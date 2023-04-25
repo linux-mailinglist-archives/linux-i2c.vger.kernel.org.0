@@ -2,75 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BD06EE17D
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Apr 2023 13:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E446EE219
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Apr 2023 14:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbjDYL55 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Apr 2023 07:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S234113AbjDYMp7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Apr 2023 08:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233907AbjDYL5q (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Apr 2023 07:57:46 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C66B11F;
-        Tue, 25 Apr 2023 04:57:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=WhgvyZf4PUh+HmrqM1Eb5netODiCMB/+LSe2XskQNYE=; b=Qh8k5GdbB3t+G8IacoH7Gl8vRw
-        8FfSvtw16hG1BTdx0IghtscGleQrUdyNG+n0MX2V1rgKe46aeAGTZXLUqni7Kfg5l+XMsTp5haOUc
-        cn23Vk7O600FRkfGkD4ZnrCAdTtu+VaOWXrkWllhUgCTJshLKP5AU8C+hYRhWP5LpqKc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1prHIU-00BBLe-DS; Tue, 25 Apr 2023 13:57:26 +0200
-Date:   Tue, 25 Apr 2023 13:57:26 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Wang Zhang <silver_code@hust.edu.cn>
-Cc:     Peter Korsgaard <peter@korsgaard.com>,
-        hust-os-kernel-patches@googlegroups.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: ocores: use devm_ managed clks
-Message-ID: <cf543f92-af0d-4862-bea6-53a358ee9a31@lunn.ch>
-References: <fc8ed989-68e6-4fd4-a818-ae077bf5e6aa@lunn.ch>
- <20230422123253.137368-1-silver_code@hust.edu.cn>
+        with ESMTP id S233943AbjDYMp7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Apr 2023 08:45:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC9B5274;
+        Tue, 25 Apr 2023 05:45:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B7C160918;
+        Tue, 25 Apr 2023 12:45:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EF82C433D2;
+        Tue, 25 Apr 2023 12:45:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682426753;
+        bh=9lqVfCY9lLNHU0htrkybarsz+MAML/KCYyGae4bOTcM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GPQwjFbHXfbaZoMuVOWAceNN5zB/+0Wdc3tFockPvhCAKr6et06igeX9BE2m7wT9V
+         E4QUM1oU2MJgBs0tH5zwQ7eyDg5derW8j9c1ebA9mysIgHR6JMu7FGOogchWzkszTE
+         Ozhq8a3ODOT9jZCwhfiCLLy72vN4qfJM2pBoSJzdGaBdSfJS8GMMOOwV6iayYq1Hhd
+         Mj6Xc7pp3Fxgf7+Q8LASjH0h69bWbYjbhCRKjkwLzfD82Qe6ZwzZDTUHKhojYYVCdV
+         gkupWdvJS4D+ZOuD/AHUN6CVuLgzqRJQFSMCH/OssuA3hH2WPGbe1MszqCr9K3I2wg
+         Dh0ci8kh3ItoA==
+Date:   Tue, 25 Apr 2023 14:45:49 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Reid Tonking <reidt@ti.com>
+Cc:     tony@atomide.com, vigneshr@ti.com, aaro.koskinen@iki.fi,
+        jmkrzyszt@gmail.com, linux-omap@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: omap: Fix standard mode false ACK readings
+Message-ID: <20230425124549.kdvfyvuy4uolvsr2@intel.intel>
+References: <20230424195344.627861-1-reidt@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230422123253.137368-1-silver_code@hust.edu.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230424195344.627861-1-reidt@ti.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 08:32:53PM +0800, Wang Zhang wrote:
-> If any wrong occurs in ocores_i2c_of_probe, the i2c->clk needs to be
-> released. But the function returns directly in line 701 without freeing
-> the clock. Even though we can fix it by freeing the clock manually if
-> platform_get_irq_optional fails, it may not be following the best practice.
-> The original code for this driver contains if (IS_ERR()) checks
-> throughout, explicitly allowing the driver to continue loading even if
-> devm_clk_get() fails.
-> 
-> While it is not entirely clear why the original author implemented this
-> behavior, there may have been certain circumstances or issues that were not
-> apparent to us. It's possible that they were trying to work around a bug by
-> employing an unconventional solution.Using `devm_clk_get_enabled()` rather
-> than devm_clk_get() can automatically track the usage of clocks and free
-> them when they are no longer needed or an error occurs.
-> 
-> fixing it by changing `ocores_i2c_of_probe` to use
-> `devm_clk_get_optional_enabled()` rather than `devm_clk_get()`, changing
-> `goto err_clk' to direct return and removing `err_clk`.
-> 
-> Signed-off-by: Wang Zhang <silver_code@hust.edu.cn>
+Hi Reid,
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+On Mon, Apr 24, 2023 at 02:53:44PM -0500, Reid Tonking wrote:
+> Using standard mode, rare false ACK responses were appearing with
+> i2cdetect tool. This was happening due to NACK interrupt triggering
+> ISR thread before register access interrupt was ready. Removing the
+> NACK interrupt's ability to trigger ISR thread lets register access
+> ready interrupt do this instead.
+> 
+> Fixes: 3b2f8f82dad7 ("i2c: omap: switch to threaded IRQ support")
+> 
+> Signed-off-by: Reid Tonking <reidt@ti.com>
 
-    Andrew
+please don't leave any space between Fixes and SoB.
+
+Add also:
+
+Cc: <stable@vger.kernel.org> # v3.7+
+
+and Cc the stable list.
+
+Andi
+
+> ---
+> Fixes: LCPD-29949
+> 
+>  drivers/i2c/busses/i2c-omap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
+> index f9ae520aed22..7ec252199706 100644
+> --- a/drivers/i2c/busses/i2c-omap.c
+> +++ b/drivers/i2c/busses/i2c-omap.c
+> @@ -1058,7 +1058,7 @@ omap_i2c_isr(int irq, void *dev_id)
+>  	u16 stat;
+>  
+>  	stat = omap_i2c_read_reg(omap, OMAP_I2C_STAT_REG);
+> -	mask = omap_i2c_read_reg(omap, OMAP_I2C_IE_REG);
+> +	mask = omap_i2c_read_reg(omap, OMAP_I2C_IE_REG) & ~OMAP_I2C_STAT_NACK;
+>  
+>  	if (stat & mask)
+>  		ret = IRQ_WAKE_THREAD;
+> -- 
+> 2.34.1
+> 
