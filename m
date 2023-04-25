@@ -2,1524 +2,839 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745BE6EDC86
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Apr 2023 09:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCDD6EDD4E
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Apr 2023 09:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbjDYH1w (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Apr 2023 03:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
+        id S232430AbjDYH5U (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Apr 2023 03:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233411AbjDYH1O (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Apr 2023 03:27:14 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CD9CC3F;
-        Tue, 25 Apr 2023 00:26:50 -0700 (PDT)
-Received: from desky.lan (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C5D8D619B;
-        Tue, 25 Apr 2023 09:26:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1682407584;
-        bh=C3Ib9Bf6ne8SlIw143IqrZDxcgapScjIQ3pk93cQpR8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lYNVNbayWsaxc3NT2YfEwxH8y4IIx7sVQTMBjENRyfo2zrweDxp/uAdpk7OXNbiJ2
-         w39YqbguQIylT5Jw4njxwf0wDC0exv5ZLSYEKc2tsy5nkS9buThQI8rXCyDtfjbmQg
-         1jmovX64etchZ41StMWJpV+ZoVsInVcLcn6Orp7A=
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v12 8/8] media: i2c: add DS90UB953 driver
-Date:   Tue, 25 Apr 2023 10:26:01 +0300
-Message-Id: <20230425072601.51031-9-tomi.valkeinen@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230425072601.51031-1-tomi.valkeinen@ideasonboard.com>
-References: <20230425072601.51031-1-tomi.valkeinen@ideasonboard.com>
+        with ESMTP id S229705AbjDYH5T (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Apr 2023 03:57:19 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2843293;
+        Tue, 25 Apr 2023 00:57:14 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33P6OTAD022623;
+        Tue, 25 Apr 2023 09:56:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=hdaBXsJgbQP2/aGkUlXeWBc2DwqHvn9brTrgvp+8UKU=;
+ b=6ynGTmcZFLSqobiHNMsJIyIdry7k2cdLeW+ErTk2A8pa8tcAOtcLyGcfxjTQ8/kvS3Wt
+ rzQC7TKb7XBoI9/JR+RHe9L3lMMGDPu1mEv0FyNGXLSlzuTGkEvHj5ibHey7NI4lNJ/W
+ BgAKFkVeoivlWPU0JTWKMETMoDuRorWrD8kMIFu2EssME7gkUhk2qRhGU1x/UrDIJ4ia
+ t/EiJMhQoNSzdNbxYnT9PvTlSvm1jOq2c9HjY2yCpQOfF5XNhVVJ651jJgMRR83EevJ5
+ S4Xegdkdq4arvcybj/Ijm7hoIRzEFFEZOaqN5MjeziFz3MTsk9T4QUtR8eDc9HoWO8fm Eg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3q48evrd70-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Apr 2023 09:56:32 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1C99F10002A;
+        Tue, 25 Apr 2023 09:56:27 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8BD3E2171DF;
+        Tue, 25 Apr 2023 09:56:27 +0200 (CEST)
+Received: from [10.201.21.121] (10.201.21.121) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 25 Apr
+ 2023 09:56:26 +0200
+Message-ID: <f1fbf285-1b41-0d98-eea6-b352d3b3bd77@foss.st.com>
+Date:   Tue, 25 Apr 2023 09:56:19 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [Linux-stm32] [PATCH v3 6/6] ARM: dts: stm32: add ETZPC as a
+ system bus for STM32MP13x boards
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "olivier.moysan@foss.st.com" <olivier.moysan@foss.st.com>,
+        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "fabrice.gasnier@foss.st.com" <fabrice.gasnier@foss.st.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Peng Fan <peng.fan@oss.nxp.com>
+References: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
+ <20230127164040.1047583-7-gatien.chevallier@foss.st.com>
+ <da51fd69-e3e8-510c-00b1-b5213d0696b1@pengutronix.de>
+ <64ac012e-e471-9093-b253-4798bbfa8cb4@pengutronix.de>
+ <837908e8-8ace-5c2e-f9fb-8b50054426f2@foss.st.com>
+ <b0049051-b571-79bf-1820-c0eb18e39dc2@pengutronix.de>
+ <f6b038d4-3524-f8eb-390f-11d90a8ac5b6@foss.st.com>
+ <a1ef17b0-1a8f-5633-de30-1d96130ccc66@epam.com>
+Content-Language: en-US
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <a1ef17b0-1a8f-5633-de30-1d96130ccc66@epam.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.201.21.121]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-25_03,2023-04-21_01,2023-02-09_01
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add driver for TI DS90UB953 FPD-Link III Serializer.
+On 4/21/23 12:19, Oleksii Moisieiev wrote:
+> Hello,
+> 
+> I'm just wandering what is the status of the Patch Series?
+> 
+> Cc'ed Peng Fang as he also has an interest in the domain-controller
+> bindings.
+> 
+> Oleksii.
+>
 
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/media/i2c/Kconfig     |   13 +
- drivers/media/i2c/Makefile    |    1 +
- drivers/media/i2c/ds90ub953.c | 1400 +++++++++++++++++++++++++++++++++
- 3 files changed, 1414 insertions(+)
- create mode 100644 drivers/media/i2c/ds90ub953.c
+Hello Oleksii,
 
-diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index bbcbf599a3f8..461df425c163 100644
---- a/drivers/media/i2c/Kconfig
-+++ b/drivers/media/i2c/Kconfig
-@@ -1630,6 +1630,19 @@ config VIDEO_DS90UB913
- 	  Device driver for the Texas Instruments DS90UB913
- 	  FPD-Link III Serializer.
- 
-+config VIDEO_DS90UB953
-+	tristate "TI FPD-Link III/IV CSI-2 Serializers"
-+	depends on OF && I2C && VIDEO_DEV
-+	select I2C_ATR
-+	select MEDIA_CONTROLLER
-+	select OF_GPIO
-+	select REGMAP_I2C
-+	select V4L2_FWNODE
-+	select VIDEO_V4L2_SUBDEV_API
-+	help
-+	  Device driver for the Texas Instruments DS90UB953
-+	  FPD-Link III Serializer and DS90UB971 FPD-Link IV Serializer.
-+
- config VIDEO_DS90UB960
- 	tristate "TI FPD-Link III/IV Deserializers"
- 	depends on OF && I2C && VIDEO_DEV
-diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index 2ae5256bb585..88e5ba3e5c39 100644
---- a/drivers/media/i2c/Makefile
-+++ b/drivers/media/i2c/Makefile
-@@ -29,6 +29,7 @@ obj-$(CONFIG_VIDEO_CS5345) += cs5345.o
- obj-$(CONFIG_VIDEO_CS53L32A) += cs53l32a.o
- obj-$(CONFIG_VIDEO_CX25840) += cx25840/
- obj-$(CONFIG_VIDEO_DS90UB913) += ds90ub913.o
-+obj-$(CONFIG_VIDEO_DS90UB953) += ds90ub953.o
- obj-$(CONFIG_VIDEO_DS90UB960) += ds90ub960.o
- obj-$(CONFIG_VIDEO_DW9714) += dw9714.o
- obj-$(CONFIG_VIDEO_DW9768) += dw9768.o
-diff --git a/drivers/media/i2c/ds90ub953.c b/drivers/media/i2c/ds90ub953.c
-new file mode 100644
-index 000000000000..1e3827a60029
---- /dev/null
-+++ b/drivers/media/i2c/ds90ub953.c
-@@ -0,0 +1,1400 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for the Texas Instruments DS90UB953 video serializer
-+ *
-+ * Based on a driver from Luca Ceresoli <luca@lucaceresoli.net>
-+ *
-+ * Copyright (c) 2019 Luca Ceresoli <luca@lucaceresoli.net>
-+ * Copyright (c) 2023 Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-+ */
-+
-+#include <linux/clk-provider.h>
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/fwnode.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/i2c-atr.h>
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/math64.h>
-+#include <linux/module.h>
-+#include <linux/property.h>
-+#include <linux/rational.h>
-+#include <linux/regmap.h>
-+
-+#include <media/i2c/ds90ub9xx.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-event.h>
-+#include <media/v4l2-subdev.h>
-+
-+#define UB953_PAD_SINK			0
-+#define UB953_PAD_SOURCE		1
-+
-+#define UB953_NUM_GPIOS			4
-+
-+#define UB953_REG_RESET_CTL			0x01
-+#define UB953_REG_RESET_CTL_DIGITAL_RESET_1	BIT(1)
-+#define UB953_REG_RESET_CTL_DIGITAL_RESET_0	BIT(0)
-+
-+#define UB953_REG_GENERAL_CFG			0x02
-+#define UB953_REG_GENERAL_CFG_CONT_CLK		BIT(6)
-+#define UB953_REG_GENERAL_CFG_CSI_LANE_SEL_SHIFT	4
-+#define UB953_REG_GENERAL_CFG_CSI_LANE_SEL_MASK	GENMASK(5, 4)
-+#define UB953_REG_GENERAL_CFG_CRC_TX_GEN_ENABLE	BIT(1)
-+#define UB953_REG_GENERAL_CFG_I2C_STRAP_MODE	BIT(0)
-+
-+#define UB953_REG_MODE_SEL			0x03
-+#define UB953_REG_MODE_SEL_MODE_DONE		BIT(3)
-+#define UB953_REG_MODE_SEL_MODE_OVERRIDE	BIT(4)
-+#define UB953_REG_MODE_SEL_MODE_MASK		GENMASK(2, 0)
-+
-+#define UB953_REG_CLKOUT_CTRL0			0x06
-+#define UB953_REG_CLKOUT_CTRL1			0x07
-+
-+#define UB953_REG_SCL_HIGH_TIME			0x0b
-+#define UB953_REG_SCL_LOW_TIME			0x0c
-+
-+#define UB953_REG_LOCAL_GPIO_DATA		0x0d
-+#define UB953_REG_LOCAL_GPIO_DATA_GPIO_RMTEN(n)		BIT(4 + (n))
-+#define UB953_REG_LOCAL_GPIO_DATA_GPIO_OUT_SRC(n)	BIT(0 + (n))
-+
-+#define UB953_REG_GPIO_INPUT_CTRL		0x0e
-+#define UB953_REG_GPIO_INPUT_CTRL_OUT_EN(n)	BIT(4 + (n))
-+#define UB953_REG_GPIO_INPUT_CTRL_INPUT_EN(n)	BIT(0 + (n))
-+
-+#define UB953_REG_REV_MASK_ID			0x50
-+#define UB953_REG_GENERAL_STATUS		0x52
-+
-+#define UB953_REG_GPIO_PIN_STS			0x53
-+#define UB953_REG_GPIO_PIN_STS_GPIO_STS(n)	BIT(0 + (n))
-+
-+#define UB953_REG_BIST_ERR_CNT			0x54
-+#define UB953_REG_CRC_ERR_CNT1			0x55
-+#define UB953_REG_CRC_ERR_CNT2			0x56
-+
-+#define UB953_REG_CSI_ERR_CNT			0x5c
-+#define UB953_REG_CSI_ERR_STATUS		0x5d
-+#define UB953_REG_CSI_ERR_DLANE01		0x5e
-+#define UB953_REG_CSI_ERR_DLANE23		0x5f
-+#define UB953_REG_CSI_ERR_CLK_LANE		0x60
-+#define UB953_REG_CSI_PKT_HDR_VC_ID		0x61
-+#define UB953_REG_PKT_HDR_WC_LSB		0x62
-+#define UB953_REG_PKT_HDR_WC_MSB		0x63
-+#define UB953_REG_CSI_ECC			0x64
-+
-+#define UB953_REG_IND_ACC_CTL			0xb0
-+#define UB953_REG_IND_ACC_ADDR			0xb1
-+#define UB953_REG_IND_ACC_DATA			0xb2
-+
-+#define UB953_REG_FPD3_RX_ID(n)			(0xf0 + (n))
-+#define UB953_REG_FPD3_RX_ID_LEN		6
-+
-+/* Indirect register blocks */
-+#define UB953_IND_TARGET_PAT_GEN		0x00
-+#define UB953_IND_TARGET_FPD3_TX		0x01
-+#define UB953_IND_TARGET_DIE_ID			0x02
-+
-+#define UB953_IND_PGEN_CTL			0x01
-+#define UB953_IND_PGEN_CTL_PGEN_ENABLE		BIT(0)
-+#define UB953_IND_PGEN_CFG			0x02
-+#define UB953_IND_PGEN_CSI_DI			0x03
-+#define UB953_IND_PGEN_LINE_SIZE1		0x04
-+#define UB953_IND_PGEN_LINE_SIZE0		0x05
-+#define UB953_IND_PGEN_BAR_SIZE1		0x06
-+#define UB953_IND_PGEN_BAR_SIZE0		0x07
-+#define UB953_IND_PGEN_ACT_LPF1			0x08
-+#define UB953_IND_PGEN_ACT_LPF0			0x09
-+#define UB953_IND_PGEN_TOT_LPF1			0x0a
-+#define UB953_IND_PGEN_TOT_LPF0			0x0b
-+#define UB953_IND_PGEN_LINE_PD1			0x0c
-+#define UB953_IND_PGEN_LINE_PD0			0x0d
-+#define UB953_IND_PGEN_VBP			0x0e
-+#define UB953_IND_PGEN_VFP			0x0f
-+#define UB953_IND_PGEN_COLOR(n)			(0x10 + (n)) /* n <= 15 */
-+
-+/* Note: Only sync mode supported for now */
-+enum ub953_mode {
-+	/* FPD-Link III CSI-2 synchronous mode */
-+	UB953_MODE_SYNC,
-+	/* FPD-Link III CSI-2 non-synchronous mode, external ref clock */
-+	UB953_MODE_NONSYNC_EXT,
-+	/* FPD-Link III CSI-2 non-synchronous mode, internal ref clock */
-+	UB953_MODE_NONSYNC_INT,
-+	/* FPD-Link III DVP mode */
-+	UB953_MODE_DVP,
-+};
-+
-+struct ub953_hw_data {
-+	const char *model;
-+	bool is_ub971;
-+};
-+
-+struct ub953_data {
-+	const struct ub953_hw_data	*hw_data;
-+
-+	struct i2c_client	*client;
-+	struct regmap		*regmap;
-+
-+	u32			num_data_lanes;
-+
-+	struct gpio_chip	gpio_chip;
-+
-+	struct v4l2_subdev	sd;
-+	struct media_pad	pads[2];
-+
-+	struct v4l2_async_notifier	notifier;
-+
-+	struct v4l2_subdev	*source_sd;
-+	u16			source_sd_pad;
-+
-+	u64			enabled_source_streams;
-+
-+	/* lock for register access */
-+	struct mutex		reg_lock;
-+
-+	u8			current_indirect_target;
-+
-+	struct clk_hw		clkout_clk_hw;
-+
-+	enum ub953_mode		mode;
-+
-+	const struct ds90ub9xx_platform_data	*plat_data;
-+};
-+
-+static inline struct ub953_data *sd_to_ub953(struct v4l2_subdev *sd)
-+{
-+	return container_of(sd, struct ub953_data, sd);
-+}
-+
-+/*
-+ * HW Access
-+ */
-+
-+static int ub953_read(struct ub953_data *priv, u8 reg, u8 *val)
-+{
-+	unsigned int v;
-+	int ret;
-+
-+	mutex_lock(&priv->reg_lock);
-+
-+	ret = regmap_read(priv->regmap, reg, &v);
-+	if (ret) {
-+		dev_err(&priv->client->dev, "Cannot read register 0x%02x: %d\n",
-+			reg, ret);
-+		goto out_unlock;
-+	}
-+
-+	*val = v;
-+
-+out_unlock:
-+	mutex_unlock(&priv->reg_lock);
-+
-+	return ret;
-+}
-+
-+static int ub953_write(struct ub953_data *priv, u8 reg, u8 val)
-+{
-+	int ret;
-+
-+	mutex_lock(&priv->reg_lock);
-+
-+	ret = regmap_write(priv->regmap, reg, val);
-+	if (ret)
-+		dev_err(&priv->client->dev,
-+			"Cannot write register 0x%02x: %d\n", reg, ret);
-+
-+	mutex_unlock(&priv->reg_lock);
-+
-+	return ret;
-+}
-+
-+static int ub953_select_ind_reg_block(struct ub953_data *priv, u8 block)
-+{
-+	struct device *dev = &priv->client->dev;
-+	int ret;
-+
-+	if (priv->current_indirect_target == block)
-+		return 0;
-+
-+	ret = regmap_write(priv->regmap, UB953_REG_IND_ACC_CTL, block << 2);
-+	if (ret) {
-+		dev_err(dev, "%s: cannot select indirect target %u (%d)\n",
-+			__func__, block, ret);
-+		return ret;
-+	}
-+
-+	priv->current_indirect_target = block;
-+
-+	return 0;
-+}
-+
-+__maybe_unused
-+static int ub953_read_ind(struct ub953_data *priv, u8 block, u8 reg, u8 *val)
-+{
-+	unsigned int v;
-+	int ret;
-+
-+	mutex_lock(&priv->reg_lock);
-+
-+	ret = ub953_select_ind_reg_block(priv, block);
-+	if (ret)
-+		goto out_unlock;
-+
-+	ret = regmap_write(priv->regmap, UB953_REG_IND_ACC_ADDR, reg);
-+	if (ret) {
-+		dev_err(&priv->client->dev,
-+			"Write to IND_ACC_ADDR failed when reading %u:%x02x: %d\n",
-+			block, reg, ret);
-+		goto out_unlock;
-+	}
-+
-+	ret = regmap_read(priv->regmap, UB953_REG_IND_ACC_DATA, &v);
-+	if (ret) {
-+		dev_err(&priv->client->dev,
-+			"Write to IND_ACC_DATA failed when reading %u:%x02x: %d\n",
-+			block, reg, ret);
-+		goto out_unlock;
-+	}
-+
-+	*val = v;
-+
-+out_unlock:
-+	mutex_unlock(&priv->reg_lock);
-+
-+	return ret;
-+}
-+
-+__maybe_unused
-+static int ub953_write_ind(struct ub953_data *priv, u8 block, u8 reg, u8 val)
-+{
-+	int ret;
-+
-+	mutex_lock(&priv->reg_lock);
-+
-+	ret = ub953_select_ind_reg_block(priv, block);
-+	if (ret)
-+		goto out_unlock;
-+
-+	ret = regmap_write(priv->regmap, UB953_REG_IND_ACC_ADDR, reg);
-+	if (ret) {
-+		dev_err(&priv->client->dev,
-+			"Write to IND_ACC_ADDR failed when writing %u:%x02x: %d\n",
-+			block, reg, ret);
-+		goto out_unlock;
-+	}
-+
-+	ret = regmap_write(priv->regmap, UB953_REG_IND_ACC_DATA, val);
-+	if (ret) {
-+		dev_err(&priv->client->dev,
-+			"Write to IND_ACC_DATA failed when writing %u:%x02x\n: %d\n",
-+			block, reg, ret);
-+	}
-+
-+out_unlock:
-+	mutex_unlock(&priv->reg_lock);
-+
-+	return ret;
-+}
-+
-+/*
-+ * GPIO chip
-+ */
-+static int ub953_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
-+{
-+	struct ub953_data *priv = gpiochip_get_data(gc);
-+	int ret;
-+	u8 v;
-+
-+	ret = ub953_read(priv, UB953_REG_GPIO_INPUT_CTRL, &v);
-+	if (ret)
-+		return ret;
-+
-+	if (v & UB953_REG_GPIO_INPUT_CTRL_INPUT_EN(offset))
-+		return GPIO_LINE_DIRECTION_IN;
-+	else
-+		return GPIO_LINE_DIRECTION_OUT;
-+}
-+
-+static int ub953_gpio_direction_in(struct gpio_chip *gc, unsigned int offset)
-+{
-+	struct ub953_data *priv = gpiochip_get_data(gc);
-+
-+	return regmap_update_bits(priv->regmap, UB953_REG_GPIO_INPUT_CTRL,
-+				  UB953_REG_GPIO_INPUT_CTRL_INPUT_EN(offset) |
-+					  UB953_REG_GPIO_INPUT_CTRL_OUT_EN(offset),
-+				  UB953_REG_GPIO_INPUT_CTRL_INPUT_EN(offset));
-+}
-+
-+static int ub953_gpio_direction_out(struct gpio_chip *gc, unsigned int offset,
-+				    int value)
-+{
-+	struct ub953_data *priv = gpiochip_get_data(gc);
-+	int ret;
-+
-+	ret = regmap_update_bits(priv->regmap, UB953_REG_LOCAL_GPIO_DATA,
-+				 UB953_REG_LOCAL_GPIO_DATA_GPIO_OUT_SRC(offset),
-+				 value ? UB953_REG_LOCAL_GPIO_DATA_GPIO_OUT_SRC(offset) :
-+					 0);
-+
-+	if (ret)
-+		return ret;
-+
-+	return regmap_update_bits(priv->regmap, UB953_REG_GPIO_INPUT_CTRL,
-+				  UB953_REG_GPIO_INPUT_CTRL_INPUT_EN(offset) |
-+					  UB953_REG_GPIO_INPUT_CTRL_OUT_EN(offset),
-+				  UB953_REG_GPIO_INPUT_CTRL_OUT_EN(offset));
-+}
-+
-+static int ub953_gpio_get(struct gpio_chip *gc, unsigned int offset)
-+{
-+	struct ub953_data *priv = gpiochip_get_data(gc);
-+	int ret;
-+	u8 v;
-+
-+	ret = ub953_read(priv, UB953_REG_GPIO_PIN_STS, &v);
-+	if (ret)
-+		return ret;
-+
-+	return !!(v & UB953_REG_GPIO_PIN_STS_GPIO_STS(offset));
-+}
-+
-+static void ub953_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
-+{
-+	struct ub953_data *priv = gpiochip_get_data(gc);
-+
-+	regmap_update_bits(priv->regmap, UB953_REG_LOCAL_GPIO_DATA,
-+			   UB953_REG_LOCAL_GPIO_DATA_GPIO_OUT_SRC(offset),
-+			   value ? UB953_REG_LOCAL_GPIO_DATA_GPIO_OUT_SRC(offset) :
-+				   0);
-+}
-+
-+static int ub953_gpio_of_xlate(struct gpio_chip *gc,
-+			       const struct of_phandle_args *gpiospec,
-+			       u32 *flags)
-+{
-+	if (flags)
-+		*flags = gpiospec->args[1];
-+
-+	return gpiospec->args[0];
-+}
-+
-+static int ub953_gpiochip_probe(struct ub953_data *priv)
-+{
-+	struct device *dev = &priv->client->dev;
-+	struct gpio_chip *gc = &priv->gpio_chip;
-+	int ret;
-+
-+	/* Set all GPIOs to local input mode */
-+	ub953_write(priv, UB953_REG_LOCAL_GPIO_DATA, 0);
-+	ub953_write(priv, UB953_REG_GPIO_INPUT_CTRL, 0xf);
-+
-+	gc->label = dev_name(dev);
-+	gc->parent = dev;
-+	gc->owner = THIS_MODULE;
-+	gc->base = -1;
-+	gc->can_sleep = true;
-+	gc->ngpio = UB953_NUM_GPIOS;
-+	gc->get_direction = ub953_gpio_get_direction;
-+	gc->direction_input = ub953_gpio_direction_in;
-+	gc->direction_output = ub953_gpio_direction_out;
-+	gc->get = ub953_gpio_get;
-+	gc->set = ub953_gpio_set;
-+	gc->of_xlate = ub953_gpio_of_xlate;
-+	gc->of_gpio_n_cells = 2;
-+
-+	ret = gpiochip_add_data(gc, priv);
-+	if (ret) {
-+		dev_err(dev, "Failed to add GPIOs: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void ub953_gpiochip_remove(struct ub953_data *priv)
-+{
-+	gpiochip_remove(&priv->gpio_chip);
-+}
-+
-+/*
-+ * V4L2
-+ */
-+
-+static int _ub953_set_routing(struct v4l2_subdev *sd,
-+			      struct v4l2_subdev_state *state,
-+			      struct v4l2_subdev_krouting *routing)
-+{
-+	static const struct v4l2_mbus_framefmt format = {
-+		.width = 640,
-+		.height = 480,
-+		.code = MEDIA_BUS_FMT_UYVY8_1X16,
-+		.field = V4L2_FIELD_NONE,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+		.ycbcr_enc = V4L2_YCBCR_ENC_601,
-+		.quantization = V4L2_QUANTIZATION_LIM_RANGE,
-+		.xfer_func = V4L2_XFER_FUNC_SRGB,
-+	};
-+	int ret;
-+
-+	/*
-+	 * Note: we can only support up to V4L2_FRAME_DESC_ENTRY_MAX, until
-+	 * frame desc is made dynamically allocated.
-+	 */
-+
-+	if (routing->num_routes > V4L2_FRAME_DESC_ENTRY_MAX)
-+		return -EINVAL;
-+
-+	ret = v4l2_subdev_routing_validate(sd, routing,
-+					   V4L2_SUBDEV_ROUTING_ONLY_1_TO_1);
-+	if (ret)
-+		return ret;
-+
-+	ret = v4l2_subdev_set_routing_with_fmt(sd, state, routing, &format);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int ub953_set_routing(struct v4l2_subdev *sd,
-+			     struct v4l2_subdev_state *state,
-+			     enum v4l2_subdev_format_whence which,
-+			     struct v4l2_subdev_krouting *routing)
-+{
-+	struct ub953_data *priv = sd_to_ub953(sd);
-+
-+	if (which == V4L2_SUBDEV_FORMAT_ACTIVE && priv->enabled_source_streams)
-+		return -EBUSY;
-+
-+	return _ub953_set_routing(sd, state, routing);
-+}
-+
-+static int ub953_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
-+				struct v4l2_mbus_frame_desc *fd)
-+{
-+	struct ub953_data *priv = sd_to_ub953(sd);
-+	struct v4l2_mbus_frame_desc source_fd;
-+	struct v4l2_subdev_route *route;
-+	struct v4l2_subdev_state *state;
-+	int ret;
-+
-+	if (pad != UB953_PAD_SOURCE)
-+		return -EINVAL;
-+
-+	ret = v4l2_subdev_call(priv->source_sd, pad, get_frame_desc,
-+			       priv->source_sd_pad, &source_fd);
-+	if (ret)
-+		return ret;
-+
-+	memset(fd, 0, sizeof(*fd));
-+
-+	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
-+
-+	state = v4l2_subdev_lock_and_get_active_state(sd);
-+
-+	for_each_active_route(&state->routing, route) {
-+		struct v4l2_mbus_frame_desc_entry *source_entry = NULL;
-+		unsigned int i;
-+
-+		if (route->source_pad != pad)
-+			continue;
-+
-+		for (i = 0; i < source_fd.num_entries; i++) {
-+			if (source_fd.entry[i].stream == route->sink_stream) {
-+				source_entry = &source_fd.entry[i];
-+				break;
-+			}
-+		}
-+
-+		if (!source_entry) {
-+			dev_err(&priv->client->dev,
-+				"Failed to find stream from source frame desc\n");
-+			ret = -EPIPE;
-+			goto out_unlock;
-+		}
-+
-+		fd->entry[fd->num_entries].stream = route->source_stream;
-+		fd->entry[fd->num_entries].flags = source_entry->flags;
-+		fd->entry[fd->num_entries].length = source_entry->length;
-+		fd->entry[fd->num_entries].pixelcode = source_entry->pixelcode;
-+		fd->entry[fd->num_entries].bus.csi2.vc =
-+			source_entry->bus.csi2.vc;
-+		fd->entry[fd->num_entries].bus.csi2.dt =
-+			source_entry->bus.csi2.dt;
-+
-+		fd->num_entries++;
-+	}
-+
-+out_unlock:
-+	v4l2_subdev_unlock_state(state);
-+
-+	return ret;
-+}
-+
-+static int ub953_set_fmt(struct v4l2_subdev *sd,
-+			 struct v4l2_subdev_state *state,
-+			 struct v4l2_subdev_format *format)
-+{
-+	struct ub953_data *priv = sd_to_ub953(sd);
-+	struct v4l2_mbus_framefmt *fmt;
-+
-+	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE &&
-+	    priv->enabled_source_streams)
-+		return -EBUSY;
-+
-+	/* No transcoding, source and sink formats must match. */
-+	if (format->pad == UB953_PAD_SOURCE)
-+		return v4l2_subdev_get_fmt(sd, state, format);
-+
-+	/* Set sink format */
-+	fmt = v4l2_subdev_state_get_stream_format(state, format->pad,
-+						  format->stream);
-+	if (!fmt)
-+		return -EINVAL;
-+
-+	*fmt = format->format;
-+
-+	/* Propagate to source format */
-+	fmt = v4l2_subdev_state_get_opposite_stream_format(state, format->pad,
-+							   format->stream);
-+	if (!fmt)
-+		return -EINVAL;
-+
-+	*fmt = format->format;
-+
-+	return 0;
-+}
-+
-+static int ub953_init_cfg(struct v4l2_subdev *sd,
-+			  struct v4l2_subdev_state *state)
-+{
-+	struct v4l2_subdev_route routes[] = {
-+		{
-+			.sink_pad = UB953_PAD_SINK,
-+			.sink_stream = 0,
-+			.source_pad = UB953_PAD_SOURCE,
-+			.source_stream = 0,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+		},
-+	};
-+
-+	struct v4l2_subdev_krouting routing = {
-+		.num_routes = ARRAY_SIZE(routes),
-+		.routes = routes,
-+	};
-+
-+	return _ub953_set_routing(sd, state, &routing);
-+}
-+
-+static int ub953_log_status(struct v4l2_subdev *sd)
-+{
-+	struct ub953_data *priv = sd_to_ub953(sd);
-+	struct device *dev = &priv->client->dev;
-+	u8 v = 0, v1 = 0, v2 = 0;
-+	unsigned int i;
-+	char id[UB953_REG_FPD3_RX_ID_LEN];
-+	u8 gpio_local_data;
-+	u8 gpio_input_ctrl;
-+	u8 gpio_pin_sts;
-+
-+	for (i = 0; i < sizeof(id); i++)
-+		ub953_read(priv, UB953_REG_FPD3_RX_ID(i), &id[i]);
-+
-+	dev_info(dev, "ID '%.*s'\n", (int)sizeof(id), id);
-+
-+	ub953_read(priv, UB953_REG_GENERAL_STATUS, &v);
-+	dev_info(dev, "GENERAL_STATUS %#02x\n", v);
-+
-+	ub953_read(priv, UB953_REG_CRC_ERR_CNT1, &v1);
-+	ub953_read(priv, UB953_REG_CRC_ERR_CNT2, &v2);
-+	dev_info(dev, "CRC error count %u\n", v1 | (v2 << 8));
-+
-+	ub953_read(priv, UB953_REG_CSI_ERR_CNT, &v);
-+	dev_info(dev, "CSI error count %u\n", v);
-+
-+	ub953_read(priv, UB953_REG_CSI_ERR_STATUS, &v);
-+	dev_info(dev, "CSI_ERR_STATUS %#02x\n", v);
-+
-+	ub953_read(priv, UB953_REG_CSI_ERR_DLANE01, &v);
-+	dev_info(dev, "CSI_ERR_DLANE01 %#02x\n", v);
-+
-+	ub953_read(priv, UB953_REG_CSI_ERR_DLANE23, &v);
-+	dev_info(dev, "CSI_ERR_DLANE23 %#02x\n", v);
-+
-+	ub953_read(priv, UB953_REG_CSI_ERR_CLK_LANE, &v);
-+	dev_info(dev, "CSI_ERR_CLK_LANE %#02x\n", v);
-+
-+	ub953_read(priv, UB953_REG_CSI_PKT_HDR_VC_ID, &v);
-+	dev_info(dev, "CSI packet header VC %u ID %u\n", v >> 6, v & 0x3f);
-+
-+	ub953_read(priv, UB953_REG_PKT_HDR_WC_LSB, &v1);
-+	ub953_read(priv, UB953_REG_PKT_HDR_WC_MSB, &v2);
-+	dev_info(dev, "CSI packet header WC %u\n", (v2 << 8) | v1);
-+
-+	ub953_read(priv, UB953_REG_CSI_ECC, &v);
-+	dev_info(dev, "CSI ECC %#02x\n", v);
-+
-+	ub953_read(priv, UB953_REG_LOCAL_GPIO_DATA, &gpio_local_data);
-+	ub953_read(priv, UB953_REG_GPIO_INPUT_CTRL, &gpio_input_ctrl);
-+	ub953_read(priv, UB953_REG_GPIO_PIN_STS, &gpio_pin_sts);
-+
-+	for (i = 0; i < UB953_NUM_GPIOS; i++) {
-+		dev_info(dev,
-+			 "GPIO%u: remote: %u is_input: %u is_output: %u val: %u sts: %u\n",
-+			 i,
-+			 !!(gpio_local_data & UB953_REG_LOCAL_GPIO_DATA_GPIO_RMTEN(i)),
-+			 !!(gpio_input_ctrl & UB953_REG_GPIO_INPUT_CTRL_INPUT_EN(i)),
-+			 !!(gpio_input_ctrl & UB953_REG_GPIO_INPUT_CTRL_OUT_EN(i)),
-+			 !!(gpio_local_data & UB953_REG_LOCAL_GPIO_DATA_GPIO_OUT_SRC(i)),
-+			 !!(gpio_pin_sts & UB953_REG_GPIO_PIN_STS_GPIO_STS(i)));
-+	}
-+
-+	return 0;
-+}
-+
-+static int ub953_enable_streams(struct v4l2_subdev *sd,
-+				struct v4l2_subdev_state *state, u32 pad,
-+				u64 streams_mask)
-+{
-+	struct ub953_data *priv = sd_to_ub953(sd);
-+	u64 sink_streams;
-+	int ret;
-+
-+	sink_streams = v4l2_subdev_state_xlate_streams(state, UB953_PAD_SOURCE,
-+						       UB953_PAD_SINK,
-+						       &streams_mask);
-+
-+	ret = v4l2_subdev_enable_streams(priv->source_sd, priv->source_sd_pad,
-+					 sink_streams);
-+	if (ret)
-+		return ret;
-+
-+	priv->enabled_source_streams |= streams_mask;
-+
-+	return 0;
-+}
-+
-+static int ub953_disable_streams(struct v4l2_subdev *sd,
-+				 struct v4l2_subdev_state *state, u32 pad,
-+				 u64 streams_mask)
-+{
-+	struct ub953_data *priv = sd_to_ub953(sd);
-+	u64 sink_streams;
-+	int ret;
-+
-+	sink_streams = v4l2_subdev_state_xlate_streams(state, UB953_PAD_SOURCE,
-+						       UB953_PAD_SINK,
-+						       &streams_mask);
-+
-+	ret = v4l2_subdev_disable_streams(priv->source_sd, priv->source_sd_pad,
-+					  sink_streams);
-+	if (ret)
-+		return ret;
-+
-+	priv->enabled_source_streams &= ~streams_mask;
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_subdev_pad_ops ub953_pad_ops = {
-+	.enable_streams = ub953_enable_streams,
-+	.disable_streams = ub953_disable_streams,
-+	.set_routing = ub953_set_routing,
-+	.get_frame_desc = ub953_get_frame_desc,
-+	.get_fmt = v4l2_subdev_get_fmt,
-+	.set_fmt = ub953_set_fmt,
-+	.init_cfg = ub953_init_cfg,
-+};
-+
-+static const struct v4l2_subdev_core_ops ub953_subdev_core_ops = {
-+	.log_status = ub953_log_status,
-+	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
-+	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
-+};
-+
-+static const struct v4l2_subdev_ops ub953_subdev_ops = {
-+	.core = &ub953_subdev_core_ops,
-+	.pad = &ub953_pad_ops,
-+};
-+
-+static const struct media_entity_operations ub953_entity_ops = {
-+	.link_validate = v4l2_subdev_link_validate,
-+};
-+
-+static int ub953_notify_bound(struct v4l2_async_notifier *notifier,
-+			      struct v4l2_subdev *source_subdev,
-+			      struct v4l2_async_subdev *asd)
-+{
-+	struct ub953_data *priv = sd_to_ub953(notifier->sd);
-+	struct device *dev = &priv->client->dev;
-+	int ret;
-+
-+	ret = media_entity_get_fwnode_pad(&source_subdev->entity,
-+					  source_subdev->fwnode,
-+					  MEDIA_PAD_FL_SOURCE);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to find pad for %s\n",
-+			source_subdev->name);
-+		return ret;
-+	}
-+
-+	priv->source_sd = source_subdev;
-+	priv->source_sd_pad = ret;
-+
-+	ret = media_create_pad_link(&source_subdev->entity, priv->source_sd_pad,
-+				    &priv->sd.entity, 0,
-+				    MEDIA_LNK_FL_ENABLED |
-+					    MEDIA_LNK_FL_IMMUTABLE);
-+	if (ret) {
-+		dev_err(dev, "Unable to link %s:%u -> %s:0\n",
-+			source_subdev->name, priv->source_sd_pad,
-+			priv->sd.name);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_async_notifier_operations ub953_notify_ops = {
-+	.bound = ub953_notify_bound,
-+};
-+
-+static int ub953_v4l2_notifier_register(struct ub953_data *priv)
-+{
-+	struct device *dev = &priv->client->dev;
-+	struct v4l2_async_subdev *asd;
-+	struct fwnode_handle *ep_fwnode;
-+	int ret;
-+
-+	ep_fwnode = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
-+						    UB953_PAD_SINK, 0, 0);
-+	if (!ep_fwnode) {
-+		dev_err(dev, "No graph endpoint\n");
-+		return -ENODEV;
-+	}
-+
-+	v4l2_async_nf_init(&priv->notifier);
-+
-+	asd = v4l2_async_nf_add_fwnode_remote(&priv->notifier, ep_fwnode,
-+					      struct v4l2_async_subdev);
-+
-+	fwnode_handle_put(ep_fwnode);
-+
-+	if (IS_ERR(asd)) {
-+		dev_err(dev, "Failed to add subdev: %ld", PTR_ERR(asd));
-+		v4l2_async_nf_cleanup(&priv->notifier);
-+		return PTR_ERR(asd);
-+	}
-+
-+	priv->notifier.ops = &ub953_notify_ops;
-+
-+	ret = v4l2_async_subdev_nf_register(&priv->sd, &priv->notifier);
-+	if (ret) {
-+		dev_err(dev, "Failed to register subdev_notifier");
-+		v4l2_async_nf_cleanup(&priv->notifier);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void ub953_v4l2_notifier_unregister(struct ub953_data *priv)
-+{
-+	v4l2_async_nf_unregister(&priv->notifier);
-+	v4l2_async_nf_cleanup(&priv->notifier);
-+}
-+
-+/*
-+ * Probing
-+ */
-+
-+static int ub953_i2c_master_init(struct ub953_data *priv)
-+{
-+	/* i2c fast mode */
-+	u32 ref = 26250000;
-+	u32 scl_high = 915; /* ns */
-+	u32 scl_low = 1641; /* ns */
-+	int ret;
-+
-+	scl_high = div64_u64((u64)scl_high * ref, 1000000000) - 5;
-+	scl_low = div64_u64((u64)scl_low * ref, 1000000000) - 5;
-+
-+	ret = ub953_write(priv, UB953_REG_SCL_HIGH_TIME, scl_high);
-+	if (ret)
-+		return ret;
-+
-+	ret = ub953_write(priv, UB953_REG_SCL_LOW_TIME, scl_low);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static u64 ub953_get_fc_rate(struct ub953_data *priv)
-+{
-+	if (priv->mode != UB953_MODE_SYNC) {
-+		/* Not supported */
-+		return 0;
-+	}
-+
-+	if (priv->hw_data->is_ub971)
-+		return priv->plat_data->bc_rate * 160ull;
-+	else
-+		return priv->plat_data->bc_rate / 2 * 160ull;
-+}
-+
-+static unsigned long ub953_calc_clkout_ub953(struct ub953_data *priv,
-+					     unsigned long target, u64 fc,
-+					     u8 *hs_div, u8 *m, u8 *n)
-+{
-+	/*
-+	 * We always use 4 as a pre-divider (HS_CLK_DIV = 2).
-+	 *
-+	 * According to the datasheet:
-+	 * - "HS_CLK_DIV typically should be set to either 16, 8, or 4 (default)."
-+	 * - "if it is not possible to have an integer ratio of N/M, it is best to
-+	 *    select a smaller value for HS_CLK_DIV.
-+	 *
-+	 * For above reasons the default HS_CLK_DIV seems the best in the average
-+	 * case. Use always that value to keep the code simple.
-+	 */
-+	static const unsigned long hs_clk_div = 4;
-+
-+	u64 fc_divided;
-+	unsigned long mul, div;
-+	unsigned long res;
-+
-+	/* clkout = fc / hs_clk_div * m / n */
-+
-+	fc_divided = div_u64(fc, hs_clk_div);
-+
-+	rational_best_approximation(target, fc_divided, (1 << 5) - 1,
-+				    (1 << 8) - 1, &mul, &div);
-+
-+	res = div_u64(fc_divided * mul, div);
-+
-+	*hs_div = hs_clk_div;
-+	*m = mul;
-+	*n = div;
-+
-+	return res;
-+}
-+
-+static unsigned long ub953_calc_clkout_ub971(struct ub953_data *priv,
-+					     unsigned long target, u64 fc,
-+					     u8 *m, u8 *n)
-+{
-+	u64 fc_divided;
-+	unsigned long mul, div;
-+	unsigned long res;
-+
-+	/* clkout = fc * m / (8 * n) */
-+
-+	fc_divided = div_u64(fc, 8);
-+
-+	rational_best_approximation(target, fc_divided, (1 << 5) - 1,
-+				    (1 << 8) - 1, &mul, &div);
-+
-+	res = div_u64(fc_divided * mul, div);
-+
-+	*m = mul;
-+	*n = div;
-+
-+	return res;
-+}
-+
-+static unsigned long ub953_clkout_recalc_rate(struct clk_hw *hw,
-+					      unsigned long parent_rate)
-+{
-+	struct ub953_data *priv = container_of(hw, struct ub953_data, clkout_clk_hw);
-+	struct device *dev = &priv->client->dev;
-+	u8 ctrl0, ctrl1;
-+	u32 mul, div;
-+	u64 fc_rate;
-+	u32 hs_clk_div;
-+	u64 rate;
-+	int ret;
-+
-+	ret = ub953_read(priv, UB953_REG_CLKOUT_CTRL0, &ctrl0);
-+	if (ret) {
-+		dev_err(dev, "Failed to read CLKOUT_CTRL0: %d\n", ret);
-+		return 0;
-+	}
-+
-+	ret = ub953_read(priv, UB953_REG_CLKOUT_CTRL1, &ctrl1);
-+	if (ret) {
-+		dev_err(dev, "Failed to read CLKOUT_CTRL1: %d\n", ret);
-+		return 0;
-+	}
-+
-+	fc_rate = ub953_get_fc_rate(priv);
-+
-+	if (priv->hw_data->is_ub971) {
-+		mul = ctrl0 & 0x1f;
-+		div = ctrl1;
-+
-+		if (div == 0)
-+			return 0;
-+
-+		rate = div_u64(fc_rate * mul, 8 * div);
-+
-+		dev_dbg(dev, "clkout: fc rate %llu, mul %u, div %u = %llu\n",
-+			fc_rate, mul, div, rate);
-+	} else {
-+		mul = ctrl0 & 0x1f;
-+		hs_clk_div = 1 << (ctrl0 >> 5);
-+		div = ctrl1;
-+
-+		if (div == 0)
-+			return 0;
-+
-+		rate = div_u64(div_u64(fc_rate, hs_clk_div) * mul, div);
-+
-+		dev_dbg(dev,
-+			"clkout: fc rate %llu, hs_clk_div %u, mul %u, div %u = %llu\n",
-+			fc_rate, hs_clk_div, mul, div, rate);
-+	}
-+
-+	return rate;
-+}
-+
-+static long ub953_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
-+				    unsigned long *parent_rate)
-+{
-+	struct ub953_data *priv = container_of(hw, struct ub953_data, clkout_clk_hw);
-+	struct device *dev = &priv->client->dev;
-+	unsigned long res;
-+	u64 fc_rate;
-+	u8 hs_div, m, n;
-+
-+	fc_rate = ub953_get_fc_rate(priv);
-+
-+	if (priv->hw_data->is_ub971) {
-+		res = ub953_calc_clkout_ub971(priv, rate, fc_rate, &m, &n);
-+
-+		dev_dbg(dev, "%s %llu * %u / (8 * %u) = %lu (requested %lu)",
-+			__func__, fc_rate, m, n, res, rate);
-+	} else {
-+		res = ub953_calc_clkout_ub953(priv, rate, fc_rate, &hs_div, &m, &n);
-+
-+		dev_dbg(dev, "%s %llu / %u * %u / %u = %lu (requested %lu)",
-+			__func__, fc_rate, hs_div, m, n, res, rate);
-+	}
-+
-+	return res;
-+}
-+
-+static int ub953_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
-+				 unsigned long parent_rate)
-+{
-+	struct ub953_data *priv = container_of(hw, struct ub953_data, clkout_clk_hw);
-+	u64 fc_rate;
-+	u8 hs_div, m, n;
-+	unsigned long res;
-+
-+	fc_rate = ub953_get_fc_rate(priv);
-+
-+	if (priv->hw_data->is_ub971) {
-+		res = ub953_calc_clkout_ub971(priv, rate, fc_rate, &m, &n);
-+
-+		ub953_write(priv, UB953_REG_CLKOUT_CTRL0, m);
-+		ub953_write(priv, UB953_REG_CLKOUT_CTRL1, n);
-+	} else {
-+		res = ub953_calc_clkout_ub953(priv, rate, fc_rate, &hs_div, &m, &n);
-+
-+		ub953_write(priv, UB953_REG_CLKOUT_CTRL0, (__ffs(hs_div) << 5) | m);
-+		ub953_write(priv, UB953_REG_CLKOUT_CTRL1, n);
-+	}
-+
-+	dev_dbg(&priv->client->dev, "%s %lu (requested %lu)\n", __func__, res,
-+		rate);
-+
-+	return 0;
-+}
-+
-+static const struct clk_ops ub953_clkout_ops = {
-+	.recalc_rate	= ub953_clkout_recalc_rate,
-+	.round_rate	= ub953_clkout_round_rate,
-+	.set_rate	= ub953_clkout_set_rate,
-+};
-+
-+static void ub953_init_clkout_ub953(struct ub953_data *priv)
-+{
-+	u64 fc_rate;
-+	u8 hs_div, m, n;
-+
-+	fc_rate = ub953_get_fc_rate(priv);
-+
-+	ub953_calc_clkout_ub953(priv, 25000000, fc_rate, &hs_div, &m, &n);
-+
-+	ub953_write(priv, UB953_REG_CLKOUT_CTRL0, (__ffs(hs_div) << 5) | m);
-+	ub953_write(priv, UB953_REG_CLKOUT_CTRL1, n);
-+}
-+
-+static void ub953_init_clkout_ub971(struct ub953_data *priv)
-+{
-+	u64 fc_rate;
-+	u8 m, n;
-+
-+	fc_rate = ub953_get_fc_rate(priv);
-+
-+	ub953_calc_clkout_ub971(priv, 25000000, fc_rate, &m, &n);
-+
-+	ub953_write(priv, UB953_REG_CLKOUT_CTRL0, m);
-+	ub953_write(priv, UB953_REG_CLKOUT_CTRL1, n);
-+}
-+
-+static int ub953_register_clkout(struct ub953_data *priv)
-+{
-+	struct device *dev = &priv->client->dev;
-+	const struct clk_init_data init = {
-+		.name = kasprintf(GFP_KERNEL, "ds90%s.%s.clk_out",
-+				  priv->hw_data->model, dev_name(dev)),
-+		.ops = &ub953_clkout_ops,
-+	};
-+	int ret;
-+
-+	if (!init.name)
-+		return -ENOMEM;
-+
-+	/* Initialize clkout to 25MHz by default */
-+	if (priv->hw_data->is_ub971)
-+		ub953_init_clkout_ub971(priv);
-+	else
-+		ub953_init_clkout_ub953(priv);
-+
-+	priv->clkout_clk_hw.init = &init;
-+
-+	ret = devm_clk_hw_register(dev, &priv->clkout_clk_hw);
-+	kfree(init.name);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Cannot register clock HW\n");
-+
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
-+					  &priv->clkout_clk_hw);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Cannot add OF clock provider\n");
-+
-+	return 0;
-+}
-+
-+static int ub953_add_i2c_adapter(struct ub953_data *priv)
-+{
-+	struct device *dev = &priv->client->dev;
-+	struct fwnode_handle *i2c_handle;
-+	int ret;
-+
-+	i2c_handle = device_get_named_child_node(dev, "i2c");
-+	if (!i2c_handle)
-+		return 0;
-+
-+	ret = i2c_atr_add_adapter(priv->plat_data->atr, priv->plat_data->port,
-+				  dev, i2c_handle);
-+
-+	fwnode_handle_put(i2c_handle);
-+
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static const struct regmap_config ub953_regmap_config = {
-+	.name = "ds90ub953",
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.reg_format_endian = REGMAP_ENDIAN_DEFAULT,
-+	.val_format_endian = REGMAP_ENDIAN_DEFAULT,
-+};
-+
-+static int ub953_parse_dt(struct ub953_data *priv)
-+{
-+	struct device *dev = &priv->client->dev;
-+	struct fwnode_handle *ep_fwnode;
-+	int ret;
-+
-+	ep_fwnode = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
-+						    UB953_PAD_SINK, 0, 0);
-+	if (!ep_fwnode)
-+		return dev_err_probe(dev, -ENOENT, "no endpoint found\n");
-+
-+	ret = fwnode_property_count_u32(ep_fwnode, "data-lanes");
-+
-+	fwnode_handle_put(ep_fwnode);
-+
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret,
-+				     "failed to parse property 'data-lanes'\n");
-+
-+	if (ret != 1 && ret != 2 && ret != 4)
-+		return dev_err_probe(dev, -EINVAL,
-+				     "bad number of data-lanes: %d\n", ret);
-+
-+	priv->num_data_lanes = ret;
-+
-+	return 0;
-+}
-+
-+static int ub953_hw_init(struct ub953_data *priv)
-+{
-+	struct device *dev = &priv->client->dev;
-+	bool mode_override;
-+	int ret;
-+	u8 v;
-+
-+	ret = ub953_read(priv, UB953_REG_MODE_SEL, &v);
-+	if (ret)
-+		return ret;
-+
-+	if (!(v & UB953_REG_MODE_SEL_MODE_DONE))
-+		return dev_err_probe(dev, -EIO, "Mode value not stabilized\n");
-+
-+	mode_override = v & UB953_REG_MODE_SEL_MODE_OVERRIDE;
-+
-+	switch (v & UB953_REG_MODE_SEL_MODE_MASK) {
-+	case 0:
-+		priv->mode = UB953_MODE_SYNC;
-+		break;
-+	case 2:
-+		priv->mode = UB953_MODE_NONSYNC_EXT;
-+		break;
-+	case 3:
-+		priv->mode = UB953_MODE_NONSYNC_INT;
-+		break;
-+	case 5:
-+		priv->mode = UB953_MODE_DVP;
-+		break;
-+	default:
-+		return dev_err_probe(dev, -EIO,
-+				     "Invalid mode in mode register\n");
-+	}
-+
-+	dev_dbg(dev, "mode from %s: %#x\n", mode_override ? "reg" : "strap",
-+		priv->mode);
-+
-+	if (priv->mode != UB953_MODE_SYNC)
-+		return dev_err_probe(dev, -ENODEV,
-+				     "Only synchronous mode supported\n");
-+
-+	ret = ub953_read(priv, UB953_REG_REV_MASK_ID, &v);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to read revision");
-+
-+	dev_info(dev, "Found %s rev/mask %#04x\n", priv->hw_data->model, v);
-+
-+	ret = ub953_read(priv, UB953_REG_GENERAL_CFG, &v);
-+	if (ret)
-+		return ret;
-+
-+	dev_dbg(dev, "i2c strap setting %s V\n",
-+		(v & UB953_REG_GENERAL_CFG_I2C_STRAP_MODE) ? "1.8" : "3.3");
-+
-+	ret = ub953_i2c_master_init(priv);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "i2c init failed\n");
-+
-+	ub953_write(priv, UB953_REG_GENERAL_CFG,
-+		    UB953_REG_GENERAL_CFG_CONT_CLK |
-+		    ((priv->num_data_lanes - 1) << UB953_REG_GENERAL_CFG_CSI_LANE_SEL_SHIFT) |
-+		    UB953_REG_GENERAL_CFG_CRC_TX_GEN_ENABLE);
-+
-+	return 0;
-+}
-+
-+static int ub953_subdev_init(struct ub953_data *priv)
-+{
-+	struct device *dev = &priv->client->dev;
-+	int ret;
-+
-+	v4l2_i2c_subdev_init(&priv->sd, priv->client, &ub953_subdev_ops);
-+
-+	priv->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-+			  V4L2_SUBDEV_FL_HAS_EVENTS | V4L2_SUBDEV_FL_STREAMS;
-+	priv->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-+	priv->sd.entity.ops = &ub953_entity_ops;
-+
-+	priv->pads[0].flags = MEDIA_PAD_FL_SINK;
-+	priv->pads[1].flags = MEDIA_PAD_FL_SOURCE;
-+
-+	ret = media_entity_pads_init(&priv->sd.entity, 2, priv->pads);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to init pads\n");
-+
-+	priv->sd.fwnode = fwnode_graph_get_endpoint_by_id(dev_fwnode(dev),
-+							  UB953_PAD_SOURCE, 0,
-+							  0);
-+	if (!priv->sd.fwnode) {
-+		ret = -ENODEV;
-+		dev_err_probe(dev, ret, "Missing TX endpoint\n");
-+		goto err_entity_cleanup;
-+	}
-+
-+	ret = v4l2_subdev_init_finalize(&priv->sd);
-+	if (ret)
-+		goto err_fwnode_put;
-+
-+	ret = ub953_v4l2_notifier_register(priv);
-+	if (ret) {
-+		dev_err_probe(dev, ret,
-+			      "v4l2 subdev notifier register failed\n");
-+		goto err_free_state;
-+	}
-+
-+	ret = v4l2_async_register_subdev(&priv->sd);
-+	if (ret) {
-+		dev_err_probe(dev, ret, "v4l2_async_register_subdev error\n");
-+		goto err_unreg_notif;
-+	}
-+
-+	return 0;
-+
-+err_unreg_notif:
-+	ub953_v4l2_notifier_unregister(priv);
-+err_free_state:
-+	v4l2_subdev_cleanup(&priv->sd);
-+err_fwnode_put:
-+	fwnode_handle_put(priv->sd.fwnode);
-+err_entity_cleanup:
-+	media_entity_cleanup(&priv->sd.entity);
-+
-+	return ret;
-+}
-+
-+static void ub953_subdev_uninit(struct ub953_data *priv)
-+{
-+	v4l2_async_unregister_subdev(&priv->sd);
-+	ub953_v4l2_notifier_unregister(priv);
-+	v4l2_subdev_cleanup(&priv->sd);
-+	fwnode_handle_put(priv->sd.fwnode);
-+	media_entity_cleanup(&priv->sd.entity);
-+}
-+
-+static int ub953_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct ub953_data *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->client = client;
-+
-+	priv->hw_data = device_get_match_data(dev);
-+
-+	priv->plat_data = dev_get_platdata(&client->dev);
-+	if (!priv->plat_data)
-+		return dev_err_probe(dev, -ENODEV, "Platform data missing\n");
-+
-+	mutex_init(&priv->reg_lock);
-+
-+	/*
-+	 * Initialize to invalid values so that the first reg writes will
-+	 * configure the target.
-+	 */
-+	priv->current_indirect_target = 0xff;
-+
-+	priv->regmap = devm_regmap_init_i2c(client, &ub953_regmap_config);
-+	if (IS_ERR(priv->regmap)) {
-+		ret = PTR_ERR(priv->regmap);
-+		dev_err_probe(dev, ret, "Failed to init regmap\n");
-+		goto err_mutex_destroy;
-+	}
-+
-+	ret = ub953_parse_dt(priv);
-+	if (ret)
-+		goto err_mutex_destroy;
-+
-+	ret = ub953_hw_init(priv);
-+	if (ret)
-+		goto err_mutex_destroy;
-+
-+	ret = ub953_gpiochip_probe(priv);
-+	if (ret) {
-+		dev_err_probe(dev, ret, "Failed to init gpiochip\n");
-+		goto err_mutex_destroy;
-+	}
-+
-+	ret = ub953_register_clkout(priv);
-+	if (ret) {
-+		dev_err_probe(dev, ret, "Failed to register clkout\n");
-+		goto err_gpiochip_remove;
-+	}
-+
-+	ret = ub953_subdev_init(priv);
-+	if (ret)
-+		goto err_gpiochip_remove;
-+
-+	ret = ub953_add_i2c_adapter(priv);
-+	if (ret) {
-+		dev_err_probe(dev, ret, "failed to add remote i2c adapter\n");
-+		goto err_subdev_uninit;
-+	}
-+
-+	return 0;
-+
-+err_subdev_uninit:
-+	ub953_subdev_uninit(priv);
-+err_gpiochip_remove:
-+	ub953_gpiochip_remove(priv);
-+err_mutex_destroy:
-+	mutex_destroy(&priv->reg_lock);
-+
-+	return ret;
-+}
-+
-+static void ub953_remove(struct i2c_client *client)
-+{
-+	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-+	struct ub953_data *priv = sd_to_ub953(sd);
-+
-+	i2c_atr_del_adapter(priv->plat_data->atr, priv->plat_data->port);
-+
-+	ub953_subdev_uninit(priv);
-+
-+	ub953_gpiochip_remove(priv);
-+	mutex_destroy(&priv->reg_lock);
-+}
-+
-+static const struct ub953_hw_data ds90ub953_hw = {
-+	.model = "ub953",
-+};
-+
-+static const struct ub953_hw_data ds90ub971_hw = {
-+	.model = "ub971",
-+	.is_ub971 = true,
-+};
-+
-+static const struct i2c_device_id ub953_id[] = {
-+	{ "ds90ub953-q1", (kernel_ulong_t)&ds90ub953_hw },
-+	{ "ds90ub971-q1", (kernel_ulong_t)&ds90ub971_hw },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, ub953_id);
-+
-+static const struct of_device_id ub953_dt_ids[] = {
-+	{ .compatible = "ti,ds90ub953-q1", .data = &ds90ub953_hw },
-+	{ .compatible = "ti,ds90ub971-q1", .data = &ds90ub971_hw },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, ub953_dt_ids);
-+
-+static struct i2c_driver ds90ub953_driver = {
-+	.probe_new	= ub953_probe,
-+	.remove		= ub953_remove,
-+	.id_table	= ub953_id,
-+	.driver = {
-+		.name	= "ds90ub953",
-+		.owner = THIS_MODULE,
-+		.of_match_table = ub953_dt_ids,
-+	},
-+};
-+module_i2c_driver(ds90ub953_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Texas Instruments FPD-Link III/IV CSI-2 Serializers Driver");
-+MODULE_AUTHOR("Luca Ceresoli <luca@lucaceresoli.net>");
-+MODULE_AUTHOR("Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>");
-+MODULE_IMPORT_NS(I2C_ATR);
--- 
-2.34.1
+I need to rework this patch series before resubmitting it. I did not 
+forget it :) I'd like to provide a good use-case on how to property can 
+be used and maybe narrow down its perimeter/use-cases.
 
+Peng, to which extent are you interested in this binding? What would be 
+your use-case?
+
+Best regards,
+Gatien
+
+> On 27.02.23 13:26, Gatien CHEVALLIER wrote:
+>> Hello Ahmad,
+>>
+>> Sorry for the delay :)
+>>
+>> On 2/13/23 12:27, Ahmad Fatoum wrote:
+>>> Hello Gatien,
+>>>
+>>> On 13.02.23 11:54, Gatien CHEVALLIER wrote:
+>>>> On 2/9/23 09:10, Ahmad Fatoum wrote:
+>>>>> On 09.02.23 08:46, Ahmad Fatoum wrote:
+>>>>>> Hello Gatien,
+>>>>>>
+>>>>>> On 27.01.23 17:40, Gatien Chevallier wrote:
+>>>>>>> The STM32 System Bus is an internal bus on which devices are
+>>>>>>> connected.
+>>>>>>> ETZPC is a peripheral overseeing the firewall bus that configures
+>>>>>>> and control access to the peripherals connected on it.
+>>>>>>>
+>>>>>>> For more information on which peripheral is securable, please read
+>>>>>>> the STM32MP13 reference manual.
+>>>>>>
+>>>>>> Diff is way too big. Please split up the alphabetic reordering
+>>>>>> into its
+>>>>>> own commit, so actual functional changes are apparent.
+>>>>>
+>>>>> Ah, I see now that you are moving securable peripherals into a new
+>>>>> bus.
+>>>>> I share Uwe's confusion of considering the ETZPC as bus.
+>>>>>
+>>>>> Does this configuration even change dynamically? Why can't you
+>>>>> implement
+>>>>> this binding in the bootloader and have Linux only see a DT where
+>>>>> unavailable
+>>>>> nodes are status = "disabled"; secure-status = "okay"?
+>>>>>
+>>>>> For inspiration, see barebox' device tree fixups when devices are
+>>>>> disabled
+>>>>> per fuse:
+>>>>>
+>>>>> https://urldefense.com/v3/__https://elixir.bootlin.com/barebox/v2023.01.0/source/drivers/base/featctrl.c*L122__;Iw!!GF_29dbcQIUBPA!2CT6VXNxfrLUg3mPkiAykgwwu8y8TVPaVa5FupuehHDyeuPvx4a2aNuMs-ayUCqP8q364P8u0GxYprlqwrvgvnXndYBmii57$
+>>>>> [elixir[.]bootlin[.]com]
+>>>>>
+>>>>> Cheers,
+>>>>> Ahmad
+>>>>
+>>>> This configuration can change dynamically. The binding will be
+>>>> implemented in the bootloader, where the ETZPC is already
+>>>> implemented as a bus in our downstream.
+>>>>
+>>>> I find the mentionned example valid.
+>>>>
+>>>> Now, why is it a bus? :D
+>>>>
+>>>> It is the result of the discussion on the previous submission by
+>>>> Benjamin (Sorry for the lack of link but I saw that you participated
+>>>> on these threads)+ we need the bus mechanism to control whether a
+>>>> subnode should be probed or not. You can see it as a firewall bus.
+>>>>
+>>>> The ETZPC relies on the ARM TrustZone extension to the AHB bus and
+>>>> propagation through bridges to the APB bus. Therefore, I find it
+>>>> relevant to consider it as a bus, what is your opinion?
+>>>>
+>>>> This patchset is a first step to the implementation of an API to
+>>>> control accesses dynamically.
+>>>
+>>> I still don't get what's dynamic about this. Either:
+>>>
+>>>     - Configuration _can_ change while Linux is running: You'll need
+>>> to do
+>>>       way more than what your current bus provides to somwhow
+>>> synchronize state
+>>>       with the secure monitor; otherwise a newly secured device will
+>>> cause the driver
+>>>       to trigger data aborts that you'll have to handle and unbind the
+>>> driver.
+>>>       (like if a USB drive is yanked out).
+>>>
+>>>     - Configuration _can't_ change while Linux is running: You can
+>>> have the bootloader
+>>>       fixup the device tree and Linux need not care at all about
+>>> devices that the
+>>>       ETZPC is securing.
+>>>
+>>> My understanding is that the latter is your use case, so I don't see
+>>> why we
+>>> even need the normal world to be aware of the partitioning.
+>>>
+>>> Cheers,
+>>> Ahmad
+>>>
+>> What about the case where we do not have a U-Boot/bootloader to fixup
+>> the device tree?
+>>
+>> On the other hand, ETZPC is a hardware firewall and is on the bus.
+>> Therefore, shouldn't it be represented as a bus in the file that
+>> describes the hardware?
+>>
+>> Best regards,
+>> Gatien
+>>
+>>>>
+>>>>>
+>>>>>>
+>>>>>> Thanks,
+>>>>>> Ahmad
+>>>>>>
+>>>>>>>
+>>>>>>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+>>>>>>> ---
+>>>>>>>
+>>>>>>> No changes in V2.
+>>>>>>>
+>>>>>>> Changes in V3:
+>>>>>>>       -Use appriopriate node name: bus
+>>>>>>>
+>>>>>>>     arch/arm/boot/dts/stm32mp131.dtsi  | 407
+>>>>>>> +++++++++++++++--------------
+>>>>>>>     arch/arm/boot/dts/stm32mp133.dtsi  |  51 ++--
+>>>>>>>     arch/arm/boot/dts/stm32mp13xc.dtsi |  19 +-
+>>>>>>>     arch/arm/boot/dts/stm32mp13xf.dtsi |  18 +-
+>>>>>>>     4 files changed, 258 insertions(+), 237 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/arch/arm/boot/dts/stm32mp131.dtsi
+>>>>>>> b/arch/arm/boot/dts/stm32mp131.dtsi
+>>>>>>> index accc3824f7e9..24462a647101 100644
+>>>>>>> --- a/arch/arm/boot/dts/stm32mp131.dtsi
+>>>>>>> +++ b/arch/arm/boot/dts/stm32mp131.dtsi
+>>>>>>> @@ -253,148 +253,6 @@ dmamux1: dma-router@48002000 {
+>>>>>>>                 dma-channels = <16>;
+>>>>>>>             };
+>>>>>>>     -        adc_2: adc@48004000 {
+>>>>>>> -            compatible = "st,stm32mp13-adc-core";
+>>>>>>> -            reg = <0x48004000 0x400>;
+>>>>>>> -            interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -            clocks = <&rcc ADC2>, <&rcc ADC2_K>;
+>>>>>>> -            clock-names = "bus", "adc";
+>>>>>>> -            interrupt-controller;
+>>>>>>> -            #interrupt-cells = <1>;
+>>>>>>> -            #address-cells = <1>;
+>>>>>>> -            #size-cells = <0>;
+>>>>>>> -            status = "disabled";
+>>>>>>> -
+>>>>>>> -            adc2: adc@0 {
+>>>>>>> -                compatible = "st,stm32mp13-adc";
+>>>>>>> -                #io-channel-cells = <1>;
+>>>>>>> -                #address-cells = <1>;
+>>>>>>> -                #size-cells = <0>;
+>>>>>>> -                reg = <0x0>;
+>>>>>>> -                interrupt-parent = <&adc_2>;
+>>>>>>> -                interrupts = <0>;
+>>>>>>> -                dmas = <&dmamux1 10 0x400 0x80000001>;
+>>>>>>> -                dma-names = "rx";
+>>>>>>> -                status = "disabled";
+>>>>>>> -
+>>>>>>> -                channel@13 {
+>>>>>>> -                    reg = <13>;
+>>>>>>> -                    label = "vrefint";
+>>>>>>> -                };
+>>>>>>> -                channel@14 {
+>>>>>>> -                    reg = <14>;
+>>>>>>> -                    label = "vddcore";
+>>>>>>> -                };
+>>>>>>> -                channel@16 {
+>>>>>>> -                    reg = <16>;
+>>>>>>> -                    label = "vddcpu";
+>>>>>>> -                };
+>>>>>>> -                channel@17 {
+>>>>>>> -                    reg = <17>;
+>>>>>>> -                    label = "vddq_ddr";
+>>>>>>> -                };
+>>>>>>> -            };
+>>>>>>> -        };
+>>>>>>> -
+>>>>>>> -        usbotg_hs: usb@49000000 {
+>>>>>>> -            compatible = "st,stm32mp15-hsotg", "snps,dwc2";
+>>>>>>> -            reg = <0x49000000 0x40000>;
+>>>>>>> -            clocks = <&rcc USBO_K>;
+>>>>>>> -            clock-names = "otg";
+>>>>>>> -            resets = <&rcc USBO_R>;
+>>>>>>> -            reset-names = "dwc2";
+>>>>>>> -            interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -            g-rx-fifo-size = <512>;
+>>>>>>> -            g-np-tx-fifo-size = <32>;
+>>>>>>> -            g-tx-fifo-size = <256 16 16 16 16 16 16 16>;
+>>>>>>> -            dr_mode = "otg";
+>>>>>>> -            otg-rev = <0x200>;
+>>>>>>> -            usb33d-supply = <&usb33>;
+>>>>>>> -            status = "disabled";
+>>>>>>> -        };
+>>>>>>> -
+>>>>>>> -        spi4: spi@4c002000 {
+>>>>>>> -            compatible = "st,stm32h7-spi";
+>>>>>>> -            reg = <0x4c002000 0x400>;
+>>>>>>> -            interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -            clocks = <&rcc SPI4_K>;
+>>>>>>> -            resets = <&rcc SPI4_R>;
+>>>>>>> -            #address-cells = <1>;
+>>>>>>> -            #size-cells = <0>;
+>>>>>>> -            dmas = <&dmamux1 83 0x400 0x01>,
+>>>>>>> -                   <&dmamux1 84 0x400 0x01>;
+>>>>>>> -            dma-names = "rx", "tx";
+>>>>>>> -            status = "disabled";
+>>>>>>> -        };
+>>>>>>> -
+>>>>>>> -        spi5: spi@4c003000 {
+>>>>>>> -            compatible = "st,stm32h7-spi";
+>>>>>>> -            reg = <0x4c003000 0x400>;
+>>>>>>> -            interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -            clocks = <&rcc SPI5_K>;
+>>>>>>> -            resets = <&rcc SPI5_R>;
+>>>>>>> -            #address-cells = <1>;
+>>>>>>> -            #size-cells = <0>;
+>>>>>>> -            dmas = <&dmamux1 85 0x400 0x01>,
+>>>>>>> -                   <&dmamux1 86 0x400 0x01>;
+>>>>>>> -            dma-names = "rx", "tx";
+>>>>>>> -            status = "disabled";
+>>>>>>> -        };
+>>>>>>> -
+>>>>>>> -        i2c3: i2c@4c004000 {
+>>>>>>> -            compatible = "st,stm32mp13-i2c";
+>>>>>>> -            reg = <0x4c004000 0x400>;
+>>>>>>> -            interrupt-names = "event", "error";
+>>>>>>> -            interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
+>>>>>>> -                     <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -            clocks = <&rcc I2C3_K>;
+>>>>>>> -            resets = <&rcc I2C3_R>;
+>>>>>>> -            #address-cells = <1>;
+>>>>>>> -            #size-cells = <0>;
+>>>>>>> -            dmas = <&dmamux1 73 0x400 0x1>,
+>>>>>>> -                   <&dmamux1 74 0x400 0x1>;
+>>>>>>> -            dma-names = "rx", "tx";
+>>>>>>> -            st,syscfg-fmp = <&syscfg 0x4 0x4>;
+>>>>>>> -            i2c-analog-filter;
+>>>>>>> -            status = "disabled";
+>>>>>>> -        };
+>>>>>>> -
+>>>>>>> -        i2c4: i2c@4c005000 {
+>>>>>>> -            compatible = "st,stm32mp13-i2c";
+>>>>>>> -            reg = <0x4c005000 0x400>;
+>>>>>>> -            interrupt-names = "event", "error";
+>>>>>>> -            interrupts = <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>,
+>>>>>>> -                     <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -            clocks = <&rcc I2C4_K>;
+>>>>>>> -            resets = <&rcc I2C4_R>;
+>>>>>>> -            #address-cells = <1>;
+>>>>>>> -            #size-cells = <0>;
+>>>>>>> -            dmas = <&dmamux1 75 0x400 0x1>,
+>>>>>>> -                   <&dmamux1 76 0x400 0x1>;
+>>>>>>> -            dma-names = "rx", "tx";
+>>>>>>> -            st,syscfg-fmp = <&syscfg 0x4 0x8>;
+>>>>>>> -            i2c-analog-filter;
+>>>>>>> -            status = "disabled";
+>>>>>>> -        };
+>>>>>>> -
+>>>>>>> -        i2c5: i2c@4c006000 {
+>>>>>>> -            compatible = "st,stm32mp13-i2c";
+>>>>>>> -            reg = <0x4c006000 0x400>;
+>>>>>>> -            interrupt-names = "event", "error";
+>>>>>>> -            interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
+>>>>>>> -                     <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -            clocks = <&rcc I2C5_K>;
+>>>>>>> -            resets = <&rcc I2C5_R>;
+>>>>>>> -            #address-cells = <1>;
+>>>>>>> -            #size-cells = <0>;
+>>>>>>> -            dmas = <&dmamux1 115 0x400 0x1>,
+>>>>>>> -                   <&dmamux1 116 0x400 0x1>;
+>>>>>>> -            dma-names = "rx", "tx";
+>>>>>>> -            st,syscfg-fmp = <&syscfg 0x4 0x10>;
+>>>>>>> -            i2c-analog-filter;
+>>>>>>> -            status = "disabled";
+>>>>>>> -        };
+>>>>>>> -
+>>>>>>>             rcc: rcc@50000000 {
+>>>>>>>                 compatible = "st,stm32mp13-rcc", "syscon";
+>>>>>>>                 reg = <0x50000000 0x1000>;
+>>>>>>> @@ -431,34 +289,6 @@ mdma: dma-controller@58000000 {
+>>>>>>>                 dma-requests = <48>;
+>>>>>>>             };
+>>>>>>>     -        sdmmc1: mmc@58005000 {
+>>>>>>> -            compatible = "st,stm32-sdmmc2", "arm,pl18x",
+>>>>>>> "arm,primecell";
+>>>>>>> -            arm,primecell-periphid = <0x20253180>;
+>>>>>>> -            reg = <0x58005000 0x1000>, <0x58006000 0x1000>;
+>>>>>>> -            interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -            clocks = <&rcc SDMMC1_K>;
+>>>>>>> -            clock-names = "apb_pclk";
+>>>>>>> -            resets = <&rcc SDMMC1_R>;
+>>>>>>> -            cap-sd-highspeed;
+>>>>>>> -            cap-mmc-highspeed;
+>>>>>>> -            max-frequency = <130000000>;
+>>>>>>> -            status = "disabled";
+>>>>>>> -        };
+>>>>>>> -
+>>>>>>> -        sdmmc2: mmc@58007000 {
+>>>>>>> -            compatible = "st,stm32-sdmmc2", "arm,pl18x",
+>>>>>>> "arm,primecell";
+>>>>>>> -            arm,primecell-periphid = <0x20253180>;
+>>>>>>> -            reg = <0x58007000 0x1000>, <0x58008000 0x1000>;
+>>>>>>> -            interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -            clocks = <&rcc SDMMC2_K>;
+>>>>>>> -            clock-names = "apb_pclk";
+>>>>>>> -            resets = <&rcc SDMMC2_R>;
+>>>>>>> -            cap-sd-highspeed;
+>>>>>>> -            cap-mmc-highspeed;
+>>>>>>> -            max-frequency = <130000000>;
+>>>>>>> -            status = "disabled";
+>>>>>>> -        };
+>>>>>>> -
+>>>>>>>             usbh_ohci: usb@5800c000 {
+>>>>>>>                 compatible = "generic-ohci";
+>>>>>>>                 reg = <0x5800c000 0x1000>;
+>>>>>>> @@ -486,29 +316,6 @@ iwdg2: watchdog@5a002000 {
+>>>>>>>                 status = "disabled";
+>>>>>>>             };
+>>>>>>>     -        usbphyc: usbphyc@5a006000 {
+>>>>>>> -            #address-cells = <1>;
+>>>>>>> -            #size-cells = <0>;
+>>>>>>> -            #clock-cells = <0>;
+>>>>>>> -            compatible = "st,stm32mp1-usbphyc";
+>>>>>>> -            reg = <0x5a006000 0x1000>;
+>>>>>>> -            clocks = <&rcc USBPHY_K>;
+>>>>>>> -            resets = <&rcc USBPHY_R>;
+>>>>>>> -            vdda1v1-supply = <&reg11>;
+>>>>>>> -            vdda1v8-supply = <&reg18>;
+>>>>>>> -            status = "disabled";
+>>>>>>> -
+>>>>>>> -            usbphyc_port0: usb-phy@0 {
+>>>>>>> -                #phy-cells = <0>;
+>>>>>>> -                reg = <0>;
+>>>>>>> -            };
+>>>>>>> -
+>>>>>>> -            usbphyc_port1: usb-phy@1 {
+>>>>>>> -                #phy-cells = <1>;
+>>>>>>> -                reg = <1>;
+>>>>>>> -            };
+>>>>>>> -        };
+>>>>>>> -
+>>>>>>>             rtc: rtc@5c004000 {
+>>>>>>>                 compatible = "st,stm32mp1-rtc";
+>>>>>>>                 reg = <0x5c004000 0x400>;
+>>>>>>> @@ -536,6 +343,220 @@ ts_cal2: calib@5e {
+>>>>>>>                 };
+>>>>>>>             };
+>>>>>>>     +        etzpc: bus@5c007000 {
+>>>>>>> +            compatible = "st,stm32mp13-sys-bus";
+>>>>>>> +            reg = <0x5c007000 0x400>;
+>>>>>>> +            #address-cells = <1>;
+>>>>>>> +            #size-cells = <1>;
+>>>>>>> +            feature-domain-controller;
+>>>>>>> +            #feature-domain-cells = <1>;
+>>>>>>> +            ranges;
+>>>>>>> +
+>>>>>>> +            adc_2: adc@48004000 {
+>>>>>>> +                compatible = "st,stm32mp13-adc-core";
+>>>>>>> +                reg = <0x48004000 0x400>;
+>>>>>>> +                interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +                clocks = <&rcc ADC2>, <&rcc ADC2_K>;
+>>>>>>> +                clock-names = "bus", "adc";
+>>>>>>> +                interrupt-controller;
+>>>>>>> +                #interrupt-cells = <1>;
+>>>>>>> +                #address-cells = <1>;
+>>>>>>> +                #size-cells = <0>;
+>>>>>>> +                feature-domains = <&etzpc 33>;
+>>>>>>> +                status = "disabled";
+>>>>>>> +
+>>>>>>> +                adc2: adc@0 {
+>>>>>>> +                    compatible = "st,stm32mp13-adc";
+>>>>>>> +                    #io-channel-cells = <1>;
+>>>>>>> +                    #address-cells = <1>;
+>>>>>>> +                    #size-cells = <0>;
+>>>>>>> +                    reg = <0x0>;
+>>>>>>> +                    interrupt-parent = <&adc_2>;
+>>>>>>> +                    interrupts = <0>;
+>>>>>>> +                    dmas = <&dmamux1 10 0x400 0x80000001>;
+>>>>>>> +                    dma-names = "rx";
+>>>>>>> +                    status = "disabled";
+>>>>>>> +
+>>>>>>> +                    channel@13 {
+>>>>>>> +                        reg = <13>;
+>>>>>>> +                        label = "vrefint";
+>>>>>>> +                    };
+>>>>>>> +                    channel@14 {
+>>>>>>> +                        reg = <14>;
+>>>>>>> +                        label = "vddcore";
+>>>>>>> +                    };
+>>>>>>> +                    channel@16 {
+>>>>>>> +                        reg = <16>;
+>>>>>>> +                        label = "vddcpu";
+>>>>>>> +                    };
+>>>>>>> +                    channel@17 {
+>>>>>>> +                        reg = <17>;
+>>>>>>> +                        label = "vddq_ddr";
+>>>>>>> +                    };
+>>>>>>> +                };
+>>>>>>> +            };
+>>>>>>> +
+>>>>>>> +            usbotg_hs: usb@49000000 {
+>>>>>>> +                compatible = "st,stm32mp15-hsotg", "snps,dwc2";
+>>>>>>> +                reg = <0x49000000 0x40000>;
+>>>>>>> +                clocks = <&rcc USBO_K>;
+>>>>>>> +                clock-names = "otg";
+>>>>>>> +                resets = <&rcc USBO_R>;
+>>>>>>> +                reset-names = "dwc2";
+>>>>>>> +                interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +                g-rx-fifo-size = <512>;
+>>>>>>> +                g-np-tx-fifo-size = <32>;
+>>>>>>> +                g-tx-fifo-size = <256 16 16 16 16 16 16 16>;
+>>>>>>> +                dr_mode = "otg";
+>>>>>>> +                otg-rev = <0x200>;
+>>>>>>> +                usb33d-supply = <&usb33>;
+>>>>>>> +                feature-domains = <&etzpc 34>;
+>>>>>>> +                status = "disabled";
+>>>>>>> +            };
+>>>>>>> +
+>>>>>>> +            spi4: spi@4c002000 {
+>>>>>>> +                compatible = "st,stm32h7-spi";
+>>>>>>> +                reg = <0x4c002000 0x400>;
+>>>>>>> +                interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +                clocks = <&rcc SPI4_K>;
+>>>>>>> +                resets = <&rcc SPI4_R>;
+>>>>>>> +                #address-cells = <1>;
+>>>>>>> +                #size-cells = <0>;
+>>>>>>> +                dmas = <&dmamux1 83 0x400 0x01>,
+>>>>>>> +                       <&dmamux1 84 0x400 0x01>;
+>>>>>>> +                dma-names = "rx", "tx";
+>>>>>>> +                feature-domains = <&etzpc 18>;
+>>>>>>> +                status = "disabled";
+>>>>>>> +            };
+>>>>>>> +
+>>>>>>> +            spi5: spi@4c003000 {
+>>>>>>> +                compatible = "st,stm32h7-spi";
+>>>>>>> +                reg = <0x4c003000 0x400>;
+>>>>>>> +                interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +                clocks = <&rcc SPI5_K>;
+>>>>>>> +                resets = <&rcc SPI5_R>;
+>>>>>>> +                #address-cells = <1>;
+>>>>>>> +                #size-cells = <0>;
+>>>>>>> +                dmas = <&dmamux1 85 0x400 0x01>,
+>>>>>>> +                       <&dmamux1 86 0x400 0x01>;
+>>>>>>> +                dma-names = "rx", "tx";
+>>>>>>> +                feature-domains = <&etzpc 19>;
+>>>>>>> +                status = "disabled";
+>>>>>>> +            };
+>>>>>>> +
+>>>>>>> +            i2c3: i2c@4c004000 {
+>>>>>>> +                compatible = "st,stm32mp13-i2c";
+>>>>>>> +                reg = <0x4c004000 0x400>;
+>>>>>>> +                interrupt-names = "event", "error";
+>>>>>>> +                interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
+>>>>>>> +                         <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +                clocks = <&rcc I2C3_K>;
+>>>>>>> +                resets = <&rcc I2C3_R>;
+>>>>>>> +                #address-cells = <1>;
+>>>>>>> +                #size-cells = <0>;
+>>>>>>> +                dmas = <&dmamux1 73 0x400 0x1>,
+>>>>>>> +                       <&dmamux1 74 0x400 0x1>;
+>>>>>>> +                dma-names = "rx", "tx";
+>>>>>>> +                st,syscfg-fmp = <&syscfg 0x4 0x4>;
+>>>>>>> +                i2c-analog-filter;
+>>>>>>> +                feature-domains = <&etzpc 20>;
+>>>>>>> +                status = "disabled";
+>>>>>>> +            };
+>>>>>>> +
+>>>>>>> +            i2c4: i2c@4c005000 {
+>>>>>>> +                compatible = "st,stm32mp13-i2c";
+>>>>>>> +                reg = <0x4c005000 0x400>;
+>>>>>>> +                interrupt-names = "event", "error";
+>>>>>>> +                interrupts = <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>,
+>>>>>>> +                         <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +                clocks = <&rcc I2C4_K>;
+>>>>>>> +                resets = <&rcc I2C4_R>;
+>>>>>>> +                #address-cells = <1>;
+>>>>>>> +                #size-cells = <0>;
+>>>>>>> +                dmas = <&dmamux1 75 0x400 0x1>,
+>>>>>>> +                       <&dmamux1 76 0x400 0x1>;
+>>>>>>> +                dma-names = "rx", "tx";
+>>>>>>> +                st,syscfg-fmp = <&syscfg 0x4 0x8>;
+>>>>>>> +                i2c-analog-filter;
+>>>>>>> +                feature-domains = <&etzpc 21>;
+>>>>>>> +                status = "disabled";
+>>>>>>> +            };
+>>>>>>> +
+>>>>>>> +            i2c5: i2c@4c006000 {
+>>>>>>> +                compatible = "st,stm32mp13-i2c";
+>>>>>>> +                reg = <0x4c006000 0x400>;
+>>>>>>> +                interrupt-names = "event", "error";
+>>>>>>> +                interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
+>>>>>>> +                         <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +                clocks = <&rcc I2C5_K>;
+>>>>>>> +                resets = <&rcc I2C5_R>;
+>>>>>>> +                #address-cells = <1>;
+>>>>>>> +                #size-cells = <0>;
+>>>>>>> +                dmas = <&dmamux1 115 0x400 0x1>,
+>>>>>>> +                       <&dmamux1 116 0x400 0x1>;
+>>>>>>> +                dma-names = "rx", "tx";
+>>>>>>> +                st,syscfg-fmp = <&syscfg 0x4 0x10>;
+>>>>>>> +                i2c-analog-filter;
+>>>>>>> +                feature-domains = <&etzpc 22>;
+>>>>>>> +                status = "disabled";
+>>>>>>> +            };
+>>>>>>> +
+>>>>>>> +            sdmmc1: mmc@58005000 {
+>>>>>>> +                compatible = "st,stm32-sdmmc2", "arm,pl18x",
+>>>>>>> "arm,primecell";
+>>>>>>> +                arm,primecell-periphid = <0x20253180>;
+>>>>>>> +                reg = <0x58005000 0x1000>, <0x58006000 0x1000>;
+>>>>>>> +                interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +                clocks = <&rcc SDMMC1_K>;
+>>>>>>> +                clock-names = "apb_pclk";
+>>>>>>> +                resets = <&rcc SDMMC1_R>;
+>>>>>>> +                cap-sd-highspeed;
+>>>>>>> +                cap-mmc-highspeed;
+>>>>>>> +                max-frequency = <130000000>;
+>>>>>>> +                feature-domains = <&etzpc 50>;
+>>>>>>> +                status = "disabled";
+>>>>>>> +            };
+>>>>>>> +
+>>>>>>> +            sdmmc2: mmc@58007000 {
+>>>>>>> +                compatible = "st,stm32-sdmmc2", "arm,pl18x",
+>>>>>>> "arm,primecell";
+>>>>>>> +                arm,primecell-periphid = <0x20253180>;
+>>>>>>> +                reg = <0x58007000 0x1000>, <0x58008000 0x1000>;
+>>>>>>> +                interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +                clocks = <&rcc SDMMC2_K>;
+>>>>>>> +                clock-names = "apb_pclk";
+>>>>>>> +                resets = <&rcc SDMMC2_R>;
+>>>>>>> +                cap-sd-highspeed;
+>>>>>>> +                cap-mmc-highspeed;
+>>>>>>> +                max-frequency = <130000000>;
+>>>>>>> +                feature-domains = <&etzpc 51>;
+>>>>>>> +                status = "disabled";
+>>>>>>> +            };
+>>>>>>> +
+>>>>>>> +            usbphyc: usbphyc@5a006000 {
+>>>>>>> +                #address-cells = <1>;
+>>>>>>> +                #size-cells = <0>;
+>>>>>>> +                #clock-cells = <0>;
+>>>>>>> +                compatible = "st,stm32mp1-usbphyc";
+>>>>>>> +                reg = <0x5a006000 0x1000>;
+>>>>>>> +                clocks = <&rcc USBPHY_K>;
+>>>>>>> +                resets = <&rcc USBPHY_R>;
+>>>>>>> +                vdda1v1-supply = <&reg11>;
+>>>>>>> +                vdda1v8-supply = <&reg18>;
+>>>>>>> +                feature-domains = <&etzpc 5>;
+>>>>>>> +                status = "disabled";
+>>>>>>> +
+>>>>>>> +                usbphyc_port0: usb-phy@0 {
+>>>>>>> +                    #phy-cells = <0>;
+>>>>>>> +                    reg = <0>;
+>>>>>>> +                };
+>>>>>>> +
+>>>>>>> +                usbphyc_port1: usb-phy@1 {
+>>>>>>> +                    #phy-cells = <1>;
+>>>>>>> +                    reg = <1>;
+>>>>>>> +                };
+>>>>>>> +            };
+>>>>>>> +
+>>>>>>> +        };
+>>>>>>> +
+>>>>>>>             /*
+>>>>>>>              * Break node order to solve dependency probe issue
+>>>>>>> between
+>>>>>>>              * pinctrl and exti.
+>>>>>>> diff --git a/arch/arm/boot/dts/stm32mp133.dtsi
+>>>>>>> b/arch/arm/boot/dts/stm32mp133.dtsi
+>>>>>>> index df451c3c2a26..be6061552683 100644
+>>>>>>> --- a/arch/arm/boot/dts/stm32mp133.dtsi
+>>>>>>> +++ b/arch/arm/boot/dts/stm32mp133.dtsi
+>>>>>>> @@ -33,35 +33,38 @@ m_can2: can@4400f000 {
+>>>>>>>                 bosch,mram-cfg = <0x1400 0 0 32 0 0 2 2>;
+>>>>>>>                 status = "disabled";
+>>>>>>>             };
+>>>>>>> +    };
+>>>>>>> +};
+>>>>>>>     -        adc_1: adc@48003000 {
+>>>>>>> -            compatible = "st,stm32mp13-adc-core";
+>>>>>>> -            reg = <0x48003000 0x400>;
+>>>>>>> -            interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -            clocks = <&rcc ADC1>, <&rcc ADC1_K>;
+>>>>>>> -            clock-names = "bus", "adc";
+>>>>>>> -            interrupt-controller;
+>>>>>>> -            #interrupt-cells = <1>;
+>>>>>>> +&etzpc {
+>>>>>>> +    adc_1: adc@48003000 {
+>>>>>>> +        compatible = "st,stm32mp13-adc-core";
+>>>>>>> +        reg = <0x48003000 0x400>;
+>>>>>>> +        interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +        clocks = <&rcc ADC1>, <&rcc ADC1_K>;
+>>>>>>> +        clock-names = "bus", "adc";
+>>>>>>> +        interrupt-controller;
+>>>>>>> +        #interrupt-cells = <1>;
+>>>>>>> +        #address-cells = <1>;
+>>>>>>> +        #size-cells = <0>;
+>>>>>>> +        feature-domains = <&etzpc 32>;
+>>>>>>> +        status = "disabled";
+>>>>>>> +
+>>>>>>> +        adc1: adc@0 {
+>>>>>>> +            compatible = "st,stm32mp13-adc";
+>>>>>>> +            #io-channel-cells = <1>;
+>>>>>>>                 #address-cells = <1>;
+>>>>>>>                 #size-cells = <0>;
+>>>>>>> +            reg = <0x0>;
+>>>>>>> +            interrupt-parent = <&adc_1>;
+>>>>>>> +            interrupts = <0>;
+>>>>>>> +            dmas = <&dmamux1 9 0x400 0x80000001>;
+>>>>>>> +            dma-names = "rx";
+>>>>>>>                 status = "disabled";
+>>>>>>>     -            adc1: adc@0 {
+>>>>>>> -                compatible = "st,stm32mp13-adc";
+>>>>>>> -                #io-channel-cells = <1>;
+>>>>>>> -                #address-cells = <1>;
+>>>>>>> -                #size-cells = <0>;
+>>>>>>> -                reg = <0x0>;
+>>>>>>> -                interrupt-parent = <&adc_1>;
+>>>>>>> -                interrupts = <0>;
+>>>>>>> -                dmas = <&dmamux1 9 0x400 0x80000001>;
+>>>>>>> -                dma-names = "rx";
+>>>>>>> -                status = "disabled";
+>>>>>>> -
+>>>>>>> -                channel@18 {
+>>>>>>> -                    reg = <18>;
+>>>>>>> -                    label = "vrefint";
+>>>>>>> -             ��  };
+>>>>>>> +            channel@18 {
+>>>>>>> +                reg = <18>;
+>>>>>>> +                label = "vrefint";
+>>>>>>>                 };
+>>>>>>>             };
+>>>>>>>         };
+>>>>>>> diff --git a/arch/arm/boot/dts/stm32mp13xc.dtsi
+>>>>>>> b/arch/arm/boot/dts/stm32mp13xc.dtsi
+>>>>>>> index 4d00e7592882..a1a7a40c2a3e 100644
+>>>>>>> --- a/arch/arm/boot/dts/stm32mp13xc.dtsi
+>>>>>>> +++ b/arch/arm/boot/dts/stm32mp13xc.dtsi
+>>>>>>> @@ -4,15 +4,14 @@
+>>>>>>>      * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for
+>>>>>>> STMicroelectronics.
+>>>>>>>      */
+>>>>>>>     -/ {
+>>>>>>> -    soc {
+>>>>>>> -        cryp: crypto@54002000 {
+>>>>>>> -            compatible = "st,stm32mp1-cryp";
+>>>>>>> -            reg = <0x54002000 0x400>;
+>>>>>>> -            interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -            clocks = <&rcc CRYP1>;
+>>>>>>> -            resets = <&rcc CRYP1_R>;
+>>>>>>> -            status = "disabled";
+>>>>>>> -        };
+>>>>>>> +&etzpc {
+>>>>>>> +    cryp: crypto@54002000 {
+>>>>>>> +        compatible = "st,stm32mp1-cryp";
+>>>>>>> +        reg = <0x54002000 0x400>;
+>>>>>>> +        interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +        clocks = <&rcc CRYP1>;
+>>>>>>> +        resets = <&rcc CRYP1_R>;
+>>>>>>> +        feature-domains = <&etzpc 42>;
+>>>>>>> +        status = "disabled";
+>>>>>>>         };
+>>>>>>>     };
+>>>>>>> diff --git a/arch/arm/boot/dts/stm32mp13xf.dtsi
+>>>>>>> b/arch/arm/boot/dts/stm32mp13xf.dtsi
+>>>>>>> index 4d00e7592882..b9fb071a1471 100644
+>>>>>>> --- a/arch/arm/boot/dts/stm32mp13xf.dtsi
+>>>>>>> +++ b/arch/arm/boot/dts/stm32mp13xf.dtsi
+>>>>>>> @@ -4,15 +4,13 @@
+>>>>>>>      * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for
+>>>>>>> STMicroelectronics.
+>>>>>>>      */
+>>>>>>>     -/ {
+>>>>>>> -    soc {
+>>>>>>> -        cryp: crypto@54002000 {
+>>>>>>> -            compatible = "st,stm32mp1-cryp";
+>>>>>>> -            reg = <0x54002000 0x400>;
+>>>>>>> -            interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> -            clocks = <&rcc CRYP1>;
+>>>>>>> -            resets = <&rcc CRYP1_R>;
+>>>>>>> -            status = "disabled";
+>>>>>>> -        };
+>>>>>>> +&etzpc {
+>>>>>>> +    cryp: crypto@54002000 {
+>>>>>>> +        compatible = "st,stm32mp1-cryp";
+>>>>>>> +        reg = <0x54002000 0x400>;
+>>>>>>> +        interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
+>>>>>>> +        clocks = <&rcc CRYP1>;
+>>>>>>> +        resets = <&rcc CRYP1_R>;
+>>>>>>> +        status = "disabled";
+>>>>>>>         };
+>>>>>>>     };
+>>>>>>
+>>>>>
+>>>>
+>>>> Regarding the patch itself, I can separate it in two patches.
+>>>> 1)Introduce ETZPC
+>>>> 2)Move peripherals under ETZPC
+>>>>
+>>>> Best regards,
+>>>> Gatien
+>>>>
+>> >
