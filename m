@@ -2,92 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F436EFB57
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Apr 2023 21:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3211F6EFC97
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Apr 2023 23:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233980AbjDZTud (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Apr 2023 15:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        id S233416AbjDZVm4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Apr 2023 17:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbjDZTuc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Apr 2023 15:50:32 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C3A1724;
-        Wed, 26 Apr 2023 12:50:27 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33QJoDbg054373;
-        Wed, 26 Apr 2023 14:50:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682538613;
-        bh=Wiv2S7gjejSKEt/wuagHsMCgQ8Xvj9Mat37+5l7d5k4=;
-        h=From:To:CC:Subject:Date;
-        b=idu2ipbLblnVVeIbR9IFwHHqoeoymtXpF1D6UeBttB3vOZ0CBOu1pWjm4leu9y4aY
-         1XkXuRXOGYDiF035TaeeQgWbcA5QSWXvtJQzmC+K7nd17OeyWj9z+oHgBun3XCSfJO
-         M4+RGHZRe1BjtBqyToUm5/kvvqQf7dIRvh5ORQa4=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33QJoD2P048430
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 26 Apr 2023 14:50:13 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 26
- Apr 2023 14:50:13 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 26 Apr 2023 14:50:12 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33QJoCuq019926;
-        Wed, 26 Apr 2023 14:50:12 -0500
-From:   Reid Tonking <reidt@ti.com>
-To:     <tony@atomide.com>, <aaro.koskinen@iki.fi>, <jmkrzyszt@gmail.com>,
-        <vigneshr@ti.com>
-CC:     <linux-omap@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <stable@vger.kernel.org>, Reid Tonking <reidt@ti.com>
-Subject: [PATCH v2] i2c: omap: Fix standard mode false ACK readings
-Date:   Wed, 26 Apr 2023 14:49:56 -0500
-Message-ID: <20230426194956.689756-1-reidt@ti.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S233181AbjDZVmz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Apr 2023 17:42:55 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A8D1FF2
+        for <linux-i2c@vger.kernel.org>; Wed, 26 Apr 2023 14:42:54 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-24b89b9a72cso3730515a91.1
+        for <linux-i2c@vger.kernel.org>; Wed, 26 Apr 2023 14:42:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682545374; x=1685137374;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JL3yT3Q33W5/BCQtgOVvz2cK4S2v0dqNTi6RS5aes9g=;
+        b=XNkZz594STdPHyX1p4sbWcT+/ufrjT0xvbgRrgWb3e2bUH7hRP0L/tfcdGAha9itOO
+         q2evXgKmm6ti4Tco14pqA2bzKAyam2OGYxmsgQsmDvWqu+3YLKHCHYgZFE9R6NPkJz8m
+         lfne6IEJw1+A8Y3D6nrh6Keqlvh6LOSo0DQmfoM9XwxTsw415XHO/qphrcKb4WovwTko
+         GMA6gxQLmgm/LIwYzb4prbCJaoDkcp6DBPLEgGfcWEHUKtGVprIsTEuruJKV6bbX6nDn
+         XrREbZBHiJu989RyMGy2M6qamTyZNkUqCplqESSSeetVi2bDd3Uc4BN/mwoIQMxQtv5O
+         Fquw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682545374; x=1685137374;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JL3yT3Q33W5/BCQtgOVvz2cK4S2v0dqNTi6RS5aes9g=;
+        b=ZwFUa+EL0S+QKDvxRON9xNuF+Vyy0rcP7zbTJ1KAHutc8ZG5r6l2eOpsIUR0/BuuKF
+         QMPirJtKr0YDMYeGkbiYmXC+fJsKyzTepBUj1t49tIkEeletDLED3IUQoZADtEY7ImlA
+         Vn98vMbKUMLl8Asu66vl8eUvb5ERBKcnJXu/xf5MTynW2Eq6+bk0GII8+DvkL66s0Prl
+         SfmTsHxJqMbxzUurrPVmFJkeOjojgSu/of5ycgR2Rc3eAGI6wEjJoLcykm3eLhKTIiNP
+         rMWq9e/XyrDQM0c5N6kOm3N0MdxpaAVHspIagXYTroYpZkyDLaV07+/+PT4igm6EKPFx
+         6T0w==
+X-Gm-Message-State: AAQBX9c1jSPfJsStSlOhagsVbaOh+CyPW2yjfmg7UMAHlWh8svWPCBB/
+        Us6YB0m28cXiADA4y6xIM6dCwIKKpXlvchrvn30=
+X-Google-Smtp-Source: AKy350ZYt3fB9LROtObaexIp6GG4m2tcMkEElwocq1wzdkgNZzW1ov+iELSoCUpNt9JvM7K7XxPvVfLCjvxrg/Y2ICE=
+X-Received: by 2002:a17:90b:1e07:b0:246:b2de:f13f with SMTP id
+ pg7-20020a17090b1e0700b00246b2def13fmr22998894pjb.24.1682545374030; Wed, 26
+ Apr 2023 14:42:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7022:c99:b0:62:e5da:deb0 with HTTP; Wed, 26 Apr 2023
+ 14:42:51 -0700 (PDT)
+Reply-To: klassoumark@gmail.com
+From:   Mark Klassou <jamseopara22@gmail.com>
+Date:   Wed, 26 Apr 2023 21:42:51 +0000
+Message-ID: <CAB-St+LycjLvcQzu+CADijKmZwECO2BsJyZRvtVsJbVq4E7YDQ@mail.gmail.com>
+Subject: Re
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Using standard mode, rare false ACK responses were appearing with
-i2cdetect tool. This was happening due to NACK interrupt triggering
-ISR thread before register access interrupt was ready. Removing the
-NACK interrupt's ability to trigger ISR thread lets register access
-ready interrupt do this instead.
+Good Morning,
 
-Cc: <stable@vger.kernel.org> # v3.7+
-Fixes: 3b2f8f82dad7 ("i2c: omap: switch to threaded IRQ support")
-Signed-off-by: Reid Tonking <reidt@ti.com>
----
- drivers/i2c/busses/i2c-omap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I was only wondering if you got my previous email? I have been trying
+to reach you by email. Kindly get back to me swiftly, it is very
+important.
 
-diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
-index 2b4e2be51318..4199f57a6bf2 100644
---- a/drivers/i2c/busses/i2c-omap.c
-+++ b/drivers/i2c/busses/i2c-omap.c
-@@ -1058,7 +1058,7 @@ omap_i2c_isr(int irq, void *dev_id)
- 	u16 stat;
- 
- 	stat = omap_i2c_read_reg(omap, OMAP_I2C_STAT_REG);
--	mask = omap_i2c_read_reg(omap, OMAP_I2C_IE_REG);
-+	mask = omap_i2c_read_reg(omap, OMAP_I2C_IE_REG) & ~OMAP_I2C_STAT_NACK;
- 
- 	if (stat & mask)
- 		ret = IRQ_WAKE_THREAD;
--- 
-2.34.1
-
+Yours faithfully
+Mark Klassou.
