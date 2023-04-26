@@ -2,109 +2,120 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 294596EED19
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Apr 2023 06:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA8C6EEF40
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Apr 2023 09:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239026AbjDZEvZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Apr 2023 00:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S239504AbjDZHVy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Apr 2023 03:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238440AbjDZEvZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Apr 2023 00:51:25 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410411B6
-        for <linux-i2c@vger.kernel.org>; Tue, 25 Apr 2023 21:51:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682484684; x=1714020684;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3utn53lV/AUbE6pDAamZ04zbwipzS1zApClxbkctjQQ=;
-  b=bggv+ucqL2iyNF2Hz0hOzk4NNeeten3RTuifh1wh37qi+wo9D4E7vIJ+
-   ABq5idrEGiDrkcGsWRQao3lVSsciwnEJIe8rSjtfvznrBn++oGvsYUgcx
-   isK0mATpOxgUGQ1ECHdHSBcOTxb5mHYRFbDMKcEaso+RA1kzEVGLXddg1
-   WeRyZ0B3rTWQbfpQc1HR/y4mAjMPc7gSFqsOe3J2C/NJWbQo5cIEmRqGe
-   WCSQeAvfs1dMj5WyWJSOgTceDql15ecjqHMq8nHd8f1qmJ0gX8FUn7dp0
-   iiPuZ3ms8fUSCHczB6We4gqHMI3C84xz3cnamg0/OzZ9ZkaZb9FFcpJuG
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="349795025"
-X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
-   d="scan'208";a="349795025"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 21:51:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="837735559"
-X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
-   d="scan'208";a="837735559"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Apr 2023 21:51:22 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 40DBE4B9; Wed, 26 Apr 2023 07:51:27 +0300 (EEST)
-Date:   Wed, 26 Apr 2023 07:51:27 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Chris Murphy <lists@colorremedies.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org
-Subject: Re: intel-lpss 0000:00:15.1: idma64_irq: status=0x0, millions of
- lines spamming journal
-Message-ID: <20230426045127.GZ66750@black.fi.intel.com>
-References: <47ff45c8-20da-4eac-acad-6d51353f95c6@app.fastmail.com>
- <ZEdsLw+dJhdHVdEO@sai>
- <20230425070109.GU66750@black.fi.intel.com>
- <a08d27b1-6eed-4fba-a3e9-b3b6746c88c3@app.fastmail.com>
+        with ESMTP id S239384AbjDZHVw (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Apr 2023 03:21:52 -0400
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ADDC2;
+        Wed, 26 Apr 2023 00:21:22 -0700 (PDT)
+X-QQ-mid: bizesmtp63t1682493358tw99y582
+Received: from wxdbg.localdomain.com ( [183.129.236.74])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 26 Apr 2023 15:15:47 +0800 (CST)
+X-QQ-SSF: 01400000000000I0Z000000A0000000
+X-QQ-FEAT: k0mQ4ihyJQM+5pSjXtrf8udOhMBQXu4gXXwj6nrx8A+TASNmhS2iT4Ohdu8eN
+        oQUpAZ/eNG+jXUEfuMXviwGToOJUeVUTGS9PuKo26QPNmjWeD3nDF4j2J3kS4/uyDA6TkVl
+        OHRQlLsKNrZtCb/qsxOlgCvguiFdm2Rtc1A7RjSy1SAdzMriEOkAsVRNy5JrqQLJCk/tCin
+        u9Ikv4Vvfk3FypD8xV9MX1HYrremvO2gNqsvSetKazX2t7f7S65UA8QFAxv3EYSkUdY3Flo
+        FDBBhoYQhP6sUEKQF4SFV8IVxdPaLr0plsv8sG5GMuo8T/lQ2mes9P+3cWbil/EH+fg2hw7
+        D4WikYcUTkWIQJtdrksMQHVejJD+p2o5jCaTqboABhs3CAq/XQ=
+X-QQ-GoodBg: 2
+X-BIZMAIL-ID: 13341010435687556093
+From:   Jiawen Wu <jiawenwu@trustnetic.com>
+To:     netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com, ose.Abreu@synopsys.com, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk
+Cc:     linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        mengyuanlou@net-swift.com, Jiawen Wu <jiawenwu@trustnetic.com>
+Subject: [RFC PATCH net-next v5 0/9] TXGBE PHYLINK support
+Date:   Wed, 26 Apr 2023 15:14:25 +0800
+Message-Id: <20230426071434.452717-1-jiawenwu@trustnetic.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a08d27b1-6eed-4fba-a3e9-b3b6746c88c3@app.fastmail.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:trustnetic.com:qybglogicsvr:qybglogicsvr5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 01:14:35PM -0400, Chris Murphy wrote:
-> 
-> 
-> On Tue, Apr 25, 2023, at 3:01 AM, Mika Westerberg wrote:
-> > Hi Chris,
-> >
-> > Would you be able to bisect this to a mainline commit?
-> 
-> Difficult in the near term.
-> 
-> 
-> > At least looking at the changes between v6.3-rc1 and v6.3-rc7 there is
-> > virtually nothing to any of these drivers involved. The log itself looks
-> > like:
-> >
-> >        dev_vdbg(idma64->dma.dev, "%s: status=%#x\n", __func__, status);
-> >
-> > so this should not be enabled at all unless CONFIG_DMADEVICES_VDEBUG is
-> > set to y which seems odd in distro kernel.
-> 
-> $ grep DMADEVICES /boot/config-6.3.0-0.rc2.20230315git6015b1aca1a2.25.fc39.x86_64+debug 
-> CONFIG_DMADEVICES=y
-> CONFIG_DMADEVICES_DEBUG=y
-> # CONFIG_DMADEVICES_VDEBUG is not set
-> $ grep DMADEVICES /boot/config-6.3.0-0.rc2.20230317git38e04b3e4240.27.fc39.x86_64+debug 
-> CONFIG_DMADEVICES=y
-> CONFIG_DMADEVICES_DEBUG=y
-> CONFIG_DMADEVICES_VDEBUG=y
-> 
-> It follows the bug, though I'm not sure if this is the true source of the problem?
+Implement I2C, SFP, GPIO and PHYLINK to setup TXGBE link.
 
-Okay, so the issue here I think is just that the VDEBUG is enabled.
-Since idma64 and I2C share the interrupt, each time a I2C transaction is
-done the idma64 interrupt handler is called as well:
+Because our I2C and PCS are based on Synopsys Designware IP-core, extend
+the i2c-designware and pcs-xpcs driver to realize our functions.
 
-17:          0          0      18841          0          0          0          0          0  IR-IO-APIC   17-fasteoi   i2c_designware.1, idma64.1
+v4 -> v5:
+- add clock register
+- delete i2c-dw.h with platform data
+- introduce property "i2c-dw-flags" to match device flags
+- get resource from platform info to do ioremap
+- rename quirk functions in i2c-designware-*.c
+- fix calling txgbe_phylink_init()
 
-so these end up in the dmesg and journal. I suggest to just disable the
-VDEBUG. Probably was enabled in the Fedora .config by accident as this
-is something that should not be enabled by distro kernels.
+v3 -> v4:
+- modify I2C transfer to be generic implementation
+- avoid to read DW_IC_COMP_PARAM_1
+- remove redundant "if" statement
+- add specific labels to handle error in txgbe_init_phy(), and remove
+  "if" conditions in txgbe_remove_phy()
+
+v2 -> v3:
+- delete own I2C bus master driver, support it in i2c-designware
+- delete own PCS functions, remove pma configuration and 1000BASE-X mode
+- add basic function for 10GBASE-R interface in pcs-xpcs
+- add helper to get txgbe pointer from netdev
+
+v1 -> v2:
+- add comments to indicate GPIO lines
+- add I2C write operation support
+- modify GPIO direction functions
+- rename functions related to PHY interface
+- add condition on interface changing to re-config PCS
+- add to set advertise and fix to get status for 1000BASE-X mode
+- other redundant codes remove
+
+Jiawen Wu (9):
+  net: txgbe: Add software nodes to support phylink
+  i2c: designware: Add driver support for Wangxun 10Gb NIC
+  net: txgbe: Register fixed rate clock
+  net: txgbe: Register I2C platform device
+  net: txgbe: Add SFP module identify
+  net: txgbe: Support GPIO to SFP socket
+  net: pcs: Add 10GBASE-R mode for Synopsys Designware XPCS
+  net: txgbe: Implement phylink pcs
+  net: txgbe: Support phylink MAC layer
+
+ drivers/i2c/busses/i2c-designware-common.c    |   8 +
+ drivers/i2c/busses/i2c-designware-core.h      |   1 +
+ drivers/i2c/busses/i2c-designware-master.c    |  84 ++-
+ drivers/i2c/busses/i2c-designware-platdrv.c   |  20 +
+ drivers/net/ethernet/wangxun/Kconfig          |   7 +
+ drivers/net/ethernet/wangxun/libwx/wx_lib.c   |   3 +-
+ drivers/net/ethernet/wangxun/libwx/wx_type.h  |   3 +
+ drivers/net/ethernet/wangxun/txgbe/Makefile   |   1 +
+ .../ethernet/wangxun/txgbe/txgbe_ethtool.c    |  28 +
+ .../net/ethernet/wangxun/txgbe/txgbe_main.c   |  63 +-
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.c    | 620 ++++++++++++++++++
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.h    |  10 +
+ .../net/ethernet/wangxun/txgbe/txgbe_type.h   |  94 +++
+ drivers/net/pcs/pcs-xpcs.c                    |  56 ++
+ include/linux/pcs/pcs-xpcs.h                  |   1 +
+ 15 files changed, 963 insertions(+), 36 deletions(-)
+ create mode 100644 drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
+ create mode 100644 drivers/net/ethernet/wangxun/txgbe/txgbe_phy.h
+
+-- 
+2.27.0
+
