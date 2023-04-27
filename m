@@ -2,75 +2,153 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3211F6EFC97
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Apr 2023 23:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F26F6EFF4C
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Apr 2023 04:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233416AbjDZVm4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 26 Apr 2023 17:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        id S242875AbjD0CSG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 26 Apr 2023 22:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbjDZVmz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Apr 2023 17:42:55 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A8D1FF2
-        for <linux-i2c@vger.kernel.org>; Wed, 26 Apr 2023 14:42:54 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-24b89b9a72cso3730515a91.1
-        for <linux-i2c@vger.kernel.org>; Wed, 26 Apr 2023 14:42:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682545374; x=1685137374;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JL3yT3Q33W5/BCQtgOVvz2cK4S2v0dqNTi6RS5aes9g=;
-        b=XNkZz594STdPHyX1p4sbWcT+/ufrjT0xvbgRrgWb3e2bUH7hRP0L/tfcdGAha9itOO
-         q2evXgKmm6ti4Tco14pqA2bzKAyam2OGYxmsgQsmDvWqu+3YLKHCHYgZFE9R6NPkJz8m
-         lfne6IEJw1+A8Y3D6nrh6Keqlvh6LOSo0DQmfoM9XwxTsw415XHO/qphrcKb4WovwTko
-         GMA6gxQLmgm/LIwYzb4prbCJaoDkcp6DBPLEgGfcWEHUKtGVprIsTEuruJKV6bbX6nDn
-         XrREbZBHiJu989RyMGy2M6qamTyZNkUqCplqESSSeetVi2bDd3Uc4BN/mwoIQMxQtv5O
-         Fquw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682545374; x=1685137374;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JL3yT3Q33W5/BCQtgOVvz2cK4S2v0dqNTi6RS5aes9g=;
-        b=ZwFUa+EL0S+QKDvxRON9xNuF+Vyy0rcP7zbTJ1KAHutc8ZG5r6l2eOpsIUR0/BuuKF
-         QMPirJtKr0YDMYeGkbiYmXC+fJsKyzTepBUj1t49tIkEeletDLED3IUQoZADtEY7ImlA
-         Vn98vMbKUMLl8Asu66vl8eUvb5ERBKcnJXu/xf5MTynW2Eq6+bk0GII8+DvkL66s0Prl
-         SfmTsHxJqMbxzUurrPVmFJkeOjojgSu/of5ycgR2Rc3eAGI6wEjJoLcykm3eLhKTIiNP
-         rMWq9e/XyrDQM0c5N6kOm3N0MdxpaAVHspIagXYTroYpZkyDLaV07+/+PT4igm6EKPFx
-         6T0w==
-X-Gm-Message-State: AAQBX9c1jSPfJsStSlOhagsVbaOh+CyPW2yjfmg7UMAHlWh8svWPCBB/
-        Us6YB0m28cXiADA4y6xIM6dCwIKKpXlvchrvn30=
-X-Google-Smtp-Source: AKy350ZYt3fB9LROtObaexIp6GG4m2tcMkEElwocq1wzdkgNZzW1ov+iELSoCUpNt9JvM7K7XxPvVfLCjvxrg/Y2ICE=
-X-Received: by 2002:a17:90b:1e07:b0:246:b2de:f13f with SMTP id
- pg7-20020a17090b1e0700b00246b2def13fmr22998894pjb.24.1682545374030; Wed, 26
- Apr 2023 14:42:54 -0700 (PDT)
+        with ESMTP id S242709AbjD0CSF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 26 Apr 2023 22:18:05 -0400
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0113F30EF;
+        Wed, 26 Apr 2023 19:18:02 -0700 (PDT)
+X-QQ-mid: Yeas51t1682561712t600t50125
+Received: from 7082A6556EBF4E69829842272A565F7C (jiawenwu@trustnetic.com [183.129.236.74])
+X-QQ-SSF: 00400000000000F0FM9000000000000
+From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
+X-BIZMAIL-ID: 10333517096435060835
+To:     <andy.shevchenko@gmail.com>
+Cc:     <netdev@vger.kernel.org>, <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
+        <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <linux-i2c@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <mengyuanlou@net-swift.com>
+References: <20230426071434.452717-1-jiawenwu@trustnetic.com> <20230426071434.452717-3-jiawenwu@trustnetic.com> <ZElCHGho-szyySGC@surfacebook>
+In-Reply-To: <ZElCHGho-szyySGC@surfacebook>
+Subject: RE: [RFC PATCH net-next v5 2/9] i2c: designware: Add driver support for Wangxun 10Gb NIC
+Date:   Thu, 27 Apr 2023 10:15:10 +0800
+Message-ID: <013a01d978ae$182104c0$48630e40$@trustnetic.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7022:c99:b0:62:e5da:deb0 with HTTP; Wed, 26 Apr 2023
- 14:42:51 -0700 (PDT)
-Reply-To: klassoumark@gmail.com
-From:   Mark Klassou <jamseopara22@gmail.com>
-Date:   Wed, 26 Apr 2023 21:42:51 +0000
-Message-ID: <CAB-St+LycjLvcQzu+CADijKmZwECO2BsJyZRvtVsJbVq4E7YDQ@mail.gmail.com>
-Subject: Re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQImNz20YbZMzc6JsoYnjpKQN5RngQGupjOHAxyjlVSufoxyQA==
+Content-Language: zh-cn
+X-QQ-SENDSIZE: 520
+Feedback-ID: Yeas:trustnetic.com:qybglogicsvr:qybglogicsvr5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Good Morning,
+On Wednesday, April 26, 2023 11:45 PM, andy.shevchenko@gmail.com wrote:
+> Wed, Apr 26, 2023 at 03:14:27PM +0800, Jiawen Wu kirjoitti:
+> > Wangxun 10Gb ethernet chip is connected to Designware I2C, to communicate
+> > with SFP.
+> >
+> > Introduce the property "i2c-dw-flags" to match device data for software
+> > node case. Since IO resource was mapped on the ethernet driver, add a model
+> > quirk to get resource from platform info.
+> >
+> > The exists IP limitations are dealt as workarounds:
+> > - IP does not support interrupt mode, it works on polling mode.
+> > - Additionally set FIFO depth address the chip issue.
+> 
+> Thanks for an update, my comments below.
+> 
+> ...
+> 
+> >  		goto done_nolock;
+> >  	}
+> >
+> > +	if ((dev->flags & MODEL_MASK) == MODEL_WANGXUN_SP) {
+> > +		ret = txgbe_i2c_dw_xfer_quirk(adap, msgs, num);
+> > +		goto done_nolock;
+> > +	}
+> 
+> 	switch (dev->flags & MODEL_MASK) {
+> 	case AMD:
+> 		...
+> 	case WANGXUN:
+> 		...
+> 	default:
+> 		break;
+> 	}
+> 
+> ...
+> 
+> > +static int txgbe_i2c_request_regs(struct dw_i2c_dev *dev)
+> > +{
+> > +	struct platform_device *pdev = to_platform_device(dev->dev);
+> > +	struct resource *r;
+> > +
+> > +	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> > +	if (!r)
+> > +		return -ENODEV;
+> > +
+> > +	dev->base = devm_ioremap(&pdev->dev, r->start, resource_size(r));
+> > +
+> > +	return PTR_ERR_OR_ZERO(dev->base);
+> > +}
+> 
+> Redundant. See below.
+> 
+> ...
+> 
+> >  	case MODEL_BAIKAL_BT1:
+> >  		ret = bt1_i2c_request_regs(dev);
+> >  		break;
+> > +	case MODEL_WANGXUN_SP:
+> > +		ret = txgbe_i2c_request_regs(dev);
+> 
+> How is it different to...
+> 
+> > +		break;
+> >  	default:
+> >  		dev->base = devm_platform_ioremap_resource(pdev, 0);
+> 
+> ...this one?
+> 
 
-I was only wondering if you got my previous email? I have been trying
-to reach you by email. Kindly get back to me swiftly, it is very
-important.
+devm_platform_ioremap_resource() has one more devm_request_mem_region()
+operation than devm_ioremap(). By my test, this memory cannot be re-requested,
+only re-mapped.
 
-Yours faithfully
-Mark Klassou.
+> ...
+> 
+> >  	dev->flags = (uintptr_t)device_get_match_data(&pdev->dev);
+> 
+> > +	if (!dev->flags)
+> 
+> No need to check this. Just define priorities (I would go with above to be
+> higher priority).
+> 
+> > +		device_property_read_u32(&pdev->dev, "i2c-dw-flags", &dev->flags);
+> 
+> Needs to be added to the Device Tree bindings I believe.
+> 
+> But wait, don't we have other ways to detect your hardware at probe time and
+> initialize flags respectively?
+> 
+
+I2C is connected to our NIC chip with no PCI ID, so I register a platform device for it.
+Please see the 4/9 patch. Software nodes are used to pass the device structure but
+no DT and ACPI. I haven't found another way to initialize flags yet, other than the
+platform data used in the previous patch (it seems to be an obsolete way).
+
+> --
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
+> 
+
