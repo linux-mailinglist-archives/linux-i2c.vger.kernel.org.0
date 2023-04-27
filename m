@@ -2,82 +2,76 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D48B6F08FA
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Apr 2023 18:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5500E6F09E3
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Apr 2023 18:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242835AbjD0QCq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 Apr 2023 12:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        id S244166AbjD0QbN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 Apr 2023 12:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239857AbjD0QCq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Apr 2023 12:02:46 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E121726;
-        Thu, 27 Apr 2023 09:02:45 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-38e27409542so5950067b6e.0;
-        Thu, 27 Apr 2023 09:02:45 -0700 (PDT)
+        with ESMTP id S244167AbjD0QbL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Apr 2023 12:31:11 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AC62733
+        for <linux-i2c@vger.kernel.org>; Thu, 27 Apr 2023 09:31:10 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1881333ac1cso6271124fac.1
+        for <linux-i2c@vger.kernel.org>; Thu, 27 Apr 2023 09:31:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682613069; x=1685205069;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YgsQjPYSA4x9EUAST26pLIMgzwk5/fmUNEDBBVE+P4A=;
+        b=H/F2jXQhEspNf2OSg1QdhIunBBlXl0Bx9YZ26gqXk+Gs3zr1BMEJlTeL5k9J8P05bu
+         GUKysimt65dWa99YmJSJVeBANdqJjBXt3KAmR09VKLgLmOByA2d4V1DF8VdJyCqx0WVy
+         wTTi+XjWh1gjMd/UXjdaOWsjrs8U9CTZzav9EEzBxRv7ygMPsrF21nAtzIqBy0hd6bx/
+         rVCC5lep6mjx7P7X7168S1kDfCavrY2GvkPNq436Edjl3h7XLL4NyZMlDGY38BE+C6i9
+         hP37oyOZN9vjSf9M67zNMdGLB4TBOx9IpsMXcGi+Kf/odO+qLqN4KuSt+YvvfhtsbHfe
+         wshw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682611364; x=1685203364;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZkWQr/2+asNAFXhl3cNlpNxsmcASlMZiMoQ8I5Rj1p0=;
-        b=UdIFvdhsJliwnvXQWqNNfQrKZpJhIdk+VUvHqTjq3WMIFOk6/Qo3pWYGf5CG/CpWVZ
-         pmy7ntQHgTPG88+079rrgQmtjQ7kEHKEnaAqGZ3iIwQ9W2Wk9Dms7m7Qr/QEkULV6+Pf
-         bIvdg26ygKtLOGdFX5w1p8ncgXcQ5PERBF5oDMwvgJ/oG+JWWa/PtFQG1Mta6ic+ye5O
-         +MS5fzqEDDzpbGZSk85SWgkJ5rkPR8FSMliVKwX/GEgXlAoWmCG6qot1i6qqVgDvEiN0
-         AF5OtQeRWt1istpXmV2W4lw4pzS98CVWYEM4kgJX/M7cx5n4dg5VtSzQUtW/EjgKfWWH
-         vssg==
-X-Gm-Message-State: AC+VfDxf300s2ZwEQr5uQGF9t2kMWnaCUntvuh3QSvrTUP0SxYmzaiSM
-        MjAa6mgpOynPUSZkEd2pug==
-X-Google-Smtp-Source: ACHHUZ704LvMZVjNdqcUq3tYsktnPGhx0nCI+NnC67pBCBEPDhfh3FkNTlOx3V1izFDtNEsrbSOy7w==
-X-Received: by 2002:a05:6808:2110:b0:390:9226:2c75 with SMTP id r16-20020a056808211000b0039092262c75mr780933oiw.55.1682611364450;
-        Thu, 27 Apr 2023 09:02:44 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o41-20020a4a95ac000000b0054248efdd67sm8517013ooi.29.2023.04.27.09.02.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 09:02:43 -0700 (PDT)
-Received: (nullmailer pid 3100666 invoked by uid 1000);
-        Thu, 27 Apr 2023 16:02:43 -0000
-Date:   Thu, 27 Apr 2023 11:02:43 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chris Paterson <chris.paterson2@renesas.com>
-Cc:     linux-kernel@vger.kernel.org, Magnus Damm <magnus.damm@gmail.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: renesas,rzv2m: Change maintainer to
- Fabrizio Castro
-Message-ID: <168261135959.3100575.3262873187837162793.robh@kernel.org>
-References: <20230426100736.11808-1-chris.paterson2@renesas.com>
+        d=1e100.net; s=20221208; t=1682613069; x=1685205069;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YgsQjPYSA4x9EUAST26pLIMgzwk5/fmUNEDBBVE+P4A=;
+        b=cIm3el4R7NWroPkeGtjJ5KdFScLiMmrTT2q7+oKAkIaP+wwK7SggGgN3c3/Okn6oKJ
+         wkEx98HeYjaGq7H7VBnNn8gXZj3qUgOS+J9ljBd1sDN8MyLI6DPl5GZsKy3Y7PXZdOj2
+         jDXSIgxKac9UbmcEhQYbiL7DjW7YwgCH+FWNfzSZsiXyg7XPljT2D+sHZSLFouh/T/XY
+         r5+qUBrnKKnssyFxrc4cM+CzESHkPlxp0LpNBmxkstJET/2qQf20JNehqix1A4vOlG9z
+         pGGcIr16GTEUTVQ6O/Q+pMUdXcmZ8bnuMv9dfwsIdwtLNF55xT7D4tjdIrfqcflhXhJO
+         ijlg==
+X-Gm-Message-State: AC+VfDyWLVe/zHGhaq4WCqFW3jG7KU3tgr4gDOiU8v/GJrWaZ4x0z5xb
+        eQ3MdPsw4lBiA8GX6RT2qBCf3dYGK5+7h6TmCl0=
+X-Google-Smtp-Source: ACHHUZ4ZWPxxNS1Y5SSo3pDTzI3Cin5siRdLfLJT7PY3lt+Mg1tieNMQ61YcFP1SGBY5C2W7bo73rMjSg69Nd/lxy4o=
+X-Received: by 2002:a05:6871:6b81:b0:188:10b8:5358 with SMTP id
+ zh1-20020a0568716b8100b0018810b85358mr1352670oab.16.1682613069193; Thu, 27
+ Apr 2023 09:31:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230426100736.11808-1-chris.paterson2@renesas.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Sender: mrsthereseninna@gmail.com
+Received: by 2002:a05:6358:2489:b0:f1:be9a:c0c5 with HTTP; Thu, 27 Apr 2023
+ 09:31:08 -0700 (PDT)
+From:   Dr Lisa Williams <lw4666555@gmail.com>
+Date:   Thu, 27 Apr 2023 09:31:08 -0700
+X-Google-Sender-Auth: 2oW4L4Na4Ml9J-VMpu6qL-XIbgg
+Message-ID: <CAKVHDg8feap+6aWmD4o2bHD1DZqj_4PvghR9nh0Cm1DaYdQB=A@mail.gmail.com>
+Subject: Hi,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi,
 
-On Wed, 26 Apr 2023 11:07:36 +0100, Chris Paterson wrote:
-> Phil no longer works for Renesas.
-> 
-> Signed-off-by: Chris Paterson <chris.paterson2@renesas.com>
-> ---
->  Documentation/devicetree/bindings/i2c/renesas,rzv2m.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+My name is Dr. Lisa Williams, from the United States, currently living
+in the United Kingdom.
 
-Applied, thanks!
+I hope you consider my friend request. I will share some of my photos
+and more details about me when I get your reply.
 
+With love
+Lisa
