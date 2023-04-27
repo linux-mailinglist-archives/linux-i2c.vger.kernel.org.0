@@ -2,25 +2,25 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C5D6F05F8
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Apr 2023 14:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C9F6F05FD
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Apr 2023 14:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243924AbjD0MkL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 Apr 2023 08:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
+        id S244026AbjD0Mk3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 Apr 2023 08:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243891AbjD0MkK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Apr 2023 08:40:10 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2069.outbound.protection.outlook.com [40.107.243.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A816526F;
-        Thu, 27 Apr 2023 05:39:58 -0700 (PDT)
+        with ESMTP id S243992AbjD0MkS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Apr 2023 08:40:18 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2063.outbound.protection.outlook.com [40.107.244.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE60DBC;
+        Thu, 27 Apr 2023 05:40:04 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CHAL0aCcnCZW1CjlH6V7JYU6k4t/t8epDHPRNqcjJdeCo2w4Uoi0E0Bbs5RvzzpUCFwtfvLrkiSrLvPgcj7WsprxiDezdcbYWo8P0QjCgl5o7RyjBnUww7qe7IHsq39Q+eWVKS2VK3aFNZDPhFS5vBx2RcO9ZLRP9MMk0Ha6b5BpvGuh8DHAU2GabcqRtL8s0JCFSRudv6+iKipF4yZp9WO6qmjO1PFXpVI2bxFk/l4mqdSHeeNHcMf6Frzqb5bvfEJqkkoQJ7r7eEexP7kQcDPiOMfbpKenmgqduw2m+Gv5K8oHINaaDMB5044/6CIqWypo9Z10eNQp7HxukZ8TFw==
+ b=NwREYPkTR1zKqaoe5a+MQ79i9NU+bRHaKWcABez9w4NaU6CrL9VZL61iRJOMyGEO+h604jTHrocim9iZSy+ANkGFaB/i86MjQ4afP2WR2wU6/6lXAzAO4OWrBtS0ZC6C8lIC8ueBKc+yWPnLAgQLtC/5r7eOsI8Uj03XM6GxbD/e1tWf8+PfZ+i+yLOsMDmVCET3k3ZMWFby//yr2XEQYjGYkyXugJ0BRo6yHWSeAUMcaOP2nio50C6rhayYO4Bnov/PN4zhaSCa+qMUczDsRbGhFUQORIOoJgaLaAFL9pMEcUFU7RhHYaD7f4f/EA2hSt1kIzLh+mOW1kquAZZwzw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FpYEGtwQDDYJiOsncTk+df3Oh+ydk+jCBnxFDmtMXZk=;
- b=Jpa0px3tWEdooFsRmbfRydC9murOZXNXQPv5pqe2aTXPgoEsLGDzuOsIQz3owWOrsRYZw+x+WkPt+KF2WVNoGHxs56Msl0OTimLU5RhwswTiUJkFBmT08et9F7LRo+XtB9qPHqQh2bz/QrP0jgqCyu7f1lIqCQzzALn0LWvqQ019l7OBTQllBrSzv2a1wCSG9GpD6z587PFlHSXgnEKyHUTxKFikQhRvJNmSgZRVv6VuxocEiMLGbXrJFszH/txrIX5FLmXyRWEgnhGZTtvqAvjHqeGvmQUN4T29SCZ2IlBj1l9vHGCCyvLjY9iQ2o1ewFBdEJ3419ZinSed/vtxrA==
+ bh=6gSgshHwmK5LYZO0ZxkYQiT4AK3G/2v/qGvKzjMm46A=;
+ b=ROlqoyndAOV10UYTpH0IAn0iMiQoSMvTiuyKMixF2hro7RUUlqVqSI5gmdobM046oEZL4RAvrbReJDpFmdkIfO7ikXEo9Wy1mqC78S+8DMPrZpnqk/mbKZXT2eMU6B/p9kYZnO5c4Hu4fafg1H4mxZT49oiUvIzj6RnRPWM7Py+qQI03g1SA0BtMIIx2FN/gtbKZWuJK8std/XMWOUrzTCjjsnQuXoH0PUOfWatEnSFLfi4xH4l+60I8aHONLr5aXRHyTW6rEPItK7+iCxYrqgBv4arZd6ElERHwBM9YxTVCMXP5fib5QMGZt9IImjHaiNtMRkmsmymKjoe1D0vTkQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.161) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -28,18 +28,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FpYEGtwQDDYJiOsncTk+df3Oh+ydk+jCBnxFDmtMXZk=;
- b=hXInFsbEvC5L1cPrv9oRKokew0jk4oqhS27YhUqfAlqcu3Nkob4PvOCvi8hME8rSVNZxta9CVubxaxmzTY8PQa1ndGjzrTslMH6E7FDVD4VLX4hhIFQha8dYgdfGm/4A5OFm6rmZ36l1nJ5EroM6Q8XJ/psBlA3/5hszmNznfgs1v4e6DfFV43q6UaoshfVguXEIMWGrb5vlXHBlG9rUjw5r4zbdqtIeF5fBsP/CCxpJSytEyf0XsRuf/xAf+/ZNquj+moyBqGE0pZmBoJVnXOGG4iXpbgS1icJM+JgQ8Iu6+AZm1rHNXIVbU23QJyMZPrWXhtlfhUljr/xu/gYY9w==
-Received: from DM6PR07CA0084.namprd07.prod.outlook.com (2603:10b6:5:337::17)
- by PH8PR12MB7280.namprd12.prod.outlook.com (2603:10b6:510:220::12) with
+ bh=6gSgshHwmK5LYZO0ZxkYQiT4AK3G/2v/qGvKzjMm46A=;
+ b=buBJnrWahx997WM1AsRzav01eB2Qj7ZPmwCA/UAJHUX8cHujeJ43ZiOXhdj8IopTfCMZ6ykyQYUEzeY0Sr40FRAXE6GDtFfMtSVFABMpGxr9XthUd8MHCiIG30ftPgdPQbyiEkgjnFPOuUoVso0HfCQr1iE3mQUuF0vWZZaVaLatIWtxUS9Rfnlv5vCvL7fW7PyMNAZB8QOsV/uj/Cbh2lystBQHTG/EsUy9fazo6KOUVPffRoBQW68shQRyrfHf2vhaROpFUHZYl5xHHBhDGv8GZEZHeWsVBiV82YIy1LPilBrYWFg+KaMXoglzWxww3WFjk8TIXT5d8+jlphRkCA==
+Received: from DS7PR03CA0149.namprd03.prod.outlook.com (2603:10b6:5:3b4::34)
+ by CY8PR12MB7755.namprd12.prod.outlook.com (2603:10b6:930:87::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Thu, 27 Apr
- 2023 12:39:54 +0000
-Received: from CY4PEPF0000B8EC.namprd05.prod.outlook.com
- (2603:10b6:5:337:cafe::c8) by DM6PR07CA0084.outlook.office365.com
- (2603:10b6:5:337::17) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 12:40:02 +0000
+Received: from CY4PEPF0000B8EE.namprd05.prod.outlook.com
+ (2603:10b6:5:3b4:cafe::ae) by DS7PR03CA0149.outlook.office365.com
+ (2603:10b6:5:3b4::34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22 via Frontend
- Transport; Thu, 27 Apr 2023 12:39:54 +0000
+ Transport; Thu, 27 Apr 2023 12:40:02 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -47,20 +47,20 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.161 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000B8EC.mail.protection.outlook.com (10.167.241.8) with Microsoft
+ CY4PEPF0000B8EE.mail.protection.outlook.com (10.167.241.10) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.5 via Frontend Transport; Thu, 27 Apr 2023 12:39:54 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ 15.20.6340.16 via Frontend Transport; Thu, 27 Apr 2023 12:40:00 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
  (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 27 Apr 2023
- 05:39:40 -0700
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ 05:39:46 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 27 Apr
- 2023 05:39:39 -0700
+ 2023 05:39:45 -0700
 Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.129.68.10) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Thu, 27 Apr 2023 05:39:36 -0700
+ Transport; Thu, 27 Apr 2023 05:39:42 -0700
 From:   Akhil R <akhilrajeev@nvidia.com>
 To:     <christian.koenig@amd.com>, <digetx@gmail.com>,
         <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
@@ -68,9 +68,9 @@ To:     <christian.koenig@amd.com>, <digetx@gmail.com>,
         <linux-tegra@vger.kernel.org>, <sumit.semwal@linaro.org>,
         <thierry.reding@gmail.com>, <wsa@kernel.org>
 CC:     <akhilrajeev@nvidia.com>
-Subject: [PATCH v6 RESEND 1/2] i2c: tegra: Fix PEC support for SMBUS block read
-Date:   Thu, 27 Apr 2023 18:09:14 +0530
-Message-ID: <20230427123915.38199-2-akhilrajeev@nvidia.com>
+Subject: [PATCH v6 RESEND 2/2] i2c: tegra: Share same DMA channel for RX and TX
+Date:   Thu, 27 Apr 2023 18:09:15 +0530
+Message-ID: <20230427123915.38199-3-akhilrajeev@nvidia.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230427123915.38199-1-akhilrajeev@nvidia.com>
 References: <20230427123915.38199-1-akhilrajeev@nvidia.com>
@@ -79,23 +79,23 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000B8EC:EE_|PH8PR12MB7280:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5110b532-ddfc-4de4-c278-08db471c8066
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000B8EE:EE_|CY8PR12MB7755:EE_
+X-MS-Office365-Filtering-Correlation-Id: 70985ce1-13d0-4eea-09dd-08db471c8452
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QSTKEMuiYnk7EmYs5UHhvFAE2N9WX/xNB4ehMnGivSOWeZ3rf3RGduazGXt2JFZbsgMm5qiQsVqkXBlp4J71KMvCZ3HqB7goLzIIp2q/627wfcHOcDoa0NJ9ZjkkW5Wd9H7YW0zSOU7Na+KBJtyTBRUtyOOPN9anVmRAiemn5sdp75NujwkBjU3CmYagg12hRkhMqnJyQY64PxEEycjWrE8wh13qGK43199NKRQT8a2Pidhl9DcCx5Wmlh+K1dglG3ZCHIYHIUlmJJ8lEVBrnbXjHiZ9gPrkcSDgUwe7CqhvPArc6qOzGEp/+SKnkxe5FWVSoYJu4djMeLLPB2c2/qw9ZcTaEsFTD+uIBxHmyhpMo8v80difNAf5KDXa0je7IDswH9OvgIMN1r0YgRgpMkZvsEo7lR11UvDYK4mYcBZqktC1r+7No3f/4xeIa1uwc+B8bp4pB6rJBt99MsicdARpCodPWoCppAuWq73cwnGuLBzNrlgSago6vJHDFMcPN/0mQEBPYUb59mRdDNT7rujLQg5I5C4QqOEqIk7athJsbs86XUEsLQuhDRQ8ug2tQ9WM2tXuVBeMwHYAXmB63S6hHQqOvwfdOs5b4StKbg1vFliOh7BtBDAQdY8Cl0sRHJEeA6Xgg5qRE20MawXZHOatsE5nEMO7z/knvW6T+DOtB/HI/6qAoawQWQiTULvStSZah+CnrqxAaN2Vb8vCUEFzAPAUcphLYC5N2tQD5iYeeO3TCPYyEjI+fTFh0T1dc8Y51z8hyCwDNa0JAdT9og==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(136003)(376002)(451199021)(40470700004)(46966006)(36840700001)(2616005)(356005)(7636003)(5660300002)(2906002)(36860700001)(47076005)(1076003)(921005)(26005)(41300700001)(82740400003)(426003)(83380400001)(8676002)(8936002)(336012)(4326008)(316002)(70206006)(40460700003)(70586007)(36756003)(478600001)(40480700001)(86362001)(186003)(107886003)(110136005)(82310400005)(6666004)(7696005)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ks1fOa3gH5/pTOnBhHjGF/WXSipohVpoarxi3A7VVbzVxYRNGr+EUsYRWwJxV0+GVeemUnw3vLtPnalm+M2JQ1FqQPX8t7jBKcDPyXKTqrCcen+L9Bts8+rPQJ5WdyI8kPxuZDy1g8PvLIbZUEtvwOrxNkR0xwQY9hO+xVWFO9ZM2TqgLGSujgzF/AhM+vAP38hBH1/6T6DgdKL1T1RLI7r2bsj5MMYjwvAqTcasqKMTPA/tc4XnUC9f0r5pDPCFIGW5iSa7RdbFGEPfxtAI+9lGgyP1rA4S3MTjoHANX7rEAeYsvmCtbGhIu34mev1rtXST6u7ePm2D0j9dO23Nmslc5AKRczBcowWwOg+z5+zkZglL+dN8wIldppv8t+rJmAcPx9SZ0eVrnxXoV2CcTpdqdw2uWJ5ckSCRVpkiWIBlw77GvA1t3zvo9khvyrk1UQudjDxgJh/7xSZT+IHxdwg50aDWt5/KtMsivJeysHjv0E1SQCc92567RvXpecqcyflbYTufiyAAw36UF1HUlzPE9nW8jsB75hCkyoeddmi6lxrK7Db40JDs0TwVq/XnhSOm7fOTKbOxy2mnyZ+V+VNy5lkAMgBxDzZhMPA+FludebM8G4HnYPfoBIi3zTxo6fG7LQZ+FexjzKGnKW8hVQuplvYC0m63AFDCd0i3JYZXWX6Z2Kk8FZqdw4z623o9LMIeWp9NDU1TlDnZbB4enX6WC+Wbruvzaa4Kv9tNTzstJUuuyTKW6WeMaq8lohaTVmtZkblxqQWfSTVcJ642vw==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(396003)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(6666004)(478600001)(40480700001)(70206006)(316002)(70586007)(110136005)(4326008)(426003)(107886003)(2616005)(336012)(47076005)(186003)(36756003)(40460700003)(26005)(1076003)(82310400005)(7696005)(2906002)(41300700001)(8936002)(5660300002)(8676002)(7636003)(356005)(921005)(82740400003)(36860700001)(86362001)(83380400001)(83996005)(2101003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 12:39:54.0207
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 12:40:00.6276
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5110b532-ddfc-4de4-c278-08db471c8066
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70985ce1-13d0-4eea-09dd-08db471c8452
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000B8EC.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000B8EE.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7280
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7755
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -106,119 +106,189 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Update the msg->len value correctly for SMBUS block read. The discrepancy
-went unnoticed as msg->len is used in SMBUS transfers only when a PEC
-byte is added.
+Allocate only one DMA channel for I2C and share it for both TX and RX
+instead of using two different DMA hardware channels with the same
+slave ID. Since I2C supports only half duplex, there is no impact on
+perf with this.
 
-Fixes: d7583c8a5748 ("i2c: tegra: Add SMBus block read function")
 Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 Acked-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/i2c/busses/i2c-tegra.c | 40 +++++++++++++++++++++++-----------
- 1 file changed, 27 insertions(+), 13 deletions(-)
+ drivers/i2c/busses/i2c-tegra.c | 69 ++++++++++------------------------
+ 1 file changed, 20 insertions(+), 49 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
-index 6aab84c8d22b..157066f06a32 100644
+index 157066f06a32..070b2b38d67d 100644
 --- a/drivers/i2c/busses/i2c-tegra.c
 +++ b/drivers/i2c/busses/i2c-tegra.c
-@@ -242,9 +242,10 @@ struct tegra_i2c_hw_feature {
-  * @is_dvc: identifies the DVC I2C controller, has a different register layout
-  * @is_vi: identifies the VI I2C controller, has a different register layout
-  * @msg_complete: transfer completion notifier
-+ * @msg_buf_remaining: size of unsent data in the message buffer
-+ * @msg_len: length of message in current transfer
-  * @msg_err: error code for completed message
-  * @msg_buf: pointer to current message data
-- * @msg_buf_remaining: size of unsent data in the message buffer
+@@ -249,8 +249,7 @@ struct tegra_i2c_hw_feature {
   * @msg_read: indicates that the transfer is a read access
   * @timings: i2c timings information like bus frequency
   * @multimaster_mode: indicates that I2C controller is in multi-master mode
-@@ -277,6 +278,7 @@ struct tegra_i2c_dev {
- 
- 	struct completion msg_complete;
- 	size_t msg_buf_remaining;
-+	unsigned int msg_len;
- 	int msg_err;
+- * @tx_dma_chan: DMA transmit channel
+- * @rx_dma_chan: DMA receive channel
++ * @dma_chan: DMA channel
+  * @dma_phys: handle to DMA resources
+  * @dma_buf: pointer to allocated DMA buffer
+  * @dma_buf_size: DMA buffer size
+@@ -283,8 +282,7 @@ struct tegra_i2c_dev {
  	u8 *msg_buf;
  
-@@ -1169,7 +1171,7 @@ static void tegra_i2c_push_packet_header(struct tegra_i2c_dev *i2c_dev,
- 	else
- 		i2c_writel(i2c_dev, packet_header, I2C_TX_FIFO);
+ 	struct completion dma_complete;
+-	struct dma_chan *tx_dma_chan;
+-	struct dma_chan *rx_dma_chan;
++	struct dma_chan *dma_chan;
+ 	unsigned int dma_buf_size;
+ 	struct device *dma_dev;
+ 	dma_addr_t dma_phys;
+@@ -393,16 +391,14 @@ static int tegra_i2c_dma_submit(struct tegra_i2c_dev *i2c_dev, size_t len)
+ {
+ 	struct dma_async_tx_descriptor *dma_desc;
+ 	enum dma_transfer_direction dir;
+-	struct dma_chan *chan;
  
--	packet_header = msg->len - 1;
-+	packet_header = i2c_dev->msg_len - 1;
+ 	dev_dbg(i2c_dev->dev, "starting DMA for length: %zu\n", len);
  
- 	if (i2c_dev->dma_mode && !i2c_dev->msg_read)
- 		*dma_buf++ = packet_header;
-@@ -1242,20 +1244,32 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 		return err;
+ 	reinit_completion(&i2c_dev->dma_complete);
  
- 	i2c_dev->msg_buf = msg->buf;
-+	i2c_dev->msg_len = msg->len;
+ 	dir = i2c_dev->msg_read ? DMA_DEV_TO_MEM : DMA_MEM_TO_DEV;
+-	chan = i2c_dev->msg_read ? i2c_dev->rx_dma_chan : i2c_dev->tx_dma_chan;
  
--	/* The condition true implies smbus block read and len is already read */
--	if (msg->flags & I2C_M_RECV_LEN && end_state != MSG_END_CONTINUE)
--		i2c_dev->msg_buf = msg->buf + 1;
--
--	i2c_dev->msg_buf_remaining = msg->len;
- 	i2c_dev->msg_err = I2C_ERR_NONE;
- 	i2c_dev->msg_read = !!(msg->flags & I2C_M_RD);
- 	reinit_completion(&i2c_dev->msg_complete);
+-	dma_desc = dmaengine_prep_slave_single(chan, i2c_dev->dma_phys,
++	dma_desc = dmaengine_prep_slave_single(i2c_dev->dma_chan, i2c_dev->dma_phys,
+ 					       len, dir, DMA_PREP_INTERRUPT |
+ 					       DMA_CTRL_ACK);
+ 	if (!dma_desc) {
+@@ -415,7 +411,7 @@ static int tegra_i2c_dma_submit(struct tegra_i2c_dev *i2c_dev, size_t len)
+ 	dma_desc->callback_param = i2c_dev;
  
-+	/*
-+	 * For SMBUS block read command, read only 1 byte in the first transfer.
-+	 * Adjust that 1 byte for the next transfer in the msg buffer and msg
-+	 * length.
-+	 */
-+	if (msg->flags & I2C_M_RECV_LEN) {
-+		if (end_state == MSG_END_CONTINUE) {
-+			i2c_dev->msg_len = 1;
-+		} else {
-+			i2c_dev->msg_buf += 1;
-+			i2c_dev->msg_len -= 1;
-+		}
-+	}
-+
-+	i2c_dev->msg_buf_remaining = i2c_dev->msg_len;
-+
- 	if (i2c_dev->msg_read)
--		xfer_size = msg->len;
-+		xfer_size = i2c_dev->msg_len;
- 	else
--		xfer_size = msg->len + I2C_PACKET_HEADER_SIZE;
-+		xfer_size = i2c_dev->msg_len + I2C_PACKET_HEADER_SIZE;
+ 	dmaengine_submit(dma_desc);
+-	dma_async_issue_pending(chan);
++	dma_async_issue_pending(i2c_dev->dma_chan);
  
- 	xfer_size = ALIGN(xfer_size, BYTES_PER_FIFO_WORD);
- 
-@@ -1295,7 +1309,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 	if (!i2c_dev->msg_read) {
- 		if (i2c_dev->dma_mode) {
- 			memcpy(i2c_dev->dma_buf + I2C_PACKET_HEADER_SIZE,
--			       msg->buf, msg->len);
-+			       msg->buf, i2c_dev->msg_len);
- 
- 			dma_sync_single_for_device(i2c_dev->dma_dev,
- 						   i2c_dev->dma_phys,
-@@ -1352,7 +1366,7 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
- 						i2c_dev->dma_phys,
- 						xfer_size, DMA_FROM_DEVICE);
- 
--			memcpy(i2c_dev->msg_buf, i2c_dev->dma_buf, msg->len);
-+			memcpy(i2c_dev->msg_buf, i2c_dev->dma_buf, i2c_dev->msg_len);
- 		}
+ 	return 0;
+ }
+@@ -428,20 +424,14 @@ static void tegra_i2c_release_dma(struct tegra_i2c_dev *i2c_dev)
+ 		i2c_dev->dma_buf = NULL;
  	}
  
-@@ -1408,8 +1422,8 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
- 			ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
- 			if (ret)
- 				break;
--			/* Set the read byte as msg len */
--			msgs[i].len = msgs[i].buf[0];
-+			/* Set the msg length from first byte */
-+			msgs[i].len += msgs[i].buf[0];
- 			dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
+-	if (i2c_dev->tx_dma_chan) {
+-		dma_release_channel(i2c_dev->tx_dma_chan);
+-		i2c_dev->tx_dma_chan = NULL;
+-	}
+-
+-	if (i2c_dev->rx_dma_chan) {
+-		dma_release_channel(i2c_dev->rx_dma_chan);
+-		i2c_dev->rx_dma_chan = NULL;
++	if (i2c_dev->dma_chan) {
++		dma_release_channel(i2c_dev->dma_chan);
++		i2c_dev->dma_chan = NULL;
+ 	}
+ }
+ 
+ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
+ {
+-	struct dma_chan *chan;
+ 	dma_addr_t dma_phys;
+ 	u32 *dma_buf;
+ 	int err;
+@@ -459,25 +449,18 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
+ 		return 0;
+ 	}
+ 
+-	chan = dma_request_chan(i2c_dev->dev, "rx");
+-	if (IS_ERR(chan)) {
+-		err = PTR_ERR(chan);
+-		goto err_out;
+-	}
+-
+-	i2c_dev->rx_dma_chan = chan;
+-
+-	chan = dma_request_chan(i2c_dev->dev, "tx");
+-	if (IS_ERR(chan)) {
+-		err = PTR_ERR(chan);
++	/*
++	 * The same channel will be used for both RX and TX.
++	 * Keeping the name as "tx" for backward compatibility
++	 * with existing devicetrees.
++	 */
++	i2c_dev->dma_chan = dma_request_chan(i2c_dev->dev, "tx");
++	if (IS_ERR(i2c_dev->dma_chan)) {
++		err = PTR_ERR(i2c_dev->dma_chan);
+ 		goto err_out;
+ 	}
+ 
+-	i2c_dev->tx_dma_chan = chan;
+-
+-	WARN_ON(i2c_dev->tx_dma_chan->device != i2c_dev->rx_dma_chan->device);
+-	i2c_dev->dma_dev = chan->device->dev;
+-
++	i2c_dev->dma_dev = i2c_dev->dma_chan->device->dev;
+ 	i2c_dev->dma_buf_size = i2c_dev->hw->quirks->max_write_len +
+ 				I2C_PACKET_HEADER_SIZE;
+ 
+@@ -976,11 +959,7 @@ static irqreturn_t tegra_i2c_isr(int irq, void *dev_id)
+ 		dvc_writel(i2c_dev, DVC_STATUS_I2C_DONE_INTR, DVC_STATUS);
+ 
+ 	if (i2c_dev->dma_mode) {
+-		if (i2c_dev->msg_read)
+-			dmaengine_terminate_async(i2c_dev->rx_dma_chan);
+-		else
+-			dmaengine_terminate_async(i2c_dev->tx_dma_chan);
+-
++		dmaengine_terminate_async(i2c_dev->dma_chan);
+ 		complete(&i2c_dev->dma_complete);
+ 	}
+ 
+@@ -994,7 +973,6 @@ static void tegra_i2c_config_fifo_trig(struct tegra_i2c_dev *i2c_dev,
+ {
+ 	struct dma_slave_config slv_config = {0};
+ 	u32 val, reg, dma_burst, reg_offset;
+-	struct dma_chan *chan;
+ 	int err;
+ 
+ 	if (i2c_dev->hw->has_mst_fifo)
+@@ -1011,7 +989,6 @@ static void tegra_i2c_config_fifo_trig(struct tegra_i2c_dev *i2c_dev,
+ 			dma_burst = 8;
+ 
+ 		if (i2c_dev->msg_read) {
+-			chan = i2c_dev->rx_dma_chan;
+ 			reg_offset = tegra_i2c_reg_addr(i2c_dev, I2C_RX_FIFO);
+ 
+ 			slv_config.src_addr = i2c_dev->base_phys + reg_offset;
+@@ -1023,7 +1000,6 @@ static void tegra_i2c_config_fifo_trig(struct tegra_i2c_dev *i2c_dev,
+ 			else
+ 				val = I2C_FIFO_CONTROL_RX_TRIG(dma_burst);
+ 		} else {
+-			chan = i2c_dev->tx_dma_chan;
+ 			reg_offset = tegra_i2c_reg_addr(i2c_dev, I2C_TX_FIFO);
+ 
+ 			slv_config.dst_addr = i2c_dev->base_phys + reg_offset;
+@@ -1037,7 +1013,7 @@ static void tegra_i2c_config_fifo_trig(struct tegra_i2c_dev *i2c_dev,
  		}
- 		ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], end_type);
+ 
+ 		slv_config.device_fc = true;
+-		err = dmaengine_slave_config(chan, &slv_config);
++		err = dmaengine_slave_config(i2c_dev->dma_chan, &slv_config);
+ 		if (err) {
+ 			dev_err(i2c_dev->dev, "DMA config failed: %d\n", err);
+ 			dev_err(i2c_dev->dev, "falling back to PIO\n");
+@@ -1347,13 +1323,8 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 		 * performs synchronization after the transfer's termination
+ 		 * and we want to get a completion if transfer succeeded.
+ 		 */
+-		dmaengine_synchronize(i2c_dev->msg_read ?
+-				      i2c_dev->rx_dma_chan :
+-				      i2c_dev->tx_dma_chan);
+-
+-		dmaengine_terminate_sync(i2c_dev->msg_read ?
+-					 i2c_dev->rx_dma_chan :
+-					 i2c_dev->tx_dma_chan);
++		dmaengine_synchronize(i2c_dev->dma_chan);
++		dmaengine_terminate_sync(i2c_dev->dma_chan);
+ 
+ 		if (!time_left && !completion_done(&i2c_dev->dma_complete)) {
+ 			dev_err(i2c_dev->dev, "DMA transfer timed out\n");
 -- 
 2.17.1
 
