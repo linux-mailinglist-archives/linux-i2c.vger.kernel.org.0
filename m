@@ -2,93 +2,267 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050D06F2555
-	for <lists+linux-i2c@lfdr.de>; Sat, 29 Apr 2023 18:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC236F279A
+	for <lists+linux-i2c@lfdr.de>; Sun, 30 Apr 2023 06:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjD2QGj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 29 Apr 2023 12:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
+        id S229663AbjD3EUJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 30 Apr 2023 00:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjD2QGi (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 29 Apr 2023 12:06:38 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D4919B4
-        for <linux-i2c@vger.kernel.org>; Sat, 29 Apr 2023 09:06:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2A66921D66;
-        Sat, 29 Apr 2023 16:06:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1682784396; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pEfq0VVD4xfZaz1e85/GzHvMOLkZI0PJ2efY8nMUg40=;
-        b=JXvfPKsm5oFEkU6gSU09bpj0/FdulwK47FiyuKTnD5B3JQ15rdqWIO899At5oQDtRyKNvR
-        6FQNnDOAlbnuUPfnETESvRIjphb4RDf2JJBwJdd/XSC1rt8e0DffbcUxwIGms6cxtr4BUL
-        4FQORITdOTfz+nJVPIMygc52wFVYGU4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1682784396;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pEfq0VVD4xfZaz1e85/GzHvMOLkZI0PJ2efY8nMUg40=;
-        b=9P7qcwXg0/p9h+mWYW+iB9Xyf1lVE0j/SrPYk99T5CHqG5lm9eG/qWHPFd+43KIluT/Cmw
-        ATq8mF8vATdK0kAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0286A13587;
-        Sat, 29 Apr 2023 16:06:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sG16OotATWSDGgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Sat, 29 Apr 2023 16:06:35 +0000
-Date:   Sat, 29 Apr 2023 18:06:34 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     =?UTF-8?B?SmVhbi1GcmFuw6dvaXM=?= Roy <jf@devklog.net>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [ee1004] Failed to select page 0 - G.Skill Trident Z5 NEO DDR5,
- ASUS X670E board - 6.2.11-arch1-1
-Message-ID: <20230429180634.7f94b29e@endymion.delvare>
-In-Reply-To: <20230429171522.05c671f8@endymion.delvare>
-References: <CAE8T=_HGM+gKQguOasGSKi5YXh91S62QYA2=MC45CLJPYxrVAg@mail.gmail.com>
-        <ZEISllc9y2bot/ZT@ninjato>
-        <20230429171522.05c671f8@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        with ESMTP id S229452AbjD3EUH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 30 Apr 2023 00:20:07 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBDB1BC2;
+        Sat, 29 Apr 2023 21:20:04 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 33U40HT4060619;
+        Sun, 30 Apr 2023 12:00:17 +0800 (GMT-8)
+        (envelope-from ryan_chen@aspeedtech.com)
+Received: from aspeedtech.com (192.168.10.13) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sun, 30 Apr
+ 2023 12:17:15 +0800
+From:   Ryan Chen <ryan_chen@aspeedtech.com>
+To:     <jk@codeconstruct.com.au>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        <linux-i2c@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        William Zhang <william.zhang@broadcom.com>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "Phil Edworthy" <phil.edworthy@renesas.com>,
+        <openbmc@lists.ozlabs.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <=linux-kernel@vger.kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+Subject: [PATCH v11 0/2] Add ASPEED AST2600 I2Cv2 controller driver
+Date:   Sun, 30 Apr 2023 12:17:10 +0800
+Message-ID: <20230430041712.3247998-1-ryan_chen@aspeedtech.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.10.13]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 33U40HT4060619
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, 29 Apr 2023 17:15:22 +0200, Jean Delvare wrote:
-> I took a quick look on jedec.org in search for information and found
-> JESD400-5A which covers SPD contents for DDR5 and it enumerates 1024
-> bytes. This is twice as much as what EE1004 EEPROMs can hold, so DDR5
-> modules are definitely not using EE1004 EEPROMs. So far I couldn't find
-> the "equivalent" of EE1004 for DDR5 modules so far.
+This series add AST2600 i2cv2 new register set driver. The i2cv2 driver
+is new register set that have new clock divider option for more
+flexiable generation. And also have separate i2c master and slave register
+set for control.
 
-Found it, it is named "SPD5118 Hub and Serial Presence Detect Device
-Standard" and is published by Jedec under reference JESD300-5B. That's
-a 126-page document. In comparison, the EE1004 specification was
-35-page long.
+The legacy register layout is mix master/slave register control together.
+The following is add more detail description about new register layout.
+And new feature set add for register.
 
-So I expect there will be a lot of work to get it to work. And I don't
-own a DDR5-based system yet, so I can't even test.
+-Add new clock divider option for more flexible and accurate clock rate
+generation -Add tCKHighMin timing to guarantee SCL high pulse width.
+-Add support dual pool buffer mode, split 32 bytes pool buffer of each
+device into 2 x 16 bytes for Tx and Rx individually.
+-Increase DMA buffer size to 4096 bytes and support byte alignment.
+-Re-define the base address of BUS1 ~ BUS16 and Pool buffer.
+-Re-define registers for separating master and slave mode control.
+-Support 4 individual DMA buffers for master Tx and Rx, slave Tx and Rx.
+
+And following is new register set for package transfer sequence.
+-New Master operation mode:
+ S -> Aw -> P
+ S -> Aw -> TxD -> P
+ S -> Ar -> RxD -> P
+ S -> Aw -> RxD -> Sr -> Ar -> TxD -> P
+-Bus SDA lock auto-release capability for new master DMA command mode.
+-Bus auto timeout for new master/slave DMA mode.
+
+The following is two versus register layout.
+Old:
+{I2CD00}: Function Control Register     
+{I2CD04}: Clock and AC Timing Control Register
+{I2CD08}: Clock and AC Timing Control Register
+{I2CD0C}: Interrupt Control Register
+{I2CD10}: Interrupt Status Register 
+{I2CD14}: Command/Status Register   
+{I2CD18}: Slave Device Address Register
+{I2CD1C}: Pool Buffer Control Register
+{I2CD20}: Transmit/Receive Byte Buffer Register
+{I2CD24}: DMA Mode Buffer Address Register
+{I2CD28}: DMA Transfer Length Register
+{I2CD2C}: Original DMA Mode Buffer Address Setting
+{I2CD30}: Original DMA Transfer Length Setting and Final Status
+
+New Register mode
+{I2CC00}: Master/Slave Function Control Register
+{I2CC04}: Master/Slave Clock and AC Timing Control Register
+{I2CC08}: Master/Slave Transmit/Receive Byte Buffer Register
+{I2CC0C}: Master/Slave Pool Buffer Control Register
+{I2CM10}: Master Interrupt Control Register
+{I2CM14}: Master Interrupt Status Register
+{I2CM18}: Master Command/Status Register
+{I2CM1C}: Master DMA Buffer Length Register
+{I2CS20}: Slave~ Interrupt Control Register
+{I2CS24}: Slave~ Interrupt Status Register
+{I2CS28}: Slave~ Command/Status Register
+{I2CS2C}: Slave~ DMA Buffer Length Register
+{I2CM30}: Master DMA Mode Tx Buffer Base Address
+{I2CM34}: Master DMA Mode Rx Buffer Base Address
+{I2CS38}: Slave~ DMA Mode Tx Buffer Base Address
+{I2CS3C}: Slave~ DMA Mode Rx Buffer Base Address
+{I2CS40}: Slave Device Address Register
+{I2CM48}: Master DMA Length Status Register
+{I2CS4C}: Slave  DMA Length Status Register
+{I2CC50}: Current DMA Operating Address Status
+{I2CC54}: Current DMA Operating Length  Status
+
+aspeed,global-regs:
+This global register is needed, global register is setting for
+new clock divide control, and new register set control.
+
+ASPEED SOC chip is server product, i2c bus may have fingerprint
+connect to another board. And also support hotplug.
+The following is board-specific design example.
+Board A                                         Board B
+-------------------------                       ------------------------
+|i2c bus#1(master/slave)  <===fingerprint ===> i2c bus#x (master/slave)|
+|i2c bus#2(master)-> tmp i2c device |          |                       |
+|i2c bus#3(master)-> adc i2c device |          |                       |
+-------------------------                       ------------------------
+
+i2c-scl-clk-low-timeout-us:
+For example I2C controller as slave mode, and suddenly disconnected.
+Slave state machine will keep waiting for master clock in for rx/tx
+transmit. So it need timeout setting to enable timeout unlock controller
+state. And in another side. In Master side also need avoid suddenly
+slave miss(un-plug), Master will timeout and release the SDA/SCL.
+
+aspeed,enable-dma:
+For example The bus#1 have trunk data needed for transfer,
+it can enable bus dma mode transfer, it can reduce cpu utilized.
+Others bus bus#2/3 use defautl buffer mode.
+
+v11:
+-aspeed,i2c.yaml
+ -no change, the same with v10.
+-i2c-ast2600.c
+ -modify alert_enable from int -> boolean.
+ -modify dbg string recovery -> recover.
+ -remove no need to init 0.
+ -remove new line after break.
+ -remove unneeded empty line.
+ -modify dma_alloc_coherent to dmam_alloc_coherent
+ -modify probe nomem return dev_err_probe
+ -modify i2c_add_adapter to devm_i2c_adapter
+ -modify checkpatch: Alignment should match open parenthesis
+ -modify checkpatch: braces {} should be used on all arms of this statement
+ -modify checkpatch: Unbalanced braces around else statement
+
+v10:
+-aspeed,i2c.yaml
+ -move unevaluatedProperties after allOf.
+ -remove extra one blank line.
+-i2c-ast2600.c
+ -no change, the same with v8.
+
+v9:
+-aspeed,i2c.yaml
+ -backoff to v7.
+  -no fix typo in maintainer's name and email. this would be another patch.
+  -no remove address-cells, size-cells, this would be another patch.
+ -use aspeed,enable-dma property instead of aspeed,xfer-mode selection.
+ -fix allOf and else false properties for aspeed,ast2600-i2cv2.
+-i2c-ast2600.c
+ -no change, the same with v8
+
+v8:
+-aspeed,i2c.yaml
+ -modify commit message.
+  -Fix typo in maintainer's name and email.
+ -remove address-cells, size-cells.
+-i2c-ast2600.c
+ -move "i2c timeout counter" comment description before property_read.
+ -remove redundant code "return ret" in probe end.
+
+v7:
+-aspeed,i2c.yaml
+ -Update ASPEED I2C maintainers email.
+ -use aspeed,enable-dma property instead of aspeed,xfer-mode selection.
+ -fix allOf and else false properties for aspeed,ast2600-i2cv2.
+-i2c-ast2600.c
+ -remove aspeed,xfer-mode instead of aspeed,enable-dma mode. buffer mode
+is default.
+ -remove aspeed,timeout instead of i2c-scl-clk-low-timeout-us for
+timeout setting.
+
+v6:
+-remove aspeed,i2cv2.yaml, merge to aspeed,i2c.yaml -add support for
+ i2cv2 properites.
+-i2c-ast2600.c
+ -fix ast2600_i2c_remove ordering.
+ -remove ast2600_i2c_probe goto labels, and add dev_err_probe -remove
+  redundant deb_dbg debug message.
+ -rename gr_regmap -> global_regs
+
+v5:
+-remove ast2600-i2c-global.yaml, i2c-ast2600-global.c.
+-i2c-ast2600.c
+ -remove legacy clock divide, all go for new clock divide.
+ -remove duplicated read isr.
+ -remove no used driver match
+ -fix probe return for each labels return.
+ -global use mfd driver, driver use phandle to regmap read/write.
+-rename aspeed,i2c-ast2600.yaml to aspeed,i2cv2.yaml -remove bus-frequency.
+-add required aspeed,gr
+-add timeout, byte-mode, buff-mode properites.
+
+v4:
+-fix i2c-ast2600.c driver buffer mode use single buffer conflit in
+ master slave mode both enable.
+-fix kmemleak issue when use dma mode.
+-fix typo aspeed,i2c-ast2600.yaml compatible is "aspeed,ast2600-i2c"
+-fix typo aspeed,i2c-ast2600.ymal to aspeed,i2c-ast2600.yaml
+
+v3:
+-fix i2c global clock divide default value.
+-remove i2c slave no used dev_dbg info.
+
+v2:
+-add i2c global ymal file commit.
+-rename file name from new to ast2600.
+ aspeed-i2c-new-global.c -> i2c-ast2600-global.c
+ aspeed-i2c-new-global.h -> i2c-ast2600-global.h
+ i2c-new-aspeed.c -> i2c-ast2600.c
+-rename all driver function name to ast2600.
+
+Ryan Chen (2):
+  dt-bindings: i2c: aspeed: support for AST2600-i2cv2
+  i2c: aspeed: support ast2600 i2c new register mode driver
+
+ .../devicetree/bindings/i2c/aspeed,i2c.yaml   |   51 +-
+ MAINTAINERS                                   |    9 +
+ drivers/i2c/busses/Kconfig                    |   11 +
+ drivers/i2c/busses/Makefile                   |    1 +
+ drivers/i2c/busses/i2c-ast2600.c              | 1596 +++++++++++++++++
+ 5 files changed, 1665 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/i2c/busses/i2c-ast2600.c
 
 -- 
-Jean Delvare
-SUSE L3 Support
+2.34.1
+
