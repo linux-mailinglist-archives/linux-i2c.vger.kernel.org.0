@@ -2,95 +2,113 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA31D6F339E
-	for <lists+linux-i2c@lfdr.de>; Mon,  1 May 2023 18:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810726F35D4
+	for <lists+linux-i2c@lfdr.de>; Mon,  1 May 2023 20:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbjEAQnQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 1 May 2023 12:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
+        id S231995AbjEAS2M (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 1 May 2023 14:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbjEAQnL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 May 2023 12:43:11 -0400
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A015173F
-        for <linux-i2c@vger.kernel.org>; Mon,  1 May 2023 09:43:10 -0700 (PDT)
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-64115e652eeso27940431b3a.0
-        for <linux-i2c@vger.kernel.org>; Mon, 01 May 2023 09:43:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682959390; x=1685551390;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ri5O66x209P4BuShL67PrVcQqCP14/P2H7cWnKrf7zA=;
-        b=gjlhz5Ml1CqrWOwIkM4S8xGz6fBrragowtE4Jb2EGM9lEpfT60hYs92mSWwzcNR4S5
-         MdCzON4CNHWycWJ3MEcNXTPSMhyEn7b1FPFJZUwEVCsl76myZiFSsdB0CYM88chGSkRj
-         UXyjzeQlUQ3ZE55/3L92aPe63EtzWNnoxUiw2OxmRNfTiwPgcd0Ul/3sY8RwFr7ltIXd
-         xz0UVD40QqMUY7d/OCJ4+Fa1fGa6p6ed8a3UKu9h55EOo+PChE8z3faOpz0N1OKtDdo8
-         bAgrHQ2Xv0nuucy3yrXomOB8XKVk+ZxCDuXtrftLUgeGSIe0KiAITEUkqzfjpX4TJH36
-         inJQ==
-X-Gm-Message-State: AC+VfDz5jP3BZw7wYyEsloO350RRnqCusuzXrEc++3tByvqhUrow9zbk
-        hQU/z9EuIeLXK5riwPBP2tmXUzxOrtI=
-X-Google-Smtp-Source: ACHHUZ6fqao3rsU5NUOW/KdldWQm0WIZQgqd7yRk6H+XgeE+Dw/ZJ9j1o+Nxq+GUYrRc+/KgzEXBKQ==
-X-Received: by 2002:a17:902:f14d:b0:19e:b2ed:6fff with SMTP id d13-20020a170902f14d00b0019eb2ed6fffmr15578896plb.31.1682959389435;
-        Mon, 01 May 2023 09:43:09 -0700 (PDT)
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com. [209.85.210.172])
-        by smtp.gmail.com with ESMTPSA id l16-20020a17090aaa9000b0023d0d50edf2sm1215165pjq.42.2023.05.01.09.43.08
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 09:43:08 -0700 (PDT)
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-64115eef620so27944241b3a.1
-        for <linux-i2c@vger.kernel.org>; Mon, 01 May 2023 09:43:08 -0700 (PDT)
-X-Received: by 2002:a17:90a:eac2:b0:24d:dcbb:6307 with SMTP id
- ev2-20020a17090aeac200b0024ddcbb6307mr8467368pjb.6.1682959388134; Mon, 01 May
- 2023 09:43:08 -0700 (PDT)
+        with ESMTP id S231467AbjEAS2L (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 1 May 2023 14:28:11 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C9012F;
+        Mon,  1 May 2023 11:28:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682965690; x=1714501690;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=th2h6GixFzybR0YMeSTj9+1aYIsWbra5cua0w6goCXc=;
+  b=V6Hq7uAcrl9JC2EHQ0L1v1G3xB2O/Rv/N0CfMRGu88AaWxY9yDz8P8gQ
+   wuICOp+4F+uLjI3KLhfVVuOYTxFv+9ft2UWo3F7E6OVLi6cv3bjtEv+DM
+   YWZUyYQ13jqxYalAQ0n/Hy0vnB53mYqrpk7DFECWOL6AeI0Px2zaqAkWQ
+   G0B42Uy42awigGiwAq+/j/uU0uob8cqLniZ7Ppv0oQjdTMSVWFi/yG8K9
+   Adv3p7i8573O4itZSmegNhrTQYdBZq/JjDPPgfSpEgxs+xzqWd9GLxBBE
+   TpdOArxmxWrt1dEVg24xyszjyo24oTn02vKXB+5dUSnTrf/L/By4M8Vr6
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="328573271"
+X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
+   d="scan'208";a="328573271"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 11:28:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="695867513"
+X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
+   d="scan'208";a="695867513"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 01 May 2023 11:28:06 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ptYFo-007jxu-36;
+        Mon, 01 May 2023 21:28:04 +0300
+Date:   Mon, 1 May 2023 21:28:04 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Jiawen Wu <jiawenwu@trustnetic.com>, netdev@vger.kernel.org,
+        andrew@lunn.ch, linux@armlinux.org.uk,
+        jarkko.nikula@linux.intel.com, olteanv@gmail.com,
+        hkallweit1@gmail.com, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org, mengyuanlou@net-swift.com
+Subject: Re: [PATCH net-next v4 2/8] i2c: designware: Add driver support for
+ Wangxun 10Gb NIC
+Message-ID: <ZFAEtI+UgPWGbJMH@smile.fi.intel.com>
+References: <20230422045621.360918-1-jiawenwu@trustnetic.com>
+ <20230422045621.360918-3-jiawenwu@trustnetic.com>
+ <ZEQKlSIIZi9941Bh@smile.fi.intel.com>
+ <20230425140859.q23mhtsk5zoc2t3d@intel.intel>
 MIME-Version: 1.0
-References: <CAE8T=_HGM+gKQguOasGSKi5YXh91S62QYA2=MC45CLJPYxrVAg@mail.gmail.com>
- <ZEISllc9y2bot/ZT@ninjato> <20230429171522.05c671f8@endymion.delvare> <20230429180634.7f94b29e@endymion.delvare>
-In-Reply-To: <20230429180634.7f94b29e@endymion.delvare>
-From:   =?UTF-8?B?SmVhbi1GcmFuw6dvaXMgUm95?= <jf@devklog.net>
-Date:   Mon, 1 May 2023 09:42:57 -0700
-X-Gmail-Original-Message-ID: <CAE8T=_FN6WUg5+CwQYnR5yXJtefxx8t85TTMzJ_weaKc2GnDUw@mail.gmail.com>
-Message-ID: <CAE8T=_FN6WUg5+CwQYnR5yXJtefxx8t85TTMzJ_weaKc2GnDUw@mail.gmail.com>
-Subject: Re: [ee1004] Failed to select page 0 - G.Skill Trident Z5 NEO DDR5,
- ASUS X670E board - 6.2.11-arch1-1
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230425140859.q23mhtsk5zoc2t3d@intel.intel>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Thank you for the research. I was under the impression decode-dimms
-supported DDR5 already. but I really misread the patch. It's only
-adding support for listing DDR5 as the memory type, and nothing else.
-I may look into getting this done. Strictly as a hobby with limited
-time.
+On Tue, Apr 25, 2023 at 04:08:59PM +0200, Andi Shyti wrote:
+> > >  #define MODEL_MSCC_OCELOT			BIT(8)
+> > >  #define MODEL_BAIKAL_BT1			BIT(9)
+> > >  #define MODEL_AMD_NAVI_GPU			BIT(10)
+> > > +#define MODEL_WANGXUN_SP			BIT(11)
+> > >  #define MODEL_MASK				GENMASK(11, 8)
+> > 
+> > Yeah, maybe next one will need to transform this from bitfield to plain number.
+> 
+> You mean this?
+
+No, only MODEL_XXX bits.
+
+> -#define ACCESS_INTR_MASK                       BIT(0)
+> -#define ACCESS_NO_IRQ_SUSPEND                  BIT(1)
+> -#define ARBITRATION_SEMAPHORE                  BIT(2)
+> -
+> -#define MODEL_MSCC_OCELOT                      BIT(8)
+> -#define MODEL_BAIKAL_BT1                       BIT(9)
+> -#define MODEL_AMD_NAVI_GPU                     BIT(10)
+> -#define MODEL_MASK                             GENMASK(11, 8)
+> +#define ACCESS_INTR_MASK                       0x00
+> +#define ACCESS_NO_IRQ_SUSPEND                  0x01
+> +#define ARBITRATION_SEMAPHORE                  0x02
+> +
+> +#define MODEL_MSCC_OCELOT                      0x08
+> +#define MODEL_BAIKAL_BT1                       0x09
+> +#define MODEL_AMD_NAVI_GPU                     0x0a
+> +#define MODEL_MASK                             0x78
+> 
+> I actually like more bitfield to plain numbers.
+
+Too limited. For model we get 16 out of 4 bits, which is much better and as you
+see we have a trend.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-On Sat, Apr 29, 2023 at 9:06 AM Jean Delvare <jdelvare@suse.de> wrote:
->
-> On Sat, 29 Apr 2023 17:15:22 +0200, Jean Delvare wrote:
-> > I took a quick look on jedec.org in search for information and found
-> > JESD400-5A which covers SPD contents for DDR5 and it enumerates 1024
-> > bytes. This is twice as much as what EE1004 EEPROMs can hold, so DDR5
-> > modules are definitely not using EE1004 EEPROMs. So far I couldn't find
-> > the "equivalent" of EE1004 for DDR5 modules so far.
->
-> Found it, it is named "SPD5118 Hub and Serial Presence Detect Device
-> Standard" and is published by Jedec under reference JESD300-5B. That's
-> a 126-page document. In comparison, the EE1004 specification was
-> 35-page long.
->
-> So I expect there will be a lot of work to get it to work. And I don't
-> own a DDR5-based system yet, so I can't even test.
->
-> --
-> Jean Delvare
-> SUSE L3 Support
