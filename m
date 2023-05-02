@@ -2,122 +2,179 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CFF6F3DC1
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 May 2023 08:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFCF6F3DDC
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 May 2023 08:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjEBGua (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 2 May 2023 02:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
+        id S233710AbjEBGxx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 2 May 2023 02:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233507AbjEBGuT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 May 2023 02:50:19 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E7D4237;
-        Mon,  1 May 2023 23:50:08 -0700 (PDT)
+        with ESMTP id S233487AbjEBGxV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 2 May 2023 02:53:21 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AFD4C37
+        for <linux-i2c@vger.kernel.org>; Mon,  1 May 2023 23:53:01 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so23300685276.0
+        for <linux-i2c@vger.kernel.org>; Mon, 01 May 2023 23:53:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1683010209; x=1714546209;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=YkZqd9ppIY7yEIAiINZ3ndGmS/bfhayyJibhgAwO8Ds=;
-  b=Vrod4UF0J7aSDZ83RWJ5VxHmEWki6MczMcAplYsmpEfQ1lXc3+eeFfWM
-   tYMQrNWj36DGUQKqiy857CgCIxD5CjIGsxZbQljXtgBmT1M0AZad5TUGC
-   m+/9MA1t6p5WqaSht0DOttgnyVJ9+0qidVfoYByuKGEN2uUH4vPgfAXuM
-   UxPMs5qRJ1iKbxdj/ILTSeZ7OmTR1GeCElyqQwmPP5RSfB5oHggOxJKEg
-   T4ousCzXUhIvOZhHimYrlJLM681gCgYEZvTXLLBt2tOhI1Rd2gKf9LSeP
-   uzK4+f1vKevbv0DDJRLwLhR/ddlVD5bu251zIjnj3HAITS01prVqam3LH
-   g==;
-X-IronPort-AV: E=Sophos;i="5.99,243,1677538800"; 
-   d="scan'208";a="30655272"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 02 May 2023 08:50:06 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 02 May 2023 08:50:06 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 02 May 2023 08:50:06 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1683010206; x=1714546206;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=YkZqd9ppIY7yEIAiINZ3ndGmS/bfhayyJibhgAwO8Ds=;
-  b=dPrYNrEwCA6bui24GyFYdJ6BXqoQavuC/GRQo02bZvpTFrwe4O4LykyE
-   m/CWzysdUm/95BL8+v+nkBd4xkRiLrQOZCfHmkgCZKSGMVc7Wl4yKMmST
-   kEoEN2FXoPmhViE8ozvQgMUwpHSIED/9tAUV12Xo4R4WEIY0DzQIpbdNU
-   9+jI/2RfXD76RZ8Gk9RkSa6MnuauZQbsw/0ksJaYvn7e0z0Roivwy2spt
-   2JolWpXZ4hIdGBNlIPof5zPaD2+WB5RXW7hl9m/8N1PQ8fSE/3o+iMC8k
-   mfWumxNqCruVPlSdRa23JOHJ+E5ZVKp5a3wo+SxaZhoI5ZSy9GMFc/+6U
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,243,1677538800"; 
-   d="scan'208";a="30655271"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 02 May 2023 08:50:06 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 80EF4280056;
-        Tue,  2 May 2023 08:50:06 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "A. Sverdlin" <alexander.sverdlin@siemens.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: lpi2c: cache peripheral clock rate
-Date:   Tue, 02 May 2023 08:50:06 +0200
-Message-ID: <2143344.irdbgypaU6@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <ZE4TU0rCw9MSwrmB@sai>
-References: <20230310130815.562418-1-alexander.sverdlin@siemens.com> <4797405.GXAFRqVoOG@steina-w> <ZE4TU0rCw9MSwrmB@sai>
+        d=9elements.com; s=google; t=1683010381; x=1685602381;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZcUXDXaT3ty1Xt8nlRve7aJUPr1+gS6+OMxz4c8SSi8=;
+        b=FBeH5yhzOigNo0qNk7msZqNEI0D4ajPcA+q1pNmp8oLq+RXNB270++fJuHY9JguMpi
+         EXKwUz+8/TIwzpBamFbT7ty2TQ+2JRGAK7Oo8h4y6eUI1wrzyzBKgkqo5l17MTaZz/E1
+         vvSdFncNC99UkJ3F/rxarMU0zqABAG7FsO5vlHodAdYjsXq0S06Z9qTyrd0GtZK8gjeq
+         E/aOLhH9m2fVqTxmov5aoS1hg5197zhHLjmAAvFk2CCY+Zbu/ECw5ikLM8fNVWmRpGk9
+         N8HZFSXNbAHfS2t0fZpmKAhHuNigc4FerJiqqFkv7guUMVKloazzUo1YpXKPi8FFwwRA
+         weOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683010381; x=1685602381;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZcUXDXaT3ty1Xt8nlRve7aJUPr1+gS6+OMxz4c8SSi8=;
+        b=Q53MWeKaevvTw2BuYhNDMoN5AAlz3dk3IVc5o3Ynttx5KJxo+hymyWqqwsGxFoFyBh
+         giww5oz+icFi1yRupghNc6AyNyrbKKeu8hGb1qfCnHgRdupvMHRjhPYakibZi4m6Sa0y
+         93FM+0ZcYy0yHr6bOUKStEjM6PNW3VTzHED+I0SgXtNTLfYiiB4SNz/w0PuH0sWcZhwS
+         +GIQ1lWWaEM7EgoYuCLWzz//nNnAG17Wp1pXCnnhFlZskOygXD+0EA5uchU3fCiH+UAk
+         HWty2UuyUHN9Q2krTOCyJ9m4oT7md/8X4WUdRgGYVWK4Er3+70+5d/XkxVbRuWycjdFf
+         QBCg==
+X-Gm-Message-State: AC+VfDygI5UHay7CWCodsc5JH8I/xld8LDQbg+3959hoVTdxaDVsfsln
+        BZiiV8dGORjI8xMLqrLHn/8V6UXSTNCyTpVxMESi4g==
+X-Google-Smtp-Source: ACHHUZ7zG5ub4HnT4rMwgFf02SO3pOSYBKGhJ/AKw0Nc/jPYYyTotJFeknFJKuCcOs7u+0vMkwfvzv0/QE8qCuunqCE=
+X-Received: by 2002:a81:6c88:0:b0:55a:8293:e387 with SMTP id
+ h130-20020a816c88000000b0055a8293e387mr3222351ywc.19.1683010379722; Mon, 01
+ May 2023 23:52:59 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230501091552.847240-1-patrick.rudolph@9elements.com>
+ <20230501091552.847240-3-patrick.rudolph@9elements.com> <fd20cad6-34f9-5f3c-abe7-cdf3a93d712c@axentia.se>
+In-Reply-To: <fd20cad6-34f9-5f3c-abe7-cdf3a93d712c@axentia.se>
+From:   Patrick Rudolph <patrick.rudolph@9elements.com>
+Date:   Tue, 2 May 2023 08:52:48 +0200
+Message-ID: <CALNFmy1gxUD-C62SH5GxA=fq8eKYxiOHe8wqXGsVdzsyiJc6Xg@mail.gmail.com>
+Subject: Re: [PATCH v14 2/4] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello Wolfgang,
+Hi Peter,
+it could indeed cause problems when VDD1 !=3D VDD2 and at both needs to
+be enabled.
+The pca9846 datasheet seems to refer to VDD1 as VDD. Thus I could add
+an optional "vdd2" regulator to the binding and driver.
 
-Am Sonntag, 30. April 2023, 09:05:55 CEST schrieb Wolfram Sang:
-> * PGP Signed by an unknown key
->=20
-> > > IIRC this is a general problem^w limitation of the clock framework,
-> > > clock providers cannot use clocks themselves in certain callback, e.g.
-> > > set_rate.
-> >=20
-> > Well, that's essentially impossible when this clock provider is attached
-> > via i2c. i2c transfers potentially need to change or prepare clocks.
->=20
-> So, as I get it, this is not a specific lpi2c problem but affecting any
-> I2C controller driver which uses get_rate() to setup a transfer to a
-> remote I2C clock provider? And this lockdep warning is a false-positive?
+Please let me know if that's what you had in mind.
+Regards,
+Patrick
 
-Yes, IMHO this could potentially occur on every I2C controller driver, if a=
-=20
-clock provider while holding the clk_prepare_lock, e.g. during registration=
-,=20
-issues an i2c transfer.
-I'm not so sure if this is a false-positive, but more like trying to do a=20
-nested lock.
-
-Best regards
-Alexander
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
-
+On Tue, May 2, 2023 at 8:03=E2=80=AFAM Peter Rosin <peda@axentia.se> wrote:
+>
+> Hi!
+>
+> 2023-05-01 at 11:15, Patrick Rudolph wrote:
+> > Update the pca954x bindings to add support for the Maxim MAX735x/MAX736=
+x
+> > chips. The functionality will be provided by the existing pca954x drive=
+r.
+> >
+> > For chips that are powered off by default add a regulator called vdd-su=
+pply.
+> >
+> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> >  .../bindings/i2c/i2c-mux-pca954x.yaml         | 22 +++++++++++++++++--
+> >  1 file changed, 20 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml=
+ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> > index e5c1070903ef..6fed6eae9c9b 100644
+> > --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> > +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> > @@ -4,18 +4,29 @@
+> >  $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
+> >  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> >
+> > -title: NXP PCA954x I2C bus switch
+> > +title: NXP PCA954x I2C and compatible bus switches
+> >
+> >  maintainers:
+> >    - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> >
+> >  description:
+> > -  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
+> > +  The NXP PCA954x and compatible devices are I2C bus
+> > +  multiplexer/switches that share the same functionality
+> > +  and register layout.
+> > +  The devices usually have 4 or 8 child buses, which are
+> > +  attached to the parent bus by using the SMBus "Send Byte"
+> > +  command.
+> >
+> >  properties:
+> >    compatible:
+> >      oneOf:
+> >        - enum:
+> > +          - maxim,max7356
+> > +          - maxim,max7357
+> > +          - maxim,max7358
+> > +          - maxim,max7367
+> > +          - maxim,max7368
+> > +          - maxim,max7369
+> >            - nxp,pca9540
+> >            - nxp,pca9542
+> >            - nxp,pca9543
+> > @@ -56,6 +67,9 @@ properties:
+> >      description: if present, overrides i2c-mux-idle-disconnect
+> >      $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
+> >
+> > +  vdd-supply:
+> > +    description: A voltage regulator supplying power to the chip.
+> > +
+>
+> The pca9846-9 chips do not have one VDD, they have separate supplies for
+> "low level" (VDD1), and "core logic" (VDD2). I don't know how such a
+> situation is normally reflected in bindings, but could it not cause
+> headaches later if use of unqualified VDD is spreading for those chips?
+> Possibly with different semantics depending on if vdd-supply is tied to
+> VDD1, VDD2 or both?
+>
+> Cheers,
+> Peter
+>
+> >  required:
+> >    - compatible
+> >    - reg
+> > @@ -68,6 +82,8 @@ allOf:
+> >            compatible:
+> >              contains:
+> >                enum:
+> > +                - maxim,max7367
+> > +                - maxim,max7369
+> >                  - nxp,pca9542
+> >                  - nxp,pca9543
+> >                  - nxp,pca9544
+> > @@ -94,6 +110,8 @@ examples:
+> >              #size-cells =3D <0>;
+> >              reg =3D <0x74>;
+> >
+> > +            vdd-supply =3D <&p3v3>;
+> > +
+> >              interrupt-parent =3D <&ipic>;
+> >              interrupts =3D <17 IRQ_TYPE_LEVEL_LOW>;
+> >              interrupt-controller;
