@@ -2,60 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5664C6F5AE7
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 May 2023 17:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFD56F5B5E
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 May 2023 17:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbjECPXf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 3 May 2023 11:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S230222AbjECPi1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 3 May 2023 11:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbjECPXe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 3 May 2023 11:23:34 -0400
+        with ESMTP id S230029AbjECPi0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 3 May 2023 11:38:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359E9449B;
-        Wed,  3 May 2023 08:23:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D67E1FDB;
+        Wed,  3 May 2023 08:38:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFD6F60DE4;
-        Wed,  3 May 2023 15:23:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE3C3C433EF;
-        Wed,  3 May 2023 15:23:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2756160AB4;
+        Wed,  3 May 2023 15:38:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE110C433EF;
+        Wed,  3 May 2023 15:38:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683127412;
-        bh=hiXRjnU7wra2TwDm/hHMN+kS2zBswOO3Fxz7JDYTmcE=;
+        s=k20201202; t=1683128304;
+        bh=LyAC9Uzz/+b0JzmwQtT+pFnyz2N1dBXrPdiGGOjCDNg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p11ytUf1uvoxJ7g5SoFSLKpSrx6pXViH99cVlbgaU91sIDSZg8uYw3mncWAYbIadu
-         LDMv5FsjApwMmWVFTgl+WsQ25FpM4zzLOd95Obud0e1+qcBvQafSO0lv945w5TRnyy
-         BWNLu+CpiD3EKy3j49src+vvWejCUeTBQxghHM/2ULG1IrMoF/k8JP7B3VysAC1KbO
-         42keNEzxmAfomnJPi4JBkIy071Or5hlY7AfFS7RGCHTgqRnbGYrlq2m347gXSDqs9s
-         Q6ca1QKe2fDTynySHUCA6OWCiF1Y98H6nt7gaonOEz2CX3xQlrMzcb+ffB2xjQ2QiU
-         QALOMkLvwR+/g==
-Date:   Wed, 3 May 2023 17:23:29 +0200
+        b=lp2Wbu726JEDxrXLhsme63CEQx9vUgzOGVcoCc9ADitNWS2ijVUMRLrQ4FP3Awjna
+         xgzY/IGaN+vUx5/WQt397KYN7kFr8uphMh1UqJ3T1Kpe5XmgR0iO+kjJASTbVdyM+3
+         zBmXKaGNs6b+zZ4q4jqSTC2BVR14b0q7/o1kdeXrCraUp9YvNTEjRbFNUGjsGWd+vn
+         114m4PlJXHHHUf2mixib9ROTW3yFDBJo7oXd2z7wpaU9z0pEQcff3UyU2QuOgB3FGP
+         8EwytdsAFrmMW942iAIvMqCVl5WzopD2vshY86uJBf21mbbhXQtL4TUf/DpDJX3fCc
+         UVORci/k8drOw==
+Date:   Wed, 3 May 2023 17:38:19 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: gxp: fix build failure without CONFIG_I2C_SLAVE
-Message-ID: <ZFJ8cUK26CqZFSTZ@ninjato>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: i2c: brcm,kona-i2c: convert to YAML
+Message-ID: <ZFJ/67UgNRmB44HT@sai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>, Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>, Joel Stanley <joel@jms.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230403074939.3785593-1-arnd@kernel.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <9875ec0211187e4f5e2a4379c63eacdb69b31d7a.1682252615.git.stano.jakubek@gmail.com>
+ <72ba28004afb733224f7294a146fc2a6a5a834a7.1682252615.git.stano.jakubek@gmail.com>
+ <168234258850.2489090.5138716439435477956.robh@kernel.org>
+ <20230426172354.GB2506@standask-GA-A55M-S2HP>
+ <ZE4Q6p1tAiIoZo/M@sai>
+ <d10e48cf-3cf8-89b7-8741-260adccfdfed@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JPPbTloawUk0fmfJ"
+        protocol="application/pgp-signature"; boundary="azXWXr9cX0NZ/8VD"
 Content-Disposition: inline
-In-Reply-To: <20230403074939.3785593-1-arnd@kernel.org>
+In-Reply-To: <d10e48cf-3cf8-89b7-8741-260adccfdfed@linaro.org>
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,50 +77,36 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---JPPbTloawUk0fmfJ
+--azXWXr9cX0NZ/8VD
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Apr 03, 2023 at 09:49:13AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The gxp_i2c_slave_irq_handler() is hidden in an #ifdef, but the
-> caller uses an IS_ENABLED() check:
->=20
-> drivers/i2c/busses/i2c-gxp.c: In function 'gxp_i2c_irq_handler':
-> drivers/i2c/busses/i2c-gxp.c:467:29: error: implicit declaration of funct=
-ion 'gxp_i2c_slave_irq_handler'; did you mean 'gxp_i2c_irq_handler'? [-Werr=
-or=3Dimplicit-function-declaration]
->=20
-> It has to consistently use one method or the other to avoid warnings,
-> so move to IS_ENABLED() here for readability and build coverage, and
-> move the #ifdef in linux/i2c.h to allow building it as dead code.
->=20
-> Fixes: 4a55ed6f89f5 ("i2c: Add GXP SoC I2C Controller")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Applied to for-current, thanks!
 
 
---JPPbTloawUk0fmfJ
+> The dtbs warnings - if fixed via any other pactch - can be safely
+> ignored. They do not affect bisectability. Please grab this patch via
+> I2C. The DTS will go separately via arm-soc.
+
+OK, thanks for the heads up!
+
+
+--azXWXr9cX0NZ/8VD
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRSfG0ACgkQFA3kzBSg
-KbZmyA//V7gN/9uaQgLI0cBfq9x/4U01NbRtIc3WQjYn9uiMuv/uaByzqhR94rkW
-qEg9jzkfaQYthFvPQKn7DdbM46nhvFudYKGLKtyweCvVFPodnppEMO5XJ8LwdbOX
-lLG8O7QaiwxLhsGJkb1sJRoiyram3Cw9YTnMKlwLrOvbr87CSccuPIvlqWEj/ORu
-5cxM3ZQHlL6VWDMEzn1planNMIHy4lrt31lM81y9RAkS25no6ZPDRPogvZ5iRCTo
-SudAUA4mfg3Z3i977IDACzkmbWOakSEGZ0A4GrIIXAkfwrKa4nXM7hPmQqWKZARQ
-qCI6gTJLWJJ0wu9WuK3Hn6MQevfE4p/MRcS0aaEbgqynmHx3B1v1mk05BHqKCPaz
-zh/ATj4ETLSvJL1jEZtrZzaqYTxWelR83wj4s9AUI/UBK1ZqUip4EzOyttLTYyfe
-IA1RGoul5apDXJmcdbSJ3oUGO/D2A6vlfyRMBxvEUXVbX3GghHPmFJX/s8VlGKfU
-HMZ9ECRiFGi9iDTXo45e4+Yv00z7p0oM4EOe5nvJj0YYey7Ci9NE8xcHd6asc3DG
-4T+YG+M+b5tfs5d1ErSfqxw73ywa83JqfHb7L6kdp3+uotitUlLcCLooDH5a8ZRK
-XpQdNFq1HMYgz6Fw7W5S9RFSySOtu2JZbAX/PZihfBRd9Ou6tBw=
-=uMcU
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRSf+EACgkQFA3kzBSg
+KbYnWw/9G1lwulnAIeVChE4f9/tIeNApXcZYGou0kOV8iAAKIoD7rHyI9O1og8JX
+CIK77xo6TZFk2aqbuKhZ88g6nf6m2DNuSRoADweRwhWJNEKzctudEEQ6qUM9ijh8
+ql0C/SVacOP2CEO7FhGO7dwTjqtxH2VRJNvseoKawtrgFc7A/2VGZccZFJXNnYZJ
+K4+jHiI8lGfzBrXtRc3MMa+gtyjn2cFz/j3RwntDwlfi/vtjgs1+MMGJqNAGX2tn
+wTV7fE7qUASlBMxQN0Z/VCCoqTzn8dy7lvgoNJ0NqPLfuO16a779FJejS2b3jaeb
+m6+NjDFAmyMT5G1KO4AXSBZb63paL+VQE8LeQVxPATYlHS9dyxTYr3t4I6T0Taqg
+sIzThlFkrjNuGQ+6uXX2pCTtqWonGeV1U4LUGkiCQzSny+89hdG8ItXOe9clKQhl
+n+6TLwG3gpbQnQmFyDlq/fb0GPQcn8dnxVvDru6ojqpnCEbVXWEUsa6WAM0khNXO
+PReAyHriVCGnPQAl48oPpe7Qqt8EiiZHs2himY68/YstYe2V5pYvMaIBqFExTHVL
+yUSev1ywjXPZT0yrJry1lWqur9+YvKXCJqAg0lM5nmOoV5GNYqlTCHWSC6uM4uMP
+JhZQh960Vfyqn4so1DoVSLAhal+Tdd4WngP6tZ2rLEYWie0nddM=
+=tfLc
 -----END PGP SIGNATURE-----
 
---JPPbTloawUk0fmfJ--
+--azXWXr9cX0NZ/8VD--
