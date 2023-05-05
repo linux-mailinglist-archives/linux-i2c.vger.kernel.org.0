@@ -2,112 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3156F7AA3
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 May 2023 03:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529D76F7DF0
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 May 2023 09:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjEEBTY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 4 May 2023 21:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
+        id S230455AbjEEHcl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 5 May 2023 03:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjEEBTY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 4 May 2023 21:19:24 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1AFAA12494;
-        Thu,  4 May 2023 18:19:21 -0700 (PDT)
-Received: from d202180596$hust.edu.cn ( [10.12.189.15] ) by
- ajax-webmail-app2 (Coremail) ; Fri, 5 May 2023 09:18:16 +0800 (GMT+08:00)
-X-Originating-IP: [10.12.189.15]
-Date:   Fri, 5 May 2023 09:18:16 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   d202180596@hust.edu.cn
-To:     "andy gross" <agross@kernel.org>,
-        "bjorn andersson" <andersson@kernel.org>,
-        "konrad dybcio" <konrad.dybcio@linaro.org>,
-        "wolfram sang" <wsa@kernel.org>,
-        "ivan t. ivanov" <iivanov@mm-sol.com>,
-        "sricharan r" <sricharan@codeaurora.org>,
-        "naveen kaje" <nkaje@codeaurora.org>,
-        "austin christ" <austinwc@codeaurora.org>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        "andy gross" <agross@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: qup: Add missing unwind goto in qup_i2c_probe()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
- Copyright (c) 2002-2023 www.mailtech.cn hust
-In-Reply-To: <20230418135612.598-1-d202180596@hust.edu.cn>
-References: <20230418135612.598-1-d202180596@hust.edu.cn>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S231272AbjEEHck (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 5 May 2023 03:32:40 -0400
+Received: from smtpbg153.qq.com (smtpbg153.qq.com [13.245.218.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D0317FF4
+        for <linux-i2c@vger.kernel.org>; Fri,  5 May 2023 00:32:24 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1683271741twofd6ve
+Received: from wxdbg.localdomain.com ( [36.24.99.3])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 05 May 2023 15:28:22 +0800 (CST)
+X-QQ-SSF: 01400000000000I0Z000000A0000000
+X-QQ-FEAT: zT6n3Y95oi2qGGm8CNxQoikUHI8a3j1SyoOwR/FQKJkU3jwhVKNerdDr17/s/
+        rrh7Wg4FSQley/BvrW8EKukRPPQPxBDDsNFvQUJEXsz2EaTn3JTSeL1utGq9Gc/oPWkKHd2
+        g6dKeCrHhPAKk3JAi5cUEQcZQQItUyIa2A97Skw5QHKed5BPSl/JdNuRbCzdtupDncQiak5
+        hIq59b369SkaF3pPJuBnufka9b8569dLww+STn8WSNwqwp3Inc0LOw2TDZI5s3uLGu6eWIV
+        mtd/WonHLSFaU3UFdHOslkrv+CrlxseBX//WBVPfumBE5TaSg/n2DcdN7VZ/dA67SEpGiM4
+        4uHmvSFBjlbVpq8Xjiasxez7gosPOkrPUHPaHT2pWf6SCPi/M4=
+X-QQ-GoodBg: 2
+X-BIZMAIL-ID: 17579024077979230374
+From:   Jiawen Wu <jiawenwu@trustnetic.com>
+To:     netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com, Jose.Abreu@synopsys.com, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk
+Cc:     linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        mengyuanlou@net-swift.com, Jiawen Wu <jiawenwu@trustnetic.com>
+Subject: [RFC PATCH net-next v6 0/9] TXGBE PHYLINK support
+Date:   Fri,  5 May 2023 15:42:19 +0800
+Message-Id: <20230505074228.84679-1-jiawenwu@trustnetic.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Message-ID: <5c9f1e4d.47382.187e97d01a5.Coremail.d202180596@hust.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: GQEQrADX4JVYWVRkMDEDBQ--.4113W
-X-CM-SenderInfo: rgsqjiiyqvmlo6kx23oohg3hdfq/1tbiAQoCE17Em5bqRAAAsj
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Cj4gLS0tLS3ljp/lp4vpgq7ku7YtLS0tLQo+IOWPkeS7tuS6ujogIlNodWFpIEppYW5nIiA8ZDIw
-MjE4MDU5NkBodXN0LmVkdS5jbj4KPiDlj5HpgIHml7bpl7Q6IDIwMjMtMDQtMTggMjE6NTY6MTIg
-KOaYn+acn+S6jCkKPiDmlLbku7bkuro6ICJBbmR5IEdyb3NzIiA8YWdyb3NzQGtlcm5lbC5vcmc+
-LCAiQmpvcm4gQW5kZXJzc29uIiA8YW5kZXJzc29uQGtlcm5lbC5vcmc+LCAiS29ucmFkIER5YmNp
-byIgPGtvbnJhZC5keWJjaW9AbGluYXJvLm9yZz4sICJXb2xmcmFtIFNhbmciIDx3c2FAa2VybmVs
-Lm9yZz4sICJJdmFuIFQuIEl2YW5vdiIgPGlpdmFub3ZAbW0tc29sLmNvbT4sICJTcmljaGFyYW4g
-UiIgPHNyaWNoYXJhbkBjb2RlYXVyb3JhLm9yZz4sICJOYXZlZW4gS2FqZSIgPG5rYWplQGNvZGVh
-dXJvcmEub3JnPiwgIkF1c3RpbiBDaHJpc3QiIDxhdXN0aW53Y0Bjb2RlYXVyb3JhLm9yZz4KPiDm
-ioTpgIE6IGh1c3Qtb3Mta2VybmVsLXBhdGNoZXNAZ29vZ2xlZ3JvdXBzLmNvbSwgIlNodWFpIEpp
-YW5nIiA8ZDIwMjE4MDU5NkBodXN0LmVkdS5jbj4sICJBbmR5IEdyb3NzIiA8YWdyb3NzQGNvZGVh
-dXJvcmEub3JnPiwgbGludXgtYXJtLW1zbUB2Z2VyLmtlcm5lbC5vcmcsIGxpbnV4LWkyY0B2Z2Vy
-Lmtlcm5lbC5vcmcsIGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcKPiDkuLvpopg6IFtQQVRD
-SF0gaTJjOiBxdXA6IEFkZCBtaXNzaW5nIHVud2luZCBnb3RvIGluIHF1cF9pMmNfcHJvYmUoKQo+
-IAo+IFNtYXRjaCBXYXJuczoKPiAJZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1xdXAuYzoxNzg0IHF1
-cF9pMmNfcHJvYmUoKQo+IAl3YXJuOiBtaXNzaW5nIHVud2luZCBnb3RvPwo+IAo+IFRoZSBnb3Rv
-IGxhYmVsICJmYWlsX3J1bnRpbWUiIGFuZCAiZmFpbCIgd2lsbCBkaXNhYmxlIHF1cC0+cGNsaywg
-Cj4gYnV0IGhlcmUgcXVwLT5wY2xrIGZhaWxlZCB0byBvYnRhaW4sIGluIG9yZGVyIHRvIGJlIGNv
-bnNpc3RlbnQsIAo+IGNoYW5nZSB0aGUgZGlyZWN0IHJldHVybiB0byBnb3RvIGxhYmVsICJmYWls
-X2RtYSIuCj4gCj4gRml4ZXM6IDEwYzVhODQyNTk2OCAoImkyYzogcXVwOiBOZXcgYnVzIGRyaXZl
-ciBmb3IgdGhlIFF1YWxjb21tIFFVUCBJMkMgY29udHJvbGxlciIpCj4gRml4ZXM6IDUxNWRhNzQ2
-OTgzYiAoImkyYzogcXVwOiBhZGQgQUNQSSBzdXBwb3J0IikKPiBTaWduZWQtb2ZmLWJ5OiBTaHVh
-aSBKaWFuZyA8ZDIwMjE4MDU5NkBodXN0LmVkdS5jbj4KPiBSZXZpZXdlZC1ieTogRG9uZ2xpYW5n
-IE11IDxkem05MUBodXN0LmVkdS5jbj4KPiAtLS0KPiBUaGUgaXNzdWUgaXMgZm91bmQgYnkgc3Rh
-dGljIGFuYWx5c2lzIGFuZCByZW1haW5zIHVudGVzdGVkLgo+IC0tLQo+ICBkcml2ZXJzL2kyYy9i
-dXNzZXMvaTJjLXF1cC5jIHwgMjEgKysrKysrKysrKysrKystLS0tLS0tCj4gIDEgZmlsZSBjaGFu
-Z2VkLCAxNCBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9k
-cml2ZXJzL2kyYy9idXNzZXMvaTJjLXF1cC5jIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1xdXAu
-Ywo+IGluZGV4IDJlMTUzZjJmNzFiNi4uNzg2ODIzODhlMDJlIDEwMDY0NAo+IC0tLSBhL2RyaXZl
-cnMvaTJjL2J1c3Nlcy9pMmMtcXVwLmMKPiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLXF1
-cC5jCj4gQEAgLTE3NTIsMTYgKzE3NTIsMjEgQEAgc3RhdGljIGludCBxdXBfaTJjX3Byb2JlKHN0
-cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpCj4gIAlpZiAoIWNsa19mcmVxIHx8IGNsa19mcmVx
-ID4gSTJDX01BWF9GQVNUX01PREVfUExVU19GUkVRKSB7Cj4gIAkJZGV2X2VycihxdXAtPmRldiwg
-ImNsb2NrIGZyZXF1ZW5jeSBub3Qgc3VwcG9ydGVkICVkXG4iLAo+ICAJCQljbGtfZnJlcSk7Cj4g
-LQkJcmV0dXJuIC1FSU5WQUw7Cj4gKwkJcmV0ID0gLUVJTlZBTDsKPiArCQlnb3RvIGZhaWxfZG1h
-Owo+ICAJfQo+ICAKPiAgCXF1cC0+YmFzZSA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJj
-ZShwZGV2LCAwKTsKPiAtCWlmIChJU19FUlIocXVwLT5iYXNlKSkKPiAtCQlyZXR1cm4gUFRSX0VS
-UihxdXAtPmJhc2UpOwo+ICsJaWYgKElTX0VSUihxdXAtPmJhc2UpKSB7Cj4gKwkJcmV0ID0gUFRS
-X0VSUihxdXAtPmJhc2UpOwo+ICsJCWdvdG8gZmFpbF9kbWE7Cj4gKwl9Cj4gIAo+ICAJcXVwLT5p
-cnEgPSBwbGF0Zm9ybV9nZXRfaXJxKHBkZXYsIDApOwo+IC0JaWYgKHF1cC0+aXJxIDwgMCkKPiAt
-CQlyZXR1cm4gcXVwLT5pcnE7Cj4gKwlpZiAocXVwLT5pcnEgPCAwKSB7Cj4gKwkJcmV0ID0gcXVw
-LT5pcnE7Cj4gKwkJZ290byBmYWlsX2RtYTsKPiArCX0KPiAgCj4gIAlpZiAoaGFzX2FjcGlfY29t
-cGFuaW9uKHF1cC0+ZGV2KSkgewo+ICAJCXJldCA9IGRldmljZV9wcm9wZXJ0eV9yZWFkX3UzMihx
-dXAtPmRldiwKPiBAQCAtMTc3NSwxMyArMTc4MCwxNSBAQCBzdGF0aWMgaW50IHF1cF9pMmNfcHJv
-YmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKPiAgCQlxdXAtPmNsayA9IGRldm1fY2xr
-X2dldChxdXAtPmRldiwgImNvcmUiKTsKPiAgCQlpZiAoSVNfRVJSKHF1cC0+Y2xrKSkgewo+ICAJ
-CQlkZXZfZXJyKHF1cC0+ZGV2LCAiQ291bGQgbm90IGdldCBjb3JlIGNsb2NrXG4iKTsKPiAtCQkJ
-cmV0dXJuIFBUUl9FUlIocXVwLT5jbGspOwo+ICsJCQlyZXQgPSBQVFJfRVJSKHF1cC0+Y2xrKTsK
-PiArCQkJZ290byBmYWlsX2RtYTsKPiAgCQl9Cj4gIAo+ICAJCXF1cC0+cGNsayA9IGRldm1fY2xr
-X2dldChxdXAtPmRldiwgImlmYWNlIik7Cj4gIAkJaWYgKElTX0VSUihxdXAtPnBjbGspKSB7Cj4g
-IAkJCWRldl9lcnIocXVwLT5kZXYsICJDb3VsZCBub3QgZ2V0IGlmYWNlIGNsb2NrXG4iKTsKPiAt
-CQkJcmV0dXJuIFBUUl9FUlIocXVwLT5wY2xrKTsKPiArCQkJcmV0ID0gUFRSX0VSUihxdXAtPnBj
-bGspOwo+ICsJCQlnb3RvIGZhaWxfZG1hOwo+ICAJCX0KPiAgCQlxdXBfaTJjX2VuYWJsZV9jbG9j
-a3MocXVwKTsKPiAgCQlzcmNfY2xrX2ZyZXEgPSBjbGtfZ2V0X3JhdGUocXVwLT5jbGspOwo+IC0t
-IAo+IDIuMjUuMQoKcGluZz8g
+Implement I2C, SFP, GPIO and PHYLINK to setup TXGBE link.
+
+Because our I2C and PCS are based on Synopsys Designware IP-core, extend
+the i2c-designware and pcs-xpcs driver to realize our functions.
+
+v5 -> v6:
+- fix to set error code if pointer of txgbe is NULL
+- change "if" to "switch" for *_i2c_dw_xfer_quirk()
+- rename property for I2C device flag
+- use regmap to access I2C mem region
+- use DEFINE_RES_IRQ()
+- use phylink_mii_c45_pcs_get_state() for DW_XPCS_10GBASER
+
+v4 -> v5:
+- add clock register
+- delete i2c-dw.h with platform data
+- introduce property "i2c-dw-flags" to match device flags
+- get resource from platform info to do ioremap
+- rename quirk functions in i2c-designware-*.c
+- fix calling txgbe_phylink_init()
+
+v3 -> v4:
+- modify I2C transfer to be generic implementation
+- avoid to read DW_IC_COMP_PARAM_1
+- remove redundant "if" statement
+- add specific labels to handle error in txgbe_init_phy(), and remove
+  "if" conditions in txgbe_remove_phy()
+
+v2 -> v3:
+- delete own I2C bus master driver, support it in i2c-designware
+- delete own PCS functions, remove pma configuration and 1000BASE-X mode
+- add basic function for 10GBASE-R interface in pcs-xpcs
+- add helper to get txgbe pointer from netdev
+
+v1 -> v2:
+- add comments to indicate GPIO lines
+- add I2C write operation support
+- modify GPIO direction functions
+- rename functions related to PHY interface
+- add condition on interface changing to re-config PCS
+- add to set advertise and fix to get status for 1000BASE-X mode
+- other redundant codes remove
+
+Jiawen Wu (9):
+  net: txgbe: Add software nodes to support phylink
+  i2c: designware: Add driver support for Wangxun 10Gb NIC
+  net: txgbe: Register fixed rate clock
+  net: txgbe: Register I2C platform device
+  net: txgbe: Add SFP module identify
+  net: txgbe: Support GPIO to SFP socket
+  net: pcs: Add 10GBASE-R mode for Synopsys Designware XPCS
+  net: txgbe: Implement phylink pcs
+  net: txgbe: Support phylink MAC layer
+
+ drivers/i2c/busses/i2c-designware-common.c    |   8 +
+ drivers/i2c/busses/i2c-designware-core.h      |   1 +
+ drivers/i2c/busses/i2c-designware-master.c    |  89 ++-
+ drivers/i2c/busses/i2c-designware-platdrv.c   |  16 +
+ drivers/net/ethernet/wangxun/Kconfig          |   8 +
+ drivers/net/ethernet/wangxun/libwx/wx_lib.c   |   3 +-
+ drivers/net/ethernet/wangxun/libwx/wx_type.h  |   3 +
+ drivers/net/ethernet/wangxun/txgbe/Makefile   |   1 +
+ .../ethernet/wangxun/txgbe/txgbe_ethtool.c    |  28 +
+ .../net/ethernet/wangxun/txgbe/txgbe_main.c   |  65 +-
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.c    | 651 ++++++++++++++++++
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.h    |  10 +
+ .../net/ethernet/wangxun/txgbe/txgbe_type.h   |  94 +++
+ drivers/net/pcs/pcs-xpcs.c                    |  30 +
+ include/linux/pcs/pcs-xpcs.h                  |   1 +
+ 15 files changed, 970 insertions(+), 38 deletions(-)
+ create mode 100644 drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
+ create mode 100644 drivers/net/ethernet/wangxun/txgbe/txgbe_phy.h
+
+-- 
+2.27.0
+
