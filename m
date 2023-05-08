@@ -2,47 +2,46 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A906FB8AA
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 May 2023 22:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0946FB897
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 May 2023 22:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbjEHUxi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 May 2023 16:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
+        id S233529AbjEHUxc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 May 2023 16:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233574AbjEHUx0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 May 2023 16:53:26 -0400
+        with ESMTP id S233343AbjEHUxX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 May 2023 16:53:23 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703585FCD
-        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 13:53:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0495FD8
+        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 13:53:22 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pw7r9-00036J-LO; Mon, 08 May 2023 22:53:15 +0200
+        id 1pw7r9-00036e-Q1; Mon, 08 May 2023 22:53:15 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pw7r8-0024qO-Qe; Mon, 08 May 2023 22:53:14 +0200
+        id 1pw7r9-0024qS-1H; Mon, 08 May 2023 22:53:15 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pw7r8-002YVs-5J; Mon, 08 May 2023 22:53:14 +0200
+        id 1pw7r8-002YVw-Dw; Mon, 08 May 2023 22:53:14 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+To:     Baruch Siach <baruch@tkos.co.il>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Wolfram Sang <wsa@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org,
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kernel@pengutronix.de
-Subject: [PATCH 18/89] i2c: designware-platdrv: Convert to platform remove callback returning void
-Date:   Mon,  8 May 2023 22:51:55 +0200
-Message-Id: <20230508205306.1474415-19-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 19/89] i2c: digicolor: Convert to platform remove callback returning void
+Date:   Mon,  8 May 2023 22:51:56 +0200
+Message-Id: <20230508205306.1474415-20-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
 References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1813; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=NhoK4GIZLZI+v7qhysdJ+1axoG0+QQLmz93AmlegSVM=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkWWBybnkbYqL0sFr9k1B+WACovRtVDSVgaPPDN Z0YIKVj49uJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFlgcgAKCRCPgPtYfRL+ TmTSB/9uowgIxUUMDgyU9ZwqyqC1mQZpQ4BBox5czM/PkVpLb+nHOJVxLaiXBmyCvXO49nKviuR iKT6cXPyjQumkW6CoAtqmAiRPMbdpnYLQrYM9egXRFTV9fY9kH/5VtTMMBxyeumcTP5Nb9jADLM hP1/+rSUMepVTmiK3Y+3XRdUxYKIz+QqtqcRrHqA52cr0/POjnUOWF+5zu4lADSleaVSkrrNyB5 q+WU4/omQ/6UPg1rrXGuW9GsFyweMx8sxTBHTBuUKjsYBwdQ7jhDt11GV7ywFmW5qOuI9hYZUeI mefdbdQoHZrBv8jmIOMdIfq3VzwsDCqb6wdJ15owCRRkwkGU
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1660; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=ruuKfv2nHtJSY73LOdUGOF0X6FzWqni2YSM1jnjI5Qg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkWWB5wYgSeO0iAe3OLrOjJBTofol+nkp3WuE2K o7XFTaWt6eJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFlgeQAKCRCPgPtYfRL+ TuLGB/0WojKKz8IEVZM3CK62VRmufpcwfHvU+JiJClqYr0/FGJnZkmXXBRJayQqzhitrxxx0u/f aeyZ4c8ltCmUx1heF8A7Ht/ko0EQ7wIJhW/eW42d4ioEpTH8KnidKQ9t3c/r4FVrTnDuyRdWEQ5 cYgl9nYrTUePW6FdHcyRKZUNvIWPyusbY9uHKmM84z9dhRqHcpaZ8dA8f3fJ//PwvnfdHItsSpW RKecl06fyh041DFicEUvLm4ipPnWI3gk1+WI+78yMQHBgxCc6mrZYWk4bVqAiSg9iPg6DVTKv6L IeuuROoVoJfVBtSqESbgKM4SVXpAo43sRNCCVkdtQPmOb8QQ
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -71,40 +70,38 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/i2c/busses/i2c-designware-platdrv.c | 6 ++----
+ drivers/i2c/busses/i2c-digicolor.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index 89ad88c54754..b404dcd6a646 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -384,7 +384,7 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
- 	return ret;
+diff --git a/drivers/i2c/busses/i2c-digicolor.c b/drivers/i2c/busses/i2c-digicolor.c
+index 50925d97fa42..3462f2bc0fa8 100644
+--- a/drivers/i2c/busses/i2c-digicolor.c
++++ b/drivers/i2c/busses/i2c-digicolor.c
+@@ -347,14 +347,12 @@ static int dc_i2c_probe(struct platform_device *pdev)
+ 	return 0;
  }
  
--static int dw_i2c_plat_remove(struct platform_device *pdev)
-+static void dw_i2c_plat_remove(struct platform_device *pdev)
+-static int dc_i2c_remove(struct platform_device *pdev)
++static void dc_i2c_remove(struct platform_device *pdev)
  {
- 	struct dw_i2c_dev *dev = platform_get_drvdata(pdev);
+ 	struct dc_i2c *i2c = platform_get_drvdata(pdev);
  
-@@ -401,8 +401,6 @@ static int dw_i2c_plat_remove(struct platform_device *pdev)
- 	i2c_dw_remove_lock_support(dev);
- 
- 	reset_control_assert(dev->rst);
+ 	i2c_del_adapter(&i2c->adap);
+ 	clk_disable_unprepare(i2c->clk);
 -
 -	return 0;
  }
  
- #ifdef CONFIG_PM_SLEEP
-@@ -481,7 +479,7 @@ MODULE_ALIAS("platform:i2c_designware");
+ static const struct of_device_id dc_i2c_match[] = {
+@@ -365,7 +363,7 @@ MODULE_DEVICE_TABLE(of, dc_i2c_match);
  
- static struct platform_driver dw_i2c_driver = {
- 	.probe = dw_i2c_plat_probe,
--	.remove = dw_i2c_plat_remove,
-+	.remove_new = dw_i2c_plat_remove,
- 	.driver		= {
- 		.name	= "i2c_designware",
- 		.of_match_table = of_match_ptr(dw_i2c_of_match),
+ static struct platform_driver dc_i2c_driver = {
+ 	.probe   = dc_i2c_probe,
+-	.remove  = dc_i2c_remove,
++	.remove_new = dc_i2c_remove,
+ 	.driver  = {
+ 		.name  = "digicolor-i2c",
+ 		.of_match_table = dc_i2c_match,
 -- 
 2.39.2
 
