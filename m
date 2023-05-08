@@ -2,47 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D186FB8C8
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 May 2023 22:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 270E06FB8F4
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 May 2023 22:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjEHUx6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 May 2023 16:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
+        id S233530AbjEHUy1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 May 2023 16:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233744AbjEHUxn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 May 2023 16:53:43 -0400
+        with ESMTP id S233916AbjEHUyN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 May 2023 16:54:13 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED677DB2
-        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 13:53:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB236E8C
+        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 13:53:55 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pw7rK-0003gu-L6; Mon, 08 May 2023 22:53:26 +0200
+        id 1pw7rL-0003j9-EX; Mon, 08 May 2023 22:53:27 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pw7rJ-0024su-0g; Mon, 08 May 2023 22:53:25 +0200
+        id 1pw7rJ-0024sy-Dq; Mon, 08 May 2023 22:53:25 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pw7rI-002YXt-6x; Mon, 08 May 2023 22:53:24 +0200
+        id 1pw7rI-002YXz-DS; Mon, 08 May 2023 22:53:24 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
+To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Wolfram Sang <wsa@kernel.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Nicholas Piggin <npiggin@gmail.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
         "open list:LINUX FOR POWERPC" <linuxppc-dev@lists.ozlabs.org>,
         linux-i2c@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 49/89] i2c: opal: Convert to platform remove callback returning void
-Date:   Mon,  8 May 2023 22:52:26 +0200
-Message-Id: <20230508205306.1474415-50-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 50/89] i2c: pasemi-platform: Convert to platform remove callback returning void
+Date:   Mon,  8 May 2023 22:52:27 +0200
+Message-Id: <20230508205306.1474415-51-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
 References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1626; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=ncthjFi6ksRiTZBfKM1IMNSBV5gAP6yfZJdoYoXEqrE=; b=owGbwMvMwMXY3/A7olbonx/jabUkhpTIhDf7tJrOC+/SLlnYv/Rdlu7iVZMvPuM3zkw46f9lx Uy2t7zWnYzGLAyMXAyyYoos9o1rMq2q5CI71/67DDOIlQlkCgMXpwBMZJscB8NsB9+ZzIe/C926 o9zgJuDP/KPmxeKF2plOSXtWPG9wubJd65TJbnfBxw9NAiQtFCK9Zl+UiioxmnCFJ99o3+17rc0 /T1l/5m3YvbWJbfsEeXu/W3nS3gJqVR4MLe9Dpd60ailP0eoIYuVxUw86br5rmuUrhQVlsvn1Hn 9rGKwsW/7XrDH6GSOjGXRYwlI5YsaDcLm2kOms1XLMPyedapimt4CxTTdEIrk2+8msZ5kCMomWs 6pErb+J/BBLFzi97v+uhClnX/RKZh7/oNTQV3V9f7jbInvF0ncTdaMsTltsklXn5dOymmU75bNF 2+4v/kc6Hl04du6L4L7JExoK8uKiI59MUfq+zbSr//9/AA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1779; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=2g9yoEqKcX1X+3bMnRkdbIFFr/3mb5kycddtX0do9WQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkWWDt06/aJyPJ7w1qMFqgybbieneo8p+eq3ZSZ yioD/fvqh2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFlg7QAKCRCPgPtYfRL+ TmR2B/9sZk2CXh0JtZGUzTaARFgkBdQjawgYBXSDgk/vvHXB1pWeZqEDKukqXR8yu2IlSUF6Un9 d0jFNAAjGCOSVUrteyazN1M6OxXbEV6gx3SrFRW3wupm4iKCnwlKfYITE/yJTrnI4snYjNoWau3 xck6pGrrI5U/oshOnxXTUS6L5aDIZZEMvUKVRroOf2zD86HaNm99Hj3BUIMXM9BhNX7AKyeaRhZ mMM134qC4U7HGRIqplWoxW4sRqBIn2ZmPX0/ZHAZvSGsOOnsZr2HtyjRvyAkjp9D6moPqDJEuZw AkI0LlkQJnDYzxvqz+TsKmImcZrh6pkDrU9oeZw1p2A+6t/6
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -71,37 +74,36 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/i2c/busses/i2c-opal.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-pasemi-platform.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-opal.c b/drivers/i2c/busses/i2c-opal.c
-index 9f773b4f5ed8..17ef87d50f7c 100644
---- a/drivers/i2c/busses/i2c-opal.c
-+++ b/drivers/i2c/busses/i2c-opal.c
-@@ -232,13 +232,11 @@ static int i2c_opal_probe(struct platform_device *pdev)
- 	return rc;
+diff --git a/drivers/i2c/busses/i2c-pasemi-platform.c b/drivers/i2c/busses/i2c-pasemi-platform.c
+index e35945a91dbe..0a44f64897c7 100644
+--- a/drivers/i2c/busses/i2c-pasemi-platform.c
++++ b/drivers/i2c/busses/i2c-pasemi-platform.c
+@@ -98,12 +98,11 @@ static int pasemi_platform_i2c_probe(struct platform_device *pdev)
+ 	return error;
  }
  
--static int i2c_opal_remove(struct platform_device *pdev)
-+static void i2c_opal_remove(struct platform_device *pdev)
+-static int pasemi_platform_i2c_remove(struct platform_device *pdev)
++static void pasemi_platform_i2c_remove(struct platform_device *pdev)
  {
- 	struct i2c_adapter *adapter = platform_get_drvdata(pdev);
+ 	struct pasemi_platform_i2c_data *data = platform_get_drvdata(pdev);
  
- 	i2c_del_adapter(adapter);
--
+ 	clk_disable_unprepare(data->clk_ref);
 -	return 0;
  }
  
- static const struct of_device_id i2c_opal_of_match[] = {
-@@ -251,7 +249,7 @@ MODULE_DEVICE_TABLE(of, i2c_opal_of_match);
+ static const struct of_device_id pasemi_platform_i2c_of_match[] = {
+@@ -119,7 +118,7 @@ static struct platform_driver pasemi_platform_i2c_driver = {
+ 		.of_match_table		= pasemi_platform_i2c_of_match,
+ 	},
+ 	.probe	= pasemi_platform_i2c_probe,
+-	.remove	= pasemi_platform_i2c_remove,
++	.remove_new = pasemi_platform_i2c_remove,
+ };
+ module_platform_driver(pasemi_platform_i2c_driver);
  
- static struct platform_driver i2c_opal_driver = {
- 	.probe	= i2c_opal_probe,
--	.remove	= i2c_opal_remove,
-+	.remove_new = i2c_opal_remove,
- 	.driver	= {
- 		.name		= "i2c-opal",
- 		.of_match_table	= i2c_opal_of_match,
 -- 
 2.39.2
 
