@@ -2,43 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BD56FB8C2
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 May 2023 22:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7FF6FB8C3
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 May 2023 22:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbjEHUxy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 May 2023 16:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
+        id S233092AbjEHUxz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 May 2023 16:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233092AbjEHUxg (ORCPT
+        with ESMTP id S233758AbjEHUxg (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 May 2023 16:53:36 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175CD7D99
-        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 13:53:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C399729F
+        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 13:53:32 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pw7rN-0003vM-LE; Mon, 08 May 2023 22:53:29 +0200
+        id 1pw7rO-0003wJ-Bb; Mon, 08 May 2023 22:53:30 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pw7rM-0024u2-Tq; Mon, 08 May 2023 22:53:28 +0200
+        id 1pw7rN-0024uK-Jq; Mon, 08 May 2023 22:53:29 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pw7rL-002YYs-Tx; Mon, 08 May 2023 22:53:27 +0200
+        id 1pw7rM-002YYv-81; Mon, 08 May 2023 22:53:28 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Jim Cromie <jim.cromie@gmail.com>, Wolfram Sang <wsa@kernel.org>
+To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 64/89] i2c: scx200_acb: Convert to platform remove callback returning void
-Date:   Mon,  8 May 2023 22:52:41 +0200
-Message-Id: <20230508205306.1474415-65-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 65/89] i2c: sh7760: Convert to platform remove callback returning void
+Date:   Mon,  8 May 2023 22:52:42 +0200
+Message-Id: <20230508205306.1474415-66-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
 References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1614; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=QzQ9+MZooMLjtenWD3Llxxu7U3qZCFGbVHTFdbjQ00A=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkWWD+4wmzYI0ySfXtNxLrtGwqOMNyTIb7WBZFH w7OxtOFr0OJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFlg/gAKCRCPgPtYfRL+ TgtmCACbSYbyhOfaijDch/FCaOrPG5XXRshT3oimVJw5qvi3gtPEvjN9L72RlhdG/f2jPwdCWj1 sCZrQPAKb1vtAlusktqo7/ioV1MC+oLYH7CImgQH6LiP/NafAVX59w5CNBOXPqv2WowOOgKUoBC 8OCTRib8VWbWQUVKIRC0Ioih/BDu8VNKfz72e4rXjSyZbYbOzl1tAgj86+LE8legxjt53NSf2Vj ygfnoaab0GNP0WgdVobLoQ50BuqtYuwIHlWaI2B4+mKB1VdGGJ4JFNyYlnel4aXH59a8LQCl1uN GklCw6ypHcYR7qq7AWjlQFD2QmPY2XBS53uus6Chh0ELttVp
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1708; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=EyqaQ0zFd7FbeD86AIG4rWU73NqwV1kiNfO/4gh+nks=; b=owGbwMvMwMXY3/A7olbonx/jabUkhpTIhP9Ff5dNj/b/frHv8aIHrNFOD+UqQmsXJYWv/7yge qf8+smVnYzGLAyMXAyyYoos9o1rMq2q5CI71/67DDOIlQlkCgMXpwBM5II5B0PXHqdfpvtnTt/N Ksd5sYV35pW/xkvkVk36Wm/1Ksv24+XQ2SWn27PvK8x6zpSn53Ug1NhWxUX2s96WneG/cwW/+kn +NfWUdXw3Ne91JJdagsSTmzaJs85qdV8o37spWqlwWniIRtSu6Z3erhOjlhldsupLN0p6cUvBlG V6YsvXNZPs06taVbsuBjm2C9mnRlxd9ttEy6pD63FIStsi7keTF3Bc8r+hY/pD5PStqzq2/sI94 scY097eXr9sDVOs2Nxgx/npblVC0XuaF08wXchrpR/7RHfDIT2v288au81Dd3qphZd8VPOslQ4K MPtcusp2xpOE0rYJn56VhZbujfZiOBAc/OK484vJhh4zAA==
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -67,38 +67,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/i2c/busses/scx200_acb.c | 6 ++----
+ drivers/i2c/busses/i2c-sh7760.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/scx200_acb.c b/drivers/i2c/busses/scx200_acb.c
-index 7b42a18bd05c..83c1db610f54 100644
---- a/drivers/i2c/busses/scx200_acb.c
-+++ b/drivers/i2c/busses/scx200_acb.c
-@@ -523,14 +523,12 @@ static void scx200_cleanup_iface(struct scx200_acb_iface *iface)
- 	kfree(iface);
+diff --git a/drivers/i2c/busses/i2c-sh7760.c b/drivers/i2c/busses/i2c-sh7760.c
+index 319d1fa617c8..60efa3a5e675 100644
+--- a/drivers/i2c/busses/i2c-sh7760.c
++++ b/drivers/i2c/busses/i2c-sh7760.c
+@@ -536,7 +536,7 @@ static int sh7760_i2c_probe(struct platform_device *pdev)
+ 	return ret;
  }
  
--static int scx200_remove(struct platform_device *pdev)
-+static void scx200_remove(struct platform_device *pdev)
+-static int sh7760_i2c_remove(struct platform_device *pdev)
++static void sh7760_i2c_remove(struct platform_device *pdev)
  {
- 	struct scx200_acb_iface *iface;
+ 	struct cami2c *id = platform_get_drvdata(pdev);
  
- 	iface = platform_get_drvdata(pdev);
- 	scx200_cleanup_iface(iface);
+@@ -546,8 +546,6 @@ static int sh7760_i2c_remove(struct platform_device *pdev)
+ 	release_resource(id->ioarea);
+ 	kfree(id->ioarea);
+ 	kfree(id);
 -
 -	return 0;
  }
  
- static struct platform_driver scx200_pci_driver = {
-@@ -538,7 +536,7 @@ static struct platform_driver scx200_pci_driver = {
- 		.name = "cs5535-smb",
+ static struct platform_driver sh7760_i2c_drv = {
+@@ -555,7 +553,7 @@ static struct platform_driver sh7760_i2c_drv = {
+ 		.name	= SH7760_I2C_DEVNAME,
  	},
- 	.probe = scx200_probe,
--	.remove = scx200_remove,
-+	.remove_new = scx200_remove,
+ 	.probe		= sh7760_i2c_probe,
+-	.remove		= sh7760_i2c_remove,
++	.remove_new	= sh7760_i2c_remove,
  };
  
- static const struct pci_device_id scx200_isa[] = {
+ module_platform_driver(sh7760_i2c_drv);
 -- 
 2.39.2
 
