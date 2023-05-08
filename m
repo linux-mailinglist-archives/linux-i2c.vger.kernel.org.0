@@ -2,48 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DA86FB272
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 May 2023 16:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AC16FB67D
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 May 2023 20:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbjEHOTC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 May 2023 10:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
+        id S229457AbjEHSyL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 May 2023 14:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234532AbjEHOSr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 May 2023 10:18:47 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4E446AD;
-        Mon,  8 May 2023 07:18:45 -0700 (PDT)
-Received: from meterpeter.fritz.box ([93.196.140.197]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MVMuN-1pohhE12MJ-00SKFE; Mon, 08 May 2023 16:18:43 +0200
-From:   Christian Heusel <christian@heusel.eu>
-To:     linux-i2c@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Christian Heusel <christian@heusel.eu>
-Subject: [PATCH] i2c: Fix spelling mistake "innacurate" -> "inaccurate"
-Date:   Mon,  8 May 2023 16:18:01 +0200
-Message-Id: <20230508141801.88507-1-christian@heusel.eu>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S229637AbjEHSyK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 May 2023 14:54:10 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6E25FE8;
+        Mon,  8 May 2023 11:54:09 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-643465067d1so3664866b3a.0;
+        Mon, 08 May 2023 11:54:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683572049; x=1686164049;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JB4/cM8wctRX4JBzn3xFEBRRTxVKKD7sX/LFKhnjc5A=;
+        b=jS1F//qR37GdGIu/uwduy4jLEe4igueofer7yYAtGL5amQqqEegFqFoZki5KFdqt/K
+         lVSira9U37PkVlWIbVkO6MmddQ0+L5SADFdxwqBOyxKb409V+NlZSUWMSQ7CQtHytl1k
+         Pf78kdVIEQP1EWLoX9kh7EQ9r0mDTrQGyFOgsO8w65oeWCvBXUqKSFqYh46QNZHZkqqf
+         Y/vfrz6+vRinPkePvl68TqJE7Q6p/G7YiKxNAhGybWHMQBilZdRw+k9ZF4khMqogzAf1
+         pPiXu4DNv2P61xPdKGGbIuVAE8020r5ToBMqbSWNZRl45u0x8l29nLuudWVPBm3hrF9V
+         uvxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683572049; x=1686164049;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JB4/cM8wctRX4JBzn3xFEBRRTxVKKD7sX/LFKhnjc5A=;
+        b=ETndiTDjfAmQe7YdhWr3lv27owjcylyuiJDs0oS9Kqovkq3C3O5noOelWIM5hPof3q
+         AsaM6TgROAaCXUHl+iuj3wK/y1BaAGrY15FgxzsgxfgOf6v3vuqaPnMvEuzCPJ3XIF9r
+         ZeyQPct5zmA0BsUtkdVKu97df1EkfeXMVT8zzS4xHg2HDyvSb5gfOukzbBZUfF6rsroy
+         Y036THbG04I4kj+CG0wTuDkn66ouM0xrpFSeEXBN4eSD7DjkM9mgSXu8wBOmzkeEAYjI
+         /8/Mn3s5GS/3DwvjiskO8lkS2TtXZacN7OiZxvm1YnxLbzTlk9j71gUNvR0XES+tZYtO
+         VdNA==
+X-Gm-Message-State: AC+VfDwtHGawgidJCEQs5jKoN16laD9eQVLZpkYGJBm6ow9Oe2D+M7Sr
+        fsy8G5vJ88LU1Zr+H8EWXnw=
+X-Google-Smtp-Source: ACHHUZ5MjAVBufTEIWp//rkT1lh59X9n0OwnyCpH/xNkSpDx1DXOcgpibn2OkgbPtEWiOh2YDBZZNQ==
+X-Received: by 2002:a05:6a20:1445:b0:100:a4b2:d5e9 with SMTP id a5-20020a056a20144500b00100a4b2d5e9mr4107904pzi.18.1683572049168;
+        Mon, 08 May 2023 11:54:09 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id u24-20020a62ed18000000b0063b6fb4522esm327825pfh.20.2023.05.08.11.54.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 11:54:08 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] ARM: dts: bcm23550: Add SoC-specific I2C compatible
+Date:   Mon,  8 May 2023 11:54:06 -0700
+Message-Id: <20230508185406.1639539-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <9875ec0211187e4f5e2a4379c63eacdb69b31d7a.1682252615.git.stano.jakubek@gmail.com>
+References: <9875ec0211187e4f5e2a4379c63eacdb69b31d7a.1682252615.git.stano.jakubek@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:++DIp72EtaRQ/6nJjS3s55l3mQIS2ve+3gZqKOdUagl4Gp11lLb
- OoOACp2/DEOo8SQ2Zq0v9629CvbXIYWI8jzDmpYvBVNhykQ+tHtZX61ZaMP2FTEQfDaqadL
- xrnKXJZq4058ZYKXUuIPf57eJfzfWD0GsvqhGxel72VJaPzCgOvmrg1VzKltRMZrgDK7AI0
- 880lXBqYRa4dmdNhVsD4Q==
-UI-OutboundReport: notjunk:1;M01:P0:7MvGWf67XZA=;XiFf0eUOVoE91PA0FxZFlC+RD7O
- F5w+v/X3bNpsLm6x3Et5D4vHautClyyg+ZFNuYML39OMWXZdhjMCZhw58oj7qrD1uYsJxLAnX
- 6ErnWRXv3MQAThNdoC2hjKjXh1K6Fj//d059nd+yMM+kT9Q/4fjvdP+f3G1ZrpmInK3uGj+4w
- BIr7GDW2FPkbtwaZ6U5CNDkVRJOy/pHbW2mdQwuke+PeWH6bGjn+K817+14zaW12ipU7vLrw8
- +ZTg/YpFHam+E8FvebdyjJQPqWWrK/621oiqvcJzHEo51ggORVjmjrok3rU4GAvHmO2S3Dvzw
- Gn+yme1yB3tp6F0hOHNne75VG+MgVLcW2SouDkcX9JPAL+Ir88Eu875UPFD+NvgAx2BvLnh71
- IesP8gK9JFfm2wiudKWLyxz4nw5UTYURhmAZ1lF94/n9iQuYt2BzFpLkh/Cpkxj98uuyKXhPh
- L9p+ewgP63oj02E6pVr/cjDZSf4hjN4GYxJ+654+y+EhnUgwwPijsbx1jjZof4W0SW47tzSZX
- Y5IqgFYPME5HTll+eX9Aft//TyvE8tB0tlJ9LPLhhBzSYOSOr2MHt5jFHmnajMFbR7BazTSNa
- ynz26mUgP1TWS+UQiOMh39UG0bKya35SmGVoSIr/uoxyZBTJfda5r8yLzuWIOMY4Nr04syLE2
- IFp+nb/Qu+QXZdLCTEd1u8lIkLuKVuiJC58eOrDQEA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,26 +76,15 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-There is a spelling mistake in a comment. Fix it.
+On Sun, 23 Apr 2023 14:39:12 +0200, Stanislav Jakubek <stano.jakubek@gmail.com> wrote:
+> Add BCM23550-specific compatible for brcm,kona-i2c nodes. While not
+> currently used by the i2c-bcm-kona driver, they can serve for further
+> customization, if required.
+> Done in preparation for dt-binding coversion to DT schema.
+> 
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> ---
 
-Signed-off-by: Christian Heusel <christian@heusel.eu>
----
- drivers/i2c/busses/i2c-img-scb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-img-scb.c b/drivers/i2c/busses/i2c-img-scb.c
-index 8e987945ed45..39c479f96eb5 100644
---- a/drivers/i2c/busses/i2c-img-scb.c
-+++ b/drivers/i2c/busses/i2c-img-scb.c
-@@ -257,7 +257,7 @@
- #define IMG_I2C_TIMEOUT			(msecs_to_jiffies(1000))
- 
- /*
-- * Worst incs are 1 (innacurate) and 16*256 (irregular).
-+ * Worst incs are 1 (inaccurate) and 16*256 (irregular).
-  * So a sensible inc is the logarithmic mean: 64 (2^6), which is
-  * in the middle of the valid range (0-127).
-  */
--- 
-2.40.1
-
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
+--
+Florian
