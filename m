@@ -2,44 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87116FB8B7
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 May 2023 22:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3191F6FB8BE
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 May 2023 22:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbjEHUxq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 May 2023 16:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
+        id S233761AbjEHUxu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 May 2023 16:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233727AbjEHUxd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 May 2023 16:53:33 -0400
+        with ESMTP id S233808AbjEHUxf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 May 2023 16:53:35 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA1A6A49
-        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 13:53:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BA276BF
+        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 13:53:30 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pw7rJ-0003ci-FW; Mon, 08 May 2023 22:53:25 +0200
+        id 1pw7rJ-0003dO-Ry; Mon, 08 May 2023 22:53:25 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pw7rH-0024sa-Ud; Mon, 08 May 2023 22:53:23 +0200
+        id 1pw7rI-0024sh-9F; Mon, 08 May 2023 22:53:24 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pw7rH-002YXi-8V; Mon, 08 May 2023 22:53:23 +0200
+        id 1pw7rH-002YXn-HQ; Mon, 08 May 2023 22:53:23 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>, Wolfram Sang <wsa@kernel.org>
+To:     Robert Richter <rric@kernel.org>, Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 46/89] i2c: ocores: Convert to platform remove callback returning void
-Date:   Mon,  8 May 2023 22:52:23 +0200
-Message-Id: <20230508205306.1474415-47-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 47/89] i2c: octeon-platdrv: Convert to platform remove callback returning void
+Date:   Mon,  8 May 2023 22:52:24 +0200
+Message-Id: <20230508205306.1474415-48-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
 References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1808; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=YS3XbyXRKte7Td1uAXFkmq6aGvmqnZHBl54Svd8x34c=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkWWDkn9ilBnJFyKhpnFg9ZpdVro2shaqWDJ7Gs hP/Qppl9YqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFlg5AAKCRCPgPtYfRL+ Tqz8B/40Grvgk/pcvzfISvZn1XypRBWsCZw78TU9wm3//KweAfKPi+0/F12hYhH9VIdgpv5X9zC 7ZC2SjONdOXtTt2ePwlOGIW9DsLWO1lW5LXUIf6Kn+N0zyAEr8cDxXNXpBPdjcec9o7c6YVx+/i InAhv2XodM/d+F2ArDA6Ro1OcYPpexEJ/TvtUHo6YIr8VC3WFR9wSXkymmG6e5jaNJ74fIpQ97d zeC+AH4FPOY7Ge1JeTW0hxGcf3FAIX26qXHGMlV6z721K3YVR7whU+NSLtPvESJCD1s7c2QBUhq 6MkGZUpavaQawBR5zgzaTXCFOD5WFIkGno28u/orV9gRQ6c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1687; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=PKjDshvndDVx+k3yKcjgc2XsKwkiA9dqnntmst4lQWo=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkWWDlwZTwg35zfIRwxK8S3vZ/ue2rpUV4cReLk oVXcPpahXyJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFlg5QAKCRCPgPtYfRL+ TuZuB/4risJliWe49L7S0mtc6HidJXEppAZ8rrJuIXDYqdquuMUJ34HbrLcCu9U5SjHSn7QUVJn kxAKAELbWB+wpOWPXGE+NksUW0qcgcEY0pweXC98aMVHKr8s2iccERg5egABL7VyGxJ+bmdSCAb YbZeoxj5YVZXDB5jhfNNe/7ua1yixf5PSJjbZxyrWUHBp4SKLi2UbjHfzREuKRAMQG9qZ9DSbct H5HICcnFCz5L9yub9d5TE3MM0jBvbrTuZtLHWyTcTpY5lI0dk+HVjSudkjOTUugFMn04UAzdsCI V7Q49FN+mIeZcAJ0I6ceV4qn9BoDlwVezR8twAoKvjz3tCdj
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -68,40 +67,36 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/i2c/busses/i2c-ocores.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-octeon-platdrv.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
-index 2e575856c5cd..0742b84a11eb 100644
---- a/drivers/i2c/busses/i2c-ocores.c
-+++ b/drivers/i2c/busses/i2c-ocores.c
-@@ -743,7 +743,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 	return ret;
- }
+diff --git a/drivers/i2c/busses/i2c-octeon-platdrv.c b/drivers/i2c/busses/i2c-octeon-platdrv.c
+index 0c227963c8d6..7d54b3203f71 100644
+--- a/drivers/i2c/busses/i2c-octeon-platdrv.c
++++ b/drivers/i2c/busses/i2c-octeon-platdrv.c
+@@ -253,12 +253,11 @@ static int octeon_i2c_probe(struct platform_device *pdev)
+ 	return result;
+ };
  
--static int ocores_i2c_remove(struct platform_device *pdev)
-+static void ocores_i2c_remove(struct platform_device *pdev)
+-static int octeon_i2c_remove(struct platform_device *pdev)
++static void octeon_i2c_remove(struct platform_device *pdev)
  {
- 	struct ocores_i2c *i2c = platform_get_drvdata(pdev);
- 	u8 ctrl = oc_getreg(i2c, OCI2C_CONTROL);
-@@ -757,8 +757,6 @@ static int ocores_i2c_remove(struct platform_device *pdev)
+ 	struct octeon_i2c *i2c = platform_get_drvdata(pdev);
  
- 	if (!IS_ERR(i2c->clk))
- 		clk_disable_unprepare(i2c->clk);
--
+ 	i2c_del_adapter(&i2c->adap);
 -	return 0;
- }
+ };
  
- #ifdef CONFIG_PM_SLEEP
-@@ -804,7 +802,7 @@ static SIMPLE_DEV_PM_OPS(ocores_i2c_pm, ocores_i2c_suspend, ocores_i2c_resume);
+ static const struct of_device_id octeon_i2c_match[] = {
+@@ -270,7 +269,7 @@ MODULE_DEVICE_TABLE(of, octeon_i2c_match);
  
- static struct platform_driver ocores_i2c_driver = {
- 	.probe   = ocores_i2c_probe,
--	.remove  = ocores_i2c_remove,
-+	.remove_new = ocores_i2c_remove,
- 	.driver  = {
- 		.name = "ocores-i2c",
- 		.of_match_table = ocores_i2c_match,
+ static struct platform_driver octeon_i2c_driver = {
+ 	.probe		= octeon_i2c_probe,
+-	.remove		= octeon_i2c_remove,
++	.remove_new	= octeon_i2c_remove,
+ 	.driver		= {
+ 		.name	= DRV_NAME,
+ 		.of_match_table = octeon_i2c_match,
 -- 
 2.39.2
 
