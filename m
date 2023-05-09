@@ -2,58 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 793926FBFDB
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 May 2023 09:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 666376FBFDF
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 May 2023 09:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235170AbjEIHDL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 9 May 2023 03:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
+        id S235151AbjEIHDn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 9 May 2023 03:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233852AbjEIHCm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 May 2023 03:02:42 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84212D044;
-        Tue,  9 May 2023 00:02:41 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-559f1819c5dso82348037b3.0;
-        Tue, 09 May 2023 00:02:41 -0700 (PDT)
+        with ESMTP id S235194AbjEIHDW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 May 2023 03:03:22 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F06C72AA;
+        Tue,  9 May 2023 00:03:10 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so28967246276.0;
+        Tue, 09 May 2023 00:03:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683615760; x=1686207760;
+        d=1e100.net; s=20221208; t=1683615789; x=1686207789;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=NO8zVEYk/++8zOA7zf8bEX4CpTBTIb8P4P1OokzEZr0=;
-        b=Ki4tUgQ3F0ZehKg5LMk+ADIR5sSeKLahi5KZHdjvEG8aPMBe71F7Jf18s+E3MmnRSp
-         p2QidlTPVziwIE7VevjNlaNq1ndhWGOo4KRuKkFpFMIX2hYJqKvJXYPWjhhRgmFCZGQP
-         2KgVfyKEWzO1FYLrnF4H773M5JO95Wj3buAU5+YIqtkcziH93+wew97DvcOTwFXChqHU
-         tRMu+5PGQiBIt2IruV4jg4Y3DZVpXX04jUaWuPqW0SjRerim+Hn1fdhV4VJnMVHf576j
-         U0Pu4dwghA9Jw7s9dm5Q7vA0zHF/5Lc+QHMKFC0WM4kMxPkgkdvmGJ0D04ITBa05by7Q
-         uxAA==
-X-Gm-Message-State: AC+VfDzLFb05V0vmZJ+UaYSNnYpT02d6WOT7MA/DXSVbbnugnZnjRZBG
-        WujxZvLwioFpVDRTiE/vjn47ESEM4/cu9Q==
-X-Google-Smtp-Source: ACHHUZ6sYNt8uafptKdvJvnIvtSjcRfSpIPvU3OEfyZFWJWSvbt6w7drEKWK3a+Nn52l4tgF76CZ3w==
-X-Received: by 2002:a0d:e696:0:b0:55a:2d2b:cdf0 with SMTP id p144-20020a0de696000000b0055a2d2bcdf0mr14060817ywe.8.1683615760250;
-        Tue, 09 May 2023 00:02:40 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id u75-20020a81844e000000b0055a7ff0a5cdsm3056984ywf.27.2023.05.09.00.02.39
+        b=eM2rZkFSFjO2C+miufznJWdJ5HsuWtRGXVz0ZunA0vAaDuOaxuNphs0TdbtFUgfvgm
+         4AyK7GxK0EHF+gIKq0K/fJ0M34jy0uyjcenJ7huG4N/motPEVgSsa+2b2sWVw+N4P/tW
+         QjFGDjtAvn1uWpSzehBKcLn32ySDOGWWAtqixCSHjAsDA2rzs5NCrYC3YwIiCmHmpVgd
+         cOfkB4Gqmrn7qA89xkqD/HXdXmf7wIP5ZVXzglovSIaHgl5A7gX+V5wlzlXmvpA6w5n1
+         asmhSSewTP5EHk7sH7FyGyt2ZFhy7E+9FnjVim34wCh1xHy/VBMFWYvMDzyPYTmkPV7P
+         qZXQ==
+X-Gm-Message-State: AC+VfDwic20wNMrwn8JfkiZghXFQvi6k54eYoi/5t2IwUkn9dP70zHJM
+        Gz7HV93gi/THdLFBDomI1geKcjQGS99BPw==
+X-Google-Smtp-Source: ACHHUZ6xja3n++kSgf38rZBQts6Ky/97oMoUL/O61HfDWUnJ6FafJJh3h2Yp5QHiS+Uhu4x9jKerMA==
+X-Received: by 2002:a25:d8c:0:b0:ba1:ecd3:b061 with SMTP id 134-20020a250d8c000000b00ba1ecd3b061mr14123546ybn.14.1683615789184;
+        Tue, 09 May 2023 00:03:09 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id d136-20020a0ddb8e000000b0054f6ca85641sm3083113ywe.99.2023.05.09.00.03.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 00:02:39 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-55a76ed088aso82146387b3.2;
-        Tue, 09 May 2023 00:02:39 -0700 (PDT)
-X-Received: by 2002:a25:ab2f:0:b0:b9d:c877:b302 with SMTP id
- u44-20020a25ab2f000000b00b9dc877b302mr13879044ybi.10.1683615759580; Tue, 09
- May 2023 00:02:39 -0700 (PDT)
+        Tue, 09 May 2023 00:03:08 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-b9a6f17f2b6so28879829276.1;
+        Tue, 09 May 2023 00:03:08 -0700 (PDT)
+X-Received: by 2002:a25:b189:0:b0:b8f:722b:3570 with SMTP id
+ h9-20020a25b189000000b00b8f722b3570mr13795243ybj.3.1683615788620; Tue, 09 May
+ 2023 00:03:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de> <20230508205306.1474415-60-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230508205306.1474415-60-u.kleine-koenig@pengutronix.de>
+References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de> <20230508205306.1474415-67-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230508205306.1474415-67-u.kleine-koenig@pengutronix.de>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 9 May 2023 09:02:28 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVg8YW91nRpJG_4js-F2sq_yLqeyX8OU779V_QXunF_vg@mail.gmail.com>
-Message-ID: <CAMuHMdVg8YW91nRpJG_4js-F2sq_yLqeyX8OU779V_QXunF_vg@mail.gmail.com>
-Subject: Re: [PATCH 59/89] i2c: riic: Convert to platform remove callback
+Date:   Tue, 9 May 2023 09:02:57 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU+jcQ-ao-Ze14R7ggSyKA8ScC1ueKrqCbX3LYhqrhosQ@mail.gmail.com>
+Message-ID: <CAMuHMdU+jcQ-ao-Ze14R7ggSyKA8ScC1ueKrqCbX3LYhqrhosQ@mail.gmail.com>
+Subject: Re: [PATCH 66/89] i2c: sh_mobile: Convert to platform remove callback
  returning void
 To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-Cc:     Chris Brandt <chris.brandt@renesas.com>,
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Wolfram Sang <wsa@kernel.org>,
         linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
         kernel@pengutronix.de
