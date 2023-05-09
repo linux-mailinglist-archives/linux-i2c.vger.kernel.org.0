@@ -2,131 +2,81 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC686FBF0F
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 May 2023 08:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0696FBF2C
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 May 2023 08:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234572AbjEIGLr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 May 2023 02:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
+        id S234855AbjEIGWQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 9 May 2023 02:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbjEIGLq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 May 2023 02:11:46 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2106.outbound.protection.outlook.com [40.107.21.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F0193FB
-        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 23:11:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hJFNlPrhMngRAKxyI+pSik074KYm2fnBeevC0nh/ku+gwJmmMhU/t8jogge3STinatb1i+OcZtAj4hiHUVRC1tlTiwXnYq2Chw/F4k9uWP5X+jIxtCozbU7P6kqJZZ976Es4j/wlvAGiea/8ZzAJMA6eZXvw2Kw1OPwRhM155qYNRcFlRHKXawpHVv7QOte3IL74VZeCseWQUUZogBQsHtEx/Yzoq8bj4Ossi4h7r0NHGzheQc65H1omeSsxAQaafGuYuuDrha57g/3hPZ2AcXOtP6G+NPmfxSTXeghfEsjoFsgeC30kWi/QlJqC2O7hVULDtA4gVfgWv0eMJ+hvxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YqknQwbXS4OBOv/HtNaYZe5AWgMLWsNlJKiWkjJE770=;
- b=Mw9y3IhYWTqUPGEKyyrTB2V/ZGAUYhD+DsHIWlN1zC/WuL8W18N2+J399HldcEAiSOJJUTZrsTjEUbXJm0+NO9Hm5lkY5rcofbKYmQcDjjJ8hJpA3vmq2sUuipSGECjgc1/YoVL4WNSQr1DQn+cMueSmdJxIp9RSVw5NIsp8d+sVTG5y+GCYFUpqn08wopTMrU5OWFUnHA9d4aa56891LbDBuq7+bpY8dyNfYPfKYI1OOSr5CmPz22K2aWD5uMXvl3Z2/rUYnXtYW2WQMegjtX0AgOJL8dftHecxlqRYgcVDV7MOBbZ7ZbC8oYQkEIVHbmtWdkPoxqGT5EV7hpgCqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YqknQwbXS4OBOv/HtNaYZe5AWgMLWsNlJKiWkjJE770=;
- b=N/ts5kZ7oEPcaANz+8Cefro1J1n6S0jGqpm9N9Dlaog0ATCs+NBTURGSsyqwogb/VkWmMdfCO5gfprwrsc1w5cLS6t6dtZWjsNxLa+V3tFakyqi+P+s2m44REb90HgWujI06qbfkrkGfSPG+r7sY13ymIoNiaUvE4FPDPIa15Z4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
- by AS4PR02MB7855.eurprd02.prod.outlook.com (2603:10a6:20b:4c2::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Tue, 9 May
- 2023 06:11:42 +0000
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::3d67:4b0:82d5:1daa]) by AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::3d67:4b0:82d5:1daa%5]) with mapi id 15.20.6363.033; Tue, 9 May 2023
- 06:11:42 +0000
-Message-ID: <077caa6a-ef2b-c3f7-0841-5f29a76546af@axentia.se>
-Date:   Tue, 9 May 2023 08:11:40 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 89/89] i2c: mux: reg: Convert to platform remove callback
+        with ESMTP id S234796AbjEIGWP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 May 2023 02:22:15 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F5759DB
+        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 23:22:14 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3495AWGT024206;
+        Tue, 9 May 2023 08:21:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Wv2pR/qB32XSuXZHdYPyNr5zgLOj4Lp0mg2Q8uIoLq0=;
+ b=0rSxLa9PY0lKY0yQG1idc/ZiNgPEDOIzoFoxFVAxISazztIxV5OXyrAjRBOlnE5Wy3sd
+ SPESJ7GRrnWCyEtmdZ2cFlsY9qwQ8P/Qi29A8JWfVWB1Qyak1DIyxzTPldddiR4OOyxn
+ Pc9nW4xNemuyYeUCkplEok47Qy/YOakH1nwOoFVMZg1cEJI8HY5+maIHVYK5iHCSV3/P
+ bvvREOUETUD9xvy38NVshxeq5J9VCwKBsrLqnL3O0PXgultK1/pQnlifnPGGGvtzr6VV
+ alkixoBPYs7/5uDgjKiCXCwuWPaohO7rX2ZIcr+iM6QFov6EO0pWpYGNzqEleumNF7A4 PA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qf787ae11-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 May 2023 08:21:55 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 67122100034;
+        Tue,  9 May 2023 08:21:54 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8E17E210F79;
+        Tue,  9 May 2023 08:21:54 +0200 (CEST)
+Received: from [10.201.21.26] (10.201.21.26) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 9 May
+ 2023 08:21:54 +0200
+Message-ID: <ef44c484-31ab-2412-623b-2d3086eec66a@foss.st.com>
+Date:   Tue, 9 May 2023 08:21:53 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 68/89] i2c: st: Convert to platform remove callback
  returning void
-Content-Language: sv-SE
+Content-Language: en-US
 To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
         Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-i2c@vger.kernel.org>, <kernel@pengutronix.de>
 References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
- <20230508205306.1474415-90-u.kleine-koenig@pengutronix.de>
-From:   Peter Rosin <peda@axentia.se>
-In-Reply-To: <20230508205306.1474415-90-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
+ <20230508205306.1474415-69-u.kleine-koenig@pengutronix.de>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20230508205306.1474415-69-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: GVX0EPF000013E5.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:144:1::25) To AM0PR02MB4436.eurprd02.prod.outlook.com
- (2603:10a6:208:ed::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR02MB4436:EE_|AS4PR02MB7855:EE_
-X-MS-Office365-Filtering-Correlation-Id: 902508c0-d7ed-4762-e0d7-08db50544214
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IKYhUTnZnlbMlYVkLtTwKWCWe1GqeCohOlvZtfGFFI9CElxoRMBvowCY62/vKM+nIhKed0HmN7PlmJN5ZsKL+svs4GLHB+9mvy7ItIH0wUFwPAP4S2djLGsS0cW1ZePp53+QD9S1YX1bgwGNU0mgBYMDCCStSJoWiR/cu59DHOhMKXJonfoJ2oourQZXcLMpP2tZL3rTQ/04np5/5hfbUWzytebwIxGRvBl6aJKS4jKQ0aPsMoRk5CyROY1AP3IeUGoeGG/3StPUC5OHCnsLeyGf6JEQfChX00sQfQTIAw5Qjtz5pI+kJS96NpQ1KwAk9KEwZCjzNU6pUuA3GQQJoBq7RLya27+uSVJhzswMk19sDe67lK3QtaGUknNqDWdfQxndSGJEFcHEeGh0yEfo6vxj4FZdEecJIalkV92/ZGslDqFP3jZ/0RNCc3uZy7O/RPaFyZYsFL/5AYqh44nZ+TiLuS/WlmbWQoTfwoioMPZHup5shU9crNznDwU1PrwKfPL5w+UrId6ZjX6VA8vBwN2uErY6np5sX2QOFkcUJW0dycDJyy0IiF07E47oWIhvphlHeJCOAJL7vglFEK8IyJX6TeUWGiIA+x3bsjBLXhNINrUN6Hd8a9dRkwi79FP+exuJstI8iNWjiwhM4u6sqQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(366004)(346002)(39840400004)(396003)(451199021)(2616005)(2906002)(186003)(4744005)(31686004)(86362001)(4326008)(41300700001)(36756003)(66556008)(66476007)(66946007)(6512007)(6506007)(31696002)(26005)(5660300002)(6486002)(38100700002)(110136005)(316002)(8936002)(8676002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cE9uQ1o0OXMwOFhpU0Nyczc4UW1raE9FdVhvY1N3cmc4cVo2bE1IS1dpZXlr?=
- =?utf-8?B?NjQ1cE0zQTVrUm1rWEl0MEIwOWRUZFEzL0ppK1BLdEVsNU5kVUhHRENqZlM3?=
- =?utf-8?B?KzV3OVdjckVOU3NmY2xzdkcxZEQ5Y2Z1RWQrMGtDTmRZM2FjQ0JMTnlRZ1g3?=
- =?utf-8?B?eEtTcEcrekN2WHlFSTYwUHc5cldmd3dER2pZcHUyR29KYkpYYmlnbjQ0aklQ?=
- =?utf-8?B?dVg5MnJ4OUNQcitiNHFkQml4VGFSVEswTEtEVXlpQXdHVVd6ZTRRU1hXY09C?=
- =?utf-8?B?QktxYjdMSFdaa05sUTdReGp4UWRQMVo4a2hvQmRPcmU5Q09xeTJIRlVpTlUw?=
- =?utf-8?B?M3VSTGV1eGY0VklvbGNheTVPbGJXbTNVVm9qQUY4M3lWQ0NwMXBNK3dEOW1F?=
- =?utf-8?B?K3BnbE5INWF1Zjh6eFVaSDUyTm92SVBydS91cW83d2FOQUVsZXcvQlU0OWZB?=
- =?utf-8?B?dGJldzFueXU5QlRXMmJPdmxEd0gzamZSeFIzWXhzUmpKTFdsM0FoQkZKcXlR?=
- =?utf-8?B?K1l4SFBsbVhla3RzNXVLaWNFd0ZpMGpyVmpRR2lzdnlVN1pSWldLS2lDdkRr?=
- =?utf-8?B?ZjBMWjFuUzU0ZGRNL1d3V3FBWDdmL094VjVvcUI0dXlJdGJEeXJwZkh4ZXV5?=
- =?utf-8?B?bXpTOUxaVHNqT1pyL2RIbXIxUFc4YkpicWZld3pwRHE5eWJZckJORGRPTndz?=
- =?utf-8?B?V3JpRHdNSktVT0xkSEI1MHludFZZcFVoL0IzR1pLblNqaHNzTmUyUnhYVjZC?=
- =?utf-8?B?ZTJCVHhEZGdneG9aUVJ6Z0JILytoRE41VmI0bFdPQlY0NG42cHBtMU5ScWN5?=
- =?utf-8?B?b2hWZGtCb0lveUd2ckI0M0pZNTFGR2J4WDVmMFFnZmt4NHZub3Q4c3JnaHVm?=
- =?utf-8?B?VktVbXpTT2pBVDgrcWxrTWtiTFdYTnQwSWdGVEc4ODN1N083ek1HSFJYMGNp?=
- =?utf-8?B?QnRCRWdpbTNFenZjSnhFdDBsTkoxMkpPaWRWUnl1SHJqOUE1NGUydGxkbDBB?=
- =?utf-8?B?U0JxVXBlLzJkYTVod0RyeFE0ajE2UFRrNXdOTlJXeW84TzJCK3NCV01NYkZT?=
- =?utf-8?B?WXpzSmYwd21lU0lVRVN6cTZqU1IzVTdUamhGdThXN3V6RkNhR3dKY255R0Rv?=
- =?utf-8?B?T2tXb24wV1RWRFBrdWxtSUdMaUdDbVdkd2I1c21JN0tSMGwxaGZ6N3R5ZDE5?=
- =?utf-8?B?c3BKNEhaNk5Zc0IxQi84QXhzNGliVHlZNjFIZVFuektpZEcxcTBzQVlLVTlx?=
- =?utf-8?B?WFFSOStvY2d4Rk5hVWpzdUtqMnJMY3M2anhMclpjbk5ldlhDQWtwQkl1Umgx?=
- =?utf-8?B?OUhHZ3hvcTArM3M4bDlDeWFmZHNXSzA3VXlGUlZUNWp3OVR6ZGVHWVF2MlFq?=
- =?utf-8?B?WDNEMXNpMUp0VGtQSHNrMEVBWDg5Z2F2V1Z1dFB1ZlpnaVd4d2YwS0I0YXl6?=
- =?utf-8?B?V1FIMmxlZEhodEhEaWNEaktobE1BaHpoR09PekFDWGdIUytaaUxRY3Z3akw4?=
- =?utf-8?B?eGxEM2twck5lYkx4bXRyMEdISjh5Ym44NlIxV04rNnhlV0FkcXhLdGowYTBt?=
- =?utf-8?B?V1hKMGFZR0lmQWJ6bHZPeVhEbWNUUCs2cW5VOTJ1STBsNDJ5UjJ3WG84SmhV?=
- =?utf-8?B?Umh6UFNsM3U0M2lxOFpCRHgxK29LSkxVT2xWZ0VqQ3hBcnMvQkxJaG1yOFNX?=
- =?utf-8?B?aTF2K0Nad3kzeEIzcy9XcHpScng5TW14RHJmTWJZUkovNjJ6RlJMQ1NzcUp5?=
- =?utf-8?B?K0EwQzhDNFhOUFRsT0VXRndFd1FnZ2RaaWREMTRIV2ROQzFBTFJ0ZzhkZm40?=
- =?utf-8?B?Vk1nSm9ueEVITWFBL285eWFxZzZwdVFwRlY0bnZDMy90c3BKQkNIUUVaZm9N?=
- =?utf-8?B?OW00UWFxV3MrRk5yc21DRFducVo1N3JEcWZibkdEWkxHbVdyYXNRcmFHVjBR?=
- =?utf-8?B?OUs2eEV5WDJoOGJtekt4RDdGR0d3bDVPVXdlZHAzSHU3WHkrcTdacmxwM1c3?=
- =?utf-8?B?NGdQZ2lTQmpNRXMzdWdLamg4Qm9xVEh4N1h6TmRNWTU2OTBCanFTY1VNVmZY?=
- =?utf-8?B?eVpxZk1LenY4bmlKR0pxeFZEdzBYOCtaZS9uOGVXdEpGY0xGS21KU1ZSVmcy?=
- =?utf-8?Q?fURQ8ftFSuTbb0Q72YRLw92Mx?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 902508c0-d7ed-4762-e0d7-08db50544214
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 06:11:42.0842
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GqoLZEkuy5vqAgjmqjAAxThs0cpbxQS6/cpCrMFH6ApPDnTPdddjbFh5W6NIcrpd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR02MB7855
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.201.21.26]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-09_03,2023-05-05_01,2023-02-09_01
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-2023-05-08 at 22:53, Uwe Kleine-König wrote:
+Hi Uwe
+
+On 5/8/23 22:52, Uwe Kleine-König wrote:
 > The .remove() callback for a platform driver returns an int which makes
 > many driver authors wrongly assume it's possible to do error handling by
 > returning an error code. However the value returned is (mostly) ignored
@@ -139,9 +89,40 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 > callback to the void returning variant.
 > 
 > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/i2c/busses/i2c-st.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-st.c b/drivers/i2c/busses/i2c-st.c
+> index f823913b75a6..25c3521cae0e 100644
+> --- a/drivers/i2c/busses/i2c-st.c
+> +++ b/drivers/i2c/busses/i2c-st.c
+> @@ -876,13 +876,11 @@ static int st_i2c_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -static int st_i2c_remove(struct platform_device *pdev)
+> +static void st_i2c_remove(struct platform_device *pdev)
+>  {
+>  	struct st_i2c_dev *i2c_dev = platform_get_drvdata(pdev);
+>  
+>  	i2c_del_adapter(&i2c_dev->adap);
+> -
+> -	return 0;
+>  }
+>  
+>  static const struct of_device_id st_i2c_match[] = {
+> @@ -899,7 +897,7 @@ static struct platform_driver st_i2c_driver = {
+>  		.pm = pm_sleep_ptr(&st_i2c_pm),
+>  	},
+>  	.probe = st_i2c_probe,
+> -	.remove = st_i2c_remove,
+> +	.remove_new = st_i2c_remove,
+>  };
+>  
+>  module_platform_driver(st_i2c_driver);
 
-Acked-by: Peter Rosin <peda@axentia.se>
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Cheers,
-Peter
-
+Thanks
+Patrice
