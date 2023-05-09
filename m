@@ -2,61 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219616FBAB0
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 May 2023 00:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7AA6FBD2E
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 May 2023 04:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbjEHWAk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 8 May 2023 18:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        id S233989AbjEICaM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 8 May 2023 22:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234494AbjEHWA0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 May 2023 18:00:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B5183C0
-        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 15:00:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1669362091
-        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 22:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71891C433D2
-        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 22:00:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683583217;
-        bh=Gs8d1OgETR5vgvXPysUobuWCafUSteJwNAsW4o5j24I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IvLll+9of5mID+aB9rFxbEIiDpvWESmRk8Nm/8dtFqu9cg5nwMO8wrjG/YDv2qJfF
-         UQkTEb4M/QYZCrDjPWVsfxSbtmwdR9K7OqnTv+6QQ0Zzv0Wf/kgvtayHg8xVbO2V1/
-         KlT/UwXqqvSSdC9gH44y8OJO97A1JJXfwR0zLi10R+aXgRoRP1U98XWRr4szpr9mlz
-         h2ygwvwPjGmHFB88ldP8L1YLDtYZcN/qkPSMgauyt9aMfowJRSltLoKPFzRs6690D9
-         z/l+erBOmygE1XCYN6LpQ9XBQmTiQkeFwp5krQi07ri3uiJKtx5lu4iQoJhCRKNtK8
-         1tBP2IpbHObjg==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4f00d41df22so31414672e87.1
-        for <linux-i2c@vger.kernel.org>; Mon, 08 May 2023 15:00:17 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzwU7vne1WY/gCTky8WlWFVtGibYa+b0eIzN7txx0nOftak1Miw
-        YIJ+NxM7eI+2rR92dWsZDxD0mdIvQX5laX0iNJ4=
-X-Google-Smtp-Source: ACHHUZ5mGqyNLyxRdoYdqnNaFLWtRL0O6WZI/VTfjzCHt9WMIY7s1RAt5/HyTRf7KgM4f/C1ztJivyEJG1NaDMua5ec=
-X-Received: by 2002:a05:651c:1255:b0:2ad:80a0:9391 with SMTP id
- h21-20020a05651c125500b002ad80a09391mr84907ljh.23.1683583215418; Mon, 08 May
- 2023 15:00:15 -0700 (PDT)
+        with ESMTP id S234296AbjEICaL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 8 May 2023 22:30:11 -0400
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B225469C;
+        Mon,  8 May 2023 19:29:53 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1683599338tav6i44r
+Received: from wxdbg.localdomain.com ( [125.119.253.217])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 09 May 2023 10:28:39 +0800 (CST)
+X-QQ-SSF: 01400000000000I0Z000000A0000000
+X-QQ-FEAT: LE7C6P2vL8S1CRIbgI3gKRvRenjzf/dLyRfNopDzpyZ2NgrD6JR30LZyzKC46
+        shSM9vwtmyUawiMD2WMKUvv3WjqJ9R31lrd+O7OPcmFzoVrTqRJmwhQmgoIUBFEc5StkuIa
+        dPGG53Bwp5sqlwV1B3QOplA87JVlUivaBDvWGPDJreGy5kUmlfnsZZC/Rdhvof5IhXFuh3K
+        N+lOMtEi2IYZ22TUdPW4rJR39W6z84V8i6R3HeglpBfnF4iF0PfX5Ocmgcue5rSnE1gau/M
+        R5D38FlNA40UxL4NYq5W2iThtoivpMir+YhRhuDJUtvum0HhsXkxa/3RnR8PZgmlotSlhio
+        gpJH86l2hnr/ea0/0Vi/7LKmvpd3M2yN/aRSif6B0FCk6R/rSdP7X39xzxlyA==
+X-QQ-GoodBg: 2
+X-BIZMAIL-ID: 15120649050218020363
+From:   Jiawen Wu <jiawenwu@trustnetic.com>
+To:     netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com, Jose.Abreu@synopsys.com, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk
+Cc:     linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        mengyuanlou@net-swift.com, Jiawen Wu <jiawenwu@trustnetic.com>
+Subject: [PATCH net-next v7 0/9] TXGBE PHYLINK support
+Date:   Tue,  9 May 2023 10:27:25 +0800
+Message-Id: <20230509022734.148970-1-jiawenwu@trustnetic.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de> <20230508205306.1474415-73-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230508205306.1474415-73-u.kleine-koenig@pengutronix.de>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 9 May 2023 00:00:03 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEUj-a8mn=QRvP2TmMMTFvTzH9VkBbogmyRqHRYkps5GA@mail.gmail.com>
-Message-ID: <CAMj1kXEUj-a8mn=QRvP2TmMMTFvTzH9VkBbogmyRqHRYkps5GA@mail.gmail.com>
-Subject: Re: [PATCH 72/89] i2c: synquacer: Convert to platform remove callback
- returning void
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,61 +51,83 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 8 May 2023 at 22:53, Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
->
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+Implement I2C, SFP, GPIO and PHYLINK to setup TXGBE link.
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Because our I2C and PCS are based on Synopsys Designware IP-core, extend
+the i2c-designware and pcs-xpcs driver to realize our functions.
 
-> ---
->  drivers/i2c/busses/i2c-synquacer.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-synquacer.c b/drivers/i2c/busses/i2c-=
-synquacer.c
-> index 50d19cf99a03..4cc196ca8f6d 100644
-> --- a/drivers/i2c/busses/i2c-synquacer.c
-> +++ b/drivers/i2c/busses/i2c-synquacer.c
-> @@ -618,15 +618,13 @@ static int synquacer_i2c_probe(struct platform_devi=
-ce *pdev)
->         return 0;
->  }
->
-> -static int synquacer_i2c_remove(struct platform_device *pdev)
-> +static void synquacer_i2c_remove(struct platform_device *pdev)
->  {
->         struct synquacer_i2c *i2c =3D platform_get_drvdata(pdev);
->
->         i2c_del_adapter(&i2c->adapter);
->         if (!IS_ERR(i2c->pclk))
->                 clk_disable_unprepare(i2c->pclk);
-> -
-> -       return 0;
->  };
->
->  static const struct of_device_id synquacer_i2c_dt_ids[] __maybe_unused =
-=3D {
-> @@ -645,7 +643,7 @@ MODULE_DEVICE_TABLE(acpi, synquacer_i2c_acpi_ids);
->
->  static struct platform_driver synquacer_i2c_driver =3D {
->         .probe  =3D synquacer_i2c_probe,
-> -       .remove =3D synquacer_i2c_remove,
-> +       .remove_new =3D synquacer_i2c_remove,
->         .driver =3D {
->                 .name =3D "synquacer_i2c",
->                 .of_match_table =3D of_match_ptr(synquacer_i2c_dt_ids),
-> --
-> 2.39.2
->
+v6 -> v7:
+- change swnode property of I2C platform to be boolean
+- use device_property_present() to match I2C device data
+
+v5 -> v6:
+- fix to set error code if pointer of txgbe is NULL
+- change "if" to "switch" for *_i2c_dw_xfer_quirk()
+- rename property for I2C device flag
+- use regmap to access I2C mem region
+- use DEFINE_RES_IRQ()
+- use phylink_mii_c45_pcs_get_state() for DW_XPCS_10GBASER
+
+v4 -> v5:
+- add clock register
+- delete i2c-dw.h with platform data
+- introduce property "i2c-dw-flags" to match device flags
+- get resource from platform info to do ioremap
+- rename quirk functions in i2c-designware-*.c
+- fix calling txgbe_phylink_init()
+
+v3 -> v4:
+- modify I2C transfer to be generic implementation
+- avoid to read DW_IC_COMP_PARAM_1
+- remove redundant "if" statement
+- add specific labels to handle error in txgbe_init_phy(), and remove
+  "if" conditions in txgbe_remove_phy()
+
+v2 -> v3:
+- delete own I2C bus master driver, support it in i2c-designware
+- delete own PCS functions, remove pma configuration and 1000BASE-X mode
+- add basic function for 10GBASE-R interface in pcs-xpcs
+- add helper to get txgbe pointer from netdev
+
+v1 -> v2:
+- add comments to indicate GPIO lines
+- add I2C write operation support
+- modify GPIO direction functions
+- rename functions related to PHY interface
+- add condition on interface changing to re-config PCS
+- add to set advertise and fix to get status for 1000BASE-X mode
+- other redundant codes remove
+
+Jiawen Wu (9):
+  net: txgbe: Add software nodes to support phylink
+  i2c: designware: Add driver support for Wangxun 10Gb NIC
+  net: txgbe: Register fixed rate clock
+  net: txgbe: Register I2C platform device
+  net: txgbe: Add SFP module identify
+  net: txgbe: Support GPIO to SFP socket
+  net: pcs: Add 10GBASE-R mode for Synopsys Designware XPCS
+  net: txgbe: Implement phylink pcs
+  net: txgbe: Support phylink MAC layer
+
+ drivers/i2c/busses/i2c-designware-common.c    |   8 +
+ drivers/i2c/busses/i2c-designware-core.h      |   1 +
+ drivers/i2c/busses/i2c-designware-master.c    |  89 ++-
+ drivers/i2c/busses/i2c-designware-platdrv.c   |  15 +
+ drivers/net/ethernet/wangxun/Kconfig          |   8 +
+ drivers/net/ethernet/wangxun/libwx/wx_lib.c   |   3 +-
+ drivers/net/ethernet/wangxun/libwx/wx_type.h  |   3 +
+ drivers/net/ethernet/wangxun/txgbe/Makefile   |   1 +
+ .../ethernet/wangxun/txgbe/txgbe_ethtool.c    |  28 +
+ .../net/ethernet/wangxun/txgbe/txgbe_main.c   |  65 +-
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.c    | 651 ++++++++++++++++++
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.h    |  10 +
+ .../net/ethernet/wangxun/txgbe/txgbe_type.h   |  94 +++
+ drivers/net/pcs/pcs-xpcs.c                    |  30 +
+ include/linux/pcs/pcs-xpcs.h                  |   1 +
+ 15 files changed, 969 insertions(+), 38 deletions(-)
+ create mode 100644 drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
+ create mode 100644 drivers/net/ethernet/wangxun/txgbe/txgbe_phy.h
+
+-- 
+2.27.0
+
