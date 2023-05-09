@@ -2,88 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CD56FBF43
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 May 2023 08:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B866FBFD1
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 May 2023 09:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234563AbjEIGdJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 May 2023 02:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
+        id S234929AbjEIHCH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 9 May 2023 03:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjEIGdJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 May 2023 02:33:09 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D60C59D5
-        for <linux-i2c@vger.kernel.org>; Mon,  8 May 2023 23:33:07 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-965ab8ed1c0so880144066b.2
-        for <linux-i2c@vger.kernel.org>; Mon, 08 May 2023 23:33:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683613986; x=1686205986;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C0qAJplq+FoI0Zp4URt/LobsN3wJwY/Cob7hjfKkbcY=;
-        b=QsLNZPOdfTVI15CvYKz6nU5Jx4eYvQygux3+q8UGBogt5ad0FnvVMGb2wzLGF2FtFm
-         o27GjsKehAG3gFdyd3oyjHfWPjoUdAopfyE+pifQawsgvbNgaACLebI2URtUWlFJkeLn
-         +7vvti8C9anhzhk/2D2sffl2cOAmY2bEua/TMXjqLAR2PSNzgEJcg8qd9FcdD6Z58mIv
-         xdDhM0mDv5W8lyg2z1eOdHu/JNcqP7Mr8+uGn0XRyY72p3Pn9Og+Hd8hzJaAQEyCQpK9
-         0sKWIAxG2Jk0zPkyeuqbqGSWspGpKbclj2rwJLvyuzG5eDpopeKGDolbz/eTAYv/tnn2
-         CBFQ==
+        with ESMTP id S234840AbjEIHBj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 May 2023 03:01:39 -0400
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6736446BD;
+        Tue,  9 May 2023 00:01:38 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-559e317eef1so81041557b3.0;
+        Tue, 09 May 2023 00:01:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683613986; x=1686205986;
+        d=1e100.net; s=20221208; t=1683615697; x=1686207697;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=C0qAJplq+FoI0Zp4URt/LobsN3wJwY/Cob7hjfKkbcY=;
-        b=CUFFxzvG3+1cuUOsbC1l5QDGg7y8W6/kuHS1wu9BYdFMSUIFEJF7onDvlu3SX/hw/9
-         cX45pUoiptMg4BRrpFXljkyXTUkTINnC1IRTRMCNI141wSFyRS9eXOhQ7qTIMCcUi1he
-         3g0tojX7sdObS65BDMg3J4ZJz5Or8QIgpyifn1yOUd7SoLLUjJLlBTMiKXctFpCd8Q41
-         ypQC1XleuU9BzOnj2RRqeuxAQZKf3OXbNvdbClT+VQU3pM3BmtDBYdcZT0YXLO9dRDi/
-         zanMK3JdDvx3kl6T0J8/3QZJW+2ld7obGCXHiFyweKoaRZoFuU/2rlyK5sENAE4Gz5qg
-         CHHw==
-X-Gm-Message-State: AC+VfDwIOvcaCNhdxsH5elZlcOsoYVNxk1y2YpVmPGXSzqumOY2mhe/7
-        W05uO43kQtF7ONZIgoMsbDrAZPw+CoCLiFSELA8=
-X-Google-Smtp-Source: ACHHUZ40Pk/rGGD9Hs1bhsarUFa7aMrDojR7Hhcs9DWiGrJtcqFql8RALK7W2RsmZ6yAnhMOr+wsHb8JIqMeE1socOo=
-X-Received: by 2002:a17:907:16a3:b0:967:92c6:1ec1 with SMTP id
- hc35-20020a17090716a300b0096792c61ec1mr4562870ejc.55.1683613985926; Mon, 08
- May 2023 23:33:05 -0700 (PDT)
+        bh=z8IHLV/BKF7Q/2XmYmPAm+C1DD5o9mDJUXDw9Xzrg1M=;
+        b=SkAP1tNQTpWrh1zFKGqffVUWTBFARglNHJYo6DRBK4vVsiuiZDK012dcZqNLudq26o
+         OeWIvn13bbJyHf8izkg/UdCqF496F4GyTjiBIrIHESCYkiAWtWkl2qOsBlQvcgEQjVti
+         l1H6UTloe32q0oYoWXT7VKg1yU5rMhgjDJ4eEiy6BCPGTO/Uz4D2wlv8ymiHEFR28JMf
+         7b0EwZrXOFnBX6JfZ6/+JtPb9cm2OJXp3uziMPtPFWHpGu+yNpYspgdlg75fjwMdjXke
+         x2XqF8lX+mFzyzVvsL+2iBiJ5uAWrTFg9tolxIq4zUypU6zi3cEoZvSLlEYAMNzliMmd
+         lWlA==
+X-Gm-Message-State: AC+VfDx8h0e83uCJM1G9WXfefjW9WgmZi+DJj2BxDX9a6wkzawu1WtkL
+        URuP61vm9i8YS5JZ3/3NWCRgv8kxUJ0CWQ==
+X-Google-Smtp-Source: ACHHUZ4Hf5d6bqf3SIQssv0h1hcx5aE6ncPbi7QodfJfJo1LHf59JUrUXtsJHHOLi4GVi6xhGz6TZA==
+X-Received: by 2002:a0d:c641:0:b0:55d:8cee:96e9 with SMTP id i62-20020a0dc641000000b0055d8cee96e9mr13452950ywd.5.1683615697412;
+        Tue, 09 May 2023 00:01:37 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id k4-20020a0dc804000000b00555ca01b115sm3042480ywd.104.2023.05.09.00.01.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 00:01:37 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-b9a6ab9ede3so7096567276.2;
+        Tue, 09 May 2023 00:01:36 -0700 (PDT)
+X-Received: by 2002:a25:4285:0:b0:b99:cace:9cd9 with SMTP id
+ p127-20020a254285000000b00b99cace9cd9mr12937514yba.44.1683615696745; Tue, 09
+ May 2023 00:01:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de> <20230508205306.1474415-46-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230508205306.1474415-46-u.kleine-koenig@pengutronix.de>
-From:   Tali Perry <tali.perry1@gmail.com>
-Date:   Tue, 9 May 2023 09:32:54 +0300
-Message-ID: <CAHb3i=sP7GgEfc4yKe6E=9HCh=F-D6sKOvM1T22xN_0fyagiKQ@mail.gmail.com>
-Subject: Re: [PATCH 45/89] i2c: npcm7xx: Convert to platform remove callback
+References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de> <20230508205306.1474415-22-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230508205306.1474415-22-u.kleine-koenig@pengutronix.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 9 May 2023 09:01:25 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUEaSmijjM2QnHq+oA_86dMmkLgoyN07uQDPcWSsXuC+g@mail.gmail.com>
+Message-ID: <CAMuHMdUEaSmijjM2QnHq+oA_86dMmkLgoyN07uQDPcWSsXuC+g@mail.gmail.com>
+Subject: Re: [PATCH 21/89] i2c: emev2: Convert to platform remove callback
  returning void
 To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Wolfram Sang <wsa@kernel.org>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
         kernel@pengutronix.de
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Thanks!
-
-Reviewed-by: Tali Perry <tali.perry@nuvoton.com>
-
-
-On Mon, May 8, 2023 at 11:53=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+On Mon, May 8, 2023 at 10:53 PM Uwe Kleine-König
 <u.kleine-koenig@pengutronix.de> wrote:
->
 > The .remove() callback for a platform driver returns an int which makes
 > many driver authors wrongly assume it's possible to do error handling by
 > returning an error code. However the value returned is (mostly) ignored
@@ -95,44 +82,17 @@ On Mon, May 8, 2023 at 11:53=E2=80=AFPM Uwe Kleine-K=C3=B6nig
 > Trivially convert this driver from always returning zero in the remove
 > callback to the void returning variant.
 >
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/i2c/busses/i2c-npcm7xx.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-np=
-cm7xx.c
-> index 38d5864d0cb5..53b65ffb6a64 100644
-> --- a/drivers/i2c/busses/i2c-npcm7xx.c
-> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> @@ -2361,7 +2361,7 @@ static int npcm_i2c_probe_bus(struct platform_devic=
-e *pdev)
->         return 0;
->  }
->
-> -static int npcm_i2c_remove_bus(struct platform_device *pdev)
-> +static void npcm_i2c_remove_bus(struct platform_device *pdev)
->  {
->         unsigned long lock_flags;
->         struct npcm_i2c *bus =3D platform_get_drvdata(pdev);
-> @@ -2371,7 +2371,6 @@ static int npcm_i2c_remove_bus(struct platform_devi=
-ce *pdev)
->         npcm_i2c_disable(bus);
->         spin_unlock_irqrestore(&bus->lock, lock_flags);
->         i2c_del_adapter(&bus->adap);
-> -       return 0;
->  }
->
->  static const struct of_device_id npcm_i2c_bus_of_table[] =3D {
-> @@ -2383,7 +2382,7 @@ MODULE_DEVICE_TABLE(of, npcm_i2c_bus_of_table);
->
->  static struct platform_driver npcm_i2c_bus_driver =3D {
->         .probe =3D npcm_i2c_probe_bus,
-> -       .remove =3D npcm_i2c_remove_bus,
-> +       .remove_new =3D npcm_i2c_remove_bus,
->         .driver =3D {
->                 .name =3D "nuvoton-i2c",
->                 .of_match_table =3D npcm_i2c_bus_of_table,
-> --
-> 2.39.2
->
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
