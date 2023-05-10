@@ -2,155 +2,138 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0D96FCE3D
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 May 2023 21:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C80C6FD75E
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 May 2023 08:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234959AbjEITD5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 9 May 2023 15:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
+        id S235524AbjEJGrS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 10 May 2023 02:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234983AbjEITDp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 9 May 2023 15:03:45 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D283C15;
-        Tue,  9 May 2023 12:03:42 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9619095f479so997324666b.1;
-        Tue, 09 May 2023 12:03:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683659021; x=1686251021;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lg+AaRFA0UQRvNOojE4EBlRJNw3ULgD7/078ZrdcKSc=;
-        b=FRP9FGuh3WhE0zFzq6ReOR6WRHhCd7Lcym/WHCBZLuje1tKK571gGvNANpetGfMMoL
-         NgtpCh8mqlJ9t09DtZWTj6GV8TT6j1ZXKvYX3mTHTMS+qZo8RElx3Hy/wKhnTcmjPLCN
-         pQbuJIVGHJkXeIntHaMAn21+xYVxAxhejRkUZnweBGMNAG9e84aCAiY112dqxE88QIPh
-         CoHWE8FIluBl04iImcIvmCje8KiJDfBCiIosA7DU6jqHdd+CzFQv2bJJ7KnjgK47dTEj
-         P9HfCQ87WwSEiQNiUdaqLGbhQej5C0Y1X5kIiipxfSNNl0OT533VNxPwhGTZLcgXm7oO
-         IjGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683659021; x=1686251021;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lg+AaRFA0UQRvNOojE4EBlRJNw3ULgD7/078ZrdcKSc=;
-        b=ckmydxHM1+qn3apUV8z6+OH38YL4RFBo9PcznREDJrCBRmXUAAMxJMqaFI0k9fK41F
-         CTbn3BZxfIQGFKGIcuPc4cFP2VY2eytO5fi2CdgLtrjQyKwgEwCCUrL8QC32IQ8H/Mgs
-         V3hmBw/wHIBp7qdfqV5NQfWkDAvci8Lvp9wNcImlAUciz3ePWk7MZOc/GaLtqouVUm5g
-         EbhiF/3Lw8ZJBuqImsz9/VgwHz/ywN5VjtXLF13n1cXzR4916wPC0DhAXkVxDBqQeBFv
-         L/NVJwJw0pJACpX6X75J3LFVWYY3X3tLlv4f7ZyKE14PU4oCaxrrD8gQ3ORaZSy8vdhv
-         PToQ==
-X-Gm-Message-State: AC+VfDz6O2pMqjkkj8Te1r3LxzXsL9ShWcFATsYq4JljmdVHiupBObf7
-        QZ7bPkYIPT03d/4iuKZGM3KjXw6NyzVdcPvZ
-X-Google-Smtp-Source: ACHHUZ7K5NExcERUaziATQooKwQ1xXwdhlZ+QKnFckt4KMJEXCxZqUcZo1UdzvcVXuZXNmQpgKVlsQ==
-X-Received: by 2002:a17:907:6e0f:b0:94e:fe77:3f47 with SMTP id sd15-20020a1709076e0f00b0094efe773f47mr13781046ejc.67.1683659020286;
-        Tue, 09 May 2023 12:03:40 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id e2-20020a170906c00200b009697aa5acfcsm1640232ejz.122.2023.05.09.12.03.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 12:03:39 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Tue, 09 May 2023 21:03:03 +0200
-Subject: [PATCH v6 5/5] mfd: tps6586x: register restart handler
+        with ESMTP id S229737AbjEJGrR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 May 2023 02:47:17 -0400
+Received: from smtpbg153.qq.com (smtpbg153.qq.com [13.245.218.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E528268D;
+        Tue,  9 May 2023 23:47:13 -0700 (PDT)
+X-QQ-mid: Yeas43t1683701031t773t15393
+Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [125.119.253.217])
+X-QQ-SSF: 00400000000000F0FNF000000000000
+From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
+X-BIZMAIL-ID: 998830972937722514
+To:     "'Piotr Raczynski'" <piotr.raczynski@intel.com>
+Cc:     <netdev@vger.kernel.org>, <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
+        <Jose.Abreu@synopsys.com>, <andrew@lunn.ch>,
+        <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <linux-i2c@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <mengyuanlou@net-swift.com>
+References: <20230509022734.148970-1-jiawenwu@trustnetic.com> <20230509022734.148970-3-jiawenwu@trustnetic.com> <ZFpQF4hi0FciwQsj@nimitz>
+In-Reply-To: <ZFpQF4hi0FciwQsj@nimitz>
+Subject: RE: [PATCH net-next v7 2/9] i2c: designware: Add driver support for Wangxun 10Gb NIC
+Date:   Wed, 10 May 2023 14:43:50 +0800
+Message-ID: <009d01d9830a$c7c6dab0$57549010$@trustnetic.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain;
+        charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-tegra-pmic-reboot-v6-5-af44a4cd82e9@skidata.com>
-References: <20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com>
-In-Reply-To: <20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com>
-To:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
-        rafael.j.wysocki@intel.com
-Cc:     dmitry.osipenko@collabora.com, peterz@infradead.org,
-        jonathanh@nvidia.com, richard.leitner@linux.dev,
-        treding@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJdw4zS3rpHMobUlf9gBLGLbLpYXQJZ55l3AhfCTYOuJr3zgA==
+Content-Language: zh-cn
+X-QQ-SENDSIZE: 520
+Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
+On Tuesday, May 9, 2023 9:52 PM, Piotr Raczynski wrote:
+> On Tue, May 09, 2023 at 10:27:27AM +0800, Jiawen Wu wrote:
+> > Wangxun 10Gb ethernet chip is connected to Designware I2C, to
+> > communicate with SFP.
+> >
+> > Introduce the property "snps,i2c-platform" to match device data for
+> > Wangxun in software node case. Since IO resource was mapped on the
+> > ethernet driver, add a model quirk to get regmap from parent device.
+> >
+> > The exists IP limitations are dealt as workarounds:
+> > - IP does not support interrupt mode, it works on polling mode.
+> > - Additionally set FIFO depth address the chip issue.
+> >
+> > Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
+> 
+> I'm definitely not an i2c expert, a couple of nit picks below, thanks.
+> Reviewed-by: Piotr Raczynski <piotr.raczynski@intel.com>
+> 
+> > ---
+> >  drivers/i2c/busses/i2c-designware-common.c  |  8 ++
+> >  drivers/i2c/busses/i2c-designware-core.h    |  1 +
+> >  drivers/i2c/busses/i2c-designware-master.c  | 89
+> > +++++++++++++++++++--  drivers/i2c/busses/i2c-designware-platdrv.c |
+> > 15 ++++
+> >  4 files changed, 108 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-designware-common.c
+> > b/drivers/i2c/busses/i2c-designware-common.c
+> > index 0dc6b1ce663f..a7c2e67ccbf6 100644
+> > --- a/drivers/i2c/busses/i2c-designware-common.c
+> > +++ b/drivers/i2c/busses/i2c-designware-common.c
+> > @@ -575,6 +575,14 @@ int i2c_dw_set_fifo_size(struct dw_i2c_dev *dev)
+> >  	unsigned int param;
+> >  	int ret;
+> >
+> > +	/* DW_IC_COMP_PARAM_1 not implement for IP issue */
+> > +	if ((dev->flags & MODEL_MASK) == MODEL_WANGXUN_SP) {
+> > +		dev->tx_fifo_depth = 4;
+> I understand this is some kind of workaround but is the number chosen
+> empirically? Maybe a defined value would be clearer instead of magic
+> number.
 
-There are a couple of boards which use a tps6586x as
-"ti,system-power-controller", e.g. the tegra20-tamonten.dtsi.
-For these, the only registered restart handler is the warm reboot via
-tegra's PMC. As the bootloader of the tegra20 requires the VDE, it must
-be ensured that VDE is enabled (which is the case after a cold reboot).
-For the "normal reboot", this is basically the case since 8f0c714ad9be.
-However, this workaround is not executed in case of an emergency restart.
-In case of an emergency restart, the system now simply hangs in the
-bootloader, as VDE is not enabled (because it is not used).
+Yes, this value setting worked and passed test.
 
-The TPS658629-Q1 provides a SOFT RST bit in the SUPPLYENE reg to request
-a (cold) reboot, which takes at least 20ms (as the data sheet states).
-This avoids the hang-up.
+> > @@ -559,13 +621,19 @@ i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+> >  	pm_runtime_get_sync(dev->dev);
+> >
+> >  	/*
+> > -	 * Initiate I2C message transfer when AMD NAVI GPU card is enabled,
+> > +	 * Initiate I2C message transfer when polling mode is enabled,
+> >  	 * As it is polling based transfer mechanism, which does not support
+> >  	 * interrupt based functionalities of existing DesignWare driver.
+> >  	 */
+> > -	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
+> > +	switch (dev->flags & MODEL_MASK) {
+> > +	case MODEL_AMD_NAVI_GPU:
+> >  		ret = amd_i2c_dw_xfer_quirk(adap, msgs, num);
+> >  		goto done_nolock;
+> > +	case MODEL_WANGXUN_SP:
+> > +		ret = txgbe_i2c_dw_xfer_quirk(adap, msgs, num);
+> > +		goto done_nolock;
+> > +	default:
+> > +		break;
+> >  	}
+> Nit pick, when I first saw above code it looked a little weird,
+> maybe it would be a little clearer with:
+> 
+> 	if (i2c_dw_is_model_poll(dev)) {
+> 		switch (dev->flags & MODEL_MASK) {
+> 		case MODEL_AMD_NAVI_GPU:
+> 			ret = amd_i2c_dw_xfer_quirk(adap, msgs, num);
+> 			break;
+> 		case MODEL_WANGXUN_SP:
+> 			ret = txgbe_i2c_dw_xfer_quirk(adap, msgs, num);
+> 			break;
+> 		default:
+> 			break;
+> 		}
+> 		goto done_nolock;
+> 	}
+> 
+> I do not insist though.
 
-Tested on a TPS658640.
-
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
----
- drivers/mfd/tps6586x.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/drivers/mfd/tps6586x.c b/drivers/mfd/tps6586x.c
-index b12c9e18970a..3b8faa058e59 100644
---- a/drivers/mfd/tps6586x.c
-+++ b/drivers/mfd/tps6586x.c
-@@ -30,6 +30,7 @@
- #include <linux/mfd/tps6586x.h>
+Sure, it looks more obvious as polling mode quirk.
  
- #define TPS6586X_SUPPLYENE	0x14
-+#define SOFT_RST_BIT		BIT(0)
- #define EXITSLREQ_BIT		BIT(1)
- #define SLEEP_MODE_BIT		BIT(3)
- 
-@@ -475,6 +476,24 @@ static int tps6586x_power_off_handler(struct sys_off_data *data)
- 	return notifier_from_errno(-ETIME);
- }
- 
-+static int tps6586x_restart_handler(struct sys_off_data *data)
-+{
-+	int ret;
-+
-+	/* TPS6586X only provides a hard/cold reboot, skip others. */
-+	if (data->mode != REBOOT_UNDEFINED && data->mode != REBOOT_COLD &&
-+	    data->mode != REBOOT_HARD)
-+		return NOTIFY_DONE;
-+
-+	/* Put the PMIC into hard reboot state. This takes at least 20ms. */
-+	ret = tps6586x_set_bits(data->dev, TPS6586X_SUPPLYENE, SOFT_RST_BIT);
-+	if (ret)
-+		return notifier_from_errno(ret);
-+
-+	mdelay(50);
-+	return notifier_from_errno(-ETIME);
-+}
-+
- static void tps6586x_print_version(struct i2c_client *client, int version)
- {
- 	const char *name;
-@@ -575,6 +594,13 @@ static int tps6586x_i2c_probe(struct i2c_client *client)
- 			dev_err(&client->dev, "register power off handler failed: %d\n", ret);
- 			goto err_add_devs;
- 		}
-+
-+		ret = devm_register_restart_handler(&client->dev, &tps6586x_restart_handler,
-+						    NULL);
-+		if (ret) {
-+			dev_err(&client->dev, "register restart handler failed: %d\n", ret);
-+			goto err_add_devs;
-+		}
- 	}
- 
- 	return 0;
-
--- 
-2.34.1
 
