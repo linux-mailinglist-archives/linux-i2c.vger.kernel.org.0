@@ -2,62 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339F06FF1B7
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 May 2023 14:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF1D6FF3E6
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 May 2023 16:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237411AbjEKMk5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 11 May 2023 08:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39798 "EHLO
+        id S237754AbjEKOUZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 11 May 2023 10:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjEKMk4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 May 2023 08:40:56 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5287E5D;
-        Thu, 11 May 2023 05:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=+CXxgv7BYMxVDWVYBvgEtBMk5M0gWA2h/9LTotfHEn8=; b=jo4WjyNyQ/ZZqPYeYmBRwJLTcR
-        /dfOKhXTZV8ngfR082+9D2xUVbwmIEk0QCz82x1byL94HuHwJY5/J46oYPD9/Q50qNzztHUnj5I2i
-        nhrEI6ROBRdPV2U7eNsjPUt0XQXrOhPmP0VKZPCEY6CiULgoiuy4MQJTi02wICneK4yM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1px5bC-00CYNL-7C; Thu, 11 May 2023 14:40:46 +0200
-Date:   Thu, 11 May 2023 14:40:46 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jiawen Wu <jiawenwu@trustnetic.com>
-Cc:     netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, Jose.Abreu@synopsys.com, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, linux-i2c@vger.kernel.org,
-        linux-gpio@vger.kernel.org, mengyuanlou@net-swift.com
-Subject: Re: [PATCH net-next v7 7/9] net: pcs: Add 10GBASE-R mode for
- Synopsys Designware XPCS
-Message-ID: <1825ca3f-a8f9-428d-ac9c-0c4b9a218fc0@lunn.ch>
-References: <20230509022734.148970-1-jiawenwu@trustnetic.com>
- <20230509022734.148970-8-jiawenwu@trustnetic.com>
+        with ESMTP id S237639AbjEKOUY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 May 2023 10:20:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64793A97
+        for <linux-i2c@vger.kernel.org>; Thu, 11 May 2023 07:20:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5600660B55
+        for <linux-i2c@vger.kernel.org>; Thu, 11 May 2023 14:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59739C433EF;
+        Thu, 11 May 2023 14:20:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683814820;
+        bh=29n/WbUV/CBlXBENjt8Dcr/hpVsTv1R4VybM0pyh9FY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K9Y0ch0dqrhg+5501UrmKl0wxgP+J8SDeXfMZL/h7TAbPxrIILqPUNRn+/tvmuQAC
+         L1oOS7NYMezUej7Q6ja/j2lh5ZCYQz+WvYG5PgOkmTx3Doj3E4ufvilKQX9I0WIgd7
+         uCcK+bfLnfrRmRkeuZoVJiKP2DXmKNja8w7UNC6RW9DZGJ7ItV265OEXJ3q9iLW2q/
+         +Bpuq/U34TsLuxAOaXp0+m9ytwQyLLBzoHuMQazXwMTtMoKAZi1gwtuieh6UJYNk+3
+         1zBanv93+h7gaYdaugtxVqYblKopk7mA/AVArSB0O6T79ikC1DlRp8nQHboF7bXFrq
+         o5tWHJJ+Eyg4A==
+Date:   Thu, 11 May 2023 16:20:17 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Simon Horman <horms@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] i2c: mchp-pci1xxxx: Avoid cast to incompatible function
+ type
+Message-ID: <20230511142017.hpk2nhvqwhunbvbm@intel.intel>
+References: <20230510-i2c-mchp-pci1xxxx-function-cast-v1-1-3ba4459114c4@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230509022734.148970-8-jiawenwu@trustnetic.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230510-i2c-mchp-pci1xxxx-function-cast-v1-1-3ba4459114c4@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, May 09, 2023 at 10:27:32AM +0800, Jiawen Wu wrote:
-> Add basic support for XPCS using 10GBASE-R interface. This mode will
-> be extended to use interrupt, so set pcs.poll false. And avoid soft
-> reset so that the device using this mode is in the default configuration.
+Hi Simon,
+
+On Wed, May 10, 2023 at 02:32:17PM +0200, Simon Horman wrote:
+> Rather than casting pci1xxxx_i2c_shutdown to an incompatible function type,
+> update the type to match that expected by __devm_add_action.
 > 
-> Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
+> Reported by clang-16 with W-1:
+> 
+>  .../i2c-mchp-pci1xxxx.c:1159:29: error: cast from 'void (*)(struct pci1xxxx_i2c *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>          ret = devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shutdown, i2c);
+>                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  ./include/linux/device.h:251:29: note: expanded from macro 'devm_add_action'
+>          __devm_add_action(release, action, data, #action)
+>                                    ^~~~~~
+> 
+> No functional change intended.
+> Compile tested only.
+> 
+> Signed-off-by: Simon Horman <horms@kernel.org>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
 
-    Andrew
+Andi
