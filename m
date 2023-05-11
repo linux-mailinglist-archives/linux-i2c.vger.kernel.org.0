@@ -2,87 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D376FEDD8
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 May 2023 10:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74576FEE44
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 May 2023 11:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjEKI2z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 11 May 2023 04:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
+        id S236865AbjEKJCz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 11 May 2023 05:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjEKI2y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 May 2023 04:28:54 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D1A4EF7
-        for <linux-i2c@vger.kernel.org>; Thu, 11 May 2023 01:28:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683793733; x=1715329733;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=UfErCu/he2nSiZC/d+l2LFrnr8PZqDi2MuAofxFVoYc=;
-  b=aXDgaI9bvoXo2HP8C1TYe1x5UWQv1nUQ4kBamh2iyrZl2/lO9kymjd7z
-   o+May1mxgwTOTu871JmYSbRgJnbNyXMVwz+4Y/FyV1C+p1U3Urf8UscLs
-   cMy52ZXM8nGZDLPy+LqAhiwUrJQBZJx4QyZUHJtcsPAtabkl4xo5riuaP
-   fk3nu3Md4h6yD75zZj1yn/PQUw0FTD+Kzb1++uoN7nREJGZcaGhJtHvtQ
-   uyL+1DIEGbEUOGgHmgb6H1+3teUY4B1uqnzBo+vZP5uHTnQlzJblY/Gdf
-   RthB2uEeK5A0GnGpCMCZMf7oaMlgSSjgNCRJxpiP0xksqh/gntG7j1mkc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="334916367"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="334916367"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 01:28:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="946047238"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="946047238"
-Received: from mylly.fi.intel.com (HELO [10.237.72.143]) ([10.237.72.143])
-  by fmsmga006.fm.intel.com with ESMTP; 11 May 2023 01:28:50 -0700
-Message-ID: <520c349e-c178-8424-d704-3ef9463bf0fe@linux.intel.com>
-Date:   Thu, 11 May 2023 11:28:50 +0300
+        with ESMTP id S236972AbjEKJCo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 May 2023 05:02:44 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902A24EF6
+        for <linux-i2c@vger.kernel.org>; Thu, 11 May 2023 02:02:41 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id 71dfb90a1353d-44fa6454576so2963919e0c.0
+        for <linux-i2c@vger.kernel.org>; Thu, 11 May 2023 02:02:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1683795760; x=1686387760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tsxggKVSQYJV/3IOolh6kyceDYKKgVTx3tgZGL0LmQE=;
+        b=ZsN0Y6hoM3XjgwWBTARPluf0i+hzHwUsB3gHFLnCxgC7Xe8gdu/MA/EKASRLaA4UzV
+         dGEKYGALkh/JqBOsdJ8QZexa5spx4GLWnmttuanVUUGwRCEQU13M3gA34l0cogT8/9xv
+         vG1QP6ll8u0xvZHb/H8gBJx/2dttEtEXL23op4JrF7X751N+TjetsMNIN/82cQ34Y3NG
+         InBJG0OSpJNKckYB2tTpdCw/0EXAf5vu2uB3iOjZgqxjJs9X6UU7Mvxqi28Scy1qfXus
+         XIGqCA3ipYIE8KAuPYfL9ZlaeYVME6bJW6UxyvMzlv6rUCc7uUt3HTnCT9PCzfvgMZWh
+         y6rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683795760; x=1686387760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tsxggKVSQYJV/3IOolh6kyceDYKKgVTx3tgZGL0LmQE=;
+        b=doi9UsK54ICLZ3LAx6J2xBIr7AbIklW8MdASo+N2Wuw6yiAC+frPshEC7sSCSnd6UK
+         V6KhvZ+qU5Zpa3mz1lylR8/WNoWIGllDHu+5BvrJMg5xmiwOEn3Bk5RQT3RBsff3VBR3
+         /FjKERSccVCvMP0msYORg7XfmouiveffR69olcsgq/fE0ww4QcxUxoKHmms6O/QgOOtN
+         iLndZu0/q5N+VkoOdozKiPY7mGnRZ0SRIk3nQ2pj3pqP7P3XYGcrzixqSPc4+XPIQUms
+         eyCQVcFKQrQMmaYJ5Ukw8gZd/2MTFUVFIdMJBHKobculT7XvypS4HAMfl+lEBhGh9SZz
+         UcyQ==
+X-Gm-Message-State: AC+VfDxldEMQnuoICEtbCV/z+sYzQt4oY83t4V+D+rOctm3kV1LAt1WG
+        2JX8UYYC9lhB9XVpRXAZaULC56NAozSN1C8PEkaPsw==
+X-Google-Smtp-Source: ACHHUZ4N5hue/VQ/qj/gki0/EwbNu6FtTeY1U+w+xBRgF4xTg6eqgXEA06a6cwGxWLumu3QD0cavCiyZaqt0uVik9Ko=
+X-Received: by 2002:a67:f699:0:b0:434:6b27:2705 with SMTP id
+ n25-20020a67f699000000b004346b272705mr7193591vso.0.1683795760691; Thu, 11 May
+ 2023 02:02:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH 18/89] i2c: designware-platdrv: Convert to platform remove
- callback returning void
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org,
+References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de> <20230508205306.1474415-17-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230508205306.1474415-17-u.kleine-koenig@pengutronix.de>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 11 May 2023 11:02:29 +0200
+Message-ID: <CAMRc=Mdad12vdj96P+Kj3Ac21K0gQmWmn_dBcvXrPxwrCv_eTg@mail.gmail.com>
+Subject: Re: [PATCH 16/89] i2c: davinci: Improve error reporting for problems
+ during .remove()
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
         kernel@pengutronix.de
-References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
- <20230508205306.1474415-19-u.kleine-koenig@pengutronix.de>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20230508205306.1474415-19-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 5/8/23 23:51, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Mon, May 8, 2023 at 10:53=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> If pm_runtime_get() fails in .remove() the driver used to return the
+> error to the driver core. The only effect of this (compared to returning
+> zero) is a generic warning that the error value is ignored. (The device
+> is unbound then anyhow.)
+>
+> Emit a better warning and return zero to suppress the generic (and
+> little helpful) message. Also disable runtime PM in the error case.
+>
+> This prepares changing platform device remove callbacks to return void.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 > ---
->   drivers/i2c/busses/i2c-designware-platdrv.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+>  drivers/i2c/busses/i2c-davinci.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-davinci.c b/drivers/i2c/busses/i2c-da=
+vinci.c
+> index 9750310f2c96..7ba7e6cbcc97 100644
+> --- a/drivers/i2c/busses/i2c-davinci.c
+> +++ b/drivers/i2c/busses/i2c-davinci.c
+> @@ -894,11 +894,11 @@ static int davinci_i2c_remove(struct platform_devic=
+e *pdev)
+>
+>         i2c_del_adapter(&dev->adapter);
+>
+> -       ret =3D pm_runtime_resume_and_get(&pdev->dev);
+> +       ret =3D pm_runtime_get_sync(&pdev->dev);
+>         if (ret < 0)
+> -               return ret;
+> -
+> -       davinci_i2c_write_reg(dev, DAVINCI_I2C_MDR_REG, 0);
+> +               dev_err(&pdev->dev, "Failed to resume device\n");
+> +       else
+> +               davinci_i2c_write_reg(dev, DAVINCI_I2C_MDR_REG, 0);
+>
+>         pm_runtime_dont_use_autosuspend(dev->dev);
+>         pm_runtime_put_sync(dev->dev);
+> --
+> 2.39.2
+>
+
+Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
