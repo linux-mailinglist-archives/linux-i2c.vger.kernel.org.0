@@ -2,93 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC8A6FE54E
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 May 2023 22:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C556FEC1F
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 May 2023 09:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236375AbjEJUli (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 10 May 2023 16:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
+        id S231625AbjEKHBU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 11 May 2023 03:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236538AbjEJUla (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 10 May 2023 16:41:30 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6477B65B9
-        for <linux-i2c@vger.kernel.org>; Wed, 10 May 2023 13:41:21 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-965d73eb65fso1217287466b.2
-        for <linux-i2c@vger.kernel.org>; Wed, 10 May 2023 13:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1683751280; x=1686343280;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nLyFEVV1jGPC3iY0YIn9kdsHioTTS2gGvHxpATDXhkk=;
-        b=YpOpHDpzp24vwhDBhE0jfhGgbGNkWSaCX+VkPGlXQoiKh9kr/iWWVZLaAkS/iYSp2i
-         0hZIdmk9p8XneA20JGqtXN88Jk+d56rtJBRMZF4mImL0X6SnFFe9qRC5IcWlZUIODvMZ
-         uerl9BOwdoTRgFSws6rfYIRlXIMCkgGTRlxixfDyR2/3rq5eFkWbfnNh7aQsG71YOEGX
-         Kzptpkc0VRL/aA/ML36B5jaizIoAEKf/zWA1nTu5tI7loJCOV4UFW2sLHxo2J2nzyJWf
-         OcXdMVN7AxbL3Dk5rH7N/EZUTCDKco2OEaL+GTI+O8yV1mmN3FKmq77WoZFxZO3+X0Sd
-         ZVVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683751280; x=1686343280;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nLyFEVV1jGPC3iY0YIn9kdsHioTTS2gGvHxpATDXhkk=;
-        b=Of1sL9QdkC6IvodWPbPZZk8RzAra+G3fWYwZui9/ATN7w86Ahhuf8eqs1p/3fcbzpE
-         ymmjqZMQq+JLvNs3QojxUumBj99ZZdDi4UZ7HUu49x2Q9HJZ3krp48t1VcP7tiSFe+tC
-         d8weK1k9dPKmTysFChkB7eD0BYS1TJ9Fmbx7kLbTcu8sAM7wrCWJB8ehsq6XVhhaRHTV
-         oCltXf2YN3pED2YKgRCEfE6UYLV8wT+h2kHK8eWYsAz6bEeT9lstP/HrG7MhhLCWn3YN
-         zsY7x9w179Uq+eD4kgyw7hlfdNj2MVCu4zUtm0VbhX+OwvXawdvmpXR1RRMp3XeS6eln
-         85AA==
-X-Gm-Message-State: AC+VfDzC3m2w2i87MuwdBfRMv8jdlF3muL+iXyIlq5WzI7fIMqdHhOEk
-        vTzl5Yy+AV48/9BR+UY5FaN2b6Ct8hvT5MBmG9C1mzL5Vws=
-X-Google-Smtp-Source: ACHHUZ7v3GSnX/C7ZWC2qvI7W7PUdDYNaIEoaMgIEvO25DgY0uOdNHTyHCHKx8YPktTMr2JgvwpsTnDMOynGxZlP8x8=
-X-Received: by 2002:a17:907:843:b0:94f:5847:8ac with SMTP id
- ww3-20020a170907084300b0094f584708acmr16386781ejb.51.1683751279630; Wed, 10
- May 2023 13:41:19 -0700 (PDT)
+        with ESMTP id S237355AbjEKHBR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 May 2023 03:01:17 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62865FF2;
+        Thu, 11 May 2023 00:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683788465; x=1715324465;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GznCalPirWq4BN6RzOuW7w8VJ+sS1Z00JtrJn0Ox0xU=;
+  b=Mc/GObpqOsqOT5JimUXuftIilm84h2sfq6Iu7beBRbsx2YxIqzZoGEfx
+   ZviUscp3Dk2diCrnLb+evEGnEnrPQzjy7JY1Kg8bMggdzUKwENkjNmgcz
+   4aRdLedOzUrOBwMH5BPm0SRV+XhiQ+/umw0ITXmlZGHMbewaOtUKV5x0V
+   rKUCwnYLSLE1EjRvIzR1GA7ceWIyfYwAS4JHrv0KE3NV/H9ecZpgUVSlw
+   GKHdJj4HGc9JNYguMYU58gvuAcimJrIQgswUn6aAoPtk1cwu8tsJK+fYo
+   Dbf6LqtSDg8bpgsBs+E5aSsUSuI8wNYZ/RRpUiTenJ5q3KbA9V64yuAAV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="347884791"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="347884791"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 00:01:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="732459966"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="732459966"
+Received: from unknown (HELO [10.237.72.143]) ([10.237.72.143])
+  by orsmga001.jf.intel.com with ESMTP; 11 May 2023 00:01:03 -0700
+Message-ID: <11d3a7e2-557f-4f4f-333a-f6cd1b8e6db8@linux.intel.com>
+Date:   Thu, 11 May 2023 10:01:02 +0300
 MIME-Version: 1.0
-References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de> <20230508205306.1474415-37-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230508205306.1474415-37-u.kleine-koenig@pengutronix.de>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Wed, 10 May 2023 22:41:08 +0200
-Message-ID: <CAFBinCARygtyxpfOv9ELMoBkPPDS=C8nRHU-EqSBAgcBrJvdag@mail.gmail.com>
-Subject: Re: [PATCH 36/89] i2c: meson: Convert to platform remove callback
- returning void
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Wolfram Sang <wsa@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH] i2c: fix crash with msgs is NULL points
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        wangyouwan <wangyouwan@126.com>
+Cc:     andriy.shevchenko@linux.intel.com, jsd@semihalf.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230510084057.17313-1-wangyouwan@126.com>
+ <20230510090241.GO66750@black.fi.intel.com>
+ <1943ca04.6ce1.18804f327f0.Coremail.wangyouwan@126.com>
+ <20230510092344.GP66750@black.fi.intel.com>
+Content-Language: en-US
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20230510092344.GP66750@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 8, 2023 at 10:53=E2=80=AFPM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
->
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Hi
+
+On 5/10/23 12:23, Mika Westerberg wrote:
+> 
+> On Wed, May 10, 2023 at 05:17:04PM +0800, wangyouwan wrote:
+>> After waking up from sleep, 100% of the time it occurred. I suspected
+>> that there was a firmware issue with the machine I was debugging, but
+>> other machines did not notice it. Therefore, I attempted to make a
+>> modification here to avoid it
+> 
+> Okay then I suggest to investigate what causes the ->msgs to be NULL and
+> fix that. When the transfer function is called we expect there to be
+> something to be sent out so this should not happen.
+
+Does you kernel include commit 301c8f5c32c8 ("i2c: designware: Fix 
+handling of real but unexpected device interrupts")? Vanilla kernels 
+after v6.1 have it and also linux-stable v5.15.75 and after.
+
+I'm asking since issue sounds similar and wanted to clarify the kernel 
+version you are using.
