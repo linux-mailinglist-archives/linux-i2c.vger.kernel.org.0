@@ -2,57 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF1D6FF3E6
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 May 2023 16:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0DF6FF91C
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 May 2023 20:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237754AbjEKOUZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 11 May 2023 10:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
+        id S238571AbjEKSBz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 11 May 2023 14:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237639AbjEKOUY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 May 2023 10:20:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64793A97
-        for <linux-i2c@vger.kernel.org>; Thu, 11 May 2023 07:20:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5600660B55
-        for <linux-i2c@vger.kernel.org>; Thu, 11 May 2023 14:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59739C433EF;
-        Thu, 11 May 2023 14:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683814820;
-        bh=29n/WbUV/CBlXBENjt8Dcr/hpVsTv1R4VybM0pyh9FY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K9Y0ch0dqrhg+5501UrmKl0wxgP+J8SDeXfMZL/h7TAbPxrIILqPUNRn+/tvmuQAC
-         L1oOS7NYMezUej7Q6ja/j2lh5ZCYQz+WvYG5PgOkmTx3Doj3E4ufvilKQX9I0WIgd7
-         uCcK+bfLnfrRmRkeuZoVJiKP2DXmKNja8w7UNC6RW9DZGJ7ItV265OEXJ3q9iLW2q/
-         +Bpuq/U34TsLuxAOaXp0+m9ytwQyLLBzoHuMQazXwMTtMoKAZi1gwtuieh6UJYNk+3
-         1zBanv93+h7gaYdaugtxVqYblKopk7mA/AVArSB0O6T79ikC1DlRp8nQHboF7bXFrq
-         o5tWHJJ+Eyg4A==
-Date:   Thu, 11 May 2023 16:20:17 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Simon Horman <horms@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] i2c: mchp-pci1xxxx: Avoid cast to incompatible function
- type
-Message-ID: <20230511142017.hpk2nhvqwhunbvbm@intel.intel>
-References: <20230510-i2c-mchp-pci1xxxx-function-cast-v1-1-3ba4459114c4@kernel.org>
+        with ESMTP id S238952AbjEKSBv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 May 2023 14:01:51 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB18D10C;
+        Thu, 11 May 2023 11:01:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683828104; x=1715364104;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YmntpvtFHJS3jrZkGSqUkMwqsVJxjst16k/I4ZCZIMs=;
+  b=FBgw+ylDzA60Cxe55E0rk9FBimMH47VzG+JapG3+i6WN4AqPV58MmAlI
+   38UCTx8MWenT9MWYNjVRXiQF1H7Gm8BKkTNBbTE4iPFDd6Jl+6jnbApu8
+   EjAEQmDnDb4cR7s6m0YmXMY7glG8QLSaZtCtHIpux49EhswV09sqGk1kF
+   ycs9qcBrIfO8EoJ0b0ElbxZqdMzhBsrjT5AQ+8Ke7AxO9uqRQFYKCp+ir
+   gkLIqw6B4R7wJUkBwHK45Ayo5sJMj8pTS2LWV6lAA4biZN9i7cK3Cy30i
+   Rb+YigcgT4pGcbgpV+yZBgEgc3V75TwoUIQqrXHSZ4MppCAA7RdYlREQl
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="413942558"
+X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
+   d="scan'208";a="413942558"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 11:00:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="874061365"
+X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
+   d="scan'208";a="874061365"
+Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.153.70])
+  by orsmga005.jf.intel.com with ESMTP; 11 May 2023 11:00:39 -0700
+From:   Ye Xiang <xiang.ye@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
+        Ye Xiang <xiang.ye@intel.com>
+Subject: [PATCH v8 0/6] Add Intel LJCA device driver
+Date:   Fri, 12 May 2023 01:58:38 +0800
+Message-Id: <20230511175844.185070-1-xiang.ye@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230510-i2c-mchp-pci1xxxx-function-cast-v1-1-3ba4459114c4@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,26 +70,78 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Simon,
+Add driver for Intel La Jolla Cove Adapter (LJCA) device.
+This is a USB-GPIO, USB-I2C and USB-SPI device. We add 4
+drivers to support this device: a USB driver, a GPIO chip
+driver, a I2C controller driver and a SPI controller driver.
 
-On Wed, May 10, 2023 at 02:32:17PM +0200, Simon Horman wrote:
-> Rather than casting pci1xxxx_i2c_shutdown to an incompatible function type,
-> update the type to match that expected by __devm_add_action.
-> 
-> Reported by clang-16 with W-1:
-> 
->  .../i2c-mchp-pci1xxxx.c:1159:29: error: cast from 'void (*)(struct pci1xxxx_i2c *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->          ret = devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shutdown, i2c);
->                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->  ./include/linux/device.h:251:29: note: expanded from macro 'devm_add_action'
->          __devm_add_action(release, action, data, #action)
->                                    ^~~~~~
-> 
-> No functional change intended.
-> Compile tested only.
-> 
-> Signed-off-by: Simon Horman <horms@kernel.org>
+---
+v8:
+ - ljca: use READ_ONCE to make the value of ibuf consistent.
+ - gpio: inplement get_direction callback.
+ - gpio: move kconfig item into `USB GPIO expanders` menu.
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+v7:
+ - ljca: remove unused field `udev` in struct ljca_dev.
+ - ljca: rename ljca module name to usb-ljca.
+ - ljca: use CONFIG_ACPI to enclose acpi related code.
+ - ljca/gpio/i2c/spi: align MACRO defination.
 
-Andi
+v6:
+ - ljca: split LJCA USB driver into two commits: USB part and API part.
+ - gpio/i2c/spi: use auxiliary bus for sub-module device enumeration instead of MFD.
+ - move document patch for LJCA sysfs entry to the 3th patch of this patch series.
+ - ljca: fix potential race condition when wait response timeout.
+ - ljca: use devm_kzalloc to malloc ljca device struct. 
+
+v5:
+ - move ljca.h from drivers/include/mfd to drivers/include/usb.
+ - ljca: fix a potential memory leak issue.
+ - add a blank line before return to adust to kernel code style.
+ - ljca: sysfs: split "cmd" to "ljca_dfu" and "ljca_trace_level".
+
+v4:
+ - move ljca.c from drivers/mfd to drivers/usb/misc folder.
+ - fix index warning in sysfs-bus-devices-ljca.
+
+v3:
+ - spi: make ljca_spi_transfer inline and fix an endian issue.
+
+v2:
+ - ljca: remove reset command.
+ - gpio/spi/i2c: add `default MFD_LJCA` in Kconfig.
+ - gpio: add "select GPIOLIB_IRQCHIP" in Kconfig.
+
+Ye Xiang (6):
+  usb: Add support for Intel LJCA device
+  usb: ljca: Add transport interfaces for sub-module drivers
+  Documentation: Add ABI doc for attributes of LJCA device
+  gpio: Add support for Intel LJCA USB GPIO driver
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+
+ .../ABI/testing/sysfs-bus-usb-devices-ljca    |   36 +
+ drivers/gpio/Kconfig                          |   12 +
+ drivers/gpio/Makefile                         |    1 +
+ drivers/gpio/gpio-ljca.c                      |  479 ++++++++
+ drivers/i2c/busses/Kconfig                    |   11 +
+ drivers/i2c/busses/Makefile                   |    1 +
+ drivers/i2c/busses/i2c-ljca.c                 |  350 ++++++
+ drivers/spi/Kconfig                           |   11 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-ljca.c                        |  290 +++++
+ drivers/usb/misc/Kconfig                      |   14 +
+ drivers/usb/misc/Makefile                     |    1 +
+ drivers/usb/misc/usb-ljca.c                   | 1068 +++++++++++++++++
+ include/linux/usb/ljca.h                      |  102 ++
+ 14 files changed, 2377 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+ create mode 100644 drivers/gpio/gpio-ljca.c
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/usb-ljca.c
+ create mode 100644 include/linux/usb/ljca.h
+
+-- 
+2.34.1
+
