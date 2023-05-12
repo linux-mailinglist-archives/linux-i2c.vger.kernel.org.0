@@ -2,137 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C65A700732
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 May 2023 13:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D0D700A36
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 May 2023 16:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240753AbjELLuQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 12 May 2023 07:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
+        id S241529AbjELOVE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 12 May 2023 10:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240096AbjELLuP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 May 2023 07:50:15 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4481411574
-        for <linux-i2c@vger.kernel.org>; Fri, 12 May 2023 04:50:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683892214; x=1715428214;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dOaQDMneb3dgVl9WgWOF0/IYIHbtwrPJraHrNmLpW+A=;
-  b=dE7l2GleJZtcGbcJYRtDzjyXkozxrge4LSB0hmrQt9c70oQjEtF+gIEu
-   xkkuosi8u1kciwy897O3AaZuyr3jmof5mqwgP+eD7kEFf80lrFFhcu+h4
-   2LcA1bOvf87UdU4EnXBKjESiLdzqudR+Zgc10LJgSAp/TWu+SfewUVr/R
-   BgpLqJKyEQ+Nn2TTenoMcK4bVWJjbRabdSGKLhxoCCz8hvNPZ8FoSwc8s
-   YgMC0vj1sg+Hu0gT3PQHWZWS5Gs6wWmBMSndGAm4ZosU0O21ow0j7yD8x
-   aBLMSyuZG+eEZXT2y+wkx+9/vS2XM67qqy7ArGWIziqnAZ/5/h0qVC6Ni
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="414141055"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="414141055"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 04:50:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="812062269"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="812062269"
-Received: from mylly.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.143])
-  by fmsmga002.fm.intel.com with ESMTP; 12 May 2023 04:50:12 -0700
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH v3 3/3] i2c: i801: Add support for Intel Meteor Lake PCH-S
-Date:   Fri, 12 May 2023 14:50:01 +0300
-Message-Id: <20230512115001.81309-3-jarkko.nikula@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230512115001.81309-1-jarkko.nikula@linux.intel.com>
-References: <20230512115001.81309-1-jarkko.nikula@linux.intel.com>
+        with ESMTP id S241241AbjELOVD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 May 2023 10:21:03 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB4A13868;
+        Fri, 12 May 2023 07:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=cpy/pdC3MPfNPFFoZ4/qpPrfXgPArCsSnkFiMVBkX/4=; b=id6JJO3lob5IHK3IHuxFi6lGYr
+        oIRzSxyj+OXLv3oPgJaIZMDu1JZFcaGGUlE0MYioIfOo3H3ndYRxtnhc8jo3iTvvcBrNak0b99vri
+        wQYAtmxvp1tUsvJBEgL7MAV4nRaFeTS1hCU2ESWabLUY/DcBSZP1tl9aDuoC7hiySGBY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pxTdO-00CfnX-Ak; Fri, 12 May 2023 16:20:38 +0200
+Date:   Fri, 12 May 2023 16:20:38 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jiawen Wu <jiawenwu@trustnetic.com>
+Cc:     netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com, Jose.Abreu@synopsys.com, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org, mengyuanlou@net-swift.com
+Subject: Re: [PATCH net-next v7 6/9] net: txgbe: Support GPIO to SFP socket
+Message-ID: <2b8a8ef8-b98b-42f7-b91d-2a9b05973d57@lunn.ch>
+References: <20230509022734.148970-1-jiawenwu@trustnetic.com>
+ <20230509022734.148970-7-jiawenwu@trustnetic.com>
+ <ab8852ce-72e8-4d5b-8c88-772a6c9f1485@lunn.ch>
+ <019201d9849c$54e88730$feb99590$@trustnetic.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <019201d9849c$54e88730$feb99590$@trustnetic.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add SMBus PCI ID on Intel Meteor Lake PCH-S.
+> > Is that a hardware requirement, that interrupts only work when the interface is
+> > running? Interrupts are not normally conditional like this, at least when the SoC
+> > provides the GPIO controller.
+> 
+> Should we handle the interrupts when interface is not running?
 
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
----
-v3: Drop the idea to call this as Meteor Point-S in code since it's confusing.
-    Intel Meteor Lake-S platform can have the SMBus controller both in
-    SoC die and PCH. I decided earlier to call latter as Meteor Point-S since
-    it fitted nicely into i801_ids table and I saw it to be used somewhere in
-    internal documentation. But it's more historical naming convension for
-    PCHs and to be honest internal documentation uses mostly Meteor Lake PCH-S.
-v2: "SOC/PCH" -> "SOC and PCH" in documentation and Kconfig. PCI ID
-    define according to updated patch 1/2.
----
- Documentation/i2c/busses/i2c-i801.rst | 2 +-
- drivers/i2c/busses/Kconfig            | 2 +-
- drivers/i2c/busses/i2c-i801.c         | 3 +++
- 3 files changed, 5 insertions(+), 2 deletions(-)
+You are adding a generic GPIO controller. It could in theory be used
+for anything. GPIO controlled LEDs, buttons, bit-banging MDIO/SPI/I2C,
+etc. I would not artificially limit interrupts to just when the
+interface is up, unless you need to.
 
-diff --git a/Documentation/i2c/busses/i2c-i801.rst b/Documentation/i2c/busses/i2c-i801.rst
-index ab9e850e8fe0..e76e68ccf718 100644
---- a/Documentation/i2c/busses/i2c-i801.rst
-+++ b/Documentation/i2c/busses/i2c-i801.rst
-@@ -46,7 +46,7 @@ Supported adapters:
-   * Intel Emmitsburg (PCH)
-   * Intel Alder Lake (PCH)
-   * Intel Raptor Lake (PCH)
--  * Intel Meteor Lake (SOC)
-+  * Intel Meteor Lake (SOC and PCH)
- 
-    Datasheets: Publicly available at the Intel website
- 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 87600b4aacb3..3144ef99f040 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -157,7 +157,7 @@ config I2C_I801
- 	    Emmitsburg (PCH)
- 	    Alder Lake (PCH)
- 	    Raptor Lake (PCH)
--	    Meteor Lake (SOC)
-+	    Meteor Lake (SOC and PCH)
- 
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called i2c-i801.
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index bc2576188e0a..943b8e6d026d 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -78,6 +78,7 @@
-  * Raptor Lake-S (PCH)		0x7a23	32	hard	yes	yes	yes
-  * Meteor Lake-P (SOC)		0x7e22	32	hard	yes	yes	yes
-  * Meteor Lake SoC-S (SOC)	0xae22	32	hard	yes	yes	yes
-+ * Meteor Lake PCH-S (PCH)	0x7f23	32	hard	yes	yes	yes
-  *
-  * Features supported by this driver:
-  * Software PEC				no
-@@ -234,6 +235,7 @@
- #define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_S_SMBUS		0x7a23
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_S_SMBUS		0x7aa3
- #define PCI_DEVICE_ID_INTEL_METEOR_LAKE_P_SMBUS		0x7e22
-+#define PCI_DEVICE_ID_INTEL_METEOR_LAKE_PCH_S_SMBUS	0x7f23
- #define PCI_DEVICE_ID_INTEL_LYNXPOINT_SMBUS		0x8c22
- #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_SMBUS		0x8ca2
- #define PCI_DEVICE_ID_INTEL_WELLSBURG_SMBUS		0x8d22
-@@ -1041,6 +1043,7 @@ static const struct pci_device_id i801_ids[] = {
- 	{ PCI_DEVICE_DATA(INTEL, RAPTOR_LAKE_S_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
- 	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_P_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
- 	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_SOC_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
-+	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_PCH_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
- 	{ 0, }
- };
- 
--- 
-2.39.2
+You should also take a look at the SFP code. When does it enable
+interrupts? When the SFP device is created, or when phylink_start() is
+called? SoC GPIO controllers work all the time, so it could be the SFP
+code just assumes interrupts work as soon as the GPIO is
+available. With the interface down, try disconnecting/connecting the
+fibre and see if /sys/kernel/debug/sfpX/state shows it sees LOS
+change.
 
+     Andrew
