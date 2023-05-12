@@ -2,75 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E94A6FFBAB
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 May 2023 23:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D866FFF96
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 May 2023 06:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239064AbjEKVHz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 11 May 2023 17:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
+        id S239825AbjELESZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 12 May 2023 00:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbjEKVHw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 11 May 2023 17:07:52 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130C9D3
-        for <linux-i2c@vger.kernel.org>; Thu, 11 May 2023 14:07:51 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-ba1cde4ee59so7153334276.1
-        for <linux-i2c@vger.kernel.org>; Thu, 11 May 2023 14:07:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683839270; x=1686431270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iMJSAuzmDEOyslGFpKNIuHv7WTx2jYS+xwESl4OR1aU=;
-        b=JrlILs/FJvcqjFimI5g8pLCwZ7MlikV+mp66z3cACXcbS1BbgdeUUlwPgpDYjOZ9N5
-         JEcC+QlYiJQB7bxuXZuug+8mQXYNE4D4eFkybnQ3pnEjFqw7zgqwVrvCGajgde2f4Mcq
-         GOUKw/vsgB0PLN2AoH0WRkZ4lkkCU1Ylf+McKd01DUUSqGOMKozMV1idVjXpuW+69+by
-         Kj65G4SKjtiP3DpPGJ+2mlrLS4FvsYr2x+HtVwQJjLnt6d5ua/w7ZXP2ofUBRz1ZgXiN
-         /CJPKvt6C3OTXYCaEW5EEqq6exRx+7x7Iohej2pGkTN+QRIalksSCq65PFEhO/EYZB0v
-         3aig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683839270; x=1686431270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iMJSAuzmDEOyslGFpKNIuHv7WTx2jYS+xwESl4OR1aU=;
-        b=ceDthwFQuJyQyn9uMJD0tm4NricyX0oJAZgDu20U9DwaeTydRQ37wpaxz/61SfyUO2
-         6IAsYTvQWCgs7QDIFi3OFP+RxtHNIcmlfkY90szfpQgZOFG94OnOYP9BHsU0m9602nA5
-         WiTUjjYfiSTnY0k2Df/HjLHTAoK3ukulf3YFlMexG3oL3azR2nYVQT0Jwa0z3eaIlhDx
-         YHYNomXDBfprDaZ/T6luUeP5m+x6ZQAYc9Tpi03ifSGWRU8XUcFfAc4RjYJM5ZUGoPTR
-         ZFs8ni+rIqPYpBHyLQsj1uTa/0N5f1SbkphtiS1fcAu7PU6pfatsBdylBJrAgJP0RCAu
-         r9wA==
-X-Gm-Message-State: AC+VfDySyqpM8Up5lBKfgkzf6LZzInXA2a471BaFNnAVUeNTtnHRbEvV
-        0NM+ZbOX2SggymFdZNhFP8k+iysA0LEGCizPMCK4gQ==
-X-Google-Smtp-Source: ACHHUZ5OKCRCzCdvnNSAXPYO3cSOrmnSrMrAUBIkganKJVWu8iiA56tmWT0d2y016WQRBVytrjHjwYEzMXjqLbOa8l0=
-X-Received: by 2002:a25:aa0c:0:b0:b9d:b5f0:3b33 with SMTP id
- s12-20020a25aa0c000000b00b9db5f03b33mr20809376ybi.58.1683839270282; Thu, 11
- May 2023 14:07:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230511175844.185070-1-xiang.ye@intel.com> <20230511175844.185070-5-xiang.ye@intel.com>
-In-Reply-To: <20230511175844.185070-5-xiang.ye@intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 11 May 2023 23:07:38 +0200
-Message-ID: <CACRpkdZvn_cX=GNO2VYC6YfJif-cXST=avT2yoMpYVq5C87bMA@mail.gmail.com>
-Subject: Re: [PATCH v8 4/6] gpio: Add support for Intel LJCA USB GPIO driver
+        with ESMTP id S229547AbjELESY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 May 2023 00:18:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBB41FF7;
+        Thu, 11 May 2023 21:18:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2DFE64FAA;
+        Fri, 12 May 2023 04:18:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 883BBC433D2;
+        Fri, 12 May 2023 04:18:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683865102;
+        bh=b2zg6KkKU4wMLPA/lt2MFpVz5BtQ9ce0BBjFejvgA0s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DePhR2wEmkgC+Xx/d8YBJwYezYFyRKWz8Tu83hAHeLHrTZ6QW23wR1Nbi5FxAjlSB
+         9sIBnmyXZkjsVlT1gcXYP0MIV01NB06Y1K9GYLbDPFB4myun+mHWL2kKvkdfGLYBfg
+         54yzHOIPkUj8HMU/WGbz7TEHOEtYfCCK08TuRuBJe11G2YWqBp0L8D3/QOBrwbxLMk
+         yGm/eZGW9r/bLaj+DJBqyf/Uu2q9YAQbVjv36sQjlbQQmAIs98W2ZlfcR7d//20Kb6
+         ged+tsRnbsxfkBSitIFSIBgiK9YG87VYOESWFlHoBlkowaCjuGnb0+mA3qhapjy//0
+         ic+RKMkQAx/+w==
+Date:   Fri, 12 May 2023 13:18:19 +0900
+From:   Mark Brown <broonie@kernel.org>
 To:     Ye Xiang <xiang.ye@intel.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Matthias Kaehlcke <mka@chromium.org>,
         Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
         Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
         srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
         andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
         zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Subject: Re: [PATCH v8 6/6] spi: Add support for Intel LJCA USB SPI driver
+Message-ID: <ZF2+C0CqaBff2hl+@finisterre.sirena.org.uk>
+References: <20230511175844.185070-1-xiang.ye@intel.com>
+ <20230511175844.185070-7-xiang.ye@intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iDLgAwJ74STo+Yb8"
+Content-Disposition: inline
+In-Reply-To: <20230511175844.185070-7-xiang.ye@intel.com>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,26 +67,46 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, May 11, 2023 at 8:01=E2=80=AFPM Ye Xiang <xiang.ye@intel.com> wrote=
-:
 
-> Implements the GPIO function of Intel USB-I2C/GPIO/SPI adapter
-> device named "La Jolla Cove Adapter" (LJCA). It communicate with
-> LJCA GPIO module with specific protocol through interfaces exported
-> by LJCA USB driver.
->
-> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
+--iDLgAwJ74STo+Yb8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Overall this looks very nice.
+On Fri, May 12, 2023 at 01:58:44AM +0800, Ye Xiang wrote:
 
-> +static int gpio_config(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id, u8 c=
-onfig)
+> +++ b/drivers/spi/spi-ljca.c
+> @@ -0,0 +1,290 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Intel La Jolla Cove Adapter USB-SPI driver
 
-All other functions are prefixed ljca_* except this one, so I think you
-should do that on this one too.
+Please make the entire comment a C++ one so things look more
+intentional.
 
-With that fixes:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> +struct spi_init_packet {
+> +	u8 index;
+> +	u8 speed;
+> +	u8 mode;
+> +} __packed;
+> +
+> +struct spi_xfer_packet {
 
-Yours,
-Linus Walleij
+These should be namespaced, especially since they look likely to collide
+with other things.  Otherwise this looks fine.
+
+--iDLgAwJ74STo+Yb8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRdvgoACgkQJNaLcl1U
+h9DNXgf9H7gFOZGlxttpn5v/IJdK948NNyKBgpz2AkJQVHOk848wbYpxrFsuWD5D
+1KYc0NYmt4CkyGz3JDwQbJy6Ipo3A38uzzn2OGphxlE35SVsoMgI4htCJ9X3gnU/
+wi9SPTlKbv3IH14IaMKyiyTWgmpobEV8lQ7VOXJPtwBwzGOQ8xPi3nbvCeGfkDFV
+/UPuODRaIBbBbABVC6pibA+GklJGO+i1q2cPGydqEk8gP2OaUbdWG8tpm7Bv2lQG
+ziu6dzm5UaDiIR+KAtbBILrdFvXInL0f14wK0xRgmHv9nYsMfxG69AXv2GsMI3iP
+OnTTtJ664+d3gz3fk27WKjuay0OZ+g==
+=G2/K
+-----END PGP SIGNATURE-----
+
+--iDLgAwJ74STo+Yb8--
