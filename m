@@ -2,137 +2,277 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772DB700430
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 May 2023 11:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF75F7005F3
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 May 2023 12:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240404AbjELJpd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 12 May 2023 05:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
+        id S240874AbjELKrx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 12 May 2023 06:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240606AbjELJos (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 May 2023 05:44:48 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C67612E82;
-        Fri, 12 May 2023 02:44:09 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-7577ef2fa31so1859657385a.0;
-        Fri, 12 May 2023 02:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683884648; x=1686476648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=walULA5GXaP1Ds+NR7kLlfHXMwiCqcKU/HbSWG2/bBU=;
-        b=sqSsC09DP5vS7f29/1grNSwWzCl2MVecmSgTwQ2EFc/FdL1aq9uk9gWgqfvJu4iBin
-         F5y3GZkjjd6u72PAp6RCiaKXYgW09KIXbh8T9nuTVsLgi9gcQ8YyddZK0F3uxlEGRe+W
-         65OZpsYAVDMK2zuehPyYeWsn0oWx/g3pN2uZNQPEYOYvEh87qU4mpLnwG8/JopofjP1I
-         DxevgZWI5dzfErBoYQs9M6n22TEY0WC6Yt8p7l4SB0pxL+9Y+E8NEzv2GyAZIAyvpEr0
-         YOJIiiVYbPr+ku3utP3GGT+wl0UFJiGBKztsbxLA+kF5Y9P3pHsL3pyaiegkeXeCaTcq
-         MAPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683884648; x=1686476648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=walULA5GXaP1Ds+NR7kLlfHXMwiCqcKU/HbSWG2/bBU=;
-        b=G1xCK/VNs8Z01kd5hH+jPNEk3aKbUjckpExvV3upqQdTZWP+yybP4N5k5TXKIZYzeu
-         9KCVQsUwF0uJ1/RlM6NIvVU8ZTQb0FGVPx/tkLgRLwGb5KHATCKUviW3k2VcEHuecw56
-         mh/PH60WwWWVmtxV2EKrxI2Dwpf63Q2seJXQDiE/uCckgWGU/2rPxF2RLdyNA0TnTo7r
-         JMsqwgvDHM22nxoeKgv9ldhhS5RmFBSnkY9YH9hCVPmolI21uEHaIeaLYwgRTQxae9cs
-         IVa2SGUIhv4NyK1jSrMUrIbVgN/2YTIVjXd+TiT5d/bhRJPkNCptAdUp3xoCeFAOTr3t
-         Q/Lg==
-X-Gm-Message-State: AC+VfDysGIvREVcwXK4ZuQu86Hru0iJw0P9HZNRcYlO4MuFEfnMD3h1Z
-        C5mZDysaGcdjaorHi5lO9+vCTsVBRMElDd2Rdy8=
-X-Google-Smtp-Source: ACHHUZ4mqn546jiUsKSUmsQb4vfQOt2zvNLc3McQ/r/bigtLwhrNE/6Dt4wsuoRDCyRwuvMwDCPLoC3QQ+XLZbAmjPA=
-X-Received: by 2002:a05:6214:b6b:b0:61b:6382:4579 with SMTP id
- ey11-20020a0562140b6b00b0061b63824579mr38845303qvb.9.1683884648528; Fri, 12
- May 2023 02:44:08 -0700 (PDT)
+        with ESMTP id S240884AbjELKrf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 12 May 2023 06:47:35 -0400
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE56B1BFD;
+        Fri, 12 May 2023 03:47:29 -0700 (PDT)
+X-QQ-mid: Yeas52t1683888384t286t23713
+Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [125.119.253.217])
+X-QQ-SSF: 00400000000000F0FNF000000000000
+From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
+X-BIZMAIL-ID: 14702659080937180453
+To:     "'Russell King \(Oracle\)'" <linux@armlinux.org.uk>
+Cc:     <netdev@vger.kernel.org>, <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
+        <Jose.Abreu@synopsys.com>, <andrew@lunn.ch>,
+        <hkallweit1@gmail.com>, <linux-i2c@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <mengyuanlou@net-swift.com>
+References: <20230509022734.148970-1-jiawenwu@trustnetic.com> <20230509022734.148970-7-jiawenwu@trustnetic.com> <ZF4Hri1yzpeq4X3T@shell.armlinux.org.uk>
+In-Reply-To: <ZF4Hri1yzpeq4X3T@shell.armlinux.org.uk>
+Subject: RE: [PATCH net-next v7 6/9] net: txgbe: Support GPIO to SFP socket
+Date:   Fri, 12 May 2023 18:46:23 +0800
+Message-ID: <000201d984be$fe86f390$fb94dab0$@trustnetic.com>
 MIME-Version: 1.0
-References: <20230509022734.148970-1-jiawenwu@trustnetic.com>
- <20230509022734.148970-7-jiawenwu@trustnetic.com> <ZF1T62BnVFgR33w0@surfacebook>
- <000001d984af$c9bc89e0$5d359da0$@trustnetic.com>
-In-Reply-To: <000001d984af$c9bc89e0$5d359da0$@trustnetic.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 12 May 2023 12:43:32 +0300
-Message-ID: <CAHp75Ves+PdNk0KaSLiwd0ozXEZAH_tQLUS4VUm_1Hvk6vBP4w@mail.gmail.com>
-Subject: Re: [PATCH net-next v7 6/9] net: txgbe: Support GPIO to SFP socket
-To:     Jiawen Wu <jiawenwu@trustnetic.com>
-Cc:     netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, Jose.Abreu@synopsys.com, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        mengyuanlou@net-swift.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: zh-cn
+Thread-Index: AQJdw4zS3rpHMobUlf9gBLGLbLpYXQGeWQPmAvQUsH+uKU/xEA==
+X-QQ-SENDSIZE: 520
+Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, May 12, 2023 at 11:58=E2=80=AFAM Jiawen Wu <jiawenwu@trustnetic.com=
-> wrote:
+> > +static int txgbe_gpio_get(struct gpio_chip *chip, unsigned int offset)
+> > +{
+> > +	struct wx *wx = gpiochip_get_data(chip);
+> > +	struct txgbe *txgbe = wx->priv;
+> > +	int val;
+> > +
+> > +	val = rd32m(wx, WX_GPIO_EXT, BIT(offset));
+> > +
+> > +	txgbe->gpio_orig &= ~BIT(offset);
+> > +	txgbe->gpio_orig |= val;
+> 
+> You seem to be using this as a way to implement triggering interrupts on
+> both levels. Reading the GPIO value using the GPIO functions should not
+> change the interrupt state, so this is wrong.
 
-...
+Yes, I just found the correct way to deal with it.
 
-> > > +   switch (type) {
-> > > +   case IRQ_TYPE_EDGE_BOTH:
-> > > +           level |=3D BIT(hwirq);
-> > > +           break;
-> > > +   case IRQ_TYPE_EDGE_RISING:
-> > > +           level |=3D BIT(hwirq);
-> > > +           polarity |=3D BIT(hwirq);
-> > > +           break;
-> > > +   case IRQ_TYPE_EDGE_FALLING:
-> > > +           level |=3D BIT(hwirq);
-> >
-> > > +           polarity &=3D ~BIT(hwirq);
-> >
-> > This...
-> >
-> > > +           break;
-> > > +   case IRQ_TYPE_LEVEL_HIGH:
-> > > +           level &=3D ~BIT(hwirq);
-> >
-> > ...and this can be done outside of the switch-case. Then you simply set=
- certain
-> > bits where it's needed.
-> >
-> > > +           polarity |=3D BIT(hwirq);
-> > > +           break;
-> > > +   case IRQ_TYPE_LEVEL_LOW:
-> > > +           level &=3D ~BIT(hwirq);
-> > > +           polarity &=3D ~BIT(hwirq);
-> > > +           break;
-> >
-> > default?
->
-> Do you mean that treat IRQ_TYPE_LEVEL_LOW as default case, clear level an=
-d
-> polarity firstly, then set the bits in other needed case?
+> > +static int txgbe_gpio_direction_out(struct gpio_chip *chip, unsigned int offset,
+> > +				    int val)
+> > +{
+> > +	struct wx *wx = gpiochip_get_data(chip);
+> > +	u32 mask;
+> > +
+> > +	mask = BIT(offset) | BIT(offset - 1);
+> > +	if (val)
+> > +		wr32m(wx, WX_GPIO_DR, mask, mask);
+> > +	else
+> > +		wr32m(wx, WX_GPIO_DR, mask, 0);
+> 
+> Why are you writing two neighbouring bits here? If GPIO 0 is requested
+> to change, offset will be zero, and BIT(-1) is probably not what you
+> want.
+> 
+> Moreover, if requesting a change to GPIO 3, BIT(offset - 1) will also
+> hit GPIO 2.
+> 
+> Maybe there's a "* 2" missing here?
+> 
+> If this code is in fact correct, it needs a comment to explain what's
+> going on here.
 
-level &=3D ...
-polarity &=3D ...
+GPIO lines description:
+	/* GPIO 0: tx fault
+	 * GPIO 1: tx disable
+	 * GPIO 2: sfp module absent
+	 * GPIO 3: rx signal lost
+	 * GPIO 4: rate select 1, 1G(0) 10G(1)
+	 * GPIO 5: rate select 0, 1G(0) 10G(1)
+	 */
+The previous consideration was processing GPIO 0&1, 4&5. The output
+lines are 1/4/5. Under the persistent misconfiguration of flash, GPIO 0 is
+treated as the output signal to enable/disable TX laser, together with
+GPIO 1. And GPIO 4 seems not be used by SFP driver, to change module
+rate, also this driver does not implement rate switching either.
 
-switch () {
-case X:
-  level |=3D ...
-  break;
-case Y:
-  polarity |=3D ...
-  break;
-case Z:
-  ...
-  break;
-default:
-  ...handle error...
-}
+In my understanding, the input GPIO does not call this function, so I put
+no  condition there. But in general, with all GPIO being used correctly,
+removing these odd codes should work as well. I'll fix it and test it again.
+
+> > +static int txgbe_gpio_set_type(struct irq_data *d, unsigned int type)
+> > +{
+> > +	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+> > +	irq_hw_number_t hwirq = irqd_to_hwirq(d);
+> > +	struct wx *wx = gpiochip_get_data(gc);
+> > +	u32 level, polarity;
+> > +
+> > +	level = rd32(wx, WX_GPIO_INTTYPE_LEVEL);
+> > +	polarity = rd32(wx, WX_GPIO_POLARITY);
+> > +
+> > +	switch (type) {
+> > +	case IRQ_TYPE_EDGE_BOTH:
+> > +		level |= BIT(hwirq);
+> > +		break;
+> > +	case IRQ_TYPE_EDGE_RISING:
+> > +		level |= BIT(hwirq);
+> > +		polarity |= BIT(hwirq);
+> > +		break;
+> > +	case IRQ_TYPE_EDGE_FALLING:
+> > +		level |= BIT(hwirq);
+> 
+> Are you sure you've got this correct. "level" gets set when edge cases
+> are requested and cleared when level cases are requested. It seems that
+> the register really selects edge-mode if the bit is set? Is it described
+> in the documentation as "not level" ?
+
+Yes, the WX_GPIO_INTTYPE_LEVEL register shows that 0 for level-sensitive,
+1 for edge-sensitive.
+
+> 
+> > +		polarity &= ~BIT(hwirq);
+> > +		break;
+> > +	case IRQ_TYPE_LEVEL_HIGH:
+> > +		level &= ~BIT(hwirq);
+> > +		polarity |= BIT(hwirq);
+> > +		break;
+> > +	case IRQ_TYPE_LEVEL_LOW:
+> > +		level &= ~BIT(hwirq);
+> > +		polarity &= ~BIT(hwirq);
+> > +		break;
+> > +	}
+> > +
+> > +	if (type & IRQ_TYPE_LEVEL_MASK)
+> > +		irq_set_handler_locked(d, handle_level_irq);
+> > +	else if (type & IRQ_TYPE_EDGE_BOTH)
+> > +		irq_set_handler_locked(d, handle_edge_irq);
+> 
+> So what handler do we end up with if a GPIO is initially requested for
+> a level IRQ, released, and then requested for an edge IRQ?
+
+Sorry I don't know much about it, who controls the IRQ type? In fact,
+edge IRQ always be requested in my test, and the type is EDGE_BOTH.
+
+> 
+> Secondly, a more general comment. You are using the masks here, and we
+> can see from the above that there is a pattern to the setting of level
+> and polarity. Also, IMHO there's a simpler way to do this:
+> 
+> 	u32 level, polarity, mask, val;
+> 
+> 	mask = BIT(hwirq);
+> 
+> 	if (type & IRQ_TYPE_LEVEL_MASK) {
+> 		level = 0;
+> 		irq_set_handler_locked(d, handle_level_irq);
+> 	} else {
+> 		level = mask;
+> 		/* fixme: irq_set_handler_locked(handle_edge_irq); ? */
+> 	}
+> 
+> 	if (type == IRQ_TYPE_EDGE_RISING || type == IRQ_TYPE_LEVEL_HIGH)
+> 		polarity = mask;
+> 	else
+> 		polarity = 0;
+> 
+> 	/* fixme: what does this register do, and why is it configured
+> 	 * here?
+> 	 */
+> 	wr32m(wx, WX_GPIO_INTEN, mask, mask);
+
+It enables corresponding GPIO interrupt.
+
+> 
+> 	wr32m(wx, WX_GPIO_INTTYPE_LEVEL, mask, level);
+> 	if (type != IRQ_TYPE_EDGE_BOTH)
+> 		wr32m(wx, WX_GPIO_POLARITY, mask, polarity);
+> 
+> Now, as for both-edge interrupts, this needs further thought. As I say
+> above, using the _get method to update the internal interrupt state
+> won't be reliable.
+> 
+> If the hardware has no way to trigger on both edges, then it's going to
+> take some additional complexity to make this work. Firstly, you need to
+> record which interrupts are using both-edges in the driver, so you know
+> which need extra work in the interrupt handler.
+> 
+> Secondly, you still need to configure the polarity as best you can to
+> pick up the first change in state here. That means reading the current
+> GPIO state, and configuring the GPIO polarity correctly here. It's
+> going to be racy with the hardware, so the closer together you can get
+> the GPIO state-to-polarity-set the better in terms of the size of the
+> race window.
+
+Thanks for the detailed advice. Hardware can trigger the interrupts on both
+edges, just set polarity.
+
+> 
+> > +static void txgbe_irq_handler(struct irq_desc *desc)
+> > +{
+> > +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> > +	struct wx *wx = irq_desc_get_handler_data(desc);
+> > +	struct txgbe *txgbe = wx->priv;
+> > +	irq_hw_number_t hwirq;
+> > +	unsigned long gpioirq;
+> > +	struct gpio_chip *gc;
+> > +	u32 gpio;
+> > +
+> > +	chained_irq_enter(chip, desc);
+> > +
+> > +	gpioirq = rd32(wx, WX_GPIO_INTSTATUS);
+> 
+> Does reading INTSTATUS clear down any of the pending status bits?
+
+No, it's read only. Interrupt status bits will be cleared in txgbe_gpio_irq_ack().
+
+> 
+> > +
+> > +	/* workaround for hysteretic gpio interrupts */
+> > +	gpio = rd32(wx, WX_GPIO_EXT);
+> > +	if (!gpioirq)
+> > +		gpioirq = txgbe->gpio_orig ^ gpio;
+> 
+> This doesn't solve the both-edge case, because this will only get
+> evaluated if some other GPIO also happens to raise an interrupt.
+> 
+> For any GPIOs should have both-edge applied, you need to read the
+> current state of the GPIO and program the polarity appropriately,
+> then re-read the GPIO to see if it changed state during that race
+> and handle that as best that can be.
+> 
+> The problem is that making both-edge work reliably on hardware that
+> doesn't support both-edge will always be rather racy.
+
+Thanks again, I learned a lot.
+
+> 
+> > +
+> > +	gc = txgbe->gpio;
+> > +	for_each_set_bit(hwirq, &gpioirq, gc->ngpio)
+> > +		generic_handle_domain_irq(gc->irq.domain, hwirq);
+> > +
+> > +	chained_irq_exit(chip, desc);
+> > +
+> > +	/* unmask interrupt */
+> > +	if (netif_running(wx->netdev))
+> > +		wx_intr_enable(wx, TXGBE_INTR_MISC(wx));
+> 
+> Why does this depend on whether the network interface is running, and
+> why is it done at the end of the interrupt handler? Maybe this needs a
+> better comment in the code explaining what it's actually doing?
+
+This register should be written after handling interrupts, otherwise the next
+Interrupt may not come, by hardware design. And should we handle the
+interrupts when interface is not running? I didn't think it should do, so I made
+it conditional.
 
 
---=20
-With Best Regards,
-Andy Shevchenko
