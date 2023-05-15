@@ -2,478 +2,159 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBCF702CC7
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 May 2023 14:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E1A702CE4
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 May 2023 14:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241052AbjEOMdF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 May 2023 08:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
+        id S241986AbjEOMk7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 May 2023 08:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241854AbjEOMc5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 May 2023 08:32:57 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33481738;
-        Mon, 15 May 2023 05:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1684153974; x=1715689974;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BimgiWQfq8D4nb52g0I+bPET0u1s3lv+JZqzQj6qIno=;
-  b=gtIUYUqqMBhqgRa/qT0mxoWAUCE10LzeFcsL1O9e8KDgroLZ4wTHOMe2
-   8hKCm2RCikVTn1dLKs/UqJNSTCIHWF+NJyPA6h996Ad/i6X2MUDRuzjwu
-   5nER7HUQe2qMIJfLFtCJqZCZpQGaHmqwUKggj6VDi0w5yarSUA3zuGCbk
-   BF/+DvMYQsYIswP750JTb4Va4TJT7stcVOk9Q7RqIU++NYB0RFesoXPqf
-   TufWjEP5HFh9PjJB7KkHhGkdAIR41ULFqPqMwUCzg+NFBC1A6ac3F/qLb
-   nxEpoZIFPqenG9/B3Z4p428YwMmdtQDbZHDO5HvjUUqPr6N/+dglbalt9
-   A==;
-X-IronPort-AV: E=Sophos;i="5.99,276,1677538800"; 
-   d="scan'208";a="30909061"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 15 May 2023 14:32:51 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 15 May 2023 14:32:51 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 15 May 2023 14:32:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1684153971; x=1715689971;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BimgiWQfq8D4nb52g0I+bPET0u1s3lv+JZqzQj6qIno=;
-  b=Uhx9ZJoo+INu8QcwC7bxfF2thoA422wNNp9gkGEdNggx5jcIQhQa7ai2
-   j62dkwlgsDgiRpSik9TVPnv/ntS44QlrS1yk1XPIISkNZvXNPO5vW0ESZ
-   BdYStS0NDu2wnRq3ShHDOoCnQ/iy000cgT4mtKzjmG2T3wcD2duntID7q
-   lU9/u0Zu2hC/SYW+W6SDa8GfYoGfVJMSCfMya9WZqUBEs0lwe5uymwagS
-   vk1x0DTEMONOZIxCh0BiFMPs1vJKWZ7938Eb5SYlkhi5PXH+R5pJXdIez
-   c1Uf4TZe5/Bfy60I++k1gRVsjllM+uT3SazYcW0gBqJF50PLCUtJ5kZ2q
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,276,1677538800"; 
-   d="scan'208";a="30909060"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 15 May 2023 14:32:50 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id AA5D4280056;
-        Mon, 15 May 2023 14:32:50 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>
-Cc:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        with ESMTP id S241542AbjEOMja (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 May 2023 08:39:30 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2040.outbound.protection.outlook.com [40.107.8.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1C81990;
+        Mon, 15 May 2023 05:37:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j//EGd8nXOUtXyJKiqoHspJ+tw5UldRQbcDcXy4rhUgrtX+jwAUgrHNCBo72zM4MK4t6mCRwlZDQzKTYJpJLiC0zTRYNL+299+hK+fXbgavUmMZqkpmdiAk6oawKXIr1DLaFNaJAIaMuObFCa97v+Xm3MrLVVM7WATn6v30MsoqRUzWkORDU9Zodjd4Aa3HG7pImacrKljNap/chY35OW/xW7xQEWq8W+PtcRqEpE9ECmH7r4N344W2abhXTVTO4a6a3RQYT6CejhBy7HM6m73SVbNHFynBFQ19GGq3DqBpvcSd6ZGrgVOYKLWVzl7pGDsJv1hgyJOyOlo9NFbOvRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=j6OAsvrf6OVHKqRXcLeAybidA67AMxUajFgFbeMazLc=;
+ b=ErH7ngp8RbvfrKC1TTkceGqRYBNTffwOsDM0VbqAdnX97/EQWaa1qc1+grMjsiPhzpcxRj9Sgx79dfikX/XIsSTX3tMCkTTw5qkzdIOBkI+KHmf9Xn6hc/2ggtCW8NLAdXPOnjmOiht/KO8/15/zbF7m7LaQwd9gXYjCvaQwMYH6Y25sEvKkaStxQRVj0KQEnNWnqe7RTJfE65diDXIySK9VExdShSaebkB8I1jkEJXqEeeDqeSKHTLbo2CcHEM36ybqO8pIyow4+EW0RRP2cg/kvcQ81VUroa6iXUlad2bCJcaGXwYma8jltA4fhG9h1iLBN95qFSrkL9fu/UOPLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=j6OAsvrf6OVHKqRXcLeAybidA67AMxUajFgFbeMazLc=;
+ b=Qwp0MC9Mz4u0veoU3SA+s5zo5k6WjHop/H+mUr7Y9vN7MqW5av12a+5Rpsd1MylqjYRwNfsZsq38fls6Camu4tYQyrSD+WiiOvJjV4wT9Whzm87X/s+xRfpYeFdU11fHJu2H40HcZw0/7Pxl7TvN/9o95hh8PL9A6RGzbEczCTF2M7nrRtgetSnxGSlQAd8LD98aaogE36IJNppspeVN8F2RMWJrQdnPC3hIX0HMFgjd5lQLR3eePlyL+L/V9s0fxVWqvWosHJ4Vm8mcgl6XMx4mPui3AR38wiHpgULc4e49JaYJFwZ/XobApTh4sBGFJHEKYnZsS2phtVj/h1GKSw==
+Received: from AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5b6::22)
+ by DU0PR10MB7076.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:423::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 12:37:17 +0000
+Received: from AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::2324:90ea:1454:5027]) by AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::2324:90ea:1454:5027%6]) with mapi id 15.20.6387.030; Mon, 15 May 2023
+ 12:37:17 +0000
+From:   "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>
+To:     "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>
+CC:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>,
         "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
         "festevam@gmail.com" <festevam@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "aisheng.dong@nxp.com" <aisheng.dong@nxp.com>
 Subject: Re: [PATCH v3] i2c: lpi2c: cache peripheral clock rate
-Date:   Mon, 15 May 2023 14:32:50 +0200
-Message-ID: <8299946.T7Z3S40VBb@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <e60c6055ad3902031e3bb632b7503ff68a9c215d.camel@siemens.com>
-References: <20230310130815.562418-1-alexander.sverdlin@siemens.com> <1933234.tdWV9SEqCh@steina-w> <e60c6055ad3902031e3bb632b7503ff68a9c215d.camel@siemens.com>
+Thread-Topic: [PATCH v3] i2c: lpi2c: cache peripheral clock rate
+Thread-Index: AQHZU1FiB+tZxN7Xn0OaUbnFTWPYCq82CWmAgCVqjYCAADAcgIAACAQAgAABPQA=
+Date:   Mon, 15 May 2023 12:37:17 +0000
+Message-ID: <8ba04ce7b28d587e9713b35dd564c8158acb2eb5.camel@siemens.com>
+References: <20230310130815.562418-1-alexander.sverdlin@siemens.com>
+         <1933234.tdWV9SEqCh@steina-w>
+         <e60c6055ad3902031e3bb632b7503ff68a9c215d.camel@siemens.com>
+         <8299946.T7Z3S40VBb@steina-w>
+In-Reply-To: <8299946.T7Z3S40VBb@steina-w>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS8PR10MB6867:EE_|DU0PR10MB7076:EE_
+x-ms-office365-filtering-correlation-id: dc03a877-cce6-49a9-feda-08db55411e31
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VByvDBD5FmiZ9vMAnxf16ZYnAf58DwhjCfLnX5fGqy8Emr4sJ7pFbuhfKKKcJjjESVIyNh6sEoa2j3bA3ZDf+tvxUgRqY9MahsUcMs7E3kj574/RcFaSbOZtspMFS3zYg6XhmjKm+BdQhn4Mlg1AI1e/Dqm1nRchnQr+yNO/6BJg2aN20KfC//eCmB285qVTThNQWC21ih2+FCG+Gj5uT52ldW1EvC70aSV3VcmgrzBQ8YOd5YLoAGPCA+9Y2N+WQlFCspHa8M0r2f7IllVzeXWQ3LiURUSzz6+k1JglHupCUlc8DT3xYHgUvI8pkuf+OorKrbRUtrinRgTISRyULQUhzYZauOCJzW57uu5LTmy6RYeUQHZw8nsqSPl9HIJ2IA0xKXXqHdP6Y766apjR3blafbJ4n5N7SAZpfklS0X3p3lkcUYlkImU6uGPx3WyUl5v6uiWHgJHf6AKyGcc4P5/xed+ZKVJDBdJO4+lnoEbAUYuaNUnDw6YENyg1UsuxhFB4t6YOl8CAkCvcAdFj2UJWN904zJ9DTnS/Hb129SXPndmVXsoyrOHyT8zhiRvvVMdrwYrFYgpFI8nBIEqn47ATjyicvnRrJteVK1YplgggnFFUsyCHcjC3jxXsHPIaQxPgmDhF8RWa0785pEJ18A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(346002)(366004)(136003)(39860400002)(451199021)(66446008)(64756008)(66946007)(66476007)(4326008)(6916009)(66556008)(478600001)(6486002)(76116006)(86362001)(91956017)(316002)(54906003)(36756003)(15974865002)(83380400001)(186003)(26005)(6512007)(2616005)(6506007)(55236004)(71200400001)(8936002)(5660300002)(8676002)(7416002)(2906002)(82960400001)(122000001)(41300700001)(38100700002)(38070700005)(18886075002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RUlDZ05mblhNMkkvRGNLWUU3bTVDL1hrNk9VSlJJRGsrZ0N1aUtFaGVhZ09m?=
+ =?utf-8?B?a0taM2hyY203NFlnNDRwRlEya3EyQ0R6WEwybVRpTkxoMHBvU3g2K2RDc08y?=
+ =?utf-8?B?ZnFEVFdqdHhjd3NUckNCVDVpcDVvbHAybllHblpJZ0pGckJuc2dDaHJLeDAy?=
+ =?utf-8?B?NWlkTE5IQllIRmdhckRra1ZtWloyeDExSmRjaW95U054cVJSZzAwa1BuVlhF?=
+ =?utf-8?B?K2pWaUlIVTBPbjVvOVhFUGQ0L3FEa2RFT2lXcndHeEVLOWJRWS9JaldYdGR6?=
+ =?utf-8?B?dkVmVFFHcEUzN2M5L2p0RW90Zjk1TWh4SjAxRFZIU29xWUwwZTVNdk9SbzRr?=
+ =?utf-8?B?bHdEMmliOStoazJWZFNKNitXNUY1djE0dXIxMkZLbXlBQUhwajZHTUd4eWVE?=
+ =?utf-8?B?NTY4eWxQZVhJSERCV0N2YkhQaUtzajB0aytVbW9HTndPL21YOXdZV0pzSkhw?=
+ =?utf-8?B?ZFJBSzZtSU8zMG5hMFhYdGVSVDhvQWYrREtxUXNoMjc2TlJTTWxVd3lFSGcw?=
+ =?utf-8?B?ZFlsZjduRE9nMmVKL0pDcVJEcTZpREtDdDViMVlFK00yYWRVZFc1UW5UOTR3?=
+ =?utf-8?B?dG1KZ1VEVXY4RTdpMG5hRnRldytISXJMTGY0RWp5MEVjS3ZzTEtON2hDN2JE?=
+ =?utf-8?B?akx3RmpnZnc1czlMY3YrUjRrMUhoMGdSdWVWMm9JZWdUc0E2TzJ0OHBkZnJO?=
+ =?utf-8?B?bEVnSklKbDZXNTg2RkFjLzcybVJxc2NtTXlXeXQveStTblVFRkUwSmJ1dC9v?=
+ =?utf-8?B?VUxQdEYwRXFoRTJaaFQ2OWpqejNoYmxud3ZHOGhpdU1WRFpBRnBUVWdlUE44?=
+ =?utf-8?B?VTBBbnRYU1VUbFpDdW05aVo3SERmcEdmWUxGUEFJR2tFekE0SDlWZHVoMHlN?=
+ =?utf-8?B?ampobVpoOXhNMHhWNXdFdTNIb2pHSEYrcnV3ejBrS2xYcVRRRmRNdFR6OUsx?=
+ =?utf-8?B?WHE3SVlGMmRjYVBJQnNoNzJYMWRyOTE2b2pLa3ZDbnRoSXhFbnpyUUhmb3pr?=
+ =?utf-8?B?dzhJUkp5bVlRSU5lYndILzVtd1JTZzM2OFJOL3BlVEk1cVdiQnFSQ2dyYWJq?=
+ =?utf-8?B?Y2Rpdm5iOW5PczVaVXJJMlZ5N1VEMjJIeE11STN0dWZXTkM4SU5LSWpKbUFB?=
+ =?utf-8?B?dDJ0bW5NNmJrVHlGcjJaaFRnUWJoamRzYnQ0VTc3SnZhVEVNYnpSa0VaTmh2?=
+ =?utf-8?B?cTVqMjNvU1BnU2NlRzk2VEFsRHA5bEEvTWhaSWpScDNqd2xaVjk3RGpObXRY?=
+ =?utf-8?B?dVY1eEVOdTVXT1Q4WDBJMU1CU1NkTm1KNjBoRTk4bHJ3eW93QkU2K0ZnUnJQ?=
+ =?utf-8?B?UlFkM3U2NnBNd0czMzYxdHNHVlFIYThMeThzQW5MYkxZSzM4Qksweld6RTVI?=
+ =?utf-8?B?NnZxaUVFZ0hwRzN5MUswNUdYa1FnZlBSZEdTb2oySDlSRHNKQnZRalpoYTBa?=
+ =?utf-8?B?SVhqZUJBMHVsczVmV3pSMkQxeHo3Z3EzNVhVUk1XbWV1eDFYK1pNMkdIUjNz?=
+ =?utf-8?B?RUNBU0d3bEJudXk2blR1ZFJPRXN2eXJkam8xTWRneEVTWjUzYURvZjZKYVBw?=
+ =?utf-8?B?b2FQZ2dHKzlpTXJId0xTN3MvNk9NZUJGZGw2Mnh5NmNJMS9RSmk4ZXBEM3F1?=
+ =?utf-8?B?aC9EcWEvYzJYY3ZCTHpuWEZUcTNON2t5OXN2OU1Xa09SUlpXKyt2UmhGcUtx?=
+ =?utf-8?B?dVYza2prT3NUZXJ1bURidi9TMnQ5a210Y1ppaWtMazFjSVdnWXdIcjRxM2FT?=
+ =?utf-8?B?dnpNeCthZDg5akJ4N3NVdCtiZlltVzVBeXlkRklxeFQ1YlNkNEZuZUxzS292?=
+ =?utf-8?B?NGxJdVBUcTlvTnBPbVNzYTkzTVI5aTh4R0ZMUkdldVVDdno0OXFTRzZHRjFY?=
+ =?utf-8?B?SW1nNE1RTXRYUkxJZDNSelp1ZlkzRERnVkZ1VnhKRk5yTW9ndjBlUGMvVVBi?=
+ =?utf-8?B?bGVFZzEzZ0pqN0twTThoa0VjRFVYTCtvQUlWL0p6bGRvb1d2YlZOeGtPdldW?=
+ =?utf-8?B?SkN5d2NLaXVXek9EWFZGQ0JGNGNjbno4VE9uSzlZaTZqR2lZSXNBWkdhV3A1?=
+ =?utf-8?B?TUQ1c3JYZktkQ0hUVDJpaEhnRDJ6cEdTRGI5cStzS1hQcnFVdHJKTVorbU9j?=
+ =?utf-8?B?TElXQXhQRUJVekczNFFzSjdwMjU1b05FOUFYTW1iYTc5WUNJdmlvTHZXUTY2?=
+ =?utf-8?Q?9TCFeHAyS3pBuZuKhyti2pU=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <68AF472E1807E3489E35B33E24CED3EE@EURPRD10.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc03a877-cce6-49a9-feda-08db55411e31
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2023 12:37:17.0529
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LW9urk3toDzk+CYuFCdxqVoshpf/Uvs8ITClTHr9umlr2coyBzvqBvMfqYc95r2WbgkAIBw58u7+vqjjK+Cq+889KD24OBf9kYi+2pUeuB0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR10MB7076
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Alexander,
-
-Am Montag, 15. Mai 2023, 14:04:10 CEST schrieb Sverdlin, Alexander:
-> Hello Alexander!
->=20
-> On Mon, 2023-05-15 at 11:11 +0200, Alexander Stein wrote:
->=20
-> > > [   22.503179] other info that might help us debug this:
-> > > [   22.503179]
-> > > [   22.503183] Chain exists of:
-> > > [   22.503183]   prepare_lock --> rtc_pcf85063:594:(&config-
-> > >=20
-> > > >regmap)->lock
-> > >=20
-> > > --> i2c_register_adapter
-> > > [   22.503183]
-> > > [   22.503207]  Possible unsafe locking scenario:
-> > > [   22.503207]
-> > > [   22.503210]        CPU0                    CPU1
-> > > [   22.503213]        ----                    ----
-> > > [   22.503216]   lock(i2c_register_adapter);
-> > > [   22.503225]                              =20
-> > > lock(rtc_pcf85063:594:(&config-
-> > >=20
-> > > > regmap)->lock);
-> > >=20
-> > >=20
-> > > [   22.503235]                              =20
-> > > lock(i2c_register_adapter);
-> > > [   22.503244]   lock(prepare_lock);
-> > > [   22.503253]
-> > > [   22.503253]  *** DEADLOCK ***
-> > >=20
-> > > Now lpi2c_runtime_resume will call into clk_prepare() which also
-> > > calls
-> > > clk_prepare_lock() (identical to clk_get_rate).
-> > >=20
-> > > Best regards,
-> > > Alexader
-> > >=20
-> > >=20
-> > > >         pm_runtime_set_autosuspend_delay(&pdev->dev,
-> > > > I2C_PM_TIMEOUT);
-> > > >         pm_runtime_use_autosuspend(&pdev->dev);
-> > > >         pm_runtime_get_noresume(&pdev->dev);
-> >=20
-> >=20
-> > With commit fa39065833db ("i2c: imx-lpi2c: avoid taking clk_prepare
-> > mutex in=20
-> > PM callbacks") in place, the additional deadlock warning regarding
-> > runtime=20
-> > resume is gone.
-> > So only the ordering issue needs to be addressed.
->=20
->=20
-> Unfortunately with both your (backported) and my patches applied I've
-> got a 3rd warning:
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-> WARNING: possible circular locking dependency detected
-> 5.15.71+git8e43aee #1 Tainted: G           O    =20
-> ------------------------------------------------------
-> xxxxxxx/2238 is trying to acquire lock:
-> ffff0000040bda40 (&desc->request_mutex){+.+.}-{3:3}, at:
-> __setup_irq+0xbc/0x8bc
->=20
-> but task is already holding lock:
-> ffff000010ef1100 (i2c_register_adapter){+.+.}-{3:3}, at:
-> i2c_adapter_lock_bus+0x2c/0x3c
->=20
-> which lock already depends on the new lock.
->=20
->=20
-> the existing dependency chain (in reverse order) is:
->=20
-> -> #5 (i2c_register_adapter){+.+.}-{3:3}:
->        lock_acquire+0x68/0x84
->        rt_mutex_lock_nested+0x88/0xe0
->        i2c_adapter_lock_bus+0x2c/0x3c
->        i2c_transfer+0x58/0x130
->        regmap_i2c_read+0x64/0xb0
->        _regmap_raw_read+0x114/0x440
->        _regmap_bus_read+0x4c/0x84
->        _regmap_read+0x6c/0x270
->        regmap_read+0x54/0x80
->        pcf85063_probe+0xec/0x4cc
->        i2c_device_probe+0x10c/0x350
->        really_probe+0xc4/0x470
->        __driver_probe_device+0x11c/0x190
->        driver_probe_device+0x48/0x110
->        __device_attach_driver+0xc4/0x160
->        bus_for_each_drv+0x80/0xe0
->        __device_attach+0xb0/0x1f0
->        device_initial_probe+0x1c/0x2c
->        bus_probe_device+0xa4/0xb0
->        device_add+0x398/0x8ac
->        device_register+0x28/0x40
->        i2c_new_client_device+0x144/0x290
->        of_i2c_register_devices+0x18c/0x230
->        i2c_register_adapter+0x1dc/0x6b0
->        __i2c_add_numbered_adapter+0x68/0xbc
->        i2c_add_adapter+0xb0/0xe0
->        lpi2c_imx_probe+0x3a4/0x670
->        platform_probe+0x70/0xec
->        really_probe+0xc4/0x470
->        __driver_probe_device+0x11c/0x190
->        driver_probe_device+0x48/0x110
->        __device_attach_driver+0xc4/0x160
->        bus_for_each_drv+0x80/0xe0
->        __device_attach+0xb0/0x1f0
->        device_initial_probe+0x1c/0x2c
->        bus_probe_device+0xa4/0xb0
->        deferred_probe_work_func+0xb8/0x110
->        process_one_work+0x27c/0x6c4
->        worker_thread+0x7c/0x450
->        kthread+0x168/0x17c
->        ret_from_fork+0x10/0x20
->=20
-> -> #4 (rtc_pcf85063:560:(&config->regmap)->lock){+.+.}-{3:3}:
->        lock_acquire+0x68/0x84
->        __mutex_lock+0xa8/0x4d0
->        mutex_lock_nested+0x48/0x54
->        regmap_lock_mutex+0x1c/0x30
->        regmap_read+0x44/0x80
->        pcf85063_clkout_recalc_rate+0x34/0x80
->        __clk_register+0x520/0x880
->        devm_clk_register+0x64/0xc4
->        pcf85063_probe+0x24c/0x4cc
->        i2c_device_probe+0x10c/0x350
->        really_probe+0xc4/0x470
->        __driver_probe_device+0x11c/0x190
->        driver_probe_device+0x48/0x110
->        __device_attach_driver+0xc4/0x160
->        bus_for_each_drv+0x80/0xe0
->        __device_attach+0xb0/0x1f0
->        device_initial_probe+0x1c/0x2c
->        bus_probe_device+0xa4/0xb0
->        device_add+0x398/0x8ac
->        device_register+0x28/0x40
->        i2c_new_client_device+0x144/0x290
->        of_i2c_register_devices+0x18c/0x230
->        i2c_register_adapter+0x1dc/0x6b0
->        __i2c_add_numbered_adapter+0x68/0xbc
->        i2c_add_adapter+0xb0/0xe0
->        lpi2c_imx_probe+0x3a4/0x670
->        platform_probe+0x70/0xec
->        really_probe+0xc4/0x470
->        __driver_probe_device+0x11c/0x190
->        driver_probe_device+0x48/0x110
->        __device_attach_driver+0xc4/0x160
->        bus_for_each_drv+0x80/0xe0
->        __device_attach+0xb0/0x1f0
->        device_initial_probe+0x1c/0x2c
->        bus_probe_device+0xa4/0xb0
->        deferred_probe_work_func+0xb8/0x110
->        process_one_work+0x27c/0x6c4
->        worker_thread+0x7c/0x450
->        kthread+0x168/0x17c
->        ret_from_fork+0x10/0x20
->=20
-> -> #3 (prepare_lock){+.+.}-{3:3}:
->        lock_acquire+0x68/0x84
->        __mutex_lock+0xa8/0x4d0
->        mutex_lock_nested+0x48/0x54
->        clk_prepare_lock+0x50/0xb0
->        clk_prepare+0x28/0x50
->        fec_runtime_resume+0x3c/0xe0
->        pm_generic_runtime_resume+0x34/0x50
->        __genpd_runtime_resume+0x38/0x90
->        genpd_runtime_resume+0xa0/0x304
->        __rpm_callback+0x50/0x1b0
->        rpm_callback+0x40/0x80
->        rpm_resume+0x448/0x6e0
->        __pm_runtime_resume+0x50/0xc0
->        fec_enet_mdio_read+0x48/0x190
->        __mdiobus_read+0x48/0xb0
->        mdiobus_read_nested+0x48/0x70
->        mv88e6xxx_smi_dual_direct_read+0x2c/0x50
->        mv88e6xxx_read+0x64/0xf0
->        mv88e6xxx_g1_read+0x28/0x34
->        mv88e6xxx_g1_irq_thread_work+0x50/0x17c
->        mv88e6xxx_irq_poll+0x28/0x50
->        kthread_worker_fn+0x100/0x480
->        kthread+0x168/0x17c
->        ret_from_fork+0x10/0x20
->=20
-> -> #2 (&bus->mdio_lock/2){+.+.}-{3:3}:
->        lock_acquire+0x68/0x84
->        __mutex_lock+0xa8/0x4d0
->        mutex_lock_nested+0x48/0x54
->        mdiobus_read_nested+0x38/0x70
->        mv88e6xxx_smi_dual_direct_read+0x2c/0x50
->        mv88e6xxx_read+0x64/0xf0
->        mv88e6xxx_port_read+0x24/0x30
->        mv88e6xxx_probe+0x250/0x7f0
->        mdio_probe+0x3c/0x80
->        really_probe+0xc4/0x470
->        __driver_probe_device+0x11c/0x190
->        driver_probe_device+0x48/0x110
->        __device_attach_driver+0xc4/0x160
->        bus_for_each_drv+0x80/0xe0
->        __device_attach+0xb0/0x1f0
->        device_initial_probe+0x1c/0x2c
->        bus_probe_device+0xa4/0xb0
->        deferred_probe_work_func+0xb8/0x110
->        process_one_work+0x27c/0x6c4
->        worker_thread+0x7c/0x450
->        kthread+0x168/0x17c
->        ret_from_fork+0x10/0x20
->=20
-> -> #1 (&chip->reg_lock){+.+.}-{3:3}:
->        lock_acquire+0x68/0x84
->        __mutex_lock+0xa8/0x4d0
->        mutex_lock_nested+0x48/0x54
->        mv88e6xxx_g1_irq_bus_lock+0x24/0x30
->        __setup_irq+0x6e0/0x8bc
->        request_threaded_irq+0xf4/0x1b4
->        mv88e6xxx_g2_irq_setup+0x1f0/0x2b4
->        mv88e6xxx_probe+0x480/0x7f0
->        mdio_probe+0x3c/0x80
->        really_probe+0xc4/0x470
->        __driver_probe_device+0x11c/0x190
->        driver_probe_device+0x48/0x110
->        __device_attach_driver+0xc4/0x160
->        bus_for_each_drv+0x80/0xe0
->        __device_attach+0xb0/0x1f0
->        device_initial_probe+0x1c/0x2c
->        bus_probe_device+0xa4/0xb0
->        deferred_probe_work_func+0xb8/0x110
->        process_one_work+0x27c/0x6c4
->        worker_thread+0x7c/0x450
->        kthread+0x168/0x17c
->        ret_from_fork+0x10/0x20
->=20
-> -> #0 (&desc->request_mutex){+.+.}-{3:3}:
->        __lock_acquire+0x12a4/0x20a0
->        lock_acquire.part.0+0xe0/0x230
->        lock_acquire+0x68/0x84
->        __mutex_lock+0xa8/0x4d0
->        mutex_lock_nested+0x48/0x54
->        __setup_irq+0xbc/0x8bc
->        request_threaded_irq+0xf4/0x1b4
->        devm_request_threaded_irq+0x88/0x104
->        lpi2c_runtime_resume+0x70/0xe4
-
-This looks like the NXP downstream kernel, requesting the IRQ from within=20
-runtime resume.
-
->        pm_generic_runtime_resume+0x34/0x50
->        __genpd_runtime_resume+0x38/0x90
->        genpd_runtime_resume+0xa0/0x304
->        __rpm_callback+0x50/0x1b0
->        rpm_callback+0x74/0x80
->        rpm_resume+0x448/0x6e0
->        __pm_runtime_resume+0x50/0xc0
->        lpi2c_imx_xfer+0x60/0xa5c
->        __i2c_transfer+0x174/0xa80
->        i2c_transfer+0x68/0x130
->        regmap_i2c_read+0x64/0xb0
->        _regmap_raw_read+0x114/0x440
->        regmap_raw_read+0x19c/0x28c
->        regmap_bulk_read+0x1b8/0x244
->        at24_read+0x14c/0x2c4
->        nvmem_reg_read+0x2c/0x54
->        bin_attr_nvmem_read+0x8c/0xbc
->        sysfs_kf_bin_read+0x74/0x94
->        kernfs_fop_read_iter+0xb0/0x1d0
->        new_sync_read+0xf0/0x184
->        vfs_read+0x154/0x1f0
->        ksys_read+0x70/0x100
->        __arm64_sys_read+0x24/0x30
->        invoke_syscall+0x50/0x120
->        el0_svc_common.constprop.0+0x68/0x124
->        do_el0_svc+0x30/0x9c
->        el0_svc+0x54/0x110
->        el0t_64_sync_handler+0xa4/0x130
->        el0t_64_sync+0x1a0/0x1a4
->=20
-> other info that might help us debug this:
->=20
-> Chain exists of:
->   &desc->request_mutex --> rtc_pcf85063:560:(&config->regmap)->lock -->
-> i2c_register_adapter
->=20
->  Possible unsafe locking scenario:
->=20
->        CPU0                    CPU1
->        ----                    ----
->   lock(i2c_register_adapter);
->                                lock(rtc_pcf85063:560:(&config->regmap)-
->=20
-> >lock);
->=20
->                                lock(i2c_register_adapter);
->   lock(&desc->request_mutex);
->=20
->  *** DEADLOCK ***
->=20
-> 4 locks held by xxxxxxx/2238:
->  #0: ffff000015a64488 (&of->mutex){+.+.}-{3:3}, at:
-> kernfs_fop_read_iter+0x74/0x1d0
->  #1: ffff0000119e2400 (kn->active#58){.+.+}-{0:0}, at:
-> kernfs_fop_read_iter+0x7c/0x1d0
->  #2: ffff0000119a26e8 (&at24->lock){+.+.}-{3:3}, at:
-> at24_read+0x8c/0x2c4
->  #3: ffff000010ef1100 (i2c_register_adapter){+.+.}-{3:3}, at:
-> i2c_adapter_lock_bus+0x2c/0x3c
->=20
-> stack backtrace:
-> CPU: 1 PID: 2238 Comm: xxxxxxx Tainted: G           O    =20
-> 5.15.71+git8e43aee #1
-> Hardware name: Siemens PXC5.E24 (DT)
-> Call trace:
->  dump_backtrace+0x0/0x1d4
->  show_stack+0x20/0x2c
->  dump_stack_lvl+0x8c/0xb8
->  dump_stack+0x18/0x34
->  print_circular_bug+0x1f8/0x200
->  check_noncircular+0x130/0x144
->  __lock_acquire+0x12a4/0x20a0
->  lock_acquire.part.0+0xe0/0x230
->  lock_acquire+0x68/0x84
->  __mutex_lock+0xa8/0x4d0
->  mutex_lock_nested+0x48/0x54
->  __setup_irq+0xbc/0x8bc
->  request_threaded_irq+0xf4/0x1b4
->  devm_request_threaded_irq+0x88/0x104
->  lpi2c_runtime_resume+0x70/0xe4
-
-It seems your (possible) deadlock is triggered along devm_request_irq() dur=
-ing=20
-resume.
-As mainline just enables the clocks, there is nothing we can do here. Your=
-=20
-patch still is sensible, can you send a new version with the review address=
-ed?=20
-Thanks.
-
-Best regards,
-Alexander
-
->  pm_generic_runtime_resume+0x34/0x50
->  __genpd_runtime_resume+0x38/0x90
->  genpd_runtime_resume+0xa0/0x304
->  __rpm_callback+0x50/0x1b0
->  rpm_callback+0x74/0x80
->  rpm_resume+0x448/0x6e0
->  __pm_runtime_resume+0x50/0xc0
->  lpi2c_imx_xfer+0x60/0xa5c
->  __i2c_transfer+0x174/0xa80
->  i2c_transfer+0x68/0x130
->  regmap_i2c_read+0x64/0xb0
->  _regmap_raw_read+0x114/0x440
->  regmap_raw_read+0x19c/0x28c
->  regmap_bulk_read+0x1b8/0x244
->  at24_read+0x14c/0x2c4
->  nvmem_reg_read+0x2c/0x54
->  bin_attr_nvmem_read+0x8c/0xbc
->  sysfs_kf_bin_read+0x74/0x94
->  kernfs_fop_read_iter+0xb0/0x1d0
->  new_sync_read+0xf0/0x184
->  vfs_read+0x154/0x1f0
->  ksys_read+0x70/0x100
->  __arm64_sys_read+0x24/0x30
->  invoke_syscall+0x50/0x120
->  el0_svc_common.constprop.0+0x68/0x124
->  do_el0_svc+0x30/0x9c
->  el0_svc+0x54/0x110
->  el0t_64_sync_handler+0xa4/0x130
->  el0t_64_sync+0x1a0/0x1a4
->=20
-> So this doesn't look like an end of the story yet, unfortunately.
->=20
-> --=20
-> Alexander Sverdlin
-> Siemens AG
-> www.siemens.com
-
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
-
+SGVsbG8gQWxleGFuZGVyIQ0KDQpPbiBNb24sIDIwMjMtMDUtMTUgYXQgMTQ6MzIgKzAyMDAsIEFs
+ZXhhbmRlciBTdGVpbiB3cm90ZToNCj4gPiBzdGFjayBiYWNrdHJhY2U6DQo+ID4gQ1BVOiAxIFBJ
+RDogMjIzOCBDb21tOiB4eHh4eHh4IFRhaW50ZWQ6IEfCoMKgwqDCoMKgwqDCoMKgwqDCoCBPwqDC
+oMKgwqAgDQo+ID4gNS4xNS43MStnaXQ4ZTQzYWVlICMxDQo+ID4gSGFyZHdhcmUgbmFtZTogU2ll
+bWVucyBQWEM1LkUyNCAoRFQpDQo+ID4gQ2FsbCB0cmFjZToNCj4gPiDCoCBkdW1wX2JhY2t0cmFj
+ZSsweDAvMHgxZDQNCj4gPiDCoCBzaG93X3N0YWNrKzB4MjAvMHgyYw0KPiA+IMKgIGR1bXBfc3Rh
+Y2tfbHZsKzB4OGMvMHhiOA0KPiA+IMKgIGR1bXBfc3RhY2srMHgxOC8weDM0DQo+ID4gwqAgcHJp
+bnRfY2lyY3VsYXJfYnVnKzB4MWY4LzB4MjAwDQo+ID4gwqAgY2hlY2tfbm9uY2lyY3VsYXIrMHgx
+MzAvMHgxNDQNCj4gPiDCoCBfX2xvY2tfYWNxdWlyZSsweDEyYTQvMHgyMGEwDQo+ID4gwqAgbG9j
+a19hY3F1aXJlLnBhcnQuMCsweGUwLzB4MjMwDQo+ID4gwqAgbG9ja19hY3F1aXJlKzB4NjgvMHg4
+NA0KPiA+IMKgIF9fbXV0ZXhfbG9jaysweGE4LzB4NGQwDQo+ID4gwqAgbXV0ZXhfbG9ja19uZXN0
+ZWQrMHg0OC8weDU0DQo+ID4gwqAgX19zZXR1cF9pcnErMHhiYy8weDhiYw0KPiA+IMKgIHJlcXVl
+c3RfdGhyZWFkZWRfaXJxKzB4ZjQvMHgxYjQNCj4gPiDCoCBkZXZtX3JlcXVlc3RfdGhyZWFkZWRf
+aXJxKzB4ODgvMHgxMDQNCj4gPiDCoCBscGkyY19ydW50aW1lX3Jlc3VtZSsweDcwLzB4ZTQNCj4g
+DQo+IEl0IHNlZW1zIHlvdXIgKHBvc3NpYmxlKSBkZWFkbG9jayBpcyB0cmlnZ2VyZWQgYWxvbmcN
+Cj4gZGV2bV9yZXF1ZXN0X2lycSgpIGR1cmluZyANCj4gcmVzdW1lLg0KDQpZb3UgYXJlIHJpZ2h0
+ISBUaGFuayB5b3UgZm9yIGxvb2tpbmcgaW50byB0aGlzIQ0KDQo+IEFzIG1haW5saW5lIGp1c3Qg
+ZW5hYmxlcyB0aGUgY2xvY2tzLCB0aGVyZSBpcyBub3RoaW5nIHdlIGNhbiBkbyBoZXJlLg0KPiBZ
+b3VyIA0KPiBwYXRjaCBzdGlsbCBpcyBzZW5zaWJsZSwgY2FuIHlvdSBzZW5kIGEgbmV3IHZlcnNp
+b24gd2l0aCB0aGUgcmV2aWV3DQo+IGFkZHJlc3NlZD8gDQoNClN1cmUsIEknbGwgZG8hDQoNCi0t
+IA0KQWxleGFuZGVyIFN2ZXJkbGluDQpTaWVtZW5zIEFHDQp3d3cuc2llbWVucy5jb20NCg==
