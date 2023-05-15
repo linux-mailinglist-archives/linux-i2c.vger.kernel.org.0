@@ -2,52 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC81703CA8
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 May 2023 20:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C89703DBC
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 May 2023 21:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235006AbjEOSbM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 May 2023 14:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S245027AbjEOTaQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 May 2023 15:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236831AbjEOSbL (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 May 2023 14:31:11 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB32C46B2;
-        Mon, 15 May 2023 11:31:09 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34FHohqw026890;
-        Mon, 15 May 2023 12:50:43 -0500
+        with ESMTP id S243497AbjEOTaP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 May 2023 15:30:15 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376513A8B;
+        Mon, 15 May 2023 12:30:14 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34FHoiRi010789;
+        Mon, 15 May 2023 12:50:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684173043;
-        bh=li1qACpEc+UiOMT6jAFyohJIo3GdjAxTe9n1fUN9AiE=;
-        h=From:To:CC:Subject:Date;
-        b=v9tiwB0Bgx2QtIRTsyCWaYsPaFqE0g0Wv391XowCuAHuBR82X6X8KZCT6kGiRBT22
-         zsxwMFlR5HcgwgfybS1JDh3GcC2O4sbifqYg4W8hdBrsyJ+V2BFSXsbKhuY5Ys1iJ1
-         7yZ3iupwfdZOh1DzZOMsiTrAH8t4Q6G1xy0PLDFk=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34FHohA0049310
+        s=ti-com-17Q1; t=1684173044;
+        bh=38tdvWK8lJabqgnOU0Hs8iF8EpCwonFKkFkL2o92fvU=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=a3PDVgb9blJwuByXbXNDbQmFKz2rAS+3gw/BPz6NsfeVUejnTU/cxcuaOeSXn/85Q
+         eDAYdkxLsoYeSrEiqVsRWlOZP+Ma40sHloNzpSlRsG/TndxoaYEwQkBP3K3jpmdXkf
+         +1ieb/cYasA1nYrjBxmd8Bu+an+GcCm32BMulz4k=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34FHoiLu124129
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 15 May 2023 12:50:43 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 15 May 2023 12:50:44 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
- May 2023 12:50:43 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ May 2023 12:50:44 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 15 May 2023 12:50:43 -0500
+ Frontend Transport; Mon, 15 May 2023 12:50:44 -0500
 Received: from lelv0327.itg.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34FHohNp060959;
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34FHohNq060959;
         Mon, 15 May 2023 12:50:43 -0500
 From:   Andrew Davis <afd@ti.com>
 To:     Wolfram Sang <wsa@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Andrew Davis <afd@ti.com>
-Subject: [PATCH v2 1/2] i2c: davinci: Use platform table macro over module_alias
-Date:   Mon, 15 May 2023 12:50:41 -0500
-Message-ID: <20230515175042.495377-1-afd@ti.com>
+Subject: [PATCH v2 2/2] i2c: davinci: Use struct name not type with devm_kzalloc()
+Date:   Mon, 15 May 2023 12:50:42 -0500
+Message-ID: <20230515175042.495377-2-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230515175042.495377-1-afd@ti.com>
+References: <20230515175042.495377-1-afd@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -62,36 +64,34 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Generates the same platform module alias. More standard usage.
+This reduces chance of error if the type of "dev" changes. While here
+remove extra error print out, this is not usually done for memory
+allocation failures.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- drivers/i2c/busses/i2c-davinci.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-davinci.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-davinci.c b/drivers/i2c/busses/i2c-davinci.c
-index 9750310f2c96..c55bd937def7 100644
+index c55bd937def7..135f76593e6f 100644
 --- a/drivers/i2c/busses/i2c-davinci.c
 +++ b/drivers/i2c/busses/i2c-davinci.c
-@@ -940,12 +940,16 @@ static const struct dev_pm_ops davinci_i2c_pm = {
- #define davinci_i2c_pm_ops NULL
- #endif
+@@ -767,12 +767,9 @@ static int davinci_i2c_probe(struct platform_device *pdev)
+ 	if (irq < 0)
+ 		return dev_err_probe(&pdev->dev, irq, "can't get irq resource\n");
  
--/* work with hotplug and coldplug */
--MODULE_ALIAS("platform:i2c_davinci");
-+static const struct platform_device_id davinci_i2c_driver_ids[] = {
-+	{ .name = "i2c_davinci", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(platform, davinci_i2c_driver_ids);
+-	dev = devm_kzalloc(&pdev->dev, sizeof(struct davinci_i2c_dev),
+-			GFP_KERNEL);
+-	if (!dev) {
+-		dev_err(&pdev->dev, "Memory allocation failed\n");
++	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
++	if (!dev)
+ 		return -ENOMEM;
+-	}
  
- static struct platform_driver davinci_i2c_driver = {
- 	.probe		= davinci_i2c_probe,
- 	.remove		= davinci_i2c_remove,
-+	.id_table	= davinci_i2c_driver_ids,
- 	.driver		= {
- 		.name	= "i2c_davinci",
- 		.pm	= davinci_i2c_pm_ops,
+ 	init_completion(&dev->cmd_complete);
+ 
 -- 
 2.39.2
 
