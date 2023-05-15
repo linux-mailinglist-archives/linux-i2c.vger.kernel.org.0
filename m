@@ -2,40 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E692702898
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 May 2023 11:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFEC702965
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 May 2023 11:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjEOJaZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 May 2023 05:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33092 "EHLO
+        id S229898AbjEOJp2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 May 2023 05:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240715AbjEOJaC (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 May 2023 05:30:02 -0400
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B421B5
-        for <linux-i2c@vger.kernel.org>; Mon, 15 May 2023 02:29:36 -0700 (PDT)
+        with ESMTP id S240859AbjEOJot (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 May 2023 05:44:49 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2679E213D
+        for <linux-i2c@vger.kernel.org>; Mon, 15 May 2023 02:42:25 -0700 (PDT)
 Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id 0016b2ae-f303-11ed-b3cf-005056bd6ce9;
-        Mon, 15 May 2023 12:29:34 +0300 (EEST)
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id ca086007-f304-11ed-abf4-005056bdd08f;
+        Mon, 15 May 2023 12:42:22 +0300 (EEST)
 From:   andy.shevchenko@gmail.com
-Date:   Mon, 15 May 2023 12:29:32 +0300
+Date:   Mon, 15 May 2023 12:42:21 +0300
 To:     Jiawen Wu <jiawenwu@trustnetic.com>
 Cc:     netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
         andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
         jsd@semihalf.com, Jose.Abreu@synopsys.com, andrew@lunn.ch,
         hkallweit1@gmail.com, linux@armlinux.org.uk,
         linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        mengyuanlou@net-swift.com,
-        Piotr Raczynski <piotr.raczynski@intel.com>
-Subject: Re: [PATCH net-next v8 4/9] net: txgbe: Register I2C platform device
-Message-ID: <ZGH7fHlq0Ao_Mr3U@surfacebook>
+        mengyuanlou@net-swift.com
+Subject: Re: [PATCH net-next v8 6/9] net: txgbe: Support GPIO to SFP socket
+Message-ID: <ZGH-fRzbGd_eCASk@surfacebook>
 References: <20230515063200.301026-1-jiawenwu@trustnetic.com>
- <20230515063200.301026-5-jiawenwu@trustnetic.com>
+ <20230515063200.301026-7-jiawenwu@trustnetic.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230515063200.301026-5-jiawenwu@trustnetic.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230515063200.301026-7-jiawenwu@trustnetic.com>
 X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
         FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
         SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
@@ -46,56 +46,150 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Mon, May 15, 2023 at 02:31:55PM +0800, Jiawen Wu kirjoitti:
-> Register the platform device to use Designware I2C bus master driver.
-> Use regmap to read/write I2C device region from given base offset.
+Mon, May 15, 2023 at 02:31:57PM +0800, Jiawen Wu kirjoitti:
+> Register GPIO chip and handle GPIO IRQ for SFP socket.
 
 ...
 
-> +#include <linux/platform_device.h>
->  #include <linux/gpio/property.h>
-> +#include <linux/regmap.h>
+> +static int txgbe_gpio_direction_out(struct gpio_chip *chip, unsigned int offset,
+> +				    int val)
+> +{
+> +	struct wx *wx = gpiochip_get_data(chip);
+> +	unsigned long flags;
+> +	u32 set;
+> +
+> +	spin_lock_irqsave(&wx->gpio_lock, flags);
 
-Perhaps keeping this ordered?
+> +	set = val ? BIT(offset) : 0;
 
->  #include <linux/clkdev.h>
->  #include <linux/clk-provider.h>
->  #include <linux/i2c.h>
+Why is this under the lock?
 
-...
-
-> +static const struct regmap_config i2c_regmap_config = {
-> +	.reg_bits = 32,
-> +	.val_bits = 32,
-> +	.reg_read = txgbe_i2c_read,
-> +	.reg_write = txgbe_i2c_write,
-
-	fast_io = true;
-
-? (Note, I haven't checked if IO accessors are really fast)
-
-> +};
+> +	wr32m(wx, WX_GPIO_DR, BIT(offset), set);
+> +	wr32m(wx, WX_GPIO_DDR, BIT(offset), BIT(offset));
+> +	spin_unlock_irqrestore(&wx->gpio_lock, flags);
+> +
+> +	return 0;
+> +}
 
 ...
 
-> +	i2c_regmap = devm_regmap_init(&pdev->dev, NULL, wx,
-> +				      &i2c_regmap_config);
+> +static void txgbe_toggle_trigger(struct gpio_chip *gc, unsigned int offset)
 
-This is exactly a single line (80 characters), why to have two?
+> +{
+> +	struct wx *wx = gpiochip_get_data(gc);
+> +	u32 pol;
+> +	int val;
+> +
+> +	pol = rd32(wx, WX_GPIO_POLARITY);
 
-> +	if (IS_ERR(i2c_regmap)) {
-> +		wx_err(wx, "failed to init regmap\n");
-> +		return PTR_ERR(i2c_regmap);
+> +	val = gc->get(gc, offset);
+
+Can't you use directly the respective rd32()?
+
+> +	if (val)
+> +		pol &= ~BIT(offset);
+> +	else
+> +		pol |= BIT(offset);
+> +
+> +	wr32(wx, WX_GPIO_POLARITY, pol);
+> +}
+
+...
+
+> +static void txgbe_irq_handler(struct irq_desc *desc)
+> +{
+> +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +	struct wx *wx = irq_desc_get_handler_data(desc);
+> +	struct txgbe *txgbe = wx->priv;
+> +	irq_hw_number_t hwirq;
+> +	unsigned long gpioirq;
+> +	struct gpio_chip *gc;
+> +
+> +	chained_irq_enter(chip, desc);
+
+Seems spin_lock() call is missing in this function.
+
+> +	gpioirq = rd32(wx, WX_GPIO_INTSTATUS);
+> +
+> +	gc = txgbe->gpio;
+> +	for_each_set_bit(hwirq, &gpioirq, gc->ngpio) {
+> +		int gpio = irq_find_mapping(gc->irq.domain, hwirq);
+> +		u32 irq_type = irq_get_trigger_type(gpio);
+> +
+> +		generic_handle_irq(gpio);
+
+Can generic_handle_domain_irq() be used here?
+
+> +		if ((irq_type & IRQ_TYPE_SENSE_MASK) == IRQ_TYPE_EDGE_BOTH)
+> +			txgbe_toggle_trigger(gc, hwirq);
 > +	}
+> +
+> +	chained_irq_exit(chip, desc);
+> +
+> +	/* unmask interrupt */
+> +	wx_intr_enable(wx, TXGBE_INTR_MISC(wx));
+> +}
 
 ...
 
-> +	res = DEFINE_RES_IRQ(pdev->irq);
-> +	info.res = &res;
+> +static int txgbe_gpio_init(struct txgbe *txgbe)
+> +{
+> +	struct gpio_irq_chip *girq;
+> +	struct wx *wx = txgbe->wx;
+> +	struct gpio_chip *gc;
+> +	struct device *dev;
+> +	int ret;
 
-You can do
+> +	dev = &wx->pdev->dev;
 
-	info.res = &DEFINE_RES_IRQ(pdev->irq);
+This can be united with the defintion above.
+
+	struct device *dev = &wx->pdev->dev;
+
+> +	gc = devm_kzalloc(dev, sizeof(*gc), GFP_KERNEL);
+> +	if (!gc)
+> +		return -ENOMEM;
+> +
+> +	gc->label = devm_kasprintf(dev, GFP_KERNEL, "txgbe_gpio-%x",
+> +				   (wx->pdev->bus->number << 8) | wx->pdev->devfn);
+> +	gc->base = -1;
+> +	gc->ngpio = 6;
+> +	gc->owner = THIS_MODULE;
+> +	gc->parent = dev;
+> +	gc->fwnode = software_node_fwnode(txgbe->nodes.group[SWNODE_GPIO]);
+
+Looking at the I²C case, I'm wondering if gpio-regmap can be used for this piece.
+
+> +	gc->get = txgbe_gpio_get;
+> +	gc->get_direction = txgbe_gpio_get_direction;
+> +	gc->direction_input = txgbe_gpio_direction_in;
+> +	gc->direction_output = txgbe_gpio_direction_out;
+> +
+> +	girq = &gc->irq;
+> +	gpio_irq_chip_set_chip(girq, &txgbe_gpio_irq_chip);
+> +	girq->parent_handler = txgbe_irq_handler;
+> +	girq->parent_handler_data = wx;
+> +	girq->num_parents = 1;
+> +	girq->parents = devm_kcalloc(dev, girq->num_parents,
+> +				     sizeof(*girq->parents), GFP_KERNEL);
+> +	if (!girq->parents)
+> +		return -ENOMEM;
+> +	girq->parents[0] = wx->msix_entries[wx->num_q_vectors].vector;
+> +	girq->default_type = IRQ_TYPE_NONE;
+> +	girq->handler = handle_bad_irq;
+> +
+> +	ret = devm_gpiochip_add_data(dev, gc, wx);
+> +	if (ret)
+> +		return ret;
+
+> +	spin_lock_init(&wx->gpio_lock);
+
+Isn't it too late?
+
+> +	txgbe->gpio = gc;
+> +
+> +	return 0;
+> +}
 
 -- 
 With Best Regards,
