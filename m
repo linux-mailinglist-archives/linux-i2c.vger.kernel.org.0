@@ -2,32 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D807024C9
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 May 2023 08:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 644C87024CE
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 May 2023 08:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239901AbjEOGec (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 15 May 2023 02:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S239918AbjEOGed (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 May 2023 02:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239899AbjEOGeb (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 May 2023 02:34:31 -0400
-Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B83100;
-        Sun, 14 May 2023 23:34:27 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1684132419te5c1cb4
+        with ESMTP id S239908AbjEOGed (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 May 2023 02:34:33 -0400
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279F611B;
+        Sun, 14 May 2023 23:34:25 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1684132423ta7o2ilr
 Received: from wxdbg.localdomain.com ( [115.200.228.151])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 15 May 2023 14:33:37 +0800 (CST)
+        id ; Mon, 15 May 2023 14:33:42 +0800 (CST)
 X-QQ-SSF: 01400000000000I0Z000000A0000000
-X-QQ-FEAT: 3M0okmaRx3izmkUOsSxg9p3Ztqlaf5nGPnfdtR4NtY7Tz6pk3FjEMjIzNczX+
-        zHG+JuS4bk807rhMpPwA1xa41orLaKyfzQANP6sU0gMFJX6y5MqBv3GWJCNWLXLKMtZKBHn
-        GSQ3db/GJy6fjyB2adD5yxcfqOvsfzC9AVaom98y7oT1tpv7BVvamUly33h/8phX3vEXgFR
-        6oWfmckrQLqh7/Kt7ttMnuIiYZHxUxwM0qCu7LDZBlAUxFY0zmTQszDCHnBmzzLLzHd1mcw
-        UOW0XcNcqWf1Su3XCb1A2MGn5eIT3j7EQGAqZrsuIIgEUT4bECSy8xchUvfRJ9Co3LTtPlh
-        ajNDCW36JTU5Vb4LB7fybKjl+OLYfQYKpaCQuxw9JBWrogf6TnpCD1HYGgEyl/A/0eiiXOp
-        00vK3lMClmZaF3HTafmfZA==
+X-QQ-FEAT: sOXXF9HUbXWpqcJS3cSsNh/OAlTXiwJuNREC7BN8FvNpGnFC1A6mbOQrIBlnT
+        iLInCqV8JorGfcs2u5w0gEY/05UoOzJ9dc83hWgDmnxDq27gLCMw7uu+8z4wneaa8rNHWPJ
+        EOKgdyyLsWA/8tdctL+tgVpWvCeh7VvAqRIX7Mp+VM8Ucvcgp2gAe2RfEP23F5ORbaPHU5u
+        xkalY/xKJSN1YEbna9Dt+siuOzCepiuMY97AuWEVs5F240fzHQcmGj008hls8HWCq9pnKEv
+        qHwaW68wJ4nRJMReD4ju7g5Q+4Wf2KScH9zbwdppMYwS+ZqemJxxSs7ixaJLtOhxqQZsYFJ
+        VlGmjHFWebrsNkJTGzCdoY8Ut3fvcAtp7xVFwOWABKSnk0CVXz9SGvJPCXpM8r/2zRAW0Uh
+        Mjkce5zgVnrgBBLLBCkuXQ==
 X-QQ-GoodBg: 2
-X-BIZMAIL-ID: 11029871857999368315
+X-BIZMAIL-ID: 3022266242605919620
 From:   Jiawen Wu <jiawenwu@trustnetic.com>
 To:     netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
         andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
@@ -36,9 +36,9 @@ To:     netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
 Cc:     linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
         mengyuanlou@net-swift.com, Jiawen Wu <jiawenwu@trustnetic.com>,
         Piotr Raczynski <piotr.raczynski@intel.com>
-Subject: [PATCH net-next v8 4/9] net: txgbe: Register I2C platform device
-Date:   Mon, 15 May 2023 14:31:55 +0800
-Message-Id: <20230515063200.301026-5-jiawenwu@trustnetic.com>
+Subject: [PATCH net-next v8 5/9] net: txgbe: Add SFP module identify
+Date:   Mon, 15 May 2023 14:31:56 +0800
+Message-Id: <20230515063200.301026-6-jiawenwu@trustnetic.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20230515063200.301026-1-jiawenwu@trustnetic.com>
 References: <20230515063200.301026-1-jiawenwu@trustnetic.com>
@@ -47,7 +47,7 @@ Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,104 +55,52 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Register the platform device to use Designware I2C bus master driver.
-Use regmap to read/write I2C device region from given base offset.
+Register SFP platform device to get modules information.
 
 Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
 Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 Reviewed-by: Piotr Raczynski <piotr.raczynski@intel.com>
 ---
- drivers/net/ethernet/wangxun/Kconfig          |  2 +
- .../net/ethernet/wangxun/txgbe/txgbe_phy.c    | 71 +++++++++++++++++++
- .../net/ethernet/wangxun/txgbe/txgbe_type.h   |  4 ++
- 3 files changed, 77 insertions(+)
+ drivers/net/ethernet/wangxun/Kconfig          |  1 +
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.c    | 28 +++++++++++++++++++
+ .../net/ethernet/wangxun/txgbe/txgbe_type.h   |  1 +
+ 3 files changed, 30 insertions(+)
 
 diff --git a/drivers/net/ethernet/wangxun/Kconfig b/drivers/net/ethernet/wangxun/Kconfig
-index a62614eeed2e..ec058a72afb6 100644
+index ec058a72afb6..90812d76181d 100644
 --- a/drivers/net/ethernet/wangxun/Kconfig
 +++ b/drivers/net/ethernet/wangxun/Kconfig
-@@ -40,6 +40,8 @@ config NGBE
- config TXGBE
- 	tristate "Wangxun(R) 10GbE PCI Express adapters support"
- 	depends on PCI
-+	select I2C_DESIGNWARE_PLATFORM
-+	select REGMAP
+@@ -44,6 +44,7 @@ config TXGBE
+ 	select REGMAP
  	select COMMON_CLK
  	select LIBWX
++	select SFP
  	help
+ 	  This driver supports Wangxun(R) 10GbE PCI Express family of
+ 	  adapters.
 diff --git a/drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c b/drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
-index f1c455d799f3..a76c9fd74864 100644
+index a76c9fd74864..38830e280031 100644
 --- a/drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
 +++ b/drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
-@@ -1,7 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2015 - 2023 Beijing WangXun Technology Co., Ltd. */
- 
-+#include <linux/platform_device.h>
- #include <linux/gpio/property.h>
-+#include <linux/regmap.h>
- #include <linux/clkdev.h>
- #include <linux/clk-provider.h>
- #include <linux/i2c.h>
-@@ -98,6 +100,65 @@ static int txgbe_clock_register(struct txgbe *txgbe)
+@@ -159,6 +159,25 @@ static int txgbe_i2c_register(struct txgbe *txgbe)
  	return 0;
  }
  
-+static int txgbe_i2c_read(void *context, unsigned int reg, unsigned int *val)
++static int txgbe_sfp_register(struct txgbe *txgbe)
 +{
-+	struct wx *wx = context;
-+
-+	*val = rd32(wx, reg + TXGBE_I2C_BASE);
-+
-+	return 0;
-+}
-+
-+static int txgbe_i2c_write(void *context, unsigned int reg, unsigned int val)
-+{
-+	struct wx *wx = context;
-+
-+	wr32(wx, reg + TXGBE_I2C_BASE, val);
-+
-+	return 0;
-+}
-+
-+static const struct regmap_config i2c_regmap_config = {
-+	.reg_bits = 32,
-+	.val_bits = 32,
-+	.reg_read = txgbe_i2c_read,
-+	.reg_write = txgbe_i2c_write,
-+};
-+
-+static int txgbe_i2c_register(struct txgbe *txgbe)
-+{
++	struct pci_dev *pdev = txgbe->wx->pdev;
 +	struct platform_device_info info = {};
-+	struct platform_device *i2c_dev;
-+	struct wx *wx = txgbe->wx;
-+	struct regmap *i2c_regmap;
-+	struct resource res = {};
-+	struct pci_dev *pdev;
-+
-+	pdev = wx->pdev;
-+	i2c_regmap = devm_regmap_init(&pdev->dev, NULL, wx,
-+				      &i2c_regmap_config);
-+	if (IS_ERR(i2c_regmap)) {
-+		wx_err(wx, "failed to init regmap\n");
-+		return PTR_ERR(i2c_regmap);
-+	}
++	struct platform_device *sfp_dev;
 +
 +	info.parent = &pdev->dev;
-+	info.fwnode = software_node_fwnode(txgbe->nodes.group[SWNODE_I2C]);
-+	info.name = "i2c_designware";
++	info.fwnode = software_node_fwnode(txgbe->nodes.group[SWNODE_SFP]);
++	info.name = "sfp";
 +	info.id = (pdev->bus->number << 8) | pdev->devfn;
++	sfp_dev = platform_device_register_full(&info);
++	if (IS_ERR(sfp_dev))
++		return PTR_ERR(sfp_dev);
 +
-+	res = DEFINE_RES_IRQ(pdev->irq);
-+	info.res = &res;
-+	info.num_res = 1;
-+	i2c_dev = platform_device_register_full(&info);
-+	if (IS_ERR(i2c_dev))
-+		return PTR_ERR(i2c_dev);
-+
-+	txgbe->i2c_dev = i2c_dev;
++	txgbe->sfp_dev = sfp_dev;
 +
 +	return 0;
 +}
@@ -160,54 +108,43 @@ index f1c455d799f3..a76c9fd74864 100644
  int txgbe_init_phy(struct txgbe *txgbe)
  {
  	int ret;
-@@ -114,8 +175,17 @@ int txgbe_init_phy(struct txgbe *txgbe)
- 		goto err_unregister_swnode;
+@@ -181,8 +200,16 @@ int txgbe_init_phy(struct txgbe *txgbe)
+ 		goto err_unregister_clk;
  	}
  
-+	ret = txgbe_i2c_register(txgbe);
++	ret = txgbe_sfp_register(txgbe);
 +	if (ret) {
-+		wx_err(txgbe->wx, "failed to init i2c interface: %d\n", ret);
-+		goto err_unregister_clk;
++		wx_err(txgbe->wx, "failed to register sfp\n");
++		goto err_unregister_i2c;
 +	}
 +
  	return 0;
  
-+err_unregister_clk:
-+	clkdev_drop(txgbe->clock);
-+	clk_unregister(txgbe->clk);
- err_unregister_swnode:
- 	software_node_unregister_node_group(txgbe->nodes.group);
- 
-@@ -124,6 +194,7 @@ int txgbe_init_phy(struct txgbe *txgbe)
++err_unregister_i2c:
++	platform_device_unregister(txgbe->i2c_dev);
+ err_unregister_clk:
+ 	clkdev_drop(txgbe->clock);
+ 	clk_unregister(txgbe->clk);
+@@ -194,6 +221,7 @@ int txgbe_init_phy(struct txgbe *txgbe)
  
  void txgbe_remove_phy(struct txgbe *txgbe)
  {
-+	platform_device_unregister(txgbe->i2c_dev);
++	platform_device_unregister(txgbe->sfp_dev);
+ 	platform_device_unregister(txgbe->i2c_dev);
  	clkdev_drop(txgbe->clock);
  	clk_unregister(txgbe->clk);
- 	software_node_unregister_node_group(txgbe->nodes.group);
 diff --git a/drivers/net/ethernet/wangxun/txgbe/txgbe_type.h b/drivers/net/ethernet/wangxun/txgbe/txgbe_type.h
-index cdbc4b37f832..55979abf01f2 100644
+index 55979abf01f2..fc91e0fc37a6 100644
 --- a/drivers/net/ethernet/wangxun/txgbe/txgbe_type.h
 +++ b/drivers/net/ethernet/wangxun/txgbe/txgbe_type.h
-@@ -55,6 +55,9 @@
- #define TXGBE_TS_CTL                            0x10300
- #define TXGBE_TS_CTL_EVAL_MD                    BIT(31)
- 
-+/* I2C registers */
-+#define TXGBE_I2C_BASE                          0x14900
-+
- /* Part Number String Length */
- #define TXGBE_PBANUM_LENGTH                     32
- 
-@@ -146,6 +149,7 @@ struct txgbe_nodes {
+@@ -149,6 +149,7 @@ struct txgbe_nodes {
  struct txgbe {
  	struct wx *wx;
  	struct txgbe_nodes nodes;
-+	struct platform_device *i2c_dev;
++	struct platform_device *sfp_dev;
+ 	struct platform_device *i2c_dev;
  	struct clk_lookup *clock;
  	struct clk *clk;
- };
 -- 
 2.27.0
 
