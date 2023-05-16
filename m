@@ -2,150 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6764B705146
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 16:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B901B705094
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 16:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234041AbjEPOwj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 May 2023 10:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
+        id S233533AbjEPOZq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 May 2023 10:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234040AbjEPOwh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 May 2023 10:52:37 -0400
-X-Greylist: delayed 2398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 May 2023 07:52:34 PDT
-Received: from mx3.securetransport.de (mx3.securetransport.de [IPv6:2a01:4f8:c0c:92be::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766ED49CC;
-        Tue, 16 May 2023 07:52:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1684243982;
-        bh=VV7WD56ZPBPmmjnYrQTEXVS/doSEeRvJARSHrkh3R8k=;
-        h=From:To:CC:Subject:Date:From;
-        b=mjWzJJUn1YfiYmLlFptrapFVs4uBQCn1N2yVVLXp4E1Di7cMW9ehB/2Kr9fAHjF8i
-         sFd7gNeeX1uRrDfAYqR0DniUI/MAV9RKEEskaAjy9H+ZBsB9/32agMtn+g+EZciq0E
-         VNuUXB41bfO80Y9vcvBjLlVY9Ejy5NPcxpqP9r/COkE415H5nTMY7+ghPIErbwDEB5
-         M9JheU0EcnHjlfRagLSHgIi6qL30fJMZPr9Af4udhPKoNV13WFmMcMPJVXRAjIpT3a
-         AiAMPsNnVy8g1SwZyP2sukB9VXjtglyx2mQGoi39J0BXRK7VrJJat3bkVYR4fB1fTF
-         sMnO17QoXhofw==
-X-secureTransport-forwarded: yes
-From:   Ludwig Zenz <lzenz@dh-electronics.com>
-Complaints-To: abuse@cubewerk.de
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-CC:     "Matti.Vaittinen@fi.rohmeurope.com" 
-        <Matti.Vaittinen@fi.rohmeurope.com>,
-        "andriy.shevchenko@intel.com" <andriy.shevchenko@intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
-        "khalasa@piap.pl" <khalasa@piap.pl>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "laurent.pinchart+renesas@ideasonboard.com" 
-        <laurent.pinchart+renesas@ideasonboard.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
-        "m.tretter@pengutronix.de" <m.tretter@pengutronix.de>,
-        "marex@denx.de" <marex@denx.de>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "mpagano@gentoo.org" <mpagano@gentoo.org>,
-        "peda@axentia.se" <peda@axentia.se>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "satish.nagireddy@getcruise.com" <satish.nagireddy@getcruise.com>,
-        "wsa@kernel.org" <wsa@kernel.org>
-Subject: Re: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
-Thread-Topic: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
-Thread-Index: AdmH94aJYfpSTDyZQpaZXJi+tH9eKw==
-Date:   Tue, 16 May 2023 13:32:55 +0000
-Message-ID: <e13dade162f74a3e812f9331b83928f0@dh-electronics.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S233193AbjEPOZn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 May 2023 10:25:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A823772BD;
+        Tue, 16 May 2023 07:25:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09A7D63AB8;
+        Tue, 16 May 2023 14:25:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3223DC4339B;
+        Tue, 16 May 2023 14:25:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684247138;
+        bh=56JVyKy+1Eo3iWQR1rFM2KRacIvVANlyt7QmXSsxXog=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sw7ItSmQIbLslllD7oBOkdF9j/FlOj5dsXDqMdAVYTGXVePqgKGiqHLCWvHm2ORRr
+         6kGi23wPgbqtWH++GyKPDbfnOGJYRSItd42GnFFL9NiTCxbS5MlCYoaE7cja5CINAl
+         MBeAVXmYMLL0CaHOeAmMhwc3cfLmYm36VluT5zcF9NizSc+259zobJFUL5N3gEno4X
+         9u5F6216HG+frqCDI12sd/qoLpfPnHwDmm/KK8Xl+b3WsdT+JxGuGo+K5vAgHOJtRQ
+         LNksR965SsJyjo9psN0LiFLlQFkAsgnNiK5I91CtB8U03VZ1stI7eAzP3ggkislL7X
+         wgwUE3IVrbIFA==
+Date:   Tue, 16 May 2023 23:25:33 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
+        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
+        vishal.sagar@amd.com, kalyani.akula@amd.com,
+        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
+Message-ID: <ZGOSXZs3H0wNxoOn@finisterre.sirena.org.uk>
+References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fdGB4dh9xyA/RRNs"
+Content-Disposition: inline
+In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PiBIaSwNCj4gDQo+IE9uIDE2LzA1LzIwMjMgMTU6MzUsIEx1ZHdpZyBaZW56IHdyb3RlOg0KPj4g
-T24gV2VkLCAyNiBBcHIgMjAyMyAxNDo1MToxMiArMDMwMCwgVG9taSBWYWxrZWluZW4gd3JvdGU6
-DQo+Pg0KPj4gWy4uLl0NCj4+DQo+Pj4gICArc3RhdGljIGludCB1Yjk2MF9jb25maWd1cmVfcG9y
-dHNfZm9yX3N0cmVhbWluZyhzdHJ1Y3QgdWI5NjBfZGF0YSAqcHJpdiwNCj4+PiAgICsgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCB2NGwyX3N1YmRldl9zdGF0
-ZSAqc3RhdGUpDQo+Pj4gICArew0KPj4+ICAgKyAgdTggZndkX2N0bDsNCj4+PiAgICsgIHN0cnVj
-dCB7DQo+Pj4gICArICAgICAgICAgIHUzMiBudW1fc3RyZWFtczsNCj4+PiAgICsgICAgICAgICAg
-dTggcGl4ZWxfZHQ7DQo+Pj4gICArICAgICAgICAgIHU4IG1ldGFfZHQ7DQo+Pj4gICArICAgICAg
-ICAgIHUzMiBtZXRhX2xpbmVzOw0KPj4+ICAgKyAgICAgICAgICB1MzIgdHhfcG9ydDsNCj4+PiAg
-ICsgIH0gcnhfZGF0YVtVQjk2MF9NQVhfUlhfTlBPUlRTXSA9IHt9Ow0KPj4+ICAgKyAgdTggdmNf
-bWFwW1VCOTYwX01BWF9SWF9OUE9SVFNdID0ge307DQo+Pj4gICArICBzdHJ1Y3QgdjRsMl9zdWJk
-ZXZfcm91dGUgKnJvdXRlOw0KPj4+ICAgKyAgdW5zaWduZWQgaW50IG5wb3J0Ow0KPj4+ICAgKyAg
-aW50IHJldDsNCj4+PiAgICsNCj4+PiAgICsgIHJldCA9IHViOTYwX3ZhbGlkYXRlX3N0cmVhbV92
-Y3MocHJpdik7DQo+Pj4gICArICBpZiAocmV0KQ0KPj4+ICAgKyAgICAgICAgICByZXR1cm4gcmV0
-Ow0KPj4+ICAgKw0KPj4+ICAgKyAgdWI5NjBfZ2V0X3ZjX21hcHMocHJpdiwgc3RhdGUsIHZjX21h
-cCk7DQo+Pj4gICArDQo+Pj4gICArICBmb3JfZWFjaF9hY3RpdmVfcm91dGUoJnN0YXRlLT5yb3V0
-aW5nLCByb3V0ZSkgew0KPj4+ICAgKyAgICAgICAgICBzdHJ1Y3QgdWI5NjBfcnhwb3J0ICpyeHBv
-cnQ7DQo+Pj4gICArICAgICAgICAgIHN0cnVjdCB1Yjk2MF90eHBvcnQgKnR4cG9ydDsNCj4+PiAg
-ICsgICAgICAgICAgc3RydWN0IHY0bDJfbWJ1c19mcmFtZWZtdCAqZm10Ow0KPj4+ICAgKyAgICAg
-ICAgICBjb25zdCBzdHJ1Y3QgdWI5NjBfZm9ybWF0X2luZm8gKnViOTYwX2ZtdDsNCj4+PiAgICsg
-ICAgICAgICAgdW5zaWduZWQgaW50IG5wb3J0Ow0KPj4+ICAgKw0KPj4+ICAgKyAgICAgICAgICBu
-cG9ydCA9IHViOTYwX3BhZF90b19wb3J0KHByaXYsIHJvdXRlLT5zaW5rX3BhZCk7DQo+Pj4gICAr
-DQo+Pj4gICArICAgICAgICAgIHJ4cG9ydCA9IHByaXYtPnJ4cG9ydHNbbnBvcnRdOw0KPj4+ICAg
-KyAgICAgICAgICBpZiAoIXJ4cG9ydCkNCj4+PiAgICsgICAgICAgICAgICAgICAgICByZXR1cm4g
-LUVJTlZBTDsNCj4+PiAgICsNCj4+PiAgICsgICAgICAgICAgdHhwb3J0ID0gcHJpdi0+dHhwb3J0
-c1t1Yjk2MF9wYWRfdG9fcG9ydChwcml2LCByb3V0ZS0+c291cmNlX3BhZCldOw0KPj4+ICAgKyAg
-ICAgICAgICBpZiAoIXR4cG9ydCkNCj4+PiAgICsgICAgICAgICAgICAgICAgICByZXR1cm4gLUVJ
-TlZBTDsNCj4+PiAgICsNCj4+PiAgICsgICAgICAgICAgcnhfZGF0YVtucG9ydF0udHhfcG9ydCA9
-IHViOTYwX3BhZF90b19wb3J0KHByaXYsIHJvdXRlLT5zb3VyY2VfcGFkKTsNCj4+PiAgICsNCj4+
-PiAgICsgICAgICAgICAgcnhfZGF0YVtucG9ydF0ubnVtX3N0cmVhbXMrKzsNCj4+PiAgICsNCj4+
-PiAgICsgICAgICAgICAgLyogRm9yIHRoZSByZXN0LCB3ZSBhcmUgb25seSBpbnRlcmVzdGVkIGlu
-IHBhcmFsbGVsIGJ1c3NlcyAqLw0KPj4+ICAgKyAgICAgICAgICBpZiAocnhwb3J0LT5yeF9tb2Rl
-ID09IFJYUE9SVF9NT0RFX0NTSTJfU1lOQyB8fA0KPj4+ICAgKyAgICAgICAgICAgICAgcnhwb3J0
-LT5yeF9tb2RlID09IFJYUE9SVF9NT0RFX0NTSTJfQVNZTkMpDQo+Pj4gICArICAgICAgICAgICAg
-ICAgICAgY29udGludWU7DQo+Pj4gICArDQo+Pj4gICArICAgICAgICAgIGlmIChyeF9kYXRhW25w
-b3J0XS5udW1fc3RyZWFtcyA+IDIpDQo+Pj4gICArICAgICAgICAgICAgICAgICAgcmV0dXJuIC1F
-UElQRTsNCj4+PiAgICsNCj4+PiAgICsgICAgICAgICAgZm10ID0gdjRsMl9zdWJkZXZfc3RhdGVf
-Z2V0X3N0cmVhbV9mb3JtYXQoc3RhdGUsDQo+Pj4gICArICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJvdXRlLT5zaW5rX3BhZCwNCj4+PiAgICsgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcm91dGUtPnNp
-bmtfc3RyZWFtKTsNCj4+PiAgICsgICAgICAgICAgaWYgKCFmbXQpDQo+Pj4gICArICAgICAgICAg
-ICAgICAgICAgcmV0dXJuIC1FUElQRTsNCj4+PiAgICsNCj4+PiAgICsgICAgICAgICAgdWI5NjBf
-Zm10ID0gdWI5NjBfZmluZF9mb3JtYXQoZm10LT5jb2RlKTsNCj4+PiAgICsgICAgICAgICAgaWYg
-KCF1Yjk2MF9mbXQpDQo+Pj4gICArICAgICAgICAgICAgICAgICAgcmV0dXJuIC1FUElQRTsNCj4+
-PiAgICsNCj4+PiAgICsgICAgICAgICAgaWYgKHViOTYwX2ZtdC0+bWV0YSkgew0KPj4+ICAgKyAg
-ICAgICAgICAgICAgICAgIGlmIChmbXQtPmhlaWdodCA+IDMpIHsNCj4+PiAgICsgICAgICAgICAg
-ICAgICAgICAgICAgICAgIGRldl9lcnIoJnByaXYtPmNsaWVudC0+ZGV2LA0KPj4+ICAgKyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAicngldTogdW5zdXBwb3J0ZWQgbWV0YWRhdGEg
-aGVpZ2h0ICV1XG4iLA0KPj4+ICAgKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBu
-cG9ydCwgZm10LT5oZWlnaHQpOw0KPj4+ICAgKyAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0
-dXJuIC1FUElQRTsNCj4+PiAgICsgICAgICAgICAgICAgICAgICB9DQo+Pj4gICArDQo+Pj4gICAr
-ICAgICAgICAgICAgICAgICAgcnhfZGF0YVtucG9ydF0ubWV0YV9kdCA9IHViOTYwX2ZtdC0+ZGF0
-YXR5cGU7DQo+Pj4gICArICAgICAgICAgICAgICAgICAgcnhfZGF0YVtucG9ydF0ubWV0YV9saW5l
-cyA9IGZtdC0+aGVpZ2h0Ow0KPj4+ICAgKyAgICAgICAgICB9IGVsc2Ugew0KPj4+ICAgKyAgICAg
-ICAgICAgICAgICAgIHJ4X2RhdGFbbnBvcnRdLnBpeGVsX2R0ID0gdWI5NjBfZm10LT5kYXRhdHlw
-ZTsNCj4+PiAgICsgICAgICAgICAgfQ0KPj4+ICAgKyAgfQ0KPj4+ICAgKw0KPj4+ICAgKyAgLyog
-Q29uZmlndXJlIFJYIHBvcnRzICovDQo+Pj4gICArDQo+Pj4gICArICBmd2RfY3RsID0gMDsNCj4+
-DQo+PiBIZWxsbywgSSBoYXZlIG9ubHkgdXNlZCB0aGUgZmlyc3QgUlggcG9ydCBpbiBteSBzZXR1
-cCAoZHM5MHViOTMzIHRvIGRzOTB1Yjk2NCkuIFRoZSBsb2dpYyBmb3IgYWN0aXZhdGluZy9kZWFj
-dGl2YXRpbmcgdGhlIFJ4IHBvcnRzIGRpZCBub3Qgd29yayBmb3IgbWUuIE15IHN1Z2dlc3Rpb24g
-aXM6DQo+IA0KPiBXaHkgZG9lc24ndCBpdCB3b3JrPyBXaGF0IGhhcHBlbnM/DQo+IA0KPiAgVG9t
-aQ0KDQpIZWxsbyBUb21pLA0KDQp0aGUgcG9ydCByeDAgd2hpY2ggSSBuZWVkIHdhcyBkaXNhYmxl
-ZCBhbmQgdGhlIG90aGVyIHBvcnRzIHJ4MSB0byByeDMgd2VyZSBlbmFibGVkLiBJbiBvdGhlciB3
-b3JkcywgdGhlIGV4YWN0IGludmVyc2Ugb2YgdGhlIHJlcXVpcmVkIHNlbGVjdGlvbi4NCg0KPj4+
-ICArCQkvKiBGb3J3YXJkaW5nICovDQo+Pj4gICsNCj4+PiAgKwkJZndkX2N0bCB8PSBCSVQoNCAr
-IG5wb3J0KTsgLyogZm9yd2FyZCBkaXNhYmxlICovDQpBY2NvcmRpbmcgdG8gdGhlIGRhdGEgc2hl
-ZXQsIGEgc2V0IGJpdDQtNyBpbiBmd2RfY3RsIG1lYW5zIHRoYXQgdGhlIGNoYW5uZWwgaXMgZGlz
-YWJsZWQuIFNvIHRoZSBjb21tZW50ICdmb3J3YXJkIGRpc2FibGUnIGlzIGNvcnJlY3QuIFdoaWxl
-IGRlYnVnZ2luZywgaG93ZXZlciwgdGhpcyBjb2RlIHdhcyBvbmx5IHJlYWNoZWQgZm9yIHRoZSBw
-b3J0cyB0byBiZSBlbmFibGVkIGJ1dCBub3QgZm9yIHRoZSBvbmVzIHdoaWNoIHNob3VsZCBiZSBk
-aXNhYmxlZC4NCg0KcmVnYXJkcywNCkx1ZHdpZw0K
+
+--fdGB4dh9xyA/RRNs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, May 16, 2023 at 03:51:08PM +0200, Michal Simek wrote:
+> @xilinx.com is still working but better to switch to new amd.com after
+> AMD/Xilinx acquisition.
+
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--fdGB4dh9xyA/RRNs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRjkl0ACgkQJNaLcl1U
+h9DxbAf+IuWAJWHJfAChVJ2LTNEpiPn0Mmuqlf3KjNCljNWlid6xXrK7PpDqYv57
+CudgrzknJ/lP9snwYZ91h2fY4sOq/WBLUY1lZlxH6sracfVVk3TkIUW5UKZXevF3
+PkB6wC87xozR2QVCGSUGz99xymbPuCE6GOiQ5fY9/vXNvXtKHCtQiUKukggj8Iaz
+jSMJB2YZutlpAIumPt4YIDaAbEQtw0Qq56CDc0/A3m9creP1/088rm2okN2cPGI5
+8Ubhinc4INz/rXmxXOo6HULZ9ym6Bq4Lc0uE9fpFVnY2dXIVou+bRC7ilmxrPMmU
+xecoraefCIfYW/zmw3mnSGKzXaf30A==
+=tMxy
+-----END PGP SIGNATURE-----
+
+--fdGB4dh9xyA/RRNs--
