@@ -2,107 +2,142 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C09705131
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 16:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C326670521B
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 17:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233572AbjEPOqw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 May 2023 10:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
+        id S233877AbjEPP3B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 May 2023 11:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233325AbjEPOqv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 May 2023 10:46:51 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4299710EC
-        for <linux-i2c@vger.kernel.org>; Tue, 16 May 2023 07:46:50 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id ada2fe7eead31-43604f20944so7104879137.2
-        for <linux-i2c@vger.kernel.org>; Tue, 16 May 2023 07:46:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684248409; x=1686840409;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UOhmwZfKJQlJRGzere4rhYjpul5gFst5eFskc2CxCHI=;
-        b=jDHNlDwrYTXxID7x+2TVi7DdflqOASVTWysEmnf2zCJMvpnBqux5xOnUVcjzBS7zwE
-         lrM7dg4qxLxEc2XlNPkELa+vxwsaVxOhx51xGK0a+WqH5dQ+Dvfbb+5PbCw6rwx4yj/S
-         cUBnPfXJc/DRDwA3UeYUq826fNgCbiXRN3dS5skX5Cut6B/dxoctwm1NuSxkBbSGU8M5
-         0OqfGNPUVRN4ZQuF4vjrH7dQkSMuRAfveHxO+szROC0WdXNh4wklUkIV3LPhoBMJLwW2
-         xTmWGY4TIeJ4aYhCbfwANBEhmoxnD8LV3wJCXdMgB9VIQd5Fbj2eJ8iybxjuLSp0vtHG
-         qlxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684248409; x=1686840409;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UOhmwZfKJQlJRGzere4rhYjpul5gFst5eFskc2CxCHI=;
-        b=VwCdvxdrlCi35Z+m2z+aw1HXRL4Iql+9UhtHsGXpIYrVUvDNyb6Ftxs/A6iCxcGs2M
-         53jS2DHCAnXLE8mC8dEUL7A4bDvmc59HYI+nc77q3YSFHxdu8XDnNtvd64awoqVAWQq5
-         xGkaS1QixjLkhhntWG4PVmBJjKlI1eH9pXmXvaj8j6a82gk6JicVqSlmivB75JKL8WRT
-         2soO0xz+PF0Pg6uzouWCv9j4rzRnG3pOX1zhsRrCuK/y/mu2aWR7hD1M8fNUzy1KF4yB
-         hN0Vw+BuakGl793oFArIsDy+2gEFkOhtd+EyAx7VYFOFyf3YhKH7gDAFq9pVb95g0kOx
-         hbeg==
-X-Gm-Message-State: AC+VfDyolDtkpv3Z77wRCx3Fv9qugc8xQ4WAfMVjxhLX9w/CTfnCbCY/
-        QrN4/KsszHbEd6h5nKJnhcln99DnfmtWylDJbedfAw==
-X-Google-Smtp-Source: ACHHUZ5KoHDWDTbdMQnJ0Jto8kIPps/K7bOZNuPP95SVIURLaOQHRvbDyVf2dn4RaDOzY7eKSaOEV65Me19DslJq4DI=
-X-Received: by 2002:a67:de14:0:b0:434:9021:30c1 with SMTP id
- q20-20020a67de14000000b00434902130c1mr14963256vsk.14.1684248409391; Tue, 16
- May 2023 07:46:49 -0700 (PDT)
+        with ESMTP id S233111AbjEPP25 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 May 2023 11:28:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37075FF1;
+        Tue, 16 May 2023 08:28:56 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-191-196.ewe-ip-backbone.de [91.248.191.196])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E5ABC66058F4;
+        Tue, 16 May 2023 16:28:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684250935;
+        bh=9Zbfci1TdhO6S4+wcLiRqTU98Ygr/MBClVVcg3Aacnc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C1QarmdofT6VuceBRnhEC8QA2IPFK3B3SaZk26W0KRWVXlGUlIglp+j8hZXgrPxdG
+         LTeVPM0qZvYgHO1l9oqgcIEQn0gJwiSqEucxe+xaM0LYqLk1TqIBiVuL7Gm/oIKhD5
+         68Ij32npBTDNc0taR6+PPTMFtvQjsQliy8dnEghJQqd3bRIcYv9L9xVTFgNE6/C5qv
+         rBzBOGihvBPpFDnLWeiA1xKeSk1SGhShAPSdghTQx/XCF15KRTI3kVqum3t9PXxGeq
+         WzzNxjfsKP6UZPDajDyqisD4fYCP66aPFjXp91/mZypwjMcmGd6P5NQ7HYSNuTbIt/
+         LUOnsiSpa0Xdg==
+Received: by mercury (Postfix, from userid 1000)
+        id E1D901060F7F; Tue, 16 May 2023 17:28:51 +0200 (CEST)
+Date:   Tue, 16 May 2023 17:28:51 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
+        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
+        vishal.sagar@amd.com, kalyani.akula@amd.com,
+        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
+Message-ID: <20230516152851.74xcwa7naaniox6x@mercury.elektranox.org>
+References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
 MIME-Version: 1.0
-References: <20230515175042.495377-1-afd@ti.com>
-In-Reply-To: <20230515175042.495377-1-afd@ti.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 16 May 2023 16:46:38 +0200
-Message-ID: <CAMRc=MfqJSYbrbS9cuQFdOB4EW-RaYt0qGN_HZEL17hbvWAK_A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] i2c: davinci: Use platform table macro over module_alias
-To:     Andrew Davis <afd@ti.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uzdssvofxc7p4teh"
+Content-Disposition: inline
+In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 15, 2023 at 7:50=E2=80=AFPM Andrew Davis <afd@ti.com> wrote:
->
-> Generates the same platform module alias. More standard usage.
->
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
->  drivers/i2c/busses/i2c-davinci.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-davinci.c b/drivers/i2c/busses/i2c-da=
-vinci.c
-> index 9750310f2c96..c55bd937def7 100644
-> --- a/drivers/i2c/busses/i2c-davinci.c
-> +++ b/drivers/i2c/busses/i2c-davinci.c
-> @@ -940,12 +940,16 @@ static const struct dev_pm_ops davinci_i2c_pm =3D {
->  #define davinci_i2c_pm_ops NULL
->  #endif
->
-> -/* work with hotplug and coldplug */
-> -MODULE_ALIAS("platform:i2c_davinci");
-> +static const struct platform_device_id davinci_i2c_driver_ids[] =3D {
-> +       { .name =3D "i2c_davinci", },
-> +       { /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(platform, davinci_i2c_driver_ids);
->
->  static struct platform_driver davinci_i2c_driver =3D {
->         .probe          =3D davinci_i2c_probe,
->         .remove         =3D davinci_i2c_remove,
-> +       .id_table       =3D davinci_i2c_driver_ids,
->         .driver         =3D {
->                 .name   =3D "i2c_davinci",
->                 .pm     =3D davinci_i2c_pm_ops,
-> --
-> 2.39.2
->
 
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+--uzdssvofxc7p4teh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi,
+
+On Tue, May 16, 2023 at 03:51:08PM +0200, Michal Simek wrote:
+> @xilinx.com is still working but better to switch to new amd.com after
+> AMD/Xilinx acquisition.
+
+[...]
+
+>  .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml    | 2 +-
+
+[...]
+
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+--uzdssvofxc7p4teh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRjoSkACgkQ2O7X88g7
++pqZnA//TDDMhr+y5x6WtK0aAHgdZNjN+PvDZjdFdHabNv9Ne7ZbkH8zfacX2Ixj
+vcRQLK7IEndRfP76oe/Yd30gDh3af+G/6sGDihy7qDIYKFZ4U59e52eijzGtzOzd
+bIQd+nK7rVLLPD6TCQnIMd59dX0YBGWW1NQsc9viEUKa73617ANSXPmUS9/z7BAc
+TB9a9Wh11wWkmndxV32Fquuq7mTmmqfBMh7rPnKm8WIqxWfdMZeZy2UvZMBVj2YB
+yXzEskCayveuLHQMKZoHrj8nUpItatw6BOupTR5Df1VQ8aZGpiedTulY/dVgusiR
+4qO9zXCKpjpRb7X4CgfvWM9L8qVEG1X47iepFNX+CEQXv+3EJCHZEF8QSyPxAk8P
+85aI/FZOmLHKjTlu9TMJspG1ruxDaPyhxtfZEpI7+xGhiH4OQN48QRk+PfIpIEqt
+9c+PCUCXosIGpX7sNn3hrXGQhPRItiRGDEX2tqt0SWyn3/V2GvG+8rOqIv3F42Bg
+5vRf8LlcgEZlAeu0CNwUFmi4T/Wu+/77sa7Tbm+HDIqEo1kHJnlLJTs2LRjSgqSR
+/vlgH3m61YKqg9jy5xrmuFeH6Yg2GQQVtig9l1+r1XmHTUXrTvROk5kQ8AgTOYZh
+ZAqxk1Gb2IdIBXK0U6iG/7jHEhu3spe5gSzqdFc/+FUfveluN/o=
+=1MS+
+-----END PGP SIGNATURE-----
+
+--uzdssvofxc7p4teh--
