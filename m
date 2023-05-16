@@ -2,126 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B901B705094
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 16:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC2E70510D
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 16:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbjEPOZq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 May 2023 10:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
+        id S229664AbjEPOoe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 May 2023 10:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233193AbjEPOZn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 May 2023 10:25:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A823772BD;
-        Tue, 16 May 2023 07:25:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09A7D63AB8;
-        Tue, 16 May 2023 14:25:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3223DC4339B;
-        Tue, 16 May 2023 14:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684247138;
-        bh=56JVyKy+1Eo3iWQR1rFM2KRacIvVANlyt7QmXSsxXog=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Sw7ItSmQIbLslllD7oBOkdF9j/FlOj5dsXDqMdAVYTGXVePqgKGiqHLCWvHm2ORRr
-         6kGi23wPgbqtWH++GyKPDbfnOGJYRSItd42GnFFL9NiTCxbS5MlCYoaE7cja5CINAl
-         MBeAVXmYMLL0CaHOeAmMhwc3cfLmYm36VluT5zcF9NizSc+259zobJFUL5N3gEno4X
-         9u5F6216HG+frqCDI12sd/qoLpfPnHwDmm/KK8Xl+b3WsdT+JxGuGo+K5vAgHOJtRQ
-         LNksR965SsJyjo9psN0LiFLlQFkAsgnNiK5I91CtB8U03VZ1stI7eAzP3ggkislL7X
-         wgwUE3IVrbIFA==
-Date:   Tue, 16 May 2023 23:25:33 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
-        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
-        vishal.sagar@amd.com, kalyani.akula@amd.com,
-        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Jolly Shah <jolly.shah@xilinx.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Neeli <srinivas.neeli@amd.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
-Message-ID: <ZGOSXZs3H0wNxoOn@finisterre.sirena.org.uk>
-References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+        with ESMTP id S233216AbjEPOob (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 May 2023 10:44:31 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95ADB2705
+        for <linux-i2c@vger.kernel.org>; Tue, 16 May 2023 07:44:28 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-452f317e304so3535612e0c.2
+        for <linux-i2c@vger.kernel.org>; Tue, 16 May 2023 07:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684248267; x=1686840267;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PcJVNjZYuulczP4FAvRLKsVnZNEKfJxSvk96RKTgnPc=;
+        b=GTyms4TBU7dPubvqTkV8Nb85cOFq4ka5+B4ok5bk1GmJF+C4Rm/p+L4Cbe1S2ptwp9
+         U8hUl3Gbm9Jxa5nw5SeYLKQl8ne7qkk8me5Cbx7aUnky9jS2daR9Z9HZgEtlrwkTl0RO
+         m6JM8YRGCi4TbI136MtLAMCJvzvRdpKW6bU2LL508ZPyTcP07yMPW+3xypBczKSZcnjx
+         wYFNI5V8Dltugf4490zDPYpOvFxBLkoBln5vfeC7f/WvEVs71zlKXIsqtz0IXL5nF6OA
+         jieMAaFh0ZTJY3JP6u3LuK2mRXs6VPzzga9hfHeYH87M90OC7urqMTrmw4nz3r3MIyBH
+         syjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684248267; x=1686840267;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PcJVNjZYuulczP4FAvRLKsVnZNEKfJxSvk96RKTgnPc=;
+        b=JVatlcdTCaDY4r+dImZ31yEFyw75YsC3ldZBnzNuWGfgjKuOtuKDSQXdmyswF+mngC
+         TNuB1MO1lVcxf9m3CzHqjlurrCvuv3rEpBGUJJQN6JR4gOqHeBw2bdkC6LlRe6tkSC52
+         YKaH5rTPZbw1yReJ2Cgvu79uvNIEywitUyqqx8aztqJDPvlQxWIe6iE3vlwlBrde4sW6
+         9m4l4V4TsIoI+VQK61KZsDjBO1glyyPOQCAD7vwC17w9jKpqExiKLasVmIn955QMpJgL
+         9Pgd3BJW0PVTrO/xtDn+oPRa8hRpvWCcYV1oyPmESnDgCPEseBNQhufhPUorDxY2MR6T
+         0tBA==
+X-Gm-Message-State: AC+VfDzKMjHJTmW072hzBKm6LYAj5y1W1eLFfMYZY5LsdbIJ3R0o7uzM
+        aYxBZ5drZod12cPdU6rVUNVf6GTKaM7+gvgy1cBtfw==
+X-Google-Smtp-Source: ACHHUZ7aBzNnok+Pb6HmZq4tvUCLSgt0EX5KOjtKGiY7vmtwWAoZWaGnhyaAvwP4dy3gh6t2CYBdEVAFgL8NS7+nfsc=
+X-Received: by 2002:a1f:c905:0:b0:440:6ad:6b71 with SMTP id
+ z5-20020a1fc905000000b0044006ad6b71mr13145822vkf.6.1684248266912; Tue, 16 May
+ 2023 07:44:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fdGB4dh9xyA/RRNs"
-Content-Disposition: inline
-In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230516080553.427681-1-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20230516080553.427681-1-alexander.stein@ew.tq-group.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 16 May 2023 16:44:15 +0200
+Message-ID: <CAMRc=MfaSvDSWRQohoacFdcbZB40_8RQKZ_=majo2KNPXKRf8w@mail.gmail.com>
+Subject: Re: [PATCH 1/1] eeprom: at24: Use dev_err_probe for nvmem register failure
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, May 16, 2023 at 10:05=E2=80=AFAM Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
+>
+> When using nvmem layouts it is possible devm_nvmem_register returns
+> -EPROBE_DEFER, resulting in an 'empty' in
+> /sys/kernel/debug/devices_deferred. Use dev_err_probe for providing
+> additional information.
+>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+>  drivers/misc/eeprom/at24.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> index 938c4f41b98c..5aae2f9bdd51 100644
+> --- a/drivers/misc/eeprom/at24.c
+> +++ b/drivers/misc/eeprom/at24.c
+> @@ -761,7 +761,8 @@ static int at24_probe(struct i2c_client *client)
+>                 pm_runtime_disable(dev);
+>                 if (!pm_runtime_status_suspended(dev))
+>                         regulator_disable(at24->vcc_reg);
+> -               return PTR_ERR(at24->nvmem);
+> +               return dev_err_probe(dev, PTR_ERR(at24->nvmem),
+> +                                    "failed to register nvmem\n");
+>         }
+>
+>         /*
+> --
+> 2.34.1
+>
 
---fdGB4dh9xyA/RRNs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied, thanks!
 
-On Tue, May 16, 2023 at 03:51:08PM +0200, Michal Simek wrote:
-> @xilinx.com is still working but better to switch to new amd.com after
-> AMD/Xilinx acquisition.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---fdGB4dh9xyA/RRNs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRjkl0ACgkQJNaLcl1U
-h9DxbAf+IuWAJWHJfAChVJ2LTNEpiPn0Mmuqlf3KjNCljNWlid6xXrK7PpDqYv57
-CudgrzknJ/lP9snwYZ91h2fY4sOq/WBLUY1lZlxH6sracfVVk3TkIUW5UKZXevF3
-PkB6wC87xozR2QVCGSUGz99xymbPuCE6GOiQ5fY9/vXNvXtKHCtQiUKukggj8Iaz
-jSMJB2YZutlpAIumPt4YIDaAbEQtw0Qq56CDc0/A3m9creP1/088rm2okN2cPGI5
-8Ubhinc4INz/rXmxXOo6HULZ9ym6Bq4Lc0uE9fpFVnY2dXIVou+bRC7ilmxrPMmU
-xecoraefCIfYW/zmw3mnSGKzXaf30A==
-=tMxy
------END PGP SIGNATURE-----
-
---fdGB4dh9xyA/RRNs--
+Bartosz
