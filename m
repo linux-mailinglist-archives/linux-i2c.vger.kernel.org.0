@@ -2,273 +2,127 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D461704B63
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 13:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD594704E37
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 14:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbjEPLBl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 May 2023 07:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53792 "EHLO
+        id S232951AbjEPMy6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 May 2023 08:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbjEPLBk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 May 2023 07:01:40 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9001717;
-        Tue, 16 May 2023 04:01:07 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GAqmjE030210;
-        Tue, 16 May 2023 11:00:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=Lh6DCRiALS5O/KtZwclDYbcveczNT4nyQsGw0ddv9Oo=;
- b=MCBypG0MID+AEE+NCCm4wNRRVy56q1NaTiDyxdK/KiykHi8B8AyClnKJTf1+sCpJgL5s
- 9cc5nm3UUvZBHBgTUJc46q7p3dFVYQS4+g6SDSNU1WXGfm9OV5cUOm3K5dRnqgi0X47k
- HsL079BTXdVumHa4YiM0i9LZ+9FoWMSlmet5i3NcgpntqUiWlyWhsgQ8AiXy8pFtkIsX
- 6X6QsJa1AuQYPa9bJlR1eDhtNGaRzZYHx5zRIdAJIXWRiPZPLYfIGBqtGKC1q0O29MaH
- W74ZpV3mueCN9lYMhbYnDWem+2EwK4e1EOizlejsG5lKvO+DFbd11h0d3E2A9mW7OMMQ SA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm7kfsmna-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:00:54 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34GAo5EP021719;
-        Tue, 16 May 2023 11:00:53 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm7kfsmkj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:00:53 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G2wIsg009276;
-        Tue, 16 May 2023 11:00:50 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qj1tdsjr4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:00:50 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GB0mXG53543420
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 11:00:48 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6B06C2005A;
-        Tue, 16 May 2023 11:00:48 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 19C9B20043;
-        Tue, 16 May 2023 11:00:48 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 16 May 2023 11:00:48 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
+        with ESMTP id S233136AbjEPMyg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 May 2023 08:54:36 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CDE619B;
+        Tue, 16 May 2023 05:54:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684241666; x=1715777666;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p0He5tvXte4d1JieMjl6lshdqriX6UhheHjawnPStNw=;
+  b=mkPTIPL7qDoyTx3qt1qARcNjHKuuBs4P0JzQIb+KTS2MvtN28yhXJq8e
+   17O9JlUIH2JS5W4uq/Be8PEqj7I1lsE2OrtoDOtWYs7OSyDbRplKprJhs
+   o/1A/7ZYRSB3yz4W/Be+yXyzY8YTc7BqlyyHC01SM7hOsghPlOlLI3b9Z
+   2ZxoAdbaFT3eWkEvPxBgdjmhbiQuD6Ai/Sj8MKvGw9vN53kmCxF+8DB8o
+   qZRQG67B9IiMjOulpFPPwmHYojssLfY64upgApmimxhE1LX8Xm694CACx
+   E96l3KreGakWfdzMI30ywxNLwpm5qy9V70EDfAYUEYT1VxSQatWU6s45F
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="340833564"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="340833564"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 05:54:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="678835489"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="678835489"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 05:54:07 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id A5109120279;
+        Tue, 16 May 2023 15:44:34 +0300 (EEST)
+Date:   Tue, 16 May 2023 12:44:34 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH v4 11/41] i2c: add HAS_IOPORT dependencies
-Date:   Tue, 16 May 2023 13:00:07 +0200
-Message-Id: <20230516110038.2413224-12-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516110038.2413224-1-schnelle@linux.ibm.com>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
+Message-ID: <ZGN6sjseR/GHs2dM@kekkonen.localdomain>
+References: <20230426115114.156696-1-tomi.valkeinen@ideasonboard.com>
+ <20230426115114.156696-7-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: fqTDUgAeAj0vMtjooaGaLbszehNR_KsY
-X-Proofpoint-ORIG-GUID: 7m-JHOy-r2X4mBFn0_bzBjNe-OIxpNK5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- lowpriorityscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0 phishscore=0
- bulkscore=0 suspectscore=0 malwarescore=0 priorityscore=1501 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305160089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230426115114.156696-7-tomi.valkeinen@ideasonboard.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. We thus need to add HAS_IOPORT as dependency for
-those drivers using them.
+Moi,
 
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
-Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
-      per-subsystem patches may be applied independently
+Thanks for the update.
 
- drivers/i2c/busses/Kconfig | 31 +++++++++++++++++--------------
- 1 file changed, 17 insertions(+), 14 deletions(-)
+On Wed, Apr 26, 2023 at 02:51:12PM +0300, Tomi Valkeinen wrote:
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index 256d55bb2b1d..80de6c3a6492 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -1611,4 +1611,25 @@ config VIDEO_THS7303
+>  
+>  endmenu
+>  
+> +#
+> +# Video serializers and deserializers (e.g. FPD-Link)
+> +#
+> +
+> +menu "Video serializers and deserializers"
+> +
+> +config VIDEO_DS90UB960
+> +	tristate "TI FPD-Link III/IV Deserializers"
+> +	depends on OF && I2C && VIDEO_DEV
+> +	select I2C_ATR
+> +	select MEDIA_CONTROLLER
+> +	select OF_GPIO
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 87600b4aacb3..6e89944fb8e9 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -18,7 +18,7 @@ config I2C_CCGX_UCSI
- 
- config I2C_ALI1535
- 	tristate "ALI 1535"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes to this option, support will be included for the SMB
- 	  Host controller on Acer Labs Inc. (ALI) M1535 South Bridges.  The SMB
-@@ -30,7 +30,7 @@ config I2C_ALI1535
- 
- config I2C_ALI1563
- 	tristate "ALI 1563"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes to this option, support will be included for the SMB
- 	  Host controller on Acer Labs Inc. (ALI) M1563 South Bridges.  The SMB
-@@ -42,7 +42,7 @@ config I2C_ALI1563
- 
- config I2C_ALI15X3
- 	tristate "ALI 15x3"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  Acer Labs Inc. (ALI) M1514 and M1543 motherboard I2C interfaces.
-@@ -52,7 +52,7 @@ config I2C_ALI15X3
- 
- config I2C_AMD756
- 	tristate "AMD 756/766/768/8111 and nVidia nForce"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes to this option, support will be included for the AMD
- 	  756/766/768 mainboard I2C interfaces.  The driver also includes
-@@ -77,7 +77,7 @@ config I2C_AMD756_S4882
- 
- config I2C_AMD8111
- 	tristate "AMD 8111"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  second (SMBus 2.0) AMD 8111 mainboard I2C interface.
-@@ -107,7 +107,7 @@ config I2C_HIX5HD2
- 
- config I2C_I801
- 	tristate "Intel 82801 (ICH/PCH)"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select P2SB if X86
- 	select CHECK_SIGNATURE if X86 && DMI
- 	select I2C_SMBUS
-@@ -164,7 +164,7 @@ config I2C_I801
- 
- config I2C_ISCH
- 	tristate "Intel SCH SMBus 1.0"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select LPC_SCH
- 	help
- 	  Say Y here if you want to use SMBus controller on the Intel SCH
-@@ -185,7 +185,7 @@ config I2C_ISMT
- 
- config I2C_PIIX4
- 	tristate "Intel PIIX4 and compatible (ATI/AMD/Serverworks/Broadcom/SMSC)"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes to this option, support will be included for the Intel
- 	  PIIX4 family of mainboard I2C interfaces.  Specifically, the following
-@@ -231,7 +231,7 @@ config I2C_CHT_WC
- 
- config I2C_NFORCE2
- 	tristate "Nvidia nForce2, nForce3 and nForce4"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes to this option, support will be included for the Nvidia
- 	  nForce2, nForce3 and nForce4 families of mainboard I2C interfaces.
-@@ -264,7 +264,7 @@ config I2C_NVIDIA_GPU
- 
- config I2C_SIS5595
- 	tristate "SiS 5595"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  SiS5595 SMBus (a subset of I2C) interface.
-@@ -274,7 +274,7 @@ config I2C_SIS5595
- 
- config I2C_SIS630
- 	tristate "SiS 630/730/964"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  SiS630, SiS730 and SiS964 SMBus (a subset of I2C) interface.
-@@ -284,7 +284,7 @@ config I2C_SIS630
- 
- config I2C_SIS96X
- 	tristate "SiS 96x"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes to this option, support will be included for the SiS
- 	  96x SMBus (a subset of I2C) interfaces.  Specifically, the following
-@@ -302,7 +302,7 @@ config I2C_SIS96X
- 
- config I2C_VIA
- 	tristate "VIA VT82C586B"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select I2C_ALGOBIT
- 	help
- 	  If you say yes to this option, support will be included for the VIA
-@@ -313,7 +313,7 @@ config I2C_VIA
- 
- config I2C_VIAPRO
- 	tristate "VIA VT82C596/82C686/82xx and CX700/VX8xx/VX900"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you say yes to this option, support will be included for the VIA
- 	  VT82C596 and later SMBus interface.  Specifically, the following
-@@ -884,6 +884,7 @@ config I2C_NPCM
- 
- config I2C_OCORES
- 	tristate "OpenCores I2C Controller"
-+	depends on HAS_IOPORT
- 	help
- 	  If you say yes to this option, support will be included for the
- 	  OpenCores I2C controller. For details see
-@@ -1277,6 +1278,7 @@ config I2C_CP2615
- config I2C_PARPORT
- 	tristate "Parallel port adapter"
- 	depends on PARPORT
-+	depends on HAS_IOPORT
- 	select I2C_ALGOBIT
- 	select I2C_SMBUS
- 	help
-@@ -1385,6 +1387,7 @@ config I2C_ICY
- config I2C_MLXCPLD
- 	tristate "Mellanox I2C driver"
- 	depends on X86_64 || COMPILE_TEST
-+	depends on HAS_IOPORT
- 	help
- 	  This exposes the Mellanox platform I2C busses to the linux I2C layer
- 	  for X86 based systems.
+I think GPIOLIB would be more appropriate. OF as such should be fine as
+ACPI support probably requires something else, too.
+
+> +	select REGMAP_I2C
+> +	select V4L2_FWNODE
+> +	select VIDEO_V4L2_SUBDEV_API
+> +	help
+> +	  Device driver for the Texas Instruments DS90UB960
+> +	  FPD-Link III Deserializer and DS90UB9702 FPD-Link IV Deserializer.
+> +
+> +endmenu
+> +
+
 -- 
-2.39.2
+Kind regards,
 
+Sakari Ailus
