@@ -2,224 +2,181 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF58B705656
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 20:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87524705956
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 23:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjEPStS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 May 2023 14:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
+        id S229901AbjEPVPb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 May 2023 17:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjEPStR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 May 2023 14:49:17 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on20613.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::613])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC5A1B5;
-        Tue, 16 May 2023 11:49:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HZvAeNLEF6nM49wHje3DU86VnP+9NYi2NRp/5ibq0KdI0B9S2mN2PK2YiP26nRN8YAN2bdESmm4Y+EhvCXSPmScYSrGsL+vD0Olhi6nNTT35tyuyfN+SBouLYuguHofM8bzVHoKD4vsQnp6pw0TrOQNPNs2SiMSnNL4rfyNGb51a128Ya5FlTru8DLOuUUldyJVpMcv5yK8Xa8sswuNCIrH53zlF0Sg0jPB4gXKOIOej2UgiRyZRZ8+Mhgp2csTaFfMNEiaMFW0xV52SuVQ2eStLsqPnrtLpbJ6UUXWyamK7e/T1ed79tg3VU0ZmO2BV6z7MHgc2lgjVsnEYb95zjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wyZ0vKskS0w0xjrQkfSquRYSVlpcV6NQ6UOTpLyDYt4=;
- b=OTM6R+6ZvzmVoG7uLkwUaMNOKJhEoh+H2uAstvgo+1aDqiGjEf1GqI3h+0lil0a3osqXu+oWSeWWGtKipI6GK5AzPuqEXkPva+Dv6hCPDrrLeiQGTLAZ2GT/uzxCztDhP1AdC5yCXU3RCkvSEaa62aFpUppO8nHqt/4Ch+dwvIZAFyEodub/kv4oOTLP0YSCAqb8CxWfQ05ZEB/PlJ4lO8o4WpKwEJKClySEgkoZcz1IhWTGvld57IVvPCQBBxEOSW9TEwKov81+/Y3eiycBH20NHaatHPe5JMvK+IHGF0Ew8tWwhKr9m5rt3Jmg/DxSVXsnmaccSjdlym11m7adsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wyZ0vKskS0w0xjrQkfSquRYSVlpcV6NQ6UOTpLyDYt4=;
- b=W9M4hkw1KIRQ5dYJvLIyxT0E844UAz06cXXRX3nNlgvuJVtQWBuu1SlZjfzatQklRcigivWVbGufLrk4JVHEgygXJ0Ks0AVmQWmjn8nqHSDuDs4ve1KQbZ9p6pQrQkX/GdwSDHTCLGQhFdm2GFbom04FJ2+Et1nJW434FqgmDe4=
-Received: from BN0PR02CA0002.namprd02.prod.outlook.com (2603:10b6:408:e4::7)
- by SJ1PR12MB6171.namprd12.prod.outlook.com (2603:10b6:a03:45a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
- 2023 18:49:12 +0000
-Received: from BN8NAM11FT108.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e4:cafe::42) by BN0PR02CA0002.outlook.office365.com
- (2603:10b6:408:e4::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33 via Frontend
- Transport; Tue, 16 May 2023 18:49:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT108.mail.protection.outlook.com (10.13.176.155) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.17 via Frontend Transport; Tue, 16 May 2023 18:49:12 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 16 May
- 2023 13:49:09 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <heikki.krogerus@linux.intel.com>, <rafael@kernel.org>,
-        <ajayg@nvidia.com>, <andriy.shevchenko@linux.intel.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <Evan.Quan@amd.com>, <Lijo.Lazar@amd.com>,
-        <Sanket.Goswami@amd.com>,
-        "Mario Limonciello" <mario.limonciello@amd.com>
-Subject: [PATCH 2/2] usb: typec: ucsi: Don't create power supplies for dGPUs
-Date:   Tue, 16 May 2023 13:25:41 -0500
-Message-ID: <20230516182541.5836-3-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230516182541.5836-1-mario.limonciello@amd.com>
-References: <20230516182541.5836-1-mario.limonciello@amd.com>
+        with ESMTP id S229649AbjEPVPa (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 May 2023 17:15:30 -0400
+X-Greylist: delayed 5401 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 May 2023 14:15:26 PDT
+Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCA665B4;
+        Tue, 16 May 2023 14:15:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1684264823;
+        bh=et+110nyHj10F9KET/LAY5/YnQT3zsearjzO3i3m29U=;
+        h=From:To:CC:Subject:Date:From;
+        b=cHJTWPmyUAC4gYK2HL8p8VQ2rCwtSl5pglrYB4IJrPD7Sx0egmfStfjVuleTbV7Sl
+         55WPlC07E8NNcSujJzwpg4sgwpim4iAV+YwbTnuby3y3yTzIX7+95tpAQ+iaywwmTz
+         PGlXLNVCYRmU4JowBCL6b4IzbhA/6/A7TQ0V5yNFjQTGf/+5iYPANPBOck7WSi1B6l
+         Ixrp8DLHKMuy+O7j8Klm9YUuabUWmuunppek6UDbRKF47dzuentaHbQXc0DjKrM3oM
+         0BoBz+uoYdZyWHAkismb3mzMgBoVJ6hc+OqjSMWqtEAtjBs/O8lLEf1xhRO1FxB2Ko
+         j7Mhb7zO5xoyg==
+X-secureTransport-forwarded: yes
+From:   Ludwig Zenz <lzenz@dh-electronics.com>
+Complaints-To: abuse@cubewerk.de
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+CC:     "Matti.Vaittinen@fi.rohmeurope.com" 
+        <Matti.Vaittinen@fi.rohmeurope.com>,
+        "andriy.shevchenko@intel.com" <andriy.shevchenko@intel.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+        "khalasa@piap.pl" <khalasa@piap.pl>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "laurent.pinchart+renesas@ideasonboard.com" 
+        <laurent.pinchart+renesas@ideasonboard.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+        "m.tretter@pengutronix.de" <m.tretter@pengutronix.de>,
+        "marex@denx.de" <marex@denx.de>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mpagano@gentoo.org" <mpagano@gentoo.org>,
+        "peda@axentia.se" <peda@axentia.se>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "satish.nagireddy@getcruise.com" <satish.nagireddy@getcruise.com>,
+        "wsa@kernel.org" <wsa@kernel.org>
+Subject: Re: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
+Thread-Topic: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
+Thread-Index: AdmIJPsII8U46khKT5Cu8bF7d5gwnw==
+Date:   Tue, 16 May 2023 19:05:10 +0000
+Message-ID: <5abbcb606e4c4a49821be5d107d9ddfc@dh-electronics.com>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT108:EE_|SJ1PR12MB6171:EE_
-X-MS-Office365-Filtering-Correlation-Id: bdb0e588-2be3-407c-29c0-08db563e3db5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ih6MXuhQ7yg3joa5O82kFO5bGTLEMOa8rxAr9LmgYivMY9fM+xh/38RG5OMu4EzbmQUuDHKmPJ46T6K5Yqnebv7xT5bLCFHnpbd53KuBaZ0xtm96K9P4rp+UZeJF0foUpEXR7uhEgIxcw8rYClqn0spO4YHlV8UKoSUof5rI6jWAOxmpkAP2r5UDMpcmbKEXiq+PIEFU+zFxK8bt82r4jdVPyQk09RLB+ZUdoE5ixY0ApF1fjIxLjAHUwy3TBkbe6Krxk5ITjAmSxrGJH+QmWU4lZcF/z+SWHPRQjtUcFBZGIkah6nsrFpXAvcAvJmtJR/MVxqnfCQa+7giDc01Zf67ki+Z76DBIEIDtprp9BK22JR5K3TNtpULzLC9iSxZlvdpAQkxOOJwh2kanZRBFt0scZ2/TYcW4eU6mdWc0CEjb9SaWOPg8JHanvG2JjDUTdXytPo2OMwNT/vHLliydnmUBAnsBuNIWV9McyRckz2JvX1JM4ZqJDRKDIQZGpIBHj0huLhW9mjK4TYAQD8Gbs6FEqDX1B6SPAh2Z9Jwf42zonAZzluOadOMlQu5F8mwOiG96VdraZX31C+rgRIxgsoQedCg7pTMjTlgu5vyg59fTQ5/FPPoTqWhhm/+YyYEgyv+U1Cuc4DEWYeoooSx+FyLYmhZwpGaUVfhQzgy29dvxLwoURNdnE2k0vO8o4cKeErxQr1zUQSgNUj/S5RZ6YRFdqy+2OW3e955Cw9MIfiSswKmmUksUzrS/Qwieh+FoySKghiGcS8wZkbkYSfGVtT5xUPlARcH+jOM9GlCwNWY=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(376002)(346002)(396003)(451199021)(46966006)(40470700004)(36840700001)(110136005)(70206006)(54906003)(70586007)(478600001)(36756003)(186003)(16526019)(336012)(40480700001)(426003)(2616005)(86362001)(40460700003)(81166007)(47076005)(36860700001)(83380400001)(82310400005)(41300700001)(26005)(1076003)(7696005)(82740400003)(6666004)(4326008)(2906002)(5660300002)(356005)(316002)(8676002)(8936002)(44832011)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 18:49:12.5988
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bdb0e588-2be3-407c-29c0-08db563e3db5
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT108.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6171
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-power_supply_is_system_supplied() checks whether any power
-supplies are present that aren't batteries to decide whether
-the system is running on DC or AC.  Downstream drivers use
-this to make performance decisions.
-
-Navi dGPUs include an UCSI function that has been exported
-since commit 17631e8ca2d3 ("i2c: designware: Add driver
-support for AMD NAVI GPU").
-
-This UCSI function registers a power supply since commit
-992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
-but this is not a system power supply.
-
-As the power supply for a dGPU is only for powering devices connected
-to dGPU, create a device property to indicate that the UCSI endpoint
-is only for the scope of `POWER_SUPPLY_SCOPE_DEVICE`.
-
-Cc: Evan Quan <Evan.Quan@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/i2c/busses/i2c-designware-pcidrv.c | 13 ++++++++++++-
- drivers/i2c/busses/i2c-nvidia-gpu.c        |  3 +++
- drivers/usb/typec/ucsi/psy.c               | 14 ++++++++++++++
- 3 files changed, 29 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 782fe1ef3ca1..048ffa18def0 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -20,6 +20,7 @@
- #include <linux/module.h>
- #include <linux/pci.h>
- #include <linux/pm_runtime.h>
-+#include <linux/power_supply.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
- 
-@@ -234,6 +235,16 @@ static const struct dev_pm_ops i2c_dw_pm_ops = {
- 	SET_RUNTIME_PM_OPS(i2c_dw_pci_runtime_suspend, i2c_dw_pci_runtime_resume, NULL)
- };
- 
-+static const struct property_entry dgpu_properties[] = {
-+	/* USB-C doesn't power the system */
-+	PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
-+	{},
-+};
-+
-+static const struct software_node dgpu_node = {
-+	.properties = dgpu_properties,
-+};
-+
- static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 			    const struct pci_device_id *id)
- {
-@@ -325,7 +336,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	}
- 
- 	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
--		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, NULL);
-+		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, &dgpu_node);
- 		if (IS_ERR(dev->slave))
- 			return dev_err_probe(dev->dev, PTR_ERR(dev->slave),
- 					     "register UCSI failed\n");
-diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-index a8b99e7f6262..26622d24bb1b 100644
---- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-+++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-@@ -14,6 +14,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
-+#include <linux/power_supply.h>
- 
- #include <asm/unaligned.h>
- 
-@@ -261,6 +262,8 @@ MODULE_DEVICE_TABLE(pci, gpu_i2c_ids);
- static const struct property_entry ccgx_props[] = {
- 	/* Use FW built for NVIDIA GPU only */
- 	PROPERTY_ENTRY_STRING("firmware-name", "nvidia,gpu"),
-+	/* USB-C doesn't power the system */
-+	PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
- 	{ }
- };
- 
-diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-index 56bf56517f75..384b42267f1f 100644
---- a/drivers/usb/typec/ucsi/psy.c
-+++ b/drivers/usb/typec/ucsi/psy.c
-@@ -27,8 +27,20 @@ static enum power_supply_property ucsi_psy_props[] = {
- 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
- 	POWER_SUPPLY_PROP_CURRENT_MAX,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_SCOPE,
- };
- 
-+static int ucsi_psy_get_scope(struct ucsi_connector *con,
-+			      union power_supply_propval *val)
-+{
-+	u8 scope = POWER_SUPPLY_SCOPE_UNKNOWN;
-+	struct device *dev = con->ucsi->dev;
-+
-+	device_property_read_u8(dev, "scope", &scope);
-+	val->intval = scope;
-+	return 0;
-+}
-+
- static int ucsi_psy_get_online(struct ucsi_connector *con,
- 			       union power_supply_propval *val)
- {
-@@ -194,6 +206,8 @@ static int ucsi_psy_get_prop(struct power_supply *psy,
- 		return ucsi_psy_get_current_max(con, val);
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		return ucsi_psy_get_current_now(con, val);
-+	case POWER_SUPPLY_PROP_SCOPE:
-+		return ucsi_psy_get_scope(con, val);
- 	default:
- 		return -EINVAL;
- 	}
--- 
-2.34.1
-
+PiBPbiAxNi8wNS8yMDIzIDE2OjMyLCBMdWR3aWcgWmVueiB3cm90ZToNCj4+PiBIaSwNCj4+Pg0K
+Pj4+IE9uIDE2LzA1LzIwMjMgMTU6MzUsIEx1ZHdpZyBaZW56IHdyb3RlOg0KPj4+PiBPbiBXZWQs
+IDI2IEFwciAyMDIzIDE0OjUxOjEyICswMzAwLCBUb21pIFZhbGtlaW5lbiB3cm90ZToNCj4+Pj4N
+Cj4+Pj4gWy4uLl0NCj4+Pj4NCj4+Pj4+ICAgICtzdGF0aWMgaW50IHViOTYwX2NvbmZpZ3VyZV9w
+b3J0c19mb3Jfc3RyZWFtaW5nKHN0cnVjdCB1Yjk2MF9kYXRhICpwcml2LA0KPj4+Pj4gICAgKyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IHY0bDJfc3ViZGV2
+X3N0YXRlICpzdGF0ZSkNCj4+Pj4+ICAgICt7DQo+Pj4+PiAgICArICB1OCBmd2RfY3RsOw0KPj4+
+Pj4gICAgKyAgc3RydWN0IHsNCj4+Pj4+ICAgICsgICAgICAgICAgdTMyIG51bV9zdHJlYW1zOw0K
+Pj4+Pj4gICAgKyAgICAgICAgICB1OCBwaXhlbF9kdDsNCj4+Pj4+ICAgICsgICAgICAgICAgdTgg
+bWV0YV9kdDsNCj4+Pj4+ICAgICsgICAgICAgICAgdTMyIG1ldGFfbGluZXM7DQo+Pj4+PiAgICAr
+ICAgICAgICAgIHUzMiB0eF9wb3J0Ow0KPj4+Pj4gICAgKyAgfSByeF9kYXRhW1VCOTYwX01BWF9S
+WF9OUE9SVFNdID0ge307DQo+Pj4+PiAgICArICB1OCB2Y19tYXBbVUI5NjBfTUFYX1JYX05QT1JU
+U10gPSB7fTsNCj4+Pj4+ICAgICsgIHN0cnVjdCB2NGwyX3N1YmRldl9yb3V0ZSAqcm91dGU7DQo+
+Pj4+PiAgICArICB1bnNpZ25lZCBpbnQgbnBvcnQ7DQo+Pj4+PiAgICArICBpbnQgcmV0Ow0KPj4+
+Pj4gICAgKw0KPj4+Pj4gICAgKyAgcmV0ID0gdWI5NjBfdmFsaWRhdGVfc3RyZWFtX3Zjcyhwcml2
+KTsNCj4+Pj4+ICAgICsgIGlmIChyZXQpDQo+Pj4+PiAgICArICAgICAgICAgIHJldHVybiByZXQ7
+DQo+Pj4+PiAgICArDQo+Pj4+PiAgICArICB1Yjk2MF9nZXRfdmNfbWFwcyhwcml2LCBzdGF0ZSwg
+dmNfbWFwKTsNCj4+Pj4+ICAgICsNCj4+Pj4+ICAgICsgIGZvcl9lYWNoX2FjdGl2ZV9yb3V0ZSgm
+c3RhdGUtPnJvdXRpbmcsIHJvdXRlKSB7DQo+Pj4+PiAgICArICAgICAgICAgIHN0cnVjdCB1Yjk2
+MF9yeHBvcnQgKnJ4cG9ydDsNCj4+Pj4+ICAgICsgICAgICAgICAgc3RydWN0IHViOTYwX3R4cG9y
+dCAqdHhwb3J0Ow0KPj4+Pj4gICAgKyAgICAgICAgICBzdHJ1Y3QgdjRsMl9tYnVzX2ZyYW1lZm10
+ICpmbXQ7DQo+Pj4+PiAgICArICAgICAgICAgIGNvbnN0IHN0cnVjdCB1Yjk2MF9mb3JtYXRfaW5m
+byAqdWI5NjBfZm10Ow0KPj4+Pj4gICAgKyAgICAgICAgICB1bnNpZ25lZCBpbnQgbnBvcnQ7DQo+
+Pj4+PiAgICArDQo+Pj4+PiAgICArICAgICAgICAgIG5wb3J0ID0gdWI5NjBfcGFkX3RvX3BvcnQo
+cHJpdiwgcm91dGUtPnNpbmtfcGFkKTsNCj4+Pj4+ICAgICsNCj4+Pj4+ICAgICsgICAgICAgICAg
+cnhwb3J0ID0gcHJpdi0+cnhwb3J0c1tucG9ydF07DQo+Pj4+PiAgICArICAgICAgICAgIGlmICgh
+cnhwb3J0KQ0KPj4+Pj4gICAgKyAgICAgICAgICAgICAgICAgIHJldHVybiAtRUlOVkFMOw0KPj4+
+Pj4gICAgKw0KPj4+Pj4gICAgKyAgICAgICAgICB0eHBvcnQgPSBwcml2LT50eHBvcnRzW3ViOTYw
+X3BhZF90b19wb3J0KHByaXYsIHJvdXRlLT5zb3VyY2VfcGFkKV07DQo+Pj4+PiAgICArICAgICAg
+ICAgIGlmICghdHhwb3J0KQ0KPj4+Pj4gICAgKyAgICAgICAgICAgICAgICAgIHJldHVybiAtRUlO
+VkFMOw0KPj4+Pj4gICAgKw0KPj4+Pj4gICAgKyAgICAgICAgICByeF9kYXRhW25wb3J0XS50eF9w
+b3J0ID0gdWI5NjBfcGFkX3RvX3BvcnQocHJpdiwgcm91dGUtPnNvdXJjZV9wYWQpOw0KPj4+Pj4g
+ICAgKw0KPj4+Pj4gICAgKyAgICAgICAgICByeF9kYXRhW25wb3J0XS5udW1fc3RyZWFtcysrOw0K
+Pj4+Pj4gICAgKw0KPj4+Pj4gICAgKyAgICAgICAgICAvKiBGb3IgdGhlIHJlc3QsIHdlIGFyZSBv
+bmx5IGludGVyZXN0ZWQgaW4gcGFyYWxsZWwgYnVzc2VzICovDQo+Pj4+PiAgICArICAgICAgICAg
+IGlmIChyeHBvcnQtPnJ4X21vZGUgPT0gUlhQT1JUX01PREVfQ1NJMl9TWU5DIHx8DQo+Pj4+PiAg
+ICArICAgICAgICAgICAgICByeHBvcnQtPnJ4X21vZGUgPT0gUlhQT1JUX01PREVfQ1NJMl9BU1lO
+QykNCj4+Pj4+ICAgICsgICAgICAgICAgICAgICAgICBjb250aW51ZTsNCj4+Pj4+ICAgICsNCj4+
+Pj4+ICAgICsgICAgICAgICAgaWYgKHJ4X2RhdGFbbnBvcnRdLm51bV9zdHJlYW1zID4gMikNCj4+
+Pj4+ICAgICsgICAgICAgICAgICAgICAgICByZXR1cm4gLUVQSVBFOw0KPj4+Pj4gICAgKw0KPj4+
+Pj4gICAgKyAgICAgICAgICBmbXQgPSB2NGwyX3N1YmRldl9zdGF0ZV9nZXRfc3RyZWFtX2Zvcm1h
+dChzdGF0ZSwNCj4+Pj4+ICAgICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgcm91dGUtPnNpbmtfcGFkLA0KPj4+Pj4gICAgKyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICByb3V0ZS0+c2lua19zdHJlYW0p
+Ow0KPj4+Pj4gICAgKyAgICAgICAgICBpZiAoIWZtdCkNCj4+Pj4+ICAgICsgICAgICAgICAgICAg
+ICAgICByZXR1cm4gLUVQSVBFOw0KPj4+Pj4gICAgKw0KPj4+Pj4gICAgKyAgICAgICAgICB1Yjk2
+MF9mbXQgPSB1Yjk2MF9maW5kX2Zvcm1hdChmbXQtPmNvZGUpOw0KPj4+Pj4gICAgKyAgICAgICAg
+ICBpZiAoIXViOTYwX2ZtdCkNCj4+Pj4+ICAgICsgICAgICAgICAgICAgICAgICByZXR1cm4gLUVQ
+SVBFOw0KPj4+Pj4gICAgKw0KPj4+Pj4gICAgKyAgICAgICAgICBpZiAodWI5NjBfZm10LT5tZXRh
+KSB7DQo+Pj4+PiAgICArICAgICAgICAgICAgICAgICAgaWYgKGZtdC0+aGVpZ2h0ID4gMykgew0K
+Pj4+Pj4gICAgKyAgICAgICAgICAgICAgICAgICAgICAgICAgZGV2X2VycigmcHJpdi0+Y2xpZW50
+LT5kZXYsDQo+Pj4+PiAgICArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICJyeCV1
+OiB1bnN1cHBvcnRlZCBtZXRhZGF0YSBoZWlnaHQgJXVcbiIsDQo+Pj4+PiAgICArICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIG5wb3J0LCBmbXQtPmhlaWdodCk7DQo+Pj4+PiAgICAr
+ICAgICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gLUVQSVBFOw0KPj4+Pj4gICAgKyAgICAg
+ICAgICAgICAgICAgIH0NCj4+Pj4+ICAgICsNCj4+Pj4+ICAgICsgICAgICAgICAgICAgICAgICBy
+eF9kYXRhW25wb3J0XS5tZXRhX2R0ID0gdWI5NjBfZm10LT5kYXRhdHlwZTsNCj4+Pj4+ICAgICsg
+ICAgICAgICAgICAgICAgICByeF9kYXRhW25wb3J0XS5tZXRhX2xpbmVzID0gZm10LT5oZWlnaHQ7
+DQo+Pj4+PiAgICArICAgICAgICAgIH0gZWxzZSB7DQo+Pj4+PiAgICArICAgICAgICAgICAgICAg
+ICAgcnhfZGF0YVtucG9ydF0ucGl4ZWxfZHQgPSB1Yjk2MF9mbXQtPmRhdGF0eXBlOw0KPj4+Pj4g
+ICAgKyAgICAgICAgICB9DQo+Pj4+PiAgICArICB9DQo+Pj4+PiAgICArDQo+Pj4+PiAgICArICAv
+KiBDb25maWd1cmUgUlggcG9ydHMgKi8NCj4+Pj4+ICAgICsNCj4+Pj4+ICAgICsgIGZ3ZF9jdGwg
+PSAwOw0KPj4+Pg0KPj4+PiBIZWxsbywgSSBoYXZlIG9ubHkgdXNlZCB0aGUgZmlyc3QgUlggcG9y
+dCBpbiBteSBzZXR1cCAoZHM5MHViOTMzIHRvIGRzOTB1Yjk2NCkuIFRoZSBsb2dpYyBmb3IgYWN0
+aXZhdGluZy9kZWFjdGl2YXRpbmcgdGhlIFJ4IHBvcnRzIGRpZCBub3Qgd29yayBmb3IgbWUuIE15
+IHN1Z2dlc3Rpb24gaXM6DQo+Pj4+DQo+Pj4gV2h5IGRvZXNuJ3QgaXQgd29yaz8gV2hhdCBoYXBw
+ZW5zPw0KPj4+DQo+Pj4gICBUb21pDQo+Pg0KPj4gSGVsbG8gVG9taSwNCj4+DQo+PiB0aGUgcG9y
+dCByeDAgd2hpY2ggSSBuZWVkIHdhcyBkaXNhYmxlZCBhbmQgdGhlIG90aGVyIHBvcnRzIHJ4MSB0
+byByeDMgd2VyZSBlbmFibGVkLiBJbiBvdGhlciB3b3JkcywgdGhlIGV4YWN0IGludmVyc2Ugb2Yg
+dGhlIHJlcXVpcmVkIHNlbGVjdGlvbi4NCj4+DQo+Pj4+PiAgICsgICAgICAgICAgICAgICAgLyog
+Rm9yd2FyZGluZyAqLw0KPj4+Pj4gICArDQo+Pj4+PiAgICsgICAgICAgICAgICAgICAgZndkX2N0
+bCB8PSBCSVQoNCArIG5wb3J0KTsgLyogZm9yd2FyZCBkaXNhYmxlICovDQo+PiBBY2NvcmRpbmcg
+dG8gdGhlIGRhdGEgc2hlZXQsIGEgc2V0IGJpdDQtNyBpbiBmd2RfY3RsIG1lYW5zIHRoYXQgdGhl
+IGNoYW5uZWwgaXMgZGlzYWJsZWQuIFNvIHRoZSBjb21tZW50ICdmb3J3YXJkIGRpc2FibGUnIGlz
+IGNvcnJlY3QuIFdoaWxlIGRlYnVnZ2luZywgaG93ZXZlciwgdGhpcyBjb2RlIHdhcyBvbmx5IHJl
+YWNoZWQgZm9yIHRoZSBwb3J0cyB0byBiZSBlbmFibGVkIGJ1dCBub3QgZm9yIHRoZSBvbmVzIHdo
+aWNoIHNob3VsZCBiZSBkaXNhYmxlZC4NCg0KPiBUaGlzIGlzIGp1c3QgYSBzZXR1cCBwaGFzZSwg
+d2hlcmUgd2UgaW5pdGlhbGl6ZSB0aGUgcmVnaXN0ZXJzIGZvciB0aGUgcG9ydHMgd2Ugd2FudCB0
+byB1c2UuIFRoZSBmb3J3YXJkaW5nIGlzIHRoZW4gZW5hYmxlZCBsYXRlciwgaW4gdWI5NjBfZW5h
+YmxlX3J4X3BvcnQsIGFuZCBldmVuIGxhdGVyIGRpc2FibGVkIGluIHViOTYwX2Rpc2FibGVfcnhf
+cG9ydC4NCg0KVGhhbmsgeW91IGZvciB0aGUgY2xhcmlmaWNhdGlvbi4gSSBoYWQgbWlzaW50ZXJw
+cmV0ZWQgdGhlIGludGVudGlvbiBvZiB0aGUgY29kZSBoZXJlLg0KDQo+IFRoaXMgYXNzdW1lcyB0
+aGF0IHRoZSBmb3J3YXJkaW5nIGlzIGRpc2FibGVkIGluIHRoZSByZWdpc3RlcnMgYnkgZGVmYXVs
+dCAod2hpY2ggaXQgaXMgaW4gVUI5NjApLg0KPiANCj4gSSBuZWVkIHRvIHRyeSB0aGlzIG9uIG15
+IEhXIHRvIHZlcmlmeSBteSB1bmRlcnN0YW5kaW5nIGlzIGNvcnJlY3QsIGJ1dCBsb29raW5nIGF0
+IHRoZSBjb2RlLCBpdCBpcyBpbmRlZWQgYSBiaXQgYnVnZ3kuDQo+IA0KPiBBdCB0aGlzIHNldHVw
+IHBoYXNlIHdlIGRpc2FibGUgdGhlIGZvcndhcmRpbmcgZm9yIHBvcnRzIHdlJ2xsIHVzZSwgYW5k
+IGVuYWJsZSB0aGUgZm9yd2FyZGluZyBmb3IgcG9ydHMgd2UgZG9uJ3QgdXNlICh3aGljaCBkb2Vz
+bid0IG1ha2Ugc2Vuc2UpLg0KPiBMYXRlciwgd2hlbiB0aGUgc3RyZWFtaW5nIGlzIHN0YXJ0ZWQg
+Zm9yIHRoYXQgcG9ydCwgd2UgZW5hYmxlIHRoZSBmb3J3YXJkaW5nLiBTbyBoZXJlIHdlIHNob3Vs
+ZCBqdXN0IGFsd2F5cyBkaXNhYmxlIHRoZSBmb3J3YXJkaW5nIGZvciBhbGwgcG9ydHMuDQo+IA0K
+DQpUaGUgdW51c2VkIFJ4IHBvcnRzIHdlcmUgbm90IGRpc2FibGVkIGluIG15IHRlc3RzLiBEaXNh
+YmxpbmcgYWxsIHBvcnRzIGhlcmUgc2hvdWxkIGFsc28gd29yayBmb3IgbXkgc2V0dXAuDQoNCj4g
+U2F5aW5nICJkaXNhYmxlIHRoZSBmb3J3YXJkaW5nIiBpcyBwZXJoYXBzIGEgYml0IGNvbmZ1c2lu
+ZyBoZXJlLCBhcyB0aGUgdGhlIGZvcndhcmRpbmcgc2hvdWxkIGFscmVhZHkgYmUgZGlzYWJsZWQg
+aW4gdGhlIEhXIGhlcmUgYW55d2F5LiBCdXQgYXMgd2Ugd3JpdGUgdGhlIFVCOTYwX1NSX0ZXRF9D
+VEwxLCB3ZSBuZWVkIHRvIHNldCB0aGF0IGJpdC4NCj4gDQo+IFNvLiBZb3Ugc2hvdWxkIHNlZSB0
+aGUgcngwIGdldHRpbmcgZW5hYmxlZCAobGF0ZXIsIGluIHViOTYwX2VuYWJsZV9yeF9wb3J0KSwg
+YW5kIEknbSBjdXJpb3VzIHdoeSB5b3UgZG9uJ3Qgc2VlIHRoYXQuDQoNCkkgd2lsbCBoYXZlIGFu
+b3RoZXIgbG9vayBhdCB0aGF0IG5leHQgd2Vlay4gSXQgY291bGQgd2VsbCBiZSB0aGF0IGluIHRo
+ZSBlbmQgb25seSB0aGUgZW5hYmxlZCBidXQgdW51c2VkIHBvcnRzIGFyZSB0aGUgcHJvYmxlbS4N
+Cg0KcmVnYXJkcywNCkx1ZHdpZw0K
