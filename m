@@ -2,46 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C326670521B
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 17:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F2C705227
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 17:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233877AbjEPP3B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 16 May 2023 11:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        id S233675AbjEPPcx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 16 May 2023 11:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233111AbjEPP25 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 May 2023 11:28:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37075FF1;
-        Tue, 16 May 2023 08:28:56 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-191-196.ewe-ip-backbone.de [91.248.191.196])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E5ABC66058F4;
-        Tue, 16 May 2023 16:28:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684250935;
-        bh=9Zbfci1TdhO6S4+wcLiRqTU98Ygr/MBClVVcg3Aacnc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C1QarmdofT6VuceBRnhEC8QA2IPFK3B3SaZk26W0KRWVXlGUlIglp+j8hZXgrPxdG
-         LTeVPM0qZvYgHO1l9oqgcIEQn0gJwiSqEucxe+xaM0LYqLk1TqIBiVuL7Gm/oIKhD5
-         68Ij32npBTDNc0taR6+PPTMFtvQjsQliy8dnEghJQqd3bRIcYv9L9xVTFgNE6/C5qv
-         rBzBOGihvBPpFDnLWeiA1xKeSk1SGhShAPSdghTQx/XCF15KRTI3kVqum3t9PXxGeq
-         WzzNxjfsKP6UZPDajDyqisD4fYCP66aPFjXp91/mZypwjMcmGd6P5NQ7HYSNuTbIt/
-         LUOnsiSpa0Xdg==
-Received: by mercury (Postfix, from userid 1000)
-        id E1D901060F7F; Tue, 16 May 2023 17:28:51 +0200 (CEST)
-Date:   Tue, 16 May 2023 17:28:51 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
-        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
-        vishal.sagar@amd.com, kalyani.akula@amd.com,
-        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S233061AbjEPPcp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 16 May 2023 11:32:45 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71367296
+        for <linux-i2c@vger.kernel.org>; Tue, 16 May 2023 08:32:42 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-510b6a24946so40334a12.0
+        for <linux-i2c@vger.kernel.org>; Tue, 16 May 2023 08:32:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684251161; x=1686843161;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+WfDmrqy+QvMst4XEpE/xoK4sak7nQ3C4hjNO9HTTG0=;
+        b=xDEJo0SLmGVlDXhX/NOriVq2mlAqG47xuhR/5aeirsLGvc7tkTl9nINt7oJZhqwU6o
+         koJhGF/IIzflE+YEoTP50NrniSiBi0YiQRxPW6iLxHejXOiDzRaDMgTVxhbW3e3EL5Dh
+         nuUQkhfOcADYBv3spwgyGfSZLOlDBU5J9PVGl3aATwbkjucWdrAxzPZuYLZBn9iDJm3S
+         A4/nurYAYt32tYoLTewVmH9oXggLmJ74/ynZ9y3ksrgZnbZQn4MOm6osU8cZ8D/XK7VR
+         hAvXQejna4ki7fOPorsJxh03h+xg2xP5CaH1XM+RGR4AjYLWCKw6LgH0+fhVeMYnrItR
+         LOvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684251161; x=1686843161;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+WfDmrqy+QvMst4XEpE/xoK4sak7nQ3C4hjNO9HTTG0=;
+        b=MHJN5kpbZAbm8QekNXs4P6PSdguv56eHsD1NhR3/syeD0f+3UUVjRthw5qrFfTF+mb
+         9wMzPLMp9mb1yQTFfftZ9lIDB25BC9MVOoo0sIDVrNYsrhwa+Px6zhqxUVLJuHdcxghp
+         do2EM2h2H3gIW0CSCZfSAFdU5EGpmAdpFjcQI7oShmIU5+BJAvU+OUZ1o1g2Nqwx3z9G
+         ahUHZ6kpC5UBIQhzv0ST8ihFOGYASzlll9BHhrXI84nRHRcyS2YHbmVt9s8wk/Q5m1F8
+         ap5TIBabloShYOYC9GbpmxaOuUyqvSc40m0mCQrM+q7jlVVIOTGIuEZsuh1mO39vKbFD
+         6HVw==
+X-Gm-Message-State: AC+VfDwf+IYCysP/s2FGCvyffI9WimKQhEA/PPm5VgNllzrYq/pKXeym
+        oXF0P/ej74hXous/BpKx49IASA==
+X-Google-Smtp-Source: ACHHUZ7x0LFHxkX8C01IljtyBknQMJkvvH2qc+W3wIiGMrH81XlGSgasoeiOPj4uhkFFeOaCs2aTJg==
+X-Received: by 2002:a50:ed99:0:b0:50b:c41b:25d with SMTP id h25-20020a50ed99000000b0050bc41b025dmr27405434edr.7.1684251161319;
+        Tue, 16 May 2023 08:32:41 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
+        by smtp.gmail.com with ESMTPSA id w15-20020a50fa8f000000b0050d89daaa70sm8389780edr.2.2023.05.16.08.32.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 08:32:40 -0700 (PDT)
+Message-ID: <5b818f32-33c4-3f89-ce02-eb803d34ea48@linaro.org>
+Date:   Tue, 16 May 2023 17:32:38 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>, piyush.mehta@amd.com,
+        nava.kishore.manne@amd.com, sai.krishna.potthuri@amd.com,
+        shubhrajyoti.datta@amd.com, vishal.sagar@amd.com,
+        kalyani.akula@amd.com, bharat.kumar.gogada@amd.com,
+        linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
@@ -56,7 +77,7 @@ Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
         Jassi Brar <jassisinghbrar@gmail.com>,
         Jolly Shah <jolly.shah@xilinx.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
@@ -67,6 +88,7 @@ Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
         Moritz Fischer <mdf@kernel.org>,
         Rajan Vaja <rajan.vaja@xilinx.com>,
         Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
         Srinivas Neeli <srinivas.neeli@amd.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -81,63 +103,30 @@ Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
         linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
-Message-ID: <20230516152851.74xcwa7naaniox6x@mercury.elektranox.org>
 References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uzdssvofxc7p4teh"
-Content-Disposition: inline
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---uzdssvofxc7p4teh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi,
-
-On Tue, May 16, 2023 at 03:51:08PM +0200, Michal Simek wrote:
+On 16/05/2023 15:51, Michal Simek wrote:
 > @xilinx.com is still working but better to switch to new amd.com after
 > AMD/Xilinx acquisition.
+> 
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
 
-[...]
 
->  .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml    | 2 +-
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[...]
+Best regards,
+Krzysztof
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
---uzdssvofxc7p4teh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRjoSkACgkQ2O7X88g7
-+pqZnA//TDDMhr+y5x6WtK0aAHgdZNjN+PvDZjdFdHabNv9Ne7ZbkH8zfacX2Ixj
-vcRQLK7IEndRfP76oe/Yd30gDh3af+G/6sGDihy7qDIYKFZ4U59e52eijzGtzOzd
-bIQd+nK7rVLLPD6TCQnIMd59dX0YBGWW1NQsc9viEUKa73617ANSXPmUS9/z7BAc
-TB9a9Wh11wWkmndxV32Fquuq7mTmmqfBMh7rPnKm8WIqxWfdMZeZy2UvZMBVj2YB
-yXzEskCayveuLHQMKZoHrj8nUpItatw6BOupTR5Df1VQ8aZGpiedTulY/dVgusiR
-4qO9zXCKpjpRb7X4CgfvWM9L8qVEG1X47iepFNX+CEQXv+3EJCHZEF8QSyPxAk8P
-85aI/FZOmLHKjTlu9TMJspG1ruxDaPyhxtfZEpI7+xGhiH4OQN48QRk+PfIpIEqt
-9c+PCUCXosIGpX7sNn3hrXGQhPRItiRGDEX2tqt0SWyn3/V2GvG+8rOqIv3F42Bg
-5vRf8LlcgEZlAeu0CNwUFmi4T/Wu+/77sa7Tbm+HDIqEo1kHJnlLJTs2LRjSgqSR
-/vlgH3m61YKqg9jy5xrmuFeH6Yg2GQQVtig9l1+r1XmHTUXrTvROk5kQ8AgTOYZh
-ZAqxk1Gb2IdIBXK0U6iG/7jHEhu3spe5gSzqdFc/+FUfveluN/o=
-=1MS+
------END PGP SIGNATURE-----
-
---uzdssvofxc7p4teh--
