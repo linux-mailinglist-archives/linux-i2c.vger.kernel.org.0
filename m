@@ -2,48 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7389D70437F
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 04:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FC2704393
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 May 2023 04:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjEPCjv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 15 May 2023 22:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
+        id S229660AbjEPCqf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 15 May 2023 22:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjEPCju (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 May 2023 22:39:50 -0400
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1023102;
-        Mon, 15 May 2023 19:39:45 -0700 (PDT)
-X-QQ-mid: Yeas43t1684204734t839t48313
-Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [115.200.228.151])
-X-QQ-SSF: 00400000000000F0FNF000000000000
-From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
-X-BIZMAIL-ID: 6361813060171089198
-To:     <andy.shevchenko@gmail.com>
-Cc:     <netdev@vger.kernel.org>, <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
-        <Jose.Abreu@synopsys.com>, <andrew@lunn.ch>,
-        <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <linux-i2c@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <mengyuanlou@net-swift.com>
-References: <20230515063200.301026-1-jiawenwu@trustnetic.com> <20230515063200.301026-7-jiawenwu@trustnetic.com> <ZGH-fRzbGd_eCASk@surfacebook>
-In-Reply-To: <ZGH-fRzbGd_eCASk@surfacebook>
-Subject: RE: [PATCH net-next v8 6/9] net: txgbe: Support GPIO to SFP socket
-Date:   Tue, 16 May 2023 10:38:53 +0800
-Message-ID: <00cd01d9879f$8e444950$aaccdbf0$@trustnetic.com>
+        with ESMTP id S229812AbjEPCqe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 15 May 2023 22:46:34 -0400
+Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224335FCF;
+        Mon, 15 May 2023 19:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
+        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=hBtJ/TjS7eImEOKAiFTF/XY7fRtSm7pKdcysreoF8hg=; b=KM/0UF1UYf6CiCZA0TAT3ZJGtw
+        46tpxzQm2IO9SPRmyTdwLpfvevXp+1byMyoC3PPXCMzB2JVtybc1TFK3Uz7SWJtYKANNIpgTZAe1d
+        fn3ZaEmNf1KdEMndDXHFh9ohZUFb/CsbfQRt1f8rp3/+XOeGTBs2iE5a2Vx4h0yGZGpWBFn7RcFyI
+        LVCV5Cc4qhaL0tPVpF+AtPpshTx/Mq0RxkX45RirIRvBLyCKKwpveWnMA3HqAmoxLSc7penNXfqwU
+        khwU97uU8ghHs2jNDEHwGF/AGcfAxatKmrMU2UrVI3SSCwTM4knE/DXGj1HVigI6dUdR7Je7QgDSJ
+        s7VPPDkA==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <lars@metafoo.de>)
+        id 1pykhI-0002ln-JZ; Tue, 16 May 2023 04:45:56 +0200
+Received: from [136.25.87.181] (helo=[192.168.86.26])
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lars@metafoo.de>)
+        id 1pykhH-000FZ1-Mz; Tue, 16 May 2023 04:45:55 +0200
+Message-ID: <cc842fa8-5ab0-daf4-22c3-055df4d06cb5@metafoo.de>
+Date:   Mon, 15 May 2023 19:45:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: zh-cn
-Thread-Index: AQHvj8QD3pC+6Aq9H9h6P1+q5LrHRgMH5FTyAkITzACvBcuB4A==
-X-QQ-SENDSIZE: 520
-Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH net-next v8 8/9] net: txgbe: Implement phylink pcs
+To:     Jiawen Wu <jiawenwu@trustnetic.com>, netdev@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com,
+        Jose.Abreu@synopsys.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk
+Cc:     linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        mengyuanlou@net-swift.com
+References: <20230515063200.301026-1-jiawenwu@trustnetic.com>
+ <20230515063200.301026-9-jiawenwu@trustnetic.com>
+Content-Language: en-US
+From:   Lars-Peter Clausen <lars@metafoo.de>
+In-Reply-To: <20230515063200.301026-9-jiawenwu@trustnetic.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: lars@metafoo.de
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26907/Mon May 15 09:25:12 2023)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,44 +67,33 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-> > +static int txgbe_gpio_init(struct txgbe *txgbe)
-> > +{
-> > +	struct gpio_irq_chip *girq;
-> > +	struct wx *wx = txgbe->wx;
-> > +	struct gpio_chip *gc;
-> > +	struct device *dev;
-> > +	int ret;
-> 
-> > +	dev = &wx->pdev->dev;
-> 
-> This can be united with the defintion above.
-> 
-> 	struct device *dev = &wx->pdev->dev;
-> 
+On 5/14/23 23:31, Jiawen Wu wrote:
+> diff --git a/drivers/net/ethernet/wangxun/txgbe/txgbe_type.h b/drivers/net/ethernet/wangxun/txgbe/txgbe_type.h
+> index 6c903e4517c7..6c0393c19b83 100644
+> --- a/drivers/net/ethernet/wangxun/txgbe/txgbe_type.h
+> +++ b/drivers/net/ethernet/wangxun/txgbe/txgbe_type.h
+> @@ -80,6 +80,10 @@
+>   /* I2C registers */
+>   #define TXGBE_I2C_BASE                          0x14900
+>   
+> +/************************************** ETH PHY ******************************/
+> +#define TXGBE_XPCS_IDA_ADDR                     0x13000
+> +#define TXGBE_XPCS_IDA_DATA                     0x13004
+> +
+>   /* Part Number String Length */
+>   #define TXGBE_PBANUM_LENGTH                     32
+>   
+> @@ -171,6 +175,8 @@ struct txgbe_nodes {
+>   struct txgbe {
+>   	struct wx *wx;
+>   	struct txgbe_nodes nodes;
+> +	struct mdio_device *mdiodev;
 
-This is a question that I often run into, when I want to keep this order,
-i.e. lines longest to shortest, but the line of the pointer which get later
-is longer. For this example:
+While assigned mdiodev is never read.
 
-	struct wx *wx = txgbe->wx;
-	struct device *dev = &wx->pdev->dev;
+> +	struct dw_xpcs *xpcs;
+>   	struct platform_device *sfp_dev;
+>   	struct platform_device *i2c_dev;
+>   	struct clk_lookup *clock;
 
-should I split the line, or put the long line abruptly there?
-
-> > +	gc = devm_kzalloc(dev, sizeof(*gc), GFP_KERNEL);
-> > +	if (!gc)
-> > +		return -ENOMEM;
-> > +
-> > +	gc->label = devm_kasprintf(dev, GFP_KERNEL, "txgbe_gpio-%x",
-> > +				   (wx->pdev->bus->number << 8) | wx->pdev->devfn);
-> > +	gc->base = -1;
-> > +	gc->ngpio = 6;
-> > +	gc->owner = THIS_MODULE;
-> > +	gc->parent = dev;
-> > +	gc->fwnode = software_node_fwnode(txgbe->nodes.group[SWNODE_GPIO]);
-> 
-> Looking at the I²C case, I'm wondering if gpio-regmap can be used for this piece.
-
-I can access this GPIO region directly, do I really need to use regmap?
- 
 
