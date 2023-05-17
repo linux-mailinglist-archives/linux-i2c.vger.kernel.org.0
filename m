@@ -2,132 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC44F7061C0
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 May 2023 09:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FE870634D
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 May 2023 10:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjEQHxQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 17 May 2023 03:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S230502AbjEQItN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 17 May 2023 04:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjEQHxN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 17 May 2023 03:53:13 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A2B1701
-        for <linux-i2c@vger.kernel.org>; Wed, 17 May 2023 00:53:09 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-19a1ac5e200so119975fac.1
-        for <linux-i2c@vger.kernel.org>; Wed, 17 May 2023 00:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684309988; x=1686901988;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=z7/UrOrH7WBlk+aHFLuoAPaV4sjjLKIsLUZnOqmSEYI=;
-        b=MidvDaPD+4NNyLDU0Nq/9wC3tduSe3MHfY9xi8NunMcr+DBB3r1pDt04EPYzMR/Bs9
-         DZNLIDrY3lKFOUVk2bJteh3sGKPQSAUny7O57HW67n0QMwD8bHYOPgZynQ00/PYpTAfF
-         WPdmxY2PACduSXHAkT5mKFscbtahkB973wjXgEoaS1t/aneOMMic0bxyEQxeKUJrP1sX
-         fLkgtHSKmxJxTmWfNuCLYAzUitf+OlSghgS2FTO9gUJKFQGuDF0i8z6+rqsaKJTFcwRl
-         f0aTXXIPOLOeNp8YDW9qshlX+9xa2r76BCGg5IwoJV6Q2WHvu9Ta6nLyF4+JbJg+SyPu
-         mpKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684309988; x=1686901988;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z7/UrOrH7WBlk+aHFLuoAPaV4sjjLKIsLUZnOqmSEYI=;
-        b=DG53egICmjpvVqk1qNx4JlK3Z/6z1B2Wgjtpk3fQc8BIRQlS9WQYCE6YpS/IdgSqh5
-         E3TFFG0gI6ABYqP3p1C+m7glvfp1caW1p/mGZdEB2g2Pst/mM/pwL1RZ5PZ6HDlKGvfI
-         nsL4VwwlzLYM0z+nHU2K5rGzwjnZ9QksrCebGv4xg8eshTDxmqmE2i+BZWo3jGLXnjZ5
-         ZoZy/3R2K1YKsf7xKOYQDFVPk+SUWL6VgCZPHl6XYpzqxIrOs3LuJX+oi/femRwRH2x9
-         nBmY0USaBjKJ+tPs4ReRcy+wk6EQg4MosnFi8YucBy03545k4BEson70yx/586Af7260
-         4FIA==
-X-Gm-Message-State: AC+VfDyRSW0gbsbO/RH+zAoPcZ5jlMLgFkWZ259zE9YJwTpP5DdEYMOF
-        Y9KOz77/FgzJ8aDxhexOARmUevcZt9QKgaYDfEU=
-X-Google-Smtp-Source: ACHHUZ5601tzZRSj3ZgHBgCYen4T3pJWG/RsyzTVziley3jzN0CqvKl97X2udfQU3asZQjt+jVE1/6LzDtiKgoZEZZE=
-X-Received: by 2002:a05:6870:d343:b0:192:550f:9c6e with SMTP id
- h3-20020a056870d34300b00192550f9c6emr19900181oag.0.1684309988487; Wed, 17 May
- 2023 00:53:08 -0700 (PDT)
+        with ESMTP id S230516AbjEQItK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 17 May 2023 04:49:10 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0522101;
+        Wed, 17 May 2023 01:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684313348; x=1715849348;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mwtRWrqDrj4nDmvAX7hgqry3RYlAqjIVusKkkudDzPQ=;
+  b=YHsIvEE7zLNzAzVjY3xMDTaY/EPMssQhPls0dbtgd8kpv+tgAfa0kDG7
+   0ec60gRbUvNSHbXd0nVKdtWm6yi0V+rNt6AuTglC7/8OTyjK5SK6lxdq8
+   Mnqm5ssAMFO2prDnnabk16VKZG4uiGdKRxeTfuCLzBl4YUGEkkI9uiRqB
+   RlwmBT2n/XCHHeOV+VLlSYfDTT5lQRuh+xmkaSwT0/pgzUnQcPAkJMBi+
+   m360WlX3s7N7CTqL/rrL34Oj+MCpwTolpHM9PAEFELn6qSHYUpQ+WSJP4
+   Lk0ekg+472WqmE5DENDQKc8YSuchef3ZRokcSj/6igfiUoXtBav2ipwhq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="341089511"
+X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
+   d="scan'208";a="341089511"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 01:49:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="701671954"
+X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
+   d="scan'208";a="701671954"
+Received: from mylly.fi.intel.com (HELO [10.237.72.160]) ([10.237.72.160])
+  by orsmga002.jf.intel.com with ESMTP; 17 May 2023 01:49:03 -0700
+Message-ID: <85d058cd-2dd9-2a7b-efd0-e4c8d512ae29@linux.intel.com>
+Date:   Wed, 17 May 2023 11:49:03 +0300
 MIME-Version: 1.0
-Received: by 2002:a05:6870:6329:b0:192:77db:2af3 with HTTP; Wed, 17 May 2023
- 00:53:07 -0700 (PDT)
-Reply-To: didieracouetey46@gmail.com
-From:   "Mrs. Cristalina Georgieva" <carolinacarolina67854@gmail.com>
-Date:   Wed, 17 May 2023 07:53:07 +0000
-Message-ID: <CAPbzxPp-fRx2Pn=d3Bc3ORtUuASOOVBmAZq-u5YqsvY_UQJkZQ@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH net-next v8 2/9] i2c: designware: Add driver support for
+ Wangxun 10Gb NIC
+Content-Language: en-US
+To:     andy.shevchenko@gmail.com, Jiawen Wu <jiawenwu@trustnetic.com>
+Cc:     netdev@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com,
+        Jose.Abreu@synopsys.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org, mengyuanlou@net-swift.com,
+        Piotr Raczynski <piotr.raczynski@intel.com>
+References: <20230515063200.301026-1-jiawenwu@trustnetic.com>
+ <20230515063200.301026-3-jiawenwu@trustnetic.com>
+ <ZGH6TmeiR0icT6Tc@surfacebook>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <ZGH6TmeiR0icT6Tc@surfacebook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-5rOo5oSPOiDopqrmhJvjgarjgovln7rph5Hlj5fnm4rogIXjga7nmobmp5gNCg0KICAg5oWO6YeN
-44Gr6Kqt44KA77yB77yB77yBDQoNCiAgIOOBk+OBrumbu+WtkOODoeODg+OCu+ODvOOCuOOBr+ap
-n+WvhuOBp+OBguOCiuOAgeWOs+WvhuOBq+OBguOBquOBn+Wum+OBruOCguOBruOBp+OBmeOAgg0K
-DQrjgYLjgarjgZ/jgYwxNeWEhOODieODq+imj+aooeOBruizh+mHkeOCkuWPl+OBkeWPluOBo+OB
-puOBhOOBquOBhOOBruOBr+aYjuOCieOBi+OBp+OBmeOAguOBk+OCjOOBr+OAgemBjuWOu+OBruiF
-kOaVl+OBl+OBn+aUv+W6nOW9ueS6uuOBjOWIqeW3seeahOOBqueQhueUseOBp+izh+mHkeOCkuOB
-u+OBqOOCk+OBqeiHquWIhuOBn+OBoeOBoOOBkeOBruOCguOBruOBq+OBl+OAgeOBguOBquOBn+OB
-ruizh+mHkeOCkuOBmeOBueOBpuipkOasuuOBl+OCiOOBhuOBqOOBl+OBpuWIqeeUqOOBl+OBn+OB
-n+OCgeOBp+OBmeOAgg0K5Z+66YeR44CCIOOBk+OCjOOBq+OCiOOCiuOAgeOBiuWuouanmOWBtOOB
-q+WkmuWkp+OBquaQjeWkseOBjOeZuueUn+OBl+OAgeizh+mHkeOBruWPl+OBkeWPluOCiuOBq+S4
-jeW/heimgeOBqumBheOCjOOBjOeUn+OBmOOBvuOBl+OBn+OAgg0KDQrjgqTjg7Pjgr/jg7zjg53j
-g7zjg6vjga7lm73lrrbkuK3lpK7lsYDjga/jgIHlm73pgKPjgajpgKPpgqbmjZzmn7vlsYDvvIhG
-SULvvInjga7mlK/mj7TjgpLlj5fjgZHjgabjgIHnj77lm73pmpvpgJrosqjln7rph5Hnt4/oo4Hj
-gavlr77jgZfjgIHjgYLjgarjgZ/jgoTku5bjga7kurrjgZ/jgaHjgavlr77jgZnjgovjgZnjgbnj
-gabjga7lr77lpJblgrXli5njga7muIXnrpfjgpLmjqjpgLLjgZnjgovjgojjgYblp5Tku7vjgZnj
-govjgZPjgajjgavmiJDlip/jgZfjgb7jgZfjgZ/jgIINCuWlkee0hOmHkeOAgeWuneOBj+OBmC/j
-gq7jg6Pjg7Pjg5bjg6vjgIHnm7jntprjgarjganjgpLlj5fjgZHlj5bjgonjgarjgYTlgIvkurrj
-gIIgQVRN44Kr44O844OJ44Gn5pSv5omV44GE44KS5Y+X44GR5Y+W44KK44G+44GZ44CCDQoNCk9S
-QSDjg5Djg7Pjgq8g44Kr44O844OJOiDlkI3liY3jgYzmmpflj7fljJbjgZXjgozjgZ/jg5Hjg7zj
-gr3jg4rjg6njgqTjgrrjgZXjgozjgZ8gT1JBIOODkOODs+OCryBBVE0NCuOCq+ODvOODieOCkueZ
-uuihjOOBl+OBvuOBmeOAguOBk+OBruOCq+ODvOODieOCkuS9v+eUqOOBmeOCi+OBqOOAgVZpc2Eg
-44Kr44O844OJ44Gu44Ot44K044GM5LuY44GE44Gm44GE44KLIEFUTSDjgYvjgokgMSDml6XjgYLj
-gZ/jgormnIDlpKcgMjAsMDAwDQrjg4njg6vjgpLlvJXjgY3lh7rjgZnjgZPjgajjgYzjgafjgY3j
-gb7jgZnjgIIg44G+44Gf44CBT1JBIOODkOODs+OCryDjgqvjg7zjg4njgpLkvb/nlKjjgZnjgovj
-gajjgIHos4fph5HjgpLpioDooYzlj6PluqfjgavpgIHph5HjgafjgY3jgb7jgZnjgIIgQVRNDQrj
-gqvjg7zjg4njgavjga/jgIHjgYLjgarjgZ/jga7lm73jgYrjgojjgbPkuJbnlYzkuK3jga7jganj
-ga4gQVRNIOapn+OBp+OCguS9v+eUqOOBp+OBjeOCi+OBk+OBqOOCkuaYjueiuuOBq+OBmeOCi+OD
-nuODi+ODpeOCouODq+OBjOS7mOWxnuOBl+OBpuOBhOOBvuOBmeOAgg0KDQros4fph5Hjga8gQVRN
-IFZpc2Eg44Kr44O844OJ57WM55Sx44Gn6YCB44KJ44KM44CBRmVkRXggRXhwcmVzcyDntYznlLHj
-gafphY3pgZTjgZXjgozjgb7jgZnjgIIg56eB44Gf44Gh44GvIEZlZEV4IEV4cHJlc3MNCuOBqOWl
-kee0hOOCkue1kOOCk+OBp+OBhOOBvuOBmeOAgumAo+e1oeOBmeOCi+W/heimgeOBjOOBguOCi+OB
-ruOBr+OAgU9SQSDpioDooYzjga7jg4fjgqPjg6zjgq/jgr/jg7zjgafjgYLjgosgTVIg44Gg44GR
-44Gn44GZ44CCIERJRElFUiBBQ09VRVRFWQ0K44GT44Gu44Oh44O844Or44Ki44OJ44Os44K544GL
-44KJOiAsIChkaWRpZXJhY291ZXRleTQ2QGdtYWlsLmNvbSkNCg0KDQrpgJrluLjjga7jg6zjg7zj
-g4jjgpLotoXjgYjjgovph5HpoY3jgpLopoHmsYLjgZnjgovkurrjga/plpPpgZXjgYTjgarjgY/o
-qZDmrLrluKvjgafjgYLjgorjgIHku5bjga7kurrjgavpgKPntaHjgpLlj5bjgaPjgZ/loLTlkIjj
-ga/jgZ3jga7kurrjgajjga7pgKPntaHjgpLkuK3mraLjgZnjgovlv4XopoHjgYzjgYLjgovjgZPj
-gajjgavms6jmhI/jgZfjgabjgY/jgaDjgZXjgYTjgIINCg0K44G+44Gf44CB44GU6LKg5ouF44GE
-44Gf44Gg44GP44Gu44Gv6YWN6YCB5paZ44Gu44G/44Gn44GZ44Gu44Gn44GU5a6J5b+D44GP44Gg
-44GV44GE44CCIOOBneOCjOS7peS4iuOBruOCguOBruOBr+OBguOCiuOBvuOBm+OCk++8gSDlv4Xo
-poHjgarmg4XloLHjgajphY3pgIHmlpnjgpLlj5fjgZHlj5bjgaPjgabjgYvjgokgMg0K5Za25qWt
-5pel5Lul5YaF44Gr6LOH6YeR44KS5Y+X44GR5Y+W44KL44GT44Go44KS5L+d6Ki844GX44G+44GZ
-44CCDQoNCuazqDog56iO6YeR5omL5pWw5paZ44KS5ZCr44KB44CB44GZ44G544Gm44GvIElNRiDj
-gajkuJbnlYzpioDooYzjgavjgojjgaPjgablh6bnkIbjgZXjgozjgovjgZ/jgoHjgIHmlK/miZXj
-gYblv4XopoHjgYzjgYLjgovjga7jga8gRmVkRXgg44Gu6YWN6YCB5paZ44Gg44GR44Gn44GZ44CC
-DQrjgZPjgozjga/jgIFGZWRFeCBFeHByZXNzIOOBriBDT0QgKOS7o+mHkeW8leaPmykg44K144O8
-44OT44K544GM6KaP57SE44Gr44KI44KK5Zu96Zqb6YWN6YCB44Gr44Gv6YGp55So44GV44KM44Gq
-44GE44Gf44KB44Gn44GZ44CCDQoNCjE1IOWEhOODieODq+ebuOW9k+OBruODleOCoeODs+ODieOC
-kuODquODquODvOOCueOBmeOCi+OBq+OBr+OAgeiqpOmFjemAgeOCkumBv+OBkeOCi+OBn+OCgeOB
-q+mFjemAgeaDheWgseOCkuaPkOS+m+OBmeOCi+W/heimgeOBjOOBguOCiuOBvuOBmeOAgg0KDQog
-ICAxLiDjgYLjgarjgZ/jga7jg5Xjg6vjg43jg7zjg6AgLi4uLi4uLi4uLi4uLi4uLi4uLg0KMi4g
-44GC44Gq44Gf44Gu5Zu9Li4uLi4NCjMuIOOBguOBquOBn+OBruihly4uLi4uDQo0LiDjgYLjgarj
-gZ/jga7lrozlhajjgarkvY/miYAgLi4uLi4uDQo1LiDlm73nsY0gLi4uLi4uDQo2LiDnlJ/lubTm
-nIjml6Uv5oCn5Yil4oCm4oCmDQo3LiDogbfmpa3igKbigKYNCjguIOmbu+ipseeVquWPt+KApuKA
-pg0KOS4g6LK056S+44Gu44Oh44O844Or44Ki44OJ44Os44K5IOKApuKApg0KMTAuIOWAi+S6uuOD
-oeODvOODq+OCouODieODrOOCuSAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4NCjEx
-LiDlm73pmpvjg5Hjgrnjg53jg7zjg4jjgb7jgZ/jga/mnInlirnjgarouqvliIboqLzmmI7mm7jj
-ga7jgrPjg5Tjg7w6DQoNCuW/heimgeS6i+mgheOCkk1S44G+44Gn44GK6YCB44KK44GP44Gg44GV
-44GE44CCIERJRElFUiBBQ09VRVRFWSBPcmFCYW5rIOODh+OCo+ODrOOCr+OCv+ODvOOAgeODoeOD
-vOODq+OCouODieODrOOCuSA9DQooZGlkaWVyYWNvdWV0ZXk0NkBnbWFpbC5jb20pIOOBvuOBp+S7
-iuOBmeOBkOOBlOmAo+e1oeOBj+OBoOOBleOBhOOAgg0KDQrjgYrjgoHjgafjgajjgYbjgZTjgZbj
-gYTjgb7jgZkNCg==
+On 5/15/23 12:24, andy.shevchenko@gmail.com wrote:
+> Mon, May 15, 2023 at 02:31:53PM +0800, Jiawen Wu kirjoitti:
+>> Wangxun 10Gb ethernet chip is connected to Designware I2C, to communicate
+>> with SFP.
+>>
+>> Introduce the property "snps,i2c-platform" to match device data for Wangxun
+>> in software node case. Since IO resource was mapped on the ethernet driver,
+>> add a model quirk to get regmap from parent device.
+>>
+>> The exists IP limitations are dealt as workarounds:
+>> - IP does not support interrupt mode, it works on polling mode.
+>> - Additionally set FIFO depth address the chip issue.
+> 
+> ...
+> 
+>>   	dev->flags = (uintptr_t)device_get_match_data(&pdev->dev);
+>> +	if (device_property_present(&pdev->dev, "snps,i2c-platform"))
+>> +		dev->flags |= MODEL_WANGXUN_SP;
+> 
+> What I meant here is to use device_property_present() _iff_ you have decided to
+> go with the _vendor-specific_ property name.
+> 
+> Otherwise it should be handled differently, i.e. with reading the actual value
+> of that property. Hence it should correspond the model enum, which you need to
+> declare in the Device Tree bindings before use.
+> 
+> So, either
+> 
+> 	if (device_property_present(&pdev->dev, "wx,..."))
+> 		dev->flags |= MODEL_WANGXUN_SP;
+> 
+> or
+> 
+> 	if ((dev->flags & MODEL_MASK) == MODEL_NONE) {
+> 	// you now have to distinguish that there is no model set in driver data
+> 		u32 model;
+> 
+> 		ret = device_property_read_u32(dev, "snps,i2c-platform");
+> 		if (ret) {
+> 			...handle error...
+> 		}
+> 		dev->flags |= model
+> 
+I'm not a device tree expert but I wonder would it be possible somehow 
+combine this and compatible properties in dw_i2c_of_match[]? They set 
+model flag for MODEL_MSCC_OCELOT and MODEL_BAIKAL_BT1.
+
+Then I'm thinking is "snps,i2c-platform" descriptive enough name for a 
+model and does it confuse with "snps,designware-i2c" compatible property?
