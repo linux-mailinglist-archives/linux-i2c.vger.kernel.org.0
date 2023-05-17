@@ -2,56 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474047067C5
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 May 2023 14:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85417706AD7
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 May 2023 16:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjEQMMg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 17 May 2023 08:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
+        id S231918AbjEQOQ6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 17 May 2023 10:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjEQMMe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 17 May 2023 08:12:34 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9213C3B;
-        Wed, 17 May 2023 05:12:16 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so12707041b3a.0;
-        Wed, 17 May 2023 05:12:16 -0700 (PDT)
+        with ESMTP id S231888AbjEQOQ4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 17 May 2023 10:16:56 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9A718C;
+        Wed, 17 May 2023 07:16:54 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9661a1ff1e9so119738366b.1;
+        Wed, 17 May 2023 07:16:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684325536; x=1686917536;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jR9QVy06+8kCR0o/MKpVdWGpHv1t5cW3AKmbdvo1Kjc=;
-        b=mMxLZJ5ClWCNLFgj9hpEZpfDu1kAtMtUeeBNuLdH81tH6WbPdHzHkUF+T/nOslsRY9
-         RBh27yg9XsCmkG1aM0eVWFTBrsRzDOMf0T4WOYWA5PbyNP47/T80qU3HpdMfxuQmY0Yz
-         0ndK627AmJ0xWoyY8SKIeEpm8VPtbvwjnufBI7oWWD7xqtOd1d53896dqyjFwWoAUugU
-         HQMY8ok7AMqYSsDFhArRhT2nYB0as1luSohqkYvs5CNqyYaVKsBbPspT20mFYt6If5e3
-         UHxcagAgqk9ClsAVp4OxsJ70b6ifBOONkstfI/LtT3979vHc8VLBsQispsv/S///i2DP
-         7ZHg==
+        d=gmail.com; s=20221208; t=1684333013; x=1686925013;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9mWuBFORINAsgkFiENnuZWACjGF2Zo8AfvFi7n4DTJY=;
+        b=biypyogl/DqZwN8+l2p9gGZMhx1QXp7js5dS6YSXbdcF3ZHK3bAXOKr9bIZ2d5+mvl
+         Qn4Gx8A74tCXzyGwgnn35/7evQqgN/7wXY9AeQJjQf2d0yv+FYmCHdYp8GwNzBMM0M2X
+         RepZrNuNaoOJQYiVZCSiNqbUDnKxLYbuFDB8j4b1yBI/QsVPe3WOIE4R72ZLtO7EIxoT
+         24iEumAIof2PKi6dQYEuyikyK+F0NROw542Ffk8G2rKhOQY1gF3SmvrkEBVbE4TJefAI
+         GSNWr7uxGsud5z6OeWp2cGbBzJ4OT09LPkQaqsMmhTV5gi2hCXnVzgGn3dz+0FxHoXgI
+         VP5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684325536; x=1686917536;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684333013; x=1686925013;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jR9QVy06+8kCR0o/MKpVdWGpHv1t5cW3AKmbdvo1Kjc=;
-        b=MnCBUFBWXyjqIBXOA7128NGSEnDm1iDcwP/USfnzBLuB0kL1Q86ZlI6l4p7FAKy3lc
-         3efdNagze1VB0iPDtQFxt9pYgeecc2oYquUUb8Yd5ovo5ewYBYqkh4IwytFXIiXUU3un
-         3phHuDPlaI9a5kT39F9ah0sv2muxBlYJcQg9H+0vYenGn9PrwanSPvYDLW5kBW02zFAa
-         9TjGAfw7BoN1mQJz5CNfx5NE/9GLPmObuRO2fftC92OpDaKzS+YmxFrAaXtGBTZ8yiut
-         EP7EeOUjW3RfNmVoE1aeykpybXYyrbuGecoMb2Uji7WUCgN0E1o0xm5ssQTonxfAZOfI
-         fgew==
-X-Gm-Message-State: AC+VfDxDdL1p8nzdaKDe4AsDkhjLOVqBP9oC/wpZGERPl/d4ygKljHvz
-        SCM2Vp2FpqlRAIR94v+4cg4=
-X-Google-Smtp-Source: ACHHUZ4ZyE/7M5xz4RF4owSSi09+sIdG3gisbl9+Vhh4syqW9Ou10ZCQBp3hmVhBuaWjYlpwSabJgA==
-X-Received: by 2002:a17:90b:120c:b0:253:25c3:7a95 with SMTP id gl12-20020a17090b120c00b0025325c37a95mr2402736pjb.14.1684325535612;
-        Wed, 17 May 2023 05:12:15 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j19-20020a17090ae61300b002500df72713sm1445765pjy.7.2023.05.17.05.12.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 05:12:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 17 May 2023 05:12:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
+        bh=9mWuBFORINAsgkFiENnuZWACjGF2Zo8AfvFi7n4DTJY=;
+        b=Z+pQ/oqFjWFJrG9+QOfmcz2fk6OWGFRuNpj7cn7shDKRiYpYGRowq2JkVCH+kIFmIE
+         Z+0NVG8IOQUjZKlbbISdY7MjZKegbdAZtLRCoaG1zNR0fgP1TIgmH3N5XFiNQzdHdBnq
+         /abMBpvgJN9Fhoxr2Unjzxbrf982Poi9gPfMU/V+4s8UYXrLNCrOxyg/2ZFPVVdup7oM
+         V2twmI0RsL0z51GbdEiOchF4MggywuQOyDAYGkJlRsqmXHdd7IprC9JGRI2HIlRl0F42
+         5AjgXpG+NqpXRXqQKXbczJ3a9xWbkvy1NFceT+GK4eMZUxXbd6K/9yEmefwohVyZzQ0P
+         lziQ==
+X-Gm-Message-State: AC+VfDwxtRBr8RIE7cgkgUEf6LEFJU/lPfTBEAuqBqM5CSGiYZfEo1KB
+        BXxqVrmLl5g5ht0kVKhEg9+SlUrulB4J1qMrc2c=
+X-Google-Smtp-Source: ACHHUZ5TyNAWL0L+xFq4qCoGU4tNyKIEpqxlZu0ALd+ZVRg36+lSEN4BwR3Z/P1zVEHc2oshTTV+tnv1x2FEG17G5M8=
+X-Received: by 2002:a17:907:36c3:b0:96a:3811:f589 with SMTP id
+ bj3-20020a17090736c300b0096a3811f589mr24647279ejc.10.1684333012989; Wed, 17
+ May 2023 07:16:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Wed, 17 May 2023 09:16:41 -0500
+Message-ID: <CABb+yY2JaC8b-HFEU_WnSBSCr2edgEezXJkfMUYqjeLBA1MvYw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
 To:     Michal Simek <michal.simek@amd.com>
 Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
         sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
@@ -68,11 +69,11 @@ Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         "David S. Miller" <davem@davemloft.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Herbert Xu <herbert@gondor.apana.org.au>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
         Jolly Shah <jolly.shah@xilinx.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
@@ -98,31 +99,27 @@ Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
         linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
-Message-ID: <155bdc43-7606-4279-a6f4-fe6e29a61722@roeck-us.net>
-References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, May 16, 2023 at 03:51:08PM +0200, Michal Simek wrote:
+On Tue, May 16, 2023 at 8:51=E2=80=AFAM Michal Simek <michal.simek@amd.com>=
+ wrote:
+>
 > @xilinx.com is still working but better to switch to new amd.com after
 > AMD/Xilinx acquisition.
-> 
+>
 > Signed-off-by: Michal Simek <michal.simek@amd.com>
 > ---
-> 
+>
 >  Documentation/devicetree/bindings/arm/xilinx.yaml             | 2 +-
 >  Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml     | 2 +-
 >  .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml       | 2 +-
@@ -152,7 +149,30 @@ On Tue, May 16, 2023 at 03:51:08PM +0200, Michal Simek wrote:
 >  Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml     | 2 +-
 >  Documentation/devicetree/bindings/timer/cdns,ttc.yaml         | 2 +-
 >  .../devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml   | 4 ++--
+>  29 files changed, 31 insertions(+), 31 deletions(-)
+>
+.....
+> diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-ma=
+ilbox.yaml b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mail=
+box.yaml
+> index 374ffe64016f..aeaddbf574b0 100644
+> --- a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.y=
+aml
+> +++ b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.y=
+aml
+> @@ -33,7 +33,7 @@ description: |
+>                +------------------------------------------+
+>
+>  maintainers:
+> -  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> +  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+>
+>  properties:
+>    compatible:
+>
+Acked-by: Jassi Brar <jassisinghbrar@gmail.com>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Just curious, some developers' ids are left unchanged, and not all
+devs have S.O.B.
 
-Guenter
+cheers.
