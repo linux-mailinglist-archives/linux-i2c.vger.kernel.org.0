@@ -2,123 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E81708060
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 May 2023 13:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D148A70806F
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 May 2023 13:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbjERLug (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 May 2023 07:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
+        id S231650AbjERLwF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 18 May 2023 07:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbjERLuS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 May 2023 07:50:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87FF1BF4;
-        Thu, 18 May 2023 04:49:10 -0700 (PDT)
-Received: from [192.168.2.250] (109-252-144-198.dynamic.spd-mgts.ru [109.252.144.198])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E580C6605960;
-        Thu, 18 May 2023 12:49:00 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684410541;
-        bh=OXwsteA01UCrw860jLSNiqKLBDWtvCA65iFbkrUoWCs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ga8El9uipKqxlT7LtpgOqzFD89dm1Pi6nD9bi8IfwjAyHCoGHmvQKJC7ZO2IvVn6V
-         UwC0iPvK+u7JLBOZnRwpZM1TyDdQfpg4QujDv4KG+4FeAtdkBb+rdnZtM7W46WDpnA
-         nfTBfkD2lQASXkPl0ge0byqDrEwMqybkaiSxdVtVAZT0sOkftI1ObSqeVpBAEsy7Ld
-         qL3aXSG1bw+rRe47tPPoY/58/dVHd380LTrWsM9+VouaNZlrfDOo5wlWMK+gs1EW0Z
-         MF589vCG4unnbJXhRy5M6Zye+qweNPFtHEW13Wt3uM7Da2Zn7jU5gbxlhcpNwBur+o
-         en1Clw7qe3iwQ==
-Message-ID: <7eddaf8c-ab04-7670-fc45-15f0fce5eff2@collabora.com>
-Date:   Thu, 18 May 2023 14:48:57 +0300
+        with ESMTP id S230359AbjERLvn (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 May 2023 07:51:43 -0400
+Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8007510E;
+        Thu, 18 May 2023 04:51:10 -0700 (PDT)
+X-QQ-mid: Yeas52t1684410588t624t28601
+Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [115.200.228.151])
+X-QQ-SSF: 00400000000000F0FNF000000000000
+From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
+X-BIZMAIL-ID: 11089335518448478364
+To:     "'Andrew Lunn'" <andrew@lunn.ch>,
+        "'Andy Shevchenko'" <andy.shevchenko@gmail.com>
+Cc:     <netdev@vger.kernel.org>, <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
+        <Jose.Abreu@synopsys.com>, <hkallweit1@gmail.com>,
+        <linux@armlinux.org.uk>, <linux-i2c@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <mengyuanlou@net-swift.com>
+References: <20230515063200.301026-1-jiawenwu@trustnetic.com> <20230515063200.301026-7-jiawenwu@trustnetic.com> <ZGH-fRzbGd_eCASk@surfacebook> <00cd01d9879f$8e444950$aaccdbf0$@trustnetic.com> <CAHp75VdthEZL6GvT5Q=f7rbcDfA5XX=7-VLfVz1kZmBFem_eCA@mail.gmail.com> <016701d9886a$f9b415a0$ed1c40e0$@trustnetic.com> <90ef7fb8-feac-4288-98e9-6e67cd38cdf1@lunn.ch>
+In-Reply-To: <90ef7fb8-feac-4288-98e9-6e67cd38cdf1@lunn.ch>
+Subject: RE: [PATCH net-next v8 6/9] net: txgbe: Support GPIO to SFP socket
+Date:   Thu, 18 May 2023 19:49:47 +0800
+Message-ID: <025b01d9897e$d8894660$899bd320$@trustnetic.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 5/5] mfd: tps6586x: register restart handler
-Content-Language: en-US
-To:     Benjamin Bara <bbara93@gmail.com>, Wolfram Sang <wsa@kernel.org>,
-        Lee Jones <lee@kernel.org>, rafael.j.wysocki@intel.com
-Cc:     peterz@infradead.org, jonathanh@nvidia.com,
-        richard.leitner@linux.dev, treding@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>
-References: <20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com>
- <20230327-tegra-pmic-reboot-v6-5-af44a4cd82e9@skidata.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20230327-tegra-pmic-reboot-v6-5-af44a4cd82e9@skidata.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: zh-cn
+Thread-Index: AQHvj8QD3pC+6Aq9H9h6P1+q5LrHRgMH5FTyAkITzAABJU2Y7wJ7xjhgAYjDQqsBr+FHUq7SqNXg
+X-QQ-SENDSIZE: 520
+Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 5/9/23 22:03, Benjamin Bara wrote:
-> From: Benjamin Bara <benjamin.bara@skidata.com>
+On Wednesday, May 17, 2023 11:01 PM, Andrew Lunn wrote:
+> On Wed, May 17, 2023 at 10:55:01AM +0800, Jiawen Wu wrote:
+> > > > > > +   gc = devm_kzalloc(dev, sizeof(*gc), GFP_KERNEL);
+> > > > > > +   if (!gc)
+> > > > > > +           return -ENOMEM;
+> > > > > > +
+> > > > > > +   gc->label = devm_kasprintf(dev, GFP_KERNEL, "txgbe_gpio-%x",
+> > > > > > +                              (wx->pdev->bus->number << 8) | wx->pdev->devfn);
+> > > > > > +   gc->base = -1;
+> > > > > > +   gc->ngpio = 6;
+> > > > > > +   gc->owner = THIS_MODULE;
+> > > > > > +   gc->parent = dev;
+> > > > > > +   gc->fwnode = software_node_fwnode(txgbe->nodes.group[SWNODE_GPIO]);
+> > > > >
+> > > > > Looking at the I²C case, I'm wondering if gpio-regmap can be used for this piece.
+> > > >
+> > > > I can access this GPIO region directly, do I really need to use regmap?
+> > >
+> > > It's not a matter of access, it's a matter of using an existing
+> > > wrapper that will give you already a lot of code done there, i.o.w.
+> > > you don't need to reinvent a wheel.
+> >
+> > I took a look at the gpio-regmap code, when I call devm_gpio_regmap_register(),
+> > I should provide gpio_regmap_config.irq_domain if I want to add the gpio_irq_chip.
+> > But in this use, GPIO IRQs are requested by SFP driver. How can I get irq_domain
+> > before SFP probe? And where do I add IRQ parent handler?
 > 
-> There are a couple of boards which use a tps6586x as
-> "ti,system-power-controller", e.g. the tegra20-tamonten.dtsi.
-> For these, the only registered restart handler is the warm reboot via
-> tegra's PMC. As the bootloader of the tegra20 requires the VDE, it must
-> be ensured that VDE is enabled (which is the case after a cold reboot).
-> For the "normal reboot", this is basically the case since 8f0c714ad9be.
-> However, this workaround is not executed in case of an emergency restart.
-> In case of an emergency restart, the system now simply hangs in the
-> bootloader, as VDE is not enabled (because it is not used).
+> I _think_ you are mixing upstream IRQs and downstream IRQs.
 > 
-> The TPS658629-Q1 provides a SOFT RST bit in the SUPPLYENE reg to request
-> a (cold) reboot, which takes at least 20ms (as the data sheet states).
-> This avoids the hang-up.
+> Interrupts are arranged in trees. The CPU itself only has one or two
+> interrupts. e.g. for ARM you have FIQ and IRQ. When the CPU gets an
+> interrupt, you look in the interrupt controller to see what external
+> or internal interrupt triggered the CPU interrupt. And that interrupt
+> controller might indicate the interrupt came from another interrupt
+> controller. Hence the tree structure. And each node in the tree is
+> considered an interrupt domain.
 > 
-> Tested on a TPS658640.
+> A GPIO controller can also be an interrupt controller. It has an
+> upstream interrupt, going to the controller above it. And it has
+> downstream interrupts, the GPIO lines coming into it which can cause
+> an interrupt. And the GPIO interrupt controller is a domain.
 > 
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-> ---
->  drivers/mfd/tps6586x.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
-> 
-> diff --git a/drivers/mfd/tps6586x.c b/drivers/mfd/tps6586x.c
-> index b12c9e18970a..3b8faa058e59 100644
-> --- a/drivers/mfd/tps6586x.c
-> +++ b/drivers/mfd/tps6586x.c
-> @@ -30,6 +30,7 @@
->  #include <linux/mfd/tps6586x.h>
->  
->  #define TPS6586X_SUPPLYENE	0x14
-> +#define SOFT_RST_BIT		BIT(0)
->  #define EXITSLREQ_BIT		BIT(1)
->  #define SLEEP_MODE_BIT		BIT(3)
->  
-> @@ -475,6 +476,24 @@ static int tps6586x_power_off_handler(struct sys_off_data *data)
->  	return notifier_from_errno(-ETIME);
->  }
->  
-> +static int tps6586x_restart_handler(struct sys_off_data *data)
-> +{
-> +	int ret;
-> +
-> +	/* TPS6586X only provides a hard/cold reboot, skip others. */
-> +	if (data->mode != REBOOT_UNDEFINED && data->mode != REBOOT_COLD &&
-> +	    data->mode != REBOOT_HARD)
-> +		return NOTIFY_DONE;
+> So what exactly does gpio_regmap_config.irq_domain mean? Is it the
+> domain of the upstream interrupt controller? Is it an empty domain
+> structure to be used by the GPIO interrupt controller? It is very
+> unlikely to have anything to do with the SFP devices below it.
 
-Not sure whether it's worthwhile to care about the reboot mode. If we
-would really care, then the supported modes should be a part of sys-off
-handler definition. Maybe Rafael could comment on it.
+Sorry, since I don't know much about interrupt,  it is difficult to understand
+regmap-irq in a short time. There are many questions about regmap-irq.
 
-Otherwise looks good.
+When I want to add an IRQ chip for regmap, for the further irq_domain,
+I need to pass a parameter of IRQ, and this IRQ will be requested with handler:
+regmap_irq_thread(). Which IRQ does it mean? In the previous code of using
+devm_gpiochip_add_data(), I set the MSI-X interrupt as gpio-irq's parent, but
+it was used to set chained handler only. Should the parent be this IRQ? I found
+the error with irq_free_descs and irq_domain_remove when I remove txgbe.ko.
 
-Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+As you said, the interrupt of each tree node has its domain. Can I understand
+that there are two layer in the interrupt tree for MSI-X and GPIOs, and requesting
+them separately is not conflicting? Although I thought so, but after I implement
+gpio-regmap, SFP driver even could not find gpio_desc. Maybe I missed something
+on registering gpio-regmap...
 
--- 
-Best regards,
-Dmitry
+Anyway it is a bit complicated, could I use this version of GPIO implementation if
+it's really tough? Thanks.
+
 
