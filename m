@@ -2,231 +2,239 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BA37085B3
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 May 2023 18:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF5E708777
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 May 2023 20:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjERQMY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 18 May 2023 12:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
+        id S229749AbjERSGW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 18 May 2023 14:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjERQMX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 May 2023 12:12:23 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2083.outbound.protection.outlook.com [40.107.244.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E63BFE;
-        Thu, 18 May 2023 09:12:21 -0700 (PDT)
+        with ESMTP id S229454AbjERSGV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 18 May 2023 14:06:21 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADFBC2;
+        Thu, 18 May 2023 11:06:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684433180; x=1715969180;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=j4HYRIZkhCVB/C6FbyfAWDEJPSWPXxVWRbh0/RcejVQ=;
+  b=BobGJ+bXVdj+zE+ijocXZ2a6zloPHDBEgOEpMuhTHxteMpZPk8fV1TL6
+   OwHXXvtupwatHNzRhraKpGSBXHnrU/kIE/ihLqaJqD/JGLM4mZx32ZztG
+   k6FbyQvlYeg5GtW1rL+iDoBT4bTB/ni12hFtkdMvQOb23+4zUSpta/s9h
+   wcWApQUyYkszS2do3B5Tht0Kwm3h2+9YstJw6JxS6BWQiYm4aFhef+Xh8
+   upMl/tFy+HoqNCWSBah4h2pDGV3/5D1uizDUKZZwSF9z4JPpWgsVKws3C
+   Rw+GaTWTICPf/LJtylPhNewie8bidro4bJkBcZMzKH3BrKXrFt0A7jL+/
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="355367051"
+X-IronPort-AV: E=Sophos;i="6.00,174,1681196400"; 
+   d="scan'208";a="355367051"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 11:06:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="876520683"
+X-IronPort-AV: E=Sophos;i="6.00,174,1681196400"; 
+   d="scan'208";a="876520683"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP; 18 May 2023 11:06:19 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 18 May 2023 11:06:19 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 18 May 2023 11:06:19 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 18 May 2023 11:06:19 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 18 May 2023 11:06:18 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lQe4GPW92UWe/PhCY8ixfnHQQFc+Y9KM3YOn4VzTSMzwy8E8hRMTylqEt6eeaBORwHIhrM6wJoTN8hGITzU0NpuTLz8uCI0OrscXjQQGLUQWTytWyeUXiSdCfEYxL7YHbaYIsyqSO2NYuRLIYhe4QbXqr9QV5g0jOQYLeZEd2T2aUhdgJu3b3aNzO7w0R00doC/yYYkkMqrw8NXHvYTyJx5tJVobvPT45g91TV1k9GlkNX3Z5sd5unx8mc1kJFu62lNL5mnNB2zHrbkaP1kmATt0nbx10lUoB4qfG3lWQn0sxFnHrAi0YUKx58tKYqh6ZJXzfAwa67S7UpbVO/7x1Q==
+ b=lbk0a8pMKPLwZla0svEM8t8c9h8GiudqYPsobIwWeEE3nZ0x9j8qE/XjaKLv8o5QkLjefxgp/9JPIF7DLKoWJBP8YIDfD0EsCW69QhYYeGWE4/93txFyMoDiSmXqN6EIQ2+yNOfOr27am/IRW7s+RhN4768OkBYFXfVX7A1GL92l2zX2visaxcOK8vAHeCHUHIM1S8iJWbjE5Kla7LgRRoOVXxy/5cqd3vyRaT2z61jnfRueB1hS7JW6uJzYs4Jo7d96k/bygc5VFHugRl4KXiy4MTfoV/eaQDAs8QPClgXu3mfuLkyWjv1zDgNw3oYqH+pH1WZ5Xo83wqUbJsflfw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p7ZcI+u5QOkEp2325OchhtpJ7Ri++tVH5Np9f5CmHK0=;
- b=LhzimnkdIjD0ppTcEv7mLzKvMuuPGFIiwLboGWJ7hBimzd0OI2767EQHNhaPaohmk+OjMigX7onMdBaIlgY7jRadIsQzpe4FeUW4Q7nAvrpve+kYfbi0QXdi83qWKbjfHDT4lBvPE15fqammYUT58rtZGUgPeRkXb1Zzv6H+peK/v8A2lyYfC9R2PIXH6L7PZ8fQaQEw42IXwjB5lOss6k5Nwv5GuxtW9aPNZrPrf+/xEpPeLs0Mt/fzXQPj2p5DdVZ6PZV4nvGdy/RMzd6kR9J/zY57EeNpFKFH8muK2I9wffpWo36OAskS7LuWkRNZVaGm6su9djS9GM8MyZsrZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p7ZcI+u5QOkEp2325OchhtpJ7Ri++tVH5Np9f5CmHK0=;
- b=5fMdWzSUp5g31ceTFPFFPlnZb3s2NqnoJCgHTeUQvS5EqAfrSK23m+mUds5MSYrHdU3z0SfV+x5i42AFH/GyP+dSBesbQoF8KYNU3sNNDLBwXGp2b/LTxkpmCZnwdvojwg5A7BkCwmfcaQ2z7CKJUbqwuEAStL71TQV6j+klIRs=
-Received: from DM6PR13CA0058.namprd13.prod.outlook.com (2603:10b6:5:134::35)
- by SJ2PR12MB7990.namprd12.prod.outlook.com (2603:10b6:a03:4c3::12) with
+ bh=lUlPJckLTPSTW5jGYZz8Lstes6MhFBrlbsvjD5iG0ho=;
+ b=CR/IOhRHR69rCv8F9GhuUjdrI/A9a4THJUStOWC5Sk51hjsQdmAvqNC95uO5+iF0E0WI8DrPKiqXsY7P3Izk37ZX1WxG68hmQu0P4gbJzRlpIJuUpZmSZarMJF8nP0crB4UzFY/afuzi4nZ+Ywx3Asr951vxYDKnZ9GEXoV+Sm58y2JfA/rAiweZvQNn3AlRRHa6WBAGGkAjfxM92y0CR+Hd4uGB2ApXyQGhIvWB+XljwAhosJw/jDit4DEJtyIkzwipdL+ayhoYfmtJKFS55yeDBysdPMRzF8UZLmyQC+oOYKLKVCEFCLua4XV3zKDRixr0mJqkUp4oXGaY0JGaBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3004.namprd11.prod.outlook.com (2603:10b6:5:67::17) by
+ SJ0PR11MB5088.namprd11.prod.outlook.com (2603:10b6:a03:2df::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Thu, 18 May
- 2023 16:12:18 +0000
-Received: from DM6NAM11FT103.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:134:cafe::6b) by DM6PR13CA0058.outlook.office365.com
- (2603:10b6:5:134::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.15 via Frontend
- Transport; Thu, 18 May 2023 16:12:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT103.mail.protection.outlook.com (10.13.172.75) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.20 via Frontend Transport; Thu, 18 May 2023 16:12:18 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 18 May
- 2023 11:12:16 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <heikki.krogerus@linux.intel.com>, <ajayg@nvidia.com>,
-        <andriy.shevchenko@linux.intel.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <Evan.Quan@amd.com>, <Lijo.Lazar@amd.com>,
-        <Sanket.Goswami@amd.com>,
-        "Mario Limonciello" <mario.limonciello@amd.com>,
-        Evan Quan <evan.quan@amd.com>
-Subject: [PATCH v2] usb: typec: ucsi: Mark dGPUs as DEVICE scope
-Date:   Thu, 18 May 2023 11:11:50 -0500
-Message-ID: <20230518161150.92959-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
+ 2023 18:06:16 +0000
+Received: from DM6PR11MB3004.namprd11.prod.outlook.com
+ ([fe80::fa75:e407:ae4e:6f31]) by DM6PR11MB3004.namprd11.prod.outlook.com
+ ([fe80::fa75:e407:ae4e:6f31%7]) with mapi id 15.20.6411.019; Thu, 18 May 2023
+ 18:06:16 +0000
+Date:   Thu, 18 May 2023 11:06:11 -0700
+From:   David Zheng <david.zheng@intel.com>
+To:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>
+Subject: [PATCH] i2c: designware: fix idx_write_cnt in read loop
+Message-ID: <ZGZpEyITTuoBUEAM@davidzhe-DESK>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-ClientProxiedBy: BYAPR21CA0003.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::13) To DM6PR11MB3004.namprd11.prod.outlook.com
+ (2603:10b6:5:67::17)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT103:EE_|SJ2PR12MB7990:EE_
-X-MS-Office365-Filtering-Correlation-Id: 315b40a3-95a6-4aa6-64eb-08db57baa71f
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3004:EE_|SJ0PR11MB5088:EE_
+X-MS-Office365-Filtering-Correlation-Id: b0182860-9d34-43a6-e5a5-08db57ca92ad
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R60QjZvkUCf9HB9CMtx+W2Jsc5uGSaf8Ij9i2ZkdOdnlVYoTNKbRiiCTHI6HK+H0qNrJDnOUVgNzbQfkE6pzpVi2IBTW1e69bGm0oA4G8rWXuOkH4UuWSpXfqWsqss/16z0dt20R7LzlyeN9ZX8V6iXkRrq0P6TB/D+DcsymWmwajiamuycrTjtHVbyFMHOFa6DsKZo/KdqJPDys+atm5xufXcfoOKRQfD0cmelaLEf4u/yO5zDb66p0PYshTSGrIinw7os0OhDv/qseG/3Z3k8+sUZ1WCsuU4KchywvEmSM+L6IJxmQQBzQuHeWarju4AOdCQ6gHtHg+gGF6gbkjLUHiM9ITj8CItjFThCWI5eDBhnES2dHFb8D30FSVkz6rg6toEkYu0ONVuHrxd/fcmv7Qa1pcD0LNdDZfbYrbU6NcOFr22edxHbcsndGCr5g+QbzXB5JOyd7kDoAv4gi36mwQszjizb+Qi835vAcukAfXoCklJtzKlB7YBIM989NCdlljzYV/UPLFV5iYm8DQO9BcXNtSDRL/lbZ2dgDzomK6yX3CspvHaiVy39RUh0cHDxT/f7oklbwzy6XC0KXxRnhknm9h3Zp0sxtnW64Nem6yT2Ynu1cVmPlyX+a7VfBXJjhlR3KrE6k5mjkIjIPeFY+bIr5DcRraU4ptsLv84oqhkFHdybYzG+iVmXKkjXC76lEnPFrYRp3qozD2VWfHan2yoW4bLvHLA7fA5Q0No/lYFl9YWI3766u6tkglSXMxaNOdD9ZDL1/n+SlBZgtG0R0L5SKPy7hYoHWMGIihsY=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199021)(36840700001)(46966006)(40470700004)(86362001)(36756003)(16526019)(54906003)(316002)(4326008)(478600001)(70206006)(110136005)(70586007)(966005)(6666004)(7696005)(8676002)(8936002)(40480700001)(82310400005)(41300700001)(40460700003)(5660300002)(2906002)(44832011)(2616005)(336012)(81166007)(82740400003)(426003)(83380400001)(1076003)(26005)(186003)(36860700001)(47076005)(356005)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 16:12:18.1662
+X-Microsoft-Antispam-Message-Info: 3Zii27UFcdO3XBmJh/6ZRGayIc5UFbVhhAFcbn+3cEO/RE82ngmwziAyFPcbltMCBEZ0j9JIa3K8RQdF0pxiqyDal307GgRGk2W+kzeXq/BTIqv59XtyNSgCZDmB+ZzCYOUP+6sha6UxQW4pfFt5EroB2/BxJU/MWhi8HuYr4LNhrNfkQF3hrbRJB6SoKdKe17CT+bYRuRMrXBcn6OXknxWl5Ofz2tOOSTUkLRwB/FicaGW9XnNpMZzIPlvakAjgPPIUUBQKT6vAsRqfp5iqEB+XTsZeT+TO5GCR7IOzIOXcU2AIIIrfKhxedENnErcECAUtPaQT9y9VCKXQIwVaxui0pJCRSFj0IiY9Lf44Um9BFBfMKELs6gAlNWYS0lYT07Them8jyeBnIm6oe05hDpUkw26X21EJkSYQ3X7iSKRM7qNmZreOEMkzyUaIPbjes7rr/CIRAC7x87jyPSeI0eOziGVEcSbtiWaP2dVl8bwqZOxz5Oh1j1739HyzGyUrvuMkBURXZIygrsT7zOJzNgSCYHyIY998llET0x8RkV0FOrbsB9P8RFle/vBNeal1
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3004.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(39860400002)(346002)(396003)(376002)(366004)(451199021)(33716001)(6666004)(4326008)(66476007)(478600001)(41300700001)(66556008)(66946007)(6486002)(316002)(86362001)(6506007)(83380400001)(6512007)(38100700002)(26005)(186003)(82960400001)(9686003)(8676002)(2906002)(44832011)(5660300002)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cyTnRYBbjYRsJ/LIFdauzksXLI1EFFuTi8xgw+SS0eCnXOx4jyTJ6G5boiYu?=
+ =?us-ascii?Q?sQuOv0KxmeFrpy1xmkdcoGsToAI+sbKCo+irD+Q7l2DkGLhnKgawyYg3xW0H?=
+ =?us-ascii?Q?XD0KHmGiCiCThq1cSTiPmOwl2oZYOd4VSamPhBqwUTTbABVELPjxxSxsp8qd?=
+ =?us-ascii?Q?8rdwfquxpAcXN3BohLP//i4O2n8LRUY4B29gY9H2nLWqqM0PyUW7JmNc1V/b?=
+ =?us-ascii?Q?aaaSWweRaQ1n1KXhPJSxLrKqvQ27c1RtNUMQMxAwMXJ2gTK2CVdTWwVF5cmb?=
+ =?us-ascii?Q?+EkYDoXxFJnZ6UR8W83pjLMGZOh2Jn+NWhjyry3F8sohdB2T8Q7DpijeLYZU?=
+ =?us-ascii?Q?orOblJqemPpf+9nitqNSsyyGuWX4LFeOEqPzSzDT7tDe5UmogmK6akJe1Fz8?=
+ =?us-ascii?Q?JJCQCUJaFcc33G/LMD2Xu+urNDD5HJyTEGrOaOJyEIxMElN+T2WZpfM2fVUW?=
+ =?us-ascii?Q?LFUvjeHov+fvqHMyvVwJcUNV+/g/gJo+301bRYijCpPRyrhL+3NXtYB1doWV?=
+ =?us-ascii?Q?JADKoRqFBWfQLBy8u++JwLICKFjxMevkHPS8tpL0z+Yhsh69+33g3IwESCOf?=
+ =?us-ascii?Q?RvISLOcebsF9Wi4YkOfkWqGPoA8NkQ1lICldwMh5ewEpXKK1LNg1xnQODwC1?=
+ =?us-ascii?Q?o2VDVmMVpo5/VLEJL0f08V78lTbmS6Y70lZ4jzGYHBbLgxk2Eu9BbbRk8HcR?=
+ =?us-ascii?Q?CdqUahOoRlnyK0anBnitarzLDEE1gNEaO4LoQsCYq1GYc/p9BLiSJqz0UBpE?=
+ =?us-ascii?Q?enHNb7SIopHGADAvbc69tPCBV7UkPmZy3jFHf6em3LekKkyD4J3PtFLkeRLO?=
+ =?us-ascii?Q?euT7WMANNiuxtqffP1Lohzh3KOFKagjsw1UiLG28jcLOmzhrpiW/0tbH7E4d?=
+ =?us-ascii?Q?FIJ53wDghZ9d0Jr63kyh2dq7kc+hY3fcAond/OliOnUtHqFFHVZVdErzFRmd?=
+ =?us-ascii?Q?5E0LP7hd7lD6qY7zNcTYkU3BsxokDCrP6IEK40ix7aNrg0wordJBCNiw6qqL?=
+ =?us-ascii?Q?W3+7U3FSwCCRdhqLjx2EeBAwK9j9BI9uN5QDqOUKJwdgt98zA1IP5JC30krW?=
+ =?us-ascii?Q?pfWu5+MXyiFNNWuuZbpyHbCd3hJGfRHJC06jx6Lwz4nJ+msg/QF/h1ljHrW8?=
+ =?us-ascii?Q?4JdxH3q44yNlMjPDpBxGZkfx3Dmgjd8F5AVNtiyY3HZusFAylH3AjQ7Q0Fpg?=
+ =?us-ascii?Q?mxFrLgQKgpFjxhJIYQnOK8Y2ObDjSBZ5xfKsanGnlbu8xPpLpAAvdjGereSD?=
+ =?us-ascii?Q?fDI7ybVbFgDFS8AGsozGJA5BdwPqWOTBuU7Z1B7pHRf2PBAEpYof171GstYP?=
+ =?us-ascii?Q?ff0hP0f7dILgVfNwcR19KW4wRtF63inP9dR3VORg+sJ5Vmi2viyfHydLHz0+?=
+ =?us-ascii?Q?RRobUipFyISLfJv201qzJUA5Lnefvne3834IT18lV8ML87k/reZs+2v1tFMq?=
+ =?us-ascii?Q?ndbPf6bVOMFqsBTMOyQItv89PM5lUqEfAG5AFOH99z7G9JbYd+GaW3vzz9V6?=
+ =?us-ascii?Q?4MVAYfVDAITp7FzrgsjbsdBtHhw5J5b1NNnG2pEH0m1ErfeYTsK770aXpW+m?=
+ =?us-ascii?Q?qpt8XtW0Ir8gRgBnwwwtCXuR+d+BFOPTIqoaxOiu/zrqdOnIGg7tCAI/7e+F?=
+ =?us-ascii?Q?eg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0182860-9d34-43a6-e5a5-08db57ca92ad
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3004.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 18:06:16.0677
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 315b40a3-95a6-4aa6-64eb-08db57baa71f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT103.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7990
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OVDl0MeYCm4DKbx3J+Rrid1x+K23e85IZRKx9NfZBDor9/QVCFvj9azAnWypAR9mgJmlV1XB13aTBx+18dDWFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5088
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-power_supply_is_system_supplied() checks whether any power
-supplies are present that aren't batteries to decide whether
-the system is running on DC or AC.  Downstream drivers use
-this to make performance decisions.
+With IC_INTR_RX_FULL slave interrupt handler reads data in a loop until
+RX FIFO is empty. When testing with the slave-eeprom, each transaction
+has 2 bytes for address/index and 1 byte for value, the address byte
+can be written as data byte due to dropping STOP condition.
 
-Navi dGPUs include an UCSI function that has been exported
-since commit 17631e8ca2d3 ("i2c: designware: Add driver
-support for AMD NAVI GPU").
+In the test below, the master continuously writes to the slave, first 2
+bytes are index, 3rd byte is value and follow by a STOP condition.
 
-This UCSI function registers a power supply since commit
-992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
-but this is not a system power supply.
+ i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D1-D1]
+ i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D2-D2]
+ i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D3-D3]
 
-As the power supply for a dGPU is only for powering devices connected
-to dGPU, create a device property to indicate that the UCSI endpoint
-is only for the scope of `POWER_SUPPLY_SCOPE_DEVICE`.
+Upon receiving STOP condition slave eeprom would reset `idx_write_cnt` so
+next 2 bytes can be treated as buffer index for upcoming transaction.
+Supposedly the slave eeprom buffer would be written as
 
-Link: https://lore.kernel.org/lkml/20230516182541.5836-2-mario.limonciello@amd.com/
-Reviewed-by: Evan Quan <evan.quan@amd.com>
-Tested-by: Evan Quan <evan.quan@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+ EEPROM[0x00D1] = 0xD1
+ EEPROM[0x00D2] = 0xD2
+ EEPROM[0x00D3] = 0xD3
+
+When CPU load is high the slave irq handler may not read fast enough,
+the interrupt status can be seen as 0x204 with both DW_IC_INTR_STOP_DET
+(0x200) and DW_IC_INTR_RX_FULL (0x4) bits. The slave device may see
+the transactions below.
+
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1794 : INTR_STAT=0x204
+ 0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x1790 : INTR_STAT=0x200
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+
+After `D1` is received, read loop continues to read `00` which is the
+first bype of next index. Since STOP condition is ignored by the loop,
+eeprom buffer index increased to `D2` and `00` is written as value.
+
+So the slave eeprom buffer becomes
+
+ EEPROM[0x00D1] = 0xD1
+ EEPROM[0x00D2] = 0x00
+ EEPROM[0x00D3] = 0xD3
+
+The fix is to use `FIRST_DATA_BYTE` (bit 11) in `IC_DATA_CMD` to split
+the transactions. The first index byte in this case would have bit 11
+set. Check this indication to inject I2C_SLAVE_WRITE_REQUESTED event
+which will reset `idx_write_cnt` in slave eeprom.
+
+Signed-off-by: David Zheng <david.zheng@intel.com>
 ---
-v1->v2:
- * Drop patch 1, merged into a maintainers tree
- * Fix title
- * Add tags
- * Fix terminators
----
- drivers/i2c/busses/i2c-designware-pcidrv.c | 13 ++++++++++++-
- drivers/i2c/busses/i2c-nvidia-gpu.c        |  3 +++
- drivers/usb/typec/ucsi/psy.c               | 14 ++++++++++++++
- 3 files changed, 29 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-designware-core.h  | 2 ++
+ drivers/i2c/busses/i2c-designware-slave.c | 6 ++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 782fe1ef3ca1..61d7a27aa070 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -20,6 +20,7 @@
- #include <linux/module.h>
- #include <linux/pci.h>
- #include <linux/pm_runtime.h>
-+#include <linux/power_supply.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index c5d87aae39c6..8b85147bd518 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -123,6 +123,8 @@
+ #define DW_IC_COMP_PARAM_1_SPEED_MODE_HIGH	(BIT(2) | BIT(3))
+ #define DW_IC_COMP_PARAM_1_SPEED_MODE_MASK	GENMASK(3, 2)
  
-@@ -234,6 +235,16 @@ static const struct dev_pm_ops i2c_dw_pm_ops = {
- 	SET_RUNTIME_PM_OPS(i2c_dw_pci_runtime_suspend, i2c_dw_pci_runtime_resume, NULL)
- };
- 
-+static const struct property_entry dgpu_properties[] = {
-+	/* USB-C doesn't power the system */
-+	PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
-+	{}
-+};
++#define DW_IC_DATA_CMD_FIRST_DATA_BYTE		BIT(11)
 +
-+static const struct software_node dgpu_node = {
-+	.properties = dgpu_properties,
-+};
-+
- static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 			    const struct pci_device_id *id)
- {
-@@ -325,7 +336,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	}
+ /*
+  * Sofware status flags
+  */
+diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
+index cec25054bb24..9549cbcf50aa 100644
+--- a/drivers/i2c/busses/i2c-designware-slave.c
++++ b/drivers/i2c/busses/i2c-designware-slave.c
+@@ -170,12 +170,14 @@ static irqreturn_t i2c_dw_isr_slave(int this_irq, void *dev_id)
+ 		if (!(dev->status & STATUS_WRITE_IN_PROGRESS)) {
+ 			dev->status |= STATUS_WRITE_IN_PROGRESS;
+ 			dev->status &= ~STATUS_READ_IN_PROGRESS;
+-			i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_REQUESTED,
+-					&val);
+ 		}
  
- 	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
--		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, NULL);
-+		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, &dgpu_node);
- 		if (IS_ERR(dev->slave))
- 			return dev_err_probe(dev->dev, PTR_ERR(dev->slave),
- 					     "register UCSI failed\n");
-diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-index a8b99e7f6262..26622d24bb1b 100644
---- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-+++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-@@ -14,6 +14,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
-+#include <linux/power_supply.h>
- 
- #include <asm/unaligned.h>
- 
-@@ -261,6 +262,8 @@ MODULE_DEVICE_TABLE(pci, gpu_i2c_ids);
- static const struct property_entry ccgx_props[] = {
- 	/* Use FW built for NVIDIA GPU only */
- 	PROPERTY_ENTRY_STRING("firmware-name", "nvidia,gpu"),
-+	/* USB-C doesn't power the system */
-+	PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
- 	{ }
- };
- 
-diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-index 56bf56517f75..384b42267f1f 100644
---- a/drivers/usb/typec/ucsi/psy.c
-+++ b/drivers/usb/typec/ucsi/psy.c
-@@ -27,8 +27,20 @@ static enum power_supply_property ucsi_psy_props[] = {
- 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
- 	POWER_SUPPLY_PROP_CURRENT_MAX,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_SCOPE,
- };
- 
-+static int ucsi_psy_get_scope(struct ucsi_connector *con,
-+			      union power_supply_propval *val)
-+{
-+	u8 scope = POWER_SUPPLY_SCOPE_UNKNOWN;
-+	struct device *dev = con->ucsi->dev;
-+
-+	device_property_read_u8(dev, "scope", &scope);
-+	val->intval = scope;
-+	return 0;
-+}
-+
- static int ucsi_psy_get_online(struct ucsi_connector *con,
- 			       union power_supply_propval *val)
- {
-@@ -194,6 +206,8 @@ static int ucsi_psy_get_prop(struct power_supply *psy,
- 		return ucsi_psy_get_current_max(con, val);
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		return ucsi_psy_get_current_now(con, val);
-+	case POWER_SUPPLY_PROP_SCOPE:
-+		return ucsi_psy_get_scope(con, val);
- 	default:
- 		return -EINVAL;
- 	}
+ 		do {
+ 			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
++			if (tmp & DW_IC_DATA_CMD_FIRST_DATA_BYTE)
++				i2c_slave_event(dev->slave,
++						I2C_SLAVE_WRITE_REQUESTED,
++						&val);
+ 			val = tmp;
+ 			i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED,
+ 					&val);
 -- 
-2.34.1
+2.40.1
 
