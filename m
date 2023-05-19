@@ -2,98 +2,137 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED2F709803
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 May 2023 15:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9679B70981A
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 May 2023 15:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbjESNNX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 May 2023 09:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S231156AbjESNTs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 May 2023 09:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjESNNU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 May 2023 09:13:20 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E390B9D;
-        Fri, 19 May 2023 06:13:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=AFSGky7UzwQyZmjfo4thsr333FmanWi5jd4y86uGkXY=; b=dW1UqK7HLxMXKzbQIoTP5QQB5L
-        FAIblVsqNZiz0j+W3QMaGVbjExUrowSvhe1VrnWLRRgdOEcu+4vRC9zRi/MW0k3Q/oXNqUt+JQUJy
-        c5XfEoam/nZaMUc9z5+uz1BXmFF3gHMZRqxgvMqZyNRirfBbwci7nCCcS0zSfDfrkMs4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pzzuq-00DKKC-5R; Fri, 19 May 2023 15:13:04 +0200
-Date:   Fri, 19 May 2023 15:13:04 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jiawen Wu <jiawenwu@trustnetic.com>
-Cc:     'Andy Shevchenko' <andy.shevchenko@gmail.com>,
-        netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, Jose.Abreu@synopsys.com, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, linux-i2c@vger.kernel.org,
-        linux-gpio@vger.kernel.org, mengyuanlou@net-swift.com
-Subject: Re: [PATCH net-next v8 6/9] net: txgbe: Support GPIO to SFP socket
-Message-ID: <f0b571ab-544b-49c3-948f-d592f931673b@lunn.ch>
-References: <20230515063200.301026-1-jiawenwu@trustnetic.com>
- <20230515063200.301026-7-jiawenwu@trustnetic.com>
- <ZGH-fRzbGd_eCASk@surfacebook>
- <00cd01d9879f$8e444950$aaccdbf0$@trustnetic.com>
- <CAHp75VdthEZL6GvT5Q=f7rbcDfA5XX=7-VLfVz1kZmBFem_eCA@mail.gmail.com>
- <016701d9886a$f9b415a0$ed1c40e0$@trustnetic.com>
- <90ef7fb8-feac-4288-98e9-6e67cd38cdf1@lunn.ch>
- <025b01d9897e$d8894660$899bd320$@trustnetic.com>
- <1e1615b3-566c-490c-8b1a-78f5521ca0b0@lunn.ch>
- <028601d989f9$230ee120$692ca360$@trustnetic.com>
+        with ESMTP id S231470AbjESNTr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 May 2023 09:19:47 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173D4F5;
+        Fri, 19 May 2023 06:19:46 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64d3fbb8c1cso177703b3a.3;
+        Fri, 19 May 2023 06:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684502385; x=1687094385;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PNZa4ZUMMTvbUod6znd3wvg9/UWL/p4a2pQAi7M2zVw=;
+        b=Tjrk99BRY28Fy8/OjZNMP8CiMQ6zmFrMXQL10thchpXS9detrOCrK1IGYiRrbYzhVO
+         zZWgRORL6Vo1JuL8ToPXNHE1MQdRgSzbz0oBKJN7O6RKsuuZyf4iknt3hNShh77400Vw
+         np77K8+ficWm8RlwW5j/sLMxK6G9akwUPWOlvZNDitIzXEavwnEDe5HBI8YkAKvX8R2c
+         /na81XIjC1Yd8QxLI0blip5op5dSEIwITsZXugLcZbgVk/3n8z5/fCaOOogmhU3Jxico
+         Or2/5SdX91MIyP/MLUT2hiljx0TfEp3RoeDIiobBmQ1QLOkZd1LPqlSXbyjCj4PTObs2
+         5Twg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684502385; x=1687094385;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PNZa4ZUMMTvbUod6znd3wvg9/UWL/p4a2pQAi7M2zVw=;
+        b=Xaa4vqHspQbklD+k73oMU6WmxqWM/mFyOvC6qhNNjT6ZD/nf7+24kC48uxgk1ZB0HH
+         Yua75tSQgEb7RXYw6CZ5rs2c/c8dcXJk9zu8HrUbsjliv6se6Xmi6MvTipUd1sDLgk71
+         jD0Xd0sV/PIj4vkFOWdTKBg+dV7qqiJ+xe1qFu83/NzRpLFT12BCoUFYWbvgdNDEfMLI
+         GpQvHvAg0hSOUxeUbjyD9mcVxR47qvMUUmYUjBoJQo7Ilnitxpt9++frouSnpguFgOF7
+         6E1ohG1aeQzJfUtllX4QPeSvgQHTKcygfBWWxY6qA2lbCtp/wLvv3VuiaobMHp5CZ0Ak
+         n5qw==
+X-Gm-Message-State: AC+VfDwycigIb/qgCflep4MpbXqoSdTB9h5bM0TTQ8G7KwDwk2vY40GO
+        ExFnrjXhAIHTc+2uD/q4N5XzkKVX9OE=
+X-Google-Smtp-Source: ACHHUZ5QF8RST84gVY23LOwTXUDqa2rVOApCMeiJNnggae4EC8S0ssgapsdL48wiE9f2cSirgy7pXw==
+X-Received: by 2002:a05:6a00:15c7:b0:64d:2e8a:4cc1 with SMTP id o7-20020a056a0015c700b0064d2e8a4cc1mr3149325pfu.27.1684502385276;
+        Fri, 19 May 2023 06:19:45 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-19.three.co.id. [116.206.28.19])
+        by smtp.gmail.com with ESMTPSA id f18-20020aa782d2000000b00571cdbd0771sm2981023pfn.102.2023.05.19.06.19.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 06:19:44 -0700 (PDT)
+Message-ID: <73883c7d-42db-7ac6-fa43-b9be45cdc795@gmail.com>
+Date:   Fri, 19 May 2023 20:19:39 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <028601d989f9$230ee120$692ca360$@trustnetic.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Input <linux-input@vger.kernel.org>,
+        Linux i2c Devices <linux-i2c@vger.kernel.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: ThinkPad L540: suspend not working (deep / S3 / standby,
+ regression Linux 4.19 -> 6.1)
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        kolAflash@kolahilft.de
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-> I have one MSI-X interrupt for all general MAC interrupt (see TXGBE_PX_MISC_IEN_MASK).
-> It has 32 bits to indicate various interrupts, GPIOs are the one of them. When GPIO
-> interrupt is determined, GPIO_INT_STATUS register should be read to determine
-> which GPIO line has changed state.
+Hi,
 
-So you have another interrupt controller above the GPIO interrupt
-controller. regmap-gpio is pushing you towards describing this
-interrupt controller as a Linux interrupt controller.
+I notice a regression report on Bugzilla [1]. Quoting from it:
 
-When you look at drivers handling interrupts, most leaf interrupt
-controllers are not described as Linux interrupt controllers. The
-driver interrupt handler reads the interrupt status register and
-internally dispatches to the needed handler. This works well when
-everything is internal to one driver.
-
-However, here, you have two drivers involved, your MAC driver and a
-GPIO driver instantiated by the MAC driver. So i think you are going
-to need to described the MAC interrupt controller as a Linux interrupt
-controller.
-
-Take a look at the mv88e6xxx driver, which does this. It has two
-interrupt controller embedded within it, and they are chained.
-
-> > If you are getting errors when removing the driver it means you are
-> > missing some level of undoing what us done in probe. Are you sure
-> > regmap_del_irq_chip() is being called on unload?
+> ThinkPad L540 failed suspend deep dmesg output - Linux-6.1.27 from Debian-12
 > 
-> I used devm_* all when I registered them.
+> Since updating from Linux-4.19 to Linux-6.1.27 suspend deep is not working anymore.
+> (a.k.a. S3, standby or suspend to ram)
+> 
+> Notebook: ThinkPad L540 20AU-S00N00
+> OS: Debian-12 "Bookworm" (was Debian-10 "Buster" before)
+> Kernel: Linux-6.1.27 from Debian-12 (was Linux-4.19 from Debian-10 before)
+> 
+> Can I provide any other helpful information?
+> Do you need a test with a vanilla Linux-6.1 kernel?
+> Should I perform any other tests or maybe try out boot parameters?
+> 
+> Full dmesg output attached.
+> Excerpt:
+> rmi4_f01 rmi4-00.fn01: Failed to write sleep mode: -6.
+> rmi4_f01 rmi4-00.fn01: Suspend failed with code -6.
+> rmi4_physical rmi4-00: Failed to suspend functions: -6
+> rmi4_smbus 0-002c: Failed to suspend device: -6
+> rmi4_smbus 0-002c: PM: dpm_run_callback(): rmi_smb_suspend+0x0/0x40 [rmi_smbus] returns -6
+> rmi4_smbus 0-002c: PM: failed to suspend async: error -6
+> sd 4:0:0:0: [sda] Synchronizing SCSI cache
+> sd 4:0:0:0: [sda] Stopping disk
+> PM: Some devices failed to suspend, or early wake event detected
+> sd 4:0:0:0: [sda] Starting disk
+> OOM killer enabled.
+> Restarting tasks ... 
+> rmi4_physical rmi4-00: rmi_driver_set_irq_bits: Failed to change enabled interrupts!
+> psmouse: probe of serio2 failed with error -1
+> 
+> 
+> 
+> Maybe related:
+> 
+> 5.17-rc regression: X1 Carbon touchpad not resumed
+> https://lore.kernel.org/lkml/YgF%2F0QGFN4SppLKg@shikoro/T/
 
-Look at the ordering. Is regmap_del_irq_chip() being called too late?
-I've had problems like this with the mv88e6xxx driver and its
-interrupt controllers. I ended up not using devm_ so i had full
-control over the order things got undone. In that case, the external
-devices was PHYs, with the PHY interrupt being inside the Ethernet
-switch, which i exposed using a Linux interrupt controller.
+FYI, I guess the regression is also introduced by 172d931910e1db
+("i2c: enable async suspend/resume on i2c client devices") and
+should have been fixed by 7b1f781f2d2460 ("Input: psmouse - set up
+dependency between PS/2 and SMBus companions"), but it doesn't
+fix the reporter's issue.
 
-	Andrew
+Anyway, I'm adding this to regzbot:
+
+#regzbot introduced: v4.19..v6.1 https://bugzilla.kernel.org/show_bug.cgi?id=217462
+#regzbot title: psmouse suspend failed on ThinkPad L540
+
+Thanks.
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217462
+
+-- 
+An old man doll... just what I always wanted! - Clara
