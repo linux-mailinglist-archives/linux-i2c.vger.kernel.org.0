@@ -2,78 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3541D709827
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 May 2023 15:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9929F70982F
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 May 2023 15:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjESNY6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 May 2023 09:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
+        id S231347AbjESN1D (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 May 2023 09:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjESNY5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 May 2023 09:24:57 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8230CE;
-        Fri, 19 May 2023 06:24:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=yLx9VzoDWbBqJmTZ++/Rgv4qWRRHxJCH7fo4Hi8SvFM=; b=Z9H4TKxWGRt9jxCZOoCjFNBp5N
-        6fDon5lgZx72hAYHl5dnnHyXNzBpvCT2wRoCsSr6RmQZAEIElG7ZcFHNGSnEGtmxSJCMvuDsWFg6L
-        RBh8nbRF0ZQXJEsm160RdvcFON9Q2rnVSjYdKo12qO+GV47MR76B5Bt4K0zWLP/aQcXw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q0068-00DKOH-CK; Fri, 19 May 2023 15:24:44 +0200
-Date:   Fri, 19 May 2023 15:24:44 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jiawen Wu <jiawenwu@trustnetic.com>
-Cc:     'Andy Shevchenko' <andy.shevchenko@gmail.com>,
-        netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, Jose.Abreu@synopsys.com, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, linux-i2c@vger.kernel.org,
-        linux-gpio@vger.kernel.org, mengyuanlou@net-swift.com
-Subject: Re: [PATCH net-next v8 6/9] net: txgbe: Support GPIO to SFP socket
-Message-ID: <3abf6e14-7029-4a52-a360-353870a9906a@lunn.ch>
-References: <20230515063200.301026-1-jiawenwu@trustnetic.com>
- <20230515063200.301026-7-jiawenwu@trustnetic.com>
- <ZGH-fRzbGd_eCASk@surfacebook>
- <00cd01d9879f$8e444950$aaccdbf0$@trustnetic.com>
- <CAHp75VdthEZL6GvT5Q=f7rbcDfA5XX=7-VLfVz1kZmBFem_eCA@mail.gmail.com>
- <016701d9886a$f9b415a0$ed1c40e0$@trustnetic.com>
- <90ef7fb8-feac-4288-98e9-6e67cd38cdf1@lunn.ch>
- <025b01d9897e$d8894660$899bd320$@trustnetic.com>
- <1e1615b3-566c-490c-8b1a-78f5521ca0b0@lunn.ch>
- <02ad01d98a2b$4cd080e0$e67182a0$@trustnetic.com>
+        with ESMTP id S230461AbjESN1C (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 May 2023 09:27:02 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8F212B;
+        Fri, 19 May 2023 06:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684502821; x=1716038821;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=21kxhYntrvevXU1LQUOUEJedYStXujm2jMSmAwYvD7g=;
+  b=Y68zkcwA9XvuqKKA1T3heGco8zUMDoU9SFk/tErPsrQWOUjdz1lfYPEI
+   EjSs0wOOnLz5hBCUjINBSeifb7dBKwwSnHjiUQsKlcDaMY30Dfz4hMJU9
+   13A6Egbhtf+W9g0iot5dlZcwh/h/LH0NU2bD7kQnbiEHMHKyDXC827Er0
+   +aC0LeUIDgLZovNn1P3aJlyoOL7pVA7rI1SRPj4qLpR7mdPGqK2RPMw3g
+   tJ2oXpOiRwnY+dpw6K3das9XwzgUpkeFSI1ffAJkwIo8CMudgs9FfKHOY
+   /3aIaiiJRVAC6dyjcLb0hY1is19+tZ7/XjRjv1RpphgZNJ14bSy5yKSjY
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10715"; a="349883503"
+X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
+   d="scan'208";a="349883503"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 06:27:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10715"; a="814727672"
+X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
+   d="scan'208";a="814727672"
+Received: from mylly.fi.intel.com (HELO [10.237.72.160]) ([10.237.72.160])
+  by fmsmga002.fm.intel.com with ESMTP; 19 May 2023 06:26:57 -0700
+Message-ID: <0e9ac73a-7937-ec04-5be3-44d3f4cd83dd@linux.intel.com>
+Date:   Fri, 19 May 2023 16:26:57 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <02ad01d98a2b$4cd080e0$e67182a0$@trustnetic.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH net-next v8 2/9] i2c: designware: Add driver support for
+ Wangxun 10Gb NIC
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jiawen Wu <jiawenwu@trustnetic.com>
+Cc:     netdev@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com,
+        Jose.Abreu@synopsys.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, linux-i2c@vger.kernel.org,
+        linux-gpio@vger.kernel.org, mengyuanlou@net-swift.com,
+        Piotr Raczynski <piotr.raczynski@intel.com>
+References: <20230515063200.301026-1-jiawenwu@trustnetic.com>
+ <20230515063200.301026-3-jiawenwu@trustnetic.com>
+ <ZGH6TmeiR0icT6Tc@surfacebook>
+ <85d058cd-2dd9-2a7b-efd0-e4c8d512ae29@linux.intel.com>
+ <018c01d988a1$7f97fe80$7ec7fb80$@trustnetic.com>
+ <CAHp75VesUNnBwwccFxRAGTpQ4TcCeg6+tfYuBuSe93uHr=ZC_g@mail.gmail.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <CAHp75VesUNnBwwccFxRAGTpQ4TcCeg6+tfYuBuSe93uHr=ZC_g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-> It's true for the problem of name, but there is another problem. SFP driver has
-> successfully got gpio_desc, then it failed to get gpio_irq from gpio_desc (with error
-> return -517). I traced the function gpiod_to_irq():
-
--517 is a number you learn after a while. -EPROBE_DEFFER. So the GPIO
-controller is not fully ready when the SFP driver tries to use it.
-
-I guess this is the missing upstream interrupt. You need to get the
-order correct:
-
-Register the MAC interrupt controller
-Instantiate the regmap-gpio controller
-Instantiate the I2C bus master
-Instantiate the SPF devices
-Instantiate PHYLINK.
-
-	Andrew
+On 5/17/23 12:44, Andy Shevchenko wrote:
+> On Wed, May 17, 2023 at 12:26 PM Jiawen Wu <jiawenwu@trustnetic.com> wrote:
+>> On Wednesday, May 17, 2023 4:49 PM, Jarkko Nikula wrote:
+>>> On 5/15/23 12:24, andy.shevchenko@gmail.com wrote:
+>>>> Mon, May 15, 2023 at 02:31:53PM +0800, Jiawen Wu kirjoitti:
+>>>>>     dev->flags = (uintptr_t)device_get_match_data(&pdev->dev);
+>>>>> +  if (device_property_present(&pdev->dev, "snps,i2c-platform"))
+>>>>> +          dev->flags |= MODEL_WANGXUN_SP;
+>>>>
+>>>> What I meant here is to use device_property_present() _iff_ you have decided to
+>>>> go with the _vendor-specific_ property name.
+>>>>
+>>>> Otherwise it should be handled differently, i.e. with reading the actual value
+>>>> of that property. Hence it should correspond the model enum, which you need to
+>>>> declare in the Device Tree bindings before use.
+>>>>
+>>>> So, either
+>>>>
+>>>>      if (device_property_present(&pdev->dev, "wx,..."))
+>>>>              dev->flags |= MODEL_WANGXUN_SP;
+>>>>
+>>>> or
+>>>>
+>>>>      if ((dev->flags & MODEL_MASK) == MODEL_NONE) {
+>>>>      // you now have to distinguish that there is no model set in driver data
+>>>>              u32 model;
+>>>>
+>>>>              ret = device_property_read_u32(dev, "snps,i2c-platform");
+>>>>              if (ret) {
+>>>>                      ...handle error...
+>>>>              }
+>>>>              dev->flags |= model
+>>>>
+>>> I'm not a device tree expert but I wonder would it be possible somehow
+>>> combine this and compatible properties in dw_i2c_of_match[]? They set
+>>> model flag for MODEL_MSCC_OCELOT and MODEL_BAIKAL_BT1.
+>>
+>> Maybe the table could be changed to match device property, instead of relying
+>> on DT only. Or device_get_match_data() could be also implemented in
+>> software node case?
+> 
+> This has been discussed [1] and still no visible prototype. Perhaps
+> you can collaborate with Vladimir on the matter.
+> 
+> [1]: https://lore.kernel.org/lkml/20230223203713.hcse3mkbq3m6sogb@skbuf/
+> 
+Ok, not possible at the moment. Perhaps for now setting model using 
+device_property_read_u32() is good enough? I asked above out of 
+curiosity rather than demanding perfection. They say "Perfect is the 
+enemy of good" :-)
