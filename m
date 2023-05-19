@@ -2,172 +2,249 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7F77091A6
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 May 2023 10:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 747D670959E
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 May 2023 13:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjESI1x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 May 2023 04:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S231653AbjESLAo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 May 2023 07:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjESI1w (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 May 2023 04:27:52 -0400
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D153F198
-        for <linux-i2c@vger.kernel.org>; Fri, 19 May 2023 01:27:50 -0700 (PDT)
-X-QQ-mid: Yeas54t1684484656t878t52425
-Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [115.200.228.151])
-X-QQ-SSF: 00400000000000F0FNF000000000000
-From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
-X-BIZMAIL-ID: 18003444399140416337
-To:     "'Andrew Lunn'" <andrew@lunn.ch>
-Cc:     "'Andy Shevchenko'" <andy.shevchenko@gmail.com>,
-        <netdev@vger.kernel.org>, <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
-        <Jose.Abreu@synopsys.com>, <hkallweit1@gmail.com>,
-        <linux@armlinux.org.uk>, <linux-i2c@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <mengyuanlou@net-swift.com>
-References: <20230515063200.301026-1-jiawenwu@trustnetic.com> <20230515063200.301026-7-jiawenwu@trustnetic.com> <ZGH-fRzbGd_eCASk@surfacebook> <00cd01d9879f$8e444950$aaccdbf0$@trustnetic.com> <CAHp75VdthEZL6GvT5Q=f7rbcDfA5XX=7-VLfVz1kZmBFem_eCA@mail.gmail.com> <016701d9886a$f9b415a0$ed1c40e0$@trustnetic.com> <90ef7fb8-feac-4288-98e9-6e67cd38cdf1@lunn.ch> <025b01d9897e$d8894660$899bd320$@trustnetic.com> <1e1615b3-566c-490c-8b1a-78f5521ca0b0@lunn.ch>
-In-Reply-To: <1e1615b3-566c-490c-8b1a-78f5521ca0b0@lunn.ch>
-Subject: RE: [PATCH net-next v8 6/9] net: txgbe: Support GPIO to SFP socket
-Date:   Fri, 19 May 2023 16:24:15 +0800
-Message-ID: <02ad01d98a2b$4cd080e0$e67182a0$@trustnetic.com>
+        with ESMTP id S231437AbjESLAl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 May 2023 07:00:41 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411DA19AD;
+        Fri, 19 May 2023 04:00:24 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2af2958db45so270611fa.1;
+        Fri, 19 May 2023 04:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684494022; x=1687086022;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8HzmV/EeDYZAd/CQ0iL4Qog48xkS+m0Ot11dMlnkfWk=;
+        b=lq4mmsZwnHP6gVL70/70n3IEu+qRUZxV6CrqxoWmz+p3PqhmSGSiLkcmDwIz3p8nnA
+         FxljhyLOZURY+0yRe8FiBn7NIqMkNDyTm25WLh8RyawQ/j2VvypfuxHLa1p/md6kLet/
+         z6sM7XmgbwGKibzPPAGdnxUVDV293ikW2jkktcrK0rk8V8N3Gu0dr/eBLrLMBvY55vSQ
+         T1Xy8PehhET0azvS5z0pK0hEjeICzIMUC+vnruC9BKZtP+Het7FdEBQdDT2iefB6B3yh
+         0IQicLkvYo6PIMdy0Qp2Zw8c21AImgXBUcSDeQaLyOBKaiqLt8TuLFAV5Qtfs0SlN8gm
+         +auA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684494022; x=1687086022;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8HzmV/EeDYZAd/CQ0iL4Qog48xkS+m0Ot11dMlnkfWk=;
+        b=aS7xSY1PKgHva/yoeqhrDXms0bQawoVumIKUFcSfXVO3iAuFBo1Togz4c4FNNA2p9j
+         BWytI1jL8WukQ7HcQGsfkVOmekSv8bcJAiU9sYZosQVVTZ84cSBQwwFkoRk2inlHSWJV
+         Q2/fR0RJuiyRXTA7oyIyWW0KnNdYcaiHMXvsGh6mkAUPk29sKucN/IsHGWDIkqBzPWWZ
+         MFIIYGfFE2YBaFxX1am7DJzuIYrXmap2IvLVD3JZqFnQ4J5/2bNRgNVHP4ROTXll0p2H
+         rmMBz72GJ0Tq03/D6OIEWPxvS5hYny5ZepFkRMizHApH7zSyJtHK3iBliV/soZGhMUgH
+         Km5w==
+X-Gm-Message-State: AC+VfDw8fjMcklna+3MvixFlm/Q/X0WnV+1QJkdQYDHFSV30nE59JKtA
+        elXij+Jw8L4VZGd/MejUYpk=
+X-Google-Smtp-Source: ACHHUZ7+pbJy3k9uH6C/3QKxyqqHfaOoWdXRDl+dyMEzF1Svz3USEJ6WBcHYU1FvyB6JAnaRftDLGg==
+X-Received: by 2002:a2e:99ca:0:b0:2af:1adf:d2ce with SMTP id l10-20020a2e99ca000000b002af1adfd2cemr595260ljj.52.1684494022071;
+        Fri, 19 May 2023 04:00:22 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id t4-20020a2e9c44000000b002ad90280503sm763254ljj.138.2023.05.19.04.00.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 04:00:21 -0700 (PDT)
+Date:   Fri, 19 May 2023 14:00:12 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: [PATCH v5 0/8] fix fwnode_irq_get[_byname()] returnvalue
+Message-ID: <cover.1684493615.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: zh-cn
-Thread-Index: AQHvj8QD3pC+6Aq9H9h6P1+q5LrHRgMH5FTyAkITzAABJU2Y7wJ7xjhgAYjDQqsBr+FHUgDJ87o1AYTHtNeuwZQUsA==
-X-QQ-SENDSIZE: 520
-Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BxFZ2ncJS53EetEw"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thursday, May 18, 2023 8:49 PM, Andrew Lunn wrote:
-> > > I _think_ you are mixing upstream IRQs and downstream IRQs.
-> > >
-> > > Interrupts are arranged in trees. The CPU itself only has one or two
-> > > interrupts. e.g. for ARM you have FIQ and IRQ. When the CPU gets an
-> > > interrupt, you look in the interrupt controller to see what external
-> > > or internal interrupt triggered the CPU interrupt. And that interrupt
-> > > controller might indicate the interrupt came from another interrupt
-> > > controller. Hence the tree structure. And each node in the tree is
-> > > considered an interrupt domain.
-> > >
-> > > A GPIO controller can also be an interrupt controller. It has an
-> > > upstream interrupt, going to the controller above it. And it has
-> > > downstream interrupts, the GPIO lines coming into it which can cause
-> > > an interrupt. And the GPIO interrupt controller is a domain.
-> > >
-> > > So what exactly does gpio_regmap_config.irq_domain mean? Is it the
-> > > domain of the upstream interrupt controller? Is it an empty domain
-> > > structure to be used by the GPIO interrupt controller? It is very
-> > > unlikely to have anything to do with the SFP devices below it.
-> >
-> > Sorry, since I don't know much about interrupt,  it is difficult to understand
-> > regmap-irq in a short time. There are many questions about regmap-irq.
-> >
-> > When I want to add an IRQ chip for regmap, for the further irq_domain,
-> > I need to pass a parameter of IRQ, and this IRQ will be requested with handler:
-> > regmap_irq_thread(). Which IRQ does it mean?
-> 
-> That is your upstream IRQ, the interrupt indicating one of your GPIO
-> lines has changed state.
-> 
-> > In the previous code of using
-> > devm_gpiochip_add_data(), I set the MSI-X interrupt as gpio-irq's parent, but
-> > it was used to set chained handler only. Should the parent be this IRQ? I found
-> > the error with irq_free_descs and irq_domain_remove when I remove txgbe.ko.
-> 
-> Do you have one MSI-X dedicated for GPIOs. Or is it your general MAC
-> interrupt, and you need to read an interrupt controller register to
-> determine it was GPIOs which triggered the interrupt?
-> 
-> If you are getting errors when removing the driver it means you are
-> missing some level of undoing what us done in probe. Are you sure
-> regmap_del_irq_chip() is being called on unload?
-> 
-> > As you said, the interrupt of each tree node has its domain. Can I understand
-> > that there are two layer in the interrupt tree for MSI-X and GPIOs, and requesting
-> > them separately is not conflicting? Although I thought so, but after I implement
-> > gpio-regmap, SFP driver even could not find gpio_desc. Maybe I missed something
-> > on registering gpio-regmap...
-> 
-> That is probably some sort of naming issue. You might want to add some
-> prints in swnode_find_gpio() and gpiochip_find() to see what it is
-> looking for vs what the name actually is.
 
-It's true for the problem of name, but there is another problem. SFP driver has
-successfully got gpio_desc, then it failed to get gpio_irq from gpio_desc (with error
-return -517). I traced the function gpiod_to_irq():
+--BxFZ2ncJS53EetEw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	gc = desc->gdev->chip;
-	offset = gpio_chip_hwgpio(desc);
-	if (gc->to_irq) {
-		int retirq = gc->to_irq(gc, offset);
+The fwnode_irq_get() and the fwnode_irq_get_byname() may have returned
+zero if mapping the IRQ fails. This contradicts the
+fwnode_irq_get_byname() documentation. Furthermore, returning zero or
+errno on error is unepected and can easily lead to problems
+like:
 
-		/* Zero means NO_IRQ */
-		if (!retirq)
-			return -ENXIO;
+int probe(foo)
+{
+=2E..
+	ret =3D fwnode_irq_get_byname(...);
+	if (ret < 0)
+		return ret;
+=2E..
+}
 
-		return retirq;
-	}
+or
 
-'gc->to_irq = gpiochip_to_irq' was set in [4]gpiochip_irqchip_add_domain().
-So:
+int probe(foo)
+{
+=2E..
+	ret =3D fwnode_irq_get_byname(...);
+	if (ret <=3D 0)
+		return ret;
+=2E..
+}
 
-	static int gpiochip_to_irq(struct gpio_chip *gc, unsigned int offset)
-	{
-		struct irq_domain *domain = gc->irq.domain;
+which are both likely to be wrong. First treats zero as successful call and
+misses the IRQ mapping failure. Second returns zero from probe even though
+it detects the IRQ mapping failure correvtly.
 
-	#ifdef CONFIG_GPIOLIB_IRQCHIP
-		/*
-		 * Avoid race condition with other code, which tries to lookup
-		 * an IRQ before the irqchip has been properly registered,
-		 * i.e. while gpiochip is still being brought up.
-		 */
-		if (!gc->irq.initialized)
-			return -EPROBE_DEFER;
-	#endif
+Here we change the fwnode_irq_get() and the fwnode_irq_get_byname() to
+always return a negative errno upon failure.
 
-gc->irq.initialized is set to true at the end of [3]gpiochip_add_irqchip() only.
-Firstly, it checks if irqchip is NULL:
+I have audited following callers (v6.4-rc2):
 
-	static int gpiochip_add_irqchip(struct gpio_chip *gc,
-					struct lock_class_key *lock_key,
-					struct lock_class_key *request_key)
-	{
-		struct fwnode_handle *fwnode = dev_fwnode(&gc->gpiodev->dev);
-		struct irq_chip *irqchip = gc->irq.chip;
-		unsigned int type;
-		unsigned int i;
+fwnode_irq_get_byname():
+drivers/i2c/i2c-smbus.c
+drivers/iio/accel/adxl355_core.c
+drivers/iio/accel/kionix-kx022a.c
+drivers/iio/adc/ad4130.c
+drivers/iio/adc/max11410.c
+drivers/iio/addac/ad74115.c
+drivers/iio/gyro/fxas21002c_core.c
+drivers/iio/imu/adis16480.c
+drivers/iio/imu/bmi160/bmi160_core.c
+drivers/iio/imu/bmi160/bmi160_core.c
 
-		if (!irqchip)
-			return 0;
+fwnode_irq_get():
+drivers/gpio/gpio-dwapb.c
+drivers/iio/chemical/scd30_serial.c
+drivers/iio/proximity/mb1232.c
+drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+drivers/net/mdio/fwnode_mdio.c
+drivers/pinctrl/pinctrl-ingenic.c
+drivers/pinctrl/pinctrl-microchip-sgpio.c
+drivers/pinctrl/pinctrl-pistachio.c
 
-The result shows that it was NULL, so gc->irq.initialized = false.
-Above all, return irq = -EPROBE_DEFER.
+and it seems to me these calls will be Ok after the change. The
+i2c-smbus.c and kionix-kx022a.c will gain a functional change (bugfix?) as
+after this patch the probe will return -EINVAL should the IRQ mapping fail.
+The series will also adjust the return value check for zero to be omitted.
 
-So let's sort the function calls. In chronological order, [1] calls [2], [2] calls
-[3], then [1] calls [4]. The irq_chip was added to irq_domain->host_data->irq_chip
-before [1]. But I don't find where to convert gpio_chip->irq.domain->host_data->irq_chip
-to gpio_chip->irq.chip, it seems like it should happen after [4] ? But if it wants to use
-'gc->to_irq' successfully, it should happen before [3]?
+NOTES:
 
-[1] gpio_regmap_register()
-[2] gpiochip_add_data()
-[3] gpiochip_add_irqchip()
-[4] gpiochip_irqchip_add_domain()
+Changes are compile-tested only.
 
-I'm sorry that I described the problem in a confusing way, apologize if I missed
-some code that caused this confusion.
+drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+will also gain a functional change. The pinctrl-wpcm450.c change is easy
+to see - after this series the device-tree mapping failures will be
+handled as any other errors - probe will be aborted with -EINVAL. Other
+feasible option could be treating other errors in IRQ getting same way
+as the DT mapping failures - just silently skip the IRQ. Please see
+comment in the respective patch.
+
+drivers/iio/cdc/ad7150.c
+will gain functional change as well. Here the logic is less
+straightforward but boils down to the same question as with the
+pinctrl-wpcm450.c. Should all the IRQ getting errors jump to same
+'no-IRQ' branch as the DT mapping error, or should the DT mapping error
+abort the probe with error same way as other IRQ getting failures do?
+
+Revision history:
+v4 =3D> v5:
+ - Fix subject lines for mvpp2 and wpcm450
+ - drop unnecessary irqno assignment from mb1232
+ - add back the drivers/i2c/i2c-smbus.c change which was accidentally
+   dropped during v3 =3D> v4 work
+v3 =3D> v4:
+ - Change also the fwnode_irq_get() as was suggested by Jonathan.
+Changelog v2 =3D> v3:
+ - rebase/resend/add kx022a fix.
+Changelog v1 =3D> v2:
+ - minor styling
+
+---
+
+Matti Vaittinen (8):
+  drivers: fwnode: fix fwnode_irq_get[_byname]()
+  iio: mb1232: relax return value check for IRQ get
+  net-next: mvpp2: relax return value check for IRQ get
+  pinctrl: wpcm450: relax return value check for IRQ get
+  pinctrl: ingenic: relax return value check for IRQ get
+  pinctrl: pistachio: relax return value check for IRQ get
+  iio: cdc: ad7150: Functional change
+  i2c: i2c-smbus: fwnode_irq_get_byname() return value fix
+
+ drivers/base/property.c                         | 12 +++++++++---
+ drivers/i2c/i2c-smbus.c                         |  2 +-
+ drivers/iio/cdc/ad7150.c                        |  3 +--
+ drivers/iio/proximity/mb1232.c                  |  7 ++-----
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c |  4 ++--
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c       |  2 --
+ drivers/pinctrl/pinctrl-ingenic.c               |  2 --
+ drivers/pinctrl/pinctrl-pistachio.c             |  6 ------
+ 8 files changed, 15 insertions(+), 23 deletions(-)
 
 
+base-commit: f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+--=20
+2.40.1
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--BxFZ2ncJS53EetEw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRnVrgACgkQeFA3/03a
+ocXKfQf9FR4vRNiIHHmlud3RjASI1JLVQDy/8HiKbQnvk3cqblRFPxJ+8X2315MU
+zLjfDm8PR/J4ojfgRUDxeTpwLAOwj5rl06FRy2+5Oa9kSNiUGr2PRP8gbnzJMHv7
+80pWnylW1oDJpIT6l3Grrp4gTCYxVUKrMiZWHWofmPvv2znGFrIK3LuC4T/Sxk17
+IQpAia0hdIpiPX9CeObO90+yjU7XyAW1ReOHk1H9VCBU5KM3HMy3IX6mjdEDY6OT
+DLKOx5Q5sDa7hdFr49VvjmpWGFxCtC2a0qLMfz1usGgFBxWzAXMxTWSdVp09HKBu
+cODupD9ML9av8AwAtAQZZYxOrHtUlg==
+=iCN4
+-----END PGP SIGNATURE-----
+
+--BxFZ2ncJS53EetEw--
