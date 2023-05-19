@@ -2,125 +2,165 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9929F70982F
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 May 2023 15:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C70AE7098A5
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 May 2023 15:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbjESN1D (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 May 2023 09:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
+        id S230454AbjESNrG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 May 2023 09:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjESN1C (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 May 2023 09:27:02 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8F212B;
-        Fri, 19 May 2023 06:27:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684502821; x=1716038821;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=21kxhYntrvevXU1LQUOUEJedYStXujm2jMSmAwYvD7g=;
-  b=Y68zkcwA9XvuqKKA1T3heGco8zUMDoU9SFk/tErPsrQWOUjdz1lfYPEI
-   EjSs0wOOnLz5hBCUjINBSeifb7dBKwwSnHjiUQsKlcDaMY30Dfz4hMJU9
-   13A6Egbhtf+W9g0iot5dlZcwh/h/LH0NU2bD7kQnbiEHMHKyDXC827Er0
-   +aC0LeUIDgLZovNn1P3aJlyoOL7pVA7rI1SRPj4qLpR7mdPGqK2RPMw3g
-   tJ2oXpOiRwnY+dpw6K3das9XwzgUpkeFSI1ffAJkwIo8CMudgs9FfKHOY
-   /3aIaiiJRVAC6dyjcLb0hY1is19+tZ7/XjRjv1RpphgZNJ14bSy5yKSjY
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10715"; a="349883503"
-X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="scan'208";a="349883503"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 06:27:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10715"; a="814727672"
-X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="scan'208";a="814727672"
-Received: from mylly.fi.intel.com (HELO [10.237.72.160]) ([10.237.72.160])
-  by fmsmga002.fm.intel.com with ESMTP; 19 May 2023 06:26:57 -0700
-Message-ID: <0e9ac73a-7937-ec04-5be3-44d3f4cd83dd@linux.intel.com>
-Date:   Fri, 19 May 2023 16:26:57 +0300
+        with ESMTP id S230356AbjESNrE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 May 2023 09:47:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A451BB
+        for <linux-i2c@vger.kernel.org>; Fri, 19 May 2023 06:46:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684503972;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ooaoDXWiYqNHwpwAlZ5TH2xlrXBySJTTzRpl4impsO0=;
+        b=dJ0qj6SJWQ7Ne59BfByRoO9NJcWTPpKmUms4f9D+toBDuMP+M8UgEptgEiyloObn3jAQ5Q
+        xy4iL5wub1v65W7FyNPUF+mvcbWQ8mfPWYR6fMMzmWmQhUNaJr9A+DD4ECUdxQHSv1j1MP
+        4SPzDaQEVWah5Q8v/O081cyKvL27aU4=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-214-mUxxEKetMW-4wXL38Ero5w-1; Fri, 19 May 2023 09:46:11 -0400
+X-MC-Unique: mUxxEKetMW-4wXL38Ero5w-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-510d1c71b8fso3289950a12.2
+        for <linux-i2c@vger.kernel.org>; Fri, 19 May 2023 06:46:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684503970; x=1687095970;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ooaoDXWiYqNHwpwAlZ5TH2xlrXBySJTTzRpl4impsO0=;
+        b=OJFt5cfJ2mSD8vgbqyJqcgjXuDXl7aiW7IE16e3o9P6+OE0fHvB2FBW6N5AfkrR8Zm
+         +8Rx1HMtfAEk+z0AgepiwAC9jtPzM1aNhhkCBWwgIQYwFFVSaP26kp3AgLatbgC90/bm
+         JxAeJ1XGb2Fk6uR7NpqMjrHsRTTvohTaZn7y2FZ1KmP5e1cnHJUQsG+Xb/bA4gfgECwp
+         VILB6JOpF8KuHe/gTYf/8aW81BoHe8hvPe5EKuCaH2B38fzEbQtR0RPiVkX9hqnKXcF+
+         3ZQv64Jdc5Lygs3KscZTct64+qwW7x1/FI2xi8Otr+7dKenmAZAjHZqaIwIzG0K29RMJ
+         oFpg==
+X-Gm-Message-State: AC+VfDwBslHUEzYlvHwmy9e4V50pjBbqzo5G8Ywv0FM9VgCaSmroprqX
+        2Js7h42Szd0gurObD2ICPpXeZKaqEzldfhVRi5gMmRxkgAVOj4f+iHqN5E8aPVoyBTYt9fctlxN
+        zwOnKus5MIrEY1wMCCg6n
+X-Received: by 2002:a05:6402:1b0c:b0:50d:ff73:64ef with SMTP id by12-20020a0564021b0c00b0050dff7364efmr1749669edb.20.1684503969777;
+        Fri, 19 May 2023 06:46:09 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7kbSpzzRMNk2yhk0jXBgwaJ85kMVYUNGda42rdnEP81KbEsJQBybc1tTyjvhwsxgEOc2a2OA==
+X-Received: by 2002:a05:6402:1b0c:b0:50d:ff73:64ef with SMTP id by12-20020a0564021b0c00b0050dff7364efmr1749646edb.20.1684503969445;
+        Fri, 19 May 2023 06:46:09 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id m11-20020a50ef0b000000b005067d6b06efsm1681645eds.17.2023.05.19.06.46.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 06:46:08 -0700 (PDT)
+Message-ID: <2d7ee116-5985-021f-0dfb-b0485a465c86@redhat.com>
+Date:   Fri, 19 May 2023 15:46:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH net-next v8 2/9] i2c: designware: Add driver support for
- Wangxun 10Gb NIC
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jiawen Wu <jiawenwu@trustnetic.com>
-Cc:     netdev@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, jsd@semihalf.com,
-        Jose.Abreu@synopsys.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, linux-i2c@vger.kernel.org,
-        linux-gpio@vger.kernel.org, mengyuanlou@net-swift.com,
-        Piotr Raczynski <piotr.raczynski@intel.com>
-References: <20230515063200.301026-1-jiawenwu@trustnetic.com>
- <20230515063200.301026-3-jiawenwu@trustnetic.com>
- <ZGH6TmeiR0icT6Tc@surfacebook>
- <85d058cd-2dd9-2a7b-efd0-e4c8d512ae29@linux.intel.com>
- <018c01d988a1$7f97fe80$7ec7fb80$@trustnetic.com>
- <CAHp75VesUNnBwwccFxRAGTpQ4TcCeg6+tfYuBuSe93uHr=ZC_g@mail.gmail.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <CAHp75VesUNnBwwccFxRAGTpQ4TcCeg6+tfYuBuSe93uHr=ZC_g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.10.0
+Subject: Re: Fwd: ThinkPad L540: suspend not working (deep / S3 / standby,
+ regression Linux 4.19 -> 6.1)
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Input <linux-input@vger.kernel.org>,
+        Linux i2c Devices <linux-i2c@vger.kernel.org>,
+        Benjamin Tissoires <btissoir@redhat.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        kolAflash@kolahilft.de
+References: <73883c7d-42db-7ac6-fa43-b9be45cdc795@gmail.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <73883c7d-42db-7ac6-fa43-b9be45cdc795@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 5/17/23 12:44, Andy Shevchenko wrote:
-> On Wed, May 17, 2023 at 12:26 PM Jiawen Wu <jiawenwu@trustnetic.com> wrote:
->> On Wednesday, May 17, 2023 4:49 PM, Jarkko Nikula wrote:
->>> On 5/15/23 12:24, andy.shevchenko@gmail.com wrote:
->>>> Mon, May 15, 2023 at 02:31:53PM +0800, Jiawen Wu kirjoitti:
->>>>>     dev->flags = (uintptr_t)device_get_match_data(&pdev->dev);
->>>>> +  if (device_property_present(&pdev->dev, "snps,i2c-platform"))
->>>>> +          dev->flags |= MODEL_WANGXUN_SP;
->>>>
->>>> What I meant here is to use device_property_present() _iff_ you have decided to
->>>> go with the _vendor-specific_ property name.
->>>>
->>>> Otherwise it should be handled differently, i.e. with reading the actual value
->>>> of that property. Hence it should correspond the model enum, which you need to
->>>> declare in the Device Tree bindings before use.
->>>>
->>>> So, either
->>>>
->>>>      if (device_property_present(&pdev->dev, "wx,..."))
->>>>              dev->flags |= MODEL_WANGXUN_SP;
->>>>
->>>> or
->>>>
->>>>      if ((dev->flags & MODEL_MASK) == MODEL_NONE) {
->>>>      // you now have to distinguish that there is no model set in driver data
->>>>              u32 model;
->>>>
->>>>              ret = device_property_read_u32(dev, "snps,i2c-platform");
->>>>              if (ret) {
->>>>                      ...handle error...
->>>>              }
->>>>              dev->flags |= model
->>>>
->>> I'm not a device tree expert but I wonder would it be possible somehow
->>> combine this and compatible properties in dw_i2c_of_match[]? They set
->>> model flag for MODEL_MSCC_OCELOT and MODEL_BAIKAL_BT1.
+Hi All,
+
+This looks like something for Benjamin Tissoires (who will
+be available to look at this in 2 weeks or so) to look at.
+
+Adding Benjamin to the Cc.
+
+In the mean time passing psmouse.synaptics_intertouch=0 on the
+kernel commandline should restore the old 4.19 kernel behavior
+of simply using the touchpad in ps/2 mode.
+
+Regards,
+
+Hans
+
+
+
+On 5/19/23 15:19, Bagas Sanjaya wrote:
+> Hi,
+> 
+> I notice a regression report on Bugzilla [1]. Quoting from it:
+> 
+>> ThinkPad L540 failed suspend deep dmesg output - Linux-6.1.27 from Debian-12
 >>
->> Maybe the table could be changed to match device property, instead of relying
->> on DT only. Or device_get_match_data() could be also implemented in
->> software node case?
+>> Since updating from Linux-4.19 to Linux-6.1.27 suspend deep is not working anymore.
+>> (a.k.a. S3, standby or suspend to ram)
+>>
+>> Notebook: ThinkPad L540 20AU-S00N00
+>> OS: Debian-12 "Bookworm" (was Debian-10 "Buster" before)
+>> Kernel: Linux-6.1.27 from Debian-12 (was Linux-4.19 from Debian-10 before)
+>>
+>> Can I provide any other helpful information?
+>> Do you need a test with a vanilla Linux-6.1 kernel?
+>> Should I perform any other tests or maybe try out boot parameters?
+>>
+>> Full dmesg output attached.
+>> Excerpt:
+>> rmi4_f01 rmi4-00.fn01: Failed to write sleep mode: -6.
+>> rmi4_f01 rmi4-00.fn01: Suspend failed with code -6.
+>> rmi4_physical rmi4-00: Failed to suspend functions: -6
+>> rmi4_smbus 0-002c: Failed to suspend device: -6
+>> rmi4_smbus 0-002c: PM: dpm_run_callback(): rmi_smb_suspend+0x0/0x40 [rmi_smbus] returns -6
+>> rmi4_smbus 0-002c: PM: failed to suspend async: error -6
+>> sd 4:0:0:0: [sda] Synchronizing SCSI cache
+>> sd 4:0:0:0: [sda] Stopping disk
+>> PM: Some devices failed to suspend, or early wake event detected
+>> sd 4:0:0:0: [sda] Starting disk
+>> OOM killer enabled.
+>> Restarting tasks ... 
+>> rmi4_physical rmi4-00: rmi_driver_set_irq_bits: Failed to change enabled interrupts!
+>> psmouse: probe of serio2 failed with error -1
+>>
+>>
+>>
+>> Maybe related:
+>>
+>> 5.17-rc regression: X1 Carbon touchpad not resumed
+>> https://lore.kernel.org/lkml/YgF%2F0QGFN4SppLKg@shikoro/T/
 > 
-> This has been discussed [1] and still no visible prototype. Perhaps
-> you can collaborate with Vladimir on the matter.
+> FYI, I guess the regression is also introduced by 172d931910e1db
+> ("i2c: enable async suspend/resume on i2c client devices") and
+> should have been fixed by 7b1f781f2d2460 ("Input: psmouse - set up
+> dependency between PS/2 and SMBus companions"), but it doesn't
+> fix the reporter's issue.
 > 
-> [1]: https://lore.kernel.org/lkml/20230223203713.hcse3mkbq3m6sogb@skbuf/
+> Anyway, I'm adding this to regzbot:
 > 
-Ok, not possible at the moment. Perhaps for now setting model using 
-device_property_read_u32() is good enough? I asked above out of 
-curiosity rather than demanding perfection. They say "Perfect is the 
-enemy of good" :-)
+> #regzbot introduced: v4.19..v6.1 https://bugzilla.kernel.org/show_bug.cgi?id=217462
+> #regzbot title: psmouse suspend failed on ThinkPad L540
+> 
+> Thanks.
+> 
+> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217462
+> 
+
