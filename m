@@ -2,53 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB567095BA
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 May 2023 13:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C113E7095C2
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 May 2023 13:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbjESLC4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 May 2023 07:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
+        id S231893AbjESLDW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 19 May 2023 07:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbjESLCw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 May 2023 07:02:52 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607ED19A2;
-        Fri, 19 May 2023 04:02:24 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f380cd1019so3693982e87.1;
-        Fri, 19 May 2023 04:02:24 -0700 (PDT)
+        with ESMTP id S231340AbjESLDO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 May 2023 07:03:14 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26C91BD7;
+        Fri, 19 May 2023 04:02:42 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2ad89c7a84fso34340241fa.2;
+        Fri, 19 May 2023 04:02:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684494141; x=1687086141;
+        d=gmail.com; s=20221208; t=1684494159; x=1687086159;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HD7sDwjeUOhS/tu28skRBlZAs5C/+PALR8fkv0T+X84=;
-        b=eijdIr5oXQZZmSbxyQ5q0NXx2PiSz0Y09n80SbfjV6RR0BJjjGnX9dwRUoI9cGDv/S
-         orxI5273zbZm7bxK8XZsIYq+OE2D6VvfnWy5gWdoK260mX9rBg3jVliyZGFA1yugDcPc
-         GRTRDwTBpUTLw659W1HUwZFgbOo+cQM30qgDnjWpRSMXN/5Alsf9p9DR32gimXgBn495
-         /t4ojKTj1N7EmvnIcR9GaL0Rd6DUtrRkX7+mIGnGL0Px4JJqWRCGWiL6QDhQrpo0UQH6
-         vHxJ+OMbjN8ONP92A0pNoVP4oa5ljVr4nJbm5A6B0R/nJg/r8z0n6Rasb55WSewYob/L
-         Oixw==
+        bh=LfIfZkT5to0ygfty53KLXwdW4k+vS796D0eoWkZMOFE=;
+        b=cJWVxCMNdCYmWdaRTtqzSknn8+g3xOPc15ifl9Di+TNaCKKjPV/u1S0oQdvFCl9Dsw
+         Fm0NVDqXXP7zuI4XQd2Sk2lIhiTRCtS87HrCd/NcmtBEuneWoH/Xu8TkaN2Fj4irfD2i
+         HZ98uf1CT0ubdZ13eS6BFDdcAG1MNPFyH/rZdlyBhI+NhZES5+at3A7xNGtPNSRVSSBC
+         BG9fa5I7UiupejrHkAdkm9bJ9qeze4GavtP0PSgDfqP5GXdLGUcq0rlaEZFkcyRvn28e
+         jjTdS5VG6cx9AaWBZUuM8vloMCrCs8zbYMo8caIv0uXbrYYIwya18lUnQDN/9I7981XZ
+         ZbXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684494141; x=1687086141;
+        d=1e100.net; s=20221208; t=1684494159; x=1687086159;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HD7sDwjeUOhS/tu28skRBlZAs5C/+PALR8fkv0T+X84=;
-        b=Zmz4n5cTJGAeqp3DcsxMusso3EMvXRqsbET1Hq9pdu5FZacZSGmHLVv5+9KosDWhxf
-         HIArvJM18WbbsJEycMObEoZM9AuDUYoks88TMCuWo1qNQQSnyHRk3e+YDUth43o3B/DY
-         JvBkDQ4HhgsAbB/BRe5nc0BcMY44e0ialOwMT566RAsIF4g1RqKj0JhCSlwiuEIMMclE
-         1cwNcYb0rURw+YRYLj4GfbEmE16PzLZy8hilqJDQbSgx7KBT7/EbeI57+Onnk0tMMA1G
-         OdcrOQ+2eSoXRZbo+BLO5nnWh5czoMOw84E+1ovGYJbgns/vmTnN1A66vJRR4BEIK8pX
-         8pcA==
-X-Gm-Message-State: AC+VfDz0IJF80vuGBzf5JyoBTWtYiiMXw1kuDrx9RvaOc/rALYYPzhHg
-        hEB5GmdA4mgWJdKiEjgqhcw=
-X-Google-Smtp-Source: ACHHUZ6u5g5R8jfey5qLxBfEbsi2trlh8URnopv6VaDE/U0+UiFkYXbLz0B5+gbKR7EvGEJQp57gEQ==
-X-Received: by 2002:ac2:4949:0:b0:4ec:8e7e:46f1 with SMTP id o9-20020ac24949000000b004ec8e7e46f1mr685248lfi.66.1684494141204;
-        Fri, 19 May 2023 04:02:21 -0700 (PDT)
+        bh=LfIfZkT5to0ygfty53KLXwdW4k+vS796D0eoWkZMOFE=;
+        b=Po8dL2clV/EZYzqdasyrsay2tLj264IQT+1OxXF4rSdiBAQ6UKtlajIWn+AFdAVgMV
+         56LjUIjmInOxgc6x98M+9PmJGhe6B27VgMUnG9wMyM7hgdBxfy/y/vuQ6JrYgeBqGr+m
+         jgP51pYXKe+dkXFramFQRYOXfbZsilQrBd89ElPYkASE3PAEDwuFpgoOqwg8QhTKXjY7
+         zPtcgDhzclBYfcC9V7Bib4HX9zV+X7vFLB/yKxBSXbEPqvu1Kw93e96y0kNJWZuK9RZ1
+         1d7XxDSPcnMWaYTpAiIZLkfz/EgkbeLUvg2XTqCAg9rzmI3aKtBKkviex4TtbcHnNx6b
+         vMBg==
+X-Gm-Message-State: AC+VfDwNbMxIwPyZVO0m3wB263pk/YEtOpanhfuuPtNjPCkIwT0pdF9A
+        CZTq+ODoIq8iRrMc1EErAVg=
+X-Google-Smtp-Source: ACHHUZ7kLQeM3iKsF59w4UnthlNctv6NledR+bbcU9FAxUkJ7v3813sVzksg2947S56c4oWmPuLz4w==
+X-Received: by 2002:a2e:964f:0:b0:2a8:a5b7:6057 with SMTP id z15-20020a2e964f000000b002a8a5b76057mr595196ljh.50.1684494159371;
+        Fri, 19 May 2023 04:02:39 -0700 (PDT)
 Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id c12-20020ac2530c000000b004f387d97dafsm565093lfh.147.2023.05.19.04.02.19
+        by smtp.gmail.com with ESMTPSA id u10-20020ac248aa000000b004e887fd71acsm556763lfg.236.2023.05.19.04.02.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 04:02:20 -0700 (PDT)
-Date:   Fri, 19 May 2023 14:02:16 +0300
+        Fri, 19 May 2023 04:02:38 -0700 (PDT)
+Date:   Fri, 19 May 2023 14:02:34 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
@@ -77,12 +77,12 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-iio@vger.kernel.org, netdev@vger.kernel.org,
         openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: [PATCH v5 4/8] pinctrl: wpcm450: relax return value check for IRQ get
-Message-ID: <42264f1b12a91e415ffa47ff9adb53f02a6aa3ea.1684493615.git.mazziesaccount@gmail.com>
+Subject: [PATCH v5 5/8] pinctrl: ingenic: relax return value check for IRQ get
+Message-ID: <9d1eae2a73143188a0b9664c1598948ccad23855.1684493615.git.mazziesaccount@gmail.com>
 References: <cover.1684493615.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tTeOBa3AOzkey5Y+"
+        protocol="application/pgp-signature"; boundary="xqo0YRjbuJxwUqgu"
 Content-Disposition: inline
 In-Reply-To: <cover.1684493615.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -96,80 +96,44 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---tTeOBa3AOzkey5Y+
-Content-Type: text/plain; charset=iso-8859-1
+--xqo0YRjbuJxwUqgu
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-fwnode_irq_get[_byname]() were changed to not return 0 anymore. The
-special error case where device-tree based IRQ mapping fails can't no
-longer be reliably detected from this return value. This yields a
-functional change in the driver where the mapping failure is treated as
-an error.
+fwnode_irq_get[_byname]() were changed to not return 0 anymore.
 
-The mapping failure can occur for example when the device-tree IRQ
-information translation call-back(s) (xlate) fail, IRQ domain is not
-found, IRQ type conflicts, etc. In most cases this indicates an error in
-the device-tree and special handling is not really required.
-
-One more thing to note is that ACPI APIs do not return zero for any
-failures so this special handling did only apply on device-tree based
-systems.
-
-Drop the special (no error, just skip the IRQ) handling for DT mapping
-failures as these can no longer be separated from other errors at driver
-side.
+Drop check for return value 0.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Reviewed-by: Jonathan Neusch=E4fer <j.neuschaefer@gmx.net>
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
 ---
-Revision history:
-v4 =3D> v5:
-Fix typo in subject "elax" =3D> "relax"
-
 Please note, I took Linus' reply to v4 cover-letter as ack && added the
 tag. Please let me know if this was not Ok.
-
-The special handling in this driver was added when fixing a problem
-where returning zero from fwnode_irq_get[_byname]() was treated as
-succes yielding zero being used as a valid IRQ by the driver.
-f4a31facfa80 ("pinctrl: wpcm450: Correct the fwnode_irq_get() return value =
-check")
-The commit message does not mention if choosing not to abort the probe
-on device-tree mapping failure (as is done on other errors) was chosen
-because: a) Abort would have broken some existing setup. b) Because skipping
-an IRQ on failure is "the right thing to do", or c) because it sounded like
-a way to minimize risk of breaking something.
-
-If the reason is a) - then I'd appreciate receiving some more
-information and a suggestion how to proceed (if possible). If the reason
-is b), then it might be best to just skip the IRQ instead of aborting
-the probe for all errors on IRQ getting. Finally, in case of c), well,
-by acking this change you will now accept the risk :)
 
 The first patch of the series changes the fwnode_irq_get() so this depends
 on the first patch of the series and should not be applied alone.
 ---
- drivers/pinctrl/nuvoton/pinctrl-wpcm450.c | 2 --
+ drivers/pinctrl/pinctrl-ingenic.c | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c b/drivers/pinctrl/nu=
-voton/pinctrl-wpcm450.c
-index 2d1c1652cfd9..f9326210b5eb 100644
---- a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-+++ b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-@@ -1106,8 +1106,6 @@ static int wpcm450_gpio_register(struct platform_devi=
-ce *pdev,
- 			irq =3D fwnode_irq_get(child, i);
- 			if (irq < 0)
- 				break;
--			if (!irq)
--				continue;
+diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-in=
+genic.c
+index 2f220a47b749..86e71ad703a5 100644
+--- a/drivers/pinctrl/pinctrl-ingenic.c
++++ b/drivers/pinctrl/pinctrl-ingenic.c
+@@ -4201,8 +4201,6 @@ static int __init ingenic_gpio_probe(struct ingenic_p=
+inctrl *jzpc,
+ 	err =3D fwnode_irq_get(fwnode, 0);
+ 	if (err < 0)
+ 		return err;
+-	if (!err)
+-		return -EINVAL;
+ 	jzgc->irq =3D err;
 =20
- 			girq->parents[i] =3D irq;
- 			girq->num_parents++;
+ 	girq =3D &jzgc->gc.irq;
 --=20
 2.40.1
 
@@ -186,19 +150,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---tTeOBa3AOzkey5Y+
+--xqo0YRjbuJxwUqgu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRnVzgACgkQeFA3/03a
-ocUI7wgAykmnnbCV0d+6hECVJlXeaJz6qc/U6yb8DIOeP3Mx2BjegGSsJ0vtVlcZ
-romo+yYHwqEg3VAjhggn4+lHZ/41mV3a+tYvDeMZ83fZMRHSflurOOcOIItTD11D
-tnUqcJ39ryflGSv05EJ/o9sPCrUQNeoFX4skwZqYvcUA8Ihp6LQ/vPfV9RFMtg1K
-1v3PqNiQFdvOCEX8WgfUHwDtY9vI2d4M6OYS1hV4iPh20LRUfsOn046RH0slxcGw
-nShvwbSpTKgxOkb+XBZFuvbyttKEzSmKT7d/CN2OZvlA3tIEAB559mbbYtldka+c
-SYDdN84zqMRFL894m6uBEBrLsIpveg==
-=ND3t
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRnV0oACgkQeFA3/03a
+ocV+DQgAyRgi2TUA5N8VsK0WYaNVMX5ZtYWMl6/GMFhsZvgKTH9D07d0A2pRMi0o
+EEhIqhqHVJcbHkoDw7RMwwweZXr3L+JNmP8+bJGu7a8mLW02/mKIAV8vJXOEGXFO
+4DDKe9Svs1tTJctTmx5VPIpu5FEi+VFuZ2zD/VC9fzbA1f8C1PemzkPfpzv7hAZe
+ScGO2OhPUJ0JcpMOkRGLGTrMojeHplQmsvmg8g+VuJV4u8mYc1o5L2wFC9ViUcEC
+GkqDlT9RSne0TeQ+zYE7ZCApuN4M64QxsUhH8Htgd0V3vMgfa9ZXgXkK5tmGyF7I
+++ar962pBKBsyXXQl1obZn4qW2KGzg==
+=bau4
 -----END PGP SIGNATURE-----
 
---tTeOBa3AOzkey5Y+--
+--xqo0YRjbuJxwUqgu--
