@@ -2,116 +2,171 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FF170A498
-	for <lists+linux-i2c@lfdr.de>; Sat, 20 May 2023 04:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E7770A8B9
+	for <lists+linux-i2c@lfdr.de>; Sat, 20 May 2023 17:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjETCQ2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 19 May 2023 22:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
+        id S231737AbjETPOq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 20 May 2023 11:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbjETCQ1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 19 May 2023 22:16:27 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC35E5F;
-        Fri, 19 May 2023 19:16:22 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-5346d150972so2478178a12.3;
-        Fri, 19 May 2023 19:16:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684548981; x=1687140981;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lFgyeYw4uPK6HO8hs9FRdVOfgCGNivxnwmXr9VMJrDo=;
-        b=DoD8GwmF2nlWu+yHJ3xHDVInM293//B2zW3ZK73ZkXnOZeVJNv1G91PULPGAOZJLRX
-         wzxIwTxaouX37dwag+QW0ieFMFiiVmx0RWrD6jUjOH6fv1xHGzn7k/E2Oj8YPeHXBBkX
-         u0fShKanlW6S+FA9ENGR/kpgjexVAXoWjJJ7PJxN81rYNljeE3NmnivGaBtoJlvcfIPv
-         Om/06THeksmrbjY7sW4hdtbTvc2xG/zBLKrZ6LFq7WFPYcjv99sTUYaIGkLYnEHHlu9m
-         4dW3aYROEM8yzwHPuBdCekQ16zm2Hv1DEDHYbdUlh6CLFVMKklt0c3odVWBDtzgNFOQE
-         KwZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684548981; x=1687140981;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lFgyeYw4uPK6HO8hs9FRdVOfgCGNivxnwmXr9VMJrDo=;
-        b=Re1K68ZWgLt4Rcb376P5dRIwmJO+S0VQYtoYHu6ze99sl/O1JwCrewp8xldSw89g3z
-         9A2dapAkGu2YkpITYzgzKa2x83GE2l+EUGv60e/DVcC/73OHU36IWB832lV+L0948lGt
-         9Wu/m0tiuFxnkKzvCslJnF0JIqLry0nIAkKQYRSuPTQe1V4L+Ua9bEbGtuzE4UBMwbOX
-         XNtiApg8EVLXnNE0d0kNg66asA/yE4udl9+XNzL0mDgsJMsCAlFymWvHEDriork2+gLt
-         YUOj6ezgWpkR+RHkIu9log9XlpdJDEMIGojhYaZJYqTPqSSHJ9ZkFC5TiQBbbiwNQTFz
-         sFxA==
-X-Gm-Message-State: AC+VfDzntF1N2euuicR0NyiFfuBRREKpY274UXjQMd9Gubse6ejhPavO
-        8NiiG9mWlgnVP0e46DRJ7MA=
-X-Google-Smtp-Source: ACHHUZ5uDX9A05fqyl3r2z7ZsQfBkXnB/zDTEtuHhK4CITCJcUviCGg40/57dB4lFG3yVKDfjiQfow==
-X-Received: by 2002:a17:902:d382:b0:1ae:3991:e4f9 with SMTP id e2-20020a170902d38200b001ae3991e4f9mr3897402pld.61.1684548981433;
-        Fri, 19 May 2023 19:16:21 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-25.three.co.id. [180.214.233.25])
-        by smtp.gmail.com with ESMTPSA id jh12-20020a170903328c00b001a19f3a661esm295628plb.138.2023.05.19.19.16.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 19:16:20 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 988531069E8; Sat, 20 May 2023 09:16:17 +0700 (WIB)
-Date:   Sat, 20 May 2023 09:16:17 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Input <linux-input@vger.kernel.org>,
-        Linux i2c Devices <linux-i2c@vger.kernel.org>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        with ESMTP id S229737AbjETPOp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 20 May 2023 11:14:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFF610D;
+        Sat, 20 May 2023 08:14:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEC8D6111D;
+        Sat, 20 May 2023 15:14:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49422C433EF;
+        Sat, 20 May 2023 15:14:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684595683;
+        bh=nb87eHnSrLM+miw1D/xmByQKBJTG9jxqONUG12aAE/A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YJiWLEfcf3avvzKkf0/4oJxV8pWWGzRVuLM4f/x2+OR+4JArle8ElxEOn19FJo5sc
+         ANNF8hS9HDrk/UIXhGTRcRiOeCeXEEG+emMIgpLYYGXCgh2Lt/FKtW0mq+BPA12C2L
+         60QXtylPkn1Jr269Kwb77s4gQXP1IOslbuUbp7bRmON1Fam9/7JDSjuCYSi82v5CxA
+         ihARPaGg6Z1UFsSyxpUFnNiQHKaPPSHMqRu6dboJ4GU+qc8EyNdsB8si09biiS5dA2
+         KTxTabR7ik77KLxFQaJZf41e4S0c8W2/LRPjz4mcayc28X1FOFxy7V75DI34aCFHFq
+         Z27rwwrsBG6TA==
+Date:   Sat, 20 May 2023 16:30:49 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Wolfram Sang <wsa@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        kolAflash@kolahilft.de
-Subject: Re: Fwd: ThinkPad L540: suspend not working (deep / S3 / standby,
- regression Linux 4.19 -> 6.1)
-Message-ID: <ZGgtcaGIECpaXKvp@debian.me>
-References: <73883c7d-42db-7ac6-fa43-b9be45cdc795@gmail.com>
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v5 7/8] iio: cdc: ad7150: relax return value check for
+ IRQ get
+Message-ID: <20230520163049.3204f31b@jic23-huawei>
+In-Reply-To: <73c633ccab80bdfaa1adf6ae099cfc9d365be6a2.1684493615.git.mazziesaccount@gmail.com>
+References: <cover.1684493615.git.mazziesaccount@gmail.com>
+        <73c633ccab80bdfaa1adf6ae099cfc9d365be6a2.1684493615.git.mazziesaccount@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wREUupUIgHJ2Wbjf"
-Content-Disposition: inline
-In-Reply-To: <73883c7d-42db-7ac6-fa43-b9be45cdc795@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, 19 May 2023 14:04:32 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
---wREUupUIgHJ2Wbjf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> fwnode_irq_get[_byname]() were changed to not return 0 anymore. The
+> special error case where device-tree based IRQ mapping fails can't no
+> longer be reliably detected from this return value. This yields a
+> functional change in the driver where the mapping failure is treated as
+> an error.
+> 
+> The mapping failure can occur for example when the device-tree IRQ
+> information translation call-back(s) (xlate) fail, IRQ domain is not
+> found, IRQ type conflicts, etc. In most cases this indicates an error in
+> the device-tree and special handling is not really required.
+> 
+> One more thing to note is that ACPI APIs do not return zero for any
+> failures so this special handling did only apply on device-tree based
+> systems.
+> 
+> Drop the special handling for DT mapping failures as these can no longer
+> be separated from other errors at driver side.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
+> ---
+> 
+> Please note that I don't have the hardware to test this change.
+> Furthermore, testing this type of device-tree error cases is not
+> trivial, as the question we probably dive in is "what happens with the
+> existing users who have errors in the device-tree". Answering to this
+> question is not simple.
+> 
+> I did this patch with minimal code changes - but a question is if we
+> should really jump into the else branch below on all IRQ getting errors?
+> 
+>         } else {
+>                 indio_dev->info = &ad7150_info_no_irq;
+>                 switch (id->driver_data) {
+>                 case AD7150:
+>                         indio_dev->channels = ad7150_channels_no_irq;
+>                         indio_dev->num_channels =
+>                                 ARRAY_SIZE(ad7150_channels_no_irq);
+>                         break;
+>                 case AD7151:
+>                         indio_dev->channels = ad7151_channels_no_irq;
+>                         indio_dev->num_channels =
+>                                 ARRAY_SIZE(ad7151_channels_no_irq);
+>                         break;
+>                 default:
+>                         return -EINVAL;
+>                 }
+> 
+> Why do we have special handling for !chip->interrupts[0] while other
+> errors on getting the fwnode_irq_get(dev_fwnode(&client->dev), 0); will
+> abort the probe?
 
-On Fri, May 19, 2023 at 08:19:39PM +0700, Bagas Sanjaya wrote:
-> #regzbot introduced: v4.19..v6.1 https://bugzilla.kernel.org/show_bug.cgi=
-?id=3D217462
-> #regzbot title: psmouse suspend failed on ThinkPad L540
->=20
+Gut feeling is that this was a rework of board file code where 0 meant not
+provided. We should look to do the same here.  I'm not sure we have a consistent
+return for no irq though across the various fw types.
 
-The reporter had narrowed down possible culprit commit range [1],
-thus telling regzbot:
+The driver looks like it should support either no interrupts or all the
+ones for a given device.
 
-#regzbot introduced: v5.16.18..v5.17-rc3
+Currrently it definitely doesn't handle the no irqs provided case right.
+Its not elegant, but if we have to have all failures to get irqs result
+in carrying on without them then that's better than now.
 
-Thanks.
+Jonathan
 
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=3D217462#c3
 
---=20
-An old man doll... just what I always wanted! - Clara
+> 
+> The first patch of the series changes the fwnode_irq_get() so this depends
+> on the first patch of the series and should not be applied alone.
+> ---
+>  drivers/iio/cdc/ad7150.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iio/cdc/ad7150.c b/drivers/iio/cdc/ad7150.c
+> index 79aeb0aaea67..d7ba50b9780d 100644
+> --- a/drivers/iio/cdc/ad7150.c
+> +++ b/drivers/iio/cdc/ad7150.c
+> @@ -567,8 +567,7 @@ static int ad7150_probe(struct i2c_client *client)
+>  		if (chip->interrupts[1] < 0)
+>  			return chip->interrupts[1];
+>  	}
+> -	if (chip->interrupts[0] &&
+> -	    (id->driver_data == AD7151 || chip->interrupts[1])) {
+> +	if (id->driver_data == AD7151 || chip->interrupts[1]) {
+>  		irq_set_status_flags(chip->interrupts[0], IRQ_NOAUTOEN);
+>  		ret = devm_request_threaded_irq(&client->dev,
+>  						chip->interrupts[0],
 
---wREUupUIgHJ2Wbjf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGgtZQAKCRD2uYlJVVFO
-o9aLAQC6hU7NN4GSTfBKgKeqs8JmCvfJgpTt6DbB6FgDW1030AD/cTZsWR+xE1xU
-pw87w0X/mt7M0TWhJbvezzYs/i/cIg8=
-=s0ct
------END PGP SIGNATURE-----
-
---wREUupUIgHJ2Wbjf--
