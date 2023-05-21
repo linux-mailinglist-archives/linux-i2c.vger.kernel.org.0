@@ -2,24 +2,24 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCA570AF5B
-	for <lists+linux-i2c@lfdr.de>; Sun, 21 May 2023 19:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DB470AF8E
+	for <lists+linux-i2c@lfdr.de>; Sun, 21 May 2023 20:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbjEURnT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 21 May 2023 13:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
+        id S230083AbjEUSc2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 21 May 2023 14:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbjEURmy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 21 May 2023 13:42:54 -0400
-Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F6D10D3
-        for <linux-i2c@vger.kernel.org>; Sun, 21 May 2023 10:21:03 -0700 (PDT)
+        with ESMTP id S231351AbjEURnD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 21 May 2023 13:43:03 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C63E4C
+        for <linux-i2c@vger.kernel.org>; Sun, 21 May 2023 10:14:26 -0700 (PDT)
 Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
-        id dacd9c49-f7fb-11ed-b972-005056bdfda7;
-        Sun, 21 May 2023 20:21:00 +0300 (EEST)
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id ee8f2be1-f7fa-11ed-abf4-005056bdd08f;
+        Sun, 21 May 2023 20:14:24 +0300 (EEST)
 From:   andy.shevchenko@gmail.com
-Date:   Sun, 21 May 2023 20:20:59 +0300
+Date:   Sun, 21 May 2023 20:14:23 +0300
 To:     Matti Vaittinen <mazziesaccount@gmail.com>
 Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -47,15 +47,14 @@ Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         linux-iio@vger.kernel.org, netdev@vger.kernel.org,
         openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: Re: [PATCH v5 4/8] pinctrl: wpcm450: relax return value check for
- IRQ get
-Message-ID: <ZGpS-13CozLp-p4f@surfacebook>
+Subject: Re: [PATCH v5 2/8] iio: mb1232: relax return value check for IRQ get
+Message-ID: <ZGpRb65GcaMRagiq@surfacebook>
 References: <cover.1684493615.git.mazziesaccount@gmail.com>
- <42264f1b12a91e415ffa47ff9adb53f02a6aa3ea.1684493615.git.mazziesaccount@gmail.com>
+ <05636b651b9a3b13aa3a3b7d3faa00f2a8de6bca.1684493615.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <42264f1b12a91e415ffa47ff9adb53f02a6aa3ea.1684493615.git.mazziesaccount@gmail.com>
+In-Reply-To: <05636b651b9a3b13aa3a3b7d3faa00f2a8de6bca.1684493615.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
         FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
         SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
@@ -66,43 +65,55 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Fri, May 19, 2023 at 02:02:16PM +0300, Matti Vaittinen kirjoitti:
-> fwnode_irq_get[_byname]() were changed to not return 0 anymore. The
-> special error case where device-tree based IRQ mapping fails can't no
-> longer be reliably detected from this return value. This yields a
-> functional change in the driver where the mapping failure is treated as
-> an error.
+Fri, May 19, 2023 at 02:01:23PM +0300, Matti Vaittinen kirjoitti:
+> fwnode_irq_get() was changed to not return 0 anymore.
 > 
-> The mapping failure can occur for example when the device-tree IRQ
-> information translation call-back(s) (xlate) fail, IRQ domain is not
-> found, IRQ type conflicts, etc. In most cases this indicates an error in
-> the device-tree and special handling is not really required.
+> Drop check for return value 0.
 > 
-> One more thing to note is that ACPI APIs do not return zero for any
-> failures so this special handling did only apply on device-tree based
-> systems.
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
+With or without below being addressed,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+> ---
+> Revsion history:
+> v4 => v5:
+>  - drop unnecessary data->irqnr = -1 assignment
 > 
-> Drop the special (no error, just skip the IRQ) handling for DT mapping
-> failures as these can no longer be separated from other errors at driver
-> side.
-
-...
-
-> The commit message does not mention if choosing not to abort the probe
-> on device-tree mapping failure (as is done on other errors) was chosen
-> because: a) Abort would have broken some existing setup. b) Because skipping
-> an IRQ on failure is "the right thing to do", or c) because it sounded like
-> a way to minimize risk of breaking something.
+> The first patch of the series changes the fwnode_irq_get() so this depends
+> on the first patch of the series and should not be applied alone.
+> ---
+>  drivers/iio/proximity/mb1232.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 > 
-> If the reason is a) - then I'd appreciate receiving some more
-> information and a suggestion how to proceed (if possible). If the reason
-> is b), then it might be best to just skip the IRQ instead of aborting
-> the probe for all errors on IRQ getting. Finally, in case of c), well,
-> by acking this change you will now accept the risk :)
+> diff --git a/drivers/iio/proximity/mb1232.c b/drivers/iio/proximity/mb1232.c
+> index e70cac8240af..3ae226297a00 100644
+> --- a/drivers/iio/proximity/mb1232.c
+> +++ b/drivers/iio/proximity/mb1232.c
+> @@ -76,7 +76,7 @@ static s16 mb1232_read_distance(struct mb1232_data *data)
+>  		goto error_unlock;
+>  	}
+>  
+> -	if (data->irqnr >= 0) {
+> +	if (data->irqnr > 0) {
+>  		/* it cannot take more than 100 ms */
+>  		ret = wait_for_completion_killable_timeout(&data->ranging,
+>  									HZ/10);
+> @@ -212,10 +212,7 @@ static int mb1232_probe(struct i2c_client *client)
+>  	init_completion(&data->ranging);
+>  
+>  	data->irqnr = fwnode_irq_get(dev_fwnode(&client->dev), 0);
+> -	if (data->irqnr <= 0) {
+> -		/* usage of interrupt is optional */
 
-No need to repeat this. As I answered the case c) was in my mind when I made
-that change.
+Maybe this comment can be kept.
 
+> -		data->irqnr = -1;
+> -	} else {
+> +	if (data->irqnr > 0) {
+>  		ret = devm_request_irq(dev, data->irqnr, mb1232_handle_irq,
+>  				IRQF_TRIGGER_FALLING, id->name, indio_dev);
+>  		if (ret < 0) {
 
 -- 
 With Best Regards,
