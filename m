@@ -2,153 +2,131 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F0A70B475
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 May 2023 07:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 078F770B85B
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 May 2023 11:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjEVFQi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 May 2023 01:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
+        id S232710AbjEVJDF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 May 2023 05:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjEVFQh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 May 2023 01:16:37 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4935A1;
-        Sun, 21 May 2023 22:16:35 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2ab3e8f4efeso37738321fa.0;
-        Sun, 21 May 2023 22:16:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684732594; x=1687324594;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CYrQOZoyONEufq+LqeQBmXVtdJJKIjdnOxohkmrAY6o=;
-        b=edyY9Uwr97Vumn46XigszV1y/m9Gv7cv/j55TMmwIGEBhAFVFRjWdybCzaYU5NixCS
-         Oy7lbHC2nES3xXibpgL20jNZZ577FxfG418ggGueA9EsKAShwZ80/RwFfsmDiyfuoofG
-         XU5tXwCrBra5Kb2IvMC1SC5YRCcGgqEd8E5TJILGa6uctQYZ4d81y/YWJBbzULtudJv2
-         klWuGT31X8OqVVju7bO1OnRz0QH+E15bv0xwtpRZSYjuP4vcqj9KUqB6De6Au5r1ta5M
-         t5g3mkhXjYHbCEbcK5SWO7imUJDRp2fJpvWX9EBEPoxFWUNHkX1CKznVwUWPDat7ybXT
-         7RXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684732594; x=1687324594;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CYrQOZoyONEufq+LqeQBmXVtdJJKIjdnOxohkmrAY6o=;
-        b=Unde6ivhDmImx+1VDzBYxnncnXyEWeSky6TC+qomHv08Czep048XWuHfFodUufv9j8
-         LicV1Bb4Xc499ffySw1rwLVuKqpoN03aH4Ffi+WQr/GAkXr2aH/DsC2x8L75QkIhuTlE
-         S/+NhnwpJdb3s0H/Dxya1NdLg2y30hMMUaLuHJyF3g0wiLCb5iJUIEPmZaezDTZvECTB
-         nDU9fEnDwoKaP2RgHHzb/3YY9t04kgF22+tFtbwPRynPaxcAn1sWRIi92cy1dcjbx2mI
-         YxMUSfIEmRtPq1FLRJv5tQSa9Xovk5wRC7HMWbPIbLXU74eHLioUpWYIlE0+a/TBweO8
-         qCww==
-X-Gm-Message-State: AC+VfDzYnfPrNmiF8q2F7D5tBzTV3R/uTymWGPdP9IBbtFWychMwNtnx
-        AJ2Qlt1iAPFqfSRHS8R3qxA=
-X-Google-Smtp-Source: ACHHUZ7TbanQlhwifMepu7ORWVh/VP5bZ18ETSV+MsG47HW0VXAqmzXXDf/VvqNJ6H52yVSkjCYq8A==
-X-Received: by 2002:a05:6512:3f1e:b0:4f3:a763:ccb7 with SMTP id y30-20020a0565123f1e00b004f3a763ccb7mr3425929lfa.2.1684732593811;
-        Sun, 21 May 2023 22:16:33 -0700 (PDT)
-Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id k19-20020ac24573000000b004f00189e1dasm847966lfm.143.2023.05.21.22.16.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 May 2023 22:16:33 -0700 (PDT)
-Message-ID: <44c87ed5-f14d-e690-1e5f-74212370611b@gmail.com>
-Date:   Mon, 22 May 2023 08:16:32 +0300
+        with ESMTP id S232713AbjEVJCi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 May 2023 05:02:38 -0400
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B347810D3;
+        Mon, 22 May 2023 02:01:40 -0700 (PDT)
+X-QQ-mid: Yeas47t1684746045t472t60201
+Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [122.235.247.1])
+X-QQ-SSF: 00400000000000F0FNF000000000000
+From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
+X-BIZMAIL-ID: 9655095480155216521
+To:     "'Andrew Lunn'" <andrew@lunn.ch>,
+        "'Michael Walle'" <michael@walle.cc>
+Cc:     "'Andy Shevchenko'" <andy.shevchenko@gmail.com>,
+        <netdev@vger.kernel.org>, <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
+        <Jose.Abreu@synopsys.com>, <hkallweit1@gmail.com>,
+        <linux@armlinux.org.uk>, <linux-i2c@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <mengyuanlou@net-swift.com>
+References: <20230515063200.301026-1-jiawenwu@trustnetic.com> <20230515063200.301026-7-jiawenwu@trustnetic.com> <ZGH-fRzbGd_eCASk@surfacebook> <00cd01d9879f$8e444950$aaccdbf0$@trustnetic.com> <CAHp75VdthEZL6GvT5Q=f7rbcDfA5XX=7-VLfVz1kZmBFem_eCA@mail.gmail.com> <016701d9886a$f9b415a0$ed1c40e0$@trustnetic.com> <90ef7fb8-feac-4288-98e9-6e67cd38cdf1@lunn.ch> <025b01d9897e$d8894660$899bd320$@trustnetic.com> <1e1615b3-566c-490c-8b1a-78f5521ca0b0@lunn.ch> <028601d989f9$230ee120$692ca360$@trustnetic.com> <f0b571ab-544b-49c3-948f-d592f931673b@lunn.ch>
+In-Reply-To: <f0b571ab-544b-49c3-948f-d592f931673b@lunn.ch>
+Subject: RE: [PATCH net-next v8 6/9] net: txgbe: Support GPIO to SFP socket
+Date:   Mon, 22 May 2023 17:00:44 +0800
+Message-ID: <005a01d98c8b$e48d2b60$ada78220$@trustnetic.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 4/8] pinctrl: wpcm450: relax return value check for IRQ
- get
-Content-Language: en-US, en-GB
-To:     andy.shevchenko@gmail.com
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <cover.1684493615.git.mazziesaccount@gmail.com>
- <42264f1b12a91e415ffa47ff9adb53f02a6aa3ea.1684493615.git.mazziesaccount@gmail.com>
- <ZGpS-13CozLp-p4f@surfacebook>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <ZGpS-13CozLp-p4f@surfacebook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain;
+        charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHvj8QD3pC+6Aq9H9h6P1+q5LrHRgMH5FTyAkITzAABJU2Y7wJ7xjhgAYjDQqsBr+FHUgDJ87o1AYTHtNcC/cxtnwIXsv+Orp2toMA=
+Content-Language: zh-cn
+X-QQ-SENDSIZE: 520
+Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 5/21/23 20:20, andy.shevchenko@gmail.com wrote:
-> Fri, May 19, 2023 at 02:02:16PM +0300, Matti Vaittinen kirjoitti:
->> fwnode_irq_get[_byname]() were changed to not return 0 anymore. The
->> special error case where device-tree based IRQ mapping fails can't no
->> longer be reliably detected from this return value. This yields a
->> functional change in the driver where the mapping failure is treated as
->> an error.
->>
->> The mapping failure can occur for example when the device-tree IRQ
->> information translation call-back(s) (xlate) fail, IRQ domain is not
->> found, IRQ type conflicts, etc. In most cases this indicates an error in
->> the device-tree and special handling is not really required.
->>
->> One more thing to note is that ACPI APIs do not return zero for any
->> failures so this special handling did only apply on device-tree based
->> systems.
->>
->> Drop the special (no error, just skip the IRQ) handling for DT mapping
->> failures as these can no longer be separated from other errors at driver
->> side.
+On Friday, May 19, 2023 9:13 PM, Andrew Lunn wrote:
+> > I have one MSI-X interrupt for all general MAC interrupt (see TXGBE_PX_MISC_IEN_MASK).
+> > It has 32 bits to indicate various interrupts, GPIOs are the one of them. When GPIO
+> > interrupt is determined, GPIO_INT_STATUS register should be read to determine
+> > which GPIO line has changed state.
 > 
-> ...
+> So you have another interrupt controller above the GPIO interrupt
+> controller. regmap-gpio is pushing you towards describing this
+> interrupt controller as a Linux interrupt controller.
 > 
->> The commit message does not mention if choosing not to abort the probe
->> on device-tree mapping failure (as is done on other errors) was chosen
->> because: a) Abort would have broken some existing setup. b) Because skipping
->> an IRQ on failure is "the right thing to do", or c) because it sounded like
->> a way to minimize risk of breaking something.
->>
->> If the reason is a) - then I'd appreciate receiving some more
->> information and a suggestion how to proceed (if possible). If the reason
->> is b), then it might be best to just skip the IRQ instead of aborting
->> the probe for all errors on IRQ getting. Finally, in case of c), well,
->> by acking this change you will now accept the risk :)
+> When you look at drivers handling interrupts, most leaf interrupt
+> controllers are not described as Linux interrupt controllers. The
+> driver interrupt handler reads the interrupt status register and
+> internally dispatches to the needed handler. This works well when
+> everything is internal to one driver.
 > 
-> No need to repeat this. As I answered the case c) was in my mind when I made
-> that change.
+> However, here, you have two drivers involved, your MAC driver and a
+> GPIO driver instantiated by the MAC driver. So i think you are going
+> to need to described the MAC interrupt controller as a Linux interrupt
+> controller.
+> 
+> Take a look at the mv88e6xxx driver, which does this. It has two
+> interrupt controller embedded within it, and they are chained.
 
-True. I'll drop that if I re-spin. Thanks for pointing it out.
+Now I add two interrupt controllers, the first one for the MAC interrupt,
+and the second one for regmap-gpio. In the second adding flow,
 
+	irq = irq_find_mapping(txgbe->misc.domain, TXGBE_PX_MISC_GPIO_OFFSET);
+	err = regmap_add_irq_chip_fwnode(fwnode, regmap, irq, 0, 0,
+					 chip, &chip_data);
 
-Yours,
-	-- Matti
+and then,
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+	config.irq_domain = regmap_irq_get_domain(chip_data);
+	gpio_regmap = gpio_regmap_register(&config);
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+"txgbe->misc.domain" is the MAC interrupt domain. I think this flow should
+be correct, but still failed to get gpio_irq from gpio_desc with err -517.
+
+And I still have doubts about what I said earlier:
+https://lore.kernel.org/netdev/20230515063200.301026-1-jiawenwu@trustnetic.com/T/#me1be68e1a1e44426ecc0dd8edf0f6b224e50630d
+
+There really is nothing wrong with gpiochip_to_irq()??
+
+> > > If you are getting errors when removing the driver it means you are
+> > > missing some level of undoing what us done in probe. Are you sure
+> > > regmap_del_irq_chip() is being called on unload?
+> >
+> > I used devm_* all when I registered them.
+> 
+> Look at the ordering. Is regmap_del_irq_chip() being called too late?
+> I've had problems like this with the mv88e6xxx driver and its
+> interrupt controllers. I ended up not using devm_ so i had full
+> control over the order things got undone. In that case, the external
+> devices was PHYs, with the PHY interrupt being inside the Ethernet
+> switch, which i exposed using a Linux interrupt controller.
+
+I use no devm_ functions to add regmap irq chip, register gpio regmap,
+and call their del/unregister functions at the position corresponding to
+release. irq_domain_remove() call trace still exist.
+
+[  104.553182] Call Trace:
+[  104.553184]  <TASK>
+[  104.553185]  irq_domain_remove+0x2b/0xe0
+[  104.553190]  regmap_del_irq_chip.part.0+0x8a/0x160
+[  104.553196]  txgbe_remove_phy+0x57/0x80 [txgbe]
+[  104.553201]  txgbe_remove+0x2a/0x90 [txgbe]
+[  104.553205]  pci_device_remove+0x36/0xa0
+[  104.553208]  device_release_driver_internal+0xaa/0x140
+[  104.553213]  driver_detach+0x44/0x90
+[  104.553215]  bus_remove_driver+0x69/0xf0
+[  104.553217]  pci_unregister_driver+0x29/0xb0
+[  104.553220]  __x64_sys_delete_module+0x145/0x240
+[  104.553223]  ? exit_to_user_mode_prepare+0x3c/0x1a0
+[  104.553226]  do_syscall_64+0x3b/0x90
+[  104.553230]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+
 
