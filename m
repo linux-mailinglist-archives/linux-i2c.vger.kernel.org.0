@@ -2,202 +2,218 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D7170BC11
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 May 2023 13:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A094A70BCE2
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 May 2023 14:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjEVLoR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 May 2023 07:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
+        id S233713AbjEVMEw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 22 May 2023 08:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232937AbjEVLoQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 May 2023 07:44:16 -0400
-Received: from mx2.securetransport.de (mx2.securetransport.de [IPv6:2a03:4000:13:6c7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5116197;
-        Mon, 22 May 2023 04:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1684755748;
-        bh=DXBNab3wDYbzqElhq6r5AwLIPShxiRZZ8AMAgvWKKzk=;
-        h=From:To:CC:Subject:Date:From;
-        b=MWVySWDBYpzCd5iJYcshYSyx/okeLK9jI4qXC5d5B5cDJIXCyTAj54gdmjbK3sjSo
-         r1NfM2VC1UPJ3uU/9ykh96aC7XRrRTUUgTAY4G6ZMRx94FjHfz99z5Wat0S03ZpMLA
-         tGCaNqhj7xJiOQ3aCG2ZfZDEt6519AmbA17qHE4rd7q3Xasc+ewExer6pbDV+c6dGY
-         4QItaf8l6a8G7De/zlqC9v3GtyGtNctYk4ntbgz6C64Cjko0KlV+3eoIIctmuX9rlX
-         Y4Wh3K57ZmTsrU5hJxvvI7w3BI+sJk0UnyinSrIuimVg2P5gNEbIFd1At1vHnSLuuq
-         d30dRWWnUSRIQ==
-X-secureTransport-forwarded: yes
-From:   Ludwig Zenz <lzenz@dh-electronics.com>
-Complaints-To: abuse@cubewerk.de
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-CC:     "Matti.Vaittinen@fi.rohmeurope.com" 
-        <Matti.Vaittinen@fi.rohmeurope.com>,
-        "andriy.shevchenko@intel.com" <andriy.shevchenko@intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
-        "khalasa@piap.pl" <khalasa@piap.pl>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "laurent.pinchart+renesas@ideasonboard.com" 
-        <laurent.pinchart+renesas@ideasonboard.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
-        "m.tretter@pengutronix.de" <m.tretter@pengutronix.de>,
-        "marex@denx.de" <marex@denx.de>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "mpagano@gentoo.org" <mpagano@gentoo.org>,
-        "peda@axentia.se" <peda@axentia.se>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "satish.nagireddy@getcruise.com" <satish.nagireddy@getcruise.com>,
-        "wsa@kernel.org" <wsa@kernel.org>
-Subject: Re: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
-Thread-Topic: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
-Thread-Index: AdmMoJ2P0iXi87HrST+FnMU7CXcJlQ==
-Date:   Mon, 22 May 2023 11:42:24 +0000
-Message-ID: <d7e992a23c7d40b09e0a931bd6857d53@dh-electronics.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S233624AbjEVMEv (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 May 2023 08:04:51 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57484A0
+        for <linux-i2c@vger.kernel.org>; Mon, 22 May 2023 05:04:48 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30789a4c537so3884456f8f.0
+        for <linux-i2c@vger.kernel.org>; Mon, 22 May 2023 05:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684757087; x=1687349087;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XmGSkIC15ZBdqEyVUHdk4p0WQzlHdQ5XyKYa3D0QoFA=;
+        b=P8Pl0wzG47Mrb4LOoe4y8hQKWb8XRQlBbaXjAcCoNfohmbC1mNS2da3YGTc3r9qjgi
+         5lbalTBg89BSBDYeFYJWRMh4n7AnDXbvgl+qYkaLINDiwc6Qp33EAjPDKF1pyHLvLCEa
+         Doj2qzzqwDDlFR77+CIeQCTSQSVhm7b1vci1Xgq5/j7ZjLS1sC0+7u3iMEkGCKw7KQtp
+         f+5/YIddIgz6yfe1tR1kvHw1qukDRrYBi7h74/mEkRHHgf/K7775wFsBj/reyUdgQsp7
+         MgWA/nos/X0+07fLcpACtyfAU+puf7nncoDXm9Qq5jLy1qWPjWbHyOO+Tv6xzg20o3wp
+         Pp8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684757087; x=1687349087;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XmGSkIC15ZBdqEyVUHdk4p0WQzlHdQ5XyKYa3D0QoFA=;
+        b=GX/3SNvBP8CEmPjjNJZzk02B1xdUz7vCMZ0l86OjTP3hRAB/FANNLJWRPkxOqm7AqM
+         K2UUF9k0Xs/7oDIuAch6iJPMYwHDnNHBiapgeAAz/JQqsG6+V9nr8V0RmE+ry+/CvxwM
+         EkD1TTDvN86HY8xTkfi2wb8wp9d1gw8x+2IQ6zqRf3oiVRdxPa1MNdWVp8OtNY4eWuPs
+         Qb0oNay6jd3JZi49wV4DyaBba6vD8q7lyZuzgf7E8Vn7YcAg92LFJVxfv9XIn5mAE2aR
+         P1H0m+iO/fO5zDtQyYyJSGHUROJM99ankizNdPZXMK6+ujEVV8HZw+weAEaO3rnj5dQO
+         bq4Q==
+X-Gm-Message-State: AC+VfDxF0cDtbu7c6upObXwpIx5NoBk6HQzi/Sd8ydotdyc8vftQPrk/
+        xcwGKHeSH+9ASiw7qCE5RuJEqg==
+X-Google-Smtp-Source: ACHHUZ6HlF5QXNP0Yse6sMgYpKn/I5NauhHUsC+IEQLh2V/f1AUEzxrr3i8XFI2XIG5GRtTuSwwnnQ==
+X-Received: by 2002:a5d:6509:0:b0:306:2b5a:d8db with SMTP id x9-20020a5d6509000000b003062b5ad8dbmr7866960wru.23.1684757086606;
+        Mon, 22 May 2023 05:04:46 -0700 (PDT)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id i7-20020a5d55c7000000b003079ed1f0a0sm7560047wrw.44.2023.05.22.05.04.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 05:04:46 -0700 (PDT)
+Message-ID: <f02c52d4-a301-eb72-02b8-0c0003aac6be@baylibre.com>
+Date:   Mon, 22 May 2023 14:04:45 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: RCU WARNING on 6.4-rc2, TI AM62 and TPS65219
+Content-Language: en-US
+From:   jerome Neanne <jneanne@baylibre.com>
+To:     Francesco Dolcini <francesco@dolcini.it>, nm@ti.com,
+        lee@kernel.org, tony@atomide.com, vigneshr@ti.com
+Cc:     afd@ti.com, khilman@baylibre.com, narmstrong@baylibre.com,
+        msp@baylibre.com, j-keerthy@ti.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+References: <ZGeHMjlnob2GFyHF@francesco-nb.int.toradex.com>
+ <1a0a796c-497f-41a5-2f76-493c09e29325@baylibre.com>
+In-Reply-To: <1a0a796c-497f-41a5-2f76-493c09e29325@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PiBPbiAxNi8wNS8yMDIzIDIyOjA1LCBMdWR3aWcgWmVueiB3cm90ZToNCj4+PiBPbiAxNi8wNS8y
-MDIzIDE2OjMyLCBMdWR3aWcgWmVueiB3cm90ZToNCj4+Pj4+IEhpLA0KPj4+Pj4NCj4+Pj4+IE9u
-IDE2LzA1LzIwMjMgMTU6MzUsIEx1ZHdpZyBaZW56IHdyb3RlOg0KPj4+Pj4+IE9uIFdlZCwgMjYg
-QXByIDIwMjMgMTQ6NTE6MTIgKzAzMDAsIFRvbWkgVmFsa2VpbmVuIHdyb3RlOg0KPj4+Pj4+DQo+
-Pj4+Pj4gWy4uLl0NCj4+Pj4+Pg0KPj4+Pj4+PiAgICAgK3N0YXRpYyBpbnQgdWI5NjBfY29uZmln
-dXJlX3BvcnRzX2Zvcl9zdHJlYW1pbmcoc3RydWN0IHViOTYwX2RhdGEgKnByaXYsDQo+Pj4+Pj4+
-ICAgICArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgdjRs
-Ml9zdWJkZXZfc3RhdGUgKnN0YXRlKQ0KPj4+Pj4+PiAgICAgK3sNCj4+Pj4+Pj4gICAgICsgIHU4
-IGZ3ZF9jdGw7DQo+Pj4+Pj4+ICAgICArICBzdHJ1Y3Qgew0KPj4+Pj4+PiAgICAgKyAgICAgICAg
-ICB1MzIgbnVtX3N0cmVhbXM7DQo+Pj4+Pj4+ICAgICArICAgICAgICAgIHU4IHBpeGVsX2R0Ow0K
-Pj4+Pj4+PiAgICAgKyAgICAgICAgICB1OCBtZXRhX2R0Ow0KPj4+Pj4+PiAgICAgKyAgICAgICAg
-ICB1MzIgbWV0YV9saW5lczsNCj4+Pj4+Pj4gICAgICsgICAgICAgICAgdTMyIHR4X3BvcnQ7DQo+
-Pj4+Pj4+ICAgICArICB9IHJ4X2RhdGFbVUI5NjBfTUFYX1JYX05QT1JUU10gPSB7fTsNCj4+Pj4+
-Pj4gICAgICsgIHU4IHZjX21hcFtVQjk2MF9NQVhfUlhfTlBPUlRTXSA9IHt9Ow0KPj4+Pj4+PiAg
-ICAgKyAgc3RydWN0IHY0bDJfc3ViZGV2X3JvdXRlICpyb3V0ZTsNCj4+Pj4+Pj4gICAgICsgIHVu
-c2lnbmVkIGludCBucG9ydDsNCj4+Pj4+Pj4gICAgICsgIGludCByZXQ7DQo+Pj4+Pj4+ICAgICAr
-DQo+Pj4+Pj4+ICAgICArICByZXQgPSB1Yjk2MF92YWxpZGF0ZV9zdHJlYW1fdmNzKHByaXYpOw0K
-Pj4+Pj4+PiAgICAgKyAgaWYgKHJldCkNCj4+Pj4+Pj4gICAgICsgICAgICAgICAgcmV0dXJuIHJl
-dDsNCj4+Pj4+Pj4gICAgICsNCj4+Pj4+Pj4gICAgICsgIHViOTYwX2dldF92Y19tYXBzKHByaXYs
-IHN0YXRlLCB2Y19tYXApOw0KPj4+Pj4+PiAgICAgKw0KPj4+Pj4+PiAgICAgKyAgZm9yX2VhY2hf
-YWN0aXZlX3JvdXRlKCZzdGF0ZS0+cm91dGluZywgcm91dGUpIHsNCj4+Pj4+Pj4gICAgICsgICAg
-ICAgICAgc3RydWN0IHViOTYwX3J4cG9ydCAqcnhwb3J0Ow0KPj4+Pj4+PiAgICAgKyAgICAgICAg
-ICBzdHJ1Y3QgdWI5NjBfdHhwb3J0ICp0eHBvcnQ7DQo+Pj4+Pj4+ICAgICArICAgICAgICAgIHN0
-cnVjdCB2NGwyX21idXNfZnJhbWVmbXQgKmZtdDsNCj4+Pj4+Pj4gICAgICsgICAgICAgICAgY29u
-c3Qgc3RydWN0IHViOTYwX2Zvcm1hdF9pbmZvICp1Yjk2MF9mbXQ7DQo+Pj4+Pj4+ICAgICArICAg
-ICAgICAgIHVuc2lnbmVkIGludCBucG9ydDsNCj4+Pj4+Pj4gICAgICsNCj4+Pj4+Pj4gICAgICsg
-ICAgICAgICAgbnBvcnQgPSB1Yjk2MF9wYWRfdG9fcG9ydChwcml2LCByb3V0ZS0+c2lua19wYWQp
-Ow0KPj4+Pj4+PiAgICAgKw0KPj4+Pj4+PiAgICAgKyAgICAgICAgICByeHBvcnQgPSBwcml2LT5y
-eHBvcnRzW25wb3J0XTsNCj4+Pj4+Pj4gICAgICsgICAgICAgICAgaWYgKCFyeHBvcnQpDQo+Pj4+
-Pj4+ICAgICArICAgICAgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+Pj4+Pj4+ICAgICAr
-DQo+Pj4+Pj4+ICAgICArICAgICAgICAgIHR4cG9ydCA9IHByaXYtPnR4cG9ydHNbdWI5NjBfcGFk
-X3RvX3BvcnQocHJpdiwgcm91dGUtPnNvdXJjZV9wYWQpXTsNCj4+Pj4+Pj4gICAgICsgICAgICAg
-ICAgaWYgKCF0eHBvcnQpDQo+Pj4+Pj4+ICAgICArICAgICAgICAgICAgICAgICAgcmV0dXJuIC1F
-SU5WQUw7DQo+Pj4+Pj4+ICAgICArDQo+Pj4+Pj4+ICAgICArICAgICAgICAgIHJ4X2RhdGFbbnBv
-cnRdLnR4X3BvcnQgPSB1Yjk2MF9wYWRfdG9fcG9ydChwcml2LCByb3V0ZS0+c291cmNlX3BhZCk7
-DQo+Pj4+Pj4+ICAgICArDQo+Pj4+Pj4+ICAgICArICAgICAgICAgIHJ4X2RhdGFbbnBvcnRdLm51
-bV9zdHJlYW1zKys7DQo+Pj4+Pj4+ICAgICArDQo+Pj4+Pj4+ICAgICArICAgICAgICAgIC8qIEZv
-ciB0aGUgcmVzdCwgd2UgYXJlIG9ubHkgaW50ZXJlc3RlZCBpbiBwYXJhbGxlbCBidXNzZXMgKi8N
-Cj4+Pj4+Pj4gICAgICsgICAgICAgICAgaWYgKHJ4cG9ydC0+cnhfbW9kZSA9PSBSWFBPUlRfTU9E
-RV9DU0kyX1NZTkMgfHwNCj4+Pj4+Pj4gICAgICsgICAgICAgICAgICAgIHJ4cG9ydC0+cnhfbW9k
-ZSA9PSBSWFBPUlRfTU9ERV9DU0kyX0FTWU5DKQ0KPj4+Pj4+PiAgICAgKyAgICAgICAgICAgICAg
-ICAgIGNvbnRpbnVlOw0KPj4+Pj4+PiAgICAgKw0KPj4+Pj4+PiAgICAgKyAgICAgICAgICBpZiAo
-cnhfZGF0YVtucG9ydF0ubnVtX3N0cmVhbXMgPiAyKQ0KPj4+Pj4+PiAgICAgKyAgICAgICAgICAg
-ICAgICAgIHJldHVybiAtRVBJUEU7DQo+Pj4+Pj4+ICAgICArDQo+Pj4+Pj4+ICAgICArICAgICAg
-ICAgIGZtdCA9IHY0bDJfc3ViZGV2X3N0YXRlX2dldF9zdHJlYW1fZm9ybWF0KHN0YXRlLA0KPj4+
-Pj4+PiAgICAgKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICByb3V0ZS0+c2lua19wYWQsDQo+Pj4+Pj4+ICAgICArICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJvdXRlLT5zaW5rX3N0cmVhbSk7DQo+Pj4+
-Pj4+ICAgICArICAgICAgICAgIGlmICghZm10KQ0KPj4+Pj4+PiAgICAgKyAgICAgICAgICAgICAg
-ICAgIHJldHVybiAtRVBJUEU7DQo+Pj4+Pj4+ICAgICArDQo+Pj4+Pj4+ICAgICArICAgICAgICAg
-IHViOTYwX2ZtdCA9IHViOTYwX2ZpbmRfZm9ybWF0KGZtdC0+Y29kZSk7DQo+Pj4+Pj4+ICAgICAr
-ICAgICAgICAgIGlmICghdWI5NjBfZm10KQ0KPj4+Pj4+PiAgICAgKyAgICAgICAgICAgICAgICAg
-IHJldHVybiAtRVBJUEU7DQo+Pj4+Pj4+ICAgICArDQo+Pj4+Pj4+ICAgICArICAgICAgICAgIGlm
-ICh1Yjk2MF9mbXQtPm1ldGEpIHsNCj4+Pj4+Pj4gICAgICsgICAgICAgICAgICAgICAgICBpZiAo
-Zm10LT5oZWlnaHQgPiAzKSB7DQo+Pj4+Pj4+ICAgICArICAgICAgICAgICAgICAgICAgICAgICAg
-ICBkZXZfZXJyKCZwcml2LT5jbGllbnQtPmRldiwNCj4+Pj4+Pj4gICAgICsgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgInJ4JXU6IHVuc3VwcG9ydGVkIG1ldGFkYXRhIGhlaWdodCAl
-dVxuIiwNCj4+Pj4+Pj4gICAgICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbnBv
-cnQsIGZtdC0+aGVpZ2h0KTsNCj4+Pj4+Pj4gICAgICsgICAgICAgICAgICAgICAgICAgICAgICAg
-IHJldHVybiAtRVBJUEU7DQo+Pj4+Pj4+ICAgICArICAgICAgICAgICAgICAgICAgfQ0KPj4+Pj4+
-PiAgICAgKw0KPj4+Pj4+PiAgICAgKyAgICAgICAgICAgICAgICAgIHJ4X2RhdGFbbnBvcnRdLm1l
-dGFfZHQgPSB1Yjk2MF9mbXQtPmRhdGF0eXBlOw0KPj4+Pj4+PiAgICAgKyAgICAgICAgICAgICAg
-ICAgIHJ4X2RhdGFbbnBvcnRdLm1ldGFfbGluZXMgPSBmbXQtPmhlaWdodDsNCj4+Pj4+Pj4gICAg
-ICsgICAgICAgICAgfSBlbHNlIHsNCj4+Pj4+Pj4gICAgICsgICAgICAgICAgICAgICAgICByeF9k
-YXRhW25wb3J0XS5waXhlbF9kdCA9IHViOTYwX2ZtdC0+ZGF0YXR5cGU7DQo+Pj4+Pj4+ICAgICAr
-ICAgICAgICAgIH0NCj4+Pj4+Pj4gICAgICsgIH0NCj4+Pj4+Pj4gICAgICsNCj4+Pj4+Pj4gICAg
-ICsgIC8qIENvbmZpZ3VyZSBSWCBwb3J0cyAqLw0KPj4+Pj4+PiAgICAgKw0KPj4+Pj4+PiAgICAg
-KyAgZndkX2N0bCA9IDA7DQo+Pj4+Pj4NCj4+Pj4+PiBIZWxsbywgSSBoYXZlIG9ubHkgdXNlZCB0
-aGUgZmlyc3QgUlggcG9ydCBpbiBteSBzZXR1cCAoZHM5MHViOTMzIHRvIGRzOTB1Yjk2NCkuIFRo
-ZSBsb2dpYyBmb3IgYWN0aXZhdGluZy9kZWFjdGl2YXRpbmcgdGhlIFJ4IHBvcnRzIGRpZCBub3Qg
-d29yayBmb3IgbWUuIE15IHN1Z2dlc3Rpb24gaXM6DQo+Pj4+Pj4NCj4+Pj4+IFdoeSBkb2Vzbid0
-IGl0IHdvcms/IFdoYXQgaGFwcGVucz8NCj4+Pj4+DQo+Pj4+PiAgICBUb21pDQo+Pj4+DQo+Pj4+
-IEhlbGxvIFRvbWksDQo+Pj4+DQo+Pj4+IHRoZSBwb3J0IHJ4MCB3aGljaCBJIG5lZWQgd2FzIGRp
-c2FibGVkIGFuZCB0aGUgb3RoZXIgcG9ydHMgcngxIHRvIHJ4MyB3ZXJlIGVuYWJsZWQuIEluIG90
-aGVyIHdvcmRzLCB0aGUgZXhhY3QgaW52ZXJzZSBvZiB0aGUgcmVxdWlyZWQgc2VsZWN0aW9uLg0K
-Pj4+Pg0KPj4+Pj4+PiAgICArICAgICAgICAgICAgICAgIC8qIEZvcndhcmRpbmcgKi8NCj4+Pj4+
-Pj4gICAgKw0KPj4+Pj4+PiAgICArICAgICAgICAgICAgICAgIGZ3ZF9jdGwgfD0gQklUKDQgKyBu
-cG9ydCk7IC8qIGZvcndhcmQgZGlzYWJsZSAqLw0KPj4+PiBBY2NvcmRpbmcgdG8gdGhlIGRhdGEg
-c2hlZXQsIGEgc2V0IGJpdDQtNyBpbiBmd2RfY3RsIG1lYW5zIHRoYXQgdGhlIGNoYW5uZWwgaXMg
-ZGlzYWJsZWQuIFNvIHRoZSBjb21tZW50ICdmb3J3YXJkIGRpc2FibGUnIGlzIGNvcnJlY3QuIFdo
-aWxlIGRlYnVnZ2luZywgaG93ZXZlciwgdGhpcyBjb2RlIHdhcyBvbmx5IHJlYWNoZWQgZm9yIHRo
-ZSBwb3J0cyB0byBiZSBlbmFibGVkIGJ1dCBub3QgZm9yIHRoZSBvbmVzIHdoaWNoIHNob3VsZCBi
-ZSBkaXNhYmxlZC4NCj4+DQo+Pj4gVGhpcyBpcyBqdXN0IGEgc2V0dXAgcGhhc2UsIHdoZXJlIHdl
-IGluaXRpYWxpemUgdGhlIHJlZ2lzdGVycyBmb3IgdGhlIHBvcnRzIHdlIHdhbnQgdG8gdXNlLiBU
-aGUgZm9yd2FyZGluZyBpcyB0aGVuIGVuYWJsZWQgbGF0ZXIsIGluIHViOTYwX2VuYWJsZV9yeF9w
-b3J0LCBhbmQgZXZlbiBsYXRlciBkaXNhYmxlZCBpbiB1Yjk2MF9kaXNhYmxlX3J4X3BvcnQuDQo+
-Pg0KPj4gVGhhbmsgeW91IGZvciB0aGUgY2xhcmlmaWNhdGlvbi4gSSBoYWQgbWlzaW50ZXJwcmV0
-ZWQgdGhlIGludGVudGlvbiBvZiB0aGUgY29kZSBoZXJlLg0KPj4NCj4+PiBUaGlzIGFzc3VtZXMg
-dGhhdCB0aGUgZm9yd2FyZGluZyBpcyBkaXNhYmxlZCBpbiB0aGUgcmVnaXN0ZXJzIGJ5IGRlZmF1
-bHQgKHdoaWNoIGl0IGlzIGluIFVCOTYwKS4NCj4+Pg0KPj4+IEkgbmVlZCB0byB0cnkgdGhpcyBv
-biBteSBIVyB0byB2ZXJpZnkgbXkgdW5kZXJzdGFuZGluZyBpcyBjb3JyZWN0LCBidXQgbG9va2lu
-ZyBhdCB0aGUgY29kZSwgaXQgaXMgaW5kZWVkIGEgYml0IGJ1Z2d5Lg0KPj4+DQo+Pj4gQXQgdGhp
-cyBzZXR1cCBwaGFzZSB3ZSBkaXNhYmxlIHRoZSBmb3J3YXJkaW5nIGZvciBwb3J0cyB3ZSdsbCB1
-c2UsIGFuZCBlbmFibGUgdGhlIGZvcndhcmRpbmcgZm9yIHBvcnRzIHdlIGRvbid0IHVzZSAod2hp
-Y2ggZG9lc24ndCBtYWtlIHNlbnNlKS4NCj4+PiBMYXRlciwgd2hlbiB0aGUgc3RyZWFtaW5nIGlz
-IHN0YXJ0ZWQgZm9yIHRoYXQgcG9ydCwgd2UgZW5hYmxlIHRoZSBmb3J3YXJkaW5nLiBTbyBoZXJl
-IHdlIHNob3VsZCBqdXN0IGFsd2F5cyBkaXNhYmxlIHRoZSBmb3J3YXJkaW5nIGZvciBhbGwgcG9y
-dHMuDQo+Pj4NCj4+DQo+PiBUaGUgdW51c2VkIFJ4IHBvcnRzIHdlcmUgbm90IGRpc2FibGVkIGlu
-IG15IHRlc3RzLiBEaXNhYmxpbmcgYWxsIHBvcnRzIGhlcmUgc2hvdWxkIGFsc28gd29yayBmb3Ig
-bXkgc2V0dXAuDQo+Pg0KPj4+IFNheWluZyAiZGlzYWJsZSB0aGUgZm9yd2FyZGluZyIgaXMgcGVy
-aGFwcyBhIGJpdCBjb25mdXNpbmcgaGVyZSwgYXMgdGhlIHRoZQ0KPiBmb3J3YXJkaW5nIHNob3Vs
-ZCBhbHJlYWR5IGJlIGRpc2FibGVkIGluIHRoZSBIVyBoZXJlIGFueXdheS4gQnV0IGFzIHdlIHdy
-aXRlDQo+IHRoZSBVQjk2MF9TUl9GV0RfQ1RMMSwgd2UgbmVlZCB0byBzZXQgdGhhdCBiaXQuDQo+
-Pj4NCj4+PiBTby4gWW91IHNob3VsZCBzZWUgdGhlIHJ4MCBnZXR0aW5nIGVuYWJsZWQgKGxhdGVy
-LCBpbiB1Yjk2MF9lbmFibGVfcnhfcG9ydCksDQo+IGFuZCBJJ20gY3VyaW91cyB3aHkgeW91IGRv
-bid0IHNlZSB0aGF0Lg0KPj4NCj4+IEkgd2lsbCBoYXZlIGFub3RoZXIgbG9vayBhdCB0aGF0IG5l
-eHQgd2Vlay4gSXQgY291bGQgd2VsbCBiZSB0aGF0IGluIHRoZSBlbmQgb25seQ0KPiB0aGUgZW5h
-YmxlZCBidXQgdW51c2VkIHBvcnRzIGFyZSB0aGUgcHJvYmxlbS4NCj4gDQo+IFRoaXMgc2hvdWxk
-IGZpeCB0aGUgaXNzdWU6DQo+IA0KPiBAIC0yNDg2LDcgKzI0ODgsNyBAQCBzdGF0aWMgaW50DQo+
-IHViOTYwX2NvbmZpZ3VyZV9wb3J0c19mb3Jfc3RyZWFtaW5nKHN0cnVjdCB1Yjk2MF9kYXRhICpw
-cml2LA0KPiANCj4gICAgICAgICAgLyogQ29uZmlndXJlIFJYIHBvcnRzICovDQo+IA0KPiAtICAg
-ICAgIGZ3ZF9jdGwgPSAwOw0KPiArICAgICAgIGZ3ZF9jdGwgPSBHRU5NQVNLKDcsIDQpOw0KPiAN
-Cj4gICAgICAgICAgZm9yIChucG9ydCA9IDA7IG5wb3J0IDwgcHJpdi0+aHdfZGF0YS0+bnVtX3J4
-cG9ydHM7IG5wb3J0KyspIHsNCj4gICAgICAgICAgICAgICAgICBzdHJ1Y3QgdWI5NjBfcnhwb3J0
-ICpyeHBvcnQgPSBwcml2LT5yeHBvcnRzW25wb3J0XTsgQEAgLTI1MzYsOA0KPiArMjUzOCw2IEBA
-IHN0YXRpYyBpbnQgdWI5NjBfY29uZmlndXJlX3BvcnRzX2Zvcl9zdHJlYW1pbmcoc3RydWN0DQo+
-IHViOTYwX2RhdGEgKnByaXYsDQo+IA0KPiAgICAgICAgICAgICAgICAgIC8qIEZvcndhcmRpbmcg
-Ki8NCj4gDQo+IC0gICAgICAgICAgICAgICBmd2RfY3RsIHw9IEJJVCg0ICsgbnBvcnQpOyAvKiBm
-b3J3YXJkIGRpc2FibGUgKi8NCj4gLQ0KPiAgICAgICAgICAgICAgICAgIGlmIChyeF9kYXRhW25w
-b3J0XS50eF9wb3J0ID09IDEpDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICBmd2RfY3RsIHw9
-IEJJVChucG9ydCk7IC8qIGZvcndhcmQgdG8gVFgxICovDQo+ICAgICAgICAgICAgICAgICAgZWxz
-ZQ0KPiANCg0KSGVsbG8gVG9taSwNCg0KeWVzLCB0aGlzIGRvZXMgZml4IHRoZSBpc3N1ZS4gSSB3
-YXMgYWJsZSB0byB0ZXN0IGl0IHN1Y2Nlc3NmdWxseSB0b2RheSB3aXRoIG15IGhhcmR3YXJlIChk
-czkwdWI5MzMgKyBkczkwdWI5NjQgKyBpLk1YOE1wbHVzKS4NCg0KVGhhbmtzIGFuZCByZWdhcmRz
-LA0KTHVkd2lnDQo=
+
+
+On 22/05/2023 11:27, jerome Neanne wrote:
+> 
+> 
+> On 19/05/2023 16:26, Francesco Dolcini wrote:
+>> Hello all,
+>> while testing 6.4-rc2 (2d1bcbc6cd70) on a TI K3 AM625 SoC with TPS65219
+>> PMIC I noticed this warning.
+>>
+>> [   80.117502] systemd-shutdown[1]: All loop devices detached.
+>> [   80.123176] systemd-shutdown[1]: Stopping MD devices.
+>> [   80.128700] systemd-shutdown[1]: All MD devices stopped.
+>> [   80.134123] systemd-shutdown[1]: Detaching DM devices.
+>> [   80.139553] systemd-shutdown[1]: All DM devices detached.
+>> [   80.144970] systemd-shutdown[1]: All filesystems, swaps, loop 
+>> devices, MD devices and DM devices detached.
+>> [   80.162682] systemd-shutdown[1]: Syncing filesystems and block 
+>> devices.
+>> [   80.169602] systemd-shutdown[1]: Rebooting.
+>> [   80.173817] kvm: exiting hardware virtualization
+>> [   80.213016] reboot: Restarting system
+>> [   80.216767] ------------[ cut here ]------------
+>> [   80.221380] Voluntary context switch within RCU read-side critical 
+>> section!
+>> [   80.221404] WARNING: CPU: 0 PID: 1 at kernel/rcu/tree_plugin.h:318 
+>> rcu_note_context_switch+0x31c/0x390
+>> [   80.237669] Modules linked in: 8021q garp mrp stp llc cfg80211 
+>> usb_f_ncm u_ether bluetooth ecdh_generic ecc rfkill sp
+>> idev crct10dif_ce snd_soc_simple_card snd_soc_simple_card_utils 
+>> rtc_ti_k3 sa2ul sha256_generic libsha256 authenc snd_soc
+>> _davinci_mcasp snd_soc_ti_udma snd_soc_ti_edma snd_soc_ti_sdma 
+>> ti_ads1015 ina2xx industrialio_triggered_buffer pwm_tiehr
+>> pwm snd_soc_nau8822 tps65219_pwrbutton lm75 kfifo_buf spi_omap2_mcspi 
+>> rtc_ds1307 libcomposite fuse drm ipv6
+>> [   80.278507] CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted 
+>> 6.4.0-rc2-00166-gf932e7bb873b #3
+>> [   80.286938] Hardware name: Toradex Verdin AM62 on Verdin 
+>> Development Board (DT)
+>> [   80.294238] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS 
+>> BTYPE=--)
+>> [   80.301193] pc : rcu_note_context_switch+0x31c/0x390
+>> [   80.306154] lr : rcu_note_context_switch+0x31c/0x390
+>> [   80.311114] sp : ffff80000a71b4c0
+>> [   80.314422] x29: ffff80000a71b4c0 x28: 0000000000000000 x27: 
+>> ffff000000118000
+>> [   80.321556] x26: 0000000000000000 x25: ffff000000118000 x24: 
+>> ffff800008fafbd8
+>> [   80.328689] x23: ffff000000118000 x22: 0000000000000000 x21: 
+>> ffff000000118000
+>> [   80.335822] x20: 0000000000000000 x19: ffff00003fd68cc0 x18: 
+>> 0000000000000010
+>> [   80.342955] x17: 0000000000000000 x16: 0000000000000000 x15: 
+>> ffff000000118000
+>> [   80.350087] x14: 00000000000001c5 x13: ffff000000118478 x12: 
+>> 00000000ffffffea
+>> [   80.357220] x11: 00000000ffffefff x10: 00000000ffffefff x9 : 
+>> ffff80000a2a9a98
+>> [   80.364352] x8 : 0000000000017fe8 x7 : c0000000ffffefff x6 : 
+>> 000000000000bff4
+>> [   80.371485] x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 
+>> 0000000000000000
+>> [   80.378617] x2 : ffff80000a251990 x1 : 0000000000000000 x0 : 
+>> 0000000000000000
+>> [   80.385751] Call trace:
+>> [   80.388193]  rcu_note_context_switch+0x31c/0x390
+>> [   80.392807]  __schedule+0x98/0xa7c
+>> [   80.396214]  schedule+0x5c/0xc4
+>> [   80.399354]  schedule_timeout+0x180/0x25c
+>> [   80.403362]  wait_for_completion_timeout+0x80/0x15c
+>> [   80.408238]  ti_sci_set_device_state+0xb4/0x1e4
+>> [   80.412771]  ti_sci_cmd_get_device_exclusive+0x18/0x24
+>> [   80.417907]  ti_sci_pd_power_on+0x28/0x48
+>> [   80.421914]  _genpd_power_on+0x94/0x154
+>> [   80.425749]  genpd_power_on.part.0+0xa4/0x174
+>> [   80.430104]  genpd_runtime_resume+0x118/0x294
+>> [   80.434457]  __rpm_callback+0x48/0x140
+>> [   80.438206]  rpm_callback+0x6c/0x78
+>> [   80.441692]  rpm_resume+0x3bc/0x59c
+>> [   80.445179]  __pm_runtime_resume+0x4c/0x90
+>> [   80.449272]  omap_i2c_xfer_common+0x38/0x598
+>> [   80.453540]  omap_i2c_xfer_polling+0x14/0x20
+>> [   80.457804]  __i2c_transfer+0x138/0x35c
+>> [   80.461642]  i2c_transfer+0x94/0xf4
+>> [   80.465130]  regmap_i2c_read+0x60/0xa8
+>> [   80.468879]  _regmap_raw_read+0xf0/0x170
+>> [   80.472799]  _regmap_bus_read+0x44/0x7c
+>> [   80.476632]  _regmap_read+0x64/0xf4
+>> [   80.480118]  _regmap_update_bits+0xf4/0x130
+>> [   80.484298]  regmap_update_bits_base+0x64/0x98
+>> [   80.488738]  tps65219_restart+0x38/0x48
+>> [   80.492576]  atomic_notifier_call_chain+0x60/0x90
+>> [   80.497280]  do_kernel_restart+0x24/0x30
+>> [   80.501202]  machine_restart+0x38/0x5c
+>> [   80.504950]  kernel_restart+0x88/0x98
+>> [   80.508612]  __do_sys_reboot+0x1e0/0x264
+>> [   80.512533]  __arm64_sys_reboot+0x24/0x30
+>> [   80.516538]  invoke_syscall+0x44/0x104
+>> [   80.520287]  el0_svc_common.constprop.0+0x44/0xec
+>> [   80.524988]  do_el0_svc+0x38/0x98
+>> [   80.528302]  el0_svc+0x2c/0x84
+>> [   80.531354]  el0t_64_sync_handler+0xb8/0xbc
+>> [   80.535534]  el0t_64_sync+0x190/0x194
+>> [   80.539192] ---[ end trace 0000000000000000 ]---
+>>
+>>
+>> This looks similar to what is described here [1], same issue or
+>> something else? Any suggestion?
+>>
+>> The issue is systematic and happens at every boot. With a TI downstream
+>> 5.10 kernel this issue was never experienced.
+>>
+>> Francesco
+>>
+>> [1] 
+>> https://lore.kernel.org/all/20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com/
+>>
+> I don't have the same board to test and don't experience this boot issue 
+> with the am62 board I'm using (the board version I have is a custom 
+> board not released publicly by TI unfortunately).
+> 
+> Notice that: 
+> https://lore.kernel.org/lkml/20230511122100.2225417-1-jneanne@baylibre.com/
+> 
+> Is not yet applied and would help handle shutdown/reboot under some 
+> conditions.
+> 
+> This might help for reboot handling if you are forcing a shutdown/reboot 
+> in your test.
+> 
+> But if the problem is your device tries to shutdown at each boot, then 
+> this is just a side effect, not the original root cause.
+> 
+> Regards,
+> Jerome
+More background in thread:
+Link: https://lore.kernel.org/all/7hfseqa7l0.fsf@baylibre.com/
+
+This explains why downstream is different on that point.
