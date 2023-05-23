@@ -2,195 +2,222 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1B170DF5D
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 May 2023 16:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DEF70E218
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 May 2023 18:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236993AbjEWOfU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 23 May 2023 10:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
+        id S229821AbjEWQm5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 May 2023 12:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236994AbjEWOfS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 May 2023 10:35:18 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1B6130;
-        Tue, 23 May 2023 07:35:07 -0700 (PDT)
-Received: from van1shing-pc.localdomain ([10.12.182.0])
-        (user=silver_code@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 34NEYNMl017601-34NEYNMm017601
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 23 May 2023 22:34:27 +0800
-From:   Wang Zhang <silver_code@hust.edu.cn>
-To:     Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>
-Cc:     os-kernel-patches@googlegroups.com,
-        Wang Zhang <silver_code@hust.edu.cn>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] i2c: ocores: use devm_ managed clks
-Date:   Tue, 23 May 2023 22:33:34 +0800
-Message-Id: <20230523143334.22348-1-silver_code@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
-References: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
+        with ESMTP id S231193AbjEWQmz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 May 2023 12:42:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FB819D
+        for <linux-i2c@vger.kernel.org>; Tue, 23 May 2023 09:42:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 32FDB1FDE4;
+        Tue, 23 May 2023 16:42:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684860165; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W++4PVxjrSr0Tq98wKKuwYLai/WjHNrA6nbpIuDGJBs=;
+        b=iE1MUuVQvUQiR3aVJ2devDxV+WLETFlA0lDhB04pDdEtydisCyBqmsJvmTSTpxzKi/Of/p
+        x7ScQftJRIQ3Xy6CedADrdc5Og9vWlD6ncdrQlzaYBmYFkm1nrCowz8l+BAyCOQP7oRhO+
+        W/QmZ6MMfdb7/5E/v9iLaxKMZvDN6ZQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684860165;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W++4PVxjrSr0Tq98wKKuwYLai/WjHNrA6nbpIuDGJBs=;
+        b=cXzosNyhALgwbxIsiabGxE6UoUxCs2922Gu76M+1MB1odhjDKnzU/CRRqxrjfOpXTe4mRK
+        y/EVB+DTPgUz6dBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EE72C13588;
+        Tue, 23 May 2023 16:42:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LLqpOATtbGRlJAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 23 May 2023 16:42:44 +0000
+Date:   Tue, 23 May 2023 18:42:43 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH v3 1/3] i2c: i801: Enlarge device name field in i801_ids
+ table
+Message-ID: <20230523184243.264ec6d1@endymion.delvare>
+In-Reply-To: <20230512115001.81309-1-jarkko.nikula@linux.intel.com>
+References: <20230512115001.81309-1-jarkko.nikula@linux.intel.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: silver_code@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_75_100,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-While it is not entirely clear why the original author implemented this
-behavior, there may have been certain circumstances or issues that were not
-apparent to us. It's possible that they were trying to work around a bug by
-employing an unconventional solution.Using `devm_clk_get_enabled()` rather
-than devm_clk_get() can automatically track the usage of clocks and free
-them when they are no longer needed or an error occurs.
+On Fri, 12 May 2023 14:49:59 +0300, Jarkko Nikula wrote:
+> Indent data field in the i801_ids table by one tab to make more space for
+> longer device names.
+> 
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> ---
+>  drivers/i2c/busses/i2c-i801.c | 122 +++++++++++++++++-----------------
+>  1 file changed, 61 insertions(+), 61 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index ac5326747c51..7431e8411e99 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -977,67 +977,67 @@ static const struct i2c_algorithm smbus_algorithm = {
+>  			 FEATURE_HOST_NOTIFY)
+>  
+>  static const struct pci_device_id i801_ids[] = {
+> -	{ PCI_DEVICE_DATA(INTEL, 82801AA_3,		0)				 },
+> -	{ PCI_DEVICE_DATA(INTEL, 82801AB_3,		0)				 },
+> -	{ PCI_DEVICE_DATA(INTEL, 82801BA_2,		0)				 },
+> -	{ PCI_DEVICE_DATA(INTEL, 82801CA_3,		FEATURE_HOST_NOTIFY)		 },
+> -	{ PCI_DEVICE_DATA(INTEL, 82801DB_3,		FEATURES_ICH4)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, 82801EB_3,		FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, ESB_4,			FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, ICH6_16,		FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, ICH7_17,		FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, ESB2_17,		FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, ICH8_5,		FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, ICH9_6,		FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, EP80579_1,		FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, ICH10_4,		FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, ICH10_5,		FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, 5_3400_SERIES_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, COUGARPOINT_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS_IDF0,	FEATURES_ICH5 | FEATURE_IDF)	 },
+> -	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS_IDF1,	FEATURES_ICH5 | FEATURE_IDF)	 },
+> -	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS_IDF2,	FEATURES_ICH5 | FEATURE_IDF)	 },
+> -	{ PCI_DEVICE_DATA(INTEL, DH89XXCC_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, PANTHERPOINT_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, LYNXPOINT_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, LYNXPOINT_LP_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, AVOTON_SMBUS,		FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS_MS0,	FEATURES_ICH5 | FEATURE_IDF)	 },
+> -	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS_MS1,	FEATURES_ICH5 | FEATURE_IDF)	 },
+> -	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS_MS2,	FEATURES_ICH5 | FEATURE_IDF)	 },
+> -	{ PCI_DEVICE_DATA(INTEL, COLETOCREEK_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, GEMINILAKE_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, WILDCATPOINT_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, WILDCATPOINT_LP_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, BAYTRAIL_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, BRASWELL_SMBUS,	FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, SUNRISEPOINT_H_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> -	{ PCI_DEVICE_DATA(INTEL, SUNRISEPOINT_LP_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> -	{ PCI_DEVICE_DATA(INTEL, CDF_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, DNV_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> -	{ PCI_DEVICE_DATA(INTEL, EBG_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, BROXTON_SMBUS,		FEATURES_ICH5)			 },
+> -	{ PCI_DEVICE_DATA(INTEL, LEWISBURG_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> -	{ PCI_DEVICE_DATA(INTEL, LEWISBURG_SSKU_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> -	{ PCI_DEVICE_DATA(INTEL, KABYLAKE_PCH_H_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> -	{ PCI_DEVICE_DATA(INTEL, CANNONLAKE_H_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, CANNONLAKE_LP_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, ICELAKE_LP_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, ICELAKE_N_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, COMETLAKE_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, COMETLAKE_H_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, COMETLAKE_V_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> -	{ PCI_DEVICE_DATA(INTEL, ELKHART_LAKE_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, TIGERLAKE_LP_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, TIGERLAKE_H_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, JASPER_LAKE_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_P_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_M_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, RAPTOR_LAKE_S_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> -	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_P_SMBUS,	FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, 82801AA_3,			0)				 },
+> +	{ PCI_DEVICE_DATA(INTEL, 82801AB_3,			0)				 },
+> +	{ PCI_DEVICE_DATA(INTEL, 82801BA_2,			0)				 },
+> +	{ PCI_DEVICE_DATA(INTEL, 82801CA_3,			FEATURE_HOST_NOTIFY)		 },
+> +	{ PCI_DEVICE_DATA(INTEL, 82801DB_3,			FEATURES_ICH4)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, 82801EB_3,			FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, ESB_4,				FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, ICH6_16,			FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, ICH7_17,			FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, ESB2_17,			FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, ICH8_5,			FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, ICH9_6,			FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, EP80579_1,			FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, ICH10_4,			FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, ICH10_5,			FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, 5_3400_SERIES_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, COUGARPOINT_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS_IDF0,		FEATURES_ICH5 | FEATURE_IDF)	 },
+> +	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS_IDF1,		FEATURES_ICH5 | FEATURE_IDF)	 },
+> +	{ PCI_DEVICE_DATA(INTEL, PATSBURG_SMBUS_IDF2,		FEATURES_ICH5 | FEATURE_IDF)	 },
+> +	{ PCI_DEVICE_DATA(INTEL, DH89XXCC_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, PANTHERPOINT_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, LYNXPOINT_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, LYNXPOINT_LP_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, AVOTON_SMBUS,			FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS_MS0,		FEATURES_ICH5 | FEATURE_IDF)	 },
+> +	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS_MS1,		FEATURES_ICH5 | FEATURE_IDF)	 },
+> +	{ PCI_DEVICE_DATA(INTEL, WELLSBURG_SMBUS_MS2,		FEATURES_ICH5 | FEATURE_IDF)	 },
+> +	{ PCI_DEVICE_DATA(INTEL, COLETOCREEK_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, GEMINILAKE_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, WILDCATPOINT_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, WILDCATPOINT_LP_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, BAYTRAIL_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, BRASWELL_SMBUS,		FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, SUNRISEPOINT_H_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> +	{ PCI_DEVICE_DATA(INTEL, SUNRISEPOINT_LP_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> +	{ PCI_DEVICE_DATA(INTEL, CDF_SMBUS,			FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, DNV_SMBUS,			FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> +	{ PCI_DEVICE_DATA(INTEL, EBG_SMBUS,			FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, BROXTON_SMBUS,			FEATURES_ICH5)			 },
+> +	{ PCI_DEVICE_DATA(INTEL, LEWISBURG_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> +	{ PCI_DEVICE_DATA(INTEL, LEWISBURG_SSKU_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> +	{ PCI_DEVICE_DATA(INTEL, KABYLAKE_PCH_H_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> +	{ PCI_DEVICE_DATA(INTEL, CANNONLAKE_H_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, CANNONLAKE_LP_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, ICELAKE_LP_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, ICELAKE_N_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, COMETLAKE_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, COMETLAKE_H_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, COMETLAKE_V_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_SPT) },
+> +	{ PCI_DEVICE_DATA(INTEL, ELKHART_LAKE_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, TIGERLAKE_LP_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, TIGERLAKE_H_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, JASPER_LAKE_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_S_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_P_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, ALDER_LAKE_M_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, RAPTOR_LAKE_S_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+> +	{ PCI_DEVICE_DATA(INTEL, METEOR_LAKE_P_SMBUS,		FEATURES_ICH5 | FEATURE_TCO_CNL) },
+>  	{ 0, }
+>  };
+>  
 
-fixing it by changing `ocores_i2c_of_probe` to use
-`devm_clk_get_optional_enabled()` rather than `devm_clk_get()`, changing
-`goto err_clk' to direct return and removing `err_clk`.
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-Signed-off-by: Wang Zhang <silver_code@hust.edu.cn>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/i2c/busses/i2c-ocores.c | 57 +++++++++++++--------------------
- 1 file changed, 22 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
-index 2e575856c5cd..316d72cde3b9 100644
---- a/drivers/i2c/busses/i2c-ocores.c
-+++ b/drivers/i2c/busses/i2c-ocores.c
-@@ -552,16 +552,14 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
- 							&clock_frequency);
- 	i2c->bus_clock_khz = 100;
- 
--	i2c->clk = devm_clk_get(&pdev->dev, NULL);
-+	i2c->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
- 
--	if (!IS_ERR(i2c->clk)) {
--		int ret = clk_prepare_enable(i2c->clk);
--
--		if (ret) {
--			dev_err(&pdev->dev,
--				"clk_prepare_enable failed: %d\n", ret);
--			return ret;
--		}
-+	if (IS_ERR(i2c->clk)) {
-+		dev_err(&pdev->dev,
-+			"devm_clk_get_optional_enabled failed\n");
-+		return PTR_ERR(i2c->clk);
-+	}
-+	if (i2c->clk) {
- 		i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
- 		if (clock_frequency_present)
- 			i2c->bus_clock_khz = clock_frequency / 1000;
-@@ -573,7 +571,6 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
- 			if (!clock_frequency_present) {
- 				dev_err(&pdev->dev,
- 					"Missing required parameter 'opencores,ip-clock-frequency'\n");
--				clk_disable_unprepare(i2c->clk);
- 				return -ENODEV;
- 			}
- 			i2c->ip_clock_khz = clock_frequency / 1000;
-@@ -678,8 +675,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 		default:
- 			dev_err(&pdev->dev, "Unsupported I/O width (%d)\n",
- 				i2c->reg_io_width);
--			ret = -EINVAL;
--			goto err_clk;
-+			return -EINVAL;
- 		}
- 	}
- 
-@@ -710,13 +706,13 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 						   pdev->name, i2c);
- 		if (ret) {
- 			dev_err(&pdev->dev, "Cannot claim IRQ\n");
--			goto err_clk;
-+			return ret;
- 		}
- 	}
- 
- 	ret = ocores_init(&pdev->dev, i2c);
- 	if (ret)
--		goto err_clk;
-+		return ret;
- 
- 	/* hook up driver to tree */
- 	platform_set_drvdata(pdev, i2c);
-@@ -728,7 +724,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 	/* add i2c adapter to i2c tree */
- 	ret = i2c_add_adapter(&i2c->adap);
- 	if (ret)
--		goto err_clk;
-+		return ret;
- 
- 	/* add in known devices to the bus */
- 	if (pdata) {
-@@ -737,10 +733,6 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 	}
- 
- 	return 0;
--
--err_clk:
--	clk_disable_unprepare(i2c->clk);
--	return ret;
- }
- 
- static int ocores_i2c_remove(struct platform_device *pdev)
-@@ -755,9 +747,6 @@ static int ocores_i2c_remove(struct platform_device *pdev)
- 	/* remove adapter & data */
- 	i2c_del_adapter(&i2c->adap);
- 
--	if (!IS_ERR(i2c->clk))
--		clk_disable_unprepare(i2c->clk);
--
- 	return 0;
- }
- 
-@@ -771,8 +760,7 @@ static int ocores_i2c_suspend(struct device *dev)
- 	ctrl &= ~(OCI2C_CTRL_EN | OCI2C_CTRL_IEN);
- 	oc_setreg(i2c, OCI2C_CONTROL, ctrl);
- 
--	if (!IS_ERR(i2c->clk))
--		clk_disable_unprepare(i2c->clk);
-+	clk_disable_unprepare(i2c->clk);
- 	return 0;
- }
- 
-@@ -780,19 +768,18 @@ static int ocores_i2c_resume(struct device *dev)
- {
- 	struct ocores_i2c *i2c = dev_get_drvdata(dev);
- 
--	if (!IS_ERR(i2c->clk)) {
--		unsigned long rate;
--		int ret = clk_prepare_enable(i2c->clk);
-+	unsigned long rate;
-+	int ret = clk_prepare_enable(i2c->clk);
- 
--		if (ret) {
--			dev_err(dev,
--				"clk_prepare_enable failed: %d\n", ret);
--			return ret;
--		}
--		rate = clk_get_rate(i2c->clk) / 1000;
--		if (rate)
--			i2c->ip_clock_khz = rate;
-+	if (ret) {
-+		dev_err(dev,
-+			"clk_prepare_enable failed: %d\n", ret);
-+		return ret;
- 	}
-+	rate = clk_get_rate(i2c->clk) / 1000;
-+	if (rate)
-+		i2c->ip_clock_khz = rate;
-+
- 	return ocores_init(dev, i2c);
- }
- 
 -- 
-2.34.1
-
+Jean Delvare
+SUSE L3 Support
