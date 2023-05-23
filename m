@@ -2,202 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E1370D0D3
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 May 2023 04:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7883E70D2F8
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 May 2023 06:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjEWCJO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 22 May 2023 22:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
+        id S230105AbjEWEuS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 23 May 2023 00:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjEWCJN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 22 May 2023 22:09:13 -0400
-Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B8EE6;
-        Mon, 22 May 2023 19:09:09 -0700 (PDT)
-X-QQ-mid: Yeas47t1684807693t352t56282
-Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [122.235.247.1])
-X-QQ-SSF: 00400000000000F0FNF000000000000
-From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
-X-BIZMAIL-ID: 17576591825519533520
-To:     "'Andy Shevchenko'" <andy.shevchenko@gmail.com>
-Cc:     "'Andrew Lunn'" <andrew@lunn.ch>,
-        "'Michael Walle'" <michael@walle.cc>,
-        "'Shreeya Patel'" <shreeya.patel@collabora.com>,
-        <netdev@vger.kernel.org>, <jarkko.nikula@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
-        <Jose.Abreu@synopsys.com>, <hkallweit1@gmail.com>,
-        <linux@armlinux.org.uk>, <linux-i2c@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <mengyuanlou@net-swift.com>
-References: <00cd01d9879f$8e444950$aaccdbf0$@trustnetic.com> <CAHp75VdthEZL6GvT5Q=f7rbcDfA5XX=7-VLfVz1kZmBFem_eCA@mail.gmail.com> <016701d9886a$f9b415a0$ed1c40e0$@trustnetic.com> <90ef7fb8-feac-4288-98e9-6e67cd38cdf1@lunn.ch> <025b01d9897e$d8894660$899bd320$@trustnetic.com> <1e1615b3-566c-490c-8b1a-78f5521ca0b0@lunn.ch> <028601d989f9$230ee120$692ca360$@trustnetic.com> <f0b571ab-544b-49c3-948f-d592f931673b@lunn.ch> <005a01d98c8b$e48d2b60$ada78220$@trustnetic.com> <005e01d98c9c$5181fb00$f485f100$@trustnetic.com> <ZGvgcdXPBy53y4mn@smile.fi.intel.com>
-In-Reply-To: <ZGvgcdXPBy53y4mn@smile.fi.intel.com>
-Subject: RE: [PATCH net-next v8 6/9] net: txgbe: Support GPIO to SFP socket
-Date:   Tue, 23 May 2023 10:08:12 +0800
-Message-ID: <007701d98d1b$6d9decc0$48d9c640$@trustnetic.com>
+        with ESMTP id S229809AbjEWEuR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 23 May 2023 00:50:17 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5FA0109;
+        Mon, 22 May 2023 21:50:14 -0700 (PDT)
+Received: from m202171703$hust.edu.cn ( [172.16.0.254] ) by
+ ajax-webmail-app1 (Coremail) ; Tue, 23 May 2023 12:49:54 +0800 (GMT+08:00)
+X-Originating-IP: [172.16.0.254]
+Date:   Tue, 23 May 2023 12:49:54 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5byg572R?= <m202171703@hust.edu.cn>
+To:     "andrew lunn" <andrew@lunn.ch>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        "peter korsgaard" <peter@korsgaard.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH v3] i2c: ocores: use devm_ managed clks
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
+ Copyright (c) 2002-2023 www.mailtech.cn hust
+In-Reply-To: <cf543f92-af0d-4862-bea6-53a358ee9a31@lunn.ch>
+References: <fc8ed989-68e6-4fd4-a818-ae077bf5e6aa@lunn.ch>
+ <20230422123253.137368-1-silver_code@hust.edu.cn>
+ <cf543f92-af0d-4862-bea6-53a358ee9a31@lunn.ch>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQElTZjva91B8RKPJxABTESLbvgbBwJ7xjhgAYjDQqsBr+FHUgDJ87o1AYTHtNcC/cxtnwIXsv+OAc8FI2ACJJqqegMG4Q+ssC78MhA=
-Content-Language: zh-cn
-X-QQ-SENDSIZE: 520
-Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: FgEQrADnSHryRWxk3XcyAg--.24551W
+X-CM-SenderInfo: rpsqjiqxrxijo6kx23oohg3hdfq/1tbiAQoAAGRrClNO0gAAsB
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tuesday, May 23, 2023 5:37 AM, Andy Shevchenko wrote:
-> On Mon, May 22, 2023 at 06:58:19PM +0800, Jiawen Wu wrote:
-> > On Monday, May 22, 2023 5:01 PM, Jiawen Wu wrote:
-> > > On Friday, May 19, 2023 9:13 PM, Andrew Lunn wrote:
-> > > > > I have one MSI-X interrupt for all general MAC interrupt (see TXGBE_PX_MISC_IEN_MASK).
-> > > > > It has 32 bits to indicate various interrupts, GPIOs are the one of them. When GPIO
-> > > > > interrupt is determined, GPIO_INT_STATUS register should be read to determine
-> > > > > which GPIO line has changed state.
-> > > >
-> > > > So you have another interrupt controller above the GPIO interrupt
-> > > > controller. regmap-gpio is pushing you towards describing this
-> > > > interrupt controller as a Linux interrupt controller.
-> > > >
-> > > > When you look at drivers handling interrupts, most leaf interrupt
-> > > > controllers are not described as Linux interrupt controllers. The
-> > > > driver interrupt handler reads the interrupt status register and
-> > > > internally dispatches to the needed handler. This works well when
-> > > > everything is internal to one driver.
-> > > >
-> > > > However, here, you have two drivers involved, your MAC driver and a
-> > > > GPIO driver instantiated by the MAC driver. So i think you are going
-> > > > to need to described the MAC interrupt controller as a Linux interrupt
-> > > > controller.
-> > > >
-> > > > Take a look at the mv88e6xxx driver, which does this. It has two
-> > > > interrupt controller embedded within it, and they are chained.
-> > >
-> > > Now I add two interrupt controllers, the first one for the MAC interrupt,
-> > > and the second one for regmap-gpio. In the second adding flow,
-> > >
-> > > 	irq = irq_find_mapping(txgbe->misc.domain, TXGBE_PX_MISC_GPIO_OFFSET);
-> > > 	err = regmap_add_irq_chip_fwnode(fwnode, regmap, irq, 0, 0,
-> > > 					 chip, &chip_data);
-> > >
-> > > and then,
-> > >
-> > > 	config.irq_domain = regmap_irq_get_domain(chip_data);
-> > > 	gpio_regmap = gpio_regmap_register(&config);
-> > >
-> > > "txgbe->misc.domain" is the MAC interrupt domain. I think this flow should
-> > > be correct, but still failed to get gpio_irq from gpio_desc with err -517.
-> > >
-> > > And I still have doubts about what I said earlier:
-> > > https://lore.kernel.org/netdev/20230515063200.301026-1-
-> > > jiawenwu@trustnetic.com/T/#me1be68e1a1e44426ecc0dd8edf0f6b224e50630d
-> > >
-> > > There really is nothing wrong with gpiochip_to_irq()??
-> >
-> > There is indeed something wrong in gpiochip_to_irq(), since commit 5467801 ("gpio:
-> > Restrict usage of GPIO chip irq members before initialization"):
-> > https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit?id=5467801f1fcbdc46bc7298a84dbf3ca1ff2a7320
-> >
-> > When I use gpio_regmap_register() to add gpiochip, gpiochip_add_irqchip() will just
-> > return 0 since irqchip = NULL, then gc->irq.initialized = false.
-> 
-> As far as I understood your hardware, you need to provide an IRQ chip for your
-> GPIOs. The driver that provides an IRQ chip for GPIO and uses GPIO regmap is
-> drivers/gpio/gpio-sl28cpld.c.
-> 
-> So, you need to create a proper IRQ domain tree before calling for GPIO
-> registration.
-
-I've already created it. There is the full code snippet:
-
-+static int txgbe_gpio_init(struct txgbe *txgbe)
-+{
-+       struct regmap_irq_chip_data *chip_data;
-+       struct gpio_regmap_config config = {};
-+       struct gpio_regmap *gpio_regmap;
-+       struct fwnode_handle *fwnode;
-+       struct regmap_irq_chip *chip;
-+       struct regmap *regmap;
-+       struct pci_dev *pdev;
-+       struct device *dev;
-+       unsigned int irq;
-+       struct wx *wx;
-+       int err;
-+
-+       wx = txgbe->wx;
-+       pdev = wx->pdev;
-+       dev = &pdev->dev;
-+       fwnode = software_node_fwnode(txgbe->nodes.group[SWNODE_GPIO]);
-+
-+       regmap = devm_regmap_init(dev, NULL, wx, &gpio_regmap_config);
-+       if (IS_ERR(regmap)) {
-+               wx_err(wx, "failed to init GPIO regmap\n");
-+               return PTR_ERR(regmap);
-+       }
-+
-+       chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
-+       if (!chip)
-+               return -ENOMEM;
-+
-+       chip->name = "txgbe-gpio-irq";
-+       chip->irq_drv_data = wx;
-+       chip->num_regs = 1;
-+       chip->irqs = txgbe_gpio_irqs;
-+       chip->num_irqs = ARRAY_SIZE(txgbe_gpio_irqs);
-+       chip->status_base = WX_GPIO_INTSTATUS;
-+       chip->ack_base = WX_GPIO_EOI;
-+       chip->mask_base = WX_GPIO_INTMASK;
-+       chip->get_irq_reg = txgbe_get_irq_reg;
-+       chip->handle_post_irq = txgbe_handle_post_irq;
-+
-+       irq = irq_find_mapping(txgbe->misc.domain, TXGBE_PX_MISC_GPIO_OFFSET);
-+       err = regmap_add_irq_chip_fwnode(fwnode, regmap, irq, 0, 0,
-+                                        chip, &chip_data);
-+       if (err) {
-+               wx_err(wx, "GPIO IRQ register failed\n");
-+               return err;
-+       }
-+
-+       txgbe->gpio_irq = irq;
-+       txgbe->gpio_data = chip_data;
-+
-+       config.label = devm_kasprintf(dev, GFP_KERNEL, "txgbe_gpio-%x",
-+                                     (pdev->bus->number << 8) | pdev->devfn);
-+       config.parent = dev;
-+       config.regmap = regmap;
-+       config.fwnode = fwnode;
-+       config.drvdata = txgbe;
-+       config.ngpio = 6;
-+       config.reg_mask_xlate = txgbe_reg_mask_xlate;
-+       config.reg_dat_base = WX_GPIO_EXT;
-+       config.reg_set_base = WX_GPIO_DR;
-+       config.reg_dir_out_base = WX_GPIO_DDR;
-+       config.irq_domain = regmap_irq_get_domain(chip_data);
-+
-+       gpio_regmap = gpio_regmap_register(&config);
-+       if (IS_ERR(gpio_regmap)) {
-+               wx_err(wx, "GPIO regmap register failed\n");
-+               regmap_del_irq_chip(irq, chip_data);
-+               return PTR_ERR(gpio_regmap);
-+       }
-+
-+       txgbe->gpio_regmap = gpio_regmap;
-+
-+       return 0;
-+}
-
-> 
-> >  Cc the committer: Shreeya Patel.
-> 
-> You meant "author", right?
-
-Yes, author.
-I think "gpiochip_add_data" does not take gpio-regmap case into account.
-
-
+PiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiQW5kcmV3IEx1bm4iIDxhbmRy
+ZXdAbHVubi5jaD4KPiDlj5HpgIHml7bpl7Q6IDIwMjMtMDQtMjUgMTk6NTc6MjYgKOaYn+acn+S6
+jCkKPiDmlLbku7bkuro6ICJXYW5nIFpoYW5nIiA8c2lsdmVyX2NvZGVAaHVzdC5lZHUuY24+Cj4g
+5oqE6YCBOiAiUGV0ZXIgS29yc2dhYXJkIiA8cGV0ZXJAa29yc2dhYXJkLmNvbT4sIGh1c3Qtb3Mt
+a2VybmVsLXBhdGNoZXNAZ29vZ2xlZ3JvdXBzLmNvbSwgbGludXgtaTJjQHZnZXIua2VybmVsLm9y
+ZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZwo+IOS4u+mimDogUmU6IFtQQVRDSCB2M10g
+aTJjOiBvY29yZXM6IHVzZSBkZXZtXyBtYW5hZ2VkIGNsa3MKPiAKPiBPbiBTYXQsIEFwciAyMiwg
+MjAyMyBhdCAwODozMjo1M1BNICswODAwLCBXYW5nIFpoYW5nIHdyb3RlOgo+ID4gSWYgYW55IHdy
+b25nIG9jY3VycyBpbiBvY29yZXNfaTJjX29mX3Byb2JlLCB0aGUgaTJjLT5jbGsgbmVlZHMgdG8g
+YmUKPiA+IHJlbGVhc2VkLiBCdXQgdGhlIGZ1bmN0aW9uIHJldHVybnMgZGlyZWN0bHkgaW4gbGlu
+ZSA3MDEgd2l0aG91dCBmcmVlaW5nCj4gPiB0aGUgY2xvY2suIEV2ZW4gdGhvdWdoIHdlIGNhbiBm
+aXggaXQgYnkgZnJlZWluZyB0aGUgY2xvY2sgbWFudWFsbHkgaWYKPiA+IHBsYXRmb3JtX2dldF9p
+cnFfb3B0aW9uYWwgZmFpbHMsIGl0IG1heSBub3QgYmUgZm9sbG93aW5nIHRoZSBiZXN0IHByYWN0
+aWNlLgo+ID4gVGhlIG9yaWdpbmFsIGNvZGUgZm9yIHRoaXMgZHJpdmVyIGNvbnRhaW5zIGlmIChJ
+U19FUlIoKSkgY2hlY2tzCj4gPiB0aHJvdWdob3V0LCBleHBsaWNpdGx5IGFsbG93aW5nIHRoZSBk
+cml2ZXIgdG8gY29udGludWUgbG9hZGluZyBldmVuIGlmCj4gPiBkZXZtX2Nsa19nZXQoKSBmYWls
+cy4KPiA+IAo+ID4gV2hpbGUgaXQgaXMgbm90IGVudGlyZWx5IGNsZWFyIHdoeSB0aGUgb3JpZ2lu
+YWwgYXV0aG9yIGltcGxlbWVudGVkIHRoaXMKPiA+IGJlaGF2aW9yLCB0aGVyZSBtYXkgaGF2ZSBi
+ZWVuIGNlcnRhaW4gY2lyY3Vtc3RhbmNlcyBvciBpc3N1ZXMgdGhhdCB3ZXJlIG5vdAo+ID4gYXBw
+YXJlbnQgdG8gdXMuIEl0J3MgcG9zc2libGUgdGhhdCB0aGV5IHdlcmUgdHJ5aW5nIHRvIHdvcmsg
+YXJvdW5kIGEgYnVnIGJ5Cj4gPiBlbXBsb3lpbmcgYW4gdW5jb252ZW50aW9uYWwgc29sdXRpb24u
+VXNpbmcgYGRldm1fY2xrX2dldF9lbmFibGVkKClgIHJhdGhlcgo+ID4gdGhhbiBkZXZtX2Nsa19n
+ZXQoKSBjYW4gYXV0b21hdGljYWxseSB0cmFjayB0aGUgdXNhZ2Ugb2YgY2xvY2tzIGFuZCBmcmVl
+Cj4gPiB0aGVtIHdoZW4gdGhleSBhcmUgbm8gbG9uZ2VyIG5lZWRlZCBvciBhbiBlcnJvciBvY2N1
+cnMuCj4gPiAKPiA+IGZpeGluZyBpdCBieSBjaGFuZ2luZyBgb2NvcmVzX2kyY19vZl9wcm9iZWAg
+dG8gdXNlCj4gPiBgZGV2bV9jbGtfZ2V0X29wdGlvbmFsX2VuYWJsZWQoKWAgcmF0aGVyIHRoYW4g
+YGRldm1fY2xrX2dldCgpYCwgY2hhbmdpbmcKPiA+IGBnb3RvIGVycl9jbGsnIHRvIGRpcmVjdCBy
+ZXR1cm4gYW5kIHJlbW92aW5nIGBlcnJfY2xrYC4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogV2Fu
+ZyBaaGFuZyA8c2lsdmVyX2NvZGVAaHVzdC5lZHUuY24+Cj4gCj4gUmV2aWV3ZWQtYnk6IEFuZHJl
+dyBMdW5uIDxhbmRyZXdAbHVubi5jaD4KPiAKPiAgICAgQW5kcmV3CgpIaSBBbmRyZXcsCkknbSBj
+aGVja2luZyBpbiBhYm91dCBteSBwYXRjaCBzdWJtaXNzaW9uIGZvciBpMmMgb2NvcmVzIHRoYXQg
+d2FzCiJyZXZpZXcnZWQiIG9uIDQvMjUsIGJ1dCBpdHMgc3RhdHVzIGhhcyBub3QgYmVlbiB1cGRh
+dGVkIHlldC4KSSB3b3VsZCBncmVhdGx5IGFwcHJlY2lhdGUgaXQgaWYgeW91IGNvdWxkIHByb3Zp
+ZGUgbWUgd2l0aCBhbiAKdXBkYXRlIG9uIHRoZSBzdGF0dXMgb2YgbXkgc3VibWlzc2lvbi4gSXMg
+dGhlcmUgYW55IGFkZGl0aW9uYWwgCmluZm9ybWF0aW9uIG9yIGRvY3VtZW50YXRpb24gdGhhdCBJ
+IGNhbiBwcm92aWRlIHRvIGhlbHAgZXhwZWRpdGUgCnRoZSBwcm9jZXNzPwoKVGhhbmsgeW91IHZl
+cnkgbXVjaCBmb3IgeW91ciB0aW1lIGFuZCBhdHRlbnRpb24uIEkgbG9vayBmb3J3YXJkIAp0byBo
+ZWFyaW5nIGZyb20geW91IHNvb24uCgpSZWdhcmRzLApXYW5nIFpoYW5n
