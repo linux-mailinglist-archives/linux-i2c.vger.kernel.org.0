@@ -2,104 +2,143 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4297A70FBA6
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 May 2023 18:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B2270FD95
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 May 2023 20:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233037AbjEXQYP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 24 May 2023 12:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
+        id S237000AbjEXSPP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 24 May 2023 14:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjEXQYN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 May 2023 12:24:13 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12olkn2098.outbound.protection.outlook.com [40.92.22.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD7510B
-        for <linux-i2c@vger.kernel.org>; Wed, 24 May 2023 09:24:12 -0700 (PDT)
+        with ESMTP id S236895AbjEXSPJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 May 2023 14:15:09 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ADDD3;
+        Wed, 24 May 2023 11:15:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684952107; x=1716488107;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=n4hqN+AXaXZ9XEHrLYNMyhfq1J7mBVLmsRw0RlWIj0A=;
+  b=gaio7bqVYf+ep9D9yYzbhYb/IGSuJPWjsHsvJom+Yb5SWgFJg+EoRRAm
+   E4HEZUYy8ZTJ7O6/z+goOXay0IHtgKopOiBRGbC/coVlvPhKgXyFNBfEP
+   BUcWV53DHGM0ASOO4vSH571K+w1duon1oAlQ6ZA8oLNZKvWr/ZXJlogUk
+   r5JchrJ1rqlzeAS1MoTuJP3l45iaOrcul7PbsUKXt5BL8jbTqzd/C+iEu
+   lpynNJ+7K+cexyIPu9OS0/AevwvdglfzZm+HnQ+p2Th0cbaWrJUbR6AqY
+   9nacwWu9OG7o8nwZBh7/qpiClkLio8pRq01dVZDl/uTA4CRCGZzGBw6rX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="419367177"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="419367177"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 11:15:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="654902139"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="654902139"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga003.jf.intel.com with ESMTP; 24 May 2023 11:15:07 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 11:15:06 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 24 May 2023 11:15:06 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 24 May 2023 11:15:06 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 24 May 2023 11:15:06 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dIndk24T39vDSwQhz5sOuR91OY8vOdE/c0mOXx/VO0bU/YxHFMhgfxozqvXrvhA1Rwzsk0d1rJweo+8j0H0A0KgLur8CrkM8LJ4sB2333MUgm6otzioVRyV+7oe98X/XbNFmO0TtBwxndayJG5zNscqLj+pfU7Wgvv/UZzam7kPazFlqpwY6h8AlXIZfGZlVfLxQQcduVDayGKQTlemD4p3FYK4f7gILB8dMvGjFvJWdAE6vN4OJ6ROa0lswYaXEauHXrSRbY1sERZi2DSrJmeSFbCo0jhaXreBU0mCe8WexDswG0XIBasni1AyVrzbO0sK0PomW5Ws7XGbbZYR7Eg==
+ b=BPYlRmH4CQscUQiVgqp8oZe6vDcQhrXCQb7cyEkGvPwixTCVjOHb1Wz+8FzX1aSM9LqJNBfD71mUK4IRegLfKW5nDHsHp6YVD8C60w/3Nfz1ZlwPkorR0fY5tSlLUBP2wIqJFA4nnmo5QGcttkJJgez6gV/it9IaUwaYeZN7Mtzv2ZAVD/dIbwFV2WkX8bT2ZhE36NtIbco/yeaVLDcJwbskH3WYgw22HO7iTuJbico8cZXIXcf8FyJHYRXtbACXcOWRxn7MvkmJ727a7BCWuB+GBQTInZmsL13ECdInKO8CTkzPBcEKfoyFrCmN7k857VZrbfH849EDSPJ/GuDqRQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VdHq1ME1sLqkegbn7XWPyH0gEL6q9psXnwPX4opi5PI=;
- b=MetLB7yQkWofuLvv3lfrmlOx6LqG6NmGwyFxj2KsLiysGpjb5lMfPTuFDjHfjMLU4Ns8hh0mX3kpELb6RxNYC7swoxJHILvA3vu9C6tUck0N4rZmxb/cTkfpAmngOUuVWpLmdVeMk6qBHo6lA/3H0kz5yI/yP7hiVE6E5SlkijLmHogwPktTKiD+gL7O4wuv1lbRiefCOP0DuWtKfhiw+nNwlZaglNvS2vPdH1zG1FK7iupONSh/JD5vzAjgk3s5z4Zso+na/sKzLU29VwaWawWbqY1xSm/uhmdvRD8uTMRBNnD009LZM44ocYKf0N3bni0oB6JXvmBoRnvnubvu5Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VdHq1ME1sLqkegbn7XWPyH0gEL6q9psXnwPX4opi5PI=;
- b=LEE7sSuGtTgoLUU1vAMIdDXjriQzmYlYBSpmoEqQLPeB4UltF8Q+fhKsYIxbbi/fgWYdnTCdanogup1bXuWjxQP2xGTuFisuObYqzCCIW6cEgNkDSxdRPXtHjkvF+8rpbJ6wrwPhNpzc57nal9HcOic2em9fjto5tU1FF7wLemdzCIWL6hJBs3bFfDAbLDNV9CQ/cwVN788bXjPs+GjqbNiLAKuvczSJdODIxFA7iS59lnJl7DeAP0VCd+1D1uTDbX/3PzwujJhhZcMmOVuPRfI7TifuxjrwOGnjkiaqGhFcGYA9BtT39O3ZjdLpeqfaL+LtPoGWuvCCLd+y1D75ag==
-Received: from SN6PR06MB5342.namprd06.prod.outlook.com (2603:10b6:805:f9::31)
- by SJ0PR06MB6942.namprd06.prod.outlook.com (2603:10b6:a03:287::7) with
+ bh=0z/GFDa5Dh1tyjVDOWHA0fWHNkamGRRwhtSDx6XToPU=;
+ b=W/LH/fSYNnqgEpYXD8tCmxsyt3HMiFlWrGoW8aYjQjOKmusW1Cgh2BjhnlP8koZcghGJ32zWDGLYB1qLzqtVXROHXLElT+wl5PyxtueDTtCLqOONRcKlmnMy/uFouC63AnzX2Ta02dztxHgNZDUX3CrbRPQeBGRwwlaAobqYVS6CDIOiVcEWA573okqN4OIs0lsxXQYKadgbUMrM7zQM7p2dPMCjK9G0vSHgPCIn4GSdFLIRL1iNMBv3B76opqTkdQ9yGptqx3JmJC5wGLDybB+0ht28aGGPCzab0bO94VdacRbG4I7lxEXcfyRYjDeRdb/3FekBkxu4yRRpL5Ga9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3004.namprd11.prod.outlook.com (2603:10b6:5:67::17) by
+ SN7PR11MB7113.namprd11.prod.outlook.com (2603:10b6:806:298::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 24 May
- 2023 16:24:10 +0000
-Received: from SN6PR06MB5342.namprd06.prod.outlook.com
- ([fe80::8fa4:8b62:ade1:9109]) by SN6PR06MB5342.namprd06.prod.outlook.com
- ([fe80::8fa4:8b62:ade1:9109%3]) with mapi id 15.20.6411.027; Wed, 24 May 2023
- 16:24:10 +0000
-Date:   Wed, 24 May 2023 11:24:05 -0500
-From:   Chris Morgan <macromorgan@hotmail.com>
-To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>
-Subject: Re: [PATCH] i2c: mv64xxx: Fix reading invalid status value in atomic
- mode
-Message-ID: <SN6PR06MB5342CC8EB6FB7AE6D68A9954A5419@SN6PR06MB5342.namprd06.prod.outlook.com>
-References: <20230521121940.27057-1-kabel@kernel.org>
-Content-Type: text/plain; charset=iso-8859-1
+ 2023 18:15:05 +0000
+Received: from DM6PR11MB3004.namprd11.prod.outlook.com
+ ([fe80::fa75:e407:ae4e:6f31]) by DM6PR11MB3004.namprd11.prod.outlook.com
+ ([fe80::fa75:e407:ae4e:6f31%7]) with mapi id 15.20.6411.028; Wed, 24 May 2023
+ 18:15:04 +0000
+Date:   Wed, 24 May 2023 11:14:59 -0700
+From:   David Zheng <david.zheng@intel.com>
+To:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>
+Subject: [PATCH v3] i2c: designware: fix idx_write_cnt in read loop
+Message-ID: <ZG5UI7cJvmLXvtLg@davidzhe-DESK>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230521121940.27057-1-kabel@kernel.org>
-X-TMN:  [LVjEs7aDskpYoF+y726AJZexinjNcXIw]
-X-ClientProxiedBy: SA1P222CA0040.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:2d0::8) To SN6PR06MB5342.namprd06.prod.outlook.com
- (2603:10b6:805:f9::31)
-X-Microsoft-Original-Message-ID: <ZG46Je0nULrM5Co2@wintermute.localhost.fail>
+X-ClientProxiedBy: BY5PR03CA0018.namprd03.prod.outlook.com
+ (2603:10b6:a03:1e0::28) To DM6PR11MB3004.namprd11.prod.outlook.com
+ (2603:10b6:5:67::17)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR06MB5342:EE_|SJ0PR06MB6942:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4301da80-9002-4072-6f70-08db5c734d77
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3004:EE_|SN7PR11MB7113:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6a060eea-3cdf-40e2-19e3-08db5c82cc48
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KWDihWdGHNZsoZoswIVo+rjuW8y6ZDyUw11J/tnfgJzeNRbPETBSjqatUUxY5w//L6vuOleX9oD0BgtfOJPTWOBrZiWvptndTiiD2hTmluKDTxyw1rIKgcuHzCfS6dAvUh+2TXy0ZEjrFwjxttBUojlhoVxxRoA7tLg/SeT2s8jDyApnOgmeOgKUBdQ5/CUCN7StewpRNvatPoVb87REx+PgmCsfTr40ZQl/QRc0ie1Gb5XRTDNAk1P5UAcgez1on6UaxDlWeEwRyqP39Eu28GYFPvJRTl/vAE5cN0xTp9Mlrcb4GzZnnpoHmdkwLHksHFdJYXkN8TZkuvSC7RpixbnWAiRaRIFXwRB4Oj1fioeGQucauMMdo8ic6BsGa/oES4MhWkfHMdOinmMhxuhnbqbAUD/Af4mp3fB8a9xdl55pyMLefcl02pB2zLG2TR7HO1XO875dx3zt/l0kp+IGeXH/9a9N4KjnHvzW2tNLIU1WMahe6ex3FK7QDgAt/m/IgiQs/8VFM6NZYo4NgOx3bJliF5lag7bVzBFgd9ur2Ua0JEbPpBz3fz27iPsLKI7h0U6YjGKwsYtGzoCwK0w1oj9SKNNpg9AL2KnvLRqWsN0=
+X-Microsoft-Antispam-Message-Info: uy76Uqpz1F9++3f+vGwcz9uPZgXx3KWVSJISS7qMHE6WtqHF18D473mNkOGQfGUcf/sGYWoEadlEgOLwUQxQmgzbfZ3ec3gWvdzHJvXysurJuj89HNcSwp+iqslJC0JTLMdozOZQkyEmeBn1pQ71clucJTDJvTCYexxORd8QbWtOgPNfS4faxC94idt7SqKz6iNx7G+gKC8wDTft1OgyhJhQ7dK9rSHF5zG3moMMYdiYhDU4pqcKIDlBLB02WANL/RYNwBCmeXXbug/vHobI0WSdYMj6ktyMXfSrdcrpgAkKA+tAlUwvzLJ+lJtSsfi0LrRVnKQ3LuaKkJTnEM6QTP/81miq1F8Duwlc9XQ37XgxX9gtEMXBlgnW1jeaXirsk7PozNH/MyeCM7eq6/06YufYtAkmtR7rmcIPlHIqqH3KIvkL62T1ZAkpNUJP1lNzmQ1aViD45yPU441aboi0AU+dVQQuscj55JF+DsmBHP9hk+A5f1hRQQ34DeWSCPv4GPvYT1/VzrRRHnbk+kLmqHSVLasoGDLfoPtif+Q1AzV1sbeyltot0VIAHBGCpt4W
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3004.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(39860400002)(376002)(346002)(366004)(136003)(451199021)(5660300002)(8936002)(6666004)(8676002)(26005)(6512007)(9686003)(6506007)(83380400001)(44832011)(186003)(2906002)(86362001)(66476007)(66946007)(66556008)(82960400001)(33716001)(4326008)(316002)(38100700002)(478600001)(41300700001)(6486002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?/0Qz2Rx6Yc32qNJ98BWbi72nOCbwJiscqjZHF+CY3R+uWAxH+7xSiF7XAv?=
- =?iso-8859-1?Q?a3pjhW7ZqDYc/NPA2rMYf7M0a7FgfHTZMoUK0eJ2n2iXmSP8tNrEf8tSGz?=
- =?iso-8859-1?Q?pjlGOZhgXc6XbILcIcyuLa2QHsogmkj47V4TYeX+pjLW8VmLGDq7Z2a/WF?=
- =?iso-8859-1?Q?P/OmI5lU74yGH9KUmNupbSTOEg6fbxx84tPuK8dvyZfeei1hVrsCbn28QJ?=
- =?iso-8859-1?Q?GtMGGbUEhY06LoQvkoMx19nokiQ1STN31lWzRdKjkRGlUyOK49KPwcDbQc?=
- =?iso-8859-1?Q?mpNI+ENDu7yjlYIbk/kYP54KcI/Kpv7pbvKuVuJlbnC+CaK1HyBKRh1WdD?=
- =?iso-8859-1?Q?dxP9z+tlPzZWDU51d6FgfkijdQTbQb634bYkGV1Y1ofTlO4RiN6EIJlQIP?=
- =?iso-8859-1?Q?o4Qi0191PYNl31xgYGFdv0+ovwa9QIJ4f2mCPXdKKQiAkT9KeWb5+g4xJ1?=
- =?iso-8859-1?Q?rtQyjeuxquUYzz+GLPrEo238KvwOJuhe751c2/ZXzYAlB4exnbaMJp8SBw?=
- =?iso-8859-1?Q?ee2mVnnGK2+D5a+rVHZ7eOzo1A5iJObaIn0tBYDLQ2RVXR9R8oNXoLDjk3?=
- =?iso-8859-1?Q?OkpWldDF+8NMXSUybFe87XitkAL5XQG9zoguxKUv82g9L8qzHMoJZD7Tn5?=
- =?iso-8859-1?Q?amNJP+diIH6tHZszKL53vkrmPmEMg4d6aKivuuvFb+YoajgaVRTDytxpD4?=
- =?iso-8859-1?Q?zMD6cnWTK8UUoV6ltinngMFYYFmahKPrNXPMmy8b6RqnOumIYxjbzFd4i4?=
- =?iso-8859-1?Q?yNTmFbs/N+qAPgDwtgo/HT4z5OS2l9ndUSMo3Vndjw7TH35rzmV3TlTzq3?=
- =?iso-8859-1?Q?HOBah+Z7w8RWWmPkr60hSJhIj/SXED1MpOBwRgmiUamsc67rY8MuqNGHxU?=
- =?iso-8859-1?Q?H4KUHjK1aQ+VVSYTBWneEVtevwLzXk9gzLujYvjZ5jUNM6LrsfeK7qbiNy?=
- =?iso-8859-1?Q?Go8KMooYtKWBAXFY4FVoHLkJMuGCHtWMVnPINR1dzp70JO9o8r2RHAIm+b?=
- =?iso-8859-1?Q?+l/Ntkb4zXBZ9P+qLnbzzyRZNAmCMVX7pCnqU1EvTWY/J6RgcmliRINx8f?=
- =?iso-8859-1?Q?NHatqAcf+qcHdllbJCu8mOO+ZOj60Ov6LOpg3g0lnJ6fBOpE/TnZ/HQem/?=
- =?iso-8859-1?Q?eGufLbuZWoH48dG3kO7+BPjFsSOxWTtmU0wpdfwM1Q0I6UW8OFMteavfaL?=
- =?iso-8859-1?Q?Q9B8EcS29HLh4JoQUYv44TeS6VdlVnV/gsumAYZxEthLAohi190bzJkP2Q?=
- =?iso-8859-1?Q?c9STY8wHw29m6xNnC9r1o051ZoWXvg7aaF4hgtx1o=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-89723.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4301da80-9002-4072-6f70-08db5c734d77
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR06MB5342.namprd06.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JWlKIAehPMxWZ3+KkKwm+bWXRvggvPqfKHTkZSyy6VoZvZ5BZfRHWA2WrNFP?=
+ =?us-ascii?Q?ETvZIKwJEOEPRRNBWlfyEO8rY3gXoJgvHpmtFh9uXOFLGFQMLzBMCdSyJH+W?=
+ =?us-ascii?Q?gZ/22oag0cDSK6A6JsONRjLxNxHxBwq1GNcKCHRKoNV+7z0fETH6fwTqDaUe?=
+ =?us-ascii?Q?kZCnWRQI5Js08eEl6hMIU64HXdUybYuCt3PzEpKtroMyHL9qy035Vw70g/9v?=
+ =?us-ascii?Q?QERbCre6lP6rZPgtpZswxdTagewT5hnPpIsOUT7LurF4brPzyxACqLqrXSJq?=
+ =?us-ascii?Q?ekJ8Dfocm4s3xZIepOk0+wrZ0PCyZYc9B2qsBTe7qszAPTZTKypwstEiUVec?=
+ =?us-ascii?Q?998YSa7/fqiTS6w6axSVnCYKDI4V2JIhok1hey0cV6TFbwf67jeaMsQsXqqJ?=
+ =?us-ascii?Q?M0wOuChSuKpIbaL7F2P+p1fppSW+eFBffDe2uzAbqH4Da0DkZYXXsaz1fuCh?=
+ =?us-ascii?Q?EauZGxZc5jjVeilB3SADCHidd9WUrrP9CFVLRwqe58Soek3q4QYkwElW2/N2?=
+ =?us-ascii?Q?MnNol6CR1QdWBMlTzQUF7MJN2DnGW94+wU2s832kYdJ1WengUnuEjfrYdarq?=
+ =?us-ascii?Q?8Iw2e/3Pf1W+gdyD++2m8UfgepOjDyDpEiw1AOKxuzYxcZ39qlUGUICGjoAw?=
+ =?us-ascii?Q?JNiTRPJc6k8Ib7YEVx5NoCc4fzhv9ohsRc7LLE0QhsP62w8a2liIkZwYnSJj?=
+ =?us-ascii?Q?tpWvpUbCwSBxF9c5meyEdtPweFIq2u20JRdRtGXLe2/MmqpAY/lWdnY2MhwU?=
+ =?us-ascii?Q?2HE7sD52+EaoKnx9Orm+jCJ/rOuKm97W/Cg7+FTkhQf9Z/E1JwtGbK6sU4py?=
+ =?us-ascii?Q?rok+yp+EmiH3UoPKKuAHW9C0H22OB5G08eWSP/x3wJ0u7KXlMir6wv/9zxYX?=
+ =?us-ascii?Q?Obls2BLaQEM5mpldGGGTPkIhN028cf/CMuRYxVi1PBU5gsbBNyunR4YF1fmu?=
+ =?us-ascii?Q?CdL0o1tQHZyn15J6EPWbqmX4NFLay81dMt3kYg8kIPtlbm32MZmgQmtjchUs?=
+ =?us-ascii?Q?TqAYyGCepkBGtU95u97x4Pnq8j3vS3Xt3ooXrIS60J6OZbc5b1f7DWgDcOe8?=
+ =?us-ascii?Q?G3ZeRWvD9o4qBSxJ3++QcuWpIzJmPIvAxerAJJ9rZsWXSbgnqeK2ONkbsZHd?=
+ =?us-ascii?Q?oAfxoAH8VmXHot9yOqp2A5Hfl+HSb236Eqr/gsjd2XU4L61BziUzDwPNKQvX?=
+ =?us-ascii?Q?NYeYDlLMvzStqsgeO/H1o9CEdNkQWAaeCxYmF50bdSAub209GrXSMOTuQtl+?=
+ =?us-ascii?Q?2w87HjeObw6poLZlFqk4/Wpx93iXS+0rawdIHXJr5K1mqDXuM3nExY/iNqmM?=
+ =?us-ascii?Q?+pS6pfIFPctrxIThVLCsPZr+V1eDme9EB9+9IG7rrSE6yhj8f3eXx3NRmmeF?=
+ =?us-ascii?Q?5/r3+PRdBwb5pEfMWVjFIy+DXF49KQDFS1Q4XZBht73aEd7QQzw5cfD3Q1hd?=
+ =?us-ascii?Q?sbATzdihucdK3p0MNBqkGu11S0bLHAwuHL2v4KFH5irnYf2Q3SrulgM3lPmK?=
+ =?us-ascii?Q?Fz6UjLFoTjvjmNE54dPiR2HlgYx6FjI07Zu09aCw0Dl+OtLgSbpEgtTeBEVn?=
+ =?us-ascii?Q?p7bIsc6+O3aPl249t/CHlGzLOUmkD0v1K1faOwTiJnNPXHCd14F1huxaynQT?=
+ =?us-ascii?Q?iw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a060eea-3cdf-40e2-19e3-08db5c82cc48
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3004.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 16:24:10.1109
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 18:15:04.7553
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR06MB6942
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oYJyjwU/Q+G59HRLFV6yP+snHs8VWR+D7dyndQJDDy61zhGHLY5PKz3R/t31OMqzxydndl9pNtZF/CEJTRreYw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7113
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,62 +146,93 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, May 21, 2023 at 02:19:40PM +0200, Marek Behún wrote:
-> There seems to be a bug within the mv64xxx I2C controller, wherein the
-> status register may not necessarily contain valid value immediately
-> after the IFLG flag is set in the control register.
-> 
-> My theory is that the controller:
-> - first sets the IFLG in control register
-> - then updates the status register
-> - then raises an interrupt
-> 
-> This may sometime cause weird bugs when in atomic mode, since in this
-> mode we do not wait for an interrupt, but instead we poll the control
-> register for IFLG and read status register immediately after.
-> 
-> I encountered -ENXIO from mv64xxx_i2c_fsm() due to this issue when using
-> this driver in atomic mode.
-> 
-> Note that I've only seen this issue on Armada 385, I don't know whether
-> other SOCs with this controller are also affected. Also note that this
-> fix has been in U-Boot for over 4 years [1] without anybody complaining,
-> so it should not cause regressions.
+With IC_INTR_RX_FULL slave interrupt handler reads data in a loop until
+RX FIFO is empty. When testing with the slave-eeprom, each transaction
+has 2 bytes for address/index and 1 byte for value, the address byte
+can be written as data byte due to dropping STOP condition.
 
-I've never seen this bug before, but don't suspect it should cause any
-issues for me. Thank you for finding/fixing this.
+In the test below, the master continuously writes to the slave, first 2
+bytes are index, 3rd byte is value and follow by a STOP condition.
 
-> 
-> [1] https://source.denx.de/u-boot/u-boot/-/commit/d50e29662f78
-> 
-> Fixes: 544a8d75f3d6 ("i2c: mv64xxx: Add atomic_xfer method to driver")
-> Signed-off-by: Marek Behún <kabel@kernel.org>
-> ---
->  drivers/i2c/busses/i2c-mv64xxx.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
-> index 047dfef7a657..878c076ebdc6 100644
-> --- a/drivers/i2c/busses/i2c-mv64xxx.c
-> +++ b/drivers/i2c/busses/i2c-mv64xxx.c
-> @@ -520,6 +520,17 @@ mv64xxx_i2c_intr(int irq, void *dev_id)
->  
->  	while (readl(drv_data->reg_base + drv_data->reg_offsets.control) &
->  						MV64XXX_I2C_REG_CONTROL_IFLG) {
-> +		/*
-> +		 * It seems that sometime the controller updates the status
-> +		 * register only after it asserts IFLG in control register.
-> +		 * This may result in weird bugs when in atomic mode. A delay
-> +		 * of 100 ns before reading the status register solves this
-> +		 * issue. This bug does not seem to appear when using
-> +		 * interrupts.
-> +		 */
-> +		if (drv_data->atomic)
-> +			ndelay(100);
-> +
->  		status = readl(drv_data->reg_base + drv_data->reg_offsets.status);
->  		mv64xxx_i2c_fsm(drv_data, status);
->  		mv64xxx_i2c_do_action(drv_data);
-> -- 
-> 2.39.3
-> 
+ i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D1-D1]
+ i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D2-D2]
+ i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D3-D3]
+
+Upon receiving STOP condition slave eeprom would reset `idx_write_cnt` so
+next 2 bytes can be treated as buffer index for upcoming transaction.
+Supposedly the slave eeprom buffer would be written as
+
+ EEPROM[0x00D1] = 0xD1
+ EEPROM[0x00D2] = 0xD2
+ EEPROM[0x00D3] = 0xD3
+
+When CPU load is high the slave irq handler may not read fast enough,
+the interrupt status can be seen as 0x204 with both DW_IC_INTR_STOP_DET
+(0x200) and DW_IC_INTR_RX_FULL (0x4) bits. The slave device may see
+the transactions below.
+
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1794 : INTR_STAT=0x204
+ 0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x1790 : INTR_STAT=0x200
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+ 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
+
+After `D1` is received, read loop continues to read `00` which is the
+first bype of next index. Since STOP condition is ignored by the loop,
+eeprom buffer index increased to `D2` and `00` is written as value.
+
+So the slave eeprom buffer becomes
+
+ EEPROM[0x00D1] = 0xD1
+ EEPROM[0x00D2] = 0x00
+ EEPROM[0x00D3] = 0xD3
+
+The fix is to use `FIRST_DATA_BYTE` (bit 11) in `IC_DATA_CMD` to split
+the transactions. The first index byte in this case would have bit 11
+set. Check this indication to inject I2C_SLAVE_WRITE_REQUESTED event
+which will reset `idx_write_cnt` in slave eeprom.
+
+Signed-off-by: David Zheng <david.zheng@intel.com>
+---
+Changes in v2:
+ - Send I2C_SLAVE_WRITE_REQUESTED for HW does not have FIRST_DATA_BYTE
+Changes in v3:
+ - Move DW_IC_DATA_CMD_FIRST_DATA_BYTE next to DW_IC_DATA_CMD_DAT define
+---
+ drivers/i2c/busses/i2c-designware-core.h  | 1 +
+ drivers/i2c/busses/i2c-designware-slave.c | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index c5d87aae39c6..bf23bfb51aea 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -40,6 +40,7 @@
+ #define DW_IC_CON_BUS_CLEAR_CTRL		BIT(11)
+ 
+ #define DW_IC_DATA_CMD_DAT			GENMASK(7, 0)
++#define DW_IC_DATA_CMD_FIRST_DATA_BYTE		BIT(11)
+ 
+ /*
+  * Registers offset
+diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
+index cec25054bb24..2e079cf20bb5 100644
+--- a/drivers/i2c/busses/i2c-designware-slave.c
++++ b/drivers/i2c/busses/i2c-designware-slave.c
+@@ -176,6 +176,10 @@ static irqreturn_t i2c_dw_isr_slave(int this_irq, void *dev_id)
+ 
+ 		do {
+ 			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
++			if (tmp & DW_IC_DATA_CMD_FIRST_DATA_BYTE)
++				i2c_slave_event(dev->slave,
++						I2C_SLAVE_WRITE_REQUESTED,
++						&val);
+ 			val = tmp;
+ 			i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED,
+ 					&val);
+-- 
+2.40.1
+
