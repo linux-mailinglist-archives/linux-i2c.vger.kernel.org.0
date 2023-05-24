@@ -2,60 +2,120 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4FF70F60E
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 May 2023 14:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD49B70F68F
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 May 2023 14:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232251AbjEXMRl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 24 May 2023 08:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
+        id S231235AbjEXMfn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 24 May 2023 08:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232197AbjEXMRk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 May 2023 08:17:40 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A626B135;
-        Wed, 24 May 2023 05:17:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=tV4Kixlk+YvmGjwPnpk7vNxhrDa8c8CxexgDpadaidY=; b=ILzTWjNWFoli98xQiZrv2VC4Wd
-        xh1rmiS/26tXhzZXIkSOOwMQr0bfiOYs7WthYTTSke2gIW0PpBgR90DAO/9zHGg9ipE3/kqdacDYE
-        ugjI5TL/nfgklP/zLM325KGOVacdTSEziyhsVMfGpkYr0K6EIxvrO94V/Q/fadD+MJZ0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q1nQk-00Dmkr-1q; Wed, 24 May 2023 14:17:26 +0200
-Date:   Wed, 24 May 2023 14:17:26 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jiawen Wu <jiawenwu@trustnetic.com>
-Cc:     netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, Jose.Abreu@synopsys.com, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, linux-i2c@vger.kernel.org,
-        linux-gpio@vger.kernel.org, mengyuanlou@net-swift.com
-Subject: Re: [PATCH net-next v9 3/9] net: txgbe: Register fixed rate clock
-Message-ID: <2758b833-0b17-48dd-8679-766ff7d453c2@lunn.ch>
-References: <20230524091722.522118-1-jiawenwu@trustnetic.com>
- <20230524091722.522118-4-jiawenwu@trustnetic.com>
+        with ESMTP id S229611AbjEXMfl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 May 2023 08:35:41 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2F71B4;
+        Wed, 24 May 2023 05:35:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684931719; x=1716467719;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cDUi7dMP4jWcg8AZDD0CYW+YYB1jCuGrGLccF6biMqg=;
+  b=NEqU+MDXdhryxuP4Eqep7iTDiDRKbsQsjJ/PGH8arl50IPOG0Qh2wbqk
+   D9mw61hnJ68oZGdy5ze5BtpKa0mh+crDLsnTPpi6bOnV/6wNUxjEQYTyn
+   s44P0uVF989WF5W8eAkzj2vmpNYHyA+m7eu7DJs7kRuks0RmiyYZDeP6g
+   AYDnfDTM6k0pSp+8IKYxFjDFDC0flYxXc/W2EAiX9cJ0pTwW4femCGXmP
+   3Wwwro8n9RHHtNkic/tfBUYXgyqKi4XtPndENou8DHWOaiE0A95aaqxFl
+   BWQPK14OUavveUrrjg5B/EK0z6BRkC4xzN5P+M9urz6Na6yZ1Hza8tDNE
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="353572618"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="353572618"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 05:33:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="1034516581"
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="1034516581"
+Received: from mylly.fi.intel.com (HELO [10.237.72.160]) ([10.237.72.160])
+  by fmsmga005.fm.intel.com with ESMTP; 24 May 2023 05:33:32 -0700
+Message-ID: <bf392104-96b0-a85b-f68e-088bd3884d9a@linux.intel.com>
+Date:   Wed, 24 May 2023 15:33:31 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524091722.522118-4-jiawenwu@trustnetic.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v1] i2c: designware: Handle invalid SMBus block data
+ response length
+Content-Language: en-US
+To:     Tam Nguyen <tamnguyenchi@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     patches@amperecomputing.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com,
+        chuong@os.amperecomputing.com, darren@os.amperecomputing.com,
+        stable@vger.kernel.org
+References: <20230523082118.10935-1-tamnguyenchi@os.amperecomputing.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20230523082118.10935-1-tamnguyenchi@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, May 24, 2023 at 05:17:16PM +0800, Jiawen Wu wrote:
-> In order for I2C to be able to work in standard mode, register a fixed
-> rate clock for each I2C device.
+Hi
+
+On 5/23/23 11:21, Tam Nguyen wrote:
+> In I2C_FUNC_SMBUS_BLOCK_DATA case, the I2C Designware driver does not
+> handle correctly when it receives the length of SMBus block data
+> response from SMBus slave device, which is outside the range 1-32 bytes.
+> Consequently, the I2C Designware bus is stuck and cannot recover.
+> Because if IC_EMPTYFIFO_HOLD_MASTER_EN is set, which cannot be detected
+> from the registers, the controller can be disabled if the STOP bit is set.
+> But it is only set after receiving block data response length.
 > 
-> Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
+> Hence, to prevent the bus from stuck condition, after receiving the
+> invalid block data response length, the driver will read another byte
+> with STOP bit set.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Tam Nguyen <tamnguyenchi@os.amperecomputing.com>
+> ---
+>   drivers/i2c/busses/i2c-designware-master.c | 15 +++++++++++++--
+>   1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+> index 55ea91a63382..94dadd785ed0 100644
+> --- a/drivers/i2c/busses/i2c-designware-master.c
+> +++ b/drivers/i2c/busses/i2c-designware-master.c
+> @@ -527,8 +527,19 @@ i2c_dw_read(struct dw_i2c_dev *dev)
+>   
+>   			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
+>   			/* Ensure length byte is a valid value */
+> -			if (flags & I2C_M_RECV_LEN &&
+> -			    (tmp & DW_IC_DATA_CMD_DAT) <= I2C_SMBUS_BLOCK_MAX && tmp > 0) {
+> +			if (flags & I2C_M_RECV_LEN) {
+> +				/*
+> +				 * if IC_EMPTYFIFO_HOLD_MASTER_EN is set, which cannot be
+> +				 * detected from the registers, the controller can be
+> +				 * disabled if the STOP bit is set. But it is only set
+> +				 * after receiving block data response length in
+> +				 * I2C_FUNC_SMBUS_BLOCK_DATA case. That needs to read
+> +				 * another byte with STOP bit set when the block data
+> +				 * response length is invalid to complete the transaction.
+> +				 */
+> +				if ((tmp & DW_IC_DATA_CMD_DAT) > I2C_SMBUS_BLOCK_MAX || tmp == 0)
+> +					tmp = 1;
+> +
+>   				len = i2c_dw_recv_len(dev, tmp);
+>   			}
+>   			*buf++ = tmp;
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-    Andrew
+Looks otherwise good to me but I'm wondering the "tmp == 0" test can it 
+have the bit 11 set (on a HW where it's supported) and should it be 
+covered with DW_IC_DATA_CMD_DAT mask too? Please see commit f53f15ba5a85 
+("i2c: designware: Get right data length").
