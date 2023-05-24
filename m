@@ -2,399 +2,367 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9340270F20F
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 May 2023 11:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E6670F379
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 May 2023 11:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240625AbjEXJUh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 24 May 2023 05:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
+        id S231761AbjEXJvx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 24 May 2023 05:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240253AbjEXJUg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 May 2023 05:20:36 -0400
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5100195;
-        Wed, 24 May 2023 02:20:29 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1684919975t2fduplc
-Received: from wxdbg.localdomain.com ( [122.235.247.1])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 24 May 2023 17:19:34 +0800 (CST)
-X-QQ-SSF: 01400000000000I0Z000000A0000000
-X-QQ-FEAT: +oIWmpEafD8aOVwF8ApBnMzZsuTN1m9CyuSP9YAOJnK90j1W4eM+8NVL8NcEg
-        Pd9l2XBUK+F23TojZP1pW8rL/xfleC0pzQzJnRm7DQlydmCoM2jCNrj6hawNYi6KY4eONRH
-        Kwk7OMd+ja70guFvZU/IvfiH5wesc1RFF5wkLYRf2vPB7SFkCI41EVjgYiD2CAhf+kaRe77
-        61RN1VWfFZ2t++w6HJbK/a13gKoy5KIcKFI77T3yMA0IjN/RtzYsuKPyJiE82sdTPKNu1KY
-        2TE81Dczy/2uzczJp3BLRrZyJPEWadC/SLygf7Yr7rJ5YTmOPa/Q+T+vnd/yh7sxV5ZqtcK
-        XH5QdqNOX4meHgRsEMaba/E6F0Ttke6G1mezXof7llODlMWcc/h1BKFzM2wmQAUMyhO9man
-        JhPtVguQmc4WPdhJtHVStnxiM/ibgn6h
-X-QQ-GoodBg: 2
-X-BIZMAIL-ID: 11709561757631919513
-From:   Jiawen Wu <jiawenwu@trustnetic.com>
-To:     netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, Jose.Abreu@synopsys.com, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk
-Cc:     linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        mengyuanlou@net-swift.com, Jiawen Wu <jiawenwu@trustnetic.com>
-Subject: [PATCH net-next v9 9/9] net: txgbe: Support phylink MAC layer
-Date:   Wed, 24 May 2023 17:17:22 +0800
-Message-Id: <20230524091722.522118-10-jiawenwu@trustnetic.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20230524091722.522118-1-jiawenwu@trustnetic.com>
-References: <20230524091722.522118-1-jiawenwu@trustnetic.com>
+        with ESMTP id S230142AbjEXJvj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 May 2023 05:51:39 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B81BFC
+        for <linux-i2c@vger.kernel.org>; Wed, 24 May 2023 02:51:37 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id ada2fe7eead31-438a5069d58so239916137.0
+        for <linux-i2c@vger.kernel.org>; Wed, 24 May 2023 02:51:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684921896; x=1687513896;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AYi/bVc73Ez3SyrfVWjfAXm92DOdQuWrEZpsgHdIRWU=;
+        b=Rv1MgPamf7A39k1c3Fr5IRtammaooy9t1aaK1186y8HDlquPaH+6/TSoRb9s0HSEfY
+         Bex4D6XPT+tAhSZADPNyVHSGc0/Moup16UvXcgrHRGid3Rdw6WMLviAtI3IM7v9LZaZr
+         dvKUv+ZLHFjx2v7dmctmhSiDplzlxSj2j14XXnbLYcI8362eOB5c1LPmfLcb467XXzzY
+         asBH5RHhQFUXM6Nu0tT26MLuGiujeaIpwaBQx08fLNm6w++1Q8SY7dCv2a/D6ul6TYoP
+         V6COXSLJYxakQ/vJz/8LLKviPQSqLHbIrt+f3FCFxq4AyDleM/PRPosWKidBtZ1gPCSe
+         og0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684921896; x=1687513896;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AYi/bVc73Ez3SyrfVWjfAXm92DOdQuWrEZpsgHdIRWU=;
+        b=jymw2SODg+Pk1SMmW99ualzojdAYt7caGIA5Plsv1QgubImoH0bBZN/A/Pn1sT0a/v
+         SA/oYQf963HhF4Q6cLQ0unIXNTrhN2Sq8uEYAf0pbhPFvmIaHZwGnI6FMRrXnGqhCUuY
+         NzUVWHDTjUpjcvQC/HZWHDyYkp1MwIN1GAMCC+tGvpRn1MveSxun3ZueNsZlj+MY14Mg
+         45sHWdggCpvrV4kEVWlouLeFIUhgNFTBXDCX+4ODiPI4tkl5X8wXtaEGb5lvmxhvjCjE
+         TlATMihiI7v9AauGAEZq8FkXy6orY4mDD6xkMZLYLcnUdjQP/tuElBZY8+gG5v7M0q+N
+         B8wQ==
+X-Gm-Message-State: AC+VfDxhmiYB/Sa+e/NzXrgLc0YaJRmuRPKVlKyK8EGo6LFVgFPJpW2a
+        UIk5c7qNBKqorE5weohn4MKV7cX1TBAOi+bdClDAJA==
+X-Google-Smtp-Source: ACHHUZ6ALzf/4xNWYfGyfROXwxiTU4MyuyEInKEAeJXg6uOe+stx6eRidDpLn7syiCw+m3bbxhsjWs9n61UzBC0WBdU=
+X-Received: by 2002:a67:f711:0:b0:432:8d37:f0e4 with SMTP id
+ m17-20020a67f711000000b004328d37f0e4mr4757122vso.21.1684921896189; Wed, 24
+ May 2023 02:51:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230517220135.170379-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230517220135.170379-1-u.kleine-koenig@pengutronix.de>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 24 May 2023 11:51:25 +0200
+Message-ID: <CAMRc=MfOTQRJSENh=O8iGe9krybyLJnSk_T6SUQxaP4NgYRdig@mail.gmail.com>
+Subject: Re: [PATCH] misc: Switch i2c drivers back to use .probe()
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Eric Piel <eric.piel@tremplin-utc.net>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Justin Stitt <justinstitt@google.com>,
+        Yuan Can <yuancan@huawei.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Adrien Grassein <adrien.grassein@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Petr Machata <petrm@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add phylink support to Wangxun 10Gb Ethernet controller for the 10GBASE-R
-interface.
+On Thu, May 18, 2023 at 12:01=E2=80=AFAM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> call-back type"), all drivers being converted to .probe_new() and then
+> 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter") convert
+> back to (the new) .probe() to be able to eventually drop .probe_new() fro=
+m
+> struct i2c_driver.
+>
+> While touching these drivers, fix alignment in apds990x.c and bh1770glc.c=
+.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+> Hello,
+>
+> I used v6.4-rc1 as base for this patch, but it also fits on top of
+> today's next master. If there are some conflicts when you apply it, feel
+> free to just drop all conflicting hunks, I'll care about the fallout
+> later.
+>
+> I chose to do this in a single patch for all drivers below drivers/misc
+> If you want me to split it, just tell me.
+>
+> Best regards
+> Uwe
+>
+>  drivers/misc/ad525x_dpot-i2c.c         | 2 +-
+>  drivers/misc/apds9802als.c             | 2 +-
+>  drivers/misc/apds990x.c                | 4 ++--
+>  drivers/misc/bh1770glc.c               | 4 ++--
+>  drivers/misc/ds1682.c                  | 2 +-
+>  drivers/misc/eeprom/at24.c             | 2 +-
 
-Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
----
- drivers/net/ethernet/wangxun/Kconfig          |   1 +
- .../ethernet/wangxun/txgbe/txgbe_ethtool.c    |  28 +++++
- .../net/ethernet/wangxun/txgbe/txgbe_main.c   |  23 ++--
- .../net/ethernet/wangxun/txgbe/txgbe_phy.c    | 113 +++++++++++++++++-
- .../net/ethernet/wangxun/txgbe/txgbe_type.h   |   5 +
- 5 files changed, 155 insertions(+), 15 deletions(-)
+I have a separate tree for at24 and some patches queued for this
+release cycle. Any chance you could send me a separate patch?
 
-diff --git a/drivers/net/ethernet/wangxun/Kconfig b/drivers/net/ethernet/wangxun/Kconfig
-index f3fb273e6fd0..2ca163f07359 100644
---- a/drivers/net/ethernet/wangxun/Kconfig
-+++ b/drivers/net/ethernet/wangxun/Kconfig
-@@ -46,6 +46,7 @@ config TXGBE
- 	select REGMAP
- 	select COMMON_CLK
- 	select PCS_XPCS
-+	select PHYLINK
- 	select LIBWX
- 	select SFP
- 	help
-diff --git a/drivers/net/ethernet/wangxun/txgbe/txgbe_ethtool.c b/drivers/net/ethernet/wangxun/txgbe/txgbe_ethtool.c
-index d914e9a05404..859da112586a 100644
---- a/drivers/net/ethernet/wangxun/txgbe/txgbe_ethtool.c
-+++ b/drivers/net/ethernet/wangxun/txgbe/txgbe_ethtool.c
-@@ -6,11 +6,39 @@
- #include <linux/netdevice.h>
- 
- #include "../libwx/wx_ethtool.h"
-+#include "../libwx/wx_type.h"
-+#include "txgbe_type.h"
- #include "txgbe_ethtool.h"
- 
-+static int txgbe_nway_reset(struct net_device *netdev)
-+{
-+	struct txgbe *txgbe = netdev_to_txgbe(netdev);
-+
-+	return phylink_ethtool_nway_reset(txgbe->phylink);
-+}
-+
-+static int txgbe_get_link_ksettings(struct net_device *netdev,
-+				    struct ethtool_link_ksettings *cmd)
-+{
-+	struct txgbe *txgbe = netdev_to_txgbe(netdev);
-+
-+	return phylink_ethtool_ksettings_get(txgbe->phylink, cmd);
-+}
-+
-+static int txgbe_set_link_ksettings(struct net_device *netdev,
-+				    const struct ethtool_link_ksettings *cmd)
-+{
-+	struct txgbe *txgbe = netdev_to_txgbe(netdev);
-+
-+	return phylink_ethtool_ksettings_set(txgbe->phylink, cmd);
-+}
-+
- static const struct ethtool_ops txgbe_ethtool_ops = {
- 	.get_drvinfo		= wx_get_drvinfo,
-+	.nway_reset		= txgbe_nway_reset,
- 	.get_link		= ethtool_op_get_link,
-+	.get_link_ksettings	= txgbe_get_link_ksettings,
-+	.set_link_ksettings	= txgbe_set_link_ksettings,
- };
- 
- void txgbe_set_ethtool_ops(struct net_device *netdev)
-diff --git a/drivers/net/ethernet/wangxun/txgbe/txgbe_main.c b/drivers/net/ethernet/wangxun/txgbe/txgbe_main.c
-index ded04e9e136f..73764555af1a 100644
---- a/drivers/net/ethernet/wangxun/txgbe/txgbe_main.c
-+++ b/drivers/net/ethernet/wangxun/txgbe/txgbe_main.c
-@@ -7,6 +7,7 @@
- #include <linux/netdevice.h>
- #include <linux/string.h>
- #include <linux/etherdevice.h>
-+#include <linux/phylink.h>
- #include <net/ip.h>
- #include <linux/if_vlan.h>
- 
-@@ -204,7 +205,8 @@ static int txgbe_request_irq(struct wx *wx)
- 
- static void txgbe_up_complete(struct wx *wx)
- {
--	u32 reg;
-+	struct net_device *netdev = wx->netdev;
-+	struct txgbe *txgbe;
- 
- 	wx_control_hw(wx, true);
- 	wx_configure_vectors(wx);
-@@ -213,24 +215,17 @@ static void txgbe_up_complete(struct wx *wx)
- 	smp_mb__before_atomic();
- 	wx_napi_enable_all(wx);
- 
-+	txgbe = netdev_to_txgbe(netdev);
-+	phylink_start(txgbe->phylink);
-+
- 	/* clear any pending interrupts, may auto mask */
- 	rd32(wx, WX_PX_IC(0));
- 	rd32(wx, WX_PX_IC(1));
- 	rd32(wx, WX_PX_MISC_IC);
- 	txgbe_irq_enable(wx, true);
- 
--	/* Configure MAC Rx and Tx when link is up */
--	reg = rd32(wx, WX_MAC_RX_CFG);
--	wr32(wx, WX_MAC_RX_CFG, reg);
--	wr32(wx, WX_MAC_PKT_FLT, WX_MAC_PKT_FLT_PR);
--	reg = rd32(wx, WX_MAC_WDG_TIMEOUT);
--	wr32(wx, WX_MAC_WDG_TIMEOUT, reg);
--	reg = rd32(wx, WX_MAC_TX_CFG);
--	wr32(wx, WX_MAC_TX_CFG, (reg & ~WX_MAC_TX_CFG_SPEED_MASK) | WX_MAC_TX_CFG_SPEED_10G);
--
- 	/* enable transmits */
--	netif_tx_start_all_queues(wx->netdev);
--	netif_carrier_on(wx->netdev);
-+	netif_tx_start_all_queues(netdev);
- }
- 
- static void txgbe_reset(struct wx *wx)
-@@ -264,7 +259,6 @@ static void txgbe_disable_device(struct wx *wx)
- 		wx_disable_rx_queue(wx, wx->rx_ring[i]);
- 
- 	netif_tx_stop_all_queues(netdev);
--	netif_carrier_off(netdev);
- 	netif_tx_disable(netdev);
- 
- 	wx_irq_disable(wx);
-@@ -295,8 +289,11 @@ static void txgbe_disable_device(struct wx *wx)
- 
- static void txgbe_down(struct wx *wx)
- {
-+	struct txgbe *txgbe = netdev_to_txgbe(wx->netdev);
-+
- 	txgbe_disable_device(wx);
- 	txgbe_reset(wx);
-+	phylink_stop(txgbe->phylink);
- 
- 	wx_clean_all_tx_rings(wx);
- 	wx_clean_all_rx_rings(wx);
-diff --git a/drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c b/drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
-index d2a6f8ca78e7..a4c02a5d128b 100644
---- a/drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
-+++ b/drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
-@@ -9,11 +9,13 @@
- #include <linux/clkdev.h>
- #include <linux/regmap.h>
- #include <linux/pcs/pcs-xpcs.h>
-+#include <linux/phylink.h>
- #include <linux/mdio.h>
- #include <linux/i2c.h>
- #include <linux/pci.h>
- 
- #include "../libwx/wx_type.h"
-+#include "../libwx/wx_lib.h"
- #include "../libwx/wx_hw.h"
- #include "txgbe_type.h"
- #include "txgbe_phy.h"
-@@ -161,6 +163,95 @@ static int txgbe_mdio_pcs_init(struct txgbe *txgbe)
- 	return 0;
- }
- 
-+static struct phylink_pcs *txgbe_phylink_mac_select(struct phylink_config *config,
-+						    phy_interface_t interface)
-+{
-+	struct txgbe *txgbe = netdev_to_txgbe(to_net_dev(config->dev));
-+
-+	return &txgbe->xpcs->pcs;
-+}
-+
-+static void txgbe_mac_config(struct phylink_config *config, unsigned int mode,
-+			     const struct phylink_link_state *state)
-+{
-+}
-+
-+static void txgbe_mac_link_down(struct phylink_config *config,
-+				unsigned int mode, phy_interface_t interface)
-+{
-+	struct wx *wx = netdev_priv(to_net_dev(config->dev));
-+
-+	wr32m(wx, WX_MAC_TX_CFG, WX_MAC_TX_CFG_TE, 0);
-+}
-+
-+static void txgbe_mac_link_up(struct phylink_config *config,
-+			      struct phy_device *phy,
-+			      unsigned int mode, phy_interface_t interface,
-+			      int speed, int duplex,
-+			      bool tx_pause, bool rx_pause)
-+{
-+	struct wx *wx = netdev_priv(to_net_dev(config->dev));
-+	u32 txcfg, wdg;
-+
-+	txcfg = rd32(wx, WX_MAC_TX_CFG);
-+	txcfg &= ~WX_MAC_TX_CFG_SPEED_MASK;
-+
-+	switch (speed) {
-+	case SPEED_10000:
-+		txcfg |= WX_MAC_TX_CFG_SPEED_10G;
-+		break;
-+	case SPEED_1000:
-+	case SPEED_100:
-+	case SPEED_10:
-+		txcfg |= WX_MAC_TX_CFG_SPEED_1G;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	wr32(wx, WX_MAC_TX_CFG, txcfg | WX_MAC_TX_CFG_TE);
-+
-+	/* Re configure MAC Rx */
-+	wr32m(wx, WX_MAC_RX_CFG, WX_MAC_RX_CFG_RE, WX_MAC_RX_CFG_RE);
-+	wr32(wx, WX_MAC_PKT_FLT, WX_MAC_PKT_FLT_PR);
-+	wdg = rd32(wx, WX_MAC_WDG_TIMEOUT);
-+	wr32(wx, WX_MAC_WDG_TIMEOUT, wdg);
-+}
-+
-+static const struct phylink_mac_ops txgbe_mac_ops = {
-+	.mac_select_pcs = txgbe_phylink_mac_select,
-+	.mac_config = txgbe_mac_config,
-+	.mac_link_down = txgbe_mac_link_down,
-+	.mac_link_up = txgbe_mac_link_up,
-+};
-+
-+static int txgbe_phylink_init(struct txgbe *txgbe)
-+{
-+	struct phylink_config *config;
-+	struct fwnode_handle *fwnode;
-+	struct wx *wx = txgbe->wx;
-+	phy_interface_t phy_mode;
-+	struct phylink *phylink;
-+
-+	config = devm_kzalloc(&wx->pdev->dev, sizeof(*config), GFP_KERNEL);
-+	if (!config)
-+		return -ENOMEM;
-+
-+	config->dev = &wx->netdev->dev;
-+	config->type = PHYLINK_NETDEV;
-+	config->mac_capabilities = MAC_10000FD | MAC_1000FD | MAC_SYM_PAUSE | MAC_ASYM_PAUSE;
-+	phy_mode = PHY_INTERFACE_MODE_10GBASER;
-+	__set_bit(PHY_INTERFACE_MODE_10GBASER, config->supported_interfaces);
-+	fwnode = software_node_fwnode(txgbe->nodes.group[SWNODE_PHYLINK]);
-+	phylink = phylink_create(config, fwnode, phy_mode, &txgbe_mac_ops);
-+	if (IS_ERR(phylink))
-+		return PTR_ERR(phylink);
-+
-+	txgbe->phylink = phylink;
-+
-+	return 0;
-+}
-+
- static int txgbe_gpio_get(struct gpio_chip *chip, unsigned int offset)
- {
- 	struct wx *wx = gpiochip_get_data(chip);
-@@ -324,6 +415,9 @@ static void txgbe_irq_handler(struct irq_desc *desc)
- 	unsigned long gpioirq;
- 	struct gpio_chip *gc;
- 	unsigned long flags;
-+	u32 eicr;
-+
-+	eicr = wx_misc_isb(wx, WX_ISB_MISC);
- 
- 	chained_irq_enter(chip, desc);
- 
-@@ -345,6 +439,12 @@ static void txgbe_irq_handler(struct irq_desc *desc)
- 
- 	chained_irq_exit(chip, desc);
- 
-+	if (eicr & (TXGBE_PX_MISC_ETH_LK | TXGBE_PX_MISC_ETH_LKDN)) {
-+		u32 reg = rd32(wx, TXGBE_CFG_PORT_ST);
-+
-+		phylink_mac_change(txgbe->phylink, !!(reg & TXGBE_CFG_PORT_ST_LINK_UP));
-+	}
-+
- 	/* unmask interrupt */
- 	wx_intr_enable(wx, TXGBE_INTR_MISC(wx));
- }
-@@ -519,16 +619,22 @@ int txgbe_init_phy(struct txgbe *txgbe)
- 		goto err_unregister_swnode;
- 	}
- 
-+	ret = txgbe_phylink_init(txgbe);
-+	if (ret) {
-+		wx_err(txgbe->wx, "failed to init phylink\n");
-+		goto err_destroy_xpcs;
-+	}
-+
- 	ret = txgbe_gpio_init(txgbe);
- 	if (ret) {
- 		wx_err(txgbe->wx, "failed to init gpio\n");
--		goto err_destroy_xpcs;
-+		goto err_destroy_phylink;
- 	}
- 
- 	ret = txgbe_clock_register(txgbe);
- 	if (ret) {
- 		wx_err(txgbe->wx, "failed to register clock: %d\n", ret);
--		goto err_destroy_xpcs;
-+		goto err_destroy_phylink;
- 	}
- 
- 	ret = txgbe_i2c_register(txgbe);
-@@ -550,6 +656,8 @@ int txgbe_init_phy(struct txgbe *txgbe)
- err_unregister_clk:
- 	clkdev_drop(txgbe->clock);
- 	clk_unregister(txgbe->clk);
-+err_destroy_phylink:
-+	phylink_destroy(txgbe->phylink);
- err_destroy_xpcs:
- 	xpcs_destroy(txgbe->xpcs);
- err_unregister_swnode:
-@@ -564,6 +672,7 @@ void txgbe_remove_phy(struct txgbe *txgbe)
- 	platform_device_unregister(txgbe->i2c_dev);
- 	clkdev_drop(txgbe->clock);
- 	clk_unregister(txgbe->clk);
-+	phylink_destroy(txgbe->phylink);
- 	xpcs_destroy(txgbe->xpcs);
- 	software_node_unregister_node_group(txgbe->nodes.group);
- }
-diff --git a/drivers/net/ethernet/wangxun/txgbe/txgbe_type.h b/drivers/net/ethernet/wangxun/txgbe/txgbe_type.h
-index d1f62f62c28c..e9e5c5186f74 100644
---- a/drivers/net/ethernet/wangxun/txgbe/txgbe_type.h
-+++ b/drivers/net/ethernet/wangxun/txgbe/txgbe_type.h
-@@ -77,6 +77,10 @@
- 	 TXGBE_PX_MISC_ETH_AN | TXGBE_PX_MISC_INT_ERR |   \
- 	 TXGBE_PX_MISC_GPIO)
- 
-+/* Port cfg registers */
-+#define TXGBE_CFG_PORT_ST                       0x14404
-+#define TXGBE_CFG_PORT_ST_LINK_UP               BIT(0)
-+
- /* I2C registers */
- #define TXGBE_I2C_BASE                          0x14900
- 
-@@ -176,6 +180,7 @@ struct txgbe {
- 	struct wx *wx;
- 	struct txgbe_nodes nodes;
- 	struct dw_xpcs *xpcs;
-+	struct phylink *phylink;
- 	struct platform_device *sfp_dev;
- 	struct platform_device *i2c_dev;
- 	struct clk_lookup *clock;
--- 
-2.27.0
+Thanks,
+Bartosz
 
+>  drivers/misc/eeprom/ee1004.c           | 2 +-
+>  drivers/misc/eeprom/eeprom.c           | 2 +-
+>  drivers/misc/eeprom/idt_89hpesx.c      | 2 +-
+>  drivers/misc/eeprom/max6875.c          | 2 +-
+>  drivers/misc/hmc6352.c                 | 2 +-
+>  drivers/misc/ics932s401.c              | 2 +-
+>  drivers/misc/isl29003.c                | 2 +-
+>  drivers/misc/isl29020.c                | 2 +-
+>  drivers/misc/lis3lv02d/lis3lv02d_i2c.c | 2 +-
+>  drivers/misc/tsl2550.c                 | 2 +-
+>  16 files changed, 18 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/misc/ad525x_dpot-i2c.c b/drivers/misc/ad525x_dpot-i2=
+c.c
+> index 3856d5c04c5f..469478f7a1d3 100644
+> --- a/drivers/misc/ad525x_dpot-i2c.c
+> +++ b/drivers/misc/ad525x_dpot-i2c.c
+> @@ -106,7 +106,7 @@ static struct i2c_driver ad_dpot_i2c_driver =3D {
+>         .driver =3D {
+>                 .name   =3D "ad_dpot",
+>         },
+> -       .probe_new      =3D ad_dpot_i2c_probe,
+> +       .probe          =3D ad_dpot_i2c_probe,
+>         .remove         =3D ad_dpot_i2c_remove,
+>         .id_table       =3D ad_dpot_id,
+>  };
+> diff --git a/drivers/misc/apds9802als.c b/drivers/misc/apds9802als.c
+> index 0526c55d5cd5..693f0e539f37 100644
+> --- a/drivers/misc/apds9802als.c
+> +++ b/drivers/misc/apds9802als.c
+> @@ -296,7 +296,7 @@ static struct i2c_driver apds9802als_driver =3D {
+>                 .name =3D DRIVER_NAME,
+>                 .pm =3D APDS9802ALS_PM_OPS,
+>         },
+> -       .probe_new =3D apds9802als_probe,
+> +       .probe =3D apds9802als_probe,
+>         .remove =3D apds9802als_remove,
+>         .id_table =3D apds9802als_id,
+>  };
+> diff --git a/drivers/misc/apds990x.c b/drivers/misc/apds990x.c
+> index 0024503ea6db..92b92be91d60 100644
+> --- a/drivers/misc/apds990x.c
+> +++ b/drivers/misc/apds990x.c
+> @@ -1267,11 +1267,11 @@ static const struct dev_pm_ops apds990x_pm_ops =
+=3D {
+>  };
+>
+>  static struct i2c_driver apds990x_driver =3D {
+> -       .driver  =3D {
+> +       .driver   =3D {
+>                 .name   =3D "apds990x",
+>                 .pm     =3D &apds990x_pm_ops,
+>         },
+> -       .probe_new =3D apds990x_probe,
+> +       .probe    =3D apds990x_probe,
+>         .remove   =3D apds990x_remove,
+>         .id_table =3D apds990x_id,
+>  };
+> diff --git a/drivers/misc/bh1770glc.c b/drivers/misc/bh1770glc.c
+> index bedbe0efb330..1629b62fd052 100644
+> --- a/drivers/misc/bh1770glc.c
+> +++ b/drivers/misc/bh1770glc.c
+> @@ -1374,11 +1374,11 @@ static const struct dev_pm_ops bh1770_pm_ops =3D =
+{
+>  };
+>
+>  static struct i2c_driver bh1770_driver =3D {
+> -       .driver  =3D {
+> +       .driver   =3D {
+>                 .name   =3D "bh1770glc",
+>                 .pm     =3D &bh1770_pm_ops,
+>         },
+> -       .probe_new =3D bh1770_probe,
+> +       .probe    =3D bh1770_probe,
+>         .remove   =3D bh1770_remove,
+>         .id_table =3D bh1770_id,
+>  };
+> diff --git a/drivers/misc/ds1682.c b/drivers/misc/ds1682.c
+> index d517eed32971..21fc5bc85c5c 100644
+> --- a/drivers/misc/ds1682.c
+> +++ b/drivers/misc/ds1682.c
+> @@ -250,7 +250,7 @@ static struct i2c_driver ds1682_driver =3D {
+>                 .name =3D "ds1682",
+>                 .of_match_table =3D ds1682_of_match,
+>         },
+> -       .probe_new =3D ds1682_probe,
+> +       .probe =3D ds1682_probe,
+>         .remove =3D ds1682_remove,
+>         .id_table =3D ds1682_id,
+>  };
+> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> index 938c4f41b98c..d93fbb1cb43e 100644
+> --- a/drivers/misc/eeprom/at24.c
+> +++ b/drivers/misc/eeprom/at24.c
+> @@ -832,7 +832,7 @@ static struct i2c_driver at24_driver =3D {
+>                 .of_match_table =3D at24_of_match,
+>                 .acpi_match_table =3D ACPI_PTR(at24_acpi_ids),
+>         },
+> -       .probe_new =3D at24_probe,
+> +       .probe =3D at24_probe,
+>         .remove =3D at24_remove,
+>         .id_table =3D at24_ids,
+>         .flags =3D I2C_DRV_ACPI_WAIVE_D0_PROBE,
+> diff --git a/drivers/misc/eeprom/ee1004.c b/drivers/misc/eeprom/ee1004.c
+> index c8c6deb7ed89..a1acd77130f2 100644
+> --- a/drivers/misc/eeprom/ee1004.c
+> +++ b/drivers/misc/eeprom/ee1004.c
+> @@ -234,7 +234,7 @@ static struct i2c_driver ee1004_driver =3D {
+>                 .name =3D "ee1004",
+>                 .dev_groups =3D ee1004_groups,
+>         },
+> -       .probe_new =3D ee1004_probe,
+> +       .probe =3D ee1004_probe,
+>         .remove =3D ee1004_remove,
+>         .id_table =3D ee1004_ids,
+>  };
+> diff --git a/drivers/misc/eeprom/eeprom.c b/drivers/misc/eeprom/eeprom.c
+> index 32611100d5cd..ccb7c2f7ee2f 100644
+> --- a/drivers/misc/eeprom/eeprom.c
+> +++ b/drivers/misc/eeprom/eeprom.c
+> @@ -196,7 +196,7 @@ static struct i2c_driver eeprom_driver =3D {
+>         .driver =3D {
+>                 .name   =3D "eeprom",
+>         },
+> -       .probe_new      =3D eeprom_probe,
+> +       .probe          =3D eeprom_probe,
+>         .remove         =3D eeprom_remove,
+>         .id_table       =3D eeprom_id,
+>
+> diff --git a/drivers/misc/eeprom/idt_89hpesx.c b/drivers/misc/eeprom/idt_=
+89hpesx.c
+> index 7075d0b37881..740c06382b83 100644
+> --- a/drivers/misc/eeprom/idt_89hpesx.c
+> +++ b/drivers/misc/eeprom/idt_89hpesx.c
+> @@ -1556,7 +1556,7 @@ static struct i2c_driver idt_driver =3D {
+>                 .name =3D IDT_NAME,
+>                 .of_match_table =3D idt_of_match,
+>         },
+> -       .probe_new =3D idt_probe,
+> +       .probe =3D idt_probe,
+>         .remove =3D idt_remove,
+>         .id_table =3D idt_ids,
+>  };
+> diff --git a/drivers/misc/eeprom/max6875.c b/drivers/misc/eeprom/max6875.=
+c
+> index 79cf8afcef2e..cb6b1efeafe0 100644
+> --- a/drivers/misc/eeprom/max6875.c
+> +++ b/drivers/misc/eeprom/max6875.c
+> @@ -192,7 +192,7 @@ static struct i2c_driver max6875_driver =3D {
+>         .driver =3D {
+>                 .name   =3D "max6875",
+>         },
+> -       .probe_new      =3D max6875_probe,
+> +       .probe          =3D max6875_probe,
+>         .remove         =3D max6875_remove,
+>         .id_table       =3D max6875_id,
+>  };
+> diff --git a/drivers/misc/hmc6352.c b/drivers/misc/hmc6352.c
+> index 8967940ecd1e..759eaeb64307 100644
+> --- a/drivers/misc/hmc6352.c
+> +++ b/drivers/misc/hmc6352.c
+> @@ -131,7 +131,7 @@ static struct i2c_driver hmc6352_driver =3D {
+>         .driver =3D {
+>                 .name =3D "hmc6352",
+>         },
+> -       .probe_new =3D hmc6352_probe,
+> +       .probe =3D hmc6352_probe,
+>         .remove =3D hmc6352_remove,
+>         .id_table =3D hmc6352_id,
+>  };
+> diff --git a/drivers/misc/ics932s401.c b/drivers/misc/ics932s401.c
+> index 12108a7b9b40..ee6296b98078 100644
+> --- a/drivers/misc/ics932s401.c
+> +++ b/drivers/misc/ics932s401.c
+> @@ -105,7 +105,7 @@ static struct i2c_driver ics932s401_driver =3D {
+>         .driver =3D {
+>                 .name   =3D "ics932s401",
+>         },
+> -       .probe_new      =3D ics932s401_probe,
+> +       .probe          =3D ics932s401_probe,
+>         .remove         =3D ics932s401_remove,
+>         .id_table       =3D ics932s401_id,
+>         .detect         =3D ics932s401_detect,
+> diff --git a/drivers/misc/isl29003.c b/drivers/misc/isl29003.c
+> index 147b58f7968d..ebf0635aee64 100644
+> --- a/drivers/misc/isl29003.c
+> +++ b/drivers/misc/isl29003.c
+> @@ -459,7 +459,7 @@ static struct i2c_driver isl29003_driver =3D {
+>                 .name   =3D ISL29003_DRV_NAME,
+>                 .pm     =3D ISL29003_PM_OPS,
+>         },
+> -       .probe_new =3D isl29003_probe,
+> +       .probe =3D isl29003_probe,
+>         .remove =3D isl29003_remove,
+>         .id_table =3D isl29003_id,
+>  };
+> diff --git a/drivers/misc/isl29020.c b/drivers/misc/isl29020.c
+> index 3be02093368c..c5976fa8c825 100644
+> --- a/drivers/misc/isl29020.c
+> +++ b/drivers/misc/isl29020.c
+> @@ -214,7 +214,7 @@ static struct i2c_driver isl29020_driver =3D {
+>                 .name =3D "isl29020",
+>                 .pm =3D ISL29020_PM_OPS,
+>         },
+> -       .probe_new =3D isl29020_probe,
+> +       .probe =3D isl29020_probe,
+>         .remove =3D isl29020_remove,
+>         .id_table =3D isl29020_id,
+>  };
+> diff --git a/drivers/misc/lis3lv02d/lis3lv02d_i2c.c b/drivers/misc/lis3lv=
+02d/lis3lv02d_i2c.c
+> index 7071412d6bf6..3882e97e96a7 100644
+> --- a/drivers/misc/lis3lv02d/lis3lv02d_i2c.c
+> +++ b/drivers/misc/lis3lv02d/lis3lv02d_i2c.c
+> @@ -262,7 +262,7 @@ static struct i2c_driver lis3lv02d_i2c_driver =3D {
+>                 .pm     =3D &lis3_pm_ops,
+>                 .of_match_table =3D of_match_ptr(lis3lv02d_i2c_dt_ids),
+>         },
+> -       .probe_new =3D lis3lv02d_i2c_probe,
+> +       .probe =3D lis3lv02d_i2c_probe,
+>         .remove =3D lis3lv02d_i2c_remove,
+>         .id_table =3D lis3lv02d_id,
+>  };
+> diff --git a/drivers/misc/tsl2550.c b/drivers/misc/tsl2550.c
+> index 6c62b94e0acd..a3bc2823143e 100644
+> --- a/drivers/misc/tsl2550.c
+> +++ b/drivers/misc/tsl2550.c
+> @@ -437,7 +437,7 @@ static struct i2c_driver tsl2550_driver =3D {
+>                 .of_match_table =3D tsl2550_of_match,
+>                 .pm     =3D TSL2550_PM_OPS,
+>         },
+> -       .probe_new =3D tsl2550_probe,
+> +       .probe =3D tsl2550_probe,
+>         .remove =3D tsl2550_remove,
+>         .id_table =3D tsl2550_id,
+>  };
+>
+> base-commit: ac9a78681b921877518763ba0e89202254349d1b
+> --
+> 2.39.2
+>
