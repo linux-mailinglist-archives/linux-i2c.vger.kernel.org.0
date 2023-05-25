@@ -2,50 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483AE710353
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 May 2023 05:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC297108D2
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 May 2023 11:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbjEYDe6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 24 May 2023 23:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S239592AbjEYJ0h (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 May 2023 05:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjEYDe5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 24 May 2023 23:34:57 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A34DE2;
-        Wed, 24 May 2023 20:34:54 -0700 (PDT)
-Received: from m202171703$hust.edu.cn ( [172.16.0.254] ) by
- ajax-webmail-app1 (Coremail) ; Thu, 25 May 2023 11:33:42 +0800 (GMT+08:00)
-X-Originating-IP: [172.16.0.254]
-Date:   Thu, 25 May 2023 11:33:42 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5byg572R?= <m202171703@hust.edu.cn>
-To:     "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>
-Cc:     "Peter Korsgaard" <peter@korsgaard.com>,
-        "Andrew Lunn" <andrew@lunn.ch>,
+        with ESMTP id S235062AbjEYJ0a (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 May 2023 05:26:30 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EF0195
+        for <linux-i2c@vger.kernel.org>; Thu, 25 May 2023 02:26:29 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3095b1b6e02so1267148f8f.2
+        for <linux-i2c@vger.kernel.org>; Thu, 25 May 2023 02:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685006787; x=1687598787;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kMj+2el2dGt8TUSmh5ASzD6FTnfF+Hm05Jh6eBFAFVk=;
+        b=jD4bd+X6wPf0itZXjBaBUXqrNWlPmA5IGDgRSWr9gVGoDBuDpXqzM2g2zWeDLdMgNM
+         Orr+KEyx5G6+4v57T6bJ4JkRKasJaWasnC2twLB/OX1S/BbjMizEB1jIOnNYgEJns0bY
+         bh5x723WTSWiFh0NJkHGehWzwlpD9jenNHYBVoFu4toNKu7YmJXBkc7fEs6KuGVgeKxn
+         4XAQl7iY8+IGA14WXRjceoo1FyLlAu4FMq4UKvSB0tKuQA7wvvdekAByBMN+ij/lrul+
+         980NzmNJBWo+s8K46WPQZnHNbQpmHJ/jBGThygE6GcrCgXEo5Po0LEMEVCJWiqRB9mmB
+         Sqdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685006787; x=1687598787;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kMj+2el2dGt8TUSmh5ASzD6FTnfF+Hm05Jh6eBFAFVk=;
+        b=RBzO1A0MGNw3YNSpG3jj5CVEScvqmbsb/U3qhmvth85cz6JA7ky7ngCTsY5SIq1nt1
+         PP2WOqRaKReW25prUMSUkKrkxAHoj+V8vXXxlJDL2jfzrUUTKullVKjkagJT5DO/c/pJ
+         e0U6fiFf2JV4A+7AetbMFcHYT1xy7yyTs6GNCkyicU37nhBjV7elbOSgIOQLXqxHE8BE
+         f6pUc7AhHYszuGZL1MHP99LuB8syVLoxIY8xs6JWheWPsKMxOySWZSv2GphnGjU2iT5D
+         8KFCh5zTgz9frSf5/chSlKoD7kt8DCfkga3VfM7DJ/AKi389fEbRB7gZE1dOQMH9wOjb
+         KgeQ==
+X-Gm-Message-State: AC+VfDxY6Pzq7igV9w1+vIw7uRNv0LyLKka0TIRgayK9bDDxor1Mfsx2
+        lF/7RygwVfSN3IEHfQ6JbiHI7g==
+X-Google-Smtp-Source: ACHHUZ5qOQzMzKP23aMzXP/Wr1FlN0hHstqfQ3C3qtCXY/8nx7ND7StpKqs9XQVDFk7g+CKhz4F8Xg==
+X-Received: by 2002:a5d:4c8b:0:b0:306:37bf:ca5a with SMTP id z11-20020a5d4c8b000000b0030637bfca5amr1847639wrs.47.1685006787584;
+        Thu, 25 May 2023 02:26:27 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id q5-20020a5d61c5000000b0030789698eebsm1106119wrv.89.2023.05.25.02.26.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 02:26:26 -0700 (PDT)
+Date:   Thu, 25 May 2023 08:02:02 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Wang Zhang <silver_code@hust.edu.cn>
+Cc:     Peter Korsgaard <peter@korsgaard.com>,
+        Andrew Lunn <andrew@lunn.ch>,
         hust-os-kernel-patches@googlegroups.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Dan Carpenter" <dan.carpenter@linaro.org>
-Subject: Re: Re: [PATCH v3] i2c: ocores: use devm_ managed clks
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
- Copyright (c) 2002-2023 www.mailtech.cn hust
-In-Reply-To: <68c4b991-6af9-36e8-354c-7c3b232ba4c2@wanadoo.fr>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: ocores: use devm_ managed clks
+Message-ID: <2ca66dae-8424-4382-a0ed-ff742921c495@kili.mountain>
 References: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
  <20230524154318.2259-1-silver_code@hust.edu.cn>
- <68c4b991-6af9-36e8-354c-7c3b232ba4c2@wanadoo.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Message-ID: <5cceb5b5.c1fe.18850f830e0.Coremail.m202171703@hust.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: FgEQrABnFJkW125kJYl2Ag--.24180W
-X-CM-SenderInfo: rpsqjiqxrxijo6kx23oohg3hdfq/1tbiAQoAAGRrClNO0gATsS
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524154318.2259-1-silver_code@hust.edu.cn>
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,106 +73,53 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGkgIENocmlzdG9waGUsCgpUaGFua3MgZm9yIHlvdXIgc3VnZ2VzdGlvbnMuIEhvd2V2ZXIsIGJv
-dGggY2xrX2dldF9yYXRlIGFuZCBjbGtfcHJlcGFyZV9lbmFibGUgCndpbGwgcmV0dXJuIDAgaWYg
-aTJjLT5jbGsgaXMgTlVMTCwgc28gSSB0aGluayB3ZSBtYXkgbm90IG5lZWQgdG8gdGFrZSB0aGlz
-IGlzc3VlIAppbnRvIGFjY291bnQuCgpSZWdhcmRzLApXYW5nIFpoYW5nCgoiQ2hyaXN0b3BoZSBK
-QUlMTEVUIiA8Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI+5YaZ6YGT77yaCj4gTGUgMjQv
-MDUvMjAyMyDDoCAxNzo0MywgV2FuZyBaaGFuZyBhIMOpY3JpdMKgOg0KPiA+IFdoaWxlIGl0IGlz
-IG5vdCBlbnRpcmVseSBjbGVhciB3aHkgdGhlIG9yaWdpbmFsIGF1dGhvciBpbXBsZW1lbnRlZCB0
-aGlzDQo+ID4gYmVoYXZpb3IsIHRoZXJlIG1heSBoYXZlIGJlZW4gY2VydGFpbiBjaXJjdW1zdGFu
-Y2VzIG9yIGlzc3VlcyB0aGF0IHdlcmUgbm90DQo+ID4gYXBwYXJlbnQgdG8gdXMuIEl0J3MgcG9z
-c2libGUgdGhhdCB0aGV5IHdlcmUgdHJ5aW5nIHRvIHdvcmsgYXJvdW5kIGEgYnVnIGJ5DQo+ID4g
-ZW1wbG95aW5nIGFuIHVuY29udmVudGlvbmFsIHNvbHV0aW9uLlVzaW5nIGBkZXZtX2Nsa19nZXRf
-ZW5hYmxlZCgpYCByYXRoZXINCj4gPiB0aGFuIGRldm1fY2xrX2dldCgpIGNhbiBhdXRvbWF0aWNh
-bGx5IHRyYWNrIHRoZSB1c2FnZSBvZiBjbG9ja3MgYW5kIGZyZWUNCj4gPiB0aGVtIHdoZW4gdGhl
-eSBhcmUgbm8gbG9uZ2VyIG5lZWRlZCBvciBhbiBlcnJvciBvY2N1cnMuDQo+ID4gDQo+ID4gZml4
-aW5nIGl0IGJ5IGNoYW5naW5nIGBvY29yZXNfaTJjX29mX3Byb2JlYCB0byB1c2UNCj4gPiBgZGV2
-bV9jbGtfZ2V0X29wdGlvbmFsX2VuYWJsZWQoKWAgcmF0aGVyIHRoYW4gYGRldm1fY2xrX2dldCgp
-YCwgY2hhbmdpbmcNCj4gPiBgZ290byBlcnJfY2xrJyB0byBkaXJlY3QgcmV0dXJuIGFuZCByZW1v
-dmluZyBgZXJyX2Nsa2AuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogV2FuZyBaaGFuZyA8c2ls
-dmVyX2NvZGVAaHVzdC5lZHUuY24+DQo+ID4gUmV2aWV3ZWQtYnk6IEFuZHJldyBMdW5uIDxhbmRy
-ZXdAbHVubi5jaD4NCj4gPiAtLS0NCj4gPiB2Mi0+djM6IHVzZSBgZGV2bV9jbGtfZ2V0X29wdGlv
-bmFsX2VuYWJsZWQoKWAgdG8gbWFuYWdlIGNsa3MNCj4gPiB2MS0+djI6IGNoYW5nZSBgb2NvcmVz
-X2kyY19vZl9wcm9iZWAgdG8gdXNlIGBkZXZtX2Nsa19nZXRfZW5hYmxlZCgpYA0KPiA+IC0tLQ0K
-PiA+ICAgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1vY29yZXMuYyB8IDU3ICsrKysrKysrKysrKyst
-LS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiA+ICAgMSBmaWxlIGNoYW5nZWQsIDIyIGluc2VydGlvbnMo
-KyksIDM1IGRlbGV0aW9ucygtKQ0KPiA+IA0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9i
-dXNzZXMvaTJjLW9jb3Jlcy5jIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1vY29yZXMuYw0KPiA+
-IGluZGV4IDJlNTc1ODU2YzVjZC4uMzE2ZDcyY2RlM2I5IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZl
-cnMvaTJjL2J1c3Nlcy9pMmMtb2NvcmVzLmMNCj4gPiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMv
-aTJjLW9jb3Jlcy5jDQo+ID4gQEAgLTU1MiwxNiArNTUyLDE0IEBAIHN0YXRpYyBpbnQgb2NvcmVz
-X2kyY19vZl9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2LA0KPiA+ICAgCQkJCQkJ
-CSZjbG9ja19mcmVxdWVuY3kpOw0KPiA+ICAgCWkyYy0+YnVzX2Nsb2NrX2toeiA9IDEwMDsNCj4g
-PiAgIA0KPiA+IC0JaTJjLT5jbGsgPSBkZXZtX2Nsa19nZXQoJnBkZXYtPmRldiwgTlVMTCk7DQo+
-ID4gKwlpMmMtPmNsayA9IGRldm1fY2xrX2dldF9vcHRpb25hbF9lbmFibGVkKCZwZGV2LT5kZXYs
-IE5VTEwpOw0KPiA+ICAgDQo+ID4gLQlpZiAoIUlTX0VSUihpMmMtPmNsaykpIHsNCj4gPiAtCQlp
-bnQgcmV0ID0gY2xrX3ByZXBhcmVfZW5hYmxlKGkyYy0+Y2xrKTsNCj4gPiAtDQo+ID4gLQkJaWYg
-KHJldCkgew0KPiA+IC0JCQlkZXZfZXJyKCZwZGV2LT5kZXYsDQo+ID4gLQkJCQkiY2xrX3ByZXBh
-cmVfZW5hYmxlIGZhaWxlZDogJWRcbiIsIHJldCk7DQo+ID4gLQkJCXJldHVybiByZXQ7DQo+ID4g
-LQkJfQ0KPiA+ICsJaWYgKElTX0VSUihpMmMtPmNsaykpIHsNCj4gPiArCQlkZXZfZXJyKCZwZGV2
-LT5kZXYsDQo+ID4gKwkJCSJkZXZtX2Nsa19nZXRfb3B0aW9uYWxfZW5hYmxlZCBmYWlsZWRcbiIp
-Ow0KPiANCj4gTWF5YmUgZGV2X2Vycl9wcm9iZSgpIHdvdWxkIGJlIG5pY2UgaGVyZS4gVGhpcyB3
-b3VsZCBsb2cgdGhlIGVycm9yIGNvZGUsIA0KPiBhbmQgZmlsdGVyIC1FUFJPQkVfREVGRVIsIHNo
-b3VsZCBpdCBoYXBwZW4uDQo+IA0KPiA+ICsJCXJldHVybiBQVFJfRVJSKGkyYy0+Y2xrKTsNCj4g
-PiArCX0NCj4gPiArCWlmIChpMmMtPmNsaykgew0KPiA+ICAgCQlpMmMtPmlwX2Nsb2NrX2toeiA9
-IGNsa19nZXRfcmF0ZShpMmMtPmNsaykgLyAxMDAwOw0KPiA+ICAgCQlpZiAoY2xvY2tfZnJlcXVl
-bmN5X3ByZXNlbnQpDQo+ID4gICAJCQlpMmMtPmJ1c19jbG9ja19raHogPSBjbG9ja19mcmVxdWVu
-Y3kgLyAxMDAwOw0KPiA+IEBAIC01NzMsNyArNTcxLDYgQEAgc3RhdGljIGludCBvY29yZXNfaTJj
-X29mX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYsDQo+ID4gICAJCQlpZiAoIWNs
-b2NrX2ZyZXF1ZW5jeV9wcmVzZW50KSB7DQo+ID4gICAJCQkJZGV2X2VycigmcGRldi0+ZGV2LA0K
-PiA+ICAgCQkJCQkiTWlzc2luZyByZXF1aXJlZCBwYXJhbWV0ZXIgJ29wZW5jb3JlcyxpcC1jbG9j
-ay1mcmVxdWVuY3knXG4iKTsNCj4gPiAtCQkJCWNsa19kaXNhYmxlX3VucHJlcGFyZShpMmMtPmNs
-ayk7DQo+ID4gICAJCQkJcmV0dXJuIC1FTk9ERVY7DQo+ID4gICAJCQl9DQo+ID4gICAJCQlpMmMt
-PmlwX2Nsb2NrX2toeiA9IGNsb2NrX2ZyZXF1ZW5jeSAvIDEwMDA7DQo+ID4gQEAgLTY3OCw4ICs2
-NzUsNyBAQCBzdGF0aWMgaW50IG9jb3Jlc19pMmNfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2Rldmlj
-ZSAqcGRldikNCj4gPiAgIAkJZGVmYXVsdDoNCj4gPiAgIAkJCWRldl9lcnIoJnBkZXYtPmRldiwg
-IlVuc3VwcG9ydGVkIEkvTyB3aWR0aCAoJWQpXG4iLA0KPiA+ICAgCQkJCWkyYy0+cmVnX2lvX3dp
-ZHRoKTsNCj4gPiAtCQkJcmV0ID0gLUVJTlZBTDsNCj4gPiAtCQkJZ290byBlcnJfY2xrOw0KPiA+
-ICsJCQlyZXR1cm4gLUVJTlZBTDsNCj4gPiAgIAkJfQ0KPiA+ICAgCX0NCj4gPiAgIA0KPiA+IEBA
-IC03MTAsMTMgKzcwNiwxMyBAQCBzdGF0aWMgaW50IG9jb3Jlc19pMmNfcHJvYmUoc3RydWN0IHBs
-YXRmb3JtX2RldmljZSAqcGRldikNCj4gPiAgIAkJCQkJCSAgIHBkZXYtPm5hbWUsIGkyYyk7DQo+
-ID4gICAJCWlmIChyZXQpIHsNCj4gPiAgIAkJCWRldl9lcnIoJnBkZXYtPmRldiwgIkNhbm5vdCBj
-bGFpbSBJUlFcbiIpOw0KPiA+IC0JCQlnb3RvIGVycl9jbGs7DQo+ID4gKwkJCXJldHVybiByZXQ7
-DQo+ID4gICAJCX0NCj4gPiAgIAl9DQo+ID4gICANCj4gPiAgIAlyZXQgPSBvY29yZXNfaW5pdCgm
-cGRldi0+ZGV2LCBpMmMpOw0KPiA+ICAgCWlmIChyZXQpDQo+ID4gLQkJZ290byBlcnJfY2xrOw0K
-PiA+ICsJCXJldHVybiByZXQ7DQo+ID4gICANCj4gPiAgIAkvKiBob29rIHVwIGRyaXZlciB0byB0
-cmVlICovDQo+ID4gICAJcGxhdGZvcm1fc2V0X2RydmRhdGEocGRldiwgaTJjKTsNCj4gPiBAQCAt
-NzI4LDcgKzcyNCw3IEBAIHN0YXRpYyBpbnQgb2NvcmVzX2kyY19wcm9iZShzdHJ1Y3QgcGxhdGZv
-cm1fZGV2aWNlICpwZGV2KQ0KPiA+ICAgCS8qIGFkZCBpMmMgYWRhcHRlciB0byBpMmMgdHJlZSAq
-Lw0KPiA+ICAgCXJldCA9IGkyY19hZGRfYWRhcHRlcigmaTJjLT5hZGFwKTsNCj4gPiAgIAlpZiAo
-cmV0KQ0KPiA+IC0JCWdvdG8gZXJyX2NsazsNCj4gPiArCQlyZXR1cm4gcmV0Ow0KPiA+ICAgDQo+
-ID4gICAJLyogYWRkIGluIGtub3duIGRldmljZXMgdG8gdGhlIGJ1cyAqLw0KPiA+ICAgCWlmIChw
-ZGF0YSkgew0KPiA+IEBAIC03MzcsMTAgKzczMyw2IEBAIHN0YXRpYyBpbnQgb2NvcmVzX2kyY19w
-cm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiA+ICAgCX0NCj4gPiAgIA0KPiA+
-ICAgCXJldHVybiAwOw0KPiA+IC0NCj4gPiAtZXJyX2NsazoNCj4gPiAtCWNsa19kaXNhYmxlX3Vu
-cHJlcGFyZShpMmMtPmNsayk7DQo+ID4gLQlyZXR1cm4gcmV0Ow0KPiA+ICAgfQ0KPiA+ICAgDQo+
-ID4gICBzdGF0aWMgaW50IG9jb3Jlc19pMmNfcmVtb3ZlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2Ug
-KnBkZXYpDQo+ID4gQEAgLTc1NSw5ICs3NDcsNiBAQCBzdGF0aWMgaW50IG9jb3Jlc19pMmNfcmVt
-b3ZlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ID4gICAJLyogcmVtb3ZlIGFkYXB0
-ZXIgJiBkYXRhICovDQo+ID4gICAJaTJjX2RlbF9hZGFwdGVyKCZpMmMtPmFkYXApOw0KPiA+ICAg
-DQo+ID4gLQlpZiAoIUlTX0VSUihpMmMtPmNsaykpDQo+ID4gLQkJY2xrX2Rpc2FibGVfdW5wcmVw
-YXJlKGkyYy0+Y2xrKTsNCj4gPiAtDQo+ID4gICAJcmV0dXJuIDA7DQo+ID4gICB9DQo+ID4gICAN
-Cj4gPiBAQCAtNzcxLDggKzc2MCw3IEBAIHN0YXRpYyBpbnQgb2NvcmVzX2kyY19zdXNwZW5kKHN0
-cnVjdCBkZXZpY2UgKmRldikNCj4gPiAgIAljdHJsICY9IH4oT0NJMkNfQ1RSTF9FTiB8IE9DSTJD
-X0NUUkxfSUVOKTsNCj4gPiAgIAlvY19zZXRyZWcoaTJjLCBPQ0kyQ19DT05UUk9MLCBjdHJsKTsN
-Cj4gPiAgIA0KPiA+IC0JaWYgKCFJU19FUlIoaTJjLT5jbGspKQ0KPiA+IC0JCWNsa19kaXNhYmxl
-X3VucHJlcGFyZShpMmMtPmNsayk7DQo+ID4gKwljbGtfZGlzYWJsZV91bnByZXBhcmUoaTJjLT5j
-bGspOw0KPiA+ICAgCXJldHVybiAwOw0KPiA+ICAgfQ0KPiA+ICAgDQo+ID4gQEAgLTc4MCwxOSAr
-NzY4LDE4IEBAIHN0YXRpYyBpbnQgb2NvcmVzX2kyY19yZXN1bWUoc3RydWN0IGRldmljZSAqZGV2
-KQ0KPiA+ICAgew0KPiA+ICAgCXN0cnVjdCBvY29yZXNfaTJjICppMmMgPSBkZXZfZ2V0X2RydmRh
-dGEoZGV2KTsNCj4gPiAgIA0KPiA+IC0JaWYgKCFJU19FUlIoaTJjLT5jbGspKSB7DQo+ID4gLQkJ
-dW5zaWduZWQgbG9uZyByYXRlOw0KPiA+IC0JCWludCByZXQgPSBjbGtfcHJlcGFyZV9lbmFibGUo
-aTJjLT5jbGspOw0KPiA+ICsJdW5zaWduZWQgbG9uZyByYXRlOw0KPiA+ICsJaW50IHJldCA9IGNs
-a19wcmVwYXJlX2VuYWJsZShpMmMtPmNsayk7DQo+ID4gICANCj4gPiAtCQlpZiAocmV0KSB7DQo+
-ID4gLQkJCWRldl9lcnIoZGV2LA0KPiA+IC0JCQkJImNsa19wcmVwYXJlX2VuYWJsZSBmYWlsZWQ6
-ICVkXG4iLCByZXQpOw0KPiA+IC0JCQlyZXR1cm4gcmV0Ow0KPiA+IC0JCX0NCj4gPiAtCQlyYXRl
-ID0gY2xrX2dldF9yYXRlKGkyYy0+Y2xrKSAvIDEwMDA7DQo+ID4gLQkJaWYgKHJhdGUpDQo+ID4g
-LQkJCWkyYy0+aXBfY2xvY2tfa2h6ID0gcmF0ZTsNCj4gPiArCWlmIChyZXQpIHsNCj4gPiArCQlk
-ZXZfZXJyKGRldiwNCj4gPiArCQkJImNsa19wcmVwYXJlX2VuYWJsZSBmYWlsZWQ6ICVkXG4iLCBy
-ZXQpOw0KPiA+ICsJCXJldHVybiByZXQ7DQo+ID4gICAJfQ0KPiA+ICsJcmF0ZSA9IGNsa19nZXRf
-cmF0ZShpMmMtPmNsaykgLyAxMDAwOw0KPiANCj4gTm93IChiZWNhdXNlIG9mIHRoZSBkZXZtX2Ns
-a19nZXRfb3B0aW9uYWxfZW5hYmxlZCgpKSwgaTJjLT5jbGsgY2FuIGJlIA0KPiBOVUxMLCBzbyB0
-aGlzIHdvdWxkIGRlZmVyZW5jZSBhIE5VTEwgcG9pbnRlci4NCj4gDQo+IENKDQo+IA0KPiANCj4g
-PiArCWlmIChyYXRlKQ0KPiA+ICsJCWkyYy0+aXBfY2xvY2tfa2h6ID0gcmF0ZTsNCj4gPiArDQo+
-ID4gICAJcmV0dXJuIG9jb3Jlc19pbml0KGRldiwgaTJjKTsNCj4gPiAgIH0NCj4gPiAgIA0K
+On Wed, May 24, 2023 at 11:43:18PM +0800, Wang Zhang wrote:
+> @@ -780,19 +768,18 @@ static int ocores_i2c_resume(struct device *dev)
+>  {
+>  	struct ocores_i2c *i2c = dev_get_drvdata(dev);
+>  
+> -	if (!IS_ERR(i2c->clk)) {
+> -		unsigned long rate;
+> -		int ret = clk_prepare_enable(i2c->clk);
+> +	unsigned long rate;
+> +	int ret = clk_prepare_enable(i2c->clk);
+
+Don't put functions which can fail in the declaration block.  Generally
+the declaration block is for preliminary stuff, and the important
+actions should be in the code block.  There should not be a blank line
+before the function call and the error checking.
+
+>  
+> -		if (ret) {
+> -			dev_err(dev,
+> -				"clk_prepare_enable failed: %d\n", ret);
+> -			return ret;
+> -		}
+> -		rate = clk_get_rate(i2c->clk) / 1000;
+> -		if (rate)
+> -			i2c->ip_clock_khz = rate;
+> +	if (ret) {
+> +		dev_err(dev,
+> +			"clk_prepare_enable failed: %d\n", ret);
+
+This can fit on one line now.
+
+	int ret;
+
+	ret = clk_prepare_enable(i2c->clk);
+	if (ret) {
+		dev_err(dev, "clk_prepare_enable failed: %d\n", ret);
+		return ret;
+	}
+
+regards,
+dan carpenter
+
+> +		return ret;
+>  	}
+> +	rate = clk_get_rate(i2c->clk) / 1000;
+> +	if (rate)
+> +		i2c->ip_clock_khz = rate;
+> +
+>  	return ocores_init(dev, i2c);
+
