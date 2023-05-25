@@ -2,68 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D7B71105B
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 May 2023 18:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E929F711068
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 May 2023 18:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234964AbjEYQFY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 25 May 2023 12:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        id S233064AbjEYQHI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 25 May 2023 12:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235626AbjEYQFX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 May 2023 12:05:23 -0400
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D132195;
-        Thu, 25 May 2023 09:05:22 -0700 (PDT)
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-75affe977abso132156085a.0;
-        Thu, 25 May 2023 09:05:22 -0700 (PDT)
+        with ESMTP id S240242AbjEYQHE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 May 2023 12:07:04 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015711BB;
+        Thu, 25 May 2023 09:07:00 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-56190515833so10791047b3.0;
+        Thu, 25 May 2023 09:07:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685030721; x=1687622721;
+        d=1e100.net; s=20221208; t=1685030820; x=1687622820;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Wh08Ox/+tC22G+gywAd5EyuJ85NWPL4SWw8BJ7/dXm4=;
-        b=aW2usrGK9kzTdMEifc3N4aoxwk8xj1rFg8rybZqgxhFbUduxgUqYXH56DM9kKuvKJ3
-         8vC02d1BDpnNw/ATlcx14phTHbajTNtLfl6IOLIAvaHIkttgfj/9W57RFKlkpRvVbT6j
-         cqabyN3P9NSPdzr8SoybjjdKXaJ6anW2T3kFjtbgYV+TPnDwKu1inGHL6tgruuJoMT7S
-         LwyFvM5dOvs4pe4CCPePaiWt3isH2GfLeAfufCFsO/g2FK2fM5yeClPCcJRmZfQz7WvL
-         0Z5F2BYFl/SR61t5oqUJVdlfXUARYsyMe+53hGaIwGImHGXpqSD0Shn/mltqjk+H/j4f
-         SOJg==
-X-Gm-Message-State: AC+VfDyP6YlfQ8aAFCkDaoXMbrRgfYe/gJcTbC1OgYbKw00n91NvqNzS
-        df/IN1ggSToFJDgQN8jA2rP1HR1/c7QS5g==
-X-Google-Smtp-Source: ACHHUZ5J+1ngYQ+NZdNHRQHardXL7DAr2uYchaPkxHKmRoa3x/o2GfqnFsWAiHaHmkP8AZgSftV+NQ==
-X-Received: by 2002:a05:620a:9481:b0:75b:23a1:3622 with SMTP id sn1-20020a05620a948100b0075b23a13622mr10157820qkn.51.1685030721485;
-        Thu, 25 May 2023 09:05:21 -0700 (PDT)
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com. [209.85.222.171])
-        by smtp.gmail.com with ESMTPSA id m24-20020a05620a13b800b0075ca93fd90dsm349777qki.45.2023.05.25.09.05.18
+        bh=ks8ki8suO9WOT8NQ14GPKicaRZdGwBVr6CRJN8aj+AI=;
+        b=VJIxwJ7oaJkyocJgg7jrt5U5RE7kRrcVVyCvPtND4Nc0Ldiyk7BsuI3qK3LgZ9Xmk6
+         b6tJ2NWelEQsVyVOePSmd++3ZOKOeBXDaOpDpAr9mrP4kdqP6o+0vY/w29nZ9Zr8FDmy
+         Qk10IgMjHFKDoZezR/VwhqQgHI5WqmlpEnxxJDHGqcq3gr3JzVGgwRCnburGgkrzTlgJ
+         erXsYja90RHCHs/vESAb1/nJXQV711l4FLf6PZn3ijaKCeKWhSogO+Qbq/KqI3O+ABuQ
+         bQkJoINa2qvrxm4aLujpQWkz3+0OkQvWQf4WRwGJxVxBw0igHRPwti3ynlbxB/gKZCGX
+         4KXw==
+X-Gm-Message-State: AC+VfDye3wLmHlRZdEToGl5dND7oTf97NIK9914uIFIrimJQz73Vg1wQ
+        CobLR8NqqoRbOC7Ly3EYsXFCVfj4JV8rXA==
+X-Google-Smtp-Source: ACHHUZ7V/P7k0SwKSMXIi1iHzBsVJoS3S5pZz9Aq2fsKsRhxP/kAOPH5qUGAwCZI1pswQxcU0SQ2zg==
+X-Received: by 2002:a81:8303:0:b0:565:9874:ff6a with SMTP id t3-20020a818303000000b005659874ff6amr119817ywf.7.1685030819887;
+        Thu, 25 May 2023 09:06:59 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id x126-20020a0dd584000000b00565271801b6sm479302ywd.59.2023.05.25.09.06.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 09:05:19 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-75affe977abso132147485a.0;
-        Thu, 25 May 2023 09:05:18 -0700 (PDT)
-X-Received: by 2002:a05:620a:801a:b0:75b:23a1:362c with SMTP id
- ee26-20020a05620a801a00b0075b23a1362cmr12025522qkb.61.1685030717893; Thu, 25
- May 2023 09:05:17 -0700 (PDT)
+        Thu, 25 May 2023 09:06:59 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-561b7729a12so10589367b3.1;
+        Thu, 25 May 2023 09:06:58 -0700 (PDT)
+X-Received: by 2002:a0d:df82:0:b0:559:d19a:37ee with SMTP id
+ i124-20020a0ddf82000000b00559d19a37eemr18122ywe.15.1685030818706; Thu, 25 May
+ 2023 09:06:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230525135108.240651-1-biju.das.jz@bp.renesas.com> <20230525135108.240651-2-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20230525135108.240651-2-biju.das.jz@bp.renesas.com>
+References: <20230525135108.240651-1-biju.das.jz@bp.renesas.com> <20230525135108.240651-3-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20230525135108.240651-3-biju.das.jz@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 25 May 2023 18:04:56 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXJpUV+u3z_enmJDC5anQfF-+0KWJgNYxjuhjELif-pAg@mail.gmail.com>
-Message-ID: <CAMuHMdXJpUV+u3z_enmJDC5anQfF-+0KWJgNYxjuhjELif-pAg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] i2c: rzv2m: Drop extra space
+Date:   Thu, 25 May 2023 18:06:43 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVMPnXiHk2CYPEnoVKFnN5jF1W3efdwVJAoOrF1TB56+A@mail.gmail.com>
+Message-ID: <CAMuHMdVMPnXiHk2CYPEnoVKFnN5jF1W3efdwVJAoOrF1TB56+A@mail.gmail.com>
+Subject: Re: [PATCH 2/3] i2c: rzv2m: Rename macro names in all uppercase
 To:     Biju Das <biju.das.jz@bp.renesas.com>
 Cc:     Wolfram Sang <wsa@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        William Zhang <william.zhang@broadcom.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Tyrone Ting <kfting@nuvoton.com>, linux-i2c@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org, Pavel Machek <pavel@denx.de>
@@ -79,13 +70,29 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Biju,
+
 On Thu, May 25, 2023 at 3:51 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> Drop extra space from the I2C_RZV2M config help description.
+> Normally we'd put macro names in all uppercase.
+> Rename bit_setl->BIT_SETL and bit_clrl->BIT_CLRL.
 >
 > Reported-by: Pavel Machek <pavel@denx.de>
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thanks for your patch!
+
+> --- a/drivers/i2c/busses/i2c-rzv2m.c
+> +++ b/drivers/i2c/busses/i2c-rzv2m.c
+> @@ -50,8 +50,8 @@
+>  #define IICB0MDSC      BIT(7)          /* Bus Mode */
+>  #define IICB0SLSE      BIT(1)          /* Start condition output */
+>
+> -#define bit_setl(addr, val)            writel(readl(addr) | (val), (addr))
+> -#define bit_clrl(addr, val)            writel(readl(addr) & ~(val), (addr))
+> +#define BIT_SETL(addr, val)            writel(readl(addr) | (val), (addr))
+> +#define BIT_CLRL(addr, val)            writel(readl(addr) & ~(val), (addr))
+
+I'd rather change them to static inline functions instead.
 
 Gr{oetje,eeting}s,
 
