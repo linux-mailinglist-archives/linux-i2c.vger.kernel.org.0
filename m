@@ -2,127 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D24711175
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 May 2023 18:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B88F2711763
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 May 2023 21:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238422AbjEYQ4g convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 25 May 2023 12:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        id S243352AbjEYT1L (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 25 May 2023 15:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbjEYQ4V (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 May 2023 12:56:21 -0400
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A743135;
-        Thu, 25 May 2023 09:56:15 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-557c9d7011aso157678eaf.1;
-        Thu, 25 May 2023 09:56:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685033774; x=1687625774;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tKef1dTnXLWEPcPkzPdiI1P0Q5fDcYjlFcAukfwXA8Q=;
-        b=NDXYLxHYnLebrUD2b4bbuSoy2H1BhPw+5e8Tity+BD/qPkRV4G9OZfV3EG+rU/un6y
-         yQiwbzn+c/ccGqX1EIU9T5m3z0uv0rr0mm/dvLbu2P39JYJCG4qHFi3bJ6yvr7/fbk1X
-         D7K/oM8+eIsJ1w4E9JTTkrFzdWvoC+zu5jE617f+lkeXPhtijNbg/fqkRsxqqEdgetqq
-         FURi9WF6qjpMDCr41SQJucxG5c2LhAWEimZFI1Za+vAcWb2gkjuvRuoo6QlO8j31WThY
-         R9vIqRk50lkhrCgOmDn1Nqo/ykWgcFhKGQM+qpyGJzNvHUdfmr50DBd8J83dpo4gl6bF
-         oY6w==
-X-Gm-Message-State: AC+VfDyBkhjU+NIxbZ+H27+VyDTg3kEA8mkoVr3b1+ssgXfHalPCD+PD
-        e8K5kmpGCYRz4ugnHaLgCXj3adQomHQGeA==
-X-Google-Smtp-Source: ACHHUZ7XWYq00+YKH/Bs7smB5LaLZQCXD42dq9K5bNvgdHrFNxe1ZSQOia14A1W7PVgAbp+59esV4w==
-X-Received: by 2002:a4a:6f50:0:b0:54f:84ea:84e4 with SMTP id i16-20020a4a6f50000000b0054f84ea84e4mr1779684oof.3.1685033774211;
-        Thu, 25 May 2023 09:56:14 -0700 (PDT)
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
-        by smtp.gmail.com with ESMTPSA id e187-20020a4a55c4000000b00555718c0c5dsm641469oob.37.2023.05.25.09.56.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 09:56:14 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6af549a7fb4so819830a34.1;
-        Thu, 25 May 2023 09:56:13 -0700 (PDT)
-X-Received: by 2002:a25:5cd:0:b0:ba8:b425:6bf2 with SMTP id
- 196-20020a2505cd000000b00ba8b4256bf2mr4131400ybf.20.1685033408372; Thu, 25
- May 2023 09:50:08 -0700 (PDT)
+        with ESMTP id S243679AbjEYT0x (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 25 May 2023 15:26:53 -0400
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E89E2E62
+        for <linux-i2c@vger.kernel.org>; Thu, 25 May 2023 12:25:21 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 2GRsq4ImI4WeJ2GRtqoeWa; Thu, 25 May 2023 21:16:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685042196;
+        bh=cdwDlTSY5nLJWFnEJZ9cFeJSFlxNwy4TcFGd8KOVKQY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=HFT9MXOA+YJs9tcYjw3E2SCcaV6P49sY+lqyK/urEYTqhQPWDrLjUzSmLlciPDHkF
+         SV/AfgVXxXZ2C00ETDTBu0scNPIGNAcxC50lok1FZOj/1xRkkdxAMCm15wrUY+TH6O
+         3/S6wgweKUxHGIjEU3A3zAQIr5d4imxjqNwxpj3tng7XVUW0zcQ+Rma+rH/ZhSBc6u
+         JqlnArApxBZM0Co6zKrIqArtUDTPzD9X971fKC0oVCtZDr/0k9L15NHq8rqyNgS0pW
+         q7JpsV6SVYm3z2T7MGD/GaLwYSc1N6lDyBUPSI4TRlPPQ7JBrmO9dHlcFW37AvydOg
+         ykXHiYNVR4w1g==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 25 May 2023 21:16:36 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <d63a3757-0f58-d125-b735-7fe86230bc9c@wanadoo.fr>
+Date:   Thu, 25 May 2023 21:16:32 +0200
 MIME-Version: 1.0
-References: <20230522101849.297499-1-biju.das.jz@bp.renesas.com> <20230522101849.297499-2-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20230522101849.297499-2-biju.das.jz@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 25 May 2023 18:49:24 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUkZe+v5-MFXrVdUsqYnLuWE1OfuFCq7xyzT=PtjSFw8Q@mail.gmail.com>
-Message-ID: <CAMuHMdUkZe+v5-MFXrVdUsqYnLuWE1OfuFCq7xyzT=PtjSFw8Q@mail.gmail.com>
-Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Wolfram Sang <wsa@kernel.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Corey Minyard <cminyard@mvista.com>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3] i2c: ocores: use devm_ managed clks
+Content-Language: fr, en-US
+To:     =?UTF-8?B?5byg572R?= <m202171703@hust.edu.cn>
+Cc:     Peter Korsgaard <peter@korsgaard.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        hust-os-kernel-patches@googlegroups.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@linaro.org>
+References: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
+ <20230524154318.2259-1-silver_code@hust.edu.cn>
+ <68c4b991-6af9-36e8-354c-7c3b232ba4c2@wanadoo.fr>
+ <5cceb5b5.c1fe.18850f830e0.Coremail.m202171703@hust.edu.cn>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <5cceb5b5.c1fe.18850f830e0.Coremail.m202171703@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 22, 2023 at 12:19 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> Renesas PMIC RAA215300 exposes two separate i2c devices, one for the main
-> device and another for rtc device.
->
-> Enhance i2c_new_ancillary_device() to instantiate a real device.
-> (eg: Instantiate rtc device from PMIC driver)
->
-> Added helper function __i2c_new_dummy_device to share the code
-> between i2c_new_dummy_device and i2c_new_ancillary_device().
->
-> Also added helper function __i2c_new_client_device() to pass parent dev
-> parameter, so that the ancillary device can assign its parent during
-> creation.
->
-> Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v4->v5:
->  * Replaced parameter dev->parent in __i2c_new_client_device() and
->    __i2c_new_dummy_device().
->  * Improved error message in __i2c_new_dummy_device() by printing device name.
->  * Updated comment for ancillary's device parent
->  * Dropped aux_device_name check in i2c_new_ancillary_device().
+Le 25/05/2023 à 05:33, 张网 a écrit :
+> Hi  Christophe,
+> 
+> Thanks for your suggestions. However, both clk_get_rate and clk_prepare_enable
+> will return 0 if i2c->clk is NULL, so I think we may not need to take this issue
+> into account.
+> 
+> Regards,
+> Wang Zhang
+> 
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Ouch!
 
-Gr{oetje,eeting}s,
+For some reaon, when I read:
+ > +	rate = clk_get_rate(i2c->clk) / 1000;
 
-                        Geert
+I read "if i2c->clk is NULL, then the i2c pointer is NULL as well and is 
+dereferenced".
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+:/
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+sorry for the noise.
+
+CJ (slightly ashamed)
+
