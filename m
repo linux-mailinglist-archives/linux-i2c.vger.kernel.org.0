@@ -2,76 +2,248 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50D2711FCA
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 May 2023 08:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC1E712006
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 May 2023 08:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242088AbjEZGWf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 26 May 2023 02:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
+        id S230097AbjEZGfF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 May 2023 02:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbjEZGWe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 May 2023 02:22:34 -0400
-Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192EC125;
-        Thu, 25 May 2023 23:22:31 -0700 (PDT)
-X-QQ-mid: Yeas48t1685082084t447t64459
-Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [125.120.148.168])
-X-QQ-SSF: 00400000000000F0FOF000000000000
-From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
-X-BIZMAIL-ID: 15681098690706422503
-To:     "'Jakub Kicinski'" <kuba@kernel.org>
-Cc:     <netdev@vger.kernel.org>, <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
-        <Jose.Abreu@synopsys.com>, <andrew@lunn.ch>,
-        <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <linux-i2c@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <mengyuanlou@net-swift.com>
-References: <20230524091722.522118-1-jiawenwu@trustnetic.com>   <20230524091722.522118-9-jiawenwu@trustnetic.com> <20230525211403.44b5f766@kernel.org>
-In-Reply-To: <20230525211403.44b5f766@kernel.org>
-Subject: RE: [PATCH net-next v9 8/9] net: txgbe: Implement phylink pcs
-Date:   Fri, 26 May 2023 14:21:23 +0800
-Message-ID: <022201d98f9a$4b4ccc00$e1e66400$@trustnetic.com>
+        with ESMTP id S229847AbjEZGfF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 May 2023 02:35:05 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789809C;
+        Thu, 25 May 2023 23:35:02 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2af225e5b4bso3554111fa.3;
+        Thu, 25 May 2023 23:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685082901; x=1687674901;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WcJOZerpXi8ObNNdTOUnt4O1FT4NXUTLaczmvwBX9kY=;
+        b=HVYhbWH5FxmTZOP2RMUrEJwk3Y0kEqphdgwS15BCu42Lky/My2LAi4wwia4SLV8YcJ
+         mdm81Bz2O0IXaDRhXxvnveeisdQWSHMWIX2pegSlrMwAZj1IpscNMYGbEPqVXdZZ/fXL
+         8rdyrYgZN7YL3+N1o8IgtpYUapJ0HQB0WJRmODtuK4x3Il7MJffIj/8VyVHNzPbLebqS
+         CoIECfRgwC+AB6cAjht7/Be+xBIUDU0WWvIVt6z2xCJvQpc0JFlES13g7UH0jBOvc+KT
+         7ckzmE2I90dOYJe3tJ5lCxUlol1anJgnsohxJXS17JLGgWg0xNhUCeNcm4hXx1PbLRSQ
+         d28Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685082901; x=1687674901;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WcJOZerpXi8ObNNdTOUnt4O1FT4NXUTLaczmvwBX9kY=;
+        b=e6MeaPydNNk6WrKAsT17x1tm4qCcVutjg7lKIjJDywBZV8RyvPm9GmYJGkh4VYGmwm
+         rJHpix17v+li4IoB2ZyDYflnGQ0wz+E8ZcVyEz1wfhh4HUht6hEEA/L2U4niGCOw+n2/
+         sSbJt7uNaVOJF3tL7WIPTCurH3P0h/zndZTPivAOOjpwGjzj/Vjuard2rrTTaMdB94EL
+         utKlsTunK9DLrAVlH9Iq0mxsCzlH0Cg8zrfi3WAQNxXK6M83S67S1sUYQv1XusVCrNcB
+         9eRXI+HJw+kWWSFuXlAMmJd4nDEf3+tJliH22dGMtMmw69fIlzX0eXwsnWeoEEGjf2s7
+         WM6A==
+X-Gm-Message-State: AC+VfDxbTigxdnoI7cFeJBdrlkZ+LNg2XX89q4Mf+eeMj9m8GWZc1mAK
+        NYaNmGef20Eg6JfpTJlnICEoNB/5GpY=
+X-Google-Smtp-Source: ACHHUZ4DJBxQQEa/1VeMXLnR0qOMEbRktLB7HCgdxnCUjBh/7NEMEMVin+iGP9WqpmCOXNgp3rHlCg==
+X-Received: by 2002:a2e:8e88:0:b0:2ac:7a77:1d4e with SMTP id z8-20020a2e8e88000000b002ac7a771d4emr387558ljk.24.1685082900374;
+        Thu, 25 May 2023 23:35:00 -0700 (PDT)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id f19-20020a2ea0d3000000b002a8bc2fb3cesm562896ljm.115.2023.05.25.23.34.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 23:34:59 -0700 (PDT)
+Date:   Fri, 26 May 2023 09:34:48 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: [PATCH v6 0/8] fix fwnode_irq_get[_byname()] returnvalue
+Message-ID: <cover.1685082026.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIrQcdiCo7tNEhbaUMwQ6r5o07FvQI4H2aIApOsZCeuok+UAA==
-Content-Language: zh-cn
-X-QQ-SENDSIZE: 520
-Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BIdqUJjNRoUB+WL6"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Friday, May 26, 2023 12:14 PM, Jakub Kicinski wrote:
-> On Wed, 24 May 2023 17:17:21 +0800 Jiawen Wu wrote:
-> > +	ret = devm_mdiobus_register(&pdev->dev, mii_bus);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	mdiodev = mdio_device_create(mii_bus, 0);
-> > +	if (IS_ERR(mdiodev))
-> > +		return PTR_ERR(mdiodev);
-> > +
-> > +	xpcs = xpcs_create(mdiodev, PHY_INTERFACE_MODE_10GBASER);
-> > +	if (IS_ERR(xpcs)) {
-> > +		mdio_device_free(mdiodev);
-> > +		return PTR_ERR(xpcs);
-> > +	}
-> 
-> How does the mdiodev get destroyed in case of success?
-> Seems like either freeing it in case of xpcs error is unnecessary
-> or it needs to also be freed when xpcs is destroyed?
 
-When xpcs is destroyed, that means mdiodev is no longer needed.
-I think there is no need to free mdiodev in case of xpcs error,
-since devm_* function leads to free it.
+--BIdqUJjNRoUB+WL6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+The fwnode_irq_get() and the fwnode_irq_get_byname() may have returned
+zero if mapping the IRQ fails. This contradicts the
+fwnode_irq_get_byname() documentation. Furthermore, returning zero or
+errno on error is unepected and can easily lead to problems
+like:
+
+int probe(foo)
+{
+=2E..
+	ret =3D fwnode_irq_get_byname(...);
+	if (ret < 0)
+		return ret;
+=2E..
+}
+
+or
+
+int probe(foo)
+{
+=2E..
+	ret =3D fwnode_irq_get_byname(...);
+	if (ret <=3D 0)
+		return ret;
+=2E..
+}
+
+which are both likely to be wrong. First treats zero as successful call and
+misses the IRQ mapping failure. Second returns zero from probe even though
+it detects the IRQ mapping failure correvtly.
+
+Here we change the fwnode_irq_get() and the fwnode_irq_get_byname() to
+always return a negative errno upon failure.
+
+I have audited following callers (v6.4-rc2):
+
+fwnode_irq_get_byname():
+drivers/i2c/i2c-smbus.c
+drivers/iio/accel/adxl355_core.c
+drivers/iio/accel/kionix-kx022a.c
+drivers/iio/adc/ad4130.c
+drivers/iio/adc/max11410.c
+drivers/iio/addac/ad74115.c
+drivers/iio/gyro/fxas21002c_core.c
+drivers/iio/imu/adis16480.c
+drivers/iio/imu/bmi160/bmi160_core.c
+drivers/iio/imu/bmi160/bmi160_core.c
+
+fwnode_irq_get():
+drivers/gpio/gpio-dwapb.c
+drivers/iio/chemical/scd30_serial.c
+drivers/iio/proximity/mb1232.c
+drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+drivers/net/mdio/fwnode_mdio.c
+drivers/pinctrl/pinctrl-ingenic.c
+drivers/pinctrl/pinctrl-microchip-sgpio.c
+drivers/pinctrl/pinctrl-pistachio.c
+
+and it seems to me these calls will be Ok after the change. The
+i2c-smbus.c and kionix-kx022a.c will gain a functional change (bugfix?) as
+after this patch the probe will return -EINVAL should the IRQ mapping fail.
+The series will also adjust the return value check for zero to be omitted.
+
+NOTES:
+
+Changes are compile-tested only.
+
+drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+will also gain a functional change. The pinctrl-wpcm450.c change is easy
+to see - after this series the device-tree mapping failures will be
+handled as any other errors - probe will be aborted with -EINVAL. Other
+feasible option could be treating other errors in IRQ getting same way
+as the DT mapping failures - just silently skip the IRQ. Please see
+comment in the respective patch.
+
+drivers/iio/cdc/ad7150.c
+Changed logic so that all the IRQ getting errors jump to the same
+'no-IRQ' branch as the DT mapping error did.
+
+Revision history:
+v5 =3D> v6:
+ - iio: cdc: ad7150 - never abort probe if IRQ getting fails
+v4 =3D> v5:
+ - Fix subject lines for mvpp2 and wpcm450
+ - drop unnecessary irqno assignment from mb1232
+ - add back the drivers/i2c/i2c-smbus.c change which was accidentally
+   dropped during v3 =3D> v4 work
+v3 =3D> v4:
+ - Change also the fwnode_irq_get() as was suggested by Jonathan.
+Changelog v2 =3D> v3:
+ - rebase/resend/add kx022a fix.
+Changelog v1 =3D> v2:
+ - minor styling
+
+---
+
+Matti Vaittinen (8):
+  drivers: fwnode: fix fwnode_irq_get[_byname]()
+  iio: mb1232: relax return value check for IRQ get
+  net-next: mvpp2: relax return value check for IRQ get
+  pinctrl: wpcm450: relax return value check for IRQ get
+  pinctrl: ingenic: relax return value check for IRQ get
+  pinctrl: pistachio: relax return value check for IRQ get
+  iio: cdc: ad7150: relax return value check for IRQ get
+  i2c: i2c-smbus: fwnode_irq_get_byname() return value fix
+
+ drivers/base/property.c                         | 12 +++++++++---
+ drivers/i2c/i2c-smbus.c                         |  2 +-
+ drivers/iio/cdc/ad7150.c                        | 10 +++++-----
+ drivers/iio/proximity/mb1232.c                  |  7 ++-----
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c |  4 ++--
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c       |  2 --
+ drivers/pinctrl/pinctrl-ingenic.c               |  2 --
+ drivers/pinctrl/pinctrl-pistachio.c             |  6 ------
+ 8 files changed, 19 insertions(+), 26 deletions(-)
+
+
+base-commit: f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+--=20
+2.40.1
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--BIdqUJjNRoUB+WL6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRwUwQACgkQeFA3/03a
+ocXAagf/SATcFgxl0jKSBaNOTF/+28Pno+TjHp9Sdo/8Ymwrg9L9edhW7FpovyWA
+5ErMPmzMs7zSKg6b9ThVlNqVX0ApH/9sVsrZZ5+xh3TapswoYLPPngUxSV2JC6cF
++Dq5A7qKkcHV5nQVQgW3tI/e7E0xybH3LNit2KaF3xgVFjfrJZ00Wx2R+j0N0JrG
+WjRQ12FUGQ7fa5W52qG9/P3aFDC1L9kQL0peEAhA6PLuIdiX86tMkp0eh7n2Ni90
+O28ZvVRC1lL+xeTxhW3QvtrxiT4EgxfbGiDgHGJ+nAJdGblViNXYFbqJXGcI+n70
+R9znRQPe0WUgM2XzsU9mp/1w9qdxFg==
+=GMUh
+-----END PGP SIGNATURE-----
+
+--BIdqUJjNRoUB+WL6--
