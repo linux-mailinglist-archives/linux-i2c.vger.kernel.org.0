@@ -2,53 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D98B371203A
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 May 2023 08:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095FA712044
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 May 2023 08:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241985AbjEZGiw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 26 May 2023 02:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
+        id S242240AbjEZGjN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 May 2023 02:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236274AbjEZGiv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 May 2023 02:38:51 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5F31B3;
-        Thu, 25 May 2023 23:38:45 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f380cd1019so350480e87.1;
-        Thu, 25 May 2023 23:38:45 -0700 (PDT)
+        with ESMTP id S242258AbjEZGjJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 May 2023 02:39:09 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7418E12F;
+        Thu, 25 May 2023 23:39:04 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f4db9987f8so1285550e87.1;
+        Thu, 25 May 2023 23:39:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685083124; x=1687675124;
+        d=gmail.com; s=20221208; t=1685083143; x=1687675143;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fnb9dxQpabXcqKFtwXirNw4zge4/PVN/rpFJ7Cz83LM=;
-        b=LpwqhHvGK5SSL6RTCR97kfc10ze/o9Lp0eR/armCRpwC617whkVt6uHhF7PgghMYcy
-         0lhZtU5P0joOmyI/SZgmyKYFhVUOdM1EkEBn/TMuS9byx9JJoQzNoph+LieI5/CJtVMY
-         D8e4n6D79v6TpC/NRc4CswPdqexkUSeiu8WgGfLmEgezX1s/01sJ8GO1G2WKjK8jfXfA
-         LdeF0nD6U746okKqTlF0DeQ9wMeVkaJdSg89JEBz3r4YrvCnOl3lzEOjTmrzm3hl7CTE
-         139VB0WpuF5OR/MYna20UhJTqwRUY1i9QZmkMP8nqUnr0TY/U4SLqRpD/cXfzjJK2uHl
-         CgSw==
+        bh=ekbpAMbogTlMCWxkxFZ/eQBJQS9KZeZKKkgzxsIBTZY=;
+        b=swo3Sx3G1UOBDNaL7TLrRZ5pQB/6afRbf8eQBpp9b1OaBl7qkV9Yxk0SqRq0yePA18
+         ZKv1bPnEl7wMGTPLzvoaZtjDHe8nkwbU5pybFPwKDNauvtpgVcg/O+tw5mTdjHSjStBG
+         yyP3YnlUR51SJ2O95YR7Sp3Ji9z1kAInjJVXtbFGs5Adtb48Zyh7ttRnntgEvp+hF88q
+         v2G+jHWagwpjRk3ZrlNpgM08lGmFRHBp5VCx/SEBP+MX32Hxmjg133eGpcr5PaK5BKel
+         L88+H53RnL1ZExbKN0NwzYroA481IHdtNGLAfDr9xx1sTeo4kYglbNM3i6Jj3uVmhfjz
+         5p7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685083124; x=1687675124;
+        d=1e100.net; s=20221208; t=1685083143; x=1687675143;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fnb9dxQpabXcqKFtwXirNw4zge4/PVN/rpFJ7Cz83LM=;
-        b=UjfBUg+e40XnTAB+0I6U3GhFFxK1bEKShEu7lQG9UVYqZz6EUZCpnJwPBKFs6fTENn
-         XRZgy6HLSlQATsmjx3Ud6daGkcIB3bCt3Y8/kK0ONF/zQqRwhEDcEOqDaL2/OEpfSDrj
-         4JunbjJ/KvjYm49AjSXlQv2WJa5utOKh6ViRml87lvyF/yPN+biV1Bi3Nj/ks2xHguiM
-         JafCPAJT8u8Uw97shL/bhNV7tEQpK7hin8cijB/MkX8MpH2eZ3T5SZrj3MYFZqEkFjmf
-         hPKP2NNntUZ9Kwe28/OUtg/uNyFXsjv0KjxbLm+5i0yMHy6h/iQYZYZr2bfkJAcngerU
-         DSqQ==
-X-Gm-Message-State: AC+VfDyyPPqWlq5cPhbxIUi46Yxgi2Lnto4rDVrx2hdl9KHfrzR0+tLk
-        YqtRDaQB3+52CM05fD5rZYs=
-X-Google-Smtp-Source: ACHHUZ5ImTEa7PavhV91maK0eLFhL+AAsBWGbqmK/QJoUj0CaHVhJETZEcyMg3v8zsbdo+Gbw3HjUg==
-X-Received: by 2002:a05:6512:49e:b0:4f4:cacb:4b4b with SMTP id v30-20020a056512049e00b004f4cacb4b4bmr204448lfq.18.1685083123710;
-        Thu, 25 May 2023 23:38:43 -0700 (PDT)
+        bh=ekbpAMbogTlMCWxkxFZ/eQBJQS9KZeZKKkgzxsIBTZY=;
+        b=FB6TpBrt4hbM+ybDODTgSU4zJRIK5Jwn8LkOHknM5L3sEqnFEImuvHY8jMFOHkepxp
+         Pg4cJrV6gcZtxRzvyDstQj/W3XumAe/ayhxIFYGeR2mnyW8Ey522nG3/VfWPyfbjmPf+
+         AAErGi55HjeqLg+/db5w7OLuVABYxrqZBV177gK+kufFq+HTGk7bQ/AfGrvoXdx7uZIQ
+         5Qumy1dzXUOSNyM85QgUsgR/DJcEDr1ygaydt+8Xyldy4JK+PUMzesDDoV2vnXNtfZoK
+         CJKaLdMkiTlVxZwDpZp+H5Cfvg4Vge0CwHx+fIsr7KCCL0mnCzqpjQu4qf38WBYAEV/I
+         PMRg==
+X-Gm-Message-State: AC+VfDxI3tvNR+SNr7/JU7F+CbJN08cz1WbikS/kevx+7W9CEYj1QRRY
+        iAyC8dd9hO9XFaXB/Dqo1s8=
+X-Google-Smtp-Source: ACHHUZ7knF9sTUOLQBiCcAr+wHS3578rbREvAyWpopCpkBaInOiXDERlRe36k4kgZYkg7rsGnuWrZQ==
+X-Received: by 2002:a05:6512:3d90:b0:4f3:a55c:ebdc with SMTP id k16-20020a0565123d9000b004f3a55cebdcmr1440553lfv.17.1685083142646;
+        Thu, 25 May 2023 23:39:02 -0700 (PDT)
 Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id c18-20020a197612000000b004f122a378d4sm483847lff.163.2023.05.25.23.38.42
+        by smtp.gmail.com with ESMTPSA id p11-20020a05651211eb00b004f13ca69dc8sm486674lfs.72.2023.05.25.23.39.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 23:38:43 -0700 (PDT)
-Date:   Fri, 26 May 2023 09:38:39 +0300
+        Thu, 25 May 2023 23:39:01 -0700 (PDT)
+Date:   Fri, 26 May 2023 09:38:58 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
@@ -77,12 +77,13 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-iio@vger.kernel.org, netdev@vger.kernel.org,
         openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: [PATCH v6 5/8] pinctrl: ingenic: relax return value check for IRQ get
-Message-ID: <c4d877dd94cb528a39dd9c7403159a036934d3b1.1685082026.git.mazziesaccount@gmail.com>
+Subject: [PATCH v6 6/8] pinctrl: pistachio: relax return value check for IRQ
+ get
+Message-ID: <9db9653eb33d345d305e918215216348a8f193da.1685082026.git.mazziesaccount@gmail.com>
 References: <cover.1685082026.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+4Ol/5oJ1HP2706K"
+        protocol="application/pgp-signature"; boundary="o9c5bgYMrd+9nbej"
 Content-Disposition: inline
 In-Reply-To: <cover.1685082026.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -96,7 +97,7 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---+4Ol/5oJ1HP2706K
+--o9c5bgYMrd+9nbej
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -106,7 +107,6 @@ fwnode_irq_get[_byname]() were changed to not return 0 anymore.
 Drop check for return value 0.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
 ---
@@ -119,24 +119,28 @@ tag. Please let me know if this was not Ok.
 The first patch of the series changes the fwnode_irq_get() so this depends
 on the first patch of the series and should not be applied alone.
 ---
- drivers/pinctrl/pinctrl-ingenic.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/pinctrl/pinctrl-pistachio.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-in=
-genic.c
-index 2f220a47b749..86e71ad703a5 100644
---- a/drivers/pinctrl/pinctrl-ingenic.c
-+++ b/drivers/pinctrl/pinctrl-ingenic.c
-@@ -4201,8 +4201,6 @@ static int __init ingenic_gpio_probe(struct ingenic_p=
-inctrl *jzpc,
- 	err =3D fwnode_irq_get(fwnode, 0);
- 	if (err < 0)
- 		return err;
--	if (!err)
--		return -EINVAL;
- 	jzgc->irq =3D err;
+diff --git a/drivers/pinctrl/pinctrl-pistachio.c b/drivers/pinctrl/pinctrl-=
+pistachio.c
+index 53408344927a..8c50e0091b32 100644
+--- a/drivers/pinctrl/pinctrl-pistachio.c
++++ b/drivers/pinctrl/pinctrl-pistachio.c
+@@ -1393,12 +1393,6 @@ static int pistachio_gpio_register(struct pistachio_=
+pinctrl *pctl)
+ 			dev_err(pctl->dev, "Failed to retrieve IRQ for bank %u\n", i);
+ 			goto err;
+ 		}
+-		if (!ret) {
+-			fwnode_handle_put(child);
+-			dev_err(pctl->dev, "No IRQ for bank %u\n", i);
+-			ret =3D -EINVAL;
+-			goto err;
+-		}
+ 		irq =3D ret;
 =20
- 	girq =3D &jzgc->gc.irq;
+ 		bank =3D &pctl->gpio_banks[i];
 --=20
 2.40.1
 
@@ -153,19 +157,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---+4Ol/5oJ1HP2706K
+--o9c5bgYMrd+9nbej
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRwU+8ACgkQeFA3/03a
-ocVKFQf9Fzo+YL9A0466zLL5jgGlSHVE02sJ5WI378VoK/fGi2vG1UpG6toFO3jN
-/WsHsJhcbOmrAlH+7gTHLdGQ82zcUi7LzoxjriJhNQ6dZetmA3D65WohrWOYc3gR
-dxHSGBCB7nEvOwae64sV+zVCKwy5C5PEZhNcghZKjqaBjyLtS7KY5NJ2O2coNaEO
-mFddumon2TjWhcztM00lP/E8ziSoTCRDMeje0//4bu1BBZNwjztyhg+pduNh7zNf
-QlecO+VQ2Qkee7j+pIK2bN1jo7cJptMdLfmWD/MukKnI9hYa/unmWGSTWZgRQyTs
-n9hYMjJTXQc/wM58qJvy8mkTOsfUmg==
-=5aQX
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRwVAIACgkQeFA3/03a
+ocW3CAgAm3wqiIWku6MbT4ThESmZlC+pfXUFhQB6EBKkUF0/X2kvjLfjx4fHP9Y9
+QOzu4Ig2tfYZ6BcRpsmNY595Z8MCKjFoX6MNft0DKYrft2ntlIOiuYNnYn22dcKa
+OF+bia+59rOF3ZxeHEaAIuG92QK4UjAPx+uGicOFBsYqdtJlX2NYyfDS3OZoq0dc
+F2VHzAJ/HFX7Qyyw/eFr4+ykXG5taDycA5YmRMqSgycgG/crg5z9e9J1GmPOfTK1
+htTdV2qURTz4WFefotfm4mZaE2oTwgn4W7yiz6Lcz6Zw79V5Oz/Z4aRyAUfYK1mW
+p9IsxXeeTscvpnAuNIBf+wY9XAx1fA==
+=tTx4
 -----END PGP SIGNATURE-----
 
---+4Ol/5oJ1HP2706K--
+--o9c5bgYMrd+9nbej--
