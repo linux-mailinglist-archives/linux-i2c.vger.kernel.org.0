@@ -2,61 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E33B7127E4
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 May 2023 15:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB83B712DCA
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 May 2023 21:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237366AbjEZN6t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 26 May 2023 09:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        id S236628AbjEZToZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 May 2023 15:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbjEZN6s (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 May 2023 09:58:48 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8411B3;
-        Fri, 26 May 2023 06:58:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685109509; x=1716645509;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GwHThv/yL2ivyUjNaPV/IaAVSIfXPS4jo26+PvVxzeM=;
-  b=IqD/9lOMs3QvCKVdCMo0SRKE1oOXLuk4YlC9juszrrQ1MwpkruJtg8V9
-   rwQTMu0fA5jkmdUaETDnpOUfbuPlAs8S6tTKiDvERXLArEn2LV04dmG8N
-   afHneI870UebSUZeGqzCd0otTbr49X3voAEC5Mi6nTcj+yTBZTs6svcvs
-   g68x9d2NWb1kt8UWpu1zKabt9tX9CyIF2A9O4+Sh6DdXTPyb9haq5BnlC
-   X3ZcZLrPHpIiaciOjwvZTcZGCKQV82drEzwvRLggwKGY0ny8RHmNJbWHN
-   b7ovMERsU6TOq8dZ3YMz3Ppwk96DaPpMU+CFHB85YKzRnxztVuzmjISU6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="419962233"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="419962233"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 06:58:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="817542977"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="817542977"
-Received: from mylly.fi.intel.com (HELO [10.237.72.143]) ([10.237.72.143])
-  by fmsmga002.fm.intel.com with ESMTP; 26 May 2023 06:58:27 -0700
-Message-ID: <f9a38ff8-ca08-a9aa-e2ff-ce2ce956235a@linux.intel.com>
-Date:   Fri, 26 May 2023 16:58:26 +0300
+        with ESMTP id S230322AbjEZToX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 May 2023 15:44:23 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4516BD;
+        Fri, 26 May 2023 12:44:22 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-75b076babc3so76298885a.3;
+        Fri, 26 May 2023 12:44:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685130262; x=1687722262;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AfNLNTpmaXslWadDEZ7wQJQB6lSbfqDgJMJHU7b+JOc=;
+        b=XfKcfVFUG8ql8usk72UncrPw3a0E7ubvh9HSFlE1XRnAt4KPI63d2BNCHeLkR82EJ7
+         nNbs74oU8tE0UZCNOaU62RLrxt10TJ1/eO72CFqvR4BAW52iUQrI2oi/gQhmYRJnvsDX
+         pXuVSuunMo3p/+EcnQrijAQIlTQkn9Z6BhjanBnqWER9jJf6wEyc9brLnS2Hu7LP6fQ4
+         UWhTwC0LbXql/ZLiygrGtFY2+gCQ7doLPiZSBt4hm9r4RMZdot33qzdMAoXfouTtXnxV
+         cnAvQfxxIVzR/UJY7AXiPSGEuycNjWuzm0u/VdIEzlHKfK+3HNItX4u3pdSwr0XvEWYn
+         5rXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685130262; x=1687722262;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AfNLNTpmaXslWadDEZ7wQJQB6lSbfqDgJMJHU7b+JOc=;
+        b=EDhTmL5plqRkxoS4Ysv+zvVOCbLigWAT6vffGX3okrIxu95kJZeZV9M1BuTsNGCdaF
+         lzeI5FdW23JPoGN+ctOeT7RQHX8LECiVXiG2q/z60d0Hg2sdsfzYkeS7JtloQ9EiLabi
+         /bX1/Y6hNg0MLltK1wIbnxgh8dlrKqUt2qZmlAP4uKVv8bZ6APeERT7XZWaLr1AedfhE
+         mj8uk6U2DtnWYU1LFrD6FlRy5SZFyv9uowVFkEas66XbAmgip45IvTQsFonMPjQNFXan
+         5CN8ZnD3gmqGf9F418XK3jlynZRJomiS/T/hr1fbJFV79XnCH4fLWgNEQ+He2S/3jSIl
+         FCqQ==
+X-Gm-Message-State: AC+VfDz7N19xyAdEF6DWDrcOHtRWrDYoyEofWbTdysTGKX0hsdlroKHp
+        wB9ektJug6ZA1Ws3d4LywyBYdNzi3HERPzKaRBU=
+X-Google-Smtp-Source: ACHHUZ6ZEcPFd97gH97yiv6TcVcYAm0nDF45Vtg9uJsoHjKrP3lFJbewpSlGDQTslUSPDWj9D5OMlqFOTMCejch+IXc=
+X-Received: by 2002:ad4:5aa2:0:b0:625:76bb:b25e with SMTP id
+ u2-20020ad45aa2000000b0062576bbb25emr3549508qvg.20.1685130261616; Fri, 26 May
+ 2023 12:44:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH v3] i2c: designware: fix idx_write_cnt in read loop
-Content-Language: en-US
-To:     David Zheng <david.zheng@intel.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com
-References: <ZG5UI7cJvmLXvtLg@davidzhe-DESK>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <ZG5UI7cJvmLXvtLg@davidzhe-DESK>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230525152203.32190-1-Jonathan.Cameron@huawei.com> <20230525152203.32190-2-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20230525152203.32190-2-Jonathan.Cameron@huawei.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 26 May 2023 22:43:45 +0300
+Message-ID: <CAHp75VfUeGsOJP=oRw9HeA-LtBXvDwt=S7GUbAa2L4FfLfm3tQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/6] i2c: acpi: set slave mode flag
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Niyas Sait <niyas.sait@linaro.org>,
+        Klaus Jensen <its@irrelevant.dk>,
+        Andy Shevchenko <andy@kernel.org>, linux-acpi@vger.kernel.org,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Shesha Bhushan Sreenivasamurthy <sheshas@marvell.com>,
+        linux-cxl@vger.kernel.org, linuxarm@huawei.com,
+        "Viacheslav A . Dubeyko" <viacheslav.dubeyko@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,93 +75,46 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 5/24/23 21:14, David Zheng wrote:
-> With IC_INTR_RX_FULL slave interrupt handler reads data in a loop until
-> RX FIFO is empty. When testing with the slave-eeprom, each transaction
-> has 2 bytes for address/index and 1 byte for value, the address byte
-> can be written as data byte due to dropping STOP condition.
-> 
-> In the test below, the master continuously writes to the slave, first 2
-> bytes are index, 3rd byte is value and follow by a STOP condition.
-> 
->   i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D1-D1]
->   i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D2-D2]
->   i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D3-D3]
-> 
-> Upon receiving STOP condition slave eeprom would reset `idx_write_cnt` so
-> next 2 bytes can be treated as buffer index for upcoming transaction.
-> Supposedly the slave eeprom buffer would be written as
-> 
->   EEPROM[0x00D1] = 0xD1
->   EEPROM[0x00D2] = 0xD2
->   EEPROM[0x00D3] = 0xD3
-> 
-> When CPU load is high the slave irq handler may not read fast enough,
-> the interrupt status can be seen as 0x204 with both DW_IC_INTR_STOP_DET
-> (0x200) and DW_IC_INTR_RX_FULL (0x4) bits. The slave device may see
-> the transactions below.
-> 
->   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
->   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
->   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
->   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1794 : INTR_STAT=0x204
->   0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x1790 : INTR_STAT=0x200
->   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
->   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
->   0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
-> 
-> After `D1` is received, read loop continues to read `00` which is the
-> first bype of next index. Since STOP condition is ignored by the loop,
-> eeprom buffer index increased to `D2` and `00` is written as value.
-> 
-> So the slave eeprom buffer becomes
-> 
->   EEPROM[0x00D1] = 0xD1
->   EEPROM[0x00D2] = 0x00
->   EEPROM[0x00D3] = 0xD3
-> 
-> The fix is to use `FIRST_DATA_BYTE` (bit 11) in `IC_DATA_CMD` to split
-> the transactions. The first index byte in this case would have bit 11
-> set. Check this indication to inject I2C_SLAVE_WRITE_REQUESTED event
-> which will reset `idx_write_cnt` in slave eeprom.
-> 
-> Signed-off-by: David Zheng <david.zheng@intel.com>
-> ---
-> Changes in v2:
->   - Send I2C_SLAVE_WRITE_REQUESTED for HW does not have FIRST_DATA_BYTE
-> Changes in v3:
->   - Move DW_IC_DATA_CMD_FIRST_DATA_BYTE next to DW_IC_DATA_CMD_DAT define
-> ---
->   drivers/i2c/busses/i2c-designware-core.h  | 1 +
->   drivers/i2c/busses/i2c-designware-slave.c | 4 ++++
->   2 files changed, 5 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-> index c5d87aae39c6..bf23bfb51aea 100644
-> --- a/drivers/i2c/busses/i2c-designware-core.h
-> +++ b/drivers/i2c/busses/i2c-designware-core.h
-> @@ -40,6 +40,7 @@
->   #define DW_IC_CON_BUS_CLEAR_CTRL		BIT(11)
->   
->   #define DW_IC_DATA_CMD_DAT			GENMASK(7, 0)
-> +#define DW_IC_DATA_CMD_FIRST_DATA_BYTE		BIT(11)
->   
->   /*
->    * Registers offset
-> diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
-> index cec25054bb24..2e079cf20bb5 100644
-> --- a/drivers/i2c/busses/i2c-designware-slave.c
-> +++ b/drivers/i2c/busses/i2c-designware-slave.c
-> @@ -176,6 +176,10 @@ static irqreturn_t i2c_dw_isr_slave(int this_irq, void *dev_id)
->   
->   		do {
->   			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
-> +			if (tmp & DW_IC_DATA_CMD_FIRST_DATA_BYTE)
-> +				i2c_slave_event(dev->slave,
-> +						I2C_SLAVE_WRITE_REQUESTED,
-> +						&val);
->   			val = tmp;
->   			i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED,
->   					&val);
+On Thu, May 25, 2023 at 6:22=E2=80=AFPM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> If the GenericSerialBusConnection includes the General Flag
+> for slave mode set it during parsing.
 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Since it's obvious that you are using the existing ACPI specification
+bits, it's a nice patch!
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+Nevertheless the remark is that most likely this feature was never
+tested on the ACPI implementations other than ACPICA (evidently by
+you). Would it be interesting to know Microsoft's point of view on
+this.
+
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+>  drivers/i2c/i2c-core-acpi.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
+> index d6037a328669..7dda5eab9645 100644
+> --- a/drivers/i2c/i2c-core-acpi.c
+> +++ b/drivers/i2c/i2c-core-acpi.c
+> @@ -125,6 +125,9 @@ static int i2c_acpi_fill_info(struct acpi_resource *a=
+res, void *data)
+>         if (sb->access_mode =3D=3D ACPI_I2C_10BIT_MODE)
+>                 info->flags |=3D I2C_CLIENT_TEN;
+>
+> +       if (sb->slave_mode)
+> +               info->flags |=3D I2C_CLIENT_SLAVE;
+> +
+>         return 1;
+>  }
+>
+> --
+> 2.39.2
+>
+
+
+--=20
+With Best Regards,
+Andy Shevchenko
