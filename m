@@ -2,53 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D34F712011
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 May 2023 08:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E53DB712018
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 May 2023 08:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241569AbjEZGfs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 26 May 2023 02:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
+        id S236681AbjEZGgd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 26 May 2023 02:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjEZGfr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 May 2023 02:35:47 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A5C12E;
-        Thu, 25 May 2023 23:35:44 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f4b256a0c9so330023e87.2;
-        Thu, 25 May 2023 23:35:44 -0700 (PDT)
+        with ESMTP id S236328AbjEZGgc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 26 May 2023 02:36:32 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466DF12E;
+        Thu, 25 May 2023 23:36:29 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4eed764a10cso346745e87.0;
+        Thu, 25 May 2023 23:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685082943; x=1687674943;
+        d=gmail.com; s=20221208; t=1685082987; x=1687674987;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cAIWAVxuFetjJrrCyLkzZqPv0PDDDlU03pSzLI8bStI=;
-        b=KxLR7HhkToIa5w9ZUoeLebvrRtTscYrXQvjH51a6aqQQIv/U4/P/ll2ivg3KNhai0X
-         se9u67YaW86IKQJnDnLFmqGwaErx/BTEjJdo88RyFnFrws85sWUGzqqG0lm5eBFSrULu
-         PZEHZOYKQu4dPje9vjVBNo+aR8lbnwt2U71aH/rFRctXC3u0zt4JEaE9+wVoHCfzhc3R
-         zFC/dAeGjOHnGLibwG86PXjg3zNRphwdezIN4fe/OZ0hQE3pByDjoVEGsKl4DgysA3Z4
-         tPoXiylXe5c9da0pAGLohe3ay/eOY9nMk+0mOqDoApeHeHqJ0eiJfhuI5dydZkTHCMqO
-         aQAw==
+        bh=ibHKBwm98vUEtm+6oAfn7y9WF5igvmXGkvEzcD82yTg=;
+        b=QFcrXmc1tI3PjA4ZyAn7pd37Ak2J3/PkBeGJ+U+ma2YDn79vzGar15Lb3UbTMSxX1s
+         aCBXbzPS36K0IEeIQnz/j9SFAbivJHwCXdPpmB0WBmgl3JlwkVXPFPtzmDaY4FFM3LqU
+         DxpNQEOwP8Gvg8zfdIRaB0tJd8YuCh+9Vhe7dsRGk8S2/Hg9szZuyY6EYH/1HYC8eiZV
+         xlT1HcHnilEVAdxRSrazc7jlvPF8IuRraZbxvx11DZDH6kUUfNd00zNMCTPpD6fZXBXM
+         cW3p1Eym2cSRuCVmXQ+pFdaaYCjQhbvWeB+vsGMYTtjM60b672wAHE6DVcZtyE6JGrgg
+         yyrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685082943; x=1687674943;
+        d=1e100.net; s=20221208; t=1685082987; x=1687674987;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cAIWAVxuFetjJrrCyLkzZqPv0PDDDlU03pSzLI8bStI=;
-        b=hyMTh8sKnRICOqOQSk8Kpwqwtng9/OfkhwyekkExD7et646IXveReRwzXUqBbHx4Ox
-         OCTABG03Rvm9ZzNcja7OSdB3lsNbToM5nYiRtITHIE2ObXtEC8I8WPqHhebGpflN1Qp5
-         2Sa1HxGQwC0iU5Qz2tnlQiuHL3tp8LBdMmAGQpzT915xnnxCas7bh4Xyr2XGxrVgFinJ
-         i8gRv+1ldOQ7eS4gx5mRUJen7WdpmB/giGuGbRWMtbfJkYeg+fNuQyNozEvWqTiBEJkp
-         BP8gsL58r66UNwat2gFPdF+f47Ap15gogsgcgGtz0HAGqpoYOjjj8axW1QR8Q6MXawGU
-         FBwQ==
-X-Gm-Message-State: AC+VfDzYPz176MrwutALXBHpAVQoKW01P1nqIi1KGjWaEYswhHbfplRb
-        DcAAmiaF73zt+t8c4nBV0/4=
-X-Google-Smtp-Source: ACHHUZ6HZepBt7ammknEbdGsV8Qlb/uNlO/ttwYaQ9PJi60bot/xBl45aYSe7ERRZ/kwxZvicu9soQ==
-X-Received: by 2002:ac2:46e5:0:b0:4f3:8143:765 with SMTP id q5-20020ac246e5000000b004f381430765mr240488lfo.27.1685082942778;
-        Thu, 25 May 2023 23:35:42 -0700 (PDT)
+        bh=ibHKBwm98vUEtm+6oAfn7y9WF5igvmXGkvEzcD82yTg=;
+        b=X9mD5KVcCGKBMOqdOXIbFdqBGF2Q7VFRihzRElfRcf+WOrEAIEdX2QTO60bHm+oFqD
+         8X4dJVW2Vo8erSP/SVScG9Sbwztc4HK7NP45kD4u5LZIYCi9l6HO2r3LUY+4DQl1tkxV
+         0NZkRYZGylOVJSEa1E60PTv+xSxsV+okidPOHOkLYGvqvSplJS0/LY1hYsVlZO4dugHe
+         kHRZoTb0R6j97f0LMO5YPplIMpFZZqrIo7zC8Vjg35QcihMr3T1OaqcvhLbB6PaGHrzj
+         if9pZc5wAEjWRVhpONJ785EIoFj4qgqjTNIwEwdBE9NMpYpAiGIVdCSQ03osKsWJCLd6
+         lQtQ==
+X-Gm-Message-State: AC+VfDztmhyRI6ggLxiV7I7rDrTY/ApaPV6l5oe1uT11NQwTBjAaLErY
+        +63iEv3NL0EVwxePmXOSF1o=
+X-Google-Smtp-Source: ACHHUZ6O+oj6UcceXRsZij+c0/OW154pLRpmpDX3QwmlOmJe/QhpMwKwIZUsm1H4wbSJBdNi05DZ4w==
+X-Received: by 2002:ac2:54b2:0:b0:4f2:6817:2379 with SMTP id w18-20020ac254b2000000b004f268172379mr192487lfk.23.1685082987373;
+        Thu, 25 May 2023 23:36:27 -0700 (PDT)
 Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id w17-20020ac254b1000000b004f4b2aa6f66sm487671lfk.295.2023.05.25.23.35.41
+        by smtp.gmail.com with ESMTPSA id u22-20020ac243d6000000b004edc7f6ee44sm480279lfl.234.2023.05.25.23.36.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 23:35:42 -0700 (PDT)
-Date:   Fri, 26 May 2023 09:35:30 +0300
+        Thu, 25 May 2023 23:36:26 -0700 (PDT)
+Date:   Fri, 26 May 2023 09:36:15 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
@@ -77,12 +77,12 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-iio@vger.kernel.org, netdev@vger.kernel.org,
         openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: [PATCH v6 1/8] drivers: fwnode: fix fwnode_irq_get[_byname]()
-Message-ID: <f457a106929e37638a87775d8d72adaff0f85cb6.1685082026.git.mazziesaccount@gmail.com>
+Subject: [PATCH v6 2/8] iio: mb1232: relax return value check for IRQ get
+Message-ID: <fce954e3d427bc94be4c8b52a4fb55b6fa4d2e5d.1685082026.git.mazziesaccount@gmail.com>
 References: <cover.1685082026.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MpNVpml8SzZtmtjR"
+        protocol="application/pgp-signature"; boundary="/+3qr3fLL7Q81NGw"
 Content-Disposition: inline
 In-Reply-To: <cover.1685082026.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -96,79 +96,57 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---MpNVpml8SzZtmtjR
+--/+3qr3fLL7Q81NGw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-The fwnode_irq_get() and the fwnode_irq_get_byname() return 0 upon
-device-tree IRQ mapping failure. This is contradicting the
-fwnode_irq_get_byname() function documentation and can potentially be a
-source of errors like:
+fwnode_irq_get() was changed to not return 0 anymore.
 
-int probe(...) {
-	...
+Drop check for return value 0.
 
-	irq =3D fwnode_irq_get_byname();
-	if (irq <=3D 0)
-		return irq;
-
-	...
-}
-
-Here we do correctly check the return value from fwnode_irq_get_byname()
-but the driver probe will now return success. (There was already one
-such user in-tree).
-
-Change the fwnode_irq_get_byname() to work as documented and make also the
-fwnode_irq_get() follow same common convention returning a negative errno
-upon failure.
-
-Fixes: ca0acb511c21 ("device property: Add fwnode_irq_get_byname")
-Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Suggested-by: Jonathan Cameron <jic23@kernel.org>
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
 ---
-I dropped the existing reviewed-by tags because change to
-fwnode_irq_get() was added.
+Revsion history:
+v5 =3D>:
+- No changes
+v4 =3D> v5:
+ - drop unnecessary data->irqnr =3D -1 assignment
 
-Revision history:
-v4 =3D>:
- - No Changes
-v3 =3D> v4:
- - Change also the fwnode_irq_get()
+The first patch of the series changes the fwnode_irq_get() so this depends
+on the first patch of the series and should not be applied alone.
 ---
- drivers/base/property.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/iio/proximity/mb1232.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/base/property.c b/drivers/base/property.c
-index f6117ec9805c..8c40abed7852 100644
---- a/drivers/base/property.c
-+++ b/drivers/base/property.c
-@@ -987,12 +987,18 @@ EXPORT_SYMBOL(fwnode_iomap);
-  * @fwnode:	Pointer to the firmware node
-  * @index:	Zero-based index of the IRQ
-  *
-- * Return: Linux IRQ number on success. Other values are determined
-- * according to acpi_irq_get() or of_irq_get() operation.
-+ * Return: Linux IRQ number on success. Negative errno on failure.
-  */
- int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index)
- {
--	return fwnode_call_int_op(fwnode, irq_get, index);
-+	int ret;
-+
-+	ret =3D fwnode_call_int_op(fwnode, irq_get, index);
-+	/* We treat mapping errors as invalid case */
-+	if (ret =3D=3D 0)
-+		return -EINVAL;
-+
-+	return ret;
- }
- EXPORT_SYMBOL(fwnode_irq_get);
+diff --git a/drivers/iio/proximity/mb1232.c b/drivers/iio/proximity/mb1232.c
+index e70cac8240af..3ae226297a00 100644
+--- a/drivers/iio/proximity/mb1232.c
++++ b/drivers/iio/proximity/mb1232.c
+@@ -76,7 +76,7 @@ static s16 mb1232_read_distance(struct mb1232_data *data)
+ 		goto error_unlock;
+ 	}
 =20
+-	if (data->irqnr >=3D 0) {
++	if (data->irqnr > 0) {
+ 		/* it cannot take more than 100 ms */
+ 		ret =3D wait_for_completion_killable_timeout(&data->ranging,
+ 									HZ/10);
+@@ -212,10 +212,7 @@ static int mb1232_probe(struct i2c_client *client)
+ 	init_completion(&data->ranging);
+=20
+ 	data->irqnr =3D fwnode_irq_get(dev_fwnode(&client->dev), 0);
+-	if (data->irqnr <=3D 0) {
+-		/* usage of interrupt is optional */
+-		data->irqnr =3D -1;
+-	} else {
++	if (data->irqnr > 0) {
+ 		ret =3D devm_request_irq(dev, data->irqnr, mb1232_handle_irq,
+ 				IRQF_TRIGGER_FALLING, id->name, indio_dev);
+ 		if (ret < 0) {
 --=20
 2.40.1
 
@@ -185,19 +163,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---MpNVpml8SzZtmtjR
+--/+3qr3fLL7Q81NGw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRwUzIACgkQeFA3/03a
-ocWl3Qf8CNu2jLOOzjzDhnSm2xnKHRAK7eRA54Otr1t/U8jJnk2gvcCavb7O8t7C
-YnkPPeyB2ZbSfZF5rHXHVRT9rF6gPMaO1oCGUYOnio3ORsFQWmj8veEdR0H9yGsr
-Enhdoe3n6ovgylnyoAfFezf/w46tUhYTlWbppxSkqaMjkpbVWfpIbxQvnkqBrIR+
-9E+Nzjrx22zR6+uDNY1nq6LDy/0fNe2UTNPwrQSPrlDnh/8CToauRF5CsbQVK8jE
-LEfRPOhSQm77o2ZSY7wFNJ0anULJWpZu28oqyy5Oy3YCtPPxcsXqbmuAN9GnQktj
-1BlOfxKCVtxUKiGEOgcEkwFmzznJwQ==
-=+cis
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRwU18ACgkQeFA3/03a
+ocVmyQf+NK1laLHO4rBaZyM3i1ZZWNS4IdGmlbloDvSboApdPxM/wPyyl/y7Xp4l
+ZruWMZZbrNySOkEU6Y7dQP1zntVU4smH0XVuKjQ+H/bSZ+UXFe+/fOjHmMHXrbKv
+uwO1C18ieVYZ49fHsEENkok4w38KacgDqR4IMy3RbWZiP2TKGuUi/8nyh23p8/dn
+cTCpYi6a6/9//ql/fkqsei2kAWmgtjfCTx/owl6ax9AMo5IMZkdujBvygsfP55LZ
+jAa6kggV848Kh1YJeDCk5nz0iZFMmgCtU0kDiMZZyq6XOuCv7nf1HTenRtBdJfHC
+DODfTe29bDrbyXkbxBx+aHDKM/635Q==
+=NT01
 -----END PGP SIGNATURE-----
 
---MpNVpml8SzZtmtjR--
+--/+3qr3fLL7Q81NGw--
