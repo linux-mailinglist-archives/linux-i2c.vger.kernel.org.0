@@ -2,36 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A07713AAA
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 May 2023 18:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6AD713ACE
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 May 2023 18:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjE1Qst (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 28 May 2023 12:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59050 "EHLO
+        id S229636AbjE1QxB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 28 May 2023 12:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjE1Qss (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 May 2023 12:48:48 -0400
+        with ESMTP id S229457AbjE1QxA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 May 2023 12:53:00 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB80C7;
-        Sun, 28 May 2023 09:48:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DE0A4;
+        Sun, 28 May 2023 09:52:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CA7760FB4;
-        Sun, 28 May 2023 16:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8C65C433D2;
-        Sun, 28 May 2023 16:48:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6987617CF;
+        Sun, 28 May 2023 16:52:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31091C4339C;
+        Sun, 28 May 2023 16:52:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685292525;
-        bh=2/Xdzz0f6dHRULVAbV2CIXRJaSLW15lBmvFfiihjXKI=;
+        s=k20201202; t=1685292778;
+        bh=6jBv9EQ5KlhNuW31yKlvrcZi5bUWsf/LRvMi5CHoiXU=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tLWwWYcxzOj9hAqkBMAboJHJD2284sMen1uDmzR6YPQBB/U8HezzseSt2SU7kDoTq
-         uOUFEx7r/BJlI0Aly6K0if4JpXqNw1VtlNaRhE9ysgPjDeoRqSWJexmX7+rqLtGAcx
-         VQHBA+5mxvG1FGEvV5OJ1EnF42iusIdQijSpIaKk4d72RC9tdMXAiRQrtxruWRiB3d
-         LaJilwrPTFNmc+5WL0/7aVxU1fPPg/d1p13rEnVSC3sqo0u8ObbhVO+VUgcRgNVQPz
-         PpwU5kfLXFTOv26CpaaPdWQaBI1XEP2Ly7RPp4dfAHnGixz6y4ez85wJbBCh4bLMhQ
-         GaUFmQu3jZyJg==
-Date:   Sun, 28 May 2023 18:05:01 +0100
+        b=VJ8g/zHWPYXw+S0eqeDnxPNxS0xOVgaBdxj2w9sSfeqkeitzhpd36Kv7pQHZAcq+h
+         pFksfue84kTUydLxY+VgPpCeIJ2teUM1ouUWWNMom3XaCxOKaEt8OsBFK5680j1n2o
+         kFDAE7FsC94GZRI0wQIZBNf6KQDUEl/spEGFiuqx8gZQ2MY0FKOQKoRwGUbCXjZl+V
+         oiOE9kBu87CJzV0v6QLxWqxVFz//0RepGcEtKBlUljMktEL/H7SavzCLrYiB/E2S3N
+         rhpXUI4sP21pS8drxwTO3qb0Jr//owAj3hogN2gGumnmLCV9/RmxEmW/sCU3vmB9IU
+         lGSTNYkTFXEcQ==
+Date:   Sun, 28 May 2023 18:09:13 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>
 Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
@@ -59,12 +59,12 @@ Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         linux-iio@vger.kernel.org, netdev@vger.kernel.org,
         openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: Re: [PATCH v6 7/8] iio: cdc: ad7150: relax return value check for
- IRQ get
-Message-ID: <20230528180501.4cb28a76@jic23-huawei>
-In-Reply-To: <6de4448e9fe46d706bdeddb71ba6923d89ea8f4d.1685082026.git.mazziesaccount@gmail.com>
+Subject: Re: [PATCH v6 8/8] i2c: i2c-smbus: fwnode_irq_get_byname() return
+ value fix
+Message-ID: <20230528180913.21493d80@jic23-huawei>
+In-Reply-To: <1c77cca2bb4a61133ebfc6833516981c98fb48b4.1685082026.git.mazziesaccount@gmail.com>
 References: <cover.1685082026.git.mazziesaccount@gmail.com>
-        <6de4448e9fe46d706bdeddb71ba6923d89ea8f4d.1685082026.git.mazziesaccount@gmail.com>
+        <1c77cca2bb4a61133ebfc6833516981c98fb48b4.1685082026.git.mazziesaccount@gmail.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -79,89 +79,61 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 26 May 2023 09:39:14 +0300
+On Fri, 26 May 2023 09:39:37 +0300
 Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-> fwnode_irq_get[_byname]() were changed to not return 0 anymore. The
-> special error case where device-tree based IRQ mapping fails can't no
-> longer be reliably detected from this return value. This yields a
-> functional change in the driver where the mapping failure is treated as
-> an error.
+> The fwnode_irq_get_byname() was changed to not return 0 upon failure so
+> return value check can be adjusted to reflect the change.
 > 
-> The mapping failure can occur for example when the device-tree IRQ
-> information translation call-back(s) (xlate) fail, IRQ domain is not
-> found, IRQ type conflicts, etc. In most cases this indicates an error in
-> the device-tree and special handling is not really required.
-> 
-> One more thing to note is that ACPI APIs do not return zero for any
-> failures so this special handling did only apply on device-tree based
-> systems.
-> 
-> Drop the special handling for DT mapping failures as these can no longer
-> be separated from other errors at driver side. Change all failures in
-> IRQ getting to be handled by continuing without the events instead of
-> aborting the probe upon certain errors.
-> 
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
-I think this is the best we can do, though ideally I'd like to have
-seen errors due to not being provided by firmware passed through and
-firmware bug issues (where it provides an irq we can't get for some reason
-shouted about - with the driver failing to probe.)
-
-Still, it's an improvement and for some FW old code wouldn't have
-done this either. Hence let's go with this approach.
+> 
 
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-> 
+Comments follow though...
 > ---
 > Revision history:
-> v5 => v6:
->  - Never abort the probe when IRQ getting fails but continue without
->    events.
+> v5 =>:
+>  - No changes
+> v4 => v5:
+>  - Added back after this was accidentally dropped at v4.
 > 
-> Please note that I don't have the hardware to test this change.
-> Furthermore, testing this type of device-tree error cases is not
-> trivial, as the question we probably dive in is "what happens with the
-> existing users who have errors in the device-tree". Answering to this
-> question is not simple.
+> Depends on the mentioned return value change which is in patch 1/2. The
+
+1/8?  Or just use 1/N and you never have to update it.
+
+> return value change does also cause a functional change here. Eg. when
+> IRQ mapping fails, the fwnode_irq_get_byname() no longer returns zero.
+> This will cause also the probe here to return nonzero failure. I guess
+> this is desired behaviour - but I would appreciate any confirmation.
 > 
-> The first patch of the series changes the fwnode_irq_get() so this depends
-> on the first patch of the series and should not be applied alone.
+> Please, see also previous discussion here:
+> https://lore.kernel.org/all/fbd52f5f5253b382b8d7b3e8046134de29f965b8.1666710197.git.mazziesaccount@gmail.com/
+> 
+> Another suggestion has been to drop the check altogether. I am slightly
+> reluctant on doing that unless it gets confirmed that is the "right
+> thing to do".
+
+I'd be more inclined to also fail in the setup->irq < 0 path and drop the later check
+on basis I can't see the driver doing anything useful wtihout an interrupt.
+
 > ---
->  drivers/iio/cdc/ad7150.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  drivers/i2c/i2c-smbus.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/iio/cdc/ad7150.c b/drivers/iio/cdc/ad7150.c
-> index 79aeb0aaea67..c05e078bba16 100644
-> --- a/drivers/iio/cdc/ad7150.c
-> +++ b/drivers/iio/cdc/ad7150.c
-> @@ -541,6 +541,7 @@ static int ad7150_probe(struct i2c_client *client)
->  	const struct i2c_device_id *id = i2c_client_get_device_id(client);
->  	struct ad7150_chip_info *chip;
->  	struct iio_dev *indio_dev;
-> +	bool use_irq = true;
->  	int ret;
->  
->  	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*chip));
-> @@ -561,14 +562,13 @@ static int ad7150_probe(struct i2c_client *client)
->  
->  	chip->interrupts[0] = fwnode_irq_get(dev_fwnode(&client->dev), 0);
->  	if (chip->interrupts[0] < 0)
-> -		return chip->interrupts[0];
-> -	if (id->driver_data == AD7150) {
-> +		use_irq = false;
-> +	else if (id->driver_data == AD7150) {
->  		chip->interrupts[1] = fwnode_irq_get(dev_fwnode(&client->dev), 1);
->  		if (chip->interrupts[1] < 0)
-> -			return chip->interrupts[1];
-> +			use_irq = false;
+> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
+> index 138c3f5e0093..893fe7cd3e41 100644
+> --- a/drivers/i2c/i2c-smbus.c
+> +++ b/drivers/i2c/i2c-smbus.c
+> @@ -129,7 +129,7 @@ static int smbalert_probe(struct i2c_client *ara)
+>  	} else {
+>  		irq = fwnode_irq_get_byname(dev_fwnode(adapter->dev.parent),
+>  					    "smbus_alert");
+> -		if (irq <= 0)
+> +		if (irq < 0)
+>  			return irq;
 >  	}
-> -	if (chip->interrupts[0] &&
-> -	    (id->driver_data == AD7151 || chip->interrupts[1])) {
-> +	if (use_irq) {
->  		irq_set_status_flags(chip->interrupts[0], IRQ_NOAUTOEN);
->  		ret = devm_request_threaded_irq(&client->dev,
->  						chip->interrupts[0],
+>  
 
