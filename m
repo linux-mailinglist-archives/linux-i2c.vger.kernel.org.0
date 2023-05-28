@@ -2,36 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6AD713ACE
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 May 2023 18:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2550D713ADC
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 May 2023 18:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjE1QxB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 28 May 2023 12:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
+        id S229744AbjE1Q4Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 28 May 2023 12:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjE1QxA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 May 2023 12:53:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DE0A4;
-        Sun, 28 May 2023 09:52:59 -0700 (PDT)
+        with ESMTP id S229738AbjE1Q4X (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 28 May 2023 12:56:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C4DBE;
+        Sun, 28 May 2023 09:56:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6987617CF;
-        Sun, 28 May 2023 16:52:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31091C4339C;
-        Sun, 28 May 2023 16:52:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 340B3617CE;
+        Sun, 28 May 2023 16:56:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EFF4C433EF;
+        Sun, 28 May 2023 16:56:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685292778;
-        bh=6jBv9EQ5KlhNuW31yKlvrcZi5bUWsf/LRvMi5CHoiXU=;
+        s=k20201202; t=1685292981;
+        bh=ueGDUdIeFC8AHXZQLlvav2knW6JGEKxFPJUhzpfVMiE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VJ8g/zHWPYXw+S0eqeDnxPNxS0xOVgaBdxj2w9sSfeqkeitzhpd36Kv7pQHZAcq+h
-         pFksfue84kTUydLxY+VgPpCeIJ2teUM1ouUWWNMom3XaCxOKaEt8OsBFK5680j1n2o
-         kFDAE7FsC94GZRI0wQIZBNf6KQDUEl/spEGFiuqx8gZQ2MY0FKOQKoRwGUbCXjZl+V
-         oiOE9kBu87CJzV0v6QLxWqxVFz//0RepGcEtKBlUljMktEL/H7SavzCLrYiB/E2S3N
-         rhpXUI4sP21pS8drxwTO3qb0Jr//owAj3hogN2gGumnmLCV9/RmxEmW/sCU3vmB9IU
-         lGSTNYkTFXEcQ==
-Date:   Sun, 28 May 2023 18:09:13 +0100
+        b=O2VgmX3NqDU6FDQv1qfNmkSIil1QyaOIm90W15IyaMF/S6AxlfLyuDD1K2FTZbN+Y
+         sbh/Vb1Oy93kUveqWRE2xFt2mmTvP0H59Kr1GZ1q9xfM2tDVP7EnsvllAq9xmUe85f
+         v2vGec/1yPvRCSdvAhIIM5+XvsY+5wTjFvVJH/2/86ISZcWua9Kx6etJxJ8LWZRA1K
+         ikdl5TEyC5lsRuk4NilIwnJYJgdDsk5rAtLa2wBXia2QCNAS1xhiWGnrMXPznrle6B
+         7MFUOI6+3HUOcAw9zmzyYwktXGCH3Ny3BTWUQe1vAza+pL7+4g2In3pVsIpBYxYfz+
+         wlEe8OI2U2Udw==
+Date:   Sun, 28 May 2023 18:12:37 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>
 Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
@@ -59,18 +59,18 @@ Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         linux-iio@vger.kernel.org, netdev@vger.kernel.org,
         openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: Re: [PATCH v6 8/8] i2c: i2c-smbus: fwnode_irq_get_byname() return
- value fix
-Message-ID: <20230528180913.21493d80@jic23-huawei>
-In-Reply-To: <1c77cca2bb4a61133ebfc6833516981c98fb48b4.1685082026.git.mazziesaccount@gmail.com>
+Subject: Re: [PATCH v6 6/8] pinctrl: pistachio: relax return value check for
+ IRQ get
+Message-ID: <20230528181237.5fc6f5d9@jic23-huawei>
+In-Reply-To: <9db9653eb33d345d305e918215216348a8f193da.1685082026.git.mazziesaccount@gmail.com>
 References: <cover.1685082026.git.mazziesaccount@gmail.com>
-        <1c77cca2bb4a61133ebfc6833516981c98fb48b4.1685082026.git.mazziesaccount@gmail.com>
+        <9db9653eb33d345d305e918215216348a8f193da.1685082026.git.mazziesaccount@gmail.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,61 +79,51 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 26 May 2023 09:39:37 +0300
+On Fri, 26 May 2023 09:38:58 +0300
 Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-> The fwnode_irq_get_byname() was changed to not return 0 upon failure so
-> return value check can be adjusted to reflect the change.
+> fwnode_irq_get[_byname]() were changed to not return 0 anymore.
 > 
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Drop check for return value 0.
+> 
 > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
 > 
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-Comments follow though...
 > ---
 > Revision history:
-> v5 =>:
 >  - No changes
-> v4 => v5:
->  - Added back after this was accidentally dropped at v4.
 > 
-> Depends on the mentioned return value change which is in patch 1/2. The
+> Please note, I took Linus' reply to v4 cover-letter as ack && added the
+> tag. Please let me know if this was not Ok.
 
-1/8?  Or just use 1/N and you never have to update it.
+Whilst I understand your point as Linus said he'd pick the patches up,
+I would have left it to Linus to Ack explicitly but added a note here
+to say he basically already did.
 
-> return value change does also cause a functional change here. Eg. when
-> IRQ mapping fails, the fwnode_irq_get_byname() no longer returns zero.
-> This will cause also the probe here to return nonzero failure. I guess
-> this is desired behaviour - but I would appreciate any confirmation.
+LGTM
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
-> Please, see also previous discussion here:
-> https://lore.kernel.org/all/fbd52f5f5253b382b8d7b3e8046134de29f965b8.1666710197.git.mazziesaccount@gmail.com/
-> 
-> Another suggestion has been to drop the check altogether. I am slightly
-> reluctant on doing that unless it gets confirmed that is the "right
-> thing to do".
-
-I'd be more inclined to also fail in the setup->irq < 0 path and drop the later check
-on basis I can't see the driver doing anything useful wtihout an interrupt.
-
+> The first patch of the series changes the fwnode_irq_get() so this depends
+> on the first patch of the series and should not be applied alone.
 > ---
->  drivers/i2c/i2c-smbus.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/pinctrl/pinctrl-pistachio.c | 6 ------
+>  1 file changed, 6 deletions(-)
 > 
-> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-> index 138c3f5e0093..893fe7cd3e41 100644
-> --- a/drivers/i2c/i2c-smbus.c
-> +++ b/drivers/i2c/i2c-smbus.c
-> @@ -129,7 +129,7 @@ static int smbalert_probe(struct i2c_client *ara)
->  	} else {
->  		irq = fwnode_irq_get_byname(dev_fwnode(adapter->dev.parent),
->  					    "smbus_alert");
-> -		if (irq <= 0)
-> +		if (irq < 0)
->  			return irq;
->  	}
+> diff --git a/drivers/pinctrl/pinctrl-pistachio.c b/drivers/pinctrl/pinctrl-pistachio.c
+> index 53408344927a..8c50e0091b32 100644
+> --- a/drivers/pinctrl/pinctrl-pistachio.c
+> +++ b/drivers/pinctrl/pinctrl-pistachio.c
+> @@ -1393,12 +1393,6 @@ static int pistachio_gpio_register(struct pistachio_pinctrl *pctl)
+>  			dev_err(pctl->dev, "Failed to retrieve IRQ for bank %u\n", i);
+>  			goto err;
+>  		}
+> -		if (!ret) {
+> -			fwnode_handle_put(child);
+> -			dev_err(pctl->dev, "No IRQ for bank %u\n", i);
+> -			ret = -EINVAL;
+> -			goto err;
+> -		}
+>  		irq = ret;
 >  
+>  		bank = &pctl->gpio_banks[i];
 
