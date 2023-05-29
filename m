@@ -2,769 +2,266 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889B071458B
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 May 2023 09:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEA271459F
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 May 2023 09:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjE2Hdp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 29 May 2023 03:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
+        id S230332AbjE2HkJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 29 May 2023 03:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjE2Hdo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 May 2023 03:33:44 -0400
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA76DBB
-        for <linux-i2c@vger.kernel.org>; Mon, 29 May 2023 00:31:55 -0700 (PDT)
-X-ASG-Debug-ID: 1685345508-086e23313500dd0001-PT6Irj
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id PSKVtMna3sxSuZSv (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 29 May 2023 15:31:48 +0800 (CST)
-X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 29 May
- 2023 15:31:48 +0800
-Received: from ml-HP-ProDesk-680-G4-MT.zhaoxin.com (10.28.66.68) by
- ZXBJMBX03.zhaoxin.com (10.29.252.7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 29 May 2023 15:31:47 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-From:   Hans Hu <hanshu-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.7
-To:     <jdelvare@suse.com>, <wsa@kernel.org>, <linux-i2c@vger.kernel.org>
-CC:     <cobechen@zhaoxin.com>, <TonyWWang@zhaoxin.com>
-Subject: [PATCH v2] i2c: add support for Zhaoxin I2C controller
-Date:   Mon, 29 May 2023 15:31:47 +0800
-X-ASG-Orig-Subj: [PATCH v2] i2c: add support for Zhaoxin I2C controller
-Message-ID: <20230529073147.12242-1-hanshu-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
+        with ESMTP id S229813AbjE2HkI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 29 May 2023 03:40:08 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2080.outbound.protection.outlook.com [40.107.8.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F1DA7;
+        Mon, 29 May 2023 00:40:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e4XbQrdQUWjQqrov1H5IkMZnSUkGizgZIy3IDIOIascFNDbyNNSTRN1BI0zDvLLdh84LeQGx06/529Tsq6mlpN8Tib3LsnImsxpZ3mymHHlgaU+pgDfmaMzRJHM7Ro8DmgES5j273Gp7rAFJpHq7VgqnfQn58fnsJYQq2RS35NVqtDa+fZ/6HckRKkjbYSOAht3lEwJzYWZRzJtNq+BknYffLsOinx35WKVAL4RGPau9qzMcCFRRwxpcF5xSsBS43vOEXVmwvWH8LgH6VrMYUJIP1u0ADuRHHFdZx5vCBSgZ/eixYrTXxdX7jMeZlTij8IATGQoDk0LbV/KUqSt+7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=55GmvbtwEJIV5MfwsMxAt2EkDxjDZF2R3rDlxcBtDYY=;
+ b=OtkmdLGey6/hThcF9T2MhDH/qIiMLGYuFF5vZFjZ1Bq6eSU61l/fXXIaNWDjJ3OP9btKz3N05PEXRceiMTd0yIuzhbpH7DQAiQSSspVHETJy/kNznmYErhDZGNQswXAA5HfACpp6SikVgUhtpzjXCcRPIS8ObFkzxHOk4xt6oaFgjxymkSPhHX2/45FiQ91G6k1a2i/P285/0DXVQ/eFCqk/SiKWl6yi53o+/EtD/om/zWQAHPOd0EXbVkwx7bKFG35zQl4zelIxk6npt+ZDIIfltMvhTWxGXUKO66juBJinfs9WqFUSZGu42GFbPEwLO5mkoA+6V2EmIO0GcMbyGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=55GmvbtwEJIV5MfwsMxAt2EkDxjDZF2R3rDlxcBtDYY=;
+ b=lhAwlY+bS3FcKkvEFbsDvMaN31NdLlhKc+dPMnBIW0cWTxvy9jutzUkx+TEVxyCxK4FaALTEiSMubxduRa+KAI/ujimaDQCbC7BWmCl/SLIt7CaV/p+cR4UiQmNsMbc+ltjTilpwjjforIBfDuB0lM4vdMFdNimik4CGq5pVtSs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
+ by GV1PR04MB9117.eurprd04.prod.outlook.com (2603:10a6:150:24::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.22; Mon, 29 May
+ 2023 07:40:02 +0000
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::c2d2:71f0:4080:dbb4]) by VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::c2d2:71f0:4080:dbb4%7]) with mapi id 15.20.6433.022; Mon, 29 May 2023
+ 07:40:02 +0000
+From:   carlos.song@nxp.com
+To:     aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        Anson.Huang@nxp.com
+Cc:     carlos.song@nxp.com, xiaoning.wang@nxp.com, haibo.chen@nxp.com,
+        linux-imx@nxp.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] i2c: imx-lpi2c: add bus recovery feature
+Date:   Mon, 29 May 2023 15:43:01 +0800
+Message-Id: <20230529074302.3612294-1-carlos.song@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.28.66.68]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- ZXBJMBX03.zhaoxin.com (10.29.252.7)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1685345508
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 19617
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.109327
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: SG2PR02CA0030.apcprd02.prod.outlook.com
+ (2603:1096:3:18::18) To VI1PR04MB5005.eurprd04.prod.outlook.com
+ (2603:10a6:803:57::30)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5005:EE_|GV1PR04MB9117:EE_
+X-MS-Office365-Filtering-Correlation-Id: d7ea5f16-4a88-46a8-18cd-08db6017e955
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Jdx8j+Rs1H5Ptl1/0SIgX3/zc1+8oZEuj3RdOsHoJDgoWy0JGadldMvkOX2j0Cvj2nmB5xs7hWzH3IexQz+LyxXcVKeTGb79WIu30clYI9ZzNuOGR9SMBu6LoVZL5uBNvCBcFp48W7fT2TgOikIO6wxcXeESE1YlZqvlqBfHrnT2PY886tgAvsA2CMhP2XJscP+dT8B17ZDHv+7ZxWSPU3WG1Gc7roPBUnAU0HeNEEgemMo/rSzaeptf64xexZ82SYTG+vj++1UJDoJ3/8notVGNNGLQYDOWi2MZWWlVM7S7jHa4XksbjCzwp6er1Vkf56ipI+bqWjnindHyjgQLXfEiDg2g7EO1Hem8Qdhyh25A+ptHS6yqVRnaT2Bi2m3amGT+qTVPSTYIFeBLmleJXj5CWu/1jASZp7mZzt6lCRXofJQz82rcLWjyYk1SDZ9SP4L+WZrqHdpkNvJdKPi1WVcymkbSxCvg60n5Urni8YGUE8CPzq5aDTFueHN87FyF9WiG5JyXgetED+dz3TWHuMjgImlW+vRCFmg4aAuQXZM+UU0P230/ca+ZckhpcKNoTaEbEW+h6WiXZ7A3ZoAvkL+0sYR28KNi+YVSYEI57nOFqBvKgimu6sAsj1NtghwC
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(346002)(376002)(39860400002)(396003)(451199021)(186003)(1076003)(6506007)(6512007)(26005)(9686003)(38350700002)(38100700002)(41300700001)(2616005)(6486002)(52116002)(478600001)(66946007)(66476007)(66556008)(4326008)(316002)(7416002)(5660300002)(2906002)(86362001)(8676002)(36756003)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bgXYLthuaqxEdB79rIxZ4bCpk2cCbxepq4mUpbRIE2VhQ7sX8qvW4TUcSFl6?=
+ =?us-ascii?Q?QVjM4tyy7xxvF72Kzo7jaLcRySgw0vB+Vz3ZMcp4LUYEkvUGZLAyRWwDJbOu?=
+ =?us-ascii?Q?MjSaa/+tlz5e0XybWa3X2cB2SBnFIOhEQyJvL/QVTF93KX73ar4OFl6MhH6u?=
+ =?us-ascii?Q?FL3S67REVhYO1mI9O9jt6gfj/n3xK8MP59Yr6A68LB+zlW1ugEQO9b+FeJt2?=
+ =?us-ascii?Q?MeCepUXFc+By51rXRIzxuQpWKlaDYgItQHyxguNYObvy9Y0Pt3XhXgnPJ6h8?=
+ =?us-ascii?Q?h9OLpcnQb30qo5O3ow7anH+RhBr2OkUqtjEheK+kWeh7YId1iTKlP6oGGtUw?=
+ =?us-ascii?Q?EurdaPDHy2jenSCBe/+gxaIaACjxfDnHMLfLo0NadO4oa+8xKyxyMIdUVMxL?=
+ =?us-ascii?Q?t6heWOUNB++YhFZziPLPqwmn2DkHkpWm+pY5Xi0+jipPijKCx1vCaM373uFi?=
+ =?us-ascii?Q?pA4XMgSpfqv2cYrE/Irf9t8rN/CW+0RE6zTUINfSIVWAucnYeAu9UE4r2f/h?=
+ =?us-ascii?Q?yLwDyPRhajeL23bbqUzMhIFS75yXC8kfHHgqoxg6PJvUTX0XYy33IdZwIjFL?=
+ =?us-ascii?Q?XLLtNj1PwzPmTkVl7KjgkQ69fz3cgIRZkVi3uUREdM/kLrcJ6qVuheyTQtCg?=
+ =?us-ascii?Q?vIziR2t4GqqDiiatey3Y2o9zjsAL5AZIVica8V0VNQTp/m7Hd1lX2Dn6awpK?=
+ =?us-ascii?Q?cNp2Eg7TJDk/PU/Gy5KxAywwU52cKKG2XXlLx5Au5efhvo9ArDgoV7RaY/p+?=
+ =?us-ascii?Q?HPUbML98cyQdFB3kCvaDVVwbm94Eu0KFPevBFQLL+TxIM1XEuQcqkZ+TssBz?=
+ =?us-ascii?Q?Klsaj+e3cv/i8LvmBgT8yjOit3GDe5N4mKbRrFVm3BHYKhH0nEPSuOf5rmHh?=
+ =?us-ascii?Q?htp4L0vrYJYsd69Nf6dwYg+UdlOggfsGHVA1qCDWrHSpODNLavXRGVyADCVg?=
+ =?us-ascii?Q?P8hQFzgnjzExf/k2QYAVobEb6V4LVzzepJKvD58TdXv6SU1DTmjRuJvJjrTj?=
+ =?us-ascii?Q?xslHX9p5X0VioxaFYVcVcyqJYTVPzUnXW3ByPY4ngWe6GbABq0ztBfc10ZVI?=
+ =?us-ascii?Q?RIbjsBfF+vaAX9MPQn12KgifJm2i+Q05VIUZhNZ/yjcwqfAA6QPuWO12ptE+?=
+ =?us-ascii?Q?RakfphUVtrZwKgA6b8u3m6Hln0FOePinwbMA+0vHqpj1t0AlPSaPq95xMuWP?=
+ =?us-ascii?Q?9mF07Dgzm8GmZ9lGjY8VjuyV0hAUO8cx+eMt1gC0Nyb0X8Z/N/A2GN1WfRQu?=
+ =?us-ascii?Q?U9WApsCQLEg1CdS5qlDGq2eBfRproSFDZKTrPHBNp2rHs9d7/xhkHoCzFDFs?=
+ =?us-ascii?Q?eE1rA7rVkUPOS40FQ2LKEIAE9pBPdaeAEkvd4KKgOgqPCky2ajOr4zJ4cnjC?=
+ =?us-ascii?Q?RlFCx2VkhmhhtSEq6sQ3n2d/KRkaZwicMW25DmW/fpa1LNje12/uDT6uBNzB?=
+ =?us-ascii?Q?kKQoT0/6eP6HzM44rAmg+aQ1WvV5DpQD25VFJlu2ocl3GLniGJg3XeNuBDdi?=
+ =?us-ascii?Q?ckGUZFB/IxTalDU4qAj5W/Cbe1uaAOSxiimHhNEKi2T5C+WOs3t1Iu26j0Ul?=
+ =?us-ascii?Q?JM4JG3EWtttySgR/AlT3jq7jaObHwiykddXmpk5Q?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7ea5f16-4a88-46a8-18cd-08db6017e955
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2023 07:40:02.1976
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0sN51A7Kpc1tCeUe3rM3vzFB3N8BW0tje2M1LrB58FMN5eS/3ORe5DnzFGojEV9MBpXS+JJxOgYaI/Ik5WYpbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB9117
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add Zhaoxin I2C controller driver. It provides the access to the i2c
-busses, which connects to the touchpad, eeprom, etc.
+From: Clark Wang <xiaoning.wang@nxp.com>
 
-Zhaoxin I2C controller have two separate busses, so may accommodate up
-to two I2C adapters. Those adapters are listed in the ACPI namespace
-with the "IIC1D17" HID, and probed by a platform driver.
+Add bus recovery feature for LPI2C.
+Need add gpio pinctrl, scl-gpios and sda-gpios configuration in dts.
 
-The driver works with IRQ mode, and supports basic I2C features. Flags
-I2C_AQ_NO_ZERO_LEN and I2C_AQ_COMB_WRITE_THEN_READ are used to limit
-the unsupported access.
-
-Change since v1:
-  * remove some useless include files and sort the rest.
-  * use mmio bar distinguish host index.
-  * use pci-dev's name and i2c-dev's name rename adapter's name.
-  * remove some debug code, fix some code style issue.
-  Link: https://lore.kernel.org/all/20230504060043.13155-1-hanshu-oc@zhaoxin.com/
-
-Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
+Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+Signed-off-by: Carlos Song <carlos.song@nxp.com>
 ---
- drivers/i2c/busses/Kconfig       |  10 +
- drivers/i2c/busses/Makefile      |   1 +
- drivers/i2c/busses/i2c-zhaoxin.c | 636 +++++++++++++++++++++++++++++++
- 3 files changed, 647 insertions(+)
- create mode 100644 drivers/i2c/busses/i2c-zhaoxin.c
+ drivers/i2c/busses/i2c-imx-lpi2c.c | 83 ++++++++++++++++++++++++++++++
+ 1 file changed, 83 insertions(+)
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 87600b4aacb3..4c2d302184aa 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -333,6 +333,16 @@ config I2C_VIAPRO
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called i2c-viapro.
- 
-+config I2C_ZHAOXIN
-+	tristate "ZHAOXIN I2C Interface"
-+	depends on PCI && ACPI
-+	help
-+	  If you say yes to this option, support will be included for the
-+	  ZHAOXIN I2C interface
+diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+index 62111fe9f207..40a4420d4c12 100644
+--- a/drivers/i2c/busses/i2c-imx-lpi2c.c
++++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+@@ -18,6 +18,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/of_gpio.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+@@ -107,6 +108,11 @@ struct lpi2c_imx_struct {
+ 	unsigned int		txfifosize;
+ 	unsigned int		rxfifosize;
+ 	enum lpi2c_imx_mode	mode;
 +
-+	  This driver can also be built as a module.  If so, the module
-+	  will be called i2c-zhaoxin.
++	struct i2c_bus_recovery_info rinfo;
++	struct pinctrl *pinctrl;
++	struct pinctrl_state *pinctrl_pins_default;
++	struct pinctrl_state *pinctrl_pins_gpio;
+ };
+ 
+ static void lpi2c_imx_intctrl(struct lpi2c_imx_struct *lpi2c_imx,
+@@ -134,6 +140,8 @@ static int lpi2c_imx_bus_busy(struct lpi2c_imx_struct *lpi2c_imx)
+ 
+ 		if (time_after(jiffies, orig_jiffies + msecs_to_jiffies(500))) {
+ 			dev_dbg(&lpi2c_imx->adapter.dev, "bus not work\n");
++			if (lpi2c_imx->adapter.bus_recovery_info)
++				i2c_recover_bus(&lpi2c_imx->adapter);
+ 			return -ETIMEDOUT;
+ 		}
+ 		schedule();
+@@ -191,6 +199,8 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *lpi2c_imx)
+ 
+ 		if (time_after(jiffies, orig_jiffies + msecs_to_jiffies(500))) {
+ 			dev_dbg(&lpi2c_imx->adapter.dev, "stop timeout\n");
++			if (lpi2c_imx->adapter.bus_recovery_info)
++				i2c_recover_bus(&lpi2c_imx->adapter);
+ 			break;
+ 		}
+ 		schedule();
+@@ -328,6 +338,8 @@ static int lpi2c_imx_txfifo_empty(struct lpi2c_imx_struct *lpi2c_imx)
+ 
+ 		if (time_after(jiffies, orig_jiffies + msecs_to_jiffies(500))) {
+ 			dev_dbg(&lpi2c_imx->adapter.dev, "txfifo empty timeout\n");
++			if (lpi2c_imx->adapter.bus_recovery_info)
++				i2c_recover_bus(&lpi2c_imx->adapter);
+ 			return -ETIMEDOUT;
+ 		}
+ 		schedule();
+@@ -533,6 +545,71 @@ static irqreturn_t lpi2c_imx_isr(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
++static void lpi2c_imx_prepare_recovery(struct i2c_adapter *adap)
++{
++	struct lpi2c_imx_struct *lpi2c_imx;
 +
- if ACPI
- 
- comment "ACPI drivers"
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index af56fe2c75c0..cc470ce470ca 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -29,6 +29,7 @@ obj-$(CONFIG_I2C_SIS630)	+= i2c-sis630.o
- obj-$(CONFIG_I2C_SIS96X)	+= i2c-sis96x.o
- obj-$(CONFIG_I2C_VIA)		+= i2c-via.o
- obj-$(CONFIG_I2C_VIAPRO)	+= i2c-viapro.o
-+obj-$(CONFIG_I2C_ZHAOXIN)	+= i2c-zhaoxin.o
- 
- # Mac SMBus host controller drivers
- obj-$(CONFIG_I2C_HYDRA)		+= i2c-hydra.o
-diff --git a/drivers/i2c/busses/i2c-zhaoxin.c b/drivers/i2c/busses/i2c-zhaoxin.c
-new file mode 100644
-index 000000000000..21b027e973d6
---- /dev/null
-+++ b/drivers/i2c/busses/i2c-zhaoxin.c
-@@ -0,0 +1,636 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
++	lpi2c_imx = container_of(adap, struct lpi2c_imx_struct, adapter);
++
++	pinctrl_select_state(lpi2c_imx->pinctrl, lpi2c_imx->pinctrl_pins_gpio);
++}
++
++static void lpi2c_imx_unprepare_recovery(struct i2c_adapter *adap)
++{
++	struct lpi2c_imx_struct *lpi2c_imx;
++
++	lpi2c_imx = container_of(adap, struct lpi2c_imx_struct, adapter);
++
++	pinctrl_select_state(lpi2c_imx->pinctrl, lpi2c_imx->pinctrl_pins_default);
++}
++
 +/*
-+ *  i2c-zhaoxin-i2c.c - Zhaoxin I2C controller driver
-+ *
-+ *  Copyright(c) 2021 Shanghai Zhaoxin Semiconductor Corporation.
-+ *                    All rights reserved.
-+ *
-+ *  CONTACTS:
-+ *
-+ *  Hans Hu             hanshu@zhaoxin.com
-+ *  Cobe Chen           cobechen@zhaoxin.com
++ * We switch SCL and SDA to their GPIO function and do some bitbanging
++ * for bus recovery. These alternative pinmux settings can be
++ * described in the device tree by a separate pinctrl state "gpio". If
++ * this is missing this is not a big problem, the only implication is
++ * that we can't do bus recovery.
 + */
-+
-+#define DRIVER_VERSION "1.4.0"
-+
-+#include <linux/delay.h>
-+#include <linux/i2c.h>
-+#include <linux/pci.h>
-+#include <linux/platform_device.h>
-+
-+#define ZX_I2C_NAME             "Zhaoxin-I2C"
-+
-+/*
-+ * registers
-+ */
-+/* I2C MMIO Address Constants */
-+#define IICCR_L                  0x00
-+#define   MST_RST          BIT(7)
-+#define   MST_RST_PATCH    BIT(6)
-+#define   CPU_RDY          BIT(3)
-+#define   TX_END           BIT(2)
-+#define   RX_ACK           BIT(1)
-+#define IICCR_H                  0x01
-+#define   FIFO_EN          BIT(6)
-+#define IICSLVADDR               0x02
-+#define IICTCR                   0x03
-+#define   FAST_SEL         BIT(7)
-+#define   MASTER_RECV      BIT(6)
-+#define   HS_SEL           BIT(5)
-+#define IICSR                    0x04
-+#define   SDA_I            BIT(3)
-+#define   SCL_I            BIT(2)
-+#define   READY            BIT(1)
-+#define   RCV_NACK         BIT(0)
-+#define IICISR                   0x06
-+#define   IRQ_STS_BYTENACK BIT(5)
-+#define   IRQ_STS_FIFONACK BIT(4)
-+#define   IRQ_STS_FIFOEND  BIT(3)
-+#define   IRQ_SCL_TIMEOUT  BIT(2)
-+#define   IRQ_STS_BYTEEND  BIT(1)
-+#define   IRQ_STS_ADDRNACK BIT(0)
-+#define   IRQ_STS_MASK     GENMASK(3, 0)
-+#define IICIMR                   0x08
-+#define   IRQ_EN_FIFOEND   BIT(3)
-+#define   IRQ_EN_TIMEOUT   BIT(2)
-+#define   IRQ_EN_BYTEEND   BIT(1)
-+#define   IRQ_EN_ADDRNACK  BIT(0)
-+#define IICDATA2IIC              0x0A
-+#define IICDATA2CPU              0x0B
-+#define IICTR_FSTP               0x0C
-+#define IICTR_SCLTP              0x0D
-+#define IICMCR                   0x0E
-+#define   DYCLK_EN         BIT(0)
-+#define IIC_MST_CODE             0x0F
-+#define IICCS                    0x10
-+#define   CLKSEL_50M       BIT(0)
-+#define IICREV                   0x11
-+#define IICHCR                   0x12
-+#define   FIFO_RST         GENMASK(1, 0)
-+#define IICHTDR                  0x13
-+#define IICHRDR                  0x14
-+#define IICHTLR                  0x15
-+#define IICHRLR                  0x16
-+#define IICHWCNTR                0x18
-+#define IICHRCNTR                0x19
-+
-+#define FIFO_SIZE       32
-+#define ZXI2C_TIMEOUT   1000
-+
-+struct zxi2c {
-+	/* controller resources information */
-+	struct device *dev;
-+	struct pci_dev *pci;
-+	struct i2c_adapter adap;
-+	void __iomem *regs;
-+	u8 irq;
-+	u8 hrv;
-+	u32 speed;
-+	u8 fstp;		/* freq control by BIOS */
-+	u8 reset_bitmask;
-+
-+	/* process control information */
-+	u8 event;
-+	u16 byte_left;
-+	wait_queue_head_t waitq;
-+
-+	/* processing msg information */
-+	u8 addr;
-+	u16 len;
-+	bool is_read;
-+	bool is_last_msg;
-+	bool dynamic;
-+};
-+
-+#define set_byte(r, d)           iowrite8(d, r+IICDATA2IIC)
-+#define get_byte(r)              ioread8(r+IICDATA2CPU)
-+#define is_ready(r)              (ioread8(r+IICSR)&READY)
-+#define is_nack(r)               (ioread8(r+IICSR)&RCV_NACK)
-+#define get_irq_status(r)        ioread8(r+IICISR)
-+#define get_reversion(r)         ioread8(r+IICREV)
-+#define clear_irq_status(r)      iowrite8(IRQ_STS_MASK, r+IICISR)
-+#define set_fifo_byte(r, d)      iowrite8(d, r+IICHTDR)
-+#define get_fifo_byte(r)         ioread8(r+IICHRDR)
-+#define set_fifo_wr_len(r, d)    iowrite8(d, r+IICHTLR)
-+#define set_fifo_rd_len(r, d)    iowrite8(d, r+IICHRLR)
-+#define get_fifo_wr_cnt(r)       ioread8(r+IICHWCNTR)
-+#define get_fifo_rd_cnt(r)       ioread8(r+IICHRCNTR)
-+#define master_regs_reset(r)     iowrite8(MST_RST|0x41, r+IICCR_L)
-+#define set_dynamic_clock(r, d)  iowrite8(d, r+IICMCR)
-+#define get_dynamic_clock(r)     (ioread8(r+IICMCR)&DYCLK_EN)
-+#define stop_write_byte(r)       iowrite8(TX_END|0x41, r+IICCR_L)
-+#define get_fstp_value(r)        ioread8(r+IICTR_FSTP)
-+#define enable_fifo_mode(r)      iowrite8(FIFO_EN, r+IICCR_H)
-+#define enable_byte_mode(r)      iowrite8(0, r+IICCR_H)
-+
-+static inline void zxi2c_prepare_next_read(void __iomem *regs, u16 left)
++static int lpi2c_imx_init_recovery_info(struct lpi2c_imx_struct *lpi2c_imx,
++		struct platform_device *pdev)
 +{
-+	u8 tmp = ioread8(regs + IICCR_L);
++	struct i2c_bus_recovery_info *rinfo = &lpi2c_imx->rinfo;
 +
-+	if (left > 1)
-+		tmp &= ~RX_ACK;
-+	else
-+		tmp |= RX_ACK;
-+
-+	iowrite8(tmp, regs + IICCR_L);
-+}
-+
-+static inline void zxi2c_enable_irq(void __iomem *regs, u8 type, int enable)
-+{
-+	if (enable)
-+		iowrite8(IRQ_EN_ADDRNACK | type, regs + IICIMR);
-+	else
-+		iowrite8(0, regs + IICIMR);
-+}
-+
-+static inline void zxi2c_continue(struct zxi2c *i2c)
-+{
-+	u8 tmp;
-+
-+	i2c->event = 0;
-+	tmp = ioread8(i2c->regs + IICCR_L);
-+	iowrite8(tmp |= CPU_RDY, i2c->regs + IICCR_L);
-+}
-+
-+static void zxi2c_reset_fifo(struct zxi2c *i2c)
-+{
-+	u8 tmp;
-+	u8 count;
-+	void __iomem *regs = i2c->regs;
-+
-+	tmp = ioread8(regs + IICHCR);
-+	iowrite8(tmp | FIFO_RST, regs + IICHCR);
-+	for (count = 0; count < 50; count++)
-+		if (!(ioread8(regs + IICHCR) & FIFO_RST))
-+			break;
-+	if (count >= 50)
-+		dev_warn(i2c->dev, "%s failed\n", __func__);
-+}
-+
-+static void zxi2c_set_wr(void __iomem *regs, bool is_read)
-+{
-+	u8 tmp;
-+
-+	tmp = ioread8(regs + IICTCR);
-+	if (is_read)
-+		tmp |= MASTER_RECV;
-+	else
-+		tmp &= ~MASTER_RECV;
-+	iowrite8(tmp, regs + IICTCR);
-+}
-+
-+static void zxi2c_start(struct zxi2c *i2c)
-+{
-+	i2c->event = 0;
-+	iowrite8(i2c->addr & 0x7f, i2c->regs + IICSLVADDR);
-+}
-+
-+static const u32 speed_params_table[][3] = {
-+	/* speed, IICTCR, IICTR_FSTP, IICCS, IICTR_SCLTP */
-+	{I2C_MAX_STANDARD_MODE_FREQ, 0, 0xF3},
-+	{I2C_MAX_FAST_MODE_FREQ, FAST_SEL, 0x38},
-+	{I2C_MAX_FAST_MODE_PLUS_FREQ, FAST_SEL, 0x13},
-+	{I2C_MAX_HIGH_SPEED_MODE_FREQ, HS_SEL, 0x37},
-+};
-+
-+static void zxi2c_set_bus_speed(struct zxi2c *i2c)
-+{
-+	u8 i, count;
-+	const u32 *params = NULL;
-+
-+	count = ARRAY_SIZE(speed_params_table);
-+	for (i = 0; i < count; i++) {
-+		if (speed_params_table[i][0] == i2c->speed) {
-+			params = speed_params_table[i];
-+			break;
-+		}
++	lpi2c_imx->pinctrl = devm_pinctrl_get(&pdev->dev);
++	if (!lpi2c_imx->pinctrl || IS_ERR(lpi2c_imx->pinctrl)) {
++		dev_info(&pdev->dev, "can't get pinctrl, bus recovery not supported\n");
++		return PTR_ERR(lpi2c_imx->pinctrl);
 +	}
 +
-+	iowrite8(params[1], i2c->regs + IICTCR);
-+	if (abs(i2c->fstp - params[2]) > 0x10) {
-+		/* if BIOS setting value far from golden value,
-+		 * use golden value and warn user
-+		 */
-+		dev_warn_once(i2c->dev, "speed:%d, fstp:0x%x, golden:0x%x\n",
-+				i2c->speed, i2c->fstp, params[2]);
-+		iowrite8(params[2], i2c->regs + IICTR_FSTP);
-+	} else
-+		iowrite8(i2c->fstp, i2c->regs + IICTR_FSTP);
-+	iowrite8(CLKSEL_50M, i2c->regs + IICCS);
-+	iowrite8(0xff, i2c->regs + IICTR_SCLTP);
++	lpi2c_imx->pinctrl_pins_default = pinctrl_lookup_state(lpi2c_imx->pinctrl,
++			PINCTRL_STATE_DEFAULT);
++	lpi2c_imx->pinctrl_pins_gpio = pinctrl_lookup_state(lpi2c_imx->pinctrl,
++			"gpio");
++	rinfo->sda_gpiod = devm_gpiod_get(&pdev->dev, "sda", GPIOD_IN);
++	rinfo->scl_gpiod = devm_gpiod_get(&pdev->dev, "scl", GPIOD_OUT_HIGH_OPEN_DRAIN);
 +
-+	/* for Hs-mode, use 0000 1000 as master code */
-+	if (i2c->speed == I2C_MAX_HIGH_SPEED_MODE_FREQ)
-+		iowrite8(0x08, i2c->regs + IIC_MST_CODE);
-+}
-+
-+static void zxi2c_get_bus_speed(struct zxi2c *i2c)
-+{
-+	u8 i, count;
-+	u32 acpi_speed = i2c_acpi_find_bus_speed(i2c->dev);
-+
-+	count = ARRAY_SIZE(speed_params_table);
-+	for (i = 0; i < count; i++)
-+		if (acpi_speed == speed_params_table[i][0])
-+			break;
-+
-+	/* if not found, use 400k as default */
-+	i2c->speed = i < count ? acpi_speed : I2C_MAX_FAST_MODE_FREQ;
-+
-+	dev_info(i2c->dev, "speed mode is %s\n",
-+			i2c_freq_mode_string(i2c->speed));
-+}
-+
-+static void zxi2c_module_reset(struct zxi2c *i2c)
-+{
-+	u8 tmp;
-+	u8 bitmask = i2c->reset_bitmask;
-+
-+	pci_read_config_byte(i2c->pci, 0x4F, &tmp);
-+	pci_write_config_byte(i2c->pci, 0x4F, tmp & ~bitmask);
-+	usleep_range(3000, 5000);
-+	pci_write_config_byte(i2c->pci, 0x4F, tmp | bitmask);
-+	usleep_range(3000, 5000);
-+
-+	set_dynamic_clock(i2c->regs, i2c->dynamic);
-+}
-+
-+static irqreturn_t zxi2c_irq_handle(int irq, void *dev_id)
-+{
-+	struct zxi2c *i2c = (struct zxi2c *)dev_id;
-+	void __iomem *regs = i2c->regs;
-+	u8 status = get_irq_status(regs);
-+
-+	if ((status & IRQ_STS_MASK) == 0)
-+		return IRQ_NONE;
-+
-+	if (status & IRQ_SCL_TIMEOUT)
-+		dev_warn(i2c->dev, "timeout(HW), ID: 0x%X\n", i2c->addr);
-+
-+	if (status & IRQ_STS_ADDRNACK) {
-+		dev_dbg(i2c->dev, "addr NACK, ID: 0x%X\n", i2c->addr);
-+	} else if (status & IRQ_STS_BYTEEND) {
-+		i2c->byte_left--;
-+		if (!i2c->is_read) {
-+			if (is_nack(regs)) {
-+				status = IRQ_STS_BYTENACK;
-+				i2c->byte_left++;
-+				dev_err(i2c->dev, "data NACK, ID: 0x%X\n",
-+					i2c->addr);
-+			} else if (i2c->byte_left == 0 && i2c->is_last_msg) {
-+				stop_write_byte(regs);
-+			}
-+		}
-+	}
-+
-+	i2c->event = status;
-+	clear_irq_status(regs);
-+	wake_up(&i2c->waitq);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int zxi2c_wait_event(struct zxi2c *i2c, u8 event)
-+{
-+	int timeout;
-+
-+	timeout = wait_event_interruptible_timeout(i2c->waitq,
-+			i2c->event != 0,
-+			msecs_to_jiffies(ZXI2C_TIMEOUT));
-+
-+	if (i2c->event & event)
++	if (PTR_ERR(rinfo->sda_gpiod) == -EPROBE_DEFER ||
++	    PTR_ERR(rinfo->scl_gpiod) == -EPROBE_DEFER) {
++		return -EPROBE_DEFER;
++	} else if (IS_ERR(rinfo->sda_gpiod) ||
++		   IS_ERR(rinfo->scl_gpiod) ||
++		   IS_ERR(lpi2c_imx->pinctrl_pins_default) ||
++		   IS_ERR(lpi2c_imx->pinctrl_pins_gpio)) {
++		dev_dbg(&pdev->dev, "recovery information incomplete\n");
 +		return 0;
-+
-+	if (timeout == 0) {
-+		dev_err(i2c->dev, "timeout(SW), ID: 0x%X\n", i2c->addr);
-+		/* Clock streching timeout, do recovery */
-+		if (!is_nack(i2c->regs))
-+			dev_err(i2c->dev, "device hang? reset, ID: 0x%X\n",
-+				i2c->addr);
-+
-+		master_regs_reset(i2c->regs);
-+		zxi2c_set_bus_speed(i2c);
-+	}
-+	return -ENODEV;
-+}
-+
-+static int zxi2c_byte_xfer(struct zxi2c *i2c, struct i2c_msg *msgs, int num)
-+{
-+	u16 i, finished;
-+	int error;
-+	u8 index, ret = 0;
-+	struct i2c_msg *msg;
-+	void __iomem *regs = i2c->regs;
-+
-+	clear_irq_status(regs);
-+	enable_byte_mode(regs);
-+	zxi2c_enable_irq(regs, IRQ_EN_BYTEEND, true);
-+
-+	for (index = 0; index < num; index++) {
-+		msg = msgs + index;
-+		i2c->addr = msg->addr;
-+		i2c->is_read = !!(msg->flags & I2C_M_RD);
-+		i2c->byte_left = i2c->len = msg->len;
-+
-+		zxi2c_set_wr(regs, i2c->is_read);
-+		if (i2c->is_read) {
-+			zxi2c_prepare_next_read(regs, i2c->byte_left);
-+			zxi2c_start(i2c);
-+			/* create restart for non-first msg */
-+			if (index)
-+				zxi2c_continue(i2c);
-+
-+			for (i = 1; i <= msg->len; i++) {
-+				error = zxi2c_wait_event(i2c, IRQ_STS_BYTEEND);
-+				if (error)
-+					break;
-+
-+				msg->buf[i - 1] = get_byte(regs);
-+				if (i2c->byte_left == 0)
-+					break;
-+
-+				zxi2c_prepare_next_read(regs, i2c->byte_left);
-+				zxi2c_continue(i2c);
-+			}
-+		} else {
-+			set_byte(regs, msg->buf[0]);
-+			/* mark whether this is the last msg */
-+			i2c->is_last_msg = index == !!(num - 1);
-+			zxi2c_start(i2c);
-+			/* create restart for non-first msg */
-+			if (index)
-+				zxi2c_continue(i2c);
-+
-+			for (i = 1; i <= msg->len; i++) {
-+				error = zxi2c_wait_event(i2c, IRQ_STS_BYTEEND);
-+				if (error)
-+					break;
-+
-+				if (i2c->byte_left == 0)
-+					break;
-+				set_byte(regs, msg->buf[i]);
-+				zxi2c_continue(i2c);
-+			}
-+		}
-+
-+		if (error) {
-+			/* check if NACK during transmitting */
-+			finished = msg->len - i2c->byte_left;
-+			if (finished)
-+				dev_err(i2c->dev,
-+					"%s: %s finished %d bytes: %*ph\n",
-+					__func__,
-+					i2c->is_read ? "read" : "write",
-+					finished, finished, msg->buf);
-+			return error;
-+		}
-+		ret++;
 +	}
 +
-+	zxi2c_enable_irq(regs, IRQ_EN_BYTEEND, false);
-+	return ret;
-+}
++	dev_info(&pdev->dev, "using scl%s for recovery\n",
++		 rinfo->sda_gpiod ? ",sda" : "");
 +
-+static int zxi2c_fifo_xfer(struct zxi2c *i2c, struct i2c_msg *msgs)
-+{
-+	void __iomem *regs = i2c->regs;
-+	struct i2c_msg *msg = msgs;
-+	int i;
-+	u8 finished;
-+
-+	i2c->addr = msg->addr;
-+	i2c->is_read = !!(msg->flags & I2C_M_RD);
-+	i2c->len = msg->len;
-+
-+	zxi2c_reset_fifo(i2c);
-+	enable_fifo_mode(regs);
-+
-+	clear_irq_status(regs);
-+	zxi2c_enable_irq(regs, IRQ_EN_FIFOEND, true);
-+
-+	zxi2c_set_wr(regs, i2c->is_read);
-+	if (i2c->is_read) {
-+		set_fifo_rd_len(regs, msg->len - 1);
-+	} else {
-+		set_fifo_wr_len(regs, msg->len - 1);
-+		for (i = 0; i < msg->len; i++)
-+			set_fifo_byte(regs, msg->buf[i]);
-+	}
-+
-+	zxi2c_start(i2c);
-+	if (zxi2c_wait_event(i2c, IRQ_STS_FIFOEND))
-+		return -ENODEV;
-+
-+	if (i2c->is_read) {
-+		finished = get_fifo_rd_cnt(regs);
-+		for (i = 0; i < finished; i++)
-+			msg->buf[i] = get_fifo_byte(regs);
-+	} else {
-+		finished = get_fifo_wr_cnt(regs);
-+	}
-+
-+	/* check if NACK during transmitting */
-+	if (finished != msg->len) {
-+		if (finished)
-+			dev_err(i2c->dev,
-+				"%s: %s only finished %d/%d bytes: %*ph\n",
-+				__func__, i2c->is_read ? "read" : "write",
-+				finished, msg->len, finished, msg->buf);
-+		return -EAGAIN;
-+	}
-+
-+	zxi2c_enable_irq(regs, IRQ_EN_FIFOEND, false);
-+	return 1;
-+}
-+
-+static int zxi2c_master_xfer(struct i2c_adapter *adap,
-+			     struct i2c_msg *msgs, int num)
-+{
-+	int error;
-+	struct zxi2c *i2c = (struct zxi2c *)i2c_get_adapdata(adap);
-+
-+	if (!is_ready(i2c->regs)) {
-+		zxi2c_module_reset(i2c);
-+		zxi2c_set_bus_speed(i2c);
-+		dev_err(i2c->dev, "controller busy, reset try again\n");
-+
-+		return -EAGAIN;
-+	}
-+
-+	if (num == 1 && msgs->len <= FIFO_SIZE && msgs->len >= 3)
-+		error = zxi2c_fifo_xfer(i2c, msgs);
-+	else
-+		error = zxi2c_byte_xfer(i2c, msgs, num);
-+
-+	return error;
-+}
-+
-+static u32 zxi2c_func(struct i2c_adapter *adap)
-+{
-+	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-+}
-+
-+static const struct i2c_algorithm zxi2c_algorithm = {
-+	.master_xfer = zxi2c_master_xfer,
-+	.functionality = zxi2c_func,
-+};
-+
-+static const struct i2c_adapter_quirks zxi2c_quirks = {
-+	.flags = I2C_AQ_NO_ZERO_LEN | I2C_AQ_COMB_WRITE_THEN_READ,
-+};
-+
-+static int zxi2c_parse_resources(struct zxi2c *i2c)
-+{
-+	struct platform_device *pdev = to_platform_device(i2c->dev);
-+	struct resource *res;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	i2c->regs = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(i2c->regs)) {
-+		dev_err(&pdev->dev, "get base addr failed\n");
-+		return -ENOMEM;
-+	}
-+
-+	if (res->start & 0x20)
-+		i2c->reset_bitmask = BIT(4);
-+	else
-+		i2c->reset_bitmask = BIT(5);
-+
-+	i2c->irq = platform_get_irq(pdev, 0);
-+	if (i2c->irq < 0) {
-+		dev_err(&pdev->dev, "get irq failed\n");
-+		return i2c->irq;
-+	}
-+
-+	zxi2c_get_bus_speed(i2c);
-+
-+	i2c->hrv = get_reversion(i2c->regs);
-+
-+	i2c->dynamic = get_dynamic_clock(i2c->regs);
-+	set_dynamic_clock(i2c->regs, i2c->dynamic);
-+
-+	i2c->fstp = get_fstp_value(i2c->regs);
-+	zxi2c_set_bus_speed(i2c);
++	rinfo->prepare_recovery = lpi2c_imx_prepare_recovery;
++	rinfo->unprepare_recovery = lpi2c_imx_unprepare_recovery;
++	rinfo->recover_bus = i2c_generic_scl_recovery;
++	lpi2c_imx->adapter.bus_recovery_info = rinfo;
 +
 +	return 0;
 +}
 +
-+static int zxi2c_probe(struct platform_device *pdev)
-+{
-+	int error;
-+	struct zxi2c *i2c;
-+	struct pci_dev *pci;
-+	struct device *dev;
+ static u32 lpi2c_imx_func(struct i2c_adapter *adapter)
+ {
+ 	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL |
+@@ -611,6 +688,12 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
+ 	lpi2c_imx->txfifosize = 1 << (temp & 0x0f);
+ 	lpi2c_imx->rxfifosize = 1 << ((temp >> 8) & 0x0f);
+ 
++	/* Init optional bus recovery function */
++	ret = lpi2c_imx_init_recovery_info(lpi2c_imx, pdev);
++	/* Give it another chance if pinctrl used is not ready yet */
++	if (ret == -EPROBE_DEFER)
++		goto rpm_disable;
 +
-+	/* make sure this is zhaoxin platform */
-+	dev = pdev->dev.parent;
-+	if (dev && dev_is_pci(dev)) {
-+		pci = to_pci_dev(dev);
-+		if (pci->vendor != 0x1d17 || pci->device != 0x1001)
-+			return -ENODEV;
-+	} else
-+		return -ENODEV;
-+
-+	i2c = devm_kzalloc(&pdev->dev, sizeof(*i2c), GFP_KERNEL);
-+	if (IS_ERR(i2c)) {
-+		dev_err(&pdev->dev, "devm_kzalloc failed\n");
-+		return -ENOMEM;
-+	}
-+
-+	i2c->pci = pci;
-+	i2c->dev = &pdev->dev;
-+	error = zxi2c_parse_resources(i2c);
-+	if (error)
-+		return error;
-+
-+	platform_set_drvdata(pdev, (void *)i2c);
-+
-+	if (devm_request_irq(&pdev->dev, i2c->irq, zxi2c_irq_handle,
-+			     IRQF_SHARED, pdev->name, i2c)) {
-+		dev_err(i2c->dev, "IRQ%d request failed\n", i2c->irq);
-+		return -ENODEV;
-+	}
-+
-+	init_waitqueue_head(&i2c->waitq);
-+
-+	i2c->adap.owner = THIS_MODULE;
-+	i2c->adap.algo = &zxi2c_algorithm;
-+	i2c->adap.retries = 2;
-+	i2c->adap.quirks = &zxi2c_quirks;
-+	i2c->adap.dev.parent = &pdev->dev;
-+	ACPI_COMPANION_SET(&i2c->adap.dev, ACPI_COMPANION(&pdev->dev));
-+	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
-+		 "%s-%s", dev_name(&pci->dev), dev_name(i2c->dev));
-+	i2c_set_adapdata(&i2c->adap, i2c);
-+
-+	error = i2c_add_adapter(&i2c->adap);
-+	if (unlikely(error)) {
-+		dev_err(i2c->dev, "failed to register, %d\n", error);
-+		return error;
-+	}
-+
-+	dev_info(i2c->dev, "adapter /dev/i2c-%d registered. hw version %x\n",
-+		 i2c->adap.nr, i2c->hrv);
-+
-+	return 0;
-+}
-+
-+static int zxi2c_remove(struct platform_device *pdev)
-+{
-+	struct zxi2c *i2c = platform_get_drvdata(pdev);
-+
-+	i2c_lock_bus(&i2c->adap, I2C_LOCK_ROOT_ADAPTER);
-+
-+	zxi2c_module_reset(i2c);
-+	master_regs_reset(i2c->regs);
-+
-+	devm_free_irq(&pdev->dev, i2c->irq, i2c);
-+
-+	i2c_unlock_bus(&i2c->adap, I2C_LOCK_ROOT_ADAPTER);
-+
-+	i2c_del_adapter(&i2c->adap);
-+
-+	platform_set_drvdata(pdev, NULL);
-+	devm_kfree(&pdev->dev, i2c);
-+
-+	dev_info(&pdev->dev, "adapter unregistered\n");
-+
-+	return 0;
-+}
-+
-+static int zxi2c_resume(struct device *dev)
-+{
-+	struct zxi2c *i2c = dev_get_drvdata(dev);
-+
-+	zxi2c_module_reset(i2c);
-+	zxi2c_set_bus_speed(i2c);
-+
-+	return 0;
-+}
-+
-+const struct dev_pm_ops zxi2c_pm = {
-+	SET_SYSTEM_SLEEP_PM_OPS(NULL, zxi2c_resume)
-+};
-+
-+static const struct acpi_device_id zxi2c_acpi_match[] = {
-+	{"IIC1D17", 0},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(acpi, zxi2c_acpi_match);
-+
-+static struct platform_driver zxi2c_driver = {
-+	.probe = zxi2c_probe,
-+	.remove = zxi2c_remove,
-+	.driver = {
-+		.name = ZX_I2C_NAME,
-+		.owner = THIS_MODULE,
-+		.acpi_match_table = ACPI_PTR(zxi2c_acpi_match),
-+		.pm = &zxi2c_pm,
-+	},
-+};
-+module_platform_driver(zxi2c_driver);
-+
-+MODULE_AUTHOR("HansHu@zhaoxin.com");
-+MODULE_DESCRIPTION("Shanghai Zhaoxin IIC driver");
-+MODULE_VERSION(DRIVER_VERSION);
-+MODULE_LICENSE("GPL");
+ 	ret = i2c_add_adapter(&lpi2c_imx->adapter);
+ 	if (ret)
+ 		goto rpm_disable;
 -- 
-2.17.1
+2.34.1
 
