@@ -2,107 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBEB716CCB
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 May 2023 20:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2591C716DE2
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 May 2023 21:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjE3Sum (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 May 2023 14:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
+        id S231615AbjE3TqJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 May 2023 15:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjE3Sul (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 May 2023 14:50:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615B0C9;
-        Tue, 30 May 2023 11:50:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0729628AE;
-        Tue, 30 May 2023 18:50:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6ABBC4339B;
-        Tue, 30 May 2023 18:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685472639;
-        bh=IZndPRsXdrvOnJb0ewXcTHzPGDycIf5ne3eEnx8Ld9E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SobdW6evDpNp5XKzU2RTYcxgG6l3SzTGzHCt5xrkeFknfGnlWzrVbG7cP1lPwqiaP
-         0FfyQurrDzUSnsieubT4XEnyDT97hyJQtHJCkBqJnG0CujgiOkILFbSLR7zDNG2zfY
-         T0hRclOsh62yzX4bY8+RHhL+htMASIgNqijM8KK+6H5Ht8sJdg5Dv6cDj1Ps1Pey0s
-         oVJeNXw6Y551qe82DQGWsaSS1fwR6MjgToppxj6pwlWvbH7FwDh/O6iZVWx7bZhddo
-         NXJlP8NoZygP29UsklAodVhproIJN3PrDjO2Fv1p9/2bdMZGxOAU7sWK64Gi/PyPsy
-         8Ln+mS7SaCOWw==
-Date:   Tue, 30 May 2023 20:50:36 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     carlos.song@nxp.com
-Cc:     aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, xiaoning.wang@nxp.com,
-        haibo.chen@nxp.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: imx-lpi2c: fix type char overflow issue when
- calculating the clock cycle
-Message-ID: <20230530185036.ggep3pv7booqtb6b@intel.intel>
-References: <20230529080251.3614380-1-carlos.song@nxp.com>
+        with ESMTP id S230193AbjE3TqH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 May 2023 15:46:07 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2A3B2;
+        Tue, 30 May 2023 12:46:07 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f805551a19so26202811cf.3;
+        Tue, 30 May 2023 12:46:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685475966; x=1688067966;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=98iPVLVadzoneKMYXN/slFjkTckG0j77uClaHpnE/jc=;
+        b=Bs+m/RVdp8BZq1xWxyc6ua3kgzULnwTnUqMDMei/qYT7McWESwKsiZ+gxPrPqGBcto
+         mGKDxozckQo4cwadVb02Hc+Djh0NPo/VnT/jIKxgeMCDSAtjxDs6JIkLKM4qsB+95dam
+         m6WlgMte77CiUI3VQyZBsPXK1v6A1612hu+GJlfhe1VfVGHKzWs6mMH5RensdgpAjVr5
+         /fVHxKuMSh3j3dPQ5dWYaFS1CSDaPk+c2A/q3juO7I4hVzPvBl0jT27h0qXGrd+OdfIx
+         JteMRdLcrGDG9Q1jOfa9uD1PCgBRICXcJMHwnpNSwmK9XcEmK5jP8vskht/0A4QmVgRi
+         KEBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685475966; x=1688067966;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=98iPVLVadzoneKMYXN/slFjkTckG0j77uClaHpnE/jc=;
+        b=jneZKwx0exjbBsAhvw51V+WXKX9lYLZtcm0lRKEq4Ix5BlXs9b2uwBAwi8D1Q9oFZt
+         inmANAk6AbVtP9F1uo1XX01Pe97AjnfgCZa4n/7FsJPH0iC856J2OB7pIFJKvvIvGp2v
+         Pem6eLUR+PKdKVH7J4eER9KRR9V02VjdPqomnDVP8wy97ehAVGic4jxvt5ko1RBSHE+T
+         B6pg5YxrkUa0sZjtQOsvWtnPvNBn0Q91Tf13xVfoRdq27dtMjM08jMGGz0LmFtAw3gp1
+         OFINOcI1tnfEZz+tTDZI5VS5ga/4BPdiaACAUa/QYRj4hk6Q9bVptt8smFKVVPwYNY+I
+         JtfA==
+X-Gm-Message-State: AC+VfDyRAyOnm6UakT2iZhfGcPa3S3RGzMcmj3DbO6GIdmW5AYeN/zh1
+        D4bFexrq8xbYM7qlDSy6mZ8igxMIx9M6t7W6PLpYD0GeiMM=
+X-Google-Smtp-Source: ACHHUZ6xIzLDLVObVsAr4UI9e+rM7Ou6Dz2e4PI1lSMkSl/CDaWworF13I8YwCYcamtPQd5ECDsY5zXgHPxejdy6PfU=
+X-Received: by 2002:a05:6214:1ccd:b0:621:4669:c806 with SMTP id
+ g13-20020a0562141ccd00b006214669c806mr2777737qvd.37.1685475966128; Tue, 30
+ May 2023 12:46:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230529080251.3614380-1-carlos.song@nxp.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230530145601.2592-1-Jonathan.Cameron@huawei.com> <20230530145601.2592-3-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20230530145601.2592-3-Jonathan.Cameron@huawei.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 30 May 2023 22:45:30 +0300
+Message-ID: <CAHp75VdNXtnorvx+aFhkkQZdgArVLuU_0-W-OKUyyarntt6vwA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 2/6] i2c: aspeed: Use platform_get_irq() instead of opencoding
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Niyas Sait <niyas.sait@linaro.org>,
+        Klaus Jensen <its@irrelevant.dk>,
+        Andy Shevchenko <andy@kernel.org>, linux-acpi@vger.kernel.org,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Shesha Bhushan Sreenivasamurthy <sheshas@marvell.com>,
+        linux-cxl@vger.kernel.org, linuxarm@huawei.com,
+        "Viacheslav A . Dubeyko" <viacheslav.dubeyko@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 29, 2023 at 04:02:51PM +0800, carlos.song@nxp.com wrote:
-> From: Clark Wang <xiaoning.wang@nxp.com>
-> 
-> Claim clkhi and clklo as integer type to avoid possible calculation
-> errors caused by data overflow.
-> 
-> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
-> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-> Signed-off-by: Carlos Song <carlos.song@nxp.com>
-> ---
->  drivers/i2c/busses/i2c-imx-lpi2c.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> index 40a4420d4c12..7dd33564cbe1 100644
-> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> @@ -211,8 +211,8 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *lpi2c_imx)
->  /* CLKLO = I2C_CLK_RATIO * CLKHI, SETHOLD = CLKHI, DATAVD = CLKHI/2 */
->  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
->  {
-> -	u8 prescale, filt, sethold, clkhi, clklo, datavd;
-> -	unsigned int clk_rate, clk_cycle;
-> +	u8 prescale, filt, sethold, datavd;
-> +	unsigned int clk_rate, clk_cycle, clkhi, clklo;
+On Tue, May 30, 2023 at 5:57=E2=80=AFPM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> A cleanup in it's own right.
 
-looks OK.
+its ?
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+> This has the handy side effect of working for ACPI FW as well
+> (unlike fwnode_irq_get() which works for ARM64 but not x86 ACPI)
 
-there is, though, another part I would take care of, this bit:
+...
 
-	clklo = clk_cycle - clkhi;
-	if (clklo < 64)
-		break;
+>  #include <linux/of_address.h>
 
-It might be unlikely, but if "clk_cycle > clkhi" then all the
-calculation. Do you mind adding a check:
+>  #include <linux/of_platform.h>
 
-	if (unlikely(clk_cycle > clkhi))
-		break;
+With your commit message I'm wondering why these are still there. Do
+we have some OF calls that are optional and do not affect
+functionality (in ACPI case)?
 
-Andi
 
->  	enum lpi2c_imx_pincfg pincfg;
->  	unsigned int temp;
->  
-> -- 
-> 2.34.1
-> 
+--=20
+With Best Regards,
+Andy Shevchenko
