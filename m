@@ -2,26 +2,26 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC4871637E
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 May 2023 16:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7641371646F
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 May 2023 16:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjE3ORm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 30 May 2023 10:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
+        id S232196AbjE3OkR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 30 May 2023 10:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjE3ORl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 May 2023 10:17:41 -0400
+        with ESMTP id S230351AbjE3OkQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 May 2023 10:40:16 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02C111B;
-        Tue, 30 May 2023 07:17:09 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QVvYW0nc3z67mXG;
-        Tue, 30 May 2023 22:15:11 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B11B0;
+        Tue, 30 May 2023 07:40:11 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QVw0f3CQsz6J7bl;
+        Tue, 30 May 2023 22:35:14 +0800 (CST)
 Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 30 May
- 2023 15:16:49 +0100
-Date:   Tue, 30 May 2023 15:16:48 +0100
+ 2023 15:40:08 +0100
+Date:   Tue, 30 May 2023 15:40:08 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 CC:     <linux-i2c@vger.kernel.org>, Wolfram Sang <wsa@kernel.org>,
@@ -34,90 +34,75 @@ CC:     <linux-i2c@vger.kernel.org>, Wolfram Sang <wsa@kernel.org>,
         Shesha Bhushan Sreenivasamurthy <sheshas@marvell.com>,
         <linux-cxl@vger.kernel.org>, <linuxarm@huawei.com>,
         "Viacheslav A . Dubeyko" <viacheslav.dubeyko@bytedance.com>
-Subject: Re: [RFC PATCH 3/6] i2c: aspeed: switch to generic fw properties.
-Message-ID: <20230530151648.00007d32@Huawei.com>
-In-Reply-To: <CAHp75Vd3ARzzWjWV=cRRghHKXMFWkrRXBa2ssCGRCZAqDEAjAA@mail.gmail.com>
+Subject: Re: [RFC PATCH 5/6] HACK: i2c: aspeed: Comment the clock and reset
+ out.
+Message-ID: <20230530154008.0000444b@Huawei.com>
+In-Reply-To: <CAHp75Vc=HgNT8WL6pPU3cJy_J5_aC8pomBpSPbe_hDEiJugUvg@mail.gmail.com>
 References: <20230525152203.32190-1-Jonathan.Cameron@huawei.com>
-        <20230525152203.32190-4-Jonathan.Cameron@huawei.com>
-        <CAHp75Vd3ARzzWjWV=cRRghHKXMFWkrRXBa2ssCGRCZAqDEAjAA@mail.gmail.com>
+        <20230525152203.32190-6-Jonathan.Cameron@huawei.com>
+        <CAHp75Vc=HgNT8WL6pPU3cJy_J5_aC8pomBpSPbe_hDEiJugUvg@mail.gmail.com>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, 27 May 2023 00:11:09 +0300
+On Sat, 27 May 2023 00:16:36 +0300
 Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-> On Thu, May 25, 2023 at 6:23 PM Jonathan Cameron
+> On Thu, May 25, 2023 at 6:24 PM Jonathan Cameron
 > <Jonathan.Cameron@huawei.com> wrote:
 > >
-> > Not tested on device tree but works nicely for ACPI :)  
-
-I was planning to abandon these as 'on list for anyone who
-cared' but now you've reviewed them I guess I better do
-an RFC v2 :)
-
+> > Needs tidying up - hopefully can do clock right
+> > using on going work from Niyas
+> > https://linaro.atlassian.net/wiki/spaces/CLIENTPC/pages/28832333867/ACPI+Clock+Management  
 > 
-> Needs a better commit message obviously :-)
+> For the current code base the easiest way is to switch to _optional
+> for clock, or request them based on the type of the fwnode. (Personal
+> preference is the _optional() API to call). 
 
-:)
+Absolutely agree that would the way to go if people want to support my
+crazy.
 
-> 
-> ...
-> 
-> > -       ret = of_property_read_u32(pdev->dev.of_node,
-> > +       ret = device_property_read_u32(&pdev->dev,
-> >                                    "bus-frequency", &bus->bus_frequency);  
-> 
-> Oh, please avoid double effort, i.e. go further and use I²C core APIs
-> for the timings. Oh, wait, do they use non-standard property?!
+However, that will leave the input clock frequency unknown which means we'll
+program a garbage value into one of the device registers. Doesn't matter
+to me, but not good in general.
 
-yup :(
+This is avoiding for now the questions of:
+1) Why devm for a clock we hold for 2 lines of code, none of which
+   have an error return path...
+2) clk_get_rate() is documented as not guaranteed to do anything for
+   a clk until enabled, so this is relying on it being enabled by
+   someone else or a quirk of the the chip. 
 
-Though it is documented as having a default of 100kHz in the devicetree
-binding so the original code shouldn't be calling dev_err() and should
-just do:
+> For the reset isn't it
+> transparent already so we got a dummy control (as for regulator)?
 
-	bus->frequency = I2C_MAX_STANDARD_MODE_FREQ;
-	device_property_read_u32(&pdev->dev,
-				 "bus-frequency, &bus->frequency);
+I don't think so, but maybe I'm missing something.
+There is a devm_reset_control_get_optional() though, similar to the clock
+one that returns a NULL if not present. 
 
-Fixing that is an unrelated change though. I'll do it for dt
-in a precusor patch then carry that forward to here.
+I'll use that here to make this a slightly less ugly hack.
+If I can handle clocks nicely using Niyas' work then can revisit
+whether the i2c and aspeed maintainers would accept making the
+reset optional.
 
-> 
-> ...
-> 
-> > +       bus->get_clk_reg_val = (u32 (*)(struct device *, u32))
-> > +               device_get_match_data(&pdev->dev);  
-> 
-> Personally I prefer using pointers in driver_data so we can avoid
-> ambiguity for the 0/NULL value returned by this call. But if 0 value
-> is considered invalid here, it's probably fine.
+Jonathan
 
-It is a pointer, just a function pointer rather than to a structure.
-I could wrap it up in a structure but that would be an unrelated
-driver change so at very least a separate patch. 
 
-> 
-> > +       if (!bus->get_clk_reg_val)
-> >                 bus->get_clk_reg_val = aspeed_i2c_24xx_get_clk_reg_val;
-> > -       else
-> > -               bus->get_clk_reg_val = (u32 (*)(struct device *, u32))
-> > -                               match->data;  
 > 
 > 
 
