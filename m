@@ -2,57 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67928716E0B
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 May 2023 21:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FAC716E13
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 May 2023 21:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbjE3Tu5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 30 May 2023 15:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
+        id S229893AbjE3Tvm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 30 May 2023 15:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbjE3Tu4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 May 2023 15:50:56 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBABD9;
-        Tue, 30 May 2023 12:50:49 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f6b2af4558so24444241cf.1;
-        Tue, 30 May 2023 12:50:49 -0700 (PDT)
+        with ESMTP id S233057AbjE3Tvk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 30 May 2023 15:51:40 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E6310D;
+        Tue, 30 May 2023 12:51:39 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-62615694bb9so16415396d6.0;
+        Tue, 30 May 2023 12:51:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685476248; x=1688068248;
+        d=gmail.com; s=20221208; t=1685476298; x=1688068298;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pXjN9PRF0JVsBQA3sSRY5GwI7nakQdzi1PnsvFjrYqM=;
-        b=dJG4SW6q+btsccPXWgVyBA2wU9LmiDckjB80PzRCy5c0+X0zRksexJwJAJMz1SkSE6
-         j2rQ664pEhP2u2FmYQchAwk853f0psHayZoOv8izLVXgvDOvwOUcdHI8gAo2DCttZScn
-         fnJNkH7UPFNpAtwhPloiOHz/nJQ4c1GrpEMjM7IjmDcFfPrgJjCsKSmyzn+f7XQn/C1C
-         0y7ev5Jw3yMPfydqUKB2ov7hFxQU2AacZ30YbzcUfzHs2y9seBhBkLn3azFsFhfLWAWe
-         x6JE/Slx6Ntvgc+MNiiFm8l+UfnyQv09Jh2b4OxqgbYtKoUQQS9bpPw7XP/v25A+THAI
-         njNg==
+        bh=Dg1R316DQtTQ+hZUY/dFh+6+GoPVV4Hxs4Uo4a0mNgA=;
+        b=T5F4eM+cPjxi+xgjsrzc97J58tELtMqaM+d4vNzHxTHLyMwCVqHqVfGPUYtNXrPQxd
+         ceu5oSZuwFknrR0ast2u8W0Uu9SQBO9ZLNbrHe1WsUu7B4z4bq1+C4dXEZdBOvpz74Fk
+         rbzPhNk5iHJAxILnFhzaN9vbwvsvjlCoa5nXTqTOeF3RLOYp6xoM8Hhd7GM+3HKUQ9W7
+         uT0VVnrd4aQisZTLTpsdVZZanTXrWDKQl+lLJQHAkp53+vzxJrttSnZP8NgLRrjuwOjc
+         bS/VEyHGhB4BzihNUyEugCL9msKyD78iaNplWKp69MqtIjVT1MC8IxsvPuk6Cu1VfsV3
+         FK3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685476248; x=1688068248;
+        d=1e100.net; s=20221208; t=1685476298; x=1688068298;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pXjN9PRF0JVsBQA3sSRY5GwI7nakQdzi1PnsvFjrYqM=;
-        b=lihl1lrHsNoz/2RiOJTLJjhXnUo14MaprUqvOJaas+oujX+Vi6/B8BeqBlbwjBoObb
-         aCNtqGNQE/u3vodIwZ38Tut8ScUgPUhRenjmJEccwbM8Pw+52iXhFryYmoWl9kgeq7aE
-         NoUoMwwDBQ4/ytWpAPGV8z3PGgP9b0AwTZqaqZh6LPD46gkwynFdLjLOt6Ph/IxWenLe
-         7tPVAjJLK2pCWFtgAJM5C/ssK/aZF6N92WqjP3VujmkGv4z3zzimCOi4P03Z9G7dNLPK
-         wWNXyH8kYhHLbrDYd2HRcuCyxqQjg6mVAsfCLibSm/+dzUz3Z0aAI0k8lTFjMRDNRNeG
-         EAUg==
-X-Gm-Message-State: AC+VfDySaARXrdnZO3T0ZASw0rWoQGu2d0XvfN8cM+x1qdemcw0MLOKB
-        LaL6UkwUevS3znuXUkrWD0qvMmge8Mtz4he8IrA=
-X-Google-Smtp-Source: ACHHUZ6KYhK91R4BVPuE9IdyLAE2nsMPM/uycxmxt3LW0NeCt7s+cFLlZlYu2taTYdaOeIpSj2HrxRZWbX8Xra03Tfo=
-X-Received: by 2002:a05:6214:aca:b0:626:1db8:de41 with SMTP id
- g10-20020a0562140aca00b006261db8de41mr4356695qvi.25.1685476248578; Tue, 30
- May 2023 12:50:48 -0700 (PDT)
+        bh=Dg1R316DQtTQ+hZUY/dFh+6+GoPVV4Hxs4Uo4a0mNgA=;
+        b=IMfF5+frQqWwJ5Y4e5Yt4yD9gMDOFz/hpHRhw4IfOpkY1XHWeKkiHvhZvgXHKc+Lkz
+         lRcg79iU9G+ROXQcSwKzvL3QcVCeLbLgvXGQ5DzDOgzTa0Nb1cSlzO2fqEGXndKBzvtJ
+         dOGpR8DbwLmaAQbSfTaGvtqkMx2v4RlJfZ2iEsJn7lDDQbmq4ewY9dZKCWq+9tLGmA5Z
+         Qy88dl0K/rPg2Z9h2hpHERnKqai0ZcU/LkzimimnZYYWMd+yxg1FRqCXw8S9khcWJ4H7
+         UqQiYp3vf/WMNhi1F6S4v8Xz+Jx5BjyTHk4ibGj5dMKNvR7Jf4Hru6zOUPlTtDmOBOJM
+         1vyA==
+X-Gm-Message-State: AC+VfDzLQtxz2iKYwfw6Vo6rT05Cs4XoDME4VPwUpW4M0RxnZAJS6IX3
+        q73o0WLnbz698RJgyhMDn0lo9v5br6vmpp5pS40=
+X-Google-Smtp-Source: ACHHUZ4j4CImuQ/J5RAiTA30bK75M2iguljSLXFIeSUpIg9H9dHEScuu3KPqtDKf6KRLDA625Ij0q1Z5anRsUziXxYU=
+X-Received: by 2002:a05:6214:1247:b0:623:6d96:c8ca with SMTP id
+ r7-20020a056214124700b006236d96c8camr3483044qvv.33.1685476298004; Tue, 30 May
+ 2023 12:51:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230530145601.2592-1-Jonathan.Cameron@huawei.com> <20230530145601.2592-5-Jonathan.Cameron@huawei.com>
-In-Reply-To: <20230530145601.2592-5-Jonathan.Cameron@huawei.com>
+References: <20230530145601.2592-1-Jonathan.Cameron@huawei.com> <20230530145601.2592-6-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20230530145601.2592-6-Jonathan.Cameron@huawei.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 30 May 2023 22:50:12 +0300
-Message-ID: <CAHp75VcjXFOG7ijEDgO7qdJiNPsBkuv_STH9e2GcSbPQDm40Mw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 4/6] i2c: aspeed: switch to generic fw properties.
+Date:   Tue, 30 May 2023 22:51:01 +0300
+Message-ID: <CAHp75VeE6UXxmC-opesh8D4wj9J0N=SvtV3Z=m-icanO7TRK7Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 5/6] i2c: aspeed: Set the fwnode for the adap->dev
 To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Cc:     linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
         Niyas Sait <niyas.sait@linaro.org>,
@@ -78,28 +78,47 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 On Tue, May 30, 2023 at 5:58=E2=80=AFPM Jonathan Cameron
 <Jonathan.Cameron@huawei.com> wrote:
 >
-> Moving over to generic firmware properties allows this driver to
-> get closer to working out of the box with both device tree and
-> other firmware options, such as ACPI via PRP0001.
+> This is needed for the bus matching used for ACPI based
+> i2c client registration.
+
+The right thing to do.
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+> v2: Drop the separate setting of the of_node. (Thanks Andy)
+> ---
+>  drivers/i2c/busses/i2c-aspeed.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> Tested only via QEMU emulation.
+> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-asp=
+eed.c
+> index 353834d7ffd5..ae8e187f2233 100644
+> --- a/drivers/i2c/busses/i2c-aspeed.c
+> +++ b/drivers/i2c/busses/i2c-aspeed.c
+> @@ -1017,7 +1017,6 @@ static int aspeed_i2c_probe_bus(struct platform_dev=
+ice *pdev)
+>         bus->adap.retries =3D 0;
+>         bus->adap.algo =3D &aspeed_i2c_algo;
+>         bus->adap.dev.parent =3D &pdev->dev;
+> -       bus->adap.dev.of_node =3D pdev->dev.of_node;
+>         strscpy(bus->adap.name, pdev->name, sizeof(bus->adap.name));
+>         i2c_set_adapdata(&bus->adap, bus);
+>
+> @@ -1043,6 +1042,8 @@ static int aspeed_i2c_probe_bus(struct platform_dev=
+ice *pdev)
+>         if (ret < 0)
+>                 return ret;
+>
+> +       device_set_node(&bus->adap.dev, dev_fwnode(&pdev->dev));
+> +
+>         ret =3D i2c_add_adapter(&bus->adap);
+>         if (ret < 0)
+>                 return ret;
+> --
+> 2.39.2
+>
 
-...
-
-> -#include <linux/of_address.h>
-> -#include <linux/of_platform.h>
-
-> +#include <linux/property.h>
-
-Ah, stupid me. You can discard the previous question (in one of the
-previous emails).
-
-...
-
-> +       bus->get_clk_reg_val =3D (u32 (*)(struct device *, u32))
-> +               device_get_match_data(&pdev->dev);
-
-Why not typedef this function and use it here and there?
 
 --=20
 With Best Regards,
