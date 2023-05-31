@@ -2,103 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCA9717BAE
-	for <lists+linux-i2c@lfdr.de>; Wed, 31 May 2023 11:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27917717BFE
+	for <lists+linux-i2c@lfdr.de>; Wed, 31 May 2023 11:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235289AbjEaJVV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 31 May 2023 05:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S234739AbjEaJdJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 31 May 2023 05:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234937AbjEaJVU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 May 2023 05:21:20 -0400
-Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74251BE;
-        Wed, 31 May 2023 02:21:16 -0700 (PDT)
-X-QQ-mid: Yeas44t1685524789t455t56494
-Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [183.159.96.128])
-X-QQ-SSF: 00400000000000F0FOF000000000000
-From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
-X-BIZMAIL-ID: 10707911515186658702
-To:     "'Russell King \(Oracle\)'" <linux@armlinux.org.uk>
-Cc:     <netdev@vger.kernel.org>, <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
-        <Jose.Abreu@synopsys.com>, <andrew@lunn.ch>,
-        <hkallweit1@gmail.com>, <oe-kbuild-all@lists.linux.dev>,
-        <linux-i2c@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <mengyuanlou@net-swift.com>,
-        "'Piotr Raczynski'" <piotr.raczynski@intel.com>
-References: <20230524091722.522118-6-jiawenwu@trustnetic.com> <202305261959.mnGUW17n-lkp@intel.com> <ZHCZ0hLKARXu3xFH@shell.armlinux.org.uk> <02dd01d991d2$2120fcf0$6362f6d0$@trustnetic.com> <03ac01d992d2$67c1ec90$3745c5b0$@trustnetic.com>
-In-Reply-To: <03ac01d992d2$67c1ec90$3745c5b0$@trustnetic.com>
-Subject: RE: [PATCH net-next v9 5/9] net: txgbe: Add SFP module identify
-Date:   Wed, 31 May 2023 17:19:47 +0800
-Message-ID: <046e01d993a1$0b8f51e0$22adf5a0$@trustnetic.com>
+        with ESMTP id S235600AbjEaJdA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 May 2023 05:33:00 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4F6A0;
+        Wed, 31 May 2023 02:32:53 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QWP7Y5pJDz6J76m;
+        Wed, 31 May 2023 17:27:53 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 31 May
+ 2023 10:32:50 +0100
+Date:   Wed, 31 May 2023 10:32:50 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     <linux-i2c@vger.kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Niyas Sait <niyas.sait@linaro.org>,
+        Klaus Jensen <its@irrelevant.dk>,
+        Andy Shevchenko <andy@kernel.org>,
+        <linux-acpi@vger.kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Shesha Bhushan Sreenivasamurthy <sheshas@marvell.com>,
+        <linux-cxl@vger.kernel.org>, <linuxarm@huawei.com>,
+        "Viacheslav A . Dubeyko" <viacheslav.dubeyko@bytedance.com>
+Subject: Re: [RFC PATCH v2 6/6] HACK: i2c: aspeed: Comment clock out and
+ make reset optional
+Message-ID: <20230531103250.00006911@Huawei.com>
+In-Reply-To: <CAHp75VcaE2-9ZKgmcZXaA668mLZ8XETcUuUdt2asF4aEzx97gg@mail.gmail.com>
+References: <20230530145601.2592-1-Jonathan.Cameron@huawei.com>
+        <20230530145601.2592-7-Jonathan.Cameron@huawei.com>
+        <CAHp75VcaE2-9ZKgmcZXaA668mLZ8XETcUuUdt2asF4aEzx97gg@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQFlCTXCD0V13/nxYaH3lJLB+zCPMgFguorBARt7XSgCWWopnAJhtNzYsCNyvSA=
-Content-Language: zh-cn
-X-QQ-SENDSIZE: 520
-Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tuesday, May 30, 2023 4:41 PM, Jiawen Wu wrote:
-> On Monday, May 29, 2023 10:06 AM, Jiawen Wu wrote:
-> > On Friday, May 26, 2023 7:37 PM, Russell King (Oracle) wrote:
-> > > On Fri, May 26, 2023 at 07:30:45PM +0800, kernel test robot wrote:
-> > > > Kconfig warnings: (for reference only)
-> > > >    WARNING: unmet direct dependencies detected for I2C_DESIGNWARE_PLATFORM
-> > > >    Depends on [n]: I2C [=n] && HAS_IOMEM [=y] && (ACPI && COMMON_CLK [=y] || !ACPI)
-> > > >    Selected by [y]:
-> > > >    - TXGBE [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_WANGXUN [=y] && PCI [=y]
-> > > >    WARNING: unmet direct dependencies detected for SFP
-> > > >    Depends on [n]: NETDEVICES [=y] && PHYLIB [=y] && I2C [=n] && PHYLINK [=y] && (HWMON [=n] || HWMON [=n]=n)
-> > > >    Selected by [y]:
-> > > >    - TXGBE [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_WANGXUN [=y] && PCI [=y]
-> > >
-> > > ... and is basically caused by "select SFP". No. Do not do this unless
-> > > you look at the dependencies for SFP and ensure that those are also
-> > > satisfied - because if you don't you create messes like the above
-> > > build errors.
+On Tue, 30 May 2023 22:59:50 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+
+> On Tue, May 30, 2023 at 5:59 PM Jonathan Cameron
+> <Jonathan.Cameron@huawei.com> wrote:
 > >
-> > So how do I make sure that the module I need compiles and loads correctly,
-> > rely on the user to manually select it?
+> > Needs tidying up - hopefully can do clock right using ongoing
+> > work from Niyas
+> > https://linaro.atlassian.net/wiki/spaces/CLIENTPC/pages/28832333867/ACPI+Clock+Management  
 > 
-> When I changed the TXGBE config to:
+> I'm wondering how this will be solved for the cases where the
+> "clock-frequency" property is used, see below.
+> 
+> > ACPI does not provide an equivalent reset deassert / assert. _RST
+> > doesn't fit that model, so for now make the reset optional.  
+> 
 > ...
-> 	depends on SFP
-> 	select PCS_XPCS
-> ...
-> the compilation gave an error:
 > 
-> drivers/net/phy/Kconfig:16:error: recursive dependency detected!
-> drivers/net/phy/Kconfig:16:     symbol PHYLIB is selected by PHYLINK
-> drivers/net/phy/Kconfig:6:      symbol PHYLINK is selected by PCS_XPCS
-> drivers/net/pcs/Kconfig:8:      symbol PCS_XPCS is selected by TXGBE
-> drivers/net/ethernet/wangxun/Kconfig:40:        symbol TXGBE depends on SFP
-> drivers/net/phy/Kconfig:63:     symbol SFP depends on PHYLIB
-> For a resolution refer to Documentation/kbuild/kconfig-language.rst
-> subsection "Kconfig recursive dependency limitations"
+> >  - Left the clock with the hideous hack to keep it obvious that it is
+> >    a hack given no way for us to get the clk rate on ACPI firmware yet
+> >    and I don't want to pretend there is.  
 > 
-> Seems deleting "depends on SFP" is the correct way. But is this normal?
-> How do we ensure the dependency between TXGBE and SFP?
+> The workaround in some cases is to read the "clock-frequency"
+> property, which is standard de facto in several drivers / subsystems.
 
-Hi Russell,
+That's the wrong clock frequency.  I believe that property is the i2c bus clock
+frequency Documentation/devicetree/bindings/i2c/i2c.txt 
+The one being used here is the input clock.  I'd imagine there is some division
+done, but probably doesn't make sense to represent that using the clock framework
+as the i2c bus clock signal isn't directly derived from the input clock
+(pulse stretching and all sorts of other fun in I2C).  Also massive overkill
+given no one else can use this clock.
 
-Could you please give me some suggestions?
+> 
+> That said, why not split this patch into two and switch the clock to
+> be optional and use the above property? Okay, one thing is that this
+> can collide probably with the generic I2C bus timings, which this
+> driver uses with a non-standard property name.
+> 
 
-I checked "kconfig-language" doc, the practical solution is that swap all
-"select FOO" to "depends on FOO" or swap all "depends on FOO" to
-"select FOO". Config PCS_XPCS has to be selected in order to load modules
-properly, so how should I fix the warning?
+I'd rather provide the clock from ACPI using Niyas' stuff when ready -
+it looks like a promising general solution so don't want to put an
+partial solution in before that.
 
+I kept these two changes in the last patch as I suspect they are the
+ones that can be considered a hack, given we don't actually have a
+real platform using ACPI with this device.  Anyone on aspeed know if
+anyone cares about ACPI on those BMCs?
+
+Jonathan
