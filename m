@@ -2,48 +2,34 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44766718069
-	for <lists+linux-i2c@lfdr.de>; Wed, 31 May 2023 14:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AC1718201
+	for <lists+linux-i2c@lfdr.de>; Wed, 31 May 2023 15:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236028AbjEaMyb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 31 May 2023 08:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        id S232949AbjEaNff (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 31 May 2023 09:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236026AbjEaMy3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 May 2023 08:54:29 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2133.outbound.protection.outlook.com [40.107.114.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE8EE44;
-        Wed, 31 May 2023 05:54:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zzx3DAqUC0gdOfCEb+1+UsreYc2tdDihT/WsNOuunhdHe5sqHQLPItlkKwzuycPpRWnaHxZgBmnZOqAO8C+cYeLAvBSEculiX25TwE0pkFXEgLQY8X5bS40GfEhdfgyDWNUYEhttc6gOq5c78qjotItW81878yjjuzjBrtPrZ07730QQQFMVIZOHsaw9IGEqZytvBDYyteNMcYJeO6hnwbqu/1CmQlQpuuytXB0XodnOrN+bnXDat8akKA8Hagy5IOcYHOp/8al2sO+IMXXnSByTzOaerJhCO4rtQtlNVMCvFkh7+AMPTS+ffjubbPVNPX/PzmuJYloGpnxXsQMU3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MgvkffKXEZNz9bnP4pfVDqTOV55XZU58kqCH2vFIGf0=;
- b=nIg3+HOfxC3kVybgq94ZOxB8otCzTU0E8D0yBXzXzMEoMK+1C9lEvvVQEViBLkXOqtW2aOcy0yj73nsgov1I5pG5KMkwuqyYwN1NXKLDTG0D0FazJT3fwfthd95kxcMUa8DkrFvoNH1JFvurjXdRz0BCmLeXR7Piw/Hbwn5Li75uDyNYp13Zl5qhD/eqygiipv9CP2wdTITQFumDhnlsOI67haT7K6017UweukLu/rTzSDoGdXKNqU+khHYZh3Q8P1/yQPFOuzoZgNvS4dKV9npux1iO0BV/VvoVfXCkNfhKVl947SiLWtaBzaFmAhLyJEiaaFcwsSD7XpFP3ajDVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MgvkffKXEZNz9bnP4pfVDqTOV55XZU58kqCH2vFIGf0=;
- b=G4BCRQ/5+H/4mn28AHUiih2AXM7L5YQgfEK3k3ZRqtNTHnkhUm34Vk3HUzIItQwfVNoBNwi17n76+/0i+wydkK88u7gm5xmJWzACu4v5I+COBjPxgvkd9tQ4i0E70S8b7TlMAGqELcuYSn+/vkTZOKw39Ut7l7/t5TmXwOaK+3M=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYCPR01MB10648.jpnprd01.prod.outlook.com (2603:1096:400:290::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
- 2023 12:53:19 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2%6]) with mapi id 15.20.6455.020; Wed, 31 May 2023
- 12:53:18 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-CC:     Wolfram Sang <wsa@kernel.org>,
+        with ESMTP id S229936AbjEaNfe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 31 May 2023 09:35:34 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13F9C5;
+        Wed, 31 May 2023 06:35:31 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126205251136.34.openmobile.ne.jp [126.205.251.136])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 16CC57F5;
+        Wed, 31 May 2023 15:35:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685540108;
+        bh=+nR/xOKmJlnCcvn/KQYJg22jLsLI40jffx8355kEeRQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kFXTO0zbOe8bfXo6WPjT5yJxSf+OYIq8Pi2SRhA2wrbMRQsLJ2zPoEe1YznMexMf5
+         tSJbhQ2woSwM86vSy+fd92pBmZT+IM83QfPAUZCPhYDwSa9CViwNVq/xRP8GejCmNn
+         0nggYSKUHRGnUeh/TV5ALyRk8REAdR0adVwqKonc=
+Date:   Wed, 31 May 2023 16:35:28 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Andrzej Hajda <andrzej.hajda@intel.com>,
@@ -58,10 +44,10 @@ CC:     Wolfram Sang <wsa@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Jonas Karlman <jonas@kwiboo.se>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Corey Minyard <cminyard@mvista.com>,
-        =?utf-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
         Jiasheng Jiang <jiasheng@iscas.ac.cn>,
         Antonio Borneo <antonio.borneo@foss.st.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
@@ -72,11 +58,8 @@ CC:     Wolfram Sang <wsa@kernel.org>,
         Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         "linux-renesas-soc@vger.kernel.org" 
         <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-Thread-Topic: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-Thread-Index: AQHZjJbXGsyu+Gf1qUyolpKmZgFmTa9w75gAgAALD6CAAyijgIAAApUwgAAqgYCAAADfgA==
-Date:   Wed, 31 May 2023 12:53:18 +0000
-Message-ID: <OS0PR01MB592217BBDCD7C0072F24493D86489@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
+Message-ID: <20230531133528.GH27043@pendragon.ideasonboard.com>
 References: <20230522101849.297499-1-biju.das.jz@bp.renesas.com>
  <20230522101849.297499-2-biju.das.jz@bp.renesas.com>
  <20230529080552.GJ25984@pendragon.ideasonboard.com>
@@ -84,359 +67,434 @@ References: <20230522101849.297499-1-biju.das.jz@bp.renesas.com>
  <20230531085941.GA27043@pendragon.ideasonboard.com>
  <OS0PR01MB59226E87241A61A2CB255DEE86489@OS0PR01MB5922.jpnprd01.prod.outlook.com>
  <20230531114103.GD27043@pendragon.ideasonboard.com>
-In-Reply-To: <20230531114103.GD27043@pendragon.ideasonboard.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB10648:EE_
-x-ms-office365-filtering-correlation-id: 953a7921-8c57-43ce-380e-08db61d601e9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NX3MZs4yzCOLUKXrg/Yxu+yeRprt3vszH0KuZA9rreVEPInLhNAG0XiN1BtGPufdnIRLkO9wqbegwMV6TcNgOoSXAfno6KxZD+FSORd7XCAa5PVTyf6yo5VCZsUqt4eiZm6u5SG9riV/LJ3ThdqMAXy/8w2sWPES6Lz3vafbnkvBMFF88lUut++nGVwcY+GaXQDYz2xMaQ7pnv28sKO9/ZkXl8rQHPdYx2qI/bJk5TTuY9eL+zpC/bPc7gl5VQGNO3ipWlQzdZExgIEeg1W9g4hSswTzm2DpL/ndHu/uyc41H0auukFZVHAcbO+YWVBxiQvhQOOk2czSEqph03UtvnIjkPVqcCqRUBmIZ1kRF1O/jme9fYws7j5BxBAzEDQ7t/thSWG9CDl9yecu7t6ecU9pFOMhCEeWJkGNEZ3vDtJDxim/J62b9NJ8StfVoNwGqz4prfIQwzj/+Qs6VsXFMF/3Hm9o8po8IUxqWS4bKd8v/Jfn1+CXtC3eY21S9Wl/lLtAqadop25arCAsOdoW9RQO0koiftOr4pYqOOV8FznLgwcV/3W1NRCh+Y7Mhl+dxclS/zPz3r50Ffx/XgoB1pXgiy3NoEDBN7z8e0di2rID7lHYYKyX5+Wc121uSAzg
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(346002)(136003)(39860400002)(366004)(451199021)(38100700002)(122000001)(38070700005)(33656002)(86362001)(478600001)(8936002)(41300700001)(52536014)(5660300002)(7416002)(26005)(6506007)(9686003)(55016003)(30864003)(7696005)(186003)(8676002)(83380400001)(2906002)(316002)(54906003)(66556008)(71200400001)(76116006)(66476007)(4326008)(110136005)(66446008)(66946007)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bWJRYVlKRm9Gckg0UldBZVlTM1dXbTZVUjdKbER6OXVsaWJXaDdMWkc1cDZt?=
- =?utf-8?B?RUdrMkpNYUFGS0E1ZXFyTGFKa0xYSUR1Z3NGRFdhUjBRdzBnckRPelBLbm16?=
- =?utf-8?B?SkpRTVdkUEJyU0MyTUZjT0Y0c2duOHFKejRRVGRNQUVVTXEwN2llZ1k0eHQw?=
- =?utf-8?B?ZFpvZTVXWDN4TG1hNHVvUjEzNzBXSVJWWENTYWxFM0s2aUZMb0FTOVRjZURj?=
- =?utf-8?B?bU9RZXZjTzJnbHFLeUZybk9HdUdybW51OTlZNDFwcEE4K3dmVzlGMmRlejZO?=
- =?utf-8?B?UC9RN3JXQmtnVlhDbmxWV0s2Q0RHMmR2SkpubEpQVXJ5cW9jVTMrM1ZDbFo2?=
- =?utf-8?B?STNzVkNUWnNNeDVPbXdTZWEwelhVcUtUTVUrUk54amIzTmNVajhhcDJ5RGRD?=
- =?utf-8?B?THByZ3BpS21zMGNnMy9EUHBDd3RkdkNWOUdUa2JiYVNSak1xeXV4cWN0NHpR?=
- =?utf-8?B?dkV3UVhTLzJ4aEttQTdPejZ3bFZxRmd0MWVyZ3h6MzRId1RsYkducmRqN2dR?=
- =?utf-8?B?WkpFVUMzc3o0MHVRaWZkSU5EVzNScVkraDhXb25SQXFBQmRadUV1WnlRMytB?=
- =?utf-8?B?TkNOOFlQdEduK0h0Q2hxZ2JFVHQ3S1pXNkFnVWNJU2lER1pmdVJzbnFrVDVl?=
- =?utf-8?B?UE1pV3hpWVBDdHlYaUdaZTUwNFQ3b1hFQ1lORHZVaEFSbFhxTTh4cG05cCtN?=
- =?utf-8?B?MkhTVlRQeEcvQTdwTDlLeVhzSE52U1pGY3JtOEM5ODRSbEc1c1crdGsxTW12?=
- =?utf-8?B?NURlaVpwV01LLzFrSGtxbVA1QVdROE9Cb2RKNFlyR3AvSkJ0RmF6YmtyWURQ?=
- =?utf-8?B?bDhoWkFkSXRDNklBZTlVUGl3QWdldVBUYktrdy9lVU1zWjZkTGEvM1dDM0lU?=
- =?utf-8?B?WHZxSjRGcGE2djRVcVQ0TlR0RFFnaTV5SUFnZW1kZnpsd2tyS01ZZm4yNWhG?=
- =?utf-8?B?YnBiZG5ZWEZ6L1AwcUs0UFAvNDI2eDZRSHBJVzZLMTF3QXlRYmNRQTQrY1dT?=
- =?utf-8?B?MjJ1c0o3djdYckF1YVJaNlNycDZWVmluOXpackk3THBNbFJiR3dlS2NYZit6?=
- =?utf-8?B?dDdGZnlZNFFQeEFCN2l2OGtFa2VPeE5pb3ZLY2x1Tkk2OVRCOHU0dzhsaWF4?=
- =?utf-8?B?TFNoY2R4U3NPbmg1QkZpWVhicXJJVlNTMDByTTRqTVJXOVpnbzJxSTBldXpH?=
- =?utf-8?B?S29mQjZVUmovR1lXbWZsRU44VndGTmsxdXhvRlFIWTZ0bGVpeTYrak5YeGZx?=
- =?utf-8?B?TVZzY1crSGk4UWQ2RGZyaUdwZTFvM25rWDZ4T1JHSnRGWDV5ZzlTV3FpOTgz?=
- =?utf-8?B?Z2VkTUpJZ1dtZ0dDTis2T3Fmb1ZkYVFYRXh1NlA3VmtxYlc4MVB5UDVtbThk?=
- =?utf-8?B?eTFJNnhvTEErUTd1TjBSQ3MxNXBGdW04aVJLbVIweWRKcHc1a01QaGNoUTJS?=
- =?utf-8?B?dWRmYXh3elJMZDdZdFdFTk1aWlZkQWlLUXIycm10VEt4bmVJaXo0ZlVBOEFT?=
- =?utf-8?B?K214dzl3Wm5OWFBZakRmb1RXYVNWZndxRGdhOUphSlROT1pRNUJoMGxRSytu?=
- =?utf-8?B?cXpJc2c1aTBoeDB1NVpGamhZaUFsOGZJSUdqeWl5Q0piVGVxVW04bmhRNzgx?=
- =?utf-8?B?ZjNTREdHbk9sRFZEMERqQVZ6WDQzRDVoWkVRUStKeWZYd3laRWF3cDdyQ2Q3?=
- =?utf-8?B?djdCcjlObmxxMjE2QkRTYW9DR1Z0NW1PNW5CajZtbVY3UlBwOWRTUHd0bjdz?=
- =?utf-8?B?NVBDUHFRUm1ZS2xaRWlSU0dueG1tWkRPak1lc1pxSXJ6ODdFbEVJbVRZTkth?=
- =?utf-8?B?WXBLV3RQa3I3UHBXa0I5bjdYY0RRaUhrN1ZDRW1hTk41Ly9VRjl3WTdQMnBk?=
- =?utf-8?B?MU5GdHZIdit6Nm5TeG5KRFFlZWNEZnlBM21tVnRjdkdCQXBwMmFXTUtUMzVv?=
- =?utf-8?B?NWhTdGh6dGtIOVVCL0JoY3lNdmNGM3JybmtaaFpKL0pDSEcvc0M0WFJkZ1Ns?=
- =?utf-8?B?T0VDWlZVaXc0THpsUWVDeUFMY0wwdElRTWc2Yzl6cXpBOHpldmNVZUt6bTM4?=
- =?utf-8?B?Q3dtS29raENrQXljbjRBZnNBNzJXNzhJdmZTNDZjZkx2MzQ1ZjhKVjZ3Z0Na?=
- =?utf-8?Q?04/IvViMUyQsyWczQo3jakxAt?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <OS0PR01MB592217BBDCD7C0072F24493D86489@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 953a7921-8c57-43ce-380e-08db61d601e9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2023 12:53:18.5652
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uACNzx+WsE5xq563/iSp0OkSydToM6RDLsyZRVjirBkZhKy80tvIZh9TeNBTeLrUNKkZUiG1ZGOOqmyW8HGMd0eqfx8LyJo0XX8EcRcY1rw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB10648
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <OS0PR01MB592217BBDCD7C0072F24493D86489@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGkgTGF1cmVudCwNCg0KVGhhbmtzIGZvciB0aGUgZmVlZGJhY2suDQoNCj4gU3ViamVjdDogUmU6
-IFtQQVRDSCB2NSAwMS8xMV0gaTJjOiBFbmhhbmNlIGkyY19uZXdfYW5jaWxsYXJ5X2RldmljZSBB
-UEkNCj4gDQo+IEhpIEJpanUsDQo+IA0KPiBPbiBXZWQsIE1heSAzMSwgMjAyMyBhdCAwOTozNDow
-NkFNICswMDAwLCBCaWp1IERhcyB3cm90ZToNCj4gPiA+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjUg
-MDEvMTFdIGkyYzogRW5oYW5jZSBpMmNfbmV3X2FuY2lsbGFyeV9kZXZpY2UNCj4gPiA+IEFQSSBP
-biBNb24sIE1heSAyOSwgMjAyMyBhdCAwOTowMDo0M0FNICswMDAwLCBCaWp1IERhcyB3cm90ZToN
-Cj4gPiA+ID4gPiBTdWJqZWN0OiBSZTogW1BBVENIIHY1IDAxLzExXSBpMmM6IEVuaGFuY2UNCj4g
-PiA+ID4gPiBpMmNfbmV3X2FuY2lsbGFyeV9kZXZpY2UgQVBJIE9uIE1vbiwgTWF5IDIyLCAyMDIz
-IGF0IDExOjE4OjM5QU0NCj4gKzAxMDAsIEJpanUgRGFzIHdyb3RlOg0KPiA+ID4gPiA+ID4gUmVu
-ZXNhcyBQTUlDIFJBQTIxNTMwMCBleHBvc2VzIHR3byBzZXBhcmF0ZSBpMmMgZGV2aWNlcywgb25l
-DQo+ID4gPiA+ID4gPiBmb3IgdGhlIG1haW4gZGV2aWNlIGFuZCBhbm90aGVyIGZvciBydGMgZGV2
-aWNlLg0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IEVuaGFuY2UgaTJjX25ld19hbmNpbGxhcnlf
-ZGV2aWNlKCkgdG8gaW5zdGFudGlhdGUgYSByZWFsDQo+IGRldmljZS4NCj4gPiA+ID4gPg0KPiA+
-ID4gPiA+IERvZXNuJ3QgaXQgYWxyZWFkeSBpbnN0YW50aWF0ZSBhIHJlYWwgZGV2aWNlID8NCj4g
-PiA+ID4NCj4gPiA+IEFuZCB0aGF0IGZ1bmN0aW9uIGNhbGxzIGkyY19uZXdfY2xpZW50X2Rldmlj
-ZSgpLCB3aGljaCBhbGxvY2F0ZXMgYQ0KPiA+ID4gc3RydWN0IGkyY19jbGllbnQgdGhhdCBlbWJl
-ZHMgYSBzdHJ1Y3QgZGV2aWNlLCBhbmQgcmVnaXN0ZXJzIHRoYXQNCj4gPiA+IGRldmljZSB3aXRo
-IHRoZSBrZXJuZWwgZGV2aWNlIGNvcmUuIEhvdyBpcyB0aGF0IGRpZmZlcmVudCwgaW4gdGVybXMN
-Cj4gPiA+IG9mIGluc3RhbnRpYXRpbmcgYSAicmVhbCBkZXZpY2UiLCBmcm9tIHdoYXQgdGhpcyBw
-YXRjaCBkb2VzID8NCj4gPg0KPiA+IFRoZXJlIGlzIGEgZGlmZmVyZW5jZSwgcmlnaHQ/IGl0IGlu
-c3RhbnRpYXRlcyBuZXcgImkyYyBkdW1teSBjbGllbnQiDQo+ID4gZHJpdmVyIGFuZCBhICJyZWFs
-IGkyYyBjbGllbnQgZGV2aWNlIiBkcml2ZXIgbGlrZSBydGMgZGV2aWNlDQo+IGNsaWVudChydGMt
-aXNsMjEwOCk/Pw0KPiANCj4gSSBkb24ndCBzZWUgaG93IHRoZXJlJ3MgYSBkaWZmZXJlbmNlIGlu
-IGJlaGF2aW91ciBpbiB0aGUgY29kZSB5b3UgaGF2ZQ0KPiBpbXBsZW1lbnRlZCwgc29ycnkuDQoN
-CldpbGwgcmV3b3JkLA0KDQpFbmhhbmNlIGkyY19uZXdfYW5jaWxsYXJ5X2RldmljZSgpIHRvIGlu
-c3RhbnRpYXRlIGEgIkkyQyBjbGllbnQgZGV2aWNlIg0KYXBhcnQgZnJvbSB0aGUgYWxyZWFkeSBz
-dXBwb3J0ZWQgIkkyQyBkdW1teSBjbGllbnQgZGV2aWNlIi4NCg0KPiANCj4gPiA+ID4gPiA+IChl
-ZzogSW5zdGFudGlhdGUgcnRjIGRldmljZSBmcm9tIFBNSUMgZHJpdmVyKQ0KPiA+ID4gPiA+ID4N
-Cj4gPiA+ID4gPiA+IEFkZGVkIGhlbHBlciBmdW5jdGlvbiBfX2kyY19uZXdfZHVtbXlfZGV2aWNl
-IHRvIHNoYXJlIHRoZSBjb2RlDQo+ID4gPiA+ID4gPiBiZXR3ZWVuIGkyY19uZXdfZHVtbXlfZGV2
-aWNlIGFuZCBpMmNfbmV3X2FuY2lsbGFyeV9kZXZpY2UoKS4NCj4gPiA+ID4gPiA+DQo+ID4gPiA+
-ID4gPiBBbHNvIGFkZGVkIGhlbHBlciBmdW5jdGlvbiBfX2kyY19uZXdfY2xpZW50X2RldmljZSgp
-IHRvIHBhc3MNCj4gPiA+ID4gPiA+IHBhcmVudCBkZXYgcGFyYW1ldGVyLCBzbyB0aGF0IHRoZSBh
-bmNpbGxhcnkgZGV2aWNlIGNhbiBhc3NpZ24NCj4gPiA+ID4gPiA+IGl0cyBwYXJlbnQgZHVyaW5n
-IGNyZWF0aW9uLg0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IFN1Z2dlc3RlZC1ieTogR2VlcnQg
-VXl0dGVyaG9ldmVuIDxnZWVydCtyZW5lc2FzQGdsaWRlci5iZT4NCj4gPiA+ID4gPiA+IFNpZ25l
-ZC1vZmYtYnk6IEJpanUgRGFzIDxiaWp1LmRhcy5qekBicC5yZW5lc2FzLmNvbT4NCj4gPiA+ID4g
-PiA+IC0tLQ0KPiA+ID4gPiA+ID4gdjQtPnY1Og0KPiA+ID4gPiA+ID4gICogUmVwbGFjZWQgcGFy
-YW1ldGVyIGRldi0+cGFyZW50IGluIF9faTJjX25ld19jbGllbnRfZGV2aWNlKCkNCj4gYW5kDQo+
-ID4gPiA+ID4gPiAgICBfX2kyY19uZXdfZHVtbXlfZGV2aWNlKCkuDQo+ID4gPiA+ID4gPiAgKiBJ
-bXByb3ZlZCBlcnJvciBtZXNzYWdlIGluIF9faTJjX25ld19kdW1teV9kZXZpY2UoKSBieQ0KPiBw
-cmludGluZyBkZXZpY2UgbmFtZS4NCj4gPiA+ID4gPiA+ICAqIFVwZGF0ZWQgY29tbWVudCBmb3Ig
-YW5jaWxsYXJ5J3MgZGV2aWNlIHBhcmVudA0KPiA+ID4gPiA+ID4gICogRHJvcHBlZCBhdXhfZGV2
-aWNlX25hbWUgY2hlY2sgaW4NCj4gaTJjX25ld19hbmNpbGxhcnlfZGV2aWNlKCkuDQo+ID4gPiA+
-ID4gPiB2My0+djQ6DQo+ID4gPiA+ID4gPiAgKiBEcm9wcGVkIFJiIHRhZyBmcm9tIEdlZXJ0IGFz
-IHRoZXJlIGFyZSBuZXcgY2hhbmdlcy4NCj4gPiA+ID4gPiA+ICAqIEludHJvZHVjZWQgX19pMmNf
-bmV3X2R1bW15X2RldmljZSgpIHRvIHNoYXJlIHRoZSBjb2RlDQo+IGJldHdlZW4NCj4gPiA+ID4g
-PiA+ICAgIGkyY19uZXdfZHVtbXlfZGV2aWNlIGFuZCBpMmNfbmV3X2FuY2lsbGFyeV9kZXZpY2Uo
-KS4NCj4gPiA+ID4gPiA+ICAqIEludHJvZHVjZWQgX19pMmNfbmV3X2NsaWVudF9kZXZpY2UoKSB0
-byBwYXNzIHBhcmVudCBkZXYNCj4gPiA+ID4gPiA+ICAgIHBhcmFtZXRlciwgc28gdGhhdCB0aGUg
-YW5jaWxsYXJ5IGRldmljZSBjYW4gYXNzaWduIGl0cw0KPiBwYXJlbnQgZHVyaW5nDQo+ID4gPiA+
-ID4gPiAgICBjcmVhdGlvbi4NCj4gPiA+ID4gPiA+IHYzOg0KPiA+ID4gPiA+ID4gICogTmV3IHBh
-dGNoDQo+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gUmVmOg0KPiA+ID4gPiA+ID4NCj4gPiA+ID4g
-PiA+IC0tLQ0KPiA+ID4gPiA+ID4gIGRyaXZlcnMvZ3B1L2RybS9icmlkZ2UvYWR2NzUxMS9hZHY3
-NTExX2Rydi5jIHwgIDYgKy0NCj4gPiA+ID4gPiA+ICBkcml2ZXJzL2kyYy9pMmMtY29yZS1iYXNl
-LmMgICAgICAgICAgICAgICAgICB8IDkyDQo+ICsrKysrKysrKysrKystLQ0KPiA+ID4gLS0tLQ0K
-PiA+ID4gPiA+IC0NCj4gPiA+ID4gPiA+ICBkcml2ZXJzL21lZGlhL2kyYy9hZHY3NDh4L2Fkdjc0
-OHgtY29yZS5jICAgICB8ICAyICstDQo+ID4gPiA+ID4gPiAgZHJpdmVycy9tZWRpYS9pMmMvYWR2
-NzYwNC5jICAgICAgICAgICAgICAgICAgfCAgMyArLQ0KPiA+ID4gPiA+ID4gIGluY2x1ZGUvbGlu
-dXgvaTJjLmggICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDMgKy0NCj4gPiA+ID4gPiA+ICA1
-IGZpbGVzIGNoYW5nZWQsIDY5IGluc2VydGlvbnMoKyksIDM3IGRlbGV0aW9ucygtKQ0KPiA+ID4g
-PiA+ID4NCj4gPiA+ID4gPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vYnJpZGdlL2Fk
-djc1MTEvYWR2NzUxMV9kcnYuYw0KPiA+ID4gPiA+ID4gYi9kcml2ZXJzL2dwdS9kcm0vYnJpZGdl
-L2Fkdjc1MTEvYWR2NzUxMV9kcnYuYw0KPiA+ID4gPiA+ID4gaW5kZXggZGRjZWFmYTdiNjM3Li44
-NjMwNmIwMTBhMGEgMTAwNjQ0DQo+ID4gPiA+ID4gPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vYnJp
-ZGdlL2Fkdjc1MTEvYWR2NzUxMV9kcnYuYw0KPiA+ID4gPiA+ID4gKysrIGIvZHJpdmVycy9ncHUv
-ZHJtL2JyaWRnZS9hZHY3NTExL2Fkdjc1MTFfZHJ2LmMNCj4gPiA+ID4gPiA+IEBAIC0xMDcyLDcg
-KzEwNzIsNyBAQCBzdGF0aWMgaW50DQo+ID4gPiA+ID4gPiBhZHY3NTExX2luaXRfY2VjX3JlZ21h
-cChzdHJ1Y3QNCj4gPiA+IGFkdjc1MTEgKmFkdikNCj4gPiA+ID4gPiA+ICAJaW50IHJldDsNCj4g
-PiA+ID4gPiA+DQo+ID4gPiA+ID4gPiAgCWFkdi0+aTJjX2NlYyA9IGkyY19uZXdfYW5jaWxsYXJ5
-X2RldmljZShhZHYtPmkyY19tYWluLA0KPiA+ID4gImNlYyIsDQo+ID4gPiA+ID4gPiAtCQkJCQkJ
-QURWNzUxMV9DRUNfSTJDX0FERFJfREVGQVVMVCk7DQo+ID4gPiA+ID4gPiArCQkJCSAgICBBRFY3
-NTExX0NFQ19JMkNfQUREUl9ERUZBVUxULCBOVUxMKTsNCj4gPiA+ID4gPiA+ICAJaWYgKElTX0VS
-UihhZHYtPmkyY19jZWMpKQ0KPiA+ID4gPiA+ID4gIAkJcmV0dXJuIFBUUl9FUlIoYWR2LT5pMmNf
-Y2VjKTsNCj4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiBAQCAtMTI2MSw3ICsxMjYxLDcgQEAgc3Rh
-dGljIGludCBhZHY3NTExX3Byb2JlKHN0cnVjdA0KPiA+ID4gPiA+ID4gaTJjX2NsaWVudA0KPiA+
-ID4gKmkyYykNCj4gPiA+ID4gPiA+ICAJYWR2NzUxMV9wYWNrZXRfZGlzYWJsZShhZHY3NTExLCAw
-eGZmZmYpOw0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ICAJYWR2NzUxMS0+aTJjX2VkaWQgPSBp
-MmNfbmV3X2FuY2lsbGFyeV9kZXZpY2UoaTJjLCAiZWRpZCIsDQo+ID4gPiA+ID4gPiAtCQkJCQlB
-RFY3NTExX0VESURfSTJDX0FERFJfREVGQVVMVCk7DQo+ID4gPiA+ID4gPiArCQkJCQlBRFY3NTEx
-X0VESURfSTJDX0FERFJfREVGQVVMVCwNCj4gPiA+IE5VTEwpOw0KPiA+ID4gPiA+ID4gIAlpZiAo
-SVNfRVJSKGFkdjc1MTEtPmkyY19lZGlkKSkgew0KPiA+ID4gPiA+ID4gIAkJcmV0ID0gUFRSX0VS
-UihhZHY3NTExLT5pMmNfZWRpZCk7DQo+ID4gPiA+ID4gPiAgCQlnb3RvIHVuaW5pdF9yZWd1bGF0
-b3JzOw0KPiA+ID4gPiA+ID4gQEAgLTEyNzEsNyArMTI3MSw3IEBAIHN0YXRpYyBpbnQgYWR2NzUx
-MV9wcm9iZShzdHJ1Y3QNCj4gPiA+ID4gPiA+IGkyY19jbGllbnQNCj4gPiA+ICppMmMpDQo+ID4g
-PiA+ID4gPiAgCQkgICAgIGFkdjc1MTEtPmkyY19lZGlkLT5hZGRyIDw8IDEpOw0KPiA+ID4gPiA+
-ID4NCj4gPiA+ID4gPiA+ICAJYWR2NzUxMS0+aTJjX3BhY2tldCA9IGkyY19uZXdfYW5jaWxsYXJ5
-X2RldmljZShpMmMsDQo+ID4gPiAicGFja2V0IiwNCj4gPiA+ID4gPiA+IC0JCQkJCUFEVjc1MTFf
-UEFDS0VUX0kyQ19BRERSX0RFRkFVTFQpOw0KPiA+ID4gPiA+ID4gKwkJCQkJQURWNzUxMV9QQUNL
-RVRfSTJDX0FERFJfREVGQVVMVCwNCj4gPiA+IE5VTEwpOw0KPiA+ID4gPiA+ID4gIAlpZiAoSVNf
-RVJSKGFkdjc1MTEtPmkyY19wYWNrZXQpKSB7DQo+ID4gPiA+ID4gPiAgCQlyZXQgPSBQVFJfRVJS
-KGFkdjc1MTEtPmkyY19wYWNrZXQpOw0KPiA+ID4gPiA+ID4gIAkJZ290byBlcnJfaTJjX3VucmVn
-aXN0ZXJfZWRpZDsgZGlmZiAtLWdpdA0KPiA+ID4gPiA+ID4gYS9kcml2ZXJzL2kyYy9pMmMtY29y
-ZS1iYXNlLmMgYi9kcml2ZXJzL2kyYy9pMmMtY29yZS1iYXNlLmMNCj4gPiA+ID4gPiA+IGluZGV4
-IGFlM2FmNzM4YjAzZi4uMzQ0MmFhODAyOTBmDQo+ID4gPiA+ID4gPiAxMDA2NDQNCj4gPiA+ID4g
-PiA+IC0tLSBhL2RyaXZlcnMvaTJjL2kyYy1jb3JlLWJhc2UuY3Z2Y2NjDQo+ID4gPiA+ID4gPiAr
-KysgYi9kcml2ZXJzL2kyYy9pMmMtY29yZS1iYXNlLmNja3ZscmdudWxrag0KPiA+ID4gPiA+ID4g
-QEAgLTg5MywyNCArODkzLDEwIEBAIGludCBpMmNfZGV2X2lycV9mcm9tX3Jlc291cmNlcyhjb25z
-dA0KPiA+ID4gPiA+ID4gc3RydWN0DQo+ID4gPiByZXNvdXJjZSAqcmVzb3VyY2VzLA0KPiA+ID4g
-PiA+ID4gIAlyZXR1cm4gMDsNCj4gPiA+ID4gPiA+ICB9DQo+ID4gPiA+ID4gPg0KPiA+ID4gPiA+
-ID4gLS8qKg0KPiA+ID4gPiA+ID4gLSAqIGkyY19uZXdfY2xpZW50X2RldmljZSAtIGluc3RhbnRp
-YXRlIGFuIGkyYyBkZXZpY2UNCj4gPiA+ID4gPiA+IC0gKiBAYWRhcDogdGhlIGFkYXB0ZXIgbWFu
-YWdpbmcgdGhlIGRldmljZQ0KPiA+ID4gPiA+ID4gLSAqIEBpbmZvOiBkZXNjcmliZXMgb25lIEky
-QyBkZXZpY2U7IGJ1c19udW0gaXMgaWdub3JlZA0KPiA+ID4gPiA+ID4gLSAqIENvbnRleHQ6IGNh
-biBzbGVlcA0KPiA+ID4gPiA+ID4gLSAqDQo+ID4gPiA+ID4gPiAtICogQ3JlYXRlIGFuIGkyYyBk
-ZXZpY2UuIEJpbmRpbmcgaXMgaGFuZGxlZCB0aHJvdWdoIGRyaXZlcg0KPiA+ID4gPiA+ID4gbW9k
-ZWwNCj4gPiA+ID4gPiA+IC0gKiBwcm9iZSgpL3JlbW92ZSgpIG1ldGhvZHMuICBBIGRyaXZlciBt
-YXkgYmUgYm91bmQgdG8gdGhpcw0KPiA+ID4gPiA+ID4gZGV2aWNlIHdoZW4gd2UNCj4gPiA+ID4g
-PiA+IC0gKiByZXR1cm4gZnJvbSB0aGlzIGZ1bmN0aW9uLCBvciBhbnkgbGF0ZXIgbW9tZW50IChl
-LmcuIG1heWJlDQo+ID4gPiA+ID4gPiBob3RwbHVnZ2luZyB3aWxsDQo+ID4gPiA+ID4gPiAtICog
-bG9hZCB0aGUgZHJpdmVyIG1vZHVsZSkuICBUaGlzIGNhbGwgaXMgbm90IGFwcHJvcHJpYXRlIGZv
-cg0KPiA+ID4gPiA+ID4gdXNlIGJ5IG1haW5ib2FyZA0KPiA+ID4gPiA+ID4gLSAqIGluaXRpYWxp
-emF0aW9uIGxvZ2ljLCB3aGljaCB1c3VhbGx5IHJ1bnMgZHVyaW5nIGFuDQo+ID4gPiA+ID4gPiBh
-cmNoX2luaXRjYWxsKCkgbG9uZw0KPiA+ID4gPiA+ID4gLSAqIGJlZm9yZSBhbnkgaTJjX2FkYXB0
-ZXIgY291bGQgZXhpc3QuDQo+ID4gPiA+ID4gPiAtICoNCj4gPiA+ID4gPiA+IC0gKiBUaGlzIHJl
-dHVybnMgdGhlIG5ldyBpMmMgY2xpZW50LCB3aGljaCBtYXkgYmUgc2F2ZWQgZm9yDQo+ID4gPiA+
-ID4gPiBsYXRlciB1c2Ugd2l0aA0KPiA+ID4gPiA+ID4gLSAqIGkyY191bnJlZ2lzdGVyX2Rldmlj
-ZSgpOyBvciBhbiBFUlJfUFRSIHRvIGRlc2NyaWJlIHRoZQ0KPiBlcnJvci4NCj4gPiA+ID4gPiA+
-IC0gKi8NCj4gPiA+ID4gPiA+IC1zdHJ1Y3QgaTJjX2NsaWVudCAqDQo+ID4gPiA+ID4gPiAtaTJj
-X25ld19jbGllbnRfZGV2aWNlKHN0cnVjdCBpMmNfYWRhcHRlciAqYWRhcCwgc3RydWN0DQo+ID4g
-PiA+ID4gPiBpMmNfYm9hcmRfaW5mbyBjb25zdCAqaW5mbykNCj4gPiA+ID4gPiA+ICtzdGF0aWMg
-c3RydWN0IGkyY19jbGllbnQgKg0KPiA+ID4gPiA+ID4gK19faTJjX25ld19jbGllbnRfZGV2aWNl
-KHN0cnVjdCBpMmNfYWRhcHRlciAqYWRhcCwNCj4gPiA+ID4gPiA+ICsJCQlzdHJ1Y3QgaTJjX2Jv
-YXJkX2luZm8gY29uc3QgKmluZm8sDQo+ID4gPiA+ID4gPiArCQkJc3RydWN0IGRldmljZSAqcGFy
-ZW50KQ0KPiA+ID4gPiA+ID4gIHsNCj4gPiA+ID4gPiA+ICAJc3RydWN0IGkyY19jbGllbnQJKmNs
-aWVudDsNCj4gPiA+ID4gPiA+ICAJaW50CQkJc3RhdHVzOw0KPiA+ID4gPiA+ID4gQEAgLTk0NCw3
-ICs5MzAsNyBAQCBpMmNfbmV3X2NsaWVudF9kZXZpY2Uoc3RydWN0IGkyY19hZGFwdGVyDQo+ID4g
-PiAqYWRhcCwgc3RydWN0IGkyY19ib2FyZF9pbmZvIGNvbnN0ICppbmYNCj4gPiA+ID4gPiA+ICAJ
-aWYgKHN0YXR1cykNCj4gPiA+ID4gPiA+ICAJCWdvdG8gb3V0X2VycjsNCj4gPiA+ID4gPiA+DQo+
-ID4gPiA+ID4gPiAtCWNsaWVudC0+ZGV2LnBhcmVudCA9ICZjbGllbnQtPmFkYXB0ZXItPmRldjsN
-Cj4gPiA+ID4gPiA+ICsJY2xpZW50LT5kZXYucGFyZW50ID0gcGFyZW50ID8gcGFyZW50IDogJmNs
-aWVudC0+YWRhcHRlci0NCj4gPiA+ID5kZXY7DQo+ID4gPiA+ID4gPiAgCWNsaWVudC0+ZGV2LmJ1
-cyA9ICZpMmNfYnVzX3R5cGU7DQo+ID4gPiA+ID4gPiAgCWNsaWVudC0+ZGV2LnR5cGUgPSAmaTJj
-X2NsaWVudF90eXBlOw0KPiA+ID4gPiA+ID4gIAljbGllbnQtPmRldi5vZl9ub2RlID0gb2Zfbm9k
-ZV9nZXQoaW5mby0+b2Zfbm9kZSk7IEBAIC05ODQsNg0KPiA+ID4gPiA+ID4gKzk3MCwyOCBAQCBp
-MmNfbmV3X2NsaWVudF9kZXZpY2Uoc3RydWN0IGkyY19hZGFwdGVyICphZGFwLA0KPiA+ID4gPiA+
-ID4gK3N0cnVjdA0KPiA+ID4gaTJjX2JvYXJkX2luZm8gY29uc3QgKmluZg0KPiA+ID4gPiA+ID4g
-IAlrZnJlZShjbGllbnQpOw0KPiA+ID4gPiA+ID4gIAlyZXR1cm4gRVJSX1BUUihzdGF0dXMpOw0K
-PiA+ID4gPiA+ID4gIH0NCj4gPiA+ID4gPiA+ICsNCj4gPiA+ID4gPiA+ICsvKioNCj4gPiA+ID4g
-PiA+ICsgKiBpMmNfbmV3X2NsaWVudF9kZXZpY2UgLSBpbnN0YW50aWF0ZSBhbiBpMmMgZGV2aWNl
-DQo+ID4gPiA+ID4gPiArICogQGFkYXA6IHRoZSBhZGFwdGVyIG1hbmFnaW5nIHRoZSBkZXZpY2UN
-Cj4gPiA+ID4gPiA+ICsgKiBAaW5mbzogZGVzY3JpYmVzIG9uZSBJMkMgZGV2aWNlOyBidXNfbnVt
-IGlzIGlnbm9yZWQNCj4gPiA+ID4gPiA+ICsgKiBDb250ZXh0OiBjYW4gc2xlZXANCj4gPiA+ID4g
-PiA+ICsgKg0KPiA+ID4gPiA+ID4gKyAqIENyZWF0ZSBhbiBpMmMgZGV2aWNlLiBCaW5kaW5nIGlz
-IGhhbmRsZWQgdGhyb3VnaCBkcml2ZXINCj4gPiA+ID4gPiA+ICttb2RlbA0KPiA+ID4gPiA+ID4g
-KyAqIHByb2JlKCkvcmVtb3ZlKCkgbWV0aG9kcy4gIEEgZHJpdmVyIG1heSBiZSBib3VuZCB0byB0
-aGlzDQo+ID4gPiA+ID4gPiArZGV2aWNlIHdoZW4gd2UNCj4gPiA+ID4gPiA+ICsgKiByZXR1cm4g
-ZnJvbSB0aGlzIGZ1bmN0aW9uLCBvciBhbnkgbGF0ZXIgbW9tZW50IChlLmcuIG1heWJlDQo+ID4g
-PiA+ID4gPiAraG90cGx1Z2dpbmcgd2lsbA0KPiA+ID4gPiA+ID4gKyAqIGxvYWQgdGhlIGRyaXZl
-ciBtb2R1bGUpLiAgVGhpcyBjYWxsIGlzIG5vdCBhcHByb3ByaWF0ZSBmb3INCj4gPiA+ID4gPiA+
-ICt1c2UgYnkgbWFpbmJvYXJkDQo+ID4gPiA+ID4gPiArICogaW5pdGlhbGl6YXRpb24gbG9naWMs
-IHdoaWNoIHVzdWFsbHkgcnVucyBkdXJpbmcgYW4NCj4gPiA+ID4gPiA+ICthcmNoX2luaXRjYWxs
-KCkgbG9uZw0KPiA+ID4gPiA+ID4gKyAqIGJlZm9yZSBhbnkgaTJjX2FkYXB0ZXIgY291bGQgZXhp
-c3QuDQo+ID4gPiA+ID4gPiArICoNCj4gPiA+ID4gPiA+ICsgKiBUaGlzIHJldHVybnMgdGhlIG5l
-dyBpMmMgY2xpZW50LCB3aGljaCBtYXkgYmUgc2F2ZWQgZm9yDQo+ID4gPiA+ID4gPiArbGF0ZXIg
-dXNlIHdpdGgNCj4gPiA+ID4gPiA+ICsgKiBpMmNfdW5yZWdpc3Rlcl9kZXZpY2UoKTsgb3IgYW4g
-RVJSX1BUUiB0byBkZXNjcmliZSB0aGUNCj4gZXJyb3IuDQo+ID4gPiA+ID4gPiArICovDQo+ID4g
-PiA+ID4gPiArc3RydWN0IGkyY19jbGllbnQgKg0KPiA+ID4gPiA+ID4gK2kyY19uZXdfY2xpZW50
-X2RldmljZShzdHJ1Y3QgaTJjX2FkYXB0ZXIgKmFkYXAsIHN0cnVjdA0KPiA+ID4gPiA+ID4gK2ky
-Y19ib2FyZF9pbmZvIGNvbnN0ICppbmZvKSB7DQo+ID4gPiA+ID4gPiArCXJldHVybiBfX2kyY19u
-ZXdfY2xpZW50X2RldmljZShhZGFwLCBpbmZvLCBOVUxMKTsgfQ0KPiA+ID4gPiA+ID4gIEVYUE9S
-VF9TWU1CT0xfR1BMKGkyY19uZXdfY2xpZW50X2RldmljZSk7DQo+ID4gPiA+ID4gPg0KPiA+ID4g
-PiA+ID4gIC8qKg0KPiA+ID4gPiA+ID4gQEAgLTEwNTQsNiArMTA2MiwyNiBAQCBzdGF0aWMgc3Ry
-dWN0IGkyY19kcml2ZXIgZHVtbXlfZHJpdmVyID0NCj4gew0KPiA+ID4gPiA+ID4gIAkuaWRfdGFi
-bGUJPSBkdW1teV9pZCwNCj4gPiA+ID4gPiA+ICB9Ow0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+
-ICtzdGF0aWMgc3RydWN0IGkyY19jbGllbnQgKl9faTJjX25ld19kdW1teV9kZXZpY2Uoc3RydWN0
-DQo+ID4gPiBpMmNfYWRhcHRlciAqYWRhcHRlciwNCj4gPiA+ID4gPiA+ICsJCQkJCQkgdTE2IGFk
-ZHJlc3MsIGNvbnN0IGNoYXINCj4gPiA+ICpuYW1lLA0KPiA+ID4gPiA+ID4gKwkJCQkJCSBzdHJ1
-Y3QgZGV2aWNlICpwYXJlbnQpIHsNCj4gPiA+ID4gPiA+ICsJc3RydWN0IGkyY19ib2FyZF9pbmZv
-IGluZm8gPSB7DQo+ID4gPiA+ID4gPiArCQlJMkNfQk9BUkRfSU5GTygiZHVtbXkiLCBhZGRyZXNz
-KSwNCj4gPiA+ID4gPiA+ICsJfTsNCj4gPiA+ID4gPiA+ICsNCj4gPiA+ID4gPiA+ICsJaWYgKG5h
-bWUpIHsNCj4gPiA+ID4gPiA+ICsJCXNzaXplX3QgcmV0ID0gc3Ryc2NweShpbmZvLnR5cGUsIG5h
-bWUsDQo+ID4gPiBzaXplb2YoaW5mby50eXBlKSk7DQo+ID4gPiA+ID4gPiArDQo+ID4gPiA+ID4g
-PiArCQlpZiAocmV0IDwgMCkNCj4gPiA+ID4gPiA+ICsJCQlyZXR1cm4gRVJSX1BUUihkZXZfZXJy
-X3Byb2JlKCZhZGFwdGVyLT5kZXYsIHJldCwNCj4gPiA+ID4gPiA+ICsJCQkJCQkgICAgICJJbnZh
-bGlkIGRldmljZSBuYW1lOg0KPiA+ID4gJXNcbiIsDQo+ID4gPiA+ID4gPiArCQkJCQkJICAgICBu
-YW1lKSk7DQo+ID4gPiA+ID4gPiArCX0NCj4gPiA+ID4gPiA+ICsNCj4gPiA+ID4gPiA+ICsJcmV0
-dXJuIF9faTJjX25ld19jbGllbnRfZGV2aWNlKGFkYXB0ZXIsICZpbmZvLCBwYXJlbnQpOyB9DQo+
-ID4gPiA+ID4gPiArDQo+ID4gPiA+ID4gPiAgLyoqDQo+ID4gPiA+ID4gPiAgICogaTJjX25ld19k
-dW1teV9kZXZpY2UgLSByZXR1cm4gYSBuZXcgaTJjIGRldmljZSBib3VuZCB0byBhDQo+ID4gPiBk
-dW1teSBkcml2ZXINCj4gPiA+ID4gPiA+ICAgKiBAYWRhcHRlcjogdGhlIGFkYXB0ZXIgbWFuYWdp
-bmcgdGhlIGRldmljZSBAQCAtMTA3NCwxMQ0KPiA+ID4gPiA+ID4gKzExMDIsNyBAQCBzdGF0aWMg
-c3RydWN0IGkyY19kcml2ZXIgZHVtbXlfZHJpdmVyID0gew0KPiA+ID4gPiA+ID4gICAqLw0KPiA+
-ID4gPiA+ID4gIHN0cnVjdCBpMmNfY2xpZW50ICppMmNfbmV3X2R1bW15X2RldmljZShzdHJ1Y3Qg
-aTJjX2FkYXB0ZXINCj4gPiA+ID4gPiA+ICphZGFwdGVyLA0KPiA+ID4gPiA+ID4gdTE2IGFkZHJl
-c3MpICB7DQo+ID4gPiA+ID4gPiAtCXN0cnVjdCBpMmNfYm9hcmRfaW5mbyBpbmZvID0gew0KPiA+
-ID4gPiA+ID4gLQkJSTJDX0JPQVJEX0lORk8oImR1bW15IiwgYWRkcmVzcyksDQo+ID4gPiA+ID4g
-PiAtCX07DQo+ID4gPiA+ID4gPiAtDQo+ID4gPiA+ID4gPiAtCXJldHVybiBpMmNfbmV3X2NsaWVu
-dF9kZXZpY2UoYWRhcHRlciwgJmluZm8pOw0KPiA+ID4gPiA+ID4gKwlyZXR1cm4gX19pMmNfbmV3
-X2R1bW15X2RldmljZShhZGFwdGVyLCBhZGRyZXNzLCBOVUxMLCBOVUxMKTsNCj4gPiA+ID4gPiA+
-ICB9DQo+ID4gPiA+ID4gPiAgRVhQT1JUX1NZTUJPTF9HUEwoaTJjX25ld19kdW1teV9kZXZpY2Up
-Ow0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IEBAIC0xMTIyLDE1ICsxMTQ2LDE5IEBADQo+ID4g
-PiBFWFBPUlRfU1lNQk9MX0dQTChkZXZtX2kyY19uZXdfZHVtbXlfZGV2aWNlKTsNCj4gPiA+ID4g
-PiA+ICAgKiBAY2xpZW50OiBIYW5kbGUgdG8gdGhlIHByaW1hcnkgY2xpZW50DQo+ID4gPiA+ID4g
-PiAgICogQG5hbWU6IEhhbmRsZSB0byBzcGVjaWZ5IHdoaWNoIHNlY29uZGFyeSBhZGRyZXNzIHRv
-IGdldA0KPiA+ID4gPiA+ID4gICAqIEBkZWZhdWx0X2FkZHI6IFVzZWQgYXMgYSBmYWxsYmFjayBp
-ZiBubyBzZWNvbmRhcnkgYWRkcmVzcw0KPiA+ID4gPiA+ID4gd2FzIHNwZWNpZmllZA0KPiA+ID4g
-PiA+ID4gKyAqIEBhdXhfZGV2aWNlX25hbWU6IEFuY2lsbGFyeSBkZXZpY2UgbmFtZQ0KPiA+ID4g
-PiA+ID4gICAqIENvbnRleHQ6IGNhbiBzbGVlcA0KPiA+ID4gPiA+ID4gICAqDQo+ID4gPiA+ID4g
-PiAgICogSTJDIGNsaWVudHMgY2FuIGJlIGNvbXBvc2VkIG9mIG11bHRpcGxlIEkyQyBzbGF2ZXMg
-Ym91bmQNCj4gPiA+IHRvZ2V0aGVyIGluIGEgc2luZ2xlDQo+ID4gPiA+ID4gPiAgICogY29tcG9u
-ZW50LiBUaGUgSTJDIGNsaWVudCBkcml2ZXIgdGhlbiBiaW5kcyB0byB0aGUgbWFzdGVyDQo+ID4g
-PiA+ID4gPiBJMkMgc2xhdmUgYW5kIG5lZWRzDQo+ID4gPiA+ID4gPiAtICogdG8gY3JlYXRlIEky
-QyBkdW1teSBjbGllbnRzIHRvIGNvbW11bmljYXRlIHdpdGggYWxsIHRoZQ0KPiA+ID4gPiA+ID4g
-b3RoZXINCj4gPiA+IHNsYXZlcy4NCj4gPiA+ID4gPiA+ICsgKiB0byBjcmVhdGUgSTJDIGFuY2ls
-bGFyeSBjbGllbnRzIHRvIGNvbW11bmljYXRlIHdpdGggYWxsDQo+ID4gPiA+ID4gPiArIHRoZQ0K
-PiA+ID4gb3RoZXIgc2xhdmVzLg0KPiA+ID4gPiA+ID4gICAqDQo+ID4gPiA+ID4gPiAtICogVGhp
-cyBmdW5jdGlvbiBjcmVhdGVzIGFuZCByZXR1cm5zIGFuIEkyQyBkdW1teSBjbGllbnQNCj4gPiA+
-ID4gPiA+IHdob3NlIEkyQyBhZGRyZXNzIGlzDQo+ID4gPiA+ID4gPiAtICogcmV0cmlldmVkIGZy
-b20gdGhlIHBsYXRmb3JtIGZpcm13YXJlIGJhc2VkIG9uIHRoZSBnaXZlbg0KPiA+ID4gPiA+ID4g
-c2xhdmUgbmFtZS4gSWYgbm8NCj4gPiA+ID4gPiA+IC0gKiBhZGRyZXNzIGlzIHNwZWNpZmllZCBi
-eSB0aGUgZmlybXdhcmUgZGVmYXVsdF9hZGRyIGlzIHVzZWQuDQo+ID4gPiA+ID4gPiArICogVGhp
-cyBmdW5jdGlvbiBjcmVhdGVzIGFuZCByZXR1cm5zIGFuIEkyQyBhbmNpbGxhcnkgY2xpZW50DQo+
-ID4gPiA+ID4gPiArIHdob3NlIEkyQyBhZGRyZXNzDQo+ID4gPiA+ID4gPiArICogaXMgcmV0cmll
-dmVkIGZyb20gdGhlIHBsYXRmb3JtIGZpcm13YXJlIGJhc2VkIG9uIHRoZSBnaXZlbg0KPiA+ID4g
-PiA+ID4gKyBzbGF2ZSBuYW1lLiBpZg0KPiA+ID4gPiA+ID4gKyAqIGF1eF9kZXZpY2VfbmFtZSBp
-cyBzcGVjaWZpZWQgYnkgdGhlIGZpcm13YXJlLA0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gVW5sZXNz
-IEknbSBtaXNzaW5nIHNvbWV0aGluZywgYXV4X2RldmljZV9uYW1lIGlzbid0IHNwZWNpZmllZCBi
-eQ0KPiA+ID4gPiA+IHRoZSBmaXJtd2FyZSwgaXQncyBhIGZ1bmN0aW9uIHBhcmFtZXRlci4NCj4g
-PiA+ID4NCj4gPiA+ID4gSXQgaXMgc3BlY2lmaWVkIGluIHRoZSBwbGF0Zm9ybSBmaXJtd2FyZShk
-ZXZpY2UgdHJlZSBmaXJtd2FyZSkuDQo+ID4gPg0KPiA+ID4gV2hhdCBJIG1lYW50LCBpbiB0aGUg
-Y29udGV4dCBvZiB0aGUgZG9jdW1lbnRhdGlvbiBoZXJlLCBpcyB0aGF0IHRoZQ0KPiA+ID4gYWRk
-cmVzcyBpcyByZXRyaWV2ZWQgZnJvbSB0aGUgcGxhdGZvcm0gZmlybXdhcmUgYnkgdGhlDQo+ID4g
-PiBpMmNfbmV3X2FuY2lsbGFyeV9kZXZpY2UoKSBmdW5jdGlvbiwgbm90IHBhc3NlZCBhcyBhIHBh
-cmFtZXRlciwNCj4gPiA+IHdoaWxlIHRoZSBuYW1lIGlzIHBhc3NlZCBhcyBhIHBhcmFtZXRlci4g
-SXQncyBub3QgcmVsZXZhbnQsIGZvciB0aGUNCj4gPiA+IGRvY3VtZW50YXRpb24gb2YgdGhpcyBm
-dW5jdGlvbiwgd2hlcmUgdGhlIGNhbGxlciBnZXRzIHRoZSBuYW1lIGZyb20uDQo+ID4NCj4gPiBB
-cmUgeW91IG9rIHdpdGggdGhlc2Ugd29yZGluZ3M/DQo+ID4NCj4gPiAqIFRoaXMgZnVuY3Rpb24g
-Y3JlYXRlcyBhbmQgcmV0dXJucyBhbiBJMkMgYW5jaWxsYXJ5IGNsaWVudCB3aG9zZSBJMkMNCj4g
-PiBhZGRyZXNzDQo+ID4gKiBpcyByZXRyaWV2ZWQgZnJvbSB0aGUgcGxhdGZvcm0gZmlybXdhcmUg
-YmFzZWQgb24gdGhlIGdpdmVuIHNsYXZlDQo+ID4gbmFtZS4gSWYNCj4gPiAqIGF1eF9kZXZpY2Vf
-bmFtZSBpcyBub3QgTlVMTCwgdGhlIGFuY2lsbGFyeSdzIGRldmljZSBwYXJlbnQNCj4gPiAqIHdp
-bGwgYmUgc2V0IHRvIHRoZSBwcmltYXJ5IGRldmljZSBvdGhlcndpc2UgaXQgd2lsbCBiZSBzZXQg
-dG8gSTJDDQo+IGFkYXB0ZXIuDQo+IA0KPiBUaGUgd29yZGluZyBpcyBiZXR0ZXIsIGJ1dCB0aGlz
-IGlzIG5vdCB3aGF0IHlvdSBoYXZlIGltcGxlbWVudGVkIGluIHRoZQ0KPiBjb2RlLiBUaGUgbmFt
-ZSBkb2Vzbid0IHNlbGVjdCB3aGljaCBwYXJlbnQgaXMgdXNlZC4NCg0KSXQgaXMgdGhlIHNhbWUg
-aW1wbGVtZW50ZWQgaW4gdGhlIGNvZGUuDQoNCkZvciB0aGUgZXhpc3RpbmcgdXNlcnMsIGF1eF9k
-ZXZpY2VfbmFtZSBpcyBOVUxMIC0tPiBUaGUgcGFyZW50IGlzIHNldCBhcyAiSTJDIGFkYXB0ZXIi
-Lg0KDQpGb3IgaW5zdGFudGlhdGluZyBhICJpMmMgY2xpZW50IGRldmljZSIsIGF1eF9kZXZpY2Vf
-bmFtZSBpcyBub3QgTlVMTCAtLT4gVGhlIHBhcmVudCBpcyBzZXQgYXMgcHJpbWFyeSBkZXZpY2Uu
-DQoNClRoZSBwcmltYXJ5IGRldmljZSBpcyB0aGUgb25lIGluc3RhbnRpYXRlZCB0aGUgImkyYyBj
-bGllbnQgZGV2aWNlIiB1c2luZw0KaTJjX25ld19hbmNpbGxhcnlfZGV2aWNlKCkuDQoNClBsZWFz
-ZSBjb3JyZWN0IG1lIGlmIGFueXRoaW5nIHdyb25nIGhlcmUuDQoNCj4gDQo+ID4gKiBJZiBubyBh
-ZGRyZXNzIGlzIHNwZWNpZmllZCBieSB0aGUgZmlybXdhcmUgZGVmYXVsdF9hZGRyIGlzIHVzZWQu
-DQo+ID4NCj4gPiA+ID4gPiA+IHRoZSBhbmNpbGxhcnkncyBkZXZpY2UgcGFyZW50DQo+ID4gPiA+
-ID4gPiArICogd2lsbCBiZSBzZXQgdG8gdGhlIHByaW1hcnkgZGV2aWNlLg0KPiA+ID4gPiA+DQo+
-ID4gPiA+ID4gVGhpcyBkb2Vzbid0IHNlZW0gdG8gbWF0Y2ggdGhlIGltcGxlbWVudGF0aW9uLiBX
-aXRoIHRoaXMgcGF0Y2gNCj4gPiA+ID4gPiB0aGUgYW5jaWxsYXJ5IGRldmljZSdzIHBhcmVudCBp
-cyBhbHdheXMgdGhlIHByaW1hcnkgZGV2aWNlLiBBcmUNCj4gPiA+ID4gPiB5b3Ugc3VyZSB0aGlz
-IHdvbid0IGNhdXNlIGFueSByZWdyZXNzaW9uID8NCj4gPiA+ID4NCj4gPiA+ID4gVGhlcmUgaXMg
-bm8gcmVncmVzc2lvbiBhcyBleGlzdGluZyB1c2VycyBvbmx5IGluc3RhbnRpYXRlIGR1bW15DQo+
-ID4gPiBkZXZpY2UuDQo+ID4gPg0KPiA+ID4gU29ycnksIEkgZG9uJ3QgZm9sbG93IHlvdSBoZXJl
-LiBFeGlzdGluZyBjYWxsZXJzIG9mDQo+ID4gPiBpMmNfbmV3X2FuY2lsbGFyeV9kZXZpY2UoKSB0
-b2RheSBnZXQgYW4gaTJjX2NsaWVudCBkZXZpY2Ugd2hvc2UNCj4gPiA+IHBhcmVudCBpcyB0aGUg
-STJDIGFkYXB0ZXIuIFdpdGggdGhpcyBwYXRjaCB0aGV5IHdpbGwgZ2V0IGFuDQo+ID4gPiBpMmNf
-Y2xpZW50IGRldmljZSB3aG9zZSBwYXJlbnQgaXMgdGhlIG1haW4gaTJjX2NsaWVudC4gVGhhdCdz
-IGENCj4gPiA+IGNoYW5nZSBpbiBiZWhhdmlvdXIsIHdoaWNoIGNvdWxkIGNhdXNlIGFsbCBzb3J0
-cyBvZiBpc3N1ZXMuDQo+ID4NCj4gPiBQbGVhc2Ugc2VlIHRoZSBwYXRjaCBzbmlwcGV0IGJlbG93
-LCB0aGVyZSBpcyBubyByZWdyZXNzaW9uLg0KPiA+DQo+ID4gY2xpZW50LT5kZXYucGFyZW50ID0g
-cGFyZW50ID8gcGFyZW50IDogJmNsaWVudC0+YWRhcHRlci0+ZGV2Ow0KPiANCj4gV2hlbiBjYWxs
-ZWQgZnJvbSBpMmNfbmV3X2FuY2lsbGFyeV9kZXZpY2UoKSwgX19pMmNfbmV3X2R1bW15X2Rldmlj
-ZSgpIGFzDQo+IGEgbm9uLU5VTEwgcGFyZW50IGFyZ3VtZW50LiBUaGVyZSBpcyBubyBjaGFuZ2Ug
-b2YgYmVoYXZpb3VyICpmb3INCj4gaTJjX25ld19kdW1teV9kZXZpY2UoKSosIGJ1dCB0aHJlIGlz
-IGEgY2hhbmdlIG9mIGJlaGF2aW91ciAqZm9yDQo+IGkyY19uZXdfYW5jaWxsYXJ5X2RldmljZSgp
-Ki4NCg0KDQpJIGRvbid0IHRoaW5rIEkgdW5kZXJzdGFuZCB3aGF0IHlvdSBtZWFuLg0KDQpGb3Ig
-ZXhpc3RpbmcgdXNlcnMsIGkyY19uZXdfYW5jaWxsYXJ5X2RldmljZSguLi4sIGF1eF9kZXZpY2Vf
-bmFtZT1OVUxMKSB0aGUgYmVoYXZpb3VyIGlzIG5vdCBjaGFuZ2VkLg0KDQpDb3VsZCB5b3UgcGxl
-YXNlIGVsYWJvcmF0ZSBmdXJ0aGVyPw0KDQo+IA0KPiA+ID4gPiA+IEFuZCB3aHkgZG8geW91IG5l
-ZWQgdGhpcyA/DQo+ID4gPiA+DQo+ID4gPiA+IEFzIHBlciBLcnp5c3p0b2YgWzJdLA0KPiA+ID4g
-Pg0KPiA+ID4gPiBUaGUgRFQgc2NoZW1hIGFsbG93cyBtdWx0aXBsZSBhZGRyZXNzZXMgZm9yIGNo
-aWxkcmVuLiBCdXQgd2UgbGFjaw0KPiA+ID4gPiBpbXBsZW1lbnRhdGlvbiBvZiBwYXJlbnQgY2hp
-bGQgcmVsYXRpb25zaGlwLCBBcyBwYXJlbnQgb3ducyB0aGUNCj4gPiA+ID4gcmVzb3VyY2VzLg0K
-PiA+ID4gPiBDaGlsZCBkZXZpY2UgbmVlZHMgdG8gcGFyc2UgcGFyZW50IG5vZGUgdG8gZ2V0IHNv
-bWUgcmVzb3VyY2UgbGlrZQ0KPiA+ID4gPiBjbG9ja3MuDQo+ID4gPiA+DQo+ID4gPiA+IFsyXQ0K
-PiA+ID4NCj4gPiA+IFRoZSBJMkMgYW5jaWxsYXJ5IGNsaWVudHMgYXJlIG5vdCBtZWFudCB0byBi
-ZSBoYW5kbGVkIGJ5IHNlcGFyYXRlDQo+ID4gPiBkcml2ZXJzLg0KPiA+DQo+ID4gSXMgaXQgYSBM
-aW51eCBydWxlPz8NCj4gDQo+IEl0J3MgYW4gSTJDIHN1YnN5c3RlbSBydWxlIGFzIGZhciBhcyBJ
-IGNhbiB0ZWxsLiBUaGlzIGlzIGhvdyBpdCBoYXMgYmVlbg0KPiBkZXNpZ25lZC4NCg0KV29sZnJh
-bS9HZWVydDoNCg0KRG8geW91IGFncmVlIHdpdGggTGF1cmVudCdzIHN0YXRlbWVudD8NCg0KQ2hl
-ZXJzLA0KQmlqdQ0KDQo=
+On Wed, May 31, 2023 at 12:53:18PM +0000, Biju Das wrote:
+> > Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
+> > On Wed, May 31, 2023 at 09:34:06AM +0000, Biju Das wrote:
+> > > > Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device
+> > > > API On Mon, May 29, 2023 at 09:00:43AM +0000, Biju Das wrote:
+> > > > > > Subject: Re: [PATCH v5 01/11] i2c: Enhance
+> > > > > > i2c_new_ancillary_device API On Mon, May 22, 2023 at 11:18:39AM +0100, Biju Das wrote:
+> > > > > > > Renesas PMIC RAA215300 exposes two separate i2c devices, one
+> > > > > > > for the main device and another for rtc device.
+> > > > > > >
+> > > > > > > Enhance i2c_new_ancillary_device() to instantiate a real device.
+> > > > > >
+> > > > > > Doesn't it already instantiate a real device ?
+> > > > >
+> > > > And that function calls i2c_new_client_device(), which allocates a
+> > > > struct i2c_client that embeds a struct device, and registers that
+> > > > device with the kernel device core. How is that different, in terms
+> > > > of instantiating a "real device", from what this patch does ?
+> > >
+> > > There is a difference, right? it instantiates new "i2c dummy client"
+> > > driver and a "real i2c client device" driver like rtc device
+> > client(rtc-isl2108)??
+> > 
+> > I don't see how there's a difference in behaviour in the code you have
+> > implemented, sorry.
+> 
+> Will reword,
+> 
+> Enhance i2c_new_ancillary_device() to instantiate a "I2C client device"
+> apart from the already supported "I2C dummy client device".
+> 
+> > > > > > > (eg: Instantiate rtc device from PMIC driver)
+> > > > > > >
+> > > > > > > Added helper function __i2c_new_dummy_device to share the code
+> > > > > > > between i2c_new_dummy_device and i2c_new_ancillary_device().
+> > > > > > >
+> > > > > > > Also added helper function __i2c_new_client_device() to pass
+> > > > > > > parent dev parameter, so that the ancillary device can assign
+> > > > > > > its parent during creation.
+> > > > > > >
+> > > > > > > Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > > > > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > > > > > > ---
+> > > > > > > v4->v5:
+> > > > > > >  * Replaced parameter dev->parent in __i2c_new_client_device() and
+> > > > > > >    __i2c_new_dummy_device().
+> > > > > > >  * Improved error message in __i2c_new_dummy_device() by printing device name.
+> > > > > > >  * Updated comment for ancillary's device parent
+> > > > > > >  * Dropped aux_device_name check in i2c_new_ancillary_device().
+> > > > > > > v3->v4:
+> > > > > > >  * Dropped Rb tag from Geert as there are new changes.
+> > > > > > >  * Introduced __i2c_new_dummy_device() to share the code between
+> > > > > > >    i2c_new_dummy_device and i2c_new_ancillary_device().
+> > > > > > >  * Introduced __i2c_new_client_device() to pass parent dev
+> > > > > > >    parameter, so that the ancillary device can assign its parent during
+> > > > > > >    creation.
+> > > > > > > v3:
+> > > > > > >  * New patch
+> > > > > > >
+> > > > > > > Ref:
+> > > > > > >
+> > > > > > > ---
+> > > > > > >  drivers/gpu/drm/bridge/adv7511/adv7511_drv.c |  6 +-
+> > > > > > >  drivers/i2c/i2c-core-base.c                  | 92 +++++++++++++-------
+> > > > > > >  drivers/media/i2c/adv748x/adv748x-core.c     |  2 +-
+> > > > > > >  drivers/media/i2c/adv7604.c                  |  3 +-
+> > > > > > >  include/linux/i2c.h                          |  3 +-
+> > > > > > >  5 files changed, 69 insertions(+), 37 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> > > > > > > b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> > > > > > > index ddceafa7b637..86306b010a0a 100644
+> > > > > > > --- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> > > > > > > +++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+> > > > > > > @@ -1072,7 +1072,7 @@ static int
+> > > > > > > adv7511_init_cec_regmap(struct adv7511 *adv)
+> > > > > > >  	int ret;
+> > > > > > >
+> > > > > > >  	adv->i2c_cec = i2c_new_ancillary_device(adv->i2c_main, "cec",
+> > > > > > > -						ADV7511_CEC_I2C_ADDR_DEFAULT);
+> > > > > > > +				    ADV7511_CEC_I2C_ADDR_DEFAULT, NULL);
+> > > > > > >  	if (IS_ERR(adv->i2c_cec))
+> > > > > > >  		return PTR_ERR(adv->i2c_cec);
+> > > > > > >
+> > > > > > > @@ -1261,7 +1261,7 @@ static int adv7511_probe(struct i2c_client *i2c)
+> > > > > > >  	adv7511_packet_disable(adv7511, 0xffff);
+> > > > > > >
+> > > > > > >  	adv7511->i2c_edid = i2c_new_ancillary_device(i2c, "edid",
+> > > > > > > -					ADV7511_EDID_I2C_ADDR_DEFAULT);
+> > > > > > > +					ADV7511_EDID_I2C_ADDR_DEFAULT, NULL);
+> > > > > > >  	if (IS_ERR(adv7511->i2c_edid)) {
+> > > > > > >  		ret = PTR_ERR(adv7511->i2c_edid);
+> > > > > > >  		goto uninit_regulators;
+> > > > > > > @@ -1271,7 +1271,7 @@ static int adv7511_probe(struct i2c_client *i2c)
+> > > > > > >  		     adv7511->i2c_edid->addr << 1);
+> > > > > > >
+> > > > > > >  	adv7511->i2c_packet = i2c_new_ancillary_device(i2c, "packet",
+> > > > > > > -					ADV7511_PACKET_I2C_ADDR_DEFAULT);
+> > > > > > > +					ADV7511_PACKET_I2C_ADDR_DEFAULT, NULL);
+> > > > > > >  	if (IS_ERR(adv7511->i2c_packet)) {
+> > > > > > >  		ret = PTR_ERR(adv7511->i2c_packet);
+> > > > > > >  		goto err_i2c_unregister_edid; diff --git
+> > > > > > > a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> > > > > > > index ae3af738b03f..3442aa80290f
+> > > > > > > 100644
+> > > > > > > --- a/drivers/i2c/i2c-core-base.cvvccc
+> > > > > > > +++ b/drivers/i2c/i2c-core-base.cckvlrgnulkj
+> > > > > > > @@ -893,24 +893,10 @@ int i2c_dev_irq_from_resources(const struct resource *resources,
+> > > > > > >  	return 0;
+> > > > > > >  }
+> > > > > > >
+> > > > > > > -/**
+> > > > > > > - * i2c_new_client_device - instantiate an i2c device
+> > > > > > > - * @adap: the adapter managing the device
+> > > > > > > - * @info: describes one I2C device; bus_num is ignored
+> > > > > > > - * Context: can sleep
+> > > > > > > - *
+> > > > > > > - * Create an i2c device. Binding is handled through driver model
+> > > > > > > - * probe()/remove() methods.  A driver may be bound to this device when we
+> > > > > > > - * return from this function, or any later moment (e.g. maybe hotplugging will
+> > > > > > > - * load the driver module).  This call is not appropriate for use by mainboard
+> > > > > > > - * initialization logic, which usually runs during an arch_initcall() long
+> > > > > > > - * before any i2c_adapter could exist.
+> > > > > > > - *
+> > > > > > > - * This returns the new i2c client, which may be saved for later use with
+> > > > > > > - * i2c_unregister_device(); or an ERR_PTR to describe the error.
+> > > > > > > - */
+> > > > > > > -struct i2c_client *
+> > > > > > > -i2c_new_client_device(struct i2c_adapter *adap, struct
+> > > > > > > i2c_board_info const *info)
+> > > > > > > +static struct i2c_client *
+> > > > > > > +__i2c_new_client_device(struct i2c_adapter *adap,
+> > > > > > > +			struct i2c_board_info const *info,
+> > > > > > > +			struct device *parent)
+> > > > > > >  {
+> > > > > > >  	struct i2c_client	*client;
+> > > > > > >  	int			status;
+> > > > > > > @@ -944,7 +930,7 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+> > > > > > >  	if (status)
+> > > > > > >  		goto out_err;
+> > > > > > >
+> > > > > > > -	client->dev.parent = &client->adapter->dev;
+> > > > > > > +	client->dev.parent = parent ? parent : &client->adapter->dev;
+> > > > > > >  	client->dev.bus = &i2c_bus_type;
+> > > > > > >  	client->dev.type = &i2c_client_type;
+> > > > > > >  	client->dev.of_node = of_node_get(info->of_node); @@ -984,6
+> > > > > > > +970,28 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
+> > > > > > >  	kfree(client);
+> > > > > > >  	return ERR_PTR(status);
+> > > > > > >  }
+> > > > > > > +
+> > > > > > > +/**
+> > > > > > > + * i2c_new_client_device - instantiate an i2c device
+> > > > > > > + * @adap: the adapter managing the device
+> > > > > > > + * @info: describes one I2C device; bus_num is ignored
+> > > > > > > + * Context: can sleep
+> > > > > > > + *
+> > > > > > > + * Create an i2c device. Binding is handled through driver model
+> > > > > > > + * probe()/remove() methods.  A driver may be bound to this device when we
+> > > > > > > + * return from this function, or any later moment (e.g. maybe hotplugging will
+> > > > > > > + * load the driver module).  This call is not appropriate for use by mainboard
+> > > > > > > + * initialization logic, which usually runs during an arch_initcall() long
+> > > > > > > + * before any i2c_adapter could exist.
+> > > > > > > + *
+> > > > > > > + * This returns the new i2c client, which may be saved for later use with
+> > > > > > > + * i2c_unregister_device(); or an ERR_PTR to describe the error.
+> > > > > > > + */
+> > > > > > > +struct i2c_client *
+> > > > > > > +i2c_new_client_device(struct i2c_adapter *adap, struct
+> > > > > > > +i2c_board_info const *info) {
+> > > > > > > +	return __i2c_new_client_device(adap, info, NULL); }
+> > > > > > >  EXPORT_SYMBOL_GPL(i2c_new_client_device);
+> > > > > > >
+> > > > > > >  /**
+> > > > > > > @@ -1054,6 +1062,26 @@ static struct i2c_driver dummy_driver = {
+> > > > > > >  	.id_table	= dummy_id,
+> > > > > > >  };
+> > > > > > >
+> > > > > > > +static struct i2c_client *__i2c_new_dummy_device(struct i2c_adapter *adapter,
+> > > > > > > +						 u16 address, const char *name,
+> > > > > > > +						 struct device *parent) {
+> > > > > > > +	struct i2c_board_info info = {
+> > > > > > > +		I2C_BOARD_INFO("dummy", address),
+> > > > > > > +	};
+> > > > > > > +
+> > > > > > > +	if (name) {
+> > > > > > > +		ssize_t ret = strscpy(info.type, name, sizeof(info.type));
+> > > > > > > +
+> > > > > > > +		if (ret < 0)
+> > > > > > > +			return ERR_PTR(dev_err_probe(&adapter->dev, ret,
+> > > > > > > +						     "Invalid device name: %s\n",
+> > > > > > > +						     name));
+> > > > > > > +	}
+> > > > > > > +
+> > > > > > > +	return __i2c_new_client_device(adapter, &info, parent); }
+> > > > > > > +
+> > > > > > >  /**
+> > > > > > >   * i2c_new_dummy_device - return a new i2c device bound to a dummy driver
+> > > > > > >   * @adapter: the adapter managing the device
+> > > > > > > @@ -1074,11 +1102,7 @@ static struct i2c_driver dummy_driver = {
+> > > > > > >   */
+> > > > > > >  struct i2c_client *i2c_new_dummy_device(struct i2c_adapter *adapter, u16 address)  {
+> > > > > > > -	struct i2c_board_info info = {
+> > > > > > > -		I2C_BOARD_INFO("dummy", address),
+> > > > > > > -	};
+> > > > > > > -
+> > > > > > > -	return i2c_new_client_device(adapter, &info);
+> > > > > > > +	return __i2c_new_dummy_device(adapter, address, NULL, NULL);
+> > > > > > >  }
+> > > > > > >  EXPORT_SYMBOL_GPL(i2c_new_dummy_device);
+> > > > > > >
+> > > > > > > @@ -1122,15 +1146,19 @@ EXPORT_SYMBOL_GPL(devm_i2c_new_dummy_device);
+> > > > > > >   * @client: Handle to the primary client
+> > > > > > >   * @name: Handle to specify which secondary address to get
+> > > > > > >   * @default_addr: Used as a fallback if no secondary address was specified
+> > > > > > > + * @aux_device_name: Ancillary device name
+> > > > > > >   * Context: can sleep
+> > > > > > >   *
+> > > > > > >   * I2C clients can be composed of multiple I2C slaves bound together in a single
+> > > > > > >   * component. The I2C client driver then binds to the master I2C slave and needs
+> > > > > > > - * to create I2C dummy clients to communicate with all the other slaves.
+> > > > > > > + * to create I2C ancillary clients to communicate with all the other slaves.
+> > > > > > >   *
+> > > > > > > - * This function creates and returns an I2C dummy client whose I2C address is
+> > > > > > > - * retrieved from the platform firmware based on the given slave name. If no
+> > > > > > > - * address is specified by the firmware default_addr is used.
+> > > > > > > + * This function creates and returns an I2C ancillary client whose I2C address
+> > > > > > > + * is retrieved from the platform firmware based on the given slave name. if
+> > > > > > > + * aux_device_name is specified by the firmware,
+> > > > > >
+> > > > > > Unless I'm missing something, aux_device_name isn't specified by
+> > > > > > the firmware, it's a function parameter.
+> > > > >
+> > > > > It is specified in the platform firmware(device tree firmware).
+> > > >
+> > > > What I meant, in the context of the documentation here, is that the
+> > > > address is retrieved from the platform firmware by the
+> > > > i2c_new_ancillary_device() function, not passed as a parameter,
+> > > > while the name is passed as a parameter. It's not relevant, for the
+> > > > documentation of this function, where the caller gets the name from.
+> > >
+> > > Are you ok with these wordings?
+> > >
+> > > * This function creates and returns an I2C ancillary client whose I2C address
+> > > * is retrieved from the platform firmware based on the given slave name. If
+> > > * aux_device_name is not NULL, the ancillary's device parent
+> > > * will be set to the primary device otherwise it will be set to I2C adapter.
+> > 
+> > The wording is better, but this is not what you have implemented in the
+> > code. The name doesn't select which parent is used.
+> 
+> It is the same implemented in the code.
+> 
+> For the existing users, aux_device_name is NULL --> The parent is set
+> as "I2C adapter".
+> 
+> For instantiating a "i2c client device", aux_device_name is not NULL
+> --> The parent is set as primary device.
+> 
+> The primary device is the one instantiated the "i2c client device" using
+> i2c_new_ancillary_device().
+> 
+> Please correct me if anything wrong here.
+
+Before your patch:
+
+struct i2c_client *i2c_new_ancillary_device(struct i2c_client *client,
+						const char *name,
+						u16 default_addr)
+{
+[...]
+	return i2c_new_dummy_device(client->adapter, addr);
+}
+
+struct i2c_client *i2c_new_dummy_device(struct i2c_adapter *adapter, u16 address)
+{
+	struct i2c_board_info info = {
+		I2C_BOARD_INFO("dummy", address),
+	};
+
+	return i2c_new_client_device(adapter, &info);
+}
+
+struct i2c_client *
+i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *info)
+{
+	struct i2c_client	*client;
+	int			status;
+
+	client = kzalloc(sizeof *client, GFP_KERNEL);
+	if (!client)
+		return ERR_PTR(-ENOMEM);
+
+	client->adapter = adap;
+[...]
+	client->dev.parent = &client->adapter->dev;
+[...]
+	return client;
+[...]
+}
+
+i2c_new_ancillary_device() returns an i2c_client with client->dev.parent
+set to the I2C adapter device.
+
+After your patch:
+
+struct i2c_client *i2c_new_ancillary_device(struct i2c_client *client,
+					    const char *name,
+					    u16 default_addr,
+					    const char *aux_device_name)
+{
+[...]
+	return __i2c_new_dummy_device(client->adapter, addr, aux_device_name,
+				      &client->dev);
+}
+
+static struct i2c_client *__i2c_new_dummy_device(struct i2c_adapter *adapter,
+						 u16 address, const char *name,
+						 struct device *parent)
+{
+	struct i2c_board_info info = {
+		I2C_BOARD_INFO("dummy", address),
+	};
+
+[...]
+
+	return __i2c_new_client_device(adapter, &info, parent);
+}
+
+static struct i2c_client *
+__i2c_new_client_device(struct i2c_adapter *adap,
+			struct i2c_board_info const *info,
+			struct device *parent)
+{
+	struct i2c_client	*client;
+	int			status;
+
+	client = kzalloc(sizeof *client, GFP_KERNEL);
+	if (!client)
+		return ERR_PTR(-ENOMEM);
+
+	client->adapter = adap;
+[...]
+	client->dev.parent = parent ? parent : &client->adapter->dev;
+[...]
+	return client;
+[...]
+}
+
+i2c_new_ancillary_device() returns an i2c_client with client->dev.parent
+set to the main i2c_client device, *regardless* of the value of the
+aux_device_name parameter.
+
+The behaviour of i2c_new_ancillary_device() has changed for existing
+users.
+
+> > > * If no address is specified by the firmware default_addr is used.
+> > >
+> > > > > > > the ancillary's device parent
+> > > > > > > + * will be set to the primary device.
+> > > > > >
+> > > > > > This doesn't seem to match the implementation. With this patch
+> > > > > > the ancillary device's parent is always the primary device. Are
+> > > > > > you sure this won't cause any regression ?
+> > > > >
+> > > > > There is no regression as existing users only instantiate dummy device.
+> > > >
+> > > > Sorry, I don't follow you here. Existing callers of
+> > > > i2c_new_ancillary_device() today get an i2c_client device whose
+> > > > parent is the I2C adapter. With this patch they will get an
+> > > > i2c_client device whose parent is the main i2c_client. That's a
+> > > > change in behaviour, which could cause all sorts of issues.
+> > >
+> > > Please see the patch snippet below, there is no regression.
+> > >
+> > > client->dev.parent = parent ? parent : &client->adapter->dev;
+> > 
+> > When called from i2c_new_ancillary_device(), __i2c_new_dummy_device() as
+> > a non-NULL parent argument. There is no change of behaviour *for
+> > i2c_new_dummy_device()*, but thre is a change of behaviour *for
+> > i2c_new_ancillary_device()*.
+> 
+> I don't think I understand what you mean.
+> 
+> For existing users, i2c_new_ancillary_device(...,
+> aux_device_name=NULL) the behaviour is not changed.
+> 
+> Could you please elaborate further?
+> 
+> > > > > > And why do you need this ?
+> > > > >
+> > > > > As per Krzysztof [2],
+> > > > >
+> > > > > The DT schema allows multiple addresses for children. But we lack
+> > > > > implementation of parent child relationship, As parent owns the resources.
+> > > > > Child device needs to parse parent node to get some resource like
+> > > > > clocks.
+> > > > >
+> > > > > [2]
+> > > >
+> > > > The I2C ancillary clients are not meant to be handled by separate
+> > > > drivers.
+> > >
+> > > Is it a Linux rule??
+> > 
+> > It's an I2C subsystem rule as far as I can tell. This is how it has been
+> > designed.
+> 
+> Wolfram/Geert:
+> 
+> Do you agree with Laurent's statement?
+
+-- 
+Regards,
+
+Laurent Pinchart
