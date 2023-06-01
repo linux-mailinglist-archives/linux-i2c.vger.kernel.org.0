@@ -2,74 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0592C719358
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Jun 2023 08:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA12719453
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Jun 2023 09:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbjFAGiI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 1 Jun 2023 02:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
+        id S231955AbjFAHbj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Jun 2023 03:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbjFAGiH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Jun 2023 02:38:07 -0400
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A09C0
-        for <linux-i2c@vger.kernel.org>; Wed, 31 May 2023 23:38:04 -0700 (PDT)
-X-ASG-Debug-ID: 1685601477-086e233135056f0001-PT6Irj
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id WWEpSeFjDWH9jzbC (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 01 Jun 2023 14:37:58 +0800 (CST)
-X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 1 Jun
- 2023 14:37:57 +0800
-Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 1 Jun
- 2023 14:37:56 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from ZXBJMBX03.zhaoxin.com ([fe80::9855:4cb:7f79:a31d]) by
- ZXBJMBX03.zhaoxin.com ([fe80::9855:4cb:7f79:a31d%4]) with mapi id
- 15.01.2507.016; Thu, 1 Jun 2023 14:37:56 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
-From:   HansHu-oc <HansHu-oc@zhaoxin.com>
-To:     Andi Shyti <andi.shyti@kernel.org>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "Cobe Chen(BJ-RD)" <CobeChen@zhaoxin.com>,
-        "Tony W. Wang(XA-RD)" <TonyWWang@zhaoxin.com>
-Subject: Re: [PATCH v2] i2c: add support for Zhaoxin I2C controller
-Thread-Topic: [PATCH v2] i2c: add support for Zhaoxin I2C controller
-X-ASG-Orig-Subj: Re: [PATCH v2] i2c: add support for Zhaoxin I2C controller
-Thread-Index: AdmUUwR14QhYu2MgO0iFXo1cHs3mZw==
-Date:   Thu, 1 Jun 2023 06:37:56 +0000
-Message-ID: <3509ba04d98b4537ba3459407da43f62@zhaoxin.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.28.64.62]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S231139AbjFAHbi (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Jun 2023 03:31:38 -0400
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4877F180
+        for <linux-i2c@vger.kernel.org>; Thu,  1 Jun 2023 00:31:29 -0700 (PDT)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id 6BDEB839D5; Thu,  1 Jun 2023 08:31:27 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1685604687; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=TiIYNjvxx7u4LtFTs4rItJ5h6uQE2Q9fuqEA99E5S/WqMmNy7oOLIcpKhePOmm4w1
+         /Icnw9Jl98VRHWdChe5Wnpmg1QKaWl/Q6xTx9U194cwQH/Z27LrW1nAwNTcTSq/Wpc
+         C+LueAURfD17k8Ru3VR0E/9QYDUqmUdf64M6fG4MQsKRaXpzLi6YYibfqbfOOcc2sG
+         ILUyUfX3hY8V/+8Gef9B0T4rfJiroinCKq8cDnSXlnepWxSq0/LqyYnsHKakXxtREU
+         67BScU9Vi0/geFiYzwIK81K0KHYall8wKtfxj+fqruD7OPb0amlfyyTPrwWnzeYR6h
+         SI60IqyMVeghg==
+Received: by mail.lokoho.com for <linux-i2c@vger.kernel.org>; Thu,  1 Jun 2023 07:30:57 GMT
+Message-ID: <20230601074503-0.1.6c.2g4br.0.l428gs9oe3@lokoho.com>
+Date:   Thu,  1 Jun 2023 07:30:57 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-i2c@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1685601477
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 2607
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.00
-X-Barracuda-Spam-Status: No, SCORE=-2.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=THREAD_INDEX, THREAD_TOPIC
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.109452
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.01 THREAD_TOPIC           Thread-Topic: ...(Japanese Subject)...
-        0.01 THREAD_INDEX           thread-index: AcO7Y8iR61tzADqsRmmc5wNiFHEOig==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,90 +45,19 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andi,
+Dzie=C5=84 dobry,
 
-Thank you very much for reviewing this. I'll take most of your
-proposed changes and double check patch with checkpatch.pl.
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-For the following two proposed changes, please see if my
-consideration is reasonable.
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-On 2023/5/31 19:00, Andi Shyti wrote:
-> [...]
->
->> +static irqreturn_t zxi2c_irq_handle(int irq, void *dev_id)
->> +{
->> +	struct zxi2c *i2c = (struct zxi2c *)dev_id;
->> +	void __iomem *regs = i2c->regs;
->> +	u8 status = get_irq_status(regs);
->> +
->> +	if ((status & IRQ_STS_MASK) == 0)
->> +		return IRQ_NONE;
->
-> unlikely?
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-This irq is shared, so it is possible.
 
->> +	if (status & IRQ_SCL_TIMEOUT)
->> +		dev_warn(i2c->dev, "timeout(HW), ID: 0x%X\n", i2c->addr);
->> +
->> +	if (status & IRQ_STS_ADDRNACK) {
->> +		dev_dbg(i2c->dev, "addr NACK, ID: 0x%X\n", i2c->addr);
->> +	} else if (status & IRQ_STS_BYTEEND) {
->> +		i2c->byte_left--;
->> +		if (!i2c->is_read) {
->> +			if (is_nack(regs)) {
->> +				status = IRQ_STS_BYTENACK;
->> +				i2c->byte_left++;
->> +				dev_err(i2c->dev, "data NACK, ID: 0x%X\n",
->> +					i2c->addr);
->> +			} else if (i2c->byte_left == 0 && i2c->is_last_msg) {
->> +				stop_write_byte(regs);
->> +			}
->> +		}
->> +	}
->> +
->> +	i2c->event = status;
->> +	clear_irq_status(regs);
->> +	wake_up(&i2c->waitq);
->> +
->> +	return IRQ_HANDLED;
->> +}
->> +
->> +static int zxi2c_wait_event(struct zxi2c *i2c, u8 event)
->> +{
->> +	int timeout;
->> +
->> +	timeout = wait_event_interruptible_timeout(i2c->waitq,
->> +			i2c->event != 0,
->> +			msecs_to_jiffies(ZXI2C_TIMEOUT));
->> +
->> +	if (i2c->event & event)
->> +		return 0;
->
-> is this valid even when "timeout == 0"?
-
-Let's see the description of the value returned by wait_event_interruptible_timeout():
-https://elixir.bootlin.com/linux/v6.3.5/source/include/linux/wait.h#L525
- * Returns:
- * 0 if the @condition evaluated to %false after the @timeout elapsed,
- * 1 if the @condition evaluated to %true after the @timeout elapsed,
- * the remaining jiffies (at least 1) if the @condition evaluated
- * to %true before the @timeout elapsed, or -%ERESTARTSYS if it was
- * interrupted by a signal.
-So, "timeout == 0" and @condition evaluated to %true unlikely to happen at the same time.
-
-Or is it OK to change it to like below?
-+    timeout = wait_event_interruptible_timeout(i2c->waitq,
-+            i2c->event != 0,
-+            msecs_to_jiffies(ZXI2C_TIMEOUT));
-+
-+    if (i2c->event & event) {
-+        if (timeout == 1)
-+            dev_warn(i2c->dev, "thread may be blocked\n");
-+        return 0;
-+    }
-+
-+    if (timeout == 0) {
-
-Hans
+Pozdrawiam
+Adam Charachuta
