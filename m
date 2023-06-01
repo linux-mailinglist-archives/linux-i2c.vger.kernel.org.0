@@ -2,55 +2,298 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4B4719E50
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Jun 2023 15:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2408719EE7
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Jun 2023 15:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbjFANc7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Jun 2023 09:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
+        id S230151AbjFANzZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Jun 2023 09:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234413AbjFANcq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Jun 2023 09:32:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44471E5A
-        for <linux-i2c@vger.kernel.org>; Thu,  1 Jun 2023 06:32:33 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q4iPY-0005ti-Bm; Thu, 01 Jun 2023 15:32:16 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q4iPX-004Mj5-9R; Thu, 01 Jun 2023 15:32:15 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q4iPW-00AAUp-Dx; Thu, 01 Jun 2023 15:32:14 +0200
-Date:   Thu, 1 Jun 2023 15:32:14 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     carlos.song@nxp.com, aisheng.dong@nxp.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, linux-kernel@vger.kernel.org,
-        haibo.chen@nxp.com, xiaoning.wang@nxp.com, linux-imx@nxp.com,
-        kernel@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: imx-lpi2c: fix type char overflow issue when
- calculating the clock cycle
-Message-ID: <20230601133214.h3vljetcybttnygo@pengutronix.de>
-References: <20230529080251.3614380-1-carlos.song@nxp.com>
- <20230530185036.ggep3pv7booqtb6b@intel.intel>
+        with ESMTP id S233283AbjFANzY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Jun 2023 09:55:24 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081B8FC
+        for <linux-i2c@vger.kernel.org>; Thu,  1 Jun 2023 06:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=xqhRMpVRwKGnSR4yTg3S/+wq82xe
+        UEL1Dnls53yl8Mw=; b=zVwx/d3ot8d8N9TH4vhGyszu0niC+gq3K8uG69HepK4Y
+        t1CR6rvFAw11dWupGg+KHJZM9VXnrwmpTZ00C0OaIHORagTv0B9jH9XPBTNbwemP
+        vFoXYAeQFLs6rY1Vz3Ww188uwFKNR5sYWZndJ8YSYXkXS19jf7QjsglAtmCGf5U=
+Received: (qmail 1670469 invoked from network); 1 Jun 2023 15:54:54 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Jun 2023 15:54:54 +0200
+X-UD-Smtp-Session: l3s3148p1@qP6/xxH9ruwujnsI
+Date:   Thu, 1 Jun 2023 15:54:50 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Thor Thayer <thor.thayer@linux.intel.com>,
+        Elie Morisse <syniurge@gmail.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jochen Friedrich <jochen@scram.de>,
+        Benson Leung <bleung@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chris Pringle <chris.pringle@phabrix.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        Michael Shych <michaelsh@nvidia.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stefan Roese <sr@denx.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Andrew Lunn <andrew@lunn.ch>, Robert Richter <rric@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Vignesh R <vigneshr@ti.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>, Rob Herring <robh@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jim Cromie <jim.cromie@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Wei Chen <harperchen1110@gmail.com>,
+        George Cherian <gcherian@marvell.com>,
+        Peter Rosin <peda@axentia.se>,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        linux-aspeed@lists.ozlabs.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Jan Dabros <jsd@semihalf.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-riscv@lists.infradead.org,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        chrome-platform@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
+        Benjamin Fair <benjaminfair@google.com>,
+        linux-rockchip@lists.infradead.org, openbmc@lists.ozlabs.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nancy Yuen <yuenn@google.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-sunxi@lists.linux.dev, Joel Stanley <joel@jms.id.au>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-msm@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-omap@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Patrick Venture <venture@google.com>,
+        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, asahi@lists.linux.dev,
+        kernel@pengutronix.de, linuxppc-dev@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 00/89] i2c: Convert to platform remove callback returning
+ void
+Message-ID: <ZHijKtBbH2sCSuT4@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        Elie Morisse <syniurge@gmail.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jochen Friedrich <jochen@scram.de>,
+        Benson Leung <bleung@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chris Pringle <chris.pringle@phabrix.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Khalil Blaiech <kblaiech@nvidia.com>,
+        Asmaa Mnebhi <asmaa@nvidia.com>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        Michael Shych <michaelsh@nvidia.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stefan Roese <sr@denx.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>,
+        Robert Richter <rric@kernel.org>, Tony Lindgren <tony@atomide.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Vignesh R <vigneshr@ti.com>, Michael Ellerman <mpe@ellerman.id.au>,
+        Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Rob Herring <robh@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jim Cromie <jim.cromie@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Wei Chen <harperchen1110@gmail.com>,
+        George Cherian <gcherian@marvell.com>,
+        Peter Rosin <peda@axentia.se>,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        linux-aspeed@lists.ozlabs.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Jan Dabros <jsd@semihalf.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-riscv@lists.infradead.org, Fabio Estevam <festevam@gmail.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        chrome-platform@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
+        Benjamin Fair <benjaminfair@google.com>,
+        linux-rockchip@lists.infradead.org, openbmc@lists.ozlabs.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nancy Yuen <yuenn@google.com>,
+        Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-sunxi@lists.linux.dev, Joel Stanley <joel@jms.id.au>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-msm@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-omap@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Patrick Venture <venture@google.com>, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, asahi@lists.linux.dev,
+        kernel@pengutronix.de, linuxppc-dev@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org
+References: <20230508205306.1474415-1-u.kleine-koenig@pengutronix.de>
+ <20230601073322.ww25ajaurktqsryr@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xmjkv3hz43ym3mcy"
+        protocol="application/pgp-signature"; boundary="gpYQGInw32d3wriv"
 Content-Disposition: inline
-In-Reply-To: <20230530185036.ggep3pv7booqtb6b@intel.intel>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230601073322.ww25ajaurktqsryr@pengutronix.de>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,84 +301,36 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---xmjkv3hz43ym3mcy
-Content-Type: text/plain; charset=iso-8859-1
+--gpYQGInw32d3wriv
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 30, 2023 at 08:50:36PM +0200, Andi Shyti wrote:
-> On Mon, May 29, 2023 at 04:02:51PM +0800, carlos.song@nxp.com wrote:
-> > From: Clark Wang <xiaoning.wang@nxp.com>
-> >=20
-> > Claim clkhi and clklo as integer type to avoid possible calculation
-> > errors caused by data overflow.
-> >=20
-> > Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
-> > Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-> > Signed-off-by: Carlos Song <carlos.song@nxp.com>
-> > ---
-> >  drivers/i2c/busses/i2c-imx-lpi2c.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2=
-c-imx-lpi2c.c
-> > index 40a4420d4c12..7dd33564cbe1 100644
-> > --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> > +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> > @@ -211,8 +211,8 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct =
-*lpi2c_imx)
-> >  /* CLKLO =3D I2C_CLK_RATIO * CLKHI, SETHOLD =3D CLKHI, DATAVD =3D CLKH=
-I/2 */
-> >  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
-> >  {
-> > -	u8 prescale, filt, sethold, clkhi, clklo, datavd;
-> > -	unsigned int clk_rate, clk_cycle;
-> > +	u8 prescale, filt, sethold, datavd;
-> > +	unsigned int clk_rate, clk_cycle, clkhi, clklo;
->=20
-> looks OK.
->=20
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>=20
->=20
-> there is, though, another part I would take care of, this bit:
->=20
-> 	clklo =3D clk_cycle - clkhi;
-> 	if (clklo < 64)
-> 		break;
->=20
-> It might be unlikely, but if "clk_cycle > clkhi" then all the
-> calculation. Do you mind adding a check:
->=20
-> 	if (unlikely(clk_cycle > clkhi))
-> 		break;
 
-With clk_cycle being unsigned and clkhi =3D DIV_ROUND_UP(clk_cycle, 3)
-this will be true unless clk_cycle 0 or 1, so I'd say this is quite
-likely to trigger?!
+> I wonder how this series will go in. My expectation was that Wolfram
+> picks up the whole series via his tree?!
 
-I guess you meant something different than you wrote. (And your sentence
-no verb.)
+Will do. I am currently super-busy, though.
 
-Best regards
-Uwe
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---xmjkv3hz43ym3mcy
+--gpYQGInw32d3wriv
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR4nd0ACgkQj4D7WH0S
-/k4FNQgAkPNYBpRid7OfDU5CbuWfB6NR+0BsFU9ggQr5+3KASlD9t0SqUQoFdoTF
-ZnNvkgTt5lAXxvS+LR0FMgMw2+nd1e7XGBjofs8b9Ct1XDQDxKNZCsqdFM4GVDkI
-2qx3kO+yj3vinAHDKne/Bjb8j9okLv48gjImJPLQdOTwynPuI9d3P5ILkjxS6j1R
-80955a5NH4i7VE6cwl5GHu351i3v8RAN2BzEPmv+C7D4rhcxql8g/WrtGEJY8OKc
-krENSlJXNRSC5kR2Qe6oZ0m+HJbEv0opsFnDX8/V4GNWg1oguyM6sCARzaqvnklA
-sRrAYGcJXqzQsGwb4CCtH/i4CJpPLQ==
-=IT7k
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR4oyYACgkQFA3kzBSg
+KbYkxRAAgf5VeQe2YA/rv9xTTFOLsiZ2yYaKqe5cSG8ORritsNgMayx5mytBy0Eb
+vLblB6pyYYUuu3M8/UNmMh+ud1b9uX4klUjd/spaehbsehFeEKn6qXIp8cwcSIYf
+Urcj54jsziLug9CQlidx+Zv9cK5qBCkmgMqzf+Nsc/qUEnZFhpblZkoqV1cEMbkQ
+ZrFXWEauQuCK9R9A4x6GrmfmdMn3c792FdLYJIL6bVJ3YJbN27vqzC8e+5NJqhs4
+KxCJ0LH0/M3rfhuDi//PfKk116qlUNYOkukv86eih76CBDm8sef221IfgFmLQx0h
+Hhvgc9g5MZNb9gSZP3UBsdXIiQgOEMztVEnWROaMIPLhab4G/rJhF0YMEAq132/Q
+4F6E5uIBY055Hdc4rrfounk8Ia3VRfuqG9B7bmaujkDmOBkLTB33+93c+b9xsJMh
+njdGaRmhDm3FnKzUqe//7kjRC2Eh004VP4Yr4JZ4byJWDkHtLLx2foYlV/Vry+Ka
+vajzcCTXVcDghWSXcd60VkXpI8cePJeHF6pnJfq6gTGFSrE3nH27ERG0zM8T7ADq
+E3PRusML2KJhpLcPuqnF2ntYSo8cwt2MW5gtEtaFlizmjuIZ/sLCTrDZKRUN9XAX
+k3ic9QCDUVLlKLXBftokeMi0I1NEhto6+ck+Fc8SNGnNnWxYJZ8=
+=ijai
 -----END PGP SIGNATURE-----
 
---xmjkv3hz43ym3mcy--
+--gpYQGInw32d3wriv--
