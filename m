@@ -2,79 +2,128 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1638A719672
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Jun 2023 11:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589357196A8
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Jun 2023 11:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbjFAJLD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 1 Jun 2023 05:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
+        id S231390AbjFAJSc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Jun 2023 05:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232661AbjFAJK6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Jun 2023 05:10:58 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55E9123;
-        Thu,  1 Jun 2023 02:10:52 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QX0jP3q1Sz6J7QZ;
-        Thu,  1 Jun 2023 17:10:49 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 1 Jun
- 2023 10:10:50 +0100
-Date:   Thu, 1 Jun 2023 10:10:49 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     <linux-i2c@vger.kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Niyas Sait <niyas.sait@linaro.org>,
-        Klaus Jensen <its@irrelevant.dk>,
-        Andy Shevchenko <andy@kernel.org>,
-        <linux-acpi@vger.kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Shesha Bhushan Sreenivasamurthy <sheshas@marvell.com>,
-        <linux-cxl@vger.kernel.org>, <linuxarm@huawei.com>,
-        "Viacheslav A . Dubeyko" <viacheslav.dubeyko@bytedance.com>
-Subject: Re: [RFC PATCH v3 6/7] i2c: aspeed: Set the fwnode for the
- adap->dev
-Message-ID: <20230601101049.00003662@Huawei.com>
-In-Reply-To: <CAHp75Vctpy_4yoaCWETxF_Ui7uVLzgUkfL_WqEgZdh=baYX5Uw@mail.gmail.com>
-References: <20230531100600.13543-1-Jonathan.Cameron@huawei.com>
-        <20230531100600.13543-7-Jonathan.Cameron@huawei.com>
-        <CAHp75Vctpy_4yoaCWETxF_Ui7uVLzgUkfL_WqEgZdh=baYX5Uw@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S231268AbjFAJSc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Jun 2023 05:18:32 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7476E99;
+        Thu,  1 Jun 2023 02:18:30 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C05206606EBB;
+        Thu,  1 Jun 2023 10:18:27 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685611108;
+        bh=B9cFiWKxbTrp3gF7lLhm/S4rmsB6wnq7isfJIy/mD4Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=d+IMj5PS+16b+EFlWbYBnrC1j65EtCwRvoVKhNyCWly/Aw+m4dSmAgnTqVeb2tsSM
+         cUPP3lyzGaEa0h/NRD/u+wcW9ht7zlLP6LK9RF9RfarrH1ljbNjPNvFJqVqiUEOea4
+         CdRZt0uXj8YHITAEwxUxbdEM852NSwdVYWsZUbAZWcEVJV8TcP8ED745YN0IOkQ6Ab
+         Dpvy9G6j6IaSOZGs31qKyBJMTZ65Jm3AdR6JNS/njMkEADQoPqqtn/MLw6nZihfD8Z
+         GzLZnlnH72fEomaYWSDr6OrrofMa4bzfUyU1NXTWkSki6cndBESoR4RFZt0i4elfgP
+         qz9oL0emXJLmQ==
+Message-ID: <053d4f6f-b43d-3a03-d193-437817321293@collabora.com>
+Date:   Thu, 1 Jun 2023 11:18:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 2/2] i2c: mt65xx: add additional clocks
+To:     Daniel Golle <daniel@makrotopia.org>, linux-i2c@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>
+Cc:     =?UTF-8?B?6YOt5bCP5qGl?= <joe@gainstrong.cn>
+References: <5f15212060f82fb94239174c4e4b46c151645fe8.1685549360.git.daniel@makrotopia.org>
+ <6632ce37e260f5f5cbdd0c6a5da8fe9679352aee.1685549360.git.daniel@makrotopia.org>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <6632ce37e260f5f5cbdd0c6a5da8fe9679352aee.1685549360.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 31 May 2023 20:46:42 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-
-> On Wed, May 31, 2023 at 1:09 PM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > This is needed for the bus matching used for ACPI based
-> > i2c client registration.  
+Il 31/05/23 18:11, Daniel Golle ha scritto:
+> On MT7981 additional clocks are required when accessing I2C registers.
+> Add MCK and PCK optional clocks to i2c-mt65xx driver so we don't have
+> to always have them enabled, but really only if I2C is used.
 > 
-> Btw, this patch like maybe others (e.g., patch 1) can be sent already
-> as non-RFC and applied independently on the goal of the entire series.
+> Fixes: f82fd1845d309 ("i2c: mediatek: add support for MT7981 SoC")
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+
+PCK and MCK should really be P=PMIC and M=MEM as far as I understand, which
+means that they should effectively be CLK_PMIC and CLK_ARB.
+
+In that case, you don't need to add new clocks to the driver, as you're using
+the very same ones that the driver supports.
+
+Cheers,
+Angelo
+
+> ---
+>   drivers/i2c/busses/i2c-mt65xx.c | 14 +++++++++++++-
+>   1 file changed, 13 insertions(+), 1 deletion(-)
 > 
+> diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+> index a43c4d77739ab..cd28cbec2b96d 100644
+> --- a/drivers/i2c/busses/i2c-mt65xx.c
+> +++ b/drivers/i2c/busses/i2c-mt65xx.c
+> @@ -93,6 +93,8 @@
+>    * @I2C_MT65XX_CLK_DMA:  DMA clock for i2c via DMA
+>    * @I2C_MT65XX_CLK_PMIC: PMIC clock for i2c from PMIC
+>    * @I2C_MT65XX_CLK_ARB:  Arbitrator clock for i2c
+> + * @I2C_MT65XX_CLK_MCK:  MCK clock for i2c
+> + * @I2C_MT65XX_CLK_PCK:  PCK clock for i2c
+>    * @I2C_MT65XX_CLK_MAX:  Number of supported clocks
+>    */
+>   enum i2c_mt65xx_clks {
+> @@ -100,11 +102,13 @@ enum i2c_mt65xx_clks {
+>   	I2C_MT65XX_CLK_DMA,
+>   	I2C_MT65XX_CLK_PMIC,
+>   	I2C_MT65XX_CLK_ARB,
+> +	I2C_MT65XX_CLK_MCK,
+> +	I2C_MT65XX_CLK_PCK,
+>   	I2C_MT65XX_CLK_MAX
+>   };
+>   
+>   static const char * const i2c_mt65xx_clk_ids[I2C_MT65XX_CLK_MAX] = {
+> -	"main", "dma", "pmic", "arb"
+> +	"main", "dma", "pmic", "arb", "mck", "pck"
+>   };
+>   
+>   enum DMA_REGS_OFFSET {
+> @@ -1444,6 +1448,14 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+>   	if (IS_ERR(i2c->clocks[I2C_MT65XX_CLK_ARB].clk))
+>   		return PTR_ERR(i2c->clocks[I2C_MT65XX_CLK_ARB].clk);
+>   
+> +	i2c->clocks[I2C_MT65XX_CLK_MCK].clk = devm_clk_get_optional(&pdev->dev, "mck");
+> +	if (IS_ERR(i2c->clocks[I2C_MT65XX_CLK_MCK].clk))
+> +		return PTR_ERR(i2c->clocks[I2C_MT65XX_CLK_MCK].clk);
+> +
+> +	i2c->clocks[I2C_MT65XX_CLK_PCK].clk = devm_clk_get_optional(&pdev->dev, "pck");
+> +	if (IS_ERR(i2c->clocks[I2C_MT65XX_CLK_PCK].clk))
+> +		return PTR_ERR(i2c->clocks[I2C_MT65XX_CLK_PCK].clk);
+> +
+>   	if (i2c->have_pmic) {
+>   		i2c->clocks[I2C_MT65XX_CLK_PMIC].clk = devm_clk_get(&pdev->dev, "pmic");
+>   		if (IS_ERR(i2c->clocks[I2C_MT65XX_CLK_PMIC].clk)) {
 
-True but then I have to reference two sets of precursors for
-what I care about for now.  Now this is fairly stable, I'll circle
-back to post these as a separate set - I can carry on referencing the
-RFC from the QEMU side of things (and blog post etc I should write on this...)
-
-Jonathan
