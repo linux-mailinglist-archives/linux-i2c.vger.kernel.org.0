@@ -2,52 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF037196FC
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Jun 2023 11:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C389A719DC0
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Jun 2023 15:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbjFAJby (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 1 Jun 2023 05:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
+        id S233749AbjFAN0T (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 1 Jun 2023 09:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjFAJbx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Jun 2023 05:31:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6836799
-        for <linux-i2c@vger.kernel.org>; Thu,  1 Jun 2023 02:31:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC8A46427C
-        for <linux-i2c@vger.kernel.org>; Thu,  1 Jun 2023 09:31:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 075B9C433D2;
-        Thu,  1 Jun 2023 09:31:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685611911;
-        bh=gpzMxDpaqaPJ9WGpNiwFniOVjvVz38WQSsWIhcnBXmc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J868g49X/i5fcJico7qTKOcekGynhQSHuh7uPm7XK11npBzKbdFspFY5avb6XZXtx
-         Z6eE+yjT6NE50/oDTj5/soUcn8NjNvv/uvfMeWBVJss3WpeDT0wiE3c9vbP9DeYBun
-         Egj/pW9PQKBATK9tbYMp+NEFi22SnUxP+c2UBqs8tzJgANFGHM2a+FUkjOFnY15lOn
-         XtlZUDER8aZVeVmso29oTHUzEHL5o2sajwpGj0nSa9gaGtTjJB9AIpC95dVgJ1A2ri
-         ZKJtVWgOxE8KsXYf5/u99O/BgSXvG2LNIAMycZXtPVp+feUXMh6OCLWHkuRIg4xgxw
-         He0wZn9kAXfcg==
-Date:   Thu, 1 Jun 2023 11:31:48 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     HansHu-oc <HansHu-oc@zhaoxin.com>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "Cobe Chen(BJ-RD)" <CobeChen@zhaoxin.com>,
-        "Tony W. Wang(XA-RD)" <TonyWWang@zhaoxin.com>
-Subject: Re: [PATCH v2] i2c: add support for Zhaoxin I2C controller
-Message-ID: <20230601093148.ycacijzq7ksbgqjy@intel.intel>
-References: <3509ba04d98b4537ba3459407da43f62@zhaoxin.com>
+        with ESMTP id S233844AbjFAN0B (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 1 Jun 2023 09:26:01 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347231B7
+        for <linux-i2c@vger.kernel.org>; Thu,  1 Jun 2023 06:25:41 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q4iJ6-0004xW-Iv; Thu, 01 Jun 2023 15:25:36 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q4iJ5-004Mhv-Ol; Thu, 01 Jun 2023 15:25:35 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q4iJ5-00AARb-4b; Thu, 01 Jun 2023 15:25:35 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] i2c: imx-lpi2c: Don't open-code DIV_ROUND_UP
+Date:   Thu,  1 Jun 2023 15:25:32 +0200
+Message-Id: <20230601132532.2749426-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3509ba04d98b4537ba3459407da43f62@zhaoxin.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=948; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=uhu5f9qNVEJbzFwOYvmm2pKMCGWEve5udki5Qdmtwk0=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkeJxL4woxOhtmsc/1qX3cs68x7KdDFJvVSoBtw 1fqqOnGiHKJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZHicSwAKCRCPgPtYfRL+ Ti8mCACVIJi+O2LuZPf7FFD6Kh3xhVBFWTT59qELsj30lmIQC3yOTh8jrgLt420fW/BVJlyawR9 vwDY5LzGvBAMrt7r9ktsMaEqroMFZV3AwiPqHWLKFVVBj65GxJHh6rJo/wepiRMnGyYupZh6R0n f68r3wTd3z31Fnde1iSJNkcRov13H2iP7r08TSQxM4xIPf+R97g/l+Zf+g2QLgvwR92oMwz8FEF jHNw+CgRRQ0hDJeOLRbEUFaNgzoi7O3bilEXVkoHgyXaSFNT40mePG8zsIw+ovVq1O8MfeWLCzn 9a16X2lohsQaEalJtbzARTqKrnO5yEYU4V2LUVnOPasEKMLV
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,34 +56,29 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-> >> +static int zxi2c_wait_event(struct zxi2c *i2c, u8 event)
-> >> +{
-> >> +	int timeout;
-> >> +
-> >> +	timeout = wait_event_interruptible_timeout(i2c->waitq,
-> >> +			i2c->event != 0,
-> >> +			msecs_to_jiffies(ZXI2C_TIMEOUT));
-> >> +
-> >> +	if (i2c->event & event)
-> >> +		return 0;
-> >
-> > is this valid even when "timeout == 0"?
-> 
-> Let's see the description of the value returned by wait_event_interruptible_timeout():
-> https://elixir.bootlin.com/linux/v6.3.5/source/include/linux/wait.h#L525
->  * Returns:
->  * 0 if the @condition evaluated to %false after the @timeout elapsed,
->  * 1 if the @condition evaluated to %true after the @timeout elapsed,
->  * the remaining jiffies (at least 1) if the @condition evaluated
->  * to %true before the @timeout elapsed, or -%ERESTARTSYS if it was
->  * interrupted by a signal.
+There is no change in the generated code (tested on an ARCH=arm
+allmodconfig build).
 
-yes, I know, that's why I asked.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/i2c/busses/i2c-imx-lpi2c.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> So, "timeout == 0" and @condition evaluated to %true unlikely to happen at the same time.
+diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+index 1af0a637d7f1..ae6ce28d3330 100644
+--- a/drivers/i2c/busses/i2c-imx-lpi2c.c
++++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+@@ -217,7 +217,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+ 	for (prescale = 0; prescale <= 7; prescale++) {
+ 		clk_cycle = clk_rate / ((1 << prescale) * lpi2c_imx->bitrate)
+ 			    - 3 - (filt >> 1);
+-		clkhi = (clk_cycle + I2C_CLK_RATIO) / (I2C_CLK_RATIO + 1);
++		clkhi = DIV_ROUND_UP(clk_cycle, I2C_CLK_RATIO + 1);
+ 		clklo = clk_cycle - clkhi;
+ 		if (clklo < 64)
+ 			break;
 
-unlikely is a very strong word and rearrangement is free. So,
-based on what you copy pasted above, I would first put the
-"timeout == 0" check and then the rest.
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+-- 
+2.39.2
 
-Andi
