@@ -2,60 +2,112 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8DE72221B
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jun 2023 11:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E27722235
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jun 2023 11:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjFEJZJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Jun 2023 05:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
+        id S231219AbjFEJav (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Jun 2023 05:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjFEJZI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jun 2023 05:25:08 -0400
+        with ESMTP id S231204AbjFEJat (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jun 2023 05:30:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27335DF;
-        Mon,  5 Jun 2023 02:25:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F0CBD;
+        Mon,  5 Jun 2023 02:30:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9C1B621BE;
-        Mon,  5 Jun 2023 09:25:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A829C433D2;
-        Mon,  5 Jun 2023 09:25:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3C37621D3;
+        Mon,  5 Jun 2023 09:30:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1D5CC433EF;
+        Mon,  5 Jun 2023 09:30:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685957106;
-        bh=2vmmK+h5PPIQLJpVOoUh89ZNQLOuPRABXJRcoZvm1MI=;
+        s=k20201202; t=1685957447;
+        bh=GGlOcAGW9SPn7EFuuc+2lfe0AlLGsZAzDDEdxTJef1Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V7X/5cmJkUW0wqW++Tft1ozAEGUwqdyFzyv/PZrmfUK+4xcV8I+he1y6mwZMbteXo
-         TXvSr62lOvqBPePVzeIMf3YYDJ7cngTfPlt3f/z7Qkd3s/1m+R/KAK1Wte9Njr++0k
-         0GHqtzGRassZ084k0kOWE1d06i1ciqiA9PDUztEtiXtnY6dZ56C3ZR7BrJxo53+FjR
-         cEvBlimgenvyC2FVJMVUENPEIOi5op4v+YbwoC1goc87k7VZOJBFLV7HBE1LjVeV4t
-         jZxS+h5j1RZZKTgi9r65sy1jeffJ2Xqvr2d8I711bNYOntgHNYbegjOm+WmeivF3pT
-         3kuIvd5Iskobw==
-Date:   Mon, 5 Jun 2023 11:25:02 +0200
+        b=V6uOjxAi9MmOwLBwkTvJkBBvBCqMcaVaAJMzHP6bUiUvgkALI70C2AN4MdHOl9iyA
+         sfpivVDM72hepyGW51mrIo8s6e7vvo9fE3LN6umUHO8ch7TS7KcJ4TZdtHREVnRuH7
+         PJR319PiAXThyr48ZeOzh/6oqf4DyAJzJ4FE7Tln2x8aflIy7GEr2qBPiwvX0kEDB6
+         3LVeMSvqkuFMTyO5EJEqk4PlZZUOtmoT2ZeU8jyRHyqFqwrQDouDiTWWA1CGMayfKx
+         lr2FOZ5uw/iFpDkapMt05pOgAHInRThFUSnq2eAASZ4XTdIlRi+uIfM1PppYtHtdbQ
+         nzkaZ5rHQMLaQ==
+Date:   Mon, 5 Jun 2023 11:30:44 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: Add i2c_get_match_data()
-Message-ID: <ZH2p7iWYizLsxZ1g@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Corey Minyard <cminyard@mvista.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Antonio Borneo <antonio.borneo@foss.st.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-References: <20230601171711.221430-1-biju.das.jz@bp.renesas.com>
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
+Message-ID: <ZH2rRAMe7+MATuao@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Corey Minyard <cminyard@mvista.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Antonio Borneo <antonio.borneo@foss.st.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
+References: <20230522101849.297499-1-biju.das.jz@bp.renesas.com>
+ <20230522101849.297499-2-biju.das.jz@bp.renesas.com>
+ <20230529080552.GJ25984@pendragon.ideasonboard.com>
+ <OS0PR01MB592283E55078298EEA30C6B9864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <20230531085941.GA27043@pendragon.ideasonboard.com>
+ <CAMuHMdXywnxO6cL5R84mryFuyVMswj6EniY-bZx7m_2L3iUY9A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yCBX5AlPw0rYAlLc"
+        protocol="application/pgp-signature"; boundary="nY4I2iNGV/UDZ0aJ"
 Content-Disposition: inline
-In-Reply-To: <20230601171711.221430-1-biju.das.jz@bp.renesas.com>
+In-Reply-To: <CAMuHMdXywnxO6cL5R84mryFuyVMswj6EniY-bZx7m_2L3iUY9A@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,36 +119,34 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---yCBX5AlPw0rYAlLc
+--nY4I2iNGV/UDZ0aJ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 
-> +       if (client->dev.of_node)
->                 config = of_device_get_match_data(&client->dev);
+> Wolfram: time to chime in ;-)
 
-Has it been considered adding this check to the new helper function as
-well? Saves even more boilerplate code, I'd think.
+I'll have a look this week.
 
 
---yCBX5AlPw0rYAlLc
+--nY4I2iNGV/UDZ0aJ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9qe4ACgkQFA3kzBSg
-KbbXcRAAiqqWhEzO2IUNv5glBXaA9C0Ad0/rf6jrOOsMuiR4ajw/+AJ7yQDBw7MC
-SWJ0gYjMOgv/pJupdP0lii5M1hUDMljKyfLwjnAbhtXeOM3QQRZ+cqWfoDDfbE3r
-EKIEa37vKjF99+D4uK/godfXrJf7hzTTgLMDBIMUW1SRao7vQIjC66xhGOi4iqs8
-7EBLBm59HxSchUIBw0IpiZa+Dy/DwV+sjU66vLPln93aujsOkOt81I+WaasB4BX7
-ysh0Jzk9Oeuk5wjs0HwRMeI5RS6BayE9chL4UGFwpkySSt2e16Q5YxLm9MUlE2+k
-3wGkQ/qyUPVDoYcwBOMew9piBoID9qOXFdx+8fkaYEkbaqO7ZZuL9jVmuOjvpC0o
-9LvY5uOooIymg1Dkwr37wctWZ3pBCNhC6BXpEjNsz5EQDcOmg+l08YmSRgty/aW4
-hsDQ4lK6fiD4MJI5C5baiMStEN+1tMU9oltmCRjWKmFCtXhRtjjiZJcJKCAyXWYb
-QeWkk/UnCpUga1oyl2k1lo4+RkeR8Kc0Tm3IqOrFinMx8XTDSxplsDJT0fPAFqvN
-wYJVRa7oBhZ6slObMIyvW6j/vDIy8mqekbvx90g4tzCRw0UPVSuB3xqtCtPm4kE9
-SPLnssoFyxD2QIM73wrYhwFZZibLhw/8qpsiQdr6OzdAXQBnEvU=
-=8N9i
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9q0QACgkQFA3kzBSg
+KbZhhQ/+Iqw/3I/2FLvudgR69quUiOsVQrtXBrBAiLONcFRBzf0k0ko+dYhxxorr
+nxUcHocBSM8AxRIhv6nmaLxdQQTyU1MBHObbfX4zjmTgQFECbUWt4mVDTVJZOErZ
+F08SZ5KR1aqVWtDXFZuEjE8TXZBWttvjzAinW+uevqPw3wrH8SCSv9AW1h2V8IMr
+j8D4aFQVdylLvQelx38YqMQ+IhqMdtFZy4ojX5nbRDY6SaZMZQzG6qL2UWp9dVT5
+tJaDag3ca+XGan33m/3biglwZJMxpzVxDlGCNJKhbfTkk+Wyqn7ZLH8xaBkMNDJS
+RRSAPHL109hysXnc1sYFH3Rj5cPO2xluOHDKNFxkNx5mHzIBqzOx7NYJVElHKU6h
+U1dAual3MdcCx2F1zXxA6Cy7NwB/JM5dNaXGpXxlOt3ITY8G8U9TNNnn+pWEMEbc
+TOIcgVC0JOFX76cUclAwCxOPuPI2NYgeiSCw+A0gNbRxz3PMnJ65qyKtbAZp9r9m
+mkdRe/Bw0scaE4dGhvVP3CVjiNcJgtYY/DiDfuGmiiMx1JRLnOqFa2DkYib5GwM0
+KdSxRJTAfFF/RJchU9Br/xmo60frJnho0GIHWB6dNJuouw6022JBHpqZ3TLOfQ13
+HZoa6+zK3XItBJujN/LDXqSTYUwa3Nu/jNoAaFifv3AbkVU4g4M=
+=duGk
 -----END PGP SIGNATURE-----
 
---yCBX5AlPw0rYAlLc--
+--nY4I2iNGV/UDZ0aJ--
