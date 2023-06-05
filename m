@@ -2,87 +2,159 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF83B7219FE
-	for <lists+linux-i2c@lfdr.de>; Sun,  4 Jun 2023 22:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF31721C3D
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jun 2023 04:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjFDUtw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 4 Jun 2023 16:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
+        id S232642AbjFEC4D (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 4 Jun 2023 22:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbjFDUtv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 4 Jun 2023 16:49:51 -0400
-X-Greylist: delayed 510 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 04 Jun 2023 13:49:49 PDT
-Received: from mail2.medvecky.net (mail2.medvecky.net [85.118.132.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AD0DB;
-        Sun,  4 Jun 2023 13:49:49 -0700 (PDT)
-Message-ID: <ae93843f-7ab0-9d10-cf93-261f986962a5@assembler.cz>
-Date:   Sun, 4 Jun 2023 22:41:15 +0200
+        with ESMTP id S232592AbjFEC4B (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 4 Jun 2023 22:56:01 -0400
+Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B94CC;
+        Sun,  4 Jun 2023 19:55:57 -0700 (PDT)
+X-QQ-mid: bizesmtp91t1685933675tpz2hoo1
+Received: from wxdbg.localdomain.com ( [60.177.99.31])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 05 Jun 2023 10:54:05 +0800 (CST)
+X-QQ-SSF: 01400000000000J0Z000000A0000000
+X-QQ-FEAT: yFznwLkTCH73VW1diemjRB3wyxTs1/ja/AmPfHGZ3Inh5KzjSEJ+biJgslv/i
+        yFGijYeX86GdcQW9zMv8Y5DhIpS0FTFwD+GlMNUjLvSmg8/xfZl83CbQv4hNNeYV6yQ97pA
+        4VcDyL1g/PQN8oxe8CoomQf/P4ESmZBGYqRXBvGEy3nRH2FLit2MY3EIAh7Ss0e7zC8VCjR
+        gWkzKNrQxBnWfJh1AnKne80cvrcldicqrBeLmeRoUqSojjBdA8hA9CNTOuxd62HXwO0OpPj
+        pvji1AOqG5BBPYeep330WlXXtU+45oqvTHtVkQKMTLaLmGOmSqV1SHeYKZC8avOl3TJXP4e
+        tIKVsu8gBDOMFBjvNKqXISGXil0SClzY6eL7tMKMgKLgufFMzPUfZAUK2AJRw==
+X-QQ-GoodBg: 2
+X-BIZMAIL-ID: 7585106368754598496
+From:   Jiawen Wu <jiawenwu@trustnetic.com>
+To:     netdev@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com, Jose.Abreu@synopsys.com, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk
+Cc:     linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        mengyuanlou@net-swift.com, Jiawen Wu <jiawenwu@trustnetic.com>
+Subject: [PATCH net-next v11 0/9] TXGBE PHYLINK support
+Date:   Mon,  5 Jun 2023 10:52:02 +0800
+Message-Id: <20230605025211.743823-1-jiawenwu@trustnetic.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.de>, Marius Hoch <mail@mariushoch.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230514103634.235917-1-mail@mariushoch.de>
- <20230523200350.62ab4788@endymion.delvare>
- <59a6a917-2a93-d52d-37f3-091295dd0db4@mariushoch.de>
- <20230604160132.102dd6a7@endymion.delvare>
-From:   Rudolf Marek <r.marek@assembler.cz>
-Subject: Re: [PATCH 0/2] i2c: i801: Force no IRQ for Dell Latitude E7450
-In-Reply-To: <20230604160132.102dd6a7@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Authentication-Results: mail2.medvecky.net;
-        auth=pass smtp.mailfrom=r.marek@assembler.cz
-X-Spamd-Bar: /
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Jean,
+Implement I2C, SFP, GPIO and PHYLINK to setup TXGBE link.
 
-Dne 04. 06. 23 v 16:01 Jean Delvare napsal(a):
-> I admit I don't know. I'm not familiar with how GSI numbers relate to
-> IRQ numbers. I think I understand that GSI numbers are an ACPI thing,
-> and the ACPI layer is responsible for mapping these to actual IRQ
-> numbers? Is there a GSI-to-IRQ table available somewhere as part of the
-> ACPI tables? If so, it would be interesting to disassemble the ACPI
-> tables on your system and check what this looks like for you.
+Because our I2C and PCS are based on Synopsys Designware IP-core, extend
+the i2c-designware and pcs-xpcs driver to realize our functions.
 
-You need to check _PRT method of PCI0 device in APIC mode.
-This will tell you to what GSI (APIC/pin) it goes.
-To check you need to have a look to the DSDT table and decompile
-it. You can obtain it by running acpidump > tables.txt and the acpixtract -a tables.txt
-and finally running iasl -d dsdt.asl.
+v10 -> v11:
+- add gc->label NULL check
+- rebase on merging of wangxun patches
 
-Then, because the SMBUS lives on bus0, you just need to check _PRT method
-under PCI0 device for the entry of 001fffff (INT C).
-If this entry exists it will tell you where is it connected.
+v9 -> v10:
+- clear I2C device model flags
+- change the order of header files
+- use xpcs_create_mdiodev()
+- fix Kconfig warning
 
-I assume this has no entry and then as a last chance Linux tries the PCI IRQ entry
-in the configuration space gets queried. And this has 0xff which is
-telling no IRQ connected.
+v8 -> v9:
+- rename swnode property for specific I2C platform device
+- add ".fast_io = true" for I2C regmap
+- use raw_spinlock_t for GPIO reg lock and adjust its position
+- remove redundant txgbe->mdiodev
+- keep reverse x-mass tree order
+- other minor style changes
 
-The southbridge has a IRQ routing configuration register which can be used to verify
-if this is routed anywhere or really left "unconnected". This is usually in the the RCBA base + something
-register. Have a look to "D31IP" register:
+v7 -> v8:
+- use macro defined I2C FIFO depth instead of magic number
+- fix return code of clock create failure
+- add spinlock for writing GPIO registers
+- implement triggering GPIO interrupts for both-edge type
+- remove the condition that enables interrupts
+- add mii bus check for PCS device
+- other minor style changes
 
-SMBus Pin (SMIP) — R/W. Indicates which pin the SMBus controller drives as its
-interrupt. bits 15:12
+v6 -> v7:
+- change swnode property of I2C platform to be boolean
+- use device_property_present() to match I2C device data
 
-If there is 0, it is not routed anywhere. Also you need to check "D31IR" where the PIN C is going:
+v5 -> v6:
+- fix to set error code if pointer of txgbe is NULL
+- change "if" to "switch" for *_i2c_dw_xfer_quirk()
+- rename property for I2C device flag
+- use regmap to access I2C mem region
+- use DEFINE_RES_IRQ()
+- use phylink_mii_c45_pcs_get_state() for DW_XPCS_10GBASER
 
-Interrupt C Pin Route (ICR) — R/W. Indicates which physical pin on the PCH is
-connected to the INTC# pin reported for device 31 functions.
+v4 -> v5:
+- add clock register
+- delete i2c-dw.h with platform data
+- introduce property "i2c-dw-flags" to match device flags
+- get resource from platform info to do ioremap
+- rename quirk functions in i2c-designware-*.c
+- fix calling txgbe_phylink_init()
 
-The PIRQA corresponds to the PIN 16 of IOAPIC etc.
+v3 -> v4:
+- modify I2C transfer to be generic implementation
+- avoid to read DW_IC_COMP_PARAM_1
+- remove redundant "if" statement
+- add specific labels to handle error in txgbe_init_phy(), and remove
+  "if" conditions in txgbe_remove_phy()
 
-If you need more info on that feel free to contact me. I can try to help.
+v2 -> v3:
+- delete own I2C bus master driver, support it in i2c-designware
+- delete own PCS functions, remove pma configuration and 1000BASE-X mode
+- add basic function for 10GBASE-R interface in pcs-xpcs
+- add helper to get txgbe pointer from netdev
 
+v1 -> v2:
+- add comments to indicate GPIO lines
+- add I2C write operation support
+- modify GPIO direction functions
+- rename functions related to PHY interface
+- add condition on interface changing to re-config PCS
+- add to set advertise and fix to get status for 1000BASE-X mode
+- other redundant codes remove
 
-Thanks,
-Rudolf
+Jiawen Wu (9):
+  net: txgbe: Add software nodes to support phylink
+  i2c: designware: Add driver support for Wangxun 10Gb NIC
+  net: txgbe: Register fixed rate clock
+  net: txgbe: Register I2C platform device
+  net: txgbe: Add SFP module identify
+  net: txgbe: Support GPIO to SFP socket
+  net: pcs: Add 10GBASE-R mode for Synopsys Designware XPCS
+  net: txgbe: Implement phylink pcs
+  net: txgbe: Support phylink MAC layer
+
+ drivers/i2c/busses/i2c-designware-common.c    |   8 +
+ drivers/i2c/busses/i2c-designware-core.h      |   4 +
+ drivers/i2c/busses/i2c-designware-master.c    |  89 ++-
+ drivers/i2c/busses/i2c-designware-platdrv.c   |  15 +
+ drivers/net/ethernet/wangxun/Kconfig          |  10 +
+ drivers/net/ethernet/wangxun/libwx/wx_lib.c   |   3 +-
+ drivers/net/ethernet/wangxun/libwx/wx_type.h  |   4 +
+ drivers/net/ethernet/wangxun/txgbe/Makefile   |   1 +
+ .../ethernet/wangxun/txgbe/txgbe_ethtool.c    |  28 +
+ .../net/ethernet/wangxun/txgbe/txgbe_main.c   |  65 +-
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.c    | 673 ++++++++++++++++++
+ .../net/ethernet/wangxun/txgbe/txgbe_phy.h    |  10 +
+ .../net/ethernet/wangxun/txgbe/txgbe_type.h   |  89 +++
+ drivers/net/pcs/pcs-xpcs.c                    |  30 +
+ include/linux/pcs/pcs-xpcs.h                  |   1 +
+ 15 files changed, 992 insertions(+), 38 deletions(-)
+ create mode 100644 drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
+ create mode 100644 drivers/net/ethernet/wangxun/txgbe/txgbe_phy.h
+
+-- 
+2.27.0
 
