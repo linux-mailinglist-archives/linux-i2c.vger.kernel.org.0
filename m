@@ -2,66 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16C272209C
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jun 2023 10:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 038B47220B8
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jun 2023 10:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjFEIKq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Jun 2023 04:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
+        id S229483AbjFEIOa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Jun 2023 04:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjFEIKp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jun 2023 04:10:45 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77E4A1;
-        Mon,  5 Jun 2023 01:10:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685952644; x=1717488644;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HPWdNa03m1xAyahf1uKBoWWQIEqxfz9qy1zZwFxRaa4=;
-  b=HPlk27kssthwPCwqNY8L1QjO+Vf4ke7H3UGtqDrk5SiLgug7BllZw3Th
-   XOgv2Tns35wbdr/KUHtYOzxMkSO5R4PbxgG+fbnlqsqpMQLLcf46gN1EC
-   Ncmjtdi8+S4dQV6rCTY8I1EXLBvoptrTBH7AxRPEpi8xhRtkvZ2eJdLxi
-   Z8DAQrt7pXmseseyhPk4ZlNEWTT+tMZmxGoWH9GgLI6IJaTXcho6ZltVK
-   t1Z947An/txQ+Kyf/DjuEKB7VQYMhZaeI+O/l/muuaNNAwat8kqRCuwkF
-   5EBdgWSfRO1XlX7xjjZOlys+RydSK36wLP/R2CI8fQc/X8QqmUu+SxSRz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="359623653"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="359623653"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 01:10:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10731"; a="658985053"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="658985053"
-Received: from mylly.fi.intel.com (HELO [10.237.72.143]) ([10.237.72.143])
-  by orsmga003.jf.intel.com with ESMTP; 05 Jun 2023 01:10:40 -0700
-Message-ID: <c3399327-37ee-f34c-4a48-7c1f1a62a785@linux.intel.com>
-Date:   Mon, 5 Jun 2023 11:10:39 +0300
+        with ESMTP id S229902AbjFEIO3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jun 2023 04:14:29 -0400
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFECA1;
+        Mon,  5 Jun 2023 01:14:25 -0700 (PDT)
+X-QQ-mid: Yeas50t1685952763t318t21946
+Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [60.177.99.31])
+X-QQ-SSF: 00400000000000F0FPF000000000000
+From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
+X-BIZMAIL-ID: 11751809325026712248
+To:     "'Wolfram Sang'" <wsa@kernel.org>
+Cc:     <netdev@vger.kernel.org>, <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
+        <Jose.Abreu@synopsys.com>, <andrew@lunn.ch>,
+        <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <linux-i2c@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <mengyuanlou@net-swift.com>,
+        "'Piotr Raczynski'" <piotr.raczynski@intel.com>
+References: <20230605025211.743823-1-jiawenwu@trustnetic.com> <20230605025211.743823-3-jiawenwu@trustnetic.com> <ZH2IaM86ei2gQkfA@shikoro> <00c901d9977e$af0dc910$0d295b30$@trustnetic.com> <ZH2UT55SRNwN15t7@shikoro>
+In-Reply-To: <ZH2UT55SRNwN15t7@shikoro>
+Subject: RE: [PATCH net-next v11 2/9] i2c: designware: Add driver support for Wangxun 10Gb NIC
+Date:   Mon, 5 Jun 2023 16:12:42 +0800
+Message-ID: <00eb01d99785$8059beb0$810d3c10$@trustnetic.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH net-next v11 2/9] i2c: designware: Add driver support for
- Wangxun 10Gb NIC
-Content-Language: en-US
-To:     Jiawen Wu <jiawenwu@trustnetic.com>, netdev@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, Jose.Abreu@synopsys.com, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk
-Cc:     linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        mengyuanlou@net-swift.com,
-        Piotr Raczynski <piotr.raczynski@intel.com>
-References: <20230605025211.743823-1-jiawenwu@trustnetic.com>
- <20230605025211.743823-3-jiawenwu@trustnetic.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20230605025211.743823-3-jiawenwu@trustnetic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain;
+        charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: zh-cn
+Thread-Index: AQKoIYpMsU3pQxi84WWC4YPAy6bqVAIyHk5AAe8WB/YDFYJsZwGgoPRlrZgJMUA=
+X-QQ-SENDSIZE: 520
+Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,26 +52,22 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 6/5/23 05:52, Jiawen Wu wrote:
-> Wangxun 10Gb ethernet chip is connected to Designware I2C, to communicate
-> with SFP.
+On Monday, June 5, 2023 3:53 PM, Wolfram Sang wrote:
+> > Do you mean the device tree binding? This property in only used in case of software
+> > node, for wangxun Soc, which has no device tree structure.
 > 
-> Introduce the property "wx,i2c-snps-model" to match device data for Wangxun
-> in software node case. Since IO resource was mapped on the ethernet driver,
-> add a model quirk to get regmap from parent device.
+> I see, thanks.
 > 
-> The exists IP limitations are dealt as workarounds:
-> - IP does not support interrupt mode, it works on polling mode.
-> - Additionally set FIFO depth address the chip issue.
-> 
-> Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
-> Reviewed-by: Piotr Raczynski <piotr.raczynski@intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->   drivers/i2c/busses/i2c-designware-common.c  |  8 ++
->   drivers/i2c/busses/i2c-designware-core.h    |  4 +
->   drivers/i2c/busses/i2c-designware-master.c  | 89 +++++++++++++++++++--
->   drivers/i2c/busses/i2c-designware-platdrv.c | 15 ++++
->   4 files changed, 111 insertions(+), 5 deletions(-)
-> 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> How is the dependency of these patches? I'd like to take this patch via
+> the i2c tree if possible. I guess the other patches will build even if
+> this patch is not in the net-tree? Or do we need an immutable branch? Or
+> is it really better if all goes in via net? We might get merge conflicts
+> then, though. There are other designware patches pending.
+
+
+Yes, other patches will build even without this patch. But SFP will not work.
+This patch series implement I2C, GPIO, SFP and PHYLINK. The support of SFP
+is dependent on I2C and GPIO. If these patches will be end up merging in the
+same upstream version, it's not a problem to merge them in different trees,
+I think.
+
