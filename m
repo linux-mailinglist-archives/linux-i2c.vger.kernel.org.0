@@ -2,80 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823F57226A0
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jun 2023 14:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3147226AE
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jun 2023 14:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233816AbjFEM4x (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Jun 2023 08:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47588 "EHLO
+        id S230189AbjFEM7C (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Jun 2023 08:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbjFEM4k (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jun 2023 08:56:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035CF10E4;
-        Mon,  5 Jun 2023 05:55:55 -0700 (PDT)
+        with ESMTP id S232600AbjFEM7A (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jun 2023 08:59:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87ADCE5A;
+        Mon,  5 Jun 2023 05:58:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63301623DD;
-        Mon,  5 Jun 2023 12:55:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B80FC433D2;
-        Mon,  5 Jun 2023 12:55:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 159C5623E3;
+        Mon,  5 Jun 2023 12:57:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDB62C4339B;
+        Mon,  5 Jun 2023 12:57:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685969754;
-        bh=J/s+63q1jQKfqUdE3nPApFzudJHfsG4lgtjsJR+y4KI=;
+        s=k20201202; t=1685969860;
+        bh=w92Xq6xwU5/tyThn8NVIB3i/bx1EhmWfmR3FDBXsqiI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R1dbaarNkau+FnYiPQFGyO4H20qEwNyyvrx5CccEz8p47fnXL3oBDSdigs5ckrHT6
-         Ru2tsiVt1wqi9OW93JDpzugZtGnSQAGg4Tp/4Qfassuvr4DyuUEXPmTWrf+KOENICJ
-         8Ar+yP0fW2vkq7CDsVx/MrAy782NfY5lu7ebeCCwTafuii/vx14Gi/PrV7iDCSEcLc
-         HD3w2027m+Qils5B4+Q5YmdaWUeSVIJO8dYJlWlkYZcaOCIbZmVDrKmD+N71BEHiNW
-         FSZhvsCeZH32Qp2Y+HFL4uFSTAASgfVZTIsvo+EnvMvjpkNpi2/X5kSsspOG+WB8Tf
-         TlBjQsoAcp7uw==
-Date:   Mon, 5 Jun 2023 14:55:50 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v4 11/41] i2c: add HAS_IOPORT dependencies
-Message-ID: <ZH3bVsK6OmqBbZqj@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
-        Arnd Bergmann <arnd@kernel.org>, linux-i2c@vger.kernel.org
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-12-schnelle@linux.ibm.com>
- <ZH21E3Obp+YPJHkl@shikoro>
- <20230605120151.qpoe5ordzdvxmqv7@pengutronix.de>
+        b=WPLqx9yAHdkBL4uvM5Ns002jO7Ug2gxugUe3OdAwbeVP+gpok4HXguKE14tv/zHYh
+         S7JNmXEGKdVjA5caaEeShelM6u/U1zZo6Ujxf8NBYT3BiR5iKU3w0CdvXgjNKmNnZ7
+         Ua6xBMLmlpcyj9TzGtcv8zitVZtvE+AG8+vyAw46p2AJQ30fQoThFxAPkOZAUUUxdX
+         CA54BL6zR6yuRFSohefdIJ8HO1hL4SqFiTWV/b1pdEPSNGR3BBRtHigODHGRbKHNnq
+         hAwQFuV3S9Qeiwiqsx4sd46GW9tPmkdJORrbILAWPdBeh2EWyBr5gnXq/GyfoiqVxs
+         wQt99bkaNXRRA==
+Date:   Mon, 5 Jun 2023 14:57:36 +0200
+From:   'Wolfram Sang' <wsa@kernel.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Jiawen Wu <jiawenwu@trustnetic.com>, netdev@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com,
+        Jose.Abreu@synopsys.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        mengyuanlou@net-swift.com,
+        'Piotr Raczynski' <piotr.raczynski@intel.com>
+Subject: Re: [PATCH net-next v11 2/9] i2c: designware: Add driver support for
+ Wangxun 10Gb NIC
+Message-ID: <ZH3bwBZvjyIoFaVv@shikoro>
+Mail-Followup-To: 'Wolfram Sang' <wsa@kernel.org>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Jiawen Wu <jiawenwu@trustnetic.com>, netdev@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com,
+        Jose.Abreu@synopsys.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        mengyuanlou@net-swift.com,
+        'Piotr Raczynski' <piotr.raczynski@intel.com>
+References: <20230605025211.743823-1-jiawenwu@trustnetic.com>
+ <20230605025211.743823-3-jiawenwu@trustnetic.com>
+ <ZH2IaM86ei2gQkfA@shikoro>
+ <00c901d9977e$af0dc910$0d295b30$@trustnetic.com>
+ <ZH2UT55SRNwN15t7@shikoro>
+ <00eb01d99785$8059beb0$810d3c10$@trustnetic.com>
+ <ZH2zb7smT/HbFx9k@shikoro>
+ <ZH22jS7KPPBEVS2a@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lT8CzXAuQSEeNSDp"
+        protocol="application/pgp-signature"; boundary="4vJFpEDhy/jzD6wj"
 Content-Disposition: inline
-In-Reply-To: <20230605120151.qpoe5ordzdvxmqv7@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <ZH22jS7KPPBEVS2a@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,38 +77,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---lT8CzXAuQSEeNSDp
+--4vJFpEDhy/jzD6wj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 
-> (Found via: https://lore.kernel.org/all/ZH21E3Obp+YPJHkl@shikoro where
-> the last part of the URL is the Message-Id of your mail.)
+> Be careful... net-next uses patchwork, and I suspect as this is posted
+> as a series which the subject line states as being destined by the
+> author for the "net-next" tree, the entire series will end up being
+> slurped into the net-next tree.
 
-I know how I could get it. Just, for scaling reasons it is better if
-people send it right away. OK, I should have said that directly :)
-
-Please send also cover-letters to mailing lists.
+Thanks for the pointer. Jiawen Wu, would you kindly send a v12 of the
+series (without the I2C patch)?
 
 
---lT8CzXAuQSEeNSDp
+--4vJFpEDhy/jzD6wj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR921YACgkQFA3kzBSg
-KbaxfBAAjVa5/CR5r65vtyv1RPcG3CvlBR9Y5RCq5Mq6yy4Y6e5Mdy/xz5805/lj
-t2XOFkxZiq68Xs/ieZ0E6mXp3aIc8wo20SsQhsouLk6BhGlLfUbMfYgH2ZJ/Hcui
-PY0odp+KPM2HbZ8qFUq88jptx2kpjedd49zv1Dr43spLcfYqmcbc29pURvib+gyg
-eCJwpT7hYNOrMgHONpTk78FS/eb6DfVmkMpMXdxKAsg/mdE+WnSeGGSeCEXmRYJp
-l5NlRWCptffhtCCg/tgNhu+gwqqn6jiLiNjjhXVjgMyWDCUFtEqV1RI4fXJ3MeYb
-YAYxPdecyfrBR6G/4UO4CxfSahhBz5JBb8LI/ffmvuKKrju6QIeGnX8QxZ2+Rvxc
-fw4BLsKgANhsQAo13D+VvKuE59rZvPTgHQvmZa675pZEdnbfvFKpmj9aslb9R75h
-NccX4C3kPDVM3f1KEWMh2D5iGtEMi3B9zMDMhxCtcMDDJ+q5LqtdQ31E8SJz4or2
-6sU8mQZpx/zu4w8js/DmU+vLVEx+ssJgcHDbCduuJZVDrBluqderSfFDwB/zGmEA
-Lw5Uwn0yO/mGd5JDZ2hqEEs4Qv62kJCWx4HE2LPSseYCowUR8IV4BN+yClJXXdch
-X8V24/Qwe6aPrYZBZEDVtZN7aIMc7s2jihhTQxMhrC0vRX+xyKI=
-=X5/1
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR928AACgkQFA3kzBSg
+KbYAlQ/8CsD/+N2Zcc03AXNNyePkY7YwqKQ89NT9H0P05i639jHKWOzocHyZ9J8j
+OGqeKxao+GUCgv+nODspUJgt+2j8rTlE7Ael8zMpvEJYWckVeryzaaNAo+EcE3jq
+VWZHkRM0PFrl9Wpb94xuWFzilN9dzwjT4rT5TOA6axIwYlGMcedv3Ngjx7a37RUi
+aeX11lLHlbdkz2SUEc11TtSBAgak6pGrJX4hD3Ffntg3s3w5gkHghcHkkXGMfavX
+J9cqm89YJg3sKzEIU9NYhGMYvvHfZ/68MbLZDgnAMXhKenpVvJoXKR8IUiehmbW9
+ih28X9F/XJ0jzqIVOPJ1NkYvkMaEFiejHtCwiLTnDmvkNjCqfysjJ0RLg6ZGuN+C
+04Aafq4tpGSKhnvGNROHN7DIyZxuzlt9811kmJKBT96U71artA28+rysHyCuiujf
+eeBMvU11//308vd9TsTfNYFlaaLQoPmy8aK0C+xo3/dQ6aTQWKpMZ4oJwehnO/yz
+n4JFsfzSYfsybTWVzlus2V4TFySbKRS0RlZ83ugmaMSgLuYeyezfo9ZmV548iJdR
+GNelCyktqDCOLDA/3ZxelNEoBfwfzTcg7nNM/FQYU6QjQ4sx7KDM/uGe4EqsYvNb
+V/jzLOsok3oB4y2F0an0el0xSxq4Tenyg5GDRV2KJZ+yLH5AygM=
+=iCS4
 -----END PGP SIGNATURE-----
 
---lT8CzXAuQSEeNSDp--
+--4vJFpEDhy/jzD6wj--
