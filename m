@@ -2,50 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B5572213B
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jun 2023 10:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE94172214E
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jun 2023 10:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjFEIkT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Jun 2023 04:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
+        id S229487AbjFEIpE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Jun 2023 04:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbjFEIkM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jun 2023 04:40:12 -0400
+        with ESMTP id S229483AbjFEIop (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jun 2023 04:44:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5846418E;
-        Mon,  5 Jun 2023 01:40:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D944F131
+        for <linux-i2c@vger.kernel.org>; Mon,  5 Jun 2023 01:44:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5EAC60DDF;
-        Mon,  5 Jun 2023 08:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB71C4339B;
-        Mon,  5 Jun 2023 08:40:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45F3160DDD
+        for <linux-i2c@vger.kernel.org>; Mon,  5 Jun 2023 08:44:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18B90C433EF;
+        Mon,  5 Jun 2023 08:44:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685954409;
-        bh=Wbt+LNbeUL+UcsjtXJ/AqiBhnvmyO3YSpqiumdxtja0=;
+        s=k20201202; t=1685954676;
+        bh=MMkMH+tpsZ3PyspKggeYX/FCSlvfVaRWIsEuKzoAkE0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=juwBwYMfjlFZuyr9B8upgQ8Qws8AzmjJwr3cNmSgBW5CClzQ664VSRQtUc/cZG9EY
-         3SMJrqzGpRzdF+XpezRREVqkLZU2JLtOtcjEB3E2Qf6PPZFWbbOL/8cNA/x2m9YABI
-         c5K6DodgrQuGzmjrlIxd1dvtgzX3DdmlyM6Qxz6QjwiW9jJ+alWPdTdda2p6/acbFb
-         1xdbMcjRECzRkpche48dJ35hL3iIp+mgRVZ1lM6N1xj9mdoWhOPHBLtXJs/kR8tRJi
-         hvb5F9qnWWWIYcBjFbvGADICVoMlgnCngFgwgA4ibMj7JJ+TL1tiYgjEAaIfK8vYU/
-         lMsTLg5E8Y1hg==
-Date:   Mon, 5 Jun 2023 10:40:06 +0200
+        b=ZJVnwLy3axTBEVeWVjc5fOAJ1d57eqjtisr0rdsZicXK1WqndHzK/+04Fqw46XxMG
+         SQN4cW7nxQ01v6cjxkSjq6t4J5ImWPXirJIrcSofQHLkgGMuHJhE1eus5/m2E5rfkT
+         Qmu7OnHFh6yx/JytJde04mm6MhT+8uAfCZTpIdREtycKCxjvrafwrif0HvuHYhvqno
+         Y1aOamQXvtJoWBOaoxVbw09gbi4Ldmnyfz73PdS79YsQlCGOI0lF2nUHm2OSATtpdB
+         KWyHTBR/S9LP58HVwcjPNJUD0p4Ka2MT8K51Pf2WCMsIzzaoxT5mCk1JEUJLdOIJqT
+         gN79yfr6coi9w==
+Date:   Mon, 5 Jun 2023 10:44:33 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Christian Heusel <christian@heusel.eu>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: Fix spelling mistake "innacurate" -> "inaccurate"
-Message-ID: <ZH2fZoHVHgISnjYH@shikoro>
+To:     Simon Horman <horms@kernel.org>
+Cc:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] i2c: mchp-pci1xxxx: Avoid cast to incompatible function
+ type
+Message-ID: <ZH2gcekxad9JPrjJ@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Christian Heusel <christian@heusel.eu>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230508141801.88507-1-christian@heusel.eu>
+        Simon Horman <horms@kernel.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <20230510-i2c-mchp-pci1xxxx-function-cast-v1-1-3ba4459114c4@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Y6hyWwjIduGm0USY"
+        protocol="application/pgp-signature"; boundary="EdPn873a/5CanpDf"
 Content-Disposition: inline
-In-Reply-To: <20230508141801.88507-1-christian@heusel.eu>
+In-Reply-To: <20230510-i2c-mchp-pci1xxxx-function-cast-v1-1-3ba4459114c4@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,38 +70,56 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Y6hyWwjIduGm0USY
+--EdPn873a/5CanpDf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 08, 2023 at 04:18:01PM +0200, Christian Heusel wrote:
-> There is a spelling mistake in a comment. Fix it.
+On Wed, May 10, 2023 at 02:32:17PM +0200, Simon Horman wrote:
+> Rather than casting pci1xxxx_i2c_shutdown to an incompatible function typ=
+e,
+> update the type to match that expected by __devm_add_action.
 >=20
-> Signed-off-by: Christian Heusel <christian@heusel.eu>
+> Reported by clang-16 with W-1:
+>=20
+>  .../i2c-mchp-pci1xxxx.c:1159:29: error: cast from 'void (*)(struct pci1x=
+xxx_i2c *)' to 'void (*)(void *)' converts to incompatible function type [-=
+Werror,-Wcast-function-type-strict]
+>          ret =3D devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shut=
+down, i2c);
+>                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~
+>  ./include/linux/device.h:251:29: note: expanded from macro 'devm_add_act=
+ion'
+>          __devm_add_action(release, action, data, #action)
+>                                    ^~~~~~
+>=20
+> No functional change intended.
+> Compile tested only.
+>=20
+> Signed-off-by: Simon Horman <horms@kernel.org>
 
-Applied to for-current, thanks! But please check other commits in the
-subsystem for the proper prefix in $subject.
+Applied to for-current, thanks!
 
 
---Y6hyWwjIduGm0USY
+--EdPn873a/5CanpDf
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9n2YACgkQFA3kzBSg
-Kbbc3RAAkoCo1fRH+kDbIxpxmnZO+hdNWMYtAG0XUwczy4I/PxNjZ1tnCy75yJlN
-VJDrmIv7rzMUEAmJ/sutn+J+6SBjBxlf8MmiVMmm473TV7Km2gByEt9wb/sijT2v
-sZxtIImgYpACuTUaMGJCZBCBDW00YZkISSGhv6bBk2Zmi+m2Vb67UG4UOsTF/RDi
-3rxt/VRl285FGIVIcJC7pPJdPhtACyZP1pk/rkZvJt7D77u6OXfROgUh8+d1uwy/
-QrLpDNiiVlTljM1tb7+FNQHV27MeQVgfGphN4CHsvWVy6jGrA2TQ7gszFO1FrMUa
-G6ftMVLEOmGJDZu7aZn3HHeSdWPSXfRSuQKZpD1lemGj6GgcshXEPjdLW+Mtbz04
-HR1lu/CYGXVYTvIhW7s3yr/I8NdBJgnjjrjTpLwU2XI5CsPBwGD1mUHSW9jq6A1i
-9GoaveGxH9M9Dl4Pkr9m3S22IsLiPQY0KvPrZ9UOJlNS5qGuLafqmDlLU1aBuQtK
-+dGerBjtUZ2YbL1UQuKBsL3pBtwtCm+uHrG6t2Xa9uvBkYPK/zivrykEKV+xdXxG
-jBYU7u29NxAx9UAQTwfLKjQUCghrOQLmWF8YuzMcEUpXu4cpw0aOXr/ixcodKsOJ
-ORWBOPDLctTKmnVorWgFMKNJR9PCTvuQXUBjrmflm1zV/vbOWPY=
-=KHaV
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9oHEACgkQFA3kzBSg
+KbaAyQ/+OcGmcDOvDD+tEiGwpTJ0aIlH8fRUmehZtJKptN8zyIEY6Qd38K+ijWvJ
+2BPHHVCBO8kzfrorqE6y5K0YOVLo9mNoBfeTlv4FwihFjuIAN2J/ytmgkgeQvAGO
+x6WQQFliQrop9nJ7j/K2RSKjBkePGfYufOlYE0NvlqeHlUruQGJ3mle7oxJvqZ2H
+FXk+qngY6eQa55CwO8l+Vb/osS9AlrlNg1FRA4rkTiDwjY9uwAsFYIwiJovUMb+L
+AUGCJy55iTCLRjH3a/qZ4PJXTmdaH1Mriz+/2ipiOIMxg9hTi0EJWE1gfQunbEq1
+58hyx6LShSHV6KsZ/dO8P4d7D/7qA04xCmmOnDARrG5G8q2tEcbahYTfQQ4as6x8
+yDd2jaFWEgfQYbyTTRYxZJYkE82dHEz73ylIMbEmXtal9hjLQmXH3K7ljQfV34Hq
+ukdMI0RELbSM9hllF+f9LVekTBasoNczShgMZFMYaDMt1DuWr9YoMvR7vAgCWxjG
+KInW8756qnBqdPjdgZnfIM4VEYg8qhMW0R8+LsPyGH5IFX0LKAuIVAsP/3M3+hiC
+PqAwl/xX2btMNNGJ9g7o0xXiLeEw/AI7Ba3YxUTJNtKuuw3qxapyKqZrJwgf1Rkm
+gsQo47W4sZGPnaft/s/ZLeJAg+I7YuYFMvVEwOOtokCN6h7udu8=
+=FCEv
 -----END PGP SIGNATURE-----
 
---Y6hyWwjIduGm0USY--
+--EdPn873a/5CanpDf--
