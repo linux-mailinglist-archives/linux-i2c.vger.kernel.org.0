@@ -2,63 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BDE722124
-	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jun 2023 10:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B5572213B
+	for <lists+linux-i2c@lfdr.de>; Mon,  5 Jun 2023 10:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjFEIgA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 5 Jun 2023 04:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S230207AbjFEIkT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 5 Jun 2023 04:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjFEIf5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jun 2023 04:35:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB4FF0;
-        Mon,  5 Jun 2023 01:35:56 -0700 (PDT)
+        with ESMTP id S230284AbjFEIkM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 5 Jun 2023 04:40:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5846418E;
+        Mon,  5 Jun 2023 01:40:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B79F60D30;
-        Mon,  5 Jun 2023 08:35:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B4E5C433D2;
-        Mon,  5 Jun 2023 08:35:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5EAC60DDF;
+        Mon,  5 Jun 2023 08:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB71C4339B;
+        Mon,  5 Jun 2023 08:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685954155;
-        bh=MDyj7xKXBRli7gBfGmpPDEsL7ak8wYtgiHhNz3PDRFA=;
+        s=k20201202; t=1685954409;
+        bh=Wbt+LNbeUL+UcsjtXJ/AqiBhnvmyO3YSpqiumdxtja0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iv5Mu2jxJoiRhp7rkw5u/6hCYceEWJlu7GzeIWqJlVOoa1qeehMr9kprCCtDB951b
-         YPYN2jwszr1sijTetbO9SDWhjdTBEou5aueGfkxy2ydngK9y3C/dPgNU89VkLiqmVN
-         9O/qeeOUpoaDk9TYd3/Kbu/NF/vR3yWFksFXJAZRNB+o+DfzgKa7E8dUm2EIAmnhgb
-         NWgMNAZCLGzBWxV1y9/8zC9Fi7mw08EHVFVQKBK9nbfQqj8TtRPFnjTcw2NCeDjdIe
-         5LHTo8m24G68eaQoxLVrDTHzoBPhzsVWcNLmZVQqONTCvSnhqRHlCVbb7y6S7P8NfO
-         7704rVvelxlAg==
-Date:   Mon, 5 Jun 2023 10:35:52 +0200
+        b=juwBwYMfjlFZuyr9B8upgQ8Qws8AzmjJwr3cNmSgBW5CClzQ664VSRQtUc/cZG9EY
+         3SMJrqzGpRzdF+XpezRREVqkLZU2JLtOtcjEB3E2Qf6PPZFWbbOL/8cNA/x2m9YABI
+         c5K6DodgrQuGzmjrlIxd1dvtgzX3DdmlyM6Qxz6QjwiW9jJ+alWPdTdda2p6/acbFb
+         1xdbMcjRECzRkpche48dJ35hL3iIp+mgRVZ1lM6N1xj9mdoWhOPHBLtXJs/kR8tRJi
+         hvb5F9qnWWWIYcBjFbvGADICVoMlgnCngFgwgA4ibMj7JJ+TL1tiYgjEAaIfK8vYU/
+         lMsTLg5E8Y1hg==
+Date:   Mon, 5 Jun 2023 10:40:06 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] i2c: tegra: allow VI support to be compiled out
-Message-ID: <ZH2eaMlCq4EhL7jL@shikoro>
+To:     Christian Heusel <christian@heusel.eu>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: Fix spelling mistake "innacurate" -> "inaccurate"
+Message-ID: <ZH2fZoHVHgISnjYH@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <cover.1683407699.git.mirq-linux@rere.qmqm.pl>
- <0248c0737ace5db7be4e04f97985f3e7874ff1ab.1683407699.git.mirq-linux@rere.qmqm.pl>
+        Christian Heusel <christian@heusel.eu>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230508141801.88507-1-christian@heusel.eu>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ab8d/9CSzKu7KjpS"
+        protocol="application/pgp-signature"; boundary="Y6hyWwjIduGm0USY"
 Content-Disposition: inline
-In-Reply-To: <0248c0737ace5db7be4e04f97985f3e7874ff1ab.1683407699.git.mirq-linux@rere.qmqm.pl>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230508141801.88507-1-christian@heusel.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,47 +57,38 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Ab8d/9CSzKu7KjpS
-Content-Type: text/plain; charset=utf-8
+--Y6hyWwjIduGm0USY
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 06, 2023 at 11:19:02PM +0200, Micha=C5=82 Miros=C5=82aw wrote:
-> Save a bit of code for older Tegra platforms by compiling out
-> VI's I2C mode support that's used only for Tegra210.
+On Mon, May 08, 2023 at 04:18:01PM +0200, Christian Heusel wrote:
+> There is a spelling mistake in a comment. Fix it.
 >=20
-> $ size i2c-tegra.o
->    text    data     bss     dec     hex filename
->   11381     292       8   11681    2da1 i2c-tegra.o (full)
->   10193     292       8   10493    28fd i2c-tegra.o (no-dvc)
->    9145     292       8    9445    24e5 i2c-tegra.o (no-vi,no-dvc)
->=20
-> Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-> Reviewed-by: Wolfram Sang <wsa@kernel.org>
->=20
+> Signed-off-by: Christian Heusel <christian@heusel.eu>
 
-Applied to for-next, thanks!
+Applied to for-current, thanks! But please check other commits in the
+subsystem for the proper prefix in $subject.
 
 
---Ab8d/9CSzKu7KjpS
+--Y6hyWwjIduGm0USY
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9nmgACgkQFA3kzBSg
-KbYLLBAAoi+cpEGpCS2VMwq07xiTInazK7eHCg1hY7HcYrcEfqCs6UV5Jmk5V86I
-hBxg/JGc1g3PbEVW1GMcbcdYn7PmbrMqjkxmg8QOUF6UBnfHKgifUgadpq58j062
-gSD2vtXdaJSrCw5/XEWcgEZZhTDWRI1l15dxOQ2OzhqG3W0Tkru1EHbAGDHHoig2
-JZMhqFBZUbuou12gIMw5JY35mEQprzsYymgqH3APfENHZeQ3AOJG+H53SKOfqACP
-r/83cU9Lm9QRXOfV8DbNm0NYtN6zhPwrIpPTo8+OnT1PvN/rH2OlUFkNVASO/fif
-zDZ1M9GTvJ3vmuNlPLABfIJf5paQWMFKIdYzSG+iftJ2WD8h6igX736SP7V24dtY
-g7uCgmQENSGmuBayMUqemtZaBzWDlMVHwDvza8eIKUIGMaFKGHdIvnZpDIst4YxM
-f0XB7wWT3jt9c3N7iV3sgpgrQPUUO5SngL5vhiR35yPCgi3kJBA2anPTa9Y4DDvY
-6JVwsyXF6NmaFuMwJBuRU4MF7q9EcHrFqRdDiP5QvL/x6fXBU5+SeztCIw1ID6ms
-Fzj5Xpj66Hq6ZD5mrbdVP1RvVtjhE/FSXztqpvzJaQsxuEzmQA+wC9l5o4ck4DUt
-0+z/SGQ5MJM/6SRqMnSeV/j00ktNdgBn8LJlljCjvL1nmvykXvI=
-=3Gn2
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmR9n2YACgkQFA3kzBSg
+Kbbc3RAAkoCo1fRH+kDbIxpxmnZO+hdNWMYtAG0XUwczy4I/PxNjZ1tnCy75yJlN
+VJDrmIv7rzMUEAmJ/sutn+J+6SBjBxlf8MmiVMmm473TV7Km2gByEt9wb/sijT2v
+sZxtIImgYpACuTUaMGJCZBCBDW00YZkISSGhv6bBk2Zmi+m2Vb67UG4UOsTF/RDi
+3rxt/VRl285FGIVIcJC7pPJdPhtACyZP1pk/rkZvJt7D77u6OXfROgUh8+d1uwy/
+QrLpDNiiVlTljM1tb7+FNQHV27MeQVgfGphN4CHsvWVy6jGrA2TQ7gszFO1FrMUa
+G6ftMVLEOmGJDZu7aZn3HHeSdWPSXfRSuQKZpD1lemGj6GgcshXEPjdLW+Mtbz04
+HR1lu/CYGXVYTvIhW7s3yr/I8NdBJgnjjrjTpLwU2XI5CsPBwGD1mUHSW9jq6A1i
+9GoaveGxH9M9Dl4Pkr9m3S22IsLiPQY0KvPrZ9UOJlNS5qGuLafqmDlLU1aBuQtK
++dGerBjtUZ2YbL1UQuKBsL3pBtwtCm+uHrG6t2Xa9uvBkYPK/zivrykEKV+xdXxG
+jBYU7u29NxAx9UAQTwfLKjQUCghrOQLmWF8YuzMcEUpXu4cpw0aOXr/ixcodKsOJ
+ORWBOPDLctTKmnVorWgFMKNJR9PCTvuQXUBjrmflm1zV/vbOWPY=
+=KHaV
 -----END PGP SIGNATURE-----
 
---Ab8d/9CSzKu7KjpS--
+--Y6hyWwjIduGm0USY--
