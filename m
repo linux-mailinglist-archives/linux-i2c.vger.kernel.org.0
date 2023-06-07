@@ -2,105 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5297259F6
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jun 2023 11:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D395D725A67
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jun 2023 11:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239202AbjFGJUH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Jun 2023 05:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
+        id S239458AbjFGJ2q convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 7 Jun 2023 05:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240043AbjFGJTt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Jun 2023 05:19:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101F31BFF;
-        Wed,  7 Jun 2023 02:19:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C56F633C0;
-        Wed,  7 Jun 2023 09:19:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60268C433EF;
-        Wed,  7 Jun 2023 09:19:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686129584;
-        bh=S4G1nZ597PL3D/rZGGTjvxU5gDXhh6TulUbc/bRtc2s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gE1ZU8mFHnl2QohSJSZ9/WEljVJZtRETEWe94dURg+MVRpm7wXy4DE7faz1JIZbNT
-         OdpD9Uod71Boazwi4S/05LTsIC2VV1VlLb9XaG3eN22k+8eLzGP/1hCqvnPx+BkwHR
-         jlppQr5hPTV0irNgw1uOG/jjQOYNkg5q2NJiCBaGW2wGkwn8t2xCl/qIo6z7bDFJxV
-         0gskIhwa6S3DRMxMLm0HKOiUjUogyEdun6Yny/SoCLoS0FDo28txBoPQ+tSzqAyoUy
-         iXvrW9YICb4CRhxkEkGygN1ejdFTsurH6KFui3u1i4dGUlTDKjlbGgBVU59O9XAgtm
-         aFA09NonD8Akg==
-Date:   Wed, 7 Jun 2023 11:19:40 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     carlos.song@nxp.com
-Cc:     aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, xiaoning.wang@nxp.com,
-        haibo.chen@nxp.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: imx-lpi2c: directly return ISR when detect a NACK
-Message-ID: <ZIBLrC6ExKWS1wt4@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, carlos.song@nxp.com,
-        aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, xiaoning.wang@nxp.com,
-        haibo.chen@nxp.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230524024002.1790405-1-carlos.song@nxp.com>
+        with ESMTP id S235626AbjFGJ2p (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Jun 2023 05:28:45 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7261BAA;
+        Wed,  7 Jun 2023 02:28:44 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-566586b180fso79159127b3.0;
+        Wed, 07 Jun 2023 02:28:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686130123; x=1688722123;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ck5/ccPepbZREHVBb/oJR6FTLZcZFdnZJX2ti6ySmVk=;
+        b=iRP+Ysheytskok3YN4BPgT+WkPKy3CMNAo6VnKr3RY/mqVDr4n7H0MMLcNC+klunAS
+         W5xpzPGLwEIXlwC31i51c4KrxSFTi8xZu+83seQhTH9kEdZsrUZitHn+iqpDHSYCzu9W
+         Wvh016JkL2VUp0ZVypS1yzniIn2E4287gtT11UZJp4KpvBnjL/nISMptx+xahg5hfkt2
+         T7yUYBz0L02aoT6kDUYLx+q4vuFkrB0iUjrgFxMRwOKTh2m+/sW+W0Jj+GyH/wtFeZ+Y
+         YnbUYAEsE73IrXJOSsL+ZXaVlUFQLD8Ci8yel9fXRFUSViN8E7jzh53I7NpIbAczbm6M
+         7xPw==
+X-Gm-Message-State: AC+VfDww7P9qu9/GJBuop1XrPJHNDP21jtGsWa9CaHhtTVVJ4GVvFoqR
+        bRek0va+1c0jX97v6t/uGm078Q9UwF2GWQ==
+X-Google-Smtp-Source: ACHHUZ6C3s7g5P3TQkq/YBtu0w7nje5OQN/Ko04PhOngM/mJ35kYkg8inuhXANBqMFL0t8i67zMD1A==
+X-Received: by 2002:a81:5b87:0:b0:56a:3b3e:bc6 with SMTP id p129-20020a815b87000000b0056a3b3e0bc6mr2920246ywb.14.1686130123328;
+        Wed, 07 Jun 2023 02:28:43 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id m197-20020a0dcace000000b0054fbafcfde9sm4680151ywd.7.2023.06.07.02.28.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 02:28:42 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-bacfc573647so8097360276.1;
+        Wed, 07 Jun 2023 02:28:42 -0700 (PDT)
+X-Received: by 2002:a25:3305:0:b0:b9a:7cfe:9bed with SMTP id
+ z5-20020a253305000000b00b9a7cfe9bedmr5663044ybz.14.1686130122296; Wed, 07 Jun
+ 2023 02:28:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3TiYRWKQmlIT/5F7"
-Content-Disposition: inline
-In-Reply-To: <20230524024002.1790405-1-carlos.song@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230606130519.382304-1-biju.das.jz@bp.renesas.com> <OS0PR01MB592282658E36A14D0A762BBB8653A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB592282658E36A14D0A762BBB8653A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 7 Jun 2023 11:28:30 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVXekgea3biJXXNb3fa-8Fe3iUJ=K51jKnu9ew_+Fq69g@mail.gmail.com>
+Message-ID: <CAMuHMdVXekgea3biJXXNb3fa-8Fe3iUJ=K51jKnu9ew_+Fq69g@mail.gmail.com>
+Subject: Re: [PATCH v3] i2c: Add i2c_get_match_data()
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>, Marek Vasut <marex@denx.de>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Biju,
 
---3TiYRWKQmlIT/5F7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Wed, Jun 7, 2023 at 9:21 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> Do we need to enhance the logic to use device_get_match_data
+> to support OF/ACPI/I2C match like below [1].
 
-Hi Carlos Song,
+Why not?
 
-> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
-> Signed-off-by: Gao Pan <pandy.gao@nxp.com>
-> Signed-off-by: Carlos Song <carlos.song@nxp.com>
+>
+> Or
+>
+> Are we happy with the current one?
 
-You sent quite some fixes for the lpi2c driver, thanks for that! Much
-appreciated.
+I don't mind.
 
-Current maintainer of this driver is Dong Aisheng. Since you are in the
-same company, maybe you can notify him more directly than I can?
+> +const void *i2c_get_match_data(const struct i2c_client *client) {
+> +       struct device_driver *drv = client->dev.driver;
+> +       struct i2c_driver *driver = to_i2c_driver(drv);
+> +       const struct i2c_device_id *match;
+> +       const void *data;
+> +
+> +       data = device_get_match_data(&client->dev);
 
-Happy hacking,
+    if (data)
+            return data;
 
-   Wolfram
+> +       if (!data) {
+> +               match = i2c_match_id(driver->id_table, client);
+> +               if (!match)
+> +                       return NULL;
+> +
+> +               data = (const void *)match->driver_data;
+> +       }
+> +
+> > +     return data;
+> > +}
+> > +EXPORT_SYMBOL(i2c_get_match_data);
 
+> > From: Biju Das <biju.das.jz@bp.renesas.com>
 
---3TiYRWKQmlIT/5F7
-Content-Type: application/pgp-signature; name="signature.asc"
+> > --- a/drivers/i2c/i2c-core-base.c
+> > +++ b/drivers/i2c/i2c-core-base.c
+> > @@ -114,6 +114,27 @@ const struct i2c_device_id *i2c_match_id(const
+> > struct i2c_device_id *id,  }  EXPORT_SYMBOL_GPL(i2c_match_id);
+> >
+> > +const void *i2c_get_match_data(const struct i2c_client *client) {
+> > +     struct device_driver *drv = client->dev.driver;
+> > +     struct i2c_driver *driver = to_i2c_driver(drv);
+> > +     const struct i2c_device_id *match;
+> > +     const void *data;
+> > +
+> > +     if (client->dev.of_node) {
+> > +             data = of_device_get_match_data(&client->dev);
 
------BEGIN PGP SIGNATURE-----
+return of_device_get_match_data(&client->dev);
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSAS6wACgkQFA3kzBSg
-KbaMpg/8CEBAxHUqowqAQNgCCwhIuRq51lr7mrKPp861JHqTaamEZglbw+l0PSSR
-8qQPz4gJZ87hhOVm+vUzjCsmlQtWgSS3K9xAaaT9bmKdUyZLaS3Rt7yx29mMLucq
-+twayeY9evgq1rUpuYYk8ef0SY3wF4Oy33G02HPQ5y4iRrijTjM/BI//gvsWqqRW
-rTOWjf1vNbBiOvK6FeyMPN5mmCzndeZLl9CvO+nKakgNW1Pok+URB19/eC/2ZJBa
-qh2pwc2x0sah+hoFwF/KtVt+5aMTcGQn+MFC8oD/HEjOHilFKe667kypfzyWQ25b
-9eHbp3EOvhUjC+j01CssaiLmtPukawc8qrs9vJyZSSYmIaGuKQm1o8NW0+wBmvER
-oV8PYyoCjW/E/1wh/NAi96bv7Wnx4YzRIHEI3o++BABKpyUSZPQ91OE4a3slj0sA
-VqYdAXNAh16dBLFVx1Osw9Ak45KRK4XT5+PaAF1S1nDSKLpt8kl7wRaOyNqO80jH
-odk4a9goc4VGH8klJk/6OR1y2tvXlQfzzivCNwJsnzbKE6b5EQDfUn1IrBrrH2aJ
-DaiBbnxMfWYJBlIApizWCpfO9UfuqB7RNTaizP0ouIodndvKTUAZ1D4dMmRZ2aMx
-PAMAxVpBqmZPLavQDNWr69hSuABfeyZTv86PciMTrwNBFeoOd0E=
-=jmLD
------END PGP SIGNATURE-----
+> > +     } else {
+> > +             match = i2c_match_id(driver->id_table, client);
+> > +             if (!match)
+> > +                     return NULL;
+> > +
+> > +             data = (const void *)match->driver_data;
 
---3TiYRWKQmlIT/5F7--
+return ...
+
+> > +     }
+> > +
+> > +     return data;
+> > +}
+> > +EXPORT_SYMBOL(i2c_get_match_data);
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
