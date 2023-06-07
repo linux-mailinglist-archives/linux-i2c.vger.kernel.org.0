@@ -2,60 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3079E725BA7
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jun 2023 12:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF10725BAC
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jun 2023 12:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237056AbjFGKbL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Jun 2023 06:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
+        id S238175AbjFGKeh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Jun 2023 06:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239230AbjFGKbK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Jun 2023 06:31:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4555C1BDA
-        for <linux-i2c@vger.kernel.org>; Wed,  7 Jun 2023 03:30:50 -0700 (PDT)
+        with ESMTP id S234352AbjFGKeg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Jun 2023 06:34:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD976EA;
+        Wed,  7 Jun 2023 03:34:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D247361610
-        for <linux-i2c@vger.kernel.org>; Wed,  7 Jun 2023 10:30:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9709AC433D2;
-        Wed,  7 Jun 2023 10:30:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3831C62DEF;
+        Wed,  7 Jun 2023 10:34:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1670BC433D2;
+        Wed,  7 Jun 2023 10:34:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686133849;
-        bh=glTlGhPMsKMl//nzrIJpv+mjk0C2ePcFeVHTdvFulO4=;
+        s=k20201202; t=1686134074;
+        bh=EnWyL/RGZVIPRednPxgadT7R3he2GlukPWhgaMHT7gw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mg6AOdfNLZfHT+W4fJp9S+tqEnixXHTHzwbBlOgua5NZ4iSGRIP0Zbx3QojGPwR2Q
-         xgDI3Uf18xVmAtxl3o4BYlsLe5MWOruKuGNsFz3Q8xmiAbQy1ZXTAxIQDrCDddEZhv
-         viXaVSb0yTqyifpPnBEjJCJaY0jPpmRh53fP6cRZC8oYNpd0p+nJb9qjGWFbXX9Bvi
-         w2QV/eXrFWI4WN33bgsfTd080KDIKtM0BSgqbjwz5y93FwHy9nJTrAZHmMQN+zMnSH
-         uKzw1rJCwptXYbNcIOeCfxzSTphWqrM2DJNebKRblhCWJWD3jiCFu+m1FrMH5ALjWd
-         LhOv0sBkA9kXQ==
-Date:   Wed, 7 Jun 2023 12:30:45 +0200
+        b=Hd0GZexWOXSaSGDZT9lqrMXsp4ss4me/8CSkbFA0Zl09kEn295vV5t7omARWN+yF+
+         TNjYnTS4TbdjxxFVdTrzdep/OEfveLzAbfuIXw9aGcuxe4a8Xr4KOSKNnQ7hTRlhk5
+         0seKiKVRAPQuOurxVu24CUrVKUJswMa0fKyN2OKcKEA/5AzxB9uQujexZFbjYbkNXP
+         XxgQw4i0h0xHQIgo42//4c1o80Mrr6hdpfEcff5ccSScHpuqIFX7qahwIAPUhvg7bM
+         Yox5OQKitnZTFGtVhOaAxhmztxyYADhZ8cW/pg+aIxQLrAfJv7Ecf4ZPtLXO06CfHM
+         NSWYZNiTSfxYg==
+Date:   Wed, 7 Jun 2023 12:34:31 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        kernel@pengutronix.de, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: sprd: Delete i2c adapter in .remove's error path
-Message-ID: <ZIBcVUiEr4VprXt6@shikoro>
+To:     Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc:     loic.poulain@linaro.org, rfoss@kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_sjaganat@quicinc.com,
+        quic_srichara@quicinc.com, quic_varada@quicinc.com
+Subject: Re: [PATCH 3/5] i2c: qcom-cci:Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <ZIBdN/16vizJqNZp@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>, kernel@pengutronix.de,
-        linux-i2c@vger.kernel.org
-References: <20230309095819.2569646-1-u.kleine-koenig@pengutronix.de>
+        Md Sadre Alam <quic_mdalam@quicinc.com>, loic.poulain@linaro.org,
+        rfoss@kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
+        quic_varada@quicinc.com
+References: <20230306144522.15699-1-quic_mdalam@quicinc.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="H50CSXNCIYOboh17"
+        protocol="application/pgp-signature"; boundary="bsZdphsPPiw7WIHD"
 Content-Disposition: inline
-In-Reply-To: <20230309095819.2569646-1-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230306144522.15699-1-quic_mdalam@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,43 +64,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---H50CSXNCIYOboh17
-Content-Type: text/plain; charset=utf-8
+--bsZdphsPPiw7WIHD
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 09, 2023 at 10:58:19AM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> If pm runtime resume fails the .remove callback used to exit early. This
-> resulted in an error message by the driver core but the device gets
-> removed anyhow. This lets the registered i2c adapter stay around with an
-> unbound parent device.
+On Mon, Mar 06, 2023 at 08:15:22PM +0530, Md Sadre Alam wrote:
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
 >=20
-> So only skip clk disabling if resume failed, but do delete the adapter.
->=20
-> Fixes: 8b9ec0719834 ("i2c: Add Spreadtrum I2C controller driver")
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 
-Applied to for-current, thanks!
+Loic, Robert, do you agree with this patch?
 
 
---H50CSXNCIYOboh17
+--bsZdphsPPiw7WIHD
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSAXFUACgkQFA3kzBSg
-Kba2+A/+NSIoWVd1e+xrmyc5QHEtM1Mdjw6ffejxuoy//XiQkzZ2bLlLhwcoSpOr
-Rw1ETA7aEIswmME9OC3xUsCREjVlE/MMr+a7hayYosPfmZxpNqymPrgLbEpwbiHI
-57LrL3kj0X41qssA3BEP2E0/pz9mLvKTXexsTyxroL1NYamfIRls8T/nU00yDXy+
-+EOUKvU3v1En2HyrsTbcIUMDoMmitUKty/UHAfHt74bLASjzvKZjKCTSHTws2tKL
-EwgSyWtRMpGxMKIMtp2//9AUlh1CcaD9loq1qB1lcOsJpKA69IjlXxXeLO3OBy8a
-TX3vJufOPjp2SbW48a6K5AF0Vs1Ns9BjKeqdFB30GJ1+kW3kl+WsfBDVwLQasPo2
-wwqhgF3WtJQ9/Kjpxl26YhA0ed/JVATJr/LB3a04ekydtLWKz6wPjuU8kQnFT7V/
-zSb5w9Fn4GeuzBzFv8zlGSIAnsi0g+gEaINBXC2/Rty/QxdA2vonOsLp2dB+ULab
-oAwSamDfFmLEUvS9xjjnfuybyaSXN55RZgW8o5NGJ0LAXz6DW+meAYiFIrf34rA0
-5tG46d1qOhVWSQOimPTlF0C5TyozaGMhHYMDJCN1DxDQ4ku6QR0UtVaqwYvghOnG
-8oG+k5qvhwHKZrjElS+eqM8iE2GfTC5fuhoQnhA5p3Ox5FwR4Uc=
-=xweG
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSAXTcACgkQFA3kzBSg
+KbarcQ//Y+9HmY6t53QDwVMuvc4Z8203aKAUdHggYnJ6n5kwNoCcutIFR8+/AYIT
+rz5uytUYJg956cMgaqSk8eAJJTZf+/8JOyWIWkawDEwG710RDjDj1+ULYGe1h77U
+o7a52fRi+88AMG7V2COvq3umsxVKecjyMQtJ7ysTR+Up0vaLF0Nq7p/nvM2l583o
+h/VwWxwrd8NbPIzaEAlczrQPJXwxQymkNK2QQm3x0tWxZXm6ZzYAzduKpRMX3JXT
++g/n5obKYtqDl/GCB+vMzzoDh/144H34KTZYZN6IpQeuTkh/nJMp6xdGJ6pfZRc5
+TtKzvrHreKu6pYVxuxCzkbOzt56knibv/EDpFlF3ckzW9SC3AIPAjHkBV+70ChMh
+kgVuk9z6zlI2h8BykYQHF46SJTdZS03msfHg+ROXgkeffMt0JV0gZCYYnP3ZB6y6
+2oI4/gd3W4h+IWQxAFhfGFLVheLIDnnuamb5F/cXPwzfv0oSXNblkD2uSif5uOxh
+X3D4FyjJ0G2P5xkcjpvMLYqGRFfdVDW9lW/wTK5vICXBywjGCZhMqEIQYjgGgJaV
+7h4NEscOfSmqkRbE2DMEBN+z/Nzf8tIUPSixf1j0CgwLVZFGbvnwLJEn4tgNu0zP
+rPSNx3VxXEH/Miu7qFbF8o8VWt43H4otn5AIbj8gh4mjvdbhZqo=
+=83z4
 -----END PGP SIGNATURE-----
 
---H50CSXNCIYOboh17--
+--bsZdphsPPiw7WIHD--
