@@ -2,268 +2,176 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268E9725550
-	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jun 2023 09:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE387258C7
+	for <lists+linux-i2c@lfdr.de>; Wed,  7 Jun 2023 10:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238913AbjFGHVi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 7 Jun 2023 03:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
+        id S239337AbjFGIzj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 7 Jun 2023 04:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233896AbjFGHVh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Jun 2023 03:21:37 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2112.outbound.protection.outlook.com [40.107.114.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43906E6B;
-        Wed,  7 Jun 2023 00:21:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PY5ncNTRbEEMN3wn/QRnYBURES3QqIsClVIAKl5NBLNwkct5JKIvoyLT54zBF5InQbAJvTlEV9mi3chbT6bUYajmnVgPWx6rTZtmHGbtJiIhFPw6xe5o5hHCizY4XobBeWIcjvJPC3nodXR5n1oqP91HdAC5qLDiK95gyBhUSwOB/c/0gA3L4KwAtWsksrN9AouguVc8i5Jw69X5NbsaEBAfdGXd9yrIFZDt+oUJ3aiMPTF/xKreYb8Ah3wMEZolvClBEla+gdLi5JAMiTAZd0L4vIhON6Hd4/02s3pOAj//ODKFkzkuXKQq1XSGC6TaUBy0fZ4H2FaXYrijDMqZfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=J2+Sg3b1yimeCLZ3YeXqcsOcbSp1rwiZ61HXMv3aRtg=;
- b=NEdGQ/N687lbFUez17I52jEbYCoosNdGW3+5VN5Hc/vEtush4msIKwtDBF+Cix96n1P6TtMZTYlDFC4I6xWBnOXQJvuGTxEkqlILaAnrIFuoRn5eoe2bnIW57x+Vg+8DQ8YYbX9jUbttHYc+PPpQNeOjMNutLQCQ2ykU0AJsmqXZohiv8yN+WLeWWi0q/kJ/Pmp5pdR+HllxrKH9bhWjz2ol6yUtUn8lEVuLask6Vy/pAH5pqJkPKKTUhLjszRtowlSfyEklGTfpime9bKZOcOrefTzZEvhjXsIzOSahHqp3nAKPsS/z22cWCWPsxKtzFypROqOMXGmvMdx+2CeEtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J2+Sg3b1yimeCLZ3YeXqcsOcbSp1rwiZ61HXMv3aRtg=;
- b=gWfro7g+Axjra9+qmsGvQ4E627f8vk1eqIODpMf1pn/z0ZFkywWOJPTiii9rCMBhFL3GcrqGzSdxtaMdjP71xQqUIbaqAZgJYtnO+zEaduN3UA+SkZe3LKbxnVlCAONhWh+UshKx0Sl66UFB2Xz/vv9VdXV92tnWnDaGKNKlAO8=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYWPR01MB12006.jpnprd01.prod.outlook.com (2603:1096:400:3fe::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Wed, 7 Jun
- 2023 07:21:32 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::bd0a:a38d:b4d2:5d2%6]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
- 07:21:32 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Wolfram Sang <wsa@kernel.org>,
+        with ESMTP id S239850AbjFGIzQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 7 Jun 2023 04:55:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DCC2117;
+        Wed,  7 Jun 2023 01:54:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E31C763C7F;
+        Wed,  7 Jun 2023 08:53:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ADF8C433EF;
+        Wed,  7 Jun 2023 08:53:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686127996;
+        bh=EkWcDuYEPYfXUrrU09MKWymiN3k4KVR9kC0PGQAic3I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TcuIqfFjWcbeOOOUYSC7vRtsg3ISAh7sWe8Thmd9VhPEL9AaFvBM+isNCLvGdxFon
+         VGRBCxfhFeshT+KFH75mjdqXdMReqlCS8FVDzMN/aSrBkWXt/7rLZvX1dGLUkkeKlL
+         cBm5zAHw6osPAqQh4yWkdYBUhYYaEugEDS5TlpsYtE7RQMROKDVdcPxW7fj3Q9lDW6
+         beNqQ49hY5fMf3eQgijV/b6mc0IjGeOibqRh5IJEpVdh1fmvvIyhzPtmaAox68NBIl
+         cCFkrmPWHXPNxcXD2cfNQx8LXUUTgrYEYH+Xe3UfJPN0dgRGCnu/jfNXfrwWWAjnjb
+         gBBanZEGAqawg==
+Date:   Wed, 7 Jun 2023 10:53:07 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Corey Minyard <cminyard@mvista.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Antonio Borneo <antonio.borneo@foss.st.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>, Marek Vasut <marex@denx.de>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Subject: RE: [PATCH v3] i2c: Add i2c_get_match_data()
-Thread-Topic: [PATCH v3] i2c: Add i2c_get_match_data()
-Thread-Index: AQHZmHeP0tU6ipLwP0StWgcCj8giXq9+63Mg
-Date:   Wed, 7 Jun 2023 07:21:32 +0000
-Message-ID: <OS0PR01MB592282658E36A14D0A762BBB8653A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20230606130519.382304-1-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20230606130519.382304-1-biju.das.jz@bp.renesas.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYWPR01MB12006:EE_
-x-ms-office365-filtering-correlation-id: 732ebbd1-7f2f-453d-81b9-08db6727d19e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MDGfD2+F+gQzs001eYgoBKRcH2RveBiqYa+aNLlHoLm50E6MhwSChV8D/dywrU/DtT2arqxHC8jzU/02kwsGg+/ER/tncvtCtyE9IYwH/WbUxpLDJNnuieLgjPt0p8Sd/qZ56XTGj3z75wuDMUVb6oZVG+1vFJ5OYRQTmkl3vKxz09K8sLo47ZfFG20pSBLhIWk35iBu3QymhUQYrP1eD4wuuFKiO/Gq9bhyTwW4jBfweMyO+yJBUhMKRU5LjaxvdJyHXeQpZnC+edmN9g8eYxhxoJnnJEYQj8pKF2/t4QLD2gpcDK9Cfgg1Ae/E1kxwxxhSJQT1PnFGDkft0ywd0TG+3inQYFI7FL6nIJz/tr24Ou0r1KQXZCz40s6DiSiy86qw45VV4NTKYosi5wpru7ifrxDpNXp15q+SSxc5NWr69nlh26w9TiLTPit3311X5yyHfoXFdzJ/231pduHjrsAEpGC5QsT0xyGYNkoqWi+4dEUed5HTKMOsCsKoWOgMsItE2SiEY420fba/c7n34Eo/tfu9aOyrVk3FNTKngm6gvfWinBWerBUERRxGKPlWPIF2JSdtExq8nHQMTm/fzmb+ziLUhBC1hkYZZ6tjZsY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(366004)(376002)(396003)(451199021)(53546011)(9686003)(6506007)(26005)(38100700002)(83380400001)(41300700001)(7696005)(966005)(186003)(71200400001)(478600001)(54906003)(110136005)(64756008)(66556008)(66446008)(66476007)(76116006)(55016003)(316002)(66946007)(4326008)(8936002)(122000001)(8676002)(52536014)(5660300002)(33656002)(38070700005)(86362001)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TOIrxCjii/t6v6Dshuwn1hGRWOBER2PH1DiCS8KZvlwBf7jGmK2YfU0h8rbk?=
- =?us-ascii?Q?rBljtsinXtCyrJrSPkJmnGqJ9pbQtCXc51S+ML40EsX5raR8fH209e5SyGKF?=
- =?us-ascii?Q?dxqk0oGlqjLUQaPDVTZ4XVhbXwL94gyDXbKKQ0gEvQljkM6GqYjgOsW3bmsy?=
- =?us-ascii?Q?di36b05am88I8y0wPuJxMpQ/nAY583jAiwYsTZL6ugn9E3annWbaBsLNntD0?=
- =?us-ascii?Q?CYwY91EgAES5ONXDrHKrKicuurp7f4LAteGWLj5OoEFco+yc6UM4hHXMVndQ?=
- =?us-ascii?Q?fBpOTO3kNRdk6oWxvrXr8361rc7frRw0BbkbtcW0GBM83bEiU9coZ4q+G41X?=
- =?us-ascii?Q?66hI+L2FxQaiCRBsFzvhum5hNeY5ihKJXTOETbAOh6Ly5ouE8ky83tqqF9we?=
- =?us-ascii?Q?9PdS3KqV8HUxMo5iyPOKje4cCvstVi6baiimHCVEEjDOgCat3BH1Lyg+gvqI?=
- =?us-ascii?Q?IyrM5xNOKMmCDqo2iQvRWBnGtSE38jnFh5S2AX1cTIM+bdh6acerEYPNDj8V?=
- =?us-ascii?Q?G1skTqvw13BB6RSILKFxiGVfrYftWxsmlhD7OLUq/VSeD7YVhn2q/jAvpV4Y?=
- =?us-ascii?Q?nas0W0VW3INH+X4I4dAEJDNvCMgzWt5jCtkltydIyJMJrY3n0x47hQaBJOE7?=
- =?us-ascii?Q?Gn7dy+/eKbaBJAQrIC//23mP5pfKknWtenfiWBhTFnDC0pkmXtumSYmlahH7?=
- =?us-ascii?Q?LhZzOGEGuh7gpWylVHIPrudInn7jCBUQTXdvkfRel8ehZrGu7WadC1aMbMkG?=
- =?us-ascii?Q?XY0IMxF0M/YF7D000JsEjffbe7X08xQjON8OEGqrnrpCxg8APoMnkuy28U7N?=
- =?us-ascii?Q?qf/Hp4JdycPRZb2/ZLLpCYsJAqYZped1Hb6+uzIWslsc3vpciqt7S3GOKjqw?=
- =?us-ascii?Q?ZiRLROXo2ROyWDl8yVmHlZxXWuOuCglt/ZYxnMhIowFRByN+aJJJpHbWUpFd?=
- =?us-ascii?Q?KpYNsqzKwzG7SUhy58zJgmdDblurrii0us8+3bzJJsJZJhcR5eIw8jnd94cV?=
- =?us-ascii?Q?ZTF1YMJtQ2De8ea+1WzaQlyZHNcxVjFWWvO95Goo+K0jCc94Sil9Zpe7/t1H?=
- =?us-ascii?Q?ryURYQ/JDwlvIiYT2ZOpo24/D3n7b52SbNay5i/nSRx/leqcW5rKqKnWoa8F?=
- =?us-ascii?Q?RWtWnvPyyuiCwISYIaWK5iLDIkVdPhAZQhucRJzlmFNLy5bP2Ucl2HyozX8f?=
- =?us-ascii?Q?zgLyicjpPGQjczXsECMuHz3gZpj9jmXUh+Ot/UCj8IRKskvcWKnDMHd9Nuns?=
- =?us-ascii?Q?gdJyXWFkXafOTv+oQg4EkSPFfiwrn5g2neGYwray9uaRVN+XMS53Cu/8sjSd?=
- =?us-ascii?Q?uyLjIRUsOXxXEmLJdP72hsUASQ2td9jWsNCv9Gll34feQFyYHnkDAk8Ic+Mo?=
- =?us-ascii?Q?KDVgW+KDTcG6EovB43lqAjQSYfshs1p7PGs35tYtANq/cjROSqmUFYrp4hfs?=
- =?us-ascii?Q?sl89NFNvJwmJQWUmywkFGI8SfU149MyqR8ZAJENe3KRMs/RpPirMioTta5vA?=
- =?us-ascii?Q?/Fh7nGlSZaGoM5rT9LTbt9cHaRphXL4pL7vMvB7svMC2D8bLtT3MUa9i1ebc?=
- =?us-ascii?Q?DTOlKYCSVHFndCZ0Mwr7byxjZ7QBYRvhvhvtnGE1?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
+Message-ID: <ZIBFc3y9jD59lZ3A@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Corey Minyard <cminyard@mvista.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Antonio Borneo <antonio.borneo@foss.st.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
+References: <20230522101849.297499-1-biju.das.jz@bp.renesas.com>
+ <20230522101849.297499-2-biju.das.jz@bp.renesas.com>
+ <20230529080552.GJ25984@pendragon.ideasonboard.com>
+ <OS0PR01MB592283E55078298EEA30C6B9864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <20230531085941.GA27043@pendragon.ideasonboard.com>
+ <CAMuHMdXywnxO6cL5R84mryFuyVMswj6EniY-bZx7m_2L3iUY9A@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 732ebbd1-7f2f-453d-81b9-08db6727d19e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2023 07:21:32.1201
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Fy3ts7vy6OA5Quy0/6lnv6rTrWsaNlxLG54h8+oXg5mdEKq9NwVEjdz639BFVzQwV18govK3x5x+TBysZ//CXzPkJsZ5o50YrTsR8AtXlI4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB12006
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Nm5CNVphMfOl2T+J"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXywnxO6cL5R84mryFuyVMswj6EniY-bZx7m_2L3iUY9A@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram/Geert,
 
-Do we need to enhance the logic to use device_get_match_data
-to support OF/ACPI/I2C match like below [1].
+--Nm5CNVphMfOl2T+J
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Or
+Hi all,
 
-Are we happy with the current one?
+sorry for not being able to chime in earlier.
 
-+ Mark, Linux-clk
+> In Biju's particular use case, the i2c device responds to two addresses,
+> which is the standard i2c ancillary use case.  However, what's special
 
-If I am correct, the new enhancement[1] will add I2C match support [2]
-drivers. Currently this driver support only OF/ACPI match-data even though
-driver has I2C matching table.
+Not quite. ancillary is used when a *driver* needs to take care of two
+addresses. We already have devices bundling two features into the same
+chip. I recall at least RTC + EEPROM somewhere. And so far, we have been
+handling this by creating two nodes in DT and have proper binding docs.
+I think this is cleaner. First, you can see in DT already what the
+compound device really consists of. In this case, which RTC and RTC
+driver is exactly needed. Second, the code added here adds complexity to
+the I2C core with another layer of inderection for dummy devices.
 
-[2] https://elixir.bootlin.com/linux/latest/source/drivers/clk/clk-renesas-=
-pcie.c#L282
-
-The current patch will be useful for these drivers as well for I2C match su=
-pport
-as these drivers have I2C matching table.
-
-[3] https://elixir.bootlin.com/linux/latest/source/drivers/clk/clk-versaclo=
-ck5.c#L956=20
-[4] https://elixir.bootlin.com/linux/latest/source/drivers/clk/clk-versaclo=
-ck7.c#L1111
-
-[1]
-+const void *i2c_get_match_data(const struct i2c_client *client) {
-+	struct device_driver *drv =3D client->dev.driver;
-+	struct i2c_driver *driver =3D to_i2c_driver(drv);
-+	const struct i2c_device_id *match;
-+	const void *data;
-+
-+	data =3D device_get_match_data(&client->dev);
-+	if (!data) {
-+		match =3D i2c_match_id(driver->id_table, client);
-+		if (!match)
-+			return NULL;
-+
-+		data =3D (const void *)match->driver_data;
-+	}
-+
-> +	return data;
-> +}
-> +EXPORT_SYMBOL(i2c_get_match_data);
-
-Cheers,
-Biju
-
-> -----Original Message-----
-> From: Biju Das <biju.das.jz@bp.renesas.com>
-> Sent: Tuesday, June 6, 2023 2:05 PM
-> To: Wolfram Sang <wsa@kernel.org>; Alessandro Zummo
-> <a.zummo@towertech.it>; Alexandre Belloni
-> <alexandre.belloni@bootlin.com>
-> Cc: Biju Das <biju.das.jz@bp.renesas.com>; linux-i2c@vger.kernel.org;
-> linux-rtc@vger.kernel.org; Geert Uytterhoeven <geert+renesas@glider.be>;
-> Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>; linux-
-> renesas-soc@vger.kernel.org
-> Subject: [PATCH v3] i2c: Add i2c_get_match_data()
+> As some resources are shared (knowledge about the clocks), splitting
+> this in two distinct devices in DT (which is what Biju's initial patch
+> series did) would need phandles to link both nodes together.
 >=20
-> Add i2c_get_match_data() to get match data for both I2C and DT-based
-> matching, so that we can optimize the driver code that uses both.
->=20
-> Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v2->v3:
->  * Added support for getting match data for both I2C and DT-based
->    matching.
->  * Added Rb tag from Geert and retained the Rb tag as change is trivial.
-> v1->v2:
->  * Dropped parameter const struct i2c_device_id *id and the helper
-> function.
->=20
-> eg: The RTC pcf85063/isl1208 driver code can be optimized with this
-> patch.
-> -       if (client->dev.of_node) {
-> -                config =3D of_device_get_match_data(&client->dev);
-> -               if (!config)
-> -                       return -ENODEV;
-> -       } else {
-> -               enum pcf85063_type type =3D
-> -                       i2c_match_id(pcf85063_ids, client)->driver_data;
-> -               if (type >=3D PCF85063_LAST_ID)
-> -                       return -ENODEV;
-> -               config =3D &pcf85063_cfg[type];
-> -       }
-> +       config =3D i2c_get_match_data(client);
-> +       if (!config)
-> +               return -ENODEV;
-> ---
->  drivers/i2c/i2c-core-base.c | 21 +++++++++++++++++++++
->  include/linux/i2c.h         |  2 ++
->  2 files changed, 23 insertions(+)
->=20
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index ae3af738b03f..15a49f4ba668 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -114,6 +114,27 @@ const struct i2c_device_id *i2c_match_id(const
-> struct i2c_device_id *id,  }  EXPORT_SYMBOL_GPL(i2c_match_id);
->=20
-> +const void *i2c_get_match_data(const struct i2c_client *client) {
-> +	struct device_driver *drv =3D client->dev.driver;
-> +	struct i2c_driver *driver =3D to_i2c_driver(drv);
-> +	const struct i2c_device_id *match;
-> +	const void *data;
-> +
-> +	if (client->dev.of_node) {
-> +		data =3D of_device_get_match_data(&client->dev);
-> +	} else {
-> +		match =3D i2c_match_id(driver->id_table, client);
-> +		if (!match)
-> +			return NULL;
-> +
-> +		data =3D (const void *)match->driver_data;
-> +	}
-> +
-> +	return data;
-> +}
-> +EXPORT_SYMBOL(i2c_get_match_data);
-> +
->  static int i2c_device_match(struct device *dev, struct device_driver
-> *drv)  {
->  	struct i2c_client	*client =3D i2c_verify_client(dev);
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h index
-> 13a1ce38cb0c..3430cc2b05a6 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -367,6 +367,8 @@ struct i2c_adapter *i2c_verify_adapter(struct device
-> *dev);  const struct i2c_device_id *i2c_match_id(const struct
-> i2c_device_id *id,
->  					 const struct i2c_client *client);
->=20
-> +const void *i2c_get_match_data(const struct i2c_client *client);
-> +
->  static inline struct i2c_client *kobj_to_i2c_client(struct kobject
-> *kobj)  {
->  	struct device * const dev =3D kobj_to_dev(kobj);
-> --
-> 2.25.1
+> Do you have a better idea how to represent this?
 
+Not sure if I understood this chip correctly, but maybe: The PMIC driver
+exposes a clock gate which can be consumed by the RTC driver?
+
+Happy hacking,
+
+   Wolfram
+
+
+--Nm5CNVphMfOl2T+J
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSARW8ACgkQFA3kzBSg
+KbbYsRAAgTcDHo1Azv7DhDEOMF7wTqPXl27TMa07c345Y64Hxn/2+x1zO5eddL2T
+dHKlj2vg5Ry53CEbEC1wGPxBSDSOtDQvPPxXCSEFDi1ead63j/gOeGcuMvwySb80
+7wk2qUBMkkT00yQDweMv9AwNXbo0MKOHnEYZHkhFBy36gS2qqzSYkjj6AdJuVKJR
+6va/d1QulASM1ZutznMHQvXd/lL/XDBbraxfQBjGlrZG9C6wJq23WuoWavjbHwdU
+DAzXIYSGMvqbIMSrXNjnGrVeEFwNnMYFM8EOTk319nQR9Z1i1UMiqvoOEVoEZWW+
+XzrLf1ydWAXICb9j0Mc6RlYTfz+/YUZA0JlBsv+ypN9tw4tPEkmKfmlg6TWAQBA9
+aXM84EZjePIhZSU826pOURtAS+fDsfPQZMlnYS6KKdrhU+h3y29rpHA28gKjBTWT
+yt3LSb2AOjcOlvsFZQBigDINvwjPfhCRFjpMH2BAzKF5Ei7qygPw1kREgyh5zmr3
+UDbelnwjQAk4SuZbqJpRTyKyQdPLl/ReW5lMEhIdOb/n2THQT8fEiFCElpbasoEU
+Zg/L7xaU6qROiqbZMPKisltXTlyZ68kY0NPRm+w0AytwQWb1C1IBqGUf8KyJWuKr
+oP/yC5SljRtET9R5XI6UgV0wnt4uN8UscY5sMJxbDGCEoTm/iAY=
+=0ELS
+-----END PGP SIGNATURE-----
+
+--Nm5CNVphMfOl2T+J--
