@@ -2,53 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92C1728951
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jun 2023 22:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB971728953
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jun 2023 22:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231864AbjFHUXn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Jun 2023 16:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38550 "EHLO
+        id S232369AbjFHUYW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Jun 2023 16:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbjFHUXm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Jun 2023 16:23:42 -0400
-Received: from pokefinder.org (pokefinder.org [135.181.139.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5548C2D6A;
-        Thu,  8 Jun 2023 13:23:41 -0700 (PDT)
-Received: from localhost (120-123-142-46.pool.kielnet.net [46.142.123.120])
-        by pokefinder.org (Postfix) with ESMTPSA id 90CAEA423CC;
-        Thu,  8 Jun 2023 22:23:40 +0200 (CEST)
-Date:   Thu, 8 Jun 2023 22:23:39 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Kevin Hilman <khilman@kernel.org>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        kernel-janitors@vger.kernel.org, Andrew Davis <afd@ti.com>
-Subject: Re: [linux-i2c] Patch notification: DaVinci: 2 patches updated
-Message-ID: <ZII4y9PfM/yBdvU+@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
-        Markus Elfring <Markus.Elfring@web.de>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Kevin Hilman <khilman@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        kernel-janitors@vger.kernel.org, Andrew Davis <afd@ti.com>
-References: <168613080300.11524.2783831689498520603@legolas.ozlabs.org>
- <8af5aca3-184f-2561-bec7-c4950fdbaeb5@web.de>
- <ZIGHmSvptAC0cWHD@shikoro>
- <93d2b121-4734-c195-90ad-d2d05e65e247@web.de>
- <ZIG6/h0PnLi7j6Pn@shikoro>
- <ae8ede44-e7a9-c086-d17e-68c33b4482e0@web.de>
- <ZIHajpkxV/PFPcb8@shikoro>
- <4bf54a0d-f525-5dab-1e7e-756e71a7267a@web.de>
+        with ESMTP id S231626AbjFHUYW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Jun 2023 16:24:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F044F2D68;
+        Thu,  8 Jun 2023 13:24:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8146061335;
+        Thu,  8 Jun 2023 20:24:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67183C433EF;
+        Thu,  8 Jun 2023 20:24:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686255859;
+        bh=IB+islnkJPuKH5r5DBGbfelqgP9jYtteAfvXOcx+1rY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m4OKC6k63o5WVlApxAIFYhwq3tbez/jvnRW0dxAr6bm8sIGe+5NIC3d8BN2Qi7C6A
+         JM+GPduMkLR++79ECWmwrEV2Tpp6WDZeCAAD3G3H0xQA83iGlZ6WFQD8425XhPQZsa
+         zl8N7gmj8oFIJkPYOtom377s1jtXp/YLHcek22rJRgN7OF8a1nEyhnH4DZeF+KpFy8
+         BSIYK+hA3fPtaQ5+zLTynW5z+ctksOAacdPNc6ZsiooRyY7JqHiF7KoK8kaWw7z+q+
+         dJ6xJpFqNUk8ebT+w3Sc6BfhBhT29cBQ3RdVihtrV/Sld2jRCroM+scixYGguBH6fa
+         EvfU+vbrJtZhg==
+Date:   Thu, 8 Jun 2023 22:24:16 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     XU pengfei <xupengfei@nfschina.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] i2c: busses: i2c-img-scb: remove unnecessary (void*)
+ conversions
+Message-ID: <ZII48BBQtuxuWMxM@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        XU pengfei <xupengfei@nfschina.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220801013319.3299-1-xupengfei@nfschina.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qC91iwAJdYwthd95"
+        protocol="application/pgp-signature"; boundary="MqnwMx7GvK187Ipa"
 Content-Disposition: inline
-In-Reply-To: <4bf54a0d-f525-5dab-1e7e-756e71a7267a@web.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220801013319.3299-1-xupengfei@nfschina.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,40 +58,37 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---qC91iwAJdYwthd95
-Content-Type: text/plain; charset=utf-8
+--MqnwMx7GvK187Ipa
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
+On Mon, Aug 01, 2022 at 09:33:20AM +0800, XU pengfei wrote:
+> remove unnecessary void* type casting.
+>=20
+> Signed-off-by: XU pengfei <xupengfei@nfschina.com>
 
-> If I look at patches which I contributed for the software area =E2=80=9CI=
-2C=E2=80=9D,
-> I got the impression that further constructive feedback will be helpful a=
-lso for
-> six change possibilities from days like the following.
-
-Yes, you are right. these patches need feedback. This is why I haven't
-applied them yet.
+Applied to for-next, thanks!
 
 
---qC91iwAJdYwthd95
+--MqnwMx7GvK187Ipa
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSCOMcACgkQFA3kzBSg
-KbbvLRAAn0s8AEpoffGOmA2hh/8FyCM7pgrbtOb3FCxrxFYJNyvq4Os1vZO7GTG8
-+xCpTtdFFGx9RJmyHf9JfCMsDcXb53NkHPGGhpIzup0UstzgYQoi7aCXTD5NbPs+
-eY24RR9fMG+ryM0jrSasyYDAZX3CXQg1d34OtS30DVMSrDWFFSrrQ4DQKrELhNcR
-XUriz15PG+jSPwMt/oxPx6vjOcecn1RP0QCeFTPLqJS4jkG5fogQWpYTXQrbtRQb
-u6kT4pfGDrxihg+H0ea2W/qm19qLdy1GugHW9BrjT9lTgAmGxMFbhGzzAIv0Bjfi
-ij5N/54Gm2cn0OdD4wgLHglSBT6bxFwfIwjevUkOdqJUp4wTV8eGCgPraj/sZjJx
-ydm1SGFogib+M8jGJtQvjcXbHPJx052crJIyWCJwv/SeLVY8x40pdn2zkF9u1CJj
-2ipe5oqzDPsd+mFnsGsCPbj88+ajFAhL6TIUHnakOh6Gv9SafRpxh3jgXlUEhYq8
-SCJKm1bc/aORb+jXaWD/+MhNHAyyClXxTgseT7nf4Unr46T+kK372I2KzxEkrzXR
-c06zr9Sw6daIpnlts5c1ASGDouMfhqsFRBBl/FlmJuybpmga+1AZFjDQxZRR50aJ
-Pu802RBPia4/gi5IcQ+ZuY7JaZnm6QaCaVvaDrG/eK8fAPv8W00=
-=fbTD
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSCOO8ACgkQFA3kzBSg
+KbYXng//akxSlLzs7y+T3B/ntqerP1wTiTCareE5ajVJRZabpnkSBzji/am2oSgT
+U0cvSuQVAaj9i20qacXnztepqmPyEMU3Btu0fy40VhfdBEmidKHqmJYq+t/LG1Y3
+XqJj23MdZOwXWDqhN+7jmNX//tBF2mO38xJN7lXRZv/LIK68e2k6rdhLAS5afNu9
+KbXKqNgg33FDz5mAtcOrut9xk2kzcXCFtpSLR3+Z/tlvEJZmfo8g1qbRdZMi5WnD
+O+ULE4ij0fFlJ5xRs9Oh/mT3qDLGqru77PDskj26q+1JUB/ucEZPCKo8BhAzzCns
+x2uOMxlig50aeFe7EqbtGjqc0k5OYwmur96ikz+tp/TZJQeDL+M5SkYVAmnKkKjC
+dX4ax4SOrSQ2/+0SnvQqSYXCdZTZ4fsuL1587UY7ST8j8TXsdA8XcgiVFR2jC+Mj
+v6jk9in3Ix0LnuzMKXNDFzsBBUPwZtndmVKtEsJKQVnk9TfEiqB8JUwvxwTTjX8d
+dxIJw7CdKtcXxT0SPzC8IfZyBjp29DzR/+lYgsrufwpbVXP3MX6h0gcqnlRXCEjA
+l+XwwzyliL+jIwxlTI21dCnPD/IHONYway8qRwoK2JQ0rkI8/D+2LdrKRGvL02Yy
+pXWPnUhHy4qafhOWYM37VR3QM8JbwdivZCIeeSqUhsu8BrEtdzU=
+=rlHF
 -----END PGP SIGNATURE-----
 
---qC91iwAJdYwthd95--
+--MqnwMx7GvK187Ipa--
