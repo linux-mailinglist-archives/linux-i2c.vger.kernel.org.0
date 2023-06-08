@@ -2,140 +2,121 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E88728996
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jun 2023 22:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47ECE728CFE
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Jun 2023 03:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjFHUg4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Jun 2023 16:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
+        id S233529AbjFIBUr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Jun 2023 21:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236177AbjFHUgy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Jun 2023 16:36:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD44230C4
-        for <linux-i2c@vger.kernel.org>; Thu,  8 Jun 2023 13:36:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EFA461520
-        for <linux-i2c@vger.kernel.org>; Thu,  8 Jun 2023 20:36:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4247C433EF;
-        Thu,  8 Jun 2023 20:36:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686256606;
-        bh=qcsPXVUfNrO5VaksuCPHsrro1Y+RCN8k67on2J6uhBk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CDARGi2MnA5E4wFs9KnFE7QwUIrgyOoWluIoF9RCHritmDWI54AHcXUkl9OupxZpF
-         LVNaryuxGXVOp/H2n1MuI7c5eZRc/BRUSVbxRBCv7H0AczDEQPZJZWsLATiV5LTqhj
-         Xeih2G9ObwSKhufOQE00xrIfVA412GUwXS+eC4NDm1+yCBQJYOXf1rH/1k++8XcF/D
-         9zFwHykrbjz8W29SWzwZ4IbHKGiSpPJol21vgV6huwUUeegaI6PXZWvm21itM+d7w+
-         LcIhCmM2b9phgSLtvZZQPyQpG+xGDqk0HwtuTWNFm/4OGu3FkSFnUMSI+gb/GvT9bg
-         cmhFofzF7Sodg==
-Date:   Thu, 8 Jun 2023 22:36:42 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-i2c@vger.kernel.org, syniurge@gmail.com,
-        shyam-sundar.s-k@amd.com, Raju.Rangoju@amd.com,
-        basavaraj.natikar@amd.com
-Subject: Re: [PATCH -next] i2c: amd-mp2: drop free_irq() of
- devm_request_irq() allocated irq
-Message-ID: <ZII72v6/ZQ4Oj+Wm@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-i2c@vger.kernel.org, syniurge@gmail.com,
-        shyam-sundar.s-k@amd.com, Raju.Rangoju@amd.com,
-        basavaraj.natikar@amd.com
-References: <20221103121146.99836-1-yangyingliang@huawei.com>
+        with ESMTP id S229692AbjFIBUp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Jun 2023 21:20:45 -0400
+X-Greylist: delayed 8722 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Jun 2023 18:20:43 PDT
+Received: from 6.mo584.mail-out.ovh.net (6.mo584.mail-out.ovh.net [188.165.36.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB83019AC
+        for <linux-i2c@vger.kernel.org>; Thu,  8 Jun 2023 18:20:43 -0700 (PDT)
+Received: from director1.ghost.mail-out.ovh.net (unknown [10.109.146.143])
+        by mo584.mail-out.ovh.net (Postfix) with ESMTP id 0907024EFE
+        for <linux-i2c@vger.kernel.org>; Thu,  8 Jun 2023 22:55:20 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-r5hrj (unknown [10.110.103.79])
+        by director1.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 87C3E1FD40;
+        Thu,  8 Jun 2023 22:55:19 +0000 (UTC)
+Received: from etezian.org ([37.59.142.108])
+        by ghost-submission-6684bf9d7b-r5hrj with ESMTPSA
+        id GNtPBldcgmTQ6AMAFqiLJA
+        (envelope-from <andi@etezian.org>); Thu, 08 Jun 2023 22:55:19 +0000
+Authentication-Results: garm.ovh; auth=pass (GARM-108S002d3f2c125-dac2-4a81-ac3a-78dbcafc621b,
+                    54E9E274CF50DDD2F5E08B3C3864B63AA558C9A4) smtp.auth=andi@etezian.org
+X-OVh-ClientIp: 178.238.172.216
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+Subject: [PATCH v2] i2c: hix5hd2: Make sure clk is disabled in remove
+Date:   Fri,  9 Jun 2023 00:55:13 +0200
+Message-Id: <20230608225513.1151574-1-andi.shyti@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Z9R52bUe4m7l6Z4n"
-Content-Disposition: inline
-In-Reply-To: <20221103121146.99836-1-yangyingliang@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 6653786977183795783
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtjedgudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepveefffevkeekgefftdellefgjefgieelvefhjefguefgueffffeifeehfeeukefgnecuffhomhgrihhnpehlihhnuhigthgvshhtihhnghdrohhrghenucfkphepuddvjedrtddrtddruddpudejkedrvdefkedrudejvddrvdduiedpfeejrdehledrudegvddruddtkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoegrnhguihesvghtvgiiihgrnhdrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekgedpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Alexey Khoroshilov <khoroshilov@ispras.ru>
 
---Z9R52bUe4m7l6Z4n
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+pm_runtime_set_suspended() does not lead to call of suspend callback,
+so clk may be left undisabled in hix5hd2_i2c_remove().
 
-On Thu, Nov 03, 2022 at 08:11:46PM +0800, Yang Yingliang wrote:
-> irq allocated with devm_request_irq() will be freed in devm_irq_release(),
-> using free_irq() in ->remove() will causes a dangling pointer, and a
-> subsequent double free. So remove the free_irq() in the error path and
-> remove path.
->=20
-> Fixes: 969864efae78 ("i2c: amd-mp2: use msix/msi if the hardware supports=
-")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
+By the way, the patch adds error handling for clk_prepare_enable().
 
-Elie, Shyam, are you OK with this patch?
+Found by Linux Driver Verification project (linuxtesting.org).
 
->  drivers/i2c/busses/i2c-amd-mp2-pci.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-amd-mp2-pci.c b/drivers/i2c/busses/i2=
-c-amd-mp2-pci.c
-> index 143165300949..ef7370d3dbea 100644
-> --- a/drivers/i2c/busses/i2c-amd-mp2-pci.c
-> +++ b/drivers/i2c/busses/i2c-amd-mp2-pci.c
-> @@ -327,13 +327,11 @@ static int amd_mp2_pci_init(struct amd_mp2_dev *pri=
-vdata,
->  			      amd_mp2_irq_isr, irq_flag, dev_name(&pci_dev->dev), privdata);
->  	if (rc) {
->  		pci_err(pci_dev, "Failure requesting irq %i: %d\n", privdata->dev_irq,=
- rc);
-> -		goto free_irq_vectors;
-> +		goto err_dma_mask;
->  	}
-> =20
->  	return rc;
-> =20
-> -free_irq_vectors:
-> -	free_irq(privdata->dev_irq, privdata);
->  err_dma_mask:
->  	pci_clear_master(pci_dev);
->  err_pci_enable:
-> @@ -376,7 +374,6 @@ static void amd_mp2_pci_remove(struct pci_dev *pci_de=
-v)
->  	pm_runtime_forbid(&pci_dev->dev);
->  	pm_runtime_get_noresume(&pci_dev->dev);
-> =20
-> -	free_irq(privdata->dev_irq, privdata);
->  	pci_clear_master(pci_dev);
-> =20
->  	amd_mp2_clear_reg(privdata);
-> --=20
-> 2.25.1
->=20
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+---
+Hi,
 
---Z9R52bUe4m7l6Z4n
-Content-Type: application/pgp-signature; name="signature.asc"
+Look what I fished from the far December 2017 :)
 
------BEGIN PGP SIGNATURE-----
+It looked better to respin it rather than replying to such an old
+mail.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSCO9oACgkQFA3kzBSg
-KbYXcRAAqjHxx95d+QJ9sLUXMIg/fj3X/qXpIz16vJ0I3AYBIigO/HyiiK57Z93m
-q6lz2XLPMkKeMKBnE02o1fcitcmtitaQR3HfBZuLDd+OnymB6xhF5c2Bza6iAeXL
-jgHpQC9Z2bqZ2MOpcSbGWPOoIMw5cb7un7cvRfPU1y5b4TQ/HQAyg3Ql/IFjbflm
-PBPf0O8Ntx6PAo5deChznmrpla90c4/Qw5MqOtNNR3A8cEVxCyib7Flpi6187BWp
-Y8/mSKam6Sfkwo225W0YwIdRTtwYTDzN1ctb4JD19m7bfq87H6uj+usSnyFb02Ii
-xQ1yeCQYdfI9+iK0F2WxgGuaRwWxxQoOVlQg0/BhcIxGhMA3/zsHuMFRdyHOgYTB
-mcl5UEAEX6p4OQSHmlGf94YqZHkF304FpjpELyCR84tfyXPU61AYTLHfYiLnB3tU
-RV3o6t10/n0aU6oWFTZW+jEfqUluOyVmg+BDN6ClLzrz+AM/hjHlrmi9lhU1vY7t
-oLEf9ad6gBuHzoGPbmq+YzF+r8lIb+W9zio3jMMLtP6K14LmbS5cOAj8//9UM0uW
-mqYmOcKVukcDNV4c1Y45FpRSyo4cZVcRTTuPgSjmvhVK3cVAeiX7ydqd13GmN2Y9
-GH+SJqkeA2QhgvD1kXiwnsnprkuu8SXIzovDVEL1tZAcGnqzCV8=
-=51Tk
------END PGP SIGNATURE-----
+I haven't made any modification to the patch exept for a little
+rebase conflict. Here's a full changelog, anyway.
 
---Z9R52bUe4m7l6Z4n--
+Changelog
+=========
+v1 -> v2:
+ - Fished this out from the muddy pond.
+ - Added my SoB
+ - Fixed rebase conflict
+
+Andi
+
+ drivers/i2c/busses/i2c-hix5hd2.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-hix5hd2.c b/drivers/i2c/busses/i2c-hix5hd2.c
+index 0e34cbaca22dc..ec775ffefa9fc 100644
+--- a/drivers/i2c/busses/i2c-hix5hd2.c
++++ b/drivers/i2c/busses/i2c-hix5hd2.c
+@@ -421,7 +421,11 @@ static int hix5hd2_i2c_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "cannot get clock\n");
+ 		return PTR_ERR(priv->clk);
+ 	}
+-	clk_prepare_enable(priv->clk);
++	ret = clk_prepare_enable(priv->clk);
++	if (ret) {
++		dev_err(&pdev->dev, "cannot enable clock\n");
++		return ret;
++	}
+ 
+ 	strscpy(priv->adap.name, "hix5hd2-i2c", sizeof(priv->adap.name));
+ 	priv->dev = &pdev->dev;
+@@ -469,8 +473,10 @@ static int hix5hd2_i2c_remove(struct platform_device *pdev)
+ 	struct hix5hd2_i2c_priv *priv = platform_get_drvdata(pdev);
+ 
+ 	i2c_del_adapter(&priv->adap);
+-	pm_runtime_disable(priv->dev);
+-	pm_runtime_set_suspended(priv->dev);
++
++	/* Make sure priv->clk is disabled */
++	pm_runtime_force_suspend(priv->dev);
++
+ 	clk_disable_unprepare(priv->clk);
+ 
+ 	return 0;
+-- 
+2.40.1
+
