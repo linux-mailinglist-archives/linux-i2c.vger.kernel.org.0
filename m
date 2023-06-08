@@ -2,132 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B09D727963
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jun 2023 10:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC3E727A1C
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jun 2023 10:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234052AbjFHIAE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Jun 2023 04:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
+        id S233645AbjFHIjM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Jun 2023 04:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234051AbjFHH7u (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Jun 2023 03:59:50 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E1526AD
-        for <linux-i2c@vger.kernel.org>; Thu,  8 Jun 2023 00:59:26 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-6261d4ea5f0so2456266d6.0
-        for <linux-i2c@vger.kernel.org>; Thu, 08 Jun 2023 00:59:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686211165; x=1688803165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hZI03Cx2EY1sdWTSmlFdME9tStwh4n+KWL1+nYy0WC8=;
-        b=u2lkZs0DGHOkdhYckKh0vEmvah3mtcUdCmEiM9iXyPblop5XpmI9V2CgRiqW0jtbGV
-         reK5FwiItuCG6+d63dQrJiv1YAltYFcixhf3BClc1sq7/GkfKOxDGLziQ9p32emOQ5wp
-         vFd0z7XXebB2KBeLEa3YGfFTTJ15GBqRq7Cyc31lqh6GZCWsSIfJFfyzloc4gHGYkWBy
-         ww/YKeXgj5vQENHB73hyBy5MFfEUMWxx+Slw4MSxv1++d/Jj4RlLPaCSKAbQgJmQOM+R
-         Pbj8aiB+yf4XOMIFOX9SC45h3BsmfRlDyvKSXoQ0Aa2y8giPk41G4iZYJ+UUC3RX+mZQ
-         7gzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686211165; x=1688803165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hZI03Cx2EY1sdWTSmlFdME9tStwh4n+KWL1+nYy0WC8=;
-        b=lgQiiEdZIBRppDkUkBeaCLrQ1xU/tVkcMynApxtRGO7M//IpulsqSVtxoJ36TuVKW1
-         IANE1CFNKC0BeLMR5rsUFNVFFhrjLd+tRa9pqzSKph4tssgVS0FBBJWn+HACttzsfPot
-         K/Xg986iFSJseeJf5/FkX26U17efx2uxzpz5SeyTD9+kYIWg/5V+PGkw/ttAOR4aKzYi
-         tS8XAAryrV5Pv45wO+/tvpj3aiU6cYYIk1OsUc7xSNZ9njSYDNR+JzrLdOXdSSQH9wfV
-         e2zyqGjs6C3IHg4XFB3rgywnjToljin8mpX1BR47cEEpqqkmbWox+QCnJPtX+x1+hpGm
-         61Zw==
-X-Gm-Message-State: AC+VfDxUUd6w/tHQgGFchIjth0qLdSMKmBzVaXQwOTmOGbjNTeD28Uub
-        pu92Au5Qxf3ShyXm5Tf7gH34aGM62RBls7PxmzpIhQ==
-X-Google-Smtp-Source: ACHHUZ5d+KjHBE3nn6IbQfTfPODDpmdVKrp2o+VWenaYC3pqaAqWhAb1Zwc6F2zu1aZB2hIhws1GsEELHYPrhnaMvp0=
-X-Received: by 2002:ac8:58c1:0:b0:3f9:aa9f:84f5 with SMTP id
- u1-20020ac858c1000000b003f9aa9f84f5mr6032848qta.65.1686211165115; Thu, 08 Jun
- 2023 00:59:25 -0700 (PDT)
+        with ESMTP id S233158AbjFHIjK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Jun 2023 04:39:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E82106;
+        Thu,  8 Jun 2023 01:39:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EFCF60FE2;
+        Thu,  8 Jun 2023 08:39:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24128C433D2;
+        Thu,  8 Jun 2023 08:39:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686213548;
+        bh=NIZop4+AV1Hej4fAByaybXPXuAlFsLjn2ujf7u8pOlk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VxUsW1XxbLmVOeJOAO9umWkV7zphA92ss0exCJGGr5sImRhWGhQrZ5rlpHBKiVVK4
+         2mU8VzY0UgLc/1r3qAUcvVIJQPqh2cE79RD/cLvhdKHyJ/fyGSwV6CzqmCjVyZVCck
+         /YXerGAy+bXGpELNjMFh6E36oc/f3TUHo02an/I9Ny3+/1taFIgI5HGzmMfwxkaZsA
+         wbHTnpLFN4/lhudKAn1GMRZ6hXLL1DwJW6EqCejltRuTPc0sCW5JhVWR0gJMV3OH9G
+         ZdZk5bMsVOZZNV5ScGr4XYXmj+rC/6x0Cyd0Go7ws2q5ekHmvsBfCk0VucPSF+x8oI
+         OAAzAnQiJ4bzQ==
+Date:   Thu, 8 Jun 2023 10:39:05 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Jon Hunter <jonathanh@nvidia.com>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] i2c: tegra: Fix failure during probe deferral cleanup
+Message-ID: <20230608083905.youqz3wt27sqda2f@intel.intel>
+References: <20230608075606.3590744-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
-References: <20230608025424.29033-1-rdunlap@infradead.org>
-In-Reply-To: <20230608025424.29033-1-rdunlap@infradead.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 8 Jun 2023 09:59:14 +0200
-Message-ID: <CAMRc=Me1U_SznMfsVzYxoD7De1iBJjHzzTtNhvVi=pd+ekKGxQ@mail.gmail.com>
-Subject: Re: [PATCH] eeprom: at24: also select REGMAP
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608075606.3590744-1-thierry.reding@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 4:54=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org>=
- wrote:
->
-> Selecting only REGMAP_I2C can leave REGMAP unset, causing build errors,
-> so also select REGMAP to prevent the build errors.
->
-> ../drivers/misc/eeprom/at24.c:540:42: warning: 'struct regmap_config' dec=
-lared inside parameter list will not be visible outside of this definition =
-or declaration
->   540 |                                   struct regmap_config *regmap_co=
-nfig)
-> ../drivers/misc/eeprom/at24.c: In function 'at24_make_dummy_client':
-> ../drivers/misc/eeprom/at24.c:552:18: error: implicit declaration of func=
-tion 'devm_regmap_init_i2c' [-Werror=3Dimplicit-function-declaration]
->   552 |         regmap =3D devm_regmap_init_i2c(dummy_client, regmap_conf=
-ig);
-> ../drivers/misc/eeprom/at24.c:552:16: warning: assignment to 'struct regm=
-ap *' from 'int' makes pointer from integer without a cast [-Wint-conversio=
-n]
->   552 |         regmap =3D devm_regmap_init_i2c(dummy_client, regmap_conf=
-ig);
-> ../drivers/misc/eeprom/at24.c: In function 'at24_probe':
-> ../drivers/misc/eeprom/at24.c:586:16: error: variable 'regmap_config' has=
- initializer but incomplete type
->   586 |         struct regmap_config regmap_config =3D { };
-> ../drivers/misc/eeprom/at24.c:586:30: error: storage size of 'regmap_conf=
-ig' isn't known
->   586 |         struct regmap_config regmap_config =3D { };
-> ../drivers/misc/eeprom/at24.c:586:30: warning: unused variable 'regmap_co=
-nfig' [-Wunused-variable]
->
-> Fixes: 5c015258478e ("eeprom: at24: add basic regmap_i2c support")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Heiner Kallweit <hkallweit1@gmail.com>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: linux-i2c@vger.kernel.org
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
+Hi Thierry,
+
+On Thu, Jun 08, 2023 at 09:56:06AM +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+> 
+> If the driver fails to obtain a DMA channel, it will initiate cleanup
+> and try to release the DMA channel that couldn't be retrieved. This will
+> cause a crash because the cleanup will try to dereference an ERR_PTR()-
+> encoded error code.
+> 
+> However, there's nothing to clean up at this point yet, so we can avoid
+> this by simply propagating the error code.
+> 
+> Fixes: fcc8a89a1c83 ("i2c: tegra: Share same DMA channel for RX and TX")
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 > ---
->  drivers/misc/eeprom/Kconfig |    1 +
->  1 file changed, 1 insertion(+)
->
-> diff -- a/drivers/misc/eeprom/Kconfig b/drivers/misc/eeprom/Kconfig
-> --- a/drivers/misc/eeprom/Kconfig
-> +++ b/drivers/misc/eeprom/Kconfig
-> @@ -6,6 +6,7 @@ config EEPROM_AT24
->         depends on I2C && SYSFS
->         select NVMEM
->         select NVMEM_SYSFS
-> +       select REGMAP
->         select REGMAP_I2C
->         help
->           Enable this driver to get read/write support to most I2C EEPROM=
-s
+>  drivers/i2c/busses/i2c-tegra.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+> index f155e9028f94..0eab199900ae 100644
+> --- a/drivers/i2c/busses/i2c-tegra.c
+> +++ b/drivers/i2c/busses/i2c-tegra.c
+> @@ -458,10 +458,8 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
+>  	 * with existing devicetrees.
+>  	 */
+>  	i2c_dev->dma_chan = dma_request_chan(i2c_dev->dev, "tx");
+> -	if (IS_ERR(i2c_dev->dma_chan)) {
+> -		err = PTR_ERR(i2c_dev->dma_chan);
+> -		goto err_out;
+> -	}
+> +	if (IS_ERR(i2c_dev->dma_chan))
+> +		return PTR_ERR(i2c_dev->dma_chan);
 
-Applied, thanks!
+Actually you are ignoring the case when the driver would use
+programmed i/o only as a backup plan.
 
-Bart
+I think a possible fix could be:
+
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -460,7 +460,7 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
+        i2c_dev->dma_chan = dma_request_chan(i2c_dev->dev, "tx");
+        if (IS_ERR(i2c_dev->dma_chan)) {
+                err = PTR_ERR(i2c_dev->dma_chan);
+-               goto err_out;
++               goto err_probe_defer;
+        }
+ 
+        i2c_dev->dma_dev = i2c_dev->dma_chan->device->dev;
+@@ -482,6 +482,7 @@ static int tegra_i2c_init_dma(struct tegra_i2c_dev *i2c_dev)
+ 
+ err_out:
+        tegra_i2c_release_dma(i2c_dev);
++err_probe_defer:
+        if (err != -EPROBE_DEFER) {
+                dev_err(i2c_dev->dev, "cannot use DMA: %d\n", err);
+                dev_err(i2c_dev->dev, "falling back to PIO\n");
+
+Thank you,
+Andi
+
+(BTW, those are not dev_err's but they should be either dev_info
+or dev_warn())
+
+>  
+>  	i2c_dev->dma_dev = i2c_dev->dma_chan->device->dev;
+>  	i2c_dev->dma_buf_size = i2c_dev->hw->quirks->max_write_len +
+> -- 
+> 2.40.1
+> 
