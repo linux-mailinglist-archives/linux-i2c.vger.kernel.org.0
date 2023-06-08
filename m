@@ -2,56 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B347728783
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jun 2023 20:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDE6728861
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jun 2023 21:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbjFHSxk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Jun 2023 14:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        id S232068AbjFHT1D (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Jun 2023 15:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjFHSxj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Jun 2023 14:53:39 -0400
+        with ESMTP id S229659AbjFHT1C (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Jun 2023 15:27:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BAF1FDF;
-        Thu,  8 Jun 2023 11:53:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A3FA2;
+        Thu,  8 Jun 2023 12:27:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE3C565065;
-        Thu,  8 Jun 2023 18:53:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F989C433EF;
-        Thu,  8 Jun 2023 18:53:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45F6C61864;
+        Thu,  8 Jun 2023 19:27:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0824EC433D2;
+        Thu,  8 Jun 2023 19:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686250417;
-        bh=zVdGP+Ew0Gem0m83/DOeF3Hf1y3exPOt9ndNwmCapHE=;
+        s=k20201202; t=1686252420;
+        bh=8k4zT0KQCjzNW6KkGWKsAklbqmnPbSRd1tQLhruj33w=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aHo3QJHY4GDz6clEFdNgD/xZgsFiIbC5Ei17HO0WJkzPy+ce76MAKzFoBpItPzw2s
-         fY4/CZXzHWaNWK58kcK/vi4bfe/lKUkFwWZb0nsQ/sVtFsKqVpsan6X+AwL3OLnxKO
-         tIzfkRUAtUOzb1w2TuiaKMj1AbilccCb/ptX8GmV4P7XIxLiY8ENyi2Ryiev590lRB
-         avoHWRov1egLy+EGNIOLz6i7HEDWBBUysMV8M735FPw8UJGrNnd8CFouioJ5HVZdPf
-         or77TX0hV5rkQWyIfYoetgKmfKcQLlwp4JS5XyroP0aY9Uzm+KMKvjcaiv/UEUBFX5
-         D08yyU1wfI7gw==
-Date:   Thu, 8 Jun 2023 20:53:33 +0200
+        b=nWY6UlWEMqGR6WcWfDmpqumLjQuwzeXaAKuShBZhpqPHUAzO0CeEFQ4HPVha43Ra1
+         UM4pMwaeE+MvvedonmiUZpQTdKtdoEvxhgCxjgJjIb3Zg9SwTOIk7x9ZJvuYhu+S1q
+         +PybQW05HwVkb4t3gInYsFnoj2F34DX0Jzbfz99K8Vk9sPBz32XKCSceWWTcYxrEwx
+         ex/Zg1wTi086qJp1RgxrA5pLyG2RKmxX5NfxjCaynKkqvrTz3pFCDwCmaBMRjPW8/K
+         0HUkjTPNDsYIyQlIxCrv8YkgEgLn2/A9pi0WcDf0IZTostECbW00mo6EXipFKJjc/S
+         r6lwK4k7GvYzw==
+Date:   Thu, 8 Jun 2023 21:26:57 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Subject: Re: [PATCH v2] MAINTAINERS: Add entries for Renesas RZ/V2M I2C driver
-Message-ID: <ZIIjrd4Pr+wMtrGs@shikoro>
+To:     Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc:     loic.poulain@linaro.org, rfoss@kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_sjaganat@quicinc.com,
+        quic_srichara@quicinc.com, quic_varada@quicinc.com
+Subject: Re: [PATCH 3/5] i2c: qcom-cci:Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <ZIIrgY1etR/pibIR@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-References: <20230607170729.139555-1-biju.das.jz@bp.renesas.com>
+        Md Sadre Alam <quic_mdalam@quicinc.com>, loic.poulain@linaro.org,
+        rfoss@kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
+        quic_varada@quicinc.com
+References: <20230306144522.15699-1-quic_mdalam@quicinc.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ILZMzs8e5U9orZ8s"
+        protocol="application/pgp-signature"; boundary="i1Olhwl0/rWh9QMV"
 Content-Disposition: inline
-In-Reply-To: <20230607170729.139555-1-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20230306144522.15699-1-quic_mdalam@quicinc.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,38 +64,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---ILZMzs8e5U9orZ8s
+--i1Olhwl0/rWh9QMV
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 07, 2023 at 06:07:29PM +0100, Biju Das wrote:
-> Add the MAINTAINERS entries for the Renesas RZ/V2M I2C driver.
+On Mon, Mar 06, 2023 at 08:15:22PM +0530, Md Sadre Alam wrote:
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
 >=20
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Acked-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 
-Applied to for-current, thanks!
+Applied to for-next, thanks! Also, thanks, Robert.
 
 
---ILZMzs8e5U9orZ8s
+--i1Olhwl0/rWh9QMV
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSCI6kACgkQFA3kzBSg
-KbYH7g//SuQN/XIjSIQjGROWzPQJGRVQd76ZY45MRTjfstU2/UTAsVfY8E7s0G/u
-VCZATitrja+Wn1C0A1QwMhLQFXERwXG8kaX9pOzlsHTBcnnG60wuMy3MrLDxI5/Y
-69QgqVs/knAVw5OmMVUS7GM2xPbUPn2HS2gb/SKIl8rcXnrlhKSgtKg+w1gQE7WG
-GpthoKM2zSmLJ2fQHj6JExMg6R3CwkqOb7X+EoN6ia/C93hhNWf5FLu3sQG5HbQa
-FAD5LVs7PAdjoKpt4jJoDNGCFvx3N1WcEGjjo0DkEX3pMefbpu++p+NSI4vSBn6O
-J6luOFqsDQVsvH3W6TUN9lqJcGxFYocqODCwm19qwcyrT/N0E7Yr7r9UxHJiT7fk
-W5uFV1iVeZHakhQ2vyTS8wGVTSYCsZLtOPH5BkUqLlP4za9eVoEw9YA69B3oEI04
-9U1iaDCVYiyuO5BwzBVw9dM8aIIDvL/pE+toOoAg4Y6Dahw1qMos/6K8yCFWLDNX
-LSv837ZvVLp4poKUxx0HNHqFMxdPapW6HwP+X3A474mNqIYdOVC4T7aP1leYMQQO
-qYHWD14GkjH4bUYST7FzBdWpd1zp5Txsih60h3dUl64L5M3sTXBB/tncobb6fbd7
-Ljwq9WiVmhDnrmaS8bKe+Q1ejJHp/9tqb78px386ZRkuHwRxjZU=
-=oX0j
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSCK3wACgkQFA3kzBSg
+KbYZ8g//agXINN6K/ZpRv8Uy1vQBHL5MUhKBEi9Drc2K19hcBNVCgQuc1VAVjeSv
+0r9SaGNaWmDXAGswBZbg+LuijycxUAa8JfcMvHD8RdRdce2Vtftx1NeR0ms+VbNx
+zAOpTtLMDyuLFUBeErSHqv8AUoyVkK6b1Bl/2llZezV6GcXAEvizXVwKhbb3bNuL
+an4mbyrCWUa6oFM0q/lh1rv1AojftPuvEzl5K4F5A/3dxaHpyyG3GMl3php4n01o
+/wn/c2SGrWcLG6LRNHFCD9DubzUH4rAlNNaSBiUHAA24WuE+Qwd6GTahxevxRNkR
+La535YlFm5PCxjdMYTfTPjgxBQl+jdBxKi8TY3GtDKEmqzHCBJ3dxNsuv8fio1CW
+TzCtHwVYkz/D7UVJvCYNLYgPaLPdmged4Y97CllAggN/LZyWSKPCHJ0kv/c+Ey+s
+5Xaql3W4LTF65ZYqAPbJ3jsa5R6EGGyU40LuH1NP+chiH4zQgaIwby3UNWbL8SPO
+Azb3C4yZ45dnxILM4LuCFWnodWuY7OlWfO8E9TWoKF/jcAfkIXjMLt2y+qII11wO
+nsGETZMZN+4N0wf0PZMd3Oaai6BUI2tTZHLmbCbQofMSTELMcC69tfmutzPMyJh/
+wN0sLnLRgWBeUe7J8wD1NOGHoCDV6qDcTw1n7HKr76mSEJVXB1E=
+=n51n
 -----END PGP SIGNATURE-----
 
---ILZMzs8e5U9orZ8s--
+--i1Olhwl0/rWh9QMV--
