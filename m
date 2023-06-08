@@ -2,61 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDE6728861
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jun 2023 21:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92C1728951
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Jun 2023 22:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbjFHT1D (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 8 Jun 2023 15:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
+        id S231864AbjFHUXn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 8 Jun 2023 16:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjFHT1C (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Jun 2023 15:27:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A3FA2;
-        Thu,  8 Jun 2023 12:27:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45F6C61864;
-        Thu,  8 Jun 2023 19:27:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0824EC433D2;
-        Thu,  8 Jun 2023 19:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686252420;
-        bh=8k4zT0KQCjzNW6KkGWKsAklbqmnPbSRd1tQLhruj33w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nWY6UlWEMqGR6WcWfDmpqumLjQuwzeXaAKuShBZhpqPHUAzO0CeEFQ4HPVha43Ra1
-         UM4pMwaeE+MvvedonmiUZpQTdKtdoEvxhgCxjgJjIb3Zg9SwTOIk7x9ZJvuYhu+S1q
-         +PybQW05HwVkb4t3gInYsFnoj2F34DX0Jzbfz99K8Vk9sPBz32XKCSceWWTcYxrEwx
-         ex/Zg1wTi086qJp1RgxrA5pLyG2RKmxX5NfxjCaynKkqvrTz3pFCDwCmaBMRjPW8/K
-         0HUkjTPNDsYIyQlIxCrv8YkgEgLn2/A9pi0WcDf0IZTostECbW00mo6EXipFKJjc/S
-         r6lwK4k7GvYzw==
-Date:   Thu, 8 Jun 2023 21:26:57 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc:     loic.poulain@linaro.org, rfoss@kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_sjaganat@quicinc.com,
-        quic_srichara@quicinc.com, quic_varada@quicinc.com
-Subject: Re: [PATCH 3/5] i2c: qcom-cci:Use
- devm_platform_get_and_ioremap_resource()
-Message-ID: <ZIIrgY1etR/pibIR@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Md Sadre Alam <quic_mdalam@quicinc.com>, loic.poulain@linaro.org,
-        rfoss@kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
-        quic_varada@quicinc.com
-References: <20230306144522.15699-1-quic_mdalam@quicinc.com>
+        with ESMTP id S231626AbjFHUXm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 8 Jun 2023 16:23:42 -0400
+Received: from pokefinder.org (pokefinder.org [135.181.139.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5548C2D6A;
+        Thu,  8 Jun 2023 13:23:41 -0700 (PDT)
+Received: from localhost (120-123-142-46.pool.kielnet.net [46.142.123.120])
+        by pokefinder.org (Postfix) with ESMTPSA id 90CAEA423CC;
+        Thu,  8 Jun 2023 22:23:40 +0200 (CEST)
+Date:   Thu, 8 Jun 2023 22:23:39 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Kevin Hilman <khilman@kernel.org>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        kernel-janitors@vger.kernel.org, Andrew Davis <afd@ti.com>
+Subject: Re: [linux-i2c] Patch notification: DaVinci: 2 patches updated
+Message-ID: <ZII4y9PfM/yBdvU+@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Markus Elfring <Markus.Elfring@web.de>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Kevin Hilman <khilman@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        kernel-janitors@vger.kernel.org, Andrew Davis <afd@ti.com>
+References: <168613080300.11524.2783831689498520603@legolas.ozlabs.org>
+ <8af5aca3-184f-2561-bec7-c4950fdbaeb5@web.de>
+ <ZIGHmSvptAC0cWHD@shikoro>
+ <93d2b121-4734-c195-90ad-d2d05e65e247@web.de>
+ <ZIG6/h0PnLi7j6Pn@shikoro>
+ <ae8ede44-e7a9-c086-d17e-68c33b4482e0@web.de>
+ <ZIHajpkxV/PFPcb8@shikoro>
+ <4bf54a0d-f525-5dab-1e7e-756e71a7267a@web.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i1Olhwl0/rWh9QMV"
+        protocol="application/pgp-signature"; boundary="qC91iwAJdYwthd95"
 Content-Disposition: inline
-In-Reply-To: <20230306144522.15699-1-quic_mdalam@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4bf54a0d-f525-5dab-1e7e-756e71a7267a@web.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,39 +56,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---i1Olhwl0/rWh9QMV
-Content-Type: text/plain; charset=us-ascii
+--qC91iwAJdYwthd95
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 06, 2023 at 08:15:22PM +0530, Md Sadre Alam wrote:
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->=20
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 
-Applied to for-next, thanks! Also, thanks, Robert.
+> If I look at patches which I contributed for the software area =E2=80=9CI=
+2C=E2=80=9D,
+> I got the impression that further constructive feedback will be helpful a=
+lso for
+> six change possibilities from days like the following.
+
+Yes, you are right. these patches need feedback. This is why I haven't
+applied them yet.
 
 
---i1Olhwl0/rWh9QMV
+--qC91iwAJdYwthd95
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSCK3wACgkQFA3kzBSg
-KbYZ8g//agXINN6K/ZpRv8Uy1vQBHL5MUhKBEi9Drc2K19hcBNVCgQuc1VAVjeSv
-0r9SaGNaWmDXAGswBZbg+LuijycxUAa8JfcMvHD8RdRdce2Vtftx1NeR0ms+VbNx
-zAOpTtLMDyuLFUBeErSHqv8AUoyVkK6b1Bl/2llZezV6GcXAEvizXVwKhbb3bNuL
-an4mbyrCWUa6oFM0q/lh1rv1AojftPuvEzl5K4F5A/3dxaHpyyG3GMl3php4n01o
-/wn/c2SGrWcLG6LRNHFCD9DubzUH4rAlNNaSBiUHAA24WuE+Qwd6GTahxevxRNkR
-La535YlFm5PCxjdMYTfTPjgxBQl+jdBxKi8TY3GtDKEmqzHCBJ3dxNsuv8fio1CW
-TzCtHwVYkz/D7UVJvCYNLYgPaLPdmged4Y97CllAggN/LZyWSKPCHJ0kv/c+Ey+s
-5Xaql3W4LTF65ZYqAPbJ3jsa5R6EGGyU40LuH1NP+chiH4zQgaIwby3UNWbL8SPO
-Azb3C4yZ45dnxILM4LuCFWnodWuY7OlWfO8E9TWoKF/jcAfkIXjMLt2y+qII11wO
-nsGETZMZN+4N0wf0PZMd3Oaai6BUI2tTZHLmbCbQofMSTELMcC69tfmutzPMyJh/
-wN0sLnLRgWBeUe7J8wD1NOGHoCDV6qDcTw1n7HKr76mSEJVXB1E=
-=n51n
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSCOMcACgkQFA3kzBSg
+KbbvLRAAn0s8AEpoffGOmA2hh/8FyCM7pgrbtOb3FCxrxFYJNyvq4Os1vZO7GTG8
++xCpTtdFFGx9RJmyHf9JfCMsDcXb53NkHPGGhpIzup0UstzgYQoi7aCXTD5NbPs+
+eY24RR9fMG+ryM0jrSasyYDAZX3CXQg1d34OtS30DVMSrDWFFSrrQ4DQKrELhNcR
+XUriz15PG+jSPwMt/oxPx6vjOcecn1RP0QCeFTPLqJS4jkG5fogQWpYTXQrbtRQb
+u6kT4pfGDrxihg+H0ea2W/qm19qLdy1GugHW9BrjT9lTgAmGxMFbhGzzAIv0Bjfi
+ij5N/54Gm2cn0OdD4wgLHglSBT6bxFwfIwjevUkOdqJUp4wTV8eGCgPraj/sZjJx
+ydm1SGFogib+M8jGJtQvjcXbHPJx052crJIyWCJwv/SeLVY8x40pdn2zkF9u1CJj
+2ipe5oqzDPsd+mFnsGsCPbj88+ajFAhL6TIUHnakOh6Gv9SafRpxh3jgXlUEhYq8
+SCJKm1bc/aORb+jXaWD/+MhNHAyyClXxTgseT7nf4Unr46T+kK372I2KzxEkrzXR
+c06zr9Sw6daIpnlts5c1ASGDouMfhqsFRBBl/FlmJuybpmga+1AZFjDQxZRR50aJ
+Pu802RBPia4/gi5IcQ+ZuY7JaZnm6QaCaVvaDrG/eK8fAPv8W00=
+=fbTD
 -----END PGP SIGNATURE-----
 
---i1Olhwl0/rWh9QMV--
+--qC91iwAJdYwthd95--
