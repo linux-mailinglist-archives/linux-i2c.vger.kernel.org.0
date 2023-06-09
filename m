@@ -2,99 +2,146 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AA17292F3
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Jun 2023 10:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 068007295A1
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Jun 2023 11:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240770AbjFIIYs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Jun 2023 04:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
+        id S241718AbjFIJlC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Jun 2023 05:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240593AbjFIIY0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Jun 2023 04:24:26 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89B94ED8
-        for <linux-i2c@vger.kernel.org>; Fri,  9 Jun 2023 01:23:07 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b219ed9915so15730231fa.3
-        for <linux-i2c@vger.kernel.org>; Fri, 09 Jun 2023 01:23:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686298983; x=1688890983;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yc5EfomFDC38C1bGgQ2dweTHsz+MZnL2cM4YJHhJ+qI=;
-        b=ShUcwcu0r2Q2TYezpcCy+Zev5ntLYRGUENLkEw3y19vhAaSySJWaqO1f7urZBVNqL+
-         FNTdtUf8KyggUV7V+sRJ91pXLbdDkamXIew1nog5gWP3WKtZVNCajxJ9kJXlM7OSVRTZ
-         /FzXIf2NmXd09x8Uccr7mQdPEZmkiMJOFYtSH8OsQ+/mV7r1S+IxSQR6NzFyzkhTXS/P
-         jcuQ62N5ej57WclK1mgDuteQ1nZO16op27luMy1ixbKwoHGPEP5LC9qZm5YV+6WkH0v7
-         V4YcC2v9QMWqtHnG/aiH2dPN3Sh3eu19PUoJnbWzkZokF6ibLWGxHvjWcIvPrBpteGrd
-         hbGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686298983; x=1688890983;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yc5EfomFDC38C1bGgQ2dweTHsz+MZnL2cM4YJHhJ+qI=;
-        b=hJhmGbthj/RbihxV+G02mDCpPRFMYfgDhPUFZA8B0EGoeO9NO96hh49bGgr//x8wAu
-         scz8a0gut9WliCyPiGHCDwh5lTiSpUIXwwY3gV7e+zHgxdYTFgH8mg+UxVqQYLzJl0+R
-         pmTh4ZKg5ftNvDVFSqPr41f+CNAQ03w8RQDvEazpwM6+cyU5tgD5t17CfX99Q3b1Thtc
-         +Vjib610NNK4XRqie31O/G3iE3s/6XS/DaE2uqVWZD3u/2hVYdz8VGiCqSBF4+mxLrBK
-         rW7Y2c2av/SGPMqd5vnphjZe5U3oA4EI8Da17F0C5P/MNi7VPG4CfzBHp2KcDU8/ZBF9
-         hGFg==
-X-Gm-Message-State: AC+VfDz7VOjzHQ4vRJg0YtTHfqZAV18vKl382qy/eA9j5kzX1xLR8NAi
-        OTKRQAVo5de8lMjEpFieaCX29w==
-X-Google-Smtp-Source: ACHHUZ7IK10gN2zFu9KeEDlxuTMjv4qgURWs76Acxq6TmVAkACLVU884Cq3Hc8NdOR/CCDHQ0uha0w==
-X-Received: by 2002:a2e:800a:0:b0:2ac:8262:322a with SMTP id j10-20020a2e800a000000b002ac8262322amr680392ljg.13.1686298983618;
-        Fri, 09 Jun 2023 01:23:03 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:4900:c6d1:3dce:450c])
-        by smtp.gmail.com with ESMTPSA id u7-20020a7bcb07000000b003f60d0eef36sm1834305wmj.48.2023.06.09.01.23.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 01:23:03 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [GIT PULL] at24: fixes for v6.4-rc6
-Date:   Fri,  9 Jun 2023 10:23:00 +0200
-Message-Id: <20230609082300.32524-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
+        with ESMTP id S242006AbjFIJkQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Jun 2023 05:40:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932AB46B1
+        for <linux-i2c@vger.kernel.org>; Fri,  9 Jun 2023 02:35:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE8D5655FF
+        for <linux-i2c@vger.kernel.org>; Fri,  9 Jun 2023 09:34:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 583B8C433EF;
+        Fri,  9 Jun 2023 09:33:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686303241;
+        bh=iH3dyjRyQIQgYXi71MyFp6V3lIQkmbSod+R6mloCwFU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ptQMo9HMgetrMGopklRx7jzRDZ17DJqBvF3mFEQqKKsSJK6QOqj8B2ht1J853kazT
+         1TGLcOJgJ7OZXDoEk2uDU3k9OmCv327fWA8ruaBKBjvtfj2Zkf3NlSHQ+1SxdaBdwh
+         vItfQ8g8NyBG08j9K6rWrh+hQzDNjQGykdv1fD5lnRU1M4DCPaGV+iORND1BHTOkzC
+         fEqLbtOBt98zVGE5IhsS0o2bTLNhw3WEfZOOxld6pyu45J2y9fdc+BthzYPEhKqaXL
+         JJlGxYORBhRIeKJg0dv0dAYHqerWCzo3hJdCusH9ftNVJVAJUIgukeHmSqbZs9orBc
+         pRgz1zwoVBVvg==
+Message-ID: <a6c22dd5-262c-4829-1eda-601cff697553@kernel.org>
+Date:   Fri, 9 Jun 2023 11:33:54 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4] i2c: add support for Zhaoxin I2C controller
+To:     Hans Hu <hanshu-oc@zhaoxin.com>, andi.shyti@kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     cobechen@zhaoxin.com, TonyWWang@zhaoxin.com
+References: <20230609031625.6928-1-hanshu-oc@zhaoxin.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230609031625.6928-1-hanshu-oc@zhaoxin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 09/06/2023 05:16, Hans Hu wrote:
+> Add Zhaoxin I2C controller driver. It provides the access to the i2c
+> busses, which connects to the touchpad, eeprom, etc.
+> 
+> Zhaoxin I2C controller has two separate busses, so may accommodate up
+> to two I2C adapters. Those adapters are listed in the ACPI namespace
+> with the "IIC1D17" HID, and probed by a platform driver.
+> 
+> The driver works with IRQ mode, and supports basic I2C features. Flags
+> I2C_AQ_NO_ZERO_LEN and I2C_AQ_COMB_WRITE_THEN_READ are used to limit
+> the unsupported access.
+> 
 
-Wolfram,
 
-Please pull the following Kconfig fix for at24 for this release cycle.
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cb932c6f8959..bb61e19eef72 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9761,6 +9761,13 @@ L:	linux-i2c@vger.kernel.org
+>  F:	Documentation/i2c/busses/i2c-ismt.rst
+>  F:	drivers/i2c/busses/i2c-ismt.c
+>  
+> +ZHAOXIN I2C CONTROLLER DRIVER
+> +M:	Hans Hu <hanshu@zhaoxin.com>
+> +L:	linux-i2c@vger.kernel.org
+> +S:	Maintained
+> +W:	https://www.zhaoxin.com
+> +F:	drivers/i2c/busses/i2c-zhaoxin.c
+> +
+>  I2C/SMBUS STUB DRIVER
+>  M:	Jean Delvare <jdelvare@suse.com>
+>  L:	linux-i2c@vger.kernel.org
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 87600b4aacb3..1f181757ce2a 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -333,6 +333,16 @@ config I2C_VIAPRO
+>  	  This driver can also be built as a module.  If so, the module
+>  	  will be called i2c-viapro.
+>  
+> +config I2C_ZHAOXIN
+> +	tristate "ZHAOXIN I2C Interface"
+> +	depends on (PCI && ACPI) || COMPILE_TEST
+> +	help
+> +	  If you say yes to this option, support will be included for the
+> +	  ZHAOXIN I2C interface
+> +
+> +	  This driver can also be built as a module.  If so, the module
+> +	  will be called i2c-zhaoxin.
+> +
+>  if ACPI
+>  
+>  comment "ACPI drivers"
 
-Bartosz
+Shouldn't you driver be in ACPI drivers?
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+...
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+> +
+> +static int zxi2c_probe(struct platform_device *pdev)
+> +{
+> +	int err = 0;
+> +	struct zxi2c *i2c;
+> +	struct pci_dev *pci;
+> +	struct device *dev;
+> +
+> +	/* make sure this is zhaoxin platform */
 
-are available in the Git repository at:
+Why? You didn't provid explanation last time for this.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git at24-fixes-for-v6.4-rc6
+> +	dev = pdev->dev.parent;
+> +	if (dev && dev_is_pci(dev)) {
+> +		pci = to_pci_dev(dev);
+> +		if (pci->vendor != PCI_VENDOR_ID_ZHAOXIN ||
+> +		    pci->device != ZXI2C_PARENT_PCI_DID)
+> +			return -ENODEV;
+> +	} else {
+> +		return -ENODEV;
+> +	}
 
-for you to fetch changes up to 2585c430e40776557e2bd66e50d345b6c3914772:
+Drop it.
 
-  eeprom: at24: also select REGMAP (2023-06-08 09:58:57 +0200)
+> +
 
-----------------------------------------------------------------
-at24 fixes for v6.4-rc6
 
-- fix a Kconfig issue (we need to select REGMAP, not only REGMAP_I2C)
+Best regards,
+Krzysztof
 
-----------------------------------------------------------------
-Randy Dunlap (1):
-      eeprom: at24: also select REGMAP
-
- drivers/misc/eeprom/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
