@@ -2,105 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1E5729A4E
-	for <lists+linux-i2c@lfdr.de>; Fri,  9 Jun 2023 14:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCF5729B29
+	for <lists+linux-i2c@lfdr.de>; Fri,  9 Jun 2023 15:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjFIMr5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 9 Jun 2023 08:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
+        id S232008AbjFINLS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 9 Jun 2023 09:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238385AbjFIMrZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Jun 2023 08:47:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616C32D68
-        for <linux-i2c@vger.kernel.org>; Fri,  9 Jun 2023 05:47:24 -0700 (PDT)
+        with ESMTP id S241087AbjFINLP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 9 Jun 2023 09:11:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC27630FE
+        for <linux-i2c@vger.kernel.org>; Fri,  9 Jun 2023 06:11:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9BF4616AA
-        for <linux-i2c@vger.kernel.org>; Fri,  9 Jun 2023 12:47:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B33C433EF;
-        Fri,  9 Jun 2023 12:47:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85245657E1
+        for <linux-i2c@vger.kernel.org>; Fri,  9 Jun 2023 13:11:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 294E6C433D2;
+        Fri,  9 Jun 2023 13:11:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686314843;
-        bh=z0tFTOtEkgUjPn+83RfuSIGTl+shWawDmOGjLMkiplI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aJgSTqOEd/sAVugO0Zk4LQYqOEOdQt+Lglg5YJFw3lWf356iTn40rwx4Ik2c3llE5
-         sEyWMAQisLeDNKHyXbYQvZjxII1Oawp/qctVIpvKebLb3EezgfLk3glBNCJU+qFe3K
-         tELP4y1sxcMuswRkIZWMDr1OOVgZ8u1GpdYUqpnvdKSrgVdsTxbzmelROTcdrYJ6se
-         fuSHf1QrGfSArbrPxftWh5EGFHR/bnXk/4KVAFkloMrXhW7lRA1FL34iKuLzBOt5/H
-         QlCHJZv+u3Q9Z7mPNMA8PX8akS3NLn5Pau6x0BC3eerjfaPrhpjg5O8SlhqBo6XHJg
-         m0JrL7IZAo/YA==
-Date:   Fri, 9 Jun 2023 14:47:20 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Hans Hu <hanshu-oc@zhaoxin.com>
-Cc:     krzk@kernel.org, linux-i2c@vger.kernel.org, cobechen@zhaoxin.com,
-        TonyWWang@zhaoxin.com
-Subject: Re: [PATCH v4] i2c: add support for Zhaoxin I2C controller
-Message-ID: <20230609124720.lir2brhmlpiekrvs@intel.intel>
-References: <20230609031625.6928-1-hanshu-oc@zhaoxin.com>
+        s=k20201202; t=1686316272;
+        bh=g9u9c77/acXG6bBcL5Ks6SfSnMn+y61eQeG3zOBNH1Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KQdPq+W6f0i7pXrhxsuamWXdxd+GVuMHc6rWn8ilCqVPLgIdrY7prTDifdyVEzwin
+         1/3I3YThxb5N659UgPNHPS4oZiAHcsF+Is9VrZDRBWijN+917NQReeaPq0PS95OsCk
+         7Rvmmf2UaNfHFdOxodVlKPD7IiFXnk1+gZZuRNJtz1hCqpl/1FPrKz66zYMkVL5sWu
+         r6vKl4Ap4SwwmWk7sFDOxgRAw/yKFuJ5SbEPZ+hQdg4gvyaS5Vhqxe0lYXLlhENpqV
+         VEejLKA3y5zD9f15CLqWFwL1tCagSICUDKUnWPFJNtIUFmsss2r66PG6t7s89oB/GW
+         AfmYo3n/XNsjQ==
+Message-ID: <01ddc13a-8be1-2b1f-4986-0218fa9c3324@kernel.org>
+Date:   Fri, 9 Jun 2023 15:11:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609031625.6928-1-hanshu-oc@zhaoxin.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4] i2c: add support for Zhaoxin I2C controller
+To:     Andi Shyti <andi.shyti@kernel.org>, Hans Hu <hanshu-oc@zhaoxin.com>
+Cc:     linux-i2c@vger.kernel.org, cobechen@zhaoxin.com,
+        TonyWWang@zhaoxin.com
+References: <20230609031625.6928-1-hanshu-oc@zhaoxin.com>
+ <20230609122414.l2pcuwv5foclkxea@intel.intel>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230609122414.l2pcuwv5foclkxea@intel.intel>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-One more thing,
+On 09/06/2023 14:24, Andi Shyti wrote:
+>> +
+>> +static int zxi2c_probe(struct platform_device *pdev)
+>> +{
+>> +	int err = 0;
+>> +	struct zxi2c *i2c;
+>> +	struct pci_dev *pci;
+>> +	struct device *dev;
+>> +
+>> +	/* make sure this is zhaoxin platform */
+> 
+> Krzysztof is asking what does this mean? I guess here you are
+> checking if the device connected is really the zhaixin plaform of
+> this driver. Makes sense. Just to avoid misunderstandings we
+> could rephrase this with something like:
+> 
+> 	/*
+> 	 * Check if vendor and device ID match the expected
+> 	 * values for the zhaoxin platform
+> 	 */
+> 
+> would it work?
 
-> +static irqreturn_t zxi2c_irq_handle(int irq, void *dev_id)
-> +{
-> +	struct zxi2c *i2c = (struct zxi2c *)dev_id;
-> +	void __iomem *regs = i2c->regs;
-> +	u8 status = zxi2c_get_irq_status(regs);
-> +
-> +	if ((status & ZXI2C_STS_MASK) == 0)
-> +		return IRQ_NONE;
-> +
-> +	if (status & ZXI2C_SCL_TIMEOUT)
-> +		dev_warn(i2c->dev, "timeout(HW), ID: 0x%X\n", i2c->addr);
-> +
-> +	if (status & ZXI2C_STS_ADDRNACK) {
-> +		dev_dbg(i2c->dev, "addr NACK, ID: 0x%X\n", i2c->addr);
-> +	} else if (status & ZXI2C_STS_BYTEEND) {
-> +		i2c->byte_left--;
-> +		if (!i2c->is_read) {
-> +			if (zxi2c_is_nack(regs)) {
-> +				status = ZXI2C_STS_BYTENACK;
-> +				i2c->byte_left++;
-> +				dev_err(i2c->dev, "data NACK, ID: 0x%X\n",
-> +					i2c->addr);
+I don't understand why does it make sense. Only correct devices are
+matched, right? So either this is impossible condition or  this is
+plugged into other proper platform. In both cases you should not have
+such checks.
 
-form these dev_warn, dev_dbg, dev_err in an irq context, what
-worries me is that if something goes wrong you would flood the
-dmesg with error/warning/debug messages.
+Why would ever a driver check in probe what platform it is?
 
-How about using
+Best regards,
+Krzysztof
 
-	dev_err_ratelimited()
-	dev_warn_ratelimited()
-	dev_dbg_ratelimited()
-
-?
-
-Andi
-
-> +			} else if (i2c->byte_left == 0 && i2c->is_last_msg) {
-> +				zxi2c_stop_wr(regs);
-> +			}
-> +		}
-> +	}
-> +
-> +	i2c->event = status;
-> +	zxi2c_clear_status(regs);
-> +	wake_up(&i2c->waitq);
-> +
-> +	return IRQ_HANDLED;
-> +}
