@@ -2,125 +2,84 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85B072AC06
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Jun 2023 16:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64CD72AE39
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Jun 2023 21:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbjFJOB5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 10 Jun 2023 10:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S231968AbjFJTBj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 10 Jun 2023 15:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjFJOB5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 10 Jun 2023 10:01:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB331984;
-        Sat, 10 Jun 2023 07:01:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C75DA6179D;
-        Sat, 10 Jun 2023 14:01:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2277C4339B;
-        Sat, 10 Jun 2023 14:01:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686405715;
-        bh=BLioT/yyyP2CevlFsAiLKf/2/ifbiaMMGEQlmTzRUNc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hj8F+cvUN1KkzcV1U0dzWWI5tMErfMkGN3KrqQj+0xX3ZCzLvaP/Cw77t+LGzYnfL
-         jFVZ898FOBs7yg6HZAwBzFbbyggKYXg3RikaNhFBHRWVy5FXw9fKHeQATETBLjS0nu
-         fYoY8qznPgZDSxiqer/MixhzJ3tAoJVnJedSX6vABsebdS8SF0FGckDydgh38VfbND
-         jxOQ90e6XUM04SeRw60OrdG8D5+9u1PtCAu/KR8W3Vdo2dfUVLxBTJokZiXRRD3Lif
-         8TW3UGhNpi5EZEgd7XDWOGpxU/QXAOsl1PmXUgo7Fw/wkX8ONNvRlKkDeQkG5HyFeO
-         mzDWkk8CZV5Ng==
-Date:   Sat, 10 Jun 2023 16:01:51 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Tao Lan <taolan@huawei.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c-hix5hd2: Add more debug info when transfer fail.
-Message-ID: <20230610140151.dghq3g2xw5wx6g67@intel.intel>
-References: <20220930014405.5469-1-taolan@huawei.com>
+        with ESMTP id S229622AbjFJTBh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 10 Jun 2023 15:01:37 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D01330F7
+        for <linux-i2c@vger.kernel.org>; Sat, 10 Jun 2023 12:01:36 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so5760919276.0
+        for <linux-i2c@vger.kernel.org>; Sat, 10 Jun 2023 12:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686423695; x=1689015695;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QM+qubxwEUOMq3TvmNZKSOIB4E6pfQOK/UfK6GmsEtI=;
+        b=i5Du6R+LrifxAu/L0KPvPnpED5A/YRXwo1rnUhdSvooPZzS/wsJ+1fNtY4S+WiM//5
+         U4UJ1ZuNm3itfoE5kgofedqqXBMd3/mR0A/jEdRpZJBAlT3FxDL3iys0nOJrQu1Xt3Dw
+         K6da1jpG0N4M/iiljf0l+hUTsAq4lJh3qYP5m8zp50swJH0btgyROo2UuaPiDfL6wiki
+         gYVU+j8VtqUD0g6mph1A81n2WKUyIoRzPwXKiN26LZyxC9nC5DWkz21nWlA6MuJLiRCe
+         +FaPGuEc2PZL6yGZ5dDGvUOIj2/xiN2d4Ml63xF2oYn6IfJo2JJtJfV4IEJZH9au/CJZ
+         p3uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686423695; x=1689015695;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QM+qubxwEUOMq3TvmNZKSOIB4E6pfQOK/UfK6GmsEtI=;
+        b=aCIBf1ONynZtbKH7YsfXh5+hWVKVqfSkT4HZ60QHDM9LnMnrulX6D1yF16Yp1peblV
+         PqBo5kHA/VxuzVXIY60mo8xYOcmAGgvZ/Olp06QDAHloCd18An9h85bRVNZv53v13S2k
+         UNu80Bzh+Gh5fUEVWJjd1oN7AWVm06t81roI79bKQo+2TkvSV08T6Z5uEgiC4+3fhpa3
+         8/R7TeGou5aATdMEIhg5L/xAmmUYO1IF+EfcKprUOwgMg8BATEppaD3NyDCzKp9D4kZA
+         YyuOPObovQixewKM5bxO0FisbBoP+ghUfHGFqmhGoe0GmRwIMd1fwwDgf5QbUE8+xatO
+         WuXg==
+X-Gm-Message-State: AC+VfDzrILjQ+qF4SoDzRYlf2Mzt0NZkveGWn0b3gnuZNNzcpF+48MpB
+        NEa7B8LZCZxZ9S4c48ctAXwqRx0FODmLQWpJ0TiJYsJAfVgALo8G
+X-Google-Smtp-Source: ACHHUZ5jiVtmkmCy4sFz1pagiPDkIrsy9yyOv/D/0lPbnaimbT/mN/8MLy1wvQfBzCeyd11+Gs965qZxZxcL4AoztfQ=
+X-Received: by 2002:a25:1e54:0:b0:bad:6997:be19 with SMTP id
+ e81-20020a251e54000000b00bad6997be19mr6503307ybe.1.1686423695390; Sat, 10 Jun
+ 2023 12:01:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930014405.5469-1-taolan@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <202301191721230148862@zte.com.cn>
+In-Reply-To: <202301191721230148862@zte.com.cn>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 10 Jun 2023 21:01:24 +0200
+Message-ID: <CACRpkdY+T8VnqPqKhHMCpqdougo2_spnzaqCthkBvxTAzwrxKQ@mail.gmail.com>
+Subject: Re: [PATCH] i2c: versatile: Use devm_platform_get_and_ioremap_resource()
+To:     ye.xingchen@zte.com.cn
+Cc:     linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Taolan,
+On Thu, Jan 19, 2023 at 10:21=E2=80=AFAM <ye.xingchen@zte.com.cn> wrote:
 
-On Fri, Sep 30, 2022 at 01:44:05AM +0000, Tao Lan wrote:
-> From: taolan <taolan@huawei.com>
-> 
-> The transfer result is checked, classified, and printed, which
-> facilitates debugging.
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
-you are missing your Signed-off-by here.
+Makes sense.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-> ---
->  drivers/i2c/busses/i2c-hix5hd2.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-hix5hd2.c b/drivers/i2c/busses/i2c-hix5hd2.c
-> index 61ae58f57047..e6ab8b20cd01 100644
-> --- a/drivers/i2c/busses/i2c-hix5hd2.c
-> +++ b/drivers/i2c/busses/i2c-hix5hd2.c
-> @@ -366,8 +366,17 @@ static int hix5hd2_i2c_xfer(struct i2c_adapter *adap,
->  			goto out;
->  	}
->  
-> -	ret = num;
-> +	if (i == num) {
-> +		ret = num;
-> +	} else {
-
-it can't be, because if you are exiting normally from the for
-loop, then i is equal to num.
-
-You might want to put this inside the out label, or, even better:
-
-                    stop = (i == num - 1);
-                    ret = hix5hd2_i2c_xfer_msg(priv, msgs, stop);
-                    if (ret < 0)
-    -                       goto out;
-    +                       break;
-            }
-     
-    -       ret = num;
-    +       if (i == num) {
-    +               ret = num;
-    +       } else {
-    +               /* Only one message, cannot access the device */
-                    ...
-    +       }
-     
-    -out:
-
-What do you think?
-
-> +		/* Only one message, cannot access the device */
-> +		if (i == 1)
-> +			ret = -EREMOTEIO;
-> +		else
-> +			ret = i;
->  
-> +		pr_warning("xfer message failed\n");
-
-please use dev_warn here.
-
-BTW, is it warning or error?
-
-Andi
-
-> +	}
->  out:
->  	pm_runtime_mark_last_busy(priv->dev);
->  	pm_runtime_put_autosuspend(priv->dev);
-> -- 
-> 2.22.0
-> 
+Yours,
+Linus Walleij
