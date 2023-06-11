@@ -2,92 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DE772AFEE
-	for <lists+linux-i2c@lfdr.de>; Sun, 11 Jun 2023 03:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9B472B1F4
+	for <lists+linux-i2c@lfdr.de>; Sun, 11 Jun 2023 15:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjFKBhS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 10 Jun 2023 21:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S229624AbjFKNKV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 11 Jun 2023 09:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjFKBhR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 10 Jun 2023 21:37:17 -0400
-Received: from 10.mo561.mail-out.ovh.net (10.mo561.mail-out.ovh.net [87.98.165.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95DC2D44
-        for <linux-i2c@vger.kernel.org>; Sat, 10 Jun 2023 18:37:15 -0700 (PDT)
-Received: from director6.ghost.mail-out.ovh.net (unknown [10.109.146.166])
-        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 39AEC23384
-        for <linux-i2c@vger.kernel.org>; Sun, 11 Jun 2023 01:37:14 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-mx8lq (unknown [10.111.172.114])
-        by director6.ghost.mail-out.ovh.net (Postfix) with ESMTPS id DF9631FDF5;
-        Sun, 11 Jun 2023 01:37:13 +0000 (UTC)
-Received: from etezian.org ([37.59.142.109])
-        by ghost-submission-6684bf9d7b-mx8lq with ESMTPSA
-        id FlwkNUklhWSwAgAA59J6Zg
-        (envelope-from <andi@etezian.org>); Sun, 11 Jun 2023 01:37:13 +0000
-Authentication-Results: garm.ovh; auth=pass (GARM-109S003fc1a52dc-a023-4c56-b5f9-7471cd84b6a3,
-                    457C5B0377F35283987BC361B5457E8A7F11D0C4) smtp.auth=andi@etezian.org
-X-OVh-ClientIp: 93.66.31.89
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Andi Shyti <andi.shyti@kernel.org>
-Subject: [PATCH 3/3] i2c: busses: nomadik: Use dev_err_probe() whenever possible
-Date:   Sun, 11 Jun 2023 03:37:01 +0200
-Message-Id: <20230611013701.1464025-4-andi.shyti@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230611013701.1464025-1-andi.shyti@kernel.org>
-References: <20230611013701.1464025-1-andi.shyti@kernel.org>
+        with ESMTP id S229562AbjFKNKU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 11 Jun 2023 09:10:20 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E019B10DA
+        for <linux-i2c@vger.kernel.org>; Sun, 11 Jun 2023 06:10:18 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id a1e0cc1a2514c-786e637f06dso1196920241.2
+        for <linux-i2c@vger.kernel.org>; Sun, 11 Jun 2023 06:10:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686489018; x=1689081018;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m7ZhYh521wqZIjgkPpyGpRYHntrQZ0TluHrGrja+CRM=;
+        b=mU6RIOrF3DjSdM45/cUEoXwwI1C+/Ml/n0hyfEskEyYSAbxkdD+LCliPtGcDOWCqVr
+         m/Zq7IcZh935MazqgNUgIw/vGaX76AERUH46AJLXNJ8ng/NxMJVGuct593jFWvwFhffD
+         YgdOao72YfAVZBwT/7YfharcgcpZlaUZUqv6KzO4v8gGcX9K7OsSIvkU7ttTild/Kd/A
+         dltRCcSr9oWg4RZH7aTAZrf6As9t507mFS8U1dxEYSIoPt7ewryklnJ4dw4YiztlwLP/
+         drFNtF72ldM8scO2iM2BBR8Grf4j9wPEOiWYiGEt7ylcPeuOVd3QsxiW60KrWenOJ25I
+         Zlaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686489018; x=1689081018;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m7ZhYh521wqZIjgkPpyGpRYHntrQZ0TluHrGrja+CRM=;
+        b=C4MIiIiSzzaztMkD2JpCwT51z3+cz52bNL0tYYYi+x3Rfxex6353W68H2OLH5w0zT2
+         cHiQqf/UkgixCuBiWiUuXteGGS0R//uVHt2yYJnjU97sZ92hzAngx9dohFkAZXsW+CGt
+         /+Qh84xN6swuZwUhqSOufRRP06mhFrYqMxEAAbeMaLMfHg21oFeSIn99j7A4QRjdKoVd
+         QBifDmhNYnFsHEdh18Yg/2XN9EGGNShKIKaBFPxHqDspUotQ0gMyW4Wo9El32F7zXwds
+         wmHT5uF1kjCYFspdS66VOgurovPUzOPfvYdPj7gLEyAiz7rNXHh9XeTlbB8Y5nItzJRm
+         Yv1w==
+X-Gm-Message-State: AC+VfDyGl/ECP+yQUUbyBaHB4USKh5c7BIUeyHv5jU9YKRJmAAwWV9/s
+        vvTxcSoRUdhkPsuJHy/uSPo/BNfmYvmpr4ZQp8k=
+X-Google-Smtp-Source: ACHHUZ5ZzAbvG/WhdhR8tkUvi8TaDh2AcHMS8HsYjgGb2/5i+KObbtQrXfDRXuPHgom4/UGNAsf3dC1nxtNdQMEQTrQ=
+X-Received: by 2002:a05:6102:1353:b0:43b:3c35:58ad with SMTP id
+ j19-20020a056102135300b0043b3c3558admr2920203vsl.33.1686489017987; Sun, 11
+ Jun 2023 06:10:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 2686960131119516231
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrgeduuddggeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepgfduveejteegteelhfetueetheegfeehhfektddvleehtefhheevkeduleeuueevnecukfhppeduvdejrddtrddtrddupdelfedrieeirdefuddrkeelpdefjedrheelrddugedvrddutdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorghnughisegvthgviihirghnrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedupdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Sender: jasimmeir525@gmail.com
+Received: by 2002:a59:af59:0:b0:3c4:8f6d:234c with HTTP; Sun, 11 Jun 2023
+ 06:10:17 -0700 (PDT)
+From:   Rose Darren <rosedarren82@gmail.com>
+Date:   Sun, 11 Jun 2023 13:10:17 +0000
+X-Google-Sender-Auth: PCCe-AnoOHNG08gy7ZFUJ0JJn7g
+Message-ID: <CAAScEX-XkVdmH=+9ye5dai+8M5gjTc959DdxLzCtEuwfYahxDg@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Make use of dev_err_probe() in order to simplify the code and
-avoid printing when returning EPROBE_DEFER.
-
-Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
----
- drivers/i2c/busses/i2c-nomadik.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-nomadik.c b/drivers/i2c/busses/i2c-nomadik.c
-index 2141ba05dfece..1e5fd23ef45c3 100644
---- a/drivers/i2c/busses/i2c-nomadik.c
-+++ b/drivers/i2c/busses/i2c-nomadik.c
-@@ -1000,16 +1000,14 @@ static int nmk_i2c_probe(struct amba_device *adev, const struct amba_id *id)
- 	dev->irq = adev->irq[0];
- 	ret = devm_request_irq(&adev->dev, dev->irq, i2c_irq_handler, 0,
- 				DRIVER_NAME, dev);
--	if (ret) {
--		dev_err(&adev->dev, "cannot claim the irq %d\n", dev->irq);
--		return ret;
--	}
-+	if (ret)
-+		return dev_err_probe(&adev->dev, ret,
-+				     "cannot claim the irq %d\n", dev->irq);
- 
- 	dev->clk = devm_clk_get_enabled(&adev->dev, NULL);
--	if (IS_ERR(dev->clk)) {
--		dev_err(&adev->dev, "could enable i2c clock\n");
--		return PTR_ERR(dev->clk);
--	}
-+	if (IS_ERR(dev->clk))
-+		return dev_err_probe(&adev->dev, PTR_ERR(dev->clk),
-+				     "could enable i2c clock\n");
- 
- 	init_hw(dev);
- 
--- 
-2.40.1
-
+Sauda=C3=A7=C3=A3o a voc=C3=AA
+Voc=C3=AA recebeu minha mensagem ontem =C3=A0 noite para que possamos conve=
+rsar mais?
