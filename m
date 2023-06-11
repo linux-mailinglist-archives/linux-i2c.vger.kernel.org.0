@@ -2,80 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE35172B3AC
-	for <lists+linux-i2c@lfdr.de>; Sun, 11 Jun 2023 21:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1387B72B4CE
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jun 2023 01:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbjFKTXM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 11 Jun 2023 15:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
+        id S229464AbjFKXf7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 11 Jun 2023 19:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233285AbjFKTXK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 11 Jun 2023 15:23:10 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E8110CF
-        for <linux-i2c@vger.kernel.org>; Sun, 11 Jun 2023 12:22:41 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-bc379e4c1cbso1904567276.2
-        for <linux-i2c@vger.kernel.org>; Sun, 11 Jun 2023 12:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686511332; x=1689103332;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U+pK5a95MOVuuN1NBZZk+USYnG+mrZyWKzAgvOFvvZs=;
-        b=Nc7T6DIu65FPGn4TiugWUeSVRoOZKKbBlual+Qjitxa++8q1xipgwWobZmkYpROJ7Y
-         WQH9DRnvHuowMR7uWqjmTReDQlKoxzfs36fzBLyn1RqaEdwQclrKjecIvakESURqg4HI
-         P6PI+UuBlEnBe7b7d/DljfRLDOmEz/QNzYk1MSV+xWLSF6v2vYD8OWZzASF9NBDJpT2N
-         sTWiqhqn5Vcnjb2l/1Tv5JS2L7bVbW5femH1haHSraNiMQdrMcMhwz1yYd6GManiEwXw
-         AIUG7rnH1tjlJhhkyO1raCQo9ZiJy3w4Z999b/tWFlH8C1zdPr5aQo+8zsYGQQHVbV5k
-         ilvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686511332; x=1689103332;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U+pK5a95MOVuuN1NBZZk+USYnG+mrZyWKzAgvOFvvZs=;
-        b=bkgngbRkKFkELgQTQDVpW/mzNwO87P0pxQI/nUgk3tr/tbDeeoB//ZTCJ+3CV+5JtY
-         U1HBkByCVLMNRm8jQzEZMTvNRTyADNn4rG/HvVJnoY4Ar1vPh8Et01W1gOghctkDGOqz
-         uFL39SuI+cP55+qnR8xrKeZGL6S6Fd/RlWfjQTvxw+vX1kD2556wTaf70qsIfIA2nuxC
-         Yt9248+au4PG7K4VVavK8fMyOHt9N6f0WlFFlM/Ys/20h48c95tEbpiO/oLUgrfI5HPC
-         /1lTpMQcyD3hmy5Iq8hVTx6IX+kxgZeSbUMOj9zEs4R9swIMeNg6dyahpHifK4ReLcYO
-         oUnA==
-X-Gm-Message-State: AC+VfDwbH8V84O0Zf/udiiqh0+FyttQLWPlRkqWpdwj7QL9K2vKm1hM6
-        CY+ODGTyHT/lBj/zsvqpyeFx8ZvIWAw0o3V54PQdhF1A7B3F9/s8
-X-Google-Smtp-Source: ACHHUZ5fS9zWrUJsK8WGkYu5SzQ50D9QLh/TjExZmUHq4u7B0xFFQzsCiOBy6Zl2UfSBSUBRG6Pei9jhdSQmwDVjnm8=
-X-Received: by 2002:a25:ba4a:0:b0:ba8:5a5a:8b23 with SMTP id
- z10-20020a25ba4a000000b00ba85a5a8b23mr6576248ybj.40.1686511332435; Sun, 11
- Jun 2023 12:22:12 -0700 (PDT)
+        with ESMTP id S229441AbjFKXf7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 11 Jun 2023 19:35:59 -0400
+X-Greylist: delayed 1804 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 11 Jun 2023 16:35:56 PDT
+Received: from 18.mo584.mail-out.ovh.net (18.mo584.mail-out.ovh.net [188.165.54.143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B966018B
+        for <linux-i2c@vger.kernel.org>; Sun, 11 Jun 2023 16:35:56 -0700 (PDT)
+Received: from director3.ghost.mail-out.ovh.net (unknown [10.108.1.146])
+        by mo584.mail-out.ovh.net (Postfix) with ESMTP id 248B723ACD
+        for <linux-i2c@vger.kernel.org>; Sun, 11 Jun 2023 22:57:46 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-mz2r5 (unknown [10.110.115.220])
+        by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id DD8DE1FD4F;
+        Sun, 11 Jun 2023 22:57:45 +0000 (UTC)
+Received: from etezian.org ([37.59.142.95])
+        by ghost-submission-6684bf9d7b-mz2r5 with ESMTPSA
+        id HYi0M2lRhmTh0AIA8H4CEw
+        (envelope-from <andi@etezian.org>); Sun, 11 Jun 2023 22:57:45 +0000
+Authentication-Results: garm.ovh; auth=pass (GARM-95G001e86cf684-f498-400f-b0b2-f9ad1f212e0c,
+                    CC7C3CD7EA035B6EDB7D18A077CE8F666EF926BD) smtp.auth=andi@etezian.org
+X-OVh-ClientIp: 93.66.31.89
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Linux I2C <linux-i2c@vger.kernel.org>
+Cc:     Andi Shyti <andi.shyti@kernel.org>
+Subject: [PATCH 00/15] i2c: busses: Use devm_clk_get_enabled()
+Date:   Mon, 12 Jun 2023 00:56:47 +0200
+Message-Id: <20230611225702.891856-1-andi.shyti@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230611013701.1464025-1-andi.shyti@kernel.org>
-In-Reply-To: <20230611013701.1464025-1-andi.shyti@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 11 Jun 2023 21:22:01 +0200
-Message-ID: <CACRpkdbGiuvExBGHmJHv8Y_YNYn812-CJteHo4Wmu=rqQE5qpg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] i2c: busses: nomadik cleanups
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 5866501466203753031
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrgedufedgudehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpedvhefgveffteekueefgeehleekueegieeivdeiuedvhfeifeevieffgffhgfektdenucfkphepuddvjedrtddrtddruddpleefrdeiiedrfedurdekledpfeejrdehledrudegvddrleehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorghnughisegvthgviihirghnrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeegpdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 3:37=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org> =
-wrote:
+Hi,
 
-> while browing the i2c code I spotted the unused goto. The other
-> two patches come naturally.
+After having sent some cleanups for using devm_clk_get_enabled(),
+I decided to expand a bit to some of the i2c drivers.
 
-Excellent patches Andi!
+Andi
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Andi Shyti (15):
+  i2c: busses: emev2: Use devm_clk_get_enabled()
+  i2c: busses: xiic: Use devm_clk_get_enabled()
+  i2c: busses: at91-core: Use devm_clk_get_enabled()
+  i2c: busses: exynos5: Use devm_clk_get_enabled()
+  i2c: busses: hix5hd2: Use devm_clk_get_enabled()
+  i2c: busses: jz4780: Use devm_clk_get_enabled()
+  i2c: busses: lpc2k: Use devm_clk_get_enabled()
+  i2c: busses: mt7621: Use devm_clk_get_enabled()
+  i2c: busses: owl: Use devm_clk_get_enabled()
+  i2c: busses: pasemi-platform: Use devm_clk_get_enabled()
+  i2c: busses: stm32f4: Use devm_clk_get_enabled()
+  i2c: busses: stm32f7: Use devm_clk_get_enabled()
+  i2c: busses: sun6i-p2wi: Use devm_clk_get_enabled()
+  i2c: busses: uniphier-f: Use devm_clk_get_enabled()
+  i2c: busses: uniphier: Use devm_clk_get_enabled()
 
-Yours,
-Linus Walleij
+ drivers/i2c/busses/i2c-at91-core.c       |  8 ++---
+ drivers/i2c/busses/i2c-emev2.c           | 17 +++------
+ drivers/i2c/busses/i2c-exynos5.c         | 44 +++++++-----------------
+ drivers/i2c/busses/i2c-hix5hd2.c         | 11 +++---
+ drivers/i2c/busses/i2c-jz4780.c          | 25 ++++----------
+ drivers/i2c/busses/i2c-lpc2k.c           | 22 +++---------
+ drivers/i2c/busses/i2c-mt7621.c          | 20 +++--------
+ drivers/i2c/busses/i2c-owl.c             | 18 +++-------
+ drivers/i2c/busses/i2c-pasemi-platform.c | 22 +++---------
+ drivers/i2c/busses/i2c-stm32f4.c         | 32 ++++++-----------
+ drivers/i2c/busses/i2c-stm32f7.c         | 37 +++++++-------------
+ drivers/i2c/busses/i2c-sun6i-p2wi.c      | 17 ++-------
+ drivers/i2c/busses/i2c-uniphier-f.c      | 21 +++--------
+ drivers/i2c/busses/i2c-uniphier.c        | 21 +++--------
+ drivers/i2c/busses/i2c-xiic.c            | 20 ++++-------
+ 15 files changed, 87 insertions(+), 248 deletions(-)
+
+-- 
+2.40.1
+
