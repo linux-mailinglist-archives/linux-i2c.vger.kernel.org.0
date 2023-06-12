@@ -2,186 +2,90 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751C372C5AF
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jun 2023 15:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A30E972CDBB
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jun 2023 20:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234182AbjFLNTW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 12 Jun 2023 09:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
+        id S236088AbjFLSTm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 12 Jun 2023 14:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235229AbjFLNTV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Jun 2023 09:19:21 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9A5DB;
-        Mon, 12 Jun 2023 06:19:20 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C779CCE6;
-        Mon, 12 Jun 2023 15:18:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1686575928;
-        bh=Bj+SpMG81sTj8aensnQvokjjL3Rwu9dHwfJTAZQIrBk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=unso4Umz7SnrFwQD6vncMYiN8Wghu0zrDkXYhTxYVqPsvHrha9zPuyquvf4leAAsY
-         aP6tl5rSEy52aLPeBmoU19RN6n2unwxLxcfM7a45sx1ngyujr8w2ddKgM30gZBzw7E
-         jipNHUxMxAAHkEqHwP9VbTz9Xv/hkHgz7DA7P+gA=
-Date:   Mon, 12 Jun 2023 16:19:17 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Corey Minyard <cminyard@mvista.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Trent Piepho <tpiepho@gmail.com>
-Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-Message-ID: <20230612131917.GD23921@pendragon.ideasonboard.com>
-References: <OS0PR01MB5922AA27B212F610A5E816138650A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230608103929.GO5058@pendragon.ideasonboard.com>
- <OS0PR01MB592259E6A7ACED4A0548DD228650A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230608125019.GD26742@pendragon.ideasonboard.com>
- <OS0PR01MB5922ECEABE4D6FC385D184008650A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB592265BFDF18F860E1EB4CFE8654A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230612122353.GA22391@pendragon.ideasonboard.com>
- <OS0PR01MB5922D335D53C7B0FA021B3218654A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20230612125405.GA23921@pendragon.ideasonboard.com>
- <CAMuHMdV_xw-+_MakVeLVgv1nCW_GqKQ2hiEfb5J-p2WiSvWV_g@mail.gmail.com>
+        with ESMTP id S235401AbjFLSTl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 12 Jun 2023 14:19:41 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D6B196
+        for <linux-i2c@vger.kernel.org>; Mon, 12 Jun 2023 11:19:39 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b1a66e71f9so55957541fa.2
+        for <linux-i2c@vger.kernel.org>; Mon, 12 Jun 2023 11:19:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686593978; x=1689185978;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sIcg7pJd0cwbfg9c0aZTwZpn8AdMMmzA5pA+DOnVHoc=;
+        b=lq8SNWAj4ps1z4QGh7oCXlUkXWT0ZkbDr2f+ofeufBm5B4qosCS0xSr/3XYbjCwcEW
+         44VcUFD1k5egHTfDL/WNPOm3FlVgX8YF+j6t/k63Q0NcsIjlAHMB96g+ismPDQLhHmhM
+         z1SJWKHOLR4sacHmFcYEvIXj2omo3DKoqO3Rh+vp1ssfUcJmSWuhvHY3MeOwNqyjbOVS
+         8v62n3xKMKJyR7jeXdSp/csjkrojezkea48eRnqVcdMw/GZi2bTgrMeJu54rbaNS2LRi
+         UxwXGapaSqwq9X1RlT9aGA41dVuSUR7JjzPPSi2OFVWzqf/Dl0k6mjW2F3djzvDleVNd
+         Q+rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686593978; x=1689185978;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sIcg7pJd0cwbfg9c0aZTwZpn8AdMMmzA5pA+DOnVHoc=;
+        b=Qd2rw62nf2hTm2t0+77haSR7+fZighv12nQgfUKNUbwHK6LNBCs98Skmw6C3ZA+ooZ
+         aOWnLex2xtk16c6oKnrde+Wf7zAwzjd+fPyYR0UMR/3LZKMUUkT7kvADrCl2uc+qbJ9o
+         +3ruBElrHNg3g17ltUM5ZddyyEAnTEsWv6pfD9u/trgMjeeO7nMkb/3vHxnhEU+K8Hd9
+         uBhIz6apHK7NxOv24k+qyldn1C4Y2Vf27NfTxK026e3oMa4v08rfgaXkeCpybuKQJuSX
+         CNOY/A8WICYKpoomqGRJOUmIxGDJ+54GJBD3YGoRglB2CsTCgzxEl0C5291RYG/4cPd4
+         gy3Q==
+X-Gm-Message-State: AC+VfDxiQzFCNM+ZMJ57nM/1gDtVAODovie6RK3gHB3e886mfVk/N5SA
+        EOk3hMCmQOuZ0Ef9GsRfrnbLz0CQBS0kFA==
+X-Google-Smtp-Source: ACHHUZ7ms7zFXaDHjEi/S+TtdX76PdJYvhfzRQ8QJ3I9vcAJiBJKn0xGwMreNfPwdadl9Ytjdf7P5g==
+X-Received: by 2002:a2e:9456:0:b0:2b1:bfcc:119d with SMTP id o22-20020a2e9456000000b002b1bfcc119dmr3318514ljh.5.1686593978023;
+        Mon, 12 Jun 2023 11:19:38 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id d22-20020a50fb16000000b005149c7b1f49sm5267576edq.64.2023.06.12.11.19.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 11:19:37 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+Cc:     Andi Shyti <andi.shyti@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH 13/15] i2c: busses: sun6i-p2wi: Use devm_clk_get_enabled()
+Date:   Mon, 12 Jun 2023 20:19:35 +0200
+Message-ID: <1853170.tdWV9SEqCh@jernej-laptop>
+In-Reply-To: <20230611225702.891856-14-andi.shyti@kernel.org>
+References: <20230611225702.891856-1-andi.shyti@kernel.org>
+ <20230611225702.891856-14-andi.shyti@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdV_xw-+_MakVeLVgv1nCW_GqKQ2hiEfb5J-p2WiSvWV_g@mail.gmail.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Geert,
-
-On Mon, Jun 12, 2023 at 03:08:46PM +0200, Geert Uytterhoeven wrote:
-> On Mon, Jun 12, 2023 at 2:54 PM Laurent Pinchart wrote:
-> > On Mon, Jun 12, 2023 at 12:42:33PM +0000, Biju Das wrote:
-> > > > Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-> > > > On Mon, Jun 12, 2023 at 09:53:02AM +0000, Biju Das wrote:
-> > > > > How do we proceed here between [1] and [2]?
-> > > > >
-> > > > > DT-Maintainers suggestion:
-> > > > > [1]
-> > > > > raa215300: pmic@12 {
-> > > > >   compatible = "renesas,raa215300";
-> > > > >   reg = <0x12>, <0x6f>;
-> > > > >   reg-names = "main", "rtc";
-> > > > >
-> > > > >   clocks = <&x2>;
-> > > > >   clock-names = "xin";
-> > > > >   /* Add Optional shared IRQ resource and share it to child and handle
-> > > > > it both in parent and child */ };
-> > > > >
-> > > > > Laurent/Wolfram suggestion to split it into two nodes and get rid of this patch:
-> > > > > [2]
-> > > > >   raa215300: pmic @12 {
-> > > > >           compatible = "renesas,raa215300";
-> > > > >           reg = <0x12>;
-> > > > >
-> > > > >           /* Add Optional shared IRQ */
-> > > > >           renesas,raa215300-rtc = <&rtc_raa215300>; /* Parse the handle and Enable RTC , if present.*/
-> > > > >   };
-> > > > >
-> > > > >   rtc_raa215300: rtc@6f {
-> > > > >           compatible = "renesas,raa215300-isl1208";
-> > > >
-> > > > Make this
-> > > >
-> > > >             compatible = "renesas,raa215300-isl1208", "isil,isl1208";
-> > > >
-> > > > >           reg = <0x6f>;
-> > > > >
-> > > > >           /* Add Optional shared IRQ */
-> > > > >           clocks = <&x2>;
-> > > > >           clock-names = "xin";
-> > > > >           renesas,raa215300-pmic = <&pmic>; /* Parse the handle to get PMIC
-> > > > > version to check Oscillator bit is inverted or not */
-> > > >
-> > > > This isn't nice. I would instead add a renesas,invert-xtoscb boolean
-> > > > property. If you don't want different DT sources for different revisions
-> > > > of the PMIC,
-> > >
-> > > I need to support all PMIC versions with same image, as PMIC is just a component on the
-> > > SoM module. So SoM's have different PMIC versions.
-> >
-> > I understand it's not convenient, so let's try to find a good solution.
-> >
-> > > > one option is to perform the auto-detection in the boot
-> > > > loader and update the DT dynamically there.
-> > >
-> > > Yes, this is an option. Bootloader updates "renesas,invert-xtoscb" property based
-> > > on PMIC version.
-> > >
-> > > Not sure, From binding perspective, Documenting "renesas,invert-xtoscb" is OK for
-> > > the relevant maintainers??
-> >
-> > It's fine with me at least :-) I think a property makes sense, as it
-> > describes the device. Updating the device tree in the boot loader based
-> > on auto-detection of features is also fairly common (to set the amount
-> > of DRAM for instance).
-> >
-> > What I'm not entirely sure about in this case is if a property would be
-> > the best option, or two different compatible strings. I'll let the
-> > appropriate maintainer recommend one of those two options. In either
-> > case, the boot loader would be responsible for updating the DT.
+Dne ponedeljek, 12. junij 2023 ob 00:57:00 CEST je Andi Shyti napisal(a):
+> Replace the pair of functions, devm_clk_get() and
+> clk_prepare_enable(), with a single function
+> devm_clk_get_enabled().
 > 
-> Indeed. DT binding best practices 101: do not use properties to
-> distinguish, use compatible values instead.
-> 
-> And don't use different compatible values if you can distinguish using
-> a version register.  Unfortunately the version register is part of the
-> main/first device (the PMIC), so the RTC cannot find out easily...
+> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: Samuel Holland <samuel@sholland.org>
 
-That's not very different from having IP cores whose integration is
-different between different SoC versions. We could easily add SoC match
-code in drivers and map the SoC version to integration data, but it's
-not a good practice. DT helps decoupling integration (and quirks) from
-drivers and allows getting rid of lots of cross-driver communication
-(which used to be handled through board files).
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-> So basically you have an i2c mfd.  The Linux mfd subsystem is tailored
-> for platform devices, so it's not a good match.  The closest we have
-> in i2c is the ancillary device...
+Best regards,
+Jernej
 
-I think an MFD-type solution that's way too much trouble to handle the
-issue at hand. I recommend a DT property here.
 
--- 
-Regards,
-
-Laurent Pinchart
