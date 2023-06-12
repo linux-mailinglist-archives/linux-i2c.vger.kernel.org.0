@@ -2,154 +2,185 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C9172B605
-	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jun 2023 05:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338B472B61A
+	for <lists+linux-i2c@lfdr.de>; Mon, 12 Jun 2023 05:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjFLDUL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 11 Jun 2023 23:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
+        id S232323AbjFLDbv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 11 Jun 2023 23:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234386AbjFLDTj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 11 Jun 2023 23:19:39 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BA219BB
-        for <linux-i2c@vger.kernel.org>; Sun, 11 Jun 2023 20:17:39 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30af86a96b4so2498749f8f.3
-        for <linux-i2c@vger.kernel.org>; Sun, 11 Jun 2023 20:17:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686539855; x=1689131855;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=luzx1jHcYiBbB4g3TD2qwt1BgVetDbdHkYsa7Oauwzs=;
-        b=Ycokdq4qqzdZnW4/YxkzU/GgrUkCyia4E9wCS2SBie8VIe1MqrdgTUXxfL/Q6cipFe
-         hYGgg7ICJCet00aZMrD9rWpTtYTAR4PL5/4DomLTi8GGLYi+XZ8XTKgbAJzI5hEXb8JF
-         swG6tFFltrBXeAg8gYGVyQH+VDFPnNhYFbkc7eme7UfmZuEx3cM+qkHIOSycMivyJtME
-         ftaRM/2qz+/syinwbYKP56gqYSP7coPpRcYyJTYMDkbFqOo/ZLW6Pn9L4OMXyKNSr/dE
-         wWYQy2mv/AdRqD7rSLy5RT9RUSkI789GYnQY5vFUeQ7uMo+RgIQLG9Dy/7r5WkDdYSkj
-         +ydw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686539855; x=1689131855;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=luzx1jHcYiBbB4g3TD2qwt1BgVetDbdHkYsa7Oauwzs=;
-        b=kJxzR/euxe8AMK/VMK8gDkpObLszmPYg63yim9YLTT5QM/lMJ1rWIiv8s20DQRuzct
-         7sUeVPr/kq3sVYt5V6oXvPIt4nmG1NUm5IxsGYI0jZjl+vfd9Vhh7TPQtMkcR1xsLd4V
-         ham5Kg1TdmoAvhiTP33iwKAp77EgeZIHHFrRSU/v8JpQGugDrtlW41I+dU3hG60rXagO
-         cpFu8tNeSkZZEhSRB/CQWWUTV/xhvL+G1cWtpMwiuce0WwUsxHaAlZFrrcOcTU2cTQ0P
-         qxT/mQ2RE7Xjwm8yc7FqhFkLb22n8DecXWZFmafzNkgZR0GZpYuRN1QqXze7sgFhqlKW
-         q3lA==
-X-Gm-Message-State: AC+VfDx9rWCukYC/JzGDAkW76xsHBFoGMY6zZevoTD8ff1mKno6O2ZBX
-        jHvYj8IYeeiqjtnpImB1WuYeanCjGdw=
-X-Google-Smtp-Source: ACHHUZ7nM171xWdj02btDyOeaXstagFbLQCpOXMOTOvniauP7q8gFy9zXuyxjl3QZqA5v0zS/Xwuwg==
-X-Received: by 2002:adf:f352:0:b0:306:2fab:1f81 with SMTP id e18-20020adff352000000b003062fab1f81mr3750481wrp.21.1686539854658;
-        Sun, 11 Jun 2023 20:17:34 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id s2-20020adfecc2000000b0030aed4223e0sm10952982wro.105.2023.06.11.20.17.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Jun 2023 20:17:32 -0700 (PDT)
-Message-ID: <ca6115d9-f39c-9350-f63b-19a40b4f7600@gmail.com>
-Date:   Mon, 12 Jun 2023 05:17:30 +0200
+        with ESMTP id S231764AbjFLDbu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 11 Jun 2023 23:31:50 -0400
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84D0F4
+        for <linux-i2c@vger.kernel.org>; Sun, 11 Jun 2023 20:31:47 -0700 (PDT)
+X-ASG-Debug-ID: 1686540696-086e233136139b0001-PT6Irj
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id LjEbKVIn4quw4Dpw (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 12 Jun 2023 11:31:37 +0800 (CST)
+X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 12 Jun
+ 2023 11:31:36 +0800
+Received: from [10.28.66.68] (10.28.66.68) by ZXBJMBX03.zhaoxin.com
+ (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 12 Jun
+ 2023 11:31:35 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Message-ID: <8273f8a5-bbbc-efeb-16fc-f9eef6561337@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.66.68
+Date:   Mon, 12 Jun 2023 11:31:32 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 08/15] i2c: busses: mt7621: Use devm_clk_get_enabled()
-To:     Andi Shyti <andi.shyti@kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-Cc:     Stefan Roese <sr@denx.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-References: <20230611225702.891856-1-andi.shyti@kernel.org>
- <20230611225702.891856-9-andi.shyti@kernel.org>
-Content-Language: en-US, ca-ES, es-ES
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230611225702.891856-9-andi.shyti@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4] i2c: add support for Zhaoxin I2C controller
+To:     Krzysztof Kozlowski <krzk@kernel.org>, <andi.shyti@kernel.org>,
+        <linux-i2c@vger.kernel.org>
+X-ASG-Orig-Subj: Re: [PATCH v4] i2c: add support for Zhaoxin I2C controller
+CC:     <cobechen@zhaoxin.com>, <TonyWWang@zhaoxin.com>
+References: <20230609031625.6928-1-hanshu-oc@zhaoxin.com>
+ <a6c22dd5-262c-4829-1eda-601cff697553@kernel.org>
+Content-Language: en-US
+Reply-To: <a6c22dd5-262c-4829-1eda-601cff697553@kernel.org>
+From:   Hans Hu <HansHu-oc@zhaoxin.com>
+In-Reply-To: <a6c22dd5-262c-4829-1eda-601cff697553@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.28.66.68]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ ZXBJMBX03.zhaoxin.com (10.29.252.7)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1686540696
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Barracuda-BRTS-Status: 1
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 3200
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.109929
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Krzysztof,
 
 
-On 12/06/2023 00:56, Andi Shyti wrote:
-> Replace the pair of functions, devm_clk_get() and
-> clk_prepare_enable(), with a single function
-> devm_clk_get_enabled().
-> 
-> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-> Cc: Stefan Roese <sr@denx.de>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On 2023/6/9 17:33, Krzysztof Kozlowski wrote:
+> On 09/06/2023 05:16, Hans Hu wrote:
+>> Add Zhaoxin I2C controller driver. It provides the access to the i2c
+>> busses, which connects to the touchpad, eeprom, etc.
+>>
+>> Zhaoxin I2C controller has two separate busses, so may accommodate up
+>> to two I2C adapters. Those adapters are listed in the ACPI namespace
+>> with the "IIC1D17" HID, and probed by a platform driver.
+>>
+>> The driver works with IRQ mode, and supports basic I2C features. Flags
+>> I2C_AQ_NO_ZERO_LEN and I2C_AQ_COMB_WRITE_THEN_READ are used to limit
+>> the unsupported access.
+>>
+>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index cb932c6f8959..bb61e19eef72 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -9761,6 +9761,13 @@ L:	linux-i2c@vger.kernel.org
+>>   F:	Documentation/i2c/busses/i2c-ismt.rst
+>>   F:	drivers/i2c/busses/i2c-ismt.c
+>>   
+>> +ZHAOXIN I2C CONTROLLER DRIVER
+>> +M:	Hans Hu <hanshu@zhaoxin.com>
+>> +L:	linux-i2c@vger.kernel.org
+>> +S:	Maintained
+>> +W:	https://www.zhaoxin.com
+>> +F:	drivers/i2c/busses/i2c-zhaoxin.c
+>> +
+>>   I2C/SMBUS STUB DRIVER
+>>   M:	Jean Delvare <jdelvare@suse.com>
+>>   L:	linux-i2c@vger.kernel.org
+>> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+>> index 87600b4aacb3..1f181757ce2a 100644
+>> --- a/drivers/i2c/busses/Kconfig
+>> +++ b/drivers/i2c/busses/Kconfig
+>> @@ -333,6 +333,16 @@ config I2C_VIAPRO
+>>   	  This driver can also be built as a module.  If so, the module
+>>   	  will be called i2c-viapro.
+>>   
+>> +config I2C_ZHAOXIN
+>> +	tristate "ZHAOXIN I2C Interface"
+>> +	depends on (PCI && ACPI) || COMPILE_TEST
+>> +	help
+>> +	  If you say yes to this option, support will be included for the
+>> +	  ZHAOXIN I2C interface
+>> +
+>> +	  This driver can also be built as a module.  If so, the module
+>> +	  will be called i2c-zhaoxin.
+>> +
+>>   if ACPI
+>>   
+>>   comment "ACPI drivers"
+> Shouldn't you driver be in ACPI drivers?
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-> ---
->   drivers/i2c/busses/i2c-mt7621.c | 20 ++++----------------
->   1 file changed, 4 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-mt7621.c b/drivers/i2c/busses/i2c-mt7621.c
-> index f9c294e2bd3c5..104bb194e9906 100644
-> --- a/drivers/i2c/busses/i2c-mt7621.c
-> +++ b/drivers/i2c/busses/i2c-mt7621.c
-> @@ -282,16 +282,11 @@ static int mtk_i2c_probe(struct platform_device *pdev)
->   	if (IS_ERR(i2c->base))
->   		return PTR_ERR(i2c->base);
->   
-> -	i2c->clk = devm_clk_get(&pdev->dev, NULL);
-> +	i2c->clk = devm_clk_get_enabled(&pdev->dev, NULL);
->   	if (IS_ERR(i2c->clk)) {
-> -		dev_err(&pdev->dev, "no clock defined\n");
-> +		dev_err(&pdev->dev, "Failed to enable clock\n");
->   		return PTR_ERR(i2c->clk);
->   	}
-> -	ret = clk_prepare_enable(i2c->clk);
-> -	if (ret) {
-> -		dev_err(&pdev->dev, "Unable to enable clock\n");
-> -		return ret;
-> -	}
->   
->   	i2c->dev = &pdev->dev;
->   
-> @@ -301,8 +296,7 @@ static int mtk_i2c_probe(struct platform_device *pdev)
->   
->   	if (i2c->bus_freq == 0) {
->   		dev_warn(i2c->dev, "clock-frequency 0 not supported\n");
-> -		ret = -EINVAL;
-> -		goto err_disable_clk;
-> +		return -EINVAL;
->   	}
->   
->   	adap = &i2c->adap;
-> @@ -320,23 +314,17 @@ static int mtk_i2c_probe(struct platform_device *pdev)
->   
->   	ret = i2c_add_adapter(adap);
->   	if (ret < 0)
-> -		goto err_disable_clk;
-> +		return ret;
->   
->   	dev_info(&pdev->dev, "clock %u kHz\n", i2c->bus_freq / 1000);
->   
->   	return 0;
-> -
-> -err_disable_clk:
-> -	clk_disable_unprepare(i2c->clk);
-> -
-> -	return ret;
->   }
->   
->   static void mtk_i2c_remove(struct platform_device *pdev)
->   {
->   	struct mtk_i2c *i2c = platform_get_drvdata(pdev);
->   
-> -	clk_disable_unprepare(i2c->clk);
->   	i2c_del_adapter(&i2c->adap);
->   }
->   
+Ok, so should I add COMPILE_TEST after ACPI?
+Like:
+-if ACPI
++if ACPI || COMPILE_TEST
+[...]
++    config I2C_ZHAOXIN
++        tristate "ZHAOXIN I2C Interface"
++        depends on PCI || COMPILE_TEST
+
+
+> ...
+>
+>> +
+>> +static int zxi2c_probe(struct platform_device *pdev)
+>> +{
+>> +	int err = 0;
+>> +	struct zxi2c *i2c;
+>> +	struct pci_dev *pci;
+>> +	struct device *dev;
+>> +
+>> +	/* make sure this is zhaoxin platform */
+> Why? You didn't provid explanation last time for this.
+
+
+I explained this earlier in my email.  Link:
+https://lore.kernel.org/all/689522d4-b7b3-59ee-685d-fa88315dbde6@zhaoxin.com/
+Since I have not received any further reply from you, I have not made 
+any change.
+
+I saw your latest discussion with Andi. I understand what you mean now,
+so I will drop it in the patch v5.
+
+Thank you,
+Hans
+
+
+>
+>> +	dev = pdev->dev.parent;
+>> +	if (dev && dev_is_pci(dev)) {
+>> +		pci = to_pci_dev(dev);
+>> +		if (pci->vendor != PCI_VENDOR_ID_ZHAOXIN ||
+>> +		    pci->device != ZXI2C_PARENT_PCI_DID)
+>> +			return -ENODEV;
+>> +	} else {
+>> +		return -ENODEV;
+>> +	}
+> Drop it.
+>
+>> +
+>
+> Best regards,
+> Krzysztof
+>
