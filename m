@@ -2,59 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F14D72ECCD
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jun 2023 22:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D9C72ED51
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Jun 2023 22:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240852AbjFMUUq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Jun 2023 16:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
+        id S235301AbjFMUvT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Jun 2023 16:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240925AbjFMUU2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Jun 2023 16:20:28 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567821BEF;
-        Tue, 13 Jun 2023 13:20:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=LafosKzgdV6QNBVzZuGKTZKuLExci9Uc2aVt8Ofq5VE=; b=suLjIK+GAZqbA1346jYT5yhoq+
-        jpyJOOMLYmnv19rfvL0BGj747EtpzPxvvPKZbP73os8+qAReIUni3dp2ajSZNnM7o1d+BXReeuvuu
-        0g8ZoNbkp4gFYNK84R8/E2nXPpVYT0IAiad4Qr4A1PuiO4ACLTwYsRolt/bA7P8E9ZE8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q9AUl-00FlNE-8P; Tue, 13 Jun 2023 22:20:03 +0200
-Date:   Tue, 13 Jun 2023 22:20:03 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
+        with ESMTP id S235185AbjFMUvT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Jun 2023 16:51:19 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7831711;
+        Tue, 13 Jun 2023 13:51:16 -0700 (PDT)
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: peter@korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B531FF805;
+        Tue, 13 Jun 2023 20:51:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+        (envelope-from <peter@korsgaard.com>)
+        id 1q9Ayu-004oB7-Fu; Tue, 13 Jun 2023 22:51:12 +0200
+From:   Peter Korsgaard <peter@korsgaard.com>
 To:     Rob Herring <robh@kernel.org>
-Cc:     Peter Korsgaard <peter@korsgaard.com>,
+Cc:     Andrew Lunn <andrew@lunn.ch>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: i2c: opencores: Add missing type for
  "regstep"
-Message-ID: <bc789af8-fe09-4371-9c34-0b98ebc74b43@lunn.ch>
 References: <20230613201105.2824399-1-robh@kernel.org>
+Date:   Tue, 13 Jun 2023 22:51:12 +0200
+In-Reply-To: <20230613201105.2824399-1-robh@kernel.org> (Rob Herring's message
+        of "Tue, 13 Jun 2023 14:11:04 -0600")
+Message-ID: <871qifw0fz.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230613201105.2824399-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 02:11:04PM -0600, Rob Herring wrote:
-> "regstep" may be deprecated, but it still needs a type.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+>>>>> "Rob" == Rob Herring <robh@kernel.org> writes:
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+ > "regstep" may be deprecated, but it still needs a type.
+ > Signed-off-by: Rob Herring <robh@kernel.org>
+ > ---
+ >  Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml | 1 +
+ >  1 file changed, 1 insertion(+)
 
-    Andrew
+ > diff --git a/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml b/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
+ > index 85d9efb743ee..d9ef86729011 100644
+ > --- a/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
+ > +++ b/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
+ > @@ -60,6 +60,7 @@ properties:
+ >      default: 0
+ 
+ >    regstep:
+ > +    $ref: /schemas/types.yaml#/definitions/uint32
+
+Reviewed-by: Peter Korsgaard <peter@korsgaard.com>
+
+-- 
+Bye, Peter Korsgaard
