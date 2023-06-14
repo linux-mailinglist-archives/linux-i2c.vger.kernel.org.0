@@ -2,71 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A1B7321E6
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jun 2023 23:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C37732514
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jun 2023 04:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjFOVtL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 15 Jun 2023 17:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
+        id S229588AbjFPCNo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 15 Jun 2023 22:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjFOVtJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Jun 2023 17:49:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428272965
-        for <linux-i2c@vger.kernel.org>; Thu, 15 Jun 2023 14:49:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0FF26217D
-        for <linux-i2c@vger.kernel.org>; Thu, 15 Jun 2023 21:49:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C87C433C8;
-        Thu, 15 Jun 2023 21:49:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686865748;
-        bh=8sfT0KKH+qYYgBJrgFZoZLtkBwqNnR7GCNpcWMQ+UUQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PRsJxNUbqlfJPPKOPDhm2y0ILJQN102G4C4kbWbEjRewzbffT5Lds29mzEPD0NJcl
-         mAVQ6Y83HnqO22XFnikkP6t0el2ZB2MQqsNmo2tsjWclRWPefY8TjmwN97wc2iZZzC
-         HmPWLh71yP+WTt+tMoRUJsFdZHOF4LmaqXvk0UYoq/AiHoc59HA7rq26d1//m+jJV1
-         E68aS/EgO6aMvbpOuZs4Q4+kjGkazEpkG/dTMcu3bZ4E0Ehn2si7b9npYw8RyxWzpn
-         oh9bi/0C88ubNx40X+zOmFBK5tS5kJ4CYkKzOCgnHV3RbEp7uhUumAZ+mpFlWMjBCB
-         foe51A9bJo1Ug==
-Date:   Thu, 15 Jun 2023 23:49:04 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 2/4] i2c: i801: Replace acpi_lock with I2C bus lock
-Message-ID: <20230615214904.uj2gpsq35kzczuss@intel.intel>
-References: <c39c8371-5ab5-45f7-d3cf-39ea50de0afb@gmail.com>
- <8f88906f-c7da-eb3a-2f14-0f4d46202517@gmail.com>
+        with ESMTP id S229581AbjFPCNo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Jun 2023 22:13:44 -0400
+Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3FE2965
+        for <linux-i2c@vger.kernel.org>; Thu, 15 Jun 2023 19:13:41 -0700 (PDT)
+Received: by mail.durme.pl (Postfix, from userid 1002)
+        id E46B160584; Wed, 14 Jun 2023 07:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
+        t=1686728561; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        h=Date:From:To:Subject:From;
+        b=f6y63+UgkvTHN4a9faJljG4C0hb1XFyGxRJTA8DKoLMBXXS54mqg3FZkDbYslTdqq
+         F2SMftetB8OhIRS8mAqk5SKZqBmtXt5MYfqS3YPX9gP+1HilHEAzJVr5FKgSoQWpU6
+         HE9xLamM7hvJdfhmMCo7+ATbSZsRd+AWIHKnCRATI+DjTfLSePdEnOc5XYl4NyoCuH
+         eNfBkPJfQ/RH9k7c9XKlhUE3fXwfmupyKl9vI6oAuk5X6PbQYrI4nQN+yQ96kEsQZG
+         W6d2Y0xK+H+598hPjqq9uaBP8jghkSAAqa5y4j6XK3vT07TwgehS+Wx0PVq5vErqzW
+         nJOyT3+PnKBrw==
+Received: by mail.durme.pl for <linux-i2c@vger.kernel.org>; Wed, 14 Jun 2023 07:40:47 GMT
+Message-ID: <20230614064501-0.1.2h.9j7r.0.i5sh35oypc@durme.pl>
+Date:   Wed, 14 Jun 2023 07:40:47 GMT
+From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
+To:     <linux-i2c@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.durme.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f88906f-c7da-eb3a-2f14-0f4d46202517@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Heiner,
+Dzie=C5=84 dobry,
 
-On Sat, Mar 04, 2023 at 10:33:05PM +0100, Heiner Kallweit wrote:
-> I2C core ensures in i2c_smbus_xfer() that the I2C bus lock is held when
-> calling the smbus_xfer callback. That's i801_access() in our case.
-> I think it's safe in general to assume that the I2C bus lock is held
-> when the smbus_xfer callback is called.
-> Therefore I see no need to define an own mutex.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
-Thanks,
-Andi
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
+
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+
+
+Pozdrawiam
+Krystian Wieczorek
