@@ -2,50 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F033F72F0CC
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jun 2023 02:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F7A72F0DB
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jun 2023 02:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbjFNAI7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 13 Jun 2023 20:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
+        id S241309AbjFNAQs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 13 Jun 2023 20:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjFNAI6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Jun 2023 20:08:58 -0400
+        with ESMTP id S232518AbjFNAQl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 13 Jun 2023 20:16:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325A61AD;
-        Tue, 13 Jun 2023 17:08:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7561739;
+        Tue, 13 Jun 2023 17:16:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AB6262DA6;
-        Wed, 14 Jun 2023 00:08:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F9BC433C8;
-        Wed, 14 Jun 2023 00:08:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54DCA63BEF;
+        Wed, 14 Jun 2023 00:16:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11D8C433C8;
+        Wed, 14 Jun 2023 00:16:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686701335;
-        bh=XVcCLcjgh55HgAnQRCWkPHl4rRjmtMsm/qZTPHVmnBY=;
+        s=k20201202; t=1686701789;
+        bh=kj9Ya7IV2GrY8S1ZmVY2sjyy1iwtpsSoYAouFrgDpLw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IPP4+tOzUEYHR/mpDuoyZbwNHSpgN2cNlnywQObuJKAna3GdD5z2sqYDPVCsBKfJp
-         0H47dIdciBIv4CJIxy5EoYAnr9wBjfi3A7McQf+kFHfg3ivcpMSK2fQXm4bKCpkVmS
-         ONYPs3T0rMraQ3E5nSS0vpG7fudbpTTCdHMGG4DCJKobCoLGXKlRtK4MRgdY+7hVYs
-         GTOoIZdEtkWlsKmRBPHC7m54ixovwBNJUrRE3RfcabOUz7fJlZJHQhV1uVJHpXsUd/
-         vfMKR6F0Xk+u0K5ZJmEXng+4+884IKNiF2FObt/4LvFj6S8cqKcQeeS8wpwA2PoAvx
-         pU7xkqM89xThw==
-Date:   Wed, 14 Jun 2023 02:08:41 +0200
+        b=BUqgYQRYma4PsE5pRtQr/DfNgQmVbQwUn/N1SkJ6TNEuJE9girQHlOuLbAifF3lA7
+         Xn4JCt/UTJX2ThcxOnZUrs3jMotcUhYZ1XNitI4tg4e4r/65P4wny11o9pyHJw2yz/
+         A/KnfqscJXCVkogfi6WiI6xeooXq4MMEdId2iLG5QDJZgz6ybBVtYF3ZW6rikLUunr
+         4ndYgZnqGQmpApXdoi8MeyhxK2+k8AoDIN1lGWlcKr76SfnoVoxC7/ZHl87oZqvn1L
+         SUSfvZ3TtSamzsBuZXAxioGNqk+TZH7+HfblfrNTqp6GQb22WgG6gneZAXVtHmGZI7
+         uNyw+bRqNrb1g==
+Date:   Wed, 14 Jun 2023 02:16:21 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
-To:     carlos.song@nxp.com
-Cc:     aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, xiaoning.wang@nxp.com,
-        haibo.chen@nxp.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: imx-lpi2c: directly return ISR when detect a NACK
-Message-ID: <20230614000841.frvf4n5zgh5eihmq@intel.intel>
-References: <20230524024002.1790405-1-carlos.song@nxp.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
+        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Evan.Quan@amd.com, Lijo.Lazar@amd.com,
+        Sanket.Goswami@amd.com
+Subject: Re: [PATCH v2] usb: typec: ucsi: Mark dGPUs as DEVICE scope
+Message-ID: <20230614001621.iyxi2khz4hmcbl3x@intel.intel>
+References: <20230518161150.92959-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230524024002.1790405-1-carlos.song@nxp.com>
+In-Reply-To: <20230518161150.92959-1-mario.limonciello@amd.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,67 +57,32 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Hi Mario,
 
-On Wed, May 24, 2023 at 10:40:02AM +0800, carlos.song@nxp.com wrote:
-> From: Gao Pan <pandy.gao@nxp.com>
+On Thu, May 18, 2023 at 11:11:50AM -0500, Mario Limonciello wrote:
+> power_supply_is_system_supplied() checks whether any power
+> supplies are present that aren't batteries to decide whether
+> the system is running on DC or AC.  Downstream drivers use
+> this to make performance decisions.
 > 
-> A NACK flag in ISR means i2c bus error. In such codition,
-> there is no need to do read/write operation. It's better
-> to return ISR directly and then stop i2c transfer.
+> Navi dGPUs include an UCSI function that has been exported
+> since commit 17631e8ca2d3 ("i2c: designware: Add driver
+> support for AMD NAVI GPU").
 > 
-> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
-> Signed-off-by: Gao Pan <pandy.gao@nxp.com>
-> Signed-off-by: Carlos Song <carlos.song@nxp.com>
-
-looks good to me, just a little note.
-
-> ---
->  drivers/i2c/busses/i2c-imx-lpi2c.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
+> This UCSI function registers a power supply since commit
+> 992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
+> but this is not a system power supply.
 > 
-> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> index 1af0a637d7f1..11240bf8e8e2 100644
-> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> @@ -514,15 +514,17 @@ static irqreturn_t lpi2c_imx_isr(int irq, void *dev_id)
->  	temp = readl(lpi2c_imx->base + LPI2C_MSR);
->  	temp &= enabled;
->  
-> +	if (temp & MSR_NDF) {
-> +		complete(&lpi2c_imx->complete);
-> +		goto ret;
-> +	}
-> +
->  	if (temp & MSR_RDF)
+> As the power supply for a dGPU is only for powering devices connected
+> to dGPU, create a device property to indicate that the UCSI endpoint
+> is only for the scope of `POWER_SUPPLY_SCOPE_DEVICE`.
+> 
+> Link: https://lore.kernel.org/lkml/20230516182541.5836-2-mario.limonciello@amd.com/
+> Reviewed-by: Evan Quan <evan.quan@amd.com>
+> Tested-by: Evan Quan <evan.quan@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-else if () and remove goto and brackets. You have used the
-"else if" below and we can keep it consistent.
+Acked-by: Andi Shyti <andi.shyti@kernel.org> 
 
-This way the commit log should be a bit different as we
-decide to check exclusively using else if's for the active bits.
-This way we also stop processing the MSR register if a NACK is
-received.
-
-With the above I can give you a conditional r-b: are you able to
-pull Dong into this review as Wolfram asked?
-
-Thank you,
+Thanks,
 Andi
-
->  		lpi2c_imx_read_rxfifo(lpi2c_imx);
-> -
-> -	if (temp & MSR_TDF)
-> +	else if (temp & MSR_TDF)
->  		lpi2c_imx_write_txfifo(lpi2c_imx);
->  
-> -	if (temp & MSR_NDF)
-> -		complete(&lpi2c_imx->complete);
-> -
-> +ret:
->  	return IRQ_HANDLED;
->  }
->  
-> -- 
-> 2.34.1
-> 
