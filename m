@@ -2,51 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C1F72F7AF
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jun 2023 10:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C398172F7EF
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Jun 2023 10:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbjFNIVw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Jun 2023 04:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
+        id S235230AbjFNId4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 14 Jun 2023 04:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbjFNIVv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Jun 2023 04:21:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A772189
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Jun 2023 01:21:50 -0700 (PDT)
+        with ESMTP id S243564AbjFNIdz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Jun 2023 04:33:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9246019A5;
+        Wed, 14 Jun 2023 01:33:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 321B763725
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Jun 2023 08:21:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21C31C433C0;
-        Wed, 14 Jun 2023 08:21:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 285F563EFF;
+        Wed, 14 Jun 2023 08:33:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D7AC433C8;
+        Wed, 14 Jun 2023 08:33:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686730909;
-        bh=Ns1MiWR6esOI5bHQkePdBLVbg25z7F+DWRDefAzhr20=;
+        s=k20201202; t=1686731633;
+        bh=0rZ8RWY+x96dvex3Xf8bOyg3oVtLNa1ds5FJhH40Hfg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dfN77VBSYWz5XrbTUEcD793Z1xFF+qIGUGQODty+RlCaQ2xvmC8WPELZvPacAejLc
-         vMPo++KRgnrB1YKKxF7BbbQlIQ67mYLK0WQJ1KnaR3s6ykRu8CzdnPIGFqudC5E50w
-         4MH/bcs1UsQTBxwGTh6JxNPEKPRM6jY/1/llDDnQ8EQZHJdjjgQTKry1GhDSLRY+4f
-         rmn9JrxrBGFn2+/SXO1jGBJAQnaIyQduqufSrTkZWB17hE13NJkgTkxqxJDzPN68+h
-         6UeCd27UyQ9Vjb1lL5o5i6rMLI/xassJ0h7rSgTl1I5atbk/xvT3cjfZV28qOuegzy
-         0K0JuLyBvvLnA==
-Date:   Wed, 14 Jun 2023 10:21:46 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Hans Hu <hanshu-oc@zhaoxin.com>
-Cc:     krzk@kernel.org, linux-i2c@vger.kernel.org, cobechen@zhaoxin.com,
-        TonyWWang@zhaoxin.com
-Subject: Re: [PATCH v5] i2c: add support for Zhaoxin I2C controller
-Message-ID: <20230614082146.ogcgsxsqdzgfhnur@intel.intel>
-References: <20230609031625.6928-1-hanshu-oc@zhaoxin.com>
- <20230614073433.280501-1-hanshu-oc@zhaoxin.com>
+        b=fMMneEOvp1Z3C0JGsSjn1GBvFcdhMz5kvaCbD66tQWVpUvUd1Zb/Oh0gEw+Qj/gFB
+         boIjowFuIEoewwLqnHSEtPXLdLuM7Tm0wa9z32xDhB3jVbbOkMp551e52o0ZILXXLx
+         3rAoPpvuFeZSzYl9Iy4zi86f5T8I5qnBB4s2CSZcdnyrZHDtwP0cw2KRcpPDqxZdzf
+         qh0kzzWEecqTnTXcPTkGF1yT9KK6Sa5HeqPYEF856x/AuQnzAWMT4nMxHRQtV7M3rO
+         EpmEij/vWxR/ieKpuMBpwVL+DlHy/LiklrAkwLYRaM83tqbHAJcNva0zpRDMSwqwE6
+         GPIKRvT8BtGIw==
+Date:   Wed, 14 Jun 2023 10:33:49 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Peter Korsgaard <peter@korsgaard.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: opencores: Add missing type for
+ "regstep"
+Message-ID: <ZIl7bcQ/cldwd2O/@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230613201105.2824399-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iCgwqCn6iatDu4+P"
 Content-Disposition: inline
-In-Reply-To: <20230614073433.280501-1-hanshu-oc@zhaoxin.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230613201105.2824399-1-robh@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,113 +65,38 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Hans,
 
-On Wed, Jun 14, 2023 at 03:34:33PM +0800, Hans Hu wrote:
-> Add Zhaoxin I2C controller driver. It provides the access to the i2c
-> busses, which connects to the touchpad, eeprom, etc.
-> 
-> Zhaoxin I2C controller has two separate busses, so may accommodate up
-> to two I2C adapters. Those adapters are listed in the ACPI namespace
-> with the "IIC1D17" HID, and probed by a platform driver.
-> 
-> The driver works with IRQ mode, and supports basic I2C features. Flags
-> I2C_AQ_NO_ZERO_LEN and I2C_AQ_COMB_WRITE_THEN_READ are used to limit
-> the unsupported access.
-> 
-> Change since v4:
->   * delete platform check in probe()
->   * move config interface under ACPI in Kconfig file
->   * add irq disable when access error
->   * fix some trivial issues
->   Link: https://lore.kernel.org/all/20230609031625.6928-1-hanshu-oc@zhaoxin.com/
+--iCgwqCn6iatDu4+P
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Looks very good, almost ready for r-b, I have few little nitpicks
-though, that are more a matter of style.
+On Tue, Jun 13, 2023 at 02:11:04PM -0600, Rob Herring wrote:
+> "regstep" may be deprecated, but it still needs a type.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-[...]
+Added fixes tag and applied to for-current, thanks!
 
-> +static const u32 zxi2c_speed_params_table[][3] = {
-> +	/* speed, ZXI2C_TCR, ZXI2C_FSTP, ZXI2C_CS, ZXI2C_SCLTP */
-> +	{I2C_MAX_STANDARD_MODE_FREQ, 0, ZXI2C_GOLDEN_FSTP_100K},
-> +	{I2C_MAX_FAST_MODE_FREQ, ZXI2C_FAST_SEL, ZXI2C_GOLDEN_FSTP_400K},
-> +	{I2C_MAX_FAST_MODE_PLUS_FREQ, ZXI2C_FAST_SEL, ZXI2C_GOLDEN_FSTP_1M},
-> +	{I2C_MAX_HIGH_SPEED_MODE_FREQ, ZXI2C_HS_SEL, ZXI2C_GOLDEN_FSTP_3400K},
 
-can you leave a space here between brackets:
+--iCgwqCn6iatDu4+P
+Content-Type: application/pgp-signature; name="signature.asc"
 
-{ I2C_MAX_FAST_MODE_PLUS_FREQ, ZXI2C_FAST_SEL, ZXI2C_GOLDEN_FSTP_1M },
+-----BEGIN PGP SIGNATURE-----
 
-> +};
-> +
-> +static void zxi2c_set_bus_speed(struct zxi2c *i2c)
-> +{
-> +	u8 i, count;
-> +	const u32 *params = NULL;
-> +
-> +	count = ARRAY_SIZE(zxi2c_speed_params_table);
-> +	for (i = 0; i < count; i++) {
-> +		if (zxi2c_speed_params_table[i][0] == i2c->speed) {
-> +			params = zxi2c_speed_params_table[i];
-> +			break;
-> +		}
-> +	}
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSJe20ACgkQFA3kzBSg
+KbbfkA//anGUwFbI7yfPlKq9xDKxmk6CVk/CrxQAwUpWKP/upFsgHsUV9WXMAKJ1
+mJOrXtfWovOBlvj3PZo80JuymI3k+/VOlqYOcfxLZ50XvrRA2ttqnC7LrCbzOltW
+wEOO9pHRCMJbeulr9+WN+vA78XAxVYVrCjTEXB3rkpApxqd9GV45H5VJ+J3tDMep
+62XqwqDB0fO/aqHPCJ4AinPzlnr+9y0ng7HgxEYcV0aW7mgmyGns1f6u1R+CgPjt
+TSQfJes6s28YhpZePh84QjIoyRZ02AjcetYJxyzU3ZumM4zbScf83uYjtW8MhmiQ
+iBFeoWeab7cqwG1nbdq2SElI2eqciXD7b+vF7mtmdMIkQ0AHXf2xPYZZSMuL+WUn
+Mkbx7jLj/vFoiTU5SQa34fcJwDtEXhfyMzv5xlg5/ebSsRgpvczg0nhZiVyIND+X
+vpOFuo6hgbCw18aWuIaq2cu9FLofTdYQHpUm6xRCYfq77DfXo99/FsDKfB9bIgS5
+Yc/hFZavXUG6i+wh7mI55tpZTlKh6jIAMXJdqgFgJBF3pD0wd41aaLaBBeQ9y3BE
+n3Fy8u8NjwJHTNw5CFmAlJvbCyQsLEtiEQc0nrxT8cyWmKI8M18F1BgEES3s9jM1
+LtSlVKTPHb5oataiWhfShUBzVSCFMAj2GRsye356+TS5ZEbV5iw=
+=HbBV
+-----END PGP SIGNATURE-----
 
-the brackets around the for() are not necessary
-
-> +	iowrite8(params[1], i2c->regs + ZXI2C_TCR);
-> +	if (abs(i2c->fstp - params[2]) > 0x10) {
-> +		/* if BIOS setting value far from golden value,
-> +		 * use golden value and warn user
-> +		 */
-
-the comment should be
-
-	/*
-	 * if BIOS setting value far from golden value,
-	 * use golden value and warn user
-	 */
-
-> +		dev_warn_once(i2c->dev, "speed:%d, fstp:0x%x, golden:0x%x\n",
-> +				i2c->speed, i2c->fstp, params[2]);
-> +		iowrite8(params[2], i2c->regs + ZXI2C_FSTP);
-> +	} else {
-> +		iowrite8(i2c->fstp, i2c->regs + ZXI2C_FSTP);
-> +	}
-
-[...]
-
-> +	if (num == 1 && msgs->len <= ZXI2C_FIFO_SIZE && msgs->len >= 3)
-> +		err = zxi2c_fifo_xfer(i2c, msgs);
-> +	else
-> +		err = zxi2c_byte_xfer(i2c, msgs, num);
-> +
-> +	zxi2c_enable_irq(i2c->regs, ZXI2C_EN_FIFOEND | ZXI2C_EN_BYTEEND, false);
-
-can you add a comment here to explain that interrupts have been
-enabled inside the xfer functions? Otherwise someone might wonder
-why this line.
-
-> +	return err;
-> +}
-
-[...]
-
-> +static const struct acpi_device_id zxi2c_acpi_match[] = {
-> +	{"IIC1D17", 0},
-> +	{},
-
-the comma is not needed and please leave a space
-
-	{ "IIC1D17", 0 },
-	{ }
-
-With the little things above, you can add:
-
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
-
-Thank you!
-Andi
-
-> +};
-> +MODULE_DEVICE_TABLE(acpi, zxi2c_acpi_match);
+--iCgwqCn6iatDu4+P--
