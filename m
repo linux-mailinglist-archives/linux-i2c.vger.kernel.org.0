@@ -2,132 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45915730CE4
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jun 2023 03:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4B373109A
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jun 2023 09:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233018AbjFOBvm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 14 Jun 2023 21:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
+        id S244542AbjFOHap (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 15 Jun 2023 03:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjFOBvl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 14 Jun 2023 21:51:41 -0400
-Received: from smtp.bonedaddy.net (smtp.bonedaddy.net [45.33.94.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D981DF
-        for <linux-i2c@vger.kernel.org>; Wed, 14 Jun 2023 18:51:40 -0700 (PDT)
-Received: by smtp.bonedaddy.net (Postfix, from userid 10001)
-        id B5CD030738D; Wed, 14 Jun 2023 21:47:29 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bonedaddy.net;
-        s=mail; t=1686793649;
-        bh=Ktx3MrA1IekIkert3j7d0rZRIYPIEG33HW+eoxbTDH0=;
-        h=Subject:From:To:Cc:In-Reply-To:References:Date;
-        b=lcsiXUxoeh8N9gX01Hv0nCzG1gvsYVzQxn8XcLCZp+FfGADudw1ERx+26qEhsB3f/
-         78VORCiS1lllLtoL1/KMUwvMi+DNvLVtHlUh6nOlh6uVoC2xaFBIAsQSOq3NcDQdPK
-         u0VQx2DUTmFtoKZQEXNFxwlKhvWatWYVjEBP10Fpbcsz/vZigfC8yJQQJdvzO51dHs
-         IZG5FvTseETlLMWOy2E4BFeNEoGVoM/JjmHQI6LpQN4Uh3XVRg4uH0Nks+WBC9I2ww
-         a9FB48LkBIdu73ygHssrDXfOxekjKJx9t8JU88i04ZcVKHVCAPd/bjNnAuqUbnjQfX
-         LYf3nDZ6PyOew==
-Message-ID: <738c0e105090e76d16303af479e2577af91192e6.camel@bonedaddy.net>
-Subject: Re: [PATCH i2c-tools v2] i2cdetect: add messages for errors during
- bus listing
-From:   Paul Wise <pabs3@bonedaddy.net>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org
-In-Reply-To: <ZIoxmbo9Cu+bPHsF@shikoro>
-References: <20230526002445.57064-1-pabs3@bonedaddy.net>
-         <ZIoxmbo9Cu+bPHsF@shikoro>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-Ur52jb23nGOnxQxf4AYD"
-Date:   Thu, 15 Jun 2023 09:51:15 +0800
+        with ESMTP id S238540AbjFOHan (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Jun 2023 03:30:43 -0400
+X-Greylist: delayed 10287 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 00:30:41 PDT
+Received: from mail.sitirkam.com (mail.aurorateknoglobal.com [103.126.10.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2898312E;
+        Thu, 15 Jun 2023 00:30:41 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.sitirkam.com (Postfix) with ESMTP id 137E24E7BE86;
+        Thu, 15 Jun 2023 08:32:09 +0700 (WIB)
+Received: from mail.sitirkam.com ([127.0.0.1])
+        by localhost (mail.sitirkam.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id TI0pmiUZZ583; Thu, 15 Jun 2023 08:32:08 +0700 (WIB)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.sitirkam.com (Postfix) with ESMTP id 9AE184E7B19D;
+        Thu, 15 Jun 2023 08:32:03 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.sitirkam.com 9AE184E7B19D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sitirkam.com;
+        s=B8AB377C-ED3B-11EA-8736-9248CAEF674E; t=1686792723;
+        bh=q7vDHy+gLAr4GKZUDI+hjt8I93kvW09nNmGJORUTyfg=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=dFdTPJycpJmgou/MhEbWyDym6M0WdU7NrsxT8ZckOfUSB2oGAZE0XYGX/SF+sDMxv
+         4eitajis0BU5mQm3ZSquoz13vgtOn6XXefenT3O7CdhmzdL/uPYXXfg/2d3MXc9aZK
+         OOmEzeXxeB/9bw3LwcawQuNVjyyTJdN1zs9HyzUsINWKOgW4TmpOfMgciHQYg3GbUB
+         sJ/xiki6lWhxJRs7M+vfnQxi8d8IF82+vIcxJXMPou7rOG6G9QT+/dJVRMnDU5xTHg
+         55V8oKqEZu8Ws1oCurj43MyJqDsrnfLSlgpQQCsDrAWnkTbP3tSRecNiuybK3gGO17
+         9DcgiALydjzGA==
+X-Virus-Scanned: amavisd-new at mail.sitirkam.com
+Received: from mail.sitirkam.com ([127.0.0.1])
+        by localhost (mail.sitirkam.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 09RgNCqtcJrY; Thu, 15 Jun 2023 08:32:03 +0700 (WIB)
+Received: from [185.169.4.111] (unknown [185.169.4.111])
+        by mail.sitirkam.com (Postfix) with ESMTPSA id D830A4E7ACFF;
+        Thu, 15 Jun 2023 08:31:55 +0700 (WIB)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Evolution 3.48.2-1 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Spende
+To:     Recipients <admin@sitirkam.com>
+From:   "Maria-Elisabeth Schaeffler" <admin@sitirkam.com>
+Date:   Wed, 14 Jun 2023 18:34:03 -0700
+Reply-To: schaefflermariaelisabeth1941@gmail.com
+Message-Id: <20230615013155.D830A4E7ACFF@mail.sitirkam.com>
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,NIXSPAM_IXHASH,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [schaefflermariaelisabeth1941[at]gmail.com]
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Your email account has been selected for a donation of =E2=82=AC1,700,000. =
+Please contact me for more information.
 
---=-Ur52jb23nGOnxQxf4AYD
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, 2023-06-14 at 23:31 +0200, Wolfram Sang wrote:
-
-> Hmm, I wonder if a simple "Is it mounted?" isn't enough?
-
-It depends on the sophistication and mental state you want to require
-from i2cdetect users. Some i2cdetect users might not know or currently
-remember the exact commands needed to fix their issues. Personally, I
-haven't memorised how to mount these directories, so I would need to go
-look up the documentation. Others might go ask mailing lists, search
-engines or AI assistants if they are online. So as I said on the Debian
-ARM list, since the issues all have very simple solutions, I added the
-commands to fix them instead of pointers to documentation about each
-error, or expecting users to know about them. Given that the RPi has
-lead to a large influx of users with potentially little Linux
-experience doing GPIO stuff, this patch could reduce support requests.
-
-https://lists.debian.org/msgid-search/8e2bfcf0375433acec188bbbf11fa9117076f=
-e6b.camel@debian.org
-
-Please don't merge this just yet though; thinking about this more
-and reading the Debian thread a bit more, I think I want to send
-a v3 patch that also tells users that pass the wrong i2c bus number
-to run `i2cdetect -l` to find the right bus.
-
-https://lists.debian.org/msgid-search/e496b7d9-e047-43df-9fe3-f65bdc37bf93@=
-app.fastmail.com
-https://lists.debian.org/msgid-search/E1poJwd-0002Go-RM@enotuniq.net
-
-
-> If there are no devices_present here, then we fail without printing
-> something? Is this intended?
-
-There wouldn't be a failure, just exit without printing any busses and
-without printing any error messages. Perhaps it should a print no
-busses found error message in that case instead?
-
-> Yes, for rare cases this could mean that loading "i2c-dev" does not
-> solve the problem, but using i2ctools without i2c-dev is going to fail
-> at some point anyhow, so IMHO we can complain about this early?
-
-Sure, but that wouldn't necessarily be very user-friendly.
-
-If there are no i2c busses present in the other i2c directories (which
-IIRC are always present), then there are no i2c busses on the system
-and so loading i2c-dev will not make i2cdetect print any busses, so
-loading i2c-dev is pointless, so we don't ask the user to do that,
-because it would be frustrating to be asked to do something that will
-then not mean any change in the situation, aka zero devices output.
-
---=20
-bye,
-pabs
-
-https://bonedaddy.net/pabs3/
-
---=-Ur52jb23nGOnxQxf4AYD
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEYQsotVz8/kXqG1Y7MRa6Xp/6aaMFAmSKbo8ACgkQMRa6Xp/6
-aaOmEA/9E0bE2bD4LOcfV4f/klmyKfirQdLMRt8SaBkfLvrtHHhRho3WgAskzh2b
-c/ZuQv0O/SE4/pT1030DMuElcmLRMrFILD8KjwHjxSaQWCJZ3qhHvHhBZc7N3bV9
-8ihHByaNaR6a6TcLwRZm9+s4rpSxbLLgiV8jBJw7GuWRqQkmD0fHyjpnWqg+99IW
-2vudjfR1wtmROC/ft2KWVH3TmB0e3AWMO6n/0RHbKFiIfsuw/hT98G4HmOmGby3L
-sYuLc0wPOJeK8Mw13/oMT9DJgr1w7IxInoLefHh4gY+4BjwEWsEggMgqLGXC9/aB
-uOxVSfKsOC3zhYS1p7RNWzqsNkzBnnqu94Kz0RfQ8XGym5NFoiqDRqK3psZ4dJzD
-GcmVz4/Fy8loZyyZA+oyh6091+HG5gAbs/X/+xPIts0CLb8bMBVoRFO/wfm3Wv3s
-wY5BHyCP+eqpadIju9h8semPWc09BNnc8Y5U0Dr2TB+sw+VSuJ5M9NysTWqJufH5
-ah69EbdzLyxQv4dZCWH1IhltumobNUqaCsAXEkSqi61a4rKvaicrrUMPF2lFuUkt
-y8+geIaRr10xl9YCAZf4yU8u/KTjHie1A2/3bMK/QyZg/V7UBP6zo4kqUZSd4GsW
-g+2b/nsKkq/YtyeOjHWn1nw07lPfOZX9fbAwxoVLI6zp9fsS+ns=
-=Rczx
------END PGP SIGNATURE-----
-
---=-Ur52jb23nGOnxQxf4AYD--
+Mrs Maria Elisabeth Schaeffler
+CEO SCHAEFFLER.
