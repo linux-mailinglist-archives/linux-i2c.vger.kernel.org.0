@@ -2,72 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F245E731D25
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jun 2023 17:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F2073216F
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Jun 2023 23:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239318AbjFOPws (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 15 Jun 2023 11:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
+        id S230009AbjFOVRR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 15 Jun 2023 17:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343749AbjFOPwq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Jun 2023 11:52:46 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF3018D;
-        Thu, 15 Jun 2023 08:52:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686844365; x=1718380365;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hTjPvLrhpjH9sRdy6Q9p9cBPgeBY5Gueb8oOzCcA7U4=;
-  b=LpnSwRE1S42eSVf4P+m8LoryX7Q4Izk3nWyLMpCkdv7Rp4Jk2czDeyS5
-   dyvPC6Um5a2JSnHMwxezBZwnLuv+d62ajyrqgnsHNMyuXncxOGILTeT6N
-   87kOX3nnxYq0H4NtGmsab/BoAzGEsfMzrCEnuYEF+eDKAH3D0pi3SmUvr
-   iIvBC54roVFA0c1/hDjt+iLyfuUbDT1cfbtSdC4IOe43RIZhWhUB/lr0r
-   vgvnKpd9GiTiYeJlxmub3G2QpUYGKcL1EESO6kQ1GzVvTUl6cKcdGALjQ
-   7WjEV+OktMXWTZNHU9KGJwx0rCLneIOF5GMOoO6on42zVfwsMqoBb26FU
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="348652234"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="348652234"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 08:50:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="689818935"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="689818935"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 15 Jun 2023 08:50:07 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q9pEb-003ye9-2S;
-        Thu, 15 Jun 2023 18:50:05 +0300
-Date:   Thu, 15 Jun 2023 18:50:05 +0300
-From:   "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-To:     Michael Brunner <michael.brunner@kontron.com>
-Cc:     "josef@oderland.se" <josef@oderland.se>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ingmar Klein <Ingmar.Klein@kontron.com>
-Subject: Re: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
-Message-ID: <ZIszLQ+Jv8YJr4Mu@smile.fi.intel.com>
-References: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
- <Yxj1ZQjBfdG1u93d@shikoro>
- <23c8fafe-af56-afb0-1257-222705bc36f3@oderland.se>
- <b8eff79f-0be0-e6a5-64ba-e085b0ea52b2@oderland.se>
- <Yxm9tlb4H7fspRMZ@smile.fi.intel.com>
- <60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com>
+        with ESMTP id S230005AbjFOVRR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 15 Jun 2023 17:17:17 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B75F2960
+        for <linux-i2c@vger.kernel.org>; Thu, 15 Jun 2023 14:17:15 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f8d0e814dfso21476415e9.3
+        for <linux-i2c@vger.kernel.org>; Thu, 15 Jun 2023 14:17:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686863834; x=1689455834;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TVMkoeUXAYosT8MI9Q/3mimgumQ87s7G5is3qoh6i2c=;
+        b=VgFbp7RNMFsWKXCGXAhP9OhhGDUD48EjVWBn3S/RfKXdmyJ1txkMhWfWgJJTCku8x7
+         PiqZ6VJVior1Ikke8x+caMtJLViGEK4ADtHTUJKek6jnRVj3Vop5UEiORq6rpg5IuU1H
+         ifEltvTF8m2NlgjUvt6A8GpVF6DhPyDp8MP7eMjnLw5oWk+35bLuTXDKUXlzd+yYRwpt
+         +s+MCxcCK6HdTtbQ9x/l/0jRVhdESz/cKc+SO67PDfry9WiFyvvGCHhHk8OXkat7gJyz
+         9sG3yOXdRO/l82Yr8zRk8w+QAsSeyBdkIwYNKkBKMfPhkBqYV6RZPCVde3iuxOZ25reo
+         u/Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686863834; x=1689455834;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TVMkoeUXAYosT8MI9Q/3mimgumQ87s7G5is3qoh6i2c=;
+        b=adTzb5m4yDSxaysaIpVMqbeI2KaSijZITtLcOX8TsRTHCw/kKwRZd2RdQid7Rp1f0n
+         mUfCM/jvzt/up+ThYEzIBkfshOaVMm8gbWVjutbPHoR+ZkrZ6eYI7WJHid6cQUoyWLMx
+         hEmoa5n5e6yTCocpYRXLwQFiOLW4QYDA3sPwB0wBbxQqdpT+5Lvz4l/Ro1j5XSi/sLRR
+         R+DsLjYPCVHog0p1dyEOTpqwHs0Sb7npqclajMDqqxxbmo6AoUONd9vdWk6RJHuRdQo9
+         7dKt5MKDzFo7+7mhBIAGa9spc5Ta2sQDHfx/tf/Mmdxh3i5aeP/HQ6B57TNR4J5JSzgM
+         Wcfg==
+X-Gm-Message-State: AC+VfDzyAu7AaWm5H+EaXjzuOXZ2SNxfDif/RAaEPBuqXE8kcPZMOBB4
+        0xcLlOEFdJPItJXjW6bbOc7Mi6e/+rk=
+X-Google-Smtp-Source: ACHHUZ6vL/O/ikxe42keL8MRFih7Vz/11hWrr1q0Ao6uUPSzSlHAz26aInDVSKMIpsnCjookjpUOgA==
+X-Received: by 2002:a1c:7c1a:0:b0:3f6:5cbf:a3a1 with SMTP id x26-20020a1c7c1a000000b003f65cbfa3a1mr306871wmc.14.1686863833410;
+        Thu, 15 Jun 2023 14:17:13 -0700 (PDT)
+Received: from ?IPV6:2a01:c22:6ec5:c500:ad06:edcc:b27e:b067? (dynamic-2a01-0c22-6ec5-c500-ad06-edcc-b27e-b067.c22.pool.telefonica.de. [2a01:c22:6ec5:c500:ad06:edcc:b27e:b067])
+        by smtp.googlemail.com with ESMTPSA id y20-20020a7bcd94000000b003f60a446fe5sm218294wmj.29.2023.06.15.14.17.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 14:17:13 -0700 (PDT)
+Message-ID: <62cf2367-5917-1459-b899-7b325e80505c@gmail.com>
+Date:   Thu, 15 Jun 2023 23:17:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <c39c8371-5ab5-45f7-d3cf-39ea50de0afb@gmail.com>
+ <a2cd5692-7a9e-7fef-6c09-6c694df1b23e@gmail.com>
+ <20230614222439.i7uw3dai3why7bk2@intel.intel>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH 1/4] i2c: i801: Use i2c_mark_adapter_suspended/resumed
+In-Reply-To: <20230614222439.i7uw3dai3why7bk2@intel.intel>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,49 +76,72 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, May 15, 2023 at 07:51:55AM +0000, Michael Brunner wrote:
-> On Thu, 2022-09-08 at 13:02 +0300, Andy Shevchenko wrote:
-> > On Thu, Sep 08, 2022 at 09:48:29AM +0200, Josef Johansson wrote:
-> > > On 9/8/22 08:07, Josef Johansson wrote:
-> > > > On 9/7/22 21:47, Wolfram Sang wrote:
-> > > > > On Tue, Sep 06, 2022 at 06:55:07PM +0300, Andy Shevchenko
-> > > > > wrote:
-
-First of all, sorry for so-o lo-o-ong delay. Too many emails in a backlog.
-
-...
-
-> > > I compiled with linux-6.0.0-rc4 with your patch on top.
-> > > 
-> > > Have been running flawless so far. Boot showed no problems.
-
-> We just noticed that this change prevents the usage of the i2c-scmi
-> driver on basically all Kontron COMe based boards.
-
-Does this device have resources defined in DSDT? Can you show all variants?
-
-> The reason is the patch "ACPI / platform: Add SMB0001 HID to
-> forbidden_id_list" submitted in November 2018 by Hans de Goede.
-
-
-> The
-> patch blacklists the SMB0001 HID that is also used by the COMe boards.
-> This was due to issues with HP AMD based laptops according to the
-> commit message.
-> Ironically the commit message there states that it is OK to blacklist
-> the HID as the device directly binds to the acpi_bus and therefore the
-> platform_device is not needed anyway. This changed with this patch.
+On 15.06.2023 00:24, Andi Shyti wrote:
+> Hi Heiner,
 > 
-> As this affects all systems using this HID, applying a patch that
-> whitelists specific boards again in the acpi-platform driver doesn't
-> seem to be a good solution to me.
-> Therefore I would request to remove this patch again, unless someone
-> has a better idea.
+> On Sat, Mar 04, 2023 at 10:31:23PM +0100, Heiner Kallweit wrote:
+>> When entering the shutdown/remove/suspend callbacks, at first we should
+>> ensure that transfers are finished and I2C core can't start further
+>> transfers. Use i2c_mark_adapter_suspended() for this purpose.
+>>
+>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>> ---
+>>  drivers/i2c/busses/i2c-i801.c | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+>> index ac5326747..d6a0c3b53 100644
+>> --- a/drivers/i2c/busses/i2c-i801.c
+>> +++ b/drivers/i2c/busses/i2c-i801.c
+>> @@ -1773,6 +1773,8 @@ static void i801_remove(struct pci_dev *dev)
+>>  {
+>>  	struct i801_priv *priv = pci_get_drvdata(dev);
+>>  
+>> +	i2c_mark_adapter_suspended(&priv->adapter);
+>> +
+>>  	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
+>>  	i801_disable_host_notify(priv);
+>>  	i801_del_mux(priv);
+>> @@ -1796,6 +1798,8 @@ static void i801_shutdown(struct pci_dev *dev)
+>>  {
+>>  	struct i801_priv *priv = pci_get_drvdata(dev);
+>>  
+>> +	i2c_mark_adapter_suspended(&priv->adapter);
+>> +
+> 
+> is this really needed in the shutdown and remove function?
+> 
+I think yes. Otherwise we may interrupt an active transfer, or a user
+may start a transfer whilst we are in cleanup.
+Note: i2c_mark_adapter_suspended() takes the I2C bus lock, therefore it
+will sleep until an active transfer is finished.
 
-I have a better idea if the DSDT has no resources. See the Q above.
+> I'm OK with it, though.
+> 
+>>  	/* Restore config registers to avoid hard hang on some systems */
+>>  	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
+>>  	i801_disable_host_notify(priv);
+>> @@ -1807,6 +1811,7 @@ static int i801_suspend(struct device *dev)
+>>  {
+>>  	struct i801_priv *priv = dev_get_drvdata(dev);
+>>  
+>> +	i2c_mark_adapter_suspended(&priv->adapter);
+>>  	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
+>>  	pci_write_config_byte(priv->pci_dev, SMBHSTCFG, priv->original_hstcfg);
+>>  	return 0;
+>> @@ -1818,6 +1823,7 @@ static int i801_resume(struct device *dev)
+>>  
+>>  	i801_setup_hstcfg(priv);
+>>  	i801_enable_host_notify(&priv->adapter);
+>> +	i2c_mark_adapter_resumed(&priv->adapter);
+> 
+> BTW, I see that very few drivers are using suspended and resumed
+> and I wonder why. Should these perhaps be added in the basic pm
+> functions?
+> 
+For my understanding, which functions are you referring to?
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+> I'm OK to r-b this, but i want first Jean to give it an ack.
+> 
+> Andi
 
