@@ -2,48 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A984F7333AC
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jun 2023 16:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350A27333C1
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jun 2023 16:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjFPOfB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Jun 2023 10:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S1345241AbjFPOiC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Jun 2023 10:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245256AbjFPOe7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Jun 2023 10:34:59 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F80535AD;
-        Fri, 16 Jun 2023 07:34:50 -0700 (PDT)
+        with ESMTP id S1345182AbjFPOh7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Jun 2023 10:37:59 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DEA30E7;
+        Fri, 16 Jun 2023 07:37:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686926090; x=1718462090;
+  t=1686926276; x=1718462276;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=r7Rg6I3bJHXDIJXv2vCD5FBIm0jYUzekHxnCgRt9I90=;
-  b=TQv28Caym8spGEIknl3sftOkgaUZsDaQlpH27BZD6Yi6DoDQiOBXIaOM
-   ZG60UYonngWbuS8zXhhW4F9eqJuuIrhPicXciZaGqBfuSkwo0dyxYnNmX
-   Qg4Y45qtqpABnnwI9hi+rUA/mNPtYQFGRUhSFjUD5xQm0EOBiTMZJ3TQj
-   c2PfYn2xfPDO1U9M6Mi2L+DxZ7BVY8h1bsX+k1C94svD7M8Y4YKvOeNJ8
-   6P0abSPwjvmK/qZDZHKWJygx09MwEzkWMFIpQhq5HHxeZSVyY+R+ZoaCj
-   FpwlYALsPYEkGtFmRKoL2GyEDQgHHs7MA+ClS8GxtpORrxjEu0L3o5DAV
+  bh=2veLEf490knl4gAIjPQCKjmkISoob58F0/w88Mad1aw=;
+  b=amwTuwPxubI5PBoxPxGbDIH3NsV7TV+Nvt6e6XTjQTTMvGbamhqK4Ts2
+   3AMpFHEE3AsMktRKsK1YArdDxAujWs0A5cdsyHK53ns0vxt/QKTAVm/+f
+   6AAvI7ylynuP23yopG1w8uUrnir32ckb1haNR0lGSN65SboKRhzhiK/W0
+   dZRVMzi86dwAGMqYi23QANK3Bk2Pi8NNABCnFG/Dgy29DRY9TuCGd8NBl
+   OoE2xp1ldS0vIhpFIs7eMn2iXvzf+61fJx0TepFVk5Uy3cjCKsxotsrlw
+   7WjpvrIJ9F9vavcNuvEUbshz8C90L6SPmeSsnnIsa8On86HXj48+dFHcu
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="348935807"
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="339558452"
 X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="348935807"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 07:34:23 -0700
+   d="scan'208";a="339558452"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 07:37:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="716046123"
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="857408631"
 X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="716046123"
+   d="scan'208";a="857408631"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 16 Jun 2023 07:34:18 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 16 Jun 2023 07:37:40 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qAAWk-004IvG-2s;
-        Fri, 16 Jun 2023 17:34:14 +0300
-Date:   Fri, 16 Jun 2023 17:34:14 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1qAAa1-004Ixf-2g;
+        Fri, 16 Jun 2023 17:37:37 +0300
+Date:   Fri, 16 Jun 2023 17:37:37 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
 To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -64,35 +64,90 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
         Marek Vasut <marex@denx.de>,
         Satish Nagireddy <satish.nagireddy@getcruise.com>
-Subject: Re: [PATCH v14 16/18] media: i2c: ds90ub960: Allow FPD-Link async
- mode
-Message-ID: <ZIxy5qKjiMZluGOf@smile.fi.intel.com>
+Subject: Re: [PATCH v14 17/18] media: i2c: ds90ub953: Restructure clkout
+ management
+Message-ID: <ZIxzsUbuUz3ysA31@smile.fi.intel.com>
 References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
- <20230616135922.442979-17-tomi.valkeinen@ideasonboard.com>
+ <20230616135922.442979-18-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230616135922.442979-17-tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20230616135922.442979-18-tomi.valkeinen@ideasonboard.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 04:59:20PM +0300, Tomi Valkeinen wrote:
-> Allow using FPD-Link in async mode. The driver handles it correctly, but
-> the mode was blocked at probe time as there wasn't HW to test this with.
-> Now the mode has been tested, and it works.
+On Fri, Jun 16, 2023 at 04:59:21PM +0300, Tomi Valkeinen wrote:
+> Separate clkout calculations and register writes into two functions:
+> ub953_calc_clkout_params and ub953_write_clkout_regs, and add a struct
+> ub953_clkout_data that is used to store the clkout parameters.
 
-Looks good, but I assume you will incorporate this into the original code.
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+...
 
+> +struct ub953_clkout_data {
+> +	u32 hs_div;
+> +	u32 m;
+> +	u32 n;
+
+Please, use struxt u32_fract instead of m/n.
+
+> +	unsigned long rate;
+> +};
+
+...
+
+> +static void ub953_calc_clkout_params(struct ub953_data *priv,
+> +				     unsigned long target_rate,
+> +				     struct ub953_clkout_data *clkout_data)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	unsigned long clkout_rate;
+> +	u64 fc_rate;
+> +
+> +	fc_rate = ub953_get_fc_rate(priv);
+> +
+> +	if (priv->hw_data->is_ub971) {
+> +		u8 m, n;
+
+Ditto. struct u8_fract; (But probably needs to be added into math.h.
+I'll Ack/Rb such a patch when one appears.
+
+> +		clkout_rate = ub953_calc_clkout_ub971(priv, target_rate,
+> +						      fc_rate, &m, &n);
+
+Can be also parameter to that function.
+
+> +		clkout_data->m = m;
+> +		clkout_data->n = n;
+> +
+> +		dev_dbg(dev, "%s %llu * %u / (8 * %u) = %lu (requested %lu)",
+> +			__func__, fc_rate, m, n, clkout_rate, target_rate);
+> +	} else {
+> +		u8 hs_div, m, n;
+
+Yeah, and so on...
+
+> +		clkout_rate = ub953_calc_clkout_ub953(priv, target_rate,
+> +						      fc_rate, &hs_div, &m, &n);
+> +
+> +		clkout_data->hs_div = hs_div;
+> +		clkout_data->m = m;
+> +		clkout_data->n = n;
+> +
+> +		dev_dbg(dev, "%s %llu / %u * %u / %u = %lu (requested %lu)",
+> +			__func__, fc_rate, hs_div, m, n, clkout_rate,
+> +			target_rate);
+> +	}
+> +
+> +	clkout_data->rate = clkout_rate;
+> +}
 
 -- 
 With Best Regards,
