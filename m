@@ -2,119 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797607327A2
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jun 2023 08:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5B3732DCF
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jun 2023 12:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233168AbjFPGct (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Jun 2023 02:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
+        id S245126AbjFPK14 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Jun 2023 06:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242562AbjFPGcn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Jun 2023 02:32:43 -0400
+        with ESMTP id S1344011AbjFPK1S (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Jun 2023 06:27:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4523B270E;
-        Thu, 15 Jun 2023 23:32:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AF34233;
+        Fri, 16 Jun 2023 03:26:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C937062527;
-        Fri, 16 Jun 2023 06:32:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E8DC433C0;
-        Fri, 16 Jun 2023 06:32:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79E40635D4;
+        Fri, 16 Jun 2023 10:26:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BCC8C433D9;
+        Fri, 16 Jun 2023 10:26:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686897161;
-        bh=+AQvRVdsmhAwTh0/YKVAYP4Euxnx0LOU4wvyWcc0gp8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uXkS0nTzeCZautZAubDXV7Aiu3ZWpl1xK5h5cg0yILzQZvxhuAFTKK2G3cgkOZVE9
-         8nlLsOvvw5KAoVSyKPOIo2dj7lBOl/Pb045bY0pVik/UjKYmVPasCSxwxpDgwORHte
-         2U28cW+EcvVAAE3UX5aWQPOa0lJEW6ehU6jWOYyOvdB2Wd08Xb5VEF2BmPm7cd2klD
-         wu3AIa62oLjRJHsSZBn5+aRJlU/RQ0L0QzSrZyBJP3FwOJZNuq4yTf+B5TywRnljc2
-         AKrUzBRAIL40UTpiLsCXAK1HaJwEhJTjojxxNNqgRMGbJEHC3uF95vDRphc5vx+K+N
-         ng67bgjEiStTA==
-Date:   Fri, 16 Jun 2023 08:32:38 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Corey Minyard <cminyard@mvista.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v5 01/11] i2c: Enhance i2c_new_ancillary_device API
-Message-ID: <ZIwCBlb5xcLZ70w4@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Corey Minyard <cminyard@mvista.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>
-References: <ZIcUEdctlgRsGxJ3@ninjato>
- <CAMuHMdVOkBeKOEW9PkWB3Tqwa6-rC3BQj=W9VAEgeZfgqvQmWQ@mail.gmail.com>
- <ZIeDcVcfxfcMx/BP@shikoro>
- <CAMuHMdV_Ty=rkcMzsrnJ3YHZngRbyWvYjR_K9Zh7RiAJ4LbvKg@mail.gmail.com>
- <OS0PR01MB59225195B4F2C771F302F7EE8655A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdUTAerddXG3zJVRZEAwcrR6V=NFeHwsKV9_tE+ccfw6_w@mail.gmail.com>
- <OS0PR01MB59224D7C95B9B0037046FCF78655A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdUhaSKiuVkmoYt1sm87emFZu7HSSCK-e95-Yy=g8Sgo4w@mail.gmail.com>
- <CAMuHMdX4QxmFJi3q61ByOFG38KgcGMxPQMeXyPA3r1D9098BMg@mail.gmail.com>
- <20230615092312.GF741@pendragon.ideasonboard.com>
+        s=k20201202; t=1686911161;
+        bh=WX97hGv7nM7zOSIgNl2gsNEkMonhpFfsgn9gTcWRj4Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iTE8Yvq+T7WqJknEDqPf9tVQ5mkhSk2TS5GJUp29tx6LCDbos77afil+a/LQd+/Bv
+         cZczUC+eNTAKNuCUBKla6mLsS5NSm/gI2FAQ5+tOCbtFp7C4pUFuVY/BsmdudfRF5P
+         BuKDqAzrf8SmF4WPIakc3ZWan8u5fbbY6fc6R2S8Fv9N1vts586DSBEkOyofsiDR0S
+         vWMz+Du6Tkz4W3Au8gibFgP7BnmDCgSbUcERFQ6gv70RMpu4v/Gg55bqLHsucfQHF4
+         EjJEUAHZ9T8finlielrbs9SCF6mwktiUFpsRB0Gx90gLques6FtK/77HQUmvrQCqXJ
+         VNNc9RFnCydOg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Simon Horman <horms@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        kumaravel.thiagarajan@microchip.com, UNGLinuxDriver@microchip.com,
+        nathan@kernel.org, ndesaulniers@google.com,
+        linux-i2c@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.3 19/30] i2c: mchp-pci1xxxx: Avoid cast to incompatible function type
+Date:   Fri, 16 Jun 2023 06:25:07 -0400
+Message-Id: <20230616102521.673087-19-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230616102521.673087-1-sashal@kernel.org>
+References: <20230616102521.673087-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DnLPxrEEezdDXnuZ"
-Content-Disposition: inline
-In-Reply-To: <20230615092312.GF741@pendragon.ideasonboard.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.3.8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -125,45 +63,60 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Simon Horman <horms@kernel.org>
 
---DnLPxrEEezdDXnuZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[ Upstream commit 7ebfd881abe9e0ea9557b29dab6aa28d294fabb4 ]
 
+Rather than casting pci1xxxx_i2c_shutdown to an incompatible function type,
+update the type to match that expected by __devm_add_action.
 
-> > Without of_node, devm_clk_get() and friends falls back to registered
-> > clkdevs. So you could call clk_register_clkdev() from within the
-> > PMIC driver, and can keep on using devm_clk_get_optional() in the
-> > ISL1208 driver.
->=20
-> Seriously, how many hacks are we piling ? :-)
+Reported by clang-16 with W-1:
 
-For this particular case, why do you consider this a hack? I previously
-suggested the solution that the PMIC driver exposes a clock to be
-consumed for the RTC driver even for the "two DT node solution". Because
-it then avoids a custom property with a phandle to the other node with
-regular DT clock bindings. I'd think we need sth like that in any case.
+ .../i2c-mchp-pci1xxxx.c:1159:29: error: cast from 'void (*)(struct pci1xxxx_i2c *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+         ret = devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shutdown, i2c);
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ./include/linux/device.h:251:29: note: expanded from macro 'devm_add_action'
+         __devm_add_action(release, action, data, #action)
+                                   ^~~~~~
 
+No functional change intended.
+Compile tested only.
 
---DnLPxrEEezdDXnuZ
-Content-Type: application/pgp-signature; name="signature.asc"
+Signed-off-by: Simon Horman <horms@kernel.org>
+Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+Reviewed-by: Tharun Kumar P<tharunkumar.pasumarthi@microchip.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/i2c/busses/i2c-mchp-pci1xxxx.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/i2c/busses/i2c-mchp-pci1xxxx.c b/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
+index b21ffd6df9276..5ef136c3ecb12 100644
+--- a/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
++++ b/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
+@@ -1118,8 +1118,10 @@ static int pci1xxxx_i2c_resume(struct device *dev)
+ static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_i2c_pm_ops, pci1xxxx_i2c_suspend,
+ 			 pci1xxxx_i2c_resume);
+ 
+-static void pci1xxxx_i2c_shutdown(struct pci1xxxx_i2c *i2c)
++static void pci1xxxx_i2c_shutdown(void *data)
+ {
++	struct pci1xxxx_i2c *i2c = data;
++
+ 	pci1xxxx_i2c_config_padctrl(i2c, false);
+ 	pci1xxxx_i2c_configure_core_reg(i2c, false);
+ }
+@@ -1156,7 +1158,7 @@ static int pci1xxxx_i2c_probe_pci(struct pci_dev *pdev,
+ 	init_completion(&i2c->i2c_xfer_done);
+ 	pci1xxxx_i2c_init(i2c);
+ 
+-	ret = devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shutdown, i2c);
++	ret = devm_add_action(dev, pci1xxxx_i2c_shutdown, i2c);
+ 	if (ret)
+ 		return ret;
+ 
+-- 
+2.39.2
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSMAgIACgkQFA3kzBSg
-KbaH5w/+L6rsiVafrxQ0Kiqgl0zxXCAKjoLdRSiBeHu7L7Pgl1Jim9SXVD9QNiyu
-TMsAJZgDMO1a/FPrnD1VXF/IO6rTz9fIMamBjAr1QoV1ySD+3dOTPcw92SmB/UsD
-PN8l5zn1rH3ebNei3hnLP76JfMDZbi9TsBYHsfgsaVl5//4P1+BNxb06WEOhtuQZ
-GxttDVUonhpc6ePqfE/kzBtw/2ku3AzdsxL50bKQMflgnowB9ondDTJ++8/YC+aR
-1LUzgF6DLipvDAwlDEeAzhokCvIFepn+t0owJNnUxjj6pypAb3xvrFrgX5CHISIA
-mhBJWM+GMtxEwKJePRoVdKn8MG9QPGQxFA27W9aZx38rJvlA6l87qVLdD3KHjMWq
-7o77OjhIOvo5gaD+kKCRAkH2Vy/7P5ZwGDe0Qg8Dezj1j6u1yrIhCMmvGcYf7GkO
-YGuu3K1cJBq2MRZg+Zo5M6+hE/X5yUjShvOW1nTd27K30iEPwEMcfRB6SN8/dcbV
-GS7Ow91cbp6hPV8pGRIbkDrUYNwCIGVPQIsPcDCqy9u8mpv/FFyTBIGBZ/IrZBzG
-WAQOsBAAOScx8BKCohamosJFUciCQwd27OcTmTdzSS+wuGM6Rp0kODn9aIu7uEdX
-mwPyiQLe19ForiH8BO/Myax/CwhqXt2L4MSD9GCAESo4xk8IjNc=
-=OTwr
------END PGP SIGNATURE-----
-
---DnLPxrEEezdDXnuZ--
