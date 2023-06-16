@@ -2,133 +2,130 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C4A733045
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jun 2023 13:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0D07332BB
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Jun 2023 16:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344759AbjFPLpc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 16 Jun 2023 07:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
+        id S245688AbjFPOAL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 16 Jun 2023 10:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344859AbjFPLpX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Jun 2023 07:45:23 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54AD359D;
-        Fri, 16 Jun 2023 04:45:10 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b41e700103so7441931fa.2;
-        Fri, 16 Jun 2023 04:45:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686915909; x=1689507909;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rPm5ARXV5BWgDp1lXKxZSY+Q/UaoNS0kZY5vjJcwDOE=;
-        b=csvzXr9sxrsEhmtl/f/VnHzabemiaF1sQuQcYkZUW1KFtpaBGsZvTu2wEj5z3fmQV7
-         XI2pZ/LySZqysZ7+KB17tTjAz4CsvyutOwJ9BjKOiAfxtf4Ex/FC2m/McWDhvSydOYeK
-         xZMW/AeU671DDhe4cpcTU2hGtMA617Y3ZhzMV97reasPuWmYTrzavjANcP/T31g9tlqO
-         Pgfdvn3J6jFePmMN+GnO44+e6nUvaC//BJfpP3aAVsfxgaQhvGk4MWJ1BQjJvAQVS+Ho
-         t7rEepKY0iZdmj3jy190snVpsdNQOJHP1T6vtktW23QWfv/r1Slt5hM63fv2151wUjjf
-         srlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686915909; x=1689507909;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rPm5ARXV5BWgDp1lXKxZSY+Q/UaoNS0kZY5vjJcwDOE=;
-        b=GgQ+CULVQXxEHQ+7vbLm3MCF+qrBIa8Kt2oZoVSVoy030+l1PShogwz+wH1ALAj7gp
-         nrfQUcnndPq/2p3D4ETgjl4/b0jIdBLw+5lIIoAB6r7f8VGS8aZt/C5cBZbTlgwtel8Z
-         Nz3BbKk7BP9oPSwgF+rSPxiZOSXcaH5sZB76dkj1OOJ1NUZbApICcG7361YFQcY7g+oI
-         PKnK4UlwmOtZl9EFpcXY5znjZ1YvfWyE9v15vH26ZxZrVWxAGLfzcRQs57w3QQGvwxtj
-         19dcYa5rNYRF0VRO83nhW+lgprlIbexJvA8SUY9AiOqYtTaRgtyDHInZfHmz32asdTxR
-         180Q==
-X-Gm-Message-State: AC+VfDzFF1E8RTmZNEW0inGNLjrAhDJ2ihY3UW3lEjejxvnkDZl0Q+Xm
-        fKFCWGQStLT1LdOmhmO4lhA=
-X-Google-Smtp-Source: ACHHUZ6EqaR+4qrPwwPEnY7bruplRUt/KImSo1+8sT1eJTNzk2+7vjhqwAvCam0CTFxoWfPkaXH0/w==
-X-Received: by 2002:a2e:9bd8:0:b0:2b4:5c1a:dd7c with SMTP id w24-20020a2e9bd8000000b002b45c1add7cmr690747ljj.41.1686915908820;
-        Fri, 16 Jun 2023 04:45:08 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f8:1500::1? (dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f8:1500::1])
-        by smtp.gmail.com with ESMTPSA id y22-20020a2e3216000000b002a8e8c776e9sm3599447ljy.56.2023.06.16.04.45.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 04:45:08 -0700 (PDT)
-Message-ID: <fb7241d3-d1d1-1c37-919b-488d6d007484@gmail.com>
-Date:   Fri, 16 Jun 2023 14:45:06 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v7 0/9] fix fwnode_irq_get[_byname()] returnvalue
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        with ESMTP id S1343556AbjFPOAK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 16 Jun 2023 10:00:10 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66562720;
+        Fri, 16 Jun 2023 07:00:08 -0700 (PDT)
+Received: from desky.lan (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 631149CA;
+        Fri, 16 Jun 2023 15:59:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1686923974;
+        bh=TYH6BSykl1V+B4KQ/yXIjolbxZaYebv3C2ZkUVO7gPE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pgqSL/lDUG1dVcKSuf7ZxGbL/zVmm0KttbN7fV1aS2kX1LKxW0FqGyEL2bIb90k9v
+         VNm330ua9beTQZVKThNfRxzxXR9eLIiCpgQxRJSdPTLUskPysW302p42baBwpDG+aa
+         sxLC5SZZEClI9wD3lGXH0Gay3l04HpgGALi6GhAU=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <cover.1685340157.git.mazziesaccount@gmail.com>
- <20230530233438.572db3fb@kernel.org>
- <2023061553-urging-collision-32f8@gregkh>
-Content-Language: en-US, en-GB
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <2023061553-urging-collision-32f8@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v14 00/18] i2c-atr and FPDLink
+Date:   Fri, 16 Jun 2023 16:59:04 +0300
+Message-Id: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 6/15/23 14:37, Greg Kroah-Hartman wrote:
-> On Tue, May 30, 2023 at 11:34:38PM -0700, Jakub Kicinski wrote:
->> On Mon, 29 May 2023 09:22:15 +0300 Matti Vaittinen wrote:
->>> The fwnode_irq_get() and the fwnode_irq_get_byname() may have returned
->>> zero if mapping the IRQ fails. This contradicts the
->>> fwnode_irq_get_byname() documentation. Furthermore, returning zero or
->>> errno on error is unepected and can easily lead to problems
->>> like.
->>
->> What's the merging plan? Could patch 1 go to a stable branch
->> and then driver trees can pull it in and apply their respective
->> patches locally?
-> 
-> I'll take patch 1 now, and then after 6.5-rc1, Matti, can you send the
-> cleanup patches to the respective subsystems?
+Hi,
 
-Yes. I can re-spin the rest of the patches.
+v13 can be found from:
 
-Yours,
-	-- Matti
+https://lore.kernel.org/all/20230426115114.156696-1-tomi.valkeinen@ideasonboard.com/
 
-> 
-> thanks,
-> 
-> greg k-h
+In this version I opted to keep the main patches unchanged and make the
+new changes as additional patches. The reason is that the main patches
+have been reviewed and have been out there for quite a while, and the
+fixes & improvements are much clearer this way.
+
+ Tomi
+
+Luca Ceresoli (1):
+  i2c: add I2C Address Translator (ATR) support
+
+Tomi Valkeinen (17):
+  dt-bindings: i2c: Add I2C Address Translator (ATR)
+  dt-bindings: media: add TI DS90UB913 FPD-Link III Serializer
+  dt-bindings: media: add TI DS90UB953 FPD-Link III Serializer
+  dt-bindings: media: add TI DS90UB960 FPD-Link III Deserializer
+  media: i2c: add DS90UB960 driver
+  media: i2c: add DS90UB913 driver
+  media: i2c: add DS90UB953 driver
+  media: i2c: ds90ub960: Fix use of UB960_SR_FWD_CTL1
+  media: i2c: ds90ub9xx: Add COMMON_CLK kconfig dependency
+  media: i2c: ds90ub9xx: Select GPIOLIB rather than OF_GPIO
+  media: i2c: ds90ub960: Configure CSI-2 continuous clock
+  media: i2c: ds90ub953: Use v4l2_fwnode_endpoint_parse()
+  media: i2c: ds90ub913: Use v4l2_fwnode_endpoint_parse()
+  media: i2c: ds90ub953: Handle V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK
+  media: i2c: ds90ub960: Allow FPD-Link async mode
+  media: i2c: ds90ub953: Restructure clkout management
+  media: i2c: ds90ub953: Support non-sync mode
+
+ .../devicetree/bindings/i2c/i2c-atr.yaml      |   34 +
+ .../bindings/media/i2c/ti,ds90ub913.yaml      |  133 +
+ .../bindings/media/i2c/ti,ds90ub953.yaml      |  134 +
+ .../bindings/media/i2c/ti,ds90ub960.yaml      |  427 ++
+ Documentation/i2c/i2c-address-translators.rst |   96 +
+ Documentation/i2c/index.rst                   |    1 +
+ MAINTAINERS                                   |   16 +
+ drivers/i2c/Kconfig                           |    9 +
+ drivers/i2c/Makefile                          |    1 +
+ drivers/i2c/i2c-atr.c                         |  710 +++
+ drivers/media/i2c/Kconfig                     |   47 +
+ drivers/media/i2c/Makefile                    |    3 +
+ drivers/media/i2c/ds90ub913.c                 |  914 ++++
+ drivers/media/i2c/ds90ub953.c                 | 1434 ++++++
+ drivers/media/i2c/ds90ub960.c                 | 4058 +++++++++++++++++
+ include/linux/i2c-atr.h                       |  116 +
+ include/media/i2c/ds90ub9xx.h                 |   22 +
+ 17 files changed, 8155 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-atr.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+ create mode 100644 Documentation/i2c/i2c-address-translators.rst
+ create mode 100644 drivers/i2c/i2c-atr.c
+ create mode 100644 drivers/media/i2c/ds90ub913.c
+ create mode 100644 drivers/media/i2c/ds90ub953.c
+ create mode 100644 drivers/media/i2c/ds90ub960.c
+ create mode 100644 include/linux/i2c-atr.h
+ create mode 100644 include/media/i2c/ds90ub9xx.h
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.34.1
 
