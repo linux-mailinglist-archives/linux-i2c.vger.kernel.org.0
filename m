@@ -2,53 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42442734631
-	for <lists+linux-i2c@lfdr.de>; Sun, 18 Jun 2023 14:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CB973463B
+	for <lists+linux-i2c@lfdr.de>; Sun, 18 Jun 2023 15:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjFRMxC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 18 Jun 2023 08:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
+        id S229590AbjFRNIK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 18 Jun 2023 09:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFRMxB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 18 Jun 2023 08:53:01 -0400
+        with ESMTP id S229453AbjFRNIJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 18 Jun 2023 09:08:09 -0400
 Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8460E5F;
-        Sun, 18 Jun 2023 05:52:55 -0700 (PDT)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB8AB0;
+        Sun, 18 Jun 2023 06:08:08 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4QkXqm1VkQz9sjp;
-        Sun, 18 Jun 2023 14:52:52 +0200 (CEST)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4QkY9J6FFsz9sq0;
+        Sun, 18 Jun 2023 15:08:04 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mariushoch.de;
-        s=MBO0001; t=1687092772;
+        s=MBO0001; t=1687093684;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XlGPTTbstQnFGAqOrIapNTlekWsFm28DnNL8CbHdVd0=;
-        b=RpKAls7Aibuqbfa+9xhSthLFexlf9163K7BVeT8LEwFzV0zSMPz1Bv79VhVzr8vz+axuPY
-        AE0JUKub+hbDE4vY9UcXhZphTrbBZgsAPJpLAubX/CwOk9LPiRYPp6IsqX4nOraUmoN8dN
-        q3NbE3AujHBGtCFAjTeMPiBBcJN4LjKbAvxJAyODZfb+BQo5fzhxVtoWxiFzY/oLTP9lEu
-        +p1w6PD5HOSL9ZC/e2DhWgUJ70Mi6Q8bZX3NLDiwJRZ1ZC9TaWGFV6tS9GZXNvcts+QCQd
-        c6CWxb/iLChVN7NWsbqx0q/rpQMuCRYV/vD2MuBmfDvcWPV2t0LSb2v9kRVFcA==
-Message-ID: <9d07309f-9596-2be0-97ab-2bb9ee237c11@mariushoch.de>
-Date:   Sun, 18 Jun 2023 14:52:50 +0200
+        bh=UEYGb76FFpCH3VvdAihjEP00oTFhKJZ92WOIg9ErGZo=;
+        b=G4QWYfxQAmEx2waUZWevykuIDbHdpQ4PgvrthOgCKa3NLusQHSOqK2f7QWv9DRf30Tyc/V
+        dtPrSbn/3yjpJuY+xMs90x42VRJcGjzec52IbkT/0reUFKVTaxxfcHo5/lj4bX8sC1IkF3
+        sNLcwdBGxUcOhAf0iI80GpvfxnmKepKl4YCOkXSl5ZJUWTbiOf8oBZ2U8oi+AAVtPO0U+v
+        JTzaukBnZgBxuH2ePEESl5oMTMmxTQZcEYctvtQSAtmEJ0Wl5gjtlngmDN1j+I93BNqmGr
+        se6m2xQStWXJAFjYLBaABYHjo+15b4wX4IqAXbBhBoYykSW5FOJisF9t1VS/9Q==
+Message-ID: <2648642f-3078-aebf-7920-7eceed044dc8@mariushoch.de>
+Date:   Sun, 18 Jun 2023 15:08:03 +0200
 MIME-Version: 1.0
-From:   Marius Hoch <mail@mariushoch.de>
-Subject: Re: [PATCH 0/2] i2c: i801: Force no IRQ for Dell Latitude E7450
-To:     Rudolf Marek <r.marek@assembler.cz>,
-        Jean Delvare <jdelvare@suse.de>
+Subject: Re: [PATCH 1/2] i2c: i801: Force no IRQ for Dell Latitude E7450
+Content-Language: en-US
+To:     Jean Delvare <jdelvare@suse.de>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230514103634.235917-1-mail@mariushoch.de>
- <20230523200350.62ab4788@endymion.delvare>
- <59a6a917-2a93-d52d-37f3-091295dd0db4@mariushoch.de>
- <20230604160132.102dd6a7@endymion.delvare>
- <ae93843f-7ab0-9d10-cf93-261f986962a5@assembler.cz>
-Content-Language: en-US
-In-Reply-To: <ae93843f-7ab0-9d10-cf93-261f986962a5@assembler.cz>
+ <20230514103634.235917-2-mail@mariushoch.de>
+ <20230604163855.5b7ea1e0@endymion.delvare>
+From:   Marius Hoch <mail@mariushoch.de>
+In-Reply-To: <20230604163855.5b7ea1e0@endymion.delvare>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 4QkY9J6FFsz9sq0
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -59,82 +57,80 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Rudolf,
+Hi Jean,
 
-thanks for the reply.
-
-On 04/06/2023 22:41, Rudolf Marek wrote:
-> Hi Jean,
+On 04/06/2023 16:38, Jean Delvare wrote:
+> On Sun, 14 May 2023 12:36:33 +0200, Marius Hoch wrote:
+>> The Dell Latitude E7450 uses IRQ 18 for the accelerometer,
+>> but also claims that the SMBus uses IRQ 18. This will
+>> result in:
+>>
+>> i801_smbus 0000:00:1f.3: PCI INT C: failed to register GSI
+>> i801_smbus 0000:00:1f.3: Failed to enable SMBus PCI device (-16)
+>> i801_smbus: probe of 0000:00:1f.3 failed with error -16
+>>
+>> Force the SMBus IRQ to IRQ_NOTCONNECTED in this case, so that
+>> we fall back to polling, which also seems to be what the (very
+>> dated) Windows 7 drivers on the Dell Latitude E7450 do.
+>>
+>> This was tested on Dell Latitude E7450.
+>>
+>> Signed-off-by: Marius Hoch <mail@mariushoch.de>
+>> ---
+>>   drivers/i2c/busses/i2c-i801.c | 20 ++++++++++++++++++++
+>>   1 file changed, 20 insertions(+)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+>> index ac5326747c51..5fd2ac585160 100644
+>> --- a/drivers/i2c/busses/i2c-i801.c
+>> +++ b/drivers/i2c/busses/i2c-i801.c
+>> @@ -1624,6 +1624,20 @@ static void i801_setup_hstcfg(struct i801_priv *priv)
+>>   	pci_write_config_byte(priv->pci_dev, SMBHSTCFG, hstcfg);
+>>   }
+>>   
+>> +/**
+> As reported by the kernel test robot, please don't start a comment with
+> /** unless it's a kernel-doc-style comment.
 >
-> Dne 04. 06. 23 v 16:01 Jean Delvare napsal(a):
->> I admit I don't know. I'm not familiar with how GSI numbers relate to
->> IRQ numbers. I think I understand that GSI numbers are an ACPI thing,
->> and the ACPI layer is responsible for mapping these to actual IRQ
->> numbers? Is there a GSI-to-IRQ table available somewhere as part of the
->> ACPI tables? If so, it would be interesting to disassemble the ACPI
->> tables on your system and check what this looks like for you.
+>> + * These DELL devices claim an IRQ for the SMBus (usually 18), but we can't use
+>> + * it, as its actually for the I2C accelerometer.
+>> + */
+>> +static const struct dmi_system_id dmi_force_no_irq[] = {
+>> +	{
+>> +		.matches = {
+>> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+>> +			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude E7450"),
+>> +		},
+>> +	},
+>> +	{} /* Terminating entry */
+>> +};
+>> +
+>>   static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>>   {
+>>   	int err, i;
+>> @@ -1657,6 +1671,12 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>>   	if (!(priv->features & FEATURE_BLOCK_BUFFER))
+>>   		priv->features &= ~FEATURE_BLOCK_PROC;
+>>   
+>> +	if (dmi_check_system(dmi_force_no_irq)) {
+> If the problem is caused by dev->irq being 255, and now that we know
+> that this value is special on x86, wouldn't it make more sense to
+> restrict this quirk to CONFIG_X86 and simply check for dev->irq ==
+> 0xff? This would save us the extra effort of maintaining a list of
+> machines which need the quirk.
 >
-> You need to check _PRT method of PCI0 device in APIC mode.
-> This will tell you to what GSI (APIC/pin) it goes.
-> To check you need to have a look to the DSDT table and decompile
-> it. You can obtain it by running acpidump > tables.txt and the 
-> acpixtract -a tables.txt
-> and finally running iasl -d dsdt.asl.
+>> +		/* Force no IRQ for these devices, otherwise pcim_enable_device will fail */
+>> +		dev->irq = IRQ_NOTCONNECTED;
+>> +		dev->irq_managed = 1;
+> This field is undocumented so I have no idea what it does. Is it not
+> sufficient to set irq to IRQ_NOTCONNECTED?
+If irq_managed is not set our irq value will be entirely ignored it 
+seems (thus leading to the same code path/ failure initially outlined).
 >
-> Then, because the SMBUS lives on bus0, you just need to check _PRT method
-> under PCI0 device for the entry of 001fffff (INT C).
-> If this entry exists it will tell you where is it connected.
-The PCI0 device's _PRT, when PICM is true, returns AR00. That contains:
-             Package (0x04)
-             {
-                 0x001FFFFF,
-                 0x02,
-                 Zero,
-                 0x12
-             },
-
-So according to this IRQ (=GSI?) 18 should be used (which, as mentioned 
-earlier is also used for the freefall device). (In acpi_pci_irq_enable) 
-acpi_register_gsi fails for this (with gsi=18) and afterwards dev->irq 
-is at 255 (which might just be an initial value? dev->irq is only set in 
-acpi_pci_irq_enable afterwards).
-
-> I assume this has no entry and then as a last chance Linux tries the 
-> PCI IRQ entry
-> in the configuration space gets queried. And this has 0xff which is
-> telling no IRQ connected.
->
-> The southbridge has a IRQ routing configuration register which can be 
-> used to verify
-> if this is routed anywhere or really left "unconnected". This is 
-> usually in the the RCBA base + something
-> register. Have a look to "D31IP" register:
->
-> SMBus Pin (SMIP) — R/W. Indicates which pin the SMBus controller 
-> drives as its
-> interrupt. bits 15:12
->
-> If there is 0, it is not routed anywhere. Also you need to check 
-> "D31IR" where the PIN C is going:
->
-> Interrupt C Pin Route (ICR) — R/W. Indicates which physical pin on the 
-> PCH is
-> connected to the INTC# pin reported for device 31 functions.
->
-> The PIRQA corresponds to the PIN 16 of IOAPIC etc.
->
-> If you need more info on that feel free to contact me. I can try to help.
-I skipped these steps (after identifying the _PRT entry) as it seems to 
-me that we have a ACPI entry here (it's just not functional), thus this 
-information would presumably be of no help.
-
-Further help in debugging this would be much appreciated. In order to 
-further see why acpi_register_gsi failed, I also got the irqdomain debug 
-output and this also didn't help me (except that it doesn't register a 
-domain for our SMBus, like "irq: Added domain IR-PCI-MSI-0000:00:XX").
->
->
-> Thanks,
-> Rudolf
+>> +	}
+>> +
+>>   	err = pcim_enable_device(dev);
+>>   	if (err) {
+>>   		dev_err(&dev->dev, "Failed to enable SMBus PCI device (%d)\n",
 >
 
