@@ -2,112 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3004E735AFD
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jun 2023 17:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CF4735B34
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jun 2023 17:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjFSPTR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Jun 2023 11:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S231636AbjFSPhv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Jun 2023 11:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjFSPTQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Jun 2023 11:19:16 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558CB9B;
-        Mon, 19 Jun 2023 08:19:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0DB961F88B;
-        Mon, 19 Jun 2023 15:19:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1687187954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BxX0JR9pCiqX52Q86QN+MVAg4XLHJ++XGVzlT7hnH14=;
-        b=g+YutJ0hLg8FV8N7BnfQi4VR/A8bq9g/lIidDNG3k4i1JkpFe+BJdnOx9ZuJ5XTqP61T7N
-        wxfB9Ep1ev8uV0C/OhnGKTsF3xO3L5kSfjzV3gQ+d8mz7a/6Y+dmtpT7pAiQpBCcpZqapw
-        tQik1aixlJIXoSQn2K+tarMHBd761rU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1687187954;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BxX0JR9pCiqX52Q86QN+MVAg4XLHJ++XGVzlT7hnH14=;
-        b=bIQmVuT6O2DhUaekn7EDcUK8P+v+BH7/hZFFW81fcngvvWtsgrZIGgwABzZDRpCDmM+1yG
-        XlEIW71I6CsfUmDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DC759139C2;
-        Mon, 19 Jun 2023 15:19:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ps8TNPFxkGTDOwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Mon, 19 Jun 2023 15:19:13 +0000
-Date:   Mon, 19 Jun 2023 17:19:12 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Marius Hoch <mail@mariushoch.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] i2c: i801: Force no IRQ for Dell Latitude E7450
-Message-ID: <20230619171912.5407a7eb@endymion.delvare>
-In-Reply-To: <967411b3-7013-619e-4fef-90644fa8d489@mariushoch.de>
-References: <20230514103634.235917-1-mail@mariushoch.de>
-        <20230523200350.62ab4788@endymion.delvare>
-        <59a6a917-2a93-d52d-37f3-091295dd0db4@mariushoch.de>
-        <20230604160132.102dd6a7@endymion.delvare>
-        <967411b3-7013-619e-4fef-90644fa8d489@mariushoch.de>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        with ESMTP id S230130AbjFSPhu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Jun 2023 11:37:50 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E72113;
+        Mon, 19 Jun 2023 08:37:49 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5186a157b85so5195439a12.0;
+        Mon, 19 Jun 2023 08:37:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687189068; x=1689781068;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LfbivNkUyRqUuO2dy5Pvjng0AOI0erWsssVVox7EkxU=;
+        b=U7IA9um402pom7Vfn68x9rYJsi5G8Gc8DyRp7c3g9NxHbf+4915W3HlmFO0crI5Sex
+         3KjLWzfA7L34zuOC/xgrHke6+1+fi7LLIa+/PUaI6ASm0rXCcfW3tqvcLpZlnMmwkXc6
+         s1fJHLGzn/SGlyTS52Awfld0dMKBdUu83FgeGoAOFKWwPelwi/MlAfA2DuQrzNGAWHWw
+         yOytdQtU6cfzT+nXU+QDom6cYHvXskXmzXJH9NSG5r4dFHFqu7oOM30sWY8dnOlYncoK
+         I24JGwvtRTwUXASmOcddfhkCh0pFxwdoknAg7QZ62ejvzJIOa6l7rNx8ICUUx+tk2ovP
+         YqmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687189068; x=1689781068;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LfbivNkUyRqUuO2dy5Pvjng0AOI0erWsssVVox7EkxU=;
+        b=PIHv5SCgWOYrFA6wxmMG1Wv7wkquaI2WaPSgKJwH/Tn5Ef/uChu8P6gg4Y46s4yGKO
+         SRH3S0WZ4CeAJ4rnuE6pnYkoCRrBJK/BWKdYA+oNkbJpMfZqgYqKWnZdZPF0plnCpn5G
+         o0ysrenIGMjNwphnRneVOtzJ2qiirjikvoL7cV29JBdQh559cYPdmZm9PPCLYP3Usan4
+         NF1knHy8e8xx7br25FDVNgrb3wWw0NDF3rAq5N0Kx64cIFHiglf3vSpvM3eYS/t9REmM
+         n43em3Q3j5PwHv+d8CBje8PD6yZaeme8UygJryUX/MwTYQioYgWKlm5l9yu00HadD9EQ
+         hJ+g==
+X-Gm-Message-State: AC+VfDxmQVPzvx+VlclVScPNybF45mj6A/7x39qCcRRA+tYSajPZSPDI
+        EXq+XE1PnwmNp3dkWYWvvZg=
+X-Google-Smtp-Source: ACHHUZ7I63Psrd0vceBOOgWfqVCcsOm9i/fBn9QmXuZWND45VGoFOumg+WpOBAF0aYBOxlXHDcCEUg==
+X-Received: by 2002:a05:6402:1245:b0:51b:52fa:4448 with SMTP id l5-20020a056402124500b0051b52fa4448mr890931edw.6.1687189067841;
+        Mon, 19 Jun 2023 08:37:47 -0700 (PDT)
+Received: from xeon.. ([188.163.112.79])
+        by smtp.gmail.com with ESMTPSA id l8-20020a056402344800b005187a42b44fsm7469043edc.58.2023.06.19.08.37.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 08:37:47 -0700 (PDT)
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+To:     Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] GPIO-based hotplug i2c bus
+Date:   Mon, 19 Jun 2023 18:37:30 +0300
+Message-Id: <20230619153732.46258-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, 18 Jun 2023 15:42:40 +0200, Marius Hoch wrote:
-> I just booted with acpi=3Dnoirq, the PCI device no longer fails to be=20
-> enabled and the device got assigned IRQ 19 now (according to lspci -v/=20
-> proc/interrupts), while the freefall device remained at IRQ 18.
-> Interestingly dmesg is full of spam from the freefall device (endlessly=20
-> reporting that freefall got detected, probably indicating a problem in=20
-> IRQ handling, yikes).
+ASUS Transformers require this driver for proper work with their dock.
+Dock is controlled by EC and its presence is detected by a GPIO.
 
-Unfortunately, while acpi=3Dnoirq can be useful for testing purposes and
-bug investigation, there's no guarantee that a modern x86 system can
-actually work properly without ACPI-based PCI routing.
+---
+Changes in v2:
+- adjusted documentation
+---
 
-> Booting without the smo8800 module results in:
-> [root@fedora ~]# dmesg | grep -i smbus
-> [=C2=A0=C2=A0 20.042515] i801_smbus 0000:00:1f.3: PCI->APIC IRQ transform=
-: INT C=20
-> -> IRQ 19 =20
-> [=C2=A0=C2=A0 20.042548] i801_smbus 0000:00:1f.3: SPD Write Disable is set
-> [=C2=A0=C2=A0 20.042574] i801_smbus 0000:00:1f.3: SMBus using PCI interru=
-pt
-> [=C2=A0=C2=A0 20.051270] i801_smbus 0000:00:1f.3: Accelerometer lis3lv02d=
- is=20
-> present on SMBus but its address is unknown, skipping registration
-> [=C2=A0=C2=A0 20.253942] i801_smbus 0000:00:1f.3: Transaction timeout
-> [=C2=A0=C2=A0 20.461962] i801_smbus 0000:00:1f.3: Transaction timeout
->=20
-> The "Transaction timeout" messages might indicate that interrupt routing=
-=20
-> isn't actually working?
+Michał Mirosław (1):
+  i2c: Add GPIO-based hotplug gate
 
-Indeed. This means the driver waited for an interrupt but was never
-called back.
+Svyatoslav Ryhel (1):
+  dt-bindings: i2c: add binding for i2c-hotplug-gpio
 
---=20
-Jean Delvare
-SUSE L3 Support
+ .../bindings/i2c/i2c-hotplug-gpio.yaml        |  65 +++++
+ drivers/i2c/Kconfig                           |  11 +
+ drivers/i2c/Makefile                          |   1 +
+ drivers/i2c/i2c-hotplug-gpio.c                | 266 ++++++++++++++++++
+ 4 files changed, 343 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-hotplug-gpio.yaml
+ create mode 100644 drivers/i2c/i2c-hotplug-gpio.c
+
+-- 
+2.39.2
+
