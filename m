@@ -2,52 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1A57359B4
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jun 2023 16:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E40A7359BB
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jun 2023 16:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbjFSOge (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S231326AbjFSOge (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Mon, 19 Jun 2023 10:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFSOgd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Jun 2023 10:36:33 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3C7F1;
+        with ESMTP id S230510AbjFSOge (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Jun 2023 10:36:34 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8D8124;
         Mon, 19 Jun 2023 07:36:32 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b479d53d48so13717411fa.1;
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51a4044b7a1so4393444a12.2;
         Mon, 19 Jun 2023 07:36:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687185390; x=1689777390;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lb3BsbwhSdIU8ke3rmUbsQpQJmTyimjl4tAXInZCbwI=;
-        b=XMY1F52O9BeRJswuECfglKhJp0K5TP9PrZgTIoRvwkIqaEzCLjYFZ1LEAv0RELrwGs
-         7oYHHKGMKXw2sHR3BMolNDOcDfNyEpNlqNdQCMO9GFGRIbNS+C0wFru2przkyxjh8hXC
-         LlUCAOOQgtz39imbzV2WISnrse8RLz9hKSN6Iim2b4klrxXZDR1pFVU9rzEcvmK+CKaK
-         COQLmPG8LzoXXCpMCnQMyZFoAoj0vZJxfvvDQ/uk8b1fnZUZz5bV0rlcXvYnRft+sHFu
-         eVjyxZfaAt1m3ltvDIXd4t2vD8JD5O//CLNTA0op9xXGskT8vHF7gd+EYKzADclOV8ne
-         Amsg==
+        d=gmail.com; s=20221208; t=1687185391; x=1689777391;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/M63MWzXEsAPQQsl++H6/LS5VBcI5JHI6IsyHetoStA=;
+        b=dnvgDHuNRmwTy7om3tVZfA8WHSmaWcORJLS3TnLlPQjuhiJjeB3jsycakvCuVrnZs3
+         V6cF/LdR5VErjtUSk+iQuU2fUhajGAD7ySGJ6v2yHJz1QIYwf0Y1VITwbOjh64pgxETV
+         NMLqQ+Tj15hVcsULfD594EeP9r9AmyYrCSidAhPNWaH7HVJlG/u41W+0VJ11pIUWqSau
+         Z8u1S+6qpRr6zovdfeQa4gh8bg8mwKAF+YQ02XfIxi48lYeeCCHpzhO3Yi71tZMO+sjT
+         q3vlg6mYYOfo8pc5ENlsyYY2T5dFnO2PtAvH8l9lDT5x0PWpnp/FwlozfEaBW9wsQgIb
+         CtuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687185390; x=1689777390;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lb3BsbwhSdIU8ke3rmUbsQpQJmTyimjl4tAXInZCbwI=;
-        b=YnYLvJ+J2qyxd3zwEXmkbWME9gg2DRhfR4Dii5I7gY65MFbD41GPAhZn3iYcoB8t5X
-         QQc4AepZwHfTCndZ4muxq6rlEJShZPwcCgimfL/jn/LLP1FtLM1Lt+nrO8DFaUYEPePd
-         q8rZuEXlqaMBZj759XZS0siRGQRhpi1v2SlmCkblxiL3vyI7CP9Wjl/qbSBqnDOmWAKH
-         UFulrrcEj6orbb70fdpWHSWV+bwCSxtmKaepd/kvQZuHhgGbV5AIdsTnr4ZtakYW8pxB
-         PRtAfG7viBD38NN3WHKmn3QIgLPzJi2pNcLIsWCpXN8q+eHvZHq+xxfC8iFWfeRanGbo
-         di4w==
-X-Gm-Message-State: AC+VfDxlHM+p/iyBJae34jI+5q08n/UeRkckT2Op2w2zVOdrtdfjUL1m
-        DByn2h8wtLKepPl7xJnXM+wV+C+zG2VPIQ==
-X-Google-Smtp-Source: ACHHUZ6GsPsB+1U6ide6EgMslbglikC2ezyhHxNi+lDsPqQu+TQt9FwBoIglgfL7iYj0sw6VR/czyw==
-X-Received: by 2002:a2e:3019:0:b0:2b4:7380:233 with SMTP id w25-20020a2e3019000000b002b473800233mr2007580ljw.5.1687185389312;
-        Mon, 19 Jun 2023 07:36:29 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687185391; x=1689777391;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/M63MWzXEsAPQQsl++H6/LS5VBcI5JHI6IsyHetoStA=;
+        b=gG9hPKQydhiU8f8h4SV73tqSdm/wjR9Btdyj6Zch7qfKUOLIztPEM0CO3+MnyCdHxm
+         C5iWUTS8r6aE5xL/VcPTygmRBhGmoYDLY/OsxeHwhonSjNqRlwdF7pYElRS0tAS+7xp0
+         0JVP3or16ao0l7NddcelaXRTIgcTdTgPSkDrWnIH9V0tlWFzJp+TPszEpsj9Rjfd21OZ
+         A1WY5TJp878oefM9J+gaU8EwIXuyubSoudJscGlZhIfaav0mx5eQrhjG1aL+mswJgSYX
+         c+1nJFBz1l2caGQLqYIXW+KW02RkqrdZ9Iz+TsAKU47Qsj4AGbHucoezydGiPFNN+nDg
+         HXiw==
+X-Gm-Message-State: AC+VfDw5UJlrVrPzCnboknCcNXWGOrFMbsSm6w1+XlobJ78t64HUsOaI
+        bRzKNjgd/FhTRS8eZyWvq/Q=
+X-Google-Smtp-Source: ACHHUZ45S4HwtMC1vy9EJG/ta9bBI3eAHk0HWDO4cIsIqhn5N8OWUic6Grg1SIrTbuAHBhTpZmgn7A==
+X-Received: by 2002:a05:6402:706:b0:51a:60b2:7fbe with SMTP id w6-20020a056402070600b0051a60b27fbemr1090107edx.32.1687185391076;
+        Mon, 19 Jun 2023 07:36:31 -0700 (PDT)
 Received: from xeon.. ([188.163.112.79])
-        by smtp.gmail.com with ESMTPSA id r13-20020aa7d58d000000b00514b2a9ce60sm13073283edq.81.2023.06.19.07.36.28
+        by smtp.gmail.com with ESMTPSA id r13-20020aa7d58d000000b00514b2a9ce60sm13073283edq.81.2023.06.19.07.36.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 07:36:28 -0700 (PDT)
+        Mon, 19 Jun 2023 07:36:30 -0700 (PDT)
 From:   Svyatoslav Ryhel <clamor95@gmail.com>
 To:     Andi Shyti <andi.shyti@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -58,10 +59,12 @@ To:     Andi Shyti <andi.shyti@kernel.org>,
         Svyatoslav Ryhel <clamor95@gmail.com>
 Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/2] GPIO-based hotplug i2c bus
-Date:   Mon, 19 Jun 2023 17:36:09 +0300
-Message-Id: <20230619143611.24482-1-clamor95@gmail.com>
+Subject: [PATCH v1 1/2] dt-bindings: i2c: add binding for i2c-hotplug-gpio
+Date:   Mon, 19 Jun 2023 17:36:10 +0300
+Message-Id: <20230619143611.24482-2-clamor95@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230619143611.24482-1-clamor95@gmail.com>
+References: <20230619143611.24482-1-clamor95@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -75,23 +78,89 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-ASUS Transformers require this driver for proper work with their dock.
-Dock is controlled by EC and its presence is detected by a GPIO.
+Document device tree schema which describes hot-pluggable via GPIO
+i2c bus.
 
-Michał Mirosław (1):
-  i2c: Add GPIO-based hotplug gate
-
-Svyatoslav Ryhel (1):
-  dt-bindings: i2c: add binding for i2c-hotplug-gpio
-
- .../bindings/i2c/i2c-hotplug-gpio.yaml        |  68 +++++
- drivers/i2c/Kconfig                           |  11 +
- drivers/i2c/Makefile                          |   1 +
- drivers/i2c/i2c-hotplug-gpio.c                | 266 ++++++++++++++++++
- 4 files changed, 346 insertions(+)
+Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+---
+ .../bindings/i2c/i2c-hotplug-gpio.yaml        | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-hotplug-gpio.yaml
- create mode 100644 drivers/i2c/i2c-hotplug-gpio.c
 
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-hotplug-gpio.yaml b/Documentation/devicetree/bindings/i2c/i2c-hotplug-gpio.yaml
+new file mode 100644
+index 000000000000..74544687a2b8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/i2c-hotplug-gpio.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/i2c-hotplug-gpio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: GPIO detected hot-plugged I2C bus
++
++maintainers:
++  - Michał Mirosław <mirq-linux@rere.qmqm.pl>
++
++description: |
++  Driver for hot-plugged I2C busses, where some devices on a bus
++  are hot-pluggable and their presence is indicated by GPIO line.
++
++properties:
++  $nodename:
++    pattern: "^i2c-(.*)?"
++
++  compatible:
++    items:
++      - const: i2c-hotplug-gpio
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++  interrupts-extended:
++    minItems: 1
++
++  detect-gpios:
++    maxItems: 1
++
++  i2c-parent:
++    maxItems: 1
++
++required:
++  - compatible
++  - "#address-cells"
++  - "#size-cells"
++  - interrupts-extended
++  - detect-gpios
++  - i2c-parent
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    /*
++     * Asus Transformers use I2C hotplug for attachable dock keyboard
++     */
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c-dock {
++        compatible = "i2c-hotplug-gpio";
++
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        interrupts-extended = <&gpio 164 IRQ_TYPE_EDGE_BOTH>;
++        detect-gpios = <&gpio 164 1>;
++
++        i2c-parent = <&{/i2c@7000c400}>;
++    };
++...
 -- 
 2.39.2
 
