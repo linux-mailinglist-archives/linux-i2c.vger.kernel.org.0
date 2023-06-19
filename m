@@ -2,104 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CECA735908
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jun 2023 16:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1A57359B4
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Jun 2023 16:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjFSOBE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Jun 2023 10:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S231312AbjFSOge (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 19 Jun 2023 10:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjFSOBD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Jun 2023 10:01:03 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0997010D
-        for <linux-i2c@vger.kernel.org>; Mon, 19 Jun 2023 07:01:03 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id 5b1f17b1804b1-3f900cd3f69so19956595e9.0
-        for <linux-i2c@vger.kernel.org>; Mon, 19 Jun 2023 07:01:02 -0700 (PDT)
+        with ESMTP id S229448AbjFSOgd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Jun 2023 10:36:33 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3C7F1;
+        Mon, 19 Jun 2023 07:36:32 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b479d53d48so13717411fa.1;
+        Mon, 19 Jun 2023 07:36:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687183261; x=1689775261;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=LFUPhZWr9OejkVe8vrK1RLqExmiJ6VnkjIuFxPfFF7fIaut2viC9mLZRInOQifGwtX
-         vzSm2imouCpOegULFEYBoyrRMxSQbLYX0N2FxrYq31loa7++1oFDAcpuEE3cRbdLSYRx
-         S6Qhi8gvP/CrYvKAj0mLiSJEUHnmTyt2CcHhh4SHBr0OZfHczkOpkY+WxNq0YaZl3uMS
-         pttIbtZcldjutzw1VD7sVDYoOKJwGcO96jL2Jz9ZeoIO5tP6YBxfMa10lnZGOWgvITWV
-         uq7DyYJykK4qOg5ZUKkrpSeFz+zOt1rooNBy25xCP0LMzHCBfGzLkTydHFCMeB8jLENY
-         n1jQ==
+        d=gmail.com; s=20221208; t=1687185390; x=1689777390;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lb3BsbwhSdIU8ke3rmUbsQpQJmTyimjl4tAXInZCbwI=;
+        b=XMY1F52O9BeRJswuECfglKhJp0K5TP9PrZgTIoRvwkIqaEzCLjYFZ1LEAv0RELrwGs
+         7oYHHKGMKXw2sHR3BMolNDOcDfNyEpNlqNdQCMO9GFGRIbNS+C0wFru2przkyxjh8hXC
+         LlUCAOOQgtz39imbzV2WISnrse8RLz9hKSN6Iim2b4klrxXZDR1pFVU9rzEcvmK+CKaK
+         COQLmPG8LzoXXCpMCnQMyZFoAoj0vZJxfvvDQ/uk8b1fnZUZz5bV0rlcXvYnRft+sHFu
+         eVjyxZfaAt1m3ltvDIXd4t2vD8JD5O//CLNTA0op9xXGskT8vHF7gd+EYKzADclOV8ne
+         Amsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687183261; x=1689775261;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=ZMtJWb+oUcDfgiuIWwnwUD3Hql+SmMHL4cQbaNO0JBSXigCVYODTpOtmFdwSyuHKDh
-         YXFuNHtxaeMCJcD4Ua52MmITBDOqwBiymdkF20kn5dLPZrnJxmDhjVqoyoxMald4Opk3
-         i9x8aDgg/0RDQOH3zjVxfxyptFCqs+vpYITY39MYtKqctemv5qAt8OSPfhLTenlD7Qe/
-         Pmzr+6beHJzYZ0qnfguMcKrfqJZtbyAaXtxzg/CZk2TWKVO2lBfzjrM/jmrbiW2eCO8l
-         JTethMNMJcu/VeMBkoP2YnkFGrrOZgBOIek+Ouo/T7q0NjLxHo0ogMnnvKLaaqS5MYiz
-         d+0Q==
-X-Gm-Message-State: AC+VfDxVzByHNquHEYT3HYcEzOaVuSsukVrfy9aIzyCHxjyckWSCVORO
-        um3Mb/WdHcs+v70fHDIj/HcRnVWxLOCisKSTl04=
-X-Google-Smtp-Source: ACHHUZ56aW+CX9Lm3umDiAdWySJt7V833IxUI+qvPK1z85vSOUK7sRep1RLXgWx0PVvBEgsrQKI32Cf00sJK50HoFE8=
-X-Received: by 2002:a05:600c:2313:b0:3f7:33cf:707b with SMTP id
- 19-20020a05600c231300b003f733cf707bmr6717084wmo.1.1687183261194; Mon, 19 Jun
- 2023 07:01:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687185390; x=1689777390;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lb3BsbwhSdIU8ke3rmUbsQpQJmTyimjl4tAXInZCbwI=;
+        b=YnYLvJ+J2qyxd3zwEXmkbWME9gg2DRhfR4Dii5I7gY65MFbD41GPAhZn3iYcoB8t5X
+         QQc4AepZwHfTCndZ4muxq6rlEJShZPwcCgimfL/jn/LLP1FtLM1Lt+nrO8DFaUYEPePd
+         q8rZuEXlqaMBZj759XZS0siRGQRhpi1v2SlmCkblxiL3vyI7CP9Wjl/qbSBqnDOmWAKH
+         UFulrrcEj6orbb70fdpWHSWV+bwCSxtmKaepd/kvQZuHhgGbV5AIdsTnr4ZtakYW8pxB
+         PRtAfG7viBD38NN3WHKmn3QIgLPzJi2pNcLIsWCpXN8q+eHvZHq+xxfC8iFWfeRanGbo
+         di4w==
+X-Gm-Message-State: AC+VfDxlHM+p/iyBJae34jI+5q08n/UeRkckT2Op2w2zVOdrtdfjUL1m
+        DByn2h8wtLKepPl7xJnXM+wV+C+zG2VPIQ==
+X-Google-Smtp-Source: ACHHUZ6GsPsB+1U6ide6EgMslbglikC2ezyhHxNi+lDsPqQu+TQt9FwBoIglgfL7iYj0sw6VR/czyw==
+X-Received: by 2002:a2e:3019:0:b0:2b4:7380:233 with SMTP id w25-20020a2e3019000000b002b473800233mr2007580ljw.5.1687185389312;
+        Mon, 19 Jun 2023 07:36:29 -0700 (PDT)
+Received: from xeon.. ([188.163.112.79])
+        by smtp.gmail.com with ESMTPSA id r13-20020aa7d58d000000b00514b2a9ce60sm13073283edq.81.2023.06.19.07.36.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 07:36:28 -0700 (PDT)
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+To:     Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/2] GPIO-based hotplug i2c bus
+Date:   Mon, 19 Jun 2023 17:36:09 +0300
+Message-Id: <20230619143611.24482-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Received: by 2002:a05:6f02:39c:b0:52:9c4c:58ad with HTTP; Mon, 19 Jun 2023
- 07:01:00 -0700 (PDT)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <yewte444@gmail.com>
-Date:   Mon, 19 Jun 2023 07:01:00 -0700
-Message-ID: <CANmt-qHC6YRV8xDfV-kDGLKxmKfi4yhwHW5j5pfuiMv-99xgrw@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:342 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [yewte444[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [yewte444[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+ASUS Transformers require this driver for proper work with their dock.
+Dock is controlled by EC and its presence is detected by a GPIO.
+
+Michał Mirosław (1):
+  i2c: Add GPIO-based hotplug gate
+
+Svyatoslav Ryhel (1):
+  dt-bindings: i2c: add binding for i2c-hotplug-gpio
+
+ .../bindings/i2c/i2c-hotplug-gpio.yaml        |  68 +++++
+ drivers/i2c/Kconfig                           |  11 +
+ drivers/i2c/Makefile                          |   1 +
+ drivers/i2c/i2c-hotplug-gpio.c                | 266 ++++++++++++++++++
+ 4 files changed, 346 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-hotplug-gpio.yaml
+ create mode 100644 drivers/i2c/i2c-hotplug-gpio.c
+
 -- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+2.39.2
+
