@@ -2,137 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D9E736028
-	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jun 2023 01:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFFF7363AD
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Jun 2023 08:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjFSXiE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 19 Jun 2023 19:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
+        id S230470AbjFTGgp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 20 Jun 2023 02:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFSXiD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 19 Jun 2023 19:38:03 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Jun 2023 16:38:02 PDT
-Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E559F9;
-        Mon, 19 Jun 2023 16:38:02 -0700 (PDT)
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4QlQhV611Jz4T;
-        Tue, 20 Jun 2023 01:19:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1687216779; bh=yLwjcEffcUiCkHIBtIV2E2+D5trU+fSj78KTub/a45Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=En5YPhY/zkeHqi2jZtDiSil2zhRDEPq1EAMvvptbUI9Rf7RWrVcNPAG6lE2MdyKFD
-         jT7tvDsLSAPnTqZ8+kJ3074zoXA1+Ts9JwL0aboHZK0CJXMbsjSlqb3opPZEcSDqof
-         biTz133qqtpdphof/68zbeLDzAj3m0lpuP6NVm1xQElsvo/iwdZBxuNXbPx1ntZCs8
-         4IEy83b8NQGnFGdpzAC90kl8ymWOULGBrlWztn68jTRHkPLrKK1ZT8VdmQHpjAgC1E
-         2tpdHgTSNcxw9EQtZIY8djXSycXb5p6sd+/fD9n8RtkdOPJGgOKfla9Aulr2tfHkrl
-         3dCz7K6HgxUCw==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.8 at mail
-Date:   Tue, 20 Jun 2023 01:19:37 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add binding for i2c-hotplug-gpio
-Message-ID: <ZJDiiZLfRO62NFPx@qmqm.qmqm.pl>
-References: <20230619153732.46258-1-clamor95@gmail.com>
- <20230619153732.46258-2-clamor95@gmail.com>
- <32b0e664-9381-19c4-de9d-9466a00b4f50@linaro.org>
+        with ESMTP id S229931AbjFTGgo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 20 Jun 2023 02:36:44 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0ABE6E
+        for <linux-i2c@vger.kernel.org>; Mon, 19 Jun 2023 23:36:42 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id d9443c01a7336-1b52bf6e669so35063215ad.2
+        for <linux-i2c@vger.kernel.org>; Mon, 19 Jun 2023 23:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687243002; x=1689835002;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NdxwweoK0KeyxrIRkhhBqs6Qf9iIESnDY6nQcUBQECk=;
+        b=gtSwhAlKH6S0UnMglLcB7kmuNUa3fRk8EAmwrwu76R+Vy9wFoISuUap4q/a9WrY3Zd
+         sZmU37leCalZU5t/cIUSgn9nrD4QQfLF4AFHrdQb28LKoACNPDdsNKLLq9P/VXJ9xjCr
+         30OVsQ2kqlDX4vGL7idFvL/Kf/OOLsnYI2eA8/QKg7tNfttfYFN2T2FP27nxgcuYOLNh
+         Ez4soQHfK82STFKM6bbfiPp9r0teTslXfyW7XKRpBvUF5sWgSknJdqQWa+cGjqMre5rP
+         4mioO4BIQk7kQmb+OJQsABs0T9aHrDAx4qXWE/LEiF7PGSkSUr9fFPjljd9CBTI2j3Fn
+         C6uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687243002; x=1689835002;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NdxwweoK0KeyxrIRkhhBqs6Qf9iIESnDY6nQcUBQECk=;
+        b=RJJd5X9SSBF2BkvNKGhnbTBM6P6Q+u4hFvFB8VfkyyJfFDjDSbqevmU+GcYVtr1hh/
+         PHV3rVtORBJ5/Sac3y48mCgHsoDN5OeH4gfqVxv9vFtQiVHWkQj4lq5GYAVnzYvDz/bo
+         EmPMWszy28rO+V8uOl7JgCESa6/md2m352FByB/xb5+qRUGjk2s6x6GiFVpZ3l5TXBbw
+         Ux/g3OBelR7bwNDwY5qf9/ke8vJQtnZqsWgU6c7Rdy1fD6uS92WH859qxMTfWZ/jVIhh
+         m9hmn5+rkt1Z6OfXLjgFd6pbHF452HlOTTvneUWXPDYUA3Yg3x2y0Shd5wLLt3dSGTgE
+         Z75Q==
+X-Gm-Message-State: AC+VfDxhIrrlNTMWSDHOnypnDjhl5VKltFimpEYhbxe+SDdAGPgvvZOB
+        yKqqWG12xSSmf63GJV/5uC3eJ2LlMte/yJWK7Is=
+X-Google-Smtp-Source: ACHHUZ6izpm1spYPPUgQGNwEgP5FRwdezeyIbHocEUUU6hD/emR/Rx6gJMdRiBDWhvDN6KlEsRTAtSZFaRzcoU8+sS4=
+X-Received: by 2002:a17:903:32c4:b0:1af:cbb1:845 with SMTP id
+ i4-20020a17090332c400b001afcbb10845mr13828862plr.16.1687243001883; Mon, 19
+ Jun 2023 23:36:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <32b0e664-9381-19c4-de9d-9466a00b4f50@linaro.org>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: mrs.munisafanasa@gmail.com
+Received: by 2002:a05:7300:b117:b0:c0:763f:7fb5 with HTTP; Mon, 19 Jun 2023
+ 23:36:41 -0700 (PDT)
+From:   Mrs Bill Chantal Lawrence <mrsbillchantallawrence58@gmail.com>
+Date:   Mon, 19 Jun 2023 23:36:41 -0700
+X-Google-Sender-Auth: ck2Ib1VGC540GGcw6p_wqc9wvKA
+Message-ID: <CA+UxooC4Lqcc=xP2gQV8x9jForCvUsQkBvnrJTWfb_4MyVrXvw@mail.gmail.com>
+Subject: Hello Good Day
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 05:53:24PM +0200, Krzysztof Kozlowski wrote:
-> On 19/06/2023 17:37, Svyatoslav Ryhel wrote:
-> > Document device tree schema which describes hot-pluggable via GPIO
-> > i2c bus.
-> > 
-> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-[...]
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/i2c/i2c-hotplug-gpio.yaml
-> > @@ -0,0 +1,65 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/i2c/i2c-hotplug-gpio.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: GPIO detected hot-plugged I2C bus
-> > +
-> > +maintainers:
-> > +  - Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
-> > +
-> > +description:
-> > +  Driver for hot-plugged I2C busses, where some devices on a bus
-> 
-> "Driver" so SW? Bindings are for hardware, not for drivers.
-[...]
-> > +  detect-gpios:
-> > +    maxItems: 1
-> > +
-> > +  i2c-parent:
-> > +    maxItems: 1
-> 
-> Discussion from v1 stands - this is a software construct, not a real device.
-[...]
-> Anyway, don't send v3, before the discussion about the entire concept
-> finishes. You create a software/virtual device, instead of adding these
-> properties to bindings for a real hardware.
+hello....
 
-Hi,
+You have been compensated with the sum of 5.5 million dollars in this
+united nation the payment will be issue into atm visa card and send to
+you from the santander bank we need your address and your  Whatsapp
+this my email.ID (  mrsbillchantallawrence58@gmail.com)  contact  me
 
-In this case it's hard for me to tell the difference if this is
-real or virtual hardware.
+Thanks my
 
-The Transformers have a connector that's used for USB, charging or
-for attaching a keyboard (called a dock; it also has a battery and
-a touchpad). This connector probably (I don't have the means to verify
-that) has an I2C bus lines and a "detect" line (pulled low on the dock
-side) among the pins. I guess there is either no additional chip or
-a transparent bridge/buffer chip, but nothing that could be controlled
-by software. For DT this setup could be modelled like an I2C gate or
-2-port mux with enable joining two I2C busses (one "closer" to the
-CPU -- parent).
-
-> > +
-> > +examples:
-> > +  - |
-> > +    /*
-> > +     * Asus Transformers use I2C hotplug for attachable dock keyboard
-> > +     */
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +
-> > +    i2c-dock {
-> > +        compatible = "i2c-hotplug-gpio";
-> > +
-> > +        #address-cells = <1>;
-> > +        #size-cells = <0>;
-> > +
-> > +        interrupts-extended = <&gpio 164 IRQ_TYPE_EDGE_BOTH>;
-> > +        detect-gpios = <&gpio 164 GPIO_ACTIVE_LOW>;
-> 
-> I don't think you can have both interrupt and GPIO on the same line.
-
-This actually works as expected. There are multiple devices (and
-drivers) that depend on this, e.g. matrix-keypad and gpio-keys.
-
-Best Regards
-Micha³ Miros³aw
+mrsbillchantallawrence58@gmail.com
