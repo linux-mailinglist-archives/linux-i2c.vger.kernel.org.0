@@ -2,38 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF25737CFF
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Jun 2023 10:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBF4738212
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Jun 2023 13:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjFUH7y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 21 Jun 2023 03:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        id S231857AbjFUJbO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 21 Jun 2023 05:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjFUH7x (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Jun 2023 03:59:53 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C08C170D
-        for <linux-i2c@vger.kernel.org>; Wed, 21 Jun 2023 00:59:50 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+        with ESMTP id S231803AbjFUJat (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Jun 2023 05:30:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8071718;
+        Wed, 21 Jun 2023 02:30:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id E84D661E5FE05;
-        Wed, 21 Jun 2023 09:59:44 +0200 (CEST)
-Message-ID: <688ccf73-1205-6ee6-d8e5-5b18c8abd9c7@molgen.mpg.de>
-Date:   Wed, 21 Jun 2023 09:59:44 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75CCE614D8;
+        Wed, 21 Jun 2023 09:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B940C433C0;
+        Wed, 21 Jun 2023 09:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687339815;
+        bh=18nRxiz3RzRU04UzjxaIi/UAFwMnex+OsDW6C9m9tzM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=avWkxEB92WjPUZaa0OQAtoTDGZAonhUdcVlGDiAyztU1gbW9Ztm9Ou+/Z3QyTYFIa
+         5Y67KG3ef56ckdI/9k479xJcWpjXht5jigCsC9KepP07J6/febDCKKG2x7luXsE2fr
+         b8/Z9nwE+g4Yrm41GnedvZTajj1Ty6dAWgbQb1IXioQi07bJN9qdwdeIbL2S4DR02j
+         iSL1bTYnpcK2TXHTCjotNKLlarnGh0TSfBzOMZEwpn5uIjzZZE2mMjVhuuuNX17eQT
+         qmLjSO1FnRx1EXA/5oEEokd/0FK1w2HHay7Rd/NhlxO4GGGyPPqUthwYa556LgmvZI
+         LQW4/DoTCPsKA==
+Date:   Wed, 21 Jun 2023 11:30:12 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Michael Brunner <michael.brunner@kontron.com>
+Subject: Re: [PATCH v1 1/2] ACPI: platform: Ignore SMB0001 only when it has
+ resources
+Message-ID: <20230621093012.nmgrzzepm764kdfy@intel.intel>
+References: <20230620163534.1042-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     linux-i2c@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.de>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Read CPDL firmware version on Edgecore AS5114-48X
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620163534.1042-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -42,170 +61,107 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dear I2C folks,
+Hi Andy,
 
+On Tue, Jun 20, 2023 at 07:35:33PM +0300, Andy Shevchenko wrote:
+> After switchind i2c-scmi driver to be a plaform one it stopped
 
-I am trying to read the CPDL firmware version of the switch Edgecore 
-AS5114-48X with dentOS (Debian based).
+/switchind/switching/
+/one/one,/
 
-In U-Boot it supposedly work like below:
+> being enumerated on number of Kontron platformsm, because it's
 
-     Marvell>> i2c dev 2
-     Marvell>> i2c md 0x40 01 1
-     0001: 01
-     Marvell>> i2c md 0x40 ff 1
-     00ff: 03
+/platformsm/platforms/
 
-But I like to do it with GNU/Linux, but my attempts failed:
+> listed in the forbidden_id_list.
+> 
+> To resolve the situation, split the list to generic one and
+> another that holds devices that has to be skiped if and only if
 
-```
-# i2cdetect -y 2
-      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00:          -- -- -- -- -- -- -- -- -- -- -- -- --
-10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-50: UU UU -- -- -- -- -- -- -- -- -- -- -- -- -- --
-60: -- -- -- -- -- -- -- -- -- -- 6a -- -- -- -- --
-70: -- UU UU UU UU UU UU --
-```
+/skiped/skipped/
 
-Nothing seems to be at address 0x40:
+> they have bogus resources attached (_CRS method returns some).
+> 
+> Fixes: 03d4287add6e ("i2c: scmi: Convert to be a platform driver")
+> Closes: https://lore.kernel.org/r/60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com
+> Reported-by: Michael Brunner <michael.brunner@kontron.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/acpi/acpi_platform.c | 27 +++++++++++++++++++++++++--
+>  1 file changed, 25 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
+> index fe00a5783f53..089a98bd18bf 100644
+> --- a/drivers/acpi/acpi_platform.c
+> +++ b/drivers/acpi/acpi_platform.c
+> @@ -19,13 +19,17 @@
+>  
+>  #include "internal.h"
+>  
+> +static const struct acpi_device_id forbidden_id_with_resourses[] = {
+> +	{"SMB0001",  0},	/* ACPI SMBUS virtual device */
+> +	{ }
+> +};
+> +
+>  static const struct acpi_device_id forbidden_id_list[] = {
+>  	{"ACPI0009", 0},	/* IOxAPIC */
+>  	{"ACPI000A", 0},	/* IOAPIC */
+>  	{"PNP0000",  0},	/* PIC */
+>  	{"PNP0100",  0},	/* Timer */
+>  	{"PNP0200",  0},	/* AT DMA Controller */
+> -	{"SMB0001",  0},	/* ACPI SMBUS virtual device */
+>  	{ }
+>  };
+>  
+> @@ -83,6 +87,15 @@ static void acpi_platform_fill_resource(struct acpi_device *adev,
+>  		dest->parent = pci_find_resource(to_pci_dev(parent), dest);
+>  }
+>  
+> +static int acpi_platform_resource_count(struct acpi_resource *ares, void *data)
+> +{
+> +	int *count = data;
+> +
+> +	*count = *count + 1;
+> +
+> +	return 1;
+> +}
+> +
+>  /**
+>   * acpi_create_platform_device - Create platform device for ACPI device node
+>   * @adev: ACPI device node to create a platform device for.
+> @@ -103,7 +116,8 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
+>  	struct resource_entry *rentry;
+>  	struct list_head resource_list;
+>  	struct resource *resources = NULL;
+> -	int count;
+> +	int count = 0;
+> +	int ret;
+>  
+>  	/* If the ACPI node already has a physical device attached, skip it. */
+>  	if (adev->physical_node_count)
+> @@ -113,6 +127,15 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
+>  		return ERR_PTR(-EINVAL);
+>  
+>  	INIT_LIST_HEAD(&resource_list);
+> +	ret = acpi_dev_get_resources(adev, &resource_list, acpi_platform_resource_count, &count);
+> +	if (ret < 0)
+> +		return ERR_PTR(ret);
+> +
+> +	acpi_dev_free_resource_list(&resource_list);
+> +
+> +	if (count > 0 && !acpi_match_device_ids(adev, forbidden_id_with_resourses))
+> +		return ERR_PTR(-EINVAL);
 
-```
-# i2cdump -f -y 2 0x40
-No size specified (using byte-data access)
-      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-00: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-10: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-20: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-30: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-40: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-50: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-60: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-70: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-80: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-90: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-a0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-b0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-c0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-d0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-e0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-f0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-```
+... so that you rule out first the devices in this list.
 
-Could the bus be different?
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
 
-```
-# i2cdetect -l
-i2c-3	i2c       	i2c-2-mux (chan_id 0)           	I2C adapter
-i2c-30	i2c       	i2c-2-mux (chan_id 3)           	I2C adapter
-i2c-20	i2c       	i2c-2-mux (chan_id 1)           	I2C adapter
-i2c-49	i2c       	i2c-2-mux (chan_id 6)           	I2C adapter
-i2c-10	i2c       	i2c-2-mux (chan_id 7)           	I2C adapter
-i2c-39	i2c       	i2c-2-mux (chan_id 4)           	I2C adapter
-i2c-1	i2c       	mv64xxx_i2c adapter             	I2C adapter
-i2c-29	i2c       	i2c-2-mux (chan_id 2)           	I2C adapter
-i2c-19	i2c       	i2c-2-mux (chan_id 0)           	I2C adapter
-i2c-47	i2c       	i2c-2-mux (chan_id 4)           	I2C adapter
-i2c-37	i2c       	i2c-2-mux (chan_id 2)           	I2C adapter
-i2c-27	i2c       	i2c-2-mux (chan_id 0)           	I2C adapter
-i2c-17	i2c       	i2c-2-mux (chan_id 6)           	I2C adapter
-i2c-45	i2c       	i2c-2-mux (chan_id 2)           	I2C adapter
-i2c-8	i2c       	i2c-2-mux (chan_id 5)           	I2C adapter
-i2c-35	i2c       	i2c-2-mux (chan_id 0)           	I2C adapter
-i2c-25	i2c       	i2c-2-mux (chan_id 6)           	I2C adapter
-i2c-15	i2c       	i2c-2-mux (chan_id 4)           	I2C adapter
-i2c-43	i2c       	i2c-2-mux (chan_id 0)           	I2C adapter
-i2c-6	i2c       	i2c-2-mux (chan_id 3)           	I2C adapter
-i2c-33	i2c       	i2c-2-mux (chan_id 6)           	I2C adapter
-i2c-23	i2c       	i2c-2-mux (chan_id 4)           	I2C adapter
-i2c-13	i2c       	i2c-2-mux (chan_id 2)           	I2C adapter
-i2c-41	i2c       	i2c-2-mux (chan_id 6)           	I2C adapter
-i2c-4	i2c       	i2c-2-mux (chan_id 1)           	I2C adapter
-i2c-31	i2c       	i2c-2-mux (chan_id 4)           	I2C adapter
-i2c-21	i2c       	i2c-2-mux (chan_id 2)           	I2C adapter
-i2c-11	i2c       	i2c-2-mux (chan_id 0)           	I2C adapter
-i2c-2	i2c       	mv64xxx_i2c adapter             	I2C adapter
-i2c-48	i2c       	i2c-2-mux (chan_id 5)           	I2C adapter
-i2c-38	i2c       	i2c-2-mux (chan_id 3)           	I2C adapter
-i2c-0	i2c       	mv64xxx_i2c adapter             	I2C adapter
-i2c-28	i2c       	i2c-2-mux (chan_id 1)           	I2C adapter
-i2c-18	i2c       	i2c-2-mux (chan_id 7)           	I2C adapter
-i2c-46	i2c       	i2c-2-mux (chan_id 3)           	I2C adapter
-i2c-9	i2c       	i2c-2-mux (chan_id 6)           	I2C adapter
-i2c-36	i2c       	i2c-2-mux (chan_id 1)           	I2C adapter
-i2c-26	i2c       	i2c-2-mux (chan_id 7)           	I2C adapter
-i2c-16	i2c       	i2c-2-mux (chan_id 5)           	I2C adapter
-i2c-44	i2c       	i2c-2-mux (chan_id 1)           	I2C adapter
-i2c-7	i2c       	i2c-2-mux (chan_id 4)           	I2C adapter
-i2c-34	i2c       	i2c-2-mux (chan_id 7)           	I2C adapter
-i2c-24	i2c       	i2c-2-mux (chan_id 5)           	I2C adapter
-i2c-14	i2c       	i2c-2-mux (chan_id 3)           	I2C adapter
-i2c-42	i2c       	i2c-2-mux (chan_id 7)           	I2C adapter
-i2c-5	i2c       	i2c-2-mux (chan_id 2)           	I2C adapter
-i2c-32	i2c       	i2c-2-mux (chan_id 5)           	I2C adapter
-i2c-22	i2c       	i2c-2-mux (chan_id 3)           	I2C adapter
-i2c-50	i2c       	i2c-2-mux (chan_id 7)           	I2C adapter
-i2c-12	i2c       	i2c-2-mux (chan_id 1)           	I2C adapter
-i2c-40	i2c       	i2c-2-mux (chan_id 5)           	I2C adapter
-# find / -iname *cpld*
-/sys/bus/i2c/drivers/as4224_cpld
-/sys/module/arm64_accton_as4224_cpld
-/sys/module/arm64_accton_as4224_cpld/drivers/i2c:as4224_cpld
-/lib/modules/5.6.16/onl/wnc/arm64-wnc-qsa72-aom-a-48p/qsa72-aom-a-48p-sys_cpld.ko
-/lib/modules/5.6.16/onl/wnc/arm64-wnc-qsd61-aom-a-48/qsd61-aom-a-48-sfp_plus_cpld.ko
-/lib/modules/5.6.16/onl/wnc/arm64-wnc-qsd61-aom-a-48/qsd61-aom-a-48-sys_cpld.ko
-/lib/modules/5.10.4/onl/delta/arm64-delta-tn48m2/arm64-delta-tn48m-cpld.ko
-/lib/modules/5.10.4/onl/delta/arm64-delta-tn48m-poe/arm64-delta-tn48m-cpld.ko
-/lib/modules/5.10.4/onl/delta/arm64-delta-tn4810m-dn/arm64-delta-tn48m-dn-cpld.ko
-/lib/modules/5.10.4/onl/delta/arm64-delta-tn48m-poe-dn/arm64-delta-tn48m-dn-cpld.ko
-/lib/modules/5.10.4/onl/delta/arm64-delta-tn4810m/arm64-delta-tn48m-cpld.ko
-/lib/modules/5.10.4/onl/delta/arm64-delta-tn48m-dn/arm64-delta-tn48m-dn-cpld.ko
-/lib/modules/5.10.4/onl/delta/arm64-delta-tn48m/arm64-delta-tn48m-cpld.ko
-/lib/modules/5.10.4/onl/delta/arm64-delta-tx4810/arm64-delta-tx4810-cpld.ko
-/lib/modules/5.10.4/onl/accton/arm64-accton-as4224-52p/arm64-accton-as4224-cpld.ko
-/lib/modules/5.10.4/onl/accton/arm64-accton-as4224-52t/arm64-accton-as4224-cpld.ko
-/lib/modules/5.10.4/onl/accton/arm64-accton-as5114-48x/arm64-accton-as4224-cpld.ko
-# ls -l /sys/bus/i2c/drivers/as4224_cpld/
-total 0
-lrwxrwxrwx 1 root root    0 Jun 20 16:53 0-0040 -> 
-../../../../devices/platform/ap806/ap806:config-space@f0000000/f0511000.i2c/i2c-0/0-0040
---w------- 1 root root 4096 Jun 20 16:53 bind
-lrwxrwxrwx 1 root root    0 Jun 20 16:53 module -> 
-../../../../module/arm64_accton_as4224_cpld
---w------- 1 root root 4096 May 16 10:21 uevent
---w------- 1 root root 4096 Jun 20 16:53 unbind
-```
+Andi
 
-Is it bus 0?
-
-```
-# i2cdump -f -y 0 0x40
-No size specified (using byte-data access)
-      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-00: 80 01 ff 07 0f cc cc cc cc cc cc cc cc cc cc cc    ??.?????????????
-10: ff 03 3f cc 01 cc cc cc cc cc cc cc cc cc cc cc    .???????????????
-20: ff cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc    .???????????????
-30: ff ff ff ff cc cc cc cc cc cc cc cc cc cc cc cc    ....????????????
-40: cc cc cc 0e cc cc cc cc cc cc cc cc cc cc cc cc    ????????????????
-50: 0d 4a 03 00 7f cc cc cc cc cc cc cc cc cc cc cc    ?J?.????????????
-60: 01 71 1e cc cc cc cc cc cc cc cc cc cc cc cc cc    ?q??????????????
-70: 7f 7f 7f 7f 7f cc cc cc cc cc cc cc cc cc cc cc    ????????????????
-80: 6c 69 69 69 68 cc cc cc cc cc cc cc cc cc cc cc    liiih???????????
-90: 02 00 71 71 cc cc cc cc cc cc cc cc cc cc cc cc    ?.qq????????????
-a0: ff ff ff ff ff ff ff ff ff ff ff 7f cc cc cc cc    ...........?????
-b0: ff ff ff ff ff ff 00 00 00 00 00 00 cc cc cc cc    ............????
-c0: 0f fe ff ff ff 3f 00 00 00 00 00 00 cc cc cc cc    ??...?......????
-d0: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc    ????????????????
-e0: 00 71 cc cc cc cc cc cc cc cc cc cc cc cc cc cc    .q??????????????
-f0: 41 53 35 31 31 34 00 00 00 00 00 00 41 57 53 05    AS5114......AWS?
-```
-
-What would be the values of `0x40 01 1` and ` 0x40 ff 1`?
-
-
-Kind regards,
-
-Paul
+> +
+>  	count = acpi_dev_get_resources(adev, &resource_list, NULL, NULL);
+>  	if (count < 0)
+>  		return NULL;
+> -- 
+> 2.40.0.1.gaa8946217a0b
+> 
