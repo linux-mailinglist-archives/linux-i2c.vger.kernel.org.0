@@ -2,125 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9117388AF
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Jun 2023 17:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA0C738BDC
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Jun 2023 18:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjFUPUK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 21 Jun 2023 11:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
+        id S229677AbjFUQpO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 21 Jun 2023 12:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbjFUPTx (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Jun 2023 11:19:53 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D832ED2;
-        Wed, 21 Jun 2023 08:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687360610; x=1718896610;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BZCM5lLaApqKK/yTbVaJKND0T8mjA20qNjOsA8/s5nU=;
-  b=bfMDzeCKjGK6H4FHShn/5ZdLutzkHVU11a33O9iqmeqxrfBZJt9ZBljw
-   rSF/InNEnMxd7QULv5c7U0DXmoQdykfDSwJB7tzQO3Z4ARh8o7kJfN+Hi
-   zISSaxlRaMmD9ucQsXB6pauKiGSHaZgDaffPtYEWAPh5umNzHJ5EYMTsX
-   1jGCQOjCYLIhb1/sj+T5+HqK00ggbpqYokCVIO7DXS/Qw74zVtMBVoNhx
-   8lJZxg58k9eHqYsrmEclLp4c8i5OuMDQIp+kyFXrtTz9Y/ALITd6Hp8Aa
-   DpM967FR8z6EpgbMbPN3uq9qzoxMtYjKMHelf6FAxI6DUVdgwlsSWzuRM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="446584496"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="446584496"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 08:16:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="664702536"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="664702536"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 21 Jun 2023 08:16:45 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8D4D0241; Wed, 21 Jun 2023 18:16:56 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, acpica-devel@lists.linuxfoundation.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Robert Moore <robert.moore@intel.com>
-Subject: [PATCH v2 2/2] ACPI: platform: Move SMB0001 HID to the header and reuse
-Date:   Wed, 21 Jun 2023 18:16:52 +0300
-Message-Id: <20230621151652.79579-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230621151652.79579-1-andriy.shevchenko@linux.intel.com>
-References: <20230621151652.79579-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S229806AbjFUQof (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 21 Jun 2023 12:44:35 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E3C1BF4;
+        Wed, 21 Jun 2023 09:44:30 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-668689ce13fso2363888b3a.0;
+        Wed, 21 Jun 2023 09:44:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687365870; x=1689957870;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ovx+jfZaH7V8FUChgciq0i3am8A77reL9nkY9HPtvCI=;
+        b=oW1ObikBvNryJa3IQbsMIObXQjVKuU+Iar50y+rtYh0A7IRz+1XYqAoe1R0Uwwgy2r
+         aLufJu+ujgaOCNBf18/9nfHEeXaf14QE55Wj9i37mRHMmR3DulOVIckWO3SYLIizeB4t
+         ylzGvX19+gt0Qz+C1m0u41kS4iGnavFx27DmySmD8+mYd04IvtdIyFjlBjm81PKfgB2b
+         TlcfC0876TQ906Q33bvfX1T8VM80AJi/b4s32YUX0pe3OCCvyBUCfNXcGw0DLrFAwl28
+         vWXwLesHf4srU5hQEQn7VazrpIrdrsP9LCG1B8h7ihjp4XN7Ac+KqSo0+BDTOAU9aOEJ
+         7oVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687365870; x=1689957870;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ovx+jfZaH7V8FUChgciq0i3am8A77reL9nkY9HPtvCI=;
+        b=kmqQC4+g3A3Ob2EXSJfbR2dpmMqrBo92SkW6l8boBGYO8SlmZyCxwXVQXDM3kwawIl
+         HhXNw3Aa4iKCkQ1wNCCaZ6RLzTA1XhVK32w879u7CgAeqrxZfarNla4SXQqUWnmaEhHk
+         uuIFI41oyaBeT2R9mMSvbXjcRwL7AC2AzLdm39e+I1s61lMKZynnZhGpVN5N8qbLgv2j
+         uR1uaeY9sCZ/TW+eouDsWK+1HTrEApWfrZCf5n8dxkQTdwOB1jiPuagbObUWsw+4G/Vs
+         H4n+y7fpMnc796x02d53CrAgQrnJrl0XyDmKaPCX7eA0zD9dTPOgfsK5SlV0euFcC1qG
+         Jo9A==
+X-Gm-Message-State: AC+VfDzaRrLgj2yjNUCFawIBzZIEHGI+pzf8sT4jRelmYfLb5z637mI7
+        HfFOpHsDa7fZDLvw4GFUTzw=
+X-Google-Smtp-Source: ACHHUZ45oqsBtnqeZQhPpnjVYiE28xPv4RXfLxZ/e2KDRp7E0x5FpC9J7lmd1zTkwlwe53k51cNEVA==
+X-Received: by 2002:a05:6a20:4288:b0:11f:4412:fc77 with SMTP id o8-20020a056a20428800b0011f4412fc77mr6379317pzj.17.1687365870107;
+        Wed, 21 Jun 2023 09:44:30 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x9-20020aa793a9000000b0064fd8b3dd10sm3130533pff.109.2023.06.21.09.44.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 09:44:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 21 Jun 2023 09:44:28 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: mpc: Use of_property_read_reg() to parse "reg"
+Message-ID: <c9e228d6-d8b5-4041-b50a-c599144c8752@roeck-us.net>
+References: <20230609183044.1764951-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609183044.1764951-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-There are at least two places in the kernel that are using
-the SMB0001 HID. Make it to be available via acpi_drivers.h
-header file. While at it, replace hard coded one with a
-definition.
+On Fri, Jun 09, 2023 at 12:30:44PM -0600, Rob Herring wrote:
+> Use the recently added of_property_read_reg() helper to get the
+> untranslated "reg" address value.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-Link: https://lore.kernel.org/r/20230620163534.1042-2-andriy.shevchenko@linux.intel.com
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: added tag (Andi)
- drivers/acpi/acpi_platform.c  | 2 +-
- drivers/i2c/busses/i2c-scmi.c | 3 ---
- include/acpi/acpi_drivers.h   | 2 ++
- 3 files changed, 3 insertions(+), 4 deletions(-)
+This patch results in:
 
-diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
-index 089a98bd18bf..e86f76ee3473 100644
---- a/drivers/acpi/acpi_platform.c
-+++ b/drivers/acpi/acpi_platform.c
-@@ -20,7 +20,7 @@
- #include "internal.h"
- 
- static const struct acpi_device_id forbidden_id_with_resourses[] = {
--	{"SMB0001",  0},	/* ACPI SMBUS virtual device */
-+	{ACPI_SMBUS_MS_HID,  0},	/* ACPI SMBUS virtual device */
- 	{ }
- };
- 
-diff --git a/drivers/i2c/busses/i2c-scmi.c b/drivers/i2c/busses/i2c-scmi.c
-index 104570292241..421735acfa14 100644
---- a/drivers/i2c/busses/i2c-scmi.c
-+++ b/drivers/i2c/busses/i2c-scmi.c
-@@ -13,9 +13,6 @@
- #include <linux/i2c.h>
- #include <linux/acpi.h>
- 
--/* SMBUS HID definition as supported by Microsoft Windows */
--#define ACPI_SMBUS_MS_HID		"SMB0001"
--
- struct smbus_methods_t {
- 	char *mt_info;
- 	char *mt_sbr;
-diff --git a/include/acpi/acpi_drivers.h b/include/acpi/acpi_drivers.h
-index 8372b0e7fd15..b14d165632e7 100644
---- a/include/acpi/acpi_drivers.h
-+++ b/include/acpi/acpi_drivers.h
-@@ -27,6 +27,8 @@
- #define ACPI_BAY_HID			"LNXIOBAY"
- #define ACPI_DOCK_HID			"LNXDOCK"
- #define ACPI_ECDT_HID			"LNXEC"
-+/* SMBUS HID definition as supported by Microsoft Windows */
-+#define ACPI_SMBUS_MS_HID		"SMB0001"
- /* Quirk for broken IBM BIOSes */
- #define ACPI_SMBUS_IBM_HID		"SMBUSIBM"
- 
--- 
-2.40.0.1.gaa8946217a0b
+Building powerpc:ppc32_allmodconfig ... failed
+--------------
+Error log:
+drivers/i2c/busses/i2c-mpc.c: In function 'mpc_i2c_setup_512x':
+drivers/i2c/busses/i2c-mpc.c:310:20: error: unused variable 'pval' [-Werror=unused-variable]
+  310 |         const u32 *pval;
 
+because pval is no longer used.
+
+Guenter
+
+> ---
+>  drivers/i2c/busses/i2c-mpc.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
+> index cfd074ee6d54..595dce9218ad 100644
+> --- a/drivers/i2c/busses/i2c-mpc.c
+> +++ b/drivers/i2c/busses/i2c-mpc.c
+> @@ -316,9 +316,10 @@ static void mpc_i2c_setup_512x(struct device_node *node,
+>  	if (node_ctrl) {
+>  		ctrl = of_iomap(node_ctrl, 0);
+>  		if (ctrl) {
+> +			u64 addr;
+>  			/* Interrupt enable bits for i2c-0/1/2: bit 24/26/28 */
+> -			pval = of_get_property(node, "reg", NULL);
+> -			idx = (*pval & 0xff) / 0x20;
+> +			of_property_read_reg(node, 0, &addr, NULL);
+> +			idx = (addr & 0xff) / 0x20;
+>  			setbits32(ctrl, 1 << (24 + idx * 2));
+>  			iounmap(ctrl);
+>  		}
+> -- 
+> 2.39.2
+> 
