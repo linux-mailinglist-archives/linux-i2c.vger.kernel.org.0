@@ -2,43 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E49773C033
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 22:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02BB073C04A
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 22:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbjFWUhm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Jun 2023 16:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S232152AbjFWUii (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Jun 2023 16:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbjFWUhd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 16:37:33 -0400
+        with ESMTP id S229451AbjFWUig (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 16:38:36 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E144A2965;
-        Fri, 23 Jun 2023 13:37:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA13294E;
+        Fri, 23 Jun 2023 13:38:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687552623; x=1719088623;
+  t=1687552686; x=1719088686;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+NDzjzg+Ni//gNmFZKyOgL7uxanPfC14OsbzNCq8wzw=;
-  b=m2lq5uWpNEOk41B54sKg/a6G8/YVRgwTL7fwyUga75Zx7jb0zYFDCSB0
-   IXN8qWHHa3KuybazFbu4CvsIvUUXCJRQ7sHrXz64qCjklHwhawph53Kyi
-   HTQaHG2kcIRLtke1aU1/Ck9E5VUvs8zrjpcuNSJy+9MxWAj3v17J5+1HM
-   HtSPQCKI83I7DQR2IA5U8yNtGZ3uWiZlw7OduA8gXePFLLdcLvYrVCC9l
-   g6uDyaifygWZyv9LkmwMng6Bj1IUOr+p1T1eKX5sa5K7WLYBMDrlBG1Hh
-   Si3yzfrXdCBJuNvzu9G0vsI7SZ6RVdW2oYSGtKgxPlxmxxsTqDAuxjklG
-   Q==;
+  bh=pO0SddiNRb5mLg5JiH+I1hubEytCoBnQJ1wPhnv+mrQ=;
+  b=Rz7OZkAwe1vkGsAhQb/Sx9QGiecHjlgXPsaKf02OR5rIytHZNSAqV1vg
+   hXahwDHQe7STEEehyJOpZAFjXtJreXED/ii+uj3a3gOXj1FzKNGy5Yf3m
+   z8dJdzUD0tobjrhyxd5Fxvg1W0J3AkM6SfqMSKDzvb0eppd9QHn0TgLD7
+   C3LyDN8/nfENToBXCEa0r7tTZPi/HyubSEfYbpf7kMD929TRgzk7Bo0ZR
+   k2TKGsryBTDsnnhpvQ52YNSZ5P/qmf41FqMwr9JETXT2Hz9YvtuBH1sWL
+   LbAFClDA8JIUSEzhtAUCEe/AbiSYMn4qlq+BiLUdPwJmaxDBLk9QJn4Cy
+   w==;
 X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="158362094"
+   d="scan'208";a="221702264"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:36:26 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:37:11 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:36:21 -0700
+ 15.1.2507.21; Fri, 23 Jun 2023 13:36:51 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:35:53 -0700
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:36:21 -0700
 From:   Varshini Rajendran <varshini.rajendran@microchip.com>
 To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
@@ -75,9 +75,9 @@ CC:     <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
         <balamanikandan.gunasundar@microchip.com>,
         <manikandan.m@microchip.com>, <dharma.b@microchip.com>,
         <nayabbasha.sayed@microchip.com>, <balakrishnan.s@microchip.com>
-Subject: [PATCH v2 10/45] clk: at91: sama7g5: move mux table macros to header file
-Date:   Sat, 24 Jun 2023 02:00:21 +0530
-Message-ID: <20230623203056.689705-11-varshini.rajendran@microchip.com>
+Subject: [PATCH v2 11/45] dt-bindings: clk: at91: add bindings for SAM9X7's clock controller
+Date:   Sat, 24 Jun 2023 02:00:22 +0530
+Message-ID: <20230623203056.689705-12-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
@@ -94,103 +94,38 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Move the mux table init and fill macro function definitions from the
-sama7g5 pmc driver to the pmc.h header file since they will be used
-by other SoC's pmc drivers as well like sam9x7.
+Add bindings for SAM9X7's slow clock controller and pmc.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 ---
- drivers/clk/at91/pmc.h     | 16 ++++++++++++++++
- drivers/clk/at91/sama7g5.c | 35 ++++++++++-------------------------
- 2 files changed, 26 insertions(+), 25 deletions(-)
+ Documentation/devicetree/bindings/clock/at91-clock.txt | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/at91/pmc.h b/drivers/clk/at91/pmc.h
-index 1dd01f30bdee..f3c23ff0da02 100644
---- a/drivers/clk/at91/pmc.h
-+++ b/drivers/clk/at91/pmc.h
-@@ -121,6 +121,22 @@ struct at91_clk_pms {
+diff --git a/Documentation/devicetree/bindings/clock/at91-clock.txt b/Documentation/devicetree/bindings/clock/at91-clock.txt
+index 13f45db3b66d..446937fab950 100644
+--- a/Documentation/devicetree/bindings/clock/at91-clock.txt
++++ b/Documentation/devicetree/bindings/clock/at91-clock.txt
+@@ -10,8 +10,9 @@ Required properties:
+ - compatible : shall be one of the following:
+ 	"atmel,at91sam9x5-sckc",
+ 	"atmel,sama5d3-sckc",
+-	"atmel,sama5d4-sckc" or
+-	"microchip,sam9x60-sckc":
++	"atmel,sama5d4-sckc",
++	"microchip,sam9x60-sckc" or
++	"microchip,sam9x7-sckc":
+ 		at91 SCKC (Slow Clock Controller)
+ - #clock-cells : shall be 1 for "microchip,sam9x60-sckc" otherwise shall be 0.
+ - clocks : shall be the input parent clock phandle for the clock.
+@@ -32,7 +33,7 @@ Power Management Controller (PMC):
  
- #define ndck(a, s) (a[s - 1].id + 1)
- #define nck(a) (a[ARRAY_SIZE(a) - 1].id + 1)
-+
-+#define PMC_INIT_TABLE(_table, _count)		\
-+	do {						\
-+		u8 _i;					\
-+		for (_i = 0; _i < (_count); _i++)	\
-+			(_table)[_i] = _i;		\
-+	} while (0)
-+
-+#define PMC_FILL_TABLE(_to, _from, _count)		\
-+	do {						\
-+		u8 _i;					\
-+		for (_i = 0; _i < (_count); _i++) {	\
-+			(_to)[_i] = (_from)[_i];	\
-+		}					\
-+	} while (0)
-+
- struct pmc_data *pmc_data_allocate(unsigned int ncore, unsigned int nsystem,
- 				   unsigned int nperiph, unsigned int ngck,
- 				   unsigned int npck);
-diff --git a/drivers/clk/at91/sama7g5.c b/drivers/clk/at91/sama7g5.c
-index 468a3c5449b5..75011df708cc 100644
---- a/drivers/clk/at91/sama7g5.c
-+++ b/drivers/clk/at91/sama7g5.c
-@@ -16,21 +16,6 @@
- 
- #include "pmc.h"
- 
--#define SAMA7G5_INIT_TABLE(_table, _count)		\
--	do {						\
--		u8 _i;					\
--		for (_i = 0; _i < (_count); _i++)	\
--			(_table)[_i] = _i;		\
--	} while (0)
--
--#define SAMA7G5_FILL_TABLE(_to, _from, _count)		\
--	do {						\
--		u8 _i;					\
--		for (_i = 0; _i < (_count); _i++) {	\
--			(_to)[_i] = (_from)[_i];	\
--		}					\
--	} while (0)
--
- static DEFINE_SPINLOCK(pmc_pll_lock);
- static DEFINE_SPINLOCK(pmc_mck0_lock);
- static DEFINE_SPINLOCK(pmc_mckX_lock);
-@@ -1022,11 +1007,11 @@ static void __init sama7g5_pmc_setup(struct device_node *np)
- 		if (!mux_table)
- 			goto err_free;
- 
--		SAMA7G5_INIT_TABLE(mux_table, 3);
--		SAMA7G5_FILL_TABLE(&mux_table[3], sama7g5_mckx[i].ep_mux_table,
--				   sama7g5_mckx[i].ep_count);
--		SAMA7G5_FILL_TABLE(&parent_names[3], sama7g5_mckx[i].ep,
--				   sama7g5_mckx[i].ep_count);
-+		PMC_INIT_TABLE(mux_table, 3);
-+		PMC_FILL_TABLE(&mux_table[3], sama7g5_mckx[i].ep_mux_table,
-+			       sama7g5_mckx[i].ep_count);
-+		PMC_FILL_TABLE(&parent_names[3], sama7g5_mckx[i].ep,
-+			       sama7g5_mckx[i].ep_count);
- 
- 		hw = at91_clk_sama7g5_register_master(regmap, sama7g5_mckx[i].n,
- 				   num_parents, parent_names, mux_table,
-@@ -1109,11 +1094,11 @@ static void __init sama7g5_pmc_setup(struct device_node *np)
- 		if (!mux_table)
- 			goto err_free;
- 
--		SAMA7G5_INIT_TABLE(mux_table, 3);
--		SAMA7G5_FILL_TABLE(&mux_table[3], sama7g5_gck[i].pp_mux_table,
--				   sama7g5_gck[i].pp_count);
--		SAMA7G5_FILL_TABLE(&parent_names[3], sama7g5_gck[i].pp,
--				   sama7g5_gck[i].pp_count);
-+		PMC_INIT_TABLE(mux_table, 3);
-+		PMC_FILL_TABLE(&mux_table[3], sama7g5_gck[i].pp_mux_table,
-+			       sama7g5_gck[i].pp_count);
-+		PMC_FILL_TABLE(&parent_names[3], sama7g5_gck[i].pp,
-+			       sama7g5_gck[i].pp_count);
- 
- 		hw = at91_clk_register_generated(regmap, &pmc_pcr_lock,
- 						 &sama7g5_pcr_layout,
+ Required properties:
+ - compatible : shall be "atmel,<chip>-pmc", "syscon" or
+-	"microchip,sam9x60-pmc"
++	"microchip,sam9x60-pmc" or "microchip,sam9x7-pmc"
+ 	<chip> can be: at91rm9200, at91sam9260, at91sam9261,
+ 	at91sam9263, at91sam9g45, at91sam9n12, at91sam9rl, at91sam9g15,
+ 	at91sam9g25, at91sam9g35, at91sam9x25, at91sam9x35, at91sam9x5,
 -- 
 2.25.1
 
