@@ -2,62 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC01C73B530
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 12:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7E973B55A
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 12:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjFWKXx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Jun 2023 06:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        id S229847AbjFWKdj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Jun 2023 06:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbjFWKXv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 06:23:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E11CE75
-        for <linux-i2c@vger.kernel.org>; Fri, 23 Jun 2023 03:23:50 -0700 (PDT)
+        with ESMTP id S232173AbjFWKdj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 06:33:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCCEE6E;
+        Fri, 23 Jun 2023 03:33:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33A206195E
-        for <linux-i2c@vger.kernel.org>; Fri, 23 Jun 2023 10:23:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4AF6C433C8;
-        Fri, 23 Jun 2023 10:23:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9FF361A11;
+        Fri, 23 Jun 2023 10:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7137C433C0;
+        Fri, 23 Jun 2023 10:33:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687515829;
-        bh=v4OeSe1Q0oEwL3e2RwpD2rlKxgUsu7g4bo3mVlWjUPU=;
+        s=k20201202; t=1687516417;
+        bh=sfFnaH25gpS9v0cJjOQk7EIROwbjYpko9ASJcwzrEhc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZJOui7DTSO9pQ/lGJ0QbJpf8qVsnv06aEHTEzgXukMt/muvs0fTdl3IgU+7h/cah1
-         9DULVog4y/Wae8qgpiaaArMRmlhQfHQB0uOGLEmXs1wwqyH0SgXW+XXLCFqjlXqS5k
-         sGAm+R5oLE+tuUiAa+Z2Pn42Fp7IKEnEva05OGw64/fsW/jiUbllPCygg0z2ZRDLX9
-         Do0AaNYU3P2lP+ElKvJw6Bg8zPbkE2eN2x2UAm/hmeLPZjI0zFLgmDztitpvRkvAqy
-         nlJm3cGpFyvAv/xxvlrh86XFjjGKH/oly8z8nXO4llNIAO4ZXFkaCWBkVIcWVWM7fb
-         wQ1gM/GbqV69Q==
-Date:   Fri, 23 Jun 2023 12:23:46 +0200
+        b=boBrJZWqR4cqNFXYKB2+LifLXTAABU48JqZrimo5aUe/KEwbyVHQnSQXUP7jjTern
+         u29kc/41kLgjFEy588K6k+AZT5Ax0wr5Sgx78rKzankDx2K9Nm8c4WUMZtuFhPIHS3
+         FJb9oq4/syOf70YWA45zzw0ywf/tL+rdaKpSfhkyJWj5Chr2JnGHlZLQGJX9g6Yc/7
+         JrQLLTKx5xmSMNPHX54v4aGT/U1WlBUwaqP71+Ip7IJnYCRirjR77jJEIp1nLQRUyv
+         QENo56jbyb5xqRbmIZkCFUw01WnipGREXGrtEi4m/8UNtx1bcV6KFaNeC/FzziA2vK
+         9gZTnMygAkVhw==
+Date:   Fri, 23 Jun 2023 12:33:33 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH 03/15] i2c: busses: at91-core: Use devm_clk_get_enabled()
-Message-ID: <ZJVyspPOps73+BaO@shikoro>
+To:     Sean Nyekjaer <sean@geanix.com>
+Cc:     Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: stm32f7: Add atomic_xfer method to driver
+Message-ID: <ZJV0/cbjn1Qa62u+@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-References: <20230611225702.891856-1-andi.shyti@kernel.org>
- <20230611225702.891856-4-andi.shyti@kernel.org>
+        Sean Nyekjaer <sean@geanix.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230509132159.4160984-1-sean@geanix.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7UcDaaXe3dyd1Kzx"
+        protocol="application/pgp-signature"; boundary="uknG7jZmb7sNlYPD"
 Content-Disposition: inline
-In-Reply-To: <20230611225702.891856-4-andi.shyti@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230509132159.4160984-1-sean@geanix.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,43 +69,48 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---7UcDaaXe3dyd1Kzx
+--uknG7jZmb7sNlYPD
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 12, 2023 at 12:56:50AM +0200, Andi Shyti wrote:
-> Replace the pair of functions, devm_clk_get() and
-> clk_prepare_enable(), with a single function
-> devm_clk_get_enabled().
+On Tue, May 09, 2023 at 03:21:59PM +0200, Sean Nyekjaer wrote:
+> Add an atomic_xfer method to the driver so that it behaves correctly
+> when controlling a PMIC that is responsible for device shutdown.
 >=20
-> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-> Cc: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+> The atomic_xfer method added is similar to the one from the i2c-mv64xxx
+> driver. When running an atomic_xfer a bool flag in the driver data is
+> set, the interrupt is not unmasked on transfer start, and the IRQ
+> handler is manually invoked while waiting for pending transfers to
+> complete.
+>=20
+> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
 
-Nicolas, did you find a new maintainer for this driver?
+Pierre-Yves, Alain, any further comments to this patch?
+
+> Is it okay to keep the DMA transfer in atomic?
+
+Will DMA actually run in atomic mode?
 
 
---7UcDaaXe3dyd1Kzx
+--uknG7jZmb7sNlYPD
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSVcrIACgkQFA3kzBSg
-KbYZMA//UDTn9pDdmWa4tXb6+/n3knEWmMc08oKQ//oGaU8Lc7kXguTlDT45sMdh
-bgeOjYYmNdC62oRk9zJgwed0/OnowK+R+HghRf8aFFwrfue2c3K4/x48Vd4X/hgD
-TtrQBJPmjaTBrkGWu5cuSxFmd2AA60iRguz+8jTRzJnSoXlq0dficd0ojeLFjET+
-7c4v+TX3hwBbMGQveAT0KreFh1+DturPmp/o7HdJ8xIPPcm0mHfipYG3noQ5YTnx
-OSFHOjLmGqhJqn8ndJktBRUS48frkfhGwzpNY8u2lz2RQlv8P4qXiFQlmAO4rySd
-iIUZxXtZ2vNVjkm1gxYGWVhBZLklDZVmHKQLH/2Q4X3ejJRjvRD85qV8d3s2EFiB
-I3DOc3ETLXB7zckSiO3EwomMEYWjiLST4Did3xECWaWqXBLwWrsoN+olmDiwti+a
-UFO/5TMAKhRBs34Ua14AUzNswxNAP36DfYOc06ebqZIm/QfCRBftIr5F4V+EwRg3
-dwsghPPYdjv5y3jJcJQ1Sk+Fy1dLSbXnp+1iL/JVjVASsWUmMPEdN6VI4QolJR7D
-/hIuAOeguKb6/fAK3U33Lv8asBMYGv7DxxqFV8W85i/yxmlY0JZphAcxhP9oCgAW
-yoN3+6EmGKmH0Giyc6eA+1rD5Zpdi9d//6RBvW6wp41HIn3m/1o=
-=Xe1B
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSVdPkACgkQFA3kzBSg
+KbbxjQ/+K79nV1aTGPrTZkz9DkQ84yocXtzQ/Qw8yJMmWIe7Ld2ELs8iW0iVABTR
+lhD9nUCcVe4pT8h+lXoxJPEg8AsDD3dM6nLWTd95SIXk+wK2k68QMYCnH9Ej/lDW
+syrfeqqV3pW3rfCAdPQHPB/BDeAwqkOZ6KU8d8Ulkc6za4KFBB6UueOO0WOvcm4a
+wTwEM0jJuEijsOPcv3xR0YtDQ1wG6hlEo8xQoRv2dF8mSVvhLFBOZVjVmdCXP20K
+70ctiTHnht1Eqbxue8XvgGhJ07WPxmIG840vEpEcEkdfjYtE/v/4Ivo2T1fd6bLy
+mJheZ0gAJxZ6Ze0D93JHCDawP7i1DsOcxld4+KgnTBKRiMtpAlbsa+AbHTkX2tM/
+DM0zcoprB3V0BPOx3cgfa9Yf87BsMvFxhG5OIPEiJJNEtReiA0rG6iopE1PMB9xY
+smdddrd0KvMYS60Xql14vje2AbgP7SzDwxrMLOLemFqhs85pydtwRMFFl8sW9Lm0
+1XHMKyE6OkmS+hR+rK8NVRPuZ8kSTvzVXxa5pcGNvlyfY0LtbWaIln24HOfKeo2Q
+wfOEDSKPFxJuroFXm8Dzt2w919cw+GipDEhxVteUDkauuc2yveqjmKOJOJJ4K9h0
+EmdrZbmNefnsLyLaReTG46cViZ+4OwVL5yutM/ow8m+FYitRS4o=
+=JfaG
 -----END PGP SIGNATURE-----
 
---7UcDaaXe3dyd1Kzx--
+--uknG7jZmb7sNlYPD--
