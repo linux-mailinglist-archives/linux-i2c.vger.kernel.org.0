@@ -2,133 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468A773BA57
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 16:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDA273BA88
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 16:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjFWOjE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Jun 2023 10:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S232367AbjFWOp2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Fri, 23 Jun 2023 10:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjFWOjD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 10:39:03 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE47A1
-        for <linux-i2c@vger.kernel.org>; Fri, 23 Jun 2023 07:39:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687531141; x=1719067141;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7dFtHmAI0ilGhYuq26XkL5GH9TosFOESpg2wiQ1WmYA=;
-  b=CPpQR78z0XnzqooHeI5JbhPyybahyr9OyMFNb+635BiuClnojksWYcm7
-   BoXM1FzuyRFXU24rnssyFa766QRwUZiNEQTqi4BtpheBYMaYDtSMC3e31
-   l26hmmVejpV/r83NAGU2p1sLbqeczfHvK5dDu8/VwcPTuKmIi62q+oW58
-   eUzCXzToonQwan4UTUwbI/GWNkdVyXUSBsqZiaEv7zyOV0toLnI2s8nJx
-   msuYxrGY96dZpkhglsEwnYI+lVd8KZDvaCT8AJKir9DDmTqXW7CDEv8xs
-   bWBv7b4t9vem3vEgHVoaJh5sqVi/HVP3CU3e+MrE24/w4He7PRYFkoOkw
-   A==;
-X-IronPort-AV: E=Sophos;i="6.01,152,1684825200"; 
-   d="scan'208";a="219500558"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 07:39:01 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 07:39:01 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Fri, 23 Jun 2023 07:39:00 -0700
-Message-ID: <b7616125-0467-451c-90aa-0b863012f7a9@microchip.com>
-Date:   Fri, 23 Jun 2023 16:38:34 +0200
+        with ESMTP id S231393AbjFWOow (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 10:44:52 -0400
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E231997;
+        Fri, 23 Jun 2023 07:44:10 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2b46d945510so1899441fa.1;
+        Fri, 23 Jun 2023 07:44:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687531448; x=1690123448;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZiwtYNSOh0NeHU7WEn4N3VuCjNo0G26bDf11cTSsZno=;
+        b=ZIVtQEvIiRiIG17zavSMNhQAXGJLlM9rcfAd/qXy/9YbTEVoF86N27i9OX6GJo9Hl/
+         MjooJIHnpIT80SIwXj5xrKIK27lvrNvWcsHWi2FOxiJC5STYDCCSrOYWck2WQhFl1rrt
+         3JkmT+Z4pC4K/YlLUnRF3V1C9CJja5Vq1FoNDaiZCectWFBz23LmwHlMAxL9D20Wy249
+         hHSlYTHBb0V9wpYvc/8/LzZoVURGhof69QpmRBlDH5XloIW172xDsVQ/kkcuqUgb7sLM
+         bnvfp9heR2rVGCZVM+N3kRrNNlA1R3/kMMDKFPisw3cm2IUGKTsjCv+kFeSDd+TToxAT
+         tDkQ==
+X-Gm-Message-State: AC+VfDxQWmKB2BBHxZo3Z8aBFnaPt/We2FaGi7RYPr+yjZYApWrTCAWB
+        7c3ymC1swUZuE0ubGAG7svdjLK53BCnOXRce65JNs8kFYWY=
+X-Google-Smtp-Source: ACHHUZ52+16LL+CRSPIyup7hQg+18EmiT6Qex68UctPZrXoSH36kbOkm0FDBp/YJbsHR5yt+iCZJXHVn4LPr42y4djQ=
+X-Received: by 2002:a2e:b804:0:b0:2b4:5bc8:3f1a with SMTP id
+ u4-20020a2eb804000000b002b45bc83f1amr12642496ljo.2.1687531448363; Fri, 23 Jun
+ 2023 07:44:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 03/15] i2c: busses: at91-core: Use devm_clk_get_enabled()
-Content-Language: en-US
-To:     Andi Shyti <andi.shyti@kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Durai Manickam <Durai.ManickamKR@microchip.com>
-References: <20230611225702.891856-1-andi.shyti@kernel.org>
- <20230611225702.891856-4-andi.shyti@kernel.org>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20230611225702.891856-4-andi.shyti@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230621151652.79579-1-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0jt8XCzUxQaBXLz0zXezih1Urq=dt-K9PWVY1JpN=Go6Q@mail.gmail.com> <ZJSQf07cO6qmNyCn@smile.fi.intel.com>
+In-Reply-To: <ZJSQf07cO6qmNyCn@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 23 Jun 2023 16:43:55 +0200
+Message-ID: <CAJZ5v0iKLtQpUnhMqB6zgwbURXGFZkje5rNORS9MLqYN=13nWg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] ACPI: platform: Ignore SMB0001 only when it has resources
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
+        Len Brown <lenb@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Michael Brunner <michael.brunner@kontron.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 12/06/2023 at 00:56, Andi Shyti wrote:
-> Replace the pair of functions, devm_clk_get() and
-> clk_prepare_enable(), with a single function
-> devm_clk_get_enabled().
-> 
-> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-> Cc: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+On Thu, Jun 22, 2023 at 8:19 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Jun 22, 2023 at 05:53:13PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Jun 21, 2023 at 5:16 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > After switching i2c-scmi driver to be a plaform one, it stopped
+> >
+> > "platform"
+> >
+> > > being enumerated on number of Kontron platforms, because it's
+> > > listed in the forbidden_id_list.
+> > >
+> > > To resolve the situation, split the list to generic one and
+> > > another that holds devices that has to be skipped if and only
+> >
+> > "have"
+> >
+> > > if they have bogus resources attached (_CRS method returns some).
+>
+> Thanks for the typo fixes!
+>
+> ...
+>
+> > > +static const struct acpi_device_id forbidden_id_with_resourses[] = {
+> >
+> > I don't quite like this name and the driver_data field could be used
+> > to indicate the need to check the resources.
+>
+> Okay, something like
+>
+> /* Check if the device has resources provided by _CRS method */
+> #define ACPI_PLATFORM_CHECK_RES         BIT(0)
+>
+> ?
 
-Looks good to me:
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Could be, but this is specific to forbidden_ids_list[].  Maybe
+ACPI_ALLOW_WO_RESOURCES or similar.
 
-Best regards,
-   Nicolas
+> > > +       {"SMB0001",  0},        /* ACPI SMBUS virtual device */
+> > > +       { }
+> > > +};
+>
+> ...
+>
+> > > +static int acpi_platform_resource_count(struct acpi_resource *ares, void *data)
+> > > +{
+> > > +       int *count = data;
+> > > +
+> > > +       *count = *count + 1;
+> >
+> > Why not (*count)++?
+>
+> Can be that way, I just copied'n'pasted from the existing code.
+>
+> > > +       return 1;
+> > > +}
 
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->   drivers/i2c/busses/i2c-at91-core.c | 8 ++------
->   1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-at91-core.c b/drivers/i2c/busses/i2c-at91-core.c
-> index 05ad3bc3578ac..2251e0deed29c 100644
-> --- a/drivers/i2c/busses/i2c-at91-core.c
-> +++ b/drivers/i2c/busses/i2c-at91-core.c
-> @@ -226,12 +226,11 @@ static int at91_twi_probe(struct platform_device *pdev)
-> 
->          platform_set_drvdata(pdev, dev);
-> 
-> -       dev->clk = devm_clk_get(dev->dev, NULL);
-> +       dev->clk = devm_clk_get_enabled(dev->dev, NULL);
->          if (IS_ERR(dev->clk)) {
-> -               dev_err(dev->dev, "no clock defined\n");
-> +               dev_err(dev->dev, "failed to enable clock\n");
->                  return -ENODEV;
->          }
-> -       clk_prepare_enable(dev->clk);
-> 
->          snprintf(dev->adapter.name, sizeof(dev->adapter.name), "AT91");
->          i2c_set_adapdata(&dev->adapter, dev);
-> @@ -260,8 +259,6 @@ static int at91_twi_probe(struct platform_device *pdev)
-> 
->          rc = i2c_add_numbered_adapter(&dev->adapter);
->          if (rc) {
-> -               clk_disable_unprepare(dev->clk);
-> -
->                  pm_runtime_disable(dev->dev);
->                  pm_runtime_set_suspended(dev->dev);
-> 
-> @@ -278,7 +275,6 @@ static void at91_twi_remove(struct platform_device *pdev)
->          struct at91_twi_dev *dev = platform_get_drvdata(pdev);
-> 
->          i2c_del_adapter(&dev->adapter);
-> -       clk_disable_unprepare(dev->clk);
-> 
->          pm_runtime_disable(dev->dev);
->          pm_runtime_set_suspended(dev->dev);
-> --
-> 2.40.1
-> 
-
--- 
-Nicolas Ferre
-
+BTW, this doesn't need to increment the count even.  It could just
+terminate the walk on the first valid resource found and tell the
+caller to return true in that case.
