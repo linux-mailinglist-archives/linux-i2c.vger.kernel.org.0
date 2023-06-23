@@ -2,43 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D546573C004
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 22:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 408ED73C016
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 22:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbjFWUfu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Jun 2023 16:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
+        id S232208AbjFWUga (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Jun 2023 16:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbjFWUfj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 16:35:39 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379B130C6;
-        Fri, 23 Jun 2023 13:35:10 -0700 (PDT)
+        with ESMTP id S232066AbjFWUgY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 16:36:24 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA9B2944;
+        Fri, 23 Jun 2023 13:35:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687552511; x=1719088511;
+  t=1687552555; x=1719088555;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1QGyJHdsdEC9quDqT4s3WD8JMv5A9Y0t0yBquA/F1eg=;
-  b=FtE6K6XCuoT7QPAg7ABdDtOVzcCG4+qAUxk1+kyTtyghY4UQZ++TslFg
-   yYKMwqP9EqJaxi91MHa/LWeYABR4Nabxi8/pkLoyLQuybtDWpYsOlsL2w
-   hiq0VmpvuPfM6wgfbtN5jcVkS+3KpwwHH16+szeH2W3g/xv0TwtHnqWUv
-   gEoR57ZA4upscAKGjBMMdSvotidhTdx2IkzBoKhOg6zI2W451anGWZUpr
-   GfP8lC+1El9v2n+Qog2qTdGr2KRst72c/gWRxYAA1qOGoeeUzcVyars3U
-   EK35ZP4DR3RxH/0rr1y+TFU/UQTmljXXZ9HMSGBPTXy9wq5IF6cJlHffX
-   Q==;
+  bh=BjHeEGjJH4FK+Dy2tpLAgiAMGYHda5kF0H68rjaLOR0=;
+  b=LeOqayjxXlyW+efmTb3n9XMeSSb9+gHRx8umPtrvd0GmI9x3CAz0fvVx
+   B8667wAB8QTHMHxt9E1RNZeVV+2hYs4rC5felaHD82sYGw76+ntjbGtpg
+   68WYWM75p+odOrqaRNG7QxhgTYeWIAQdWD5lu/ADoxPyNEir/OviWdwSw
+   NHbA7THis1HcJ7XOJ01F7hRjFrDonmVvWkIfx9HLhu7ONoj1T9PRVNSxa
+   VAOBf9gwoaSeqwKXaxZik3GQNJlDwzQgPjl0nGES6HOfl6pPREJrDGjw+
+   m6jnTeG2Ow/2BzYeyUdAf2dvwMaHcYJK/TvKLfJ1iw4uRoTYnVST2wjjZ
+   A==;
 X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="217418437"
+   d="scan'208";a="220216416"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:35:04 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:35:33 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:34:56 -0700
+ 15.1.2507.21; Fri, 23 Jun 2023 13:35:25 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:34:28 -0700
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:34:56 -0700
 From:   Varshini Rajendran <varshini.rajendran@microchip.com>
 To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
@@ -75,9 +75,9 @@ CC:     <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
         <balamanikandan.gunasundar@microchip.com>,
         <manikandan.m@microchip.com>, <dharma.b@microchip.com>,
         <nayabbasha.sayed@microchip.com>, <balakrishnan.s@microchip.com>
-Subject: [PATCH v2 07/45] ARM: at91: add support in SoC driver for new sam9x7
-Date:   Sat, 24 Jun 2023 02:00:18 +0530
-Message-ID: <20230623203056.689705-8-varshini.rajendran@microchip.com>
+Subject: [PATCH v2 08/45] clk: at91: clk-sam9x60-pll: re-factor to support individual core freq outputs
+Date:   Sat, 24 Jun 2023 02:00:19 +0530
+Message-ID: <20230623203056.689705-9-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
@@ -94,75 +94,135 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add support for SAM9X7 SoC in the SoC driver.
+SAM9X7 SoC family supports different core output frequencies for
+different PLL IDs. To handle the same in the PLL driver, a separate
+parameter core_output is added. The sam9x60 and sama7g5 SoC PMC drivers
+are aligned to the PLL driver by adding the core output freq range in
+the PLL characteristics configurations.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 ---
- drivers/soc/atmel/soc.c | 23 +++++++++++++++++++++++
- drivers/soc/atmel/soc.h |  9 +++++++++
- 2 files changed, 32 insertions(+)
+ drivers/clk/at91/clk-sam9x60-pll.c | 12 ++++++------
+ drivers/clk/at91/pmc.h             |  1 +
+ drivers/clk/at91/sam9x60.c         |  7 +++++++
+ drivers/clk/at91/sama7g5.c         |  7 +++++++
+ 4 files changed, 21 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/soc/atmel/soc.c b/drivers/soc/atmel/soc.c
-index cc9a3e107479..cae3452cbc60 100644
---- a/drivers/soc/atmel/soc.c
-+++ b/drivers/soc/atmel/soc.c
-@@ -101,6 +101,29 @@ static const struct at91_soc socs[] __initconst = {
- 		 AT91_CIDR_VERSION_MASK, SAM9X60_D6K_EXID_MATCH,
- 		 "sam9x60 8MiB SDRAM SiP", "sam9x60"),
- #endif
-+#ifdef CONFIG_SOC_SAM9X7
-+	AT91_SOC(SAM9X7_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
-+		 AT91_CIDR_VERSION_MASK, SAM9X75_EXID_MATCH,
-+		 "sam9x75", "sam9x7"),
-+	AT91_SOC(SAM9X7_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
-+		 AT91_CIDR_VERSION_MASK, SAM9X72_EXID_MATCH,
-+		 "sam9x72", "sam9x7"),
-+	AT91_SOC(SAM9X7_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
-+		 AT91_CIDR_VERSION_MASK, SAM9X70_EXID_MATCH,
-+		 "sam9x70", "sam9x7"),
-+	AT91_SOC(SAM9X7_CIDR_MATCH, SAM9X75_D1G_EXID_MATCH,
-+		 AT91_CIDR_VERSION_MASK, SAM9X75_EXID_MATCH,
-+		 "sam9x75 1Gb DDR3L SiP ", "sam9x7"),
-+	AT91_SOC(SAM9X7_CIDR_MATCH, SAM9X75_D5M_EXID_MATCH,
-+		 AT91_CIDR_VERSION_MASK, SAM9X75_EXID_MATCH,
-+		 "sam9x75 512Mb DDR2 SiP", "sam9x7"),
-+	AT91_SOC(SAM9X7_CIDR_MATCH, SAM9X75_D1M_EXID_MATCH,
-+		 AT91_CIDR_VERSION_MASK, SAM9X75_EXID_MATCH,
-+		 "sam9x75 128Mb DDR2 SiP", "sam9x7"),
-+	AT91_SOC(SAM9X7_CIDR_MATCH, SAM9X75_D2G_EXID_MATCH,
-+		 AT91_CIDR_VERSION_MASK, SAM9X75_EXID_MATCH,
-+		 "sam9x75 2Gb DDR3L SiP", "sam9x7"),
-+#endif
- #ifdef CONFIG_SOC_SAMA5
- 	AT91_SOC(SAMA5D2_CIDR_MATCH, AT91_CIDR_MATCH_MASK,
- 		 AT91_CIDR_VERSION_MASK, SAMA5D21CU_EXID_MATCH,
-diff --git a/drivers/soc/atmel/soc.h b/drivers/soc/atmel/soc.h
-index 7a9f47ce85fb..26dd26b4f179 100644
---- a/drivers/soc/atmel/soc.h
-+++ b/drivers/soc/atmel/soc.h
-@@ -45,6 +45,7 @@ at91_soc_init(const struct at91_soc *socs);
- #define AT91SAM9N12_CIDR_MATCH		0x019a07a0
- #define SAM9X60_CIDR_MATCH		0x019b35a0
- #define SAMA7G5_CIDR_MATCH		0x00162100
-+#define SAM9X7_CIDR_MATCH		0x09750020
+diff --git a/drivers/clk/at91/clk-sam9x60-pll.c b/drivers/clk/at91/clk-sam9x60-pll.c
+index 0882ed01d5c2..b3012641214c 100644
+--- a/drivers/clk/at91/clk-sam9x60-pll.c
++++ b/drivers/clk/at91/clk-sam9x60-pll.c
+@@ -23,9 +23,6 @@
+ #define UPLL_DIV		2
+ #define PLL_MUL_MAX		(FIELD_GET(PMC_PLL_CTRL1_MUL_MSK, UINT_MAX) + 1)
  
- #define AT91SAM9M11_EXID_MATCH		0x00000001
- #define AT91SAM9M10_EXID_MATCH		0x00000002
-@@ -74,6 +75,14 @@ at91_soc_init(const struct at91_soc *socs);
- #define SAMA7G54_D2G_EXID_MATCH		0x00000020
- #define SAMA7G54_D4G_EXID_MATCH		0x00000028
+-#define FCORE_MIN		(600000000)
+-#define FCORE_MAX		(1200000000)
+-
+ #define PLL_MAX_ID		7
  
-+#define SAM9X75_EXID_MATCH		0x00000000
-+#define SAM9X72_EXID_MATCH		0x00000004
-+#define SAM9X70_EXID_MATCH		0x00000005
-+#define SAM9X75_D1G_EXID_MATCH		0x00000001
-+#define SAM9X75_D5M_EXID_MATCH		0x00000002
-+#define SAM9X75_D1M_EXID_MATCH		0x00000003
-+#define SAM9X75_D2G_EXID_MATCH		0x00000006
+ struct sam9x60_pll_core {
+@@ -194,7 +191,8 @@ static long sam9x60_frac_pll_compute_mul_frac(struct sam9x60_pll_core *core,
+ 	unsigned long nmul = 0;
+ 	unsigned long nfrac = 0;
+ 
+-	if (rate < FCORE_MIN || rate > FCORE_MAX)
++	if (rate < core->characteristics->core_output[0].min ||
++	    rate > core->characteristics->core_output[0].max)
+ 		return -ERANGE;
+ 
+ 	/*
+@@ -214,7 +212,8 @@ static long sam9x60_frac_pll_compute_mul_frac(struct sam9x60_pll_core *core,
+ 	}
+ 
+ 	/* Check if resulted rate is a valid.  */
+-	if (tmprate < FCORE_MIN || tmprate > FCORE_MAX)
++	if (tmprate < core->characteristics->core_output[0].min ||
++	    tmprate > core->characteristics->core_output[0].max)
+ 		return -ERANGE;
+ 
+ 	if (update) {
+@@ -666,7 +665,8 @@ sam9x60_clk_register_frac_pll(struct regmap *regmap, spinlock_t *lock,
+ 			goto free;
+ 		}
+ 
+-		ret = sam9x60_frac_pll_compute_mul_frac(&frac->core, FCORE_MIN,
++		ret = sam9x60_frac_pll_compute_mul_frac(&frac->core,
++							characteristics->core_output[0].min,
+ 							parent_rate, true);
+ 		if (ret < 0) {
+ 			hw = ERR_PTR(ret);
+diff --git a/drivers/clk/at91/pmc.h b/drivers/clk/at91/pmc.h
+index 1b3ca7dd9b57..3e36dcc464c1 100644
+--- a/drivers/clk/at91/pmc.h
++++ b/drivers/clk/at91/pmc.h
+@@ -75,6 +75,7 @@ struct clk_pll_characteristics {
+ 	struct clk_range input;
+ 	int num_output;
+ 	const struct clk_range *output;
++	const struct clk_range *core_output;
+ 	u16 *icpll;
+ 	u8 *out;
+ 	u8 upll : 1;
+diff --git a/drivers/clk/at91/sam9x60.c b/drivers/clk/at91/sam9x60.c
+index ac070db58195..452ad45cf251 100644
+--- a/drivers/clk/at91/sam9x60.c
++++ b/drivers/clk/at91/sam9x60.c
+@@ -26,10 +26,16 @@ static const struct clk_range plla_outputs[] = {
+ 	{ .min = 2343750, .max = 1200000000 },
+ };
+ 
++/* Fractional PLL core output range. */
++static const struct clk_range core_outputs[] = {
++	{ .min = 600000000, .max = 1200000000 },
++};
 +
- #define AT91SAM9XE128_CIDR_MATCH	0x329973a0
- #define AT91SAM9XE256_CIDR_MATCH	0x329a93a0
- #define AT91SAM9XE512_CIDR_MATCH	0x329aa3a0
+ static const struct clk_pll_characteristics plla_characteristics = {
+ 	.input = { .min = 12000000, .max = 48000000 },
+ 	.num_output = ARRAY_SIZE(plla_outputs),
+ 	.output = plla_outputs,
++	.core_output = core_outputs,
+ };
+ 
+ static const struct clk_range upll_outputs[] = {
+@@ -40,6 +46,7 @@ static const struct clk_pll_characteristics upll_characteristics = {
+ 	.input = { .min = 12000000, .max = 48000000 },
+ 	.num_output = ARRAY_SIZE(upll_outputs),
+ 	.output = upll_outputs,
++	.core_output = core_outputs,
+ 	.upll = true,
+ };
+ 
+diff --git a/drivers/clk/at91/sama7g5.c b/drivers/clk/at91/sama7g5.c
+index f135b662f1ff..468a3c5449b5 100644
+--- a/drivers/clk/at91/sama7g5.c
++++ b/drivers/clk/at91/sama7g5.c
+@@ -104,11 +104,17 @@ static const struct clk_range pll_outputs[] = {
+ 	{ .min = 2343750, .max = 1200000000 },
+ };
+ 
++/* Fractional PLL core output range. */
++static const struct clk_range core_outputs[] = {
++	{ .min = 600000000, .max = 1200000000 },
++};
++
+ /* CPU PLL characteristics. */
+ static const struct clk_pll_characteristics cpu_pll_characteristics = {
+ 	.input = { .min = 12000000, .max = 50000000 },
+ 	.num_output = ARRAY_SIZE(cpu_pll_outputs),
+ 	.output = cpu_pll_outputs,
++	.core_output = core_outputs,
+ };
+ 
+ /* PLL characteristics. */
+@@ -116,6 +122,7 @@ static const struct clk_pll_characteristics pll_characteristics = {
+ 	.input = { .min = 12000000, .max = 50000000 },
+ 	.num_output = ARRAY_SIZE(pll_outputs),
+ 	.output = pll_outputs,
++	.core_output = core_outputs,
+ };
+ 
+ /*
 -- 
 2.25.1
 
