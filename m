@@ -2,55 +2,56 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992B373B4EE
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 12:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7104873B4FB
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 12:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbjFWKMN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Jun 2023 06:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
+        id S231684AbjFWKPu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Jun 2023 06:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbjFWKL6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 06:11:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FD02132
-        for <linux-i2c@vger.kernel.org>; Fri, 23 Jun 2023 03:10:12 -0700 (PDT)
+        with ESMTP id S231681AbjFWKPp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 06:15:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13E7172C
+        for <linux-i2c@vger.kernel.org>; Fri, 23 Jun 2023 03:15:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05D38619EF
-        for <linux-i2c@vger.kernel.org>; Fri, 23 Jun 2023 10:10:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB0C5C433C0;
-        Fri, 23 Jun 2023 10:10:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9A966194E
+        for <linux-i2c@vger.kernel.org>; Fri, 23 Jun 2023 10:15:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B723CC433C0;
+        Fri, 23 Jun 2023 10:15:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687515011;
-        bh=aS9o1mb8nWK5N199dnmFCuxzwgq6+TAxr+tfibfkS6U=;
+        s=k20201202; t=1687515321;
+        bh=4i9s+qKe1rs2PAkyMGtxHbHrtahkmkd46nQ3phsqfWI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KCNVVG5lITMp9VD8ZDYLfLpwmM18BEaxGsfrZTpyrDeIG3wAUjIYsTWEfnoxerMdg
-         coDI/KvhRNm+5LECghiUYgyVpwLv3pYRu0mGdJ2m/C4cQ+uIAyn55jpcvVcJKrD29r
-         nTu9hcuBdYnV+TvYR1ELsA7G51wjQhn+2+NCTtCgCgOnCz2mD1MgWI3/aSE4kOBgKb
-         jfCKsXIHB0XUsDaf8CDF0LhighWEfYE1tNXEjZsh6OQ0IrikNWqyNgPSmsGVoRprv4
-         WF93LfBs+BXCGVnzLoGz/YXPu9ZnR3jPIaoff84QGbxXkqxY3QofCoUVz+NabVMlti
-         WCWKmw1H9I2lQ==
-Date:   Fri, 23 Jun 2023 12:10:07 +0200
+        b=BH5jLT2ZQzglpMwwgiH+76zTwuMQBP1G8DmhgYySFDyBT6XL5laDn/N2sioQE2M6z
+         cWKrVUlyOerCLZq80M2SkJf32GPIwGw0ojaQxOaU2RTRqxnvEpXojxKTEtmPTiqzvy
+         O9vB9AsYQMPtoTtgxy6gPqkc62T0C13WKaNagwrj5bR1lhAg0fIU3rIWsmXDcQc2OU
+         LKG+kazyX8EsZuXXPnKkBV/6yyqhAiIgoc37MutmqLJetdvN97aZxV0DsaRPlZWKSv
+         HoAklg6xoFzYzw7fjv4C+7j1ZlALi+KZCj+8MVnj63ohIaaAJJyLmDWnt4Jv9vJUR/
+         3QHmjm6R2IHuQ==
+Date:   Fri, 23 Jun 2023 12:15:18 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2] i2c: hix5hd2: Make sure clk is disabled in remove
-Message-ID: <ZJVvf1vxqeeq+UHW@shikoro>
+Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 06/15] i2c: busses: jz4780: Use devm_clk_get_enabled()
+Message-ID: <ZJVwtohDfAlSUpqB@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
         Andi Shyti <andi.shyti@kernel.org>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Linux I2C <linux-i2c@vger.kernel.org>
-References: <20230608225513.1151574-1-andi.shyti@kernel.org>
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>
+References: <20230611225702.891856-1-andi.shyti@kernel.org>
+ <20230611225702.891856-7-andi.shyti@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LlwovOyBLx4vzW2p"
+        protocol="application/pgp-signature"; boundary="lVdkKCPGTNglhF01"
 Content-Disposition: inline
-In-Reply-To: <20230608225513.1151574-1-andi.shyti@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230611225702.891856-7-andi.shyti@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,46 +61,34 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---LlwovOyBLx4vzW2p
+--lVdkKCPGTNglhF01
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Jun 09, 2023 at 12:55:13AM +0200, Andi Shyti wrote:
-> From: Alexey Khoroshilov <khoroshilov@ispras.ru>
->=20
-> pm_runtime_set_suspended() does not lead to call of suspend callback,
-> so clk may be left undisabled in hix5hd2_i2c_remove().
->=20
-> By the way, the patch adds error handling for clk_prepare_enable().
->=20
-> Found by Linux Driver Verification project (linuxtesting.org).
->=20
-> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-
-I have now applied "[PATCH 05/15] i2c: busses: hix5hd2: Use
-devm_clk_get_enabled()". Can this patch then be dropped entirely?
 
 
---LlwovOyBLx4vzW2p
+>  static void jz4780_i2c_remove(struct platform_device *pdev)
+
+You did not update the remove function.
+
+
+--lVdkKCPGTNglhF01
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSVb38ACgkQFA3kzBSg
-KbZ65hAAktJdOS8GGvoZ0FBh8xjEH1IneqyToO+M4yRoJUH2eLnruV7pL25RbRDl
-M7cYEeDTtZtHoXZO+XA4Nz9vzNM0rL0/yczUBBSc6hkuh1+KXUSVsfCUFR8mUY5K
-3CcblxOsyk9DPM8J1vWt2YpJJeg2KDJ8rI1rs2RTZOqp3W/q3c0AntWFxX7ftOhp
-Ehm/QPA9PtkWk0vlOjg6QHQQa14GyhDA4rlsbRLxc9LFVcstPWLjIh7zb8N+88ou
-5Awah/3gSpomUTY02Md7i9XbpZ/LtsOi2+3Va2WAZ4wzj+0Po3LuhOxWXDqoN3cP
-BXKkOUyh4oicl39+lqjV0vMJZXgIX7HqEM/LuKyfofFb7M+nqSQUreW+O5ENt3Ip
-XpKH5wkbStUTG0yMOohIEFfJd8uHZZDEEto0TvnpIYN/ovS4D6aoe26Fy5HFbERC
-Gn+rg51ehQIvBI0aGxOK4ZvZXsJwXW+gYIm0TDmqHa4EYDQFbAsRoJRrb0wGRz3P
-PLqfer0WyukVf/heVLxMrxJb3+joR8NAYJsX6M/cjA/h1oknuyhbvIKtXh4FQZFa
-53fxEfQftkJb8G/WnyZpbJj29hSXHV2kZLSrWlGuvmDeIgUTPWNmInv8rHSzVxGG
-nE30VwIVhYnFW9rQ0OiAApvdQMNgQ2jqOWJ4guTTuMXPC5jjGFU=
-=Hf0R
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSVcLUACgkQFA3kzBSg
+KbYFMxAAr/kklR5qXrd8wPu+ygjdyYEACMOad+N/TbsjCSnXIiH8sdQz64OiRCPG
+li77f9As/sntD821yIZz/sntrNORgkRzHLARqxKickA2cuzT8iLry4Gf9NHqcQ81
+9xSFR+lHXu2c067bf9urlk1BytfK0kDVNYiOY4qScM4+22z95CLIVjoNT+UrV+Ga
+R9Q+rf5uIJCDwwsihMtVhisZos9jGeRDud9hBrAknAH9yxIWtYvBmFA8qUsy3ire
+CX8Tat39uF7CEyk0Vr+VAPb2QapuyXka/gWla7tfe2NQQVFTodzURhHHOnpnxzc+
+FR6+eQiJfXZ4jnrrHq1i4i+8yhwsCcwEiJ8XSgqExXjKzJx3RcRshMcxxDFOtAtX
+s6tPkPRXvbVLHB/nDbBV9hLTzc+7NDa9nyg3LvPOVkJCHrqF8pvg+VtJnZYyVInB
+FSHW5wfLyjljY2gnXeN9f4uZCLBq4iD4Y5tfBjzu5ZmF1IHwM3tE4poXIJxQK+HA
+l7j+BEKgoc0EwOZMKqMFtJpPM471Uv6zfJhgR4H3afnEq13LHbAd82aKOYy91dXM
+BC7xNjrMX2OmchPLoiW2pF5cBa1rz7XbWVT1OOJ01LQ6pO39M9X8Ukb1vPjQQ3lk
+u4Ph+14VcWgcWp62flybskC2rihdaxTyxwmH1+HqUyU5Zjw8B7A=
+=rQ4d
 -----END PGP SIGNATURE-----
 
---LlwovOyBLx4vzW2p--
+--lVdkKCPGTNglhF01--
