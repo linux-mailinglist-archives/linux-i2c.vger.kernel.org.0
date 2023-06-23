@@ -2,43 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F6F73C0D9
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 22:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F1373C0EA
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 22:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbjFWUod (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Jun 2023 16:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
+        id S231332AbjFWUp3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Jun 2023 16:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232515AbjFWUoM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 16:44:12 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2906C26AF;
-        Fri, 23 Jun 2023 13:43:19 -0700 (PDT)
+        with ESMTP id S232498AbjFWUoc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 16:44:32 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2483A9D;
+        Fri, 23 Jun 2023 13:43:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687552999; x=1719088999;
+  t=1687553022; x=1719089022;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=a5/m7TTlJ8XMalnbV6/Tcw8Q0FeNDH1xvWljMF6nhyo=;
-  b=nfyneqt2DnXcljN3nwVQe8osdDPuVfW3UmNY4a/SO/0CRsDkZe/iAACl
-   rrPINDErXhQdZ3q8xuBw86mroYGkLr/JczHAhW+JfrdRB2UQlyc4vsGun
-   nNt8NJifcuZQxc8X0x5SFqKUOx60u+kXXJgSUIOPUPodrqSVDabZ7jWQs
-   /RcjMnB1Qo3eyZGmYTIqdvg34TXxwho6FipzxqKmvNTZF0WR6VgOGheNA
-   rxO78VLGPjn3Jd3MOh8OTZ1V/xtVyuCv73aTjx7GYgu9alKKJI1PFg0CJ
-   AjDKXp55WMafK+N5jFX18SLyxLz/cNWnMFT2QmF+BsR4IY+7bk/F/tvcG
-   g==;
+  bh=G7A5k+DM4C0yHEGOw3X3WeFKFst9s9Hdj/1DbnHsMRc=;
+  b=ChFHqrMpfO/1DiXQYzqreJM2C0zdA0Uq78oo+XbmFDiMIKjAQ6kezaup
+   EbZMczLom1Ak0ereCM18aAMm2QUlUgI/AevqsRnpqD+1NRADVcwlPXbh9
+   YvNheCmOnBZnnyhu2jxn1dGPitewiY0Ic0jEXUQCsZZtpVI05GdEZKQTi
+   u+M8lWK/Eu5aVQHa71mC7kpi6QVwIWiZjk0Qgnw0XDY/uwpDmlLnDASI3
+   fN0Wg1r1XMQapinQ+vY0yYqORe6y9gm4EmQOFAUzn71X7fSnjY4JPP6K8
+   CzojP3gQ+yio9dl25va4BQLoJR6T72hoZJXa2DBVeaTjQicYciS8nVpKN
+   Q==;
 X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="158362850"
+   d="scan'208";a="231890879"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:42:15 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:42:40 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 23 Jun 2023 13:42:11 -0700
+ 15.1.2507.21; Fri, 23 Jun 2023 13:42:39 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:41:43 -0700
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:42:12 -0700
 From:   Varshini Rajendran <varshini.rajendran@microchip.com>
 To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
@@ -75,9 +75,9 @@ CC:     <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
         <balamanikandan.gunasundar@microchip.com>,
         <manikandan.m@microchip.com>, <dharma.b@microchip.com>,
         <nayabbasha.sayed@microchip.com>, <balakrishnan.s@microchip.com>
-Subject: [PATCH v2 22/45] dt-bindings: atmel-smc: add microchip,sam9x7-smc
-Date:   Sat, 24 Jun 2023 02:00:33 +0530
-Message-ID: <20230623203056.689705-23-varshini.rajendran@microchip.com>
+Subject: [PATCH v2 23/45] dt-bindings: atmel-ssc: add microchip,sam9x7-ssc
+Date:   Sat, 24 Jun 2023 02:00:34 +0530
+Message-ID: <20230623203056.689705-24-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230623203056.689705-1-varshini.rajendran@microchip.com>
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
@@ -94,25 +94,25 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add microchip,sam9x7-smc to DT bindings documentation.
+Add microchip,sam9x7-ssc to DT bindings documentation.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 ---
- Documentation/devicetree/bindings/mfd/atmel-smc.txt | 1 +
+ Documentation/devicetree/bindings/misc/atmel-ssc.txt | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/atmel-smc.txt b/Documentation/devicetree/bindings/mfd/atmel-smc.txt
-index 5696d9fcb5dc..1eb2606820a5 100644
---- a/Documentation/devicetree/bindings/mfd/atmel-smc.txt
-+++ b/Documentation/devicetree/bindings/mfd/atmel-smc.txt
-@@ -10,6 +10,7 @@ Required properties:
- 			"atmel,sama5d3-smc", "syscon"
- 			"atmel,sama5d2-smc", "syscon"
- 			"microchip,sam9x60-smc", "syscon"
-+			"microchip,sam9x7-smc", "syscon"
- - reg:			Contains offset/length value of the SMC memory
- 			region.
+diff --git a/Documentation/devicetree/bindings/misc/atmel-ssc.txt b/Documentation/devicetree/bindings/misc/atmel-ssc.txt
+index f9fb412642fe..67c1227a01bd 100644
+--- a/Documentation/devicetree/bindings/misc/atmel-ssc.txt
++++ b/Documentation/devicetree/bindings/misc/atmel-ssc.txt
+@@ -2,6 +2,7 @@
  
+ Required properties:
+ - compatible: "atmel,at91rm9200-ssc" or "atmel,at91sam9g45-ssc"
++	       or "microchip,sam9x7-ssc"
+ 	- atmel,at91rm9200-ssc: support pdc transfer
+ 	- atmel,at91sam9g45-ssc: support dma transfer
+ - reg: Should contain SSC registers location and length
 -- 
 2.25.1
 
