@@ -2,94 +2,94 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9379673B73B
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 14:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F5673B9F4
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Jun 2023 16:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjFWMbA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 23 Jun 2023 08:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
+        id S229666AbjFWOWZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 23 Jun 2023 10:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbjFWMbA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 08:31:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D2210A
-        for <linux-i2c@vger.kernel.org>; Fri, 23 Jun 2023 05:30:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F9A561A3D
-        for <linux-i2c@vger.kernel.org>; Fri, 23 Jun 2023 12:30:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11380C433C0;
-        Fri, 23 Jun 2023 12:30:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687523458;
-        bh=NHjfJehKHbV0Y+qDGnCOrAgD/z+kIubkkz4e0cSyRrs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OrXqbi+429jd0YJRyQXARmLZejVxlSSy64neRMd5/j8EL1AuN/J0qFNXHNriGCmhk
-         fnXaQ/WuyMZg9lGQwKdfB2wqKCn5cKzIZ4ilgrPkB/CavtfPCEKsSxwvFMwtOgc0Aj
-         Pk+Uxk1A6MAdkTA8uPa9NWeZigYMCZ6edOsycK0z628i51pWqM8e5Ru6w/aHlFsF/k
-         VWRDOTn232ou3QbdS25c3ZC9pmhlCR8n0NwF3W2woSTvwxXbvtXPttT4k8wwuwMuXK
-         6MsejWHvg46rhQqfM/sohZHEQeuyRUMQa3Lu8MN0CMmRssd2I4h7gt+cNN7sut+U1R
-         lGHI7BY9yR4bw==
-Date:   Fri, 23 Jun 2023 14:30:55 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: Re: [PATCH 04/15] i2c: busses: exynos5: Use devm_clk_get_enabled()
-Message-ID: <20230623123055.lxjbhvae7arl5uvj@intel.intel>
-References: <20230611225702.891856-1-andi.shyti@kernel.org>
- <20230611225702.891856-5-andi.shyti@kernel.org>
- <ZJVuDEa/7IBwAusj@shikoro>
- <20230623114803.rvzxjb7iatr6jlvu@intel.intel>
- <9189aad9-5053-81e1-b0f3-9b585d75734d@linaro.org>
+        with ESMTP id S229632AbjFWOWY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 23 Jun 2023 10:22:24 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA5FBC
+        for <linux-i2c@vger.kernel.org>; Fri, 23 Jun 2023 07:22:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687530143; x=1719066143;
+  h=message-id:date:mime-version:subject:to:references:cc:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bAcRDbkfZyQ7JIvRWjcJOEpeSVfFqOoOPCK1UXrT+b4=;
+  b=bj2AYWpXZJQ7ttQ8ET+nEEaatGXDSiHzBSHaRjTHE9xKKYdK6giTvFRA
+   FyKf0atyG0qJXcNBFveWTAny+NFCcNu5vjAr+syfh2H94szWEzGPhu32n
+   J+XwaTO6sfO1TfneZ9LIQ6DFpyHRFXrpxIlxsD/nzXWlLcs9FV0FTsEGY
+   DCBGFkR54n2VnrES5VgzIu47EmrTSGUHncMbBIoE/xFVA8NEZ6VuKcVS7
+   jcIX5yrA+CfEQSfjlwXNJHlDm2DGfD9WdrSsnvkUyaAovhxbD9jK690EV
+   v0shqZnDEvFcreJkEsMaf+nyfhiACA9twDcZ5l0HxFANXaYWy4OqtN5XN
+   A==;
+X-IronPort-AV: E=Sophos;i="6.01,152,1684825200"; 
+   d="scan'208";a="231819617"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 07:22:23 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 23 Jun 2023 07:22:20 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Fri, 23 Jun 2023 07:22:19 -0700
+Message-ID: <2e6c26c8-d463-8e3f-90a9-89db30847795@microchip.com>
+Date:   Fri, 23 Jun 2023 16:21:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9189aad9-5053-81e1-b0f3-9b585d75734d@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 03/15] i2c: busses: at91-core: Use devm_clk_get_enabled()
+Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+        "Linux I2C" <linux-i2c@vger.kernel.org>,
+        Durai Manickam <Durai.ManickamKR@microchip.com>
+References: <20230611225702.891856-1-andi.shyti@kernel.org>
+ <20230611225702.891856-4-andi.shyti@kernel.org> <ZJVyspPOps73+BaO@shikoro>
+CC:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <ZJVyspPOps73+BaO@shikoro>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Krzysztof,
+Wolfram,
 
-On Fri, Jun 23, 2023 at 02:18:32PM +0200, Krzysztof Kozlowski wrote:
-> On 23/06/2023 13:48, Andi Shyti wrote:
-> > On Fri, Jun 23, 2023 at 12:03:56PM +0200, Wolfram Sang wrote:
-> >>
-> >>> -	clk_unprepare(i2c->clk);
-> >>> -	clk_unprepare(i2c->pclk);
-> >>
-> >> Are you sure we can use devm_clk_get_enabled() here which calls
-> >> clk_disable_unprepare() on remove and not clk_unprepare()?
-> > 
-> > Unless I am missing something, I think so. This is what the
-> > driver does, gets the clock and enables it.
-> > 
-> > I don't know why there is just unprepare() and not
-> > disable_unprepare() in this function.
+On 23/06/2023 at 12:23, Wolfram Sang wrote:
 > 
-> Your code is not equivalent and does not explain why. Pure
-> devm_clk_get_enabled() conversion should be equivalent.
-> 
-> If original code was correct, your patch will cause double clk disable.
-> If original code was not correct, your patch silently fixes it without
-> explaining that there was a bug.
-> 
-> Did you test the patch, including the unbind path?
+> On Mon, Jun 12, 2023 at 12:56:50AM +0200, Andi Shyti wrote:
+>> Replace the pair of functions, devm_clk_get() and
+>> clk_prepare_enable(), with a single function
+>> devm_clk_get_enabled().
+>>
+>> Signed-off-by: Andi Shyti<andi.shyti@kernel.org>
+>> Cc: Codrin Ciubotariu<codrin.ciubotariu@microchip.com>
+>> Cc: Nicolas Ferre<nicolas.ferre@microchip.com>
+>> Cc: Alexandre Belloni<alexandre.belloni@bootlin.com>
+>> Cc: Claudiu Beznea<claudiu.beznea@microchip.com>
+> Nicolas, did you find a new maintainer for this driver?
 
-you are right! My code, indeed, doesn't do a 1to1 conversion.
+You can contact Durai in "to" of this email. I can have a look if needed 
+as well. Thanks for the heads-up!
 
-Will prepare it again, maybe in two patches, one for the
-conversion and one for clearing the removal path.
+Best regards,
+  Nicolas
 
-Thanks for dropping in,
-Andi
+-- 
+Nicolas Ferre
+
