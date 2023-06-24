@@ -2,60 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E07BA73C800
-	for <lists+linux-i2c@lfdr.de>; Sat, 24 Jun 2023 10:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 698FC73C812
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Jun 2023 10:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232386AbjFXH75 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 24 Jun 2023 03:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
+        id S232489AbjFXIAj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 24 Jun 2023 04:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbjFXH7v (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 24 Jun 2023 03:59:51 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FD22952
-        for <linux-i2c@vger.kernel.org>; Sat, 24 Jun 2023 00:59:44 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-98df6bc0048so24297566b.1
-        for <linux-i2c@vger.kernel.org>; Sat, 24 Jun 2023 00:59:44 -0700 (PDT)
+        with ESMTP id S232460AbjFXIAf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 24 Jun 2023 04:00:35 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7882D70
+        for <linux-i2c@vger.kernel.org>; Sat, 24 Jun 2023 01:00:17 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51cff235226so990022a12.0
+        for <linux-i2c@vger.kernel.org>; Sat, 24 Jun 2023 01:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687593583; x=1690185583;
+        d=linaro.org; s=google; t=1687593616; x=1690185616;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FTjB3MUThuy0fH56tPu8r2SapKpsQyQgWZ4G2iu3Iz8=;
-        b=HEwevcjVQu+8yO3NUrkkTGxP0CcIpGsLiEQXCTRo3UkbkAEAAtNC0UlY9ftejwavbS
-         WPfQTRQVl1GcrgXT/jwnimlNGGTxk1BasUFrZ0+zaXN90t4zsCJHF8eP/rzPh9y7q75O
-         DrmxzN2V5bro/a7Yjn2JaR+shcHxeMnMBPEOsxKHS90sJWabsHm/pELi2kj5UnO7u9RD
-         LnX93Xk9EYFZE7c3mDCbNFjt6xfev1h30nRmSxtXhBhzhBmUqIahBD/KcUlZwriKT34w
-         oFkzPzPGaxAQxWKiI+DomOOYGd+hKHvLudnuiUccthDx082FzhV3uj+CPG6toFmF8/Bz
-         rhrQ==
+        bh=plRq9uRX7lb7dTEBq+/7uDl8MLqphJlYEezgY+W1p9o=;
+        b=a43pJHJ0/i79GK0sVllmNDFxmLRvG6mdn29k3MDLUJpDO/vAzPg3YyQ818IBbmxC/u
+         1gtZ48SyfAQ5B6l0nPXN+iauyWfgfXlbH0dfibAQKneNTKdjh2/VHLoEKzIxurh9DBP5
+         ygKyuWkrfxIEeg0x0Ulo13gCWxCoWUMToLkqHYl6h6s3s4qa1bsqQQrA6iOgzlG7pLl+
+         dIYVYidPvnGoTN3V2N4aRfUTueCnlqRpbuIYXLGn2MIJJvK807soiNVOfavxJ/gbhjQH
+         difhgo70gZBHNBdb4AvayK2zERp3uN7fHKNQxbBPF+9B6cl2sxkR8NHUfutycTaQtmog
+         Ussw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687593583; x=1690185583;
+        d=1e100.net; s=20221208; t=1687593616; x=1690185616;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FTjB3MUThuy0fH56tPu8r2SapKpsQyQgWZ4G2iu3Iz8=;
-        b=gByeQQ2Q6Orlm+cFbuDspi+5IRwIp2SEtyMOyt3YYC8NZRJrkhVJooJl6pXtDeopqt
-         swN22bn6kfeEFKKUHybyKKuaosO1gBajHvHq8SatbfNbLz+ckyF4hGXtKYXS0h/7+FmL
-         6/eiWIybkXFYH1e/Tive5TwZ683eV93CSs4TZgqltFT60P4ZxAaetK9inn2Pi3qy2fKm
-         LXslFry/BMOdr2eiOGbUdxtabB8umK8uWl3HZK7/NITp+QMFVl5IXNxHeTrx7oRVh5f1
-         pwQus15PNv2EbzWPOW431SOBKrZne45XF957TcgCcOR3AaKFirfMYaasq/ckFKX8mMor
-         elOg==
-X-Gm-Message-State: AC+VfDziBix1w4fr4I9O7AagHpNcTnFbTyYRn8x3l9iIQ4H2pWi+1M2G
-        zf4K00YpuUmaIC9tuE5Y5nNgaw==
-X-Google-Smtp-Source: ACHHUZ5pRd8UNSYc52Q0vkUp3nRCIrlMv+cEYLJxjAGxSYuFwmJusDkYkiVv0idqnJteffrCHMZ8Sg==
-X-Received: by 2002:a17:907:783:b0:988:dced:f339 with SMTP id xd3-20020a170907078300b00988dcedf339mr12750156ejb.31.1687593583035;
-        Sat, 24 Jun 2023 00:59:43 -0700 (PDT)
+        bh=plRq9uRX7lb7dTEBq+/7uDl8MLqphJlYEezgY+W1p9o=;
+        b=DSUPIcYg67125et1h48KAD/DOv3+V+F7IZqLP2t43+i4u9/g/TmZgcQ/ZuCUsieaCr
+         YegwPkDxN9yGk+5kxkf1KY/XR7xe7B+IfGEPQv5o8ZckoGZwboB8IxPRwh4DxOtHmNjS
+         t82ZjjS0txuvHyBaV267sQLgL131O9Ba+mFS2vfJISAAhl0ZTsMINP5z8e1xndtXji+a
+         lHg7jMiveY52x7UXCOEp4g8S7p+Rd+J/qCutVeJ+WAljhgRmS3NCNG1AvuK9zyobQ9F3
+         XM1PcVcVxV0qxoDsEW+bz5Wg5oXEt9WwAdt9FL6KRQhS/L6LNqXFSsUwuKb+vcc24Bxq
+         xdDg==
+X-Gm-Message-State: AC+VfDzlFr4sDzmCDOPOoj0aC10RmmfRq+J6qMaSulLTY74A1KcaL+2q
+        WDuBLo93wkCV3fsBzqn/OPckqg==
+X-Google-Smtp-Source: ACHHUZ6M3mY16cNIWWFFSaJhLerF0OTUcHm2JKoX1SNGPbnrXFGF7T+AVx68dGzEKp0F0dxMjJC17w==
+X-Received: by 2002:aa7:da90:0:b0:51b:de6f:2182 with SMTP id q16-20020aa7da90000000b0051bde6f2182mr9641369eds.8.1687593615898;
+        Sat, 24 Jun 2023 01:00:15 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id t23-20020a170906179700b00987f64b84afsm597458eje.39.2023.06.24.00.59.37
+        by smtp.gmail.com with ESMTPSA id p18-20020aa7d312000000b0051a2d2f82fdsm422074edq.6.2023.06.24.01.00.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 00:59:42 -0700 (PDT)
-Message-ID: <7c0025cc-ed36-f4e1-d48d-d09326756d89@linaro.org>
-Date:   Sat, 24 Jun 2023 09:59:36 +0200
+        Sat, 24 Jun 2023 01:00:15 -0700 (PDT)
+Message-ID: <b837784a-50f0-7cab-a535-e699688640e5@linaro.org>
+Date:   Sat, 24 Jun 2023 10:00:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 16/45] dt-bindings: crypto: add bindings for sam9x7 in
- Atmel TDES
+Subject: Re: [PATCH v2 13/45] dt-bindings: atmel-sysreg: add bindings for
+ sam9x7
 Content-Language: en-US
 To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -92,9 +92,9 @@ Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
         manikandan.m@microchip.com, dharma.b@microchip.com,
         nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-17-varshini.rajendran@microchip.com>
+ <20230623203056.689705-14-varshini.rajendran@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230623203056.689705-17-varshini.rajendran@microchip.com>
+In-Reply-To: <20230623203056.689705-14-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -108,29 +108,12 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 On 23/06/2023 22:30, Varshini Rajendran wrote:
-> Add DT bindings for atmel TDES.
-> 
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> ---
->  .../devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml   | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
-> index 3d6ed24b1b00..0e71bfd32a1c 100644
-> --- a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
-> +++ b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
-> @@ -12,7 +12,10 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    const: atmel,at91sam9g46-tdes
-> +    oneOf:
-> +      - items:
-> +          - const: atmel,at91sam9g46-tdes
-> +          - const: microchip,sam9x7-tdes
+> Add RAM controller, shutdown controller & SFR DT bindings.
 
-Same as in other cases, so just to avoid applying by submaintainer: not
-tested, broken.
+A nit, subject: drop second/last, redundant "bindings". The
+"dt-bindings" prefix is already stating that these are bindings.
+
+Applies to every patch, since there will be a v3.
 
 
 Best regards,
