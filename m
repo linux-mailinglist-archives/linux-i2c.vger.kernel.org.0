@@ -2,71 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5B87422E9
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Jun 2023 11:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655EB742364
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Jun 2023 11:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbjF2JIv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 29 Jun 2023 05:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S231594AbjF2Jnu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 29 Jun 2023 05:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjF2JIu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 29 Jun 2023 05:08:50 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA7B210B;
-        Thu, 29 Jun 2023 02:08:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688029729; x=1719565729;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=SX4TAKT5s6ztRMXiDOFeBmIy1i1UvOMhH2wnpOB8Uew=;
-  b=Th84bKrwqJptrGuUJvK8yRo88Dv7V8ifMm0EaRHjiBnDqMlOHvSSoWJd
-   0A0otr7xNRFbyNTH1FUMb7RhNMb72I82+s69JbjDVM6ipnNx1V72oOaBc
-   eybKo6d4CVPziyU3vcYGuLzGz/RLxQ+IpoCz6nA5VCq6XccwNdzi59faX
-   hS6w6/0JwXREnY9LlUp3oh4jR8BohChp1cEv06ESbfx0E2H/da9JImDmi
-   8dg+xAnqPghDFA81UC5I00ewTT5nX+zd07l///ZPEgB8DEYXYt0I99wtO
-   J/Ku/sWyN6FzczH9Lmy9F1+NXxapaIjjdWbBTrYJ9mJ3jv5QO9lbDgxwt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="362099291"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="362099291"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 02:08:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="841384189"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="841384189"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 29 Jun 2023 02:08:46 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qEnds-000oFZ-2P;
-        Thu, 29 Jun 2023 12:08:44 +0300
-Date:   Thu, 29 Jun 2023 12:08:44 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        with ESMTP id S229739AbjF2Jno (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 29 Jun 2023 05:43:44 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920E11727;
+        Thu, 29 Jun 2023 02:43:43 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-98e1fc9d130so13603466b.0;
+        Thu, 29 Jun 2023 02:43:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688031822; x=1690623822;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8BOa2cA+os6Sirozpo+vKmIp/ZPBpwZIKMHVNEkdkAo=;
+        b=FXLair9F1rsWjrg/DCklv5Ruhl/qoU3p6Kz8+S8C8VxPwKmJsvvMZXJxJPvcs2u+DA
+         BVeIbRw58YsIk1MWwnDn84dp58CvTtZMFbcdIg6qNyGG5xtL8hMyI7u2qBUKmpdGAkzI
+         Ui6bmkN0KlBvDphUJviuOW6vTrNzmhnZqwgOGRSp84SQOtFT5eDb4EuJ68aewHjxGopH
+         hM/OPRyxagX9TKQWe/8JR2LPvUimGUt33QpUHUWo5sKp7cRFB4g8uStZJ63UZUcUn+er
+         EyHkavW9diWHErllHJHymQpO/yKcJuBTdrGl6t+GdfdqL3Ia9YgDrh5B4dQVobCUhj54
+         aiLg==
+X-Gm-Message-State: AC+VfDxPrqKaZSBNXFyfhFqTkhmzQlmkncKJ7PZPiHSssqLbkea47u+U
+        84hDL90rJ1TTECWtkJfb2PxtOFnSL52WtueNe+s=
+X-Google-Smtp-Source: ACHHUZ7G91aFKoB+8LU9G+96kOiiq1furXLbqPGGVuciGs3Uxa/vAfBN7Q6yvT2GQPwiQM3yZ8MI5YaXyKqNY6RF5fc=
+X-Received: by 2002:a17:906:73cc:b0:98d:b10f:f3cd with SMTP id
+ n12-20020a17090673cc00b0098db10ff3cdmr10261241ejl.7.1688031821981; Thu, 29
+ Jun 2023 02:43:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230626110026.65825-1-andriy.shevchenko@linux.intel.com>
+ <20230626110026.65825-2-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0jqP0N3=TB3w+HMwGMzctpRCjKa3a5iHKePP113T3CK-g@mail.gmail.com> <ZJ1KHJW6Jhma/rHc@smile.fi.intel.com>
+In-Reply-To: <ZJ1KHJW6Jhma/rHc@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 29 Jun 2023 11:43:30 +0200
+Message-ID: <CAJZ5v0hf49hneyE7a-qjcdUBBhtvPUhkM6XorecaOrSjn=PbAQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] ACPI: bus: Constify acpi_companion_match()
+ returned value
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-i2c@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
         Len Brown <lenb@kernel.org>,
         Andi Shyti <andi.shyti@kernel.org>,
         Robert Moore <robert.moore@intel.com>,
         Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH v3 1/4] ACPI: bus: Constify acpi_companion_match()
- returned value
-Message-ID: <ZJ1KHJW6Jhma/rHc@smile.fi.intel.com>
-References: <20230626110026.65825-1-andriy.shevchenko@linux.intel.com>
- <20230626110026.65825-2-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0jqP0N3=TB3w+HMwGMzctpRCjKa3a5iHKePP113T3CK-g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jqP0N3=TB3w+HMwGMzctpRCjKa3a5iHKePP113T3CK-g@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,23 +66,22 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 10:49:17AM +0200, Rafael J. Wysocki wrote:
-> On Mon, Jun 26, 2023 at 1:00 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
+On Thu, Jun 29, 2023 at 11:08 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Jun 29, 2023 at 10:49:17AM +0200, Rafael J. Wysocki wrote:
+> > On Mon, Jun 26, 2023 at 1:00 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > acpi_companion_match() doesn't alter the contents of the passed
+> > > parameter, so we don't expect that returned value can be altered
+> > > either. So constify it.
+> > >
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > >
-> > acpi_companion_match() doesn't alter the contents of the passed
-> > parameter, so we don't expect that returned value can be altered
-> > either. So constify it.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> This makes sense even without the rest of the series, so I can queue
-> it up right away if you want me to do that.
+> > This makes sense even without the rest of the series, so I can queue
+> > it up right away if you want me to do that.
+>
+> Please, go ahead and thank you!
 
-Please, go ahead and thank you!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Done, thanks!
