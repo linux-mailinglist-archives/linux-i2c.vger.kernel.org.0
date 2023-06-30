@@ -2,62 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93EE7443C3
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Jun 2023 23:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754B47443DD
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Jun 2023 23:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbjF3VHJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Jun 2023 17:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
+        id S229484AbjF3VX4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Jun 2023 17:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjF3VHJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Jun 2023 17:07:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487BB3AAF;
-        Fri, 30 Jun 2023 14:07:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9DA061808;
-        Fri, 30 Jun 2023 21:07:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9576C433C8;
-        Fri, 30 Jun 2023 21:07:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688159227;
-        bh=hYpTEHMq6y6J6BenMyXuV1x1KGnn5tFTZrm73RQZ4aU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AzzeprbLoRBnHWrjJgRKbrUVVtaz33A2ZhsLuQyXKqDmyQOvljcBt3DAhrDflzwp0
-         bJ6XivbLjc+Oa+fochTe2RWbZMh8PKRIo7wkZFbYVC92qiFcoydLXV0oRqY0qsf0ew
-         krnGRlpTeLDYFh8Km+lfBZGqKGVXNTBrldkarnpOuZTFXuCa2TMACzq5cMsCzGiuJ+
-         cx9UhgS3LZHH5XGzDBm3DkrcwpM0106BaZdjTK4dSm1kDvRBqMv03DMHRbb2zzbVcI
-         JAvG3NWomezqtyWEWd3P9qU/XECzKAVDm9grLS9Z3HvKE2759v596WuvTaktksVK+z
-         c3vJSzj2MV8Hw==
-Date:   Fri, 30 Jun 2023 23:06:50 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linus.walleij@linaro.org, Andi Shyti <andi.shyti@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] i2c: busses: i2c-nomadik: Remove a useless call in the
- remove function
-Message-ID: <ZJ9D6mP+gqQahEVq@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        with ESMTP id S229611AbjF3VXz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Jun 2023 17:23:55 -0400
+Received: from smtp.smtpout.orange.fr (unknown [80.12.242.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7882686
+        for <linux-i2c@vger.kernel.org>; Fri, 30 Jun 2023 14:23:50 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id FLaWqFE741lRhFLaWqu2BO; Fri, 30 Jun 2023 23:23:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1688160215;
+        bh=kMcJl7rvulaYPvsNlfWsI9/je8sVJ9jmEHBC5pxujxE=;
+        h=From:To:Cc:Subject:Date;
+        b=O8ML1LNRtqOBAXG4IUAARTGOG4bbWqctKdJCWvjnoFtNnYF4JIikMW/veVPXHlGtN
+         qENoZRqlrMJekwDGxR9X+hXSz/LOJesjZxS44YRA7UBb3ongN/YFK/GY1OX4BhW5pT
+         fgEq+VWs1lCN0cQhuLgxHyEx20Pid8ftLkEsYy2kLPrjyG8QP1b7+BV4AFkQAX0eph
+         EJuPNUgLuePv0w3ezdcIJsxqF5hHlzDK7P+vgeVRIvcqleA9NrcNk6ozzKdhLlSwqt
+         vrcgtjVBDBTY1K1kEOWMYouMC4xdNSq6sAAaKxHHJ6M8vhZgWHT0E9Y63evhoOAtJo
+         kWP44ZYBRSDFg==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 30 Jun 2023 23:23:35 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     wsa@kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linus.walleij@linaro.org, Andi Shyti <andi.shyti@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <4f4c2c5c20b61c4bb28cb3e9ab4640534dd2adec.1629530169.git.christophe.jaillet@wanadoo.fr>
- <8ac04af8-eff8-bfe1-647a-2d04f5739702@wanadoo.fr>
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Subject: [PATCH v2] i2c: busses: i2c-nomadik: Remove a useless call in the remove function
+Date:   Fri, 30 Jun 2023 23:23:28 +0200
+Message-Id: <62ae6810d41e0429ebaadfac8a95409f4bc72456.1688160163.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2SKYA9MrhLMabYkk"
-Content-Disposition: inline
-In-Reply-To: <8ac04af8-eff8-bfe1-647a-2d04f5739702@wanadoo.fr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,47 +54,57 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Since commit a410963ba4c0 ("Merge branch 'i2c-embedded/for-next' of
+git://git.pengutronix.de/git/wsa/linux"), there is no more
+request_mem_region() call in this driver.
 
---2SKYA9MrhLMabYkk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So remove the release_mem_region() call from the remove function which is
+likely a left over.
 
-On Fri, Jun 30, 2023 at 10:10:40PM +0200, Christophe JAILLET wrote:
-> Hi,
->=20
-> "drivers/i2c/busses/i2c-nomadik.c" just got some loved, so I was wondering
-> if the below patch could be reviewed.
->=20
-> It does not apply anymore because of the recent change, but the explanati=
-on
-> in the commit message and the proposed change still make sense to me.
->=20
-> If it looks valid, I could send a V2.
->=20
-> So any feedback would be appreciated.
+There is no details in the above commit log, but at its end we can read:
+   Conflicts:
+	   drivers/i2c/busses/i2c-nomadik.c
 
-Sure, go ahead!
+This may explain why this call has been left here.
+
+Fixes: a410963ba4c0 ("Merge branch 'i2c-embedded/for-next' of git://git.pengutronix.de/git/wsa/linux
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+v2: synch with latest -next
+
+v1: https://lore.kernel.org/all/4f4c2c5c20b61c4bb28cb3e9ab4640534dd2adec.1629530169.git.christophe.jaillet@wanadoo.fr/
 
 
---2SKYA9MrhLMabYkk
-Content-Type: application/pgp-signature; name="signature.asc"
+/!\ /!\ /!\ /!\ /!\ /!\
+  This patch is completely speculative and without details about commit
+  a410963ba4c0 it's hard to be sure of the intent.
+/!\ /!\ /!\ /!\ /!\ /!\
 
------BEGIN PGP SIGNATURE-----
+All I can say is that it looks logical to me and that it compiles!
+---
+ drivers/i2c/busses/i2c-nomadik.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSfQ+cACgkQFA3kzBSg
-KbZFWQ//fBMB4Z1V98HOgBgCUVd0VuuXt9kxzZvljp7zwhLujA/JQ/2q41iQZ5og
-VBI7V7gjuMjAYLRPwgQAtW3JObcIQ9BEenHv2DGGQX/xEDsmGvhyWVwnW4Oyl8mb
-RBz8OMdleU/p641cbrZJa0RNbbONIjsx+G1KI8nvm0cyah2Fc+ITJAyc4MDY++/7
-EtOjYWnbZJRsWX9FC2fEWqvNFTmI1EV8d5Z5ODf3dMK+fTlgs0yohf0JHa00IUpb
-Jc5REW6JcVvPLppS7jXyurDD3ZxdkM7RxWyZcM9hPrGvs4gtI+VC0sFfugPI3z6F
-09t6+1kBZuLGszIMQo89WeWqWUldFmYprY8bmdTdisf2AwZmdu1cogsaZrjOpA3H
-2FDNT7iRs/AGSidJnTgUkeAhpDHODyXVBgnv5cbA4zubWYnMKVRVVWhiO/88PUpM
-vXhnmkF4l6lOmtT9Q+XAJahmeW8S//AkMtW5DCdjgu+ruHv5vdD0BzYYWdDLiDrW
-NsM6Cv2BSW+V9a3rWViM3vg9dHsUt9Vx9pI6TmeLC73DZFdM1LgpGAX/VTLWZYke
-ToE1ngerg8X8OgoXeS3kSOkGH/byHxlWTI0qIv4j+3JcctQQUorW8TI2+kQu0eZc
-0ncdZ4MFI0X9Lsky6S0b7/Gr/up+noH3P58q716HOlEIYjKrnDk=
-=P9oA
------END PGP SIGNATURE-----
+diff --git a/drivers/i2c/busses/i2c-nomadik.c b/drivers/i2c/busses/i2c-nomadik.c
+index 1e5fd23ef45c..212f412f1c74 100644
+--- a/drivers/i2c/busses/i2c-nomadik.c
++++ b/drivers/i2c/busses/i2c-nomadik.c
+@@ -1038,7 +1038,6 @@ static int nmk_i2c_probe(struct amba_device *adev, const struct amba_id *id)
+ 
+ static void nmk_i2c_remove(struct amba_device *adev)
+ {
+-	struct resource *res = &adev->res;
+ 	struct nmk_i2c_dev *dev = amba_get_drvdata(adev);
+ 
+ 	i2c_del_adapter(&dev->adap);
+@@ -1047,7 +1046,6 @@ static void nmk_i2c_remove(struct amba_device *adev)
+ 	clear_all_interrupts(dev);
+ 	/* disable the controller */
+ 	i2c_clr_bit(dev->virtbase + I2C_CR, I2C_CR_PE);
+-	release_mem_region(res->start, resource_size(res));
+ }
+ 
+ static struct i2c_vendor_data vendor_stn8815 = {
+-- 
+2.34.1
 
---2SKYA9MrhLMabYkk--
