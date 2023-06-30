@@ -2,88 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5049F744162
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Jun 2023 19:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E33774430E
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Jun 2023 22:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbjF3Rhf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Jun 2023 13:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S229606AbjF3UGb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Jun 2023 16:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbjF3Rhe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Jun 2023 13:37:34 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3DB1FE4;
-        Fri, 30 Jun 2023 10:37:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688146653; x=1719682653;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dm6Sl1OEMpFX+zHsfmQ4rudo1iU9mbzP0Adu+TolMaY=;
-  b=AzzEdiWKzJJNkTEf6Dd6CzhhXMAsVItlLhScmWNvrT3QjyjKhN0Tu/7E
-   u/6w7gKM9Rx8XHPrO0nlvIhI/51Qsuc82vr7CGEJt69eUlPY+eIfBUIw8
-   lr3iZRu8GHigaOnDOk8MFVXTevbNkqGM/rdhWjw/I2LGre+4/yTRnXxZo
-   0frZH3bHEkEVH6dpGY14qR6guFan5PtWLWnmFRLPvbwz3Lrin4qkw0BGS
-   w0MtrUfbpAHgznV8cwFPrvYauFMPfNDZIFhoNBzFhjR/MHpQegXEzbUfy
-   DlJuHipI1U/WZLoBxk94+g+Bx85OoaOhSYls0OxvcrxFMiBC16knBiCyG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="352272354"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="352272354"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 10:37:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="787789404"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="787789404"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Jun 2023 10:37:23 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qFI3d-001AR3-2g;
-        Fri, 30 Jun 2023 20:37:21 +0300
-Date:   Fri, 30 Jun 2023 20:37:21 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     "Ye, Xiang" <xiang.ye@intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "Zhang, Lixu" <lixu.zhang@intel.com>
-Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
-Message-ID: <ZJ8S0ds4IX4wLF9V@smile.fi.intel.com>
-References: <20230312190435.3568212-1-xiang.ye@intel.com>
- <20230312190435.3568212-2-xiang.ye@intel.com>
- <20230313170341.GV9667@google.com>
- <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
- <ZBAyKQwnQ8fxHRuU@kuha.fi.intel.com>
- <ZBCU5h/A2woJLtvT@ye-NUC7i7DNHE>
- <ZBCYVNmoo2EdDY90@smile.fi.intel.com>
- <ZBGLYXxpkwokgV4R@kuha.fi.intel.com>
- <DM6PR11MB43163C9D76023777B36380B98D2AA@DM6PR11MB4316.namprd11.prod.outlook.com>
+        with ESMTP id S229485AbjF3UG2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Jun 2023 16:06:28 -0400
+X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Jun 2023 13:06:26 PDT
+Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC06C13E
+        for <linux-i2c@vger.kernel.org>; Fri, 30 Jun 2023 13:06:26 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id FKGYqEHA1L1SxFKGYqWJB6; Fri, 30 Jun 2023 21:58:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1688155134;
+        bh=o5ckSAdQhDQt1G2xCQ7TAMOKGpjs8f/t5pbLIrXW61w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=coif+5OJouCPXahY3jBN1vHFtlk7H1YYxyB0Wcxop2vfbsw2XfxnPLSc/fXl7tK42
+         Fab/mbDCUQylqSYpzZ9XnzVKzu8CVUjDWPORlpfnIz1X3uis9V77TmEm9jU/2HBqfy
+         aT2LfBL9QtW47P4d8VBmeIvJt/3y/+SOefM/b2LfX2fzt39Ynw1jwb1bExlj2VBrk0
+         sKlzr1dGNG0/QSi/uqZNFAcLDrvINU/N8K43kS/tim7dZsaIRWguPJFZ/97+cdF8dg
+         elyCzTpYmcp8SLImDj/d2ant5WjCuTtunZjipW3O8yKMf+eIUKD6yLf9LvzGdjO4GF
+         iRRcrDT5y+rNw==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 30 Jun 2023 21:58:54 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <85f98e39-1f66-8049-91a4-d11c3003877d@wanadoo.fr>
+Date:   Fri, 30 Jun 2023 21:58:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB43163C9D76023777B36380B98D2AA@DM6PR11MB4316.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] i2c: sun6i-p2wi: Fix an error message in probe()
+Content-Language: fr
+To:     Dan Carpenter <dan.carpenter@linaro.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel-janitors@vger.kernel.org
+References: <98afbc28-3366-459e-bd01-f77cf1a67fe9@moroto.mountain>
+ <20230627115920.c4ms65vgrbiyekc6@intel.intel>
+ <7c6db53c-427d-4ba5-80b7-a069ab9322a0@kadam.mountain>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <7c6db53c-427d-4ba5-80b7-a069ab9322a0@kadam.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,51 +65,60 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 07:40:48AM +0000, Wu, Wentong wrote:
-> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Sent: Wednesday, March 15, 2023 5:10 PM
-> > On Tue, Mar 14, 2023 at 05:52:52PM +0200, Andy Shevchenko wrote:
-> > > On Tue, Mar 14, 2023 at 11:38:14PM +0800, Ye, Xiang wrote:
-> > > > On Tue, Mar 14, 2023 at 10:36:57AM +0200, Heikki Krogerus wrote:
-> > > > > On Tue, Mar 14, 2023 at 04:03:26PM +0800, Ye, Xiang wrote:
-
-...
-
-> > > > > You don't really seem to get any benefit from MFD. Perhaps it
-> > > > > would be more appropriate and clear if you just registered
-> > > > > auxiliary devices in this driver. Check drivers/base/auxiliary.c.
-> > > > Yes, it should be a work. I have a question.
-> > > > MFD provides the ACPI binding for sub-devices through struct
-> > > > mfd_cell_acpi_match. But I didn't see this in drivers/base/auxiliary.c.
-> > > > If using auxiliary bus to implement the LJCA sub-devices, we need to
-> > > > do the sub-devices acpi binding manually in ljca.c.
-> > > >
-> > > > Something Like:
-> > > > adr = LJCA_ACPI_MATCH_GPIO
-> > > > adev = acpi_find_child_device(parent, adr, false);
-> > > > ACPI_COMPANION_SET(&pdev->dev, adev ?: parent);
-> > > >
-> > > > Is that acceptable?
+Le 27/06/2023 à 14:08, Dan Carpenter a écrit :
+> On Tue, Jun 27, 2023 at 01:59:20PM +0200, Andi Shyti wrote:
+>> Hi Dan,
+>>
+>> On Tue, Jun 27, 2023 at 10:12:36AM +0300, Dan Carpenter wrote:
+>>> The "ret" variable is uninitialized.  It was the "p2wi->rstc" variable
+>>> that was intended.  We can also use the %pe string format to print the
+>>> error code name instead of just the number.
+>>>
+>>> Fixes: 75ff8a340a81 ("i2c: sun6i-p2wi: Use devm_clk_get_enabled()")
+>>> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+>>> ---
+>>>   drivers/i2c/busses/i2c-sun6i-p2wi.c | 3 ++-
+>>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/i2c/busses/i2c-sun6i-p2wi.c b/drivers/i2c/busses/i2c-sun6i-p2wi.c
+>>> index ad8270cdbd3e..fa6020dced59 100644
+>>> --- a/drivers/i2c/busses/i2c-sun6i-p2wi.c
+>>> +++ b/drivers/i2c/busses/i2c-sun6i-p2wi.c
+>>> @@ -250,7 +250,8 @@ static int p2wi_probe(struct platform_device *pdev)
+>>>   
+>>>   	p2wi->rstc = devm_reset_control_get_exclusive(dev, NULL);
+>>>   	if (IS_ERR(p2wi->rstc)) {
+>>> -		dev_err(dev, "failed to retrieve reset controller: %d\n", ret);
+>>> +		dev_err(dev, "failed to retrieve reset controller: %pe\n",
+>>> +			p2wi->rstc);
+>>
+>> Yes, good catch! Thanks! But I think we want to print the error
+>> value here, so I think it should be:
+>>
+>> -		dev_err(dev, "failed to retrieve reset controller: %d\n", ret);
+>> +		dev_err(dev, "failed to retrieve reset controller: %d\n",
+>> +			PTR_ERR(p2wi->rstc));
+>>
 > 
-> This actually doesn't work, look at the acpi_find_child_device(), it compares
-> the bus address specified by _ADR object, but there is no _ADR object in DSDT
-> for these three devices because the relationship between the parent and
-> children isn't bus type listed in ACPI spec, so it always return NULL.
+> The %pe which I changed it to is a cool new thing that prints:
+> 
+> 	failed to retrieve reset controller: -EINVAL\n
+> 
+> We should create a similar %e printk format that works for ints instead
+> of error pointers.  But instead of that you have people who cast error
+> codes to pointers just to get the %pe functionality.  And other people
+> who make suggestions (this is the catagory that I'm in) but are too lazy
+> to do the actual work.
 
-If you want to have this on ACPI enabled platform, ACPI table has to have
-the necessary bits. What you are describing is a BIOS bug _or_ somebody has
-to provide the SSDT overlay depending on the real connection of the device..
+Hi Dan,
 
-> > Looks ok to me.
-> > 
-> > > Maybe you can implement this on the level of auxiliary bus.
-> > 
-> > I would actually prefer that the auxiliary bus itself does not make any
-> > assumptions regarding the whereabouts of the fwnodes at this stage. Maybe
-> > later, when(if) there are more users.
+why not switch to dev_err_probe()?
 
--- 
-With Best Regards,
-Andy Shevchenko
+CJ
 
+> 
+> regards,
+> dan carpenter
+> 
+> 
 
