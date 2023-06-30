@@ -2,56 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77593743656
-	for <lists+linux-i2c@lfdr.de>; Fri, 30 Jun 2023 10:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BBC74366A
+	for <lists+linux-i2c@lfdr.de>; Fri, 30 Jun 2023 10:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232213AbjF3ICI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 30 Jun 2023 04:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
+        id S232345AbjF3IEb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 30 Jun 2023 04:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232173AbjF3ICF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Jun 2023 04:02:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BD8297B
-        for <linux-i2c@vger.kernel.org>; Fri, 30 Jun 2023 01:02:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC42D616D6;
-        Fri, 30 Jun 2023 08:02:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 723B1C433C0;
-        Fri, 30 Jun 2023 08:02:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688112123;
-        bh=jn79D4qvuULmsRPzEV+TN+Mak4KIj3BN/Rf0XDYSz6c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cPRBAGNkpyDopF4uNHu9PcP3mOARvWS4mNLQlxp1IqUDeCIVyn7Xa/wot0jW7RNtv
-         ZgJUiOVSiwMTSN935NmhWvybiOSc5HdGCcMABYhKaF1QTV2E3RBtbboqeQBFj2NnAl
-         eSw0GqCFHn0szg/oVGRPQL+kG1YpbfBJ9pbmj6bMsqxJliNOgQTtAtk+eteN+5p+x7
-         H3k39aOipxO6Zi3aq0gKA8Zo828uHxJCUsSxc68w8k9Dg3HFjJUdXASBS4aByEgGC8
-         zUgceyns5Sxyvzd4JEFpc7qjevf+Bk1jwVmuQmIpBmwMgR8hNXIXiXwB/i0mLxsU35
-         /AxjdF0GVfUTA==
-Date:   Fri, 30 Jun 2023 10:01:59 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     ZJVcNIDWEbB6Jq7a@shikoro
-Cc:     Wolfram Sang <wsa@kernel.org>, krzk@kernel.org,
-        TonyWWang@zhaoxin.com, cobechen@zhaoxin.com,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v6] i2c: add support for Zhaoxin I2C controller
-Message-ID: <20230630080159.wvt5loiq66tuo24z@intel.intel>
-References: <20230614073433.280501-1-hanshu-oc@zhaoxin.com>
- <20230614094858.317652-1-hanshu-oc@zhaoxin.com>
- <ZJVcNIDWEbB6Jq7a@shikoro>
- <a12f9bb4-835f-ea18-307f-4aa5ce36f61c@zhaoxin.com>
+        with ESMTP id S232215AbjF3IE2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 30 Jun 2023 04:04:28 -0400
+X-Greylist: delayed 553 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Jun 2023 01:04:27 PDT
+Received: from mail.tradeharbor.pl (mail.tradeharbor.pl [217.61.97.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AA62D5B
+        for <linux-i2c@vger.kernel.org>; Fri, 30 Jun 2023 01:04:27 -0700 (PDT)
+Received: by mail.tradeharbor.pl (Postfix, from userid 1002)
+        id 15E958342A; Fri, 30 Jun 2023 09:55:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tradeharbor.pl;
+        s=mail; t=1688111712;
+        bh=+8JR9pbZKhAL6uRH+3YthTnulvnmSqiK0eDpljLgYE8=;
+        h=Date:From:To:Subject:From;
+        b=LWK9OtBzIBLJCC3XFAOWeqBh2XFpjc/C2GRiwRLL2fo/EHyam7UFvoAYCx8MP18gr
+         beIKVZZNDRlxYhCXZ0THCUqYU2uHMfQVDImKcBKGdni1S0vNdY9hAAo0RDJhZGbKPB
+         7AXLT8T04T+zvaomJTlsgo4Mtn5Nvj69CXoLS7xlNYe4xY2K+9PPIAw3kVLu1Ohvqo
+         MArf8OkTyZYoSF+ZV+zsAJh8jMBAcazp5wrG2fpUJ2GvUr07FxG4KKX4F+oJpb/Cdx
+         g0ngtAhv3deugyKQwh4FMUCYDFW6PUyTid/1IbAMC4PxkRZztu53ImPRvX2+1Cmd4l
+         EzA8YUJ34KL3g==
+Received: by mail.tradeharbor.pl for <linux-i2c@vger.kernel.org>; Fri, 30 Jun 2023 07:54:19 GMT
+Message-ID: <20230630083000-0.1.6.4sl.0.ihq7x9gmek@tradeharbor.pl>
+Date:   Fri, 30 Jun 2023 07:54:19 GMT
+From:   "Piotr Firek" <piotr.firek@tradeharbor.pl>
+To:     <linux-i2c@vger.kernel.org>
+Subject: =?UTF-8?Q?Prosz=C4=99_o_kontakt?=
+X-Mailer: mail.tradeharbor.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a12f9bb4-835f-ea18-307f-4aa5ce36f61c@zhaoxin.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,TO_MALFORMED,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,40 +47,18 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Hans,
+Dzie=C5=84 dobry,
 
-> > > + * registers
-> > > + */
-> > > +/* I2C MMIO Address Constants */
-> > > +#define ZXI2C_CR_L                     0x00
-> > > +#define   ZXI2C_CPU_RDY          BIT(3)
-> > > +#define   ZXI2C_TX_END           BIT(2)
-> > > +#define   ZXI2C_RX_ACK           BIT(1)
-> > The register layout looks similar to the i2c-wmt driver. Could this
-> > driver maybe be reused for your hardware? I'll stop reviewing here
-> > because we need to have that clear first.
-> > 
-> > Thank you and happy hacking,
-> > 
-> >     Wolfram
-> > 
-> 
-> I just learned that they are indeed derived from the same VIA I2C IP.
-> The relationship between WonderMedia/VIA/Zhaoxin looks like this:
-> * The i2c-wmt.c driver is used on the WonderMedia/VT8500 platform,
->   an ARM-based SOC from VIA. This SOC hasn't been updated in years.
->   Its MAINTAINERS are also Orphan.
-> * Lots of VIA IP is now owned by Zhaoxin, including I2C, SMBus, etc.
->   Zhaoxin adds some new features on the basis of the original I2C IP,
->   such as FIFO mode. And there are plans to continue adding new
->   features.
-> 
-> Based on this information, we thought it might be more maintainable
-> to create a new driver file.
+Czy jest mo=C5=BCliwo=C5=9B=C4=87 nawi=C4=85zania wsp=C3=B3=C5=82pracy z =
+Pa=C5=84stwem?
 
-I think I commented about this some times ago but then forgot.
-The two drivers are, indeed, very similar.
+Z ch=C4=99ci=C4=85 porozmawiam z osob=C4=85 zajmuj=C4=85c=C4=85 si=C4=99 =
+dzia=C5=82aniami zwi=C4=85zanymi ze sprzeda=C5=BC=C4=85.
 
-We could eventually create a *-common.{c,h} file.
+Pomagamy skutecznie pozyskiwa=C4=87 nowych klient=C3=B3w.
 
-Andi
+Zapraszam do kontaktu.
+
+
+Pozdrawiam
+Piotr Firek
