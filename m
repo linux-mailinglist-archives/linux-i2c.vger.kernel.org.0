@@ -2,67 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74BB7744973
-	for <lists+linux-i2c@lfdr.de>; Sat,  1 Jul 2023 15:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B66F744D4F
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jul 2023 12:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjGANuI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 1 Jul 2023 09:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
+        id S229554AbjGBKkM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 2 Jul 2023 06:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjGANuH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 1 Jul 2023 09:50:07 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135183C0A
-        for <linux-i2c@vger.kernel.org>; Sat,  1 Jul 2023 06:50:06 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-570877f7838so32827497b3.0
-        for <linux-i2c@vger.kernel.org>; Sat, 01 Jul 2023 06:50:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688219405; x=1690811405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ezm+NjXf2KCPvjh2cUYvqoi17u9GLDDqaRcVx1XsiHA=;
-        b=R2rNfLLxRrVBYKsSHAcBwKJVDcAhDgmgfawivAKqzoPyyh2oD0EyQ45LpLCPIoMLeH
-         J4P+p6OajPIe2EFxKpAqtnr+h0e3D3yCCc2lNMll43/f+fHtX352P2NH0M0lmhn4Xiqy
-         6qkJAhx14uUNv1QCv/Um85MT4x6fVvwpLHXbXo75ddeokFl/QInQ31DbPTsTi4jW0V+g
-         uWsQSm0eerjNioH7ecPxv3lWqAqbdFRfya2z9oDS65B7K2PHW4SxVYJYy+ZJcMqUVOtk
-         s+UVgHc69oUSNVJw4LUmrQOTloB1H1J/kYj1n3/9CbwmMayMkjlGqeegWoGtC6gPlbWr
-         SSRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688219405; x=1690811405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ezm+NjXf2KCPvjh2cUYvqoi17u9GLDDqaRcVx1XsiHA=;
-        b=Xznf5wN1GZSLzPBy5NYzeI3nW+WRMdYKy2OetC10hi2oTFVoHVuHs4lh6gi4P0bHN2
-         myBp/VRmsBq7XvLOYAb97QVPFCu8zhr6ourwdS0FOrLxNNokl8TnuZEDB6xnZRntu/Bx
-         DXB4X98M/9Q/RinM2PtmcUH1hiS6Gad++WQ2LrCxR9n9j3uG0xofLA6GwzCqaISBb7tZ
-         7s/XMtjPvImdfQKUAAt/pUntSWPtgumbEGlwa54zGT0G055AZlZLOMy7iIMNqGcBlnJv
-         W3m265GgmBCbMyV0eE3Lw99Wtu+gsNp3T/7tTpnA6b7y9tBcvKEpLGiATjwiIiFFbni+
-         Uf5Q==
-X-Gm-Message-State: ABy/qLYa9xhHVE8pH9LpZDgUX/uNFksFZgfZMz+HFnMqslKo4swcuqz1
-        alk+bV15zoavc0geE1c4cZRJVZ1+jT2uLQIy7/O3S30HRKpt1kx/
-X-Google-Smtp-Source: APBJJlGXw6gZAbhK4kl28Jt3+uNyGtz1CZs/V06D3OBlIubL8fMEUnFM2hCVt33G8WUHmy8s370jcIDCaHOXRR/TDpc=
-X-Received: by 2002:a81:83cc:0:b0:576:c543:2a5f with SMTP id
- t195-20020a8183cc000000b00576c5432a5fmr5543264ywf.4.1688219405263; Sat, 01
- Jul 2023 06:50:05 -0700 (PDT)
+        with ESMTP id S229460AbjGBKkL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 2 Jul 2023 06:40:11 -0400
+Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6984E54;
+        Sun,  2 Jul 2023 03:40:09 -0700 (PDT)
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4Qv5D72bvpz56;
+        Sun,  2 Jul 2023 12:40:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1688294407; bh=Vt2OuD2YgoWjYb9mB0pJty47mCq/a7jrF/gXYo2tnkw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pvHYkXhaHjIchq0Yun+6ber7npZhKtrjaVMrDvWHA9Jp2YzB9Z6G/w0Kzt45ovPpF
+         ge58y/gZeUu49F+HhLpIZQWXpTv8RFiip2OmSehiATfoIHQaqnAWfx6qbYdtOlzFPK
+         8zKNzo6okTLvzCUCv1y/H9ZhKZOo51f5/Wlhi3bep0shZrsrPMFGGNT4nVBTL9mDcT
+         /7LrHGuhptDWK84OjIa93hRQd35vzlS3f4NtBKUGTGR9prsSgcKLfVLVHH7AZeA+/8
+         iFxi8sU4f+mPHmBofuX+RICpYIoTkD3cOmUj49IuPlpnodwshsitZaVLDl/tnsxZXr
+         NAyq9gpoYIz/g==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.8 at mail
+Date:   Sun, 2 Jul 2023 12:40:05 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] i2c: at91: constify at91_twi_pdata
+Message-ID: <ZKFUBUyCqZBNUMfz@qmqm.qmqm.pl>
+References: <6ac87dcbb660ae892bf8740c78d3eca7625d6db6.1687814664.git.mirq-linux@rere.qmqm.pl>
+ <20230629223825.27q75s2a3eyiapgy@intel.intel>
 MIME-Version: 1.0
-References: <62ae6810d41e0429ebaadfac8a95409f4bc72456.1688160163.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <62ae6810d41e0429ebaadfac8a95409f4bc72456.1688160163.git.christophe.jaillet@wanadoo.fr>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 1 Jul 2023 15:49:54 +0200
-Message-ID: <CACRpkdYu4KWx4cgt1PFniduJb5kRmnKs84k+7xVdo3dDY=TqbQ@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: busses: i2c-nomadik: Remove a useless call in the
- remove function
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     wsa@kernel.org, Andi Shyti <andi.shyti@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230629223825.27q75s2a3eyiapgy@intel.intel>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,29 +51,32 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 11:23=E2=80=AFPM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
+On Fri, Jun 30, 2023 at 12:38:25AM +0200, Andi Shyti wrote:
+> Hi Michal,
+> 
+> [...]
+> 
+> > -static struct at91_twi_pdata *at91_twi_get_driver_data(
+> > +static const struct at91_twi_pdata *at91_twi_get_driver_data(
+> >  					struct platform_device *pdev)
+> >  {
+> >  	if (pdev->dev.of_node) {
+> > @@ -189,9 +189,9 @@ static struct at91_twi_pdata *at91_twi_get_driver_data(
+> >  		match = of_match_node(atmel_twi_dt_ids, pdev->dev.of_node);
+> >  		if (!match)
+> >  			return NULL;
+> > -		return (struct at91_twi_pdata *)match->data;
+> > +		return match->data;
+> >  	}
+> > -	return (struct at91_twi_pdata *) platform_get_device_id(pdev)->driver_data;
+> > +	return (const void *) platform_get_device_id(pdev)->driver_data;
+> 
+> the const's always confuse me... do you get an error here? Is
+> this cast really needed?
 
-> Since commit a410963ba4c0 ("Merge branch 'i2c-embedded/for-next' of
-> git://git.pengutronix.de/git/wsa/linux"), there is no more
-> request_mem_region() call in this driver.
->
-> So remove the release_mem_region() call from the remove function which is
-> likely a left over.
->
-> There is no details in the above commit log, but at its end we can read:
->    Conflicts:
->            drivers/i2c/busses/i2c-nomadik.c
->
-> This may explain why this call has been left here.
->
-> Fixes: a410963ba4c0 ("Merge branch 'i2c-embedded/for-next' of git://git.p=
-engutronix.de/git/wsa/linux
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> v2: synch with latest -next
+platform_device_id.driver_data is an ulong, not a void pointer. So, the
+cast is needed. It could be just (void *), but I think it's better to
+document the constness in the code.
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+-- 
+Micha³ Miros³aw
