@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61908745BEA
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jul 2023 14:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93904745BF5
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jul 2023 14:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbjGCMOP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Jul 2023 08:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S231282AbjGCMOT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Jul 2023 08:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjGCMOP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Jul 2023 08:14:15 -0400
+        with ESMTP id S229932AbjGCMOR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Jul 2023 08:14:17 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48480115;
-        Mon,  3 Jul 2023 05:14:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6E910E;
+        Mon,  3 Jul 2023 05:14:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688386454; x=1719922454;
+  t=1688386457; x=1719922457;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Z7bCMN6xKQi+ypGD5LL1aECtFx/TCb2DP0kRtZYvV10=;
-  b=NgWm81nllrMuJmp/bRu/UKkw/UVojjh3HHK7yCFnShWqG/duNrkqWkgS
-   CHgYchjvGjt+s2NGqsnMjDjjqOQrzUGn4zFXumNxx/nJhchWBXMeRtOrp
-   efZY6DMhZw3cz+xW2Ly1+ftVY754CqoBtmjm/NZsbutC4gBQOYHzYf3cB
-   sruHhESK3zosSYhn4/pjxMflqpSj5T7MXLytnlCfKF3E3a2hOJFBxK5v/
-   E5p5jX3XaJ8MHnlPxBOldkk1SkdjtcKC7cBmEOx/duXd/U+pgloUKMpbK
-   c2oolHZ5eAXsePF6oxXt1hG958l599byK6w8/GvCTQ3KsCmESOpsV9Mis
+  bh=6dRCLDNqHkkgOUVmba5HT205hg+Hl4f7VC7TUVOvuDs=;
+  b=In5Upfr6C5gXiONAMV1wQ16x/2QH4eupis0ImI9fmQs/oIit5CGE3Vfu
+   Yuf8spOZYtPt3pwy1PHuRLCsRnwy51aG16KSzHQvEEDJ614Ouj8EKsIcL
+   zoL9c3KEFd5vT2dXtE9xjDRnGxic8/5fcYJUBDqy2+tETF03FA3MjL42c
+   45GXZCsbQQlU+yg21obn/mpfJqc6WiqaFNBPEv+NCBs2comcvyaB5V7Qn
+   EAZWLJSSLlbJDYYm4EKCyNUvNc0IliaJvHF1gB0svq9HIBh4HSF4v8TyF
+   x0La9plWQBrmJEVJExkH1mCqcNWu5HJ7547N8/SlKlGinEljTQgodHKtR
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="361726055"
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="361726070"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="361726055"
+   d="scan'208";a="361726070"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 05:14:13 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 05:14:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="788508188"
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="788508205"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="788508188"
+   d="scan'208";a="788508205"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Jul 2023 05:14:10 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 03 Jul 2023 05:14:13 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 22DA81C7; Mon,  3 Jul 2023 15:14:13 +0300 (EEST)
+        id 28A8C17C; Mon,  3 Jul 2023 15:14:13 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
@@ -51,9 +51,9 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <lenb@kernel.org>,
         Robert Moore <robert.moore@intel.com>,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v4 4/5] ACPI: scan: Use the acpi_match_acpi_device() helper
-Date:   Mon,  3 Jul 2023 15:14:10 +0300
-Message-Id: <20230703121411.69606-5-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v4 5/5] ACPI: scan: Provide symbol declarations
+Date:   Mon,  3 Jul 2023 15:14:11 +0300
+Message-Id: <20230703121411.69606-6-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 In-Reply-To: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com>
 References: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com>
@@ -69,57 +69,32 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Instead of doing two pass parsing of the table, replace
-acpi_match_device_ids() with acpi_match_acpi_device().
+Compiler is not happy about a couple of symbols that, it thinks,
+are not declared:
+
+  warning: symbol 'acpi_device_lock' was not declared. Should it be static?
+  warning: symbol 'acpi_wakeup_device_list' was not declared. Should it be static?
+
+Include "sleep.h" to have them explicitly declared and make
+the compiler happy.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/acpi/scan.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+ drivers/acpi/scan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-index e75ed9123931..ec1c9bec8bae 100644
+index ec1c9bec8bae..5b145f1aaa1b 100644
 --- a/drivers/acpi/scan.c
 +++ b/drivers/acpi/scan.c
-@@ -928,26 +928,29 @@ static int acpi_bus_extract_wakeup_device_power_package(struct acpi_device *dev)
- 	return err;
- }
+@@ -23,6 +23,7 @@
+ #include <linux/dma-direct.h>
  
-+/* Do not use a button for S5 wakeup */
-+#define ACPI_AVOID_WAKE_FROM_S5		BIT(0)
-+
- static bool acpi_wakeup_gpe_init(struct acpi_device *device)
- {
- 	static const struct acpi_device_id button_device_ids[] = {
--		{"PNP0C0C", 0},		/* Power button */
--		{"PNP0C0D", 0},		/* Lid */
--		{"PNP0C0E", 0},		/* Sleep button */
-+		{"PNP0C0C", 0},				/* Power button */
-+		{"PNP0C0D", ACPI_AVOID_WAKE_FROM_S5},	/* Lid */
-+		{"PNP0C0E", ACPI_AVOID_WAKE_FROM_S5},	/* Sleep button */
- 		{"", 0},
- 	};
- 	struct acpi_device_wakeup *wakeup = &device->wakeup;
-+	const struct acpi_device_id *match;
- 	acpi_status status;
+ #include "internal.h"
++#include "sleep.h"
  
- 	wakeup->flags.notifier_present = 0;
- 
- 	/* Power button, Lid switch always enable wakeup */
--	if (!acpi_match_device_ids(device, button_device_ids)) {
--		if (!acpi_match_device_ids(device, &button_device_ids[1])) {
--			/* Do not use Lid/sleep button for S5 wakeup */
--			if (wakeup->sleep_state == ACPI_STATE_S5)
--				wakeup->sleep_state = ACPI_STATE_S4;
--		}
-+	match = acpi_match_acpi_device(button_device_ids, device);
-+	if (match) {
-+		if ((match->driver_data & ACPI_AVOID_WAKE_FROM_S5) &&
-+		    wakeup->sleep_state == ACPI_STATE_S5)
-+			wakeup->sleep_state = ACPI_STATE_S4;
- 		acpi_mark_gpe_for_wake(wakeup->gpe_device, wakeup->gpe_number);
- 		device_set_wakeup_capable(&device->dev, true);
- 		return true;
+ #define ACPI_BUS_CLASS			"system_bus"
+ #define ACPI_BUS_HID			"LNXSYBUS"
 -- 
 2.40.0.1.gaa8946217a0b
 
