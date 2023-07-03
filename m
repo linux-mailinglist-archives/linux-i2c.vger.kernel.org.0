@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF2C745BF0
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jul 2023 14:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61908745BEA
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jul 2023 14:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbjGCMOR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Jul 2023 08:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
+        id S230133AbjGCMOP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Jul 2023 08:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjGCMOP (ORCPT
+        with ESMTP id S229989AbjGCMOP (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Jul 2023 08:14:15 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC5F109;
-        Mon,  3 Jul 2023 05:14:15 -0700 (PDT)
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48480115;
+        Mon,  3 Jul 2023 05:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688386455; x=1719922455;
+  t=1688386454; x=1719922454;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=SqHkBAkMK8Hr6vUp+4hcp7KlH8mbLu8d9B93Kaa2CI0=;
-  b=cmN2v3BsUccyQpB/JP3I9AtikT+eCMQn8WwHu9egn0wTtsuAYkJePai1
-   6HEjlNDFWllbAKPK60bGVrSH/GYvzl0UQXdKSAB5LWU4n8/saIkNoTzaA
-   fMh+YAlfqXEMOlMMQ0CwefQZTVz3RDjwuAvshaHuA+RDCz/YbJSQE75HA
-   hpXgpCwhxOTNx5bi2F58iuFl58g6RGaSGvPTjLE51k0XKVDf5NT/kznuZ
-   ftDipyD8x8ixCcklcmp+ULXMzkKvDR30DeZQXpxGilEpPjfL0su892qqI
-   ju1zCNIHGPfUCnGWKs4v5ZBYAxl1DpI+SRp2Ahdzf0szGGFoUPiRihiOa
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="449241146"
+  bh=Z7bCMN6xKQi+ypGD5LL1aECtFx/TCb2DP0kRtZYvV10=;
+  b=NgWm81nllrMuJmp/bRu/UKkw/UVojjh3HHK7yCFnShWqG/duNrkqWkgS
+   CHgYchjvGjt+s2NGqsnMjDjjqOQrzUGn4zFXumNxx/nJhchWBXMeRtOrp
+   efZY6DMhZw3cz+xW2Ly1+ftVY754CqoBtmjm/NZsbutC4gBQOYHzYf3cB
+   sruHhESK3zosSYhn4/pjxMflqpSj5T7MXLytnlCfKF3E3a2hOJFBxK5v/
+   E5p5jX3XaJ8MHnlPxBOldkk1SkdjtcKC7cBmEOx/duXd/U+pgloUKMpbK
+   c2oolHZ5eAXsePF6oxXt1hG958l599byK6w8/GvCTQ3KsCmESOpsV9Mis
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="361726055"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="449241146"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 05:14:13 -0700
+   d="scan'208";a="361726055"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 05:14:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="718574510"
+X-IronPort-AV: E=McAfee;i="6600,9927,10759"; a="788508188"
 X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="718574510"
+   d="scan'208";a="788508188"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 03 Jul 2023 05:14:09 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 03 Jul 2023 05:14:10 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 12A1A177; Mon,  3 Jul 2023 15:14:13 +0300 (EEST)
+        id 22DA81C7; Mon,  3 Jul 2023 15:14:13 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
@@ -51,9 +51,9 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <lenb@kernel.org>,
         Robert Moore <robert.moore@intel.com>,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v4 3/5] ACPI: platform: Move SMB0001 HID to the header and reuse
-Date:   Mon,  3 Jul 2023 15:14:09 +0300
-Message-Id: <20230703121411.69606-4-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v4 4/5] ACPI: scan: Use the acpi_match_acpi_device() helper
+Date:   Mon,  3 Jul 2023 15:14:10 +0300
+Message-Id: <20230703121411.69606-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 In-Reply-To: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com>
 References: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com>
@@ -69,61 +69,57 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-There are at least two places in the kernel that are using
-the SMB0001 HID. Make it to be available via acpi_drivers.h
-header file. While at it, replace hard coded one with a
-definition.
+Instead of doing two pass parsing of the table, replace
+acpi_match_device_ids() with acpi_match_acpi_device().
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
-Link: https://lore.kernel.org/r/20230621151652.79579-2-andriy.shevchenko@linux.intel.com
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/acpi/acpi_platform.c  | 2 +-
- drivers/i2c/busses/i2c-scmi.c | 3 ---
- include/acpi/acpi_drivers.h   | 2 ++
- 3 files changed, 3 insertions(+), 4 deletions(-)
+ drivers/acpi/scan.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
-index c2ce558bd032..3867d5389c51 100644
---- a/drivers/acpi/acpi_platform.c
-+++ b/drivers/acpi/acpi_platform.c
-@@ -29,7 +29,7 @@ static const struct acpi_device_id forbidden_id_list[] = {
- 	{"PNP0000",  0},	/* PIC */
- 	{"PNP0100",  0},	/* Timer */
- 	{"PNP0200",  0},	/* AT DMA Controller */
--	{"SMB0001",  ACPI_ALLOW_WO_RESOURCES},	/* ACPI SMBUS virtual device */
-+	{ACPI_SMBUS_MS_HID,  ACPI_ALLOW_WO_RESOURCES},	/* ACPI SMBUS virtual device */
- 	{ }
- };
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index e75ed9123931..ec1c9bec8bae 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -928,26 +928,29 @@ static int acpi_bus_extract_wakeup_device_power_package(struct acpi_device *dev)
+ 	return err;
+ }
  
-diff --git a/drivers/i2c/busses/i2c-scmi.c b/drivers/i2c/busses/i2c-scmi.c
-index 104570292241..421735acfa14 100644
---- a/drivers/i2c/busses/i2c-scmi.c
-+++ b/drivers/i2c/busses/i2c-scmi.c
-@@ -13,9 +13,6 @@
- #include <linux/i2c.h>
- #include <linux/acpi.h>
++/* Do not use a button for S5 wakeup */
++#define ACPI_AVOID_WAKE_FROM_S5		BIT(0)
++
+ static bool acpi_wakeup_gpe_init(struct acpi_device *device)
+ {
+ 	static const struct acpi_device_id button_device_ids[] = {
+-		{"PNP0C0C", 0},		/* Power button */
+-		{"PNP0C0D", 0},		/* Lid */
+-		{"PNP0C0E", 0},		/* Sleep button */
++		{"PNP0C0C", 0},				/* Power button */
++		{"PNP0C0D", ACPI_AVOID_WAKE_FROM_S5},	/* Lid */
++		{"PNP0C0E", ACPI_AVOID_WAKE_FROM_S5},	/* Sleep button */
+ 		{"", 0},
+ 	};
+ 	struct acpi_device_wakeup *wakeup = &device->wakeup;
++	const struct acpi_device_id *match;
+ 	acpi_status status;
  
--/* SMBUS HID definition as supported by Microsoft Windows */
--#define ACPI_SMBUS_MS_HID		"SMB0001"
--
- struct smbus_methods_t {
- 	char *mt_info;
- 	char *mt_sbr;
-diff --git a/include/acpi/acpi_drivers.h b/include/acpi/acpi_drivers.h
-index 8372b0e7fd15..b14d165632e7 100644
---- a/include/acpi/acpi_drivers.h
-+++ b/include/acpi/acpi_drivers.h
-@@ -27,6 +27,8 @@
- #define ACPI_BAY_HID			"LNXIOBAY"
- #define ACPI_DOCK_HID			"LNXDOCK"
- #define ACPI_ECDT_HID			"LNXEC"
-+/* SMBUS HID definition as supported by Microsoft Windows */
-+#define ACPI_SMBUS_MS_HID		"SMB0001"
- /* Quirk for broken IBM BIOSes */
- #define ACPI_SMBUS_IBM_HID		"SMBUSIBM"
+ 	wakeup->flags.notifier_present = 0;
  
+ 	/* Power button, Lid switch always enable wakeup */
+-	if (!acpi_match_device_ids(device, button_device_ids)) {
+-		if (!acpi_match_device_ids(device, &button_device_ids[1])) {
+-			/* Do not use Lid/sleep button for S5 wakeup */
+-			if (wakeup->sleep_state == ACPI_STATE_S5)
+-				wakeup->sleep_state = ACPI_STATE_S4;
+-		}
++	match = acpi_match_acpi_device(button_device_ids, device);
++	if (match) {
++		if ((match->driver_data & ACPI_AVOID_WAKE_FROM_S5) &&
++		    wakeup->sleep_state == ACPI_STATE_S5)
++			wakeup->sleep_state = ACPI_STATE_S4;
+ 		acpi_mark_gpe_for_wake(wakeup->gpe_device, wakeup->gpe_number);
+ 		device_set_wakeup_capable(&device->dev, true);
+ 		return true;
 -- 
 2.40.0.1.gaa8946217a0b
 
