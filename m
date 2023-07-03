@@ -2,103 +2,119 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2124E745CE1
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jul 2023 15:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B58745D55
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jul 2023 15:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbjGCNJx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 3 Jul 2023 09:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
+        id S231522AbjGCNbR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 3 Jul 2023 09:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbjGCNJt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Jul 2023 09:09:49 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F6BE6E;
-        Mon,  3 Jul 2023 06:09:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688389788; x=1719925788;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QZ/zCTxgUvgYpyM9lZeEIyhV+aOwlC3KMlPBTVwkteI=;
-  b=Oy10oJb4VeEyEwzsCyN5kXc5Ud7F0vao0jvxlccUh0ogXiZCqwxOJuXo
-   SdeGnfYGHumLe5tZXNy1RuIX30H85b0IrAPZ1wqnX/vb1bPh+EBAz7qjJ
-   mSmum4jdbM/ShjVBg4XEYDSHhru3F4QC0u+VXaKwzkGE2OOuYOz+cPYE+
-   Irx8jL+Se8DD6RgWJuWJVE0lNY9rcybi/tIesE26pAz5aoaWxC2+Ul0uG
-   ZnOVP+e4dM2lxc1TmPHQ0X7YhWY7ATJrCsQWVKFZBS9pfi7nfP7qJI3h9
-   MosnPcfY/En7FfgR1b/mTC/5VormX+BKZueql6uJY/XraxODmyz8MJMHS
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="342470211"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="342470211"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 06:09:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="842665070"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="842665070"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 03 Jul 2023 06:09:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qGJJ6-001ruT-2R;
-        Mon, 03 Jul 2023 16:09:32 +0300
-Date:   Mon, 3 Jul 2023 16:09:32 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH v4 0/5] ACPI: platform: Fix SMB0001 enumeration on
- Kontron devices
-Message-ID: <ZKLIjAgJ5p/usyK3@smile.fi.intel.com>
-References: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S229914AbjGCNbQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 3 Jul 2023 09:31:16 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E0DE3
+        for <linux-i2c@vger.kernel.org>; Mon,  3 Jul 2023 06:31:15 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b6a5fd1f46so68093681fa.1
+        for <linux-i2c@vger.kernel.org>; Mon, 03 Jul 2023 06:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688391073; x=1690983073;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mmnKR6NrcH13RIboC24wgvo0cXm9uFpdKMc5Nw0n2zA=;
+        b=ScMdpPo+quZsGKt6VxpWHDSxyvsyHQTKTkDln/Nk5LM97r3ByHE8tRaLbaMvIxbS85
+         lQMOOI6mNxiq/LTabMNpFsGcPccJoVDJvShOaSrpsRAAw2GVxGZ0/hQb3kL+DOn9bPO3
+         LzzMb+6WZ9gj9hrm80XN+GiplqVeWvzt2DHlJzYUm4O3fYez/hIEfojd6aCDtOQLMyDw
+         /JST52UuE9cGQN/N23OmzKAbDBCwMaT+9FXOCFXxFcoYHA40lGBrO7AfStANI6Fie7bc
+         AybJ0M1nIfz4EcE8lNqRCIoqPrMLcwxi6MjmTcgE/1FmWXxq/MKuYPxjFySG61Pss78+
+         QEIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688391073; x=1690983073;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mmnKR6NrcH13RIboC24wgvo0cXm9uFpdKMc5Nw0n2zA=;
+        b=UT7egrParNVdQA4QIcrUj1nbDaokRy4DiEMOt+SaIMbsYIF3qsziY0MZeB5Iznwgoj
+         OLo57l7WL+T7jYj5T0ZVIw61X9qebrjLbPXkmj2CtkHk4IHmqtnxJ70QYB5zVJ7hr9kH
+         SbGNvTvIcDFrM5reta0wc9U3ZQBEwgZTsjs5Yu/m0yiJRfUPBjlpr/QVztD8FOkum+hF
+         b91umKtd7MOzsunnCbvVgDuHMKhz0G+0RXNgXn2IqaRiKdsc+eOwMgM8vyqSZucEpOC5
+         wtoHMzHH0KVsg7lRTbNPkNW3lETpd1c+HzknFtA2MATMNd/HNlN6de0sRy7L5cdlpTso
+         Sd1Q==
+X-Gm-Message-State: ABy/qLZ0UO9NFTq/mSAEX06LmxPYN+f9rNLOAGJfaLG9IBQSE0IKrPFU
+        FpOdYgVSRy8wBztmwsXWI5+7x+FB+Gi8mvqnWBDDIQ==
+X-Google-Smtp-Source: APBJJlGFdqjy8wwAOkx2KKsD9YVjv9xJFBDRdOY+uU/tTgJX7vCdJgPQj5vpQBGok4bNXDBHh5GbeQ==
+X-Received: by 2002:a05:6512:3984:b0:4fb:85b2:cf78 with SMTP id j4-20020a056512398400b004fb85b2cf78mr8856638lfu.37.1688391073559;
+        Mon, 03 Jul 2023 06:31:13 -0700 (PDT)
+Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
+        by smtp.gmail.com with ESMTPSA id ep7-20020a056512484700b004fbb1f70ceesm833417lfb.227.2023.07.03.06.31.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 06:31:13 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/5] Add interconnects to QUPs on SM8250
+Date:   Mon, 03 Jul 2023 15:31:09 +0200
+Message-Id: <20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJ3NomQC/x2N0QqDMAwAf0XyvEBtp5X9yhCpMZsBqV2rMhD/f
+ WGPd3DcCYWzcIFHdULmQ4qsUaG+VUBziG9GmZTBGuuMNw63NQlhZxszfPY0CBG2tW+74O7kmUD
+ DMRTGMYdIs6ZxXxaVKfNLvv/Ts7+uH6A3bfx5AAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1688391072; l=1274;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=P/b9sUtVGW1aCLv/5W9/Do7IS4MZ5AYwLEHs4cWI4Yo=;
+ b=FeyN/5yDiFSyKCkhToHlIcdNwZzpYCsAzae8/E3MTmMzSSgehX8sZSykvbqgM4E5OR2o/LBXV
+ pAWX9VvkUzICzoebYDjNNIbkASbiD70Z2u/I6lHttwRFt3eIaxT4Pcp
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 03:14:06PM +0300, Andy Shevchenko wrote:
-> After switching i2c-scmi driver to be a plaform one, it stopped
-> being enumerated on number of Kontron platforms, because it's
-> listed in the forbidden_id_list.
-> 
-> To resolve the situation, add a flag and check if there are resources
-> privided for the forbiden device. If it is the case, the device must
-> be skipped.
+SM8250 (like SM8150 but unlike all other QUP-equipped SoCs) doesn't
+provide a qup-core path. Adjust the bindings and drivers as necessary,
+and then describe the icc paths in the device tree. This makes it possible
+for interconnect sync_state succeed so long as you don't use UFS.
 
-...
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (5):
+      dt-bindings: spi: spi-geni-qcom: Allow no qup-core icc path
+      dt-bindings: serial: geni-qcom: Allow no qup-core icc path
+      dt-bindings: i2c: qcom,i2c-geni: Allow no qup-core icc path
+      soc: qcom: geni-se: Allow any combination of icc paths
+      arm64: dts: qcom: sm8250: Add interconnects and power-domains to QUPs
 
-> Changelog v4:
-> - dropped applied patch
-> - added kernel doc for new helper (Rafael)
-> - rewritten the commit message for the reason of a new helper (Rafael)
-> - added a couple of patches for ACPI scan.c that can be applied later on
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml           |  27 ++--
+ .../bindings/serial/qcom,serial-geni-qcom.yaml     |  26 ++--
+ .../bindings/spi/qcom,spi-geni-qcom.yaml           |  15 ++-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               | 150 +++++++++++++++++++++
+ drivers/soc/qcom/qcom-geni-se.c                    |   9 +-
+ 5 files changed, 204 insertions(+), 23 deletions(-)
+---
+base-commit: 296d53d8f84ce50ffaee7d575487058c8d437335
+change-id: 20230703-topic-8250_qup_icc-61768a34c7ec
 
-- converted to use boolean instead of integer (Rafael)
-- added tag (Andi)
-
-> Changelog v3:
-> - provided completely rewritten solution (Rafael)
-> - due to above, added two new patches
-> - due to above, dropped tags from patch 3
-
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
