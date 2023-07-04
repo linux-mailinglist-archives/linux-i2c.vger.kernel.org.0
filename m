@@ -2,61 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5167477D4
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jul 2023 19:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8D97478D4
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jul 2023 21:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbjGDRdF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 4 Jul 2023 13:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
+        id S231688AbjGDTvO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 4 Jul 2023 15:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjGDRdA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Jul 2023 13:33:00 -0400
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4709CDA;
-        Tue,  4 Jul 2023 10:32:56 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-98e2865e2f2so160154466b.0;
-        Tue, 04 Jul 2023 10:32:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688491975; x=1691083975;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lW4LJlumzva12+IQ3BLk1PuvUZFdkFvStFm2FTeBlDo=;
-        b=JoNfASlzzObF5scHE8HLjRklUuAs94F3cVBKJXgbRWZmOveZ+2S6gErN/vmdIvNA14
-         6U1SkDy56Hafr/dBYyyzsXcSXr5nVuJx5sa6E0SxLJUoKlX9k2NlPfl2MCUJWV/I86uS
-         p7YdDIQQUNftSr3jozH6ouk/W2oEoycNz9IpkoZotDBJss+l1RXWkXuzP4TW3f3Oe6/G
-         K8pPIIc+B5lsqOMhJ98Mg+tGawu4WNUUPEqoGj1v8ggAU99Wn+PFkcOu61ZBoqh6QJkJ
-         Iz5u4MlA8SEsVpbgFrzSmoYWi7fVbSTTiZ1zg1LjgjD+l7SzJbfXPf3aTTw9BEUwQHoj
-         oarA==
-X-Gm-Message-State: ABy/qLbesWnHZ0Re+53njriMlJU3B4WfGFkMzoM1XLMr3WaU2AD7tKGE
-        SxrkEMjNJ5wcSN4hjXyrMp27qgm8x2jZHVyFRS8=
-X-Google-Smtp-Source: APBJJlFJ3yLzRjSaZ5TGIc7GshSZ92NCejwA2m9LUyC4vBOSDqHjrz/cvK5NFXGX9h1VI6PkKTZDyyC8vkBxV1WGVHM=
-X-Received: by 2002:a17:906:d112:b0:992:387:44d1 with SMTP id
- b18-20020a170906d11200b00992038744d1mr7765098ejz.7.1688491974696; Tue, 04 Jul
- 2023 10:32:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com> <20230703121411.69606-3-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230703121411.69606-3-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 4 Jul 2023 19:32:43 +0200
-Message-ID: <CAJZ5v0iZzvdkxe3NjHbiZzDjea=CoK-pGw3hjSoa9u8f87TLtg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] ACPI: platform: Ignore SMB0001 only when it has resources
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        with ESMTP id S231319AbjGDTvO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 4 Jul 2023 15:51:14 -0400
+Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C867010DD
+        for <linux-i2c@vger.kernel.org>; Tue,  4 Jul 2023 12:51:11 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id Gm3HqhIN61lRhGm3Hq4oNQ; Tue, 04 Jul 2023 21:51:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1688500269;
+        bh=E5rO26Dz3CWK8l+Od+4vE1x2c+orHF72b1zdbUbPDV4=;
+        h=From:To:Cc:Subject:Date;
+        b=Vtze80gT9MTMD9rA3V9bGewsYl3ApaMoHm2coqNXA2EIJYAbnuj/jrjX6wzceUUrY
+         8ZXcbDtR0rZkV0KZlPL31Rx4tDuX45eSyEH5/HUlapU4xhaQy9oepa92Ex3GuxPGN6
+         M6jCQg3gSdxCCXFgmvhKHrHsRZvt7J9ZYdfdkciXcU/7sKSlghv1zHtfgqBlk2c0Y1
+         Qw3dA9LeA2lUnpSa7YAnKJyUMCNPG5CpOLHz2QwvPLlUAR4tuxtOm55LHjh+/T6d3y
+         ryL1iciITpEf9iTlxjnbvWptvB6wcjt+eM23rzaeVNMSKojQ/6nAWQnetfDJfAkr1W
+         SxHEUFahQVGcA==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 04 Jul 2023 21:51:09 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     dan.carpenter@linaro.org, Linus Walleij <linus.walleij@linaro.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Alessandro Rubini <rubini@gnudd.com>,
         Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Michael Walle <michael@walle.cc>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        Giancarlo Asnaghi <giancarlo.asnaghi@st.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        stable@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH v3] i2c: busses: i2c-nomadik: Remove a useless call in the remove function
+Date:   Tue,  4 Jul 2023 21:50:28 +0200
+Message-Id: <62ae6810d41e04a9eb5adfa18a9e40904bc72256.1688160163.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,110 +58,51 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jul 3, 2023 at 2:14 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> After switching i2c-scmi driver to be a platform one, it stopped
-> being enumerated on number of Kontron platforms, because it's
-> listed in the forbidden_id_list.
->
-> To resolve the situation, add a flag to driver data to allow devices
-> with no resources in _CRS to be enumerated via platform bus.
->
-> Fixes: 03d4287add6e ("i2c: scmi: Convert to be a platform driver")
-> Closes: https://lore.kernel.org/r/60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com
-> Link: https://lore.kernel.org/r/20230621151652.79579-1-andriy.shevchenko@linux.intel.com
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-> ---
->  drivers/acpi/acpi_platform.c | 30 +++++++++++++++++++++++++++---
->  1 file changed, 27 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
-> index fe00a5783f53..c2ce558bd032 100644
-> --- a/drivers/acpi/acpi_platform.c
-> +++ b/drivers/acpi/acpi_platform.c
-> @@ -9,6 +9,7 @@
->   */
->
->  #include <linux/acpi.h>
-> +#include <linux/bits.h>
->  #include <linux/device.h>
->  #include <linux/err.h>
->  #include <linux/kernel.h>
-> @@ -19,13 +20,16 @@
->
->  #include "internal.h"
->
-> +/* Exclude devices that have no _CRS resources provided */
-> +#define ACPI_ALLOW_WO_RESOURCES                BIT(0)
-> +
->  static const struct acpi_device_id forbidden_id_list[] = {
->         {"ACPI0009", 0},        /* IOxAPIC */
->         {"ACPI000A", 0},        /* IOAPIC */
->         {"PNP0000",  0},        /* PIC */
->         {"PNP0100",  0},        /* Timer */
->         {"PNP0200",  0},        /* AT DMA Controller */
-> -       {"SMB0001",  0},        /* ACPI SMBUS virtual device */
-> +       {"SMB0001",  ACPI_ALLOW_WO_RESOURCES},  /* ACPI SMBUS virtual device */
->         { }
->  };
->
-> @@ -83,6 +87,15 @@ static void acpi_platform_fill_resource(struct acpi_device *adev,
->                 dest->parent = pci_find_resource(to_pci_dev(parent), dest);
->  }
->
-> +static unsigned int acpi_platform_resource_count(struct acpi_resource *ares, void *data)
-> +{
-> +       bool *has_resources = data;
-> +
-> +       *has_resources = true;
-> +
-> +       return AE_CTRL_TERMINATE;
-> +}
-> +
->  /**
->   * acpi_create_platform_device - Create platform device for ACPI device node
->   * @adev: ACPI device node to create a platform device for.
-> @@ -100,17 +113,28 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
->         struct acpi_device *parent = acpi_dev_parent(adev);
->         struct platform_device *pdev = NULL;
->         struct platform_device_info pdevinfo;
-> +       const struct acpi_device_id *match;
->         struct resource_entry *rentry;
->         struct list_head resource_list;
->         struct resource *resources = NULL;
-> +       bool has_resources;
->         int count;
->
->         /* If the ACPI node already has a physical device attached, skip it. */
->         if (adev->physical_node_count)
->                 return NULL;
->
-> -       if (!acpi_match_device_ids(adev, forbidden_id_list))
-> -               return ERR_PTR(-EINVAL);
-> +       match = acpi_match_acpi_device(forbidden_id_list, adev);
-> +       if (match) {
-> +               if (match->driver_data & ACPI_ALLOW_WO_RESOURCES) {
-> +                       acpi_walk_resources(adev->handle, METHOD_NAME__CRS,
-> +                                           acpi_platform_resource_count, &has_resources);
-> +                       if (has_resources)
-> +                               return ERR_PTR(-EINVAL);
-> +               } else {
-> +                       return ERR_PTR(-EINVAL);
-> +               }
-> +       }
->
->         INIT_LIST_HEAD(&resource_list);
->         count = acpi_dev_get_resources(adev, &resource_list, NULL, NULL);
-> --
+Since commit 235602146ec9 ("i2c-nomadik: turn the platform driver to an amba
+driver"), there is no more request_mem_region() call in this driver.
 
-Applied as 6.5-rc material along with the rest of the series (except
-for the last patch that has been superseded), but I moved the
-has_resources definition to the block where it is used and added a
-'false' initial value to it. as the code might not work as expected
-without initializing it.
+So remove the release_mem_region() call from the remove function which is
+likely a left over.
 
-Please double check the bleeding-edge branch of linux-pm.
+Fixes: 235602146ec9 ("i2c-nomadik: turn the platform driver to an amba driver")
+Cc: <stable@vger.kernel.org> # v3.6+
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+v3: - update commit description
+    - add R-b and A-b
+    - fix Fixes tag   [Dan Carpenter]
+    - add cc stable   [Andi Shyti]
 
-Thanks!
+v2: - synch with latest -next
+    - https://lore.kernel.org/all/62ae6810d41e0429ebaadfac8a95409f4bc72456.1688160163.git.christophe.jaillet@wanadoo.fr/
+
+v1: - https://lore.kernel.org/all/4f4c2c5c20b61c4bb28cb3e9ab4640534dd2adec.1629530169.git.christophe.jaillet@wanadoo.fr/
+---
+ drivers/i2c/busses/i2c-nomadik.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-nomadik.c b/drivers/i2c/busses/i2c-nomadik.c
+index 1e5fd23ef45c..212f412f1c74 100644
+--- a/drivers/i2c/busses/i2c-nomadik.c
++++ b/drivers/i2c/busses/i2c-nomadik.c
+@@ -1038,7 +1038,6 @@ static int nmk_i2c_probe(struct amba_device *adev, const struct amba_id *id)
+ 
+ static void nmk_i2c_remove(struct amba_device *adev)
+ {
+-	struct resource *res = &adev->res;
+ 	struct nmk_i2c_dev *dev = amba_get_drvdata(adev);
+ 
+ 	i2c_del_adapter(&dev->adap);
+@@ -1047,7 +1046,6 @@ static void nmk_i2c_remove(struct amba_device *adev)
+ 	clear_all_interrupts(dev);
+ 	/* disable the controller */
+ 	i2c_clr_bit(dev->virtbase + I2C_CR, I2C_CR_PE);
+-	release_mem_region(res->start, resource_size(res));
+ }
+ 
+ static struct i2c_vendor_data vendor_stn8815 = {
+-- 
+2.34.1
+
