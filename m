@@ -2,57 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5962748A7A
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jul 2023 19:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3DF748AB1
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jul 2023 19:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232689AbjGERcF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jul 2023 13:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S232774AbjGERgI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jul 2023 13:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbjGERcE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 13:32:04 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5431BEF;
-        Wed,  5 Jul 2023 10:31:23 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365ELHiM007736;
-        Wed, 5 Jul 2023 19:29:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=oxvOgEF9cvRzCwfkDelwx7si1C+N2VuboXigLVR2SWA=;
- b=xvOY8m0QodXwBZhsM5T5ELcmsFzBcK0qMv6Qs6hI88hnRwBkFB/ysw0DZwZNS/iobXNl
- I0cYXFRnIZz7I/iEDI3bpcPn+zk0PitWpNNMHMe0z06nqOKI3FuLJP+y5wWrLgSLg7HH
- vfyeYlPA0S1CbOrphhlesXe6Lq0BftoFErxYR1F0L7yKWHqkK4+67PQghl8QfA1lyrIr
- JCnNAxreYxI5KIMus4YvhsJQHutLzJY9o/98Z2fqQyGMNquLhuUjHd2+wU+ouZea00Qi
- 5Cp9uxFBXQMIASgwij832gWHVXXvMJU4x5pqoJyREDktLaQBWkv3VHl/9R9P+8Os4giD mQ== 
+        with ESMTP id S231305AbjGERgH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 13:36:07 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DE91BEB;
+        Wed,  5 Jul 2023 10:35:41 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365FaBp3003086;
+        Wed, 5 Jul 2023 19:35:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=shpntqm9Lb88tQ8tlCGuG2FwYoCeA99QpOjJ1mJ95MI=;
+ b=B9NUeEVnBg8MdHStPnL4TOmJhyuqDrSpAiTXxO/nPPpzy04upCGkWFZloothm1IsdlaP
+ X2dM2UcrLRYot6pDInpUaDfpMw4tRdOgSMjIIUt05sxIHPJTt05NtgJdfiSkjWYJGqQo
+ 5Qf6gvHVZoCkeCGLEsdD07XE10xUn4T3IucwxfOuRptLSABHo82p+XsFpOmpXmiiGV0P
+ XYKMcsbwul2uScBGSCEWMtTWo929/YaPT+Wh3TxrAMZmjHQzF56NlcYYWFxkdKCpyT5u
+ NiyW4MLstguYxELgKwv13IwhUcKcDJWT1p8IlKqjWxQyak83KOQne1tFXm8DXME2V55K Uw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rna75h45d-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rn8c9t3jy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 19:29:48 +0200
+        Wed, 05 Jul 2023 19:35:16 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4F782100057;
-        Wed,  5 Jul 2023 19:29:48 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2E6D9100057;
+        Wed,  5 Jul 2023 19:35:15 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4659024C434;
-        Wed,  5 Jul 2023 19:29:48 +0200 (CEST)
-Received: from localhost (10.201.21.121) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2427D24C451;
+        Wed,  5 Jul 2023 19:35:15 +0200 (CEST)
+Received: from [10.201.21.121] (10.201.21.121) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 5 Jul
- 2023 19:29:47 +0200
-From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
+ 2023 19:35:12 +0200
+Message-ID: <f8c6e86d-af6a-b61f-c642-c23cb3cfb015@foss.st.com>
+Date:   Wed, 5 Jul 2023 19:35:07 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 0/6] Introduce STM32 system bus
+Content-Language: en-US
 To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
         <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
         <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
-        <vkoul@kernel.org>, <jic23@kernel.org>,
-        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
-        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <arnd@kernel.org>,
-        <richardcochran@gmail.com>
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
+        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
+        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
+        <fabrice.gasnier@foss.st.com>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
 CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
@@ -61,213 +63,131 @@ CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
         <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Gatien Chevallier <gatien.chevallier@foss.st.com>
-Subject: [PATCH 08/10] bus: etzpc: introduce ETZPC firewall controller driver
-Date:   Wed, 5 Jul 2023 19:27:57 +0200
-Message-ID: <20230705172759.1610753-9-gatien.chevallier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.201.21.121]
 X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
  (10.75.129.69)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-05_09,2023-07-05_01,2023-05-22_02
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-ETZPC is a peripheral and memory firewall controller that filter accesses
-based on Arm TrustZone secure state and Arm CPU privilege execution level.
-It handles MCU isolation as well.
+Hello all,
 
-Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
----
- MAINTAINERS               |   1 +
- drivers/bus/Makefile      |   2 +-
- drivers/bus/stm32_etzpc.c | 137 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 139 insertions(+), 1 deletion(-)
- create mode 100644 drivers/bus/stm32_etzpc.c
+I'm abandoning this series for:
+https://lore.kernel.org/lkml/20230705172759.1610753
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1ea2f9f60b43..51f5bced7b9b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20126,6 +20126,7 @@ F:	drivers/media/i2c/st-mipid02.c
- ST STM32 FIREWALL
- M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
- S:	Maintained
-+F:	drivers/bus/stm32_etzpc.c
- F:	drivers/bus/stm32_firewall.c
- F:	drivers/bus/stm32_rifsc.c
- 
-diff --git a/drivers/bus/Makefile b/drivers/bus/Makefile
-index e50d18e1d141..cddd4984d6af 100644
---- a/drivers/bus/Makefile
-+++ b/drivers/bus/Makefile
-@@ -26,7 +26,7 @@ obj-$(CONFIG_OMAP_INTERCONNECT)	+= omap_l3_smx.o omap_l3_noc.o
- obj-$(CONFIG_OMAP_OCP2SCP)	+= omap-ocp2scp.o
- obj-$(CONFIG_QCOM_EBI2)		+= qcom-ebi2.o
- obj-$(CONFIG_QCOM_SSC_BLOCK_BUS)	+= qcom-ssc-block-bus.o
--obj-$(CONFIG_STM32_FIREWALL)	+= stm32_firewall.o stm32_rifsc.o
-+obj-$(CONFIG_STM32_FIREWALL)	+= stm32_firewall.o stm32_rifsc.o stm32_etzpc.o
- obj-$(CONFIG_SUN50I_DE2_BUS)	+= sun50i-de2.o
- obj-$(CONFIG_SUNXI_RSB)		+= sunxi-rsb.o
- obj-$(CONFIG_OF)		+= simple-pm-bus.o
-diff --git a/drivers/bus/stm32_etzpc.c b/drivers/bus/stm32_etzpc.c
-new file mode 100644
-index 000000000000..2ef5ab738f87
---- /dev/null
-+++ b/drivers/bus/stm32_etzpc.c
-@@ -0,0 +1,137 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/types.h>
-+
-+#include "stm32_firewall.h"
-+
-+/*
-+ * ETZPC registers
-+ */
-+#define ETZPC_DECPROT			0x10
-+#define ETZPC_HWCFGR			0x3F0
-+
-+/*
-+ * HWCFGR register
-+ */
-+#define ETZPC_HWCFGR_NUM_TZMA		GENMASK(7, 0)
-+#define ETZPC_HWCFGR_NUM_PER_SEC	GENMASK(15, 8)
-+#define ETZPC_HWCFGR_NUM_AHB_SEC	GENMASK(23, 16)
-+#define ETZPC_HWCFGR_CHUNKS1N4		GENMASK(31, 24)
-+
-+/*
-+ * ETZPC miscellaneous
-+ */
-+#define ETZPC_PROT_MASK			GENMASK(1, 0)
-+#define ETZPC_PROT_A7NS			0x3
-+#define ETZPC_DECPROT_SHIFT		1
-+
-+#define IDS_PER_DECPROT_REGS		16
-+
-+static int stm32_etzpc_grant_access(struct stm32_firewall_controller *ctrl, u32 firewall_id)
-+{
-+	u32 offset, reg_offset, sec_val;
-+
-+	if (firewall_id >= ctrl->max_entries) {
-+		dev_err(ctrl->dev, "Invalid sys bus ID %u", firewall_id);
-+		return -EINVAL;
-+	}
-+
-+	/* Check access configuration, 16 peripherals per register */
-+	reg_offset = ETZPC_DECPROT + 0x4 * (firewall_id / IDS_PER_DECPROT_REGS);
-+	offset = (firewall_id % IDS_PER_DECPROT_REGS) << ETZPC_DECPROT_SHIFT;
-+
-+	/* Verify peripheral is non-secure and attributed to cortex A7 */
-+	sec_val = (readl(ctrl->mmio + reg_offset) >> offset) & ETZPC_PROT_MASK;
-+	if (sec_val != ETZPC_PROT_A7NS) {
-+		dev_dbg(ctrl->dev, "Invalid bus configuration: reg_offset %#x, value %d\n",
-+			reg_offset, sec_val);
-+		return -EACCES;
-+	}
-+
-+	return 0;
-+}
-+
-+static void stm32_etzpc_release_access(struct stm32_firewall_controller *ctrl __maybe_unused,
-+				       u32 firewall_id __maybe_unused)
-+{
-+}
-+
-+static int stm32_etzpc_probe(struct platform_device *pdev)
-+{
-+	struct stm32_firewall_controller *etzpc_controller;
-+	struct device_node *np = pdev->dev.of_node;
-+	u32 nb_per, nb_master;
-+	struct resource *res;
-+	void __iomem *mmio;
-+	int rc;
-+
-+	etzpc_controller = devm_kzalloc(&pdev->dev, sizeof(*etzpc_controller), GFP_KERNEL);
-+	if (!etzpc_controller)
-+		return -ENOMEM;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	mmio = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(mmio))
-+		return PTR_ERR(mmio);
-+
-+	etzpc_controller->dev = &pdev->dev;
-+	etzpc_controller->mmio = mmio;
-+	etzpc_controller->type = STM32_PERIPHERAL_FIREWALL | STM32_MEMORY_FIREWALL;
-+	etzpc_controller->grant_access = stm32_etzpc_grant_access;
-+	etzpc_controller->release_access = stm32_etzpc_release_access;
-+
-+	/* Get number of etzpc entries*/
-+	nb_per = FIELD_GET(ETZPC_HWCFGR_NUM_PER_SEC,
-+			   readl(etzpc_controller->mmio + ETZPC_HWCFGR));
-+	nb_master = FIELD_GET(ETZPC_HWCFGR_NUM_AHB_SEC,
-+			      readl(etzpc_controller->mmio + ETZPC_HWCFGR));
-+	etzpc_controller->max_entries = nb_per + nb_master;
-+
-+	platform_set_drvdata(pdev, etzpc_controller);
-+
-+	rc = stm32_firewall_controller_register(etzpc_controller);
-+	if (rc) {
-+		dev_err(etzpc_controller->dev, "Couldn't register as a firewall controller: %d",
-+			rc);
-+		return rc;
-+	}
-+
-+	stm32_firewall_populate_bus(etzpc_controller);
-+
-+	/* Populate all allowed nodes */
-+	return of_platform_populate(np, NULL, NULL, &pdev->dev);
-+}
-+
-+static const struct of_device_id stm32_etzpc_of_match[] = {
-+	{ .compatible = "st,stm32-etzpc" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, stm32_etzpc_of_match);
-+
-+static struct platform_driver stm32_etzpc_driver = {
-+	.probe  = stm32_etzpc_probe,
-+	.driver = {
-+		.name = "stm32-etzpc",
-+		.of_match_table = stm32_etzpc_of_match,
-+	},
-+};
-+
-+static int __init stm32_etzpc_init(void)
-+{
-+	return platform_driver_register(&stm32_etzpc_driver);
-+}
-+arch_initcall(stm32_etzpc_init);
--- 
-2.25.1
+Sorry for the noise.
 
+Best regards,
+Gatien
+
+On 1/27/23 17:40, Gatien Chevallier wrote:
+> Document STM32 System Bus. This bus is intended to control firewall
+> access for the peripherals connected to it.
+> 
+> For every peripheral, the bus checks the firewall registers to see
+> if the peripheral is configured as non-secure. If the peripheral
+> is configured as secure, the node is marked populated, so the
+> device won't be probed.
+> 
+> This is useful as a firewall configuration sanity check and avoid
+> platform crashes in case peripherals are incorrectly configured.
+> 
+> The STM32 System Bus implements the feature-domain-controller
+> bindings. It is used by peripherals to reference a domain
+> controller, in this case the firewall feature domain.
+> The bus uses the ID referenced by the feature-domains property to
+> know where to look in the firewall to get the security configuration
+> for the peripheral. This allows a device tree description rather
+> than a hardcoded peripheral table in the bus driver.
+> 
+> On STM32MP13/15 platforms, the firewall bus is represented by the
+> ETZPC node, which is responsible for the securing / MCU isolating
+> the capable peripherals.
+> 
+> STM32MP13/15 device trees are updated in this series to implement
+> the bus. All peripherals that are securable or MCU isolation capable
+> by the ETZPC are connected to the bus.
+> 
+> Changes in V2:
+> 	- Corrected YAMLS errors highlighted by Rob's robot
+> 	- Re-ordered Signed-off-by tags in two patches
+> 
+> Changes in V3:
+> 	- Document feature-domains property in YAML documentation for
+> 	concerned periperals under the System Bus
+> 	- Fix STM32 System Bus YAML documentation
+> 	- Remove STM32 System bus bindings that were currently used
+> 	as helpers for device tree
+> 	- Correct few errors in driver
+> 	- Add missing peripherals under the System Bus that were in
+> 	SoC variation device tree files
+> 	- Fix node names
+> 
+> Gatien Chevallier (5):
+>    dt-bindings: treewide: add feature-domains description in binding
+>      files
+>    dt-bindings: bus: add STM32 System Bus
+>    bus: stm32_sys_bus: add support for STM32MP15 and STM32MP13 system bus
+>    ARM: dts: stm32: add ETZPC as a system bus for STM32MP15x boards
+>    ARM: dts: stm32: add ETZPC as a system bus for STM32MP13x boards
+> 
+> Oleksii Moisieiev (1):
+>    dt-bindings: Document common device controller bindings
+> 
+>   .../devicetree/bindings/bus/st,sys-bus.yaml   |  127 +
+>   .../bindings/crypto/st,stm32-hash.yaml        |    5 +
+>   .../devicetree/bindings/dma/st,stm32-dma.yaml |    5 +
+>   .../bindings/dma/st,stm32-dmamux.yaml         |    5 +
+>   .../feature-domain-controller.yaml            |   84 +
+>   .../devicetree/bindings/i2c/st,stm32-i2c.yaml |    5 +
+>   .../bindings/iio/adc/st,stm32-adc.yaml        |    5 +
+>   .../bindings/iio/adc/st,stm32-dfsdm-adc.yaml  |    5 +
+>   .../bindings/iio/dac/st,stm32-dac.yaml        |    5 +
+>   .../bindings/media/st,stm32-cec.yaml          |    5 +
+>   .../bindings/media/st,stm32-dcmi.yaml         |    5 +
+>   .../memory-controllers/st,stm32-fmc2-ebi.yaml |    5 +
+>   .../bindings/mfd/st,stm32-lptimer.yaml        |    5 +
+>   .../bindings/mfd/st,stm32-timers.yaml         |    6 +
+>   .../devicetree/bindings/mmc/arm,pl18x.yaml    |    5 +
+>   .../devicetree/bindings/net/stm32-dwmac.yaml  |    5 +
+>   .../bindings/phy/phy-stm32-usbphyc.yaml       |    5 +
+>   .../bindings/regulator/st,stm32-vrefbuf.yaml  |    5 +
+>   .../devicetree/bindings/rng/st,stm32-rng.yaml |    5 +
+>   .../bindings/serial/st,stm32-uart.yaml        |    5 +
+>   .../bindings/sound/st,stm32-i2s.yaml          |    5 +
+>   .../bindings/sound/st,stm32-sai.yaml          |    5 +
+>   .../bindings/sound/st,stm32-spdifrx.yaml      |    5 +
+>   .../bindings/spi/st,stm32-qspi.yaml           |    5 +
+>   .../devicetree/bindings/spi/st,stm32-spi.yaml |    5 +
+>   .../devicetree/bindings/usb/dwc2.yaml         |    5 +
+>   MAINTAINERS                                   |    6 +
+>   arch/arm/boot/dts/stm32mp131.dtsi             |  407 +--
+>   arch/arm/boot/dts/stm32mp133.dtsi             |   51 +-
+>   arch/arm/boot/dts/stm32mp13xc.dtsi            |   19 +-
+>   arch/arm/boot/dts/stm32mp13xf.dtsi            |   18 +-
+>   arch/arm/boot/dts/stm32mp151.dtsi             | 2722 +++++++++--------
+>   arch/arm/boot/dts/stm32mp153.dtsi             |   52 +-
+>   arch/arm/boot/dts/stm32mp15xc.dtsi            |   19 +-
+>   drivers/bus/Kconfig                           |    9 +
+>   drivers/bus/Makefile                          |    1 +
+>   drivers/bus/stm32_sys_bus.c                   |  168 +
+>   37 files changed, 2208 insertions(+), 1596 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/bus/st,sys-bus.yaml
+>   create mode 100644 Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
+>   create mode 100644 drivers/bus/stm32_sys_bus.c
+> 
