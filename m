@@ -2,35 +2,36 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141A3748F3A
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jul 2023 22:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B967A748F3C
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jul 2023 22:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233947AbjGEUpy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jul 2023 16:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
+        id S233956AbjGEUqB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jul 2023 16:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233961AbjGEUpr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 16:45:47 -0400
+        with ESMTP id S233959AbjGEUpz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 16:45:55 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2665119AA;
-        Wed,  5 Jul 2023 13:45:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF19B1BC3;
+        Wed,  5 Jul 2023 13:45:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1688589821;
+        s=mail; t=1688589822;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8c7jTkEU88lEi6fv0iM1MMw6JdY9CeSY5L29Egt6b1A=;
-        b=L+0FajBG1zP9IyIZnPhZNyeEF2VvieClOQI9AVyx04NPX+M3U2R22bkmPJ8/1R20jIZwVa
-        KRImFiJGY5YN+q/XDOpuP0ij+CgVqvJvc8NhtdvDGm4Mkafni7TGAUNjuvZFRxGz3fEkGp
-        Dfr44XfIsUuoVJO1/dQ0XKLv/N8icFs=
+        bh=01pgnO3LmZ+g6UKEArvaysfksO27PzBte9R/lys+ks8=;
+        b=U/L5YhS121XOe19Vzoy9JiCSPNqotMhlZbTiLLA2LwEvEZn/dmU546Gt0UURUVnZFlUbnG
+        PU9gH+jCMLBAz9x1b21faGGlLhvdJDiX3/nrQ9mqekMq8eGcee/Cby5tFP4U1dP3lTBbkb
+        1kUtA5Nmk+tizRYCY2AhoNFGpaeuKZA=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 08/23] i2c: hix5hd2: Remove #ifdef guards for PM related functions
-Date:   Wed,  5 Jul 2023 22:42:59 +0200
-Message-Id: <20230705204314.89800-9-paul@crapouillou.net>
+        Paul Cercueil <paul@crapouillou.net>,
+        Jean Delvare <jdelvare@suse.com>
+Subject: [PATCH 09/23] i2c: i801: Remove #ifdef guards for PM related functions
+Date:   Wed,  5 Jul 2023 22:43:00 +0200
+Message-Id: <20230705204314.89800-10-paul@crapouillou.net>
 In-Reply-To: <20230705204314.89800-1-paul@crapouillou.net>
 References: <20230705204314.89800-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -53,50 +54,44 @@ This has the advantage of always compiling these functions in,
 independently of any Kconfig option. Thanks to that, bugs and other
 regressions are subsequently easier to catch.
 
-Note that this driver should probably use the
-DEFINE_RUNTIME_DEV_PM_OPS() macro, which would allow the devices to be
-runtime-suspended on system suspend.
-
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/i2c/busses/i2c-hix5hd2.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-hix5hd2.c b/drivers/i2c/busses/i2c-hix5hd2.c
-index 784a5f56eb76..8e75515c3ca4 100644
---- a/drivers/i2c/busses/i2c-hix5hd2.c
-+++ b/drivers/i2c/busses/i2c-hix5hd2.c
-@@ -475,7 +475,6 @@ static void hix5hd2_i2c_remove(struct platform_device *pdev)
- 	pm_runtime_set_suspended(priv->dev);
+---
+Cc: Jean Delvare <jdelvare@suse.com>
+---
+ drivers/i2c/busses/i2c-i801.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 943b8e6d026d..73ae06432133 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -1808,7 +1808,6 @@ static void i801_shutdown(struct pci_dev *dev)
+ 	pci_write_config_byte(dev, SMBHSTCFG, priv->original_hstcfg);
  }
  
--#ifdef CONFIG_PM
- static int hix5hd2_i2c_runtime_suspend(struct device *dev)
+-#ifdef CONFIG_PM_SLEEP
+ static int i801_suspend(struct device *dev)
  {
- 	struct hix5hd2_i2c_priv *priv = dev_get_drvdata(dev);
-@@ -494,12 +493,11 @@ static int hix5hd2_i2c_runtime_resume(struct device *dev)
+ 	struct i801_priv *priv = dev_get_drvdata(dev);
+@@ -1827,9 +1826,8 @@ static int i801_resume(struct device *dev)
  
  	return 0;
  }
 -#endif
  
- static const struct dev_pm_ops hix5hd2_i2c_pm_ops = {
--	SET_RUNTIME_PM_OPS(hix5hd2_i2c_runtime_suspend,
--			      hix5hd2_i2c_runtime_resume,
--			      NULL)
-+	RUNTIME_PM_OPS(hix5hd2_i2c_runtime_suspend,
-+		       hix5hd2_i2c_runtime_resume,
-+		       NULL)
- };
+-static SIMPLE_DEV_PM_OPS(i801_pm_ops, i801_suspend, i801_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(i801_pm_ops, i801_suspend, i801_resume);
  
- static const struct of_device_id hix5hd2_i2c_match[] = {
-@@ -513,7 +511,7 @@ static struct platform_driver hix5hd2_i2c_driver = {
- 	.remove_new	= hix5hd2_i2c_remove,
+ static struct pci_driver i801_driver = {
+ 	.name		= DRV_NAME,
+@@ -1838,7 +1836,7 @@ static struct pci_driver i801_driver = {
+ 	.remove		= i801_remove,
+ 	.shutdown	= i801_shutdown,
  	.driver		= {
- 		.name	= "hix5hd2-i2c",
--		.pm	= &hix5hd2_i2c_pm_ops,
-+		.pm	= pm_ptr(&hix5hd2_i2c_pm_ops),
- 		.of_match_table = hix5hd2_i2c_match,
+-		.pm	= &i801_pm_ops,
++		.pm	= pm_sleep_ptr(&i801_pm_ops),
+ 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
  	},
  };
 -- 
