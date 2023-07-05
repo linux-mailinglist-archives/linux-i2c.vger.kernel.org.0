@@ -2,35 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC91748F3E
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jul 2023 22:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A72748F40
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jul 2023 22:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233835AbjGEUqJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jul 2023 16:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
+        id S233878AbjGEUqY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jul 2023 16:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233895AbjGEUqF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 16:46:05 -0400
+        with ESMTP id S233865AbjGEUqX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 16:46:23 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDD91BC2;
-        Wed,  5 Jul 2023 13:46:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65B81BCB;
+        Wed,  5 Jul 2023 13:46:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1688589823;
+        s=mail; t=1688589824;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=O6s8zlIWAPbRXKFmTmNcemtSW35hNiREJpb3UD0lF9s=;
-        b=dz3W5Zchp8vNqFNM5stHka3thaIlMoxDgt46SmsSNtT09+euSUMWOmiofoOMYGrbjMasK2
-        39/1qvEdvHf4ZhVIKJeDED9YR/2BTL+NhfTOsrG3O90TRpVjsExYBMjiZ+tUwmNalxARMh
-        cz3CAQ8GvVL4EFoGELtkrMWGrypZ4J8=
+        bh=5G9Bz4NBKmoOQ9iIRjAj1sqsIF1f4+70ZU6MM73SBdQ=;
+        b=pmIX54jGvEPhw5a4wQO13kQM6njVxF/iPqIJas2Uh6vE8uCq6P0QwjUYIR07+3jhpGL/wM
+        ria1xcRwx4n72G6XmTX9rTVwJ2SaEDo67UYZgiz45n3YpLFkIJVzGLPqyd23yQl9GqlIZ8
+        ABIXojaXcSs2htlre6QTklwqjQ1QY8A=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 10/23] i2c: img-scb: Remove #ifdef guards for PM related functions
-Date:   Wed,  5 Jul 2023 22:43:01 +0200
-Message-Id: <20230705204314.89800-11-paul@crapouillou.net>
+Subject: [PATCH 11/23] i2c: kempld: Remove #ifdef guards for PM related functions
+Date:   Wed,  5 Jul 2023 22:43:02 +0200
+Message-Id: <20230705204314.89800-12-paul@crapouillou.net>
 In-Reply-To: <20230705204314.89800-1-paul@crapouillou.net>
 References: <20230705204314.89800-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -53,50 +53,48 @@ This has the advantage of always compiling these functions in,
 independently of any Kconfig option. Thanks to that, bugs and other
 regressions are subsequently easier to catch.
 
+Note that the driver should most likely be updated to use the
+platform_driver.driver.pm.{suspend,resume} callbacks.
+
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/i2c/busses/i2c-img-scb.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+ drivers/i2c/busses/i2c-kempld.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-img-scb.c b/drivers/i2c/busses/i2c-img-scb.c
-index 4b674cfbc6fb..a92e3082542e 100644
---- a/drivers/i2c/busses/i2c-img-scb.c
-+++ b/drivers/i2c/busses/i2c-img-scb.c
-@@ -1454,7 +1454,6 @@ static int img_i2c_runtime_resume(struct device *dev)
- 	return 0;
+diff --git a/drivers/i2c/busses/i2c-kempld.c b/drivers/i2c/busses/i2c-kempld.c
+index 281058e3ea46..cb61e7b9202c 100644
+--- a/drivers/i2c/busses/i2c-kempld.c
++++ b/drivers/i2c/busses/i2c-kempld.c
+@@ -350,7 +350,6 @@ static void kempld_i2c_remove(struct platform_device *pdev)
+ 	i2c_del_adapter(&i2c->adap);
  }
  
--#ifdef CONFIG_PM_SLEEP
- static int img_i2c_suspend(struct device *dev)
+-#ifdef CONFIG_PM
+ static int kempld_i2c_suspend(struct platform_device *pdev, pm_message_t state)
  {
- 	struct img_i2c *i2c = dev_get_drvdata(dev);
-@@ -1482,14 +1481,10 @@ static int img_i2c_resume(struct device *dev)
+ 	struct kempld_i2c_data *i2c = platform_get_drvdata(pdev);
+@@ -377,10 +376,6 @@ static int kempld_i2c_resume(struct platform_device *pdev)
  
  	return 0;
  }
--#endif /* CONFIG_PM_SLEEP */
+-#else
+-#define kempld_i2c_suspend	NULL
+-#define kempld_i2c_resume	NULL
+-#endif
  
--static const struct dev_pm_ops img_i2c_pm = {
--	SET_RUNTIME_PM_OPS(img_i2c_runtime_suspend,
--			   img_i2c_runtime_resume,
--			   NULL)
--	SET_SYSTEM_SLEEP_PM_OPS(img_i2c_suspend, img_i2c_resume)
--};
-+static _DEFINE_DEV_PM_OPS(img_i2c_pm, img_i2c_suspend, img_i2c_resume,
-+			  img_i2c_runtime_suspend, img_i2c_runtime_resume,
-+			  NULL);
- 
- static const struct of_device_id img_scb_i2c_match[] = {
- 	{ .compatible = "img,scb-i2c" },
-@@ -1501,7 +1496,7 @@ static struct platform_driver img_scb_i2c_driver = {
+ static struct platform_driver kempld_i2c_driver = {
  	.driver = {
- 		.name		= "img-i2c-scb",
- 		.of_match_table	= img_scb_i2c_match,
--		.pm		= &img_i2c_pm,
-+		.pm		= pm_ptr(&img_i2c_pm),
+@@ -388,8 +383,8 @@ static struct platform_driver kempld_i2c_driver = {
  	},
- 	.probe = img_i2c_probe,
- 	.remove_new = img_i2c_remove,
+ 	.probe		= kempld_i2c_probe,
+ 	.remove_new	= kempld_i2c_remove,
+-	.suspend	= kempld_i2c_suspend,
+-	.resume		= kempld_i2c_resume,
++	.suspend	= pm_ptr(kempld_i2c_suspend),
++	.resume		= pm_ptr(kempld_i2c_resume),
+ };
+ 
+ module_platform_driver(kempld_i2c_driver);
 -- 
 2.40.1
 
