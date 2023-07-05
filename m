@@ -2,37 +2,35 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E36A748F26
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jul 2023 22:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACC3748F2A
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jul 2023 22:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbjGEUnm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jul 2023 16:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
+        id S233846AbjGEUny (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jul 2023 16:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbjGEUnk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 16:43:40 -0400
+        with ESMTP id S233849AbjGEUnx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 16:43:53 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C638819AD;
-        Wed,  5 Jul 2023 13:43:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBCB19B9;
+        Wed,  5 Jul 2023 13:43:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1688589810;
+        s=mail; t=1688589813;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=obH8McaBd3nUMET7TuQgiFiKc+cl8J8cJlDEYCzaprU=;
-        b=cr1y/7ymT1bphYVK/CGawimtywWwGDCF9aihE0i4zlmInnB6dJl8wKm+nAP5fd0mbGMfi8
-        KbcJfuGRCvQeuAdPcQIVHUjgSgc4RhUDoqomysHbaWhJzVIG/dFDtXUuYBv5+3vA0yDms3
-        yrrA5bu+y3UUn5UQGJbZKIcwSRLTv94=
+        bh=d3aQXAnkhZ7Mg6y01d2N6oWlFlsuT62QoVsGZrNeIxk=;
+        b=MgTj5abITfTAufGMnC+BqQbsKTxpvUHjaXv6rUIZniEvz368kOpI424x+JDFERQSnp8Gly
+        m7lJ2gXzEJBBtwfQKqKgbyMUKoc94zUV77reozfs/9B2uvY+5eWfMdCTkj2xrR9Kc7DU1F
+        6IMaPF3jEoSo6kfWKhmJ3ojevciAfdw=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>,
-        Elie Morisse <syniurge@gmail.com>,
-        Shyam Sundar S K <shyam-sundar.s-k@amd.com>
-Subject: [PATCH 01/23] i2c: amd-mp2: Remove #ifdef guards for PM related functions
-Date:   Wed,  5 Jul 2023 22:42:52 +0200
-Message-Id: <20230705204314.89800-2-paul@crapouillou.net>
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 02/23] i2c: au1550: Remove #ifdef guards for PM related functions
+Date:   Wed,  5 Jul 2023 22:42:53 +0200
+Message-Id: <20230705204314.89800-3-paul@crapouillou.net>
 In-Reply-To: <20230705204314.89800-1-paul@crapouillou.net>
 References: <20230705204314.89800-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -55,110 +53,56 @@ This has the advantage of always compiling these functions in,
 independently of any Kconfig option. Thanks to that, bugs and other
 regressions are subsequently easier to catch.
 
-Note that the use of the UNIVERSAL_DEV_PM_OPS() macro was likely to be
-wrong, as it sets the same callbacks for the runtime-PM and system
-suspend/resume. This patch does not change this behaviour, but I suspect
-that it should be changed to use DEFINE_RUNTIME_DEV_PM_OPS() instead, as
-the current documentation for UNIVERSAL_DEV_PM_OPS() suggests.
+Note that the behaviour is slightly different than before; the original
+code wrapped the suspend/resume with #ifdef CONFIG_PM guards, which
+resulted in these functions being compiled in but never used when
+CONFIG_PM_SLEEP was disabled.
+
+Now, those functions are only compiled in when CONFIG_PM_SLEEP is
+enabled.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-
 ---
-Cc: Elie Morisse <syniurge@gmail.com>
-Cc: Shyam Sundar S K <shyam-sundar.s-k@amd.com>
----
- drivers/i2c/busses/i2c-amd-mp2-pci.c  | 14 +++++---------
- drivers/i2c/busses/i2c-amd-mp2-plat.c |  8 ++------
- drivers/i2c/busses/i2c-amd-mp2.h      |  2 --
- 3 files changed, 7 insertions(+), 17 deletions(-)
+ drivers/i2c/busses/i2c-au1550.c | 15 +++------------
+ 1 file changed, 3 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-amd-mp2-pci.c b/drivers/i2c/busses/i2c-amd-mp2-pci.c
-index 143165300949..114fe329279a 100644
---- a/drivers/i2c/busses/i2c-amd-mp2-pci.c
-+++ b/drivers/i2c/busses/i2c-amd-mp2-pci.c
-@@ -382,7 +382,6 @@ static void amd_mp2_pci_remove(struct pci_dev *pci_dev)
- 	amd_mp2_clear_reg(privdata);
+diff --git a/drivers/i2c/busses/i2c-au1550.c b/drivers/i2c/busses/i2c-au1550.c
+index e66c12ecf270..8e43f25c117e 100644
+--- a/drivers/i2c/busses/i2c-au1550.c
++++ b/drivers/i2c/busses/i2c-au1550.c
+@@ -342,7 +342,6 @@ static void i2c_au1550_remove(struct platform_device *pdev)
+ 	i2c_au1550_disable(priv);
  }
  
 -#ifdef CONFIG_PM
- static int amd_mp2_pci_suspend(struct device *dev)
+ static int i2c_au1550_suspend(struct device *dev)
  {
- 	struct pci_dev *pci_dev = to_pci_dev(dev);
-@@ -434,9 +433,10 @@ static int amd_mp2_pci_resume(struct device *dev)
- 	return ret;
+ 	struct i2c_au1550_data *priv = dev_get_drvdata(dev);
+@@ -361,21 +360,13 @@ static int i2c_au1550_resume(struct device *dev)
+ 	return 0;
  }
  
--static UNIVERSAL_DEV_PM_OPS(amd_mp2_pci_pm_ops, amd_mp2_pci_suspend,
--			    amd_mp2_pci_resume, NULL);
--#endif /* CONFIG_PM */
-+static const struct dev_pm_ops amd_mp2_pci_pm_ops = {
-+	SYSTEM_SLEEP_PM_OPS(amd_mp2_pci_suspend, amd_mp2_pci_resume)
-+	RUNTIME_PM_OPS(amd_mp2_pci_suspend, amd_mp2_pci_resume, NULL)
-+};
- 
- static const struct pci_device_id amd_mp2_pci_tbl[] = {
- 	{PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_MP2)},
-@@ -449,11 +449,7 @@ static struct pci_driver amd_mp2_pci_driver = {
- 	.id_table	= amd_mp2_pci_tbl,
- 	.probe		= amd_mp2_pci_probe,
- 	.remove		= amd_mp2_pci_remove,
--#ifdef CONFIG_PM
--	.driver = {
--		.pm	= &amd_mp2_pci_pm_ops,
--	},
+-static const struct dev_pm_ops i2c_au1550_pmops = {
+-	.suspend	= i2c_au1550_suspend,
+-	.resume		= i2c_au1550_resume,
+-};
+-
+-#define AU1XPSC_SMBUS_PMOPS (&i2c_au1550_pmops)
+-
+-#else
+-#define AU1XPSC_SMBUS_PMOPS NULL
 -#endif
-+	.driver.pm	= pm_ptr(&amd_mp2_pci_pm_ops),
- };
- module_pci_driver(amd_mp2_pci_driver);
++static DEFINE_SIMPLE_DEV_PM_OPS(i2c_au1550_pmops,
++				i2c_au1550_suspend, i2c_au1550_resume);
  
-diff --git a/drivers/i2c/busses/i2c-amd-mp2-plat.c b/drivers/i2c/busses/i2c-amd-mp2-plat.c
-index 112fe2bc5662..4c677aeaca29 100644
---- a/drivers/i2c/busses/i2c-amd-mp2-plat.c
-+++ b/drivers/i2c/busses/i2c-amd-mp2-plat.c
-@@ -183,7 +183,6 @@ static const struct i2c_algorithm i2c_amd_algorithm = {
- 	.functionality = i2c_amd_func,
- };
- 
--#ifdef CONFIG_PM
- static int i2c_amd_suspend(struct amd_i2c_common *i2c_common)
- {
- 	struct amd_i2c_dev *i2c_dev = amd_i2c_dev_common(i2c_common);
-@@ -198,7 +197,6 @@ static int i2c_amd_resume(struct amd_i2c_common *i2c_common)
- 
- 	return i2c_amd_enable_set(i2c_dev, true);
- }
--#endif
- 
- static const u32 supported_speeds[] = {
- 	I2C_MAX_HIGH_SPEED_MODE_FREQ,
-@@ -276,10 +274,8 @@ static int i2c_amd_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, i2c_dev);
- 
- 	i2c_dev->common.cmd_completion = &i2c_amd_cmd_completion;
--#ifdef CONFIG_PM
--	i2c_dev->common.suspend = &i2c_amd_suspend;
--	i2c_dev->common.resume = &i2c_amd_resume;
--#endif
-+	i2c_dev->common.suspend = pm_ptr(&i2c_amd_suspend);
-+	i2c_dev->common.resume = pm_ptr(&i2c_amd_resume);
- 
- 	/* Register the adapter */
- 	amd_mp2_pm_runtime_get(mp2_dev);
-diff --git a/drivers/i2c/busses/i2c-amd-mp2.h b/drivers/i2c/busses/i2c-amd-mp2.h
-index 018a42de8b1e..40f3cdcc60aa 100644
---- a/drivers/i2c/busses/i2c-amd-mp2.h
-+++ b/drivers/i2c/busses/i2c-amd-mp2.h
-@@ -160,10 +160,8 @@ struct amd_i2c_common {
- 	enum speed_enum i2c_speed;
- 	u8 *dma_buf;
- 	dma_addr_t dma_addr;
--#ifdef CONFIG_PM
- 	int (*suspend)(struct amd_i2c_common *i2c_common);
- 	int (*resume)(struct amd_i2c_common *i2c_common);
--#endif /* CONFIG_PM */
- };
- 
- /**
+ static struct platform_driver au1xpsc_smbus_driver = {
+ 	.driver = {
+ 		.name	= "au1xpsc_smbus",
+-		.pm	= AU1XPSC_SMBUS_PMOPS,
++		.pm	= pm_sleep_ptr(&i2c_au1550_pmops),
+ 	},
+ 	.probe		= i2c_au1550_probe,
+ 	.remove_new	= i2c_au1550_remove,
 -- 
 2.40.1
 
