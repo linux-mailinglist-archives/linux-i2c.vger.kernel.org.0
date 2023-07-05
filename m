@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B17748A2D
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jul 2023 19:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF8F748A47
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jul 2023 19:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbjGER3P (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jul 2023 13:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
+        id S232938AbjGER3e (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jul 2023 13:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbjGER3L (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 13:29:11 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD74519B;
-        Wed,  5 Jul 2023 10:29:09 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365ELI4l007752;
-        Wed, 5 Jul 2023 19:28:32 +0200
+        with ESMTP id S232086AbjGER33 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 13:29:29 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0991992;
+        Wed,  5 Jul 2023 10:29:14 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365FgASP003096;
+        Wed, 5 Jul 2023 19:28:34 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=R+Z7Pl439e9+R/OYQcTq/KrptBdKV0UCpQ0mjty63sk=;
- b=tlYJ8bAB1TUj0LwFVbPDnHnNsQsPEKDYc7RIdUFugmNIoLHfC9MaAgyosgyAvqii/B6R
- 5qrcoTg3Q6k/I56I0OzVx2vgYM9cPbcocO8TE8ndfp4La2vhrI+bGU3jccxQdu7LWrdq
- D6LgARFUY19H5DB81M8iSFUJVQN7j5WgUupSW271GTZo0D9jYqYEMi8hyi5mccSJlFQ8
- Ykw4TM4uYhbwykn3MxO7MsXVFGtEITcCpk7yMWdHWZo41ha4KeIlnHVoRO8P1gM52J3u
- oZvaUz6AtUMiOHaAFIhelP5FcJvRrCChR+aan2ciYmXxdwF3AdnR0PYOib6sbU07oiCK 4w== 
+ bh=aw+a9oxu/DBhq69Yh+u1WoOOa0pn8inaUz2S9U2iiVA=;
+ b=spkRAyPc38MCEtiCx+SwGKvhQ0FVQ9Y+uy0pFuBrSe8QXFUdhaPdgjBKd3Ss/2f25uR5
+ MM7mk5xgq6to4YthbPEaFRGfvAOaU+BlsVzk1LMA2E5GKUXc4SQfWfSnD0yfxQxw2edp
+ ZpdSC7ZKS5PP8pUVe1ncgQPifd11nUDTItDCEGRnp5L9NAf931knw/qxBXiCgmdoxzLx
+ ET26EdL7UsCiJM9eZSxPiXfUiwjr1y9RZFjSL7k/A4NlHkhCz+9ur5bM6IjL7/UD2W/c
+ K+jUwtGqzdn/0fe16bAfzRIiD7UqYlp4LDtevSWe9GUAgKlF3OsWeKclVIJntKIzNiMy zA== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rna75h3xb-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rn8c9t2d7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 19:28:32 +0200
+        Wed, 05 Jul 2023 19:28:34 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 084AA100060;
-        Wed,  5 Jul 2023 19:28:32 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5EF6A100057;
+        Wed,  5 Jul 2023 19:28:33 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F0C3224C433;
-        Wed,  5 Jul 2023 19:28:31 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 54E1524C42F;
+        Wed,  5 Jul 2023 19:28:33 +0200 (CEST)
 Received: from localhost (10.201.21.121) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 5 Jul
- 2023 19:28:31 +0200
+ 2023 19:28:32 +0200
 From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
 To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
         <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
@@ -63,9 +63,9 @@ CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
         Gatien Chevallier <gatien.chevallier@foss.st.com>
-Subject: [PATCH 02/10] dt-bindings: bus: add device tree bindings for RIFSC
-Date:   Wed, 5 Jul 2023 19:27:51 +0200
-Message-ID: <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
+Subject: [PATCH 03/10] dt-bindings: bus: add device tree bindings for ETZPC
+Date:   Wed, 5 Jul 2023 19:27:52 +0200
+Message-ID: <20230705172759.1610753-4-gatien.chevallier@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
 References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
@@ -88,58 +88,39 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Document RIFSC (RIF security controller). RIFSC is a firewall controller
-composed of different kinds of hardware resources.
+Document ETZPC (Extended TrustZone protection controller). ETZPC is a
+firewall controller.
 
 Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
 ---
- .../bindings/bus/st,stm32-rifsc.yaml          | 101 ++++++++++++++++++
- 1 file changed, 101 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
+ .../bindings/bus/st,stm32-etzpc.yaml          | 90 +++++++++++++++++++
+ 1 file changed, 90 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
 
-diff --git a/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
+diff --git a/Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml b/Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
 new file mode 100644
-index 000000000000..68d585ed369c
+index 000000000000..327fb0b84c0b
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
-@@ -0,0 +1,101 @@
++++ b/Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
+@@ -0,0 +1,90 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/bus/st,stm32-rifsc.yaml#
++$id: http://devicetree.org/schemas/bus/st,stm32-etzpc.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: STM32 Resource isolation framework security controller bindings
++title: STM32 Extended TrustZone protection controller bindings
++
++description: |
++  The ETZPC configures TrustZone security in a SoC having bus masters and
++  devices with programmable-security attributes (securable resources).
 +
 +maintainers:
 +  - Gatien Chevallier <gatien.chevallier@foss.st.com>
 +
-+description: |
-+  Resource isolation framework (RIF) is a comprehensive set of hardware blocks
-+  designed to enforce and manage isolation of STM32 hardware resources like
-+  memory and peripherals.
-+
-+  The RIFSC (RIF security controller) is composed of three sets of registers,
-+  each managing a specific set of hardware resources:
-+    - RISC registers associated with RISUP logic (resource isolation device unit
-+      for peripherals), assign all non-RIF aware peripherals to zero, one or
-+      any security domains (secure, privilege, compartment).
-+    - RIMC registers: associated with RIMU logic (resource isolation master
-+      unit), assign all non RIF-aware bus master to one security domain by
-+      setting secure, privileged and compartment information on the system bus.
-+      Alternatively, the RISUP logic controlling the device port access to a
-+      peripheral can assign target bus attributes to this peripheral master port
-+      (supported attribute: CID).
-+    - RISC registers associated with RISAL logic (resource isolation device unit
-+      for address space - Lite version), assign address space subregions to one
-+      security domains (secure, privilege, compartment).
-+
 +properties:
 +  compatible:
-+    const: st,stm32mp25-rifsc
-+
-+  reg:
-+    maxItems: 1
++    const: "st,stm32-etzpc"
 +
 +  "#address-cells":
 +    const: 1
@@ -147,10 +128,11 @@ index 000000000000..68d585ed369c
 +  "#size-cells":
 +    const: 1
 +
-+  "#feature-domain-cells":
-+    const: 1
++  reg:
++    maxItems: 1
 +
-+  ranges: true
++  clocks:
++    maxItems: 1
 +
 +  feature-domain-controller: true
 +
@@ -185,23 +167,30 @@ index 000000000000..68d585ed369c
 +    // Access rights are verified before creating devices.
 +
 +    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/stm32mp13-clks.h>
++    #include <dt-bindings/reset/stm32mp13-resets.h>
 +
-+    rifsc: rifsc-bus@42080000 {
-+        compatible = "st,stm32mp25-rifsc";
-+        reg = <0x42080000 0x1000>;
++    etzpc: etzpc@5c007000 {
++        compatible = "st,stm32mp13-sys-bus";
++        reg = <0x5c007000 0x400>;
 +        #address-cells = <1>;
 +        #size-cells = <1>;
 +        ranges;
 +        feature-domain-controller;
 +        #feature-domain-cells = <1>;
 +
-+        usart2: serial@400e0000 {
-+            compatible = "st,stm32h7-uart";
-+            reg = <0x400e0000 0x400>;
-+            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&ck_flexgen_08>;
-+            feature-domains = <&rifsc 32>;
-+            status = "disabled";
++        usart2: serial@4c001000 {
++          compatible = "st,stm32h7-uart";
++          reg = <0x4c001000 0x400>;
++          interrupts-extended = <&exti 27 IRQ_TYPE_LEVEL_HIGH>;
++          clocks = <&rcc USART2_K>;
++          resets = <&rcc USART2_R>;
++          wakeup-source;
++          dmas = <&dmamux1 43 0x400 0x5>,
++                 <&dmamux1 44 0x400 0x1>;
++          dma-names = "rx", "tx";
++          feature-domains = <&etzpc 17>;
++          status = "disabled";
 +        };
 +    };
 -- 
