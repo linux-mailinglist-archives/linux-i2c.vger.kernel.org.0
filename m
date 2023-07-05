@@ -2,129 +2,172 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC69748DF7
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jul 2023 21:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD31748F24
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jul 2023 22:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbjGETjl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jul 2023 15:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
+        id S233797AbjGEUne (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jul 2023 16:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232714AbjGETjk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 15:39:40 -0400
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED11D1732;
-        Wed,  5 Jul 2023 12:39:38 -0700 (PDT)
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-345f50577d3so29125815ab.2;
-        Wed, 05 Jul 2023 12:39:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688585978; x=1691177978;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=n9XXXuHpMOQBfJPbmDE208zmHNLuLmJ5W06p0NFVR4Q=;
-        b=ersniBmhizjJuc99EwCsgydFhJ5WYMocEo29tBHvxmubbVUK+AlfvRziEwMxGMjKFa
-         mgnRc/aRTBjXc28hUfwRn5lf5kD73U3+0e7aPlqPUFc+FoogeOirN8Z6n3dlUF+0j+WL
-         IbgDx/RKGAaN8IMUnHoLOp2P8UxqxEa9+AjmTyRdwE2lDpL4gzzbi85zlihP6MILiuU/
-         TGKNIDUgXuriR0f2TBMGgUxIWbQI6ILPEAzUX5Y0nd6NEz7Lr+WjAZoH7xv3D0jXQifp
-         F84CvV9nsJ5o2JS6pmWTNoP5gsSxfy5gLoLoGOyYS7AJ8noY4bPU/mS8RRJl+aABjZAm
-         1eow==
-X-Gm-Message-State: ABy/qLbj+zQvs+ONbVPWLm2f6k/p3ugZ4zO4p16R4XFkkmuQpnRQ8Qv1
-        0Afn141UvS2QfN9VOSVYJw==
-X-Google-Smtp-Source: APBJJlHeCCgfywEkTbD8TaGxOES0xf6LHwH4LNaopQfeQ1Mlc+0XwkrXc56AMYZDW2D01Tl0iYFNfw==
-X-Received: by 2002:a92:c70d:0:b0:345:af3e:3aa8 with SMTP id a13-20020a92c70d000000b00345af3e3aa8mr110268ilp.25.1688585978167;
-        Wed, 05 Jul 2023 12:39:38 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id n24-20020a5e8c18000000b007835686237asm7580752ioj.27.2023.07.05.12.39.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jul 2023 12:39:37 -0700 (PDT)
-Received: (nullmailer pid 1714647 invoked by uid 1000);
-        Wed, 05 Jul 2023 19:39:32 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S233758AbjGEUnb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 16:43:31 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BED19B;
+        Wed,  5 Jul 2023 13:43:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1688589809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wyXkGZNGA5ysK2ltkve4RVlCutN+wjP1W2giIyjMZxk=;
+        b=nScC7Am7eHbPkqLsb+E2gznpiUpMVyfzuF8FL3UiEEkgxgDebdCyG0lG4/LsIyuatJlX4p
+        bLgSjmITOHNmgrkD8zSZN2pAMtILouf7m0vVi2R75j9CXCT1jpDBwzoRZP8oDzs/SSuMLd
+        FF8hRZbcRQMFlzMf9jstb8q8Hg0pEdM=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>,
+        Elie Morisse <syniurge@gmail.com>,
+        Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Conghui Chen <conghui.chen@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Peter Rosin <peda@axentia.se>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH 00/23] i2c: Use new PM macros
+Date:   Wed,  5 Jul 2023 22:42:51 +0200
+Message-Id: <20230705204314.89800-1-paul@crapouillou.net>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, lee@kernel.org, davem@davemloft.net,
-        pabeni@redhat.com, linux-stm32@st-md-mailman.stormreply.com,
-        linux-media@vger.kernel.org, mchehab@kernel.org,
-        robh+dt@kernel.org, alexandre.torgue@foss.st.com, will@kernel.org,
-        dmaengine@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-phy@lists.infradead.org, catalin.marinas@arm.com,
-        Oleksii Moisieiev <oleksii_moisieiev@epam.com>,
-        arnd@kernel.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org, fabrice.gasnier@foss.st.com,
-        edumazet@google.com, hugues.fruchet@foss.st.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        herbert@gondor.apana.org.au, Oleksii_Moisieiev@epam.com,
-        andi.shyti@kernel.org, linux-crypto@vger.kernel.org,
-        kuba@kernel.org, linux-mmc@vger.kernel.org, conor+dt@kernel.org,
-        olivier.moysan@foss.st.com, linux-i2c@vger.kernel.org,
-        alsa-devel@alsa-project.org, jic23@kernel.org,
-        linux-arm-kernel@lists.infradead.org, richardcochran@gmail.com,
-        vkoul@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        ulf.hansson@linaro.org, arnaud.pouliquen@foss.st.com
-In-Reply-To: <20230705172759.1610753-2-gatien.chevallier@foss.st.com>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-2-gatien.chevallier@foss.st.com>
-Message-Id: <168858597047.1714514.3836923282073685393.robh@kernel.org>
-Subject: Re: [IGNORE][PATCH 01/10] dt-bindings: Document common device
- controller bindings
-Date:   Wed, 05 Jul 2023 13:39:32 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram,
 
-On Wed, 05 Jul 2023 19:27:50 +0200, Gatien Chevallier wrote:
-> From: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-> 
-> Introducing of the common device controller bindings for the controller
-> provider and consumer devices. Those bindings are intended to allow
-> divided system on chip into muliple domains, that can be used to
-> configure hardware permissions.
-> 
-> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
-> ---
-> 
-> Depends-on: https://lore.kernel.org/lkml/c869d2751125181a55bc8a88c96e3a892b42f37a.1668070216.git.oleksii_moisieiev@epam.com/
-> 
->  .../feature-domain-controller.yaml            | 84 +++++++++++++++++++
->  1 file changed, 84 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
-> 
+This patchset converts the I2C subsystem to use the PM macros that were
+introduced in v5.17, which allow the dev_pm_ops and related callbacks to
+be automatically dropped by the compiler when CONFIG_PM or
+CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+The point of this, is that all this code is now compiled independently
+of any Kconfig option, which makes bugs and regressions easier to catch.
 
-yamllint warnings/errors:
+This continues the work that has been started in other subsystems (DRM,
+IIO, watchdog).
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml: title: 'Generic Domain Controller bindings' should not be valid under {'pattern': '([Bb]inding| [Ss]chema)'}
-	hint: Everything is a binding/schema, no need to say it. Describe what hardware the binding is for.
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+As an added bonus, the diff is 71+/192-, that means less code you will
+have to maintain ;)
 
-doc reference errors (make refcheckdocs):
+The patches generally don't change the behaviour, with a few exceptions,
+that are documented in the corresponding patches.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230705172759.1610753-2-gatien.chevallier@foss.st.com
+I would like to draw the attention to a few patches in particular:
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+- [01/23] the driver most likely does something that it shouldn't do
+  (use the same callbacks for runtime PM and system PM). The patch does
+  not change this behaviour but I have questions.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+- [11/23] uses platform_driver.{suspend,resume} instead of the regular
+  .driver.pm. I have no idea why it does that and I believe it doesn't
+  really have to.
 
-pip3 install dtschema --upgrade
+- [18/23] I feel like the qup_i2c_suspend / qup_i2c_resume don't really
+  need to exist, and the pm_runtime_force_suspend() /
+  pm_runtime_force_resume() helpers should be used instead, using the
+  DEFINE_RUNTIME_DEV_PM_OPS() macro.
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Cheers,
+-Paul
+
+Paul Cercueil (23):
+  i2c: amd-mp2: Remove #ifdef guards for PM related functions
+  i2c: au1550: Remove #ifdef guards for PM related functions
+  i2c: iproc: Remove #ifdef guards for PM related functions
+  i2c: brcmstb: Remove #ifdef guards for PM related functions
+  i2c: davinci: Remove #ifdef guards for PM related functions
+  i2c: designware: Remove #ifdef guards for PM related functions
+  i2c: exynos5: Remove #ifdef guards for PM related functions
+  i2c: hix5hd2: Remove #ifdef guards for PM related functions
+  i2c: i801: Remove #ifdef guards for PM related functions
+  i2c: img-scb: Remove #ifdef guards for PM related functions
+  i2c: kempld: Remove #ifdef guards for PM related functions
+  i2c: lpc2k: Remove #ifdef guards for PM related functions
+  i2c: mt65xx: Remove #ifdef guards for PM related functions
+  i2c: nomadik: Remove #ifdef guards for PM related functions
+  i2c: ocores: Remove #ifdef guards for PM related functions
+  i2c: pnx: Remove #ifdef guards for PM related functions
+  i2c: pxa: Remove #ifdef guards for PM related functions
+  i2c: qup: Remove #ifdef guards for PM related functions
+  i2c: rcar: Remove #ifdef guards for PM related functions
+  i2c: s3c2410: Remove #ifdef guards for PM related functions
+  i2c: sh-mobile: Remove #ifdef guards for PM related functions
+  i2c: virtio: Remove #ifdef guards for PM related functions
+  i2c: mux: pca954x: Remove #ifdef guards for PM related functions
+
+ drivers/i2c/busses/i2c-amd-mp2-pci.c        | 14 +++++--------
+ drivers/i2c/busses/i2c-amd-mp2-plat.c       |  8 ++------
+ drivers/i2c/busses/i2c-amd-mp2.h            |  2 --
+ drivers/i2c/busses/i2c-au1550.c             | 15 +++-----------
+ drivers/i2c/busses/i2c-bcm-iproc.c          | 10 +---------
+ drivers/i2c/busses/i2c-brcmstb.c            |  8 +++-----
+ drivers/i2c/busses/i2c-davinci.c            | 12 +++--------
+ drivers/i2c/busses/i2c-designware-platdrv.c | 22 ++++++---------------
+ drivers/i2c/busses/i2c-exynos5.c            |  8 +++-----
+ drivers/i2c/busses/i2c-hix5hd2.c            | 10 ++++------
+ drivers/i2c/busses/i2c-i801.c               |  6 ++----
+ drivers/i2c/busses/i2c-img-scb.c            | 13 ++++--------
+ drivers/i2c/busses/i2c-kempld.c             |  9 ++-------
+ drivers/i2c/busses/i2c-lpc2k.c              |  8 +-------
+ drivers/i2c/busses/i2c-mt65xx.c             |  8 +++-----
+ drivers/i2c/busses/i2c-nomadik.c            | 14 +++++--------
+ drivers/i2c/busses/i2c-ocores.c             | 10 +++-------
+ drivers/i2c/busses/i2c-pnx.c                | 12 ++++-------
+ drivers/i2c/busses/i2c-pxa.c                |  8 +-------
+ drivers/i2c/busses/i2c-qup.c                | 16 ++++-----------
+ drivers/i2c/busses/i2c-rcar.c               | 10 ++--------
+ drivers/i2c/busses/i2c-s3c2410.c            | 14 +++----------
+ drivers/i2c/busses/i2c-sh_mobile.c          | 12 +++--------
+ drivers/i2c/busses/i2c-virtio.c             |  8 ++------
+ drivers/i2c/muxes/i2c-mux-pca954x.c         |  6 ++----
+ 25 files changed, 71 insertions(+), 192 deletions(-)
+
+-- 
+2.40.1
 
