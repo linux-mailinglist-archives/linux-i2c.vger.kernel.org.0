@@ -2,88 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18851749853
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jul 2023 11:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F11D749863
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jul 2023 11:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjGFJ01 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jul 2023 05:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
+        id S231627AbjGFJ1m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jul 2023 05:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjGFJ00 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jul 2023 05:26:26 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5691BF0;
-        Thu,  6 Jul 2023 02:25:56 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3668EjRL026984;
-        Thu, 6 Jul 2023 11:25:24 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=7t4eCU5gGbd6E2c3Byzad523u0UnY/0NWeRLFMO8wqQ=;
- b=oOHQUk7YHvsQeSB7NLsvfkez0kTZlUCcLBgh3hS4SMD5Wr3XtDTxiKvSKowNqENq4C8s
- /288tIqKzXTGt4S2InHB2hb0Amk1CNtGQGYBfWaqN77e7cTrA1nCFp/hXvhbko3GdqKF
- L/MzEPCBqP4GZU1Fn/yzQ5JE4cj8OgCenJ0wWY5nRviDPqiXVJho5qJfaAY9qEtW3ldq
- WNfUylY6/Hwr6gUEHKjKBvvikQWSeI38uHh3/etreV3Px9tW0l50odh6QdLz+VrpwnEn
- 3Em2pZ9kmrlRUa/Y7HiINICLumd7trhKCCWuff7jg/l/hOAVnY6ZeQv4znQLx1ghbUAx 6w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rnsxd0je3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 11:25:24 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BB767100052;
-        Thu,  6 Jul 2023 11:25:21 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C615521685E;
-        Thu,  6 Jul 2023 11:25:21 +0200 (CEST)
-Received: from [10.201.21.122] (10.201.21.122) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 6 Jul
- 2023 11:25:19 +0200
-Message-ID: <61d93738-4ffd-411d-d32c-912c14eea56d@foss.st.com>
-Date:   Thu, 6 Jul 2023 11:25:18 +0200
+        with ESMTP id S229793AbjGFJ1l (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jul 2023 05:27:41 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4871725;
+        Thu,  6 Jul 2023 02:27:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688635660; x=1720171660;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=JArIM2HKqC9QBC+pTllM7eQ+KGMVlg+PycBfFpwwyJU=;
+  b=aMMG4iuXMm0le92scYgSRoUNY0zXgPAxXBfTyALvqI83K40SFicjLse8
+   BRebSCmtinOBh0SVYFDpjDytpRZgLrnvL1jOg2aPeoZSpXWI+Mrun5zMB
+   W2TchB0+1+3XES8EbmraN1pN1c+aYX7kGk/HxjnDh06LGq4MALcgrsZB4
+   BW42i7q07JDuz+3B91MncL546aDe+O5HuAxHW2ErEO3RFeJxJmnp6JF6S
+   9T2a3Sx9fIAvpDt3HqKIEU1DkjXsWx79AC1lsun8efwjN5MfQo3I4j4xT
+   hbZDI5ALiUtPZ5C/lONSrR0ucPzoA5yMn1kbKDSl9+zwWVA/OzC0PrjeD
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="363583183"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="363583183"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 02:27:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="719525627"
+X-IronPort-AV: E=Sophos;i="6.01,185,1684825200"; 
+   d="scan'208";a="719525627"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 06 Jul 2023 02:27:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qHLGj-000Tso-2V;
+        Thu, 06 Jul 2023 12:27:21 +0300
+Date:   Thu, 6 Jul 2023 12:27:21 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v4 2/5] ACPI: platform: Ignore SMB0001 only when it has
+ resources
+Message-ID: <ZKaI+XeYZkdGyFxF@smile.fi.intel.com>
+References: <20230703121411.69606-1-andriy.shevchenko@linux.intel.com>
+ <20230703121411.69606-3-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0iZzvdkxe3NjHbiZzDjea=CoK-pGw3hjSoa9u8f87TLtg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 07/10] arm64: dts: st: add RIFSC as a domain controller
- for STM32MP25x boards
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>,
-        <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <vkoul@kernel.org>, <jic23@kernel.org>,
-        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
-        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <arnd@kernel.org>,
-        <richardcochran@gmail.com>
-CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-8-gatien.chevallier@foss.st.com>
-Content-Language: en-US
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230705172759.1610753-8-gatien.chevallier@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.122]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_06,2023-07-06_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0iZzvdkxe3NjHbiZzDjea=CoK-pGw3hjSoa9u8f87TLtg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,49 +75,25 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Gatien
+On Tue, Jul 04, 2023 at 07:32:43PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Jul 3, 2023 at 2:14 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 
-On 7/5/23 19:27, Gatien Chevallier wrote:
-> RIFSC is a firewall controller. Change its compatible so that is matches
-> the documentation and reference RIFSC as a feature-domain-controller.
+...
+
+> Applied as 6.5-rc material along with the rest of the series (except
+> for the last patch that has been superseded), but I moved the
+> has_resources definition to the block where it is used and added a
+> 'false' initial value to it. as the code might not work as expected
+> without initializing it.
 > 
-> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> ---
->   arch/arm64/boot/dts/st/stm32mp251.dtsi | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-> index 5268a4321841..62101084cab8 100644
-> --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
-> +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-> @@ -106,17 +106,20 @@ soc@0 {
->   		ranges = <0x0 0x0 0x0 0x80000000>;
->   
->   		rifsc: rifsc-bus@42080000 {
-> -			compatible = "simple-bus";
-> +			compatible = "st,stm32mp25-rifsc";
+> Please double check the bleeding-edge branch of linux-pm.
 
-You could keep "simple-bus" compatible (in second position). In case of 
-the RIFSC is not probed, the platform will be able to boot. If you agree 
-you can use the same for ETZPC.
+Now it's in Linux Next and everything looks fine to me,
+thank you!
 
-Cheers
-Alex
+-- 
+With Best Regards,
+Andy Shevchenko
 
->   			reg = <0x42080000 0x1000>;
->   			#address-cells = <1>;
->   			#size-cells = <1>;
->   			ranges;
-> +			feature-domain-controller;
-> +			#feature-domain-cells = <1>;
->   
->   			usart2: serial@400e0000 {
->   				compatible = "st,stm32h7-uart";
->   				reg = <0x400e0000 0x400>;
->   				interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
->   				clocks = <&ck_flexgen_08>;
-> +				feature-domains = <&rifsc 32>;
->   				status = "disabled";
->   			};
->   		};
 
