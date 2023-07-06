@@ -2,58 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8667D74986E
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jul 2023 11:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B8D749887
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jul 2023 11:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbjGFJaZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jul 2023 05:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        id S231445AbjGFJbt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jul 2023 05:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjGFJaX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jul 2023 05:30:23 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075BF1725;
-        Thu,  6 Jul 2023 02:30:21 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36684HLC016989;
-        Thu, 6 Jul 2023 11:29:47 +0200
+        with ESMTP id S231835AbjGFJbq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jul 2023 05:31:46 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7A51FF0;
+        Thu,  6 Jul 2023 02:31:15 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3667J8tL028476;
+        Thu, 6 Jul 2023 11:30:49 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=selector1;
- bh=FJ0MomoThNUzsv1pX20GYZsRL0ZNxMl5ijEruyW+QsM=;
- b=Wfiz+s02qZ+/GlnKxXqYORZi2Cl675p0tcrGzK9P1iaimfEBZIEEn9BOP6BZj55AnFyQ
- SOksZ9EYhjIQjNmLpWRBblepAj6ayQlw+sNuBzx378/keLBSE3Ki4u9b9YDy1kQtsJGt
- TFbLM5w9wnv5VKMxPDsrTnNWGCzGRtlgI0FB8JDHQqHSh2R5FDNc2oElbvcrUBzQBYic
- dx3hf83LKCn4e+q5Yp8iyXO59+ppD3U075hFJrrggh9e3Hri8dvBjWowILkKbpX2AD0J
- Nrektl6lIyQAr2w9wKavixNCGpsDAlYOGTuqcjhYiUfg7js2J2iHgA0VeZkSbU5iXBDP Pg== 
+ bh=QjdN1V/hI6Mx6jHfQb/2NbbcyfO5P8v8g9k00xWpqD4=;
+ b=DYCthB7alQTQ3lrROhg7wOy4r1QjzIouOx6L/IhrmzziUxxOXE/SAY/s3xl5nbC6MKjP
+ yKTOupwej1UZTT1NzllCw19pAI/ozfW4DzFp93ABJK04vmnrhUVTRSeHfQBMiFRmMCS6
+ RE6I1Z7cJ131NjJJcG1uMwLxnvvWKLJSrY1Ldr2zQqHHRB5gF6YmNXEW5uDS8b7ASW9K
+ 9NavX8kCT/YO35Q8WUwtoqHl0/n1GZUt3sDcUAgcu4R4+QK48NXobdWd0egzTTMZmYXB
+ Fcl1NvDUv2WloUvJGVEtMGRv5s06I3e2+JLxzO7J8eoNhgBH/rQgPUF5qHlO3YrPxajT yQ== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rnssf8ppn-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rns47s4ud-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 11:29:47 +0200
+        Thu, 06 Jul 2023 11:30:49 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 29DA4100052;
-        Thu,  6 Jul 2023 11:29:47 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F3A43100052;
+        Thu,  6 Jul 2023 11:30:47 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1B9CE216ECD;
-        Thu,  6 Jul 2023 11:29:47 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E997C216ED4;
+        Thu,  6 Jul 2023 11:30:47 +0200 (CEST)
 Received: from [10.201.21.121] (10.201.21.121) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 6 Jul
- 2023 11:29:45 +0200
-Message-ID: <1ac0f2e0-4ec1-3871-d0a3-3ccc2eb687e5@foss.st.com>
-Date:   Thu, 6 Jul 2023 11:29:45 +0200
+ 2023 11:30:46 +0200
+Message-ID: <997780a9-1cbc-46a2-2743-7fd493682278@foss.st.com>
+Date:   Thu, 6 Jul 2023 11:30:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 02/10] dt-bindings: bus: add device tree bindings for
- RIFSC
+Subject: Re: [PATCH 07/10] arm64: dts: st: add RIFSC as a domain controller
+ for STM32MP25x boards
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
         <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
         <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
         <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
-        <vkoul@kernel.org>, <jic23@kernel.org>,
+        <conor+dt@kernel.org>, <vkoul@kernel.org>, <jic23@kernel.org>,
         <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
         <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
         <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
@@ -71,12 +70,12 @@ CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
 References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-3-gatien.chevallier@foss.st.com>
- <e871ad32-dfa4-067d-4f2c-207ffd42aafd@linaro.org>
+ <20230705172759.1610753-8-gatien.chevallier@foss.st.com>
+ <61d93738-4ffd-411d-d32c-912c14eea56d@foss.st.com>
 From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <e871ad32-dfa4-067d-4f2c-207ffd42aafd@linaro.org>
+In-Reply-To: <61d93738-4ffd-411d-d32c-912c14eea56d@foss.st.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.201.21.121]
 X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
  (10.75.129.69)
@@ -93,193 +92,58 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello Krzysztof,
+Hi Alex,
 
-Firstly, I will correct the bindings error pointed by Rob's robot.
-Obviously, I did not pass the bindings check the proper way or maybe I'm 
-running an old version.
-
-On 7/6/23 08:28, Krzysztof Kozlowski wrote:
-> On 05/07/2023 19:27, Gatien Chevallier wrote:
->> Document RIFSC (RIF security controller). RIFSC is a firewall controller
->> composed of different kinds of hardware resources.
+On 7/6/23 11:25, Alexandre TORGUE wrote:
+> Hi Gatien
+> 
+> On 7/5/23 19:27, Gatien Chevallier wrote:
+>> RIFSC is a firewall controller. Change its compatible so that is matches
+>> the documentation and reference RIFSC as a feature-domain-controller.
 >>
 >> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> 
-> A nit, subject: drop second/last, redundant "device tree bindings for".
-> The "dt-bindings" prefix is already stating that these are bindings. 4
-> words of your 6 word subject is meaningless...
-
-Ack, I will rephrase, it is indeed redundant
-
-> 
 >> ---
->>   .../bindings/bus/st,stm32-rifsc.yaml          | 101 ++++++++++++++++++
->>   1 file changed, 101 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
+>>   arch/arm64/boot/dts/st/stm32mp251.dtsi | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
 >>
->> diff --git a/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
->> new file mode 100644
->> index 000000000000..68d585ed369c
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/bus/st,stm32-rifsc.yaml
+>> diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi 
+>> b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+>> index 5268a4321841..62101084cab8 100644
+>> --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
+>> +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+>> @@ -106,17 +106,20 @@ soc@0 {
+>>           ranges = <0x0 0x0 0x0 0x80000000>;
+>>           rifsc: rifsc-bus@42080000 {
+>> -            compatible = "simple-bus";
+>> +            compatible = "st,stm32mp25-rifsc";
 > 
-> Filename like compatible, unless you know list of compatibles will
-> grow... but then add them.
+> You could keep "simple-bus" compatible (in second position). In case of 
+> the RIFSC is not probed, the platform will be able to boot. If you agree 
+> you can use the same for ETZPC.
 > 
->> @@ -0,0 +1,101 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/bus/st,stm32-rifsc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: STM32 Resource isolation framework security controller bindings
-> 
-> Drop bindings
+> Cheers
+> Alex
 
-Ack
+Sure, good point.
 
-> 
->> +
->> +maintainers:
->> +  - Gatien Chevallier <gatien.chevallier@foss.st.com>
->> +
->> +description: |
->> +  Resource isolation framework (RIF) is a comprehensive set of hardware blocks
->> +  designed to enforce and manage isolation of STM32 hardware resources like
->> +  memory and peripherals.
->> +
->> +  The RIFSC (RIF security controller) is composed of three sets of registers,
->> +  each managing a specific set of hardware resources:
->> +    - RISC registers associated with RISUP logic (resource isolation device unit
->> +      for peripherals), assign all non-RIF aware peripherals to zero, one or
->> +      any security domains (secure, privilege, compartment).
->> +    - RIMC registers: associated with RIMU logic (resource isolation master
->> +      unit), assign all non RIF-aware bus master to one security domain by
->> +      setting secure, privileged and compartment information on the system bus.
->> +      Alternatively, the RISUP logic controlling the device port access to a
->> +      peripheral can assign target bus attributes to this peripheral master port
->> +      (supported attribute: CID).
->> +    - RISC registers associated with RISAL logic (resource isolation device unit
->> +      for address space - Lite version), assign address space subregions to one
->> +      security domains (secure, privilege, compartment).
->> +
->> +properties:
->> +  compatible:
->> +    const: st,stm32mp25-rifsc
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  "#address-cells":
->> +    const: 1
->> +
->> +  "#size-cells":
->> +    const: 1
->> +
->> +  "#feature-domain-cells":
->> +    const: 1
->> +
->> +  ranges: true
->> +
->> +  feature-domain-controller: true
->> +
->> +patternProperties:
->> +  "^.*@[0-9a-f]+$":
->> +    description: Peripherals
->> +    type: object
->> +    properties:
->> +      feature-domains:
->> +        minItems: 1
->> +        maxItems: 2
->> +        description:
->> +          The first argument must always be a phandle that references to the
->> +          firewall controller of the peripheral. The second can contain the
->> +          platform specific firewall ID of the peripheral.
-> 
-> It does not make much sense to me to have hierarchy parent-child and via
-> phandle at the same time. You express the similar relationship twice
-Thank you for pointing this out.
-
-About the parent-child relation:
-
-The bus-like device tree architecture allows a bus-probe mechanism with 
-which we want to check accesses of peripherals before probing their 
-driver. This has several advantages:
--This bus architecture provides a clearer view of the hardware.
--No peripheral driver modifications as it is fully handled by the 
-firewall drivers.
--Drivers for devices that aren't accessible will not even be probed => 
-no probe fail.
-
-It would be possible to manage this mechanism another way by handling 
-probe deferrals in drivers. But it would mean modifying every driver 
-with a check on ST firewall that we probe and some of them aren't from 
-STMicroelectronics.
-
-About the phandle relation:
-
-I agree on the fact that this double expression of the relationship is 
-redundant.
-
-I've done it this way because there will be other nodes outside the 
-RIFSC node that will need to reference it as their feature-domain 
-controller. I kept the same information in the property to be coherent 
-between all.
-
-For nodes under the RIFSC, the phandle is indeed useless and could be 
-removed, just to leave the firewall ID. And I'm inclined to do so. I 
-just have one worry on the YAML binding files where I will have a 
-pattern property in the RIFSC that will state something and maybe 
-another description in the peripheral YAML files. What is your take on that?
-
-> 
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - "#address-cells"
->> +  - "#size-cells"
->> +  - feature-domain-controller
->> +  - "#feature-domain-cells"
->> +  - ranges
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    // In this example, the usart2 device refers to rifsc as its domain
->> +    // controller.
->> +    // Access rights are verified before creating devices.
->> +
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +
->> +    rifsc: rifsc-bus@42080000 {
->> +        compatible = "st,stm32mp25-rifsc";
->> +        reg = <0x42080000 0x1000>;
->> +        #address-cells = <1>;
->> +        #size-cells = <1>;
->> +        ranges;
->> +        feature-domain-controller;
->> +        #feature-domain-cells = <1>;
->> +
->> +        usart2: serial@400e0000 {
->> +            compatible = "st,stm32h7-uart";
->> +            reg = <0x400e0000 0x400>;
->> +            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
->> +            clocks = <&ck_flexgen_08>;
->> +            feature-domains = <&rifsc 32>;
->> +            status = "disabled";
-> 
-> No status in the examples.
-> 
->> +        };
->> +    };
-> 
-> Best regards,
-> Krzysztof
-> 
+I'll change that in V2
 
 Best regards,
 Gatien
+> 
+>>               reg = <0x42080000 0x1000>;
+>>               #address-cells = <1>;
+>>               #size-cells = <1>;
+>>               ranges;
+>> +            feature-domain-controller;
+>> +            #feature-domain-cells = <1>;
+>>               usart2: serial@400e0000 {
+>>                   compatible = "st,stm32h7-uart";
+>>                   reg = <0x400e0000 0x400>;
+>>                   interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
+>>                   clocks = <&ck_flexgen_08>;
+>> +                feature-domains = <&rifsc 32>;
+>>                   status = "disabled";
+>>               };
+>>           };
+> 
