@@ -2,61 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA0A74A5C7
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jul 2023 23:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8273874A5D6
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jul 2023 23:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbjGFVOg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jul 2023 17:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        id S230443AbjGFVWI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jul 2023 17:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbjGFVOf (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jul 2023 17:14:35 -0400
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7751BF8;
-        Thu,  6 Jul 2023 14:14:29 -0700 (PDT)
-Received: by mail-oo1-xc30.google.com with SMTP id 006d021491bc7-56597d949b1so816183eaf.1;
-        Thu, 06 Jul 2023 14:14:29 -0700 (PDT)
+        with ESMTP id S230435AbjGFVWH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jul 2023 17:22:07 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372811BF0;
+        Thu,  6 Jul 2023 14:22:06 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3142ee41fd2so1170238f8f.3;
+        Thu, 06 Jul 2023 14:22:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688678068; x=1691270068;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5HPMk53DYK8e+Bl4mudoo8nEvNlWFMO8Yu/MUeAfcgw=;
-        b=ZP97fNRMvWcbMExc1H7NSAHzWi9iQ0xIKjsiOpTh7ZYnCiKemLc54lgjzF0PME6/rt
-         2yKAYt5Lm/pd6tTQ54AQ05jUIuMN+ITG3dWtb1dJ0F6a1ugAKz/BmfWnPDOwTxyTVhos
-         Xgd4QPaczjHJIMpSfnhAO7JKU/p5201ioz95KDcBTY/io3T2OhcMp1Tsga8r2lrcpnAQ
-         3phKz03UuaZNTOEVv5+RrCP0bo+wWFQmXfgzoWqODaeK4tXa9imo1TsJ3QYvSWZkQiFT
-         +JblbI3IwvlUIiH/bXZpAW1l91imIAXQChMJrEsvxV+SpSLodocKsGc4s5s8rZ8ZPM7q
-         Gbew==
+        d=gmail.com; s=20221208; t=1688678524; x=1691270524;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0FvpS/+1YUK2280YM22guyluj/H/r120tkVYHERIJhg=;
+        b=E2724ppdCPfiRw6I8upDJQov4YlJgquzq6akts6GGTIazp0OM1zdRgSKJJMniM2Rmn
+         BmWCvjasy/B3bi6+ttfMgVIJALHUhshM69IYu3tMIpKc3JFauVa60jh2W8gtohxMvynM
+         fPzbSO4HX1P5c4Zw8DqWa4w6EIOEHS6MM6rJ6akjBnupBsRu8ZnmP3ZzT2Rfh13NoS+g
+         Fpt7wX8jcwN5fcj2rKpX6zACKeF4Xpy9cRjX5ZOwvZLVeDkDPxFm2kj9vgfFVy8whVku
+         A0+2dKAsrbC/VXG1AkD7I5hduzzA6/1aIM7k48O3U85AIYXd0+1TLyHp4C2t62TckLPO
+         enfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688678068; x=1691270068;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5HPMk53DYK8e+Bl4mudoo8nEvNlWFMO8Yu/MUeAfcgw=;
-        b=lH1UfOPQdFPllT+KHrJxC27kSDDAN8qcHluH8jD14uldIOmcwTH3Ka6y8pXsqNFRuW
-         oga7tv2oWk6OUe5nScBZNfiVVO/RPRy4YOonxRSXG+I7u/dnxYjI37aDq6FbneYsWte6
-         TFuKFOSewPwjt48UV3fq2NVPx9Fr88YODy2uwV1svm+DY2oV0hz1Ckjtz3FaHsvrDE58
-         i+JtVug1DiF7NcScp9XyC7BLHWohVWGEQ2qCZXJ90L3qZgGzeJvOoGgnfak7KrQCd7s2
-         BmyRTjoKhQUYFelrM/F/wzAeuFHDseNjctk7FHEFhYl0k1BqDyPA7FnORG1FnCKVZZe4
-         0ruA==
-X-Gm-Message-State: ABy/qLZSdJWluJPVrXpxsCiMKCERlM5UdgGKGbZE8Xf0ygxRuWSfnbPO
-        iAB6MbbEXkHB0exTZzSAWfY=
-X-Google-Smtp-Source: APBJJlEJRSlMqTAsb1/Mhe3I9HeKRUQFktrGM9vLEsMb/HkYxNLD2l/sDxoUsRgbeM51/mMsK7sRgA==
-X-Received: by 2002:a4a:5207:0:b0:565:9028:d034 with SMTP id d7-20020a4a5207000000b005659028d034mr2334846oob.4.1688678068662;
-        Thu, 06 Jul 2023 14:14:28 -0700 (PDT)
-Received: from 377044c6c369.cse.ust.hk (191host097.mobilenet.cse.ust.hk. [143.89.191.97])
-        by smtp.gmail.com with ESMTPSA id v14-20020a4a8c4e000000b00565fcfabab8sm1077585ooj.21.2023.07.06.14.14.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 14:14:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688678524; x=1691270524;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0FvpS/+1YUK2280YM22guyluj/H/r120tkVYHERIJhg=;
+        b=bCeQYw+HoXato6oWrzN2iRyzAUBZTp0Ntl8qbAlJwzLwLjJE9KiOaw0FOCMR8sRiZf
+         b5ap0tYWVsauY0/6evg5PQO1Z0p3Oky0POKovMa370s2djUHblbz636QmvPyiorQljLB
+         hUiJmKN+Ar2wZv2Fyl5qyXPmHRaK2uAQURcFX1o70/fmFtnpGGWj4twMgHvTJQwcwvKZ
+         3uUjA6GMXZ4rtZl8Iuukv+T4fVez5A6+SVRHATsqLPY2AgECjPWtSYMYYnGNNqgc8aGj
+         N/5t48pDMeM9RMqUQi+0m1+Xl5hLJIMIsesv4U7tDRaulb0HyIM/ogAYEPdfMo2l+gU5
+         qsuA==
+X-Gm-Message-State: ABy/qLYgsT918mcD/jc+OaG4NpfndjJVgT4Wwv92AuIY4I9Ppw7f/J6x
+        T6PIWvuxSPqPtsFTkfr+r8PacclYwsoyTTPHWlc=
+X-Google-Smtp-Source: APBJJlHRel6vaU4WRUoQQhFpLXuRxT5GKkO7wlb0TzaYHYtxp+R1anuSt3SxIQrA+1XykMalY0T9JlPu3tdhBk1Em6I=
+X-Received: by 2002:a5d:58cf:0:b0:314:77a:c2b2 with SMTP id
+ o15-20020a5d58cf000000b00314077ac2b2mr2256584wrf.32.1688678524280; Thu, 06
+ Jul 2023 14:22:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230706211414.10660-1-dg573847474@gmail.com>
+In-Reply-To: <20230706211414.10660-1-dg573847474@gmail.com>
 From:   Chengfeng Ye <dg573847474@gmail.com>
+Date:   Fri, 7 Jul 2023 05:21:53 +0800
+Message-ID: <CAAo+4rW1kmiVGbGxMUBsggQiY7dpOTUq+t6B=QTrikwBp72Kkw@mail.gmail.com>
+Subject: Re: [PATCH RESEND] i2c: bcm-iproc: Fix bcm_iproc_i2c_isr deadlock issue
 To:     andi.shyti@kernel.org, rjui@broadcom.com, sbranden@broadcom.com,
         wsa@kernel.org
 Cc:     bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chengfeng Ye <dg573847474@gmail.com>
-Subject: [PATCH RESEND] i2c: bcm-iproc: Fix bcm_iproc_i2c_isr deadlock issue
-Date:   Thu,  6 Jul 2023 21:14:14 +0000
-Message-Id: <20230706211414.10660-1-dg573847474@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -67,54 +67,14 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-iproc_i2c_rd_reg and iproc_i2c_wr_reg are called from both
-interrupt context (e.g. bcm_iproc_i2c_isr) and process context
-(e.g. bcm_iproc_i2c_suspend). Therefore, interrupts should be
-disabled to avoid potential deadlock. To prevent this scenario,
-use spin_lock_irqsave.
+Hi Ray and Wolfram,
 
-Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
----
- drivers/i2c/busses/i2c-bcm-iproc.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+> I can't apply it, what version is this against?
 
-diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-index 85d8a6b04885..d02245e4db8c 100644
---- a/drivers/i2c/busses/i2c-bcm-iproc.c
-+++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-@@ -233,13 +233,14 @@ static inline u32 iproc_i2c_rd_reg(struct bcm_iproc_i2c_dev *iproc_i2c,
- 				   u32 offset)
- {
- 	u32 val;
-+	unsigned long flags;
- 
- 	if (iproc_i2c->idm_base) {
--		spin_lock(&iproc_i2c->idm_lock);
-+		spin_lock_irqsave(&iproc_i2c->idm_lock, flags);
- 		writel(iproc_i2c->ape_addr_mask,
- 		       iproc_i2c->idm_base + IDM_CTRL_DIRECT_OFFSET);
- 		val = readl(iproc_i2c->base + offset);
--		spin_unlock(&iproc_i2c->idm_lock);
-+		spin_unlock_irqrestore(&iproc_i2c->idm_lock, flags);
- 	} else {
- 		val = readl(iproc_i2c->base + offset);
- 	}
-@@ -250,12 +251,13 @@ static inline u32 iproc_i2c_rd_reg(struct bcm_iproc_i2c_dev *iproc_i2c,
- static inline void iproc_i2c_wr_reg(struct bcm_iproc_i2c_dev *iproc_i2c,
- 				    u32 offset, u32 val)
- {
-+	unsigned long flags;
- 	if (iproc_i2c->idm_base) {
--		spin_lock(&iproc_i2c->idm_lock);
-+		spin_lock_irqsave(&iproc_i2c->idm_lock, flags);
- 		writel(iproc_i2c->ape_addr_mask,
- 		       iproc_i2c->idm_base + IDM_CTRL_DIRECT_OFFSET);
- 		writel(val, iproc_i2c->base + offset);
--		spin_unlock(&iproc_i2c->idm_lock);
-+		spin_unlock_irqrestore(&iproc_i2c->idm_lock, flags);
- 	} else {
- 		writel(val, iproc_i2c->base + offset);
- 	}
--- 
-2.17.1
+The patch is based on 6.4-rc7. I resend the patch with this
+email because I had some problems setting up the previous
+one with git send-email. That patch was manually pasted
+so that might be the reason for not being able to be applied.
 
+Best Regards,
+Chengfeng
