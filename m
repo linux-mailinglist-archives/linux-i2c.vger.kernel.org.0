@@ -2,688 +2,224 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E3274A076
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jul 2023 17:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3EB74A2BC
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jul 2023 19:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbjGFPJS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jul 2023 11:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54136 "EHLO
+        id S229891AbjGFRBy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jul 2023 13:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjGFPJO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jul 2023 11:09:14 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49578F;
-        Thu,  6 Jul 2023 08:09:11 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-78374596182so27252839f.0;
-        Thu, 06 Jul 2023 08:09:11 -0700 (PDT)
+        with ESMTP id S229880AbjGFRBx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jul 2023 13:01:53 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4901737
+        for <linux-i2c@vger.kernel.org>; Thu,  6 Jul 2023 10:01:51 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-66c729f5618so832380b3a.1
+        for <linux-i2c@vger.kernel.org>; Thu, 06 Jul 2023 10:01:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1688662911; x=1691254911;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=UcI1Y0a2HNgToncW1MrBA+crkM1Kg6dPd7h8Wivi6rY=;
+        b=NKBF+qxkB01yO1mk9UQrnPHihvLRR+aKtgKov+mhRs/VIA5N4t9OfP5ySKI6xKAXmv
+         gCSD2MgAU8Srr1qMuuMz9bDE4ixGybcd9XfMTVTJlgl2UCPy8SdKBG23ThNv5X66/gO1
+         yHvY9mVZXo6+3GseZuJjqsNg9moi4P1MLk7+s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688656151; x=1691248151;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1688662911; x=1691254911;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=agWvj58WC7T3LMV2aGcahAHT9AGyWaUQQ/8M5V5YO7c=;
-        b=RvynrG4Gaj59q5AelhXgJdxmf0j4urySDL3yksj7JIcrHM/tJ9fjnm8U88Hp4Q3Ryd
-         4ube/ievVN2Mx37LaTh3w3oPyQQmf4Fz01JwgtYTV6/ooPFAfg2nMuMWQ9mIledk2jNE
-         KcPnjbXj1O9wcBrrXmi6vI/zVDc17Chb5j2fRvszqeNP1hdUKYN9wcnEQN/p7pWtXDJE
-         mLRpXrvmIfoRZtncUfHyvPVizznrts4b0w1QaxcRX2hpyWbTDpYe06fEcPbV7NGgJdsl
-         RAqDqVPA3bQ2iv7R9VwZa0aPUwUku0NeQPDn80D2X1j6eKFi1SDImSQ6NU0IRGrSeOM2
-         52fQ==
-X-Gm-Message-State: ABy/qLafeNEqKp1e3JCeCBNH+wMtfhDhh8Pz8MoV6zzKMdsrNvocK6e7
-        O+7dM1b7mh1lN1gae9IwKA==
-X-Google-Smtp-Source: APBJJlFGJU3qjnUCwyswSCpMUMJfvzDFSrJMHX7BS+SXsEGBzdCLa2ewD7RnXVHqaGFITbuGMesUOA==
-X-Received: by 2002:a05:6602:42d3:b0:77e:3e85:34ee with SMTP id ce19-20020a05660242d300b0077e3e8534eemr2353957iob.13.1688656150906;
-        Thu, 06 Jul 2023 08:09:10 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id t16-20020a02c910000000b00411bdcdc488sm558535jao.173.2023.07.06.08.09.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jul 2023 08:09:10 -0700 (PDT)
-Received: (nullmailer pid 3902613 invoked by uid 1000);
-        Thu, 06 Jul 2023 15:09:06 -0000
-Date:   Thu, 6 Jul 2023 09:09:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
-        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
-        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
-        andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
-        lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
-        arnd@kernel.org, richardcochran@gmail.com,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 05/10] firewall: introduce stm32_firewall framework
-Message-ID: <20230706150906.GB3858320-robh@kernel.org>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-6-gatien.chevallier@foss.st.com>
+        bh=UcI1Y0a2HNgToncW1MrBA+crkM1Kg6dPd7h8Wivi6rY=;
+        b=gxwD3BBgGWIvSlr82UGUcY4vNkvNGTpVv0CiFyHME8H7IhcRJ0KVKRLUChzJiq1ADN
+         HgTpmgAqD2WaipOHn+UxuMkZN4NZyaIGCSM16dJ0pZTDZZBDFpRxFfS1Yl5cCckoeWhB
+         wSJQu+wUGOfCzSP6wIDo4x0U7GQKjjqrRh+3ob8MaYo7npMFnHPh6Jr5waluWdnj8gWl
+         ysJvL5DwF2FBLXB/QmI/FO3pFxo+FjMZpZB49sfkLQ4dnStH1+bILJIgaP9TNn7NlV8B
+         22jl8eEEOiC70iWug60ACvbYhYlUGQtACGGMYquPzFZurRB3mWG8a2fFUD+U9lqyR4+t
+         mzUA==
+X-Gm-Message-State: ABy/qLbuVpCjKq9p/kszZXn733ockW1pIyq/Tomg7f15g9APgojtMDLb
+        I0uLK+shjZ2ubnKM1NJUvToII6BRldKu5/ocvKLr/A==
+X-Google-Smtp-Source: APBJJlFpXlhqm0J63QH79N3z+G8fMY+FnLHKhBfw3be+w9MLmSp71eQRvYTvqMOZVOFPPBnJXkaXOA==
+X-Received: by 2002:a05:6a20:1394:b0:122:4a16:dfa4 with SMTP id hn20-20020a056a20139400b001224a16dfa4mr2249991pzc.10.1688662910377;
+        Thu, 06 Jul 2023 10:01:50 -0700 (PDT)
+Received: from [10.136.64.163] ([192.19.161.248])
+        by smtp.gmail.com with ESMTPSA id jw9-20020a170903278900b001a6f7744a27sm1680223plb.87.2023.07.06.10.01.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 10:01:48 -0700 (PDT)
+Message-ID: <45516ded-9964-5536-a211-3a58c4249b59@broadcom.com>
+Date:   Thu, 6 Jul 2023 10:01:46 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705172759.1610753-6-gatien.chevallier@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 03/23] i2c: iproc: Remove #ifdef guards for PM related
+ functions
+To:     Paul Cercueil <paul@crapouillou.net>, Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20230705204314.89800-1-paul@crapouillou.net>
+ <20230705204314.89800-4-paul@crapouillou.net>
+From:   Ray Jui <ray.jui@broadcom.com>
+In-Reply-To: <20230705204314.89800-4-paul@crapouillou.net>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000f49d1905ffd4786d"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 07:27:54PM +0200, Gatien Chevallier wrote:
-> Introduce a firewall framework that offers to firewall consumers different
-> firewall services such as the ability to check their access rights against
-> their firewall controller(s).
+--000000000000f49d1905ffd4786d
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+
+
+On 7/5/2023 1:42 PM, Paul Cercueil wrote:
+> Use the new PM macros for the suspend and resume functions to be
+> automatically dropped by the compiler when CONFIG_PM or
+> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
 > 
-> The firewall framework offers a generic API that is defined in firewall
-> controllers drivers to best fit the specificity of each firewall.
+> This has the advantage of always compiling these functions in,
+> independently of any Kconfig option. Thanks to that, bugs and other
+> regressions are subsequently easier to catch.
 > 
-> There are various types of firewalls:
-> -Peripheral firewalls that filter accesses to peripherals
-> -Memory firewalls that filter accesses to memories or memory regions
-> -Resource firewalls that filter accesses to internal resources such as
-> reset and clock controllers
-
-How do resource firewalls work? Access to registers for some clocks in a 
-clock controller are disabled? Or something gates off clocks/resets to 
-a block?
-
-It might make more sense for "resource" accesses to be managed within 
-those resource APIs (i.e. the clock and reset frameworks) and leave this 
-framework to bus accesses.
-
-> A firewall controller must be probed at arch_initcall level and register
-> to the framework so that consumers can use their services.
-
-initcall ordering hacks should not be needed. We have both deferred 
-probe and fw_devlinks to avoid that problem.
-
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > 
-> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
 > ---
->  MAINTAINERS                               |   5 +
->  arch/arm64/Kconfig.platforms              |   1 +
->  drivers/bus/Kconfig                       |  10 +
->  drivers/bus/Makefile                      |   1 +
->  drivers/bus/stm32_firewall.c              | 252 ++++++++++++++++++++++
->  drivers/bus/stm32_firewall.h              |  83 +++++++
-
-Why something stm32 specific? We know there are multiple platforms 
-wanting something in this area. Wasn't the last attempt common?
-
-For a common binding, I'm not eager to accept anything new with only 1 
-user. 
-
->  include/linux/bus/stm32_firewall_device.h | 134 ++++++++++++
->  7 files changed, 486 insertions(+)
->  create mode 100644 drivers/bus/stm32_firewall.c
->  create mode 100644 drivers/bus/stm32_firewall.h
->  create mode 100644 include/linux/bus/stm32_firewall_device.h
+> Cc: Ray Jui <rjui@broadcom.com>
+> Cc: Scott Branden <sbranden@broadcom.com>
+> Cc: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+>  drivers/i2c/busses/i2c-bcm-iproc.c | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 41385f01fa98..fabf95ba9b86 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -20123,6 +20123,11 @@ T:	git git://linuxtv.org/media_tree.git
->  F:	Documentation/devicetree/bindings/media/i2c/st,st-mipid02.yaml
->  F:	drivers/media/i2c/st-mipid02.c
+> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
+> index 2d8342fdc25d..8a3e2208475c 100644
+> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
+> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
+> @@ -1125,8 +1125,6 @@ static void bcm_iproc_i2c_remove(struct platform_device *pdev)
+>  	bcm_iproc_i2c_enable_disable(iproc_i2c, false);
+>  }
 >  
-> +ST STM32 FIREWALL
-> +M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
-> +S:	Maintained
-> +F:	drivers/bus/stm32_firewall.c
-> +
->  ST STM32 I2C/SMBUS DRIVER
->  M:	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
->  M:	Alain Volmat <alain.volmat@foss.st.com>
-> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-> index 6069120199bb..5a46e90f1e4e 100644
-> --- a/arch/arm64/Kconfig.platforms
-> +++ b/arch/arm64/Kconfig.platforms
-> @@ -293,6 +293,7 @@ config ARCH_STM32
->  	select ARM_SMC_MBOX
->  	select ARM_SCMI_PROTOCOL
->  	select COMMON_CLK_SCMI
-> +	select STM32_FIREWALL
->  	help
->  	  This enables support for ARMv8 based STMicroelectronics
->  	  STM32 family, including:
-> diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
-> index fcfa280df98a..4d54a7ea52b2 100644
-> --- a/drivers/bus/Kconfig
-> +++ b/drivers/bus/Kconfig
-> @@ -163,6 +163,16 @@ config QCOM_SSC_BLOCK_BUS
->  	  i2c/spi/uart controllers, a hexagon core, and a clock controller
->  	  which provides clocks for the above.
+> -#ifdef CONFIG_PM_SLEEP
+> -
+>  static int bcm_iproc_i2c_suspend(struct device *dev)
+>  {
+>  	struct bcm_iproc_i2c_dev *iproc_i2c = dev_get_drvdata(dev);
+> @@ -1177,12 +1175,6 @@ static const struct dev_pm_ops bcm_iproc_i2c_pm_ops = {
+>  	.resume_early = &bcm_iproc_i2c_resume
+>  };
 >  
-> +config STM32_FIREWALL
-> +	bool "STM32 Firewall framework"
-> +	depends on ARCH_STM32
-> +	default MACH_STM32MP157 || MACH_STM32MP13 || MACH_STM32MP25
-> +	help
-> +	  Say y to enable firewall framework and its services. Firewall
-> +	  controllers will be able to register to the framework. Firewall
-> +	  controllers must be initialized and register to the firewall framework
-> +	  at arch_initcall level.
-> +
->  config SUN50I_DE2_BUS
->  	bool "Allwinner A64 DE2 Bus Driver"
->  	  default ARM64
-> diff --git a/drivers/bus/Makefile b/drivers/bus/Makefile
-> index d90eed189a65..fc0511450ec2 100644
-> --- a/drivers/bus/Makefile
-> +++ b/drivers/bus/Makefile
-> @@ -26,6 +26,7 @@ obj-$(CONFIG_OMAP_INTERCONNECT)	+= omap_l3_smx.o omap_l3_noc.o
->  obj-$(CONFIG_OMAP_OCP2SCP)	+= omap-ocp2scp.o
->  obj-$(CONFIG_QCOM_EBI2)		+= qcom-ebi2.o
->  obj-$(CONFIG_QCOM_SSC_BLOCK_BUS)	+= qcom-ssc-block-bus.o
-> +obj-$(CONFIG_STM32_FIREWALL)	+= stm32_firewall.o
->  obj-$(CONFIG_SUN50I_DE2_BUS)	+= sun50i-de2.o
->  obj-$(CONFIG_SUNXI_RSB)		+= sunxi-rsb.o
->  obj-$(CONFIG_OF)		+= simple-pm-bus.o
-> diff --git a/drivers/bus/stm32_firewall.c b/drivers/bus/stm32_firewall.c
-> new file mode 100644
-> index 000000000000..510db5bc6eaf
-> --- /dev/null
-> +++ b/drivers/bus/stm32_firewall.c
-> @@ -0,0 +1,252 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
+> -#define BCM_IPROC_I2C_PM_OPS (&bcm_iproc_i2c_pm_ops)
+> -#else
+> -#define BCM_IPROC_I2C_PM_OPS NULL
+> -#endif /* CONFIG_PM_SLEEP */
+> -
+> -
+>  static int bcm_iproc_i2c_reg_slave(struct i2c_client *slave)
+>  {
+>  	struct bcm_iproc_i2c_dev *iproc_i2c = i2c_get_adapdata(slave->adapter);
+> @@ -1255,7 +1247,7 @@ static struct platform_driver bcm_iproc_i2c_driver = {
+>  	.driver = {
+>  		.name = "bcm-iproc-i2c",
+>  		.of_match_table = bcm_iproc_i2c_of_match,
+> -		.pm = BCM_IPROC_I2C_PM_OPS,
+> +		.pm = pm_sleep_ptr(&bcm_iproc_i2c_pm_ops),
+>  	},
+>  	.probe = bcm_iproc_i2c_probe,
+>  	.remove_new = bcm_iproc_i2c_remove,
 
-The default kernel license is GPL-2.0-only. Why the deviation?
+Thanks.
 
-> +/*
-> + * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
-> +#include <linux/bus/stm32_firewall_device.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/types.h>
-> +
-> +#include "stm32_firewall.h"
-> +
-> +/* Corresponds to STM32_FIREWALL_MAX_EXTRA_ARGS + firewall controller reference + firewall ID */
-> +#define STM32_FIREWALL_MAX_ARGS		(STM32_FIREWALL_MAX_EXTRA_ARGS + 2)
-> +
-> +static LIST_HEAD(firewall_controller_list);
-> +static DEFINE_MUTEX(firewall_controller_list_lock);
-> +
-> +static int stm32_firewall_get_id(struct device_node *np, u32 *id)
-> +{
-> +	u32 feature_domain_cell[2];
-> +
-> +	/* Get property from device node */
-> +	if (of_property_read_u32_array(np, "feature-domains",
-> +				       feature_domain_cell,
-> +				       ARRAY_SIZE(feature_domain_cell))) {
-> +		pr_err("Unable to find get firewall ID property\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	*id = feature_domain_cell[1];
-> +
-> +	return 0;
-> +}
-> +
-> +/* Firewall device API */
-> +
-> +int stm32_firewall_get_firewall(struct device_node *np,
-> +				struct stm32_firewall *firewall)
-> +{
-> +	struct stm32_firewall_controller *ctrl;
-> +	struct of_phandle_args args;
-> +	u32 controller_phandle;
-> +	bool match = false;
-> +	size_t i;
-> +	int err;
-> +
-> +	if (!firewall)
-> +		return -EINVAL;
-> +
-> +	/* The controller phandle is always the first argument of the feature-domains property. */
-> +	err = of_property_read_u32(np, "feature-domains", &controller_phandle);
+Acked-by: Ray Jui <ray.jui@broadcom.com>
 
-Why do you need to parse the property twice?
+--000000000000f49d1905ffd4786d
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> +	if (err) {
-> +		pr_err("Unable to get feature-domains property for node %s\n", np->full_name);
-> +		return err;
-> +	}
-> +
-> +	/* Parse property with phandle parsed out */
-> +	err = of_parse_phandle_with_args(np, "feature-domains", "#feature-domain-cells", 0, &args);
-> +	if (err) {
-> +		pr_err("Unable to read feature-domains arguments for node %s\n", np->full_name);
-> +		return err;
-> +	}
-> +
-> +	/* The phandle is parsed out */
-> +	if (args.args_count > STM32_FIREWALL_MAX_ARGS - 1)
-> +		return -EINVAL;
-> +
-> +	of_node_put(np);
-> +
-> +	/* Check if the parsed phandle corresponds to a registered firewall controller */
-> +	mutex_lock(&firewall_controller_list_lock);
-> +	list_for_each_entry(ctrl, &firewall_controller_list, entry) {
-> +		if (ctrl->dev->of_node->phandle == controller_phandle) {
-> +			match = true;
-> +			firewall->firewall_ctrl = ctrl;
-> +			break;
-> +		}
-> +	}
-> +	mutex_unlock(&firewall_controller_list_lock);
-> +	if (!match) {
-> +		firewall->firewall_ctrl = NULL;
-> +		pr_err("No firewall controller registered for %s\n", np->full_name);
-> +		return -ENODEV;
-> +	}
-> +
-> +	/*
-> +	 * The firewall ID is always the second argument of the feature-domains property.
-> +	 * The first argument is already parsed out, so args.args[0] is the second argument.
-> +	 */
-> +	firewall->firewall_id = args.args[0];
-> +
-> +	/* Extra args start at the third argument */
-> +	for (i = 0; i < args.args_count; i++)
-> +		firewall->extra_args[i] = args.args[i + 1];
-> +
-> +	/* Remove the firewall ID arg that is not an extra argument */
-> +	if (args.args_count >= 1)
-> +		firewall->extra_args_size = args.args_count - 1;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(stm32_firewall_get_firewall);
-> +
-> +int stm32_firewall_grant_access(struct stm32_firewall *firewall)
-> +{
-> +	struct stm32_firewall_controller *firewall_controller;
-> +
-> +	if (!firewall || firewall->firewall_id == U32_MAX)
-> +		return -EINVAL;
-> +
-> +	firewall_controller = firewall->firewall_ctrl;
-> +
-> +	if (!firewall_controller)
-> +		return -ENODEV;
-> +
-> +	return firewall_controller->grant_access(firewall_controller, firewall->firewall_id);
-> +}
-> +EXPORT_SYMBOL_GPL(stm32_firewall_grant_access);
-> +
-> +int stm32_firewall_grant_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id)
-> +{
-> +	struct stm32_firewall_controller *firewall_controller;
-> +
-> +	if (!firewall || subsystem_id == U32_MAX || firewall->firewall_id == U32_MAX)
-> +		return -EINVAL;
-> +
-> +	firewall_controller = firewall->firewall_ctrl;
-> +
-> +	if (!firewall_controller)
-> +		return -ENODEV;
-> +
-> +	return firewall_controller->grant_access(firewall_controller, subsystem_id);
-> +}
-> +EXPORT_SYMBOL_GPL(stm32_firewall_grant_access_by_id);
-> +
-> +void stm32_firewall_release_access(struct stm32_firewall *firewall)
-> +{
-> +	struct stm32_firewall_controller *firewall_controller;
-> +
-> +	if (!firewall || firewall->firewall_id == U32_MAX) {
-> +		pr_err("Incorrect arguments when releasing a firewall access");
-> +		return;
-> +	}
-> +
-> +	firewall_controller = firewall->firewall_ctrl;
-> +
-> +	if (!firewall_controller) {
-> +		pr_debug("No firewall controller to release");
-> +		return;
-> +	}
-> +
-> +	firewall_controller->release_access(firewall_controller, firewall->firewall_id);
-> +}
-> +EXPORT_SYMBOL_GPL(stm32_firewall_release_access);
-> +
-> +void stm32_firewall_release_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id)
-> +{
-> +	struct stm32_firewall_controller *firewall_controller;
-> +
-> +	if (!firewall || subsystem_id == U32_MAX || firewall->firewall_id == U32_MAX) {
-> +		pr_err("Incorrect arguments when releasing a firewall access");
-> +		return;
-> +	}
-> +
-> +	firewall_controller = firewall->firewall_ctrl;
-> +
-> +	if (!firewall_controller) {
-> +		pr_debug("No firewall controller to release");
-> +		return;
-> +	}
-> +
-> +	firewall_controller->release_access(firewall_controller, subsystem_id);
-> +}
-> +EXPORT_SYMBOL_GPL(stm32_firewall_release_access_by_id);
-> +
-> +/* Firewall controller API */
-> +
-> +int stm32_firewall_controller_register(struct stm32_firewall_controller *firewall_controller)
-> +{
-> +	pr_info("Registering firewall controller %s", dev_name(firewall_controller->dev));
-> +
-> +	if (!firewall_controller)
-> +		return -ENODEV;
-> +
-> +	mutex_lock(&firewall_controller_list_lock);
-> +	list_add_tail(&firewall_controller->entry, &firewall_controller_list);
-> +	mutex_unlock(&firewall_controller_list_lock);
-> +
-> +	return 0;
-> +
-> +}
-> +
-> +void stm32_firewall_controller_unregister(struct stm32_firewall_controller *firewall_controller)
-> +{
-> +	struct stm32_firewall_controller *ctrl, *tmp;
-> +	bool controller_removed = false;
-> +
-> +	if (!firewall_controller) {
-> +		pr_debug("Null reference while unregistering firewall controller");
-> +		return;
-> +	}
-> +
-> +	mutex_lock(&firewall_controller_list_lock);
-> +	list_for_each_entry_safe(ctrl, tmp, &firewall_controller_list, entry) {
-> +		if (ctrl == firewall_controller) {
-> +			controller_removed = true;
-> +			list_del_init(&ctrl->entry);
-> +			break;
-> +		}
-> +	}
-> +	mutex_unlock(&firewall_controller_list_lock);
-> +
-> +	if (!controller_removed)
-> +		pr_debug("There was no firewall controller named %s to unregister",
-> +			 dev_name(firewall_controller->dev));
-> +}
-> +
-> +void stm32_firewall_populate_bus(struct stm32_firewall_controller *firewall_controller)
-> +{
-> +	struct device_node *child;
-> +	struct device *parent;
-> +	u32 firewall_id;
-> +	int err;
-> +
-> +	parent = firewall_controller->dev;
-> +
-> +	dev_dbg(parent, "Populating %s system bus\n", dev_name(firewall_controller->dev));
-> +
-> +	for_each_available_child_of_node(dev_of_node(parent), child) {
-> +		err = stm32_firewall_get_id(child, &firewall_id);
-> +		if (err < 0 ||
-> +		    firewall_controller->grant_access(firewall_controller, firewall_id)) {
-> +			/*
-> +			 * Peripheral access not allowed or not defined.
-> +			 * Mark the node as populated so platform bus won't probe it
-> +			 */
-> +			of_node_set_flag(child, OF_POPULATED);
-> +			dev_err(parent, "%s: Device driver will not be probed\n",
-> +				child->full_name);
-> +		}
-> +	}
-> +}
-> diff --git a/drivers/bus/stm32_firewall.h b/drivers/bus/stm32_firewall.h
-> new file mode 100644
-> index 000000000000..8d92e8c1ab77
-> --- /dev/null
-> +++ b/drivers/bus/stm32_firewall.h
-> @@ -0,0 +1,83 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> +/*
-> + * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
-> + */
-> +
-> +#ifndef _STM32_FIREWALL_H
-> +#define _STM32_FIREWALL_H
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/list.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/types.h>
-> +
-> +/**
-> + * STM32_PERIPHERAL_FIREWALL:		This type of firewall protects peripherals
-> + * STM32_MEMORY_FIREWALL:		This type of firewall protects memories/subsets of memory
-> + *					zones
-> + * STM32_RESOURCE_FIREWALL:		This type of firewall protects internal resources
-> + * STM32_NOTYPE_FIREWALL:		Undefined firewall type
-> + */
-> +
-> +#define STM32_PERIPHERAL_FIREWALL	BIT(1)
-> +#define STM32_MEMORY_FIREWALL		BIT(2)
-> +#define STM32_RESOURCE_FIREWALL		BIT(3)
-> +#define STM32_NOTYPE_FIREWALL		BIT(4)
-> +
-> +/**
-> + * struct stm32_firewall_controller - Information on firewall controller supplying services
-> + *
-> + * @name			Name of the firewall controller
-> + * @dev				Device reference of the firewall controller
-> + * @mmio			Base address of the firewall controller
-> + * @entry			List entry of the firewall controller list
-> + * @type			Type of firewall
-> + * @max_entries			Number of entries covered by the firewall
-> + * @grant_access		Callback used to grant access for a device access against a
-> + *				firewall controller
-> + * @release_access		Callback used to release resources taken by a device when access was
-> + *				granted
-> + * @grant_memory_range_access	Callback used to grant access for a device to a given memory region
-> + */
-> +struct stm32_firewall_controller {
-> +	const char *name;
-> +	struct device *dev;
-> +	void __iomem *mmio;
-> +	struct list_head entry;
-> +	unsigned int type;
-> +	unsigned int max_entries;
-> +
-> +	int (*grant_access)(struct stm32_firewall_controller *ctrl, u32 id);
-> +	void (*release_access)(struct stm32_firewall_controller *ctrl, u32 id);
-> +	int (*grant_memory_range_access)(struct stm32_firewall_controller *ctrl, phys_addr_t paddr,
-> +					 size_t size);
-> +};
-> +
-> +/**
-> + * int stm32_firewall_controller_register - Register a firewall controller to the STM32 firewall
-> + *					    framework
-> + * @firewall_controller		Firewall controller to register
-> + *
-> + * Returns 0 in case of success or -ENODEV if no controller was given.
-> + */
-> +int stm32_firewall_controller_register(struct stm32_firewall_controller *firewall_controller);
-> +
-> +/**
-> + * int stm32_firewall_controller_unregister - Unregister a firewall controller from the STM32
-> + *					      firewall framework
-> + * @firewall_controller		Firewall controller to unregister
-> + */
-> +void stm32_firewall_controller_unregister(struct stm32_firewall_controller *firewall_controller);
-> +
-> +/**
-> + * stm32_firewall_populate_bus - Populate device tree nodes that have a correct firewall
-> + *				 configuration. This is used at boot-time only, as a sanity check
-> + *				 between device tree and firewalls hardware configurations to
-> + *				 prevent a kernel crash when a device driver is not granted access
-> + *
-> + * @firewall_controller		Firewall controller which nodes will be populated or not
-> + */
-> +void stm32_firewall_populate_bus(struct stm32_firewall_controller *firewall_controller);
-> +
-> +#endif /* _STM32_FIREWALL_H */
-> diff --git a/include/linux/bus/stm32_firewall_device.h b/include/linux/bus/stm32_firewall_device.h
-> new file mode 100644
-> index 000000000000..ccaecea7fc6c
-> --- /dev/null
-> +++ b/include/linux/bus/stm32_firewall_device.h
-> @@ -0,0 +1,134 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> +/*
-> + * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
-> + */
-> +
-> +#ifndef STM32_FIREWALL_DEVICE_H
-> +#define STM32_FIREWALL_DEVICE_H
-> +
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/types.h>
-> +
-> +#define STM32_FIREWALL_MAX_EXTRA_ARGS		5
-> +
-> +/* Opaque reference to stm32_firewall_controller */
-> +struct stm32_firewall_controller;
-> +
-> +/**
-> + * stm32_firewall - Information on a device's firewall. Each device can have more than one firewall.
-> + *
-> + * @firewall_ctrl		Pointer referencing a firewall controller of the device. It is
-> + *				opaque so a device cannot manipulate the controller's ops or access
-> + *				the controller's data
-> + * @extra_args			Extra arguments that are implementation dependent
-> + * @extra_args_size		Number of extra arguments
-> + * @firewall_id			Firewall ID associated the device for this firewall controller
-> + */
-> +struct stm32_firewall {
-> +	struct stm32_firewall_controller *firewall_ctrl;
-> +	u32 extra_args[STM32_FIREWALL_MAX_EXTRA_ARGS];
-> +	size_t extra_args_size;
-> +	u32 firewall_id;
-> +};
-> +
-> +#if IS_ENABLED(CONFIG_STM32_FIREWALL)
-> +/**
-> + * stm32_firewall_get_firewall - Get the firewall(s) associated to given device.
-> + *				 The firewall controller reference is always the first argument
-> + *				 of the feature-domains property.
-> + *				 The firewall ID is always the second argument of the
-> + *				 feature-domains property.
-> + *
-> + * @np				Device node to parse
-> + * @firewall			Resulting firewall reference(s)
-> + *
-> + * Returns 0 on success, -ENODEV if there's no match with a firewall controller or appropriate errno
-> + * code if error occurred.
-> + */
-> +int stm32_firewall_get_firewall(struct device_node *np, struct stm32_firewall *firewall);
-> +
-> +/**
-> + * stm32_firewall_grant_access - Request firewall access rights and grant access.
-> + *
-> + * @firewall			Firewall reference containing the ID to check against its firewall
-> + *				controller
-> + *
-> + * Returns 0 if access is granted, -EACCES if access is denied, -ENODEV if firewall is null or
-> + * appropriate errno code if error occurred
-> + */
-> +int stm32_firewall_grant_access(struct stm32_firewall *firewall);
-> +
-> +/**
-> + * stm32_firewall_release_access - Release access granted from a call to
-> + *				   stm32_firewall_grant_access().
-> + *
-> + * @firewall			Firewall reference containing the ID to check against its firewall
-> + *				controller
-> + */
-> +void stm32_firewall_release_access(struct stm32_firewall *firewall);
-> +
-> +/**
-> + * stm32_firewall_grant_access_by_id - Request firewall access rights of a given device
-> + *				       based on a specific firewall ID
-> + *
-> + * Warnings:
-> + * There is no way to ensure that the given ID will correspond to the firewall referenced in the
-> + * device node if the ID did not come from stm32_firewall_get_firewall(). In that case, this
-> + * function must be used with caution.
-> + * This function should be used for subsystem resources that do not have the same firewall ID
-> + * as their parent.
-> + * U32_MAX is an invalid ID.
-> + *
-> + * @firewall			Firewall reference containing the firewall controller
-> + * @subsystem_id		Firewall ID of the subsystem resource
-> + *
-> + * Returns 0 if access is granted, -EACCES if access is denied, -ENODEV if firewall is null or
-> + * appropriate errno code if error occurred
-> + */
-> +int stm32_firewall_grant_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id);
-> +
-> +/**
-> + * stm32_firewall_release_access_by_id - Release access granted from a call to
-> + *					 stm32_firewall_grant_access_by_id().
-> + *
-> + * Warnings:
-> + * There is no way to ensure that the given ID will correspond to the firewall referenced in the
-> + * device node if the ID did not come from stm32_firewall_get_firewall(). In that case, this
-> + * function must be used with caution.
-> + * This function should be used for subsystem resources that do not have the same firewall ID
-> + * as their parent.
-> + * U32_MAX is an invalid ID.
-> + *
-> + * @firewall			Firewall reference containing the firewall controller
-> + * @subsystem_id		Firewall ID of the subsystem resource
-> + */
-> +void stm32_firewall_release_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id);
-> +
-> +#else /* CONFIG_STM32_FIREWALL */
-> +
-> +int stm32_firewall_get_firewall(struct device_node *np, struct stm32_firewall *firewall)
-> +{
-> +	return -ENODEV;
-> +}
-> +
-> +int stm32_firewall_grant_access(struct stm32_firewall *firewall)
-> +{
-> +	return -ENODEV;
-> +}
-> +
-> +void stm32_firewall_release_access(struct stm32_firewall *firewall)
-> +{
-> +}
-> +
-> +int stm32_firewall_grant_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id)
-> +{
-> +	return -ENODEV;
-> +}
-> +
-> +void stm32_firewall_release_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id)
-> +{
-> +}
-> +
-> +#endif /* CONFIG_STM32_FIREWALL */
-> +#endif /* STM32_FIREWALL_DEVICE_H */
-> -- 
-> 2.25.1
-> 
+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
+YVhHgdTTB3aAzFyz4UFRLwxCzIG7d7GIiB9MoLImssS08R5WQ5EJCd1fAF6iefLupAn/plPmn2w0
+GF8bLF/FhwOn8jObLW5pQiKhjQSv3QIDAQABo4IB1TCCAdEwDgYDVR0PAQH/BAQDAgWgMIGjBggr
+BgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9j
+YWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVodHRwOi8v
+b2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNVHSAERjBE
+MEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20v
+cmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3JsLmdsb2Jh
+bHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAfBgNVHREEGDAWgRRyYXku
+anVpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdb
+NHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIScG7uNJuCYBQieQC+eonQS9tdkwDQYJKoZIhvcNAQEL
+BQADggEBAGLwq/sDtwLmkAa5/UpIG4o5HA9EH7SaYi05EUlzrDdIeZsJnXDkxmG9144wNZBbndHx
+nKXRnpJjCX4jhZeNQFyY4m5c9c8bMytO4zb8XUJIxCjqkhtukJtqHieEogwGsmZlpOxt6Ucc2JXg
+6oTTbyITD4Bvn7cFb7EI2FBcT7K8bf8AvwtNLl/dKYtUA/nEvVhjqp0wsDL3t//Q3GTwGWZB41gf
+LC04V6gD9TVFl7i/N48Gu8PzTt4Kt0SZvBr7kQ9PKi7DVyXe23Ou89QVflaja3bPjt2UZCyq0JxJ
+Nu5SjFDWjKlBCzbLDGkCBlM4DpjAb0y4MyKOsiVv7vIxNlYxggJtMIICaQIBATBrMFsxCzAJBgNV
+BAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdD
+QyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwcAgHcg4j27cIp1UUwDQYJYIZIAWUDBAIBBQCg
+gdQwLwYJKoZIhvcNAQkEMSIEIPcyTFCJKpokM2M7YfqnANwWWbBUtPriWfZT+rSjzt/IMBgGCSqG
+SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDcwNjE3MDE1MFowaQYJKoZI
+hvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
+9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEF
+AASCAQBehjrZq3QQa0ONZxa50dZgK2zP08KrOWFE0EnVe3JAl2kEhigjO8/8Hii4ZSMMoAUD5DWT
+TCcJGPe7FoUjJQb40AVLcotCfRJxVm9VI9nI1yQO+qsIncF+mYGFLi05Ai34ysS+fFCqaYT3ZSkw
+rtcY33TdWyba6XS89g8XfBFN3smjVZdrZeT3Df93x/pyJIFfo9mmaZRR/tM1YzhFwB3dh4ykc0Yk
+1U4CiHpdDTR8xFdyWCeCAWOvTJ/zrAPdFPH+US3SmnzTpJ+3ydYlxaFI4C9U4YuUGYGk9erPZ2ap
+yJurVjOEp7RLNothTPdc2JMENT7Vxp8GZ3/i2GrCI9Ui
+--000000000000f49d1905ffd4786d--
