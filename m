@@ -2,43 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEB37493BA
-	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jul 2023 04:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF637493BD
+	for <lists+linux-i2c@lfdr.de>; Thu,  6 Jul 2023 04:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbjGFC1X (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 5 Jul 2023 22:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
+        id S232138AbjGFC2N (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 5 Jul 2023 22:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbjGFC1X (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 22:27:23 -0400
+        with ESMTP id S229793AbjGFC2M (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 5 Jul 2023 22:28:12 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5F2DA;
-        Wed,  5 Jul 2023 19:27:22 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QxL3Z4H4pz6J7DC;
-        Thu,  6 Jul 2023 10:25:30 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AD3DA;
+        Wed,  5 Jul 2023 19:28:12 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QxL2k6Lxxz67Nsw;
+        Thu,  6 Jul 2023 10:24:46 +0800 (CST)
 Received: from localhost (10.34.206.101) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 6 Jul
- 2023 03:27:19 +0100
-Date:   Thu, 6 Jul 2023 10:27:15 +0800
+ 2023 03:28:07 +0100
+Date:   Thu, 6 Jul 2023 10:28:03 +0800
 From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To:     Paul Cercueil <paul@crapouillou.net>
 CC:     Wolfram Sang <wsa@kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 08/23] i2c: hix5hd2: Remove #ifdef guards for PM related
+        <linux-kernel@vger.kernel.org>, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH 09/23] i2c: i801: Remove #ifdef guards for PM related
  functions
-Message-ID: <20230706102715.000038b1@Huawei.com>
-In-Reply-To: <20230705204314.89800-9-paul@crapouillou.net>
+Message-ID: <20230706102803.00005eee@Huawei.com>
+In-Reply-To: <20230705204314.89800-10-paul@crapouillou.net>
 References: <20230705204314.89800-1-paul@crapouillou.net>
-        <20230705204314.89800-9-paul@crapouillou.net>
+        <20230705204314.89800-10-paul@crapouillou.net>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
 Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.34.206.101]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -50,7 +50,7 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed,  5 Jul 2023 22:42:59 +0200
+On Wed,  5 Jul 2023 22:43:00 +0200
 Paul Cercueil <paul@crapouillou.net> wrote:
 
 > Use the new PM macros for the suspend and resume functions to be
@@ -60,12 +60,6 @@ Paul Cercueil <paul@crapouillou.net> wrote:
 > This has the advantage of always compiling these functions in,
 > independently of any Kconfig option. Thanks to that, bugs and other
 > regressions are subsequently easier to catch.
-> 
-> Note that this driver should probably use the
-> DEFINE_RUNTIME_DEV_PM_OPS() macro, which would allow the devices to be
-> runtime-suspended on system suspend.
-Agreed - if anyone can test that good to do it as a follow up
-as it's a functional change.
 > 
 > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
