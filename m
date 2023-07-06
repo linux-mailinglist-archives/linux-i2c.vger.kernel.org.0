@@ -2,54 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D355474A765
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jul 2023 01:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 127C474A77F
+	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jul 2023 01:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjGFXF7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 6 Jul 2023 19:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
+        id S229507AbjGFXTd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 6 Jul 2023 19:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjGFXF6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jul 2023 19:05:58 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650361737
-        for <linux-i2c@vger.kernel.org>; Thu,  6 Jul 2023 16:05:56 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8ad356fe4so7266285ad.2
-        for <linux-i2c@vger.kernel.org>; Thu, 06 Jul 2023 16:05:56 -0700 (PDT)
+        with ESMTP id S230362AbjGFXTd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 6 Jul 2023 19:19:33 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B921BC3
+        for <linux-i2c@vger.kernel.org>; Thu,  6 Jul 2023 16:19:31 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-635e54e22d6so9246446d6.2
+        for <linux-i2c@vger.kernel.org>; Thu, 06 Jul 2023 16:19:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1688684756; x=1691276756;
+        d=broadcom.com; s=google; t=1688685571; x=1691277571;
         h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=kgIZl28ZqGF5ftfOyzWvBX5NrnGgq48OaKJN2aHQafE=;
-        b=IKCdsUSA2IL1jQzF2gbU7+9qbXtQt/wTSCsk9FlruKhmpFFcNAJ79v+llvFNBghCbw
-         t9mXUbc+/QIp9Bgr9qmZCrAfyalJqcpRbchoOCw7NNMyCOdhaVKj3LTiE5WNtp2Y0dmM
-         48/ORhxRZ1zCfS98lDF6aXToW97+UI3W+0sDI=
+        bh=hQ7muwG3TkYR9PrUVWGBd1Otj3q5y/bXr6MR4yOWqOQ=;
+        b=IgkepAe//KjTXFpQuuZZE0Y9UwXXw9aBPMByYmlOYhZAJXe6RhTGxNdpZ/bI9ZIosk
+         fJfrVRP+/VUfqsE1nwD21kh/oAecxe5acxxI0I3iUE6UonsQ5pbp0wPxEbN37dxlwLya
+         2ojoUe7QXF9yoecL2TeugGWExjkMTBFfH5GCc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688684756; x=1691276756;
+        d=1e100.net; s=20221208; t=1688685571; x=1691277571;
         h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kgIZl28ZqGF5ftfOyzWvBX5NrnGgq48OaKJN2aHQafE=;
-        b=c5/MflbF/Cos9CQSIIgT0kdLU4CR+T4QLNJ4kfrbYpchcB2n0s2blQ5DcrN7mEUZQi
-         rrmt6IMVcf1Yz8Jfjlll4BPxrEyueP7XPJg6E82UFE8uWFx3fEEp1XxDuhoNMN7/EI63
-         PWDxUtvlQp8NDqKShSRx+hfBuTdguIr/5YZIZu6xe94SSurTSdRZWhDFlfyISZi5WxL8
-         lOkDUFOZCAw+ynjGCpG1xokcc2zLupH9ZY7vwYNv4bK785B4GBkyEVBNYhNvNjVmWSbH
-         LbYtgEIM3mWVBT4jYAZQ238dzukXN/CzO866H2GoPMJ04uvhib156TO8wg1l3JfqXNX+
-         IvFw==
-X-Gm-Message-State: ABy/qLaTuZztT7oIZn9Ks60Nv/OorZkmbzsRPDlvg6e4JhsrU+M5qN1b
-        5g8whCrm+s/ENWLTW2IMGmGERg==
-X-Google-Smtp-Source: APBJJlHaqsUa8BHCaF6EfQZDp4Dnq002Nf5Yedyr6qvDbRuuVKDKm/j+oD1hSqhbDIU911i7F0qTGw==
-X-Received: by 2002:a17:902:ce8b:b0:1af:b957:718b with SMTP id f11-20020a170902ce8b00b001afb957718bmr2933808plg.39.1688684755779;
-        Thu, 06 Jul 2023 16:05:55 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.161.248])
-        by smtp.gmail.com with ESMTPSA id m6-20020a170902db0600b001b016313b1dsm1914675plx.86.2023.07.06.16.05.53
+        bh=hQ7muwG3TkYR9PrUVWGBd1Otj3q5y/bXr6MR4yOWqOQ=;
+        b=amJam01uXhFQz6yKOhDBCGjBe5Cu98fXVZ+jghd80VejgbwG033IsUDwyhUsIncYRM
+         IZvOB6+FvJrQrU+MTeSRbezcB10u9WMQO1EycwnlH2X4E3DGL8K4QkFUFIRVp+NrbMu2
+         WNNvJERLQ24dF1oQkKPVx8eQHqFAqLPduV/edIHdyzQUtEOE4uagVkg4+ZCxymyvkNHS
+         8fYIcf0W4z5Uhp1NyjBNxjZbAxKbt+Qa1Po8MzXMTxOziDBW6jBjqxO8qxKHtqD7E8r6
+         EE2LSN86HbznRaQgyG6AIadGgXZ/zVb5IC/a0rmaqvU7G4Wf4c7rmgRhbtP1Cv04k/vw
+         RlzQ==
+X-Gm-Message-State: ABy/qLYCa46u+tLnXqVs6vkTBXLmJPQ8ouY6GWfKkKt7ZUst8Q6AwaGS
+        e7L31OJiGu3E1Tvy/lx1NCW0Xg==
+X-Google-Smtp-Source: APBJJlEKz0oCncN98+0t9WWh6lKRQD7FmM3+bXwt27Xu72YxRa0Mqs6PLxQCCxYH/wRwrTMehIWsoQ==
+X-Received: by 2002:a0c:b71a:0:b0:636:8476:7a3e with SMTP id t26-20020a0cb71a000000b0063684767a3emr2682442qvd.36.1688685570542;
+        Thu, 06 Jul 2023 16:19:30 -0700 (PDT)
+Received: from [10.136.64.163] ([192.19.161.248])
+        by smtp.gmail.com with ESMTPSA id k19-20020a0cf293000000b00630173b9a7asm1406194qvl.71.2023.07.06.16.19.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 16:05:54 -0700 (PDT)
-Message-ID: <87f34cb7-6cd2-32b4-7668-e4851e4788ff@broadcom.com>
-Date:   Thu, 6 Jul 2023 16:02:39 -0700
+        Thu, 06 Jul 2023 16:19:29 -0700 (PDT)
+Message-ID: <499444bd-3699-edbc-d6c6-748d24a2387a@broadcom.com>
+Date:   Thu, 6 Jul 2023 16:19:26 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
 Subject: Re: [PATCH RESEND] i2c: bcm-iproc: Fix bcm_iproc_i2c_isr deadlock
  issue
 To:     Chengfeng Ye <dg573847474@gmail.com>, andi.shyti@kernel.org,
@@ -57,10 +57,11 @@ To:     Chengfeng Ye <dg573847474@gmail.com>, andi.shyti@kernel.org,
 Cc:     bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20230706211414.10660-1-dg573847474@gmail.com>
-From:   Scott Branden <scott.branden@broadcom.com>
-In-Reply-To: <20230706211414.10660-1-dg573847474@gmail.com>
+ <CAAo+4rW1kmiVGbGxMUBsggQiY7dpOTUq+t6B=QTrikwBp72Kkw@mail.gmail.com>
+From:   Ray Jui <ray.jui@broadcom.com>
+In-Reply-To: <CAAo+4rW1kmiVGbGxMUBsggQiY7dpOTUq+t6B=QTrikwBp72Kkw@mail.gmail.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000073c9705ffd98f12"
+        boundary="0000000000009a9fe605ffd9bf7d"
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -71,73 +72,45 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
---000000000000073c9705ffd98f12
+--0000000000009a9fe605ffd9bf7d
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Some comments inline
 
-On 2023-07-06 14:14, Chengfeng Ye wrote:
-> iproc_i2c_rd_reg and iproc_i2c_wr_reg are called from both
-> interrupt context (e.g. bcm_iproc_i2c_isr) and process context
-> (e.g. bcm_iproc_i2c_suspend). Therefore, interrupts should be
-> disabled to avoid potential deadlock. To prevent this scenario,
-> use spin_lock_irqsave.
-> 
-Add Fixes: tag here.
-> Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
-> ---
->   drivers/i2c/busses/i2c-bcm-iproc.c | 10 ++++++----
->   1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-> index 85d8a6b04885..d02245e4db8c 100644
-> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
-> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-> @@ -233,13 +233,14 @@ static inline u32 iproc_i2c_rd_reg(struct bcm_iproc_i2c_dev *iproc_i2c,
->   				   u32 offset)
->   {
->   	u32 val;
-> +	unsigned long flags;
->   
->   	if (iproc_i2c->idm_base) {
-> -		spin_lock(&iproc_i2c->idm_lock);
-> +		spin_lock_irqsave(&iproc_i2c->idm_lock, flags);
->   		writel(iproc_i2c->ape_addr_mask,
->   		       iproc_i2c->idm_base + IDM_CTRL_DIRECT_OFFSET);
->   		val = readl(iproc_i2c->base + offset);
-> -		spin_unlock(&iproc_i2c->idm_lock);
-> +		spin_unlock_irqrestore(&iproc_i2c->idm_lock, flags);
->   	} else {
->   		val = readl(iproc_i2c->base + offset);
->   	}
-> @@ -250,12 +251,13 @@ static inline u32 iproc_i2c_rd_reg(struct bcm_iproc_i2c_dev *iproc_i2c,
->   static inline void iproc_i2c_wr_reg(struct bcm_iproc_i2c_dev *iproc_i2c,
->   				    u32 offset, u32 val)
->   {
-> +	unsigned long flags;
-Add newline after variable declarations.
->   	if (iproc_i2c->idm_base) {
-> -		spin_lock(&iproc_i2c->idm_lock);
-> +		spin_lock_irqsave(&iproc_i2c->idm_lock, flags);
->   		writel(iproc_i2c->ape_addr_mask,
->   		       iproc_i2c->idm_base + IDM_CTRL_DIRECT_OFFSET);
->   		writel(val, iproc_i2c->base + offset);
-> -		spin_unlock(&iproc_i2c->idm_lock);
-> +		spin_unlock_irqrestore(&iproc_i2c->idm_lock, flags);
->   	} else {
->   		writel(val, iproc_i2c->base + offset);
->   	}
 
---000000000000073c9705ffd98f12
+On 7/6/2023 2:21 PM, Chengfeng Ye wrote:
+> Hi Ray and Wolfram,
+> 
+>> I can't apply it, what version is this against?
+> 
+> The patch is based on 6.4-rc7. I resend the patch with this
+> email because I had some problems setting up the previous
+> one with git send-email. That patch was manually pasted
+> so that might be the reason for not being able to be applied.
+> 
+> Best Regards,
+> Chengfeng
+
+I saw your latest patch. You should use prefix of [PATCH V2]
+instead of [PATCH RESEND].
+
+Also, can you please add the fix tag I identified to your commit
+message. That will save Wolfram some
+manual work.
+
+Thanks,
+
+Ray
+
+--0000000000009a9fe605ffd9bf7d
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Description: S/MIME Cryptographic Signature
 
-MIIQcAYJKoZIhvcNAQcCoIIQYTCCEF0CAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg3HMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+MIIQXgYJKoZIhvcNAQcCoIIQTzCCEEsCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg21MIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
 VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
 AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
 AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
@@ -175,39 +148,39 @@ M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
 Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
 14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
 a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBU8wggQ3oAMCAQICDE8D4z4BAwwalmdsKzANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+XzCCBT0wggQloAMCAQICDBwCAdyDiPbtwinVRTANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
 RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAwODI1MjdaFw0yNTA5MTAwODI1MjdaMIGQ
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAwODI1MTRaFw0yNTA5MTAwODI1MTRaMIGE
 MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xFjAUBgNVBAMTDVNjb3R0IEJyYW5kZW4xKTAnBgkqhkiG9w0B
-CQEWGnNjb3R0LmJyYW5kZW5AYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
-CgKCAQEAo9mbREkJi8J8/NvDSl+KmH869odu/YFwp7LkXV52nkAZznm/6vzgb7tdMBnn4cZQIJGg
-isZ47sSEh2m9VKwWdhtE3MI4itH9gKR2K3s6FyeRSCeHbwTVDbGrVs0qojGSmql4Kc7EiCAZy/wt
-HZVH6VyfFeFxWtznSR328toXCPFoC3IpoftevI5YA1bS7e9cKoaYScAE/6vsJmImxQR/5Dc5Lu90
-aon9PduLGVgSMfiFb2nQ2w0PzDSefbrZKRQAGcSvcQlWb8XU7YKGbLhjR9c/r3KF4iUW8w2T2pd+
-bO6aQXt8b1C9YG/V+B65TuJXxgX0veIJEyP+Cl0Im5vNwwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRpzY290dC5icmFuZGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU8+MSO/sprODwb9D5cjaq
-JNiLqgkwDQYJKoZIhvcNAQELBQADggEBAA25uPHwC95BhvFXuEOAk+J5FZV4v82uly/X7LATDzrf
-tsww461GRAidKV8lvziiIw6OQQgO9Ei/yC8bVdzDLQJF2PhxcWhc+4II6AkUyRC+Tmfk7xmPEYSv
-MHgQfpwPU6C1o4FI/8XjfJgk1dE4j4v16iLKC2qfBqfdzdT/cJaCg/fZfL0w5RLtGOOVIMBWwObx
-UKmtYSCgcvRKmLailjlxgiUaYgxdZSpwR0RvFJapt0KzMR5OIP96iyXYVWbl9qy8uY9gqEeNaaQm
-Bt8T4oEXHxRvse+Ij162RjEysEsDgkiE/koCb3YFlkVu5lL1N0M7EIo+XiuWWUEjuhztPasxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxPA+M+AQMMGpZn
-bCswDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIiRLpsP8ZyT1gh1pzu0OUy0JLQa
-jfdyDUt/LYV13PmOMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDcwNjIzMDU1NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCTPKqFsfWNFW8fiZcu4WheHYLCp02bm3wqpGGhRj0yl3xv
-ljrPxLntEcKmMywg4WxU/22V5+th6MPuLpDpMDcyEOeq+K130auHcidGL/tT9fE6I7oyao7gG3MX
-SxSIGoFQKU+8hAWLlAcsFcZr3pilh5p0s+Zf//HjN7i5GgqZMLb1nrbcVb7S97FZHB/e4JUJOCpj
-T4jWcYyGXdaCZoa9jI/qESKDPyV/brIyDThRMTf75X9F/d1k/PPyXAeFsoX+XsVhDcVKL5Wa19Go
-FsMpOpJ+XIwRBJx2Gr5oB6LI7UyQcnnaJiccPsza5f5RBeunmRsRPp9PuVLUh0NQVB7t
---000000000000073c9705ffd98f12--
+BgNVBAoTDUJyb2FkY29tIEluYy4xEDAOBgNVBAMTB1JheSBKdWkxIzAhBgkqhkiG9w0BCQEWFHJh
+eS5qdWlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxVog8ECB
+UuLS9+3u1unYu1btuI4N+GpeX0H41mobRa9omPRMJAN8hTIZFZIycnDbZurLHHlVoItP8C9MlQCI
+CmcoLwOAvUUKm04+sR8SQklVhIn3QaHIWTU05rux80BzS1mqtSq0Rg6wOfthqVyrzX4ao8SJ3LnI
+7PmtFaTR1t5BZLBkotM+Kc/+bXTDUptHDQE/OiNh3oTuSHznRxgec+skrwuPSZ4H9WE2m/vqncD5
+YVhHgdTTB3aAzFyz4UFRLwxCzIG7d7GIiB9MoLImssS08R5WQ5EJCd1fAF6iefLupAn/plPmn2w0
+GF8bLF/FhwOn8jObLW5pQiKhjQSv3QIDAQABo4IB1TCCAdEwDgYDVR0PAQH/BAQDAgWgMIGjBggr
+BgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9j
+YWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVodHRwOi8v
+b2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNVHSAERjBE
+MEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20v
+cmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3JsLmdsb2Jh
+bHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAfBgNVHREEGDAWgRRyYXku
+anVpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdb
+NHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIScG7uNJuCYBQieQC+eonQS9tdkwDQYJKoZIhvcNAQEL
+BQADggEBAGLwq/sDtwLmkAa5/UpIG4o5HA9EH7SaYi05EUlzrDdIeZsJnXDkxmG9144wNZBbndHx
+nKXRnpJjCX4jhZeNQFyY4m5c9c8bMytO4zb8XUJIxCjqkhtukJtqHieEogwGsmZlpOxt6Ucc2JXg
+6oTTbyITD4Bvn7cFb7EI2FBcT7K8bf8AvwtNLl/dKYtUA/nEvVhjqp0wsDL3t//Q3GTwGWZB41gf
+LC04V6gD9TVFl7i/N48Gu8PzTt4Kt0SZvBr7kQ9PKi7DVyXe23Ou89QVflaja3bPjt2UZCyq0JxJ
+Nu5SjFDWjKlBCzbLDGkCBlM4DpjAb0y4MyKOsiVv7vIxNlYxggJtMIICaQIBATBrMFsxCzAJBgNV
+BAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdD
+QyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwcAgHcg4j27cIp1UUwDQYJYIZIAWUDBAIBBQCg
+gdQwLwYJKoZIhvcNAQkEMSIEIOGxTEicVY/qS2rShXCLfkuqJ99bjGfvDUn+7bJ0lRivMBgGCSqG
+SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDcwNjIzMTkzMVowaQYJKoZI
+hvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
+9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEF
+AASCAQCuke4UTCsDrdT6j/b8CIQmQzKq78OUO3FowapBAA6nbo/JZXX2zRN8SKH2C00dDlk/vmUJ
+w3TYD80sgTJCS50GBaQJMYL+rrPjKa6vKOu5ABic8CxdTzeyQqWKR7ZsgXllDFkTDIVn142Hqb/l
+eOBkM0DKqx+8vbwX90osqz7FgE8nMDEVEzchQPGoEzJ1ZXR5CjSp2fdQIMt40nI8fqVq/PzMsump
+QvxDt8LV+7ye9qb4clGNWvaVBhO4tPyL1q9u5316RgatMmDtQsyZAQFk8x4Bx6CzaI+rskSWC2rY
+iX7LgmrJqAmnlbjJbBlBK1PlwisJmrRlXWtQymePCvdL
+--0000000000009a9fe605ffd9bf7d--
