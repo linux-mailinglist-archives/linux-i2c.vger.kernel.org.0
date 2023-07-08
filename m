@@ -2,136 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D02E074BCFF
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jul 2023 11:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B83474BF15
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jul 2023 22:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjGHJNR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Jul 2023 05:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
+        id S230325AbjGHUI2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Jul 2023 16:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjGHJNP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Jul 2023 05:13:15 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B59919BD;
-        Sat,  8 Jul 2023 02:13:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1688807592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=puPcf+V/6sYMK2fF/csgHvd5WcNj3g1IOwnH/eQ0e6M=;
-        b=EpaY7FBThokHiE8Qntc3o9lFnB+3/fuOCESW6gkkOmtKmEi+KCT4Ys1priFKiTWy4K3qxk
-        LfUcRfcM4a4q2f7cnUrw51s8MMeUWfwgQc966yjhMivIVz/ID40hLXtZnnCUhvoUJXRcKB
-        IqvxzBGA07h9B29szX9JcnGB8Vv5IoQ=
-Message-ID: <180fece4bfe6084c740b8f73cc040d269b0f8968.camel@crapouillou.net>
-Subject: Re: [PATCH 11/23] i2c: kempld: Remove #ifdef guards for PM related
- functions
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 08 Jul 2023 11:13:11 +0200
-In-Reply-To: <20230706103737.00007497@Huawei.com>
-References: <20230705204314.89800-1-paul@crapouillou.net>
-         <20230705204314.89800-12-paul@crapouillou.net>
-         <20230706103737.00007497@Huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229549AbjGHUI1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Jul 2023 16:08:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D141BF;
+        Sat,  8 Jul 2023 13:08:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F4B760B37;
+        Sat,  8 Jul 2023 20:08:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 97759C433CA;
+        Sat,  8 Jul 2023 20:08:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688846905;
+        bh=LcY1qvy9P41BUybqlDn8q578rWBLu/xQ79M9Beib7Dg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=EiVs92kmqByDkZc8mg0Ujl5AKdHnJ+j39jsUgSyXHvw6u8ZvbwoVtbsI0O7GOajnz
+         N6OhpQ7JM7dyf1LKGTlzBDTmhV6jx2qe9FetikYb1xIpg/nbSbE5PYs4+CLYetIH5t
+         5SxwgFtoUk0cURKhE2KdBMjy4+B54Bas5dUagterpxRT2/oJK6obG6m6KCHmIT0vc0
+         lh29Q/IeRbZpWpbAQG1v4VrNA370YwshzpnBBY2iyMG+qevk4megsUkCNNh78gxe2h
+         IG13SIQT0xBy6uOTNLsY6/DgZvZvRIayz8anZl3JImnYkU4r5vTZsyY+SW5/KEVE3v
+         Z+PZwerq5usPA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8538DC4167B;
+        Sat,  8 Jul 2023 20:08:25 +0000 (UTC)
+Subject: Re: [PULL REQUEST] i2c-for-6.5-rc1-part2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZKhup2kTPKNKm2sW@ninjato>
+References: <ZKhup2kTPKNKm2sW@ninjato>
+X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZKhup2kTPKNKm2sW@ninjato>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.5-rc1-part2
+X-PR-Tracked-Commit-Id: 6537ed3904a3b3720e5e238dd5d542448fcf94c2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 84dc5aa3f0d861281d353e4b7f4ea03da31e9aba
+Message-Id: <168884690554.10103.2502624043872731600.pr-tracker-bot@kernel.org>
+Date:   Sat, 08 Jul 2023 20:08:25 +0000
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andi Shyti <andi.shyti@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Jonathan,
+The pull request you sent on Fri, 7 Jul 2023 21:59:35 +0200:
 
-Le jeudi 06 juillet 2023 =C3=A0 10:37 +0800, Jonathan Cameron a =C3=A9crit=
-=C2=A0:
-> On Wed,=C2=A0 5 Jul 2023 22:43:02 +0200
-> Paul Cercueil <paul@crapouillou.net> wrote:
->=20
-> > Use the new PM macros for the suspend and resume functions to be
-> > automatically dropped by the compiler when CONFIG_PM or
-> > CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
-> >=20
-> > This has the advantage of always compiling these functions in,
-> > independently of any Kconfig option. Thanks to that, bugs and other
-> > regressions are subsequently easier to catch.
-> >=20
-> > Note that the driver should most likely be updated to use the
-> > platform_driver.driver.pm.{suspend,resume} callbacks.
->=20
-> Agreed.=C2=A0 In this particular case I'd be tempted to do that first
-> so that we don't introduce pm_ptr() usage for these hooks.
-> Look at the platform device core, I suspect they should be
-> pm_sleep_ptr()
-> but not 100% sure.
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.5-rc1-part2
 
-Ok, I'll just convert it then, the diff won't be much bigger.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/84dc5aa3f0d861281d353e4b7f4ea03da31e9aba
 
-Cheers,
--Paul
+Thank you!
 
-> Jonathan
->=20
-> >=20
-> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > ---
-> > =C2=A0drivers/i2c/busses/i2c-kempld.c | 9 ++-------
-> > =C2=A01 file changed, 2 insertions(+), 7 deletions(-)
-> >=20
-> > diff --git a/drivers/i2c/busses/i2c-kempld.c
-> > b/drivers/i2c/busses/i2c-kempld.c
-> > index 281058e3ea46..cb61e7b9202c 100644
-> > --- a/drivers/i2c/busses/i2c-kempld.c
-> > +++ b/drivers/i2c/busses/i2c-kempld.c
-> > @@ -350,7 +350,6 @@ static void kempld_i2c_remove(struct
-> > platform_device *pdev)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0i2c_del_adapter(&i2c->a=
-dap);
-> > =C2=A0}
-> > =C2=A0
-> > -#ifdef CONFIG_PM
-> > =C2=A0static int kempld_i2c_suspend(struct platform_device *pdev,
-> > pm_message_t state)
-> > =C2=A0{
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct kempld_i2c_data =
-*i2c =3D platform_get_drvdata(pdev);
-> > @@ -377,10 +376,6 @@ static int kempld_i2c_resume(struct
-> > platform_device *pdev)
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> > =C2=A0}
-> > -#else
-> > -#define kempld_i2c_suspend=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0NULL
-> > -#define kempld_i2c_resume=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0NULL
-> > -#endif
-> > =C2=A0
-> > =C2=A0static struct platform_driver kempld_i2c_driver =3D {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.driver =3D {
-> > @@ -388,8 +383,8 @@ static struct platform_driver kempld_i2c_driver
-> > =3D {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0},
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.probe=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D kempld_i2c_probe,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.remove_new=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=3D kempld_i2c_remove,
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.suspend=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D kempld_i2c_suspend,
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.resume=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D kempld_i2c_resume,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.suspend=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D pm_ptr(kempld_i2c_suspend),
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.resume=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D pm_ptr(kempld_i2c_resume),
-> > =C2=A0};
-> > =C2=A0
-> > =C2=A0module_platform_driver(kempld_i2c_driver);
->=20
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
