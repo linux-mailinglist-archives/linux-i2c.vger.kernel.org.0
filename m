@@ -2,255 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035D674B7DE
-	for <lists+linux-i2c@lfdr.de>; Fri,  7 Jul 2023 22:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138DB74BCC7
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jul 2023 10:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjGGUdW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 7 Jul 2023 16:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
+        id S229658AbjGHIOC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Jul 2023 04:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjGGUdV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 7 Jul 2023 16:33:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B1B1986;
-        Fri,  7 Jul 2023 13:33:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        with ESMTP id S229458AbjGHIOA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Jul 2023 04:14:00 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688AEE46
+        for <linux-i2c@vger.kernel.org>; Sat,  8 Jul 2023 01:13:59 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05BCF61A71;
-        Fri,  7 Jul 2023 20:33:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B4ABC433C8;
-        Fri,  7 Jul 2023 20:33:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688761999;
-        bh=6QgMyrqXqeI6SEHa107HdWgEq35vmLXVAeALwcT+lDs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Gx9KJf9fL/mmok1L7S1JEw98F7rQhqcE0z1w8BHJD17srLItsZuymDl+Vh6LuOMqc
-         4alUEBZ5opvgHkrhgxf7bnhwEXvTA+lJ+2wjTvLnBj5RIOrUBEqvzoLMwkvr5kKOo5
-         yISOGrruanfS4vCw4yBo4KjJkpCqE5P53NTnagcHPGIOblr6h6cNsX8ys6OcsyQ0H4
-         qrXgMrqCQhWJISUHikJ+H6A9Rt5IkKe3q5S7a3IgZXRpoKmUEEfF3davdWD0SEJOLF
-         x6HLSMnKxFc6bNn9fzW5yjsdHLXCNjC5gVSA2oPohD58IIKPy37fpI2og6S7rvH4ES
-         9S5gMKOibrioQ==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2b703a0453fso37141861fa.3;
-        Fri, 07 Jul 2023 13:33:19 -0700 (PDT)
-X-Gm-Message-State: ABy/qLZo43p2l+JUdXdAHHLr7x5By9lULZ0gvScQBahF8NzkZ7iGjFNj
-        nBPFbytml/9kUDxgrPNEkwvjdPZ6fJwFGxB1DQ==
-X-Google-Smtp-Source: APBJJlG4YuPBi7t5aJDihdeDntOW9LxmDKsR0D/L3YobFTVh86nYL2PgWf1QDLA9jOV+N7/XaSZs5aykFPftRmtwQjM=
-X-Received: by 2002:a2e:8706:0:b0:2b2:104d:8f89 with SMTP id
- m6-20020a2e8706000000b002b2104d8f89mr5474388lji.0.1688761997303; Fri, 07 Jul
- 2023 13:33:17 -0700 (PDT)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 02D941EC090B;
+        Sat,  8 Jul 2023 10:13:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1688804037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=dS2fzenyP0BX8ZJt91yKjyWhh0EsKLdU+FBzjXw+KV4=;
+        b=AfceIfrPmKttzHI/QKHB9rWmUQtXwxo/NqGrxuueX93lMl0m216bpNg8HfZct44fSwJjVc
+        tGKWe7U9W1/qYrqYrT/i3pxvUC9A6bRiT5j5DIxZgV3uuS4rAM+LbF095PlaR5EUlV3xO8
+        dFYHdvcKb3MLEK7JWGuodH+YRDNesSA=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id NESm3Vyn2Z52; Sat,  8 Jul 2023 08:13:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1688804031; bh=dS2fzenyP0BX8ZJt91yKjyWhh0EsKLdU+FBzjXw+KV4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=T65cEBe00oCandBMyP9jTx85ehUi6xq2E9KYAh8tTxl2N3EqHwIJLNLTBjeQB+kEq
+         XT6TR4ZkPyktreOJ39R+B3zstt6Sj4yejW6yDM9ZAiddhXwsvlBWLH1AngkWZP2Qbs
+         55jZFDBF95cyfhL02qfmj24H5VVGUCzIcZBlwJg2grCCir1h7Gv+U9a04krFvAY0aI
+         elg96OC6Q9XjL7UU1FGxg54nS25WmyrFIeLsAW6T5MjuLLovtwKpTMvydH6JyrO6ub
+         ocQ8zQmADy+u5tDgoVaIQlfMiMRJzZ42LDshE7S6FyD0grAmt/Mh773OKyLsBhXZGU
+         MXOqp0Io5DHJUXmPkOJQj+rHCWaEDwUXUPtB7MZTSWgDPhrdaMAIS0xgm3rn5/hPBZ
+         jsMO3iYzeR4gMIqb0hUupS65Ywx1EKqR6S8NAU/8P9Hj589LybaFHu/kyeTeVUumTn
+         QDKmobgSb0jJvul98t7fWUw7LLJBJ2Jtk824h+H2tykiW850k1M0anqLXPQXs2MBK6
+         GbTdqqP5juGCLXeVDtaCZHVl/uwNzlN0g6qJn4Rg/XoswKohv7Voma6+E1pNYcMz8C
+         HHtzwrWIsK/4JGRirvFKjzFPUSvgj6Nbk9cZiwGwoyQYDNUl55jEJbG/D4Xy29hX1x
+         dRGpzh5U5ayztxrSDJPDN8/4=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B01AE40E0187;
+        Sat,  8 Jul 2023 08:13:49 +0000 (UTC)
+Date:   Sat, 8 Jul 2023 10:13:47 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     linux-i2c@vger.kernel.org
+Cc:     paula@alumni.cse.ucsc.edu
+Subject: [bugzilla-daemon@kernel.org: [Bug 217644] New: Chuwi Gemibook Pro
+ Celeron N5100 touchpad not detected, PNP ID SYNA3602, i2c_designware
+ timeout]
+Message-ID: <20230708081347.GAZKkau6TqG8NjtOju@fat_crate.local>
 MIME-Version: 1.0
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-5-gatien.chevallier@foss.st.com> <875y6vzuga.fsf@epam.com>
- <20230707152724.GA329615-robh@kernel.org> <87sf9zya79.fsf@epam.com>
-In-Reply-To: <87sf9zya79.fsf@epam.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 7 Jul 2023 14:33:04 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJkkT4SZcHj-RLPpDpX+t3Oe6RHyjeBNh4arWbMx-J0Og@mail.gmail.com>
-Message-ID: <CAL_JsqJkkT4SZcHj-RLPpDpX+t3Oe6RHyjeBNh4arWbMx-J0Og@mail.gmail.com>
-Subject: Re: [PATCH 04/10] dt-bindings: treewide: add feature-domains
- description in binding files
-To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
-        Peng Fan <peng.fan@nxp.com>
-Cc:     Gatien Chevallier <gatien.chevallier@foss.st.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "olivier.moysan@foss.st.com" <olivier.moysan@foss.st.com>,
-        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "fabrice.gasnier@foss.st.com" <fabrice.gasnier@foss.st.com>,
-        "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "hugues.fruchet@foss.st.com" <hugues.fruchet@foss.st.com>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "arnd@kernel.org" <arnd@kernel.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Jul 7, 2023 at 10:10=E2=80=AFAM Oleksii Moisieiev
-<Oleksii_Moisieiev@epam.com> wrote:
->
->
-> Hi Rob,
->
-> Rob Herring <robh@kernel.org> writes:
->
-> > On Fri, Jul 07, 2023 at 02:07:18PM +0000, Oleksii Moisieiev wrote:
-> >>
-> >> Gatien Chevallier <gatien.chevallier@foss.st.com> writes:
-> >>
-> >> > feature-domains is an optional property that allows a peripheral to
-> >> > refer to one or more feature domain controller(s).
-> >> >
-> >> > Description of this property is added to all peripheral binding file=
-s of
-> >> > the peripheral under the STM32 firewall controllers. It allows an ac=
-curate
-> >> > representation of the hardware, where various peripherals are connec=
-ted
-> >> > to this firewall bus. The firewall can then check the peripheral acc=
-esses
-> >> > before allowing it to probe.
-> >> >
-> >> > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> >> > ---
-> >> >
-> >> > Disclaimer: Some error with dtbs_check will be observed as I've
-> >> > considered the property to be generic, as Rob asked
-> >> >
-> >> >  Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml  | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/dma/st,stm32-dma.yaml      | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml   | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml      | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 4 ++=
-++
-> >> >  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml  | 4 ++=
-++
-> >> >  .../devicetree/bindings/media/cec/st,stm32-cec.yaml          | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml   | 4 ++=
-++
-> >> >  .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml       | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml  | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml   | 5 ++=
-+++
-> >> >  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml         | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/net/stm32-dwmac.yaml       | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml | 4 ++=
-++
-> >> >  .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml      | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml      | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/serial/st,stm32-uart.yaml  | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml    | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml    | 4 ++=
-++
-> >> >  .../devicetree/bindings/sound/st,stm32-spdifrx.yaml          | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml     | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml      | 4 ++=
-++
-> >> >  Documentation/devicetree/bindings/usb/dwc2.yaml              | 4 ++=
-++
-> >> >  24 files changed, 97 insertions(+)
-> >> >
-> >> > diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.=
-yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> >> > index b767ec72a999..daf8dcaef627 100644
-> >> > --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> >> > +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> >> > @@ -50,6 +50,10 @@ properties:
-> >> >    power-domains:
-> >> >      maxItems: 1
-> >> >
-> >> > +  feature-domains:
-> >> > +    minItems: 1
-> >> > +    maxItems: 3
-> >> > +
-> >>
-> >> I beliewe feature-domains is generic binding. This means that maxItems
-> >> can be implementation dependend. I would rather drop maxItems so the
-> >> following format will be possible:
-> >>
-> >>           feature-domains =3D <&etzpc 1>, <&etzpc 2>, <&some_other_dom=
-ain 1 2 3 4>
-> >>           feature-domain-names =3D "firewall 1", "firewall 2", "other_=
-domain"
-> >
-> > The above already allows this (not -names, but the number of entries).
-> >>
-> >> Also I beliewe driver will handle feature-domain-names property so it
-> >> will parse feature-domains only related to the firewall.
-> >
-> > Now I'm curious. What's an example that's not a firewall?
-> >
-> > (Note I'm still not happy with the naming of 'feature' as anything is a
-> > feature, but that's the least of the issues really.)
-> >
->
-> The alternative usages of feature-domains was originally proposed by me
-> here:
-> https://lore.kernel.org/lkml/c869d2751125181a55bc8a88c96e3a892b42f37a.166=
-8070216.git.oleksii_moisieiev@epam.com/
->
-> Also I remember Peng Fan also was interested in those bindings.
+Forwarding to i2c list
 
-It helps to Cc people when you talk about them.
+----- Forwarded message from bugzilla-daemon@kernel.org -----
 
-If the parties interested in this want to see progress on this, you
-all must work together and show this is a solution for multiple
-platforms.
+Date: Sat, 08 Jul 2023 03:06:17 +0000
+From: bugzilla-daemon@kernel.org
+To: bp@alien8.de
+Subject: [Bug 217644] New: Chuwi Gemibook Pro Celeron N5100 touchpad not detected, PNP ID SYNA3602, i2c_designware timeout
+Message-ID: <bug-217644-6385@https.bugzilla.kernel.org/>
 
-> I think the use-case when one node is protected by firewall and also is
-> controlled by scmi feature-domain-controller (As was proposed in my
-> patch series) may take place.
+https://bugzilla.kernel.org/show_bug.cgi?id=217644
 
-But isn't the SCMI device protection interface the same thing? Some
-interface to say "can I access this device?" and/or control access to
-it.
+            Bug ID: 217644
+           Summary: Chuwi Gemibook Pro Celeron N5100 touchpad not
+                    detected, PNP ID SYNA3602, i2c_designware timeout
+           Product: Platform Specific/Hardware
+           Version: 2.5
+          Hardware: Intel
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: x86-64
+          Assignee: platform_x86_64@kernel-bugs.osdl.org
+          Reporter: paula@alumni.cse.ucsc.edu
+        Regression: No
 
-The other possible use I'm aware of is system partitioning. OpenAMP or
-similar where an SoC is partitioned into multiple OS instances and
-peripherals are assigned to different partitions.
+This bug is specific to the Chuwi Gemibook Pro Celeron N5100, 8GB DRAM model.
+The bug is specific to linux as the touchpad works normally under Windows 10. I
+have a J4125/16GB model of the same laptop and it works fine under linux, but
+has a different touchpad pnp ID.
 
-> As for the naming maybe you have some thoughts about better name?
+The kernel log error at the heart of the matter:
 
-If I did, I would have. Something with 'access' in it is as far as I've got=
-ten.
+[21615.530254] i2c_designware i2c_designware.0: controller timed out
 
-Rob
+The i2c subsystem attempts to talk to the touchpad device and immediately times
+out. This is a hard failure, no other errors ever occur. If I use i2cdetect on
+bus 0, where the device resides, it shows -- for addresses 30-37 and 50-5f and
+blank for all other addresses. Running i2cdetect on bus 0 takes far longer than
+running on any of the other 19 i2c buses on the machine. My feeling is that the
+touchpad is on i2c bus 0 but is not responding to any queries or commands. The
+presence of the misbehaving device is causing detection queries to take longer
+to timeout than on the other buses.
+
+I feel like I've ruled out the following:
+1. Runtime power management, failure the same with runtime power management
+disabled.
+2. ACPI specifying the wrong bus for the SYNA3602 device. As far as I can tell,
+none of
+   the other 19 i2c buses could be used for the touchpad.
+
+Since i2cdetect does not detect the device, I am guessing that the problem is
+I/O pin location, speed or polarity related. This a jasperlake device and
+perhaps the pinctrl_jasperlake driver is not mapping the PCH I/O pins properly.
+Perhaps i2c bus 0 is not tied to the correct PCH pins, or not with the proper
+polarity, or incorrect clock speed.
+
+I am no expert on any of these matters so any help with this would be greatly
+appreciated.
+
+I have looked at other kernel bugs that may be related, and done quite a bit of
+general internet searching and haven't been able to find anything that seems
+connected to this particular problem.
+
+-- 
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.
+
+----- End forwarded message -----
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
