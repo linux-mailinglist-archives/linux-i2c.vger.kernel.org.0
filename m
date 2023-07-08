@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C9274BCE6
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jul 2023 10:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02E074BCFF
+	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jul 2023 11:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjGHIqZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Jul 2023 04:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
+        id S229852AbjGHJNR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 8 Jul 2023 05:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjGHIqY (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Jul 2023 04:46:24 -0400
+        with ESMTP id S229496AbjGHJNP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Jul 2023 05:13:15 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B241FEE;
-        Sat,  8 Jul 2023 01:46:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B59919BD;
+        Sat,  8 Jul 2023 02:13:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1688805982;
+        s=mail; t=1688807592;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KFsF/Pchrt/OXl692hOLmaW9S5Y0YPAjhoefyVENWrE=;
-        b=cNyI0iSzg4feQmvXL4+llRi81AbJmnTk3f/+th1HW3y6kSTN8bQ69pu6RgL2juKMUbRdbk
-        TRqWfJ0DwEPM1/xw4cAlRybyuzY59oI5UCmKgRmEqqRLsrcqICsUFBZeFHam/tHARJ5zof
-        DYQbF4C/jneJ0ls5LayOqxjiZmdYtC0=
-Message-ID: <445b8b63b75234730a277d091ae02d31c63ed2f0.camel@crapouillou.net>
-Subject: Re: [PATCH 10/23] i2c: img-scb: Remove #ifdef guards for PM related
+        bh=puPcf+V/6sYMK2fF/csgHvd5WcNj3g1IOwnH/eQ0e6M=;
+        b=EpaY7FBThokHiE8Qntc3o9lFnB+3/fuOCESW6gkkOmtKmEi+KCT4Ys1priFKiTWy4K3qxk
+        LfUcRfcM4a4q2f7cnUrw51s8MMeUWfwgQc966yjhMivIVz/ID40hLXtZnnCUhvoUJXRcKB
+        IqvxzBGA07h9B29szX9JcnGB8Vv5IoQ=
+Message-ID: <180fece4bfe6084c740b8f73cc040d269b0f8968.camel@crapouillou.net>
+Subject: Re: [PATCH 11/23] i2c: kempld: Remove #ifdef guards for PM related
  functions
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Sat, 08 Jul 2023 10:46:20 +0200
-In-Reply-To: <20230706103133.00006b5f@Huawei.com>
+Date:   Sat, 08 Jul 2023 11:13:11 +0200
+In-Reply-To: <20230706103737.00007497@Huawei.com>
 References: <20230705204314.89800-1-paul@crapouillou.net>
-         <20230705204314.89800-11-paul@crapouillou.net>
-         <20230706103133.00006b5f@Huawei.com>
+         <20230705204314.89800-12-paul@crapouillou.net>
+         <20230706103737.00007497@Huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
@@ -49,57 +49,89 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGkgSm9uYXRoYW4sCgpMZSBqZXVkaSAwNiBqdWlsbGV0IDIwMjMgw6AgMTA6MzEgKzA4MDAsIEpv
-bmF0aGFuIENhbWVyb24gYSDDqWNyaXTCoDoKPiBPbiBXZWQswqAgNSBKdWwgMjAyMyAyMjo0Mzow
-MSArMDIwMAo+IFBhdWwgQ2VyY3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PiB3cm90ZToKPiAK
-PiA+IFVzZSB0aGUgbmV3IFBNIG1hY3JvcyBmb3IgdGhlIHN1c3BlbmQgYW5kIHJlc3VtZSBmdW5j
-dGlvbnMgdG8gYmUKPiA+IGF1dG9tYXRpY2FsbHkgZHJvcHBlZCBieSB0aGUgY29tcGlsZXIgd2hl
-biBDT05GSUdfUE0gb3IKPiA+IENPTkZJR19QTV9TTEVFUCBhcmUgZGlzYWJsZWQsIHdpdGhvdXQg
-aGF2aW5nIHRvIHVzZSAjaWZkZWYgZ3VhcmRzLgo+ID4gCj4gPiBUaGlzIGhhcyB0aGUgYWR2YW50
-YWdlIG9mIGFsd2F5cyBjb21waWxpbmcgdGhlc2UgZnVuY3Rpb25zIGluLAo+ID4gaW5kZXBlbmRl
-bnRseSBvZiBhbnkgS2NvbmZpZyBvcHRpb24uIFRoYW5rcyB0byB0aGF0LCBidWdzIGFuZCBvdGhl
-cgo+ID4gcmVncmVzc2lvbnMgYXJlIHN1YnNlcXVlbnRseSBlYXNpZXIgdG8gY2F0Y2guCj4gPiAK
-PiA+IFNpZ25lZC1vZmYtYnk6IFBhdWwgQ2VyY3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0Pgo+
-IEkgdGhvdWdodCB0aGUgX0RFRklORSBtYWNyb3Mgd2VyZW4ndCByZWFsbHkgaW50ZW5kZWQgZm9y
-IGRyaXZlcgo+IHVzYWdlIGFuZCBpdCdzIGdvb2QgdG8ga2VlcCB0aGUgYWJpbGl0eSB0byBjaGFu
-Z2UgdGhvc2UgZGV0YWlscwo+IHdpdGhvdXQgdXBkYXRpbmcgbG90cyBvZiBkcml2ZXJzLsKgIFBl
-cmhhcHMganVzdCBleHByZXNzIGl0IGxvbmcgaGFuZAo+IGhlcmU/CgpZZWFoIHlvdSBhcmUgcmln
-aHQuIFRoZSAibG9uZyB2ZXJzaW9uIiBpc24ndCBtdWNoIGxvbmdlciBhbnl3YXkuCgpDaGVlcnMs
-Ci1QYXVsCgo+IEpvbmF0aGFuCj4gCj4gCj4gPiAtLS0KPiA+IMKgZHJpdmVycy9pMmMvYnVzc2Vz
-L2kyYy1pbWctc2NiLmMgfCAxMyArKysrLS0tLS0tLS0tCj4gPiDCoDEgZmlsZSBjaGFuZ2VkLCA0
-IGluc2VydGlvbnMoKyksIDkgZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9kcml2
-ZXJzL2kyYy9idXNzZXMvaTJjLWltZy1zY2IuYwo+ID4gYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJj
-LWltZy1zY2IuYwo+ID4gaW5kZXggNGI2NzRjZmJjNmZiLi5hOTJlMzA4MjU0MmUgMTAwNjQ0Cj4g
-PiAtLS0gYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWltZy1zY2IuYwo+ID4gKysrIGIvZHJpdmVy
-cy9pMmMvYnVzc2VzL2kyYy1pbWctc2NiLmMKPiA+IEBAIC0xNDU0LDcgKzE0NTQsNiBAQCBzdGF0
-aWMgaW50IGltZ19pMmNfcnVudGltZV9yZXN1bWUoc3RydWN0Cj4gPiBkZXZpY2UgKmRldikKPiA+
-IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiA+IMKgfQo+ID4gwqAKPiA+IC0jaWZkZWYgQ09O
-RklHX1BNX1NMRUVQCj4gPiDCoHN0YXRpYyBpbnQgaW1nX2kyY19zdXNwZW5kKHN0cnVjdCBkZXZp
-Y2UgKmRldikKPiA+IMKgewo+ID4gwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCBpbWdfaTJjICppMmMg
-PSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsKPiA+IEBAIC0xNDgyLDE0ICsxNDgxLDEwIEBAIHN0YXRp
-YyBpbnQgaW1nX2kyY19yZXN1bWUoc3RydWN0IGRldmljZQo+ID4gKmRldikKPiA+IMKgCj4gPiDC
-oMKgwqDCoMKgwqDCoMKgcmV0dXJuIDA7Cj4gPiDCoH0KPiA+IC0jZW5kaWYgLyogQ09ORklHX1BN
-X1NMRUVQICovCj4gPiDCoAo+ID4gLXN0YXRpYyBjb25zdCBzdHJ1Y3QgZGV2X3BtX29wcyBpbWdf
-aTJjX3BtID0gewo+ID4gLcKgwqDCoMKgwqDCoMKgU0VUX1JVTlRJTUVfUE1fT1BTKGltZ19pMmNf
-cnVudGltZV9zdXNwZW5kLAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgIGltZ19pMmNfcnVudGltZV9yZXN1bWUsCj4gPiAtwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgTlVMTCkKPiA+IC3CoMKgwqDC
-oMKgwqDCoFNFVF9TWVNURU1fU0xFRVBfUE1fT1BTKGltZ19pMmNfc3VzcGVuZCwgaW1nX2kyY19y
-ZXN1bWUpCj4gPiAtfTsKPiA+ICtzdGF0aWMgX0RFRklORV9ERVZfUE1fT1BTKGltZ19pMmNfcG0s
-IGltZ19pMmNfc3VzcGVuZCwKPiA+IGltZ19pMmNfcmVzdW1lLAo+ID4gK8KgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpbWdfaTJjX3J1bnRpbWVfc3VzcGVu
-ZCwKPiA+IGltZ19pMmNfcnVudGltZV9yZXN1bWUsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIE5VTEwpOwo+ID4gwqAKPiA+IMKgc3RhdGljIGNv
-bnN0IHN0cnVjdCBvZl9kZXZpY2VfaWQgaW1nX3NjYl9pMmNfbWF0Y2hbXSA9IHsKPiA+IMKgwqDC
-oMKgwqDCoMKgwqB7IC5jb21wYXRpYmxlID0gImltZyxzY2ItaTJjIiB9LAo+ID4gQEAgLTE1MDEs
-NyArMTQ5Niw3IEBAIHN0YXRpYyBzdHJ1Y3QgcGxhdGZvcm1fZHJpdmVyCj4gPiBpbWdfc2NiX2ky
-Y19kcml2ZXIgPSB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgLmRyaXZlciA9IHsKPiA+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLm5hbWXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgPSAiaW1n
-LWkyYy1zY2IiLAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAub2ZfbWF0Y2hf
-dGFibGXCoD0gaW1nX3NjYl9pMmNfbWF0Y2gsCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgLnBtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA9ICZpbWdfaTJjX3BtLAo+ID4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC5wbcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-PSBwbV9wdHIoJmltZ19pMmNfcG0pLAo+ID4gwqDCoMKgwqDCoMKgwqDCoH0sCj4gPiDCoMKgwqDC
-oMKgwqDCoMKgLnByb2JlID0gaW1nX2kyY19wcm9iZSwKPiA+IMKgwqDCoMKgwqDCoMKgwqAucmVt
-b3ZlX25ldyA9IGltZ19pMmNfcmVtb3ZlLAo+IAoK
+Hi Jonathan,
+
+Le jeudi 06 juillet 2023 =C3=A0 10:37 +0800, Jonathan Cameron a =C3=A9crit=
+=C2=A0:
+> On Wed,=C2=A0 5 Jul 2023 22:43:02 +0200
+> Paul Cercueil <paul@crapouillou.net> wrote:
+>=20
+> > Use the new PM macros for the suspend and resume functions to be
+> > automatically dropped by the compiler when CONFIG_PM or
+> > CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
+> >=20
+> > This has the advantage of always compiling these functions in,
+> > independently of any Kconfig option. Thanks to that, bugs and other
+> > regressions are subsequently easier to catch.
+> >=20
+> > Note that the driver should most likely be updated to use the
+> > platform_driver.driver.pm.{suspend,resume} callbacks.
+>=20
+> Agreed.=C2=A0 In this particular case I'd be tempted to do that first
+> so that we don't introduce pm_ptr() usage for these hooks.
+> Look at the platform device core, I suspect they should be
+> pm_sleep_ptr()
+> but not 100% sure.
+
+Ok, I'll just convert it then, the diff won't be much bigger.
+
+Cheers,
+-Paul
+
+> Jonathan
+>=20
+> >=20
+> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> > ---
+> > =C2=A0drivers/i2c/busses/i2c-kempld.c | 9 ++-------
+> > =C2=A01 file changed, 2 insertions(+), 7 deletions(-)
+> >=20
+> > diff --git a/drivers/i2c/busses/i2c-kempld.c
+> > b/drivers/i2c/busses/i2c-kempld.c
+> > index 281058e3ea46..cb61e7b9202c 100644
+> > --- a/drivers/i2c/busses/i2c-kempld.c
+> > +++ b/drivers/i2c/busses/i2c-kempld.c
+> > @@ -350,7 +350,6 @@ static void kempld_i2c_remove(struct
+> > platform_device *pdev)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0i2c_del_adapter(&i2c->a=
+dap);
+> > =C2=A0}
+> > =C2=A0
+> > -#ifdef CONFIG_PM
+> > =C2=A0static int kempld_i2c_suspend(struct platform_device *pdev,
+> > pm_message_t state)
+> > =C2=A0{
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct kempld_i2c_data =
+*i2c =3D platform_get_drvdata(pdev);
+> > @@ -377,10 +376,6 @@ static int kempld_i2c_resume(struct
+> > platform_device *pdev)
+> > =C2=A0
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> > =C2=A0}
+> > -#else
+> > -#define kempld_i2c_suspend=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0NULL
+> > -#define kempld_i2c_resume=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0NULL
+> > -#endif
+> > =C2=A0
+> > =C2=A0static struct platform_driver kempld_i2c_driver =3D {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.driver =3D {
+> > @@ -388,8 +383,8 @@ static struct platform_driver kempld_i2c_driver
+> > =3D {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0},
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.probe=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D kempld_i2c_probe,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.remove_new=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=3D kempld_i2c_remove,
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.suspend=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D kempld_i2c_suspend,
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.resume=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D kempld_i2c_resume,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.suspend=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D pm_ptr(kempld_i2c_suspend),
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.resume=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D pm_ptr(kempld_i2c_resume),
+> > =C2=A0};
+> > =C2=A0
+> > =C2=A0module_platform_driver(kempld_i2c_driver);
+>=20
 
