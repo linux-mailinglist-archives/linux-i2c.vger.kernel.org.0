@@ -2,77 +2,75 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B83474BF15
-	for <lists+linux-i2c@lfdr.de>; Sat,  8 Jul 2023 22:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FD874C13C
+	for <lists+linux-i2c@lfdr.de>; Sun,  9 Jul 2023 08:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjGHUI2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 8 Jul 2023 16:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
+        id S233203AbjGIGQp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 9 Jul 2023 02:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjGHUI1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 8 Jul 2023 16:08:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D141BF;
-        Sat,  8 Jul 2023 13:08:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F4B760B37;
-        Sat,  8 Jul 2023 20:08:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 97759C433CA;
-        Sat,  8 Jul 2023 20:08:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688846905;
-        bh=LcY1qvy9P41BUybqlDn8q578rWBLu/xQ79M9Beib7Dg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=EiVs92kmqByDkZc8mg0Ujl5AKdHnJ+j39jsUgSyXHvw6u8ZvbwoVtbsI0O7GOajnz
-         N6OhpQ7JM7dyf1LKGTlzBDTmhV6jx2qe9FetikYb1xIpg/nbSbE5PYs4+CLYetIH5t
-         5SxwgFtoUk0cURKhE2KdBMjy4+B54Bas5dUagterpxRT2/oJK6obG6m6KCHmIT0vc0
-         lh29Q/IeRbZpWpbAQG1v4VrNA370YwshzpnBBY2iyMG+qevk4megsUkCNNh78gxe2h
-         IG13SIQT0xBy6uOTNLsY6/DgZvZvRIayz8anZl3JImnYkU4r5vTZsyY+SW5/KEVE3v
-         Z+PZwerq5usPA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8538DC4167B;
-        Sat,  8 Jul 2023 20:08:25 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c-for-6.5-rc1-part2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZKhup2kTPKNKm2sW@ninjato>
-References: <ZKhup2kTPKNKm2sW@ninjato>
-X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZKhup2kTPKNKm2sW@ninjato>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.5-rc1-part2
-X-PR-Tracked-Commit-Id: 6537ed3904a3b3720e5e238dd5d542448fcf94c2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 84dc5aa3f0d861281d353e4b7f4ea03da31e9aba
-Message-Id: <168884690554.10103.2502624043872731600.pr-tracker-bot@kernel.org>
-Date:   Sat, 08 Jul 2023 20:08:25 +0000
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andi Shyti <andi.shyti@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S233191AbjGIGQo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 9 Jul 2023 02:16:44 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3ADE4E
+        for <linux-i2c@vger.kernel.org>; Sat,  8 Jul 2023 23:16:43 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id 3f1490d57ef6-c5ce57836b8so3907700276.1
+        for <linux-i2c@vger.kernel.org>; Sat, 08 Jul 2023 23:16:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688883402; x=1691475402;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CmlwvXEoimVTfsyyyYai0GQlqo3zzXGhdH5Gfvmx5TY=;
+        b=Bp5MLvKPSk5zMbAC/lttAdgyhC6wqBrx20Zr6vebn+/0U+fjSDRgD/l9Z5tUmJ67TZ
+         vtzfcWzCq9eFkMP1wm+iNthhOOTdTMAUfemY994pc1Vcsk4/nHlq8vIM1LCGXMdPOrUB
+         U21MpugVWLPMpmOSYigcx5pHCVVItOA+ZqUaxPGgfysELso1+wGqj5Wnp62wcEm71XOm
+         jOBl38WhtzxvBwD6cak1rDdOdkhOBhT4JC7yK2jyZ/IDmbDwPOivr0BGiSqOgEtQettM
+         pmH+KLXC9g90nw9aDDvE8KlonfY/glvE4j5x+XvvndwhZJNCtombGtVRls7GTt5eWP3J
+         39bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688883402; x=1691475402;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CmlwvXEoimVTfsyyyYai0GQlqo3zzXGhdH5Gfvmx5TY=;
+        b=j7X5nEnbyb7hDlvbmn+2pSvQhE2k5DAnKM/V/DT33/rEVq3DvJ3XbE5oRQzbfrG9M0
+         25z3macl5OyhyTZplGpLp8n2bzkudjPMKNknY0EEYf0/1e95uOpAFIlTAgbaJoRvHk1A
+         X6G6bAarSiR0FFIHJnWwFI4yipoxWDu5iuJuWedUBi6sUfuJgl7BFUMJ45+IcXM4ammV
+         fUdQkh1EuPVAG+LKm8VmRMl3yyQo2x+x0HKBYKeJnVzCSnvWO5xu+xIS1eSEF3L5mENc
+         pCjlaq45RUYlOE709QubevWwxHkNrUjzuEqg0uTG1TYwihiVvbuRbdsCRGqQnMTsH/rV
+         PxSA==
+X-Gm-Message-State: ABy/qLZzuEOEep+c0QjBRFnxcBEM1edKugTOw0Q1+erHY5dRzm1LqpJR
+        3I8HLztUboYkl2Cn9D3DZlKd2vujtS8i2XZpTpU=
+X-Google-Smtp-Source: APBJJlHDyeGMLRJh1TqEFXuQL5gNHvL979NAqymoRu2852sJo5Wc5PVm71x+nJyUxH/c+0ShKcWO/9pWFC+1aec0z8Q=
+X-Received: by 2002:a81:5f83:0:b0:576:b52d:4946 with SMTP id
+ t125-20020a815f83000000b00576b52d4946mr9750194ywb.30.1688883402409; Sat, 08
+ Jul 2023 23:16:42 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:7010:6211:b0:35e:b32a:1b89 with HTTP; Sat, 8 Jul 2023
+ 23:16:40 -0700 (PDT)
+Reply-To: ninacoulibaly03@hotmail.com
+From:   nina coulibaly <coulibalynina15@gmail.com>
+Date:   Sun, 9 Jul 2023 06:16:40 +0000
+Message-ID: <CA+8Vp3Va6YuVNky0j3E1UYrYwr56aeg2aKtMxvgOUsLM-3zVTw@mail.gmail.com>
+Subject: from nina coulibaly
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Fri, 7 Jul 2023 21:59:35 +0200:
+Dear,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.5-rc1-part2
+Please grant me the permission to share important discussion with you.
+I am looking forward to hearing from you at your earliest convenience.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/84dc5aa3f0d861281d353e4b7f4ea03da31e9aba
+Best Regards.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Mrs. Nina Coulibaly
