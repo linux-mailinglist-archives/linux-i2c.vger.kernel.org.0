@@ -2,196 +2,233 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A51E74D933
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jul 2023 16:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8807D74DD3D
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jul 2023 20:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjGJOmn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 10 Jul 2023 10:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S232473AbjGJSVu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 10 Jul 2023 14:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjGJOmm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jul 2023 10:42:42 -0400
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1906C3;
-        Mon, 10 Jul 2023 07:42:40 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-345ff33d286so24253225ab.3;
-        Mon, 10 Jul 2023 07:42:40 -0700 (PDT)
+        with ESMTP id S231214AbjGJSVu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jul 2023 14:21:50 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D7512B
+        for <linux-i2c@vger.kernel.org>; Mon, 10 Jul 2023 11:21:49 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-3461053677eso10219345ab.0
+        for <linux-i2c@vger.kernel.org>; Mon, 10 Jul 2023 11:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1689013308; x=1691605308;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1lPRorHQG7uNEJcXpPIMaS4hN8qEoJtqRBI+RRN2lJY=;
+        b=aIaOGZIab8TRTzpVT4gbgNGIHWgreOqLCmJ196IK187aejibag907UjgkajYNHVT9l
+         D9qFut3twrLqrABnKgGEfjHdKVQvMr91OwXXa5mYHcOLI9zxgftAgsPIOh1yZS8jadLF
+         rWNQ9qxYig9iNjUNzWQOg5dhQP7z4Ei3zWovU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689000160; x=1691592160;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9youPIImCCAcdEckdoxFQrNpLYrygdk7W9ZtiP8w15k=;
-        b=RNoulLSZHnHbR/2BYwKnhB6ZCVD59ktpzYmSlC+pFzHu5labOYQjxCMLjg4wmUaXA9
-         5vfXG/4I3tImqbWLvdIksMoDeccqRRvd95Z32GFS3nPDNTnlnPJSrEEj7eJXJ/lWUeVr
-         KE0J6gWiBOMpY2LkMZbDHluq+5lcDdGcHnLJ7RBFruBMlvha04KUuNUfZoQzW+chBW5k
-         tYpEHrU4YrdlJ4bvtl7C/W8gUJqi1OXND3pnVB8oYKf6q004qRo/Ok5OdvnmQ5Zmd0bZ
-         nJHvdsoQNiMnmosuh/Y9qGz6npMn4TZDJsXIpqcogTrhPKfeBcRGSvFNYBmn+el3NcTe
-         /V7w==
-X-Gm-Message-State: ABy/qLb0UTDG/EF+3cYvmQZXUUxjYHEQEXmHqRWXEJnqZ28alAfM/g8I
-        jLTwmVejLmJaAiz/gfQnPg==
-X-Google-Smtp-Source: APBJJlG3K/ro2oZtTnsZ7Banw1CdZJLy4OFKR61udj8GbrxlXMYjo+jeaSBEKYBDTKO2X9W4TkNn0w==
-X-Received: by 2002:a92:502:0:b0:345:c8ce:ff4e with SMTP id q2-20020a920502000000b00345c8ceff4emr11579387ile.3.1689000160019;
-        Mon, 10 Jul 2023 07:42:40 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id x7-20020a92d307000000b00342f537e3c3sm3560577ila.2.2023.07.10.07.42.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 07:42:39 -0700 (PDT)
-Received: (nullmailer pid 1938541 invoked by uid 1000);
-        Mon, 10 Jul 2023 14:42:35 -0000
-Date:   Mon, 10 Jul 2023 08:42:35 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
-        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
-        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
-        andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
-        lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
-        arnd@kernel.org, richardcochran@gmail.com,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 04/10] dt-bindings: treewide: add feature-domains
- description in binding files
-Message-ID: <20230710144235.GA1922048-robh@kernel.org>
-References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
- <20230705172759.1610753-5-gatien.chevallier@foss.st.com>
- <20230706145108.GA3858320-robh@kernel.org>
- <0aaace47-1bb4-82c5-57a5-6f5d27eb4d45@foss.st.com>
- <20230707152056.GA317056-robh@kernel.org>
- <fb72b4e4-d5c6-d9be-269d-29aff996001c@foss.st.com>
+        d=1e100.net; s=20221208; t=1689013308; x=1691605308;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1lPRorHQG7uNEJcXpPIMaS4hN8qEoJtqRBI+RRN2lJY=;
+        b=XzoBaR2WWxvjUuIspgdb5fPs4xZ9JWEMF8ybTjvTd2tHZJ9z8qQeiSZyfBngeNy/n+
+         RiYnD5UYSUxUSNpanylHyJt4w8uPqp1kgMGdSjwbCRhtbiMcmS0NGCsVh7Ewe3AIAfzZ
+         WIA2l6ktVcwBjzLJkZiGwQ8C4VPfTCCmm+dWg1aeyfnU6g950/RukxMLppKe+jI3gwX+
+         KnoW6XdE7aY5bEeeqGoVOAyeLVLwiipcBzAeCODevGXCyN5/2/+QAazBJx6Jbakbz219
+         mBzCa9znGhXhtItJg1DSBoAKm295nVrS6I+yaJaBZ6QZBTp6S3Zw0Sjb/1cDM1NYeiGh
+         tJrA==
+X-Gm-Message-State: ABy/qLaBq6b9NsUuajV3HGZNVNKeq48JY7ZcSMB9jQZs93hy091zrDhQ
+        6JAKYEeSNVlGlBwlDSdYQbJIhFHwSx2ZG9P9pGMJiQ==
+X-Google-Smtp-Source: APBJJlEv3m/u5U4PB18pMEq0F4FC27n+LMf7xpyTdt0yeKSmA9TlGT/2doO4oGPoOvjnhbDd+RdZDXaQVjenkTmx/24=
+X-Received: by 2002:a92:c808:0:b0:345:b728:f588 with SMTP id
+ v8-20020a92c808000000b00345b728f588mr9999692iln.8.1689013308526; Mon, 10 Jul
+ 2023 11:21:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fb72b4e4-d5c6-d9be-269d-29aff996001c@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230710063351.17490-1-frank.li@vivo.com> <20230710063351.17490-3-frank.li@vivo.com>
+In-Reply-To: <20230710063351.17490-3-frank.li@vivo.com>
+From:   Kamal Dasu <kamal.dasu@broadcom.com>
+Date:   Mon, 10 Jul 2023 14:21:11 -0400
+Message-ID: <CAKekbeux2ApVp1Jcjdn-+8CS+hGtR5LGE2kL_x12MOzq41ZF-w@mail.gmail.com>
+Subject: Re: [PATCH v2 03/11] i2c: brcmstb: Convert to devm_platform_ioremap_resource()
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000004ad2540600260ec7"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 10:22:10AM +0200, Gatien CHEVALLIER wrote:
-> 
-> 
-> On 7/7/23 17:20, Rob Herring wrote:
-> > On Fri, Jul 07, 2023 at 02:28:28PM +0200, Gatien CHEVALLIER wrote:
-> > > Hello Rob,
-> > > 
-> > > On 7/6/23 16:51, Rob Herring wrote:
-> > > > On Wed, Jul 05, 2023 at 07:27:53PM +0200, Gatien Chevallier wrote:
-> > > > > feature-domains is an optional property that allows a peripheral to
-> > > > > refer to one or more feature domain controller(s).
-> > > > > 
-> > > > > Description of this property is added to all peripheral binding files of
-> > > > > the peripheral under the STM32 firewall controllers. It allows an accurate
-> > > > > representation of the hardware, where various peripherals are connected
-> > > > > to this firewall bus. The firewall can then check the peripheral accesses
-> > > > > before allowing it to probe.
-> > > > > 
-> > > > > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> > > > > ---
-> > > > > 
-> > > > > Disclaimer: Some error with dtbs_check will be observed as I've
-> > > > > considered the property to be generic, as Rob asked
-> > > > > 
-> > > > >    Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml  | 4 ++++
-> > > > >    Documentation/devicetree/bindings/dma/st,stm32-dma.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml   | 4 ++++
-> > > > >    Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 4 ++++
-> > > > >    .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml  | 4 ++++
-> > > > >    .../devicetree/bindings/media/cec/st,stm32-cec.yaml          | 4 ++++
-> > > > >    Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml   | 4 ++++
-> > > > >    .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml       | 4 ++++
-> > > > >    Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml  | 4 ++++
-> > > > >    Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml   | 5 +++++
-> > > > >    Documentation/devicetree/bindings/mmc/arm,pl18x.yaml         | 4 ++++
-> > > > >    Documentation/devicetree/bindings/net/stm32-dwmac.yaml       | 4 ++++
-> > > > >    Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml | 4 ++++
-> > > > >    .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/rng/st,stm32-rng.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/serial/st,stm32-uart.yaml  | 4 ++++
-> > > > >    Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml    | 4 ++++
-> > > > >    Documentation/devicetree/bindings/sound/st,stm32-sai.yaml    | 4 ++++
-> > > > >    .../devicetree/bindings/sound/st,stm32-spdifrx.yaml          | 4 ++++
-> > > > >    Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml     | 4 ++++
-> > > > >    Documentation/devicetree/bindings/spi/st,stm32-spi.yaml      | 4 ++++
-> > > > >    Documentation/devicetree/bindings/usb/dwc2.yaml              | 4 ++++
-> > > > >    24 files changed, 97 insertions(+)
-> > > > > 
-> > > > > diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> > > > > index b767ec72a999..daf8dcaef627 100644
-> > > > > --- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-> > > > > @@ -50,6 +50,10 @@ properties:
-> > > > >      power-domains:
-> > > > >        maxItems: 1
-> > > > > +  feature-domains:
-> > > > > +    minItems: 1
-> > > > > +    maxItems: 3
-> > > > 
-> > > > What are the 3 entries?
-> > > > 
-> > > > Rob
-> > > 
-> > > I thought I was benefiting from the description of the pattern-property in
-> > > the RIFSC YAML file. But yes anyway, it seems like it needs some description
-> > > here as the dependency does not appear in this file.
-> > 
-> > Humm, that should limit the maximum entries to 2, so 3 would never work
-> > (if RIFSC is the parent).
-> > 
-> > > I picked 3 as a maxItems for our ST needs, I'll give it some more thought
-> > > when coming back with something clearer.
-> > 
-> > I'd expect you have 1 entry for register bus and 1 entry for DMA bus if
-> > there is one. It's block specific for how many entries, so the RIFSC
-> > schema should not be setting that. You could possibly say that
-> > 'feature-domains' is required for all the child nodes though.
-> 
-> Ok, I will change to not specifying the number of entries in the
-> RIFSC YAML file for V2.
-> 
-> > 
-> > Rob
-> Some hardware blocks may have a firewall ID for their device part and
-> another ID for their master part as well. In the end, the number of
-> entries could very well vary between different platforms. And the YAML
-> files are common to these platforms.
+--0000000000004ad2540600260ec7
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-A given device has a fixed number of buses. Usually 1 or 2. That does 
-*not* vary by platform (unless the device is modified). You could have 
-the same firewall controller and id for multiple buses, but that 
-should not change the number of entries for the device. Now maybe a bus 
-has no firewall on some platforms. In that case, you should make the 
-optional firewall entry the last one, have a null phandle (0 or -1), or 
-use -names to distinguish the entries.
+On Mon, Jul 10, 2023 at 2:34=E2=80=AFAM Yangtao Li <frank.li@vivo.com> wrot=
+e:
+>
+> Use devm_platform_ioremap_resource() to simplify code.
+>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-> This property could be used for "extra" arguments as well, that are not
-> firewall IDs.
+Reviewed-by:  Kamal Dasu <kamal.dasu@broadcom.com>
+> ---
+>  drivers/i2c/busses/i2c-brcmstb.c | 19 ++++++-------------
+>  1 file changed, 6 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-brcmstb.c b/drivers/i2c/busses/i2c-br=
+cmstb.c
+> index cf92cbcb8c86..0d422487161a 100644
+> --- a/drivers/i2c/busses/i2c-brcmstb.c
+> +++ b/drivers/i2c/busses/i2c-brcmstb.c
+> @@ -594,11 +594,10 @@ static int bcm2711_release_bsc(struct brcmstb_i2c_d=
+ev *dev)
+>
+>  static int brcmstb_i2c_probe(struct platform_device *pdev)
+>  {
+> -       int rc =3D 0;
+>         struct brcmstb_i2c_dev *dev;
+>         struct i2c_adapter *adap;
+> -       struct resource *iomem;
+>         const char *int_name;
+> +       int rc;
+>
+>         /* Allocate memory for private data structure */
+>         dev =3D devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
+> @@ -614,18 +613,15 @@ static int brcmstb_i2c_probe(struct platform_device=
+ *pdev)
+>         init_completion(&dev->done);
+>
+>         /* Map hardware registers */
+> -       iomem =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -       dev->base =3D devm_ioremap_resource(dev->device, iomem);
+> -       if (IS_ERR(dev->base)) {
+> -               rc =3D -ENOMEM;
+> -               goto probe_errorout;
+> -       }
+> +       dev->base =3D devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(dev->base))
+> +               return PTR_ERR(dev->base);
+>
+>         if (of_device_is_compatible(dev->device->of_node,
+>                                     "brcm,bcm2711-hdmi-i2c")) {
+>                 rc =3D bcm2711_release_bsc(dev);
+>                 if (rc)
+> -                       goto probe_errorout;
+> +                       return rc;
+>         }
+>
+>         rc =3D of_property_read_string(dev->device->of_node, "interrupt-n=
+ames",
+> @@ -678,16 +674,13 @@ static int brcmstb_i2c_probe(struct platform_device=
+ *pdev)
+>         adap->dev.of_node =3D pdev->dev.of_node;
+>         rc =3D i2c_add_adapter(adap);
+>         if (rc)
+> -               goto probe_errorout;
+> +               return rc;
+>
+>         dev_info(dev->device, "%s@%dhz registered in %s mode\n",
+>                  int_name ? int_name : " ", dev->clk_freq_hz,
+>                  (dev->irq >=3D 0) ? "interrupt" : "polling");
+>
+>         return 0;
+> -
+> -probe_errorout:
+> -       return rc;
+>  }
+>
+>  static void brcmstb_i2c_remove(struct platform_device *pdev)
+> --
+> 2.39.0
+>
 
-The arg cells are dictated by the provider and opaque to the client.
+--0000000000004ad2540600260ec7
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> What do you suggest between picking a high maxItems value that would
-> (hopefully) cover all cases and not specifying maxItems at all? Or maybe
-> another property dedicated to such arguments?
-
-You should not specify maxItems in the firewall controller binding.
-
-Rob
+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
+DxuNuBlySpn/GYqPcDcRZd8EENWqnZrjtjHMk0j7ZfrPGXq8sQkbG3OX+DOwSaefPRq1pLGWBZaZ
+YuUo5O7CNHo7h7Hc9GgjiW+6X9BjKAzSaDy8jwIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
+MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
+dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
+HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
+bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
+Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
+gRdrYW1hbC5kYXN1QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
+gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUcRYSWvAVyA3hgTrQ2c4AFquBsG0wDQYJ
+KoZIhvcNAQELBQADggEBAIKB2IOweF2sIYGBZTDm+Hwmhga+sjekM167Sk/KwxxvQFwZYP6i0SnR
+7aR59vbfVQVaAiZH/a+35EYxP/sXaIM4+E3bFykBuXwcGEnYyEn6MceiOCkjkWQq1Co2JyOdNvkP
+nAxyPoWlsJtr+N/MF1EYKGpYMdPM7S2T/gujjO9N56BCGu9yJElszWcXHmBl5IsaQqMS36vhsV0b
+NxffjNkeAdgfN/SS9S9Rj4WXD7pF1M0Xq8gPLCLyXrx1i2KkYOYJsj0PWlC6VRg6E1xXkYDte0VL
+fAAG4QsETU27E1HBNQyp5zF1PoPCPvq3EnWQnbLgYk+Jz2iwIUwiqwr/bDgxggJtMIICaQIBATBr
+MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
+YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw89WX2Pp7ue922QVkwDQYJYIZI
+AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBT89c1IUYpBCyRR2pzdBsUc+t+TkW202gJ2VHN3
+zSSJMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDcxMDE4MjE0
+OFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
+AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
+hkiG9w0BAQEFAASCAQCgvZ2Qvj04/EAb3K5/xvoURQ2W4yzQ0T1eeFzl7gK5AFGkjDQyRmMWDaKq
+rhCjlC2j+QvVbOcBPmNlJGeA/qjpyqWHaqYfwbGK6x7KKLwenSfUKGV0C7xEu1uYyorRiMcvm8J4
+8dkyKM01S+6HqClaqYD+hLqqHRTuXSc9+yVLa8flyyHiTMCytB1l0IUKBRonHe9Utyse4ou3+ZbS
+RC3tThC5RKjZAjBO4m25Y5MZ3TF1bSYHMeybHCw9rB0Z62DjMtmkyo6HCkB6cZvZkckwwqc2zugB
+qMlRHAhU+j0YFBLPp8mZS6L4jGDX7K3y17sS7hIyte0hIaS/pXuO2lZx
+--0000000000004ad2540600260ec7--
