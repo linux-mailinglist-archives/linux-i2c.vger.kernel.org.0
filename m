@@ -2,55 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FF174D5E0
-	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jul 2023 14:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D06574D5EB
+	for <lists+linux-i2c@lfdr.de>; Mon, 10 Jul 2023 14:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjGJMkd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 10 Jul 2023 08:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        id S229671AbjGJMl7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 10 Jul 2023 08:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjGJMkc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jul 2023 08:40:32 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA5199;
-        Mon, 10 Jul 2023 05:40:27 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-579dd20b1c8so52984797b3.1;
-        Mon, 10 Jul 2023 05:40:27 -0700 (PDT)
+        with ESMTP id S231546AbjGJMl6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 10 Jul 2023 08:41:58 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196F6DE;
+        Mon, 10 Jul 2023 05:41:57 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-5703d12ab9aso56148667b3.2;
+        Mon, 10 Jul 2023 05:41:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688992827; x=1691584827;
+        d=1e100.net; s=20221208; t=1688992916; x=1691584916;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=EZqGOW9woC4hxySuD731jBWPOXAr5ZaE6PhY8Yhm8lY=;
-        b=ZKLP/PywOlCp6Sa5q1VuQ0U38wL3kiaTt8pX/3p1O9byMpkIVHF1w4WC8o66FS4d6f
-         SGum8XUdo75a+q+OJX6/G0qnHpZX6kYw6GXUazD/oTOoFaadzkECRz6hkXthApcNWv7V
-         r/rtFxRNuEOV6AX5/o55rz7Vzu959xasMYQbvfCOxBtqD1DGE91f5VJ5xRSGYwqLdZsU
-         0ToI77zDWEjrQVKJ7M5B/7XmvBLKceKVPME2zylOy4G62UR5fYqF9oxZyOWBRaduW64o
-         wmgWLtM0xYYpElSiFYtNqfrnVAnG3qEfyAkdruKgwRDDqc6JX4QWdPjJvltEvlSdx5l0
-         TAFQ==
-X-Gm-Message-State: ABy/qLbQWJhV899YD6RYcCxdFgUHSHQJ+uP/sKTGoflzrZZ7Z0rc6ED0
-        pVxP1TWwKsAK8+CcNy8EfHjl8rY3Mqetqg==
-X-Google-Smtp-Source: APBJJlEJMTbC7f17bZd3ijIwfZ3qfrMe+B/VWAArTlKJZz8rElYmkFojUmt6Ej6gBRJN7hPBS08vJw==
-X-Received: by 2002:a81:7bc5:0:b0:577:150f:3efe with SMTP id w188-20020a817bc5000000b00577150f3efemr10164599ywc.27.1688992826671;
-        Mon, 10 Jul 2023 05:40:26 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id o2-20020a817302000000b0057a8de7f43dsm252137ywc.109.2023.07.10.05.40.26
+        b=ImoS7t9dFXDyuOvkjRSl1MZ31kYtTVODReEfmNJDEJPUyFawmu/pCdYlSeYJFM4c9R
+         IWt+4ORttfm71XVbDEns5HibJky9Pzlai+j0haEcwR6vvIwY3KvgMX8NceAvTQ0yGIU2
+         1l+VeGGz6Mx7JQZ3vs/3IHjI13n0hbFUKdlx9v4bpXHKbyvrEuErAOHgMhQ7Q0nt6Kt4
+         WPLa+f4O+CNxPcbxJIoh0hQ190GPjekEYsQzAhPkQQ8ugJ+FxYDzLpiy/mXSWB5xZ+HI
+         VXIBelQ5Mk/Eka2BNiEZRCCGhu5UmIrBfH1o16GgyC/xCC+Y3k7sntZBCJ71ghi6+arQ
+         gLtw==
+X-Gm-Message-State: ABy/qLYf1g0wQCcTFZs8XHEATMXcLHiRTTqzpH443/iJAST2521+KKxX
+        /YWvpikv1mKh0dAkiDfwVWS9kNknYu1A3Q==
+X-Google-Smtp-Source: APBJJlE9UQJWa33lLGhl6vElj5+oXEUBksGAFqtVodWNGgKxyPo/hq0Moe4YcwkW0DDGTjFWn2v13Q==
+X-Received: by 2002:a81:84d6:0:b0:568:d63e:dd2c with SMTP id u205-20020a8184d6000000b00568d63edd2cmr11689252ywf.11.1688992915920;
+        Mon, 10 Jul 2023 05:41:55 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id p135-20020a0de68d000000b005707d7686ddsm3032925ywe.76.2023.07.10.05.41.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 05:40:26 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-c5079a9f1c8so5299926276.0;
-        Mon, 10 Jul 2023 05:40:26 -0700 (PDT)
-X-Received: by 2002:a25:f40e:0:b0:bc5:6c3d:9e43 with SMTP id
- q14-20020a25f40e000000b00bc56c3d9e43mr9410301ybd.6.1688992826199; Mon, 10 Jul
- 2023 05:40:26 -0700 (PDT)
+        Mon, 10 Jul 2023 05:41:55 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-c4e4c258ba9so5446538276.1;
+        Mon, 10 Jul 2023 05:41:55 -0700 (PDT)
+X-Received: by 2002:a05:6902:20e:b0:c6f:db67:cbf7 with SMTP id
+ j14-20020a056902020e00b00c6fdb67cbf7mr6843481ybs.16.1688992915397; Mon, 10
+ Jul 2023 05:41:55 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230705204314.89800-1-paul@crapouillou.net> <20230705204521.90050-1-paul@crapouillou.net>
- <20230705204521.90050-3-paul@crapouillou.net>
-In-Reply-To: <20230705204521.90050-3-paul@crapouillou.net>
+In-Reply-To: <20230705204521.90050-1-paul@crapouillou.net>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 Jul 2023 14:40:14 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVoSRXf3AWcbjx7sPW2JzKD2_77HDQM_2cv6uDutw-H8w@mail.gmail.com>
-Message-ID: <CAMuHMdVoSRXf3AWcbjx7sPW2JzKD2_77HDQM_2cv6uDutw-H8w@mail.gmail.com>
-Subject: Re: [PATCH 21/23] i2c: sh-mobile: Remove #ifdef guards for PM related functions
+Date:   Mon, 10 Jul 2023 14:41:43 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXecRUTmTcmWkXH1FY0iXPLYxKkqFhgoK7tRBD+ztcsRA@mail.gmail.com>
+Message-ID: <CAMuHMdXecRUTmTcmWkXH1FY0iXPLYxKkqFhgoK7tRBD+ztcsRA@mail.gmail.com>
+Subject: Re: [PATCH 19/23] i2c: rcar: Remove #ifdef guards for PM related functions
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org,
