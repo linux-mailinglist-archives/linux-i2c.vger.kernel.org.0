@@ -2,149 +2,259 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A51EA751EB8
-	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jul 2023 12:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6E275246F
+	for <lists+linux-i2c@lfdr.de>; Thu, 13 Jul 2023 15:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233680AbjGMKSs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 13 Jul 2023 06:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S232523AbjGMN7A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 13 Jul 2023 09:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbjGMKSq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Jul 2023 06:18:46 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2098.outbound.protection.outlook.com [40.107.215.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F497E77;
-        Thu, 13 Jul 2023 03:18:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aLk9C3MaSkL9feGPP49V7CmGH8rGw4TNuRZQxR0kvzUyJkGrkQ2ydUas8+FBcINksNFpxK4Nu0TC0rC7M9zztHaJKKd0tA4vJBWBb3rYr8o4573myBPJl/Ho0IEOONAnQ64P8ot8cIZ1PWyAVl59EvpABsfeGRcyATEezcNQPtzqCocc6G/FAKjARuRgW0sb0yNTur7q1uM/t5AKPEeANw4xK+PLF9+4F8n1tK7gaBTyEc7Y3j2pJSqgP8czH+EUmqYEeNAHvzqq3knRZ0bCNAfX8ue/rPSV+y8FuiVM4ViwjmFxmFci7duyiEOa+9bOgYaPBAZTmLiKHjktMR12Cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/iHYAp2K5Ch4SEkwAyIKhXBh3azcybLUmgG+bV5miEQ=;
- b=EnTfw/CkiWgF4Ld0S7s1FGycbCwFEerELkyl7Lfv5WHxrRVgrLAQmWQ5e+VCgBZjyfRXvLYwEyr1b6XGRBrKWKpPl0/nvaBmydOqf8V8T1RBKQgqIIhRoyijNfPms4udnGV2cf0F/0HRk5rOk9o0Wguwm9sUSRo55RUQ50aZsrahQyrIs7R4HmJwOWw9xb0V+uDehm6aBZZ2xig2JHeXymQuy9EVGatUMyyP+EHt6nadEw6pSpZ8qHhorSM1hP5m1t7aDvpsZqfZDhJunzJIRiAQ8bgXhSom4d5dZo58Y58X4u8jbjqDM9PbK8Y9iLO2lXl8dld3vzSRTlJKU9w32w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/iHYAp2K5Ch4SEkwAyIKhXBh3azcybLUmgG+bV5miEQ=;
- b=FnoBCTIlYiDMj8VfZYRJkppG9CccXMMoajHyx31heK2y4ADbjNrv8WMGt/FMCXcQnnCgOOUnjJMSZ8L1xuWXEIGxwmFjQeUJ64UxVvC+cfQoCipBIixjKazw0RtVGIDA0pl1655VK0xRaSYvCEEMlYZK3CMzUFv+Lxc6ex40t0pnCbFKYZogMI+bLaWyfqMYprlCIG9ez+8C3LL/qvJrjMAO6HjdTchgwwU8+IHHAksn9N7rbNvX5mibFZAQnma4/56vVNe5Nhq4UAe49JgHf/DNGssTZhtU07Z3jtaXxZaC2y4Doq01oogKIckGyrrFS5g8ABxkmmXOCh3Opo8o6w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB5288.apcprd06.prod.outlook.com (2603:1096:4:1dc::9) by
- SEZPR06MB5174.apcprd06.prod.outlook.com (2603:1096:101:70::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.20; Thu, 13 Jul 2023 10:18:36 +0000
-Received: from SG2PR06MB5288.apcprd06.prod.outlook.com
- ([fe80::f9b8:80b5:844e:f49a]) by SG2PR06MB5288.apcprd06.prod.outlook.com
- ([fe80::f9b8:80b5:844e:f49a%6]) with mapi id 15.20.6565.028; Thu, 13 Jul 2023
- 10:18:36 +0000
-From:   Minjie Du <duminjie@vivo.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, Minjie Du <duminjie@vivo.com>,
-        stable@vger.kernel.org
-Subject: [PATCH v4] i2c: gpio: Fix an error check in i2c_gpio_fault_injector_init()
-Date:   Thu, 13 Jul 2023 18:18:28 +0800
-Message-Id: <20230713101829.15548-1-duminjie@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0184.apcprd04.prod.outlook.com
- (2603:1096:4:14::22) To SG2PR06MB5288.apcprd06.prod.outlook.com
- (2603:1096:4:1dc::9)
+        with ESMTP id S232372AbjGMN67 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 13 Jul 2023 09:58:59 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB371FF1;
+        Thu, 13 Jul 2023 06:58:57 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36DDG3DB009960;
+        Thu, 13 Jul 2023 15:58:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=jScQfB7dHrSC/WSmDV+VXYQZhrTRCDcVOleEzuAMkbE=;
+ b=SfPoPLnnS6bLH20C2mmzuSXgd6/LCZxaRC927PE4Mq989cPc8vsuiDIrNcox0JeecTgk
+ vPSy+TZQ0MWOr5EnYuFBdJ4IeZx8ly3L7dJBVxGjU8klO2sMHXDNayHV0IEhjmSJsuCp
+ iGud6dnNZMDNTsd/DkUniBS2IpTUNWOe4vjqh2vsQwrqhmWN8E7LzuSEP4zI2yQiwW3+
+ zBpv9EiLZwUwirVLGu0eG1qtyzqzjsy3ii1suiVs0vmb/OiOXk2oEMI3chtxRqniHYa3
+ X9F+QSqs4L8qMuMBivzwcYURTgZbAwRpZYfPZh60JsRQFYr2leCnOExEUKEI2GdCBMLi ZA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rtedthy7f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Jul 2023 15:58:16 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4F4DC100056;
+        Thu, 13 Jul 2023 15:58:14 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E240A21A21E;
+        Thu, 13 Jul 2023 15:58:14 +0200 (CEST)
+Received: from [10.201.21.121] (10.201.21.121) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 13 Jul
+ 2023 15:58:12 +0200
+Message-ID: <ba409196-06a1-bf2b-3536-1e1420550ff4@foss.st.com>
+Date:   Thu, 13 Jul 2023 15:58:12 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PR06MB5288:EE_|SEZPR06MB5174:EE_
-X-MS-Office365-Filtering-Correlation-Id: f80fb1d4-425a-4fa4-f2a1-08db838a84b2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BswmD2UtZBhcE+PIhrvC+5+ajCffNCCdwjcqH970Z2FlEhyX1C3ldAejIfF56fUqEs/GZoORKmH9+UsY5dPycayYl87G272tqrPQ4L/eBlf0YWuNqPcgTPso+pIRPnC8FenKyHyvUhUfB8r7uTnnPyua2PbqEwKxbvfkmnSaZeIEhGoX3muQN4XXxJ0gG1ekZFhPKkvm6JMXSn7/Xlne/OtaS72nmcVdJFmew0NN9/oqJ2aqto6G51bPiFCNeamuygXfLAMGqFnpRAzEqMoC0MvUA11s1GHhr6ZADIVagsaZoF1WNYXA83QMRFBhS/eh+NFYoEVbZZ67HH5PyEE36XdWyr3w4QKsCFdehmaSCVf7jnk+WDCiV+U3QBCoRRBouQN4/hlD/XFeHSnG5jkMSyDsh+l/MMdygXUrU+7v2oFDE24JqUYpdCyee/EzWVm1u6+s5CukwFFkDJDDGeVsC7JNDMT6rxPcJ+uIIF70tGYW9v6mnO66jJlJ0JnebnXJeeD5kuQ2IVkxQIPsFtaX7Oh6wud0p5h1fa4wGF/UilMW88+oHDXxmWipRB2lOsSxazP73u72Ce3YgUSkyBezTxJ6ZyCVgyFxPAffp9hZzWH27Mbkdbp2ksHv7epS9s/Q
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB5288.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(376002)(346002)(396003)(366004)(451199021)(316002)(41300700001)(6512007)(8676002)(110136005)(52116002)(66556008)(66476007)(66946007)(6486002)(4326008)(478600001)(83380400001)(6506007)(6666004)(38100700002)(38350700002)(8936002)(1076003)(86362001)(36756003)(26005)(5660300002)(2616005)(2906002)(4744005)(186003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?foU3e/+bs1JMe3DYHWgO0kq7IdHNou7kYb3pvGJ441dyCrbmtNFypLyvHuCZ?=
- =?us-ascii?Q?ZRKnPXrCADEbfxIhxfce82wQrDi4wifroyK8eZJHwjAxGzAtPQe69fCansYv?=
- =?us-ascii?Q?fxhN+pnrqg16yRPWL1xNhu1pXcOZvAWtss3AcyM88QLjD0LQtjvSvuNPRF0m?=
- =?us-ascii?Q?V2QK1pOzzllbyg9brojffeqYod1AC/py6SoDfYHTV70/ggPV1y33qtTP9ZSd?=
- =?us-ascii?Q?+tAvLKAYRZVToGUuk3W+m8mQ+/TGpZdqZQkYJAyPViQ5q8rSi6z/ljblGb6t?=
- =?us-ascii?Q?fUraVkomgTlqIc73h3IWwcUJYedAth1f9BEFPuXY6oeMZA0+hCaUQFIUkRuq?=
- =?us-ascii?Q?5cEL9gDuXyM9pTdX07u3Ks+8mV4Te0giGl4bjPUAIiE898d6vYd9vJMX4B5S?=
- =?us-ascii?Q?mAzyOk7LlfhFAN40uqcdZ0OB7mjkZlzPJAdnR1MNZe5Z6NBaTL3aKB4SWDzM?=
- =?us-ascii?Q?8qzdLAtCnpCk1pjrMGyQAFz1M2LCxGtu1JkdwBxma8o8+9j3u+5IbKwAIDyJ?=
- =?us-ascii?Q?TrUEesJNcP/aH0A++Z3UDIXypuFkY9bFlSzSBpqDGexVbrzsWbcHefiNO46L?=
- =?us-ascii?Q?z3W18jBeMcD/eZSx6uwTN1kfUa3EHyqmvSxCEohNJxWXPaTEsCJW1CZlRn6l?=
- =?us-ascii?Q?VXQOYa+S55/ab+vxhwNV6kQNHOrKK3vfV0b2glwXTt8IwhLfubCY/LpoLshI?=
- =?us-ascii?Q?HwVwsyq9hCOthYhmeMGegPaA5c3UWIXnsFmTXzgNJF7QMryhhRtHYVG/cGRc?=
- =?us-ascii?Q?35D5p/yF9Rwo+Ip8fxuXtQH386A3QBaoG5UtjkV7XVTrmsGlIKvj1+o+Q9tP?=
- =?us-ascii?Q?t6dV8onaEPgmL8UYMEe0WA0APk/GoZNoe0n0dUUouNepNXh8PDoEhs3CB6C/?=
- =?us-ascii?Q?07Qzv2KdqJ5Ybne3Sb65kjS6jxUf1RYFy0OCdaJ9BidxS+7oweAMKHP1lKq+?=
- =?us-ascii?Q?J6rSUImgx4L/KJWzKD8Hwoat/PoL0Qfu8nRUeRb3+8eM78/uN9lUCSwSuxHD?=
- =?us-ascii?Q?V8hMZAJ4UNqNclEqarAxHpMoRCXfqUz66MvG9qRtfNODJVCGCT6M36SRfan+?=
- =?us-ascii?Q?JKjB9BSymxMzQUmutkRdk0mcx5zMLTQkTaa0JUaf7Fe6b4m3UdOUYua4fkiE?=
- =?us-ascii?Q?XT1GEnMjfUgqMS+EVW9fTjtyJ2R2P1WWOPBPq8S8PpOEYutPTCnl7w9IXhM/?=
- =?us-ascii?Q?ZFT2eMrqf/QpYpthPOwmUfGGvb6IFHuKhoNfaLjqARmurUVeSnSB7hzhL/3B?=
- =?us-ascii?Q?8qlQwp+3h8PnJ0mLCsYXoVfAdPl1bc8WJlhUktQYxhWWMD/nB2amVxb74bCV?=
- =?us-ascii?Q?9x6sBXBiiLLdLIL+VDqlq0ZcVlO9Dw1p8SMJShK4UtYg90Xkr4hT5kv4B61C?=
- =?us-ascii?Q?SWXB7xtTZDhMSxbupRd2V7tzJ87yRZvJ3K1zXtAtY7+v1QUgywplkOeptjhu?=
- =?us-ascii?Q?u9BFzsyycyl/7a2YnPIj6ajQ6UJCiM1yVdGhPJojHDqaEx2AWuv3gXl2Ijph?=
- =?us-ascii?Q?TytlzNF2r47dvHDG40B8+4Q/YDabGO4XvMysoNTU6MYPcEABiqsCVe14L0xs?=
- =?us-ascii?Q?cj65qOWI893JIFJ81rBPWfvApONcjPZG/EL4Fd6T?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f80fb1d4-425a-4fa4-f2a1-08db838a84b2
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB5288.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2023 10:18:35.9590
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vwgOXIbdwdakK2cpE4xyMk03gpxXzb/S4DApQTnwYEydD6mDcc21jT5do7/9jEDdTnLj2CbP2SvsxCjsJ8midA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5174
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 05/10] firewall: introduce stm32_firewall framework
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
+        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
+        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
+        <fabrice.gasnier@foss.st.com>, <andi.shyti@kernel.org>,
+        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <hugues.fruchet@foss.st.com>,
+        <lee@kernel.org>, <will@kernel.org>, <catalin.marinas@arm.com>,
+        <arnd@kernel.org>, <richardcochran@gmail.com>,
+        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Peng Fan <peng.fan@oss.nxp.com>
+References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
+ <20230705172759.1610753-6-gatien.chevallier@foss.st.com>
+ <20230706150906.GB3858320-robh@kernel.org>
+ <d13f935c-568b-3c0d-8e7d-006b7d4e7d50@foss.st.com>
+ <20230707150724.GA112541-robh@kernel.org>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <20230707150724.GA112541-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.121]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-13_05,2023-07-13_01,2023-05-22_02
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-debugfs_create_dir() function returns an error value embedded in
-the pointer (PTR_ERR). Evaluate the return value using IS_ERR
-rather than checking for NULL.
+Hello Rob,
 
-Fixes: 14911c6f48ec ("i2c: gpio: add fault injector")
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: <stable@vger.kernel.org> # v4.16+
-Signed-off-by: Minjie Du <duminjie@vivo.com>
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
----
-v1-v2:
-Fix judge typo.
-v2-v3:
-Add tags.
-v3-v4:
-Fix log content.
----
- drivers/i2c/busses/i2c-gpio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 7/7/23 17:07, Rob Herring wrote:
+> On Fri, Jul 07, 2023 at 03:43:15PM +0200, Gatien CHEVALLIER wrote:
+>>
+>>
+>> On 7/6/23 17:09, Rob Herring wrote:
+>>> On Wed, Jul 05, 2023 at 07:27:54PM +0200, Gatien Chevallier wrote:
+>>>> Introduce a firewall framework that offers to firewall consumers different
+>>>> firewall services such as the ability to check their access rights against
+>>>> their firewall controller(s).
+>>>>
+>>>> The firewall framework offers a generic API that is defined in firewall
+>>>> controllers drivers to best fit the specificity of each firewall.
+>>>>
+>>>> There are various types of firewalls:
+>>>> -Peripheral firewalls that filter accesses to peripherals
+>>>> -Memory firewalls that filter accesses to memories or memory regions
+>>>> -Resource firewalls that filter accesses to internal resources such as
+>>>> reset and clock controllers
+>>>
+>>> How do resource firewalls work? Access to registers for some clocks in a
+>>> clock controller are disabled? Or something gates off clocks/resets to
+>>> a block?
+>>
+>> To take a practical example:
+>>
+>> A clock controller can be firewall-aware and have its own firewall registers
+>> to configure. To access a clock/reset that is handled this way, a device
+>> would need to check this "resource firewall". I thought that for these kinds
+>> of hardware blocks, having a common API would help.
+> 
+> We already have the concept of 'protected clocks' which are ones
+> controlled by secure mode which limits what Linux can do with them. I
+> think you should extend this mechanism if needed and use the existing
+> clock/reset APIs for managing resources.
+> 
 
-diff --git a/drivers/i2c/busses/i2c-gpio.c b/drivers/i2c/busses/i2c-gpio.c
-index e5a5b9e8b..545927b96 100644
---- a/drivers/i2c/busses/i2c-gpio.c
-+++ b/drivers/i2c/busses/i2c-gpio.c
-@@ -265,7 +265,7 @@ static void i2c_gpio_fault_injector_init(struct platform_device *pdev)
- 	 */
- 	if (!i2c_gpio_debug_dir) {
- 		i2c_gpio_debug_dir = debugfs_create_dir("i2c-fault-injector", NULL);
--		if (!i2c_gpio_debug_dir)
-+		if (IS_ERR(i2c_gpio_debug_dir))
- 			return;
- 	}
- 
--- 
-2.39.0
+Ok, thank you for the input. I'll remove this type of firewall for V2 as
+I no longer have a use case.
 
+>>>
+>>> It might make more sense for "resource" accesses to be managed within
+>>> those resource APIs (i.e. the clock and reset frameworks) and leave this
+>>> framework to bus accesses.
+>>>
+>>
+>> Okay, I'll drop this for V2 if you find that the above explaination do not
+>> justify this.
+>>
+>>>> A firewall controller must be probed at arch_initcall level and register
+>>>> to the framework so that consumers can use their services.
+>>>
+>>> initcall ordering hacks should not be needed. We have both deferred
+>>> probe and fw_devlinks to avoid that problem.
+>>>
+>>
+>> Greg also doubts this.
+>>
+>> Drivers like reset/clock controllers drivers (core_initcall level) will have
+>> a dependency on the firewall controllers in order to initialize their
+>> resources. I was not sure how to manage these dependencies.
+>>
+>> Now, looking at init/main.c, I've realized that core_initcall() level comes
+>> before arch_initcall() level...
+>>
+>> If managed by fw_devlink, the feature-domains property should be supported
+>> as well I suppose? I'm not sure how to handle this properly. I'd welcome
+>> your suggestion.
+> 
+> DT parent/child child dependencies are already handled which might be
+> enough for you. Otherwise, adding a new provider/consumer binding is a
+> couple of lines to add the property names. See drivers/of/property.c.
+> 
+
+Ok, I'll try with a modification of drivers/of/property.c as the
+parent/child dependency won't be enough. Thanks for pointing this out.
+
+>>>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+>>>> ---
+>>>>    MAINTAINERS                               |   5 +
+>>>>    arch/arm64/Kconfig.platforms              |   1 +
+>>>>    drivers/bus/Kconfig                       |  10 +
+>>>>    drivers/bus/Makefile                      |   1 +
+>>>>    drivers/bus/stm32_firewall.c              | 252 ++++++++++++++++++++++
+>>>>    drivers/bus/stm32_firewall.h              |  83 +++++++
+>>>
+>>> Why something stm32 specific? We know there are multiple platforms
+>>> wanting something in this area. Wasn't the last attempt common?
+>>>
+>>> For a common binding, I'm not eager to accept anything new with only 1
+>>> user.
+>>>
+>>
+>> Last attempt was common for the feature-domain bindings. The system-bus
+>> driver was ST-specific. I don't know if other platforms needs this kind
+>> of framework. Are you suggesting that this framework should be generic? Or
+>> that this framework should have a st-specific property?
+> 
+> Ah right, the posting for SCMI device permissions was the binding only.
+> The binding should be generic and support more than 1 user. That somewhat
+> implies a generic framework, but not necessarily.
+> 
+>> I've oriented this firewall framework to serve ST purpose. There may be a
+>> need for other platforms but I'm not sure that this framework serves them
+>> well. One can argue that it is quite minimalist and covers basic purposes of
+>> a hardware firewall but I would need more feedback from other vendors to
+>> submit it as a generic one.
+> 
+> We already know there are at least 2 users. Why would we make the 2nd
+> user refactor your driver into a common framework?
+> 
+> [...]
+> 
+
+If one thinks this framework is generic enough so it can be of use for
+them, so yes, I can submit it as a common framework. I'm not that sure
+Oleksii finds a use case with it. He seemed interested by the bindings.
+Maybe I'm wrong Oleksii?
+
+For V2, I'd rather submit it again as an ST-specific framework again to
+address the generic comments. This way, other people have time to
+manifest themselves.
+
+>>>> +int stm32_firewall_get_firewall(struct device_node *np,
+>>>> +				struct stm32_firewall *firewall)
+>>>> +{
+>>>> +	struct stm32_firewall_controller *ctrl;
+>>>> +	struct of_phandle_args args;
+>>>> +	u32 controller_phandle;
+>>>> +	bool match = false;
+>>>> +	size_t i;
+>>>> +	int err;
+>>>> +
+>>>> +	if (!firewall)
+>>>> +		return -EINVAL;
+>>>> +
+>>>> +	/* The controller phandle is always the first argument of the feature-domains property. */
+>>>> +	err = of_property_read_u32(np, "feature-domains", &controller_phandle);
+>>>
+>>> Why do you need to parse the property twice?
+>>>
+>>
+>> The first parsing is to have the first argument, which is the controller
+>> phandle. The second parsing is here to get the firewall arguments based on
+>> the number of arguments defined by #feature-domain-cells. Maybe using
+>> of_property_read_u32_array() would be better.
+> 
+> No. It's not a u32 array. It's a phandle+args property, so you should
+> only use phandle+args APIs.
+> 
+>> I did not want to close the
+>> door for supporting several feature domain controllers, hence multiple
+>> phandles. of_parse_phandle_with_args() seemed fine for this purpose but the
+>> phandle is parsed out.
+> 
+> There's an iterator for handling multiple phandle+args cases.
+> 
+> Rob
+
+Ok, will look into that for V2.
+
+Best regards,
+Gatien
