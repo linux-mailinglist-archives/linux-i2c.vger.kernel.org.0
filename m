@@ -2,62 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F038A7535D5
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jul 2023 10:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AED0753662
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jul 2023 11:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235699AbjGNI6L (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 14 Jul 2023 04:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S235431AbjGNJ0v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 14 Jul 2023 05:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235704AbjGNI6K (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Jul 2023 04:58:10 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CFC271F
-        for <linux-i2c@vger.kernel.org>; Fri, 14 Jul 2023 01:58:01 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fbd33a57dcso16352465e9.0
-        for <linux-i2c@vger.kernel.org>; Fri, 14 Jul 2023 01:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689325080; x=1691917080;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TBpOTioWYQ0j3N4IeyzzrOG0jNZw8LOuQH6eognekMo=;
-        b=lJioJo16+7QTE7Bv1v30mC6kDQwB6sjuQLlFQxjbX0kYJfb+BaDMwo02Nj2POJt4xY
-         ambqevCTL5CSJWOnpOk/OJreCBaEEI5wVbio9co7f48RjJVEFR+8p50+ml0F0XMC4uaC
-         RpY/UKB12QgKXXpZIh0klXGHKIhu4WeQpPPCt5afugIx9U3m7rVnLA6PTbnX4b9bFfUd
-         MI2IkL/H6GGpJfkaW88G1MauywFlFnKHa/4RLDC61tkiv55fdJ2Q7NamtOEvukybNZSE
-         3h5karzbM988g7c5xQwM25OJhW0u8F4Bprv7hzOmqrq8J6sIPRpKI8vMnPPyMvazZh2C
-         pe1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689325080; x=1691917080;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TBpOTioWYQ0j3N4IeyzzrOG0jNZw8LOuQH6eognekMo=;
-        b=bL4U8IDOmn5Nxyf2KExlf0s3PSr4cYioFp9KpIAa/MrhwaCjvr7/HIq7GmyaHJMDoy
-         F06lWkSPIP6PbIqkmtmnWzI6WSykWD+tFtFYhGz5CLmsBo7HB3LG9c8JGoz+EB5G13Jq
-         IGaGsyXuBlfC3HYZggmZAsMTeiGu49QEvgKQMguAPphFnKYihBaohXQvf5LbMFAXK7OJ
-         feSPHbinweMi5YvgpyCECBdhHQzbb869QmzzhbSAtIkxQfJGfNjM5DtIPNx9GG34XIp8
-         LWpHQ5wnwKrcTJqrdk2n5tIypA0gR2P2anBxewHi1JY5HJi3UttmEydOHJ7YukFieW9c
-         erDg==
-X-Gm-Message-State: ABy/qLbPPX7ehI0QEBBmy/jKrDU9S5EdZWJjtnxAgYSygl75iKbESS2c
-        Z01NoaavqLskV4Oryj345wk4YA==
-X-Google-Smtp-Source: APBJJlGGcOQKIlJR/8CU0pXiIjp31q3MTr1cXmxwyy1mOcTI2kPigEceKALeRcgV1pbT/hDgdf652A==
-X-Received: by 2002:a05:600c:214d:b0:3fb:b1fd:4183 with SMTP id v13-20020a05600c214d00b003fbb1fd4183mr3701240wml.12.1689325080318;
-        Fri, 14 Jul 2023 01:58:00 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id 9-20020a05600c228900b003fba92fad35sm924257wmf.26.2023.07.14.01.57.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Jul 2023 01:57:59 -0700 (PDT)
-Message-ID: <674fed6f-36d6-bacb-d075-97bc355177a3@linaro.org>
-Date:   Fri, 14 Jul 2023 10:57:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v12 2/2] i2c: aspeed: support ast2600 i2c new register
- mode driver
-Content-Language: en-US
-To:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        with ESMTP id S235562AbjGNJ0o (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Jul 2023 05:26:44 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2118.outbound.protection.outlook.com [40.107.215.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C38A2D73;
+        Fri, 14 Jul 2023 02:26:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Dp0JBMFDTwBD/AqiGmOxDeMGyDVjJeTp3Bcet0WCm6CsipmHGd63n175f/vVYBVWC2S1n/pP1lO5mEJyP1iCTNcwMpr+lC9Eg3rEWK7ib7qDWmx4TxHUl2D4dAyPbaTkWzWxztZaXcKSDQQLggoqD+V3rZrmwdRrC6jQtyUFSedRli4ChEFb+WQMv6OvIXui40nOGXJqiwFQAsbNd8fNt447QwAUMqvc1MlgR+qt0mVkdkEsMMnuVWAMfYjd+qGGW0LrIISrf0VSdB1KyHgPkOjoXLVt4dUzpDJPqcteLtiUzwEQ6YgWOPVP5k4S5iBPaKYUMHuYAIpyg9kxhH4SMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bSGh02aTUdcKqbyeu4ILMV6UvQSrnLTPguNRKtTQ4AM=;
+ b=BLwXXJPosZsMMu2Lz/JTNELJ9C0ll5lHkIX3Y/a37TZcuURVYFwxsIKql9MTpu9bUyDwkaFYYRsQyebbGZw/0UN8ZsR8perVKCQLplAIMo3WIRD5SDMh3KSnqKVBp6WPvsQ3JLqTl/VonjtvMf1B5aNF9C6gTjLCkOW28LMgQEcsH9GCmlJSmIWS86hMEUw0NyiPR1mUb2kkxk0f9zDbh2Ndc2qr4mKQorHE9nH4VsJwlueOQ82IwrqlB/dlSM6lrImOdw9m5mEUTyNSvxDASK/NlmSq0/uF4NBXJ/lEbsTZ36VBjZjorNAJpOP+L5c4/57gzfqOzV4YdfElJ+lYEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bSGh02aTUdcKqbyeu4ILMV6UvQSrnLTPguNRKtTQ4AM=;
+ b=JX7JmL7lwer9dSeU1/9DS6Hr7ze/2K6O/Qv5jPBYPEyzj0sSqJT/1HoH2ih0GvvC0pETsHISdGLvBarcQ9XKfiuUD99bdvzpoDd7Vu+l3qrdk8SSu77YU/4HgaziAGJ9Ol+GYENjJk7IfYll/fBKw1AQ7Ej0xobuLYeBfhHDx4Iha0mkWGAj4bRH6/1C6l92OkVfSS0P/GHn6Svm2s6hV36cWAI83ZIcPlkOGV7SGxeYS/EYJlHiio8Dwjud1ipG558LjwaUyAoomMUL095ZDQtFJPfxd4PlQlU54QqXqs5b3YyaKvmq2iwN49BHgBipy/4zXTixPuv3CMgsEpCMvA==
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TYZPR06MB6567.apcprd06.prod.outlook.com (2603:1096:400:465::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.27; Fri, 14 Jul
+ 2023 09:26:36 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.028; Fri, 14 Jul 2023
+ 09:26:36 +0000
+From:   Ryan Chen <ryan_chen@aspeedtech.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         "jk@codeconstruct.com.au" <jk@codeconstruct.com.au>,
         Brendan Higgins <brendan.higgins@linux.dev>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -83,69 +65,122 @@ To:     Ryan Chen <ryan_chen@aspeedtech.com>,
         "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
         "=linux-kernel@vger.kernel.org" <=linux-kernel@vger.kernel.org>,
         Andi Shyti <andi.shyti@kernel.org>
+Subject: RE: [PATCH v12 2/2] i2c: aspeed: support ast2600 i2c new register
+ mode driver
+Thread-Topic: [PATCH v12 2/2] i2c: aspeed: support ast2600 i2c new register
+ mode driver
+Thread-Index: AQHZtics0zDPons9tEqiPxizT4zKAq+45uuAgAAA8zCAAA5kgIAAB7jA
+Date:   Fri, 14 Jul 2023 09:26:36 +0000
+Message-ID: <SEZPR06MB5269568451406598F0D824F6F234A@SEZPR06MB5269.apcprd06.prod.outlook.com>
 References: <20230714074522.23827-1-ryan_chen@aspeedtech.com>
  <20230714074522.23827-3-ryan_chen@aspeedtech.com>
  <eda7789d-a603-d565-c9da-edfe9493a05d@linaro.org>
  <SEZPR06MB5269EB586319B3333CD96010F234A@SEZPR06MB5269.apcprd06.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SEZPR06MB5269EB586319B3333CD96010F234A@SEZPR06MB5269.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+ <674fed6f-36d6-bacb-d075-97bc355177a3@linaro.org>
+In-Reply-To: <674fed6f-36d6-bacb-d075-97bc355177a3@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SEZPR06MB5269:EE_|TYZPR06MB6567:EE_
+x-ms-office365-filtering-correlation-id: 394b6adc-b829-4c06-b36c-08db844c6bb9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: o9Kf/QfNlJvWdo2aU/q7WiqURN6WudWdS5BEvtcg6mMmYv+shr0dmplydosmovV8Jf5TrbH6kSS6wi6PXt6D+o+L5jdzs/BAg1fH6aJdQBw7l64o1o4tbBMFHZf4hmgo6CfyqADEK/ImV6d0ntot0RjWqLO5o75KNixsTR+8mAAQNuQ3HGrRYDowvdJMlpvcDvMmUaxOLVT3Hn6JvpxHIdiKkLPwamJXiyyNNXXvPrknkMuqAA2sgYWJKHX/zA1vpxhYLRFItuq1EB5bQLxQ8F5j9AO+hqd2I9u0HWe9LXVauKBu4m1UYMJgalqcwJS5e1Yzd1QnzrU72HrX44T3k90MFq75871DEZQf6KnQSXIaECf+LyNYmJBkcSmRzPKUJyba9x8Wa9Amd4tF7wPHYMM9tON6YJjKeabiJspdkaQpWj5gTked3kceF/vrhFGSjxdMVwkVzZJHBZBr5e8uXRJCPTxS5w8I/Afi7k/s2ojrn00uQp1rueYHhflm21alYJNy72Fum2strx+zQddSbZU2Y9BXZOMf7sxYrLK+CX6s8XA1aY/FZyg+RxUtK8PBm9jnyg93bOvDfCdunJIKB/iDdpIjz5F63qwIqb9Fyaxhf98E7Gzqifm8kGjaa1Lt
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(366004)(396003)(376002)(346002)(39840400004)(451199021)(110136005)(41300700001)(55016003)(64756008)(7416002)(66476007)(66446008)(76116006)(66946007)(66556008)(478600001)(5660300002)(52536014)(8936002)(2906002)(8676002)(316002)(71200400001)(7696005)(966005)(86362001)(921005)(26005)(9686003)(6506007)(53546011)(186003)(83380400001)(33656002)(38070700005)(38100700002)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M052RDVrd0dndVFjY0N1ckI5NlQ0L1RQUlRNZEtGdklmUGZPVlFpR3JkTkNr?=
+ =?utf-8?B?MlRTVUZVRHlYZUZTU1Y1Vk8vQWdwT3BybDJBZWxaTXdNamVOWnZRcHNDSlpN?=
+ =?utf-8?B?c3d1RUlUNFlxTGJObTQwUHVWSk9VbHRIOGN6KzJoVGtROXcyVmdkdnIzRm1s?=
+ =?utf-8?B?UzNHNkk1VTd1b2NKaHpYNmVCZFpabmhvM1hnamlGVlFnVk9PSUJ0WFNFNFJQ?=
+ =?utf-8?B?aW5PZXo0eThSTVRKbFJYdUVNNVUzNHM2TEdrZEZjSFcwSnVKbmdJTkt2UWNv?=
+ =?utf-8?B?bVpsVWZKYmltZG9qKzZ2SlJOWUpvZjloRW9pTGtjMTJvazdvRFJxbTFRWDdP?=
+ =?utf-8?B?NFlEM1NNeWlSMHBoVW91NjR0TFo5ajd5QVlUWXZDME1jZXF0alVxVTVjTk9n?=
+ =?utf-8?B?UGNIc2tKMkFGUEdNVUROU2cvNnppZUl4dHZ0MXdqcHdMRlNJSHZrbVBKRHJm?=
+ =?utf-8?B?OHRObTNrWEs0M1Vqb2dkeTk3eWZ5YzkrOXFGQkxlZTZkQXY5ZHBXdzhOVEo3?=
+ =?utf-8?B?SjcvV3Z3MTZtNExXV2d6QkU5Ny9MWitTZ1B6ZEFmZFlCT21qSDJGM1BmNVpi?=
+ =?utf-8?B?c014dVFMU1ZPQUpkaWFFMm5CbUZSRWNNYW00QVBuYkVQVXVQY1JLUXFsY01K?=
+ =?utf-8?B?M1JSOURBVnd6ejJUclFESDZQMFFpb1BCYThjMk1HWXkyZXZhaHRlaGJhUVpy?=
+ =?utf-8?B?MmYyeGtWTm9sTmxNTmhLRWEzOVIzdFJxbHVNVThPbVpzMmlsTURMamtLT2cr?=
+ =?utf-8?B?M0duSDA0M1dYaUdHNE8wSVZyZko0THJ1UHd2bngvUC8vcXc2ZWplcUZXMkxX?=
+ =?utf-8?B?WGJQVXR1eDF1eS82SmlKbmJpTUhrY0NzY2NnWXFoNTVEQmU0dmZ2VHE5aUNZ?=
+ =?utf-8?B?b1A4a0lqRmUxVVY0dkZsRC85SlJCKzEwaTg2cm9ZWVJudkZSVTc3VkNhU1d2?=
+ =?utf-8?B?Zkt1L1pWUTQ3a00zanIwMElzUUxnZExZVHBrRlVYemtjM0VzU09LdFlSSDcr?=
+ =?utf-8?B?VFNDMkl0WElsdHBwdjNpTnAydG1LNTVpUnJpR3ptejVPY3JXMU9iV1c0N1g4?=
+ =?utf-8?B?SlZBc2RwalJEYXJoVEp0NnZ6SGF4dWNmeDZhVXY0MGdrMTFkWEpsQ054RFYx?=
+ =?utf-8?B?Ri9GeWNFUHQ2YTJJbjlqUlBRb3p5VTR1aC9xWkFMYnRma3JpdW1yVEE3R1FP?=
+ =?utf-8?B?QzRWajgyVG1XSTdrK0pPVEVTTk9pRFdYdkw3dFlXQ0ZiaGNheFFURmNxd3ZP?=
+ =?utf-8?B?SlBqNThYWW1aakp1bHMybHN3QVJyODgxdTRaVzB6VFo3ZFIxM3prZGtkdXA1?=
+ =?utf-8?B?SkFoNkZZVnlONDFuSWJDZGhqSHczRHQ2WjcxTTgvT3JtS1Nnd3o2cDBjWVFG?=
+ =?utf-8?B?elk0SGNYb09IOFlWbGdlVyswVlVmYkZOY0ozNWZhaW1PZnFCUHoyRHVhdlBa?=
+ =?utf-8?B?ZHFzdzBYWlREejkrZU1UYWVmTmkrSk5qYXlNNyt0UXhmSWhFQjhiSXYzTUhI?=
+ =?utf-8?B?WVMyK3JxazFHR3dxdnE5RGZydy9LQkpyZHdpeU5PWmxJcUIzZjYxNE1XRS9v?=
+ =?utf-8?B?U2pzN0FHeTN1SDVEd0M1NXBRTHI1VisvTURhNlRQbkNXaWttZm1NUmdPdmJU?=
+ =?utf-8?B?Qy8yVHVTOVF3cXd5L0VNNDdqQ1AwVmhZTUU4MEJscXl0U1IrVFdSaXRaRWN3?=
+ =?utf-8?B?SmI5NkZJQXJPWG44cXB1V0RyRXVuakxNc3c1eTlEd09ET05EZjhhZHNuaTZh?=
+ =?utf-8?B?WFdwU3FROGlWVTZYZ3llNTRIajgwY3AvcnQzZy9aWmRJTUo1aDVmY2hXM0R5?=
+ =?utf-8?B?bitnbFNjbDJIRmdjRnhTZW1FK1FsenptMXQxNVdETGdhMjh6eDdMb2xacFEw?=
+ =?utf-8?B?ajd0d0V2RW9sRU0xUk42dmkwVXFxaERORWtSTkg2VUNqNnNFdVVVSkFham9U?=
+ =?utf-8?B?MDdNUURHZU1EeGtFS0JneHdqL1JiZ1N1L0YxVUljdGR6S2JYb25qbFFlTlNT?=
+ =?utf-8?B?eWdHenFMQnFKakRWRnpwK1U4dmp4ZTc3TTVvTTl3NTltY0tSN3hJN3prSEVH?=
+ =?utf-8?B?ZDFpZWpBYU80VW9qNktwMk45amdkeXFPcm1oVHBWOGVmT1duU1JSeE1OUGY5?=
+ =?utf-8?Q?AJQPzg6Me5jttJqU4QUDqwylL?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 394b6adc-b829-4c06-b36c-08db844c6bb9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jul 2023 09:26:36.2622
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fK8dZF95SKhUpWn5KygCfrna7fEZOa4X0Y4JYTC78jDC6BUeZkyGQ/gnUmpbHfLMbuV05RWRdQ+Og+CZT6SOpvNc9h65qXnc2mSB3+T8rnc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6567
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 14/07/2023 10:08, Ryan Chen wrote:
-> Hello,
-> 
-> On 14/07/2023 09:45, Ryan Chen wrote:
->> Add i2c new register mode driver to support AST2600 i2c new register 
->> mode. AST2600 i2c controller have legacy and new register mode. The 
->> new register mode have global register support 4 base clock for scl 
->> clock selection, and new clock divider mode. The i2c new register mode 
->> have separate register set to control i2c master and slave.
->>
->> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
->> ---
-> 
-> ...
-> 
->> +	ret = devm_i2c_add_adapter(dev, &i2c_bus->adap);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return 0;
->> +}
->> +
->> +static int ast2600_i2c_remove(struct platform_device *pdev) {
->> +	struct ast2600_i2c_bus *i2c_bus = platform_get_drvdata(pdev);
->> +
->> +	/* Disable everything. */
->> +	writel(0, i2c_bus->reg_base + AST2600_I2CC_FUN_CTRL);
->> +	writel(0, i2c_bus->reg_base + AST2600_I2CM_IER);
->> +
->> +	i2c_del_adapter(&i2c_bus->adap);
-> 
->> I have doubts that you tested this. I think you have here double free/del of the adapter.
-> Sorry, i can't catch your point for double free the adapter.
-> It should use i2c_del_adapter in driver remove function.
-> All the driver doing this 
-> https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-npcm7xx.c#L2373
-> https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-altera.c#L473
-> 
-> Do you mean it is not necessary? 
-
-Instead of giving you the fish, I think much more learning experience is
-to teach you how to fish. Please unbind your driver (echo the device
-name to proper unbind file in sysfs). The best if you build your kernel
-with KASAN.
-
-Best regards,
-Krzysztof
-
+SGVsbG8sDQo+IA0KPiBPbiAxNC8wNy8yMDIzIDA5OjQ1LCBSeWFuIENoZW4gd3JvdGU6DQo+PiBB
+ZGQgaTJjIG5ldyByZWdpc3RlciBtb2RlIGRyaXZlciB0byBzdXBwb3J0IEFTVDI2MDAgaTJjIG5l
+dyByZWdpc3RlciANCj4+IG1vZGUuIEFTVDI2MDAgaTJjIGNvbnRyb2xsZXIgaGF2ZSBsZWdhY3kg
+YW5kIG5ldyByZWdpc3RlciBtb2RlLiBUaGUgDQo+PiBuZXcgcmVnaXN0ZXIgbW9kZSBoYXZlIGds
+b2JhbCByZWdpc3RlciBzdXBwb3J0IDQgYmFzZSBjbG9jayBmb3Igc2NsIA0KPj4gY2xvY2sgc2Vs
+ZWN0aW9uLCBhbmQgbmV3IGNsb2NrIGRpdmlkZXIgbW9kZS4gVGhlIGkyYyBuZXcgcmVnaXN0ZXIg
+DQo+PiBtb2RlIGhhdmUgc2VwYXJhdGUgcmVnaXN0ZXIgc2V0IHRvIGNvbnRyb2wgaTJjIG1hc3Rl
+ciBhbmQgc2xhdmUuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogUnlhbiBDaGVuIDxyeWFuX2NoZW5A
+YXNwZWVkdGVjaC5jb20+DQo+PiAtLS0NCj4gDQo+IC4uLg0KPiANCj4+ICsJcmV0ID0gZGV2bV9p
+MmNfYWRkX2FkYXB0ZXIoZGV2LCAmaTJjX2J1cy0+YWRhcCk7DQo+PiArCWlmIChyZXQpDQo+PiAr
+CQlyZXR1cm4gcmV0Ow0KPj4gKw0KPj4gKwlyZXR1cm4gMDsNCj4+ICt9DQo+PiArDQo+PiArc3Rh
+dGljIGludCBhc3QyNjAwX2kyY19yZW1vdmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikg
+ew0KPj4gKwlzdHJ1Y3QgYXN0MjYwMF9pMmNfYnVzICppMmNfYnVzID0gcGxhdGZvcm1fZ2V0X2Ry
+dmRhdGEocGRldik7DQo+PiArDQo+PiArCS8qIERpc2FibGUgZXZlcnl0aGluZy4gKi8NCj4+ICsJ
+d3JpdGVsKDAsIGkyY19idXMtPnJlZ19iYXNlICsgQVNUMjYwMF9JMkNDX0ZVTl9DVFJMKTsNCj4+
+ICsJd3JpdGVsKDAsIGkyY19idXMtPnJlZ19iYXNlICsgQVNUMjYwMF9JMkNNX0lFUik7DQo+PiAr
+DQo+PiArCWkyY19kZWxfYWRhcHRlcigmaTJjX2J1cy0+YWRhcCk7DQo+IA0KPj4gSSBoYXZlIGRv
+dWJ0cyB0aGF0IHlvdSB0ZXN0ZWQgdGhpcy4gSSB0aGluayB5b3UgaGF2ZSBoZXJlIGRvdWJsZSBm
+cmVlL2RlbCBvZiB0aGUgYWRhcHRlci4NCj4gU29ycnksIGkgY2FuJ3QgY2F0Y2ggeW91ciBwb2lu
+dCBmb3IgZG91YmxlIGZyZWUgdGhlIGFkYXB0ZXIuDQo+IEl0IHNob3VsZCB1c2UgaTJjX2RlbF9h
+ZGFwdGVyIGluIGRyaXZlciByZW1vdmUgZnVuY3Rpb24uDQo+IEFsbCB0aGUgZHJpdmVyIGRvaW5n
+IHRoaXMNCj4gaHR0cHM6Ly9naXRodWIuY29tL3RvcnZhbGRzL2xpbnV4L2Jsb2IvbWFzdGVyL2Ry
+aXZlcnMvaTJjL2J1c3Nlcy9pMmMtbg0KPiBwY203eHguYyNMMjM3Mw0KPiBodHRwczovL2dpdGh1
+Yi5jb20vdG9ydmFsZHMvbGludXgvYmxvYi9tYXN0ZXIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1h
+DQo+IGx0ZXJhLmMjTDQ3Mw0KPiANCj4gRG8geW91IG1lYW4gaXQgaXMgbm90IG5lY2Vzc2FyeT8g
+DQoNCj5JbnN0ZWFkIG9mIGdpdmluZyB5b3UgdGhlIGZpc2gsIEkgdGhpbmsgbXVjaCBtb3JlIGxl
+YXJuaW5nIGV4cGVyaWVuY2UgaXMgdG8gdGVhY2ggeW91IGhvdyB0byBmaXNoLiBQbGVhc2UgdW5i
+aW5kIHlvdXIgZHJpdmVyIChlY2hvIHRoZSBkZXZpY2UgbmFtZSB0byBwcm9wZXIgdW5iaW5kIGZp
+bGUgaW4gc3lzZnMpLiBUaGUgYmVzdCBpZiB5b3UgYnVpbGQgeW91ciBrZXJuZWwgd2l0aCBLQVNB
+Ti4NCg0KVGhhbmtzLCB3aWxsIGRvIHRoaXMgdGVzdCB3aXRoIHVuYmluZCB0byB1bmRlcnN0YW5k
+IHlvdXIgcG9pbnQuIA0KDQoNCg==
