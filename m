@@ -2,185 +2,197 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AED0753662
-	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jul 2023 11:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396E3753941
+	for <lists+linux-i2c@lfdr.de>; Fri, 14 Jul 2023 13:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235431AbjGNJ0v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 14 Jul 2023 05:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
+        id S232239AbjGNLG5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 14 Jul 2023 07:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235562AbjGNJ0o (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Jul 2023 05:26:44 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2118.outbound.protection.outlook.com [40.107.215.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C38A2D73;
-        Fri, 14 Jul 2023 02:26:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dp0JBMFDTwBD/AqiGmOxDeMGyDVjJeTp3Bcet0WCm6CsipmHGd63n175f/vVYBVWC2S1n/pP1lO5mEJyP1iCTNcwMpr+lC9Eg3rEWK7ib7qDWmx4TxHUl2D4dAyPbaTkWzWxztZaXcKSDQQLggoqD+V3rZrmwdRrC6jQtyUFSedRli4ChEFb+WQMv6OvIXui40nOGXJqiwFQAsbNd8fNt447QwAUMqvc1MlgR+qt0mVkdkEsMMnuVWAMfYjd+qGGW0LrIISrf0VSdB1KyHgPkOjoXLVt4dUzpDJPqcteLtiUzwEQ6YgWOPVP5k4S5iBPaKYUMHuYAIpyg9kxhH4SMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bSGh02aTUdcKqbyeu4ILMV6UvQSrnLTPguNRKtTQ4AM=;
- b=BLwXXJPosZsMMu2Lz/JTNELJ9C0ll5lHkIX3Y/a37TZcuURVYFwxsIKql9MTpu9bUyDwkaFYYRsQyebbGZw/0UN8ZsR8perVKCQLplAIMo3WIRD5SDMh3KSnqKVBp6WPvsQ3JLqTl/VonjtvMf1B5aNF9C6gTjLCkOW28LMgQEcsH9GCmlJSmIWS86hMEUw0NyiPR1mUb2kkxk0f9zDbh2Ndc2qr4mKQorHE9nH4VsJwlueOQ82IwrqlB/dlSM6lrImOdw9m5mEUTyNSvxDASK/NlmSq0/uF4NBXJ/lEbsTZ36VBjZjorNAJpOP+L5c4/57gzfqOzV4YdfElJ+lYEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bSGh02aTUdcKqbyeu4ILMV6UvQSrnLTPguNRKtTQ4AM=;
- b=JX7JmL7lwer9dSeU1/9DS6Hr7ze/2K6O/Qv5jPBYPEyzj0sSqJT/1HoH2ih0GvvC0pETsHISdGLvBarcQ9XKfiuUD99bdvzpoDd7Vu+l3qrdk8SSu77YU/4HgaziAGJ9Ol+GYENjJk7IfYll/fBKw1AQ7Ej0xobuLYeBfhHDx4Iha0mkWGAj4bRH6/1C6l92OkVfSS0P/GHn6Svm2s6hV36cWAI83ZIcPlkOGV7SGxeYS/EYJlHiio8Dwjud1ipG558LjwaUyAoomMUL095ZDQtFJPfxd4PlQlU54QqXqs5b3YyaKvmq2iwN49BHgBipy/4zXTixPuv3CMgsEpCMvA==
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by TYZPR06MB6567.apcprd06.prod.outlook.com (2603:1096:400:465::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.27; Fri, 14 Jul
- 2023 09:26:36 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6565.028; Fri, 14 Jul 2023
- 09:26:36 +0000
-From:   Ryan Chen <ryan_chen@aspeedtech.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "jk@codeconstruct.com.au" <jk@codeconstruct.com.au>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "=linux-kernel@vger.kernel.org" <=linux-kernel@vger.kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>
-Subject: RE: [PATCH v12 2/2] i2c: aspeed: support ast2600 i2c new register
- mode driver
-Thread-Topic: [PATCH v12 2/2] i2c: aspeed: support ast2600 i2c new register
- mode driver
-Thread-Index: AQHZtics0zDPons9tEqiPxizT4zKAq+45uuAgAAA8zCAAA5kgIAAB7jA
-Date:   Fri, 14 Jul 2023 09:26:36 +0000
-Message-ID: <SEZPR06MB5269568451406598F0D824F6F234A@SEZPR06MB5269.apcprd06.prod.outlook.com>
-References: <20230714074522.23827-1-ryan_chen@aspeedtech.com>
- <20230714074522.23827-3-ryan_chen@aspeedtech.com>
- <eda7789d-a603-d565-c9da-edfe9493a05d@linaro.org>
- <SEZPR06MB5269EB586319B3333CD96010F234A@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <674fed6f-36d6-bacb-d075-97bc355177a3@linaro.org>
-In-Reply-To: <674fed6f-36d6-bacb-d075-97bc355177a3@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SEZPR06MB5269:EE_|TYZPR06MB6567:EE_
-x-ms-office365-filtering-correlation-id: 394b6adc-b829-4c06-b36c-08db844c6bb9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: o9Kf/QfNlJvWdo2aU/q7WiqURN6WudWdS5BEvtcg6mMmYv+shr0dmplydosmovV8Jf5TrbH6kSS6wi6PXt6D+o+L5jdzs/BAg1fH6aJdQBw7l64o1o4tbBMFHZf4hmgo6CfyqADEK/ImV6d0ntot0RjWqLO5o75KNixsTR+8mAAQNuQ3HGrRYDowvdJMlpvcDvMmUaxOLVT3Hn6JvpxHIdiKkLPwamJXiyyNNXXvPrknkMuqAA2sgYWJKHX/zA1vpxhYLRFItuq1EB5bQLxQ8F5j9AO+hqd2I9u0HWe9LXVauKBu4m1UYMJgalqcwJS5e1Yzd1QnzrU72HrX44T3k90MFq75871DEZQf6KnQSXIaECf+LyNYmJBkcSmRzPKUJyba9x8Wa9Amd4tF7wPHYMM9tON6YJjKeabiJspdkaQpWj5gTked3kceF/vrhFGSjxdMVwkVzZJHBZBr5e8uXRJCPTxS5w8I/Afi7k/s2ojrn00uQp1rueYHhflm21alYJNy72Fum2strx+zQddSbZU2Y9BXZOMf7sxYrLK+CX6s8XA1aY/FZyg+RxUtK8PBm9jnyg93bOvDfCdunJIKB/iDdpIjz5F63qwIqb9Fyaxhf98E7Gzqifm8kGjaa1Lt
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(366004)(396003)(376002)(346002)(39840400004)(451199021)(110136005)(41300700001)(55016003)(64756008)(7416002)(66476007)(66446008)(76116006)(66946007)(66556008)(478600001)(5660300002)(52536014)(8936002)(2906002)(8676002)(316002)(71200400001)(7696005)(966005)(86362001)(921005)(26005)(9686003)(6506007)(53546011)(186003)(83380400001)(33656002)(38070700005)(38100700002)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M052RDVrd0dndVFjY0N1ckI5NlQ0L1RQUlRNZEtGdklmUGZPVlFpR3JkTkNr?=
- =?utf-8?B?MlRTVUZVRHlYZUZTU1Y1Vk8vQWdwT3BybDJBZWxaTXdNamVOWnZRcHNDSlpN?=
- =?utf-8?B?c3d1RUlUNFlxTGJObTQwUHVWSk9VbHRIOGN6KzJoVGtROXcyVmdkdnIzRm1s?=
- =?utf-8?B?UzNHNkk1VTd1b2NKaHpYNmVCZFpabmhvM1hnamlGVlFnVk9PSUJ0WFNFNFJQ?=
- =?utf-8?B?aW5PZXo0eThSTVRKbFJYdUVNNVUzNHM2TEdrZEZjSFcwSnVKbmdJTkt2UWNv?=
- =?utf-8?B?bVpsVWZKYmltZG9qKzZ2SlJOWUpvZjloRW9pTGtjMTJvazdvRFJxbTFRWDdP?=
- =?utf-8?B?NFlEM1NNeWlSMHBoVW91NjR0TFo5ajd5QVlUWXZDME1jZXF0alVxVTVjTk9n?=
- =?utf-8?B?UGNIc2tKMkFGUEdNVUROU2cvNnppZUl4dHZ0MXdqcHdMRlNJSHZrbVBKRHJm?=
- =?utf-8?B?OHRObTNrWEs0M1Vqb2dkeTk3eWZ5YzkrOXFGQkxlZTZkQXY5ZHBXdzhOVEo3?=
- =?utf-8?B?SjcvV3Z3MTZtNExXV2d6QkU5Ny9MWitTZ1B6ZEFmZFlCT21qSDJGM1BmNVpi?=
- =?utf-8?B?c014dVFMU1ZPQUpkaWFFMm5CbUZSRWNNYW00QVBuYkVQVXVQY1JLUXFsY01K?=
- =?utf-8?B?M1JSOURBVnd6ejJUclFESDZQMFFpb1BCYThjMk1HWXkyZXZhaHRlaGJhUVpy?=
- =?utf-8?B?MmYyeGtWTm9sTmxNTmhLRWEzOVIzdFJxbHVNVThPbVpzMmlsTURMamtLT2cr?=
- =?utf-8?B?M0duSDA0M1dYaUdHNE8wSVZyZko0THJ1UHd2bngvUC8vcXc2ZWplcUZXMkxX?=
- =?utf-8?B?WGJQVXR1eDF1eS82SmlKbmJpTUhrY0NzY2NnWXFoNTVEQmU0dmZ2VHE5aUNZ?=
- =?utf-8?B?b1A4a0lqRmUxVVY0dkZsRC85SlJCKzEwaTg2cm9ZWVJudkZSVTc3VkNhU1d2?=
- =?utf-8?B?Zkt1L1pWUTQ3a00zanIwMElzUUxnZExZVHBrRlVYemtjM0VzU09LdFlSSDcr?=
- =?utf-8?B?VFNDMkl0WElsdHBwdjNpTnAydG1LNTVpUnJpR3ptejVPY3JXMU9iV1c0N1g4?=
- =?utf-8?B?SlZBc2RwalJEYXJoVEp0NnZ6SGF4dWNmeDZhVXY0MGdrMTFkWEpsQ054RFYx?=
- =?utf-8?B?Ri9GeWNFUHQ2YTJJbjlqUlBRb3p5VTR1aC9xWkFMYnRma3JpdW1yVEE3R1FP?=
- =?utf-8?B?QzRWajgyVG1XSTdrK0pPVEVTTk9pRFdYdkw3dFlXQ0ZiaGNheFFURmNxd3ZP?=
- =?utf-8?B?SlBqNThYWW1aakp1bHMybHN3QVJyODgxdTRaVzB6VFo3ZFIxM3prZGtkdXA1?=
- =?utf-8?B?SkFoNkZZVnlONDFuSWJDZGhqSHczRHQ2WjcxTTgvT3JtS1Nnd3o2cDBjWVFG?=
- =?utf-8?B?elk0SGNYb09IOFlWbGdlVyswVlVmYkZOY0ozNWZhaW1PZnFCUHoyRHVhdlBa?=
- =?utf-8?B?ZHFzdzBYWlREejkrZU1UYWVmTmkrSk5qYXlNNyt0UXhmSWhFQjhiSXYzTUhI?=
- =?utf-8?B?WVMyK3JxazFHR3dxdnE5RGZydy9LQkpyZHdpeU5PWmxJcUIzZjYxNE1XRS9v?=
- =?utf-8?B?U2pzN0FHeTN1SDVEd0M1NXBRTHI1VisvTURhNlRQbkNXaWttZm1NUmdPdmJU?=
- =?utf-8?B?Qy8yVHVTOVF3cXd5L0VNNDdqQ1AwVmhZTUU4MEJscXl0U1IrVFdSaXRaRWN3?=
- =?utf-8?B?SmI5NkZJQXJPWG44cXB1V0RyRXVuakxNc3c1eTlEd09ET05EZjhhZHNuaTZh?=
- =?utf-8?B?WFdwU3FROGlWVTZYZ3llNTRIajgwY3AvcnQzZy9aWmRJTUo1aDVmY2hXM0R5?=
- =?utf-8?B?bitnbFNjbDJIRmdjRnhTZW1FK1FsenptMXQxNVdETGdhMjh6eDdMb2xacFEw?=
- =?utf-8?B?ajd0d0V2RW9sRU0xUk42dmkwVXFxaERORWtSTkg2VUNqNnNFdVVVSkFham9U?=
- =?utf-8?B?MDdNUURHZU1EeGtFS0JneHdqL1JiZ1N1L0YxVUljdGR6S2JYb25qbFFlTlNT?=
- =?utf-8?B?eWdHenFMQnFKakRWRnpwK1U4dmp4ZTc3TTVvTTl3NTltY0tSN3hJN3prSEVH?=
- =?utf-8?B?ZDFpZWpBYU80VW9qNktwMk45amdkeXFPcm1oVHBWOGVmT1duU1JSeE1OUGY5?=
- =?utf-8?Q?AJQPzg6Me5jttJqU4QUDqwylL?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S230101AbjGNLG4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 14 Jul 2023 07:06:56 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2D9269D
+        for <linux-i2c@vger.kernel.org>; Fri, 14 Jul 2023 04:06:53 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 2FB3B61E5FE03;
+        Fri, 14 Jul 2023 12:57:34 +0200 (CEST)
+Message-ID: <2fd078b9-e55d-7649-3231-3c587f5d4ec4@molgen.mpg.de>
+Date:   Fri, 14 Jul 2023 12:57:33 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 394b6adc-b829-4c06-b36c-08db844c6bb9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jul 2023 09:26:36.2622
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fK8dZF95SKhUpWn5KygCfrna7fEZOa4X0Y4JYTC78jDC6BUeZkyGQ/gnUmpbHfLMbuV05RWRdQ+Og+CZT6SOpvNc9h65qXnc2mSB3+T8rnc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6567
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: Read CPLD firmware version on Edgecore AS5114-48X
+Content-Language: en-US
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-i2c@vger.kernel.org
+References: <688ccf73-1205-6ee6-d8e5-5b18c8abd9c7@molgen.mpg.de>
+ <20230624133214.48015fb6@endymion.delvare>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230624133214.48015fb6@endymion.delvare>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGVsbG8sDQo+IA0KPiBPbiAxNC8wNy8yMDIzIDA5OjQ1LCBSeWFuIENoZW4gd3JvdGU6DQo+PiBB
-ZGQgaTJjIG5ldyByZWdpc3RlciBtb2RlIGRyaXZlciB0byBzdXBwb3J0IEFTVDI2MDAgaTJjIG5l
-dyByZWdpc3RlciANCj4+IG1vZGUuIEFTVDI2MDAgaTJjIGNvbnRyb2xsZXIgaGF2ZSBsZWdhY3kg
-YW5kIG5ldyByZWdpc3RlciBtb2RlLiBUaGUgDQo+PiBuZXcgcmVnaXN0ZXIgbW9kZSBoYXZlIGds
-b2JhbCByZWdpc3RlciBzdXBwb3J0IDQgYmFzZSBjbG9jayBmb3Igc2NsIA0KPj4gY2xvY2sgc2Vs
-ZWN0aW9uLCBhbmQgbmV3IGNsb2NrIGRpdmlkZXIgbW9kZS4gVGhlIGkyYyBuZXcgcmVnaXN0ZXIg
-DQo+PiBtb2RlIGhhdmUgc2VwYXJhdGUgcmVnaXN0ZXIgc2V0IHRvIGNvbnRyb2wgaTJjIG1hc3Rl
-ciBhbmQgc2xhdmUuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogUnlhbiBDaGVuIDxyeWFuX2NoZW5A
-YXNwZWVkdGVjaC5jb20+DQo+PiAtLS0NCj4gDQo+IC4uLg0KPiANCj4+ICsJcmV0ID0gZGV2bV9p
-MmNfYWRkX2FkYXB0ZXIoZGV2LCAmaTJjX2J1cy0+YWRhcCk7DQo+PiArCWlmIChyZXQpDQo+PiAr
-CQlyZXR1cm4gcmV0Ow0KPj4gKw0KPj4gKwlyZXR1cm4gMDsNCj4+ICt9DQo+PiArDQo+PiArc3Rh
-dGljIGludCBhc3QyNjAwX2kyY19yZW1vdmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikg
-ew0KPj4gKwlzdHJ1Y3QgYXN0MjYwMF9pMmNfYnVzICppMmNfYnVzID0gcGxhdGZvcm1fZ2V0X2Ry
-dmRhdGEocGRldik7DQo+PiArDQo+PiArCS8qIERpc2FibGUgZXZlcnl0aGluZy4gKi8NCj4+ICsJ
-d3JpdGVsKDAsIGkyY19idXMtPnJlZ19iYXNlICsgQVNUMjYwMF9JMkNDX0ZVTl9DVFJMKTsNCj4+
-ICsJd3JpdGVsKDAsIGkyY19idXMtPnJlZ19iYXNlICsgQVNUMjYwMF9JMkNNX0lFUik7DQo+PiAr
-DQo+PiArCWkyY19kZWxfYWRhcHRlcigmaTJjX2J1cy0+YWRhcCk7DQo+IA0KPj4gSSBoYXZlIGRv
-dWJ0cyB0aGF0IHlvdSB0ZXN0ZWQgdGhpcy4gSSB0aGluayB5b3UgaGF2ZSBoZXJlIGRvdWJsZSBm
-cmVlL2RlbCBvZiB0aGUgYWRhcHRlci4NCj4gU29ycnksIGkgY2FuJ3QgY2F0Y2ggeW91ciBwb2lu
-dCBmb3IgZG91YmxlIGZyZWUgdGhlIGFkYXB0ZXIuDQo+IEl0IHNob3VsZCB1c2UgaTJjX2RlbF9h
-ZGFwdGVyIGluIGRyaXZlciByZW1vdmUgZnVuY3Rpb24uDQo+IEFsbCB0aGUgZHJpdmVyIGRvaW5n
-IHRoaXMNCj4gaHR0cHM6Ly9naXRodWIuY29tL3RvcnZhbGRzL2xpbnV4L2Jsb2IvbWFzdGVyL2Ry
-aXZlcnMvaTJjL2J1c3Nlcy9pMmMtbg0KPiBwY203eHguYyNMMjM3Mw0KPiBodHRwczovL2dpdGh1
-Yi5jb20vdG9ydmFsZHMvbGludXgvYmxvYi9tYXN0ZXIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1h
-DQo+IGx0ZXJhLmMjTDQ3Mw0KPiANCj4gRG8geW91IG1lYW4gaXQgaXMgbm90IG5lY2Vzc2FyeT8g
-DQoNCj5JbnN0ZWFkIG9mIGdpdmluZyB5b3UgdGhlIGZpc2gsIEkgdGhpbmsgbXVjaCBtb3JlIGxl
-YXJuaW5nIGV4cGVyaWVuY2UgaXMgdG8gdGVhY2ggeW91IGhvdyB0byBmaXNoLiBQbGVhc2UgdW5i
-aW5kIHlvdXIgZHJpdmVyIChlY2hvIHRoZSBkZXZpY2UgbmFtZSB0byBwcm9wZXIgdW5iaW5kIGZp
-bGUgaW4gc3lzZnMpLiBUaGUgYmVzdCBpZiB5b3UgYnVpbGQgeW91ciBrZXJuZWwgd2l0aCBLQVNB
-Ti4NCg0KVGhhbmtzLCB3aWxsIGRvIHRoaXMgdGVzdCB3aXRoIHVuYmluZCB0byB1bmRlcnN0YW5k
-IHlvdXIgcG9pbnQuIA0KDQoNCg==
+[Subject: Correct CPDL to CPLD.]
+
+Dear Jean,
+
+
+Thank you very much for y
+
+Am 24.06.23 um 13:32 schrieb Jean Delvare:
+> Hi Paul,
+> 
+> On Wed, 21 Jun 2023 09:59:44 +0200, Paul Menzel wrote:
+>> I am trying to read the CPLD firmware version of the switch Edgecore
+>> AS5114-48X with dentOS (Debian based).
+>>
+>> In U-Boot it supposedly work like below:
+>>
+>>       Marvell>> i2c dev 2
+>>       Marvell>> i2c md 0x40 01 1
+>>       0001: 01
+>>       Marvell>> i2c md 0x40 ff 1
+>>       00ff: 03
+>>
+>> But I like to do it with GNU/Linux, but my attempts failed:
+>>
+>> ```
+>> # i2cdetect -y 2
+>>        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+>> 00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+>> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+>> 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+>> 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+>> 40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+>> 50: UU UU -- -- -- -- -- -- -- -- -- -- -- -- -- --
+>> 60: -- -- -- -- -- -- -- -- -- -- 6a -- -- -- -- --
+>> 70: -- UU UU UU UU UU UU --
+>> ```
+>>
+>> Nothing seems to be at address 0x40:
+>>
+>> ```
+>> # i2cdump -f -y 2 0x40
+>> No size specified (using byte-data access)
+>>        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+>> 00: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+>> (...)
+>> f0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
+>> ```
+>>
+>> Could the bus be different?
+> 
+> Yes, unlike the PCI bus which has a well defined topology, multiple I2C
+> root segments can coexist in a system and their numbering is largely
+> arbitrary. So there's no guarantee that i2c bus 2 on U-Boot is the same
+> as i2c bus 2 on Linux.
+> 
+> I'm not familiar with U-Boot but you may try "i2c dev" or "i2c bus"
+> commands there, maybe it will tell you what corresponds to i2c bus 2.
+> 
+>> (...)
+>> # find / -iname *cpld*
+>> /sys/bus/i2c/drivers/as4224_cpld
+>> (...)
+>> # ls -l /sys/bus/i2c/drivers/as4224_cpld/
+>> total 0
+>> lrwxrwxrwx 1 root root    0 Jun 20 16:53 0-0040 ->
+>> ../../../../devices/platform/ap806/ap806:config-space@f0000000/f0511000.i2c/i2c-0/0-0040
+>> --w------- 1 root root 4096 Jun 20 16:53 bind
+>> lrwxrwxrwx 1 root root    0 Jun 20 16:53 module ->
+>> ../../../../module/arm64_accton_as4224_cpld
+>> --w------- 1 root root 4096 May 16 10:21 uevent
+>> --w------- 1 root root 4096 Jun 20 16:53 unbind
+>> ```
+>>
+>> Is it bus 0?
+> 
+> Seems so, yes.
+> 
+>> ```
+>> # i2cdump -f -y 0 0x40
+>> No size specified (using byte-data access)
+>>        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+>> 00: 80 01 ff 07 0f cc cc cc cc cc cc cc cc cc cc cc    ??.?????????????
+>> 10: ff 03 3f cc 01 cc cc cc cc cc cc cc cc cc cc cc    .???????????????
+>> 20: ff cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc    .???????????????
+>> 30: ff ff ff ff cc cc cc cc cc cc cc cc cc cc cc cc    ....????????????
+>> 40: cc cc cc 0e cc cc cc cc cc cc cc cc cc cc cc cc    ????????????????
+>> 50: 0d 4a 03 00 7f cc cc cc cc cc cc cc cc cc cc cc    ?J?.????????????
+>> 60: 01 71 1e cc cc cc cc cc cc cc cc cc cc cc cc cc    ?q??????????????
+>> 70: 7f 7f 7f 7f 7f cc cc cc cc cc cc cc cc cc cc cc    ????????????????
+>> 80: 6c 69 69 69 68 cc cc cc cc cc cc cc cc cc cc cc    liiih???????????
+>> 90: 02 00 71 71 cc cc cc cc cc cc cc cc cc cc cc cc    ?.qq????????????
+>> a0: ff ff ff ff ff ff ff ff ff ff ff 7f cc cc cc cc    ...........?????
+>> b0: ff ff ff ff ff ff 00 00 00 00 00 00 cc cc cc cc    ............????
+>> c0: 0f fe ff ff ff 3f 00 00 00 00 00 00 cc cc cc cc    ??...?......????
+>> d0: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc    ????????????????
+>> e0: 00 71 cc cc cc cc cc cc cc cc cc cc cc cc cc cc    .q??????????????
+>> f0: 41 53 35 31 31 34 00 00 00 00 00 00 41 57 53 05    AS5114......AWS?
+>> ```
+>>
+>> What would be the values of `0x40 01 1` and ` 0x40 ff 1`?
+> 
+> As I understand the U-Boot i2c command syntax, 0x40 is the slave
+> address, 01/ff is the register offset (in hexadecimal, despite no
+> leading "0x") and 1 is the register count. So the equivalent Linux
+> i2c-tools commands, assuming i2c bus 0, would be:
+> 
+> # i2cget 0 0x40 0x01 b
+> # i2cget 0 0x40 0xff b
+> 
+> From the full register dump above, these commands will most probably
+> return values (0x)01 and (0x)05, respectively. The former matches what
+> you got from U-Boot, the latter doesn't. Which may or may not indicate
+> a problem, depending on whether these values are supposed to be static
+> or if they could change over time.
+
+The U-Boot values were copied from the GitHub issue, so it’s not an 
+error that they are different.
+
+I updated the CPLD firmware to version 1.09 now, and to verify tried 
+your commands, but get an error:
+
+     # i2cdump -f -y 0 0x40
+     No size specified (using byte-data access)
+          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
+     00: 88 01 ff 07 0f cc cc cc cc cc cc cc cc cc cc cc    ??.?????????????
+     10: ff 03 3f cc 01 cc cc cc cc cc cc cc cc cc cc cc    .???????????????
+     20: ff cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc    .???????????????
+     30: 03 00 00 00 cc cc cc cc cc cc cc cc cc cc cc cc    ?...????????????
+     40: cc cc cc 0e cc cc cc cc cc cc cc cc cc cc cc cc    ????????????????
+     50: 0d 4a 03 00 7f cc cc cc cc cc cc cc cc cc cc cc    ?J?.????????????
+     60: 01 71 1e cc cc cc cc cc cc cc cc cc cc cc cc cc    ?q??????????????
+     70: 7f 7f 7f 7f 7f cc cc cc cc cc cc cc cc cc cc cc    ????????????????
+     80: 6a 69 69 69 68 cc cc cc cc cc cc cc cc cc cc cc    jiiih???????????
+     90: 02 00 71 71 cc cc cc cc cc cc cc cc cc cc cc cc    ?.qq????????????
+     a0: 00 00 00 00 00 00 f0 01 00 00 00 c0 cc cc cc cc    ......??...?????
+     b0: 00 00 00 00 00 00 00 00 00 00 00 00 cc cc cc cc    ............????
+     c0: 0f fe ff ff ff 3f 00 00 00 00 00 00 cc cc cc cc    ??...?......????
+     d0: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc    ????????????????
+     e0: 00 71 cc cc cc cc cc cc cc cc cc cc cc cc cc 00    .q?????????????.
+     f0: 41 53 35 31 31 34 00 00 00 00 00 00 41 57 53 09    AS5114......AWS?
+     # i2cget 0 0x40 0x01 b
+     Error: Could not set address to 0x40: Device or resource busy
+     # i2cget 0 0x40 0xff b
+     Error: Could not set address to 0x40: Device or resource busy
+
+Do you know, why i2cdump is able to read the date, but i2cget is not?
+
+
+Kind regards,
+
+Paul
