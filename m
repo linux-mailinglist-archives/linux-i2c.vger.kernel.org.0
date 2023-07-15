@@ -2,60 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C0B754759
+	by mail.lfdr.de (Postfix) with ESMTP id 9F84475475B
 	for <lists+linux-i2c@lfdr.de>; Sat, 15 Jul 2023 09:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjGOHxr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S230423AbjGOHxr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Sat, 15 Jul 2023 03:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbjGOHxp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 15 Jul 2023 03:53:45 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC18D358E;
-        Sat, 15 Jul 2023 00:53:44 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3128fcd58f3so2814267f8f.1;
-        Sat, 15 Jul 2023 00:53:44 -0700 (PDT)
+        with ESMTP id S230399AbjGOHxq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 15 Jul 2023 03:53:46 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E6935B3;
+        Sat, 15 Jul 2023 00:53:45 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbef8ad9bbso24223965e9.0;
+        Sat, 15 Jul 2023 00:53:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689407623; x=1691999623;
+        d=gmail.com; s=20221208; t=1689407624; x=1691999624;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nXdgGZmClIw2y5+yLCGfpXc796bXl4kQ7ee+T64K4uo=;
-        b=PwVsFYtmxvMSiAQEHcjIruM/oKJvm+GZdX+v3EQVMIjtyg9G/ze9ZJQrmxv4NCw2pg
-         MZgq2fvxZPW3dB59NBhXebmxWXn5rI60bAB7Ft7GCdITE98aby6YFcITPaB29924RAsQ
-         qIefRk5vX7D7yyTWk4g036C3P7ViAFHRXO0bTUms6xHfeQracKlxOTSoV5ueSyVXzfc9
-         LWF764WuYYIgh8+h13z+jRQuaCsi0w7pb8ZPLvxji8nUx922MEjxSgS0DgIV12rjr6+5
-         R+zvz5KiL3PEoN5AMQChw95XLCrRj/fRinaV2R+SczBRtcFr4lgSUz7ZMCGddPok5VJG
-         PKFA==
+        bh=cO8MaIrmzLIgpAh79j/PTcb6h7we+UptA1d76S5ZSws=;
+        b=S0yWZlEfOXQCIdfQ7MJ/pLor2v4HmMmfN9UlsoKQIFHefBL4zXFQXlEFgONXXWVska
+         yQev/sBOgNu08yX6LX/1S1dWqBlm9HVCLPnbVNUbi5RtP18YMGtiLxjcOA4jViUCfD28
+         Ek7fKcPmlKPSEIOgJ+Uaq3iKtPnB/P936EDPHSo7JaeMAZ1fm1jyZSKE++/1XSDTce/w
+         uzvdU7nc/SdoK5kfjpF/r/8cbNFkE85OeSFlbztuRFmCCimEswkNMV2af8AM/4ziq9xe
+         CRCFl2qBwDBxVo54zLGeTEhT5HVF11+7yZ2slZ21TocaPHIfDAnoutrPXOd0xEkBxyTX
+         t+AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689407623; x=1691999623;
+        d=1e100.net; s=20221208; t=1689407624; x=1691999624;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nXdgGZmClIw2y5+yLCGfpXc796bXl4kQ7ee+T64K4uo=;
-        b=FRvs+Jdoi9OSVgQcSJGwPDxDemKRXLYV2Q6bketS22YzHwO7UjzqYTLgJ0e+sCUE59
-         jYwnbzFePqYYmrjvFOk9zMaG8qBvbuN4t279C6Z/AqOMM2zbOjrXJkbBccmvCUjft4Q3
-         ioVViu+hHG/MRlunEptWcehZbA0PHQmgK4Y2RQwJyyK/j/ZwLTKNyoFRH/LEFfLY/ilw
-         i+JRsA1pSpz+I2OgW6zNFREZ5v8JCHfEgblXLiW050eGF7nSUAYqy8VcxSqTWTldarQO
-         JA03lsblMeLrpfEQKIpPpzOX4Wq64dck1vBqqA0xrzXLZMuTRxVW00+mR+arOpVSCa2Z
-         KnHg==
-X-Gm-Message-State: ABy/qLZ+HlZWd7bUZ2gGxVuH4wue/F/T4RpsrI5SOV+6jmnwDYkQSEc3
-        l/Dd3tTZhlPkbotuby0GSXSXz1ix+Epecxk4
-X-Google-Smtp-Source: APBJJlEjboW0Mw0GJEMKk4o267Y0opjo4z5gbY5NMkdzMHWR0B1D43okIC5wkBrr8J5rn9EsemQdbQ==
-X-Received: by 2002:a5d:44ca:0:b0:314:1582:6eb4 with SMTP id z10-20020a5d44ca000000b0031415826eb4mr6133679wrr.46.1689407623357;
-        Sat, 15 Jul 2023 00:53:43 -0700 (PDT)
+        bh=cO8MaIrmzLIgpAh79j/PTcb6h7we+UptA1d76S5ZSws=;
+        b=XG8APEn6gt6GVcoYBFjlKb++LuKoJERvTTITFzqixMAFe9zVnl6v27F0nIQa9LZKpq
+         k8z1aums1zSvxlAwpjdpYN9qBJTlkuZf3E3yIFoWcAm1+C1GG8XgfUmr+lnGP9l9hF5n
+         iqht54BCiPd9nA1v8oeAJ3i72GYGFllnJNrj3WlSzvacctuepHmlUMj6pREWP+Y0cAb6
+         m17iISO/pIN9hCfzsAjg4uaGp/HsmP+jjWjKB0it2ff7aCDhBDtVVwfdE30FMGAjZ8Ri
+         1m8VBRIJru9SLMmGrTFD7u0CuQvC05/8O02lVEEEFtp0VD6QlDalsZn+b1rzMsGIUFry
+         aS4A==
+X-Gm-Message-State: ABy/qLYlN4/OKdhyVK6a2//aZPle8AJtef81sD1NpgqEPj7osYXaQ08i
+        L25CN3WoXtrzubSXTY8H1OA=
+X-Google-Smtp-Source: APBJJlGro5VHrnSJt5gm25Ax8kAN55eHOQJS1zTEspa+DjFeZWNzb+DbAda48F6OBIRsbIG1wX1WEg==
+X-Received: by 2002:a1c:cc15:0:b0:3fc:48e:581e with SMTP id h21-20020a1ccc15000000b003fc048e581emr5990254wmb.24.1689407624088;
+        Sat, 15 Jul 2023 00:53:44 -0700 (PDT)
 Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id f6-20020adff586000000b003142eb75724sm13001271wro.24.2023.07.15.00.53.42
+        by smtp.gmail.com with ESMTPSA id f6-20020adff586000000b003142eb75724sm13001271wro.24.2023.07.15.00.53.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 15 Jul 2023 00:53:43 -0700 (PDT)
 From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Sat, 15 Jul 2023 09:53:26 +0200
-Subject: [PATCH v7 4/5] mfd: tps6586x: use devm-based power off handler
+Date:   Sat, 15 Jul 2023 09:53:27 +0200
+Subject: [PATCH v7 5/5] mfd: tps6586x: register restart handler
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-tegra-pmic-reboot-v7-4-18699d5dcd76@skidata.com>
+Message-Id: <20230327-tegra-pmic-reboot-v7-5-18699d5dcd76@skidata.com>
 References: <20230327-tegra-pmic-reboot-v7-0-18699d5dcd76@skidata.com>
 In-Reply-To: <20230327-tegra-pmic-reboot-v7-0-18699d5dcd76@skidata.com>
 To:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
@@ -79,66 +79,70 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Benjamin Bara <benjamin.bara@skidata.com>
 
-Convert the power off handler to a devm-based power off handler.
+There are a couple of boards which use a tps6586x as
+"ti,system-power-controller", e.g. the tegra20-tamonten.dtsi.
+For these, the only registered restart handler is the warm reboot via
+tegra's PMC. As the bootloader of the tegra20 requires the VDE, it must
+be ensured that VDE is enabled (which is the case after a cold reboot).
+For the "normal reboot", this is basically the case since 8f0c714ad9be.
+However, this workaround is not executed in case of an emergency restart.
+In case of an emergency restart, the system now simply hangs in the
+bootloader, as VDE is not enabled (because it is not used).
 
-Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+The TPS658629-Q1 provides a SOFT RST bit in the SUPPLYENE reg to request
+a (cold) reboot, which takes at least 20ms (as the data sheet states).
+This avoids the hang-up.
+
+Tested on a TPS658640.
+
 Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Acked-for-MFD-by: Lee Jones <lee@kernel.org>
 Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 ---
- drivers/mfd/tps6586x.c | 29 +++++++++++++++++++++--------
- 1 file changed, 21 insertions(+), 8 deletions(-)
+ drivers/mfd/tps6586x.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
 diff --git a/drivers/mfd/tps6586x.c b/drivers/mfd/tps6586x.c
-index 2d947f3f606a..b12c9e18970a 100644
+index b12c9e18970a..1777d8d3a990 100644
 --- a/drivers/mfd/tps6586x.c
 +++ b/drivers/mfd/tps6586x.c
-@@ -22,6 +22,7 @@
- #include <linux/err.h>
- #include <linux/i2c.h>
- #include <linux/platform_device.h>
-+#include <linux/reboot.h>
- #include <linux/regmap.h>
- #include <linux/of.h>
+@@ -30,6 +30,7 @@
+ #include <linux/mfd/tps6586x.h>
  
-@@ -457,13 +458,21 @@ static const struct regmap_config tps6586x_regmap_config = {
- 	.cache_type = REGCACHE_RBTREE,
- };
+ #define TPS6586X_SUPPLYENE	0x14
++#define SOFT_RST_BIT		BIT(0)
+ #define EXITSLREQ_BIT		BIT(1)
+ #define SLEEP_MODE_BIT		BIT(3)
  
--static struct device *tps6586x_dev;
--static void tps6586x_power_off(void)
-+static int tps6586x_power_off_handler(struct sys_off_data *data)
- {
--	if (tps6586x_clr_bits(tps6586x_dev, TPS6586X_SUPPLYENE, EXITSLREQ_BIT))
--		return;
-+	int ret;
-+
-+	/* Put the PMIC into sleep state. This takes at least 20ms. */
-+	ret = tps6586x_clr_bits(data->dev, TPS6586X_SUPPLYENE, EXITSLREQ_BIT);
-+	if (ret)
-+		return notifier_from_errno(ret);
-+
-+	ret = tps6586x_set_bits(data->dev, TPS6586X_SUPPLYENE, SLEEP_MODE_BIT);
-+	if (ret)
-+		return notifier_from_errno(ret);
- 
--	tps6586x_set_bits(tps6586x_dev, TPS6586X_SUPPLYENE, SLEEP_MODE_BIT);
-+	mdelay(50);
-+	return notifier_from_errno(-ETIME);
+@@ -475,6 +476,19 @@ static int tps6586x_power_off_handler(struct sys_off_data *data)
+ 	return notifier_from_errno(-ETIME);
  }
  
++static int tps6586x_restart_handler(struct sys_off_data *data)
++{
++	int ret;
++
++	/* Put the PMIC into hard reboot state. This takes at least 20ms. */
++	ret = tps6586x_set_bits(data->dev, TPS6586X_SUPPLYENE, SOFT_RST_BIT);
++	if (ret)
++		return notifier_from_errno(ret);
++
++	mdelay(50);
++	return notifier_from_errno(-ETIME);
++}
++
  static void tps6586x_print_version(struct i2c_client *client, int version)
-@@ -559,9 +568,13 @@ static int tps6586x_i2c_probe(struct i2c_client *client)
- 		goto err_add_devs;
- 	}
- 
--	if (pdata->pm_off && !pm_power_off) {
--		tps6586x_dev = &client->dev;
--		pm_power_off = tps6586x_power_off;
-+	if (pdata->pm_off) {
-+		ret = devm_register_power_off_handler(&client->dev, &tps6586x_power_off_handler,
-+						      NULL);
+ {
+ 	const char *name;
+@@ -575,6 +589,13 @@ static int tps6586x_i2c_probe(struct i2c_client *client)
+ 			dev_err(&client->dev, "register power off handler failed: %d\n", ret);
+ 			goto err_add_devs;
+ 		}
++
++		ret = devm_register_restart_handler(&client->dev, &tps6586x_restart_handler,
++						    NULL);
 +		if (ret) {
-+			dev_err(&client->dev, "register power off handler failed: %d\n", ret);
++			dev_err(&client->dev, "register restart handler failed: %d\n", ret);
 +			goto err_add_devs;
 +		}
  	}
