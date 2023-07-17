@@ -2,25 +2,25 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BD875656B
-	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jul 2023 15:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5E075656E
+	for <lists+linux-i2c@lfdr.de>; Mon, 17 Jul 2023 15:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjGQNsR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 17 Jul 2023 09:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S231714AbjGQNsU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 17 Jul 2023 09:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbjGQNsQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jul 2023 09:48:16 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11877A6;
-        Mon, 17 Jul 2023 06:48:14 -0700 (PDT)
+        with ESMTP id S231491AbjGQNsU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 17 Jul 2023 09:48:20 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FCBFFF;
+        Mon, 17 Jul 2023 06:48:18 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="6.01,211,1684767600"; 
-   d="scan'208";a="169508546"
+   d="scan'208";a="173153396"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 17 Jul 2023 22:48:14 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 17 Jul 2023 22:48:17 +0900
 Received: from localhost.localdomain (unknown [10.226.92.210])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 95430400CF1C;
-        Mon, 17 Jul 2023 22:48:12 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 598D7400CF1A;
+        Mon, 17 Jul 2023 22:48:15 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Peter Rosin <peda@axentia.se>
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
@@ -29,9 +29,9 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 1/2] i2c: mux: ltc4306: Simplify probe()
-Date:   Mon, 17 Jul 2023 14:48:06 +0100
-Message-Id: <20230717134807.265302-2-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v2 2/2] i2c: mux: ltc4306: Drop enum ltc_type and split chips[]
+Date:   Mon, 17 Jul 2023 14:48:07 +0100
+Message-Id: <20230717134807.265302-3-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230717134807.265302-1-biju.das.jz@bp.renesas.com>
 References: <20230717134807.265302-1-biju.das.jz@bp.renesas.com>
@@ -46,51 +46,77 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The ltc4306_id[].driver_data could store a pointer to the chips,
-like for DT-based matching, making I2C and DT-based matching
-more similar.
+Drop enum ltc_type and split the array chips[] as individual
+variables, and make lines shorter by referring to e.g. &ltc_4305_chip
+instead of &chips[ltc_4305].
 
-After that, we can simplify the probe() by replacing of_device_get_
-match_data() and i2c_match_id() by i2c_get_match_data() as we have
-similar I2C and DT-based matching table.
-
+Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
-v1->v2:
- * Added Rb tag from Geert.
+v2:
+ * New patch
 ---
- drivers/i2c/muxes/i2c-mux-ltc4306.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/i2c/muxes/i2c-mux-ltc4306.c | 28 +++++++++++-----------------
+ 1 file changed, 11 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/i2c/muxes/i2c-mux-ltc4306.c b/drivers/i2c/muxes/i2c-mux-ltc4306.c
-index 5a03031519be..c7dfd5eba413 100644
+index c7dfd5eba413..c4f090e8d6db 100644
 --- a/drivers/i2c/muxes/i2c-mux-ltc4306.c
 +++ b/drivers/i2c/muxes/i2c-mux-ltc4306.c
-@@ -192,8 +192,8 @@ static int ltc4306_deselect_mux(struct i2c_mux_core *muxc, u32 chan)
+@@ -34,11 +34,6 @@
+ #define LTC_GPIO_ALL_INPUT	0xC0
+ #define LTC_SWITCH_MASK		0xF0
+ 
+-enum ltc_type {
+-	ltc_4305,
+-	ltc_4306,
+-};
+-
+ struct chip_desc {
+ 	u8 nchans;
+ 	u8 num_gpios;
+@@ -50,14 +45,13 @@ struct ltc4306 {
+ 	const struct chip_desc *chip;
+ };
+ 
+-static const struct chip_desc chips[] = {
+-	[ltc_4305] = {
+-		.nchans = LTC4305_MAX_NCHANS,
+-	},
+-	[ltc_4306] = {
+-		.nchans = LTC4306_MAX_NCHANS,
+-		.num_gpios = 2,
+-	},
++static const struct chip_desc ltc_4305_chip = {
++	.nchans = LTC4305_MAX_NCHANS
++};
++
++static const struct chip_desc ltc_4306_chip = {
++	.nchans = LTC4306_MAX_NCHANS,
++	.num_gpios = 2
+ };
+ 
+ static bool ltc4306_is_volatile_reg(struct device *dev, unsigned int reg)
+@@ -192,15 +186,15 @@ static int ltc4306_deselect_mux(struct i2c_mux_core *muxc, u32 chan)
  }
  
  static const struct i2c_device_id ltc4306_id[] = {
--	{ "ltc4305", ltc_4305 },
--	{ "ltc4306", ltc_4306 },
-+	{ "ltc4305", .driver_data = (kernel_ulong_t)&chips[ltc_4305] },
-+	{ "ltc4306", .driver_data = (kernel_ulong_t)&chips[ltc_4306] },
+-	{ "ltc4305", .driver_data = (kernel_ulong_t)&chips[ltc_4305] },
+-	{ "ltc4306", .driver_data = (kernel_ulong_t)&chips[ltc_4306] },
++	{ "ltc4305", .driver_data = (kernel_ulong_t)&ltc_4305_chip },
++	{ "ltc4306", .driver_data = (kernel_ulong_t)&ltc_4306_chip },
  	{ }
  };
  MODULE_DEVICE_TABLE(i2c, ltc4306_id);
-@@ -216,10 +216,9 @@ static int ltc4306_probe(struct i2c_client *client)
- 	unsigned int val = 0;
- 	int num, ret;
  
--	chip = of_device_get_match_data(&client->dev);
--
-+	chip = i2c_get_match_data(client);
- 	if (!chip)
--		chip = &chips[i2c_match_id(ltc4306_id, client)->driver_data];
-+		return -ENODEV;
- 
- 	idle_disc = device_property_read_bool(&client->dev,
- 					      "i2c-mux-idle-disconnect");
+ static const struct of_device_id ltc4306_of_match[] = {
+-	{ .compatible = "lltc,ltc4305", .data = &chips[ltc_4305] },
+-	{ .compatible = "lltc,ltc4306", .data = &chips[ltc_4306] },
++	{ .compatible = "lltc,ltc4305", .data = &ltc_4305_chip },
++	{ .compatible = "lltc,ltc4306", .data = &ltc_4306_chip },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, ltc4306_of_match);
 -- 
 2.25.1
 
