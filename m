@@ -2,81 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928E8758AEC
-	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jul 2023 03:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D67875902B
+	for <lists+linux-i2c@lfdr.de>; Wed, 19 Jul 2023 10:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjGSBfy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 18 Jul 2023 21:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
+        id S229743AbjGSIXU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 19 Jul 2023 04:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjGSBfw (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 18 Jul 2023 21:35:52 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF331BCD
-        for <linux-i2c@vger.kernel.org>; Tue, 18 Jul 2023 18:35:50 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id F20EA2C034B
-        for <linux-i2c@vger.kernel.org>; Wed, 19 Jul 2023 13:35:46 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1689730546;
-        bh=nqjEdNP04k09GdRYSCkHya5wPHSKybq9iDjDUlMX+/Q=;
-        h=From:To:Subject:Date:From;
-        b=m6HrrbYElwRrnOLUFkjzbkm6QrDDKAzuMgyli2bmjuNJYckgUdP2mvVNV7ohZ3hHi
-         fow/B4lX6O+sp+hl2Arne1QWZ/pL3RwNlx9DfGc+HIV85rl1uvoM14meby8sj0q0+i
-         VPXbJolf2Tbo4wtPCa0IhrVGktwTrNUdyX+hKlGuvX6zyqcX90B/o0Kjgj6ZcaVBBa
-         G/cKRVO06bLC8aSF/ukt9CTQOYfdI43XBnNhc1Ea6057fKsbXAP3PhmMmF280HlWNj
-         aZFV4bX4qk73FJ47feul8OxrE9/uLkuuz3/+uf0pMVQ3z4TgTTL5M1wgI6By9UOgGX
-         ZuaxpwEb3hrBA==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B64b73df20000>; Wed, 19 Jul 2023 13:35:46 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 19 Jul 2023 13:35:46 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.030; Wed, 19 Jul 2023 13:35:46 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Simulating an I2C device
-Thread-Topic: Simulating an I2C device
-Thread-Index: AQHZueFXrkDjdSD3dkmSq7cstvF7og==
-Date:   Wed, 19 Jul 2023 01:35:46 +0000
-Message-ID: <405df79f-0c6c-9eed-2635-22a0fa2260d9@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8B6B4A16AA75CA48A84B883A69FDEF1F@atlnz.lc>
-Content-Transfer-Encoding: base64
+        with ESMTP id S229844AbjGSIXT (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 19 Jul 2023 04:23:19 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAA5E47;
+        Wed, 19 Jul 2023 01:23:18 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b70404a5a0so107551181fa.2;
+        Wed, 19 Jul 2023 01:23:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689754997; x=1692346997;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DohGz6VEowRbgvgE/wkjJVFhC+k1Zhd2ZdGxcIPh6rQ=;
+        b=st2pN/z8+mIkcC4P6AArBydMm4TFL6zJY+KbqmrnIWRbR5BtCS0aN8Q2nn6znce5m0
+         cmz2kjs+cdc+bQ/LRI3zqO+BhLmBNO8q4wbE5ikIN7j2gEFZVlYPnVZu4crrfKZijtUE
+         KKnmVDtCSgjjD6vOUXXWJzNc7uKtTTGauiy7LGAt5YVSfpSsqWXg7QX0bEzZJd9av9rY
+         NZ6DaXiog2r2D224u8C7bhjaFk/c/meGb3dwZiFLP0SkwSHRefoy9aA4XKJAcDmdzRr/
+         kIfb1a1tYzopotO0ubJxDLSGt8yTOEU+44IoGTBdyoZq40tfhhKLRnzYvkr4T3L4+/r1
+         yvkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689754997; x=1692346997;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DohGz6VEowRbgvgE/wkjJVFhC+k1Zhd2ZdGxcIPh6rQ=;
+        b=h8GiqJ9tZgmZ7rgRD6lP+PH3v8HbxnbAuST7/PusGe/+gkQpFuzLc0nfQjrGlXEJZQ
+         4p9Nf+epO7ekEbpXUib7VlRuU1LLYO8J96CqOmrMI33QQdXukvk+LiGb4NmF4dlO6c3n
+         ddAYdve97k3omtDl2qM/gA04Afo+cUOhl9JwZnYAwualdjyJumHtI6lrxMfNVUxW24k6
+         rr7mOVAGV/TacWOOlW4j8wl3WtBdnCi+ilLQBuBGhT0zSeucZ7YEvqEJ4wVQTgKvSWUe
+         2/VNPhUNB862bSty2kLnxvaC02ggoVi1C6pFXdeCzwNYkeeiTTJL7iwTuuv9SiCzcaBB
+         F0ow==
+X-Gm-Message-State: ABy/qLb0f6JtIacV51VUuPiQYe1y0dO2HOjESfDzwwHWHX9E58RUiuwr
+        a31PxatTWXLoaq3O7x5nTds=
+X-Google-Smtp-Source: APBJJlGMvkyJcCiODD00MqjTQusP7EQzJMPlB4LTu8tiJ6JyEhO/Ji0ltP7JcLtw5rtMtrxuAFcC9Q==
+X-Received: by 2002:a2e:3a14:0:b0:2b6:e618:b597 with SMTP id h20-20020a2e3a14000000b002b6e618b597mr16791001lja.28.1689754996546;
+        Wed, 19 Jul 2023 01:23:16 -0700 (PDT)
+Received: from PCBABN.skidata.net ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id dk9-20020a170906f0c900b00988a0765e29sm2005844ejb.104.2023.07.19.01.23.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jul 2023 01:23:16 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+To:     dmitry.osipenko@collabora.com, konstantin@linuxfoundation.org
+Cc:     bbara93@gmail.com, benjamin.bara@skidata.com, jonathanh@nvidia.com,
+        lee@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        peterz@infradead.org, rafael.j.wysocki@intel.com,
+        richard.leitner@linux.dev, treding@nvidia.com,
+        wsa+renesas@sang-engineering.com, wsa@kernel.org
+Subject: Re: [PATCH v7 5/5] mfd: tps6586x: register restart handler
+Date:   Wed, 19 Jul 2023 10:22:51 +0200
+Message-Id: <20230719082251.3501424-1-bbara93@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <215679f1-a866-1e92-1bab-9c80918927a6@collabora.com>
+References: <215679f1-a866-1e92-1bab-9c80918927a6@collabora.com>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=boIy+3Si c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=ws7JD89P4LkA:10 a=_XVxg8LEKy6U4psh0rUA:9 a=QEXdDO2ut3YA:10 a=zgiPjhLxNE0A:10 a=ZXulRonScM0A:10 a=zZCYzV9kfG8A:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGVsbG8gSTJDIGVudGh1c2lhc3RzLA0KDQpJJ3ZlIGJlZW4gZG9pbmcgc29tZSB0ZXN0aW5nIHdp
-dGggdGhlIEkyQyBHUElPIGZhdWx0IGluamVjdGlvbiB3aXRoIGEgDQpSYXNwYmVycnkgUGkgKE1v
-ZGVsIDRCKSBjb25uZWN0ZWQgdG8gbXkgYm9hcmQgYW5kIGNhbiBtYWtlIHVzZSBvZiB0aGUgDQpp
-bmNvbXBsZXRlX2FkZHJlc3NfcGhhc2UvaW5jb21wbGV0ZV93cml0ZV9ieXRlIHRvIHNpbXVsYXRl
-IHNvbWUgZXJyb3JzIA0KYW5kIGNoZWNrIHRoYXQgbXkgYm9hcmQgd2lsbCBkbyB0aGUgSTJDIFNE
-QS9TQ0wgcmVjb3ZlcnkuDQoNCk9uZSB0aGluZyBJJ20gaW50ZXJlc3RlZCBpbiBkb2luZyBpcyBj
-aGVja2luZyB0aGUgaW1wYWN0IG9mIFNDTCBjbG9jayANCnN0cmV0Y2hpbmcuIEkgdGhpbmsgZm9y
-IHRoYXQgSSBjYW4ndCBqdXN0IChhYil1c2UgdGhlIEkyQyBHUElPIA0KY29udHJvbGxlciBJIHBy
-b2JhYmx5IG5lZWQgdG8gaGF2ZSB0aGUgUmFzcGJlcnJ5IFBpIGFjdCBhcyBhbiBJMkMgDQpkZXZp
-Y2UuIEhhcyBhbnlvbmUgYWxyZWFkeSBhdHRlbXB0ZWQgc29tZXRoaW5nIGxpa2UgdGhpcz8NCg0K
-SXQga2luZCBvZiBsb29rcyBsaWtlIGkyYy1zbGF2ZS1lZXByb20uYyBtaWdodCBiZSB1c2FibGUg
-Zm9yIHRoaXMgKEknZCANCnByb2JhYmx5IGhhdmUgdG8gZG8gc29tZXRoaW5nIHNwZWNpYWwgdG8g
-ZmFrZSBjbG9jayBzdHJldGNoaW5nKS4NCg==
+Hi Dmitry,
+
+thanks for the feedback!
+
+On Tue, 18 Jul 2023 at 06:46, Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
+> 15.07.2023 10:53, Benjamin Bara пишет:
+> >
+> > Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> > Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+>
+> Acked-for-MFD-by isn't a valid tag, scripts/checkpatch.pl should tell
+> you about it.
+>
+> In general you may add a comment to a tag, like this:
+>
+>   Acked-by: Lee Jones <lee@kernel.org> # for MFD
+>
+> In this particular case, the comment is unnecessary because Lee is the
+> MFD maintainer, hence his ack itself implies the MFD subsys.
+
+I saw the warning, but Lee requested to add it like this [1].
+
+@Konstantin:
+Do you think it makes sense to print a warning when adding "non-standard
+trailers" during running "b4 trailers -u", maybe around the
+find_trailers() checks? I could provide a RFC, if considered useful.
+
+Best regards,
+Benjamin
+
+[1] https://lore.kernel.org/all/20230518094434.GD404509@google.com/
