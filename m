@@ -2,42 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D563F75DC1E
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jul 2023 13:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFD875DC2B
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jul 2023 13:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjGVLyu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Jul 2023 07:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
+        id S230158AbjGVLzU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 22 Jul 2023 07:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjGVLyt (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jul 2023 07:54:49 -0400
+        with ESMTP id S230210AbjGVLzM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jul 2023 07:55:12 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAAB359F;
-        Sat, 22 Jul 2023 04:54:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AF43C06;
+        Sat, 22 Jul 2023 04:54:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1690026681;
+        s=mail; t=1690026683;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WJouQK7xzpSaHcHMSHJNeS3qIccDqtjb0YIyUjhatbU=;
-        b=zHqKuO9Iw5ItBjFqufsptizJwcHvFt68dDG1LxDWEAq4EP88uGMxSbWAcphUKHSUHA1D1Q
-        OcGkJGBnElcsAtAzuHfO/h098idSam1l6Vjm7MeDrVnDwHZ7hLOb9TyQolB5wFOl4vlPvU
-        jRSDD9lmJpLZ3J4QlsuHLSupWPJ6uHk=
+        bh=R6PzViV5Y9OmUAkqhYjwDJV91zNywmpdfDXZvoN28Kc=;
+        b=Pn0M1dQJ+gnGPsD2C4uo9sbzKD2piUYePxYhxyzqPF+2/5lX0nc4DGms2fQqHFLsVti7Lr
+        r7IjsklAebG/5YrRtChUiXaWZMvLDTyJl1l74wxCoEX6Uy7GW7JFzSo9NYLikcaWINicuy
+        0K6P5c/w8J7rADVBIybnd0re0U+XN8w=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 11/22] i2c: lpc2k: Remove #ifdef guards for PM related functions
-Date:   Sat, 22 Jul 2023 13:50:35 +0200
-Message-Id: <20230722115046.27323-12-paul@crapouillou.net>
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 12/22] i2c: mt65xx: Remove #ifdef guards for PM related functions
+Date:   Sat, 22 Jul 2023 13:50:36 +0200
+Message-Id: <20230722115046.27323-13-paul@crapouillou.net>
 In-Reply-To: <20230722115046.27323-1-paul@crapouillou.net>
 References: <20230722115046.27323-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam: Yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -56,55 +61,52 @@ This has the advantage of always compiling these functions in,
 independently of any Kconfig option. Thanks to that, bugs and other
 regressions are subsequently easier to catch.
 
-Note that the behaviour is slightly different than before; the original
-code wrapped the suspend/resume with #ifdef CONFIG_PM guards, which
-resulted in these functions being compiled in but never used when
-CONFIG_PM_SLEEP was disabled.
-
-Now, those functions are only compiled in when CONFIG_PM_SLEEP is
-enabled.
-
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 ---
-Cc: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Qii Wang <qii.wang@mediatek.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
 ---
- drivers/i2c/busses/i2c-lpc2k.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/i2c/busses/i2c-mt65xx.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-lpc2k.c b/drivers/i2c/busses/i2c-lpc2k.c
-index 5c6d96554753..c61157f1409b 100644
---- a/drivers/i2c/busses/i2c-lpc2k.c
-+++ b/drivers/i2c/busses/i2c-lpc2k.c
-@@ -431,7 +431,6 @@ static void i2c_lpc2k_remove(struct platform_device *dev)
- 	i2c_del_adapter(&i2c->adap);
+diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+index 7ca3f2221ba6..21cc39e35cf6 100644
+--- a/drivers/i2c/busses/i2c-mt65xx.c
++++ b/drivers/i2c/busses/i2c-mt65xx.c
+@@ -1514,7 +1514,6 @@ static void mtk_i2c_remove(struct platform_device *pdev)
+ 	clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
  }
  
--#ifdef CONFIG_PM
- static int i2c_lpc2k_suspend(struct device *dev)
+-#ifdef CONFIG_PM_SLEEP
+ static int mtk_i2c_suspend_noirq(struct device *dev)
  {
- 	struct lpc2k_i2c *i2c = dev_get_drvdata(dev);
-@@ -456,11 +455,6 @@ static const struct dev_pm_ops i2c_lpc2k_dev_pm_ops = {
- 	.resume_noirq = i2c_lpc2k_resume,
+ 	struct mtk_i2c *i2c = dev_get_drvdata(dev);
+@@ -1544,11 +1543,10 @@ static int mtk_i2c_resume_noirq(struct device *dev)
+ 
+ 	return 0;
+ }
+-#endif
+ 
+ static const struct dev_pm_ops mtk_i2c_pm = {
+-	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(mtk_i2c_suspend_noirq,
+-				      mtk_i2c_resume_noirq)
++	NOIRQ_SYSTEM_SLEEP_PM_OPS(mtk_i2c_suspend_noirq,
++				  mtk_i2c_resume_noirq)
  };
  
--#define I2C_LPC2K_DEV_PM_OPS (&i2c_lpc2k_dev_pm_ops)
--#else
--#define I2C_LPC2K_DEV_PM_OPS NULL
--#endif
--
- static const struct of_device_id lpc2k_i2c_match[] = {
- 	{ .compatible = "nxp,lpc1788-i2c" },
- 	{},
-@@ -472,7 +466,7 @@ static struct platform_driver i2c_lpc2k_driver = {
- 	.remove_new = i2c_lpc2k_remove,
- 	.driver	= {
- 		.name		= "lpc2k-i2c",
--		.pm		= I2C_LPC2K_DEV_PM_OPS,
-+		.pm		= pm_sleep_ptr(&i2c_lpc2k_dev_pm_ops),
- 		.of_match_table	= lpc2k_i2c_match,
+ static struct platform_driver mtk_i2c_driver = {
+@@ -1556,7 +1554,7 @@ static struct platform_driver mtk_i2c_driver = {
+ 	.remove_new = mtk_i2c_remove,
+ 	.driver = {
+ 		.name = I2C_DRV_NAME,
+-		.pm = &mtk_i2c_pm,
++		.pm = pm_sleep_ptr(&mtk_i2c_pm),
+ 		.of_match_table = mtk_i2c_of_match,
  	},
  };
 -- 
