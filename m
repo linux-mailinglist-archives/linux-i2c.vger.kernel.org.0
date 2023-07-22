@@ -2,38 +2,38 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4423475DC2D
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jul 2023 13:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CA675DC30
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jul 2023 13:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjGVLzw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Jul 2023 07:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
+        id S230163AbjGVL4u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 22 Jul 2023 07:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbjGVLzl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jul 2023 07:55:41 -0400
+        with ESMTP id S230217AbjGVL4p (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jul 2023 07:56:45 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6F93ABD;
-        Sat, 22 Jul 2023 04:55:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904B62D46;
+        Sat, 22 Jul 2023 04:56:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1690026684;
+        s=mail; t=1690026685;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=INhMr4ZnPfM7KPu4B+DulB6N21MJlD7AD/5uWSd1oOE=;
-        b=dhyXVRKPuMycbtf07n5qKw8WqCRNjk/2dYzu9+MuY+dIWQKdfW/nrrgIf71i/eyLYSaPZ4
-        onLN52UTHVsnFBR5ng4UnS8Us6b5fwPoxkyLSgIYIoGfwTseKToKj1xl0YzlYC8vTRCinh
-        O+fmk6fGpXabzAj40H6V9xOMYQ+nVLE=
+        bh=vWjncXjiCmOApnwrSM4Cd6iO/mHi8UOW3/VBKdasyw8=;
+        b=cl4sWmS8BYMFArLhDmUcTqi8Sj16qDJV26GhC9RFXSlqluch0tOSCP7gy7MJL4YffBm1Bd
+        TxLeGDRoXqrqBlHIS0YZnsMaQYgYmaK2MirAw9NkUZrDw6IErA+gMwSAFsbeIvyu4S5QeL
+        ca3EuDQnQbe/ZovRirKPTL6Uf4/XU1w=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 13/22] i2c: nomadik: Remove #ifdef guards for PM related functions
-Date:   Sat, 22 Jul 2023 13:50:37 +0200
-Message-Id: <20230722115046.27323-14-paul@crapouillou.net>
+        Peter Korsgaard <peter@korsgaard.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: [PATCH v2 14/22] i2c: ocores: Remove #ifdef guards for PM related functions
+Date:   Sat, 22 Jul 2023 13:50:38 +0200
+Message-Id: <20230722115046.27323-15-paul@crapouillou.net>
 In-Reply-To: <20230722115046.27323-1-paul@crapouillou.net>
 References: <20230722115046.27323-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -58,64 +58,49 @@ regressions are subsequently easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 ---
-v2: Rewrapped runtime PM line
-
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Andrew Lunn <andrew@lunn.ch>
 ---
-Cc: linux-arm-kernel@lists.infradead.org
----
- drivers/i2c/busses/i2c-nomadik.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ drivers/i2c/busses/i2c-ocores.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-nomadik.c b/drivers/i2c/busses/i2c-nomadik.c
-index 212f412f1c74..b10574d42b7a 100644
---- a/drivers/i2c/busses/i2c-nomadik.c
-+++ b/drivers/i2c/busses/i2c-nomadik.c
-@@ -873,7 +873,6 @@ static irqreturn_t i2c_irq_handler(int irq, void *arg)
- 	return IRQ_HANDLED;
+diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
+index 4ac77e57bbbf..041a76f71a49 100644
+--- a/drivers/i2c/busses/i2c-ocores.c
++++ b/drivers/i2c/busses/i2c-ocores.c
+@@ -743,7 +743,6 @@ static void ocores_i2c_remove(struct platform_device *pdev)
+ 	i2c_del_adapter(&i2c->adap);
  }
  
 -#ifdef CONFIG_PM_SLEEP
- static int nmk_i2c_suspend_late(struct device *dev)
+ static int ocores_i2c_suspend(struct device *dev)
  {
- 	int ret;
-@@ -890,9 +889,7 @@ static int nmk_i2c_resume_early(struct device *dev)
- {
- 	return pm_runtime_force_resume(dev);
+ 	struct ocores_i2c *i2c = dev_get_drvdata(dev);
+@@ -772,11 +771,8 @@ static int ocores_i2c_resume(struct device *dev)
+ 	return ocores_init(dev, i2c);
  }
+ 
+-static SIMPLE_DEV_PM_OPS(ocores_i2c_pm, ocores_i2c_suspend, ocores_i2c_resume);
+-#define OCORES_I2C_PM	(&ocores_i2c_pm)
+-#else
+-#define OCORES_I2C_PM	NULL
 -#endif
++static DEFINE_SIMPLE_DEV_PM_OPS(ocores_i2c_pm,
++				ocores_i2c_suspend, ocores_i2c_resume);
  
--#ifdef CONFIG_PM
- static int nmk_i2c_runtime_suspend(struct device *dev)
- {
- 	struct amba_device *adev = to_amba_device(dev);
-@@ -925,13 +922,10 @@ static int nmk_i2c_runtime_resume(struct device *dev)
- 
- 	return ret;
- }
--#endif
- 
- static const struct dev_pm_ops nmk_i2c_pm = {
--	SET_LATE_SYSTEM_SLEEP_PM_OPS(nmk_i2c_suspend_late, nmk_i2c_resume_early)
--	SET_RUNTIME_PM_OPS(nmk_i2c_runtime_suspend,
--			nmk_i2c_runtime_resume,
--			NULL)
-+	LATE_SYSTEM_SLEEP_PM_OPS(nmk_i2c_suspend_late, nmk_i2c_resume_early)
-+	RUNTIME_PM_OPS(nmk_i2c_runtime_suspend, nmk_i2c_runtime_resume, NULL)
+ static struct platform_driver ocores_i2c_driver = {
+ 	.probe   = ocores_i2c_probe,
+@@ -784,7 +780,7 @@ static struct platform_driver ocores_i2c_driver = {
+ 	.driver  = {
+ 		.name = "ocores-i2c",
+ 		.of_match_table = ocores_i2c_match,
+-		.pm = OCORES_I2C_PM,
++		.pm = pm_sleep_ptr(&ocores_i2c_pm),
+ 	},
  };
  
- static unsigned int nmk_i2c_functionality(struct i2c_adapter *adap)
-@@ -1078,7 +1072,7 @@ static struct amba_driver nmk_i2c_driver = {
- 	.drv = {
- 		.owner = THIS_MODULE,
- 		.name = DRIVER_NAME,
--		.pm = &nmk_i2c_pm,
-+		.pm = pm_ptr(&nmk_i2c_pm),
- 	},
- 	.id_table = nmk_i2c_ids,
- 	.probe = nmk_i2c_probe,
 -- 
 2.40.1
 
