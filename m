@@ -2,39 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C4375DC4C
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jul 2023 13:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D8475DC4F
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jul 2023 14:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjGVL7y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Jul 2023 07:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
+        id S229884AbjGVMAJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 22 Jul 2023 08:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjGVL7x (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jul 2023 07:59:53 -0400
+        with ESMTP id S230330AbjGVMAI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jul 2023 08:00:08 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FCB2D46;
-        Sat, 22 Jul 2023 04:59:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6794730E3;
+        Sat, 22 Jul 2023 05:00:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1690026804;
+        s=mail; t=1690026805;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZvEx+/bmIcBKo3sLB0qwnuNIHWgVCd4+TInDfv5ftPo=;
-        b=qUKoHoDnUpbrNkx9bMwta1ALwle95h5zpiNJr+Vn9dD4RM8jXNsjuNgAxYos6Wax2kF4J0
-        MJ6Qk/NmPSTDRJcQNpx0QTOctzBL1seHDEkZyySLBBY3BxhbtqCifyYRBQn2D+EdVBGJpo
-        6JTFKp44RbAqBJ2ZOTlz9MnwoDtqeGE=
+        bh=F1GaE+2/EobGnXaZrbvRPqDqY+YQjb0KaQg4mOcftS0=;
+        b=Nxx985BTR1MUipNpPbGPhgeZ0+xVITtFXC6aNIc9OCPYwE45hc8r/mHsJIObHmz74FLnkA
+        jZCf6OXVwU4FpeJ5DyZHbywvWstyZ9PtrLcfZsT74fYEiS53rVOjoj16Icy5GOFEOvX34J
+        p8+cyKkBYYNQbUenTlujAxurASol9XM=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Conghui Chen <conghui.chen@intel.com>,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH v2 21/22] i2c: virtio: Remove #ifdef guards for PM related functions
-Date:   Sat, 22 Jul 2023 13:53:09 +0200
-Message-Id: <20230722115310.27681-5-paul@crapouillou.net>
+        Peter Rosin <peda@axentia.se>
+Subject: [PATCH v2 22/22] i2c: mux: pca954x: Remove #ifdef guards for PM related functions
+Date:   Sat, 22 Jul 2023 13:53:10 +0200
+Message-Id: <20230722115310.27681-6-paul@crapouillou.net>
 In-Reply-To: <20230722115046.27323-1-paul@crapouillou.net>
 References: <20230722115046.27323-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -59,49 +57,40 @@ regressions are subsequently easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-
+Acked-by: Peter Rosin <peda@axentia.se>
 ---
-Cc: Conghui Chen <conghui.chen@intel.com>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: virtualization@lists.linux-foundation.org
----
- drivers/i2c/busses/i2c-virtio.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/i2c/muxes/i2c-mux-pca954x.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
-index 4b9536f50800..c60ae531ba57 100644
---- a/drivers/i2c/busses/i2c-virtio.c
-+++ b/drivers/i2c/busses/i2c-virtio.c
-@@ -243,7 +243,6 @@ static struct virtio_device_id id_table[] = {
- };
- MODULE_DEVICE_TABLE(virtio, id_table);
+diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+index 0ccee2ae5720..6965bf4c2348 100644
+--- a/drivers/i2c/muxes/i2c-mux-pca954x.c
++++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+@@ -530,7 +530,6 @@ static void pca954x_remove(struct i2c_client *client)
+ 	pca954x_cleanup(muxc);
+ }
  
 -#ifdef CONFIG_PM_SLEEP
- static int virtio_i2c_freeze(struct virtio_device *vdev)
+ static int pca954x_resume(struct device *dev)
  {
- 	virtio_i2c_del_vqs(vdev);
-@@ -254,7 +253,6 @@ static int virtio_i2c_restore(struct virtio_device *vdev)
- {
- 	return virtio_i2c_setup_vqs(vdev->priv);
+ 	struct i2c_client *client = to_i2c_client(dev);
+@@ -544,14 +543,13 @@ static int pca954x_resume(struct device *dev)
+ 
+ 	return ret;
  }
 -#endif
  
- static const unsigned int features[] = {
- 	VIRTIO_I2C_F_ZERO_LENGTH_REQUEST,
-@@ -269,10 +267,8 @@ static struct virtio_driver virtio_i2c_driver = {
- 	.driver			= {
- 		.name	= "i2c_virtio",
- 	},
--#ifdef CONFIG_PM_SLEEP
--	.freeze = virtio_i2c_freeze,
--	.restore = virtio_i2c_restore,
--#endif
-+	.freeze			= pm_sleep_ptr(virtio_i2c_freeze),
-+	.restore		= pm_sleep_ptr(virtio_i2c_restore),
- };
- module_virtio_driver(virtio_i2c_driver);
+-static SIMPLE_DEV_PM_OPS(pca954x_pm, NULL, pca954x_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(pca954x_pm, NULL, pca954x_resume);
  
+ static struct i2c_driver pca954x_driver = {
+ 	.driver		= {
+ 		.name	= "pca954x",
+-		.pm	= &pca954x_pm,
++		.pm	= pm_sleep_ptr(&pca954x_pm),
+ 		.of_match_table = pca954x_of_match,
+ 	},
+ 	.probe		= pca954x_probe,
 -- 
 2.40.1
 
