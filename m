@@ -2,44 +2,43 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A6375DC4A
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jul 2023 13:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C4375DC4C
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jul 2023 13:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjGVL7m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Jul 2023 07:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        id S229644AbjGVL7y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 22 Jul 2023 07:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjGVL7j (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jul 2023 07:59:39 -0400
+        with ESMTP id S229665AbjGVL7x (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jul 2023 07:59:53 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A7435B7;
-        Sat, 22 Jul 2023 04:59:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FCB2D46;
+        Sat, 22 Jul 2023 04:59:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1690026803;
+        s=mail; t=1690026804;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cDKwmBrSHDbvvXF7OyKsUvepLA1ouw+cJYaTFRNC5YE=;
-        b=Qj/sCk8tyAcmh0z0+MS8uYnDQoAZWTqbFzZcVoCwBT8rDu3oWELh/AV7Lke5gA0QFl5y83
-        b60b5HTyzrN6GeRnwi8DjsjwqKMKL4/S9XGR8k76SztJ6SP99KrlwDhVERPspr6PFYaoGf
-        kWDblSSNtW9txOKkzftznIk4kyYyKgg=
+        bh=ZvEx+/bmIcBKo3sLB0qwnuNIHWgVCd4+TInDfv5ftPo=;
+        b=qUKoHoDnUpbrNkx9bMwta1ALwle95h5zpiNJr+Vn9dD4RM8jXNsjuNgAxYos6Wax2kF4J0
+        MJ6Qk/NmPSTDRJcQNpx0QTOctzBL1seHDEkZyySLBBY3BxhbtqCifyYRBQn2D+EdVBGJpo
+        6JTFKp44RbAqBJ2ZOTlz9MnwoDtqeGE=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 20/22] i2c: sh-mobile: Remove #ifdef guards for PM related functions
-Date:   Sat, 22 Jul 2023 13:53:08 +0200
-Message-Id: <20230722115310.27681-4-paul@crapouillou.net>
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Conghui Chen <conghui.chen@intel.com>,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH v2 21/22] i2c: virtio: Remove #ifdef guards for PM related functions
+Date:   Sat, 22 Jul 2023 13:53:09 +0200
+Message-Id: <20230722115310.27681-5-paul@crapouillou.net>
 In-Reply-To: <20230722115046.27323-1-paul@crapouillou.net>
 References: <20230722115046.27323-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam: Yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -60,51 +59,49 @@ regressions are subsequently easier to catch.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 ---
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org
+Cc: Conghui Chen <conghui.chen@intel.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: virtualization@lists.linux-foundation.org
 ---
- drivers/i2c/busses/i2c-sh_mobile.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ drivers/i2c/busses/i2c-virtio.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-sh_mobile.c b/drivers/i2c/busses/i2c-sh_mobile.c
-index 21717b943a9e..324407196a10 100644
---- a/drivers/i2c/busses/i2c-sh_mobile.c
-+++ b/drivers/i2c/busses/i2c-sh_mobile.c
-@@ -965,7 +965,6 @@ static void sh_mobile_i2c_remove(struct platform_device *dev)
- 	pm_runtime_disable(&dev->dev);
- }
+diff --git a/drivers/i2c/busses/i2c-virtio.c b/drivers/i2c/busses/i2c-virtio.c
+index 4b9536f50800..c60ae531ba57 100644
+--- a/drivers/i2c/busses/i2c-virtio.c
++++ b/drivers/i2c/busses/i2c-virtio.c
+@@ -243,7 +243,6 @@ static struct virtio_device_id id_table[] = {
+ };
+ MODULE_DEVICE_TABLE(virtio, id_table);
  
 -#ifdef CONFIG_PM_SLEEP
- static int sh_mobile_i2c_suspend(struct device *dev)
+ static int virtio_i2c_freeze(struct virtio_device *vdev)
  {
- 	struct sh_mobile_i2c_data *pd = dev_get_drvdata(dev);
-@@ -983,20 +982,15 @@ static int sh_mobile_i2c_resume(struct device *dev)
+ 	virtio_i2c_del_vqs(vdev);
+@@ -254,7 +253,6 @@ static int virtio_i2c_restore(struct virtio_device *vdev)
+ {
+ 	return virtio_i2c_setup_vqs(vdev->priv);
  }
+-#endif
  
- static const struct dev_pm_ops sh_mobile_i2c_pm_ops = {
--	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(sh_mobile_i2c_suspend,
--				      sh_mobile_i2c_resume)
-+	NOIRQ_SYSTEM_SLEEP_PM_OPS(sh_mobile_i2c_suspend,
-+				  sh_mobile_i2c_resume)
- };
- 
--#define DEV_PM_OPS (&sh_mobile_i2c_pm_ops)
--#else
--#define DEV_PM_OPS NULL
--#endif /* CONFIG_PM_SLEEP */
--
- static struct platform_driver sh_mobile_i2c_driver = {
- 	.driver		= {
- 		.name		= "i2c-sh_mobile",
- 		.of_match_table = sh_mobile_i2c_dt_ids,
--		.pm	= DEV_PM_OPS,
-+		.pm	= pm_sleep_ptr(&sh_mobile_i2c_pm_ops),
+ static const unsigned int features[] = {
+ 	VIRTIO_I2C_F_ZERO_LENGTH_REQUEST,
+@@ -269,10 +267,8 @@ static struct virtio_driver virtio_i2c_driver = {
+ 	.driver			= {
+ 		.name	= "i2c_virtio",
  	},
- 	.probe		= sh_mobile_i2c_probe,
- 	.remove_new	= sh_mobile_i2c_remove,
+-#ifdef CONFIG_PM_SLEEP
+-	.freeze = virtio_i2c_freeze,
+-	.restore = virtio_i2c_restore,
+-#endif
++	.freeze			= pm_sleep_ptr(virtio_i2c_freeze),
++	.restore		= pm_sleep_ptr(virtio_i2c_restore),
+ };
+ module_virtio_driver(virtio_i2c_driver);
+ 
 -- 
 2.40.1
 
