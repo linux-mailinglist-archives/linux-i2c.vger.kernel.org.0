@@ -2,36 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1681175DC3A
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jul 2023 13:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FB975DC40
+	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jul 2023 13:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjGVL6J (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Jul 2023 07:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
+        id S230316AbjGVL6g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 22 Jul 2023 07:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjGVL6H (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jul 2023 07:58:07 -0400
+        with ESMTP id S230153AbjGVL6b (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jul 2023 07:58:31 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0CB185;
-        Sat, 22 Jul 2023 04:57:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FF710C1;
+        Sat, 22 Jul 2023 04:58:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1690026686;
+        s=mail; t=1690026799;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=K1kXVJYmeYFGDk1jOMEZ/tC/buoxy4+qLy2zmLpTzDA=;
-        b=i1/AC2mEsJ/+3v8VXsJj7b5qxQCSPhPpXMsSkM1WKYcx/atu7FEWHrwJbkbJNaNLmwr4Fn
-        wOoS3UGuAPu5rJgo+8dp6VZuOXjy9xKcryvGL6RT2QaTe5DYNE4zHDdOUTERRhqGerOTfA
-        EqLGbBpljEoTA9PVM7+7rzf1WRXJ5RU=
+        bh=Gr5fISthM3hjviIV2m+GHu1GOqDLLniBOMs8Cbn21rA=;
+        b=TsdRxWo4yJIATAp3W8dDyU7tgsfQmpxGpFFRw+3KM40FlLmb/rd/NYamRtL3nkjbzVOV1E
+        EdGE1xEoAEAC+4v03oTCSxxntuVILqG2FM1l3wi6r1U+B9qqL6cZbfHndA1qE5YyRRmYqC
+        hpr8GhfxWYmRwV8T7NwI0Us6DWZJsBw=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2 16/22] i2c: pxa: Remove #ifdef guards for PM related functions
-Date:   Sat, 22 Jul 2023 13:50:40 +0200
-Message-Id: <20230722115046.27323-17-paul@crapouillou.net>
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2 17/22] i2c: qup: Remove #ifdef guards for PM related functions
+Date:   Sat, 22 Jul 2023 13:53:05 +0200
+Message-Id: <20230722115310.27681-1-paul@crapouillou.net>
 In-Reply-To: <20230722115046.27323-1-paul@crapouillou.net>
 References: <20230722115046.27323-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -54,51 +58,73 @@ This has the advantage of always compiling these functions in,
 independently of any Kconfig option. Thanks to that, bugs and other
 regressions are subsequently easier to catch.
 
-Note that the behaviour is slightly different than before; the original
-code wrapped the suspend/resume with #ifdef CONFIG_PM guards, which
-resulted in these functions being compiled in but never used when
-CONFIG_PM_SLEEP was disabled.
-
-Now, those functions are only compiled in when CONFIG_PM_SLEEP is
-enabled.
+Note that the driver should probably use the DEFINE_RUNTIME_DEV_PM_OPS()
+macro, as the system suspend/resume callbacks seem to not do anything
+more than triggering the runtime-PM states.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
----
- drivers/i2c/busses/i2c-pxa.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-pxa.c b/drivers/i2c/busses/i2c-pxa.c
-index 937f7eebe906..65a18d73be5c 100644
---- a/drivers/i2c/busses/i2c-pxa.c
-+++ b/drivers/i2c/busses/i2c-pxa.c
-@@ -1491,7 +1491,6 @@ static void i2c_pxa_remove(struct platform_device *dev)
- 	clk_disable_unprepare(i2c->clk);
+---
+Cc: Andy Gross <agross@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+---
+ drivers/i2c/busses/i2c-qup.c | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
+index ae90170023b0..598102d16677 100644
+--- a/drivers/i2c/busses/i2c-qup.c
++++ b/drivers/i2c/busses/i2c-qup.c
+@@ -1927,7 +1927,6 @@ static void qup_i2c_remove(struct platform_device *pdev)
+ 	pm_runtime_set_suspended(qup->dev);
  }
  
 -#ifdef CONFIG_PM
- static int i2c_pxa_suspend_noirq(struct device *dev)
+ static int qup_i2c_pm_suspend_runtime(struct device *device)
  {
- 	struct pxa_i2c *i2c = dev_get_drvdata(dev);
-@@ -1516,17 +1515,12 @@ static const struct dev_pm_ops i2c_pxa_dev_pm_ops = {
- 	.resume_noirq = i2c_pxa_resume_noirq,
+ 	struct qup_i2c_dev *qup = dev_get_drvdata(device);
+@@ -1945,9 +1944,7 @@ static int qup_i2c_pm_resume_runtime(struct device *device)
+ 	qup_i2c_enable_clocks(qup);
+ 	return 0;
+ }
+-#endif
+ 
+-#ifdef CONFIG_PM_SLEEP
+ static int qup_i2c_suspend(struct device *device)
+ {
+ 	if (!pm_runtime_suspended(device))
+@@ -1962,16 +1959,11 @@ static int qup_i2c_resume(struct device *device)
+ 	pm_request_autosuspend(device);
+ 	return 0;
+ }
+-#endif
+ 
+ static const struct dev_pm_ops qup_i2c_qup_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(
+-		qup_i2c_suspend,
+-		qup_i2c_resume)
+-	SET_RUNTIME_PM_OPS(
+-		qup_i2c_pm_suspend_runtime,
+-		qup_i2c_pm_resume_runtime,
+-		NULL)
++	SYSTEM_SLEEP_PM_OPS(qup_i2c_suspend, qup_i2c_resume)
++	RUNTIME_PM_OPS(qup_i2c_pm_suspend_runtime,
++		       qup_i2c_pm_resume_runtime, NULL)
  };
  
--#define I2C_PXA_DEV_PM_OPS (&i2c_pxa_dev_pm_ops)
--#else
--#define I2C_PXA_DEV_PM_OPS NULL
--#endif
--
- static struct platform_driver i2c_pxa_driver = {
- 	.probe		= i2c_pxa_probe,
- 	.remove_new	= i2c_pxa_remove,
- 	.driver		= {
- 		.name	= "pxa2xx-i2c",
--		.pm	= I2C_PXA_DEV_PM_OPS,
-+		.pm	= pm_sleep_ptr(&i2c_pxa_dev_pm_ops),
- 		.of_match_table = i2c_pxa_dt_ids,
+ static const struct of_device_id qup_i2c_dt_match[] = {
+@@ -1987,7 +1979,7 @@ static struct platform_driver qup_i2c_driver = {
+ 	.remove_new = qup_i2c_remove,
+ 	.driver = {
+ 		.name = "i2c_qup",
+-		.pm = &qup_i2c_qup_pm_ops,
++		.pm = pm_ptr(&qup_i2c_qup_pm_ops),
+ 		.of_match_table = qup_i2c_dt_match,
+ 		.acpi_match_table = ACPI_PTR(qup_i2c_acpi_match),
  	},
- 	.id_table	= i2c_pxa_id_table,
 -- 
 2.40.1
 
