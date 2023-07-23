@@ -2,130 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 572A975DE25
-	for <lists+linux-i2c@lfdr.de>; Sat, 22 Jul 2023 21:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1ED75E02B
+	for <lists+linux-i2c@lfdr.de>; Sun, 23 Jul 2023 08:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbjGVTGd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 22 Jul 2023 15:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S229487AbjGWGuR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 23 Jul 2023 02:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjGVTGc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 22 Jul 2023 15:06:32 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C015E45;
-        Sat, 22 Jul 2023 12:06:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1690052788;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7guB4ZLz29lC5Mz2i2OthYSB2/BMWeO0nASQlIgRzPY=;
-        b=vTwlnTIAozIFBeEey9kTSN7kQfGflFzQIMU6ef7N3eHkTi2pT32bhu4G+CSr/HVijfzw9J
-        ztjvH+lqV4wKa/Obra29W78agD13UuzGwhonM9pdBQvxum7RPDoXbP0vnFywVliagz7V6h
-        zF4lNOGG7a92XX9XY6CG6ph7jYcPFAY=
-Message-ID: <96ce584d2ba6cb58ab3d5f8ea64f18ada54de944.camel@crapouillou.net>
-Subject: Re: [PATCH v2 21/22] i2c: virtio: Remove #ifdef guards for PM
- related functions
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Conghui Chen <conghui.chen@intel.com>,
-        virtualization@lists.linux-foundation.org
-Date:   Sat, 22 Jul 2023 21:06:26 +0200
-In-Reply-To: <20230722115310.27681-5-paul@crapouillou.net>
-References: <20230722115046.27323-1-paul@crapouillou.net>
-         <20230722115310.27681-5-paul@crapouillou.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229579AbjGWGuQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 23 Jul 2023 02:50:16 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401CB10F8
+        for <linux-i2c@vger.kernel.org>; Sat, 22 Jul 2023 23:50:14 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-992e22c09edso479880566b.2
+        for <linux-i2c@vger.kernel.org>; Sat, 22 Jul 2023 23:50:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690095012; x=1690699812;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1u/3nDCzkW70AKnNpBS42v36rtY1f3f31R5FNY+LiIc=;
+        b=jD7uHoWhvP8ENkr/KX8Zi1TnoaPUKoH1hTDdMFmHrujLHgxsAAYsayQUUFdwJ9uuBC
+         rCfuHm7d3rBPfxVihpJH2xmFhPaEO39UIfkzSSD7JuRhfoY7d+FkUYbvhu1auVmVuKfE
+         CqnjdSg0kekQj7wbjGOEI2eaLr3IZboJlhxab4b6ZP3vFJ1Tv4ldAvdxsS21C0mIE55U
+         nMKKCThOijXmJSlyFCfMVSifEzQrmqmosJY6cUyL1gUicRTlxptrAM4KnMgNauCf3zgq
+         HFf96bp7jHTUp2E6eYSWonZM4I+Ilsh+Q0OK1tUuosOjH3oiNGEVRIAQ96IWbPxS2q9Y
+         lxow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690095012; x=1690699812;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1u/3nDCzkW70AKnNpBS42v36rtY1f3f31R5FNY+LiIc=;
+        b=M+DcOBI7lEKQin9h6WeyMDnDnmjxexOFr038dQssqyart+fBeGP6a3/KG3YnbSM9hI
+         wJfYJucohlHvqI+bsdZ7ZhDpMwdQmQ/+gwGPcjMqT1fM+AMwWsUwb+XzCo0ucyoufcV4
+         2aKCGn3bbeIp49jXz3t/WliofighnmjRE8NtZJ4NPlS64kobmPM7DFQp7nledaamrO5Y
+         PYxmMsyBSjraLtmXzeAisjdxo4RfEgqn4JEA9FxkuqCsqe+q0vdQ9josjdRfCiHQXqMx
+         j+sGeCWwIa7Ii4fAjm5v3fvDmFW+3EaxO7kuZmoIsEuls60BMUTA6LBwf2WdPfSjSWFY
+         jJnw==
+X-Gm-Message-State: ABy/qLZ9bVOVEa7l/upXNjiuEL1+/FFGbvfnOIHGNGIvENIentt2/A+3
+        wveQJP0bkjwAnDKWHeCHiLN7OA==
+X-Google-Smtp-Source: APBJJlFh+oNDfKLO1Sshaq7qORXX+6iYbRofQriExlg7yGep5Nqsp3zT4Boljv2rRjY/7Mfofk/vRA==
+X-Received: by 2002:a17:906:cc0e:b0:99b:4a29:fb6a with SMTP id ml14-20020a170906cc0e00b0099b4a29fb6amr6166973ejb.59.1690095012597;
+        Sat, 22 Jul 2023 23:50:12 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id s8-20020a170906960800b0099316c56db9sm4591850ejx.127.2023.07.22.23.50.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Jul 2023 23:50:11 -0700 (PDT)
+Message-ID: <7ad1f01a-4307-fdba-c79c-8a21c234f8b0@linaro.org>
+Date:   Sun, 23 Jul 2023 08:50:09 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 2/2] dt-bindings: i2c: arb-gpio-challange: convert to DT
+ schema
+Content-Language: en-US
+To:     Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230722095710.17496-1-krzysztof.kozlowski@linaro.org>
+ <20230722095710.17496-2-krzysztof.kozlowski@linaro.org>
+ <9e900507-bdc3-21af-4ee0-017c193d5c8c@axentia.se>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9e900507-bdc3-21af-4ee0-017c193d5c8c@axentia.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-As the build bot noticed - this patch is invalid as the
-virtio_driver.{freeze,restore} callbacks are guarded by #ifdefs.
+On 22/07/2023 12:50, Peter Rosin wrote:
+>> +  their-claim-gpios:
+>> +    minItems: 1
+>> +    maxItems: 2
+> 
+> I don't think there should be a max here? There is no reason for not
+> supporting more than 2 other masters. True, the current Linux driver
+> happens to only support 1 other master. So if there should be a max,
+> I guess it should be 1? But that feels like an implementation
+> detail of the driver. The Linux driver bails out with an error if
+> there are more than one other master, it's the only thing it does
+> with that 2nd 'their-claim-goios' ref.
 
-Feel free to apply the rest (if everybody is happy with them) and I'll
-respin this one.
+I will make it some higher number.
 
-Cheers,
--Paul
-
-Le samedi 22 juillet 2023 =C3=A0 13:53 +0200, Paul Cercueil a =C3=A9crit=C2=
-=A0:
-> Use the new PM macros for the suspend and resume functions to be
-> automatically dropped by the compiler when CONFIG_PM or
-> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
->=20
-> This has the advantage of always compiling these functions in,
-> independently of any Kconfig option. Thanks to that, bugs and other
-> regressions are subsequently easier to catch.
->=20
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->=20
-> ---
-> Cc: Conghui Chen <conghui.chen@intel.com>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: virtualization@lists.linux-foundation.org
-> ---
-> =C2=A0drivers/i2c/busses/i2c-virtio.c | 8 ++------
-> =C2=A01 file changed, 2 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-virtio.c
-> b/drivers/i2c/busses/i2c-virtio.c
-> index 4b9536f50800..c60ae531ba57 100644
-> --- a/drivers/i2c/busses/i2c-virtio.c
-> +++ b/drivers/i2c/busses/i2c-virtio.c
-> @@ -243,7 +243,6 @@ static struct virtio_device_id id_table[] =3D {
-> =C2=A0};
-> =C2=A0MODULE_DEVICE_TABLE(virtio, id_table);
-> =C2=A0
-> -#ifdef CONFIG_PM_SLEEP
-> =C2=A0static int virtio_i2c_freeze(struct virtio_device *vdev)
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0virtio_i2c_del_vqs(vdev);
-> @@ -254,7 +253,6 @@ static int virtio_i2c_restore(struct
-> virtio_device *vdev)
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return virtio_i2c_setup_v=
-qs(vdev->priv);
-> =C2=A0}
-> -#endif
-> =C2=A0
-> =C2=A0static const unsigned int features[] =3D {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0VIRTIO_I2C_F_ZERO_LENGTH_=
-REQUEST,
-> @@ -269,10 +267,8 @@ static struct virtio_driver virtio_i2c_driver =3D
-> {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.driver=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=3D {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0.name=C2=A0=C2=A0=C2=A0=3D "i2c_virtio",
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0},
-> -#ifdef CONFIG_PM_SLEEP
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.freeze =3D virtio_i2c_freeze,
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.restore =3D virtio_i2c_restor=
-e,
-> -#endif
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.freeze=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=3D pm_sleep_ptr(virtio_i2c_freeze),
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.restore=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=3D pm_sleep_ptr(virtio_i2c_restore),
-> =C2=A0};
-> =C2=A0module_virtio_driver(virtio_i2c_driver);
-> =C2=A0
+Best regards,
+Krzysztof
 
