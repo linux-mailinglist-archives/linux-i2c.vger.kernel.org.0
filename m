@@ -2,291 +2,191 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E0F75F90C
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jul 2023 15:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A41F75F914
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jul 2023 15:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjGXN4u (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Jul 2023 09:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S229867AbjGXN7D (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Jul 2023 09:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbjGXN43 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Jul 2023 09:56:29 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D4610D8;
-        Mon, 24 Jul 2023 06:55:45 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8ad356fe4so26594375ad.2;
-        Mon, 24 Jul 2023 06:55:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690206945; x=1690811745;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ULja3BLjTNFjQ4GO2rpitCFLtGkIPOmJuF93/WwCacE=;
-        b=EP1WKlKH9GEPEdOFls1ivH1XkWa4cmSVW97NYgoLwTvJHFaGF1WKtRgJ4/FsQpk2Hr
-         PjkUdvuD33TmqvWzUyH+ZoveTwZTFiZw8H1O40aTx68ZEDQSRCfKv38sVtzVQ+gv2wPe
-         yS0PGqdUO9Nnt30ybzTfw6+Pd75jfc+/ysgX98MoTlWAAu1ql5Fcl1jDr9A3a2N2Ro6b
-         HV+59Jk51G+dMhQwDAnzhUyclRmNPi4tVgEEtkriWrmTokkLSRS0b4CRUyyT519ISIj6
-         T8svNuf7/nzZk3MLHJjg3rcm2RnVWQHq4MR4lnfKO+GvnTuX9iYoYfYOAGk1igurDCtU
-         pymQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690206945; x=1690811745;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ULja3BLjTNFjQ4GO2rpitCFLtGkIPOmJuF93/WwCacE=;
-        b=cNrtvZeV4P7o0Q3uXMgv7wV1khNf0myp6S1JbwW2u3dzNtZDRbz8V+enVCOBoTPKil
-         HmjxOVOo24hqu7r84CYjuD22voCHsWgYv27m4ohg9bT2zdPGQjGw6F7XhcBG4tf7JFuQ
-         XAkZGspWARpOXPf4yOg0CdOq44QaYANuZa9o+9DHPJS4jiG98FgJXcYkdjTVBHHgev7g
-         UcdYuyoKetlCwKqw8Yr2/Fz8vcbtGUqsMHPeDWdhhAiwGu1lmzu7PyY2xmVu1jvlIG2A
-         ROUeTS73/3pxgjE/gzp28XgIX54OLOWAUCbTTJzyG9eX2x2EWos5ikWFTTQx1diXJNKM
-         9NIA==
-X-Gm-Message-State: ABy/qLZoz10EVhBEtGLAffMh0+TgxI6lH8cz6UeLj9Y364WE8lrLnW6H
-        WEk40qkwRTONJKJEQXUai7ZazfYPgSc=
-X-Google-Smtp-Source: APBJJlFDNfEzpO5i0W64pXfS84ozrVvSAt2NOlNtVfg/Vl0J+gYmIDbfextWl/RN0V4iDWTfHMTWew==
-X-Received: by 2002:a17:902:e811:b0:1b1:9218:6bf9 with SMTP id u17-20020a170902e81100b001b192186bf9mr11213340plg.43.1690206945215;
-        Mon, 24 Jul 2023 06:55:45 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bb11-20020a170902bc8b00b00198d7b52eefsm8872741plb.257.2023.07.24.06.55.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jul 2023 06:55:44 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4c67020f-4385-5d34-1c31-2cbdb0f37b6e@roeck-us.net>
-Date:   Mon, 24 Jul 2023 06:55:43 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 2/2] hwmon: pmbus: Add ltc4286 driver
+        with ESMTP id S229798AbjGXN7C (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Jul 2023 09:59:02 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2104.outbound.protection.outlook.com [40.107.113.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAE1133;
+        Mon, 24 Jul 2023 06:59:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UKjdAeKrN+1PgGoCjkZpt5h6wFXzvlAEjuOACNZeDtfJlGFkmrkqUe3lKDSglTGCOuEeI9dWWU7s6SZPVIyHPg3IZrfTezntYHI/5B5DJuhNH686s3J8Pf7Fz4cphgINzNztCKMQKVYNDMIVIdS4K3P5brbCZ9kiHI0Hmvjrf4AKZW7D8HgAOCYFQb1G1VabV73d2vhPBDXBs46h38JhbDp0kDmctcVI6FdMXQj0IjmniL/+tGkU8Jetc4pqYAN96djIQ65XHLY22mFvX+7KFWE3vNsAajzT1JKBVJKnmZJDBq1CLn3M2HRPO9sks2CzOTVtquL7EcC2rINSUwYOjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JzSkWnqKv/DDF64HW+Ni/vfaZ4/PxPP0ILG9ru+Z/Gw=;
+ b=UyktTb7GRYuvg4DyW4iJR6gIocEj4ArtE8HEuEgxMWzQzKe7+ulJCQnTgsthX/EEXd3UmmuenBnURoZWzH3B/WAT/D0vOTPeRoLEEGuzwMrIG31gAWUBeFxu/61tVDtN1xmpyFCQFODcdQtbs7lJ2undexv33EuTcMasXOCVILJ31HCwxYCS4xBScEn+cU7puIt2uuloksW4WuVsnGVcRNZol2NonCHQhtzMX5S8Y2acrz1d70Uab6niCcboYnQb8Ev3+2dAQ06m2IZBzrhqcXfKzzblVda+LKx2BXErsbpjH8ougrkXXrTek0updPIUOJgiAAthxBQJrKEwElcFXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JzSkWnqKv/DDF64HW+Ni/vfaZ4/PxPP0ILG9ru+Z/Gw=;
+ b=Mie+MkYu5nzdL+HhX3ZLQuJFFFlRV5+YuAC7AB4QUQl8U3qTtLxrEWI/m1iytJLM9hjlqXI0sM+oMAoGWfj/p8U+hgwdo57omZOO+6vF9E/rvQmJkx6ipDOTSsPji9LQDdzJUExDVMcP10TJC9asaGFkpzKWCRmkwiKldZNdC/w=
+Received: from TYCPR01MB5933.jpnprd01.prod.outlook.com (2603:1096:400:47::11)
+ by TYAPR01MB5852.jpnprd01.prod.outlook.com (2603:1096:404:8053::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.31; Mon, 24 Jul
+ 2023 13:58:55 +0000
+Received: from TYCPR01MB5933.jpnprd01.prod.outlook.com
+ ([fe80::ef83:ef86:806d:6558]) by TYCPR01MB5933.jpnprd01.prod.outlook.com
+ ([fe80::ef83:ef86:806d:6558%7]) with mapi id 15.20.6609.032; Mon, 24 Jul 2023
+ 13:58:55 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+CC:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH RFC 1/2] drivers: fwnode: Extend device_get_match_data()
+ to struct bus_type
+Thread-Topic: [PATCH RFC 1/2] drivers: fwnode: Extend device_get_match_data()
+ to struct bus_type
+Thread-Index: AQHZvUDtPDEdTtGE90+pXnIpqvMbOK/Iwy6AgAALZ0CAABSggIAABCvQgAAJyACAAAE0QA==
+Date:   Mon, 24 Jul 2023 13:58:55 +0000
+Message-ID: <TYCPR01MB5933A2EC98D3BF251C74A7AF8602A@TYCPR01MB5933.jpnprd01.prod.outlook.com>
+References: <20230723083721.35384-1-biju.das.jz@bp.renesas.com>
+ <20230723083721.35384-2-biju.das.jz@bp.renesas.com>
+ <ZL5bH10uJWDe2SPY@smile.fi.intel.com>
+ <OS0PR01MB592287A0B91E353663FE12A68602A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <ZL51/dXKyDkcoDVJ@smile.fi.intel.com>
+ <OS0PR01MB592289F163F05A61DFD019DF8602A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <ZL6BsM0NGhn2mc+6@smile.fi.intel.com>
+In-Reply-To: <ZL6BsM0NGhn2mc+6@smile.fi.intel.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, patrick@stwcx.xyz,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
- <20230724100514.1028061-1-Delphine_CC_Chiu@Wiwynn.com>
- <20230724100514.1028061-2-Delphine_CC_Chiu@Wiwynn.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230724100514.1028061-2-Delphine_CC_Chiu@Wiwynn.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYCPR01MB5933:EE_|TYAPR01MB5852:EE_
+x-ms-office365-filtering-correlation-id: 8dc69a86-aabd-4c51-dbf9-08db8c4e1ec5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Pig5PpjD1pnReWyf7cGCu4B4e+Q6S/Bjwup/xwyKdRh0/1zU1Xr8sBwQHabQgurAm0s5aRwTWdyFJKmXnAu+pgvlN2nvBJr5fe1nnsjcSXtYFqa1DmQsSHI3QGSH7nHrcaIMKtwAjDPdeis9O/gXVLcuokzmaYHi+Mvbr1h3UcD+3CICB1H93rCpFmyX/MuKU/Nu6svTzwI/fKZjmm0Py6MgaQpj9B8EC0MTaHV6enY7c0PpLIJY8v+c8yFy6h5cRDbMohHYLIty3dNy2anoLKQtybJM7ZR7QjUCHbQjmAwqcqjRadaDFit8eyhNB56kwQi+7hJheLBG9sO/v2pN8C3i7XMx81VS6x6f/kr51/KBlpD6YaPlD7/pe53UVfOCT3oQjLmDRDf5nHGbQUs/ODXyfvxmZdDWnBXUNYN69lv5nKSyHUu62QNi0IJmXl/YdRuUrvTwBE+D1v/jaPQJkON/Cu66SZqBGOMhoJbk1OoWg5V0xUXFgwKIXRX33Qv7QTRVkMjfC1WfTSHREL2ShWaDZw9wYTayi/y9tebwM0Ew0w8SiLCnPQM86taRSOFy14kL/byfbJeUekLJPDA/7xV75Btawx66MMG+84eRaMqEyvLlsSMiLqqC8eBHKfi7f4MwRdLI7pWzITDCCCHFEA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB5933.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(346002)(136003)(39860400002)(366004)(451199021)(38100700002)(122000001)(55016003)(83380400001)(7416002)(8676002)(110136005)(8936002)(5660300002)(52536014)(966005)(478600001)(64756008)(54906003)(66556008)(66476007)(66446008)(316002)(4326008)(76116006)(66946007)(41300700001)(186003)(26005)(6506007)(71200400001)(2906002)(9686003)(7696005)(33656002)(38070700005)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?yG8Sv2MWuYXCN0NM9Ub3PEaMpilrO5+efFFborJ3WmpeKekANcjc3VNDmAq7?=
+ =?us-ascii?Q?4wNe1XjuZgIbf80fDN1iv978hsHupNCd2Kg94W6nGEgWpx2FBLVCs4u3f0kx?=
+ =?us-ascii?Q?8myD7hXZP3+cp91MG/7rtsS0Myb0KguKneHQs3m545eD9pDe2cPTYPCuuXYb?=
+ =?us-ascii?Q?CXLsESA7Bj/T0aqd1yWvKJ8+eXrsE1GQlxjiUnYcnRkctEOcDUKiwVaLpHD2?=
+ =?us-ascii?Q?YeAiV6RnJ/IkqlKYbAQwJi9emaivAMktkFRTq7WnqhF5As7uYS1cAGVsb/1N?=
+ =?us-ascii?Q?aMf61PQo/QGqKdxfg8TBqJR5tRvlFOKxt+ZDGrKGUFHCCuvV7LbolwSdmvkx?=
+ =?us-ascii?Q?hj1e1FVe3h3VkciAwdXvzRSR79fXFfOdcEYCLl1rWQkuFI6W0GBw5nOAwMiP?=
+ =?us-ascii?Q?Pq0+lS5x18nUGMVjjkNxZF9cS8S1d5ABx40Dsi6fKU2CkvQ3iflUS/xBEigL?=
+ =?us-ascii?Q?l9a0XjTTwg/CrlSSYNVBgVj+ueWhm7spxPHPRkV+mhVDrF21NkqfZelSosBn?=
+ =?us-ascii?Q?NOf9/+j4+/Rbvul1UFMX8qGWOnUZ3cscFEOtSLflT2s9sLKxKdp+FWkbFn1i?=
+ =?us-ascii?Q?6dHN/sITXUxklSY3zEMe8LS55TNfQLpASi2mEtYAONrx7W6tsIL51IL8eweZ?=
+ =?us-ascii?Q?eMIfTC+2ieXl8bfu223QXX+0Eg5XqQSjLZN5yIEDPc/C/ogovFmlr5v056F8?=
+ =?us-ascii?Q?VPOVAY5IFAYkucG9oUmzTy6wYpgYXMHkoU0OoENW1byKJc58xC4jRqYBNBj9?=
+ =?us-ascii?Q?Jo0JKPOVEoW0i7r88LbAtsW+bnbqTHzQtmc5uSxRQTAnkr+oFw+l7ZcwAoDi?=
+ =?us-ascii?Q?3/nicyav5ymHS9SRwAyfwUYWIYbGk702rRjYLfjhTSwbduCN3fJ2AJj/CCcl?=
+ =?us-ascii?Q?LsHuJkFp3YEbY2yVV92+EcxI/gj1gp/tjN5O6r5dxs7SKRbSwu4fBnF24i48?=
+ =?us-ascii?Q?Or9AypmOHRAf8v2Cr2CVvE+qJG/0ipAzT6tgKLowIXL5b+otkGv5tBiiGmT8?=
+ =?us-ascii?Q?vheT7qgAvUAVsdGtDl7HlgkI9EEaOXubJQ0I+EabrnLRtGbcU+xQzuPGx1+c?=
+ =?us-ascii?Q?XmuzJ0t1QM4AiXFH4L2ypNw/gBZOZXy3TK6aOcuxGdYaLCD5wIOaVkivsEP2?=
+ =?us-ascii?Q?2yP0HO5J25B1W78zmuysERXAFds2mNsWH/fOi4idH9piYY+WmYk4tnRtO5Vp?=
+ =?us-ascii?Q?UqgRwU9mX8KC0+QZBCmvVQNvno2LivWwxYgV3Yviionnod6YiezJlWXcjBiV?=
+ =?us-ascii?Q?viaBWLWdPgZUeCCPmqm5VaZ2Yp96a2/h9uRn5MN4djzI8hhjnl+QEUMt6sHS?=
+ =?us-ascii?Q?4b7qhdfx6W/eJEYJxzjtgPBpn3aNSqem5qrUi/g2+gdF0CXak1CgFr2dfCXc?=
+ =?us-ascii?Q?QJbYF+a50J4k23igahlIUKIx5TZ8BLc790XAkZ+fTvV71+jC48FnyVg4PbBU?=
+ =?us-ascii?Q?ZK9D3VH3vB/jS1ZevVfTO1H6SnTfy1EmjRxiDjnUjkTp8wb1gQe9D5WcIGET?=
+ =?us-ascii?Q?ivhZPEOu2UuPys0AVb0cZE6MnDOktHpZm1Wg4mZnCnDa6kTWH/FK3eOlhz5U?=
+ =?us-ascii?Q?pr9uQapRKvbvWNcWvw8x6F0tRDDnXAdNQC7DwwwK7hcKHKwA6WHh2eIMPzYX?=
+ =?us-ascii?Q?4w=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB5933.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8dc69a86-aabd-4c51-dbf9-08db8c4e1ec5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jul 2023 13:58:55.4318
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ljvb3j715oxrJLelR1b0lm3aVYfY3BgP2iE3c0up4z7WFYraiu5Fiw7AyeDQA5E40BXUNVITe33l7AiTEec14sIXeVJ+RR4K7IBDZG+GyUQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB5852
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 7/24/23 03:05, Delphine CC Chiu wrote:
-> Add a driver to support ltc4286 chip
-> 
+Hi Andy,
 
-No change log, no versioning, did not address all feedback,
-sent as reply to previous version instead of independently.
+Thanks for the feedback.
 
-I am not going to re-review this patch. Address all feedback
-comments, provide change log and patch versions, and do not
-send as reply to previous patch series.
+> Subject: Re: [PATCH RFC 1/2] drivers: fwnode: Extend
+> device_get_match_data() to struct bus_type
+>=20
+> On Mon, Jul 24, 2023 at 01:19:02PM +0000, Biju Das wrote:
+> > > Subject: Re: [PATCH RFC 1/2] drivers: fwnode: Extend
+> > > device_get_match_data() to struct bus_type On Mon, Jul 24, 2023 at
+> > > 12:02:27PM +0000, Biju Das wrote:
+> > > > > Subject: Re: [PATCH RFC 1/2] drivers: fwnode: Extend
+> > > > > device_get_match_data() to struct bus_type On Sun, Jul 23, 2023
+> > > > > at 09:37:20AM +0100, Biju Das wrote:
+>=20
+> ...
+>=20
+> > > > > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > > >
+> > > > > You can't just throw one's SoB tag without clear understanding
+> > > > > what's going on here (either wrong authorship or missing
+> > > > > Co-developed-by or...?).
+> > > >
+> > > > Dmitry feels instead of having separate bus based match_data()
+> > > > like i2c_get_match_data[2] and spi_get_device_match_data[3], it is
+> > > > better to have a generic approach like a single API
+> > > > device_get_match_data() for getting match_data for OF/ACPI/I2C/SPI
+> tables.
+> > > >
+> > > > So, he came with a proposal and shared some code here[1].
+> > >
+> > > Yes, I'm pretty much following the discussion.
+> > >
+> > > > Since,I have send this patch, I put my signed -off.
+> > >
+> > > I'm not talking about this. There is no evidence that Dmitry gives
+> > > you any approval to use or clear SoB tag. Again, you may not do like
+> this.
+> >
+> > Here Dmitry is acknowledging, he is ok with the patch I posted.
+> >
+>=20
+> No, you just misinterpreted his message.
+>=20
 
-Guenter
+Dmitry,
 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> ---
->   drivers/hwmon/pmbus/Kconfig   |   9 +++
->   drivers/hwmon/pmbus/Makefile  |   1 +
->   drivers/hwmon/pmbus/ltc4286.c | 147 ++++++++++++++++++++++++++++++++++
->   3 files changed, 157 insertions(+)
->   create mode 100644 drivers/hwmon/pmbus/ltc4286.c
-> 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 270b6336b76d..7cb9cbff587d 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -226,6 +226,15 @@ config SENSORS_LTC3815
->   
->   	  This driver can also be built as a module. If so, the module will
->   	  be called ltc3815.
-> +config SENSORS_LTC4286
-> +	bool "Analog Devices LTC4286"
-> +	help
-> +	  LTC4286 is an integrated solution for hot swap applications that
-> +	  allows a board to be safely inserted and removed from a
-> +	  live backplane.
-> +	  This chip could be used to monitor voltage, current, ...etc.
-> +	  If you say yes here you get hardware monitoring support for Analog
-> +	  Devices LTC4286.
->   
->   config SENSORS_MAX15301
->   	tristate "Maxim MAX15301"
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 84ee960a6c2d..94e28f6d6a61 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -24,6 +24,7 @@ obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
->   obj-$(CONFIG_SENSORS_LT7182S)	+= lt7182s.o
->   obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
->   obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
-> +obj-$(CONFIG_SENSORS_LTC4286)	+= ltc4286.o
->   obj-$(CONFIG_SENSORS_MAX15301)	+= max15301.o
->   obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
->   obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
-> diff --git a/drivers/hwmon/pmbus/ltc4286.c b/drivers/hwmon/pmbus/ltc4286.c
-> new file mode 100644
-> index 000000000000..b86bf31cfbae
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/ltc4286.c
-> @@ -0,0 +1,147 @@
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pmbus.h>
-> +#include "pmbus.h"
-> +
-> +/* LTC4286 register */
-> +#define LTC4286_MFR_CONFIG1	0xF2
-> +
-> +/* LTC4286 configuration */
-> +#define VRANGE_SELECT_BIT	BIT(1)
-> +
-> +#define LTC4286_MFR_ID_SIZE	3
-> +
-> +enum chips { ltc4286, ltc4287 };
-> +
-> +/*
-> + * Initialize the MBR as default settings which is referred to LTC4286 datasheet
-> + * (March 22, 2022 version) table 3 page 16
-> + */
-> +static struct pmbus_driver_info ltc4286_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = direct,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +	.format[PSC_CURRENT_OUT] = direct,
-> +	.format[PSC_POWER] = direct,
-> +	.format[PSC_TEMPERATURE] = direct,
-> +	.m[PSC_VOLTAGE_IN] = 32,
-> +	.b[PSC_VOLTAGE_IN] = 0,
-> +	.R[PSC_VOLTAGE_IN] = 1,
-> +	.m[PSC_VOLTAGE_OUT] = 32,
-> +	.b[PSC_VOLTAGE_OUT] = 0,
-> +	.R[PSC_VOLTAGE_OUT] = 1,
-> +	.m[PSC_CURRENT_OUT] = 1024,
-> +	.b[PSC_CURRENT_OUT] = 0,
-> +	.R[PSC_CURRENT_OUT] = 3 - 6, /* To support small shunt resistor value */
-> +	.m[PSC_POWER] = 1,
-> +	.b[PSC_POWER] = 0,
-> +	.R[PSC_POWER] = 4 - 6, /* To support small shunt resistor value */
-> +	.m[PSC_TEMPERATURE] = 1,
-> +	.b[PSC_TEMPERATURE] = 273,
-> +	.R[PSC_TEMPERATURE] = 0,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-> +		   PMBUS_HAVE_PIN | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_VOUT |
-> +		   PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_TEMP,
-> +};
-> +
-> +static const struct i2c_device_id ltc4286_id[] = { { "ltc4286", ltc4286 },
-> +						   { "ltc4287", ltc4287 },
-> +						   {} };
-> +MODULE_DEVICE_TABLE(i2c, ltc4286_id);
-> +
-> +static int ltc4286_probe(struct i2c_client *client)
-> +{
-> +	int ret;
-> +	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
-> +	struct pmbus_driver_info *info;
-> +	u32 rsense;
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to read manufacturer id\n");
-> +		return ret;
-> +	}
-> +
-> +	/*
-> +	 * Refer to ltc4286 datasheet page 20
-> +	 * the manufacturer id is LTC
-> +	 */
-> +	if (ret != LTC4286_MFR_ID_SIZE ||
-> +	    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
-> +		return dev_err_probe(&client->dev, err,
-> +				     "failed to read manufacturer id\n");
-> +	}
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to read manufacturer model\n");
-> +		return ret;
-> +	}
-> +
-> +	for (mid = ltc4286_id; mid->name[0]; mid++) {
-> +		if (!strncasecmp(mid->name, block_buffer, strlen(mid->name)))
-> +			break;
-> +	}
-> +
-> +	ret = of_property_read_u32(client->dev.of_node,
-> +				   "shunt-resistor-micro-ohms", &rsense);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (rsense == 0)
-> +		return -EINVAL;
-> +
-> +	info = &ltc4286_info;
-> +
-> +	/* Default of VRANGE_SELECT = 1, 102.4V */
-> +	if (device_property_read_bool(client->dev, "vrange_select_25p6")) {
-> +		/* Setup MFR1 CONFIG register bit 1 VRANGE_SELECT */
-> +		ret = i2c_smbus_read_word_data(client, LTC4286_MFR_CONFIG1);
-> +		if (ret < 0) {
-> +			dev_err(&client->dev,
-> +				"failed to read manufacturer configuration one\n");
-> +			return ret;
-> +		}
-> +
-> +		ret &= ~VRANGE_SELECT; /* VRANGE_SELECT = 0, 25.6V */
-> +		ret = i2c_smbus_write_word_data(client, LTC4286_MFR_CONFIG1,
-> +						ret);
-> +		if (ret < 0) {
-> +			dev_err(&client->dev, "failed to set vrange\n");
-> +			return ret;
-> +		}
-> +
-> +		info->m[PSC_VOLTAGE_IN] = 128;
-> +		info->m[PSC_VOLTAGE_OUT] = 128;
-> +		info->m[PSC_POWER] = 4 * rsense;
-> +	} else
-> +		info->m[PSC_POWER] = rsense;
-> +
-> +	info->m[PSC_CURRENT_OUT] = 1024 * rsense;
-> +
-> +	return pmbus_do_probe(client, info);
-> +}
-> +
-> +static const struct of_device_id ltc4286_of_match[] = {
-> +	{ .compatible = "lltc,ltc4286" },
-> +	{ .compatible = "lltc,ltc4287" },
-> +	{}
-> +};
-> +
-> +static struct i2c_driver ltc4286_driver = {
-> +	.driver = {
-> +		.name = "ltc4286",
-> +		.of_match_table = ltc4286_of_match,
-> +	},
-> +	.probe = ltc4286_probe,
-> +	.id_table = ltc4286_id,
-> +};
-> +
-> +module_i2c_driver(ltc4286_driver);
-> +
-> +MODULE_AUTHOR("Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>");
-> +MODULE_DESCRIPTION("PMBUS driver for LTC4286 and compatibles");
-> +MODULE_LICENSE("GPL");
+As you are the author of code, either you post a patch or provide your SoB =
+as per the guideline mentioned here to avoid confusion.
 
+ https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sig=
+n-your-work-the-developer-s-certificate-of-origin
+
+Cheers,
+Biju
