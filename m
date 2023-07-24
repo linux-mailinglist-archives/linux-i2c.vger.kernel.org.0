@@ -2,75 +2,85 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2EF75FC44
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jul 2023 18:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9549375FC54
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jul 2023 18:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbjGXQfI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Jul 2023 12:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S231260AbjGXQiz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Jul 2023 12:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbjGXQfD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Jul 2023 12:35:03 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E434B10F7;
-        Mon, 24 Jul 2023 09:34:57 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-66c729f5618so4333056b3a.1;
-        Mon, 24 Jul 2023 09:34:57 -0700 (PDT)
+        with ESMTP id S231405AbjGXQiy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Jul 2023 12:38:54 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE43E4F;
+        Mon, 24 Jul 2023 09:38:53 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6689430d803so2665846b3a.0;
+        Mon, 24 Jul 2023 09:38:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690216497; x=1690821297;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oPY+/PnhzHFtPt0tZQtYeNyQhNC/v7QsezINAIEv2aI=;
-        b=D3RR8FBeuYcqNYn7VTTb6rILtuEnSSxZ4jFPnys6XSMbXbEIrZoZoqHN0kfq497ToV
-         Wg0OJ2cPE0qoWHuzJNOJVnnrhysKv12+IiqDF7X2wUaCfuLKb8vbvBrN4bGhz2pWiQMC
-         Wx+knLXOYHFv+gv8zp0H7HW7bauqyd+OdNCqUjT4i5GYGnChZazleoZgFz90r4I0mY+T
-         sahwsZdgRsx2cQhu9IMdpsJaGdyVdqzlNp5pcDRx4HPuWpgOwFyle14dE9PCaqytQK34
-         WdS7bz50xnvZDUc2EKEI10WmgcMuTe+Izmdln4nJTJX4+6ty3LWLbYzKrDLFZ/L05720
-         jqUQ==
+        d=gmail.com; s=20221208; t=1690216732; x=1690821532;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=V+JfSQRVxp5hBkPI67OByVISWadfjZ/gRo2caZ6QEXQ=;
+        b=J0SIDsaBqhOqChaQ67sGyvXCw6wuB9D70BUPePoRqPBHzVABFhup3ZHYXe/SPLDyyp
+         9/ZKbm15730MXx32osKl+2CMdJPZ8SsFsfozMhaByvH1NQgWElYdrssXlTtZ4gtshqyT
+         3L6kvgvgfgdGpurk0A7WlEOtZBVi1lcM2t27vF3bL3YHNcZ5CnDiwMrEN5CD/PEFOk9S
+         GjhujVbNueto7dTUoLwf+AJ8TZ8JiRF3EXzims3/cuKgmFP+7fYzAp4+gGiSEIoBvkPC
+         gSKftNJ1d/h6iXs+kdqKiHc25umN+6MR1gGNvDa6B6n6CCDcrNCmGcheSANsj5zk5GXO
+         PL/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690216497; x=1690821297;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oPY+/PnhzHFtPt0tZQtYeNyQhNC/v7QsezINAIEv2aI=;
-        b=GKoYQ7GaXCAui8wOX8BdfmdWnz7uVO3W6DvKWx6YRU1M/UGexIwHSXPc8zUgAaDo3D
-         QDjELlgt7i8Jo3wHVnckRjK+JWkn3C90VjAcfOUuzWxKCB31VDcyoFmDkoDUyNafpK8Q
-         rJ1xQW0n8Y5PdHiTm5e6q6EkTAFikA3G4mHUKANZLbeeZxwnFY3OMU/ruliznVH6nYuy
-         LhXjO1SZFS2+y6Tjzc4PdoJqH5pMC22orloG9ucs7UoSzMvzvr+1wNTQfp8b1Okbjmno
-         zm3g+Y4F1WJZQSu4msfVC1bxb+0kLzVGzKdajA8d3hWIksrsc155RqdFYfhIu5i/FkGQ
-         I4Yg==
-X-Gm-Message-State: ABy/qLYQyt+TVLYxVt3RRs5+avgnQY2DnJdkZN5DQGzhKIP2AevhzipX
-        T7wkaopZfwUiQyTQWd0UpvTFRS8fJFk=
-X-Google-Smtp-Source: APBJJlEyGoQb0ncKRYtNc/D/eu+jVEwZVJD8O6CLTgykkkb4D81Iqzc2iwjuhNd91ZqzzmxQksaaIw==
-X-Received: by 2002:a05:6a20:bb07:b0:132:a85f:b20c with SMTP id fc7-20020a056a20bb0700b00132a85fb20cmr11315169pzb.38.1690216497060;
-        Mon, 24 Jul 2023 09:34:57 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690216732; x=1690821532;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V+JfSQRVxp5hBkPI67OByVISWadfjZ/gRo2caZ6QEXQ=;
+        b=dtGmsTUVajQzD4yXRVl32ZnOz5PyAfu+sJ0nQJTCBwcJmfLlvUa745z2eYHOPrNick
+         rbJzDFzKDC8vXHZwKUmGhxEhl2Sco4hDXbG/rjpSVZN9RqzZBneW26jNPPXC4Jq5KSGw
+         E+a9656YmfzNgLPCB1TUXq9usAs+Xs8yarieRbEJGCjVjxX07NVdxt4i+39Sunb0anKP
+         DgzBey3UDjaCn7Z3Hz5pYArJjAXXeCWdZ7hthKKDpm66dOHhuxxpF99Hx+sNTCpNfXTN
+         auGygPH1MDSuTFHRZZKPw+178GrM90hQv1ZD+l+Okfi26mckVR3uc74w255glLb86F9S
+         9uxw==
+X-Gm-Message-State: ABy/qLbjwMjIxMcjgxAeYjZbT3GE+D+rP3Gj7+bbUQEfEwzR9Sy7Nizx
+        gu47+pdDR8VVtAjj70Vx504=
+X-Google-Smtp-Source: APBJJlHwkoplxjfTudrcTmCgYQje4SlToJXd/PplWbbrxvDRkCzwmUomoG9bb/7nJz8xzrTc/eq/sw==
+X-Received: by 2002:a05:6a00:2492:b0:673:5d1e:6654 with SMTP id c18-20020a056a00249200b006735d1e6654mr10098128pfv.33.1690216732389;
+        Mon, 24 Jul 2023 09:38:52 -0700 (PDT)
 Received: from google.com ([2620:15c:9d:2:b8db:3c3:1ff4:2ae3])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170902b70600b001b016313b1dsm9111179pls.86.2023.07.24.09.34.56
+        by smtp.gmail.com with ESMTPSA id m26-20020a056a00165a00b00682b2fbd20fsm7996939pfc.31.2023.07.24.09.38.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 09:34:56 -0700 (PDT)
-Date:   Mon, 24 Jul 2023 09:34:54 -0700
+        Mon, 24 Jul 2023 09:38:52 -0700 (PDT)
+Date:   Mon, 24 Jul 2023 09:38:49 -0700
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Wolfram Sang <wsa@kernel.org>,
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         "linux-renesas-soc@vger.kernel.org" 
         <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH RFC 2/2] i2c: Add i2c_device_get_match_data() callback
-Message-ID: <ZL6oLoPviI8ZtSKV@google.com>
+Subject: Re: [PATCH RFC 1/2] drivers: fwnode: Extend device_get_match_data()
+ to struct bus_type
+Message-ID: <ZL6pGRNvOfdYhhAs@google.com>
 References: <20230723083721.35384-1-biju.das.jz@bp.renesas.com>
- <20230723083721.35384-3-biju.das.jz@bp.renesas.com>
- <CAMuHMdWThYuw+fwoz8xwHRyDDgTQUkW_c_ANkjzuMggqZCm3zg@mail.gmail.com>
- <OS0PR01MB5922CA1B457D6747478DCCB18602A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <20230723083721.35384-2-biju.das.jz@bp.renesas.com>
+ <ZL5bH10uJWDe2SPY@smile.fi.intel.com>
+ <OS0PR01MB592287A0B91E353663FE12A68602A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <ZL51/dXKyDkcoDVJ@smile.fi.intel.com>
+ <OS0PR01MB592289F163F05A61DFD019DF8602A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <ZL6BsM0NGhn2mc+6@smile.fi.intel.com>
+ <TYCPR01MB5933A2EC98D3BF251C74A7AF8602A@TYCPR01MB5933.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <OS0PR01MB5922CA1B457D6747478DCCB18602A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYCPR01MB5933A2EC98D3BF251C74A7AF8602A@TYCPR01MB5933.jpnprd01.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,77 +88,64 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 03:06:50PM +0000, Biju Das wrote:
-> Hi Geert,
+On Mon, Jul 24, 2023 at 01:58:55PM +0000, Biju Das wrote:
+> Hi Andy,
 > 
 > Thanks for the feedback.
 > 
-> > Subject: Re: [PATCH RFC 2/2] i2c: Add i2c_device_get_match_data()
-> > callback
+> > Subject: Re: [PATCH RFC 1/2] drivers: fwnode: Extend
+> > device_get_match_data() to struct bus_type
 > > 
-> > Hi Biju,
+> > On Mon, Jul 24, 2023 at 01:19:02PM +0000, Biju Das wrote:
+> > > > Subject: Re: [PATCH RFC 1/2] drivers: fwnode: Extend
+> > > > device_get_match_data() to struct bus_type On Mon, Jul 24, 2023 at
+> > > > 12:02:27PM +0000, Biju Das wrote:
+> > > > > > Subject: Re: [PATCH RFC 1/2] drivers: fwnode: Extend
+> > > > > > device_get_match_data() to struct bus_type On Sun, Jul 23, 2023
+> > > > > > at 09:37:20AM +0100, Biju Das wrote:
 > > 
-> > On Sun, Jul 23, 2023 at 10:37 AM Biju Das <biju.das.jz@bp.renesas.com>
-> > wrote:
-> > > Add i2c_device_get_match_data() callback to struct bus_type().
+> > ...
+> > 
+> > > > > > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > > > >
+> > > > > > You can't just throw one's SoB tag without clear understanding
+> > > > > > what's going on here (either wrong authorship or missing
+> > > > > > Co-developed-by or...?).
+> > > > >
+> > > > > Dmitry feels instead of having separate bus based match_data()
+> > > > > like i2c_get_match_data[2] and spi_get_device_match_data[3], it is
+> > > > > better to have a generic approach like a single API
+> > > > > device_get_match_data() for getting match_data for OF/ACPI/I2C/SPI
+> > tables.
+> > > > >
+> > > > > So, he came with a proposal and shared some code here[1].
+> > > >
+> > > > Yes, I'm pretty much following the discussion.
+> > > >
+> > > > > Since,I have send this patch, I put my signed -off.
+> > > >
+> > > > I'm not talking about this. There is no evidence that Dmitry gives
+> > > > you any approval to use or clear SoB tag. Again, you may not do like
+> > this.
 > > >
-> > > While at it, introduced i2c_get_match_data_helper() to avoid code
-> > > duplication with i2c_get_match_data().
+> > > Here Dmitry is acknowledging, he is ok with the patch I posted.
 > > >
-> > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 > > 
-> > Thanks for your patch!
+> > No, you just misinterpreted his message.
 > > 
-> > > --- a/drivers/i2c/i2c-core-base.c
-> > > +++ b/drivers/i2c/i2c-core-base.c
-> > > @@ -114,20 +114,41 @@ const struct i2c_device_id *i2c_match_id(const
-> > > struct i2c_device_id *id,  }  EXPORT_SYMBOL_GPL(i2c_match_id);
-> > >
-> > > +static void *i2c_get_match_data_helper(struct i2c_driver *driver,
-> > 
-> > static const void *
 > 
-> I missed this.
+> Dmitry,
 > 
-> > 
-> > > +                                      const struct i2c_client
-> > > +*client) {
-> > > +       const struct i2c_device_id *match;
-> > > +
-> > > +       match = i2c_match_id(driver->id_table, client);
-> > > +       if (!match)
-> > > +               return NULL;
-> > > +
-> > > +       return (const void *)match->driver_data;
-> > 
-> > I guess your compiler didn't complain about the const/non-const
-> > conversion when returning because it inlined the function?
+> As you are the author of code, either you post a patch or provide your SoB as per the guideline mentioned here to avoid confusion.
 > 
-> It complained. Somehow, I didn't notice that warning before sending the patch.
-> 
-> > 
-> > > +}
-> > > +
-> > > +static const void *i2c_device_get_match_data(const struct device
-> > > +*dev) {
-> > > +       const struct i2c_client *client = to_i2c_client(dev);
-> 
-> Not sure, non-const i2c_verify_client(dev)to be used here??
+>  https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
 
-Good call, it actually should, as i2c bus contains instances of both
-i2c_client and i2c_adapter.
+It was not really proper patch, consider it as an email with parts
+written in unified diff, as sometimes it is easier than to explain in
+words, and I do not want to take much credit for it.
 
-Unfortunately i2c_verify_client() right now is a function, we might need
-to turn it into a macro to allow transparently handle const/non-const
-device argument... If this is too hard at the moment we could open-code
-i2c_verify_client() in i2c_device_get_match_data() and first check on
-the device type before doing to_i2c_client() conversion.
-
-Also I see i2c_device_remove() uses to_i2c_client(). I guess it only
-works because i2c adapters never have drivers assigned to them, but it
-would be nice to use i2c_verify_client() and maybe put a big fat warning
-if we get wrong type of device there.
+If you wish you can put "Suggested-by" for me, or just drop my name off
+the patch description altogether.
 
 Thanks.
 
