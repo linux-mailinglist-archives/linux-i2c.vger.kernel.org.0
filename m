@@ -2,152 +2,149 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9549375FC54
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jul 2023 18:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F3675FC63
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jul 2023 18:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbjGXQiz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Jul 2023 12:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
+        id S231561AbjGXQnq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 24 Jul 2023 12:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbjGXQiy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Jul 2023 12:38:54 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE43E4F;
-        Mon, 24 Jul 2023 09:38:53 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6689430d803so2665846b3a.0;
-        Mon, 24 Jul 2023 09:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690216732; x=1690821532;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V+JfSQRVxp5hBkPI67OByVISWadfjZ/gRo2caZ6QEXQ=;
-        b=J0SIDsaBqhOqChaQ67sGyvXCw6wuB9D70BUPePoRqPBHzVABFhup3ZHYXe/SPLDyyp
-         9/ZKbm15730MXx32osKl+2CMdJPZ8SsFsfozMhaByvH1NQgWElYdrssXlTtZ4gtshqyT
-         3L6kvgvgfgdGpurk0A7WlEOtZBVi1lcM2t27vF3bL3YHNcZ5CnDiwMrEN5CD/PEFOk9S
-         GjhujVbNueto7dTUoLwf+AJ8TZ8JiRF3EXzims3/cuKgmFP+7fYzAp4+gGiSEIoBvkPC
-         gSKftNJ1d/h6iXs+kdqKiHc25umN+6MR1gGNvDa6B6n6CCDcrNCmGcheSANsj5zk5GXO
-         PL/w==
+        with ESMTP id S231496AbjGXQnq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Jul 2023 12:43:46 -0400
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66F5E53;
+        Mon, 24 Jul 2023 09:43:44 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-583d702129cso19327707b3.3;
+        Mon, 24 Jul 2023 09:43:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690216732; x=1690821532;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V+JfSQRVxp5hBkPI67OByVISWadfjZ/gRo2caZ6QEXQ=;
-        b=dtGmsTUVajQzD4yXRVl32ZnOz5PyAfu+sJ0nQJTCBwcJmfLlvUa745z2eYHOPrNick
-         rbJzDFzKDC8vXHZwKUmGhxEhl2Sco4hDXbG/rjpSVZN9RqzZBneW26jNPPXC4Jq5KSGw
-         E+a9656YmfzNgLPCB1TUXq9usAs+Xs8yarieRbEJGCjVjxX07NVdxt4i+39Sunb0anKP
-         DgzBey3UDjaCn7Z3Hz5pYArJjAXXeCWdZ7hthKKDpm66dOHhuxxpF99Hx+sNTCpNfXTN
-         auGygPH1MDSuTFHRZZKPw+178GrM90hQv1ZD+l+Okfi26mckVR3uc74w255glLb86F9S
-         9uxw==
-X-Gm-Message-State: ABy/qLbjwMjIxMcjgxAeYjZbT3GE+D+rP3Gj7+bbUQEfEwzR9Sy7Nizx
-        gu47+pdDR8VVtAjj70Vx504=
-X-Google-Smtp-Source: APBJJlHwkoplxjfTudrcTmCgYQje4SlToJXd/PplWbbrxvDRkCzwmUomoG9bb/7nJz8xzrTc/eq/sw==
-X-Received: by 2002:a05:6a00:2492:b0:673:5d1e:6654 with SMTP id c18-20020a056a00249200b006735d1e6654mr10098128pfv.33.1690216732389;
-        Mon, 24 Jul 2023 09:38:52 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:b8db:3c3:1ff4:2ae3])
-        by smtp.gmail.com with ESMTPSA id m26-20020a056a00165a00b00682b2fbd20fsm7996939pfc.31.2023.07.24.09.38.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 09:38:52 -0700 (PDT)
-Date:   Mon, 24 Jul 2023 09:38:49 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        d=1e100.net; s=20221208; t=1690217024; x=1690821824;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7mElFEfwbMG8KCjvO65hzvFcgmIqLhBTgsDuwotg3/g=;
+        b=cNmCfiHe0xNzLtyJwXP7iyN9dxRmZGLZ5HF95Ijbo/5y0ycZR094LdrItiCmPb/IU3
+         VHtmAC0jQKtE860FXPKLNHiKU61Hde2xfM1GNEJhx7u+Ntm85Ry5c1dJsbVKhOzwG2ff
+         tP+bSMARCO+l/wMmsgRc0f1OqTaPEQtPNAKjgJUqSrX7sZSeug9NGqYZYjZ9U11PraK9
+         /exrYqWH+B9LLWEZmXI0VKB6IWtr7DeVPY06r1ulrd+1hPgAQAVL1PBi5idXaGhZKC3m
+         hV/b8iMZmQJ/TyVgl0Gh7uMlg9k1ayV7nS3H6HzlJTSi+ceY4r+teiLWmkNO8ZPT+XSC
+         f2kQ==
+X-Gm-Message-State: ABy/qLb32l54oyGqoL6h3yhNslhE57saAvaC5dXHyxyJBe6u9iztFd9O
+        MVqKBgDX/FkS97T6yRfh5PxABv3QzHfz6Q==
+X-Google-Smtp-Source: APBJJlGXT/DfJqfeLlJOI2NkY/DyZycFLs0Zh8NqiyfddgQXP1ky+jxfNkk7LdC1L9b2SB8ZjMNv0w==
+X-Received: by 2002:a81:5e83:0:b0:56d:3b91:7e76 with SMTP id s125-20020a815e83000000b0056d3b917e76mr8370521ywb.12.1690217023789;
+        Mon, 24 Jul 2023 09:43:43 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id t199-20020a0dead0000000b0056f3779557esm2891682ywe.113.2023.07.24.09.43.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Jul 2023 09:43:43 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-d0548cf861aso3474962276.3;
+        Mon, 24 Jul 2023 09:43:43 -0700 (PDT)
+X-Received: by 2002:a25:34e:0:b0:d0f:b553:8284 with SMTP id
+ 75-20020a25034e000000b00d0fb5538284mr922146ybd.20.1690217023116; Mon, 24 Jul
+ 2023 09:43:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230723083721.35384-1-biju.das.jz@bp.renesas.com>
+ <20230723083721.35384-3-biju.das.jz@bp.renesas.com> <CAMuHMdWThYuw+fwoz8xwHRyDDgTQUkW_c_ANkjzuMggqZCm3zg@mail.gmail.com>
+ <OS0PR01MB5922CA1B457D6747478DCCB18602A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <ZL6oLoPviI8ZtSKV@google.com>
+In-Reply-To: <ZL6oLoPviI8ZtSKV@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 24 Jul 2023 18:43:30 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWtajSfa91Yg6codr8rVTvkWWykUgs=mDuS9hfsRbnAiQ@mail.gmail.com>
+Message-ID: <CAMuHMdWtajSfa91Yg6codr8rVTvkWWykUgs=mDuS9hfsRbnAiQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/2] i2c: Add i2c_device_get_match_data() callback
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "linux-renesas-soc@vger.kernel.org" 
         <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH RFC 1/2] drivers: fwnode: Extend device_get_match_data()
- to struct bus_type
-Message-ID: <ZL6pGRNvOfdYhhAs@google.com>
-References: <20230723083721.35384-1-biju.das.jz@bp.renesas.com>
- <20230723083721.35384-2-biju.das.jz@bp.renesas.com>
- <ZL5bH10uJWDe2SPY@smile.fi.intel.com>
- <OS0PR01MB592287A0B91E353663FE12A68602A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <ZL51/dXKyDkcoDVJ@smile.fi.intel.com>
- <OS0PR01MB592289F163F05A61DFD019DF8602A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <ZL6BsM0NGhn2mc+6@smile.fi.intel.com>
- <TYCPR01MB5933A2EC98D3BF251C74A7AF8602A@TYCPR01MB5933.jpnprd01.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYCPR01MB5933A2EC98D3BF251C74A7AF8602A@TYCPR01MB5933.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 01:58:55PM +0000, Biju Das wrote:
-> Hi Andy,
-> 
-> Thanks for the feedback.
-> 
-> > Subject: Re: [PATCH RFC 1/2] drivers: fwnode: Extend
-> > device_get_match_data() to struct bus_type
-> > 
-> > On Mon, Jul 24, 2023 at 01:19:02PM +0000, Biju Das wrote:
-> > > > Subject: Re: [PATCH RFC 1/2] drivers: fwnode: Extend
-> > > > device_get_match_data() to struct bus_type On Mon, Jul 24, 2023 at
-> > > > 12:02:27PM +0000, Biju Das wrote:
-> > > > > > Subject: Re: [PATCH RFC 1/2] drivers: fwnode: Extend
-> > > > > > device_get_match_data() to struct bus_type On Sun, Jul 23, 2023
-> > > > > > at 09:37:20AM +0100, Biju Das wrote:
-> > 
-> > ...
-> > 
-> > > > > > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > > > > >
-> > > > > > You can't just throw one's SoB tag without clear understanding
-> > > > > > what's going on here (either wrong authorship or missing
-> > > > > > Co-developed-by or...?).
-> > > > >
-> > > > > Dmitry feels instead of having separate bus based match_data()
-> > > > > like i2c_get_match_data[2] and spi_get_device_match_data[3], it is
-> > > > > better to have a generic approach like a single API
-> > > > > device_get_match_data() for getting match_data for OF/ACPI/I2C/SPI
-> > tables.
-> > > > >
-> > > > > So, he came with a proposal and shared some code here[1].
+Hi Dmitry,
+
+On Mon, Jul 24, 2023 at 6:35 PM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+> On Mon, Jul 24, 2023 at 03:06:50PM +0000, Biju Das wrote:
+> > > Subject: Re: [PATCH RFC 2/2] i2c: Add i2c_device_get_match_data()
+> > > callback
+> > > On Sun, Jul 23, 2023 at 10:37 AM Biju Das <biju.das.jz@bp.renesas.com>
+> > > wrote:
+> > > > Add i2c_device_get_match_data() callback to struct bus_type().
 > > > >
-> > > > Yes, I'm pretty much following the discussion.
+> > > > While at it, introduced i2c_get_match_data_helper() to avoid code
+> > > > duplication with i2c_get_match_data().
 > > > >
-> > > > > Since,I have send this patch, I put my signed -off.
-> > > >
-> > > > I'm not talking about this. There is no evidence that Dmitry gives
-> > > > you any approval to use or clear SoB tag. Again, you may not do like
-> > this.
+> > > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 > > >
-> > > Here Dmitry is acknowledging, he is ok with the patch I posted.
+> > > Thanks for your patch!
 > > >
-> > 
-> > No, you just misinterpreted his message.
-> > 
-> 
-> Dmitry,
-> 
-> As you are the author of code, either you post a patch or provide your SoB as per the guideline mentioned here to avoid confusion.
-> 
->  https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+> > > > --- a/drivers/i2c/i2c-core-base.c
+> > > > +++ b/drivers/i2c/i2c-core-base.c
+> > > > @@ -114,20 +114,41 @@ const struct i2c_device_id *i2c_match_id(const
+> > > > struct i2c_device_id *id,  }  EXPORT_SYMBOL_GPL(i2c_match_id);
+> > > >
+> > > > +static void *i2c_get_match_data_helper(struct i2c_driver *driver,
+> > >
+> > > static const void *
+> >
+> > I missed this.
+> >
+> > >
+> > > > +                                      const struct i2c_client
+> > > > +*client) {
+> > > > +       const struct i2c_device_id *match;
+> > > > +
+> > > > +       match = i2c_match_id(driver->id_table, client);
+> > > > +       if (!match)
+> > > > +               return NULL;
+> > > > +
+> > > > +       return (const void *)match->driver_data;
+> > >
+> > > I guess your compiler didn't complain about the const/non-const
+> > > conversion when returning because it inlined the function?
+> >
+> > It complained. Somehow, I didn't notice that warning before sending the patch.
+> >
+> > >
+> > > > +}
+> > > > +
+> > > > +static const void *i2c_device_get_match_data(const struct device
+> > > > +*dev) {
+> > > > +       const struct i2c_client *client = to_i2c_client(dev);
+> >
+> > Not sure, non-const i2c_verify_client(dev)to be used here??
+>
+> Good call, it actually should, as i2c bus contains instances of both
+> i2c_client and i2c_adapter.
+>
+> Unfortunately i2c_verify_client() right now is a function, we might need
+> to turn it into a macro to allow transparently handle const/non-const
+> device argument... If this is too hard at the moment we could open-code
+> i2c_verify_client() in i2c_device_get_match_data() and first check on
+> the device type before doing to_i2c_client() conversion.
 
-It was not really proper patch, consider it as an email with parts
-written in unified diff, as sometimes it is easier than to explain in
-words, and I do not want to take much credit for it.
+Tadah, we have _Generic()! See container_of_const():
+https://elixir.bootlin.com/linux/latest/source/include/linux/container_of.h#L25
 
-If you wish you can put "Suggested-by" for me, or just drop my name off
-the patch description altogether.
+Gr{oetje,eeting}s,
 
-Thanks.
+                        Geert
 
 -- 
-Dmitry
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
