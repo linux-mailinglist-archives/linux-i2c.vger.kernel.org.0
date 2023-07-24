@@ -2,41 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1781675F2D0
-	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jul 2023 12:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E92B75F30B
+	for <lists+linux-i2c@lfdr.de>; Mon, 24 Jul 2023 12:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjGXKTs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 24 Jul 2023 06:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S231641AbjGXKZW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 24 Jul 2023 06:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbjGXKTM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Jul 2023 06:19:12 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2056.outbound.protection.outlook.com [40.107.6.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DC91716;
-        Mon, 24 Jul 2023 03:11:50 -0700 (PDT)
+        with ESMTP id S232756AbjGXKZH (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 24 Jul 2023 06:25:07 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2073.outbound.protection.outlook.com [40.107.13.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631E955A6;
+        Mon, 24 Jul 2023 03:19:52 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hqE5vNyWRV+zOlobrjXnych0TQ+UsIYYnn3023ln48mTi76/gb9PTwLvf41Zy+XqWxHk2Y57vMyG0buR+Bojs1UOH3KtlrPWl33XZtzcRWZ8f8jZEnWTDAUpCJ7Mn6DdYpJey9oRIXka0F7ig5etoSv0TuidJZvZsldwOMMpXbDZdA/A6nHrUlGYZhbVxbmCXj7K+OUADnYlK0ct0NtHUYX7+T7JkKfgHhpoYOafR03IeCYAwbyEFAuIp6x/qqI84AnECe9yRu5QDtzH5kiJ78PhbbYyJ90sDg57/bgmD+gXuW7K5ScAyhfoUpNvyr7trpsMwAjjXk8c2r3oYWxeDg==
+ b=n20Gn97eILoSkcbOWWV9rTzAvvIvUCgOtxIDhWnaSyNLR3r73xHM3X8SJJpjyN0n5mD5nXIOEihhrwHYnKDkGJQvQnGcfP181EeZdvIUb9EIjyeQR1dvrV9SJify1aglVjUNGvmbt2UUHEj2RvpUeS8PrxzXygLA+RkMpNh6qm9QlV5EySQdTqOrZmWtqJJH65Y8S9ZGMMDlSeREpNuO6BUcUHvridjOC0+3vxxGvupv6lT+7bUneDIaueCF2eErRKEwDBMlw7bdmbAosV/6z1Q5gLgZdarBvFCAAE4s5NbWSh3LlVC2OH1cDoc93hDUdz1OqeuphoogWpjIVIHutA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7MgVrYc4+pJOokviVI+8cPDsDxmqlB5mHprn2qGawP4=;
- b=RuGkULnxLZn95nQ/EF2/6ns9Mia2q89UxocmkqEX3Tb6Tg4v+Hzdfq8yyZ4K0lzDUSlj9Iu9R5vOi+hWFosmUXb9ni4vtIDQEnpY8UzA3rXGJbVF/yUQZ2FUy4/t5JEg4oXj0Tvt14LBMjk5W5Hpda7HKCL1blRPZ/t5L+TaIu7x6NlcfjZ1hboq+59eRooPSqDJEbi+Km6iBxVTXjf76+lbCgjapFGgnz3HCs1CK8iz91Wq4Nsql1fYYH0dnzDrJp1Q35vwS3bnWfAHlLuN2qY+tmf7sOaZ+Pwx9283dENm8lkztW54MhiSeZE/0kK+U6HvgZQhaeYl9W252t9YWg==
+ bh=SSEHluESptW40Sh0zq8kibsH8845Eblb2O8n41x5AGk=;
+ b=YX25XOJy8mhhgiqQ8t8VhLd3RaaypPVYf0m9r92QCxQO50WKk2HUzeccDxBys3lUGFcVDDvCeaj+DmpJCcJAvan8WdFa1Qxkmre+aqhKe9lbOLI88ne8zopTXy8+0nBm3uAJ4Hwm9me9Qkasz08csClw2MPCfzUOu7bwHgqFL3K0h6tIHcNrjQbFSmITSnU2IctbpVWKm/KI6tpqc2sVZcdVi+M4kB6CEfmjhRqh3oVIsdUw+Txo2+IRnyzZ/U+vOJ5agWMWCEWObIsITaYjdrOBb7+NGNPtrZIGyks7dA30bJPNvbtXD0i6BkKlkulx1KUtA1oDdfTuDwgkkFGV5g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7MgVrYc4+pJOokviVI+8cPDsDxmqlB5mHprn2qGawP4=;
- b=i4C9697zfvrlwfhcP4H7fk029CNAk9K90EHZ6J3ycfOs+fsi5e0nz6zZoR7QpYX+6sw+LrHCa8TL8+aqMo9fi4gnknw5WZzmp1qP3NQcTsh4hn6ZJ5dmLAsuJ0xkeWU5NA1rUvZPPb/WntV59mCJ5OIQWIJqA9uPHnGgjm3WZaU=
+ bh=SSEHluESptW40Sh0zq8kibsH8845Eblb2O8n41x5AGk=;
+ b=PwNbmJKQrsCa8KS2MjIvKVk6IKjlkh9iUFUbz2wE/cLgRW4sBwVT4/SPpZ/RVMxo9fOLvjRkrEM0HfOaEF/9ELd+63dGNRDM1AJmsBW7M5ejfY+naTbvljTWx7/zTkv4aOwOiGGtro0IPgemhaQ5QM3d0/Oaej82G60mHpVAMEo=
 Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
- by DBAPR04MB7448.eurprd04.prod.outlook.com (2603:10a6:10:1a6::6) with
+ by DU2PR04MB8776.eurprd04.prod.outlook.com (2603:10a6:10:2e3::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.32; Mon, 24 Jul
- 2023 10:11:47 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.31; Mon, 24 Jul
+ 2023 10:19:48 +0000
 Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
  ([fe80::7f26:a98a:b8c5:f620]) by VI1PR04MB5005.eurprd04.prod.outlook.com
  ([fe80::7f26:a98a:b8c5:f620%4]) with mapi id 15.20.6609.031; Mon, 24 Jul 2023
- 10:11:46 +0000
+ 10:19:48 +0000
 From:   Carlos Song <carlos.song@nxp.com>
 To:     Andi Shyti <andi.shyti@kernel.org>
 CC:     Aisheng Dong <aisheng.dong@nxp.com>,
@@ -44,27 +44,23 @@ CC:     Aisheng Dong <aisheng.dong@nxp.com>,
         "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>,
         "festevam@gmail.com" <festevam@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "Anson.Huang@nxp.com" <Anson.Huang@nxp.com>,
         Clark Wang <xiaoning.wang@nxp.com>,
         Bough Chen <haibo.chen@nxp.com>,
         dl-linux-imx <linux-imx@nxp.com>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] Re: [PATCH 1/2] i2c: imx-lpi2c: add bus recovery feature
-Thread-Topic: [EXT] Re: [PATCH 1/2] i2c: imx-lpi2c: add bus recovery feature
-Thread-Index: AQHZkgDH5/Zn1FPUhESYir+xnLlZhq+JdxYAgD+M+2A=
-Date:   Mon, 24 Jul 2023 10:11:46 +0000
-Message-ID: <VI1PR04MB500517614935B4E769A27F3EE802A@VI1PR04MB5005.eurprd04.prod.outlook.com>
-References: <20230529074302.3612294-1-carlos.song@nxp.com>
- <20230613231948.bsxuou4nnwbg2ui5@intel.intel>
-In-Reply-To: <20230613231948.bsxuou4nnwbg2ui5@intel.intel>
+Subject: RE: [EXT] Re: [PATCH] i2c: imx-lpi2c: add debug message when i2c
+ peripheral clk doesn't work
+Thread-Topic: [EXT] Re: [PATCH] i2c: imx-lpi2c: add debug message when i2c
+ peripheral clk doesn't work
+Thread-Index: AQHZkf4EMwNjG9kys0GQYjQZG+GhNq+JfK0AgD+PLXA=
+Date:   Mon, 24 Jul 2023 10:19:48 +0000
+Message-ID: <VI1PR04MB5005DC14A78D364FABEF6E3EE802A@VI1PR04MB5005.eurprd04.prod.outlook.com>
+References: <20230529072316.3605989-1-carlos.song@nxp.com>
+ <20230613233944.673syh3cjykvygfl@intel.intel>
+In-Reply-To: <20230613233944.673syh3cjykvygfl@intel.intel>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -72,55 +68,55 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR04MB5005:EE_|DBAPR04MB7448:EE_
-x-ms-office365-filtering-correlation-id: bb4974f2-cd20-47f9-f1e4-08db8c2e632c
+x-ms-traffictypediagnostic: VI1PR04MB5005:EE_|DU2PR04MB8776:EE_
+x-ms-office365-filtering-correlation-id: 9ea14470-f843-4986-0c9a-08db8c2f8292
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Pz4QwIkd0zNBnpROopKEDJI/mxzGBy5okWosjv8AqDrJqzy/sM1fhXxTlQuC1srzSGoLzyX8B7ds/ZJfgBz6eTaBvvnLxmH6xnQYP923Mh3oZrexJcVwYsjiZY87A0XfKnvSk0vIsNz3+Alhtnx0mVX0Vq5VljbV9HIzL0ZAq+n1vTF6lKhn0q2g02QUrILKBeDGP21ZTug6h7jp4KMuRTghiArkCwortl3fQvzmEe2x/h0UcDomBq7Lc3vwPNr6blnZZiWLyOvtKHcpsnByMr7BoBwE+sTdTOiGbAlf4M9gAGGI/SBWpPq4CdTpH+n2hoCBcAKp8FYAl7Ig0SpyJCWEUe48EHohsQvKHf2UVfCjBD0f2A0p6OZLH8ynw/VXGpWThJiIA4cHesnf3Z9Ltvyzs1G7Hh6bp2EmMtBYUEM2bsiqzMGPn2vdf9akmLMPWyZQf7zqerRfK5JAg/A3E5Qml3aaMd9pYI+VZEgsNb7AnvXkClIo+OQnNWix+2nbpp/Glfo5wge03P+T1VsaDbtnf/v1DsnSDG6O2GaIZvzB/Fc0+IrLuTT3xHVX4Jm9cEtOUF+vrw076fAJhcsh/OEvwxv/Mp5TaOZ1birYx1Un6/KnKKnEceMjSiWTMnPo
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(136003)(366004)(376002)(451199021)(2906002)(64756008)(66946007)(76116006)(66446008)(66476007)(66556008)(4326008)(6916009)(7696005)(33656002)(71200400001)(478600001)(86362001)(9686003)(54906003)(83380400001)(186003)(122000001)(38070700005)(53546011)(6506007)(38100700002)(26005)(55016003)(41300700001)(7416002)(8936002)(8676002)(52536014)(5660300002)(316002)(44832011);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: fd1jejJFG78QQrKFXlJUFCcWSQG/x8fdeYlPFglWXqzvgBcmd8osIyVVCJFo2pJnNHruEh05AhvGMoT0UvfuE/B3rMSArw7+UbU1sWDEgZFvf0rm5EV6s8vV2JhmAv5rtGXVWka5yusQg33vfTEkRp7dq7HXBp7y1U1mZ3TzepgQy3+WKVpBGQPNSClSR0TOsH9npmdyfs8P/5zKC+gg73/+cLvqfaOZec7LV4zBoNR4WxTchLwxL/ACM132Qv8eOpegyWOlh2lQzw5Vt5kVF8C50kKyfBIknFoHR9H/UmRaQFVR7i2ftwXZyauyiMh1EOUHCTuzTF9Txb39Y4NlxDnKvOKYbWHDaX0EFYIP99pBiI2AMe7ehVRumraVitP/n67qbql5x9HyxxLGkJQpl1XZfVidUMzRcm8rzgBeIPRDcKIFuKMO/fzH7R+sa6SEORR5lmaMFHwZJCPnnJfnWIx0CKVdLgmXAgSDMEdsCAa5uGAHA33Wt8cgNJBk+QcehLJaklS5mjGqSaScmcBhMXDMXHvhH6qy6rg22P4Z/di6XicHO/0CCe3waO5Ca2Fg41YovUC734sXdmCzzpaZDj3sclTfA2Z0kav+gNqO1ZTLJOR4wiUXVOc6fBFQAhsF
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(39860400002)(136003)(366004)(451199021)(71200400001)(9686003)(7696005)(54906003)(478600001)(53546011)(6506007)(26005)(44832011)(15650500001)(2906002)(41300700001)(316002)(6916009)(66946007)(66476007)(64756008)(76116006)(4326008)(66446008)(8676002)(8936002)(52536014)(5660300002)(66556008)(122000001)(38100700002)(38070700005)(86362001)(83380400001)(33656002)(55016003)(186003);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3kSimHvQH4mAyeaAoLLjge9A7fTWGkTCsCD+KXteFcN4sZzUSkbYbGIZpkZq?=
- =?us-ascii?Q?olwsBEjNkhb8EJslUYCoaVj3IU+PJ07v48TBKf7PT4O0EJhMD+dJRDu8hyf6?=
- =?us-ascii?Q?ZF7+TYx5l9RJy0DSThNAlOmt6rYvcwTet2NU/xKbSJ3T8Gn6l/PhtvGUSlwj?=
- =?us-ascii?Q?MRV9I8c8dupPp5m8u/D20R+xAwErbm6fV4lbxfURG3mSa3Mt1sR3xkvAN51C?=
- =?us-ascii?Q?sLGyt33Am1r3GZmn0sUAQ2gPmzeawpuu8XyqQeOxisY9iPZttBzCD6UvlOLG?=
- =?us-ascii?Q?6aRgmWzzxwaE/Vo/VRshkjwBsVhIMpvswqk2roHBotZ57x18gcvOvAxquVYQ?=
- =?us-ascii?Q?l13EJ+RJu4ZSw9Q68h2KaqxI+uQXO1KdrQYATqRkPw//+a+bXitJwsoqyuuS?=
- =?us-ascii?Q?ublsXsznGrmzDXjFuh7Yf+GuNikfSrRUfzgqmwMvWK8pxZFrhfKvHZYAd52n?=
- =?us-ascii?Q?rBpVGSqnWeeBhYSdZO+2eFsSnHURQx51AVUSmh7xIJ5aaDFFXlPnzzN8Cz/U?=
- =?us-ascii?Q?j2GN71rBgppETQFpGZA+LwlO2EgRQU5nCexZJeCCcw644i8ZO0RvSpLpY9o2?=
- =?us-ascii?Q?bPkhLje09UsS6shZmQcT3R3crvP9ORozSZvBjrUVICzMKNVyEutE2fyB+M9s?=
- =?us-ascii?Q?vKUOL0SqcfyVYaXH/Q6vb/pMPrYXjPrWneCrswoQ66lH5oAmA+7IBVfFq67v?=
- =?us-ascii?Q?jT4+f7pP4VV6MDqpbBCx3CH67AIu8UpJ0wC3FA6CldJVrM5bmY8ZcRZ6Un+J?=
- =?us-ascii?Q?76rKus13GoF7pwbdfrme0jT/UAKU2Xcas3aOQHphiIS5cp4Y0SL5E8UWLMhH?=
- =?us-ascii?Q?ULLjur2GhhO+ElTIx04vBbFeXeLkNXwjtCVKpVO+j8wXZC4NmHG9i5O50xR1?=
- =?us-ascii?Q?r/bbKkeyhNLXkYJ4X1siaiLR9C4lWu26k8p3d4PASljXlnvgY1RsS/HLLhxe?=
- =?us-ascii?Q?m+ddnCUrNjU0CH5arXJneNL8V2apZ+fND1g73McFegUACwrP5PvyZ26VnSCZ?=
- =?us-ascii?Q?3nveKa2z9eLzEY7talitIdi2OQrm+DY+3/SwRCv45TFmZ2uHUHj03dbMB9Gq?=
- =?us-ascii?Q?tBgjcdrwMM8rI6UcBL/2is/11n7oGHttZswQ2Vmf4Pzh/LDkhtQn5i5+5nse?=
- =?us-ascii?Q?kZ5CLkPDPgBCxNsOt0PtgQobDu5QDRBLPpQxdss5Rsvl2ERYV8v28k643TFe?=
- =?us-ascii?Q?8C4ZW7BdgbXL9VgulZonYCgeWPvMHei6NuVCZrU4TArTm+QZJiEqOoa6ej5g?=
- =?us-ascii?Q?9kY7rItAP1AX8NJbZRkk6PrM3mNMzVjgK0+Yfwq63P4ztDQHQg6oVLA2kVch?=
- =?us-ascii?Q?K8jQVSdb78Zb6cx8+t1V1LUJYjo19+S+KgEppoQmU8lRrciAb8ndBNVXMbbo?=
- =?us-ascii?Q?OK5AxrxWxmTwm1f4MLwYeMydlbhlG+qT2ScT4wf2aDw7LMNK4d51metJLeKW?=
- =?us-ascii?Q?9EuENfwA7dhsIWnQ/onlfXV/Lxp6BheIYdqhx8eNvE6MJVqHSDkCmLnlrjx0?=
- =?us-ascii?Q?LaJF/c4cVcxHb9g4eNELkKLDWDoodElbPXbcSuqr3OznlxZL+gzjaT1r4OZp?=
- =?us-ascii?Q?Dlz5zaYker7DmgUoA+zutdYIBFtz/NPoDX8NcWuf?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?qlNV8dKQj7XcXISKtpC915UERhmvpt9F6VHg0RI2EfnbedPDh2/kt+VviWRz?=
+ =?us-ascii?Q?W1F3dSJkMNcWCNN5U67mvn54gBAyVUyIZPiSONqlXglryUp1JYF8sKSWlvmK?=
+ =?us-ascii?Q?GN7igZX0qHwmBp0Gqy69nasRAFjjWHo/GBNSdWoTllx85Ez1J3JVJb3fC7L7?=
+ =?us-ascii?Q?8JnCah1pvmnunpTfBC51SMC3cLb/KmjT+I4cjRBF4LAGNjAZ+eeJOIRl2Hyf?=
+ =?us-ascii?Q?tL+ksYCwx1C3KDAQ2+9LZGTA/qq4PNwkTikBaENihkX61JaSCL9Q/3oU8LWd?=
+ =?us-ascii?Q?5lunPOTV0MoG2UTI094s/VoHfW55YHG9lb4ZnkLpScXfE075yTd5YcmVJFXG?=
+ =?us-ascii?Q?c2BFPLkt1JPa01kA22MxgxhWMPAkpuNpWQ0I0LYy4WPf0tTopN7foXov/At0?=
+ =?us-ascii?Q?SeA9CP2Vv/Ba1NUw0Eb+XF7J/JEPwDTXauUV4lVwCBevCu3FCkjMx8+FWHd3?=
+ =?us-ascii?Q?V1kEoHKOPgmguDajitvU4oMrvmjT6K8AgM9gdHT4ZZV9NdJ7eh1tcBxIJ1sf?=
+ =?us-ascii?Q?KoaWXd0deeEq2v5Duzyc6CRB5ptQMp8fkFuQfQp9pNIXMukNvTqqeQxNY0qd?=
+ =?us-ascii?Q?xb63O4+ZnNBzwYncm46cSnOSfSYToBSc0J38c8SeJDgVHjd7NBVDwlyRyI3k?=
+ =?us-ascii?Q?y8tsCZcf2o13MFn8IBLrQpPDRAvhpJw/JIRmctKFGvIi7hTDidcGI6FwQ3K6?=
+ =?us-ascii?Q?x+SIHe3PMpnphoFl+J24g77VW6/BLkYqiRedVjhSbp+YmlDm6UMkTZbatB/J?=
+ =?us-ascii?Q?2D8cuycb9KXBOel4Gy5f5dVUR/J09qZbHgQVXIMJc56R5YD4WjSu0cJivXHu?=
+ =?us-ascii?Q?1yaE8xSQkWMOVszC637Z/Y31fuswQ1yQVABPD3Mt9tziGS1jxKBkpmtJWsaH?=
+ =?us-ascii?Q?pPZMVgP2c+pfcIeQI4oaBHjOZ1Hw9i718XxaHeUzirsuubBvRSHGoi7XM8/d?=
+ =?us-ascii?Q?bds6TnUBs8BvbzytlgKIsGnRvPPIg50Hrb4nUNUo9mOwUJyEw2//GpsYnFGa?=
+ =?us-ascii?Q?yp9p+xpIq73c2dNl82Vds8T9293JTRaP95Z9cwyBZ0y6fCHuRI9dynLGMSx1?=
+ =?us-ascii?Q?PGfUc33j/JporQEoQIMn5IDgdjDLR/W+/+732ATRTtVZnuhS4HCnfhZrEsH7?=
+ =?us-ascii?Q?97F9w+Vxf5WzXO+8a4bDN/pHhT2id/93UfKqweBqOeKhRVBTK9etTFik3BWL?=
+ =?us-ascii?Q?Xx0VLexHPairALMcN6KvQiB/PySlhTfJgUKw09CgUZnGuy/Unb9unglkK0fA?=
+ =?us-ascii?Q?QS2/fSfTYDHX+6zpU/S7WbqxugazehFhTTwKQSClEbqzO3Co/sStlD5UZLsr?=
+ =?us-ascii?Q?4lb8N4lEVlsNHd+bZJ+vNZ3e6DR9AW54c5qqcGn0WmPgM4jx8//JfT0UEODQ?=
+ =?us-ascii?Q?axOVIKkFuE5WLy/eLuHfNGiR3JOOuauFIpzWP/wtwFI37aU4duBcAAN2YtkN?=
+ =?us-ascii?Q?D+LVNPk1nVdFKQSDr1vsPbXHMpduxfFqbtpVad0oaDDF5YnygbV9fwjR82ID?=
+ =?us-ascii?Q?Vv34fd8Ijg+fbUNedYJastDL6wb7cW0/n//6ihSkQEIG2P11EPiAawzMQcxq?=
+ =?us-ascii?Q?rp0Tv7xyxdNPLzGeUNxL6i/RkLtguoD4E5d38x4x?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb4974f2-cd20-47f9-f1e4-08db8c2e632c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jul 2023 10:11:46.2719
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ea14470-f843-4986-0c9a-08db8c2f8292
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jul 2023 10:19:48.4703
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TsrNCBPtKRZWCI1Y/aR3Ks83jjaW59DavzQR29QHxd9IEJtmr5XiZcij7rNzvS3LtfCgcjJoKPui9V1nvonMnA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7448
+X-MS-Exchange-CrossTenant-userprincipalname: aYS0PnycUzrn07FWNFKatpsxR1bGGCdz7Whi8y9HRYvN7yDNiKGCOpb2NYlxN6/bX6xyONNxAPlxUX2JGY724A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8776
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -133,27 +129,17 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi, Andi
 
-Sorry for the long time to reply. According to your advice, I found the pat=
-ch is too redundant!
-so I will send V2 patch.=20
-I find gpio and pinctrl assignement from the default i2c_init_recovery() ha=
-ve been defined very well.
-Lpi2c have special initialization conditions for i2c recovery and I have ad=
-ded a comment in V2.
-
 > -----Original Message-----
 > From: Andi Shyti <andi.shyti@kernel.org>
-> Sent: Wednesday, June 14, 2023 7:20 AM
+> Sent: Wednesday, June 14, 2023 7:40 AM
 > To: Carlos Song <carlos.song@nxp.com>
 > Cc: Aisheng Dong <aisheng.dong@nxp.com>; shawnguo@kernel.org;
-> s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com;
-> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; conor+dt@kernel.or=
-g;
-> Anson.Huang@nxp.com; Clark Wang <xiaoning.wang@nxp.com>; Bough Chen
-> <haibo.chen@nxp.com>; dl-linux-imx <linux-imx@nxp.com>;
-> linux-i2c@vger.kernel.org; devicetree@vger.kernel.org;
+> s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com; Clark
+> Wang <xiaoning.wang@nxp.com>; Bough Chen <haibo.chen@nxp.com>;
+> dl-linux-imx <linux-imx@nxp.com>; linux-i2c@vger.kernel.org;
 > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> Subject: [EXT] Re: [PATCH 1/2] i2c: imx-lpi2c: add bus recovery feature
+> Subject: [EXT] Re: [PATCH] i2c: imx-lpi2c: add debug message when i2c
+> peripheral clk doesn't work
 >=20
 > Caution: This is an external email. Please take care when clicking links =
 or
@@ -164,114 +150,48 @@ this
 >=20
 > Hi,
 >=20
-> On Mon, May 29, 2023 at 03:43:01PM +0800, carlos.song@nxp.com wrote:
-> > From: Clark Wang <xiaoning.wang@nxp.com>
+> On Mon, May 29, 2023 at 03:23:16PM +0800, carlos.song@nxp.com wrote:
+> > From: Gao Pan <pandy.gao@nxp.com>
 > >
-> > Add bus recovery feature for LPI2C.
-> > Need add gpio pinctrl, scl-gpios and sda-gpios configuration in dts.
->=20
-> please update the commit message according to the dts changes, as well.
->=20
-Carlos: There is still a need to add gpio pinctrl to set i2c sda/scl pin to=
- gpio
-> [...]
->=20
-> > +static void lpi2c_imx_prepare_recovery(struct i2c_adapter *adap) {
-> > +     struct lpi2c_imx_struct *lpi2c_imx;
-> > +
-> > +     lpi2c_imx =3D container_of(adap, struct lpi2c_imx_struct,
-> > + adapter);
-> > +
-> > +     pinctrl_select_state(lpi2c_imx->pinctrl,
-> > +lpi2c_imx->pinctrl_pins_gpio); }
-> > +
-> > +static void lpi2c_imx_unprepare_recovery(struct i2c_adapter *adap) {
-> > +     struct lpi2c_imx_struct *lpi2c_imx;
-> > +
-> > +     lpi2c_imx =3D container_of(adap, struct lpi2c_imx_struct,
-> > + adapter);
-> > +
-> > +     pinctrl_select_state(lpi2c_imx->pinctrl,
-> > +lpi2c_imx->pinctrl_pins_default); }
-> > +
-> > +/*
-> > + * We switch SCL and SDA to their GPIO function and do some
-> > +bitbanging
-> > + * for bus recovery. These alternative pinmux settings can be
-> > + * described in the device tree by a separate pinctrl state "gpio".
-> > +If
->=20
-> is this still true?
->=20
-
-Carlos: Yes it is true.
-
-> > + * this is missing this is not a big problem, the only implication is
-> > + * that we can't do bus recovery.
-> > + */
-> > +static int lpi2c_imx_init_recovery_info(struct lpi2c_imx_struct *lpi2c=
-_imx,
-> > +             struct platform_device *pdev) {
-> > +     struct i2c_bus_recovery_info *rinfo =3D &lpi2c_imx->rinfo;
-> > +
-> > +     lpi2c_imx->pinctrl =3D devm_pinctrl_get(&pdev->dev);
-> > +     if (!lpi2c_imx->pinctrl || IS_ERR(lpi2c_imx->pinctrl)) {
-> > +             dev_info(&pdev->dev, "can't get pinctrl, bus recovery not
-> supported\n");
-> > +             return PTR_ERR(lpi2c_imx->pinctrl);
-> > +     }
-> > +
-> > +     lpi2c_imx->pinctrl_pins_default =3D
-> pinctrl_lookup_state(lpi2c_imx->pinctrl,
-> > +                     PINCTRL_STATE_DEFAULT);
-> > +     lpi2c_imx->pinctrl_pins_gpio =3D pinctrl_lookup_state(lpi2c_imx->=
-pinctrl,
-> > +                     "gpio");
-> > +     rinfo->sda_gpiod =3D devm_gpiod_get(&pdev->dev, "sda", GPIOD_IN);
-> > +     rinfo->scl_gpiod =3D devm_gpiod_get(&pdev->dev, "scl",
-> > + GPIOD_OUT_HIGH_OPEN_DRAIN);
-> > +
-> > +     if (PTR_ERR(rinfo->sda_gpiod) =3D=3D -EPROBE_DEFER ||
-> > +         PTR_ERR(rinfo->scl_gpiod) =3D=3D -EPROBE_DEFER) {
-> > +             return -EPROBE_DEFER;
-> > +     } else if (IS_ERR(rinfo->sda_gpiod) ||
-> > +                IS_ERR(rinfo->scl_gpiod) ||
-> > +                IS_ERR(lpi2c_imx->pinctrl_pins_default) ||
-> > +                IS_ERR(lpi2c_imx->pinctrl_pins_gpio)) {
-> > +             dev_dbg(&pdev->dev, "recovery information incomplete\n");
-> > +             return 0;
+> > Add debug message when i2c peripheral clk rate is 0, then directly
+> > return -EINVAL.
+> >
+> > Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+> > Signed-off-by: Gao Pan <pandy.gao@nxp.com>
+> > Signed-off-by: Carlos Song <carlos.song@nxp.com>
+> > ---
+> >  drivers/i2c/busses/i2c-imx-lpi2c.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> > b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> > index 11240bf8e8e2..62111fe9f207 100644
+> > --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> > +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> > @@ -209,6 +209,11 @@ static int lpi2c_imx_config(struct lpi2c_imx_struc=
+t
+> *lpi2c_imx)
+> >       lpi2c_imx_set_mode(lpi2c_imx);
+> >
+> >       clk_rate =3D clk_get_rate(lpi2c_imx->clks[0].clk);
+> > +     if (!clk_rate) {
+> > +             dev_dbg(&lpi2c_imx->adapter.dev, "clk_per rate is 0\n");
+> > +             return -EINVAL;
 > > +     }
 >=20
-> Why not use these assignement from the default i2c_init_recovery()? Is th=
-ere
-> anything you are doing I am not seeing?
+> should this rather be a dev_err?
 >=20
-
-Carlos: these assignements are too redundant and I will fix it in V2 patch.
-
-> > +
-> > +     dev_info(&pdev->dev, "using scl%s for recovery\n",
-> > +              rinfo->sda_gpiod ? ",sda" : "");
+Carlos: Yes, I will fix it.
+> And, BTW, did you actually hit this?
 >=20
-> is there any case when sda_gpiod is NULL?
->=20
-Carlos: I will delete it in V2.
-> > +
-> > +     rinfo->prepare_recovery =3D lpi2c_imx_prepare_recovery;
-> > +     rinfo->unprepare_recovery =3D lpi2c_imx_unprepare_recovery;
-> > +     rinfo->recover_bus =3D i2c_generic_scl_recovery;
-> > +     lpi2c_imx->adapter.bus_recovery_info =3D rinfo;
->=20
-> do you need also the set_scl() function? It should be mandatory.
->=20
-Carlos: I will use the default setting in V2 patch.
-> > +
-> > +     return 0;
-> > +}
->=20
-> Besides, this is a copy/paste from i2c-imx.c, any chance to put the two t=
-hings
-> together?
->=20
-Carlos: I hope to apply the new recovery patch for lpi2c.
+Carlos: No, not frequently. But I think it will be safer maybe.
 > Andi
+>=20
+> > +
+> >       if (lpi2c_imx->mode =3D=3D HS || lpi2c_imx->mode =3D=3D ULTRA_FAS=
+T)
+> >               filt =3D 0;
+> >       else
+> > --
+> > 2.34.1
+> >
