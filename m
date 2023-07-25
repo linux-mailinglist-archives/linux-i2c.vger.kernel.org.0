@@ -2,44 +2,44 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 174AB761EDA
-	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jul 2023 18:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE20761F4B
+	for <lists+linux-i2c@lfdr.de>; Tue, 25 Jul 2023 18:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjGYQnT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Jul 2023 12:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
+        id S232498AbjGYQqi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Jul 2023 12:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjGYQnR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Jul 2023 12:43:17 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2652118;
-        Tue, 25 Jul 2023 09:43:14 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36PDkOF1006161;
-        Tue, 25 Jul 2023 18:42:44 +0200
+        with ESMTP id S232297AbjGYQqR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Jul 2023 12:46:17 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EEE271B;
+        Tue, 25 Jul 2023 09:45:42 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36PELblT027164;
+        Tue, 25 Jul 2023 18:43:55 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=4z+CMjmnNSllvM0qjlYzhWsRtVdq0gvawPBhZvKLtIE=;
- b=MzAXc0G1nWij8ZOad9UqOqFDgv1KhnqYztCo3BK3Rh0ADNETsKj6i5aQpfNzVes0EpaN
- EmW9ycaZMYtJNahtLs5Ws72uMeBuZYBe7pLRHiDZckuxy9+hJmsqYlTD1+ViPNhkQilG
- AepC+LoRIcBsoTNayfTLSzXamh0CwG4LXIyNcIzNop4wj7CCGoxtfQc3XOvz3UWe4piQ
- DATmkL7katZZqgHkjYSL7VHQcxy8HVLiCwKpcvCreLnStOXHP3dcq6gE0hrM9dl/19EA
- PIcTwrAWB6FAaE8KnopY1dwtXW4vUGyDaD++chc5rfMzNMdiwwENt5DNik05l7y3MOk2 Zg== 
+ bh=UHtxTxC9v7GUZaYkAug21X34neeLMcdx4gODrURlYJ0=;
+ b=qELCnL5DyqQ8Bn2ke19VigY8lhHcJX6z8RIC8Oo1t7hygtlFviNRsp9JFprGX2F/sUv1
+ bcL4iaknHBRz26+c1oHyibPYQdgb9E8rH5ZU6DcE10Z/0dgD2J3WAXRs/fg0EEv5w2eX
+ oPouyGzWy0f8y1fbSgc3xCsqiby9eR5eobiXLVRLATLL42MP1+4cNsHVXNqhUSoiVHZT
+ M5JMRxkmRhjwZWGh1akbFIacw5Q+tSPMVIzKh4MEfB7zdDVTMsYqERuoOiWxSstL4Wci
+ aqBseH3ZVI6gqzMX39HrPlXNdGdMhyMZ1QV28bkTJUDqDrJBoJ18rOeHfViop5Skm/+H 9g== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3s2fjnh01v-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3s2g3a0rsu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jul 2023 18:42:43 +0200
+        Tue, 25 Jul 2023 18:43:55 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 44F2710002A;
-        Tue, 25 Jul 2023 18:42:43 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 064AD10002A;
+        Tue, 25 Jul 2023 18:43:54 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 356C326DDDD;
-        Tue, 25 Jul 2023 18:42:43 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EB31127FAB5;
+        Tue, 25 Jul 2023 18:43:53 +0200 (CEST)
 Received: from localhost (10.201.21.121) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 25 Jul
- 2023 18:42:42 +0200
+ 2023 18:43:53 +0200
 From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
 To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
         <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
@@ -63,9 +63,9 @@ CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
         Gatien Chevallier <gatien.chevallier@foss.st.com>
-Subject: [PATCH v2 04/11] dt-bindings: treewide: add feature-domains description
-Date:   Tue, 25 Jul 2023 18:40:57 +0200
-Message-ID: <20230725164104.273965-5-gatien.chevallier@foss.st.com>
+Subject: [PATCH v2 05/11] firewall: introduce stm32_firewall framework
+Date:   Tue, 25 Jul 2023 18:40:58 +0200
+Message-ID: <20230725164104.273965-6-gatien.chevallier@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230725164104.273965-1-gatien.chevallier@foss.st.com>
 References: <20230725164104.273965-1-gatien.chevallier@foss.st.com>
@@ -88,441 +88,648 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-feature-domains is an optional property that allows a peripheral to
-refer to one or more feature domain controller(s).
+Introduce a STM32 firewall framework that offers to firewall consumers
+different firewall services such as the ability to check their access
+rights against their firewall controller(s).
 
-Description of this property is added to all peripheral binding files of
-the peripheral under the STM32 firewall controllers. It allows an accurate
-representation of the hardware, where various peripherals are connected
-to this firewall bus. The firewall can then check the peripheral accesses
-before allowing it to probe.
+The STM32 firewall framework offers a generic API for STM32 firewall
+controllers that is defined in their drivers to best fit the
+specificity of each firewall.
+
+There are various types of firewalls:
+-Peripheral firewalls that filter accesses to peripherals
+-Memory firewalls that filter accesses to memories or memory regions
+-No type for undefined type of firewall
 
 Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
 ---
 
-Changes in V2: 
-	- Add missing "feature-domains" property declaration
-	  in bosch,m_can.yaml and st,stm32-cryp.yaml files
+Changes in V2:
+	- Support multiple entries for "feature-domains"
+	  property. Change stm32_firewall_get_firewall()
+	  to do so.
+	- Better handle the device-tree parsing using
+	  phandle+args APIs and phandle iterator.
+	- Remove "resource firewall" type
+	- Rephrase STM32_FIREWALL description in the bus
+	  Kconfig and remove useless default value
+	- Add missing EXPORT_SYMBOL_GPL
+	- Remove useless stm32_firewall_get_id() API
+	- Add a field for the name of the firewall entry
+	  in the stm32_firewall_controller structure
+	- Minor fixes on some traces level (err -> debug)
+	- Fix licenses to GPL-2.0-only
+	- Fix stm32_firewall_get_firewall() description
+	- Rephrase some sentences to better emphasize this
+	  is STM32-specific
+	- Switch to list_for_each_entry() in
+	  stm32_firewall_controller_unregister() as we only
+	  expect one firewall controller instance per device.
+	  The loop just breaks when found
+	- Do not register the firewall controller if it is
+	  already registered to the framework 
 
- Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml  | 4 ++++
- Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml  | 4 ++++
- Documentation/devicetree/bindings/dma/st,stm32-dma.yaml      | 4 ++++
- Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml   | 4 ++++
- Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml      | 4 ++++
- Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml  | 4 ++++
- .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 4 ++++
- Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml  | 4 ++++
- .../devicetree/bindings/media/cec/st,stm32-cec.yaml          | 4 ++++
- Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml   | 4 ++++
- .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml       | 4 ++++
- Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml  | 4 ++++
- Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml   | 5 +++++
- Documentation/devicetree/bindings/mmc/arm,pl18x.yaml         | 4 ++++
- Documentation/devicetree/bindings/net/can/bosch,m_can.yaml   | 4 ++++
- Documentation/devicetree/bindings/net/stm32-dwmac.yaml       | 4 ++++
- Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml | 4 ++++
- .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml      | 4 ++++
- Documentation/devicetree/bindings/rng/st,stm32-rng.yaml      | 4 ++++
- Documentation/devicetree/bindings/serial/st,stm32-uart.yaml  | 4 ++++
- Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml    | 4 ++++
- Documentation/devicetree/bindings/sound/st,stm32-sai.yaml    | 4 ++++
- .../devicetree/bindings/sound/st,stm32-spdifrx.yaml          | 4 ++++
- Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml     | 4 ++++
- Documentation/devicetree/bindings/spi/st,stm32-spi.yaml      | 4 ++++
- Documentation/devicetree/bindings/usb/dwc2.yaml              | 4 ++++
- 26 files changed, 105 insertions(+)
+ MAINTAINERS                               |   5 +
+ arch/arm64/Kconfig.platforms              |   1 +
+ drivers/bus/Kconfig                       |   9 +
+ drivers/bus/Makefile                      |   1 +
+ drivers/bus/stm32_firewall.c              | 288 ++++++++++++++++++++++
+ drivers/bus/stm32_firewall.h              |  83 +++++++
+ include/linux/bus/stm32_firewall_device.h | 140 +++++++++++
+ 7 files changed, 527 insertions(+)
+ create mode 100644 drivers/bus/stm32_firewall.c
+ create mode 100644 drivers/bus/stm32_firewall.h
+ create mode 100644 include/linux/bus/stm32_firewall_device.h
 
-diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml
-index 0ddeb8a9a7a0..87a578327fc0 100644
---- a/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml
-+++ b/Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml
-@@ -46,6 +46,10 @@ properties:
-   power-domains:
-     maxItems: 1
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d516295978a4..17559ed17a11 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20137,6 +20137,11 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/devicetree/bindings/media/i2c/st,st-mipid02.yaml
+ F:	drivers/media/i2c/st-mipid02.c
  
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++ST STM32 FIREWALL
++M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
++S:	Maintained
++F:	drivers/bus/stm32_firewall.c
 +
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-index b767ec72a999..042a1e005ab2 100644
---- a/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-+++ b/Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml
-@@ -50,6 +50,10 @@ properties:
-   power-domains:
-     maxItems: 1
+ ST STM32 I2C/SMBUS DRIVER
+ M:	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+ M:	Alain Volmat <alain.volmat@foss.st.com>
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 6069120199bb..5a46e90f1e4e 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -293,6 +293,7 @@ config ARCH_STM32
+ 	select ARM_SMC_MBOX
+ 	select ARM_SCMI_PROTOCOL
+ 	select COMMON_CLK_SCMI
++	select STM32_FIREWALL
+ 	help
+ 	  This enables support for ARMv8 based STMicroelectronics
+ 	  STM32 family, including:
+diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
+index fcfa280df98a..7ac904363a28 100644
+--- a/drivers/bus/Kconfig
++++ b/drivers/bus/Kconfig
+@@ -163,6 +163,15 @@ config QCOM_SSC_BLOCK_BUS
+ 	  i2c/spi/uart controllers, a hexagon core, and a clock controller
+ 	  which provides clocks for the above.
  
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++config STM32_FIREWALL
++	bool "STM32 Firewall framework"
++	depends on ARCH_STM32 || COMPILE_TEST
++	help
++	  Say y to enable STM32 firewall framework and its services. Firewall
++	  controllers will be able to register to the framework. Access for
++	  hardware resources linked to a firewall controller can be requested
++	  through this STM32 framework.
 +
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/dma/st,stm32-dma.yaml b/Documentation/devicetree/bindings/dma/st,stm32-dma.yaml
-index 329847ef096a..9f60915e6130 100644
---- a/Documentation/devicetree/bindings/dma/st,stm32-dma.yaml
-+++ b/Documentation/devicetree/bindings/dma/st,stm32-dma.yaml
-@@ -82,6 +82,10 @@ properties:
-     description: if defined, it indicates that the controller
-       supports memory-to-memory transfer
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
+ config SUN50I_DE2_BUS
+ 	bool "Allwinner A64 DE2 Bus Driver"
+ 	  default ARM64
+diff --git a/drivers/bus/Makefile b/drivers/bus/Makefile
+index d90eed189a65..fc0511450ec2 100644
+--- a/drivers/bus/Makefile
++++ b/drivers/bus/Makefile
+@@ -26,6 +26,7 @@ obj-$(CONFIG_OMAP_INTERCONNECT)	+= omap_l3_smx.o omap_l3_noc.o
+ obj-$(CONFIG_OMAP_OCP2SCP)	+= omap-ocp2scp.o
+ obj-$(CONFIG_QCOM_EBI2)		+= qcom-ebi2.o
+ obj-$(CONFIG_QCOM_SSC_BLOCK_BUS)	+= qcom-ssc-block-bus.o
++obj-$(CONFIG_STM32_FIREWALL)	+= stm32_firewall.o
+ obj-$(CONFIG_SUN50I_DE2_BUS)	+= sun50i-de2.o
+ obj-$(CONFIG_SUNXI_RSB)		+= sunxi-rsb.o
+ obj-$(CONFIG_OF)		+= simple-pm-bus.o
+diff --git a/drivers/bus/stm32_firewall.c b/drivers/bus/stm32_firewall.c
+new file mode 100644
+index 000000000000..4a8e44b732b1
+--- /dev/null
++++ b/drivers/bus/stm32_firewall.c
+@@ -0,0 +1,288 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
++ */
 +
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml b/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
-index e722fbcd8a5f..15d33d41098f 100644
---- a/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
-+++ b/Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml
-@@ -28,6 +28,10 @@ properties:
-   resets:
-     maxItems: 1
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++#include <linux/bitfield.h>
++#include <linux/bits.h>
++#include <linux/bus/stm32_firewall_device.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/init.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/types.h>
++#include <linux/slab.h>
 +
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-index 94b75d9f66cd..8a1a21faab8c 100644
---- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-@@ -99,6 +99,10 @@ properties:
- 
-   wakeup-source: true
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++#include "stm32_firewall.h"
 +
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
-index 995cbf8cefc6..d59ac9282a28 100644
---- a/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml
-@@ -93,6 +93,10 @@ properties:
-   '#size-cells':
-     const: 0
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++/* Corresponds to STM32_FIREWALL_MAX_EXTRA_ARGS + firewall ID */
++#define STM32_FIREWALL_MAX_ARGS		(STM32_FIREWALL_MAX_EXTRA_ARGS + 1)
 +
- allOf:
-   - if:
-       properties:
-diff --git a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-index 1970503389aa..39ee55aa4dd8 100644
---- a/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml
-@@ -59,6 +59,10 @@ properties:
-       If not, SPI CLKOUT frequency will not be accurate.
-     maximum: 20000000
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++static LIST_HEAD(firewall_controller_list);
++static DEFINE_MUTEX(firewall_controller_list_lock);
 +
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml b/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml
-index 04045b932bd2..184d0a44d1de 100644
---- a/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml
-+++ b/Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml
-@@ -45,6 +45,10 @@ properties:
-   '#size-cells':
-     const: 0
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++/* Firewall device API */
 +
- additionalProperties: false
- 
- required:
-diff --git a/Documentation/devicetree/bindings/media/cec/st,stm32-cec.yaml b/Documentation/devicetree/bindings/media/cec/st,stm32-cec.yaml
-index 2314a9a14650..41db21373301 100644
---- a/Documentation/devicetree/bindings/media/cec/st,stm32-cec.yaml
-+++ b/Documentation/devicetree/bindings/media/cec/st,stm32-cec.yaml
-@@ -29,6 +29,10 @@ properties:
-       - const: cec
-       - const: hdmi-cec
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++int stm32_firewall_get_firewall(struct device_node *np, struct stm32_firewall *firewall,
++				unsigned int nb_firewall)
++{
++	struct stm32_firewall_controller *ctrl;
++	struct of_phandle_iterator it;
++	unsigned int i, j = 0;
++	int err;
 +
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-index 6b3e413cedb2..81e1cd5e30cc 100644
---- a/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-+++ b/Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
-@@ -36,6 +36,10 @@ properties:
-   resets:
-     maxItems: 1
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++	if (!firewall || !nb_firewall)
++		return -EINVAL;
 +
-   port:
-     $ref: /schemas/graph.yaml#/$defs/port-base
-     unevaluatedProperties: false
-diff --git a/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml b/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
-index 14f1833d37c9..4ef01ee4a5e5 100644
---- a/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
-@@ -45,6 +45,10 @@ properties:
-       Reflects the memory layout with four integer values per bank. Format:
-       <bank-number> 0 <address of the bank> <size>
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++	/* Parse property with phandle parsed out */
++	of_for_each_phandle(&it, err, np, "feature-domains", "#feature-domain-cells", 0) {
++		struct of_phandle_args provider_args;
++		struct device_node *provider = it.node;
++		const char *fw_entry;
++		bool match = false;
 +
- patternProperties:
-   "^.*@[0-4],[a-f0-9]+$":
-     additionalProperties: true
-diff --git a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
-index 27329c5dc38e..156aed282fb8 100644
---- a/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
-+++ b/Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml
-@@ -44,6 +44,10 @@ properties:
- 
-   wakeup-source: true
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++		if (err) {
++			pr_err("Unable to get feature-domains property for node %s\n, err: %d",
++			       np->full_name, err);
++			of_node_put(provider);
++			return err;
++		}
 +
-   pwm:
-     type: object
-     additionalProperties: false
-diff --git a/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml b/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml
-index f84e09a5743b..d19981ef3fce 100644
---- a/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml
-+++ b/Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml
-@@ -67,6 +67,11 @@ properties:
-   "#size-cells":
-     const: 0
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++		if (j > nb_firewall) {
++			pr_err("Too many firewall controllers");
++			of_node_put(provider);
++			return -EINVAL;
++		}
 +
++		provider_args.args_count = of_phandle_iterator_args(&it, provider_args.args,
++								    STM32_FIREWALL_MAX_ARGS);
 +
-   pwm:
-     type: object
-     additionalProperties: false
-diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-index 2459a55ed540..5a8b53d5c35f 100644
---- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-+++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-@@ -79,6 +79,10 @@ properties:
-           - const: rx
-           - const: tx
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++		/* Check if the parsed phandle corresponds to a registered firewall controller */
++		mutex_lock(&firewall_controller_list_lock);
++		list_for_each_entry(ctrl, &firewall_controller_list, entry) {
++			if (ctrl->dev->of_node->phandle == it.phandle) {
++				match = true;
++				firewall[j].firewall_ctrl = ctrl;
++				break;
++			}
++		}
++		mutex_unlock(&firewall_controller_list_lock);
 +
-   power-domains: true
- 
-   resets:
-diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-index 67879aab623b..144cbcbefa37 100644
---- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-+++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-@@ -118,6 +118,10 @@ properties:
-   phys:
-     maxItems: 1
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++		if (!match) {
++			firewall[j].firewall_ctrl = NULL;
++			pr_err("No firewall controller registered for %s\n", np->full_name);
++			of_node_put(provider);
++			return -ENODEV;
++		}
 +
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-index fc8c96b08d7d..133e1edbd561 100644
---- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-@@ -93,6 +93,10 @@ properties:
-       select RCC clock instead of ETH_REF_CLK.
-     type: boolean
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++		err = of_property_read_string_index(np, "feature-domain-names", j, &fw_entry);
++		if (err == 0)
++			firewall[j].entry = fw_entry;
 +
- required:
-   - compatible
-   - clocks
-diff --git a/Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml b/Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml
-index 24a3dbde223b..89fa65f31d20 100644
---- a/Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml
-+++ b/Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml
-@@ -55,6 +55,10 @@ properties:
-     description: number of clock cells for ck_usbo_48m consumer
-     const: 0
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++		/* Handle the case when there are no arguments given along with the phandle */
++		if (provider_args.args_count < 0 ||
++		    provider_args.args_count > STM32_FIREWALL_MAX_ARGS) {
++			of_node_put(provider);
++			return -EINVAL;
++		} else if (provider_args.args_count == 0) {
++			firewall[j].extra_args_size = 0;
++			firewall[j].firewall_id = U32_MAX;
++			j++;
++			continue;
++		}
 +
- # Required child nodes:
- 
- patternProperties:
-diff --git a/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml b/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
-index 05f4ad2c7d3a..b73a97f89fe4 100644
---- a/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
-+++ b/Documentation/devicetree/bindings/regulator/st,stm32-vrefbuf.yaml
-@@ -30,6 +30,10 @@ properties:
-   vdda-supply:
-     description: phandle to the vdda input analog voltage.
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++		/* The firewall ID is always the first argument */
++		firewall[j].firewall_id = provider_args.args[0];
 +
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml b/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
-index 187b172d0cca..c45e6285653c 100644
---- a/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
-+++ b/Documentation/devicetree/bindings/rng/st,stm32-rng.yaml
-@@ -30,6 +30,10 @@ properties:
-     type: boolean
-     description: If set enable the clock detection management
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++		/* Extra args start at the third argument */
++		for (i = 0; i < provider_args.args_count; i++)
++			firewall[j].extra_args[i] = provider_args.args[i + 1];
 +
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
-index 1df8ffe95fc6..b80d5a8ff4e8 100644
---- a/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
-+++ b/Documentation/devicetree/bindings/serial/st,stm32-uart.yaml
-@@ -70,6 +70,10 @@ properties:
-     enum: [1, 2, 4, 8, 12, 14, 16]
-     default: 8
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++		/* Remove the firewall ID arg that is not an extra argument */
++		firewall[j].extra_args_size = provider_args.args_count - 1;
 +
- allOf:
-   - $ref: rs485.yaml#
-   - $ref: serial.yaml#
-diff --git a/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml b/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
-index b9111d375b93..30339447cc24 100644
---- a/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
-+++ b/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
-@@ -65,6 +65,10 @@ properties:
-     $ref: audio-graph-port.yaml#
-     unevaluatedProperties: false
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++		j++;
++	}
 +
- required:
-   - compatible
-   - "#sound-dai-cells"
-diff --git a/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml b/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml
-index 56d206f97a96..f59770ead3e3 100644
---- a/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml
-+++ b/Documentation/devicetree/bindings/sound/st,stm32-sai.yaml
-@@ -48,6 +48,10 @@ properties:
-   clock-names:
-     maxItems: 3
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++	return 0;
++}
++EXPORT_SYMBOL_GPL(stm32_firewall_get_firewall);
 +
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml b/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml
-index bc48151b9adb..480ce8704fda 100644
---- a/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml
-+++ b/Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml
-@@ -50,6 +50,10 @@ properties:
-   resets:
-     maxItems: 1
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++int stm32_firewall_grant_access(struct stm32_firewall *firewall)
++{
++	struct stm32_firewall_controller *firewall_controller;
 +
- required:
-   - compatible
-   - "#sound-dai-cells"
-diff --git a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
-index 8bba965a9ae6..3331f6cd1b75 100644
---- a/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml
-@@ -46,6 +46,10 @@ properties:
-       - const: tx
-       - const: rx
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++	if (!firewall || firewall->firewall_id == U32_MAX)
++		return -EINVAL;
 +
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-index 9ca1a843c820..a0664a0fcabf 100644
---- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-@@ -59,6 +59,10 @@ properties:
-       - const: rx
-       - const: tx
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++	firewall_controller = firewall->firewall_ctrl;
 +
- patternProperties:
-   "^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-f]+$":
-     type: object
-diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
-index 0a5c98ea711d..95b615ee3a07 100644
---- a/Documentation/devicetree/bindings/usb/dwc2.yaml
-+++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-@@ -172,6 +172,10 @@ properties:
- 
-   tpl-support: true
- 
-+  feature-domains:
-+    minItems: 1
-+    maxItems: 2
++	if (!firewall_controller)
++		return -ENODEV;
 +
- dependencies:
-   port: [ usb-role-switch ]
-   role-switch-default-mode: [ usb-role-switch ]
++	return firewall_controller->grant_access(firewall_controller, firewall->firewall_id);
++}
++EXPORT_SYMBOL_GPL(stm32_firewall_grant_access);
++
++int stm32_firewall_grant_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id)
++{
++	struct stm32_firewall_controller *firewall_controller;
++
++	if (!firewall || subsystem_id == U32_MAX || firewall->firewall_id == U32_MAX)
++		return -EINVAL;
++
++	firewall_controller = firewall->firewall_ctrl;
++
++	if (!firewall_controller)
++		return -ENODEV;
++
++	return firewall_controller->grant_access(firewall_controller, subsystem_id);
++}
++EXPORT_SYMBOL_GPL(stm32_firewall_grant_access_by_id);
++
++void stm32_firewall_release_access(struct stm32_firewall *firewall)
++{
++	struct stm32_firewall_controller *firewall_controller;
++
++	if (!firewall || firewall->firewall_id == U32_MAX) {
++		pr_debug("Incorrect arguments when releasing a firewall access\n");
++		return;
++	}
++
++	firewall_controller = firewall->firewall_ctrl;
++
++	if (!firewall_controller) {
++		pr_debug("No firewall controller to release\n");
++		return;
++	}
++
++	firewall_controller->release_access(firewall_controller, firewall->firewall_id);
++}
++EXPORT_SYMBOL_GPL(stm32_firewall_release_access);
++
++void stm32_firewall_release_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id)
++{
++	struct stm32_firewall_controller *firewall_controller;
++
++	if (!firewall || subsystem_id == U32_MAX || firewall->firewall_id == U32_MAX) {
++		pr_debug("Incorrect arguments when releasing a firewall access");
++		return;
++	}
++
++	firewall_controller = firewall->firewall_ctrl;
++
++	if (!firewall_controller) {
++		pr_debug("No firewall controller to release");
++		return;
++	}
++
++	firewall_controller->release_access(firewall_controller, subsystem_id);
++}
++EXPORT_SYMBOL_GPL(stm32_firewall_release_access_by_id);
++
++/* Firewall controller API */
++
++int stm32_firewall_controller_register(struct stm32_firewall_controller *firewall_controller)
++{
++	struct stm32_firewall_controller *ctrl;
++
++	pr_info("Registering %s firewall controller\n", firewall_controller->name);
++
++	if (!firewall_controller)
++		return -ENODEV;
++
++	mutex_lock(&firewall_controller_list_lock);
++	list_for_each_entry(ctrl, &firewall_controller_list, entry) {
++		if (ctrl == firewall_controller) {
++			pr_debug("%s firewall controller already registered\n",
++				 firewall_controller->name);
++			mutex_unlock(&firewall_controller_list_lock);
++			return 0;
++		}
++	}
++	list_add_tail(&firewall_controller->entry, &firewall_controller_list);
++	mutex_unlock(&firewall_controller_list_lock);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(stm32_firewall_controller_register);
++
++void stm32_firewall_controller_unregister(struct stm32_firewall_controller *firewall_controller)
++{
++	struct stm32_firewall_controller *ctrl;
++	bool controller_removed = false;
++
++	if (!firewall_controller) {
++		pr_debug("Null reference while unregistering firewall controller\n");
++		return;
++	}
++
++	mutex_lock(&firewall_controller_list_lock);
++	list_for_each_entry(ctrl, &firewall_controller_list, entry) {
++		if (ctrl == firewall_controller) {
++			controller_removed = true;
++			list_del_init(&ctrl->entry);
++			break;
++		}
++	}
++	mutex_unlock(&firewall_controller_list_lock);
++
++	if (!controller_removed)
++		pr_debug("There was no firewall controller named %s to unregister\n",
++			 firewall_controller->name);
++}
++EXPORT_SYMBOL_GPL(stm32_firewall_controller_unregister);
++
++int stm32_firewall_populate_bus(struct stm32_firewall_controller *firewall_controller)
++{
++	struct stm32_firewall *firewalls;
++	struct device_node *child;
++	struct device *parent;
++	unsigned int i;
++	int len;
++	int err;
++
++	parent = firewall_controller->dev;
++
++	dev_dbg(parent, "Populating %s system bus\n", dev_name(firewall_controller->dev));
++
++	for_each_available_child_of_node(dev_of_node(parent), child) {
++		/* The feature-domains property is mandatory for firewall bus devices */
++		len = of_count_phandle_with_args(child, "feature-domains", "#feature-domain-cells");
++		if (len <= 0)
++			return -EINVAL;
++
++		firewalls = kcalloc(len, sizeof(*firewalls), GFP_KERNEL);
++		if (!firewalls)
++			return -ENOMEM;
++
++		err = stm32_firewall_get_firewall(child, firewalls, (unsigned int)len);
++		if (err) {
++			kfree(firewalls);
++			return err;
++		}
++
++		for (i = 0; i < len; i++) {
++			if (firewall_controller->grant_access(firewall_controller,
++							      firewalls[i].firewall_id)) {
++				/*
++				 * Peripheral access not allowed or not defined.
++				 * Mark the node as populated so platform bus won't probe it
++				 */
++				of_node_set_flag(child, OF_POPULATED);
++				dev_err(parent, "%s: Device driver will not be probed\n",
++					child->full_name);
++			}
++		}
++
++		kfree(firewalls);
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(stm32_firewall_populate_bus);
+diff --git a/drivers/bus/stm32_firewall.h b/drivers/bus/stm32_firewall.h
+new file mode 100644
+index 000000000000..eed089a0acc0
+--- /dev/null
++++ b/drivers/bus/stm32_firewall.h
+@@ -0,0 +1,83 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
++ */
++
++#ifndef _STM32_FIREWALL_H
++#define _STM32_FIREWALL_H
++
++#include <linux/kernel.h>
++#include <linux/list.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/types.h>
++
++/**
++ * STM32_PERIPHERAL_FIREWALL:		This type of firewall protects peripherals
++ * STM32_MEMORY_FIREWALL:		This type of firewall protects memories/subsets of memory
++ *					zones
++ * STM32_NOTYPE_FIREWALL:		Undefined firewall type
++ */
++
++#define STM32_PERIPHERAL_FIREWALL	BIT(1)
++#define STM32_MEMORY_FIREWALL		BIT(2)
++#define STM32_NOTYPE_FIREWALL		BIT(3)
++
++/**
++ * struct stm32_firewall_controller - Information on firewall controller supplying services
++ *
++ * @name			Name of the firewall controller
++ * @dev				Device reference of the firewall controller
++ * @mmio			Base address of the firewall controller
++ * @entry			List entry of the firewall controller list
++ * @type			Type of firewall
++ * @max_entries			Number of entries covered by the firewall
++ * @grant_access		Callback used to grant access for a device access against a
++ *				firewall controller
++ * @release_access		Callback used to release resources taken by a device when access was
++ *				granted
++ * @grant_memory_range_access	Callback used to grant access for a device to a given memory region
++ */
++struct stm32_firewall_controller {
++	const char *name;
++	struct device *dev;
++	void __iomem *mmio;
++	struct list_head entry;
++	unsigned int type;
++	unsigned int max_entries;
++
++	int (*grant_access)(struct stm32_firewall_controller *ctrl, u32 id);
++	void (*release_access)(struct stm32_firewall_controller *ctrl, u32 id);
++	int (*grant_memory_range_access)(struct stm32_firewall_controller *ctrl, phys_addr_t paddr,
++					 size_t size);
++};
++
++/**
++ * int stm32_firewall_controller_register - Register a firewall controller to the STM32 firewall
++ *					    framework
++ * @firewall_controller		Firewall controller to register
++ *
++ * Returns 0 in case of success or -ENODEV if no controller was given.
++ */
++int stm32_firewall_controller_register(struct stm32_firewall_controller *firewall_controller);
++
++/**
++ * int stm32_firewall_controller_unregister - Unregister a firewall controller from the STM32
++ *					      firewall framework
++ * @firewall_controller		Firewall controller to unregister
++ */
++void stm32_firewall_controller_unregister(struct stm32_firewall_controller *firewall_controller);
++
++/**
++ * stm32_firewall_populate_bus - Populate device tree nodes that have a correct firewall
++ *				 configuration. This is used at boot-time only, as a sanity check
++ *				 between device tree and firewalls hardware configurations to
++ *				 prevent a kernel crash when a device driver is not granted access
++ *
++ * @firewall_controller		Firewall controller which nodes will be populated or not
++ *
++ * Returns 0 in case of success or appropriate errno code if error occurred.
++ */
++int stm32_firewall_populate_bus(struct stm32_firewall_controller *firewall_controller);
++
++#endif /* _STM32_FIREWALL_H */
+diff --git a/include/linux/bus/stm32_firewall_device.h b/include/linux/bus/stm32_firewall_device.h
+new file mode 100644
+index 000000000000..9bdc4060154c
+--- /dev/null
++++ b/include/linux/bus/stm32_firewall_device.h
+@@ -0,0 +1,140 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
++ */
++
++#ifndef STM32_FIREWALL_DEVICE_H
++#define STM32_FIREWALL_DEVICE_H
++
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/types.h>
++
++#define STM32_FIREWALL_MAX_EXTRA_ARGS		5
++
++/* Opaque reference to stm32_firewall_controller */
++struct stm32_firewall_controller;
++
++/**
++ * stm32_firewall - Information on a device's firewall. Each device can have more than one firewall.
++ *
++ * @firewall_ctrl		Pointer referencing a firewall controller of the device. It is
++ *				opaque so a device cannot manipulate the controller's ops or access
++ *				the controller's data
++ * @extra_args			Extra arguments that are implementation dependent
++ * @entry			Name of the firewall entry
++ * @extra_args_size		Number of extra arguments
++ * @firewall_id			Firewall ID associated the device for this firewall controller
++ */
++struct stm32_firewall {
++	struct stm32_firewall_controller *firewall_ctrl;
++	u32 extra_args[STM32_FIREWALL_MAX_EXTRA_ARGS];
++	const char *entry;
++	size_t extra_args_size;
++	u32 firewall_id;
++};
++
++#if IS_ENABLED(CONFIG_STM32_FIREWALL)
++/**
++ * stm32_firewall_get_firewall - Get the firewall(s) associated to given device.
++ *				 The firewall controller reference is always the first argument
++ *				 of each of the feature-domains property entries.
++ *				 The firewall ID is always the second argument of each of the
++ *				 feature-domains property entries.
++ *				 If there's no argument linked to the phandle, then the firewall ID
++ *				 field is set to U32_MAX, which is an invalid ID.
++ *
++ * @np				Device node to parse
++ * @firewall			Array of firewall references
++ * @nb_firewall			Number of firewall references to get. Must be at least 1.
++ *
++ * Returns 0 on success, -ENODEV if there's no match with a firewall controller or appropriate errno
++ * code if error occurred.
++ */
++int stm32_firewall_get_firewall(struct device_node *np, struct stm32_firewall *firewall,
++				unsigned int nb_firewall);
++
++/**
++ * stm32_firewall_grant_access - Request firewall access rights and grant access.
++ *
++ * @firewall			Firewall reference containing the ID to check against its firewall
++ *				controller
++ *
++ * Returns 0 if access is granted, -EACCES if access is denied, -ENODEV if firewall is null or
++ * appropriate errno code if error occurred
++ */
++int stm32_firewall_grant_access(struct stm32_firewall *firewall);
++
++/**
++ * stm32_firewall_release_access - Release access granted from a call to
++ *				   stm32_firewall_grant_access().
++ *
++ * @firewall			Firewall reference containing the ID to check against its firewall
++ *				controller
++ */
++void stm32_firewall_release_access(struct stm32_firewall *firewall);
++
++/**
++ * stm32_firewall_grant_access_by_id - Request firewall access rights of a given device
++ *				       based on a specific firewall ID
++ *
++ * Warnings:
++ * There is no way to ensure that the given ID will correspond to the firewall referenced in the
++ * device node if the ID did not come from stm32_firewall_get_firewall(). In that case, this
++ * function must be used with caution.
++ * This function should be used for subsystem resources that do not have the same firewall ID
++ * as their parent.
++ * U32_MAX is an invalid ID.
++ *
++ * @firewall			Firewall reference containing the firewall controller
++ * @subsystem_id		Firewall ID of the subsystem resource
++ *
++ * Returns 0 if access is granted, -EACCES if access is denied, -ENODEV if firewall is null or
++ * appropriate errno code if error occurred
++ */
++int stm32_firewall_grant_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id);
++
++/**
++ * stm32_firewall_release_access_by_id - Release access granted from a call to
++ *					 stm32_firewall_grant_access_by_id().
++ *
++ * Warnings:
++ * There is no way to ensure that the given ID will correspond to the firewall referenced in the
++ * device node if the ID did not come from stm32_firewall_get_firewall(). In that case, this
++ * function must be used with caution.
++ * This function should be used for subsystem resources that do not have the same firewall ID
++ * as their parent.
++ * U32_MAX is an invalid ID.
++ *
++ * @firewall			Firewall reference containing the firewall controller
++ * @subsystem_id		Firewall ID of the subsystem resource
++ */
++void stm32_firewall_release_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id);
++
++#else /* CONFIG_STM32_FIREWALL */
++
++int stm32_firewall_get_firewall(struct device_node *np, struct stm32_firewall *firewall)
++{
++	return -ENODEV;
++}
++
++int stm32_firewall_grant_access(struct stm32_firewall *firewall)
++{
++	return -ENODEV;
++}
++
++void stm32_firewall_release_access(struct stm32_firewall *firewall)
++{
++}
++
++int stm32_firewall_grant_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id)
++{
++	return -ENODEV;
++}
++
++void stm32_firewall_release_access_by_id(struct stm32_firewall *firewall, u32 subsystem_id)
++{
++}
++
++#endif /* CONFIG_STM32_FIREWALL */
++#endif /* STM32_FIREWALL_DEVICE_H */
 -- 
 2.35.3
 
