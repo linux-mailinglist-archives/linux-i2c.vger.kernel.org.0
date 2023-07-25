@@ -2,47 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F9A7626FB
-	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jul 2023 00:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8EA762778
+	for <lists+linux-i2c@lfdr.de>; Wed, 26 Jul 2023 01:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbjGYWlQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 25 Jul 2023 18:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
+        id S229603AbjGYXlJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 25 Jul 2023 19:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbjGYWlD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Jul 2023 18:41:03 -0400
+        with ESMTP id S229548AbjGYXlI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 25 Jul 2023 19:41:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AE66A7F;
-        Tue, 25 Jul 2023 15:35:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5759012E;
+        Tue, 25 Jul 2023 16:41:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEBC561924;
-        Tue, 25 Jul 2023 22:33:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1A67C433C7;
-        Tue, 25 Jul 2023 22:33:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0426616C1;
+        Tue, 25 Jul 2023 23:41:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D8A6C433C8;
+        Tue, 25 Jul 2023 23:41:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690324418;
-        bh=/afpJPuPiv9orEg3GS3va/jozsy1NKzMmzbTKAx6uog=;
+        s=k20201202; t=1690328466;
+        bh=sp25dJ6Y/KLI8MJmxJb9iKJpN51ML9wRrtiUXLyP2Ec=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q4mzAwTQOvszvgxVSbGfFEYzy7KeSop+CExQiHaPfXvCp7fEPkmuqh1gEiUcPxeqi
-         Y/3ToTnGT0WH6IUKwpoPBCgO2Fp7PVKl2XI0PkRyfbVeSIiMbK+pFZHymBvgMSks5h
-         3NfNnFniwo0h45cADdG51MGsU3/4LaP6/SixekOvVscQo28SYyGv12iTUwq+cJdXIx
-         0rO3a9qdr2fqudpZ29ehLFo+0r2ksuziYFRAEeuv/ASouDOUOe7Jul0TWISvjst+pP
-         uWNa2x8picpAY6Pttx5AKXCM3LWXvpayHZcGHuAvzvwLIa01yeNstN5wwcmdbX/Enm
-         SH1zSlu7X3zew==
-Date:   Wed, 26 Jul 2023 00:33:35 +0200
+        b=bmzZKVNizAdrfrpWp6sIWXbqX7bRAuU8H3UFp7g4Ht0WGdLPoXLNU7gR5UK9iYYDA
+         cLYQf7qBnPJRxujlsHAPVhh18hhuboumHmWxKcPzwAcM3PM4ZwZWSdq37bRnASVayN
+         RBSl8WEN/Fcdn0wqPohzgo81Nonke3IvOPejYBCo1M5WvizQe2iGrB0mxi0Gi7ZJ1Z
+         3gNU1ccPFL4bqSirn9ZStTBQyLal28n1QpjRgy7Kn1tFC5I8K1adN3fvoqMq8uRRi+
+         zE0ZTECJ49u9ioiYikjozGCJ1MIMToMqHGMWgz898mUAoytlhjmdiG9zi3ZkthNwRE
+         SKHOyNGrz+I0A==
+Date:   Wed, 26 Jul 2023 01:41:02 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c:octeon:Add block-mode r/w
-Message-ID: <20230725223335.mzgdgr7qgeyc6hj7@intel.intel>
-References: <20230705234501.4153224-1-aryan.srivastava@alliedtelesis.co.nz>
+To:     carlos.song@nxp.com
+Cc:     u.kleine-koenig@pengutronix.de, aisheng.dong@nxp.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, xiaoning.wang@nxp.com, haibo.chen@nxp.com,
+        linux-imx@nxp.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] i2c: imx-lpi2c: return -EINVAL when i2c peripheral
+ clk doesn't work
+Message-ID: <20230725234102.louqs6gvlhfehjur@intel.intel>
+References: <20230725083117.2745327-1-carlos.song@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230705234501.4153224-1-aryan.srivastava@alliedtelesis.co.nz>
+In-Reply-To: <20230725083117.2745327-1-carlos.song@nxp.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,20 +58,32 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Aryan,
+Hi Carlos,
 
-On Thu, Jul 06, 2023 at 11:45:00AM +1200, Aryan Srivastava wrote:
-> Add support for block mode read/write operations on
-> Thunderx chips.
-> 
-> When attempting r/w operations of greater then 8 bytes
-> block mode is used, instead of performing a series of
-> 8 byte reads.
-> 
-> Signed-off-by: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
+> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> @@ -209,6 +209,9 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+>  	lpi2c_imx_set_mode(lpi2c_imx);
+>  
+>  	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
+> +	if (!clk_rate)
+> +		return -EINVAL;
+> +
 
-thanks for your patch, could you please run checkpatch.pl,
-clean it up a little (e.g. comments like /* A */) and resend it?
+this is a very unlikely to happen and generally not really
+appreciated.
 
-Thanks,
+If you got so far it's basically impossible that clk_rate is '0'.
+Uwe asked you in v2 if you actually had such case.
+
+I don't have a strong opinion, thoug... I would drop this patch
+unless Dong is OK with it and I can accept it with his ack.
+
 Andi
+
+>  	if (lpi2c_imx->mode == HS || lpi2c_imx->mode == ULTRA_FAST)
+>  		filt = 0;
+>  	else
+> -- 
+> 2.34.1
+> 
