@@ -2,56 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA6A765D5F
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jul 2023 22:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E29765D8A
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jul 2023 22:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjG0UbD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 Jul 2023 16:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
+        id S229980AbjG0Unr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 Jul 2023 16:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbjG0Ua5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Jul 2023 16:30:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2793A80;
-        Thu, 27 Jul 2023 13:30:49 -0700 (PDT)
+        with ESMTP id S229552AbjG0Unp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Jul 2023 16:43:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25E22D5B;
+        Thu, 27 Jul 2023 13:43:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 545C861F40;
-        Thu, 27 Jul 2023 20:30:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED73EC433C7;
-        Thu, 27 Jul 2023 20:30:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F54F61F44;
+        Thu, 27 Jul 2023 20:43:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C880AC433C8;
+        Thu, 27 Jul 2023 20:43:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690489848;
-        bh=mQBtNRNqjOs/lQt6R/EIsW6LRcenyV0myrRrv1wFZ0E=;
+        s=k20201202; t=1690490623;
+        bh=QlIHP8dhX5OJKYng0fljwWznF8dNsUY8Bn/VfqY1drk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ALFJR+wYo9wRrPqbJ70y8hQ58UfdRlVokpUzFGN4Q8UoPpydHwMBVKmbeaIP1nMz2
-         hO22rLNz2b539G4e45tfpYkrFp8WSZbJcFcgzHXuRqtX1AVvZ1JKOgk+rTCll7Lmz7
-         dEmsiLqRZZPZjpv7gHEIWddvqbvA1ijnDUnuvRmfl70dO4fa2EuhKl1bHhxv8D+xTb
-         IMqjJdOPhDD+PGEbLAHEKZqF0FDXjcfq8GuVmnjBfR31MgZ3NNeZb4/JLsEhGC9VbQ
-         EzQq9ZAVFykggSleDerNeRCXLxKmtDuvDkRqtl0kfJuJW7AbY0VKGvE6v1hzPZE1d9
-         vpT2j6JK5NIvg==
-Date:   Thu, 27 Jul 2023 22:30:45 +0200
+        b=dZyI1Xl51voxYvqt1b7E85tntZQ5XlSa5Ls6CckQJLCdMgznvnKbraiKe8MCHhYVf
+         DrFwWDUwwoZ9KNsfdjh4jNrM/UkjjT4chmd64CdvouO15NN6LgcuRJ+cEgjG/UWkA3
+         0dKQm1OYI3mxScCV8kGX0g4SvK5S4t0FEUTqhArHzrugieUdAx36AXcoboDy6v364m
+         T2mQ/Ei6DCnpT3TC+a0WyOKPRg+4BTbKs+ejkeSCI0qWD1OP2BSmT1+g3VuIgZJc0g
+         PKNEKGfAxViz2VIsXv60rn6c0AEPlnT7t2Ii7UMCy4PP/SWbPFI+0T4mBTn+Cw77LJ
+         0WRtMZ0GcA+bw==
+Date:   Thu, 27 Jul 2023 22:43:40 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Mans Rullgard <mans@mansr.com>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: imx: add support for I2C_M_STOP flag
-Message-ID: <20230727203045.2p7mbdtayca2hago@intel.intel>
-References: <20230706125729.17335-1-mans@mansr.com>
+To:     Chengfeng Ye <dg573847474@gmail.com>
+Cc:     rjui@broadcom.com, sbranden@broadcom.com, wsa@kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: bcm-iproc: Fix bcm_iproc_i2c_isr deadlock issue
+Message-ID: <20230727204340.454cmkli5gotipmb@intel.intel>
+References: <20230707084941.28964-1-dg573847474@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230706125729.17335-1-mans@mansr.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230707084941.28964-1-dg573847474@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,52 +55,19 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Mans,
+Hi Chengfeng,
 
-on top of Oleksij's comments...
+On Fri, Jul 07, 2023 at 08:49:41AM +0000, Chengfeng Ye wrote:
+> iproc_i2c_rd_reg() and iproc_i2c_wr_reg() are called from both
+> interrupt context (e.g. bcm_iproc_i2c_isr) and process context
+> (e.g. bcm_iproc_i2c_suspend). Therefore, interrupts should be
+> disabled to avoid potential deadlock. To prevent this scenario,
+> use spin_lock_irqsave().
+> 
+> Fixes: 9a1038728037 ("i2c: iproc: add NIC I2C support")
+> Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
 
-[...]
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
 
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1262,10 +1262,17 @@ static int i2c_imx_xfer_common(struct i2c_adapter *adapter,
->  
->  	/* read/write data */
->  	for (i = 0; i < num; i++) {
-> -		if (i == num - 1)
-> -			is_lastmsg = true;
-> +		if (is_lastmsg) {
-> +			/* previous message had I2C_M_STOP flag set */
-> +			temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
-> +			temp |= I2CR_MSTA;
-> +			imx_i2c_write_reg(temp, i2c_imx, IMX_I2C_I2CR);
-> +			result = i2c_imx_bus_busy(i2c_imx, 1, atomic);
-> +			if (result)
-> +				goto fail0;
-> +		}
->  
-> -		if (i) {
-> +		if (i && !is_lastmsg) {
-
-	} else if (i) {
-
-looks a bit simplier to me.
-
->  			dev_dbg(&i2c_imx->adapter.dev,
->  				"<%s> repeated start\n", __func__);
->  			temp = imx_i2c_read_reg(i2c_imx, IMX_I2C_I2CR);
-> @@ -1275,6 +1282,10 @@ static int i2c_imx_xfer_common(struct i2c_adapter *adapter,
->  			if (result)
->  				goto fail0;
->  		}
-> +
-> +		if (i == num - 1 || (msgs[i].flags & I2C_M_STOP))
-> +			is_lastmsg = true;
-
-you don't need this "i == num - 1" here.
-
+Thanks,
 Andi
-
->  		dev_dbg(&i2c_imx->adapter.dev,
->  			"<%s> transfer message: %d\n", __func__, i);
->  		/* write/read data */
