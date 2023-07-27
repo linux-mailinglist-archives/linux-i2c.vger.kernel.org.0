@@ -2,106 +2,91 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CDF76526D
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jul 2023 13:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB0F76555B
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jul 2023 15:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231993AbjG0Lbg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 Jul 2023 07:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
+        id S231228AbjG0Nys (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 Jul 2023 09:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232041AbjG0Lbe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Jul 2023 07:31:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CD830DB;
-        Thu, 27 Jul 2023 04:31:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73CEE61E4A;
-        Thu, 27 Jul 2023 11:30:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FEE3C433B9;
-        Thu, 27 Jul 2023 11:30:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690457432;
-        bh=VAVgWucxeJJI9Wt5KmRjcPVztLb3rVZJ/YSNgUL7k7E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iJYZAv7sKGIKaidDYGfcIuWJ5VTe5GdWgRVn8QgY0VKYvxdIg+Okmn6uyfbSjWQyc
-         G7ulBKyX2ic6kSNJpxjjazxgrtwNFqbD+Ee1Ri3l0bZ3zRfVKvi5CwpuSHSX8k9A6+
-         KjfcMf0eLfSOraAvwiOkPN5hyjc8sX6YS+V1UR/6pYsDgbpwuptTt54QW6SbAKRqgG
-         7UUttZBCw8IFJkRVHW1aXAJ/AGeMcwdWiL9JhVC0YJ0QjsBcU5SXdUMl+0BF2wEZoG
-         3Tdty9BY50pAJbL4DshiqUaWx6Vu7h315Iqfq70qzlESS9lW3dy7/CKUITdWwlrB6u
-         /to4IyL0DuFiA==
-Date:   Thu, 27 Jul 2023 13:30:29 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Harry Geyer <harry.geyer@devtank.co.uk>
-Cc:     Till Harbaum <till@harbaum.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        with ESMTP id S229580AbjG0Nyr (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Jul 2023 09:54:47 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E765E30C0
+        for <linux-i2c@vger.kernel.org>; Thu, 27 Jul 2023 06:54:45 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbc5d5742bso10989995e9.2
+        for <linux-i2c@vger.kernel.org>; Thu, 27 Jul 2023 06:54:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=devtank-co-uk.20221208.gappssmtp.com; s=20221208; t=1690466084; x=1691070884;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OfdsUyWNnEJciwAi9tkOFXhMC6Z3uDKYKT9or1dyiEU=;
+        b=OuM5n6Ew/Y1WgNMgLXSnnlLvHCsvyT4cEzhnsmXewPt3bH7lxaQCqkj0/Obi8/9kD8
+         Y3hbPNJ8p4MmErC2nqCOIo3qcciGgR74UTIVFxopqH/6ykzSNP2xDP1zXUmVVMxuRC5f
+         JujQXxJRSd5757ZwTC2PqGCMSPy9BtvJGxJ3p3tPVsOgy2ve9trVP5dLPEaVCb/Sflsj
+         Cjl3Cq+vUXH1nCDiW/mV7wPf5N9Mq8lWX13NYOVbTRyJQFhkfNT2fmQyTe1qYaH/PAfP
+         5I7CxwwBKd/lkAzxW5xXVqFdY71ag1Czam70MkdnhjDYzUv2AmrS+AXuPeGk4o/bfrO+
+         qlaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690466084; x=1691070884;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OfdsUyWNnEJciwAi9tkOFXhMC6Z3uDKYKT9or1dyiEU=;
+        b=ku+gSiNpYLCS6BZvFnO/AuuKmMI9ZpHGLRucSy0R4Ow9bkskSkXzjfE5oA56rhh+1/
+         UX2CFGfA678Txgjk/8JUdICqJAxOpCBYd4KN99/VVMffA31jFmOpuhguOaI3pcY36I45
+         FDoG1SfNi0u81GHSq2oz/uP8WEX2hdM2KgkMnNqZDjdG9DwojE+pCKfB+Cn/pOyfZUB2
+         uLF0epaM6km5d8b6XiNRZoXVSdgB27uGUf5tv0h1cv6eMscn1BnPwSeM7iICyk8sNIa2
+         xmFyg7mJAUHpVhgjNmxig3KxLcrNkEF+qF3+byskJy51CpvopIpkonI5qYU7SvaaGf9A
+         sLYA==
+X-Gm-Message-State: ABy/qLbXttP+Ux765jdtxs//KvNAYg1+tD6HAOEC3H3R6n3vgkdk6Yi8
+        Sxwd4ESdB8T/h6hnU39JSrI8DxClLuABHNzSduCABw==
+X-Google-Smtp-Source: APBJJlHsPa+5NTBWeG27KIUK8LBS8NPDuPMqjoMkw//yrbpdgT3Jq8NFl/VO6oFLwbEgpbGAi+A4+Q==
+X-Received: by 2002:a05:600c:ada:b0:3fb:d1db:545b with SMTP id c26-20020a05600c0ada00b003fbd1db545bmr1676687wmr.20.1690466084299;
+        Thu, 27 Jul 2023 06:54:44 -0700 (PDT)
+Received: from [192.168.200.236] ([212.82.82.3])
+        by smtp.gmail.com with ESMTPSA id 1-20020a05600c248100b003fbb5142c4bsm4813129wms.18.2023.07.27.06.54.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jul 2023 06:54:43 -0700 (PDT)
+Message-ID: <ac708760-ed6a-a36b-ac8f-25654276a57c@devtank.co.uk>
+Date:   Thu, 27 Jul 2023 14:54:42 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
 Subject: Re: [PATCH] i2c: tiny-usb: check usb base class before assuming the
  interface on device is for this driver
-Message-ID: <20230727113029.ckrxe4qmy2nznh4e@intel.intel>
+Content-Language: en-GB
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Till Harbaum <till@harbaum.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20230727083354.4903-1-harry.geyer@devtank.co.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230727083354.4903-1-harry.geyer@devtank.co.uk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20230727113029.ckrxe4qmy2nznh4e@intel.intel>
+From:   Harry Geyer <harry.geyer@devtank.co.uk>
+In-Reply-To: <20230727113029.ckrxe4qmy2nznh4e@intel.intel>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Harry,
+Hi Andi,
 
-On Thu, Jul 27, 2023 at 09:33:54AM +0100, Harry Geyer wrote:
-> Patch allows usb devices with multiple interfaces to use this driver without
-> this driver assuming all interfaces are i2c-tiny-usb.
-> 
-> Signed-off-by: Harry Geyer <harry.geyer@devtank.co.uk>
-> ---
->  drivers/i2c/busses/i2c-tiny-usb.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-tiny-usb.c b/drivers/i2c/busses/i2c-tiny-usb.c
-> index d1fa9ff5aeab..d6578e8908ac 100644
-> --- a/drivers/i2c/busses/i2c-tiny-usb.c
-> +++ b/drivers/i2c/busses/i2c-tiny-usb.c
-> @@ -222,6 +222,9 @@ static int i2c_tiny_usb_probe(struct usb_interface *interface,
->  	int retval = -ENOMEM;
->  	u16 version;
->  
-> +	if (interface->intf_assoc && interface->intf_assoc->bFunctionClass != USB_CLASS_VENDOR_SPEC)
+On 27/07/2023 12:30, Andi Shyti wrote:
+> On the other hand, checkpatch is OK with lines up to 100
+> characters and this one looks like it's withing that length. So,
+> up to your personal preference.
+I am happy to resend the patch.
+> If you resend it, you can add my r-b.
+Not sure what you mean, I am sorry. Please, can you explain what you 
+want me to do.
 
-I'm sorry, I meant the same column, my bad here!
-Would you please be so kind to resend it as
+Thank you,
 
+Harry.
 
-	if (interface->intf_assoc &&
-	    interface->intf_assoc->bFunctionClass != USB_CLASS_VENDOR_SPEC)
-
-It's a nitpick, though.
-
-On the other hand, checkpatch is OK with lines up to 100
-characters and this one looks like it's withing that length. So,
-up to your personal preference.
-
-If you resend it, you can add my r-b.
-
-Thank you and again, sorry,
-Andi
-
-PS Next time, please add a changelog and a versioning to
-   following patches.
-
-> +		return -ENODEV;
-> +
->  	dev_dbg(&interface->dev, "probing usb device\n");
->  
->  	/* allocate memory for our device state and initialize it */
-> -- 
-> 2.34.1
-> 
