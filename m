@@ -2,67 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6F4764942
-	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jul 2023 09:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615A5764E2F
+	for <lists+linux-i2c@lfdr.de>; Thu, 27 Jul 2023 10:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjG0HtX (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 27 Jul 2023 03:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        id S234055AbjG0Ixt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 27 Jul 2023 04:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233505AbjG0Hrq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Jul 2023 03:47:46 -0400
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E8A44B6
-        for <linux-i2c@vger.kernel.org>; Thu, 27 Jul 2023 00:41:00 -0700 (PDT)
-Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-4866270a5eeso445125e0c.0
-        for <linux-i2c@vger.kernel.org>; Thu, 27 Jul 2023 00:41:00 -0700 (PDT)
+        with ESMTP id S234672AbjG0IxW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 27 Jul 2023 04:53:22 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEA842F4A
+        for <linux-i2c@vger.kernel.org>; Thu, 27 Jul 2023 01:34:43 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-31765aee31bso739782f8f.1
+        for <linux-i2c@vger.kernel.org>; Thu, 27 Jul 2023 01:34:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1690443656; x=1691048456;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Y6Ww/Hps4ekYyaueVrTmTuZFPtK46a7P6gDhJscw3A=;
-        b=lZl4dehodJurgoVIaC73y/eC9wYlITfHe4k+3NZRwvtbtZUUyiPoJ0QDneyfoTTTiG
-         em4ZFEKmmd1+kXQpevVRNFMnkJyO1nYEzpaqMH10C87JxDERPhYzao+LyfQHfQye0M/R
-         1HRTEHdEcs3rHusA+e98W3Z8ZQQw80KJYSQ3Luied4gCPtLoXbKWYE0dWcbJ0lDqqTO7
-         WlnrNy3ZI5rBmyvztLhCd1SGEFW65pry6e1123zYOa5Xg+LLAOCXmXn0XdapI77rbsnT
-         Gg8QVJN/guBX67ngK3kI+bXw107xTyyTnoHWjZJrkNFzHXsQmM7aAyu7YR26dstQxhsG
-         D9XQ==
+        d=devtank-co-uk.20221208.gappssmtp.com; s=20221208; t=1690446872; x=1691051672;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T+RffnyX1C3jwfJk0PWLmvia5S+Nu7M5/ptHa76gYBw=;
+        b=FeXoWvmilpW1hdXzL3FNF8UmBleGyuvtnBmWlMSGvCfmSQyoKL2aTr0nXU1WNBbq3U
+         o4mHBaStsMb/aS8Osw9yf5pBA10qmjWbFvlxZr58zyG+vx2zz4ieK7+FD19cbHtCtj6g
+         9I9CrXC6YMrnO6/7p97IYUAzIRVv7tJHCBWrSC9tOkX3Vm9nVA94sY003Q+UnQKlemgx
+         9fVkLgnEpsMmaw/hfMYe0yAmqhdaYfSm0cWVDagn1mqjA630hpwRTzb7/rPjr/1HyTj0
+         XPDr2xlvbijolhVXSV6s+ezhmHEA9bMqO9UdJSB0LxeW4/huleZr9kq8ExozgbYWebcC
+         Jy9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690443656; x=1691048456;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/Y6Ww/Hps4ekYyaueVrTmTuZFPtK46a7P6gDhJscw3A=;
-        b=Dm2Pi0eFQSKK7y8U+K9XmD/wNMw5Vb8odE30yCBEO1CKFmclzeeDVQ++8BcoNxGZ1J
-         eKrQfzbL6nJC8eyIq9IG++L9iZ0w8ephwm6aRl6tdeP0R+3iWPI2Xr7LetvF8nUIfKKR
-         lx8Sc6dI5tuLBlVVUnVxDLkywgRMK9Gh18l/hVVvRU0g7UpzX9XFG6y0Az4czLP1lseI
-         fFOVOetodA2YZ0JlX4spqC9JYqvbj6ytfgoxhYZ/NOMcJgYum3i4GdBqDD4wMBOE2UwH
-         6olM6j23SjPj221URp28F8MujIXGd52DWvPZRMfMrPhn5a7nSM8pT0Np/9I70kYJjm4L
-         iECQ==
-X-Gm-Message-State: ABy/qLabA2wRd0BPFp6DcdvUcsaYLYokf6zQf5mt1g7dMqdV+MHfyqfV
-        9Jp6u185nWlC3+08SHNXUWCSBAZk9XnwOeLGS8Pn0w==
-X-Google-Smtp-Source: APBJJlGEfmpoEXq+Qzglm+2heQrKM3Nw8InqN9U9NkeatxiuELwtIv2vQj/VPHsCl1tYzVd2KxZqySCnsDpeE4/NduU=
-X-Received: by 2002:a67:ef0a:0:b0:443:74a8:b7fd with SMTP id
- j10-20020a67ef0a000000b0044374a8b7fdmr419670vsr.9.1690443656054; Thu, 27 Jul
- 2023 00:40:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690446872; x=1691051672;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T+RffnyX1C3jwfJk0PWLmvia5S+Nu7M5/ptHa76gYBw=;
+        b=kvny+wE9rXxDZcnLOGnrZORoZCIqv3SKhn9dVxxY3ypiEabSuM12TQp8+//st40bcT
+         puKsqvWC36BfI4VO5tBccZEaWmUbwYQAQuU2PmJUv7XC8akrJgMRs/8qZMKV33I5DRlz
+         O4XITU9c4gtK+1IVf3X02g3HEzz5/S2FGolqnsNBtjef/qNGSqxWlyupa0Y+ZhPCpBMz
+         IXiovFdObuwvz7+3qttYwW+1OvmGX8dAFKAIdnwBRIRvuukm/+2kNW8XpZkVG+YqP85G
+         efsSNhOZD9j+SmXLprn8hmTqgutwEKIqYt2V4BlIuuT6lBf/0t04QhOslX70XLlroZ0k
+         PAAw==
+X-Gm-Message-State: ABy/qLamnFqTPMqRIMbiutrK6eBV8oBt3+3ZAkoHOaMBI3/Lka2LwPJ6
+        wO6iWnP67ZAAtpVm6i/imXqedPad8n78bLp7X7zaTg==
+X-Google-Smtp-Source: APBJJlEHOF6Ha/hI8jPTkvlVhz5xgjSnWuYcuXmwjzcHWfoWdbiiFTlziaUnxvQuqw4WK5cG59wsFg==
+X-Received: by 2002:adf:edca:0:b0:313:e8bf:a77 with SMTP id v10-20020adfedca000000b00313e8bf0a77mr1129028wro.5.1690446872019;
+        Thu, 27 Jul 2023 01:34:32 -0700 (PDT)
+Received: from DevTop.lan ([212.82.82.3])
+        by smtp.gmail.com with ESMTPSA id e5-20020a5d5005000000b00311d8c2561bsm1330079wrt.60.2023.07.27.01.34.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jul 2023 01:34:31 -0700 (PDT)
+From:   Harry Geyer <harry.geyer@devtank.co.uk>
+To:     Till Harbaum <till@harbaum.org>,
+        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     harry.geyer@devtank.co.uk
+Subject: [PATCH] i2c: tiny-usb: check usb base class before assuming the interface on device is for this driver
+Date:   Thu, 27 Jul 2023 09:33:54 +0100
+Message-Id: <20230727083354.4903-1-harry.geyer@devtank.co.uk>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230722115046.27323-1-paul@crapouillou.net> <20230722115046.27323-5-paul@crapouillou.net>
-In-Reply-To: <20230722115046.27323-5-paul@crapouillou.net>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 27 Jul 2023 09:40:45 +0200
-Message-ID: <CAMRc=MdR5K-mZZzKKgBgKUgEoWUT_41t6FDUsLB2Q-VQaOhOVA@mail.gmail.com>
-Subject: Re: [PATCH v2 04/22] i2c: davinci: Remove #ifdef guards for PM
- related functions
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,79 +69,28 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sat, Jul 22, 2023 at 1:51=E2=80=AFPM Paul Cercueil <paul@crapouillou.net=
-> wrote:
->
-> Use the new PM macros for the suspend and resume functions to be
-> automatically dropped by the compiler when CONFIG_PM or
-> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
->
-> This has the advantage of always compiling these functions in,
-> independently of any Kconfig option. Thanks to that, bugs and other
-> regressions are subsequently easier to catch.
->
-> Note that the behaviour is slightly different than before; the original
-> code wrapped the suspend/resume with #ifdef CONFIG_PM guards, which
-> resulted in these functions being compiled in but never used when
-> CONFIG_PM_SLEEP was disabled.
->
-> Now, those functions are only compiled in when CONFIG_PM_SLEEP is
-> enabled.
->
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->
-> ---
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: linux-arm-kernel@lists.infradead.org
-> ---
->  drivers/i2c/busses/i2c-davinci.c | 12 +++---------
->  1 file changed, 3 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-davinci.c b/drivers/i2c/busses/i2c-da=
-vinci.c
-> index 71b60778c643..52527189a7bf 100644
-> --- a/drivers/i2c/busses/i2c-davinci.c
-> +++ b/drivers/i2c/busses/i2c-davinci.c
-> @@ -902,7 +902,6 @@ static void davinci_i2c_remove(struct platform_device=
- *pdev)
->         pm_runtime_disable(dev->dev);
->  }
->
-> -#ifdef CONFIG_PM
->  static int davinci_i2c_suspend(struct device *dev)
->  {
->         struct davinci_i2c_dev *i2c_dev =3D dev_get_drvdata(dev);
-> @@ -926,15 +925,10 @@ static int davinci_i2c_resume(struct device *dev)
->  static const struct dev_pm_ops davinci_i2c_pm =3D {
->         .suspend        =3D davinci_i2c_suspend,
->         .resume         =3D davinci_i2c_resume,
-> -       SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-> -                                     pm_runtime_force_resume)
-> +       NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-> +                                 pm_runtime_force_resume)
->  };
->
-> -#define davinci_i2c_pm_ops (&davinci_i2c_pm)
-> -#else
-> -#define davinci_i2c_pm_ops NULL
-> -#endif
-> -
->  static const struct platform_device_id davinci_i2c_driver_ids[] =3D {
->         { .name =3D "i2c_davinci", },
->         { /* sentinel */ }
-> @@ -947,7 +941,7 @@ static struct platform_driver davinci_i2c_driver =3D =
-{
->         .id_table       =3D davinci_i2c_driver_ids,
->         .driver         =3D {
->                 .name   =3D "i2c_davinci",
-> -               .pm     =3D davinci_i2c_pm_ops,
-> +               .pm     =3D pm_sleep_ptr(&davinci_i2c_pm),
->                 .of_match_table =3D davinci_i2c_of_match,
->         },
->  };
-> --
-> 2.40.1
->
+Patch allows usb devices with multiple interfaces to use this driver without
+this driver assuming all interfaces are i2c-tiny-usb.
 
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Signed-off-by: Harry Geyer <harry.geyer@devtank.co.uk>
+---
+ drivers/i2c/busses/i2c-tiny-usb.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-tiny-usb.c b/drivers/i2c/busses/i2c-tiny-usb.c
+index d1fa9ff5aeab..d6578e8908ac 100644
+--- a/drivers/i2c/busses/i2c-tiny-usb.c
++++ b/drivers/i2c/busses/i2c-tiny-usb.c
+@@ -222,6 +222,9 @@ static int i2c_tiny_usb_probe(struct usb_interface *interface,
+ 	int retval = -ENOMEM;
+ 	u16 version;
+ 
++	if (interface->intf_assoc && interface->intf_assoc->bFunctionClass != USB_CLASS_VENDOR_SPEC)
++		return -ENODEV;
++
+ 	dev_dbg(&interface->dev, "probing usb device\n");
+ 
+ 	/* allocate memory for our device state and initialize it */
+-- 
+2.34.1
+
