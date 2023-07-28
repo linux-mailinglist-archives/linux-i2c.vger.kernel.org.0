@@ -2,41 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F28767195
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jul 2023 18:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A59407671F2
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jul 2023 18:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbjG1QLO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Jul 2023 12:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
+        id S233411AbjG1QhB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Jul 2023 12:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjG1QLM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jul 2023 12:11:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F85AFC;
-        Fri, 28 Jul 2023 09:11:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6D3A62196;
-        Fri, 28 Jul 2023 16:11:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4871FC433C7;
-        Fri, 28 Jul 2023 16:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690560670;
-        bh=tjGuSrDwTbS2bQDCEbJvPIHSpBadcYgXq8DyDZNK8XU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gyAzu+W+m+DUr2THVKr8nlypPSMO/0fSh5RLpztO0wYLpGqCdkGeG9LwczxcmgwFh
-         1xsiWwYcgbX3PSQ2CIVG2rBb9D1JRNcAnfchiXceCXcI4a4Frro59/iv/kWqBzLW4O
-         aDEpZE6AH3utAOsXGRNYIIh/UGblZeJpwXYsh2/4DoLWPJW6K6/qrimrbrkQTl41sz
-         pfb15Sb49WK7O5dU14vI9hUNF+g44dcyEG6oEn4klzDM5xARx60q3qkBkxJ7cbepuZ
-         jMvTa9PMJm0QNsb1YUchIAU+F66g+DsywJoKLaSb3mKTaOcZehRaF/9JYoBOzmscUm
-         oSkxewggZst+w==
-Date:   Fri, 28 Jul 2023 17:10:54 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Varshini Rajendran <varshini.rajendran@microchip.com>,
+        with ESMTP id S232517AbjG1Qg7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jul 2023 12:36:59 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DFE4228
+        for <linux-i2c@vger.kernel.org>; Fri, 28 Jul 2023 09:36:56 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-31765792c7cso2420290f8f.0
+        for <linux-i2c@vger.kernel.org>; Fri, 28 Jul 2023 09:36:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690562215; x=1691167015;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kv1vn8i10uKiVGMZqWV0hp2dp0U/OH8nWn1xPOKpe2E=;
+        b=WXsUGfp3JibzzSWaJLOYRCf5x8xXWgYZKzFIf69dgVy9YK8C4NDwHyEDFZXz5w3U4v
+         QQOs8VR3xBCFtRC9Uc3C7jDtHbHf/TVcDQbt3KNBbvC3KguUj++OBRSmosar1TXhCfCO
+         cgVRNgC2CqwGVozxV9BCvuohUn46t+dccFpMTd9ejv8OKqQcVDJDj14Xf7r2EkIsfxZ5
+         ogiBvgZjEDgqBJiNCt+R3MZB3dOH5vA6Wa4t08ltVHwtTVkpajcfwR8vctgSe4BB19fI
+         6WAvtCklIkG3U/TnlOkzeYCurxGOclz0CiZwVtqU4t3uUZ/xLeZzpgcwN0UIfUeqn7Sx
+         T+Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690562215; x=1691167015;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kv1vn8i10uKiVGMZqWV0hp2dp0U/OH8nWn1xPOKpe2E=;
+        b=bfHpWNBfUpo9r8F4+iBvBx+0R530gIGPD45ivSuO1btIGfOYOo4OJZhz+7npo3mWXR
+         h14AVANk7GhqU9jcMtcC9CdgDi57aSiqFemJRwWig9s4Q/qnUNwdgybdCiBmFNmYaXt5
+         3ceSuXRHiSJK//ulc6KnvM3q4oQU4quUggdDvdM6ppiRR+0gzOg9N/v/X7Fp/gwYDkDC
+         6hRJbpBIF3qkrOgNty9x6VcYG2HXLYElG8MMLNnrqjfqDG15X+aRUB+gddmHTGjlQGdb
+         ajroT7mo/47uNJe6YRFV/g+LvEigGxmlEDB0iab0SK3HTbR7uwU3C3D6rYPl+bVqmNvi
+         xJOA==
+X-Gm-Message-State: ABy/qLYWk73A6788Qc+3oXcX+T9KRnVKntyLRf/XQ9sxTt4FS6lGMhWT
+        jlpxuwRPYcV4zAIlMrkH9ALPqQ==
+X-Google-Smtp-Source: APBJJlFtwmVxo8pxiclcUgLI8fwOIzC/1t6avYTLDMrZvATE9p+eFs+1MvU7kydx7xR6YX3cFZ69Tg==
+X-Received: by 2002:a05:6000:11:b0:317:5de3:86fb with SMTP id h17-20020a056000001100b003175de386fbmr2171475wrx.10.1690562214762;
+        Fri, 28 Jul 2023 09:36:54 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id p9-20020a5d48c9000000b0031433443265sm5235215wrs.53.2023.07.28.09.36.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jul 2023 09:36:54 -0700 (PDT)
+Message-ID: <30943376-f895-2eb9-1b00-55ce56f51742@linaro.org>
+Date:   Fri, 28 Jul 2023 18:36:47 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 00/50] Add support for sam9x7 SoC family
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Varshini Rajendran <varshini.rajendran@microchip.com>,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         conor+dt@kernel.org, nicolas.ferre@microchip.com,
         alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
@@ -67,75 +89,69 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
         linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v3 00/50] Add support for sam9x7 SoC family
-Message-ID: <20230728-perfectly-online-499ba99ce421@spud>
 References: <20230728102223.265216-1-varshini.rajendran@microchip.com>
  <c0792cfd-db4f-7153-0775-824912277908@linaro.org>
- <20230728-floss-stark-889158f968ea@spud>
- <20230728180443.55363550@xps-13>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JwCxVt0P/WwXvHk3"
-Content-Disposition: inline
-In-Reply-To: <20230728180443.55363550@xps-13>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20230728-floss-stark-889158f968ea@spud> <20230728180443.55363550@xps-13>
+ <20230728-perfectly-online-499ba99ce421@spud>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230728-perfectly-online-499ba99ce421@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 28/07/2023 18:10, Conor Dooley wrote:
+> On Fri, Jul 28, 2023 at 06:04:43PM +0200, Miquel Raynal wrote:
+>> Hi Conor,
+>>
+>> conor@kernel.org wrote on Fri, 28 Jul 2023 16:50:24 +0100:
+>>
+>>> On Fri, Jul 28, 2023 at 01:32:12PM +0200, Krzysztof Kozlowski wrote:
+>>>> On 28/07/2023 12:22, Varshini Rajendran wrote:  
+>>>>> This patch series adds support for the new SoC family - sam9x7.
+>>>>>  - The device tree, configs and drivers are added
+>>>>>  - Clock driver for sam9x7 is added
+>>>>>  - Support for basic peripherals is added
+>>>>>  - Target board SAM9X75 Curiosity is added
+>>>>>   
+>>>>
+>>>> Your threading is absolutely broken making it difficult to review and apply.  
+>>>
+>>> I had a chat with Varshini today, they were trying to avoid sending the
+>>> patches to a massive CC list, but didn't set any in-reply-to header.
+>>> For the next submission whole series could be sent to the binding &
+>>> platform maintainers and the individual patches additionally to their
+>>> respective lists/maintainers. Does that sound okay to you, or do you
+>>> think it should be broken up?
+>>
+>> I usually prefer receiving the dt-bindings *and* the driver changes, so
+>> I can give my feedback on the description side, as well as looking at
+>> the implementation and see if that really matches what was discussed
+>> with you :)
+> 
+> Right, that is what I was suggesting. Respective maintainers would get
+> the drivers *and* bindings for their subsystems - IOW, each patch is
+> sent to what get_maintainer.pl outputs for it.
 
---JwCxVt0P/WwXvHk3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For reviewers I find the easiest if this is mostly split per subsystem.
+There were here few patches for USB, few clk etc, so these easily can be
+separate patchsets. All the rest one-liners or one-patch-per-subsystem
+could be grouped and set in one patchset, after fixing the threading.
 
-On Fri, Jul 28, 2023 at 06:04:43PM +0200, Miquel Raynal wrote:
-> Hi Conor,
->=20
-> conor@kernel.org wrote on Fri, 28 Jul 2023 16:50:24 +0100:
->=20
-> > On Fri, Jul 28, 2023 at 01:32:12PM +0200, Krzysztof Kozlowski wrote:
-> > > On 28/07/2023 12:22, Varshini Rajendran wrote: =20
-> > > > This patch series adds support for the new SoC family - sam9x7.
-> > > >  - The device tree, configs and drivers are added
-> > > >  - Clock driver for sam9x7 is added
-> > > >  - Support for basic peripherals is added
-> > > >  - Target board SAM9X75 Curiosity is added
-> > > >  =20
-> > >=20
-> > > Your threading is absolutely broken making it difficult to review and=
- apply. =20
-> >=20
-> > I had a chat with Varshini today, they were trying to avoid sending the
-> > patches to a massive CC list, but didn't set any in-reply-to header.
-> > For the next submission whole series could be sent to the binding &
-> > platform maintainers and the individual patches additionally to their
-> > respective lists/maintainers. Does that sound okay to you, or do you
-> > think it should be broken up?
->=20
-> I usually prefer receiving the dt-bindings *and* the driver changes, so
-> I can give my feedback on the description side, as well as looking at
-> the implementation and see if that really matches what was discussed
-> with you :)
+But the moment the patchset grows to 50 it's time to re-think it whether
+this grouping is necessary or even beneficial.
 
-Right, that is what I was suggesting. Respective maintainers would get
-the drivers *and* bindings for their subsystems - IOW, each patch is
-sent to what get_maintainer.pl outputs for it.
+This is not a conversion of mach to DT (like ep93xx) which benefits of
+doing everything in one step. Therefore my recommendation for this work
+is to split it entirely per each subsystem.
 
---JwCxVt0P/WwXvHk3
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+Krzysztof
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMPojgAKCRB4tDGHoIJi
-0kkfAP4ga1L8W2nIhESI6nBrFIrWddcSQtR9qdorSuJaMVMayQD8DIEJcInDpQKd
-xcNO0xMMpnCF1rhZL6BPvkIZHuZ5Ygk=
-=CpFU
------END PGP SIGNATURE-----
-
---JwCxVt0P/WwXvHk3--
