@@ -2,99 +2,89 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405F2766A63
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jul 2023 12:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0E0766AD4
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jul 2023 12:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235878AbjG1K0O (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Jul 2023 06:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
+        id S235978AbjG1KhB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Jul 2023 06:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235890AbjG1KZq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jul 2023 06:25:46 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C8A3AA9;
-        Fri, 28 Jul 2023 03:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1690539919; x=1722075919;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sXObJvFOIGK/mqhYpuwAgl4c9CSw6fuF7YraS2BMD6g=;
-  b=vU9cF4V9SJPimPydujYeblaKIwX0QK/fvZrWLQORXK07itfEemy5CP2T
-   8nLxvTvNXtnoRk+yYXXkJzF4/OMZdeznDvQrHnVOqc5ThERptXvVzHEP5
-   SpWaDzMQR369I0D0PJW8IPOsQcUkPS1mmJ3CAw5vx8cE7JM8MdoRF47Tu
-   ird5sASlIq/9LKRJ1P1lBft8yYAkgVgv62OkuLQ/7rUKbgnGj4gb/OrYE
-   WThHx+3m0HtZ1bk/Ls/EKnBKTZ7oEvr3a975XUFp9x6VUUevBwZEpxDHQ
-   Pkmp1fb4Xtd9ivHFUOjI9JTfOvvTKRpqu9ooCv7wsZwbsLYnfH900zDkB
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
-   d="scan'208";a="163712550"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jul 2023 03:25:16 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 28 Jul 2023 03:25:14 -0700
-Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 28 Jul 2023 03:25:10 -0700
-From:   Varshini Rajendran <varshini.rajendran@microchip.com>
-To:     <andi.shyti@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <varshini.rajendran@microchip.com>
-Subject: [PATCH v3 13/50] dt-bindings: i2c: at91: Add sam9x7 compatible string
-Date:   Fri, 28 Jul 2023 15:55:06 +0530
-Message-ID: <20230728102506.265917-1-varshini.rajendran@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S235355AbjG1Kge (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jul 2023 06:36:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2C44ED0;
+        Fri, 28 Jul 2023 03:33:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8210C620D5;
+        Fri, 28 Jul 2023 10:33:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8F4DC433C8;
+        Fri, 28 Jul 2023 10:33:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690540433;
+        bh=De0OBn9WOW/3B2pyULgUhwXszW9Q66YIYLoomDnSz0A=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=s40RjITnwRE+UpjErTp94GWb29V+u+SmEbqR0uyoFiZ3xkMSjVe2/kHLv7R1pac4d
+         W/3R9F3RmhhOvq3xpLOp6pZRkh4mDYj0uNAZWgL9PYkx8VwCNcewPhP0chbgYGeodn
+         T97/1IzzNglMCq+KaDqNrYW2rZEMKby0iEhWahLqMnTDOSpEweWADjvUa5yE/hn2d3
+         vjem3Nd/PC4ZHYaIZvucc5y0sGlbEgsgXYqb7clt21r2+8KlZJreZZSAQtw+7eO1Ry
+         A0rJ9f6dyl8Psr0UxtF8WLgPmIAi9NZBN/OKvvi93GnavA5+wFF9eJLmGf5bCen/0r
+         BXZAJcdn5s8Cw==
+From:   Lee Jones <lee@kernel.org>
+To:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
+        rafael.j.wysocki@intel.com,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Benjamin Bara <bbara93@gmail.com>
+Cc:     dmitry.osipenko@collabora.com, peterz@infradead.org,
+        jonathanh@nvidia.com, richard.leitner@linux.dev,
+        treding@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        stable@vger.kernel.org, Nishanth Menon <nm@ti.com>
+In-Reply-To: <20230327-tegra-pmic-reboot-v7-0-18699d5dcd76@skidata.com>
+References: <20230327-tegra-pmic-reboot-v7-0-18699d5dcd76@skidata.com>
+Subject: Re: [PATCH v7 0/5] mfd: tps6586x: register restart handler
+Message-Id: <169054042966.328674.7411378579702852995.b4-ty@kernel.org>
+Date:   Fri, 28 Jul 2023 11:33:49 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add compatible string for sam9x7.
+On Sat, 15 Jul 2023 09:53:22 +0200, Benjamin Bara wrote:
+> The Tegra20 requires an enabled VDE power domain during startup. As the
+> VDE is currently not used, it is disabled during runtime.
+> Since 8f0c714ad9be, there is a workaround for the "normal restart path"
+> which enables the VDE before doing PMC's warm reboot. This workaround is
+> not executed in the "emergency restart path", leading to a hang-up
+> during start.
+> 
+> [...]
 
-Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
----
- Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+Applied, thanks!
 
-diff --git a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-index 6adedd3ec399..6f3158604d02 100644
---- a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-@@ -27,6 +27,9 @@ properties:
-       - items:
-           - const: microchip,sama7g5-i2c
-           - const: microchip,sam9x60-i2c
-+      - items:
-+          - const: microchip,sam9x7-i2c
-+          - const: microchip,sam9x60-i2c
- 
-   reg:
-     maxItems: 1
-@@ -84,6 +87,7 @@ allOf:
-               - atmel,sama5d4-i2c
-               - atmel,sama5d2-i2c
-               - microchip,sam9x60-i2c
-+              - microchip,sam9x7-i2c
-               - microchip,sama7g5-i2c
-     then:
-       properties:
--- 
-2.25.1
+[1/5] kernel/reboot: emergency_restart: set correct system_state
+      commit: 60466c067927abbcaff299845abd4b7069963139
+[2/5] i2c: core: run atomic i2c xfer when !preemptible
+      commit: aa49c90894d06e18a1ee7c095edbd2f37c232d02
+[3/5] kernel/reboot: add device to sys_off_handler
+      commit: db2d6038c5e795cab4f0a8d3e86b4f7e33338629
+[4/5] mfd: tps6586x: use devm-based power off handler
+      commit: 8bd141b17cedcbcb7d336df6e0462e4f4a528ab1
+[5/5] mfd: tps6586x: register restart handler
+      commit: 510f276df2b91efd73f6c53be62b7e692ff533c1
+
+--
+Lee Jones [李琼斯]
 
