@@ -2,92 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5BD766ADA
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jul 2023 12:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48D5766BC2
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jul 2023 13:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235874AbjG1Kh5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Jul 2023 06:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        id S234584AbjG1LcY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Jul 2023 07:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232861AbjG1Kho (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jul 2023 06:37:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB64044BB;
-        Fri, 28 Jul 2023 03:34:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAFBF620D4;
-        Fri, 28 Jul 2023 10:34:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E4CC433C7;
-        Fri, 28 Jul 2023 10:34:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690540493;
-        bh=TUjLJdNwfNR/TGamEiDdXYMvBzY99g/GUkL1jg3+/4o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NE88mJgsFRKMaSD6i+4HFY6ufJ4a9xjLY/xW5CtiXWChs8lzgqlnlQXa7enuq0TOd
-         X4DKStiIfpZ722cZ0Un7keYLEkiuTofKNCSIvI3k7OR24S3ntgi0qJ28uHK26aGXRO
-         hfnE3Or3ht4YzLeVNUR8eivSqUJ6DzoL8yVQPGJosMZZiZnuoP9Zu51NzO3TFyCg5F
-         9UyCIVDkNcl90MN4tq8uZiu8ZkKQAUBpeohOADLrJZdFMfvQIfyqOdAYGvslU461b0
-         OfMj/x0Enkpdb0VlNVCzN/y5z2rK0dKDW/Wmj1yfxDU8a3hpRuqBuKbE6bU6+uwFD9
-         vDj2UpxcmvJLg==
-Date:   Fri, 28 Jul 2023 11:34:46 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>, rafael.j.wysocki@intel.com,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Benjamin Bara <bbara93@gmail.com>
-Cc:     dmitry.osipenko@collabora.com, peterz@infradead.org,
-        jonathanh@nvidia.com, richard.leitner@linux.dev,
-        treding@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        stable@vger.kernel.org, Nishanth Menon <nm@ti.com>
-Subject: Re: [PATCH v7 0/5] mfd: tps6586x: register restart handler
-Message-ID: <20230728103446.GK8175@google.com>
-References: <20230327-tegra-pmic-reboot-v7-0-18699d5dcd76@skidata.com>
- <169054042966.328674.7411378579702852995.b4-ty@kernel.org>
+        with ESMTP id S234974AbjG1LcW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jul 2023 07:32:22 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D2135B6
+        for <linux-i2c@vger.kernel.org>; Fri, 28 Jul 2023 04:32:18 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbc59de0e2so20569715e9.3
+        for <linux-i2c@vger.kernel.org>; Fri, 28 Jul 2023 04:32:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690543937; x=1691148737;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+F++azjWGXR/zzwHylDS5zKIIkHfazjhU13uoVBCItI=;
+        b=AMnkE9WuW7Szt2FbkP+Jy7gImGXicajY9/8nwcsWkrUwhvEUvP7ntHlB4esXk3K8U4
+         0i6OvKn+5MRV/VvX72hQyI3+TxZnb6cRN+AlFwW7eoAEroux8iHcBnUojCtWchKA78jl
+         SY5zsDpCGe7jFTiAVJefedCk62+1uRl1DCOGCwjHw3AcI7lBvwuS6yZmpan72Z124GkA
+         HzuwDVmYWrxvejLrwD5DxuP7Te8Jagm+rkOkbxUiWNpEVTWGGoMyhL+3cuwlWbXGDr0B
+         nKgA+tN0Fx8WjnGsZEpQTGxaPoJXDju/pS2BVUhj93heIIMcoWmwxaaXx1t90HNC7HAh
+         LaVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690543937; x=1691148737;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+F++azjWGXR/zzwHylDS5zKIIkHfazjhU13uoVBCItI=;
+        b=Tj10dZrPD0Slzexi+4rj5Tb6b+ji7gsHzgcxE5qJ33A8RF9N1JarRe/ODOdA+U0UXp
+         EcLwhM+DUGWS/nfNo5yITk96kKY8Is2KStHSR724LIVkgjkbsv7on30lvulbgPiwETbY
+         Izk4ELmYbGG2Ux9jJDBx2rtgtW+qRJ6/rgqCLlSHSEOMBlrwVtS3u/C+4++OLbUSbzy1
+         Hf+6nrhmZAuvgxCt/QVmHO/HoEPaAwLN8Omp53nrw/y8dU9Z6On9hreRNTD1vHzlA8Rh
+         EX0AwojNb39em05ym+kOoE9pQDV+xxAuc/Db8QGlX55uRnrkPVZIH7IHh5RArkfqRAVB
+         mqMw==
+X-Gm-Message-State: ABy/qLZdKyCTKOz3np+jy38xAu5Au/KvaqPDTx+EllgT2/3OuYBnjiV2
+        vkBfRMsFWEgnviHYV+cVv8+V8g==
+X-Google-Smtp-Source: APBJJlGEkskLn7KheQI/2hh6B8RIJum6fk3h7Nk91C/s4cct7x2FxIqw26uj1lGmelJK6ucVYjt8Ng==
+X-Received: by 2002:adf:e94f:0:b0:314:3611:3e54 with SMTP id m15-20020adfe94f000000b0031436113e54mr1907446wrn.9.1690543937250;
+        Fri, 28 Jul 2023 04:32:17 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id m14-20020adffa0e000000b003177e9b2e64sm4508524wrr.90.2023.07.28.04.32.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jul 2023 04:32:16 -0700 (PDT)
+Message-ID: <c0792cfd-db4f-7153-0775-824912277908@linaro.org>
+Date:   Fri, 28 Jul 2023 13:32:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <169054042966.328674.7411378579702852995.b4-ty@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 00/50] Add support for sam9x7 SoC family
+Content-Language: en-US
+To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        andi.shyti@kernel.org, tglx@linutronix.de, maz@kernel.org,
+        lee@kernel.org, ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linus.walleij@linaro.org, sre@kernel.org, p.zabel@pengutronix.de,
+        olivia@selenic.com, a.zummo@towertech.it,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        linux@armlinux.org.uk, durai.manickamkr@microchip.com,
+        andrew@lunn.ch, jerry.ray@microchip.com, andre.przywara@arm.com,
+        mani@kernel.org, alexandre.torgue@st.com,
+        gregory.clement@bootlin.com, arnd@arndb.de, rientjes@google.com,
+        deller@gmx.de, 42.hyeyoo@gmail.com, vbabka@suse.cz,
+        mripard@kernel.org, mihai.sain@microchip.com,
+        codrin.ciubotariu@microchip.com, eugen.hristev@collabora.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20230728102223.265216-1-varshini.rajendran@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230728102223.265216-1-varshini.rajendran@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 28 Jul 2023, Lee Jones wrote:
-
-> On Sat, 15 Jul 2023 09:53:22 +0200, Benjamin Bara wrote:
-> > The Tegra20 requires an enabled VDE power domain during startup. As the
-> > VDE is currently not used, it is disabled during runtime.
-> > Since 8f0c714ad9be, there is a workaround for the "normal restart path"
-> > which enables the VDE before doing PMC's warm reboot. This workaround is
-> > not executed in the "emergency restart path", leading to a hang-up
-> > during start.
-> > 
-> > [...]
+On 28/07/2023 12:22, Varshini Rajendran wrote:
+> This patch series adds support for the new SoC family - sam9x7.
+>  - The device tree, configs and drivers are added
+>  - Clock driver for sam9x7 is added
+>  - Support for basic peripherals is added
+>  - Target board SAM9X75 Curiosity is added
 > 
-> Applied, thanks!
-> 
-> [1/5] kernel/reboot: emergency_restart: set correct system_state
->       commit: 60466c067927abbcaff299845abd4b7069963139
-> [2/5] i2c: core: run atomic i2c xfer when !preemptible
->       commit: aa49c90894d06e18a1ee7c095edbd2f37c232d02
-> [3/5] kernel/reboot: add device to sys_off_handler
->       commit: db2d6038c5e795cab4f0a8d3e86b4f7e33338629
-> [4/5] mfd: tps6586x: use devm-based power off handler
->       commit: 8bd141b17cedcbcb7d336df6e0462e4f4a528ab1
-> [5/5] mfd: tps6586x: register restart handler
->       commit: 510f276df2b91efd73f6c53be62b7e692ff533c1
 
-Pull-request to follow after built tests have completed.
+Your threading is absolutely broken making it difficult to review and apply.
 
--- 
-Lee Jones [李琼斯]
+Best regards,
+Krzysztof
+
