@@ -2,120 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E994E766BC8
-	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jul 2023 13:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9459F766BD6
+	for <lists+linux-i2c@lfdr.de>; Fri, 28 Jul 2023 13:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235822AbjG1LdC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 28 Jul 2023 07:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S235823AbjG1LdS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 28 Jul 2023 07:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233620AbjG1LdB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jul 2023 07:33:01 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A402D5B
-        for <linux-i2c@vger.kernel.org>; Fri, 28 Jul 2023 04:32:57 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-3178fa77b27so259288f8f.2
-        for <linux-i2c@vger.kernel.org>; Fri, 28 Jul 2023 04:32:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690543975; x=1691148775;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bvt6gTVxDn+2sUGsn1CSbJgPH86R0eTVqQfCu4TXUDo=;
-        b=ihYG/3HHPl5FBpQ+akutSxXPgMXuWO0DzvVRM1SksGA8Z6z6pOdw0xIixvMEZJwJcd
-         4Z9oCv17ECKWSDIarWP03zMzkLYWgMwcwhoxSSaT5GUpRNxEjtRo4EY8oOokfuAmg2K3
-         X3bV9VHSl8t4uwTz1mse0RuhyVeDc9KRKdziDQTXDWRDJdS8WyXvQtCDSSpsLP63bbdW
-         cOiiI52GZVUebGyMsG2X5E6fYT0OIJFnxGAXUetZKDydkrF3Wl2/fb0Wxp0Z75TVQh6T
-         giWorb/o+3LTFwvzrenWwbszz2vm7NxrLdr+hhPHn+acqPkmYagZ70swmgFq3rn/3E7w
-         YSgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690543975; x=1691148775;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bvt6gTVxDn+2sUGsn1CSbJgPH86R0eTVqQfCu4TXUDo=;
-        b=fi8l65LZEGNd2QEu3xjXsN/VGPALbnNxrouAu4qRx4Ng+BUcVlR15g/RJErMEXG90q
-         7pvRSj5pcpp0xEnOL/C3g3lqcktQrYb+PRUNDoUgJ7YcHUHyib6DF2XT98W0MkPdf/Kk
-         fza3DIWKwMiYk5DULZ6FZUfffzhKD7lP4qM5oMobMApl9J20E8paNmeXNUwGVcbmfOty
-         M05yhMglUh21rDu2smibFxdI+jRQVf0n0DZRZJPhG94K4Y211Bi7+JML68GCNq0fNASm
-         sZuGVmeFDe4gS+EtheVu0DWe3OmFQy/tUnsXt9M8D55G8O7hcaTXvHGzKp99/8vwKyof
-         YgQw==
-X-Gm-Message-State: ABy/qLYco2Q9VCQ8+AXZk7sfQ36uJodFuqyqortC/xkgo/00n67A+Evc
-        lNkS7UIjwlhxe89TFXHIlbAGvw==
-X-Google-Smtp-Source: APBJJlGzFqci86oHnzgj2vDsZF3+rlLFEk6DPLtkPGOiNL5NezUh1WtcFdshRpGeLkVsg8nMnAV0bg==
-X-Received: by 2002:a5d:554b:0:b0:317:6816:578c with SMTP id g11-20020a5d554b000000b003176816578cmr2003464wrw.5.1690543975603;
-        Fri, 28 Jul 2023 04:32:55 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id y8-20020adffa48000000b003159d2dabbasm4575839wrr.94.2023.07.28.04.32.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 04:32:55 -0700 (PDT)
-Message-ID: <75fb91cc-e505-7aa9-b90d-0b4d5c643b69@linaro.org>
-Date:   Fri, 28 Jul 2023 13:32:50 +0200
+        with ESMTP id S236264AbjG1LdP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 28 Jul 2023 07:33:15 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4223C07;
+        Fri, 28 Jul 2023 04:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690543991; x=1722079991;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=uAiSCACue2/Yc7IB3UDBv81ePECoMUEDVW8spdeHU98=;
+  b=nyAAkG35HlI3xc5RHUAJTEW1fG/Uyl2T6QOthhWz95yMz1k27CTJo6UB
+   x74tuXTJNo224SJAEjx/pAwmUFxOuhytAkxWqdeHvD3VI481IyL56z65R
+   mUCoBIm2hrlhdz/Du6VWuPsk+hzCGoTy82FaHC+B24gHtVw44BkrM1gBP
+   rR/+gGv4ahZ7KrJKgrm5Xc70SAfS+G+fi9x0fQ1qkg8RAtpOJdHglgUrb
+   BPzTw/G8pl9sdMrG5/Rvn9iiv1k1uapetgUoGNcj4hnh/WiEvkRtkfxiz
+   KLouyi1Q2OQdP9seSeBadyjKIGuwVh6CkMuvhY1dhP6H0sYcPckpG2tNZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="366031009"
+X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
+   d="scan'208";a="366031009"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 04:33:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="851177485"
+X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
+   d="scan'208";a="851177485"
+Received: from mylly.fi.intel.com (HELO [10.237.72.59]) ([10.237.72.59])
+  by orsmga004.jf.intel.com with ESMTP; 28 Jul 2023 04:33:07 -0700
+Message-ID: <928d54c4-ec71-5f09-ed66-5f9c52aca6ba@linux.intel.com>
+Date:   Fri, 28 Jul 2023 14:33:07 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 00/50] Add support for sam9x7 SoC family
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH v1 1/9] i2c: designware: Move has_acpi_companion() to
+ common code
 Content-Language: en-US
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-        andi.shyti@kernel.org, tglx@linutronix.de, maz@kernel.org,
-        lee@kernel.org, ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linus.walleij@linaro.org, sre@kernel.org, p.zabel@pengutronix.de,
-        olivia@selenic.com, a.zummo@towertech.it,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        linux@armlinux.org.uk, durai.manickamkr@microchip.com,
-        andrew@lunn.ch, jerry.ray@microchip.com, andre.przywara@arm.com,
-        mani@kernel.org, alexandre.torgue@st.com,
-        gregory.clement@bootlin.com, arnd@arndb.de, rientjes@google.com,
-        deller@gmx.de, 42.hyeyoo@gmail.com, vbabka@suse.cz,
-        mripard@kernel.org, mihai.sain@microchip.com,
-        codrin.ciubotariu@microchip.com, eugen.hristev@collabora.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20230728102223.265216-1-varshini.rajendran@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230728102223.265216-1-varshini.rajendran@microchip.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Andi Shyti <andi.shyti@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>
+References: <20230725143023.86325-1-andriy.shevchenko@linux.intel.com>
+ <20230725143023.86325-2-andriy.shevchenko@linux.intel.com>
+ <20230725214521.zxjqinryvva2zanx@intel.intel>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20230725214521.zxjqinryvva2zanx@intel.intel>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 28/07/2023 12:22, Varshini Rajendran wrote:
-> This patch series adds support for the new SoC family - sam9x7.
->  - The device tree, configs and drivers are added
->  - Clock driver for sam9x7 is added
->  - Support for basic peripherals is added
->  - Target board SAM9X75 Curiosity is added
+On 7/26/23 00:45, Andi Shyti wrote:
+> Hi Andy,
 > 
->  Changes in v3:
->  --------------
+> On Tue, Jul 25, 2023 at 05:30:15PM +0300, Andy Shevchenko wrote:
+>> Instead of checking in callers, move the call to the callee.
+>>
+>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> ---
+>>   drivers/i2c/busses/i2c-designware-common.c  | 11 +++++++++--
+>>   drivers/i2c/busses/i2c-designware-pcidrv.c  |  3 +--
+>>   drivers/i2c/busses/i2c-designware-platdrv.c |  3 +--
+>>   3 files changed, 11 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+>> index cdd8c67d9129..683f7a9beb46 100644
+>> --- a/drivers/i2c/busses/i2c-designware-common.c
+>> +++ b/drivers/i2c/busses/i2c-designware-common.c
+>> @@ -255,9 +255,8 @@ static void i2c_dw_acpi_params(struct device *device, char method[],
+>>   	kfree(buf.pointer);
+>>   }
+>>   
+>> -int i2c_dw_acpi_configure(struct device *device)
+>> +static void i2c_dw_acpi_do_configure(struct dw_i2c_dev *dev, struct device *device)
+
+Because of this dual dev pointer obscurity which is cleaned in the next 
+patch and Andi's comment below in my opinion it makes sense to combine 
+patches 1 and 2.
+
+>>   {
+>> -	struct dw_i2c_dev *dev = dev_get_drvdata(device);
+>>   	struct i2c_timings *t = &dev->timings;
+>>   	u32 ss_ht = 0, fp_ht = 0, hs_ht = 0, fs_ht = 0;
+>>   
+>> @@ -285,6 +284,14 @@ int i2c_dw_acpi_configure(struct device *device)
+>>   		dev->sda_hold_time = fs_ht;
+>>   		break;
+>>   	}
+>> +}
+>> +
+>> +int i2c_dw_acpi_configure(struct device *device)
 > 
->  - Fixed the DT documentation errors pointed out in v2.
-
-That's too generic. What changed?
-
-Best regards,
-Krzysztof
-
+> I was about to ask you why are we keeping this int, but then I
+> saw that you are making it void in the next patch :)
+> 
