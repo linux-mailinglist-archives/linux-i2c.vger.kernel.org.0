@@ -2,118 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141347689E9
-	for <lists+linux-i2c@lfdr.de>; Mon, 31 Jul 2023 04:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1AD768AC2
+	for <lists+linux-i2c@lfdr.de>; Mon, 31 Jul 2023 06:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjGaCQp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 30 Jul 2023 22:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
+        id S229544AbjGaEVf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 31 Jul 2023 00:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjGaCQo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 30 Jul 2023 22:16:44 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECD218B;
-        Sun, 30 Jul 2023 19:16:42 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RDhfh14BqzrRyr;
-        Mon, 31 Jul 2023 10:15:40 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 31 Jul 2023 10:16:38 +0800
-Message-ID: <4ae70a67-6421-f1f6-f88f-163ee54b39bb@huawei.com>
-Date:   Mon, 31 Jul 2023 10:16:38 +0800
+        with ESMTP id S229523AbjGaEVd (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 31 Jul 2023 00:21:33 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D167510D;
+        Sun, 30 Jul 2023 21:21:30 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-99bdf08860dso731252166b.0;
+        Sun, 30 Jul 2023 21:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google; t=1690777289; x=1691382089;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZitA7g4lEq5HSSYsaRmgk4c652yJOHd1UWJHaP9uzJ0=;
+        b=kBU1Q1S3kp6WRiIFnBiqesOP3oNfzY4PjpVactBA8fweY9YQU9rWYcW+Z0fdUsCfWP
+         vDdE6k+zrNA1y/f+A2Xf6XFtLNB9g1Qw5cKfWPuKta+ngFqZJYFyH8NT896Dv9xKD9fd
+         jXhw5Hv4ZyCoyYuLYKA65QT/FyEJ7WPFWoIm8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690777289; x=1691382089;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZitA7g4lEq5HSSYsaRmgk4c652yJOHd1UWJHaP9uzJ0=;
+        b=gfD1DRIGCJx9GvqgYMDt0AcPm5bso3/mgiZrENkZ8o/ryv4XFtSK2blahWbMvXcTag
+         OFRFtmFg7of6wJdtcupJWWb9PUv3WBKJhDetD/QV8qwt4XFo7D6JvkkSHHK7Zd8W3XYi
+         TDpZxSsStRLvw5z3mzbYGeHA0P3A8v9cl/vBqY/iebqOCXjyUV2Nay70HqcMS+ywpBJ0
+         IzbvxMi0WLuAXKydocheTOYvcWyGdNo8yp74aoknQZreZlrZpi4ZX84SXQIRTK1uJ2/J
+         U7fF/qAApf47QrarKDswX8wd6VbyNI9j1XX55XcOSTsD0S3i9BdhNj6A94yu0zh4KGN9
+         ahVQ==
+X-Gm-Message-State: ABy/qLZtGeXM50Gy22PtQaz+PMArLmft68xviiULyAOeP/ZAKLM/qiZ6
+        Ptn87Ho8WX7t83M71iWyviaQl/Pviq+lF4sA3lM=
+X-Google-Smtp-Source: APBJJlFDgZxAn8Q4AK+y0YmkDiz7Rn+hJjCg5hDfnEtGL7P5vUgksBmup3Ptzk+0W/Ntq2y52aZUAHLFf/CgJEV8f+E=
+X-Received: by 2002:a17:907:728d:b0:99b:dd23:4f01 with SMTP id
+ dt13-20020a170907728d00b0099bdd234f01mr6491075ejc.33.1690777289031; Sun, 30
+ Jul 2023 21:21:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 8/9] i2c: imx-lpi2c: Use dev_err_probe in probe function
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-CC:     <andi.shyti@kernel.org>, <florian.fainelli@broadcom.com>,
-        <rjui@broadcom.com>, <sbranden@broadcom.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <yangyicong@hisilicon.com>, <aisheng.dong@nxp.com>,
-        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
-        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
-        <kblaiech@nvidia.com>, <asmaa@nvidia.com>,
-        <loic.poulain@linaro.org>, <rfoss@kernel.org>, <ardb@kernel.org>,
-        <gcherian@marvell.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-rpi-kernel@lists.infradead.org>
-References: <20230728013148.1720978-1-liaochang1@huawei.com>
- <20230728013148.1720978-9-liaochang1@huawei.com>
- <20230728055535.qoqq5syketmtduoy@pengutronix.de>
-From:   "Liao, Chang" <liaochang1@huawei.com>
-In-Reply-To: <20230728055535.qoqq5syketmtduoy@pengutronix.de>
+References: <20230728122416.17782-1-lianglixuehao@126.com>
+In-Reply-To: <20230728122416.17782-1-lianglixuehao@126.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 31 Jul 2023 04:21:18 +0000
+Message-ID: <CACPK8Xf6YssamEmHB5XDf8JYk+_=hnG8Yzqn4kCikseqg6rqOA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: aspeed: Avoid accessing freed buffers during i2c transfers.
+To:     Lixue Liang <lianglixuehao@126.com>,
+        Eddie James <eajames@linux.ibm.com>
+Cc:     brendan.higgins@linux.dev, benh@kernel.crashing.org,
+        p.zabel@pengutronix.de, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Lixue Liang <lianglixue@greatwall.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.108]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, 28 Jul 2023 at 12:40, Lixue Liang <lianglixuehao@126.com> wrote:
+>
+> From: Lixue Liang <lianglixue@greatwall.com.cn>
+>
+> After waiting for the transmission timeout, the I2C controller will
+> continue to transmit data when the bus is idle. Clearing bus->msg will
+> avoid kernel panic when accessing the freed msg->buf in
+> aspeed_i2c_master_irq.
+>
+> Signed-off-by: Lixue Liang <lianglixue@greatwall.com.cn>
+> ---
+>  drivers/i2c/busses/i2c-aspeed.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+> index 2e5acfeb76c8..c83057497e26 100644
+> --- a/drivers/i2c/busses/i2c-aspeed.c
+> +++ b/drivers/i2c/busses/i2c-aspeed.c
+> @@ -713,6 +713,8 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
+>                 spin_lock_irqsave(&bus->lock, flags);
+>                 if (bus->master_state == ASPEED_I2C_MASTER_PENDING)
+>                         bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
+> +
+> +               bus->msgs = NULL;
 
+Eddie, is this the same issue you were debugging?
 
-在 2023/7/28 13:55, Uwe Kleine-König 写道:
-> Hello,
-> 
-> On Fri, Jul 28, 2023 at 09:31:47AM +0800, Liao Chang wrote:
->> Use the dev_err_probe function instead of dev_err in the probe function
->> so that the printed messge includes the return value and also handles
->> -EPROBE_DEFER nicely.
->>
->> Signed-off-by: Liao Chang <liaochang1@huawei.com>
->> ---
->>  drivers/i2c/busses/i2c-imx-lpi2c.c | 6 ++----
->>  1 file changed, 2 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
->> index c3287c887c6f..9021b8064ae4 100644
->> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
->> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
->> @@ -569,10 +569,8 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
->>  		sizeof(lpi2c_imx->adapter.name));
->>  
->>  	ret = devm_clk_bulk_get_all(&pdev->dev, &lpi2c_imx->clks);
->> -	if (ret < 0) {
->> -		dev_err(&pdev->dev, "can't get I2C peripheral clock, ret=%d\n", ret);
->> -		return ret;
->> -	}
->> +	if (ret < 0)
->> +		return dev_err_probe(&pdev->dev, ret, "can't get I2C peripheral clock\n");
-> 
-> The change looks good, however I wonder why you didn't convert the other
-> dev_err() called by lpi2c_imx_probe() in the same way.
-
-Sorry, I am in hurry and don't clean it up as much as.
-
-Actually, I am not sure if I should convert all dev_err calls to dev_err_probe, or just
-replace the ones that print the 'return value'. I know that dev_err_probe is better
-suited for printing return values, but I am nore sure if it's worth the effort to convert
-all of the calls, for example, the second dev_err in lpi2c_imx_probe():
-
-ret = devm_request_irq(&pdev->dev, irq, lpi2c_imx_isr, 0, pdev->name, lpi2c_imx);
-if (ret)
-    dev_err(&pdev->dev, "can't claim rqi %d\n", irq);
-    return ret;
-}
-
-Thanks.
-
-> 
-> Best regards
-> Uwe
-> 
-
--- 
-BR
-Liao, Chang
+>                 spin_unlock_irqrestore(&bus->lock, flags);
+>
+>                 return -ETIMEDOUT;
+> --
+> 2.27.0
+>
