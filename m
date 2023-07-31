@@ -2,36 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C75A76AA61
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Aug 2023 09:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717D276B408
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Aug 2023 13:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjHAH7C (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Aug 2023 03:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
+        id S233618AbjHAL5C (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Aug 2023 07:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjHAH7B (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Aug 2023 03:59:01 -0400
-Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6041729
-        for <linux-i2c@vger.kernel.org>; Tue,  1 Aug 2023 00:59:00 -0700 (PDT)
-Received: by mail.durme.pl (Postfix, from userid 1002)
-        id A909C4B55A; Tue,  1 Aug 2023 07:55:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
-        t=1690876591; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        with ESMTP id S233638AbjHAL5B (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Aug 2023 07:57:01 -0400
+Received: from mail.cothiafon.pl (mail.cothiafon.pl [217.61.106.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB8B1723
+        for <linux-i2c@vger.kernel.org>; Tue,  1 Aug 2023 04:57:00 -0700 (PDT)
+Received: by mail.cothiafon.pl (Postfix, from userid 1002)
+        id 3B1EF82FFA; Mon, 31 Jul 2023 10:35:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cothiafon.pl; s=mail;
+        t=1690792559; bh=dwoca0X6C9VXklO/zRgFQCPapTk5LFz4tKaENdvy6Po=;
         h=Date:From:To:Subject:From;
-        b=czTgnOWYf94k9n9GBZdSwtiScqtSZZEOsSKvCgWlqvOHA4D3gfxoQS3Yj1qHnLCku
-         ctocu1MebFXqtZQKlAKh4Lr2JOs+9SovL0l0u7XfdiISk7TSW/vt5j11UneFbGNPfE
-         xhMl834p2/hXlhBHxDbjx+jQPi8wkvQFSDeYWjHjDJASn1cfhgjX7EsFR4ZU03c160
-         faU7Vdsn0WGxnWOuIJXX7a/OumW09KDHCubmfWzKJTPlaDV6BOPSSdMkRSqQ+OWGjl
-         CwpTa0zDpiVbynV5HYt8vl9oxdvFM8Sm33xoyFreTwS70vXfWhBbYwn6pFInIqZ7EE
-         ChwvJ8o1Zz6pA==
-Received: by mail.durme.pl for <linux-i2c@vger.kernel.org>; Tue,  1 Aug 2023 07:55:32 GMT
-Message-ID: <20230801064501-0.1.3f.clui.0.kjfii38rta@durme.pl>
-Date:   Tue,  1 Aug 2023 07:55:32 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
+        b=lUvbWFQQRoUrOls+w2d1utZSqucZA1XhBBE76b27UuU7bLbw00DVCNfzUZcUiXKqy
+         r3++7uf5NNEseScDNnoedB2OVfWPVFa99UMxWa/6NJTufW/av9Z/PDjXbExsSEGou1
+         n50MSa1uHT2zhGDTONbRUtonDOT7D1VqDRnUifxKsw6mF3jPZ4gp6bN2kbHVKhWlYQ
+         pNSL4/RyrBrk3cKzG0YSDC2u6gHLeWAaqG1hcxJQOrD4ab0X5OaRvT6YM98+5ltlGb
+         1qQK2GdHIWwcrEEOIBcnOpFi9Y8rgrpXAAcGKypTKW64ioQOOVJtsSkzluf7Z75r/s
+         mNzeOL2CA4/Ng==
+Received: by mail.cothiafon.pl for <linux-i2c@vger.kernel.org>; Mon, 31 Jul 2023 08:35:48 GMT
+Message-ID: <20230731095940-0.1.28.omlq.0.ogpghhtpui@cothiafon.pl>
+Date:   Mon, 31 Jul 2023 08:35:48 GMT
+From:   =?UTF-8?Q? "Rados=C5=82aw_Grabowski" ?= 
+        <radoslaw.grabowski@cothiafon.pl>
 To:     <linux-i2c@vger.kernel.org>
 Subject: W sprawie samochodu
-X-Mailer: mail.durme.pl
+X-Mailer: mail.cothiafon.pl
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -64,4 +65,4 @@ b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
 
 Pozdrawiam
-Krystian Wieczorek
+Rados=C5=82aw Grabowski
