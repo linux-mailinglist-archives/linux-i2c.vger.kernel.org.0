@@ -2,42 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9D376BAAD
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Aug 2023 19:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E087576BBA3
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Aug 2023 19:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234532AbjHAREY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 1 Aug 2023 13:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
+        id S231340AbjHARtn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 1 Aug 2023 13:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234376AbjHARD5 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Aug 2023 13:03:57 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66F5330F2;
-        Tue,  1 Aug 2023 10:03:34 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.01,247,1684767600"; 
-   d="scan'208";a="171566346"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 02 Aug 2023 02:03:32 +0900
-Received: from localhost.localdomain (unknown [10.226.92.54])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 26762402842A;
-        Wed,  2 Aug 2023 02:03:29 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-i2c@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v3 2/2] i2c: Add i2c_device_get_match_data() callback
-Date:   Tue,  1 Aug 2023 18:03:18 +0100
-Message-Id: <20230801170318.82682-3-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230801170318.82682-1-biju.das.jz@bp.renesas.com>
-References: <20230801170318.82682-1-biju.das.jz@bp.renesas.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        with ESMTP id S231222AbjHARtm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 1 Aug 2023 13:49:42 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D37FE61;
+        Tue,  1 Aug 2023 10:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690912175; x=1722448175;
+  h=date:from:to:cc:subject:message-id;
+  bh=+hiKzgVIdfd4Ul1Hh9n+HHx4lcITo+xaMCT5DwRKcdI=;
+  b=DbgE+L+aSFuNbba4hCdg3L5E3LxJ7AuIkABL6fWSc+/V/pGv8kjpNi5/
+   tvKBl7zDI+YXNU2mX3UaG5HP3MnFQkn4wK+QS1G9kgPM2FdGfO+amDYxz
+   SyGYNZOICCs05rNl4qDLxNps4qYx9nxUZuKI6590ubxmdbNxguHv6jBwg
+   M/XReCa6aPMGaOr2Iqgy38iSrMG+hsWTdz/OGFo9vdWhO8UNIgSZIxGra
+   HuldsSwXAvARKqU+jXqr8VCs79AYI826xJbmZBSmXoq85kYVggxTvORXX
+   SFYwpEn7dTf6RtMrLzuDnfk0gH46pxzTIeQBNOr5bkSEQdAwPyFX4tbip
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="369368299"
+X-IronPort-AV: E=Sophos;i="6.01,247,1684825200"; 
+   d="scan'208";a="369368299"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2023 10:49:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10789"; a="794275606"
+X-IronPort-AV: E=Sophos;i="6.01,247,1684825200"; 
+   d="scan'208";a="794275606"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 01 Aug 2023 10:49:32 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qQtUx-0000UD-2k;
+        Tue, 01 Aug 2023 17:49:31 +0000
+Date:   Wed, 02 Aug 2023 01:49:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        linux-arch@vger.kernel.org, linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: [linux-next:master] BUILD REGRESSION
+ a734662572708cf062e974f659ae50c24fc1ad17
+Message-ID: <202308020108.zBWJNwcE-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,164 +61,197 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add i2c_device_get_match_data() callback to struct bus_type().
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: a734662572708cf062e974f659ae50c24fc1ad17  Add linux-next specific files for 20230801
 
-While at it, introduced i2c_get_match_data_helper() to avoid code
-duplication with i2c_get_match_data().
+Error/Warning reports:
 
-Suggested-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v2->v3:
- * Extended to support i2c_of_match_device() as suggested by Andy.
- * Changed i2c_of_match_device_sysfs() as non-static function as it is
-   needed for i2c_device_get_match_data().
- * Added a TODO comment to use i2c_verify_client() when it accepts const
-   pointer.
- * Added multiple returns to make code path for device_get_match_data()
-   faster in i2c_get_match_data().
-RFC v1->v2:
- * Replaced "Signed-off-by"->"Suggested-by" tag for Dmitry.
- * Fixed build warnings reported by kernel test robot <lkp@intel.com>
- * Added const qualifier to return type and parameter struct i2c_driver
-   in i2c_get_match_data_helper().
- * Added const qualifier to struct i2c_driver in i2c_get_match_data()
- * Dropped driver variable from i2c_device_get_match_data()
- * Replaced to_i2c_client with logic for assigning verify_client as it
-   returns non const pointer.
----
- drivers/i2c/i2c-core-base.c | 49 +++++++++++++++++++++++++++++++------
- drivers/i2c/i2c-core-of.c   |  3 ++-
- include/linux/i2c.h         | 11 +++++++++
- 3 files changed, 54 insertions(+), 9 deletions(-)
+https://lore.kernel.org/oe-kbuild-all/202307251531.p8ZLFTMZ-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202308020154.Xrcb9bWT-lkp@intel.com
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 60746652fd52..7db881a923b6 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -114,23 +114,55 @@ const struct i2c_device_id *i2c_match_id(const struct i2c_device_id *id,
- }
- EXPORT_SYMBOL_GPL(i2c_match_id);
- 
--const void *i2c_get_match_data(const struct i2c_client *client)
-+static const void *i2c_get_match_data_helper(const struct i2c_driver *driver,
-+					     const struct i2c_client *client)
- {
--	struct i2c_driver *driver = to_i2c_driver(client->dev.driver);
- 	const struct i2c_device_id *match;
-+
-+	match = i2c_match_id(driver->id_table, client);
-+	if (!match)
-+		return NULL;
-+
-+	return (const void *)match->driver_data;
-+}
-+
-+static const void *i2c_device_get_match_data(const struct device *dev)
-+{
-+	/* TODO: use i2c_verify_client() when it accepts const pointer */
-+	const struct i2c_client *client = (dev->type == &i2c_client_type) ?
-+					  to_i2c_client(dev) : NULL;
- 	const void *data;
- 
--	data = device_get_match_data(&client->dev);
--	if (!data) {
--		match = i2c_match_id(driver->id_table, client);
--		if (!match)
--			return NULL;
-+	if (!dev->driver)
-+		return NULL;
-+
-+	data = i2c_get_match_data_helper(to_i2c_driver(dev->driver), client);
-+	if (data)
-+		return data;
- 
--		data = (const void *)match->driver_data;
-+	if (dev->driver->of_match_table) {
-+		const struct of_device_id *match;
-+
-+		match = i2c_of_match_device_sysfs(dev->driver->of_match_table,
-+						  (struct i2c_client *)client);
-+		if (match)
-+			data = match->data;
- 	}
- 
- 	return data;
- }
-+
-+const void *i2c_get_match_data(const struct i2c_client *client)
-+{
-+	const struct i2c_driver *driver = to_i2c_driver(client->dev.driver);
-+	const void *data;
-+
-+	data = device_get_match_data(&client->dev);
-+	if (data)
-+		return data;
-+
-+	return i2c_get_match_data_helper(driver, client);
-+}
- EXPORT_SYMBOL(i2c_get_match_data);
- 
- static int i2c_device_match(struct device *dev, struct device_driver *drv)
-@@ -695,6 +727,7 @@ struct bus_type i2c_bus_type = {
- 	.probe		= i2c_device_probe,
- 	.remove		= i2c_device_remove,
- 	.shutdown	= i2c_device_shutdown,
-+	.get_match_data	= i2c_device_get_match_data,
- };
- EXPORT_SYMBOL_GPL(i2c_bus_type);
- 
-diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-index a6c407d36800..514bf8cddb81 100644
---- a/drivers/i2c/i2c-core-of.c
-+++ b/drivers/i2c/i2c-core-of.c
-@@ -113,7 +113,7 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
- 	of_node_put(bus);
- }
- 
--static const struct of_device_id*
-+const struct of_device_id*
- i2c_of_match_device_sysfs(const struct of_device_id *matches,
- 				  struct i2c_client *client)
- {
-@@ -141,6 +141,7 @@ i2c_of_match_device_sysfs(const struct of_device_id *matches,
- 
- 	return NULL;
- }
-+EXPORT_SYMBOL_GPL(i2c_of_match_device_sysfs);
- 
- const struct of_device_id
- *i2c_of_match_device(const struct of_device_id *matches,
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 3430cc2b05a6..597aa0f1ed0b 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -999,6 +999,10 @@ static inline struct i2c_adapter *of_get_i2c_adapter_by_node(struct device_node
- 	return i2c_get_adapter_by_fwnode(of_fwnode_handle(node));
- }
- 
-+const struct of_device_id*
-+i2c_of_match_device_sysfs(const struct of_device_id *matches,
-+			  struct i2c_client *client);
-+
- const struct of_device_id
- *i2c_of_match_device(const struct of_device_id *matches,
- 		     struct i2c_client *client);
-@@ -1030,6 +1034,13 @@ static inline const struct of_device_id
- 	return NULL;
- }
- 
-+static inline const struct of_device_id
-+*i2c_of_match_device(const struct of_device_id *matches,
-+		     struct i2c_client *client)
-+{
-+	return NULL;
-+}
-+
- static inline int of_i2c_get_board_info(struct device *dev,
- 					struct device_node *node,
- 					struct i2c_board_info *info)
+Error/Warning: (recently discovered and may have been fixed)
+
+../lib/gcc/loongarch64-linux/12.3.0/plugin/include/config/loongarch/loongarch-opts.h:31:10: fatal error: loongarch-def.h: No such file or directory
+clang-16: error: unknown argument: '-msym32'
+drivers/i2c/busses/i2c-virtio.c:270:3: error: field designator 'freeze' does not refer to any field in type 'struct virtio_driver'
+drivers/i2c/busses/i2c-virtio.c:271:3: error: field designator 'restore' does not refer to any field in type 'struct virtio_driver'
+drivers/regulator/max77857-regulator.c:312:16: error: initializer element is not a compile-time constant
+include/asm-generic/io.h:1137:20: error: static declaration of 'ioport_map' follows non-static declaration
+include/asm-generic/io.h:1147:22: error: static declaration of 'ioport_unmap' follows non-static declaration
+include/asm-generic/io.h:636:15: error: redefinition of 'inb_p'
+include/asm-generic/io.h:644:15: error: redefinition of 'inw_p'
+include/asm-generic/io.h:652:15: error: redefinition of 'inl_p'
+include/asm-generic/io.h:660:16: error: redefinition of 'outb_p'
+include/asm-generic/io.h:668:16: error: redefinition of 'outw_p'
+include/asm-generic/io.h:676:16: error: redefinition of 'outl_p'
+include/asm-generic/io.h:689:14: error: redefinition of 'insb'
+include/asm-generic/io.h:697:14: error: redefinition of 'insw'
+include/asm-generic/io.h:705:14: error: redefinition of 'insl'
+include/asm-generic/io.h:713:15: error: redefinition of 'outsb'
+include/asm-generic/io.h:722:15: error: redefinition of 'outsw'
+include/asm-generic/io.h:731:15: error: redefinition of 'outsl'
+
+Unverified Error/Warning (likely false positive, please contact us if interested):
+
+sh4-linux-gcc: internal compiler error: Segmentation fault signal terminated program cc1
+{standard input}: Warning: end of file not at end of a line; newline inserted
+{standard input}:1095: Error: pcrel too far
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- loongarch-allmodconfig
+|   `-- lib-gcc-loongarch64-linux-..-plugin-include-config-loongarch-loongarch-opts.h:fatal-error:loongarch-def.h:No-such-file-or-directory
+|-- sh-allmodconfig
+|   |-- sh4-linux-gcc:internal-compiler-error:Segmentation-fault-signal-terminated-program-cc1
+|   |-- standard-input:Error:pcrel-too-far
+|   `-- standard-input:Warning:end-of-file-not-at-end-of-a-line-newline-inserted
+`-- sh-randconfig-r023-20230731
+    |-- include-asm-generic-io.h:error:redefinition-of-inb_p
+    |-- include-asm-generic-io.h:error:redefinition-of-inl_p
+    |-- include-asm-generic-io.h:error:redefinition-of-insb
+    |-- include-asm-generic-io.h:error:redefinition-of-insl
+    |-- include-asm-generic-io.h:error:redefinition-of-insw
+    |-- include-asm-generic-io.h:error:redefinition-of-inw_p
+    |-- include-asm-generic-io.h:error:redefinition-of-outb_p
+    |-- include-asm-generic-io.h:error:redefinition-of-outl_p
+    |-- include-asm-generic-io.h:error:redefinition-of-outsb
+    |-- include-asm-generic-io.h:error:redefinition-of-outsl
+    |-- include-asm-generic-io.h:error:redefinition-of-outsw
+    |-- include-asm-generic-io.h:error:redefinition-of-outw_p
+    |-- include-asm-generic-io.h:error:static-declaration-of-ioport_map-follows-non-static-declaration
+    `-- include-asm-generic-io.h:error:static-declaration-of-ioport_unmap-follows-non-static-declaration
+clang_recent_errors
+|-- hexagon-allmodconfig
+|   |-- drivers-i2c-busses-i2c-virtio.c:error:field-designator-freeze-does-not-refer-to-any-field-in-type-struct-virtio_driver
+|   |-- drivers-i2c-busses-i2c-virtio.c:error:field-designator-restore-does-not-refer-to-any-field-in-type-struct-virtio_driver
+|   `-- drivers-regulator-max77857-regulator.c:error:initializer-element-is-not-a-compile-time-constant
+|-- hexagon-randconfig-r015-20230731
+|   `-- drivers-regulator-max77857-regulator.c:error:initializer-element-is-not-a-compile-time-constant
+|-- i386-randconfig-i012-20230731
+|   |-- drivers-i2c-busses-i2c-virtio.c:error:field-designator-freeze-does-not-refer-to-any-field-in-type-struct-virtio_driver
+|   `-- drivers-i2c-busses-i2c-virtio.c:error:field-designator-restore-does-not-refer-to-any-field-in-type-struct-virtio_driver
+`-- mips-sb1250_swarm_defconfig
+    `-- clang:error:unknown-argument:msym32
+
+elapsed time: 725m
+
+configs tested: 111
+configs skipped: 5
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r026-20230731   gcc  
+arc                              alldefconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r004-20230731   gcc  
+arc                  randconfig-r033-20230731   gcc  
+arc                  randconfig-r043-20230731   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                            mmp2_defconfig   clang
+arm                  randconfig-r046-20230731   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r003-20230731   gcc  
+arm64                randconfig-r021-20230731   clang
+csky                                defconfig   gcc  
+hexagon              randconfig-r001-20230731   clang
+hexagon              randconfig-r022-20230731   clang
+hexagon              randconfig-r041-20230731   clang
+hexagon              randconfig-r045-20230731   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230731   gcc  
+i386         buildonly-randconfig-r005-20230731   gcc  
+i386         buildonly-randconfig-r006-20230731   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230731   gcc  
+i386                 randconfig-i002-20230731   gcc  
+i386                 randconfig-i003-20230731   gcc  
+i386                 randconfig-i004-20230731   gcc  
+i386                 randconfig-i005-20230731   gcc  
+i386                 randconfig-i006-20230731   gcc  
+i386                 randconfig-i011-20230731   clang
+i386                 randconfig-i012-20230731   clang
+i386                 randconfig-i013-20230731   clang
+i386                 randconfig-i014-20230731   clang
+i386                 randconfig-i015-20230731   clang
+i386                 randconfig-i016-20230731   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r014-20230731   gcc  
+m68k                 randconfig-r025-20230731   gcc  
+microblaze           randconfig-r002-20230731   gcc  
+microblaze           randconfig-r023-20230731   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                      maltaaprp_defconfig   clang
+mips                   sb1250_swarm_defconfig   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r024-20230731   gcc  
+nios2                randconfig-r035-20230731   gcc  
+nios2                randconfig-r036-20230731   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r006-20230731   gcc  
+parisc               randconfig-r031-20230731   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r013-20230731   clang
+riscv                randconfig-r042-20230731   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r034-20230731   gcc  
+s390                 randconfig-r044-20230731   clang
+sh                               allmodconfig   gcc  
+sh                        apsh4ad0a_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r011-20230731   gcc  
+sparc                randconfig-r012-20230731   gcc  
+sparc64              randconfig-r015-20230731   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230731   gcc  
+x86_64       buildonly-randconfig-r002-20230731   gcc  
+x86_64       buildonly-randconfig-r003-20230731   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-x001-20230731   clang
+x86_64               randconfig-x002-20230731   clang
+x86_64               randconfig-x003-20230731   clang
+x86_64               randconfig-x004-20230731   clang
+x86_64               randconfig-x005-20230731   clang
+x86_64               randconfig-x006-20230731   clang
+x86_64               randconfig-x011-20230731   gcc  
+x86_64               randconfig-x012-20230731   gcc  
+x86_64               randconfig-x013-20230731   gcc  
+x86_64               randconfig-x014-20230731   gcc  
+x86_64               randconfig-x015-20230731   gcc  
+x86_64               randconfig-x016-20230731   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
