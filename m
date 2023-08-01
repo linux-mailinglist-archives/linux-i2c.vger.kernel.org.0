@@ -2,54 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EE376A46C
-	for <lists+linux-i2c@lfdr.de>; Tue,  1 Aug 2023 01:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2E176A63E
+	for <lists+linux-i2c@lfdr.de>; Tue,  1 Aug 2023 03:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjGaXBt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 31 Jul 2023 19:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
+        id S230363AbjHABXk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 31 Jul 2023 21:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjGaXBs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 31 Jul 2023 19:01:48 -0400
-Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA62810FE;
-        Mon, 31 Jul 2023 16:01:46 -0700 (PDT)
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4RFDJT1NmgzCY;
-        Tue,  1 Aug 2023 01:01:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1690844505; bh=coqy55HefL/fdeEF6y/6iJl2PiJntoSRxKXFxaiXquI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IvFhlDJluxwsMCw2RZplNa9mCAeTUF9ac8QKHcWPVUHyEpQzWsB/oUYg4mr5tJGp2
-         Hcmk5Y53yIJVQyA9kanW2SAqoc9JWrI6wzYytBigvNrPqfgLb1AV8LfXTRj/YVT3pB
-         W4Kh4BOBgKNUzSwzaZHOrZv0CjJw1f/Oy0QoSI7RACQk49kN7x2hLJjaz5lvMpnukF
-         vvfnlaQr/GHcOZ9prIkuGxQw4bHhwRJiZW+U48u7bmLHyTiaW2qk83u84Xm0UUEhiu
-         J4bBx4yH0fBJd1sJYrJwwter6yXc46Q3huziYRzpXAJWaLlT1pQG5Nlri7afSJeuV1
-         DfTKYXy5e92xw==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.8 at mail
-Date:   Tue, 1 Aug 2023 01:01:43 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] i2c: Add GPIO-based hotplug gate
-Message-ID: <ZMg9VwKxXBm94YRl@qmqm.qmqm.pl>
-References: <20230729160857.6332-1-clamor95@gmail.com>
- <20230729160857.6332-3-clamor95@gmail.com>
- <20230730202507.ojwinyjsx7ygyavp@intel.intel>
- <ZMbgIovV7lxlgd5T@qmqm.qmqm.pl>
+        with ESMTP id S229492AbjHABXj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 31 Jul 2023 21:23:39 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD76114;
+        Mon, 31 Jul 2023 18:23:38 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RFHP31cs2zLp0H;
+        Tue,  1 Aug 2023 09:20:55 +0800 (CST)
+Received: from [10.67.110.108] (10.67.110.108) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Tue, 1 Aug 2023 09:23:34 +0800
+Message-ID: <97e82278-5414-f1ab-3c52-1c9658c3f6e2@huawei.com>
+Date:   Tue, 1 Aug 2023 09:23:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 8/9] i2c: imx-lpi2c: Use dev_err_probe in probe function
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+CC:     <yangyicong@hisilicon.com>, <linux-i2c@vger.kernel.org>,
+        <festevam@gmail.com>, <ardb@kernel.org>, <asmaa@nvidia.com>,
+        <rfoss@kernel.org>, <florian.fainelli@broadcom.com>,
+        <kblaiech@nvidia.com>, <bcm-kernel-feedback-list@broadcom.com>,
+        <linux-imx@nxp.com>, <linux-arm-msm@vger.kernel.org>,
+        <andi.shyti@kernel.org>, <rjui@broadcom.com>,
+        <s.hauer@pengutronix.de>, <gcherian@marvell.com>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <aisheng.dong@nxp.com>,
+        <loic.poulain@linaro.org>, <sbranden@broadcom.com>,
+        <kernel@pengutronix.de>, <shawnguo@kernel.org>
+References: <20230728013148.1720978-1-liaochang1@huawei.com>
+ <20230728013148.1720978-9-liaochang1@huawei.com>
+ <20230728055535.qoqq5syketmtduoy@pengutronix.de>
+ <4ae70a67-6421-f1f6-f88f-163ee54b39bb@huawei.com>
+ <20230731073456.zqg6adnyogtojyiv@pengutronix.de>
+From:   "Liao, Chang" <liaochang1@huawei.com>
+In-Reply-To: <20230731073456.zqg6adnyogtojyiv@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZMbgIovV7lxlgd5T@qmqm.qmqm.pl>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,
+X-Originating-IP: [10.67.110.108]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,36 +61,58 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 12:11:47AM +0200, Micha� Miros�aw wrote:
-> On Sun, Jul 30, 2023 at 10:25:07PM +0200, Andi Shyti wrote:
-> > On Sat, Jul 29, 2023 at 07:08:57PM +0300, Svyatoslav Ryhel wrote:
-> > > +static int i2c_hotplug_activate(struct i2c_hotplug_priv *priv)
-> [...]
-> > > +{
-> > > +	int ret;
-> > > +
-> > > +	if (priv->adap.algo_data)
-> > > +		return 0;
-> [...]
-> > > +	ret = i2c_add_adapter(&priv->adap);
-> > > +	if (!ret)
-> > > +		priv->adap.algo_data = (void *)1;
-> > 
-> > You want to set algo_data to "1" in order to keep the
-> > activate/deactivate ordering.
-> > 
-> > But if we fail to add the adapter, what's the point to keep it
-> > active?
+
+
+在 2023/7/31 15:34, Uwe Kleine-König 写道:
+> Hello,
 > 
-> The code above does "if we added the adapter, remember we did so".
-> IOW, if we failed to add the adapter we don't set the mark so that
-> the next interrupt edge can trigger another try. Also we prevent
-> trying to remove an adapter we didn't successfully add.
+> On Mon, Jul 31, 2023 at 10:16:38AM +0800, Liao, Chang wrote:
+>> 在 2023/7/28 13:55, Uwe Kleine-König 写道:
+>>> On Fri, Jul 28, 2023 at 09:31:47AM +0800, Liao Chang wrote:
+>>>> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+>>>> index c3287c887c6f..9021b8064ae4 100644
+>>>> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+>>>> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+>>>> @@ -569,10 +569,8 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
+>>>>  		sizeof(lpi2c_imx->adapter.name));
+>>>>  
+>>>>  	ret = devm_clk_bulk_get_all(&pdev->dev, &lpi2c_imx->clks);
+>>>> -	if (ret < 0) {
+>>>> -		dev_err(&pdev->dev, "can't get I2C peripheral clock, ret=%d\n", ret);
+>>>> -		return ret;
+>>>> -	}
+>>>> +	if (ret < 0)
+>>>> +		return dev_err_probe(&pdev->dev, ret, "can't get I2C peripheral clock\n");
+>>>
+>>> The change looks good, however I wonder why you didn't convert the other
+>>> dev_err() called by lpi2c_imx_probe() in the same way.
+>>
+>> Sorry, I am in hurry and don't clean it up as much as.
+>>
+>> Actually, I am not sure if I should convert all dev_err calls to dev_err_probe, or just
+>> replace the ones that print the 'return value'. I know that dev_err_probe is better
+>> suited for printing return values, but I am nore sure if it's worth the effort to convert
+>> all of the calls, for example, the second dev_err in lpi2c_imx_probe():
+>>
+>> ret = devm_request_irq(&pdev->dev, irq, lpi2c_imx_isr, 0, pdev->name, lpi2c_imx);
+>> if (ret)
+>>     dev_err(&pdev->dev, "can't claim rqi %d\n", irq);
+>>     return ret;
+>> }
+> 
+> I'd say yes. The return value of devm_request_irq() might be interesting
+> in the error message. Also emitting error messages in a consistent style
+> is nice.
 
-Maybe the function's name is misleading? We could find a better one.
-Activation/deactivation in this driver means "initialize/shutdown the
-hotplugged bus" and is done in response to an edge (triggering an
-interrupt) of the hotplug-detect signal.
+Sounds good, I will convert them all in the next revision.
 
-Best Regards
-Micha� Miros�aw
+Thanks.
+
+> 
+> Best regards
+> Uwe
+> 
+
+-- 
+BR
+Liao, Chang
