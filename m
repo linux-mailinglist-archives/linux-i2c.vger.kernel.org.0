@@ -2,25 +2,25 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C208976CA19
-	for <lists+linux-i2c@lfdr.de>; Wed,  2 Aug 2023 11:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FA176CA22
+	for <lists+linux-i2c@lfdr.de>; Wed,  2 Aug 2023 11:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234265AbjHBJ6j (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Aug 2023 05:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
+        id S234302AbjHBJ6s (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 2 Aug 2023 05:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234197AbjHBJ6R (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Aug 2023 05:58:17 -0400
+        with ESMTP id S234221AbjHBJ6c (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Aug 2023 05:58:32 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B9A2D53;
-        Wed,  2 Aug 2023 02:58:14 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RG6pF3kh8zrS17;
-        Wed,  2 Aug 2023 17:57:09 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6DA19B9;
+        Wed,  2 Aug 2023 02:58:15 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RG6lb15PhztRnF;
+        Wed,  2 Aug 2023 17:54:51 +0800 (CST)
 Received: from huawei.com (10.67.174.53) by kwepemi500012.china.huawei.com
  (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 2 Aug
- 2023 17:58:11 +0800
+ 2023 17:58:12 +0800
 From:   Liao Chang <liaochang1@huawei.com>
 To:     <andi.shyti@kernel.org>, <florian.fainelli@broadcom.com>,
         <bcm-kernel-feedback-list@broadcom.com>, <rjui@broadcom.com>,
@@ -34,9 +34,9 @@ CC:     <linux-i2c@vger.kernel.org>,
         <linux-rpi-kernel@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH 7/9] i2c: dln2: Use dev_err_probe in probe function
-Date:   Wed, 2 Aug 2023 17:57:35 +0800
-Message-ID: <20230802095737.3957587-8-liaochang1@huawei.com>
+Subject: [PATCH 8/9] i2c: imx-lpi2c: Use dev_err_probe in probe function
+Date:   Wed, 2 Aug 2023 17:57:36 +0800
+Message-ID: <20230802095737.3957587-9-liaochang1@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230802095737.3957587-1-liaochang1@huawei.com>
 References: <20230802095737.3957587-1-liaochang1@huawei.com>
@@ -61,29 +61,41 @@ Use the dev_err_probe function instead of dev_err in the probe function
 so that the printed messge includes the return value and also handles
 -EPROBE_DEFER nicely.
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 Signed-off-by: Liao Chang <liaochang1@huawei.com>
 ---
- drivers/i2c/busses/i2c-dln2.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-imx-lpi2c.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-dln2.c b/drivers/i2c/busses/i2c-dln2.c
-index 4f02cc2fb567..631109c7a098 100644
---- a/drivers/i2c/busses/i2c-dln2.c
-+++ b/drivers/i2c/busses/i2c-dln2.c
-@@ -218,10 +218,8 @@ static int dln2_i2c_probe(struct platform_device *pdev)
+diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+index c3287c887c6f..bfa788b3775b 100644
+--- a/drivers/i2c/busses/i2c-imx-lpi2c.c
++++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+@@ -569,10 +569,8 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
+ 		sizeof(lpi2c_imx->adapter.name));
  
- 	/* initialize the i2c interface */
- 	ret = dln2_i2c_enable(dln2, true);
+ 	ret = devm_clk_bulk_get_all(&pdev->dev, &lpi2c_imx->clks);
 -	if (ret < 0) {
--		dev_err(dev, "failed to initialize adapter: %d\n", ret);
+-		dev_err(&pdev->dev, "can't get I2C peripheral clock, ret=%d\n", ret);
 -		return ret;
 -	}
 +	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to initialize adapter\n");
++		return dev_err_probe(&pdev->dev, ret, "can't get I2C peripheral clock\n");
+ 	lpi2c_imx->num_clks = ret;
  
- 	/* and finally attach to i2c layer */
- 	ret = i2c_add_adapter(&dln2->adapter);
+ 	ret = of_property_read_u32(pdev->dev.of_node,
+@@ -582,10 +580,8 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
+ 
+ 	ret = devm_request_irq(&pdev->dev, irq, lpi2c_imx_isr, 0,
+ 			       pdev->name, lpi2c_imx);
+-	if (ret) {
+-		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "can't claim irq %d\n", irq);
+ 
+ 	i2c_set_adapdata(&lpi2c_imx->adapter, lpi2c_imx);
+ 	platform_set_drvdata(pdev, lpi2c_imx);
 -- 
 2.25.1
 
