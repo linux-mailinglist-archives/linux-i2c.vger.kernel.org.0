@@ -2,112 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5CAB76E56F
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Aug 2023 12:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8428776E571
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Aug 2023 12:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235031AbjHCKTT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 3 Aug 2023 06:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
+        id S231211AbjHCKTU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Aug 2023 06:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjHCKS7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Aug 2023 06:18:59 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C1D92D5F;
-        Thu,  3 Aug 2023 03:18:58 -0700 (PDT)
+        with ESMTP id S229832AbjHCKTC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Aug 2023 06:19:02 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E34F359A;
+        Thu,  3 Aug 2023 03:19:01 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="6.01,251,1684767600"; 
-   d="scan'208";a="171794517"
+   d="scan'208";a="175475871"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 03 Aug 2023 19:18:58 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 03 Aug 2023 19:19:00 +0900
 Received: from localhost.localdomain (unknown [10.226.93.128])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2AC324179D03;
-        Thu,  3 Aug 2023 19:18:53 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id A86D641C8A62;
+        Thu,  3 Aug 2023 19:18:58 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-acpi@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-i2c@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v5 0/4] Extend device_get_match_data() to struct bus_type
-Date:   Thu,  3 Aug 2023 11:18:50 +0100
-Message-Id: <20230803101851.323504-1-biju.das.jz@bp.renesas.com>
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v5 3/4] i2c: i2c-core-of: Convert i2c_of_match_device_sysfs() to non-static
+Date:   Thu,  3 Aug 2023 11:18:51 +0100
+Message-Id: <20230803101851.323504-2-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230803101851.323504-1-biju.das.jz@bp.renesas.com>
+References: <20230803101851.323504-1-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This patch series extend device_get_match_data() to struct bus_type,
-so that buses like I2C can get matched data.
+Currently i2c_of_match_device_sysfs() is used by i2c_of_match_device().
+Convert this to non-static function for finding match data for the I2C
+sysfs interface using i2c_device_get_match_data() for code reuse.
 
-v4->v5:
- * Added const struct device_driver variable 'drv' in i2c_device_get_match
-   _data().
- * For code readability and maintenance perspective, added separate NULL
-   check for drv and client variable and added comment for NULL check for
-   drv variable.
- * Created separate patch for converting i2c_of_match_device_sysfs() to
-   non-static.
- * Removed export symbol for i2c_of_match_device_sysfs().
- * Replaced 'dev->driver'->'drv'.
- * Replaced return value data->NULL to avoid (potentially) stale pointers,
-   if there is no match.
+While at it, fix the below issues:
+ 1) Replace 'of_device_id*'->'of_device_id *' in function definition.
+ 2) Fix the alignment in the function definition.
+ 3) Change the struct i2c_client parameter as const to avoid overriding
+    the client pointer.
 
-v3->v4:
- * Documented corner case for device_get_match_data()
- * Dropped struct i2c_driver parameter from i2c_get_match_data_helper()
- * Split I2C sysfs handling in separate patch(patch#3)
- * Added space after of_device_id for i2c_of_match_device_sysfs()
- * Added const parameter for struct i2c_client, to prevent overriding it's
-   pointer.
- * Moved declaration from public i2c.h->i2c-core.h
-v2->v3:
- * Added Rb tag from Andy for patch#1.
- * Extended to support i2c_of_match_device() as suggested by Andy.
- * Changed i2c_of_match_device_sysfs() as non-static function as it is
-   needed for i2c_device_get_match_data().
- * Added a TODO comment to use i2c_verify_client() when it accepts const
-   pointer.
- * Added multiple returns to make code path for device_get_match_data()
-   faster in i2c_get_match_data().
-RFC v1->v2:
- * Replaced "Signed-off-by"->"Suggested-by" tag for Dmitry.
- * Documented device_get_match_data().
- * Added multiple returns to make code path for generic fwnode-based
-   lookup faster.
- * Fixed build warnings reported by kernel test robot <lkp@intel.com>
- * Added const qualifier to return type and parameter struct i2c_driver
-   in i2c_get_match_data_helper().
- * Added const qualifier to struct i2c_driver in i2c_get_match_data()
- * Dropped driver variable from i2c_device_get_match_data()
- * Replaced to_i2c_client with logic for assigning verify_client as it
-   returns non const pointer.
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Suggested-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+v5:
+ * Split from patch #3
+ * Removed export symbol
+---
+ drivers/i2c/i2c-core-of.c | 4 ++--
+ drivers/i2c/i2c-core.h    | 9 +++++++++
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-Biju Das (4):
-  drivers: fwnode: Extend device_get_match_data() to struct bus_type
-  i2c: Add i2c_device_get_match_data() callback
-  i2c: i2c-core-of: Convert i2c_of_match_device_sysfs() to non-static
-  i2c: Extend i2c_device_get_match_data() to support i2c sysfs
-
- drivers/base/property.c     | 27 ++++++++++++++++-
- drivers/i2c/i2c-core-base.c | 60 ++++++++++++++++++++++++++++++-------
- drivers/i2c/i2c-core-of.c   |  4 +--
- drivers/i2c/i2c-core.h      |  9 ++++++
- include/linux/device/bus.h  |  3 ++
- 5 files changed, 90 insertions(+), 13 deletions(-)
-
+diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+index a6c407d36800..33832622f436 100644
+--- a/drivers/i2c/i2c-core-of.c
++++ b/drivers/i2c/i2c-core-of.c
+@@ -113,9 +113,9 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
+ 	of_node_put(bus);
+ }
+ 
+-static const struct of_device_id*
++const struct of_device_id *
+ i2c_of_match_device_sysfs(const struct of_device_id *matches,
+-				  struct i2c_client *client)
++			  const struct i2c_client *client)
+ {
+ 	const char *name;
+ 
+diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
+index 1247e6e6e975..e4d397b67989 100644
+--- a/drivers/i2c/i2c-core.h
++++ b/drivers/i2c/i2c-core.h
+@@ -82,8 +82,17 @@ static inline void i2c_acpi_remove_space_handler(struct i2c_adapter *adapter) {
+ 
+ #ifdef CONFIG_OF
+ void of_i2c_register_devices(struct i2c_adapter *adap);
++const struct of_device_id *
++i2c_of_match_device_sysfs(const struct of_device_id *matches,
++			  const struct i2c_client *client);
+ #else
+ static inline void of_i2c_register_devices(struct i2c_adapter *adap) { }
++static inline const struct of_device_id *
++i2c_of_match_device_sysfs(const struct of_device_id *matches,
++			  const struct i2c_client *client)
++{
++	return NULL;
++}
+ #endif
+ extern struct notifier_block i2c_of_notifier;
+ 
 -- 
 2.25.1
 
