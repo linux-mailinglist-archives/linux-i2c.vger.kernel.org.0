@@ -2,519 +2,198 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C732076DE9D
-	for <lists+linux-i2c@lfdr.de>; Thu,  3 Aug 2023 04:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9536076DFF7
+	for <lists+linux-i2c@lfdr.de>; Thu,  3 Aug 2023 08:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbjHCC5r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 2 Aug 2023 22:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40204 "EHLO
+        id S230523AbjHCGBL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 3 Aug 2023 02:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbjHCC5q (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 2 Aug 2023 22:57:46 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF56139
-        for <linux-i2c@vger.kernel.org>; Wed,  2 Aug 2023 19:57:43 -0700 (PDT)
-X-ASG-Debug-ID: 1691031460-1eb14e747a09a50001-PT6Irj
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id qpupbZX4HzPEESvQ (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 03 Aug 2023 10:57:40 +0800 (CST)
-X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 3 Aug
- 2023 10:57:40 +0800
-Received: from ml-HP-ProDesk-680-G4-MT.zhaoxin.com (10.28.66.68) by
- ZXBJMBX03.zhaoxin.com (10.29.252.7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 3 Aug 2023 10:57:39 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-From:   Hans Hu <hanshu-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.7
-To:     <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>
-CC:     <cobechen@zhaoxin.com>, <TonyWWang@zhaoxin.com>
-Subject: [RFC 2/2] i2c: add support for Zhaoxin I2C controller
-Date:   Thu, 3 Aug 2023 10:57:38 +0800
-X-ASG-Orig-Subj: [RFC 2/2] i2c: add support for Zhaoxin I2C controller
-Message-ID: <dd03c35a556f468fbbf65c6df2a5b97e74a31e8d.1691030850.git.hanshu-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1691030850.git.hanshu-oc@zhaoxin.com>
-References: <cover.1691030850.git.hanshu-oc@zhaoxin.com>
+        with ESMTP id S230150AbjHCGBK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 3 Aug 2023 02:01:10 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2128.outbound.protection.outlook.com [40.107.113.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242A3E6F;
+        Wed,  2 Aug 2023 23:01:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jwU8937S5GUACBfumIvT18GsmF73KH9ilXojVuFlG3hXjAlyX/ARJMecYPxc+G1o7spebMZpAZsbxvk3Sp90EWZhpDhUESA2Z3al4SUqzpgvmo3PuRgc5BuZhW9WqOtnmTvNjW5/g5oVUZeSC3GI3v1HJAZlA6JYf36SqI856bw8HsC/qFaBAYldCDhVmtZiWEXchgnhwj4YPWeGjTiHW0OJxmAeG1RLbQFmXcZ6SUh/4KjwlZ3fj8dxFrQte98OLRg7En2Wa8vDzmur1+gP9yZV7aCGUsSXhysP+6AOufqmuciCocAchWFl3B4B/6SAM3Rtkr10tC8k4FyFzAvv4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ltFYv4GIQGNYuKWJnYmmkNqwUpbagq8DQpOE4Y+RPsY=;
+ b=fXIBgjGGZDU3u4mozyHSJWTqbdGk0lw8Frgvj5yG6OGfAMqvAGrxJ0JQiFZfx2P9xFJThJuxY/eML2l7HcfOU+P+ZUOwEftgE8taTTdAIY1H07kCz/FfyB/Ajrxy2jiyC4gFgKJiRvFY+laje5R5Pklsy4WpQhlivUGMi9WwQlAzRqAz3rGILphlcvSZJlMCz7IyOW6ZiAQa5h2Ykbkl0RdXN5SGOPaiX49Xw2a+t85lfukw1NpqsJa/k86miRB4bLRVEXRZKWgyWsq+OImpnbQKyVtYp/jtnQuT+5VQ0BCC/jiE/a2BlRqDnjanTemZlyiVzvasTckW6XvPqk0/6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ltFYv4GIQGNYuKWJnYmmkNqwUpbagq8DQpOE4Y+RPsY=;
+ b=lhVbuLRuIoJdlK57s4gbLspXCRuGAJwzgbAfZfZsZJDXDQt1r3e7aneGaIXQvP/HyZqijpow+JDMvkeqTWs4fCHBf5uoFDwitROX8OtPCQdGbo+RFjfTkz89wu/WpJ/8GMPCVsvAds1M9G04D+kn9D6mfIqRUrR1I6/X9T4pH3E=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by TY3PR01MB9840.jpnprd01.prod.outlook.com (2603:1096:400:229::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.47; Thu, 3 Aug
+ 2023 06:01:04 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::8f98:d64b:f092:766]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::8f98:d64b:f092:766%6]) with mapi id 15.20.6631.046; Thu, 3 Aug 2023
+ 06:01:04 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Wolfram Sang <wsa@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH v4 2/3] i2c: Add i2c_device_get_match_data() callback
+Thread-Topic: [PATCH v4 2/3] i2c: Add i2c_device_get_match_data() callback
+Thread-Index: AQHZxTPELxwc8vJH5E2y5cpL45xCf6/XHAeAgAD4iGA=
+Date:   Thu, 3 Aug 2023 06:01:04 +0000
+Message-ID: <OS0PR01MB5922E3FE58E8EF93EF94A11B8608A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20230802112317.252745-1-biju.das.jz@bp.renesas.com>
+ <20230802112317.252745-3-biju.das.jz@bp.renesas.com>
+ <ZMpxd91WelcwGicN@smile.fi.intel.com>
+In-Reply-To: <ZMpxd91WelcwGicN@smile.fi.intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TY3PR01MB9840:EE_
+x-ms-office365-filtering-correlation-id: 90768bc7-3cb6-489b-4106-08db93e7059b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ytsFcZDcpJUfVmSxIjWTsUX2DCCA/v9NTcBFWSkx8wAiM7IzHsnjCLDkj8weqzW0uBxEUCjn4tVKOz5ylQ++62NglqZKt6q5Kgj7Nvq2FnnHzaFDFvD0W4pdBLZzMIfDQEY8ayvvU9MrmKCiSKOcAb5ClwvUyNB2IHTGiivWTYTFi8fCgNv/sBlNr1kmaxX11ypfd7f4HZZBiyuR1MLfoqte3KatOAI6CQtVsTmC34XRBSrpNo9mMCvdtlvoyalIoZV4oFM3Okh9ssop0XGphcThTEgIzFEoO/vakPpyGntY0/0GScwXJAFgta5HerpeoYhD6GXhk4QvhksCCtq5SPpEoMrJR4G+lScJrk0JxcfKEbKrHSGbdiaFktBNRMkFjppX6sCmzlY2EZTtuJ+tBvEbNO25ewRtoOjsA71Uksnbfn7lw1CGJM9JK4BZHyTvniqTVJpwNm6kLZnaNFU6s06WJ6rtD+MMd7Cp+aV9l/T8kUpXL3NGsLqYyhSrUDLH6qW8a+WbX7qZEo3kZD7KmLS/MSKbtC9Xe2FDtmlIYfOefC+0N4UTuJQr3+pQBni3gSRqMz4iwRNPxnSAkhimtiLgYavQERUqoizMaonwwVu0hG5q4MZh7PYBVB+UThBj
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(366004)(346002)(396003)(451199021)(6506007)(83380400001)(26005)(186003)(316002)(76116006)(2906002)(66946007)(4326008)(6916009)(64756008)(66446008)(66476007)(66556008)(5660300002)(52536014)(41300700001)(8676002)(8936002)(7696005)(71200400001)(9686003)(478600001)(54906003)(55016003)(38100700002)(122000001)(33656002)(86362001)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DB5FgPlxTFfp074fKjZ0vePxDIZ46tXjnN+uf62Vd3PBTMKq9A++3Szt2zL9?=
+ =?us-ascii?Q?rQ4rXP/wlzvrr/BLFFc5pdtVF7PtoHBJ9vdX/u+XZyHvhxtdDCWo/2lAnJH4?=
+ =?us-ascii?Q?1Mc6MHxJKMZzh747MwOEg8vzSNTsZt0h+KF9Jwf8P7/fDIkwkqO0R5VSe4N/?=
+ =?us-ascii?Q?FLfkerl+g9vdH4qwPlh4hd99CZpZM1JiOvyOtWjyPKH/OFOHPRF2LrAUhwOe?=
+ =?us-ascii?Q?o+5F5Ca53g4MK4coO0bEwcnXZGmFI8yvJI57+Kat6jQt+nP7CSw1J12kEzhJ?=
+ =?us-ascii?Q?XhqzUaAJzJitNpyVr/WRTUGuyvc9L7MkBmuYoTpl2h9kFKdCcRdh8wdD5nYy?=
+ =?us-ascii?Q?866Ll+/uY/h0KpY7m0I4GdyFI28vv7pvEHp4lRK8FQVOveswbw6nhBwt3weJ?=
+ =?us-ascii?Q?WQnQSHHhlW4e3bDHNAPevwDvyOsv6moFGS5c9qeqSRRZ4/1aDOS0SJ4sHa4H?=
+ =?us-ascii?Q?K33BezWhgaEPTuAXmafcWyGvVKqMlfSDeQKZNNG8sKIEfOYAxwSV9Y6IGXJ8?=
+ =?us-ascii?Q?YxWBexgUJ85ue0pD2U2r1gAn4VADqf42LeC8IjZfxR/scNWlsT7XY/5okJKf?=
+ =?us-ascii?Q?yy+qc27YfjNbHBtNYd0FqlAOfnb6CpsT0jZD4+h36aV2sYZ8EIARB+uch5ie?=
+ =?us-ascii?Q?zI114QWBhZ4SAT50LE0oHZoLu6C08dQnYsWSUluGa53DVpEZm6Jjp8X8IXKO?=
+ =?us-ascii?Q?DDtG5r8D+023eR8UOhXHiBAB9OdX7KiI5d5kGg3z5hVpNaZ8TQ8ogmrr6EGf?=
+ =?us-ascii?Q?8ccCSaeEnprPv0q/jIC1R6lFfoDUXVAtgKKgrTkXuRNp9/hJf7Om30LDQPc+?=
+ =?us-ascii?Q?2dJamyXiuB5L4j9ZjT0NtLmQwCiysTGg/ZLqHTsNe/K6RS/E+QWNhGL6H0/u?=
+ =?us-ascii?Q?EGhqhGb5Rw3Mf2tRMkkArVE+47agiPx4rhW7cQDvvUAs9Cskgd6GlIMx/XPH?=
+ =?us-ascii?Q?gPjNt/ZqAxsR1szF3eQWZpG8zd73cB/FC37BP8rIIp1s+jv/kzN2gMU+kAwa?=
+ =?us-ascii?Q?D5vR1kjU6cEV8Zo9bGVBJOjuUjt4oW7w8Ea2ukw3/eWzce5uJH4UJ3Iq2Zit?=
+ =?us-ascii?Q?74subG/yUaXv8RQ9F8i8XFBB2IiYG6WXLjS0y9mSvXXMvACOXXGNzpxTsNCX?=
+ =?us-ascii?Q?bPlbuhLum7xHJeQ/cThKZX2jNLvC3/nykPtfmXjoyy+JVDbdp9fx8oqslcJO?=
+ =?us-ascii?Q?fxv+YwmOgxjG8jj4yOcBXjS8NALAJrjNJr9zPXAdMU8lV6CJ4fB4y70SoL+e?=
+ =?us-ascii?Q?a/SepT2IgWOdaYflt9hRBigvOLnRssa9xRJT3NsXykdHusS+leXhceYJGFXW?=
+ =?us-ascii?Q?mIaHais1ROovWwaqBPjGr/iVoNqLMkb//N483AaXmzvBXoq68VCQjUxSqvJe?=
+ =?us-ascii?Q?qTXj9UR3iNtgadrlIEKIwuVpciT/5T3tj7Kl+j4iZL19ALDssLF7U9pemc21?=
+ =?us-ascii?Q?9kXudK70Ov3aUs9KBPASqpUVlnEriZRejiF4SpC5i422RwHaE3nmkq2PttGQ?=
+ =?us-ascii?Q?kUfQVZ9bDh7c3hoY9Bg/yuDENtduZO2ThHvUyVlLXsvQijObWVCyWJf5wdH7?=
+ =?us-ascii?Q?XEn90MuL0/xhJcybfQUo3NcxkOmqti3H/jWLOzX2?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.66.68]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- ZXBJMBX03.zhaoxin.com (10.29.252.7)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1691031460
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 13910
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.112240
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90768bc7-3cb6-489b-4106-08db93e7059b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Aug 2023 06:01:04.3294
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WxXKyBQIWp4iVIT5x35pkgU9mrn57vNhoYjvWUAYxu3THUyOEb82viv1yIqQhQQdi4cAqWT6V7g0jp1geRVp9DGN6rqQ1qPFBdguf6oT1bA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB9840
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add Zhaoxin I2C controller driver. It provides the access to the i2c
-busses, which connects to the touchpad, eeprom, etc.
+Hi Andy Shevchenko,
 
-Zhaoxin I2C controller provides two modes of operation:
-FIFO mode: works in access requests without restart.
-Byte mode: same IP with i2c-wmt and use driver i2c-viai2c-common.
+Thanks for the feedback.
 
-Zhaoxin I2C controller has two separate busses, so may accommodate up
-to two I2C adapters. Those adapters are listed in the ACPI namespace
-with the "IIC1D17" HID, and probed by a platform driver.
+> Subject: Re: [PATCH v4 2/3] i2c: Add i2c_device_get_match_data()
+> callback
+>=20
+> On Wed, Aug 02, 2023 at 12:23:16PM +0100, Biju Das wrote:
+> > Add i2c_device_get_match_data() callback to struct bus_type().
+> >
+> > While at it, introduced i2c_get_match_data_helper() to avoid code
+> > duplication with i2c_get_match_data().
+>=20
+> ...
+>=20
+> > +static const void *i2c_get_match_data_helper(const struct i2c_client
+> > +*client)
+> >  {
+> > -	struct i2c_driver *driver =3D to_i2c_driver(client->dev.driver);
+> > +	const struct i2c_driver *driver =3D to_i2c_driver(client-
+> >dev.driver);
+> >  	const struct i2c_device_id *match;
+> > +
+> > +	match =3D i2c_match_id(driver->id_table, client);
+> > +	if (!match)
+> > +		return NULL;
+> > +
+> > +	return (const void *)match->driver_data; }
+>=20
+> Yes, perfect!
+>=20
+> ...
+>=20
+> > +static const void *i2c_device_get_match_data(const struct device
+> > +*dev) {
+> > +	/* TODO: use i2c_verify_client() when it accepts const pointer */
+> > +	const struct i2c_client *client =3D (dev->type =3D=3D
+> &i2c_client_type) ?
+> > +					  to_i2c_client(dev) : NULL;
+> > +
+> > +	if (!client || !dev->driver)
+> > +		return NULL;
+> > +
+> > +	return i2c_get_match_data_helper(client);
+>=20
+>=20
+> I believe below looks better from readability and maintenance
+> perspectives.
 
-The driver works with IRQ mode, and supports basic I2C features. Flags
-I2C_AQ_NO_ZERO_LEN and I2C_AQ_COMB_WRITE_THEN_READ are used to limit
-the unsupported access.
+Agreed. Will Incorporate latest comment from v4 as well.
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
----
- MAINTAINERS                            |   7 +
- drivers/i2c/busses/Kconfig             |  11 +
- drivers/i2c/busses/Makefile            |   1 +
- drivers/i2c/busses/i2c-viai2c-common.c |  12 +-
- drivers/i2c/busses/i2c-viai2c-common.h |  11 +
- drivers/i2c/busses/i2c-wmt.c           |   2 +
- drivers/i2c/busses/i2c-zhaoxin.c       | 275 +++++++++++++++++++++++++
- 7 files changed, 316 insertions(+), 3 deletions(-)
- create mode 100644 drivers/i2c/busses/i2c-zhaoxin.c
+Cheers,
+Biju
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b3648da1c5b2..bb65f7d748eb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9864,6 +9864,13 @@ L:	linux-i2c@vger.kernel.org
- F:	Documentation/i2c/busses/i2c-ismt.rst
- F:	drivers/i2c/busses/i2c-ismt.c
- 
-+I2C/SMBUS ZHAOXIN DRIVER
-+M:	Hans Hu <hanshu@zhaoxin.com>
-+L:	linux-i2c@vger.kernel.org
-+S:	Maintained
-+W:	https://www.zhaoxin.com
-+F:	drivers/i2c/busses/i2c-zhaoxin.c
-+
- I2C/SMBUS STUB DRIVER
- M:	Jean Delvare <jdelvare@suse.com>
- L:	linux-i2c@vger.kernel.org
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index d0dd0a892d50..282c26b28a9e 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -347,6 +347,17 @@ config I2C_SCMI
- 	  To compile this driver as a module, choose M here:
- 	  the module will be called i2c-scmi.
- 
-+config I2C_ZHAOXIN
-+	tristate "Zhaoxin I2C Interface"
-+	depends on PCI || COMPILE_TEST
-+	select I2C_VIA_COMMON
-+	help
-+	  If you say yes to this option, support will be included for the
-+	  ZHAOXIN I2C interface
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called i2c-zhaoxin.
-+
- endif # ACPI
- 
- comment "Mac SMBus host controller drivers"
-diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
-index 62b2ed4862e0..62cebb72b323 100644
---- a/drivers/i2c/busses/Makefile
-+++ b/drivers/i2c/busses/Makefile
-@@ -29,6 +29,7 @@ obj-$(CONFIG_I2C_SIS630)	+= i2c-sis630.o
- obj-$(CONFIG_I2C_SIS96X)	+= i2c-sis96x.o
- obj-$(CONFIG_I2C_VIA)		+= i2c-via.o
- obj-$(CONFIG_I2C_VIAPRO)	+= i2c-viapro.o
-+obj-$(CONFIG_I2C_ZHAOXIN)	+= i2c-zhaoxin.o
- 
- # Mac SMBus host controller drivers
- obj-$(CONFIG_I2C_HYDRA)		+= i2c-hydra.o
-diff --git a/drivers/i2c/busses/i2c-viai2c-common.c b/drivers/i2c/busses/i2c-viai2c-common.c
-index 671117caba75..47778ce24367 100644
---- a/drivers/i2c/busses/i2c-viai2c-common.c
-+++ b/drivers/i2c/busses/i2c-viai2c-common.c
-@@ -53,7 +53,8 @@ static int via_i2c_write(struct via_i2c *i2c, struct i2c_msg *pmsg, int last)
- 		writew(pmsg->buf[0], base + VIAI2C_CDR);
- 	}
- 
--	if (!(pmsg->flags & I2C_M_NOSTART)) {
-+	if (!(pmsg->flags & I2C_M_NOSTART)
-+	   && (i2c->platform & VIAI2C_PLAT_WMT)) {
- 		val = readb(base + VIAI2C_CR);
- 		val &= ~VIAI2C_CR_TX_END;
- 		val |= VIAI2C_CR_CPU_RDY;
-@@ -94,8 +95,10 @@ static int via_i2c_write(struct via_i2c *i2c, struct i2c_msg *pmsg, int last)
- 		}
- 
- 		if (xfer_len == pmsg->len) {
--			if (last != 1)
-+			if (last != 1 && (i2c->platform & VIAI2C_PLAT_WMT))
- 				writeb(VIAI2C_CR_ENABLE, base + VIAI2C_CR);
-+			else if (last && (i2c->platform & VIAI2C_PLAT_ZHAOXIN))
-+				writeb(VIAI2C_CR_TX_END, base + VIAI2C_CR);
- 		} else {
- 			writeb(pmsg->buf[xfer_len] & 0xFF, base + VIAI2C_CDR);
- 			writeb(VIAI2C_CR_CONTINUE_MASK, base + VIAI2C_CR);
-@@ -159,7 +162,8 @@ int via_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
- 	for (i = 0; ret >= 0 && i < num; i++) {
- 		struct i2c_msg * pmsg = &msgs[i];
- 
--		if (!(pmsg->flags & I2C_M_NOSTART)) {
-+		if (!(pmsg->flags & I2C_M_NOSTART)
-+		   && (i2c->platform & VIAI2C_PLAT_WMT)) {
- 			ret = via_i2c_wait_bus_ready(i2c);
- 			if (ret < 0)
- 				return ret;
-@@ -181,6 +185,8 @@ static irqreturn_t via_i2c_isr(int irq, void *data)
- 
- 	/* save the status and write-clear it */
- 	i2c->event = readw(i2c->base + VIAI2C_ISR);
-+	if (!i2c->event)
-+		return IRQ_NONE;
- 	writew(i2c->event, i2c->base + VIAI2C_ISR);
- 
- 	complete(&i2c->complete);
-diff --git a/drivers/i2c/busses/i2c-viai2c-common.h b/drivers/i2c/busses/i2c-viai2c-common.h
-index 39deda1c42c4..98f1895bf0a6 100644
---- a/drivers/i2c/busses/i2c-viai2c-common.h
-+++ b/drivers/i2c/busses/i2c-viai2c-common.h
-@@ -46,6 +46,11 @@
- 
- #define VIAI2C_TIMEOUT		(msecs_to_jiffies(1000))
- 
-+enum {
-+	VIAI2C_PLAT_WMT,
-+	VIAI2C_PLAT_ZHAOXIN
-+};
-+
- struct via_i2c {
- 	struct i2c_adapter	adapter;
- 	struct completion	complete;
-@@ -55,6 +60,12 @@ struct via_i2c {
- 	int			irq;
- 	u16			event;
- 	u16			tcr;
-+	bool			platform;
-+	u16			tr;
-+	u16			mcr;
-+	u16			csr;
-+	u8			fstp;
-+	u8			hrv;
- };
- 
- int via_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num);
-diff --git a/drivers/i2c/busses/i2c-wmt.c b/drivers/i2c/busses/i2c-wmt.c
-index e445155d1a60..0496c0328314 100644
---- a/drivers/i2c/busses/i2c-wmt.c
-+++ b/drivers/i2c/busses/i2c-wmt.c
-@@ -78,6 +78,8 @@ static int wmt_i2c_probe(struct platform_device *pdev)
- 	if (err)
- 		return err;
- 
-+	i2c_dev->platform = VIAI2C_PLAT_WMT;
-+
- 	i2c_dev->clk = of_clk_get(np, 0);
- 	if (IS_ERR(i2c_dev->clk))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(i2c_dev->clk),
-diff --git a/drivers/i2c/busses/i2c-zhaoxin.c b/drivers/i2c/busses/i2c-zhaoxin.c
-new file mode 100644
-index 000000000000..dbfc8207420b
---- /dev/null
-+++ b/drivers/i2c/busses/i2c-zhaoxin.c
-@@ -0,0 +1,275 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ *  Copyright(c) 2023 Shanghai Zhaoxin Semiconductor Corporation.
-+ *                    All rights reserved.
-+ */
-+
-+#include <linux/pci.h>
-+#include "i2c-viai2c-common.h"
-+
-+#define ZXI2C_NAME		"Zhaoxin-I2C"
-+
-+/*
-+ * zhaoxin custom registers and bits
-+ */
-+/* reg CR Bit fields */
-+#define ZXI2C_CR_FIFO_EN		BIT(14)
-+/* reg ISR Bit fields */
-+#define ZXI2C_ISR_FIFO			BIT(3)
-+/* reg IMR Bit fields */
-+#define ZXI2C_IMR_FIFO			BIT(3)
-+#define ZXI2C_IMR_FIFO_MASK		(BIT(3) | VIAI2C_IMR_ADDRNACK)
-+#define ZXI2C_IMR_BYTE_MASK		(BIT(1) | VIAI2C_IMR_ADDRNACK)
-+#define ZXI2C_CS		0x10
-+#define   ZXI2C_CS_CLK_50M		BIT(0)
-+#define ZXI2C_REV		0x11
-+#define ZXI2C_HCR		0x12
-+#define   ZXI2C_HCR_FIFO_RST		GENMASK(1, 0)
-+#define ZXI2C_HTDR		0x13
-+#define ZXI2C_HRDR		0x14
-+#define ZXI2C_HTLR		0x15
-+#define ZXI2C_HRLR		0x16
-+#define ZXI2C_HWCNTR		0x18
-+#define ZXI2C_HRCNTR		0x19
-+
-+/* parameters Constants */
-+#define ZXI2C_GOLD_FSTP_100K	0xF3
-+#define ZXI2C_GOLD_FSTP_400K	0x38
-+#define ZXI2C_GOLD_FSTP_1M	0x13
-+#define ZXI2C_GOLD_FSTP_3400K	0x37
-+#define ZXI2C_HS_MASTER_CODE	(0x08 << 8)
-+
-+#define ZXI2C_FIFO_SIZE		32
-+
-+#define zxi2c			via_i2c
-+
-+static int zxi2c_fifo_xfer(struct zxi2c *i2c, struct i2c_msg *msg)
-+{
-+	int err;
-+	u16 i, finished;
-+	u16 tcr_val = i2c->tcr;
-+	void __iomem *base = i2c->base;
-+	int read = !!(msg->flags & I2C_M_RD);
-+
-+	/* reset fifo settings */
-+	iowrite8(ZXI2C_HCR_FIFO_RST, base + ZXI2C_HCR);
-+	/* select fifo mode */
-+	iowrite16(ZXI2C_CR_FIFO_EN, i2c->base + VIAI2C_CR);
-+	/* enable fifo interrupt */
-+	iowrite8(ZXI2C_IMR_FIFO_MASK, base + VIAI2C_IMR);
-+
-+	/* sets the transmission length, direction, and the data to be sent */
-+	if (read) {
-+		tcr_val |= VIAI2C_TCR_READ;
-+		iowrite8(msg->len - 1, base + ZXI2C_HRLR);
-+	} else {
-+
-+		iowrite8(msg->len - 1, base + ZXI2C_HTLR);
-+		for (i = 0; i < msg->len; i++)
-+			iowrite8(msg->buf[i], base + ZXI2C_HTDR);
-+	}
-+	/* set slave addr */
-+	tcr_val |= (msg->addr & VIAI2C_TCR_ADDR_MASK);
-+
-+	reinit_completion(&i2c->complete);
-+
-+	/* a write to the TCR triggers the transfer start */
-+	iowrite16(tcr_val, i2c->base + VIAI2C_TCR);
-+
-+	err = via_i2c_wait_event(i2c, ZXI2C_ISR_FIFO);
-+	if (err)
-+		return err;
-+
-+	/* gets the length of the actual transmission and the received data */
-+	if (read) {
-+		finished = ioread8(base + ZXI2C_HRCNTR);
-+		for (i = 0; i < finished; i++)
-+			msg->buf[i] = ioread8(base + ZXI2C_HRDR);
-+	} else {
-+		finished = ioread8(base + ZXI2C_HWCNTR);
-+	}
-+
-+	/* check if data NACK during transmitting */
-+	if (finished != msg->len) {
-+		if (finished)
-+			dev_err(i2c->dev, "only %s %d/%d bytes\n",
-+				read ? "read" : "write", finished, msg->len);
-+		return -EAGAIN;
-+	}
-+
-+	return 1;
-+}
-+
-+static int zxi2c_byte_xfer(struct i2c_adapter *adap,
-+				struct i2c_msg *msgs, int num)
-+{
-+	int err;
-+	struct zxi2c *i2c = (struct zxi2c *)i2c_get_adapdata(adap);
-+
-+	/* select byte mode */
-+	iowrite16(0, i2c->base + VIAI2C_CR);
-+	/* enable interrupt */
-+	iowrite8(ZXI2C_IMR_BYTE_MASK, i2c->base + VIAI2C_IMR);
-+
-+	err = via_i2c_xfer(adap, msgs, num);
-+	/* kill unfinished transfer signal */
-+	if (err < 0)
-+		iowrite16(VIAI2C_CR_KILL_MASK, i2c->base + VIAI2C_CR);
-+
-+	return err;
-+}
-+
-+static int zxi2c_master_xfer(struct i2c_adapter *adap,
-+				struct i2c_msg *msgs, int num)
-+{
-+	int err;
-+	struct zxi2c *i2c = (struct zxi2c *)i2c_get_adapdata(adap);
-+
-+	err = via_i2c_wait_bus_ready(i2c);
-+	if (err)
-+		return err;
-+
-+	if (num == 1 && msgs->len <= ZXI2C_FIFO_SIZE && msgs->len >= 2)
-+		err = zxi2c_fifo_xfer(i2c, msgs);
-+	else
-+		err = zxi2c_byte_xfer(adap, msgs, num);
-+	/*
-+	 * fifo or byte interrupts have been enabled inside the xfer functions.
-+	 * To make the code more concise, we put the disable action here
-+	 */
-+	iowrite8(0, i2c->base + VIAI2C_IMR);
-+	return err;
-+}
-+
-+static u32 zxi2c_func(struct i2c_adapter *adap)
-+{
-+	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
-+}
-+
-+static const struct i2c_algorithm zxi2c_algorithm = {
-+	.master_xfer = zxi2c_master_xfer,
-+	.functionality = zxi2c_func,
-+};
-+
-+static const struct i2c_adapter_quirks zxi2c_quirks = {
-+	.flags = I2C_AQ_NO_ZERO_LEN | I2C_AQ_COMB_WRITE_THEN_READ,
-+};
-+
-+static const u32 zxi2c_speed_params_table[][3] = {
-+	/* speed, ZXI2C_TCR, ZXI2C_FSTP */
-+	{ I2C_MAX_STANDARD_MODE_FREQ, 0, ZXI2C_GOLD_FSTP_100K },
-+	{ I2C_MAX_FAST_MODE_FREQ, VIAI2C_TCR_FAST, ZXI2C_GOLD_FSTP_400K },
-+	{ I2C_MAX_FAST_MODE_PLUS_FREQ, VIAI2C_TCR_FAST, ZXI2C_GOLD_FSTP_1M },
-+	{ I2C_MAX_HIGH_SPEED_MODE_FREQ, VIAI2C_TCR_HS_MODE | VIAI2C_TCR_FAST,
-+	  ZXI2C_GOLD_FSTP_3400K },
-+};
-+
-+static void zxi2c_set_bus_speed(struct zxi2c *i2c)
-+{
-+	iowrite16(i2c->tr, i2c->base + VIAI2C_TR);
-+	iowrite8(ZXI2C_CS_CLK_50M, i2c->base + ZXI2C_CS);
-+	iowrite16(i2c->mcr, i2c->base + VIAI2C_MCR);
-+}
-+
-+static void zxi2c_get_bus_speed(struct zxi2c *i2c)
-+{
-+	u8 i, count;
-+	u8 fstp;
-+	const u32 *params;
-+	u32 acpi_speed = i2c_acpi_find_bus_speed(i2c->dev);
-+
-+	count = ARRAY_SIZE(zxi2c_speed_params_table);
-+	for (i = 0; i < count; i++)
-+		if (acpi_speed == zxi2c_speed_params_table[i][0])
-+			break;
-+	/* if not found, use 400k as default */
-+	i = i < count ? i : 1;
-+
-+	params = zxi2c_speed_params_table[i];
-+	fstp = ioread8(i2c->base + VIAI2C_TR);
-+	if (abs(fstp - params[2]) > 0x10) {
-+		/*
-+		 * if BIOS setting value far from golden value,
-+		 * use golden value and warn user
-+		 */
-+		dev_warn(i2c->dev, "speed:%d, fstp:0x%x, golden:0x%x\n",
-+				params[0], fstp, params[2]);
-+		i2c->tr = params[2] | 0xff00;
-+	} else {
-+		i2c->tr = fstp | 0xff00;
-+	}
-+
-+	i2c->tcr = params[1];
-+	i2c->mcr = ioread16(i2c->base + VIAI2C_MCR);
-+	/* for Hs-mode, use 0000 1000 as master code */
-+	if (params[0] == I2C_MAX_HIGH_SPEED_MODE_FREQ)
-+		i2c->mcr |= ZXI2C_HS_MASTER_CODE;
-+
-+	dev_info(i2c->dev, "speed mode is %s\n",
-+			i2c_freq_mode_string(params[0]));
-+}
-+
-+static int zxi2c_probe(struct platform_device *pdev)
-+{
-+	int err = 0;
-+	struct zxi2c *i2c;
-+	struct pci_dev *pci;
-+
-+	err = via_i2c_init(pdev, &i2c);
-+	if (err)
-+		return err;
-+
-+	i2c->platform = VIAI2C_PLAT_ZHAOXIN;
-+	i2c->hrv = ioread8(i2c->base + ZXI2C_REV);
-+	i2c->csr = ioread16(i2c->base + VIAI2C_CSR);
-+
-+	zxi2c_get_bus_speed(i2c);
-+	zxi2c_set_bus_speed(i2c);
-+
-+	i2c->adapter.owner = THIS_MODULE;
-+	i2c->adapter.algo = &zxi2c_algorithm;
-+	i2c->adapter.retries = 2;
-+	i2c->adapter.quirks = &zxi2c_quirks;
-+	i2c->adapter.dev.parent = &pdev->dev;
-+	ACPI_COMPANION_SET(&i2c->adapter.dev, ACPI_COMPANION(&pdev->dev));
-+	pci = to_pci_dev(pdev->dev.parent);
-+	snprintf(i2c->adapter.name, sizeof(i2c->adapter.name), "%s-%s-%s",
-+			ZXI2C_NAME, dev_name(&pci->dev), dev_name(i2c->dev));
-+	i2c_set_adapdata(&i2c->adapter, i2c);
-+
-+	return devm_i2c_add_adapter(&pdev->dev, &i2c->adapter);
-+}
-+
-+static int zxi2c_resume(struct device *dev)
-+{
-+	struct zxi2c *i2c = dev_get_drvdata(dev);
-+
-+	iowrite16(i2c->csr, i2c->base + VIAI2C_CSR);
-+	zxi2c_set_bus_speed(i2c);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops zxi2c_pm = {
-+	SET_SYSTEM_SLEEP_PM_OPS(NULL, zxi2c_resume)
-+};
-+
-+static const struct acpi_device_id zxi2c_acpi_match[] = {
-+	{ "IIC1D17", 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, zxi2c_acpi_match);
-+
-+static struct platform_driver zxi2c_driver = {
-+	.probe = zxi2c_probe,
-+	.driver = {
-+		.name = ZXI2C_NAME,
-+		.acpi_match_table = zxi2c_acpi_match,
-+		.pm = &zxi2c_pm,
-+	},
-+};
-+module_platform_driver(zxi2c_driver);
-+
-+MODULE_AUTHOR("HansHu@zhaoxin.com");
-+MODULE_DESCRIPTION("Shanghai Zhaoxin IIC driver");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+>=20
+> 	const struct i2c_client *client;
+>=20
+> 	/* ...comment as in Dmitry's reply in v3 thread on why we need
+> this check... */
+> 	if (!dev->driver)
+> 		return NULL;
+>=20
+> 	/* TODO: use i2c_verify_client() when it accepts const pointer */
+> 	client =3D (dev->type =3D=3D &i2c_client_type) ? to_i2c_client(dev) :
+> NULL;
+> 	if (!client)
+> 		return NULL;
+>=20
+> > +	return i2c_get_match_data_helper(client);
+> > +}
+>=20
+> --
+> With Best Regards,
+> Andy Shevchenko
+>=20
 
