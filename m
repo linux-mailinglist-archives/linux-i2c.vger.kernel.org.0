@@ -2,102 +2,129 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40CA76F8CB
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Aug 2023 06:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7F476FAAE
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Aug 2023 09:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjHDEIQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Aug 2023 00:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S234022AbjHDHJ2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Aug 2023 03:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjHDEIO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Aug 2023 00:08:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3D23A90;
-        Thu,  3 Aug 2023 21:08:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F20EA61F1F;
-        Fri,  4 Aug 2023 04:08:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60FB3C433C7;
-        Fri,  4 Aug 2023 04:08:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691122090;
-        bh=qTtD5TWnoHpW2u2IuehOQmD6gyBJwP6/55k/zGA/OkA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BzJov61P8SqjVhM6x3gOO7LhTIMmFRu4cX+cUWRsbJVep9EifS/ErXten/q8iicOq
-         dX1cv+0PTkOSJvw2i+q7p1IESifF3B67Lrg3HJipCC7vliw6KsugYMAEYPBp3Ktr1A
-         /yAh4nCJ+J/Ac0z46ZNjOnPu4+WpLpbAeJqdmJizeMmDCWPDMPpfaiDnoNjFf7LZHb
-         10DJQDFQgKO8SoACGCzZlNwrwhjm8ZHIIMZglTm9SFcccICI9peaBjkjcwoNcXUTPV
-         uHz2LupnG126pvfbGHbndxNvVhRCLe8ws6lyMReWyrA5LPVftLTe2Cs2YNZ52ApleX
-         wu5LQ56g2b5mw==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-56c711a88e8so1105176eaf.2;
-        Thu, 03 Aug 2023 21:08:10 -0700 (PDT)
-X-Gm-Message-State: AOJu0YwIa9kfrfWdb8SzrZDRigTFtzvGl9Z4onKUHq+26RPyRzTrx3co
-        yxUDQd8+AJTCKL16IhspOe9pLRNF/zdZGqAugwQ=
-X-Google-Smtp-Source: AGHT+IGMPLp7ZQDzNQTXY9U4n72nm6+aNOorveA44nZo4400bxELjfRBGLQ+pgcjsLlWfpdLr5Dmc1tXEwnopqK9jJk=
-X-Received: by 2002:a05:6871:5228:b0:1b0:5bf7:3bb6 with SMTP id
- ht40-20020a056871522800b001b05bf73bb6mr1030818oac.28.1691122089649; Thu, 03
- Aug 2023 21:08:09 -0700 (PDT)
+        with ESMTP id S233654AbjHDHJ1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Aug 2023 03:09:27 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D2A5110;
+        Fri,  4 Aug 2023 00:09:24 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="6.01,254,1684767600"; 
+   d="scan'208";a="175584186"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 04 Aug 2023 16:09:23 +0900
+Received: from localhost.localdomain (unknown [10.226.93.35])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 7C8DE419E609;
+        Fri,  4 Aug 2023 16:09:17 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-acpi@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-rtc@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v6 0/4] Extend device_get_match_data() to struct bus_type
+Date:   Fri,  4 Aug 2023 08:09:11 +0100
+Message-Id: <20230804070915.117829-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAK7LNASvTLTj3hKkjsWBwm8++nXqMpomjZd6QbpmrfR+3iveNg@mail.gmail.com>
-In-Reply-To: <CAK7LNASvTLTj3hKkjsWBwm8++nXqMpomjZd6QbpmrfR+3iveNg@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 4 Aug 2023 13:07:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASEjbwYNV+EaJx8CxXtjNUMLq=uN0B5TMfAWQyinNifFQ@mail.gmail.com>
-Message-ID: <CAK7LNASEjbwYNV+EaJx8CxXtjNUMLq=uN0B5TMfAWQyinNifFQ@mail.gmail.com>
-Subject: Re: Wake up sequence of crypto - atmel-i2c
-To:     Jianhui Zhao <zhaojh329@gmail.com>
-Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Aug 3, 2023 at 5:56=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
->
-> Hi Jianhui,
-> (CC: crypto and i2c sub-systems)
->
->
-> I am trying to use ATECC608B chip
-> (it is compatible with ATECC508), but no luck so far.
->
-> Specifically, it fails in atmel_i2c_wakeup() in
-> drivers/crypto/atmel-i2c.c
+This patch series extend device_get_match_data() to struct bus_type,
+so that buses like I2C can get matched data.
 
+There is a plan to replace i2c_get_match_data()->device_get_match_data()
+later, once this patch hits mainline as it is redundant.
 
+v5->v6:
+ * Cced linux-rtc and linux-iio as these subsytems uses i2c_get_match_
+   data() and this function become redundant once this patch series hits
+   mainline.
+ * Added Rb tag from Sakari for patch#1.
+ * Moved patch#3 from v5 to patch#2 and patch#2 from v5 to patch#4.
+ * Added Rb tag from Andy for patch#2
+ * Separate patch#3 to prepare for better difference for
+   i2c_match_id() changes.
+ * Merged patch#4 from v5 with patch#4.
+v4->v5:
+ * Added const struct device_driver variable 'drv' in i2c_device_get_match
+   _data().
+ * For code readability and maintenance perspective, added separate NULL
+   check for drv and client variable and added comment for NULL check for
+   drv variable.
+ * Created separate patch for converting i2c_of_match_device_sysfs() to
+   non-static.
+ * Removed export symbol for i2c_of_match_device_sysfs().
+ * Replaced 'dev->driver'->'drv'.
+ * Replaced return value data->NULL to avoid (potentially) stale pointers,
+   if there is no match.
 
-FWIW, I decided to work around the issue
-by lowering I2C bus speed.
+v3->v4:
+ * Documented corner case for device_get_match_data()
+ * Dropped struct i2c_driver parameter from i2c_get_match_data_helper()
+ * Split I2C sysfs handling in separate patch(patch#3)
+ * Added space after of_device_id for i2c_of_match_device_sysfs()
+ * Added const parameter for struct i2c_client, to prevent overriding it's
+   pointer.
+ * Moved declaration from public i2c.h->i2c-core.h
+v2->v3:
+ * Added Rb tag from Andy for patch#1.
+ * Extended to support i2c_of_match_device() as suggested by Andy.
+ * Changed i2c_of_match_device_sysfs() as non-static function as it is
+   needed for i2c_device_get_match_data().
+ * Added a TODO comment to use i2c_verify_client() when it accepts const
+   pointer.
+ * Added multiple returns to make code path for device_get_match_data()
+   faster in i2c_get_match_data().
+RFC v1->v2:
+ * Replaced "Signed-off-by"->"Suggested-by" tag for Dmitry.
+ * Documented device_get_match_data().
+ * Added multiple returns to make code path for generic fwnode-based
+   lookup faster.
+ * Fixed build warnings reported by kernel test robot <lkp@intel.com>
+ * Added const qualifier to return type and parameter struct i2c_driver
+   in i2c_get_match_data_helper().
+ * Added const qualifier to struct i2c_driver in i2c_get_match_data()
+ * Dropped driver variable from i2c_device_get_match_data()
+ * Replaced to_i2c_client with logic for assigning verify_client as it
+   returns non const pointer.
 
-The I2C bus speed 400 kHz did not work,
-but 100 kHz worked in my case.
+Biju Das (4):
+  drivers: fwnode: Extend device_get_match_data() to struct bus_type
+  i2c: i2c-core-of: Convert i2c_of_match_device_sysfs() to non-static
+  i2c: Enhance i2c_get_match_data()
+  i2c: Add i2c_device_get_match_data() callback
 
-I changed the DT property to
-clock-frequency =3D <100000>;
+ drivers/base/property.c     | 27 ++++++++++++++++-
+ drivers/i2c/i2c-core-base.c | 58 +++++++++++++++++++++++++++++++------
+ drivers/i2c/i2c-core-of.c   |  4 +--
+ drivers/i2c/i2c-core.h      |  9 ++++++
+ include/linux/device/bus.h  |  3 ++
+ 5 files changed, 89 insertions(+), 12 deletions(-)
 
-Perhaps, the address phase (slave-addr + R/W)
-provided a low pulse long enough to wake up
-the ATECC chip.
+-- 
+2.25.1
 
-Thanks.
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
