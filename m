@@ -2,45 +2,62 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDC476FAC2
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Aug 2023 09:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 099407702A2
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Aug 2023 16:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbjHDHJq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Aug 2023 03:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
+        id S231593AbjHDOLF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Aug 2023 10:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234038AbjHDHJo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Aug 2023 03:09:44 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC9EC30DB;
-        Fri,  4 Aug 2023 00:09:41 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.01,254,1684767600"; 
-   d="scan'208";a="171902704"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 04 Aug 2023 16:09:41 +0900
-Received: from localhost.localdomain (unknown [10.226.93.35])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id D5CC3419E609;
-        Fri,  4 Aug 2023 16:09:37 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-i2c@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
+        with ESMTP id S230089AbjHDOLE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Aug 2023 10:11:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AF6CC;
+        Fri,  4 Aug 2023 07:11:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D193962041;
+        Fri,  4 Aug 2023 14:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4C08C433C7;
+        Fri,  4 Aug 2023 14:11:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1691158262;
+        bh=yrEIt4NaDboTaHtQyue5mLxAAjP7Fhmtw7gV2iueu1g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L8LtwDhpICVSeLFKkfohddHjUExn4kxt2GbuwKiVqSQaqNodExtmAmFchYFQFrlFT
+         FObb0m2v2n6QqdlkPVUa1StgSQiqUt+CYOhQ9zAmcUjG0SUlnfuay9loMYGC8Ik0Fu
+         Rq0OF5EdZVjpe66hTqWyIlKzIDT8PqHpEc2aT3Ho=
+Date:   Fri, 4 Aug 2023 16:10:48 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v6 4/4] i2c: Add i2c_device_get_match_data() callback
-Date:   Fri,  4 Aug 2023 08:09:15 +0100
-Message-Id: <20230804070915.117829-5-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230804070915.117829-1-biju.das.jz@bp.renesas.com>
+        Jonathan Cameron <jic23@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-rtc@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v6 1/4] drivers: fwnode: Extend device_get_match_data()
+ to struct bus_type
+Message-ID: <2023080441-gluten-pessimist-c892@gregkh>
 References: <20230804070915.117829-1-biju.das.jz@bp.renesas.com>
+ <20230804070915.117829-2-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230804070915.117829-2-biju.das.jz@bp.renesas.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,130 +65,14 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add i2c_device_get_match_data() callback to struct bus_type().
+On Fri, Aug 04, 2023 at 08:09:12AM +0100, Biju Das wrote:
+> Extend device_get_match_data() to buses (for eg: I2C) by adding a
+> callback device_get_match_data() to struct bus_type() and call this method
+> as a fallback for generic fwnode based device_get_match_data().
+> 
+> Suggested-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-While at it, introduced i2c_get_match_data_helper() to avoid code
-duplication with i2c_get_match_data().
-
-Suggested-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v5->v6:
- * Merged with patch#3 from v5.
- * Separate patch#3 to prepare for better difference for
-   i2c_match_id() changes.
-v4->v5:
- * Added const struct device_driver variable 'drv' in i2c_device_get_match
-   _data().
- * For code readability and maintenance perspective, added separate NULL
-   check for drv and client variable and added comment for NULL check for
-   drv variable.
-v3->v4:
- * Dropped struct i2c_driver parameter from i2c_get_match_data_helper()
- * Split I2C sysfs handling in separate patch.
-v2->v3:
- * Extended to support i2c_of_match_device() as suggested by Andy.
- * Changed i2c_of_match_device_sysfs() as non-static function as it is
-   needed for i2c_device_get_match_data().
- * Added a TODO comment to use i2c_verify_client() when it accepts const
-   pointer.
- * Added multiple returns to make code path for device_get_match_data()
-   faster in i2c_get_match_data().
-RFC v1->v2:
- * Replaced "Signed-off-by"->"Suggested-by" tag for Dmitry.
- * Fixed build warnings reported by kernel test robot <lkp@intel.com>
- * Added const qualifier to return type and parameter struct i2c_driver
-   in i2c_get_match_data_helper().
- * Added const qualifier to struct i2c_driver in i2c_get_match_data()
- * Dropped driver variable from i2c_device_get_match_data()
- * Replaced to_i2c_client with logic for assigning verify_client as it
-   returns non const pointer.
----
- drivers/i2c/i2c-core-base.c | 53 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 47 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 7005dfe64066..d543460e47c2 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -114,15 +114,10 @@ const struct i2c_device_id *i2c_match_id(const struct i2c_device_id *id,
- }
- EXPORT_SYMBOL_GPL(i2c_match_id);
- 
--const void *i2c_get_match_data(const struct i2c_client *client)
-+static const void *i2c_get_match_data_helper(const struct i2c_client *client)
- {
- 	const struct i2c_driver *driver = to_i2c_driver(client->dev.driver);
- 	const struct i2c_device_id *match;
--	const void *data;
--
--	data = device_get_match_data(&client->dev);
--	if (data)
--		return data;
- 
- 	match = i2c_match_id(driver->id_table, client);
- 	if (!match)
-@@ -130,6 +125,51 @@ const void *i2c_get_match_data(const struct i2c_client *client)
- 
- 	return (const void *)match->driver_data;
- }
-+
-+static const void *i2c_device_get_match_data(const struct device *dev)
-+{
-+	const struct device_driver *drv = dev->driver;
-+	const struct i2c_client *client;
-+	const void *data;
-+
-+	/*
-+	 * It is not guaranteed that the function is always called on a device
-+	 * bound to a driver (even though we normally expect this to be the
-+	 * case).
-+	 */
-+	if (!drv)
-+		return NULL;
-+
-+	/* TODO: use i2c_verify_client() when it accepts const pointer */
-+	client = (dev->type == &i2c_client_type) ? to_i2c_client(dev) : NULL;
-+	if (!client)
-+		return NULL;
-+
-+	data = i2c_get_match_data_helper(client);
-+	if (data)
-+		return data;
-+
-+	if (drv->of_match_table) {
-+		const struct of_device_id *match;
-+
-+		match = i2c_of_match_device_sysfs(drv->of_match_table, client);
-+		if (match)
-+			return match->data;
-+	}
-+
-+	return NULL;
-+}
-+
-+const void *i2c_get_match_data(const struct i2c_client *client)
-+{
-+	const void *data;
-+
-+	data = device_get_match_data(&client->dev);
-+	if (data)
-+		return data;
-+
-+	return i2c_get_match_data_helper(client);
-+}
- EXPORT_SYMBOL(i2c_get_match_data);
- 
- static int i2c_device_match(struct device *dev, struct device_driver *drv)
-@@ -694,6 +734,7 @@ struct bus_type i2c_bus_type = {
- 	.probe		= i2c_device_probe,
- 	.remove		= i2c_device_remove,
- 	.shutdown	= i2c_device_shutdown,
-+	.get_match_data	= i2c_device_get_match_data,
- };
- EXPORT_SYMBOL_GPL(i2c_bus_type);
- 
--- 
-2.25.1
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
