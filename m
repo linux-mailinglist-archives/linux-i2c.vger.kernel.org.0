@@ -2,52 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754AF770C6A
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Aug 2023 01:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FFA770C7C
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Aug 2023 01:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbjHDXag (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Aug 2023 19:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
+        id S229447AbjHDXp6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Aug 2023 19:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjHDXae (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Aug 2023 19:30:34 -0400
+        with ESMTP id S229379AbjHDXp6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Aug 2023 19:45:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C504EE3
-        for <linux-i2c@vger.kernel.org>; Fri,  4 Aug 2023 16:30:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AA23AAF;
+        Fri,  4 Aug 2023 16:45:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1FFB62109
-        for <linux-i2c@vger.kernel.org>; Fri,  4 Aug 2023 23:30:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B51B7C433C8;
-        Fri,  4 Aug 2023 23:30:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B35186217A;
+        Fri,  4 Aug 2023 23:45:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9282BC433C8;
+        Fri,  4 Aug 2023 23:45:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691191832;
-        bh=W9UNwFbWUiwuBWb8KFWd90zl5XmIjPqAPszE28jU0dM=;
+        s=k20201202; t=1691192756;
+        bh=dMBsnf7UVFGyJspGf+fmvKXjCVkmWyeAS8rDN2tPz/E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XGCORaqUZJOP1NzuqNMxSAuYDc1ctReb11anVM+rsCo9+PXr3HBP9iJ9/VtrhQpte
-         JFBIyeV1YfcqKvlwZxyolMeKX2tIhSQL/3yT4yJa29/c2R8ki4hv4uFV8yEU1zMHoY
-         0P+PSyl0yDn7SU1XJKJO7wGJnB3PxONUetD8WFf76hGplp9c78R3XN15mYOlY+F171
-         d6FX+Y9CiNiqMQ3vfip/z0Yy3f103yCkYnc0jayebnZfEbDgnwjTkDp1DCI9HZ4rdG
-         Ggr62J4UGbeXdcVUvLUl5krLfsuhT6ZI07lbkxAm+PDoYt3i+oYNRNxtxeLv1IVPjp
-         tg3OiGB7wn/VQ==
-Date:   Sat, 5 Aug 2023 01:30:29 +0200
+        b=pmY7MD90OJcgP5sniA1hTm7IbuLT54Ol4h94HMC4LBIr1ZpdVPwxB9g7omT0er3p4
+         UxyDAknlzxLaOFHqUSE1vyBQW8YgS3M72WNbprkGHZWqIYz1AxNZJew64vNMktqJdX
+         XAD7c6rSLvW0tzLREevadkAfHaldgnbuxzQxMN6Io8gblPbVL1kfIL6bhb66E7UNag
+         jDGT1trq+xSPnLWqFQwr9wLZPl0mYmANficejs3+FwpiFsq3mDW3ow6cbUkgAldtXf
+         JkiSEY8n+x+8koeemZxXJHkPbEzAinL5bKrXUz9LVB8KJ6q1RM6lzPqr1jlYwt9Tq4
+         aq+F4/GBeBeHg==
+Date:   Sat, 5 Aug 2023 01:45:53 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Yicong Yang <yangyicong@huawei.com>
-Cc:     yangyicong@hisilicon.com, wsa@kernel.org,
-        linux-i2c@vger.kernel.org, f.fangjian@huawei.com,
-        linuxarm@huawei.com
-Subject: Re: [PATCH] i2c: hisi: Only handle the interrupt of the driver's
- transfer
-Message-ID: <20230804233029.xgqf6zszzbqcue5o@intel.intel>
-References: <20230801124625.63587-1-yangyicong@huawei.com>
- <20230801221557.74z7lorwzq5nxqam@intel.intel>
- <517658b5-4f44-7903-bb86-074c7561e0f2@huawei.com>
+To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] i2c: Add GPIO-based hotplug gate
+Message-ID: <20230804234553.3egec5i5tyfyg4hz@intel.intel>
+References: <20230729160857.6332-1-clamor95@gmail.com>
+ <20230729160857.6332-3-clamor95@gmail.com>
+ <20230730202507.ojwinyjsx7ygyavp@intel.intel>
+ <ZMbgIovV7lxlgd5T@qmqm.qmqm.pl>
+ <ZMg9VwKxXBm94YRl@qmqm.qmqm.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <517658b5-4f44-7903-bb86-074c7561e0f2@huawei.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZMg9VwKxXBm94YRl@qmqm.qmqm.pl>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -58,106 +63,48 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Yicong,
-
-On Wed, Aug 02, 2023 at 10:39:04AM +0800, Yicong Yang wrote:
-> On 2023/8/2 6:15, Andi Shyti wrote:
-> > Hi Yicong,
+On Tue, Aug 01, 2023 at 01:01:43AM +0200, Michał Mirosław wrote:
+> On Mon, Jul 31, 2023 at 12:11:47AM +0200, Michał Mirosław wrote:
+> > On Sun, Jul 30, 2023 at 10:25:07PM +0200, Andi Shyti wrote:
+> > > On Sat, Jul 29, 2023 at 07:08:57PM +0300, Svyatoslav Ryhel wrote:
+> > > > +static int i2c_hotplug_activate(struct i2c_hotplug_priv *priv)
+> > [...]
+> > > > +{
+> > > > +	int ret;
+> > > > +
+> > > > +	if (priv->adap.algo_data)
+> > > > +		return 0;
+> > [...]
+> > > > +	ret = i2c_add_adapter(&priv->adap);
+> > > > +	if (!ret)
+> > > > +		priv->adap.algo_data = (void *)1;
+> > > 
+> > > You want to set algo_data to "1" in order to keep the
+> > > activate/deactivate ordering.
+> > > 
+> > > But if we fail to add the adapter, what's the point to keep it
+> > > active?
 > > 
-> > On Tue, Aug 01, 2023 at 08:46:25PM +0800, Yicong Yang wrote:
-> >> From: Yicong Yang <yangyicong@hisilicon.com>
-> >>
-> >> The controller may be shared with other port, for example the firmware.
-> >> Handle the interrupt from other sources will cause crash since some
-> >> data are not initialized. So only handle the interrupt of the driver's
-> >> transfer and discard others.
-> >>
-> >> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> > 
-> > Is this a fix? Then, could you please add:
-> > 
-> > Fixes: d62fbdb99a85 ("i2c: add support for HiSilicon I2C controller")
-> > Cc: <stable@vger.kernel.org> # v5.13+
-> > 
-> > What kind of crash is this? Is it a NULL pointer dereference?
+> > The code above does "if we added the adapter, remember we did so".
+> > IOW, if we failed to add the adapter we don't set the mark so that
+> > the next interrupt edge can trigger another try. Also we prevent
+> > trying to remove an adapter we didn't successfully add.
 > 
-> I not quite sure this is a fix of the driver. On some use case the controller is
-> shared between the firmware and the OS and we have no synchronization method
-> from the hardware. A transfer started by the firmware cause the interrupt handled
-> by the driver and cause a NULL pointer dereference.
+> Maybe the function's name is misleading? We could find a better one.
+> Activation/deactivation in this driver means "initialize/shutdown the
+> hotplugged bus" and is done in response to an edge (triggering an
+> interrupt) of the hotplug-detect signal.
 
-So that the firmware is running on a controller and memory,
-concurrently to the main CPU; which means that you are having
-some kind of bus arbitration issue with two masters on the bus.
+So that algo_data is randomly chosen as a boolean value given the
+fact that this particular driver doesn't have its own algorithms
+but it's using the ones from the parent. Right?
 
-Anyway, if we are talking about avoiding a NULL pointer
-dereference then this is a fix and you need to add the tags
-above.
+If so, can we have a different and more meaningful boolean value
+for this?
 
-(No need to resend for this, I can do it for you if you convince
-me on the part below.)
+And... thinking aloud... are there race conditions here? I
+mean... you can't attach two docking stations, but are there
+other scenarios?
 
-> >> ---
-> >>  drivers/i2c/busses/i2c-hisi.c | 8 ++++++++
-> >>  1 file changed, 8 insertions(+)
-> >>
-> >> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-> >> index e067671b3ce2..8328da4bc3ec 100644
-> >> --- a/drivers/i2c/busses/i2c-hisi.c
-> >> +++ b/drivers/i2c/busses/i2c-hisi.c
-> >> @@ -330,6 +330,14 @@ static irqreturn_t hisi_i2c_irq(int irq, void *context)
-> >>  	struct hisi_i2c_controller *ctlr = context;
-> >>  	u32 int_stat;
-> >>  
-> >> +	/*
-> >> +	 * Don't handle the interrupt if cltr->completion is NULL. We may
-> >> +	 * reach here because the interrupt is spurious or the transfer is
-> >> +	 * started by another port rather than us.
-> >> +	 */
-> >> +	if (!ctlr->completion)
-> >> +		return IRQ_NONE;
-> > 
-> > Is this the place you should really check for completion being
-> > NULL? By reading the code I don't exclude that completion at this
-> > stage might be NULL.
-> > 
-> > Can it be that the real fix is this one instead:
-> 
-> Maybe not. If we handle the case as late as below, we'll operate the hardware
-> which should be handled by the firmware which start the transfer. So we check
-> it as early as possible.
-
-But if i2c_master_xfer() is not called and we receive an irq,
-most probably ctrl->completion is NULL. Right? Can this happen?
-
-I can't really tell the sequence for enabling/disabling the
-interrupt in this device. They might happen in
-hisi_i2c_start_xfer() for enabling and in hisi_i2c_xfer_msg() for
-desabling at the last message; which makes the scenario above a
-bit difficult, indeed.
-
-Thanks for the explanation,
+Thanks,
 Andi
-
-> > @@ -352,7 +352,7 @@ static irqreturn_t hisi_i2c_irq(int irq, void *context)
-> >          * Only use TRANS_CPLT to indicate the completion. On error cases we'll
-> >          * get two interrupts, INT_ERR first then TRANS_CPLT.
-> >          */
-> > -       if (int_stat & HISI_I2C_INT_TRANS_CPLT) {
-> > +       if (ctrl->completion && (int_stat & HISI_I2C_INT_TRANS_CPLT)) {
-> >                 hisi_i2c_disable_int(ctlr, HISI_I2C_INT_ALL);
-> >                 hisi_i2c_clear_int(ctlr, HISI_I2C_INT_ALL);
-> >                 complete(ctlr->completion);
-> > 
-> > Anyway, this whole completion management smells a bit racy to me.
-> > 
-> > Andi
-> > 
-> >>  	int_stat = readl(ctlr->iobase + HISI_I2C_INT_MSTAT);
-> >>  	hisi_i2c_clear_int(ctlr, int_stat);
-> >>  	if (!(int_stat & HISI_I2C_INT_ALL))
-> >> -- 
-> >> 2.24.0
-> >>
-> > .
-> > 
