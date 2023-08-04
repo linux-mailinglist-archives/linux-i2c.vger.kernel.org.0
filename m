@@ -2,161 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA96A77055A
-	for <lists+linux-i2c@lfdr.de>; Fri,  4 Aug 2023 17:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7E27705B7
+	for <lists+linux-i2c@lfdr.de>; Fri,  4 Aug 2023 18:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjHDP4g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Aug 2023 11:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
+        id S229554AbjHDQRm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Aug 2023 12:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjHDP4e (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Aug 2023 11:56:34 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501CBB2;
-        Fri,  4 Aug 2023 08:56:33 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1bb775625e2so15892775ad.1;
-        Fri, 04 Aug 2023 08:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691164593; x=1691769393;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9u4RND7EcPo+OWHsAS1xl3llbbmhoUWKI06kDT5GXQA=;
-        b=f9TVjbsQnqdTOVtBDcddw/eT28VsyM3GH4zgMl8jUs2Ex+Iu+6/UH99gPlD3sce1hu
-         nsNb8DNhOetzXbl8JUBwkMzL9xyjjBKUNZYilYi8g44YnJTUa/D6LebkRHp+EfRUgnFI
-         hOsnDHg5xFsCx+7+vWkf5kM61YQpZwi+cPSaGaBtvdnZo9jmwA2/8DJTMlc8Sr2vy3Uo
-         wvbVn1+9VcpvBzYFHZXdyaWtzuXNDemIeuOY/XoBtIcHjWUTEKz48vneslLPMBvS3CxO
-         jsr9pGrMK/B+WCPtYlH7BQje7h9qkJbZqutxI6VNfPj6+Zm7ejPpWZE0KKYxinBAE01y
-         eTYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691164593; x=1691769393;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9u4RND7EcPo+OWHsAS1xl3llbbmhoUWKI06kDT5GXQA=;
-        b=LwVxNcD6rJZuCToly3dWiWdlzVUJn3vtZDr7NjE/8ZTwTSYpUDT8pklvPJjZu5Eal0
-         v0MB9//YLPtLKm34b4LyxXUSKOSoeK9HIylx95mE4y+LZxKSkhbJmEjLB4eLaOmh4PBg
-         cR4tf8ymd9iLJPzDFTQfEiIVyvV5DBgvML3zxR7U8V5mqGL/VkZkJQFWKXB1Z2kjdXbM
-         AsH6gEyYXuZHm/bU8PJTKxk55bp0klbc0EYqq9IMw35ZWRMbTx8gb38z5xdXAonYJnoM
-         BxQV9D9ithSN1RXvDzGSkNQ4z+1Mxk5SQ8rE+XgsH0hwvc17FhM1dWloCz5xMz8lfGMy
-         toYw==
-X-Gm-Message-State: AOJu0YznjSuyd2oN+2DSbEvhppd/csvpwji2qBtWxsb+1/KxjlMRKqhO
-        ZJz/FbB3k0fINhdcKhQ1+5IPtBvBjE4=
-X-Google-Smtp-Source: AGHT+IE+Tztu7bMsg6TruhEs+WPJAVgGUhYxNm5Ur4SydSLd6SpXKMbv1j+c37TJnXD/76t6rZHf8Q==
-X-Received: by 2002:a17:902:e88a:b0:1b8:5bca:8256 with SMTP id w10-20020a170902e88a00b001b85bca8256mr50661plg.31.1691164592698;
-        Fri, 04 Aug 2023 08:56:32 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v22-20020a17090331d600b001ac2be26340sm1929528ple.222.2023.08.04.08.56.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Aug 2023 08:56:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <22f6364c-611c-ffb6-451c-9ddc20418d0a@roeck-us.net>
-Date:   Fri, 4 Aug 2023 08:56:30 -0700
+        with ESMTP id S229499AbjHDQRl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Aug 2023 12:17:41 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90250B2;
+        Fri,  4 Aug 2023 09:17:39 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="6.01,255,1684767600"; 
+   d="scan'208";a="171950178"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 05 Aug 2023 01:17:38 +0900
+Received: from localhost.localdomain (unknown [10.226.93.35])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 9436840116B5;
+        Sat,  5 Aug 2023 01:17:33 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-acpi@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-rtc@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v7 0/4] Extend device_get_match_data() to struct bus_type
+Date:   Fri,  4 Aug 2023 17:17:24 +0100
+Message-Id: <20230804161728.394920-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To:     Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
-Cc:     "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
- <20230424101352.28117-2-Delphine_CC_Chiu@Wiwynn.com>
- <321a84c6-6d74-4042-a6ce-6229073c8d30@roeck-us.net>
- <SG2PR04MB55436F03F6CAD6D415FDEE40A102A@SG2PR04MB5543.apcprd04.prod.outlook.com>
- <e093a52d-e36f-ec26-e218-1e3b3b400e34@roeck-us.net>
- <SG2PR04MB55438E9C5E61ACB9330D829AA10BA@SG2PR04MB5543.apcprd04.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
- bindings
-In-Reply-To: <SG2PR04MB55438E9C5E61ACB9330D829AA10BA@SG2PR04MB5543.apcprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 8/1/23 22:31, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
->> -----Original Message-----
->> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->> Sent: Monday, July 24, 2023 11:22 AM
->> To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
->> Cc: patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>; Rob Herring
->> <robh+dt@kernel.org>; Krzysztof Kozlowski
->> <krzysztof.kozlowski+dt@linaro.org>; linux-i2c@vger.kernel.org;
->> linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org;
->> linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH v1 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
->> bindings
->>
->>    Security Reminder: Please be aware that this email is sent by an external
->> sender.
->>
->> On 7/23/23 19:12, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
->>
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    enum:
->>>>> +      - lltc,ltc4286
->>>>> +      - lltc,ltc4287
->>>>
->>>> There is no LTC4287, at least according to the Analog website.
->>> It has been announced on Analog Devices website.
->>> Please refer to this link:
->>> https://apc01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.
->>>
->> analog.com%2Fen%2Fproducts%2Fltc2487.html%23product-overview&data=0
->> 5%7
->>>
->> C01%7CWayne_SC_Liu%40wiwynn.com%7Cd97a86a696a54f28a26408db8bf52
->> 23d%7Cd
->>>
->> a6e0628fc834caf9dd273061cbab167%7C0%7C0%7C638257657193005539%7C
->> Unknown
->>>
->> %7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haW
->> wiLCJ
->>>
->> XVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=XrdlzCyq0pcjfv3M6QNX73Ieux0w
->> rfNKzNvv
->>> HgVSH40%3D&reserved=0
->>>
->>
->> No, that is wrong. You are pointing to ltc2487, which is something completely
->> different.
->>
-> 
-> We have sent e-mail to query about the release date for LTC4287 chip.
-> Analog Device reply that they will release this chip in last week of Sep, 2023.
-> Please refer to the attachment to review their reply.
-> 
+This patch series extend device_get_match_data() to struct bus_type,
+so that buses like I2C can get matched data.
 
-At least according to the driver code, LTC4286 and the LTC4287 are functionally
-identical. I am kind of puzzled why you insist mentioning the not-yet-existing
-LTC4287; instantiating LTC4287 as LTC4286 should work perfectly fine. LTC4287
-can always be added as devicetree reference if/when it officially exists.
+There is a plan to replace i2c_get_match_data()->device_get_match_data()
+later, once this patch hits mainline as it is redundant.
 
-Care to explain ?
+v6->v7:
+ * Added ack from Greg Kroah-Hartman for patch#1
+ * Swapped patch#2 and patch#3 from v6.
+ * Added Rb tag from Andy for patch#2 and patch#4
+ * Updated commit description of patch#2 by removing unnecessary wrapping.
+ * Updated typo in commit description struct bus_type()->struct bus_type.
+v5->v6:
+ * Cced linux-rtc and linux-iio as these subsytems uses i2c_get_match_
+   data() and this function become redundant once this patch series hits
+   mainline.
+ * Added Rb tag from Sakari for patch#1.
+ * Moved patch#3 from v5 to patch#2 and patch#2 from v5 to patch#4.
+ * Added Rb tag from Andy for patch#2
+ * Separate patch#3 to prepare for better difference for
+   i2c_match_id() changes.
+ * Merged patch#4 from v5 with patch#4.
+v4->v5:
+ * Added const struct device_driver variable 'drv' in i2c_device_get_match
+   _data().
+ * For code readability and maintenance perspective, added separate NULL
+   check for drv and client variable and added comment for NULL check for
+   drv variable.
+ * Created separate patch for converting i2c_of_match_device_sysfs() to
+   non-static.
+ * Removed export symbol for i2c_of_match_device_sysfs().
+ * Replaced 'dev->driver'->'drv'.
+ * Replaced return value data->NULL to avoid (potentially) stale pointers,
+   if there is no match.
+v3->v4:
+ * Documented corner case for device_get_match_data()
+ * Dropped struct i2c_driver parameter from i2c_get_match_data_helper()
+ * Split I2C sysfs handling in separate patch(patch#3)
+ * Added space after of_device_id for i2c_of_match_device_sysfs()
+ * Added const parameter for struct i2c_client, to prevent overriding it's
+   pointer.
+ * Moved declaration from public i2c.h->i2c-core.h
+v2->v3:
+ * Added Rb tag from Andy for patch#1.
+ * Extended to support i2c_of_match_device() as suggested by Andy.
+ * Changed i2c_of_match_device_sysfs() as non-static function as it is
+   needed for i2c_device_get_match_data().
+ * Added a TODO comment to use i2c_verify_client() when it accepts const
+   pointer.
+ * Added multiple returns to make code path for device_get_match_data()
+   faster in i2c_get_match_data().
+RFC v1->v2:
+ * Replaced "Signed-off-by"->"Suggested-by" tag for Dmitry.
+ * Documented device_get_match_data().
+ * Added multiple returns to make code path for generic fwnode-based
+   lookup faster.
+ * Fixed build warnings reported by kernel test robot <lkp@intel.com>
+ * Added const qualifier to return type and parameter struct i2c_driver
+   in i2c_get_match_data_helper().
+ * Added const qualifier to struct i2c_driver in i2c_get_match_data()
+ * Dropped driver variable from i2c_device_get_match_data()
+ * Replaced to_i2c_client with logic for assigning verify_client as it
+   returns non const pointer.
 
-Note: If the chips are _not_ functionally identical, and a follow-up patch will
-be needed to add full LTC4287 support to the driver after the chip has been
-published, it would be inappropriate to make partial/incomplete changes now.
-With that possibility in mind, I am not inclined to accept a driver that is
-even mentioning LTC4287 without access to its datasheet because I think it
-is important for me to understand the differences and similarities between
-the two chips.
+Biju Das (4):
+  drivers: fwnode: Extend device_get_match_data() to struct bus_type
+  i2c: Enhance i2c_get_match_data()
+  i2c: i2c-core-of: Convert i2c_of_match_device_sysfs() to non-static
+  i2c: Add i2c_device_get_match_data() callback
 
-Guenter
+ drivers/base/property.c     | 27 ++++++++++++++++-
+ drivers/i2c/i2c-core-base.c | 60 ++++++++++++++++++++++++++++++-------
+ drivers/i2c/i2c-core-of.c   |  4 +--
+ drivers/i2c/i2c-core.h      |  9 ++++++
+ include/linux/device/bus.h  |  3 ++
+ 5 files changed, 90 insertions(+), 13 deletions(-)
+
+-- 
+2.25.1
 
