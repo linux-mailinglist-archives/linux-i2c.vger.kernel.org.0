@@ -2,74 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE06770E49
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Aug 2023 09:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFB3770F31
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Aug 2023 12:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjHEHKn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 5 Aug 2023 03:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
+        id S229449AbjHEKKK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 5 Aug 2023 06:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjHEHKl (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Aug 2023 03:10:41 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5FE4EC7
-        for <linux-i2c@vger.kernel.org>; Sat,  5 Aug 2023 00:10:34 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1bbafe6fd8fso2171874fac.3
-        for <linux-i2c@vger.kernel.org>; Sat, 05 Aug 2023 00:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691219434; x=1691824234;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fyaf0OHfvWgaqfRiwRufcy49gz6rXRNyNLf1qH0Ffk0=;
-        b=NyNlKvPPbZwPdwbvM4R7L4KsFgp3jG/Yz8y0NIeYmHHJ60z4qQ0fFsmVqW5esDEuDf
-         Fbqb+ORnggRsV/pIEqpEs2yu0/YKs9pD6jA44sJjckZFJjWrjZBCnh/Qr2sUsU07kv/L
-         knrpJt9C2u1G8+0sdBqb9VFAcBcWQ2JYMMxTgjqLW7TyJXsECfnZsYbDZYGJ021hruds
-         b6SdMq+LgNo+QKk3JacoNYu0EnUkuxmqbKFjmLhHHZPwIyuceqH6PG6Q+pUXtQFhKStr
-         M2rb43D0N3l+3Xip2MB2BqiSWg19UTdKtnT6XoQJbsYEQhcYm4qjsLppLqXS05iPpnha
-         xk5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691219434; x=1691824234;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fyaf0OHfvWgaqfRiwRufcy49gz6rXRNyNLf1qH0Ffk0=;
-        b=mAR0xiHt0LvQ9/HVtMSaYp13Y/HOG0ZZ2HNqQezfYrRusahzxtbI0jWbD1cTPaUPdG
-         5M3fG92WBTU0gyRThYxO/c8c7j86a0FWVoPwtOtzzxIMJQ7w1wHPbnGzvhkaJbxwB5To
-         NJpV2Il/e7y6p/Edhnzdh3BPtyG6m3M8a/qXU4uB4NyZmbAbsMKx3H3uWRQU2GTkKqhm
-         xtDM51qWvi02f9QOUuaq06fTEx7s3h6MYBcmN50cicgEzEIDsR8uNBnAP7mXmFk9qrnf
-         eVHtOMCUhMJ9qx3zOROy50HAscPdbNpTP7yoPKLEcurWjw/YIfumKA7/c46OnadgXzCi
-         y+Bg==
-X-Gm-Message-State: AOJu0YxebC6DmkvdG5ek84ksZQscP/HXlosQtFPBJsI6fR2G2FngrbLm
-        SCr5JY0f03t7WAMrcOoAMsNDXtoElJ278N6Yn+Y=
-X-Google-Smtp-Source: AGHT+IGH02H39PMw0xWk2K73MYNiRITBuX4ZDWp2liYw7rTO89dOBjJ0iYsV4KQAkBpBZGnEOASHFzdP3NjhzY7VCto=
-X-Received: by 2002:a05:6870:e40b:b0:1b4:4935:653f with SMTP id
- n11-20020a056870e40b00b001b44935653fmr4895301oag.49.1691219433722; Sat, 05
- Aug 2023 00:10:33 -0700 (PDT)
+        with ESMTP id S229477AbjHEKKI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 5 Aug 2023 06:10:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60CFE57;
+        Sat,  5 Aug 2023 03:10:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FB6F60C6B;
+        Sat,  5 Aug 2023 10:10:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E34C433C8;
+        Sat,  5 Aug 2023 10:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691230206;
+        bh=RZD/okUT8P7W5bz60THY3oriTvZX3Irx0g2o/7jpNgM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nXu7JJHLU9Jooam3uyoQ6e0wCkbz7xIrGiNIEzv+H/djdFeKyXyWdoZ+cS3ex/nwx
+         Hf9os47q9i4O8rPUaHQEgCCnGE2sIREgy0TXaQFDlx0XI6OsZZ3twxM2UKb2vu8lk9
+         VjGfrOnun6jBInNaow/vZ6xwduNClFon1dJhbxDxobyoV0jJhVMfWkTshDyLIiZXx8
+         2JpDieuy6NeBfihyEuejwO1jTP//MyoaxMPoQ32cQNoIQeXAk9HZXylYzNVrd8TKZc
+         kH3hOayvpvoIsew6gxod6r315LuWEQMQ0jQq40j4QCIftMqMIxr0mjwDZBTOR7cW9P
+         a8t3p6xKC7M+g==
+Date:   Sat, 5 Aug 2023 12:10:04 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Lixue Liang <lianglixuehao@126.com>
+Cc:     brendan.higgins@linux.dev, benh@kernel.crashing.org,
+        joel@jms.id.au, Lixue Liang <lianglixue@greatwall.com.cn>,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        p.zabel@pengutronix.de, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] i2c: aspeed: Avoid accessing freed buffers during i2c
+ transfers.
+Message-ID: <20230805101004.dknxj7nqrt2aes5n@intel.intel>
+References: <20230728122416.17782-1-lianglixuehao@126.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7300:c0b:b0:d3:811f:e55d with HTTP; Sat, 5 Aug 2023
- 00:10:33 -0700 (PDT)
-Reply-To: bintu37999@gmail.com
-From:   BINTU FELICIA <felicia712@gmail.com>
-Date:   Sat, 5 Aug 2023 08:10:33 +0100
-Message-ID: <CALG3m0HXrMBzFna_RyFNFMdf46PasvpWcv8ApUVmb8Dp2_zhfg@mail.gmail.com>
-Subject: HELLO...,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230728122416.17782-1-lianglixuehao@126.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-How are you today? I hope you are fine. My name is Miss
-Bintu Felicia . l am single looking for honest and nice
-person whom i can partner with . I don't care about
-your color, ethnicity, Status or Sex. Upon your reply to
-this mail I will tell you more about myself and send you
-more of my picture .I am sending you this beautiful mail
-with a wish for much happiness
+Hi Lixue,
+
+On Fri, Jul 28, 2023 at 12:24:16PM +0000, Lixue Liang wrote:
+> From: Lixue Liang <lianglixue@greatwall.com.cn>
+> 
+> After waiting for the transmission timeout, the I2C controller will
+> continue to transmit data when the bus is idle. Clearing bus->msg will
+> avoid kernel panic when accessing the freed msg->buf in
+> aspeed_i2c_master_irq.
+
+actually in aspeed_i2c_master_irq() you are already checking for
+!bus->msgs.
+
+What kind of panic are you referring to?
+
+Andi
+
+> Signed-off-by: Lixue Liang <lianglixue@greatwall.com.cn>
+> ---
+>  drivers/i2c/busses/i2c-aspeed.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+> index 2e5acfeb76c8..c83057497e26 100644
+> --- a/drivers/i2c/busses/i2c-aspeed.c
+> +++ b/drivers/i2c/busses/i2c-aspeed.c
+> @@ -713,6 +713,8 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
+>  		spin_lock_irqsave(&bus->lock, flags);
+>  		if (bus->master_state == ASPEED_I2C_MASTER_PENDING)
+>  			bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
+> +
+> +		bus->msgs = NULL;
+>  		spin_unlock_irqrestore(&bus->lock, flags);
+>  
+>  		return -ETIMEDOUT;
+> -- 
+> 2.27.0
+> 
