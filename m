@@ -2,76 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3B2770CF7
-	for <lists+linux-i2c@lfdr.de>; Sat,  5 Aug 2023 03:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEEB770D33
+	for <lists+linux-i2c@lfdr.de>; Sat,  5 Aug 2023 03:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjHEBUo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 4 Aug 2023 21:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
+        id S229543AbjHEBtD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 4 Aug 2023 21:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjHEBUn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Aug 2023 21:20:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E7911B;
-        Fri,  4 Aug 2023 18:20:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADEDE60AEE;
-        Sat,  5 Aug 2023 01:20:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 924E4C433C8;
-        Sat,  5 Aug 2023 01:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691198442;
-        bh=ofjXmL8ljSBXB2sYmAqpa4VoixQYJGBIRjbCzebS5i4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c2l24Q5OCNQ0gfcmGd5CLhn555uETmqpzdgO9dA2bc17yoTwdIq29mwyaScagTivg
-         WxZI/Ed0nIdFl/DrxkjqXU3Q894gp59ut8s/f2M9ngH5hJx6xJ9Yrlk3GidzNKXMUx
-         fdMj2JBtY53kvK8c9rpsLPCvYJiXFiT6m4nH8/i/FpUXbiSVtKBM4I2Viwe/tWepa2
-         yAM0Kv2eVUCGwrNZLEIXeAJknAXjRrWaBss7f9DcXc2quFbONMfLj43rYF5VFzqvLB
-         nl6zH7QQO5bqDZzHjL1BBN/UGtoCRZyh1pmF3UAdu1mmWYHpoCYY0uArasA4d/n3Mt
-         6c6QJl5D4Hx5Q==
-Date:   Sat, 5 Aug 2023 03:20:39 +0200
+        with ESMTP id S229487AbjHEBtC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 4 Aug 2023 21:49:02 -0400
+X-Greylist: delayed 1141 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Aug 2023 18:49:01 PDT
+Received: from 16.mo550.mail-out.ovh.net (16.mo550.mail-out.ovh.net [178.33.104.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131761BE
+        for <linux-i2c@vger.kernel.org>; Fri,  4 Aug 2023 18:49:00 -0700 (PDT)
+Received: from director9.ghost.mail-out.ovh.net (unknown [10.108.16.251])
+        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 9A46B25951
+        for <linux-i2c@vger.kernel.org>; Sat,  5 Aug 2023 01:29:57 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-ckdcs (unknown [10.109.156.99])
+        by director9.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 993DF1FD47;
+        Sat,  5 Aug 2023 01:29:55 +0000 (UTC)
+Received: from etezian.org ([37.59.142.95])
+        by ghost-submission-6684bf9d7b-ckdcs with ESMTPSA
+        id ai7tIROmzWTHWAMAIGJpLQ
+        (envelope-from <andi@etezian.org>); Sat, 05 Aug 2023 01:29:55 +0000
+Authentication-Results: garm.ovh; auth=pass (GARM-95G001d9e3624c-ac52-4978-b522-021b72bbbf33,
+                    05ACED94171614EC843435E2D99940E8A2AB1814) smtp.auth=andi@etezian.org
+X-OVh-ClientIp: 178.238.172.51
 From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Samuel Holland <samuel.holland@sifive.com>
-Cc:     Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: ocores: Move system PM hooks to the NOIRQ phase
-Message-ID: <20230805012039.lnekkg7zcspvsnkl@intel.intel>
-References: <20230717203857.2626773-1-samuel.holland@sifive.com>
- <20230727003551.dtjx3shwpjs3le6x@intel.intel>
+To:     linux-kernel@vger.kernel.org, monstr@monstr.eu, git@xilinx.com,
+        Michal Simek <michal.simek@amd.com>
+Cc:     Andi Shyti <andi.shyti@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: cadence: Describe power-domains property
+Date:   Sat,  5 Aug 2023 03:29:11 +0200
+Message-Id: <169119887100.1781235.4441400054342220300.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <8774dba53cae5508f9f7aa173fbaf814d97898b1.1691047405.git.michal.simek@amd.com>
+References: <8774dba53cae5508f9f7aa173fbaf814d97898b1.1691047405.git.michal.simek@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230727003551.dtjx3shwpjs3le6x@intel.intel>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 11967471585594182288
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrkeehgdeggecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepveevieffieefgfefuddvteelffeuhfelffejteejuddvveekveehvdejgeefteevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpudejkedrvdefkedrudejvddrhedupdefjedrheelrddugedvrdelheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoegrnhguihesvghtvgiiihgrnhdrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheehtddpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Hi
 
-On Thu, Jul 27, 2023 at 02:35:51AM +0200, Andi Shyti wrote:
-> Hi Samuel,
+On Thu, 03 Aug 2023 09:23:31 +0200, Michal Simek wrote:
+> ZynqMP Cadence I2c IP core has own power domain that's why describe it as
+> optional property.
 > 
-> On Mon, Jul 17, 2023 at 01:38:57PM -0700, Samuel Holland wrote:
-> > When an I2C device contains a wake IRQ subordinate to a regmap-irq chip,
-> > the regmap-irq code must be able to perform I2C transactions during
-> > suspend_device_irqs() and resume_device_irqs(). Therefore, the bus must
-> > be suspended/resumed during the NOIRQ phase.
-> > 
-> > Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
 > 
-> it's OK for me.
-> 
-> Peter, any comment on this?
 
-a kind ping...
+Applied to i2c/andi-for-next on
 
+https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
+
+Please note that this patch may still undergo further evaluation
+and the final decision will be made in collaboration with
+Wolfram.
+
+Thank you,
 Andi
+
+Patches applied
+===============
+[1/1] dt-bindings: i2c: cadence: Describe power-domains property
+      commit: 26a106e540b100a887209a3012b6ac2ec9a577f8
