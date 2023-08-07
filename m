@@ -2,152 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517D4772321
-	for <lists+linux-i2c@lfdr.de>; Mon,  7 Aug 2023 13:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539A47727D3
+	for <lists+linux-i2c@lfdr.de>; Mon,  7 Aug 2023 16:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbjHGLzL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 7 Aug 2023 07:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
+        id S232860AbjHGOdb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 7 Aug 2023 10:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjHGLzK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Aug 2023 07:55:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E02083;
-        Mon,  7 Aug 2023 04:55:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63333618FB;
-        Mon,  7 Aug 2023 11:55:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29F76C433C8;
-        Mon,  7 Aug 2023 11:55:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691409307;
-        bh=R/epzjP4MVztL6PEKysek/qZr/5qEjO+L1hh2sVtNkg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FYkZSXK438kVYpG/FfDQDXVWZYMWtJMrr9KwB6PJW4J+YmLIa2fk0wCMulUqhO9zp
-         ix0aut8KRwYPunKf7198c6rEXJCR+pf///fpbovSM7xfEohg1MislFmv1G87kzlf2X
-         mxbYMX8LKi5rQ4FR/+m0oWM5gNVYMxS5U4hjUmwAP6cWp2Vxn7gsfO+Rm2udz/YQRf
-         8sQ2mCC5Qjfj1DITaA9qBxImpEPtCGiTUeCoD0nFe20okcNVMTYkhcnb6qBqEkR8hf
-         nXdzGOsib5BG2JkNGhMhh1ZvNcKDZIbXZM/3pqoqJwlgk7EIs+nQRt9uIbUEtEnHVz
-         mruoq1GaQNhtw==
-Date:   Mon, 7 Aug 2023 13:55:03 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     "Liao, Chang" <liaochang1@huawei.com>
-Cc:     florian.fainelli@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, rjui@broadcom.com,
-        sbranden@broadcom.com, yangyicong@hisilicon.com,
-        aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        kblaiech@nvidia.com, asmaa@nvidia.com, loic.poulain@linaro.org,
-        rfoss@kernel.org, ardb@kernel.org, gcherian@marvell.com,
-        linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 8/9] i2c: imx-lpi2c: Use dev_err_probe in probe function
-Message-ID: <20230807115503.u7qrtmt23vzosehr@intel.intel>
-References: <20230802095737.3957587-1-liaochang1@huawei.com>
- <20230802095737.3957587-9-liaochang1@huawei.com>
- <20230804221644.cqmoin6u22mxvouk@intel.intel>
- <758b882e-31a5-1f73-7fd2-945a8a2e9558@huawei.com>
- <20230807081725.fmjvdp3gxjs2ijee@intel.intel>
- <042c6eb7-cf31-79e1-51c7-c229e2582c0c@huawei.com>
+        with ESMTP id S232465AbjHGOda (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 7 Aug 2023 10:33:30 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A03210DC;
+        Mon,  7 Aug 2023 07:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691418809; x=1722954809;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TRDCLFDgzgMsAH800OlISo9NPJHoNGEwoCEGo3ugJME=;
+  b=dHo4qmBC8osqA8qh+/9mRCMBokFuBX8/d7pRc6TO0na+2DLI12F7/Bzy
+   u3MhLMZwpt89hko6rJC0sDk2iKqkH/k9uLn9lOrtvIXFQwckGHp/JbblR
+   jWpe0mpRMexjLzby7sIlhETHvIochznBJ7qeM/H5BzF1CsBe8YB/PXKyO
+   P6P4JleXWGIwZB5RO5hv0gBCysVWRs0U5I6wHZ61GHsSxpkzd9ZmKbOW+
+   u+A63hyg5tC3xa4QHTmRxR6sxr3y7cVLF7b4Rzgegca1wrJOV7XfI+Cq7
+   S+MesuifdmNQFsHN/4koD5SHUsA/Kbem4uNn1Caq8oE2LyQcanEGmA+D7
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="350867078"
+X-IronPort-AV: E=Sophos;i="6.01,262,1684825200"; 
+   d="scan'208";a="350867078"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2023 07:32:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="977465850"
+X-IronPort-AV: E=Sophos;i="6.01,262,1684825200"; 
+   d="scan'208";a="977465850"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 07 Aug 2023 07:32:52 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qT1Hu-00FTgr-1x;
+        Mon, 07 Aug 2023 17:32:50 +0300
+Date:   Mon, 7 Aug 2023 17:32:50 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>
+Subject: Re: [PATCH v1 4/9] i2c: designware: Propagate firmware node
+Message-ID: <ZNEAklbEI5wbjv7l@smile.fi.intel.com>
+References: <20230725143023.86325-1-andriy.shevchenko@linux.intel.com>
+ <20230725143023.86325-5-andriy.shevchenko@linux.intel.com>
+ <f0e0c31e-ad5e-c3ae-945e-c2af0d68beab@linux.intel.com>
+ <ZMgU9Jm4u37D+70Y@smile.fi.intel.com>
+ <20230804205956.uuna4c76ww64z3zm@intel.intel>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <042c6eb7-cf31-79e1-51c7-c229e2582c0c@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230804205956.uuna4c76ww64z3zm@intel.intel>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Aug 07, 2023 at 06:44:23PM +0800, Liao, Chang wrote:
-> Hi, Andi
-> 
-> 在 2023/8/7 16:17, Andi Shyti 写道:
-> > On Mon, Aug 07, 2023 at 10:13:30AM +0800, Liao, Chang wrote:
-> >> Hi, Andi
-> >>
-> >> 在 2023/8/5 6:16, Andi Shyti 写道:
-> >>> On Wed, Aug 02, 2023 at 05:57:36PM +0800, Liao Chang wrote:
-> >>>> Use the dev_err_probe function instead of dev_err in the probe function
-> >>>> so that the printed messge includes the return value and also handles
-> >>>> -EPROBE_DEFER nicely.
-> >>>>
-> >>>> Signed-off-by: Liao Chang <liaochang1@huawei.com>
-> >>>> ---
-> >>>>  drivers/i2c/busses/i2c-imx-lpi2c.c | 12 ++++--------
-> >>>>  1 file changed, 4 insertions(+), 8 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> >>>> index c3287c887c6f..bfa788b3775b 100644
-> >>>> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> >>>> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> >>>> @@ -569,10 +569,8 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
-> >>>>  		sizeof(lpi2c_imx->adapter.name));
-> >>>>  
-> >>>>  	ret = devm_clk_bulk_get_all(&pdev->dev, &lpi2c_imx->clks);
-> >>>> -	if (ret < 0) {
-> >>>> -		dev_err(&pdev->dev, "can't get I2C peripheral clock, ret=%d\n", ret);
-> >>>> -		return ret;
-> >>>> -	}
-> >>>> +	if (ret < 0)
-> >>>> +		return dev_err_probe(&pdev->dev, ret, "can't get I2C peripheral clock\n");
-> >>>
-> >>> you cut on this because the line was going over 100 characters? :)
-> >>>
-> >>> In theory you shouldn't change the print message when doing such
-> >>> changes and you can still split it as:
-> >>>
-> >>> 		return dev_err_probe(&pdev->dev, ret,
-> >>> 				     "can't get I2C peripheral clock, ret=%d\n",
-> >>> 				     ret);
-> >>>
-> >>> and you're even within the 80 characters.
-> >>
-> >> Since dev_err_probe always print the second parameter that happens to be the return value,
-> >> I remove the "ret=%d" from the original message to avoid a redundant error message.
-> >>
-> >> So is it better to keep the original message unchanged, even though dev_err_probe also prints
-> >> the return error value? Or is it better to make this change so that all error messages printed
-> >> in the probe function include the return value in a consistent style?
-> > 
-> > yes, you are right! Then please ignore this comment, but...
-> > 
-> >>>   	ret = devm_request_irq(&pdev->dev, irq, lpi2c_imx_isr, 0,
-> >>>   		pdev->name, lpi2c_imx);
-> >>> - 	if (ret) {
-> >>> - 		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
-> >>> - 		return ret;
-> >>> - 	}
-> >>> + 	if (ret)
-> >>> + 		return dev_err_probe(&pdev->dev, ret, "can't claim irq %d\n", irq);
-> > 
-> > please make it coherent to this second part, as well, where the
-> > error number is printed.
-> 
-> Do you mean to convert it to the following?
-> 
->     if (ret)
->         return dev_err_probe(&pdev->dev, ret, "can't claim irq\n");
-> 
-> I understand that the style of error message printed by dev_err_probe is like
-> "error [ERRNO]: [customized message]", the [ERRNO] comes from 2nd parameter,
-> [customized message] comes from 3rd paramter, if the original [customized message]it
-> also print ERRNO, i intend to remove it in this patch, otherwise, I will just keep it.
-> In the above code, [customized message] intend to print irq but return value, so it is
-> better to keep the original message, right?
+On Fri, Aug 04, 2023 at 10:59:56PM +0200, Andi Shyti wrote:
+> On Mon, Jul 31, 2023 at 11:09:24PM +0300, Andy Shevchenko wrote:
+> > On Fri, Jul 28, 2023 at 03:25:58PM +0300, Jarkko Nikula wrote:
+> > > On 7/25/23 17:30, Andy Shevchenko wrote:
+> > > > Propagate firmware node by using a specific API call, i.e. device_set_node().
 
-sorry... I just got confused and read wrong the code. Please
-ignore my comments on this patch, you are right here. Feel free
-to add.
+...
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+> > > > +	device_set_node(&dev->adapter.dev, dev_fwnode(dev->dev));
+> > > 
+> > > Would this be better to put in the same place where ACPI_COMPANION_SET() is
+> > > removed like below? I'd keep this static inline function in the header file
+> > > as simple as possible. All extra code might invite adding even more.
+> > 
+> > We come again to the duplication and prone to deviation code, I wouldn't like
+> > to go this way. The idea of this call is to unify and avoid mistakes, like
+> > updating only in ACPI or DT (or any new one if happens in the future) case
+> > and leaving the second one unconsidered.
+> 
+> it's anyway an inline function becoming a bit too fat. Can't we
+> make it not inline?
+> 
+> > That said, I would rather drop this patch until i2c core will take this
+> > once for all (may be never in the reasonable future :-).
+> 
+> Which patch are you referring to that should be taken into i2c
+> core?
 
-Andi
+Something I tried to do in the past but failed.
+https://lore.kernel.org/linux-i2c/20211207162457.18450-1-andriy.shevchenko@linux.intel.com/
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
