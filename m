@@ -2,66 +2,72 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C22774943
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Aug 2023 21:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B67E6774938
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Aug 2023 21:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbjHHTus (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Aug 2023 15:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
+        id S233586AbjHHTu3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Aug 2023 15:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233961AbjHHTu1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Aug 2023 15:50:27 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870F153509;
-        Tue,  8 Aug 2023 09:56:09 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4RKxV54TDFz6GD4v;
-        Tue,  8 Aug 2023 23:11:25 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
- 2023 16:16:20 +0100
-Date:   Tue, 8 Aug 2023 16:16:19 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org\" <linux-renesas-soc@vger.kernel.org>"@domain.invalid
-Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct
- bus_type
-Message-ID: <20230808161619.00000b92@Huawei.com>
-In-Reply-To: <ZNFV+C1HCIRJpbdC@google.com>
-References: <20230804161728.394920-1-biju.das.jz@bp.renesas.com>
-        <20230805174036.129ffbc2@jic23-huawei>
-        <OS0PR01MB59220491C7C8AA40BEFAAD82860EA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-        <20230806142950.6c409600@jic23-huawei>
-        <ZNEFjyAloqlkMWn7@smile.fi.intel.com>
-        <ZNFV+C1HCIRJpbdC@google.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
-MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        with ESMTP id S233625AbjHHTuO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Aug 2023 15:50:14 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D4B53525
+        for <linux-i2c@vger.kernel.org>; Tue,  8 Aug 2023 09:56:19 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-583312344e7so73076607b3.1
+        for <linux-i2c@vger.kernel.org>; Tue, 08 Aug 2023 09:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691513778; x=1692118578;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zRGROs0prSq9MFh0VojzEm9/faHihdz2gNY33winOk0=;
+        b=ZwuzzdZO9kYs2Oc/mNbJfARuvGlMIC3UUvNeZoKIvfQ2VX/159UeLD1ZOmH/QRku2q
+         UdxijLS1nyzh4vJapMPxBdB8Mw0I7WhzdZN5HIP1q4KkrgtgqCuWf6ebvKHNXq6l9tGA
+         r/JobYflpqEJayDjQmiSyLfBHt9cttoaedbWNQRVokc8GdBH1nN1OhMM71m5X6bnIFOX
+         jGZafbBDftxnGbVwxScApAzdztO3THQLw8zbAAexjzipo9xfZrido1s5h4shka1W8pRA
+         mt9oD6/q/ha3W6CQK/O/WueGTnREmrbLW/46ftFn+1ehcZRoL4uLnQTtAg2+1kfrNN1r
+         1RaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691513778; x=1692118578;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zRGROs0prSq9MFh0VojzEm9/faHihdz2gNY33winOk0=;
+        b=IdS5lmCMDMA+PprB/bWpaiEM9Iu4PLdMzWN+p4GG4iUebnWr/xjjLmbylzq/EGJcwD
+         PZmUWdVuZ94SOa5mwQTGBrB5H8e4NazjK/Y2NDkLcFzVcdkBxfm1eO5aDTffECPX2kVm
+         TSdcuB0ccPNBndBEttHfhFlw0cQVzLiUMuysB36B9SdqeT1SPwDb0EpgNVFzFk8uQO3t
+         /6jnbJmxLKnCgwrLyTzROx/rluCepAonSicf0HDr1H/wVx4esYm+9H3LTzGsIfgtBGUy
+         cSiBhRWGhdy7grO5/CGwaPMw1cyGL6u8ZQWDMQPeLGlnW/bibmevcLW+rauzYNp3SE1I
+         5RvA==
+X-Gm-Message-State: AOJu0YyPHZVhMam0m/0DIyezmfCFZgk2iwEgMtVbHSLpZhF8NxtCj0lG
+        X08kzDgi7gsKQ25CA1n0d0DzadyjoJvMVbOt7A4=
+X-Google-Smtp-Source: AGHT+IHvp4RVooOae7EfRvNoe9ojEueuoOpKM3VV7FgRuePNPnjR9K9MVCvuT9PpaD6qBvXfpS2T7QcKSQIpYFkLMfU=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:cc03:38d0:9718:e90b])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:860e:0:b0:d5d:511b:16da with SMTP
+ id y14-20020a25860e000000b00d5d511b16damr1793ybk.2.1691513778422; Tue, 08 Aug
+ 2023 09:56:18 -0700 (PDT)
+Date:   Tue, 08 Aug 2023 09:56:16 -0700
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAK9z0mQC/x3MQQqAIBBA0avIrBPUiqSrRISMU80iC40IxLsnL
+ d/i/wyJIlOCUWSI9HDiM1ToRgDuLmwk2VeDUaZVVlnJBqU7/JJudzNKq6lHMzjbIUGNrkgrv/9 wmkv5AFb2g4hgAAAA
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691513776; l=2427;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
+ bh=si09L+ne/76nNtqRPQQNA8vh+v/vSOpRLqSBS/7yXBU=; b=rVdUpEz91pDMvj2lTvd62ib7crXJtBOPX1kW9foKJV39T/d9Twit/ju7Ur4Jw4tv+AsMmMlNb
+ X1Dlt6TmZSeDalyhdGjGC+BA2Yko/jKs/08sEV2wsETgddvbzoMAjbW
+X-Mailer: b4 0.12.3
+Message-ID: <20230808-i2c-amd_static-v1-1-1902f608bba1@google.com>
+Subject: [PATCH] i2c/busses: fix -Wmissing-variable-declarations
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Andi Shyti <andi.shyti@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        llvm@lists.linux.dev, kernel test robot <lkp@intel.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,51 +75,72 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 7 Aug 2023 13:37:12 -0700
-Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
+I'm looking to enable -Wmissing-variable-declarations behind W=1. 0day
+bot spotted the following instance:
 
-> On Mon, Aug 07, 2023 at 05:54:07PM +0300, Andy Shevchenko wrote:
-> > On Sun, Aug 06, 2023 at 02:29:50PM +0100, Jonathan Cameron wrote:  
-> > > On Sat, 5 Aug 2023 17:42:21 +0000
-> > > Biju Das <biju.das.jz@bp.renesas.com> wrote:  
-> > > > > On Fri,  4 Aug 2023 17:17:24 +0100
-> > > > > Biju Das <biju.das.jz@bp.renesas.com> wrote:  
-> > 
-> > ...
-> >   
-> > > > + * Besides the fact that some drivers abuse the device ID driver_data type
-> > > > + * and claim it to be integer, for the bus specific ID tables the driver_data
-> > > > + * may be defined as kernel_ulong_t. For these tables 0 is a valid response,
-> > > > + * but not for this function. It's recommended to convert those either to avoid
-> > > > + * 0 or use a real pointer to the predefined driver data.  
-> >   
-> > > We still need to maintain consistency across the two tables, which
-> > > is a stronger requirement than avoiding 0.  
-> > 
-> > True. Any suggestion how to amend the above comment? Because the documentation
-> > makes sense on its own (may be split from the series?).
-> >   
-> > > Some drivers already do that by forcing the enum used to start at 1 which
-> > > doesn't solver the different data types issue.  
-> > 
-> > And some maintainers do not want to see non-enum values in i2c ID table.
-> > *Shrug*.  
-> 
-> So in legacy ID lookup path we can safely assume that values below 4096
-> are scalars and return NULL from the new device_get_match_data(). This
-> way current drivers using the values as indices or doing direct
-> comparisons against them can continue doing manual look up and using
-> them as they see fit. And we can convert the drivers at our leisure.
+  drivers/i2c/busses/i2c-amd756.c:286:20: warning: no previous extern
+  declaration for non-static variable 'amd756_smbus'
+  [-Wmissing-variable-declarations]
+  286 | struct i2c_adapter amd756_smbus = {
+      |                    ^
+  drivers/i2c/busses/i2c-amd756.c:286:1: note: declare 'static' if the
+  variable is not intended to be used outside of this translation unit
+  286 | struct i2c_adapter amd756_smbus = {
+      | ^
 
-Good idea.  Though I suspect there may still be nasty cases. People have
-been known to put chip ID values in these fields so that they can then
-match them against a who am I register as a 'detect it's the right part' check.
+This symbol is referenced by more than one translation unit, so create
+then include the correct header for their declarations.
 
-No idea if we have any drivers doing that but if there are hopefully not too many!
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/llvm/202308081000.tTL1ElTr-lkp@intel.com/
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ drivers/i2c/busses/i2c-amd756-s4882.c | 3 +--
+ drivers/i2c/busses/i2c-amd756.c       | 1 +
+ drivers/i2c/busses/i2c-amd756.h       | 3 +++
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-Jonathan
+diff --git a/drivers/i2c/busses/i2c-amd756-s4882.c b/drivers/i2c/busses/i2c-amd756-s4882.c
+index 063274388a75..8156cfc43df3 100644
+--- a/drivers/i2c/busses/i2c-amd756-s4882.c
++++ b/drivers/i2c/busses/i2c-amd756-s4882.c
+@@ -26,8 +26,7 @@
+ #include <linux/init.h>
+ #include <linux/i2c.h>
+ #include <linux/mutex.h>
+-
+-extern struct i2c_adapter amd756_smbus;
++#include "i2c-amd756.h"
+ 
+ static struct i2c_adapter *s4882_adapter;
+ static struct i2c_algorithm *s4882_algo;
+diff --git a/drivers/i2c/busses/i2c-amd756.c b/drivers/i2c/busses/i2c-amd756.c
+index ef1307a258e9..af77374d2ab3 100644
+--- a/drivers/i2c/busses/i2c-amd756.c
++++ b/drivers/i2c/busses/i2c-amd756.c
+@@ -31,6 +31,7 @@
+ #include <linux/i2c.h>
+ #include <linux/acpi.h>
+ #include <linux/io.h>
++#include "i2c-amd756.h"
+ 
+ /* AMD756 SMBus address offsets */
+ #define SMB_ADDR_OFFSET		0xE0
+diff --git a/drivers/i2c/busses/i2c-amd756.h b/drivers/i2c/busses/i2c-amd756.h
+new file mode 100644
+index 000000000000..88698266d6d8
+--- /dev/null
++++ b/drivers/i2c/busses/i2c-amd756.h
+@@ -0,0 +1,3 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <linux/i2c.h>
++extern struct i2c_adapter amd756_smbus;
 
-> 
-> Thanks.
-> 
+---
+base-commit: 14f9643dc90adea074a0ffb7a17d337eafc6a5cc
+change-id: 20230808-i2c-amd_static-81e5c27a84ce
+
+Best regards,
+-- 
+Nick Desaulniers <ndesaulniers@google.com>
 
