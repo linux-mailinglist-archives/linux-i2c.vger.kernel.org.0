@@ -2,59 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D8A774352
-	for <lists+linux-i2c@lfdr.de>; Tue,  8 Aug 2023 20:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98590773FF8
+	for <lists+linux-i2c@lfdr.de>; Tue,  8 Aug 2023 18:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbjHHSBd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 8 Aug 2023 14:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
+        id S233758AbjHHQ5v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 8 Aug 2023 12:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbjHHSBD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Aug 2023 14:01:03 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD40AD20
-        for <linux-i2c@vger.kernel.org>; Tue,  8 Aug 2023 09:28:03 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fe1e1142caso56566715e9.0
-        for <linux-i2c@vger.kernel.org>; Tue, 08 Aug 2023 09:28:03 -0700 (PDT)
+        with ESMTP id S233830AbjHHQ5F (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 8 Aug 2023 12:57:05 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DB619433
+        for <linux-i2c@vger.kernel.org>; Tue,  8 Aug 2023 09:00:05 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4fe0fe622c3so9232222e87.2
+        for <linux-i2c@vger.kernel.org>; Tue, 08 Aug 2023 09:00:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691512045; x=1692116845;
+        d=linaro.org; s=google; t=1691510384; x=1692115184;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=k2MJPyoks2T/ViX3nyRQF8CYDSyq3wamUO8HlMVdzMs=;
-        b=dI5If1CQzI+SphW5RlV4Lh5VCaY//SxedWvkyXQH2j5F1QGSd1tAx3zoXx82OCslRX
-         AdX5LkmXu3rlr0/RgG1qyth+t3ZDJTKytpZeZXA3rOvDpFE+PRu3LTZ76UAWil8sP5E2
-         p7YQYDBGWxPBDrkiQ7l8asOYU6t1zV3+Ikh0hHRNhqNYZu14nmUue1BEx77JaG59l5ak
-         8r5cZPWOBN5NMF+a1+1DIGy4kqg8XODg0th746J/h10zrr08ZrHTvvo0x3r5tTph6Vuv
-         TLG0UOJ47KqXVilHE4HI0OM6b+LaHxAV+SwiCTbXjZDcPxQkWXAYbLz0ckvDbGHSa1PC
-         LeaQ==
+        bh=AV7pYGODgs/vswsM71s7yBSPT97U68gXTdayAu9iSYw=;
+        b=SK7EF8irX26ZL05JdgFF1yB8kkEK1uXsZgpdmViSUHGg7dpioaudoLqQUTY26rJIoh
+         AXcGjTrdQp1BZGMyQLg8yv/6ufxwJu9LocicnZuhwR14oEHCNsEmwdg9JXJ8e56BWEoR
+         wr+kjOOrzD7BdUFLHtP1DhQYd1tGuhoMGdIL0ySLe9QKdbUxpT0u4Lb9ecgYY7ZE/1BQ
+         Ve5XVYY9CxHTamGwzPbhx2Cp9cRlPNDYANWz84Bj35AOOq1cA8WIP8020CnsTKdyz54c
+         UddK4IY1b3bVkbDHhD9TLxRtedq7z6YeTnKy++9NywQj0cg8bA+HK83DNRkz+zS/+gdj
+         PbxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691512045; x=1692116845;
+        d=1e100.net; s=20221208; t=1691510384; x=1692115184;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k2MJPyoks2T/ViX3nyRQF8CYDSyq3wamUO8HlMVdzMs=;
-        b=IrOeKF3Pm49KXe3T6DOQmXHFF+YTVx4VfCcq22QBQ/gax2xk7dgjHZlOsqMgDkk5YA
-         ILyemJKEgd/se5KgzGLkRsS2g7rPWsJk8/vmtSaJvxX72LJd+tVl4dyufX9f5R8w5BV/
-         0uAwQuVIcVHWe1IbtBEukjxjWrqU2rh7+klS/fcxGbhmm4JguHFYj6lPi3j68XUeanbR
-         c9wZJBGqeiGVbvBG2/4gkuzT2dHU7sL1j/sMTrdvEYO5hQyzFl7uHBG4ZmNxQ7dkoIBg
-         VEM3OtM3WNUJAdv7AwLN0OTQJsFn/UTVFpwUXiMy/l/+SSVTSMwDnTeZgxmx7KaWjSNZ
-         IK3A==
-X-Gm-Message-State: AOJu0YzYj57iTHXyD/Q49VLOV6fu8Rt+nJWaVoVdu6amPn+LrP2mPZek
-        etROLipskB6n2DoBmluDvSJNCXk59xoOgG82AEo=
-X-Google-Smtp-Source: AGHT+IHVYl6k7X1HkWuOZJGrwfDyphp8mGeKHbuzBByCu7FEdYTXY1+5KAwkmhFPQxZ+9wIOIIVSOg==
-X-Received: by 2002:aa7:d7c7:0:b0:523:2df6:395e with SMTP id e7-20020aa7d7c7000000b005232df6395emr5416705eds.31.1691483787005;
-        Tue, 08 Aug 2023 01:36:27 -0700 (PDT)
+        bh=AV7pYGODgs/vswsM71s7yBSPT97U68gXTdayAu9iSYw=;
+        b=UZhZptvljl/OzJhriUf1F2yHNVUdU7eCaWuexgjNWwyKraud+dQAW2wNWiIYcmpGWa
+         XWRHIPl+GFI6Tbv26DXIRtMjLIFWQkpHBxoLDTAhaYxAdehklotWmd5sW99OuLD0TaE7
+         MgLSQrZbQXuGOGVsVGM5Oj0AsPDvbnjXXC6FtS3mU70Dbl5rmn1Yd0j+uWMzQfIw9dfA
+         P12+/ay2vsi75Qa6IuSSHZs6OTZmmhwWMy2SMB1TjszGG+aUOwMkzbdhmVzWSx2UBtPQ
+         khKXg+JN7J0bU1y58tjJMARyo2zix7qTqPHWu1IhFgSynqewSrZYLjlswX8bKN6LlNtO
+         giWA==
+X-Gm-Message-State: AOJu0YyUzOFCuQRyYSkOZY+nW3rCoJg1Bu5UQqGnOnetLjAoSpmtOrRh
+        BVLwdv0GirE4khrxWve9nvZtOEvbDa5la7CxNiU=
+X-Google-Smtp-Source: AGHT+IHi6Yp+yRsRwvN5aEzHBHFgm8hd5a3fbcIKHC1dwK0+H3FWM+RobNVM6FnNwNpUNH5BDqly7w==
+X-Received: by 2002:a17:906:e:b0:99c:7134:ab6d with SMTP id 14-20020a170906000e00b0099c7134ab6dmr10266806eja.41.1691483828332;
+        Tue, 08 Aug 2023 01:37:08 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id n24-20020a05640204d800b0052307566ed2sm6257416edw.14.2023.08.08.01.36.24
+        by smtp.gmail.com with ESMTPSA id l17-20020a1709060e1100b009944e955e19sm6302110eji.30.2023.08.08.01.37.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Aug 2023 01:36:26 -0700 (PDT)
-Message-ID: <b32797d7-ef81-7051-85b5-cbe0cd3302ae@linaro.org>
-Date:   Tue, 8 Aug 2023 10:36:24 +0200
+        Tue, 08 Aug 2023 01:37:07 -0700 (PDT)
+Message-ID: <c589a82d-3011-d437-7343-b52308cbc185@linaro.org>
+Date:   Tue, 8 Aug 2023 10:37:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH v3 3/9] i2c: xlp9xx: Use dev_err_probe in probe function
+Subject: Re: [PATCH v3 8/9] i2c: imx-lpi2c: Use dev_err_probe in probe
+ function
 Content-Language: en-US
 To:     Liao Chang <liaochang1@huawei.com>, andi.shyti@kernel.org,
         florian.fainelli@broadcom.com, rjui@broadcom.com,
@@ -68,9 +69,9 @@ Cc:     linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
 References: <20230808012954.1643834-1-liaochang1@huawei.com>
- <20230808012954.1643834-4-liaochang1@huawei.com>
+ <20230808012954.1643834-9-liaochang1@huawei.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230808012954.1643834-4-liaochang1@huawei.com>
+In-Reply-To: <20230808012954.1643834-9-liaochang1@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,22 +89,16 @@ On 08/08/2023 03:29, Liao Chang wrote:
 > so that the printed messge includes the return value and also handles
 > -EPROBE_DEFER nicely.
 > 
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-> Signed-off-by: Liao Chang <liaochang1@huawei.com>
-> ---
->  drivers/i2c/busses/i2c-xlp9xx.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-xlp9xx.c b/drivers/i2c/busses/i2c-xlp9xx.c
-> index f59e8c544f36..08a59a920929 100644
-> --- a/drivers/i2c/busses/i2c-xlp9xx.c
-> +++ b/drivers/i2c/busses/i2c-xlp9xx.c
-> @@ -529,10 +529,8 @@ static int xlp9xx_i2c_probe(struct platform_device *pdev)
+
+>  	ret = devm_request_irq(&pdev->dev, irq, lpi2c_imx_isr, 0,
+>  			       pdev->name, lpi2c_imx);
+> -	if (ret) {
+> -		dev_err(&pdev->dev, "can't claim irq %d\n", irq);
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret, "can't claim irq %d\n", irq);
 >  
->  	err = devm_request_irq(&pdev->dev, priv->irq, xlp9xx_i2c_isr, 0,
->  			       pdev->name, priv);
-> -	if (err) {
-> -		dev_err(&pdev->dev, "IRQ request failed!\n");
 
 I don't think this is needed:
 https://lore.kernel.org/all/20230721094641.77189-1-frank.li@vivo.com/
