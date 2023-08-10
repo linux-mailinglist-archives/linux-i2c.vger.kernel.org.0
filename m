@@ -2,130 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7081B77713E
-	for <lists+linux-i2c@lfdr.de>; Thu, 10 Aug 2023 09:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A7877724F
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Aug 2023 10:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233810AbjHJHW3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 10 Aug 2023 03:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
+        id S230153AbjHJILB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 10 Aug 2023 04:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbjHJHW2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Aug 2023 03:22:28 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8F21BF7
-        for <linux-i2c@vger.kernel.org>; Thu, 10 Aug 2023 00:22:02 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6873a30d02eso413381b3a.3
-        for <linux-i2c@vger.kernel.org>; Thu, 10 Aug 2023 00:22:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1691652122; x=1692256922;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oCsFa++ogn7H/UBzN64O3INdySKF0/YyEIYVfwtbNi4=;
-        b=cCKBkQQg3S66/frhBsmAlmRxovXilvClD1MVf+P/F/DowmmK8Ocu/GlQ9T4uPUxv4U
-         u12XtTQ0rXPiTyvqbb55WTf+xmwq7qnFLIuoyT5J7YPA1SzpiRY+LCiKiTxbL73hTN3X
-         pXOnqtky7JiPc0mU49MbYEH9OWr5oMrktoGi1Y6Fm7MQVTtLRkyRpvZB5AUYp7ILOAuu
-         WbmmbVpIZAiQkjMdzY89weCPT3rE+mKG3NuBf2Hizx5BMKmbrYAtF6OhvTbg98urRmp4
-         9JwvnEHzcwNDk0FeudEeL8ALFcAtKHd7IFL6MdTqicfcckmSlIdYbKK1ItGJB8uHzoLb
-         TEvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691652122; x=1692256922;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oCsFa++ogn7H/UBzN64O3INdySKF0/YyEIYVfwtbNi4=;
-        b=C53UeZad1BO5ZSZ8QTl2V22BrYHfnTXpnU7KPjvHVqsFcSmgK6XwvOrg2dKJv1v1Un
-         BDKzS7NHRZJNuYqSgxeS1V5shwXDP6VxbqqFEUTC3dt9cadkh9qDUtkbFmxqwPPtn1F3
-         FkJSNjyNs7L5E1Fqk8gWBH+wE0Lo5JdVIyg6UQXxSG6zDEQSuaLWPhle/oBAFul33I1m
-         nvTUH03wzvbb/7vTFyQumFSWp8Fic0xjqzCFgVFBoz25bvlSwWNLbAVT8P6GGEHHf8H0
-         gor/HM7cHsmixO6BOa58yupmbP4exE9hGlVKOSsiYOtURf31jW3/ubOyxAiDCjR6xmG+
-         dfqg==
-X-Gm-Message-State: AOJu0YzFdVA/bG/pTsVIDp4HdnlJ8lf5cThBh8DLxL15/LBzM57X+W5d
-        Yh7SJLjJcbIg5k4gtT3mlJ+d+Q==
-X-Google-Smtp-Source: AGHT+IEND+WgzSbKSq1IjO2/9yuM5dCUzGFWbXi0PrhVd/2hDTcBqIjIu+42sIy/hJZwuV+CdVSa7A==
-X-Received: by 2002:a05:6a20:325a:b0:134:a8a1:3bf with SMTP id hm26-20020a056a20325a00b00134a8a103bfmr1309418pzc.30.1691652122340;
-        Thu, 10 Aug 2023 00:22:02 -0700 (PDT)
-Received: from localhost ([49.7.199.210])
-        by smtp.gmail.com with ESMTPSA id c6-20020a170902c1c600b001b8a3a0c928sm880830plc.181.2023.08.10.00.22.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 00:22:02 -0700 (PDT)
-From:   Jian Zhang <zhangjian.3032@bytedance.com>
-To:     brendan.higgins@linux.dev, benh@kernel.crashing.org,
-        joel@jms.id.au, andrew@aj.id.au
-Cc:     zhangjian3032@gmail.com, yulei.sh@bytedance.com,
-        xiexinnan@bytedance.com,
-        linux-i2c@vger.kernel.org (open list:ARM/ASPEED I2C DRIVER),
-        openbmc@lists.ozlabs.org (moderated list:ARM/ASPEED I2C DRIVER),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/ASPEED MACHINE
-        SUPPORT),
-        linux-aspeed@lists.ozlabs.org (moderated list:ARM/ASPEED MACHINE
-        SUPPORT), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] i2c: aspeed: Fix i2c bus hang in slave read
-Date:   Thu, 10 Aug 2023 15:21:55 +0800
-Message-Id: <20230810072155.3726352-1-zhangjian.3032@bytedance.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S231837AbjHJILA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 10 Aug 2023 04:11:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E192136;
+        Thu, 10 Aug 2023 01:10:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D3B465236;
+        Thu, 10 Aug 2023 08:10:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39D9DC433C7;
+        Thu, 10 Aug 2023 08:10:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691655043;
+        bh=pPtrMnD+a1HV9tVnWccuGoqbvbAmQI0mFVpSTDqunzk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PiJbYP3AfcmvS4dhCAbBYRrSXKLMBY1z9owaOJIubJq7IqLfgJHX0AUitRGtbNmQb
+         nsaudgbmLifGG9ihxAfEP2P5HXlXxCzELDp4l7RS2hV4gcIcZqQ2Vgvlmq7EG+MkcD
+         +VKtJXMK9kFrQAeMUuP3s6zqIhpKIzk+TBDhF5jAjrfplR3mztX+cGThE902/i/nB4
+         hot3F370IagNSd975t+FVIA71gjEw2m38j56HhBiBpglmC7eSvC8t10U8nhsyP1VjD
+         /od5y8Lrcljrc1VQuZtaqzQZ806yIlGN2xuKi0Ht6VU+PLV08DFJEA0BD5RbMYg/fe
+         f9JGFVMex46EA==
+Date:   Thu, 10 Aug 2023 10:10:40 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     "Liao, Chang" <liaochang1@huawei.com>
+Cc:     florian.fainelli@broadcom.com, rjui@broadcom.com,
+        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        yangyicong@hisilicon.com, aisheng.dong@nxp.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, kblaiech@nvidia.com,
+        asmaa@nvidia.com, loic.poulain@linaro.org, rfoss@kernel.org,
+        ardb@kernel.org, gcherian@marvell.com, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 9/9] i2c: synquacer: Use dev_err_probe in probe
+ function
+Message-ID: <20230810081040.xrhaa2beru52hxlu@intel.intel>
+References: <20230808012954.1643834-1-liaochang1@huawei.com>
+ <20230808012954.1643834-10-liaochang1@huawei.com>
+ <20230809192117.h7rn6vwmvxdnkr2a@intel.intel>
+ <46a39960-ad79-ca65-6b2b-ccaf982965f5@huawei.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <46a39960-ad79-ca65-6b2b-ccaf982965f5@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When the `CONFIG_I2C_SLAVE` option is enabled and the device operates
-as a slave, a situation arises where the master sends a START signal
-without the accompanying STOP signal. This action results in a
-persistent I2C bus timeout. The core issue stems from the fact that
-the i2c controller remains in a slave read state without a timeout
-mechanism. As a consequence, the bus perpetually experiences timeouts.
+Hi Liao,
 
-This proposed patch addresses this problem by introducing a status
-check during i2c transmit timeouts. In the event that the controller
-is in a slave read state, the i2c controller will be reset to restore
-proper functionality and allow the I2C bus to resume normal operation.
+On Thu, Aug 10, 2023 at 10:33:58AM +0800, Liao, Chang wrote:
+> Hi Andi and Krzysztof,
+> 
+> 在 2023/8/10 3:21, Andi Shyti 写道:
+> > Hi Liao,
+> > 
+> > On Tue, Aug 08, 2023 at 09:29:54AM +0800, Liao Chang wrote:
+> >> Use the dev_err_probe function instead of dev_err in the probe function
+> >> so that the printed messge includes the return value and also handles
+> >> -EPROBE_DEFER nicely.
+> >>
+> >> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> > 
+> > After some discussions and time, I think it's right to r-b this
+> > patch. If you agree more with Krzysztof, feel free to follow his
+> > recommendation and send another version otherwise I will go ahead
+> > and take this series in my branch. I do not really mind, both
+> > arguments are valid.
+> 
+> I saw that Frank Li developed some new APIs that look like they would be very
+> helpful for aligning the error messages of devm_request_irq in device probes.
+> However, the patches have been pending for weeks and the author hasn't sent a
+> new version. So I'm not planning to switch to the new APIs in this patch series,
+> if there are no objections.
+> 
+> Do I need to resend a new revision to add your R-B at this patch?
 
-Signed-off-by: Jian Zhang <zhangjian.3032@bytedance.com>
----
- drivers/i2c/busses/i2c-aspeed.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+no, no need. I'm also going to fix a typo in the commit message
+(messge/message) that Markus has pointed out.
 
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index e76befe3f60f..1a95205fc946 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -113,6 +113,7 @@
- 		 ASPEED_I2CD_M_RX_CMD |					       \
- 		 ASPEED_I2CD_M_TX_CMD |					       \
- 		 ASPEED_I2CD_M_START_CMD)
-+#define ASPEED_I2CD_SLAVE_CMDS_MASK			GENMASK(31, 29)
- 
- /* 0x18 : I2CD Slave Device Address Register   */
- #define ASPEED_I2CD_DEV_ADDR_MASK			GENMASK(6, 0)
-@@ -706,6 +707,22 @@ static int aspeed_i2c_master_xfer(struct i2c_adapter *adap,
- 		     ASPEED_I2CD_BUS_BUSY_STS))
- 			aspeed_i2c_recover_bus(bus);
- 
-+#if IS_ENABLED(CONFIG_I2C_SLAVE)
-+		/*
-+		 * If master timed out and bus is in slave mode.
-+		 * reset the slave mode.
-+		 */
-+		if (readl(bus->base + ASPEED_I2C_CMD_REG) & ASPEED_I2CD_SLAVE_CMDS_MASK) {
-+			spin_lock_irqsave(&bus->lock, flags);
-+			u32 func_ctrl_reg_val = readl(bus->base + ASPEED_I2C_FUN_CTRL_REG);
-+
-+			writel(0, bus->base + ASPEED_I2C_FUN_CTRL_REG);
-+			writel(func_ctrl_reg_val, bus->base + ASPEED_I2C_FUN_CTRL_REG);
-+			bus->slave_state = ASPEED_I2C_SLAVE_INACTIVE;
-+			spin_unlock_irqrestore(&bus->lock, flags);
-+		}
-+#endif
-+
- 		/*
- 		 * If timed out and the state is still pending, drop the pending
- 		 * master command.
--- 
-2.30.2
+Thanks for this series of cleanups,
+Andi
 
+> Thanks.
+> 
+> > 
+> > Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+> > 
+> > Thanks,
+> > Andi
+> 
+> -- 
+> BR
+> Liao, Chang
