@@ -2,108 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C84776AE9
-	for <lists+linux-i2c@lfdr.de>; Wed,  9 Aug 2023 23:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DB1776E18
+	for <lists+linux-i2c@lfdr.de>; Thu, 10 Aug 2023 04:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjHIVZu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 9 Aug 2023 17:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
+        id S229730AbjHJCeF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 9 Aug 2023 22:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbjHIVZs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Aug 2023 17:25:48 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405361BD9
-        for <linux-i2c@vger.kernel.org>; Wed,  9 Aug 2023 14:25:47 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d637af9a981so99518276.0
-        for <linux-i2c@vger.kernel.org>; Wed, 09 Aug 2023 14:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691616346; x=1692221146;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TeHUuHfRgnWDPuFH4hkEU5fzn9hCBRBVrCadOWnm/dY=;
-        b=m3F8/0ulUMYTwL9xFOJ0hLRUE0yTJsXtRqAWzCWvR8A+u4BtSF1Y9J//7l8oh0HeNF
-         d5qEkunwkS56Mz1cw7IUxuZVEOW2FD/UTOgzMNQJmPWQHyJ05/0wM/x6SuBrfs27Jrnt
-         qUklp3oTnJ7R4SapRrWPkfff8qOSLDGr1ld2cj9x3iq+oq3psVc6yx8Uk7alFVQLOTC7
-         FXHyjmZP0uT9Fi12AOmKZle93xdSLL1acnmz/8ctRZCUx4WiU1KuNlsM4s+l6BcfmLmd
-         +0n++QJDHSgrwWPxPCHclEP51dI4/IAC4TY6UkzLXJbTD3a9ekMpmCia1UX6FTucRJgY
-         pE0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691616346; x=1692221146;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TeHUuHfRgnWDPuFH4hkEU5fzn9hCBRBVrCadOWnm/dY=;
-        b=f4hVoOD6ZbgMW8pSkzFdN8l5yvo9vA/RR7GamQkc4sLkOzkRHx+l8BEhxvVVaEsnAv
-         aVH+K+JLUVRFMXEeJuWcWc5mBWv46mEnWTXLS6rEHP3VNjWFj3pHsZlyjn0z3o+KlKCp
-         nIJXfFpxI4v8Vll6SpHDLdLVF+v9/qDJ6icR/Sv+5aB/xW0tLNb2ytAyE09bE6ia/6Wt
-         5+L7mWtKb/WtWUCKM5WwzPPItz9k+6Z8GDaEW2aQheQam0dED0flAgD/MXBNFqoolhIR
-         /BEpMW/uezezp7n81Lyv+AcJQxhUdXvqGIpQMNIX+c3Z6hPTd2AH+F7EHL8cH9ssttWU
-         gQ/A==
-X-Gm-Message-State: AOJu0YxFFIihG1MCQLi11PRRYonpRS3NbyfUEXchE0itK6E2ROVPXXEN
-        AL6IcJNWXs0O+wgRBLr0RsMkwspiRzIMn1OrPw==
-X-Google-Smtp-Source: AGHT+IER7CD8SLhYDzqAvYfXBz6YfQlFaQpKeWFvIJE3aWUQIYc8I61MFtiEi6h9Vzp0vHtlu9BcD3BOdPTotW/zYw==
-X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a25:1409:0:b0:c6a:caf1:e601 with SMTP
- id 9-20020a251409000000b00c6acaf1e601mr9823ybu.13.1691616346561; Wed, 09 Aug
- 2023 14:25:46 -0700 (PDT)
-Date:   Wed, 09 Aug 2023 21:25:36 +0000
-In-Reply-To: <20230809-cbl-1903-v1-0-df9d66a3ba3e@google.com>
-Mime-Version: 1.0
-References: <20230809-cbl-1903-v1-0-df9d66a3ba3e@google.com>
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691616343; l=1145;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=8JnGtAd2EouEzprwFG0EpWdSWssM4tBnJ8iYInUW3tw=; b=y/bJoUJDpUrl23oM/z5FEe37aFVYK4HTaD9RQ9C+npAsantOFJJouIu1r+p30Gfq3nlCbIx8G
- DhPci9Ygy+cDBvibVqeQG0Mi40YPg54DPSndE/L8i0YHBy2nhk5+ZJD
-X-Mailer: b4 0.12.3
-Message-ID: <20230809-cbl-1903-v1-2-df9d66a3ba3e@google.com>
-Subject: [PATCH 2/2] i2c: i2c-rcar: fix -Wvoid-pointer-to-enum-cast warning
-From:   Justin Stitt <justinstitt@google.com>
-To:     Andi Shyti <andi.shyti@kernel.org>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229514AbjHJCeE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 9 Aug 2023 22:34:04 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072E41BF7;
+        Wed,  9 Aug 2023 19:34:04 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RLrWx3vfBzkXxQ;
+        Thu, 10 Aug 2023 10:31:09 +0800 (CST)
+Received: from [10.67.110.108] (10.67.110.108) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 10 Aug 2023 10:33:59 +0800
+Message-ID: <46a39960-ad79-ca65-6b2b-ccaf982965f5@huawei.com>
+Date:   Thu, 10 Aug 2023 10:33:58 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 9/9] i2c: synquacer: Use dev_err_probe in probe
+ function
+To:     Andi Shyti <andi.shyti@kernel.org>
+CC:     <florian.fainelli@broadcom.com>, <rjui@broadcom.com>,
+        <sbranden@broadcom.com>, <bcm-kernel-feedback-list@broadcom.com>,
+        <yangyicong@hisilicon.com>, <aisheng.dong@nxp.com>,
+        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
+        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
+        <kblaiech@nvidia.com>, <asmaa@nvidia.com>,
+        <loic.poulain@linaro.org>, <rfoss@kernel.org>, <ardb@kernel.org>,
+        <gcherian@marvell.com>, <linux-i2c@vger.kernel.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230808012954.1643834-1-liaochang1@huawei.com>
+ <20230808012954.1643834-10-liaochang1@huawei.com>
+ <20230809192117.h7rn6vwmvxdnkr2a@intel.intel>
+From:   "Liao, Chang" <liaochang1@huawei.com>
+In-Reply-To: <20230809192117.h7rn6vwmvxdnkr2a@intel.intel>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.108]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Fix the following warning:
+Hi Andi and Krzysztof,
 
-|  drivers/i2c/busses/i2c-rcar.c:1066:18: error: cast to smaller integer type \
-|       'enum rcar_i2c_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
-|   1066 |         priv->devtype = (enum rcar_i2c_type)of_device_get_match_data(dev);
-|        |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+在 2023/8/10 3:21, Andi Shyti 写道:
+> Hi Liao,
+> 
+> On Tue, Aug 08, 2023 at 09:29:54AM +0800, Liao Chang wrote:
+>> Use the dev_err_probe function instead of dev_err in the probe function
+>> so that the printed messge includes the return value and also handles
+>> -EPROBE_DEFER nicely.
+>>
+>> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> 
+> After some discussions and time, I think it's right to r-b this
+> patch. If you agree more with Krzysztof, feel free to follow his
+> recommendation and send another version otherwise I will go ahead
+> and take this series in my branch. I do not really mind, both
+> arguments are valid.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1904
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
- drivers/i2c/busses/i2c-rcar.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I saw that Frank Li developed some new APIs that look like they would be very
+helpful for aligning the error messages of devm_request_irq in device probes.
+However, the patches have been pending for weeks and the author hasn't sent a
+new version. So I'm not planning to switch to the new APIs in this patch series,
+if there are no objections.
 
-diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
-index 2d9c37410ebd..ae4072bc96dc 100644
---- a/drivers/i2c/busses/i2c-rcar.c
-+++ b/drivers/i2c/busses/i2c-rcar.c
-@@ -1063,7 +1063,7 @@ static int rcar_i2c_probe(struct platform_device *pdev)
- 	if (IS_ERR(priv->io))
- 		return PTR_ERR(priv->io);
- 
--	priv->devtype = (enum rcar_i2c_type)of_device_get_match_data(dev);
-+	priv->devtype = (unsigned long) of_device_get_match_data(dev);
- 	init_waitqueue_head(&priv->wait);
- 
- 	adap = &priv->adap;
+Do I need to resend a new revision to add your R-B at this patch?
+
+Thanks.
+
+> 
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+> 
+> Thanks,
+> Andi
 
 -- 
-2.41.0.640.ga95def55d0-goog
-
+BR
+Liao, Chang
