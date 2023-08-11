@@ -2,90 +2,41 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468B6778E86
-	for <lists+linux-i2c@lfdr.de>; Fri, 11 Aug 2023 14:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C28778FEE
+	for <lists+linux-i2c@lfdr.de>; Fri, 11 Aug 2023 14:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233238AbjHKMBG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 11 Aug 2023 08:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
+        id S234191AbjHKMxO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 11 Aug 2023 08:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbjHKMBF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Aug 2023 08:01:05 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C2410F;
-        Fri, 11 Aug 2023 05:01:00 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37B88G8v008911;
-        Fri, 11 Aug 2023 14:00:30 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=
-        selector1; bh=YFHcudHf3KpEu6VK+Oi7sDZa7u7aRH57T4p90BFxYt4=; b=kU
-        O35PwDwyu9KjgW31K5h+6ypqbjSO6SxBadYITZWgPgbjcx7JybnAtEPYUufCNZ1c
-        UmcJYsfb4v5cYrhDkibKKDxm5TpRLh/usyV9eplTbzPk8FWxlpA11SMe+tWFoHtE
-        nXPAN596HtBzcvDnDHR0ekdCH486R0r+TxPzL9tozmYQYoPWnnLGInYl3MRzO4Ve
-        mX/GHIkPAIGcQsdV9V/wrcIE3MhSv5JVpUfvddbdbHMcOV/6LpEQ9KIuJdAz19XH
-        RJctqFi0wSAJ+BRNaqX/iLjVk/ggN6VW/unTU9UDPsJ6xBkOROMcl3YQW+ceqGTb
-        HV30OC1Vqh+PAlrRr7vg==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3sdh74h9vb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Aug 2023 14:00:29 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 64D9710004F;
-        Fri, 11 Aug 2023 14:00:27 +0200 (CEST)
-Received: from Webmail-eu.st.com (eqndag1node4.st.com [10.75.129.133])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 287D02171E0;
-        Fri, 11 Aug 2023 14:00:27 +0200 (CEST)
-Received: from [10.201.21.121] (10.201.21.121) by EQNDAG1NODE4.st.com
- (10.75.129.133) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 11 Aug
- 2023 14:00:25 +0200
-Message-ID: <4f0f9d6c-ce4d-73a2-60bf-801c1a1d6cc3@foss.st.com>
-Date:   Fri, 11 Aug 2023 14:00:20 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [IGNORE][PATCH v4 01/11] dt-bindings: Document common device
- controller bindings
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <Oleksii_Moisieiev@epam.com>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
-        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
-        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
-        <fabrice.gasnier@foss.st.com>, <andi.shyti@kernel.org>,
-        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <hugues.fruchet@foss.st.com>,
-        <lee@kernel.org>, <will@kernel.org>, <catalin.marinas@arm.com>,
-        <arnd@kernel.org>, <richardcochran@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>, <peng.fan@oss.nxp.com>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20230811100731.108145-1-gatien.chevallier@foss.st.com>
- <20230811100731.108145-2-gatien.chevallier@foss.st.com>
- <2023081117-sprout-cruncher-862c@gregkh>
-From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <2023081117-sprout-cruncher-862c@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.121]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To EQNDAG1NODE4.st.com
- (10.75.129.133)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-11_02,2023-08-10_01,2023-05-22_02
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        with ESMTP id S229449AbjHKMxN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 11 Aug 2023 08:53:13 -0400
+Received: from mx4.sionneau.net (mx4.sionneau.net [51.15.250.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797F9114;
+        Fri, 11 Aug 2023 05:53:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sionneau.net;
+        s=selectormx4; t=1691757988;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=CaLitFg0AQg0SHOtu12KE1t6WKRpx9J2tJDVn0wAGlQ=;
+        b=yOzChHtAdLXsrrGyrh5FOxoWirMt8GAteFEMgiS35YA97tKuLkYXifA0gjKxWbU6Bvu2re
+        elEWPXyHmH0kto3SmrFMss7Io21BOGrp3LNzjGGDkSnawlOMKeKrBgGTEGPj6KllAwNeD7
+        HzzUaCzbln8aOaFHe1bqqSq7xlzFvUw=
+Received: from junon.lin.mbt.kalray.eu (<unknown> [217.181.231.53])
+        by mx4.sionneau.net (OpenSMTPD) with ESMTPSA id 62fa6ae0 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 11 Aug 2023 12:46:28 +0000 (UTC)
+From:   Yann Sionneau <yann@sionneau.net>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yann Sionneau <ysionneau@kalray.eu>,
+        Jonathan Borne <jborne@kalray.eu>
+Subject: [PATCH 1/2] i2c: designware: fix __i2c_dw_disable in case master is holding SCL low
+Date:   Fri, 11 Aug 2023 14:46:23 +0200
+Message-Id: <20230811124624.12792-1-yann@sionneau.net>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -94,48 +45,89 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Yann Sionneau <ysionneau@kalray.eu>
 
+The designware IP can be synthesized with the IC_EMPTYFIFO_HOLD_MASTER_EN
+parameter.
+In which case, if the TX FIFO gets empty and the last command didn't have
+the STOP bit (IC_DATA_CMD[9]), the dw_apb_i2c will hold SCL low until
+a new command is pushed into the TX FIFO or the transfer is aborted.
 
-On 8/11/23 12:16, Greg KH wrote:
-> On Fri, Aug 11, 2023 at 12:07:21PM +0200, Gatien Chevallier wrote:
->> From: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
->>
->> Introducing of the common device controller bindings for the controller
->> provider and consumer devices. Those bindings are intended to allow
->> divided system on chip into multiple domains, that can be used to
->> configure hardware permissions.
->>
->> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
->> [Gatien: Fix typos and YAML error]
->> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->> ---
->>
->> Changes in V4:
->> 	Corrected typos and YAML errors	
-> 
-> Why are we supposed to ignore the first patch in this series, but pay
-> attention to the 10 after this that depend on it?
-> 
-> totally confused,
-> 
-> greg k-h
+When the dw_apb_i2c is holding SCL low, it cannot be disabled.
+The transfer must first be aborted.
+Also, the bus recover won't work because SCL is held low by the master.
 
-Hello Greg,
+This patch checks if the master is holding SCL low in __i2c_dw_disable
+before trying to disable the IP.
+If SCL is held low, an abort is initiated.
+When the abort is done, the disabling can then proceed.
 
-I'm sorry that this tag troubles your review. It was first suggested
-in [1]. The "IGNORE" means ignore review on this thread, as it is still
-under review in another thread (Link in the cover letter). It does not
-mean that the content should be ignored for the series. I will change
-this to something else as this is obviously confusing the review.
+This whole situation can happen for instance during SMBUS read data block
+if the slave just responds with "byte count == 0".
+This puts the master in an unrecoverable state, holding SCL low and the
+current __i2c_dw_disable procedure is not working. In this situation
+only a Linux reboot can fix the i2c bus.
 
-@Oleksii, can we imagine integrating this patch to this series or do
-you prefer to keep it apart?
+Co-developed-by: Jonathan Borne <jborne@kalray.eu>
+Signed-off-by: Jonathan Borne <jborne@kalray.eu>
+Tested-by: Yann Sionneau <ysionneau@kalray.eu>
+Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+---
+ drivers/i2c/busses/i2c-designware-common.c | 17 +++++++++++++++++
+ drivers/i2c/busses/i2c-designware-core.h   |  3 +++
+ 2 files changed, 20 insertions(+)
 
-Should I consider a resend with another tag if Oleksii prefers to keep
-this patch apart?
+diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+index 9f8574320eb2..744927b0c5af 100644
+--- a/drivers/i2c/busses/i2c-designware-common.c
++++ b/drivers/i2c/busses/i2c-designware-common.c
+@@ -440,8 +440,25 @@ void __i2c_dw_disable(struct dw_i2c_dev *dev)
+ {
+ 	int timeout = 100;
+ 	u32 status;
++	u32 raw_intr_stats;
++	u32 enable;
++	bool abort_needed;
++	bool abort_done = false;
++
++	regmap_read(dev->map, DW_IC_RAW_INTR_STAT, &raw_intr_stats);
++	regmap_read(dev->map, DW_IC_ENABLE, &enable);
++
++	abort_needed = raw_intr_stats & DW_IC_INTR_MST_ON_HOLD;
++	if (abort_needed)
++		regmap_write(dev->map, DW_IC_ENABLE, enable | DW_IC_ENABLE_ABORT);
+ 
+ 	do {
++		if (abort_needed && !abort_done) {
++			regmap_read(dev->map, DW_IC_ENABLE, &enable);
++			abort_done = !(enable & DW_IC_ENABLE_ABORT);
++			continue;
++		}
++
+ 		__i2c_dw_disable_nowait(dev);
+ 		/*
+ 		 * The enable status register may be unimplemented, but
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index 19ae23575945..dcd9bd9ee00f 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -98,6 +98,7 @@
+ #define DW_IC_INTR_START_DET	BIT(10)
+ #define DW_IC_INTR_GEN_CALL	BIT(11)
+ #define DW_IC_INTR_RESTART_DET	BIT(12)
++#define DW_IC_INTR_MST_ON_HOLD	BIT(13)
+ 
+ #define DW_IC_INTR_DEFAULT_MASK		(DW_IC_INTR_RX_FULL | \
+ 					 DW_IC_INTR_TX_ABRT | \
+@@ -109,6 +110,8 @@
+ 					 DW_IC_INTR_RX_UNDER | \
+ 					 DW_IC_INTR_RD_REQ)
+ 
++#define DW_IC_ENABLE_ABORT		BIT(1)
++
+ #define DW_IC_STATUS_ACTIVITY		BIT(0)
+ #define DW_IC_STATUS_TFE		BIT(2)
+ #define DW_IC_STATUS_MASTER_ACTIVITY	BIT(5)
+-- 
+2.17.1
 
-[1] 
-https://lore.kernel.org/all/1e498b93-d3bd-bd12-e991-e3f4bedf632d@linaro.org/
-
-Best regards,
-Gatien
