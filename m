@@ -2,59 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7122477B954
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Aug 2023 15:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1B777B977
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Aug 2023 15:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbjHNNCT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 14 Aug 2023 09:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
+        id S229498AbjHNNNF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Mon, 14 Aug 2023 09:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbjHNNCG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Aug 2023 09:02:06 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D341738;
-        Mon, 14 Aug 2023 06:01:53 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-589a6c2c020so61635517b3.1;
-        Mon, 14 Aug 2023 06:01:53 -0700 (PDT)
+        with ESMTP id S229709AbjHNNMj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Aug 2023 09:12:39 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8596CE6E;
+        Mon, 14 Aug 2023 06:12:38 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-d6a5207d9d8so1545802276.0;
+        Mon, 14 Aug 2023 06:12:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692018096; x=1692622896;
+        d=1e100.net; s=20221208; t=1692018757; x=1692623557;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ri/aAhV9V1QKg7f5IB5V2rWz5Gg5B1mduf0Q//YtRKw=;
-        b=TdW/cEEx1B47rEg/w44vUWBwTbSwnVJ6raS93GmpebRkmvR3kAgv5SKG5EQtNNELUE
-         2Q3HNHhveh8lY4SfTHFMkLuV/XKB/KoWfMZ7uOdi1tBuGznLzA/iTdLtz1VszyXTdOjS
-         OlM0emgQ3Hy1HqT8xqMJzoCniTLCUVFUX2pmULh0C7qrDr/2PcKIwXOwCgFJNlHDMeIS
-         wlSrPxqu0JRfYyrxoXCRnDa8l+7/8QOkA7igbJUoCd+1pegSl2KsU/XopT79uepqJNHc
-         SHMKusT/Ea7KmZvinANULLeqOcwlRdfxIMsrgOz4+b3lYRsyWUCDDZjk66ryZeKg3q8O
-         RIIw==
-X-Gm-Message-State: AOJu0YzYLjBLdQSs0yNr8efdBnweIKZgEeqeTvcRBf17kmSHfwyrkIuV
-        ju3pR8xbO37ywMVCUH3Tz8f7n+jx0Vul4A==
-X-Google-Smtp-Source: AGHT+IEMeRQYvn22++yzjtAWK3gd9orQ/RXnamvbeDfRBA9FXiU4VWSUM6P6Jab0/J7qK5/Mp4+vEQ==
-X-Received: by 2002:a5b:60a:0:b0:d09:22c0:138d with SMTP id d10-20020a5b060a000000b00d0922c0138dmr11861914ybq.7.1692018094963;
-        Mon, 14 Aug 2023 06:01:34 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id b8-20020a252e48000000b00d0d080074f3sm2311971ybn.31.2023.08.14.06.01.33
+        bh=hSgqut+JHlQUbB4Bd/FI8orZtwhhcAep0ucawImk8r8=;
+        b=S6CFp9bjlVo2MLbyJ+XyKa4kUnGsop4qB3jguxwG65I7ijvj55GkO7lj0YFBY94TgC
+         5KZQEfRttg297W2g1DBgvNEpexbazzzhtz7UMu720mzfWBzIOS+aPxSwJqPcaniDcTiD
+         UZ6K2QzOfviIkHcAemUNYaDE38KV7QSZ1nr/DuovwuPQsdfzksBwgqZ8tMBcB891g5Lm
+         w+qyRkQu9e+9enT1imMPSaLg8/Y8rDT/xWx/sj9XI6PxGTp9TfpyO+3o1whfhSH/v9s4
+         LU+7k/wwfvPrHD9uLE99dQPF/EcxtqZBFfKH1Z6ddf2Kyv3l52fgnyepivmAo5ibj/GY
+         MXJA==
+X-Gm-Message-State: AOJu0YwNels3wHdfljeccvDFY5aP4v9/zjkJegEHyHAOYS2X4nzmyqQY
+        TER/PyD/jBAw5tjJUCua/YHcnv9x8aAgeA==
+X-Google-Smtp-Source: AGHT+IFhPHRvUhhj3UWfHfsFGEqkY264d6jRqnAsh/AeEtCoU9+CuBeEQXY/MMPKPoP/4XAizAZajg==
+X-Received: by 2002:a05:6902:149:b0:d07:b677:3349 with SMTP id p9-20020a056902014900b00d07b6773349mr10364672ybh.25.1692018757455;
+        Mon, 14 Aug 2023 06:12:37 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id w6-20020a259bc6000000b00d06d47fd0b8sm2324160ybo.53.2023.08.14.06.12.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Aug 2023 06:01:34 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-d67305c80deso3901354276.1;
-        Mon, 14 Aug 2023 06:01:33 -0700 (PDT)
-X-Received: by 2002:a25:361f:0:b0:d48:8ff1:dd12 with SMTP id
- d31-20020a25361f000000b00d488ff1dd12mr15424802yba.18.1692018093136; Mon, 14
- Aug 2023 06:01:33 -0700 (PDT)
+        Mon, 14 Aug 2023 06:12:36 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-d6a5207d9d8so1545745276.0;
+        Mon, 14 Aug 2023 06:12:36 -0700 (PDT)
+X-Received: by 2002:a25:2d16:0:b0:d52:6882:1032 with SMTP id
+ t22-20020a252d16000000b00d5268821032mr14671149ybt.28.1692018756289; Mon, 14
+ Aug 2023 06:12:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230804161728.394920-1-biju.das.jz@bp.renesas.com>
- <20230805174036.129ffbc2@jic23-huawei> <OS0PR01MB59220491C7C8AA40BEFAAD82860EA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20230805174036.129ffbc2@jic23-huawei> <OS0PR01MB59220491C7C8AA40BEFAAD82860EA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
  <20230806142950.6c409600@jic23-huawei> <ZNEFjyAloqlkMWn7@smile.fi.intel.com>
-In-Reply-To: <ZNEFjyAloqlkMWn7@smile.fi.intel.com>
+ <ZNFV+C1HCIRJpbdC@google.com> <ZNIyrG/2h/PeS9Oz@smile.fi.intel.com>
+ <20230809182551.7eca502e@jic23-huawei> <OS0PR01MB59221A1ADB67E96E9E39D0198613A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <ZNT+NY99n7y3abwa@smile.fi.intel.com> <OS0PR01MB5922DD3C809B78F1E9C5949B8610A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <ZNZF6cjx5N+ZsIJx@smile.fi.intel.com> <OS0PR01MB5922E09340CDCFF54A9A6CBA8610A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB5922E09340CDCFF54A9A6CBA8610A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Aug 2023 15:01:21 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUHjema72HrmghH6ozVYHEBHZhnS4+mkrJJZPu2pQNUxg@mail.gmail.com>
-Message-ID: <CAMuHMdUHjema72HrmghH6ozVYHEBHZhnS4+mkrJJZPu2pQNUxg@mail.gmail.com>
+Date:   Mon, 14 Aug 2023 15:12:24 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU6LhvnZ5FE_3BxyH7reVi69Rjcircquk=jYZ6-j3cqug@mail.gmail.com>
+Message-ID: <CAMuHMdU6LhvnZ5FE_3BxyH7reVi69Rjcircquk=jYZ6-j3cqug@mail.gmail.com>
 Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct bus_type
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Daniel Scally <djrscally@gmail.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -62,7 +68,6 @@ Cc:     Jonathan Cameron <jic23@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Andi Shyti <andi.shyti@kernel.org>,
         Wolfram Sang <wsa@kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -75,7 +80,7 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,62 +88,45 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andy,
+Hi Biju,
 
-On Mon, Aug 7, 2023 at 4:54 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Sun, Aug 06, 2023 at 02:29:50PM +0100, Jonathan Cameron wrote:
-> > On Sat, 5 Aug 2023 17:42:21 +0000
-> > Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > > On Fri,  4 Aug 2023 17:17:24 +0100
-> > > > Biju Das <biju.das.jz@bp.renesas.com> wrote:
+On Fri, Aug 11, 2023 at 4:46 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct
+> > bus_type
+> >
+> > On Fri, Aug 11, 2023 at 01:27:36PM +0000, Biju Das wrote:
+> > > > On Thu, Aug 10, 2023 at 09:05:10AM +0000, Biju Das wrote:
+> >
+> > ...
+> >
+> > > > I'm good with this approach, but make sure you checked the whole
+> > > > kernel source tree for a such.
+> > >
+> > > Checking against 16 is too short I guess??
+> > >
+> > > drivers/iio/imu/inv_mpu6050/inv_mpu_iio.h has 18 enums.
+> >
+> > So, what does prevent us from moving that tables to use pointers?
 >
-> ...
+> I think that will lead to ABI breakage(client->name vs id->name)
 >
-> > > + * Besides the fact that some drivers abuse the device ID driver_data type
-> > > + * and claim it to be integer, for the bus specific ID tables the driver_data
-> > > + * may be defined as kernel_ulong_t. For these tables 0 is a valid response,
-> > > + * but not for this function. It's recommended to convert those either to avoid
-> > > + * 0 or use a real pointer to the predefined driver data.
->
-> > We still need to maintain consistency across the two tables, which
-> > is a stronger requirement than avoiding 0.
->
-> True. Any suggestion how to amend the above comment? Because the documentation
-> makes sense on its own (may be split from the series?).
+>         match = device_get_match_data(&client->dev);
+>         if (match) {
+>                 chip_type = (uintptr_t)match;
+>                 name = client->name;
+>         } else if (id) {
+>                 chip_type = (enum inv_devices)
+>                         id->driver_data;
+>                 name = id->name;
+>         } else {
+>                 return -ENOSYS;
+>         }
 
-I do have an idea how to handle that (inspired by the macro-heavy
-R-Car pin control drivers ;-)
+I don't consider that part of the ABI, as e.g. converting from board files
+to DT would change the name.
+In addition, using id->name breaks multiple instances of the same device.
 
-    #define DEVICES(fn) \
-        fn("vendor1", "device1", &driver_data1) \
-        fn("vendor3", "device2", &driver_data2) \
-        fn("vendor3", "device2", &driver_data3)
-
-    OF_MATCH_TABLE(driver_of_match, DEVICES);
-    I2C_MATCH_TABLE(driver_i2c_ids, DEVICES);
-
-and in the of resp. i2c headers:
-
-    #define EMIT_OF_ENTRY(_vendor, _device, _data) \
-            { .name = _vendor ## "," ## _device, .data = _data) },
-    #define EMIT_OF_ENTRIES(_name, _devs) \
-            static const struct of_device_id _name[] = { \
-                    _devs(EMIT_OF_ENTRY) \
-                    { } \
-            } \
-
-    #define EMIT_I2C_ENTRY(_vendor, _device, _data) \
-            { .name = _device, .driver_data = (void *)_data) },
-    #define EMIT_I2C_ENTRIES(_name, _devs) \
-            static const struct i2c_device_id _name[] = { \
-                    _devs(EMIT_I2C_ENTRY) \
-                    { } \
-            } \
-
-I didn't try to compile this, so I may have missed something (e.g.
-a required intermediate macro to ensure proper expansion).
-Unfortunately this would break grep'ability for compatible values...
+I applaud more unification ;-)
 
 Gr{oetje,eeting}s,
 
