@@ -2,63 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B4D77BC49
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Aug 2023 17:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B0277BC5D
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Aug 2023 17:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjHNPCc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Aug 2023 11:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S229511AbjHNPFn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Aug 2023 11:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbjHNPCO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Aug 2023 11:02:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDCB18F;
-        Mon, 14 Aug 2023 08:02:13 -0700 (PDT)
+        with ESMTP id S232558AbjHNPF0 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Aug 2023 11:05:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239EDE6A;
+        Mon, 14 Aug 2023 08:05:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C810162B00;
-        Mon, 14 Aug 2023 15:02:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C5BC433C8;
-        Mon, 14 Aug 2023 15:02:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B727F611FE;
+        Mon, 14 Aug 2023 15:05:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA324C433C8;
+        Mon, 14 Aug 2023 15:05:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692025332;
-        bh=CLst8JcIxRWJRs96SWu43o7JLfLImPUU1vROlmY+7V0=;
+        s=k20201202; t=1692025525;
+        bh=4p3z9h6V5+vZPZBXXP6SecTUBOk6jE8UP8wSMjIbjXg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gtbYFW/YIqdj8Sia7jg+XIhP2UJW05KXxzz/dVFPvj6/61CI51fZruZlNUaHhd2Q4
-         qhvbaMxNW1/SaEBpebU7emYByq3yXPzvG6zD7UYLAIir9TBsWlSVtGUH3H7p3HcF4k
-         U8MXKe1whDqs5oAvt6IS4njkMm4RoOhZrUvYYMFS90TevvNRmeRSqasg4znPQECkVh
-         C/CbK5oolhiYUOMbWtpC5+pGytQS7zZjXSheMMKpjYTOEdmUJCwfWlujPCfrvqjTlo
-         RiwkLcjvwJhe7NiyckE8fJsbYJbvBFx+wYHShlkr0ItRtwRs7fShLwHYTs7Fm/NwfP
-         tWJeXuQCwGFjg==
-Date:   Mon, 14 Aug 2023 17:02:09 +0200
+        b=bTdyAgCI6GA7kv+piDLHBOi/CNISNFWEyAk0wvmVFbkJ8OQLGGTtymT0ly5Lzg0EQ
+         l5RxrQtejWK9MbeswBJuFSruueo6p2iqo9Mx/IamnpgLqtro49at1gMoUlIOtx6c5U
+         v7FIdzCrsFSbofDCY2UDjD2uGMIdquCdwMXUKJQ20y5tDUsl+m+PJRmwZp05vDMfU1
+         PcJ7gDG/GJTq+gzbFUN1wJ/C4Rnbw9OMDJuyCXThpyX5MUt3LatIJnJ79qXf74Pby2
+         AgKp/NCNV4Tb8M3YRXcmTb69+Av+ciA6s0OjrqwAt93mXtSuHJLBy9InNwk2iFrIIB
+         60zb5uSgsKpHA==
+Date:   Mon, 14 Aug 2023 17:05:21 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, carlos.song@nxp.com,
-        xiaoning.wang@nxp.com, haibo.chen@nxp.com, linux-imx@nxp.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] i2c: imx-lpi2c: directly return ISR when detect a NACK
-Message-ID: <ZNpB8fWnOcH8997V@shikoro>
+Cc:     krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Ruan Jinjie <ruanjinjie@huawei.com>
+Subject: Re: [PATCH -next] i2c: s3c2410: Remove redundant dev_err()
+Message-ID: <ZNpCsZzVF8WchW+P@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>, aisheng.dong@nxp.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, carlos.song@nxp.com, xiaoning.wang@nxp.com,
-        haibo.chen@nxp.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230727030347.3552992-1-carlos.song@nxp.com>
- <169100562766.1919254.12222013232053766298.b4-ty@kernel.org>
+        Andi Shyti <andi.shyti@kernel.org>, krzysztof.kozlowski@linaro.org,
+        alim.akhtar@samsung.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Ruan Jinjie <ruanjinjie@huawei.com>
+References: <20230726174226.2480552-1-ruanjinjie@huawei.com>
+ <169100562768.1919254.7407243487471763166.b4-ty@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w3K+5rbsIPadrzlO"
+        protocol="application/pgp-signature"; boundary="MvsnLAYldP8ONpVl"
 Content-Disposition: inline
-In-Reply-To: <169100562766.1919254.12222013232053766298.b4-ty@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <169100562768.1919254.7407243487471763166.b4-ty@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,48 +63,44 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---w3K+5rbsIPadrzlO
+--MvsnLAYldP8ONpVl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 02, 2023 at 10:10:31PM +0200, Andi Shyti wrote:
+On Wed, Aug 02, 2023 at 10:10:35PM +0200, Andi Shyti wrote:
 > Hi
 >=20
-> On Thu, 27 Jul 2023 11:03:47 +0800, carlos.song@nxp.com wrote:
-> > A NACK flag in ISR means i2c bus error. In such condition,
-> > there is no need to do read/write operation.
+> On Wed, 26 Jul 2023 17:42:26 +0000, Ruan Jinjie wrote:
+> > There is no need to call the dev_err() function directly to print a cus=
+tom
+> > message when handling an error from platform_get_irq() function as
+> > it is going to display an appropriate error message in case of a failur=
+e.
 > >=20
-> > In this patch, i2c will check MSR_NDF, MSR_RDF and MSR_TDF
-> > flag in turn, it's making mutually exclusive NACK/read/write.
-> > So when a NACK is received(MSR_NDF), i2c will return ISR
-> > directly and then stop i2c transfer.
 > >=20
-> > [...]
->=20
-> Applied to i2c/andi-for-next on
 
-Applied to for-next (via Andi's tree), thanks!
+Applied to for-next (via Andi's branch), thanks!
 
 
---w3K+5rbsIPadrzlO
+--MvsnLAYldP8ONpVl
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTaQewACgkQFA3kzBSg
-KbbjoBAArY/BhYhzQhmZR3cld8jSC7zTM/UcLi9YgnSUMdJ4rrLV9Lzf5dGk58WF
-tfdUGhPDDY7CgYwVurUENvqtU5g5O+b4LQJ9Fyj2F/10U5lAFv7Bn6A5W6w98yFH
-28EgSPb5YEuKuDwhIsRmuII5AZf/A6mb7ivrT7e7gS1dn5Ur7GkHhsd9f4megZeq
-WOKZ4Psva/JW0SZW3LlyayV/ZJQsZcapt/puXIPt2IupefKoUxduu4Dbw3sVhf1U
-zA5p4Kw+q0NBqXN7P9D3ZlyWGmYsNURrp4I2EEWkFnQj9yZExVugaEx5TabK9C3q
-z/xBBE504UKgME5n5b7F7IT9wiFRjwwsjtLFlnIrk+h8MnqJ9H2GnVr0UW3Z7tnN
-vMixefzx211lTy9CGWz2zIe6ar4bohkH33u3EEufb0OjBo42s7PXNQ4AudHoCnCO
-TupY9SpVElJmpSocg4i2Q4xBbE/55Gw9q1uOe1dtBz0PP9n1SX+95iZdr/WiZ4zU
-0ZuH2tdaoF+13ngwcih1s6McMwCb4/A6t/AkZcytpk/HzK14rLOAnOorFuaMjfFm
-JUnMigzyLzgiTCVqa0erVtI5/CHIOUkIPJJ74R/Li0upA8HnK23ePRk1F6aB+qRB
-p5JXeKlR1gxjwOAcUI4OAuFT9jWMaS906RzHXjpA/hoDv5YqdFs=
-=yuB9
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTaQrEACgkQFA3kzBSg
+Kbaguw/9H0RINXI13sHlLZfgr/kcMN5W2way+cKnaTzxAkLo/n1FDJ7SwrnoRvMb
+aaq5mzB0nFQvhTPSi9r4fgbBlebYyz/F55LYlTbsenem4R/b2+D2prugrE8GypAq
+TL74CFn889w7HnmpbN+/f6OW21XRXZ3rXiJ/xVKeJLCeStj87a4mZeWn03uqaX66
+5/vI/rqlOZTnwmWlE+cDdz3rGIKzB7a/0sZiOJT9a485xMhJazD06GL1xgqJ/mif
+hSEEyum2994uKtaXrf15oRLJm0th9u0hoxrGwgKdKJEmotkmEy3SvkH13m2W5kK7
+MsXdZXRlwV6JZtZxmXsFw0VgAEcKONpr5HyVA8Dm1Izhae6vlZYEs0f+2G6Jl5Ua
+xbjyWOIebXfR7h4mHT5F0fRmri/HbV+GBjAmLpBbcyFhYPrTf1kFEKs7ckd9h/A7
+iWOJ6x4nw/m1tnvbe5rb0QVrhSlhFEmYqZGmLeLnfnqSz6EXI7O516cyfpohd/n8
+wfIkhRBbqM2HnvtibJiyApNj/x28ygE7hcs1xhUQBEL8RxT+imqgTh6pGt+gku44
+kdWlt1hoY80w3m/IhKN/ruCzDrTriNQj9z5X8KpYdIHzgHgcZ66EsVC0i7GMRBWF
+8PrA9iFY7feY0L+W+62Hrzobbneabxfu+eNV3UULLsSEkktQcm4=
+=WiNN
 -----END PGP SIGNATURE-----
 
---w3K+5rbsIPadrzlO--
+--MvsnLAYldP8ONpVl--
