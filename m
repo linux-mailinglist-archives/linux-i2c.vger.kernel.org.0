@@ -2,57 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E442977BCCF
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Aug 2023 17:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5425777BCD1
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Aug 2023 17:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjHNPRA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Aug 2023 11:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
+        id S231629AbjHNPRc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Aug 2023 11:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232960AbjHNPQo (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Aug 2023 11:16:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E1D173E
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Aug 2023 08:16:23 -0700 (PDT)
+        with ESMTP id S232648AbjHNPRC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Aug 2023 11:17:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353A11726;
+        Mon, 14 Aug 2023 08:16:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADD226566D
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Aug 2023 15:15:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCB98C433C8;
-        Mon, 14 Aug 2023 15:15:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B61363D27;
+        Mon, 14 Aug 2023 15:16:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E311C433C7;
+        Mon, 14 Aug 2023 15:16:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692026104;
-        bh=eQAgEd41v4YI6qj01T2BetIW0nxk891N3CCGbuy1shU=;
+        s=k20201202; t=1692026197;
+        bh=DRzdPIKUmbGcvAzpJ59Jaz3VgU+um32k/6LTcjJ6FDI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CMNjNJdkNzcB8egAM7USYx7c0K+L1xS+3W1pA/jACFzRuwb7c/INS+PEB/JFOCC6k
-         pdZBvssd0j1XUPfFbAcEHETqrvFyP8U7jo1pwZWeWBUA4N7hLJRvAaTM8D+ypZqjZa
-         axBES4mx3wmk6atG1w/bIN2BygANYBMl38X770Qih8VE9ZB/CAK/X8Ueo0Gd4PyvTA
-         PQSxL2TB0/cgGJRTAKK9dJx/fnCjWPfoggQVdFWHIPVq2sqmAjCAZUriIQKZm516dA
-         mp1JoK5sEavf68+b2NTDpM0X13f1LjL7zo3YB0aH3RhRG5bSLuBbreEJyIW2TjWpIX
-         1e+gueyNCiFfA==
-Date:   Mon, 14 Aug 2023 17:15:01 +0200
+        b=P5LvcNE7N91sDfLj0zXRy9zX+HGhLvEe+yhLsN4PGJAJTHOLjiysAfzHtRRh46ZjP
+         dNCF4mmYla2l/otHE4OdPM0xNzBOnXkxxBlkMXkF04Ql6Y3pktqBIpr3BhDtiIeTy4
+         23y4n5Q9gKlUWzlcRo2WyX3GajD4QhKVh6cZeUASCvCOoTr2G+Qd+J7r+wJgGBkjYa
+         cbBHzO1QvLnQRAU82h2ewJPdrJm07wn3TXWBVROeOL6sui3e26+B6Sp6aT8IJJVhAt
+         0lQopZHlKp5YwABbKJJjYEhT8iMwfvmM2y+61+bldQJWcUfhmfqsnIMAdckEEZxjFT
+         gUZy2SbRJvyaw==
+Date:   Mon, 14 Aug 2023 17:16:31 +0200
 From:   Wolfram Sang <wsa@kernel.org>
 To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     michael.hennerich@analog.com, peda@axentia.se,
-        linux-i2c@vger.kernel.org, Ruan Jinjie <ruanjinjie@huawei.com>
-Subject: Re: [PATCH -next] i2c: mux: ltc4306: Remove an unnecessary ternary
- operator
-Message-ID: <ZNpE9QXZbmjvjQqu@shikoro>
+Cc:     florian.fainelli@broadcom.com, rjui@broadcom.com,
+        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        yangyicong@hisilicon.com, aisheng.dong@nxp.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, kblaiech@nvidia.com,
+        asmaa@nvidia.com, loic.poulain@linaro.org, rfoss@kernel.org,
+        ardb@kernel.org, gcherian@marvell.com,
+        Liao Chang <liaochang1@huawei.com>, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v3 0/9] Use dev_err_probe in i2c probe function
+Message-ID: <ZNpFT18MJh2cyEZY@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>, michael.hennerich@analog.com,
-        peda@axentia.se, linux-i2c@vger.kernel.org,
-        Ruan Jinjie <ruanjinjie@huawei.com>
-References: <20230801025328.3380963-1-ruanjinjie@huawei.com>
- <169123651971.2868114.6900808236241841864.b4-ty@kernel.org>
+        Andi Shyti <andi.shyti@kernel.org>, florian.fainelli@broadcom.com,
+        rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, yangyicong@hisilicon.com,
+        aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        kblaiech@nvidia.com, asmaa@nvidia.com, loic.poulain@linaro.org,
+        rfoss@kernel.org, ardb@kernel.org, gcherian@marvell.com,
+        Liao Chang <liaochang1@huawei.com>, linux-i2c@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230808012954.1643834-1-liaochang1@huawei.com>
+ <169165547667.2480436.2965071341321476080.b4-ty@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CghA26ttsxVVKv8S"
+        protocol="application/pgp-signature"; boundary="8+NiwAwBgQFDWghu"
 Content-Disposition: inline
-In-Reply-To: <169123651971.2868114.6900808236241841864.b4-ty@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <169165547667.2480436.2965071341321476080.b4-ty@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,43 +77,46 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---CghA26ttsxVVKv8S
+--8+NiwAwBgQFDWghu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Aug 05, 2023 at 01:55:56PM +0200, Andi Shyti wrote:
+On Thu, Aug 10, 2023 at 10:19:35AM +0200, Andi Shyti wrote:
 > Hi
 >=20
-> On Tue, 01 Aug 2023 10:53:28 +0800, Ruan Jinjie wrote:
-> > The true or false judgement of the ternary operator is unnecessary
-> > in C language semantics. So remove it to clean Code.
+> On Tue, 08 Aug 2023 09:29:45 +0800, Liao Chang wrote:
+> > Use the dev_err_probe function instead of dev_err in the probe function
+> > so that the printed messge includes the return value and also handles
+> > -EPROBE_DEFER nicely.
 > >=20
+> > NOTICE: dev_err_probe always print the second parameter that happens to
+> > be the return value, hence the return errno will be removed from the
+> > third parameter to avoid a redundant error message.
 > >=20
->=20
-> Applied to i2c/andi-for-next on
+> > [...]
 
 Applied to for-next (via Andi's branch), thanks!
 
 
---CghA26ttsxVVKv8S
+--8+NiwAwBgQFDWghu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTaRPUACgkQFA3kzBSg
-KbZc8RAAo0psoILtQc1HE7wgHsNfnAsAOjI6pYEmtwmd9EXXAq47CPCbPVJb+QJg
-m33i/riu2Vp8s9ex+bXs2Vs92FCRmbUZY/nm+8yJ8ActKB6g8c7hyM1KuS35UwXw
-hCHwtXiTl9h0xwVd9QFrN5FUp2GRPFEyu3zGsDuMxW+uIb3IdjIfdxc/MO1EbNOk
-MahzTXdUHURUpkQHnz1hNd8nNtxBnZOXub/k9ZqAh6dq2OEA3CQr6SO5pc+4kTWU
-eddptT2+EJ/UCTYXiIN8V56f1jXxP77kJhN2tfdviHowg20CnDQ/jtT9REcOpYyR
-QkeO5w9BfvScSMEXzSMhpdNyZ675SIABwNn26a+ybdXDUH0zP97iBLMagYz54We5
-aCD8NoDMHJ2l45hgaI+vVncOfI9LSSZsr4bpsPmXP1q/MvnAAev+gkh1bBcXucBg
-zCXBU5jBKeR64JVI3EcvNNNZLaKMvBTh7erE2ukt25v53LXfgy+PkJ9M2ubfNPKS
-a4g4BMU0HWEiTUaL/hjwNBa5YAFzl6u4/AwHvepXwsRbm/tP3r/gyetdzU49JhPH
-jznZ9deyMeEB48RGiBLKZaMVDvejcThxHRn4+tsQh6wSRuHKVP/3ZDulSyuUmz1D
-S/0ZSaZcGh7xbKFRoLeJT0c3TaRSiXWhQeYnvcbzrV8J9Ck0U2o=
-=snet
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTaRU4ACgkQFA3kzBSg
+KbbgbA//VfSSnUFBZKU7yYg8sAHg81guMfRmL9es0zCaT7kpvdl+MQjcMZPzm5+b
+BUoxuyW4xnHiMYQtCuXTsUv5N5LC/XEw/qypExq10hQ5xeKk9TZnmYOdJaiCo6y0
+dRjHGHaIkwObj1Y4NhdsOKFAb5LzD6K/MWn+0/79/qm4AzHGqcwL41xugowg2hH7
+/WBrKKPtll/xdUGBU8yQzl/WpumtEXY1xZnxSRKfaMq3Pv0ow5lUb/7KT++qYys5
+KGTP8XjfTv6s08wyZa+qZTQ3PLzkoyddXOgNiLvjdVbNMehXTwXW5vOXG4pTDxi5
+sfP3i0JPBJg6e8vf4b69Qc8UWCihq+XF2wmLfRX7AJoI3XJERYBkslqb5xdHSieB
+FP4ajNydI7aEOWfdJA7OwBcrW1p5/HXaHJlx35AAsfzR4G4IeCC3ixbmVJqU6/gv
+3mIkwnujrYDBYtO5D22N41COi9F393CmKKfb6XsIJrLIqvhkaRZIiuMWRfngnmhA
+1Pz7LvW7vjcRYv0US4fXgYkMtCNmvDgxPtMcFpuqc9wUywXk7MVzL95Kz8WmIDZb
+AKFC7Fg8v+S7qtBNSyT9UdOwbUVRv2TImM9sCu7UvLSPBZyaqjeunesSSWYKSNVl
+9vDeEIi9idvSQw9T40OxQFqf+af8HFZtoVQ1ofwzmln5Xth/jvo=
+=+Bmf
 -----END PGP SIGNATURE-----
 
---CghA26ttsxVVKv8S--
+--8+NiwAwBgQFDWghu--
