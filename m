@@ -2,69 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115FA77BA44
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Aug 2023 15:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4686E77BA57
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Aug 2023 15:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbjHNNib (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Aug 2023 09:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S230172AbjHNNmO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Aug 2023 09:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbjHNNiN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Aug 2023 09:38:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87343106;
-        Mon, 14 Aug 2023 06:38:12 -0700 (PDT)
+        with ESMTP id S231177AbjHNNmG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Aug 2023 09:42:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785E4106
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Aug 2023 06:42:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CBB8616F0;
-        Mon, 14 Aug 2023 13:38:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04BAEC433C8;
-        Mon, 14 Aug 2023 13:38:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F7036528D
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Aug 2023 13:42:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB8C6C433C8;
+        Mon, 14 Aug 2023 13:42:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692020291;
-        bh=t7icBauJBJbjfgpWzY440IllQTVH/6HK+tv6+c4cYTw=;
+        s=k20201202; t=1692020524;
+        bh=6i0lIGZB2K6cNVhaCBHFeOMta7lOQd5gC7KgaF8Xvv8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q0G/P5u601yj55RWvw2gClmvEfBdOUAylS2eaRLXMus/fyWigWFE/GpQ+DPUHUq58
-         pPY0V/OeQctjK9hIm8mykfKxY7nQELOSlN0SE5secLkkz0HscZWs6J9h+qgEi9ikuL
-         rLXBBo0QzDBJP472uNaAXVb0QlMrqHN4deU643CFXjldoAo+aTE9jyLGjyJtmhpWkt
-         k+XGFNuqRn9NG/x7Goxg2DzxkPUTKozm4Eidij2eB4/Lqhvib5IhtDANNspTQFacFg
-         9islMXR565w6J62g6e4ryznnSXTIpsRt0m1lH5BBt3vQQ6tEZYU5/VrIhhzSPjV+bY
-         ybjdWQDrjzTbw==
-Date:   Mon, 14 Aug 2023 15:38:08 +0200
+        b=dGkLSJ538hlzlbpEyWwTs34fEGOeSkzu25eBjwL/d7LfA3HpJhFty9G9e/XfKNH6u
+         N1OReUv2WPiJuCRw7Sl+H/LHR2YKaee7IXokqsya72YZH6j/pW3Eidc1lpt7ee+cbu
+         u8DgpalZLHB8B2S3qO/fD9c67ea9jb1SlZC+RZAmszOXfW5xSj+dFQUYwEM+DRT4hO
+         PNmY5RGAZaeTIrGJKVyWtRbRex42mpdlT7/JQj75gk9mZgTFIe/td8lAwniFlSyd6D
+         MO80d2MLXmcCvPk7iADR2sqgtzby4yZb/cpL7VTLFZ9RIJH/A9jaQL08OkW79OycEr
+         kwJYpFnmpb2Mw==
+Date:   Mon, 14 Aug 2023 15:42:01 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Parker Newman <pnewman@connecttech.com>
-Cc:     Laxman Dewangan <ldewangan@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: tegra: Fix i2c-tegra DMA config option processing
-Message-ID: <ZNouQE7JpkGXdwvV@shikoro>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
+        yangyicong@hisilicon.com, f.fangjian@huawei.com,
+        linuxarm@huawei.com
+Subject: Re: [PATCH] i2c: hisi: Only handle the interrupt of the driver's
+ transfer
+Message-ID: <ZNovKVNuxXf457t8@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Parker Newman <pnewman@connecttech.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <fcfcf9b3-c8c4-9b34-2ff8-cd60a3d490bd@connecttech.com>
+        Yicong Yang <yangyicong@huawei.com>, andi.shyti@kernel.org,
+        linux-i2c@vger.kernel.org, yangyicong@hisilicon.com,
+        f.fangjian@huawei.com, linuxarm@huawei.com
+References: <20230801124625.63587-1-yangyicong@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Db4jKuiAS4AKOy/g"
+        protocol="application/pgp-signature"; boundary="1peg8Ul36MINFZnY"
 Content-Disposition: inline
-In-Reply-To: <fcfcf9b3-c8c4-9b34-2ff8-cd60a3d490bd@connecttech.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230801124625.63587-1-yangyicong@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,52 +61,43 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---Db4jKuiAS4AKOy/g
+--1peg8Ul36MINFZnY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 03, 2023 at 05:10:02PM +0000, Parker Newman wrote:
+On Tue, Aug 01, 2023 at 08:46:25PM +0800, Yicong Yang wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
 >=20
-> This patch fixes the Tegra DMA config option processing in the
-> i2c-tegra driver.
+> The controller may be shared with other port, for example the firmware.
+> Handle the interrupt from other sources will cause crash since some
+> data are not initialized. So only handle the interrupt of the driver's
+> transfer and discard others.
 >=20
-> Tegra processors prior to Tegra186 used APB DMA for I2C requiring
-> CONFIG_TEGRA20_APB_DMA=3Dy while Tegra186 and later use GPC DMA requiring
-> CONFIG_TEGRA186_GPC_DMA=3Dy.
->=20
-> The check for if the processor uses APB DMA is inverted and so the wrong
-> DMA config options are checked.
->=20
-> This means if CONFIG_TEGRA20_APB_DMA=3Dy but CONFIG_TEGRA186_GPC_DMA=3Dn
-> with a Tegra186 or later processor the driver will incorrectly think DMA =
-is
-> enabled and attempt to request DMA channels that will never be availible,
-> leaving the driver in a perpetual EPROBE_DEFER state.
->=20
-> Signed-off-by: Parker Newman <pnewman@connecttech.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 
-Applied to for-current, thanks!
+Applied to for-current, thanks! I updated the comment to mention that
+another port is likely the firmware. Similar like in the above text.
 
 
---Db4jKuiAS4AKOy/g
+--1peg8Ul36MINFZnY
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTaLkAACgkQFA3kzBSg
-KbbFJg/+NI5XqMJpKaWLfSatM0gW6FIo79Uim8p8ap/55ijuzAnBVsl4x4Ue//L5
-+ebfAQ65hOS5P8+08RR7IdRuAD6iTAOHSXHE/Fj5Yvs+VKI847lxcSNQ5T2k6ori
-pycBnmAkolhNU8TLMsSyJEheOmeBfPzyLKmc6p2DxmTokltKA2C92IABycFCaNPC
-yVuPx0pKsotWyk7ANA28n7nQyZA+5RQn2+oUo5ZgGLZTuMM52FQEDGF8lSbVuaOl
-nLkoBmmgTZJDizNBcjydYDWGowzoLxHtwHGTAkmQv17GmM2sPb8EMWNkC2HW9GLD
-M4jNdgm9BQuoFnHzggmtKLT5XE3myCcx8zq/0ldO4MUGwteS3PuwTj8l0jsX062N
-pPca3Tv02FI3q4YQ8rfR2aupqpfxT7MpLF3Jfv/LTGhpKXRr6mnFda8xq3OAIixP
-sISl4p3ztVk6h3dOtUI6mqaIKsiUImB3Inus28K1L+SPz0bnmPdcUPhXpzlWpY1p
-oUOVUyEMNVXCzXP+W5UYmQyfxokOUNwhPNjk9MqhSChsjsoupmUcEp8eWJkUYaDg
-iwvmyT5tqyPwMZ/I8LPgxw6QX8nRqRwH+TJwByW6MiUpZiwmUWCgeMB+ZLwFFwVq
-rL0CrMnOA1jxSYjaPctiAdC9A6KXk3r4FPxQ1jEkKygDWCxx9rM=
-=+wNa
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTaLykACgkQFA3kzBSg
+KbYV5g/+IrVM1fuN7cE34+1RexgBGRFZxl1zUTEhVr4plBH/BNrMQv6/7LFsl5Q9
+Yks8vCMxeBosmNS7lWnwuvZCnTDxfvI/FaYDScL3ZqHBFOf/3J+dbDLib/fMNKN6
+BZz7/eFCBbgmXsmqzx/ipD1JL0Uh6bN8qtlCHSVBl7bw3ZKfrz19AqInAQqbBcQg
+3xYuZB17wkW9tJO+xWqhWCEkX0VNhSBrjGL4/djt+9S3ZnllAT92GQt3gcXmKseh
+xAkQGHQ79NgfMHT6Sfe5ZBkNAhT4gd4M/LvpouPMJ0J33tJES5r9Z4cF9sy8tjwr
+YQb/9epouPXIiVmDcxDdEDnorejSZDpAMALrdQsuIQv3KGtulOJ6O2CpwzqgmCys
+P97pJxo1cX4hmGYEc06Kusw2lLH3ZXDbJAAC0j/LBxu9usvwnJW2wz7Fb/7u8/2M
+cX7SgEglmLUF3f5GR4Lo1GXTHOoyBPcihYZe29f4JAb2WU0LE0wbw69mnn2DNjya
+HDkdux87jiu6sXRY8PHF7CtkbpxFMPDGra9TgR7U+bJ2iMEpWvWucuSQOstShJc9
+0r/dieKP4p+ROaCMieJ4F0nNUqC9gYXKYQRPtpBzuo7s2hEN6tjI+2b8wHQdTjgw
+0a1BVp8Q9gC7hfg2EtWKTyHbgraw+MQHcfUDpw1nSBHczwmsfn4=
+=jjWg
 -----END PGP SIGNATURE-----
 
---Db4jKuiAS4AKOy/g--
+--1peg8Ul36MINFZnY--
