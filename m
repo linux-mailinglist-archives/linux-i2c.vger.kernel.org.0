@@ -2,64 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C61577BDAA
-	for <lists+linux-i2c@lfdr.de>; Mon, 14 Aug 2023 18:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA0CD77BDBD
+	for <lists+linux-i2c@lfdr.de>; Mon, 14 Aug 2023 18:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbjHNQKx (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 14 Aug 2023 12:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
+        id S229721AbjHNQPm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 14 Aug 2023 12:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbjHNQKj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Aug 2023 12:10:39 -0400
+        with ESMTP id S231335AbjHNQP1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 14 Aug 2023 12:15:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6063F1;
-        Mon, 14 Aug 2023 09:10:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E72F1
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Aug 2023 09:15:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4409761DE8;
-        Mon, 14 Aug 2023 16:10:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 492E2C433C7;
-        Mon, 14 Aug 2023 16:10:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 154A2622B7
+        for <linux-i2c@vger.kernel.org>; Mon, 14 Aug 2023 16:15:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E7B0C433C8;
+        Mon, 14 Aug 2023 16:15:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692029437;
-        bh=Bh7TmAhKmRh7QbFt8obpKRo8wLtKqi8DZLVy8PH/rJI=;
+        s=k20201202; t=1692029725;
+        bh=bF6wx7tMT5k6bVqZuAnSDVZ3QMyu66+UaQiLYCfgbSs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b3v3muJRQcNtWZ/qxAU0JMaARKJ7IKOSXbHSDSo/yx+h6uOnmgBO/RzDIFd/i9OEI
-         yzD8nusIrJhrgQS2rdqB2AbvXWRVrYsNglQB11kDMDAgh5sPXcWretcRZ1IIlVDVIp
-         ucAy7ui1Tfokn7OqiqNzFv+jGrrCFyipswxjsihZ52QDKbF3wXAFgoUqbLadkAaSME
-         okx4VZFq346j1/sh8yfkQ/AEIrKh/DJYgqzruv607RZ9q3uYuYZT7rdnmc9lEE/EB6
-         i/qgz+bwQqEIucDPnlYt6NpAUtCRdzvzIQ2Bz8nvqE5z1gsHSGEy5Gy0Sty0jaVgqG
-         MSVE2Tibd/8HQ==
-Date:   Mon, 14 Aug 2023 18:10:34 +0200
+        b=i8KAmuOomGsHoyrANHBLOOFpVzYbKrvTRMVbZDYS+8QUROiP91yCuiwlyrtrY5ioB
+         rNDvdgOGtu6Y93610d+TIFj0ywKjWE/zWN8wQ6hEfmQZ9xCosNtQgF3n7nnShD3i+P
+         zI+HfiTBNZHcmLpi8QG/WPO0F0ELDiQtvw307Qh7nPQx3pXDFcz5pJbDqGe2v18855
+         Tif23NVHk1sXeNfa/2MVzPN8ivktTcfE0Em0qjHhmmw/RvX+9M2Ca25+tNsqaJqHjz
+         aYHgDQeOLwwGbKeCjotZWdJpKZEZ8QsChpUYyXMEWVOi6HWGo6SUKSVgBRHyi8jb7M
+         9FsTJGyqyPRyA==
+Date:   Mon, 14 Aug 2023 18:15:19 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 01/11] i2c: at91: Use
- devm_platform_get_and_ioremap_resource()
-Message-ID: <ZNpR+qRhL/O1uFOx@shikoro>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     kernel@pengutronix.de,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: Update documentation to use .probe() again
+Message-ID: <ZNpTF0rHoPJWy4MS@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Yangtao Li <frank.li@vivo.com>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230710063351.17490-1-frank.li@vivo.com>
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        kernel@pengutronix.de,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org
+References: <20230627064522.593332-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="I6Jq9Snyhnu/zpCa"
+        protocol="application/pgp-signature"; boundary="JSQBufAwoVXlD/u8"
 Content-Disposition: inline
-In-Reply-To: <20230710063351.17490-1-frank.li@vivo.com>
+In-Reply-To: <20230627064522.593332-1-u.kleine-koenig@pengutronix.de>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,39 +61,40 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---I6Jq9Snyhnu/zpCa
-Content-Type: text/plain; charset=us-ascii
+--JSQBufAwoVXlD/u8
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 10, 2023 at 02:33:40PM +0800, Yangtao Li wrote:
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+On Tue, Jun 27, 2023 at 08:45:22AM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> Since commit 03c835f498b5 ("i2c: Switch .probe() to not take an id
+> parameter") .probe() is the recommended callback to implement (again).
+> Reflect this in the documentation and don't mention .probe_new() any
+> more.
 >=20
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-Applied to for-next as the rest of this series, thanks!
+Applied to for-current, thanks!
 
 
---I6Jq9Snyhnu/zpCa
+--JSQBufAwoVXlD/u8
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTaUfoACgkQFA3kzBSg
-KbZPoBAAr2ALepMwfc7ssk8JXIBNf007sil68V6i6+KxXi/soJVe3b6Kub7PbV8I
-OkdqTsVkeY9DA34JZp6yD/DfVspQvgWAKdYR6blRPmbmhepBr/WxIvPFbx8XM5nO
-NGLBekzearcD9n8sptTVxD+bTg8SATLwQM6tv8p2UsK3rKbAIhJfKb1LpOkBOtbB
-cOY5jlmvNSwQgbQ79OHL53/61XtgXTI6apr5l297JACjM3km0vBTswT8yqGAygmw
-ensfOTy8SY03ZGqf6eeRE5BtQDmJuEg2aCxgNVBTSdNuBlatle26FLEakOzFlq2W
-UlR4MHiTJoIhKKdMNd+fvavB8MYph2g/86SMrNALelb9nMOQcs+7K857qEhpCjai
-9EdrI5XL0EAQ0dzT3jrcFN1C43jjHExkJJVgf2J5GKt7Nan2wjhK6MP6KWrW8f3o
-GCwjxW9C36sK8gUFr92itzs7tD/Gduc1DW19o6AmX3kAL6v7jIrx1XLEWHwytaCN
-S5jCisRMy4OeQ47b0mNtauWGCGS6MzeoAFLk48MYTXSEAKyaJ6z7kHauU83rY/W/
-078uDZhCrAA8qGjs9WyWQk/Ri4gMuy+7fN9/GnjzU0sQwgYaIeShQFjq6T+3TZSf
-F5kax1FtHCEMY7Xd4JpGoiicD/zr13lrfnK3NK/3mznAqFEuzT8=
-=lECm
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTaUxYACgkQFA3kzBSg
+KbZ9Dw/9GTPTTg2YgSYzWYnLZ9L/U7oNAd6XOY6DkTC1wpN1UawLzvnuKUl1koQQ
+aa5KF0DYCDuKUuoBLvi2e/pyp5I8+b8pEn42l8xMlf08oa3CKWkyx3KAtJ5A1f0e
+u0qcTOGillsmBA8nFeAKp1sEyk0KuPBiTqQN3vcmCvQOtM4Wi9F7TkLCQuutfJLg
+2zrwZbEStQye3kUiBubZSBo5VJpvOv/HNIL5wA6yI24MJzdcXR0+PFU4uwfg5UJI
+uvOZ1t6lgeWjMTk+T/5vQ7bgnBxHFocX59SAFJOIZ+v0i5fYJ8S/bcGbTAKgxylk
+nSKCsXelyXEY8wKyX8/U36EAotxtNieao7TdKRbbKThiv9odKDYyRr0LGlSyIRK3
++vQ6qiFrCGCOFjtYI2d2dwzJpArleFzfOL+ZKjfa9k7/KctIkJvGLaG9JKzibU5A
+0uUlke7g7AaCuprM5lx3SPBLBecZgZt2ggE+8ogFw1/wm+9a2iT0KHnOuSdbYRQd
+f1fTawTSmJAmtZ5q77aTu+yrMVZh0e0EaqgwgJFF1bKjDZ60VJLvOpVprZS8B3S0
+lv/Z/SwX6MSv4n6leVTO5szPjBtPNQJNksuIOpsQuIEZdMovobwdpB0CoiFvTHNm
+5GLuuNoZrgp4fMJPFvdOkXG5ukD0BPzsTCcZ5ec96sLl3jOYOpI=
+=EcWT
 -----END PGP SIGNATURE-----
 
---I6Jq9Snyhnu/zpCa--
+--JSQBufAwoVXlD/u8--
