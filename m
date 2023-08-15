@@ -2,105 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665FD77CFB1
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Aug 2023 17:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9531F77CFCD
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Aug 2023 18:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238367AbjHOPz3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Aug 2023 11:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
+        id S232976AbjHOQA2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Aug 2023 12:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238453AbjHOPz1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Aug 2023 11:55:27 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC59A6;
-        Tue, 15 Aug 2023 08:55:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692114926; x=1723650926;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xjBcL6FBcGapG9UkcvFfq8o8+YiISNlkILWmTkEJaHc=;
-  b=OZ+Ei9I3CO53ZUjV2lDG4uOZZoo+KktOUlhbmRYA8rZsw9V5kd208Any
-   cQJSdfSYBHBMCnd9jKDE8ro7HexGL6+aeUDshsocJbgXe9HeQpJrCChRW
-   p7kXJjCn+RblcDYiBZQmdm9LBemjwg5dUMYVmFcPilftxXQAw6lNQSC7p
-   3GPEdY/zILuersnKqH8lorBjWhRwa5dl7wmarh4TaKRVViEw0a/tu7Q/T
-   MKjeDCJoF3vWe6j5GJ2cwATLKqEagSCGFWg6Isvjrgjob58AEaIMOyM35
-   yTIAG7LEclrlUTBAkqVv7dDv1fX6u8n8erxHoI/ZYOpkOlQCAf2NFSf5b
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="436203440"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="436203440"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 08:55:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="763304122"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="763304122"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 15 Aug 2023 08:55:23 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qVwO9-008EDA-33;
-        Tue, 15 Aug 2023 18:55:21 +0300
-Date:   Tue, 15 Aug 2023 18:55:21 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 1/4] i2c: start migrating to a pointer in
- i2c_device_id
-Message-ID: <ZNuf6UpcyVGjxZ2F@smile.fi.intel.com>
-References: <20230814-i2c-id-rework-v1-0-3e5bc71c49ee@gmail.com>
- <20230814-i2c-id-rework-v1-1-3e5bc71c49ee@gmail.com>
+        with ESMTP id S238442AbjHOQAC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Aug 2023 12:00:02 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA09410F;
+        Tue, 15 Aug 2023 09:00:00 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 135BE2CF;
+        Tue, 15 Aug 2023 17:58:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1692115126;
+        bh=Dnd/cluCU2tJlyL5IE/vj5RGc9tRSKrNvv0CBVqiJT0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sJa/4ZlsiHqxJZpaZB6CPNhkoXDTp6lqWqtDiwPfsuiaa3jCmK8d1CQ9+N7NbmAK/
+         /teo3klkb0iW/bWdPbO19fp6zCAYAMLJMFeDkjNp7Eq9mxq7NAhJ4qoE6yiI1XGuU8
+         U4HPksBN5yMS9NtNXSn2wKwEkFbrgqUySHtdsHos=
+Message-ID: <94dd2237-2a4a-fb45-ceb1-f224fafd4e36@ideasonboard.com>
+Date:   Tue, 15 Aug 2023 18:59:55 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230814-i2c-id-rework-v1-1-3e5bc71c49ee@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] i2c: Make I2C_ATR invisible
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <588d302477cb7e6b30b52ee6448807324c57b88a.1692113321.git.geert+renesas@glider.be>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <588d302477cb7e6b30b52ee6448807324c57b88a.1692113321.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 02:52:49PM -0700, Dmitry Torokhov wrote:
-> The of_device_id structure uses a void pointer to associate additional
-> driver-private data with device id, most commonly used to refer to a
-> structure containing additional characteristics of a particular chip.
-> However i2c_device_id uses an unsigned long. While it can easily be
-> converted to a pointer, several drivers use it to store a scalar (and it
-> is possible to use a pointer in of_device_id to store a scalar value as
-> well). The worst case comes when OF part of a driver uses pointers,
-> while legacy part is using scalars, causing constructs like:
+On 15/08/2023 18:29, Geert Uytterhoeven wrote:
+> I2C Address Translator (ATR) support is not a stand-alone driver, but a
+> library.  All of its users select I2C_ATR.  Hence there is no need for
+> the user to enable this symbol manually, except when compile-testing.
 > 
-> 	data = device_get_match_data(...);
-> 	if (!data)
-> 		data = &some_array[i2c_match_id(...)->data];
-> 	...
+> Fixes: a076a860acae77bb ("media: i2c: add I2C Address Translator (ATR) support")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> Do we care yet about out-of-tree drivers that need this functionality?
+> ---
+>   drivers/i2c/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> To avoid this introduce a const void "data" pointer to i2c_device_id as
-> well, so that we can convert drivers one by one, and drop driver_data
-> member in the end.
-> 
-> The end goal is to clean up all helpers and make device_get_match_data()
-> work universally for all ACPI, DT, and legacy variants.
+> diff --git a/drivers/i2c/Kconfig b/drivers/i2c/Kconfig
+> index c6d1a345ea6d8aee..9388823bb0bb960c 100644
+> --- a/drivers/i2c/Kconfig
+> +++ b/drivers/i2c/Kconfig
+> @@ -72,7 +72,7 @@ config I2C_MUX
+>   source "drivers/i2c/muxes/Kconfig"
+>   
+>   config I2C_ATR
+> -	tristate "I2C Address Translator (ATR) support"
+> +	tristate "I2C Address Translator (ATR) support" if COMPILE_TEST
+>   	help
+>   	  Enable support for I2C Address Translator (ATR) chips.
+>   
 
-So, we have in the parallel the activity to make buses to have a callback,
-why do we need this one? Looks to me as yet another 1000+ churn for not
-much value. What the good outcome of this is constification, but maybe
-we can find the way on how to prove const to stay over the kernel_ulong_t
-transformations for all device ID tables?
+Isn't this normally done with just "tristate", without the text? Is 
+there a need to make configs manually selectable when compile-test is 
+enabled?
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+  Tomi
 
