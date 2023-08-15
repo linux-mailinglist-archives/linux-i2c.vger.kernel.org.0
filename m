@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2B677C832
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Aug 2023 08:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208CE77C84E
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Aug 2023 09:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235301AbjHOG7H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Aug 2023 02:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
+        id S235029AbjHOHHT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Aug 2023 03:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235338AbjHOG6s (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Aug 2023 02:58:48 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2099.outbound.protection.outlook.com [40.107.113.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DA210F0;
-        Mon, 14 Aug 2023 23:58:43 -0700 (PDT)
+        with ESMTP id S234755AbjHOHGp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Aug 2023 03:06:45 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2092.outbound.protection.outlook.com [40.107.113.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4636110F2;
+        Tue, 15 Aug 2023 00:06:40 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b49TTgEHpCs8mLtgwxBNil2lMqeRWejf32s3u8v+JO18gp6A69LqUmHbfStxnRJtx9Y/tzboK6gAHBsAnMU0Cg3LrznGKSPffx6OgozaZEs9TSnt1zA3XMLKk3J2dpP5WuutIsppVmcXNmpoKsckvWJGP0RL5qLraa8Qa2LxwWrYRp+rQIuLZxRGXzVGxinC99zDBWdnJp+iuqNDXbUlC+R1EObaTSRNPMZXGF2FhLZG7dpq/tp8KE/Eqxdv5gMLfINcGKJSR3z7r8V9/FJBssqI9IfbszploRgGB1wdtMUq1cW1WcV0qpThLd3KGLd5NLtqIEoq4t9x250RXa9ljA==
+ b=B0iiCyqpimhwQxpc0CZbpxreNQIgJnxIblT3fW0sxJVrjSGNnQfqT30N0C8+zYWFmv141KU9iGCYlc7AKaSVx5Fpgmp+p4ZBf/KXu34gu8IIl88zkp0EJ+RccO1tdRijH49Yx52f/+hMzAaciv/9m/dVEttXv2ZTBm8NMbYw5X3dINM+0bceAPHSEgq98cWHSJb/y7BX/552SzB+68UPtdNs2ccytRT5g+OKaJgG9OALjW2CQ0FNACmnunuX1LMvuxcgYqPz53voPcJwNMwjhkX9KvdPitngQ6H2WHwoeLdbuoy8IpLrScrmlR+rXQyws1c23rd4FMtdOe+Io5ioyw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=enIiOwoMPpZWCX1g0GVpGG6HkB8PTm/E7rUF5UZs/Ps=;
- b=K6wPVVyzYODC1DJ4BPi7FSKxMNTlHhv1XjxJkI07NQdZ1pD6BPG2P/s2PzjmZGskQsSfA1y0FokNHyo6FtAjrosdsYuFkvZJZDN61XABA8S7Y1Tumx6ImhzUtpL1bvQ3V6iSZntITm/5v42UyzGQtPCznoawq9MkUBV/K9QmP/y/usTl1ZPQaj0AV6KFmWDjdQOCU77u/h6rKLAx0WyXoMbOjIjzTyrzKXqsvlfuva/EPUtANsfr/z8Xd40WfV9+zTFfUtNGCwsEVZcZPHypjE3J1vNUBORTKuIXlLJIa7n7ClE2DQID1eueqdrXZXPhgDYO6tqw2khcKXqiunBuSA==
+ bh=1ms3LRKr0gyON/nmV5nq5t4BmxzcKjviz8cILAoUVn4=;
+ b=E53R1FD8mLfbDogW4KB/gax/BERkpC9ujLPjEHB18AQ63yyVdHXZi2hCS+hXejpFiql21g6vzmU8ftElsBwfQA7+VwmNfaCNstmaEKLsvVoe9Ykzrp/s9nUsQ7FO3jD162KxbsLnDArLgY/EbW56hDUb85qLEMAZG4GnxQD/Mf7+XTa59iwt62cVXEKG/igWBhm5F3O6zEmowP7bOJaXiNEp1BSvaYv87HLwX1+iDQr85Yvg5QmvtQyWG7a9/B+ANHKNHhI7ESeArROJ70HzLQikjlXoScuTeRD8Xd3iaTCJl9W1c5FIFO/AqoBcMm6ADuT3SPMGxcZ2G5RcL2VJ5Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
  header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=enIiOwoMPpZWCX1g0GVpGG6HkB8PTm/E7rUF5UZs/Ps=;
- b=NE7MJztov44dkfWU0Rbyh5Emu+0K3I9RhzYRALILL7IIOBeGoBn6KHuMHTaKeFnOh8lI/KiDzpbDUFDLAkY+mNfuYh1GYNxQkBAsa6jyGQx6fDjjrEH/1YRi3nU3M7xxyWoNyGl0IRdKH0xlICwfKgz3hqQPr05AakWHp6YadzU=
+ bh=1ms3LRKr0gyON/nmV5nq5t4BmxzcKjviz8cILAoUVn4=;
+ b=YvxdCXAa/dcMtY9oZijFyEUVOJ+Q4aw93kDIw7eGgUPQTciWEqKVZQEt8xCz0ISxTZ7sjN3WDDeIkBLkZ3HZoqMj39TIPTH4Kolgn7liGkbXEit5o1So6w7z3LEXjGRAuiKz7TKrVjAgVL5uStbANfEQSJXp1TXrgcMnFAvbCTU=
 Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by OS3PR01MB8507.jpnprd01.prod.outlook.com (2603:1096:604:199::13) with
+ by OS0PR01MB5844.jpnprd01.prod.outlook.com (2603:1096:604:bc::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.26; Tue, 15 Aug
- 2023 06:58:41 +0000
+ 2023 07:06:36 +0000
 Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
  ([fe80::2168:623e:e186:4cf0]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
  ([fe80::2168:623e:e186:4cf0%6]) with mapi id 15.20.6678.025; Tue, 15 Aug 2023
- 06:58:41 +0000
+ 07:06:35 +0000
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 CC:     Jonathan Cameron <jic23@kernel.org>,
@@ -61,9 +61,9 @@ CC:     Jonathan Cameron <jic23@kernel.org>,
         <linux-renesas-soc@vger.kernel.org>
 Subject: RE: [PATCH v7 0/4] Extend device_get_match_data() to struct bus_type
 Thread-Topic: [PATCH v7 0/4] Extend device_get_match_data() to struct bus_type
-Thread-Index: AQHZxu8xqdWpTKFxl0mrPmlP0GQCwa/b6UAAgAADvoCAAVlKAIABqeGAgABf2wCAAQcZAIAB6BqAgAED5pCAAGj8gIABdEDwgAASZ4CAAALG8IAFxH+AgAADBNA=
-Date:   Tue, 15 Aug 2023 06:58:41 +0000
-Message-ID: <OS0PR01MB592231608697B4FB0D142CCD8614A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Thread-Index: AQHZxu8xqdWpTKFxl0mrPmlP0GQCwa/b6UAAgAADvoCAAVlKAIABqeGAgABf2wCAAQcZAIAB6BqAgAED5pCAAGj8gIABdEDwgAASZ4CAAALG8IAFxH+AgAADBNCAAAKn8A==
+Date:   Tue, 15 Aug 2023 07:06:35 +0000
+Message-ID: <OS0PR01MB59225D35AB0AF2999D1F60388614A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 References: <20230806142950.6c409600@jic23-huawei>
  <ZNEFjyAloqlkMWn7@smile.fi.intel.com> <ZNFV+C1HCIRJpbdC@google.com>
  <ZNIyrG/2h/PeS9Oz@smile.fi.intel.com> <20230809182551.7eca502e@jic23-huawei>
@@ -73,7 +73,8 @@ References: <20230806142950.6c409600@jic23-huawei>
  <ZNZF6cjx5N+ZsIJx@smile.fi.intel.com>
  <OS0PR01MB5922E09340CDCFF54A9A6CBA8610A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
  <ZNsez3oWNcT72PGy@smile.fi.intel.com>
-In-Reply-To: <ZNsez3oWNcT72PGy@smile.fi.intel.com>
+ <OS0PR01MB592231608697B4FB0D142CCD8614A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB592231608697B4FB0D142CCD8614A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -81,55 +82,55 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=bp.renesas.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|OS3PR01MB8507:EE_
-x-ms-office365-filtering-correlation-id: d447ebc4-f482-417e-3d1b-08db9d5d0ef3
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|OS0PR01MB5844:EE_
+x-ms-office365-filtering-correlation-id: 59474a1e-305a-41ff-2f04-08db9d5e29f2
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7X7pJwzCDlkp3aS2lJnHx/t1M/bLlp3EB1b/sB1XS5V4dc+ysoNjOQRzo43A04JhE8eaIvOgBfU98JTbk7vOui/XqMwuxUIAx361mOVvVISbBao4pzkxcCPrEQAfXsnhNK3NfvPULIuKhpjVnCDrZxlKSQ5hboFQO1FwdxodlTU1H19wEaivKQhdIHtfSBMskEk8rK9Ep1LAVNQk17RtRLeYKQNk5J4UTu4fgDyK45RL62kIq24QQA+0i3EP0UnJT8tTzsd8EsPE6FnuMIyh2x/ZUoVUw045grr3HdlAae+ssOKxshfEa8SrJKC+ht0E2cDxcTu3OEm8g7iCnerzGw84BxOGIObAUYYDB/xqfF9ZcNc8kh8Mxjc5pkLHcWDoU9jKQimVehpPrifUCu9uDjkcIoa38/yNm46+3K4Lo4BZJMY21M6Wmsa3wEzDmW1T0DoYN5jDv9dpQghtjdjCY+wQBP+/u79NLTaYNuZMBLMum1AS9XF41T0FXDsBPn2981FqRdjfb7l1yJ37fUxpiz9Ou5n6L6ex3jE8X5IJI75v9oOcY58n590elMBc18fe10valwVjknbbxeMj4smWp1lrRfGKRA5+rT60rIc0pEl8SmxtuWMfH3Rp7uaCnBxb
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(366004)(39860400002)(396003)(136003)(451199021)(1800799006)(186006)(2906002)(6506007)(26005)(55016003)(38100700002)(478600001)(38070700005)(41300700001)(52536014)(5660300002)(7696005)(8936002)(8676002)(71200400001)(33656002)(54906003)(86362001)(316002)(9686003)(66946007)(66446008)(66556008)(66476007)(64756008)(76116006)(4326008)(6916009)(122000001)(7416002);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: yg0xsLB5z0aziwLwrBAnh4eex0DxoHNyO7Zcwa67w1jmih47KthpKuCOEbLoLos9hJctDFVY25vATk5esGxMekfH2nDAIBvKJa4smyclV0sbMjog9/gBlLLB681iI1MiSiuo3RryokpPIZLN06MZYx8qvRdGA4iw1lOtTN5bq6+W0Z9uV1kg5kLQH/UsbRbV7p8c1sK3aKLbuSTnxCTrSet1Jf/iWu0Dbg49275OsVgkWlxT8Ch0H7i6KkyunvEf7Wt6y0wbsit9qVUoubGTFFCwOuxmfNG+VlohEXgzkCiQyMIwFuA7Xy1b939Qqpe2OulkDbkYOrFPyP5BcI79FL374NEJOimmWJtiaOTQM2u+wvhGn8tjxTrVSxnAKsVrTz4V3rrM7dh8+58Z87AKt2WG+VFil6ylMlMqX1/4uyuf/+UENrCcU5o3KdAmS/6+9TJeSlqvpXxcUkwtw9/fGqqP5Hgi6Qe7QFCzSm085gGwbQqiO39fKCx8qTT4iaA6yE4rIAu64mT8A4gsBS5q07ur3FAx7zy3HcTXPaUeAL+XWurM5LcG71SbjsMpYLg2Z645ohRnJLIbTgKtyqpAeuED9Ahj6/+i94ak5EYSM/nhymebihMrQqtWwWdE4W3p
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(136003)(366004)(39860400002)(396003)(376002)(186006)(1800799006)(451199021)(33656002)(55016003)(86362001)(2940100002)(26005)(52536014)(5660300002)(4326008)(6916009)(66446008)(64756008)(76116006)(66556008)(54906003)(316002)(8676002)(8936002)(66946007)(41300700001)(7696005)(6506007)(71200400001)(7416002)(478600001)(2906002)(66476007)(122000001)(9686003)(38100700002)(38070700005);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?r9C3sXTKkO79yOmUBfYCpQ/4CLV2x7UfKMcdNCURiy7I3GNtKh0tjS/8OQke?=
- =?us-ascii?Q?ozUAT82zrxEo9JScFgA6Yo+8vLUUnEfDBcHRRN59BMtbeV3481riqcq0jWQP?=
- =?us-ascii?Q?LqovxMEOkfDjf3GcYX/GBOy8p4pXwAhvT4XEmoNZxNs32yz9fs87124Pifma?=
- =?us-ascii?Q?oy79W9Ifjl47+6iqlh2mocsk2zIoSAIfJS7ceDufh7e0PmLpdm+lnI2t7FhT?=
- =?us-ascii?Q?v13DsRXh9CXUxI2OJpy5u7bQ/7Y3SoZRwx665OvEs7bPsjMSVRCCmGFNFx6v?=
- =?us-ascii?Q?6+pYCZeptlvDIIFI1f6FGV0TnIlC7jp2mEDj4rx6L+nrDxUAYi84PTy05iqZ?=
- =?us-ascii?Q?Rnc7UIACYknuGZyxW90R5CEgwXWkfesPtsww6CiV9Zx8PBFh+GCvhtSJ2XAf?=
- =?us-ascii?Q?ScvN/JIsFDVBUXPsTgpYvWgGBx0qsq1urGuiv1b3OzV5Sy2EnMWWJrhG7ZIJ?=
- =?us-ascii?Q?l92DpVJmcsxJHyx2qXNMG2VhOGxBT0M4vwIxqVITQc8NnzJyqRF/oBp9bW+Z?=
- =?us-ascii?Q?l/7x/WCgVriTnNWU/2TGEOuiZ9ZVWhk5QZg4SVjnArUI93feLa9H2inpQ5ap?=
- =?us-ascii?Q?14MLSje05a0auvSlyTBf+rmrnRnUdOK5Db8f3cjYhR0jY0mgTKC6j47jD5Lw?=
- =?us-ascii?Q?50YARJXEJSglbxgPeeb7sBwstkhd1ZvuBkROZr+bksp1gOcowd5TnOKQfiy/?=
- =?us-ascii?Q?YUUnPldHSkGHpR0rPsIG6BDpRnEqjX1RloR+MVxu7TuKufAG6xZJ5eWX8JVT?=
- =?us-ascii?Q?f9NclPj8v7Vzx1dwLgefFBkkZvxnpRyfsl823NGwdwuo9/CIZvyScAGv9iel?=
- =?us-ascii?Q?Za1zHiGEdJDBjckB5u0wX38Ew3k+Kvee8+FgjhDaDEwtUnA5jRFQCLBJ7f2l?=
- =?us-ascii?Q?ncrhPGH0i42bUhXIx3bE3aiAmj0pFuIyga9aNvAT18GeNbV16VSv/TtatmBF?=
- =?us-ascii?Q?M8JuDueO5meLD5qbdZP6wfVUc/q0JecaS4ntv21Q1kvkbtDYWOij67m3Gock?=
- =?us-ascii?Q?uEXQlegOw7EeI0Zbg2rWz3YWXKTnQ9FGAu0T/XKuB2LnM5wGAK5/sdAIDsmt?=
- =?us-ascii?Q?nVamvuELYG2rb8gl1rSzLy52ozc9zg7DM+UHQfAdVIuDCiVxfbrUHp3nM8yH?=
- =?us-ascii?Q?y1NZiIPl9XYs6QVJcr4w28y9sY5lsttOssFdP7uGs9Wst/o4IShZmtIH9VKT?=
- =?us-ascii?Q?8TwPYhdYdXAhDIBoYhuIL/tARRoEFiY8/lyCz7gDYBvgH1VV7O6ymfnIbeMM?=
- =?us-ascii?Q?CLgLt18nd2mgKoSJk3xa89QBbtc6JgRJeymRefv0g1sI27bKRLOqY8Y90YxO?=
- =?us-ascii?Q?5biNavxYMy1mGx3VnZuPeoxUNWNyq9XV02gbhbQk+5LWqo7OEHCzcpCgM8Sw?=
- =?us-ascii?Q?gBK1Hcad5LMA8ALTXIwi5zmqCjDk9ybKXq4XXqFEaX7BsYeU1ucXJj2RK2Jc?=
- =?us-ascii?Q?wcIp6Uf0KrBVB44F+0r1YRnUvIQju6d+iUDriev9xk2X7YIkoTnOpI6DI/ll?=
- =?us-ascii?Q?jXdmZwadr6vUfKfma+MjhNIRiYX19MlS/cQNiKaFHseIC7CNB/H4N8QyKtAE?=
- =?us-ascii?Q?8hJ2xGd12/u8haDthEBMUrskE/Ycqrs0kr7rxyYE?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?v4OkxTBho1sspVKTFLRrUXpCn9X+9iNUGheJfC2npj6QZuqeZ5FlrYwKaYRA?=
+ =?us-ascii?Q?Qvcx5Gt7VVZMnWFxeBp6rL2CA63NcXo6dREylEGhPNfiqV0QENSRhq5/uCm7?=
+ =?us-ascii?Q?P0xqvsWkzsoew6Ck9GLMcz90OaOJWwb970o+5zv9QQAfPAMAXcdM/pWTkMOZ?=
+ =?us-ascii?Q?LHYjmQJX/9jtmPYnBWmmsKvebuVpE3lMhDZu9R8GBeg9A7Bt8k+RdmyEjRE/?=
+ =?us-ascii?Q?ETR4AAnYpIeF6NBfTAnvsN/WLqcEP+JgwWTpTaUAOpm4dCwrZMQMlb841iS2?=
+ =?us-ascii?Q?yF/fKDEDxX0BWpWBtf5CNq5t37v1pu8P6tvWCikNAhg1frphQxs0LVFd7JNF?=
+ =?us-ascii?Q?iP5M24PN65cRVKY49qZj1bmnsLYilpNld/a6q0vj5nSxIVVLkSx6y9JyvEuI?=
+ =?us-ascii?Q?jqPuyQzPVnwZDUUFyjl/L2jcfO9C0/BJYroyVeEy5TbxcPeHx3aaTHWFeLtR?=
+ =?us-ascii?Q?nQmHzAUq8fPTK32goYmN+dS2SQ+6SS2qumLIZMq3pM5LKI1/q3cKjssyfbZm?=
+ =?us-ascii?Q?i0mji+BaBQf2WT3GcilLDnIKZgt6zX8P7EcMmnFvis8oFv3g3GaGZJw+wX+R?=
+ =?us-ascii?Q?VEJ2NvswgsbBLuN5DvnOLqMf0fBOqySS21a3p9SAbD5oE5DM99KIO5MrI5Rs?=
+ =?us-ascii?Q?2uB80z1aF+0tRHadmfw3jHzg56fOf8DTQuEKI5rMgf/rqs384KAuSOafdQlP?=
+ =?us-ascii?Q?NNsoubrhPDedfORinZ773Rc0kXTKxyuKFQ7rFUMzNh4kroa7K+WNmuNHzQkK?=
+ =?us-ascii?Q?Qq80OunWlV6JRHjuH4qVGnJHWtEM9qJq7962UVlTSomhHPg/2OYwoAKRAOx+?=
+ =?us-ascii?Q?5Zx23bI9ccHm+7uBWPlP2/dBClkJB67LFDEzQyIO+6OEWBHKLAUg/Hw/zHSu?=
+ =?us-ascii?Q?yNpassjZb2A26uA3GMUKXQeOJkeKliay4iD4WRM4LA/gCl0uq9Gh7S+65ek6?=
+ =?us-ascii?Q?eoM5/mgexkGcslNjMRN/GXMpjhSfwBD1FN+pEcjpg4Vppwgh/kyjMgmRAfC8?=
+ =?us-ascii?Q?zh/B1TuZVCWOTmDqXJ5BFz/52Lk+l9OLq9cLzUj2JUEN+yd8AARzGvVpkHgD?=
+ =?us-ascii?Q?ipWUGzPaZovWAMjKCyS/bLQmYToxAKMOMjtYVmnL3Z/ofMltfU/EW4NmzoR5?=
+ =?us-ascii?Q?g1TtqQ3EQ7Al6T54cx2WxdYlAagt901dzPNgpL+vuFdPO7Rl4d8LWFZjRVKo?=
+ =?us-ascii?Q?j010tNn9GPW2+Ul8C7ffB+5L/kak/Vklqk4342vfHuixGlh/NPgx1lTn6RZM?=
+ =?us-ascii?Q?Ibgqb7SIc0p6I0GZ12dKKtsf7QDEDfGolUxPtFkemretnhBQ94HvkSrhUD0I?=
+ =?us-ascii?Q?5uHGsj346DhjwvPCc1J+q1kjWdXOuJvXU4Bwu56oBt2cG7/t2qSFc5vc6r8i?=
+ =?us-ascii?Q?cGCB97R6M9zb66OIEjsmnJDVGhpHFT1o394wf3DUyfyvB7feN3O+HBpxqg+L?=
+ =?us-ascii?Q?0cpggH1rgay2YeKMMAn6LOsa6U02Pac3cxkHQDu+vPEfx5APSHQXL4Ogu+l9?=
+ =?us-ascii?Q?qd5m+pBY8y/Uu+q15KFGV5X7n2vhsS1els0fqkvIuf9THpQ6N+yRn+8zCfIl?=
+ =?us-ascii?Q?QP1Mc5u5+A0PlN2RoXiLPcs2C2APRYH2cXxtZ6gO?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: bp.renesas.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d447ebc4-f482-417e-3d1b-08db9d5d0ef3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Aug 2023 06:58:41.0936
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59474a1e-305a-41ff-2f04-08db9d5e29f2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Aug 2023 07:06:35.8716
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9Flyw+i9AGCzRYF9+3sndhbLm8f4NjbQpZf6w7sVE5eQnfqe3A4tn5fC0Htr0Q87dcpmT0TlWEauFSQe2Q80a/amF+2mX4/sjI1K+dy1YDc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB8507
+X-MS-Exchange-CrossTenant-userprincipalname: 8KNM0fb+BavHcQMjyT65Y36b4cdwFY3Hhrr/ObYAEr5ohLCerUYe2DMZG4imb7HKAeHcBTEqLlc54hKAPUTmVMVgSieC0gku3d/8Jj0k7Ec=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB5844
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
         SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -140,107 +141,71 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-Hi Andy Shevchenko,
-
-Thanks for the feedback.
-
-> Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct
+> Subject: RE: [PATCH v7 0/4] Extend device_get_match_data() to struct
 > bus_type
 >=20
-> On Fri, Aug 11, 2023 at 02:46:10PM +0000, Biju Das wrote:
-> > > Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct
-> > > bus_type On Fri, Aug 11, 2023 at 01:27:36PM +0000, Biju Das wrote:
-> > > > > On Thu, Aug 10, 2023 at 09:05:10AM +0000, Biju Das wrote:
 >=20
-> ...
+> Hi Andy Shevchenko,
 >=20
-> > > > > I'm good with this approach, but make sure you checked the whole
-> > > > > kernel source tree for a such.
+> Thanks for the feedback.
+>=20
+> > Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct
+> > bus_type
+> >
+> > On Fri, Aug 11, 2023 at 02:46:10PM +0000, Biju Das wrote:
+> > > > Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to
+> > > > struct bus_type On Fri, Aug 11, 2023 at 01:27:36PM +0000, Biju Das
+> wrote:
+> > > > > > On Thu, Aug 10, 2023 at 09:05:10AM +0000, Biju Das wrote:
+> >
+> > ...
+> >
+> > > > > > I'm good with this approach, but make sure you checked the
+> > > > > > whole kernel source tree for a such.
+> > > > >
+> > > > > Checking against 16 is too short I guess??
+> > > > >
+> > > > > drivers/iio/imu/inv_mpu6050/inv_mpu_iio.h has 18 enums.
 > > > >
-> > > > Checking against 16 is too short I guess??
-> > > >
-> > > > drivers/iio/imu/inv_mpu6050/inv_mpu_iio.h has 18 enums.
+> > > > So, what does prevent us from moving that tables to use pointers?
 > > >
-> > > So, what does prevent us from moving that tables to use pointers?
+> > > I think that will lead to ABI breakage(client->name vs id->name)
+> > >
+> > > 	match =3D device_get_match_data(&client->dev);
+> > > 	if (match) {
+> > > 		chip_type =3D (uintptr_t)match;
+> > > 		name =3D client->name;
+> > > 	} else if (id) {
+> > > 		chip_type =3D (enum inv_devices)
+> > > 			id->driver_data;
+> > > 		name =3D id->name;
+> > > 	} else {
+> > > 		return -ENOSYS;
+> > > 	}
 > >
-> > I think that will lead to ABI breakage(client->name vs id->name)
 > >
-> > 	match =3D device_get_match_data(&client->dev);
-> > 	if (match) {
-> > 		chip_type =3D (uintptr_t)match;
-> > 		name =3D client->name;
-> > 	} else if (id) {
-> > 		chip_type =3D (enum inv_devices)
-> > 			id->driver_data;
-> > 		name =3D id->name;
-> > 	} else {
-> > 		return -ENOSYS;
-> > 	}
+> > It's easy to work around (may be better fix can be found, haven't
+> > checked, just what first comes to my mind):
+> >
+> > 	match ...
+> > 	name =3D match->name;
 >=20
+> The device_get_match_data()API returns matched data, so we cannot use tha=
+t
+> one here.
 >=20
-> It's easy to work around (may be better fix can be found, haven't checked=
-,
-> just what first comes to my mind):
+> Maybe??
 >=20
-> 	match ...
-> 	name =3D match->name;
+> /* If enumerated via ID lookup, fix the ABI */ if (!dev_fwnode())
+> 	name =3D id->name;
 
-The device_get_match_data()API returns matched data, so we cannot use that =
-one here.
+Looks this will work.
 
-Maybe??
-
-/* If enumerated via ID lookup, fix the ABI */
-if (!dev_fwnode())
-	name =3D id->name;
+/* If enumerated via firmware node, fix the ABI */
+	if (dev_fwnode())
+		name =3D client->name
+	else
+		name =3D id->name
 
 Cheers,
 Biju
-
->=20
-> 	/* If enumerated via firmware node, fix the ABI */
-> 	if (dev_fwnode())
-> 		client->name
->=20
-> > > > /*device enum */
-> > > > enum inv_devices {
-> > > > 	INV_MPU6050,
-> > > > 	INV_MPU6500,
-> > > > 	INV_MPU6515,
-> > > > 	INV_MPU6880,
-> > > > 	INV_MPU6000,
-> > > > 	INV_MPU9150,
-> > > > 	INV_MPU9250,
-> > > > 	INV_MPU9255,
-> > > > 	INV_ICM20608,
-> > > > 	INV_ICM20608D,
-> > > > 	INV_ICM20609,
-> > > > 	INV_ICM20689,
-> > > > 	INV_ICM20600,
-> > > > 	INV_ICM20602,
-> > > > 	INV_ICM20690,
-> > > > 	INV_IAM20680,
-> > > > 	INV_NUM_PARTS
-> > > > };
-> > > >
-> > > > The new helper function
-> > >
-> > > You mean for debugging? We don't need that in production.
-> >
-> > That is sample code for iterating through id table to find max enum
-> > and check against ZERO_OR_NULL_PTR
->=20
-> Much better with a coccinelle. You will find all or almost all occurrence=
-s
-> without too much effort done.
->=20
-> > > I think what you need is a coccinelle script to find these.
-> >
-> > I need to explore using coccinelle script as I have n't tried before.
->=20
-> --
-> With Best Regards,
-> Andy Shevchenko
->=20
-
