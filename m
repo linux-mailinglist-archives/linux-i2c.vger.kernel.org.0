@@ -2,159 +2,173 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9751477C707
-	for <lists+linux-i2c@lfdr.de>; Tue, 15 Aug 2023 07:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AB477C806
+	for <lists+linux-i2c@lfdr.de>; Tue, 15 Aug 2023 08:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234608AbjHOFXo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 15 Aug 2023 01:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
+        id S235177AbjHOGox (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 15 Aug 2023 02:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234734AbjHOFVc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Aug 2023 01:21:32 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C98319B5
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Aug 2023 22:20:40 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-317716a4622so4458971f8f.1
-        for <linux-i2c@vger.kernel.org>; Mon, 14 Aug 2023 22:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692076838; x=1692681638;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E1iK6gDGnLT6YH6YDnZtvo75txDfUuM4Picw/2uLIh0=;
-        b=JVbj6cxuWCQ4fdjUTVThiW9Yn4j9If3QsCX5dlVqGZF5tuQ8Bzg071hgBP4IHNPZkI
-         FE/l9sNnzLLIzVG9bo8ex1Nxad+f63t8bXDH4saMDy6SjqPqRLtEJRHCaRJwJ5hHz68o
-         I1hzJmZJeBvfXRsBqqF4ljx/euy8s1Zu11yQ4g92+yzWb101bDbmjJgrHcb1tUPTvU8J
-         aA6kM3RS/Yk0aJwTtXZCcjzzf6NFVSb6Mjyg3WJRe4krR7pdKlxmutOoCZ6EChZ7z2vr
-         nyGc1whQFZVGmdYziMgf59L+JdDaKZeOeozjWz0AomrEbiFeViWSYgcVuO/tD+Y1lCaE
-         2Lsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692076838; x=1692681638;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E1iK6gDGnLT6YH6YDnZtvo75txDfUuM4Picw/2uLIh0=;
-        b=MqBMVRntLhGkSwBR0PsMCylmV8xXrFhx9biktJZ/FqlBGdda01P1kjCUcuaey5/ZdR
-         FODz7PQgXhHKQjRy6zHtH+Q34W5VNeoLKWNWHnQEEGcJJkJPUNMhhAb9dtojOIDMrLuB
-         xfRFsS+EeZAr+EdrpXLudvdBDDLKKW0cbLvJXpT3GTPzg+wIIwr3MdGrXDoRgaXa6sKt
-         Bls8B/JHaISTrw5jjfxPihXwleX91jY5biQk09Ke40Z1dBehmXbeab6ujf1kpzN+ZEnk
-         Al5D8Latjiu3CXkhkeXjVFbnlQxYdBbXDJ1rdrr/K9CfyqLMdkHIEevXWw+OKZ4GWSbt
-         lt2Q==
-X-Gm-Message-State: AOJu0YximSNHszVejzgA/JJ4iLoRwPtFkcSscyh4fWh/aPkgrWj9pJLH
-        ukSWiwul2wmZNjnze60dMe6LTQ==
-X-Google-Smtp-Source: AGHT+IFyjkPBJoV+XazQhAjmKyn6CK4hTOt2a3tGZBE3jpKVIpVKhpfJ/wcMf8ugaCQ3TimspEYXXg==
-X-Received: by 2002:a5d:554e:0:b0:314:10d8:b491 with SMTP id g14-20020a5d554e000000b0031410d8b491mr6785789wrw.67.1692076838327;
-        Mon, 14 Aug 2023 22:20:38 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id l11-20020a05600012cb00b003177f57e79esm4297502wrx.88.2023.08.14.22.20.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Aug 2023 22:20:37 -0700 (PDT)
-Message-ID: <c577a92a-d1e4-df7e-250c-33d47b4d5bcb@linaro.org>
-Date:   Tue, 15 Aug 2023 07:20:35 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 2/2] i2c: Add GPIO-based hotplug gate
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
+        with ESMTP id S234110AbjHOGok (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 15 Aug 2023 02:44:40 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87224E72;
+        Mon, 14 Aug 2023 23:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692081879; x=1723617879;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WoRkywen7QyRJh5gY+NeF3XBAuuj7J1YVN5gmyneGXU=;
+  b=HwsMxuzTNnjKD4mNmnnpLkqJnmEIjMvJbxwqZ9Zty7pLwWtg/r2kJb4h
+   tYrJEy53LpG/6WXYT+8bDcl0uhMGZl0edgHlrFPCnC/1fToEg9JcHQRNV
+   PCr3bn1zjrMEtHVdaqe2xO6znx1VvXPu5+xgVjWm/3SmCYRND/ZQpWAt3
+   hF6+IYSfpbm7O+XGuNciB8jnJnNi9tPBUloQYJLxQ9/5yTWID3ZP9qUg9
+   sHkQvQVa9n2XAd3edXDVhiKHZpyvUN9sgqX1BP0p7X15GWQCEHkxr0vnA
+   CIulMNzpMucW/zxa8MD8uaeMKZ2iR4d06IfD+l1vBF9g6HRXeqUXgLdhH
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="438554581"
+X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
+   d="scan'208";a="438554581"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 23:44:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="736809481"
+X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
+   d="scan'208";a="736809481"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 14 Aug 2023 23:44:34 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qVnn5-006tP3-2q;
+        Tue, 15 Aug 2023 09:44:31 +0300
+Date:   Tue, 15 Aug 2023 09:44:31 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
         Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230729160857.6332-1-clamor95@gmail.com>
- <20230729160857.6332-3-clamor95@gmail.com>
- <25858c22-ef92-2136-67ef-0d27364c1600@linaro.org>
- <ZMbcb0yuTz6l6BYh@qmqm.qmqm.pl>
- <b9183dfc-8e8a-9602-f31c-5de9e27acb88@linaro.org>
- <ZMd1qI7RjQhpI8zO@qmqm.qmqm.pl>
- <fdc513a3-c0e0-c57d-5c9a-8da6fa2f54e2@linaro.org>
- <ZMg6m+Dru6rxCRqU@qmqm.qmqm.pl>
- <249e806a-f094-9514-9c83-e74e7b1f00ba@linaro.org>
- <ZNVcEfNjo0ZZlhIp@qmqm.qmqm.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZNVcEfNjo0ZZlhIp@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct bus_type
+Message-ID: <ZNsez3oWNcT72PGy@smile.fi.intel.com>
+References: <20230806142950.6c409600@jic23-huawei>
+ <ZNEFjyAloqlkMWn7@smile.fi.intel.com>
+ <ZNFV+C1HCIRJpbdC@google.com>
+ <ZNIyrG/2h/PeS9Oz@smile.fi.intel.com>
+ <20230809182551.7eca502e@jic23-huawei>
+ <OS0PR01MB59221A1ADB67E96E9E39D0198613A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <ZNT+NY99n7y3abwa@smile.fi.intel.com>
+ <OS0PR01MB5922DD3C809B78F1E9C5949B8610A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <ZNZF6cjx5N+ZsIJx@smile.fi.intel.com>
+ <OS0PR01MB5922E09340CDCFF54A9A6CBA8610A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <OS0PR01MB5922E09340CDCFF54A9A6CBA8610A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 10/08/2023 23:52, Michał Mirosław wrote:
->>>>>>>> Shared IRQ with devm is a recipe for disaster. Are you sure this is a
->>>>>>>> shared one? You have a remove() function which also points that it is
->>>>>>>> not safe. You can:
->>>>>>>> 1. investigate to be sure it is 100% safe (please document why do you
->>>>>>>> think it is safe)
-> [...]
->>>> True, therefore non-devm interrupts are recommended also in such case.
->>>> Maybe one of my solutions is actually not recommended.
->>>>
->>>> However if done right, driver with non-shared interrupts, is expected to
->>>> disable interrupts in remove(), thus there is no risk. We have big
->>>> discussions in the past about it, so feel free to dig through LKML to
->>>> read more about. Anyway shared and devm is a clear no go.
->>>
->>> Can you share pointers to some of those discussions? Quick search
->>> about devm_request_irq() and friends found only a thread from 2013
->>
->> Just look at CONFIG_DEBUG_SHIRQ. Some things lore points:
->> https://lore.kernel.org/all/1592130544-19759-2-git-send-email-krzk@kernel.org/
->> https://lore.kernel.org/all/20200616103956.GL4447@sirena.org.uk/
->>
->> I think pretty clear:
->> https://lore.kernel.org/all/87mu52ca4b.fsf@nanos.tec.linutronix.de/
->> https://lore.kernel.org/all/CA+h21hrxQ1fRahyQGFS42Xuop_Q2petE=No1dft4nVb-ijUu2g@mail.gmail.com/
->>
->> Also:
->> https://lore.kernel.org/all/651c9a33-71e6-c042-58e2-6ad501e984cd@pengutronix.de/
->> https://lore.kernel.org/all/36AC4067-78C6-4986-8B97-591F93E266D8@gmail.com/
-> [...]
-> 
-> Thanks! It all looks like a proof by example [1]: a broken driver [2]
-> was converted to devres [3] and allowed a shared interrupt [4] and now is
-> used to back an argument that devres and/or shared IRQs are bad. I have
-> a hard time accepting this line of reasoning.
-> 
-> So: sure, if you disable device's clock, you should first disable the
-> interrupt handler one way or another, and if you request a shared interrupt
-> then you have to write the handler expecting spurious invocations anytime
-> between entry to register_irq() and return from free_irq() (BTW, DEBUG_SHIRQ
-> is here to help test exactly this). And, when used correctly, devres can
-> release you from having to write remove() and error paths (but I guess it
-> might be a challenge to find a single driver that is a complete, good and
-> complex-enough example).
-> 
-> Coming back from the digression: I gathered following items from the
-> review of the i2c-hotplug-gpio driver:
-> 
->   1. TODO: register i2c_hotplug_deactivate(priv) using
->      devm_add_action_or_reset() before registering the IRQ handler
->      and remove remove();
-> 
->   2. shared IRQ: it is expected to be an edge-triggered, rarely
->      signalled interrupt and the handler will work fine if called
->      spuriously; it is not required to be shared for my Transformer,
->      but I can't say much about other hardware. Would a comment help?
+On Fri, Aug 11, 2023 at 02:46:10PM +0000, Biju Das wrote:
+> > Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct
+> > bus_type
+> > On Fri, Aug 11, 2023 at 01:27:36PM +0000, Biju Das wrote:
+> > > > On Thu, Aug 10, 2023 at 09:05:10AM +0000, Biju Das wrote:
 
-We have way too lengthy discussion and now we are circling back. Can you
-refer to the first email I wrote?
+...
 
-"You can:
-1. investigate to be sure it is 100% safe (please document why do you
-think it is safe)
-2. drop devm
-3. drop shared flag."
+> > > > I'm good with this approach, but make sure you checked the whole
+> > > > kernel source tree for a such.
+> > >
+> > > Checking against 16 is too short I guess??
+> > >
+> > > drivers/iio/imu/inv_mpu6050/inv_mpu_iio.h has 18 enums.
+> > 
+> > So, what does prevent us from moving that tables to use pointers?
+> 
+> I think that will lead to ABI breakage(client->name vs id->name)
+> 
+> 	match = device_get_match_data(&client->dev);
+> 	if (match) {
+> 		chip_type = (uintptr_t)match;
+> 		name = client->name;
+> 	} else if (id) {
+> 		chip_type = (enum inv_devices)
+> 			id->driver_data;
+> 		name = id->name;
+> 	} else {
+> 		return -ENOSYS;
+> 	}
 
 
-Best regards,
-Krzysztof
+It's easy to work around (may be better fix can be found, haven't checked, just
+what first comes to my mind):
+
+	match ...
+	name = match->name;
+
+	/* If enumerated via firmware node, fix the ABI */
+	if (dev_fwnode())
+		client->name
+
+> > > /*device enum */
+> > > enum inv_devices {
+> > > 	INV_MPU6050,
+> > > 	INV_MPU6500,
+> > > 	INV_MPU6515,
+> > > 	INV_MPU6880,
+> > > 	INV_MPU6000,
+> > > 	INV_MPU9150,
+> > > 	INV_MPU9250,
+> > > 	INV_MPU9255,
+> > > 	INV_ICM20608,
+> > > 	INV_ICM20608D,
+> > > 	INV_ICM20609,
+> > > 	INV_ICM20689,
+> > > 	INV_ICM20600,
+> > > 	INV_ICM20602,
+> > > 	INV_ICM20690,
+> > > 	INV_IAM20680,
+> > > 	INV_NUM_PARTS
+> > > };
+> > >
+> > > The new helper function
+> > 
+> > You mean for debugging? We don't need that in production.
+> 
+> That is sample code for iterating through id table to find max enum
+> and check against ZERO_OR_NULL_PTR
+
+Much better with a coccinelle. You will find all or almost all occurrences
+without too much effort done.
+
+> > I think what you need is a coccinelle script to find these.
+> 
+> I need to explore using coccinelle script as I have n't tried before.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
