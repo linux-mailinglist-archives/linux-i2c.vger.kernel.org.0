@@ -2,85 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBC477EA59
-	for <lists+linux-i2c@lfdr.de>; Wed, 16 Aug 2023 22:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE55B77ED28
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Aug 2023 00:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239509AbjHPUFA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 16 Aug 2023 16:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
+        id S1346926AbjHPWcZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 16 Aug 2023 18:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346031AbjHPUEe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Aug 2023 16:04:34 -0400
-Received: from mx4.sionneau.net (mx4.sionneau.net [51.15.250.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F732110;
-        Wed, 16 Aug 2023 13:04:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sionneau.net;
-        s=selectormx4; t=1692216270;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=26DUZLe4PV/0nEWQNlxeRLfNg1jDJUvrXE6RFg1ThPg=;
-        b=SRo7JCOYfnLKt/roeC4G6zaXhgZ8gfwdQ52MwzmbFJUQLcW4J7OpqrjU7aa6OSvPCxk8H2
-        XlUK5hS6P81rJOdSZ9sQJu72UpGRB0zBphTcHmBmBRnxV7onSSw/WnwHfyNwJk4zi5QlIb
-        tdsuR+X8pdGTCMaihQaiPRSlS6XlkB0=
-Received: from fallen-ThinkPad-X260.hotspot.hub-one.net (<unknown> [37.169.176.143])
-        by mx4.sionneau.net (OpenSMTPD) with ESMTPSA id dbbb5935 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 16 Aug 2023 20:04:30 +0000 (UTC)
-From:   Yann Sionneau <yann@sionneau.net>
-To:     Andi Shyti <andi.shyti@kernel.org>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-        Michal Simek <michal.simek@amd.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Yann Sionneau <yann@sionneau.net>
-Subject: [PATCH 4/4] i2c: imx: devm_pinctrl_get() cannot return NULL
-Date:   Wed, 16 Aug 2023 22:04:10 +0200
-Message-Id: <20230816200410.62131-5-yann@sionneau.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230816200410.62131-1-yann@sionneau.net>
-References: <20230816200410.62131-1-yann@sionneau.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S1346949AbjHPWcP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 16 Aug 2023 18:32:15 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67231B2;
+        Wed, 16 Aug 2023 15:32:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692225135; x=1723761135;
+  h=from:to:cc:subject:date:message-id;
+  bh=nwijjDmkxjrbyX2r4Q6jg8zM3nb6NY2HBgKNMEuFmwA=;
+  b=IwTdfusO3j4rlHQJm+B08oTst581qmzJwKIXHB+LcJ8bcibmEmQNGJij
+   L2sxuwZfV94NrZ9R4vABvfNFq3zPaTGTNxF7wroLdfcv1cNatXH+Bsmpp
+   +ZaxXL5NagI3da9ig3SkptpkyciBXbY4yCNJ1y5jRFj3RWfE3FV3x/cMc
+   yq5xY6b4XHdQK7cz94Fm5J2FBihuX+wVDLKyh6iSgM6KVZ5taUUh/XrLs
+   vqTB9t9vhR0Al5VPj14BgaA5GS9PTD7VGgboC33rL7f3fUMqBFgIAMrnf
+   ONmd9u1HfVKd5098DtSw46EkcHEec6+VylCaHCDWAvJh+IFzsh+YyssN/
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="376391925"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="376391925"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 15:32:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="877974818"
+Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Aug 2023 15:32:13 -0700
+From:   Wentong Wu <wentong.wu@intel.com>
+To:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        maz@kernel.org, brgl@bgdev.pl, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, srinivas.pandruvada@intel.com,
+        linux-drivers-review@eclists.intel.com
+Cc:     zhifeng.wang@intel.com, Wentong Wu <wentong.wu@intel.com>
+Subject: [PATCH v9 0/4] Add Intel LJCA device driver
+Date:   Thu, 17 Aug 2023 06:31:47 +0800
+Message-Id: <1692225111-19216-1-git-send-email-wentong.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Remove unnecessary check against NULL for devm_pinctrl_get() return value.
+Add driver for Intel La Jolla Cove Adapter (LJCA) device.
+This is a USB-GPIO, USB-I2C and USB-SPI device. We add 4
+drivers to support this device: a USB driver, a GPIO chip
+driver, a I2C controller driver and a SPI controller driver.
 
-Signed-off-by: Yann Sionneau <yann@sionneau.net>
 ---
- drivers/i2c/busses/i2c-imx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v9:
+ - overhaul usb-ljca driver to make it more structured and easy understanding
+ - fix memory leak issue for usb-ljca driver
+ - add spinlock to protect tx_buf and ex_buf
+ - change exported APIs for usb-ljca driver
+ - unify prefix for structures and functions for i2c-ljca driver
+ - unify prefix for structures and functions for spi-ljca driver
+ - unify prefix for structures and functions for gpio-ljca driver
+ - update gpio-ljca, i2c-ljca and spi-ljca drivers according to usb-ljca's changes
 
-diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-index 65128a73e8a3..502276e8ded5 100644
---- a/drivers/i2c/busses/i2c-imx.c
-+++ b/drivers/i2c/busses/i2c-imx.c
-@@ -1389,7 +1389,7 @@ static int i2c_imx_init_recovery_info(struct imx_i2c_struct *i2c_imx,
- 	struct i2c_bus_recovery_info *rinfo = &i2c_imx->rinfo;
- 
- 	i2c_imx->pinctrl = devm_pinctrl_get(&pdev->dev);
--	if (!i2c_imx->pinctrl || IS_ERR(i2c_imx->pinctrl)) {
-+	if (IS_ERR(i2c_imx->pinctrl)) {
- 		dev_info(&pdev->dev, "can't get pinctrl, bus recovery not supported\n");
- 		return PTR_ERR(i2c_imx->pinctrl);
- 	}
+Wentong Wu (4):
+  usb: Add support for Intel LJCA device
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  gpio: update Intel LJCA USB GPIO driver
+
+ drivers/gpio/Kconfig          |   4 +-
+ drivers/gpio/gpio-ljca.c      | 242 +++++++------
+ drivers/i2c/busses/Kconfig    |  11 +
+ drivers/i2c/busses/Makefile   |   1 +
+ drivers/i2c/busses/i2c-ljca.c | 353 ++++++++++++++++++
+ drivers/spi/Kconfig           |  11 +
+ drivers/spi/Makefile          |   1 +
+ drivers/spi/spi-ljca.c        | 299 ++++++++++++++++
+ drivers/usb/misc/Kconfig      |  14 +
+ drivers/usb/misc/Makefile     |   1 +
+ drivers/usb/misc/usb-ljca.c   | 817 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb/ljca.h      | 113 ++++++
+ 12 files changed, 1764 insertions(+), 103 deletions(-)
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/usb-ljca.c
+ create mode 100644 include/linux/usb/ljca.h
+
 -- 
-2.34.1
+2.7.4
 
