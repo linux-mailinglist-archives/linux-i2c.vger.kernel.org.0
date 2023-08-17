@@ -2,99 +2,97 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF2C77F0C8
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Aug 2023 09:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EE877F0D7
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Aug 2023 09:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjHQG7i (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Aug 2023 02:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
+        id S1348347AbjHQHDa (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Aug 2023 03:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238931AbjHQG7L (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Aug 2023 02:59:11 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0086D1990
-        for <linux-i2c@vger.kernel.org>; Wed, 16 Aug 2023 23:59:09 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d7260fae148so979135276.1
-        for <linux-i2c@vger.kernel.org>; Wed, 16 Aug 2023 23:59:09 -0700 (PDT)
+        with ESMTP id S1348372AbjHQHDX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Aug 2023 03:03:23 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4851E26BC
+        for <linux-i2c@vger.kernel.org>; Thu, 17 Aug 2023 00:03:22 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d6b1025fc7aso3603045276.3
+        for <linux-i2c@vger.kernel.org>; Thu, 17 Aug 2023 00:03:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692255549; x=1692860349;
+        d=linaro.org; s=google; t=1692255801; x=1692860601;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fRAHHehPFKdyr5YnXRiLjnh+UaG2zDBxdwcL8glV9iA=;
-        b=CTkdWOoILiIuRr0w4mv7A8juuL0UUMqd2hEbJIfIK8c8qklxOH5G9wSSRoRKQTdrKH
-         N61IzAqEgTfY+KNWPRF+8ul1VE86nYbxfueU6sD/n3usKJ++R/MKc8UG2QaSK8iCqVDC
-         iPZMJ+1sFz6ydKF8FnGWYISpLkrYgDbKoR7FAVEav8MUbQXS8Y0lgCs9RlZ23nZ+MGvY
-         juBW+I/jEO3vBeIgwtA48aPJTkSgppiQHo585CgNNkVBT9dOU7/hzKA6xjUp3MoRZ0KZ
-         lyNJHkKiAz2Y38vB5dK6lL/5sKDzuA9PJtWCn+qZPHcUe5EBVfq7Sb8fT94NcFqTM1a0
-         kh7g==
+        bh=7avfeamG6iWWfTOtg1OnHs5e+jyQ3+PF63+3RSy+ZNY=;
+        b=aesoNAiPj499lKGIzB7bNr54KVIoSJsEXkhmzrQoTcfXaA397PhbJcdMq8ocVt8sb1
+         b1Sc+vB+94tdi2fbLbsY8bqJ/kjF3OAZiDj6wrY20y7cJdfbvLj2v+Yfa7a70Aqix0wQ
+         kidH1dHkXMRNTpG86qq25sh/3cN9mXEY58H/lO0/e62qHvbCPwdfJ5N+lRtw3HdIaTaq
+         vAJbAAjNuq+9pcJlFQ/4g4ND/M7AUnpEVPgcBC8ptcIa+APBPLf2LIEXOmkV1sQQGZac
+         qJNDfuKZ2UaznXHcIuWelTBYzIO91VzMls8SjwG4zoogtKBwjbH8L1340wzABnwFOE6b
+         AnDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692255549; x=1692860349;
+        d=1e100.net; s=20221208; t=1692255801; x=1692860601;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fRAHHehPFKdyr5YnXRiLjnh+UaG2zDBxdwcL8glV9iA=;
-        b=WkpxNk2F1wxoOs3HyZ8uMuz9G5FvLY0zJ+liL1PaBvGuyZndcB5Ze5XtbElCDZbyf0
-         Th+I+h4dpoTn18CljPs4CjKrZOpxDdPtc8+85MIA8eX/OfEuDXw/FLdW6e6tWDyiM7i4
-         9STxRGtgQZ7PSR1m7HBHoTozkPD8ty27qiFn65CBaDJQq50wm03llguLb2aO7Z2cnwsp
-         1zyZQRckypqAKL8LKGKzjGEJjDd7Q70mmniBSKHRFNUqxkxQ7MXr/M1uwV7nxsjfL5s5
-         BSyn728alyhsKZN1g2Df5TIUsEOVaR15yXG4T6Up0lZfM8Gg0Mq4aow6kTdhyiGxhWzG
-         emIA==
-X-Gm-Message-State: AOJu0Yy70O5KHm7qipS6rC9wB5ZbC9ZBAu0b14UCLdokx9f4CgvbjMLN
-        4vh2TWZ67D3twgUKsXt5H2KCgDD8LBLgetIBdu728w==
-X-Google-Smtp-Source: AGHT+IGpYhRHya6xrz95w/CwNRF7nyGsyh3/msYYVNs4qq390dBXzA07kXvg8La4CX/ZPPAZ5o4fuDb1JiF7o1TIL+A=
-X-Received: by 2002:a5b:e8f:0:b0:d49:bfe4:9c50 with SMTP id
- z15-20020a5b0e8f000000b00d49bfe49c50mr3803365ybr.18.1692255549206; Wed, 16
- Aug 2023 23:59:09 -0700 (PDT)
+        bh=7avfeamG6iWWfTOtg1OnHs5e+jyQ3+PF63+3RSy+ZNY=;
+        b=YDH8qd+99xE2VGW6o90H7OrbRul3WS6ZYcECTkkkZNovq0e9fL65MH0/XrnK6eTWIU
+         sVT7dh18iaq9rMnn7c3HLQppx6T1R+7/pLnqoIV3HzNjG37eQ6U82tBjsIPh+a+TGXfs
+         XRsggWDLwgfgzlUN2cP25S74TGYypKWi6rQKlSzdZE2x7XbFP45H1tljxKN4fxvYPv0D
+         CUp3rkJUVu6r913Wvel3Y0c/VRdRFyLmIPAQAcMKI/lAkyYYBTU+te/HAaRq5Dqk67hv
+         hygXRiixmb/juVAdFQopXruRauP5Xn/W4+MVnUG4fA/fQUT9Fy9CHeza3Ai329itwXzR
+         z1Ew==
+X-Gm-Message-State: AOJu0Yz5qnWXfBxyDMU/DdUA5SDfb/AYj4JuE/vHLGKh2UxeOeXhlJmJ
+        dSHRryzy+4ZKs01SuR5AvCGk5MAkrXy+S76riNptGw==
+X-Google-Smtp-Source: AGHT+IGDnRoZkjFE+pzPjoUJsL58my27gTcWLZaoxQzesMZi1Q8a9WWRHdCTt4tKbGw0pjF8h1pvGTej++I4c7CD2PA=
+X-Received: by 2002:a25:bb4d:0:b0:d10:c4ea:a6b1 with SMTP id
+ b13-20020a25bb4d000000b00d10c4eaa6b1mr3725106ybk.38.1692255801526; Thu, 17
+ Aug 2023 00:03:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230817022018.3527570-1-ruanjinjie@huawei.com>
-In-Reply-To: <20230817022018.3527570-1-ruanjinjie@huawei.com>
+References: <1692225111-19216-1-git-send-email-wentong.wu@intel.com> <1692225111-19216-5-git-send-email-wentong.wu@intel.com>
+In-Reply-To: <1692225111-19216-5-git-send-email-wentong.wu@intel.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 17 Aug 2023 08:58:57 +0200
-Message-ID: <CACRpkdYaociodweVRFn+bS4+BoCkLMEa=+xjGTJaPZ3pquY1EQ@mail.gmail.com>
-Subject: Re: [PATCH -next v2] I2C: Fix return value check for devm_pinctrl_get()
-To:     Ruan Jinjie <ruanjinjie@huawei.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Yang Li <leoyang.li@nxp.com>
+Date:   Thu, 17 Aug 2023 09:03:10 +0200
+Message-ID: <CACRpkda4Wrih_HPz6KjNf5rQ3A7jSRoPpMpQbm+ZWNv5P3WccA@mail.gmail.com>
+Subject: Re: [PATCH v9 4/4] gpio: update Intel LJCA USB GPIO driver
+To:     Wentong Wu <wentong.wu@intel.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, maz@kernel.org,
+        brgl@bgdev.pl, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, srinivas.pandruvada@intel.com,
+        linux-drivers-review@eclists.intel.com, zhifeng.wang@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 4:21=E2=80=AFAM Ruan Jinjie <ruanjinjie@huawei.com>=
- wrote:
+On Thu, Aug 17, 2023 at 12:32=E2=80=AFAM Wentong Wu <wentong.wu@intel.com> =
+wrote:
 
-> The devm_pinctrl_get() function returns error pointers and never
-> returns NULL. Update the checks accordingly.
+> This driver communicate with LJCA GPIO module with specific
+> protocol through interfaces exported by LJCA USB driver.
+> Update the driver according to LJCA USB driver's changes.
 >
-> Fixes: 543aa2c4da8b ("i2c: at91: Move to generic GPIO bus recovery")
-> Fixes: fd8961c5ba9e ("i2c: imx: make bus recovery through pinctrl optiona=
-l")
-> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+> Signed-off-by: Wentong Wu <wentong.wu@intel.com>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-That's right.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+This patch does several things at the same time, consider the
+"one technical step per patch" approach, for some definition
+of a "technical step". The upside is that git bisect gets better
+precision when something goes sidewise.
 
-Thanks for fixing this Ruan!
+However it's no big deal for me as I'm not hung up on process
+and I bet you have tested the result, so:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij
