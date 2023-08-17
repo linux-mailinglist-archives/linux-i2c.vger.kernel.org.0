@@ -2,93 +2,144 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C33177F450
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Aug 2023 12:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6D777F548
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Aug 2023 13:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349600AbjHQK36 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Aug 2023 06:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
+        id S236405AbjHQLaH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Aug 2023 07:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243667AbjHQK3j (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Aug 2023 06:29:39 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDC32D54;
-        Thu, 17 Aug 2023 03:29:38 -0700 (PDT)
-Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5BDB2497;
-        Thu, 17 Aug 2023 12:28:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1692268102;
-        bh=6t44jZbV72pjMZfcadFePl+MnE7XEaDfJ7ot64scjQo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bn87AhZaQEb2SRNlqE7cMGIc3hfOxut76mah7mCTgwui0BZcVj/6i+X1DUibb3b86
-         xLi1awt7rQoGhEA+ceCbZ10TJkujNFK9/mNLjia1cICBn7Qp5YPFjUI0aMVU0tv4UO
-         nt2K5NorZOlYDZ5zapWwyWI0Xwy7MvsxLhuiE4Pw=
-Message-ID: <6d552603-a8ae-44db-2598-46017d047566@ideasonboard.com>
-Date:   Thu, 17 Aug 2023 13:29:33 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] i2c: Make I2C_ATR invisible
-Content-Language: en-US
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
+        with ESMTP id S1350380AbjHQL3v (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Aug 2023 07:29:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA57030FD
+        for <linux-i2c@vger.kernel.org>; Thu, 17 Aug 2023 04:29:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E22966631F
+        for <linux-i2c@vger.kernel.org>; Thu, 17 Aug 2023 11:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49185C433CC;
+        Thu, 17 Aug 2023 11:29:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692271746;
+        bh=KDB20w3zVcSKTTV5vUMmLZF/S01IHbzFRhKTMQ0FMVI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h9MrRiFY8Yj+Ldr0w6ovtXICKQ3vFTOyUsQEohwW9UFpjgRFYbF2Wm2zpqcVj9XZ7
+         hAzP5TTEZYZ0GvXApYjfKYkZ1w3z2G+J94OwKSDzHCR254/q4h84WFpBEC2aE20iNc
+         S0qQRZqdPq0wGmt7n3w9sFQfZDUnBRCS4SoT/AYUnQcpuoFdaPw8zWZXHOrxviWGk3
+         cU4oCo5SK5bTk24Cbyih8EMWzTEHZR2++VMA3+9SLCk5YFaqsGe9OnziCZcAZIQfcM
+         4V6poiYMRYIRTBf/FmJ0VSFomIQDSLgU2TslvNtwy3vPpXs/E2BrIcAN4kydkLQEwR
+         U44dOMVHlhcbQ==
+Date:   Thu, 17 Aug 2023 12:29:00 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
 Cc:     Wolfram Sang <wsa@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <588d302477cb7e6b30b52ee6448807324c57b88a.1692113321.git.geert+renesas@glider.be>
- <20230817094512.38b3d45b@booty>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20230817094512.38b3d45b@booty>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        kernel@pengutronix.de, linux-i2c@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Pavel Machek <pavel@ucw.cz>, Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH] i2c: Drop legacy callback .probe_new()
+Message-ID: <20230817112900.GB986605@google.com>
+References: <20230626094548.559542-1-u.kleine-koenig@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230626094548.559542-1-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 17/08/2023 10:45, Luca Ceresoli wrote:
-> Hi Geert,
-> 
-> On Tue, 15 Aug 2023 17:29:11 +0200
-> Geert Uytterhoeven <geert+renesas@glider.be> wrote:
-> 
->> I2C Address Translator (ATR) support is not a stand-alone driver, but a
->> library.  All of its users select I2C_ATR.  Hence there is no need for
->> the user to enable this symbol manually, except when compile-testing.
->>
->> Fixes: a076a860acae77bb ("media: i2c: add I2C Address Translator (ATR) support")
->> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->> ---
->> Do we care yet about out-of-tree drivers that need this functionality?
->> ---
->>   drivers/i2c/Kconfig | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/i2c/Kconfig b/drivers/i2c/Kconfig
->> index c6d1a345ea6d8aee..9388823bb0bb960c 100644
->> --- a/drivers/i2c/Kconfig
->> +++ b/drivers/i2c/Kconfig
->> @@ -72,7 +72,7 @@ config I2C_MUX
->>   source "drivers/i2c/muxes/Kconfig"
->>   
->>   config I2C_ATR
->> -	tristate "I2C Address Translator (ATR) support"
->> +	tristate "I2C Address Translator (ATR) support" if COMPILE_TEST
-> 
-> Either as-is, or with an anonymous tristate:
-> 
-> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+On Mon, 26 Jun 2023, Uwe Kleine-König wrote:
 
-Yes, I'm also fine either way:
+> Now that all drivers are converted to the (new) .probe() callback, the
+> temporary .probe_new() can go away. \o/
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+> Hello,
+> 
+> I was planning to send out this patch for inclusion into next after
+> v6.5-rc1 as I thought there were only three drivers left to be converted
+> before (on top of today's next/master). While preparing to submit this
+> patch I noticed that a few more .probe_new were introduced in next even
+> after commit 03c835f498b5 ("i2c: Switch .probe() to not take an id
+> parameter"). I just sent out patches for all drivers in next that are
+> still using .probe_new. These are:
+> 
+>  - w1: ds2482: Switch back to use struct i2c_driver's .probe()
+>    https://lore.kernel.org/lkml/20230612072807.839689-1-u.kleine-koenig@pengutronix.de
+>    Krzysztof Kozlowski already signaled this won't go into 6.5-rc via
+>    his tree, and he's ok if it goes in via i2c then.
+> 
+>  - drm/i2c: Switch i2c drivers back to use .probe()
+>    https://lore.kernel.org/dri-devel/20230611202740.826120-1-u.kleine-koenig@pengutronix.de
+>    Currently applied to
+> 
+> 	https://anongit.freedesktop.org/git/drm/drm-misc.git drm-misc-next
+> 
+>    as d13b5d2b2b45. This won't make it onto v6.5-rc1 either.
+> 
+>  - watchdog: ziirave_wdt: Switch i2c driver back to use .probe()
+>    https://lore.kernel.org/linux-watchdog/20230525210837.735447-1-u.kleine-koenig@pengutronix.de
+>    Given that the merge window is open now, I doubt this will make it
+>    into v6.5-rc1.
+> 
+>  - c4cfa2436ff6 hwmon: max31827: Switch back to use struct i2c_driver::probe
+>    https://lore.kernel.org/linux-hwmon/20230626085145.554616-1-u.kleine-koenig@pengutronix.de
+> 
+>  - leds: aw200xx: Switch back to use struct i2c_driver::probe
+>    https://lore.kernel.org/linux-leds/20230626090254.556206-1-u.kleine-koenig@pengutronix.de
+> 
+>  - media: i2c: ov01a10: Switch back to use struct i2c_driver::probe
+>    https://lore.kernel.org/linux-media/20230626090533.556406-1-u.kleine-koenig@pengutronix.de
+> 
+>  - usb: typec: nb7vpq904m: Switch back to use struct i2c_driver::probe
+>    https://lore.kernel.org/linux-usb/20230626091314.557122-1-u.kleine-koenig@pengutronix.de
+> 
+>  - regulator: raa215300: Switch back to use struct i2c_driver::probe
+>    https://lore.kernel.org/lkml/20230626091544.557403-1-u.kleine-koenig@pengutronix.de
+> 
+>  - mfd: Switch two more drivers back to use struct i2c_driver::probe
+>    https://lore.kernel.org/lkml/20230626091941.557733-1-u.kleine-koenig@pengutronix.de
+> 
+> The last six were only sent today, so I guess we have to wait another
+> development cycle and then get this patch into next after v6.6-rc1
+> (together with the patches from above list that will have failed to get
+> into v6.6-rc1).
+> 
+> Until we're there, feel free to already look at this patch. I was unsure
+> if I should split of the change to Documentation/hwmon/pmbus.rst. As
+> .probe() already works in v6.3-rc2 this hunk could go in already
+> earlier, e.g. via the hwmon tree. While thinking about that, the hunk
+> for Documentation/i2c/writing-clients.rst could go in before, too.
+> So tell me your thoughts, then I can split as desired.
+> 
+> Best regards
+> Uwe
+> 
+>  Documentation/hwmon/pmbus.rst         |  2 +-
+>  Documentation/i2c/writing-clients.rst |  2 +-
+>  include/linux/i2c.h                   | 11 +----------
+>  3 files changed, 3 insertions(+), 12 deletions(-)
 
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Lee Jones <lee@kernel.org>
 
-  Tomi
-
+-- 
+Lee Jones [李琼斯]
