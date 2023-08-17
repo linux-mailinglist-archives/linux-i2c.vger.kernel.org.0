@@ -2,53 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5F877EFEA
-	for <lists+linux-i2c@lfdr.de>; Thu, 17 Aug 2023 06:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 647AE77EFEF
+	for <lists+linux-i2c@lfdr.de>; Thu, 17 Aug 2023 06:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235076AbjHQEie (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 17 Aug 2023 00:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
+        id S1348045AbjHQErS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 17 Aug 2023 00:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348019AbjHQEi2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Aug 2023 00:38:28 -0400
+        with ESMTP id S1348037AbjHQEqo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 17 Aug 2023 00:46:44 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339D31BE8
-        for <linux-i2c@vger.kernel.org>; Wed, 16 Aug 2023 21:38:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB0810E9
+        for <linux-i2c@vger.kernel.org>; Wed, 16 Aug 2023 21:46:42 -0700 (PDT)
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1qWUm6-0003oL-4d; Thu, 17 Aug 2023 06:38:22 +0200
+        id 1qWUty-0004ft-LL; Thu, 17 Aug 2023 06:46:30 +0200
 Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1qWUm2-0003QZ-By; Thu, 17 Aug 2023 06:38:18 +0200
-Date:   Thu, 17 Aug 2023 06:38:18 +0200
+        id 1qWUtx-0003fc-Ag; Thu, 17 Aug 2023 06:46:29 +0200
+Date:   Thu, 17 Aug 2023 06:46:29 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Ruan Jinjie <ruanjinjie@huawei.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+To:     Yann Sionneau <yann@sionneau.net>
+Cc:     Andi Shyti <andi.shyti@kernel.org>,
         Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+        Michal Simek <michal.simek@amd.com>,
         Oleksij Rempel <linux@rempel-privat.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Yang Li <leoyang.li@nxp.com>
-Subject: Re: [PATCH -next v2] I2C: Fix return value check for
- devm_pinctrl_get()
-Message-ID: <20230817043818.GC28787@pengutronix.de>
-References: <20230817022018.3527570-1-ruanjinjie@huawei.com>
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 4/4] i2c: imx: devm_pinctrl_get() cannot return NULL
+Message-ID: <20230817044629.GD28787@pengutronix.de>
+References: <20230816200410.62131-1-yann@sionneau.net>
+ <20230816200410.62131-5-yann@sionneau.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230817022018.3527570-1-ruanjinjie@huawei.com>
+In-Reply-To: <20230816200410.62131-5-yann@sionneau.net>
 X-Sent-From: Pengutronix Hildesheim
 X-URL:  http://www.pengutronix.de/
 X-Accept-Language: de,en
@@ -67,24 +65,36 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 10:20:17AM +0800, Ruan Jinjie wrote:
-> The devm_pinctrl_get() function returns error pointers and never
-> returns NULL. Update the checks accordingly.
+On Wed, Aug 16, 2023 at 10:04:10PM +0200, Yann Sionneau wrote:
+> Remove unnecessary check against NULL for devm_pinctrl_get() return value.
 > 
-> Fixes: 543aa2c4da8b ("i2c: at91: Move to generic GPIO bus recovery")
-> Fixes: fd8961c5ba9e ("i2c: imx: make bus recovery through pinctrl optional")
-> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+> Signed-off-by: Yann Sionneau <yann@sionneau.net>
 > ---
-> v2:
-> - Remove NULL check instead of using IS_ERR_OR_NULL() to avoid leaving them behind.
-> - Update the commit title and message.
-> ---
->  drivers/i2c/busses/i2c-at91-master.c | 2 +-
->  drivers/i2c/busses/i2c-imx.c         | 2 +-
+>  drivers/i2c/busses/i2c-imx.c | 2 +-
 
 Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
 Thank you!
+
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+> index 65128a73e8a3..502276e8ded5 100644
+> --- a/drivers/i2c/busses/i2c-imx.c
+> +++ b/drivers/i2c/busses/i2c-imx.c
+> @@ -1389,7 +1389,7 @@ static int i2c_imx_init_recovery_info(struct imx_i2c_struct *i2c_imx,
+>  	struct i2c_bus_recovery_info *rinfo = &i2c_imx->rinfo;
+>  
+>  	i2c_imx->pinctrl = devm_pinctrl_get(&pdev->dev);
+> -	if (!i2c_imx->pinctrl || IS_ERR(i2c_imx->pinctrl)) {
+> +	if (IS_ERR(i2c_imx->pinctrl)) {
+>  		dev_info(&pdev->dev, "can't get pinctrl, bus recovery not supported\n");
+>  		return PTR_ERR(i2c_imx->pinctrl);
+>  	}
+> -- 
+> 2.34.1
+> 
+> 
 
 -- 
 Pengutronix e.K.                           |                             |
