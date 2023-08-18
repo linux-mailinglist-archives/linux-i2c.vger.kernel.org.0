@@ -2,78 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A69C780ABF
-	for <lists+linux-i2c@lfdr.de>; Fri, 18 Aug 2023 13:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F176780D02
+	for <lists+linux-i2c@lfdr.de>; Fri, 18 Aug 2023 15:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346135AbjHRLGu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 18 Aug 2023 07:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
+        id S1377386AbjHRNwU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 18 Aug 2023 09:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244170AbjHRLGQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Aug 2023 07:06:16 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5402D73
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Aug 2023 04:06:14 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4ff88239785so1090143e87.0
-        for <linux-i2c@vger.kernel.org>; Fri, 18 Aug 2023 04:06:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692356773; x=1692961573;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UMIktzBcgCZ2Vl0uMoPdLyMfuXFnj8LQIJonADyTrTE=;
-        b=hc7DAw1jAzejV41R4/oXFzjTTyJcG4TEUTMq2mRDdLba4GbIlI6HIu45uZ55hhxcK5
-         Hk1jHJkCz3PT4fZQh1pWDeERortudXYMit4GMFztCX8fpiiJWh/Se4OOB+bGSysIvy+D
-         Q03npqSi7pZucFaqytpwos/Gs1lJZvhCPMX78z+z3BFIPj6MK89IbZkngBqcxM7t28Na
-         4TncwsUIeSJlYeXpBeH98lgJrS57JRHmexw0C2s8odiyZY1hBO4u16fQ616TmRIDvtqM
-         8K5P2SUH+Qt7SWMzeYaMG4fWi/D98DKiBJChjwxhTajd4x+p19nRAqMkW03bI3yTs54D
-         OHqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692356773; x=1692961573;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UMIktzBcgCZ2Vl0uMoPdLyMfuXFnj8LQIJonADyTrTE=;
-        b=KXhEorIwnSTNwTJ+Cq5D0K/Rbqz4rSGv2XQUSDoXBWAW6R55PLrLzLuftsS+CwDcWl
-         HuPDlX3183O/ygxcpPuwVF1jEYBxMZyYNe8aA6BMYPTnrc6N1XvyH0lE8eUc+T5rgvtp
-         ZQkB1Zc9viIW3qSOs0s12akywhfE4s2FblMfuWLJy+ue2XwKa6y2Hai5hs4NRAjC6WFB
-         oULt54xMeSaPWVa8TP17zMZYXtwUmPz7I2ETmWXtDXZBjn7anGyddmLpaWieCm0ZowL3
-         ULgGnHhvj6VjehvWWpUxmkDBX/+1NfdPnmauZFmfGctqdtrfPI/++325jHAjd3cjnshR
-         mcvw==
-X-Gm-Message-State: AOJu0YwR4eJh67dN9OHaX4gbNDDFThFkviPfjtBkZWweCzmZviHLZCmT
-        YH7jZoX/GlzRxX11Sbo+ovsB+Q==
-X-Google-Smtp-Source: AGHT+IH0IRqcnpfQ1DcMW1gOJYtBbBbQUGhUUhchG+P2KKAZ3KQNIExD06f+xoIePJauUtb49QueuQ==
-X-Received: by 2002:a05:6512:2342:b0:4f9:56a9:b98e with SMTP id p2-20020a056512234200b004f956a9b98emr1801620lfu.58.1692356772869;
-        Fri, 18 Aug 2023 04:06:12 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id k19-20020ac257d3000000b004ff91a94156sm290851lfo.121.2023.08.18.04.06.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Aug 2023 04:06:12 -0700 (PDT)
-Message-ID: <e87b35f9-f585-4a3f-bd31-9ebeba52f66b@linaro.org>
-Date:   Fri, 18 Aug 2023 14:06:11 +0300
+        with ESMTP id S1377449AbjHRNwC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 18 Aug 2023 09:52:02 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713F1114;
+        Fri, 18 Aug 2023 06:52:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692366721; x=1723902721;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PCENrtaPcOVgzt+0HSz4cxOUh2pO83Ef4o5U53ChBlg=;
+  b=egwb/7a3hPdTOOM5g2O0ykrfr3pxD+TzAvwL9/ekDIPeFcpSCRKExknm
+   D8u2w0TlhESpWL7JMP+b1aakQuKA9YjjD7d5n+mdCd6aCQNJuL3PkUKKE
+   9riBWzXv7rZWWt6koLmjKQKcnGvF97U8hHwHz0U5PvVum9vFAgm4VQD0L
+   Wdyp9292gO56elP+SoTwcANhnmxYu08RPS+iFUxajjrp5CcRVsJ4YWaBv
+   jouqHkEBtq/9IxD9vpjjNeenp0DodsHFamuu4OO8goe/JFZrr/hfh3XbC
+   BjLCDwTiUDg8/EInc7HPA/epkn5xSEP7z4quCnWXWRMV6l6YQo8gQG7U/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10806"; a="437014471"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="437014471"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 06:52:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10806"; a="735104661"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="735104661"
+Received: from mylly.fi.intel.com (HELO [10.237.72.154]) ([10.237.72.154])
+  by orsmga002.jf.intel.com with ESMTP; 18 Aug 2023 06:51:58 -0700
+Message-ID: <49384d62-7c5c-41d7-bbbd-b9aee5d1d0a3@linux.intel.com>
+Date:   Fri, 18 Aug 2023 16:51:57 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/9] i2c: qcom-cci: Use dev_err_probe in probe function
-Content-Language: en-GB
-To:     Liao Chang <liaochang1@huawei.com>, andi.shyti@kernel.org,
-        florian.fainelli@broadcom.com, rjui@broadcom.com,
-        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        yangyicong@hisilicon.com, aisheng.dong@nxp.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, kblaiech@nvidia.com,
-        asmaa@nvidia.com, loic.poulain@linaro.org, rfoss@kernel.org,
-        ardb@kernel.org, gcherian@marvell.com
-Cc:     linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-References: <20230728013148.1720978-1-liaochang1@huawei.com>
- <20230728013148.1720978-6-liaochang1@huawei.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230728013148.1720978-6-liaochang1@huawei.com>
+Subject: Re: [PATCH v2] i2c: designware: add support for pinctrl for recovery
+Content-Language: en-US
+To:     Yann Sionneau <yann@sionneau.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Andi Shyti <andi.shyti@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yann Sionneau <ysionneau@kalray.eu>
+References: <20230816095015.23705-1-yann@sionneau.net>
+ <97d62909-551b-4abd-a743-5be09e617665@linux.intel.com>
+ <685b10d2-7627-eea8-69e4-454af039fa5d@sionneau.net>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <685b10d2-7627-eea8-69e4-454af039fa5d@sionneau.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,38 +68,70 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 28/07/2023 04:31, Liao Chang wrote:
-> Use the dev_err_probe function instead of dev_err in the probe function
-> so that the printed messge includes the return value and also handles
-> -EPROBE_DEFER nicely.
+On 8/17/23 17:27, Yann Sionneau wrote:
+> Hi
 > 
-> Signed-off-by: Liao Chang <liaochang1@huawei.com>
-> ---
->   drivers/i2c/busses/i2c-qcom-cci.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
+> Le 17/08/2023 à 10:07, Jarkko Nikula a écrit :
+>> Hi
+>>
+>> On 8/16/23 12:50, Yann Sionneau wrote:
+>>> From: Yann Sionneau <ysionneau@kalray.eu>
+>>>
+>>> Currently if the SoC needs pinctrl to switch the SCL and SDA
+>>> from the I2C function to GPIO function, the recovery won't work.
+>>>
+>>> scl-gpio = <>;
+>>> sda-gpio = <>;
+>>>
+>>> Are not enough for some SoCs to have a working recovery.
+>>> Some need:
+>>>
+>>> scl-gpio = <>;
+>>> sda-gpio = <>;
+>>> pinctrl-names = "default", "recovery";
+>>> pinctrl-0 = <&i2c_pins_hw>;
+>>> pinctrl-1 = <&i2c_pins_gpio>;
+>>>
+>>> The driver was not filling rinfo->pinctrl with the device node
+>>> pinctrl data which is needed by generic recovery code.
+>>>
+>>> Tested-by: Yann Sionneau <ysionneau@kalray.eu>
+>>> Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+>>
+>> Tested-by from author is needless. Expectation is that author has 
+>> tested the patch while not always true :-)
+> Ok, I just wanted to emphasize the fact that I have the device and I 
+> tested the change with the device. Ack!
+>>
+>>> @@ -905,6 +906,15 @@ static int i2c_dw_init_recovery_info(struct 
+>>> dw_i2c_dev *dev)
+>>>           return PTR_ERR(gpio);
+>>>       rinfo->sda_gpiod = gpio;
+>>>   +    rinfo->pinctrl = devm_pinctrl_get(dev->dev);
+>>> +    if (IS_ERR(rinfo->pinctrl)) {
+>>> +        if (PTR_ERR(rinfo->pinctrl) == -EPROBE_DEFER)
+>>> +            return PTR_ERR(rinfo->pinctrl);
+>>> +
+>>> +        rinfo->pinctrl = NULL;
+>>> +        dev_info(dev->dev, "can't get pinctrl, bus recovery might 
+>>> not work\n");
+>>
+>> I think dev_dbg() suits better here or is it needed at all? End user 
+>> may not be able to do anything when sees this in dmesg. I.e. more like 
+>> development time dev_dbg() information.
+> I agree dev_dbg() is a better idea.
+>>
+>> Does i2c-core-base.c: i2c_gpio_init_pinctrl_recovery() already do 
+>> dev_info() print when pinctrl & GPIO are set properly making above 
+>> also kind of needless?
 > 
-> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-> index 622dc14add9d..cf13abec05f1 100644
-> --- a/drivers/i2c/busses/i2c-qcom-cci.c
-> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
-> @@ -588,10 +588,8 @@ static int cci_probe(struct platform_device *pdev)
->   	/* Clocks */
->   
->   	ret = devm_clk_bulk_get_all(dev, &cci->clocks);
-> -	if (ret < 1) {
-> -		dev_err(dev, "failed to get clocks %d\n", ret);
-> -		return ret;
-> -	}
-> +	if (ret < 1)
-> +		return dev_err_probe(dev, ret, "failed to get clocks\n");
->   	cci->nclocks = ret;
->   
->   	/* Retrieve CCI clock rate */
-
--- 
-With best wishes
-Dmitry
-
+> Thanks for the review. In fact I had to use gdb to understand why the 
+> recovery was not working. Because as you said, it only prints something 
+> to say "everything looks ok!".
+> 
+> I kind of prefer when it prints when something goes wrong.
+> 
+> But I let you decide what you think is the best.
+> 
+Fair enough, dev_dbg() is justified when it makes developer's life 
+easier :-)
