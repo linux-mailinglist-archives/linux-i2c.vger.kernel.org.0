@@ -2,58 +2,54 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CC5781AA4
-	for <lists+linux-i2c@lfdr.de>; Sat, 19 Aug 2023 19:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E57781D85
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Aug 2023 13:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbjHSRaW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 19 Aug 2023 13:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
+        id S230436AbjHTLC3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Aug 2023 07:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232665AbjHSRaV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 19 Aug 2023 13:30:21 -0400
+        with ESMTP id S230418AbjHTLC2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 20 Aug 2023 07:02:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697FFE6A;
-        Sat, 19 Aug 2023 10:30:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9DA46BB;
+        Sun, 20 Aug 2023 04:02:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F212E60A4A;
-        Sat, 19 Aug 2023 17:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 55A13C433C7;
-        Sat, 19 Aug 2023 17:30:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3883560CEC;
+        Sun, 20 Aug 2023 11:02:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AB2C433C7;
+        Sun, 20 Aug 2023 11:02:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692466219;
-        bh=OlNTMdaQSWY8PfpJscZhUOXVyztLvlW7jE3AzMp+uFo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=AAm20DYsr0DaMFxvynNVk7lpc58xSQTCHdN+JjeL6LsvHLj6AyqTfYR/Miq3WCgqU
-         rtrDR/5/LGS3z2bDD5pI6kGYrjoO+5ysELgvAPa6iE78A4j66ek5s38L7pvnxJNM3W
-         0SYy5fstRxgAYvwdUqeyYOpr3Ds87oU1pmaWBf5JYj7jpuayhesLx2VqLMuOyj6b2c
-         UihRwxVIPG2QhRgEY+KbsZQpLdL0pWVP7ZObdAIA4UpNBx5aB1jeWZkNGGFWV1SKmp
-         4QC8YjfUHGytccUbPhK11ZHABH+X8kVnNVjIunvrEuhvf3Pd6MkuW4K/WUjGonNOH2
-         mkIdgT22l78tw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3ECA2C59A4C;
-        Sat, 19 Aug 2023 17:30:19 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c-for-6.5-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZODtsyZ2g1EX8C0X@shikoro>
-References: <ZODtsyZ2g1EX8C0X@shikoro>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZODtsyZ2g1EX8C0X@shikoro>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.5-rc7
-X-PR-Tracked-Commit-Id: 4caf4cb1eaed469742ef719f2cc024b1ec3fa9e6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9e6c269de404bef2fb50b9407e988083a0805e3b
-Message-Id: <169246621923.23997.4832059481901560386.pr-tracker-bot@kernel.org>
-Date:   Sat, 19 Aug 2023 17:30:19 +0000
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andi Shyti <andi.shyti@kernel.org>
+        s=k20201202; t=1692529325;
+        bh=D9F83LnHCzB/B6DrASGGWoF5v/ghjA2/wqo72X39IaQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TkcKG6euz7zFGSTqAeeCVmMUaQUdBlKM02qNaS/6DEokY2iFCtOT0JK/bl/wGIm/h
+         729ioY8Gx5Ss/QAdU+G7W0Eyt0NWvNuBw9ew7xvLaSx8HU6K/J+ONNrg57QqNr+Z3t
+         pduElSzf8NYQzAPfijsUKwD58MZqDhYUFuBqw97ku76zqwTSQgSwVj0UU37aalzG2W
+         qKKih6hIWzNeLI7pChYtdzXyNCp1SrGIuztfFt45sOKy9YWiGE+IM8VvzFWBsTsGfD
+         gYuyWI4SdsCQ10Q/XeXKsqNRJS7AsOzW/kjIIOomh4Bnf3wcSNpnLhjNzwFBwwjgkv
+         zjENAmMi2btEg==
+Date:   Sun, 20 Aug 2023 13:01:58 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Yann Sionneau <yann@sionneau.net>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yann Sionneau <ysionneau@kalray.eu>
+Subject: Re: [PATCH v2] i2c: designware: add support for pinctrl for recovery
+Message-ID: <20230820110158.sixmrcs5kbv3sof3@intel.intel>
+References: <20230816095015.23705-1-yann@sionneau.net>
+ <97d62909-551b-4abd-a743-5be09e617665@linux.intel.com>
+ <685b10d2-7627-eea8-69e4-454af039fa5d@sionneau.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <685b10d2-7627-eea8-69e4-454af039fa5d@sionneau.net>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,15 +59,87 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The pull request you sent on Sat, 19 Aug 2023 18:28:35 +0200:
+Hi,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.5-rc7
+On Thu, Aug 17, 2023 at 04:27:26PM +0200, Yann Sionneau wrote:
+> Hi
+> 
+> Le 17/08/2023 à 10:07, Jarkko Nikula a écrit :
+> > Hi
+> > 
+> > On 8/16/23 12:50, Yann Sionneau wrote:
+> > > From: Yann Sionneau <ysionneau@kalray.eu>
+> > > 
+> > > Currently if the SoC needs pinctrl to switch the SCL and SDA
+> > > from the I2C function to GPIO function, the recovery won't work.
+> > > 
+> > > scl-gpio = <>;
+> > > sda-gpio = <>;
+> > > 
+> > > Are not enough for some SoCs to have a working recovery.
+> > > Some need:
+> > > 
+> > > scl-gpio = <>;
+> > > sda-gpio = <>;
+> > > pinctrl-names = "default", "recovery";
+> > > pinctrl-0 = <&i2c_pins_hw>;
+> > > pinctrl-1 = <&i2c_pins_gpio>;
+> > > 
+> > > The driver was not filling rinfo->pinctrl with the device node
+> > > pinctrl data which is needed by generic recovery code.
+> > > 
+> > > Tested-by: Yann Sionneau <ysionneau@kalray.eu>
+> > > Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+> > 
+> > Tested-by from author is needless. Expectation is that author has tested
+> > the patch while not always true :-)
+> Ok, I just wanted to emphasize the fact that I have the device and I tested
+> the change with the device. Ack!
+> > 
+> > > @@ -905,6 +906,15 @@ static int i2c_dw_init_recovery_info(struct
+> > > dw_i2c_dev *dev)
+> > >           return PTR_ERR(gpio);
+> > >       rinfo->sda_gpiod = gpio;
+> > >   +    rinfo->pinctrl = devm_pinctrl_get(dev->dev);
+> > > +    if (IS_ERR(rinfo->pinctrl)) {
+> > > +        if (PTR_ERR(rinfo->pinctrl) == -EPROBE_DEFER)
+> > > +            return PTR_ERR(rinfo->pinctrl);
+> > > +
+> > > +        rinfo->pinctrl = NULL;
+> > > +        dev_info(dev->dev, "can't get pinctrl, bus recovery might
+> > > not work\n");
+> > 
+> > I think dev_dbg() suits better here or is it needed at all? End user may
+> > not be able to do anything when sees this in dmesg. I.e. more like
+> > development time dev_dbg() information.
+> I agree dev_dbg() is a better idea.
+> > 
+> > Does i2c-core-base.c: i2c_gpio_init_pinctrl_recovery() already do
+> > dev_info() print when pinctrl & GPIO are set properly making above also
+> > kind of needless?
+> 
+> Thanks for the review. In fact I had to use gdb to understand why the
+> recovery was not working. Because as you said, it only prints something to
+> say "everything looks ok!".
+> 
+> I kind of prefer when it prints when something goes wrong.
+> But I let you decide what you think is the best.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9e6c269de404bef2fb50b9407e988083a0805e3b
+You need to differentiate here between an error and not an error.
+If the return value is an ENOMEM, then this is an error. Although
+I think you should not return, but the message needs to be an
+dev_err().
 
-Thank you!
+On the other hand, if the return value is a '0', then I think
+dev_info() is correct.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Either remove the logging or make it correct.
+
+One more note, the sentence "can't get pinctrl,... " sounds like
+an error. If the pinctrl is not connected on your system, maybe
+it's because your system is not designed to have recovery. Please
+write a message that doesn't sound like an error (or suppress the
+logging).
+
+Thanks,
+Andi
