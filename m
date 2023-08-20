@@ -2,54 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E57781D85
-	for <lists+linux-i2c@lfdr.de>; Sun, 20 Aug 2023 13:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B59E781D93
+	for <lists+linux-i2c@lfdr.de>; Sun, 20 Aug 2023 13:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbjHTLC3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 20 Aug 2023 07:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
+        id S230458AbjHTL1s (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 20 Aug 2023 07:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjHTLC2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 20 Aug 2023 07:02:28 -0400
+        with ESMTP id S230463AbjHTL1p (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 20 Aug 2023 07:27:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9DA46BB;
-        Sun, 20 Aug 2023 04:02:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FDB10A;
+        Sun, 20 Aug 2023 04:23:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3883560CEC;
-        Sun, 20 Aug 2023 11:02:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AB2C433C7;
-        Sun, 20 Aug 2023 11:02:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07E7E60C95;
+        Sun, 20 Aug 2023 11:23:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF502C433C8;
+        Sun, 20 Aug 2023 11:23:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692529325;
-        bh=D9F83LnHCzB/B6DrASGGWoF5v/ghjA2/wqo72X39IaQ=;
+        s=k20201202; t=1692530592;
+        bh=fv6Jnf4C4C6jLRYZLmCtAwdfTKtNmXWpxE2tscsXid4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TkcKG6euz7zFGSTqAeeCVmMUaQUdBlKM02qNaS/6DEokY2iFCtOT0JK/bl/wGIm/h
-         729ioY8Gx5Ss/QAdU+G7W0Eyt0NWvNuBw9ew7xvLaSx8HU6K/J+ONNrg57QqNr+Z3t
-         pduElSzf8NYQzAPfijsUKwD58MZqDhYUFuBqw97ku76zqwTSQgSwVj0UU37aalzG2W
-         qKKih6hIWzNeLI7pChYtdzXyNCp1SrGIuztfFt45sOKy9YWiGE+IM8VvzFWBsTsGfD
-         gYuyWI4SdsCQ10Q/XeXKsqNRJS7AsOzW/kjIIOomh4Bnf3wcSNpnLhjNzwFBwwjgkv
-         zjENAmMi2btEg==
-Date:   Sun, 20 Aug 2023 13:01:58 +0200
+        b=EXhoViG8aGvVvO7jkefln+vSQ3nqDk1W9hm1WW1ahfM/5jZiVYBXBFi8uyYKuxBvM
+         umnShvJP7nfnolYZHogOYIkuokpMvapkXXImiZ8Qq6dxYU0mGnadUiqZtHNGp1g+ss
+         p+Dj8FOOH6ZuRvErtrj3+3wckWbcsUyAvPVvLOm9kw78jiXuA7EYcejsds/leMiuvx
+         PEH3bZHWiB8B2q9/5Q+ZTpSJfrubmqgu3fWpWaRBaXYCwkP74C/zuaGcyE4mHWLAH/
+         ahjddURxel6VbnFfbWcCk/SNjc07KzItu93Y+ADHcNVjrvYuSwt7nQBCFk9Xhtr6Tw
+         Zlj4bVMY0pJyg==
+Date:   Sun, 20 Aug 2023 13:23:04 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Yann Sionneau <yann@sionneau.net>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yann Sionneau <ysionneau@kalray.eu>
-Subject: Re: [PATCH v2] i2c: designware: add support for pinctrl for recovery
-Message-ID: <20230820110158.sixmrcs5kbv3sof3@intel.intel>
-References: <20230816095015.23705-1-yann@sionneau.net>
- <97d62909-551b-4abd-a743-5be09e617665@linux.intel.com>
- <685b10d2-7627-eea8-69e4-454af039fa5d@sionneau.net>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Peter Rosin <peda@axentia.se>, naresh.solanki@9elements.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v15 3/4] i2c: muxes: pca954x: Add MAX735x/MAX736x support
+Message-ID: <20230820112304.bokph645wvqt5jfl@intel.intel>
+References: <20230817071056.2125679-1-patrick.rudolph@9elements.com>
+ <20230817071056.2125679-4-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <685b10d2-7627-eea8-69e4-454af039fa5d@sionneau.net>
+In-Reply-To: <20230817071056.2125679-4-patrick.rudolph@9elements.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,87 +54,146 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
+Hi Patrick,
 
-On Thu, Aug 17, 2023 at 04:27:26PM +0200, Yann Sionneau wrote:
-> Hi
-> 
-> Le 17/08/2023 à 10:07, Jarkko Nikula a écrit :
-> > Hi
-> > 
-> > On 8/16/23 12:50, Yann Sionneau wrote:
-> > > From: Yann Sionneau <ysionneau@kalray.eu>
-> > > 
-> > > Currently if the SoC needs pinctrl to switch the SCL and SDA
-> > > from the I2C function to GPIO function, the recovery won't work.
-> > > 
-> > > scl-gpio = <>;
-> > > sda-gpio = <>;
-> > > 
-> > > Are not enough for some SoCs to have a working recovery.
-> > > Some need:
-> > > 
-> > > scl-gpio = <>;
-> > > sda-gpio = <>;
-> > > pinctrl-names = "default", "recovery";
-> > > pinctrl-0 = <&i2c_pins_hw>;
-> > > pinctrl-1 = <&i2c_pins_gpio>;
-> > > 
-> > > The driver was not filling rinfo->pinctrl with the device node
-> > > pinctrl data which is needed by generic recovery code.
-> > > 
-> > > Tested-by: Yann Sionneau <ysionneau@kalray.eu>
-> > > Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
-> > 
-> > Tested-by from author is needless. Expectation is that author has tested
-> > the patch while not always true :-)
-> Ok, I just wanted to emphasize the fact that I have the device and I tested
-> the change with the device. Ack!
-> > 
-> > > @@ -905,6 +906,15 @@ static int i2c_dw_init_recovery_info(struct
-> > > dw_i2c_dev *dev)
-> > >           return PTR_ERR(gpio);
-> > >       rinfo->sda_gpiod = gpio;
-> > >   +    rinfo->pinctrl = devm_pinctrl_get(dev->dev);
-> > > +    if (IS_ERR(rinfo->pinctrl)) {
-> > > +        if (PTR_ERR(rinfo->pinctrl) == -EPROBE_DEFER)
-> > > +            return PTR_ERR(rinfo->pinctrl);
-> > > +
-> > > +        rinfo->pinctrl = NULL;
-> > > +        dev_info(dev->dev, "can't get pinctrl, bus recovery might
-> > > not work\n");
-> > 
-> > I think dev_dbg() suits better here or is it needed at all? End user may
-> > not be able to do anything when sees this in dmesg. I.e. more like
-> > development time dev_dbg() information.
-> I agree dev_dbg() is a better idea.
-> > 
-> > Does i2c-core-base.c: i2c_gpio_init_pinctrl_recovery() already do
-> > dev_info() print when pinctrl & GPIO are set properly making above also
-> > kind of needless?
-> 
-> Thanks for the review. In fact I had to use gdb to understand why the
-> recovery was not working. Because as you said, it only prints something to
-> say "everything looks ok!".
-> 
-> I kind of prefer when it prints when something goes wrong.
-> But I let you decide what you think is the best.
+> diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> index 0ccee2ae5720..968111442625 100644
+> --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
+> +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> @@ -4,6 +4,7 @@
+>   *
+>   * Copyright (c) 2008-2009 Rodolfo Giometti <giometti@linux.it>
+>   * Copyright (c) 2008-2009 Eurotech S.p.A. <info@eurotech.it>
+> + * Copyright (c) 2022 9elements GmbH <patrick.rudolph@9elements.com>
 
-You need to differentiate here between an error and not an error.
-If the return value is an ENOMEM, then this is an error. Although
-I think you should not return, but the message needs to be an
-dev_err().
+2023?
 
-On the other hand, if the return value is a '0', then I think
-dev_info() is correct.
+One question, why are you adding yourself in the copyright?
 
-Either remove the logging or make it correct.
+>   * This module supports the PCA954x and PCA984x series of I2C multiplexer/switch
+>   * chips made by NXP Semiconductors.
+> @@ -11,6 +12,12 @@
+>   *	 PCA9540, PCA9542, PCA9543, PCA9544, PCA9545, PCA9546, PCA9547,
+>   *	 PCA9548, PCA9846, PCA9847, PCA9848 and PCA9849.
+>   *
+> + * It's also compatible to Maxims MAX735x I2C switch chips, which are controlled
+> + * as the NXP PCA9548 and the MAX736x chips that act like the PCA9544.
+> + *
+> + * This includes the:
+> + *	 MAX7356, MAX7357, MAX7358, MAX7367, MAX7368 and MAX7369
+> + *
+>   * These chips are all controlled via the I2C bus itself, and all have a
+>   * single 8-bit register. The upstream "parent" bus fans out to two,
+>   * four, or eight downstream busses or channels; which of these
+> @@ -51,6 +58,12 @@
+>  #define PCA954X_IRQ_OFFSET 4
+>  
+>  enum pca_type {
+> +	max_7356,
+> +	max_7357,
+> +	max_7358,
+> +	max_7367,
+> +	max_7368,
+> +	max_7369,
+>  	pca_9540,
+>  	pca_9542,
+>  	pca_9543,
+> @@ -90,8 +103,45 @@ struct pca954x {
+>  	raw_spinlock_t lock;
+>  };
+>  
+> -/* Provide specs for the PCA954x types we know about */
+> +/* Provide specs for the MAX735x, PCA954x and PCA984x types we know about */
+>  static const struct chip_desc chips[] = {
+> +	[max_7356] = {
+> +		.nchans = 8,
+> +		.muxtype = pca954x_isswi,
+> +		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+> +	},
+> +	[max_7357] = {
+> +		.nchans = 8,
+> +		.muxtype = pca954x_isswi,
+> +		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+> +		/* No interrupt controller support.
+> +		   The interrupt provides information about stuck channels. */
 
-One more note, the sentence "can't get pinctrl,... " sounds like
-an error. If the pinctrl is not connected on your system, maybe
-it's because your system is not designed to have recovery. Please
-write a message that doesn't sound like an error (or suppress the
-logging).
+I'm sorry, Peter already commented on this, can you please fix
+the commenting?
 
-Thanks,
+		/*
+		 * No interrupt controller support.
+		 * The interrupt provides information
+		 * about stuck channels.
+		 */
+
+Or
+
+		/*
+		 * No interrupt controller support. The interrupt
+		 * provides information * about stuck channels.
+		 */
+
+to save one line. (I prefer the latter, your choice)
+
+Rest looks good.
+
 Andi
+
+> +	},
+> +	[max_7358] = {
+> +		.nchans = 8,
+> +		.muxtype = pca954x_isswi,
+> +		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+> +		/* No interrupt controller support.
+> +		   The interrupt provides information about stuck channels. */
+> +	},
+> +	[max_7367] = {
+> +		.nchans = 4,
+> +		.muxtype = pca954x_isswi,
+> +		.has_irq = 1,
+> +		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+> +	},
+> +	[max_7368] = {
+> +		.nchans = 4,
+> +		.muxtype = pca954x_isswi,
+> +		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+> +	},
+> +	[max_7369] = {
+> +		.nchans = 4,
+> +		.enable = 0x4,
+> +		.muxtype = pca954x_ismux,
+> +		.has_irq = 1,
+> +		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
+> +	},
+>  	[pca_9540] = {
+>  		.nchans = 2,
+>  		.enable = 0x4,
+> @@ -177,6 +227,12 @@ static const struct chip_desc chips[] = {
+>  };
+>  
+>  static const struct i2c_device_id pca954x_id[] = {
+> +	{ "max7356", max_7356 },
+> +	{ "max7357", max_7357 },
+> +	{ "max7358", max_7358 },
+> +	{ "max7367", max_7367 },
+> +	{ "max7368", max_7368 },
+> +	{ "max7369", max_7369 },
+>  	{ "pca9540", pca_9540 },
+>  	{ "pca9542", pca_9542 },
+>  	{ "pca9543", pca_9543 },
+> @@ -194,6 +250,12 @@ static const struct i2c_device_id pca954x_id[] = {
+>  MODULE_DEVICE_TABLE(i2c, pca954x_id);
+>  
+>  static const struct of_device_id pca954x_of_match[] = {
+> +	{ .compatible = "maxim,max7356", .data = &chips[max_7356] },
+> +	{ .compatible = "maxim,max7357", .data = &chips[max_7357] },
+> +	{ .compatible = "maxim,max7358", .data = &chips[max_7358] },
+> +	{ .compatible = "maxim,max7367", .data = &chips[max_7367] },
+> +	{ .compatible = "maxim,max7368", .data = &chips[max_7368] },
+> +	{ .compatible = "maxim,max7369", .data = &chips[max_7369] },
+>  	{ .compatible = "nxp,pca9540", .data = &chips[pca_9540] },
+>  	{ .compatible = "nxp,pca9542", .data = &chips[pca_9542] },
+>  	{ .compatible = "nxp,pca9543", .data = &chips[pca_9543] },
+> -- 
+> 2.41.0
+> 
