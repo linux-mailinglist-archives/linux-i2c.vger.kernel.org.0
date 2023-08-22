@@ -2,104 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABBC783CB0
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Aug 2023 11:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BDA783DBC
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Aug 2023 12:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234189AbjHVJQH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Aug 2023 05:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
+        id S234694AbjHVKO4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Aug 2023 06:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234202AbjHVJQG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Aug 2023 05:16:06 -0400
-X-Greylist: delayed 394 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Aug 2023 02:16:01 PDT
-Received: from mx4.sionneau.net (mx4.sionneau.net [51.15.250.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B2C189;
-        Tue, 22 Aug 2023 02:16:01 -0700 (PDT)
-Received: from junon.lin.mbt.kalray.eu (<unknown> [217.181.231.53])
-        by mx4.sionneau.net (OpenSMTPD) with ESMTPSA id 837e536d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 22 Aug 2023 09:15:59 +0000 (UTC)
-From:   Yann Sionneau <ysionneau@kalray.eu>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        with ESMTP id S229938AbjHVKO4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Aug 2023 06:14:56 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47707CC1;
+        Tue, 22 Aug 2023 03:14:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692699294; x=1724235294;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=v3kCkqaI1EHggZDLHMlxLe8djfBcWc9iGWYm8Tx2+zo=;
+  b=dHgb0FIHD0DOdxziutaik3sWmyWj7EsFeoDPlL5qULlmo7doqF10WlLl
+   GTBvqafF0vZ38nfQGEfEpkEBZEzNpE5hoXjK4Rhh+GVOjMq9rjiFgBUb2
+   TsytFxFeaO7GEEJX03r34Z+qNkb5nS4uCuoIKkgHS329hZcYss6nHd5fq
+   5b6BUXoMrRxjIbtM3VpqihCtpo8kRFe5+ALj4OCIFUX/tGtPEn7rC2jEP
+   GigvMJyIlXdicwme0lSxpw4Q04cvpUhxzhuHKvoGG1FvD7t0FX8CnCXZj
+   hjAz2XaAdVWe/GnAj1tLlOreiFj5CHom/Dsdn96PxpwxkR+EcPdp+zwPg
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="460206939"
+X-IronPort-AV: E=Sophos;i="6.01,192,1684825200"; 
+   d="scan'208";a="460206939"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 03:14:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="736159070"
+X-IronPort-AV: E=Sophos;i="6.01,192,1684825200"; 
+   d="scan'208";a="736159070"
+Received: from mylly.fi.intel.com (HELO [10.237.72.67]) ([10.237.72.67])
+  by orsmga002.jf.intel.com with ESMTP; 22 Aug 2023 03:14:46 -0700
+Message-ID: <2f215e0f-c2ed-4300-8b75-1949f17cdf1c@linux.intel.com>
+Date:   Tue, 22 Aug 2023 13:14:45 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] i2c: designware: fix __i2c_dw_disable() in case master
+ is holding SCL low
+Content-Language: en-US
+To:     Yann Sionneau <ysionneau@kalray.eu>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Julian Vetter <jvetter@kalrayinc.com>
 Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yann Sionneau <ysionneau@kalray.eu>
-Subject: [PATCH v3] Currently if the SoC needs pinctrl to switch the SCL and SDA from the I2C function to GPIO function, the recovery won't work.
-Date:   Tue, 22 Aug 2023 11:15:55 +0200
-Message-Id: <20230822091555.18015-1-ysionneau@kalray.eu>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_FAIL,SPF_HELO_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Jonathan Borne <jborne@kalray.eu>
+References: <20230822090233.14885-1-ysionneau@kalray.eu>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20230822090233.14885-1-ysionneau@kalray.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-scl-gpio = <>;
-sda-gpio = <>;
+Hi
 
-Are not enough for some SoCs to have a working recovery.
-Some need:
+On 8/22/23 12:02, Yann Sionneau wrote:
+> The DesignWare IP can be synthesized with the IC_EMPTYFIFO_HOLD_MASTER_EN
+> parameter.
+> In this case, when the TX FIFO gets empty and the last command didn't have
+> the STOP bit (IC_DATA_CMD[9]), the controller will hold SCL low until
+> a new command is pushed into the TX FIFO or the transfer is aborted.
+> 
+> When the controller is holding SCL low, it cannot be disabled.
+> The transfer must first be aborted.
+> Also, the bus recovery won't work because SCL is held low by the master.
+> 
+> Check if the master is holding SCL low in __i2c_dw_disable() before trying
+> to disable the controller. If SCL is held low, an abort is initiated.
+> When the abort is done, then proceed with disabling the controller.
+> 
+> This whole situation can happen for instance during SMBus read data block
+> if the slave just responds with "byte count == 0".
+> This puts the driver in an unrecoverable state, because the controller is
+> holding SCL low and the current __i2c_dw_disable() procedure is not
+> working. In this situation only a SoC reset can fix the i2c bus.
+> 
+Is this fixed already by the commit 69f035c480d7 ("i2c: designware: 
+Handle invalid SMBus block data response length value")?
 
-scl-gpio = <>;
-sda-gpio = <>;
-pinctrl-names = "default", "recovery";
-pinctrl-0 = <&i2c_pins_hw>;
-pinctrl-1 = <&i2c_pins_gpio>;
-
-The driver was not filling rinfo->pinctrl with the device node
-pinctrl data which is needed by generic recovery code.
-
-Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
----
-V2 -> V3:
-* put back 'if (!rinfo->pinctrl)' test since devm_pinctrl_get()
-can return NULL if CONFIG_PINCTRL is not set.
-* print an error msg when devm_pinctrl_get() returns an error that
-is not -EPROBE_DEFER.
-* print a dbg msg if devm_pinctrl_get() return NULL. 
-
-V1 -> V2:
-* remove the unnecessary 'if (!rinfo->pinctrl)' test
-* test if return is -EPROBE_DEFER, in that case, return it.
-* Reword the commit message according to review
-
- drivers/i2c/busses/i2c-designware-master.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index b720fcc5c10a..30b2de829a32 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -17,6 +17,7 @@
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/module.h>
-+#include <linux/pinctrl/consumer.h>
- #include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
-@@ -855,6 +856,17 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
- 		return PTR_ERR(gpio);
- 	rinfo->sda_gpiod = gpio;
- 
-+	rinfo->pinctrl = devm_pinctrl_get(dev->dev);
-+	if (IS_ERR(rinfo->pinctrl)) {
-+		if (PTR_ERR(rinfo->pinctrl) == -EPROBE_DEFER)
-+			return PTR_ERR(rinfo->pinctrl);
-+
-+		rinfo->pinctrl = NULL;
-+		dev_err(dev->dev, "getting pinctrl info failed: bus recovery might not work\n");
-+	} else if (!rinfo->pinctrl) {
-+		dev_dbg(dev->dev, "pinctrl is disabled, bus recovery might not work\n");
-+	}
-+
- 	rinfo->recover_bus = i2c_generic_scl_recovery;
- 	rinfo->prepare_recovery = i2c_dw_prepare_recovery;
- 	rinfo->unprepare_recovery = i2c_dw_unprepare_recovery;
--- 
-2.17.1
-
+https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git/commit/?h=i2c/for-next&id=69f035c480d76f12bf061148ccfd578e1099e5fc
