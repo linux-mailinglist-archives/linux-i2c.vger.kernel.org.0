@@ -2,83 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166E8784455
-	for <lists+linux-i2c@lfdr.de>; Tue, 22 Aug 2023 16:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E372C78446A
+	for <lists+linux-i2c@lfdr.de>; Tue, 22 Aug 2023 16:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235908AbjHVOca (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 22 Aug 2023 10:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
+        id S236801AbjHVOex (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 22 Aug 2023 10:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234980AbjHVOca (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Aug 2023 10:32:30 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F57CFE;
-        Tue, 22 Aug 2023 07:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692714729; x=1724250729;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lLVHA+wbulHmFJxtggwukH/8p7P+zlDRisDT4oBjb1I=;
-  b=GXMBgUAC2OUnUkOgPmtLb/ovw47yOzkXTu8GCuUrNOF4AtxSB7J5372t
-   gK75Wiu6YsYwfa13xv612IfICaGaWlqekFnuTdSRwpd43l5DMx1D3LDcy
-   H6QGefMph9smT1wN0E+3vK8HuqprsXE9if8+dokmY7o2QtXGN+/Awo80y
-   YrSpCIhHbLCBlyGCHP7Pk0Ixddm2pxMuuDjswjesMaDcuVXRIHKbROun7
-   6ewau8t7LEGMf7KoXhDmw98h/9qseXZ0sIzcdBt3lW+Xm7Ua+zt8P8daa
-   PxJJO6vFYZ5rLsoWQSAonYJz3mhCRQcVGsNtU17s2Go67giDZa5dkCQxT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="364066635"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="364066635"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 07:31:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="765751948"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="765751948"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 22 Aug 2023 07:31:35 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qYSPt-00EMMm-1S;
-        Tue, 22 Aug 2023 17:31:33 +0300
-Date:   Tue, 22 Aug 2023 17:31:33 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yann Sionneau <ysionneau@kalrayinc.com>
-Cc:     Yann Sionneau <ysionneau@kalray.eu>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        with ESMTP id S234144AbjHVOew (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 22 Aug 2023 10:34:52 -0400
+Received: from mx4.sionneau.net (mx4.sionneau.net [51.15.250.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E371BCEA;
+        Tue, 22 Aug 2023 07:34:47 -0700 (PDT)
+Received: from junon.lin.mbt.kalray.eu (<unknown> [217.181.231.53])
+        by mx4.sionneau.net (OpenSMTPD) with ESMTPSA id ba139134 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 22 Aug 2023 14:34:46 +0000 (UTC)
+From:   Yann Sionneau <ysionneau@kalray.eu>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Julian Vetter <jvetter@kalrayinc.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] i2c: designware: Currently if the SoC needs pinctrl
- to switch the SCL and SDA from the I2C function to GPI
-Message-ID: <ZOTGxW6AfXGgVxeQ@smile.fi.intel.com>
-References: <20230822142513.7518-1-ysionneau@kalray.eu>
- <c388a776-4d1f-13a6-e682-a47509fae4e2@kalrayinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c388a776-4d1f-13a6-e682-a47509fae4e2@kalrayinc.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Julian Vetter <jvetter@kalrayinc.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yann Sionneau <ysionneau@kalray.eu>
+Subject: [PATCH v6] i2c: designware: Add support for recovery when GPIO need pinctrl.
+Date:   Tue, 22 Aug 2023 16:34:37 +0200
+Message-Id: <20230822143437.9395-1-ysionneau@kalray.eu>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_FAIL,
+        SPF_HELO_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Tue, Aug 22, 2023 at 04:26:25PM +0200, Yann Sionneau wrote:
-> Subject seems to have been truncated... I'll re-send.
+Currently if the SoC needs pinctrl to switch the SCL and SDA from the I2C
+function to GPIO function, the recovery won't work.
 
-It was missing _completely_ up to v4. In v5 it's mangled. I explained in
-previous reply how it should be in the commit message in your local Git repo
-to begin with.
+scl-gpio = <>;
+sda-gpio = <>;
 
+Are not enough for some SoCs to have a working recovery.
+Some need:
+
+scl-gpio = <>;
+sda-gpio = <>;
+pinctrl-names = "default", "recovery";
+pinctrl-0 = <&i2c_pins_hw>;
+pinctrl-1 = <&i2c_pins_gpio>;
+
+The driver was not filling rinfo->pinctrl with the device node
+pinctrl data which is needed by generic recovery code.
+
+Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+V5 -> V6:
+* Put a proper commit msg subject
+
+V4 -> V5:
+* put back `else if`
+* reword the commit msg Subject to add the `i2c: designware: ` tag
+* Add the missing `Reviewed-by: Andy Shevchenko` tag
+
+V3 -> V4:
+* Replace `else if` by simply `if`.
+
+V2 -> V3:
+* put back 'if (!rinfo->pinctrl)' test since devm_pinctrl_get()
+can return NULL if CONFIG_PINCTRL is not set.
+* print an error msg when devm_pinctrl_get() returns an error that
+is not -EPROBE_DEFER.
+* print a dbg msg if devm_pinctrl_get() return NULL. 
+
+V1 -> V2:
+* remove the unnecessary 'if (!rinfo->pinctrl)' test
+* test if return is -EPROBE_DEFER, in that case, return it.
+* Reword the commit message according to review
+
+ drivers/i2c/busses/i2c-designware-master.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index b720fcc5c10a..30b2de829a32 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -17,6 +17,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
++#include <linux/pinctrl/consumer.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
+@@ -855,6 +856,17 @@ static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+ 		return PTR_ERR(gpio);
+ 	rinfo->sda_gpiod = gpio;
+ 
++	rinfo->pinctrl = devm_pinctrl_get(dev->dev);
++	if (IS_ERR(rinfo->pinctrl)) {
++		if (PTR_ERR(rinfo->pinctrl) == -EPROBE_DEFER)
++			return PTR_ERR(rinfo->pinctrl);
++
++		rinfo->pinctrl = NULL;
++		dev_err(dev->dev, "getting pinctrl info failed: bus recovery might not work\n");
++	} else if (!rinfo->pinctrl) {
++		dev_dbg(dev->dev, "pinctrl is disabled, bus recovery might not work\n");
++	}
++
+ 	rinfo->recover_bus = i2c_generic_scl_recovery;
+ 	rinfo->prepare_recovery = i2c_dw_prepare_recovery;
+ 	rinfo->unprepare_recovery = i2c_dw_unprepare_recovery;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.17.1
 
