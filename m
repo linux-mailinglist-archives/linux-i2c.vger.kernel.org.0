@@ -2,119 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF92786219
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Aug 2023 23:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243DF78623A
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Aug 2023 23:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237327AbjHWVQ6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Aug 2023 17:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
+        id S231285AbjHWVVr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Aug 2023 17:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237875AbjHWVQr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Aug 2023 17:16:47 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099AB171A
-        for <linux-i2c@vger.kernel.org>; Wed, 23 Aug 2023 14:16:34 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-d746d030a86so4837656276.1
-        for <linux-i2c@vger.kernel.org>; Wed, 23 Aug 2023 14:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692825394; x=1693430194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iEpTjrnLVqxen66G7Uvz7Jyy/E11cVlVrjCW6/VyKj8=;
-        b=ZDmv2BjJU3fBSftYGcNM3tb+ILU/d9+cLODcLN7bJx5jE0GqvFKrPnlSYGlL0k9kWu
-         m0bch7za38IJ+CLWsWjflpljG/O8F9HEsNE/VWjVNStBDOBq3iJDnH2eTLO/dJEAtALA
-         zbXY+4ZWcbcUYtwqB7UctSATyz1sDYmgfZ/uZj88iB4dhaAHsNB4lm1XJShf+lSlTUF4
-         q1mw8cBg/PsTLqlxfYRQ9OdT1JyBSqfrgsLuehUHu9V36ypWdR+RMX9JIQmW7yxqcnfx
-         Bu1+6uVlgAFqvayOjaJa8cEpXa7Hm+cDiofeMeKPmewLASFqzTHTuUzB1cC9zTcv8uzK
-         +bQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692825394; x=1693430194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iEpTjrnLVqxen66G7Uvz7Jyy/E11cVlVrjCW6/VyKj8=;
-        b=QVGW5oPW/8PMBX/TLR7O9KCed/zUdMUHNr4woz5T/5//5u6Y3UDIq2V2I4vk/br8wt
-         VJeno95i68Etz/7TldhxCTQZ2+rJxvvsjFzBjp2/kjXk0b55Njp+GyhM8yz7Wl6O+PES
-         bxBYt2x95jdrUoNxBUxhl2Hvr0rDxgHGTJSZy+DiESVR2t/J04GOknWm91u+fDKJVOyj
-         HlMlQ2pKDVT4KLyXrcneyc4Xzyr9pASo3bCAl1VKTj8Ny+Y8n7crYUpascYP9ueLiU/V
-         TIMNkTbwWbTeE4X8XUtBDO38vkIuQlkVLXrPkPdjdpM/uUw8FstM0XWZFvDRKsMlykhO
-         HBqw==
-X-Gm-Message-State: AOJu0YxBlDT27FDNw4LmovCcNNrN0AoeJd2LNQdMirgQXhAHxsngJ8W8
-        sZXc4nujFM2MMJCQmW8QgE3mqJh/CuCaKK9WpvpBcQ==
-X-Google-Smtp-Source: AGHT+IGU5hlAbzjKR6dHf8nG7wjH+gLTIhLdkOAR0BQZYCAzmvxO+0vsobrLpwu8+6G8uJRZXAov+P50unjaO9+ZE7g=
-X-Received: by 2002:a25:c08f:0:b0:d09:f39b:cecf with SMTP id
- c137-20020a25c08f000000b00d09f39bcecfmr12862557ybf.9.1692825393910; Wed, 23
- Aug 2023 14:16:33 -0700 (PDT)
+        with ESMTP id S232359AbjHWVVO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Aug 2023 17:21:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A411728;
+        Wed, 23 Aug 2023 14:20:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 139CD6347C;
+        Wed, 23 Aug 2023 21:20:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A609C433C8;
+        Wed, 23 Aug 2023 21:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692825622;
+        bh=nI2OhOTb1Qgbc6HkfkkxCJRA1rkPKJZ6GYyJIF0MLi0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ASWqsq/ibrWBtDSg/O9H1EqcUOKsVqZkpoOgz/yAk+q/cUMuhNBYYXH6Y72jHv7Tf
+         +dqZpSxT5gUInuUTkxkjS5UjKoCPu6UlLUrti+PLlSKSiRnlq8Kr24/DRYkKGJS3Uq
+         KmfQk8TontWl2O6YbdOt/qRdbUSi+cTTGpHziNpxvqtu9/gL6ohbLgs8Tft5pHkbpR
+         ShnuVgWjZIuAXlBvhvl9AJV7Q4rc/XKft7goa+zgZdlGHt4bqarMIn6R3oFk0MAA25
+         /byZ+tJfUyQaf9FxyAjNy6gVdOL22kI0RVej+zEXirvL7OeFLyFw/3HQ/SDDKweYxJ
+         mBpo+RUcjj8+A==
+Date:   Wed, 23 Aug 2023 23:20:18 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Peter Rosin <peda@axentia.se>, naresh.solanki@9elements.com,
+        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v15 4/4] i2c: muxes: pca954x: Add regulator support
+Message-ID: <ZOZ4Es6inxxC/1+Q@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Peter Rosin <peda@axentia.se>, naresh.solanki@9elements.com,
+        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230817071056.2125679-1-patrick.rudolph@9elements.com>
+ <20230817071056.2125679-5-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-References: <20230823183749.2609013-1-robh@kernel.org>
-In-Reply-To: <20230823183749.2609013-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 23 Aug 2023 23:16:22 +0200
-Message-ID: <CACRpkdbuB-NotnMXc9vZj-byjk7spCSkZ+Dx=R_eOqoSV5CdTA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Drop remaining unneeded quotes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        James Clark <james.clark@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Corey Minyard <minyard@acm.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        M ark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-iio@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        alsa-devel@alsa-project.org, linux-scsi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ccRFqxw5gulr/hp0"
+Content-Disposition: inline
+In-Reply-To: <20230817071056.2125679-5-patrick.rudolph@9elements.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 8:38=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
 
-> Cleanup bindings dropping the last remaining unneeded quotes. With this,
-> the check for this can be enabled in yamllint.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+--ccRFqxw5gulr/hp0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+On Thu, Aug 17, 2023 at 09:10:53AM +0200, Patrick Rudolph wrote:
+> Add a vdd regulator and enable it for boards that have the
+> mux powered off by default.
+>=20
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 
-Yours,
-Linus Walleij
+There is devm_regulator_get_enable() which maybe simplifies the code
+here. But we can do this incrementally. Thank you for keeping at it!
+
+Applied to for-next, thanks!
+
+
+--ccRFqxw5gulr/hp0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTmeBIACgkQFA3kzBSg
+KbbqEg/7BraWaS+vBbXE9L/AX95Y0r0S/zjtbQrL4KxBIWElHWBUx7qoSqFmYTKx
+m29MG7j5+zXloLOJm+ONt92fo8fCma+GV6YvtjxouzhuTOwlBA4Dwju+U+Li63fo
+fKqFSeHMWeG3On5IjXxV+ccBGiyoGarO8ucWgf1IMuGctTapeaCp7DMK50Vh3MFk
+CEGhy+Y2WgIQwQxviRtznj2iv0blrLAhvqY/20is2Pj4E4M/IVm8KiRTVBh+3ZNb
+0w2jRQHHgozPlYFYnUJynQ57HX1sGNieIt8Lh3/nmTO+Z2zLBnTKDYPwbLFlnK4/
+QekzrlfgpAcCpdkOqlQyG3Ydb07t7b/uw2xBz5sbd7yTxv6GoZdf11ahqgR8Wh/K
+aswxCjDuBLduLUk312l3C0rQak6e4Ee4kk5zyios+5rkoLm0wWUZZrGjFH/9rXhk
+sbab1sdJgVa9uhfAVJZ+L9cpVMC7ROmlTtiohLq8QggnyPRPJCa0AuJ9k29NJBkv
+7gIevjQHeHvvYYABuSozc66tDgKZuK/lW0C4bAGthho2d7tnlmNmb4T4jLahdssN
+90O8kPp2oNFj0XyhRLcKzUOzMZEgdfDW40WstmM75qS2bQI7AGiTZ6ve+cyN9iQO
+6ZgKxqNCH9U60aJSPM/ugLoOwSkZzmq73mxnwpVlR4/yfyuIDdw=
+=j2+o
+-----END PGP SIGNATURE-----
+
+--ccRFqxw5gulr/hp0--
