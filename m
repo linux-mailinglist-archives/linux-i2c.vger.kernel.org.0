@@ -2,525 +2,803 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D23785CB6
-	for <lists+linux-i2c@lfdr.de>; Wed, 23 Aug 2023 17:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC48785FD2
+	for <lists+linux-i2c@lfdr.de>; Wed, 23 Aug 2023 20:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237021AbjHWPyO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 23 Aug 2023 11:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
+        id S238192AbjHWSiy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 23 Aug 2023 14:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233338AbjHWPyO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Aug 2023 11:54:14 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2062.outbound.protection.outlook.com [40.107.223.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50672E5F
-        for <linux-i2c@vger.kernel.org>; Wed, 23 Aug 2023 08:54:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iRmAup0a74NcQQQ2tyU4AAGkP/2rI4Z5IdfUwAds9c9SLe46VQ311AP6MjJlboz8eHqsK1XypU5OduDDIFmPnvKi+7KboiegoChZirXDnhnSNS6bAjZyrL1fo9z6JKavzXkUz5e7DdKPujV35wiF4rbF+xeBdwpyktKCQ39Q68Gm89fO/GcChY3nBRfssFZnMGRfDIe1mARfhBQN9uMg6Wspdrp9LYgGzeBSdce3BPp3bRH1s78kmfQ6x4qAPdgUjPYJElQbctd1ks3i6Tr7H2zqQToU/u8nyo6UCdHxEK0kwThkPsC7JOiUQaEF9Brw5VRB8/fkcpGb6ldNsXNilA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Sc5oaBFzXV/pD2DwlSB+t0xKRA2foSuWrf9+r+RT8KE=;
- b=EmsHtMCVOnzbtyb6Aaxsb5M2csDuV2lr5ITE38lqfepB7RaLkNBTNX9ZBYIu8paYJrV5jYB6i8csfcU+oz1huDydcUb3H9VF4lhR6mzevXn+NzypQYdiIQO1asplXuudr44oBIeC+B0rQgJb0WJSiij5EmN/KzeRut6VwNevJkuTRaHhNagyVoyxPpr9rLkBtPEILS6eLXYQaSl8IsbbsxPK1Kbnt6uXPx/JHFzm2agA6mhtFyXrb9PYKoWFVzMB4pQDPxAVNrKa4dox4+UyIg5vHqrdQ3HpigOXsRYduBmadzD9szlF8Cx87+fja3k/UuiuNAWmEGIwCxVwldTviA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=axentia.se smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Sc5oaBFzXV/pD2DwlSB+t0xKRA2foSuWrf9+r+RT8KE=;
- b=jR9dVdSdpKbsnEK3zr5qZsouz2vXMy4mD0uXgViwWE2NOYTtSkJlPM0Vi9/7b5WPxauPBaz6W82ruGfSPDIEPiDpQ7z4iLvdqvRL4c8i8K3iVf3cEmUMNRXippwySDxyLLUWE00YB5dfmPZeHZwfJNEY13qLK/KMKYDFmdyXlRwBK9RK1hwy4WBHdWcw0Zx7OzfWsnOB7ucOa43C+qe2dUwc/GWYbBp1tC6an4y8zdNaOfuZUftyGj3APaOfOhAySv0lZmJ3AMO9Ux9MjzfFIeqdoBiZV1vqHwaKPG+qI/VU4EMpdg79EH4O38zYI5l8NEK+EQ06UIya3FltZ/8opA==
-Received: from DS0PR17CA0016.namprd17.prod.outlook.com (2603:10b6:8:191::7) by
- BL0PR12MB4881.namprd12.prod.outlook.com (2603:10b6:208:1c7::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6699.26; Wed, 23 Aug 2023 15:54:08 +0000
-Received: from CY4PEPF0000EDD6.namprd03.prod.outlook.com
- (2603:10b6:8:191:cafe::b9) by DS0PR17CA0016.outlook.office365.com
- (2603:10b6:8:191::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.26 via Frontend
- Transport; Wed, 23 Aug 2023 15:54:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CY4PEPF0000EDD6.mail.protection.outlook.com (10.167.241.210) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6699.15 via Frontend Transport; Wed, 23 Aug 2023 15:54:07 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 23 Aug 2023
- 08:53:55 -0700
-Received: from r-build-bsp-02.mtr.labs.mlnx (10.126.230.37) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Wed, 23 Aug 2023 08:53:54 -0700
-From:   Vadim Pasternak <vadimp@nvidia.com>
-To:     <peda@axentia.se>
-CC:     <linux-i2c@vger.kernel.org>, Vadim Pasternak <vadimp@nvidia.com>
-Subject: [PATCH i2c-mux-next v2 1/1] i2c: mux: Add register map based mux driver
-Date:   Wed, 23 Aug 2023 15:53:32 +0000
-Message-ID: <20230823155332.48648-2-vadimp@nvidia.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230823155332.48648-1-vadimp@nvidia.com>
-References: <20230823155332.48648-1-vadimp@nvidia.com>
+        with ESMTP id S232847AbjHWSio (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 23 Aug 2023 14:38:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B17CC7;
+        Wed, 23 Aug 2023 11:38:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4642D63CFC;
+        Wed, 23 Aug 2023 18:38:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B204C433C8;
+        Wed, 23 Aug 2023 18:38:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692815919;
+        bh=PGr354L+s73iBBK1xz4DEth2iwPeO9ICvrQZsePd2yU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QbTn0UWUC5xlKxFdBn4n5gnL7z4axWxIdWjlS/ip2veMh9vBp1AFbBxJWK64RZKJQ
+         ASRDRojq5V/6CT5P3hcmL+td4Z9APOagVmRXXWIIVbczbxsNPtgHwtYCMythfZpoCN
+         vSa9Z2U8eATZsEewNCrgLbGLkogw9IuIxsxsLIiVC+GaSvxTODbO4rJUCKFEb2ilSE
+         eIieKFfGy2xLDTgQz9eazP6R3AygF1Bc6z7b4U2C3NiIYGgg64bUwEA9UYJNDLWUQd
+         48k4VABNbLZoeVBTugTPIyf6Hk8nWU9ptt+nIdu1M/s4y7dyLtb+rdFs1jFChlr/jP
+         BpsIvjuoriWSg==
+Received: (nullmailer pid 2621683 invoked by uid 1000);
+        Wed, 23 Aug 2023 18:38:33 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        James Clark <james.clark@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Corey Minyard <minyard@acm.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        M ark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux-iio@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        alsa-devel@alsa-project.org, linux-scsi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH] dt-bindings: Drop remaining unneeded quotes
+Date:   Wed, 23 Aug 2023 13:28:47 -0500
+Message-Id: <20230823183749.2609013-1-robh@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.126.230.37]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD6:EE_|BL0PR12MB4881:EE_
-X-MS-Office365-Filtering-Correlation-Id: ae69a7c9-4ecd-4411-1423-08dba3f12f1a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A7Mv7AELv5g0V//B+7zmIHQ4l5kc49uM7LAuVOMVz3BmT+BZX0Unvl6zQ+SzdQByQdyKiqeaEUqAJN0560Uh22NfT6VIkD+9Ov/7VJes9VTR/UBdIo5WMsianN54FNOSTAZVnyHbuzkj4V6L7Yqixl9km0Fa40WPyvPCYEw6fQ7t9/ITsn7Nrw9ZEHwMscVcxfFvW4DfEfxlBwDPIFjCwjRVkiHrQiLrAJWtf+KM1q5N/I1Ey/N5RqA4mShbOoOrExSrNT1mPXH5J/JqAwWreghv2r/sWBz24B0weD24z2D0isFM1F2A/IcvMBhqAgmmUw1zxyG7ee3LTuR174QDNFLZN5tPqXL2/Kn1dGKP3Vj1PgUdlRVjsxiqHlgCzHdfS8CZNgqXJekhdgiGb0loq2ah/P/tHaxbYF4Ip2YLFPhrXewC583+/EzQt+55BnM9uq0n9maPTyc7AYvslbHw6i7vuw1F9MxTI38IRJE6IlTv3bdKLo6UDKyUiKr1KJbIjbTJm3phTqLEbO7/wi6ClBuSjqzjq/6DDxprx4p3sFunCKvYmQl0M2cFoDYYxv7PmWy65MQryjRj37h89ACmB+7q6Wt2wJejpi+3/SCUtto3tzW2/nCLS6wpJdizysHBK/eJmPoihP0H7gfk7YK2yoxbhWHIo1vsupkANMBzDnSSxq89ZilZNnKElR2sEgLvhiT/u9GURau2SLX4mhxj13xEPjdJV6bmzfZjLsieZR1kCCwDwzzOMcL1bi2EcaA2
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(136003)(396003)(376002)(346002)(186009)(451199024)(1800799009)(82310400011)(40470700004)(46966006)(36840700001)(2616005)(316002)(6916009)(4326008)(8936002)(8676002)(40480700001)(70586007)(54906003)(70206006)(41300700001)(336012)(426003)(16526019)(26005)(1076003)(107886003)(5660300002)(6666004)(478600001)(83380400001)(30864003)(40460700003)(47076005)(36860700001)(36756003)(86362001)(2906002)(82740400003)(356005)(7636003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2023 15:54:07.4491
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae69a7c9-4ecd-4411-1423-08dba3f12f1a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EDD6.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4881
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add 'regmap' mux driver to allow virtual bus switching by setting a
-single selector register.
-The 'regmap' is supposed to be passed to driver within a platform data
-by parent platform driver.
+Cleanup bindings dropping the last remaining unneeded quotes. With this,
+the check for this can be enabled in yamllint.
 
-The register can be on type of bus or mapped memory, supported by
-'regmap' infrastructure.
-
-Motivation is to support indirect access to register space.
-For example, Lattice FPGA LFD2NX-40 device, being connected through
-PCIe bus provides SPI or LPC bus logic through PCIe-to-SPI or
-PCIe-to-LPC bridging. Thus, FPGA operates as host controller and some
-slave devices can be connected to it. For example:
-CPU (PCIe) -> FPGA (PCIe-to-SPI bridge) -> CPLD or another FPGA
-CPU (PCIe) -> FPGA (PCIe-to-LPC bridge) -> CPLD or another FPGA
-where 1-st FPGA connected to PCIe is located on carrier board, while
-2-nd programming logic device is located on some switch board and
-cannot be connected to CPU PCIe root complex.
-
-In case mux selector register is located within the 2-nd device, SPI or
-LPC transaction is prepared sent by indirect access, through some
-pre-defined protocol.
-To support such protocol reg_read()/reg_write() callbacks are provided
-to 'regmap' object and these callback implements required indirect
-access.
-Thus, 'regmap' performs all hardware specific access making it
-transparent to the mux driver.
-
-Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
-Reviewed-by: Michael Shych <michaelsh@nvidia.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/i2c/muxes/i2c-mux-regmap.rst   | 168 +++++++++++++++++++
- drivers/i2c/muxes/Kconfig                    |  12 ++
- drivers/i2c/muxes/Makefile                   |   1 +
- drivers/i2c/muxes/i2c-mux-regmap.c           | 127 ++++++++++++++
- include/linux/platform_data/i2c-mux-regmap.h |  32 ++++
- 5 files changed, 340 insertions(+)
- create mode 100644 Documentation/i2c/muxes/i2c-mux-regmap.rst
- create mode 100644 drivers/i2c/muxes/i2c-mux-regmap.c
- create mode 100644 include/linux/platform_data/i2c-mux-regmap.h
+ .../bindings/arm/arm,embedded-trace-extension.yaml   |  4 ++--
+ .../bindings/arm/arm,trace-buffer-extension.yaml     |  7 ++++---
+ .../devicetree/bindings/arm/arm,vexpress-juno.yaml   |  2 +-
+ .../devicetree/bindings/arm/aspeed/aspeed,sbc.yaml   |  4 ++--
+ .../arm/firmware/tlm,trusted-foundations.yaml        |  4 ++--
+ .../bindings/arm/mstar/mstar,l3bridge.yaml           |  4 ++--
+ .../devicetree/bindings/arm/mstar/mstar,smpctrl.yaml |  4 ++--
+ .../devicetree/bindings/arm/stm32/st,mlahb.yaml      |  4 ++--
+ .../bindings/arm/stm32/st,stm32-syscon.yaml          |  4 ++--
+ .../devicetree/bindings/connector/usb-connector.yaml |  4 ++--
+ Documentation/devicetree/bindings/eeprom/at24.yaml   |  4 ++--
+ Documentation/devicetree/bindings/eeprom/at25.yaml   |  4 ++--
+ .../intel,ixp4xx-network-processing-engine.yaml      |  4 ++--
+ .../bindings/gpio/x-powers,axp209-gpio.yaml          |  4 ++--
+ .../bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml      |  4 ++--
+ .../devicetree/bindings/gpio/xylon,logicvc-gpio.yaml |  4 ++--
+ .../devicetree/bindings/hwmon/iio-hwmon.yaml         |  4 ++--
+ .../bindings/hwmon/starfive,jh71x0-temp.yaml         |  8 ++++----
+ .../devicetree/bindings/i3c/mipi-i3c-hci.yaml        |  4 ++--
+ .../devicetree/bindings/iio/accel/fsl,mma7455.yaml   |  4 ++--
+ .../bindings/iio/adc/atmel,sama9260-adc.yaml         |  4 ++--
+ .../bindings/ipmi/aspeed,ast2400-kcs-bmc.yaml        |  8 ++++----
+ .../devicetree/bindings/ipmi/ipmi-ipmb.yaml          |  2 +-
+ .../devicetree/bindings/ipmi/ipmi-smic.yaml          |  2 +-
+ .../bindings/media/qcom,msm8916-venus.yaml           |  4 ++--
+ .../bindings/mips/loongson/ls2k-reset.yaml           |  4 ++--
+ .../bindings/mips/loongson/rs780e-acpi.yaml          |  4 ++--
+ .../misc/intel,ixp4xx-ahb-queue-manager.yaml         |  4 ++--
+ .../devicetree/bindings/mmc/marvell,xenon-sdhci.yaml |  4 ++--
+ .../bindings/mtd/microchip,mchp48l640.yaml           |  4 ++--
+ .../devicetree/bindings/soc/aspeed/uart-routing.yaml |  4 ++--
+ .../bindings/soc/intel/intel,hps-copy-engine.yaml    |  4 ++--
+ .../bindings/soc/litex/litex,soc-controller.yaml     |  4 ++--
+ .../bindings/soc/renesas/renesas,rzg2l-sysc.yaml     |  4 ++--
+ .../devicetree/bindings/soc/ti/k3-ringacc.yaml       |  4 ++--
+ .../devicetree/bindings/sound/dialog,da7219.yaml     |  4 ++--
+ .../bindings/sound/nvidia,tegra-audio-max9808x.yaml  | 12 ++++++------
+ .../bindings/sound/nvidia,tegra-audio-rt5631.yaml    |  8 ++++----
+ .../devicetree/bindings/ufs/ufs-common.yaml          |  2 +-
+ .../bindings/watchdog/toshiba,visconti-wdt.yaml      |  4 ++--
+ 40 files changed, 88 insertions(+), 87 deletions(-)
 
-diff --git a/Documentation/i2c/muxes/i2c-mux-regmap.rst b/Documentation/i2c/muxes/i2c-mux-regmap.rst
-new file mode 100644
-index 000000000000..5ee48ad42e4c
---- /dev/null
-+++ b/Documentation/i2c/muxes/i2c-mux-regmap.rst
-@@ -0,0 +1,168 @@
-+.. SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0
-+============================
-+Kernel driver i2c-mux-regmap
-+============================
-+
-+Author: Vadim Pasternak <vadimp@nvidia.com>
-+
-+Description
-+-----------
-+
-+i2c-mux-regmap is an i2c mux driver providing access to I2C bus segments
-+from a master I2C bus and a hardware MUX controlled through FPGA device
-+with indirect access to register space.
-+
-+For example, Lattice FPGA LFD2NX-40 device, being connected through PCIe
-+bus provides SPI or LPC logic through PCIe-to-SPI or PCIe-to-LPC
-+bridging.
-+Thus, FPGA operates as host controller and some slave devices can be
-+connected to it. For example:
-+- CPU (PCIe) -> FPGA (PCIe-to-SPI bridge) -> CPLD or another FPGA
-+- CPU (PCIe) -> FPGA (PCIe-to-LPC bridge) -> CPLD or another FPGA
-+where 1-st FPGA connected to PCIe is located on carrier board, while 2-nd
-+programming logic device is located on some switch board and cannot be
-+connected to CPU PCIe root complex.
-+
-+E.G.::
-+ ------------------------    ---------------------------------------
-+|  COME board            |  |  Switch board                         |
-+|                        |  |                                       |
-+|  -----        ------   |  |   -------     Bus channel 1           |
-+| |     |      |      |  |  |  |       |  *-------------->          |
-+| | CPU |      | FPGA |------->| CPLD  |  |                         |
-+| |     | PCIe |      |  LPC   |  ---  |  | Bus channel 2           |
-+| |     |------|      |  |  |  | |MUX|--->*-------------->  Devices |
-+| |     |      |      |  |  |  | |REG| |  |                         |
-+| |     |      |      |  |  |  |  ---  |  | Bus channel n           |
-+| |     |      |      |  |  |  |       |  *-------------->          |
-+|  -----        ------   |  |   -------                             |
-+|                        |  |                                       |
-+ ------------------------    ---------------------------------------
-+
-+SCL/SDA of the master I2C bus is multiplexed to bus segment 1..n
-+according to the settings of the MUX REG or REGS.
-+
-+Access to MUX selector registers is performed through the 'regmap' object,
-+which provides read and write methods, implementing protocol for indirect
-+access.
-+
-+Usage
-+-----
-+
-+i2c-mux-regmap uses the platform bus, so it is necessary to provide a struct
-+platform_device with the platform_data pointing to a struct
-+i2c_mux_regmap_platform_data with:
-+- The I2C adapter number of the master bus.
-+- Channels array and the number of bus channels to create.
-+- MUX select register offset in programming logic device space for bus
-+  selection/deselection control.
-+- Optional callback to notify caller when all the adapters are created and
-+  handle to be passed to callback.
-+See include/linux/platform_data/i2c-mux-regmap.h for details.
-+
-+Device Registration example
-+---------------------------
-+
-+   /* Channels vector for regmap mux. */
-+   static int regmap_mux_chan[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-+
-+   /* Platform regmap mux data */
-+   static struct i2c_mux_regmap_platform_data regmap_mux_data[] = {
-+	{
-+		.parent = 1,
-+		.chan_ids = regmap_mux_chan,
-+		.num_adaps = ARRAY_SIZE(regmap_mux_chan),
-+		.sel_reg_addr = 0xdb,
-+	},
-+	{
-+		.parent = 1,
-+		.chan_ids = regmap_mux_chan,
-+		.num_adaps = ARRAY_SIZE(regmap_mux_chan),
-+		.sel_reg_addr = 0xda,
-+	},
-+   };
-+
-+  Create regmap object.
-+
-+  struct caller_regmap_context {
-+	void __iomem *base;
-+  };
-+
-+  /* Read callback for indirect register map access */
-+  static int fpga_reg_read(void *context, unsigned int reg, unsigned int *val)
-+  {
-+	/* Verify there are no pending transactions */
-+	/* Set address in register space */
-+	/* Activate read operation */
-+	/* Verify transaction completion */
-+	/* Read data */
-+  }
-+
-+  /* Write callback for indirect register map access */
-+  static int reg_write(void *context, unsigned int reg, unsigned int val)
-+  {
-+	/* Verify there are no pending transactions */
-+	/* Set address in register space */
-+	/* Set data to be written */
-+	/* Activate write operation */
-+	/* Verify transaction completion */
-+  }
-+
-+  static struct caller_regmap_context caller_regmap_ctx;
-+
-+  static const struct regmap_config fpga_regmap_config = {
-+	.reg_bits = 9,
-+	.val_bits = 8,
-+	.max_register = 511,
-+	.cache_type = REGCACHE_FLAT,
-+	.writeable_reg = caller_writeable_reg,
-+	.readable_reg = caller_readable_reg,
-+	.volatile_reg = caller_volatile_reg,
-+	.reg_defaults = caller_regmap_default,
-+	.num_reg_defaults = ARRAY_SIZE(caller_regmap_default),
-+	/* Methods implementing protocol to access PCI-LPC bridge. */
-+	.reg_read = fpga_reg_read,
-+	.reg_write = fpga_reg_write,
-+  };
-+
-+  regmap = devm_regmap_init(&dev, NULL, &caller_regmap_ctx,
-+			    fpga_regmap_config);
-+
-+  Remap FPGA base address.
-+
-+  caller_regmap_ctx.base = devm_ioremap(&fpga_pci_dev->dev,
-+					pci_resource_start(pci_dev, 0),
-+					pci_resource_len(pci_dev, 0));
-+
-+  For each entry in 'regmap_mux_data' array.
-+
-+  mux_regmap_data[i].handle = caller_handle;
-+  mux_regmap_data[i].regmap = regmap;
-+  mux_regmap_data[i].completion_notify = caller_complition_notify;
-+
-+  pdev[i] =
-+  platform_device_register_resndata(dev, "i2c-mux-regmap", i, NULL, 0,
-+				    &regmap_mux_data[i],
-+				    sizeof(regmap_mux_data[i]));
-+
-+  In the above examples two instances of "i2c-mux-regmap" will be created.
-+  For each the array of the created adapter will be passed to
-+  caller_complition_notify(), if this callback was provided.
-+
-+SYSFS example
-+=============
-+  In 'sysfs' the channels will be exposed through path:
-+  /sys/devices/platform/<caller-driver>/<i2c-parent-driver.parent-bus>
-+  Following the above example it will contain:
-+  i2c-mux-regmap.0/channel-1
-+  ...
-+  i2c-mux-regmap.0/channel-8
-+  i2c-mux-regmap.1/channel-1
-+  ...
-+  i2c-mux-regmap.1/channel-8
-+
-+  However, MUX number of each 'i2c-mux-regmap' instance is limited by
-+  the size of selector register.
-+  Thus, if its size is 1 byte - up to 255 MUX channels can be created,
-+  for 2 bytes respectively up to 65535.
-+
-diff --git a/drivers/i2c/muxes/Kconfig b/drivers/i2c/muxes/Kconfig
-index ea838dbae32e..a509b75bd545 100644
---- a/drivers/i2c/muxes/Kconfig
-+++ b/drivers/i2c/muxes/Kconfig
-@@ -99,6 +99,18 @@ config I2C_MUX_REG
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called i2c-mux-reg.
+diff --git a/Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml b/Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml
+index 108460627d9a..a477a810f9e9 100644
+--- a/Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2021, Arm Ltd
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/arm,embedded-trace-extension.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/arm,embedded-trace-extension.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
  
-+config I2C_MUX_REGMAP
-+	tristate "Register map based I2C multiplexer"
-+	depends on REGMAP
-+	help
-+	  If you say yes to this option, support will be included for a
-+	  register map based I2C multiplexer. This driver provides access to
-+	  I2C busses connected through a MUX, which is controlled
-+	  by a single register through the regmap.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called i2c-mux-regmap.
-+
- config I2C_DEMUX_PINCTRL
- 	tristate "pinctrl-based I2C demultiplexer"
- 	depends on PINCTRL && OF
-diff --git a/drivers/i2c/muxes/Makefile b/drivers/i2c/muxes/Makefile
-index 6d9d865e8518..092dca428a75 100644
---- a/drivers/i2c/muxes/Makefile
-+++ b/drivers/i2c/muxes/Makefile
-@@ -14,5 +14,6 @@ obj-$(CONFIG_I2C_MUX_PCA9541)	+= i2c-mux-pca9541.o
- obj-$(CONFIG_I2C_MUX_PCA954x)	+= i2c-mux-pca954x.o
- obj-$(CONFIG_I2C_MUX_PINCTRL)	+= i2c-mux-pinctrl.o
- obj-$(CONFIG_I2C_MUX_REG)	+= i2c-mux-reg.o
-+obj-$(CONFIG_I2C_MUX_REGMAP)	+= i2c-mux-regmap.o
+ title: ARM Embedded Trace Extensions
  
- ccflags-$(CONFIG_I2C_DEBUG_BUS) := -DDEBUG
-diff --git a/drivers/i2c/muxes/i2c-mux-regmap.c b/drivers/i2c/muxes/i2c-mux-regmap.c
-new file mode 100644
-index 000000000000..952d705c5dd2
---- /dev/null
-+++ b/drivers/i2c/muxes/i2c-mux-regmap.c
-@@ -0,0 +1,127 @@
-+// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0
-+/*
-+ * Regmap i2c mux driver
-+ *
-+ * Copyright (C) 2023 Nvidia Technologies Ltd.
-+ */
+diff --git a/Documentation/devicetree/bindings/arm/arm,trace-buffer-extension.yaml b/Documentation/devicetree/bindings/arm/arm,trace-buffer-extension.yaml
+index b1322658063a..8c27e510cb71 100644
+--- a/Documentation/devicetree/bindings/arm/arm,trace-buffer-extension.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,trace-buffer-extension.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2021, Arm Ltd
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/arm,trace-buffer-extension.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/arm,trace-buffer-extension.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: ARM Trace Buffer Extensions
+ 
+@@ -19,7 +19,8 @@ description: |
+ 
+ properties:
+   $nodename:
+-    const: "trbe"
++    const: trbe
 +
-+#include <linux/device.h>
-+#include <linux/i2c.h>
-+#include <linux/i2c-mux.h>
-+#include <linux/io.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/platform_data/i2c-mux-regmap.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+
-+/* i2c_mux_regmap - mux control structure:
-+ * @last_val - last selected register value or -1 if mux deselected;
-+ * @parent - parent I2C adapter;
-+ * @pdata: platform data;
-+ */
-+struct i2c_mux_regmap {
-+	int last_val;
-+	struct i2c_adapter *parent;
-+	struct i2c_mux_regmap_platform_data pdata;
-+};
-+
-+static int i2c_mux_regmap_select_chan(struct i2c_mux_core *muxc, u32 chan)
-+{
-+	struct i2c_mux_regmap *mux = i2c_mux_priv(muxc);
-+	int err = 0;
-+
-+	/* Only select the channel if it's different from the last channel */
-+	if (mux->last_val != chan) {
-+		err = regmap_write(mux->pdata.regmap, mux->pdata.sel_reg_addr, chan);
-+		mux->last_val = err < 0 ? -1 : chan;
-+	}
-+
-+	return err;
-+}
-+
-+static int i2c_mux_regmap_deselect(struct i2c_mux_core *muxc, u32 chan)
-+{
-+	struct i2c_mux_regmap *mux = i2c_mux_priv(muxc);
-+
-+	/* Deselect active channel */
-+	mux->last_val = -1;
-+
-+	return regmap_write(mux->pdata.regmap, mux->pdata.sel_reg_addr, 0);
-+}
-+
-+/* Probe/remove functions */
-+static int i2c_mux_regmap_probe(struct platform_device *pdev)
-+{
-+	struct i2c_mux_regmap_platform_data *pdata = dev_get_platdata(&pdev->dev);
-+	struct i2c_mux_regmap *mux;
-+	struct i2c_mux_core *muxc;
-+	int num, err;
-+
-+	if (!pdata)
-+		return -EINVAL;
-+
-+	mux = devm_kzalloc(&pdev->dev, sizeof(*mux), GFP_KERNEL);
-+	if (!mux)
-+		return -ENOMEM;
-+
-+	memcpy(&mux->pdata, pdata, sizeof(*pdata));
-+	mux->parent = i2c_get_adapter(mux->pdata.parent);
-+	if (!mux->parent)
-+		return -EPROBE_DEFER;
-+
-+	muxc = i2c_mux_alloc(mux->parent, &pdev->dev, pdata->num_adaps, sizeof(*mux), 0,
-+			     i2c_mux_regmap_select_chan, i2c_mux_regmap_deselect);
-+	if (!muxc) {
-+		err = -ENOMEM;
-+		goto err_i2c_mux_alloc;
-+	}
-+
-+	platform_set_drvdata(pdev, muxc);
-+	muxc->priv = mux;
-+	mux->last_val = -1; /* force the first selection */
-+
-+	/* Create an adapter for each channel. */
-+	for (num = 0; num < pdata->num_adaps; num++) {
-+		err = i2c_mux_add_adapter(muxc, 0, pdata->chan_ids[num], 0);
-+		if (err)
-+			goto err_i2c_mux_add_adapter;
-+	}
-+
-+	/* Notify caller when all channels' adapters are created. */
-+	if (pdata->completion_notify)
-+		pdata->completion_notify(pdata->handle, muxc->parent, muxc->adapter);
-+
-+	return 0;
-+
-+err_i2c_mux_add_adapter:
-+	i2c_mux_del_adapters(muxc);
-+err_i2c_mux_alloc:
-+	i2c_put_adapter(mux->parent);
-+	return err;
-+}
-+
-+static void i2c_mux_regmap_remove(struct platform_device *pdev)
-+{
-+	struct i2c_mux_core *muxc = platform_get_drvdata(pdev);
-+	struct i2c_mux_regmap *mux = muxc->priv;
-+
-+	i2c_mux_del_adapters(muxc);
-+	i2c_put_adapter(mux->parent);
-+}
-+
-+static struct platform_driver i2c_mux_regmap_driver = {
-+	.driver = {
-+		.name = "i2c-mux-regmap",
-+	},
-+	.probe = i2c_mux_regmap_probe,
-+	.remove_new = i2c_mux_regmap_remove,
-+};
-+
-+module_platform_driver(i2c_mux_regmap_driver);
-+
-+MODULE_AUTHOR("Vadim Pasternak (vadimp@nvidia.com)");
-+MODULE_DESCRIPTION("Regmap I2C multiplexer driver");
-+MODULE_LICENSE("Dual BSD/GPL");
-+MODULE_ALIAS("platform:i2c-mux-regmap");
-diff --git a/include/linux/platform_data/i2c-mux-regmap.h b/include/linux/platform_data/i2c-mux-regmap.h
-new file mode 100644
-index 000000000000..0c03687e2c7d
---- /dev/null
-+++ b/include/linux/platform_data/i2c-mux-regmap.h
-@@ -0,0 +1,32 @@
-+/* SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0 */
-+/*
-+ * Regmap i2c mux driver
-+ *
-+ * Copyright (C) 2023 Nvidia Technologies Ltd.
-+ */
-+
-+#ifndef __LINUX_PLATFORM_DATA_I2C_MUX_REGMAP_H
-+#define __LINUX_PLATFORM_DATA_I2C_MUX_REGMAP_H
-+
-+/**
-+ * struct i2c_mux_regmap_platform_data - Platform-dependent data for i2c-mux-regmap
-+ * @regmap: register map of parent device;
-+ * @parent: Parent I2C bus adapter number
-+ * @chan_ids - channels array
-+ * @num_adaps - number of adapters
-+ * @sel_reg_addr - mux select register offset in CPLD space
-+ * @handle: handle to be passed by callback
-+ * @completion_notify: callback to notify when all the adapters are created
-+ */
-+struct i2c_mux_regmap_platform_data {
-+	void *regmap;
-+	int parent;
-+	const unsigned int *chan_ids;
-+	unsigned int num_adaps;
-+	unsigned int sel_reg_addr;
-+	void *handle;
-+	int (*completion_notify)(void *handle, struct i2c_adapter *parent,
-+				 struct i2c_adapter *adapters[]);
-+};
-+
-+#endif	/* __LINUX_PLATFORM_DATA_I2C_MUX_REGMAP_H */
+   compatible:
+     items:
+       - const: arm,trace-buffer-extension
+diff --git a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
+index cdd65881fcdd..8dd6b6446394 100644
+--- a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
++++ b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
+@@ -143,7 +143,7 @@ patternProperties:
+       "simple-bus". If the compatible is placed in the "motherboard-bus" node,
+       it is stricter and always has two compatibles.
+     type: object
+-    $ref: '/schemas/simple-bus.yaml'
++    $ref: /schemas/simple-bus.yaml
+     unevaluatedProperties: false
+ 
+     properties:
+diff --git a/Documentation/devicetree/bindings/arm/aspeed/aspeed,sbc.yaml b/Documentation/devicetree/bindings/arm/aspeed/aspeed,sbc.yaml
+index c72aab706484..b8c5cacb09bd 100644
+--- a/Documentation/devicetree/bindings/arm/aspeed/aspeed,sbc.yaml
++++ b/Documentation/devicetree/bindings/arm/aspeed/aspeed,sbc.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2021 Joel Stanley, IBM Corp.
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/aspeed/aspeed,sbc.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/aspeed/aspeed,sbc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: ASPEED Secure Boot Controller
+ 
+diff --git a/Documentation/devicetree/bindings/arm/firmware/tlm,trusted-foundations.yaml b/Documentation/devicetree/bindings/arm/firmware/tlm,trusted-foundations.yaml
+index 9d1857c0aa07..e3980b659f63 100644
+--- a/Documentation/devicetree/bindings/arm/firmware/tlm,trusted-foundations.yaml
++++ b/Documentation/devicetree/bindings/arm/firmware/tlm,trusted-foundations.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/firmware/tlm,trusted-foundations.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/firmware/tlm,trusted-foundations.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Trusted Foundations
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mstar/mstar,l3bridge.yaml b/Documentation/devicetree/bindings/arm/mstar/mstar,l3bridge.yaml
+index 6816bd68f9cf..a8ac4a2d672d 100644
+--- a/Documentation/devicetree/bindings/arm/mstar/mstar,l3bridge.yaml
++++ b/Documentation/devicetree/bindings/arm/mstar/mstar,l3bridge.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2020 thingy.jp.
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mstar/mstar,l3bridge.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mstar/mstar,l3bridge.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MStar/SigmaStar Armv7 SoC l3bridge
+ 
+diff --git a/Documentation/devicetree/bindings/arm/mstar/mstar,smpctrl.yaml b/Documentation/devicetree/bindings/arm/mstar/mstar,smpctrl.yaml
+index 599c65980f5d..5739848000b1 100644
+--- a/Documentation/devicetree/bindings/arm/mstar/mstar,smpctrl.yaml
++++ b/Documentation/devicetree/bindings/arm/mstar/mstar,smpctrl.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2020 thingy.jp.
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/mstar/mstar,smpctrl.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/mstar/mstar,smpctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MStar/SigmaStar Armv7 SoC SMP control registers
+ 
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml b/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
+index 2297ad3f4774..d2dce238ff5d 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/stm32/st,mlahb.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/stm32/st,mlahb.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: STMicroelectronics STM32 ML-AHB interconnect
+ 
+diff --git a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+index b63ff591ef8f..d083d8ad48b7 100644
+--- a/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
++++ b/Documentation/devicetree/bindings/arm/stm32/st,stm32-syscon.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/arm/stm32/st,stm32-syscon.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/arm/stm32/st,stm32-syscon.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: STMicroelectronics STM32 Platforms System Controller
+ 
+diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+index 3ecb51f55a71..7c8a3e8430d3 100644
+--- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
++++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+@@ -232,8 +232,8 @@ properties:
+     type: boolean
+ 
+ dependencies:
+-  sink-vdos-v1: [ 'sink-vdos' ]
+-  sink-vdos: [ 'sink-vdos-v1' ]
++  sink-vdos-v1: [ sink-vdos ]
++  sink-vdos: [ sink-vdos-v1 ]
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
+index 84af0d5f52aa..b1e5dddf9bf4 100644
+--- a/Documentation/devicetree/bindings/eeprom/at24.yaml
++++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2019 BayLibre SAS
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/eeprom/at24.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/eeprom/at24.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: I2C EEPROMs compatible with Atmel's AT24
+ 
+diff --git a/Documentation/devicetree/bindings/eeprom/at25.yaml b/Documentation/devicetree/bindings/eeprom/at25.yaml
+index 0e31bb36ebb1..1715b0c9feea 100644
+--- a/Documentation/devicetree/bindings/eeprom/at25.yaml
++++ b/Documentation/devicetree/bindings/eeprom/at25.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/eeprom/at25.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/eeprom/at25.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: SPI EEPROMs or FRAMs compatible with Atmel's AT25
+ 
+diff --git a/Documentation/devicetree/bindings/firmware/intel,ixp4xx-network-processing-engine.yaml b/Documentation/devicetree/bindings/firmware/intel,ixp4xx-network-processing-engine.yaml
+index 9a785bbaafb7..e6bed7d93e2d 100644
+--- a/Documentation/devicetree/bindings/firmware/intel,ixp4xx-network-processing-engine.yaml
++++ b/Documentation/devicetree/bindings/firmware/intel,ixp4xx-network-processing-engine.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2019 Linaro Ltd.
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/firmware/intel,ixp4xx-network-processing-engine.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/firmware/intel,ixp4xx-network-processing-engine.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Intel IXP4xx Network Processing Engine
+ 
+diff --git a/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml b/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
+index 1638cfe90f1c..5eeb29bcdd21 100644
+--- a/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
++++ b/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/gpio/x-powers,axp209-gpio.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/gpio/x-powers,axp209-gpio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: X-Powers AXP209 GPIO
+ 
+diff --git a/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml b/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml
+index 18e61aff2185..56143f1fe84a 100644
+--- a/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml
++++ b/Documentation/devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/gpio/xlnx,zynqmp-gpio-modepin.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/gpio/xlnx,zynqmp-gpio-modepin.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: ZynqMP Mode Pin GPIO controller
+ 
+diff --git a/Documentation/devicetree/bindings/gpio/xylon,logicvc-gpio.yaml b/Documentation/devicetree/bindings/gpio/xylon,logicvc-gpio.yaml
+index a36aec27069c..59c79a6943ec 100644
+--- a/Documentation/devicetree/bindings/gpio/xylon,logicvc-gpio.yaml
++++ b/Documentation/devicetree/bindings/gpio/xylon,logicvc-gpio.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2019 Bootlin
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/gpio/xylon,logicvc-gpio.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/gpio/xylon,logicvc-gpio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Xylon LogiCVC GPIO controller
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/iio-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/iio-hwmon.yaml
+index c54b5986b365..e5b24782f448 100644
+--- a/Documentation/devicetree/bindings/hwmon/iio-hwmon.yaml
++++ b/Documentation/devicetree/bindings/hwmon/iio-hwmon.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/hwmon/iio-hwmon.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/hwmon/iio-hwmon.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: ADC-attached Hardware Sensor
+ 
+diff --git a/Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml b/Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
+index f5b34528928d..733cba780186 100644
+--- a/Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
++++ b/Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
+@@ -27,8 +27,8 @@ properties:
+ 
+   clock-names:
+     items:
+-      - const: "sense"
+-      - const: "bus"
++      - const: sense
++      - const: bus
+ 
+   '#thermal-sensor-cells':
+     const: 0
+@@ -39,8 +39,8 @@ properties:
+ 
+   reset-names:
+     items:
+-      - const: "sense"
+-      - const: "bus"
++      - const: sense
++      - const: bus
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml b/Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml
+index c002afdbfc7c..5dda8cb44cdb 100644
+--- a/Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml
++++ b/Documentation/devicetree/bindings/i3c/mipi-i3c-hci.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/i3c/mipi-i3c-hci.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/i3c/mipi-i3c-hci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: MIPI I3C HCI
+ 
+diff --git a/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml b/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml
+index c8659c5eba2a..cb31e75ba680 100644
+--- a/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml
++++ b/Documentation/devicetree/bindings/iio/accel/fsl,mma7455.yaml
+@@ -36,8 +36,8 @@ properties:
+     maxItems: 2
+     items:
+       enum:
+-        - "INT1"
+-        - "INT2"
++        - INT1
++        - INT2
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/iio/adc/atmel,sama9260-adc.yaml b/Documentation/devicetree/bindings/iio/adc/atmel,sama9260-adc.yaml
+index e6a1f915b542..1f30a8569187 100644
+--- a/Documentation/devicetree/bindings/iio/adc/atmel,sama9260-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/atmel,sama9260-adc.yaml
+@@ -56,8 +56,8 @@ properties:
+       String corresponding to an identifier from atmel,adc-res-names property.
+       If not specified, the highest resolution will be used.
+     enum:
+-      - "lowres"
+-      - "highres"
++      - lowres
++      - highres
+ 
+   atmel,adc-sleep-mode:
+     $ref: /schemas/types.yaml#/definitions/flag
+diff --git a/Documentation/devicetree/bindings/ipmi/aspeed,ast2400-kcs-bmc.yaml b/Documentation/devicetree/bindings/ipmi/aspeed,ast2400-kcs-bmc.yaml
+index 4ff6fabfcb30..129e32c4c774 100644
+--- a/Documentation/devicetree/bindings/ipmi/aspeed,ast2400-kcs-bmc.yaml
++++ b/Documentation/devicetree/bindings/ipmi/aspeed,ast2400-kcs-bmc.yaml
+@@ -41,7 +41,7 @@ properties:
+       - description: STR register
+ 
+   aspeed,lpc-io-reg:
+-    $ref: '/schemas/types.yaml#/definitions/uint32-array'
++    $ref: /schemas/types.yaml#/definitions/uint32-array
+     minItems: 1
+     maxItems: 2
+     description: |
+@@ -50,7 +50,7 @@ properties:
+       status address may be optionally provided.
+ 
+   aspeed,lpc-interrupts:
+-    $ref: "/schemas/types.yaml#/definitions/uint32-array"
++    $ref: /schemas/types.yaml#/definitions/uint32-array
+     minItems: 2
+     maxItems: 2
+     description: |
+@@ -63,12 +63,12 @@ properties:
+ 
+   kcs_chan:
+     deprecated: true
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
++    $ref: /schemas/types.yaml#/definitions/uint32
+     description: The LPC channel number in the controller
+ 
+   kcs_addr:
+     deprecated: true
+-    $ref: '/schemas/types.yaml#/definitions/uint32'
++    $ref: /schemas/types.yaml#/definitions/uint32
+     description: The host CPU IO map address
+ 
+ required:
+diff --git a/Documentation/devicetree/bindings/ipmi/ipmi-ipmb.yaml b/Documentation/devicetree/bindings/ipmi/ipmi-ipmb.yaml
+index 3f25cdb4e99b..52647bff31af 100644
+--- a/Documentation/devicetree/bindings/ipmi/ipmi-ipmb.yaml
++++ b/Documentation/devicetree/bindings/ipmi/ipmi-ipmb.yaml
+@@ -18,7 +18,7 @@ properties:
+ 
+   device_type:
+     items:
+-      - const: "ipmi"
++      - const: ipmi
+ 
+   reg:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/ipmi/ipmi-smic.yaml b/Documentation/devicetree/bindings/ipmi/ipmi-smic.yaml
+index c1b4bf95ef99..4bffa3d86128 100644
+--- a/Documentation/devicetree/bindings/ipmi/ipmi-smic.yaml
++++ b/Documentation/devicetree/bindings/ipmi/ipmi-smic.yaml
+@@ -20,7 +20,7 @@ properties:
+ 
+   device_type:
+     items:
+-      - const: "ipmi"
++      - const: ipmi
+ 
+   reg:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml b/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
+index 2350bf4b370e..9410f13ca97c 100644
+--- a/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
++++ b/Documentation/devicetree/bindings/media/qcom,msm8916-venus.yaml
+@@ -40,7 +40,7 @@ properties:
+ 
+     properties:
+       compatible:
+-        const: "venus-decoder"
++        const: venus-decoder
+ 
+     required:
+       - compatible
+@@ -52,7 +52,7 @@ properties:
+ 
+     properties:
+       compatible:
+-        const: "venus-encoder"
++        const: venus-encoder
+ 
+     required:
+       - compatible
+diff --git a/Documentation/devicetree/bindings/mips/loongson/ls2k-reset.yaml b/Documentation/devicetree/bindings/mips/loongson/ls2k-reset.yaml
+index 20b5836efd90..358ac8cd4d1d 100644
+--- a/Documentation/devicetree/bindings/mips/loongson/ls2k-reset.yaml
++++ b/Documentation/devicetree/bindings/mips/loongson/ls2k-reset.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/mips/loongson/ls2k-reset.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/mips/loongson/ls2k-reset.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Loongson 2K1000 PM Controller
+ 
+diff --git a/Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml b/Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml
+index 7c0f9022202c..3e3a3705e879 100644
+--- a/Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml
++++ b/Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/mips/loongson/rs780e-acpi.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/mips/loongson/rs780e-acpi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Loongson RS780E PCH ACPI Controller
+ 
+diff --git a/Documentation/devicetree/bindings/misc/intel,ixp4xx-ahb-queue-manager.yaml b/Documentation/devicetree/bindings/misc/intel,ixp4xx-ahb-queue-manager.yaml
+index 38ab0499102d..36a9dbdf3f03 100644
+--- a/Documentation/devicetree/bindings/misc/intel,ixp4xx-ahb-queue-manager.yaml
++++ b/Documentation/devicetree/bindings/misc/intel,ixp4xx-ahb-queue-manager.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2019 Linaro Ltd.
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/misc/intel,ixp4xx-ahb-queue-manager.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/misc/intel,ixp4xx-ahb-queue-manager.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Intel IXP4xx AHB Queue Manager
+ 
+diff --git a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+index 3ee758886558..3a8e74894ae0 100644
+--- a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+@@ -71,8 +71,8 @@ properties:
+   marvell,xenon-phy-type:
+     $ref: /schemas/types.yaml#/definitions/string
+     enum:
+-      - "emmc 5.1 phy"
+-      - "emmc 5.0 phy"
++      - emmc 5.1 phy
++      - emmc 5.0 phy
+     description: |
+       Xenon support multiple types of PHYs. To select eMMC 5.1 PHY, set:
+       marvell,xenon-phy-type = "emmc 5.1 phy" eMMC 5.1 PHY is the default
+diff --git a/Documentation/devicetree/bindings/mtd/microchip,mchp48l640.yaml b/Documentation/devicetree/bindings/mtd/microchip,mchp48l640.yaml
+index 00882892f47e..0ff32bd00bf6 100644
+--- a/Documentation/devicetree/bindings/mtd/microchip,mchp48l640.yaml
++++ b/Documentation/devicetree/bindings/mtd/microchip,mchp48l640.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/mtd/microchip,mchp48l640.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/mtd/microchip,mchp48l640.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Microchip 48l640 (and similar) serial EERAM
+ 
+diff --git a/Documentation/devicetree/bindings/soc/aspeed/uart-routing.yaml b/Documentation/devicetree/bindings/soc/aspeed/uart-routing.yaml
+index 6876407124dc..51aaf34acb32 100644
+--- a/Documentation/devicetree/bindings/soc/aspeed/uart-routing.yaml
++++ b/Documentation/devicetree/bindings/soc/aspeed/uart-routing.yaml
+@@ -3,8 +3,8 @@
+ # # Copyright (c) 2021 Aspeed Technology Inc.
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/soc/aspeed/uart-routing.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/soc/aspeed/uart-routing.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Aspeed UART Routing Controller
+ 
+diff --git a/Documentation/devicetree/bindings/soc/intel/intel,hps-copy-engine.yaml b/Documentation/devicetree/bindings/soc/intel/intel,hps-copy-engine.yaml
+index 8634865015cd..ceb81646fe75 100644
+--- a/Documentation/devicetree/bindings/soc/intel/intel,hps-copy-engine.yaml
++++ b/Documentation/devicetree/bindings/soc/intel/intel,hps-copy-engine.yaml
+@@ -2,8 +2,8 @@
+ # Copyright (C) 2022, Intel Corporation
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/soc/intel/intel,hps-copy-engine.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/soc/intel/intel,hps-copy-engine.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Intel HPS Copy Engine
+ 
+diff --git a/Documentation/devicetree/bindings/soc/litex/litex,soc-controller.yaml b/Documentation/devicetree/bindings/soc/litex/litex,soc-controller.yaml
+index ecae9fa8561b..a64406ca17b5 100644
+--- a/Documentation/devicetree/bindings/soc/litex/litex,soc-controller.yaml
++++ b/Documentation/devicetree/bindings/soc/litex/litex,soc-controller.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2020 Antmicro <www.antmicro.com>
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/soc/litex/litex,soc-controller.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/soc/litex/litex,soc-controller.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: LiteX SoC Controller driver
+ 
+diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+index 398663d21ab1..e52e176d8cb3 100644
+--- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
++++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/soc/renesas/renesas,rzg2l-sysc.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/soc/renesas/renesas,rzg2l-sysc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Renesas RZ/{G2L,V2L} System Controller (SYSC)
+ 
+diff --git a/Documentation/devicetree/bindings/soc/ti/k3-ringacc.yaml b/Documentation/devicetree/bindings/soc/ti/k3-ringacc.yaml
+index 22cf9002fee7..4ac00716885e 100644
+--- a/Documentation/devicetree/bindings/soc/ti/k3-ringacc.yaml
++++ b/Documentation/devicetree/bindings/soc/ti/k3-ringacc.yaml
+@@ -2,8 +2,8 @@
+ # Copyright (C) 2020 Texas Instruments Incorporated - http://www.ti.com/
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/soc/ti/k3-ringacc.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/soc/ti/k3-ringacc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Texas Instruments K3 NavigatorSS Ring Accelerator
+ 
+diff --git a/Documentation/devicetree/bindings/sound/dialog,da7219.yaml b/Documentation/devicetree/bindings/sound/dialog,da7219.yaml
+index 2d01956cefbb..19137abdba3e 100644
+--- a/Documentation/devicetree/bindings/sound/dialog,da7219.yaml
++++ b/Documentation/devicetree/bindings/sound/dialog,da7219.yaml
+@@ -74,7 +74,7 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/uint32
+ 
+   dlg,mic-amp-in-sel:
+-    enum: ["diff", "se_p", "se_n"]
++    enum: [diff, se_p, se_n]
+     description:
+       Mic input source type.
+ 
+@@ -124,7 +124,7 @@ properties:
+         $ref: /schemas/types.yaml#/definitions/uint32
+ 
+       dlg,jack-ins-det-pty:
+-        enum: ["low", "high"]
++        enum: [low, high]
+         description:
+           Polarity for jack insertion detection.
+         $ref: /schemas/types.yaml#/definitions/string
+diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max9808x.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max9808x.yaml
+index fc89dbd6bf24..c29d7942915c 100644
+--- a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max9808x.yaml
++++ b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max9808x.yaml
+@@ -35,12 +35,12 @@ properties:
+     items:
+       enum:
+         # Board Connectors
+-        - "Int Spk"
+-        - "Headphone Jack"
+-        - "Earpiece"
+-        - "Headset Mic"
+-        - "Internal Mic 1"
+-        - "Internal Mic 2"
++        - Int Spk
++        - Headphone Jack
++        - Earpiece
++        - Headset Mic
++        - Internal Mic 1
++        - Internal Mic 2
+ 
+         # CODEC Pins
+         - HPL
+diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml
+index a04487002e88..0c8067c3b056 100644
+--- a/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml
++++ b/Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml
+@@ -31,10 +31,10 @@ properties:
+     items:
+       enum:
+         # Board Connectors
+-        - "Int Spk"
+-        - "Headphone Jack"
+-        - "Mic Jack"
+-        - "Int Mic"
++        - Int Spk
++        - Headphone Jack
++        - Mic Jack
++        - Int Mic
+ 
+         # CODEC Pins
+         - MIC1
+diff --git a/Documentation/devicetree/bindings/ufs/ufs-common.yaml b/Documentation/devicetree/bindings/ufs/ufs-common.yaml
+index 47a4e9e1a775..bbaee4f5f7b2 100644
+--- a/Documentation/devicetree/bindings/ufs/ufs-common.yaml
++++ b/Documentation/devicetree/bindings/ufs/ufs-common.yaml
+@@ -74,7 +74,7 @@ properties:
+       Specifies max. load that can be drawn from VCCQ2 supply.
+ 
+ dependencies:
+-  freq-table-hz: [ 'clocks' ]
++  freq-table-hz: [ clocks ]
+ 
+ required:
+   - interrupts
+diff --git a/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
+index 51d03d5b08ad..3e9fd49d935e 100644
+--- a/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2020 Toshiba Electronic Devices & Storage Corporation
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/watchdog/toshiba,visconti-wdt.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/watchdog/toshiba,visconti-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Toshiba Visconti SoCs PIUWDT Watchdog timer
+ 
 -- 
-2.20.1
+2.40.1
 
