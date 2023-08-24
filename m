@@ -2,93 +2,125 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02687867E2
-	for <lists+linux-i2c@lfdr.de>; Thu, 24 Aug 2023 08:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE4F7868CA
+	for <lists+linux-i2c@lfdr.de>; Thu, 24 Aug 2023 09:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233621AbjHXGxm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 24 Aug 2023 02:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
+        id S232793AbjHXHnD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Thu, 24 Aug 2023 03:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240231AbjHXGxd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Aug 2023 02:53:33 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDC91724;
-        Wed, 23 Aug 2023 23:53:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692859980; x=1724395980;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=glCjWylfZPa8/1r90fCH4I0bDmEqpvkYi6gf5hnG/+M=;
-  b=MoyDpStzIkxxN4s+LK3g7I7+NsC8Ej+DaRPK5WvuPrT21pBQWG8SHU1a
-   2RK1QzH4dl9KIZzcIsz0iFwArecBk7T6hBllpXWmstFpC02wl2YJU17hh
-   ioFq9sYnba8oIRtTBykbZZ1+o/BcofIPA6h82YbfI/7CxtYPItw0y8USK
-   6oA+BLvkUWzHGjc7bFZwaaVrjMfTNw23CpVQmbqC8e/9wNAzFXlI+xwum
-   4RbiKcKsDVbz5uqdKgKE9B2zP14fzTP2FyWqqbdzOtkPwtQEQtZ81zdlF
-   LsWf524OTjmkL6fk4KlYCyrSg7jDbozkk+mxlCqmCxwkyvHxcHw3RlP5B
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="364533845"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="364533845"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 23:53:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="766426382"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="766426382"
-Received: from mylly.fi.intel.com (HELO [10.237.72.62]) ([10.237.72.62])
-  by orsmga008.jf.intel.com with ESMTP; 23 Aug 2023 23:52:58 -0700
-Message-ID: <686d5609-7e3d-4385-a23b-f7dec13c02bf@linux.intel.com>
-Date:   Thu, 24 Aug 2023 09:52:57 +0300
+        with ESMTP id S240429AbjHXHml (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 24 Aug 2023 03:42:41 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C7A170A;
+        Thu, 24 Aug 2023 00:42:26 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-bcb6dbc477eso5955730276.1;
+        Thu, 24 Aug 2023 00:42:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692862929; x=1693467729;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dhv4Bg1fdD4fcuHP4DlJnIZ9JdHOfbSov1NYQWp3Ek8=;
+        b=AUkWWfX/zFe56Yxj+BNMG9GYZd670gyfSKx962grd7skql98XJFT6sYafeF+K5Z5UT
+         uOSKmvz4SSZIBuz5mqlJIuCg1m7IThElJhOyVuw3ickhoASJp57LSq/vhONcjoAzu5DS
+         fJuAxaKSWp9TpgL6jR3raPzeb5LyRJKMzifsIEdYLoKXmiPpU6Qfxu/lmAHFtsYOm+cL
+         DA26NRyOTLp4V8sfKm1CH9KnnpgoD1ArDN88uQ2GUXJ/q7zmPf9FaW3o0Ws2OXLChTub
+         FKdW2N+Kp3V2QocRbp7vgkdQBkENXTXCCyC8bqGPrQelFUg6dYk1WS8VekSuws3VXTt9
+         ipig==
+X-Gm-Message-State: AOJu0Yx9vL8zg2n+aLaEmW1xcn/9o7fif0DG/MxgpsxjIpyozYQSjt2+
+        1CGVEXxp2jYf0iYPVcQKqxHj8MGbeILy8w==
+X-Google-Smtp-Source: AGHT+IFHvPS0ch0Ft+QoIRmYP0ssAD5Obu+K54gJyP4DyMVpin6CXenCeFQLr0zMO2e8H5nv/tKibg==
+X-Received: by 2002:a81:dd02:0:b0:58f:afe5:4c16 with SMTP id e2-20020a81dd02000000b0058fafe54c16mr15233630ywn.30.1692862928821;
+        Thu, 24 Aug 2023 00:42:08 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id i127-20020a819185000000b0058c4e33b2d6sm3798266ywg.90.2023.08.24.00.42.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Aug 2023 00:42:08 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-d77f614243aso478610276.0;
+        Thu, 24 Aug 2023 00:42:08 -0700 (PDT)
+X-Received: by 2002:a25:ae92:0:b0:d3b:e659:5331 with SMTP id
+ b18-20020a25ae92000000b00d3be6595331mr14472125ybj.58.1692862928507; Thu, 24
+ Aug 2023 00:42:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6] i2c: designware: Add support for recovery when GPIO
- need pinctrl.
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Yann Sionneau <ysionneau@kalray.eu>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Julian Vetter <jvetter@kalrayinc.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andi Shyti <andi.shyti@kernel.org>
-References: <20230822143437.9395-1-ysionneau@kalray.eu>
- <ZOTJnWjG90tyGkJl@smile.fi.intel.com>
-Content-Language: en-US
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <ZOTJnWjG90tyGkJl@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230823183749.2609013-1-robh@kernel.org>
+In-Reply-To: <20230823183749.2609013-1-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 24 Aug 2023 09:41:56 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWSrpjUK4Fa9cBiRqsnhh2GxyXK5fCt8B-RmaDgEy6OeA@mail.gmail.com>
+Message-ID: <CAMuHMdWSrpjUK4Fa9cBiRqsnhh2GxyXK5fCt8B-RmaDgEy6OeA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Drop remaining unneeded quotes
+To:     Rob Herring <robh@kernel.org>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        James Clark <james.clark@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Corey Minyard <minyard@acm.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        M ark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux-iio@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        alsa-devel@alsa-project.org, linux-scsi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 8/22/23 17:43, Andy Shevchenko wrote:
-> On Tue, Aug 22, 2023 at 04:34:37PM +0200, Yann Sionneau wrote:
->> Currently if the SoC needs pinctrl to switch the SCL and SDA from the I2C
->> function to GPIO function, the recovery won't work.
->>
->> scl-gpio = <>;
->> sda-gpio = <>;
->>
->> Are not enough for some SoCs to have a working recovery.
->> Some need:
->>
->> scl-gpio = <>;
->> sda-gpio = <>;
->> pinctrl-names = "default", "recovery";
->> pinctrl-0 = <&i2c_pins_hw>;
->> pinctrl-1 = <&i2c_pins_gpio>;
->>
->> The driver was not filling rinfo->pinctrl with the device node
->> pinctrl data which is needed by generic recovery code.
-> 
-> Now looks pretty much good enough (yet the period is not needed in the Subject,
-> but it's fine for your newbie submission — no need to resend or make a new
-> version). Thank you!
-> 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+On Wed, Aug 23, 2023 at 8:38 PM Rob Herring <robh@kernel.org> wrote:
+> Cleanup bindings dropping the last remaining unneeded quotes. With this,
+> the check for this can be enabled in yamllint.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+>  .../bindings/soc/renesas/renesas,rzg2l-sysc.yaml     |  4 ++--
+
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
