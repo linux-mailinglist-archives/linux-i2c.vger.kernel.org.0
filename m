@@ -2,62 +2,63 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D844B78904B
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Aug 2023 23:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4E27891A6
+	for <lists+linux-i2c@lfdr.de>; Sat, 26 Aug 2023 00:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjHYVRQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 25 Aug 2023 17:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
+        id S229526AbjHYWRq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 25 Aug 2023 18:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbjHYVRM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Aug 2023 17:17:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4CC2684;
-        Fri, 25 Aug 2023 14:17:00 -0700 (PDT)
+        with ESMTP id S231176AbjHYWRp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Aug 2023 18:17:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D246C26B0;
+        Fri, 25 Aug 2023 15:17:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20FE262651;
-        Fri, 25 Aug 2023 21:17:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EED25C433C7;
-        Fri, 25 Aug 2023 21:16:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7105861C18;
+        Fri, 25 Aug 2023 22:17:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50065C433C7;
+        Fri, 25 Aug 2023 22:17:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692998219;
-        bh=3NF4/9sTUxsy7+cyZVszKONaH5lg0pf6BADotaKBhFo=;
+        s=k20201202; t=1693001858;
+        bh=5wEZ5+WfZTeITiieGOEm/Q/+VkMcT0g/7Bj4HC/ckYI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dk4+O2XDPHEOJDIs7SCoeR5T1prK0c4Ap6SYWFKXqZjJL2R74VTYx7x2nAeSE4p5n
-         AFn1rw+Oty1qwNh848Kbvkd08i17THrv8FoNVlhO8iy9UyHfNEI1oTOFLzsEucb+3r
-         ygFva0FjiN302PDY0bdQAcPv5nEyJIPV7uA6zeXrvjjfSdmr3/S7+bqRrNnJix6Vza
-         U0ucNCQV15owskfGcfGa8TBIfsjnCptGk3xai/L+d1zXMSX3Ezu8BC78ZB1TxMWcAB
-         1Q2Pb06n5VKsWYzM4Yr5I+F2o7j4TVyoo0I15nRTufH9xWCWTMs0Ko2J0pSlVuzMK0
-         4goS7XcZqTTXg==
-Date:   Fri, 25 Aug 2023 23:16:55 +0200
+        b=o9pRJqadyLSa3vMvjnXrFX6Jh7JG3T4Mq+9L25/IpT3jNbAEXTsVF6QLNE3GkGlhM
+         O/JHv38ldszn6Psoyp1Xywm7FTDmEGnOUjiI6In2VBq+nVpHZKki4UIj8iLJ8iN/CZ
+         vdn397irGrUVBQsPet1DPHwGeztSQ44bkOQmOaqZa7SRST272atJcTeyE9tJF6MzdF
+         UT5mQ2wBhnEywyv7fVcM/oi9K1ToyXFG6A3Be4F+ly6IxQweI0qD7M1mKHS6YdimUm
+         m9mVuUcQGJlqxiQ9kwnGSoQOUHjS9uKm8CHKy7xJlVCt/4Bw3uz5AdhtO4j09ZFBjO
+         Uhpdyg8I001Aw==
+Date:   Sat, 26 Aug 2023 00:17:33 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: Make I2C_ATR invisible
-Message-ID: <ZOkaRx/DqT9fnTXi@shikoro>
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     Andi Shyti <andi.shyti@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] i2c: pxa: fix clang -Wvoid-pointer-to-enum-cast warning
+Message-ID: <ZOkofUzv6t9lXyN+@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <588d302477cb7e6b30b52ee6448807324c57b88a.1692113321.git.geert+renesas@glider.be>
+        Justin Stitt <justinstitt@google.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230816-void-drivers-i2c-busses-i2c-pxa-v1-1-931634b931ec@google.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MoFTp7i1YP066zwH"
+        protocol="application/pgp-signature"; boundary="ukkw/O5ByhuWtfMf"
 Content-Disposition: inline
-In-Reply-To: <588d302477cb7e6b30b52ee6448807324c57b88a.1692113321.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230816-void-drivers-i2c-busses-i2c-pxa-v1-1-931634b931ec@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,44 +66,41 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---MoFTp7i1YP066zwH
+--ukkw/O5ByhuWtfMf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 15, 2023 at 05:29:11PM +0200, Geert Uytterhoeven wrote:
-> I2C Address Translator (ATR) support is not a stand-alone driver, but a
-> library.  All of its users select I2C_ATR.  Hence there is no need for
-> the user to enable this symbol manually, except when compile-testing.
+
+> Note: I think something like this may be more readable:
+> | 	*i2c_types =3D (enum pxa_i2c_types)(uintptr_t)of_id->data;
 >=20
-> Fixes: a076a860acae77bb ("media: i2c: add I2C Address Translator (ATR) su=
-pport")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Thoughts on this approach against the one present in this patch?
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
-
-I like it but I can only apply it once the ATR hits upstream. Or it goes
-via the same tree than I2C_ATR. I don't mind which way.
+On the one hand, I think this is more explicit and, thus, more readable.
+On the other hand, we still have the loss of precision, between the
+first and the second cast. Which gives it a bit of a "let's hide it
+somewhat so the compiler will be happy" feeling?
 
 
---MoFTp7i1YP066zwH
+--ukkw/O5ByhuWtfMf
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTpGkcACgkQFA3kzBSg
-KbbHBg//ee72Mtj96yDYgt2RPUGkdQdTG7C/hC2b8rMBUr+uKw5Dx1JkzEeSgEL/
-UPLVxLPjYacyOk4pSTJ9mPBduvnsmBQVCM6aEiBm2F5gCF8T+29sGTSSOa0Lt7ok
-t2vgt1SvUCya8d7UwYamvvfVKjpPAV+DSZu53EPp9xmj+/AOR2jp0I6pnEJ3o212
-KaRS82yqOF03vHmy1iuWnDodtEg6BYrP4CdDRXJJLi1rFob4i5Ki4Y1flzC1YWy9
-cRAFtdDo1y9LtIxJ73zUvAzIEHTHRt1L9Auws97rQpThlddg8uFmvUqRpg11wLml
-RsG7rQj39fEK+gHzsLvXBA48GvYVMxyYlFJq0JytBMXEG8vbNSYuQmeYi2/j+Nvh
-a9WtURgqoWNoN/rMDL7twjZPdOH6iEu0aaF5OAR7AVXC/YbtmUaPbEqgTBGi9KO+
-cr/R1IVu6M1858fQTBdsC2HLtqC6nxO7/OGAn/1TM0hjpLnKkgpvj5gqJZjhZxsL
-at7iTXscfFyjmO8cLIXXgAf6yFMeHgt/QmdwK2eKF1yM08OByagzAO7XSTPrQ9Uq
-Dkl9j7v/gI6rhigEwCqb2RfxWNR17rlGsmGrae1yt9jziLER5DFVO0FI+or5loJ0
-CTt0KPbkW7uqLAJxkOLY/t1/O6qphdCT/OG+TFOFueJ+tRaTweo=
-=HlqT
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTpKHkACgkQFA3kzBSg
+KbacVBAAg+N9jsa8f4e8wE1hq7+1tE7qvQY8yS3OV5Y7Dazv1ZMn15SI14rFd8MK
+OwHb/VHDzQVCb60doqviBDM6shh9DXenrzk+kN89WbJEWDcpq5Ne3NDwo2+i/D5Z
+GoK1znRWf9EUSxqr6Uf5ueoLy/IVBqNtF380UCMZiMYBO4hx0RvhwjoJ3vIl8Ucu
+lPaV28mmsNjDPYIclE9LHLt005Fo8yT6Yr15/YaspGG+bdoTBhH6+DkSpfLNdvM2
+YK5cGhVol8b2Tqs9IjiIGR/nNGi0eGaiSw135RkklsbmAJ491itmX2KU4afxNo8r
+be5fkSMIkHUDnfrkEv91hZ6pD9PqL3gkxrqsvHwJMrCWIUrxQnKp7dtY10CTozDr
+7cqrtrKt92cllY5R7TN/seBSzODjnvXU2yQR1NDRJIlyxIruhPmQe2XU7qm9QphV
+JKwUs5Y8tV2J3UPtwbuzBXn/Mdv4WkrKcl17ufyT5KXePlLnhoWWje2so3HfjD9b
+0J+26PZjpaWPif8jz9S7R+/aCbICJDGT8m855uLhu0E97y0RpGRF2jItk/WAW1/e
+8iJbz/m2+c/dHuCsCU2TQh3ibMz/7h3DijAs21tUnBhwbm8L8ySu9dp7nDpvCSBY
+bV5nJQURKg4ih0nFuCkaY720KaPEf958iIP+1+M3Uf1sZ0E1TDw=
+=pXsd
 -----END PGP SIGNATURE-----
 
---MoFTp7i1YP066zwH--
+--ukkw/O5ByhuWtfMf--
