@@ -2,57 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A50788F81
-	for <lists+linux-i2c@lfdr.de>; Fri, 25 Aug 2023 22:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8CB788F84
+	for <lists+linux-i2c@lfdr.de>; Fri, 25 Aug 2023 22:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjHYUEy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 25 Aug 2023 16:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
+        id S230222AbjHYUIK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 25 Aug 2023 16:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjHYUEX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Aug 2023 16:04:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382492689
-        for <linux-i2c@vger.kernel.org>; Fri, 25 Aug 2023 13:04:21 -0700 (PDT)
+        with ESMTP id S230207AbjHYUH6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 25 Aug 2023 16:07:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD00A2686;
+        Fri, 25 Aug 2023 13:07:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9D7962AD0
-        for <linux-i2c@vger.kernel.org>; Fri, 25 Aug 2023 20:04:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5AAFC433C7;
-        Fri, 25 Aug 2023 20:04:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39DF362AD0;
+        Fri, 25 Aug 2023 20:07:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF3CEC433C8;
+        Fri, 25 Aug 2023 20:07:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692993860;
-        bh=5mVM01iITxxlAs4ukrQegFEkqZ/IJI7Z882Wwqb+fBs=;
+        s=k20201202; t=1692994075;
+        bh=kvYJY9GVkYB1KvLokRDqmnYgpNsujZYT6/nl/kMTZHM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FF3fUlX0hJuxjOa/UAE/Rpj/utycUixRbvvax7K0OYF+dxIiWglQh3kfDLhude7wB
-         0CzDQvCdflj892k50vsokfGkrFrw9WL3JC6jnasNksTDuDUOeSzxJno2txgJYWEmNq
-         cDW2rSGKl8f/btMPtOAt++qHOKceg3OVEhlqWHDCKjke0jsTy5i3JEhD7crxSUrmuK
-         odTPM3QJylouwsIwaxYAs+g/Pm5gkc4asDJZRMUjkAwox9gz+uBtJgN2ihJxAci4fb
-         A+/0Zyb+8YGMgpox+E14yCrRi/d/hdXaxwWN7GNtUfY5auolfmz3Gqt31AVJylz8pb
-         wx80XL5dLK2oQ==
-Date:   Fri, 25 Aug 2023 22:04:17 +0200
+        b=mAD1fmKqnwS1/LbiUvdzh0WfHfssTaHymtW7SXRUAa8qq8Y8Zi+AbANCzY8UMR69B
+         0aM8w3V9Lwr6wPexmih6fAyhbkkKE6Ukyfw9vxon87sOr1j+PGkS6Lw4W2vr2e0Tl9
+         02ADvZ+3COI8ZWf/i4vktTYdvLoVJz6MBKbwyR9kQAZpDMu4old3IbVoFSBetWfps9
+         11oKD+87PwhrH5NFOknacLolivH5wbIeG/4FH8JwtEmL2zGn15ejLoK3bGY5c9FVud
+         BfIh04UsB0TPrlx0cf5UuRxLG5pzcLKKzGyygTBGSJDvR13O3+lz6PQ/EKneHKKoI6
+         0vGJaRg34ODoA==
+Date:   Fri, 25 Aug 2023 22:07:52 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Hans Hu <hanshu-oc@zhaoxin.com>
-Cc:     andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
-        cobechen@zhaoxin.com, TonyWWang@zhaoxin.com
-Subject: Re: [PATCH v2 2/2] i2c: add support for Zhaoxin I2C controller
-Message-ID: <ZOkJQe4QVeCctbFL@shikoro>
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     dmitry.baryshkov@linaro.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Liao Chang <liaochang1@huawei.com>,
+        Todor Tomov <todor.too@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
+        error27@gmail.com, vegard.nossum@oracle.com
+Subject: Re: [PATCH next] i2c: qcom-cci: Fix error checking in cci_probe()
+Message-ID: <ZOkKGAv5iBHRNL4M@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Hans Hu <hanshu-oc@zhaoxin.com>, andi.shyti@kernel.org,
-        linux-i2c@vger.kernel.org, cobechen@zhaoxin.com,
-        TonyWWang@zhaoxin.com
-References: <cover.1691999569.git.hanshu-oc@zhaoxin.com>
- <4b85bcdfb1d04ccba7988ed7931c33b7531a0a4c.1691999569.git.hanshu-oc@zhaoxin.com>
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        dmitry.baryshkov@linaro.org, Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+        Liao Chang <liaochang1@huawei.com>,
+        Todor Tomov <todor.too@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org,
+        error27@gmail.com, vegard.nossum@oracle.com
+References: <20230823194202.2280957-1-harshit.m.mogalapalli@oracle.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4/i6599i+BiB4VfE"
+        protocol="application/pgp-signature"; boundary="B0A59Lbk1gxNIIfK"
 Content-Disposition: inline
-In-Reply-To: <4b85bcdfb1d04ccba7988ed7931c33b7531a0a4c.1691999569.git.hanshu-oc@zhaoxin.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230823194202.2280957-1-harshit.m.mogalapalli@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,40 +76,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---4/i6599i+BiB4VfE
+--B0A59Lbk1gxNIIfK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Aug 23, 2023 at 12:42:02PM -0700, Harshit Mogalapalli wrote:
+> devm_clk_bulk_get_all() can return zero when no clocks are obtained.
+> Passing zero to dev_err_probe() is a success which is incorrect.
+>=20
+> Fixes: 605efbf43813 ("i2c: qcom-cci: Use dev_err_probe in probe function")
+> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+
+Applied to for-next, thanks!
 
 
-> +I2C/SMBUS ZHAOXIN DRIVER
-> +M:	Hans Hu <hanshu@zhaoxin.com>
-> +L:	linux-i2c@vger.kernel.org
-> +S:	Maintained
-> +W:	https://www.zhaoxin.com
-> +F:	drivers/i2c/busses/i2c-zhaoxin.c
-
-Are you open to maintain the viai2c core as well? If so, then I'd think
-adding another "F:"-entry here will do.
-
-
---4/i6599i+BiB4VfE
+--B0A59Lbk1gxNIIfK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTpCUEACgkQFA3kzBSg
-KbZ7Nw/9GwszpBjH+0zYQcnTygPRjGhjNm0eA5zwIflKDeE8+ojpfZFd2gjr7dOw
-k2g88DnC9I/Gg3FTEdJGQuNpu85ubMZHHGBFT0pzafq6hyFXPSAyhSwXf5GKin9i
-IaC7uUQ6yHr/hC5ZcMHrB5tClVZFcU7Mub7Vae8NZHCm9dhieO3vM/8zf5j8bNml
-IcE+HXUWn4h+yZ4Z+i9/17tgwkx/zTuPWXNLIBgzs03XjBsI1tqTas5Pdj2yDePv
-U3JSIyJF1xqxsyq/t7cPA3RT8jrF6Q4RbFluVEhr1A1jaV0O2eZRuoL3DXMUzUYa
-xSxuHBvRPddSlLSeHIoyBnRNrHkAZRt8EmpOl49yh8pgYB9KAjb/1Z0L7u2npiUS
-74Eq1dl8uRV0Uz3lXKn+2Yg3/hAE6Ni2dV6/ZNKtjrSxc6RJud+iQUHD7kEEj16Q
-tTcWPfcABQMPxn7nHrnnRToEQS8biFCBAJuyJFeJ9zF8hiiI+0W5fY0FsmUWn+33
-FRYWuNUsXxn/EhS0gWsHUC/qsXS6iUJrLPhk6Kvz3H032rUyxvVHeLrDvR9mXSsb
-B5MveY4SI4efSUuC6YiRc63WqNWhwWmQvObOC7p0f4qzRVO/ANkKdGJ9PvX6JOfT
-wPidHI+O0NmA7/9QN7Y4dEBzfrSuU9im8a9/pGVLIJ8sD+WGe0g=
-=4pAM
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTpChgACgkQFA3kzBSg
+KbYsYQ//fCeqqLuAljmXlXehorWuqtDXrAlPqj5kBBySFZEgZwvwZk8WtONlY6PL
+9I5SLVOwwUIHX7P5p9lrsN6E7dlVcSp5E6olJLV5fY/rANLgd6tLU9XbIvOig9zF
+D7atebwcLCRZuP407yt0OMPm8tf48KIAQBHeae5WreWnAdgDzARVFi8NrFrQI1oL
+NW7olTC76jtj9/9FGVAbvRAJsQU9nW/tV/ILS+S9rSqO1HLPfF2KXe5Ua6AAvOQy
+Y9vPkEWYsNMQO0vzoyFWem6cFxznzLRirtcv6R4DBrjmK64jivAYKeWtUt7i7tIY
+NsfFIKZBoMn+XxfGzogeib3ShdqUgFaNChwyh95wmG40HnIRHQn8fBdDzX9tJir8
+cYpnHS3zNY/iQh37uZRW+UZUvCR6VEUqev67LaFDm/4uRMAyKUUsVvWsizvMN/Ex
+7WOhzWMt/1M67pFBXDFRLssLTEJQ8qZPZDBhvr/97xr1xglGsR8+kLLLRssD52Sm
+PHuzPf7KCg/msJ1DJ9KzrBGoIPscpuM38aIleH0DLan8nql3zzCkK2OP3UmIrljh
+DMe+BN8NED12eFLkJWUr2oKaa3B28ux8FIUST7Fn24u5myNc6vVAeoBfbsjzcWTC
+HbPpPa+ylOSLBscEWEQR/GFW+z8qiYT7ai2yAQfXhBg8kDWEAWU=
+=F7WM
 -----END PGP SIGNATURE-----
 
---4/i6599i+BiB4VfE--
+--B0A59Lbk1gxNIIfK--
