@@ -2,68 +2,67 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702C178A026
-	for <lists+linux-i2c@lfdr.de>; Sun, 27 Aug 2023 18:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD44A78A029
+	for <lists+linux-i2c@lfdr.de>; Sun, 27 Aug 2023 18:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjH0QVZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 27 Aug 2023 12:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
+        id S229765AbjH0QWA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 27 Aug 2023 12:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbjH0QUy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 27 Aug 2023 12:20:54 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCBAF5
-        for <linux-i2c@vger.kernel.org>; Sun, 27 Aug 2023 09:20:51 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5236b2b4cdbso3332150a12.3
-        for <linux-i2c@vger.kernel.org>; Sun, 27 Aug 2023 09:20:51 -0700 (PDT)
+        with ESMTP id S229713AbjH0QVu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 27 Aug 2023 12:21:50 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D805CFE
+        for <linux-i2c@vger.kernel.org>; Sun, 27 Aug 2023 09:21:46 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-522dd6b6438so3330404a12.0
+        for <linux-i2c@vger.kernel.org>; Sun, 27 Aug 2023 09:21:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693153249; x=1693758049;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1693153305; x=1693758105;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=HWgIaaIOc149ue6GXXKVcAQfrTDNE1vHc1RbUyPnKBQ=;
-        b=mGZPkNqMnswb9CYve5V5dgjs3I3VAMPXECQXfnS++M5f3QBK4zGjOtEcUJSFnQFQ+N
-         SBZyMRjhgXxfKMCWgmt0+Bo/WKeA9KMdyFr4XOSjCSJlcdQrLNHtE8UiJCJh6fiJ5YK4
-         OASAoymHvMdl/SHKb7qvK2Ae7BlrB1FkhwMlNoqIMYxQ/o7tZJNNFPidjQct9YYMq2dw
-         c6G5ctSayq6A5pMJA2hXBbIgqfO21fOsMFU3S1AyXlG1RWVhSatUGuTvmIAA/ieUIZ1b
-         bBZ5ESPMWiADE5tcyukE6C3rvm4XszX5iKnZxTH30CDjqp1rOqa18fFO4VZdrVMaiObr
-         Riag==
+        bh=1kYabs9vUGaQTJJt3ZxESUsK/gDXfMSAFcFY8xzFlPM=;
+        b=IsC+KF0SvHD5bim+PhwQSfTd2/kLNUYnQmUliNenioQlAD/jleLuvsrp5enKu59mC6
+         Q5tkH3l0wG2WkPOEidMUdZmk7cNjuNuJB+Tp2O3I70XVWKhiOGLEMf9DD5PfqFjQlmUv
+         HKBw8M4QLpFrapX4YI/gDqmjRyFikuJOH8d5kifGA+MtT57sN6k6TjDnjSa+wKDs3UMS
+         AZ4i862+XXudw5GtnR8y9X8gWpskxJ/0GR2C4ITlvW8KsgZFxufGic/5dh4ziag6134I
+         YoR+uAdp1Qwe/orwvLy0+45UPY2/0auoG9CXywjcZA2KTSDbkA5QH6Cw3rTwxZaqpQjJ
+         WVUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693153249; x=1693758049;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1693153305; x=1693758105;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HWgIaaIOc149ue6GXXKVcAQfrTDNE1vHc1RbUyPnKBQ=;
-        b=MXMpp/wWVJncwsYNurpY7SBT72QHEPx+N4EuOqfZFnfjBDNWmzsJUU2zAQ8O56lkj3
-         1HduSGpoG1sCq8nVCILBOBRAQBeLIQ0ab4KZyP0VAz8iZ1UEHUF5zv2sd4KuehIfxD7m
-         dN/JATeif9UuGV5uU+DQPlSA4yvTHKDlIjtlhgd9QEpKfZiX8If1oRc/Lr9B1m6Bu21x
-         SofdJkOe+RuypFqS4YZtpEIhRmw2D6vubbeTqS2xDXxlHiWmrqZFQ5tPazTRz4VOpZ/G
-         uXumBDDeSHfIcWM2PWa6gH4mR7qRa0hCyhJculQSHbLL8c5dpFW3pd5mcu20cgXcH/xU
-         hTVA==
-X-Gm-Message-State: AOJu0YwR4ruWxVTkcCO6EKPncVKejSR12SjGVitW+NcbD46Rsi8X+QzG
-        xRKvSIVHRMeB04VEnLyHxr+KJ/Eb7UA=
-X-Google-Smtp-Source: AGHT+IHNGJeXfbFEbSRPQpgx65Ho++jqm+bNx9kvOrQZGuuLidw67D8Y8fepTv2vh7O0XIqvED6ZvA==
-X-Received: by 2002:aa7:d6d2:0:b0:523:2b8c:d901 with SMTP id x18-20020aa7d6d2000000b005232b8cd901mr17737265edr.10.1693153249190;
-        Sun, 27 Aug 2023 09:20:49 -0700 (PDT)
+        bh=1kYabs9vUGaQTJJt3ZxESUsK/gDXfMSAFcFY8xzFlPM=;
+        b=gerVSs0iHgMMnMYhZl4G5c7G3wiZYI9kFi7mhJthSGobocKhBP7X46W1ah/UyWO7Uy
+         1PsgvrijUUz3n5TjdRkonc9cEM93xxzqcOvGeNHkQtixR/WwZtPNjDvPSy5Tk5ja3/GQ
+         gmli0Ps1cN6WJWUcrayazlky9rVFgNf+n31zC8cZRE4DSJXxwSV/nGOAratNJhN6ZCTZ
+         Qyz1KMJfopOGrfdTRFlZa1uffGvkTjI0j+ShGjo+1OKXaito8pFDTMrMYhTXKaxzZXBk
+         dlQFU7+XvLlwdNAJ0UD25F8JYtff4E1Gk2Xy1/z0cmS/fQbd5CwWP/yDevMRsxmyflUk
+         QRZg==
+X-Gm-Message-State: AOJu0YwymPQOyJnaCv0gTCkubAHt7NdpY5hELJspKN9oTNzJ3u9rmLO4
+        TdlTGfgTDnTDhkpWEBll1R0WZcjbc6c=
+X-Google-Smtp-Source: AGHT+IFKI3FQdQicw5zfhdBfalKnAZLOqHXlOWCJ1xiebHM+zTLIkmfsJQn4YuXAnLiNYdWAhT/0ng==
+X-Received: by 2002:a05:6402:18b:b0:51e:53eb:88a3 with SMTP id r11-20020a056402018b00b0051e53eb88a3mr17801818edv.25.1693153305289;
+        Sun, 27 Aug 2023 09:21:45 -0700 (PDT)
 Received: from ?IPV6:2a01:c23:c0a4:3400:90f1:4994:ce26:fdf9? (dynamic-2a01-0c23-c0a4-3400-90f1-4994-ce26-fdf9.c23.pool.telefonica.de. [2a01:c23:c0a4:3400:90f1:4994:ce26:fdf9])
-        by smtp.googlemail.com with ESMTPSA id z8-20020aa7c648000000b0052a3ad836basm3450062edr.41.2023.08.27.09.20.48
+        by smtp.googlemail.com with ESMTPSA id e10-20020aa7d7ca000000b005256994e335sm3471728eds.92.2023.08.27.09.21.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Aug 2023 09:20:48 -0700 (PDT)
-Message-ID: <debeb057-1579-13f6-d2d7-bd81b0e012d2@gmail.com>
-Date:   Sun, 27 Aug 2023 18:20:46 +0200
+        Sun, 27 Aug 2023 09:21:44 -0700 (PDT)
+Message-ID: <e31596a9-2753-8528-9fed-5fb17de1d138@gmail.com>
+Date:   Sun, 27 Aug 2023 18:21:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH 1/4] i2c: i801: Use i2c_mark_adapter_suspended/resumed
-To:     Jean Delvare <jdelvare@suse.de>, Andi Shyti <andi.shyti@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-References: <c39c8371-5ab5-45f7-d3cf-39ea50de0afb@gmail.com>
- <a2cd5692-7a9e-7fef-6c09-6c694df1b23e@gmail.com>
- <20230614222439.i7uw3dai3why7bk2@intel.intel>
- <20230626192039.315cacce@endymion.delvare>
+Subject: Re: [PATCH 2/4] i2c: i801: Replace acpi_lock with I2C bus lock
 Content-Language: en-US
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-i2c@vger.kernel.org
+References: <c39c8371-5ab5-45f7-d3cf-39ea50de0afb@gmail.com>
+ <8f88906f-c7da-eb3a-2f14-0f4d46202517@gmail.com>
+ <20230626195951.1695cda6@endymion.delvare>
 From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <20230626192039.315cacce@endymion.delvare>
+In-Reply-To: <20230626195951.1695cda6@endymion.delvare>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,76 +75,92 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 26.06.2023 19:20, Jean Delvare wrote:
-> Hi Andi, Heiner,
+On 26.06.2023 19:59, Jean Delvare wrote:
+> Hi Heiner,
 > 
-> Adding Wolfram Sang who introduced the i2c_mark_adapter_suspended() API
-> originally.
-> 
-> On Thu, 15 Jun 2023 00:24:39 +0200, Andi Shyti wrote:
->> On Sat, Mar 04, 2023 at 10:31:23PM +0100, Heiner Kallweit wrote:
->>> When entering the shutdown/remove/suspend callbacks, at first we should
->>> ensure that transfers are finished and I2C core can't start further
->>> transfers. Use i2c_mark_adapter_suspended() for this purpose.
->>>
->>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->>> ---
->>>  drivers/i2c/busses/i2c-i801.c | 6 ++++++
->>>  1 file changed, 6 insertions(+)
->>>
->>> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
->>> index ac5326747..d6a0c3b53 100644
->>> --- a/drivers/i2c/busses/i2c-i801.c
->>> +++ b/drivers/i2c/busses/i2c-i801.c
->>> @@ -1773,6 +1773,8 @@ static void i801_remove(struct pci_dev *dev)
->>>  {
->>>  	struct i801_priv *priv = pci_get_drvdata(dev);
->>>  
->>> +	i2c_mark_adapter_suspended(&priv->adapter);
->>> +
->>>  	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
->>>  	i801_disable_host_notify(priv);
->>>  	i801_del_mux(priv);
->>> @@ -1796,6 +1798,8 @@ static void i801_shutdown(struct pci_dev *dev)
->>>  {
->>>  	struct i801_priv *priv = pci_get_drvdata(dev);
->>>  
->>> +	i2c_mark_adapter_suspended(&priv->adapter);
->>> +  
+> On Sat, 04 Mar 2023 22:33:05 +0100, Heiner Kallweit wrote:
+>> I2C core ensures in i2c_smbus_xfer() that the I2C bus lock is held when
+>> calling the smbus_xfer callback. That's i801_access() in our case.
+>> I think it's safe in general to assume that the I2C bus lock is held
+>> when the smbus_xfer callback is called.
+>> Therefore I see no need to define an own mutex.
 >>
->> is this really needed in the shutdown and remove function?
+>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>> ---
+>>  drivers/i2c/busses/i2c-i801.c | 14 ++++----------
+>>  1 file changed, 4 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+>> index d6a0c3b53..7641bd0ac 100644
+>> --- a/drivers/i2c/busses/i2c-i801.c
+>> +++ b/drivers/i2c/busses/i2c-i801.c
+>> @@ -289,10 +289,9 @@ struct i801_priv {
+>>  
+>>  	/*
+>>  	 * If set to true the host controller registers are reserved for
+>> -	 * ACPI AML use. Protected by acpi_lock.
+>> +	 * ACPI AML use.
+>>  	 */
+>>  	bool acpi_reserved;
+>> -	struct mutex acpi_lock;
+>>  };
+>>  
+>>  #define FEATURE_SMBUS_PEC	BIT(0)
+>> @@ -871,11 +870,8 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+>>  	int hwpec, ret;
+>>  	struct i801_priv *priv = i2c_get_adapdata(adap);
+>>  
+>> -	mutex_lock(&priv->acpi_lock);
+>> -	if (priv->acpi_reserved) {
+>> -		mutex_unlock(&priv->acpi_lock);
+>> +	if (priv->acpi_reserved)
+>>  		return -EBUSY;
+>> -	}
+>>  
+>>  	pm_runtime_get_sync(&priv->pci_dev->dev);
+>>  
+>> @@ -916,7 +912,6 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
+>>  
+>>  	pm_runtime_mark_last_busy(&priv->pci_dev->dev);
+>>  	pm_runtime_put_autosuspend(&priv->pci_dev->dev);
+>> -	mutex_unlock(&priv->acpi_lock);
+>>  	return ret;
+>>  }
+>>  
+>> @@ -1566,7 +1561,7 @@ i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bits,
+>>  	 * further access from the driver itself. This device is now owned
+>>  	 * by the system firmware.
+>>  	 */
+>> -	mutex_lock(&priv->acpi_lock);
+>> +	i2c_lock_bus(&priv->adapter, I2C_LOCK_SEGMENT);
+>>  
+>>  	if (!priv->acpi_reserved && i801_acpi_is_smbus_ioport(priv, address)) {
+>>  		priv->acpi_reserved = true;
+>> @@ -1586,7 +1581,7 @@ i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bits,
+>>  	else
+>>  		status = acpi_os_write_port(address, (u32)*value, bits);
+>>  
+>> -	mutex_unlock(&priv->acpi_lock);
+>> +	i2c_unlock_bus(&priv->adapter, I2C_LOCK_SEGMENT);
+>>  
+>>  	return status;
+>>  }
+>> @@ -1640,7 +1635,6 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>>  	priv->adapter.dev.parent = &dev->dev;
+>>  	ACPI_COMPANION_SET(&priv->adapter.dev, ACPI_COMPANION(&dev->dev));
+>>  	priv->adapter.retries = 3;
+>> -	mutex_init(&priv->acpi_lock);
+>>  
+>>  	priv->pci_dev = dev;
+>>  	priv->features = id->driver_data;
 > 
-> The very same question came to my mind. I would really expect the
-> driver core to do all the reference counting needed so that a device
-> can't possibly be removed when any of its children is still active. If
-> that's not the case then something is very wrong in the device driver
-> model itself, and I certainly hope that the proper fix wouldn't be
-> subsystem-specific and implemented in every device driver separately.
+> Looks reasonable, I also can't see any reason why that wouldn't work.
+> But locking and power management can be tricky of course. I'll test
+> this for some time, but I don't think my system actually suffers from
+> this ACPI resource conflict, so this most probably won't be testing
+> much in practice.
 > 
-> FWIW, I see 13 I2C bus drivers calling i2c_mark_adapter_suspended() at
-> the moment, and only one of them is calling it in shutdown
-> (i2c-qcom-geni). None of them is calling it in remove. If that's not
-> needed for other drivers then I can't see why that would be needed for
-> i2c-i801.
-> 
-> As far as the remove() path is concerned, my expectation is that if
-> everything is undone in the opposite way of the probe() path then
-> everything should be fine. It turns out this is not the case of the
-> current i2c-i801 driver. The original HSTCNT register value is being
-> restored too early in i801_remove(). I'm to blame for this, the bug was
-> introduced by commit 9b5bf5878138 ("i2c: i801: Restore INTREN on
-> unload") which is mine. This should be fixed separately before any
-> other change.
-> 
-I think there's a little bit more to be done for proper cleanup
-in reverse order in remove() and in the error path of probe().
-I'll come up with a patch.
+What's your opinion after more testing?
 
-> Once this is fixed, unless you are able to actually trigger a bug in
-> the remove() path, then I see no good reason to add
-> i2c_mark_adapter_suspended() to that code path.
-> 
-> For shutdown, I'm unsure. Wolfram, what's your take?
-> 
 > Thanks,
 
