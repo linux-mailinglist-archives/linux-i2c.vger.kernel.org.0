@@ -2,110 +2,114 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A1378A6A2
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Aug 2023 09:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0580078A6FF
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Aug 2023 10:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjH1Hhn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Aug 2023 03:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S229472AbjH1IER (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Aug 2023 04:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjH1HhN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Aug 2023 03:37:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6FBCC
-        for <linux-i2c@vger.kernel.org>; Mon, 28 Aug 2023 00:37:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8B5E62F76
-        for <linux-i2c@vger.kernel.org>; Mon, 28 Aug 2023 07:37:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA37BC433C7;
-        Mon, 28 Aug 2023 07:37:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693208230;
-        bh=qHeY0HopPO24zbqDOHchslSSm+an42hK4J3eN1odAfQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UDlwE7i6/AucfRCqQKs2xHumCH1btmA1bEzd13oD5sOzmrlsqX5g/r8lYheSUEPud
-         Bz0erUKtfndJren9tZxe3zz8PxkxQ5rkElVQvGxH/5JC8XJedVeOwQUXPJT5K/LKdm
-         TbvqrBCNEO2/3RHys2jm4YnRQZ9czapGWwSyCffnFaPUI/Ey2LcA9wp2aYOeqjUSbq
-         FlkOImCE5w2IQf3JugHCo9kjzwB80zPzZi3y8D/sgQnb0Iv6379U1LE0xIo2oIz6kl
-         OJDnTCsoL6M+nW36oQwwE9MyDmupNz036gOBdpjxBTCg8kqt89mQ2EGZPwgnFTzFzF
-         X26Sq+PZniDBA==
-Date:   Mon, 28 Aug 2023 09:37:07 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Hans Hu <HansHu-oc@zhaoxin.com>
-Cc:     andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
-        cobechen@zhaoxin.com, TonyWWang@zhaoxin.com
-Subject: Re: [PATCH v2 1/2] i2c: wmt: split out i2c-viai2c-common.{c,h}
-Message-ID: <ZOxOo+3j46gMmWaI@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Hans Hu <HansHu-oc@zhaoxin.com>, andi.shyti@kernel.org,
-        linux-i2c@vger.kernel.org, cobechen@zhaoxin.com,
-        TonyWWang@zhaoxin.com
-References: <cover.1691999569.git.hanshu-oc@zhaoxin.com>
- <fdd2968e0ae028ce3d4cf389e4e2d55a4641c0d7.1691999569.git.hanshu-oc@zhaoxin.com>
- <ZOkI62MZee+3HR6n@shikoro>
- <744e7a46-066f-738f-69cc-9f2374be2fba@zhaoxin.com>
- <ZOw3+3njP/p8Ned5@ninjato>
- <fa22abcd-c100-c633-4625-5a2324e3337f@zhaoxin.com>
+        with ESMTP id S229473AbjH1ID6 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Aug 2023 04:03:58 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AE5114;
+        Mon, 28 Aug 2023 01:03:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1693209835; x=1724745835;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=W6UvRcQNcknRhKMqAymfgYVMc/oAF9o4ms5wsMxD9pw=;
+  b=vogpT6sSKhUWe95dTItTx7+scjwl9ttkhf4gBCS79D2WpzqEYXL2xXIa
+   /Jw2FSZPerU9f88SfqoI8UtzNSI/XLxlUj8gtEwR3TuaU/DfO7i6LxFII
+   upeQNpUANmDkWthzQVN9rCQ3ql1QxqwEh4FAl6eOJDDYbIK/aV8SPPEBH
+   F0lTn0+atp+pF8VRPvQMsisEVfK8DldeB7/OAmWfrfZhIjrEn9uWSabL+
+   CsCeTaZmZ0lJz0sVtEb4E946GambkbbSwRUUpbV543o3Q7xOsczv6ZvKP
+   2OJU93Zdmvfct6eE991DT5AcH8UQEnj0sVNFqxl0gVPGyAMfKOOi1kUd/
+   g==;
+X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
+   d="scan'208";a="1641246"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Aug 2023 01:03:53 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 28 Aug 2023 01:03:24 -0700
+Received: from [10.159.245.205] (10.10.85.11) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Mon, 28 Aug 2023 01:03:23 -0700
+Message-ID: <5c680292-bcfe-881a-1c23-299c05b377ee@microchip.com>
+Date:   Mon, 28 Aug 2023 10:03:14 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+MG/ougYw74QpONF"
-Content-Disposition: inline
-In-Reply-To: <fa22abcd-c100-c633-4625-5a2324e3337f@zhaoxin.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH RESEND] i2c: at91: Use dev_err_probe() instead of
+ dev_err()
+Content-Language: en-US, fr-FR
+To:     Yann Sionneau <yann@sionneau.net>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@tuxon.dev>
+CC:     <linux-i2c@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230825143234.38336-1-yann@sionneau.net>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20230825143234.38336-1-yann@sionneau.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On 25/08/2023 at 16:32, Yann Sionneau wrote:
+> Change
+> if (IS_ERR(x)) { dev_err(...); return PTR_ERR(x); }
+> into
+> return dev_err_probe()
+> 
+> Also, return the correct error instead of hardcoding -ENODEV
+> This change has also the advantage of handling the -EPROBE_DEFER situation.
 
---+MG/ougYw74QpONF
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Is it found using a tool like Coccinelle or you just ran into it and 
+figured out it could be good to change?
 
+Regards,
+   Nicolas
 
-> i2c-zhaoxin-objs:=3D i2c-viai2c-common.o i2c-zhaoxin-plt.o
-> obj-$(CONFIG_I2C_ZHAOXIN)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 +=3D i2c-zh=
-aoxin.o
+> Signed-off-by: Yann Sionneau <yann@sionneau.net>
+> ---
+>   drivers/i2c/busses/i2c-at91-core.c | 7 +++----
+>   1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-at91-core.c b/drivers/i2c/busses/i2c-at91-core.c
+> index 05ad3bc3578a..b7bc17b0e5f0 100644
+> --- a/drivers/i2c/busses/i2c-at91-core.c
+> +++ b/drivers/i2c/busses/i2c-at91-core.c
+> @@ -227,10 +227,9 @@ static int at91_twi_probe(struct platform_device *pdev)
+>          platform_set_drvdata(pdev, dev);
+> 
+>          dev->clk = devm_clk_get(dev->dev, NULL);
+> -       if (IS_ERR(dev->clk)) {
+> -               dev_err(dev->dev, "no clock defined\n");
+> -               return -ENODEV;
+> -       }
+> +       if (IS_ERR(dev->clk))
+> +               return dev_err_probe(dev->dev, PTR_ERR(dev->clk), "no clock defined\n");
+> +
+>          clk_prepare_enable(dev->clk);
+> 
+>          snprintf(dev->adapter.name, sizeof(dev->adapter.name), "AT91");
+> --
+> 2.34.1
+> 
 
-Yes, exactly!
-
-> i2c-wmt-objs:=3D i2c-viai2c-common.o i2c-wmt-plt.o
-> obj-$(CONFIG_I2C_WMT)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 +=3D i2c-wmt.o
->=20
-> But I'm not sure which way is more appropriate:
-> change file name i2c-wmt.c to i2c-wmt-plt.c.(I prefer this)
-
-I prefer this, too!
-
-Thank you and happy hacking!
-
-
---+MG/ougYw74QpONF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTsTp8ACgkQFA3kzBSg
-KbYPKg/8CEiQScs8hka6kaMQinhk59ycvL/yL1x1FTiBFwnaSWNUgqlMEwgr5jhw
-jZ8fKcnMPXdNv+zEte3KKRaQnmfjl+puMXusHaQNGL+1ThsQmQOpOMV3NF4+n9Tw
-CchuvaawQiN7LoiF5w7iyxNo9DxkKMkNYfIhYKeww/xuJLanoILj8yFKTsHi7Wwm
-oEPRf9RF6RkTC/5HD++jXu5De8VRa2Kxb6PinkY0BhcOMmkiRiL1dgyuvKA+h06p
-Qpkb4qCD9Bs0Bo5eFVV3+OJ8eWJlfbm+kA2/B6AgHJ9hKw8qhg2KIzIyVUp+me8I
-UXu4tXaN5J0nEInVnvV4rr20ibceostzxarSczVM10LQOkHBGxNjCa4eH0H42QkG
-lj1kEatGU67PTFQxRA3hCBX+0Kp+kMUyhSXW9WC5hd/Mk5ha03jvpvEP+0GN3LhD
-bmVzm3QVCVvbwZzZcQGwiJr7qztrBCKD55yelV1WMBfih9laCM4L6exekb2GVGx2
-VFVQrSxVBL06tw2w9N5VOxfe0QBcoR7/pblg6IAmtR7Cx+YAPQAOXMfo5I7zpx+d
-UXEW9wv05k1QFRfsFjNYDpPO83DDthwQSm8NcSd8MTOhCAs7L/jt74qCezgxPWOk
-toUo/jicoFsNzBHOEDZwr5EeemFy/86KdPTVcMllB45MXijry88=
-=+Gal
------END PGP SIGNATURE-----
-
---+MG/ougYw74QpONF--
