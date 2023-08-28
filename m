@@ -2,88 +2,65 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9BF78A675
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Aug 2023 09:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894A978A699
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Aug 2023 09:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjH1H2A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Aug 2023 03:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S229758AbjH1HhF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Aug 2023 03:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjH1H1g (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Aug 2023 03:27:36 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CC511B
-        for <linux-i2c@vger.kernel.org>; Mon, 28 Aug 2023 00:27:32 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id 71dfb90a1353d-48d0dbf4ec5so940183e0c.2
-        for <linux-i2c@vger.kernel.org>; Mon, 28 Aug 2023 00:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1693207652; x=1693812452;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3aAdLCo7+5NsyJy4woVDAtzriNe/Ar/+QNUBkrNNwNk=;
-        b=sNMl2UDUX3JowQ3/XIWffWmHya5JO9YpTKjoq3J4anjxUN2AynbD5fBoqugGvh7GaI
-         Up1+bihyzpGLtim8dOksR1ahR/JnBOrqoI8+RF5JZVW6Ojhd4QJQ3tngsThX7MgonxsZ
-         jxAvSFq5qo2HKZ3lRXBsrvAUpu63EwkaMRLRTxUgB7srNhNWLk1nUyxhzzx8nojSE9kZ
-         6iotrIbLyN07GquyYlSi2FIxqX6NH+JlSpbRjB7+s0q8rwuyrDew2QkV5Vrr+9dl38OR
-         pyRvmeyGRn3dStLTw44AhUQPVJlrdBtMlBnyVaGR2eWyUvq1NiSTbWgPuz/HF9Vb6SZD
-         MokQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693207652; x=1693812452;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3aAdLCo7+5NsyJy4woVDAtzriNe/Ar/+QNUBkrNNwNk=;
-        b=AkfyKCYHdhldbrOcvYiV9eIFeWlw1dRF68mVxLWkDtPpgHPuj4y5nHq5j51/wndPec
-         qYh+528NXDjrF9Ukr++pehNNYAzUWxtTfEKepSAXag5Uyzj+/fu2OJEO8IVad03WN4Gw
-         /Jr0CI66khWg8aHI/01f7hc4KVb1awPbjIjbOm5D45gRT0Q22WgVu1+yLEK5WdtPKt1B
-         Pi+frR7f/+eWWGfMpOJAYTjRXOJnMDv1v6n3PluGa9qL+SuMcPlf5rztUr9DhN9m296F
-         cAzNFx2t2alQEEJDY1p6WBSWoEcCRtgWXIA49BxJdPYmKRjSZ82WmA1TfxcbzPZZoLhy
-         ZSAQ==
-X-Gm-Message-State: AOJu0YwHKes8k2MpTJNACvH+nYbBJE7WacpJ5GSHsPDiMpMm6iGzwp43
-        ynCHWOw+Tstf3CyQEa1UDgQduNtRYIomEX/MUSmbm3nNSwPJAyTM
-X-Google-Smtp-Source: AGHT+IEJylB1pZZ8U3hYbqpKHzzVTBvaaWl9vXTK7SDgTsScgcGSwsEgavbn7vGuUKghrUmhND4cgC8KZjPVxRypeBU=
-X-Received: by 2002:a1f:ea84:0:b0:48d:3933:f545 with SMTP id
- i126-20020a1fea84000000b0048d3933f545mr13641569vkh.12.1693207651895; Mon, 28
- Aug 2023 00:27:31 -0700 (PDT)
+        with ESMTP id S229823AbjH1Hgy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Aug 2023 03:36:54 -0400
+X-Greylist: delayed 372 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Aug 2023 00:36:50 PDT
+Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1073F9
+        for <linux-i2c@vger.kernel.org>; Mon, 28 Aug 2023 00:36:50 -0700 (PDT)
+Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
+        id 0BF8749984; Mon, 28 Aug 2023 07:30:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
+        s=mail; t=1693207837;
+        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
+        h=Date:From:To:Subject:From;
+        b=qFhcTSeBGV/VsrzibywgoC7bK6sav1sa5CovSnaC7yFQllbCXnqS9rgzgySFFUYF7
+         WNovWxOL/Ytug3Je1QMiGHA3yLgUxDiy7fCdMqs++iSo+Qrh7oJxWya8s5qfFepBTt
+         01nc5VYbBk/wkVkIFBKs7A6+YsqjSyo3j6XSEIl32kOwnYBLbDVskO9W9GVoaItoNS
+         UHzw8lVANWgjlMcCzmuhUtUvV38esX35p4gM89VJ/ActMtPwmWf41xhyf+oswaQqGt
+         b5e2+4G9+7hpjnuF9hSa7oqmKeBB31Tj3tjztBfTfB3b+voF1QK0Cv1H8qtmdkVakZ
+         3EihoZaifbmTw==
+Received: by mail.profitpathwaygo.com for <linux-i2c@vger.kernel.org>; Mon, 28 Aug 2023 07:30:28 GMT
+Message-ID: <20230828064500-0.1.1e.dc2o.0.c8cdc24doj@profitpathwaygo.com>
+Date:   Mon, 28 Aug 2023 07:30:28 GMT
+From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
+To:     <linux-i2c@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
+X-Mailer: mail.profitpathwaygo.com
 MIME-Version: 1.0
-References: <1693091643-20867-1-git-send-email-wentong.wu@intel.com> <1693091643-20867-5-git-send-email-wentong.wu@intel.com>
-In-Reply-To: <1693091643-20867-5-git-send-email-wentong.wu@intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 28 Aug 2023 09:27:21 +0200
-Message-ID: <CAMRc=MdfUuq3OePe9suXpFnE7T+A8_MYZmFX8Q3rHA4b4mYnFw@mail.gmail.com>
-Subject: Re: [PATCH v10 4/4] gpio: update Intel LJCA USB GPIO driver
-To:     Wentong Wu <wentong.wu@intel.com>
-Cc:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
-        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
-        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
-        maz@kernel.org, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
-        sakari.ailus@linux.intel.com, srinivas.pandruvada@intel.com,
-        zhifeng.wang@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Sun, Aug 27, 2023 at 1:15=E2=80=AFAM Wentong Wu <wentong.wu@intel.com> w=
-rote:
->
-> This driver communicate with LJCA GPIO module with specific
-> protocol through interfaces exported by LJCA USB driver.
-> Update the driver according to LJCA USB driver's changes.
->
-> Signed-off-by: Wentong Wu <wentong.wu@intel.com>
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
+Dzie=C5=84 dobry,
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
+
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+
+
+Pozdrawiam serdecznie
+Adam Charachuta
