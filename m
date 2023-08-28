@@ -2,105 +2,88 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D0278A669
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Aug 2023 09:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9BF78A675
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Aug 2023 09:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjH1HZt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Aug 2023 03:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
+        id S229483AbjH1H2A (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Aug 2023 03:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjH1HZU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Aug 2023 03:25:20 -0400
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C8AF1
-        for <linux-i2c@vger.kernel.org>; Mon, 28 Aug 2023 00:25:16 -0700 (PDT)
-X-ASG-Debug-ID: 1693207514-1eb14e751404de0001-PT6Irj
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx2.zhaoxin.com with ESMTP id EApGS2EddAhEKoyK (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 28 Aug 2023 15:25:14 +0800 (CST)
-X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 28 Aug
- 2023 15:25:14 +0800
-Received: from [10.28.66.68] (10.28.66.68) by ZXBJMBX03.zhaoxin.com
- (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 28 Aug
- 2023 15:25:13 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Message-ID: <fa22abcd-c100-c633-4625-5a2324e3337f@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.66.68
-Date:   Mon, 28 Aug 2023 15:25:11 +0800
+        with ESMTP id S229766AbjH1H1g (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Aug 2023 03:27:36 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CC511B
+        for <linux-i2c@vger.kernel.org>; Mon, 28 Aug 2023 00:27:32 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id 71dfb90a1353d-48d0dbf4ec5so940183e0c.2
+        for <linux-i2c@vger.kernel.org>; Mon, 28 Aug 2023 00:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1693207652; x=1693812452;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3aAdLCo7+5NsyJy4woVDAtzriNe/Ar/+QNUBkrNNwNk=;
+        b=sNMl2UDUX3JowQ3/XIWffWmHya5JO9YpTKjoq3J4anjxUN2AynbD5fBoqugGvh7GaI
+         Up1+bihyzpGLtim8dOksR1ahR/JnBOrqoI8+RF5JZVW6Ojhd4QJQ3tngsThX7MgonxsZ
+         jxAvSFq5qo2HKZ3lRXBsrvAUpu63EwkaMRLRTxUgB7srNhNWLk1nUyxhzzx8nojSE9kZ
+         6iotrIbLyN07GquyYlSi2FIxqX6NH+JlSpbRjB7+s0q8rwuyrDew2QkV5Vrr+9dl38OR
+         pyRvmeyGRn3dStLTw44AhUQPVJlrdBtMlBnyVaGR2eWyUvq1NiSTbWgPuz/HF9Vb6SZD
+         MokQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693207652; x=1693812452;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3aAdLCo7+5NsyJy4woVDAtzriNe/Ar/+QNUBkrNNwNk=;
+        b=AkfyKCYHdhldbrOcvYiV9eIFeWlw1dRF68mVxLWkDtPpgHPuj4y5nHq5j51/wndPec
+         qYh+528NXDjrF9Ukr++pehNNYAzUWxtTfEKepSAXag5Uyzj+/fu2OJEO8IVad03WN4Gw
+         /Jr0CI66khWg8aHI/01f7hc4KVb1awPbjIjbOm5D45gRT0Q22WgVu1+yLEK5WdtPKt1B
+         Pi+frR7f/+eWWGfMpOJAYTjRXOJnMDv1v6n3PluGa9qL+SuMcPlf5rztUr9DhN9m296F
+         cAzNFx2t2alQEEJDY1p6WBSWoEcCRtgWXIA49BxJdPYmKRjSZ82WmA1TfxcbzPZZoLhy
+         ZSAQ==
+X-Gm-Message-State: AOJu0YwHKes8k2MpTJNACvH+nYbBJE7WacpJ5GSHsPDiMpMm6iGzwp43
+        ynCHWOw+Tstf3CyQEa1UDgQduNtRYIomEX/MUSmbm3nNSwPJAyTM
+X-Google-Smtp-Source: AGHT+IEJylB1pZZ8U3hYbqpKHzzVTBvaaWl9vXTK7SDgTsScgcGSwsEgavbn7vGuUKghrUmhND4cgC8KZjPVxRypeBU=
+X-Received: by 2002:a1f:ea84:0:b0:48d:3933:f545 with SMTP id
+ i126-20020a1fea84000000b0048d3933f545mr13641569vkh.12.1693207651895; Mon, 28
+ Aug 2023 00:27:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 1/2] i2c: wmt: split out i2c-viai2c-common.{c,h}
-To:     Wolfram Sang <wsa@kernel.org>, <andi.shyti@kernel.org>,
-        <linux-i2c@vger.kernel.org>, <cobechen@zhaoxin.com>,
-        <TonyWWang@zhaoxin.com>
-X-ASG-Orig-Subj: Re: [PATCH v2 1/2] i2c: wmt: split out i2c-viai2c-common.{c,h}
-References: <cover.1691999569.git.hanshu-oc@zhaoxin.com>
- <fdd2968e0ae028ce3d4cf389e4e2d55a4641c0d7.1691999569.git.hanshu-oc@zhaoxin.com>
- <ZOkI62MZee+3HR6n@shikoro> <744e7a46-066f-738f-69cc-9f2374be2fba@zhaoxin.com>
- <ZOw3+3njP/p8Ned5@ninjato>
-Content-Language: en-US
-From:   Hans Hu <HansHu-oc@zhaoxin.com>
-In-Reply-To: <ZOw3+3njP/p8Ned5@ninjato>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.28.66.68]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- ZXBJMBX03.zhaoxin.com (10.29.252.7)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1693207514
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1368
-X-Barracuda-BRTS-Status: 0
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.113340
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1693091643-20867-1-git-send-email-wentong.wu@intel.com> <1693091643-20867-5-git-send-email-wentong.wu@intel.com>
+In-Reply-To: <1693091643-20867-5-git-send-email-wentong.wu@intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 28 Aug 2023 09:27:21 +0200
+Message-ID: <CAMRc=MdfUuq3OePe9suXpFnE7T+A8_MYZmFX8Q3rHA4b4mYnFw@mail.gmail.com>
+Subject: Re: [PATCH v10 4/4] gpio: update Intel LJCA USB GPIO driver
+To:     Wentong Wu <wentong.wu@intel.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        maz@kernel.org, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, srinivas.pandruvada@intel.com,
+        zhifeng.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
-On 2023/8/28 14:00, Wolfram Sang wrote:
->> 1. I checked the MAINTAINERS section related to ARM/VT8500,
->> Found that the entire ARM/VT8500 ARCHITECTURE is currently
->> unmaintained, maybe one day it will be removed from the kernel.
->> So I think it might be better as a separate module.
-> But even if we remove the arch, we will not remove the viai2c core,
-> right? We just remove the Makefile entry for WMT. And your driver will
-> still link two object files into one kernel object.
+On Sun, Aug 27, 2023 at 1:15=E2=80=AFAM Wentong Wu <wentong.wu@intel.com> w=
+rote:
 >
->> 2. In addition, if not separated from wmt, the driver would
->> become a bit confusing and difficult to maintain.
-> Ah, maybe this is the misunderstanding. The seperation from WMT is very
-> good! It is just that the new viai2c core shouldn't be a module itself
-> but only a seperate object file which gets linked into your driver.
-> Please check the octeon or pasemi driver for an example.
+> This driver communicate with LJCA GPIO module with specific
+> protocol through interfaces exported by LJCA USB driver.
+> Update the driver according to LJCA USB driver's changes.
 >
+> Signed-off-by: Wentong Wu <wentong.wu@intel.com>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
 
-Sorry about the misunderstanding, will change to like below:
-
-i2c-zhaoxin-objs:= i2c-viai2c-common.o i2c-zhaoxin-plt.o
-obj-$(CONFIG_I2C_ZHAOXIN)       += i2c-zhaoxin.o
-i2c-wmt-objs:= i2c-viai2c-common.o i2c-wmt-plt.o
-obj-$(CONFIG_I2C_WMT)           += i2c-wmt.o
-
-But I'm not sure which way is more appropriate:
-change file name i2c-wmt.c to i2c-wmt-plt.c.(I prefer this)
-or
-change config name CONFIG_I2C_WMT to CONFIG_I2C_WMT_PLT.
-
-Hans
-
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
