@@ -2,70 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AED78A15F
-	for <lists+linux-i2c@lfdr.de>; Sun, 27 Aug 2023 22:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DC978A4AD
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Aug 2023 04:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjH0U0m (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 27 Aug 2023 16:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
+        id S229533AbjH1Cmw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 27 Aug 2023 22:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjH0U0L (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 27 Aug 2023 16:26:11 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0802128
-        for <linux-i2c@vger.kernel.org>; Sun, 27 Aug 2023 13:26:08 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-99c1c66876aso320903966b.2
-        for <linux-i2c@vger.kernel.org>; Sun, 27 Aug 2023 13:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693167967; x=1693772767;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YTmvATT/UtEXUK1ImZOjKSkY8ri0j8jCjWUi3tVfSes=;
-        b=soNTpyGsglnWViIPlxTzT6Rsf53/QnXOtR9G6y1s7Rsm+X+iGTshUUc5i+h93BvPCM
-         xia2aYRKuJ3cvTlko6N2RHwEg0x4SNzMnbgCktxgRi9s6C/mrB/356jAqEx+goi3l8Eo
-         yUEhRGeY6RjHDgtR/Qf0x73B4kEM6neQDb85nAPByNCqJ0pXlXl+Zm7EdxcIKi4/V89i
-         8lGnkUfAx2271mU96Ul86YQv0qZae+C5tF3s9QZ8DYOoG3WIYXRzp3dVpEu9r7lychWy
-         HwCDTe4ULPixrE43Zs2GjYLDxjJIER66/kifkZlDSbdWBiwMu5kn3B7T1ZY2h2t9I1y/
-         oxbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693167967; x=1693772767;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YTmvATT/UtEXUK1ImZOjKSkY8ri0j8jCjWUi3tVfSes=;
-        b=MVkBzD7jWGKnOsYJiIIi3JZEwqVlABxM5TO5EELOrlb3A3PQl8btRgWJwZlaT8tdXM
-         VLXJvG76mYyQFIHkNSlKQsKiRf6cH+OHXIot8nY5GpXi6D487UvpVO+jehb4XndCQJwU
-         Sg4hvhShtqaLN5hvRtHk04lEeKE9DUqbDpVEJcWFMr52972BHL1sVTW3XCD8ORynUzP3
-         Os3lfmhpkMDQ32oarJRH1QY7VjBv5Der0oWvho00qZ1bCJERHVLtlNDa/UurV+DTulM+
-         TmX1VFvMQx3X6gkKmBtDUzXfzF2kYziHhiVm6Ad5/AjL2Cw0tyXMWz0v3yIWx68p/bMN
-         DuFA==
-X-Gm-Message-State: AOJu0YwW0snStJe6+vCv7rlMzT9f6gp0MumuFWe/SEaPYGffxLmC2CDo
-        yC4YH46pGYjnRt6kfKdhGGo=
-X-Google-Smtp-Source: AGHT+IHwGhHR81vicU2BR1PXIuY1sy+QlFaea4lmPlZ1MthjNwyJEhjWS9HBuwFg/f0zGyaREVFJdg==
-X-Received: by 2002:a17:906:19:b0:9a1:ddb9:6550 with SMTP id 25-20020a170906001900b009a1ddb96550mr10727565eja.52.1693167967031;
-        Sun, 27 Aug 2023 13:26:07 -0700 (PDT)
-Received: from ?IPV6:2a01:c23:c0a4:3400:90f1:4994:ce26:fdf9? (dynamic-2a01-0c23-c0a4-3400-90f1-4994-ce26-fdf9.c23.pool.telefonica.de. [2a01:c23:c0a4:3400:90f1:4994:ce26:fdf9])
-        by smtp.googlemail.com with ESMTPSA id z21-20020a1709064e1500b0098f99048053sm3845768eju.148.2023.08.27.13.26.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Aug 2023 13:26:06 -0700 (PDT)
-Message-ID: <07386d35-0f9f-bcd7-185c-d8eed60fc794@gmail.com>
-Date:   Sun, 27 Aug 2023 22:26:05 +0200
+        with ESMTP id S230109AbjH1Cmq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 27 Aug 2023 22:42:46 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BD2107
+        for <linux-i2c@vger.kernel.org>; Sun, 27 Aug 2023 19:42:42 -0700 (PDT)
+X-ASG-Debug-ID: 1693190560-1eb14e751404710001-PT6Irj
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id 3931MwTV5SYwF9CT (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 28 Aug 2023 10:42:40 +0800 (CST)
+X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 28 Aug
+ 2023 10:42:40 +0800
+Received: from [10.28.66.68] (10.28.66.68) by ZXBJMBX03.zhaoxin.com
+ (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 28 Aug
+ 2023 10:42:38 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Message-ID: <744e7a46-066f-738f-69cc-9f2374be2fba@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.66.68
+Date:   Mon, 28 Aug 2023 10:42:36 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 1/2] i2c: wmt: split out i2c-viai2c-common.{c,h}
+To:     Wolfram Sang <wsa@kernel.org>, <andi.shyti@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <cobechen@zhaoxin.com>,
+        <TonyWWang@zhaoxin.com>
+X-ASG-Orig-Subj: Re: [PATCH v2 1/2] i2c: wmt: split out i2c-viai2c-common.{c,h}
+References: <cover.1691999569.git.hanshu-oc@zhaoxin.com>
+ <fdd2968e0ae028ce3d4cf389e4e2d55a4641c0d7.1691999569.git.hanshu-oc@zhaoxin.com>
+ <ZOkI62MZee+3HR6n@shikoro>
 Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.com>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] i2c: i801: fix cleanup code in remove() and error path of
- probe()
-Content-Type: text/plain; charset=UTF-8
+From:   Hans Hu <HansHu-oc@zhaoxin.com>
+In-Reply-To: <ZOkI62MZee+3HR6n@shikoro>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Originating-IP: [10.28.66.68]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ ZXBJMBX03.zhaoxin.com (10.29.252.7)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1693190560
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 1729
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.113330
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,63 +72,44 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Jean pointed out that the referenced patch resulted in the remove()
-path not having the reverse order of calls in probe(). I think there's
-more to be done to ensure proper cleanup.
-Especially cleanup in the probe() error path has to be extended.
-Not every step there may be strictly needed, but it's in line with
-remove() now.
 
-Fixes: 9b5bf5878138 ("i2c: i801: Restore INTREN on unload")
-Cc: stable@vger.kernel.org
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/i2c/busses/i2c-i801.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 73ae06432..7a0ccc584 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1754,6 +1754,9 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		"SMBus I801 adapter at %04lx", priv->smba);
- 	err = i2c_add_adapter(&priv->adapter);
- 	if (err) {
-+		platform_device_unregister(priv->tco_pdev);
-+		outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
-+		pci_write_config_byte(dev, SMBHSTCFG, priv->original_hstcfg);
- 		i801_acpi_remove(priv);
- 		return err;
- 	}
-@@ -1779,14 +1782,13 @@ static void i801_remove(struct pci_dev *dev)
- {
- 	struct i801_priv *priv = pci_get_drvdata(dev);
- 
--	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
--	i801_disable_host_notify(priv);
- 	i801_del_mux(priv);
-+	i801_disable_host_notify(priv);
- 	i2c_del_adapter(&priv->adapter);
--	i801_acpi_remove(priv);
--	pci_write_config_byte(dev, SMBHSTCFG, priv->original_hstcfg);
--
- 	platform_device_unregister(priv->tco_pdev);
-+	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
-+	pci_write_config_byte(dev, SMBHSTCFG, priv->original_hstcfg);
-+	i801_acpi_remove(priv);
- 
- 	/* if acpi_reserved is set then usage_count is incremented already */
- 	if (!priv->acpi_reserved)
-@@ -1803,8 +1805,8 @@ static void i801_shutdown(struct pci_dev *dev)
- 	struct i801_priv *priv = pci_get_drvdata(dev);
- 
- 	/* Restore config registers to avoid hard hang on some systems */
--	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
- 	i801_disable_host_notify(priv);
-+	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
- 	pci_write_config_byte(dev, SMBHSTCFG, priv->original_hstcfg);
- }
- 
--- 
-2.42.0
-
+On 2023/8/26 04:02, Wolfram Sang wrote:
+> Hi!
+>
+> first of all, thank you for reworking your driver to share common code
+> with the WMT driver. This effort is much appreciated and we are close to
+> go, I think. But some remarks.
+>
+>> +config I2C_VIAI2C_COMMON
+>> +	tristate
+>> +
+>>   config I2C_WMT
+>>   	tristate "Wondermedia WM8xxx SoC I2C bus support"
+>>   	depends on ARCH_VT8500 || COMPILE_TEST
+>> +	select I2C_VIAI2C_COMMON
+>>   	help
+>>   	  Say yes if you want to support the I2C bus on Wondermedia 8xxx-series
+>>   	  SoCs.
+>> diff --git a/drivers/i2c/busses/Makefile b/drivers/i2c/busses/Makefile
+>> index af56fe2c75c0..b7e20c3531b5 100644
+>> --- a/drivers/i2c/busses/Makefile
+>> +++ b/drivers/i2c/busses/Makefile
+>> @@ -120,6 +120,7 @@ obj-$(CONFIG_I2C_TEGRA_BPMP)	+= i2c-tegra-bpmp.o
+>>   obj-$(CONFIG_I2C_UNIPHIER)	+= i2c-uniphier.o
+>>   obj-$(CONFIG_I2C_UNIPHIER_F)	+= i2c-uniphier-f.o
+>>   obj-$(CONFIG_I2C_VERSATILE)	+= i2c-versatile.o
+>> +obj-$(CONFIG_I2C_VIAI2C_COMMON)	+= i2c-viai2c-common.o
+>>   obj-$(CONFIG_I2C_WMT)		+= i2c-wmt.o
+>>   i2c-octeon-objs := i2c-octeon-core.o i2c-octeon-platdrv.o
+>>   obj-$(CONFIG_I2C_OCTEON)	+= i2c-octeon.o
+> I'd prefer to link the core object to the driver object like pasemi or
+> octeon do. Or is there an argument for having a seperate module?
+There are two main reasons:
+1. I checked the MAINTAINERS section related to ARM/VT8500,
+Found that the entire ARM/VT8500 ARCHITECTURE is currently
+unmaintained, maybe one day it will be removed from the kernel.
+So I think it might be better as a separate module.
+2. In addition, if not separated from wmt, the driver would
+become a bit confusing and difficult to maintain.
+> Regards!
+>
