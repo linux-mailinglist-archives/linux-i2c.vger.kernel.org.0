@@ -2,158 +2,163 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93ABE78B145
-	for <lists+linux-i2c@lfdr.de>; Mon, 28 Aug 2023 15:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6721E78B1CB
+	for <lists+linux-i2c@lfdr.de>; Mon, 28 Aug 2023 15:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbjH1NBc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Aug 2023 09:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
+        id S229848AbjH1N14 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Aug 2023 09:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232685AbjH1NB1 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Aug 2023 09:01:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5490211A;
-        Mon, 28 Aug 2023 06:01:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S231730AbjH1N1w (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Aug 2023 09:27:52 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD81B9
+        for <linux-i2c@vger.kernel.org>; Mon, 28 Aug 2023 06:27:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E26FB6144F;
-        Mon, 28 Aug 2023 13:01:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11F22C433CA;
-        Mon, 28 Aug 2023 13:01:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693227683;
-        bh=YwWf+69ptq1lyMZ3WehfZU4zX7mpITK5ckcA15GNDIE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Aw0e7QTd83GlVDwR5IACmbCyziwaRoRDSDYLhZsN+exmsOIzzc8nZiMooYuvd4z7b
-         aHn8TNqW/QFw3zqIU/cNFpmaol/dnQNV9WU0FSKQaFGsDJrF60rjEhWYz+9HJsPD5l
-         Ne94NGEkGIWwisddBtA3tuAO1OaCbTyEs1fkB1tunHO4PssYz4mDIHAPU98xKGtJVl
-         Iu6IEvwvfhP/2LOs0qE6TrskpJ3E6KevDF7aeSj7SgsFAjRw2i0HQrlBNqeYn1IaBk
-         3jq4ZTrx0fTHRrFPRhZuV+3HJmWRN3+afF+LvDb56RG51ElppMtAVVHvLTO6JQca02
-         Cdpes2R/2GQJQ==
-Date:   Mon, 28 Aug 2023 14:01:41 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct
- bus_type
-Message-ID: <20230828140141.220732e0@jic23-huawei>
-In-Reply-To: <CAMuHMdU6LhvnZ5FE_3BxyH7reVi69Rjcircquk=jYZ6-j3cqug@mail.gmail.com>
-References: <20230805174036.129ffbc2@jic23-huawei>
-        <OS0PR01MB59220491C7C8AA40BEFAAD82860EA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-        <20230806142950.6c409600@jic23-huawei>
-        <ZNEFjyAloqlkMWn7@smile.fi.intel.com>
-        <ZNFV+C1HCIRJpbdC@google.com>
-        <ZNIyrG/2h/PeS9Oz@smile.fi.intel.com>
-        <20230809182551.7eca502e@jic23-huawei>
-        <OS0PR01MB59221A1ADB67E96E9E39D0198613A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-        <ZNT+NY99n7y3abwa@smile.fi.intel.com>
-        <OS0PR01MB5922DD3C809B78F1E9C5949B8610A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-        <ZNZF6cjx5N+ZsIJx@smile.fi.intel.com>
-        <OS0PR01MB5922E09340CDCFF54A9A6CBA8610A@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-        <CAMuHMdU6LhvnZ5FE_3BxyH7reVi69Rjcircquk=jYZ6-j3cqug@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 27CB121AC2;
+        Mon, 28 Aug 2023 13:27:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1693229269; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2K0p3BnuN+l0KiyLXRdBzW5wUC2PRxI+ujhFg3Eakjo=;
+        b=D9te/xBVdigAmWnb56w4HawckgEf5bq4dIAOqur+WFWYtKwmTKD7PPBo4hpVaai4ihV9WL
+        P2LyEfPQ9X7iZYnGfdcUbta0TOB+pgn53NPbhY/9pV4GfSdaAguHpG4BItEciYNr9G1XxO
+        FKMedRe86EbqJMU2foH6k877tDGS9VQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1693229269;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2K0p3BnuN+l0KiyLXRdBzW5wUC2PRxI+ujhFg3Eakjo=;
+        b=tricx1T6kyBC21KTUP1RL0owrQTp2sfKpDtWn1XD/SdaIzxCrZ7m4O9M6tpzu/N2VMTEmj
+        cYeN1xrnQ794Q8CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F307513A11;
+        Mon, 28 Aug 2023 13:27:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NFm7OdSg7GQwPAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 28 Aug 2023 13:27:48 +0000
+Date:   Mon, 28 Aug 2023 15:27:47 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 3/4] i2c: i801: Improve
+ i801_block_transaction_byte_by_byte
+Message-ID: <20230828152747.09444625@endymion.delvare>
+In-Reply-To: <cc1826de-35b1-cd20-900f-3908c7499792@gmail.com>
+References: <c39c8371-5ab5-45f7-d3cf-39ea50de0afb@gmail.com>
+        <6686b692-0caf-734e-18cd-7879810b29cd@gmail.com>
+        <20230627154606.1488423f@endymion.delvare>
+        <cc1826de-35b1-cd20-900f-3908c7499792@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, 14 Aug 2023 15:12:24 +0200
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+Hi Heiner,
 
-> Hi Biju,
->=20
-> On Fri, Aug 11, 2023 at 4:46=E2=80=AFPM Biju Das <biju.das.jz@bp.renesas.=
-com> wrote:
-> > > Subject: Re: [PATCH v7 0/4] Extend device_get_match_data() to struct
-> > > bus_type
-> > >
-> > > On Fri, Aug 11, 2023 at 01:27:36PM +0000, Biju Das wrote: =20
-> > > > > On Thu, Aug 10, 2023 at 09:05:10AM +0000, Biju Das wrote: =20
-> > >
-> > > ...
-> > > =20
-> > > > > I'm good with this approach, but make sure you checked the whole
-> > > > > kernel source tree for a such. =20
-> > > >
-> > > > Checking against 16 is too short I guess??
-> > > >
-> > > > drivers/iio/imu/inv_mpu6050/inv_mpu_iio.h has 18 enums. =20
-> > >
-> > > So, what does prevent us from moving that tables to use pointers? =20
-> >
-> > I think that will lead to ABI breakage(client->name vs id->name)
-> >
-> >         match =3D device_get_match_data(&client->dev);
-> >         if (match) {
-> >                 chip_type =3D (uintptr_t)match;
-> >                 name =3D client->name;
-> >         } else if (id) {
-> >                 chip_type =3D (enum inv_devices)
-> >                         id->driver_data;
-> >                 name =3D id->name;
-> >         } else {
-> >                 return -ENOSYS;
-> >         } =20
->=20
-> I don't consider that part of the ABI, as e.g. converting from board files
-> to DT would change the name.
-> In addition, using id->name breaks multiple instances of the same device.
+On Sun, 27 Aug 2023 19:14:38 +0200, Heiner Kallweit wrote:
+> On 27.06.2023 15:46, Jean Delvare wrote:
+> > Hi Heiner, Andi,
+> > 
+> > On Sat, 04 Mar 2023 22:36:34 +0100, Heiner Kallweit wrote:  
+> >> Here we don't have to write SMBHSTCNT in each iteration of the loop.
+> >> Bit SMBHSTCNT_START is internally cleared immediately, therefore
+> >> we don't have to touch the value of SMBHSTCNT until the last byte.
+> >>
+> >> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> >> ---
+> >>  drivers/i2c/busses/i2c-i801.c | 6 +++---
+> >>  1 file changed, 3 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> >> index 7641bd0ac..e1350a8cc 100644
+> >> --- a/drivers/i2c/busses/i2c-i801.c
+> >> +++ b/drivers/i2c/busses/i2c-i801.c
+> >> @@ -677,11 +677,11 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+> >>  	for (i = 1; i <= len; i++) {
+> >>  		if (i == len && read_write == I2C_SMBUS_READ)
+> >>  			smbcmd |= SMBHSTCNT_LAST_BYTE;
+> >> -		outb_p(smbcmd, SMBHSTCNT(priv));
+> >>  
+> >>  		if (i == 1)
+> >> -			outb_p(inb(SMBHSTCNT(priv)) | SMBHSTCNT_START,
+> >> -			       SMBHSTCNT(priv));
+> >> +			outb_p(smbcmd | SMBHSTCNT_START, SMBHSTCNT(priv));
+> >> +		else if (smbcmd & SMBHSTCNT_LAST_BYTE)
+> >> +			outb_p(smbcmd, SMBHSTCNT(priv));
+> >>  
+> >>  		status = i801_wait_byte_done(priv);
+> >>  		if (status)  
+> > 
+> > I tested this and it works, but I don't understand how.
+> > 
+> > I thought that writing to SMBHSTCNT was what was telling the host
+> > controller to proceed with the next byte. If writing to SMBHSTCNT for
+> > each byte isn't needed, then what causes the next byte to be processed?
+> > Does this happen as soon as SMBHSTSTS_BYTE_DONE is written? If so, then
+> > what guarantees that we set SMBHSTCNT_LAST_BYTE *before* the last byte
+> > is actually processed?
+>
+> It's my understanding that writing SMBHSTSTS_BYTE_DONE tells the host to
+> continue with the next byte.
 
-This has always been a mess as I wasn't paying attention a long time back
-and we ended up with some client->name entries being used for iio_dev->name
-whereas it should be the part number.
+That's indeed possible, and quite likely, considering that your patch
+works.
 
-Using id->name is correct choice.  This is supposed to be the same for mult=
-iple
-instances of the same device.  There is label and a bunch of other options
-for differentiating them including their parent devices.
+> We set SMBHSTCNT_LAST_BYTE whilst the host is receiving the last byte.
+> Apparently the host checks for SMBHSTCNT_LAST_BYTE once it received
+> a byte, in order to determine whether to ack the byte or not.
+> So SMBHSTCNT_LAST_BYTE doesn't have to be set before the host starts
+> receiving the last byte.
 
-Problem is that is exported to userspace and often used as part of the
-matching when a userspace tool is trying to find the device.
+How is this not racy?
 
-We could 'give it a go' by setting the name in teh switch statement in the =
-core code
-and hope no one notices but it's not ideal
-https://elixir.bootlin.com/linux/latest/source/drivers/iio/imu/inv_mpu6050/=
-inv_mpu_core.c#L1597
+In the interrupt-driven case, at the end of a block read transaction,
+we set SMBHSTCNT_LAST_BYTE at the end of i801_isr_byte_done(), then
+return to i801_isr() where we write 1 to SMBHSTSTS_BYTE_DONE to clear
+it. This lets the controller handle the last byte with the knowledge
+that this is the last byte.
 
-Jonathan
+However, in the poll-driven case, SMBHSTSTS_BYTE_DONE is being cleared
+at the end of the loop in i801_block_transaction_byte_by_byte(), then
+at the beginning of the next iteration, we write SMBHSTCNT_LAST_BYTE,
+then wait for completion. If the controller is super fast (or, to be
+more realistic, the i2c-i801 driver gets preempted between writing
+SMBHSTSTS_BYTE_DONE and writing SMBHSTCNT_LAST_BYTE) then the byte may
+have been already read and acked, before we have the time to let the
+controller know that no ACK should be sent. This looks racy. Am I
+missing something?
 
+If nothing else, the fact that the order is different between the
+interrupt-driven and poll-driven cases is fishy.
 
+I must add that the problem is not related to your patch, I just
+happened to notice it while reviewing your patch.
 
->=20
-> I applaud more unification ;-)
->=20
-> Gr{oetje,eeting}s,
->=20
->                         Geert
->=20
+> For writes SMBHSTCNT_LAST_BYTE isn't used.
 
+Agreed.
+
+-- 
+Jean Delvare
+SUSE L3 Support
