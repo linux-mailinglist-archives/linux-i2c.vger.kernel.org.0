@@ -2,54 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7026B78BAD3
-	for <lists+linux-i2c@lfdr.de>; Tue, 29 Aug 2023 00:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E310B78BAF6
+	for <lists+linux-i2c@lfdr.de>; Tue, 29 Aug 2023 00:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjH1WLL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 28 Aug 2023 18:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
+        id S231758AbjH1WYF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 28 Aug 2023 18:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbjH1WKn (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Aug 2023 18:10:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4490D7;
-        Mon, 28 Aug 2023 15:10:40 -0700 (PDT)
+        with ESMTP id S230426AbjH1WX7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 28 Aug 2023 18:23:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F65139
+        for <linux-i2c@vger.kernel.org>; Mon, 28 Aug 2023 15:23:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4E706304F;
-        Mon, 28 Aug 2023 22:10:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D48CC433C7;
-        Mon, 28 Aug 2023 22:10:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0C9163625
+        for <linux-i2c@vger.kernel.org>; Mon, 28 Aug 2023 22:23:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1633C433C8;
+        Mon, 28 Aug 2023 22:23:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693260640;
-        bh=fZd3AB1DhmkzRDsQN04BoXQg1MSXWCp4QTNzl46m7v0=;
+        s=k20201202; t=1693261436;
+        bh=flP4eiu8OWhuXc0rYQBVqqqQMPlCSq942Ra9vTvZdqA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z7blGISDqgou4eLu/2O4vBnKWuyLgEtYZUsC0uwjXWYBgR0mokpG+lB3V27jOShsv
-         A61ajiWOUCk+jMzhaVjdKkM59FTYn7W+r2EcRS28OtYIFIJN51Wy4TqTwV3yGJSjs2
-         I8gMYQ6TAF4WAp/x/TzkgYZr+d2nXypUrdU87Kk/uWFinvIxq4rrbZwpRSoG+LDG5b
-         8wG7yF3Xaweh7xL37VS9YIPV7dJJZA5sF16St6S/LuHK/7eeujFS9y//itGfSFZ9zx
-         xPj4FU0UT6vbDBOTmWkptjc/on8jhbXb+f3sq977IsLH725we1TKpyAaBCAFiJ5yTQ
-         ytDjfTTCIMhsA==
-Date:   Tue, 29 Aug 2023 00:10:35 +0200
+        b=G/zb45/sHaHmJuHxr3F6lWsGIqXiPx0uu7fSfy380wxRxSN3/hxGAeR62TnR874WD
+         XFIVJZU5NvxWSONdUPJGMATNrKAqLxLsrqA+OiUPWFKWn/Drh/L2NVyuibRXOWUISH
+         JUH/z+zxTsYdNXy89c4UR1t/RMWjyiW8ucvhvIZh+viZJyHwkVcTXe5s/70Fvw1mUk
+         obR5mPrPFbW67GQ8tzUCvmvTiv/rNvoEGVz8GmDfIT+Q6bEI4ok3bgVN26H9YaaREW
+         HcyMSk9O0/DZXWWQN1G224R5DNkx/QOoLTBKVnhZZLR9iFdAFzZqrwf5m+euu0Dmbl
+         tgerfh6eJcv7A==
+Date:   Tue, 29 Aug 2023 00:23:52 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/8] I2C: ali15x3: Do PCI error checks on own line
-Message-ID: <20230828221035.t6jshaqpknd4ivzw@intel.intel>
-References: <20230827133705.12991-1-ilpo.jarvinen@linux.intel.com>
- <20230827133705.12991-6-ilpo.jarvinen@linux.intel.com>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c: i801: fix cleanup code in remove() and error path
+ of probe()
+Message-ID: <20230828222352.azg62n7kz22twkep@intel.intel>
+References: <07386d35-0f9f-bcd7-185c-d8eed60fc794@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230827133705.12991-6-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <07386d35-0f9f-bcd7-185c-d8eed60fc794@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,49 +54,20 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Ilpo,
+Hi Jean,
 
-On Sun, Aug 27, 2023 at 04:37:02PM +0300, Ilpo Järvinen wrote:
-> Instead of if conditions with line splits, use the usual error handling
-> pattern with a separate variable to improve readability.
+On Sun, Aug 27, 2023 at 10:26:05PM +0200, Heiner Kallweit wrote:
+> Jean pointed out that the referenced patch resulted in the remove()
+> path not having the reverse order of calls in probe(). I think there's
+> more to be done to ensure proper cleanup.
+> Especially cleanup in the probe() error path has to be extended.
+> Not every step there may be strictly needed, but it's in line with
+> remove() now.
 > 
-> No functional changes intended.
-> 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Fixes: 9b5bf5878138 ("i2c: i801: Restore INTREN on unload")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+any chance to take a look at this?
 
 Andi
-
-> ---
->  drivers/i2c/busses/i2c-ali15x3.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-ali15x3.c b/drivers/i2c/busses/i2c-ali15x3.c
-> index cc58feacd082..0231c5be6354 100644
-> --- a/drivers/i2c/busses/i2c-ali15x3.c
-> +++ b/drivers/i2c/busses/i2c-ali15x3.c
-> @@ -165,14 +165,15 @@ static int ali15x3_setup(struct pci_dev *ALI15X3_dev)
->  	}
->  
->  	if(force_addr) {
-> +		int ret;
-> +
->  		dev_info(&ALI15X3_dev->dev, "forcing ISA address 0x%04X\n",
->  			ali15x3_smba);
-> -		if (PCIBIOS_SUCCESSFUL != pci_write_config_word(ALI15X3_dev,
-> -								SMBBA,
-> -								ali15x3_smba))
-> +		ret = pci_write_config_word(ALI15X3_dev, SMBBA, ali15x3_smba);
-> +		if (ret != PCIBIOS_SUCCESSFUL)
->  			goto error;
-> -		if (PCIBIOS_SUCCESSFUL != pci_read_config_word(ALI15X3_dev,
-> -								SMBBA, &a))
-> +		ret = pci_read_config_word(ALI15X3_dev, SMBBA, &a);
-> +		if (ret != PCIBIOS_SUCCESSFUL)
->  			goto error;
->  		if ((a & ~(ALI15X3_SMB_IOSIZE - 1)) != ali15x3_smba) {
->  			/* make sure it works */
-> -- 
-> 2.30.2
-> 
