@@ -2,128 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCD078DB28
-	for <lists+linux-i2c@lfdr.de>; Wed, 30 Aug 2023 20:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6039E78DF2D
+	for <lists+linux-i2c@lfdr.de>; Wed, 30 Aug 2023 22:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbjH3Sii (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 30 Aug 2023 14:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        id S232248AbjH3TxA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 30 Aug 2023 15:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245164AbjH3OiQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 30 Aug 2023 10:38:16 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED271A3
-        for <linux-i2c@vger.kernel.org>; Wed, 30 Aug 2023 07:38:13 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2bcb89b476bso85637591fa.1
-        for <linux-i2c@vger.kernel.org>; Wed, 30 Aug 2023 07:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693406291; x=1694011091; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cMgMrR7+l3U6InFHuLJKmHUuLjLzWvIThsVzLRt3aVA=;
-        b=boeH8U4vR+1Vf5QffwQHIOwj9K1UppXefxIOnmXcfZDJMLWz5h27gJGL0BjAv7NP2v
-         czLtXy8fTv8Ta4MKe8tmFDz3x+nYu8kvD7/JisJ8I0VWODUxat/ebLB+YAl1bvGvY0n6
-         BhwSU3096kAV8xGe1QVSjzqhf6SadAFA5Cs3wRQiZuGhKUTGElQS8vN5nm1SfZa+pl7E
-         L4ibf79GLQm5KVtsPa1LEor8Lo3FfL04VKYdbPDJ62kf9WQpFDXmXjk3/3u0/d41RFzY
-         a0s4HQzez8GacA5Ao2R6CuljBfjt9QpGhDfR/GKy6MV6NP8YpI6vqUDCjSatrvef4tNl
-         vwig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693406291; x=1694011091;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cMgMrR7+l3U6InFHuLJKmHUuLjLzWvIThsVzLRt3aVA=;
-        b=Ei3i6NWs1aZRp28z1Pe44+9ExxJKIHfcrLnsydbaRNLn1iCTIPzW0nWiZswpVLc/bo
-         MohtxZc95t2dOMB9pDmVt5gwS/n6wSen3wYdCzFiRR/AyaTzVKYtoEg2cJKaozb7Gm+d
-         cO978diZAvc7gq6ABHEwqQrER7wro2c2zJ9YKQgklDVNLjzofYcuVlhgSMNONeD7dMbr
-         XKzc/tefjvaw6UNbY2WAMxwrhLX6xBjT46z044hZ66lYL6EfGi9jsoygiLaZi6z/qZAb
-         jTxvnslQe8+E4zzeGbl7dVxc6RwuZqfs2/ZVLI5/4tW17nlVOpyOQPOFDPpKhD3Ii4Zh
-         RxAA==
-X-Gm-Message-State: AOJu0YzDwM1ImnPcB9z96l9GRL4C1S2EyUTIeaQWAMNccbdTopK9Nyww
-        3u+laDgi3Ai2Ul/6oiJD+iZzxQ==
-X-Google-Smtp-Source: AGHT+IErThUR7PX4P9tgEp26JOMA5iIFhpRzIW70CUb4TYwhSuoCzQURMIk4hJsKeGk6T83B+0C8aA==
-X-Received: by 2002:a2e:98d0:0:b0:2bd:10b7:4610 with SMTP id s16-20020a2e98d0000000b002bd10b74610mr1823901ljj.25.1693406291406;
-        Wed, 30 Aug 2023 07:38:11 -0700 (PDT)
-Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id sd26-20020a170906ce3a00b00997d76981e0sm7249079ejb.208.2023.08.30.07.38.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 07:38:10 -0700 (PDT)
-Message-ID: <b467c423-dbd4-8a14-8fa4-169658e21693@linaro.org>
-Date:   Wed, 30 Aug 2023 16:38:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 1/2] dt-binding: Add custom property for MAX7357
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Peter Rosin <peda@axentia.se>,
+        with ESMTP id S231927AbjH3Twf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 30 Aug 2023 15:52:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D816659F76;
+        Wed, 30 Aug 2023 12:20:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27652649CA;
+        Wed, 30 Aug 2023 19:19:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D77CAC433C8;
+        Wed, 30 Aug 2023 19:18:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693423139;
+        bh=DQehdTj1zGLksZp0kH4qhiZqixjDifmmemA/25jnu/k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IpF2BjCs2PIj9Ct0u35NKMNrn09TpMuu6e/wZuJS2cC2da0YnsBlhfNChW9jqSzsx
+         ExtuqwcwbNTAGnrwC47fIwc8g3SL1VE1thytKlwXp97GlAPJIH+E2o+1aRxJW1wxos
+         0LVrRinXcXTZThoXIv8n2ZbPROs+r6vCN7/oHCWOiMR1Q//9qKiVcW/+8LTBx0FR4C
+         Xek1XSTFznkJD7ehJCFQC5RX7d0tq5O1OpuFHFw30Vyhj1i+QW5CJql4vNibs6cpYj
+         SePwub2fCA3qmUqDbtP4zHS0nkJ8yUIty9OQj2Wg3LQVbeRqhoBSvxobSkrwGxNLTI
+         AA//rMHYe1zvw==
+Date:   Wed, 30 Aug 2023 21:18:55 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
         Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230830115744.4102929-1-Naresh.Solanki@9elements.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230830115744.4102929-1-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH v2 5/8] I2C: ali15x3: Do PCI error checks on own line
+Message-ID: <ZO+WH2LLkyM0PdM0@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230827133705.12991-1-ilpo.jarvinen@linux.intel.com>
+ <20230827133705.12991-6-ilpo.jarvinen@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="35KUKm7IdQwcja9I"
+Content-Disposition: inline
+In-Reply-To: <20230827133705.12991-6-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 30/08/2023 13:57, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> 
-> Add a custom property "maxim,bus-lockup-fix" to enable proprietary
-> features on MAX7357. The driver configures MAX7357 to isolate the
-> failing channel and trigger a flush-out sequence for bus lock-up
-> resolution.
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
+--35KUKm7IdQwcja9I
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It is "dt-bindings" not binding and several other fields are needed.
+On Sun, Aug 27, 2023 at 04:37:02PM +0300, Ilpo J=C3=A4rvinen wrote:
+> Instead of if conditions with line splits, use the usual error handling
+> pattern with a separate variable to improve readability.
+>=20
+> No functional changes intended.
+>=20
+> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
 
-Also "add custom property" is quite generic. When you add next custom
-property you are going to have two commits with the same subject. Just
-make it descriptive - "Add foobar for MAX7357"
+Applied to for-next, thanks!
 
 
+--35KUKm7IdQwcja9I
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
->  .../devicetree/bindings/i2c/i2c-mux-pca954x.yaml  | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> index 2d7bb998b0e9..984d4614a270 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> @@ -71,6 +71,11 @@ properties:
->      description: A voltage regulator supplying power to the chip. On PCA9846
->        the regulator supplies power to VDD2 (core logic) and optionally to VDD1.
->  
-> +  maxim,bus-lockup-fix:
-> +    type: boolean
-> +    description: Isolates only the stuck channel and generates a flush-out sequence
-> +      to attempt to clear the bus lock-up.
+-----BEGIN PGP SIGNATURE-----
 
-Why wouldn't you want it to be enabled all the time? Why should it be
-configurable per-board?
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTvlh8ACgkQFA3kzBSg
+KbYSXg//c8OcU6ixBEjPBdpYLtGQnTnzVraWKC3vVbipNSoeU9+vw7tN/m4YM3uv
+n0DUSlkmDGzmuxvxlXKDjINy8urJI2UbhhNCdSjgPz8PjdCLg2vqijPNFGcVNX7A
+DE9D6kBfb2hFlIlDYpmqBos9c6U4zgA31ypTD3K5bziVgyAS6PqK20qtes0jHqH6
+nD+HcKyNeMjborf6tnDQo2UPJNQlOo2KZXFD4kLBS4xqLcquGqDkueEjWi1CUX+H
+m16Ehqg2yo4eZ7PtrdCFBYBnK4uc51E81CKrws7pkBsUFdsuvXOQcfCz4c9zWK+9
+fES0hJx/NZbgs3JxJw5dLgwXufZcYCmw0v1k5ED8Mh5exyVuM1fFQMf+h0ytmEfz
+jPtbXw3bAJTHbutX8Bt5QK5tPEowM5LFReJkTXVRNN280ofFK+4kHUj8CIxkL2Iq
+65Fj+VEsDIQzKxHa6aefYS9ZTSGQrYMWokX1TwfP2StFNPSubbwyQF1fHmSfxyde
+57dO8pMBoCkq8r3ttv66lfAtv9IX73olx7OPUHelNax0qToRZErAXzVv37DB2CIQ
+o9O3QN2XZ/5kBaGrHj3TW5xFwHRg4YFOZ3Jvkrrl6Ak5O9rQhU4EWsOMJwra7YcN
+Bj1BRSFYRBiuXjGfEWIuHmj1blZCob5/PN3V2Y8Demli+2ZbX3Y=
+=osT3
+-----END PGP SIGNATURE-----
 
-Best regards,
-Krzysztof
-
+--35KUKm7IdQwcja9I--
