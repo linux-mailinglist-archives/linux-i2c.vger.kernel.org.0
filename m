@@ -2,74 +2,74 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC73178ECAF
-	for <lists+linux-i2c@lfdr.de>; Thu, 31 Aug 2023 14:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E794E78ECB4
+	for <lists+linux-i2c@lfdr.de>; Thu, 31 Aug 2023 14:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345016AbjHaMBh (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 31 Aug 2023 08:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
+        id S230315AbjHaMDb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 31 Aug 2023 08:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbjHaMBg (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 31 Aug 2023 08:01:36 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D722DC5
-        for <linux-i2c@vger.kernel.org>; Thu, 31 Aug 2023 05:01:33 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-99bc9e3cbf1so146505566b.0
-        for <linux-i2c@vger.kernel.org>; Thu, 31 Aug 2023 05:01:33 -0700 (PDT)
+        with ESMTP id S233999AbjHaMDb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 31 Aug 2023 08:03:31 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF75CFC
+        for <linux-i2c@vger.kernel.org>; Thu, 31 Aug 2023 05:03:27 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-522bd411679so929882a12.0
+        for <linux-i2c@vger.kernel.org>; Thu, 31 Aug 2023 05:03:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693483292; x=1694088092; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1693483406; x=1694088206; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=F1hWfPnTaYiDGzQWbm7h7EGtwXK/30+yuix+xBw0jQ4=;
-        b=wvj3LQwNA6YDzPPOhf0PO6FAm8ObP4IXPQ1RAmpOIMIMPbNjisG/6vusCtIjsCBI/c
-         sF3uW9WnpSsOk8CBBPCqZp/k1fDjTJCgd+Y1+vzmOg9H7/LQ6SIqRnIbFDCkWWxZe+E9
-         UtMl4avZPpYOB8aAwNuzmSRTsHE3SByxQ4CE/DfFj/rvbd2EjLcXPiedDHjArzsT9P2V
-         GK/3/nRHyXsc/1F97YygK5mHIQGdFxnxbPhGvlNPaxOIeNzNVh8M8mIyOBiuclHKPagq
-         rUlX6UFni3mLDQCkShltgFUec/YjkYoXO6eo2O5Oyyxf7VboTMWpICF04jDDQBUsYrqJ
-         J+fw==
+        bh=+Qid7Zt4Nm7h17lK01I8jj5e2dg/MWibaTYtU5DvKk8=;
+        b=WEcSjFymwdzKSUSEA54RpKH/2Z7qoZDNRSeWWv24DZefzZaGlcMS3eEphgc/EuB5Mn
+         IpQqYDO2yi7DpL6sTIdqKc7QlGAu+Ph+zao5rhm2JB6itKlDN4Iyvzm3CitGpuOhSrpM
+         juKZsN1Hcw0vyVNokxNnp7gVJ7FwopoJcBf/TB6+tA1oXivfo3+t+lfryHZtQ6UTH36I
+         t57ATg63MNvgXaaPiRSJc1o90mrPb9W2XtKsGYR9RZUTYb4+kSKCqhL0ueYpxtQ+Qf1r
+         fSXMH6SR4CmajD5XsNl5QTXT+aRSjTYM+Jfsjgnhn3MkI5lI9qT3vW1iEKLpIOhU3ahP
+         EEwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693483292; x=1694088092;
+        d=1e100.net; s=20221208; t=1693483406; x=1694088206;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F1hWfPnTaYiDGzQWbm7h7EGtwXK/30+yuix+xBw0jQ4=;
-        b=kYwZL5Qrvcb2ygopr0r4IiKsQJAAO28mUi7zroQafJVYnxC8roA7fkJiAdsZdHYDhD
-         mHqxZnaews6pjVi7quZFgafMclyIfguZQbfb73SAxcAQ5kJF5yVpZr6tDZ42E4no+9kK
-         idrotD0+OKHVsj4BtUFt2MYER0MH5dIUTVGhj6+I3MxhUP56sEsI7tlItunh/GQZklk8
-         uElPCxN++631/LUIJXh/Tjy2XilzpKxXJwb3uuHDvE3P6k3kW9tH5JQGrT3UHKpM0bFS
-         yEqcONt+/DHiPh/o8aAGZLAsogRGgpLs867doB73HXqBqPwBDa+n5z86cD4GhXFP+/12
-         7Bbw==
-X-Gm-Message-State: AOJu0YwWVC31IVo29Sht1/78JGg/DKBvnBid5w5suEQecWPJl4/sn1Xi
-        Qw8VtPnJm4sYpic6jXSMi9dtvV4a5VPhHU7EctM=
-X-Google-Smtp-Source: AGHT+IHAKOqgfeXOn8vIiw1D0PnVLOyxf4Ka4diEYQmxfjyZVB4gmwGWTLG6UsiByQJ5TCVnVGxaMQ==
-X-Received: by 2002:a17:906:53d4:b0:9a1:b33a:e464 with SMTP id p20-20020a17090653d400b009a1b33ae464mr3149812ejo.31.1693483292230;
-        Thu, 31 Aug 2023 05:01:32 -0700 (PDT)
+        bh=+Qid7Zt4Nm7h17lK01I8jj5e2dg/MWibaTYtU5DvKk8=;
+        b=irMDRRFOxR5E7woYJ0EF4dGrXiszLfVmka7Ux3CDmPJNkQEEpJBIAP8iVSr8j1/j1v
+         1WxbekBMZv+cj7ztCQCnXkXDektAK//N2b+WcG3kQAxoRQPAdDjjJuRxJFD2k/ybzIr3
+         gxD0LpZdaXR/NmZrYxLM+Sy2qAtPaBbRTKiFvQjjQYD3KpofkRtgayi6+qlP/LjGgi2c
+         6sO1GtCZ8M3IaEeYRclsEmgNIbrpg5CAYrUSDdQKNXpLhz36hOxJ7dllwQZwR/sQgbfL
+         4N9fBIhvNXF7Yw61c03jZP/w5EKW0/Wc6xhJCEQbQ2L/5sxrhN9wtOwptMN6TeECH/+S
+         qMrw==
+X-Gm-Message-State: AOJu0YyN6e0i54aJPV5E3DnTPc38QPt+j/YdIdRs7O7doHb6s/mO+vun
+        m1ayTiAOwd6PXE66i8zVlir83Q==
+X-Google-Smtp-Source: AGHT+IEs6VS8bjSZseegVzeqGN/rt4+LKFjlVeCkSmCCxHrzS8MHmJ5CQGLBGIJXqB2bCztP2HFybw==
+X-Received: by 2002:aa7:c545:0:b0:523:3f1e:68c4 with SMTP id s5-20020aa7c545000000b005233f1e68c4mr4455616edr.34.1693483405972;
+        Thu, 31 Aug 2023 05:03:25 -0700 (PDT)
 Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id f27-20020a170906391b00b0099cd1c0cb21sm668087eje.129.2023.08.31.05.01.29
+        by smtp.gmail.com with ESMTPSA id d19-20020a05640208d300b00523b1335618sm693235edz.97.2023.08.31.05.03.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Aug 2023 05:01:30 -0700 (PDT)
-Message-ID: <9100e41b-291e-9723-4188-b4d3e5adb6f8@linaro.org>
-Date:   Thu, 31 Aug 2023 14:01:28 +0200
+        Thu, 31 Aug 2023 05:03:23 -0700 (PDT)
+Message-ID: <0b7cb454-4c31-569c-7609-7931e6fb798a@linaro.org>
+Date:   Thu, 31 Aug 2023 14:03:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH 1/2] dt-binding: Add custom property for MAX7357
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: Add custom properties for
+ MAX7357/MAX7358
 Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Peter Rosin <peda@axentia.se>,
+        Andi Shyti <andi.shyti@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230830115744.4102929-1-Naresh.Solanki@9elements.com>
- <b467c423-dbd4-8a14-8fa4-169658e21693@linaro.org>
- <CABqG17hB_GvQ56ZB+wjhSrDtZLreZ4vPc+3AfUj6AdA3Btd1+Q@mail.gmail.com>
+References: <20230831101513.2042773-1-Naresh.Solanki@9elements.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CABqG17hB_GvQ56ZB+wjhSrDtZLreZ4vPc+3AfUj6AdA3Btd1+Q@mail.gmail.com>
+In-Reply-To: <20230831101513.2042773-1-Naresh.Solanki@9elements.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,78 +82,67 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 31/08/2023 11:45, Naresh Solanki wrote:
-> Hi
+On 31/08/2023 12:15, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > 
-> On Wed, 30 Aug 2023 at 20:08, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 30/08/2023 13:57, Naresh Solanki wrote:
->>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>>
->>> Add a custom property "maxim,bus-lockup-fix" to enable proprietary
->>> features on MAX7357. The driver configures MAX7357 to isolate the
->>> failing channel and trigger a flush-out sequence for bus lock-up
->>> resolution.
->>
->> Please use subject prefixes matching the subsystem. You can get them for
->> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
->> your patch is touching.
-> Ack
->>
->> It is "dt-bindings" not binding and several other fields are needed.
-> Ack
->>
->> Also "add custom property" is quite generic. When you add next custom
->> property you are going to have two commits with the same subject. Just
->> make it descriptive - "Add foobar for MAX7357"
-> Missed Properties in this Patch Series, Will Be Addressed in V2.
-> So in that case I guess the below title should be fine?
-> dt-bindings: i2c: Add custom properties for MAX7357/MAX7358
-
-No, because you do not solve that part of my feedback:
-
->> Also "add custom property" is quite generic. When you add next custom
->> property you are going to have two commits with the same subject.
-
-I said, everything will be now "add custom properties", right?
-
-The prefix is dt-bindings: i2c: pca954x:
-
-
-
+> Both chips have a configuration register to enable additional
+> features. These features aren't enabled by default & its up to
+> board designer to enable the same.
 > 
->>
->>
->>
->>>
->>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->>> ---
->>>  .../devicetree/bindings/i2c/i2c-mux-pca954x.yaml  | 15 +++++++++++++++
->>>  1 file changed, 15 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
->>> index 2d7bb998b0e9..984d4614a270 100644
->>> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
->>> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
->>> @@ -71,6 +71,11 @@ properties:
->>>      description: A voltage regulator supplying power to the chip. On PCA9846
->>>        the regulator supplies power to VDD2 (core logic) and optionally to VDD1.
->>>
->>> +  maxim,bus-lockup-fix:
->>> +    type: boolean
->>> +    description: Isolates only the stuck channel and generates a flush-out sequence
->>> +      to attempt to clear the bus lock-up.
->>
->> Why wouldn't you want it to be enabled all the time? Why should it be
->> configurable per-board?
-> The chip doesn't enable these features by default & it is left to
-> discretion of board designer to enable the same.
+> Add booleans for:
+>  - maxim,isolate-stuck-channel
+>  - maxim,send-flush-out-sequence
+>  - maxim,preconnection-wiggle-test-enable
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+
+Subject: still did not improve. You waited exactly 30 minutes for my
+feedback after sending your response.
 
 
-That does not explain anything. Enable them by default in such case or
-come with some argument.
+
+> ---
+> Changes in V2:
+> - Update properties.
+> ---
+>  .../bindings/i2c/i2c-mux-pca954x.yaml         | 31 +++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> index 2d7bb998b0e9..fa73eadfdf7b 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+> @@ -71,6 +71,23 @@ properties:
+>      description: A voltage regulator supplying power to the chip. On PCA9846
+>        the regulator supplies power to VDD2 (core logic) and optionally to VDD1.
+>  
+> +  maxim,isolate-stuck-channel:
+> +    type: boolean
+> +    description: Allows to use non faulty channels while a stuck channel is
+> +      isolated from the upstream bus. If not set all channels are isolated from
+> +      the upstream bus until the fault is cleared.
+
+Nothing improved here. As I said, please provide arguments or drop this
+property.
+
+> +
+> +  maxim,send-flush-out-sequence:
+> +    type: boolean
+> +    description: Send a flush-out sequence to stuck auxiliary buses
+> +      automatically after a stuck channel is being detected.
+
+Ditto
+
+> +
+> +  maxim,preconnection-wiggle-test-enable:
+> +    type: boolean
+> +    description: Send a STOP condition to the auxiliary buses when the switch
+> +      register activates a channel to detect a stuck high fault. On fault the
+> +      channel is isolated from the upstream bus.
+
+Ditto
+
 
 Best regards,
 Krzysztof
