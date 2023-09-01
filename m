@@ -2,111 +2,147 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4522E78FCA3
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Sep 2023 13:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925B178FD0B
+	for <lists+linux-i2c@lfdr.de>; Fri,  1 Sep 2023 14:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345137AbjIALto (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 1 Sep 2023 07:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
+        id S231628AbjIAMTj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 1 Sep 2023 08:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344742AbjIALto (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Sep 2023 07:49:44 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B029E7F
-        for <linux-i2c@vger.kernel.org>; Fri,  1 Sep 2023 04:49:41 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9a21b6d105cso226029766b.3
-        for <linux-i2c@vger.kernel.org>; Fri, 01 Sep 2023 04:49:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1693568980; x=1694173780; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=v5KnEJ23wDQrBX+Q/skDfs7xsPcC6Ms54YtdId73k2g=;
-        b=f4MEw6E+M5s4FonzeXMjl61KauHY3kYciHCh9CX/iz9/dyKLevcqUNtA/EXO63lTc/
-         f+ywMXs31szftRJlHjxPYTG2RL9KipCIzvl0iRKaKcAUpmfHauFLZ/VxvEa/fov4hVWG
-         +TjR/egUaEI4tUD1ZVgzAnAZJ8qQG5Bo14MFNLx363ZQiUNaz+HQCwHmp7bT7vKPfohY
-         7tL/qyj3nu2/8FJ2PFww1nTpdeZ3X4tsBdkp6fOM2FuV8tGUeFbBY4Zq/w6zuhNajJa/
-         8Cds8UVmegkTap9DTFucZUEjpqv5NVipg+DHUqNa6wf0IjvzifJuDRkzw+QJ/JGE/9uz
-         84nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693568980; x=1694173780;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v5KnEJ23wDQrBX+Q/skDfs7xsPcC6Ms54YtdId73k2g=;
-        b=UyibaDWhfRITxIO4xSO3D/cIqK6VDv5dqpdc/vhscMeYPjUJE8bKfGwcpdeSsn1QSK
-         vMUXvgnC0NGEvrY5IPxWnfjKucWpbJfatoyt7U0FayAcAdb5uF064qWWy6a+/xJpWX1n
-         kO2VNfb4a4+njgoKkjsc00yZ7b4dZ0/tko24fCubGofERy+Fe0vW1TRYe6BLxGLVIJpC
-         knPlEZW5wznJz2bdSBDINryoUNc+Do/KWuy3t7XzJOr/xAHHFbfbBPtwZ3iU1r/vB1DC
-         qcSbRPTLiUVUsNZiqkoSNOkJgXTwIeNfWfeidfODvQmha1HGEXTxZWALXWBzH1CC1f2J
-         +CSQ==
-X-Gm-Message-State: AOJu0YyDgmn9ESvOZhcYyu0TEXK3NyifICTOSXTFIy4qAiyfa6jk0rwC
-        5dWEBr4WvNgTBimmYBsJ0OlKbQ==
-X-Google-Smtp-Source: AGHT+IHE3WEUr/ANccr+3kWR4PwDspoJ96QfkrJTdqkphFLGy/AEzbxBa/deDGlCsnoMb3L65434NQ==
-X-Received: by 2002:a17:906:ef8b:b0:9a1:ddb9:6550 with SMTP id ze11-20020a170906ef8b00b009a1ddb96550mr1609104ejb.52.1693568979779;
-        Fri, 01 Sep 2023 04:49:39 -0700 (PDT)
-Received: from fedora.. (dh207-99-49.xnet.hr. [88.207.99.49])
-        by smtp.googlemail.com with ESMTPSA id a25-20020a1709064a5900b009a2202bfce5sm1869532ejv.118.2023.09.01.04.49.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Sep 2023 04:49:39 -0700 (PDT)
-From:   Robert Marko <robert.marko@sartura.hr>
-To:     wsa@kernel.org, codrin.ciubotariu@microchip.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     luka.perkov@sartura.hr, Robert Marko <robert.marko@sartura.hr>
-Subject: [RFC PATCH] i2c: core: dont change pinmux state to GPIO during recovery setup
-Date:   Fri,  1 Sep 2023 13:49:17 +0200
-Message-ID: <20230901114936.1319844-1-robert.marko@sartura.hr>
-X-Mailer: git-send-email 2.41.0
+        with ESMTP id S236716AbjIAMTj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Sep 2023 08:19:39 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECF9E7B
+        for <linux-i2c@vger.kernel.org>; Fri,  1 Sep 2023 05:19:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 348BC1F853;
+        Fri,  1 Sep 2023 12:19:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1693570771; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yTGFN/YunX0V03zERO1lp8CC4a/5LqUfy0IhLkF6JDw=;
+        b=NVWco+V1AjKL3M0KKBGbn4X/Ht+fRlrrYta872Nqfv5/Pi4FsmHqXHWl4vM+X5oYGUM73z
+        JxaS4o0+bf4ElKYih+jINmjws9wuvqyqe8QtavEl7hSTBX6rFQZl2zfJ0TytomLNHrq6cK
+        FJ2+cezf55DSTPeVQMZAfqK7XnKXn3U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1693570771;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yTGFN/YunX0V03zERO1lp8CC4a/5LqUfy0IhLkF6JDw=;
+        b=Wjj0egcTqj7EfbUZfcLJz/q+kPxLUeX3JWMNpQeVrP+LIUx++6EpQ42UBzFLLZHzCdPGaJ
+        xJripuxQnx6YHKAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0A2951358B;
+        Fri,  1 Sep 2023 12:19:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id nmexANPW8WQ4HwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 01 Sep 2023 12:19:31 +0000
+Date:   Fri, 1 Sep 2023 14:19:29 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: i801: fix cleanup code in remove() and error path
+ of probe()
+Message-ID: <20230901141929.640fc5d5@endymion.delvare>
+In-Reply-To: <07386d35-0f9f-bcd7-185c-d8eed60fc794@gmail.com>
+References: <07386d35-0f9f-bcd7-185c-d8eed60fc794@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Ever since PXA I2C driver was moved to the generic I2C recovery, I2C has
-stopped working completely on Armada 3720 if the pins are specified in DTS.
+Hi Heiner,
 
-After a while it was traced down to the only difference being that PXA
-driver did not change the pinmux state to GPIO before trying to acquire the
-GPIO pins.
-And indeed as soon as this call is removed I2C starts working.
+On Sun, 27 Aug 2023 22:26:05 +0200, Heiner Kallweit wrote:
+> Jean pointed out that the referenced patch resulted in the remove()
+> path not having the reverse order of calls in probe(). I think there's
+> more to be done to ensure proper cleanup.
+> Especially cleanup in the probe() error path has to be extended.
+> Not every step there may be strictly needed, but it's in line with
+> remove() now.
+> 
+> Fixes: 9b5bf5878138 ("i2c: i801: Restore INTREN on unload")
 
-To me it seems that this call is not required at all as devm_gpiod_get()
-will result in the pinmux state being changed to GPIO via the pinmux
-set_mux() op.
+I think it also fixes 9424693035a5 ("i2c: i801: Create iTCO device on
+newer Intel PCHs").
 
-Fixes: 0b01392c18b9 ("i2c: pxa: move to generic GPIO recovery")
-Signed-off-by: Robert Marko <robert.marko@sartura.hr>
----
-I am aware this probably isnt the correct fix, so I am sending it as RFC
-cause I have ran out of ideas.
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+>  drivers/i2c/busses/i2c-i801.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index 73ae06432..7a0ccc584 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -1754,6 +1754,9 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  		"SMBus I801 adapter at %04lx", priv->smba);
+>  	err = i2c_add_adapter(&priv->adapter);
+>  	if (err) {
+> +		platform_device_unregister(priv->tco_pdev);
+> +		outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
 
- drivers/i2c/i2c-core-base.c | 7 -------
- 1 file changed, 7 deletions(-)
+Doesn't seem to be needed, as I can't see SMBHSTCNT being written to
+during probe?
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 60746652fd52..b34d939078a1 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -359,13 +359,6 @@ static int i2c_gpio_init_generic_recovery(struct i2c_adapter *adap)
- 	if (bri->recover_bus && bri->recover_bus != i2c_generic_scl_recovery)
- 		return 0;
- 
--	/*
--	 * pins might be taken as GPIO, so we should inform pinctrl about
--	 * this and move the state to GPIO
--	 */
--	if (bri->pinctrl)
--		pinctrl_select_state(bri->pinctrl, bri->pins_gpio);
--
- 	/*
- 	 * if there is incomplete or no recovery information, see if generic
- 	 * GPIO recovery is available
+> +		pci_write_config_byte(dev, SMBHSTCFG, priv->original_hstcfg);
+>  		i801_acpi_remove(priv);
+>  		return err;
+>  	}
+> @@ -1779,14 +1782,13 @@ static void i801_remove(struct pci_dev *dev)
+>  {
+>  	struct i801_priv *priv = pci_get_drvdata(dev);
+>  
+> -	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
+> -	i801_disable_host_notify(priv);
+>  	i801_del_mux(priv);
+> +	i801_disable_host_notify(priv);
+>  	i2c_del_adapter(&priv->adapter);
+> -	i801_acpi_remove(priv);
+> -	pci_write_config_byte(dev, SMBHSTCFG, priv->original_hstcfg);
+> -
+>  	platform_device_unregister(priv->tco_pdev);
+> +	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
+> +	pci_write_config_byte(dev, SMBHSTCFG, priv->original_hstcfg);
+> +	i801_acpi_remove(priv);
+>  
+>  	/* if acpi_reserved is set then usage_count is incremented already */
+>  	if (!priv->acpi_reserved)
+> @@ -1803,8 +1805,8 @@ static void i801_shutdown(struct pci_dev *dev)
+>  	struct i801_priv *priv = pci_get_drvdata(dev);
+>  
+>  	/* Restore config registers to avoid hard hang on some systems */
+> -	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
+>  	i801_disable_host_notify(priv);
+> +	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
+>  	pci_write_config_byte(dev, SMBHSTCFG, priv->original_hstcfg);
+>  }
+>  
+
+Rest looks OK, I'll give it some testing 
+
 -- 
-2.41.0
-
+Jean Delvare
+SUSE L3 Support
