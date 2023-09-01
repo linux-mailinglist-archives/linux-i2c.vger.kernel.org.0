@@ -2,151 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFC5790108
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Sep 2023 19:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A7879010B
+	for <lists+linux-i2c@lfdr.de>; Fri,  1 Sep 2023 19:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243003AbjIARCW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 1 Sep 2023 13:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
+        id S231557AbjIARD6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 1 Sep 2023 13:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjIARCV (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Sep 2023 13:02:21 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87D010F2
-        for <linux-i2c@vger.kernel.org>; Fri,  1 Sep 2023 10:02:18 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9a5be3166a2so257185066b.1
-        for <linux-i2c@vger.kernel.org>; Fri, 01 Sep 2023 10:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693587737; x=1694192537; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JjLIE0CRPv1DMJDSSwRhapSZoWr3GymH7mb9JYxnG0U=;
-        b=Q4Cjly24sMF2sM3Nfjh+PBYVOy/FIt4C286ALp7WSyX5aR/eICUnJqWLNhq0V/0JOJ
-         ETRZnKvzocXVc1Onbj950Kphat6/RSaFcrVHU7aOHC3j5xNTVsmvxeFFeyrWwEI1SNa0
-         h5bFYzeOMjSD9rNzJvMvvwy8LoEsInDF1OaOBz+jOiSGgvnJWQkl6EMzfWR4KCS4K5qG
-         s5p0/c1UsJ6grVaIhIibJfO+NAnNVbP5Azj0W5nYFXGkGjYPu5wqhItqAWYMQpcsQDxP
-         QLMA/69c988+zjXXATCTKFgSivIMDr0NpMp8uiLZhCSpJSk7zLJST1f3btAbu/29H2ZQ
-         EOLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693587737; x=1694192537;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JjLIE0CRPv1DMJDSSwRhapSZoWr3GymH7mb9JYxnG0U=;
-        b=iW87XRpYQs5bOGYfAZi5vnGmoRJrL9khjpglNABvu4OhwGPT0LJyUCUaQVk04CtATp
-         iRtwDPJn3s5GGGKWovMm+/fe1GrRwPhgb3wzXR7qJAjaOimbIEr71eEn/XzsSQaC9Rl1
-         DRmEQ9wLtsdDLQQHPxC496I6vfhD/vMQiXsYMCDKlLyyGOtng+n30fzYdDPulb3snjq6
-         I7VWaeMIbBtikirOtbk+Wmykq71Mvp8/B2RkNBabv7ZWYm58fLwZfVpXBKo1+T1GVCGP
-         e7MPywwCQb4hlmLsGQPenabt3JtusuaI64sA4ZO1OQlfmQOL6O6fMXAIIq0O59xvYjXE
-         r98A==
-X-Gm-Message-State: AOJu0YxLhjY66O6GAF219f2cAxc9S0/dXMKwpgRtWbTZ96dw/SAanQ1L
-        ta3gKNB0XBEcz7d54GDfxu4=
-X-Google-Smtp-Source: AGHT+IGkFrcrWErZphXcgQVCV91YgR7w4RTChs3DoWx0FGcli5ACW4K+OVFnAUMBJ28r93hrWqtL6g==
-X-Received: by 2002:a17:906:cc0f:b0:9a5:c79f:bed5 with SMTP id ml15-20020a170906cc0f00b009a5c79fbed5mr2040217ejb.16.1693587736769;
-        Fri, 01 Sep 2023 10:02:16 -0700 (PDT)
-Received: from ?IPV6:2a01:c22:72e7:e700:d0a8:40ee:858e:f418? (dynamic-2a01-0c22-72e7-e700-d0a8-40ee-858e-f418.c22.pool.telefonica.de. [2a01:c22:72e7:e700:d0a8:40ee:858e:f418])
-        by smtp.googlemail.com with ESMTPSA id y8-20020a170906914800b00992f2befcbcsm2202973ejw.180.2023.09.01.10.02.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Sep 2023 10:02:16 -0700 (PDT)
-Message-ID: <d392cf3a-a029-2cd6-44e6-a98f57d42b5f@gmail.com>
-Date:   Fri, 1 Sep 2023 19:02:13 +0200
+        with ESMTP id S230254AbjIARD5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 1 Sep 2023 13:03:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7514210F2
+        for <linux-i2c@vger.kernel.org>; Fri,  1 Sep 2023 10:03:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 30E5F1F853;
+        Fri,  1 Sep 2023 17:03:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1693587833; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9GagGRztP1T820hQctp2gZEuFFiWxTmDDCxtH5A4stY=;
+        b=ldkiK20Acr0LYaoHhgSeFQZ+Qat22kxQY//5ly0PfcrJqzt8Lc4oJXPTU1c5ck6LVH4wOT
+        OTEuCNYoLCfL2tMoDIM9qE1pG5H370lRW5ZQoTkFaq9ekd+zjmIr//FoapDc6L+QQh14pZ
+        7xHKUjtdGSwAfNp1fexizoNxS2fOWaY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1693587833;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9GagGRztP1T820hQctp2gZEuFFiWxTmDDCxtH5A4stY=;
+        b=sI/KRgGRyMsk1K4ar7Zkgc05YQiAvIAkimxoqVJbK2236Mo08h6fBye2S6MFCdaLgRCKl7
+        kQ5AW3u20qA2CNDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0409A1358B;
+        Fri,  1 Sep 2023 17:03:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +Lv7OXgZ8mRyLAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 01 Sep 2023 17:03:52 +0000
+Date:   Fri, 1 Sep 2023 19:03:51 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: i801: fix cleanup code in remove() and error path
+ of probe()
+Message-ID: <20230901190351.2bd3b346@endymion.delvare>
+In-Reply-To: <dd6c9ddd-da76-ae6d-5903-e945cf950969@gmail.com>
+References: <07386d35-0f9f-bcd7-185c-d8eed60fc794@gmail.com>
+        <20230901141929.640fc5d5@endymion.delvare>
+        <dd6c9ddd-da76-ae6d-5903-e945cf950969@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH] i2c: i801: fix potential race in
- i801_block_transaction_byte_by_byte
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Andi Shyti <andi.shyti@kernel.org>,
-        Daniel Kurtz <djkurtz@chromium.org>, linux-i2c@vger.kernel.org
-References: <679ddcf8-b03d-15eb-e914-bdbaa3f5b890@gmail.com>
- <20230901184455.54effcea@endymion.delvare>
-Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <20230901184455.54effcea@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 01.09.2023 18:44, Jean Delvare wrote:
-> Hi Heiner,
+On Fri, 1 Sep 2023 14:41:38 +0200, Heiner Kallweit wrote:
+> On 01.09.2023 14:19, Jean Delvare wrote:
+> > On Sun, 27 Aug 2023 22:26:05 +0200, Heiner Kallweit wrote:  
+> >> Jean pointed out that the referenced patch resulted in the remove()
+> >> path not having the reverse order of calls in probe(). I think there's
+> >> more to be done to ensure proper cleanup.
+> >> Especially cleanup in the probe() error path has to be extended.
+> >> Not every step there may be strictly needed, but it's in line with
+> >> remove() now.
+> >>
+> >> Fixes: 9b5bf5878138 ("i2c: i801: Restore INTREN on unload")  
+> > 
+> > I think it also fixes 9424693035a5 ("i2c: i801: Create iTCO device on
+> > newer Intel PCHs").
 > 
-> On Tue, 29 Aug 2023 08:25:23 +0200, Heiner Kallweit wrote:
->> Currently we set SMBHSTCNT_LAST_BYTE only after the host has started
->> receiving the last byte. If we get e.g. preempted before setting
->> SMBHSTCNT_LAST_BYTE, the host may be finished with receiving the byte
->> before SMBHSTCNT_LAST_BYTE is set.
->> Therefore change the code to set SMBHSTCNT_LAST_BYTE before writing
->> SMBHSTSTS_BYTE_DONE for the byte before the last byte. Now the code
->> is also consistent with what we do in i801_isr_byte_done().
->>
->> Fixes: efa3cb15ad8b ("i2c-i801: Refactor use of LAST_BYTE in i801_block_transaction_byte_by_byte")
-> 
-> I don't think this is true. This patch refactored the code but didn't
-> change the logic. The bug existed before already. As far as I see, the
-> race condition already existed when the kernel switched to git, so
-> there's no point in having a Fixes statement.
-> 
-Shall we go with the patch as-is or do you think it's better to resubmit
-w/o the Fixes tag?
+> Right. We should add this, even though this fix won't apply cleanly
+> on some older kernel versions. I think we'll need separate patches for these
+> LTS kernel versions.
 
->> Reported-by: Jean Delvare <jdelvare@suse.com>
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->> ---
->>  drivers/i2c/busses/i2c-i801.c | 19 +++++++++----------
->>  1 file changed, 9 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
->> index 7a0ccc584..8acf09539 100644
->> --- a/drivers/i2c/busses/i2c-i801.c
->> +++ b/drivers/i2c/busses/i2c-i801.c
->> @@ -679,15 +679,11 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
->>  		return result ? priv->status : -ETIMEDOUT;
->>  	}
->>  
->> -	for (i = 1; i <= len; i++) {
->> -		if (i == len && read_write == I2C_SMBUS_READ)
->> -			smbcmd |= SMBHSTCNT_LAST_BYTE;
->> -		outb_p(smbcmd, SMBHSTCNT(priv));
->> -
->> -		if (i == 1)
->> -			outb_p(inb(SMBHSTCNT(priv)) | SMBHSTCNT_START,
->> -			       SMBHSTCNT(priv));
->> +	if (len == 1 && read_write == I2C_SMBUS_READ)
->> +		smbcmd |= SMBHSTCNT_LAST_BYTE;
->> +	outb_p(smbcmd | SMBHSTCNT_START, SMBHSTCNT(priv));
->>  
->> +	for (i = 1; i <= len; i++) {
->>  		status = i801_wait_byte_done(priv);
->>  		if (status)
->>  			return status;
->> @@ -710,9 +706,12 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
->>  			data->block[0] = len;
->>  		}
->>  
->> -		/* Retrieve/store value in SMBBLKDAT */
->> -		if (read_write == I2C_SMBUS_READ)
->> +		if (read_write == I2C_SMBUS_READ) {
->>  			data->block[i] = inb_p(SMBBLKDAT(priv));
->> +			if (i == len - 1)
->> +				outb_p(smbcmd | SMBHSTCNT_LAST_BYTE, SMBHSTCNT(priv));
->> +		}
->> +
->>  		if (read_write == I2C_SMBUS_WRITE && i+1 <= len)
->>  			outb_p(data->block[i+1], SMBBLKDAT(priv));
->>  
-> 
-> Looks good and tested OK.
-> 
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
-> 
+Our task is to annotate the commit message with the dependency
+information. Whether or not people want to backport the fix to a given
+kernel is their decision.
 
+Personally I wouldn't bother backporting this to stable kernels, as it's
+not "a real bug that bothers people", to quote
+Documentation/process/stable-kernel-rules.rst.
+
+> >> Cc: stable@vger.kernel.org
+> >> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> >> ---
+> >>  drivers/i2c/busses/i2c-i801.c | 14 ++++++++------
+> >>  1 file changed, 8 insertions(+), 6 deletions(-)
+> >>
+> >> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> >> index 73ae06432..7a0ccc584 100644
+> >> --- a/drivers/i2c/busses/i2c-i801.c
+> >> +++ b/drivers/i2c/busses/i2c-i801.c
+> >> @@ -1754,6 +1754,9 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+> >>  		"SMBus I801 adapter at %04lx", priv->smba);
+> >>  	err = i2c_add_adapter(&priv->adapter);
+> >>  	if (err) {
+> >> +		platform_device_unregister(priv->tco_pdev);
+> >> +		outb_p(priv->original_hstcnt, SMBHSTCNT(priv));  
+> > 
+> > Doesn't seem to be needed, as I can't see SMBHSTCNT being written to
+> > during probe?
+> >   
+> Right, this is what I was referring to in the commit message when saying
+> "not every step may be strictly needed". Restoring SMBHSTCNT isn't needed
+
+Oh right, missed that, sorry.
+
+> here, but it makes cleanup in the probe error path the same as in remove
+> and therefore may improve readability and maintainability.
+> But I don't insist on it and don't have a strong opinion.
+
+I think it would make sense to omit it from the probe error path (to
+make it clear it's not needed there) and move it at the end of
+i801_remove() and i801_shutdown(). That way the probe error path is
+still a subset of the remove and shutdown paths and I think this solves
+the maintainability issue. Would that be OK with you?
+
+-- 
+Jean Delvare
+SUSE L3 Support
