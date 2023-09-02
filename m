@@ -2,70 +2,57 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7A9790976
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Sep 2023 22:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF47779098A
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Sep 2023 22:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233841AbjIBULJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 2 Sep 2023 16:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
+        id S234215AbjIBU0H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 2 Sep 2023 16:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbjIBULJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 2 Sep 2023 16:11:09 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0F4E54
-        for <linux-i2c@vger.kernel.org>; Sat,  2 Sep 2023 13:11:04 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-50087d47d4dso381178e87.1
-        for <linux-i2c@vger.kernel.org>; Sat, 02 Sep 2023 13:11:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693685463; x=1694290263; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oagijnXdwApLzLrrhY/sdUJmvC/lVU1cxKXfNb3TM/k=;
-        b=miajlgTRekv4ugvHKsNqCCY6ZZ3xXQNwnRAj7sbw8IKjhcJw76QA5zB7tNsVpZIwOe
-         /HNpG1K0qKHiZihKNpdHBmcsYHX1fMp75TYfntRgn1KTi1tlqZcK4eKD+FIzCxerHfEE
-         NI3Ng7rqun5ZJZ7HYS4HY7tRYdkfDI8v030BhDkbi1sgzjgEj/LQ19NRJY+APzDTBchR
-         kvNIB3UHT2Su16pbF6vHMbftmh+Ke/12gBZkIF0zIxaI3GgyQhq0qefncW3HXk6mxltP
-         b/p28isxnzFk9iz0dlfWwOkW9Nm2Qs7SE7nwvHgXH7glPYs7JdMsQKydA/+xPfjdQgRi
-         17Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693685463; x=1694290263;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oagijnXdwApLzLrrhY/sdUJmvC/lVU1cxKXfNb3TM/k=;
-        b=lOLAICgFjBNivRuGExnv9Jh70VsWe8ckRWVKnOd5LEXgzUo8FL0dgNg2ptj+5uQTn8
-         teiyyuy0LYkCjl0nzlcGAmAbvAJf04XpCs1SgK11DOo/T3FeWFTqZo+Exs2YNdrU7bDs
-         wOEF/50MDDmi3MPpW7BwBt6/8K2OyALgD0JSXjxz+EE4UZab9DuIBo2McLSSVvwCTR9r
-         MECys7S7bRBPa9WkNDaWU3eJ982LZgJDtOZ5GxDmTHj1na+yp1eUWofadA4frYyQQ8xk
-         +YqCGS/bpRQ3D39uVpgsUVFxBuxtm7v+QQa9uCW4hOMkPykkj8IZ82rukVa4P2YViccs
-         tv8w==
-X-Gm-Message-State: AOJu0Ywbbfpm1Ka5w7IxRNE4Oi7THykE3msXkcGGLyLbxfqEarjfHePy
-        AunU6zT3+7nu2HL26QI2zQw=
-X-Google-Smtp-Source: AGHT+IGzP2EMc68dko915xjmK+dTSViwBDC6d/6W9bm5tuHrCZPPyX+N/r/MapZ3kl/GldixaDqE7w==
-X-Received: by 2002:a05:6512:4845:b0:4f8:74b5:b4ec with SMTP id ep5-20020a056512484500b004f874b5b4ecmr4068737lfb.41.1693685462482;
-        Sat, 02 Sep 2023 13:11:02 -0700 (PDT)
-Received: from ?IPV6:2a01:c22:7326:d300:b9c4:4b23:eec7:79e? (dynamic-2a01-0c22-7326-d300-b9c4-4b23-eec7-079e.c22.pool.telefonica.de. [2a01:c22:7326:d300:b9c4:4b23:eec7:79e])
-        by smtp.googlemail.com with ESMTPSA id g10-20020aa7c58a000000b005227e53cec2sm3762647edq.50.2023.09.02.13.11.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Sep 2023 13:11:01 -0700 (PDT)
-Message-ID: <f056286a-1db9-b88c-6d36-a3358190b9c9@gmail.com>
-Date:   Sat, 2 Sep 2023 22:10:52 +0200
+        with ESMTP id S234223AbjIBU0H (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 2 Sep 2023 16:26:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DABE5F;
+        Sat,  2 Sep 2023 13:25:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84851B8090A;
+        Sat,  2 Sep 2023 20:25:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8080FC433C8;
+        Sat,  2 Sep 2023 20:25:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693686338;
+        bh=+WSTiNaglKsn0BH7JjBM55l1rreJQF3ZzL15znSALFU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l3+ofwj+nPd9LpC4A9FvPVAWupwZCGhEL9TrlULCtfQs+CjoWVUkCSs6qj9ruUVs8
+         bbxaAFePua8cgnRqDNk5ly/0mg+ATVBdYre7WRorhlRSbsEjPDcjqWKUokSRGYp6Bv
+         lSXyQQ2AHgJvSFTthl0KuRCB7W6VX7HqFHD8Vlk0g92ocrFD8CgE33b1pvUVmVPhoF
+         /nYbPOVG5OI5qgQ3BezOdSY3toku8Oo9L/nazCz97mjh3pLYma4Jsj+tZAqR+o4WMI
+         h6mH8a6Nsy0TNaMSmqAbe2BCfs6ZKmzX0lMrBBZTZDXEk4DIW25/g+Xdv2bbXPtfsf
+         tKjEkjY0l7E6Q==
+Date:   Sat, 2 Sep 2023 22:25:33 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Huangzheng Lai <Huangzheng.Lai@unisoc.com>
+Cc:     Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huangzheng lai <laihuangzheng@gmail.com>,
+        Xiongpeng Wu <xiongpeng.wu@unisoc.com>
+Subject: Re: [PATCH 1/8] i2c: sprd: Add configurations that support 1Mhz and
+ 3.4Mhz frequencies
+Message-ID: <20230902202533.bpquxhjq3mrhmwew@zenone.zhora.eu>
+References: <20230817094520.21286-1-Huangzheng.Lai@unisoc.com>
+ <20230817094520.21286-2-Huangzheng.Lai@unisoc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.com>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH v2] i2c: i801: fix potential race in
- i801_block_transaction_byte_by_byte
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230817094520.21286-2-Huangzheng.Lai@unisoc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,63 +60,63 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Currently we set SMBHSTCNT_LAST_BYTE only after the host has started
-receiving the last byte. If we get e.g. preempted before setting
-SMBHSTCNT_LAST_BYTE, the host may be finished with receiving the byte
-before SMBHSTCNT_LAST_BYTE is set.
-Therefore change the code to set SMBHSTCNT_LAST_BYTE before writing
-SMBHSTSTS_BYTE_DONE for the byte before the last byte. Now the code
-is also consistent with what we do in i801_isr_byte_done().
+Hi Huangzheng,
 
-Reported-by: Jean Delvare <jdelvare@suse.com>
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
-v2:
-- remove incorrect Fixes tag
----
- drivers/i2c/busses/i2c-i801.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+On Thu, Aug 17, 2023 at 05:45:13PM +0800, Huangzheng Lai wrote:
+> This patch adds I2C controller driver support for 1Mhz and 3.4Mhz
+> frequency configurations.
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 7a0ccc584..8acf09539 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -679,15 +679,11 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
- 		return result ? priv->status : -ETIMEDOUT;
- 	}
- 
--	for (i = 1; i <= len; i++) {
--		if (i == len && read_write == I2C_SMBUS_READ)
--			smbcmd |= SMBHSTCNT_LAST_BYTE;
--		outb_p(smbcmd, SMBHSTCNT(priv));
--
--		if (i == 1)
--			outb_p(inb(SMBHSTCNT(priv)) | SMBHSTCNT_START,
--			       SMBHSTCNT(priv));
-+	if (len == 1 && read_write == I2C_SMBUS_READ)
-+		smbcmd |= SMBHSTCNT_LAST_BYTE;
-+	outb_p(smbcmd | SMBHSTCNT_START, SMBHSTCNT(priv));
- 
-+	for (i = 1; i <= len; i++) {
- 		status = i801_wait_byte_done(priv);
- 		if (status)
- 			return status;
-@@ -710,9 +706,12 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
- 			data->block[0] = len;
- 		}
- 
--		/* Retrieve/store value in SMBBLKDAT */
--		if (read_write == I2C_SMBUS_READ)
-+		if (read_write == I2C_SMBUS_READ) {
- 			data->block[i] = inb_p(SMBBLKDAT(priv));
-+			if (i == len - 1)
-+				outb_p(smbcmd | SMBHSTCNT_LAST_BYTE, SMBHSTCNT(priv));
-+		}
-+
- 		if (read_write == I2C_SMBUS_WRITE && i+1 <= len)
- 			outb_p(data->block[i+1], SMBBLKDAT(priv));
- 
--- 
-2.42.0
+please avoid the "This patch adds..." form, it can be sometimes
+misleading... Use always the imperative form.
 
+"Add support for 1Mhz and 3.5Mhz frequency configuration"
+
+> Signed-off-by: Huangzheng Lai <Huangzheng.Lai@unisoc.com>
+> ---
+>  drivers/i2c/busses/i2c-sprd.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sprd.c
+> index ffc54fbf814d..acc2a4d4eeae 100644
+> --- a/drivers/i2c/busses/i2c-sprd.c
+> +++ b/drivers/i2c/busses/i2c-sprd.c
+> @@ -347,6 +347,10 @@ static void sprd_i2c_set_clk(struct sprd_i2c *i2c_dev, u32 freq)
+>  		writel((6 * apb_clk) / 10000000, i2c_dev->base + ADDR_STA0_DVD);
+>  	else if (freq == I2C_MAX_STANDARD_MODE_FREQ)
+>  		writel((4 * apb_clk) / 1000000, i2c_dev->base + ADDR_STA0_DVD);
+> +	else if (freq == I2C_MAX_FAST_MODE_PLUS_FREQ)
+> +		writel((8 * apb_clk) / 10000000, i2c_dev->base + ADDR_STA0_DVD);
+> +	else if (freq == I2C_MAX_HIGH_SPEED_MODE_FREQ)
+> +		writel((8 * apb_clk) / 10000000, i2c_dev->base + ADDR_STA0_DVD);
+
+if you want you can queue up a patch that makes this train of
+"else if" in a switch case.
+
+>  }
+>  
+>  static void sprd_i2c_enable(struct sprd_i2c *i2c_dev)
+> @@ -519,9 +523,11 @@ static int sprd_i2c_probe(struct platform_device *pdev)
+>  	if (!of_property_read_u32(dev->of_node, "clock-frequency", &prop))
+>  		i2c_dev->bus_freq = prop;
+>  
+> -	/* We only support 100k and 400k now, otherwise will return error. */
+> +	/* We only support 100k\400k\1m\3.4m now, otherwise will return error. */
+>  	if (i2c_dev->bus_freq != I2C_MAX_STANDARD_MODE_FREQ &&
+> -	    i2c_dev->bus_freq != I2C_MAX_FAST_MODE_FREQ)
+> +			i2c_dev->bus_freq != I2C_MAX_FAST_MODE_FREQ &&
+> +			i2c_dev->bus_freq != I2C_MAX_FAST_MODE_PLUS_FREQ &&
+> +			i2c_dev->bus_freq != I2C_MAX_HIGH_SPEED_MODE_FREQ)
+
+We finally make use of these defines :)
+
+Acked-by: Andi Shyti <andi.shyti@kernel.org> 
+
+Thanks,
+Andi
+
+>  		return -EINVAL;
+>  
+>  	ret = sprd_i2c_clk_init(i2c_dev);
+> -- 
+> 2.17.1
+> 
