@@ -2,49 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD364793227
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 00:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFA4793237
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 00:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236064AbjIEWxq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Sep 2023 18:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S232406AbjIEW7b (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Sep 2023 18:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbjIEWxq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Sep 2023 18:53:46 -0400
+        with ESMTP id S229993AbjIEW7b (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Sep 2023 18:59:31 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D51109;
-        Tue,  5 Sep 2023 15:53:43 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B512EC433C8;
-        Tue,  5 Sep 2023 22:53:41 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AC0EB
+        for <linux-i2c@vger.kernel.org>; Tue,  5 Sep 2023 15:59:27 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 088DAC433C7;
+        Tue,  5 Sep 2023 22:59:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693954422;
-        bh=miuDGTaJZrddpauNP0hGkxomeqgCzyoCrEificvmnr4=;
+        s=k20201202; t=1693954767;
+        bh=e6x00YSc1O0rONfdHhTnpdZ9PNTeWLHkYHC3YGtFCcM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=brMpdWs72DTusXM27W9jzz0n/0x1koCiMVqB0h69WdyCqkgmUL3NzMnZ1ow0W/kPP
-         HvC0c9+tEmc32e3bD5S5jlL0/h+AWirwecxPyEZLtXivuDjwp2OP8TigTV91qWitVM
-         gfM11YtlkX530YPgjIrFQapP/xOnqfqWaPTr45USqexbGwhzUpvwUZgI4KT8wYycmK
-         qgj2wXju4frSUPWCgfGDIA8op4s8QjYza3Pqv5ftQBixGYSiCZtrs3pnQFlAIxdoGC
-         lZCIeo4Rso2rKZN2b1xL1g2aYN6sVhYMyQUDG/M088G0MgpfoDOQ/26heS7Pe2g/MP
-         Lx9/90xcfYVnA==
-Date:   Wed, 6 Sep 2023 00:53:38 +0200
+        b=lhXNxiaKESSncXUJW+K4bzSG/6aw9hYwN2oiB2grIhGFNZhMKsvBsRhfHEx0h3CDA
+         vByhJduLhLCXZ9/Vv5qC8uFhVnuheFB55XKtW6ZbBVTmNDXCFX8Ke8HbK4ZRrA5oLn
+         aIW64juerJPMRCk8E/XbJ3yOczABBEbnwdVoGKNPRpqpqv7V3jJjr+Hcx5DIZrbNPE
+         aoIslG+kZOv8zlwrrZjc3hpYSBr0lvE9HVf94CwfnQV5judaBncy5VZ3juqRMZBuMH
+         XuQCprjFf6BhdYumoMuxmrOjUevsNBhesTa9bt7/c+RUdyczxSv8jEjRE3HqQ8nxrE
+         tdA5QTTzSVz4w==
+Date:   Wed, 6 Sep 2023 00:59:22 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Jonas Gorski <jonas.gorski@bisdn.de>
-Cc:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Kevin Cernekee <cernekee@chromium.org>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: iproc: reset bus after timeout if START_BUSY is
- stuck
-Message-ID: <20230905225338.g76dqf3a26dnnzxx@zenone.zhora.eu>
-References: <20230904090005.52622-1-jonas.gorski@bisdn.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
+        linux-i2c@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] i2c: i801: fix potential race in
+ i801_block_transaction_byte_by_byte
+Message-ID: <20230905225922.blulveq5qwe7tv6h@zenone.zhora.eu>
+References: <f056286a-1db9-b88c-6d36-a3358190b9c9@gmail.com>
+ <20230905101243.39920fe5@endymion.delvare>
+ <20230905091155.h3oezdj5g6z5jpxu@zenone.zhora.eu>
+ <5838f7e4-dd08-48eb-2f9c-df45daa0214a@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230904090005.52622-1-jonas.gorski@bisdn.de>
+In-Reply-To: <5838f7e4-dd08-48eb-2f9c-df45daa0214a@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -55,104 +53,52 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Jonas,
+Hi Heiner,
 
-On Mon, Sep 04, 2023 at 11:00:04AM +0200, Jonas Gorski wrote:
-> If a transaction times out, the START_BUSY signal may have gotten stuck,
-> and subsequent transactaction attempts will fail as the bus is still
-> considered busy.
-> 
-> To work around this, check if the START_BUSY bit is still asserted, and
-> reset the controller in case it is.
-> 
-> This is also done by the alternative, non-upstream iproc-smbus driver
-> implementation [1].
-> 
-> Works around situations like:
-> 
->     bcm-iproc-2c 1803b000.i2c: transaction timed out
->     bcm-iproc-2c 1803b000.i2c: bus is busy
->     bcm-iproc-2c 1803b000.i2c: bus is busy
->     bcm-iproc-2c 1803b000.i2c: bus is busy
->     bcm-iproc-2c 1803b000.i2c: bus is busy
->     bcm-iproc-2c 1803b000.i2c: bus is busy
->     ...
-> 
-> where the bus never recovers after a timeout.
-> 
-> [1] https://github.com/opencomputeproject/onie/blob/master/patches/kernel/3.2.69/driver-iproc-smbus.patch
-> 
-> Fixes: e6e5dd3566e0 ("i2c: iproc: Add Broadcom iProc I2C Driver")
-> Signed-off-by: Jonas Gorski <jonas.gorski@bisdn.de>
+On Tue, Sep 05, 2023 at 01:35:10PM +0200, Heiner Kallweit wrote:
+> On 05.09.2023 11:11, Andi Shyti wrote:
+> > Hi Jean,
+> > 
+> > On Tue, Sep 05, 2023 at 10:12:43AM +0200, Jean Delvare wrote:
+> >> On Sat, 02 Sep 2023 22:10:52 +0200, Heiner Kallweit wrote:
+> >>> Currently we set SMBHSTCNT_LAST_BYTE only after the host has started
+> >>> receiving the last byte. If we get e.g. preempted before setting
+> >>> SMBHSTCNT_LAST_BYTE, the host may be finished with receiving the byte
+> >>> before SMBHSTCNT_LAST_BYTE is set.
+> >>> Therefore change the code to set SMBHSTCNT_LAST_BYTE before writing
+> >>> SMBHSTSTS_BYTE_DONE for the byte before the last byte. Now the code
+> >>> is also consistent with what we do in i801_isr_byte_done().
+> >>>
+> >>> Reported-by: Jean Delvare <jdelvare@suse.com>
+> >>
+> >> Note for Wolfram: checkpatch says we should insert here:
+> >>
+> >> Closes: https://lore.kernel.org/linux-i2c/20230828152747.09444625@endymion.delvare/
+> > 
+> > does this also need a Fixes: tag? I tried to check it, but there
+> > was an intricate jungle of commits in these lines.
+> > 
+> Quoting Jean from previous communication about this patch:
+> As far as I see, the race condition already existed when the kernel
+> switched to git, so there's no point in having a Fixes statement.
 
-I think the right Fixes tag should be:
+true... I forgot about this comment.
 
-Fixes: 3f98ad45e585 ("i2c: iproc: add polling support")
-Cc: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Cc: <stable@vger.kernel.org> # v5.2+
+Anyway I think that this should, then, go to all the stable
+kernels and I believe that without the Fixes tag this will never
+be picked up.
 
-> ---
-> The iproc-smbus driver does some additional checks/mitigations, but
-> since my I2C understanding is only very rudimentary, I didn't add them,
-> also the reset was enough to fix the issue I was seeing.
-> 
-> I was a bit conflicted about the Fixes tag, but since it fixes/work
-> around misbehaviour seen I decided to add one.
-> 
-> The issue was happening only in production, and only once per boot (so
-> far), but with 100% probability within a few hours.
-> 
->  drivers/i2c/busses/i2c-bcm-iproc.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
-> index 05c80680dff4..69f9c199fa3b 100644
-> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
-> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
-> @@ -796,6 +796,15 @@ static int bcm_iproc_i2c_xfer_wait(struct bcm_iproc_i2c_dev *iproc_i2c,
->  	if (!time_left && !iproc_i2c->xfer_is_done) {
->  		dev_err(iproc_i2c->device, "transaction timed out\n");
->  
-> +		/* check if START_BUSY did not clear */
+Maybe Greg can advise here.
 
-as Ray asked, can you please expand this comment?
+Would you mind resending this patch Cc'eing the stable kernel and
+adding a note after the '---'?
 
-Thanks,
 Andi
 
-> +		if (!!(iproc_i2c_rd_reg(iproc_i2c, M_CMD_OFFSET) &
-> +		       BIT(M_CMD_START_BUSY_SHIFT))) {
-> +			/* re-initialize i2c for recovery */
-> +			bcm_iproc_i2c_enable_disable(iproc_i2c, false);
-> +			bcm_iproc_i2c_init(iproc_i2c);
-> +			bcm_iproc_i2c_enable_disable(iproc_i2c, true);
-> +		}
-> +
->  		/* flush both TX/RX FIFOs */
->  		val = BIT(M_FIFO_RX_FLUSH_SHIFT) | BIT(M_FIFO_TX_FLUSH_SHIFT);
->  		iproc_i2c_wr_reg(iproc_i2c, M_FIFO_CTRL_OFFSET, val);
-> -- 
-> 2.42.0
-> 
-> 
-> -- 
-> BISDN GmbH
-> Körnerstraße 7-10
-> 10785 Berlin
-> Germany
-> 
-> 
-> Phone: 
-> +49-30-6108-1-6100
-> 
-> 
-> Managing Directors: 
-> Dr.-Ing. Hagen Woesner, Andreas 
-> Köpsel
-> 
-> 
-> Commercial register: 
-> Amtsgericht Berlin-Charlottenburg HRB 141569 
-> B
-> VAT ID No: DE283257294
+> > Anyway, you can add:
+> > 
+> > Acked-by: Andi Shyti <andi.shyti@kernel.org> 
+> > 
+> > Thanks,
+> > Andi
 > 
