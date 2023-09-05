@@ -2,110 +2,78 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633987926B8
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Sep 2023 18:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCAA79270C
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Sep 2023 18:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243859AbjIEQUV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Sep 2023 12:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        id S240655AbjIEQTu (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Sep 2023 12:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354430AbjIELfZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Sep 2023 07:35:25 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048D783
-        for <linux-i2c@vger.kernel.org>; Tue,  5 Sep 2023 04:35:21 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-31c65820134so2117250f8f.1
-        for <linux-i2c@vger.kernel.org>; Tue, 05 Sep 2023 04:35:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693913718; x=1694518518; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jvh7WWzBAfXIoLzMSSdLyX47ANtIvmPMfydEou4b9YY=;
-        b=TeNECdvpO9r1SBGjZ9pisRSv/oW/ZMpr5gHFHc573ZYfIihKiHbngZX+6PilA5sz/u
-         5UlPqB53GQ3Z5LhqTeiEyvL5q2UFAVe6QvysjFf2qGaKBFLFlxKFGjs4H5VLgHD7QmgK
-         rVSg784JHilbHIbLtwC9cZo04qtxYhnNLq1dUKGVET7j6UQxlWpHPptv3lggUl6f+Q8X
-         R7dP4JsM/bsLhOtZiYBji3kSSIu+xFRGSts2spi+0O2TwJ70Kp5wEpmVPEm7hla5yKLb
-         yeBwTGW08ovq/UhSqxIHZ5eQZdmCWTVmK4GHnWy3Pxz1LSgttd/8VdNDWirV7mQVXYXA
-         BDxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693913718; x=1694518518;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jvh7WWzBAfXIoLzMSSdLyX47ANtIvmPMfydEou4b9YY=;
-        b=BJfZguaWAfK3D0ecKWcC9cBePgax5+ryaBGiGd1PAkjSf9zgxcrKL/53OWQOXwlmsX
-         a5y/AMuGLtbd2tGLn9x/JuYvGjtkA8ABS20S9jfWAIfzJp/pgdZoAJjtAHppK0/9MBMg
-         N5phtC7cMoZxNQNo5PqHLN9F7JGQbT0E3LHguzRK6+MfqbnZl6zVVSVitRFM3pachlwS
-         ZP+IhuuSWmprL6CkRntX6KrhffSygvFd1DFC/BfFaDGxFiJmF6LmiuuiKQ70HWOh6Ckl
-         NHl93u0mGXg4N4QytRxKgXGjpAwRcc643QXu+rFHOBUtS2og70e2301BCKtVOIq8ADYO
-         2bKQ==
-X-Gm-Message-State: AOJu0Yzo7fzf/tfsnB6Bb7XuvTOwi1axlak8GYz0R7CXtf3sIT2h66zd
-        PwGvIytaCYrl5Sh/CDA3TXw=
-X-Google-Smtp-Source: AGHT+IHOHzTrP4NzjQVDJirNoemHn+GVuC/dHpoCKwrwgDZx6qjpNwN4f85rtIL2+PuFa5c3V/vnnA==
-X-Received: by 2002:a05:6000:4e:b0:31c:e933:9590 with SMTP id k14-20020a056000004e00b0031ce9339590mr8574702wrx.33.1693913718106;
-        Tue, 05 Sep 2023 04:35:18 -0700 (PDT)
-Received: from ?IPV6:2a01:c22:6f6b:c00:c45d:f24a:575b:803b? (dynamic-2a01-0c22-6f6b-0c00-c45d-f24a-575b-803b.c22.pool.telefonica.de. [2a01:c22:6f6b:c00:c45d:f24a:575b:803b])
-        by smtp.googlemail.com with ESMTPSA id a2-20020adff7c2000000b003177074f830sm17267798wrq.59.2023.09.05.04.35.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Sep 2023 04:35:17 -0700 (PDT)
-Message-ID: <5838f7e4-dd08-48eb-2f9c-df45daa0214a@gmail.com>
-Date:   Tue, 5 Sep 2023 13:35:10 +0200
+        with ESMTP id S1354433AbjIELgc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Sep 2023 07:36:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA061AB;
+        Tue,  5 Sep 2023 04:36:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CABA3602E0;
+        Tue,  5 Sep 2023 11:36:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAA19C433C8;
+        Tue,  5 Sep 2023 11:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693913788;
+        bh=JJ1xgbKs1Vv5+UBKm7oDOUD1ckh8Fc4bT3kqxnA3/sg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DGQX5q5hkl16T4RhaWAG4GCnv6bCK0EwaWZ9Ztvnh8bfULdbZqoFFL+LN4ptVukir
+         Ib/NOa2YKgggCD2D7iBAegSc5e8caSpP0r48/8O7pR6E8s0CciR8cUuBuOhXeyLXbu
+         AMqEd1pSvTOZUZCR3d8ZDxGwNnXR9HGKZZaRUayB9b1aeHOZsDVDDwLns7sVZAPnEN
+         D31jV9zkSr6fYBtFEAXFCaH0224mkWO1s8Kadr3gcvECqhb8wamOG2UF3poCpaACZ/
+         yf/NRTrWYz/bn0PkiyTwP5o0KZ+IOkZdwwlACkEVZtf3k4lze7Mh6rbxsmicJQKEkb
+         /hXyAvTfIrp+g==
+Date:   Tue, 5 Sep 2023 13:36:24 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] i2c: rcar: introduce Gen4 devices
+Message-ID: <20230905113624.5o2hfjojh3he7aex@zenone.zhora.eu>
+References: <20230904135852.12146-1-wsa+renesas@sang-engineering.com>
+ <20230904135852.12146-3-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v2] i2c: i801: fix potential race in
- i801_block_transaction_byte_by_byte
-Content-Language: en-US
-To:     Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.de>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-References: <f056286a-1db9-b88c-6d36-a3358190b9c9@gmail.com>
- <20230905101243.39920fe5@endymion.delvare>
- <20230905091155.h3oezdj5g6z5jpxu@zenone.zhora.eu>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <20230905091155.h3oezdj5g6z5jpxu@zenone.zhora.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230904135852.12146-3-wsa+renesas@sang-engineering.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 05.09.2023 11:11, Andi Shyti wrote:
-> Hi Jean,
-> 
-> On Tue, Sep 05, 2023 at 10:12:43AM +0200, Jean Delvare wrote:
->> On Sat, 02 Sep 2023 22:10:52 +0200, Heiner Kallweit wrote:
->>> Currently we set SMBHSTCNT_LAST_BYTE only after the host has started
->>> receiving the last byte. If we get e.g. preempted before setting
->>> SMBHSTCNT_LAST_BYTE, the host may be finished with receiving the byte
->>> before SMBHSTCNT_LAST_BYTE is set.
->>> Therefore change the code to set SMBHSTCNT_LAST_BYTE before writing
->>> SMBHSTSTS_BYTE_DONE for the byte before the last byte. Now the code
->>> is also consistent with what we do in i801_isr_byte_done().
->>>
->>> Reported-by: Jean Delvare <jdelvare@suse.com>
->>
->> Note for Wolfram: checkpatch says we should insert here:
->>
->> Closes: https://lore.kernel.org/linux-i2c/20230828152747.09444625@endymion.delvare/
-> 
-> does this also need a Fixes: tag? I tried to check it, but there
-> was an intricate jungle of commits in these lines.
-> 
-Quoting Jean from previous communication about this patch:
-As far as I see, the race condition already existed when the kernel
-switched to git, so there's no point in having a Fixes statement.
+Hi Wolfram,
 
-> Anyway, you can add:
-> 
-> Acked-by: Andi Shyti <andi.shyti@kernel.org> 
-> 
-> Thanks,
-> Andi
+> @@ -1031,10 +1021,12 @@ static const struct of_device_id rcar_i2c_dt_ids[] = {
+>  	{ .compatible = "renesas,i2c-r8a7794", .data = (void *)I2C_RCAR_GEN2 },
+>  	{ .compatible = "renesas,i2c-r8a7795", .data = (void *)I2C_RCAR_GEN3 },
+>  	{ .compatible = "renesas,i2c-r8a7796", .data = (void *)I2C_RCAR_GEN3 },
+> +	/* S4 has no FM+ bit */
+> +	{ .compatible = "renesas,i2c-r8a779f0", .data = (void *)I2C_RCAR_GEN3 },
 
+is this I2C_RCAR_GEN3 or I2C_RCAR_GEN4?
+
+Rest looks good.
+
+Andi
+
+>  	{ .compatible = "renesas,rcar-gen1-i2c", .data = (void *)I2C_RCAR_GEN1 },
+>  	{ .compatible = "renesas,rcar-gen2-i2c", .data = (void *)I2C_RCAR_GEN2 },
+>  	{ .compatible = "renesas,rcar-gen3-i2c", .data = (void *)I2C_RCAR_GEN3 },
+> -	{ .compatible = "renesas,rcar-gen4-i2c", .data = (void *)I2C_RCAR_GEN3 },
+> +	{ .compatible = "renesas,rcar-gen4-i2c", .data = (void *)I2C_RCAR_GEN4 },
+>  	{},
