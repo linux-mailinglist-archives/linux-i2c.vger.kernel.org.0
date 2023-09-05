@@ -2,44 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9E07930FB
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Sep 2023 23:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD364793227
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 00:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244251AbjIEVhT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Sep 2023 17:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
+        id S236064AbjIEWxq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Sep 2023 18:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232877AbjIEVhS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Sep 2023 17:37:18 -0400
-X-Greylist: delayed 591 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 14:37:15 PDT
+        with ESMTP id S232014AbjIEWxq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Sep 2023 18:53:46 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1711F133;
-        Tue,  5 Sep 2023 14:37:15 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBAA9C433C7;
-        Tue,  5 Sep 2023 21:37:13 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D51109;
+        Tue,  5 Sep 2023 15:53:43 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B512EC433C8;
+        Tue,  5 Sep 2023 22:53:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693949834;
-        bh=1tW/2YmVkVDqbE9TScoPDDYvN/EtPZ3iDJNQoYXntFk=;
+        s=k20201202; t=1693954422;
+        bh=miuDGTaJZrddpauNP0hGkxomeqgCzyoCrEificvmnr4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rB1yc9fjSlhx1N807FdykNMbNdeJR6JH1pqqabkB1XrRZorOa0DC80wxLQRF+SBol
-         JBgqszR6mgnozoT0yiOBD39CPCCNFctGwNKc8SaXCky/fjbL9FqMDPxuqWcI+ylUwC
-         2JF0JqiZtpO2DcbeqkkkEB6wyrmgHcqSzbn85NTrKaTo3mX4fVUFWkycYrMcDPgzZw
-         6G5IR22g0/0vG+rj7JEf2zeYsHEJ15OQsbpfy/3LWSWuPqXwP6NjMA1QEKauKCknJ6
-         oyWxbBb7lNe6D0HCIJA3jJafukqb2toqV2woo8X+AScpfRNBihPftHJqCx3F7ntPQX
-         1jftW0YOT9eKg==
-Date:   Tue, 5 Sep 2023 23:37:10 +0200
+        b=brMpdWs72DTusXM27W9jzz0n/0x1koCiMVqB0h69WdyCqkgmUL3NzMnZ1ow0W/kPP
+         HvC0c9+tEmc32e3bD5S5jlL0/h+AWirwecxPyEZLtXivuDjwp2OP8TigTV91qWitVM
+         gfM11YtlkX530YPgjIrFQapP/xOnqfqWaPTr45USqexbGwhzUpvwUZgI4KT8wYycmK
+         qgj2wXju4frSUPWCgfGDIA8op4s8QjYza3Pqv5ftQBixGYSiCZtrs3pnQFlAIxdoGC
+         lZCIeo4Rso2rKZN2b1xL1g2aYN6sVhYMyQUDG/M088G0MgpfoDOQ/26heS7Pe2g/MP
+         Lx9/90xcfYVnA==
+Date:   Wed, 6 Sep 2023 00:53:38 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+To:     Jonas Gorski <jonas.gorski@bisdn.de>
+Cc:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Kevin Cernekee <cernekee@chromium.org>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] i2c: rcar: add FastMode+ support
-Message-ID: <20230905213710.3dv5h6zvwu4tpnby@zenone.zhora.eu>
-References: <20230904135852.12146-1-wsa+renesas@sang-engineering.com>
- <20230904135852.12146-4-wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH] i2c: iproc: reset bus after timeout if START_BUSY is
+ stuck
+Message-ID: <20230905225338.g76dqf3a26dnnzxx@zenone.zhora.eu>
+References: <20230904090005.52622-1-jonas.gorski@bisdn.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20230904135852.12146-4-wsa+renesas@sang-engineering.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230904090005.52622-1-jonas.gorski@bisdn.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -50,91 +55,104 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+Hi Jonas,
 
-[...]
+On Mon, Sep 04, 2023 at 11:00:04AM +0200, Jonas Gorski wrote:
+> If a transaction times out, the START_BUSY signal may have gotten stuck,
+> and subsequent transactaction attempts will fail as the bus is still
+> considered busy.
+> 
+> To work around this, check if the START_BUSY bit is still asserted, and
+> reset the controller in case it is.
+> 
+> This is also done by the alternative, non-upstream iproc-smbus driver
+> implementation [1].
+> 
+> Works around situations like:
+> 
+>     bcm-iproc-2c 1803b000.i2c: transaction timed out
+>     bcm-iproc-2c 1803b000.i2c: bus is busy
+>     bcm-iproc-2c 1803b000.i2c: bus is busy
+>     bcm-iproc-2c 1803b000.i2c: bus is busy
+>     bcm-iproc-2c 1803b000.i2c: bus is busy
+>     bcm-iproc-2c 1803b000.i2c: bus is busy
+>     ...
+> 
+> where the bus never recovers after a timeout.
+> 
+> [1] https://github.com/opencomputeproject/onie/blob/master/patches/kernel/3.2.69/driver-iproc-smbus.patch
+> 
+> Fixes: e6e5dd3566e0 ("i2c: iproc: Add Broadcom iProc I2C Driver")
+> Signed-off-by: Jonas Gorski <jonas.gorski@bisdn.de>
 
-> @@ -217,7 +228,17 @@ static void rcar_i2c_init(struct rcar_i2c_priv *priv)
->  	rcar_i2c_write(priv, ICMCR, MDBS);
->  	rcar_i2c_write(priv, ICMSR, 0);
->  	/* start clock */
-> -	rcar_i2c_write(priv, ICCCR, priv->icccr);
-> +	if (priv->flags & ID_P_FMPLUS) {
-> +		rcar_i2c_write(priv, ICCCR, 0);
-> +		rcar_i2c_write(priv, ICMPR, priv->clock_val);
-> +		rcar_i2c_write(priv, ICHPR, 3 * priv->clock_val);
-> +		rcar_i2c_write(priv, ICLPR, 3 * priv->clock_val);
-> +		rcar_i2c_write(priv, ICCCR2, FMPE | CDFD | HLSE | SME);
-> +	} else {
-> +		rcar_i2c_write(priv, ICCCR, priv->clock_val);
-> +		if (priv->devtype >= I2C_RCAR_GEN3)
-> +			rcar_i2c_write(priv, ICCCR2, 0);
+I think the right Fixes tag should be:
 
-is this last bit part of the FM+ enabling or is it part of the
-GEN4 support?
+Fixes: 3f98ad45e585 ("i2c: iproc: add polling support")
+Cc: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Cc: <stable@vger.kernel.org> # v5.2+
 
-> +	}
-
-[...]
-
-> +	if (priv->flags & ID_P_FMPLUS) {
-> +		/*
-> +		 * SMD should be smaller than SCLD and SCHD, we arbitrarily set
-> +		 * the ratio 1:3. SCHD:SCLD ratio is 1:1, thus:
-> +		 * SCL	= clkp / (8 + SMD * 2 + SCLD + SCHD + F[(ticf + tr + intd) * clkp])
-> +		 * SCL	= clkp / (8 + SMD * 2 + SMD * 3 + SMD * 3 + F[...])
-> +		 * SCL	= clkp / (8 + SMD * 8 + F[...])
-> +		 */
-> +		smd = DIV_ROUND_UP(ick / t.bus_freq_hz - 8 - round, 8);
-> +		scl = ick / (8 + 8 * smd + round);
+> ---
+> The iproc-smbus driver does some additional checks/mitigations, but
+> since my I2C understanding is only very rudimentary, I didn't add them,
+> also the reset was enough to fix the issue I was seeing.
+> 
+> I was a bit conflicted about the Fixes tag, but since it fixes/work
+> around misbehaviour seen I decided to add one.
+> 
+> The issue was happening only in production, and only once per boot (so
+> far), but with 100% probability within a few hours.
+> 
+>  drivers/i2c/busses/i2c-bcm-iproc.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2c-bcm-iproc.c
+> index 05c80680dff4..69f9c199fa3b 100644
+> --- a/drivers/i2c/busses/i2c-bcm-iproc.c
+> +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
+> @@ -796,6 +796,15 @@ static int bcm_iproc_i2c_xfer_wait(struct bcm_iproc_i2c_dev *iproc_i2c,
+>  	if (!time_left && !iproc_i2c->xfer_is_done) {
+>  		dev_err(iproc_i2c->device, "transaction timed out\n");
 >  
-> -	if (scgd == 0x40) {
-> -		dev_err(dev, "it is impossible to calculate best SCL\n");
-> -		return -EIO;
-> -	}
-> +		if (smd > 0xff) {
-> +			dev_err(dev, "it is impossible to calculate best SCL\n");
-> +			return -EINVAL;
-> +		}
->  
-> -	dev_dbg(dev, "clk %d/%d(%lu), round %u, CDF:0x%x, SCGD: 0x%x\n",
-> -		scl, t.bus_freq_hz, rate, round, cdf, scgd);
-> +		dev_dbg(dev, "clk %d/%d(%lu), round %u, SMD:0x%x, SCHD: 0x%x\n",
-> +			scl, t.bus_freq_hz, rate, round, smd, 3 * smd);
+> +		/* check if START_BUSY did not clear */
 
-I trust the formula application is right here... I can't say much :)
-I don't see anything odd here.
+as Ray asked, can you please expand this comment?
 
->  
-> -	/* keep icccr value */
-> -	priv->icccr = scgd << cdf_width | cdf;
-> +		priv->clock_val = smd;
-> +	} else {
-> +		/*
-> +		 * SCL	= ick / (20 + SCGD * 8 + F[(ticf + tr + intd) * ick])
-> +		 *
-> +		 * Calculation result (= SCL) should be less than
-> +		 * bus_speed for hardware safety
-> +		 *
-> +		 * We could use something along the lines of
-> +		 *	div = ick / (bus_speed + 1) + 1;
-> +		 *	scgd = (div - 20 - round + 7) / 8;
-> +		 *	scl = ick / (20 + (scgd * 8) + round);
-> +		 * (not fully verified) but that would get pretty involved
-> +		 */
-> +		for (scgd = 0; scgd < 0x40; scgd++) {
-> +			scl = ick / (20 + (scgd * 8) + round);
-> +			if (scl <= t.bus_freq_hz)
-> +				break;
-> +		}
-> +
-> +		if (scgd == 0x40) {
-
-would be nice to give a meaning to this 0x40 constant... either
-having it in a define or a comment, at least.
-
+Thanks,
 Andi
 
-> +			dev_err(dev, "it is impossible to calculate best SCL\n");
-> +			return -EINVAL;
+> +		if (!!(iproc_i2c_rd_reg(iproc_i2c, M_CMD_OFFSET) &
+> +		       BIT(M_CMD_START_BUSY_SHIFT))) {
+> +			/* re-initialize i2c for recovery */
+> +			bcm_iproc_i2c_enable_disable(iproc_i2c, false);
+> +			bcm_iproc_i2c_init(iproc_i2c);
+> +			bcm_iproc_i2c_enable_disable(iproc_i2c, true);
 > +		}
+> +
+>  		/* flush both TX/RX FIFOs */
+>  		val = BIT(M_FIFO_RX_FLUSH_SHIFT) | BIT(M_FIFO_TX_FLUSH_SHIFT);
+>  		iproc_i2c_wr_reg(iproc_i2c, M_FIFO_CTRL_OFFSET, val);
+> -- 
+> 2.42.0
+> 
+> 
+> -- 
+> BISDN GmbH
+> Körnerstraße 7-10
+> 10785 Berlin
+> Germany
+> 
+> 
+> Phone: 
+> +49-30-6108-1-6100
+> 
+> 
+> Managing Directors: 
+> Dr.-Ing. Hagen Woesner, Andreas 
+> Köpsel
+> 
+> 
+> Commercial register: 
+> Amtsgericht Berlin-Charlottenburg HRB 141569 
+> B
+> VAT ID No: DE283257294
+> 
