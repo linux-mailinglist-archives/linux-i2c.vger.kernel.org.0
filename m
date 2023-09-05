@@ -2,67 +2,110 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF50579277E
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Sep 2023 18:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633987926B8
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Sep 2023 18:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237910AbjIEQT2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Sep 2023 12:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
+        id S243859AbjIEQUV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Sep 2023 12:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354421AbjIELaQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Sep 2023 07:30:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF6F197;
-        Tue,  5 Sep 2023 04:30:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92B44B8108E;
-        Tue,  5 Sep 2023 11:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C827BC433C7;
-        Tue,  5 Sep 2023 11:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693913410;
-        bh=RdrgRebQVMYD5+vh/Q9aQGUsa7aLHdkgmZjegcvTHzQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SXHy/K+I2JZWBTxu0P+tvwpuCbAKpUjofqK3xdoRWVP05NrKyV7A+ij+qaJcU5wFH
-         UwEzBIuz3kefb0lDd+yj+BFMtKSedH7kh9oed6LWc4buYGya7httpaAWUtbpnVJ9L1
-         AB2ZwdpXG6dxPtv/CqV2CWA34Q87MQkWqMdAsKv3dVdtR3fhmyJGmRgMmXwsfN6RJO
-         CLOXueIoL1iGzTr+COyFM2qF5bFTfSI5LdxCo8g2/m4QhVpeDY6lhjRC9hiI59AuWb
-         SxrOyHji9OzoWrZxcxLu/dyMITn1botjbMjN0emlgb4wmiTqcZMFjoW7hznht2u9KQ
-         9lJo6aobhzOyQ==
-Date:   Tue, 5 Sep 2023 13:30:06 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] i2c: rcar: avoid non-standard use of goto
-Message-ID: <20230905113006.tqfe6xqoyfhzk5ak@zenone.zhora.eu>
-References: <20230904135852.12146-1-wsa+renesas@sang-engineering.com>
- <20230904135852.12146-2-wsa+renesas@sang-engineering.com>
+        with ESMTP id S1354430AbjIELfZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Sep 2023 07:35:25 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048D783
+        for <linux-i2c@vger.kernel.org>; Tue,  5 Sep 2023 04:35:21 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-31c65820134so2117250f8f.1
+        for <linux-i2c@vger.kernel.org>; Tue, 05 Sep 2023 04:35:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693913718; x=1694518518; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jvh7WWzBAfXIoLzMSSdLyX47ANtIvmPMfydEou4b9YY=;
+        b=TeNECdvpO9r1SBGjZ9pisRSv/oW/ZMpr5gHFHc573ZYfIihKiHbngZX+6PilA5sz/u
+         5UlPqB53GQ3Z5LhqTeiEyvL5q2UFAVe6QvysjFf2qGaKBFLFlxKFGjs4H5VLgHD7QmgK
+         rVSg784JHilbHIbLtwC9cZo04qtxYhnNLq1dUKGVET7j6UQxlWpHPptv3lggUl6f+Q8X
+         R7dP4JsM/bsLhOtZiYBji3kSSIu+xFRGSts2spi+0O2TwJ70Kp5wEpmVPEm7hla5yKLb
+         yeBwTGW08ovq/UhSqxIHZ5eQZdmCWTVmK4GHnWy3Pxz1LSgttd/8VdNDWirV7mQVXYXA
+         BDxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693913718; x=1694518518;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jvh7WWzBAfXIoLzMSSdLyX47ANtIvmPMfydEou4b9YY=;
+        b=BJfZguaWAfK3D0ecKWcC9cBePgax5+ryaBGiGd1PAkjSf9zgxcrKL/53OWQOXwlmsX
+         a5y/AMuGLtbd2tGLn9x/JuYvGjtkA8ABS20S9jfWAIfzJp/pgdZoAJjtAHppK0/9MBMg
+         N5phtC7cMoZxNQNo5PqHLN9F7JGQbT0E3LHguzRK6+MfqbnZl6zVVSVitRFM3pachlwS
+         ZP+IhuuSWmprL6CkRntX6KrhffSygvFd1DFC/BfFaDGxFiJmF6LmiuuiKQ70HWOh6Ckl
+         NHl93u0mGXg4N4QytRxKgXGjpAwRcc643QXu+rFHOBUtS2og70e2301BCKtVOIq8ADYO
+         2bKQ==
+X-Gm-Message-State: AOJu0Yzo7fzf/tfsnB6Bb7XuvTOwi1axlak8GYz0R7CXtf3sIT2h66zd
+        PwGvIytaCYrl5Sh/CDA3TXw=
+X-Google-Smtp-Source: AGHT+IHOHzTrP4NzjQVDJirNoemHn+GVuC/dHpoCKwrwgDZx6qjpNwN4f85rtIL2+PuFa5c3V/vnnA==
+X-Received: by 2002:a05:6000:4e:b0:31c:e933:9590 with SMTP id k14-20020a056000004e00b0031ce9339590mr8574702wrx.33.1693913718106;
+        Tue, 05 Sep 2023 04:35:18 -0700 (PDT)
+Received: from ?IPV6:2a01:c22:6f6b:c00:c45d:f24a:575b:803b? (dynamic-2a01-0c22-6f6b-0c00-c45d-f24a-575b-803b.c22.pool.telefonica.de. [2a01:c22:6f6b:c00:c45d:f24a:575b:803b])
+        by smtp.googlemail.com with ESMTPSA id a2-20020adff7c2000000b003177074f830sm17267798wrq.59.2023.09.05.04.35.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Sep 2023 04:35:17 -0700 (PDT)
+Message-ID: <5838f7e4-dd08-48eb-2f9c-df45daa0214a@gmail.com>
+Date:   Tue, 5 Sep 2023 13:35:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230904135852.12146-2-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2] i2c: i801: fix potential race in
+ i801_block_transaction_byte_by_byte
+Content-Language: en-US
+To:     Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.de>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+References: <f056286a-1db9-b88c-6d36-a3358190b9c9@gmail.com>
+ <20230905101243.39920fe5@endymion.delvare>
+ <20230905091155.h3oezdj5g6z5jpxu@zenone.zhora.eu>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <20230905091155.h3oezdj5g6z5jpxu@zenone.zhora.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
-
-On Mon, Sep 04, 2023 at 03:58:49PM +0200, Wolfram Sang wrote:
-> Kernel functions goto somewhere on error conditions. Using goto for the
-> default path is irritating. Let's bail out on error instead.
+On 05.09.2023 11:11, Andi Shyti wrote:
+> Hi Jean,
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> On Tue, Sep 05, 2023 at 10:12:43AM +0200, Jean Delvare wrote:
+>> On Sat, 02 Sep 2023 22:10:52 +0200, Heiner Kallweit wrote:
+>>> Currently we set SMBHSTCNT_LAST_BYTE only after the host has started
+>>> receiving the last byte. If we get e.g. preempted before setting
+>>> SMBHSTCNT_LAST_BYTE, the host may be finished with receiving the byte
+>>> before SMBHSTCNT_LAST_BYTE is set.
+>>> Therefore change the code to set SMBHSTCNT_LAST_BYTE before writing
+>>> SMBHSTSTS_BYTE_DONE for the byte before the last byte. Now the code
+>>> is also consistent with what we do in i801_isr_byte_done().
+>>>
+>>> Reported-by: Jean Delvare <jdelvare@suse.com>
+>>
+>> Note for Wolfram: checkpatch says we should insert here:
+>>
+>> Closes: https://lore.kernel.org/linux-i2c/20230828152747.09444625@endymion.delvare/
+> 
+> does this also need a Fixes: tag? I tried to check it, but there
+> was an intricate jungle of commits in these lines.
+> 
+Quoting Jean from previous communication about this patch:
+As far as I see, the race condition already existed when the kernel
+switched to git, so there's no point in having a Fixes statement.
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+> Anyway, you can add:
+> 
+> Acked-by: Andi Shyti <andi.shyti@kernel.org> 
+> 
+> Thanks,
+> Andi
 
-Andi
