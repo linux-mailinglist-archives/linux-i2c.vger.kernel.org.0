@@ -2,48 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EA47925BE
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Sep 2023 18:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026777927A6
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Sep 2023 18:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244617AbjIEQUW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 5 Sep 2023 12:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        id S232138AbjIEQUG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 5 Sep 2023 12:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354254AbjIEKWq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Sep 2023 06:22:46 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359EA199;
-        Tue,  5 Sep 2023 03:22:42 -0700 (PDT)
+        with ESMTP id S1354259AbjIEKZx (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 5 Sep 2023 06:25:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1B5DB;
+        Tue,  5 Sep 2023 03:25:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8ECFDCE10BD;
-        Tue,  5 Sep 2023 10:22:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E07CC433C8;
-        Tue,  5 Sep 2023 10:22:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAB11B8113E;
+        Tue,  5 Sep 2023 10:25:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6876DC433C7;
+        Tue,  5 Sep 2023 10:25:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693909358;
-        bh=d0WWaRDwoMZNo0weBWOUYSbs+np+nwdICmtyfDltmrY=;
+        s=k20201202; t=1693909547;
+        bh=s5OcvhMGsauyHDIDghPQ23qUl8W6KKM1Q1jw2SF9yi4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XHFaFS7lrm51Y4lZmWc8wotwtZwwFaqSlPglbvV1Tmr3HVisKCEZ9TGiKhl4HSNC8
-         MozOQ2C7M0fOECRfCwuiogBiKDjfXnnG0WFcTsXGLHyVXphtemu2xKZorP/LTayBIM
-         da+psHNUc91ULQXG/UzcLEDmMBfo5uS7Daec1omTdf4brQKqRuxaRBUqdfL9A/FC4l
-         9BhYtRhbyTYpMRdfIPuMXWpLnZEjuMUTy4V2zE33YLmAXbVyTb5rRtba7lxro6e+a0
-         bxeph+LETCcCPm4DasybnHEYxTJ3fV0xBkf0MPzL8vIgMmZyPMadrKzp5RF7+Wpt+F
-         18sLx14L3orTg==
-Date:   Tue, 5 Sep 2023 12:22:34 +0200
+        b=MCmfXrexYhH4Ai/BXu//C7U3rOTpsCWaLsG2uJMmVDnnEHOp1gXStiwclOrtqdLCF
+         MncEUQuevfAWcC/UQV5gAuG3WKjdr9gaDPvbVnTVJae/dzpZCdgEXzRv3Cb74PEev5
+         +0AAn1NOM6DAmxh0fEreYMJ1dJ8/wZqN5KGGWfc1nsBNPN4G+61Ic8F9Mb5EQWiHca
+         hl4iq8ICMou/PeI5bUv9Er9LzY0Ek2BOGGSveOQJFtSxnin4jDb3dngoSq6d1+EPJx
+         N4tUUInzW1rehli5Atc4hYch3YUxSuyIuL672CLe1FgME3om0QlqSbN1FrGb9QTkzy
+         NbANuoCgERNpg==
+Date:   Tue, 5 Sep 2023 12:25:43 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c:octeon:Add block-mode r/w
-Message-ID: <20230905102234.nlaeskxbbvu74co2@zenone.zhora.eu>
-References: <20230903123446.vjgpplnogejbzneb@zenone.zhora.eu>
- <20230904231439.485925-1-aryan.srivastava@alliedtelesis.co.nz>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        dmitry.baryshkov@linaro.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Liao Chang <liaochang1@huawei.com>,
+        Todor Tomov <todor.too@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        error27@gmail.com, vegard.nossum@oracle.com
+Subject: Re: [PATCH next] i2c: qcom-cci: Fix error checking in cci_probe()
+Message-ID: <20230905102543.54weuecvkcujusip@zenone.zhora.eu>
+References: <20230823194202.2280957-1-harshit.m.mogalapalli@oracle.com>
+ <47e3acac-7d4f-43bd-bd55-5ae9ab993f2d@kadam.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230904231439.485925-1-aryan.srivastava@alliedtelesis.co.nz>
+In-Reply-To: <47e3acac-7d4f-43bd-bd55-5ae9ab993f2d@kadam.mountain>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -54,124 +64,30 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Aryan,
+Hi Dan,
 
-In the title, please leave a space after the ':'
+On Tue, Sep 05, 2023 at 12:10:31PM +0300, Dan Carpenter wrote:
+> On Wed, Aug 23, 2023 at 12:42:02PM -0700, Harshit Mogalapalli wrote:
+> > devm_clk_bulk_get_all() can return zero when no clocks are obtained.
+> > Passing zero to dev_err_probe() is a success which is incorrect.
+> > 
+> > Fixes: 605efbf43813 ("i2c: qcom-cci: Use dev_err_probe in probe function")
+> > Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+> > ---
+> > Only compile tested, found by static analysis with smatch.
+> > 
+> > https://lore.kernel.org/all/CAA8EJprTOjbOy7N5+8NiJaNNhK+_btdUUFcpHKPkMuCZj5umMA@mail.gmail.com/
+> > ^^ I reported initially here, Dmitry suggested we need to fix it in a
+> > different patch.
+> > 
+> > the Fixes commit used above pointed this bug, but the real fixes tag is this:
+> > Fixes: e517526195de ("i2c: Add Qualcomm CCI I2C driver")
+> 
+> This has already been applied but, for future reference, you should have
+> gone with the real fixes tag instead of where the static checker started
+> complaining.
 
-   i2c: octeon: Add block-mode r/w
+yeah... sorry... I normally check all the "Fixes:" tags, but
+sometimes, out of sheer laziness, I trust the commit.
 
-Please check with "git log drivers..." to see what's the rule in
-a particular community.
-
-I guess Wolfram can fix this, though, before pushing.
-
-[...]
-
-> +/* high-level-controller composite block write+read, msg0=addr, msg1=data */
-
-I think this comment is fine and great to have it, but it's
-missing a bit of clarity, can you please expand the concept?
-
-> +static int octeon_i2c_hlc_block_comp_read(struct octeon_i2c *i2c, struct i2c_msg *msgs)
-> +{
-> +	int i, j, len, ret = 0;
-> +	u64 cmd = 0, rd = 0;
-
-can please you move rd, j inside the for loop? The basic common
-sense is to have all variable declared in the innermost section
-in order to avoid confusion.
-
-It's a nitpick though, not a strong comment and, afaik, not a
-real rule.
-
-Same comment for the function below.
-
-> +
-> +	octeon_i2c_hlc_enable(i2c);
-> +	octeon_i2c_block_enable(i2c);
-> +
-> +	/* Write (size - 1) into block control register */
-> +	len = msgs[1].len - 1;
-> +	octeon_i2c_writeq_flush((u64)(len), i2c->twsi_base + TWSI_BLOCK_CTL(i2c));
-> +
-> +	/* Prepare core command */
-> +	cmd = SW_TWSI_V | SW_TWSI_R | SW_TWSI_SOVR;
-> +	cmd |= (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
-> +
-> +	if (msgs[0].flags & I2C_M_TEN)
-> +		cmd |= SW_TWSI_OP_10_IA;
-> +	else
-> +		cmd |= SW_TWSI_OP_7_IA;
-> +
-> +	if (msgs[0].len == 2) {
-> +		u64 ext = 0;
-> +
-> +		cmd |= SW_TWSI_EIA;
-> +		ext = (u64)msgs[0].buf[0] << SW_TWSI_IA_SHIFT;
-> +		cmd |= (u64)msgs[0].buf[1] << SW_TWSI_IA_SHIFT;
-> +		octeon_i2c_writeq_flush(ext, i2c->twsi_base + SW_TWSI_EXT(i2c));
-> +	} else {
-> +		cmd |= (u64)msgs[0].buf[0] << SW_TWSI_IA_SHIFT;
-> +	}
-
-This first part is basically a copy/paste with the write()
-function... can we put them together in a common function?
-
-Can we put as much as we can in a single function?
-
-> +	/* Send command to core (send data to FIFO) */
-> +	octeon_i2c_hlc_int_clear(i2c);
-> +	octeon_i2c_writeq_flush(cmd, i2c->twsi_base + SW_TWSI(i2c));
-> +
-> +	/* Wait for transaction to complete */
-> +	ret = octeon_i2c_hlc_wait(i2c);
-> +	if (ret)
-> +		return ret;
-> +
-> +	cmd = __raw_readq(i2c->twsi_base + SW_TWSI(i2c));
-> +	if ((cmd & SW_TWSI_R) == 0)
-> +		return octeon_i2c_check_status(i2c, false);
-> +
-> +	/* read data in FIFO */
-> +	octeon_i2c_writeq_flush(TWSI_BLOCK_STS_RESET_PTR, i2c->twsi_base + TWSI_BLOCK_STS(i2c));
-> +	for (i = 0; i < len; i += 8) {
-> +		rd = __raw_readq(i2c->twsi_base + TWSI_BLOCK_FIFO(i2c));
-> +		for (j = 7; j >= 0; j--)
-
-is len always a multiple of 8?
-
-> +			msgs[1].buf[i + (7 - j)] = (rd >> (8 * j)) & 0xff;
-> +	}
-> +
-> +	octeon_i2c_block_disable(i2c);
-> +	return ret;
-> +}
-
-[...]
-
-> -		    msgs[1].len > 0 && msgs[1].len <= 8 &&
-> +		    msgs[1].len > 0 &&
->  		    msgs[0].addr == msgs[1].addr) {
-> -			if (msgs[1].flags & I2C_M_RD)
-> -				ret = octeon_i2c_hlc_comp_read(i2c, msgs);
-> -			else
-> -				ret = octeon_i2c_hlc_comp_write(i2c, msgs);
-> -			goto out;
-> +			if (msgs[1].len <= 8) {
-> +				if (msgs[1].flags & I2C_M_RD)
-> +					ret = octeon_i2c_hlc_comp_read(i2c, msgs);
-> +				else
-> +					ret = octeon_i2c_hlc_comp_write(i2c, msgs);
-> +				goto out;
-> +			} else if (msgs[1].len <= 1024 && TWSI_BLOCK_CTL(i2c)) {
-> +				if (msgs[1].flags & I2C_M_RD)
-> +					ret = octeon_i2c_hlc_block_comp_read(i2c, msgs);
-> +				else
-> +					ret = octeon_i2c_hlc_block_comp_write(i2c, msgs);
-> +				goto out;
-> +			}
-
-the rest looks good...
-
-Thanks,
 Andi
