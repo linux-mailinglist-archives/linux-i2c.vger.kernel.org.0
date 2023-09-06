@@ -2,158 +2,133 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54207793697
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 09:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61727936DC
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 10:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbjIFH46 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 6 Sep 2023 03:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
+        id S232904AbjIFIIR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Sep 2023 04:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjIFH45 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 03:56:57 -0400
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1ED9CF;
-        Wed,  6 Sep 2023 00:56:51 -0700 (PDT)
-Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-7a505727e7eso1248580241.0;
-        Wed, 06 Sep 2023 00:56:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693987011; x=1694591811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eC4TeOgj5AZE66ZqrYtCV0soUn6GpHNH9WYMorYVd28=;
-        b=LnFSfWiOKXg3FzopLBOBwSGWlKp8Q4yCIIE+5/vHvNYJSHnqs5G8wm7V2z0gIH6m/c
-         lp08CuPjIe8Is3x0hC38oWb1O+Jai9Ku8FZu/NoYScKCJXhEPlzA/PGLQ0p13brKdCOP
-         FvTV8dWUhlHzBFY83bcCTRi3S75COmwJrbwosvklJSpTJGBCFfnlS5BBd/YOTweHMLSm
-         BHpZRGpVgxBcqURUS2ugsOEmAAKixwIsvvLCV5msVpxEdoBmnEqb17qgODqREyWcuji/
-         cX8Bm9acApsGTgGHy3hJFmj3Yb5eAwa834h5sW7HxKA9hQkwrbyhRGQpYOGy6GuHQKz4
-         fmig==
-X-Gm-Message-State: AOJu0YzT7x4Vrnqw+VBq4W42SX28mkbpqvvwv7OFUYf9I4tstYRilrVo
-        bbcRw8No4eDMXUwkRIRo2xy2TOX9HKvjdA==
-X-Google-Smtp-Source: AGHT+IGibwRn4E2d46HNX70RZyJ0mqAkCh/NA175oYi4Bf5wh0aKcCcehszS4TqrwYiWDhjLKUvu6g==
-X-Received: by 2002:a1f:ed47:0:b0:490:a0eb:1b9f with SMTP id l68-20020a1fed47000000b00490a0eb1b9fmr2291319vkh.10.1693987010718;
-        Wed, 06 Sep 2023 00:56:50 -0700 (PDT)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
-        by smtp.gmail.com with ESMTPSA id t84-20020a1f2d57000000b004936903f3b3sm241778vkt.13.2023.09.06.00.56.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Sep 2023 00:56:50 -0700 (PDT)
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-7a505727e7eso1248564241.0;
-        Wed, 06 Sep 2023 00:56:50 -0700 (PDT)
-X-Received: by 2002:a67:fd9a:0:b0:44d:547d:7e84 with SMTP id
- k26-20020a67fd9a000000b0044d547d7e84mr2339913vsq.28.1693987009748; Wed, 06
- Sep 2023 00:56:49 -0700 (PDT)
+        with ESMTP id S231183AbjIFIIR (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 04:08:17 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70243E79
+        for <linux-i2c@vger.kernel.org>; Wed,  6 Sep 2023 01:07:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3909E2029B;
+        Wed,  6 Sep 2023 08:07:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1693987626; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=02cyOWpXzHY8q5tFXxZaLLYXF5EBAhHRZBEhQ3SRE44=;
+        b=UhGMjjjJwMbaxR2VcaCteigUWjWIENjJ+YISOetcszJrsWh0r4GhWqtmPLG9RWH/Egkpk2
+        hKmo+cM+QLstNtA1dr9XG/QR0U/tpgnM2+6M+ONV3bk7uusRj47FYQRIv0gpAFL2qMSgs7
+        bz8lec7x7xxXbyA/3GYFikX8EEUJ40M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1693987626;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=02cyOWpXzHY8q5tFXxZaLLYXF5EBAhHRZBEhQ3SRE44=;
+        b=/h3E/Xggj7/pX88HJrN6ItNTldAAj+x2rzNuomnlJLXWFn+RWbNyuJKs9A5MmEo7hsX8vl
+        Va2BQQgUL4j8OwDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0BE231346C;
+        Wed,  6 Sep 2023 08:07:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rxxXASoz+GQTWwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Wed, 06 Sep 2023 08:07:06 +0000
+Date:   Wed, 6 Sep 2023 10:07:04 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] i2c: i801: fix potential race in
+ i801_block_transaction_byte_by_byte
+Message-ID: <20230906100704.3e581f9c@endymion.delvare>
+In-Reply-To: <20230905225922.blulveq5qwe7tv6h@zenone.zhora.eu>
+References: <f056286a-1db9-b88c-6d36-a3358190b9c9@gmail.com>
+        <20230905101243.39920fe5@endymion.delvare>
+        <20230905091155.h3oezdj5g6z5jpxu@zenone.zhora.eu>
+        <5838f7e4-dd08-48eb-2f9c-df45daa0214a@gmail.com>
+        <20230905225922.blulveq5qwe7tv6h@zenone.zhora.eu>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20230904135852.12146-1-wsa+renesas@sang-engineering.com> <20230904135852.12146-3-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230904135852.12146-3-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Sep 2023 09:56:37 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUJnKeLJu4-CuDEFty8oW0p9M-D5mcuDv+fFxo-fHvvaQ@mail.gmail.com>
-Message-ID: <CAMuHMdUJnKeLJu4-CuDEFty8oW0p9M-D5mcuDv+fFxo-fHvvaQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] i2c: rcar: introduce Gen4 devices
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+On Wed, 6 Sep 2023 00:59:22 +0200, Andi Shyti wrote:
+> On Tue, Sep 05, 2023 at 01:35:10PM +0200, Heiner Kallweit wrote:
+> > On 05.09.2023 11:11, Andi Shyti wrote:  
+> > > On Tue, Sep 05, 2023 at 10:12:43AM +0200, Jean Delvare wrote:  
+> > >> On Sat, 02 Sep 2023 22:10:52 +0200, Heiner Kallweit wrote:  
+> > >>> Currently we set SMBHSTCNT_LAST_BYTE only after the host has started
+> > >>> receiving the last byte. If we get e.g. preempted before setting
+> > >>> SMBHSTCNT_LAST_BYTE, the host may be finished with receiving the byte
+> > >>> before SMBHSTCNT_LAST_BYTE is set.
+> > >>> Therefore change the code to set SMBHSTCNT_LAST_BYTE before writing
+> > >>> SMBHSTSTS_BYTE_DONE for the byte before the last byte. Now the code
+> > >>> is also consistent with what we do in i801_isr_byte_done().
+> > >>>
+> > >>> Reported-by: Jean Delvare <jdelvare@suse.com>  
+> > >>
+> > >> Note for Wolfram: checkpatch says we should insert here:
+> > >>
+> > >> Closes: https://lore.kernel.org/linux-i2c/20230828152747.09444625@endymion.delvare/  
+> > > 
+> > > does this also need a Fixes: tag? I tried to check it, but there
+> > > was an intricate jungle of commits in these lines.
+> > >   
+> > Quoting Jean from previous communication about this patch:
+> > As far as I see, the race condition already existed when the kernel
+> > switched to git, so there's no point in having a Fixes statement.  
+> 
+> true... I forgot about this comment.
+> 
+> Anyway I think that this should, then, go to all the stable
+> kernels and I believe that without the Fixes tag this will never
+> be picked up.
+> 
+> Maybe Greg can advise here.
+> 
+> Would you mind resending this patch Cc'eing the stable kernel and
+> adding a note after the '---'?
 
-On Mon, Sep 4, 2023 at 3:59 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> So far, we treated Gen4 as Gen3. But we are soon adding FM+ as a Gen4
-> specific feature, so prepare the code for the new devtype.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Again, no. This is a theoretical bug, that was discovered by code
+inspection. It's been present in the driver for over 20 years and we
+have no evidence that anyone ever hit it.
 
-Thanks for your patch!
+Furthermore, it only happens if the driver is in polling mode, which is
+uncommon, and only for block transactions, and only when the block
+buffer isn't used. And then the only negative effect of the bug is to
+shift the internal register pointer by 1. So it would only ever be a
+problem if someone mixes block reads and immediate byte reads on the
+same device. That's a very uncommon usage model. That's definitely not
+"a real bug that bothers people".
 
-> --- a/drivers/i2c/busses/i2c-rcar.c
-> +++ b/drivers/i2c/busses/i2c-rcar.c
+Not every fix needs to go to stable. In this case, our engineering time
+is better used elsewhere.
 
-> @@ -218,7 +219,7 @@ static void rcar_i2c_init(struct rcar_i2c_priv *priv)
->         /* start clock */
->         rcar_i2c_write(priv, ICCCR, priv->icccr);
->
-> -       if (priv->devtype == I2C_RCAR_GEN3)
-> +       if (priv->devtype >= I2C_RCAR_GEN3)
->                 rcar_i2c_write(priv, ICFBSCR, TCYC17);
-
-Note that R-Car Gen4 (incl. R-Car S4) has ICFBSCR bits related to
-Slave Clock Stretch Select (which is not yet supported by the driver).
-
-> @@ -1031,10 +1021,12 @@ static const struct of_device_id rcar_i2c_dt_ids[] = {
->         { .compatible = "renesas,i2c-r8a7794", .data = (void *)I2C_RCAR_GEN2 },
->         { .compatible = "renesas,i2c-r8a7795", .data = (void *)I2C_RCAR_GEN3 },
->         { .compatible = "renesas,i2c-r8a7796", .data = (void *)I2C_RCAR_GEN3 },
-> +       /* S4 has no FM+ bit */
-> +       { .compatible = "renesas,i2c-r8a779f0", .data = (void *)I2C_RCAR_GEN3 },
->         { .compatible = "renesas,rcar-gen1-i2c", .data = (void *)I2C_RCAR_GEN1 },
->         { .compatible = "renesas,rcar-gen2-i2c", .data = (void *)I2C_RCAR_GEN2 },
->         { .compatible = "renesas,rcar-gen3-i2c", .data = (void *)I2C_RCAR_GEN3 },
-> -       { .compatible = "renesas,rcar-gen4-i2c", .data = (void *)I2C_RCAR_GEN3 },
-> +       { .compatible = "renesas,rcar-gen4-i2c", .data = (void *)I2C_RCAR_GEN4 },
->         {},
->  };
->  MODULE_DEVICE_TABLE(of, rcar_i2c_dt_ids);
-> @@ -1101,6 +1093,7 @@ static int rcar_i2c_probe(struct platform_device *pdev)
->                 irqhandler = rcar_i2c_gen2_irq;
->         }
->
-> +       /* Gen3 needs reset for RXDMA */
->         if (priv->devtype == I2C_RCAR_GEN3) {
-
-According to the Programming Examples in the docs for R-Car Gen3,
-R-Car V3U, S4-8, and V4H, I2C must be reset "at the beginning of
-transmission and reception procedure", so not only for DMA.
-
->                 priv->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
->                 if (!IS_ERR(priv->rstc)) {
-
-Also, you didn't the touch the checks in rcar_i2c_cleanup_dma():
-
-    /* Gen3 can only do one RXDMA per transfer and we just completed it */
-    if (priv->devtype == I2C_RCAR_GEN3 && ...) ...
-
-and rcar_i2c_master_xfer():
-
-    /* Gen3 needs a reset before allowing RXDMA once */
-    if (priv->devtype == I2C_RCAR_GEN3) {
-            ...
-    }
-
-Don't these apply to R-Car Gen4? I can't easily find where this quirk
-is documented (perhaps just as a commit in the BSP?), but at least the
-"Usage note for DMA mode of Receive Operation" looks identical for
-R-Car Gen3 and for the various R-Car Gen4 variants.
-
-So either:
-  1. These checks must be updated, too, or
-  2. The commit description must explain why this is not needed, as
-     switching to I2C_RCAR_GEN4 changes behavior for R-Car Gen4 SoCs
-     using the family-specific fallback.
-
-BTW, depending on the answers to my questions above, you may want to
-replace the rcar_i2c_type enum by a feature mask...
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Jean Delvare
+SUSE L3 Support
