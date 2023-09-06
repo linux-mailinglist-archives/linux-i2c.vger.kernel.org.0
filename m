@@ -2,128 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF96A7935ED
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 09:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF72793647
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 09:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjIFHKe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Sep 2023 03:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
+        id S230481AbjIFHc4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Sep 2023 03:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjIFHKe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 03:10:34 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D134CE9
-        for <linux-i2c@vger.kernel.org>; Wed,  6 Sep 2023 00:10:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sang-engineering.com; h=date:from:to:cc:subject:message-id
-        :references:mime-version:content-type:in-reply-to; s=k1; bh=yHql
-        SmIWAIOx9D8wRvMGi5pEa9tjuw5WUujgb0WYc9w=; b=SuEmTjgsB+FCgm97qFkG
-        r7dUiEgQJrQeQIhx6ESn0NPMKFCYvA2SW2TIdDoMyayYEksjG/aYHihTcLPzo5PV
-        8IgSnC/0iZHMdNIcFeVbH+0O2bU+YubpGuEoEIFuEleIBdDu8JGdScZGFG9XP7+K
-        mcazVCy0OtHodPRYpvJPcRxC7SrM56hi6ZNlaUZnpe8VrW8aYYg2aflukJJbbPX4
-        545SufDN/bO0SITDKf7TOMlXYd/G92DzCMziZyOk/6RWkXpJqR1OFmZzzo5RValC
-        3SfTrBO8qXU25MHVnc0vJsrliaTtqgKyzlvsRctTZPotVTeqaV5lFpuOyqqDLAGf
-        Tw==
-Received: (qmail 2724785 invoked from network); 6 Sep 2023 09:10:25 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Sep 2023 09:10:25 +0200
-X-UD-Smtp-Session: l3s3148p1@Z4UGcKsEUKEgAwDPXx78AHsOvgc204Bb
-Date:   Wed, 6 Sep 2023 09:10:25 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] i2c: rcar: add FastMode+ support
-Message-ID: <ZPgl4eLYTyDFXiyC@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230904135852.12146-1-wsa+renesas@sang-engineering.com>
- <20230904135852.12146-4-wsa+renesas@sang-engineering.com>
- <20230905213710.3dv5h6zvwu4tpnby@zenone.zhora.eu>
+        with ESMTP id S230457AbjIFHcz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 03:32:55 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6182794;
+        Wed,  6 Sep 2023 00:32:52 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5279AC433C7;
+        Wed,  6 Sep 2023 07:32:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693985571;
+        bh=rA6dVSbG+dQq5j1TWqDv/sU8ofco7JkJsESS9r4nexI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EpiIJ1va/OaAlymFCx4jcMot106SymqceVmqONNNcqQY7R0gUrH7ExLhQnq0I2rom
+         sqbmxWokxHdagxbPRmcjYpRL/F+JoszpNW/CcEooYOOxN93NYtShdQYC79Vp80EiBi
+         fcLosiNlmJQGKRmnBwcMmRFohwBvq25CcgfF1UnSS/80BquP9HaE//Tq2S6tbULpv/
+         IFhG0Q7/jCxFx7rxL2HIUQObVHoudFj5jhUpD9fezJisUDgt9riqCEmocbFrMJiT6E
+         EMAsBWawBRUO/i9hdvZmHdsd+Nf6i7ZnFBY6e8tweB9P2NpzHoIeEod1USOwjIu2cv
+         WmD32kkBWNwzg==
+Date:   Wed, 6 Sep 2023 09:32:47 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Sean Nyekjaer <sean@geanix.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: stm32f7: Add atomic_xfer method to driver
+Message-ID: <20230906073247.hjzjywivxzt3lcxw@zenone.zhora.eu>
+References: <20230816080552.3045491-1-sean@geanix.com>
+ <20230903124620.6yrnpbpj37on6wih@zenone.zhora.eu>
+ <6A1B6BF0-C298-43D3-9B63-0FB1EC9E902B@geanix.com>
+ <20230905230821.h7a7thjgm2do3w64@zenone.zhora.eu>
+ <2356AD12-9631-4707-8EA5-385E9D6A5716@geanix.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7Ts7kpPtQHL+6LUF"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230905213710.3dv5h6zvwu4tpnby@zenone.zhora.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2356AD12-9631-4707-8EA5-385E9D6A5716@geanix.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Sean,
 
---7Ts7kpPtQHL+6LUF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> >>>> @@ -357,6 +357,7 @@ struct stm32f7_i2c_dev {
+> >>>> u32 dnf_dt;
+> >>>> u32 dnf;
+> >>>> struct stm32f7_i2c_alert *alert;
+> >>>> + bool atomic;
+> >>> 
+> >>> this smells a bit racy here, this works only if the xfer's are
+> >>> always sequential.
+> >>> 
+> >>> What happens when we receive at the same time two xfer's, one
+> >>> atomic and one non atomic?
+> >> 
+> >> From the include/i2c.h:
+> >> * @master_xfer_atomic: same as @master_xfer. Yet, only using atomic context
+> >> *   so e.g. PMICs can be accessed very late before shutdown. Optional.
+> >> 
+> >> So it’s only used very late in the shutdown.
+> >> 
+> >> It’s implemented the same way as in:
+> >> drivers/i2c/busses/i2c-imx.c
+> >> drivers/i2c/busses/i2c-meson.c
+> >> drivers/i2c/busses/i2c-mv64xxx.c
+> >> drivers/i2c/busses/i2c-tegra.c
+> >> … etc…
+> >> 
+> >> 
+> >> In drivers/i2c/i2c-core.h it’s determined whether it’s atomic transfer or not:
+> >> 
+> >> /*
+> >> * We only allow atomic transfers for very late communication, e.g. to access a
+> >> * PMIC when powering down. Atomic transfers are a corner case and not for
+> >> * generic use!
+> >> */
+> >> static inline bool i2c_in_atomic_xfer_mode(void)
+> >> {
+> >>        return system_state > SYSTEM_RUNNING && irqs_disabled();
+> >> }
+> >> 
+> >> So you would not have an atomic transfer and later an non atomic.
+> > 
+> > What about the opposite? I.e. a non atomic and later an atomic,
+> > for very late tardive communications :)
+> 
+> Sure it’s the opposite? Normal scenario is “non atomic” transfers going on and under shutdown it switches to “atomic”.
+> From i2c_in_atomic_xfer_mode() it can’t go from “atomic” -> “non atomic”.
 
-Hi Andi,
+well at some point we move from non atomic to atomic and we
+preempt whatever is non atomic in order to go atomic, including
+non atomic transfers.
 
-> > @@ -217,7 +228,17 @@ static void rcar_i2c_init(struct rcar_i2c_priv *pr=
-iv)
-> >  	rcar_i2c_write(priv, ICMCR, MDBS);
-> >  	rcar_i2c_write(priv, ICMSR, 0);
-> >  	/* start clock */
-> > -	rcar_i2c_write(priv, ICCCR, priv->icccr);
-> > +	if (priv->flags & ID_P_FMPLUS) {
-> > +		rcar_i2c_write(priv, ICCCR, 0);
-> > +		rcar_i2c_write(priv, ICMPR, priv->clock_val);
-> > +		rcar_i2c_write(priv, ICHPR, 3 * priv->clock_val);
-> > +		rcar_i2c_write(priv, ICLPR, 3 * priv->clock_val);
-> > +		rcar_i2c_write(priv, ICCCR2, FMPE | CDFD | HLSE | SME);
-> > +	} else {
-> > +		rcar_i2c_write(priv, ICCCR, priv->clock_val);
-> > +		if (priv->devtype >=3D I2C_RCAR_GEN3)
-> > +			rcar_i2c_write(priv, ICCCR2, 0);
->=20
-> is this last bit part of the FM+ enabling or is it part of the
-> GEN4 support?
+A "global" variable thrown there without protection is a bit weak
+and we need to be sure to be covering all possible scenarios when
+this variable is used.
 
-It is "disabling FM+" for lower speeds. Since we never used ICCCR2
-before FM+, we need to make sure it is cleared properly.
+> extern enum system_states {
+> SYSTEM_BOOTING,
+> SYSTEM_SCHEDULING,
+> SYSTEM_FREEING_INITMEM,
+> SYSTEM_RUNNING,
+> SYSTEM_HALT,
+> SYSTEM_POWER_OFF,
+> SYSTEM_RESTART,
+> SYSTEM_SUSPEND,
+> } system_state;
+> 
+> If you are asking what happens if a “non atomic” transfer is ongoing and irq’s is disabled, IDK.
+> 
+> Let’s get Wolfram in the loop (Sorry I forgot to add you) :)
 
-> > +		for (scgd =3D 0; scgd < 0x40; scgd++) {
-> > +			scl =3D ick / (20 + (scgd * 8) + round);
-> > +			if (scl <=3D t.bus_freq_hz)
-> > +				break;
-> > +		}
-> > +
-> > +		if (scgd =3D=3D 0x40) {
->=20
-> would be nice to give a meaning to this 0x40 constant... either
-> having it in a define or a comment, at least.
+Nah, it's OK... I am thinking aloud here and trying to cover
+possible scenarios. I also think that setting up a spinlock might
+be too much paranoiac and not necessary.
 
-This code existed before and was just moved into an if-body. It will be
-updated in another series following this one.
+I'm going to ack it... but I will keep a few thoughts on thinking
+what can happen wrong here.
 
-Thanks for the review,
+Acked-by: Andi Shyti <andi.shyti@kernel.org> 
 
-   Wolfram
-
-
---7Ts7kpPtQHL+6LUF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmT4Jd0ACgkQFA3kzBSg
-KbbPFw//cLOkD7C5M5BdquUYTxjpHocQ6wE20W1KvIThySFmulLTXe4hsH8uctBG
-SB5t9GTEuHlTitT24OxIPwu5foG1sDa9V0rSilU3wEG3ckjDjCi6f9zOB44eEPTK
-gtpANt1uLmTppCQL8Mt8M1aUGqKAqxfEoBTFrc0Duk7axEeMhYeQjc7ZA6XFtxU8
-wA2wEkF1DjijEIiQqB5qTKVMYPu4w+5uUZQf/WQ9t/6+cestm4DurIawKlHg4IKc
-AHHqLgK4fNC+NGB1YR/fK48ezBfaVkQkdRacgyA4Q+Cc7pWQ5sW8BPPvGUdEYRFo
-s8RZYX2AZhZmF7aaLA9q8IN598l74AOm7lznoASvEu9UfIP2A+BfPWjIjHTlIZn5
-ygUVaZIYQL8ooXdwyD/eIkGLvko5UCMbg1DlRnDhIaZRxL8VHbpFkWBkTrK3Geqa
-OvDLU+yvVfR/rUsrL1/9B9lBYXtwBxA0ENutilfI+89CXLlS8iczvKFEXA6HAUoy
-Z5b11GlZ/uyVl0/IjsXFtcLZwy/6bGBSRB1h+vPdZXdfOsM65uPDbmLtn7509g8j
-nOrXXZ6ljhyp6ywx2Gf1ctS0uYGH1q1/lA/doSEjAu7+36HeuaFazJL3jUsMGNCV
-ZY6qWBEi7SyOEwCSDsSeA1fym3rTnKpYLtARXe9MOdxInw0iIv8=
-=wxPe
------END PGP SIGNATURE-----
-
---7Ts7kpPtQHL+6LUF--
+Andi
