@@ -2,108 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487C67941BF
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 18:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8274B794300
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 20:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234495AbjIFQ4G (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Sep 2023 12:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
+        id S234939AbjIFSZd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Sep 2023 14:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234699AbjIFQ4G (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 12:56:06 -0400
-Received: from pandora.armlinux.org.uk (unknown [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25F9199B;
-        Wed,  6 Sep 2023 09:56:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=sNT5Q34gaJqxFAzMyuR220ihuYNJNI4qn4J+v0HJKgg=; b=qgrWXZbpxvbI8vhw4vEIqO9JKI
-        pFCV9fe0ukjHTp4uurXd5O3JljyAfUnSHyHml1eFErtkbL2ErjKPch9YmhTUZDEf7t+CpVoiOeSV7
-        s4atnhAAcA1OaFly7quMx6MGM0Cy7X91Nouuy1oaRuJYPLGJoyJZ2xO4Gfj1PluWd/3j+7Q1Pksdf
-        14Ka05TBPsVNrHkAmGco6cZBKMaS/UmBxU/uWQ1kmf0ukYxKkVS2GFqQy2GGGpEXe9hPZscmToOgD
-        VxzdYERGjYqs7tP53H5gZrU9/D+R4o1BQs9qwcX9sPXN4YJVzS/qwpuJYJznfB20MXlGHb67iIScN
-        IgTkxk4g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51652)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qdvoq-0000qg-0D;
-        Wed, 06 Sep 2023 17:55:56 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qdvoq-0004we-8Y; Wed, 06 Sep 2023 17:55:56 +0100
-Date:   Wed, 6 Sep 2023 17:55:56 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     wsa@kernel.org, codrin.ciubotariu@microchip.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luka.perkov@sartura.hr
-Subject: Re: [RFC PATCH] i2c: core: dont change pinmux state to GPIO during
- recovery setup
-Message-ID: <ZPivHKd0LWWnhPr/@shell.armlinux.org.uk>
-References: <20230901114936.1319844-1-robert.marko@sartura.hr>
- <CA+HBbNEM6AfwX87DLRNAuJSWPKboGuuJJDRK_E+G3sJDF73oZA@mail.gmail.com>
+        with ESMTP id S237740AbjIFSZc (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 14:25:32 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BBFE6A
+        for <linux-i2c@vger.kernel.org>; Wed,  6 Sep 2023 11:25:28 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F2DC433C8;
+        Wed,  6 Sep 2023 18:25:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694024727;
+        bh=x3RsLFgY5yOEbrwXVdCsDV8FlgBNBkr81mWwFsnR0Dc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hSNnkdunO4G+F9ocu4pSM3HWIbxAfKUrpn/7xF3HCWApc8m8a7gcX8i0GSyPhyPr5
+         hxvnDEDUP0ApKlX3ZwJzF0mjhQ2/t+UbaCdMwB/xfajkWbWBfbxVP7ool4ORbpJeMs
+         cFbAYx5+86eWIEcEkKVr5KUth3o5hYI+svEhQsONfIafRcKTAAuMoS0cAAbnBs5HEB
+         c593Tbb2tkZlSwtnRiakZti3NULWcoFga0MeruvJYtji9o88Sllz85dBMAR/fytF9r
+         ZfuGzd9kFP9uiJPLH9TTpTZw5bpWBo2kK+BRvK7d4qDYq5HAUTaG/s2lvPRD+199K2
+         KvUoT1gVHGKvg==
+Date:   Wed, 6 Sep 2023 20:25:23 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: i801: fix cleanup code in remove() and error
+ path of probe()
+Message-ID: <20230906182523.sncigwwmbifm4gpn@zenone.zhora.eu>
+References: <3d5143c3-9a6c-2107-62e4-5f328ce7ea26@gmail.com>
+ <20230906134745.24dfa076@endymion.delvare>
+ <20230906141357.nudcljmbflv32esx@zenone.zhora.eu>
+ <20230906174739.499ab821@endymion.delvare>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+HBbNEM6AfwX87DLRNAuJSWPKboGuuJJDRK_E+G3sJDF73oZA@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230906174739.499ab821@endymion.delvare>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 04:41:33PM +0200, Robert Marko wrote:
-> On Fri, Sep 1, 2023 at 1:49 PM Robert Marko <robert.marko@sartura.hr> wrote:
-> >
-> > Ever since PXA I2C driver was moved to the generic I2C recovery, I2C has
-> > stopped working completely on Armada 3720 if the pins are specified in DTS.
-> >
-> > After a while it was traced down to the only difference being that PXA
-> > driver did not change the pinmux state to GPIO before trying to acquire the
-> > GPIO pins.
-> > And indeed as soon as this call is removed I2C starts working.
-> >
-> > To me it seems that this call is not required at all as devm_gpiod_get()
-> > will result in the pinmux state being changed to GPIO via the pinmux
-> > set_mux() op.
-> >
-> > Fixes: 0b01392c18b9 ("i2c: pxa: move to generic GPIO recovery")
-> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > ---
-> > I am aware this probably isnt the correct fix, so I am sending it as RFC
-> > cause I have ran out of ideas.
+Hi Jean,
+
+> > > I wouldn't cc stable. For one thing, this patch doesn't fix a bug that
+> > > actually bothers people. Error paths are rarely taken, and driver
+> > > removal isn't that frequent either. Consequences are also rather
+> > > harmless (one-time resource leak, race condition which is quite
+> > > unlikely to trigger).  
+> > 
+> > we are having this same discussion in another thread: if a bug is
+> > unlikely to happen, doesn't mean that there is no bug. A fix is a
+> > fix and should be backported to stable kernels.
 > 
-> CC-ing Russel as well since I forgot him.
+> No. Please read:
+> 
+>   https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> 
+> There is clearly a list of conditions for a commit to be eligible for
+> stable kernel trees. It's not "every fix".
 
-So the generic recovery decided to set the pinmux state before calling
-devm_gpiod_get(), where as the driver (and my code) originally did this
-after calling devm_gpiod_get():
+I think you are putting these fixes into the ""This could be a
+problem..." type of things".
 
--       /*
--        * Claiming GPIOs can change the pinmux state, which confuses the
--        * pinctrl since pinctrl's idea of the current setting is unaffected
--        * by the pinmux change caused by claiming the GPIO. Work around that
--        * by switching pinctrl to the GPIO state here. We do it this way to
--        * avoid glitching the I2C bus.
--        */
--       pinctrl_select_state(i2c->pinctrl, i2c->pinctrl_recovery);
--
--       return pinctrl_select_state(i2c->pinctrl, i2c->pinctrl_default);
+But as I see these fixes don't belong to this category, as they
+are clearing the exit path. This is a kind of fixes I want to see
+going to stable.
 
-I'd suggest re-implementing my original scheme in the generic code
-because this _does_ work on Armada 3720 hardware.
+Which means that if we exit through that path, do we exit
+cleanly, e.g., without leaking? If the answer is "no", then this
+is a fix and should go to stable.
 
-Removing the pinmux frobbing is likely to break stuff.
+It belongs to "This could be a problem..." type, things like
+dev_err/dev_warn (first thing coming to my mind) or other non
+functional fixes.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Maybe this is a matter of opinion and different background. For
+the i2c side I'm in peace :-)
+
+For the stable backport I'd love to hear another opinion.
+
+Thanks, Jean!
+Andi
