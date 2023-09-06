@@ -2,103 +2,151 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1195793778
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 10:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161097938C5
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 11:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjIFIvF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Sep 2023 04:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
+        id S237567AbjIFJsC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Sep 2023 05:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbjIFIvE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 04:51:04 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3265510DE
-        for <linux-i2c@vger.kernel.org>; Wed,  6 Sep 2023 01:50:38 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10B62C433C7;
-        Wed,  6 Sep 2023 08:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1693990220;
-        bh=GLq9hdp/o97miTEIZM5Xf4vOPBXOHlT6jLKTEJKrijw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OvWi7WBO2dFcmFObS8/Kc9t1amkpcxcYQczSwIpj7ErzRuKQZRq/o0vH728emcu4l
-         8wzTur3CrxmYj1kC4vxGxzZeK6PhQhtYpsoeSIDdLmyTNoei2gB07Qg7gEd6/D3/4w
-         coyOqPTHQmcyqaRBdm8jFn+xM8HLiY9iCYGCoioU=
-Date:   Wed, 6 Sep 2023 09:50:17 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Andi Shyti <andi.shyti@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: i801: fix potential race in
- i801_block_transaction_byte_by_byte
-Message-ID: <2023090642-umbilical-travesty-6274@gregkh>
-References: <f056286a-1db9-b88c-6d36-a3358190b9c9@gmail.com>
- <20230905101243.39920fe5@endymion.delvare>
- <20230905091155.h3oezdj5g6z5jpxu@zenone.zhora.eu>
- <5838f7e4-dd08-48eb-2f9c-df45daa0214a@gmail.com>
- <20230905225922.blulveq5qwe7tv6h@zenone.zhora.eu>
- <55e8de0d-daf3-f398-0fc2-357b53c14bc8@gmail.com>
+        with ESMTP id S234907AbjIFJsB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 05:48:01 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D20171D
+        for <linux-i2c@vger.kernel.org>; Wed,  6 Sep 2023 02:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sang-engineering.com; h=date:from:to:cc:subject:message-id
+        :references:mime-version:content-type:in-reply-to; s=k1; bh=a1yT
+        0IOFHp9HSU2CcA4+eKpH1I+x1AeVbpr+1yuKAJA=; b=CQfHl6+WuVMWepsgbUKx
+        OSs6kFzihlQG7CVZLXWb83uKQxmr77GFw+Ol6kYKv7DdgnWEiRxOkBaJ2IrrcoqE
+        KAMBEtu4z031Lkizs6jZVe2ZuAcMI7bseatQ3c2HxDh5au/q960ACYookQjGeMnR
+        ZvYe28vzaf+JeFRmhXsMtsPoxn5n4UFdFvFJGAO935F+EZ5yXEdBAoCdT9buCRF6
+        ZBhwQfLZXTjBrAcF/8gEGTe80s06pYc2b+IpHeAxUxGmNQ+ZT5eW1tlaChz6JmgA
+        s1GJbf2iIg98dTmhk2AlKxSRP1K/KaK0tv/bqCO0JrnYbzY3ex4uB60EVK15E8Db
+        xA==
+Received: (qmail 2773979 invoked from network); 6 Sep 2023 11:47:50 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Sep 2023 11:47:50 +0200
+X-UD-Smtp-Session: l3s3148p1@JxD7oq0E41wucrHM
+Date:   Wed, 6 Sep 2023 11:47:50 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] i2c: rcar: introduce Gen4 devices
+Message-ID: <ZPhKxsj6VTmIlKUY@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230904135852.12146-1-wsa+renesas@sang-engineering.com>
+ <20230904135852.12146-3-wsa+renesas@sang-engineering.com>
+ <CAMuHMdUJnKeLJu4-CuDEFty8oW0p9M-D5mcuDv+fFxo-fHvvaQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UHvLJwySjydpKWhy"
 Content-Disposition: inline
-In-Reply-To: <55e8de0d-daf3-f398-0fc2-357b53c14bc8@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdUJnKeLJu4-CuDEFty8oW0p9M-D5mcuDv+fFxo-fHvvaQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 08:05:59AM +0200, Heiner Kallweit wrote:
-> On 06.09.2023 00:59, Andi Shyti wrote:
-> > Hi Heiner,
-> > 
-> > On Tue, Sep 05, 2023 at 01:35:10PM +0200, Heiner Kallweit wrote:
-> >> On 05.09.2023 11:11, Andi Shyti wrote:
-> >>> Hi Jean,
-> >>>
-> >>> On Tue, Sep 05, 2023 at 10:12:43AM +0200, Jean Delvare wrote:
-> >>>> On Sat, 02 Sep 2023 22:10:52 +0200, Heiner Kallweit wrote:
-> >>>>> Currently we set SMBHSTCNT_LAST_BYTE only after the host has started
-> >>>>> receiving the last byte. If we get e.g. preempted before setting
-> >>>>> SMBHSTCNT_LAST_BYTE, the host may be finished with receiving the byte
-> >>>>> before SMBHSTCNT_LAST_BYTE is set.
-> >>>>> Therefore change the code to set SMBHSTCNT_LAST_BYTE before writing
-> >>>>> SMBHSTSTS_BYTE_DONE for the byte before the last byte. Now the code
-> >>>>> is also consistent with what we do in i801_isr_byte_done().
-> >>>>>
-> >>>>> Reported-by: Jean Delvare <jdelvare@suse.com>
-> >>>>
-> >>>> Note for Wolfram: checkpatch says we should insert here:
-> >>>>
-> >>>> Closes: https://lore.kernel.org/linux-i2c/20230828152747.09444625@endymion.delvare/
-> >>>
-> >>> does this also need a Fixes: tag? I tried to check it, but there
-> >>> was an intricate jungle of commits in these lines.
-> >>>
-> >> Quoting Jean from previous communication about this patch:
-> >> As far as I see, the race condition already existed when the kernel
-> >> switched to git, so there's no point in having a Fixes statement.
-> > 
-> > true... I forgot about this comment.
-> > 
-> > Anyway I think that this should, then, go to all the stable
-> > kernels and I believe that without the Fixes tag this will never
-> > be picked up.
-> > 
-> 
-> Then we may have to set the Fixes tag to the following?
-> 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Plus a comment that the issue existed before already.
-> 
-> > Maybe Greg can advise here.
-> > 
-> I *think* Greg (or a bot of him) would complain when receiving
-> something for stable w/o a Fixes tag.
 
-No, fixes tags are not required, but they are nice.  For the full set of
-rules on how to do this, please see:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+--UHvLJwySjydpKWhy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi Geert,
+
+thank you for the review!
+
+> Note that R-Car Gen4 (incl. R-Car S4) has ICFBSCR bits related to
+> Slave Clock Stretch Select (which is not yet supported by the driver).
+
+Thanks for the heads up. I'd need more information about the use case of
+these bits. Seperate task.
+
+> According to the Programming Examples in the docs for R-Car Gen3,
+> R-Car V3U, S4-8, and V4H, I2C must be reset "at the beginning of
+> transmission and reception procedure", so not only for DMA.
+
+Sadly, this is vague. If you look at the example for a combined
+write-then-read transfer, then you see that only one reset is done,
+
+i.e.: reset -> write -> rep_start -> read
+
+That would mean that we don't need a reset per read/write message of a
+transfer. But a reset per transfer then? I would wonder why because we
+could also have a super long transfer with lots of read/write messages
+in it. Do we need a reset then inbetween? Or is it really dependant on
+the STOP bit being transferred? I guess these are all questions for the
+HW team, though.
+
+I was reluctant to add the reset too often because my measurements back
+then showed that it costs around 5us every time. Annoying. Maybe I
+should take it easy and follow the documentation. But then I am still
+not sure if a large transfer with way more than two messages are OK
+without reset? I will ask the HW team.
+
+> Also, you didn't the touch the checks in rcar_i2c_cleanup_dma():
+=2E..
+> and rcar_i2c_master_xfer():
+=2E..
+>=20
+> Don't these apply to R-Car Gen4? I can't easily find where this quirk
+> is documented (perhaps just as a commit in the BSP?), but at least the
+> "Usage note for DMA mode of Receive Operation" looks identical for
+> R-Car Gen3 and for the various R-Car Gen4 variants.
+
+My memory played a trick on me here. I asked Shimoda-san about this
+issue on Gen4. I thought I got an answer that it was fixed, so I left
+the code Gen3 only. But he actually never got a reply and I forgot to
+ping about it.
+
+The latest documentation has now a "usage note for DMA mode" about it
+implying that the issue is still present on Gen4 :(
+
+> BTW, depending on the answers to my questions above, you may want to
+> replace the rcar_i2c_type enum by a feature mask...
+
+That might be an option. I need to reshuffle my I2C patches first,
+though. I'll send some cleanups first to have them out of the way. Then,
+I will respin Gen4 support and take care of the DMA RX issue and the new
+reset handling there. Thank you for your input!
+
+All the best,
+
+   Wolfram
+
+
+--UHvLJwySjydpKWhy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmT4SsIACgkQFA3kzBSg
+KbaPxQ/+KZOE7Fq3lIvqI/wCRiVaZFK5dgwrxK8nUwOoyjh6dfU7ZRzxZYAVrz0/
+cm0gRbcuUFzLigeNmnUK0AgHmyJOIsLRV1EXzsFO6KELiUn1GTd2XU7F9DW9CqNC
+p6OOCyCKgqKpp70WO9Xf8n6BnixeqeyqUvfMO/V/PU2YSDKopmov6mQHYRBa3JCh
+xfTHRl6pAe7aRuWILXuwR/beasQ9yzLS/wndH5r3OVjzeXwZLZ8IeoTA6zqknE/a
+ePQSd2XsJvaA3mS+saKOBsyBkzzpC60SNX0ug7MSAzuTytX2VCWzDo6rIMlIalG4
+Hk/VTevu2t+MhI8WJ/TG5WUfgylL1D5X40+cRww3FoVo4vlsWWkOFhZViJMtC8IO
+HuO84qxIaBEWxd3DH0N+cfXRa+V2my4KsX4xBWATaevTte8Vm+MDMYJQqoFC9jTq
+DMocmVnAIbkTyLgMG9B0jj2VMzF4pL6+y/Otk3w65pMIL5gx/futpwRucJSwdUoh
+szzC37/7Hym1pqRhLmRZ8sZv4+yAr1ncJNcveT2ulhJOxS7QCPTsZVxzERVpeXxN
+ZLW0jODfwTc0Ge8mShdUfXNt6b86W6UtTrCjDLVHjKJsHJFpZAjzIAXfCR9jlIbe
+33O7pN98NxE+d0CEcP6OwvePdF6c9pr5X6AJqDVO+Kk7D9NWOLQ=
+=yjCj
+-----END PGP SIGNATURE-----
+
+--UHvLJwySjydpKWhy--
