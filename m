@@ -2,151 +2,302 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161097938C5
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 11:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9727939ED
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 12:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237567AbjIFJsC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Sep 2023 05:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
+        id S232750AbjIFKbr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 6 Sep 2023 06:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234907AbjIFJsB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 05:48:01 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D20171D
-        for <linux-i2c@vger.kernel.org>; Wed,  6 Sep 2023 02:47:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sang-engineering.com; h=date:from:to:cc:subject:message-id
-        :references:mime-version:content-type:in-reply-to; s=k1; bh=a1yT
-        0IOFHp9HSU2CcA4+eKpH1I+x1AeVbpr+1yuKAJA=; b=CQfHl6+WuVMWepsgbUKx
-        OSs6kFzihlQG7CVZLXWb83uKQxmr77GFw+Ol6kYKv7DdgnWEiRxOkBaJ2IrrcoqE
-        KAMBEtu4z031Lkizs6jZVe2ZuAcMI7bseatQ3c2HxDh5au/q960ACYookQjGeMnR
-        ZvYe28vzaf+JeFRmhXsMtsPoxn5n4UFdFvFJGAO935F+EZ5yXEdBAoCdT9buCRF6
-        ZBhwQfLZXTjBrAcF/8gEGTe80s06pYc2b+IpHeAxUxGmNQ+ZT5eW1tlaChz6JmgA
-        s1GJbf2iIg98dTmhk2AlKxSRP1K/KaK0tv/bqCO0JrnYbzY3ex4uB60EVK15E8Db
-        xA==
-Received: (qmail 2773979 invoked from network); 6 Sep 2023 11:47:50 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Sep 2023 11:47:50 +0200
-X-UD-Smtp-Session: l3s3148p1@JxD7oq0E41wucrHM
-Date:   Wed, 6 Sep 2023 11:47:50 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] i2c: rcar: introduce Gen4 devices
-Message-ID: <ZPhKxsj6VTmIlKUY@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230904135852.12146-1-wsa+renesas@sang-engineering.com>
- <20230904135852.12146-3-wsa+renesas@sang-engineering.com>
- <CAMuHMdUJnKeLJu4-CuDEFty8oW0p9M-D5mcuDv+fFxo-fHvvaQ@mail.gmail.com>
+        with ESMTP id S230102AbjIFKbq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 06:31:46 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23709CE2;
+        Wed,  6 Sep 2023 03:31:42 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-d7d50ba994eso2968731276.1;
+        Wed, 06 Sep 2023 03:31:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693996301; x=1694601101;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3mp+XFav+gv2iGOZnJObeWkSIHa4blAGQ6C5KKvsasw=;
+        b=eVNnX9N4xcNbujviBJeFQF8R4In0mtGJu5guEWZu+Q8gHMdTHZPkOUW2b/IEb6OwSn
+         HrTvO1NgUt10AYzQq1s7y3sp6misdgyhq0FengKaD9bV5JrGTOQVVU9dQ5+MOgMPCKDS
+         R9e9NxCTQxkJ98982aYe4u9AbEROxgki+S2ew4agFxPI5gGWTVVKtY0Bw3PHX03+n4da
+         81o3vii4BnGJfEoCmtmRhjWiYWlFLyfRkdZrhJR7hFbUZT+TtjdDLsB7Ct9zgmO1v4pn
+         M+1mwsfVsT7Ghw9i6G2Ubo/KuMqfAmwh6F34U2te+JDQ4t4UX9v/03MXjsJyAO2sZMwg
+         VK7A==
+X-Gm-Message-State: AOJu0Yz8zb0rvbYPqMB2xyyY+rZ55itljq/5sZihu3jcsH5GCT3pIOYX
+        xLdEaZdeVU6nJ9JqvpKhD1VM7jK6m2hWNw==
+X-Google-Smtp-Source: AGHT+IFoLzsFkumLMxu1Q+L+tKq5cl1aLQQkzXO9szMOIBnQLHpb9oa7qxD9Zdk7ESgPozMCYiiJiQ==
+X-Received: by 2002:a25:7691:0:b0:d6b:8ea4:b8a1 with SMTP id r139-20020a257691000000b00d6b8ea4b8a1mr16707447ybc.12.1693996301052;
+        Wed, 06 Sep 2023 03:31:41 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id k66-20020a252445000000b00d071631665fsm3242028ybk.59.2023.09.06.03.31.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Sep 2023 03:31:40 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-d7d50ba994eso2968718276.1;
+        Wed, 06 Sep 2023 03:31:40 -0700 (PDT)
+X-Received: by 2002:a25:55:0:b0:d4c:cbd2:f6f3 with SMTP id 82-20020a250055000000b00d4ccbd2f6f3mr15437569yba.53.1693996300390;
+ Wed, 06 Sep 2023 03:31:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UHvLJwySjydpKWhy"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUJnKeLJu4-CuDEFty8oW0p9M-D5mcuDv+fFxo-fHvvaQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230904135852.12146-1-wsa+renesas@sang-engineering.com> <20230904135852.12146-4-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230904135852.12146-4-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 6 Sep 2023 12:31:29 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW3nGaCHU2GeO3=MHDvZskmXd17GJwj=xBp_ZVawAtniA@mail.gmail.com>
+Message-ID: <CAMuHMdW3nGaCHU2GeO3=MHDvZskmXd17GJwj=xBp_ZVawAtniA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] i2c: rcar: add FastMode+ support
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram,
 
---UHvLJwySjydpKWhy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Sep 5, 2023 at 6:01 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> Apply the different formula and register setting for activating FM+ on
+> Gen4 devtypes.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Hi Geert,
+Thanks for your patch!
 
-thank you for the review!
+> --- a/drivers/i2c/busses/i2c-rcar.c
+> +++ b/drivers/i2c/busses/i2c-rcar.c
 
-> Note that R-Car Gen4 (incl. R-Car S4) has ICFBSCR bits related to
-> Slave Clock Stretch Select (which is not yet supported by the driver).
+> @@ -128,7 +139,7 @@ struct rcar_i2c_priv {
+>         wait_queue_head_t wait;
+>
+>         int pos;
+> -       u32 icccr;
+> +       u32 clock_val;
 
-Thanks for the heads up. I'd need more information about the use case of
-these bits. Seperate task.
+Perhaps use a union to store either icccr or smd?
 
-> According to the Programming Examples in the docs for R-Car Gen3,
-> R-Car V3U, S4-8, and V4H, I2C must be reset "at the beginning of
-> transmission and reception procedure", so not only for DMA.
+>         u8 recovery_icmcr;      /* protected by adapter lock */
+>         enum rcar_i2c_type devtype;
+>         struct i2c_client *slave;
+> @@ -217,7 +228,17 @@ static void rcar_i2c_init(struct rcar_i2c_priv *priv)
+>         rcar_i2c_write(priv, ICMCR, MDBS);
+>         rcar_i2c_write(priv, ICMSR, 0);
+>         /* start clock */
+> -       rcar_i2c_write(priv, ICCCR, priv->icccr);
+> +       if (priv->flags & ID_P_FMPLUS) {
+> +               rcar_i2c_write(priv, ICCCR, 0);
+> +               rcar_i2c_write(priv, ICMPR, priv->clock_val);
+> +               rcar_i2c_write(priv, ICHPR, 3 * priv->clock_val);
+> +               rcar_i2c_write(priv, ICLPR, 3 * priv->clock_val);
+> +               rcar_i2c_write(priv, ICCCR2, FMPE | CDFD | HLSE | SME);
 
-Sadly, this is vague. If you look at the example for a combined
-write-then-read transfer, then you see that only one reset is done,
+ICCCR2 note 1: "ICCCR2 should be written to prior to writing ICCCR."
 
-i.e.: reset -> write -> rep_start -> read
+> +       } else {
+> +               rcar_i2c_write(priv, ICCCR, priv->clock_val);
+> +               if (priv->devtype >= I2C_RCAR_GEN3)
+> +                       rcar_i2c_write(priv, ICCCR2, 0);
 
-That would mean that we don't need a reset per read/write message of a
-transfer. But a reset per transfer then? I would wonder why because we
-could also have a super long transfer with lots of read/write messages
-in it. Do we need a reset then inbetween? Or is it really dependant on
-the STOP bit being transferred? I guess these are all questions for the
-HW team, though.
+Likewise.
 
-I was reluctant to add the reset too often because my measurements back
-then showed that it costs around 5us every time. Annoying. Maybe I
-should take it easy and follow the documentation. But then I am still
-not sure if a large transfer with way more than two messages are OK
-without reset? I will ask the HW team.
+> +       }
+>
+>         if (priv->devtype >= I2C_RCAR_GEN3)
+>                 rcar_i2c_write(priv, ICFBSCR, TCYC17);
+> @@ -242,7 +263,7 @@ static int rcar_i2c_bus_barrier(struct rcar_i2c_priv *priv)
+>
+>  static int rcar_i2c_clock_calculate(struct rcar_i2c_priv *priv)
+>  {
+> -       u32 scgd, cdf, round, ick, sum, scl, cdf_width;
+> +       u32 scgd, cdf = 0, round, ick, sum, scl, cdf_width, smd;
+>         unsigned long rate;
+>         struct device *dev = rcar_i2c_priv_to_dev(priv);
+>         struct i2c_timings t = {
+> @@ -252,19 +273,26 @@ static int rcar_i2c_clock_calculate(struct rcar_i2c_priv *priv)
+>                 .scl_int_delay_ns       = 50,
+>         };
+>
+> -       cdf_width = (priv->devtype == I2C_RCAR_GEN1) ? 2 : 3;
+> -
+>         /* Fall back to previously used values if not supplied */
+>         i2c_parse_fw_timings(dev, &t, false);
+>
+> +       if (t.bus_freq_hz > I2C_MAX_FAST_MODE_FREQ &&
+> +           priv->devtype >= I2C_RCAR_GEN4)
+> +               priv->flags |= ID_P_FMPLUS;
+> +       else
+> +               priv->flags &= ~ID_P_FMPLUS;
+> +
+>         /*
+>          * calculate SCL clock
+>          * see
+> -        *      ICCCR
+> +        *      ICCCR (and ICCCR2 for FastMode+)
+>          *
+>          * ick  = clkp / (1 + CDF)
+>          * SCL  = ick / (20 + SCGD * 8 + F[(ticf + tr + intd) * ick])
+>          *
+> +        * for FastMode+:
+> +        * SCL  = clkp / (8 + SMD * 2 + SCLD + SCHD +F[(ticf + tr + intd) * clkp])
+> +        *
+>          * ick  : I2C internal clock < 20 MHz
+>          * ticf : I2C SCL falling time
+>          * tr   : I2C SCL rising  time
+> @@ -273,10 +301,14 @@ static int rcar_i2c_clock_calculate(struct rcar_i2c_priv *priv)
+>          * F[]  : integer up-valuation
+>          */
+>         rate = clk_get_rate(priv->clk);
+> -       cdf = rate / 20000000;
+> -       if (cdf >= 1U << cdf_width) {
+> -               dev_err(dev, "Input clock %lu too high\n", rate);
+> -               return -EIO;
+> +
+> +       if (!(priv->flags & ID_P_FMPLUS)) {
+> +               cdf = rate / 20000000;
+> +               cdf_width = (priv->devtype == I2C_RCAR_GEN1) ? 2 : 3;
+> +               if (cdf >= 1U << cdf_width) {
+> +                       dev_err(dev, "Input clock %lu too high\n", rate);
+> +                       return -EIO;
+> +               }
+>         }
+>         ick = rate / (cdf + 1);
 
-> Also, you didn't the touch the checks in rcar_i2c_cleanup_dma():
-=2E..
-> and rcar_i2c_master_xfer():
-=2E..
->=20
-> Don't these apply to R-Car Gen4? I can't easily find where this quirk
-> is documented (perhaps just as a commit in the BSP?), but at least the
-> "Usage note for DMA mode of Receive Operation" looks identical for
-> R-Car Gen3 and for the various R-Car Gen4 variants.
+In case of FM+, cdf will be zero, and ick == rate?
 
-My memory played a trick on me here. I asked Shimoda-san about this
-issue on Gen4. I thought I got an answer that it was fixed, so I left
-the code Gen3 only. But he actually never got a reply and I forgot to
-ping about it.
+> @@ -292,34 +324,55 @@ static int rcar_i2c_clock_calculate(struct rcar_i2c_priv *priv)
+>         round = (ick + 500000) / 1000000 * sum;
 
-The latest documentation has now a "usage note for DMA mode" about it
-implying that the issue is still present on Gen4 :(
+ick == rate if FM+
 
-> BTW, depending on the answers to my questions above, you may want to
-> replace the rcar_i2c_type enum by a feature mask...
+>         round = (round + 500) / 1000;
 
-That might be an option. I need to reshuffle my I2C patches first,
-though. I'll send some cleanups first to have them out of the way. Then,
-I will respin Gen4 support and take care of the DMA RX issue and the new
-reset handling there. Thank you for your input!
+DIV_ROUND_UP()
 
-All the best,
+>
+> -       /*
+> -        * SCL  = ick / (20 + SCGD * 8 + F[(ticf + tr + intd) * ick])
+> -        *
+> -        * Calculation result (= SCL) should be less than
+> -        * bus_speed for hardware safety
+> -        *
+> -        * We could use something along the lines of
+> -        *      div = ick / (bus_speed + 1) + 1;
+> -        *      scgd = (div - 20 - round + 7) / 8;
+> -        *      scl = ick / (20 + (scgd * 8) + round);
+> -        * (not fully verified) but that would get pretty involved
+> -        */
+> -       for (scgd = 0; scgd < 0x40; scgd++) {
+> -               scl = ick / (20 + (scgd * 8) + round);
+> -               if (scl <= t.bus_freq_hz)
+> -                       break;
+> -       }
+> +       if (priv->flags & ID_P_FMPLUS) {
 
-   Wolfram
+IIUIC, on R-ar Gen3 and later you can use ICCCR2 without FM+, for
+improved accuracy, too?
+
+> +               /*
+> +                * SMD should be smaller than SCLD and SCHD, we arbitrarily set
+> +                * the ratio 1:3. SCHD:SCLD ratio is 1:1, thus:
+> +                * SCL  = clkp / (8 + SMD * 2 + SCLD + SCHD + F[(ticf + tr + intd) * clkp])
+> +                * SCL  = clkp / (8 + SMD * 2 + SMD * 3 + SMD * 3 + F[...])
+> +                * SCL  = clkp / (8 + SMD * 8 + F[...])
+> +                */
+> +               smd = DIV_ROUND_UP(ick / t.bus_freq_hz - 8 - round, 8);
+
+Perhaps use rate instead of ick?
+
+DIV_ROUND_UP(ick, 8 * (t.bus_freq_hz - 8 - round));
+
+> +               scl = ick / (8 + 8 * smd + round);
+
+DIV_ROUND_UP()?
+
+>
+> -       if (scgd == 0x40) {
+> -               dev_err(dev, "it is impossible to calculate best SCL\n");
+> -               return -EIO;
+> -       }
+> +               if (smd > 0xff) {
+> +                       dev_err(dev, "it is impossible to calculate best SCL\n");
+> +                       return -EINVAL;
+
+Perhaps some "goto error", to share with the error handling for non-FM+?
+
+> +               }
+>
+> -       dev_dbg(dev, "clk %d/%d(%lu), round %u, CDF:0x%x, SCGD: 0x%x\n",
+> -               scl, t.bus_freq_hz, rate, round, cdf, scgd);
+> +               dev_dbg(dev, "clk %d/%d(%lu), round %u, SMD:0x%x, SCHD: 0x%x\n",
+
+%u/%u
+
+Perhaps it makes more sense to print SMD and SCHD in decimal?
+
+This also applies to the existing code (CDF/SCGD) you moved into
+the else branch.
+
+> +                       scl, t.bus_freq_hz, rate, round, smd, 3 * smd);
+>
+> -       /* keep icccr value */
+> -       priv->icccr = scgd << cdf_width | cdf;
+> +               priv->clock_val = smd;
+> +       } else {
+> +               /*
+> +                * SCL  = ick / (20 + SCGD * 8 + F[(ticf + tr + intd) * ick])
+> +                *
+> +                * Calculation result (= SCL) should be less than
+> +                * bus_speed for hardware safety
+> +                *
+> +                * We could use something along the lines of
+> +                *      div = ick / (bus_speed + 1) + 1;
+> +                *      scgd = (div - 20 - round + 7) / 8;
+> +                *      scl = ick / (20 + (scgd * 8) + round);
+> +                * (not fully verified) but that would get pretty involved
+> +                */
+> +               for (scgd = 0; scgd < 0x40; scgd++) {
+> +                       scl = ick / (20 + (scgd * 8) + round);
+> +                       if (scl <= t.bus_freq_hz)
+> +                               break;
+> +               }
+> +
+> +               if (scgd == 0x40) {
+> +                       dev_err(dev, "it is impossible to calculate best SCL\n");
+> +                       return -EINVAL;
+
+This was -EIO before.
 
 
---UHvLJwySjydpKWhy
-Content-Type: application/pgp-signature; name="signature.asc"
+> +               }
+> +
+> +               dev_dbg(dev, "clk %d/%d(%lu), round %u, CDF:0x%x, SCGD: 0x%x\n",
+> +                       scl, t.bus_freq_hz, rate, round, cdf, scgd);
+> +
+> +               priv->clock_val = scgd << cdf_width | cdf;
+> +       }
+>
+>         return 0;
+>  }
 
------BEGIN PGP SIGNATURE-----
+Gr{oetje,eeting}s,
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmT4SsIACgkQFA3kzBSg
-KbaPxQ/+KZOE7Fq3lIvqI/wCRiVaZFK5dgwrxK8nUwOoyjh6dfU7ZRzxZYAVrz0/
-cm0gRbcuUFzLigeNmnUK0AgHmyJOIsLRV1EXzsFO6KELiUn1GTd2XU7F9DW9CqNC
-p6OOCyCKgqKpp70WO9Xf8n6BnixeqeyqUvfMO/V/PU2YSDKopmov6mQHYRBa3JCh
-xfTHRl6pAe7aRuWILXuwR/beasQ9yzLS/wndH5r3OVjzeXwZLZ8IeoTA6zqknE/a
-ePQSd2XsJvaA3mS+saKOBsyBkzzpC60SNX0ug7MSAzuTytX2VCWzDo6rIMlIalG4
-Hk/VTevu2t+MhI8WJ/TG5WUfgylL1D5X40+cRww3FoVo4vlsWWkOFhZViJMtC8IO
-HuO84qxIaBEWxd3DH0N+cfXRa+V2my4KsX4xBWATaevTte8Vm+MDMYJQqoFC9jTq
-DMocmVnAIbkTyLgMG9B0jj2VMzF4pL6+y/Otk3w65pMIL5gx/futpwRucJSwdUoh
-szzC37/7Hym1pqRhLmRZ8sZv4+yAr1ncJNcveT2ulhJOxS7QCPTsZVxzERVpeXxN
-ZLW0jODfwTc0Ge8mShdUfXNt6b86W6UtTrCjDLVHjKJsHJFpZAjzIAXfCR9jlIbe
-33O7pN98NxE+d0CEcP6OwvePdF6c9pr5X6AJqDVO+Kk7D9NWOLQ=
-=yjCj
------END PGP SIGNATURE-----
+                        Geert
 
---UHvLJwySjydpKWhy--
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
