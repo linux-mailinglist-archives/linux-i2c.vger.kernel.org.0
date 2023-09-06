@@ -2,93 +2,70 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8274B794300
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 20:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D3679441F
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 22:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234939AbjIFSZd (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Sep 2023 14:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
+        id S243745AbjIFUAr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Sep 2023 16:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237740AbjIFSZc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 14:25:32 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BBFE6A
-        for <linux-i2c@vger.kernel.org>; Wed,  6 Sep 2023 11:25:28 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F2DC433C8;
-        Wed,  6 Sep 2023 18:25:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694024727;
-        bh=x3RsLFgY5yOEbrwXVdCsDV8FlgBNBkr81mWwFsnR0Dc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hSNnkdunO4G+F9ocu4pSM3HWIbxAfKUrpn/7xF3HCWApc8m8a7gcX8i0GSyPhyPr5
-         hxvnDEDUP0ApKlX3ZwJzF0mjhQ2/t+UbaCdMwB/xfajkWbWBfbxVP7ool4ORbpJeMs
-         cFbAYx5+86eWIEcEkKVr5KUth3o5hYI+svEhQsONfIafRcKTAAuMoS0cAAbnBs5HEB
-         c593Tbb2tkZlSwtnRiakZti3NULWcoFga0MeruvJYtji9o88Sllz85dBMAR/fytF9r
-         ZfuGzd9kFP9uiJPLH9TTpTZw5bpWBo2kK+BRvK7d4qDYq5HAUTaG/s2lvPRD+199K2
-         KvUoT1gVHGKvg==
-Date:   Wed, 6 Sep 2023 20:25:23 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: i801: fix cleanup code in remove() and error
- path of probe()
-Message-ID: <20230906182523.sncigwwmbifm4gpn@zenone.zhora.eu>
-References: <3d5143c3-9a6c-2107-62e4-5f328ce7ea26@gmail.com>
- <20230906134745.24dfa076@endymion.delvare>
- <20230906141357.nudcljmbflv32esx@zenone.zhora.eu>
- <20230906174739.499ab821@endymion.delvare>
+        with ESMTP id S243566AbjIFUAf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 16:00:35 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0D31998
+        for <linux-i2c@vger.kernel.org>; Wed,  6 Sep 2023 13:00:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sang-engineering.com; h=from:to:cc:subject:date:message-id
+        :mime-version:content-transfer-encoding; s=k1; bh=A3ixWxOf22d750
+        WBlTRj5T+ZBuyZaVvPJI9t1l4g7TY=; b=HdNOkU1Hj07eZC0l1r5gG0NDPhgbcT
+        oHy3xRdz1t00WqjF8QOIEGYZArEiV6autpeM70cQNe4CjeVZ6X2IHrZpFsAnOmQv
+        QVGb1xSngGOTZa8Gj0RhXwSqsfbNZthsFh0rKAJ4sFpS36tV8ZmWUVd7IGYa+lAz
+        R2lz/ChOxz22D4U7LeTkbfqNwfD3NV9nYu3xtVP22ewBaWVqNizFzn6qucar8VCP
+        fIZ1AKT3rXsyY02XlMvYWAwWxaDo084+SZ5/ZkDiA69GxYa+sH0maRalz56GVRbO
+        bl2vSeqMcNqoXuBiw2TfNsud27kHIJXYdlEr9Vd/nw7A15CSl6A97uyA==
+Received: (qmail 2929762 invoked from network); 6 Sep 2023 22:00:26 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Sep 2023 22:00:26 +0200
+X-UD-Smtp-Session: l3s3148p1@a7rIMbYEDIsgAQnoAFZhALrSGIaWNE/A
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] i2c: clock calculation cleanups for Renesas devices
+Date:   Wed,  6 Sep 2023 22:00:18 +0200
+Message-Id: <20230906200024.5305-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230906174739.499ab821@endymion.delvare>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Jean,
+While implementing FastMode+ support for the R-Car IP core, I noticed
+potential for other cleanups. It turned out that it makes sense to apply
+them first, so here is the series. Tested on a Renesas Falcon board with
+an R-Car V3U. The calculated values are identical for 100 and 400kHz.
+The RIIC patch is build tested only.
 
-> > > I wouldn't cc stable. For one thing, this patch doesn't fix a bug that
-> > > actually bothers people. Error paths are rarely taken, and driver
-> > > removal isn't that frequent either. Consequences are also rather
-> > > harmless (one-time resource leak, race condition which is quite
-> > > unlikely to trigger).  
-> > 
-> > we are having this same discussion in another thread: if a bug is
-> > unlikely to happen, doesn't mean that there is no bug. A fix is a
-> > fix and should be backported to stable kernels.
-> 
-> No. Please read:
-> 
->   https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-> 
-> There is clearly a list of conditions for a commit to be eligible for
-> stable kernel trees. It's not "every fix".
+Looking forward to comments!
 
-I think you are putting these fixes into the ""This could be a
-problem..." type of things".
 
-But as I see these fixes don't belong to this category, as they
-are clearing the exit path. This is a kind of fixes I want to see
-going to stable.
+Wolfram Sang (5):
+  i2c: rcar: avoid non-standard use of goto
+  i2c: rcar: properly format a debug output
+  i2c: rcar: calculate divider instead of brute-forcing it
+  i2c: rcar: remove open coded DIV_ROUND_CLOSEST
+  i2c: riic: avoid potential division by zero
 
-Which means that if we exit through that path, do we exit
-cleanly, e.g., without leaking? If the answer is "no", then this
-is a fix and should go to stable.
+ drivers/i2c/busses/i2c-rcar.c | 41 +++++++++++++++--------------------
+ drivers/i2c/busses/i2c-riic.c |  2 +-
+ 2 files changed, 19 insertions(+), 24 deletions(-)
 
-It belongs to "This could be a problem..." type, things like
-dev_err/dev_warn (first thing coming to my mind) or other non
-functional fixes.
+-- 
+2.35.1
 
-Maybe this is a matter of opinion and different background. For
-the i2c side I'm in peace :-)
-
-For the stable backport I'd love to hear another opinion.
-
-Thanks, Jean!
-Andi
