@@ -2,130 +2,215 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5115793BAE
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 13:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73557793C5E
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 14:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbjIFLsB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Sep 2023 07:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S235123AbjIFMLL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Sep 2023 08:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240093AbjIFLsB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 07:48:01 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD4E10F9
-        for <linux-i2c@vger.kernel.org>; Wed,  6 Sep 2023 04:47:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CF71A1F459;
-        Wed,  6 Sep 2023 11:47:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1694000868; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qXfjtDa7WcrDMSPbIpyFeagjcCP8xGGUVFIkzIYlPA4=;
-        b=YDGA6Lves34OiKCEqyOQfLSRGmVs2D+d2Yuyz/RNDKdXz4RiziLAVI4ssO8K2PM9gE7S5m
-        uwWVGI0zIc1JgsXZEXpOFHtp0ogXvFbKw5jVvuVcCFiWYqt+hf3JZmKuIFMHLeNwvRLpR8
-        u24a3P45wDyf666KBQ1OGjJFmZ/bEoU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1694000868;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qXfjtDa7WcrDMSPbIpyFeagjcCP8xGGUVFIkzIYlPA4=;
-        b=The1CZtrsuh3x2QxSsbTCb8yERDKqGrhKYONaDOSt/UafvMsPZsi5zY7pbBEYez4Mrd119
-        /B0DAsDyS3ADudBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA75B1333E;
-        Wed,  6 Sep 2023 11:47:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sNIeKORm+GTPXgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Wed, 06 Sep 2023 11:47:48 +0000
-Date:   Wed, 6 Sep 2023 13:47:45 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: i801: fix cleanup code in remove() and error
- path of probe()
-Message-ID: <20230906134745.24dfa076@endymion.delvare>
-In-Reply-To: <3d5143c3-9a6c-2107-62e4-5f328ce7ea26@gmail.com>
-References: <3d5143c3-9a6c-2107-62e4-5f328ce7ea26@gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        with ESMTP id S240581AbjIFMLL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 08:11:11 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17085171F
+        for <linux-i2c@vger.kernel.org>; Wed,  6 Sep 2023 05:11:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sang-engineering.com; h=date:from:to:cc:subject:message-id
+        :references:mime-version:content-type:in-reply-to; s=k1; bh=YyKx
+        SEw64CuPDiuCgGzAN3A6ofWzKjxmBcED81gY0A4=; b=UhLN09bTV7ehGrr8oh43
+        6VjNiIRbx6EIwC9zNWj8NGxat5pG4ldrNJ/f7YxGhemcwJNC75/ofWoZhowrlQr1
+        hRS3lt9v+IJR6o6wuKlInAinV4PWfHQdWsDUgGfBrq1131jEQSbFJUaya05Ffyt/
+        WDdSSrvwbfFo55Kf2MMWTvnBStuU2dpiV6A/lZhvmNsSaLSwMwsQom8qWvefPR2w
+        Yxnp8pDdqMQ0DGJPOidtfbD0rAE4nKXG44qAtSex4erOXPI/JZ8RTwQl9y5nr5yI
+        mcPMdfN4SmqEcyTSL9hK5c42Wn/fudwNqQdjMHOOFpaQ1g2X/DQPGKX8Qkhe7n2+
+        Dg==
+Received: (qmail 2814613 invoked from network); 6 Sep 2023 14:11:01 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Sep 2023 14:11:01 +0200
+X-UD-Smtp-Session: l3s3148p1@hTsJo68EPRQucrGD
+Date:   Wed, 6 Sep 2023 14:11:00 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] i2c: rcar: add FastMode+ support
+Message-ID: <ZPhsVLiGck+XF5T7@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230904135852.12146-1-wsa+renesas@sang-engineering.com>
+ <20230904135852.12146-4-wsa+renesas@sang-engineering.com>
+ <CAMuHMdW3nGaCHU2GeO3=MHDvZskmXd17GJwj=xBp_ZVawAtniA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="T7IJSgVMdsFtcOK6"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdW3nGaCHU2GeO3=MHDvZskmXd17GJwj=xBp_ZVawAtniA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Heiner, Wolfram,
 
-On Sat, 02 Sep 2023 22:06:14 +0200, Heiner Kallweit wrote:
-> Jean pointed out that the referenced patch resulted in the remove()
-> path not having the reverse order of calls in probe(). I think there's
-> more to be done to ensure proper cleanup.
-> Especially cleanup in the probe() error path has to be extended.
-> Not every step there may be strictly needed, but it's in line with
-> remove() now.
+--T7IJSgVMdsFtcOK6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This last sentence no longer applies to this version of the patch.
+Hi Geert,
 
-> Fixes: 9b5bf5878138 ("i2c: i801: Restore INTREN on unload")
-> Fixes: 9424693035a5 ("i2c: i801: Create iTCO device on newer Intel PCHs")
-> Cc: stable@vger.kernel.org
+> > -       u32 icccr;
+> > +       u32 clock_val;
+>=20
+> Perhaps use a union to store either icccr or smd?
 
-I wouldn't cc stable. For one thing, this patch doesn't fix a bug that
-actually bothers people. Error paths are rarely taken, and driver
-removal isn't that frequent either. Consequences are also rather
-harmless (one-time resource leak, race condition which is quite
-unlikely to trigger).
+Yup, can do.
 
-For another, this patch is a mix of 2 bug fixes (SMBHSTCNT being
-restored too early in i801_remove, resource leak in error path of
-i801_probe) which have been added in very different kernel versions
-(v5.16 and v4.3, respectively), and tidying up (the reordering of some
-of the statements in i801_remove is nice for consistency but is not
-actually fixing any bug).
+>=20
+> >         u8 recovery_icmcr;      /* protected by adapter lock */
+> >         enum rcar_i2c_type devtype;
+> >         struct i2c_client *slave;
+> > @@ -217,7 +228,17 @@ static void rcar_i2c_init(struct rcar_i2c_priv *pr=
+iv)
+> >         rcar_i2c_write(priv, ICMCR, MDBS);
+> >         rcar_i2c_write(priv, ICMSR, 0);
+> >         /* start clock */
+> > -       rcar_i2c_write(priv, ICCCR, priv->icccr);
+> > +       if (priv->flags & ID_P_FMPLUS) {
+> > +               rcar_i2c_write(priv, ICCCR, 0);
+> > +               rcar_i2c_write(priv, ICMPR, priv->clock_val);
+> > +               rcar_i2c_write(priv, ICHPR, 3 * priv->clock_val);
+> > +               rcar_i2c_write(priv, ICLPR, 3 * priv->clock_val);
+> > +               rcar_i2c_write(priv, ICCCR2, FMPE | CDFD | HLSE | SME);
+>=20
+> ICCCR2 note 1: "ICCCR2 should be written to prior to writing ICCCR."
 
-If you really want to push the fixes to stable, you'd have to split the
-patch in 3 pieces, one for each fix (going to stable), and one for the
-remainder (not going to stable). Otherwise it makes backporting to
-older kernels error-prone and time-consuming. Considering how harmless
-the bugs are in the first place, my position is that the extra work is
-simply not worth it.
+Eeks, I remembered it the other way around :/
 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
-> v2:
-> - add Fixes tag for 9424693035a5
-> - remove restoring SMBHSTCNT from probe error path
-> - move restoring SMBHSTCNT to the end in remove/shutdown
-> ---
->  drivers/i2c/busses/i2c-i801.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> (...)
+> >         ick =3D rate / (cdf + 1);
+>=20
+> In case of FM+, cdf will be zero, and ick =3D=3D rate?
 
-That being said, the patch itself looks good to me, and I have tested
-it too.
+Yes.
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Tested-by: Jean Delvare <jdelvare@suse.de>
+>=20
+> > @@ -292,34 +324,55 @@ static int rcar_i2c_clock_calculate(struct rcar_i=
+2c_priv *priv)
+> >         round =3D (ick + 500000) / 1000000 * sum;
+>=20
+> ick =3D=3D rate if FM+
+
+Yes, does this induce a change here?
+
+> >         round =3D (round + 500) / 1000;
+>=20
+> DIV_ROUND_UP()
+
+DIV_ROUND_CLOSEST() I'd say, but I have a seperate patch for that.
+
+> > +       if (priv->flags & ID_P_FMPLUS) {
+>=20
+> IIUIC, on R-ar Gen3 and later you can use ICCCR2 without FM+, for
+> improved accuracy, too?
+
+Yeah, we could do that. It indeed improves accuracy:
+
+	old		new
+100kHz:	97680/100000	99950/100000
+400kHz: 373482/400000	399201/400000
+
+Caring about regressions here is a bit over the top, or?
+
+> > +               /*
+> > +                * SMD should be smaller than SCLD and SCHD, we arbitra=
+rily set
+> > +                * the ratio 1:3. SCHD:SCLD ratio is 1:1, thus:
+> > +                * SCL  =3D clkp / (8 + SMD * 2 + SCLD + SCHD + F[(ticf=
+ + tr + intd) * clkp])
+> > +                * SCL  =3D clkp / (8 + SMD * 2 + SMD * 3 + SMD * 3 + F=
+[...])
+> > +                * SCL  =3D clkp / (8 + SMD * 8 + F[...])
+> > +                */
+> > +               smd =3D DIV_ROUND_UP(ick / t.bus_freq_hz - 8 - round, 8=
+);
+>=20
+> Perhaps use rate instead of ick?
+
+That's probably cleaner.
+
+> DIV_ROUND_UP(ick, 8 * (t.bus_freq_hz - 8 - round));
+
+This looks like you assumed "ick / (t.bus_freq_hz - 8 - round)" but it
+is "(ick / t.bus_freq_hz) - 8 - round"?
+
+> > +               scl =3D ick / (8 + 8 * smd + round);
+>=20
+> DIV_ROUND_UP()?
+
+Okay.
+
+> > +               if (smd > 0xff) {
+> > +                       dev_err(dev, "it is impossible to calculate bes=
+t SCL\n");
+> > +                       return -EINVAL;
+>=20
+> Perhaps some "goto error", to share with the error handling for non-FM+?
+
+I will check with the refactored code.
+
+> > -       dev_dbg(dev, "clk %d/%d(%lu), round %u, CDF:0x%x, SCGD: 0x%x\n",
+> > -               scl, t.bus_freq_hz, rate, round, cdf, scgd);
+> > +               dev_dbg(dev, "clk %d/%d(%lu), round %u, SMD:0x%x, SCHD:=
+ 0x%x\n",
+>=20
+> %u/%u
+>=20
+> Perhaps it makes more sense to print SMD and SCHD in decimal?
+>=20
+> This also applies to the existing code (CDF/SCGD) you moved into
+> the else branch.
+
+Can do. I don't care it is debug output.
+
+> > +               if (scgd =3D=3D 0x40) {
+> > +                       dev_err(dev, "it is impossible to calculate bes=
+t SCL\n");
+> > +                       return -EINVAL;
+>=20
+> This was -EIO before.
+
+I'll squash this into a seperate cleanup patch I have.
 
 Thanks,
--- 
-Jean Delvare
-SUSE L3 Support
+
+   Wolfram
+
+
+--T7IJSgVMdsFtcOK6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmT4bFAACgkQFA3kzBSg
+KbZv3A//X40G/mXBVIsm9A1xDul1E9P+P8XuhKQwaefee1bYOvOQVv1r+a+LayVq
+nV2zSyH4l5Ec4oXubwPO2+hdgxYLpZRl4aejjtaUrTlRvEHLb/xCI7Hn3OQ1G/yc
+G5CFBP3Etnhk7y9uNo7Et/3Oy5X2AlwDRR9c01WPw/BY9GobnY3x09A6YTm5TtT2
+jBBx9TPFGmwhulGt1JXBFBEifPJfOvjR34yAubRAulwTGdbOVvufvULZIIJrXlku
+Y/hOQZbklOLu/M6/3Te6/pZYg2BzFcUM8S/g5uDYx2dC1RvOrlLnlcZb0L5WrhsM
+10lnU1qwYDQqNTdwChuXepMsg90UpFLCwzrcH8nayLzaaCHjYmv/oV9ft1rpxZxj
+14v8/BgO9zCWhe9hBAdcVPH+npHs6yAD/fyUmsppbsN6WVP+NCd8apKpUAhuPdVY
+5oVfW02a8jkw9WLo2tjzqhRNFHG2JiRXRdd4Ej+OH1DcdV9ytEURiw8ztmAothfG
+GoGH8CjZjn2xHNTvPEY4A+3kbAgVe9a/pB3vXpIRjf0DYr8OSI5mUvx/oZwTk4qw
+VBVeLFihA3TuOwMU0PtoLw9ioDmzfaETOLqrpJL0Pij82WtAz20i45D4lDZ/Jcgi
+vGeCWVbZeLwOzivXDFQYZ1GPpxSDUqdwPRHTCurQPv8GFm9AKFI=
+=iUx3
+-----END PGP SIGNATURE-----
+
+--T7IJSgVMdsFtcOK6--
