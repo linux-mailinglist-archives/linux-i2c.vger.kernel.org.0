@@ -2,57 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7053793D69
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 15:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BE8793E76
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Sep 2023 16:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241077AbjIFNHr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 6 Sep 2023 09:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
+        id S231316AbjIFOOF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 6 Sep 2023 10:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241069AbjIFNHr (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 09:07:47 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E28A10E2
-        for <linux-i2c@vger.kernel.org>; Wed,  6 Sep 2023 06:07:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sang-engineering.com; h=date:from:to:cc:subject:message-id
-        :references:mime-version:content-type:in-reply-to; s=k1; bh=5Rc5
-        1KKYM2VQU/ABIQd7vOULDm4mUTaH1o7bkoDnXBc=; b=l0zluQVNwKvgiSUva04y
-        ZUWEIAQi1H6F3iD6fEQ9rQNZYMd5AwChG+OTiSu/M9O94Qdas/SDlyGqtNJNjAjR
-        Jp1rpq/cZ6AKXe4x2UAX9SzbRMFXn61uu8twHd5tdNIXLSVdIMd9t4VsY6+HAbv6
-        xpIypQzGdv5NHiDVZxn5qtfdNlfbeMYRBnJf9x0rE8PGEUx+FT5WmMXoxj6ufOdL
-        jtr5MnYwYq0UygTdQpPqEd3ZOYaY3EWyl0xOzddPHj+Y2TeRfcGGVBx01j31z/BW
-        i666rxvw9zZVr8tyAWfwkU7+acM70U0D/oawnO3AmTHMdVtxu5AZ6IOZKF/Ropta
-        DA==
-Received: (qmail 2830462 invoked from network); 6 Sep 2023 15:07:40 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 6 Sep 2023 15:07:40 +0200
-X-UD-Smtp-Session: l3s3148p1@suycbbAEiDUucrGD
-Date:   Wed, 6 Sep 2023 15:07:39 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] i2c: rcar: add FastMode+ support
-Message-ID: <ZPh5m2PUMlmhtOyQ@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230904135852.12146-1-wsa+renesas@sang-engineering.com>
- <20230904135852.12146-4-wsa+renesas@sang-engineering.com>
- <CAMuHMdW3nGaCHU2GeO3=MHDvZskmXd17GJwj=xBp_ZVawAtniA@mail.gmail.com>
- <ZPhsVLiGck+XF5T7@shikoro>
- <CAMuHMdUE3BVZzsBGSZRPyZRK46zZJ_1jtNMV_Lv-Tp5YXPOY8A@mail.gmail.com>
+        with ESMTP id S230435AbjIFOOF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 6 Sep 2023 10:14:05 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C63CF
+        for <linux-i2c@vger.kernel.org>; Wed,  6 Sep 2023 07:14:02 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4066C433C8;
+        Wed,  6 Sep 2023 14:14:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694009641;
+        bh=C0nGeWFrTT9iwlGGOHpc5T/5W9pWqhk12vmsyfjdXfw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JSWsiEWVfMU6VvG8QN380m6G2AKwRaBhatHGgHAKu19QSlYU9SDrVw7dK4aKqYARC
+         16Pnoau+2P4fNDLXxXEfpimT3gF6uW2vOELmR8B8B9+DovwFu9Q5V/VQk7lhVznI7f
+         Ow1NNdNC1Lh3hm/UgpCsBVSHl/bN7+EWjsuptjJv0xqESb3+DYvsU5gEfXhGbPrI23
+         kxwwYm+FXB3rRCmZxdde+3j9YIEKTLOZ7j7oAnAv3CEVxvS/O/+x4n9PVutK6kauel
+         Ctul9yTf9Or8NDEitEFBctF6/oGZjTHbYIdese0LIXb8HeZaXAsNEIfD6VL52jbxAg
+         caNMi4Za2qHOg==
+Date:   Wed, 6 Sep 2023 16:13:57 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: i801: fix cleanup code in remove() and error
+ path of probe()
+Message-ID: <20230906141357.nudcljmbflv32esx@zenone.zhora.eu>
+References: <3d5143c3-9a6c-2107-62e4-5f328ce7ea26@gmail.com>
+ <20230906134745.24dfa076@endymion.delvare>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FVdGaMsPA8WdSF2P"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdUE3BVZzsBGSZRPyZRK46zZJ_1jtNMV_Lv-Tp5YXPOY8A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+In-Reply-To: <20230906134745.24dfa076@endymion.delvare>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,41 +50,82 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Jean,
 
---FVdGaMsPA8WdSF2P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Wed, Sep 06, 2023 at 01:47:45PM +0200, Jean Delvare wrote:
+> Hi Heiner, Wolfram,
+> 
+> On Sat, 02 Sep 2023 22:06:14 +0200, Heiner Kallweit wrote:
+> > Jean pointed out that the referenced patch resulted in the remove()
+> > path not having the reverse order of calls in probe(). I think there's
+> > more to be done to ensure proper cleanup.
+> > Especially cleanup in the probe() error path has to be extended.
+> > Not every step there may be strictly needed, but it's in line with
+> > remove() now.
+> 
+> This last sentence no longer applies to this version of the patch.
+> 
+> > Fixes: 9b5bf5878138 ("i2c: i801: Restore INTREN on unload")
+> > Fixes: 9424693035a5 ("i2c: i801: Create iTCO device on newer Intel PCHs")
+> > Cc: stable@vger.kernel.org
+> 
+> I wouldn't cc stable. For one thing, this patch doesn't fix a bug that
+> actually bothers people. Error paths are rarely taken, and driver
+> removal isn't that frequent either. Consequences are also rather
+> harmless (one-time resource leak, race condition which is quite
+> unlikely to trigger).
 
+we are having this same discussion in another thread: if a bug is
+unlikely to happen, doesn't mean that there is no bug. A fix is a
+fix and should be backported to stable kernels.
 
-> OK do you need rounding for the division of ick and t.bus_freq_hz,
-> or is the adjustment bij "- (round + 8)" already taking care of that?
+Sometimes bugs are reported some other times bugs are discovered
+by reading the code (like in the other thread). In the latter
+case bugs are just waiting for their time of glory.
 
-Unless I overlooked something, it is the latter. The new formula
-produces the same values for 100 and 400kHz as the old one.
+I'm OK if this set of fixes have the Fixes tag or, like in the
+other case, we find a way to get it backported anyway.
 
-> I guess I just don't understand the intended formula here...
+> For another, this patch is a mix of 2 bug fixes (SMBHSTCNT being
+> restored too early in i801_remove, resource leak in error path of
+> i801_probe) which have been added in very different kernel versions
+> (v5.16 and v4.3, respectively), and tidying up (the reordering of some
+> of the statements in i801_remove is nice for consistency but is not
+> actually fixing any bug).
+> 
+> If you really want to push the fixes to stable, you'd have to split the
+> patch in 3 pieces, one for each fix (going to stable), and one for the
+> remainder (not going to stable). Otherwise it makes backporting to
+> older kernels error-prone and time-consuming. Considering how harmless
+> the bugs are in the first place, my position is that the extra work is
+> simply not worth it.
 
-Ok, needs more documentation then.
+In my opinion, Heiner, you should split this patch in the two
+logical changes that Jean was suggesting, add the tags from Jean
+and have them backported.
 
+Thanks Jean for your review and inputs.
 
---FVdGaMsPA8WdSF2P
-Content-Type: application/pgp-signature; name="signature.asc"
+Andi
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmT4eZcACgkQFA3kzBSg
-KbbJag/+Ks6KCNO+/9qRQcsH51FT9+h/K3iXvDNNgLqKpoda6RaU0Roe9ffXUszQ
-fu84LLpI8AUImsGUP3NuicW58Vhv4RdiAfREIiJ8TRUIq05BXno30l/AE1fAs1C3
-W8UgtiIkHibSfz30ItE8yAa8MUCnaK4XoxHlvAphoTzkx3ufQyjFDP9LmdJno+Ly
-Tkb9yg8PteY+MVvUskMKf/wJ420OSBFXQL6y0V/4Z07Qb9o9WXXZynvMFeIlfmEK
-SvSUhfOjm96W2aviVgj2pTuPad3X4F2Ddz5PVvOkPgq2Cy7vSBhNODgY/gkB7+jL
-OjPJYPugVUsq0GKCx4TZSgZe0kWNpsatuBOznQ50WE3nZS2KHlNopuSrWntl2xt5
-MQQMPl6yKmmuE3yYciyEh/w/Q9lmv3uBuMdyFGKX9NVEmR7wVw4X6GcTsvjY2lmo
-qUA5fhJUkkXagLAD2drG3rKwYqlFSqEYqDQnEnIvRY4bEL/blTmCFibXW6kvnCps
-a3o0vytmhFq2JIqWPp2pLgtXX7acrzEK+Qf8ATqgya3tiSIbVeMhr4eC3f6KUwgn
-q103Mv7kpNEhquy90ah3dUC4yxnsQen2TZf+kp/Bmayhu0jcaURhjeARMMEiQY8H
-QsMo6hmPbjRlCwKFDdz2n/+Hr8rIQUrzNubd2SZn5BAjR54OxYs=
-=f0CV
------END PGP SIGNATURE-----
-
---FVdGaMsPA8WdSF2P--
+> > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> > ---
+> > v2:
+> > - add Fixes tag for 9424693035a5
+> > - remove restoring SMBHSTCNT from probe error path
+> > - move restoring SMBHSTCNT to the end in remove/shutdown
+> > ---
+> >  drivers/i2c/busses/i2c-i801.c | 13 +++++++------
+> >  1 file changed, 7 insertions(+), 6 deletions(-)
+> > (...)
+> 
+> That being said, the patch itself looks good to me, and I have tested
+> it too.
+> 
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> Tested-by: Jean Delvare <jdelvare@suse.de>
+> 
+> Thanks,
+> -- 
+> Jean Delvare
+> SUSE L3 Support
