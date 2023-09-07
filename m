@@ -2,179 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7519797B0F
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Sep 2023 20:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0F8797CBF
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Sep 2023 21:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235420AbjIGSBS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 7 Sep 2023 14:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
+        id S237767AbjIGTbb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 7 Sep 2023 15:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244058AbjIGSBR (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Sep 2023 14:01:17 -0400
-Received: from pandora.armlinux.org.uk (unknown [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050801FCF;
-        Thu,  7 Sep 2023 11:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=X4xUKnQy5Cuyq/hlcTvI9PdWU+bO5LlG1WNNbVR8IrU=; b=lleRes3stqKrEVBIpyWoQv1a+r
-        gcuk3LwaMYPqCntIqfD62zX3R9U/uxNscQhd1wwd7tn7UfdE112nDjujBeGXAVKSObqviG4BNYL2K
-        q3BmwOaKa5OjDUdO6MCFf6uOx+jUfqPrrh2Y9xzHwhJ2Q5ubd3NUDgyWey8OW2Z+b7CDu3zkE1E7s
-        WrQjNXU1jxJZ30sKuLMPjb4dd8R7BuNjxvjpg1PNctN6zBnCBn/iIv74WZJSNsz9W/TXCS692xvxk
-        GpoZnI9Csrhw6/ExpTYX1kHfafdv2PaGIhuQGz7qWsqqVik+dlGjAtgpA54Ro/eVtauQY/r8FIIBx
-        e24awPug==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36672)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qeJJ7-0004BF-0b;
-        Thu, 07 Sep 2023 19:00:45 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qeJJ6-000639-R6; Thu, 07 Sep 2023 19:00:44 +0100
-Date:   Thu, 7 Sep 2023 19:00:44 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Raul Piper <raulpblooper@gmail.com>
-Cc:     tanure@linux.com, Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Devicetree <devicetree@vger.kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        kernelnewbies <kernelnewbies@kernelnewbies.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: Debugging i2c : i2cdetect cant detect a device on i2c line
-Message-ID: <ZPoPzNIDHHC/v/Tw@shell.armlinux.org.uk>
-References: <CAEwN+MCorDCS7EhN40Qgja_nY+SFc3G61Zd6yntqAS+w26YO9Q@mail.gmail.com>
- <ZPnR4Cx6_Hh3weEl@debian.me>
- <ZPnWb15ucCotffav@shell.armlinux.org.uk>
- <CAJX_Q+0-v=oadJ697VDawyEhDSPBAS_oqakZFHWVUfsnbCanMA@mail.gmail.com>
- <CAEwN+MAtQSSwDLiERG4uEhv5YpS6EZrL4FER3wxVx+e3paxz4w@mail.gmail.com>
+        with ESMTP id S244281AbjIGR15 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 7 Sep 2023 13:27:57 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491731710;
+        Thu,  7 Sep 2023 10:27:26 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-31f737b8b69so645300f8f.3;
+        Thu, 07 Sep 2023 10:27:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694107597; x=1694712397; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=26DcFGzDOHLTIiLeHWKpfXHidOy7/CEGyz2eAxmSs7g=;
+        b=qQONLOK4TWURG9P9wA/Zu6HpecZhSeybNYUZnJf65mlMjDs9nijGzryCayf1uDoyb6
+         rQWmt9rE/KgGvQ7Y95E7QyIIZUp29GEl9JcbRiO6CRyc7raEXdHnATlDl53RyqLKqWOA
+         OxPWIPJ6Xux9wMRpNXmD0KoZ+DGfwmJCksPIlh7VhS2NrlwSjKdI5ansB02iQBlQx2YI
+         m1d2imOEWwmlywCBI/uk9JVy2uFz/sCSNSsv1icrXqu1/4NjR3JVzaMxwX54uBdGGSyO
+         xyhx3gRAb8zVCSdG6ehhYUF0S0PwjxRkYs8TELezXumz53XwfTB8myIcQOcyaixCj8Gt
+         06Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694107597; x=1694712397;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=26DcFGzDOHLTIiLeHWKpfXHidOy7/CEGyz2eAxmSs7g=;
+        b=NdY2Cv79lXqVtXyZIhlMe/9G5iRkqytQfbmaTrz5ST2V4IJ0H6nYCL77di6xcvX2lh
+         MoJlwa8T1BKP8T7Aeg8JBRjEj5YGUbjMpDgi2axWNMBiohWe0pRv0Jyk65Gse/0FrmYu
+         RcE68UdW/7zmslz/iPXyLmI9bEv+WYZZA7MbI8Q85QMi+ut0MjJjY/I2UGVI7bfX2pw5
+         wRBD+KvEvV+79KQ9uOBw6pUpnHWw4IvXvtheizg1cLQWyh1Xo79ACbE1scwJ2sXfBn8b
+         BfHpW1UejoW2nuhWwtjSxu2R9YY8GB9ZXB14l1nMJAYmrlWlsv2Qz3W9ZeVZpmQjiMCL
+         LN/Q==
+X-Gm-Message-State: AOJu0YyE8LfaX5DnyCVS6EYxySSJRVqbG0yk4a82Br//jfzYlO6aTPwV
+        ZvK2Cp9GOuPoD6O27X1owm7gx7eaJfyKMK9s
+X-Google-Smtp-Source: AGHT+IGmdbnP2IiRkh2YShm8FU8AlrM8Iy3LYwqc2f08IbVFyuZjViTL76t1BpmUinhyYoKIpv2l/g==
+X-Received: by 2002:adf:dd86:0:b0:317:5e55:f06f with SMTP id x6-20020adfdd86000000b003175e55f06fmr4617335wrl.10.1694074839361;
+        Thu, 07 Sep 2023 01:20:39 -0700 (PDT)
+Received: from PCBABN.skidata.net ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id n10-20020adfe78a000000b0031aca6cc69csm22772438wrm.2.2023.09.07.01.20.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Sep 2023 01:20:38 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+To:     lee@kernel.org
+Cc:     bbara93@gmail.com, benjamin.bara@skidata.com,
+        dmitry.osipenko@collabora.com, jonathanh@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, nm@ti.com, peterz@infradead.org,
+        rafael.j.wysocki@intel.com, richard.leitner@linux.dev,
+        stable@vger.kernel.org, treding@nvidia.com,
+        wsa+renesas@sang-engineering.com, wsa@kernel.org
+Subject: Re: [PATCH v7 0/5] mfd: tps6586x: register restart handler
+Date:   Thu,  7 Sep 2023 10:20:32 +0200
+Message-Id: <20230907082032.478027-1-bbara93@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230728103446.GK8175@google.com>
+References: <20230728103446.GK8175@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEwN+MAtQSSwDLiERG4uEhv5YpS6EZrL4FER3wxVx+e3paxz4w@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Sep 07, 2023 at 10:38:10PM +0530, Raul Piper wrote:
-> On Thu, Sep 7, 2023 at 9:47 PM Lucas Tanure <tanure@linux.com> wrote:
+Hi Lee,
+
+On Fri, 28 Jul 2023 at 12:34, Lee Jones <lee@kernel.org> wrote:
+> On Fri, 28 Jul 2023, Lee Jones wrote:
+> > On Sat, 15 Jul 2023 09:53:22 +0200, Benjamin Bara wrote:
+> > > The Tegra20 requires an enabled VDE power domain during startup. As the
+> > > VDE is currently not used, it is disabled during runtime.
+> > > Since 8f0c714ad9be, there is a workaround for the "normal restart path"
+> > > which enables the VDE before doing PMC's warm reboot. This workaround is
+> > > not executed in the "emergency restart path", leading to a hang-up
+> > > during start.
+> > >
+> > > [...]
 > >
+> > Applied, thanks!
 > >
-> >
-> > On Thu, 7 Sept 2023, 14:56 Russell King (Oracle), <linux@armlinux.org.uk> wrote:
-> >>
-> >> On Thu, Sep 07, 2023 at 08:36:32PM +0700, Bagas Sanjaya wrote:
-> >> > [also Cc: devicetree and ARM folks]
-> >> >
-> >> > On Thu, Sep 07, 2023 at 08:21:44AM +0530, Raul Piper wrote:
-> >> > > Hello ,
-> >> > > I am trying to detect an i2c device A on i2c1 line on  one of the Arm
-> >> > > Cortex A7 platform but not able to see any device on a given address (
-> >> > > 0x3d) .
-> >> > >
-> >> > > Is there any parameters of i2c which i can change like rise/fall time
-> >> > > , timeout etc in a device tree or kernel source and re test it?
-> >> > > I have tried changing the i2c speed from 100KHz to 400 KHz  but no success.
-> >> > > I have even tried removing the 1.5K pull ups on the i2c lines but no result.
-> >>
-> >> Honestly, from this description, I'm wondering if this posting is a joke.
-> >>
-> >> I2C is entirely _reliant_ on pull-ups. It's a wire-or bus, and the
-> >> logic 1 state is created by no device pulling the signal low, thereby
-> >> allowing the pull-up resistor to pull the line to the logic 1 state.
-> >>
-> >> The pull-up must be the correct strength for the devices on the bus.
-> >> If it is too strong, then a driver may not be able to pull the signal
-> >> sufficiently low for other devices to register it as a logic 0.
-> >>
-> >> Conversely, the pull-up must be strong enough so that the rise-time
-> >> of the signal is sufficient to register as a logic 1.
-> >>
-> >> If it's a problem with the rise time, then increasing the clock rate
-> >> will just make the situation worse.
-> 
-> Where can I change this time? Can you please provide example of some
-> device/device tree?
+> > [1/5] kernel/reboot: emergency_restart: set correct system_state
+> >       commit: 60466c067927abbcaff299845abd4b7069963139
+> > [2/5] i2c: core: run atomic i2c xfer when !preemptible
+> >       commit: aa49c90894d06e18a1ee7c095edbd2f37c232d02
+> > [3/5] kernel/reboot: add device to sys_off_handler
+> >       commit: db2d6038c5e795cab4f0a8d3e86b4f7e33338629
+> > [4/5] mfd: tps6586x: use devm-based power off handler
+> >       commit: 8bd141b17cedcbcb7d336df6e0462e4f4a528ab1
+> > [5/5] mfd: tps6586x: register restart handler
+> >       commit: 510f276df2b91efd73f6c53be62b7e692ff533c1
+>
+> Pull-request to follow after built tests have completed.
 
-You can't directly. The rise time is a function of the capacitive
-loading on the lines and the pull-up resistor. It's not a software
-parameter.
+What's the current state of this series?
 
-> >> So, if other devices work on the bus, it could be that the Vil
-> >> threshold of this device is not being achieved, whereas the other
-> >> devices are happy. Therefore, I would suggest you study the data
-> >> sheets of the device that isn't being detected.
-> What Vil threshold? I checked the power supply to this device and it
-> is ~3.3 V as expected.
-
-This makes me convinced that you're not familiar with electronics.
-
-Vil is a pretty standard parameter in all digital logic for "Voltage,
-input, low" - the voltage at which it is guaranteed that the device
-will see a logic 0 signal on its input.
-
-If I draw a diagram illustrating the voltage levels on an input,
-top is the supply voltage, bottom is ground, then most are:
-
-	+------+	<--- Vcc (supply voltage)
-	|      |	<--- Within this region, it is guaranteed that
-	|      |	     the device will see a logic 1
-	+------+	<--- Vih (input high)
-	|//////|
-	|\\\\\\|	<--- Within this region, the value that the
-	|//////|	     device sees is indeterminant
-	|\\\\\\|
-	+------+	<--- Vil (input low)
-	|      |
-	|      |
-	+------+	<--- Ground (0V)
-
-So, if the voltage on the SDA and SCL pins does not reach Vil or below,
-there is no guarantee that the device will see a logic 0 on its input,
-and it either won't work, it may sporadically work. Basically, Vil is
-the threshold voltage at which the manufacturer _guarantees_ that the
-device will see a logic 0, and Vih is the threshold voltage at which
-the manufacturer _guarantees_ that the device will see a logic 1.
-
-Both these parameters will be specified in the data sheet, possibly
-as a function of supply voltage.
-
-> >> Lastly, if the undetectable device has a reset line, it's possible
-> >> that the device isn't responding because it's being held in reset.
-> The device is fine, I am sure about it. As the device provides data on
-> USART as well and I am getting it.
-> >
-> > Please try to use an logic analyser like saleae logic.
-> > Probe the i2c bus, reset line, power lines, pins that set the i2c address for the device.
-> > Can tell us which device it is?
-> 
-> Its a GPS sensor(still under development) .Logic Analyser gives NACK
-> on the given address.
-
-Which means either the device is not seeing the logic levels necessary
-to receive the address, or maybe if this is a prototype I2C device,
-maybe it has a bug in its address matching logic, or the address is
-incorrectly set.
-
-I'd first be checking that the Vih and Vil for this device are being
-achieved by putting an oscilloscope on its input pin and comparing
-that with the device specification.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Thanks & regards
+Benjamin
