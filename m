@@ -2,331 +2,180 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19758798804
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Sep 2023 15:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0693579883E
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Sep 2023 16:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235936AbjIHNim (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 8 Sep 2023 09:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
+        id S241897AbjIHOED (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 8 Sep 2023 10:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbjIHNil (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Sep 2023 09:38:41 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F2A1BC1;
-        Fri,  8 Sep 2023 06:38:35 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93061C433C9;
-        Fri,  8 Sep 2023 13:38:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1694180315;
-        bh=NG4rqQ6PfFJGjVqvVxbbwLmhlW1GjZSPIPxS8rHc7u4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0OxEf4Rw4yiibpMgZXDIq48csVzV+4kxc9HrJcibFpQdoW1eYT991oNfVeqD8FO6f
-         F2ZHEGt2Y9KksFBk6IdzcFScUPP3iHCA+vo/kZN58Y4t+UPhuLaPqG04D2wPiMohoY
-         T+Tnu7OXt2pIQK2t6DcOAiDFNvyB3F2ghhFG0ZFs=
-Date:   Fri, 8 Sep 2023 14:38:31 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wentong Wu <wentong.wu@intel.com>
-Cc:     arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
-        wsa@kernel.org, kfting@nuvoton.com, broonie@kernel.org,
-        linus.walleij@linaro.org, hdegoede@redhat.com, maz@kernel.org,
-        brgl@bgdev.pl, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
-        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
-        srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
-Subject: Re: [PATCH v15 1/4] usb: Add support for Intel LJCA device
-Message-ID: <2023090854-verse-crabmeat-bf14@gregkh>
-References: <1693970580-18967-1-git-send-email-wentong.wu@intel.com>
- <1693970580-18967-2-git-send-email-wentong.wu@intel.com>
+        with ESMTP id S232518AbjIHOEC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 8 Sep 2023 10:04:02 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E3D1BF5
+        for <linux-i2c@vger.kernel.org>; Fri,  8 Sep 2023 07:03:58 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-26f3975ddd4so1636053a91.1
+        for <linux-i2c@vger.kernel.org>; Fri, 08 Sep 2023 07:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bisdn-de.20230601.gappssmtp.com; s=20230601; t=1694181838; x=1694786638; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U2jvztty3xt2xqRdD6cfGGolwNPuHAE+YuTfrjsOWm8=;
+        b=k/ayXSOt+KDeq9unA2uzfzRbj+UTbtlf25/kwk3ZiLn6+pcjRVzkw0twErt2bwE2QL
+         vwZCFnKGNKwdcUu37O3sa8VNo1IC99N8CZqH+PX9C9n10EoEYxCJkCVIYcKNeY+1Yetn
+         ia3hZSSwvG7kaLCkyD2q0jvsMVaDeBOuCiZiDiwSLx/kLDtddgfboXO9L61T4C22/6Xd
+         F/Fw5vHAGQ2GXtF9UbmG/DMF/IYv0sAHYefL+GhHeDWLKlaF6lQ8cuYYSZ11BPTQnRCv
+         1tj0MptX869YToix7JiUXO5wfRYg6g0QBi15OrAw+YzwiqWU6SqKLoRPmu1APxq73mwM
+         vJBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694181838; x=1694786638;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U2jvztty3xt2xqRdD6cfGGolwNPuHAE+YuTfrjsOWm8=;
+        b=M1xL/zp3Cu6JAOI1p3je0WBflHGC1gKKodD/Te1rA2f20wPMl6IUZbmy9fiBJuczq+
+         NQuem5A8E/1OCOt3LFvXEjyZaNF/hd2WIBSEYZgoK/eTaTmwV3sIx7YeOMDzvmNh/wzP
+         CURloU0Dho3nhvLqhdEm9xquNY4o4KNPhGuUq88aAWnBc7snau3aDRavSJwzBhoEdr1i
+         GDOqcdwrwTa5eVNi4ffpZjvoC9dlpfS6kSzFD8fKCFgks1kfRVxXIQy9fXbLmSHU7QUd
+         Rdr2CZcSiFDrNv+YC/5s3b+lEYRTrFC9/OoyySswDXhunhgX/74MXLkl1bIl6tABX+C2
+         WvVw==
+X-Gm-Message-State: AOJu0YyH1FIPS23i27LNlb71//aEcnDdrIOx+iwsViKYXcMvC2eBmsSF
+        7aaRemBl5Woziufy0PQxOgKtVc9wD753rU0By7qA2neWxMkpfjoA8hYwaewU5v1AoPVu0RnbAIf
+        9tdc3D4N3asir+R1I84LcN/a/wsDtwA==
+X-Google-Smtp-Source: AGHT+IFubqKICpsm4d0x1yCcLZWU0qkze1b5oT/J2zmu/5mc/iRlrnTk0M1kh+WZEoNCX34AwFqGsl3UdlU+a9TtVQA=
+X-Received: by 2002:a17:90b:4a10:b0:26d:1a46:1646 with SMTP id
+ kk16-20020a17090b4a1000b0026d1a461646mr2389383pjb.48.1694181837747; Fri, 08
+ Sep 2023 07:03:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1693970580-18967-2-git-send-email-wentong.wu@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230904090005.52622-1-jonas.gorski@bisdn.de> <20230905225338.g76dqf3a26dnnzxx@zenone.zhora.eu>
+In-Reply-To: <20230905225338.g76dqf3a26dnnzxx@zenone.zhora.eu>
+From:   Jonas Gorski <jonas.gorski@bisdn.de>
+Date:   Fri, 8 Sep 2023 16:03:46 +0200
+Message-ID: <CAJpXRYR+yUe4jGgNMOjbK3YALwkJp8vr9=1hH04FHWW-TcRGtA@mail.gmail.com>
+Subject: Re: [PATCH] i2c: iproc: reset bus after timeout if START_BUSY is stuck
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Kevin Cernekee <cernekee@chromium.org>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 11:22:57AM +0800, Wentong Wu wrote:
-> +struct ljca_bank_descriptor {
-> +	u8 bank_id;
-> +	u8 pin_num;
-> +
-> +	/* 1 bit for each gpio, 1 means valid */
-> +	u32 valid_pins;
-> +} __packed;
+Hi,
 
-This is an unaligned access, do you mean to have that?
+Am Mi., 6. Sept. 2023 um 00:53 Uhr schrieb Andi Shyti <andi.shyti@kernel.or=
+g>:
+>
+> Hi Jonas,
+>
+> On Mon, Sep 04, 2023 at 11:00:04AM +0200, Jonas Gorski wrote:
+> > If a transaction times out, the START_BUSY signal may have gotten stuck=
+,
+> > and subsequent transactaction attempts will fail as the bus is still
+> > considered busy.
+> >
+> > To work around this, check if the START_BUSY bit is still asserted, and
+> > reset the controller in case it is.
+> >
+> > This is also done by the alternative, non-upstream iproc-smbus driver
+> > implementation [1].
+> >
+> > Works around situations like:
+> >
+> >     bcm-iproc-2c 1803b000.i2c: transaction timed out
+> >     bcm-iproc-2c 1803b000.i2c: bus is busy
+> >     bcm-iproc-2c 1803b000.i2c: bus is busy
+> >     bcm-iproc-2c 1803b000.i2c: bus is busy
+> >     bcm-iproc-2c 1803b000.i2c: bus is busy
+> >     bcm-iproc-2c 1803b000.i2c: bus is busy
+> >     ...
+> >
+> > where the bus never recovers after a timeout.
+> >
+> > [1] https://github.com/opencomputeproject/onie/blob/master/patches/kern=
+el/3.2.69/driver-iproc-smbus.patch
+> >
+> > Fixes: e6e5dd3566e0 ("i2c: iproc: Add Broadcom iProc I2C Driver")
+> > Signed-off-by: Jonas Gorski <jonas.gorski@bisdn.de>
+>
+> I think the right Fixes tag should be:
+>
+> Fixes: 3f98ad45e585 ("i2c: iproc: add polling support")
 
-> +struct ljca_adapter {
-> +	struct usb_interface *intf;
-> +	struct usb_device *usb_dev;
-> +	struct device *dev;
-> +
-> +	unsigned int rx_pipe;
-> +	unsigned int tx_pipe;
-> +
-> +	/* urb for recv */
-> +	struct urb *rx_urb;
-> +	/* buffer for recv */
-> +	void *rx_buf;
-> +	unsigned int rx_len;
-> +
-> +	/* external buffer for recv */
-> +	void *ex_buf;
+That was the last change that part of the code, but the "issue" was
+not introduced there. The code before that already did a timeout check
+and flush in that case, without the reset.
 
-Shouldn't buffers be u8*?
+Obviously the fix wouldn't apply without changes to a version without
+that commit, but the version would be nevertheless affected by the
+issue. That's why I chose the commit introducing the timeout handling.
 
-> +static void ljca_handle_event(struct ljca_adapter *adap,
-> +			      struct ljca_msg *header)
-> +{
-> +	struct ljca_client *client;
-> +
-> +	list_for_each_entry(client, &adap->client_list, link) {
-> +		/*
-> +		 * FIXME: currently only GPIO register event callback.
+> Cc: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+> Cc: <stable@vger.kernel.org> # v5.2+
+>
+> > ---
+> > The iproc-smbus driver does some additional checks/mitigations, but
+> > since my I2C understanding is only very rudimentary, I didn't add them,
+> > also the reset was enough to fix the issue I was seeing.
+> >
+> > I was a bit conflicted about the Fixes tag, but since it fixes/work
+> > around misbehaviour seen I decided to add one.
+> >
+> > The issue was happening only in production, and only once per boot (so
+> > far), but with 100% probability within a few hours.
+> >
+> >  drivers/i2c/busses/i2c-bcm-iproc.c | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-bcm-iproc.c b/drivers/i2c/busses/i2=
+c-bcm-iproc.c
+> > index 05c80680dff4..69f9c199fa3b 100644
+> > --- a/drivers/i2c/busses/i2c-bcm-iproc.c
+> > +++ b/drivers/i2c/busses/i2c-bcm-iproc.c
+> > @@ -796,6 +796,15 @@ static int bcm_iproc_i2c_xfer_wait(struct bcm_ipro=
+c_i2c_dev *iproc_i2c,
+> >       if (!time_left && !iproc_i2c->xfer_is_done) {
+> >               dev_err(iproc_i2c->device, "transaction timed out\n");
+> >
+> > +             /* check if START_BUSY did not clear */
+>
+> as Ray asked, can you please expand this comment?
 
-When is this fixme going to be addressed?
+Will do, thanks for the reviews!
 
-> +		 * firmware message structure should include id when
-> +		 * multiple same type clients register event callback.
-> +		 */
-> +		if (client->type == header->type) {
-> +			unsigned long flags;
-> +
-> +			spin_lock_irqsave(&client->event_cb_lock, flags);
-> +			client->event_cb(client->context, header->cmd,
-> +					 header->data, header->len);
-> +			spin_unlock_irqrestore(&client->event_cb_lock, flags);
-> +
-> +			break;
-> +		}
-> +	}
-> +}
-> +
-> +/* process command ack */
-> +static void ljca_handle_cmd_ack(struct ljca_adapter *adap,
-> +				struct ljca_msg *header)
-> +{
-> +	struct ljca_msg *tx_header = adap->tx_buf;
-> +	unsigned int actual_len = 0;
-> +	unsigned int ibuf_len;
-> +	unsigned long flags;
-> +	void *ibuf;
-> +
-> +	spin_lock_irqsave(&adap->lock, flags);
+Best Regards,
+Jonas
 
-Why not use the functionality in cleanup.h for this lock?  Makes this
-function much simpler.
+--=20
+BISDN GmbH
+K=C3=B6rnerstra=C3=9Fe 7-10
+10785 Berlin
+Germany
 
-> +
-> +	if (tx_header->type != header->type || tx_header->cmd != header->cmd) {
-> +		spin_unlock_irqrestore(&adap->lock, flags);
-> +
 
-No need for a blank line.
+Phone:=20
++49-30-6108-1-6100
 
-And how can these things happen?  No need to return an error if this is
-the case?
 
-> +static int ljca_send(struct ljca_adapter *adap, u8 type, u8 cmd,
-> +		     const void *obuf, unsigned int obuf_len, void *ibuf,
-> +		     unsigned int ibuf_len, bool ack, unsigned long timeout)
+Managing Directors:=C2=A0
+Dr.-Ing. Hagen Woesner, Andreas=20
+K=C3=B6psel
 
-That's a lot of function parameters, whyh so many?
 
-And why void *?  That should never be used in an internal function where
-you know the real type.
+Commercial register:=C2=A0
+Amtsgericht Berlin-Charlottenburg HRB 141569=20
+B
+VAT ID No:=C2=A0DE283257294
 
-> +{
-> +	unsigned int msg_len = sizeof(struct ljca_msg) + obuf_len;
-> +	struct ljca_msg *header = adap->tx_buf;
-> +	unsigned long flags;
-> +	unsigned int actual;
-> +	int ret = 0;
-> +
-> +	if (adap->disconnect)
-> +		return -ENODEV;
-> +
-> +	if (msg_len > adap->tx_buf_len)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&adap->mutex);
-> +
-> +	spin_lock_irqsave(&adap->lock, flags);
-
-2 locks?  Why 2 locks for the same structure?
-
-> +
-> +	header->type = type;
-> +	header->cmd = cmd;
-> +	header->len = obuf_len;
-> +	if (obuf)
-> +		memcpy(header->data, obuf, obuf_len);
-> +
-> +	header->flags = LJCA_CMPL_FLAG | (ack ? LJCA_ACK_FLAG : 0);
-> +
-> +	adap->ex_buf = ibuf;
-> +	adap->ex_buf_len = ibuf_len;
-> +	adap->actual_length = 0;
-> +
-> +	spin_unlock_irqrestore(&adap->lock, flags);
-> +
-> +	reinit_completion(&adap->cmd_completion);
-> +
-> +	usb_autopm_get_interface(adap->intf);
-> +
-> +	ret = usb_bulk_msg(adap->usb_dev, adap->tx_pipe, header,
-> +			   msg_len, &actual, LJCA_WRITE_TIMEOUT_MS);
-
-This function is slow.  Really slow.  You drop the spinlock which is
-good, but the mutex is still held.  Does this call have to be
-synchronous?
-
-> +
-> +	usb_autopm_put_interface(adap->intf);
-> +
-> +	if (!ret && ack) {
-> +		ret = wait_for_completion_timeout(&adap->cmd_completion,
-> +						  timeout);
-> +		if (ret < 0) {
-> +			goto out;
-> +		} if (!ret) {
-> +			ret = -ETIMEDOUT;
-> +			goto out;
-> +		}
-> +	}
-> +	ret = adap->actual_length;
-> +
-> +out:
-> +	spin_lock_irqsave(&adap->lock, flags);
-> +	adap->ex_buf = NULL;
-> +	adap->ex_buf_len = 0;
-> +
-> +	memset(header, 0, sizeof(*header));
-
-Why?
-
-> +	spin_unlock_irqrestore(&adap->lock, flags);
-> +
-> +	mutex_unlock(&adap->mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +int ljca_transfer(struct ljca_client *client, u8 cmd, const void *obuf,
-
-Again, drop all void * please, use real types in your apis.
-
-> +#else
-> +static void ljca_auxdev_acpi_bind(struct ljca_adapter *adap,
-> +				  struct auxiliary_device *auxdev,
-> +				  u64 adr, u8 id)
-> +{
-> +}
-> +#endif
-
-Can't this go in a .h file?  #ifdef in .c files are frowned apon.
-
-> +static int ljca_enumerate_clients(struct ljca_adapter *adap)
-> +{
-> +	int ret;
-> +
-> +	ret = ljca_reset_handshake(adap);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ljca_enumerate_gpio(adap);
-> +	if (ret)
-> +		dev_warn(adap->dev, "enumerate GPIO error\n");
-> +
-> +	ret = ljca_enumerate_i2c(adap);
-> +	if (ret)
-> +		dev_warn(adap->dev, "enumerate I2C error\n");
-> +
-> +	ret = ljca_enumerate_spi(adap);
-> +	if (ret)
-> +		dev_warn(adap->dev, "enumerate SPI error\n");
-
-You warn about these things, but keep on saying the code is working
-properly with a return of:
-
-> +	return 0;
-
-That's not good.  Why not unwind properly and handle the error?
-
-> --- /dev/null
-> +++ b/include/linux/usb/ljca.h
-> @@ -0,0 +1,113 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2023, Intel Corporation. All rights reserved.
-> + */
-> +#ifndef _LINUX_USB_LJCA_H_
-> +#define _LINUX_USB_LJCA_H_
-> +
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/list.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/types.h>
-> +
-> +#define LJCA_MAX_GPIO_NUM 64
-> +
-> +#define auxiliary_dev_to_ljca_client(auxiliary_dev)			\
-> +		container_of(auxiliary_dev, struct ljca_client, auxdev)
-> +
-> +struct ljca_adapter;
-> +
-> +/**
-> + * typedef ljca_event_cb_t - event callback function signature
-> + *
-> + * @context: the execution context of who registered this callback
-> + * @cmd: the command from device for this event
-> + * @evt_data: the event data payload
-> + * @len: the event data payload length
-> + *
-> + * The callback function is called in interrupt context and the data payload is
-> + * only valid during the call. If the user needs later access of the data, it
-> + * must copy it.
-> + */
-> +typedef void (*ljca_event_cb_t)(void *context, u8 cmd, const void *evt_data, int len);
-> +
-> +struct ljca_client {
-> +	u8 type;
-> +	u8 id;
-> +	struct list_head link;
-> +	struct auxiliary_device auxdev;
-> +	struct ljca_adapter *adapter;
-> +
-> +	void *context;
-> +	ljca_event_cb_t event_cb;
-> +	/* lock to protect event_cb */
-> +	spinlock_t event_cb_lock;
-> +};
-> +
-> +struct ljca_gpio_info {
-> +	unsigned int num;
-> +	DECLARE_BITMAP(valid_pin_map, LJCA_MAX_GPIO_NUM);
-> +};
-> +
-> +struct ljca_i2c_info {
-> +	u8 id;
-> +	u8 capacity;
-> +	u8 intr_pin;
-> +};
-> +
-> +struct ljca_spi_info {
-> +	u8 id;
-> +	u8 capacity;
-> +};
-
-No documentation for these other public structures?
-
-thanks,
-
-greg k-h
