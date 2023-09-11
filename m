@@ -2,117 +2,144 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A85A79BD83
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 Sep 2023 02:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236EB79C053
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Sep 2023 02:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239684AbjIKVSY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Sep 2023 17:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
+        id S235481AbjIKVSb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Sep 2023 17:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236919AbjIKLkF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Sep 2023 07:40:05 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F00E12E
-        for <linux-i2c@vger.kernel.org>; Mon, 11 Sep 2023 04:40:00 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-27405bafa2eso706513a91.2
-        for <linux-i2c@vger.kernel.org>; Mon, 11 Sep 2023 04:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1694432399; x=1695037199; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8CrVsD9avnsAV7fcpyubc5/XQ49oMeNgq2mdV92nk8c=;
-        b=GPLJcTUKyoHin+KlTi3kN0eLKOoO7CN1L0JyacZoq8n06Lr59750j3bxrQEcSMlLCb
-         /MP8al0x7Kj5zrJXdKI5mFaWa2nnWajsyg0e6Mf200KqULbDfrMfKYVZE94YAETdTGla
-         NcPwLme9wXW22jHq0cDmrOnxPWnrWw9O7GzCq6XkrJth8kqc1xHEP6FatiiXIkV7mSlZ
-         ys50PQ2L7GMHCPVDd2uQXvT/dcpIR9+8hYP3Ry5g1Xzqm40yh2SEpD0+3hfqvrkYbKdT
-         iii5Bzx0oiaQc2UZLMc3DfOHWH2GuHztodTqzoQt89Ogf1OPuwjbe+fYrsNOy3dvJZ69
-         llcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694432399; x=1695037199;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8CrVsD9avnsAV7fcpyubc5/XQ49oMeNgq2mdV92nk8c=;
-        b=XfXPRAY14It//HF8uyPu3R/45eHT6pUShmHeNtNCVY2+FEHuIvBn5LBKGWKaiXjH71
-         WIYP5EB7O6BMDmMHWDCBAd/JpvG06tamZrgyVGrHTmgx0UuwVf6p/EpSOpM2KR0yYY2i
-         wEQMFwMF6XxUbDer2qWwf1B2VLtSKfC+/y8zvb7HpQkXnDkp0KVo9ucx4cvY3/CMQJiZ
-         W+InD1SDl8b9UegnrhOCe8HXcH2z5LMq/307UahWVsRPUjINTz3pv109WgA3ry2dAq/G
-         kU2jSGi2EAwfDaXAFdZwLh8y3ZyYllWdG5fbgimCgvaedVWNfZQ7KTB5xZv6Lelh6MdI
-         ZptQ==
-X-Gm-Message-State: AOJu0YwBUo6lYLzc9Fd//9jUqhv/cvIY6E68FVujaUkfeUjcl/L+4MvR
-        wDsnCd9O84alTJ3mZP420H8YdBbZjDnAkznOulavxA==
-X-Google-Smtp-Source: AGHT+IGQ0MEu3CYbp1oRozA5xchzHNnfGc4+g9TF6J0vVsnYTnh90AClMTinE7edS31ihrh/D+B7/zpqIUhgszsi8VU=
-X-Received: by 2002:a17:90b:1295:b0:273:ec9c:a7e3 with SMTP id
- fw21-20020a17090b129500b00273ec9ca7e3mr4595166pjb.17.1694432399658; Mon, 11
- Sep 2023 04:39:59 -0700 (PDT)
+        with ESMTP id S238960AbjIKOIW (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Sep 2023 10:08:22 -0400
+Received: from mx4.sionneau.net (mx4.sionneau.net [51.15.250.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680D4CF0;
+        Mon, 11 Sep 2023 07:08:16 -0700 (PDT)
+Received: from junon.lin.mbt.kalray.eu (<unknown> [217.181.231.53])
+        by mx4.sionneau.net (OpenSMTPD) with ESMTPSA id aebb35d2 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 11 Sep 2023 14:08:13 +0000 (UTC)
+From:   Yann Sionneau <ysionneau@kalray.eu>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Julian Vetter <jvetter@kalrayinc.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yann Sionneau <ysionneau@kalray.eu>,
+        Jonathan Borne <jborne@kalray.eu>
+Subject: [PATCH v4] i2c: designware: fix __i2c_dw_disable() in case master is holding SCL low
+Date:   Mon, 11 Sep 2023 16:07:49 +0200
+Message-ID: <20230911140749.32386-1-ysionneau@kalray.eu>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-References: <20230831101513.2042773-1-Naresh.Solanki@9elements.com>
- <0b7cb454-4c31-569c-7609-7931e6fb798a@linaro.org> <CABqG17g8QOgU7cObe=4EMLbEC1PeZWxdPXt7zzFs35JGqpRbfg@mail.gmail.com>
- <b38632d8-6a9e-7368-3309-16edfca5d2be@linaro.org>
-In-Reply-To: <b38632d8-6a9e-7368-3309-16edfca5d2be@linaro.org>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-Date:   Mon, 11 Sep 2023 17:09:48 +0530
-Message-ID: <CABqG17jA4_Mpq7-WjjsoJuOeBf8BbCy=Lix8XpjfkmU_-+N7ww@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: Add custom properties for MAX7357/MAX7358
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_FAIL,SPF_HELO_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi
+The DesignWare IP can be synthesized with the IC_EMPTYFIFO_HOLD_MASTER_EN
+parameter.
+In this case, when the TX FIFO gets empty and the last command didn't have
+the STOP bit (IC_DATA_CMD[9]), the controller will hold SCL low until
+a new command is pushed into the TX FIFO or the transfer is aborted.
 
+When the controller is holding SCL low, it cannot be disabled.
+The transfer must first be aborted.
+Also, the bus recovery won't work because SCL is held low by the master.
 
-On Mon, 11 Sept 2023 at 16:13, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 11/09/2023 12:31, Naresh Solanki wrote:
->
-> >>> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> >>> index 2d7bb998b0e9..fa73eadfdf7b 100644
-> >>> --- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> >>> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-> >>> @@ -71,6 +71,23 @@ properties:
-> >>>      description: A voltage regulator supplying power to the chip. On PCA9846
-> >>>        the regulator supplies power to VDD2 (core logic) and optionally to VDD1.
-> >>>
-> >>> +  maxim,isolate-stuck-channel:
-> >>> +    type: boolean
-> >>> +    description: Allows to use non faulty channels while a stuck channel is
-> >>> +      isolated from the upstream bus. If not set all channels are isolated from
-> >>> +      the upstream bus until the fault is cleared.
-> >>
-> >> Nothing improved here. As I said, please provide arguments or drop this
-> >> property.
-> > These features cannot be enabled by default because doing so may lead
-> > to unexpected behavior, such as bus disconnections(although that
-> > wasn't expected).
-> > These features should only be enabled after they have been validated
-> > by the board designer.
-> > Therefore, they cannot be enabled by default.
->
-> And what is needed to validate them for given board? IOW, what changes
-> in hardware design that it can or cannot be used?
-Enabling PRECONNECT_TEST in my setup didn't work
-Although this wasn't expected.
+Check if the master is holding SCL low in __i2c_dw_disable() before trying
+to disable the controller. If SCL is held low, an abort is initiated.
+When the abort is done, then proceed with disabling the controller.
 
-Regards,
-Naresh
+This whole situation can happen for instance during SMBus read data block
+if the slave just responds with "byte count == 0".
+This puts the driver in an unrecoverable state, because the controller is
+holding SCL low and the current __i2c_dw_disable() procedure is not
+working. In this situation only a SoC reset can fix the i2c bus.
 
->
-> Best regards,
-> Krzysztof
->
+Co-developed-by: Jonathan Borne <jborne@kalray.eu>
+Signed-off-by: Jonathan Borne <jborne@kalray.eu>
+Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+---
+V3 -> V4:
+* rebase on Linux v6.6-rc1 (0bb80ec)
+
+V2 -> V3:
+* do not rename timeout variable for disabling loop
+in order to ease backports
+* replace abort loop with regmap_read_poll_timeout()
+* remove extra empty line.
+
+V1 -> V2:
+* use reverse christmas tree order for variable declarations
+* use unsigned int type instead of u32 for regmap_read
+* give its own loop to the abort procedure with its own timeout
+* print an error message if the abort never finishes during the timeout
+* rename the timeout variable for the controller disabling loop
+* with the usleep_range(10, 20) it takes only 1 loop iteration.
+Without it takes 75 iterations and with udelay(1) it takes 16
+loop iterations.
+
+ drivers/i2c/busses/i2c-designware-common.c | 17 +++++++++++++++++
+ drivers/i2c/busses/i2c-designware-core.h   |  3 +++
+ 2 files changed, 20 insertions(+)
+
+diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+index cdd8c67d91298..affcfb243f0f5 100644
+--- a/drivers/i2c/busses/i2c-designware-common.c
++++ b/drivers/i2c/busses/i2c-designware-common.c
+@@ -441,8 +441,25 @@ int i2c_dw_set_sda_hold(struct dw_i2c_dev *dev)
+ 
+ void __i2c_dw_disable(struct dw_i2c_dev *dev)
+ {
++	unsigned int raw_intr_stats;
++	unsigned int enable;
+ 	int timeout = 100;
++	bool abort_needed;
+ 	unsigned int status;
++	int ret;
++
++	regmap_read(dev->map, DW_IC_RAW_INTR_STAT, &raw_intr_stats);
++	regmap_read(dev->map, DW_IC_ENABLE, &enable);
++
++	abort_needed = raw_intr_stats & DW_IC_INTR_MST_ON_HOLD;
++	if (abort_needed) {
++		regmap_write(dev->map, DW_IC_ENABLE, enable | DW_IC_ENABLE_ABORT);
++		ret = regmap_read_poll_timeout(dev->map, DW_IC_ENABLE, enable,
++					       !(enable & DW_IC_ENABLE_ABORT), 10,
++					       100);
++		if (ret)
++			dev_err(dev->dev, "timeout while trying to abort current transfer\n");
++	}
+ 
+ 	do {
+ 		__i2c_dw_disable_nowait(dev);
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index cf4f684f53566..a7f6f3eafad7d 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -98,6 +98,7 @@
+ #define DW_IC_INTR_START_DET			BIT(10)
+ #define DW_IC_INTR_GEN_CALL			BIT(11)
+ #define DW_IC_INTR_RESTART_DET			BIT(12)
++#define DW_IC_INTR_MST_ON_HOLD			BIT(13)
+ 
+ #define DW_IC_INTR_DEFAULT_MASK			(DW_IC_INTR_RX_FULL | \
+ 						 DW_IC_INTR_TX_ABRT | \
+@@ -108,6 +109,8 @@
+ 						 DW_IC_INTR_RX_UNDER | \
+ 						 DW_IC_INTR_RD_REQ)
+ 
++#define DW_IC_ENABLE_ABORT			BIT(1)
++
+ #define DW_IC_STATUS_ACTIVITY			BIT(0)
+ #define DW_IC_STATUS_TFE			BIT(2)
+ #define DW_IC_STATUS_RFNE			BIT(3)
+-- 
+2.17.1
+
