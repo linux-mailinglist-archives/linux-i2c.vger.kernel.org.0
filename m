@@ -2,417 +2,166 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2E579C144
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 Sep 2023 02:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C80B79C19A
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Sep 2023 03:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbjILApe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 11 Sep 2023 20:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
+        id S235040AbjILBYY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 11 Sep 2023 21:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjILApS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Sep 2023 20:45:18 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634DF181784
-        for <linux-i2c@vger.kernel.org>; Mon, 11 Sep 2023 17:39:23 -0700 (PDT)
+        with ESMTP id S235063AbjILBYD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 11 Sep 2023 21:24:03 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ADD13AE0
+        for <linux-i2c@vger.kernel.org>; Mon, 11 Sep 2023 17:29:35 -0700 (PDT)
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A293C2C05E0;
-        Tue, 12 Sep 2023 12:28:08 +1200 (NZST)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0C7AE2C053B;
+        Tue, 12 Sep 2023 12:28:04 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1694478488;
-        bh=wy0NgsQn8/la/4jPBKtdFNe9fKsC7g51dJCDU1dInJ8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cjl43NMChb2gDyWog5KoyYLm1SpwiKYBssoIF0WyjZRfy7CBNHeYQ9JOS9mdXg4ul
-         u4SIbkpvMvEa/csv8auaE82RvwH8G/63s21UgbKHbz064s3h1Jw3o1lX8feeBUEscb
-         2AFrFEaQM33G/luxjObDCTY029wViiNTlou5TKtADwcPY53YI431fDLSVikpzsIbfn
-         QMx+T7q4A5eWBE9Pvv5keJyCC357KACDTdmUS6OReiKgrTbwBBwe2syNoHFnZcWW3V
-         0GVuMKk59M3E0W1YEGPJ7cbNNOq3bClIgs2zw/5wDoN4mU0kMclLN97s3zBAHGkv9Q
-         LMn3Z3hw6dwKw==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B64ffb0980000>; Tue, 12 Sep 2023 12:28:08 +1200
-Received: from aryans-dl.ws.atlnz.lc (aryans-dl.ws.atlnz.lc [10.33.22.26])
-        by pat.atlnz.lc (Postfix) with ESMTP id 77ED913EE32;
-        Tue, 12 Sep 2023 12:28:08 +1200 (NZST)
-Received: by aryans-dl.ws.atlnz.lc (Postfix, from userid 1844)
-        id 7450220388A; Tue, 12 Sep 2023 12:28:08 +1200 (NZST)
-From:   Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
-To:     andi.shyti@kernel.org
-Cc:     aryan.srivastava@alliedtelesis.co.nz, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] THUNDERX_I2C_BLOCK_MODE
-Date:   Tue, 12 Sep 2023 12:27:06 +1200
-Message-ID: <20230912002706.2393450-1-aryan.srivastava@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.42.0
+        s=mail181024; t=1694478484;
+        bh=4BnR2/Pe4zsWpCGRueYCt2ZABjHfH4H2LohJTDmVp5I=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=EmWKdC8+IVuejVGdtMgZG1CuLRnfXuZi+kOX/RpOxGi1JqwaUSWnTQzvIGtrtpNNL
+         aCWtUVNAX3WnpbYUKqNijFZi3Iwo8PJFK3NllGKathFTALtJtZYzblfM+6A1NE7Avd
+         M5qEutgujceigD3J75rcfaLaGtQ/wfVoFqXM8YAZ/jC+5HzNt0NmlAVPrKTF5Ac3+A
+         r+f54q4OLDBShD/1qd9odVJUPm8Uj06WMkn3APqASUFX2xicYrDkCw7YPdmqp8MLdQ
+         eMZLvPnPgQ/uZUbb4cQpHPkbwBc220CvDFyMwMLmMPLee5YPiTYstY6uonP3HMHptG
+         IDGgq9MBIUYKQ==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B64ffb0930000>; Tue, 12 Sep 2023 12:28:03 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.37; Tue, 12 Sep 2023 12:28:03 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
+ SMTP Server (TLS) id 15.0.1497.48; Tue, 12 Sep 2023 12:28:03 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.037; Tue, 12 Sep 2023 12:28:03 +1200
+From:   Aryan Srivastava <Aryan.Srivastava@alliedtelesis.co.nz>
+To:     "andi.shyti@kernel.org" <andi.shyti@kernel.org>
+CC:     Aryan Srivastava <Aryan.Srivastava@alliedtelesis.co.nz>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] i2c:octeon:Add block-mode r/w
+Thread-Topic: [PATCH] i2c:octeon:Add block-mode r/w
+Thread-Index: AQHZr5q3r2c2MLptDkmOgF4YLLXmVq/KZ7iAgCKcq4CAG5lIAIACRR2AgAC6nQCAClo2gA==
+Date:   Tue, 12 Sep 2023 00:28:03 +0000
+Message-ID: <29186bdd021eae1ed6a0b92af7213db23b7b6f06.camel@alliedtelesis.co.nz>
+References: <20230903123446.vjgpplnogejbzneb@zenone.zhora.eu>
+         <20230904231439.485925-1-aryan.srivastava@alliedtelesis.co.nz>
+         <20230905102234.nlaeskxbbvu74co2@zenone.zhora.eu>
 In-Reply-To: <20230905102234.nlaeskxbbvu74co2@zenone.zhora.eu>
-References: <20230905102234.nlaeskxbbvu74co2@zenone.zhora.eu>
+Accept-Language: en-US, en-NZ
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.33.22.26]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <703BA02D23F4D84AB6E00CB5F2E20982@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=fYfTNHYF c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=zNV7Rl7Rt7sA:10 a=rKDP7ky7gNLDGIgusUQA:9
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=fYfTNHYF c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=JMFsQdWQCw4A:10 a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=ukSZkMMagyX6BzUICnMA:9 a=QEXdDO2ut3YA:10
 X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,SUBJ_ALL_CAPS autolearn=no autolearn_force=no
-        version=3.4.6
+        SPF_HELO_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-i2c:octeon:Add block-mode r/w
-
-Add support for block mode read/write operations on
-Thunderx chips.
-
-When attempting r/w operations of greater then 8 bytes
-block mode is used, instead of performing a series of
-8 byte reads.
-
-Signed-off-by: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
----
- drivers/i2c/busses/i2c-octeon-core.c     | 198 +++++++++++++++++++----
- drivers/i2c/busses/i2c-octeon-core.h     |  14 ++
- drivers/i2c/busses/i2c-thunderx-pcidrv.c |   4 +
- 3 files changed, 186 insertions(+), 30 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-octeon-core.c b/drivers/i2c/busses/i2=
-c-octeon-core.c
-index 845eda70b8ca..4c704262d228 100644
---- a/drivers/i2c/busses/i2c-octeon-core.c
-+++ b/drivers/i2c/busses/i2c-octeon-core.c
-@@ -130,6 +130,25 @@ static void octeon_i2c_hlc_disable(struct octeon_i2c=
- *i2c)
- 	octeon_i2c_ctl_write(i2c, TWSI_CTL_ENAB);
- }
-=20
-+static void octeon_i2c_block_enable(struct octeon_i2c *i2c)
-+{
-+	if (i2c->block_enabled || !TWSI_BLOCK_CTL(i2c))
-+		return;
-+
-+	i2c->block_enabled =3D true;
-+	octeon_i2c_writeq_flush(TWSI_MODE_STRETCH
-+		| TWSI_MODE_BLOCK_MODE, i2c->twsi_base + TWSI_MODE(i2c));
-+}
-+
-+static void octeon_i2c_block_disable(struct octeon_i2c *i2c)
-+{
-+	if (!i2c->block_enabled || !TWSI_BLOCK_CTL(i2c))
-+		return;
-+
-+	i2c->block_enabled =3D false;
-+	octeon_i2c_writeq_flush(TWSI_MODE_STRETCH, i2c->twsi_base + TWSI_MODE(i=
-2c));
-+}
-+
- /**
-  * octeon_i2c_hlc_wait - wait for an HLC operation to complete
-  * @i2c: The struct octeon_i2c
-@@ -268,6 +287,7 @@ static int octeon_i2c_start(struct octeon_i2c *i2c)
- 	u8 stat;
-=20
- 	octeon_i2c_hlc_disable(i2c);
-+	octeon_i2c_block_disable(i2c);
-=20
- 	octeon_i2c_ctl_write(i2c, TWSI_CTL_ENAB | TWSI_CTL_STA);
- 	ret =3D octeon_i2c_wait(i2c);
-@@ -485,6 +505,37 @@ static int octeon_i2c_hlc_write(struct octeon_i2c *i=
-2c, struct i2c_msg *msgs)
- 	return ret;
- }
-=20
-+/* Process hlc transaction */
-+static int octeon_i2c_hlc_cmd_send(struct octeon_i2c *i2c, u64 cmd)
-+{
-+	octeon_i2c_hlc_int_clear(i2c);
-+	octeon_i2c_writeq_flush(cmd, i2c->twsi_base + SW_TWSI(i2c));
-+
-+	return octeon_i2c_hlc_wait(i2c);
-+}
-+
-+/* Construct and send i2c transaction core cmd */
-+static int octeon_i2c_hlc_cmd(struct octeon_i2c *i2c, struct i2c_msg msg=
-, u64 cmd)
-+{
-+	if (msg.flags & I2C_M_TEN)
-+		cmd |=3D SW_TWSI_OP_10_IA;
-+	else
-+		cmd |=3D SW_TWSI_OP_7_IA;
-+
-+	if (msg.len =3D=3D 2) {
-+		u64 ext =3D 0;
-+
-+		cmd |=3D SW_TWSI_EIA;
-+		ext =3D (u64)msg.buf[0] << SW_TWSI_IA_SHIFT;
-+		cmd |=3D (u64)msg.buf[1] << SW_TWSI_IA_SHIFT;
-+		octeon_i2c_writeq_flush(ext, i2c->twsi_base + SW_TWSI_EXT(i2c));
-+	} else {
-+		cmd |=3D (u64)msg.buf[0] << SW_TWSI_IA_SHIFT;
-+	}
-+
-+	return octeon_i2c_hlc_cmd_send(i2c, cmd);
-+}
-+
- /* high-level-controller composite write+read, msg0=3Daddr, msg1=3Ddata =
-*/
- static int octeon_i2c_hlc_comp_read(struct octeon_i2c *i2c, struct i2c_m=
-sg *msgs)
- {
-@@ -499,26 +550,8 @@ static int octeon_i2c_hlc_comp_read(struct octeon_i2=
-c *i2c, struct i2c_msg *msgs
- 	/* A */
- 	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
-=20
--	if (msgs[0].flags & I2C_M_TEN)
--		cmd |=3D SW_TWSI_OP_10_IA;
--	else
--		cmd |=3D SW_TWSI_OP_7_IA;
--
--	if (msgs[0].len =3D=3D 2) {
--		u64 ext =3D 0;
--
--		cmd |=3D SW_TWSI_EIA;
--		ext =3D (u64)msgs[0].buf[0] << SW_TWSI_IA_SHIFT;
--		cmd |=3D (u64)msgs[0].buf[1] << SW_TWSI_IA_SHIFT;
--		octeon_i2c_writeq_flush(ext, i2c->twsi_base + SW_TWSI_EXT(i2c));
--	} else {
--		cmd |=3D (u64)msgs[0].buf[0] << SW_TWSI_IA_SHIFT;
--	}
--
--	octeon_i2c_hlc_int_clear(i2c);
--	octeon_i2c_writeq_flush(cmd, i2c->twsi_base + SW_TWSI(i2c));
--
--	ret =3D octeon_i2c_hlc_wait(i2c);
-+	/* Send core command */
-+	ret =3D octeon_i2c_hlc_cmd(i2c, msgs[0], cmd);
- 	if (ret)
- 		goto err;
-=20
-@@ -579,10 +612,7 @@ static int octeon_i2c_hlc_comp_write(struct octeon_i=
-2c *i2c, struct i2c_msg *msg
- 	if (set_ext)
- 		octeon_i2c_writeq_flush(ext, i2c->twsi_base + SW_TWSI_EXT(i2c));
-=20
--	octeon_i2c_hlc_int_clear(i2c);
--	octeon_i2c_writeq_flush(cmd, i2c->twsi_base + SW_TWSI(i2c));
--
--	ret =3D octeon_i2c_hlc_wait(i2c);
-+	ret =3D octeon_i2c_hlc_cmd_send(i2c, cmd);
- 	if (ret)
- 		goto err;
-=20
-@@ -594,6 +624,106 @@ static int octeon_i2c_hlc_comp_write(struct octeon_=
-i2c *i2c, struct i2c_msg *msg
- 	return ret;
- }
-=20
-+/**
-+ * high-level-controller composite block write+read, msg0=3Daddr, msg1=3D=
-data
-+ * Used in the case where the i2c xfer is for greater than 8 bytes of re=
-ad data.
-+ */
-+static int octeon_i2c_hlc_block_comp_read(struct octeon_i2c *i2c, struct=
- i2c_msg *msgs)
-+{
-+	int len, ret =3D 0;
-+	u64 cmd =3D 0;
-+
-+	octeon_i2c_hlc_enable(i2c);
-+	octeon_i2c_block_enable(i2c);
-+
-+	/* Write (size - 1) into block control register */
-+	len =3D msgs[1].len - 1;
-+	octeon_i2c_writeq_flush((u64)(len), i2c->twsi_base + TWSI_BLOCK_CTL(i2c=
-));
-+
-+	/* Prepare core command */
-+	cmd =3D SW_TWSI_V | SW_TWSI_R | SW_TWSI_SOVR;
-+	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
-+
-+	/* Send core command */
-+	ret =3D octeon_i2c_hlc_cmd(i2c, msgs[0], cmd);
-+	if (ret)
-+		return ret;
-+
-+	cmd =3D __raw_readq(i2c->twsi_base + SW_TWSI(i2c));
-+	if ((cmd & SW_TWSI_R) =3D=3D 0)
-+		return octeon_i2c_check_status(i2c, false);
-+
-+	/* read data in FIFO */
-+	octeon_i2c_writeq_flush(TWSI_BLOCK_STS_RESET_PTR, i2c->twsi_base + TWSI=
-_BLOCK_STS(i2c));
-+	for (int i =3D 0; i < len; i +=3D 8) {
-+		u64 rd =3D __raw_readq(i2c->twsi_base + TWSI_BLOCK_FIFO(i2c));
-+		for (int j =3D 7; j >=3D 0; j--)
-+			msgs[1].buf[i + (7 - j)] =3D (rd >> (8 * j)) & 0xff;
-+	}
-+
-+	octeon_i2c_block_disable(i2c);
-+	return ret;
-+}
-+
-+/**
-+ * high-level-controller composite block write+write, m[0]len<=3D2, m[1]=
-len<=3D1024
-+ * Used in the case where the i2c xfer is for greater than 8 bytes of wr=
-ite data.
-+ */
-+static int octeon_i2c_hlc_block_comp_write(struct octeon_i2c *i2c, struc=
-t i2c_msg *msgs)
-+{
-+	bool set_ext =3D false;
-+	int i, j, len, ret =3D 0;
-+	u64 cmd, ext =3D 0;
-+
-+	octeon_i2c_hlc_enable(i2c);
-+	octeon_i2c_block_enable(i2c);
-+
-+	/* Write (size - 1) into block control register */
-+	len =3D msgs[1].len - 1;
-+	octeon_i2c_writeq_flush((u64)(len), i2c->twsi_base + TWSI_BLOCK_CTL(i2c=
-));
-+
-+	/* Prepare core command */
-+	cmd =3D SW_TWSI_V | SW_TWSI_SOVR;
-+	cmd |=3D (u64)(msgs[0].addr & 0x7full) << SW_TWSI_ADDR_SHIFT;
-+
-+	if (msgs[0].flags & I2C_M_TEN)
-+		cmd |=3D SW_TWSI_OP_10_IA;
-+	else
-+		cmd |=3D SW_TWSI_OP_7_IA;
-+
-+	if (msgs[0].len =3D=3D 2) {
-+		cmd |=3D SW_TWSI_EIA;
-+		ext |=3D (u64)msgs[0].buf[0] << SW_TWSI_IA_SHIFT;
-+		set_ext =3D true;
-+		cmd |=3D (u64)msgs[0].buf[1] << SW_TWSI_IA_SHIFT;
-+	} else {
-+		cmd |=3D (u64)msgs[0].buf[0] << SW_TWSI_IA_SHIFT;
-+	}
-+
-+	/* Write msg into FIFO buffer */
-+	octeon_i2c_writeq_flush(TWSI_BLOCK_STS_RESET_PTR, i2c->twsi_base + TWSI=
-_BLOCK_STS(i2c));
-+	for (i =3D 0; i < len; i +=3D 8) {
-+		u64 buf =3D 0;
-+		for (j =3D 7; j >=3D 0; j--)
-+			buf |=3D (msgs[1].buf[i + (7 - j)] << (8 * j));
-+		octeon_i2c_writeq_flush(buf, i2c->twsi_base + TWSI_BLOCK_FIFO(i2c));
-+	}
-+	if (set_ext)
-+		octeon_i2c_writeq_flush(ext, i2c->twsi_base + SW_TWSI_EXT(i2c));
-+
-+	/* Send command to core (send data in FIFO) */
-+	ret =3D octeon_i2c_hlc_cmd_send(i2c, cmd);
-+	if (ret)
-+		return ret;
-+
-+	cmd =3D __raw_readq(i2c->twsi_base + SW_TWSI(i2c));
-+	if ((cmd & SW_TWSI_R) =3D=3D 0)
-+		return octeon_i2c_check_status(i2c, false);
-+
-+	octeon_i2c_block_disable(i2c);
-+	return ret;
-+}
-+
- /**
-  * octeon_i2c_xfer - The driver's master_xfer function
-  * @adap: Pointer to the i2c_adapter structure
-@@ -619,13 +749,21 @@ int octeon_i2c_xfer(struct i2c_adapter *adap, struc=
-t i2c_msg *msgs, int num)
- 		if ((msgs[0].flags & I2C_M_RD) =3D=3D 0 &&
- 		    (msgs[1].flags & I2C_M_RECV_LEN) =3D=3D 0 &&
- 		    msgs[0].len > 0 && msgs[0].len <=3D 2 &&
--		    msgs[1].len > 0 && msgs[1].len <=3D 8 &&
-+		    msgs[1].len > 0 &&
- 		    msgs[0].addr =3D=3D msgs[1].addr) {
--			if (msgs[1].flags & I2C_M_RD)
--				ret =3D octeon_i2c_hlc_comp_read(i2c, msgs);
--			else
--				ret =3D octeon_i2c_hlc_comp_write(i2c, msgs);
--			goto out;
-+			if (msgs[1].len <=3D 8) {
-+				if (msgs[1].flags & I2C_M_RD)
-+					ret =3D octeon_i2c_hlc_comp_read(i2c, msgs);
-+				else
-+					ret =3D octeon_i2c_hlc_comp_write(i2c, msgs);
-+				goto out;
-+			} else if (msgs[1].len <=3D 1024 && TWSI_BLOCK_CTL(i2c)) {
-+				if (msgs[1].flags & I2C_M_RD)
-+					ret =3D octeon_i2c_hlc_block_comp_read(i2c, msgs);
-+				else
-+					ret =3D octeon_i2c_hlc_block_comp_write(i2c, msgs);
-+				goto out;
-+			}
- 		}
- 	}
-=20
-diff --git a/drivers/i2c/busses/i2c-octeon-core.h b/drivers/i2c/busses/i2=
-c-octeon-core.h
-index 9bb9f64fdda0..81fcf413c890 100644
---- a/drivers/i2c/busses/i2c-octeon-core.h
-+++ b/drivers/i2c/busses/i2c-octeon-core.h
-@@ -85,6 +85,11 @@
- #define TWSI_INT_SDA		BIT_ULL(10)
- #define TWSI_INT_SCL		BIT_ULL(11)
-=20
-+#define TWSI_MODE_STRETCH		BIT_ULL(1)
-+#define TWSI_MODE_BLOCK_MODE		BIT_ULL(2)
-+
-+#define TWSI_BLOCK_STS_RESET_PTR	BIT_ULL(0)
-+#define TWSI_BLOCK_STS_BUSY		BIT_ULL(1)
- #define I2C_OCTEON_EVENT_WAIT 80 /* microseconds */
-=20
- /* Register offsets */
-@@ -92,11 +97,19 @@ struct octeon_i2c_reg_offset {
- 	unsigned int sw_twsi;
- 	unsigned int twsi_int;
- 	unsigned int sw_twsi_ext;
-+	unsigned int twsi_mode;
-+	unsigned int twsi_block_ctl;
-+	unsigned int twsi_block_sts;
-+	unsigned int twsi_block_fifo;
- };
-=20
- #define SW_TWSI(x)	(x->roff.sw_twsi)
- #define TWSI_INT(x)	(x->roff.twsi_int)
- #define SW_TWSI_EXT(x)	(x->roff.sw_twsi_ext)
-+#define TWSI_MODE(x)	(x->roff.twsi_mode)
-+#define TWSI_BLOCK_CTL(x)	(x->roff.twsi_block_ctl)
-+#define TWSI_BLOCK_STS(x)	(x->roff.twsi_block_sts)
-+#define TWSI_BLOCK_FIFO(x)	(x->roff.twsi_block_fifo)
-=20
- struct octeon_i2c {
- 	wait_queue_head_t queue;
-@@ -110,6 +123,7 @@ struct octeon_i2c {
- 	void __iomem *twsi_base;
- 	struct device *dev;
- 	bool hlc_enabled;
-+	bool block_enabled;
- 	bool broken_irq_mode;
- 	bool broken_irq_check;
- 	void (*int_enable)(struct octeon_i2c *);
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busse=
-s/i2c-thunderx-pcidrv.c
-index a77cd86fe75e..abde98117d7e 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -165,6 +165,10 @@ static int thunder_i2c_probe_pci(struct pci_dev *pde=
-v,
- 	i2c->roff.sw_twsi =3D 0x1000;
- 	i2c->roff.twsi_int =3D 0x1010;
- 	i2c->roff.sw_twsi_ext =3D 0x1018;
-+	i2c->roff.twsi_mode =3D 0x1038;
-+	i2c->roff.twsi_block_ctl =3D 0x1048;
-+	i2c->roff.twsi_block_sts =3D 0x1050;
-+	i2c->roff.twsi_block_fifo =3D 0x1058;
-=20
- 	i2c->dev =3D dev;
- 	pci_set_drvdata(pdev, i2c);
---=20
-2.42.0
-
+SGksIEFuZGksDQoNCk9uIFR1ZSwgMjAyMy0wOS0wNSBhdCAxMjoyMiArMDIwMCwgQW5kaSBTaHl0
+aSB3cm90ZToNCj4gSGkgQXJ5YW4sDQo+IA0KPiBJbiB0aGUgdGl0bGUsIHBsZWFzZSBsZWF2ZSBh
+IHNwYWNlIGFmdGVyIHRoZSAnOicNCj4gDQo+ICAgIGkyYzogb2N0ZW9uOiBBZGQgYmxvY2stbW9k
+ZSByL3cNCj4gDQo+IFBsZWFzZSBjaGVjayB3aXRoICJnaXQgbG9nIGRyaXZlcnMuLi4iIHRvIHNl
+ZSB3aGF0J3MgdGhlIHJ1bGUgaW4NCj4gYSBwYXJ0aWN1bGFyIGNvbW11bml0eS4NCj4gDQo+IEkg
+Z3Vlc3MgV29sZnJhbSBjYW4gZml4IHRoaXMsIHRob3VnaCwgYmVmb3JlIHB1c2hpbmcuDQo+IA0K
+PiBbLi4uXQ0KPiANCkRvbmUNCg0KPiA+ICsvKiBoaWdoLWxldmVsLWNvbnRyb2xsZXIgY29tcG9z
+aXRlIGJsb2NrIHdyaXRlK3JlYWQsIG1zZzA9YWRkciwNCj4gPiBtc2cxPWRhdGEgKi8NCj4gDQo+
+IEkgdGhpbmsgdGhpcyBjb21tZW50IGlzIGZpbmUgYW5kIGdyZWF0IHRvIGhhdmUgaXQsIGJ1dCBp
+dCdzDQo+IG1pc3NpbmcgYSBiaXQgb2YgY2xhcml0eSwgY2FuIHlvdSBwbGVhc2UgZXhwYW5kIHRo
+ZSBjb25jZXB0Pw0KPiANCkRvbmUsIGxldCBtZSBrbm93IGlmIHlvdSB3YW50IG1lIHRvIGFkZCBt
+b3JlIGhlcmUuDQoNCj4gPiArc3RhdGljIGludCBvY3Rlb25faTJjX2hsY19ibG9ja19jb21wX3Jl
+YWQoc3RydWN0IG9jdGVvbl9pMmMgKmkyYywNCj4gPiBzdHJ1Y3QgaTJjX21zZyAqbXNncykNCj4g
+PiArew0KPiA+ICsJaW50IGksIGosIGxlbiwgcmV0ID0gMDsNCj4gPiArCXU2NCBjbWQgPSAwLCBy
+ZCA9IDA7DQo+IA0KPiBjYW4gcGxlYXNlIHlvdSBtb3ZlIHJkLCBqIGluc2lkZSB0aGUgZm9yIGxv
+b3A/IFRoZSBiYXNpYyBjb21tb24NCj4gc2Vuc2UgaXMgdG8gaGF2ZSBhbGwgdmFyaWFibGUgZGVj
+bGFyZWQgaW4gdGhlIGlubmVybW9zdCBzZWN0aW9uDQo+IGluIG9yZGVyIHRvIGF2b2lkIGNvbmZ1
+c2lvbi4NCj4gDQo+IEl0J3MgYSBuaXRwaWNrIHRob3VnaCwgbm90IGEgc3Ryb25nIGNvbW1lbnQg
+YW5kLCBhZmFpaywgbm90IGENCj4gcmVhbCBydWxlLg0KPiANCj4gU2FtZSBjb21tZW50IGZvciB0
+aGUgZnVuY3Rpb24gYmVsb3cuDQo+IA0KRG9uZSwgSSBhZ3JlZSB0aGV5IHNob3VsZCBiZSBkZWZp
+bmVkIHdpdGhpbiBsb29wLiBJIHdhcyBqdXN0IHRyeWluZyB0bw0KbWF0Y2ggdGhlIG90aGVyIGhs
+YyByL3cuDQoNCj4gPiArDQo+ID4gKwlvY3Rlb25faTJjX2hsY19lbmFibGUoaTJjKTsNCj4gPiAr
+CW9jdGVvbl9pMmNfYmxvY2tfZW5hYmxlKGkyYyk7DQo+ID4gKw0KPiA+ICsJLyogV3JpdGUgKHNp
+emUgLSAxKSBpbnRvIGJsb2NrIGNvbnRyb2wgcmVnaXN0ZXIgKi8NCj4gPiArCWxlbiA9IG1zZ3Nb
+MV0ubGVuIC0gMTsNCj4gPiArCW9jdGVvbl9pMmNfd3JpdGVxX2ZsdXNoKCh1NjQpKGxlbiksIGky
+Yy0+dHdzaV9iYXNlICsNCj4gPiBUV1NJX0JMT0NLX0NUTChpMmMpKTsNCj4gPiArDQo+ID4gKwkv
+KiBQcmVwYXJlIGNvcmUgY29tbWFuZCAqLw0KPiA+ICsJY21kID0gU1dfVFdTSV9WIHwgU1dfVFdT
+SV9SIHwgU1dfVFdTSV9TT1ZSOw0KPiA+ICsJY21kIHw9ICh1NjQpKG1zZ3NbMF0uYWRkciAmIDB4
+N2Z1bGwpIDw8IFNXX1RXU0lfQUREUl9TSElGVDsNCj4gPiArDQo+ID4gKwlpZiAobXNnc1swXS5m
+bGFncyAmIEkyQ19NX1RFTikNCj4gPiArCQljbWQgfD0gU1dfVFdTSV9PUF8xMF9JQTsNCj4gPiAr
+CWVsc2UNCj4gPiArCQljbWQgfD0gU1dfVFdTSV9PUF83X0lBOw0KPiA+ICtObywgYnV0IHRoaXMg
+ZG9lc250IHJlYWxseSBtYXR0ZXIgYXMgdGhlIGludGVybmFsIGogbG9vcCB3aWxsIHRha2UNCj4g
+PiBjYXJlIG9mIHRoZSByZW1haW5pbmcgYnl0ZXMuDQo+ID4gDQo+ID4gZS5nLiBpZiB0aGUgbGVu
+IGlzIDksIHRoZW4gd2Ugd2lsbCBkbw0KPiA+IDAtNyBpbiB0aGUgZmlyc3QsIHRoZW4gaSA9IDgs
+IHdoaWNoIGlzIDwgbGVuLCBhbmQgdGhlbiB0aGUgaW50ZXJuYWwNCj4gPiBsb29wIHdpbGwgZG8g
+OC0xNy4NCj4gPiArCWlmIChtc2dzWzBdLmxlbiA9PSAyKSB7DQo+ID4gKwkJdTY0IGV4dCA9IDA7
+DQo+ID4gKw0KPiA+ICsJCWNtZCB8PSBTV19UV1NJX0VJQTsNCj4gPiArCQlleHQgPSAodTY0KW1z
+Z3NbMF0uYnVmWzBdIDw8IFNXX1RXU0lfSUFfU0hJRlQ7DQo+ID4gKwkJY21kIHw9ICh1NjQpbXNn
+c1swXS5idWZbMV0gPDwgU1dfVFdTSV9JQV9TSElGVDsNCj4gPiArCQlvY3Rlb25faTJjX3dyaXRl
+cV9mbHVzaChleHQsIGkyYy0+dHdzaV9iYXNlICsNCj4gPiBTV19UV1NJX0VYVChpMmMpKTsNCj4g
+PiArCX0gZWxzZSB7DQo+ID4gKwkJY21kIHw9ICh1NjQpbXNnc1swXS5idWZbMF0gPDwgU1dfVFdT
+SV9JQV9TSElGVDsNCj4gPiArCX0NCj4gDQo+IFRoaXMgZmlyc3QgcGFydCBpcyBiYXNpY2FsbHkg
+YSBjb3B5L3Bhc3RlIHdpdGggdGhlIHdyaXRlKCkNCj4gZnVuY3Rpb24uLi4gY2FuIHdlIHB1dCB0
+aGVtIHRvZ2V0aGVyIGluIGEgY29tbW9uIGZ1bmN0aW9uPw0KPiANCj4gQ2FuIHdlIHB1dCBhcyBt
+dWNoIGFzIHdlIGNhbiBpbiBhIHNpbmdsZSBmdW5jdGlvbj8NCj4gDQpEb25lLiBDb3VsZCBub3Qg
+bWFrZSBhIGNvbW1vbiBmb3IgdGhlIHdyaXRlK3dyaXRlcywgYXMgdGhleSB3YXkgd2UNCmluc2Vy
+dCBkYXRhIGludG8gYnVmZmVycyBmb3Igd3JpdGluZyBhcmUgc2lnbmlmaWNhbnRseSBkaWZmZXJl
+bnQsDQphbmQgZG9uJ3Qgb2NjdXIgYWZ0ZXIgdGhlIGNvcmUgY29tbWFuZCBzZW5kIChpLmUuIHRo
+ZSBjb3JlIGNvbW1hbmQgaXMNCnNlbnQgd2l0aC9jb25jdXJyZW50bHkgd2l0aCB0aGUgd3JpdGUg
+ZGF0YSkuIFVubGlrZSB0aGUgcmVhZCwgd2hpY2gNCnNlbmRzIGFsbW9zdCBpZGVudGljYWwgY29y
+ZSBjb21tYW5kcyBhbmQgcmVhZHMgdGhlIGJ1ZmZlciBkaWZmZXJlbnRseQ0KYWZ0ZXJ3YXJkcy4g
+VGhvdWdoIGlmIHdvdWxkIGxpa2UgaXQgSSBjb3VsZCBtYW5nbGUgdG9nZXRoZXIgYSBmdW5jdGlv
+bg0KZm9yIHRoZXNlIGFzIHdlbGwuDQoNCj4gPiArCS8qIFNlbmQgY29tbWFuZCB0byBjb3JlIChz
+ZW5kIGRhdGEgdG8gRklGTykgKi8NCj4gPiArCW9jdGVvbl9pMmNfaGxjX2ludF9jbGVhcihpMmMp
+Ow0KPiA+ICsJb2N0ZW9uX2kyY193cml0ZXFfZmx1c2goY21kLCBpMmMtPnR3c2lfYmFzZSArIFNX
+X1RXU0koaTJjKSk7DQo+ID4gKw0KPiA+ICsJLyogV2FpdCBmb3IgdHJhbnNhY3Rpb24gdG8gY29t
+cGxldGUgKi8NCj4gPiArCXJldCA9IG9jdGVvbl9pMmNfaGxjX3dhaXQoaTJjKTsNCj4gPiArCWlm
+IChyZXQpDQo+ID4gKwkJcmV0dXJuIHJldDsNCj4gPiArDQo+ID4gKwljbWQgPSBfX3Jhd19yZWFk
+cShpMmMtPnR3c2lfYmFzZSArIFNXX1RXU0koaTJjKSk7DQo+ID4gKwlpZiAoKGNtZCAmIFNXX1RX
+U0lfUikgPT0gMCkNCj4gPiArCQlyZXR1cm4gb2N0ZW9uX2kyY19jaGVja19zdGF0dXMoaTJjLCBm
+YWxzZSk7DQo+ID4gKw0KPiA+ICsJLyogcmVhZCBkYXRhIGluIEZJRk8gKi8NCj4gPiArCW9jdGVv
+bl9pMmNfd3JpdGVxX2ZsdXNoKFRXU0lfQkxPQ0tfU1RTX1JFU0VUX1BUUiwgaTJjLQ0KPiA+ID50
+d3NpX2Jhc2UgKyBUV1NJX0JMT0NLX1NUUyhpMmMpKTsNCj4gPiArCWZvciAoaSA9IDA7IGkgPCBs
+ZW47IGkgKz0gOCkgew0KPiA+ICsJCXJkID0gX19yYXdfcmVhZHEoaTJjLT50d3NpX2Jhc2UgKw0K
+PiA+IFRXU0lfQkxPQ0tfRklGTyhpMmMpKTsNCj4gPiArCQlmb3IgKGogPSA3OyBqID49IDA7IGot
+LSkNCj4gDQo+IGlzIGxlbiBhbHdheXMgYSBtdWx0aXBsZSBvZiA4Pw0KPiANCj4gPiArCQkJbXNn
+c1sxXS5idWZbaSArICg3IC0gaildID0gKHJkID4+ICg4ICogaikpICYNCj4gPiAweGZmOw0KPiA+
+ICsJfQ0KPiA+ICsNCj4gPiArCW9jdGVvbl9pMmNfYmxvY2tfZGlzYWJsZShpMmMpOw0KPiA+ICsJ
+cmV0dXJuIHJldDsNCj4gPiArfQ0KPiANCj4gWy4uLl0NCg0KTm8sIGJ1dCB0aGlzIGRvZXNudCBy
+ZWFsbHkgbWF0dGVyIGFzIHRoZSBpbnRlcm5hbCBqIGxvb3Agd2lsbCB0YWtlIGNhcmUNCm9mIHRo
+ZSByZW1haW5pbmcgYnl0ZXMuDQoNCmUuZy4gaWYgdGhlIGxlbiBpcyA5LCB0aGVuIHdlIHdpbGwg
+ZG8NCjAtNyBpbiB0aGUgZmlyc3QsIHRoZW4gaSA9IDgsIHdoaWNoIGlzIDwgbGVuLCBhbmQgdGhl
+biB0aGUgaW50ZXJuYWwNCmxvb3Agd2lsbCBkbyA4LTE3Lg0KPiANCj4gPiAtCQkgICAgbXNnc1sx
+XS5sZW4gPiAwICYmIG1zZ3NbMV0ubGVuIDw9IDggJiYNCj4gPiArCQkgICAgbXNnc1sxXS5sZW4g
+PiAwICYmDQo+ID4gIAkJICAgIG1zZ3NbMF0uYWRkciA9PSBtc2dzWzFdLmFkZHIpIHsNCj4gPiAt
+CQkJaWYgKG1zZ3NbMV0uZmxhZ3MgJiBJMkNfTV9SRCkNCj4gPiAtCQkJCXJldCA9IG9jdGVvbl9p
+MmNfaGxjX2NvbXBfcmVhZChpMmMsDQo+ID4gbXNncyk7DQo+ID4gLQkJCWVsc2UNCj4gPiAtCQkJ
+CXJldCA9IG9jdGVvbl9pMmNfaGxjX2NvbXBfd3JpdGUoaTJjLA0KPiA+IG1zZ3MpOw0KPiA+IC0J
+CQlnb3RvIG91dDsNCj4gPiArCQkJaWYgKG1zZ3NbMV0ubGVuIDw9IDgpIHsNCj4gPiArCQkJCWlm
+IChtc2dzWzFdLmZsYWdzICYgSTJDX01fUkQpDQo+ID4gKwkJCQkJcmV0ID0NCj4gPiBvY3Rlb25f
+aTJjX2hsY19jb21wX3JlYWQoaTJjLCBtc2dzKTsNCj4gPiArCQkJCWVsc2UNCj4gPiArCQkJCQly
+ZXQgPQ0KPiA+IG9jdGVvbl9pMmNfaGxjX2NvbXBfd3JpdGUoaTJjLCBtc2dzKTsNCj4gPiArCQkJ
+CWdvdG8gb3V0Ow0KPiA+ICsJCQl9IGVsc2UgaWYgKG1zZ3NbMV0ubGVuIDw9IDEwMjQgJiYNCj4g
+PiBUV1NJX0JMT0NLX0NUTChpMmMpKSB7DQo+ID4gKwkJCQlpZiAobXNnc1sxXS5mbGFncyAmIEky
+Q19NX1JEKQ0KPiA+ICsJCQkJCXJldCA9DQo+ID4gb2N0ZW9uX2kyY19obGNfYmxvY2tfY29tcF9y
+ZWFkKGkyYywgbXNncyk7DQo+ID4gKwkJCQllbHNlDQo+ID4gKwkJCQkJcmV0ID0NCj4gPiBvY3Rl
+b25faTJjX2hsY19ibG9ja19jb21wX3dyaXRlKGkyYywgbXNncyk7DQo+ID4gKwkJCQlnb3RvIG91
+dDsNCj4gPiArCQkJfQ0KPiANCj4gdGhlIHJlc3QgbG9va3MgZ29vZC4uLg0KPiANCj4gVGhhbmtz
+LA0KPiBBbmRpDQoNClRoYW5rcywNCkFyeWFuDQo=
