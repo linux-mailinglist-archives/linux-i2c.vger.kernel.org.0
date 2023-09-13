@@ -2,112 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4E979E8F6
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Sep 2023 15:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7858479EA4F
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Sep 2023 16:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240765AbjIMNRF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Sep 2023 09:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
+        id S239563AbjIMOBC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Sep 2023 10:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240883AbjIMNRD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Sep 2023 09:17:03 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477751BC9;
-        Wed, 13 Sep 2023 06:16:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694611019; x=1726147019;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=voOn5vnRRx8HAlnRbH6yWGQTEDY27am7NocvssgVeqo=;
-  b=HTHhII3tZI/dyvhxQboFch7wUXVs848TvkToPK8rKtHRO6qSch1bYaDb
-   3GpdoZ3jIarDhBtbqCiekAOt7gou6xUzRI0Gdbn23a0LpxexiQpIlVfHO
-   LnGMtLByhh2Hof6ivXVsVWSwmHHkkDztbR6kd+3OQSCc+gAnxMwYrPZNC
-   HYEGwh59qbP1h5N1KZFEKiIZ7bao/HXEKu/BEUP+emt0eVlZyX1pEGdJM
-   bDjWT4SNzwen62j04NqpraetztiCScYzB6/B3ubXQE6RbuSnCvUMghlxr
-   usrz1WvDzusODlUwhPJ0DRayKuQ+w8Ibm/lG42VWQd8HxoSqM4JnDmJlG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="445095693"
-X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="445095693"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 06:16:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="814224347"
-X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="814224347"
-Received: from mylly.fi.intel.com (HELO [10.237.72.154]) ([10.237.72.154])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Sep 2023 06:16:32 -0700
-Message-ID: <e58384d1-86c4-4b56-9d05-b0f7ffb339d5@linux.intel.com>
-Date:   Wed, 13 Sep 2023 16:16:31 +0300
+        with ESMTP id S237959AbjIMOBB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Sep 2023 10:01:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF92F19B1;
+        Wed, 13 Sep 2023 07:00:57 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E9F4F66072F4;
+        Wed, 13 Sep 2023 15:00:55 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694613656;
+        bh=zNzJow6Gn0s5lcUUXuQqO24RP3fvno10hjXXk/5ytb8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FPqf764XjDlDRzXc/WCOeWXB4U20gfHRMvI6TON8Gs4r+ajqG8jZEPliH+tqp739t
+         AmUQcmBxv0PLHPufVTN4dMA2v7XewK5vkxZVCr+ix7x4+i5ZncJUawBsS7tn/HGers
+         vVY49DopN+HNZMAaFKAcCdOtkPE4V4fdDZeqHvich/1Im7yGbJDvqk+iMEcYfIsReA
+         YN194QBwHPoVvBOly6accH+GGNaVgqYuulaEguwqNbzZ8vZXOZSJcPLOH7wioscrfg
+         1A7iIE6WkdTHaztNlDDHj6XMCkRKzgqIaycBaVaEENST/L0swdLSW5Qn24x2a2JB62
+         Op5YCsPMelVAA==
+Message-ID: <0fd097fd-9fdb-9001-cddb-7a396fde28bb@collabora.com>
+Date:   Wed, 13 Sep 2023 16:00:53 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] i2c: designware: fix __i2c_dw_disable() in case master
- is holding SCL low
-To:     Yann Sionneau <ysionneau@kalray.eu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Julian Vetter <jvetter@kalrayinc.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Borne <jborne@kalray.eu>
-References: <20230911140749.32386-1-ysionneau@kalray.eu>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH] i2c: mt65xx: allow optional pmic clock
 Content-Language: en-US
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20230911140749.32386-1-ysionneau@kalray.eu>
+To:     Daniel Golle <daniel@makrotopia.org>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Cc:     =?UTF-8?B?6YOt5bCP5qGl?= <joe@gainstrong.cn>
+References: <3bf827929a44c17bfb1bf1000b143c02ce26a929.1693102324.git.daniel@makrotopia.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <3bf827929a44c17bfb1bf1000b143c02ce26a929.1693102324.git.daniel@makrotopia.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 9/11/23 17:07, Yann Sionneau wrote:
-> The DesignWare IP can be synthesized with the IC_EMPTYFIFO_HOLD_MASTER_EN
-> parameter.
-> In this case, when the TX FIFO gets empty and the last command didn't have
-> the STOP bit (IC_DATA_CMD[9]), the controller will hold SCL low until
-> a new command is pushed into the TX FIFO or the transfer is aborted.
+Il 27/08/23 04:13, Daniel Golle ha scritto:
+> Using the I2C host controller on the MT7981 SoC requires 4 clocks to
+> be enabled. One of them, the pmic clk, is only enabled in case
+> 'mediatek,have-pmic' is also set which has other consequences which
+> are not desired in this case.
 > 
-> When the controller is holding SCL low, it cannot be disabled.
-> The transfer must first be aborted.
-> Also, the bus recovery won't work because SCL is held low by the master.
+> Allow defining a pmic clk even in case the 'mediatek,have-pmic' propterty
+> is not present and the bus is not used to connect to a pmic, but may
+> still require to enable the pmic clock.
 > 
-> Check if the master is holding SCL low in __i2c_dw_disable() before trying
-> to disable the controller. If SCL is held low, an abort is initiated.
-> When the abort is done, then proceed with disabling the controller.
-> 
-> This whole situation can happen for instance during SMBus read data block
-> if the slave just responds with "byte count == 0".
-> This puts the driver in an unrecoverable state, because the controller is
-> holding SCL low and the current __i2c_dw_disable() procedure is not
-> working. In this situation only a SoC reset can fix the i2c bus.
-> 
-> Co-developed-by: Jonathan Borne <jborne@kalray.eu>
-> Signed-off-by: Jonathan Borne <jborne@kalray.eu>
-> Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 > ---
-> V3 -> V4:
-> * rebase on Linux v6.6-rc1 (0bb80ec)
+>   drivers/i2c/busses/i2c-mt65xx.c | 12 ++++++++----
+>   1 file changed, 8 insertions(+), 4 deletions(-)
 > 
-> V2 -> V3:
-> * do not rename timeout variable for disabling loop
-> in order to ease backports
-> * replace abort loop with regmap_read_poll_timeout()
-> * remove extra empty line.
-> 
-> V1 -> V2:
-> * use reverse christmas tree order for variable declarations
-> * use unsigned int type instead of u32 for regmap_read
-> * give its own loop to the abort procedure with its own timeout
-> * print an error message if the abort never finishes during the timeout
-> * rename the timeout variable for the controller disabling loop
-> * with the usleep_range(10, 20) it takes only 1 loop iteration.
-> Without it takes 75 iterations and with udelay(1) it takes 16
-> loop iterations.
-> 
->   drivers/i2c/busses/i2c-designware-common.c | 17 +++++++++++++++++
->   drivers/i2c/busses/i2c-designware-core.h   |  3 +++
->   2 files changed, 20 insertions(+)
-> 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
+> index 1a9b5a068ef1b..a8b5719c33729 100644
+> --- a/drivers/i2c/busses/i2c-mt65xx.c
+> +++ b/drivers/i2c/busses/i2c-mt65xx.c
+> @@ -1442,15 +1442,19 @@ static int mtk_i2c_probe(struct platform_device *pdev)
+>   	if (IS_ERR(i2c->clocks[I2C_MT65XX_CLK_ARB].clk))
+>   		return PTR_ERR(i2c->clocks[I2C_MT65XX_CLK_ARB].clk);
+>   
+> +	i2c->clocks[I2C_MT65XX_CLK_PMIC].clk = devm_clk_get_optional(&pdev->dev, "pmic");
+> +	if (IS_ERR(i2c->clocks[I2C_MT65XX_CLK_PMIC].clk)) {
+> +		dev_err(&pdev->dev, "cannot get pmic clock\n");
+> +		return PTR_ERR(i2c->clocks[I2C_MT65XX_CLK_PMIC].clk);
+> +	}
+> +
+>   	if (i2c->have_pmic) {
+
+...but you're not changing speed_clk if !i2c->have_pmic, I'm not sure that
+this will work correctly. Perhaps you wanted to also set speed_clk if the
+clock is present?
+
+if (IS_ERR...) {
+	error handling
+} else if (clk is present)
+	speed_clk = I2C_MT65XX_CLK_PMIC;
+
+if (have_pmic && !clk_is_present)
+	error
+
+Regards,
+Angelo
+
+> -		i2c->clocks[I2C_MT65XX_CLK_PMIC].clk = devm_clk_get(&pdev->dev, "pmic");
+> -		if (IS_ERR(i2c->clocks[I2C_MT65XX_CLK_PMIC].clk)) {
+> +		if (!i2c->clocks[I2C_MT65XX_CLK_PMIC].clk) {
+>   			dev_err(&pdev->dev, "cannot get pmic clock\n");
+> -			return PTR_ERR(i2c->clocks[I2C_MT65XX_CLK_PMIC].clk);
+> +			return -ENODEV;
+>   		}
+>   		speed_clk = I2C_MT65XX_CLK_PMIC;
+>   	} else {
+> -		i2c->clocks[I2C_MT65XX_CLK_PMIC].clk = NULL;
+>   		speed_clk = I2C_MT65XX_CLK_MAIN;
+>   	}
+>   
+
+
