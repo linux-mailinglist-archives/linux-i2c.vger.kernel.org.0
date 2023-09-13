@@ -2,269 +2,242 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F58F79E004
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Sep 2023 08:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF51C79E0CE
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Sep 2023 09:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238362AbjIMGaD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Sep 2023 02:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        id S234469AbjIMH1Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Sep 2023 03:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238348AbjIMGaD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Sep 2023 02:30:03 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E951D173A
-        for <linux-i2c@vger.kernel.org>; Tue, 12 Sep 2023 23:29:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sang-engineering.com; h=from:to:cc:subject:date:message-id
-        :in-reply-to:references:mime-version:content-transfer-encoding;
-         s=k1; bh=YXJOhBKin2MR8tV4lFJR3XpMrEsZzUkf4neCg226l1I=; b=ACLq9W
-        YeE62kLkVpcDzBtalbM3TiPekub5kK8UEhvcH8pO7DAIM1gsGj4KctjQ+LRqi89u
-        BqoJ7Yav4nOmYWK5PAxjAHQlj2+/iw6wbnDKAMNoc/mpuqE1LQeaMYVAr0SLGpXP
-        DY8JLRMTQ5afK+lOEH4mkZTL96vXN6mVwRIHdnuEjCOj2tCIaM4r8Klgw2/bLpI1
-        +ZOKB6zqPrYpKcOT9tm1AWkPVKfdw31Yy3bX60PpSXrNeIMh9dEmdo4TYdf6TLTX
-        AOSZq2jNNvTxauXCpwpg5WVNUTv7/DHxa5msNNEAn3ngRcm5Q22ZeXmocaXBIkwy
-        3+J+4dzcTEDOFW3A==
-Received: (qmail 489585 invoked from network); 13 Sep 2023 08:29:57 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Sep 2023 08:29:57 +0200
-X-UD-Smtp-Session: l3s3148p1@ohMosDcFlqMujnuS
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RFT 2/2] i2c: rcar: improve accuracy for R-Car Gen3+
-Date:   Wed, 13 Sep 2023 08:29:49 +0200
-Message-Id: <20230913062950.4968-3-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230913062950.4968-1-wsa+renesas@sang-engineering.com>
-References: <20230913062950.4968-1-wsa+renesas@sang-engineering.com>
+        with ESMTP id S238595AbjIMH1Y (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Sep 2023 03:27:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE2E31982
+        for <linux-i2c@vger.kernel.org>; Wed, 13 Sep 2023 00:26:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1694589994;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y+z/VJVoCY4LZ35ZR0Mzw7V+/Zr+JLFHRkK2GVRV/EU=;
+        b=H6G2hxDhPZ+V42FIiik7O5Do1+sUM56OT2gXPhFn74B7mMpzCxMOcvaI0hOvx6Wq3tNxWf
+        wG5LbC2BVykx3pYSJdqPulAfR8lbL3SLl4Eu3Acj8VsfluJokY/ftYrcrm5hnCXo6y2eXv
+        Kid1hjgrp8J1N0O6zdt5ivhySyDqQCM=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-332-QDEQixXMPV6xlUXOvLY2LQ-1; Wed, 13 Sep 2023 03:26:32 -0400
+X-MC-Unique: QDEQixXMPV6xlUXOvLY2LQ-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9a9e12a3093so95962966b.0
+        for <linux-i2c@vger.kernel.org>; Wed, 13 Sep 2023 00:26:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694589991; x=1695194791;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y+z/VJVoCY4LZ35ZR0Mzw7V+/Zr+JLFHRkK2GVRV/EU=;
+        b=pvp2hn7pGgo/bdBcWJJ+5c4S19an4SY/X2fxqhPlhRvgg4z8wi+fcyrQPs4wULQkUS
+         TkKu/+HGC6q3xGVGsUCu98zSn7oCGDe46VyM3jp5WMwhoKPaKikQa3howHz7CowKOPym
+         ynVGpSjXdHk5SlUg47FBonO5UM9uogcV3hejLvt1ljxdBeF1JKaGoDbToAy18nBOJL9Z
+         LcNg/Hy9wNV8N/cPrMcoTRNnUSHgszIPz8GXmdWUptSEv6esM7XCx3JQlMX5Gco3pxBO
+         pPIRBkIHYA61kZAKwTXmvYhdgjuljPRfHG6aHXI5GdOrjbrYjN8lNpfy0UPSAgKP5GKD
+         02ZA==
+X-Gm-Message-State: AOJu0YwzcL0Y8jVjba6tS9uL1NMJDLeW126+TbRkkDQvqorlLjnmO53q
+        o1/hnS6a+Sytxm6TT+Uq6FsADAvaAlf9Fdzw9yyXXIE/8beFF1msr7kISfUTwvM7XQmXXBUuLdV
+        TCWlNrci5WJPGHbz9BzhS4QUnurbW
+X-Received: by 2002:a17:906:3150:b0:9ad:a46c:66a2 with SMTP id e16-20020a170906315000b009ada46c66a2mr892530eje.11.1694589991111;
+        Wed, 13 Sep 2023 00:26:31 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHFZiNOK2Yzq5Yl/6Ha26/Um8kT7PCaxJDRjRJvq8ELbAzF48q+8/IwCFhaHoaB1/6hRAFoIw==
+X-Received: by 2002:a17:906:3150:b0:9ad:a46c:66a2 with SMTP id e16-20020a170906315000b009ada46c66a2mr892499eje.11.1694589990725;
+        Wed, 13 Sep 2023 00:26:30 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id v14-20020a17090690ce00b0099c53c44083sm7923202ejw.79.2023.09.13.00.26.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Sep 2023 00:26:30 -0700 (PDT)
+Message-ID: <764de5af-d589-9c43-be02-a9934eb9044b@redhat.com>
+Date:   Wed, 13 Sep 2023 09:26:28 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v16 1/4] usb: Add support for Intel LJCA device
+To:     kernel test robot <lkp@intel.com>,
+        Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
+        arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
+        wsa@kernel.org, kfting@nuvoton.com, broonie@kernel.org,
+        linus.walleij@linaro.org, maz@kernel.org, brgl@bgdev.pl,
+        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
+        andi.shyti@linux.intel.com, sakari.ailus@linux.intel.com,
+        bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com
+Cc:     oe-kbuild-all@lists.linux.dev, zhifeng.wang@intel.com
+References: <1694569212-10080-2-git-send-email-wentong.wu@intel.com>
+ <202309131427.AUBwVNBm-lkp@intel.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <202309131427.AUBwVNBm-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-With some new registers, SCL can be calculated to be closer to the
-desired rate. Apply the new formula for R-Car Gen3 device types.
+Hi,
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+On 9/13/23 08:12, kernel test robot wrote:
+> Hi Wentong,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on wsa/i2c/for-next]
+> [also build test WARNING on broonie-spi/for-next linus/master v6.6-rc1 next-20230912]
+> [cannot apply to usb/usb-testing usb/usb-next usb/usb-linus]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Wentong-Wu/usb-Add-support-for-Intel-LJCA-device/20230913-094239
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+> patch link:    https://lore.kernel.org/r/1694569212-10080-2-git-send-email-wentong.wu%40intel.com
+> patch subject: [PATCH v16 1/4] usb: Add support for Intel LJCA device
+> config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230913/202309131427.AUBwVNBm-lkp@intel.com/config)
+> compiler: sparc64-linux-gcc (GCC) 13.2.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309131427.AUBwVNBm-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202309131427.AUBwVNBm-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    drivers/usb/misc/usb-ljca.c: In function 'ljca_match_device_ids':
+>    drivers/usb/misc/usb-ljca.c:389:27: error: implicit declaration of function 'acpi_device_uid'; did you mean 'dmi_device_id'? [-Werror=implicit-function-declaration]
+>      389 |         const char *uid = acpi_device_uid(adev);
+>          |                           ^~~~~~~~~~~~~~~
+>          |                           dmi_device_id
+>>> drivers/usb/misc/usb-ljca.c:389:27: warning: initialization of 'const char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+>    drivers/usb/misc/usb-ljca.c:391:13: error: implicit declaration of function 'acpi_match_device_ids'; did you mean 'ljca_match_device_ids'? [-Werror=implicit-function-declaration]
+>      391 |         if (acpi_match_device_ids(adev, wd->ids))
+>          |             ^~~~~~~~~~~~~~~~~~~~~
+>          |             ljca_match_device_ids
+>    drivers/usb/misc/usb-ljca.c: In function 'ljca_auxdev_acpi_bind':
+>    drivers/usb/misc/usb-ljca.c:429:16: error: implicit declaration of function 'acpi_find_child_device'; did you mean 'acpi_match_device'? [-Werror=implicit-function-declaration]
+>      429 |         adev = acpi_find_child_device(parent, adr, false);
+>          |                ^~~~~~~~~~~~~~~~~~~~~~
+>          |                acpi_match_device
+>>> drivers/usb/misc/usb-ljca.c:429:14: warning: assignment to 'struct acpi_device *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+>      429 |         adev = acpi_find_child_device(parent, adr, false);
+>          |              ^
+>    drivers/usb/misc/usb-ljca.c:458:9: error: implicit declaration of function 'acpi_dev_for_each_child'; did you mean 'device_for_each_child'? [-Werror=implicit-function-declaration]
+>      458 |         acpi_dev_for_each_child(parent, ljca_match_device_ids, &wd);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~
+>          |         device_for_each_child
+>    cc1: some warnings being treated as errors
 
-The base for this patch was a BSP patch adding FM+ support. However,
-this clock calculation is significantly different:
+Ok, so this need to have a "depends on ACPI" added to its Kconfig
+entry. There are other ways to fix it, but this driver will not
+be functional without ACPI anyways so "depends on ACPI" seems
+to be the best solution for this.
 
-* it calculates the divider instead of trying values until it fits
-* as there was no information about reasonable SMD calculation, it uses
-  a fixed value suggested from recommended settings in the docs
-* the SCL low/high ratio is 5:4 instead of 1:1. Otherwise the specs for
-  Fastmode are slightly not met
-* it doesn't use soc_device_match
+Regards,
 
- drivers/i2c/busses/i2c-rcar.c | 126 +++++++++++++++++++++++-----------
- 1 file changed, 87 insertions(+), 39 deletions(-)
+Hans
 
-diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
-index 342c3747f415..bc5c7a0050eb 100644
---- a/drivers/i2c/busses/i2c-rcar.c
-+++ b/drivers/i2c/busses/i2c-rcar.c
-@@ -41,6 +41,10 @@
- #define ICSAR	0x1C	/* slave address */
- #define ICMAR	0x20	/* master address */
- #define ICRXTX	0x24	/* data port */
-+#define ICCCR2	0x28	/* Clock control 2 */
-+#define ICMPR	0x2C	/* SCL mask control */
-+#define ICHPR	0x30	/* SCL HIGH control */
-+#define ICLPR	0x34	/* SCL LOW control */
- #define ICFBSCR	0x38	/* first bit setup cycle (Gen3) */
- #define ICDMAER	0x3c	/* DMA enable (Gen3) */
- 
-@@ -84,11 +88,25 @@
- #define RMDMAE	BIT(1)	/* DMA Master Received Enable */
- #define TMDMAE	BIT(0)	/* DMA Master Transmitted Enable */
- 
-+/* ICCCR2 */
-+#define CDFD	BIT(2)	/* CDF Disable */
-+#define HLSE	BIT(1)	/* HIGH/LOW Separate Control Enable */
-+#define SME	BIT(0)	/* SCL Mask Enable */
-+
- /* ICFBSCR */
- #define TCYC17	0x0f		/* 17*Tcyc delay 1st bit between SDA and SCL */
- 
- #define RCAR_MIN_DMA_LEN	8
- 
-+/* SCL low/high ratio 5:4 to meet all I2C timing specs (incl safety margin) */
-+#define RCAR_SCLD_RATIO		5
-+#define RCAR_SCHD_RATIO		4
-+/*
-+ * SMD should be smaller than SCLD/SCHD and is always around 20 in the docs.
-+ * Thus, we simply use 20 which works for low and high speeds.
-+*/
-+#define RCAR_DEFAULT_SMD	20
-+
- #define RCAR_BUS_PHASE_START	(MDBS | MIE | ESG)
- #define RCAR_BUS_PHASE_DATA	(MDBS | MIE)
- #define RCAR_BUS_PHASE_STOP	(MDBS | MIE | FSB)
-@@ -128,6 +146,7 @@ struct rcar_i2c_priv {
- 
- 	int pos;
- 	u32 icccr;
-+	u32 scl_gran;
- 	u8 recovery_icmcr;	/* protected by adapter lock */
- 	enum rcar_i2c_type devtype;
- 	struct i2c_client *slave;
-@@ -216,11 +235,16 @@ static void rcar_i2c_init(struct rcar_i2c_priv *priv)
- 	rcar_i2c_write(priv, ICMCR, MDBS);
- 	rcar_i2c_write(priv, ICMSR, 0);
- 	/* start clock */
--	rcar_i2c_write(priv, ICCCR, priv->icccr);
--
--	if (priv->devtype == I2C_RCAR_GEN3)
-+	if (priv->devtype < I2C_RCAR_GEN3) {
-+		rcar_i2c_write(priv, ICCCR, priv->icccr);
-+	} else {
-+		rcar_i2c_write(priv, ICCCR2, CDFD | HLSE | SME);
-+		rcar_i2c_write(priv, ICCCR, priv->icccr);
-+		rcar_i2c_write(priv, ICMPR, RCAR_DEFAULT_SMD);
-+		rcar_i2c_write(priv, ICHPR, RCAR_SCHD_RATIO * priv->scl_gran);
-+		rcar_i2c_write(priv, ICLPR, RCAR_SCLD_RATIO * priv->scl_gran);
- 		rcar_i2c_write(priv, ICFBSCR, TCYC17);
--
-+	}
- }
- 
- static int rcar_i2c_bus_barrier(struct rcar_i2c_priv *priv)
-@@ -241,7 +265,7 @@ static int rcar_i2c_bus_barrier(struct rcar_i2c_priv *priv)
- 
- static int rcar_i2c_clock_calculate(struct rcar_i2c_priv *priv)
- {
--	u32 scgd, cdf, round, ick, sum, scl, cdf_width;
-+	u32 cdf, round, ick, sum, scl, cdf_width;
- 	unsigned long rate;
- 	struct device *dev = rcar_i2c_priv_to_dev(priv);
- 	struct i2c_timings t = {
-@@ -254,27 +278,17 @@ static int rcar_i2c_clock_calculate(struct rcar_i2c_priv *priv)
- 	/* Fall back to previously used values if not supplied */
- 	i2c_parse_fw_timings(dev, &t, false);
- 
--	switch (priv->devtype) {
--	case I2C_RCAR_GEN1:
--		cdf_width = 2;
--		break;
--	case I2C_RCAR_GEN2:
--	case I2C_RCAR_GEN3:
--		cdf_width = 3;
--		break;
--	default:
--		dev_err(dev, "device type error\n");
--		return -EIO;
--	}
--
- 	/*
- 	 * calculate SCL clock
- 	 * see
--	 *	ICCCR
-+	 *	ICCCR (and ICCCR2 for Gen3+)
- 	 *
- 	 * ick	= clkp / (1 + CDF)
- 	 * SCL	= ick / (20 + SCGD * 8 + F[(ticf + tr + intd) * ick])
- 	 *
-+	 * for Gen3+:
-+	 * SCL	= clkp / (8 + SMD * 2 + SCLD + SCHD +F[(ticf + tr + intd) * clkp])
-+	 *
- 	 * ick  : I2C internal clock < 20 MHz
- 	 * ticf : I2C SCL falling time
- 	 * tr   : I2C SCL rising  time
-@@ -284,11 +298,12 @@ static int rcar_i2c_clock_calculate(struct rcar_i2c_priv *priv)
- 	 */
- 	rate = clk_get_rate(priv->clk);
- 	cdf = rate / 20000000;
--	if (cdf >= 1U << cdf_width) {
--		dev_err(dev, "Input clock %lu too high\n", rate);
--		return -EIO;
--	}
--	ick = rate / (cdf + 1);
-+	cdf_width = (priv->devtype == I2C_RCAR_GEN1) ? 2 : 3;
-+	if (cdf >= 1U << cdf_width)
-+		goto err_no_val;
-+
-+	/* On Gen3+, we use cdf only for the filters, not as a SCL divider */
-+	ick = rate / (priv->devtype < I2C_RCAR_GEN3 ? (cdf + 1) : 1);
- 
- 	/*
- 	 * It is impossible to calculate a large scale number on u32. Separate it.
-@@ -301,24 +316,57 @@ static int rcar_i2c_clock_calculate(struct rcar_i2c_priv *priv)
- 	round = DIV_ROUND_CLOSEST(ick, 1000000);
- 	round = DIV_ROUND_CLOSEST(round * sum, 1000);
- 
--	/*
--	 * SCL	= ick / (20 + 8 * SCGD + F[(ticf + tr + intd) * ick])
--	 * 20 + 8 * SCGD + F[...] = ick / SCL
--	 * SCGD = ((ick / SCL) - 20 - F[...]) / 8
--	 * Result (= SCL) should be less than bus_speed for hardware safety
--	 */
--	scgd = DIV_ROUND_UP(ick, t.bus_freq_hz ?: 1);
--	scgd = DIV_ROUND_UP(scgd - 20 - round, 8);
--	scl = ick / (20 + 8 * scgd + round);
-+	if (priv->devtype < I2C_RCAR_GEN3) {
-+		u32 scgd;
-+		/*
-+		 * SCL	= ick / (20 + 8 * SCGD + F[(ticf + tr + intd) * ick])
-+		 * 20 + 8 * SCGD + F[...] = ick / SCL
-+		 * SCGD = ((ick / SCL) - 20 - F[...]) / 8
-+		 * Result (= SCL) should be less than bus_speed for hardware safety
-+		 */
-+		scgd = DIV_ROUND_UP(ick, t.bus_freq_hz ?: 1);
-+		scgd = DIV_ROUND_UP(scgd - 20 - round, 8);
-+		scl = ick / (20 + 8 * scgd + round);
- 
--	if (scgd > 0x3f)
--		goto err_no_val;
-+		if (scgd > 0x3f)
-+			goto err_no_val;
- 
--	dev_dbg(dev, "clk %u/%u(%lu), round %u, CDF: %u, SCGD: %u\n",
--		scl, t.bus_freq_hz, rate, round, cdf, scgd);
-+		dev_dbg(dev, "clk %u/%u(%lu), round %u, CDF: %u, SCGD: %u\n",
-+			scl, t.bus_freq_hz, rate, round, cdf, scgd);
- 
--	/* keep icccr value */
--	priv->icccr = scgd << cdf_width | cdf;
-+		priv->icccr = scgd << cdf_width | cdf;
-+	} else {
-+		u32 x, sum_ratio = RCAR_SCHD_RATIO + RCAR_SCLD_RATIO;
-+		/*
-+		 * SCLD/SCHD ratio and SMD default value are explained above
-+		 * where they are defined. With these definitions, we can compute
-+		 * x as a base value for the SCLD/SCHD ratio:
-+		 *
-+		 * SCL = clkp / (8 + 2 * SMD + SCLD + SCHD + F[(ticf + tr + intd) * clkp])
-+		 * SCL = clkp / (8 + 2 * RCAR_DEFAULT_SMD + RCAR_SCLD_RATIO * x
-+		 * 		 + RCAR_SCHD_RATIO * x + F[...])
-+		 *
-+		 * with: sum_ratio = RCAR_SCLD_RATIO + RCAR_SCHD_RATIO
-+		 * and:  smd = 2 * RCAR_DEFAULT_SMD
-+		 *
-+		 * SCL = clkp / (8 + smd + sum_ratio * x + F[...])
-+		 * 8 + smd + sum_ratio * x + F[...] = SCL / clkp
-+		 * x = ((SCL / clkp) - 8 - smd - F[...]) / sum_ratio
-+		 */
-+		x = DIV_ROUND_UP(rate, t.bus_freq_hz ?: 1);
-+		x = DIV_ROUND_UP(x - 8 - 2 * RCAR_DEFAULT_SMD - round, sum_ratio);
-+		scl = rate / (8 + 2 * RCAR_DEFAULT_SMD + sum_ratio * x + round);
-+
-+		/* Bail out if values don't fit into 16 bit or SMD became too large */
-+		if (x * RCAR_SCLD_RATIO > 0xffff || RCAR_DEFAULT_SMD > x * RCAR_SCHD_RATIO)
-+			goto err_no_val;
-+
-+		dev_dbg(dev, "clk %u/%u(%lu), round %u, CDF: %u SCL gran %u\n",
-+			scl, t.bus_freq_hz, rate, round, cdf, x);
-+
-+		priv->icccr = cdf;
-+		priv->scl_gran = x;
-+	}
- 
- 	return 0;
- 
--- 
-2.35.1
+
+
+
+
+> vim +389 drivers/usb/misc/usb-ljca.c
+> 
+>    385	
+>    386	static int ljca_match_device_ids(struct acpi_device *adev, void *data)
+>    387	{
+>    388		struct ljca_match_ids_walk_data *wd = data;
+>  > 389		const char *uid = acpi_device_uid(adev);
+>    390	
+>    391		if (acpi_match_device_ids(adev, wd->ids))
+>    392			return 0;
+>    393	
+>    394		if (!wd->uid)
+>    395			goto match;
+>    396	
+>    397		if (!uid)
+>    398			uid = "0";
+>    399		else
+>    400			uid = strchr(uid, wd->uid[0]);
+>    401	
+>    402		if (!uid || strcmp(uid, wd->uid))
+>    403			return 0;
+>    404	
+>    405	match:
+>    406		wd->adev = adev;
+>    407	
+>    408		return 1;
+>    409	}
+>    410	
+>    411	/* bind auxiliary device to acpi device */
+>    412	static void ljca_auxdev_acpi_bind(struct ljca_adapter *adap,
+>    413					  struct auxiliary_device *auxdev,
+>    414					  u64 adr, u8 id)
+>    415	{
+>    416		struct ljca_match_ids_walk_data wd = { 0 };
+>    417		struct acpi_device *parent, *adev;
+>    418		struct device *dev = adap->dev;
+>    419		char uid[4];
+>    420	
+>    421		parent = ACPI_COMPANION(dev);
+>    422		if (!parent)
+>    423			return;
+>    424	
+>    425		/*
+>    426		 * get auxdev ACPI handle from the ACPI device directly
+>    427		 * under the parent that matches _ADR.
+>    428		 */
+>  > 429		adev = acpi_find_child_device(parent, adr, false);
+>    430		if (adev) {
+>    431			ACPI_COMPANION_SET(&auxdev->dev, adev);
+>    432			return;
+>    433		}
+>    434	
+>    435		/*
+>    436		 * _ADR is a grey area in the ACPI specification, some
+>    437		 * platforms use _HID to distinguish children devices.
+>    438		 */
+>    439		switch (adr) {
+>    440		case LJCA_GPIO_ACPI_ADR:
+>    441			wd.ids = ljca_gpio_hids;
+>    442			break;
+>    443		case LJCA_I2C1_ACPI_ADR:
+>    444		case LJCA_I2C2_ACPI_ADR:
+>    445			snprintf(uid, sizeof(uid), "%d", id);
+>    446			wd.uid = uid;
+>    447			wd.ids = ljca_i2c_hids;
+>    448			break;
+>    449		case LJCA_SPI1_ACPI_ADR:
+>    450		case LJCA_SPI2_ACPI_ADR:
+>    451			wd.ids = ljca_spi_hids;
+>    452			break;
+>    453		default:
+>    454			dev_warn(dev, "unsupported _ADR\n");
+>    455			return;
+>    456		}
+>    457	
+>    458		acpi_dev_for_each_child(parent, ljca_match_device_ids, &wd);
+>    459		if (wd.adev) {
+>    460			ACPI_COMPANION_SET(&auxdev->dev, wd.adev);
+>    461			return;
+>    462		}
+>    463	
+>    464		parent = ACPI_COMPANION(dev->parent->parent);
+>    465		if (!parent)
+>    466			return;
+>    467	
+>    468		acpi_dev_for_each_child(parent, ljca_match_device_ids, &wd);
+>    469		if (wd.adev)
+>    470			ACPI_COMPANION_SET(&auxdev->dev, wd.adev);
+>    471	}
+>    472	
+> 
 
