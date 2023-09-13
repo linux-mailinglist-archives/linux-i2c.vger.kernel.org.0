@@ -2,42 +2,40 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D26479F2EA
+	by mail.lfdr.de (Postfix) with ESMTP id DDDE579F2EE
 	for <lists+linux-i2c@lfdr.de>; Wed, 13 Sep 2023 22:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbjIMUc4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Sep 2023 16:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
+        id S232173AbjIMUc5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Sep 2023 16:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbjIMUcz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Sep 2023 16:32:55 -0400
+        with ESMTP id S232555AbjIMUc4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Sep 2023 16:32:56 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B261BC6
-        for <linux-i2c@vger.kernel.org>; Wed, 13 Sep 2023 13:32:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EE91BD1
+        for <linux-i2c@vger.kernel.org>; Wed, 13 Sep 2023 13:32:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         sang-engineering.com; h=from:to:cc:subject:date:message-id
         :in-reply-to:references:mime-version:content-transfer-encoding;
-         s=k1; bh=jI4vgN2cr90+cfd1v21EoE5zyLzqOPeYwv4iYO6HXXk=; b=HUXVlh
-        Xv1Tn/Ax9P6M7vBd/x26viftksC9y0Z1h3d5C6IbU+FPVWSKgIzWyJszASmy4KoN
-        7l/8uCmgAKy/8/de0JTPK/hDNeEyFJXkKagtEvTdxlo5WQ5BhduE01tQT26+E80W
-        g5W1DMqVvHQ+pEpyjCIc9+2IaD5tDOmlLzZKhbrnX+aSHjlVcEdGkZ2A2om0JTyU
-        WGd299nXTI+B2HTs4gZ+0O65RsV2f0RgCS9oe1bQr1N1ImXLGS9L7jIWoFXG/uAR
-        8dvHMbuDkp8l7oXt1a0QuzVUJKZ9or87LZrDVQ6xC0DvkcHSq9j3BxhSPq6OwGyw
-        MeNOCVq4ZvhmzkSA==
-Received: (qmail 715830 invoked from network); 13 Sep 2023 22:32:48 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Sep 2023 22:32:48 +0200
-X-UD-Smtp-Session: l3s3148p1@54ZtdkMFVo0ujnuS
+         s=k1; bh=OjN5VJ4QM7OhyI3wmGDWXLIjFnf1/VnezDm+qLQZSgg=; b=DzLrod
+        dQ1Ib357owC5tehUe++9ulGPTDn02OnChHkAzXWpWvM5ldero61RZFgC3P83eJkQ
+        3t5oA2+qJ/U5EQMEQYdC9XPCKrEhJXt4eniKAZdwVwJR7DISJPPDJI0HVkuAvaWU
+        6BFAkU5uwJyP19cNALjGO5FzXvrSZ6PVJpoqnruVIpq8Q/hWBr5LmWzyhlXb16xr
+        ZTDlXkr599/ejcNstL6gZpAMngnFed6htZ+Ljg04wI7Gzg3GytSwEka84zJ+EzvI
+        4VRnX25v/4k+nnsSgFBBvzCHY2jpOr8G+DBvM7yA8/wc6oFn5bWjR8VSQtDNDiU9
+        GDz0RCS0/ktDjMzg==
+Received: (qmail 715875 invoked from network); 13 Sep 2023 22:32:49 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Sep 2023 22:32:49 +0200
+X-UD-Smtp-Session: l3s3148p1@P9h8dkMFPqIujnuS
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-renesas-soc@vger.kernel.org
 Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
+        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] i2c: rcar: introduce Gen4 devices
-Date:   Wed, 13 Sep 2023 22:32:40 +0200
-Message-Id: <20230913203242.31505-2-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 2/2] i2c: rcar: add FastMode+ support for Gen4
+Date:   Wed, 13 Sep 2023 22:32:41 +0200
+Message-Id: <20230913203242.31505-3-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230913203242.31505-1-wsa+renesas@sang-engineering.com>
 References: <20230913203242.31505-1-wsa+renesas@sang-engineering.com>
@@ -47,71 +45,135 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-So far, we treated Gen4 as Gen3. But we are soon adding FM+ as a Gen4
-specific feature, so prepare the code for the new devtype.
+To support FM+, we mainly need to turn the SMD constant into a parameter
+and set it accordingly. Then, activating the enable bit for FM+ is all
+we need to do. Tested with a Renesas Falcon board using R-Car V3U.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/busses/i2c-rcar.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ drivers/i2c/busses/i2c-rcar.c | 52 +++++++++++++++++++++++------------
+ 1 file changed, 34 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
-index bc5c7a0050eb..5aa6fd777276 100644
+index 5aa6fd777276..9cc8d6ba0c78 100644
 --- a/drivers/i2c/busses/i2c-rcar.c
 +++ b/drivers/i2c/busses/i2c-rcar.c
-@@ -132,6 +132,7 @@ enum rcar_i2c_type {
+@@ -89,6 +89,7 @@
+ #define TMDMAE	BIT(0)	/* DMA Master Transmitted Enable */
+ 
+ /* ICCCR2 */
++#define FMPE	BIT(7)	/* Fast Mode Plus Enable */
+ #define CDFD	BIT(2)	/* CDF Disable */
+ #define HLSE	BIT(1)	/* HIGH/LOW Separate Control Enable */
+ #define SME	BIT(0)	/* SCL Mask Enable */
+@@ -122,11 +123,12 @@
+ #define ID_NACK			BIT(4)
+ #define ID_EPROTO		BIT(5)
+ /* persistent flags */
++#define ID_P_FMPLUS		BIT(27)
+ #define ID_P_NOT_ATOMIC		BIT(28)
+ #define ID_P_HOST_NOTIFY	BIT(29)
+ #define ID_P_NO_RXDMA		BIT(30) /* HW forbids RXDMA sometimes */
+ #define ID_P_PM_BLOCKED		BIT(31)
+-#define ID_P_MASK		GENMASK(31, 28)
++#define ID_P_MASK		GENMASK(31, 27)
+ 
+ enum rcar_i2c_type {
  	I2C_RCAR_GEN1,
- 	I2C_RCAR_GEN2,
- 	I2C_RCAR_GEN3,
-+	I2C_RCAR_GEN4,
- };
+@@ -148,6 +150,7 @@ struct rcar_i2c_priv {
+ 	int pos;
+ 	u32 icccr;
+ 	u32 scl_gran;
++	u8 smd;
+ 	u8 recovery_icmcr;	/* protected by adapter lock */
+ 	enum rcar_i2c_type devtype;
+ 	struct i2c_client *slave;
+@@ -239,9 +242,14 @@ static void rcar_i2c_init(struct rcar_i2c_priv *priv)
+ 	if (priv->devtype < I2C_RCAR_GEN3) {
+ 		rcar_i2c_write(priv, ICCCR, priv->icccr);
+ 	} else {
+-		rcar_i2c_write(priv, ICCCR2, CDFD | HLSE | SME);
++		u32 icccr2 = CDFD | HLSE | SME;
++
++		if (priv->flags & ID_P_FMPLUS)
++			icccr2 |= FMPE;
++
++		rcar_i2c_write(priv, ICCCR2, icccr2);
+ 		rcar_i2c_write(priv, ICCCR, priv->icccr);
+-		rcar_i2c_write(priv, ICMPR, RCAR_DEFAULT_SMD);
++		rcar_i2c_write(priv, ICMPR, priv->smd);
+ 		rcar_i2c_write(priv, ICHPR, RCAR_SCHD_RATIO * priv->scl_gran);
+ 		rcar_i2c_write(priv, ICLPR, RCAR_SCLD_RATIO * priv->scl_gran);
+ 		rcar_i2c_write(priv, ICFBSCR, TCYC17);
+@@ -278,6 +286,8 @@ static int rcar_i2c_clock_calculate(struct rcar_i2c_priv *priv)
  
- struct rcar_i2c_priv {
-@@ -429,8 +430,8 @@ static void rcar_i2c_cleanup_dma(struct rcar_i2c_priv *priv, bool terminate)
- 	dma_unmap_single(chan->device->dev, sg_dma_address(&priv->sg),
- 			 sg_dma_len(&priv->sg), priv->dma_direction);
+ 	/* Fall back to previously used values if not supplied */
+ 	i2c_parse_fw_timings(dev, &t, false);
++	priv->smd = RCAR_DEFAULT_SMD;
++	rate = clk_get_rate(priv->clk);
  
--	/* Gen3 can only do one RXDMA per transfer and we just completed it */
--	if (priv->devtype == I2C_RCAR_GEN3 &&
-+	/* Gen3+ can only do one RXDMA per transfer and we just completed it */
-+	if (priv->devtype >= I2C_RCAR_GEN3 &&
- 	    priv->dma_direction == DMA_FROM_DEVICE)
- 		priv->flags |= ID_P_NO_RXDMA;
+ 	/*
+ 	 * calculate SCL clock
+@@ -297,11 +307,18 @@ static int rcar_i2c_clock_calculate(struct rcar_i2c_priv *priv)
+ 	 * clkp : peripheral_clk
+ 	 * F[]  : integer up-valuation
+ 	 */
+-	rate = clk_get_rate(priv->clk);
+-	cdf = rate / 20000000;
+-	cdf_width = (priv->devtype == I2C_RCAR_GEN1) ? 2 : 3;
+-	if (cdf >= 1U << cdf_width)
+-		goto err_no_val;
++	if (t.bus_freq_hz > I2C_MAX_FAST_MODE_FREQ && priv->devtype >= I2C_RCAR_GEN4) {
++		priv->flags |= ID_P_FMPLUS;
++		/* FM+ needs lower SMD and no filters */
++		priv->smd /= 2;
++		cdf = 0;
++	} else {
++		priv->flags &= ~ID_P_FMPLUS;
++		cdf = rate / 20000000;
++		cdf_width = (priv->devtype == I2C_RCAR_GEN1) ? 2 : 3;
++		if (cdf >= 1U << cdf_width)
++			goto err_no_val;
++	}
  
-@@ -884,8 +885,8 @@ static int rcar_i2c_master_xfer(struct i2c_adapter *adap,
- 	if (ret < 0)
- 		goto out;
+ 	/* On Gen3+, we use cdf only for the filters, not as a SCL divider */
+ 	ick = rate / (priv->devtype < I2C_RCAR_GEN3 ? (cdf + 1) : 1);
+@@ -344,26 +361,25 @@ static int rcar_i2c_clock_calculate(struct rcar_i2c_priv *priv)
+ 		 * x as a base value for the SCLD/SCHD ratio:
+ 		 *
+ 		 * SCL = clkp / (8 + 2 * SMD + SCLD + SCHD + F[(ticf + tr + intd) * clkp])
+-		 * SCL = clkp / (8 + 2 * RCAR_DEFAULT_SMD + RCAR_SCLD_RATIO * x
++		 * SCL = clkp / (8 + 2 * SMD + RCAR_SCLD_RATIO * x
+ 		 * 		 + RCAR_SCHD_RATIO * x + F[...])
+ 		 *
+ 		 * with: sum_ratio = RCAR_SCLD_RATIO + RCAR_SCHD_RATIO
+-		 * and:  smd = 2 * RCAR_DEFAULT_SMD
+ 		 *
+-		 * SCL = clkp / (8 + smd + sum_ratio * x + F[...])
+-		 * 8 + smd + sum_ratio * x + F[...] = SCL / clkp
+-		 * x = ((SCL / clkp) - 8 - smd - F[...]) / sum_ratio
++		 * SCL = clkp / (8 + 2 * smd + sum_ratio * x + F[...])
++		 * 8 + 2 * smd + sum_ratio * x + F[...] = clkp / SCL
++		 * x = ((clkp / SCL) - 8 - 2 * smd - F[...]) / sum_ratio
+ 		 */
+ 		x = DIV_ROUND_UP(rate, t.bus_freq_hz ?: 1);
+-		x = DIV_ROUND_UP(x - 8 - 2 * RCAR_DEFAULT_SMD - round, sum_ratio);
+-		scl = rate / (8 + 2 * RCAR_DEFAULT_SMD + sum_ratio * x + round);
++		x = DIV_ROUND_UP(x - 8 - 2 * priv->smd - round, sum_ratio);
++		scl = rate / (8 + 2 * priv->smd + sum_ratio * x + round);
  
--	/* Gen3 needs a reset before allowing RXDMA once */
--	if (priv->devtype == I2C_RCAR_GEN3) {
-+	/* Gen3+ needs a reset. That also allows RXDMA once */
-+	if (priv->devtype >= I2C_RCAR_GEN3) {
- 		priv->flags &= ~ID_P_NO_RXDMA;
- 		ret = rcar_i2c_do_reset(priv);
- 		if (ret)
-@@ -1070,10 +1071,12 @@ static const struct of_device_id rcar_i2c_dt_ids[] = {
- 	{ .compatible = "renesas,i2c-r8a7794", .data = (void *)I2C_RCAR_GEN2 },
- 	{ .compatible = "renesas,i2c-r8a7795", .data = (void *)I2C_RCAR_GEN3 },
- 	{ .compatible = "renesas,i2c-r8a7796", .data = (void *)I2C_RCAR_GEN3 },
-+	/* S4 has no FM+ bit */
-+	{ .compatible = "renesas,i2c-r8a779f0", .data = (void *)I2C_RCAR_GEN3 },
- 	{ .compatible = "renesas,rcar-gen1-i2c", .data = (void *)I2C_RCAR_GEN1 },
- 	{ .compatible = "renesas,rcar-gen2-i2c", .data = (void *)I2C_RCAR_GEN2 },
- 	{ .compatible = "renesas,rcar-gen3-i2c", .data = (void *)I2C_RCAR_GEN3 },
--	{ .compatible = "renesas,rcar-gen4-i2c", .data = (void *)I2C_RCAR_GEN3 },
-+	{ .compatible = "renesas,rcar-gen4-i2c", .data = (void *)I2C_RCAR_GEN4 },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, rcar_i2c_dt_ids);
-@@ -1140,7 +1143,7 @@ static int rcar_i2c_probe(struct platform_device *pdev)
- 		irqhandler = rcar_i2c_gen2_irq;
- 	}
+ 		/* Bail out if values don't fit into 16 bit or SMD became too large */
+-		if (x * RCAR_SCLD_RATIO > 0xffff || RCAR_DEFAULT_SMD > x * RCAR_SCHD_RATIO)
++		if (x * RCAR_SCLD_RATIO > 0xffff || priv->smd > x * RCAR_SCHD_RATIO)
+ 			goto err_no_val;
  
--	if (priv->devtype == I2C_RCAR_GEN3) {
-+	if (priv->devtype >= I2C_RCAR_GEN3) {
- 		priv->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
- 		if (IS_ERR(priv->rstc))
- 			return dev_err_probe(&pdev->dev, PTR_ERR(priv->rstc),
+-		dev_dbg(dev, "clk %u/%u(%lu), round %u, CDF: %u SCL gran %u\n",
+-			scl, t.bus_freq_hz, rate, round, cdf, x);
++		dev_dbg(dev, "clk %u/%u(%lu), round %u, CDF: %u SMD %u SCL gran %u\n",
++			scl, t.bus_freq_hz, rate, round, cdf, priv->smd, x);
+ 
+ 		priv->icccr = cdf;
+ 		priv->scl_gran = x;
 -- 
 2.35.1
 
