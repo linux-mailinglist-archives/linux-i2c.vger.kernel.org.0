@@ -2,209 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B44579E213
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Sep 2023 10:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979EB79E271
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Sep 2023 10:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238724AbjIMI30 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 13 Sep 2023 04:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
+        id S237278AbjIMIop (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 13 Sep 2023 04:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjIMI3Z (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Sep 2023 04:29:25 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF3110C0;
-        Wed, 13 Sep 2023 01:29:21 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-49059b1ca83so2392855e0c.2;
-        Wed, 13 Sep 2023 01:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694593761; x=1695198561; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Es8hOuwIYmcM8r+ve2+bumMbnNue3lPNHT0KgpLrG9U=;
-        b=RXQtXAh8uJHJccJPw7SaNVYSRyXJmnYLxondFk5gY2NhTlenvxLnujsnNTS9HWoGN3
-         DzJ+9voc18JWqLpXAumyX855SA7iLfyAcpk2IgQG7DnNJiW6phB8a4mJmGVyFZT1I48x
-         HBkpNEkRmGpH2TeRJJF3uDFieqhpGhL4vhrBZgqBFW9QSQxcqMF49KVeOXtfed4ur/8F
-         bx4s/DPvKxPZyX02O0BcW+7N059Eve1m2cH9Be5p2YqWDDYssSY1Awms1uvxJJSC7Eg1
-         pPGc8/Z5lXfcBfoXHKNCarkkQXL1S3Hb1wlGWGUD+xDBYh+hY6HnfboibwbFXPO+d7Dn
-         WzWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694593761; x=1695198561;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Es8hOuwIYmcM8r+ve2+bumMbnNue3lPNHT0KgpLrG9U=;
-        b=rwjR2gk9N1nDyT0EncLyzUxPmotyzbSimSKsWZfdrPDMdvbWUlOw91tbLPDVwIjvqH
-         dkw5oll+1ii8tc5CCtdq5/05SWjuMDN792gflgChGC2QVLYyvrPr2hjEZB4eGpP5RC0Z
-         eAiwMbXwEbafVTV0r2TMZMOn/xF/aGGIYu2haAIPiBlSgZsBuijua1/JLKWxUYETjjd1
-         kMeZlEiTTU5GVbG+c2EjQM03+NKxDpzjwC2w2WbwKaVKAoGgjTzHoB7OCamZ3SZP70Tn
-         gFaOHe5OE0Cnw0ajD6GW/wN29e3b944vdwuFLYHmeVbmEOeCaLKY+pCR3895q1RoRciN
-         xtoQ==
-X-Gm-Message-State: AOJu0YyEUINRqtt9foOrVG7vcuWvmkiyWksD5wjdykpOB3fbx4vG9Wk9
-        WF3NVYnXjZ4pGfh8KTqzvQXbklXZS4mXvXC+iLA=
-X-Google-Smtp-Source: AGHT+IHNbUeA9uwBUiBHUY1MBXjNkTE1bdBml3QVvnCnVS3I8Av3J8GoylPYg8GNXJUtkZ1492htIqR61uw6WM0hiLA=
-X-Received: by 2002:a05:6102:34d1:b0:44d:3bc0:f0bf with SMTP id
- a17-20020a05610234d100b0044d3bc0f0bfmr1967586vst.8.1694593760967; Wed, 13 Sep
- 2023 01:29:20 -0700 (PDT)
+        with ESMTP id S232464AbjIMIoo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 13 Sep 2023 04:44:44 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A03196;
+        Wed, 13 Sep 2023 01:44:40 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 535D0C433C7;
+        Wed, 13 Sep 2023 08:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694594679;
+        bh=aJJCLiUbkRCcRoJVLk1mhA8Q0ZY2oyaqKQncAtNAau0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i7mFiz9CXvbIaRr8YXBVjNOKtRC/SSu+994BC4w8VRNxaD8Tx3U9I6XGtc9CVpNwL
+         +y8xFvi7vvZt5zL5J0H8Z8heI3aYLkg+hoHMW+UL91zz/9LSSrsgTO25Vo8i2dqFNh
+         06MU2wRf721XAx3Lp87LDDk6Erp15rbLTFApSjyXtdUH/Ilo1xf+tCq+ORzM+bZSjb
+         kTLHWpaxol+p+uV3AhtHRCnGhuxgUIQu/WFDcbWS0mJgVg1vFz15a1xaG2rnmreJ+K
+         adXC+ZHqcqTnsuH5JGSwLQyu7UpVHWqWux15pBGVadarZ6Bj3WUA6hlZp+cXSvJKRd
+         iZtZpSLhV+4Eg==
+Date:   Wed, 13 Sep 2023 10:44:35 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
+        arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        maz@kernel.org, brgl@bgdev.pl, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
+        srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
+Subject: Re: [PATCH v12 2/4] i2c: Add support for Intel LJCA USB I2C driver
+Message-ID: <ZQF2c/bKmU9/BDAx@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
+        arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        maz@kernel.org, brgl@bgdev.pl, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
+        srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
+References: <1693546577-17824-1-git-send-email-wentong.wu@intel.com>
+ <1693546577-17824-3-git-send-email-wentong.wu@intel.com>
+ <20230902181954.xgdth4flatyn6cip@zenone.zhora.eu>
 MIME-Version: 1.0
-References: <20230817094520.21286-1-Huangzheng.Lai@unisoc.com>
- <20230817094520.21286-4-Huangzheng.Lai@unisoc.com> <20230902210513.3xelrcdtynz45p4o@zenone.zhora.eu>
- <CAAA1NbZt84f8vzmPbO_TH6hnvveyaiPhXpwjihRhJAEY9qw_Vg@mail.gmail.com>
-In-Reply-To: <CAAA1NbZt84f8vzmPbO_TH6hnvveyaiPhXpwjihRhJAEY9qw_Vg@mail.gmail.com>
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-Date:   Wed, 13 Sep 2023 16:28:44 +0800
-Message-ID: <CAAfSe-vwueijaYo2_rw3CO2ghZUN7hzoXEzRYS1gkB5ez2LXqw@mail.gmail.com>
-Subject: Re: [PATCH 3/8] i2c: sprd: Use global variables to record IIC
- ack/nack status instead of local variables
-To:     huangzheng lai <laihuangzheng@gmail.com>
-Cc:     Andi Shyti <andi.shyti@kernel.org>,
-        Huangzheng Lai <Huangzheng.Lai@unisoc.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiongpeng Wu <xiongpeng.wu@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="R76JO3gO6y2NCsKB"
+Content-Disposition: inline
+In-Reply-To: <20230902181954.xgdth4flatyn6cip@zenone.zhora.eu>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, 13 Sept 2023 at 15:12, huangzheng lai <laihuangzheng@gmail.com> wro=
-te:
->
-> Hi Chunyan=EF=BC=8C
->
-> I don't think it's necessary to clear  i2c_dev->ack_flag in sprd_i2c_clea=
-r_ack() . Because every time a new interrupt is triggered, it will retrieve=
- the value of i2c_dev->ack_flag in sprd_i2c_isr and then use it in sprd_i2c=
-_isr_thread.
 
-You're assuming that ack_flag is and will be used in sprd_i2c_isr_thread() =
-only.
+--R76JO3gO6y2NCsKB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If ack_flag is used to represent the ack/nack bit of interrupt status
-register, I think we should clear it as well when clearing ack/nack
-bit.
+Hi Andi,
 
-BTW, please make sure your email is plain-text mode so that people can
-receive from the mail list, and do not top-post again.
+> your comment here has been addressed. This commit depends on
+> the first patch how do we get this in?
 
-Thanks,
-Chunyan
+Wentong Wu confirmed my assumption that the auxiliary bus hides away the
+dependencies. So, we can simply merge it into for-mergewindow AFAIU.
 
->
-> On Sun, Sep 3, 2023 at 5:05=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org>=
- wrote:
->>
->> Hi Huangzheng,
->>
->> On Thu, Aug 17, 2023 at 05:45:15PM +0800, Huangzheng Lai wrote:
->> > We found that when the interrupt bit of the IIC controller is cleared,
->> > the ack/nack bit is also cleared at the same time. After clearing the
->> > interrupt bit in sprd_i2c_isr(), incorrect ack/nack information will b=
-e
->> > obtained in sprd_i2c_isr_thread(), resulting in incorrect communicatio=
-n
->> > when nack cannot be recognized. To solve this problem, we used a globa=
-l
->> > variable to record ack/nack information before clearing the interrupt
->> > bit instead of a local variable.
->> >
->> > Signed-off-by: Huangzheng Lai <Huangzheng.Lai@unisoc.com>
->>
->> Is this a fix? Then please consider adding
->>
->> Fixes: 8b9ec0719834 ("i2c: Add Spreadtrum I2C controller driver")
->> Cc: <stable@vger.kernel.org> # v4.14+
->>
->> > ---
->> >  drivers/i2c/busses/i2c-sprd.c | 10 +++++-----
->> >  1 file changed, 5 insertions(+), 5 deletions(-)
->> >
->> > diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sp=
-rd.c
->> > index 066b3a9c30c8..549b60dd3273 100644
->> > --- a/drivers/i2c/busses/i2c-sprd.c
->> > +++ b/drivers/i2c/busses/i2c-sprd.c
->> > @@ -85,6 +85,7 @@ struct sprd_i2c {
->> >       struct clk *clk;
->> >       u32 src_clk;
->> >       u32 bus_freq;
->> > +     bool ack_flag;
->>
->> smells a bit racy... however we are in the same interrupt cycle.
->>
->> Do you think we might need a spinlock around here?
->>
->> >       struct completion complete;
->> >       struct reset_control *rst;
->> >       u8 *buf;
->> > @@ -384,7 +385,6 @@ static irqreturn_t sprd_i2c_isr_thread(int irq, vo=
-id *dev_id)
->> >  {
->> >       struct sprd_i2c *i2c_dev =3D dev_id;
->> >       struct i2c_msg *msg =3D i2c_dev->msg;
->> > -     bool ack =3D !(readl(i2c_dev->base + I2C_STATUS) & I2C_RX_ACK);
->> >       u32 i2c_tran;
->> >
->> >       if (msg->flags & I2C_M_RD)
->> > @@ -400,7 +400,7 @@ static irqreturn_t sprd_i2c_isr_thread(int irq, vo=
-id *dev_id)
->> >        * For reading data, ack is always true, if i2c_tran is not 0 wh=
-ich
->> >        * means we still need to contine to read data from slave.
->> >        */
->> > -     if (i2c_tran && ack) {
->> > +     if (i2c_tran && i2c_dev->ack_flag) {
->> >               sprd_i2c_data_transfer(i2c_dev);
->> >               return IRQ_HANDLED;
->> >       }
->> > @@ -411,7 +411,7 @@ static irqreturn_t sprd_i2c_isr_thread(int irq, vo=
-id *dev_id)
->> >        * If we did not get one ACK from slave when writing data, we sh=
-ould
->> >        * return -EIO to notify users.
->> >        */
->> > -     if (!ack)
->> > +     if (!i2c_dev->ack_flag)
->> >               i2c_dev->err =3D -EIO;
->> >       else if (msg->flags & I2C_M_RD && i2c_dev->count)
->> >               sprd_i2c_read_bytes(i2c_dev, i2c_dev->buf, i2c_dev->coun=
-t);
->> > @@ -428,7 +428,6 @@ static irqreturn_t sprd_i2c_isr(int irq, void *dev=
-_id)
->> >  {
->> >       struct sprd_i2c *i2c_dev =3D dev_id;
->> >       struct i2c_msg *msg =3D i2c_dev->msg;
->> > -     bool ack =3D !(readl(i2c_dev->base + I2C_STATUS) & I2C_RX_ACK);
->> >       u32 i2c_tran;
->> >
->> >       if (msg->flags & I2C_M_RD)
->> > @@ -447,7 +446,8 @@ static irqreturn_t sprd_i2c_isr(int irq, void *dev=
-_id)
->> >        * means we can read all data in one time, then we can finish th=
-is
->> >        * transmission too.
->> >        */
->> > -     if (!i2c_tran || !ack) {
->> > +     i2c_dev->ack_flag =3D !(readl(i2c_dev->base + I2C_STATUS) & I2C_=
-RX_ACK);
->>
->> there is a question from Chunyan here.
->>
->> I like more
->>
->>         val =3D readl(...);
->>         i2c_dev->ack_flag =3D !(val & I2C_RX_ACK);
->>
->> a matter of taste, your choice.
->>
->> Andi
->>
->> > +     if (!i2c_tran || !i2c_dev->ack_flag) {
->> >               sprd_i2c_clear_start(i2c_dev);
->> >               sprd_i2c_clear_irq(i2c_dev);
->> >       }
->> > --
->> > 2.17.1
->> >
+
+--R76JO3gO6y2NCsKB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUBdm0ACgkQFA3kzBSg
+Kbb01A/7BSCPiQ1ty+iGwuJKxyvlGe6KZFXj+qWmtf0xHpBcuKqSeW0w3iwDOfB/
+1Vq3vM1PBjuuA7/q6eRFz6cdY2yodC2bbXm+dQ6VXPUSpzhl6wvRi6Wlc4jnRMfB
+PazfkUGFSOxzcoTKXh5Wm2jJYIH4W45s/Wp0S+nv1q3PpcsI/MdSIc9im2AZjr4C
+sMaonxkW7FQGqM0mse/z/LWFW8gjNNHIBoST8X58ecUkJGThfpqUXWBCYLdF7ljL
+7xUWgdejms8g3KOR33Ldxj3my1+TBJ849KifZTaXHNnJ391W59DRBQmH6oMqdd4S
+JPef3Ei5hjF4yvrqfrBAEScRy6qoPMr4UkBk1a+Ac+oOa7OvNPnP1JW1uOboLIUK
+bQIAEBl9PYdsvcmGrCNUNNAeaZgG8YGVNV8pP85kO8XrGYHXBKkBLWeTTVj7Go0w
+msBCAOoH8nvuxkjEB2x9UFOYH6HY249HsPj8bqMC7hZNFPfA3/3A3/4NOawISbpU
+pHrsL+2YsjlJ4/s5GCWtQpFga3kUoTA+QkwUlOTU9YPcdQwRPUUyDnZhKvr2SQhq
+KLccjV7y/hkLoCKn8nhH9K/z/gMxg2QCNO7PU5/S3qcqExSvFYtsx9QkXFVMbBeP
+a2h7yhsb4TS4Wz1TIFEbotshtpKIoJgOiNKcUdW+mBwdLLLcTe0=
+=Lzn5
+-----END PGP SIGNATURE-----
+
+--R76JO3gO6y2NCsKB--
