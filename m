@@ -2,89 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D087A0175
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Sep 2023 12:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7731A7A02BF
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Sep 2023 13:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237316AbjINKRq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 14 Sep 2023 06:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S235350AbjINLeb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 14 Sep 2023 07:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236902AbjINKRq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 14 Sep 2023 06:17:46 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B351BE9;
-        Thu, 14 Sep 2023 03:17:42 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 670BAC433C8;
-        Thu, 14 Sep 2023 10:17:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694686662;
-        bh=cvtU3pIiXOKkkLhPCgWUEUlS+9q5X3ztWTBwoalM5Rc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cHW9TPRizQhFbx9iLfVRbTuidi4zCsBWyWneYsuYYv7h6n6YBvy5l5Q376dvOC6g7
-         RJw/OIVfjgkGqCcVCR+2VRVya3agt5Mn4Vn67DXJDxi2DmrJwcIvA3C8te6WLm4GHh
-         qBOZgXGEY/7Ed8mvcm7ujVkEl3QFU2WI5NGhvn3LKksWFcSAzWLc97xh7GCVG1jo1V
-         +Bw7QuSjVtDUwS6rsr6ra5nwgjMsB/8SkzNqqjzjfj9BOfF6RlegOPk1N9Vf1CsuOz
-         oZ4QIo+tkOh39Ug/unv5Dm49wuUSafyezpMz6H0HBip+qVBKv/RTOn250RVR/VwJBg
-         3VF1zcu2iCXTw==
-Date:   Thu, 14 Sep 2023 11:17:34 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     benjamin.bara@skidata.com, dmitry.osipenko@collabora.com,
-        jonathanh@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        nm@ti.com, peterz@infradead.org, rafael.j.wysocki@intel.com,
-        richard.leitner@linux.dev, stable@vger.kernel.org,
-        treding@nvidia.com, wsa+renesas@sang-engineering.com,
-        wsa@kernel.org
-Subject: Re: [PATCH v7 0/5] mfd: tps6586x: register restart handler
-Message-ID: <20230914100744.GL13143@google.com>
-References: <20230728103446.GK8175@google.com>
- <20230907082032.478027-1-bbara93@gmail.com>
+        with ESMTP id S237799AbjINLe3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 14 Sep 2023 07:34:29 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A341FDD
+        for <linux-i2c@vger.kernel.org>; Thu, 14 Sep 2023 04:34:22 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9ad8bf9bfabso114459566b.3
+        for <linux-i2c@vger.kernel.org>; Thu, 14 Sep 2023 04:34:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1694691261; x=1695296061; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oXa4ycYFzT7jLeokUgoWTtJjQh8+NIDSPVuIE36lEvI=;
+        b=TcUy05WeARz+LFWGVi8yH1dw7F0mWoa4WJBNDiQ5PnB/9xefhisF5srV995mBw12CC
+         OWOcRYqndaPWkQQd8YTwAxSdEGEl90fHxUJ3nx3eY+xTicjdp+cRCoD94csY33O8/bx4
+         4sU4zj4bcQAg+AfJrwX+oAvQ06DrqktiIPEGfFhjFMj/3eRNB2ccocmi87kLme1OUTB0
+         G3oedJVA+/rfBC7OR45jt1ehBWiPxWzrNtD9HFeH1nAY+wYIviDmRb6qa3XIp6ZE/ZJ/
+         BtTIYEq9nzudNLzao1pkzaa3WgFCM9pblakoeZ0rOl4dBy2dPiP0i5cfUxm2MbSMQAQk
+         OL8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694691261; x=1695296061;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oXa4ycYFzT7jLeokUgoWTtJjQh8+NIDSPVuIE36lEvI=;
+        b=Hcog6dlwQPIN2Qwu8IR44sNudukWegIqKOVrS84IiA7D+3LxY7CjbjkE4fLsMEHjUN
+         bozjeomlXlhblpOjHhv9CL0idkpggNtx2eVjZtb7C5/Gbpmt4PrlhKhS7YlZJ7WGV552
+         0QDUB8qU1pjtD95uy3HkxJH1pwRMsqXvnsWwFdoOt21w6P5ePJjBif2Mc9nwOOOr2FIr
+         oTz26/FngDDGV0S0INRy6u2UztWNYtFkmL+1N1USVFJFZUWgpik3dtOuBESaxYrwfOhY
+         yOGBM6OFGX6BIEFmKuI00QbhwOnrLdBh9M9AXOiTBJW+20dd2qG1YQz4/OXPvRvx7sJG
+         ZWjg==
+X-Gm-Message-State: AOJu0Yzf/TX2I9y1enyFqJvcabGdsT4/+mM3OSLQgWcSNda14yP4cdk8
+        kwGyMe5LefEk+0G2Q7z0EpKO/Q==
+X-Google-Smtp-Source: AGHT+IGhxfGLWS9n5UK96bk1q/w1vuoTujKcbBAcFbFYwjmqvmyvlCpC/ds32SMX6ht2v9Hva9iFDQ==
+X-Received: by 2002:a17:907:2724:b0:9ad:7ec3:c055 with SMTP id d4-20020a170907272400b009ad7ec3c055mr4343650ejl.10.1694691260689;
+        Thu, 14 Sep 2023 04:34:20 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id h11-20020a170906854b00b0099ccee57ac2sm875119ejy.194.2023.09.14.04.34.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Sep 2023 04:34:20 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+To:     Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/2] dt-bindings: i2c: pca954x: Add custom properties for MAX7357/MAX7358
+Date:   Thu, 14 Sep 2023 13:34:14 +0200
+Message-ID: <20230914113416.1285518-1-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230907082032.478027-1-bbara93@gmail.com>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 07 Sep 2023, Benjamin Bara wrote:
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-> Hi Lee,
-> 
-> On Fri, 28 Jul 2023 at 12:34, Lee Jones <lee@kernel.org> wrote:
-> > On Fri, 28 Jul 2023, Lee Jones wrote:
-> > > On Sat, 15 Jul 2023 09:53:22 +0200, Benjamin Bara wrote:
-> > > > The Tegra20 requires an enabled VDE power domain during startup. As the
-> > > > VDE is currently not used, it is disabled during runtime.
-> > > > Since 8f0c714ad9be, there is a workaround for the "normal restart path"
-> > > > which enables the VDE before doing PMC's warm reboot. This workaround is
-> > > > not executed in the "emergency restart path", leading to a hang-up
-> > > > during start.
-> > > >
-> > > > [...]
-> > >
-> > > Applied, thanks!
-> > >
-> > > [1/5] kernel/reboot: emergency_restart: set correct system_state
-> > >       commit: 60466c067927abbcaff299845abd4b7069963139
-> > > [2/5] i2c: core: run atomic i2c xfer when !preemptible
-> > >       commit: aa49c90894d06e18a1ee7c095edbd2f37c232d02
-> > > [3/5] kernel/reboot: add device to sys_off_handler
-> > >       commit: db2d6038c5e795cab4f0a8d3e86b4f7e33338629
-> > > [4/5] mfd: tps6586x: use devm-based power off handler
-> > >       commit: 8bd141b17cedcbcb7d336df6e0462e4f4a528ab1
-> > > [5/5] mfd: tps6586x: register restart handler
-> > >       commit: 510f276df2b91efd73f6c53be62b7e692ff533c1
-> >
-> > Pull-request to follow after built tests have completed.
-> 
-> What's the current state of this series?
+Both chips have a configuration register to enable additional
+features. These features aren't enabled by default & its up to
+board designer to enable the same as it may have unexpected side effects.
 
-Looks like the build-tests didn't complete properly, so they stayed on
-one of my development branches.  I'll re-submit them for testing and get
-back to you about merging for this cycle.
+These should be validated for proper functioning & detection of devices
+in secondary bus as sometimes it can cause secondary bus being disabled.
 
+Add booleans for:
+ - maxim,isolate-stuck-channel
+ - maxim,send-flush-out-sequence
+ - maxim,preconnection-wiggle-test-enable
+
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+---
+Changes in V3:
+- Update commit message
+Changes in V2:
+- Update properties.
+---
+ .../bindings/i2c/i2c-mux-pca954x.yaml         | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+index 2d7bb998b0e9..fa73eadfdf7b 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+@@ -71,6 +71,23 @@ properties:
+     description: A voltage regulator supplying power to the chip. On PCA9846
+       the regulator supplies power to VDD2 (core logic) and optionally to VDD1.
+ 
++  maxim,isolate-stuck-channel:
++    type: boolean
++    description: Allows to use non faulty channels while a stuck channel is
++      isolated from the upstream bus. If not set all channels are isolated from
++      the upstream bus until the fault is cleared.
++
++  maxim,send-flush-out-sequence:
++    type: boolean
++    description: Send a flush-out sequence to stuck auxiliary buses
++      automatically after a stuck channel is being detected.
++
++  maxim,preconnection-wiggle-test-enable:
++    type: boolean
++    description: Send a STOP condition to the auxiliary buses when the switch
++      register activates a channel to detect a stuck high fault. On fault the
++      channel is isolated from the upstream bus.
++
+ required:
+   - compatible
+   - reg
+@@ -95,6 +112,20 @@ allOf:
+         "#interrupt-cells": false
+         interrupt-controller: false
+ 
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - maxim,max7357
++                - maxim,max7358
++    then:
++      properties:
++        maxim,isolate-stuck-channel: false
++        maxim,send-flush-out-sequence: false
++        maxim,preconnection-wiggle-test-enable: false
++
+ unevaluatedProperties: false
+ 
+ examples:
+
+base-commit: 637f33a4fe864ac8636e22766d67210e801fcd0d
 -- 
-Lee Jones [李琼斯]
+2.41.0
+
