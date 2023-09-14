@@ -2,66 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7731A7A02BF
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Sep 2023 13:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5077A02BD
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Sep 2023 13:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235350AbjINLeb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        id S233361AbjINLeb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
         Thu, 14 Sep 2023 07:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237799AbjINLe3 (ORCPT
+        with ESMTP id S233594AbjINLe3 (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Thu, 14 Sep 2023 07:34:29 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A341FDD
-        for <linux-i2c@vger.kernel.org>; Thu, 14 Sep 2023 04:34:22 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9ad8bf9bfabso114459566b.3
-        for <linux-i2c@vger.kernel.org>; Thu, 14 Sep 2023 04:34:22 -0700 (PDT)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F69D1FE9
+        for <linux-i2c@vger.kernel.org>; Thu, 14 Sep 2023 04:34:23 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-99c3d3c3db9so119207066b.3
+        for <linux-i2c@vger.kernel.org>; Thu, 14 Sep 2023 04:34:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1694691261; x=1695296061; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oXa4ycYFzT7jLeokUgoWTtJjQh8+NIDSPVuIE36lEvI=;
-        b=TcUy05WeARz+LFWGVi8yH1dw7F0mWoa4WJBNDiQ5PnB/9xefhisF5srV995mBw12CC
-         OWOcRYqndaPWkQQd8YTwAxSdEGEl90fHxUJ3nx3eY+xTicjdp+cRCoD94csY33O8/bx4
-         4sU4zj4bcQAg+AfJrwX+oAvQ06DrqktiIPEGfFhjFMj/3eRNB2ccocmi87kLme1OUTB0
-         G3oedJVA+/rfBC7OR45jt1ehBWiPxWzrNtD9HFeH1nAY+wYIviDmRb6qa3XIp6ZE/ZJ/
-         BtTIYEq9nzudNLzao1pkzaa3WgFCM9pblakoeZ0rOl4dBy2dPiP0i5cfUxm2MbSMQAQk
-         OL8Q==
+        d=9elements.com; s=google; t=1694691262; x=1695296062; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lV1vLMgIGx4rvSnOJBSF85XJaepjxLerEmm9st1yuuc=;
+        b=M8jdaMwpYsUGNprr4R1C6mpHdu7BaMbT47YAoIQFAqDBHKBd+mY9P02ziI7Ex6Fh5N
+         I9cgeLhD8ZYtnuV2dg/07rbnTRKBextdyt9+4aHFCHDDnfoatuHbvSj1JBz6bKGipg8f
+         nvH0dkT4jA4in/lcOMCzWD5+PRoyCJBd3/2omF+8XL6740jp7jWH8+6+TiVSpnyzgqxE
+         saz2rYgGEm8hP1u5P4nGTCapybkvd3zOVP4kng30wnNzn7xZjkh2vTjJK3nqq04Q3h2Q
+         TpzyjDVutanyoFRaUASssJ20EvTL1Cu+nQ+OERhGobTqqDGIBOwj0RWla/VueGGVDsZ5
+         /C7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694691261; x=1695296061;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oXa4ycYFzT7jLeokUgoWTtJjQh8+NIDSPVuIE36lEvI=;
-        b=Hcog6dlwQPIN2Qwu8IR44sNudukWegIqKOVrS84IiA7D+3LxY7CjbjkE4fLsMEHjUN
-         bozjeomlXlhblpOjHhv9CL0idkpggNtx2eVjZtb7C5/Gbpmt4PrlhKhS7YlZJ7WGV552
-         0QDUB8qU1pjtD95uy3HkxJH1pwRMsqXvnsWwFdoOt21w6P5ePJjBif2Mc9nwOOOr2FIr
-         oTz26/FngDDGV0S0INRy6u2UztWNYtFkmL+1N1USVFJFZUWgpik3dtOuBESaxYrwfOhY
-         yOGBM6OFGX6BIEFmKuI00QbhwOnrLdBh9M9AXOiTBJW+20dd2qG1YQz4/OXPvRvx7sJG
-         ZWjg==
-X-Gm-Message-State: AOJu0Yzf/TX2I9y1enyFqJvcabGdsT4/+mM3OSLQgWcSNda14yP4cdk8
-        kwGyMe5LefEk+0G2Q7z0EpKO/Q==
-X-Google-Smtp-Source: AGHT+IGhxfGLWS9n5UK96bk1q/w1vuoTujKcbBAcFbFYwjmqvmyvlCpC/ds32SMX6ht2v9Hva9iFDQ==
-X-Received: by 2002:a17:907:2724:b0:9ad:7ec3:c055 with SMTP id d4-20020a170907272400b009ad7ec3c055mr4343650ejl.10.1694691260689;
-        Thu, 14 Sep 2023 04:34:20 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694691262; x=1695296062;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lV1vLMgIGx4rvSnOJBSF85XJaepjxLerEmm9st1yuuc=;
+        b=LGNrRldG3Lm9BUfGkPtTXuFGJNuKUZtB6cP0FHzd1rA8gDEaMFiYyl+Otvf1fJN59w
+         +h9UFdjje9gbTXglAJ4Tk/5NonTVG63GGGp7XbjPAjcYYDyC5CXYcGz3zpQlOg+Wqe0V
+         DMNQBmFQmGKqBMe1F8kyaIiLeG9NDP8DEkHRGesA43UyT/KRjd7K/D/tyehckzR4LWIx
+         N8C9VBMZ/qh75qR3SAFV4B1MzAv4pl5WqcO6NoxW/12IqiQ5B3VQHY65/O064WwWCPxU
+         PhksQ3KfCuPkmPoeWwFzGUVkIWsd1M9liVpxNUBqhhrcbfq9Sxx4SlIFN/KHexdquvSS
+         mkNA==
+X-Gm-Message-State: AOJu0YxOI8fjQ3aqtFXh7Uu2B9Akfmivf0yZT+dPKwVxgkbDtcRe36R1
+        G5Aq/FL2OG/MlykuX3NaoxLfNg==
+X-Google-Smtp-Source: AGHT+IEiO6lUl1syd4gFkJfKzwtfdKEUnNw0/c9PW9DPf2xh/ND4dxFbxRHsrctmMEooYdA1DFFwkA==
+X-Received: by 2002:a17:907:789a:b0:9aa:1e2f:7a9c with SMTP id ku26-20020a170907789a00b009aa1e2f7a9cmr4421990ejc.8.1694691262042;
+        Thu, 14 Sep 2023 04:34:22 -0700 (PDT)
 Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id h11-20020a170906854b00b0099ccee57ac2sm875119ejy.194.2023.09.14.04.34.19
+        by smtp.gmail.com with ESMTPSA id h11-20020a170906854b00b0099ccee57ac2sm875119ejy.194.2023.09.14.04.34.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 04:34:20 -0700 (PDT)
+        Thu, 14 Sep 2023 04:34:21 -0700 (PDT)
 From:   Naresh Solanki <naresh.solanki@9elements.com>
-To:     Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Peter Rosin <peda@axentia.se>
 Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
         Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/2] dt-bindings: i2c: pca954x: Add custom properties for MAX7357/MAX7358
-Date:   Thu, 14 Sep 2023 13:34:14 +0200
-Message-ID: <20230914113416.1285518-1-naresh.solanki@9elements.com>
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 2/2] i2c: muxes: pca954x: Enable features on MAX7357/MAX7358
+Date:   Thu, 14 Sep 2023 13:34:15 +0200
+Message-ID: <20230914113416.1285518-2-naresh.solanki@9elements.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230914113416.1285518-1-naresh.solanki@9elements.com>
+References: <20230914113416.1285518-1-naresh.solanki@9elements.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -70,80 +68,99 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Both chips have a configuration register to enable additional
-features. These features aren't enabled by default & its up to
-board designer to enable the same as it may have unexpected side effects.
+Detect that max7357 is being used and run custom init sequence.
+Enable additional features based on DT settings and unconditionally
+release the shared interrupt pin after 1.6 seconds and allow to use
+it as reset.
+
+These features aren't enabled by default & its up to board designer
+to enable the same as it may have unexpected side effects.
 
 These should be validated for proper functioning & detection of devices
 in secondary bus as sometimes it can cause secondary bus being disabled.
 
-Add booleans for:
- - maxim,isolate-stuck-channel
- - maxim,send-flush-out-sequence
- - maxim,preconnection-wiggle-test-enable
+The init sequence is not run for max7358 that needs to be unlocked
+first, but that would need the unimplemented function
+i2c_probe_func_quick_write().
 
 Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
 ---
 Changes in V3:
+- Delete unused #define
+- Update pca954x_init
 - Update commit message
+
 Changes in V2:
-- Update properties.
+- Update comments
+- Update check for DT properties
 ---
- .../bindings/i2c/i2c-mux-pca954x.yaml         | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ drivers/i2c/muxes/i2c-mux-pca954x.c | 38 ++++++++++++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-index 2d7bb998b0e9..fa73eadfdf7b 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
-@@ -71,6 +71,23 @@ properties:
-     description: A voltage regulator supplying power to the chip. On PCA9846
-       the regulator supplies power to VDD2 (core logic) and optionally to VDD1.
+diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+index 2219062104fb..91c7c1d13c89 100644
+--- a/drivers/i2c/muxes/i2c-mux-pca954x.c
++++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+@@ -57,6 +57,20 @@
  
-+  maxim,isolate-stuck-channel:
-+    type: boolean
-+    description: Allows to use non faulty channels while a stuck channel is
-+      isolated from the upstream bus. If not set all channels are isolated from
-+      the upstream bus until the fault is cleared.
-+
-+  maxim,send-flush-out-sequence:
-+    type: boolean
-+    description: Send a flush-out sequence to stuck auxiliary buses
-+      automatically after a stuck channel is being detected.
-+
-+  maxim,preconnection-wiggle-test-enable:
-+    type: boolean
-+    description: Send a STOP condition to the auxiliary buses when the switch
-+      register activates a channel to detect a stuck high fault. On fault the
-+      channel is isolated from the upstream bus.
-+
- required:
-   - compatible
-   - reg
-@@ -95,6 +112,20 @@ allOf:
-         "#interrupt-cells": false
-         interrupt-controller: false
+ #define PCA954X_IRQ_OFFSET 4
  
-+  - if:
-+      not:
-+        properties:
-+          compatible:
-+            contains:
-+              enum:
-+                - maxim,max7357
-+                - maxim,max7358
-+    then:
-+      properties:
-+        maxim,isolate-stuck-channel: false
-+        maxim,send-flush-out-sequence: false
-+        maxim,preconnection-wiggle-test-enable: false
++/*
++ * MAX7357's configuration register is writeable after POR, but
++ * can be locked by setting the basic mode bit. MAX7358 configuration
++ * register is locked by default and needs to be unlocked first.
++ * The configuration register holds the following settings:
++ */
++#define MAX7357_CONF_INT_ENABLE			BIT(0)
++#define MAX7357_CONF_FLUSH_OUT			BIT(1)
++#define MAX7357_CONF_RELEASE_INT		BIT(2)
++#define MAX7357_CONF_DISCON_SINGLE_CHAN		BIT(4)
++#define MAX7357_CONF_PRECONNECT_TEST		BIT(7)
 +
- unevaluatedProperties: false
++#define MAX7357_POR_DEFAULT_CONF		BIT(0)
++
+ enum pca_type {
+ 	max_7356,
+ 	max_7357,
+@@ -463,6 +477,7 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
  
- examples:
-
-base-commit: 637f33a4fe864ac8636e22766d67210e801fcd0d
+ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
+ {
++	u8 conf = MAX7357_POR_DEFAULT_CONF;
+ 	int ret;
+ 
+ 	if (data->idle_state >= 0)
+@@ -470,7 +485,28 @@ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
+ 	else
+ 		data->last_chan = 0; /* Disconnect multiplexer */
+ 
+-	ret = i2c_smbus_write_byte(client, data->last_chan);
++	if (device_is_compatible(&client->dev, "maxim,max7357") &&
++	    i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WRITE_BYTE_DATA)) {
++		/*
++		 * The interrupt signal is shared with the reset pin. Release the
++		 * interrupt after 1.6 seconds to allow using the pin as reset.
++		 * The interrupt isn't serviced yet.
++		 */
++		conf |= MAX7357_CONF_RELEASE_INT;
++
++		if (device_property_read_bool(&client->dev, "maxim,isolate-stuck-channel"))
++			conf |= MAX7357_CONF_DISCON_SINGLE_CHAN;
++		if (device_property_read_bool(&client->dev, "maxim,send-flush-out-sequence"))
++			conf |= MAX7357_CONF_FLUSH_OUT;
++		if (device_property_read_bool(&client->dev,
++					      "maxim,preconnection-wiggle-test-enable"))
++			conf |= MAX7357_CONF_PRECONNECT_TEST;
++
++		ret = i2c_smbus_write_byte_data(client, data->last_chan, conf);
++	} else {
++		ret = i2c_smbus_write_byte(client, data->last_chan);
++	}
++
+ 	if (ret < 0)
+ 		data->last_chan = 0;
+ 
 -- 
 2.41.0
 
