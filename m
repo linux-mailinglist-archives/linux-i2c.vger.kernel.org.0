@@ -2,165 +2,139 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5077A02BD
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Sep 2023 13:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7737A045C
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Sep 2023 14:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233361AbjINLeb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 14 Sep 2023 07:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
+        id S238473AbjINMuj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 14 Sep 2023 08:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233594AbjINLe3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 14 Sep 2023 07:34:29 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F69D1FE9
-        for <linux-i2c@vger.kernel.org>; Thu, 14 Sep 2023 04:34:23 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-99c3d3c3db9so119207066b.3
-        for <linux-i2c@vger.kernel.org>; Thu, 14 Sep 2023 04:34:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1694691262; x=1695296062; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lV1vLMgIGx4rvSnOJBSF85XJaepjxLerEmm9st1yuuc=;
-        b=M8jdaMwpYsUGNprr4R1C6mpHdu7BaMbT47YAoIQFAqDBHKBd+mY9P02ziI7Ex6Fh5N
-         I9cgeLhD8ZYtnuV2dg/07rbnTRKBextdyt9+4aHFCHDDnfoatuHbvSj1JBz6bKGipg8f
-         nvH0dkT4jA4in/lcOMCzWD5+PRoyCJBd3/2omF+8XL6740jp7jWH8+6+TiVSpnyzgqxE
-         saz2rYgGEm8hP1u5P4nGTCapybkvd3zOVP4kng30wnNzn7xZjkh2vTjJK3nqq04Q3h2Q
-         TpzyjDVutanyoFRaUASssJ20EvTL1Cu+nQ+OERhGobTqqDGIBOwj0RWla/VueGGVDsZ5
-         /C7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694691262; x=1695296062;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lV1vLMgIGx4rvSnOJBSF85XJaepjxLerEmm9st1yuuc=;
-        b=LGNrRldG3Lm9BUfGkPtTXuFGJNuKUZtB6cP0FHzd1rA8gDEaMFiYyl+Otvf1fJN59w
-         +h9UFdjje9gbTXglAJ4Tk/5NonTVG63GGGp7XbjPAjcYYDyC5CXYcGz3zpQlOg+Wqe0V
-         DMNQBmFQmGKqBMe1F8kyaIiLeG9NDP8DEkHRGesA43UyT/KRjd7K/D/tyehckzR4LWIx
-         N8C9VBMZ/qh75qR3SAFV4B1MzAv4pl5WqcO6NoxW/12IqiQ5B3VQHY65/O064WwWCPxU
-         PhksQ3KfCuPkmPoeWwFzGUVkIWsd1M9liVpxNUBqhhrcbfq9Sxx4SlIFN/KHexdquvSS
-         mkNA==
-X-Gm-Message-State: AOJu0YxOI8fjQ3aqtFXh7Uu2B9Akfmivf0yZT+dPKwVxgkbDtcRe36R1
-        G5Aq/FL2OG/MlykuX3NaoxLfNg==
-X-Google-Smtp-Source: AGHT+IEiO6lUl1syd4gFkJfKzwtfdKEUnNw0/c9PW9DPf2xh/ND4dxFbxRHsrctmMEooYdA1DFFwkA==
-X-Received: by 2002:a17:907:789a:b0:9aa:1e2f:7a9c with SMTP id ku26-20020a170907789a00b009aa1e2f7a9cmr4421990ejc.8.1694691262042;
-        Thu, 14 Sep 2023 04:34:22 -0700 (PDT)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id h11-20020a170906854b00b0099ccee57ac2sm875119ejy.194.2023.09.14.04.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 04:34:21 -0700 (PDT)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] i2c: muxes: pca954x: Enable features on MAX7357/MAX7358
-Date:   Thu, 14 Sep 2023 13:34:15 +0200
-Message-ID: <20230914113416.1285518-2-naresh.solanki@9elements.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230914113416.1285518-1-naresh.solanki@9elements.com>
-References: <20230914113416.1285518-1-naresh.solanki@9elements.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S237683AbjINMuj (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 14 Sep 2023 08:50:39 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEEA9B;
+        Thu, 14 Sep 2023 05:50:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694695835; x=1726231835;
+  h=from:to:cc:subject:date:message-id;
+  bh=ltc7zMqv/QU8PZJuqZg9TNqNO0HQO7E7axD/p1AKl3o=;
+  b=ho3zdog1nQz4fBw7QRhHRcO8K86qBXPlBjy2uylrfJadw9cx9zCeB4B8
+   j44AnX39qQXcBFsfTmiXFWBprVue9Yjy/oa6TB2KbVNSwGLOtFDkK8Om6
+   97uhA9VI9U8zuRiwSqbzPN74U6DIK7VcSZyD0e0PzDNsm/0q9/SObGTvs
+   fkOEcz+4IZGk6c8O+DA7YimjVcrsj5OYUxWEfJiC5czRcLe4Vowj3qNhm
+   HaMt5uTUDdzg15LkQpX12k102pC578+L7ieLhmZtlasP1o6SQZ1DcTO2T
+   OuZNSclHDcb3x5RtsgpHQDagavozdUpSudBx6rsDItBPIReIqX5xTVz53
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="377846840"
+X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
+   d="scan'208";a="377846840"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 05:50:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="814656859"
+X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
+   d="scan'208";a="814656859"
+Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Sep 2023 05:50:29 -0700
+From:   Wentong Wu <wentong.wu@intel.com>
+To:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        hdegoede@redhat.com, maz@kernel.org, brgl@bgdev.pl,
+        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
+        andi.shyti@linux.intel.com, sakari.ailus@linux.intel.com,
+        bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com
+Cc:     zhifeng.wang@intel.com, Wentong Wu <wentong.wu@intel.com>
+Subject: [PATCH v17 0/4] Add Intel LJCA device driver
+Date:   Thu, 14 Sep 2023 20:45:26 +0800
+Message-Id: <1694695530-31645-1-git-send-email-wentong.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+Add driver for Intel La Jolla Cove Adapter (LJCA) device. This
+IO-expander adds additional functions to the host system such
+as GPIO, I2C and SPI with USB host interface. We add 4 drivers
+to support this device: a USB driver, a GPIO chip driver, a I2C
+controller driver and a SPI controller driver.
 
-Detect that max7357 is being used and run custom init sequence.
-Enable additional features based on DT settings and unconditionally
-release the shared interrupt pin after 1.6 seconds and allow to use
-it as reset.
-
-These features aren't enabled by default & its up to board designer
-to enable the same as it may have unexpected side effects.
-
-These should be validated for proper functioning & detection of devices
-in secondary bus as sometimes it can cause secondary bus being disabled.
-
-The init sequence is not run for max7358 that needs to be unlocked
-first, but that would need the unimplemented function
-i2c_probe_func_quick_write().
-
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
 ---
-Changes in V3:
-- Delete unused #define
-- Update pca954x_init
-- Update commit message
+v17:
+ - change valid_pins type to __le32 and access valid_pins with get_unaligned_le32
+ - remove COMPILE_TEST for USB_LJCA Kconfig
 
-Changes in V2:
-- Update comments
-- Update check for DT properties
----
- drivers/i2c/muxes/i2c-mux-pca954x.c | 38 ++++++++++++++++++++++++++++-
- 1 file changed, 37 insertions(+), 1 deletion(-)
+v16:
+ - drop all void * and use real types in the exported apis and internal ljca_send()
+ - remove #ifdef in usb-ljca.c file
+ - add documentation in ljca.h for the public structures
+ - add error message in ljca_handle_cmd_ack() if error happens and remove blank line
+ - use the functionality in cleanup.h for spinlock to make function much simpler
+ - change the type of ex_buf in struct ljca_adapter to u8 *
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 2219062104fb..91c7c1d13c89 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -57,6 +57,20 @@
- 
- #define PCA954X_IRQ_OFFSET 4
- 
-+/*
-+ * MAX7357's configuration register is writeable after POR, but
-+ * can be locked by setting the basic mode bit. MAX7358 configuration
-+ * register is locked by default and needs to be unlocked first.
-+ * The configuration register holds the following settings:
-+ */
-+#define MAX7357_CONF_INT_ENABLE			BIT(0)
-+#define MAX7357_CONF_FLUSH_OUT			BIT(1)
-+#define MAX7357_CONF_RELEASE_INT		BIT(2)
-+#define MAX7357_CONF_DISCON_SINGLE_CHAN		BIT(4)
-+#define MAX7357_CONF_PRECONNECT_TEST		BIT(7)
-+
-+#define MAX7357_POR_DEFAULT_CONF		BIT(0)
-+
- enum pca_type {
- 	max_7356,
- 	max_7357,
-@@ -463,6 +477,7 @@ static void pca954x_cleanup(struct i2c_mux_core *muxc)
- 
- static int pca954x_init(struct i2c_client *client, struct pca954x *data)
- {
-+	u8 conf = MAX7357_POR_DEFAULT_CONF;
- 	int ret;
- 
- 	if (data->idle_state >= 0)
-@@ -470,7 +485,28 @@ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
- 	else
- 		data->last_chan = 0; /* Disconnect multiplexer */
- 
--	ret = i2c_smbus_write_byte(client, data->last_chan);
-+	if (device_is_compatible(&client->dev, "maxim,max7357") &&
-+	    i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WRITE_BYTE_DATA)) {
-+		/*
-+		 * The interrupt signal is shared with the reset pin. Release the
-+		 * interrupt after 1.6 seconds to allow using the pin as reset.
-+		 * The interrupt isn't serviced yet.
-+		 */
-+		conf |= MAX7357_CONF_RELEASE_INT;
-+
-+		if (device_property_read_bool(&client->dev, "maxim,isolate-stuck-channel"))
-+			conf |= MAX7357_CONF_DISCON_SINGLE_CHAN;
-+		if (device_property_read_bool(&client->dev, "maxim,send-flush-out-sequence"))
-+			conf |= MAX7357_CONF_FLUSH_OUT;
-+		if (device_property_read_bool(&client->dev,
-+					      "maxim,preconnection-wiggle-test-enable"))
-+			conf |= MAX7357_CONF_PRECONNECT_TEST;
-+
-+		ret = i2c_smbus_write_byte_data(client, data->last_chan, conf);
-+	} else {
-+		ret = i2c_smbus_write_byte(client, data->last_chan);
-+	}
-+
- 	if (ret < 0)
- 		data->last_chan = 0;
- 
+v15:
+ - enhance disconnect() of usb-ljca driver
+ - change memchr to strchr in ljca_match_device_ids() of usb-ljca driver
+
+v14:
+ - fix build error: implicit declaration of function 'acpi_dev_clear_dependencies'
+
+v13:
+ - make ljca-usb more robust with the help of Hans de Goede
+ - call acpi_dev_clear_dependencies() to mark _DEP ACPI dependencies on the I2C controller as satisfied, and patch is from Hans de Goede
+
+v12:
+ - switch dev_err to dev_dbg for i2c-ljca driver
+ - avoid err printing because of calling usb_kill_urb when attempts to resubmit the rx urb
+
+v11:
+ - switch dev_err to dev_dbg for i2c-ljca driver
+ - remove message length check because of defined quirk structure
+ - remove I2C_FUNC_SMBUS_EMUL support
+
+v10:
+ - remove ljca_i2c_format_slave_addr
+ - remove memset before write write w_packet
+ - make ljca_i2c_stop void and print err message in case failure
+ - use dev_err_probe in ljca_i2c_probe function
+
+v9:
+ - overhaul usb-ljca driver to make it more structured and easy understand
+ - fix memory leak issue for usb-ljca driver
+ - add spinlock to protect tx_buf and ex_buf
+ - change exported APIs for usb-ljca driver
+ - unify prefix for structures and functions for i2c-ljca driver
+ - unify prefix for structures and functions for spi-ljca driver
+ - unify prefix for structures and functions for gpio-ljca driver
+ - update gpio-ljca, i2c-ljca and spi-ljca drivers according to usb-ljca's changes
+
+Wentong Wu (4):
+  usb: Add support for Intel LJCA device
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  gpio: update Intel LJCA USB GPIO driver
+
+ drivers/gpio/Kconfig          |   4 +-
+ drivers/gpio/gpio-ljca.c      | 246 +++++++------
+ drivers/i2c/busses/Kconfig    |  11 +
+ drivers/i2c/busses/Makefile   |   1 +
+ drivers/i2c/busses/i2c-ljca.c | 342 +++++++++++++++++
+ drivers/spi/Kconfig           |  11 +
+ drivers/spi/Makefile          |   1 +
+ drivers/spi/spi-ljca.c        | 297 +++++++++++++++
+ drivers/usb/misc/Kconfig      |  13 +
+ drivers/usb/misc/Makefile     |   1 +
+ drivers/usb/misc/usb-ljca.c   | 837 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb/ljca.h      | 145 ++++++++
+ 12 files changed, 1804 insertions(+), 105 deletions(-)
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/usb-ljca.c
+ create mode 100644 include/linux/usb/ljca.h
+
 -- 
-2.41.0
+2.7.4
 
