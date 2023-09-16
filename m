@@ -2,592 +2,224 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412947A3206
-	for <lists+linux-i2c@lfdr.de>; Sat, 16 Sep 2023 20:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8048C7A320D
+	for <lists+linux-i2c@lfdr.de>; Sat, 16 Sep 2023 20:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237296AbjIPSyk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 16 Sep 2023 14:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S238988AbjIPS4r (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 16 Sep 2023 14:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235855AbjIPSyT (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 16 Sep 2023 14:54:19 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E269DCE8;
-        Sat, 16 Sep 2023 11:54:13 -0700 (PDT)
+        with ESMTP id S239195AbjIPS4p (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 16 Sep 2023 14:56:45 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A61CE7;
+        Sat, 16 Sep 2023 11:56:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694890453; x=1726426453;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=T8SNnhL8eIlCkYHCsxB+y7LIr9mwapdiSOmMcT2K6bI=;
-  b=Dr7rCS2ijRswf4WHmYtng5TL6zfZIHzKAiOvUOHz7hdaBG4pPEbHhB/k
-   3j8oUq4n8SlTVUr38LVk340GP+icuxvQK8x/Dt7FW1xtcQecbphyU+N5V
-   Jm9W7GgFuam9GabWncdmFiIuD2Mog40cygGun99+BQTJwOzDtiSUrswXP
-   WNyuEUJjJ5kGoCQZs6TDvvWeVo5zGzzGARSyhgo4ZgV4BwVUIzpRXFRsG
-   pMnFYDND0XOOS8Tf4NP2x7HinzE342HuZWqxhtmrn2C0m6PF1v0ZgBimh
-   QEkts/R383Tw/VCy26YRu0S1LvoDE9sn1ydbNcYYANbuAWcQsK1x6akH9
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10835"; a="465794051"
+  t=1694890600; x=1726426600;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=IqopkPCuspStzQRzGMvs1IfE2m249q0xLRIRKCbvc0k=;
+  b=lXDcPRL+/dIEUgnpcx5de4f0L1ENJXLJ+hF5R1YZaCVhoe+JPnDGpfsL
+   MJeWdNwJg6wobWGqXWFs0NTs0A+aQ/iZZqIPFARrw4BX0GtEQG8Kq6ypN
+   s/Rn08/qeCehJmxPSb3QyLkZm26taEQ0C4FGclX6goBcKCtKT7erSm6/p
+   Os7L3K6wkkUkza12XkgqX1XnQhEBSvT9xV1cfIJlGAWt/CG3Udv7LlG92
+   vGNuVxKjnz6GgUM+4oczhBekXcKtUs9ZdX5gFkbdspB0ap48lfi/2tjgI
+   YjBPbKNIthUViqtpkzHWSJ5lToOYmb686xHoms6IZwyYqFNuf0uoDmV0H
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10835"; a="382176111"
 X-IronPort-AV: E=Sophos;i="6.02,152,1688454000"; 
-   d="scan'208";a="465794051"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2023 11:54:13 -0700
+   d="scan'208";a="382176111"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2023 11:56:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10835"; a="810907621"
+X-IronPort-AV: E=McAfee;i="6600,9927,10835"; a="919020312"
 X-IronPort-AV: E=Sophos;i="6.02,152,1688454000"; 
-   d="scan'208";a="810907621"
-Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Sep 2023 11:54:08 -0700
-From:   Wentong Wu <wentong.wu@intel.com>
-To:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
-        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
-        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
-        hdegoede@redhat.com, maz@kernel.org, brgl@bgdev.pl,
-        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
-        andi.shyti@linux.intel.com, sakari.ailus@linux.intel.com,
-        bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com
-Cc:     zhifeng.wang@intel.com, Wentong Wu <wentong.wu@intel.com>
-Subject: [PATCH v19 4/4] gpio: update Intel LJCA USB GPIO driver
-Date:   Sun, 17 Sep 2023 02:53:36 +0800
-Message-Id: <1694890416-14409-5-git-send-email-wentong.wu@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1694890416-14409-1-git-send-email-wentong.wu@intel.com>
-References: <1694890416-14409-1-git-send-email-wentong.wu@intel.com>
+   d="scan'208";a="919020312"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 16 Sep 2023 11:56:39 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Sat, 16 Sep 2023 11:56:39 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Sat, 16 Sep 2023 11:56:39 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.43) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Sat, 16 Sep 2023 11:56:39 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y/m/qyH3cIbagRJaqZtI5/HY/+rho/eLcd52UzXOpRi38aVI/mIIaoCqlVbvkb/f8yGxg0NT0BivWz/U3rsi1z0l1nFggAOgoD71KerB8/wcW3hhQ3yOHEBpFNZOv6KBy3OuPlyO0STItGKZOwublx8XUFkShiWdXH/rPrzLujDfBwapAR2X5H0c1Ui48F0EOXCbnsP+5Lrr3s9rYZYcSOcp65+rOcV2GH0pQscYBThSYmJuIYCxzG6eOblJZzEIdq/kNz9LTCAGEdB8tpzr7/I0ktonAxvTDoIpX5gi2gwtlXxWNX+HEwgf7r5zPetmVxR557dqW+/smKvsnzfSUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IqopkPCuspStzQRzGMvs1IfE2m249q0xLRIRKCbvc0k=;
+ b=QyNxWrQQfa4v05wlOJRcFYR8B20DhGSUzvV0eURsJy4KyeUqUP+uASynyzX1VJEHbrN8WaK4AZHTSDrUn/duP2B88tVJqeUZuL9Z4JiB6z35LqFXd6uUockXldvpL5oGfjp/GvBlCULS+GlLSeEhGlZ7PiyWRtUBTxQ6Wn/FNCLuWYy2N7W6hEithlNI7apolSKbIl12GCWEd9Wl+p/4E8YjRYZo3zYRz6cRx1gK6L07fmvhzTjm9VOV3Ee9wZesQXa6g5FX3Zi/Jja7AufbCiYwah0t5maf5BJ4LgghKF7GS1Snd3xPWrhPsVcLaJRgZURWXQ06dDRtVZ+edljXuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM6PR11MB4316.namprd11.prod.outlook.com (2603:10b6:5:205::16)
+ by DM3PR11MB8714.namprd11.prod.outlook.com (2603:10b6:0:b::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.21; Sat, 16 Sep 2023 18:56:37 +0000
+Received: from DM6PR11MB4316.namprd11.prod.outlook.com
+ ([fe80::e836:4003:6244:2466]) by DM6PR11MB4316.namprd11.prod.outlook.com
+ ([fe80::e836:4003:6244:2466%7]) with mapi id 15.20.6792.023; Sat, 16 Sep 2023
+ 18:56:37 +0000
+From:   "Wu, Wentong" <wentong.wu@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "mka@chromium.org" <mka@chromium.org>,
+        "oneukum@suse.com" <oneukum@suse.com>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "kfting@nuvoton.com" <kfting@nuvoton.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "maz@kernel.org" <maz@kernel.org>, "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        "Wang, Zhifeng" <zhifeng.wang@intel.com>
+Subject: RE: [PATCH v17 3/4] spi: Add support for Intel LJCA USB SPI driver
+Thread-Topic: [PATCH v17 3/4] spi: Add support for Intel LJCA USB SPI driver
+Thread-Index: AQHZ5wor5/N5/IsKLEWimd3KHgQ0w7AdcDaAgABcT+A=
+Date:   Sat, 16 Sep 2023 18:56:35 +0000
+Message-ID: <DM6PR11MB4316CAEAA00DBD529CA7F6E98DF5A@DM6PR11MB4316.namprd11.prod.outlook.com>
+References: <1694695530-31645-1-git-send-email-wentong.wu@intel.com>
+ <1694695530-31645-4-git-send-email-wentong.wu@intel.com>
+ <1d02f04c-fd02-38f7-a355-76e4975ce5da@redhat.com>
+In-Reply-To: <1d02f04c-fd02-38f7-a355-76e4975ce5da@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR11MB4316:EE_|DM3PR11MB8714:EE_
+x-ms-office365-filtering-correlation-id: 03aa02b0-20c5-4e41-1d6b-08dbb6e6a6ba
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: x3pSUtXfzrp5iQg/dUZDGJCQGTOAZ7/UKIhbXOEVzEbhBucLfFtNBv3IygmnSFUtuzfE2+bj5QQYVOjP/ComYHnNiEGW/bHmWouRaHR5fi2CQzFvP1YMlCrqlFPmu7QLgIq77uCp+Q8R/IgHHBgL7ZDdB0NhzLhZOrrW+yGxRZf4VNKaLWjYu5hBE4vNlG7fT8VozR/Dhwu6valBoP2X/eWnYrILL1OBX5Xck8Nhk6YHGLRyzDRklCejYhye0ld82NFJ9+jUhddWk/bgS5i+3mB4k/kfjYtD8RzBXOXlfobL63OMGVdHWt4wybNzP73YnJvD30l+9i5YfvRB6SFgTP4tiSaJSYYHs89CBicvU6tpT/jWubxy+GDZnmAR+ydQJOyTtKRaLpG7hwE1W+9BIAYz3qZiojA7sxVbmxIOuGRq9ZXRlPYBT8WmjL8GOWtBmLsrKKqXVcd6kHwUcsF9hiHlH5+/ENKxJv2myUbjPVenR3274FH39TXOj1DlP05vOHffpDjkV9j7QzBReZbbbTZ1+kXXjug5qWoNOrfAhSezX8PAc3qH5B/mpsyShrsljnJej9Y9RZpLc3DCFXV7LJ4al9xCWJsXbXFfmuVftjy+hFnHq3KVhpL8r1m43T50
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4316.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(346002)(376002)(396003)(39860400002)(366004)(451199024)(186009)(1800799009)(5660300002)(41300700001)(8936002)(7416002)(66946007)(4326008)(76116006)(110136005)(66556008)(66476007)(64756008)(8676002)(52536014)(316002)(54906003)(66446008)(2906002)(122000001)(38100700002)(38070700005)(55016003)(86362001)(9686003)(53546011)(26005)(82960400001)(33656002)(478600001)(6506007)(7696005)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eWI0MmN4SHVVS1RHYlRPUHRFOTVTZWdwaEFZcHBTV3JnOHBob09OWXdhODBx?=
+ =?utf-8?B?VW10VEsrQXB0aFgrZTJrQnJXa09YbS9KQjZRN25acUQ1SHFoeTVKRDk2NWhQ?=
+ =?utf-8?B?SDZFdk1uZTg3K2taNHNkUnpaSlpBVUlncWxWcVBsNmw1d29GamU0TkRNTkhq?=
+ =?utf-8?B?dnZydUNvU05hZENrVm5aZ0hvNHUveVRUQlJ5d0xBVlcwOEJrTEY5Y1RoeWM3?=
+ =?utf-8?B?YmF6UFg5VDhIaG5wak1seWtEMzYyeGdYUkpMNXl1aFJSVExwNFJlZ0xhc2Iz?=
+ =?utf-8?B?b2lFRkF3cTRSSjhiSlg0SUNMUSt3RTU2dWlONHVWUCtWQWRHRHRYalh5MVVw?=
+ =?utf-8?B?WFp3ZW1nMTY4clhPYlcwODM2cHNENTE0RjNFcFJUMkdTOGh6d0h2d2JUSEJN?=
+ =?utf-8?B?dy9tazVBWXhoekhqSDJHMHlKQjIrOVdGT3g3d2pPTjAvZkZjYlB5OUJjQ2l2?=
+ =?utf-8?B?WWJtOWN4TWhFSHNHTzdZVGlSSnhsS04xUjU2U1NpNDJablZtTkxNMkdNOGFS?=
+ =?utf-8?B?SG40bWZtYUgrdldRRkJhRG84N0lCMnBRSGh3YzNmSTVaTHErL2djZGlhSy9i?=
+ =?utf-8?B?UWcxbk1YT1FkYmZydWdrVU10cmVXL1htNlRVaWVUS1A2YXFOZmVMaFhyUWdo?=
+ =?utf-8?B?WG5XZis2NVRLZDB1WUZBWll0NG1GWlhZQ1RydnEveXQ0UHNwYW9acU5mdHhs?=
+ =?utf-8?B?ZkNWcjR2SE1iM0JicnIzQzV6NG5TTzM1dmY3clBpM0hkY3RIZE8yRzd3azEw?=
+ =?utf-8?B?SFpvdms4ZEV2UnBzN0ZoWVZUa3NtYUtTUlk5Q0tIR2tBVnNyRTBKSFJtR1Ez?=
+ =?utf-8?B?WVgrcGtvaFV3OGZ1emVLUC8rMmJITjZHak1JeFRHZW9tQkY1YWlRUWZWWU1G?=
+ =?utf-8?B?VUtmQ3EyVkNyRG1BbTJsMmE3YXpjTnh3VUV4SEJtK1AxLzF2MTZBR2ZkY3Rk?=
+ =?utf-8?B?STFFSmplcXhPZGFyQkRJU0JDRjZqdUFFdjYyV1QwSndzaGVNUDV0bHpHdGFF?=
+ =?utf-8?B?eDNwbUtTVkplT2l1RjhMVWVmakp1TUtYNUs1c0VSam0yMzhzVkVISkVSOGxX?=
+ =?utf-8?B?MFdqT3VWTW1QYXdHUVlSbFJKVlU2VGYwaFFwUysvQnFOSWtkUHZScWphNnQ0?=
+ =?utf-8?B?NklraVRuNmdRZktsYVBtZjJFVmdLVDltc0ErWVJ3emxDYm5LMDNqUXRXRGdm?=
+ =?utf-8?B?RWlBR3RCZW5laTVyY3Y2MlpOcVQ5dXFkUnpEVDRvWERnNy9hYlQ5ODEwbFRs?=
+ =?utf-8?B?QVpQc3hYdU01SWJtRFRXNGxINVRidDl6WlRwZENqUVRqK2I5ckpCTll1VzE0?=
+ =?utf-8?B?VXpBL1pQN2NySS9BODNicUxGVVJYbllMUWoraHVDYUF6R3o1LzVFRlEwZzgv?=
+ =?utf-8?B?dER0SkZkdy9zQ1pkdmVxYXNqZFpwTTRvUXRGKy92V05WcG9uM3JmTEE0VlJa?=
+ =?utf-8?B?QmxNT2NSMktkVXpjSE40YlozUGxBK1ZKVXR2cENZNmZTd0kzandIelRnRGNY?=
+ =?utf-8?B?RXRsSDM2cnJoajg3b3JOMmg1OGpBbUNJNkFnbkF3WmNlb3draHlkRS9YUWQx?=
+ =?utf-8?B?dzdmLzdIQlM0NkhCTUpBSENrU2tCUU94eDBaU0JEZzIwNjNNcnVQczQ4eXdC?=
+ =?utf-8?B?OVc4U2tvb21qZUZkNytTUkJ3eU9XY0s1elliTTZKTWxrWEJvS0FVMlhRbjVh?=
+ =?utf-8?B?dGpVR3MvUHlxUnJVcG9pWDRKMWhvMzltaWJlSzdVMy9sZ0p3VWNnTG9JbGRv?=
+ =?utf-8?B?ay85ekJHTmh2MjNPeWtIRU56MXMwQ3lvZFBIOHZSTmUxb0pFWHB2QWJtR24w?=
+ =?utf-8?B?UllWSFZtVzZJaHJEd3NtWUdoL2VjeWp3SEFzNjB0eTdhMkhEY1hzWWJsVzNG?=
+ =?utf-8?B?VHVBN241LzZRbTgxWXhLeEZKR09Fdk5sSHM1aU1xeDRQRmlhQ0hmVHlGVkhX?=
+ =?utf-8?B?UjBOL2xVL2hVbDdULzArZGx6RHdXVVR3dWFVZXplSG5tUlFGa2lOMjZYNGYv?=
+ =?utf-8?B?ZGwzQy95RFIrY3pPWmJVNzNPNUptbUQrNDZ3dXJGaUx6YkFpRnprOElaR1Yr?=
+ =?utf-8?B?Y1FTczlJbzdZeWdveDlFMzZqM3pZTVZ1WTVWUFl5UXVYNFJMNTd3MlFvSlNr?=
+ =?utf-8?Q?gHxAX3NyEiLLY4v5JO9SgI6b9?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4316.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03aa02b0-20c5-4e41-1d6b-08dbb6e6a6ba
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Sep 2023 18:56:35.8620
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YcKnyORUaugnkeKmhBI4P64Dp90MdPOetwk3EyknyHUbubY9oGViihvCSLkiWQLI49mLbRad35TTjmJqOXzh4A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR11MB8714
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This driver communicate with LJCA GPIO module with specific
-protocol through interfaces exported by LJCA USB driver.
-Update the driver according to LJCA USB driver's changes.
-
-Signed-off-by: Wentong Wu <wentong.wu@intel.com>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Tested-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/gpio/Kconfig     |   4 +-
- drivers/gpio/gpio-ljca.c | 246 +++++++++++++++++++++++++++--------------------
- 2 files changed, 145 insertions(+), 105 deletions(-)
-
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 673bafb..8d5b6c3 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1312,9 +1312,9 @@ config GPIO_KEMPLD
- 
- config GPIO_LJCA
- 	tristate "INTEL La Jolla Cove Adapter GPIO support"
--	depends on MFD_LJCA
-+	depends on USB_LJCA
- 	select GPIOLIB_IRQCHIP
--	default MFD_LJCA
-+	default USB_LJCA
- 	help
- 	  Select this option to enable GPIO driver for the INTEL
- 	  La Jolla Cove Adapter (LJCA) board.
-diff --git a/drivers/gpio/gpio-ljca.c b/drivers/gpio/gpio-ljca.c
-index 87863f0..7fae26d 100644
---- a/drivers/gpio/gpio-ljca.c
-+++ b/drivers/gpio/gpio-ljca.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/acpi.h>
-+#include <linux/auxiliary_bus.h>
- #include <linux/bitfield.h>
- #include <linux/bitops.h>
- #include <linux/dev_printk.h>
-@@ -13,19 +14,18 @@
- #include <linux/irq.h>
- #include <linux/kernel.h>
- #include <linux/kref.h>
--#include <linux/mfd/ljca.h>
- #include <linux/module.h>
--#include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/types.h>
-+#include <linux/usb/ljca.h>
- 
- /* GPIO commands */
--#define LJCA_GPIO_CONFIG	1
--#define LJCA_GPIO_READ		2
--#define LJCA_GPIO_WRITE		3
--#define LJCA_GPIO_INT_EVENT	4
--#define LJCA_GPIO_INT_MASK	5
--#define LJCA_GPIO_INT_UNMASK	6
-+#define LJCA_GPIO_CONFIG		1
-+#define LJCA_GPIO_READ			2
-+#define LJCA_GPIO_WRITE			3
-+#define LJCA_GPIO_INT_EVENT		4
-+#define LJCA_GPIO_INT_MASK		5
-+#define LJCA_GPIO_INT_UNMASK		6
- 
- #define LJCA_GPIO_CONF_DISABLE		BIT(0)
- #define LJCA_GPIO_CONF_INPUT		BIT(1)
-@@ -36,45 +36,49 @@
- #define LJCA_GPIO_CONF_INTERRUPT	BIT(6)
- #define LJCA_GPIO_INT_TYPE		BIT(7)
- 
--#define LJCA_GPIO_CONF_EDGE	FIELD_PREP(LJCA_GPIO_INT_TYPE, 1)
--#define LJCA_GPIO_CONF_LEVEL	FIELD_PREP(LJCA_GPIO_INT_TYPE, 0)
-+#define LJCA_GPIO_CONF_EDGE		FIELD_PREP(LJCA_GPIO_INT_TYPE, 1)
-+#define LJCA_GPIO_CONF_LEVEL		FIELD_PREP(LJCA_GPIO_INT_TYPE, 0)
- 
- /* Intentional overlap with PULLUP / PULLDOWN */
--#define LJCA_GPIO_CONF_SET	BIT(3)
--#define LJCA_GPIO_CONF_CLR	BIT(4)
-+#define LJCA_GPIO_CONF_SET		BIT(3)
-+#define LJCA_GPIO_CONF_CLR		BIT(4)
- 
--struct gpio_op {
-+#define LJCA_GPIO_BUF_SIZE		60u
-+
-+struct ljca_gpio_op {
- 	u8 index;
- 	u8 value;
- } __packed;
- 
--struct gpio_packet {
-+struct ljca_gpio_packet {
- 	u8 num;
--	struct gpio_op item[];
-+	struct ljca_gpio_op item[];
- } __packed;
- 
--#define LJCA_GPIO_BUF_SIZE 60
- struct ljca_gpio_dev {
--	struct platform_device *pdev;
-+	struct ljca_client *ljca;
- 	struct gpio_chip gc;
- 	struct ljca_gpio_info *gpio_info;
- 	DECLARE_BITMAP(unmasked_irqs, LJCA_MAX_GPIO_NUM);
- 	DECLARE_BITMAP(enabled_irqs, LJCA_MAX_GPIO_NUM);
- 	DECLARE_BITMAP(reenable_irqs, LJCA_MAX_GPIO_NUM);
-+	DECLARE_BITMAP(output_enabled, LJCA_MAX_GPIO_NUM);
- 	u8 *connect_mode;
--	/* mutex to protect irq bus */
-+	/* protect irq bus */
- 	struct mutex irq_lock;
- 	struct work_struct work;
--	/* lock to protect package transfer to Hardware */
-+	/* protect package transfer to hardware */
- 	struct mutex trans_lock;
- 
- 	u8 obuf[LJCA_GPIO_BUF_SIZE];
- 	u8 ibuf[LJCA_GPIO_BUF_SIZE];
- };
- 
--static int gpio_config(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id, u8 config)
-+static int ljca_gpio_config(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id,
-+			    u8 config)
- {
--	struct gpio_packet *packet = (struct gpio_packet *)ljca_gpio->obuf;
-+	struct ljca_gpio_packet *packet =
-+				(struct ljca_gpio_packet *)ljca_gpio->obuf;
- 	int ret;
- 
- 	mutex_lock(&ljca_gpio->trans_lock);
-@@ -82,43 +86,43 @@ static int gpio_config(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id, u8 config)
- 	packet->item[0].value = config | ljca_gpio->connect_mode[gpio_id];
- 	packet->num = 1;
- 
--	ret = ljca_transfer(ljca_gpio->gpio_info->ljca, LJCA_GPIO_CONFIG, packet,
--			    struct_size(packet, item, packet->num), NULL, NULL);
-+	ret = ljca_transfer(ljca_gpio->ljca, LJCA_GPIO_CONFIG, (u8 *)packet,
-+			    struct_size(packet, item, packet->num), NULL, 0);
- 	mutex_unlock(&ljca_gpio->trans_lock);
--	return ret;
-+
-+	return ret < 0 ? ret : 0;
- }
- 
- static int ljca_gpio_read(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id)
- {
--	struct gpio_packet *packet = (struct gpio_packet *)ljca_gpio->obuf;
--	struct gpio_packet *ack_packet = (struct gpio_packet *)ljca_gpio->ibuf;
--	unsigned int ibuf_len = LJCA_GPIO_BUF_SIZE;
-+	struct ljca_gpio_packet *ack_packet =
-+				(struct ljca_gpio_packet *)ljca_gpio->ibuf;
-+	struct ljca_gpio_packet *packet =
-+				(struct ljca_gpio_packet *)ljca_gpio->obuf;
- 	int ret;
- 
- 	mutex_lock(&ljca_gpio->trans_lock);
- 	packet->num = 1;
- 	packet->item[0].index = gpio_id;
--	ret = ljca_transfer(ljca_gpio->gpio_info->ljca, LJCA_GPIO_READ, packet,
--			    struct_size(packet, item, packet->num), ljca_gpio->ibuf, &ibuf_len);
--	if (ret)
--		goto out_unlock;
--
--	if (!ibuf_len || ack_packet->num != packet->num) {
--		dev_err(&ljca_gpio->pdev->dev, "failed gpio_id:%u %u", gpio_id, ack_packet->num);
--		ret = -EIO;
-+	ret = ljca_transfer(ljca_gpio->ljca, LJCA_GPIO_READ, (u8 *)packet,
-+			    struct_size(packet, item, packet->num),
-+			    ljca_gpio->ibuf, LJCA_GPIO_BUF_SIZE);
-+
-+	if (ret <= 0 || ack_packet->num != packet->num) {
-+		dev_err(&ljca_gpio->ljca->auxdev.dev,
-+			"read package error, gpio_id: %u num: %u ret: %d\n",
-+			gpio_id, ack_packet->num, ret);
-+		ret = ret < 0 ? ret : -EIO;
- 	}
--
--out_unlock:
- 	mutex_unlock(&ljca_gpio->trans_lock);
--	if (ret)
--		return ret;
--	return ack_packet->item[0].value > 0;
-+
-+	return ret < 0 ? ret : ack_packet->item[0].value > 0;
- }
- 
--static int ljca_gpio_write(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id,
--			   int value)
-+static int ljca_gpio_write(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id, int value)
- {
--	struct gpio_packet *packet = (struct gpio_packet *)ljca_gpio->obuf;
-+	struct ljca_gpio_packet *packet =
-+			(struct ljca_gpio_packet *)ljca_gpio->obuf;
- 	int ret;
- 
- 	mutex_lock(&ljca_gpio->trans_lock);
-@@ -126,10 +130,11 @@ static int ljca_gpio_write(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id,
- 	packet->item[0].index = gpio_id;
- 	packet->item[0].value = value & 1;
- 
--	ret = ljca_transfer(ljca_gpio->gpio_info->ljca, LJCA_GPIO_WRITE, packet,
--			    struct_size(packet, item, packet->num), NULL, NULL);
-+	ret = ljca_transfer(ljca_gpio->ljca, LJCA_GPIO_WRITE, (u8 *)packet,
-+			    struct_size(packet, item, packet->num), NULL, 0);
- 	mutex_unlock(&ljca_gpio->trans_lock);
--	return ret;
-+
-+	return ret < 0 ? ret : 0;
- }
- 
- static int ljca_gpio_get_value(struct gpio_chip *chip, unsigned int offset)
-@@ -147,16 +152,24 @@ static void ljca_gpio_set_value(struct gpio_chip *chip, unsigned int offset,
- 
- 	ret = ljca_gpio_write(ljca_gpio, offset, val);
- 	if (ret)
--		dev_err(chip->parent, "offset:%u val:%d set value failed %d\n", offset, val, ret);
-+		dev_err(chip->parent,
-+			"set value failed offset: %u val: %d ret: %d\n",
-+			offset, val, ret);
- }
- 
--static int ljca_gpio_direction_input(struct gpio_chip *chip,
--				     unsigned int offset)
-+static int ljca_gpio_direction_input(struct gpio_chip *chip, unsigned int offset)
- {
- 	struct ljca_gpio_dev *ljca_gpio = gpiochip_get_data(chip);
- 	u8 config = LJCA_GPIO_CONF_INPUT | LJCA_GPIO_CONF_CLR;
-+	int ret;
- 
--	return gpio_config(ljca_gpio, offset, config);
-+	ret = ljca_gpio_config(ljca_gpio, offset, config);
-+	if (ret)
-+		return ret;
-+
-+	clear_bit(offset, ljca_gpio->output_enabled);
-+
-+	return 0;
- }
- 
- static int ljca_gpio_direction_output(struct gpio_chip *chip,
-@@ -166,14 +179,26 @@ static int ljca_gpio_direction_output(struct gpio_chip *chip,
- 	u8 config = LJCA_GPIO_CONF_OUTPUT | LJCA_GPIO_CONF_CLR;
- 	int ret;
- 
--	ret = gpio_config(ljca_gpio, offset, config);
-+	ret = ljca_gpio_config(ljca_gpio, offset, config);
- 	if (ret)
- 		return ret;
- 
- 	ljca_gpio_set_value(chip, offset, val);
-+	set_bit(offset, ljca_gpio->output_enabled);
-+
- 	return 0;
- }
- 
-+static int ljca_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct ljca_gpio_dev *ljca_gpio = gpiochip_get_data(chip);
-+
-+	if (test_bit(offset, ljca_gpio->output_enabled))
-+		return GPIO_LINE_DIRECTION_OUT;
-+
-+	return GPIO_LINE_DIRECTION_IN;
-+}
-+
- static int ljca_gpio_set_config(struct gpio_chip *chip, unsigned int offset,
- 				unsigned long config)
- {
-@@ -197,7 +222,8 @@ static int ljca_gpio_set_config(struct gpio_chip *chip, unsigned int offset,
- 	return 0;
- }
- 
--static int ljca_gpio_init_valid_mask(struct gpio_chip *chip, unsigned long *valid_mask,
-+static int ljca_gpio_init_valid_mask(struct gpio_chip *chip,
-+				     unsigned long *valid_mask,
- 				     unsigned int ngpios)
- {
- 	struct ljca_gpio_dev *ljca_gpio = gpiochip_get_data(chip);
-@@ -208,15 +234,18 @@ static int ljca_gpio_init_valid_mask(struct gpio_chip *chip, unsigned long *vali
- 	return 0;
- }
- 
--static void ljca_gpio_irq_init_valid_mask(struct gpio_chip *chip, unsigned long *valid_mask,
-+static void ljca_gpio_irq_init_valid_mask(struct gpio_chip *chip,
-+					  unsigned long *valid_mask,
- 					  unsigned int ngpios)
- {
- 	ljca_gpio_init_valid_mask(chip, valid_mask, ngpios);
- }
- 
--static int ljca_enable_irq(struct ljca_gpio_dev *ljca_gpio, int gpio_id, bool enable)
-+static int ljca_enable_irq(struct ljca_gpio_dev *ljca_gpio, int gpio_id,
-+			   bool enable)
- {
--	struct gpio_packet *packet = (struct gpio_packet *)ljca_gpio->obuf;
-+	struct ljca_gpio_packet *packet =
-+			(struct ljca_gpio_packet *)ljca_gpio->obuf;
- 	int ret;
- 
- 	mutex_lock(&ljca_gpio->trans_lock);
-@@ -224,18 +253,20 @@ static int ljca_enable_irq(struct ljca_gpio_dev *ljca_gpio, int gpio_id, bool en
- 	packet->item[0].index = gpio_id;
- 	packet->item[0].value = 0;
- 
--	ret = ljca_transfer(ljca_gpio->gpio_info->ljca,
--			    enable ? LJCA_GPIO_INT_UNMASK : LJCA_GPIO_INT_MASK, packet,
--			    struct_size(packet, item, packet->num), NULL, NULL);
-+	ret = ljca_transfer(ljca_gpio->ljca,
-+			    enable ? LJCA_GPIO_INT_UNMASK : LJCA_GPIO_INT_MASK,
-+			    (u8 *)packet, struct_size(packet, item, packet->num),
-+			    NULL, 0);
- 	mutex_unlock(&ljca_gpio->trans_lock);
--	return ret;
-+
-+	return ret < 0 ? ret : 0;
- }
- 
- static void ljca_gpio_async(struct work_struct *work)
- {
--	struct ljca_gpio_dev *ljca_gpio = container_of(work, struct ljca_gpio_dev, work);
--	int gpio_id;
--	int unmasked;
-+	struct ljca_gpio_dev *ljca_gpio =
-+			container_of(work, struct ljca_gpio_dev, work);
-+	int gpio_id, unmasked;
- 
- 	for_each_set_bit(gpio_id, ljca_gpio->reenable_irqs, ljca_gpio->gc.ngpio) {
- 		clear_bit(gpio_id, ljca_gpio->reenable_irqs);
-@@ -245,20 +276,22 @@ static void ljca_gpio_async(struct work_struct *work)
- 	}
- }
- 
--static void ljca_gpio_event_cb(void *context, u8 cmd, const void *evt_data, int len)
-+static void ljca_gpio_event_cb(void *context, u8 cmd, const void *evt_data,
-+			       int len)
- {
--	const struct gpio_packet *packet = evt_data;
-+	const struct ljca_gpio_packet *packet = evt_data;
- 	struct ljca_gpio_dev *ljca_gpio = context;
--	int i;
--	int irq;
-+	int i, irq;
- 
- 	if (cmd != LJCA_GPIO_INT_EVENT)
- 		return;
- 
- 	for (i = 0; i < packet->num; i++) {
--		irq = irq_find_mapping(ljca_gpio->gc.irq.domain, packet->item[i].index);
-+		irq = irq_find_mapping(ljca_gpio->gc.irq.domain,
-+				       packet->item[i].index);
- 		if (!irq) {
--			dev_err(ljca_gpio->gc.parent, "gpio_id %u does not mapped to IRQ yet\n",
-+			dev_err(ljca_gpio->gc.parent,
-+				"gpio_id %u does not mapped to IRQ yet\n",
- 				packet->item[i].index);
- 			return;
- 		}
-@@ -299,18 +332,22 @@ static int ljca_irq_set_type(struct irq_data *irqd, unsigned int type)
- 	ljca_gpio->connect_mode[gpio_id] = LJCA_GPIO_CONF_INTERRUPT;
- 	switch (type) {
- 	case IRQ_TYPE_LEVEL_HIGH:
--		ljca_gpio->connect_mode[gpio_id] |= (LJCA_GPIO_CONF_LEVEL | LJCA_GPIO_CONF_PULLUP);
-+		ljca_gpio->connect_mode[gpio_id] |=
-+			(LJCA_GPIO_CONF_LEVEL | LJCA_GPIO_CONF_PULLUP);
- 		break;
- 	case IRQ_TYPE_LEVEL_LOW:
--		ljca_gpio->connect_mode[gpio_id] |= (LJCA_GPIO_CONF_LEVEL | LJCA_GPIO_CONF_PULLDOWN);
-+		ljca_gpio->connect_mode[gpio_id] |=
-+			(LJCA_GPIO_CONF_LEVEL | LJCA_GPIO_CONF_PULLDOWN);
- 		break;
- 	case IRQ_TYPE_EDGE_BOTH:
- 		break;
- 	case IRQ_TYPE_EDGE_RISING:
--		ljca_gpio->connect_mode[gpio_id] |= (LJCA_GPIO_CONF_EDGE | LJCA_GPIO_CONF_PULLUP);
-+		ljca_gpio->connect_mode[gpio_id] |=
-+			(LJCA_GPIO_CONF_EDGE | LJCA_GPIO_CONF_PULLUP);
- 		break;
- 	case IRQ_TYPE_EDGE_FALLING:
--		ljca_gpio->connect_mode[gpio_id] |= (LJCA_GPIO_CONF_EDGE | LJCA_GPIO_CONF_PULLDOWN);
-+		ljca_gpio->connect_mode[gpio_id] |=
-+			(LJCA_GPIO_CONF_EDGE | LJCA_GPIO_CONF_PULLDOWN);
- 		break;
- 	default:
- 		return -EINVAL;
-@@ -332,15 +369,14 @@ static void ljca_irq_bus_unlock(struct irq_data *irqd)
- 	struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
- 	struct ljca_gpio_dev *ljca_gpio = gpiochip_get_data(gc);
- 	int gpio_id = irqd_to_hwirq(irqd);
--	int enabled;
--	int unmasked;
-+	int enabled, unmasked;
- 
- 	enabled = test_bit(gpio_id, ljca_gpio->enabled_irqs);
- 	unmasked = test_bit(gpio_id, ljca_gpio->unmasked_irqs);
- 
- 	if (enabled != unmasked) {
- 		if (unmasked) {
--			gpio_config(ljca_gpio, gpio_id, 0);
-+			ljca_gpio_config(ljca_gpio, gpio_id, 0);
- 			ljca_enable_irq(ljca_gpio, gpio_id, true);
- 			set_bit(gpio_id, ljca_gpio->enabled_irqs);
- 		} else {
-@@ -363,43 +399,48 @@ static const struct irq_chip ljca_gpio_irqchip = {
- 	GPIOCHIP_IRQ_RESOURCE_HELPERS,
- };
- 
--static int ljca_gpio_probe(struct platform_device *pdev)
-+static int ljca_gpio_probe(struct auxiliary_device *auxdev,
-+			   const struct auxiliary_device_id *aux_dev_id)
- {
-+	struct ljca_client *ljca = auxiliary_dev_to_ljca_client(auxdev);
- 	struct ljca_gpio_dev *ljca_gpio;
- 	struct gpio_irq_chip *girq;
- 	int ret;
- 
--	ljca_gpio = devm_kzalloc(&pdev->dev, sizeof(*ljca_gpio), GFP_KERNEL);
-+	ljca_gpio = devm_kzalloc(&auxdev->dev, sizeof(*ljca_gpio), GFP_KERNEL);
- 	if (!ljca_gpio)
- 		return -ENOMEM;
- 
--	ljca_gpio->gpio_info = dev_get_platdata(&pdev->dev);
--	ljca_gpio->connect_mode = devm_kcalloc(&pdev->dev, ljca_gpio->gpio_info->num,
--					       sizeof(*ljca_gpio->connect_mode), GFP_KERNEL);
-+	ljca_gpio->ljca = ljca;
-+	ljca_gpio->gpio_info = dev_get_platdata(&auxdev->dev);
-+	ljca_gpio->connect_mode = devm_kcalloc(&auxdev->dev,
-+					       ljca_gpio->gpio_info->num,
-+					       sizeof(*ljca_gpio->connect_mode),
-+					       GFP_KERNEL);
- 	if (!ljca_gpio->connect_mode)
- 		return -ENOMEM;
- 
- 	mutex_init(&ljca_gpio->irq_lock);
- 	mutex_init(&ljca_gpio->trans_lock);
--	ljca_gpio->pdev = pdev;
- 	ljca_gpio->gc.direction_input = ljca_gpio_direction_input;
- 	ljca_gpio->gc.direction_output = ljca_gpio_direction_output;
-+	ljca_gpio->gc.get_direction = ljca_gpio_get_direction;
- 	ljca_gpio->gc.get = ljca_gpio_get_value;
- 	ljca_gpio->gc.set = ljca_gpio_set_value;
- 	ljca_gpio->gc.set_config = ljca_gpio_set_config;
- 	ljca_gpio->gc.init_valid_mask = ljca_gpio_init_valid_mask;
- 	ljca_gpio->gc.can_sleep = true;
--	ljca_gpio->gc.parent = &pdev->dev;
-+	ljca_gpio->gc.parent = &auxdev->dev;
- 
- 	ljca_gpio->gc.base = -1;
- 	ljca_gpio->gc.ngpio = ljca_gpio->gpio_info->num;
--	ljca_gpio->gc.label = ACPI_COMPANION(&pdev->dev) ?
--			      acpi_dev_name(ACPI_COMPANION(&pdev->dev)) :
--			      dev_name(&pdev->dev);
-+	ljca_gpio->gc.label = ACPI_COMPANION(&auxdev->dev) ?
-+			      acpi_dev_name(ACPI_COMPANION(&auxdev->dev)) :
-+			      dev_name(&auxdev->dev);
- 	ljca_gpio->gc.owner = THIS_MODULE;
- 
--	platform_set_drvdata(pdev, ljca_gpio);
--	ljca_register_event_cb(ljca_gpio->gpio_info->ljca, ljca_gpio_event_cb, ljca_gpio);
-+	auxiliary_set_drvdata(auxdev, ljca_gpio);
-+	ljca_register_event_cb(ljca, ljca_gpio_event_cb, ljca_gpio);
- 
- 	girq = &ljca_gpio->gc.irq;
- 	gpio_irq_chip_set_chip(girq, &ljca_gpio_irqchip);
-@@ -413,7 +454,7 @@ static int ljca_gpio_probe(struct platform_device *pdev)
- 	INIT_WORK(&ljca_gpio->work, ljca_gpio_async);
- 	ret = gpiochip_add_data(&ljca_gpio->gc, ljca_gpio);
- 	if (ret) {
--		ljca_unregister_event_cb(ljca_gpio->gpio_info->ljca);
-+		ljca_unregister_event_cb(ljca);
- 		mutex_destroy(&ljca_gpio->irq_lock);
- 		mutex_destroy(&ljca_gpio->trans_lock);
- 	}
-@@ -421,34 +462,33 @@ static int ljca_gpio_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int ljca_gpio_remove(struct platform_device *pdev)
-+static void ljca_gpio_remove(struct auxiliary_device *auxdev)
- {
--	struct ljca_gpio_dev *ljca_gpio = platform_get_drvdata(pdev);
-+	struct ljca_gpio_dev *ljca_gpio = auxiliary_get_drvdata(auxdev);
- 
- 	gpiochip_remove(&ljca_gpio->gc);
--	ljca_unregister_event_cb(ljca_gpio->gpio_info->ljca);
-+	ljca_unregister_event_cb(ljca_gpio->ljca);
-+	cancel_work_sync(&ljca_gpio->work);
- 	mutex_destroy(&ljca_gpio->irq_lock);
- 	mutex_destroy(&ljca_gpio->trans_lock);
--	return 0;
- }
- 
--#define LJCA_GPIO_DRV_NAME "ljca-gpio"
--static const struct platform_device_id ljca_gpio_id[] = {
--	{ LJCA_GPIO_DRV_NAME, 0 },
--	{ /* sentinel */ }
-+static const struct auxiliary_device_id ljca_gpio_id_table[] = {
-+	{ "usb_ljca.ljca-gpio", 0 },
-+	{ /* sentinel */ },
- };
--MODULE_DEVICE_TABLE(platform, ljca_gpio_id);
-+MODULE_DEVICE_TABLE(auxiliary, ljca_gpio_id_table);
- 
--static struct platform_driver ljca_gpio_driver = {
--	.driver.name = LJCA_GPIO_DRV_NAME,
-+static struct auxiliary_driver ljca_gpio_driver = {
- 	.probe = ljca_gpio_probe,
- 	.remove = ljca_gpio_remove,
-+	.id_table = ljca_gpio_id_table,
- };
--module_platform_driver(ljca_gpio_driver);
-+module_auxiliary_driver(ljca_gpio_driver);
- 
--MODULE_AUTHOR("Ye Xiang <xiang.ye@intel.com>");
--MODULE_AUTHOR("Wang Zhifeng <zhifeng.wang@intel.com>");
--MODULE_AUTHOR("Zhang Lixu <lixu.zhang@intel.com>");
-+MODULE_AUTHOR("Wentong Wu <wentong.wu@intel.com>");
-+MODULE_AUTHOR("Zhifeng Wang <zhifeng.wang@intel.com>");
-+MODULE_AUTHOR("Lixu Zhang <lixu.zhang@intel.com>");
- MODULE_DESCRIPTION("Intel La Jolla Cove Adapter USB-GPIO driver");
- MODULE_LICENSE("GPL");
- MODULE_IMPORT_NS(LJCA);
--- 
-2.7.4
-
+PiBGcm9tOiBIYW5zIGRlIEdvZWRlDQo+IA0KPiBIaSBXZW50b25nLA0KPiANCj4gT24gOS8xNC8y
+MyAxNDo0NSwgV2VudG9uZyBXdSB3cm90ZToNCj4gPiBJbXBsZW1lbnRzIHRoZSBTUEkgZnVuY3Rp
+b24gb2YgSW50ZWwgVVNCLUkyQy9HUElPL1NQSSBhZGFwdGVyIGRldmljZQ0KPiA+IG5hbWVkICJM
+YSBKb2xsYSBDb3ZlIEFkYXB0ZXIiIChMSkNBKS4gSXQgY29tbXVuaWNhdGUgd2l0aCBMSkNBIFNQ
+SQ0KPiA+IG1vZHVsZSB3aXRoIHNwZWNpZmljIHByb3RvY29sIHRocm91Z2ggaW50ZXJmYWNlcyBl
+eHBvcnRlZCBieSBMSkNBIFVTQg0KPiA+IGRyaXZlci4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6
+IFdlbnRvbmcgV3UgPHdlbnRvbmcud3VAaW50ZWwuY29tPg0KPiA+IFJldmlld2VkLWJ5OiBTYWth
+cmkgQWlsdXMgPHNha2FyaS5haWx1c0BsaW51eC5pbnRlbC5jb20+DQo+ID4gUmV2aWV3ZWQtYnk6
+IEFuZGkgU2h5dGkgPGFuZGkuc2h5dGlAbGludXguaW50ZWwuY29tPg0KPiA+IFRlc3RlZC1ieTog
+SGFucyBkZSBHb2VkZSA8aGRlZ29lZGVAcmVkaGF0LmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVy
+cy9zcGkvS2NvbmZpZyAgICB8ICAxMSArKw0KPiA+ICBkcml2ZXJzL3NwaS9NYWtlZmlsZSAgIHwg
+ICAxICsNCj4gPiAgZHJpdmVycy9zcGkvc3BpLWxqY2EuYyB8IDI5Nw0KPiA+ICsrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gPiAgMyBmaWxlcyBjaGFu
+Z2VkLCAzMDkgaW5zZXJ0aW9ucygrKQ0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9z
+cGkvc3BpLWxqY2EuYw0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvc3BpL0tjb25maWcg
+Yi9kcml2ZXJzL3NwaS9LY29uZmlnIGluZGV4DQo+ID4gODk2MmIyNS4uYWQxODg2NCAxMDA2NDQN
+Cj4gPiAtLS0gYS9kcml2ZXJzL3NwaS9LY29uZmlnDQo+ID4gKysrIGIvZHJpdmVycy9zcGkvS2Nv
+bmZpZw0KPiA+IEBAIC01ODMsNiArNTgzLDE3IEBAIGNvbmZpZyBTUElfRlNMX0VTUEkNCj4gPiAg
+CSAgRnJvbSBNUEM4NTM2LCA4NXh4IHBsYXRmb3JtIHVzZXMgdGhlIGNvbnRyb2xsZXIsIGFuZCBh
+bGwgUDEweHgsDQo+ID4gIAkgIFAyMHh4LCBQMzB4eCxQNDB4eCwgUDUweHggdXNlcyB0aGlzIGNv
+bnRyb2xsZXIuDQo+ID4NCj4gPiArY29uZmlnIFNQSV9MSkNBDQo+ID4gKwl0cmlzdGF0ZSAiSW50
+ZWwgTGEgSm9sbGEgQ292ZSBBZGFwdGVyIFNQSSBzdXBwb3J0Ig0KPiA+ICsJZGVwZW5kcyBvbiBV
+U0JfTEpDQQ0KPiA+ICsJZGVmYXVsdCBVU0JfTEpDQQ0KPiA+ICsJaGVscA0KPiA+ICsJICBTZWxl
+Y3QgdGhpcyBvcHRpb24gdG8gZW5hYmxlIFNQSSBkcml2ZXIgZm9yIHRoZSBJbnRlbA0KPiA+ICsJ
+ICBMYSBKb2xsYSBDb3ZlIEFkYXB0ZXIgKExKQ0EpIGJvYXJkLg0KPiA+ICsNCj4gPiArCSAgVGhp
+cyBkcml2ZXIgY2FuIGFsc28gYmUgYnVpbHQgYXMgYSBtb2R1bGUuIElmIHNvLCB0aGUgbW9kdWxl
+DQo+ID4gKwkgIHdpbGwgYmUgY2FsbGVkIHNwaS1samNhLg0KPiA+ICsNCj4gPiAgY29uZmlnIFNQ
+SV9NRVNPTl9TUElDQw0KPiA+ICAJdHJpc3RhdGUgIkFtbG9naWMgTWVzb24gU1BJQ0MgY29udHJv
+bGxlciINCj4gPiAgCWRlcGVuZHMgb24gQ09NTU9OX0NMSw0KPiA+IGRpZmYgLS1naXQgYS9kcml2
+ZXJzL3NwaS9NYWtlZmlsZSBiL2RyaXZlcnMvc3BpL01ha2VmaWxlIGluZGV4DQo+ID4gMDgwYzJj
+MS4uMDg0Nzk2MiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3NwaS9NYWtlZmlsZQ0KPiA+ICsr
+KyBiL2RyaXZlcnMvc3BpL01ha2VmaWxlDQo+ID4gQEAgLTcwLDYgKzcwLDcgQEAgb2JqLSQoQ09O
+RklHX1NQSV9JTlRFTF9QQ0kpCQkrPSBzcGktaW50ZWwtDQo+IHBjaS5vDQo+ID4gIG9iai0kKENP
+TkZJR19TUElfSU5URUxfUExBVEZPUk0pCSs9IHNwaS1pbnRlbC1wbGF0Zm9ybS5vDQo+ID4gIG9i
+ai0kKENPTkZJR19TUElfTEFOVElRX1NTQykJCSs9IHNwaS1sYW50aXEtc3NjLm8NCj4gPiAgb2Jq
+LSQoQ09ORklHX1NQSV9KQ09SRSkJCQkrPSBzcGktamNvcmUubw0KPiA+ICtvYmotJChDT05GSUdf
+U1BJX0xKQ0EpCQkJKz0gc3BpLWxqY2Eubw0KPiA+ICBvYmotJChDT05GSUdfU1BJX0xNNzBfTExQ
+KQkJKz0gc3BpLWxtNzBsbHAubw0KPiA+ICBvYmotJChDT05GSUdfU1BJX0xQODg0MV9SVEMpCQkr
+PSBzcGktbHA4ODQxLXJ0Yy5vDQo+ID4gIG9iai0kKENPTkZJR19TUElfTUVTT05fU1BJQ0MpCQkr
+PSBzcGktbWVzb24tc3BpY2Mubw0KPiANCj4gSSBkb24ndCBrbm93IHdoYXQgeW91IGFyZSB1c2lu
+ZyBhcyBhIGJhc2UgY29tbWl0IGZvciB0aGVzZSBwYXRjaGVzLCBidXQgdGhpcw0KPiBkb2VzIG5v
+dCBhcHBseSBjbGVhbmx5IG9uIHRvcCBvZiB2Ni42LXJjMS4NCj4gDQo+IEZvciB0aGUgbmV4dCB2
+ZXJzaW9uIG9mIHRoZXNlIHBhdGNoZXMgcGxlYXNlIHJlYmFzZXMgdGhpcyBvbiB0b3Agb2YgdjYu
+Ni1yYzE7IG9yDQo+IG9uIExpbnVzJyBtYXN0ZXIgYnJhbmNoLg0KPiANCg0KVGhhbmtzLCB2MTcg
+aXMgYmFzZWQgb24gNi41LXJjNCwgbm93IHYxOSBpcyBiYXNlZCBvbiBMaW51cycgbWFzdGVyIGJy
+YW5jaC4NCg0KQlIsDQpXZW50b25nDQoNCj4gUmVnYXJkcywNCj4gDQo+IEhhbnMNCg==
