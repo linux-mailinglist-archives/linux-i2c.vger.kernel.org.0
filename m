@@ -2,55 +2,55 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4966A7A4902
-	for <lists+linux-i2c@lfdr.de>; Mon, 18 Sep 2023 13:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 993327A4968
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Sep 2023 14:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241774AbjIRL7B (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 18 Sep 2023 07:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53210 "EHLO
+        id S230220AbjIRMRS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 18 Sep 2023 08:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241854AbjIRL6m (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Sep 2023 07:58:42 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADC91715
-        for <linux-i2c@vger.kernel.org>; Mon, 18 Sep 2023 04:57:11 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-40479f8325fso35285445e9.1
-        for <linux-i2c@vger.kernel.org>; Mon, 18 Sep 2023 04:57:11 -0700 (PDT)
+        with ESMTP id S241997AbjIRMRQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 18 Sep 2023 08:17:16 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4606B10B
+        for <linux-i2c@vger.kernel.org>; Mon, 18 Sep 2023 05:17:01 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-40473f1fe9fso44643395e9.2
+        for <linux-i2c@vger.kernel.org>; Mon, 18 Sep 2023 05:17:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695038229; x=1695643029; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1695039420; x=1695644220; darn=vger.kernel.org;
         h=content-transfer-encoding:autocrypt:subject:from:cc:to
          :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GJlenrkb6OM2/XFA6V+0SoD/ghxVj4aU3a35ghgluGU=;
-        b=TDLqXSOKJhm3pJC5yhwhw5JLnEWLWhTrJ8uiS/UlEXwO2tF0KZkD5CQ8K/Cy2eITXx
-         p1PJcgZLQbi4zIRWhu/WT4fmeZ+bT9IebAvUM9PCjBKD9tFWfUbgHoOvZtlU9JtuUsnQ
-         wZ5ekb6oSUtT0QyAkzjqIBlbBiM+uyFXcJ5gCajyj3Jh8nFB3zLgtnnu6IhOH8efUM+v
-         q1kWw6Mtq9hTzvsMYzA+H8hnVMgjtf5ttGbS9GBjXsubKr3P2tfjccvRRuihOdrCHroo
-         Y5deAyljLwAZpLNWnptb0SEh7p1sYmikGyGuNeSwi87P0JO80sXRprKDPo40AFd2SC8e
-         6bAw==
+        bh=3wyGydXg4Y6/nCjJZZ1//claaYAsly2YIGeh7lYxvG8=;
+        b=llD5WR43Vl7ivsnocGRayrLZlwcKpa1KCkzKlHiZjtZ3I6fZNktkyLMYZo3LC0sRSe
+         1GKAYAJymumIU94EYFdGUocc4Ipzl+kN1dPXrVYX8nQipJaGeCmEyhnwe3SJ0eWPXwHj
+         d7Dvi/8zOkUxaBL0WcVx+kivEbpWdv27cAB3EOBvf86p0EE30/E5BVRLQbl0HjJlQZWA
+         Bk9gLoCo1vEQJb8R9fPRds+rhvP+/o5WBOQtrpAjZpnu2CIbptJlvhKE3x8q4sv8JxtX
+         1o428gr40JaYrZK8L858iz0eA187GvLFZSVkv001TGFYfQpKx7n/92MMCG/1C/OP6LO0
+         UC5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695038229; x=1695643029;
+        d=1e100.net; s=20230601; t=1695039420; x=1695644220;
         h=content-transfer-encoding:autocrypt:subject:from:cc:to
          :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GJlenrkb6OM2/XFA6V+0SoD/ghxVj4aU3a35ghgluGU=;
-        b=InacNiBDwcVCKlFQDhWYWSI8a4IkV/YY58c8Dipq98b4DJx4IPkWeDGXGsebEAGYu3
-         cCjZ4SxpDXnzBC896X7LsBCHGtjhPttXRcUAGA63nzEyI0FfraitBE9U8cru6j5hZecu
-         ri9CPWwZE0Ok3xt2y+Z7lFozEXxcNNnX8TMMBZ74JyyNomytT/xD5Vi7G6LKVJKugyFu
-         gqOea/mCKuPqFOxpvJcl6pD+iVsktQF4wMVLCWbpDNi8G8pSZFYyu2NB4iaWiv0VIfek
-         R3DyaHetYRsX8wCUBeWS3tq0DGHnIC4pT1Scd5AXL+ty2IyLujX0MrPjQQzdZW4FutBq
-         DfvA==
-X-Gm-Message-State: AOJu0YzH51aWrpHQNSN//rQfoZ33gIxD+CxTYkE0m1mm9LfuWrs+F+FY
-        xAM5cX5xZibwXl5Z7bzSYeALTaAIJBI=
-X-Google-Smtp-Source: AGHT+IFdQLiELVZwL6oRED0L2/WavOZiLON0pa5F4jOkehDzobq4n0504FUPjyEJKjCAa31mFQJbyw==
-X-Received: by 2002:a7b:cb8b:0:b0:3fb:b248:67c with SMTP id m11-20020a7bcb8b000000b003fbb248067cmr7537507wmi.22.1695038229083;
-        Mon, 18 Sep 2023 04:57:09 -0700 (PDT)
+        bh=3wyGydXg4Y6/nCjJZZ1//claaYAsly2YIGeh7lYxvG8=;
+        b=jZi0Sag1VUvxHqQnycvuC84eWntZGjfUb7MmnyJ+fq6gAisMZDpreLBzcbZ92j9yAO
+         g4C8wbkO/az0/trUC8/1DvTHqzlth9ZJ/DtvjLmoSPOr0bRBgMfYOJKjr1nz2e+PW0Ux
+         f7IdiahwdWCMphmUnpQin/CTqVxlO3f9vjloAX8pitpw2FlqOdOxi/OEHitjqf3J2xwi
+         B2mpBaGP12jMkcp1Uxbml/uVpzKTmgTkn1rX+xouHgbscAC8dt7KyVKYTvEV7+C6xo2p
+         vyGs73ngjFNDaERAgCREKdEPb/MKCYoQQB0qqEWJMqdlCnIvG9ecM69cYxbuGyJ4zBBR
+         MoQQ==
+X-Gm-Message-State: AOJu0YyRi4rddMOvoxGSEL4en5XCjE4pH6/FvYhytxkSzvzjZ+X7ABzg
+        VDnWg7NSFahoiz5MsLnkVvtoQx0PqHE=
+X-Google-Smtp-Source: AGHT+IEC5mByMD/z/BBAs3agyf+LMgtLKjZcLnYuDgOnVuTOQklyZFQso5iq/l0f61mV1OROIJe5rQ==
+X-Received: by 2002:a05:600c:22d8:b0:3fe:d448:511a with SMTP id 24-20020a05600c22d800b003fed448511amr7987037wmg.9.1695039419218;
+        Mon, 18 Sep 2023 05:16:59 -0700 (PDT)
 Received: from ?IPV6:2a01:c22:73cf:cc00:24d0:a406:bff7:95f1? (dynamic-2a01-0c22-73cf-cc00-24d0-a406-bff7-95f1.c22.pool.telefonica.de. [2a01:c22:73cf:cc00:24d0:a406:bff7:95f1])
-        by smtp.googlemail.com with ESMTPSA id b14-20020a05600c11ce00b003fee8502999sm15043707wmi.18.2023.09.18.04.57.08
+        by smtp.googlemail.com with ESMTPSA id v3-20020adff683000000b0031980294e9fsm473324wrp.116.2023.09.18.05.16.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Sep 2023 04:57:08 -0700 (PDT)
-Message-ID: <94271a34-dbf5-440a-9f53-dc27b8384812@gmail.com>
-Date:   Mon, 18 Sep 2023 13:57:01 +0200
+        Mon, 18 Sep 2023 05:16:58 -0700 (PDT)
+Message-ID: <2f01722d-bb57-4645-8995-4bfebafe41ea@gmail.com>
+Date:   Mon, 18 Sep 2023 14:16:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-US
@@ -58,7 +58,7 @@ To:     Jean Delvare <jdelvare@suse.com>,
         Andi Shyti <andi.shyti@kernel.org>
 Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
 From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] i2c: i801: add helper i801_restore_regs
+Subject: [PATCH] i2c: i801: simplify module boilerplate code
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -114,92 +114,43 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-In few places relevant registers are reset to their initial value on
-driver load. Factor this out to new helper i801_restore_regs to avoid
-code duplication.
-Even though no actual problems are known, this patch may contribute
-to avoiding potential issues by:
-- restoring register values also in the error path of i2c_add_adapter
-- making restoring registers the last step (especially in i801_remove)
+Simplify the module boilerplate code.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
-This patch is a reworked version of a part of previously discussed patch
-"i2c: i801: fix cleanup code in remove() and error path of probe()".
----
- drivers/i2c/busses/i2c-i801.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 9bd712eaf..811541797 100644
+index 811541797..6d02a8b88 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1629,6 +1629,12 @@ static void i801_setup_hstcfg(struct i801_priv *priv)
- 	pci_write_config_byte(priv->pci_dev, SMBHSTCFG, hstcfg);
+@@ -1847,16 +1847,11 @@ static struct pci_driver i801_driver = {
+ 	},
+ };
+ 
+-static int __init i2c_i801_init(void)
++static int __init i2c_i801_init(struct pci_driver *drv)
+ {
+ 	if (dmi_name_in_vendors("FUJITSU"))
+ 		input_apanel_init();
+-	return pci_register_driver(&i801_driver);
+-}
+-
+-static void __exit i2c_i801_exit(void)
+-{
+-	pci_unregister_driver(&i801_driver);
++	return pci_register_driver(drv);
  }
  
-+static void i801_restore_regs(struct i801_priv *priv)
-+{
-+	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
-+	pci_write_config_byte(priv->pci_dev, SMBHSTCFG, priv->original_hstcfg);
-+}
-+
- static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- {
- 	int err, i;
-@@ -1755,6 +1761,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	if (err) {
- 		platform_device_unregister(priv->tco_pdev);
- 		i801_acpi_remove(priv);
-+		i801_restore_regs(priv);
- 		return err;
- 	}
+ MODULE_AUTHOR("Mark D. Studebaker <mdsxyz123@yahoo.com>");
+@@ -1864,5 +1859,4 @@ MODULE_AUTHOR("Jean Delvare <jdelvare@suse.de>");
+ MODULE_DESCRIPTION("I801 SMBus driver");
+ MODULE_LICENSE("GPL");
  
-@@ -1779,12 +1786,10 @@ static void i801_remove(struct pci_dev *dev)
- {
- 	struct i801_priv *priv = pci_get_drvdata(dev);
- 
--	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
- 	i801_disable_host_notify(priv);
- 	i801_del_mux(priv);
- 	i2c_del_adapter(&priv->adapter);
- 	i801_acpi_remove(priv);
--	pci_write_config_byte(dev, SMBHSTCFG, priv->original_hstcfg);
- 
- 	platform_device_unregister(priv->tco_pdev);
- 
-@@ -1792,6 +1797,8 @@ static void i801_remove(struct pci_dev *dev)
- 	if (!priv->acpi_reserved)
- 		pm_runtime_get_noresume(&dev->dev);
- 
-+	i801_restore_regs(priv);
-+
- 	/*
- 	 * do not call pci_disable_device(dev) since it can cause hard hangs on
- 	 * some systems during power-off (eg. Fujitsu-Siemens Lifebook E8010)
-@@ -1802,18 +1809,17 @@ static void i801_shutdown(struct pci_dev *dev)
- {
- 	struct i801_priv *priv = pci_get_drvdata(dev);
- 
--	/* Restore config registers to avoid hard hang on some systems */
--	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
- 	i801_disable_host_notify(priv);
--	pci_write_config_byte(dev, SMBHSTCFG, priv->original_hstcfg);
-+	/* Restore config registers to avoid hard hang on some systems */
-+	i801_restore_regs(priv);
- }
- 
- static int i801_suspend(struct device *dev)
- {
- 	struct i801_priv *priv = dev_get_drvdata(dev);
- 
--	outb_p(priv->original_hstcnt, SMBHSTCNT(priv));
--	pci_write_config_byte(priv->pci_dev, SMBHSTCFG, priv->original_hstcfg);
-+	i801_restore_regs(priv);
-+
- 	return 0;
- }
- 
+-module_init(i2c_i801_init);
+-module_exit(i2c_i801_exit);
++module_driver(i801_driver, i2c_i801_init, pci_unregister_driver);
 -- 
 2.42.0
 
