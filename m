@@ -2,90 +2,103 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22DD7A6730
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Sep 2023 16:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3397D7A674E
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Sep 2023 16:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbjISOq4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Sep 2023 10:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
+        id S232874AbjISOvM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Sep 2023 10:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232832AbjISOqz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Sep 2023 10:46:55 -0400
+        with ESMTP id S231208AbjISOvL (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Sep 2023 10:51:11 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75412BF;
-        Tue, 19 Sep 2023 07:46:50 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22CD7C433C7;
-        Tue, 19 Sep 2023 14:46:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695134810;
-        bh=kNiCJsCewFz4TLCsqksrAT4cC3PggEcrjWbgkKxvCjE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PYqk1G+jPr5zv/QpaLp4AA6V9a4GL1VwF37uS6Xrbc8ReE7oRYrubpdPFOjJM8K3+
-         hRS1IKB4RXa9s8nGXa6u/pOsUdxWBlOdYHlGhFeCm1Gpp3jxKzEFzwi4a9xZ0wslNY
-         Nb7xVfEUKVR6L1I2j5A4H2rDkBtTuYw/rR63P5djPMVPiHVfrNGC441JpFyumuwhtR
-         39JtOgpjOmcPqbz9VbPJYEMJCQx+WWsYPiRfd7k0ymOXIxfen89DpdaYpjyhfUiIyP
-         Q0fkCmOIhipggzdJjgk6wih18EH+KsVvbMOyfu5GLtNTz/6Ps5yA1ysWadfr3/WZa2
-         xpWAcQZ2DMKNw==
-Date:   Tue, 19 Sep 2023 15:46:44 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, rafael.j.wysocki@intel.com,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        dmitry.osipenko@collabora.com, peterz@infradead.org,
-        jonathanh@nvidia.com, richard.leitner@linux.dev,
-        treding@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        stable@vger.kernel.org, Nishanth Menon <nm@ti.com>
-Subject: [GIT PULL] Immutable branch between MFD, I2C and Reboot due for the
- v6.7 merge window
-Message-ID: <20230919144644.GX13143@google.com>
-References: <20230327-tegra-pmic-reboot-v7-0-18699d5dcd76@skidata.com>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708A5BC;
+        Tue, 19 Sep 2023 07:51:05 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79D57C433C7;
+        Tue, 19 Sep 2023 14:51:02 +0000 (UTC)
+Date:   Tue, 19 Sep 2023 15:51:00 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Yann Sionneau <ysionneau@kalrayinc.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Jan Bottorff <janb@os.amperecomputing.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Yann Sionneau <yann@sionneau.net>,
+        Will Deacon <will@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: designware: Fix corrupted memory seen in the ISR
+Message-ID: <ZQm1UyZ0g7KxRW3a@arm.com>
+References: <20230913232938.420423-1-janb@os.amperecomputing.com>
+ <i6h72feyrvo6pajo67b346masyxt7ycpfj46mvrfp4o7suh4ud@xuv5lu64s75m>
+ <a7a85428-d40d-4adb-8f84-75e1dabe19c9@os.amperecomputing.com>
+ <xxnggfauhkfum63p5bkgxsu3m5odyjda7pnwpb5ocwf4gez7fh@4lu6qyqy6dvh>
+ <37e10c3d-b5ab-75ec-3c96-76e15eb9bef8@sionneau.net>
+ <v4hdblxwhl6ncdfxre5gyrve7bgdsorfqpqj53ib6q4tr7aguy@4kfr6ergb3jn>
+ <9de89e14-35bd-415d-97f1-4b6db1258997@os.amperecomputing.com>
+ <ZQlwC9TCSwWJpuxy@arm.com>
+ <ZQl1zwVkx9n2MPvr@shikoro>
+ <da400d3e-a357-1ae8-cb92-728cc4974b67@kalrayinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230327-tegra-pmic-reboot-v7-0-18699d5dcd76@skidata.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <da400d3e-a357-1ae8-cb92-728cc4974b67@kalrayinc.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Enjoy!
+On Tue, Sep 19, 2023 at 02:38:22PM +0200, Yann Sionneau wrote:
+> Hi,
+> 
+> On 9/19/23 12:19, Wolfram Sang wrote:
+> > > I also agree that a wmb() in the i2c driver is not the more elegant fix.
+> > > For similar reasons, we hid barriers in the write*() macros, drivers
+> > > need to stay architecture-agnostic as much as possible.
+> > Exactly my thinking. I wanted to read this patch discussion later this
+> > week. But from glimpsing at it so far, I already wondered why there
+> > isn't a memory barrier in the final accessor to the register.
+> 
+> The regmap accessors used by the designware driver end up calling
+> writel_relaxed() and readl_relaxed() : https://elixir.bootlin.com/linux/v6.6-rc2/source/drivers/i2c/busses/i2c-designware-common.c#L71
 
-The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+OK, since it ends up with the *_relaxed() accessors, there are no
+barriers here. I wonder whether the regmap API should have both standard
+and relaxed variants. If a regmap driver does not populate the
+.reg_write_relaxed etc. members, a regmap_write_relaxed() would just
+fall back to regmap_write().
 
-  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+We went through similar discussions many years ago around the I/O
+accessors and decided to add the barriers to readl/writel() even if they
+become more expensive, correctness should be first. The relaxed variants
+were added as optimisations if specific memory ordering was not
+required. I think the regmap API should follow the same semantics, go
+for correctness first as you can't tell what the side-effect of a
+regmap_write() is (e.g. kicking off DMA or causing an interrupt on
+another CPU).
 
-are available in the Git repository at:
+> In those cases I would say the smp_* barriers are what we are supposed to
+> use, isn't it?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-i2c-reboot-v6.7
+While smp_* is ok, it really depends on what the regmap_write() does. Is
+it a write to a shared peripheral (if not, you may need a DSB)? Does the
+regmap_write() caller know this? That's why I think having the barrier
+in dw_reg_write() is better.
 
-for you to fetch changes up to 510f276df2b91efd73f6c53be62b7e692ff533c1:
-
-  mfd: tps6586x: Register restart handler (2023-07-28 11:33:20 +0100)
-
-----------------------------------------------------------------
-Immutable branch between MFD, I2C and Reboot due for the v6.7 merge window
-
-----------------------------------------------------------------
-Benjamin Bara (5):
-      kernel/reboot: emergency_restart: Set correct system_state
-      i2c: core: Run atomic i2c xfer when !preemptible
-      kernel/reboot: Add device to sys_off_handler
-      mfd: tps6586x: Use devm-based power off handler
-      mfd: tps6586x: Register restart handler
-
- drivers/i2c/i2c-core.h |  2 +-
- drivers/mfd/tps6586x.c | 50 ++++++++++++++++++++++++++++++++++++++++++--------
- include/linux/reboot.h |  3 +++
- kernel/reboot.c        |  4 ++++
- 4 files changed, 50 insertions(+), 9 deletions(-)
+If you do want to stick to a fix in i2c_dw_xfer_init(), you could go for
+dma_wmb(). While this is not strictly DMA, it's sharing data with
+another coherent agent (a different CPU in this instance). The smp_wmb()
+is more about communication via memory not involving I/O. But this still
+assumes that the caller knows regmap_write() ends up with an I/O
+write*() (potentially relaxed).
 
 -- 
-Lee Jones [李琼斯]
+Catalin
