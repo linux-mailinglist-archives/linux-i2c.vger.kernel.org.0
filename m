@@ -2,58 +2,60 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635F17A6BE9
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Sep 2023 21:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C517A6BF1
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Sep 2023 22:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjIST6g (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Sep 2023 15:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
+        id S232960AbjISUAm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Sep 2023 16:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjIST6f (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Sep 2023 15:58:35 -0400
+        with ESMTP id S232994AbjISUAl (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Sep 2023 16:00:41 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9263AF0;
-        Tue, 19 Sep 2023 12:58:29 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A36ADC433C7;
-        Tue, 19 Sep 2023 19:58:28 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFB3F3;
+        Tue, 19 Sep 2023 13:00:35 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86024C433C7;
+        Tue, 19 Sep 2023 20:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695153509;
-        bh=u5J60Ej28pkPmBREqk2gvlRHjHeyOQZbOqVKESDiB38=;
+        s=k20201202; t=1695153635;
+        bh=yBHFcggJxfr9oVyoIAK0o3aPJKqRcii1MV+oGVQdXZ8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nPK4IEa+cHBjYn+8qMhyyX9boPLxquwqbGt5MMT6vE1lF23feceMSYAlIaxgjheBW
-         dkmzu/tDku+jgNs8XUX6Bl+wKUaCy14qoMUPpxbqJ8Vd8Lgbep+zNdo+XUT71MzVJm
-         9wjM0yAkcrOX5mTV+7XViirdryXol77c0xfYRAYqWS9M0YrnU4DkYmBG0sLtRceNoX
-         ++ymTbFgMv10j434XPxYi1vdTOXl6Og+9MhiIjoHkF+vVHpaaODISwYI02GHkI0Zjp
-         jM4URh/vSoflyeeCSPhuCPPFuQxfKReG5NbFbc7/0WNrq3XULa0kcfhUiKvtm89mYT
-         tqE55FP1h/WEg==
-Date:   Tue, 19 Sep 2023 21:58:26 +0200
+        b=g9GnttkX6pnlKaOvdIWEdiYttOsa//ixBKxQcYdRUKBhDPiPd+gPE3ScJGJcWUk45
+         KOiFT/R1BUeRa2fBQhdm9Ms9ZqoEhxbgd/EFQwmQOpEQRrEgeAPuneyqJICSwLNsSG
+         wHFW1jc/GvdbHm0LIGvztT0waf5WZAQ4S7CACQBzMjGuBXRTcXj3S+faHGq8wYv2X+
+         QuAYKB14Xk+d7GmWiICflEGaSQAUfB5zEXTPIdcksxNl7zDDTPNNm6eKrg15+gVNxs
+         QOAHZwlsdPD3/KYT9ZMUHxzW4v/5smxYxxw/zY1pvZmbXXnGIV/Ay6vSayZ065dc21
+         cJnzbNGL++SYA==
+Date:   Tue, 19 Sep 2023 22:00:31 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Yann Sionneau <ysionneau@kalray.eu>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Qii Wang <qii.wang@mediatek.com>,
         Andi Shyti <andi.shyti@kernel.org>,
-        Julian Vetter <jvetter@kalrayinc.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Borne <jborne@kalray.eu>
-Subject: Re: [PATCH v4] i2c: designware: fix __i2c_dw_disable() in case
- master is holding SCL low
-Message-ID: <ZQn9YtgWKQpUM4od@shikoro>
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        =?utf-8?B?6YOt5bCP5qGl?= <joe@gainstrong.cn>
+Subject: Re: [PATCH] i2c: mt65xx: allow optional pmic clock
+Message-ID: <ZQn93wz9fndNWh2Q@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Yann Sionneau <ysionneau@kalray.eu>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
-        Julian Vetter <jvetter@kalrayinc.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Borne <jborne@kalray.eu>
-References: <20230911140749.32386-1-ysionneau@kalray.eu>
+        Daniel Golle <daniel@makrotopia.org>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        =?utf-8?B?6YOt5bCP5qGl?= <joe@gainstrong.cn>
+References: <3bf827929a44c17bfb1bf1000b143c02ce26a929.1693102324.git.daniel@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="szkZFZrLxc3RDUOO"
+        protocol="application/pgp-signature"; boundary="r7tFlyNNSHuH/Tsi"
 Content-Disposition: inline
-In-Reply-To: <20230911140749.32386-1-ysionneau@kalray.eu>
+In-Reply-To: <3bf827929a44c17bfb1bf1000b143c02ce26a929.1693102324.git.daniel@makrotopia.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,57 +66,44 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---szkZFZrLxc3RDUOO
+--r7tFlyNNSHuH/Tsi
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 11, 2023 at 04:07:49PM +0200, Yann Sionneau wrote:
-> The DesignWare IP can be synthesized with the IC_EMPTYFIFO_HOLD_MASTER_EN
-> parameter.
-> In this case, when the TX FIFO gets empty and the last command didn't have
-> the STOP bit (IC_DATA_CMD[9]), the controller will hold SCL low until
-> a new command is pushed into the TX FIFO or the transfer is aborted.
+On Sun, Aug 27, 2023 at 03:13:30AM +0100, Daniel Golle wrote:
+> Using the I2C host controller on the MT7981 SoC requires 4 clocks to
+> be enabled. One of them, the pmic clk, is only enabled in case
+> 'mediatek,have-pmic' is also set which has other consequences which
+> are not desired in this case.
 >=20
-> When the controller is holding SCL low, it cannot be disabled.
-> The transfer must first be aborted.
-> Also, the bus recovery won't work because SCL is held low by the master.
+> Allow defining a pmic clk even in case the 'mediatek,have-pmic' propterty
+> is not present and the bus is not used to connect to a pmic, but may
+> still require to enable the pmic clock.
 >=20
-> Check if the master is holding SCL low in __i2c_dw_disable() before trying
-> to disable the controller. If SCL is held low, an abort is initiated.
-> When the abort is done, then proceed with disabling the controller.
->=20
-> This whole situation can happen for instance during SMBus read data block
-> if the slave just responds with "byte count =3D=3D 0".
-> This puts the driver in an unrecoverable state, because the controller is
-> holding SCL low and the current __i2c_dw_disable() procedure is not
-> working. In this situation only a SoC reset can fix the i2c bus.
->=20
-> Co-developed-by: Jonathan Borne <jborne@kalray.eu>
-> Signed-off-by: Jonathan Borne <jborne@kalray.eu>
-> Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 
-Applied to for-current, thanks!
+Applied to for-next, thanks!
 
 
---szkZFZrLxc3RDUOO
+--r7tFlyNNSHuH/Tsi
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUJ/WEACgkQFA3kzBSg
-KbY3DQ/8CVPVpHGcdgEAUE9igmoNvHYnDkPsuowZoT3tvE/iGYd80gU63jiUzL7v
-nG1XWLhDQPUho+HJHVPNAAbxM/CDZLtEnhTrsyqeZWmI1zsIffb2hDN+wpyHGOCZ
-am5S8M78n3IilV+83zvX5TVxHvkIYqS8xDebPXQgBfO1bZ/0MkKI3XF3FsObj/Wc
-RC7UjZsHNrlsnFDK7+xImFzXHXjLnK6BZYzt4urGgE2gffkyUKMfVaydztyZGeeC
-SCox2f+jBMso3XnYprMamK5QlszvsyUgZ6OZJ0SI6BPJJbfFdlSXkOdgxOQWacBn
-aYpa/gtUIv0vOFwdV/bIIxUfzEXsUua5OTu1L3jdJjlnhyzQX6a4U/IKWuKrTUqC
-v8blCTXa7HcCvDrAe8ZNKPIaph+LZii9zPj4c20DWVaXDMQOvBEPr+mK/OLkst0s
-tS2qdZ0kAljCBkNaYwrAqQXYnf5pF+DlpW7WB+zxLUew11K+mUsKR4Ewe0HcpnQa
-0LRG68Hlm0h2YwbLiOMC2wJeweexOKwIMIt7Gxu01u9ZfvRV4gI2LdENZ0q0mNhR
-yQdu4hboFZRDL5k3TEoy95031+O/3BGB1UWubAKJV82jdJ9aC6SfdeExYiyxqZlo
-juHJ95PkHUX2zOcMrZzBg7p7l6WOwJ+4xKtlXKRp87uTUycSHSY=
-=trD0
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUJ/d8ACgkQFA3kzBSg
+KbZP/g/8Dv1fJqUjSajNDpfl/NUL4+PviUZe6O6Z8+AZ7hfmvNQOu0xnUs+13G5u
+NDk1tEiaFfhhrzgHRxgZyQfwyqPV3JCmEnu2sAWyDMA6MebIIoyF0TJLvqGZSZa6
+pwTwI1dJ6ZB2rqvuLvGs2lxYGquMacY4jX+iZ5RCch6jXCZy8oj4VYMn5GNPdOls
+Og84v8KQJgsbx76LG7wk3daJb5sKMkP+MTqVw9uty6jgcFRk/OorwDoHNjAQYMRM
+1FVJ9W0pu78S0klNaySzlP0YXFnM8Jr+DVQSTgA9p2sbXpwbJm1hZ/z0IJUW9Rdv
+B9Rt4GdQz8J01XKWAtNtlRU/BdJiMI6+IuLM7vssV/eZcJYtmSOpYdR0DJ3Hv8fL
+rxHQe1ol2nCNtoBH6ih19L+f2sRMXnQaSx99YJguNBZC6OqT1HqwX3qSEPr35ofV
+9ICJ8x1nbzjrTDvEGcty4MeV2ijGy4zeBJi3cyJyXsLFYJIixDZHmB6l4y7eyHei
+6ky1JM0+7fg6LtDQqYc9jAF2/dYcMBTlLCcqgyIiEyUId6fE7fr/91aSokRx5QPU
+PXi/vwktQWPQ+5xGPudJ7MO0JXSkOcvFQiC5c7Fuv65sas75diN0+hmIqmKP5eWI
+cNteSvLwQml4fNdW0hk8SzyB7A2tN7mPVfRvHNywYLmeGKVltKY=
+=Hdch
 -----END PGP SIGNATURE-----
 
---szkZFZrLxc3RDUOO--
+--r7tFlyNNSHuH/Tsi--
