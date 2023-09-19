@@ -2,74 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352317A6759
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Sep 2023 16:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAEB7A676E
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Sep 2023 16:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232910AbjISOzk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Sep 2023 10:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
+        id S232974AbjISO6k (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Sep 2023 10:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbjISOzj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Sep 2023 10:55:39 -0400
+        with ESMTP id S232132AbjISO6k (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Sep 2023 10:58:40 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6847FBE;
-        Tue, 19 Sep 2023 07:55:33 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 434B0C433C7;
-        Tue, 19 Sep 2023 14:55:32 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A8192;
+        Tue, 19 Sep 2023 07:58:34 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B54F5C433C7;
+        Tue, 19 Sep 2023 14:58:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695135333;
-        bh=Z+KCWNb28zVEsZA3bgcGqvVW05rZBIKdnf6DwZ8F5+0=;
+        s=k20201202; t=1695135514;
+        bh=iGa9mOvxXrr916ZLBDwrxfoGhDEaWcNjxHwM+NjsHok=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fexae1IRIHDPJnBLkZpujCXwAyJheENZPR93E3wN5P7y/Iw4c2BG9uZqcFLk5UjrG
-         5EWDJvua+WIZGI6QUaDAQgcHelmdYA0fKjllx0nax6AeByY0fJnUFuu3Z/om33yNzq
-         Cb91zdCqDuHyakoV0IOmB4cA9wfXtgw7uSqR3n91kIK1/7+lT2m3z4trFvWVWjWhsx
-         5g/1PmFrvTswUiH6dWWhmR9v6dv6QUFewGjkCP8f3311uuL+lqYxfdwI877Bga3HFv
-         se+yBUofdNn4Xhss9XNFF2gWxoob8KT8TcQGTOBjWynlbDsT54hs12hybMbpQyaPNi
-         GMfSeRnRN6YOw==
-Date:   Tue, 19 Sep 2023 16:55:29 +0200
+        b=TQTE17aEj0vvKuho86KYfIFl0ILTGLi4u9jdY0svVQd20e5Crn53DxoJVp+8frWLw
+         aIIUaHUu30ruCIsjyyyd/z98bMHBu/NqU2NnqnZzTEViIGYTrFK1XVC0OyeDdjLC2Q
+         3701nf8nUiS13I2oDgS8cI7rDyHHAlbQuGQLZxK2Mh7wj8sGuY5MQhZrw4/MB7N0Lo
+         JdFNt3betV9cBJmZWEw+ym63hiZsjbvNBRDJm+Hw3iQeUt6G0ZhXpR+w++m1BYhsPC
+         oK2a0UOMcGuISe6XloughLjbyCZvNNZ5tedJPaiC+R+cnsUnBMCXdT39cSKSgzZn21
+         FtMCus3hbZe/A==
+Date:   Tue, 19 Sep 2023 16:58:30 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Yann Sionneau <ysionneau@kalrayinc.com>,
-        Jan Bottorff <janb@os.amperecomputing.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Yann Sionneau <yann@sionneau.net>,
-        Will Deacon <will@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: designware: Fix corrupted memory seen in the ISR
-Message-ID: <ZQm2Ydt/0jRW4crK@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Yann Sionneau <ysionneau@kalrayinc.com>,
-        Jan Bottorff <janb@os.amperecomputing.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Yann Sionneau <yann@sionneau.net>, Will Deacon <will@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <i6h72feyrvo6pajo67b346masyxt7ycpfj46mvrfp4o7suh4ud@xuv5lu64s75m>
- <a7a85428-d40d-4adb-8f84-75e1dabe19c9@os.amperecomputing.com>
- <xxnggfauhkfum63p5bkgxsu3m5odyjda7pnwpb5ocwf4gez7fh@4lu6qyqy6dvh>
- <37e10c3d-b5ab-75ec-3c96-76e15eb9bef8@sionneau.net>
- <v4hdblxwhl6ncdfxre5gyrve7bgdsorfqpqj53ib6q4tr7aguy@4kfr6ergb3jn>
- <9de89e14-35bd-415d-97f1-4b6db1258997@os.amperecomputing.com>
- <ZQlwC9TCSwWJpuxy@arm.com>
- <ZQl1zwVkx9n2MPvr@shikoro>
- <da400d3e-a357-1ae8-cb92-728cc4974b67@kalrayinc.com>
- <ZQm1UyZ0g7KxRW3a@arm.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Benjamin Bara <bbara93@gmail.com>, rafael.j.wysocki@intel.com,
+        dmitry.osipenko@collabora.com, peterz@infradead.org,
+        jonathanh@nvidia.com, richard.leitner@linux.dev,
+        treding@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        stable@vger.kernel.org, Nishanth Menon <nm@ti.com>
+Subject: Re: [GIT PULL] Immutable branch between MFD, I2C and Reboot due for
+ the v6.7 merge window
+Message-ID: <ZQm3FgIH+bQb8emb@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
+        Benjamin Bara <bbara93@gmail.com>, rafael.j.wysocki@intel.com,
+        dmitry.osipenko@collabora.com, peterz@infradead.org,
+        jonathanh@nvidia.com, richard.leitner@linux.dev, treding@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>, stable@vger.kernel.org,
+        Nishanth Menon <nm@ti.com>
+References: <20230327-tegra-pmic-reboot-v7-0-18699d5dcd76@skidata.com>
+ <20230919144644.GX13143@google.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mv+JQVsHnSl3dLVx"
+        protocol="application/pgp-signature"; boundary="K5ChaIBwZ+fsUzNw"
 Content-Disposition: inline
-In-Reply-To: <ZQm1UyZ0g7KxRW3a@arm.com>
+In-Reply-To: <20230919144644.GX13143@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -81,49 +65,49 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---mv+JQVsHnSl3dLVx
+--K5ChaIBwZ+fsUzNw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> OK, since it ends up with the *_relaxed() accessors, there are no
-> barriers here. I wonder whether the regmap API should have both standard
-> and relaxed variants. If a regmap driver does not populate the
-> .reg_write_relaxed etc. members, a regmap_write_relaxed() would just
-> fall back to regmap_write().
+On Tue, Sep 19, 2023 at 03:46:44PM +0100, Lee Jones wrote:
+> Enjoy!
 >=20
-> We went through similar discussions many years ago around the I/O
-> accessors and decided to add the barriers to readl/writel() even if they
-> become more expensive, correctness should be first. The relaxed variants
-> were added as optimisations if specific memory ordering was not
-> required. I think the regmap API should follow the same semantics, go
-> for correctness first as you can't tell what the side-effect of a
-> regmap_write() is (e.g. kicking off DMA or causing an interrupt on
-> another CPU).
+> The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaa=
+a5:
+>=20
+>   Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-i2c-re=
+boot-v6.7
+>=20
+> for you to fetch changes up to 510f276df2b91efd73f6c53be62b7e692ff533c1:
+>=20
+>   mfd: tps6586x: Register restart handler (2023-07-28 11:33:20 +0100)
 
-Again, I am all with Catalin here. Safety first, optimizations a la
-*_relaxed should be opt-in.
+Pulled, thanks!
 
 
---mv+JQVsHnSl3dLVx
+--K5ChaIBwZ+fsUzNw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUJtl0ACgkQFA3kzBSg
-KbbFXRAAgy4qEqLgh7Xm0EoQCPqnMbizqcMFhaFIKjxcfbI2v5e6Gk92SdUqtAna
-cL+5uqpCZ9ZsF7lLzTLJwqBOzMqCB5b16JRKy6WAwXB12Cy3CtF2SeC8s90JpIk+
-vi8FqnYLS+0PxjaC46iuAU52OTi9uCwew8puCS5vxi7zycgsjdCCjRbmHTAvbC0E
-yxQDpUWNGkOrpdl/3lPnEwdRrIpuD/pFZt6v55ytbzMbakZigH532jWkXKUPNHoG
-2NgC59AvvYWx9XPAO2Pd1YwtOoVwCjbEaSyc+jFZqtwPocrueQCXnOiXHVXJ0z0F
-12alQRQnb78kAz9YUnhG0hf9fCPj/2wSObaAWUap3FhLJ0eV53sfYidO2rCVEpns
-Onl6sqrbpakVhjCNWA6e1XBe/rKNKWi4QkX5o3+c8mwydkL0OWSxb3Xe+BOt770/
-41dcVM1nG2O0waMCJJr1UYym3gL9GYOhIbF4rrRa2jpmZZIHzG0jVkGB7Cj2LoY+
-KA5iYIzS7jm+PNjC8zFgCUjc06D964jGAYJNfG4X8aYb0/nfaFniuGKGCOi2LHLi
-G9bqyKr7Mg/5Do7AKgmXwhkrRoJqTfQ7tTjDgEG0M/shTU7QrA60XpNXN3j4K5zT
-uzEbo+nxyc4L7PfzZU97e9Rmtp+mlPSfT/itDzT0sUn3EB56VUk=
-=7WHl
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUJtxYACgkQFA3kzBSg
+KbYomQ/+I1i6wa9VyhVNrsIjBWBmYsLnZcvqk0cK2TwYmYoQnnvjPOyuoYKDRVZR
+TBYgPogyQFyqNG5hxmqt3J5QunnaxrcdY2zWyG+kOb9m4T/bISfImOyWpDVoFP+z
+E09z6ny5WQGsCSn/FSsRrKxQm/g40Jr9kUiWsd/mrHBOP3TP2mDQBpkhX3OPdW+d
+Dm0FzWbUY3CJtvYtVS7EWGYUthitZh8cyp7TUTgd/k50H/9nyhrEf0xn95FyoNQL
+BN3nJeuJ+sR3YNxknJAYuI3nEmjTt17rgIGSR0q0Y83C85NDBf3WCD1IbvJjXz3c
+UVrYL4R6jFPZ4Gfc2wLCyk4ZTNGNU+p/o5chiLfOL60skBigeLxOyduN1dVea1rB
+OcHbCu2T5d7LCgjcUBVUwJg3A/HZKKOz3q9/e3q4W1altwpgKcJ3D9XNxf8GWGgq
+ic/9iPcs4CujyfsSnIMt2BH1+wACqc/tPr7jyRq7Sy6nIJkOnafh/pnivM6oGNNl
+BLQCgBbkXAefXQwAD0b7PH/IBIO3WuIsaPmAzLq8oUFixPzp4RaFSNARLYAOwlVY
+BxdfQwa8LEXYVq63zFkZ7TbG7BdRtXc9agOXLNHYH2wtMPNsfc9pEqS8d8BVDszD
+2O/US/Y1kMAVly5hJzW1EXrlnleK79Wna9mDa4F4flyzVEit4rM=
+=db+7
 -----END PGP SIGNATURE-----
 
---mv+JQVsHnSl3dLVx--
+--K5ChaIBwZ+fsUzNw--
