@@ -2,145 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0BF7A5CD6
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Sep 2023 10:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940047A5D2B
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Sep 2023 10:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjISIqX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 19 Sep 2023 04:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
+        id S230154AbjISI6c (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 19 Sep 2023 04:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbjISIqU (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Sep 2023 04:46:20 -0400
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADDA12C;
-        Tue, 19 Sep 2023 01:46:14 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-59be9a09c23so54054057b3.1;
-        Tue, 19 Sep 2023 01:46:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695113173; x=1695717973;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W9gDLlTbkTy+GJtIonlGZoKgcN5Rc/QMrBSOswFOmJU=;
-        b=XtIiEBbNKhdQ5ePIcmksgm90zXGg0r/8ACyUAIPL/zLYEbOHALIjicOpBAp4VHp3+1
-         gqjxROTVFeHPhfEd9XtggB05hc8EfSddAnMp0hRFsveR4h0iJFHziaWDVBjPxZUQo08c
-         NyUxIs+lZwXQHftun1HQFdUVLHTtv0tK4l4FbafJ47EQc2behF2qG9vmRxX+TCI0SyKt
-         cJWr+6cmfu6Lv7FL/Ve8Mxups28lyEzu0yWnxEHor2YwE6Yf2FqpLzvmH1sZTiVtoG0i
-         m2GSJZzIAfQvj0oTSOKvIq/H1a55y89wgfTIPsvCeY54w5UcKlKIamTC5Js64FLme2cd
-         w6Lw==
-X-Gm-Message-State: AOJu0Yzb9xvO7r7RrQGNzTNtEusJQ/JDgmx0wa/+9HcUuNgQna5QIveD
-        xFu+3khACLjfVFxPGgXhZeqQVjTQsYpQNg==
-X-Google-Smtp-Source: AGHT+IFHw9C+Hc2uB35nJw64YBBhY+Pn+Qggfd1kl2yeSZge063uQlCQ9XDe+RLzSxgpXdKjY+Mbqw==
-X-Received: by 2002:a0d:df09:0:b0:55a:3ce9:dc3d with SMTP id i9-20020a0ddf09000000b0055a3ce9dc3dmr11625643ywe.13.1695113173002;
-        Tue, 19 Sep 2023 01:46:13 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id z185-20020a8189c2000000b0059af9f2ee68sm3058131ywf.66.2023.09.19.01.46.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Sep 2023 01:46:12 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-d7b79a4899bso4930129276.2;
-        Tue, 19 Sep 2023 01:46:12 -0700 (PDT)
-X-Received: by 2002:a5b:70b:0:b0:d0c:110b:2f17 with SMTP id
- g11-20020a5b070b000000b00d0c110b2f17mr10594697ybq.53.1695113172381; Tue, 19
- Sep 2023 01:46:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230913062950.4968-1-wsa+renesas@sang-engineering.com> <20230913062950.4968-2-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230913062950.4968-2-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 19 Sep 2023 10:46:00 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX8Ug6sQX97_CyFbpAN1Emp7d891wJAWg8pLpnM3q+ysQ@mail.gmail.com>
-Message-ID: <CAMuHMdX8Ug6sQX97_CyFbpAN1Emp7d891wJAWg8pLpnM3q+ysQ@mail.gmail.com>
-Subject: Re: [PATCH RFT 1/2] i2c: rcar: reset controller is mandatory for Gen3+
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
+        with ESMTP id S231222AbjISI61 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Sep 2023 04:58:27 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFDF120
+        for <linux-i2c@vger.kernel.org>; Tue, 19 Sep 2023 01:58:21 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB34C433C7;
+        Tue, 19 Sep 2023 08:58:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695113901;
+        bh=btMSQV0k0d36XzeVxBDIvRVioNucy1pO8/g+IpnfBzY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GIIbkC0++EpKVF/2eX4mRjwjUof0yp+dqRm1sHtVyQbl/Y/YIeeRHV2lMzG+g6DD7
+         V2dkTHljIVaZHTYxk93JgQcC/7WhBgd6IqS1CnR5DRZyk1DMkMgPNlCK6rYGtunNl1
+         Gt85oknqyiCIjsI3KLLjiQATLSYtkYxx5u2hzL4h4kRCNGD5LEkDNNL3YbMOCQh8Nj
+         Xn5icxBnnRwS7dWOJ/P/6E0Ur5aefgI5OJ4FP0bsSGPaqAlMC0sUzeFqTUIQ16XejT
+         5Qsrww/n/5C9S0hmaqHP3oS3oV4eCVsNBnxwxSRFA46BzPegUHyIrgaue/tht4jIuO
+         KHQCJr8cT5ZzQ==
+Date:   Tue, 19 Sep 2023 10:58:17 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Andi Shyti <andi.shyti@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH v3] i2c: i801: fix potential race in
+ i801_block_transaction_byte_by_byte
+Message-ID: <ZQliqdEjHaI2KQEE@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <205f1930-f26c-9533-ef09-e37377d9ef10@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oZGmSW1v5LTBOVxk"
+Content-Disposition: inline
+In-Reply-To: <205f1930-f26c-9533-ef09-e37377d9ef10@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
 
-Thanks for your patch!
-On Wed, Sep 13, 2023 at 8:41 AM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> Initially, we only needed a reset controller to make sure RXDMA works at
-> least once per transfer. Meanwhile, documentation has been updated. It
-> now says that a reset has to be performed prior every transaction, also
-> if it is non-DMA. So, make the reset controller a requirement instead of
-> being optional.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+--oZGmSW1v5LTBOVxk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Sat, Sep 09, 2023 at 10:25:06PM +0200, Heiner Kallweit wrote:
+> Currently we set SMBHSTCNT_LAST_BYTE only after the host has started
+> receiving the last byte. If we get e.g. preempted before setting
+> SMBHSTCNT_LAST_BYTE, the host may be finished with receiving the byte
+> before SMBHSTCNT_LAST_BYTE is set.
+> Therefore change the code to set SMBHSTCNT_LAST_BYTE before writing
+> SMBHSTSTS_BYTE_DONE for the byte before the last byte. Now the code
+> is also consistent with what we do in i801_isr_byte_done().
+>=20
+> Reported-by: Jean Delvare <jdelvare@suse.com>
+> Closes: https://lore.kernel.org/linux-i2c/20230828152747.09444625@endymio=
+n.delvare/
+> Cc: stable@vger.kernel.org
+> Acked-by: Andi Shyti <andi.shyti@kernel.org>
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
-> --- a/drivers/i2c/busses/i2c-rcar.c
-> +++ b/drivers/i2c/busses/i2c-rcar.c
-> @@ -838,12 +838,10 @@ static int rcar_i2c_master_xfer(struct i2c_adapter *adap,
->
->         /* Gen3 needs a reset before allowing RXDMA once */
->         if (priv->devtype == I2C_RCAR_GEN3) {
-> -               priv->flags |= ID_P_NO_RXDMA;
-> -               if (!IS_ERR(priv->rstc)) {
-> -                       ret = rcar_i2c_do_reset(priv);
-> -                       if (ret == 0)
-> -                               priv->flags &= ~ID_P_NO_RXDMA;
-> -               }
-> +               priv->flags &= ~ID_P_NO_RXDMA;
-> +               ret = rcar_i2c_do_reset(priv);
-> +               if (ret)
-> +                       priv->flags |= ID_P_NO_RXDMA;
+Applied to for-next, thanks!
 
-This is pre-existing, but if rcar_i2c_do_reset() returns an error,
-that means the I2C block couldn't get out of reset.  Are we sure we
-can still do PIO transfers in that case, or should this be considered
-a fatal error?
 
->         }
->
->         rcar_i2c_init(priv);
-> @@ -1096,11 +1094,13 @@ static int rcar_i2c_probe(struct platform_device *pdev)
->
->         if (priv->devtype == I2C_RCAR_GEN3) {
->                 priv->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-> -               if (!IS_ERR(priv->rstc)) {
-> -                       ret = reset_control_status(priv->rstc);
-> -                       if (ret < 0)
-> -                               priv->rstc = ERR_PTR(-ENOTSUPP);
-> -               }
-> +               if (IS_ERR(priv->rstc))
-> +                       return dev_err_probe(&pdev->dev, PTR_ERR(priv->rstc),
-> +                                            "couldn't get reset");
-> +
-> +               ret = reset_control_status(priv->rstc);
-> +               if (ret < 0)
-> +                       return ret;
+--oZGmSW1v5LTBOVxk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-This is a pre-existing check, but do you really need it?
-This condition will be true if the reset is still asserted, which
-could happen due to some glitch, or force-booting into a new kernel
-using kexec.  And AFAIUI, that should be resolved by the call to
-rcar_i2c_do_reset() above.
+-----BEGIN PGP SIGNATURE-----
 
->         }
->
->         /* Stay always active when multi-master to keep arbitration working */
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUJYqUACgkQFA3kzBSg
+Kba1cw//Sn4z3hpcVeW9ZH25hrzJ+e9+ib/Ep/c3DKIoJOfh8EUSAie3Ns/+XJkP
+M7xP5BgqNaKQ4DCLsTWazl491SKDjUKHBcV+i6Fm+mfIZ/1zZUOTNwMzuoQGWUY+
+taZROHcSNQ5KGdR1DqihlG1Y+fiVhfNH1FyeuR++y+ubhz1d/ZKAmmnboVOdA7O5
+wwWmAwsycCevSUsrTwjMAvIELAj2ANkgfeN/AfNUXBwfqeY826cABhubqO2wg+uT
+Yoxmm4tSPcN4QWVoMGRyLM1KnyucC7QCC28PhZh8aetNBU+9pPh5Ch5+2hHgZoud
+gsZ7ZI6Pg0pUVEEBvvCSuXrOX144ot4Qxdf2Zx13VcnNNeOnPPXiDYtr8+pqqe39
+lleLhWyTEPRV6+/5Xu0w4avylwFDWuIxTdCYOz2FHE78OYfX2Y2NTamTxo/PT5Bp
+H96gJz1Euo9yJzcofpUA+4uK9drbFE/Mn4aCmbCvVA5wplFTbH8jitGmaQ0bHumf
+3bDPgXEQju/OEfgF8ICaz1xUAF+WB21ljdXnVNbL0ivHlLEcJ8jT/Rc9Wpd4dzZU
+HQgPmPL0r0sx/Xq9cOhRX25Y4lUihOCOhZytVWme2qeUgYk6Q143DDVBfk21V5hN
+sQI95nYnYC01grWLc2/x6f5I2B9zMHcPjvuU4+QihhU/qIVlsNk=
+=XdcF
+-----END PGP SIGNATURE-----
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--oZGmSW1v5LTBOVxk--
