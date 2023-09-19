@@ -2,120 +2,116 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEC17A5E34
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Sep 2023 11:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF297A5E5F
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Sep 2023 11:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjISJhR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 19 Sep 2023 05:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
+        id S231178AbjISJmf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 19 Sep 2023 05:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231724AbjISJhH (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Sep 2023 05:37:07 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D611B8
-        for <linux-i2c@vger.kernel.org>; Tue, 19 Sep 2023 02:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sang-engineering.com; h=date:from:to:cc:subject:message-id
-        :references:mime-version:content-type:in-reply-to; s=k1; bh=HWLP
-        fI01KZohB/1GOGLxTPNllKzeM+HqgsDWNu38w9c=; b=P3f/njRaxT/ghHSY9YuQ
-        uXRqYj9iPHlDRdklCj+KjiX1OuH9LgtEX4Gmixo5TtM+bk/HFs4mmpDqYsH06eDx
-        6Bjl0Wf1EJ37ddWZUlR3IEeKuLs8HkYhXXQv5nnPp4q2MV+UAXXIzsMJBIYw3u5I
-        VCKOBVoxu2j5eNbP9lOqJ2jxosHeiq+uzxyzJRuRZp84bO+wAdqTyT1Jw0b632ha
-        apIZT8d/85wnb5Ekn4H4ALdo0JOkneNsn/jZqkwDFviG/x8vnkD4R7jjVqv0kwql
-        39urWYABzdZRq/DbwvPtk2AbeIK+vsOrXpmyBSRNIvKhT5KM4jUqWjK/YC2ZSJEX
-        Ag==
-Received: (qmail 164169 invoked from network); 19 Sep 2023 11:36:44 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Sep 2023 11:36:44 +0200
-X-UD-Smtp-Session: l3s3148p1@kYsy/7IF2lYucraB
-Date:   Tue, 19 Sep 2023 11:36:43 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
+        with ESMTP id S229484AbjISJme (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 19 Sep 2023 05:42:34 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5291EA;
+        Tue, 19 Sep 2023 02:42:28 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-d85800eb234so142091276.0;
+        Tue, 19 Sep 2023 02:42:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695116548; x=1695721348;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k0h3rL/x/HNLwpVF5ucA8c2hYYGS3gbuq0AP1UWDvEs=;
+        b=AhuKR+HdBoiUIDJLS+JsYBl7581kTRUAnGloEO/MjEy2okFzy1fHbUv0RAMD7AOIvc
+         jDU4x7HAi07T08BLQ+5IEbSc5osgLboD0N1enAOhj9ySSeuYzGIY+TVSHHu2hJDX4uwC
+         OlNbHhTFWCTC5FFd/cwU61smAcQXf7l6gIGz7gfSkfUpN6junbzPW+yY0V9DO38EZyU9
+         YU6N2sPIzNmvLB/ceEheXMxR9iyt+iYdYL/0rmuSpjZIyCp7vB2aHCQAD8ksMRx9ckdV
+         eAihhfqIkGaxiXReEDK5LdiUYCaXUke+yzJhUFWGqRijXzt0+aovcc9IurROd7wP6RPq
+         kOlA==
+X-Gm-Message-State: AOJu0YzxHhUtyfdPMxc7L/9hm11Mx75RsXb5fPMzSJ7sMjfiEZbapopU
+        ypG/qgg5yISqG79yJ4ZAyW9WoDyC//araQ==
+X-Google-Smtp-Source: AGHT+IE+KcTp0QZC8Qykg6chQUk/YP+wwMubs2Ve6QNR3XrrihoWsgqreIKpCvxkt7dPSLlL3zV1Ag==
+X-Received: by 2002:a5b:60a:0:b0:d7e:44de:1c1 with SMTP id d10-20020a5b060a000000b00d7e44de01c1mr10151542ybq.14.1695116547897;
+        Tue, 19 Sep 2023 02:42:27 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id z19-20020a25ad93000000b00d72176bdc5csm2763486ybi.40.2023.09.19.02.42.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Sep 2023 02:42:27 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-59bcd927b45so57167697b3.1;
+        Tue, 19 Sep 2023 02:42:27 -0700 (PDT)
+X-Received: by 2002:a0d:d583:0:b0:59b:4f2d:231 with SMTP id
+ x125-20020a0dd583000000b0059b4f2d0231mr12017509ywd.45.1695116547461; Tue, 19
+ Sep 2023 02:42:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230913062950.4968-1-wsa+renesas@sang-engineering.com> <20230913062950.4968-3-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230913062950.4968-3-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 19 Sep 2023 11:42:16 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX3LTp-35_+2QAkvq0a+K8uAzY2R9A8xryjP5po+d18ig@mail.gmail.com>
+Message-ID: <CAMuHMdX3LTp-35_+2QAkvq0a+K8uAzY2R9A8xryjP5po+d18ig@mail.gmail.com>
+Subject: Re: [PATCH RFT 2/2] i2c: rcar: improve accuracy for R-Car Gen3+
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc:     linux-renesas-soc@vger.kernel.org,
         Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFT 2/2] i2c: rcar: improve accuracy for R-Car Gen3+
-Message-ID: <ZQlrq68kQNWESkkC@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230913062950.4968-1-wsa+renesas@sang-engineering.com>
- <20230913062950.4968-3-wsa+renesas@sang-engineering.com>
- <CAMuHMdWO2KVpg50Zxak6e_7-5c5Xg6O2PJkPkTfrR=treOtUig@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yvMLh94UaA2UoAoN"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWO2KVpg50Zxak6e_7-5c5Xg6O2PJkPkTfrR=treOtUig@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Wolfram,
 
---yvMLh94UaA2UoAoN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, Sep 13, 2023 at 11:38 AM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> With some new registers, SCL can be calculated to be closer to the
+> desired rate. Apply the new formula for R-Car Gen3 device types.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Hi Geert,
+> --- a/drivers/i2c/busses/i2c-rcar.c
+> +++ b/drivers/i2c/busses/i2c-rcar.c
 
-> > +       u32 scl_gran;
->=20
-> You may want to store just u16 schd and scld instead, so you don't
-> have to calculate them over and over again in rcar_i2c_init().
-> They are calculated in rcar_i2c_clock_calculate() (called from .probe())
-> anyway to validate ranges.
->=20
-> That would also avoid the need to come up with a better name for
-> scl_gran ;-)
+> -       /* keep icccr value */
+> -       priv->icccr = scgd << cdf_width | cdf;
+> +               priv->icccr = scgd << cdf_width | cdf;
+> +       } else {
+> +               u32 x, sum_ratio = RCAR_SCHD_RATIO + RCAR_SCLD_RATIO;
+> +               /*
+> +                * SCLD/SCHD ratio and SMD default value are explained above
+> +                * where they are defined. With these definitions, we can compute
+> +                * x as a base value for the SCLD/SCHD ratio:
+> +                *
+> +                * SCL = clkp / (8 + 2 * SMD + SCLD + SCHD + F[(ticf + tr + intd) * clkp])
+> +                * SCL = clkp / (8 + 2 * RCAR_DEFAULT_SMD + RCAR_SCLD_RATIO * x
+> +                *               + RCAR_SCHD_RATIO * x + F[...])
+> +                *
+> +                * with: sum_ratio = RCAR_SCLD_RATIO + RCAR_SCHD_RATIO
+> +                * and:  smd = 2 * RCAR_DEFAULT_SMD
+> +                *
+> +                * SCL = clkp / (8 + smd + sum_ratio * x + F[...])
+> +                * 8 + smd + sum_ratio * x + F[...] = SCL / clkp
+> +                * x = ((SCL / clkp) - 8 - smd - F[...]) / sum_ratio
 
-I like that idea! Will do.
+Woops, I missed that both "SCL / clkp" above should be "clkp / SCL".
 
-> > +               /* Bail out if values don't fit into 16 bit or SMD beca=
-me too large */
-> > +               if (x * RCAR_SCLD_RATIO > 0xffff || RCAR_DEFAULT_SMD > =
-x * RCAR_SCHD_RATIO)
->=20
-> The second part of the check looks wrong to me, as it would reject
-> all the recommended register values for SMD and SCHD in the docs .
->=20
-> What does "SMD became too large" mean here?
+Fortunately I noticed your "[PATCH 2/2] i2c: rcar: add FastMode+
+support for Gen4" fixed that, but I guess it's better to fix that in
+this patch instead.
 
-Seems you clarified this on your own.
+Gr{oetje,eeting}s,
 
-I will resend this series with the u16 variables and the cosmetic issues
-fixed. And figure out how this slipped through my checkpatch hooks...
+                        Geert
 
-Thanks for the review!
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-   Wolfram
-
-
---yvMLh94UaA2UoAoN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUJa6cACgkQFA3kzBSg
-Kbb2Rg/8DeIFVUDkin+Ck1fKs7dpkMwFXX0bB1xkx6VWsNuQKclA9e3e9ZfHt/tT
-jIqUoPCg7GU3+eeh81jmagTHzjwQR7Ne2f0FledAB0HG8jKQ2/eSqb8nPurKkuTf
-punOPSs8cJkqiAE/kyb5eFesu1sZV1fdZej4WGMgm/9z/5tKDTVCCfCP63S7Wx12
-QVhxIwSALydcTqnmHOjypRNLu4DSQiE8J/Tr7E0++H/QFwXGL9sHsulROX++ZgRA
-wUQ3ZxfPK/TygVyF+eOKvVCBsypxCQzy42b42C3GERg2sycFtvKZos5v6nGPbs0D
-TgAWibNgW0bTul/Ni4gbXlPljpvUZZU0c4eFMbAMu6vHNAl/zbnKHnPeGCcYUr3x
-YjclaBnoEYD3tY9rdZLWhLy+w+4OkTtTcEbJe+58BmFmboQQEb7ahWgR1Ba/DLh5
-KObMOU7oLAvZNQOhhFU456JKUVyL/ev5QdyD5q6WxZ93LmXomf9ihkgqNU1hobQv
-hfaXDN3pEblL1FpTzvL64LfDRLaOI3CJ8J6zyAjY0vkIcXjvT0t8LVYnoxHcCWs0
-L4YDo+jfYIqrb3SnUiIXtga3D2UxKJ5A9AmWs0yShXbFEyhRvcoZ/htFspQNgNJ3
-aH4Yec6Foww3AGyolF9rrF3d0pM960YNOeSo+BFgKFhKNb4gLbs=
-=gaFB
------END PGP SIGNATURE-----
-
---yvMLh94UaA2UoAoN--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
