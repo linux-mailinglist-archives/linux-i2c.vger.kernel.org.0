@@ -2,82 +2,140 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0FA7A9AD2
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Sep 2023 20:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81467A9926
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Sep 2023 20:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbjIUSvB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 Sep 2023 14:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
+        id S230241AbjIUSLs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 Sep 2023 14:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjIUSur (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Sep 2023 14:50:47 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1644F8A20D
-        for <linux-i2c@vger.kernel.org>; Thu, 21 Sep 2023 10:40:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sang-engineering.com; h=from:to:cc:subject:date:message-id
-        :mime-version:content-transfer-encoding; s=k1; bh=BWoG3Cv+9NwMSj
-        Oxgnt6dDveNegqs9pWvhh6JaU1+sY=; b=mYqT33MOiLshEtmkWv7E5tZ4gsTQaw
-        Z49u0NRmMm7GEcTGxlUoayfUctiKXbquROc53D9gXlY0InY8Su3uIlmtDRC2jTW4
-        vKQFJgzOFiT2juQoCzjcBkNNlp6PcTNT637JoA5ZbEGEwCUALC6LoOhMN3V842P3
-        +vrbuSU683OydILnh5UaJrY1a7rKMDJNOA2xKbLAIa2E20EcUs2OaEPSjV/AofvV
-        XUtOu9yw+S9aqV+Gxu8HEq75iNFOgWglql3nCB56Dmd2QNMVEE3COtGYNphnXxWt
-        YyWjwpgVh8120C/ZEPKDolV0UBRAbp/VnXp6Rc0kiS4iOUiHSmDNBCWw==
-Received: (qmail 881727 invoked from network); 21 Sep 2023 10:40:29 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Sep 2023 10:40:29 +0200
-X-UD-Smtp-Session: l3s3148p1@xoK6cdoFk1YuciSu
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Minjie Du <duminjie@vivo.com>,
-        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: gpio: remove error checks with debugfs
-Date:   Thu, 21 Sep 2023 10:40:15 +0200
-Message-Id: <20230921084016.3434-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S229947AbjIUSLP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Sep 2023 14:11:15 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7713573D5;
+        Thu, 21 Sep 2023 10:18:34 -0700 (PDT)
+Received: from SHSQR01.spreadtrum.com (localhost [127.0.0.2] (may be forged))
+        by SHSQR01.spreadtrum.com with ESMTP id 38L8vFBT047648;
+        Thu, 21 Sep 2023 16:57:15 +0800 (+08)
+        (envelope-from Huangzheng.Lai@unisoc.com)
+Received: from dlp.unisoc.com ([10.29.3.86])
+        by SHSQR01.spreadtrum.com with ESMTP id 38L8tVw8040607;
+        Thu, 21 Sep 2023 16:55:31 +0800 (+08)
+        (envelope-from Huangzheng.Lai@unisoc.com)
+Received: from SHDLP.spreadtrum.com (shmbx04.spreadtrum.com [10.0.1.214])
+        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4Rrq0B6YBSz2SZtbS;
+        Thu, 21 Sep 2023 16:52:10 +0800 (CST)
+Received: from xm9614pcu.spreadtrum.com (10.13.2.29) by shmbx04.spreadtrum.com
+ (10.0.1.214) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Thu, 21 Sep
+ 2023 16:55:29 +0800
+From:   Huangzheng Lai <Huangzheng.Lai@unisoc.com>
+To:     Andi Shyti <andi.shyti@kernel.org>
+CC:     Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        huangzheng lai <laihuangzheng@gmail.com>,
+        Huangzheng Lai <Huangzheng.Lai@unisoc.com>,
+        Xiongpeng Wu <xiongpeng.wu@unisoc.com>
+Subject: [PATCH V2 3/7] i2c: sprd: Use global variables to record I2C ack/nack status instead of local variables
+Date:   Thu, 21 Sep 2023 16:54:53 +0800
+Message-ID: <20230921085457.32446-4-Huangzheng.Lai@unisoc.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230921085457.32446-1-Huangzheng.Lai@unisoc.com>
+References: <20230921085457.32446-1-Huangzheng.Lai@unisoc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.13.2.29]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ shmbx04.spreadtrum.com (10.0.1.214)
+X-MAIL: SHSQR01.spreadtrum.com 38L8tVw8040607
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-debugfs can handle error pointers in subsequent calls. So, remove the
-error checks as suggested by kerneldoc of this function.
+We found that when the interrupt bit of the I2C controller is cleared,
+the ack/nack bit is also cleared at the same time. After clearing the
+interrupt bit in sprd_i2c_isr(), incorrect ack/nack information will be
+obtained in sprd_i2c_isr_thread(), resulting in incorrect communication
+when nack cannot be recognized. To solve this problem, we used a global
+variable to record ack/nack information before clearing the interrupt
+bit instead of a local variable.
 
-Reported-by: Minjie Du <duminjie@vivo.com>
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Fixes: 8b9ec0719834 ("i2c: Add Spreadtrum I2C controller driver")
+Cc: <stable@vger.kernel.org> # v4.14+
+Signed-off-by: Huangzheng Lai <Huangzheng.Lai@unisoc.com>
 ---
- drivers/i2c/busses/i2c-gpio.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/i2c/busses/i2c-sprd.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-gpio.c b/drivers/i2c/busses/i2c-gpio.c
-index e5a5b9e8bf2c..fb35a75fe0e3 100644
---- a/drivers/i2c/busses/i2c-gpio.c
-+++ b/drivers/i2c/busses/i2c-gpio.c
-@@ -263,15 +263,10 @@ static void i2c_gpio_fault_injector_init(struct platform_device *pdev)
- 	 * 'fault-injector' dir there. Until then, we have a global dir with
- 	 * all adapters as subdirs.
+diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sprd.c
+index aa602958d4fd..dec627ef408c 100644
+--- a/drivers/i2c/busses/i2c-sprd.c
++++ b/drivers/i2c/busses/i2c-sprd.c
+@@ -85,6 +85,7 @@ struct sprd_i2c {
+ 	struct clk *clk;
+ 	u32 src_clk;
+ 	u32 bus_freq;
++	bool ack_flag;
+ 	struct completion complete;
+ 	struct reset_control *rst;
+ 	u8 *buf;
+@@ -119,6 +120,7 @@ static void sprd_i2c_clear_ack(struct sprd_i2c *i2c_dev)
+ {
+ 	u32 tmp = readl(i2c_dev->base + I2C_STATUS);
+ 
++	i2c_dev->ack_flag = 0;
+ 	writel(tmp & ~I2C_RX_ACK, i2c_dev->base + I2C_STATUS);
+ }
+ 
+@@ -393,7 +395,6 @@ static irqreturn_t sprd_i2c_isr_thread(int irq, void *dev_id)
+ {
+ 	struct sprd_i2c *i2c_dev = dev_id;
+ 	struct i2c_msg *msg = i2c_dev->msg;
+-	bool ack = !(readl(i2c_dev->base + I2C_STATUS) & I2C_RX_ACK);
+ 	u32 i2c_tran;
+ 
+ 	if (msg->flags & I2C_M_RD)
+@@ -409,7 +410,7 @@ static irqreturn_t sprd_i2c_isr_thread(int irq, void *dev_id)
+ 	 * For reading data, ack is always true, if i2c_tran is not 0 which
+ 	 * means we still need to contine to read data from slave.
  	 */
--	if (!i2c_gpio_debug_dir) {
-+	if (!i2c_gpio_debug_dir)
- 		i2c_gpio_debug_dir = debugfs_create_dir("i2c-fault-injector", NULL);
--		if (!i2c_gpio_debug_dir)
--			return;
--	}
+-	if (i2c_tran && ack) {
++	if (i2c_tran && i2c_dev->ack_flag) {
+ 		sprd_i2c_data_transfer(i2c_dev);
+ 		return IRQ_HANDLED;
+ 	}
+@@ -420,7 +421,7 @@ static irqreturn_t sprd_i2c_isr_thread(int irq, void *dev_id)
+ 	 * If we did not get one ACK from slave when writing data, we should
+ 	 * return -EIO to notify users.
+ 	 */
+-	if (!ack)
++	if (!i2c_dev->ack_flag)
+ 		i2c_dev->err = -EIO;
+ 	else if (msg->flags & I2C_M_RD && i2c_dev->count)
+ 		sprd_i2c_read_bytes(i2c_dev, i2c_dev->buf, i2c_dev->count);
+@@ -437,7 +438,6 @@ static irqreturn_t sprd_i2c_isr(int irq, void *dev_id)
+ {
+ 	struct sprd_i2c *i2c_dev = dev_id;
+ 	struct i2c_msg *msg = i2c_dev->msg;
+-	bool ack = !(readl(i2c_dev->base + I2C_STATUS) & I2C_RX_ACK);
+ 	u32 i2c_tran;
  
- 	priv->debug_dir = debugfs_create_dir(pdev->name, i2c_gpio_debug_dir);
--	if (!priv->debug_dir)
--		return;
- 
- 	init_completion(&priv->scl_irq_completion);
- 
+ 	if (msg->flags & I2C_M_RD)
+@@ -456,7 +456,8 @@ static irqreturn_t sprd_i2c_isr(int irq, void *dev_id)
+ 	 * means we can read all data in one time, then we can finish this
+ 	 * transmission too.
+ 	 */
+-	if (!i2c_tran || !ack) {
++	i2c_dev->ack_flag = !(readl(i2c_dev->base + I2C_STATUS) & I2C_RX_ACK);
++	if (!i2c_tran || !i2c_dev->ack_flag) {
+ 		sprd_i2c_clear_start(i2c_dev);
+ 		sprd_i2c_clear_irq(i2c_dev);
+ 	}
 -- 
-2.35.1
+2.17.1
 
