@@ -2,43 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1DD7AA303
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Sep 2023 23:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A49A7AA31D
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Sep 2023 23:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbjIUVqA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 Sep 2023 17:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S230387AbjIUVsW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 Sep 2023 17:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbjIUVpk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Sep 2023 17:45:40 -0400
+        with ESMTP id S232664AbjIUVsE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Sep 2023 17:48:04 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0839CE081;
-        Thu, 21 Sep 2023 14:27:16 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF88FC433C8;
-        Thu, 21 Sep 2023 21:27:14 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41744E5ED;
+        Thu, 21 Sep 2023 14:35:13 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7798DC433C8;
+        Thu, 21 Sep 2023 21:35:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695331635;
-        bh=jVkLh9DPAnAnP1lLTr3OB/S19OdOlVvPRQ+dX6pg1/s=;
+        s=k20201202; t=1695332113;
+        bh=5Q9lwGR3nLKBoAjsox+oX7kPsbdEMYb7iKizTcyIEOE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JOw7/cSXng6klDeb+k67KP+hCxSkoFBDQUgh6X+482MYUPfJKtx/wNumFTmlgbOqc
-         +FRRATEnaY6yiCNhiTfaCB3NJKvbTwkG/Quo4c3ySSkwBSeSgxO9ka45AwBaqw91xz
-         aMsCNYU3L7xf5ekJdmPZl36GNGK0Y2OW6KS9bisaINknN8/3XjJwkNEv0Z//Uc1R5e
-         J1mvMLj1dZnU2AqNakg5dn46XDskpLLZMu/hSP3DGtFSFrn0SHjTFseASCmMLqXsNW
-         DpOdCCU/5CGskxSzJf7BBlx3tpeXsCo7YUyK/9zjYyCpwp48MU/AvPuLs5GOP5Hl6z
-         aUirGCPfHOyAg==
-Date:   Thu, 21 Sep 2023 23:27:09 +0200
+        b=uxztyUIjTWdwT+T1RURT7taDdPu4y4tAUJ+xv6/zZZsitNKABQhT2GZiX20iIWaL0
+         zfSGS+251U61Rj8sStvXGs+j7SKdKBhxTzCaH8jgQ9MIA7nMwyQPugWgSlhDhCkSzz
+         P9S5gowLsHTIHgUK42c687Dl/6ngzJq/IWMZonmgYppUoh3R3pnWlAJXiacMygyWcJ
+         PEfytyy16Y0k+gC2ewR7UwtESEkc2r3Pgb8p32fd6e3UVCKOfOAOYvv9/1qxJQSaw6
+         sLRLGeBWF5KvCsewHYO2AvNF1kEn0lyF25xsP5VOzWT+m4jwea15Lqnyak186DEPGm
+         IHsbhYacPqmMQ==
+Date:   Thu, 21 Sep 2023 23:35:07 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] i2c: rcar: improve accuracy for R-Car Gen3+
-Message-ID: <20230921212709.kpjt3lyp6i6fjk57@zenone.zhora.eu>
-References: <20230921125351.3954-1-wsa+renesas@sang-engineering.com>
- <20230921125351.3954-3-wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org, Minjie Du <duminjie@vivo.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: gpio: remove error checks with debugfs
+Message-ID: <20230921213507.pfs3gp5uwgemsqoe@zenone.zhora.eu>
+References: <20230921084016.3434-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230921125351.3954-3-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230921084016.3434-1-wsa+renesas@sang-engineering.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -50,19 +49,34 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi Wolfram,
 
-On Thu, Sep 21, 2023 at 02:53:50PM +0200, Wolfram Sang wrote:
-> With some new registers, SCL can be calculated to be closer to the
-> desired rate. Apply the new formula for R-Car Gen3 device types.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+[...]
 
-I guess you forgot
+> diff --git a/drivers/i2c/busses/i2c-gpio.c b/drivers/i2c/busses/i2c-gpio.c
+> index e5a5b9e8bf2c..fb35a75fe0e3 100644
+> --- a/drivers/i2c/busses/i2c-gpio.c
+> +++ b/drivers/i2c/busses/i2c-gpio.c
+> @@ -263,15 +263,10 @@ static void i2c_gpio_fault_injector_init(struct platform_device *pdev)
+>  	 * 'fault-injector' dir there. Until then, we have a global dir with
+>  	 * all adapters as subdirs.
+>  	 */
+> -	if (!i2c_gpio_debug_dir) {
+> +	if (!i2c_gpio_debug_dir)
+>  		i2c_gpio_debug_dir = debugfs_create_dir("i2c-fault-injector", NULL);
+> -		if (!i2c_gpio_debug_dir)
+> -			return;
+> -	}
+>  
+>  	priv->debug_dir = debugfs_create_dir(pdev->name, i2c_gpio_debug_dir);
+> -	if (!priv->debug_dir)
+> -		return;
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+nice... this reminds me of some more cleanups that needs to be
+done elsewhere.
 
-And as well as in the previous review, you can also add
+Another good thing that comes out from this patch is that if a
+debgufs entry is not created it's not a big deal and we shouldn't
+return but move ahead with the function execution.
 
 Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
 
-Thanks,
 Andi
