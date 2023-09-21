@@ -2,42 +2,42 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A49A7AA31D
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Sep 2023 23:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8CC7AA463
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Sep 2023 00:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjIUVsW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 21 Sep 2023 17:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
+        id S231428AbjIUWHe (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 21 Sep 2023 18:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbjIUVsE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Sep 2023 17:48:04 -0400
+        with ESMTP id S231795AbjIUWHO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 21 Sep 2023 18:07:14 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41744E5ED;
-        Thu, 21 Sep 2023 14:35:13 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7798DC433C8;
-        Thu, 21 Sep 2023 21:35:11 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64701C85C8
+        for <linux-i2c@vger.kernel.org>; Thu, 21 Sep 2023 14:14:27 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 686A6C433C7;
+        Thu, 21 Sep 2023 21:14:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695332113;
-        bh=5Q9lwGR3nLKBoAjsox+oX7kPsbdEMYb7iKizTcyIEOE=;
+        s=k20201202; t=1695330866;
+        bh=3ISIXPSYynm8nPwODdS4GfSYhDZNyO3F8ZKPeuidRmY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uxztyUIjTWdwT+T1RURT7taDdPu4y4tAUJ+xv6/zZZsitNKABQhT2GZiX20iIWaL0
-         zfSGS+251U61Rj8sStvXGs+j7SKdKBhxTzCaH8jgQ9MIA7nMwyQPugWgSlhDhCkSzz
-         P9S5gowLsHTIHgUK42c687Dl/6ngzJq/IWMZonmgYppUoh3R3pnWlAJXiacMygyWcJ
-         PEfytyy16Y0k+gC2ewR7UwtESEkc2r3Pgb8p32fd6e3UVCKOfOAOYvv9/1qxJQSaw6
-         sLRLGeBWF5KvCsewHYO2AvNF1kEn0lyF25xsP5VOzWT+m4jwea15Lqnyak186DEPGm
-         IHsbhYacPqmMQ==
-Date:   Thu, 21 Sep 2023 23:35:07 +0200
+        b=U5+JcMajn4MgTDeQoDLLw80MISA3dpE2T0yFFzc56YFxKnOkCfdBxjLIeRDyDXpQE
+         oFgiad11Mn1lK8jJim173ABmYa67Vh+Sf6NbC2wpL0PcuHHptQjS4W9zYLFyJ15V/I
+         /RB0rhzCtw2fShr++CAk8vmb0jVqk25MIZS7wYi8wEQsCSXdCkQCI/1KsrzsYZcNjE
+         0jkBGzfcoqo+YQRxIym3tZZvEV+1uHgxNd1BsKrvOo21h0QWqZQSV3Hjl3CloiFMHC
+         bq7fQ012HKPEQAJzMUA907jWSkn4jfouO2Us+va3+0i/fLHZKUN6aGbLuf5yMExcmq
+         gT7cgS3u13JSg==
+Date:   Thu, 21 Sep 2023 23:14:23 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org, Minjie Du <duminjie@vivo.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: gpio: remove error checks with debugfs
-Message-ID: <20230921213507.pfs3gp5uwgemsqoe@zenone.zhora.eu>
-References: <20230921084016.3434-1-wsa+renesas@sang-engineering.com>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c: i801: use i2c_mark_adapter_suspended/resumed
+Message-ID: <20230921211423.e55vvjmckfwhusxj@zenone.zhora.eu>
+References: <0d13ed54-af1d-4c21-a90c-ba8c6b03f67e@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230921084016.3434-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <0d13ed54-af1d-4c21-a90c-ba8c6b03f67e@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -47,35 +47,42 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+Hi Heiner,
 
-[...]
-
-> diff --git a/drivers/i2c/busses/i2c-gpio.c b/drivers/i2c/busses/i2c-gpio.c
-> index e5a5b9e8bf2c..fb35a75fe0e3 100644
-> --- a/drivers/i2c/busses/i2c-gpio.c
-> +++ b/drivers/i2c/busses/i2c-gpio.c
-> @@ -263,15 +263,10 @@ static void i2c_gpio_fault_injector_init(struct platform_device *pdev)
->  	 * 'fault-injector' dir there. Until then, we have a global dir with
->  	 * all adapters as subdirs.
->  	 */
-> -	if (!i2c_gpio_debug_dir) {
-> +	if (!i2c_gpio_debug_dir)
->  		i2c_gpio_debug_dir = debugfs_create_dir("i2c-fault-injector", NULL);
-> -		if (!i2c_gpio_debug_dir)
-> -			return;
-> -	}
+On Wed, Sep 20, 2023 at 09:29:28AM +0200, Heiner Kallweit wrote:
+> When entering the suspend callback, at first we should ensure that
+> transfers are finished and I2C core can't start further transfers.
+> Use i2c_mark_adapter_suspended() for this purpose, and complement it
+> with a call to i2c_mark_adapter_resumed() in the resume path.
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+> Rebased version of a previously discussed patch, now w/o touching
+> the remove and shutdown path.
+> ---
+>  drivers/i2c/busses/i2c-i801.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index 6d02a8b88..26f132277 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -1818,6 +1818,7 @@ static int i801_suspend(struct device *dev)
+>  {
+>  	struct i801_priv *priv = dev_get_drvdata(dev);
 >  
->  	priv->debug_dir = debugfs_create_dir(pdev->name, i2c_gpio_debug_dir);
-> -	if (!priv->debug_dir)
-> -		return;
+> +	i2c_mark_adapter_suspended(&priv->adapter);
+>  	i801_restore_regs(priv);
+>  
+>  	return 0;
+> @@ -1829,6 +1830,7 @@ static int i801_resume(struct device *dev)
+>  
+>  	i801_setup_hstcfg(priv);
+>  	i801_enable_host_notify(&priv->adapter);
+> +	i2c_mark_adapter_resumed(&priv->adapter);
 
-nice... this reminds me of some more cleanups that needs to be
-done elsewhere.
-
-Another good thing that comes out from this patch is that if a
-debgufs entry is not created it's not a big deal and we shouldn't
-return but move ahead with the function execution.
+I think I already reviewed this patch previously and I had same
+concerns as Jean, anyway,
 
 Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
 
