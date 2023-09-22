@@ -2,60 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948E67ABA2F
+	by mail.lfdr.de (Postfix) with ESMTP id E1C007ABA30
 	for <lists+linux-i2c@lfdr.de>; Fri, 22 Sep 2023 21:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjIVTmn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Sep 2023 15:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        id S230373AbjIVTmo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Sep 2023 15:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjIVTmm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Sep 2023 15:42:42 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB5EAF
+        with ESMTP id S229541AbjIVTmo (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Sep 2023 15:42:44 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31C4C1
         for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:42:37 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-405524e6740so2482025e9.1
-        for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:42:36 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3215f19a13aso2610360f8f.3
+        for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:42:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695411755; x=1696016555; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1695411756; x=1696016556; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=+0NUqPQFaTEasE2HDG9p9tl+WpsS9QXfHr2ExKwakUg=;
-        b=OC6rK3zvXF93HunAAf82+gB6QWwzae4Wly21t4s7iWcljA2f44NvBEj3HhCXSgQ3xv
-         lZGlA5hSNqpsLT8coZTFQJZXMLd/BrpSCxKDwli4smDdrdGbGO/4RuJ296a1m2PGGGn5
-         i5txCgjR1kK8qVRXqDAcGHBffN1V6bnrEHteOefluEjtgCo8nB3MOTslsPwUbzm9L8F7
-         YgCKO992glWzhSh3984uN0r+QQy0OuDUTDnwnECEG9PAh1zzI6qPdpKZBQRiIrMagG6z
-         so5n3zv615rGglyTBlcVjJAFhmiq3Tc7sKGfPrD0kOqyhZVUaabHS0YBqN39ZgkJAZHE
-         dI7Q==
+        bh=/TIlUAnIJQI2qk3es/6nOwCf87TBbsLDeequcDWBmd4=;
+        b=lgjkthfHowA6p1+iTHt64hH8UxT1VI7absoA3SBiYAMhBsVlo0IVvsBW0mdFMySS+u
+         TcFG4Nq6hiNSrv1xtKvBEXP5xVtJPeVzjyXvADDPeaTcZn14A6UeZdkWoyKhZsi94UEd
+         ehK/g0JJMEy3OPda9IhVqjUXHS9uM0cYH9Navplgb6+2owOA9eFKS/9QGSg/luQJJ7Vg
+         s3FhDBh5gV0Jqfbs6uGWjpd3r573WyIRGo6vw3RA2kuN/zTroWScEKytjXTw6/C9ytte
+         IOqCI5N5kXtce6vH+HnxmXVuaM5OAndpf7QEta2FOsjZz4o4WiPkRwXp+GaL0dsD+KNl
+         0teQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695411755; x=1696016555;
+        d=1e100.net; s=20230601; t=1695411756; x=1696016556;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+0NUqPQFaTEasE2HDG9p9tl+WpsS9QXfHr2ExKwakUg=;
-        b=AIUWCxzehTsUK1LPgR8R80BdEr+nsw40NO86V3QhpVni0zAzEyj7wtzG99KETtlsQX
-         wUaMt1I+schrX/JZfNFwzVvk2s9HG5nbZ8weHW1gLfLsk7e17Z/2KtZUcR+MXJpq8uqq
-         01tEx+zxjiMdkXAlaT7dssvcK82Wpq1ljDHkDNujpKpeHzK3qMFyinVlgnnvbT3r5jMf
-         fE/oKcR6KqQH6yPMCAm+8mbU/h5AedxJYK91mCiwLnYlVtWt+fDbE8dNsO7HDfuj7Fj6
-         GL8i9Zky1HUm9RLzY4fCL4CH3vjJJ145Rm/1vbVJkfzKExZ7rkwK4B+zKbp8xCBcFkCI
-         LZow==
-X-Gm-Message-State: AOJu0YwJthLugvyaWQIZJApPNBBf6VBJYoHn8DhTYKljGm2AyjYom4y0
-        wMcSG+dnHNtc8x3CSLJcFn8=
-X-Google-Smtp-Source: AGHT+IG1RCsvVev1tcCjo+/AcUXJBRzsgaIPhouAPpzkUYg8ZROs0je0OuSh2KOlCzKF8S3LhipNaQ==
-X-Received: by 2002:a5d:6a8c:0:b0:317:d048:8d87 with SMTP id s12-20020a5d6a8c000000b00317d0488d87mr533744wru.61.1695411755247;
+        bh=/TIlUAnIJQI2qk3es/6nOwCf87TBbsLDeequcDWBmd4=;
+        b=H8ivEOOJAJaicP9ScgAoih3Mlb+VvxG2aY50YHJbDQ+nQeIYMgBUMajw+ZUbovEcLe
+         9EVElJdDiJLfwNYpAp84cfEiZZ656fgTXyJyg1KSUTjzSDn17JKPKUeXdP1zlzu3ZJZx
+         7ENerzEOtXTYHJ1V0ztRBEcNjpyhIiwdcGos6fbrgKBs61VJl+nKp7VApbM1/Nn3Adon
+         1nxT0ryPtGvcdWHOduL5r/mfnvXMSsAv0X1Xv+/4VIGzhkMZbPzh618oYwIP3CL84flK
+         hBJCGyaMNQprgM/B1IVaTVtzuWQo38pkmy0Sb8QByKberO67le8Sd5sc8DEqlJFZM8aY
+         Zbtw==
+X-Gm-Message-State: AOJu0Yxwb0dPcjcXFV18hji6vE/ZwHqmm+KZTAW2Lgc2cbV4FVcxJYFw
+        4FE+SQpDXysvbYGmPpi5Ryg=
+X-Google-Smtp-Source: AGHT+IGatLtZfe0lUDxOs5GgFC48Yv3NMIoDaEmVyY8UR0RBohJElt4DhzYZajjxybrYTQItj0hd+w==
+X-Received: by 2002:a5d:4570:0:b0:31f:d8b3:ea06 with SMTP id a16-20020a5d4570000000b0031fd8b3ea06mr575435wrc.0.1695411755949;
         Fri, 22 Sep 2023 12:42:35 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:9589:7c00:3475:142c:c3cb:ba32? (dynamic-2a02-3100-9589-7c00-3475-142c-c3cb-ba32.310.pool.telefonica.de. [2a02:3100:9589:7c00:3475:142c:c3cb:ba32])
-        by smtp.googlemail.com with ESMTPSA id t16-20020a5d49d0000000b0031c5b380291sm5174077wrs.110.2023.09.22.12.42.34
+        by smtp.googlemail.com with ESMTPSA id t16-20020a5d49d0000000b0031c5b380291sm5174077wrs.110.2023.09.22.12.42.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Sep 2023 12:42:34 -0700 (PDT)
-Message-ID: <71286ba3-27cb-41cb-bb38-2c4e6d2a49f1@gmail.com>
-Date:   Fri, 22 Sep 2023 21:34:13 +0200
+        Fri, 22 Sep 2023 12:42:35 -0700 (PDT)
+Message-ID: <dbc384aa-488a-4fe5-ab7a-a92e2b1f1b3a@gmail.com>
+Date:   Fri, 22 Sep 2023 21:35:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 1/8] i2c: i801: Replace magic value with constant in
- dmi_check_onboard_devices
+Subject: [PATCH 2/8] i2c: i801: Remove unused argument from tco functions
 Content-Language: en-US
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>,
@@ -110,34 +109,57 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Replace magic number 10 with the appropriate constant.
+Argument priv isn't used, so remove it.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-i801.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index a485dc84d..880e98734 100644
+index 880e98734..cea8aaba0 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1115,7 +1115,7 @@ static void dmi_check_onboard_devices(const struct dmi_header *dm, void *adap)
+@@ -1464,8 +1464,7 @@ static inline unsigned int i801_get_adapter_class(struct i801_priv *priv)
+ #endif
+ 
+ static struct platform_device *
+-i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+-		 struct resource *tco_res)
++i801_add_tco_spt(struct pci_dev *pci_dev, struct resource *tco_res)
  {
- 	int i, count;
+ 	static const struct itco_wdt_platform_data pldata = {
+ 		.name = "Intel PCH",
+@@ -1496,8 +1495,7 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
+ }
  
--	if (dm->type != 10)
-+	if (dm->type != DMI_ENTRY_ONBOARD_DEVICE)
- 		return;
+ static struct platform_device *
+-i801_add_tco_cnl(struct i801_priv *priv, struct pci_dev *pci_dev,
+-		 struct resource *tco_res)
++i801_add_tco_cnl(struct pci_dev *pci_dev, struct resource *tco_res)
+ {
+ 	static const struct itco_wdt_platform_data pldata = {
+ 		.name = "Intel PCH",
+@@ -1537,9 +1535,9 @@ static void i801_add_tco(struct i801_priv *priv)
+ 	res->flags = IORESOURCE_IO;
  
- 	count = (dm->length - sizeof(struct dmi_header)) / 2;
+ 	if (priv->features & FEATURE_TCO_CNL)
+-		priv->tco_pdev = i801_add_tco_cnl(priv, pci_dev, tco_res);
++		priv->tco_pdev = i801_add_tco_cnl(pci_dev, tco_res);
+ 	else
+-		priv->tco_pdev = i801_add_tco_spt(priv, pci_dev, tco_res);
++		priv->tco_pdev = i801_add_tco_spt(pci_dev, tco_res);
+ 
+ 	if (IS_ERR(priv->tco_pdev))
+ 		dev_warn(&pci_dev->dev, "failed to create iTCO device\n");
 -- 
 2.42.0
 
