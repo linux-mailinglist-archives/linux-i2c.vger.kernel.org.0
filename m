@@ -2,60 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E397ABA32
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Sep 2023 21:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD817ABA33
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Sep 2023 21:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbjIVTmp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Sep 2023 15:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S230387AbjIVTmq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Sep 2023 15:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjIVTmp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Sep 2023 15:42:45 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649FCAF
+        with ESMTP id S230403AbjIVTmq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Sep 2023 15:42:46 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB178AC
         for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:42:39 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-405361bb93bso22499945e9.3
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-307d58b3efbso2426248f8f.0
         for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:42:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20230601; t=1695411758; x=1696016558; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=wQ/KIUWIKtcmfID/CkoLXKLoqgABiUJiud/TtNRuPF4=;
-        b=mMhmVNALW5WWwcA+bN5uApHWcwam24ZZmeEFnYkpAe/MFssc4Qgd4oZ+lyj4/Saw6b
-         hEJ5V+oLHUZZBq6wftFy5sN3gsn0YXwREBH9/D9BgeTZZGmBZIVB/Pk+Xz0nkm0qg1y1
-         YsiThCM7reNNQsU0/MkcZlOaInZZQvatLEhD0oqC+LtjmbD+HrZINLvaVP1Mw4vOcOGS
-         aCKV+VeATa42xWO9O0OjlnlDN87xOkz6u7pXhRqSu/pg8yfIRATQOfAKBjxBFQOUAQTC
-         mg4SfQHmlDAeYAuaorjiarsMszddXilxlRCMAs1a5Jpq3TtUfcQHGVHMSMNXY7pwWAtk
-         ih3Q==
+        bh=uSenmJ9Las4g9YYe7bPAC0RcvkYFnxV4buUqt3EN5Dk=;
+        b=SrFTpbQhgu5BcVZI92HUvKzxYGzyYMF2/Rmi5TJzHpZqfPsVMfsRRxMyegawtJDrO5
+         cKTJixqSDh3zHCZuyych0oOlf/NDWUfkioDGRkLJVI8sgFj1uvgoXPTSjTnDx2oKSY1p
+         HKLTe2SEDAjJHfypNc31DsvGJ+fFv3/9jMcCaDvn5XD1l32K81oL3zfiVEVdPU5iPXQA
+         GNwLQ78wtEN0La5CY5t3i3WO711gapHmDYhFwn3Qs4m3piyE+j82ukM+Gtsx2pU42PeZ
+         vq9ISt57GsXJxx7rx5FVJLXtErBNXfiFD8O1hlHPeXwfam1uH70QvkCzcu3nhpcnFTMq
+         vCmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1695411758; x=1696016558;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wQ/KIUWIKtcmfID/CkoLXKLoqgABiUJiud/TtNRuPF4=;
-        b=WqgdF6XihI9cTdVNcTAtbS2YgV83Q2Bz7KjEo2ahWP5IPnwRdazUuWVCVpGrL74dcd
-         GLzpS0p83kCsZ5f+ENMfc5BAdKXLLUpV7IxlCN8767nOUTo34fR9iawSV/DsEv0Yjqr6
-         LMgLCv9NJub5loxm/xyQKZO3nkSxBEM299lEZWoOWcBhrQmzkmlDUmK/EgfL0AzpjkOA
-         VWmTCkEI00RFI5vol8/5ZKG4ahTfKUcgP5KZD8i2IXHGSLebI0fcqqbc/zI7agOaQai/
-         DVoGIyZBohYoPjkoxDCz/VamkGtKvjvPK+9fkub4CIfWIEctEsZG/plwYtjNshf36zq8
-         L2Zw==
-X-Gm-Message-State: AOJu0YwP1B6U5HPSFER53fYVPpHs+F9JYEeql/lnafdcRkHISkdUwwUv
-        Dv2ZFG1obtyNqIf0IqORl6vCNGDRttM=
-X-Google-Smtp-Source: AGHT+IHQ2knSnTLI8mjPQrpNH0ubIhVjMc/4zMTuqfUWsUemhoP4OoBInbWi6jGX5ioWOYxMgHnnXw==
-X-Received: by 2002:a7b:c456:0:b0:405:4c3a:796f with SMTP id l22-20020a7bc456000000b004054c3a796fmr274455wmi.2.1695411757561;
-        Fri, 22 Sep 2023 12:42:37 -0700 (PDT)
+        bh=uSenmJ9Las4g9YYe7bPAC0RcvkYFnxV4buUqt3EN5Dk=;
+        b=t6dct1ogOtmqlqiz2HZCQGkHIgnHR+tu8BaZT6JwKjyNWkEZ+QvT7m7g/wEX7/cGiu
+         dpOvBzXdLEpvz1BBJ/WTqY0EELRU9PIMB26HRyg0YmQG0I/nMIQqN5EEzW+eR1e+dByZ
+         2sk++Iuw+18A+sybJbpTvPUjSgdDNSXY/G6Pix3Jqm6koqCSM2todK66cRe5C3rfVrMV
+         p1UUYCC/ZvoOGBEp1wW+Hg1TmjgI5XC2cHObZVV0WYdGBZPIlVziq1XPkIX16r7irn7v
+         w1/5wuazH4jVzvfsoEAI9D8PIPfFpdlvf8yLqusvdSAD9ycbaw8ofbPCbtXGB0ONbpot
+         ahng==
+X-Gm-Message-State: AOJu0YywJbiGR76EVYnZXxeIKsrah09LtU7ryqh5diGG9eQg4m3H3jqM
+        iv7jiUoGEjqMyWnvA0bY1t93TlYYPNw=
+X-Google-Smtp-Source: AGHT+IHVfXqGzhUKu9k/yB3HSB2A/49HrU61YvnwnBLvo2Y1aUzo8b/7TpQsQbizhZAoqHxaiNsbTg==
+X-Received: by 2002:a5d:6084:0:b0:318:7bd:349e with SMTP id w4-20020a5d6084000000b0031807bd349emr609143wrt.29.1695411758287;
+        Fri, 22 Sep 2023 12:42:38 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:9589:7c00:3475:142c:c3cb:ba32? (dynamic-2a02-3100-9589-7c00-3475-142c-c3cb-ba32.310.pool.telefonica.de. [2a02:3100:9589:7c00:3475:142c:c3cb:ba32])
-        by smtp.googlemail.com with ESMTPSA id t16-20020a5d49d0000000b0031c5b380291sm5174077wrs.110.2023.09.22.12.42.36
+        by smtp.googlemail.com with ESMTPSA id t16-20020a5d49d0000000b0031c5b380291sm5174077wrs.110.2023.09.22.12.42.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Fri, 22 Sep 2023 12:42:37 -0700 (PDT)
-Message-ID: <dbd94462-fd24-46d0-9321-54b5f79aff42@gmail.com>
-Date:   Fri, 22 Sep 2023 21:36:45 +0200
+Message-ID: <01fb032a-7b6f-4db3-a273-30a017d4e58c@gmail.com>
+Date:   Fri, 22 Sep 2023 21:37:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 4/8] i2c: i801: Define FEATURES_ICH5 as an extension of
- FEATURES_ICH4
+Subject: [PATCH 5/8] i2c: i801: Add helper i801_check_and_clear_pec_error
 Content-Language: en-US
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>,
@@ -118,32 +117,83 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This change simplifies the code a little and makes clearer that the
-ICH5 feature set is an extension of the ICH4 feature set.
+Avoid code duplication and factor out checking and clearing PEC error
+bit to new helper i801_check_and_clear_pec_error().
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 38 ++++++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 344544d1f..a300c66b4 100644
+index a300c66b4..915dd07e1 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -968,11 +968,10 @@ static const struct i2c_algorithm smbus_algorithm = {
- 	.functionality	= i801_func,
- };
+@@ -327,11 +327,27 @@ MODULE_PARM_DESC(disable_features, "Disable selected driver features:\n"
+ 	"\t\t  0x10  don't use interrupts\n"
+ 	"\t\t  0x20  disable SMBus Host Notify ");
  
--#define FEATURES_ICH5	(FEATURE_BLOCK_PROC | FEATURE_I2C_BLOCK_READ	| \
--			 FEATURE_IRQ | FEATURE_SMBUS_PEC		| \
--			 FEATURE_BLOCK_BUFFER | FEATURE_HOST_NOTIFY)
- #define FEATURES_ICH4	(FEATURE_SMBUS_PEC | FEATURE_BLOCK_BUFFER | \
- 			 FEATURE_HOST_NOTIFY)
-+#define FEATURES_ICH5	(FEATURES_ICH4 | FEATURE_BLOCK_PROC | \
-+			 FEATURE_I2C_BLOCK_READ | FEATURE_IRQ)
++static int i801_check_and_clear_pec_error(struct i801_priv *priv)
++{
++	u8 status;
++
++	if (!(priv->features & FEATURE_SMBUS_PEC))
++		return 0;
++
++	status = inb_p(SMBAUXSTS(priv)) & SMBAUXSTS_CRCE;
++	if (status) {
++		outb_p(status, SMBAUXSTS(priv));
++		return -EBADMSG;
++	}
++
++	return 0;
++}
++
+ /* Make sure the SMBus host is ready to start transmitting.
+    Return 0 if it is, -EBUSY if it is not. */
+ static int i801_check_pre(struct i801_priv *priv)
+ {
+-	int status;
++	int status, result;
  
- static const struct pci_device_id i801_ids[] = {
- 	{ PCI_DEVICE_DATA(INTEL, 82801AA_3,			0)				 },
+ 	status = inb_p(SMBHSTSTS(priv));
+ 	if (status & SMBHSTSTS_HOST_BUSY) {
+@@ -352,13 +368,9 @@ static int i801_check_pre(struct i801_priv *priv)
+ 	 * the hardware was already in this state when the driver
+ 	 * started.
+ 	 */
+-	if (priv->features & FEATURE_SMBUS_PEC) {
+-		status = inb_p(SMBAUXSTS(priv)) & SMBAUXSTS_CRCE;
+-		if (status) {
+-			pci_dbg(priv->pci_dev, "Clearing aux status flags (%02x)\n", status);
+-			outb_p(status, SMBAUXSTS(priv));
+-		}
+-	}
++	result = i801_check_and_clear_pec_error(priv);
++	if (result)
++		pci_dbg(priv->pci_dev, "Clearing aux status flag CRCE\n");
+ 
+ 	return 0;
+ }
+@@ -407,14 +419,12 @@ static int i801_check_post(struct i801_priv *priv, int status)
+ 		 * bit is harmless as long as it's cleared before
+ 		 * the next operation.
+ 		 */
+-		if ((priv->features & FEATURE_SMBUS_PEC) &&
+-		    (inb_p(SMBAUXSTS(priv)) & SMBAUXSTS_CRCE)) {
+-			outb_p(SMBAUXSTS_CRCE, SMBAUXSTS(priv));
+-			result = -EBADMSG;
+-			dev_dbg(&priv->pci_dev->dev, "PEC error\n");
++		result = i801_check_and_clear_pec_error(priv);
++		if (result) {
++			pci_dbg(priv->pci_dev, "PEC error\n");
+ 		} else {
+ 			result = -ENXIO;
+-			dev_dbg(&priv->pci_dev->dev, "No response\n");
++			pci_dbg(priv->pci_dev, "No response\n");
+ 		}
+ 	}
+ 	if (status & SMBHSTSTS_BUS_ERR) {
 -- 
 2.42.0
 
