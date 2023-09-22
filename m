@@ -2,53 +2,49 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564FC7AAF1F
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Sep 2023 12:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 259327AAF31
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Sep 2023 12:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbjIVKHk (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Sep 2023 06:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
+        id S233226AbjIVKKz (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Sep 2023 06:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjIVKHk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Sep 2023 06:07:40 -0400
+        with ESMTP id S233237AbjIVKKy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Sep 2023 06:10:54 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDDE91
-        for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 03:07:34 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89215C433C8;
-        Fri, 22 Sep 2023 10:07:33 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A49C19E;
+        Fri, 22 Sep 2023 03:10:48 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16E60C433CA;
+        Fri, 22 Sep 2023 10:10:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695377254;
-        bh=61yyli1b+TB36mlGU4MRImwKwe43A3AAFbw7HbiYo4Y=;
+        s=k20201202; t=1695377447;
+        bh=33Tgy9zFb+25f45bxXvE9vqs5K0swv1i/LRG0rsLIP8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K8NOjXQLNypTx+lKv2KhF5D44R/8w70MEIogcZl4us0wCpgrmQRD12KjxTLIwb+o4
-         Q/nUORUqS5UfSA/SsE3qmQhtVikxtJr5sHRELvdWE5o9mE9lkS0avlEA5btZzaU7hO
-         gbKa1euKiVDs6NKQ3htpkuWyd4I2AcXH77Wx8/kh4mz7wPFrlCG3Ld3mcHHL/vulUg
-         7NhINzWTa9rcckjezTJlOy1fSHqZDAaGBlH08fI9E13pnrYIrtzX0v7bJkyPlicRUH
-         6T2opBqElK4lnQV7+uMio9NXBbVW0JAE7vqeznShaaCCXDoCU452vh5Le7QZr+LFPk
-         5XWpUXptqdFRw==
-Date:   Fri, 22 Sep 2023 12:07:30 +0200
+        b=ZRckGD9LAAQnDK/ghKMPAyO39B4Dc7dD/KtrMuIbVHxFym0bmgfZloMqwY8Oa+abh
+         bTc8ozFDCJKsngLTD8LVVLC54y9eM9cO/bpSCybYzBBG0AIK30FGNQpQHnnpJaWh9f
+         OPnUmrm55U23dce7eswmSUQzYSXE59u0bOmk6g6uCYUYBsU/EqeAkfKClAXk+5y+3D
+         E953C88XqwRTWhXBJrTjk9hdmw5dS5/JUn+XdzIH/SdCr3fjXBPxi5JJW0jHPnPcHa
+         480UWBMKu9RvoxUsoGsYMxM9peExWDWltwdyKwKntJD1LuiBvzM0h4Qumgg4SQj3f4
+         K8tvW0zIDSNxw==
+Date:   Fri, 22 Sep 2023 12:10:44 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Daniel Scally <dan.scally@ideasonboard.com>
-Cc:     Michal Simek <michal.simek@amd.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-Subject: Re: [PATCH] i2c: xiic: Correct return value check for xiic_reinit()
-Message-ID: <ZQ1nYkSe+e/D2c7s@shikoro>
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
+        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] i2c: cp2615: replace deprecated strncpy with strscpy
+Message-ID: <ZQ1oJB0Tiop3Z1Fv@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Raviteja Narayanam <raviteja.narayanam@xilinx.com>
-References: <20230920134109.2232769-1-dan.scally@ideasonboard.com>
+        Justin Stitt <justinstitt@google.com>,
+        Bence =?utf-8?B?Q3PDs2vDoXM=?= <bence98@sch.bme.hu>,
+        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20230920-strncpy-drivers-i2c-busses-i2c-cp2615-c-v1-1-11406a996794@google.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HhmUBSpH2Bkg5dom"
+        protocol="application/pgp-signature"; boundary="c0LwJnjHZmcinQj0"
 Content-Disposition: inline
-In-Reply-To: <20230920134109.2232769-1-dan.scally@ideasonboard.com>
+In-Reply-To: <20230920-strncpy-drivers-i2c-busses-i2c-cp2615-c-v1-1-11406a996794@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -60,41 +56,59 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---HhmUBSpH2Bkg5dom
+--c0LwJnjHZmcinQj0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 20, 2023 at 02:41:09PM +0100, Daniel Scally wrote:
-> The error paths for xiic_reinit() return negative values on failure
-> and 0 on success - this error message therefore is triggered on
-> _success_ rather than failure. Correct the condition so it's only
-> shown on failure as intended.
+On Wed, Sep 20, 2023 at 08:08:52AM +0000, Justin Stitt wrote:
+> `strncpy` is deprecated for use on NUL-terminated destination strings [1].
 >=20
-> Fixes: 8fa9c9388053 ("i2c: xiic: return value of xiic_reinit")
-> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+> We should prefer more robust and less ambiguous string interfaces.
+>=20
+> We expect name to be NUL-terminated based on its numerous uses with
+> functions that expect NUL-terminated strings.
+>=20
+> For example in i2c-core-base.c +1533:
+> | dev_dbg(&adap->dev, "adapter [%s] registered\n", adap->name);
+>=20
+> NUL-padding is not required as `adap` is already zero-alloacted with:
+> | adap =3D devm_kzalloc(&usbif->dev, sizeof(struct i2c_adapter), GFP_KERN=
+EL);
+>=20
+> With the above in mind, a suitable replacement is `strscpy` [2] due to
+> the fact that it guarantees NUL-termination on the destination buffer
+> without unnecessarily NUL-padding.
+>=20
+> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strn=
+cpy-on-nul-terminated-strings [1]
+> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.h=
+tml [2]
+> Link: https://github.com/KSPP/linux/issues/90
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
 
-Applied to for-current, thanks!
+Applied to for-next, thanks!
 
 
---HhmUBSpH2Bkg5dom
+--c0LwJnjHZmcinQj0
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUNZ2IACgkQFA3kzBSg
-Kbb10BAAi5dF8kPA1ACtZhc6vVe0VCPwKlGJ1VMYYzaIjAPm5+jXbKHrTCxnbKsa
-FLH/gFqGn9jwtccrrt7mdtIW1WRJqMoqmqDw4E+/A76/XYSF4xNjwCCbloQvpsDX
-Lp9mYd2DY+t1mOlkxECtVB7b9dfMPRISzMLO3bWYKDRaXnXzMExFSxC2Dz5mvO7e
-jPT85u839WtvpHPPMFBzVHgXwJ89FoPwM649RbcpcEiLp13bZycYMSNm5xhlI+Jn
-nGS4TYyHvnSAyEZmSjtbGasipKom7f7yux+jlrDm8DuMkOD+LKGuPAq7I7oLnLXu
-ohMzg/cwoNkgj3D5XuaDpLUUpZLzELmz5zv4bD0bauuVdN6WJ/xSvTTscEGofL3P
-oY168nPeaP1Nkd4PkdeRCXCglPQX8DNxKU4EMMts5qeNgaB64M4StUCt/fqWyTOQ
-ZDaJyp1tGYNYk1a7czOI5mxlItvoey7I+Xl8t1Z96pUdMaKjYcvb+A4IF/lWp83Q
-p9mIGne6byS4KwgYD1NkJgVrwDgs2ihgJ8ucR4qbD6lTdIl9zh0jRs9JM94E2jFu
-9wSG1cQNK9h8uD4LPS4OBUsFBJ5TRxnVg5xE+ajjAh3sUrH7iBs6OaIw1qHbEKq6
-HISm5HO+GMAbr4fmR/rQJLN5/CvOgJaj6DOJQLhiK5oWZ5LOZc0=
-=ipwC
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUNaCQACgkQFA3kzBSg
+KbZcVg/9E7peMn7vHeP47JzLjr4NVIkVY//5HALFdYGqXGp3VKTizc45nquNyd9j
+6BFcXqSC+d1DxJ5hiwuNPRoQc0ftZhaFUweAeucZHh/Gg3iPnK395lVv+WAVIeu8
+6DeK8sKeQmBJcQyX9xcPHypJfs3eW2i99KuPhz/97hDNLy4XezL50QOpzBSuarGE
+cbelsLwxxaOED+dtW9B5kgTrpNeKdIaBskoufFrOxNYn911cLv+bN0TRXks7tW94
+ytVLqdF7A/KH+0QNC1X2mnMcf13hRexZ8K946T/8+Caa1pnAJnzZWmwWsKqX4HPT
+6uLU1wQaG5ZrBryF6mItiISL0dRb7qNToS5/oPGHbgq2Pr7nV9JAW62kP18eNcKG
+zOP8QApoTzbzSASUR9y6xLhhhaXNvEkAK08HGfcJMtL8gVuJGqfm0eQoiwGTQoTp
+gP5rsfDKLgVar5dGkGMQ9OJaR7inQjHjGy0gkQ5+FT0yY0hWANH0eEq0EXmy71/z
+suSZZKZJlJK7s6EwS9l4NJlSk/whexyW86srKBq0ilYe+B0KrTnAJaDgxN1HJ8cx
+FUkLgfoEuEeuMBCA2E6iymbaB6nl93j7nvl6Y7cqKzJdsbWwoPfpfL+51kKTp4bR
+6SoUWGORqbZpku27IhTlRZgEqFnr+GXvGW2y8hW3UiWNrHpKw80=
+=V3V8
 -----END PGP SIGNATURE-----
 
---HhmUBSpH2Bkg5dom--
+--c0LwJnjHZmcinQj0--
