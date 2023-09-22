@@ -2,64 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F567ABA1D
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Sep 2023 21:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948E67ABA2F
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Sep 2023 21:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjIVTdK (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Sep 2023 15:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
+        id S230039AbjIVTmn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Sep 2023 15:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjIVTdJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Sep 2023 15:33:09 -0400
+        with ESMTP id S229541AbjIVTmm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Sep 2023 15:42:42 -0400
 Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C046794
-        for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:33:03 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-405505b07dfso2468015e9.0
-        for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:33:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB5EAF
+        for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:42:37 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-405524e6740so2482025e9.1
+        for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:42:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695411182; x=1696015982; darn=vger.kernel.org;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bOrn8KOkz8jbRlSeOE3VuuSpE1AhR4X5WqhQzW+AtvU=;
-        b=J2mMJnQC/9lWaIWZRSRMKTNY0EIvWrdeC3YJHk9Qh7ZEPi09xyc1UJmBU1hZ/7E+Km
-         4XXde/wOmH8MI3TJB+rsT5fYRE98LfzHHeiFppXFtyhwb6GRgzyZOne389mUcgmnujG/
-         fQgQY8ucbZrWWBbYtPSiLJedg0xnh0y28dJUx2XDPJ9Xe58Pj+kpoU2hRU1kwqKBUpO0
-         cPMvQB6/+dr6t5yriloM3qzyrbdWlsr2V2Pbx7z0Q63Cl40bdzK1i2WiiSDjDVh04Qff
-         9gFysElWPrOtUjYH8wv0uQ1zenF/agJ8BQxebKsrO4Kn25Am1rOxF9HlOEke1cS5Mvie
-         TUnw==
+        d=gmail.com; s=20230601; t=1695411755; x=1696016555; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=+0NUqPQFaTEasE2HDG9p9tl+WpsS9QXfHr2ExKwakUg=;
+        b=OC6rK3zvXF93HunAAf82+gB6QWwzae4Wly21t4s7iWcljA2f44NvBEj3HhCXSgQ3xv
+         lZGlA5hSNqpsLT8coZTFQJZXMLd/BrpSCxKDwli4smDdrdGbGO/4RuJ296a1m2PGGGn5
+         i5txCgjR1kK8qVRXqDAcGHBffN1V6bnrEHteOefluEjtgCo8nB3MOTslsPwUbzm9L8F7
+         YgCKO992glWzhSh3984uN0r+QQy0OuDUTDnwnECEG9PAh1zzI6qPdpKZBQRiIrMagG6z
+         so5n3zv615rGglyTBlcVjJAFhmiq3Tc7sKGfPrD0kOqyhZVUaabHS0YBqN39ZgkJAZHE
+         dI7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695411182; x=1696015982;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bOrn8KOkz8jbRlSeOE3VuuSpE1AhR4X5WqhQzW+AtvU=;
-        b=nzzTvhGM1f+wmd78rLYtLccT4LeDetOdlSciH+jHGVza1soRbGcv0VXOcRWp8tPP1t
-         ZmUgXE6im0NaaHB7L/tW7pKPA4thLuZFOaG6PQ72FnmEBOnAcboSpV1ic2bLivV6ChSF
-         HHah5Fqg3xCOXwktvnwXkFbnTNGEV3QJxqo0czb9Lnf3MJ6SJFCutIIop53bGvbh/zrp
-         4VAezkOxys5snkxTVj9GK75XLr8yKYr1eb8onrxRyRG0/+eIeFGHTwQ6JfA+4cWA+D//
-         ooQ4WceLuIlTEwI3lMzUFYWORcKXVoLppsMVrg8DsU5WRcEqba6P5kU8eUtH1BWe22Fd
-         ORmw==
-X-Gm-Message-State: AOJu0Yy2pYcxjmOqImo1mbez7ciS0O8H9m3NUX9YYbMg+P7Fe7mfpQag
-        QLwE4YN8ginnl9+eh6vpFMZlqDXwJh4=
-X-Google-Smtp-Source: AGHT+IG+1tKUuEMI5npmMe/NMw3+l/fPsd1sEKUuJiqqkXtcsrL7EF/nWdSHOXnJNrHZpryW8iP4Pg==
-X-Received: by 2002:a5d:4003:0:b0:321:f74d:ade3 with SMTP id n3-20020a5d4003000000b00321f74dade3mr2577370wrp.32.1695411181870;
-        Fri, 22 Sep 2023 12:33:01 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695411755; x=1696016555;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+0NUqPQFaTEasE2HDG9p9tl+WpsS9QXfHr2ExKwakUg=;
+        b=AIUWCxzehTsUK1LPgR8R80BdEr+nsw40NO86V3QhpVni0zAzEyj7wtzG99KETtlsQX
+         wUaMt1I+schrX/JZfNFwzVvk2s9HG5nbZ8weHW1gLfLsk7e17Z/2KtZUcR+MXJpq8uqq
+         01tEx+zxjiMdkXAlaT7dssvcK82Wpq1ljDHkDNujpKpeHzK3qMFyinVlgnnvbT3r5jMf
+         fE/oKcR6KqQH6yPMCAm+8mbU/h5AedxJYK91mCiwLnYlVtWt+fDbE8dNsO7HDfuj7Fj6
+         GL8i9Zky1HUm9RLzY4fCL4CH3vjJJ145Rm/1vbVJkfzKExZ7rkwK4B+zKbp8xCBcFkCI
+         LZow==
+X-Gm-Message-State: AOJu0YwJthLugvyaWQIZJApPNBBf6VBJYoHn8DhTYKljGm2AyjYom4y0
+        wMcSG+dnHNtc8x3CSLJcFn8=
+X-Google-Smtp-Source: AGHT+IG1RCsvVev1tcCjo+/AcUXJBRzsgaIPhouAPpzkUYg8ZROs0je0OuSh2KOlCzKF8S3LhipNaQ==
+X-Received: by 2002:a5d:6a8c:0:b0:317:d048:8d87 with SMTP id s12-20020a5d6a8c000000b00317d0488d87mr533744wru.61.1695411755247;
+        Fri, 22 Sep 2023 12:42:35 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:9589:7c00:3475:142c:c3cb:ba32? (dynamic-2a02-3100-9589-7c00-3475-142c-c3cb-ba32.310.pool.telefonica.de. [2a02:3100:9589:7c00:3475:142c:c3cb:ba32])
-        by smtp.googlemail.com with ESMTPSA id c17-20020adfe751000000b00317909f9985sm5092501wrn.113.2023.09.22.12.33.01
+        by smtp.googlemail.com with ESMTPSA id t16-20020a5d49d0000000b0031c5b380291sm5174077wrs.110.2023.09.22.12.42.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Sep 2023 12:33:01 -0700 (PDT)
-Message-ID: <0d6a1cdb-39a1-4fad-a6e4-48953619f33b@gmail.com>
-Date:   Fri, 22 Sep 2023 21:32:57 +0200
+        Fri, 22 Sep 2023 12:42:34 -0700 (PDT)
+Message-ID: <71286ba3-27cb-41cb-bb38-2c4e6d2a49f1@gmail.com>
+Date:   Fri, 22 Sep 2023 21:34:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: [PATCH 1/8] i2c: i801: Replace magic value with constant in
+ dmi_check_onboard_devices
 Content-Language: en-US
+From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>,
         Andi Shyti <andi.shyti@kernel.org>
 Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH 0/8] i2c: i801: collection of further improvements /
- refactorings
+References: <0d6a1cdb-39a1-4fad-a6e4-48953619f33b@gmail.com>
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -103,6 +105,7 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
+In-Reply-To: <0d6a1cdb-39a1-4fad-a6e4-48953619f33b@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -115,22 +118,27 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-This series contains further improvements and refactorings.
+Replace magic number 10 with the appropriate constant.
 
-Heiner Kallweit (8):
-  i2c: i801: Replace magic value with constant in
-    dmi_check_onboard_devices
-  i2c: i801: Remove unused argument from tco functions
-  i2c: i801: Use i2c core default adapter timeout
-  i2c: i801: Define FEATURES_ICH5 as an extension of FEATURES_ICH4
-  i2c: i801: Add helper i801_check_and_clear_pec_error
-  i2c: i801: Split i801_block_transaction
-  i2c: i801: Add SMBUS_LEN_SENTINEL
-  i2c: i801: Add helper i801_get_block_len
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ drivers/i2c/busses/i2c-i801.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/i2c/busses/i2c-i801.c | 216 +++++++++++++++++-----------------
- 1 file changed, 106 insertions(+), 110 deletions(-)
-
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index a485dc84d..880e98734 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -1115,7 +1115,7 @@ static void dmi_check_onboard_devices(const struct dmi_header *dm, void *adap)
+ {
+ 	int i, count;
+ 
+-	if (dm->type != 10)
++	if (dm->type != DMI_ENTRY_ONBOARD_DEVICE)
+ 		return;
+ 
+ 	count = (dm->length - sizeof(struct dmi_header)) / 2;
 -- 
 2.42.0
+
 
