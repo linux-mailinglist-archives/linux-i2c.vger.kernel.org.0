@@ -2,59 +2,59 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C007ABA30
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Sep 2023 21:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B657ABA31
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Sep 2023 21:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjIVTmo (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 22 Sep 2023 15:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
+        id S229541AbjIVTmp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 22 Sep 2023 15:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjIVTmo (ORCPT
+        with ESMTP id S229495AbjIVTmo (ORCPT
         <rfc822;linux-i2c@vger.kernel.org>); Fri, 22 Sep 2023 15:42:44 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31C4C1
-        for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:42:37 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3215f19a13aso2610360f8f.3
-        for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:42:37 -0700 (PDT)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E81AC
+        for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:42:38 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-32003aae100so2898879f8f.0
+        for <linux-i2c@vger.kernel.org>; Fri, 22 Sep 2023 12:42:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695411756; x=1696016556; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1695411757; x=1696016557; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/TIlUAnIJQI2qk3es/6nOwCf87TBbsLDeequcDWBmd4=;
-        b=lgjkthfHowA6p1+iTHt64hH8UxT1VI7absoA3SBiYAMhBsVlo0IVvsBW0mdFMySS+u
-         TcFG4Nq6hiNSrv1xtKvBEXP5xVtJPeVzjyXvADDPeaTcZn14A6UeZdkWoyKhZsi94UEd
-         ehK/g0JJMEy3OPda9IhVqjUXHS9uM0cYH9Navplgb6+2owOA9eFKS/9QGSg/luQJJ7Vg
-         s3FhDBh5gV0Jqfbs6uGWjpd3r573WyIRGo6vw3RA2kuN/zTroWScEKytjXTw6/C9ytte
-         IOqCI5N5kXtce6vH+HnxmXVuaM5OAndpf7QEta2FOsjZz4o4WiPkRwXp+GaL0dsD+KNl
-         0teQ==
+        bh=R9ueMG1cX11O7S2FmzMn0wfJ23nQw2FXSwxEbfZgB2Y=;
+        b=RqkPcxZtDBRcgjDgBtYavLSXOKWMuGaVxIfCZx6/H+enMr5KmhqD0VrnBM4J7Llc6n
+         HVlgc9btezUWbtfwQDF7/bmcRzQDC4QecYn0ZosqT+RFUJH2EZG4HGYIGtfX5NH635/v
+         bS2s0PLofIdwsSR3yh0SX0uEKDE6/QnSMQNNgxX6yOQScRxdEgxqIUAGVKu3AlYUCsgz
+         lYL4BqO38HgjTpEDGT734OOC8BuZ9CxQtucx1WvMC41qXiM3CwMWEMOVDwgqj/DOyDkg
+         BNf8/1Pnp6GdhRDwNxhb56CeAm+Q+UVR4/eiw0Rk6Ah7RWPOhCTmOxv1VNgPt0ckztun
+         VaSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695411756; x=1696016556;
+        d=1e100.net; s=20230601; t=1695411757; x=1696016557;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/TIlUAnIJQI2qk3es/6nOwCf87TBbsLDeequcDWBmd4=;
-        b=H8ivEOOJAJaicP9ScgAoih3Mlb+VvxG2aY50YHJbDQ+nQeIYMgBUMajw+ZUbovEcLe
-         9EVElJdDiJLfwNYpAp84cfEiZZ656fgTXyJyg1KSUTjzSDn17JKPKUeXdP1zlzu3ZJZx
-         7ENerzEOtXTYHJ1V0ztRBEcNjpyhIiwdcGos6fbrgKBs61VJl+nKp7VApbM1/Nn3Adon
-         1nxT0ryPtGvcdWHOduL5r/mfnvXMSsAv0X1Xv+/4VIGzhkMZbPzh618oYwIP3CL84flK
-         hBJCGyaMNQprgM/B1IVaTVtzuWQo38pkmy0Sb8QByKberO67le8Sd5sc8DEqlJFZM8aY
-         Zbtw==
-X-Gm-Message-State: AOJu0Yxwb0dPcjcXFV18hji6vE/ZwHqmm+KZTAW2Lgc2cbV4FVcxJYFw
-        4FE+SQpDXysvbYGmPpi5Ryg=
-X-Google-Smtp-Source: AGHT+IGatLtZfe0lUDxOs5GgFC48Yv3NMIoDaEmVyY8UR0RBohJElt4DhzYZajjxybrYTQItj0hd+w==
-X-Received: by 2002:a5d:4570:0:b0:31f:d8b3:ea06 with SMTP id a16-20020a5d4570000000b0031fd8b3ea06mr575435wrc.0.1695411755949;
-        Fri, 22 Sep 2023 12:42:35 -0700 (PDT)
+        bh=R9ueMG1cX11O7S2FmzMn0wfJ23nQw2FXSwxEbfZgB2Y=;
+        b=Q0t7F1FgTqIe4iiZkXFENwbLPljVIZY4CBH2SRGUGCKBPT67KVovXTcYIk3s2b5SRd
+         OSJhCqDLAaqIYKSVKDnq52cF9GzGwe2sioCX6LGJTspQ27Y4lXFdtWzslyQKV9AE/gzN
+         jl4+COMSM6YtuMzDCty8UQzCfeWXMrgN3bFyeH73chGsJxrvfYyPFUqclIA+6UBmagIM
+         ua6hTBd8W+NU6l82Qd0MceSVtasBg5cGGmLcDqQXJtY1mRPmN8r65o0bRcskJDHwTbIf
+         9BfEnvIb10Pisy+4jYK+KQhPhkwSGtkaYga9cnsadc/sJ059mTHctzqwqhgaRbPNJXkL
+         qOZg==
+X-Gm-Message-State: AOJu0YxWOE+t3IyauffYGU6NOA7Tx3QFpWUV3l4qoHpQP2d3r1MKynvM
+        OURN/ML+wcrPVJB3/LoVWN157ap3ffI=
+X-Google-Smtp-Source: AGHT+IGvo2cH1Mfs/M1TlX+9Y/cVVPvDCxRoeZHmIQiFteLiEFiX80ocfdDyk71+RF3kyKEqjHG+lg==
+X-Received: by 2002:adf:ef0b:0:b0:316:fc03:3c66 with SMTP id e11-20020adfef0b000000b00316fc033c66mr520992wro.3.1695411756795;
+        Fri, 22 Sep 2023 12:42:36 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:9589:7c00:3475:142c:c3cb:ba32? (dynamic-2a02-3100-9589-7c00-3475-142c-c3cb-ba32.310.pool.telefonica.de. [2a02:3100:9589:7c00:3475:142c:c3cb:ba32])
-        by smtp.googlemail.com with ESMTPSA id t16-20020a5d49d0000000b0031c5b380291sm5174077wrs.110.2023.09.22.12.42.35
+        by smtp.googlemail.com with ESMTPSA id t16-20020a5d49d0000000b0031c5b380291sm5174077wrs.110.2023.09.22.12.42.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Sep 2023 12:42:35 -0700 (PDT)
-Message-ID: <dbc384aa-488a-4fe5-ab7a-a92e2b1f1b3a@gmail.com>
-Date:   Fri, 22 Sep 2023 21:35:00 +0200
+        Fri, 22 Sep 2023 12:42:36 -0700 (PDT)
+Message-ID: <380b592a-cb28-47ef-b110-e2ee6e8550fb@gmail.com>
+Date:   Fri, 22 Sep 2023 21:35:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 2/8] i2c: i801: Remove unused argument from tco functions
+Subject: [PATCH 3/8] i2c: i801: Use i2c core default adapter timeout
 Content-Language: en-US
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>,
@@ -117,49 +117,28 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Argument priv isn't used, so remove it.
+I see no need for a driver-specific timeout value, therefore let's go
+with the i2c core default timeout of 1s set by i2c_register_adapter().
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 880e98734..cea8aaba0 100644
+index cea8aaba0..344544d1f 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1464,8 +1464,7 @@ static inline unsigned int i801_get_adapter_class(struct i801_priv *priv)
- #endif
+@@ -1707,9 +1707,6 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 		outb_p(inb_p(SMBAUXCTL(priv)) &
+ 		       ~(SMBAUXCTL_CRC | SMBAUXCTL_E32B), SMBAUXCTL(priv));
  
- static struct platform_device *
--i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
--		 struct resource *tco_res)
-+i801_add_tco_spt(struct pci_dev *pci_dev, struct resource *tco_res)
- {
- 	static const struct itco_wdt_platform_data pldata = {
- 		.name = "Intel PCH",
-@@ -1496,8 +1495,7 @@ i801_add_tco_spt(struct i801_priv *priv, struct pci_dev *pci_dev,
- }
+-	/* Default timeout in interrupt mode: 200 ms */
+-	priv->adapter.timeout = HZ / 5;
+-
+ 	if (dev->irq == IRQ_NOTCONNECTED)
+ 		priv->features &= ~FEATURE_IRQ;
  
- static struct platform_device *
--i801_add_tco_cnl(struct i801_priv *priv, struct pci_dev *pci_dev,
--		 struct resource *tco_res)
-+i801_add_tco_cnl(struct pci_dev *pci_dev, struct resource *tco_res)
- {
- 	static const struct itco_wdt_platform_data pldata = {
- 		.name = "Intel PCH",
-@@ -1537,9 +1535,9 @@ static void i801_add_tco(struct i801_priv *priv)
- 	res->flags = IORESOURCE_IO;
- 
- 	if (priv->features & FEATURE_TCO_CNL)
--		priv->tco_pdev = i801_add_tco_cnl(priv, pci_dev, tco_res);
-+		priv->tco_pdev = i801_add_tco_cnl(pci_dev, tco_res);
- 	else
--		priv->tco_pdev = i801_add_tco_spt(priv, pci_dev, tco_res);
-+		priv->tco_pdev = i801_add_tco_spt(pci_dev, tco_res);
- 
- 	if (IS_ERR(priv->tco_pdev))
- 		dev_warn(&pci_dev->dev, "failed to create iTCO device\n");
 -- 
 2.42.0
 
