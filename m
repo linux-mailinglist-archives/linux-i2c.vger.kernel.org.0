@@ -2,48 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36F87AC3B1
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Sep 2023 18:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09467AC469
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Sep 2023 20:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjIWQc3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 23 Sep 2023 12:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
+        id S232262AbjIWSZY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 23 Sep 2023 14:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbjIWQc3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 23 Sep 2023 12:32:29 -0400
+        with ESMTP id S232254AbjIWSZY (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 23 Sep 2023 14:25:24 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACF9D3;
-        Sat, 23 Sep 2023 09:32:23 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B2E9C433C7;
-        Sat, 23 Sep 2023 16:32:21 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAF5136;
+        Sat, 23 Sep 2023 11:25:17 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3DD44C433C9;
+        Sat, 23 Sep 2023 18:25:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695486742;
-        bh=wGrh5m2KFThfYRApjwd8cwMRsCaSFWP9x70dbr76E/4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=blGyQtb1u7hciF01UIGBmDL/ZcWAVc5wzrzSWsShSB2dSVYmECgdrot5Q5Zn9d3cK
-         qrxsrnNvU6bxdy8nXzXlWEftjQ9ZB+gMRL9tRh/yJ75uERRQOL7BRP1mjg1+W6HIPf
-         MC9KDHv8aKMPiJEhtYt70CdiUPOexr12hngonQAY/I5GTRW2WMcJBMd7CdUsEoQjsN
-         tzTUDhdWRjjQbKm5J1Cw7pzlYM7s56QhfYgZN3AuHmaatAmk7kq90Gilfq/5+Oed4w
-         BokKX6Hnc7fd5fBzmzpHQ8OY9jWbcFK9AaNtWkZkDq95OVv7r9ducX1ggM4xtLiQZO
-         WVXRsGvJJJFLA==
-Date:   Sat, 23 Sep 2023 18:32:17 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        s=k20201202; t=1695493517;
+        bh=NjopDASN4cafaiLW9pGS79WWHRQSZiTWmD8J0qpmibw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=PkBFLKgkolKXsETYsMOWXVpKp3eD5YgG0DFNyfqYwI5biWoNBd59waMMVnGT6iLxF
+         wGe/Jld828cHpo+k25KpToRBbePAB64LxHEdyuHzxL/S6YjWW999R8Wo1JKrEPiQjV
+         ZhucQXDCD1j3sV/0tZz8E13ybZvjkFExzJ+7nkFMG4E78l3AfomAT9MbLRXXittbXj
+         tOJhPZzQWbu45HOgxnoV1+Ii0IdUK81eimhP1iAwktpO+COKal89pNwWUP/4XbW8GH
+         lsqHNZ00pNuzeZVqQbCWAb8OihNZJ4y9G1xRs31Gn2KW9NKK7/G++jD9idlw4n4gf1
+         SLLrvl94JWiYQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 24CE1C595C0;
+        Sat, 23 Sep 2023 18:25:17 +0000 (UTC)
+Subject: Re: [PULL REQUEST] i2c-for-6.6-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZQ8TEfqhMnEqv6rA@shikoro>
+References: <ZQ8TEfqhMnEqv6rA@shikoro>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZQ8TEfqhMnEqv6rA@shikoro>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.6-rc3
+X-PR-Tracked-Commit-Id: 59851fb05d759f13662be143eff0aae605815b0e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5a4de7dc9e77ca914bb050e6d661624a43db794c
+Message-Id: <169549351714.14827.7839485789096942659.pr-tracker-bot@kernel.org>
+Date:   Sat, 23 Sep 2023 18:25:17 +0000
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Peter Rosin <peda@axentia.se>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Andi Shyti <andi.shyti@kernel.org>
-Subject: [PULL REQUEST] i2c-for-6.6-rc3
-Message-ID: <ZQ8TEfqhMnEqv6rA@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andi Shyti <andi.shyti@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g9vcFmfON0snxgas"
-Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -54,81 +58,15 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The pull request you sent on Sat, 23 Sep 2023 18:32:17 +0200:
 
---g9vcFmfON0snxgas
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.6-rc3
 
-The following changes since commit ce9ecca0238b140b88f43859b211c9fdfd8e5b70:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5a4de7dc9e77ca914bb050e6d661624a43db794c
 
-  Linux 6.6-rc2 (2023-09-17 14:40:24 -0700)
+Thank you!
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.6-rc3
-
-for you to fetch changes up to 59851fb05d759f13662be143eff0aae605815b0e:
-
-  i2c: xiic: Correct return value check for xiic_reinit() (2023-09-22 12:04:39 +0200)
-
-----------------------------------------------------------------
-A set of I2C driver fixes. Mostly fixing resource leaks or sanity
-checks.
-
-----------------------------------------------------------------
-Daniel Scally (1):
-      i2c: xiic: Correct return value check for xiic_reinit()
-
-Heiner Kallweit (1):
-      i2c: i801: unregister tco_pdev in i801_probe() error path
-
-Liang He (1):
-      i2c: mux: gpio: Add missing fwnode_handle_put()
-
-Xiaoke Wang (1):
-      i2c: mux: demux-pinctrl: check the return value of devm_kstrdup()
-
-Yann Sionneau (1):
-      i2c: designware: fix __i2c_dw_disable() in case master is holding SCL low
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Andi Shyti (1):
-      (Rev.) i2c: xiic: Correct return value check for xiic_reinit()
-
-Jean Delvare (1):
-      (Rev.) i2c: i801: unregister tco_pdev in i801_probe() error path
-
-Mika Westerberg (1):
-      (Rev.) i2c: i801: unregister tco_pdev in i801_probe() error path
-
- drivers/i2c/busses/i2c-designware-common.c | 17 +++++++++++++++++
- drivers/i2c/busses/i2c-designware-core.h   |  3 +++
- drivers/i2c/busses/i2c-i801.c              |  1 +
- drivers/i2c/busses/i2c-xiic.c              |  2 +-
- drivers/i2c/muxes/i2c-demux-pinctrl.c      |  4 ++++
- drivers/i2c/muxes/i2c-mux-gpio.c           |  4 +++-
- 6 files changed, 29 insertions(+), 2 deletions(-)
-
---g9vcFmfON0snxgas
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUPExEACgkQFA3kzBSg
-KbZQHxAAkNvlEP2k0DHDVvU2TBN9L/Zh6ONlNpeyY/m/zYQJCsUQwa5pEl7EGNCp
-TNIOsDlp0jK/zoH0fm5+UG/QRX+vwSdOtE0pLr+hmct//URUOrX0jgB+eB1D5YUE
-WPyuhQaGAJiHZU3vvPKVVxiDGmkJacgz7/9yyoHjCS+/H108jp24XqAB63f42WDW
-DYeZYzkO8CiAioG46A7lFBxOQum4ubucmfWWpnfx+TOTK4Sk+AtWtW0Wr75qiGkY
-PDA3uZWNn9bcD7k1uIoku1BwSa54R0DileF1lOsv4fz/4oHBcjrtJSaWjhl6dp+N
-VmbwxRfHMUUXPvdOAP0hCimougHxWqeQ8vmsv527Kscg0nsd9necHwilAmutiXja
-aF7nTrva/N8O7+ymElF4o5FHPAEplvbiJzCPWRjCqSCVByr82N0w/MoN5jfoNo87
-6sP3o8tpAf+1j6Vo8FnUmLEFxWM8QlNEj3n+DGfjLr2pRhsQbdUAbxP7fjthvmnG
-BJctAdf77DSJbl3v22h7M1WGrFK8N5DjUBkCmSiEIAa6YhAHp9k+woS9csp+nqDf
-buxVTEtJwfZI65Ahhp9m3RBTPqniFTgXK0056ke9mEuUuBL4ujHWJVIine4oasxS
-rD3oS3NSEtOJe0cgBXmnMfGxxuE5eMvHT4YBmmV1z7FlzVXBN3k=
-=fXGG
------END PGP SIGNATURE-----
-
---g9vcFmfON0snxgas--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
