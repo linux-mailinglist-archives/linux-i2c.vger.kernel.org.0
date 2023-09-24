@@ -2,134 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE947AC60A
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Sep 2023 03:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 917417ACBE4
+	for <lists+linux-i2c@lfdr.de>; Sun, 24 Sep 2023 22:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjIXBC1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 23 Sep 2023 21:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
+        id S229698AbjIXUvv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 24 Sep 2023 16:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjIXBC0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 23 Sep 2023 21:02:26 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53710109
-        for <linux-i2c@vger.kernel.org>; Sat, 23 Sep 2023 18:02:20 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6c0d6fef60cso2756761a34.1
-        for <linux-i2c@vger.kernel.org>; Sat, 23 Sep 2023 18:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wkennington-com.20230601.gappssmtp.com; s=20230601; t=1695517339; x=1696122139; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=X73lBW8dYp//48BBb52n2l32mOLJg99MbHSqLw+5gsg=;
-        b=wFJx7o4tUl4/n/IMKEhKUCd4OUv0LRxnWsKwJp0PJ6Q324JZs4DL15T0zmbyZkC2+d
-         Nmuqw2JsXDFbFG6fZBoLmfBlfnYfQvy8b+GGomvbHHuCwERyRUBzKyZdPsndq03gGyDy
-         RnNkqjZn9w6Imv4nS0WaCJ/aTBcZv82bZyiWHUvWYpAQk+c/nVcTvbn5NA/tO+TwgqQA
-         j+Ng7GpngfgSPDeItke/mLSAuaIwjhSasw9yIHcm1qdfA281HjOs9FnBgcaUMQlrwaE9
-         ace7afluryHB3UUoSGNnDCRCwcVuRuKARqrwixp3LmefVvEvbtEIMX8nSYm3GiYNJiwd
-         uqdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695517339; x=1696122139;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X73lBW8dYp//48BBb52n2l32mOLJg99MbHSqLw+5gsg=;
-        b=jch4U6yfCH3hnJt0jlHpFSAI/1dUO0zt37V/0yvCwkhIffh5Xh98egyyZnswy7KOoW
-         xpxK45ACa/wcOKMnFwCTpAMoEIE/xMtvNT6el4UM57H2CRHLA3YSUxgCj2rlxLiK4KUi
-         CQXKrVjstEnMpewOu+oXEYU70ljFC1D8+DvKrCCZtlPBwvwfNWF9SgHR6IyqiV5XcR4u
-         KGgd8uuHyh3t+5EjTYpPyRKSpLyRypxv+DdQh+jur0Jbisa7jX4Ol7f9PsOi5VtViRvk
-         O6ACtSyONkxYh+UBnLQtgQsonEhzozvlZIddEfpBWaKP9wGdIyVlfD4UCtNbujjOAfKa
-         X+tg==
-X-Gm-Message-State: AOJu0YwIALkmG1aK181HmpAbL903gIUCMnTE0ytlMcYGz0IF7lSCFiJ4
-        HIE+RyikWJ5GUAqe47xjML9A7v1qqTjSA1FI0KcPAQ==
-X-Google-Smtp-Source: AGHT+IEHCUq8tKH+V3+QkWwMwP5hmPglWU/SHOlNBefQAgMc1vl7Isp7xNsJgSzP1G/v0dpQoxLBiQ==
-X-Received: by 2002:a05:6808:4d4:b0:3a7:35af:bbc0 with SMTP id a20-20020a05680804d400b003a735afbbc0mr4087968oie.54.1695517339619;
-        Sat, 23 Sep 2023 18:02:19 -0700 (PDT)
-Received: from wak-linux.svl.corp.google.com ([2620:15c:2a3:200:fa82:e505:60ca:9f9f])
-        by smtp.gmail.com with ESMTPSA id c8-20020a170903234800b001b8b07bc600sm5922016plh.186.2023.09.23.18.02.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Sep 2023 18:02:19 -0700 (PDT)
-From:   "William A. Kennington III" <william@wkennington.com>
-To:     tmaimon77@gmail.com, tali.perry1@gmail.com, avifishman70@gmail.com,
-        wsa@kernel.org, joel@jms.id.au
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "William A. Kennington III" <william@wkennington.com>
-Subject: [PATCH] i2c: npcm7xx: Fix callback completion ordering
-Date:   Sat, 23 Sep 2023 18:02:14 -0700
-Message-ID: <20230924010214.3700150-1-william@wkennington.com>
-X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
+        with ESMTP id S229480AbjIXUvu (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 24 Sep 2023 16:51:50 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08255EE
+        for <linux-i2c@vger.kernel.org>; Sun, 24 Sep 2023 13:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sang-engineering.com; h=date:from:to:cc:subject:message-id
+        :references:mime-version:content-type:in-reply-to; s=k1; bh=rmBj
+        8WzgZ1qY7XdqFTxxAvVk/6lNMe6UdmcFN+n1JgI=; b=NOclYpq9H+NZtYeLYITO
+        W0SBHwoqdShHnQUKYbpLdCjouQcHceI8AP0YoHETkcp+cz78fpeNBhsQ9zXCsaLj
+        no3t60+2ikBEeO/nroEW5tH1cEkW3LaQxa6pN5lnyR3yp0o3oaSyNDzoyIp37Nrz
+        sziYDqTAblsKzqO8vtbK+17VliIVZugV+4SHsM1hVoAv/qXQg1YWHUwCevRWN5uS
+        HBJm0OrFJev03nNVGHLsdn61fcPNvV12wvBAr4VwrnEBZVt3atLqxbKU6P5qNheG
+        u+x4z0Sdx60VNU02+0Cawib45EZjlYOHFkSchzHNK6HlLt8NVxwp1ZZ/zLP4Uwqp
+        +Q==
+Received: (qmail 2104137 invoked from network); 24 Sep 2023 22:51:39 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Sep 2023 22:51:39 +0200
+X-UD-Smtp-Session: l3s3148p1@D93qASEGWOMujntX
+Date:   Sun, 24 Sep 2023 22:51:35 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] i2c: mux: demux-pinctrl: Annotate struct
+ i2c_demux_pinctrl_priv with __counted_by
+Message-ID: <ZRChVwlTcBIMGk95@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Kees Cook <keescook@chromium.org>, Peter Rosin <peda@axentia.se>,
+        linux-i2c@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20230922174959.work.093-kees@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Yzf40OIfY1TWj451"
+Content-Disposition: inline
+In-Reply-To: <20230922174959.work.093-kees@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Sometimes, our completions race with new master transfers and override
-the bus->operation and bus->master_or_slave variables. This causes
-transactions to timeout and kernel crashes less frequently.
 
-To remedy this, we re-order all completions to the very end of the
-function.
+--Yzf40OIfY1TWj451
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
-Signed-off-by: William A. Kennington III <william@wkennington.com>
----
- drivers/i2c/busses/i2c-npcm7xx.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+On Fri, Sep 22, 2023 at 10:49:59AM -0700, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+>=20
+> As found with Coccinelle[1], add __counted_by for struct i2c_demux_pinctr=
+l_priv.
+> Additionally, since the element count member must be set before accessing
+> the annotated flexible array member, move its initialization earlier.
+>=20
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/c=
+ounted_by.cocci
+>=20
+> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Cc: Peter Rosin <peda@axentia.se>
+> Cc: linux-i2c@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index 495a8b5f6a2b..ae4bae63ad4f 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -694,6 +694,7 @@ static void npcm_i2c_callback(struct npcm_i2c *bus,
- {
- 	struct i2c_msg *msgs;
- 	int msgs_num;
-+	bool do_complete = false;
- 
- 	msgs = bus->msgs;
- 	msgs_num = bus->msgs_num;
-@@ -722,23 +723,17 @@ static void npcm_i2c_callback(struct npcm_i2c *bus,
- 				 msgs[1].flags & I2C_M_RD)
- 				msgs[1].len = info;
- 		}
--		if (completion_done(&bus->cmd_complete) == false)
--			complete(&bus->cmd_complete);
--	break;
--
-+		do_complete = true;
-+		break;
- 	case I2C_NACK_IND:
- 		/* MASTER transmit got a NACK before tx all bytes */
- 		bus->cmd_err = -ENXIO;
--		if (bus->master_or_slave == I2C_MASTER)
--			complete(&bus->cmd_complete);
--
-+		do_complete = true;
- 		break;
- 	case I2C_BUS_ERR_IND:
- 		/* Bus error */
- 		bus->cmd_err = -EAGAIN;
--		if (bus->master_or_slave == I2C_MASTER)
--			complete(&bus->cmd_complete);
--
-+		do_complete = true;
- 		break;
- 	case I2C_WAKE_UP_IND:
- 		/* I2C wake up */
-@@ -752,6 +747,8 @@ static void npcm_i2c_callback(struct npcm_i2c *bus,
- 	if (bus->slave)
- 		bus->master_or_slave = I2C_SLAVE;
- #endif
-+	if (do_complete)
-+		complete(&bus->cmd_complete);
- }
- 
- static u8 npcm_i2c_fifo_usage(struct npcm_i2c *bus)
--- 
-2.42.0.515.g380fc7ccd1-goog
+Fixed a blank line and applied to for-next, thanks!
 
+
+--Yzf40OIfY1TWj451
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUQoVMACgkQFA3kzBSg
+KbYPXw/+OI9vKEMhaU1rrgG+7J5iC21kX3uFzSB+1HHmfaB5FRr6A8YO8XtPO6Dg
+MRH7LculsUzt8aszMl12+x9DLiFUn2G5S2OEl/qlfc/SiCBQvNEYNyxBiwrpVlc5
+vF710VZKczRmnWiUKjIJV1QiQjhm4O9iXeeZifaA0FHYH2CTcCZoy2wJoAnfjoGI
+0xEQIwVggYx1SHABWTz3fdDDUiypE8CZh5HLTqokDOrLbLS0Kf24MYAJ42U9Bwj8
+OfQj6SKwixKs49PKvdgpYb9BMcLruarU1q8/upOO/Iye+MykNKzBTq0yPoLe0VJS
+EWijVeKAJTTsS8PZ65ILU4RAka/5gNS+AXpX45QrxChzjCVJF2lgyJWGach9jq7D
+3AUAWq+BDgtQgvQHmXU4vTV6PcvR4KU3GfzO/cALPqHQex4ZVYfKLygY83c/ytDI
+vxZOSW5Zu/msnPwgZD2wQ4BNpJbJceoaGqYCUBwlVAqCMEduCkKMpP0ijXPmWaT2
+a6lTESy/75lQ2B1DS9BylcBdm4GqUesGAKQsbel253N/5EaW3H4W14N4OFrXM7gp
+f+/el1VgrtZy7ufe95/4+L9V2pijzw9Ppo69eyXEJZjI9tMepvR0KsxM87doEy6f
+ZERJuVj7YeWqlaqzFe43rrsylyNq7oVfZuNR/QJmVXup+5nIb7s=
+=tbDm
+-----END PGP SIGNATURE-----
+
+--Yzf40OIfY1TWj451--
