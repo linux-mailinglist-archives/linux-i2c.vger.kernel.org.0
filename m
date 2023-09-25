@@ -2,105 +2,117 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00D87AD0C9
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Sep 2023 08:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89107AD1E7
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Sep 2023 09:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbjIYG4Y (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Sep 2023 02:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
+        id S232198AbjIYHlS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Sep 2023 03:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232326AbjIYG4G (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Sep 2023 02:56:06 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DFB1B4;
-        Sun, 24 Sep 2023 23:55:53 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85C53C433C8;
-        Mon, 25 Sep 2023 06:55:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695624953;
-        bh=5dW7YNpbxW+6ZEI9C3zdDpNw1rrUHJJxI/gVVtxsPTU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VlqjQj//PuCFllDnEEU/O9tQlIOE+f604AZZPzGlO8FLRvv4KwwdWzEnHZPVU1nrY
-         UvlYUe2WqMiXUO+vdeperchnQ13H4y084BGDg4IkDV0g9g5TuvH1uuV9FloyufSzGn
-         5+c9IsMtdoPq6I+yGV3Ow0w8UI30nWMXRNovHRMP8/hUQTULxSBqsCveeZzSWVIiG4
-         x7qFZWnJywagDiSjo9RuZC9y7NSE9YyxhLqz55wy41zeoiQPM+lVW4TgAXBTuCi8Et
-         R8psXeXEvP/t0kMkBVgo78QGGROZNnL3lfZwYwqWb6sxBnrTMV3zD07ao0/QDtdynX
-         nESLK7gr2wsiA==
-Date:   Mon, 25 Sep 2023 08:55:48 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>
-Subject: Re: [PATCH v1 1/9] i2c: designware: Move has_acpi_companion() to
- common code
-Message-ID: <ZREu9Pq/YqaL5/tV@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>
-References: <20230725143023.86325-1-andriy.shevchenko@linux.intel.com>
- <20230725143023.86325-2-andriy.shevchenko@linux.intel.com>
- <20230725214521.zxjqinryvva2zanx@intel.intel>
- <928d54c4-ec71-5f09-ed66-5f9c52aca6ba@linux.intel.com>
- <ZMgWJY3w/HhsZvVd@smile.fi.intel.com>
- <2e2f4d7e-2831-9161-9564-3d1e89511727@linux.intel.com>
- <ZRCiYI5SMEVxxJ98@shikoro>
- <ZREs1XQzPe9GqlbK@smile.fi.intel.com>
+        with ESMTP id S232251AbjIYHlQ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Sep 2023 03:41:16 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5058DA
+        for <linux-i2c@vger.kernel.org>; Mon, 25 Sep 2023 00:41:08 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id ada2fe7eead31-452863742f3so2436729137.1
+        for <linux-i2c@vger.kernel.org>; Mon, 25 Sep 2023 00:41:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1695627667; x=1696232467; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tiYZdX9DU54hlyCL6A/xG5cg0RmJhcg6NNDUibAVUyM=;
+        b=T+SWuozF8p5UNcF4T8GwMGauc784jE2iIkm53erAQQ30lNHY8u3xAUjX6P2uPLyWee
+         rbXYSdDrsy3uHF1ClYhkxlw7wEhRX4ckShYHTrKfegTvOtLHoVtis8DHD6geh/XsrW5x
+         vJVwN9uFuZYZx3YSReBnawR8jg0OyugWDMPuKUuK0pmU//MSffcj0+xOH2MMrJzgoxYA
+         JOZCGtqf57WdeJ+XEH33FP/PKAnUNzYnv3WtJ00JjgUi/bGBdVr7hGe3d0hoh3rbwOqq
+         HPZMp24PtdeYQTGZ3nV3T7ZyL0ekt1GMjP5RMQi7lFqXtyK1kG3w75m5LFUWoZ99SnwH
+         O24Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695627667; x=1696232467;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tiYZdX9DU54hlyCL6A/xG5cg0RmJhcg6NNDUibAVUyM=;
+        b=jQ8MaTGP9JcuOZPKvY15f+E7BQpIsJjdDB2AvVWCyhC/Hg/rEAgMK+/RgfsiiPemrD
+         /4GSIOnQKy6X7KGblPJKc8Rx874oBUpwbdndjhr2X0MEJMPdkqyKL/mIud7lexAtRrpP
+         Uc2ZE2XSZUfd0W54Irv4Elf7VjcRAoAWHVTr5xCLfgTBy6TWdXm+VQhkKRiXPnk7mBUC
+         8LV83dRW/COzHc9IY+FrTJ1XXCBRnku8s0Kxuy/RzJl+fsuMKaT8MCmjbC7Z4Hoh+p1V
+         05ln4xE9HO6jn6qlp0Au67xCGmZwjzm0LheapgGIrrp9uIHqCeD2/mzjZoVkbTh0VnQ9
+         QWGQ==
+X-Gm-Message-State: AOJu0YxmqhFf9CU7It+nlf6yf5wimd3xIjB/NwB/b49FZgd4Kwdc2gj5
+        yM0+ffUbPSAsB64Tt9G016z6bsfsfUiUB+VPofm52Q==
+X-Google-Smtp-Source: AGHT+IFx82zmsxjoLuNTPGGd8GrhippPyNF9FQn3hKIpX7aWK+Ny/ek0o4jNsCfrxS8J3MiCNYA4klx50t41kyL94KQ=
+X-Received: by 2002:a67:fb89:0:b0:44e:e7d7:6847 with SMTP id
+ n9-20020a67fb89000000b0044ee7d76847mr2800971vsr.7.1695627667358; Mon, 25 Sep
+ 2023 00:41:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qQ5FN+LhzD4GPmo4"
-Content-Disposition: inline
-In-Reply-To: <ZREs1XQzPe9GqlbK@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230922175155.work.872-kees@kernel.org>
+In-Reply-To: <20230922175155.work.872-kees@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 25 Sep 2023 09:40:56 +0200
+Message-ID: <CAMRc=Md+BM0fGoO9SrnmKOKAmXmMBNJ9aBvuOCfKpT94rhv+zQ@mail.gmail.com>
+Subject: Re: [PATCH] eeprom: at24: Annotate struct at24_data with __counted_by
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Fri, Sep 22, 2023 at 7:51=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> Prepare for the coming implementation by GCC and Clang of the __counted_b=
+y
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUND=
+S
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+>
+> As found with Coccinelle[1], add __counted_by for struct at24_data.
+>
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/c=
+ounted_by.cocci
+>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-i2c@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  drivers/misc/eeprom/at24.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+> index af83aca452b7..7dfd7fdb423e 100644
+> --- a/drivers/misc/eeprom/at24.c
+> +++ b/drivers/misc/eeprom/at24.c
+> @@ -92,7 +92,7 @@ struct at24_data {
+>          * them for us.
+>          */
+>         u8 bank_addr_shift;
+> -       struct regmap *client_regmaps[];
+> +       struct regmap *client_regmaps[] __counted_by(num_addresses);
+>  };
+>
+>  /*
+> --
+> 2.34.1
+>
 
---qQ5FN+LhzD4GPmo4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-
-> > Does this all mean that the series needs to be refactored?
->=20
-> At least that is my impression. Just have no time to look at it (yet).
-
-Okay, I'll set it to 'changes requested' then. Thanks for the heads up!
-
-
---qQ5FN+LhzD4GPmo4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmURLvAACgkQFA3kzBSg
-KbYchRAAgtjiV1cdGz3OpR4RFua+ts5E5bD+fAYPDewHts6BEf1S/PvkNFWivhLN
-dAx2r9aDhShHvnYubkAgCDgkm37AxxOukVPo4pWTaiZZ3R3Ve47O3TCOEAHIB8mh
-u96U6TIQfuPEiAjyPa9EvNBzrHHzSP5nB3v7rJvHTR5h0SM3XF2+ROxa8h60m4r1
-eL/ZHZCn428QxCbvIV6+0QXV8j8qQg+I9q7p2BxLpBmjNqIPzOyMjGCzfG9xXS6N
-fyFmqHweaXS9oivvFtWiBX2nwP1Ld5g/6eEZARwyZRhkud8o/H/Y+dPxPUJcfYdV
-fgsV1FFwM+AuJXv8lq8ipid7HN/X71NlFxcbEmgtSn0TWZxe+0/85MHXwGlO6XdI
-KspveebmTd8L5ILwzZ6l2hLAhAOc2N/UXwfK1YeNyIlJo7pxW7dgk7GnItU59a9q
-gLCpegn0RWK90M3eVbxn4Goc4utSb3+FI5xrtKOS3xI8R7Lr2K+W385IaqEKPKdB
-LmqOHebvoo4X6bJRskhGXB6FqNhHv6lIEoIW1s0b+NSYjg0Vxapt8s0vC6Q6YAzD
-V2z6PF8i0dUbkMSp14HeEP/saTngH2ZYGhdL5w3txc78MRfZJOKz6SQe0VzBevne
-ru1vW7iSTfqv3/PDfs2kGfp96+Ps+ZJnQpfU6HzyL8VWtcxwrs0=
-=QKqF
------END PGP SIGNATURE-----
-
---qQ5FN+LhzD4GPmo4--
+Bart
