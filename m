@@ -2,282 +2,249 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173FB7ADBB5
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Sep 2023 17:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A3B7ADFA0
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Sep 2023 21:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjIYPk3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Sep 2023 11:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
+        id S229584AbjIYTj4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Sep 2023 15:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjIYPk2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Sep 2023 11:40:28 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC43FF;
-        Mon, 25 Sep 2023 08:40:20 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38PB8uT6014707;
-        Mon, 25 Sep 2023 17:39:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=
-        selector1; bh=mGHKtScuDGvlKtHxb7FEML0faIVvgVUaxKEFd7mNV8E=; b=4q
-        Kcoqc3zgo9sJUre04DyZDGbklDpC/KeHLYhQUqjGRISItW8tgxD1HfsY5C4dvmqU
-        ypND1/tw6xNpNdiaI9cj+0DWwB+AO0jLWS/wje1xIs8ahvEonwIRLgsKfwpyGxPj
-        WrbsnrDRuDGY9paZF0VD3ToFCcy5ZYDaUcatISItUInwnHoiND9VP6eDGTO9iYXo
-        ZEP5o7P/ZBL2FD+txkgb4ZEpwSXXmY28sPofNNkoXeBmhTKN4+cuSPwfop+Qz5FQ
-        7qyGBbMEzJI/xgZpubfLrOe/BKmIRB3aBHd5cxl6QkR5912kToqhArv0Ruzk8VDm
-        KERn0jfP42AQsJ6JQr2A==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3t9qbwr14m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Sep 2023 17:39:35 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 16D6610005C;
-        Mon, 25 Sep 2023 17:39:15 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D8052245514;
-        Mon, 25 Sep 2023 17:39:15 +0200 (CEST)
-Received: from [10.201.20.32] (10.201.20.32) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 25 Sep
- 2023 17:39:13 +0200
-Message-ID: <4eb771d5-1f22-c708-0390-0111e8d1a9a0@foss.st.com>
-Date:   Mon, 25 Sep 2023 17:39:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v3 00/11] Introduce STM32 Firewall framework
+        with ESMTP id S229481AbjIYTjz (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Sep 2023 15:39:55 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2109.outbound.protection.outlook.com [40.107.243.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05D4101;
+        Mon, 25 Sep 2023 12:39:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JWaVhUv14yV+LErS54idVnjraGVv0C/02yKI1497BgbgqH+BvNw26LWIxIoKuuXjGcwNa1jEHNpGiAxAVKL7ZbnY/ueYIJKimVc7SnEwUl7q7kBDW1O26U0Z6Qbk8ruulbuvjMb1ugUfCc3p89q0n25vS466utBA8cQtj4gZlSJ/p1zV+YFbw2fXXuelQLcJlTj8kg19/reD631SSt2IsBiII0+z5CMxt3I7Hm+Xy0c51+LuSG1V0YxO8l4SzlYXp6W+kDwzqVh2E8WAoCTAomV+G12XZvFu4q55tHScBWkRHf0bCEV84d9xxJhBLAYXZupB35xHmKwUuV2My8vC+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rj48+E4aOK/l0kOzm6FkIKJMInG9qNAXgroUL6YTyWo=;
+ b=Lj03qhCH3jM35b5QnC7r7s4+EMZ6/+BdDLdENCUgCeAI3g0JHvzj1j+vbrIXBZfYYxaxeRle1vuXSAFnSv2RuJra0k/P/NrhoJsD0EthK4OPVgorrZXfMzwYQnxCSygFg4A7FmDQUtn/RdvgC/aGZV8pzrXB2kd0xTqdmB2Yh8KJr7C16mvbVgGFysMKNZGIAEZUlRZp+NvCATxiIkg8TrwgDeB0wTUkRRGYrifSae0QWvwr5bmw8m9UOQ0qt6lVG74PB3HXyEZuCdgBCQsXhZNz1flGEODiO9BbMiC3XNykJeycp8Jmk4gSOs2Vwstgqu6342K4UvAm6ZBjM5NmRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Rj48+E4aOK/l0kOzm6FkIKJMInG9qNAXgroUL6YTyWo=;
+ b=gmHMKZlT2AVN5zwX8lj6XYgPoqAFxDFuNGo8htNThVSGHNfRh0it7D7Q4ZSTH2XRmqEKVk8kvEqgBpf09WEgBQ763PrnX1btcRMbDxSoNFr3PkkHJLkRNnP8c5EFq8ltckGlQLrIVIQEu+JwTydY4ZNDdXgUdHdqTjqGB+Amv7o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from DM6PR01MB4044.prod.exchangelabs.com (2603:10b6:5:2c::17) by
+ SA1PR01MB7357.prod.exchangelabs.com (2603:10b6:806:1f8::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6813.23; Mon, 25 Sep 2023 19:39:44 +0000
+Received: from DM6PR01MB4044.prod.exchangelabs.com
+ ([fe80::e565:f57e:a8c5:5fd5]) by DM6PR01MB4044.prod.exchangelabs.com
+ ([fe80::e565:f57e:a8c5:5fd5%3]) with mapi id 15.20.6813.027; Mon, 25 Sep 2023
+ 19:39:44 +0000
+Message-ID: <3a305e74-2235-47ab-8564-0c594f24dc0a@os.amperecomputing.com>
+Date:   Mon, 25 Sep 2023 12:39:37 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] i2c: designware: Fix corrupted memory seen in the ISR
 Content-Language: en-US
-To:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
-        <vkoul@kernel.org>, <jic23@kernel.org>,
-        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
-        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <arnd@kernel.org>,
-        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>
-CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20230726083810.232100-1-gatien.chevallier@foss.st.com>
-From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <20230726083810.232100-1-gatien.chevallier@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.20.32]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-25_13,2023-09-25_01,2023-05-22_02
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Yann Sionneau <ysionneau@kalrayinc.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Yann Sionneau <yann@sionneau.net>,
+        Will Deacon <will@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <9de89e14-35bd-415d-97f1-4b6db1258997@os.amperecomputing.com>
+ <ZQlwC9TCSwWJpuxy@arm.com> <ZQl1zwVkx9n2MPvr@shikoro>
+ <da400d3e-a357-1ae8-cb92-728cc4974b67@kalrayinc.com>
+ <ZQm1UyZ0g7KxRW3a@arm.com>
+ <cde7e2fc-2e13-4b82-98b3-3d3a52c4c185@os.amperecomputing.com>
+ <p7wl7fk4cdyhvw2mfsa6sfc7dhfls3foplmzwj6pzstargt2oh@33zuuznup2gq>
+ <ZQq2cT+/QCenR5gx@shikoro>
+ <ba6d4378-b646-4514-3a45-4b6c951fbb9c@kalrayinc.com>
+ <9219ad29-b9a3-4f07-81b5-43b4b6d9d178@os.amperecomputing.com>
+ <d65lwrkji3rvw6r4jdcumo4zu3hbu6zpv6xq73hw6hcshvhtkw@jvuohb3f3loo>
+From:   Jan Bottorff <janb@os.amperecomputing.com>
+In-Reply-To: <d65lwrkji3rvw6r4jdcumo4zu3hbu6zpv6xq73hw6hcshvhtkw@jvuohb3f3loo>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH2PR05CA0003.namprd05.prod.outlook.com (2603:10b6:610::16)
+ To DM6PR01MB4044.prod.exchangelabs.com (2603:10b6:5:2c::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR01MB4044:EE_|SA1PR01MB7357:EE_
+X-MS-Office365-Filtering-Correlation-Id: fba58cee-d6d1-42d3-bfe6-08dbbdff2b00
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LdLFu4bJIixg3iAZtldx6Zf/FiJ9EaNuQas5VZiHNUGDG/norsalzwj2hg2LjDAPHIpi4HoUYqoZ8gzqgD/yb+2u7KGSPcnal6Q8VMjAeTyEWOOZzoFtxOR4OoOyABVY3L9rQb2dDAjYnjV7r8fmoVd4elKSqsPh0KyNSzyJDAKKxkvUxk+5q7cLKZE7vHCpbhTqhRNQJOHP8WefQW/d31l17Zv+margJ4mPVkG9ngxOlyXjph8wm6IKYA7boVlkqOi3IXWKHHQT+LZ1nQ1+4yetuLvtksvx0VenrfSBVKkCQUB2gKMsxaEybBA/7fEROxgDm5IyMvH37+Q+VUBc0YniMCA0tZvmTLk5fcLfIIIFy+/U8e6zyyouRaAEpWLheyDWYbo3Gl4v4pnTWERjpnJ/Wa3ahpCRYhH5xN3PPbCH+VqGU+/qrI82ozSO5M/NeQY3o0H5l2LiL9TVZx6on31cwCll6yd+o6VuOp9uHTaJ/6HIFzK2uv6gFh4iQCNOY6B2guxARRaLdJ9NsFssZz5ciCcLi1z68I6ITNYjvEIskd4aG9CY359PaVhDGcGq7mBRTKSsQhTjPsmEBkMZgNsC3o13Y58eh/3k0FwHTBA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR01MB4044.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(39850400004)(366004)(396003)(346002)(230922051799003)(451199024)(186009)(1800799009)(31686004)(7416002)(53546011)(6506007)(54906003)(66476007)(316002)(5660300002)(4326008)(8936002)(66556008)(41300700001)(6916009)(8676002)(2906002)(83380400001)(66946007)(2616005)(6666004)(31696002)(86362001)(478600001)(6486002)(26005)(6512007)(38100700002)(966005)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a2N1ME5IeGlMT2p3VWdCV3NiWno3Uy9YNG9oRmllOThQMTdEcC91MDVhek8w?=
+ =?utf-8?B?WlI3SzVubVkxVXpOaWIrUmk5VDIrams2T0kxUm5HdHdNNTBOY2dDSDcrZ3Ar?=
+ =?utf-8?B?SkxwaTV2SFdXSFU3RHdmYWRRN1pZRHNaVDFnblFjOWprQXAzV3VXQUFjZlNJ?=
+ =?utf-8?B?M2FKRGExd05IbEFjcnBZcmY2WTh5YVpQeDJKdkxPUzlVcVJaZVgzazFiL3dv?=
+ =?utf-8?B?V1lwSjlka0Zsc1BKczlyQmdFNlZWdzFaZmdscVJpRDcwNkFhVHhyY1pPQmtk?=
+ =?utf-8?B?TDc2V2h0YldQby9Za3VWajF5My9LeGVGR2x4UURpUXc2d0VoKzFZa3JrN1Bx?=
+ =?utf-8?B?V1Q4QkxGanVmRDdNT1JIQnZ0bWZwUjIvMDdMcUUrQ1pCYklkUXAvM1RvNmM2?=
+ =?utf-8?B?UGk4YWFUZUJXbHU0NlRTalhDeHJpZjVDeXVPQlZWVEw4ck9ra2p2Q0lxVG54?=
+ =?utf-8?B?VTZsUzZIaUl3OEhEMVRYajFOK2NwRjhBUHluUnpWZ2U0ODZPUkFQMnUxOXRJ?=
+ =?utf-8?B?Q01CcHFXQXhKSXdCekR2bXVvNEg4d3ZsTDhwQ0pFTVhONE9lRWZxMzh5ZmE5?=
+ =?utf-8?B?OEtKQTlsd0QrYzIzMnBPb2xSOXU2TmF4d1FjdEZrc29MS0Vsak9yRUNqMlJN?=
+ =?utf-8?B?YmUxaitBZkZyWXA0Q2VhalF5Q2EzcGljMDdMamhvTGQ0QnhnWEY2WGN6Rm05?=
+ =?utf-8?B?OC9YWkxSWXJiZCt6cklhcXFvbUxPdmtscUFnRmQycSs2UE43TWhaNk5PN3BR?=
+ =?utf-8?B?QlJQaHVPTUt6N2grc0JQNmdRZDhQMTRhMkpsWHRlNUZDcmpZOG1UajIzSGlC?=
+ =?utf-8?B?YldaNWhVTnJwR053bEhqT3pLdkE4OUJacmx2eGRCK3VhU0NDWWhaTHlEekZ0?=
+ =?utf-8?B?aGZERTJORWgwRnNJQUhCWDhFNkZXMXBDOUJMWGNBT3h2SEpUcWgwbHkwd1Iv?=
+ =?utf-8?B?Yk1PZ21YRTE3WndQbm42Ym5qYURtSjZtMDNvSjZ2MlA4OU41YmJmS0hvNms3?=
+ =?utf-8?B?cEtKT3VLbHFtVFVCNEJ5SGIySEFsRVBaaUtWZnRIcENYVk1vK2xUYkpyOWpH?=
+ =?utf-8?B?VWJxai8rT2tzSzAxZHRYK0prbmx0TTRBSmpxQzFWRTl2VGsrenhZM2dZbFB4?=
+ =?utf-8?B?UlFUL1ZvcUU4aVdqSVN2Ynl5d0hiWFMrNGFwaUJGeGdMc013aENKMUYxWFNT?=
+ =?utf-8?B?b0owU2k0WlRZVnIvSm1SZmJCblg3STRSa2M4QURudUxOdEZ4RWg4bGE3c1pT?=
+ =?utf-8?B?SFNFYXo2SzNtaU1oUFN5WlJGNVgwQTAxcnFydnNmOUxOUFRqbzVtQyt3Tm1j?=
+ =?utf-8?B?dWJFUVVzVU1WU1NDaXRjUU10YThzTXIvWGNtRk43OUh3WUt4cHo3Yys3WE1D?=
+ =?utf-8?B?YzlKNmFFM1NGcnprM3ByeGNhSWZITkFvbjA5Q0RtRDkxblljZGxBWEZsY2Zz?=
+ =?utf-8?B?SXY4RE9qSHcveW9YWW0wVHFEMHdmUzBhelZwSzVubldkelFzbTU5K1N4SC9N?=
+ =?utf-8?B?Z016QkgwWG9lbnB2NmFySDk2c012TVBzNlNaUndDTjJxVU9KUk5tNWxhRFAz?=
+ =?utf-8?B?UUNWSXFjaU8xdXVqOEhtK2pzNkFZOG1rWStZZmFUaFBrdlY3YmNyQ3ZJZ3Zi?=
+ =?utf-8?B?dW12bDFRK0NZdHdac2Z3ekdHS1dUNjZUcHhSNFR5bGk4SmZiTW5VMEdCZlNI?=
+ =?utf-8?B?NDVaOEduSXVKUU56UGhLeXcrV2JUNXJDd1RNd0ZzNjduTDNMNDdwVDdxUk1Y?=
+ =?utf-8?B?VDdPTy9PaXFYbXIwNTV3dG1aZmRNSHpoSUl1TUVDMDVtczFZL2l0UDFBTjg0?=
+ =?utf-8?B?anpRMzFmSHMzNVl2UVpNMkVLeGE3b25UUElYRE9pdVgweCtKRWwyOHBlMFBs?=
+ =?utf-8?B?d0JRSmRBQjc1SW5vYitHaFVYWGVxc3hIMmwyeEE3aVRGQlNKOWhlZDVsWENF?=
+ =?utf-8?B?YTdIWnFDUnNFcWFwUlRzWkFLVzZkamdoWWMrdCtwWGxEbXpxbzlnanJkUWFQ?=
+ =?utf-8?B?a0VIeDgwUGdlMUdGRUdBaGtQNGJxajNoeWp1UFgxWVpCRjVjMmIrSXpJeEdU?=
+ =?utf-8?B?T0xLMXJRQzBNWStFajZyVzh0WjROblliSkhMUWE3dTEvdlp3VWVDRjRvbDVt?=
+ =?utf-8?B?UnlRendIQjdhS3JVSktOQmY3ZFJWZVlXSmxudENXbVJlend1eXFjY0sxRlBy?=
+ =?utf-8?Q?zl4gyZPRMeIuDgOjww5Ql5w=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fba58cee-d6d1-42d3-bfe6-08dbbdff2b00
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR01MB4044.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2023 19:39:44.0180
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zJaaELHpCp4zVsZmdmH2/PZHKOimICGJWlnaGC8iusGzJwcWnhLyEqcO4V4QiMzatIxEUe01RG5X0iCJ4xWXDhddRF9rQrtDVexUc1i/euM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB7357
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hello all,
+On 9/25/2023 5:54 AM, Serge Semin wrote:
+> On Wed, Sep 20, 2023 at 12:14:17PM -0700, Jan Bottorff wrote:
+>> On 9/20/2023 6:27 AM, Yann Sionneau wrote:
+>>> Hi,
+>>>
+>>> On 20/09/2023 11:08, Wolfram Sang wrote:
+>>>>> same thread." [1] Thus I'd suggest the next fix for the problem:
+>>>>>
+>>>>> --- a/drivers/i2c/busses/i2c-designware-common.c
+>>>>> +++ b/drivers/i2c/busses/i2c-designware-common.c
+>>>>> @@ -72,7 +72,10 @@ static int dw_reg_write(void *context,
+>>>>> unsigned int reg, unsigned int val)
+>>>>>    {
+>>>>>        struct dw_i2c_dev *dev = context;
+>>>>> -    writel_relaxed(val, dev->base + reg);
+>>>>> +    if (reg == DW_IC_INTR_MASK)
+>>>>> +        writel(val, dev->base + reg);
+>>>>> +    else
+>>>>> +        writel_relaxed(val, dev->base + reg);
+>>>>>        return 0;
+>>>>>    }
+>>>>>
+>>>>> (and similar changes for dw_reg_write_swab() and dw_reg_write_word().)
+>>>>>
+>>>>> What do you think?
+>>>> To me, this looks reasonable and much more what I would have expected as
+>>>> a result (from a high level point of view). Let's hope it works. I am
+>>>> optimistic, though...
+>>>>
+>>> It works if we make sure all the other register accesses to the
+>>> designware i2c IP can't generate IRQ.
+>>>
+>>> Meaning that all register accesses that can trigger an IRQ are enclosed
+>>> in between a call to i2c_dw_disable_int() and a call to
+>>> regmap_write(dev->map, DW_IC_INTR_MASK, DW_IC_INTR_MASTER_MASK); or
+>>> equivalent.
+>>>
+>>> It seems to be the case, I'm not sure what's the best way to make sure
+>>> it will stay that way.
+>>>
+>>> Moreover, maybe writes to IC_ENABLE register should also use the
+>>> non-relaxed writel() version?
+>>>
+>>> Since one could do something like:
+>>>
+>>> [ IP is currently disabled ]
+>>>
+>>> 1/ enable interrupts in DW_IC_INTR_MASK
+>>>
+>>> 2/ update some variable in dev-> structure in DDR
+>>>
+>>> 3/ enable the device by writing to IC_ENABLE, thus triggering for
+>>> instance the TX_FIFO_EMPTY irq.
+>>>
+>>
+>> It does seem like there are a variety of register write combinations that
+>> could immediately cause an interrupt, so would need a barrier.
+> 
+> My suggestion was based on your fix. If it won't work or if it won't
+> completely solve the problem, then perhaps one of the next option
+> shall do it:
+> 1. Add the non-relaxed IO call for the IC_ENABLE CSR too.
+> 2. Completely convert the IO accessors to using the non-relaxed
+> methods especially seeing Wolfram already noted: "Again, I am all with
+> Catalin here. Safety first, optimizations a la *_relaxed should be
+> opt-in."
+> https://lore.kernel.org/linux-i2c/ZQm2Ydt%2F0jRW4crK@shikoro/
+> 3. Find all the places where the memory writes need to be fully
+> visible after a subsequent IO-write causing an IRQ raise and just
+> place dma_wmb() there (though just wmb() would look a bit more
+> relevant).
+> 
+> IMO in the worst case solution 2. must be enough at least in the
+> master mode seeing the ISR uses the completion variable to indicate
+> the cmd execution completion, which also implies the complete memory
+> barrier. Moreover i2c bus isn't that performant for us to be that much
+> concerned about the optimizations like the pipeline stalls in between
+> the MMIO accesses.
+> 
 
-Since the "feature-domains" bindings lacks precision (maybe some
-renaming for better clarity on its purpose), I will send v4 with a
-vendor binding so the generic one better discussed and enriched with
-other contributor examples.
+I did stress testing for a few days on our processor of the proposed fix 
+that makes writes to DW_IC_INTR_MASK use writel instead of 
+writel_relaxed in dw_reg_write. The problem we were seeing is fixed. On 
+our system, the problem was occurring when many ssif (ipmi over i2c) 
+transfers were done. The stress test was running "ipmitool sdr elist" in 
+a loop. Without the change, multiple errors per day from the driver are 
+seen in the kernel log.
 
-This will avoid mixing several patch set.
+I'm good with a change that just has that one change. Also applying 
+non-relaxed to dw_reg_write_swab and dw_reg_write_word was also 
+suggested for completeness.
 
-Best regards,
-Gatien
+Does anybody have concerns about other cases that may not get fixed by 
+this change? We did have hypothetical cases, like with IC_ENABLE, that 
+could have the same issue.
 
-On 7/26/23 10:37, Gatien Chevallier wrote:
-> Introduce STM32 Firewall framework for STM32MP1x and STM32MP2x
-> platforms. STM32MP1x(ETZPC) and STM32MP2x(RIFSC) Firewall controllers
-> register to the framework to offer firewall services such as access
-> granting.
-> 
-> This series of patches is a new approach on the previous STM32 system
-> bus, history is available here:
-> https://lore.kernel.org/lkml/20230127164040.1047583/
-> 
-> The need for such framework arises from the fact that there are now
-> multiple hardware firewalls implemented across multiple products.
-> Drivers are shared between different products, using the same code.
-> When it comes to firewalls, the purpose mostly stays the same: Protect
-> hardware resources. But the implementation differs, and there are
-> multiple types of firewalls: peripheral, memory, ...
-> 
-> Some hardware firewall controllers such as the RIFSC implemented on
-> STM32MP2x platforms may require to take ownership of a resource before
-> being able to use it, hence the requirement for firewall services to
-> take/release the ownership of such resources.
-> 
-> On the other hand, hardware firewall configurations are becoming
-> more and more complex. These mecanisms prevent platform crashes
-> or other firewall-related incoveniences by denying access to some
-> resources.
-> 
-> The stm32 firewall framework offers an API that is defined in
-> firewall controllers drivers to best fit the specificity of each
-> firewall.
-> 
-> For every peripherals protected by either the ETZPC or the RIFSC, the
-> firewall framework checks the firewall controlelr registers to see if
-> the peripheral's access is granted to the Linux kernel. If not, the
-> peripheral is configured as secure, the node is marked populated,
-> so that the driver is not probed for that device.
-> 
-> The firewall framework relies on the feature-domain-controller device
-> tree bindings: https://lore.kernel.org/lkml/0c0a82bb-18ae-d057-562b.
-> It is used by peripherals to reference a domain controller, in this
-> case a firewall feature domain. The bus uses the ID referenced by
-> the feature-domains property to know where to look in the firewall
-> to get the security configuration for the peripheral. This allows
-> a device tree description rather than a hardcoded peripheral table
-> in the bus driver.
-> 
-> The STM32 ETZPC device is responsible for filtering accesses based on
-> security level, or co-processor isolation for any resource connected
-> to it.
-> 
-> The RIFSC is responsible for filtering accesses based on Compartment
-> ID / security level / privilege level for any resource connected to
-> it.
-> 
-> STM32MP13/15/25 SoC device tree files are updated in this series to
-> implement this mecanism.
-> 
-> Changes in V2:
-> 
-> 	generic:
-> 		- Add fw_devlink dependency for "feature-domains"
-> 		  property.
-> 
-> 	bindings:
-> 		- Corrected YAMLS errors highlighted by Rob's robot
-> 		- Firewall controllers YAMLs no longer define the
-> 		  maxItems for the "feature-domains" property
-> 		- Renamed st,stm32-rifsc.yaml to
-> 		  st,stm32mp25-rifsc.yaml
-> 		- Fix examples in YAML files
-> 		- Change feature-domains maxItems to 2 in firewall
-> 		  consumer files as there should not be more than
-> 		  2 entries for now
-> 		- Declare "feature-domain-names" as an optional
-> 		  property for firewall controllers child nodes.
-> 		- Add missing "feature-domains" property declaration
-> 		  in bosch,m_can.yaml and st,stm32-cryp.yaml files
-> 
-> 	firewall framework:
-> 		- Support multiple entries for "feature-domains"
-> 		  property
-> 		- Better handle the device-tree parsing using
-> 		  phandle+args APIs
-> 		- Remove "resource firewall" type
-> 		- Add a field for the name of the firewall entry
-> 		- Fix licenses
-> 	
-> 	RIFSC:
-> 		- Add controller name
-> 		- Driver is now a module_platform_driver
-> 		- Fix license
-> 
-> 	ETZPC:
-> 		- Add controller name
-> 		- Driver is now a module_platform_driver
-> 		- Fix license
-> 
-> 	Device trees:
-> 		- Fix rifsc node name
-> 		- Move the "ranges" property under the
-> 		  "feature-domains" one
-> 
-> Changes in V3:
-> 
-> 	Change incorrect ordering for bindings commits leading
-> 	to an error while running
-> 	"make DT_CHECKER_FLAGS=-m dt_binding_check"
-> 
-> Oleksii Moisieiev (1):
->    dt-bindings: Document common device controller bindings
-> 
-> Gatien Chevallier (10):
->    dt-bindings: treewide: add feature-domains description
->    dt-bindings: bus: document RIFSC
->    dt-bindings: bus: document ETZPC
->    firewall: introduce stm32_firewall framework
->    of: property: fw_devlink: Add support for "feature-domains"
->    bus: rifsc: introduce RIFSC firewall controller driver
->    arm64: dts: st: add RIFSC as a domain controller for STM32MP25x boards
->    bus: etzpc: introduce ETZPC firewall controller driver
->    ARM: dts: stm32: add ETZPC as a system bus for STM32MP15x boards
->    ARM: dts: stm32: add ETZPC as a system bus for STM32MP13x boards
-> 
->   .../bindings/bus/st,stm32-etzpc.yaml          |   96 +
->   .../bindings/bus/st,stm32mp25-rifsc.yaml      |  105 +
->   .../bindings/crypto/st,stm32-cryp.yaml        |    4 +
->   .../bindings/crypto/st,stm32-hash.yaml        |    4 +
->   .../devicetree/bindings/dma/st,stm32-dma.yaml |    4 +
->   .../bindings/dma/st,stm32-dmamux.yaml         |    4 +
->   .../feature-domain-controller.yaml            |   84 +
->   .../devicetree/bindings/i2c/st,stm32-i2c.yaml |    4 +
->   .../bindings/iio/adc/st,stm32-adc.yaml        |    4 +
->   .../bindings/iio/adc/st,stm32-dfsdm-adc.yaml  |    4 +
->   .../bindings/iio/dac/st,stm32-dac.yaml        |    4 +
->   .../bindings/media/cec/st,stm32-cec.yaml      |    4 +
->   .../bindings/media/st,stm32-dcmi.yaml         |    4 +
->   .../memory-controllers/st,stm32-fmc2-ebi.yaml |    4 +
->   .../bindings/mfd/st,stm32-lptimer.yaml        |    4 +
->   .../bindings/mfd/st,stm32-timers.yaml         |    5 +
->   .../devicetree/bindings/mmc/arm,pl18x.yaml    |    4 +
->   .../bindings/net/can/bosch,m_can.yaml         |    4 +
->   .../devicetree/bindings/net/stm32-dwmac.yaml  |    4 +
->   .../bindings/phy/phy-stm32-usbphyc.yaml       |    4 +
->   .../bindings/regulator/st,stm32-vrefbuf.yaml  |    4 +
->   .../devicetree/bindings/rng/st,stm32-rng.yaml |    4 +
->   .../bindings/serial/st,stm32-uart.yaml        |    4 +
->   .../bindings/sound/st,stm32-i2s.yaml          |    4 +
->   .../bindings/sound/st,stm32-sai.yaml          |    4 +
->   .../bindings/sound/st,stm32-spdifrx.yaml      |    4 +
->   .../bindings/spi/st,stm32-qspi.yaml           |    4 +
->   .../devicetree/bindings/spi/st,stm32-spi.yaml |    4 +
->   .../devicetree/bindings/usb/dwc2.yaml         |    4 +
->   MAINTAINERS                                   |    7 +
->   arch/arm/boot/dts/st/stm32mp131.dtsi          | 1027 +++---
->   arch/arm/boot/dts/st/stm32mp133.dtsi          |   51 +-
->   arch/arm/boot/dts/st/stm32mp13xc.dtsi         |   19 +-
->   arch/arm/boot/dts/st/stm32mp13xf.dtsi         |   19 +-
->   arch/arm/boot/dts/st/stm32mp151.dtsi          | 2757 +++++++++--------
->   arch/arm/boot/dts/st/stm32mp153.dtsi          |   52 +-
->   arch/arm/boot/dts/st/stm32mp15xc.dtsi         |   19 +-
->   arch/arm64/Kconfig.platforms                  |    1 +
->   arch/arm64/boot/dts/st/stm32mp251.dtsi        |    7 +-
->   drivers/bus/Kconfig                           |    9 +
->   drivers/bus/Makefile                          |    1 +
->   drivers/bus/stm32_etzpc.c                     |  141 +
->   drivers/bus/stm32_firewall.c                  |  288 ++
->   drivers/bus/stm32_firewall.h                  |   83 +
->   drivers/bus/stm32_rifsc.c                     |  252 ++
->   drivers/of/property.c                         |    2 +
->   include/linux/bus/stm32_firewall_device.h     |  140 +
->   47 files changed, 3346 insertions(+), 1919 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
->   create mode 100644 Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
->   create mode 100644 Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
->   create mode 100644 drivers/bus/stm32_etzpc.c
->   create mode 100644 drivers/bus/stm32_firewall.c
->   create mode 100644 drivers/bus/stm32_firewall.h
->   create mode 100644 drivers/bus/stm32_rifsc.c
->   create mode 100644 include/linux/bus/stm32_firewall_device.h
-> 
+So my next question, is the change to dw_reg_write something that I 
+should write and submit, or should someone else submit something more 
+generalized, like option 2 above? I don't own the i2c driver, I'm just 
+trying to fix one issue on one processor with minimal risk of breaking 
+something. I don't have the broader view of what's optimal for the whole 
+DesignWare i2c driver. I also don't have any way to test changes on 
+other models of processors.
+
+
+
+
