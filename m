@@ -2,51 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182987AD016
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Sep 2023 08:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CD27AD01A
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Sep 2023 08:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbjIYGXm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 25 Sep 2023 02:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        id S232223AbjIYGYA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 25 Sep 2023 02:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbjIYGXa (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Sep 2023 02:23:30 -0400
+        with ESMTP id S232280AbjIYGXm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 25 Sep 2023 02:23:42 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F209B26BC
-        for <linux-i2c@vger.kernel.org>; Sun, 24 Sep 2023 23:21:41 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D40D7C433C8;
-        Mon, 25 Sep 2023 06:21:35 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF84CF5
+        for <linux-i2c@vger.kernel.org>; Sun, 24 Sep 2023 23:23:03 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29461C433C7;
+        Mon, 25 Sep 2023 06:23:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695622896;
-        bh=5xE4X9Uvhm2Ld2DTHCHGlUhAGCsPF0n96pM4jOOr9H0=;
+        s=k20201202; t=1695622982;
+        bh=MwmT2fX9UNla0DaVqFUwO6hKbHVG2ebu6uptnPPaZvY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=admc5vioEGMdxE4SWaTwv2TCavmm6fiX8RBpbxVHqSFTjJa6PuuVpsVAfIBzmA/TR
-         Fgph+zBaL94pX8TLciOuCiPVUazvMfv0cNRZ6da+0GeM4ihEGMCz4jtfi/OaWNV8hB
-         syGTrSL6HCKr759pT6XE2cpFVHeOusR5ww2jDpababIVCSoB8q2ob36XlqKCy8HRgm
-         PnkKDmnRMibafJIsYnV5mWmqJhvp32wK5JD1qfVpCP3+aRMVs1kkUQmoRPQNfM3e0H
-         k3AGxuEMyJPPNJLfd/Q9OSWIhvohuCDljvpj5chIWAG+9o5cmdWaoSDJe6hlSafXGJ
-         OKHl/UEnjVBMg==
-Date:   Mon, 25 Sep 2023 08:21:32 +0200
+        b=cB0zs/WBCtlyEipdbtJ7zg36rUvGdJJQh5jGJiN6p7Kbg/GNr2IwBX02rapopFHoO
+         hky+ouYASW/2sYAw4OUYQGCUs3svAmqbdfyrp+RzeUhdjE0oBLu8bx83dt9NvFF+nN
+         7/c63uSYoFEzgPPiAABRE7m5+J8eG4UfgPcwLe+YHR4okxn/fOteUZHfI6S7fljgRd
+         pp50nf5ewn+0pTTvjWurWOq1JKeD4i1XqGNKRT1AyRhxRVj8L4trgnY6vlAHEGTQlm
+         IghRntm1QfUhwsiLpSPYut/wQeXmTXtxzj8c0EfG/Brj7+qqApTWuo/LQ2ACyK/Cou
+         n2Qa4TiGWMpfQ==
+Date:   Mon, 25 Sep 2023 08:22:58 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     andi.shyti@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-Subject: Re: [PATCH] dt-bindings: i2c: mxs: Pass ref and
- 'unevaluatedProperties: false'
-Message-ID: <ZREm7HNh6CrIR4xk@shikoro>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Peter Rosin <peda@axentia.se>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c: mux: Avoid potential false error message in
+ i2c_mux_add_adapter
+Message-ID: <ZREnQgin9z2uvvLW@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>, andi.shyti@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-References: <20230923192619.601890-1-festevam@gmail.com>
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Rosin <peda@axentia.se>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <e4aa66a4-898c-4583-adf8-3f934f0893d4@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GLgQzCIVP08t5UJ2"
+        protocol="application/pgp-signature"; boundary="81q2tDF0awcltqdQ"
 Content-Disposition: inline
-In-Reply-To: <20230923192619.601890-1-festevam@gmail.com>
+In-Reply-To: <e4aa66a4-898c-4583-adf8-3f934f0893d4@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -58,48 +55,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---GLgQzCIVP08t5UJ2
+--81q2tDF0awcltqdQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 23, 2023 at 04:26:19PM -0300, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@denx.de>
+On Sat, Sep 23, 2023 at 11:54:06PM +0200, Heiner Kallweit wrote:
+> I2C_CLASS_DEPRECATED is a flag and not an actual class.
+> There's nothing speaking against both, parent and child, having
+> I2C_CLASS_DEPRECATED set. Therefore exclude it from the check.
 >=20
-> Running 'make dtbs_check DT_SCHEMA_FILES=3Di2c-mxs.yaml' throws
-> several schema warnings such as:
-> =20
-> imx28-m28evk.dtb: i2c@80058000: '#address-cells', '#size-cells', 'codec@a=
-', 'eeprom@51', 'rtc@68' do not match any of the regexes: 'pinctrl-[0-9]+'
-> 	from schema $id: http://devicetree.org/schemas/i2c/i2c-mxs.yaml#
->=20
-> Fix these warnings by passing a reference to i2c-controller.yaml#
-> and using 'unevaluatedProperties: false' just like the yaml bindings
-> of other I2C controllers.
->=20
-> Signed-off-by: Fabio Estevam <festevam@denx.de>
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
 Applied to for-current, thanks!
 
 
---GLgQzCIVP08t5UJ2
+--81q2tDF0awcltqdQ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmURJugACgkQFA3kzBSg
-Kba4vA/+NdRSQmt3W0bUhXrkvjlWSGCLgQsJPD0POtFAJnPoMqtMeTnqdbAzGo70
-vGT5iewfH3kDtqAFZ72eGWRP31ZNeb3fLhJIjpcTMjopL4iMR/83xuPpdepQsb8v
-TIvXLXwCTumMQETuoyvLmq8x1ZSEFlLBEHSdNHHlM7V2SG8cWdS1oNmpn14Qyaep
-c2X4bAx2Plx9bwQOQNzkgz6VHVi8M/mzWQrkKPSh4G1QgE4vj/7kx9QJ7nxfAcx0
-9SIl1tLmOtWqmnVcq+PLhC2GhRfxmMJBiYrxxkjSrqvK5MgUcuKgjz8/+nvSHU38
-tRJbBRn+WIlQiwJ8+loQR52+uaa7unLgJW90gmca0L8FI6TRQxtJZm7GVAbWCHDF
-xekpib3C8zvRt7AKHZsuRYC5e0GsGtict7BmeKBOMrr4op26D+nSQKXA8iq/leFv
-XnupgbBv1mU8DN9PTrGHnUIrvwxOsK3d630zke795M7hqr8W1GJHN76Uai9PEcN4
-GpnkEjnC12Mnvp5UlfyWoAEEQfMgSR58q85V+Kztt3j+vsDpYc1qtb4bg436CGrf
-igA+ObIhYgZgsrPTFRZVJDfen8nE97jZ4grjHRLlT0CSuSCQ4SEWpEMQ+SuA5DxT
-6CFEYwMH/UzsLJCUWFoBquN/f+T68/kfw/IxjM8dntKw3kFZEXs=
-=MPVd
+iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmURJ0IACgkQFA3kzBSg
+KbYUiQ/zB5lHQ92svYR36+NEHNMH1z0o+XpCpWfOHW/tLv4ccbFreQeatgSEdEZL
+bdJPESyRLW30OuDToZrb38hPGPZPP2GHpRjyqaCTa7dRWqOEW9O+bzUgMMRFd21V
+g323EWJhhzXpIEV/mugSqTYDGH35XMW/vCMNWroz03zsWxBBYsosej8X+Xet1U80
+7OBHeBZOk1iyO42Ne750eG3H551zDff5Rwvzs7ZOMCCR2ILbbs37rn8xB20LDVAc
+6PIxiTfh5j1+ElYqC33T2CHvUAwF26fu/Nf3INzag7MDxadQ+eZgmFY9wpX3sict
+j/RcnkoRwaRcYi3xE/OM1JWfqw0Ai5harzSPODIGMEKRzPQik5qDWlxixY+mK+MT
+Kps53H0xkhwpSqVK+N4rdZNzAK+4MS6fshMcnuyI2PN5MGvotRnziHDRLEtSOoLt
++wYrQwacDdqaQMJ0Xsu0eyRjemIw5r742ur2kaQqpbca+yr3P7Q2Kf1eLHz2T4x4
+pf9jtDh6Y/5T63numZJW7Ql66ZzBvPCx3ADE9fqgJAhOQsfNj1SvD+tp9QU2/Rdd
+yGYyO4KnwPrGQ/je9lU6Jez1hGzVPa6gW4oAcrFr3NrehbcZOYkzAnxq/TI+aEQQ
+WY15s6NHz1LrHTjMy21kjgE2kd+KiUThqQ7keCdLgQpNnT1thA==
+=/YPk
 -----END PGP SIGNATURE-----
 
---GLgQzCIVP08t5UJ2--
+--81q2tDF0awcltqdQ--
