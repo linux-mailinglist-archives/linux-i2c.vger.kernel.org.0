@@ -2,32 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C07E7AECC8
+	by mail.lfdr.de (Postfix) with ESMTP id E84C77AECC9
 	for <lists+linux-i2c@lfdr.de>; Tue, 26 Sep 2023 14:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbjIZM2Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 26 Sep 2023 08:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
+        id S234653AbjIZM21 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 26 Sep 2023 08:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234636AbjIZM2Y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 Sep 2023 08:28:24 -0400
+        with ESMTP id S234644AbjIZM2Z (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 Sep 2023 08:28:25 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94898FB;
-        Tue, 26 Sep 2023 05:28:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BD93FC;
+        Tue, 26 Sep 2023 05:28:18 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4541DFEC;
-        Tue, 26 Sep 2023 05:28:55 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F7841480;
+        Tue, 26 Sep 2023 05:28:56 -0700 (PDT)
 Received: from e103737-lin.cambridge.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0D6F3F6C4;
-        Tue, 26 Sep 2023 05:28:15 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 475BB3F6C4;
+        Tue, 26 Sep 2023 05:28:17 -0700 (PDT)
 From:   Sudeep Holla <sudeep.holla@arm.com>
-Date:   Tue, 26 Sep 2023 13:28:01 +0100
-Subject: [PATCH 2/3] i2c: xgene-slimpro: Migrate to use generic PCC shmem
+Date:   Tue, 26 Sep 2023 13:28:02 +0100
+Subject: [PATCH 3/3] hwmon: (xgene) Migrate to use generic PCC shmem
  related macros
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230926-pcc_defines-v1-2-0f925a1658fd@arm.com>
+Message-Id: <20230926-pcc_defines-v1-3-0f925a1658fd@arm.com>
 References: <20230926-pcc_defines-v1-0-0f925a1658fd@arm.com>
 In-Reply-To: <20230926-pcc_defines-v1-0-0f925a1658fd@arm.com>
 To:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -38,20 +38,20 @@ Cc:     Sudeep Holla <sudeep.holla@arm.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2106; i=sudeep.holla@arm.com;
- h=from:subject:message-id; bh=+8XMvgcBZDMKcEA3RRExPbyScwOjYNRYC/UYX8cjwNs=;
- b=owEBbQKS/ZANAwAIAQBBurwxfuKYAcsmYgBlEs5cfOigpBTgwA3trZcDjDYUNOuJ51IVXqpow
- VpCpVfAt5iJAjMEAAEIAB0WIQS6ceUSBvMeskPdk+EAQbq8MX7imAUCZRLOXAAKCRAAQbq8MX7i
- mLYREADFHDxsCs80lSs+CHiNM7u1QjKyEiZvh1oO21L58p2dSnEpXO5KTn/8gaHrGgNXRITYAR/
- AQl7bUxBB1DbBHNfXXBJYTWDt0lm/isxKeLWjf78m5iGGhzzy4H8Plica2fY9nb9hAJFd2ihrXy
- mFFOwVbBHRspyG5NC6VOBC34Bm6GW66uI4QdlojLvgI9TICajc/+cx2IsGxhj+/9/3IA38YppVV
- qr5RZd1Am7bfqnASPL8g5w/xzJ18+AZy/vHZA0SfSl+ydrCyU6cPrk464cpdQ8CGIcKD4auc3Su
- Wvi4Dkxs2FyMfqhXEFty5ZoSFo8DkJkdKCu8+9m0gQfKlgMDoOlhguPRf/Oj6rRdIGBrt2NVqwD
- uGsvB/80NInJDTHInikJnfdGA32oj/dBTNjsGcvZpQz3c1W2lRaELloIi9xuO2hkX/SMvlANu7B
- R6Ni1YEY9efER9h0MEJzO5e3B/ScoxkFgo7G0hC0qhDqqA3YuhgZdNTlQGwj6dc1PUeNqS5Io1F
- 8aYExSp/b9tWh5OjR4fTXcedw3+RbaJrlYlF0K/VNxYvMhizfr5D395YbL7NRbDZSxMWxXFG57B
- xI9Bp6YcVTi4qJbAeDXIUQx+U20XmCihVcgBaFtO+tDVA8pDJo0LwEM7tw/qguBrFY9KpxQYQ/M
- rMfLqsD9tRrCtug==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2535; i=sudeep.holla@arm.com;
+ h=from:subject:message-id; bh=xAB9DO9/WuBfrCyxIgct5Wml2oQRa0x+hPVPHrXNjoA=;
+ b=owEBbQKS/ZANAwAIAQBBurwxfuKYAcsmYgBlEs5dgRCkg3Q8R+TXzB+/wrKszSybk6z9171cI
+ 3pqISWetFmJAjMEAAEIAB0WIQS6ceUSBvMeskPdk+EAQbq8MX7imAUCZRLOXQAKCRAAQbq8MX7i
+ mLEGEACl2JMbMOB+9OV8WlvKM7hyGqeLYE6pFW9p0ZqGXyCXsWZaZiAtXXFKjl9/l7Yi5oeoIrE
+ dOK4RA1guAGaulOWlUZRn3E1VfZLwtUTztToPY6AP7sqXUbIouIRHajm6e6AEKs1PQlMIH6TSSQ
+ HJa24nPd863GDeAgwSTO6Zc2vxv4A6ea+L40qP1U13f1xlj0vEaarNJ1qMfVo+T+xh2NyxpSlOB
+ ptpiVoGj4JCBAFfm5bXKwegkaN/sXGe6G8vrJq9mpaCmtJ6eeAzimJIuufvmanNUGi8q/CMwKOJ
+ avyx9YuhtVdlNhKN0eR5Yzs9blKq9nxQU2tGHKObR/2cUG41MZ4j3aJ4x5p9K0+91bn0G5VzdG9
+ SzoZ2ehCblxfvjQP+15G1HLGfzfN2LBiyzi49cC48k72DxdLf1kxg2QOGfhCSuL8tb/eqeF6NAw
+ m/aiGnxi7tVr53hP9aZ3XFUzpnuiz2r4wJs9n+kxV7srdj+CTa0U9LWKicfw2oQsjJYtnvyBqtF
+ Pp+GxV2/2412qdNkjkAmnwOlU7aUW7FXkyfPOOBs5owBjoId3PxXttnqBTN009QwoiySA2ns4jZ
+ lNv2UOxRJ2sGlZBdlbBvhTWfOnBX57RVNb0jXtNhmSBh8uZvvmYPUbmGm6sz0jRuAQNYUqygubF
+ 4WxWWr0QKYreLMA==
 X-Developer-Key: i=sudeep.holla@arm.com; a=openpgp;
  fpr=7360A21742ADF5A11767C1C139CFD4755FE2D5B4
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
@@ -66,58 +66,67 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 Use the newly defined common and generic PCC shared memory region
 related macros in this driver to replace the locally defined ones.
 
-Cc: Andi Shyti <andi.shyti@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
- drivers/i2c/busses/i2c-xgene-slimpro.c | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+ drivers/hwmon/xgene-hwmon.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c b/drivers/i2c/busses/i2c-xgene-slimpro.c
-index fbc1ffbd2fa7..658396c9eeab 100644
---- a/drivers/i2c/busses/i2c-xgene-slimpro.c
-+++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
-@@ -91,14 +91,6 @@
+diff --git a/drivers/hwmon/xgene-hwmon.c b/drivers/hwmon/xgene-hwmon.c
+index 78d9f52e2a71..1ccdd61b6d13 100644
+--- a/drivers/hwmon/xgene-hwmon.c
++++ b/drivers/hwmon/xgene-hwmon.c
+@@ -57,12 +57,6 @@
+ 	(MSG_TYPE_SET(MSG_TYPE_PWRMGMT) | \
+ 	MSG_SUBTYPE_SET(hndl) | TPC_CMD_SET(cmd) | type)
  
- #define SLIMPRO_IIC_MSG_DWORD_COUNT			3
+-/* PCC defines */
+-#define PCC_SIGNATURE_MASK		0x50424300
+-#define PCCC_GENERATE_DB_INT		BIT(15)
+-#define PCCS_CMD_COMPLETE		BIT(0)
+-#define PCCS_SCI_DOORBEL		BIT(1)
+-#define PCCS_PLATFORM_NOTIFICATION	BIT(3)
+ /*
+  * Arbitrary retries in case the remote processor is slow to respond
+  * to PCC commands
+@@ -142,15 +136,15 @@ static int xgene_hwmon_pcc_rd(struct xgene_hwmon_dev *ctx, u32 *msg)
  
--/* PCC related defines */
--#define PCC_SIGNATURE			0x50424300
--#define PCC_STS_CMD_COMPLETE		BIT(0)
--#define PCC_STS_SCI_DOORBELL		BIT(1)
--#define PCC_STS_ERR			BIT(2)
--#define PCC_STS_PLAT_NOTIFY		BIT(3)
--#define PCC_CMD_GENERATE_DB_INT		BIT(15)
--
- struct slimpro_i2c_dev {
- 	struct i2c_adapter adapter;
- 	struct device *dev;
-@@ -160,11 +152,11 @@ static void slimpro_i2c_pcc_rx_cb(struct mbox_client *cl, void *msg)
+ 	/* Write signature for subspace */
+ 	WRITE_ONCE(generic_comm_base->signature,
+-		   cpu_to_le32(PCC_SIGNATURE_MASK | ctx->mbox_idx));
++		   cpu_to_le32(PCC_SIGNATURE | ctx->mbox_idx));
  
+ 	/* Write to the shared command region */
+ 	WRITE_ONCE(generic_comm_base->command,
+-		   cpu_to_le16(MSG_TYPE(msg[0]) | PCCC_GENERATE_DB_INT));
++		   cpu_to_le16(MSG_TYPE(msg[0]) | PCC_CMD_GENERATE_DB_INTR));
+ 
+ 	/* Flip CMD COMPLETE bit */
+ 	val = le16_to_cpu(READ_ONCE(generic_comm_base->status));
+-	val &= ~PCCS_CMD_COMPLETE;
++	val &= ~PCC_STATUS_CMD_COMPLETE;
+ 	WRITE_ONCE(generic_comm_base->status, cpu_to_le16(val));
+ 
+ 	/* Copy the message to the PCC comm space */
+@@ -544,7 +538,7 @@ static void xgene_hwmon_pcc_rx_cb(struct mbox_client *cl, void *msg)
+ 	msg = generic_comm_base + 1;
  	/* Check if platform sends interrupt */
  	if (!xgene_word_tst_and_clr(&generic_comm_base->status,
--				    PCC_STS_SCI_DOORBELL))
+-				    PCCS_SCI_DOORBEL))
 +				    PCC_STATUS_SCI_DOORBELL))
  		return;
  
- 	if (xgene_word_tst_and_clr(&generic_comm_base->status,
--				   PCC_STS_CMD_COMPLETE)) {
-+				   PCC_STATUS_CMD_COMPLETE)) {
- 		msg = generic_comm_base + 1;
- 
- 		/* Response message msg[1] contains the return value. */
-@@ -186,10 +178,10 @@ static void slimpro_i2c_pcc_tx_prepare(struct slimpro_i2c_dev *ctx, u32 *msg)
- 		   cpu_to_le32(PCC_SIGNATURE | ctx->mbox_idx));
- 
- 	WRITE_ONCE(generic_comm_base->command,
--		   cpu_to_le16(SLIMPRO_MSG_TYPE(msg[0]) | PCC_CMD_GENERATE_DB_INT));
-+		   cpu_to_le16(SLIMPRO_MSG_TYPE(msg[0]) | PCC_CMD_GENERATE_DB_INTR));
- 
- 	status = le16_to_cpu(READ_ONCE(generic_comm_base->status));
--	status &= ~PCC_STS_CMD_COMPLETE;
-+	status &= ~PCC_STATUS_CMD_COMPLETE;
- 	WRITE_ONCE(generic_comm_base->status, cpu_to_le16(status));
- 
- 	/* Copy the message to the PCC comm space */
+ 	/*
+@@ -566,7 +560,7 @@ static void xgene_hwmon_pcc_rx_cb(struct mbox_client *cl, void *msg)
+ 	      TPC_CMD(((u32 *)msg)[0]) == TPC_ALARM))) {
+ 		/* Check if platform completes command */
+ 		if (xgene_word_tst_and_clr(&generic_comm_base->status,
+-					   PCCS_CMD_COMPLETE)) {
++					   PCC_STATUS_CMD_COMPLETE)) {
+ 			ctx->sync_msg.msg = ((u32 *)msg)[0];
+ 			ctx->sync_msg.param1 = ((u32 *)msg)[1];
+ 			ctx->sync_msg.param2 = ((u32 *)msg)[2];
 
 -- 
 2.42.0
