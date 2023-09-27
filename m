@@ -2,96 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217E07AF893
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Sep 2023 05:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1595A7AF91A
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Sep 2023 06:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjI0DXL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 26 Sep 2023 23:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
+        id S229643AbjI0EOW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 Sep 2023 00:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbjI0DUs (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 26 Sep 2023 23:20:48 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD683158B4;
-        Tue, 26 Sep 2023 19:42:59 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2c131ddfc95so159430801fa.0;
-        Tue, 26 Sep 2023 19:42:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google; t=1695782578; x=1696387378; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VMinxs6nfn6iZUfMzZa2WeT44I91Ws9Lj88tZvpoGtU=;
-        b=DnQ0O7TxSFeJaq/njn8sQ8a1nLF38MLqJIXu2k/JomimIGFmuLaz7pci0w7/XGu8+I
-         Iq9nKckfkQpySiEqIFH9PM6ao+Svi/sziBju5qo4a/LdkqkC4PAPlc3qgWlKosWFkwaA
-         o9VcQnThDB6+FJI5QL4qqMHqlUOIBrCDNuo4A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695782578; x=1696387378;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VMinxs6nfn6iZUfMzZa2WeT44I91Ws9Lj88tZvpoGtU=;
-        b=DkbBTQx0fGO1Ao7E9JQdIXsbSMci8ydNr9H8/oOrAgAq9XOS4Nzg08lymabaN2sryO
-         7NqRzNaX5sg62pGSSTCR86pMarTqUEvvaYGW9kF0Sage3HcvNvyiDyELdIGW3UEmduOw
-         5KVKTKh0WEbqfQyRRzJzXFjBdrc/eGik1Jd81vdv5M0jBrZs49c33W8cP2Nx/e334Egs
-         LGAszw5pJ9h7PURtz9e8dlxPCFobSo7lsA9woUtgvH5dl+63KFV7yW7phVH6Bj+Tu86p
-         0FpnbBwnnlOebfRo9DUT8U3WzDJi7bBTgOwLZgCa63+d6ScibkeWF20U+G8OhV5Ndsz9
-         mNVA==
-X-Gm-Message-State: AOJu0YyOrmkTnXNl1pv6G9qBWxYJMZMjejSHxMym/85FlhkyGVN3wrSi
-        dCREO8PNjnr87OGzrg4KSpHac3NlChxeK91RDvo=
-X-Google-Smtp-Source: AGHT+IEoGxjFIivq3ZMXhL6ZTDxnLdVcOLOzUHrNnMa0KFIxb8uxpmFj3uJhgYHyG7vXKUM/QD4YPpVc0zYFqvug4qM=
-X-Received: by 2002:a2e:808d:0:b0:2bf:f599:be63 with SMTP id
- i13-20020a2e808d000000b002bff599be63mr681593ljg.41.1695782577775; Tue, 26 Sep
- 2023 19:42:57 -0700 (PDT)
+        with ESMTP id S229509AbjI0ENK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Sep 2023 00:13:10 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6919910CB;
+        Tue, 26 Sep 2023 19:07:20 -0700 (PDT)
+Received: from kwepemm000004.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RwKgf4SGhzrSsV;
+        Wed, 27 Sep 2023 10:05:02 +0800 (CST)
+Received: from [10.67.121.59] (10.67.121.59) by kwepemm000004.china.huawei.com
+ (7.193.23.18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 27 Sep
+ 2023 10:07:16 +0800
+Message-ID: <a89bdd10-9388-01f5-6a7c-894af793e1c1@huawei.com>
+Date:   Wed, 27 Sep 2023 10:07:15 +0800
 MIME-Version: 1.0
-References: <20230810072155.3726352-1-zhangjian.3032@bytedance.com>
- <CACPK8XfWKLS_4nBC+NCSw=21iQeaHzBXOROmz9T+S0qZHCBKeg@mail.gmail.com> <CA+J-oUtxiQBOT+VM3fbOUM8HL5TX-C4HqtbbT__b4_KsGAJy1w@mail.gmail.com>
-In-Reply-To: <CA+J-oUtxiQBOT+VM3fbOUM8HL5TX-C4HqtbbT__b4_KsGAJy1w@mail.gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 27 Sep 2023 02:42:46 +0000
-Message-ID: <CACPK8XeO404ok+B+k4U_bdFE3yYebzT-UNcTqcHStJfEnDh6jg@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH] i2c: aspeed: Fix i2c bus hang in slave read
-To:     Jian Zhang <zhangjian.3032@bytedance.com>
-Cc:     Tommy Huang <tommy_huang@aspeedtech.com>,
-        brendan.higgins@linux.dev, benh@kernel.crashing.org,
-        andrew@aj.id.au, zhangjian3032@gmail.com, yulei.sh@bytedance.com,
-        xiexinnan@bytedance.com,
-        "open list:ARM/ASPEED I2C DRIVER" <linux-i2c@vger.kernel.org>,
-        "moderated list:ARM/ASPEED I2C DRIVER" <openbmc@lists.ozlabs.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 1/3] ACPI: PCC: Add PCC shared memory region command and
+ status bitfields
+To:     Sudeep Holla <sudeep.holla@arm.com>, <linux-hwmon@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>
+CC:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, <lihuisong@huawei.com>
+References: <20230926-pcc_defines-v1-0-0f925a1658fd@arm.com>
+ <20230926-pcc_defines-v1-1-0f925a1658fd@arm.com>
+From:   "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20230926-pcc_defines-v1-1-0f925a1658fd@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.121.59]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm000004.china.huawei.com (7.193.23.18)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, 22 Sept 2023 at 14:39, Jian Zhang <zhangjian.3032@bytedance.com> wrote:
-> >
-> > Tommy has submitted a similar fix:
-> >
-> >  https://lore.kernel.org/linux-i2c/20230906004910.4157305-1-tommy_huang@aspeedtech.com/
-> >
-> > His change is very heavy handed; it reinitialises the bus including
-> > re-parsing the device tree (!).
-> >
-> > Should we have merged this fix instead? If not, are you able to
-> > confirm that his change fixes your issue?
+Hi Sudeep,
+
+在 2023/9/26 20:28, Sudeep Holla 写道:
+> Define the common macros to use when referring to various bitfields in
+> the PCC generic communications channel command and status fields.
+Can you define the bit0 macros in the "flags" for Extended PCC Subspace 
+Shared Memory Region?
 >
-> I feel it's for solving the same issue, but I think this patch is
-> missing the action
-> `bus->slave_state = ASPEED_I2C_SLAVE_INACTIVE;`,
->  which means it can't resolve my problem. @Tommy, can you help confirm this?
-
-You're right, it doesn't change the slave_state at all.
-
-Unfortunately, despite no acks from the maintainers, this patch has
-now been merged and backported to stable. We should complete the fix,
-or revert it asap.
+> Currently different drivers that need to use these bitfields have defined
+> these locally. This common macro is intended to consolidate and replace
+> those.
+>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>   include/acpi/pcc.h | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+>
+> diff --git a/include/acpi/pcc.h b/include/acpi/pcc.h
+> index 73e806fe7ce7..66d9934c2ee4 100644
+> --- a/include/acpi/pcc.h
+> +++ b/include/acpi/pcc.h
+> @@ -18,7 +18,18 @@ struct pcc_mbox_chan {
+>   	u16 min_turnaround_time;
+>   };
+>   
+> +/* Generic Communications Channel Shared Memory Region */
+> +#define PCC_SIGNATURE			0x50424300
+Why is this signature 0x50424300?
+In ACPI spec, this signature is all 0x50434303.
+> +/* Generic Communications Channel Command Field */
+> +#define PCC_CMD_GENERATE_DB_INTR	BIT(15)
+> +/* Generic Communications Channel Status Field */
+> +#define PCC_STATUS_CMD_COMPLETE		BIT(0)
+> +#define PCC_STATUS_SCI_DOORBELL		BIT(1)
+> +#define PCC_STATUS_ERROR		BIT(2)
+> +#define PCC_STATUS_PLATFORM_NOTIFY	BIT(3)
+> +
+>   #define MAX_PCC_SUBSPACES	256
+> +
+>   #ifdef CONFIG_PCC
+>   extern struct pcc_mbox_chan *
+>   pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id);
+>
