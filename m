@@ -2,72 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3197AFAD8
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Sep 2023 08:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE917AFAF9
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Sep 2023 08:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjI0GSZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 Sep 2023 02:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
+        id S229672AbjI0GWH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 Sep 2023 02:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjI0GSO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Sep 2023 02:18:14 -0400
+        with ESMTP id S229986AbjI0GVO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Sep 2023 02:21:14 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA681AB;
-        Tue, 26 Sep 2023 23:18:08 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FFF7C433C7;
-        Wed, 27 Sep 2023 06:18:07 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B5197
+        for <linux-i2c@vger.kernel.org>; Tue, 26 Sep 2023 23:20:58 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2BC7C433C7;
+        Wed, 27 Sep 2023 06:20:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695795488;
-        bh=rLLFvcYuIx77qvOIA0NdmeKsrJeYTo4qSHyQzstJC20=;
+        s=k20201202; t=1695795658;
+        bh=7fgwg1sef6wIrS4qx4uSIVf2iP2jKdYWcieEbIs953M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XY57OvzIShA3wIcpA+SeME04GXo9XApWlls6CI2e0DlXfWlz6EfAAVDDwLAbawMnB
-         iBAgRqMZxYbUzMmeS3VIIr9KA11Z1kHtGvO6wlsz4RPhNsTWSn/HCG1qLvOKhWdpuP
-         0Oh/fRHApqx2ftz6wxdsxalxoszqZbCVlnv8t+ZdWwZZNVE3zoZEJsj10/asUCX8fa
-         k/ZtPGdBf/dFxar4BvIX6ZQBOuZAdIJouau+Nyb05PxJuICmK3mLVco/TGTqJaPdjn
-         pLwOcm21CtBBVbyySqjs8bQWT4PLpzoktev3JIMa5l9QBarMbhHP3oc5nvE/08wuZM
-         4cfCPqybeqDlQ==
-Date:   Wed, 27 Sep 2023 08:18:05 +0200
+        b=Wvw/Jz8LrwegJpWHBbqHaVDqSe8TlOFN9K+TH9Al8RgKaeRtPyWYZnwIsfuwpRB07
+         EDNZ9ZhRbYk+dOavap6b8DRzCEMwKez7YfS04EqN70AncwZohbzm2aifQT8xOjYtW1
+         TpphFBr5xi0D/V7Tq/DHWJ6tioRNKtR+8KiHGwQMmjtnrtFimyn4prhaJ6C2DoF275
+         6zETmZr7u9EVjV2l1Ep13pTkVRfI/gpI7ZBoJb5qUHeFgt2uB2SjblLZ8atDTIVfwW
+         kJt2DKT90lIGS4PQcS9UaMHTdV640WVJXzqISLSd4tKijkTR2rGUzQW5EAVK8m2fmC
+         uGWUt/tWZ4o8g==
+Date:   Wed, 27 Sep 2023 08:20:55 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Jian Zhang <zhangjian.3032@bytedance.com>,
-        Tommy Huang <tommy_huang@aspeedtech.com>,
-        brendan.higgins@linux.dev, benh@kernel.crashing.org,
-        andrew@aj.id.au, zhangjian3032@gmail.com, yulei.sh@bytedance.com,
-        xiexinnan@bytedance.com,
-        "open list:ARM/ASPEED I2C DRIVER" <linux-i2c@vger.kernel.org>,
-        "moderated list:ARM/ASPEED I2C DRIVER" <openbmc@lists.ozlabs.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [External] Re: [PATCH] i2c: aspeed: Fix i2c bus hang in slave
- read
-Message-ID: <ZRPJHQXLb0nPUjwF@ninjato>
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] i2c: Drop legacy muxing pseudo-drivers
+Message-ID: <ZRPJx5OFGaAkXJzg@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Jian Zhang <zhangjian.3032@bytedance.com>,
-        Tommy Huang <tommy_huang@aspeedtech.com>, brendan.higgins@linux.dev,
-        benh@kernel.crashing.org, andrew@aj.id.au, zhangjian3032@gmail.com,
-        yulei.sh@bytedance.com, xiexinnan@bytedance.com,
-        "open list:ARM/ASPEED I2C DRIVER" <linux-i2c@vger.kernel.org>,
-        "moderated list:ARM/ASPEED I2C DRIVER" <openbmc@lists.ozlabs.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230810072155.3726352-1-zhangjian.3032@bytedance.com>
- <CACPK8XfWKLS_4nBC+NCSw=21iQeaHzBXOROmz9T+S0qZHCBKeg@mail.gmail.com>
- <CA+J-oUtxiQBOT+VM3fbOUM8HL5TX-C4HqtbbT__b4_KsGAJy1w@mail.gmail.com>
- <CACPK8XeO404ok+B+k4U_bdFE3yYebzT-UNcTqcHStJfEnDh6jg@mail.gmail.com>
+        Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.de>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <20230926133725.5c3fb96e@endymion.delvare>
+ <20230926212720.adcn42akrnj72oxl@zenone.zhora.eu>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="T2xE4zoWqm00l66z"
+        protocol="application/pgp-signature"; boundary="KE5i3S+bg3WeXNwL"
 Content-Disposition: inline
-In-Reply-To: <CACPK8XeO404ok+B+k4U_bdFE3yYebzT-UNcTqcHStJfEnDh6jg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230926212720.adcn42akrnj72oxl@zenone.zhora.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,50 +55,41 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---T2xE4zoWqm00l66z
+--KE5i3S+bg3WeXNwL
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Joel!
 
-> Unfortunately, despite no acks from the maintainers, this patch has
-> now been merged and backported to stable.
+> I'm somewhat conflicted, on one hand I like the cleanup. But on
+> the other I think that they don't do any harm if they stay where
+> they are. There are lots of drivers that look outdated and need
+> maintenance, we can't just remove them... right?
 
-To explain my reasoning: given the list of unreviewed patches for
-aspeed[1], I thought that the driver maintainers were busy or similar.
-This happens all the time, so it would be no surprise. Andi is the
-driver-comaintainer meanwhile, so an ack from him counts for me as well.
-
-[1] http://patchwork.ozlabs.org/project/linux-i2c/list/?series=&submitter=&state=&q=aspeed&archive=&delegate=
-
-> We should complete the fix, or revert it asap.
-
-Agreed. We can always revert if you guys need more time fixing the issue
-properly.
-
-Thanks,
-
-   Wolfram
+I'd agree if they are proper drivers. If they are hacks which would be
+solved entirely differently today, I am all for removing the bad
+examples from the tree. I happily take Jean's offer to rewrite the
+drivers with proper mux-interfaces, if any complain should arise. I
+wouldn't wait for it, though ;)
 
 
---T2xE4zoWqm00l66z
+--KE5i3S+bg3WeXNwL
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUTyRkACgkQFA3kzBSg
-KbaRRQ/9ErOFFerb4EgS8SymBAI4TNQtrlHIgkJdwfnE02lEWFQGfo+BC2P2wisD
-pax/duJiMFlxRNKkJllc1Q2scJkpcG/5wPyDG5SkWsPyauH813igLa7tyGIrezOp
-e6oXRGeBGCqHRun2QQhMFmYvqArlWnolqfzqMepCtPvz7W1fVAecjUquHfVoLSO5
-mOzDeKwZJAoDr3WA96Zewd/F7mj/QxMAjrLCBpVADoK3pR+OlcPiCnDmpSRkCI0D
-LVYwWawekk0L0w2tWXdE4GMLRVEGjmoBIWz8Q86u7t54BbF3CMptVCFlAqae9lPI
-Hkp9Zr/SEDyudnWAYEBQgsBvHt9K0/oPAcNZnFb1iiXtWF24OrQ79GoOx7bHWfdp
-+sFggn0rL8sQw9EQrSecmbj2k/7pTsjVHIvR5yZaVcBHzlP1pfodRhMhtsIv6dao
-bhD5a2F0Hv/WELJmhaj3pw3SGpBLAxzqy+qw1lcd5YfynfbWmNMegnIfUyxWzLvj
-4qp61h6FWVk5wNbjHBPimsn6R/vKq6dSiLB0m5w3PKliwORBHXT0Q+YGE4oSpFSv
-MaHh5iAwHNLpaWZ+xqXzishnOROA3sCkg/b1RPABaRsoMAmgfZcm03xljVIjF7Kk
-1Ii7+lo743q7kck8b/LZ4IFm4DAC9kQTg+JauONvvezkuL1emRk=
-=Cbyl
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUTyccACgkQFA3kzBSg
+KbZQag//fA77cnUhYdFcHifDg+eUt8oRgGLxOLzHgR3RUlWDiLEdgWYVkVKsHkxz
+CPtPCGlTyWSNjUiT1PMwVxWt63X5Ir0alcCyXbl0GVbioZ2P28g3g6tKPOJilZ/1
+9VqJJB2FiHyl0Fj8KkHKqZUD8invOxLrVgqSuoDl08YUgvUWs4Cr18V2qCvW0w5i
+tgdYhZIPPHjr0rVYd3YWrsRSArg6f2kvhWXaMeDo/TW6SD9tCJBbFXxn7d3y8Wyo
+gQzp6pQ9UZorsB1+1i/FjSZmw2UzeuUA1qyukwzRG0Smjg+doRc8G1hZkWsldExc
+hZq1uvVFXgHuLrPdoAH3iQEBryuiZjoUjO2vqltEaFzmZBBBA98Lx7nNuAPV3KUQ
+TzW0vLt6HRnMovhj+g5/oGCvj5c2MjWyLKlDx2N6pIgRHoJi5Lfgwce4MAm8rKTN
+a9Vz3EcbCeR4/1H48l/IAfeXbnhqeGGRSKnze/9ZTphsL99ceEgtU8ow5KYARKcQ
+XsH3mQZ28vfQObQwwuYWouHF++O/pc8p6IpOhg9mBQJdvaYjHQ9f6sIjrH4g5Nrb
+HxWQqTEfGyi9LcJDVjXsZGD4Qnlk7Hnx+cxZCxmeoQeWOB3Mxm9e/Uv50sbZD9RK
+af7kkyxvFI+2dB+s7w6123dNVtxEHGK6dwuqJvbBK4arHgyaWuw=
+=0EAX
 -----END PGP SIGNATURE-----
 
---T2xE4zoWqm00l66z--
+--KE5i3S+bg3WeXNwL--
