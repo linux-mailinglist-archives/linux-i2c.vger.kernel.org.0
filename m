@@ -2,97 +2,109 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A7B7B07AA
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Sep 2023 17:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E271A7B094D
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Sep 2023 17:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbjI0PIK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-i2c@lfdr.de>); Wed, 27 Sep 2023 11:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S232906AbjI0PuV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 Sep 2023 11:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbjI0PIJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Sep 2023 11:08:09 -0400
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAF8F4;
-        Wed, 27 Sep 2023 08:08:08 -0700 (PDT)
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-57de3096e25so281522eaf.1;
-        Wed, 27 Sep 2023 08:08:08 -0700 (PDT)
+        with ESMTP id S232699AbjI0PuE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Sep 2023 11:50:04 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC18D037
+        for <linux-i2c@vger.kernel.org>; Wed, 27 Sep 2023 08:42:51 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-690d2441b95so8721115b3a.1
+        for <linux-i2c@vger.kernel.org>; Wed, 27 Sep 2023 08:42:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1695829370; x=1696434170; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e+KczYJ63iTfnuMsHD4IMClJxOV5m4dNcMyA1mqDD9g=;
+        b=RLhwbE5cF0AchcrKRjBTtVBNA2oVXu2QTVVh6MJ9Ue4WgkSdIkayZ6YTp2NI5dr2G8
+         Ozy2UO4I8rx3jZdn+ycpNbQ7rewp4IBrVrEMHneNdjbMi2hxhqyhrbK5Ehf3AwWwZYQW
+         Sqv4TL1DIhUcNfGnxYBIxRfkXimpF8nQX+i7wOUWZ8h4/vhkLGoH1EqQZ2qa3fgLh9rS
+         Z34lIsCHRNLOFEJ5MtSXRBBU6EwP45inYMrrQyowlhXjkVWTJ5xllTZGvOualR3eqTte
+         lrm6a8uiXM6SmqR632zFc+hHyImYQ0bXojujQCy40bLTacK3/24fcmVyXyeyyF4GA7bB
+         N8xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695827288; x=1696432088;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JLgUPwRvAPA8jd102uQ0DZ4SGf6ggVl5r/JJMTLaDvY=;
-        b=uTPfJLbwkjKPKxblqCJeWmZHAuEeeflTvFid9gSzEDStPJ/gx3ebB2BWiaQ/wZDloV
-         ZW0/AGzBkN9T0UFtwIcUtP3wqoV/4DQEWeHIxC54vO0OQZlLUnX/UdZBGS5ZDhzmWSHB
-         GrVt8ESUqsA8oQoTXCwRdSMm6degsNhYVkwitsHspo7xGzSXrWRZ31nuieM62onKgHXJ
-         f/5/SMh7DVAP04zE9JLQ1utII2qRTMll0/wr4mZTsXitkhh1X2Y3avEfcO7HLbN917BO
-         243bK/+oefsa2JHtwwKbr0nPIlnuh9vsLew3y70AELHM3P5N11mL6m9RhjeCNNRJfMwY
-         Q/5g==
-X-Gm-Message-State: AOJu0YxnNInrNEKXRNeLBq6bhxsChoc4xlBnUiWVQ8oKph1YJDjF+Cw8
-        iQXdFAtlFax9FUkKTDHwpljD4c8Gcgy6V1jhTA8=
-X-Google-Smtp-Source: AGHT+IGxapHK1mKy+yb4sAqwkZyYR20GheCsnbkVDbtaT2auUj/pRBrwkd5ToZJDeesAl9lSkE/l+ey1Vav5vfcPGE4=
-X-Received: by 2002:a4a:c58f:0:b0:57b:7804:9d72 with SMTP id
- x15-20020a4ac58f000000b0057b78049d72mr2592125oop.1.1695827287685; Wed, 27 Sep
- 2023 08:08:07 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695829370; x=1696434170;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e+KczYJ63iTfnuMsHD4IMClJxOV5m4dNcMyA1mqDD9g=;
+        b=kw2JWikCYFELgfaWOnNRNzBUzP86qnreixTnGMO+X29G0eC9WMmqfn89h+tWJFI+vs
+         2xGlAp7JRwRK9OJyfQH9uV3dK8LW9bKSu60DF8SKIuQ6znt5DFsbRIaCgsViNv4CbI8y
+         e2rBik8LSkRw2tRqE2R+rAmpqSAL2vDK7JvYKbWD8EqXlovlD1RweuI4J/hKsReDfrl7
+         81IVj0bXdFKs8FlUUGCU/BmksbseizjGwY/LpHFsCSwbfkVaZA9MPYjxTmvI0SHm19Dh
+         zey3Xlku8FsT/D3A+hju2WPt/O/qQYudwRjXckwE3eVuLjRYYmQiRX+ch0cZym6k4RBe
+         VcKQ==
+X-Gm-Message-State: AOJu0Yz4n4WhnoqMDIcy0AF2Fmmq2JM6dHGwGiDSLc8zzsHT9rclDFgo
+        tDJ3yEmy03H1LbcWhSIbwPcBCg==
+X-Google-Smtp-Source: AGHT+IFRfQ/0KX1bSuu5UuM2JxSiQwHD4x642i16XMLdBILDBkTo7GJS+ledc4uHjgaqOgLCqUIbcg==
+X-Received: by 2002:a05:6a21:9983:b0:15d:1646:285a with SMTP id ve3-20020a056a21998300b0015d1646285amr3860484pzb.21.1695829370365;
+        Wed, 27 Sep 2023 08:42:50 -0700 (PDT)
+Received: from localhost ([49.7.199.230])
+        by smtp.gmail.com with ESMTPSA id v3-20020a655c43000000b005782ad723casm10120152pgr.27.2023.09.27.08.42.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Sep 2023 08:42:50 -0700 (PDT)
+From:   Jian Zhang <zhangjian.3032@bytedance.com>
+To:     brendan.higgins@linux.dev, benh@kernel.crashing.org,
+        joel@jms.id.au, andrew@aj.id.au
+Cc:     zhangjian3032@gmail.com, yulei.sh@bytedance.com,
+        xiexinnan@bytedance.com, Andi Shyti <andi.shyti@kernel.org>,
+        Tommy Huang <tommy_huang@aspeedtech.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        linux-i2c@vger.kernel.org (open list:ARM/ASPEED I2C DRIVER),
+        openbmc@lists.ozlabs.org (moderated list:ARM/ASPEED I2C DRIVER),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/ASPEED MACHINE
+        SUPPORT),
+        linux-aspeed@lists.ozlabs.org (moderated list:ARM/ASPEED MACHINE
+        SUPPORT), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] i2c: aspeed: Fix i2c bus hang in slave read
+Date:   Wed, 27 Sep 2023 23:42:43 +0800
+Message-Id: <20230927154244.3774670-1-zhangjian.3032@bytedance.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230926-pcc_defines-v1-0-0f925a1658fd@arm.com>
- <CAJZ5v0hq37x_v6Z0Vqj2h8D5QZM8zWE4=GfrMk7YAEfUjeRydA@mail.gmail.com> <20230927144552.pqolbw5p22sgc22l@bogus>
-In-Reply-To: <20230927144552.pqolbw5p22sgc22l@bogus>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 27 Sep 2023 17:07:56 +0200
-Message-ID: <CAJZ5v0iXcqxBWY7hCWkQ+iXUvnrVGHFTnNBtn88iVGj=LLBJcg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] ACPI: PCC: Define and use the common PCC shared
- memory regions related macros
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Wed, Sep 27, 2023 at 4:47 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Wed, Sep 27, 2023 at 04:19:21PM +0200, Rafael J. Wysocki wrote:
-> > On Tue, Sep 26, 2023 at 2:33 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > This set of 3 small patches intend to consolidate and replace the existing
-> > > locally defined macros within couple of PCC client drivers when accessing
-> > > the command and status bitfields.
-> > >
-> > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > > ---
-> > > Sudeep Holla (3):
-> > >       ACPI: PCC: Add PCC shared memory region command and status bitfields
-> > >       i2c: xgene-slimpro: Migrate to use generic PCC shmem related macros
-> > >       hwmon: (xgene) Migrate to use generic PCC shmem related macros
-> > >
-> > >  drivers/hwmon/xgene-hwmon.c            | 16 +++++-----------
-> > >  drivers/i2c/busses/i2c-xgene-slimpro.c | 16 ++++------------
-> > >  include/acpi/pcc.h                     | 11 +++++++++++
-> > >  3 files changed, 20 insertions(+), 23 deletions(-)
-> > > ---
-> >
-> > This is fine with me.
-> >
-> > How do you want to route it?
->
-> I have to respin this to include another driver.
->
-> I also have 2 PCC mailbox driver changes that I wanted to send a pull request
-> to you. I can make this part of that PR or you can take it directly. Both
-> hwmon and i2c maintainers have acked now.
+When the `CONFIG_I2C_SLAVE` option is enabled and the device operates
+as a slave, a situation arises where the master sends a START signal
+without the accompanying STOP signal. This action results in a
+persistent I2C bus timeout. The core issue stems from the fact that
+the i2c controller remains in a slave read state without a timeout
+mechanism. As a consequence, the bus perpetually experiences timeouts.
 
-A PR would be convenient. :-)
+In this case, the i2c bus will be reset, but the slave_state reset is
+missing.
+
+Fixes: fee465150b45 ("i2c: aspeed: Reset the i2c controller when timeout occurs")
+Signed-off-by: Jian Zhang <zhangjian.3032@bytedance.com>
+---
+ drivers/i2c/busses/i2c-aspeed.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
+index 5a416b39b818..18f618625472 100644
+--- a/drivers/i2c/busses/i2c-aspeed.c
++++ b/drivers/i2c/busses/i2c-aspeed.c
+@@ -933,6 +933,7 @@ static int aspeed_i2c_init(struct aspeed_i2c_bus *bus,
+ 	/* If slave has already been registered, re-enable it. */
+ 	if (bus->slave)
+ 		__aspeed_i2c_reg_slave(bus, bus->slave->addr);
++	bus->slave_state = ASPEED_I2C_SLAVE_INACTIVE;
+ #endif /* CONFIG_I2C_SLAVE */
+
+ 	/* Set interrupt generation of I2C controller */
+--
+2.30.2
+
