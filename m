@@ -2,53 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706577B0CDE
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Sep 2023 21:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4902A7B0CFA
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Sep 2023 21:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbjI0Tog (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 Sep 2023 15:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S229693AbjI0TzJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 Sep 2023 15:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjI0Tog (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Sep 2023 15:44:36 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3716CC
-        for <linux-i2c@vger.kernel.org>; Wed, 27 Sep 2023 12:44:34 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD519C433C7;
-        Wed, 27 Sep 2023 19:44:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695843874;
-        bh=26jXvUrMI4rHYNdpgdvqJ9Wv5jC/1GdOMf3LxBMs/00=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M8gWHdvcOGwZm4wdOvl4RCtpVdVop7IGH/2dn9zbVdH7FKnj+RDPww2kA1fK2NciU
-         Yfqu6dII32AyhL4nwbBsIJF+a8DG4eLAil/Th4dolgliMjgkodz6GUYetRb1vjbzvz
-         obMV7XeNtk8Pynq/JzoHIhmizLbo8rPpuG0DHr+4tQQrPiu435TypTVAivgBDhmpjE
-         6nBOU3XF9m1ikpOJtHaoCuZ6WI9rP49y3d2Yvrx/0SawRb/9dRzgoKQxGC5sEUrzuw
-         o3Gj6mv30m4arLHXYYWIcrspThrUEMikiLJljQjuxZLHsnFh5ceqZmqo9tMoHXVJ1k
-         MyFUfhm1qeoFQ==
-Date:   Wed, 27 Sep 2023 21:44:30 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
+        with ESMTP id S229595AbjI0TzJ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Sep 2023 15:55:09 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EC610A
+        for <linux-i2c@vger.kernel.org>; Wed, 27 Sep 2023 12:55:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sang-engineering.com; h=date:from:to:cc:subject:message-id
+        :references:mime-version:content-type:in-reply-to; s=k1; bh=/hPS
+        uQ2NRUAu1MtmSEqw5S0lNV0lO0QlN8GLk370his=; b=XOiPE246PKdjaE/6qIiH
+        uOCkrfpbEdsnjiRwkuadk+B+EHrffSp8PKtmiTMNdQiq91oaPc20aQhOx7CjglmS
+        A5iykt26jeK++A4KNR0UInFayB8ZzuYsQjrbxOvpPicf92O9ZY5sGIdJ7L51PwZP
+        OgXmXmtAuNHxNrYUwqvnaLRFs5BS6d1SnE4UsEeCtc+PJzYpEztjjUnDUX/vw7oc
+        /h/lgyRoV9UrfbQ3sBNkwHfDyYSQLc2ocst3SFJ0mRG+4WH0gNm83j2M6EZBhLOW
+        LLTzNpfuALZV1biLxhb0n5jzal5GFQHhA6uZHgsgNoFrX+5HGQbcCv9xrKtve+zb
+        vA==
+Received: (qmail 3184996 invoked from network); 27 Sep 2023 21:55:03 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Sep 2023 21:55:03 +0200
+X-UD-Smtp-Session: l3s3148p1@zKsykVwGQqwgAQnoAF+HAOhQXz46dAsh
+Date:   Wed, 27 Sep 2023 21:55:02 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Andi Shyti <andi.shyti@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] i2c: rcar: fix error code in probe()
+Message-ID: <ZRSIlgWhDIz3pbh+@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
         Andi Shyti <andi.shyti@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH] i2c: Drop legacy muxing pseudo-drivers
-Message-ID: <ZRSGHm8t3ul/s07a@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <20230926133725.5c3fb96e@endymion.delvare>
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <06d4de31-dfe5-432d-acab-600b01422155@moroto.mountain>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="X71Q2PW1rurvCL4I"
+        protocol="application/pgp-signature"; boundary="KqCQv6EJAFfntN6O"
 Content-Disposition: inline
-In-Reply-To: <20230926133725.5c3fb96e@endymion.delvare>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <06d4de31-dfe5-432d-acab-600b01422155@moroto.mountain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,51 +61,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---X71Q2PW1rurvCL4I
+--KqCQv6EJAFfntN6O
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 26, 2023 at 01:37:25PM +0200, Jean Delvare wrote:
-> The i2c-amd756-s4882 and i2c-nforce2-s4985 muxing pseudo-drivers were
-> written at a time when the i2c core did not support muxing. They are
-> essentially board-specific hacks. If we had to add support for these
-> boards today, we would implement it in a completely different way.
+On Wed, Sep 27, 2023 at 03:38:36PM +0300, Dan Carpenter wrote:
+> Return an error code if devm_reset_control_get_exclusive() fails.
+> The current code returns success.
 >=20
-> These Tyan server boards are 18 years old by now, so I very much doubt
-> any of these is still running today. So let's just drop this clumsy
-> code. If anyone really still needs this support and complains, I'll
-> rewrite it in a proper way on top of i2c-mux.
->=20
-> This also fixes the following warnings:
-> drivers/i2c/busses/i2c-amd756.c:286:20: warning: symbol 'amd756_smbus' wa=
-s not declared. Should it be static?
-> drivers/i2c/busses/i2c-nforce2.c:123:20: warning: symbol 'nforce2_smbus' =
-was not declared. Should it be static?
->=20
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> Fixes: 0e864b552b23 ("i2c: rcar: reset controller is mandatory for Gen3+")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 
-What is this based on? Doesn't apply to 6.6-rc3 here?
+Applied to for-next, thanks!
 
 
---X71Q2PW1rurvCL4I
+--KqCQv6EJAFfntN6O
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUUhh4ACgkQFA3kzBSg
-Kbb8mg/+MVyfizsqKmaOuL6L7E5QQW+yFa5UdROOiv2klNsZDgK+ntMq7f4VBIN9
-/BuB7hgnxblxnOoIuaWc2H5nLvALV29Own8g5H6niYMdD8fVUzkgmtuO2z/lbOsN
-7HC3RVB2psQ7r/I7BRm8gt2DIzrpDMKKGCaeQ9Be4pKFfUDAqWHZVnU2KGtzHbsd
-J++AJKZiyEckQ/Ockp+f6MEW3LyZUZ22NuAHGjv3HEMNobfftJK+6hHnGe8Dghk4
-TGzcJdpcjM8Ww3PdHibUbfv+5FXHq9AcUPwsTjBrd+x5Eb90kIbhpOA0uwS4hyiZ
-t1E03jzCCYnPukeUoqjw6fV7Vq3PWKKXaEgBBFLVFgsE7YlHbjVS28DURJsRWQ6/
-C8KicEWNbOov7SH8jnBQRGVKIAj8waaOJ53jLG6e/kkkfn3eUDcI/2R1Q8o5EQh4
-MVaswAg+BNNjAhPomJZC9DsmcZpQ9eDs/yVv6IsiKTPUVmsTKpACzpZjVtxYUSt2
-YmgGWN8bkVBqMrUMlEi5oTtVu0P9O9prxXHwZNrph42ubSQngUSw2z+7LNpe8qWT
-ptDe8T2lRuTTrTD2S8ABVih1ml2wXhGw/2eBJbDlYuMjg09/QhXrixdJZbzTX1a5
-r52QL74OLkffINvASAfW+vbTRplv9zOmqxaYPWJWusEhaV5puoI=
-=6OsB
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUUiJYACgkQFA3kzBSg
+KbZs1A//TOmDoDRhG66rSNLMeTXX3iCyJjGg+vuMugfXruz8YuQJVCVHPPtPpFSc
+trU5w7jhUPtDqpJJCdbsqAq6Z1Y63E+Cc5gTuAGmbBcAPyAt+cycRaw54+SwNd//
+0z5yR3ebf9V42xtoOAgLLfck+d4YKzRaHbEOyzbnpziCvVYhUWG7DwWikZv1oLwj
+PrQzSlNk/lMEzRYAlgIkknxlkRjbzK+Kx9AlnjcXJg3uPK6Me31kPWkDjR0Y88oA
+4mJlNdCxHYyIy+bULEpDvXRMcRCCol7LzZEY6+P9M59IdeVgdxp9ncUHzRH3+xxo
+NbjNNDyuRZluhiVVkDga+RsEExdvgcOOy1HX+P3QqzC6kuzwldBxo1AFwT548Xj/
+ut7NUIMI+mVfHb62wBXfDZUCwnS/9j2LV0V/NT5VHdVqoen/oqNBofO/vq/L0l/o
+RnUFCgjUsI/H/xnC/6AKrYzVq5RYYUk1uIEbOzB3XTP/37MD5Aaq8ZFU1nuhYEEm
+Nfg8Emp4V+amr5yEHf9gsMjLEv6EXG+WvfwMeIJrUhEPKXO/LAmrVg7tZnNSOsDm
+xj+uPOzE1/CPXy4QZrr2i+joshBRB+i+IBbQ7y9YxInbH+qP5TCmR37PzoE3nN+t
+eaAreurIdi1Dy8ZSlhMCZOt3KZLB6NkyKBVEhT6/86h2zBkt7lc=
+=Oh/z
 -----END PGP SIGNATURE-----
 
---X71Q2PW1rurvCL4I--
+--KqCQv6EJAFfntN6O--
