@@ -2,61 +2,61 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A657B0A14
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Sep 2023 18:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F037F7B0C81
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Sep 2023 21:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbjI0Q04 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 Sep 2023 12:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
+        id S229497AbjI0T3J (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 Sep 2023 15:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbjI0Q0y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Sep 2023 12:26:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1AFCD139;
-        Wed, 27 Sep 2023 09:26:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A04C12FC;
-        Wed, 27 Sep 2023 09:27:25 -0700 (PDT)
-Received: from e103737-lin.cambridge.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA64D3F59C;
-        Wed, 27 Sep 2023 09:26:45 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-Date:   Wed, 27 Sep 2023 17:26:13 +0100
-Subject: [PATCH v2 4/4] soc: kunpeng_hccs: Migrate to use generic PCC shmem
- related macros
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230927-pcc_defines-v2-4-0b8ffeaef2e5@arm.com>
-References: <20230927-pcc_defines-v2-0-0b8ffeaef2e5@arm.com>
-In-Reply-To: <20230927-pcc_defines-v2-0-0b8ffeaef2e5@arm.com>
-To:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        with ESMTP id S229459AbjI0T3I (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Sep 2023 15:29:08 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E368F;
+        Wed, 27 Sep 2023 12:29:07 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A422EC433C8;
+        Wed, 27 Sep 2023 19:29:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695842947;
+        bh=DLORLISSbfGpz9Qo1iPESXCR3M3Z5Vppn33Xzt8GFRI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fFG0cNEr4hv+GhzWDjkFh6JcZlrkUkMHEgzsp3fGMTV6HITO1Hze2DnLhEat6Haa8
+         qgr2ypxus07qKxPU5fAQdDGer99gHaMupaNG54STNuskq+JeCvdhMll4FQdLZtmAx1
+         BEQJ4UX6sHh5mAyuvYi6eSxR8V7Z04tGNlW9tEKKPe0RD0n6a+SIe0pABKV2sCVvMt
+         bGRsR6cgOFjLydR68hBII3Q3B7IqlxZHgEB4iI/YUlyfww4TyxGfxVX8Fvnhqs/8Ei
+         dZSeVAgjfgfBIGGPVPuOOgHq8KO/OsoT594gpem3XP7nysZSiyCoKe/jE2bRfkWX/8
+         bXAmtNPTfrXww==
+Date:   Wed, 27 Sep 2023 21:29:00 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Sean Nyekjaer <sean@geanix.com>
+Cc:     Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
         Andi Shyti <andi.shyti@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Huisong Li <lihuisong@huawei.com>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1586; i=sudeep.holla@arm.com;
- h=from:subject:message-id; bh=u2l37EKodWl3t9KxuqJG431SMIrlAILGoiCEw5HkoSE=;
- b=owEBbQKS/ZANAwAIAQBBurwxfuKYAcsmYgBlFFe/MXQmrQGDt88mM/QuYZQQEwA0o/hLokyjA
- Qtrf/ED40uJAjMEAAEIAB0WIQS6ceUSBvMeskPdk+EAQbq8MX7imAUCZRRXvwAKCRAAQbq8MX7i
- mJicEADBde2Fk7xTC+4jwSkOtCCkC4G/OVOGdOkVedcKO4keIhCg3lPB7DlKqPpwXJechXVZCNJ
- 22v3vOv5cAojUmOVqXIa2kR1IN8wAeeKn9FkbRd0QmS4DLG0SPjxTOqw44eLWbYhn9zBxTFZ0zI
- E5P68YSocsTMtiNKXZ5+TnET1fJJGfkMlxBal91M9jonwmXwjThZW8MwEV1SKWmtY01NtznhnL8
- SmEtcB3+PuEXDHPrSZqR0Vl4GtfE3dNUEY5mKD+nL5MGy+Cobmqu6fDXKwnU4lqcv/twOeSNoSm
- sbPyEPcjyztqZk5tn0O0nswbc9mecLsBhR294g54qTycx9BxilFSUSp7Kv7Hda/6e6Oyp8aqrD2
- 0Wk1nl6oi0nZMzzEpDMYJTwI6ORfQLQaGqLQ7GMJzaKaskFHwd9wdgVk/ssojjh1AIUo3bMVkH7
- dQyWosO6FIV23mcQc3HQnZujjitBpGglaXlYYYUpG/0d0bpk9GS8uMKIz9u36GhM9/sTkaNEjIT
- UZrcAMjOETjmNHl4Ih3hN9JNyQbGIelMtewDRUmiOrGcQHUJKXr5+vok5H8phxPyjbaemp9K6TS
- l3muPI06WmkrPCw3WXzmHYUpSGhxWCJwdIoI7pS5ikNGRl9ppXBR72Pb0ma39f/8uB/RBpqovVT
- JJNY7i5cWit+j9g==
-X-Developer-Key: i=sudeep.holla@arm.com; a=openpgp;
- fpr=7360A21742ADF5A11767C1C139CFD4755FE2D5B4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: stm32f7: Add atomic_xfer method to driver
+Message-ID: <ZRSCfMn7CX09z6/e@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Sean Nyekjaer <sean@geanix.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230816080552.3045491-1-sean@geanix.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="q4e6LjJ1370WBudV"
+Content-Disposition: inline
+In-Reply-To: <20230816080552.3045491-1-sean@geanix.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,49 +64,45 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Use the newly defined common and generic PCC shared memory region
-related macros in this driver to replace the locally defined ones.
 
-Cc: Huisong Li <lihuisong@huawei.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/soc/hisilicon/kunpeng_hccs.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+--q4e6LjJ1370WBudV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/soc/hisilicon/kunpeng_hccs.c b/drivers/soc/hisilicon/kunpeng_hccs.c
-index f3810d9d1caa..27a96cafd1ea 100644
---- a/drivers/soc/hisilicon/kunpeng_hccs.c
-+++ b/drivers/soc/hisilicon/kunpeng_hccs.c
-@@ -31,10 +31,6 @@
- 
- #include "kunpeng_hccs.h"
- 
--/* PCC defines */
--#define HCCS_PCC_SIGNATURE_MASK		0x50434300
--#define HCCS_PCC_STATUS_CMD_COMPLETE	BIT(0)
--
- /*
-  * Arbitrary retries in case the remote processor is slow to respond
-  * to PCC commands
-@@ -187,7 +183,7 @@ static int hccs_check_chan_cmd_complete(struct hccs_dev *hdev)
- 	 * deadline_us(timeout_us) until PCC command complete bit is set(cond)
- 	 */
- 	ret = readw_poll_timeout(&comm_base->status, status,
--				 status & HCCS_PCC_STATUS_CMD_COMPLETE,
-+				 status & PCC_STATUS_CMD_COMPLETE,
- 				 HCCS_POLL_STATUS_TIME_INTERVAL_US,
- 				 cl_info->deadline_us);
- 	if (unlikely(ret))
-@@ -208,7 +204,7 @@ static int hccs_pcc_cmd_send(struct hccs_dev *hdev, u8 cmd,
- 	int ret;
- 
- 	/* Write signature for this subspace */
--	tmp.signature = HCCS_PCC_SIGNATURE_MASK | hdev->chan_id;
-+	tmp.signature = PCC_SIGNATURE | hdev->chan_id;
- 	/* Write to the shared command region */
- 	tmp.command = cmd;
- 	/* Clear cmd complete bit */
+On Wed, Aug 16, 2023 at 10:05:52AM +0200, Sean Nyekjaer wrote:
+> Add an atomic_xfer method to the driver so that it behaves correctly
+> when controlling a PMIC that is responsible for device shutdown.
+>=20
+> The atomic_xfer method added is similar to the one from the i2c-mv64xxx
+> driver. When running an atomic_xfer a bool flag in the driver data is
+> set, the interrupt is not unmasked on transfer start, and the IRQ
+> handler is manually invoked while waiting for pending transfers to
+> complete.
+>=20
+> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
 
--- 
-2.42.0
+Applied to for-next, thanks!
 
+
+--q4e6LjJ1370WBudV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUUgngACgkQFA3kzBSg
+KbY5mg//fnSEAw0ncLAp7FAiL+6CXF3XRI8wmDILe+fjXyIWU4xpZDYT0y1wrQ+9
+qm/eghJr9ieoJXLA4U9oEIJha0P8ZucXJxYgD2pmEmUA5f0Dfg90jQePAlsM2wxX
+2e4u1+ztpFiJnc8P25bM5oHLggZMMsbHZHzyxgRDCq4IL4vdMEammHS8pCe3zPtr
+vaPj7iu5gQuGe8e+A6nlSF3aPeki48M1kFcwiUIfLU57ltY7YwR7jUPcvgamrHKK
+1HX80XHaAecj4Dlmjd2upaKSiEgV4TFz8Ior0pmWCvBBlkMq59Ml2eoWS5AWkF6J
+hD8caDVPApH263Apd0KcpOYwhSkTIQY3Pmld8mdGIeRX70IKm2QkMZdsAoR7AQv3
+iMmoLN6ChyXiE931D3rAvd1cRemP1O86FSZwqBEMCtIr06xSB+ps/fo2q1oWpn6S
+A1DZ4PYcO0APtRqigbMbe7SSLtwT4zvZ938dd2oCNGf4lxOfclGT+3rUCCYQL8XD
+4xd+2511orDi0ebV5OF8CMvCDd+Cu9KVW+3HmQ3GPwzSPJONG37WXu7OVMhdltNk
+wyZhBj/Oen05Bv7qdTx8eh1XlVnfPiMyojSUQ0+k38xvkpw6xvgM5jo1Xngz29LF
+dNmB9zRmj6tGp2PL3MtcQACrBNzeQfXC541XIfntLsNKCPOlevo=
+=f9RA
+-----END PGP SIGNATURE-----
+
+--q4e6LjJ1370WBudV--
