@@ -2,117 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBEB7AFE39
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Sep 2023 10:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C1A7B0455
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Sep 2023 14:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjI0IYb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 27 Sep 2023 04:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S229880AbjI0Min (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 27 Sep 2023 08:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjI0IY3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Sep 2023 04:24:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC5D116
-        for <linux-i2c@vger.kernel.org>; Wed, 27 Sep 2023 01:24:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 64DE41F894;
-        Wed, 27 Sep 2023 08:24:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1695803066; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sny89avrzVvv1wsoPIvqcA5GqHDt5O2Qljnzs7gXSao=;
-        b=rgX7s+DPwdUWQMoM1tTKlH9zxL0psnPhw1h0ykwkHx3sf2wJ7cqNoK4QCyYJbynsWz70gc
-        fEJek5JGOn/TBIsQmv1sO/l9QbontBinF9hQvtdVmZCshRMyrVIfqEWjuZYqphKD80paVm
-        Yuww8omLlBMTLdbeJRO87p90Dr+970A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1695803066;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sny89avrzVvv1wsoPIvqcA5GqHDt5O2Qljnzs7gXSao=;
-        b=D0/g+Zx+lMxFLuH6yREMW3Ft8nDnlNs+0T1yH87z4L5suuF4csL1Csf4advXYUCDVIVxaF
-        7S+0UyFJNCtOJICQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3CE8B13479;
-        Wed, 27 Sep 2023 08:24:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kjtEDbrmE2VnZwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Wed, 27 Sep 2023 08:24:26 +0000
-Date:   Wed, 27 Sep 2023 10:24:25 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH] i2c: Drop legacy muxing pseudo-drivers
-Message-ID: <20230927102425.616feeb8@endymion.delvare>
-In-Reply-To: <20230926212720.adcn42akrnj72oxl@zenone.zhora.eu>
-References: <20230926133725.5c3fb96e@endymion.delvare>
-        <20230926212720.adcn42akrnj72oxl@zenone.zhora.eu>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        with ESMTP id S229531AbjI0Mim (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 27 Sep 2023 08:38:42 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AA512A
+        for <linux-i2c@vger.kernel.org>; Wed, 27 Sep 2023 05:38:41 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-4053cb57f02so98881625e9.1
+        for <linux-i2c@vger.kernel.org>; Wed, 27 Sep 2023 05:38:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695818320; x=1696423120; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Iv3thYPyIQ8GygicfHZHZp04/tIitP9GfIoOieD69Cs=;
+        b=PAVvej6nT02WuWdyz3iOG0pIB59mAZ6AwvDrdGeZygRd9tWVf8Tczz8JzLcu9QD7IV
+         61tzWha6DXsHM45EB/hefAC5qMTDw/89VvwWGogGv0/uz7pQaS9KMkX73o59jtWodIRV
+         9Z/5S5WGPPoZ7i/RvbsoElgDARG3SOVBKixYLCP3r2kdCjI81WP9so6pr264frivB+zL
+         1OMubEIDBxUhTrgrWQesc6DXs/LkYikjMn3mQO0ZP0CSqZ2I+B18/QxzK34VajRhY4MK
+         S+X1lfeBm8erdqhtsPL8tDiqFRWu02bSt1UvbpfXbxkl3mINr5yRtS1Qo1Pzbl2SBPlN
+         w1AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695818320; x=1696423120;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Iv3thYPyIQ8GygicfHZHZp04/tIitP9GfIoOieD69Cs=;
+        b=ZaJQiWyXsiD9n+NAp70iU72GzIQJG++cDJ0jlF2RxodAQ+wNF6681x0/gO857pMqnQ
+         lpXJLeiKVfz7LIKpGEpJFfIeAFqez3LVttSS4cv6UX6KRb+BJWOLd6UPgh9la5hQ5jIU
+         6G1EeBw4e8bpBuMMqL5zwkSOej/HvNmLf88/+fz5DI4bkf2qY6FNk9/vvdxFYiloEDXs
+         eDaBUCbLV3J8tN/wP1t0rA78IJeCTmWqnoTkeP5ucVnzioL1lW/9YPOcP0OWXU5NdkWx
+         xl0cg0x1fBYHhNFFAZGHG+MIO1qbxzyOr9w3/RcjR+K4GV+XSunvrlJ2LUjcPlD+Lsf+
+         EPQQ==
+X-Gm-Message-State: AOJu0YxEASZaW4gRNv03a242bc4+QHHOpuAC83fy5b+dMHWbqhb/mq3f
+        NmaMYS9uXyv02ZYKoznKX8rUIQ==
+X-Google-Smtp-Source: AGHT+IG+giG0uB2f0slqRXUC2s/Xr805TX2Mc8YoPELbwGNV0aJ3OYBXte08KuYU4ss+e25T8ZVO6g==
+X-Received: by 2002:adf:f044:0:b0:321:521f:836f with SMTP id t4-20020adff044000000b00321521f836fmr1709032wro.26.1695818319926;
+        Wed, 27 Sep 2023 05:38:39 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id c12-20020adfed8c000000b0032179c4a46dsm16988190wro.100.2023.09.27.05.38.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Sep 2023 05:38:39 -0700 (PDT)
+Date:   Wed, 27 Sep 2023 15:38:36 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Andi Shyti <andi.shyti@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] i2c: rcar: fix error code in probe()
+Message-ID: <06d4de31-dfe5-432d-acab-600b01422155@moroto.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andi,
+Return an error code if devm_reset_control_get_exclusive() fails.
+The current code returns success.
 
-On Tue, 26 Sep 2023 23:27:20 +0200, Andi Shyti wrote:
-> On Tue, Sep 26, 2023 at 01:37:25PM +0200, Jean Delvare wrote:
-> > The i2c-amd756-s4882 and i2c-nforce2-s4985 muxing pseudo-drivers were
-> > written at a time when the i2c core did not support muxing. They are
-> > essentially board-specific hacks. If we had to add support for these
-> > boards today, we would implement it in a completely different way.
-> > 
-> > These Tyan server boards are 18 years old by now, so I very much doubt
-> > any of these is still running today. So let's just drop this clumsy
-> > code. If anyone really still needs this support and complains, I'll
-> > rewrite it in a proper way on top of i2c-mux.  
-> 
-> do you have such devices?
+Fixes: 0e864b552b23 ("i2c: rcar: reset controller is mandatory for Gen3+")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/i2c/busses/i2c-rcar.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I don't. If I did, I would have written proper muxing code for them
-long ago.
-
-> I'm somewhat conflicted, on one hand I like the cleanup. But on
-> the other I think that they don't do any harm if they stay where
-> they are.
-
-Every piece of code which lives in the kernel tree has a maintenance
-cost. As a matter of fact, these 2 "drivers" were affected by 6
-tree-wide or subsystem-wide changes over the last 14 years. No actual
-driver-specific change was applied during that period of time.
-
-Currently these "drivers" also cause build-time warnings (with W=1),
-which Nick understandably wanted to clear, and this is even the reason
-why I looked into that and wrote this removal patch.
-
-> There are lots of drivers that look outdated and need
-> maintenance, we can't just remove them... right?
-
-Actually we can, and should, if we suspect there are no users left.
-There's absolutely no reason to spend time maintaining and building old
-drivers which have no users left. Unused drivers also take disk space
-and network bandwidth world-wide, and represent an additional attack
-surface from a security perspective.
-
+diff --git a/drivers/i2c/busses/i2c-rcar.c b/drivers/i2c/busses/i2c-rcar.c
+index 8417d5bc662b..829ac053bbb7 100644
+--- a/drivers/i2c/busses/i2c-rcar.c
++++ b/drivers/i2c/busses/i2c-rcar.c
+@@ -1153,8 +1153,10 @@ static int rcar_i2c_probe(struct platform_device *pdev)
+ 
+ 	if (priv->devtype == I2C_RCAR_GEN3) {
+ 		priv->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+-		if (IS_ERR(priv->rstc))
++		if (IS_ERR(priv->rstc)) {
++			ret = PTR_ERR(priv->rstc);
+ 			goto out_pm_put;
++		}
+ 
+ 		ret = reset_control_status(priv->rstc);
+ 		if (ret < 0)
 -- 
-Jean Delvare
-SUSE L3 Support
+2.39.2
+
