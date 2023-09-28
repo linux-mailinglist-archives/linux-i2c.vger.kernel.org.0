@@ -2,726 +2,156 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903EF7B15D9
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Sep 2023 10:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB3F7B1827
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Sep 2023 12:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbjI1IRI (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 28 Sep 2023 04:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
+        id S230345AbjI1KTA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 28 Sep 2023 06:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjI1IRF (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Sep 2023 04:17:05 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F100DE
-        for <linux-i2c@vger.kernel.org>; Thu, 28 Sep 2023 01:17:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E25901F45B;
-        Thu, 28 Sep 2023 08:16:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1695889019; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=s0DnlMtiuP+HdbC6hPXFdVb4rE7YEyMikgMe7Pnpb7Q=;
-        b=an7PdLVKPMyVNgwT/WY+mSMpq+DNHTuWyx1Iu3fgrHimDHUnzclZhrNl2w7GUCQEwoGtVk
-        /BJ0xZyd6BUHRk/0ps2kj/ox4dqZjGRxwJV1dskzJfEmWCbaKGhegjRzerhPVJG7S8TZ4u
-        uDjByaw3pieFHzMhru6nmZKsy7EqYfU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1695889019;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=s0DnlMtiuP+HdbC6hPXFdVb4rE7YEyMikgMe7Pnpb7Q=;
-        b=7v+nFqCgLMbMjYt+bsgnNOBNw+Sg+RIWLSHLPApWL0lrDYZvhAR6sE2GontHR34DCqdlfL
-        7VqNnVuRACmzxKAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B8C01138E9;
-        Thu, 28 Sep 2023 08:16:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Y7ieK3s2FWVhRQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Thu, 28 Sep 2023 08:16:59 +0000
-Date:   Thu, 28 Sep 2023 10:16:55 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Linux I2C <linux-i2c@vger.kernel.org>
-Cc:     Andi Shyti <andi.shyti@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH v2] i2c: Drop legacy muxing pseudo-drivers
-Message-ID: <20230928101655.47d3dd2a@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        with ESMTP id S229639AbjI1KS7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 28 Sep 2023 06:18:59 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2044.outbound.protection.outlook.com [40.107.20.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECA79C;
+        Thu, 28 Sep 2023 03:18:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d8c077CpXoWpwjkIGcqAsfeT15OJqDn4kZr2VlLY+ANYEnaxlflokIzdArhX5PK/FBoaaDtoOEsGQuhgiAAPBBV9NIBcWjjZ5xnH7K48QIF1W799RO1quROJ5gDw25Iyy38zjadUcERI2j3Sc0wv8/5o7+8FeFPBlae5pmyAGW0vv7xnae1itlMYlkRLZmx6LCaIR8VH7G+adl7GtRoeZrkbw7TiO6sjtlTi5qFVQLzQKPKeBr2VLFZN3h60ER8Mf6SzzbfDJAZo2un2qr+zXanxCbbkrsSB37XtYT5I6w3Sl5gO6PheTbjaiXe0sQzPHOg5Vuy8VHRBQCsBnXq6Pg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2VayyAcTwBmHFjeQszHVSBjVTqTJQIVyWEJ4M7t3uPI=;
+ b=AVbNKVssIAEmYbmOwnlj2V8bVrAnZz+6oYrnP4dVT8DUjQ4N9v2VKKGVvw0jDf5dBvoiFvcvQaIu5oZHlCxP5823HB8Vng+BA/+8fqgnfZdnjSqKk42inJDl0MqzBi4firIHfjFPdIRMQTaO70IhR7NSV/7d/KiXsgSkBzd4oIffLzjG+pmpaaBJ0YzWNKrdaeSlS33UKmB8QDf1gvFPTffPEsN2isPa+ppKjCjQ9yEa7MPrRevM8mbm5kcS3oJqjF4OYqr6DD0LSpCDrdT6TyuReyJK/R3dkpzgIMHaQ0f6VpfL2Ktlvr0vHu10WVzNcqkDEbytgX+N4o2SC8vwwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2VayyAcTwBmHFjeQszHVSBjVTqTJQIVyWEJ4M7t3uPI=;
+ b=t+72ayf+OKCmlvCn85Rtc0zla+g8ezvMfD44s3TVv1zBdyd7p7SHi1f7EheX/uRFJC/q17C9yg/cYwQ9J4qSZv1eDNvOZ3UjmRcXYKVZGpFo5Hbk7KdfX987gPxJ//L7R83EYYfIZx38x0tZwFurCzaJVKcrzOKzgOlcPFgVgDqmLG0KCVqS0vvReQ5ktqY1sqahUEVRBlTh73royloc87reErsJmm7IvSerqhAsX0/PTqWqAazyawumGM2DFXNsj3OQHxxEOsED3kwsDfFtWeSerK5g7QvisTpZmJCeIgWHXnK5WQAeblIwyVjBsfpBHhX18wHeZ+QpwOb85jL+Vw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by AS8PR04MB8295.eurprd04.prod.outlook.com (2603:10a6:20b:3b0::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Thu, 28 Sep
+ 2023 10:18:54 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::ae2b:2be:9625:d810]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::ae2b:2be:9625:d810%4]) with mapi id 15.20.6813.017; Thu, 28 Sep 2023
+ 10:18:54 +0000
+Message-ID: <95ce1e2f-eb60-46fc-bced-06b8a150cbfb@suse.com>
+Date:   Thu, 28 Sep 2023 12:18:50 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v19 0/4] Add Intel LJCA device driver
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Wentong Wu <wentong.wu@intel.com>
+Cc:     arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
+        wsa@kernel.org, kfting@nuvoton.com, broonie@kernel.org,
+        linus.walleij@linaro.org, maz@kernel.org, brgl@bgdev.pl,
+        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
+        andi.shyti@linux.intel.com, sakari.ailus@linux.intel.com,
+        bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com,
+        zhifeng.wang@intel.com
+References: <1694890416-14409-1-git-send-email-wentong.wu@intel.com>
+ <2023091704-nape-coconut-af6c@gregkh>
+ <f576c346-db6c-dded-1502-c87d5e58fa39@redhat.com>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <f576c346-db6c-dded-1502-c87d5e58fa39@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FRYP281CA0004.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::14)
+ To VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|AS8PR04MB8295:EE_
+X-MS-Office365-Filtering-Correlation-Id: 681e3c30-cbe3-4af9-c1ed-08dbc00c50f7
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Jn46+J5CKND+MqDv7UaPyqOPscTVdBdFfwIGWIlf/R8hoyqcW0apNMn4kL+a7Wu/4xZ1PS4iFoWmhmSMNtN+kVOurYfmers+e7HoJstFYL8f9ZinkCQtL6YgplKrrWt3N0yNAPy6w9aWFNMDDxTBiO7XPAMCS7UTUbdeVSR8AiJzb16GuSKK/xzWvEv3pOjySgoSpH9t9LOzEpU+ItyHSwoWJU4wBnrxFSh2WCqfqNegjb50Snjb35tBPZveLkHNc3bacmsiuBKitJ0pbiwST/rNVUKtkIg8BJPc5lazKiqAgLvr/wzSm6ZXrK5o00bGrxWfsb3mO6RzMQkSBelqyGrUQsSMVTldwlhgU7EV8kQouU1PycLpq0o25BuhrDzQacaopVUWsTWYjvubPK7Jzbib0C+RQnzd7EGaEMWyFcOd+l/s6c9bMmBkfYxoVMtw5wv2amroctyb4Ka07BF4cos83g8sDphRJPIlNc6jJHBDbr5dmp9fipdJRqArCCvxspORlaZUWQh88WbI0IYAhL2knPZaa9PLPUosW+A9GtCHQL2ClZ9EG82AUymznsY0k2+hUmyFG5UGjzWZD9lc/gByQFjcAGUYAE8Uh0wH4VkfOnYRhxQiYr1luDZStqhPC4jfR3NBjzhxBzw09xS3yg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(136003)(39860400002)(376002)(366004)(230922051799003)(1800799009)(186009)(64100799003)(451199024)(4744005)(31686004)(110136005)(6512007)(66946007)(316002)(7416002)(2906002)(66476007)(66556008)(41300700001)(8936002)(8676002)(4326008)(478600001)(6666004)(5660300002)(38100700002)(53546011)(6506007)(2616005)(86362001)(36756003)(6486002)(31696002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzdUTGJNSVJaM1JwYk4yU2NnVUxJWmppWmZYTTQ1U0hLK1k0R0R2aWJwS1JN?=
+ =?utf-8?B?ZWRVRnBmZzhDcFgxSHBKQjlXU3ZTcmVqajNWbG8xV29KVlovZU9LVkg1U1pw?=
+ =?utf-8?B?MVNjaXlYbHpzUnFNZWh1VkNvcDdURkZzZ3J0RTZ6Qi9aUUw5bUc3c2ljR3Bn?=
+ =?utf-8?B?dUtvdVFXRW5NcWVPMzJ4TWg0cVhMdTlObmZzeHFoamxuOENSalpDMjIydENw?=
+ =?utf-8?B?dmxpK3YwYTY3TGdZTXFzcVY3RmFjR3p2dlk3Rmc0QXNYK2ZGalVMeXdXR1Vs?=
+ =?utf-8?B?YkFzcFRoemZOdkRlYnIxZS9CcldncFBHbFdzc3AzS0psczRaOStLb3NITGN6?=
+ =?utf-8?B?aDgwZzRsSjZodWpORGU5MGQrdFdPSmwzeU1KWDkycmRIS045TGRyTW9uM2wz?=
+ =?utf-8?B?NXNIYVpNRU1jckJJRnd2K0w0TURqazF4dmpwaE1uZkl0aW43WGlmM0ZERTBq?=
+ =?utf-8?B?ZE8zbmczZnl1YVZsTjczUm82Vi8rdEt4M28wY2gwMEswOEV6aHN3ZmNuQ1A1?=
+ =?utf-8?B?dE1BTEYrcmZ4by9PaGI2dHdqZm16Tnl0MTVIUTBIM0pxZ1NNV3BSMm5RTGY5?=
+ =?utf-8?B?UHNwRzBreXhaemlNTEpSN3BTK3JNRWxReStqbHM4Z2h0Z3pYM2RpMEhmZ09z?=
+ =?utf-8?B?SVZFbFB3KzB0cG1tK2ROakdmY2gvMnU1RWlhQW94cEpYYmtqaEt5QStsMFdF?=
+ =?utf-8?B?VzVwTUdWYlk1UFBabjIwK0VOSmdYSVBOeHErbXhyZlhjZE9zNFhRTkNpbWI0?=
+ =?utf-8?B?eFVpalplTE4rcmVQRHE3NER0L1pDRkdjS2R0c0FJVC9xZFJPVTU5NDRYWllZ?=
+ =?utf-8?B?TnRRLzFQZmFjODZkd3VLTi9wWmtWRmduZFZlMlYyeFZmOTcyM0lGK3Q2bjQv?=
+ =?utf-8?B?SW83TjI3OGNKMi84aWpIRVJlNjJDRW12WmJCUE1rOURCNVh3NFBUaUlYSGdO?=
+ =?utf-8?B?a3lsbXdqZGtXTE80RTZhTWdSVXQyandrUnc3c2o1ZWxmVXVqMmZXVkNUMXB2?=
+ =?utf-8?B?MFFGMFc3Zy9DV3ljZURJaWFLVkVnUERLaXZSV3Q2cjRzdjFkVUlPUGVoZEsv?=
+ =?utf-8?B?aVRWdHNMZUJNUzAvWm5WQlU1YnZQSUFiTVU4Ky81THZTQ2NXMi9DVVc2aTZp?=
+ =?utf-8?B?S0JZeHJXdnpneitnL2JVazk1YUdsZS9paG5NRDlSQTY5QXNWNGFYMnlKT2lz?=
+ =?utf-8?B?eEZQOTNXYzNmelRBVHhWbldwMC9Cc1JydDJTZjZwTzBVYnhsRDMvYytUM1Rl?=
+ =?utf-8?B?NGd1a3E5bkZYY1BwWlJ1M2k1dFB1dWdwMUdWZmpEN2ZRUjk5OG9Vb0pwdllz?=
+ =?utf-8?B?c0MzUHBiTFBJdm1OUnpCcEpIbFMzdnU3clhhdm84TDU2TytORjZtT2t2clpt?=
+ =?utf-8?B?UFROdGdiV2g4elBmRTRJeGNjR240ZklmUDVNWC9NK2xzSG0vZUNwWmxpREQ5?=
+ =?utf-8?B?dzBDdzYrSlR3UG9Eam5aaEk2ZUlPNGxGU0praEp1R2w4WWhCbzdUci9VU2hr?=
+ =?utf-8?B?a1NMRzFaakdoTHpLSElNOGlIandJN3FId3dSZS9mS2FrOU5yZ29zSXBJU1FN?=
+ =?utf-8?B?UlZXcC9mQk9naTJkWnpOeXllSGZjek5SME14eUJCVjZLclhmTlBUNlcxc3hS?=
+ =?utf-8?B?VzBvbm9qbEhZYWNieHpoc21sQXU3aWQwUW9mSW1SZDBaL0o4cXdkeWZwZWR1?=
+ =?utf-8?B?b0dtaGtaN0xkOHM5dGo1VXM0aEhQWDVUdFFXYXpEOTlNdEF0UDU2bC9oQWp3?=
+ =?utf-8?B?VXZMVlc1ak8xa2hPaXAyaEhXRys0RGwvVUx5NGJZSHJZYXJCSmNxdWtHMEpD?=
+ =?utf-8?B?Yy9iOGU4ZE4wbmlNekdCUmRpb1ZtMnF1M0oxY0VkT09VcXdoMGpJNm1JeDdp?=
+ =?utf-8?B?VkpGdnd3NzRYYW15ZEU1K2FKLzc3RjFmUldIRUNySUFPbjRqbmpwZ0llOVlK?=
+ =?utf-8?B?OXBDQ280aHVFTjRtQWJpSlVUaVlscE9TeGNFWXBxR0MxcVllb3RXbHltTWg2?=
+ =?utf-8?B?QmViQUVQRUdMU0tVQ0pYaEY0RnNtekIxTzlKMmhlM2NKTldidHJIVGJmVWVj?=
+ =?utf-8?B?K3ZGaklwQWd5NzhzekJCKzRWb05lZlpGcm0rNWUxRWtCQmFUaEdheUtSYThP?=
+ =?utf-8?B?VWNBb1B2L29yamUvSndGekN5VlIyK0dNNjJ3WWpLeTZQd0Z0Q3VQdVBDZXFU?=
+ =?utf-8?Q?lpKKS7yWiTPKfYvJdqj5Yf6QOJxsztTQqdMUnzo882Fb?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 681e3c30-cbe3-4af9-c1ed-08dbc00c50f7
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2023 10:18:53.9614
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LT8zDcQ7gGkUIHpU+nnDx0GWdmWVqja9AHrCmyvbR3FlSNk87jVGKYAX/rcxP/tF+R/qhz71Rx/27tIpJR8BdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8295
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The i2c-amd756-s4882 and i2c-nforce2-s4985 muxing pseudo-drivers were
-written at a time when the i2c core did not support muxing. They are
-essentially board-specific hacks. If we had to add support for these
-boards today, we would implement it in a completely different way.
+On 17.09.23 13:26, Hans de Goede wrote:
+  
+> Note I did not ask for a new version to be send right away, but
+> I'm afraid there has been a bit of miscommunication and instead
+> of rebasing the next version based on further review Wentong has
+> send out a new rebased version immediately, sorry about that.
 
-These Tyan server boards are 18 years old by now, so I very much doubt
-any of these is still running today. So let's just drop this clumsy
-code. If anyone really still needs this support and complains, I'll
-rewrite it in a proper way on top of i2c-mux.
+Hi,
 
-This also fixes the following warnings:
-drivers/i2c/busses/i2c-amd756.c:286:20: warning: symbol 'amd756_smbus' was not declared. Should it be static?
-drivers/i2c/busses/i2c-nforce2.c:123:20: warning: symbol 'nforce2_smbus' was not declared. Should it be static?
+what to do now? It's been ten days.
+I am sure this driver has been very thoroughly reviewed by now.
+We are dragging this out. Do we want the developer to do another release
+or do we ask Greg to take it as is?
+This is becoming almost comical, but that is not what we want driver
+submission to be.
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>
----
-Changes since v1:
- * Added Nick's ack.
- * Rebased on top of v6.6-rc3.
+As far as I am concerned on the USB side everything is fine now.
+Hans? Greg?
 
- MAINTAINERS                            |    2 
- drivers/i2c/busses/Kconfig             |   26 ---
- drivers/i2c/busses/Makefile            |    2 
- drivers/i2c/busses/i2c-amd756-s4882.c  |  245 ---------------------------------
- drivers/i2c/busses/i2c-amd756.c        |    4 
- drivers/i2c/busses/i2c-nforce2-s4985.c |  240 --------------------------------
- drivers/i2c/busses/i2c-nforce2.c       |   16 --
- 7 files changed, 1 insertion(+), 534 deletions(-)
-
---- linux-6.6-rc3.orig/MAINTAINERS
-+++ linux-6.6-rc3/MAINTAINERS
-@@ -9871,12 +9871,10 @@ F:	Documentation/i2c/busses/i2c-viapro.r
- F:	drivers/i2c/busses/i2c-ali1535.c
- F:	drivers/i2c/busses/i2c-ali1563.c
- F:	drivers/i2c/busses/i2c-ali15x3.c
--F:	drivers/i2c/busses/i2c-amd756-s4882.c
- F:	drivers/i2c/busses/i2c-amd756.c
- F:	drivers/i2c/busses/i2c-amd8111.c
- F:	drivers/i2c/busses/i2c-i801.c
- F:	drivers/i2c/busses/i2c-isch.c
--F:	drivers/i2c/busses/i2c-nforce2-s4985.c
- F:	drivers/i2c/busses/i2c-nforce2.c
- F:	drivers/i2c/busses/i2c-piix4.c
- F:	drivers/i2c/busses/i2c-sis5595.c
---- linux-6.6-rc3.orig/drivers/i2c/busses/Kconfig
-+++ linux-6.6-rc3/drivers/i2c/busses/Kconfig
-@@ -62,19 +62,6 @@ config I2C_AMD756
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called i2c-amd756.
- 
--config I2C_AMD756_S4882
--	tristate "SMBus multiplexing on the Tyan S4882"
--	depends on I2C_AMD756 && X86
--	help
--	  Enabling this option will add specific SMBus support for the Tyan
--	  S4882 motherboard.  On this 4-CPU board, the SMBus is multiplexed
--	  over 8 different channels, where the various memory module EEPROMs
--	  and temperature sensors live.  Saying yes here will give you access
--	  to these in addition to the trunk.
--
--	  This driver can also be built as a module.  If so, the module
--	  will be called i2c-amd756-s4882.
--
- config I2C_AMD8111
- 	tristate "AMD 8111"
- 	depends on PCI
-@@ -239,19 +226,6 @@ config I2C_NFORCE2
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called i2c-nforce2.
- 
--config I2C_NFORCE2_S4985
--	tristate "SMBus multiplexing on the Tyan S4985"
--	depends on I2C_NFORCE2 && X86
--	help
--	  Enabling this option will add specific SMBus support for the Tyan
--	  S4985 motherboard.  On this 4-CPU board, the SMBus is multiplexed
--	  over 4 different channels, where the various memory module EEPROMs
--	  live.  Saying yes here will give you access to these in addition
--	  to the trunk.
--
--	  This driver can also be built as a module.  If so, the module
--	  will be called i2c-nforce2-s4985.
--
- config I2C_NVIDIA_GPU
- 	tristate "NVIDIA GPU I2C controller"
- 	depends on PCI
---- linux-6.6-rc3.orig/drivers/i2c/busses/Makefile
-+++ linux-6.6-rc3/drivers/i2c/busses/Makefile
-@@ -14,14 +14,12 @@ obj-$(CONFIG_I2C_ALI1535)	+= i2c-ali1535
- obj-$(CONFIG_I2C_ALI1563)	+= i2c-ali1563.o
- obj-$(CONFIG_I2C_ALI15X3)	+= i2c-ali15x3.o
- obj-$(CONFIG_I2C_AMD756)	+= i2c-amd756.o
--obj-$(CONFIG_I2C_AMD756_S4882)	+= i2c-amd756-s4882.o
- obj-$(CONFIG_I2C_AMD8111)	+= i2c-amd8111.o
- obj-$(CONFIG_I2C_CHT_WC)	+= i2c-cht-wc.o
- obj-$(CONFIG_I2C_I801)		+= i2c-i801.o
- obj-$(CONFIG_I2C_ISCH)		+= i2c-isch.o
- obj-$(CONFIG_I2C_ISMT)		+= i2c-ismt.o
- obj-$(CONFIG_I2C_NFORCE2)	+= i2c-nforce2.o
--obj-$(CONFIG_I2C_NFORCE2_S4985)	+= i2c-nforce2-s4985.o
- obj-$(CONFIG_I2C_NVIDIA_GPU)	+= i2c-nvidia-gpu.o
- obj-$(CONFIG_I2C_PIIX4)		+= i2c-piix4.o
- obj-$(CONFIG_I2C_SIS5595)	+= i2c-sis5595.o
---- linux-6.6-rc3.orig/drivers/i2c/busses/i2c-amd756-s4882.c
-+++ /dev/null
-@@ -1,245 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * i2c-amd756-s4882.c - i2c-amd756 extras for the Tyan S4882 motherboard
-- *
-- * Copyright (C) 2004, 2008 Jean Delvare <jdelvare@suse.de>
-- */
-- 
--/*
-- * We select the channels by sending commands to the Philips
-- * PCA9556 chip at I2C address 0x18. The main adapter is used for
-- * the non-multiplexed part of the bus, and 4 virtual adapters
-- * are defined for the multiplexed addresses: 0x50-0x53 (memory
-- * module EEPROM) located on channels 1-4, and 0x4c (LM63)
-- * located on multiplexed channels 0 and 5-7. We define one
-- * virtual adapter per CPU, which corresponds to two multiplexed
-- * channels:
-- *   CPU0: virtual adapter 1, channels 1 and 0
-- *   CPU1: virtual adapter 2, channels 2 and 5
-- *   CPU2: virtual adapter 3, channels 3 and 6
-- *   CPU3: virtual adapter 4, channels 4 and 7
-- */
--
--#include <linux/module.h>
--#include <linux/kernel.h>
--#include <linux/slab.h>
--#include <linux/init.h>
--#include <linux/i2c.h>
--#include <linux/mutex.h>
--
--extern struct i2c_adapter amd756_smbus;
--
--static struct i2c_adapter *s4882_adapter;
--static struct i2c_algorithm *s4882_algo;
--
--/* Wrapper access functions for multiplexed SMBus */
--static DEFINE_MUTEX(amd756_lock);
--
--static s32 amd756_access_virt0(struct i2c_adapter * adap, u16 addr,
--			       unsigned short flags, char read_write,
--			       u8 command, int size,
--			       union i2c_smbus_data * data)
--{
--	int error;
--
--	/* We exclude the multiplexed addresses */
--	if (addr == 0x4c || (addr & 0xfc) == 0x50 || (addr & 0xfc) == 0x30
--	 || addr == 0x18)
--		return -ENXIO;
--
--	mutex_lock(&amd756_lock);
--
--	error = amd756_smbus.algo->smbus_xfer(adap, addr, flags, read_write,
--					      command, size, data);
--
--	mutex_unlock(&amd756_lock);
--
--	return error;
--}
--
--/* We remember the last used channels combination so as to only switch
--   channels when it is really needed. This greatly reduces the SMBus
--   overhead, but also assumes that nobody will be writing to the PCA9556
--   in our back. */
--static u8 last_channels;
--
--static inline s32 amd756_access_channel(struct i2c_adapter * adap, u16 addr,
--					unsigned short flags, char read_write,
--					u8 command, int size,
--					union i2c_smbus_data * data,
--					u8 channels)
--{
--	int error;
--
--	/* We exclude the non-multiplexed addresses */
--	if (addr != 0x4c && (addr & 0xfc) != 0x50 && (addr & 0xfc) != 0x30)
--		return -ENXIO;
--
--	mutex_lock(&amd756_lock);
--
--	if (last_channels != channels) {
--		union i2c_smbus_data mplxdata;
--		mplxdata.byte = channels;
--
--		error = amd756_smbus.algo->smbus_xfer(adap, 0x18, 0,
--						      I2C_SMBUS_WRITE, 0x01,
--						      I2C_SMBUS_BYTE_DATA,
--						      &mplxdata);
--		if (error)
--			goto UNLOCK;
--		last_channels = channels;
--	}
--	error = amd756_smbus.algo->smbus_xfer(adap, addr, flags, read_write,
--					      command, size, data);
--
--UNLOCK:
--	mutex_unlock(&amd756_lock);
--	return error;
--}
--
--static s32 amd756_access_virt1(struct i2c_adapter * adap, u16 addr,
--			       unsigned short flags, char read_write,
--			       u8 command, int size,
--			       union i2c_smbus_data * data)
--{
--	/* CPU0: channels 1 and 0 enabled */
--	return amd756_access_channel(adap, addr, flags, read_write, command,
--				     size, data, 0x03);
--}
--
--static s32 amd756_access_virt2(struct i2c_adapter * adap, u16 addr,
--			       unsigned short flags, char read_write,
--			       u8 command, int size,
--			       union i2c_smbus_data * data)
--{
--	/* CPU1: channels 2 and 5 enabled */
--	return amd756_access_channel(adap, addr, flags, read_write, command,
--				     size, data, 0x24);
--}
--
--static s32 amd756_access_virt3(struct i2c_adapter * adap, u16 addr,
--			       unsigned short flags, char read_write,
--			       u8 command, int size,
--			       union i2c_smbus_data * data)
--{
--	/* CPU2: channels 3 and 6 enabled */
--	return amd756_access_channel(adap, addr, flags, read_write, command,
--				     size, data, 0x48);
--}
--
--static s32 amd756_access_virt4(struct i2c_adapter * adap, u16 addr,
--			       unsigned short flags, char read_write,
--			       u8 command, int size,
--			       union i2c_smbus_data * data)
--{
--	/* CPU3: channels 4 and 7 enabled */
--	return amd756_access_channel(adap, addr, flags, read_write, command,
--				     size, data, 0x90);
--}
--
--static int __init amd756_s4882_init(void)
--{
--	int i, error;
--	union i2c_smbus_data ioconfig;
--
--	if (!amd756_smbus.dev.parent)
--		return -ENODEV;
--
--	/* Configure the PCA9556 multiplexer */
--	ioconfig.byte = 0x00; /* All I/O to output mode */
--	error = i2c_smbus_xfer(&amd756_smbus, 0x18, 0, I2C_SMBUS_WRITE, 0x03,
--			       I2C_SMBUS_BYTE_DATA, &ioconfig);
--	if (error) {
--		dev_err(&amd756_smbus.dev, "PCA9556 configuration failed\n");
--		error = -EIO;
--		goto ERROR0;
--	}
--
--	/* Unregister physical bus */
--	i2c_del_adapter(&amd756_smbus);
--
--	printk(KERN_INFO "Enabling SMBus multiplexing for Tyan S4882\n");
--	/* Define the 5 virtual adapters and algorithms structures */
--	if (!(s4882_adapter = kcalloc(5, sizeof(struct i2c_adapter),
--				      GFP_KERNEL))) {
--		error = -ENOMEM;
--		goto ERROR1;
--	}
--	if (!(s4882_algo = kcalloc(5, sizeof(struct i2c_algorithm),
--				   GFP_KERNEL))) {
--		error = -ENOMEM;
--		goto ERROR2;
--	}
--
--	/* Fill in the new structures */
--	s4882_algo[0] = *(amd756_smbus.algo);
--	s4882_algo[0].smbus_xfer = amd756_access_virt0;
--	s4882_adapter[0] = amd756_smbus;
--	s4882_adapter[0].algo = s4882_algo;
--	s4882_adapter[0].dev.parent = amd756_smbus.dev.parent;
--	for (i = 1; i < 5; i++) {
--		s4882_algo[i] = *(amd756_smbus.algo);
--		s4882_adapter[i] = amd756_smbus;
--		snprintf(s4882_adapter[i].name, sizeof(s4882_adapter[i].name),
--			 "SMBus 8111 adapter (CPU%d)", i-1);
--		s4882_adapter[i].algo = s4882_algo+i;
--		s4882_adapter[i].dev.parent = amd756_smbus.dev.parent;
--	}
--	s4882_algo[1].smbus_xfer = amd756_access_virt1;
--	s4882_algo[2].smbus_xfer = amd756_access_virt2;
--	s4882_algo[3].smbus_xfer = amd756_access_virt3;
--	s4882_algo[4].smbus_xfer = amd756_access_virt4;
--
--	/* Register virtual adapters */
--	for (i = 0; i < 5; i++) {
--		error = i2c_add_adapter(s4882_adapter+i);
--		if (error) {
--			printk(KERN_ERR "i2c-amd756-s4882: "
--			       "Virtual adapter %d registration "
--			       "failed, module not inserted\n", i);
--			for (i--; i >= 0; i--)
--				i2c_del_adapter(s4882_adapter+i);
--			goto ERROR3;
--		}
--	}
--
--	return 0;
--
--ERROR3:
--	kfree(s4882_algo);
--	s4882_algo = NULL;
--ERROR2:
--	kfree(s4882_adapter);
--	s4882_adapter = NULL;
--ERROR1:
--	/* Restore physical bus */
--	i2c_add_adapter(&amd756_smbus);
--ERROR0:
--	return error;
--}
--
--static void __exit amd756_s4882_exit(void)
--{
--	if (s4882_adapter) {
--		int i;
--
--		for (i = 0; i < 5; i++)
--			i2c_del_adapter(s4882_adapter+i);
--		kfree(s4882_adapter);
--		s4882_adapter = NULL;
--	}
--	kfree(s4882_algo);
--	s4882_algo = NULL;
--
--	/* Restore physical bus */
--	if (i2c_add_adapter(&amd756_smbus))
--		printk(KERN_ERR "i2c-amd756-s4882: "
--		       "Physical bus restoration failed\n");
--}
--
--MODULE_AUTHOR("Jean Delvare <jdelvare@suse.de>");
--MODULE_DESCRIPTION("S4882 SMBus multiplexing");
--MODULE_LICENSE("GPL");
--
--module_init(amd756_s4882_init);
--module_exit(amd756_s4882_exit);
---- linux-6.6-rc3.orig/drivers/i2c/busses/i2c-amd756.c
-+++ linux-6.6-rc3/drivers/i2c/busses/i2c-amd756.c
-@@ -283,7 +283,7 @@ static const struct i2c_algorithm smbus_
- 	.functionality	= amd756_func,
- };
- 
--struct i2c_adapter amd756_smbus = {
-+static struct i2c_adapter amd756_smbus = {
- 	.owner		= THIS_MODULE,
- 	.class          = I2C_CLASS_HWMON | I2C_CLASS_SPD,
- 	.algo		= &smbus_algorithm,
-@@ -398,5 +398,3 @@ module_pci_driver(amd756_driver);
- MODULE_AUTHOR("Merlin Hughes <merlin@merlin.org>");
- MODULE_DESCRIPTION("AMD756/766/768/8111 and nVidia nForce SMBus driver");
- MODULE_LICENSE("GPL");
--
--EXPORT_SYMBOL(amd756_smbus);
---- linux-6.6-rc3.orig/drivers/i2c/busses/i2c-nforce2-s4985.c
-+++ /dev/null
-@@ -1,240 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * i2c-nforce2-s4985.c - i2c-nforce2 extras for the Tyan S4985 motherboard
-- *
-- * Copyright (C) 2008 Jean Delvare <jdelvare@suse.de>
-- */
--
--/*
-- * We select the channels by sending commands to the Philips
-- * PCA9556 chip at I2C address 0x18. The main adapter is used for
-- * the non-multiplexed part of the bus, and 4 virtual adapters
-- * are defined for the multiplexed addresses: 0x50-0x53 (memory
-- * module EEPROM) located on channels 1-4. We define one virtual
-- * adapter per CPU, which corresponds to one multiplexed channel:
-- *   CPU0: virtual adapter 1, channel 1
-- *   CPU1: virtual adapter 2, channel 2
-- *   CPU2: virtual adapter 3, channel 3
-- *   CPU3: virtual adapter 4, channel 4
-- */
--
--#include <linux/module.h>
--#include <linux/kernel.h>
--#include <linux/slab.h>
--#include <linux/init.h>
--#include <linux/i2c.h>
--#include <linux/mutex.h>
--
--extern struct i2c_adapter *nforce2_smbus;
--
--static struct i2c_adapter *s4985_adapter;
--static struct i2c_algorithm *s4985_algo;
--
--/* Wrapper access functions for multiplexed SMBus */
--static DEFINE_MUTEX(nforce2_lock);
--
--static s32 nforce2_access_virt0(struct i2c_adapter *adap, u16 addr,
--				unsigned short flags, char read_write,
--				u8 command, int size,
--				union i2c_smbus_data *data)
--{
--	int error;
--
--	/* We exclude the multiplexed addresses */
--	if ((addr & 0xfc) == 0x50 || (addr & 0xfc) == 0x30
--	 || addr == 0x18)
--		return -ENXIO;
--
--	mutex_lock(&nforce2_lock);
--	error = nforce2_smbus->algo->smbus_xfer(adap, addr, flags, read_write,
--						command, size, data);
--	mutex_unlock(&nforce2_lock);
--
--	return error;
--}
--
--/* We remember the last used channels combination so as to only switch
--   channels when it is really needed. This greatly reduces the SMBus
--   overhead, but also assumes that nobody will be writing to the PCA9556
--   in our back. */
--static u8 last_channels;
--
--static inline s32 nforce2_access_channel(struct i2c_adapter *adap, u16 addr,
--					 unsigned short flags, char read_write,
--					 u8 command, int size,
--					 union i2c_smbus_data *data,
--					 u8 channels)
--{
--	int error;
--
--	/* We exclude the non-multiplexed addresses */
--	if ((addr & 0xfc) != 0x50 && (addr & 0xfc) != 0x30)
--		return -ENXIO;
--
--	mutex_lock(&nforce2_lock);
--	if (last_channels != channels) {
--		union i2c_smbus_data mplxdata;
--		mplxdata.byte = channels;
--
--		error = nforce2_smbus->algo->smbus_xfer(adap, 0x18, 0,
--							I2C_SMBUS_WRITE, 0x01,
--							I2C_SMBUS_BYTE_DATA,
--							&mplxdata);
--		if (error)
--			goto UNLOCK;
--		last_channels = channels;
--	}
--	error = nforce2_smbus->algo->smbus_xfer(adap, addr, flags, read_write,
--						command, size, data);
--
--UNLOCK:
--	mutex_unlock(&nforce2_lock);
--	return error;
--}
--
--static s32 nforce2_access_virt1(struct i2c_adapter *adap, u16 addr,
--				unsigned short flags, char read_write,
--				u8 command, int size,
--				union i2c_smbus_data *data)
--{
--	/* CPU0: channel 1 enabled */
--	return nforce2_access_channel(adap, addr, flags, read_write, command,
--				      size, data, 0x02);
--}
--
--static s32 nforce2_access_virt2(struct i2c_adapter *adap, u16 addr,
--				unsigned short flags, char read_write,
--				u8 command, int size,
--				union i2c_smbus_data *data)
--{
--	/* CPU1: channel 2 enabled */
--	return nforce2_access_channel(adap, addr, flags, read_write, command,
--				      size, data, 0x04);
--}
--
--static s32 nforce2_access_virt3(struct i2c_adapter *adap, u16 addr,
--				unsigned short flags, char read_write,
--				u8 command, int size,
--				union i2c_smbus_data *data)
--{
--	/* CPU2: channel 3 enabled */
--	return nforce2_access_channel(adap, addr, flags, read_write, command,
--				      size, data, 0x08);
--}
--
--static s32 nforce2_access_virt4(struct i2c_adapter *adap, u16 addr,
--				unsigned short flags, char read_write,
--				u8 command, int size,
--				union i2c_smbus_data *data)
--{
--	/* CPU3: channel 4 enabled */
--	return nforce2_access_channel(adap, addr, flags, read_write, command,
--				      size, data, 0x10);
--}
--
--static int __init nforce2_s4985_init(void)
--{
--	int i, error;
--	union i2c_smbus_data ioconfig;
--
--	if (!nforce2_smbus)
--		return -ENODEV;
--
--	/* Configure the PCA9556 multiplexer */
--	ioconfig.byte = 0x00; /* All I/O to output mode */
--	error = i2c_smbus_xfer(nforce2_smbus, 0x18, 0, I2C_SMBUS_WRITE, 0x03,
--			       I2C_SMBUS_BYTE_DATA, &ioconfig);
--	if (error) {
--		dev_err(&nforce2_smbus->dev, "PCA9556 configuration failed\n");
--		error = -EIO;
--		goto ERROR0;
--	}
--
--	/* Unregister physical bus */
--	i2c_del_adapter(nforce2_smbus);
--
--	printk(KERN_INFO "Enabling SMBus multiplexing for Tyan S4985\n");
--	/* Define the 5 virtual adapters and algorithms structures */
--	s4985_adapter = kcalloc(5, sizeof(struct i2c_adapter), GFP_KERNEL);
--	if (!s4985_adapter) {
--		error = -ENOMEM;
--		goto ERROR1;
--	}
--	s4985_algo = kcalloc(5, sizeof(struct i2c_algorithm), GFP_KERNEL);
--	if (!s4985_algo) {
--		error = -ENOMEM;
--		goto ERROR2;
--	}
--
--	/* Fill in the new structures */
--	s4985_algo[0] = *(nforce2_smbus->algo);
--	s4985_algo[0].smbus_xfer = nforce2_access_virt0;
--	s4985_adapter[0] = *nforce2_smbus;
--	s4985_adapter[0].algo = s4985_algo;
--	s4985_adapter[0].dev.parent = nforce2_smbus->dev.parent;
--	for (i = 1; i < 5; i++) {
--		s4985_algo[i] = *(nforce2_smbus->algo);
--		s4985_adapter[i] = *nforce2_smbus;
--		snprintf(s4985_adapter[i].name, sizeof(s4985_adapter[i].name),
--			 "SMBus nForce2 adapter (CPU%d)", i - 1);
--		s4985_adapter[i].algo = s4985_algo + i;
--		s4985_adapter[i].dev.parent = nforce2_smbus->dev.parent;
--	}
--	s4985_algo[1].smbus_xfer = nforce2_access_virt1;
--	s4985_algo[2].smbus_xfer = nforce2_access_virt2;
--	s4985_algo[3].smbus_xfer = nforce2_access_virt3;
--	s4985_algo[4].smbus_xfer = nforce2_access_virt4;
--
--	/* Register virtual adapters */
--	for (i = 0; i < 5; i++) {
--		error = i2c_add_adapter(s4985_adapter + i);
--		if (error) {
--			printk(KERN_ERR "i2c-nforce2-s4985: "
--			       "Virtual adapter %d registration "
--			       "failed, module not inserted\n", i);
--			for (i--; i >= 0; i--)
--				i2c_del_adapter(s4985_adapter + i);
--			goto ERROR3;
--		}
--	}
--
--	return 0;
--
--ERROR3:
--	kfree(s4985_algo);
--	s4985_algo = NULL;
--ERROR2:
--	kfree(s4985_adapter);
--	s4985_adapter = NULL;
--ERROR1:
--	/* Restore physical bus */
--	i2c_add_adapter(nforce2_smbus);
--ERROR0:
--	return error;
--}
--
--static void __exit nforce2_s4985_exit(void)
--{
--	if (s4985_adapter) {
--		int i;
--
--		for (i = 0; i < 5; i++)
--			i2c_del_adapter(s4985_adapter+i);
--		kfree(s4985_adapter);
--		s4985_adapter = NULL;
--	}
--	kfree(s4985_algo);
--	s4985_algo = NULL;
--
--	/* Restore physical bus */
--	if (i2c_add_adapter(nforce2_smbus))
--		printk(KERN_ERR "i2c-nforce2-s4985: "
--		       "Physical bus restoration failed\n");
--}
--
--MODULE_AUTHOR("Jean Delvare <jdelvare@suse.de>");
--MODULE_DESCRIPTION("S4985 SMBus multiplexing");
--MODULE_LICENSE("GPL");
--
--module_init(nforce2_s4985_init);
--module_exit(nforce2_s4985_exit);
---- linux-6.6-rc3.orig/drivers/i2c/busses/i2c-nforce2.c
-+++ linux-6.6-rc3/drivers/i2c/busses/i2c-nforce2.c
-@@ -117,20 +117,6 @@ static const struct dmi_system_id nforce
- 
- static struct pci_driver nforce2_driver;
- 
--/* For multiplexing support, we need a global reference to the 1st
--   SMBus channel */
--#if IS_ENABLED(CONFIG_I2C_NFORCE2_S4985)
--struct i2c_adapter *nforce2_smbus;
--EXPORT_SYMBOL_GPL(nforce2_smbus);
--
--static void nforce2_set_reference(struct i2c_adapter *adap)
--{
--	nforce2_smbus = adap;
--}
--#else
--static inline void nforce2_set_reference(struct i2c_adapter *adap) { }
--#endif
--
- static void nforce2_abort(struct i2c_adapter *adap)
- {
- 	struct nforce2_smbus *smbus = adap->algo_data;
-@@ -411,7 +397,6 @@ static int nforce2_probe(struct pci_dev
- 		return -ENODEV;
- 	}
- 
--	nforce2_set_reference(&smbuses[0].adapter);
- 	return 0;
- }
- 
-@@ -420,7 +405,6 @@ static void nforce2_remove(struct pci_de
- {
- 	struct nforce2_smbus *smbuses = pci_get_drvdata(dev);
- 
--	nforce2_set_reference(NULL);
- 	if (smbuses[0].base) {
- 		i2c_del_adapter(&smbuses[0].adapter);
- 		release_region(smbuses[0].base, smbuses[0].size);
-
-
--- 
-Jean Delvare
-SUSE L3 Support
+	Regards
+		Oliver
