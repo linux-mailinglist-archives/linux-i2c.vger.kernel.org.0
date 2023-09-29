@@ -2,114 +2,115 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6757F7B2E56
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Sep 2023 10:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BC17B2F06
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Sep 2023 11:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232613AbjI2IsT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 29 Sep 2023 04:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S232915AbjI2JQF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 29 Sep 2023 05:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbjI2IsS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Sep 2023 04:48:18 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DD3AC;
-        Fri, 29 Sep 2023 01:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695977296; x=1727513296;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=3M7aFFgj+OG/B4ua2iQPHy8g+N3GH2j+D8XnoTVg0ek=;
-  b=Zv2TUz9IjnJ0nLmVdkHDEt2VUyzYgHliYu+IjSjGSW0OtZPG6RLznTHh
-   gsBKdiaHJPFNIBf9ZBv12BjuFZjhWI4VbGQi2yRUO/ZvyVcHd8qiA0UJ6
-   E4+vTKDDtMDlOxa6CuGhfMLJXwebNVQUM5/N6QNuJQF0Y4/H8YSWbUVT5
-   Zn69Jj/NzQPb9auLG8SR26d0PbAkph62ImK4Po/2N42OuwrgqRuFVwL6+
-   xct5AtO/+C/jHxvvEziTGhJjA6FSkZnn3AmhgMw9XaK7SwVWkkQpusqjX
-   5VX54tiYZhyzzusp1vy/ESjJJ4md+VY+gaJm8LVT6+305LjU7oA2BL5Ml
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="448753071"
-X-IronPort-AV: E=Sophos;i="6.03,186,1694761200"; 
-   d="scan'208";a="448753071"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 01:48:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="1080861194"
-X-IronPort-AV: E=Sophos;i="6.03,186,1694761200"; 
-   d="scan'208";a="1080861194"
-Received: from mylly.fi.intel.com (HELO [10.237.72.66]) ([10.237.72.66])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Sep 2023 01:48:11 -0700
-Message-ID: <1d56ceef-6573-43b9-a050-124c341a0698@linux.intel.com>
-Date:   Fri, 29 Sep 2023 11:48:10 +0300
+        with ESMTP id S232887AbjI2JQE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Sep 2023 05:16:04 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFA11A5
+        for <linux-i2c@vger.kernel.org>; Fri, 29 Sep 2023 02:16:02 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB715C433C7;
+        Fri, 29 Sep 2023 09:16:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695978962;
+        bh=qhu5luz2FGDlTYdy7sJEYA2TUjY8CqVYAQq3G5aL6bs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p8z4b+R8yAUxGCBcqpY4DFd4gJefp+aEkGhXhA1a0KPaIhsnRu2PSgkQluDti6rSk
+         3qaXiTNEMcTDMGoX6kOjbNT/eZwpiI3KSdqJuDx7XNMQKxAjOdz+D+Nv1KfiU6LgWN
+         O+ZgbkSRmBkdvDMJKayZXyLVUjf/GicahnhdO0LHp1uXUB8ThDmb2W8hUxncVnuT1+
+         aaA/uMZseA8v1XRkGWQJ4oelxiJZzzgqmGxNBCLEXRql2WxtoK4tt3/5oGn31blmpC
+         de+lp9jp+jMJBDh2BAUctUmfbsU3jZhg6x9JgI0gtCHymE8a3CIj8ykpBltrw1/7S4
+         dTJAgID/ANN6Q==
+Date:   Fri, 29 Sep 2023 11:15:59 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: core: Fix possible memleak in
+ i2c_new_client_device()
+Message-ID: <ZRaVz4pj8zko8x7W@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-i2c@vger.kernel.org
+References: <20221124085448.3620240-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] i2c: designware: Fix corrupted memory seen in the ISR
-To:     Wolfram Sang <wsa@kernel.org>,
-        Jan Bottorff <janb@os.amperecomputing.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Yann Sionneau <ysionneau@kalrayinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Yann Sionneau <yann@sionneau.net>,
-        Will Deacon <will@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ZQl1zwVkx9n2MPvr@shikoro>
- <da400d3e-a357-1ae8-cb92-728cc4974b67@kalrayinc.com>
- <ZQm1UyZ0g7KxRW3a@arm.com>
- <cde7e2fc-2e13-4b82-98b3-3d3a52c4c185@os.amperecomputing.com>
- <p7wl7fk4cdyhvw2mfsa6sfc7dhfls3foplmzwj6pzstargt2oh@33zuuznup2gq>
- <ZQq2cT+/QCenR5gx@shikoro>
- <ba6d4378-b646-4514-3a45-4b6c951fbb9c@kalrayinc.com>
- <9219ad29-b9a3-4f07-81b5-43b4b6d9d178@os.amperecomputing.com>
- <d65lwrkji3rvw6r4jdcumo4zu3hbu6zpv6xq73hw6hcshvhtkw@jvuohb3f3loo>
- <3a305e74-2235-47ab-8564-0c594f24dc0a@os.amperecomputing.com>
- <ZRSEntqne/1y1ozq@shikoro>
-Content-Language: en-US
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <ZRSEntqne/1y1ozq@shikoro>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5hxmEnCosLPTBQZ5"
+Content-Disposition: inline
+In-Reply-To: <20221124085448.3620240-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 9/27/23 22:38, Wolfram Sang wrote:
-> 
->> So my next question, is the change to dw_reg_write something that I should
->> write and submit, or should someone else submit something more generalized,
->> like option 2 above? I don't own the i2c driver, I'm just trying to fix one
->> issue on one processor with minimal risk of breaking something. I don't have
->> the broader view of what's optimal for the whole DesignWare i2c driver. I
->> also don't have any way to test changes on other models of processors.
-> 
-> Well, I guess this is a question for the designware maintainers: do we
-> want this one conversion from *_relaxed to non-relaxed. Or are we
-> playing safe by using non-relaxed all the time. I would suggest the
-> latter because the drivers I look after hardly write registers in a hot
-> path (and not many of them at a time). But you guys know your driver
-> better...
-> 
-Well I don't have any preference (read enough knowledge) either here and 
-I hardly think performance becomes issue in any configuration.
 
-Not a showstopper to this fix nor necessarily need to cover either but 
-one another memory barrier case might be in i2c-slave flows:
+--5hxmEnCosLPTBQZ5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-1. I2C bus read/write from another host
-2. Interrupt to i2c-designware IP
-    i2c-designware-slave.c: i2c_dw_isr_slave()
-    i2c-core-slave.c: i2c_slave_event()
-    -> irq handler goes to slave backend like i2c-slave-eeprom
-    i2c-slave-eeprom.c: i2c_slave_eeprom_slave_cb()
-3. Shared data between irq handler and process context
-    struct eeprom_data is accessed both from irq handler via 
-i2c_slave_eeprom_slave_cb() and process context via sysfs node handlers 
-i2c_slave_eeprom_bin_read() and i2c_slave_eeprom_bin_write()
+On Thu, Nov 24, 2022 at 04:54:48PM +0800, Yang Yingliang wrote:
+> I got memory leak as follows when doing fault injection test:
+>=20
+> unreferenced object 0xffff888014aec078 (size 8):
+>   comm "xrun", pid 356, jiffies 4294910619 (age 16.332s)
+>   hex dump (first 8 bytes):
+>     31 2d 30 30 31 63 00 00                          1-001c..
+>   backtrace:
+>     [<00000000eb56c0a9>] __kmalloc_track_caller+0x1a6/0x300
+>     [<000000000b220ea3>] kvasprintf+0xad/0x140
+>     [<00000000b83203e5>] kvasprintf_const+0x62/0x190
+>     [<000000002a5eab37>] kobject_set_name_vargs+0x56/0x140
+>     [<00000000300ac279>] dev_set_name+0xb0/0xe0
+>     [<00000000b66ebd6f>] i2c_new_client_device+0x7e4/0x9a0
+>=20
+> If device_register() returns error in i2c_new_client_device(),
+> the name allocated by i2c_dev_set_name() need be freed. As
+> comment of device_register() says, it should use put_device()
+> to give up the reference in the error path.
+>=20
+> Moving i2c_dev_set_name() to front of device_register(), so
+> it's managed by device core, then call put_device(), when the
+> refcount is 0, the name will be freed in kobject_cleanup() and
+> the 'client' will be freed in i2c_client_dev_release().
+>=20
+> Because the 'client' is freed by calling put_device(), so it
+> don't need goto error label, release other resources before
+> put_device() and return directly.
+>=20
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+
+The report seems correct to me, yet the solution is copying code a tad
+too much IMO. I'll send another approach I'd suggest to spark some
+discussion. Thanks for the report in any case!
+
+
+--5hxmEnCosLPTBQZ5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUWlcoACgkQFA3kzBSg
+KbYX7BAAikOoCf8YzRZyJ5yejpcT05c194QGK07EyVs7YaxavveY+O+raPte2QIO
+8dJ4XyXm7q9XL0SDmgbGhQdsHF0OVRklRUtQHMMRIp4avWB8KYB6wiqiN+Ju/wQD
+NYiaRaSpuPDTjaKaNS8dQ//CPNTQuF/Ms2uPv53KyG4Sr2Gz4QCqCVWqXE8Uy9vi
+1/IQ3ZODEKukgOFhXNU/ek9uvCEAy6mo0rxuPI7IhsJXzF+kHIC+hUrOTEebGCl4
+6A0T0UVAPdNwgFLCqOkn2/1r/kkmKTGskpzEdnMOebojBo5cGkk//lCjhUVvlGrq
+t1QUqZ6ErIdkAOggrZCL9otJFcSuQBOEsL+sq57yZVDMwAWfNVSUMHvp94mjyDf+
+cBXAlTs3x0AcJ0oMHuxMbxTgGkGugcX4aN7Zb611FbHbfXB9dY1SegKP0WTopQMY
+CqqJU6Vb2T0iWwdIrsM4QE5SuRDBIGaTQwT4iCDjt2AIcg0PlSiowfBFANH6domd
+k2muF9RmkkwWKR7m7g2g7JU84GzlN3M2OycH9IKnbiv+Df/TgAxTqj+JAm2S6ttw
+kd31bPeDeeOKH3nZKOcL/A9U1tKMJemRTF9/3KtRcTBFaca5zizWV1lLpD7POmXM
+l52I4wYi91hslpJenlB9LfCvh6E3ezeBY1b3fz1DhmNqhz0VnmY=
+=wAAu
+-----END PGP SIGNATURE-----
+
+--5hxmEnCosLPTBQZ5--
