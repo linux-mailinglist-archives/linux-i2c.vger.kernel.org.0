@@ -2,123 +2,171 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C667B3749
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Sep 2023 17:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2651E7B3780
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Sep 2023 18:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbjI2Pw1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 29 Sep 2023 11:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50014 "EHLO
+        id S233112AbjI2QJG (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 29 Sep 2023 12:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233732AbjI2Pw0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Sep 2023 11:52:26 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445C81B1
-        for <linux-i2c@vger.kernel.org>; Fri, 29 Sep 2023 08:52:23 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-406618d0991so4141175e9.2
-        for <linux-i2c@vger.kernel.org>; Fri, 29 Sep 2023 08:52:23 -0700 (PDT)
+        with ESMTP id S233141AbjI2QJG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Sep 2023 12:09:06 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B7D139;
+        Fri, 29 Sep 2023 09:09:04 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-505748580ceso51086e87.3;
+        Fri, 29 Sep 2023 09:09:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696002742; x=1696607542; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IrS+nzD68lxpKLinSVXhSEs3fVhjvM8TXqXpQevNJBs=;
-        b=Sn3Ed8UGv5mdqPn4PA4bd7aTXYIJAfdgINOxGcha/NsfEnt1fkuvcyE8rZZS+K1pCe
-         e98JNYxp+IchJaQCx/+a3/hlB3AV+lkfrw3gWELwGc8y2l4c3AsCPpm7MxoKatG+5t5y
-         GrcQ11DSQSJutU2L5ZevyVdRum0BJvPzzHRyDMKQ6zFWXYKtQg4uRBADgay+fus0fNxy
-         Jqh+aHf5wF3Mm+vgkJXf4OU+6a5DpSCReWfp57vreLtoQiqvZGYVTGuwzK8/xcLDEG8T
-         fQoaaoZfo5mGZx9DpDa8aY9M9cAgwkXqMDU6vPXvx9NSdlGlzD7Q9ZQ+A4A6G3PWV8Dc
-         KOGQ==
+        d=gmail.com; s=20230601; t=1696003742; x=1696608542; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qCN934VhabHlWJc9p5aUyxuMGd+S4iIxKk262wTizkQ=;
+        b=WXYTwTnP+PrU4HfGUzRVWDFTZ4E8jucN5WaPFMPEbJE/x864LMMfU8+gB7fXdUAApQ
+         7a0dLO0jgybjDpkPcljh6kokbDnvqM7cLP6g3/AktUIRkYwr4k7dDI2tuHsc8B/fXgDi
+         2JKup1yxhJU6nKzoCMds8n+2q278kh0ciXW2noYcrnZX0rBOC+Sn8XMLN1GGtKZlKgHq
+         LASv4ceQIVMMdztSJl1YGQ4rEnfKZTQoOj3eo8uRuRUWPdPzxTfSuwU88IHtCx9/Q3+D
+         ivW5bw1VQE/4K5z1v9tyy8rtgpWawGQZimUUW5QPMB1gWq6freupHY0PWspn3iU7zc8R
+         mEMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696002742; x=1696607542;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IrS+nzD68lxpKLinSVXhSEs3fVhjvM8TXqXpQevNJBs=;
-        b=rnh5SyNZwY+CtgLBPLtkKacVRee8XHa4YNd9zEXfnP7mucOOWrJ9rX0nBFxLryYDBu
-         2rn5xwfu+NMPWJz/RnVfz9HQ7fjxgqL6Oql/nxoqy3LoJVhHBAUR2HO9/HTVo2kn3inF
-         951ZfE+b7w7a/UYU8sqURO8QQVmwfdVCQB/SGDFhziwlcn4T08/TO/4/9ExjQ2/WaiJe
-         7JZNQr5gbAWAvMCa2w8fCKgpxmPZRqtH+QgNODIuZ4FQLdcjP070EWna2S/Y3zMG8xLV
-         GPbdrhIHI/ePuNVRnrR52SWh7WAqrUiuUYOgLnYnRf47ZjUv05UNcZRf+6pmX1oF1mBk
-         BJ+Q==
-X-Gm-Message-State: AOJu0YyL3lwTTPL2SQmqh5nfZBBwbNHzG/F3gQ/sYHr7VlXq2ccjOKNw
-        rLn37lt4rXZTjKh/jbLdFepAbA==
-X-Google-Smtp-Source: AGHT+IGWszKKxw4TdMa+hddnqsHXs6q8yNQZry/GtgBQM82ugScktA6LHs1ViFFsbX/SAdDuPBryyw==
-X-Received: by 2002:a7b:c8d1:0:b0:405:3b92:2fed with SMTP id f17-20020a7bc8d1000000b004053b922fedmr3953096wml.26.1696002741647;
-        Fri, 29 Sep 2023 08:52:21 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id y19-20020a1c4b13000000b00405bbfd5d16sm1685765wma.7.2023.09.29.08.52.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Sep 2023 08:52:21 -0700 (PDT)
-Message-ID: <b983e5e4-9a70-4e50-9d32-234cd5c47f66@linaro.org>
-Date:   Fri, 29 Sep 2023 16:52:20 +0100
+        d=1e100.net; s=20230601; t=1696003742; x=1696608542;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qCN934VhabHlWJc9p5aUyxuMGd+S4iIxKk262wTizkQ=;
+        b=YvFdUn6cJIBt6izGvwyG4NYeyN7c5R1qtxgkH3MQb5hPb8hKq4mvcbrwAOzHO3HP9q
+         5GKpo4D927zJhfAJ3SFk0I7EsngLSQu1p6aVCqG3ml0qzQi26WJ0hm9ZWnnJuxTK8fuu
+         60jBQQ6VJpkXBTClTFvUJX6KRViYlq5SkyCZUNt0hOEl9e9tu1b22keZqH854621GZEO
+         Rycuoo9BxwxB8C6ogohIQi3HiQ/XZwU4PIxWHaWmynJ6s4lpz++/WOGNjUbl4f14U/wO
+         WotVbV+6yVOnzm+MwDomPeVg4HcKqdiiqY9h8L75BvfB8br0PpXfmr/tc7WTkjSSCEhU
+         AT0g==
+X-Gm-Message-State: AOJu0Yx4nbe4s4EaMxg+O+LTdcz22y9xMP4BOv80YkP3A99nPCg2mi6D
+        RIeLrqJWCFp/9IqzveqqGmU=
+X-Google-Smtp-Source: AGHT+IHOnFq1zeqSSK3P/A5O+MTaHM4TSDzr6YY7Q+M2Qa7yO9OEpAsyizPdPF7tKw/bdEsCGEwhIQ==
+X-Received: by 2002:a19:3817:0:b0:4ff:70d2:4512 with SMTP id f23-20020a193817000000b004ff70d24512mr3820036lfa.23.1696003741534;
+        Fri, 29 Sep 2023 09:09:01 -0700 (PDT)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id h21-20020a056512221500b00502b04e2722sm1296268lfu.3.2023.09.29.09.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Sep 2023 09:09:00 -0700 (PDT)
+Date:   Fri, 29 Sep 2023 19:08:57 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Tam Nguyen <tamnguyenchi@os.amperecomputing.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        patches@amperecomputing.com, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        jsd@semihalf.com, chuong@os.amperecomputing.com,
+        darren@os.amperecomputing.com, stable@vger.kernel.org
+Subject: Re: [PATCH v1] i2c: designware: Disable TX_EMPTY irq while waiting
+ for block length byte
+Message-ID: <avd7jhwexehgbvi6euzdwvf5zvqqgjx4ozo6uxu2qpmlarvva3@sgkce3rvovwk>
+References: <20230929035356.6435-1-tamnguyenchi@os.amperecomputing.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] arm64: dts: qcom: sc7280: Add Camera Control
- Interface busses
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230929-sc7280-cci-v1-0-16c7d386f062@fairphone.com>
- <20230929-sc7280-cci-v1-2-16c7d386f062@fairphone.com>
- <8dd470e5-ce33-3d33-98f1-e66935ca7b56@linaro.org>
- <1b5bd391-4bb0-44ac-88d1-e326bec4dd7d@nexus-software.ie>
- <acc606a6-c46c-43f5-86e0-84bf876001dd@linaro.org>
- <db5d00b5-5d18-4144-88c2-ff6cfb8c176a@linaro.org>
- <b6f801fc-1d8b-420b-a439-ea0cdd12f7f6@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <b6f801fc-1d8b-420b-a439-ea0cdd12f7f6@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230929035356.6435-1-tamnguyenchi@os.amperecomputing.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 29/09/2023 16:25, Konrad Dybcio wrote:
->> Not actually a required clock for the clock controller.
->>
->> I suspect the same is true for dispcc and videocc though it would also mean the respective drivers would need to switch on <&gcc DISPx_CAMERA_AHB_CLK> or <&gcc GCC_VIDEO_AHB_CLK> prior to accessing registers inside the ip blocks which may not currently be the case.
->>
->> Feels like a bit of a contrary answer but my reading is the GCC_IPBLOCK_AHB_CLK clocks belong in the drivers not the clock controllers..  or at least that's true for sm8250/camcc
-> I believe the idea here would be that registering GCC_IP_AHB_CLK
-> as a pm_clk for the clock controller would make that clock turn
-> on when IPBLOCK_CC is accessed (e.g. when we turn on
-> IPBLOCK_CORE_CLK), so that it doesn't need to be duplicated in
-> each and every end device.
+On Fri, Sep 29, 2023 at 10:53:56AM +0700, Tam Nguyen wrote:
+> During SMBus block data read process, we have seen high interrupt rate
+> because of TX_EMPTY irq status while waiting for block length byte (the
+> first data byte after the address phase). The interrupt handler does not
+> do anything because the internal state is kept as STATUS_WRITE_IN_PROGRESS.
+> Hence, we should disable TX_EMPTY irq until I2C DW receives first data
+> byte from I2C device, then re-enable it.
 > 
-> Konrad
+> It takes 0.789 ms for host to receive data length from slave.
+> Without the patch, i2c_dw_isr is called 99 times by TX_EMPTY interrupt.
+> And it is none after applying the patch.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Chuong Tran <chuong@os.amperecomputing.com>
+> Signed-off-by: Tam Nguyen <tamnguyenchi@os.amperecomputing.com>
+> ---
+>  drivers/i2c/busses/i2c-designware-master.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+> index 55ea91a63382..2152b1f9b27c 100644
+> --- a/drivers/i2c/busses/i2c-designware-master.c
+> +++ b/drivers/i2c/busses/i2c-designware-master.c
+> @@ -462,6 +462,13 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
 
-Yeah I mean I accept the logic - the core AHB clock is effectively gated 
-by the ipblockcc even though they originate from different places in 
-hardware - and _when_ do you want one clock without the other ? Never 
-except at probe() time for the ipblockcc.
+>  		if (buf_len > 0 || flags & I2C_M_RECV_LEN) {
+>  			/* more bytes to be written */
+>  			dev->status |= STATUS_WRITE_IN_PROGRESS;
+> +			/*
+> +			 * In I2C_FUNC_SMBUS_BLOCK_DATA case, there is no data
+> +			 * to send before receiving data length from slave.
+> +			 * Disable TX_EMPTY while waiting for data length byte
+> +			 */
+> +			if (flags & I2C_M_RECV_LEN)
+> +				intr_mask &= ~DW_IC_INTR_TX_EMPTY;
 
-Then again if you can show the clock dependency tree of camera or disp 
-requires GCC_IP_AHB_CLK you could make the argument the dt requires the 
-clock dependency defined in that block.
+Is it possible to reduce the indentations level? Like this:
 
-I'd say we should offline this from Luca's patches tho :) for me anyway 
-the first two are fine.
+		/*
+		 * Because we don't know the buffer length in the
+		 * I2C_FUNC_SMBUS_BLOCK_DATA case, we can't stop the
+		 * transaction here. Also disable the TX_EMPTY IRQ
+		 * while waiting for the data length byte to avoid the
+		 * bogus interrupts flood.
+		 */
+		if (flags & I2C_M_RECV_LEN) {
+  			dev->status |= STATUS_WRITE_IN_PROGRESS;
+			intr_mask &= ~DW_IC_INTR_TX_EMPTY;
+			break;
+		} else if (buf_len > 0) {
+  			/* more bytes to be written */
+  			dev->status |= STATUS_WRITE_IN_PROGRESS;
+			break;
+		} else {
+			dev->status &= ~STATUS_WRITE_IN_PROGRESS;
+		}
 
-Agree #3 is verboten. No new empty nodes.
+>  			break;
+>  		} else
+>  			dev->status &= ~STATUS_WRITE_IN_PROGRESS;
+> @@ -485,6 +492,7 @@ i2c_dw_recv_len(struct dw_i2c_dev *dev, u8 len)
+>  {
+>  	struct i2c_msg *msgs = dev->msgs;
+>  	u32 flags = msgs[dev->msg_read_idx].flags;
 
----
-bod
+> +	u32 intr_mask;
+>  
+>  	/*
+>  	 * Adjust the buffer length and mask the flag
+> @@ -495,6 +503,11 @@ i2c_dw_recv_len(struct dw_i2c_dev *dev, u8 len)
+>  	msgs[dev->msg_read_idx].len = len;
+>  	msgs[dev->msg_read_idx].flags &= ~I2C_M_RECV_LEN;
+>  
+> +	/* Re-enable TX_EMPTY interrupt. */
+> +	regmap_read(dev->map, DW_IC_INTR_MASK, &intr_mask);
+> +	intr_mask |= DW_IC_INTR_TX_EMPTY;
+> +	regmap_write(dev->map, DW_IC_INTR_MASK, intr_mask);
+
+1. What about just:
+	regmap_update_bits(dev->map, DW_IC_INTR_MASK, DW_IC_INTR_TX_EMPTY,
+			   DW_IC_INTR_TX_EMPTY);
+
+2. The in-situ comment is pointless because the statement already
+implies the IRQ re-enabling. I suggest to add more details of _why_
+the IRQ needs to be re-enabled (what is supposed to be done after it's
+re-enabled?).
+
+-Serge(y)
+
+> +
+>  	return len;
+>  }
+>  
+> -- 
+> 2.25.1
+> 
