@@ -2,115 +2,106 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8133D7B2D41
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Sep 2023 09:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BDA7B2D5F
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Sep 2023 10:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbjI2Hvv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 29 Sep 2023 03:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
+        id S232621AbjI2IBP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 29 Sep 2023 04:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbjI2Hvv (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Sep 2023 03:51:51 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2CB1A7;
-        Fri, 29 Sep 2023 00:51:48 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67638C433C9;
-        Fri, 29 Sep 2023 07:51:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695973908;
-        bh=iyIPI73TgggZFG6vSBaLbOmkRMMZ6arLpAx8an8tRTQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BdpwaCcdJvBumfQ3WeJkEtODzou/TDJNph1C0slLKec8ISoKLC312jrmBDstUtuLB
-         246SylgFSd6SlTAg2WqtQ5IL77yglU1a5bIEVTTJLjG2Aj1V5zyUYcG6lX7qabJhfz
-         7oJKZidPmkErVJT6b+YDumossOtwbAiE5gAa8JZs7KRIrfaOV3ZCbvL9oVofoEvIdi
-         a8A2V6+XxeQwyb/SeGLQyiktz0sVMaP3sP3DnwN+eV22U1xcgHREEpD1Ic1fNlveky
-         FcRZhq2xvu2UhZqdiGbeWSQJnNjhISS9s6SdydtAfWWYhubMrdr8EDSPvznP7iLGJw
-         gDmks5yiWvlFQ==
-Date:   Fri, 29 Sep 2023 09:51:44 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Wentong Wu <wentong.wu@intel.com>
-Cc:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
-        oneukum@suse.com, lee@kernel.org, kfting@nuvoton.com,
-        broonie@kernel.org, linus.walleij@linaro.org, hdegoede@redhat.com,
-        maz@kernel.org, brgl@bgdev.pl, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
-        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
-        srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
-Subject: Re: [PATCH v19 2/4] i2c: Add support for Intel LJCA USB I2C driver
-Message-ID: <ZRaCEI5EZuSx5/Lx@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
-        arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
-        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
-        hdegoede@redhat.com, maz@kernel.org, brgl@bgdev.pl,
-        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
-        andi.shyti@linux.intel.com, sakari.ailus@linux.intel.com,
-        bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com,
-        zhifeng.wang@intel.com
-References: <1694890416-14409-1-git-send-email-wentong.wu@intel.com>
- <1694890416-14409-3-git-send-email-wentong.wu@intel.com>
+        with ESMTP id S232813AbjI2IBN (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 29 Sep 2023 04:01:13 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7831AC
+        for <linux-i2c@vger.kernel.org>; Fri, 29 Sep 2023 01:01:09 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-533f193fc8dso12936385a12.2
+        for <linux-i2c@vger.kernel.org>; Fri, 29 Sep 2023 01:01:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1695974467; x=1696579267; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3LpdYfllnzk+eL7xy8/BzP6mgFCymyy/bqU+HI0uTEs=;
+        b=DYibaKNTuzhI3DaWppNe87iHmzawQbHMDzwPSB8yMWo/HJyzuizLS5/u9txgC2X0qf
+         d2YDLd/mGKeCjpo9j8A4bhw6T0eYu8XjvSQMNHuY5+heLiFRxtiuiKafO/UoaQdixNnB
+         ++IIwTCFL5K5L0cJ+zN8wDLfko91B8qlwGctymyqM+4HaqVv0xDb1TE7kEM/3miQYPrw
+         HmRNtLEHaIrgrq7Ag+BPvJwgL6J7Kux4gLPYoH5RvE9Srt3JjjKNVx4CHbQK2TPQ0m1P
+         uzCGZ1V5S1Dk3YSRLkD5WSu5l5ZXhe+vpQpOQqdOtdnYtAQg2LmeQfk2EhV1kvQIHBcY
+         hemw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695974467; x=1696579267;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3LpdYfllnzk+eL7xy8/BzP6mgFCymyy/bqU+HI0uTEs=;
+        b=SjL1DY3PlDzdyuJ+DK9fF96vQwKCKn3i7tkg7BKQh92G40k9arqLNoRqPFgfYtjAkZ
+         hFm7Jds8Xqg4QbbZrflhKM6umPDpqAeHnKPgM0H65RnmFfdbBaI0eO+t8frlkN77xPqv
+         k4O43dvgFQikkf5mibeP2KQDby3T4ogtaXtmL4xkmnC+0Hv/jj2lIP0ljnE30lSTgEPi
+         ckSTB7P0oV5vOrPg4YbqEohnMahR5Tf6lGowS3nntU9oF4gRfALruToqhXwUeJXoXjph
+         q8cz6b43fpWRGbwUinH5SzFKX3ex0S2ilEplvj9uhbSUUCg9V9flvqEFhos6LyXpPv8w
+         qFMQ==
+X-Gm-Message-State: AOJu0YxHsoqELzeApqGmYI51EjsNMfqBjJy3Bev0+UnWWJ6EUZA6xQkM
+        npEudKA4Yv1hy+19eCaRFSp96Q==
+X-Google-Smtp-Source: AGHT+IGFZ/5xxIudkRrtkvptEGoNA89AtAFlEqkjdKJowNCAVNzpC6iHSsAYaP3o5stnPODfbs2fPA==
+X-Received: by 2002:aa7:d58d:0:b0:522:2d1b:5a38 with SMTP id r13-20020aa7d58d000000b005222d1b5a38mr3304809edq.10.1695974467458;
+        Fri, 29 Sep 2023 01:01:07 -0700 (PDT)
+Received: from otso.luca.vpn.lucaweiss.eu (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id j6-20020aa7ca46000000b0052889d090bfsm10825040edt.79.2023.09.29.01.01.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Sep 2023 01:01:07 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH 0/3] Add CCI support for SC7280
+Date:   Fri, 29 Sep 2023 10:01:04 +0200
+Message-Id: <20230929-sc7280-cci-v1-0-16c7d386f062@fairphone.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YCx/WuvTs1tSucgW"
-Content-Disposition: inline
-In-Reply-To: <1694890416-14409-3-git-send-email-wentong.wu@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAECEFmUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2MDSyNL3eJkcyMLA93k5ExdEzNLg9Q0i5REQwNzJaCGgqLUtMwKsGHRsbW
+ 1AEZyCoNcAAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Add the dts nodes for the camera control interface found on the SC7280
+SoC. And then enable the CCI nodes in the Fairphone 5 dts.
 
---YCx/WuvTs1tSucgW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+Luca Weiss (3):
+      dt-bindings: i2c: qcom-cci: Document SC7280 compatible
+      arm64: dts: qcom: sc7280: Add Camera Control Interface busses
+      arm64: dts: qcom: qcm6490-fairphone-fp5: Enable CCI busses
 
+ .../devicetree/bindings/i2c/qcom,i2c-cci.yaml      |   1 +
+ arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts |  20 +++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               | 136 +++++++++++++++++++++
+ 3 files changed, 157 insertions(+)
+---
+base-commit: c858197a69efe69e1607f4854af42ec338e54e96
+change-id: 20230929-sc7280-cci-4690ef8da107
 
-> +static u32 ljca_i2c_func(struct i2c_adapter *adap)
-> +{
-> +	return I2C_FUNC_I2C;
+Best regards,
+-- 
+Luca Weiss <luca.weiss@fairphone.com>
 
-You could use this here to make the driver way more useful:
-
-return I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK);
-
-Except I2C_FUNC_SMBUS_QUICK, emulated SMBUS calls work out of the box.
-
-For I2C_FUNC_SMBUS_QUICK, you need to test zero-length transfers indeed
-('i2cdetect <busnum>' will use it and is a good testcase). Which would
-be good anyway, because if it is not supporting zero-length, we need to
-add an adapter->quirk flag as well.
-
-We could add this incrementally, but it will be better to have this
-correct right away. i2cdetect is a good and simple testcase.
-
-
---YCx/WuvTs1tSucgW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUWghAACgkQFA3kzBSg
-KbY/ixAAowr8Fus+jYGKBQQGDqTL5HX4MCFiPibs8Uq0yRLrqiArAdwf0ERVpM4s
-1mXpq4mA3W2cF8r1p5IrzbIsA1Zo31EmESC3KbqtPyNxvV5yOP6tqXsleODQ1fv3
-eABFlCftQLjgvY6hYSaP7yjmSpQ9xiLhXUNl3CGH43kyKrJ7O4VXHR130NrDpC0q
-YBbalXxrtY1M2zDBDjVznMF401w7KgGw345x93W0XztZG+queVmSKlzXK9ereUZ5
-1jI9rW+2T94PwDEp/H7i2+ACbnIoPfIam/iSkwg+Myr7E7erpUBHy1kWRRbtOgVV
-8Egk78ynig4pRSCplfVx4qQX9D8sC2m2NJrtY6dpWXE2K1Eka6HE+CcfDqbhoXT0
-Ig4geaTomjVDdHR3/48uvu3ArEtM9OJi0EPnmXefhvoEKwmVaBEoTt96HIXYL7YN
-28FYmrlZQFK7W7CK9AegOgQZp15Ghi45syaA8zsA6Qea8p4LEUK7bV+6QCfllwlI
-BQpPVnqd7uqbshDGXFyhLMB/fQkDarM9nOy1Qs4D/Endva9deUz2Jo4V0vYxoDtJ
-igjeYqG+ZEflIbEDa7PmeU6S+SarpC0aqcnOzaYB1T0Ohta8d88Gv5UkfYkmkjTW
-uBTMWcZOfyaqqg7uLNENi0uXPSFWZzmWnieoB6c/cq9iB+j7a0A=
-=+eIl
------END PGP SIGNATURE-----
-
---YCx/WuvTs1tSucgW--
