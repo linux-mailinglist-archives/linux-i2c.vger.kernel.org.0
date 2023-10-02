@@ -2,347 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41377B5162
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Oct 2023 13:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8062C7B5477
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Oct 2023 16:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236835AbjJBLbQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 2 Oct 2023 07:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46674 "EHLO
+        id S236736AbjJBNtV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 2 Oct 2023 09:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236843AbjJBLbG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Oct 2023 07:31:06 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF861722;
-        Mon,  2 Oct 2023 04:30:22 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFAA0C433C7;
-        Mon,  2 Oct 2023 11:30:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1696246221;
-        bh=eLP1rteqSM+m4kcG2++s4zrtyidQsjL6rtGDvWSti3U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s+HOBDlssDRzBEXCbgR4uRQugNkZ99W/gvmGIptbV/M82fhdU4miCrtxMSoYXn2b/
-         wQymwspi8gsR67RgGlB0No/Zspp1Ppwrdwx01FHxnx+N38cgRwbtouXfmlMvr1EJ9G
-         DhkAoxQ2T1MMKOQlipI4+jjJaqmlhDIDr01uId8M=
-Date:   Mon, 2 Oct 2023 13:30:19 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     "arnd@arndb.de" <arnd@arndb.de>,
-        "mka@chromium.org" <mka@chromium.org>,
-        "oneukum@suse.com" <oneukum@suse.com>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "kfting@nuvoton.com" <kfting@nuvoton.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "maz@kernel.org" <maz@kernel.org>, "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>
-Subject: Re: [PATCH v19 1/4] usb: Add support for Intel LJCA device
-Message-ID: <2023100229-immodest-cattishly-2ea1@gregkh>
-References: <1694890416-14409-1-git-send-email-wentong.wu@intel.com>
- <1694890416-14409-2-git-send-email-wentong.wu@intel.com>
- <2023092857-atrium-scared-b624@gregkh>
- <DM6PR11MB4316E03DA12320D62995F15B8DC0A@DM6PR11MB4316.namprd11.prod.outlook.com>
+        with ESMTP id S237500AbjJBNtV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Oct 2023 09:49:21 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2590B4
+        for <linux-i2c@vger.kernel.org>; Mon,  2 Oct 2023 06:49:16 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9a9f139cd94so2208273166b.2
+        for <linux-i2c@vger.kernel.org>; Mon, 02 Oct 2023 06:49:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696254555; x=1696859355; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xty2hjrI0rUBwt6hciFpO785hSratICpEH6GmITOrmY=;
+        b=nPWvEbWi24k3iMR8R3oNeK4iqMOQupp8pTY55DrOmqycxcb3cS2gknlMQH6l6mYjgH
+         N380taxuo6eoP1qiDbofBFRDysilmnuZLYmxbEqJTfn+YLLDpWDFJ19m52M5G5XKREq7
+         DRyGCNrEkA/y57dqd5aHH7zJq3QfJHYHtyJ2183ZanZPMmnvnTa+utcDedebpy7/0st4
+         qqQn5W2CTjfxZI/BxmLIhVT4MoowuXOQfLbEHHPi6DUewrqUtH2xsHKPGmJsoKEkAVhb
+         IueyTikHEN0SyG/+/3M7LnkgKbXTPMyL8cHkSXvFus3NpoYiHeyB9JZ5PwDVZGdBWRbA
+         PVAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696254555; x=1696859355;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xty2hjrI0rUBwt6hciFpO785hSratICpEH6GmITOrmY=;
+        b=ewH2QDpJNzbopYVFn5VDlJgykIwBXC1ku1KoQ+aCQgKiYR4yA2KGFWPxt3HK93u6QI
+         Njenukp6J8B6SzRkLP6IQ8DPQP9TQ5I9gDiLltdY+4TsxL3kGje5z/67P1XxDY4Qapg3
+         wJNvJWCJfxnXh6+aoGirG8OkoXN3fZLtqaB/CrFXldVJpFGZAYHGXtlZKzZTTNLxaerK
+         SxOpF/fXV9ACPd+fjWTS897lWwNf81iXYSOPY1ZmZHYaqlGtZE0YxuIPANtB8S1tD7Yr
+         AC8cBHC2VySN3d6pUqzqxxzZH76wOYGiyXz0bKSUTRa1o3SjErkf+z3fNOgvzWgfpvHK
+         KAlQ==
+X-Gm-Message-State: AOJu0YzK4WSQvSLnYr2CFe/yGcwEFCpTlJKecU9iHaRZTJupAPTdC5hl
+        5pChSQF/ZOHF0GVXgqqpZMCwzQ==
+X-Google-Smtp-Source: AGHT+IETS5hDzPJJ8t+72ICyq1R9SLNSuaLJXKC/3tvPE/8bRhg8x7jridIpwkTKhuCdTCrqni9G+w==
+X-Received: by 2002:a17:907:770d:b0:9ae:5370:81d5 with SMTP id kw13-20020a170907770d00b009ae537081d5mr10086083ejc.41.1696254555327;
+        Mon, 02 Oct 2023 06:49:15 -0700 (PDT)
+Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
+        by smtp.gmail.com with ESMTPSA id h13-20020a170906584d00b00992b8d56f3asm17008467ejs.105.2023.10.02.06.49.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Oct 2023 06:49:14 -0700 (PDT)
+Message-ID: <9f09757e-1ab6-4e5f-8c70-fbb9acd179e8@linaro.org>
+Date:   Mon, 2 Oct 2023 15:49:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB4316E03DA12320D62995F15B8DC0A@DM6PR11MB4316.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: qcom-cci: Document SC7280
+ compatible
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+References: <20231002-sc7280-cci-v2-0-9333fda4612a@fairphone.com>
+ <20231002-sc7280-cci-v2-1-9333fda4612a@fairphone.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231002-sc7280-cci-v2-1-9333fda4612a@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Sep 29, 2023 at 11:31:21AM +0000, Wu, Wentong wrote:
-> > From: Greg KH <gregkh@linuxfoundation.org>
-> > On Sun, Sep 17, 2023 at 02:53:33AM +0800, Wentong Wu wrote:
-> > > +static void ljca_handle_event(struct ljca_adapter *adap,
-> > > +			      struct ljca_msg *header)
-> > > +{
-> > > +	struct ljca_client *client;
-> > > +
-> > > +	list_for_each_entry(client, &adap->client_list, link) {
-> > > +		/*
-> > > +		 * FIXME: currently only GPIO register event callback.
-> > > +		 * firmware message structure should include id when
-> > > +		 * multiple same type clients register event callback.
-> > > +		 */
-> > 
-> > When will this be fixed?
-> > 
-> > If not now, why not?
+On 02/10/2023 08:55, Luca Weiss wrote:
+> Document the compatible for the CCI block found on SC7280 SoC.
 > 
-> Actually this doesn't impact current functionality because only GPIO register
-> event callback, but from coding perspective it should add the id in the message
-> structure. This fix should be done by firmware first, but many products have
-> already been running the firmware, it's not easy to update the firmware.
-> 
-> Can I just remove the 'FIXME' and leave the comment here?
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
 
-If you are never going to fix it, it does not need a FIXME, right?  :)
+Thanks, looks good now.
 
-> > > +		spin_unlock_irqrestore(&adap->lock, flags);
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	ibuf_len = adap->ex_buf_len;
-> > > +	ibuf = adap->ex_buf;
-> > > +
-> > > +	if (ibuf && ibuf_len) {
-> > > +		actual_len = min_t(unsigned int, header->len, ibuf_len);
-> > 
-> > You control both of these types, why aren't they the same type to start with?
-> > Why the force cast?
-> 
-> The len of header is defined by firmware, it should be u8 type. But the ex_buf_len
-> is passed by API users, I don't want users to do the cast if their buffer is large than
-> 256.
 
-Then fix the api to use a u8 as obviously you can not handle more data
-then that for now.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> > > +
-> > > +		/* copy received data to external buffer */
-> > > +		memcpy(ibuf, header->data, actual_len);
-> > > +	}
-> > > +	/* update copied data length */
-> > > +	adap->actual_length = actual_len;
-> > 
-> > Wait, what happens if you don't actually copy the data?
-> 
-> This actual_length is the actual length of data copied to external buffer
-> where is to save the command response. The API callers should check
-> the response length according to the command you passed to this API.
+Best regards,
+Krzysztof
 
-But they aren't checking it as I pointed out elsewhere.
-
-> > > +}
-> > > +
-> > > +static int ljca_send(struct ljca_adapter *adap, u8 type, u8 cmd,
-> > > +		     const u8 *obuf, unsigned int obuf_len, u8 *ibuf,
-> > > +		     unsigned int ibuf_len, bool ack, unsigned long timeout) {
-> > > +	unsigned int msg_len = sizeof(struct ljca_msg) + obuf_len;
-> > > +	struct ljca_msg *header = adap->tx_buf;
-> > > +	unsigned int actual;
-> > > +	int ret = 0;
-> > > +
-> > > +	if (adap->disconnect)
-> > > +		return -ENODEV;
-> > > +
-> > > +	if (msg_len > adap->tx_buf_len)
-> > > +		return -EINVAL;
-> > > +
-> > > +	mutex_lock(&adap->mutex);
-> > > +
-> > > +	scoped_guard(spinlock_irqsave, &adap->lock) {
-> > > +		header->type = type;
-> > > +		header->cmd = cmd;
-> > > +		header->len = obuf_len;
-> > > +		if (obuf)
-> > > +			memcpy(header->data, obuf, obuf_len);
-> > > +		header->flags = LJCA_CMPL_FLAG | (ack ? LJCA_ACK_FLAG : 0);
-> > > +
-> > > +		adap->ex_buf = ibuf;
-> > > +		adap->ex_buf_len = ibuf_len;
-> > > +		adap->actual_length = 0;
-> > > +	}
-> > 
-> > Do you really need a scoped guard when you can not fail out of the block?
-> 
-> The scoped_guard is required by you with "Why not use the functionality in
-> cleanup.h for this lock? Makes this function much simpler." If I understand
-> correctly, so I use the scoped_guard where I can to make things simpler.
-
-But that's not making anything simpler here, cleanup.h works well when
-you have error paths that would be more complex without it.  You do not
-have that here at all now (maybe you did before?)
-
-> > Why do you have both a mutex and spinlock grabed?
-> 
-> The mutex is to avoid command download concurrently
-> 
-> The spinlock is to protect tx_buf and ex_buf, which may be accessed by tx and rx
-> at the same time.
-
-Please document this somewhere.
-
-> > > +	ret = usb_bulk_msg(adap->usb_dev, adap->tx_pipe, header,
-> > > +			   msg_len, &actual, LJCA_WRITE_TIMEOUT_MS);
-> > > +
-> > > +	usb_autopm_put_interface(adap->intf);
-> > > +
-> > > +	if (!ret && ack) {
-> > > +		ret = wait_for_completion_timeout(&adap->cmd_completion,
-> > > +						  timeout);
-> > > +		if (ret < 0) {
-> > > +			goto out;
-> > > +		} if (!ret) {
-> > > +			ret = -ETIMEDOUT;
-> > > +			goto out;
-> > > +		}
-> > > +	}
-> > > +	ret = adap->actual_length;
-> > 
-> > Why are you not verifying that you sent what you wanted to send?
-> 
-> As I said, the actual_length is the actual length of data copied to user buffer instead
-> of the length of what we want to send.
-> 
-> And even for verifying the length of what we want to send, the max length of the
-> message is sizeof(struct ljca_msg) + LJCA_MAX_PACKET_SIZE which is less than
-> the endpoint's max packet size, so I don't check the actual sent length in above
-> usb_bulk_msg().
-
-But you need to.
-
-> > When you call this function, sometimes you check that the function sent the
-> > proper amount of data, but in many places you do not, and you assume that the
-> > full buffer was sent, which is not correct.  So please change _this_ function to
-> > check that you sent the proper amount and then the caller logic will be much
-> > simpler and actually work like you are using it in many places (some places you
-> > got it right, some wrong, which is a HUGE indication that the API is wrong
-> > because you wrote this code, and if you can't get it right...)
-> 
-> As I said, the return value of this function is the response data length instead of
-> sent data length. And in this patch set, every caller has verified if the response
-> length matched with the sent command. 
-
-No, I found many users that did not do this.  Please make the api easy
-to use, right now it's not.
-
-> > > +static int ljca_match_device_ids(struct acpi_device *adev, void
-> > > +*data) {
-> > > +	struct ljca_match_ids_walk_data *wd = data;
-> > > +	const char *uid = acpi_device_uid(adev);
-> > > +
-> > > +	if (acpi_match_device_ids(adev, wd->ids))
-> > > +		return 0;
-> > > +
-> > > +	if (!wd->uid)
-> > > +		goto match;
-> > > +
-> > > +	if (!uid)
-> > > +		uid = "0";
-> > 
-> > Are you sure this is a valid uid to use?  If so, why?  What happens if this gets set
-> > to "0" for multiple ones?  Don't underestimate broken firmware tables, but also
-> > don't paper over problems in ways that will be impossible to notice and can
-> > cause problems.
-> 
-> This actually has been discussed in previous email as bellow: 
-> 
-> some DSDTs have only 1 ACPI companion for the 2 I2C controllers
-> and these don't set a UID at all. On these models only the first I2C
-> controller is used. So if a HID match has no UID use "0" for the HID.
-> assigning the ACPI companion to the first I2C controller.
-> An example device with this setup is the Dell Latitude 9420.
-
-Then document this really really well in the code itself, otherwise it
-looks broken.
-
-> > > +static int ljca_enumerate_clients(struct ljca_adapter *adap) {
-> > > +	int ret;
-> > > +
-> > > +	ret = ljca_reset_handshake(adap);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	ret = ljca_enumerate_gpio(adap);
-> > > +	if (ret)
-> > > +		dev_warn(adap->dev, "enumerate GPIO error\n");
-> > > +
-> > > +	ret = ljca_enumerate_i2c(adap);
-> > > +	if (ret)
-> > > +		dev_warn(adap->dev, "enumerate I2C error\n");
-> > > +
-> > > +	ret = ljca_enumerate_spi(adap);
-> > > +	if (ret)
-> > > +		dev_warn(adap->dev, "enumerate SPI error\n");
-> > 
-> > So none of these "errors" are actually errors:
-> > 
-> > > +	return 0;
-> > 
-> > You return success?  Why?  Are they not actually problems?
-> 
-> This is to be compatible with old version FW which does not support
-> full USB2xxx functions, so it just warn here as this is.
-
-Why do you have to support obsolete and broken firmware?  Can't it be
-updated?
-
-> To make things more clear, I re-structure this as below, hope that
-> helps, thanks
-> 
-> static int ljca_enumerate_clients(struct ljca_adapter *adap)
-> {
-> 	struct ljca_client *client, *next;
-> 	int ret;
-> 
-> 	ret = ljca_reset_handshake(adap);
-> 	if (ret)
-> 		return ret;
-> 
-> 	ret = ljca_enumerate_gpio(adap);
-> 	if (ret)
-> 		goto err_free;
-> 
-> 	ret = ljca_enumerate_i2c(adap);
-> 	if (ret)
-> 		goto err_free;
-> 
-> 	ret = ljca_enumerate_spi(adap);
-> 	if (ret)
-> 		goto err_free;
-> 
-> 	return 0;
-> 
-> err_free:
-> 	adap->disconnect = true;
-> 
-> 	list_for_each_entry_safe_reverse(client, next, &adap->client_list, link) {
-> 		auxiliary_device_delete(&client->auxdev);
-> 		auxiliary_device_uninit(&client->auxdev);
-> 
-> 		list_del_init(&client->link);
-> 		kfree(client);
-> 	}
-> 
-> 	return ret;
-> }
-> 
-> And accordingly, the ljca_enumerate_xxx() has slightly change to cover the
-> unsupported case as below( take spi as an example)
-> 
-> @@ -617,6 +633,11 @@ static int ljca_enumerate_spi(struct ljca_adapter *adap)
->  
->         ret = ljca_send(adap, LJCA_CLIENT_MNG, LJCA_MNG_ENUM_SPI, NULL, 0, buf,
->                         sizeof(buf), true, LJCA_ENUM_CLIENT_TIMEOUT_MS);
-> +       if (ret == -ETIMEDOUT) {
-> +               dev_warn(adap->dev, "doesn't support SPI function\n");
-> +               return 0;
-
-You warn, yet return success?  Again, that doesn't work well as you
-never know if you need to unwind it or not.
-
-Either report an error and handle it, or don't, but what you have here
-looks broken as-is.
-
-thanks,
-
-greg k-h
