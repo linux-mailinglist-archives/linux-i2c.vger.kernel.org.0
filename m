@@ -2,123 +2,207 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9577B4D61
-	for <lists+linux-i2c@lfdr.de>; Mon,  2 Oct 2023 10:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE177B4EB7
+	for <lists+linux-i2c@lfdr.de>; Mon,  2 Oct 2023 11:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbjJBImr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 2 Oct 2023 04:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
+        id S235981AbjJBJLF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 2 Oct 2023 05:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235856AbjJBImq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Oct 2023 04:42:46 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11062A6;
-        Mon,  2 Oct 2023 01:42:42 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3928U3U6019923;
-        Mon, 2 Oct 2023 10:42:16 +0200
+        with ESMTP id S235965AbjJBJLE (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 2 Oct 2023 05:11:04 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7192C83;
+        Mon,  2 Oct 2023 02:11:00 -0700 (PDT)
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3928E3qR022118;
+        Mon, 2 Oct 2023 11:10:14 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding:content-type; s=selector1; bh=ST/+Jyc
-        5mLphX8HujPhPASxpDHMbj5k1JIST9D3Y+J0=; b=e7MCGpg1xbM8W063320H0Km
-        +c9mxJVe+yYjekAoCqVa/0yo1GP22pICas5bVIRYpLY4/C35a82Qs03levH3k9CB
-        Ki3aAftI1Y7RohsjoWfq+a4RvYj0u2YXi3/fQkqQVC6YBXSDS8M99KRRHetJ3SKV
-        OF4iTu1TyYklmUBcAvSKVhyxyMip23v/JkUgjUgavTC6U2+GEuiI++xCwW8+ZA5R
-        wHdenECB6AbDg+PdDtnF3gZxKlyR0OH+gMx+y4Xu2WLcbQk4dqaImnupObBIIVWR
-        teraMW0BxZ2QH51iIvHyS81UXe/aMmK1f+oJ3KFJBV+SLvJgNLRu5X42FFxSC4w=
-        =
+        message-id:date:mime-version:subject:to:cc:references:from
+        :in-reply-to:content-type:content-transfer-encoding; s=
+        selector1; bh=E01OcOCHWhP/6+N5KY2PJxe8Vqf5B2GZBRHXsK7b/ZI=; b=aA
+        egtRg/HZV5z61BlbQRmw/xhKB5/NOvXNbEABAWfThJ4zPTHndz302pa5QVjGM+sM
+        3J8B5ueo8i4iRhw3Pi7HwaWlrkqWsy58TBUitGYwlxhFctZH+p7nxHxKyjmiDHP0
+        gunyUnqWwhUVh8dpDShiYuX54yeB8rEzvnWdNJYWKBCqzgkrTC+zGteyX1b5Pb5j
+        Rf6xRjDsxe+C3FBAdS36hxq9MRrXNisC3EZbZEbT4TzCJ6MY1lbLR6cryXr1bkaw
+        d59gty15vIlgDcfiUoAb0YziosPbln43LGmK99GlHY0DfgQb6OF9EUVre9tgoPIq
+        Z+Sxdr7e5cMYwyIcmVVA==
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3te8t4pbnw-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tew80bymt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Oct 2023 10:42:16 +0200 (MEST)
+        Mon, 02 Oct 2023 11:10:14 +0200 (MEST)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2196A100059;
-        Mon,  2 Oct 2023 10:42:16 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B9C5F100059;
+        Mon,  2 Oct 2023 11:10:12 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 196D420F55A;
-        Mon,  2 Oct 2023 10:42:16 +0200 (CEST)
-Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6252F211F22;
+        Mon,  2 Oct 2023 11:10:12 +0200 (CEST)
+Received: from [10.201.20.32] (10.201.20.32) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 2 Oct
- 2023 10:42:15 +0200
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        M'boumba Cedric Madianga <cedric.madianga@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>
-CC:     Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] i2c: stm32f7: Fix PEC handling in case of SMBUS transfers
-Date:   Mon, 2 Oct 2023 10:42:10 +0200
-Message-ID: <20231002084211.1108940-1-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+ 2023 11:10:10 +0200
+Message-ID: <f3dbcd84-1320-9efb-f715-71b6bb4c7bdb@foss.st.com>
+Date:   Mon, 2 Oct 2023 11:10:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.129.178.213]
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v5 01/11] dt-bindings: document generic access controller
+To:     Rob Herring <robh@kernel.org>
+CC:     <arnd@kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-mmc@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <robh+dt@kernel.org>, <jic23@kernel.org>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux-spi@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <olivier.moysan@foss.st.com>, <linux-media@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Oleksii Moisieiev <oleksii_moisieiev@epam.com>,
+        <edumazet@google.com>, <linux-stm32@st-md-mailman.stormreply.com>,
+        <ulf.hansson@linaro.org>, <richardcochran@gmail.com>,
+        <will@kernel.org>, <linux-crypto@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <arnaud.pouliquen@foss.st.com>, <linux-serial@vger.kernel.org>,
+        <alexandre.torgue@foss.st.com>,
+        Frank Rowand <frowand.list@gmail.com>, <andi.shyti@kernel.org>,
+        <linux-usb@vger.kernel.org>, <peng.fan@oss.nxp.com>,
+        <lee@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <conor+dt@kernel.org>, <herbert@gondor.apana.org.au>,
+        <linux-arm-kernel@lists.infradead.org>, <catalin.marinas@arm.com>,
+        <al.sa-devel@alsa-project.org>, <hugues.fruchet@foss.st.com>,
+        <devicetree@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <mchehab@kernel.org>, <vkoul@kernel.org>,
+        <gregkh@linuxfoundation.org>
+References: <20230929142852.578394-1-gatien.chevallier@foss.st.com>
+ <20230929142852.578394-2-gatien.chevallier@foss.st.com>
+ <169600172184.3601218.2121908606358610119.robh@kernel.org>
+Content-Language: en-US
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <169600172184.3601218.2121908606358610119.robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.20.32]
 X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
  (10.75.129.69)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-02_03,2023-09-28_03,2023-05-22_02
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-The PECBYTE bit allows to generate (in case of write) or
-compute/compare the PEC byte (in case of read).  In case
-of reading a value (performed by first sending a write
-command, then followed by a read command) the PECBYTE should
-only be set before starting the read command and not before
-the first write command.
 
-Fixes: 9e48155f6bfe ("i2c: i2c-stm32f7: Add initial SMBus protocols support")
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
----
- drivers/i2c/busses/i2c-stm32f7.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+On 9/29/23 17:35, Rob Herring wrote:
+> 
+> On Fri, 29 Sep 2023 16:28:42 +0200, Gatien Chevallier wrote:
+>> From: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+>>
+>> Introducing of the generic access controller bindings for the
+>> access controller provider and consumer devices. Those bindings are
+>> intended to allow a better handling of accesses to resources in a
+>> hardware architecture supporting several compartments.
+>>
+>> This patch is based on [1]. It is integrated in this patchset as it
+>> provides a use-case for it.
+>>
+>> Diffs with [1]:
+>> 	- Rename feature-domain* properties to access-control* to narrow
+>> 	  down the scope of the binding
+>> 	- YAML errors and typos corrected.
+>> 	- Example updated
+>> 	- Some rephrasing in the binding description
+>>
+>> [1]: https://lore.kernel.org/lkml/0c0a82bb-18ae-d057-562b
+>>
+>> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+>>
+>> ---
+>> Changes in V5:
+>> 	- Diffs with [1]
+>> 	- Discarded the [IGNORE] tag as the patch is now part of the
+>> 	  patchset
+>>
+>>   .../access-controllers/access-controller.yaml | 90 +++++++++++++++++++
+>>   1 file changed, 90 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/access-controllers/access-controller.yaml
+>>
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/access-controllers/access-controller.yaml: access-control-provider: missing type definition
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230929142852.578394-2-gatien.chevallier@foss.st.com
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+> 
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index 579b30581725..0d3c9a041b56 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1059,9 +1059,10 @@ static int stm32f7_i2c_smbus_xfer_msg(struct stm32f7_i2c_dev *i2c_dev,
- 	/* Configure PEC */
- 	if ((flags & I2C_CLIENT_PEC) && f7_msg->size != I2C_SMBUS_QUICK) {
- 		cr1 |= STM32F7_I2C_CR1_PECEN;
--		cr2 |= STM32F7_I2C_CR2_PECBYTE;
--		if (!f7_msg->read_write)
-+		if (!f7_msg->read_write) {
-+			cr2 |= STM32F7_I2C_CR2_PECBYTE;
- 			f7_msg->count++;
-+		}
- 	} else {
- 		cr1 &= ~STM32F7_I2C_CR1_PECEN;
- 		cr2 &= ~STM32F7_I2C_CR2_PECBYTE;
-@@ -1149,8 +1150,10 @@ static void stm32f7_i2c_smbus_rep_start(struct stm32f7_i2c_dev *i2c_dev)
- 	f7_msg->stop = true;
- 
- 	/* Add one byte for PEC if needed */
--	if (cr1 & STM32F7_I2C_CR1_PECEN)
-+	if (cr1 & STM32F7_I2C_CR1_PECEN) {
-+		cr2 |= STM32F7_I2C_CR2_PECBYTE;
- 		f7_msg->count++;
-+	}
- 
- 	/* Set number of bytes to be transferred */
- 	cr2 &= ~(STM32F7_I2C_CR2_NBYTES_MASK);
--- 
-2.25.1
+Hi Rob,
 
+Running:
+1- make dt_binding_check | grep access-control
+2- make dt_binding_check 
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/access-controllers/access-controller.yaml
+from Krzysztof's slideset
+
+with
+
+pip3 show dtschema
+Name: dtschema
+Version: 2023.9
+
+and
+
+pip3 show yamllint
+Name: yamllint
+Version: 1.32.0
+
+I don't see any of the errors reported by the robot. I have to clone
+your repository to reproduce it.
+
+Should I resubmit with a clean dt-check using the latest dtschema?
+
+***********
+However, I get:
+warning: ignoring duplicate '$id' value 
+'http://devicetree.org/schemas/reserved-memory/framebuffer.yaml#
+warning: ignoring duplicate '$id' value 
+'http://devicetree.org/schemas/reserved-memory/memory-region.yaml#
+warning: ignoring duplicate '$id' value 
+'http://devicetree.org/schemas/reserved-memory/shared-dma-pool.yaml#
+warning: ignoring duplicate '$id' value 
+'http://devicetree.org/schemas/reserved-memory/reserved-memory.yaml
+
+Above warnings disappears when switching to:
+pip3 show dtschema
+Name: dtschema
+Version: 2023.7
+
+The above YAMLs seem to be duplicated in dtschema's latest version.
+I guess it's a synchro that needs to be done since:
+https://lore.kernel.org/all/20230830231758.2561402-2-sjg@chromium.org/
+***********
+
+Best regards,
+Gatien
