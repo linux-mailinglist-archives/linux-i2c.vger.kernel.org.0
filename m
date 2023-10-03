@@ -2,102 +2,107 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F787B64CD
-	for <lists+linux-i2c@lfdr.de>; Tue,  3 Oct 2023 10:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC427B6A8C
+	for <lists+linux-i2c@lfdr.de>; Tue,  3 Oct 2023 15:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239535AbjJCI6J (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 3 Oct 2023 04:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55788 "EHLO
+        id S232619AbjJCN3b convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-i2c@lfdr.de>); Tue, 3 Oct 2023 09:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239537AbjJCI6J (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 Oct 2023 04:58:09 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EB5AF;
-        Tue,  3 Oct 2023 01:58:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696323484; x=1727859484;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dLKfzWcsf70/Y3M11dv8yZFYzYdOU1fQSbZAMIbOyV8=;
-  b=OuvXAuNKOdhvhOlITC6nQBXykoXnSMNvii/xn96FwpEbg1MRmFXfdLOE
-   lmGxGuqcLBbgvc0qGHfx5/a0a/bBcgfgObVCoNjr9FxapaFzvUhB7btWa
-   vZxeeltGGn5uocfs8soGie8Qr7Gts4E49zAMEpW6B1GEYGS+SfP7JBcdJ
-   dudB1zbju7RzN+1oe4MZn8glyRNczD5zmgVFzX9gHWitkZoNNuViINN/A
-   DVT4J7rVu5O6nwQC1u3rADDHKhLFMVl1yX7NWtvaGLgoOJ3CrcjLLn0oC
-   dYWJr4n1X7MTUJCzlYF1Ii2L1FTVA6qIe5METOdltRc28qro5carzAVCx
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="363094905"
-X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
-   d="scan'208";a="363094905"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2023 01:58:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="700631613"
-X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
-   d="scan'208";a="700631613"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2023 01:58:01 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC1)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qnbE6-00000002RHo-2Hqw;
-        Tue, 03 Oct 2023 11:57:58 +0300
-Date:   Tue, 3 Oct 2023 11:57:58 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tam Nguyen <tamnguyenchi@os.amperecomputing.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        patches@amperecomputing.com, jarkko.nikula@linux.intel.com,
-        mika.westerberg@linux.intel.com, jsd@semihalf.com,
-        chuong@os.amperecomputing.com, darren@os.amperecomputing.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v1] i2c: designware: Disable TX_EMPTY irq while waiting
- for block length byte
-Message-ID: <ZRvXlqCcEuwR7YzM@smile.fi.intel.com>
-References: <20230929035356.6435-1-tamnguyenchi@os.amperecomputing.com>
+        with ESMTP id S234951AbjJCN3b (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 3 Oct 2023 09:29:31 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EA2AB;
+        Tue,  3 Oct 2023 06:29:28 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3ae0df6494bso81534b6e.1;
+        Tue, 03 Oct 2023 06:29:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696339768; x=1696944568;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EgTheVskLJNxwiIux7F+HpZW9rPZyOHwxwNzj7ZHzWs=;
+        b=pTQGlo8F0KaNU1hYktJ01OiTsZ+GSovTdWmWfMuFJWFvnlqxflykx6jSqhuSpEU6lz
+         UjcCgGYrV6TrR3Skssat1+89DDV5tahbcfh2aZFHcsatvcwqGU4qkSl3sofJS3XXo3tw
+         f5lRyJqSvS61PVz31tIt9BT3P3KIZccJR/3rHHhF0XB+yQeC5buCde1RUvgEI/dtVFA2
+         DmBsaZSUoF2CFySwSLs93qGq9EVPJplzn5zjoTp0PDMfTkn1UfxE4m7efXCPeo0LiWgk
+         0MkFwQUx4zvU0htw265NjQ1GIhsE3hYfOv21aX6WQLCpZW8XYX6zl04nprahWXDeo9KY
+         2dZA==
+X-Gm-Message-State: AOJu0YzX7J61IALeh5RL+UPg8V9EPLPG6erdDzHBQ73KRByyje9ex3UR
+        B3XDcO9XyqT10cVErjkFNNUdVl7cTpFMSJUeq60malGi
+X-Google-Smtp-Source: AGHT+IFvgpZtGFxEjqXVRDrG6th4u6a1MW/1xTy8JY7Gv+arPmgxWjCuEpnzmbbNt/DLfD2NoURtROARl1sR/F3p+QU=
+X-Received: by 2002:a05:6808:2029:b0:3a9:e85d:b689 with SMTP id
+ q41-20020a056808202900b003a9e85db689mr16893352oiw.0.1696339767998; Tue, 03
+ Oct 2023 06:29:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230929035356.6435-1-tamnguyenchi@os.amperecomputing.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230927-pcc_defines-v2-0-0b8ffeaef2e5@arm.com> <20230927-pcc_defines-v2-1-0b8ffeaef2e5@arm.com>
+In-Reply-To: <20230927-pcc_defines-v2-1-0b8ffeaef2e5@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 3 Oct 2023 15:29:16 +0200
+Message-ID: <CAJZ5v0hG0sDJ4VOY+Gk0Fg1gebNft+z3YK9Jf-7NHb9Ow-C2mg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] ACPI: PCC: Add PCC shared memory region command
+ and status bitfields
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-acpi@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Huisong Li <lihuisong@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Fri, Sep 29, 2023 at 10:53:56AM +0700, Tam Nguyen wrote:
-> During SMBus block data read process, we have seen high interrupt rate
-> because of TX_EMPTY irq status while waiting for block length byte (the
-> first data byte after the address phase). The interrupt handler does not
-> do anything because the internal state is kept as STATUS_WRITE_IN_PROGRESS.
-> Hence, we should disable TX_EMPTY irq until I2C DW receives first data
+On Wed, Sep 27, 2023 at 6:32 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> Define the common macros to use when referring to various bitfields in
+> the PCC generic communications channel command and status fields.
+>
+> Currently different drivers that need to use these bitfields have defined
+> these locally. This common macro is intended to consolidate and replace
+> those.
+>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  include/acpi/pcc.h | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+>
+> diff --git a/include/acpi/pcc.h b/include/acpi/pcc.h
+> index 73e806fe7ce7..021891a7434f 100644
+> --- a/include/acpi/pcc.h
+> +++ b/include/acpi/pcc.h
+> @@ -18,7 +18,20 @@ struct pcc_mbox_chan {
+>         u16 min_turnaround_time;
+>  };
+>
+> +/* Generic Communications Channel Shared Memory Region */
+> +#define PCC_SIGNATURE                  0x50424300
+> +/* Generic Communications Channel Command Field */
+> +#define PCC_CMD_GENERATE_DB_INTR       BIT(15)
+> +/* Generic Communications Channel Status Field */
+> +#define PCC_STATUS_CMD_COMPLETE                BIT(0)
+> +#define PCC_STATUS_SCI_DOORBELL                BIT(1)
+> +#define PCC_STATUS_ERROR               BIT(2)
+> +#define PCC_STATUS_PLATFORM_NOTIFY     BIT(3)
+> +/* Initiator Responder Communications Channel Flags */
+> +#define PCC_CMD_COMPLETION_NOTIFY      BIT(0)
+> +
+>  #define MAX_PCC_SUBSPACES      256
+> +
+>  #ifdef CONFIG_PCC
+>  extern struct pcc_mbox_chan *
+>  pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id);
+>
+> --
 
-IRQ
-DesignWare
-
-> byte from I2C device, then re-enable it.
-> 
-> It takes 0.789 ms for host to receive data length from slave.
-> Without the patch, i2c_dw_isr is called 99 times by TX_EMPTY interrupt.
-
-i2c_dw_isr()
-
-> And it is none after applying the patch.
-
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Chuong Tran <chuong@os.amperecomputing.com>
-
-Who is this guy? Do you need Co-developed-by tag?
-
-> Signed-off-by: Tam Nguyen <tamnguyenchi@os.amperecomputing.com>
-
-Other than that, agree with Serge's points.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Do you want me to pick up this lot?
