@@ -2,157 +2,155 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811257BA3F2
-	for <lists+linux-i2c@lfdr.de>; Thu,  5 Oct 2023 18:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FE47B9E77
+	for <lists+linux-i2c@lfdr.de>; Thu,  5 Oct 2023 16:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233136AbjJEQCp (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Oct 2023 12:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
+        id S232417AbjJEOGf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Oct 2023 10:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237841AbjJEQBm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Oct 2023 12:01:42 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CC82D5E;
-        Thu,  5 Oct 2023 06:50:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696513856; x=1728049856;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tXYScCQloVsf+4gJdEXKIeLEpV9gui3O8J54Ug/L2KY=;
-  b=cpznR0Chai9JWC4G9Fgygf7Z+65i3xBOmbnfawgh8+H1Hg7wW8ELlWWK
-   7//TH63VkXPIJhaEt8UH+kKFestRDBfi247f/oVOibhnmtC6xWR9wpnY0
-   67xsGXS2eF7htZjPzrevGmHQGIm9YYU6UUnNw03p6v13EQ6Vu9jHKJB3x
-   samxVCqkyxvqt2Zz2c6B28e5VgXCAj//fMFJfdyn7GgtnYNVs34LfGJED
-   z45n/MPF5sSME65Ccp2oACHcjsCWz8C/LdL0T8vO+a6jNOEepCzYE4RoN
-   Mkcfa1Ar+QEacbAti12bsk4cDMc7pzH7ct8bUQGX7M/kr3WyjXdgsAL6T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="368546539"
-X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
-   d="scan'208";a="368546539"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 04:56:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="701629587"
-X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
-   d="scan'208";a="701629587"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 04:56:21 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC1)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qoMxl-000000030t3-0Z6W;
-        Thu, 05 Oct 2023 14:56:17 +0300
-Date:   Thu, 5 Oct 2023 14:56:16 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ryan Chen <ryan_chen@aspeedtech.com>
-Cc:     "jk@codeconstruct.com.au" <jk@codeconstruct.com.au>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
+        with ESMTP id S232438AbjJEOEe (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Oct 2023 10:04:34 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8078D2812C
+        for <linux-i2c@vger.kernel.org>; Thu,  5 Oct 2023 06:45:46 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-307d20548adso985404f8f.0
+        for <linux-i2c@vger.kernel.org>; Thu, 05 Oct 2023 06:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1696513545; x=1697118345; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uj31+jd3gJyWsP/fXObaBtCToRppFqlJAWU3kN9VEy4=;
+        b=HIg40lnUX5e90HGrA4vwjqPCKtO4IC/mgmrds6ldtAHEly9MNugKxNzhiN4rQqJz13
+         BS7eAqfNdiGeydyyQxAtgT9fci2gCfEWDTjxBFcF5cSiRNZbCsyiWss4fWeya6I0fZ6J
+         lITc8xqPOsRCjOKzH64ByCCu81rdvOpvWQ+6RovhE8/ZxTDEcJVoTxkYJSc2wQzz+JRa
+         3eRB8VcZLzwrXx2HAKcltWeStfYDY/crUVxYytWQW0onuIz2OJp1gjMbufnySEfQVYww
+         s5Hvh2g6IelUonIY7uwxi9LaaJ6r6cvGEXUJpbpLBaBCtCqGPUpKQda8luOqJgqXXrqU
+         hpKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696513545; x=1697118345;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Uj31+jd3gJyWsP/fXObaBtCToRppFqlJAWU3kN9VEy4=;
+        b=RKh5CI6VsvkkqRny68wM6HAFmZyIGhrXIw09W49q1iBGad8ckkcSlN19+PtfwgjxFx
+         XrLLu82J58Pj9xUl7VnZ4M1JGjvV0qmX2jj5N0o8Q+FO5pg3xOAZ+skl1wozBz/ChHMS
+         wAVCmyPecYDF3gnBz62zCFuu7bYW0YAKa75QaeDXYKMYOrXwedFab/K76LmBLoJWTpzl
+         Yqz8tmQulCnpnjA1bS3SsRIwTOqH9T9mDiY475g/2JGrjbVKjQH58bv9k1WvO7IO6/5f
+         Em/fl9HZ/AwVn+RargYA/N1oABU5abIz+e8bGQtVAP70yZcuwR/haqDzYeI0BZKT23Fz
+         P+aQ==
+X-Gm-Message-State: AOJu0YyTRKmfNXdu86MAROoLpcKCD8JYOAEjp8KxD4GqHCrkHvdRouLP
+        0SAT1SJ5+xQeNkF48PXHmXszRA==
+X-Google-Smtp-Source: AGHT+IGIa4hFNy4A2lBJFQR6ZScq4AlE/Kv0eDGiWp0ZqH/0d7ic1apKJTRq01geLIFmqizzM3U4Kg==
+X-Received: by 2002:a5d:4049:0:b0:319:74d5:a2d7 with SMTP id w9-20020a5d4049000000b0031974d5a2d7mr4227088wrp.32.1696513544908;
+        Thu, 05 Oct 2023 06:45:44 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id d7-20020adfef87000000b0032326908972sm1840961wro.17.2023.10.05.06.45.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Oct 2023 06:45:44 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+To:     Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "=linux-kernel@vger.kernel.org" <=linux-kernel@vger.kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>
-Subject: Re: [PATCH v12 2/2] i2c: aspeed: support ast2600 i2c new register
- mode driver
-Message-ID: <ZR6kYMOB67+WJonG@smile.fi.intel.com>
-References: <20230714074522.23827-1-ryan_chen@aspeedtech.com>
- <20230714074522.23827-3-ryan_chen@aspeedtech.com>
- <ZLENe5B3gi/oNTQp@smile.fi.intel.com>
- <SEZPR06MB5269831E049E2267661F181FF2E8A@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <ZPcXJ4adUNMv4LDr@smile.fi.intel.com>
- <SEZPR06MB52699EC5463397F4BFF244DBF2CAA@SEZPR06MB5269.apcprd06.prod.outlook.com>
+        Conor Dooley <conor+dt@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/2] dt-bindings: i2c: pca954x: Add custom properties for MAX7357
+Date:   Thu,  5 Oct 2023 15:45:39 +0200
+Message-ID: <20231005134541.947727-1-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SEZPR06MB52699EC5463397F4BFF244DBF2CAA@SEZPR06MB5269.apcprd06.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, Oct 05, 2023 at 06:21:35AM +0000, Ryan Chen wrote:
-> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Sent: Tuesday, September 5, 2023 7:55 PM
-> > On Tue, Sep 05, 2023 at 06:52:37AM +0000, Ryan Chen wrote:
-> > > > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > > Sent: Friday, July 14, 2023 4:55 PM
-> > > > On Fri, Jul 14, 2023 at 03:45:22PM +0800, Ryan Chen wrote:
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-...
+Maxim Max7357 has a configuration register to enable additional
+features. These features aren't enabled by default & its up to
+board designer to enable the same as it may have unexpected side effects.
 
-> > > 			divisor = DIV_ROUND_UP(base_clk[3],
-> > i2c_bus->timing_info.bus_freq_hz);
-> > > 			for_each_set_bit(divisor, &divisor, 32) {
-> > 
-> > This is wrong.
-> > 
-> > > 				if ((divisor + 1) <= 32)
-> > > 					break;
-> > 
-> > > 				divisor >>= 1;
-> > 
-> > And this.
-> > 
-> > > 				baseclk_idx++;
-> > 
-> > > 			}
-> > 
-> > for_each_set_bit() should use two different variables.
-> 
-> Will update by following.
-> 
-> for_each_set_bit(bit, &divisor, 32) {
->     divisor >>= 1;
->     baseclk_idx++;
-> }
+These should be validated for proper functioning & detection of devices
+in secondary bus as sometimes it can cause secondary bus being disabled.
 
-It's unclear what you are trying to achieve here as the code is not equivalent
-to the above.
+Add booleans for:
+ - maxim,isolate-stuck-channel
+ - maxim,send-flush-out-sequence
+ - maxim,preconnection-wiggle-test-enable
 
-> > > 		} else {
-> > > 			baseclk_idx = i + 1;
-> > > 			divisor = DIV_ROUND_UP(base_clk[i],
-> > i2c_bus->timing_info.bus_freq_hz);
-> > > 		}
-> > > 	}
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+---
+Changes in V4:
+- Drop max7358.
+Changes in V3:
+- Update commit message
+Changes in V2:
+- Update properties.
+---
+ .../bindings/i2c/i2c-mux-pca954x.yaml         | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-...
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+index 2d7bb998b0e9..9aa0585200c9 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+@@ -71,6 +71,23 @@ properties:
+     description: A voltage regulator supplying power to the chip. On PCA9846
+       the regulator supplies power to VDD2 (core logic) and optionally to VDD1.
+ 
++  maxim,isolate-stuck-channel:
++    type: boolean
++    description: Allows to use non faulty channels while a stuck channel is
++      isolated from the upstream bus. If not set all channels are isolated from
++      the upstream bus until the fault is cleared.
++
++  maxim,send-flush-out-sequence:
++    type: boolean
++    description: Send a flush-out sequence to stuck auxiliary buses
++      automatically after a stuck channel is being detected.
++
++  maxim,preconnection-wiggle-test-enable:
++    type: boolean
++    description: Send a STOP condition to the auxiliary buses when the switch
++      register activates a channel to detect a stuck high fault. On fault the
++      channel is isolated from the upstream bus.
++
+ required:
+   - compatible
+   - reg
+@@ -95,6 +112,19 @@ allOf:
+         "#interrupt-cells": false
+         interrupt-controller: false
+ 
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - maxim,max7357
++    then:
++      properties:
++        maxim,isolate-stuck-channel: false
++        maxim,send-flush-out-sequence: false
++        maxim,preconnection-wiggle-test-enable: false
++
+ unevaluatedProperties: false
+ 
+ examples:
 
-> > > 	divisor = min_t(unsigned long, divisor, 32);
-> > 
-> > Can't you use min()? min_t is a beast with some subtle corner cases.
-> > 
-> Will update to 
-> divisor = min(divisor, (unsigned long)32);
-
-No, the idea behind min() is that _both_ arguments are of the same type,
-the proposed above is wrong.
-
+base-commit: b5d463c0eecb4a690e631fa38cb6771a906f7620
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.41.0
 
