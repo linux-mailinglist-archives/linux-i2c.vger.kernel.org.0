@@ -2,119 +2,162 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A357BAF3C
-	for <lists+linux-i2c@lfdr.de>; Fri,  6 Oct 2023 01:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8955A7BAF88
+	for <lists+linux-i2c@lfdr.de>; Fri,  6 Oct 2023 02:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjJEXKV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 5 Oct 2023 19:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+        id S229496AbjJFAUJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 5 Oct 2023 20:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjJEXIB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Oct 2023 19:08:01 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5845211B;
-        Thu,  5 Oct 2023 16:07:43 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66543C433C7;
-        Thu,  5 Oct 2023 23:07:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696547262;
-        bh=SLxoCaj8+sjzohhZAKAeitCTwO69mwCyvpBXx/t3mn8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eqVpbGcZYRKBnm1peUNSFdaEbGBkiVzzK9XT0+U9GtZSBzyVT0XT1/fzM3QYQIzD7
-         vp5vXGgdVO60OwsJDq2ekLnAWy6jMdflpjNR1ZN3hZKSUSyrOJ73vLU/ULSgUW2etD
-         a6R32TzhXCg0Z6lGQ+QIsQK5IWGpCKZ/cfWr147n68P4T5zOZVA8QQhjLNJkFwM5Jg
-         sSbEJ+TXGxZSgB87hJpTNNdNav1mL6YthEqe8ZqDpehIRgd8kIwFyavyJt62J1DMH7
-         Q3k4e3SEynwm59DGiIZoUlRjI4/+Ho2UFrFfg7y/HV5HJt98OtESzPpgP6bHyId4GA
-         1i0TZKOZ/Mjew==
-Date:   Fri, 6 Oct 2023 01:07:37 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "pierre.gondois@arm.com" <pierre.gondois@arm.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] i2c: mv64xxx: add support for FSM based recovery
-Message-ID: <20231005230737.6j57y7d27vnsbws3@zenone.zhora.eu>
-References: <20230926234801.4078042-1-chris.packham@alliedtelesis.co.nz>
- <20230926234801.4078042-4-chris.packham@alliedtelesis.co.nz>
- <20231005215832.p4mxov6occzqmj2k@zenone.zhora.eu>
- <57c27eb5-1145-4a84-a7b6-ff785d7a1eeb@alliedtelesis.co.nz>
+        with ESMTP id S229455AbjJFAUI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 5 Oct 2023 20:20:08 -0400
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FDCD8;
+        Thu,  5 Oct 2023 17:20:04 -0700 (PDT)
+Received: from [192.168.68.112] (ppp118-210-84-62.adl-adc-lon-bras32.tpg.internode.on.net [118.210.84.62])
+        by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 3214D20059;
+        Fri,  6 Oct 2023 08:19:57 +0800 (AWST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=codeconstruct.com.au; s=2022a; t=1696551600;
+        bh=3sH1cC4T7Uxpkbo5Qenr+5cCv9WsbR2e9hfD400KTuo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=RaIzrwLNVT0wczma4nXdI8uzOys7yIcWc0tNsg6EH01Cmu22paNVn/DeDt08xzpwM
+         6k/F+MybjfiauBnPzT4fxMomIejKYmSUxbjozPFXOT9DiDm/Eftj04RAqULlEqH+H8
+         nChvGX13LaKYYZxqoudhOgVdG2qTW6f3cBc1LeKiQOcAIVRkQCY2va4xa3NVVXSStp
+         MShkXmhpLyL+el3+FZDGqOnXT2i/p1WoTorByug64Uqu7JYQBEIGLO92j7g+tZ/hYy
+         uTiO3B0Hb/o+RfhzlcIEfOnKOWSdnQTaolThdEcTIoj999+4PeH0iYDr3t+FW6gKVg
+         fE5NHoUlNchlw==
+Message-ID: <9407cee639b3eeb715a953c33b26a9a3830a64f8.camel@codeconstruct.com.au>
+Subject: Re: [PATCH v2] i2c: aspeed: Fix i2c bus hang in slave read
+From:   Andrew Jeffery <andrew@codeconstruct.com.au>
+To:     Quan Nguyen <quan@os.amperecomputing.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Jian Zhang <zhangjian.3032@bytedance.com>
+Cc:     Andi Shyti <andi.shyti@kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>, andrew@aj.id.au,
+        "moderated list:ARM/ASPEED I2C DRIVER" <openbmc@lists.ozlabs.org>,
+        yulei.sh@bytedance.com, open list <linux-kernel@vger.kernel.org>,
+        Tommy Huang <tommy_huang@aspeedtech.com>,
+        "open list:ARM/ASPEED I2C DRIVER" <linux-i2c@vger.kernel.org>,
+        brendan.higgins@linux.dev, joel@jms.id.au, zhangjian3032@gmail.com,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>, xiexinnan@bytedance.com
+Date:   Fri, 06 Oct 2023 10:49:55 +1030
+In-Reply-To: <052ccd48-2541-1ef3-1f33-75b7d49611ad@os.amperecomputing.com>
+References: <20230927154244.3774670-1-zhangjian.3032@bytedance.com>
+         <ZRZ/ObZmntMLw2r+@ninjato>
+         <975c69de32eefb124fe668e921e8dbda86962deb.camel@codeconstruct.com.au>
+         <052ccd48-2541-1ef3-1f33-75b7d49611ad@os.amperecomputing.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <57c27eb5-1145-4a84-a7b6-ff785d7a1eeb@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Chris,
+On Thu, 2023-10-05 at 14:55 +0700, Quan Nguyen wrote:
+>=20
+> On 04/10/2023 13:08, Andrew Jeffery wrote:
+> > On Fri, 2023-09-29 at 09:39 +0200, Wolfram Sang wrote:
+> > > On Wed, Sep 27, 2023 at 11:42:43PM +0800, Jian Zhang wrote:
+> > > > When the `CONFIG_I2C_SLAVE` option is enabled and the device operat=
+es
+> > > > as a slave, a situation arises where the master sends a START signa=
+l
+> > > > without the accompanying STOP signal. This action results in a
+> > > > persistent I2C bus timeout. The core issue stems from the fact that
+> > > > the i2c controller remains in a slave read state without a timeout
+> > > > mechanism. As a consequence, the bus perpetually experiences timeou=
+ts.
+> > > >=20
+> > > > In this case, the i2c bus will be reset, but the slave_state reset =
+is
+> > > > missing.
+> > > >=20
+> > > > Fixes: fee465150b45 ("i2c: aspeed: Reset the i2c controller when ti=
+meout occurs")
+> > > > Signed-off-by: Jian Zhang <zhangjian.3032@bytedance.com>
+> > >=20
+> > > Somebody wants to add tags here? I think it should go to my pull requ=
+est
+> > > this week.
+> > >=20
+> >=20
+> > I've tested this patch applied on top of fee465150b45 on an AST2600 and
+> > the the system behaviour doesn't seem worse. However, I can still lock
+> > the bus up and trigger a hung task panic by surprise-unplugging things.
+> > I'll poke around to see if I can get to the bottom of that.
+> >=20
+> > Resetting the slave state makes sense, so with the above observation
+> > aside:
+> >=20
+> > Tested-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+> > Reviewed-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+> >=20
+> > That said I do wonder whether we should update the slave state in the
+> > same place we're updating the hardware state. It would cover off the
+> > gap identified by Jian if it were to ever occur anywhere else.
+> > Something like:
+> >=20
+> > diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-
+> > aspeed.c
+> > index 5a416b39b818..28e2a5fc4528 100644
+> > --- a/drivers/i2c/busses/i2c-aspeed.c
+> > +++ b/drivers/i2c/busses/i2c-aspeed.c
+> > @@ -749,6 +749,8 @@ static void __aspeed_i2c_reg_slave(struct
+> > aspeed_i2c_bus *bus, u16 slave_addr)
+> >          func_ctrl_reg_val =3D readl(bus->base + ASPEED_I2C_FUN_CTRL_RE=
+G);
+> >          func_ctrl_reg_val |=3D ASPEED_I2CD_SLAVE_EN;
+> >          writel(func_ctrl_reg_val, bus->base + ASPEED_I2C_FUN_CTRL_REG)=
+;
+> > +
+> > +       bus->slave_state =3D ASPEED_I2C_SLAVE_INACTIVE;
+> >   }
+> >  =20
+> >   static int aspeed_i2c_reg_slave(struct i2c_client *client)
+> > @@ -765,7 +767,6 @@ static int aspeed_i2c_reg_slave(struct i2c_client
+> > *client)
+> >          __aspeed_i2c_reg_slave(bus, client->addr);
+> >  =20
+> >          bus->slave =3D client;
+> > -       bus->slave_state =3D ASPEED_I2C_SLAVE_INACTIVE;
+> >          spin_unlock_irqrestore(&bus->lock, flags);
+> >  =20
+> >          return 0;
+> >=20
+> >=20
+>=20
+> We tested both Jian's patch and Andrew's patch on our MCTP-i2c bus=20
+> (ast2600 based BMC) and see both patches work well.
+>=20
+> We currently use upstream i2c-aspeed.c driver with the commit [1]=20
+> backported. Without that commit, we frequently experienced the bus hang=
+=20
+> (due to bus arbitration) and it is unable to recover.
+>=20
+> But, by reverting that commit and with Jian or Andrew's patch, we see=20
+> the bus could be able to recover so we think both changes are good.
+>=20
+> [1]=20
+> https://github.com/AspeedTech-BMC/linux/commit/11a94e5918aa0f87c828d63fd2=
+54dd60ab2505e5
+>=20
+> Anyway, I would prefer Andrew's way because the bus->slave_state must=20
+> always be reset to ASPEED_I2C_SLAVE_INACTIVE everytime=20
+> __aspeed_i2c_reg_slave() is called.
 
-> >> +static int
-> >> +mv64xxx_i2c_recover_bus(struct i2c_adapter *adap)
-> >> +{
-> >> +	struct mv64xxx_i2c_data *drv_data = i2c_get_adapdata(adap);
-> >> +	int ret;
-> >> +	u32 val;
-> >> +
-> >> +	dev_dbg(&adap->dev, "Trying i2c bus recovery\n");
-> >> +	writel(MV64XXX_I2C_UNSTUCK_TRIGGER, drv_data->unstuck_reg);
-> >> +	ret = readl_poll_timeout_atomic(drv_data->unstuck_reg, val,
-> >> +					!(val & MV64XXX_I2C_UNSTUCK_INPROGRESS),
-> >> +					1000, 5000);
-> > here you are busy looping for 1ms between reads which is a long
-> > time. Why not using read_poll_timeout() instead?
-> 
-> I needed to use the atomic variant because this ends up getting called 
-> from an interrupt handler (mv64xxx_i2c_intr() -> mv64xxx_i2c_fsm()). I 
-> probably don't need to wait so long between reads those times were just 
-> pulled out of thin air. In my experimentation the faults that can be 
-> cleared do so within a couple of clocks, if it hasn't cleared within 8 
-> clocks it's not going to.
+Jian, what's your preference? Are you happy to do a v3 along the lines
+of my suggestion above?
 
-It's still a long time to wait in atomic context...
-readl_poll_timeout_atomic() waits in udelays, where the maximum
-accepted waiting time is 10us. Here you are waiting 100 times
-more.
+Otherwise Wolfram can take v2 and we can always do the cleanup in a
+follow-up patch.
 
-If we can't be within that value I would rather use a thread.
-
-Or, you could also consider using threaded_irq()... but this
-might have a bit of a higher impact.
-
-[...]
-
-> >> +	/* optional unstuck support */
-> >> +	res = platform_get_resource(pd, IORESOURCE_MEM, 1);
-> >> +	if (res) {
-> >> +		drv_data->unstuck_reg = devm_ioremap_resource(&pd->dev, res);
-> >> +		if (IS_ERR(drv_data->unstuck_reg))
-> >> +			return PTR_ERR(drv_data->unstuck_reg);
-> > OK, we failed to ioremap... but instead of returning an error,
-> > wouldn't it be better to just set unstuck_reg to NULL and move
-> > forward without unstuck support?
-> >
-> > Maybe you will stil crash later because something might have
-> > happened, but failing on purpose on an optional feature looks a
-> > bit too drastic to me. What do you think?
-> 
-> Personally I think if the reg property is supplied in the dts we'd 
-> better be able to use it. If the feature is not wanted then the way to 
-> indicate this is by supplying only one reg cell.
-> 
-> I'd be happy with a dev_warn() and unstuck_reg = NULL if that helps get 
-> this landed.
-
-Don't ahve a strong opinion... as you like. Mine is just an
-opinion and your argument is valid :-)
-
-Andi
+Andrew
