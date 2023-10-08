@@ -2,85 +2,69 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9E47BCB80
-	for <lists+linux-i2c@lfdr.de>; Sun,  8 Oct 2023 03:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3EA7BD045
+	for <lists+linux-i2c@lfdr.de>; Sun,  8 Oct 2023 23:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234329AbjJHBRs (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 7 Oct 2023 21:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
+        id S230038AbjJHV2a (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 8 Oct 2023 17:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344378AbjJHBRd (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 7 Oct 2023 21:17:33 -0400
+        with ESMTP id S229706AbjJHV23 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 8 Oct 2023 17:28:29 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A552D41;
-        Sat,  7 Oct 2023 17:51:14 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1905C4163C;
-        Sun,  8 Oct 2023 00:50:58 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DAC9D;
+        Sun,  8 Oct 2023 14:28:28 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80FD3C433C7;
+        Sun,  8 Oct 2023 21:28:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696726259;
-        bh=TxI7l2S2BRxrv3nR22d+QN6K+W8sIY5zyOuUww3lMhU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IA297/9vjJ7jTGZDq64rKdirzFCi24n2a7PtxPzq/U5YSSlB5L4fpufWwGtNcK640
-         NMclMVdFoULYCpdWrBadeW4USepnjy8oCKoJzC7deCSqlM1Ll3PDJEloSs/6QO3YbB
-         b6GbRg3CQU419csnHHCBtdGIbEoTUHqf95StA7hvZNwY7tFZYsHIqWia3MuHCbWZcc
-         zLS98GWPT7YJCFASdX65ackqIQ6wqPDg2/CY0k9fFb8xJQQffgOUzaN72FQ+185Wrz
-         eZpCxna075OJh/uUzJai+cXaj2FbFuWKE1IuUrj2urgDgQHl8x/mvnJ2zoIrbb/4th
-         ZYCwNP5vcidFw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Rosin <peda@axentia.se>, Wolfram Sang <wsa@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 3/7] i2c: mux: Avoid potential false error message in i2c_mux_add_adapter
-Date:   Sat,  7 Oct 2023 20:50:49 -0400
-Message-Id: <20231008005053.3768625-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231008005053.3768625-1-sashal@kernel.org>
-References: <20231008005053.3768625-1-sashal@kernel.org>
+        s=k20201202; t=1696800508;
+        bh=nQGWKZiyHBv6B4a2iISbyjNNNeRSkrsuiZCq95X2HsI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZGH8vFeD3P+e5W18SGGGuMO7pnRPit9L6JH4GVO8pqloZKkJZyekCXtN4O6nDHB3c
+         DcQ0v6fNnsKA2smebnULTaa91hcoOchINv9ytFKlbrL8d+XxyGTr+CqBikJDUw8yk3
+         4IqCcaW8ZC4MwQCHSgbJe4nRGgrZpei2Xq6+X9yuXoUL/9Dv8T2FGYlQBgeTQy79T0
+         Lhd+UghpG7bWqJJkZYyXoe4hTLqIXP/59UxnWOfY4sVmNWbh7nPVf1jz/ho8+BstGn
+         A2H/7IiVGESt+ih4Dt/fEkicEDnfmvV9vDWACSPoUDZWsUUMZM+TcJUWMdTRX/H8VE
+         oKBkFxWFiqb0g==
+Date:   Sun, 8 Oct 2023 23:28:24 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, loic.poulain@linaro.org, rfoss@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, todor.too@gmail.com, mchehab@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] i2c: qcom-cci: Add sc8280xp compatible
+Message-ID: <20231008212824.cs6e6hc7zur67v6k@zenone.zhora.eu>
+References: <20231006120159.3413789-1-bryan.odonoghue@linaro.org>
+ <20231006120159.3413789-3-bryan.odonoghue@linaro.org>
+ <b8f2d7f1-16e2-4e6a-9c84-37da393f74a3@linaro.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.14.326
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b8f2d7f1-16e2-4e6a-9c84-37da393f74a3@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Heiner Kallweit <hkallweit1@gmail.com>
+Hi Konrad,
 
-[ Upstream commit b13e59e74ff71a1004e0508107e91e9a84fd7388 ]
+> > Add sc8280xp compatible with cci_v2_data parameters.
+> > 
+> > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> > ---
+> Drop this patch, it adds nothing useful
 
-I2C_CLASS_DEPRECATED is a flag and not an actual class.
-There's nothing speaking against both, parent and child, having
-I2C_CLASS_DEPRECATED set. Therefore exclude it from the check.
+what about the rest of the series?
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Acked-by: Peter Rosin <peda@axentia.se>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/i2c-mux.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Could you please be a bit more explicative?
 
-diff --git a/drivers/i2c/i2c-mux.c b/drivers/i2c/i2c-mux.c
-index 7ba31f6bf1488..ad5fd357b2bce 100644
---- a/drivers/i2c/i2c-mux.c
-+++ b/drivers/i2c/i2c-mux.c
-@@ -334,7 +334,7 @@ int i2c_mux_add_adapter(struct i2c_mux_core *muxc,
- 		priv->adap.lock_ops = &i2c_parent_lock_ops;
- 
- 	/* Sanity check on class */
--	if (i2c_mux_parent_classes(parent) & class)
-+	if (i2c_mux_parent_classes(parent) & class & ~I2C_CLASS_DEPRECATED)
- 		dev_err(&parent->dev,
- 			"Segment %d behind mux can't share classes with ancestors\n",
- 			chan_id);
--- 
-2.40.1
-
+Thanks,
+Andi
