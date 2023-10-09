@@ -2,111 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F75D7BD0E5
-	for <lists+linux-i2c@lfdr.de>; Mon,  9 Oct 2023 00:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A537BD368
+	for <lists+linux-i2c@lfdr.de>; Mon,  9 Oct 2023 08:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344708AbjJHW0Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 8 Oct 2023 18:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S1345251AbjJIGd4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 9 Oct 2023 02:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344866AbjJHW0X (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 8 Oct 2023 18:26:23 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2803AC6
-        for <linux-i2c@vger.kernel.org>; Sun,  8 Oct 2023 15:26:21 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-405361bb94eso39356765e9.0
-        for <linux-i2c@vger.kernel.org>; Sun, 08 Oct 2023 15:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696803979; x=1697408779; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E5F6Ic134Yi1iysyJ6K232qeqhgAgSXNQ9anlaFp7+o=;
-        b=vp/BtA35HUCXhFv1symXXPDLhdZ6mZOEsEXQPQzAt0n8aoWbQTWQ+z0dsZ6Bx9a3lf
-         Hy7PDKdvA4/U3JDpqrUBJ11wb1LGd66K/1lLXkJvYLf5Hgwg+mEf1UPKEb6rxpFFQane
-         TwWi+ziNH/baQdFbYT061V4+kjplDeh8XWNJF9UNHbCiwSowvS/b3kvvtdr11qb5Sv6Q
-         O25CLXjSyoWEdMIPN+sUT7ouKLINxgj1xrFyLxqBoSm0AJgaTYvb5FOf2Px2/NhIIj1M
-         NF9bNY54zS8zyvYBaVQ82ov9XvPceTfubMhDBw16DDVXREaiqOjXp2Z5/Mn8oYhgxzwH
-         DVcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696803979; x=1697408779;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E5F6Ic134Yi1iysyJ6K232qeqhgAgSXNQ9anlaFp7+o=;
-        b=oc51mOYXn7UncXnAw7xAS5DbfIlKCDNQLfvCtJwIcwi+EjecUt1oCmIjzwSxYkPKzf
-         R3oQSNJQHbM4BPZ5hcP/7sbvbKB86NtrEDB+QkDa7UA9eWpbQ0hvPO7NgQWzhqy8awB7
-         R/EV/ol+mBWgWsVOlgLLrS1/hOLby57cbdS2wlxWSs+b1ZxSwVHoSlM1+0+JtDv3k1jM
-         s9quW4pqZt5jrsMcxvK19fhYnzu53qajGw1vv3NZm3vLS0H/57elZYh5hzmfUGcDrOzK
-         5WMPJ6YznoxqGXUuWY9p/xIoROQdFqJm4B9GEqqd8u+HWEMgP2/vBwspVWdAFKWGr5Ra
-         lxFA==
-X-Gm-Message-State: AOJu0YyXwVbTOxYNv6rIpCtUGodO1XmI5SZOsgShbKwsG1dR1Eyisn4E
-        t+KX5cTAGVxMGJGyX8WMnCivGw==
-X-Google-Smtp-Source: AGHT+IE5Bwgw8Sv4XEbdHISWjLI6mywdMuzfaBhCFQkF9GkEp3SmKfDb1yrC+EDJeeO0eM6jYnFsqw==
-X-Received: by 2002:a05:600c:468d:b0:407:4944:76dc with SMTP id p13-20020a05600c468d00b00407494476dcmr1947380wmo.20.1696803979357;
-        Sun, 08 Oct 2023 15:26:19 -0700 (PDT)
-Received: from [192.168.100.102] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id n5-20020a05600c294500b003fc02e8ea68sm11615535wmd.13.2023.10.08.15.26.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Oct 2023 15:26:18 -0700 (PDT)
-Message-ID: <18716c6a-93ea-43d5-ab55-43b3b86920ce@linaro.org>
-Date:   Sun, 8 Oct 2023 23:26:17 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/5] i2c: qcom-cci: Add sc8280xp compatible
-Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Andi Shyti <andi.shyti@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, loic.poulain@linaro.org,
-        rfoss@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        todor.too@gmail.com, mchehab@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20231006120159.3413789-1-bryan.odonoghue@linaro.org>
- <20231006120159.3413789-3-bryan.odonoghue@linaro.org>
- <b8f2d7f1-16e2-4e6a-9c84-37da393f74a3@linaro.org>
- <20231008212824.cs6e6hc7zur67v6k@zenone.zhora.eu>
- <4fdfd283-234b-4c14-8db1-3feaf1fa8618@linaro.org>
-In-Reply-To: <4fdfd283-234b-4c14-8db1-3feaf1fa8618@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229551AbjJIGd4 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 9 Oct 2023 02:33:56 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265A6B9;
+        Sun,  8 Oct 2023 23:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696833234; x=1728369234;
+  h=from:to:cc:subject:date:message-id;
+  bh=yGGnTiOwfcMWNPVc2G/Q813ixhjZkvPBHMtZp7WfHWA=;
+  b=RhzwvGgW2Tay0i90VybRKZkZns+OkvFNviuWP8QAvEoI2Dm5YADqBnL8
+   Xzn4lmefIuDYnS11qsVcOtnUIs/FlNvK0FVYdmnsFguae0664Od7KjHK6
+   KnSpfiTj7BvEQB11ytKycUE6UPGlZy14RNRWo4QoFwAgsJ7e2LGStV3uA
+   usQvzYrJh2mK9SLoCEMu5Ubx+Fgko54HdGoa2V3evU1HsZOcjq5pUV88v
+   wTKKe5FGxnJCEBR9T9Wasbv/1BJb1MKvOzpwwQLA3yWdDkoN0yvOA4fie
+   w6FwIV34g7coFaIl1w2k+naBsB46w8YvjFda+o6ji+1GKDXTKY7I+OJk0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="448273533"
+X-IronPort-AV: E=Sophos;i="6.03,209,1694761200"; 
+   d="scan'208";a="448273533"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2023 23:33:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="896653868"
+X-IronPort-AV: E=Sophos;i="6.03,209,1694761200"; 
+   d="scan'208";a="896653868"
+Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Oct 2023 23:32:08 -0700
+From:   Wentong Wu <wentong.wu@intel.com>
+To:     gregkh@linuxfoundation.org, oneukum@suse.com, wsa@kernel.org,
+        andi.shyti@linux.intel.com, broonie@kernel.org
+Cc:     bartosz.golaszewski@linaro.org, linus.walleij@linaro.org,
+        hdegoede@redhat.com, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wentong Wu <wentong.wu@intel.com>
+Subject: [PATCH v20 0/4] Add Intel LJCA device driver
+Date:   Mon,  9 Oct 2023 14:33:21 +0800
+Message-Id: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 08/10/2023 23:13, Bryan O'Donoghue wrote:
-> On 08/10/2023 22:28, Andi Shyti wrote:
->> Hi Konrad,
->>
->>>> Add sc8280xp compatible with cci_v2_data parameters.
->>>>
->>>> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->>>> ---
->>> Drop this patch, it adds nothing useful
->>
->> what about the rest of the series?
->>
->> Could you please be a bit more explicative?
->>
->> Thanks,
->> Andi
-> 
-> I think he means I can use the sm8250 or sm8450 compat string, which is 
-> true.
-> 
-> ---
-> bod
-
-Tested, compat sm8250 works fine.
+Add driver for Intel La Jolla Cove Adapter (LJCA) device. This
+IO-expander adds additional functions to the host system with
+host USB interface, such as GPIO, I2C and SPI. This patch set
+adds four drivers to support this device: a USB device driver,
+a GPIO chip driver, a I2C controller driver and a SPI controller
+driver.
 
 ---
-bod
+v20:
+ - add __counted_by attributes for all of [] arrays
+ - use proper kernel doc for ljca_adapter structure
+ - re-structure ljca_recv function to make it more clear
+ - remove all of scoped_guard
+ - check return value of usb_autopm_get_interface()
+ - re-structure ljca_enumerate_clients() to handle error correctly
+ - add comment for 'uid = "0";' in ljca_match_device_ids()
+ - change the parameters' type of ljca_send() to u8
+
+v17 - v19:
+ - rebase patch set on top of Linus' master branch (57d88e8a5974644039fbc47806bac7bb12025636)
+ - change valid_pins type to __le32 and access valid_pins with get_unaligned_le32
+ - remove COMPILE_TEST for USB_LJCA Kconfig
+
+v16:
+ - drop all void * and use real types in the exported apis and internal ljca_send()
+ - remove #ifdef in usb-ljca.c file
+ - add documentation in ljca.h for the public structures
+ - add error message in ljca_handle_cmd_ack() if error happens and remove blank line
+ - use the functionality in cleanup.h for spinlock to make function much simpler
+ - change the type of ex_buf in struct ljca_adapter to u8 *
+
+v14 - v15:
+ - enhance disconnect() of usb-ljca driver
+ - change memchr to strchr in ljca_match_device_ids() of usb-ljca driver
+ - fix build error: implicit declaration of function 'acpi_dev_clear_dependencies'
+
+v13:
+ - make ljca-usb more robust with the help of Hans de Goede
+ - call acpi_dev_clear_dependencies() to mark _DEP ACPI dependencies on the I2C controller as satisfied
+ - avoid err printing because of calling usb_kill_urb when attempts to resubmit the rx urb
+
+v10 - v12:
+ - switch dev_err to dev_dbg for i2c-ljca driver
+ - remove message length check because of defined quirk structure
+ - remove I2C_FUNC_SMBUS_EMUL support
+ - remove ljca_i2c_format_slave_addr
+ - remove memset before write write w_packet for i2c driver
+ - make ljca_i2c_stop void and print err message in case failure
+ - use dev_err_probe in ljca_i2c_probe function
+
+v9:
+ - overhaul usb-ljca driver to make it more structured and easy understand
+ - fix memory leak issue for usb-ljca driver
+ - add spinlock to protect tx_buf and ex_buf
+ - change exported APIs for usb-ljca driver
+ - unify prefix for structures and functions for i2c-ljca driver
+ - unify prefix for structures and functions for spi-ljca driver
+ - unify prefix for structures and functions for gpio-ljca driver
+ - update gpio-ljca, i2c-ljca and spi-ljca drivers according to usb-ljca's changes
+
+Wentong Wu (4):
+  usb: Add support for Intel LJCA device
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  gpio: update Intel LJCA USB GPIO driver
+
+ drivers/gpio/Kconfig          |   4 +-
+ drivers/gpio/gpio-ljca.c      | 246 +++++++-----
+ drivers/i2c/busses/Kconfig    |  11 +
+ drivers/i2c/busses/Makefile   |   1 +
+ drivers/i2c/busses/i2c-ljca.c | 343 ++++++++++++++++
+ drivers/spi/Kconfig           |  11 +
+ drivers/spi/Makefile          |   1 +
+ drivers/spi/spi-ljca.c        | 297 ++++++++++++++
+ drivers/usb/misc/Kconfig      |  13 +
+ drivers/usb/misc/Makefile     |   1 +
+ drivers/usb/misc/usb-ljca.c   | 902 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb/ljca.h      | 145 +++++++
+ 12 files changed, 1870 insertions(+), 105 deletions(-)
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/usb-ljca.c
+ create mode 100644 include/linux/usb/ljca.h
+
+-- 
+2.7.4
+
