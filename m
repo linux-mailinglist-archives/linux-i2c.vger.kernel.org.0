@@ -2,59 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B67E7C04DB
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Oct 2023 21:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6037C04E5
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Oct 2023 21:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234258AbjJJTod (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Oct 2023 15:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
+        id S234256AbjJJTql (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Oct 2023 15:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbjJJToc (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Oct 2023 15:44:32 -0400
+        with ESMTP id S234289AbjJJTqk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Oct 2023 15:46:40 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBDF8E;
-        Tue, 10 Oct 2023 12:44:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B770EC433C8;
-        Tue, 10 Oct 2023 19:44:30 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F843B0
+        for <linux-i2c@vger.kernel.org>; Tue, 10 Oct 2023 12:46:39 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71D7CC433C7;
+        Tue, 10 Oct 2023 19:46:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696967071;
-        bh=3C++hF0g2xnKijtFMR04daPdF8gMLF1v7H3LnvxMEhg=;
+        s=k20201202; t=1696967199;
+        bh=S7iEsMpSYCQnNiuXan9iozV4uspyFbrB9p7ZHCWzxmM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t7KrsoMcqOmJb1MuzJxoEBEyUaRciAvWD61supcifUDsRdoYMEPuVEuFWTABqJ541
-         jxulDs09PYKpUgBhJUj/eA4O0OoR1ai2BuCNy7vlrAdO/kUfSa4q6wu2zEYJ87lUVm
-         CsCbcawg9RiP8bY55Tu1sO3CjpZ5hDeWlgK5y4LvP32ngvGyio3Q3o0yJoiCUDCLvg
-         z2b4RgpuRZTpxo1dfk7931Jl8D4VHhgcJcoeWIegFeRjdd656UDokKnZ+3ERDpDOzs
-         dOk98eBpG9v1IiTiyFmBb12OLpEOa0axyhkB8nsfEBV8h5brrzZSx6WPc4deYS46k7
-         g2yP0X3R631ww==
-Date:   Tue, 10 Oct 2023 21:44:27 +0200
+        b=PlXEICP10q91aPE3wE+2Y4s026Zm6GW2WEHiHRlfTtay5qlmdZFQ+fTPJRXtp+t4A
+         uZ3lRL4imzZDpAnm6ghkxV/d7F1xE91gNY6JIGc1Ng5J1/akGeRylnZhgFFEAL50Bh
+         MS8SSiXDFEIM7xH2dSI6XwB2H7CJzwgd88IwibpQBC3mdPJpfNfzY3+q1LpEergOdS
+         doQckoSY7oFvQRck23f8GRq9Bc2YfIysXJKv79+KN34+M6I1g3XwRzXjLdrQrGnFvm
+         uTt6xL4VDChQSwS864tq54lsgiI2v3h5mRzdVHypLQt6BFLowxmr02BCK4UtnCj2Xb
+         KBvy7LKg50xRQ==
+Date:   Tue, 10 Oct 2023 21:46:35 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        loic.poulain@linaro.org, rfoss@kernel.org, andi.shyti@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, todor.too@gmail.com, mchehab@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] dt-bindings: i2c: qcom-cci: Document sc8280xp
- compatible
-Message-ID: <ZSWpm/7xnoFkUn31@shikoro>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH] i2c: i801: Add support for Intel Birch Stream SoC
+Message-ID: <ZSWqG04dnl+jpjGP@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        loic.poulain@linaro.org, rfoss@kernel.org, andi.shyti@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, todor.too@gmail.com, mchehab@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20231006120159.3413789-1-bryan.odonoghue@linaro.org>
- <20231006120159.3413789-2-bryan.odonoghue@linaro.org>
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Andi Shyti <andi.shyti@kernel.org>
+References: <20231002082804.63339-1-jarkko.nikula@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t6Aj+rePpll//Dod"
+        protocol="application/pgp-signature"; boundary="bkMyAboMMII/IUDk"
 Content-Disposition: inline
-In-Reply-To: <20231006120159.3413789-2-bryan.odonoghue@linaro.org>
+In-Reply-To: <20231002082804.63339-1-jarkko.nikula@linux.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -66,37 +54,37 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---t6Aj+rePpll//Dod
+--bkMyAboMMII/IUDk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 06, 2023 at 01:01:55PM +0100, Bryan O'Donoghue wrote:
-> Add sc8280xp compatible consistent with recent CAMSS CCI interfaces.
+On Mon, Oct 02, 2023 at 11:28:04AM +0300, Jarkko Nikula wrote:
+> Add SMBus PCI ID on Intel Birch Stream SoC.
 >=20
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
 Applied to for-next, thanks!
 
 
---t6Aj+rePpll//Dod
+--bkMyAboMMII/IUDk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUlqZsACgkQFA3kzBSg
-KbYxYRAAr7+ppZOIsAJ24eXrV+W6sJDcUrxv7CSK9IjgX4II8QHuJJPwGW1iUeax
-LOgmBQcvDP2hQKG3oaAWcpn0UWly1ny4n6iHLyMK9EDiKIPkXVr64G5sfN/iDRjL
-U6lSb5ZRpO9uYvVu7+vFU9JmCoO5p53JnQpdkvZpy89wT8ylMST/Dx/ZHMYr6ySj
-s7TsBNizXBo0UXSUYjpXekq7NZHIP124/wK+LWUx3AXq7fnlGsksCAoQen27G05F
-U5bIPxhJuNvO4U/1g1xNZFHsOwI6Gb2Jk/dpNmik4YJ7jaiUfzK3QXuH0Yge/vxK
-JsWIdmMRMz31UTSePtq49Gd4Q2PFo92fti+TUVzZhkawhgi8jL6aX6u1Z93PMeqv
-NnHgVT4ziqKqCCHQQU11CcGcjNaepfawOlWSebqTI1oDk9Z5XAMRyxU0tGVAYQtB
-BKiPvnUeQ0kHGhoyfb4V5d3Q5ue9l12aJ2/PAMH2F5w3Q3m25dgRteW0IAT8OuZc
-TjxNWAbtDh6I3ZxgfBHR9XR8kdkBHgxv7h/6lYh3fxdUPPPnLHrADCURVscownI7
-tJy7FNISwe1O6yHfge2FnzUOFAspZAUL9VBMPU0fL5Z4w5NxTIxPs5tQsDfJQmxj
-zAnfTpMqoVsvt05mGusYWetkr00c3RiNG3Yp4P8V0zIGDWH7TS4=
-=jtu3
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUlqhsACgkQFA3kzBSg
+KbasEBAAmRKkr0OgUBSwU/2bTbtJNT9cQ23rkfOrUwmaBVEtL3jS1ZE1MQ34VgTN
+Cd1kg1fJXiZFiiv0rPcgSno6blZXJIgTd0r44pUNaEVc45QwdIZ6mLFrgOtpZg3R
+JB7bKN0hzA3x9DZcXOeQdei9oVPLEBnG/dqWw1GnDuh0JkUneF9SmlI0eXyFgX+C
+/rZ6+dW95o3ezbzsEQhfzgrh0ighKfmn2NSj3zJhPdtxBIi2qkHdgLkkvEvLBJzj
+0pQ/iBsyqxfUGC0QCJ8Tf5xr8HScZvxHuwEMJzhDXnkvjPdsvF2DTvi53JGRK8Ay
+yH4UnFbRk9Z4bGh2ac4kRhzNTuKVsE8RJ8TkwEwbdofZ8ZexChO0usWOSPfALQfx
+GOARh2eaOsTTG78604BYMH1cxzDwGpb7QM9TI47HnbPSwUCkmaribQw0ybVAfblK
+JnKU6T82V6q3C+jU1/9PJFZhfzMHlZ50xEqnMmNA2i4XucseTt21MmlJy7uycSBt
+c+pKP9OtFVx50CQKLWxWFwEtq7rNVQGazqrY4ttHcp21nVb0rwIWnIH91unSgx9O
+1ENsJxPc0YeVbwMjHLyGxnyrPW1zb5jhKWmJNtTx7leTStzF2/xPMNFZESJYNoqi
+GqSvjBOwWR6acJmsyqNuKQhaKsverqheJ5jqwwsaK9Kuy23I2DA=
+=xV3I
 -----END PGP SIGNATURE-----
 
---t6Aj+rePpll//Dod--
+--bkMyAboMMII/IUDk--
