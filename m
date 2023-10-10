@@ -2,142 +2,93 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D402E7C03F4
-	for <lists+linux-i2c@lfdr.de>; Tue, 10 Oct 2023 20:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2A37C041B
+	for <lists+linux-i2c@lfdr.de>; Tue, 10 Oct 2023 21:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233829AbjJJS6S (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 10 Oct 2023 14:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
+        id S1343677AbjJJTJ7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 10 Oct 2023 15:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbjJJS6R (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Oct 2023 14:58:17 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D925893;
-        Tue, 10 Oct 2023 11:58:12 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB77BC433C7;
-        Tue, 10 Oct 2023 18:58:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696964292;
-        bh=ys7zX7Uip/yjApTsNB1scMMUo0/posh8yamGRtSA3Rk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RL4dxfBVLsK8NR+QUwqeE0N3UhwgMYm3mO7m3Dp8BQWAw8W4AZQZ1poygrgqOOx9O
-         h+UnoxTFJxS5d7DmytOI2Q/1bOZ4Dd5JxKkHQ48C+HAMIuXrQunpDezF45lYwaaD3s
-         rTjziqWRLQvaTI1HMp4rPIyp8jkVUyD/7P4SUErRgqCujcgYJ9VyxF+E3XJua0C2+W
-         JFsgB/icYYc50GwjKPfNghwS7rCzxdtdf7f01hmFeWgLTmtPdUDQZuD2AXIfQY0HLR
-         FtjPdK31QgJUjRJbFx5n6DzT6JKGSQjnb6UXStsmfNf0m+g86ds2DJrZjWFYyM4Yr1
-         hzK4RluUVpXWg==
-Date:   Tue, 10 Oct 2023 20:58:06 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Lakshmi Yadlapati <lakshmiy@us.ibm.com>, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, jdelvare@suse.com, joel@jms.id.au,
-        andrew@aj.id.au, eajames@linux.ibm.com, ninad@linux.ibm.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v1 0/2] [PATCH] hwmon: (pmbus/max31785) Add minimum delay
- between bus accesses
-Message-ID: <ZSWevlHzu6kVcGWA@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lakshmi Yadlapati <lakshmiy@us.ibm.com>, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, jdelvare@suse.com, joel@jms.id.au,
-        andrew@aj.id.au, eajames@linux.ibm.com, ninad@linux.ibm.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20231009211420.3454026-1-lakshmiy@us.ibm.com>
- <ZSUaDIfWmEn5edrE@shikoro>
- <1284830f-025e-4e25-8ed0-50a6cc00d223@roeck-us.net>
+        with ESMTP id S1343570AbjJJTJ7 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 10 Oct 2023 15:09:59 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B5793;
+        Tue, 10 Oct 2023 12:09:57 -0700 (PDT)
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 34C2486BAC;
+        Tue, 10 Oct 2023 21:09:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1696964991;
+        bh=I4f7Dc6dnDKz6zHFLKzAB/fW4xuy6lQF9NKmsn74fB8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=0MGOSos9l8x8dJLs3E3bbVH+Ry9mAJ+SGWz/L0AuebUjbjeuLOW1JuRyE106JCSvG
+         /zMWg/9Z6Zik8YdA7+j4DShUg18ml/Zd1ymcgg04A/REHl2JrZg4X7D6rnERuUqfya
+         tz8rYp6/Nr1V0/CBgmg0Q/E4d2pJnv85F0fqHJpME7SGU8aGLWdcgqDDIRgw4mMwB9
+         jTW2qH7zbAQwgRVgjwxzgl0e8tmU8Q/QOEjOhEU3DL1IUwtxb01NyvGhaj8IZG8eXS
+         /4MYcTLsbe4jGnQRUf6yTyWszWSUoxfqNG4WmTT3cILGujjeYwQ10HxFfQNiTvyBvp
+         RUULqGCho7LNw==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-i2c@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: at24: add ST M24C32-D Additional Write lockable page
+Date:   Tue, 10 Oct 2023 21:09:25 +0200
+Message-Id: <20231010190926.57674-1-marex@denx.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1djJUpxMrj0Eh3vK"
-Content-Disposition: inline
-In-Reply-To: <1284830f-025e-4e25-8ed0-50a6cc00d223@roeck-us.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+The ST M24C32-D behaves as a regular M24C32, except for the -D variant
+which uses up another I2C address for Additional Write lockable page.
+This page is 32 Bytes long and can contain additional data. Document
+compatible string for it, so users can describe that page in DT. Note
+that users still have to describe the main M24C32 area separately as
+that is on separate I2C address from this page.
 
---1djJUpxMrj0Eh3vK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
+---
+ Documentation/devicetree/bindings/eeprom/at24.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Hi Guenter,
+diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
+index 98139489d4b5c..7be127e9b2507 100644
+--- a/Documentation/devicetree/bindings/eeprom/at24.yaml
++++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
+@@ -67,6 +67,8 @@ properties:
+                   pattern: cs16$
+               - items:
+                   pattern: c32$
++              - items:
++                  pattern: c32d-wl$
+               - items:
+                   pattern: cs32$
+               - items:
+-- 
+2.40.1
 
-> > > Reference to Andrew's previous proposal:
-> > > https://lore.kernel.org/all/20200914122811.3295678-1-andrew@aj.id.au/
-> >=20
-> > I do totally agree with Guenter's comment[1], though. This just affects
-> > a few drivers and this patch is way too intrusive for the I2C core. The
-> > later suggested prepare_device() callback[2] sounds better to me. I
-> > still haven't fully understood why this all cannot be handled in the
-> > driver's probe. Could someone give me a small summary about that?
-> >=20
->=20
-> Lots of PMBus devices have the same problem, we have always handled
-> it in PMBus drivers by implementing local wait code, and your references
-> point that out.
-
-I am confused now. Reading your reply:
-
-"I am not sure if an implementation in the i2c core is desirable. It
-looks quite invasive to me, and it won't solve the problem for all
-devices since it isn't always a simple "wait <n> microseconds between
-accesses". For example, some devices may require a wait after a write
-but not after a read, or a wait only after certain commands (such as
-commands writing to an EEPROM)."
-
-I get the impression you don't prefer to have a generic mechanism in the
-I2C core. This I share. Your response now sounds like you do support
-that idea now?
-
-> What other summary are you looking for ?
-
-What the actual problem is with these devices. The cover letter only
-mentions "issues with small command turn-around times". More details
-would be nice. Is it between transfers? Or even between messages within
-one transfer? Has it been tried to lower the bus frequency? Stuff like
-this.
-
-> On a side note, if anyone plans to implement the prepare_device() callbac=
-k,
-> please make sure that it covers all requirements. It would be unfortunate
-> if such a callback was implemented if that would still require per-driver
-> code (besides the callback).
-
-Is there a list of that somewhere? Or does it mean going through all the
-drivers and see what they currently do?
-
-Regards,
-
-   Wolfram
-
-
---1djJUpxMrj0Eh3vK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUlnroACgkQFA3kzBSg
-Kbbh1hAAobbv+zDV1isP1VmO8awucHkYyvQ8LVnS+Uk1vKJZJjDR7UZHJhnm0VDK
-iTZBj9bnFfwoGzSEA5qmsb6EClU/NE9e0I/zrAvLK8Qhl5qB7vE6iwCe7VwZCacK
-ckl9b7lW/4rB/d/Rp4c8dhpaMIiOV/iimgEAbQJlud+ojwZWTOIWJ0mE+1OlO+as
-m9tyYspGMUIa3APMfaL7hmuNTQC8alEenf/rrPcbHhUKEfu9MmS1fWbXgMgJHgse
-IeTBCDf0lurUO/NdnCGxgfG5aQHZ37EwdaDETzxtob0uWgc2IsUAx//CIxG3VN0J
-13j3QnOwNW3GRmiwiHJgP5Ij896pNaffOKdWz79gSmqKbjaJZ7Tj4FC1IPq9cWLZ
-zf/P0yvysvHC1w8mFFQ3oCJum+VPsK7y9AK/yzxDxSXEq10jUdLCPPoZ4+smhtls
-DcfND9JE2WSpH8Gz0iaeEn629LZlT852KPLFLA6M5sBtHc0w4beT99EL1f3bxn+9
-GSBWEjh5/IHX3YKfWwnjeuDme3OVxc4+eUOmV59i4xjvYo4t9N5qcGy7CucuOFEo
-bz5AcKVQNEIwC3liRRZLzy4dQLHEVlRMuNsk1Rk+BbtTdLygSYmqTVH96j2r5v41
-JuspoeQn8WmdTyD/LnkoZYtqxR6F+HynPJXs4/IgHMRzBW/D0ks=
-=9HLu
------END PGP SIGNATURE-----
-
---1djJUpxMrj0Eh3vK--
