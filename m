@@ -2,123 +2,86 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C9F7C5001
-	for <lists+linux-i2c@lfdr.de>; Wed, 11 Oct 2023 12:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1089F7C5057
+	for <lists+linux-i2c@lfdr.de>; Wed, 11 Oct 2023 12:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbjJKKXj (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 11 Oct 2023 06:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
+        id S234794AbjJKKih (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 11 Oct 2023 06:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbjJKKXh (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Oct 2023 06:23:37 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4AFB0;
-        Wed, 11 Oct 2023 03:23:35 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-405497850dbso61556505e9.0;
-        Wed, 11 Oct 2023 03:23:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697019814; x=1697624614; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=bX+yrAuVDTEDKkc7P0hOKfzpwI5t1BU6OZLf3VDs9ao=;
-        b=FS2cGOrKfi8VkcP2/nRVGaQ18DieQWSXkyQ2aZ/47vav+7df78GY53/I+3f8dqhG8Y
-         3AgTHHSGC1S45LrtXgl7yskO9OaL8er8vmbZ9llGCnlsjSWILQxHZ4T7NTMNwzMMmsV3
-         Du60voNV5eFQljR4+aNzLfLcWjx4/b30m0Yr4uwN2OSreRsdaNl0jnfns4VTEd4pvEDx
-         9D9HJSrRs52fM8XQU2bCgpWdOLGXxY4HJqJow4GOtREGKSBON/44M9ASH3qL2Kn/oGrU
-         N3+QZJYwmzoMhnToTOVYDYpFKYmix9mu3ZJs1SNKLA/Ib3n20IZ0V9Ou4HYr2/CwJ6sK
-         RW4A==
+        with ESMTP id S231847AbjJKKig (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 11 Oct 2023 06:38:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FEE94
+        for <linux-i2c@vger.kernel.org>; Wed, 11 Oct 2023 03:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1697020675;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B9T69CSeczQTNAGc3fH4cJghTMdZtaq9dJk8j6ttMDE=;
+        b=jIE5ENlAEmsyRXF95FFe5og93HzPhN4nL3oxKosf1GhzFtNWFhGgWuL11HkKz8E7WY+0Nb
+        EzWnLqpuzLdz10AOW78duZuysvCtP7tDWZHZYhdBdlh3YbWC7eJb7K9KTAJdr1ymXnuIPD
+        bO8DRJNWU+GRr2GbJFZLsQsNKmeY9pE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-402-2QobqTb6NkeaNZiYt5vxCg-1; Wed, 11 Oct 2023 06:37:54 -0400
+X-MC-Unique: 2QobqTb6NkeaNZiYt5vxCg-1
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-52f274df255so909104a12.1
+        for <linux-i2c@vger.kernel.org>; Wed, 11 Oct 2023 03:37:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697019814; x=1697624614;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bX+yrAuVDTEDKkc7P0hOKfzpwI5t1BU6OZLf3VDs9ao=;
-        b=U3WkmYw8Mog7/FpXYu6c/L0BsFg2D04NBM+E+k6K/TO7Z1ssyfQsNQJxmXcyZME/67
-         mmeSkN8ecNwxxmye/t/J6uYgftEssyGHdDOTtCr7XO13VZOx55A3SA2+2F77rdoY6vOA
-         ZGLVO0QEB3cwcPscUS2id04wdISBatpcrSLiZrVVJYbu3PBPwfeMqi7SUoGPuhgnXlNc
-         c2Voc/Ny398VUUDB1trVMJk7uwfktJDRfXko2jXkfnrPDdS/aKgXFZastKXSS/xGi8eL
-         C42Dho7BJiMxATT8qKl/2HTz2XxxHpLYEDGJnXIrJy3/zhftto5DzFt33VHnX4LeNem5
-         +RiA==
-X-Gm-Message-State: AOJu0YxPsI3+eJsbugwuv4uAQD9kO7X804JeIXm1AmBVDxzlwZ8edhdS
-        VIGR+PaGf0WrtoxaKgzlSv7w1TQkiScZR3jr
-X-Google-Smtp-Source: AGHT+IEW1PktiicAatOHgxHgnvHkX2qPEEz4bBWzDDSvTEiBL2y6OpAV7YLva3DDVFDRP/UXlFVX3w==
-X-Received: by 2002:a05:600c:1e28:b0:407:5b7c:2f6a with SMTP id ay40-20020a05600c1e2800b004075b7c2f6amr2510587wmb.0.1697019813855;
-        Wed, 11 Oct 2023 03:23:33 -0700 (PDT)
-Received: from ?IPV6:2a02:168:575a:b00b:10e9:ac6e:518d:a489? ([2a02:168:575a:b00b:10e9:ac6e:518d:a489])
-        by smtp.googlemail.com with ESMTPSA id v10-20020a05600c470a00b00407460234f9sm11116659wmo.21.2023.10.11.03.23.32
+        d=1e100.net; s=20230601; t=1697020673; x=1697625473;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B9T69CSeczQTNAGc3fH4cJghTMdZtaq9dJk8j6ttMDE=;
+        b=F3UQf1Z/lCEWfR7FnNmLCZiIf1ZlEiIuaA7pvaCtoyaV3NrxI1nUQ1kZncmKEp0YD2
+         5xTvtVeG3/CQb63JxjtEi6P10IJ+IBlL3xK7+qwg6OsTm2oD/XVsh1IzWQYyb/pxvSB7
+         PfmfUX7RVBl/UbRw/My1ujeZQxQ0hngpfEPIxF1OJWeIPDUuODs/Y3hzAiwoJzD3u1wo
+         JOERuZOQHTxdmogByHxjBlZ4LNFTbqkWqKhGK8406lsZMBXN/68+UroNIOKAkDxYXt0C
+         ZR8FronEJkVwPrPLTS+auWHOI5idY+I7mtywe67POxISzd259qNPyMJEuliUNpTEK/fi
+         MnAw==
+X-Gm-Message-State: AOJu0YzhuVvsf4UC2nwJpqeAJYvd0Cytt+mF8bwmMXQ9rS62IAnKum5N
+        +JJhtJlno92FbCy18ypEb418IjTd7b0+TQ7vGTVlh4eOT05Em1diZvhA3H3KxJRN1XX4eqSUqBZ
+        6RxaHs/AxiHGiCm9+AREG
+X-Received: by 2002:a05:6402:2547:b0:531:14c4:ae30 with SMTP id l7-20020a056402254700b0053114c4ae30mr16765432edb.0.1697020673665;
+        Wed, 11 Oct 2023 03:37:53 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGpqK//D1TgfDznC+Wtwpoxq0pK4T0TpAW3VYUjkeuymqvaSZAJeCmcSYMMkbgvTRmAH89JYQ==
+X-Received: by 2002:a05:6402:2547:b0:531:14c4:ae30 with SMTP id l7-20020a056402254700b0053114c4ae30mr16765416edb.0.1697020673313;
+        Wed, 11 Oct 2023 03:37:53 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id s14-20020a056402014e00b005309eb7544fsm8660244edu.45.2023.10.11.03.37.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Oct 2023 03:23:33 -0700 (PDT)
-Message-ID: <ba3c0972-2ba2-4df7-826e-a7634027b967@gmail.com>
-Date:   Wed, 11 Oct 2023 12:23:31 +0200
+        Wed, 11 Oct 2023 03:37:52 -0700 (PDT)
+Message-ID: <6a87b43a-0648-28d4-6c69-e0f684e44eb6@redhat.com>
+Date:   Wed, 11 Oct 2023 12:37:51 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: brcmstb: Add support for atomic transfers
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v20 1/4] usb: Add support for Intel LJCA device
+Content-Language: en-US, nl
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Wentong Wu <wentong.wu@intel.com>
+Cc:     gregkh@linuxfoundation.org, oneukum@suse.com, wsa@kernel.org,
+        andi.shyti@linux.intel.com, broonie@kernel.org,
+        bartosz.golaszewski@linaro.org, linus.walleij@linaro.org,
+        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Kamal Dasu <kamal.dasu@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Wolfram Sang <wsa@kernel.org>
-References: <CGME20231006144123eucas1p111cbbdbd70927ffbd697f7edf6b7ae1c@eucas1p1.samsung.com>
- <20231006144117.4079796-1-m.szyprowski@samsung.com>
-Content-Language: en-US, de-CH, fr-CH
-From:   Gregor Riepl <onitake@gmail.com>
-Autocrypt: addr=onitake@gmail.com; keydata=
- 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
- DMcsQA==
-In-Reply-To: <20231006144117.4079796-1-m.szyprowski@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
+ <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
+ <ZSZ3IPgLk7uC5UGI@smile.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <ZSZ3IPgLk7uC5UGI@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -127,44 +90,153 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi,
 
-I admit that I don't understand the I²C subsystem very well, but doesn't 
-this introduce a potential race condition?
+On 10/11/23 12:21, Andy Shevchenko wrote:
+> On Mon, Oct 09, 2023 at 02:33:22PM +0800, Wentong Wu wrote:
+>> Implements the USB part of Intel USB-I2C/GPIO/SPI adapter device
+>> named "La Jolla Cove Adapter" (LJCA).
+>>
+>> The communication between the various LJCA module drivers and the
+>> hardware will be muxed/demuxed by this driver. Three modules (
+>> I2C, GPIO, and SPI) are supported currently.
+>>
+>> Each sub-module of LJCA device is identified by type field within
+>> the LJCA message header.
+>>
+>> The sub-modules of LJCA can use ljca_transfer() to issue a transfer
+>> between host and hardware. And ljca_register_event_cb is exported
+>> to LJCA sub-module drivers for hardware event subscription.
+>>
+>> The minimum code in ASL that covers this board is
+>> Scope (\_SB.PCI0.DWC3.RHUB.HS01)
+>>     {
+>>         Device (GPIO)
+>>         {
+>>             Name (_ADR, Zero)
+>>             Name (_STA, 0x0F)
+>>         }
+>>
+>>         Device (I2C)
+>>         {
+>>             Name (_ADR, One)
+>>             Name (_STA, 0x0F)
+>>         }
+>>
+>>         Device (SPI)
+>>         {
+>>             Name (_ADR, 0x02)
+>>             Name (_STA, 0x0F)
+>>         }
+>>     }
+> 
+> This commit message is not true anymore, or misleading at bare minimum.
+> The ACPI specification is crystal clear about usage _ADR and _HID, i.e.
+> they must NOT be used together for the same device node. So, can you
+> clarify how the DSDT is organized and update the commit message and
+> it may require (quite likely) to redesign the architecture of this
+> driver. Sorry I missed this from previous rounds as I was busy by
+> something else.
 
- > ...
- > @@ -240,7 +241,7 @@ static int brcmstb_i2c_wait_for_completion(struct 
-brcmstb_i2c_dev *dev)
- > ...
-> -	if (dev->irq >= 0) {
-> +	if (dev->irq >= 0 && !dev->atomic) {
- > ...
- > @@ -287,7 +288,7 @@ static int brcmstb_send_i2c_cmd(struct 
-brcmstb_i2c_dev *dev,
- > ...
-> -	if (dev->irq >= 0)
-> +	if (dev->irq >= 0 && !dev->atomic)
- > ...
- > +static int brcmstb_i2c_xfer_atomic(struct i2c_adapter *adapter,
- > +				   struct i2c_msg msgs[], int num)
- > ...
-> +	dev->atomic = true;
-> +	ret = brcmstb_i2c_xfer(adapter, msgs, num);
-> +	dev->atomic = false;
-> ...
+This part of the commit message unfortunately is not accurate.
+_ADR is not used in either DSDTs of shipping hw; nor in the code.
 
-What happens when one of the if() branches is taken in one thread while 
-another thread is just executing the assignment of the atomic flag? My 
-expectation would be that the first tread still sees the old flag value 
-and happily executes the branch, while brcmstb_i2c_xfer_atomic() sets 
-the flag just after and initiates a transfer.
+The code in question parsing the relevant part of the DSDT looks
+like this:
 
-I'd expect that access to the flag must be atomic as well, so maybe 
-something like 
-https://www.kernel.org/doc/html/latest/core-api/wrappers/atomic_t.html 
-is needed, or some other synchronization mechanism.
+static int ljca_match_device_ids(struct acpi_device *adev, void *data)
+{
+        struct ljca_match_ids_walk_data *wd = data;
+        const char *uid = acpi_device_uid(adev);
 
-Or is it guaranteed that brcmstb_i2c_wait_for_completion() and 
-brcmstb_send_i2c_cmd() can only be called from the same thread as 
-brcmstb_i2c_xfer_atomic() ?
+        if (acpi_match_device_ids(adev, wd->ids))
+                return 0;
+
+        if (!wd->uid)
+                goto match;
+
+        if (!uid)
+                /*
+                 * Some DSDTs have only one ACPI companion for the two I2C
+                 * controllers and they don't set a UID at all (e.g. Dell
+                 * Latitude 9420). On these platforms only the first I2C
+                 * controller is used, so if a HID match has no UID we use
+                 * "0" as the UID and assign ACPI companion to the first
+                 * I2C controller.
+                 */
+                uid = "0";
+        else
+                uid = strchr(uid, wd->uid[0]);
+
+        if (!uid || strcmp(uid, wd->uid))
+                return 0;
+
+match:
+        wd->adev = adev;
+
+        return 1;
+}
+
+Notice that it check _UID (for some child devices, only those of
+which there may be more then 1 have a UID set in the DSDT) and
+that in case of requested but missing UID it assumes UID = "0"
+for compatibility with older DSDTs which lack the UID.
+
+And relevant DSDT bits from early hw (TigerLake Dell Latitude 9420)
+Note no UID for the I2C node even though the LJCA USB IO expander
+has 2 I2C controllers :
+
+    Scope (_SB.PC00.XHCI.RHUB.HS06)
+    {
+            Device (VGPO)
+            {
+                Name (_HID, "INTC1074")  // _HID: Hardware ID
+                Name (_DDN, "Intel UsbGpio Device")  // _DDN: DOS Device Name
+            }
+
+            Device (VI2C)
+            {
+                Name (_HID, "INTC1075")  // _HID: Hardware ID
+                Name (_DDN, "Intel UsbI2C Device")  // _DDN: DOS Device Name
+            }
+    }
+
+And for newer hw (Lenovo Thinkpad X1 yoga gen7, alder lake):
+
+        Scope (_SB.PC00.XHCI.RHUB.HS08)
+        {
+            Device (VGPO)
+            {
+                Name (_HID, "INTC1096")  // _HID: Hardware ID
+                Name (_DDN, "Intel UsbGpio Device")  // _DDN: DOS Device Name
+            }
+
+            Device (VIC0)
+            {
+                Name (_HID, "INTC1097")  // _HID: Hardware ID
+                Name (_DDN, "Intel UsbI2C Device")  // _DDN: DOS Device Name
+                Name (_UID, Zero)  // _UID: Unique ID
+            }
+
+            Device (VIC1)
+            {
+                Name (_HID, "INTC1097")  // _HID: Hardware ID
+                Name (_DDN, "Intel UsbI2C Device")  // _DDN: DOS Device Name
+                Name (_UID, One)  // _UID: Unique ID
+            }
+
+            Device (VSPI)
+            {
+                Name (_HID, "INTC1098")  // _HID: Hardware ID
+                Name (_DDN, "Intel UsbSPI Device")  // _DDN: DOS Device Name
+            }
+        }
+
+Note UIDs are used for the I2C controllers but not for the singleton
+SPI and GPIO controllers.
+
+TL;DR: there is nothing to worry about here, but the commit message
+should be updated to reflect reality.
 
 Regards,
-Gregor
+
+Hans
+
