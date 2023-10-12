@@ -2,92 +2,105 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3119D7C7842
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Oct 2023 22:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA6C7C795D
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Oct 2023 00:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442919AbjJLUzw (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Oct 2023 16:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
+        id S1442986AbjJLWST (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Oct 2023 18:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442920AbjJLUzu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Oct 2023 16:55:50 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACB4DD
-        for <linux-i2c@vger.kernel.org>; Thu, 12 Oct 2023 13:55:48 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 18B572C0276;
-        Fri, 13 Oct 2023 09:55:47 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1697144147;
-        bh=afGf/ekp/+BiFhRA6dIQoU+1zIdLF/hdLKv9nMLUZP8=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=RNrYXny9qfH9AkwWpZHUp5+bKbQLwm5+nucH3TgmVH52EB5yVntX11jVLxvbDvt1q
-         YAt5vjw3G4jcOu7Iq23ZXzkMNwso6g+7VQtpWP8SBOoaawX5xhD6iQTF4pZKRCIuma
-         XyTO4HX3nAbqKl5yu1RjMPV+yaBhkkeNbdibFXk1UZA/4jW/Eft5eqxP1GdMduf6t9
-         abclx89rY2FmtS1omtpOMqyIMl/8NTYZFbI/iM4XCKpbBYG8yx9ZElA+0Pu9N2dG7s
-         bPDujPdf1smN5xi8zgpBt4VD5yG7mbqe1kYWBcvCVuY72e4aLAuHu7/+fXsm7uy+yH
-         aZw+LTlNNqKnA==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B65285d530000>; Fri, 13 Oct 2023 09:55:47 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.37; Fri, 13 Oct 2023 09:55:46 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.48; Fri, 13 Oct 2023 09:55:46 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.037; Fri, 13 Oct 2023 09:55:46 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: i2c: mv64xxx: add reset-gpios property
-Thread-Topic: [PATCH 1/2] dt-bindings: i2c: mv64xxx: add reset-gpios property
-Thread-Index: AQHZ/MBi6XZX9Kqut0uImsVd7sO7BrBE69CAgADdsgA=
-Date:   Thu, 12 Oct 2023 20:55:46 +0000
-Message-ID: <993b78a0-81b6-4822-ac55-4ae9612e3f55@alliedtelesis.co.nz>
-References: <20231012035838.2804064-1-chris.packham@alliedtelesis.co.nz>
- <20231012035838.2804064-2-chris.packham@alliedtelesis.co.nz>
- <cfc9b2cc-e0a8-4115-a7c5-a75654adb84a@linaro.org>
-In-Reply-To: <cfc9b2cc-e0a8-4115-a7c5-a75654adb84a@linaro.org>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <85692065B7E2834BBD1D64626840E5CE@atlnz.lc>
-Content-Transfer-Encoding: base64
+        with ESMTP id S1442960AbjJLWST (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Oct 2023 18:18:19 -0400
+X-Greylist: delayed 999 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Oct 2023 15:18:17 PDT
+Received: from stcim.de (stcim.de [IPv6:2a01:4f8:151:40c4::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B72BB8;
+        Thu, 12 Oct 2023 15:18:17 -0700 (PDT)
+Received: from stc by stcim with local (Exim 4.92)
+        (envelope-from <stc@stcim.de>)
+        id 1qr3kF-0007rM-Hb; Fri, 13 Oct 2023 00:01:27 +0200
+Date:   Fri, 13 Oct 2023 00:01:27 +0200
+From:   Stefan Lengfeld <stefan@lengfeld.xyz>
+To:     Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
+Cc:     linux-media <linux-media@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-i2c@vger.kernel.org
+Subject: Re: Sony IMX290/462 image sensors I2C xfer peculiarity
+Message-ID: <20231012220127.GB27838@stcim.de>
+References: <m3y1gpw8ri.fsf@t19.piap.pl>
+ <CAPY8ntASwh3AcRqE+2zF4Df=u+=wJ5K9icAeOrXTMJGDd1+caw@mail.gmail.com>
+ <m3o7hfx3ob.fsf@t19.piap.pl>
+ <m37cnuvmhn.fsf@t19.piap.pl>
+ <m3o7h5tthf.fsf@t19.piap.pl>
+ <m3jzrttrmz.fsf@t19.piap.pl>
+ <20231011101553.we3r73xejvqdql5j@porty>
+ <m3fs2htn7g.fsf@t19.piap.pl>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=L6ZjvNb8 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=Ulsmse5NmTHuyaPRj18A:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <m3fs2htn7g.fsf@t19.piap.pl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-SGkgS3J5c3p0b2YsDQoNCihyZXNlbmQgYXMgcGxhaW4gdGV4dCkNCg0KT24gMTIvMTAvMjMgMjA6
-NDIsIEtyenlzenRvZiBLb3psb3dza2kgd3JvdGU6DQo+IE9uIDEyLzEwLzIwMjMgMDU6NTgsIENo
-cmlzIFBhY2toYW0gd3JvdGU6DQo+PiBBZGQgYSByZXNldC1ncGlvcyBwcm9wZXJ0eSB0byB0aGUg
-bWFydmVsbCxtdjY0eHh4LWkyYyBiaW5kaW5nLg0KPiBXaHk/DQoNClNvcnJ5IGFib3V0IHRoYXQu
-IEkgcHV0IGEgYmV0dGVyIGV4cGxhbmF0aW9uIGluIHRoZSBjb3JyZXNwb25kaW5nIGRyaXZlciAN
-CmNoYW5nZSBidXQgdGhlbiBvdmVyLWVkaXRlZCB3aGVuIGRvaW5nIHRoZSBkZXZpY2UtdHJlZSBj
-aGFuZ2UuIEknbGwgdHJ5IA0KYW5kIGV4cGxhaW4gdGhpbmdzIGEgYml0IGJldHRlciBpbiB2Mi4N
-Cg0KPj4gU2lnbmVkLW9mZi1ieTogQ2hyaXMgUGFja2hhbTxjaHJpcy5wYWNraGFtQGFsbGllZHRl
-bGVzaXMuY28ubno+DQo+PiAtLS0NCj4gQmVzdCByZWdhcmRzLA0KPiBLcnp5c3p0b2YNCj4=
+Hi Chris,
+
+> > My understand is that an ordinary I2C device would just use normal (and
+> > sleepable) I2C transfers while the device is in use.
+> 
+> You are spot-on here :-) Now I use IMX 290 and 462.
+> 
+> OTOH I wonder if such issues are limited to those sensors only.
+
+Hmm, yes. I know no other I2C device that has these timeout issues. (*)
+
+> The problem is I use Sony IMX290 and IMX462 image sensors, and they have
+> an apparently hard-coded timeout of about 2^18 their master clock cycles
+> (= ca. 7 ms with my setup). After the timeout they simply disconnect
+> from the I2C bus. Of course, this isn't mentioned in the docs.
+
+hmm. I have no idea about this sensor and your setup. So I can just give hints:
+
+This timeout seems strange. If this 7 ms timeout is required, it would mean
+that I2C masters require to fullfill real-time/deadline requirements.  For
+"small" I2C master in microcontrolles this seems ok-ish, but for general
+operating systems real-time requirements are hard.  The real-time patches for
+linux just landed recently and it still requires fine tuning the system for the
+required deadlines.
+
+Maybe you just hit a corner case or a bug, that can be avoid, in the I2C
+device.  Maybe check with the manufacturer directly?
+
+> Unfortunately, "normal" I2C accesses take frequently more than those
+> 7 ms (mostly due to scheduling when all CPU cores are in use).
+
+Yes, correctly. There are multiple cases in which I2C transactions to the same
+device can be preempted/delayed: A busy system, as you said, or when some other driver
+in the kernel accesses another I2C device on the same bus. This will lock the
+bus/I2C adapter for the duration of its transfer.
+
+Do you know the I2C repeated start feature [1]? This allows to batch together
+multiple I2C read/writes in a single transfer. And in the best case, this
+transfer is executed in one go without a delay in between. At least in the
+kernel it's guaranteed that no other driver can go in between with another
+transfer.
+
+Kind regards,
+Stefan
+
+[1]: https://www.i2c-bus.org/repeated-start-condition/
+
+(*) Fun answer: Actually external watchdogs have timeouts. But the timeout
+duration is in the range of seconds, not milliseconds. And timeout expiration
+is expected (in error cases ;-).
