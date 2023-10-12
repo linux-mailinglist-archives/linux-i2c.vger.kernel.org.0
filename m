@@ -2,110 +2,134 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C907C70F8
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Oct 2023 17:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9AF7C717D
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Oct 2023 17:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378304AbjJLPIN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Oct 2023 11:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
+        id S1379348AbjJLPaT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Oct 2023 11:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347050AbjJLPIN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Oct 2023 11:08:13 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF0FD7;
-        Thu, 12 Oct 2023 08:08:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697123291; x=1728659291;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=/1CsdNQjxQo9/5qh0TNOdpn1mckdm/TJkKZvUEyDvlE=;
-  b=LNRovgrIEMHQw4Haix1K5Yd01CMB4GTVPXx25plK4KySO8Wh0iB+Gans
-   jEXx113U5YPUMPfTIu5u5bKsfHIglmUTFTaaeYKNNsv+Ag//sH1LtV6IA
-   5Yyj0e728yYW9A8Zk6dyyjGpzNItB9hPl12srAAyHZIvjF4/lsI7QE82Q
-   5OUR4bVqDTKsmLv6ZjHNhoiVGel0Il31Lutjl5Nv11kzeHjMMI6ysJrlD
-   th2AjtvEvoseoEmawwQqvHwoRNsmrxbyTR2GJUHwQvwYFX9KN/plbJ1bM
-   G3FXB8Tw1KvCnsvDIMPmiNlwItGxMmSfcpa9QpNsIKtmjKO/PsEK/aORh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="415993228"
-X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
-   d="scan'208";a="415993228"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 08:08:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="1085696842"
-X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
-   d="scan'208";a="1085696842"
-Received: from jnikula-mobl4.fi.intel.com (HELO localhost) ([10.237.66.162])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 08:08:05 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        "lakshmiy@us.ibm.com" <lakshmiy@us.ibm.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "ninad@linux.ibm.com" <ninad@linux.ibm.com>,
-        "eajames@linux.ibm.com" <eajames@linux.ibm.com>,
-        "wsa@kernel.org" <wsa@kernel.org>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
-Subject: Re: [PATCH v1 1/2] i2c: smbus: Allow throttling of transfers to
- client devices
-In-Reply-To: <bf0d71383958e7cc88bc84c7e2378f10d3a486f3.camel@suse.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20231009211420.3454026-1-lakshmiy@us.ibm.com>
- <20231009211420.3454026-2-lakshmiy@us.ibm.com>
- <bf0d71383958e7cc88bc84c7e2378f10d3a486f3.camel@suse.com>
-Date:   Thu, 12 Oct 2023 18:08:03 +0300
-Message-ID: <87y1g7zxnw.fsf@intel.com>
+        with ESMTP id S1379229AbjJLPaS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Oct 2023 11:30:18 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA29C0;
+        Thu, 12 Oct 2023 08:30:17 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65F77C433C8;
+        Thu, 12 Oct 2023 15:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697124617;
+        bh=ZtcSIbjB2WpeZfQRyCvdpc+0MAvoSIsAVFQJFGWoAZY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sNlqy8imXhwlW5ogqsGatXLJh6x3ULy2dxsaSxs56ggFVkTV6XlGelwtvmknbj7Xu
+         ShUCZ/8OXslZolbuuvyrBlxLrcJ01GSlmz7CSJEaxf3rAcgbPMbnfuFHufU09E90RW
+         5ApYEGyJHTTls7cFvAibnKaw6QYJ/MgybICMj+V6qAR0vsGzNnF3N6loiEvhXeakbo
+         Tc8RBxaMuLt9cw9IyN5cmf2yVbPk/7zrWOf/NIL+18Z146Hj24oQ+EZR236LNiKgxH
+         rW8s1EpB9lyTQA3S/nGP0hy8u95XFa9UJYnNgK7IXnZV4NIWHKMv5YsKgXN/Jehq6j
+         lkrAiKBqcY2gw==
+Received: (nullmailer pid 821925 invoked by uid 1000);
+        Thu, 12 Oct 2023 15:30:12 -0000
+Date:   Thu, 12 Oct 2023 10:30:12 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
+        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
+        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
+        andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
+        lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
+        arnd@kernel.org, richardcochran@gmail.com,
+        Frank Rowand <frowand.list@gmail.com>, peng.fan@oss.nxp.com,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-p.hy@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v6 10/11] ARM: dts: stm32: add ETZPC as a system bus for
+ STM32MP15x boards
+Message-ID: <20231012153012.GA698406-robh@kernel.org>
+References: <20231010125719.784627-1-gatien.chevallier@foss.st.com>
+ <20231010125719.784627-11-gatien.chevallier@foss.st.com>
+ <20231010184212.GA1221641-robh@kernel.org>
+ <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Thu, 12 Oct 2023, Jean Delvare <jdelvare@suse.com> wrote:
-> On Mon, 2023-10-09 at 16:14 -0500, Lakshmi Yadlapati wrote:
->> Signed-off-by: Lakshmi Yadlapati <lakshmiy@us.ibm.com>
->> ---
->> =C2=A0drivers/i2c/i2c-core-base.c=C2=A0 |=C2=A0=C2=A0 8 +-
->> =C2=A0drivers/i2c/i2c-core-smbus.c | 143 ++++++++++++++++++++++++++++---=
-----
->> =C2=A0drivers/i2c/i2c-core.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=
- 23 ++++++
->> =C2=A0include/linux/i2c.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0=C2=A0 2 +
->> =C2=A04 files changed, 145 insertions(+), 31 deletions(-)
->> (...)
->
-> Non-trivial patch with no description -> not even looking, sorry. You
-> can't possibly propose a change to the core of a subsystem and not
-> bother explaining why this change is needed or what purpose it serves.
+On Wed, Oct 11, 2023 at 10:49:58AM +0200, Gatien CHEVALLIER wrote:
+> Hi Rob,
+> 
+> On 10/10/23 20:42, Rob Herring wrote:
+> > On Tue, Oct 10, 2023 at 02:57:18PM +0200, Gatien Chevallier wrote:
+> > > ETZPC is a firewall controller. Put all peripherals filtered by the
+> > > ETZPC as ETZPC subnodes and reference ETZPC as an
+> > > access-control-provider.
+> > > 
+> > > For more information on which peripheral is securable or supports MCU
+> > > isolation, please read the STM32MP15 reference manual.
+> > > 
+> > > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> > > ---
+> > > 
+> > > Changes in V6:
+> > >      	- Renamed access-controller to access-controllers
+> > >      	- Removal of access-control-provider property
+> > > 
+> > > Changes in V5:
+> > >      	- Renamed feature-domain* to access-control*
+> > > 
+> > >   arch/arm/boot/dts/st/stm32mp151.dtsi  | 2756 +++++++++++++------------
+> > >   arch/arm/boot/dts/st/stm32mp153.dtsi  |   52 +-
+> > >   arch/arm/boot/dts/st/stm32mp15xc.dtsi |   19 +-
+> > >   3 files changed, 1450 insertions(+), 1377 deletions(-)
+> > 
+> > This is not reviewable. Change the indentation and any non-functional
+> > change in one patch and then actual changes in another.
+> 
+> Ok, I'll make it easier to read.
+> 
+> > 
+> > This is also an ABI break. Though I'm not sure it's avoidable. All the
+> > devices below the ETZPC node won't probe on existing kernel. A
+> > simple-bus fallback for ETZPC node should solve that.
+> > 
+> 
+> I had one issue when trying with a simple-bus fallback that was the
+> drivers were probing even though the access rights aren't correct.
+> Hence the removal of the simple-bus compatible in the STM32MP25 patch.
 
-We've even managed to write extensive documentation on this!
+But it worked before, right? So the difference is you have either added 
+new devices which need setup or your firmware changed how devices are 
+setup (or not setup). Certainly can't fix the latter case. You just need 
+to be explicit about what you are doing to users.
 
-https://docs.kernel.org/process/submitting-patches.html#describe-your-chang=
-es
 
->
-> (And yes I know there's some information in patch 0/2, but that's not
-> going to make it into git, so it will be lost. Commits should be self-
-> sufficient, not only the implementation, but also the description.)
->
-> I would also suggest trimming the To and Cc lists. I can't really see
-> how linux-media and dri-devel are relevant here for example.
+> Even though a node is tagged with the OF_POPULATED flag when checking
+> the access rights with the firewall controller, it seems that when
+> simple-bus is probing, there's no check of this flag.
 
---=20
-Jani Nikula, Intel
+It shouldn't. Those flags are for creating the devices (or not) and 
+removing only devices of_platform_populate() created.
+
+> of_platform_populate() checks and sets the OF_POPULATED_BUS flag.
+> Maybe that is my error and the firewall bus populate should set
+> OF_POPULATED_BUS instead of OF_POPULATED. Is that correct?
+
+Shrug. Off hand, I'd say probably not, but am not certain.
+
+Rob
