@@ -2,178 +2,240 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0417C6B74
-	for <lists+linux-i2c@lfdr.de>; Thu, 12 Oct 2023 12:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8497C6C0F
+	for <lists+linux-i2c@lfdr.de>; Thu, 12 Oct 2023 13:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343811AbjJLKtP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 12 Oct 2023 06:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S1378036AbjJLLPW (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 12 Oct 2023 07:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbjJLKtO (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Oct 2023 06:49:14 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2103.outbound.protection.outlook.com [40.107.22.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7389090;
-        Thu, 12 Oct 2023 03:49:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HkFaDHFdriwVkims9WrI9xKUC2KI+uUSM2KECVpsDTNqjbMhbr384hZjasSavnfNCP6KmdJIKO59Y+VVLk/UcQAJ3h9+SXhSXuie9jU7ZrfQ69UjeY9Xq14tXpcztExI0JSOQpAnT/yLKFlv09OUSUAN7PqQjW/vayuY48+rtgxm1jb5XbIxPvUYaDqlCEGcmhYCzwzsDhvGLvElAeUmWX8DRItpA+cqhjTPpcE8unohpkSl6/vIpox0c9rXwGxV0vBN1grsPvxjTxdBAArq9wjei7mlZauaBzen/crovqCRaMr3DUOH3z+ji71HAdql3B3ehc59DUoObCT0/OYEVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a/wyIA0JenScA1RTENeYZs9coz7r4tAvVJ7RmRTMG4w=;
- b=ALXJJCB0J895iSUYiXI2iDQpMqI1p4qdoJWSBsCgTCNiKciMzQj1Gw0gJayAUZnbFwYSTrW1hj5RBueKzY5vSXsE3qRaVSfPDRO2nCvlwgA2rUtEWFLBWn5U1qH62mrVu4wgPcvduFX5oG/22GwAUDGnj+ENxpDkTQPyBoJpjTDjusLW0lJUtrS0OA26kgI7k/6aFy8kggevOAUXlNI06ep1njFS0HrQ5o92UwN9pAIkKEqp9x/30FoUAmjEGIjmDLWj4aQoXdNTNrbPTW6Jy9ZTXBLnQ5IG7y5Ul8Bi3orY/h5z7xoVna5oEFxBYA1KprPsdgtvhi1DoFFcutsDJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a/wyIA0JenScA1RTENeYZs9coz7r4tAvVJ7RmRTMG4w=;
- b=VzOt+lArYTnw4PLZ2AatIG3DvrLdcbuOmenYqVsQL88VLoJ7MxUMdOxaI5WK3dWDODbE5K13uYMkD5lbCvoTR4aJ20lPIgT1KUP2nbjOiWvOrmfUdeSiFvbUwQkTc+Od0GEVu4NfqJCgoBS/yvDcySymiAEZikk+b6A/kzM2CY4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
- by PRAPR02MB7906.eurprd02.prod.outlook.com (2603:10a6:102:29e::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38; Thu, 12 Oct
- 2023 10:49:09 +0000
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::4ba4:83a5:e60c:3a5d]) by AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::4ba4:83a5:e60c:3a5d%7]) with mapi id 15.20.6863.043; Thu, 12 Oct 2023
- 10:49:09 +0000
-Message-ID: <63403365-2d23-b4a0-d869-070686d62ab5@axentia.se>
-Date:   Thu, 12 Oct 2023 12:49:07 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/2] i2c: mv64xxx: add an optional reset-gpios property
-Content-Language: sv-SE, en-US
-To:     Andi Shyti <andi.shyti@kernel.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     gregory.clement@bootlin.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20231012035838.2804064-1-chris.packham@alliedtelesis.co.nz>
- <20231012035838.2804064-3-chris.packham@alliedtelesis.co.nz>
- <20231012102140.kydfi2tppvhd7bdn@zenone.zhora.eu>
-From:   Peter Rosin <peda@axentia.se>
-In-Reply-To: <20231012102140.kydfi2tppvhd7bdn@zenone.zhora.eu>
+        with ESMTP id S1378207AbjJLLPV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 12 Oct 2023 07:15:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A038DC
+        for <linux-i2c@vger.kernel.org>; Thu, 12 Oct 2023 04:14:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1697109267;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DRaC+0mMS0mqrKmBhT+mt/F7wkHtGnlArsECVSA7S7c=;
+        b=hKlGoqKjpYnSXsWlF0mj4UZ2EfmVRmaBoHBh33CehsvAGPMa85Em/+ciSKiq6jkjNFZ+89
+        xox4AwXLVSOne/BN6/dd57TGEvSq3r/M1SoO4+vH0cU0cUofQrKiJcA9FvCLLWiY/KlXs6
+        XEHRGVd5onmSTJe4IiGxneJ/BztXti4=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-532-5PBnZQWhMPSWRgjB8Fx0hQ-1; Thu, 12 Oct 2023 07:14:26 -0400
+X-MC-Unique: 5PBnZQWhMPSWRgjB8Fx0hQ-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-9b65b6bcfb7so64020566b.2
+        for <linux-i2c@vger.kernel.org>; Thu, 12 Oct 2023 04:14:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697109265; x=1697714065;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DRaC+0mMS0mqrKmBhT+mt/F7wkHtGnlArsECVSA7S7c=;
+        b=vAqM6+6Xnks21ckw2+K8FwCBbZtctuVzAkX1kTU7rVVlRAEJhXTeIiHSIGgRhtgtYU
+         e/5ydgCQxu4wsRe4RDMGjOTCNKkuY7pvcy9Thjek/CVZFyxmlO/aryfeqgtfEmt7SCZZ
+         sWRddFYIMzWwYM4gQ8Q5EfeDKkEMxECqZA03u1iL8durg8YqAqkWhpgh7Smqzc2BGgyt
+         ItTKq5ndcf6U4DGCfwQrPhrpj1jcbgnXgPgg+jtndB4JzAGjPCODBKdPPPx9+NnYE0/t
+         MzjmtmsNw39q6pPYKW53Eb4EWkBqVcCUjK4I4gT1eb6biPGIesENoDZgxLzsr/BQk8mU
+         dd+Q==
+X-Gm-Message-State: AOJu0YwZNLoNWnM/323hqOBpH97RIyDqdmriTmymFe7VykWplA5oMy2J
+        95t4KHtI6l0aXOivQusnhZR7BH3Caxzrr0QVyTxgom3HF1MQvJdI2Qptb4g0FlbveN2psorwP1w
+        KmfJ3aIPkV6/R9S7ZvXOR
+X-Received: by 2002:a17:907:720b:b0:9a1:f4e8:87b9 with SMTP id dr11-20020a170907720b00b009a1f4e887b9mr25620922ejc.45.1697109265288;
+        Thu, 12 Oct 2023 04:14:25 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHs8ShNQHDZ6hbq2SG2uMzUpUZfypOCB88v9DfbsSj8Zps3xEVjhs2Lqn/YHWow7aMfu9rhnQ==
+X-Received: by 2002:a17:907:720b:b0:9a1:f4e8:87b9 with SMTP id dr11-20020a170907720b00b009a1f4e887b9mr25620912ejc.45.1697109264928;
+        Thu, 12 Oct 2023 04:14:24 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id ks8-20020a170906f84800b0099b6becb107sm11078691ejb.95.2023.10.12.04.14.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Oct 2023 04:14:24 -0700 (PDT)
+Message-ID: <5d2e9eba-a941-ea9a-161a-5b97d09d5d35@redhat.com>
+Date:   Thu, 12 Oct 2023 13:14:23 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v20 1/4] usb: Add support for Intel LJCA device
+Content-Language: en-US, nl
+To:     "Wu, Wentong" <wentong.wu@intel.com>,
+        "Shevchenko, Andriy" <andriy.shevchenko@intel.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "oneukum@suse.com" <oneukum@suse.com>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
+ <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
+ <ZSZ3IPgLk7uC5UGI@smile.fi.intel.com>
+ <6a87b43a-0648-28d4-6c69-e0f684e44eb6@redhat.com>
+ <DM6PR11MB4316BE44F53E276384FF06C88DCCA@DM6PR11MB4316.namprd11.prod.outlook.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <DM6PR11MB4316BE44F53E276384FF06C88DCCA@DM6PR11MB4316.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MM0P280CA0118.SWEP280.PROD.OUTLOOK.COM (2603:10a6:190:9::8)
- To AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR02MB4436:EE_|PRAPR02MB7906:EE_
-X-MS-Office365-Filtering-Correlation-Id: 76c6d968-fce1-4e74-b3ba-08dbcb10dd39
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1yk/eRedcR7TTELGAj+zWJ/OuR4ecGi2IjrF206GXIEYrV2XJyE7czShv41Bf7xgna3qNaXs5Ez1Kqjr8F/l90RglgASSOv9uoAvnqVvUVWzk2F6Om0BGCASCsePwwOQkSNWcTFb2/3TcqxQNYL2x60Z8AHe0eEFeOte2V5UYbYjLMee3FFg62hPvhkJIG113QHRw7mdKG8rZKdhfkRZJrg5gwNhQaMwvWDONOZYVNFbI43Oq5wi3GYGkx468dxcmdyWi+TxBLMCNNIsixOPfwrGXmUmDGqvKqPJx8kPJjDpTBhIodiucEhycelqDa7o9c4B1fWVva4RyTZZLqVtxEuM/A/U/ZQyoURuQECLwjaUTMGAd8oJ1Jf6tu+qs58IxR6ar4UPi1jv/MyWsTyOOXy61tg/nYH0KgDpPutnn/XQV+zCgtOrOEUfjNIHf6CCd1nxqI572KRr7sQPaWTpyl5SxjGiTdqh5ilIQcOYYLnVsiAfBikkDtgBb0YUCsfSCwyr5hgpJBHqjKKm2I9AotNEzAT/dtX95wlVPrV9cMZmcJ49E8k5p/6PeRU79bCTIe8iJamu9iO6S4j5P9/Pt4qjycaoaKdLq0qu8R88kx+xjTjfd063A9STeUnXQ1tav3VXFlvpeAv77BF1cABRvw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(366004)(39840400004)(346002)(396003)(230922051799003)(1800799009)(186009)(451199024)(64100799003)(6506007)(31686004)(26005)(2616005)(6512007)(38100700002)(6486002)(31696002)(2906002)(8936002)(5660300002)(8676002)(86362001)(4001150100001)(316002)(66476007)(66946007)(41300700001)(110136005)(36756003)(66556008)(4326008)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WE9HL0d5NnFhR3hyYSt4MHpXWThsYU0yMkdSV1dtS3haWXIzeW9xV3JlZHpZ?=
- =?utf-8?B?R3VqbkJDWXNVRzVTWlVINTA0SHVrR1AxZmN1ZndieXlIUDJMOWsxNHJDd2tJ?=
- =?utf-8?B?dElhUWN4RWJxR2RYekJVMHlFMVE4bEJoVXNZQTI3aHhyRWtFOXFueEw4bmJj?=
- =?utf-8?B?TllYOGhFUysyNTBuOUlOTExiK1NmQmp3angzZEI4ekRQNitYd1FqSDNHZUxa?=
- =?utf-8?B?MjNWWVowcnFCWXJQUFh2THNseUNFYUxzdWlGNE1qWWU5MDl6UVk2N2ZtdG15?=
- =?utf-8?B?RVNQM3N0YkVxRGw1ZVBLSUhEZTE0d3Z1b1Q5VXcxQ1h4TGRJRkFpRk1GS3p0?=
- =?utf-8?B?QkQ1dDVkNWZqNmFKeWZEamRWKzZoeGtBK0xwcElpd2dPVzg0d25lL21iS29q?=
- =?utf-8?B?RFp1cUVSOWp0M0NPRUVuNGd3NjYrbWhtMWRSMHZYdmhFSVdmczdBcmVOS1VO?=
- =?utf-8?B?NVFWVm9HMEtaMkM2UXREMEwrTUFVTm1FWEhITGpPdjhRV0NtZVJ1QlJCUHMx?=
- =?utf-8?B?UkhWWjJVOEtOY01PRUJidXYxL0VnSVpEeDFva1U5cGd1ZEZ0Zk90dDROakxv?=
- =?utf-8?B?MTF6bjhSSVdvckZDKzR0WGRLWUZ1RHJZRkdKcUxBMFB3eitLSDVLOHJJaGoz?=
- =?utf-8?B?M1lhNjFLdUtsSWw3NkRCbzFJNUNxR2xWb2RQZEpMVHQrSWFzaExKS21HYVF0?=
- =?utf-8?B?dXFUMmZNVWJobnFtam1CVStMY1JuNUh0VDY3UVFzb0lOTXcwOEpuWjl5SElO?=
- =?utf-8?B?azFsUmpGcitWM3JITHRydHBBbWVYeTRyY0wrQ0orUHUySVRvM2NJem1wOUN2?=
- =?utf-8?B?ZlVTY1ViM0xEdGZLYU9jd2hpdkRvWHBEeis0cHFtcUhsa29RTHdkemlYY3M1?=
- =?utf-8?B?VFRlcFNpZmY5RHZ4Q2hkMmFvS0ZWc0ZNendLN0RtazU4MkRzcUM4emlQRmEz?=
- =?utf-8?B?OW56ek9nQVhySS9WZ21WSlhTVDdqWmIyV3JRVUZBU3RwRm1FY3FIZWtmc3li?=
- =?utf-8?B?TmQ0WU5aT0M1NUVNU29TMC9ac2JMVkY3LytWdUo2KzhCSExFNUVrbHV3T211?=
- =?utf-8?B?WXhIN1I5ZlExb1IxV2kyWlhRM3ZnUUZFSW1Ja25ZMFRBNHpWQXA4dnNxWHlq?=
- =?utf-8?B?WmExdW1HQnR2aFdCL0VDR2hxODZwcHAzS0o4U1kzSXI3dDlFa2p6VG1BWWlF?=
- =?utf-8?B?NllJVERuUFh0UWZPZ2w0SDNlOFpvcWRseit6dG0rbkQzUEdPd3JCbmpUNXBz?=
- =?utf-8?B?YnI5ZTlaTFNNTGdxMmZwYTlDSzZ0ZXY2NWlhOStCWklELzVHZzYrckthYVF1?=
- =?utf-8?B?YS9TQ0Y2R09udXREcld5RHIxZTZvNm9qRVlvQTdaU2VIaFZGUmltcHc5M2JN?=
- =?utf-8?B?YzRMQkR2M1BDTlJ5bjRpQ1k5NG9KSDlCTXpqMmM5K1BON3ovVERqQmFqVjRX?=
- =?utf-8?B?TnVLMzd1UHFiZ21ZbU1qLytjOEdHYTBkaVhYbTdRNGtseGo4clBSdmdlVThn?=
- =?utf-8?B?dmlNb3hod2oybXp5NDBSMml5Qnk3UnhHVno1eUNpSm9LWUw0ZWwzMFZHNmN1?=
- =?utf-8?B?dmNyNTk4MmR3Vk1nZEJza0VHMXI5Q2NpQU55UVVheW9ZTkV4bDBmWE1TWVVO?=
- =?utf-8?B?bFNYN1FFSmJVZmhtTEJXVFQzM1VBUm1wUTh6QWR1RFo1MG5kS3dCNzBZSThl?=
- =?utf-8?B?clNtb1IrS0c2dXRzaXBBdURqYllpZURCKytwYmRHUWxWeGlNMU9mUFJxQXN6?=
- =?utf-8?B?bnZCeWxvd0VaUFU5NzJLanNHVUhHNU1ldGJ5TDVKV3U2WTB6ay9PaWNZdmZp?=
- =?utf-8?B?NU5Eb0VVay9tUE9hS3d6b0pJOTF1Snk0WVVMTnNmTTU2MWlwS1ZIM2Foekpx?=
- =?utf-8?B?NkJTck9RbVFMT0JjUVlCR3ZrZ2IzUHBBVzZOUzB0d1d4MDdSTjRzZEhJcmhu?=
- =?utf-8?B?aWwxRVZHOE5EUGJOM3hZbjhmUys2b0hZeFRPc2hVTXl1aFBqOW5PU2xIS3BE?=
- =?utf-8?B?YVRzYVhOenFvZ1JLcjVQRjdrVkpKTEh0c05nSG1SNVczYVBYTHFSR25OK3pi?=
- =?utf-8?B?aUZicG90Q29mZnNiZHBOSFFRbFdCbHNqQW04UzBkaWZsS2tPcTJCMFR3ZWF2?=
- =?utf-8?Q?oN0kTkfNVTdGCLrlt5nf4aPeK?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76c6d968-fce1-4e74-b3ba-08dbcb10dd39
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2023 10:49:09.6156
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HU4/Hx6Y1sdEj4ULhA1+tyyeT2OZTiIaJqZdrkDP7DAZNwV4y7Nghi+/ZB/fe/sG
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PRAPR02MB7906
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi!
+Hi,
 
-2023-10-12 at 12:21, Andi Shyti wrote:
-> Hi Chris,
+On 10/11/23 14:50, Wu, Wentong wrote:
+>> From: Hans de Goede <hdegoede>
+>>
+>> Hi,
+>>
+>> On 10/11/23 12:21, Andy Shevchenko wrote:
+>>> On Mon, Oct 09, 2023 at 02:33:22PM +0800, Wentong Wu wrote:
+>>>> Implements the USB part of Intel USB-I2C/GPIO/SPI adapter device
+>>>> named "La Jolla Cove Adapter" (LJCA).
+>>>>
+>>>> The communication between the various LJCA module drivers and the
+>>>> hardware will be muxed/demuxed by this driver. Three modules ( I2C,
+>>>> GPIO, and SPI) are supported currently.
+>>>>
+>>>> Each sub-module of LJCA device is identified by type field within the
+>>>> LJCA message header.
+>>>>
+>>>> The sub-modules of LJCA can use ljca_transfer() to issue a transfer
+>>>> between host and hardware. And ljca_register_event_cb is exported to
+>>>> LJCA sub-module drivers for hardware event subscription.
+>>>>
+>>>> The minimum code in ASL that covers this board is Scope
+>>>> (\_SB.PCI0.DWC3.RHUB.HS01)
+>>>>     {
+>>>>         Device (GPIO)
+>>>>         {
+>>>>             Name (_ADR, Zero)
+>>>>             Name (_STA, 0x0F)
+>>>>         }
+>>>>
+>>>>         Device (I2C)
+>>>>         {
+>>>>             Name (_ADR, One)
+>>>>             Name (_STA, 0x0F)
+>>>>         }
+>>>>
+>>>>         Device (SPI)
+>>>>         {
+>>>>             Name (_ADR, 0x02)
+>>>>             Name (_STA, 0x0F)
+>>>>         }
+>>>>     }
+>>>
+>>> This commit message is not true anymore, or misleading at bare minimum.
+>>> The ACPI specification is crystal clear about usage _ADR and _HID, i.e.
+>>> they must NOT be used together for the same device node. So, can you
+>>> clarify how the DSDT is organized and update the commit message and it
+>>> may require (quite likely) to redesign the architecture of this
+>>> driver. Sorry I missed this from previous rounds as I was busy by
+>>> something else.
+>>
+>> This part of the commit message unfortunately is not accurate.
+>> _ADR is not used in either DSDTs of shipping hw; nor in the code.
 > 
-> ...
+> We have covered the _ADR in the code like below, it first try to find the
+> child device based on _ADR, if not found, it will check the _HID, and there
+> is clear comment in the function.
 > 
->>  static struct mv64xxx_i2c_regs mv64xxx_i2c_regs_mv64xxx = {
->> @@ -1083,6 +1084,10 @@ mv64xxx_i2c_probe(struct platform_device *pd)
->>  	if (drv_data->irq < 0)
->>  		return drv_data->irq;
->>  
->> +	drv_data->reset_gpio = devm_gpiod_get_optional(&pd->dev, "reset", GPIOD_OUT_HIGH);
->> +	if (IS_ERR(drv_data->reset_gpio))
->> +		return PTR_ERR(drv_data->reset_gpio);
+> /* bind auxiliary device to acpi device */
+> static void ljca_auxdev_acpi_bind(struct ljca_adapter *adap,
+> 				   struct auxiliary_device *auxdev,
+> 				   u64 adr, u8 id)
+> {
+> 	struct ljca_match_ids_walk_data wd = { 0 };
+> 	struct acpi_device *parent, *adev;
+> 	struct device *dev = adap->dev;
+> 	char uid[4];
 > 
-> if this optional why are we returning in case of error?
+> 	parent = ACPI_COMPANION(dev);
+> 	if (!parent)
+> 		return;
 > 
->> +
->>  	if (pdata) {
->>  		drv_data->freq_m = pdata->freq_m;
->>  		drv_data->freq_n = pdata->freq_n;
->> @@ -1121,6 +1126,12 @@ mv64xxx_i2c_probe(struct platform_device *pd)
->>  			goto exit_disable_pm;
->>  	}
->>  
->> +	if (drv_data->reset_gpio) {
->> +		udelay(1);
->> +		gpiod_set_value_cansleep(drv_data->reset_gpio, 0);
->> +		udelay(1);
+> 	/*
+> 	 * get auxdev ACPI handle from the ACPI device directly
+> 	 * under the parent that matches _ADR.
+> 	 */
+> 	adev = acpi_find_child_device(parent, adr, false);
+> 	if (adev) {
+> 		ACPI_COMPANION_SET(&auxdev->dev, adev);
+> 		return;
+> 	}
 > 
-> you like busy waiting :-)
+> 	/*
+> 	 * _ADR is a grey area in the ACPI specification, some
+> 	 * platforms use _HID to distinguish children devices.
+> 	 */
+> 	switch (adr) {
+> 	case LJCA_GPIO_ACPI_ADR:
+> 		wd.ids = ljca_gpio_hids;
+> 		break;
+> 	case LJCA_I2C1_ACPI_ADR:
+> 	case LJCA_I2C2_ACPI_ADR:
+> 		snprintf(uid, sizeof(uid), "%d", id);
+> 		wd.uid = uid;
+> 		wd.ids = ljca_i2c_hids;
+> 		break;
+> 	case LJCA_SPI1_ACPI_ADR:
+> 	case LJCA_SPI2_ACPI_ADR:
+> 		wd.ids = ljca_spi_hids;
+> 		break;
+> 	default:
+> 		dev_warn(dev, "unsupported _ADR\n");
+> 		return;
+> 	}
 > 
-> What is the reason behind these waits? Is there anything
-> specified by the datasheet?
-> 
-> If not I would do a more relaxed sleeping like an usleep_range...
-> what do you think?
+> 	acpi_dev_for_each_child(parent, ljca_match_device_ids, &wd);
 
-Since this is apparently not intended to reset the bus driver itself,
-but instead various clients connected to the bus, there is not telling
-which datasheet to examine. It is simply impossible to hard-code a
-correct reset pulse here, when the targets of the pulse are unspecified
-and unknown.
+Ah ok, I see. So the code:
 
-I find the reset-gpios naming extremely misleading.
+1. First tries to find the matching child acpi_device for the auxdev by ADR
 
-Cheers,
-Peter
+2. If 1. fails then falls back to HID + UID matching
+
+And there are DSDTs which use either:
+
+1. Only use _ADR to identify which child device is which, like the example
+   DSDT snippet from the commit msg.
+
+2. Only use _HID + _UID like the 2 example DSDT snippets from me email
+
+But there never is a case where both _ADR and _HID are used at
+the same time (which would be an ACPI spec violation as Andy said).
+
+So AFAICT there is no issue here since  _ADR and _HID are never
+user at the same time and the commit message correctly describes
+scenario 1. from above, so the commit message is fine too.
+
+So I believe that we can continue with this patch series in
+its current v20 form, which has already been staged for
+going into -next by Greg.
+
+Andy can you confirm that moving ahead with the current
+version is ok ?
+
+Regards,
+
+Hans
+
+
+
