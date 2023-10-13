@@ -2,71 +2,53 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870817C7E76
-	for <lists+linux-i2c@lfdr.de>; Fri, 13 Oct 2023 09:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23577C821D
+	for <lists+linux-i2c@lfdr.de>; Fri, 13 Oct 2023 11:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjJMHR3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 13 Oct 2023 03:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
+        id S230380AbjJMJeP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 13 Oct 2023 05:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjJMHR2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Oct 2023 03:17:28 -0400
+        with ESMTP id S230424AbjJMJeO (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 13 Oct 2023 05:34:14 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9DDBC;
-        Fri, 13 Oct 2023 00:17:26 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0115FC433CB;
-        Fri, 13 Oct 2023 07:17:25 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953ACBD;
+        Fri, 13 Oct 2023 02:34:12 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6354C433C7;
+        Fri, 13 Oct 2023 09:34:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697181446;
-        bh=mZzYynmfJ2/pdsSnnLB7cuavYnApPnZfzHGYj9nCAeA=;
+        s=k20201202; t=1697189652;
+        bh=aqNTWk/jLrgnCA59noQX1Z0OD+kaSq0f7Cj2KJ+dY7M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IVoeRbExMYaVYqOlZ0E8lBzZCXXY1JbAget/P8s277Z4fb0gx7WIb1qebIwGCY1IJ
-         h9+RlBxTjpMHU+QGDK+xK0cIE4HpVPEjn3DX8RpRLBXFLTD9DmNZ8Y2xHQAVYmMjxV
-         zytHQGwaKWn4P5a2325k49h7ZiBI2s+N2XYzMt6wM/rVgKre84QrYF0DViIU1ytMd7
-         VfArELQIqtToaHjPtoTAvY8n3GcR/eoFQMbjTHu1l699yX99pLwFNg9UhFxkHIysst
-         0uOq71xzAiyIVBIG853S3Os9ftzvPGv/woCU5U6WfkrFesxc9ATonOrZGcWYEdd4GO
-         aK2T7umF31aTQ==
-Date:   Fri, 13 Oct 2023 09:17:23 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Stefan Lengfeld <stefan@lengfeld.xyz>
-Cc:     Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        linux-media <linux-media@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-i2c@vger.kernel.org
-Subject: Re: Sony IMX290/462 image sensors I2C xfer peculiarity
-Message-ID: <ZSjvA3QpY1T9McjN@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Stefan Lengfeld <stefan@lengfeld.xyz>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        linux-media <linux-media@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-i2c@vger.kernel.org
-References: <m3y1gpw8ri.fsf@t19.piap.pl>
- <CAPY8ntASwh3AcRqE+2zF4Df=u+=wJ5K9icAeOrXTMJGDd1+caw@mail.gmail.com>
- <m3o7hfx3ob.fsf@t19.piap.pl>
- <m37cnuvmhn.fsf@t19.piap.pl>
- <m3o7h5tthf.fsf@t19.piap.pl>
- <m3jzrttrmz.fsf@t19.piap.pl>
- <20231011101553.we3r73xejvqdql5j@porty>
- <m3fs2htn7g.fsf@t19.piap.pl>
- <20231012220127.GB27838@stcim.de>
+        b=sWMAeeBqIkpI34Z+ITknz6l3Bw/5EvKniAa2W9YT6hM+MssyAs6Z+4VuyQ1LHE9m4
+         7K2yz6zc8HBODFAsnlPAViSy5OmwWBWu5JFoTB5i3KtXXu71zbSllc85RQrHQVssCL
+         ca0g9xRjkWR7D/3s1fj3nIklhqs24WWQoUpPI+RVfL51wdxZp+XhGkt79fgpaEj1/T
+         UVjPymfCA6ZhNSOPZ0SdNBy1MaGznZKwnhs9EtvZIHGU9IftrK6HeeY+dP5URXehs1
+         bg2qA3QdcObOy3NQifFNmWh5ItRopcwdJQqrLjRXZ9rB2awpZYD6WTbHgDSOsnRYt9
+         BNmevFk8cgr+A==
+Date:   Fri, 13 Oct 2023 11:34:07 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     Peter Rosin <peda@axentia.se>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] i2c: mv64xxx: add an optional reset-gpios property
+Message-ID: <20231013093407.p2oqsagk62vrqacc@zenone.zhora.eu>
+References: <20231012035838.2804064-1-chris.packham@alliedtelesis.co.nz>
+ <20231012035838.2804064-3-chris.packham@alliedtelesis.co.nz>
+ <20231012102140.kydfi2tppvhd7bdn@zenone.zhora.eu>
+ <63403365-2d23-b4a0-d869-070686d62ab5@axentia.se>
+ <812dd506-c61b-4967-9b0b-ea35a111bc7f@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u/l8M5o0YMZg682I"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231012220127.GB27838@stcim.de>
+In-Reply-To: <812dd506-c61b-4967-9b0b-ea35a111bc7f@alliedtelesis.co.nz>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -77,41 +59,31 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+Hi Chris,
 
---u/l8M5o0YMZg682I
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+...
 
+>              static struct mv64xxx_i2c_regs mv64xxx_i2c_regs_mv64xxx = {
+>             @@ -1083,6 +1084,10 @@ mv64xxx_i2c_probe(struct platform_device *pd)
+>                     if (drv_data->irq < 0)
+>                             return drv_data->irq;
+> 
+>             +       drv_data->reset_gpio = devm_gpiod_get_optional(&pd->dev, "reset", GPIOD_OUT_HIGH);
+>             +       if (IS_ERR(drv_data->reset_gpio))
+>             +               return PTR_ERR(drv_data->reset_gpio);
+> 
+>         if this optional why are we returning in case of error?
+> 
+> gpiod_get_optional() will return NULL if the property is not present. The main
+> error I care about here is -EPROBE_DEFER but I figure other errors are also
+> relevant. This same kind of pattern is used in other drivers.
 
-> Do you know the I2C repeated start feature [1]? This allows to batch together
-> multiple I2C read/writes in a single transfer. And in the best case, this
-> transfer is executed in one go without a delay in between. At least in the
-> kernel it's guaranteed that no other driver can go in between with another
-> transfer.
+we already discussed about this, I don't have a strong opinion,
+you can leave it as it is... I recon this is a matter of pure
+taste.
 
-If the HW does rep_start properly, it is even guaranteed on the bus
-because the bus is never seen as free by other participants. Check
-"START and STOP" conditions in the I2C specs.
+Would you just mind adding an error message using
+dev_err_probe()?
 
-
---u/l8M5o0YMZg682I
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUo7wMACgkQFA3kzBSg
-KbZs4xAAiGla3VYW4LK+tWuDufXr/zrNHbwb0pU1zty0q+93Yp9riCln24vQ8VdN
-QbtOpwcHb+aZOh5wfz8IqL8DTgAtC1Z5h2qxUXv2vYA/V6t5jirybkOg/iR+moG4
-61V8ov437G4iAaL4xcObmtW6F6Gse/dlm8Q2JGg2eVIZqNr7mgcgJeyPTR38pWjS
-1FjP9NYoY1Xu/JhFEwar2LbLLYQqNtrT1AuPXAll2GlfDrBtfxSWZAG6ywDIXU34
-oEaMuAZDVIzhltMLgXzBQhMgef9l0naVuo/myB+htVwA7oAn45ImyDc1fGyAUMlC
-x2E7zL54CYGpon4FclA74Sgp0AjlWa3RWCkPZ+oQzL7HyjKYwM62cb3aPWkMCaV7
-57KkLtKwUb5SmTRGryNYivEXta7adBo7HvIrYeuO0paGDw65NpzeKP4rMSQHo+XX
-LWTirx18kOKA4T+r9xKvIdKiDly+R26dBln6nK5cbM2bkmIn6TIo7i2fITPbTInA
-Y94MFb/0Ifa97tNRD0VQbv89dnzogx0HP8BkVqwdpshIoIifmYSm9X33n5Nb0cT1
-YifunACQYgdt3vxnJjFPiUB3KE8Px/Wp/vvkWEacvbgnxfrID8zVMAhhsvinCrhQ
-hHh/id1kvsXrsrs8POeU0KrsQDarFZUAf42lJtPcXoY2rd9FoBU=
-=pVqj
------END PGP SIGNATURE-----
-
---u/l8M5o0YMZg682I--
+Thanks,
+Andi
