@@ -2,66 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31007C9BF3
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Oct 2023 23:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137C67C9BF4
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Oct 2023 23:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbjJOVd2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 15 Oct 2023 17:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S229748AbjJOVe3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 15 Oct 2023 17:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjJOVd2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 15 Oct 2023 17:33:28 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFA5A9;
-        Sun, 15 Oct 2023 14:33:25 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9adb9fa7200so794616066b.0;
-        Sun, 15 Oct 2023 14:33:25 -0700 (PDT)
+        with ESMTP id S229500AbjJOVe2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 15 Oct 2023 17:34:28 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C51C1;
+        Sun, 15 Oct 2023 14:34:26 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9bf0ac97fdeso168508066b.2;
+        Sun, 15 Oct 2023 14:34:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697405603; x=1698010403; darn=vger.kernel.org;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PSF1noR8dMkDo9Wz5ZL7eF39GKGra66n7rRT8AUw9eM=;
-        b=ed7vLpVq6Ljk3nkUVk7JqN0Fc9gnkICQg6PYvwq1ThiZn5X5ge1Q0SDyaH/S6/ofqY
-         mWfqYKZf+Ki84bZXDxksN7eZjFQ4VhhzwwTGwZ2YNrOx7KBeMapnnWuQhcmF/0zXTbES
-         KZM8+bnDUaPFmAYiJv/F4h4LKx0jTGtNBseKTn0+6MDZQQqYT2NgfNwiCuJOeQS6OtlL
-         xdm1/kiZu2kWr+WI/HxEmJByE1Cc1wK5U0vhonRqS/k0q6isuyTKYnWkc7udKU63/bMK
-         uFypDbBLVaAtK8yXBV6w0ZAc/6/MYnfoLiCvAeehlg/Lv2aTKLlYgkXpROWSPfIvyEJj
-         b25g==
+        d=gmail.com; s=20230601; t=1697405665; x=1698010465; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=jw1z4BrIqqDR/qVvxdVmgbHJcCH5Xlnp6mfEh+8shys=;
+        b=N5pa/hDOgmoHD2nR0Sy2EdiU5INlC6hvK3MO2CsGILvIfmGG2F+XJMf71FXFaPY65r
+         5mcFLxqKXdDRj2FDac2jpSsZaGniHK2gRZPbQb4DszsRzaFaaz6agfzdZM0VMx2gBMw6
+         0EhUVg4rQG/WPaALPna4UVOq+UvWjdtsPnSr1CGEiMgEfzvcSfbKCtoMHjdxRTnmA3bd
+         RK+DMoDizCbJRNXumiW43mw4PtShTVfsbrvV19I/nhUikz9IXSUIFtLUuFO9N5Py96fa
+         /c7gZa+7pLWx6LZvNO/+x9Kwlo6lNWu2wcCgwPJ19M6FVEexg3adHs4/b6kaOR4JHN8a
+         N4gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697405603; x=1698010403;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PSF1noR8dMkDo9Wz5ZL7eF39GKGra66n7rRT8AUw9eM=;
-        b=j8pzgFswr0AKAxlLLREbJ0HMyJNClafbO2cRCTgorCkoZDkr0r743iuclDntBGd9/m
-         nQGMFpkYSFUvymHz1SrFq5JqQY9M9B5HUxs4Bb93PjkTJVXS810GdyrqIZw64oJHIaHy
-         6Mob/iZb9/Jdj4z2+k3B70QWOd14GWuZ59PgHVhzNgewKh0sES012gxsbXYW/r4TwjIr
-         Jvz/ZAd+fx4oyLTpbVfUUC5CwbDOEwgHUi9H2a7N1Ey7EeHXQ/mltM0T++F5fRiXF8Sj
-         vJirKuyyhUcQhSSUCVY1iiPEYTpP14SsrT263CHRXQDsVTKdtJlexcvjljZ2xFP6EbkT
-         NraQ==
-X-Gm-Message-State: AOJu0YxTWC+0MkYDToaY4NVioCt9h/ekkxaT72/zYBrcXKphmQicY0Xl
-        zQeDPJRnJnf0mSW6YaTwEeY=
-X-Google-Smtp-Source: AGHT+IHtBrjLbLjvJUxI6+m3EoMmKk2246Hl+lDL3KYqd+MLUt6eUMxnLbnjcxiCJFcY2QM4FGq4MQ==
-X-Received: by 2002:a17:907:96aa:b0:9ae:659f:4d2f with SMTP id hd42-20020a17090796aa00b009ae659f4d2fmr5499494ejc.26.1697405603307;
-        Sun, 15 Oct 2023 14:33:23 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697405665; x=1698010465;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jw1z4BrIqqDR/qVvxdVmgbHJcCH5Xlnp6mfEh+8shys=;
+        b=QpNfs9HWys/gtvBtOxX2KFn9yOa8ibEU8QAzecvt9PBt5NJYyPDDvvEQi39xaSm3kG
+         Svv3XpGfz+eo2hVxErvYoNp8uzeqwA47n500YYxJbGeml2JnxcxtIQ0b8TxtoXkVFEmo
+         DkCDXhtsGRMvUwgZlk6cTH9TqvPjmqaO6h0sZGYXqCfwOoUM+0feRwyHGiapKO3Hh/lQ
+         aFY6HoehDcIduPshD1aweTXo2m3CGZGHf6QA7rVdguWNHU+Mp/xOAw0+PYDfowmShAzr
+         i/vbIlrCkFUX0mNwW0wU5Mz73BQOd3a9V+mWPvs7Scr+9WZPuaD+/aq73YYHqDDxrtbR
+         AlQQ==
+X-Gm-Message-State: AOJu0YxFeNTlYZctOtieuK5kuStqOXORFegS2yDx2IglcOHiE5ygb8pQ
+        2dNpLcRWnyxS/Tx3yKKNZ6I3GdSUAIk=
+X-Google-Smtp-Source: AGHT+IH5HQCS8LnexBhkgTKkk1wZZRlchbVEBOx468Hm0RhlCpeA30vA9HYEeZEXd5pQcbf35zMQpg==
+X-Received: by 2002:a17:907:360b:b0:9bd:a73a:7a0d with SMTP id bk11-20020a170907360b00b009bda73a7a0dmr5684711ejc.13.1697405665032;
+        Sun, 15 Oct 2023 14:34:25 -0700 (PDT)
 Received: from ?IPV6:2a01:c23:b8cd:6500:313f:61c6:6f63:8859? (dynamic-2a01-0c23-b8cd-6500-313f-61c6-6f63-8859.c23.pool.telefonica.de. [2a01:c23:b8cd:6500:313f:61c6:6f63:8859])
-        by smtp.googlemail.com with ESMTPSA id vl9-20020a170907b60900b0099bccb03eadsm2685462ejc.205.2023.10.15.14.33.22
+        by smtp.googlemail.com with ESMTPSA id vl9-20020a170907b60900b0099bccb03eadsm2685462ejc.205.2023.10.15.14.34.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Oct 2023 14:33:22 -0700 (PDT)
-Message-ID: <90bd1071-317e-4dfe-b94b-9bcee15d66c5@gmail.com>
-Date:   Sun, 15 Oct 2023 23:33:22 +0200
+        Sun, 15 Oct 2023 14:34:24 -0700 (PDT)
+Message-ID: <6e935761-5b36-411a-ac82-cbc394bba7b6@gmail.com>
+Date:   Sun, 15 Oct 2023 23:34:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: [PATCH 1/2] ACPI: Add helper acpi_use_parent_companion
 Content-Language: en-US
+From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>,
         Andi Shyti <andi.shyti@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <lenb@kernel.org>
 Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         linux-acpi@vger.kernel.org
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH 0/2] Add and use new helper acpi_use_parent_companion
+References: <90bd1071-317e-4dfe-b94b-9bcee15d66c5@gmail.com>
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -105,6 +107,7 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
+In-Reply-To: <90bd1071-317e-4dfe-b94b-9bcee15d66c5@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -120,14 +123,26 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 In several drivers devices use the ACPI companion of the parent.
 Add a helper for this use case to avoid code duplication.
 
-Heiner Kallweit (2):
-  ACPI: Add helper acpi_use_parent_companion
-  i2c: i801: Use new helper acpi_use_parent_companion
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ include/linux/acpi.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- drivers/i2c/busses/i2c-i801.c | 2 +-
- include/linux/acpi.h          | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
-
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index ba3f601b6..89efb1658 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -1541,4 +1541,9 @@ static inline void acpi_device_notify(struct device *dev) { }
+ static inline void acpi_device_notify_remove(struct device *dev) { }
+ #endif
+ 
++static inline void acpi_use_parent_companion(struct device *dev)
++{
++	ACPI_COMPANION_SET(dev, ACPI_COMPANION(dev->parent));
++}
++
+ #endif	/*_LINUX_ACPI_H*/
 -- 
 2.42.0
+
 
