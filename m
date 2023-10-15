@@ -2,116 +2,132 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3000E7C9B5B
-	for <lists+linux-i2c@lfdr.de>; Sun, 15 Oct 2023 22:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F31007C9BF3
+	for <lists+linux-i2c@lfdr.de>; Sun, 15 Oct 2023 23:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjJOUVF (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 15 Oct 2023 16:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S229518AbjJOVd2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 15 Oct 2023 17:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjJOUVE (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 15 Oct 2023 16:21:04 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732F7C5
-        for <linux-i2c@vger.kernel.org>; Sun, 15 Oct 2023 13:21:01 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9C72B2C052B;
-        Mon, 16 Oct 2023 09:20:59 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1697401259;
-        bh=gONpe1sbbkI4PiZoynwr5VYJMtfUq3WDBNIjhwpjr9M=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=Y8LSC1pr2FL6WbJpYjuL9jwhLDpf+EXrvnJQGABAIeClGiGcSuoEr8MEqKHay0vuV
-         m3mXse3xA0NzowpJI2sijaYHff8NvmP9vKdQyuQxLweqpTruGwKzXdy0QVTxhQHNr0
-         4WcLp92ESifApW0BGEFOSlu0nsFQt7ctqzJWchkEGLKeE3MlRnSAv14G0gi+1AdiCv
-         kfbdq9b3cl7CWDGOCiQqd4KW4JLT3PDs8Jow2ENu0E4eyLncK+W+QZ9TXyt541x0nR
-         hDNCCbMrFLG+AUjOc+aMD4tVaSCon6u1vgAz2xJPe/xOJb+NMzZ5ElJqa0+i37Lkma
-         D7gWrWolthUuQ==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B652c49ab0001>; Mon, 16 Oct 2023 09:20:59 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.37; Mon, 16 Oct 2023 09:20:59 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Mon, 16 Oct 2023 09:20:58 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.037; Mon, 16 Oct 2023 09:20:59 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Andi Shyti <andi.shyti@kernel.org>
-CC:     Peter Rosin <peda@axentia.se>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] i2c: mv64xxx: add an optional reset-gpios property
-Thread-Topic: [PATCH 2/2] i2c: mv64xxx: add an optional reset-gpios property
-Thread-Index: AQHZ/MBiho/r3vjr4Umpa1L63KxTDrBFGFgAgAAHq4CAAKhmAIAA1PuAgAPZZAA=
-Date:   Sun, 15 Oct 2023 20:20:58 +0000
-Message-ID: <21392d77-568c-4770-ac01-cfe3f93d424c@alliedtelesis.co.nz>
-References: <20231012035838.2804064-1-chris.packham@alliedtelesis.co.nz>
- <20231012035838.2804064-3-chris.packham@alliedtelesis.co.nz>
- <20231012102140.kydfi2tppvhd7bdn@zenone.zhora.eu>
- <63403365-2d23-b4a0-d869-070686d62ab5@axentia.se>
- <812dd506-c61b-4967-9b0b-ea35a111bc7f@alliedtelesis.co.nz>
- <20231013093407.p2oqsagk62vrqacc@zenone.zhora.eu>
-In-Reply-To: <20231013093407.p2oqsagk62vrqacc@zenone.zhora.eu>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B80CCE180BF6584B9036E1080E653C8F@atlnz.lc>
-Content-Transfer-Encoding: base64
+        with ESMTP id S229500AbjJOVd2 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 15 Oct 2023 17:33:28 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFA5A9;
+        Sun, 15 Oct 2023 14:33:25 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9adb9fa7200so794616066b.0;
+        Sun, 15 Oct 2023 14:33:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697405603; x=1698010403; darn=vger.kernel.org;
+        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PSF1noR8dMkDo9Wz5ZL7eF39GKGra66n7rRT8AUw9eM=;
+        b=ed7vLpVq6Ljk3nkUVk7JqN0Fc9gnkICQg6PYvwq1ThiZn5X5ge1Q0SDyaH/S6/ofqY
+         mWfqYKZf+Ki84bZXDxksN7eZjFQ4VhhzwwTGwZ2YNrOx7KBeMapnnWuQhcmF/0zXTbES
+         KZM8+bnDUaPFmAYiJv/F4h4LKx0jTGtNBseKTn0+6MDZQQqYT2NgfNwiCuJOeQS6OtlL
+         xdm1/kiZu2kWr+WI/HxEmJByE1Cc1wK5U0vhonRqS/k0q6isuyTKYnWkc7udKU63/bMK
+         uFypDbBLVaAtK8yXBV6w0ZAc/6/MYnfoLiCvAeehlg/Lv2aTKLlYgkXpROWSPfIvyEJj
+         b25g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697405603; x=1698010403;
+        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PSF1noR8dMkDo9Wz5ZL7eF39GKGra66n7rRT8AUw9eM=;
+        b=j8pzgFswr0AKAxlLLREbJ0HMyJNClafbO2cRCTgorCkoZDkr0r743iuclDntBGd9/m
+         nQGMFpkYSFUvymHz1SrFq5JqQY9M9B5HUxs4Bb93PjkTJVXS810GdyrqIZw64oJHIaHy
+         6Mob/iZb9/Jdj4z2+k3B70QWOd14GWuZ59PgHVhzNgewKh0sES012gxsbXYW/r4TwjIr
+         Jvz/ZAd+fx4oyLTpbVfUUC5CwbDOEwgHUi9H2a7N1Ey7EeHXQ/mltM0T++F5fRiXF8Sj
+         vJirKuyyhUcQhSSUCVY1iiPEYTpP14SsrT263CHRXQDsVTKdtJlexcvjljZ2xFP6EbkT
+         NraQ==
+X-Gm-Message-State: AOJu0YxTWC+0MkYDToaY4NVioCt9h/ekkxaT72/zYBrcXKphmQicY0Xl
+        zQeDPJRnJnf0mSW6YaTwEeY=
+X-Google-Smtp-Source: AGHT+IHtBrjLbLjvJUxI6+m3EoMmKk2246Hl+lDL3KYqd+MLUt6eUMxnLbnjcxiCJFcY2QM4FGq4MQ==
+X-Received: by 2002:a17:907:96aa:b0:9ae:659f:4d2f with SMTP id hd42-20020a17090796aa00b009ae659f4d2fmr5499494ejc.26.1697405603307;
+        Sun, 15 Oct 2023 14:33:23 -0700 (PDT)
+Received: from ?IPV6:2a01:c23:b8cd:6500:313f:61c6:6f63:8859? (dynamic-2a01-0c23-b8cd-6500-313f-61c6-6f63-8859.c23.pool.telefonica.de. [2a01:c23:b8cd:6500:313f:61c6:6f63:8859])
+        by smtp.googlemail.com with ESMTPSA id vl9-20020a170907b60900b0099bccb03eadsm2685462ejc.205.2023.10.15.14.33.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Oct 2023 14:33:22 -0700 (PDT)
+Message-ID: <90bd1071-317e-4dfe-b94b-9bcee15d66c5@gmail.com>
+Date:   Sun, 15 Oct 2023 23:33:22 +0200
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=L6ZjvNb8 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=ZG9u6gaKJp329XwHsg0A:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To:     Jean Delvare <jdelvare@suse.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        linux-acpi@vger.kernel.org
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH 0/2] Add and use new helper acpi_use_parent_companion
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQpPbiAxMy8xMC8yMyAyMjozNCwgQW5kaSBTaHl0aSB3cm90ZToNCj4gSGkgQ2hyaXMsDQo+DQo+
-IC4uLg0KPg0KPj4gICAgICAgICAgICAgICBzdGF0aWMgc3RydWN0IG12NjR4eHhfaTJjX3JlZ3Mg
-bXY2NHh4eF9pMmNfcmVnc19tdjY0eHh4ID0gew0KPj4gICAgICAgICAgICAgIEBAIC0xMDgzLDYg
-KzEwODQsMTAgQEAgbXY2NHh4eF9pMmNfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGQp
-DQo+PiAgICAgICAgICAgICAgICAgICAgICBpZiAoZHJ2X2RhdGEtPmlycSA8IDApDQo+PiAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHJldHVybiBkcnZfZGF0YS0+aXJxOw0KPj4NCj4+ICAg
-ICAgICAgICAgICArICAgICAgIGRydl9kYXRhLT5yZXNldF9ncGlvID0gZGV2bV9ncGlvZF9nZXRf
-b3B0aW9uYWwoJnBkLT5kZXYsICJyZXNldCIsIEdQSU9EX09VVF9ISUdIKTsNCj4+ICAgICAgICAg
-ICAgICArICAgICAgIGlmIChJU19FUlIoZHJ2X2RhdGEtPnJlc2V0X2dwaW8pKQ0KPj4gICAgICAg
-ICAgICAgICsgICAgICAgICAgICAgICByZXR1cm4gUFRSX0VSUihkcnZfZGF0YS0+cmVzZXRfZ3Bp
-byk7DQo+Pg0KPj4gICAgICAgICAgaWYgdGhpcyBvcHRpb25hbCB3aHkgYXJlIHdlIHJldHVybmlu
-ZyBpbiBjYXNlIG9mIGVycm9yPw0KPj4NCj4+IGdwaW9kX2dldF9vcHRpb25hbCgpIHdpbGwgcmV0
-dXJuIE5VTEwgaWYgdGhlIHByb3BlcnR5IGlzIG5vdCBwcmVzZW50LiBUaGUgbWFpbg0KPj4gZXJy
-b3IgSSBjYXJlIGFib3V0IGhlcmUgaXMgLUVQUk9CRV9ERUZFUiBidXQgSSBmaWd1cmUgb3RoZXIg
-ZXJyb3JzIGFyZSBhbHNvDQo+PiByZWxldmFudC4gVGhpcyBzYW1lIGtpbmQgb2YgcGF0dGVybiBp
-cyB1c2VkIGluIG90aGVyIGRyaXZlcnMuDQo+IHdlIGFscmVhZHkgZGlzY3Vzc2VkIGFib3V0IHRo
-aXMsIEkgZG9uJ3QgaGF2ZSBhIHN0cm9uZyBvcGluaW9uLA0KPiB5b3UgY2FuIGxlYXZlIGl0IGFz
-IGl0IGlzLi4uIEkgcmVjb24gdGhpcyBpcyBhIG1hdHRlciBvZiBwdXJlDQo+IHRhc3RlLg0KDQpJ
-IHRoaW5rIGluIHRoaXMgY2FzZSBpdCB3b3VsZCBhY3R1YWxseSBtYWtlIHRoaW5ncyB1Z2xpZXIg
-YmVjYXVzZSBJJ2QgDQpoYXZlIHRvIGNoZWNrIGZvciAtRVBST0JFX0RFRkVSLiBTbyBzb21ldGhp
-bmcgbGlrZQ0KDQogwqDCoMKgIGRydl9kYXRhLT5yZXNldF9ncGlvID0gZGV2bV9ncGlvZF9nZXRf
-b3B0aW9uYWwoJnBkLT5kZXYsICJyZXNldCIsIA0KR1BJT0RfT1VUX0hJR0gpOw0KIMKgwqDCoCBp
-ZiAoSVNfRVJSKGRydl9kYXRhLT5yZXNldF9ncGlvKSAmJiBQVFJfRVJSKGRydl9kYXRhLT5yZXNl
-dF9ncGlvKSANCj09IC1FUFJPQkVfREVGRVIpDQogwqDCoCDCoMKgwqDCoCByZXR1cm4gUFRSX0VS
-UihkcnZfZGF0YS0+cmVzZXRfZ3Bpbyk7DQogwqDCoMKgIGVsc2UNCiDCoMKgIMKgwqDCoMKgIGRy
-dl9kYXRhLT5yZXNldF9ncGlvID0gTlVMTDsNCg0KSSBjb3VsZCBwcm9iYWJseSBjb21lIHVwIHdp
-dGggc29tZXRoaW5nIGxlc3MgdWdseSB3aXRoIGEgbG9jYWwgdmFyaWFibGUgDQpvciB0d28gYnV0
-IG5vdGhpbmcgYXMgdGlkeSBhcyBqdXN0IHJldHVybmluZyBvbiBlcnJvci4NCg0KPg0KPiBXb3Vs
-ZCB5b3UganVzdCBtaW5kIGFkZGluZyBhbiBlcnJvciBtZXNzYWdlIHVzaW5nDQo+IGRldl9lcnJf
-cHJvYmUoKT8NCg0KWWVwIHN1cmUuIFdpbGwgaW5jbHVkZSBpbiB0aGUgbmV4dCByb3VuZC4NCg0K
+In several drivers devices use the ACPI companion of the parent.
+Add a helper for this use case to avoid code duplication.
+
+Heiner Kallweit (2):
+  ACPI: Add helper acpi_use_parent_companion
+  i2c: i801: Use new helper acpi_use_parent_companion
+
+ drivers/i2c/busses/i2c-i801.c | 2 +-
+ include/linux/acpi.h          | 5 +++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+-- 
+2.42.0
+
