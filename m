@@ -2,159 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EDB7CAEA1
-	for <lists+linux-i2c@lfdr.de>; Mon, 16 Oct 2023 18:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD3D7CB140
+	for <lists+linux-i2c@lfdr.de>; Mon, 16 Oct 2023 19:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbjJPQK7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 Oct 2023 12:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
+        id S233425AbjJPRVM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 16 Oct 2023 13:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233936AbjJPQKq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Oct 2023 12:10:46 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7260126;
-        Mon, 16 Oct 2023 09:10:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697472643; x=1729008643;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=B9G40KQJPzjLV32VuQU8UDW8fEfnJ5/ZHze9hZb9uYg=;
-  b=QDsW3YeA+ZNCrFh1+Na4/Lsp1e6rqUNXpsfIyUWGhwRp6QzJacSdP/4L
-   ETMPDwZvGzBBFUh7YSCQnHBl9kwGZ7HrVW+o9Nh8tkZSsA5fSV5GN8OzE
-   Jm89V9iEHarWApduAXFgoWdoK5owaVW9DHeln+Qpcotgvehw7JH2M535T
-   LlASd10zp5sWWcOioYW5EA7Y0vLNHA7W0d1thoMYkyrDUBcXYBHs46r+d
-   FFlGB7rHTLm/uP3kcypYCtRtZnxqCwYNDgkTIr6Z52azRI1tlkvIle6Wc
-   uaxJw/Xm5dcpytJ0J1oBzuRrkPCdyrT/3YUm7B05nHLwg3LKaEbeI6eML
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="452043902"
-X-IronPort-AV: E=Sophos;i="6.03,229,1694761200"; 
-   d="scan'208";a="452043902"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 09:10:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="749327878"
-X-IronPort-AV: E=Sophos;i="6.03,229,1694761200"; 
-   d="scan'208";a="749327878"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga007.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 16 Oct 2023 09:10:22 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Mon, 16 Oct 2023 09:10:21 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Mon, 16 Oct 2023 09:10:21 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.41) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Mon, 16 Oct 2023 09:09:32 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gvKG4DIJd5LXJawZK3jxI87Q/mfVD24t10J5UlfTlg0f0trnG59m3rt95vGxOIFqeUpWRxV9TCqoNN9dmNrPHxUfCb0BIkyAWVZan8dN25S4V2wCEcvdKhaO2Ldec96h1voPSIeNVOCfsilUapJuz+hpXAgKOoiKRHPXhMhaiciaj8WTjBJTcKrUegIG9x4fU9/UTJsNzR91yXGKrrkh1k+IWmhNqHTcOEmgwd2p5RGC/2De14g2nZRK0WsquxvDIYQ/SPXYWRsmQRoXx2R02PIkbRp9D71BInbqlpB4QEzLNHhcqrJox1xpPWtBZs15kRdD0ym1a+vbMc3nuyRdNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3eLPlibtcGn80MYifCBrAijCkQszR2+Xam+KQeeP7+s=;
- b=jMvw8Q7eyHjZedWC3fYkRbFfTFPqpaLGntIn/+Lpu6F1jn+2UYAEujusbFq+u8tAPNUXG8Sw/mtaVTnWRYZ+lvyqDNLuQ7Ytq3wMELa7mTPq6kUZDr5N0q8TOjh7Xaq9YtBNown9khXkYAnjUfbChcbEvAZe6Qge9dKIG3e8YD3+Wh732YUCAlmQD4XOW4SaanoaI8FmKIoZZLEl2T/nUFFmPErasoRMjqHy4li0pQwDzcFlPnH/KxC71dYGFlqaflsA7bDfnFWLPmNnLelF/Tx5aH1aaI77kFuEoOH3vBs9SINW/0p7LEoAFD5gYzINAlJ4krQlF8YH7mRDtreZSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO6PR11MB5603.namprd11.prod.outlook.com (2603:10b6:5:35c::12)
- by SA1PR11MB7697.namprd11.prod.outlook.com (2603:10b6:806:33a::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.46; Mon, 16 Oct
- 2023 16:09:25 +0000
-Received: from CO6PR11MB5603.namprd11.prod.outlook.com
- ([fe80::dbe4:218c:1bdd:510]) by CO6PR11MB5603.namprd11.prod.outlook.com
- ([fe80::dbe4:218c:1bdd:510%4]) with mapi id 15.20.6886.034; Mon, 16 Oct 2023
- 16:09:24 +0000
-Message-ID: <66418e44-6862-4555-9280-2633ffb34d23@intel.com>
-Date:   Mon, 16 Oct 2023 18:09:19 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] i2c: i801: Use new helper acpi_use_parent_companion
-Content-Language: en-US
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>
-References: <90bd1071-317e-4dfe-b94b-9bcee15d66c5@gmail.com>
- <6e935761-5b36-411a-ac82-cbc394bba7b6@gmail.com>
- <206f0f25-8a83-4e53-89fd-cbe025e5798d@gmail.com>
-From:   "Wilczynski, Michal" <michal.wilczynski@intel.com>
-In-Reply-To: <206f0f25-8a83-4e53-89fd-cbe025e5798d@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: WA1P291CA0003.POLP291.PROD.OUTLOOK.COM
- (2603:10a6:1d0:19::6) To CO6PR11MB5603.namprd11.prod.outlook.com
- (2603:10b6:5:35c::12)
+        with ESMTP id S233657AbjJPRVF (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Oct 2023 13:21:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBBEA7
+        for <linux-i2c@vger.kernel.org>; Mon, 16 Oct 2023 10:20:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1697476822;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IB8ijEdDwJemoPTssoo1rbFdLIyoQawFS03Tg5RD9fQ=;
+        b=HZc/JTankE+lWC8WPpMmNGtvpnI5USQJZ5JLRSZ/X5LEYnuhQy39GjlpBmPxw3EZ6eLZAd
+        lGpR/OrCfWT0DXftNrVxnMvRWh5u88wNyXZNeHEaPeeed9J+oAn9hKI2qNlMUowW9gzXvW
+        p6mhZgGBLQvj8KO5760q+wtjJc8/MnU=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-636-NSIJd-HRMVa0pjQEzVjQYQ-1; Mon, 16 Oct 2023 13:20:20 -0400
+X-MC-Unique: NSIJd-HRMVa0pjQEzVjQYQ-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9adc78b386cso64796966b.0
+        for <linux-i2c@vger.kernel.org>; Mon, 16 Oct 2023 10:20:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697476819; x=1698081619;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IB8ijEdDwJemoPTssoo1rbFdLIyoQawFS03Tg5RD9fQ=;
+        b=UY2Bb+aiVTnLDeIy02xOiuHcJh3FY6BDbrMwC635BbqyI/wPUiO7fIeUcW4b+8c6vO
+         D+TzIFl6Blu/kMvu6KvkEN09ARqweLj903LZz2ayWNuHcYtFWkjtUKCkMmVLBrsR8Yg4
+         tVHPgk7e8PHJlogVjk8INEISQkWe+adMrRT567+HIQDSi3soCXyR3ZMGhsvhF9fX7sLx
+         dUbF1fPgsHCPM2xsDgJrefD0SuouvVKV1w6eR+ezaa1wBtHbEq/7eFuod7y4A3ACMvhd
+         xN/6JDbtLfkPXAsXfAtHDcCESJXunxmYSoU7Rg0Y95T07r4gBx2nIfZIsXIl9AFgHLrL
+         VmAw==
+X-Gm-Message-State: AOJu0Yyt4TZQCsSofP6LRcDem2OWferwWOtqadovv9Ad2B3j2rv8ajS/
+        Iw9/HUw8Dw8yJAdh6kr+8mayRljQRW/gXJmdTjPEjOcUCdgYl/uwM+oKol7lEsKMKgcvAdN10TX
+        hzNanYhnZ+ijcJI0VAwdM
+X-Received: by 2002:a17:906:4fc7:b0:9be:dce3:6e07 with SMTP id i7-20020a1709064fc700b009bedce36e07mr5538508ejw.32.1697476819511;
+        Mon, 16 Oct 2023 10:20:19 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFyQXWWwAP/eW5eefiiR9ndnCb91EORwxQ3opyiCWlj496ZaVbyT5HGgZWO9aC83VCWTOXj4A==
+X-Received: by 2002:a17:906:4fc7:b0:9be:dce3:6e07 with SMTP id i7-20020a1709064fc700b009bedce36e07mr5538478ejw.32.1697476819117;
+        Mon, 16 Oct 2023 10:20:19 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id r20-20020a1709062cd400b009ad8084e08asm4363084ejr.0.2023.10.16.10.20.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Oct 2023 10:20:18 -0700 (PDT)
+Message-ID: <5747b78e-1956-8249-8f5e-85426b3efd01@redhat.com>
+Date:   Mon, 16 Oct 2023 19:20:17 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR11MB5603:EE_|SA1PR11MB7697:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6470e82c-0427-4cab-a725-08dbce6243fe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EhJqXIym1OOVwelOLQe5XapC50g1UqF3WMKtffYzTchPa+mWlFF27k9oGzHGAIQSNpQ8sdRxDKYQmvM67PGasZESlKOzh9bgplJWivgnGOLVgN+4IHiuysihNM4OUvz9ruGjAMl7S2L399Srqyv6ABaufo0gXsyR7MAomiTKDK15BSZkRTQ4zZaUFIGQ49o01RUy0Tg2LOugZXN4GnJ0q8QFn4v2ckyfIeid/deNkInEgsCu/kKp++THYXufZTIHUHO5fBQoCcaQEYaUPlFtWh+k5wS24MJ/Mw4wQUzTL5LTb0SL/yRa8wLDL2RC7+QS5/RjHhWLzcZcQ2mN7ZgbptgdT90CD8YQiBA6yxLunNoMT03Rs+ZqEJ56r5M4QXEUtvbqOcm6AK0Gpv8uKBfT0zKmx8VlrOv4DEHErvqIl/syGvH+kFe/RBa/OdTbnJHz1q8YWCaAepmmIlqoWXE7JHkSznYJarcCqFgit5cIP36cKHJmUQ/K3DOKFv5LpQ0sFdascnrMr5rYSTkNr2nFLXCcrQ8WQDykYtNgaXB9RziZ/2xUJxg/PKhdi7rBo4YxA4/ThggAZRpTEV3h4cSK6H+hzqzZfdVTwrUAij2VgtkKmBPOMxR9FlHEpaYH0dpgVm56mVRKD/+nchzCCXK5+Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR11MB5603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(136003)(366004)(376002)(346002)(396003)(230922051799003)(186009)(1800799009)(451199024)(64100799003)(66946007)(66556008)(110136005)(316002)(6486002)(66476007)(6666004)(2906002)(31696002)(86362001)(4744005)(41300700001)(8936002)(4326008)(8676002)(5660300002)(2616005)(31686004)(478600001)(82960400001)(83380400001)(26005)(38100700002)(6506007)(53546011)(36756003)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?KzMwR2pLdEJ1RjJmZEFrRTAwcHY4VW5lSDRKelFUWTdIdG11RnFqMEhZVDMy?=
- =?utf-8?B?OTFTeWowR3UvbUZIcU9QU0lRVHJnelRqMEtIQ0NMSG9zOFg2Q0YxbEdlREdy?=
- =?utf-8?B?a3RlcTFjejNJNExEL0VXK2FodUpVZjluR2lkblEyNlFleFBqOUJ4SitWbllF?=
- =?utf-8?B?UWVpbTdzV3paV2llR2hYaUNTaHluWCtJNGlSYTFLZlJURlBMeU52TlhXZFpW?=
- =?utf-8?B?cGhZQVJRQkZ0Z0ZyUUFiM05qaFdtSjYxZXdWa2ZPR29CWW52ekJkWnlOdzNH?=
- =?utf-8?B?RGVPZXVqcEJERkFiSGdpWXpRa094Rjh5cDBZNzJQa0tIMWxoMHcrL0wzOGZ2?=
- =?utf-8?B?NGZubk5iRFdoNlYrNHZ2NGdaSjZyeHNaL1lna2VzSjl5RHE1RjRNajExZito?=
- =?utf-8?B?SXhzK1ZQUTJwcm9iK2NLZjlvNEVyTVBYTXBPSHJPeEozT2F2YjZ2Wjg5VHdO?=
- =?utf-8?B?UEYzZkNrMjFmdXNpd0hVSFNHT0hhUk1xVXV6L2dQYlhnRTB0dUk0aWxXWVhj?=
- =?utf-8?B?NWt5bUtGTngyRU5TcWQrczdEdWpGeUdlSXZBR1V6a25nQ2srR0E5Wjg3R0c3?=
- =?utf-8?B?dk9rbHV3NzIwOTVtZHJiY2VZSW9qSUh4RU5TUEIzQVgvaURxT0pFL0J1M1pr?=
- =?utf-8?B?S0tJcnkwK09OeGd3ekE1YVlMdmRyOGpZOHMyTjlFbFBETkFIS1V5Z2F2WWl1?=
- =?utf-8?B?NVovOEozSTlwSjdHQWppcExRdEt3SDRUd2tNRDBQZ3JOckFPNmFRelRGMkYv?=
- =?utf-8?B?VzZwM3MyaUsrcGFlb25iTzZRRXMwVGJISVpFRHFoSXVLeGM5UmJza0VhcEVl?=
- =?utf-8?B?a0pLK1RYVzZ0b3lrRk9NVVcrVlZrRXF3ZndHbzMrR0tpNytwTFFpTWR2SUNJ?=
- =?utf-8?B?MkQ4dFE1ZXdMeHZBZjlrTDBCM2tFaHJJTGRiOE45TVdYeUpKQXY4WUZzRGZL?=
- =?utf-8?B?aFFKMGFrRVVaQU1SVm5qVFhjK2lyd1ZTV0t1empwU201NDJVWFh1dDB0SXlN?=
- =?utf-8?B?L0h1QjhYRDF4WEdSTmh3UjkxQUdhOTF1cXpRU1Z4WmROM1d3WkVYWHpjMlhE?=
- =?utf-8?B?ZU1KNG1hRkc5U3VXMTh0Y3M4TnRZZndUWVlCbFU1UXFXNTRXR1hSMDRMbnpv?=
- =?utf-8?B?VkVpNEVtQjdVd1JBN1J2OUN2eFdGMzB1WWZ4R1VZRU1vRlVteTF0aVJSSXBz?=
- =?utf-8?B?bC9OU1NjcVZxc2prMTZObGtMeGFJUEQrUmcydnFaTlZnWkVqOUtaQnBKL0Ns?=
- =?utf-8?B?TFM5RTIycmJxTTNhK2thQ3plVittTGdrSVhGZGhYWlNnWmVtR0tEelVyaWVG?=
- =?utf-8?B?ZU9SQytXVi90M2dCVjlLazFUSk4yTXRlbXZrVHFLN0FSV2p3c0lIN3lJRHJo?=
- =?utf-8?B?R3h1OWxFVlFGVTZHRGVucTlwOHZlc09PaW5qZmovaTBRQkl0aXRFRys1ZUcw?=
- =?utf-8?B?bVFJam10YTFMbDNUMlByRUc5bXRlelFTVytOUStleWJKSkRGaWFtazVjbTJE?=
- =?utf-8?B?THJsejErYmxGTVdQMzJYUHBIcDllVEVYOUl2RWRQYWtYNG83eG85eUZkTnJD?=
- =?utf-8?B?Mnh6N3hFMFNObUtWK2tzalBCS1Rhc0pmMzlTOEtkYmxDeXJLZEFBOUdPU0t4?=
- =?utf-8?B?Zy9JRG03bi9Nd2JNU1VxdG5HVHgrc3lUd20yWVFsbUxTWU1wTEs5ZGl6b1Zv?=
- =?utf-8?B?QmZLRkZqZjlkL2tWMnd5VkthZ1lJWDZJWXNtQ1NjTmFjKzZ5VDNrWTVNREpP?=
- =?utf-8?B?SWFXZE5OVXQrWjNWL256U3BoZGhkb2NWd2ZyME1wT2tEbjRCKzBXVjd3OVFi?=
- =?utf-8?B?OEVLVnJTdVhYWlJReVhERmJ6VXN5d1lINmVrNVUwNnF2MzlacGlRN09GMXZz?=
- =?utf-8?B?RVhlczlnc2dQUmNEWnh3UFp0dFVXL0VRamtkWmVRQm9tZ2x6MVdRblYxanZn?=
- =?utf-8?B?dnp2U0tSb3RCK0NpQWw5aHhYUlNSTmt0YmtpUG9SWlVNTVU5MHVVQ0U2QldP?=
- =?utf-8?B?MzRYTnAyNmNjTHZxalI3OTRTU0I3V0oxeW5mcGFxNG1ISTNYbks1QzFqYWl5?=
- =?utf-8?B?dWJPdzdVMFAzR2laakc5ZnV2eU1sRVpISk9ScEFVdWZHUkF1RFJiZDZpMEE2?=
- =?utf-8?B?ZWFaa2VJWC9KclhUQzF4dE10K05SS0ZuUXVIV2VWQzRrc2xNOUZ2Mm1oQklY?=
- =?utf-8?B?Mmc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6470e82c-0427-4cab-a725-08dbce6243fe
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR11MB5603.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2023 16:09:24.8926
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8aGlvBgc+bM80X1HDZYrV3fHyrV7LoWseRuCg9XIBJGXPlr3Qcd4IDz/XUzv/m4YXBCDafsCx4QhN/Kg8JEdN0dCrG64lQbTwiPehLiXOO4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB7697
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v20 1/4] usb: Add support for Intel LJCA device
+To:     "Shevchenko, Andriy" <andriy.shevchenko@intel.com>,
+        "Wu, Wentong" <wentong.wu@intel.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "oneukum@suse.com" <oneukum@suse.com>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <6a87b43a-0648-28d4-6c69-e0f684e44eb6@redhat.com>
+ <DM6PR11MB4316BE44F53E276384FF06C88DCCA@DM6PR11MB4316.namprd11.prod.outlook.com>
+ <5d2e9eba-a941-ea9a-161a-5b97d09d5d35@redhat.com>
+ <ZSmjEKfYzFuAHXW+@smile.fi.intel.com>
+ <9a080d06-586d-686f-997e-674cb8d16099@redhat.com>
+ <DM6PR11MB43169A9ADDA7681DB7D9347C8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
+ <ZSzogNhlX9njvOIU@smile.fi.intel.com>
+ <DM6PR11MB4316382324D15985A70E531C8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
+ <2023101653-shiftless-scorebook-19e3@gregkh>
+ <DM6PR11MB4316711C71937AE3C0516C7B8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
+ <ZS1fSPhfREVlELLD@smile.fi.intel.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <ZS1fSPhfREVlELLD@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -163,30 +105,96 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 Hi,
 
-On 10/15/2023 11:36 PM, Heiner Kallweit wrote:
-> Use new helper acpi_use_parent_companion to simplify the code.
->
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  drivers/i2c/busses/i2c-i801.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index a41f5349a..ac223146c 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -1620,7 +1620,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  	priv->adapter.class = I2C_CLASS_HWMON;
->  	priv->adapter.algo = &smbus_algorithm;
->  	priv->adapter.dev.parent = &dev->dev;
-> -	ACPI_COMPANION_SET(&priv->adapter.dev, ACPI_COMPANION(&dev->dev));
-> +	acpi_use_parent_companion(&priv->adapter.dev);
+On 10/16/23 18:05, Shevchenko, Andriy wrote:
+> On Mon, Oct 16, 2023 at 06:44:21PM +0300, Wu, Wentong wrote:
+>>> From: gregkh@linuxfoundation.org
+>>> On Mon, Oct 16, 2023 at 03:05:09PM +0000, Wu, Wentong wrote:
+>>>>> From: Shevchenko, Andriy
+>>>>> On Mon, Oct 16, 2023 at 08:52:28AM +0300, Wu, Wentong wrote:
+> 
+> ...
+> 
+>>>>> But this does not confirm if you have such devices. Moreover, My
+>>>>> question about _CID per function stays the same. Why firmware is not using
+>>> it?
+>>>>
+>>>> Yes, both _ADR and _CID can stop growing list in the driver. And for
+>>>> _ADR, it also only require one ID per function. I don't know why BIOS
+>>>> team doesn't select _CID, but I have suggested use _ADR internally,
+>>>> and , to make things moving forward, the driver adds support for _ADR here
+>>> first.
+>>>>
+>>>> But you're right, _CID is another solution as well, we will discuss it
+>>>> with firmware team more.
+>>>
+>>> Should I revert this series now until this gets sorted out?
+>>
+>> Current _ADR support is a solution, I don't think _CID is better than _ADR to both
+>> stop growing list in driver and support the shipped hardware at the same time.
+>>
+>> Andy, what's your idea? 
+> 
+> In my opinion if _CID can be made, it's better than _ADR. As using _ADR like
+> you do is a bit of grey area in the ACPI specification. I.o.w. can you get
+> a confirmation, let's say, from Microsoft, that they will go your way for other
+> similar devices?
+> 
+> Btw, Microsoft has their own solution actually using _ADR for the so called
+> "wired" USB devices. Is it your case? If so, I'm not sure why _HID has been
+> used from day 1...
+> 
+> Also I suggest to wait for Hans' opinion on the topic.
 
-I think this case is a bit too trivial for a helper, it's one line before, and
-one line after, so it doesn't really save much.
+I definitely don't think we should revert the entire series since this
+supports actual hw which has already been shipping for years.
 
+But if the _ADR support is only there to support future hw and
+it is not even certain yet that that future hw is actually going
+to be using _ADR support then I believe that a follow-up patch
+to drop _ADR support for now is in order. We can then re-introduce
+it (revert the follow up patch) if future hw actually starts
+using _ADR support.
 
->  	priv->adapter.retries = 3;
->  
->  	priv->pci_dev = dev;
+Specifically what I'm suggesting is something like the following:
+
+diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
+index c9decd0396d4..e1bbaf964786 100644
+--- a/drivers/usb/misc/usb-ljca.c
++++ b/drivers/usb/misc/usb-ljca.c
+@@ -457,8 +457,8 @@ static void ljca_auxdev_acpi_bind(struct ljca_adapter *adap,
+ 				  u64 adr, u8 id)
+ {
+ 	struct ljca_match_ids_walk_data wd = { 0 };
+-	struct acpi_device *parent, *adev;
+ 	struct device *dev = adap->dev;
++	struct acpi_device *parent;
+ 	char uid[4];
+ 
+ 	parent = ACPI_COMPANION(dev);
+@@ -466,17 +466,7 @@ static void ljca_auxdev_acpi_bind(struct ljca_adapter *adap,
+ 		return;
+ 
+ 	/*
+-	 * get auxdev ACPI handle from the ACPI device directly
+-	 * under the parent that matches _ADR.
+-	 */
+-	adev = acpi_find_child_device(parent, adr, false);
+-	if (adev) {
+-		ACPI_COMPANION_SET(&auxdev->dev, adev);
+-		return;
+-	}
+-
+-	/*
+-	 * _ADR is a grey area in the ACPI specification, some
++	 * Currently LJCA hw does not use _ADR instead current
+ 	 * platforms use _HID to distinguish children devices.
+ 	 */
+ 	switch (adr) {
+
+As a follow-up patch to the existing series.
+
+Regards,
+
+Hans
+
 
