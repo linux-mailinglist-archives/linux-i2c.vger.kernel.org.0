@@ -2,80 +2,77 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B27E7CC6F5
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Oct 2023 17:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10337CC700
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Oct 2023 17:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235137AbjJQPEl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Oct 2023 11:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S1344261AbjJQPGm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Oct 2023 11:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344240AbjJQPE3 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Oct 2023 11:04:29 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB4F27765
-        for <linux-i2c@vger.kernel.org>; Tue, 17 Oct 2023 07:56:27 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-27d5c71b4d7so2354302a91.1
-        for <linux-i2c@vger.kernel.org>; Tue, 17 Oct 2023 07:56:27 -0700 (PDT)
+        with ESMTP id S1344273AbjJQPGb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Oct 2023 11:06:31 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F892914E
+        for <linux-i2c@vger.kernel.org>; Tue, 17 Oct 2023 07:58:45 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-27cfb8bc7eeso4620482a91.0
+        for <linux-i2c@vger.kernel.org>; Tue, 17 Oct 2023 07:58:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1697554586; x=1698159386; darn=vger.kernel.org;
+        d=9elements.com; s=google; t=1697554725; x=1698159525; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3gd0Gezxir5QATSsJeNa9WRo2ZrSawXsEvPQ5V+cdyA=;
-        b=LJxN4FX1zZkJqhMtBTs0UbsuIVgZ4EBpPUeth+mFjzvUvKadEUUXBsNEDxYfamysmj
-         VMf238lpii/CigCKwPpDxxvhsGtLr2xRmJ5wajZKJ1Sxd30ZMhBXQ+2Ytw9mxFUobuAd
-         HwxvtgnYD5m8uRyeMLbCIqsKp8UBVoOCn9eCsu1XbPJVuBuWfXvZcE1y5crbRcFj6ocS
-         Q7XyQNSRindyoYDTTJV4sT6jjvgBTDssBFHjZ9dN5Lqx1uMdVvU28jzETbQmFT6cQaJq
-         j9tBm7D7jZcMdG23wEPseHovJNruJqvMFzWipARo7tiEL4hSJVF9Z+msd5SrVhqQFW/X
-         bEiA==
+        bh=hRxv/xQHCbwfjsFwBDzlBOcscTMXDoiVeykMIgqT/70=;
+        b=O5jQAQgVLRO+PsmmUqU7WgOMCOGrqtfXF0CKGR+wbchOJQikW/ovplka17+B2nYi0P
+         Oo6XcoPnxrrDFsYSV+E5A8NSCuR1RP2O9zCfpr7EcyK/nuyHXJvLBPMnp8sq7lKalq4m
+         G7Khv0n2ShqqDhcWlpSIs/Ocow8IC1ioGhHhsdrJwVfRrWq2wvUCIC4m6B7xulR8rFXr
+         FnXQoYAqi/yxYBkqeAO/o6jxRWtWr8/K/M8LzBjFe3S7QOaLz4M9lDzWkSxMYkC1o52y
+         pS8ZWyjq03Fzxoh2ucBFLH8cqIW1G371ekX+OWTStW/BhtDQwLAbXsirMB8Mb35wnZGg
+         Xrow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697554586; x=1698159386;
+        d=1e100.net; s=20230601; t=1697554725; x=1698159525;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3gd0Gezxir5QATSsJeNa9WRo2ZrSawXsEvPQ5V+cdyA=;
-        b=WiLDU+QhTI/KJJYVSrZOzpWuH/fWdJmUuH9TchOrV0fe1A5vLt76a3A6RD0i8efZHZ
-         gX4e7DXAN9jiX0znxBBEr6TQfi6+89BZpyy5hWSXkrhxUlStU1xnwWRZYPDEkS0mg4qz
-         Naov4REMNhWDr6MzSeVALO2+HaQZDlAWrYht7SOcBmxmqd7X+EscMbospJvndmXB24vA
-         //LcVj/zHuXJ7qP8LZqsUv3tfLz9wR9+Et8PvzvJz2XKTdZdbOiqM4YtWnw+IRe2KrLu
-         zOKYKntizJbnxiuZKz5pASTLZZUSMJTNw9fbPiX27MasC0nn9ghhPoRVg7HLf7BYVwso
-         XtXw==
-X-Gm-Message-State: AOJu0YyQeWYGEqYm5Eaco1enK7+p3UmvhGz1XaL2d4UchZpFd5Zo2qCv
-        ljJChe0AZU/T0qh2fdq+ozZ/YvQE4EvBCJDDvj8j11B+5dWoGwds
-X-Google-Smtp-Source: AGHT+IFkPdIp9SqODT7PVHNkBCadz9jJx+BVHFYHmQo/8sTxpsV7ScWPFIs0eApSjk4znFY/ydzqpHVN5DH0w9+oOdw=
-X-Received: by 2002:a17:90a:e393:b0:27d:63f1:2d24 with SMTP id
- b19-20020a17090ae39300b0027d63f12d24mr3166962pjz.0.1697554586521; Tue, 17 Oct
- 2023 07:56:26 -0700 (PDT)
+        bh=hRxv/xQHCbwfjsFwBDzlBOcscTMXDoiVeykMIgqT/70=;
+        b=uIwjqKXqpXNQDZZDuVHHX5v9gi2eEr4HuvSXWxFGIRVF8oAgsDVcS0LJTAPH9RbMh7
+         9M6i38zMQ3gqXuMJQig1A7t5Jl+arEHpL07/kY0BCeuL/hTAip8PGHdBSuPm81TH93EB
+         hI1smHjY27VePxgIYBV2TJfuzL1qi7omvqzuQ6InkeqTl1N0H/cTHr7Ww0zB7Wb6EoJP
+         vRXFHHR7sYAmavlBKUNzJiNjeAzkXKitNRDS43FVBkMAt2tZnGdcStqaVAhcvLC78g3P
+         JrFvGLEM1tPi0kaHx/KPBwGHxc4PA5ajVosABMy4EtTEPOpUEo4HFLrbK4iZYGfLqWHn
+         Y1xw==
+X-Gm-Message-State: AOJu0YzNXaurf1cdhoLiESina4q7+iDBDI+6NNGdvxOe9bB7owO2d/ha
+        WLXYoZMhPjBEIVlihqp927jCBihIiV9q8KrSvZ6EJncrKb8dOY44sv4=
+X-Google-Smtp-Source: AGHT+IES1CkRGvdSXLTh6fW8XeKNFlA1wfTDkUWe2UIfEim18KRVWsaejinQekqV4Gq4F6JTPBmUzocv7NY6sayk86o=
+X-Received: by 2002:a17:90b:1058:b0:27d:6dd:fb7d with SMTP id
+ gq24-20020a17090b105800b0027d06ddfb7dmr2488553pjb.17.1697554725068; Tue, 17
+ Oct 2023 07:58:45 -0700 (PDT)
 MIME-Version: 1.0
 References: <20231005134541.947727-1-naresh.solanki@9elements.com>
- <20231005134541.947727-2-naresh.solanki@9elements.com> <20231005230008.kw3u76gmudpia4cq@zenone.zhora.eu>
-In-Reply-To: <20231005230008.kw3u76gmudpia4cq@zenone.zhora.eu>
+ <20231005134541.947727-2-naresh.solanki@9elements.com> <29485a37-1f45-9f7f-9cc5-5d6a9fcc5e08@axentia.se>
+In-Reply-To: <29485a37-1f45-9f7f-9cc5-5d6a9fcc5e08@axentia.se>
 From:   Naresh Solanki <naresh.solanki@9elements.com>
-Date:   Tue, 17 Oct 2023 20:26:17 +0530
-Message-ID: <CABqG17gUKwE-wM=Qc5MV2N6NqdjXqmvbALgVvn8HTY+P7KRBWQ@mail.gmail.com>
+Date:   Tue, 17 Oct 2023 20:28:36 +0530
+Message-ID: <CABqG17g=Q4nhH_RaVQJHhciWMfc-1hLyPaB_+WaincgLtH37CA@mail.gmail.com>
 Subject: Re: [PATCH v4 2/2] i2c: muxes: pca954x: Enable features on MAX7357
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Peter Rosin <peda@axentia.se>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Andi,
+Hi
 
-
-On Fri, 6 Oct 2023 at 04:30, Andi Shyti <andi.shyti@kernel.org> wrote:
+On Fri, 6 Oct 2023 at 13:16, Peter Rosin <peda@axentia.se> wrote:
 >
-> Hi Patrick,
+> Hi!
 >
-> On Thu, Oct 05, 2023 at 03:45:40PM +0200, Naresh Solanki wrote:
+> 2023-10-05 at 15:45, Naresh Solanki wrote:
 > > From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > >
 > > Enable additional features based on DT settings and unconditionally
@@ -83,33 +80,57 @@ On Fri, 6 Oct 2023 at 04:30, Andi Shyti <andi.shyti@kernel.org> wrote:
 > > it as reset.
 > >
 > > These features aren't enabled by default & its up to board designer
->
-> /&/and/
-> /its/it's/
-Ack
->
 > > to enable the same as it may have unexpected side effects.
->
-> which side effects?
->
+> >
 > > These should be validated for proper functioning & detection of devices
->
-> /&/and/
->
-> it ain't WhatsApp :-)
-Ack
->
 > > in secondary bus as sometimes it can cause secondary bus being disabled.
->
-> Is this latest sentence a related to this patch or is it a free
-> information?
-Its related to the potential side effect of the feature if enabled.
->
+> >
 > > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
 > > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
->
-> [...]
->
+> > ---
+> > Changes in V4:
+> > - Drop max7358
+> > - Update #define
+> > - Move conf variable
+> > - Print warning when I2C_FUNC_SMBUS_WRITE_BYTE_DATA isn't supported
+> > Changes in V3:
+> > - Delete unused #define
+> > - Update pca954x_init
+> > - Update commit message
+> >
+> > Changes in V2:
+> > - Update comments
+> > - Update check for DT properties
+> > ---
+> >  drivers/i2c/muxes/i2c-mux-pca954x.c | 44 ++++++++++++++++++++++++++++-
+> >  1 file changed, 43 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> > index 2219062104fb..f37ce332078c 100644
+> > --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
+> > +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> > @@ -57,6 +57,20 @@
+> >
+> >  #define PCA954X_IRQ_OFFSET 4
+> >
+> > +/*
+> > + * MAX7357's configuration register is writeable after POR, but
+> > + * can be locked by setting the basic mode bit. MAX7358 configuration
+> > + * register is locked by default and needs to be unlocked first.
+> > + * The configuration register holds the following settings:
+> > + */
+> > +#define MAX7357_CONF_INT_ENABLE                      BIT(0)
+> > +#define MAX7357_CONF_FLUSH_OUT                       BIT(1)
+> > +#define MAX7357_CONF_RELEASE_INT             BIT(2)
+> > +#define MAX7357_CONF_DISCON_SINGLE_CHAN              BIT(4)
+> > +#define MAX7357_CONF_PRECONNECT_TEST         BIT(7)
+> > +
+> > +#define MAX7357_POR_DEFAULT_CONF             MAX7357_CONF_INT_ENABLE
+> > +
+> >  enum pca_type {
+> >       max_7356,
+> >       max_7357,
+> > @@ -470,7 +484,35 @@ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
 > >       else
 > >               data->last_chan = 0; /* Disconnect multiplexer */
 > >
@@ -121,16 +142,18 @@ Its related to the potential side effect of the feature if enabled.
 > > +                      * The interrupt signal is shared with the reset pin. Release the
 > > +                      * interrupt after 1.6 seconds to allow using the pin as reset.
 > > +                      * The interrupt isn't serviced yet.
+>
+> I'd suggest dropping the word "yet". The interrupt isn't serviced for
+> max7357, period. The "yet" in combination with that 1.6 second window is
+> a bit cunfusing and readers might think that the interrupt is serviced
+> at some later stage or something, when I think the intention of "The
+> interrupt isn't serviced yet" comes with the silent implication that it
+> is simply not implemented yet.
+Sure.
+>
 > > +                      */
 > > +                     conf |= MAX7357_CONF_RELEASE_INT;
->
-> This setting comes as default, what about the dedicated reset
-> gpio pin? How is the driver going to understand whether from the
-> irq pin is coming a reset or an interrupt?
-As per datasheet,
- RELEASE_INT bit in conf is cleared at poweron.
- The RST/INT is dual function pin.
->
+> > +
 > > +                     if (device_property_read_bool(&client->dev, "maxim,isolate-stuck-channel"))
 > > +                             conf |= MAX7357_CONF_DISCON_SINGLE_CHAN;
 > > +                     if (device_property_read_bool(&client->dev,
@@ -139,15 +162,28 @@ As per datasheet,
 > > +                     if (device_property_read_bool(&client->dev,
 > > +                                                   "maxim,preconnection-wiggle-test-enable"))
 > > +                             conf |= MAX7357_CONF_PRECONNECT_TEST;
+> > +
+> > +                     ret = i2c_smbus_write_byte_data(client, data->last_chan, conf);
+> > +             } else {
+> > +                     dev_warn(&client->dev,
+> > +                              "Write byte not supported. Cannot enable enhanced mode features");
 >
-> How are these properties affecting the economy of the driver? Can
-> we have a brief description?
-Not sure what you mean.
-Are you asking for impact on the driver or feature description ?
-Note: These are chip features & this patch is intended to enable them
-based on DT settings.
+> Missing \n at the end of the string.
+Sure. Will also update it as
+'Write byte data not supported. Cannot enable enhanced mode features\n'
 
 Regards,
 Naresh
 >
-> Andi
+> Cheers,
+> Peter
+>
+> > +                     ret = i2c_smbus_write_byte(client, data->last_chan);
+> > +             }
+> > +     } else {
+> > +             ret = i2c_smbus_write_byte(client, data->last_chan);
+> > +     }
+> > +
+> >       if (ret < 0)
+> >               data->last_chan = 0;
+> >
