@@ -2,369 +2,152 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCDE7CC53C
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Oct 2023 15:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B27E7CC6F5
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Oct 2023 17:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343584AbjJQNyq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 17 Oct 2023 09:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
+        id S235137AbjJQPEl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Oct 2023 11:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343894AbjJQNyp (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Oct 2023 09:54:45 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3A2ED
-        for <linux-i2c@vger.kernel.org>; Tue, 17 Oct 2023 06:54:42 -0700 (PDT)
+        with ESMTP id S1344240AbjJQPE3 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Oct 2023 11:04:29 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB4F27765
+        for <linux-i2c@vger.kernel.org>; Tue, 17 Oct 2023 07:56:27 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-27d5c71b4d7so2354302a91.1
+        for <linux-i2c@vger.kernel.org>; Tue, 17 Oct 2023 07:56:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1697550883; x=1729086883;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=miZzG0khLIpx/7QCyEFXzuWod2hJR8wFw9VpN47ephA=;
-  b=Zn2H0F22MZ0vqw0HN6bE0Lh8gsk444qMFA6Yc0A/Kk70HPcQIfaV4jsL
-   C9frdP+fikSevovTiOzEA6m11QEWl7XMypDvy/6/0CEmyZWQpJLlUUt08
-   3x4+ZzubiXua7XlKPtNXnvrggAKSUfjJI/QPsYpNe6xDXIuCAbxbBqpt2
-   xWdeg7YQZelBSMv075lhXmHBSog+d/13+q5HUrkP9/BBA4w/bXo564cfR
-   gZvNlAnaHc3RqXrd0cnzkGrQvxGeBHWsIWbRQzZnNjK1i/V47WhySPxxA
-   EyN6Iua7K9wyISyeHwClew7fK6HFwe+K3e84GRmP7EafiqiYPoLDen8dx
-   w==;
-X-IronPort-AV: E=Sophos;i="6.03,232,1694728800"; 
-   d="scan'208";a="33508839"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 17 Oct 2023 15:54:40 +0200
-Received: from steina-w.tq-net.de (steina-w.tq-net.de [10.123.53.18])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 99D02280082;
-        Tue, 17 Oct 2023 15:54:40 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Dong Aisheng <aisheng.dong@nxp.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: [PATCH v6 1/1] i2c: lpi2c: cache peripheral clock rate
-Date:   Tue, 17 Oct 2023 15:54:36 +0200
-Message-Id: <20231017135436.1241650-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
+        d=9elements.com; s=google; t=1697554586; x=1698159386; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3gd0Gezxir5QATSsJeNa9WRo2ZrSawXsEvPQ5V+cdyA=;
+        b=LJxN4FX1zZkJqhMtBTs0UbsuIVgZ4EBpPUeth+mFjzvUvKadEUUXBsNEDxYfamysmj
+         VMf238lpii/CigCKwPpDxxvhsGtLr2xRmJ5wajZKJ1Sxd30ZMhBXQ+2Ytw9mxFUobuAd
+         HwxvtgnYD5m8uRyeMLbCIqsKp8UBVoOCn9eCsu1XbPJVuBuWfXvZcE1y5crbRcFj6ocS
+         Q7XyQNSRindyoYDTTJV4sT6jjvgBTDssBFHjZ9dN5Lqx1uMdVvU28jzETbQmFT6cQaJq
+         j9tBm7D7jZcMdG23wEPseHovJNruJqvMFzWipARo7tiEL4hSJVF9Z+msd5SrVhqQFW/X
+         bEiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697554586; x=1698159386;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3gd0Gezxir5QATSsJeNa9WRo2ZrSawXsEvPQ5V+cdyA=;
+        b=WiLDU+QhTI/KJJYVSrZOzpWuH/fWdJmUuH9TchOrV0fe1A5vLt76a3A6RD0i8efZHZ
+         gX4e7DXAN9jiX0znxBBEr6TQfi6+89BZpyy5hWSXkrhxUlStU1xnwWRZYPDEkS0mg4qz
+         Naov4REMNhWDr6MzSeVALO2+HaQZDlAWrYht7SOcBmxmqd7X+EscMbospJvndmXB24vA
+         //LcVj/zHuXJ7qP8LZqsUv3tfLz9wR9+Et8PvzvJz2XKTdZdbOiqM4YtWnw+IRe2KrLu
+         zOKYKntizJbnxiuZKz5pASTLZZUSMJTNw9fbPiX27MasC0nn9ghhPoRVg7HLf7BYVwso
+         XtXw==
+X-Gm-Message-State: AOJu0YyQeWYGEqYm5Eaco1enK7+p3UmvhGz1XaL2d4UchZpFd5Zo2qCv
+        ljJChe0AZU/T0qh2fdq+ozZ/YvQE4EvBCJDDvj8j11B+5dWoGwds
+X-Google-Smtp-Source: AGHT+IFkPdIp9SqODT7PVHNkBCadz9jJx+BVHFYHmQo/8sTxpsV7ScWPFIs0eApSjk4znFY/ydzqpHVN5DH0w9+oOdw=
+X-Received: by 2002:a17:90a:e393:b0:27d:63f1:2d24 with SMTP id
+ b19-20020a17090ae39300b0027d63f12d24mr3166962pjz.0.1697554586521; Tue, 17 Oct
+ 2023 07:56:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20231005134541.947727-1-naresh.solanki@9elements.com>
+ <20231005134541.947727-2-naresh.solanki@9elements.com> <20231005230008.kw3u76gmudpia4cq@zenone.zhora.eu>
+In-Reply-To: <20231005230008.kw3u76gmudpia4cq@zenone.zhora.eu>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Tue, 17 Oct 2023 20:26:17 +0530
+Message-ID: <CABqG17gUKwE-wM=Qc5MV2N6NqdjXqmvbALgVvn8HTY+P7KRBWQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] i2c: muxes: pca954x: Enable features on MAX7357
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Peter Rosin <peda@axentia.se>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+Hi Andi,
 
-One of the reasons to do it is to save some CPU cycles on cpu_freq_get()
-under mutex. The second reason if the (false-positive) lockdep splat caused
-by the recursive feature of the "prepare_lock" (one clock instance is I2C
-peripheral clock and another is pcf85063 RTC as clock provider):
 
-======================================================
-WARNING: possible circular locking dependency detected
-5.15.71+... #1 Tainted: G           O
-------------------------------------------------------
-.../2332 is trying to acquire lock:
-ffff8000096cae08 (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock+0x50/0xb0
+On Fri, 6 Oct 2023 at 04:30, Andi Shyti <andi.shyti@kernel.org> wrote:
+>
+> Hi Patrick,
+>
+> On Thu, Oct 05, 2023 at 03:45:40PM +0200, Naresh Solanki wrote:
+> > From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> >
+> > Enable additional features based on DT settings and unconditionally
+> > release the shared interrupt pin after 1.6 seconds and allow to use
+> > it as reset.
+> >
+> > These features aren't enabled by default & its up to board designer
+>
+> /&/and/
+> /its/it's/
+Ack
+>
+> > to enable the same as it may have unexpected side effects.
+>
+> which side effects?
+>
+> > These should be validated for proper functioning & detection of devices
+>
+> /&/and/
+>
+> it ain't WhatsApp :-)
+Ack
+>
+> > in secondary bus as sometimes it can cause secondary bus being disabled.
+>
+> Is this latest sentence a related to this patch or is it a free
+> information?
+Its related to the potential side effect of the feature if enabled.
+>
+> > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+>
+> [...]
+>
+> >       else
+> >               data->last_chan = 0; /* Disconnect multiplexer */
+> >
+> > -     ret = i2c_smbus_write_byte(client, data->last_chan);
+> > +     if (device_is_compatible(&client->dev, "maxim,max7357")) {
+> > +             if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WRITE_BYTE_DATA)) {
+> > +                     u8 conf = MAX7357_POR_DEFAULT_CONF;
+> > +                     /*
+> > +                      * The interrupt signal is shared with the reset pin. Release the
+> > +                      * interrupt after 1.6 seconds to allow using the pin as reset.
+> > +                      * The interrupt isn't serviced yet.
+> > +                      */
+> > +                     conf |= MAX7357_CONF_RELEASE_INT;
+>
+> This setting comes as default, what about the dedicated reset
+> gpio pin? How is the driver going to understand whether from the
+> irq pin is coming a reset or an interrupt?
+As per datasheet,
+ RELEASE_INT bit in conf is cleared at poweron.
+ The RST/INT is dual function pin.
+>
+> > +                     if (device_property_read_bool(&client->dev, "maxim,isolate-stuck-channel"))
+> > +                             conf |= MAX7357_CONF_DISCON_SINGLE_CHAN;
+> > +                     if (device_property_read_bool(&client->dev,
+> > +                                                   "maxim,send-flush-out-sequence"))
+> > +                             conf |= MAX7357_CONF_FLUSH_OUT;
+> > +                     if (device_property_read_bool(&client->dev,
+> > +                                                   "maxim,preconnection-wiggle-test-enable"))
+> > +                             conf |= MAX7357_CONF_PRECONNECT_TEST;
+>
+> How are these properties affecting the economy of the driver? Can
+> we have a brief description?
+Not sure what you mean.
+Are you asking for impact on the driver or feature description ?
+Note: These are chip features & this patch is intended to enable them
+based on DT settings.
 
-but task is already holding lock:
-ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus+0x2c/0x3c
-
-which lock already depends on the new lock.
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (i2c_register_adapter){+.+.}-{3:3}:
-       lock_acquire+0x68/0x8c
-       rt_mutex_lock_nested+0x88/0xe0
-       i2c_adapter_lock_bus+0x2c/0x3c
-       i2c_transfer+0x58/0x130
-       regmap_i2c_read+0x64/0xb0
-       _regmap_raw_read+0x114/0x440
-       _regmap_bus_read+0x4c/0x84
-       _regmap_read+0x6c/0x270
-       regmap_read+0x54/0x80
-       pcf85063_probe+0xec/0x4cc
-       i2c_device_probe+0x10c/0x350
-       really_probe+0xc4/0x470
-       __driver_probe_device+0x11c/0x190
-       driver_probe_device+0x48/0x110
-       __device_attach_driver+0xc4/0x160
-       bus_for_each_drv+0x80/0xe0
-       __device_attach+0xb0/0x1f0
-       device_initial_probe+0x1c/0x2c
-       bus_probe_device+0xa4/0xb0
-       device_add+0x398/0x8ac
-       device_register+0x28/0x40
-       i2c_new_client_device+0x144/0x290
-       of_i2c_register_devices+0x18c/0x230
-       i2c_register_adapter+0x1dc/0x6b0
-       __i2c_add_numbered_adapter+0x68/0xbc
-       i2c_add_adapter+0xb0/0xe0
-       lpi2c_imx_probe+0x354/0x5e0
-       platform_probe+0x70/0xec
-       really_probe+0xc4/0x470
-       __driver_probe_device+0x11c/0x190
-       driver_probe_device+0x48/0x110
-       __device_attach_driver+0xc4/0x160
-       bus_for_each_drv+0x80/0xe0
-       __device_attach+0xb0/0x1f0
-       device_initial_probe+0x1c/0x2c
-       bus_probe_device+0xa4/0xb0
-       deferred_probe_work_func+0xa0/0xfc
-       process_one_work+0x2ac/0x6f4
-       worker_thread+0x7c/0x47c
-       kthread+0x150/0x16c
-       ret_from_fork+0x10/0x20
-
--> #1 (rtc_pcf85063:560:(&config->regmap)->lock){+.+.}-{3:3}:
-       lock_acquire+0x68/0x8c
-       __mutex_lock+0x9c/0x4d0
-       mutex_lock_nested+0x48/0x5c
-       regmap_lock_mutex+0x1c/0x30
-       regmap_read+0x44/0x80
-       pcf85063_clkout_recalc_rate+0x34/0x80
-       __clk_register+0x520/0x880
-       devm_clk_register+0x64/0xc4
-       pcf85063_probe+0x24c/0x4cc
-       i2c_device_probe+0x10c/0x350
-       really_probe+0xc4/0x470
-       __driver_probe_device+0x11c/0x190
-       driver_probe_device+0x48/0x110
-       __device_attach_driver+0xc4/0x160
-       bus_for_each_drv+0x80/0xe0
-       __device_attach+0xb0/0x1f0
-       device_initial_probe+0x1c/0x2c
-       bus_probe_device+0xa4/0xb0
-       device_add+0x398/0x8ac
-       device_register+0x28/0x40
-       i2c_new_client_device+0x144/0x290
-       of_i2c_register_devices+0x18c/0x230
-       i2c_register_adapter+0x1dc/0x6b0
-       __i2c_add_numbered_adapter+0x68/0xbc
-       i2c_add_adapter+0xb0/0xe0
-       lpi2c_imx_probe+0x354/0x5e0
-       platform_probe+0x70/0xec
-       really_probe+0xc4/0x470
-       __driver_probe_device+0x11c/0x190
-       driver_probe_device+0x48/0x110
-       __device_attach_driver+0xc4/0x160
-       bus_for_each_drv+0x80/0xe0
-       __device_attach+0xb0/0x1f0
-       device_initial_probe+0x1c/0x2c
-       bus_probe_device+0xa4/0xb0
-       deferred_probe_work_func+0xa0/0xfc
-       process_one_work+0x2ac/0x6f4
-       worker_thread+0x7c/0x47c
-       kthread+0x150/0x16c
-       ret_from_fork+0x10/0x20
-
--> #0 (prepare_lock){+.+.}-{3:3}:
-       __lock_acquire+0x1298/0x20d0
-       lock_acquire.part.0+0xf0/0x250
-       lock_acquire+0x68/0x8c
-       __mutex_lock+0x9c/0x4d0
-       mutex_lock_nested+0x48/0x5c
-       clk_prepare_lock+0x50/0xb0
-       clk_get_rate+0x28/0x80
-       lpi2c_imx_xfer+0xb0/0xa9c
-       __i2c_transfer+0x174/0xa80
-       i2c_transfer+0x68/0x130
-       regmap_i2c_read+0x64/0xb0
-       _regmap_raw_read+0x114/0x440
-       regmap_raw_read+0x19c/0x28c
-       regmap_bulk_read+0x1b8/0x244
-       at24_read+0x14c/0x2c4
-       nvmem_reg_read+0x2c/0x54
-       bin_attr_nvmem_read+0x8c/0xbc
-       sysfs_kf_bin_read+0x74/0x94
-       kernfs_fop_read_iter+0xb0/0x1d0
-       new_sync_read+0xf0/0x184
-       vfs_read+0x154/0x1f0
-       ksys_read+0x70/0x100
-       __arm64_sys_read+0x24/0x30
-       invoke_syscall+0x50/0x120
-       el0_svc_common.constprop.0+0x68/0x124
-       do_el0_svc+0x30/0x9c
-       el0_svc+0x54/0x110
-       el0t_64_sync_handler+0xa4/0x130
-       el0t_64_sync+0x1a0/0x1a4
-
-other info that might help us debug this:
-
-Chain exists of:
-  prepare_lock --> rtc_pcf85063:560:(&config->regmap)->lock --> i2c_register_adapter
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(i2c_register_adapter);
-                               lock(rtc_pcf85063:560:(&config->regmap)->lock);
-                               lock(i2c_register_adapter);
-  lock(prepare_lock);
-
- *** DEADLOCK ***
-
-4 locks held by .../2332:
- #0: ffff0000146eb288 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_read_iter+0x74/0x1d0
- #1: ffff000010fe4400 (kn->active#72){.+.+}-{0:0}, at: kernfs_fop_read_iter+0x7c/0x1d0
- #2: ffff0000110168e8 (&at24->lock){+.+.}-{3:3}, at: at24_read+0x8c/0x2c4
- #3: ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus+0x2c/0x3c
-
-stack backtrace:
-CPU: 1 PID: 2332 Comm: ... Tainted: G           O      5.15.71+... #1
-Hardware name: ... (DT)
-Call trace:
- dump_backtrace+0x0/0x1d4
- show_stack+0x20/0x2c
- dump_stack_lvl+0x8c/0xb8
- dump_stack+0x18/0x34
- print_circular_bug+0x1f8/0x200
- check_noncircular+0x130/0x144
- __lock_acquire+0x1298/0x20d0
- lock_acquire.part.0+0xf0/0x250
- lock_acquire+0x68/0x8c
- __mutex_lock+0x9c/0x4d0
- mutex_lock_nested+0x48/0x5c
- clk_prepare_lock+0x50/0xb0
- clk_get_rate+0x28/0x80
- lpi2c_imx_xfer+0xb0/0xa9c
- __i2c_transfer+0x174/0xa80
- i2c_transfer+0x68/0x130
- regmap_i2c_read+0x64/0xb0
- _regmap_raw_read+0x114/0x440
- regmap_raw_read+0x19c/0x28c
- regmap_bulk_read+0x1b8/0x244
- at24_read+0x14c/0x2c4
- nvmem_reg_read+0x2c/0x54
- bin_attr_nvmem_read+0x8c/0xbc
- sysfs_kf_bin_read+0x74/0x94
- kernfs_fop_read_iter+0xb0/0x1d0
- new_sync_read+0xf0/0x184
- vfs_read+0x154/0x1f0
- ksys_read+0x70/0x100
- __arm64_sys_read+0x24/0x30
- invoke_syscall+0x50/0x120
- el0_svc_common.constprop.0+0x68/0x124
- do_el0_svc+0x30/0x9c
- el0_svc+0x54/0x110
- el0t_64_sync_handler+0xa4/0x130
- el0t_64_sync+0x1a0/0x1a4
-
-Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-This is a v6 picking up Alexander Sverdlin's patch. Up to v5 is done by
-Alexander Sverdlin.
-I'm not sure if in this case both my R-b and S-o-b are necessary/desired.
-
-Changelog:
-v6: - rebased to next-20231017
-    - Just replaced clk_get_rate with atomic_read to shrink the diff
-v5: rebased onto Wolfram's i2c/for-next
-v4: switched to atomic_t
-    included clk_rate_exclusive_get()/clk_rate_exclusive_put()
-v3: fixed build error reported by kernel test robot <lkp@intel.com>
-    https://lore.kernel.org/oe-kbuild-all/202303102010.pAv56wKs-lkp@intel.com/
-v2: added clk_notifier as Alexander suggested
-
- drivers/i2c/busses/i2c-imx-lpi2c.c | 41 +++++++++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-index 678b30e90492a..e04faa261e7b1 100644
---- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-+++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-@@ -5,6 +5,7 @@
-  * Copyright 2016 Freescale Semiconductor, Inc.
-  */
- 
-+#include <linux/atomic.h>
- #include <linux/clk.h>
- #include <linux/completion.h>
- #include <linux/delay.h>
-@@ -99,6 +100,8 @@ struct lpi2c_imx_struct {
- 	__u8			*rx_buf;
- 	__u8			*tx_buf;
- 	struct completion	complete;
-+	struct notifier_block	clk_change_nb;
-+	atomic_t		rate_per;
- 	unsigned int		msglen;
- 	unsigned int		delivered;
- 	unsigned int		block_data;
-@@ -197,6 +200,20 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *lpi2c_imx)
- 	} while (1);
- }
- 
-+static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
-+				   unsigned long action, void *data)
-+{
-+	struct clk_notifier_data *ndata = data;
-+	struct lpi2c_imx_struct *lpi2c_imx = container_of(nb,
-+							  struct lpi2c_imx_struct,
-+							  clk_change_nb);
-+
-+	if (action & POST_RATE_CHANGE)
-+		atomic_set(&lpi2c_imx->rate_per, ndata->new_rate);
-+
-+	return NOTIFY_OK;
-+}
-+
- /* CLKLO = I2C_CLK_RATIO * CLKHI, SETHOLD = CLKHI, DATAVD = CLKHI/2 */
- static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
- {
-@@ -207,7 +224,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
- 
- 	lpi2c_imx_set_mode(lpi2c_imx);
- 
--	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
-+	clk_rate = atomic_read(&lpi2c_imx->rate_per);
- 	if (!clk_rate)
- 		return -EINVAL;
- 
-@@ -590,6 +607,28 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	lpi2c_imx->clk_change_nb.notifier_call = lpi2c_imx_clk_change_cb;
-+	ret = devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
-+					 &lpi2c_imx->clk_change_nb);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "can't register peripheral clock notifier\n");
-+	/*
-+	 * Lock the clock rate to avoid rate change between clk_get_rate() and
-+	 * atomic_set()
-+	 */
-+	ret = clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
-+	if (ret) {
-+		dev_err(&pdev->dev, "can't lock I2C peripheral clock rate\n");
-+		return ret;
-+	}
-+	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx->clks[0].clk));
-+	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
-+	if (!atomic_read(&lpi2c_imx->rate_per)) {
-+		dev_err(&pdev->dev, "can't get I2C peripheral clock rate\n");
-+		return -EINVAL;
-+	}
-+
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
- 	pm_runtime_use_autosuspend(&pdev->dev);
- 	pm_runtime_get_noresume(&pdev->dev);
--- 
-2.34.1
-
+Regards,
+Naresh
+>
+> Andi
