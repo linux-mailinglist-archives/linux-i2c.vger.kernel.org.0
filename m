@@ -2,251 +2,369 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006467CB78D
-	for <lists+linux-i2c@lfdr.de>; Tue, 17 Oct 2023 02:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCDE7CC53C
+	for <lists+linux-i2c@lfdr.de>; Tue, 17 Oct 2023 15:54:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbjJQAqY (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 16 Oct 2023 20:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S1343584AbjJQNyq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 17 Oct 2023 09:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233549AbjJQAqX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 16 Oct 2023 20:46:23 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFCD92;
-        Mon, 16 Oct 2023 17:46:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697503581; x=1729039581;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=3mmV4uChs6CrY50KZ6de0InyfCYJRqhWHCVLchiFSmY=;
-  b=Dr+pCR/PgASQhCvAywvfZHTnGZGL+Qbdr2ZJTkPG1cxQ3TT2FXC04xf0
-   pCztX6SZluw5jpXHx2ocAP8402kddv0Q9nUy7OMIS3hzU1DMVCbFXiGHz
-   zQ2d1jKG/d1/1SzFRmk/qy67SaBgMZ0XOoEpSupZASzkuXQKyEV3prGDZ
-   Z8yHBJcj8mHdAYLNtIOzl0IIggdXz4whugcijTDF+yFe+D57hmHlwIQBn
-   zdguPSLaBoNHjMnB7iIQW+im1skmQu+5Ie+LHnxU0FebAeNNsJ5GHEE6f
-   xSw5aHAMKN7lnPUDk1PwU1Q9ROPOm3kswKoI3Daxkco8LYu7J99/NvD26
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="376040610"
-X-IronPort-AV: E=Sophos;i="6.03,230,1694761200"; 
-   d="scan'208";a="376040610"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 17:46:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="929558336"
-X-IronPort-AV: E=Sophos;i="6.03,230,1694761200"; 
-   d="scan'208";a="929558336"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 16 Oct 2023 17:46:20 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Mon, 16 Oct 2023 17:46:20 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Mon, 16 Oct 2023 17:46:19 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Mon, 16 Oct 2023 17:46:19 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Mon, 16 Oct 2023 17:46:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O14hSWIx1cGx1S2+gMuvMAy/FVlkKIoFb0reTd29Z9KylzfgTbvGkvUUSs5D4fio8u3PNrw3UMiQw5YMrBYK8f8TOsJmzzMg7y24u/lLe5a+MihFEjyRGSJTuTUPGC4+W4MW+gCqISJEUoDoPePUscW+QND1qbyWYQVFjvd4toAwdP9qR28M95FGjg5SMZ/kLlz5+60bVNa3bgMF9TIaKmmpXHfTOvwa738Hcf1BdFq/ofs2Mb2jxhp6r21lzkMFzo7DacTzW7tGG350wJhxGhyr599PZcIrvrKu2KZHlAw/St+xsUPTez0HoNIhLdAvyBId3Nnt2qLUYwYp4DD8oQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3mmV4uChs6CrY50KZ6de0InyfCYJRqhWHCVLchiFSmY=;
- b=MupmpZdssMPpgTE20KqMKsy7ndU6OsGQpJAC7KpyDNftjvtHxtS44LE12ts6uXavyKoGLH9Bsyg6MpYf21trCusUFo8AB79zC0Kb8VUQjxO6Ex+bhJEjyyg1JAdTEVV8mcMydjut1S4yreKwKY9oGWReY90yxdxYllLpjEAp+BI4XaHKtwnnqkRSC4OaT6ZCIodHThSiroExxcah6TVqpFH7quchfBA0WGBTVpsibTg/tuUq+WqYXORTIiY79xJKB9YZSahCtxp0BixCWiSQrfx2GKNCMrIdYbCKtt++oXMzmeuOxXc5H91wg/AW2eFLl9PWq26Chv6f8nvUnVjmpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB4316.namprd11.prod.outlook.com (2603:10b6:5:205::16)
- by SN7PR11MB7975.namprd11.prod.outlook.com (2603:10b6:806:2eb::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.45; Tue, 17 Oct
- 2023 00:46:17 +0000
-Received: from DM6PR11MB4316.namprd11.prod.outlook.com
- ([fe80::e836:4003:6244:2466]) by DM6PR11MB4316.namprd11.prod.outlook.com
- ([fe80::e836:4003:6244:2466%7]) with mapi id 15.20.6863.046; Tue, 17 Oct 2023
- 00:46:17 +0000
-From:   "Wu, Wentong" <wentong.wu@intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        "Shevchenko, Andriy" <andriy.shevchenko@intel.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "oneukum@suse.com" <oneukum@suse.com>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v20 1/4] usb: Add support for Intel LJCA device
-Thread-Topic: [PATCH v20 1/4] usb: Add support for Intel LJCA device
-Thread-Index: AQHZ+nqZYOWB2QQzm0agSGlxpBPNmbBEZGUAgAAEnYCAAByScIABf/iAgAImwQCAAPlcAIACx//wgAAk8gCAAHc9cIAACXCAgAAFf1CAAAdtAIAAFOiAgAB6mmA=
-Date:   Tue, 17 Oct 2023 00:46:17 +0000
-Message-ID: <DM6PR11MB43166B4FFB86D12A36F23B398DD6A@DM6PR11MB4316.namprd11.prod.outlook.com>
-References: <6a87b43a-0648-28d4-6c69-e0f684e44eb6@redhat.com>
- <DM6PR11MB4316BE44F53E276384FF06C88DCCA@DM6PR11MB4316.namprd11.prod.outlook.com>
- <5d2e9eba-a941-ea9a-161a-5b97d09d5d35@redhat.com>
- <ZSmjEKfYzFuAHXW+@smile.fi.intel.com>
- <9a080d06-586d-686f-997e-674cb8d16099@redhat.com>
- <DM6PR11MB43169A9ADDA7681DB7D9347C8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
- <ZSzogNhlX9njvOIU@smile.fi.intel.com>
- <DM6PR11MB4316382324D15985A70E531C8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
- <2023101653-shiftless-scorebook-19e3@gregkh>
- <DM6PR11MB4316711C71937AE3C0516C7B8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
- <ZS1fSPhfREVlELLD@smile.fi.intel.com>
- <5747b78e-1956-8249-8f5e-85426b3efd01@redhat.com>
-In-Reply-To: <5747b78e-1956-8249-8f5e-85426b3efd01@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR11MB4316:EE_|SN7PR11MB7975:EE_
-x-ms-office365-filtering-correlation-id: c79b0372-e061-4eb4-a845-08dbceaa78ee
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Afjj4IL8o8MwWGuUKNHb3AbIPJ4wnFWyPQICMdxyWFFWzuOg1c0LWeplFjQDVoC9ey/oBnyhLMBF8LrTJwsO/czag3dBiCI/Xfhmnvfkzwn0AYt5EptPlC80/fBcgDpx+ndXKtCYpV20/DNyc3JDsOsj+sbIEPrTuEXim2E/1l2DzZm8XcAddeXoWhD7/lReGXQFIKcdHY1FKoBfj08//DHn9/bXoth1mbXgu8qpJgUSg8rM2N4q3mX34vHZ+UpSLRhhqd1AuivdFjSjC/Thz57ShTEsRYPF0eIQGRuhEuejomJgyHOZPRQ+UqHFfAKgaUaVI98MsBjlaUGyRtYrOQ/obSnLeOF/YQOj/n12SyUi2tmiyX9txYuh19tZMnVqf9a9xtVyT9V1Aw4N2cJ0FDS25mn7oK7PkgkACiAqgJIPs9vbsULILZ3SXSWOuy7Ey2h5c4T/G2zYvcO7+rVZG1NlWzbt9UGVH4NtJzfqSmnSo1qJKTrhelDOV6G0RVINirb2QC/qUmgxQaf44aSbwT0N8ZWJ/evXAnnyBSwZ4OSVVHPiRr/GtVLTA7hE3Ti3wJKLqshgQT4/FiYXnSlRh/iP/OVUGlJYKT+Nt5YUlC9cTP0KdSilAirunW+Iwc7s
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4316.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(366004)(396003)(346002)(376002)(39860400002)(230922051799003)(1800799009)(186009)(64100799003)(451199024)(26005)(45080400002)(64756008)(66946007)(71200400001)(38100700002)(316002)(38070700005)(76116006)(66446008)(66556008)(54906003)(6636002)(41300700001)(53546011)(110136005)(66476007)(83380400001)(5660300002)(8936002)(4326008)(8676002)(7696005)(9686003)(478600001)(52536014)(6506007)(7416002)(2906002)(82960400001)(55016003)(122000001)(33656002)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UUtFTkxnWHdvS09lYXlucTUvZi9sQ0x5ancxYVJQTlhpMkxnYjlZVVdIeDF4?=
- =?utf-8?B?cVhVdURSKzBESTMyNnBZOGZDOW9IcXUvVTFtREtYakpzUVhqNFZHb1o1Z1Nq?=
- =?utf-8?B?T3dFNkl3ckVFVUorS0RPUnFGVFZqOTM0bzJiNHVWYk1DY1ppZitsNGI2SlBB?=
- =?utf-8?B?RjA3Zi9Rbk0vZFpBajYrOXhEODFocElBOE9ySm5DZmdCS3cxWHJKQkVlSmkv?=
- =?utf-8?B?ZlpzUmVmbHFXUFhDTXNaWXlNaU04d09JRzg3MkpjbVVxVXBNWnIwQThLUVlZ?=
- =?utf-8?B?VG40TWVYa012dEd0MXpzeXA0bi92aHVGOG5qU0VTZlgyUEI4ZUJXOGlOcnVG?=
- =?utf-8?B?ZjJqcWFPUVFTbzRTYWI5UVhHNXV1a2lkdlByLzdnNi9uWkJWcG0wSHc0VVhv?=
- =?utf-8?B?UkVOTGk4ZzBzSG5vTzFERGJOYm1VQnkycFZQclBMU2R0TUg2blZxcEJuZnkx?=
- =?utf-8?B?ZmxXLzNvN1htZTk5Wkw2WWtOSVpNMmpoQTM4ZE1YNWt6RkxFTVFEbzJHVGht?=
- =?utf-8?B?Y0JQZHFac0RSK1lqVVJJT1VPWTM5WkVLSGhrVU05SkJLTW53VURxWHgwWmFi?=
- =?utf-8?B?K1lZYlQvOTZ5ZFVITUkvSVNDUHYzYjhsZjRJNGhhcG9vOUVJbUxZS1pQdmNW?=
- =?utf-8?B?N25kK3JxV2RiUDVweE0rUGJtME5aNkt6QlBhREF0NXhHUS9PdE9ncm9KTjhZ?=
- =?utf-8?B?anFxSElWWlROOWh6NGt0dWNKVUpleGlHeVl6NWczNllVbXNCNmUxV094QUFY?=
- =?utf-8?B?TjcrNHhjR2RCOXk0d0Nqb1JuMlMvRFkvdDh3S0txMEVvNmcrVVdNaTNFVXRl?=
- =?utf-8?B?amZqVjZhaTg2TGFGUmlsbEppSzQ3UkJqYzdweGxVVnBaL21BWVVaVkkvRXBO?=
- =?utf-8?B?d3QrQjExSWVlWnBGSmN4RDZYd1c5WGFUM2NzR21oQlUxbjFxQjlKQUdXd0NC?=
- =?utf-8?B?OGtMVktuL1psWFRHMS9XR2dnUE1ybzk1c1VoU1pRUm5KU29aUU93bjZZL3Mx?=
- =?utf-8?B?d1hlYXlKeUZuZXp0NWh4M0VhR2JNZUoxUGdpQVhFbUErZnlUSG1YeHRKcytu?=
- =?utf-8?B?cHdSZTRYSFNOT2JzdEU0MTJ5T2laY01XZkFsWit0RW1wZkhISE52R3YrODIx?=
- =?utf-8?B?Mjk2aXpTdWxDTFZ4c0hJeU02eVFUSjBmVmM1ME9xcURLY3pxNEdZZllGWXUw?=
- =?utf-8?B?WFVkQTNCTUNxZm5qZFV2VmYzY21rV1l2MlZ1TlBFUzVqdFJHMERXdk51WSsr?=
- =?utf-8?B?VUdHbTZzVDJsZEVPSVVxbDBxZ3NIc05LNFBxd0g4WTJsRXVHc2JrRUo4eW13?=
- =?utf-8?B?WWxJSE9DR2ZyODF2UC83NEM2YTdmZVV1QW15U0ZhS25IbUlTQmpIOUJPbHpV?=
- =?utf-8?B?OXZhT21UTTd6Sm5pN1kvK1Q4UmFzeW5oZFEyZUpmUkxpbVFsZWVmVUN4R0kw?=
- =?utf-8?B?VGhYV2N3d05WRmhaeC90M0p1ZWM2K05MQXk1VGxGUTRGVmJkSFBja0xLQzEx?=
- =?utf-8?B?UCtIK0dLU1lDYmtLY0Z6U1J3SW5XNlIrRWVxWnJoNldaK2p3ck1IV3pXdU1C?=
- =?utf-8?B?SjJkaXBtMkxLQ2RFZEJ5OGJzVFFjVFdMZ01WUFVnR3dpVnoyZUNuN0dIWDF4?=
- =?utf-8?B?MUIrRVUrSHB0Z005QUNLME9RalQ1UlhlRUJVT2dPdUpBZkZTZUVPSStoeEw2?=
- =?utf-8?B?aFo3cFN1czk3VWJhY21JSzhnRU9RZ0NNMy9TWCtKZW5wZGxsNlJvaGRiWm5P?=
- =?utf-8?B?alVzc2Q3YXhGeEFhVmJZQk5VVEx6MlE3dExMTkhOVWR4NmdnTFFhbDJkTHFa?=
- =?utf-8?B?R1Y5cGtwenZORnRoWnpoZ0VZWjFBNERjVlBGV1RHbWRaNHpRSStwaUVSczBq?=
- =?utf-8?B?R1EzSzJVZ01lZ0lJTEtjSTV0RU9VcXAwVWlHb0hPWkpTbXdPSjM3QXc2b2dJ?=
- =?utf-8?B?ZGhFU2VrZWhhc2RRUW1ZZ01IS1laZmVxU0c1TVg2UGdMVzFGQzNrUUt2NE9W?=
- =?utf-8?B?NDVWcWkvWVduaVN6ZFRWY1lwL0dKYkVxSEtveFVPUmZ0bjB6cHIrd01ySitD?=
- =?utf-8?B?aHdYaE9hbVV3MmpHWU9KUFIwNXV0dGxJeXhJY2FCaHZsdk5FQ2FEc3Zvd2VJ?=
- =?utf-8?Q?jXPsMqqW3MaTgG85nvAHHbp1W?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S1343894AbjJQNyp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 17 Oct 2023 09:54:45 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3A2ED
+        for <linux-i2c@vger.kernel.org>; Tue, 17 Oct 2023 06:54:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1697550883; x=1729086883;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=miZzG0khLIpx/7QCyEFXzuWod2hJR8wFw9VpN47ephA=;
+  b=Zn2H0F22MZ0vqw0HN6bE0Lh8gsk444qMFA6Yc0A/Kk70HPcQIfaV4jsL
+   C9frdP+fikSevovTiOzEA6m11QEWl7XMypDvy/6/0CEmyZWQpJLlUUt08
+   3x4+ZzubiXua7XlKPtNXnvrggAKSUfjJI/QPsYpNe6xDXIuCAbxbBqpt2
+   xWdeg7YQZelBSMv075lhXmHBSog+d/13+q5HUrkP9/BBA4w/bXo564cfR
+   gZvNlAnaHc3RqXrd0cnzkGrQvxGeBHWsIWbRQzZnNjK1i/V47WhySPxxA
+   EyN6Iua7K9wyISyeHwClew7fK6HFwe+K3e84GRmP7EafiqiYPoLDen8dx
+   w==;
+X-IronPort-AV: E=Sophos;i="6.03,232,1694728800"; 
+   d="scan'208";a="33508839"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 17 Oct 2023 15:54:40 +0200
+Received: from steina-w.tq-net.de (steina-w.tq-net.de [10.123.53.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 99D02280082;
+        Tue, 17 Oct 2023 15:54:40 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Dong Aisheng <aisheng.dong@nxp.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Subject: [PATCH v6 1/1] i2c: lpi2c: cache peripheral clock rate
+Date:   Tue, 17 Oct 2023 15:54:36 +0200
+Message-Id: <20231017135436.1241650-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4316.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c79b0372-e061-4eb4-a845-08dbceaa78ee
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2023 00:46:17.1568
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HGVQIV+m75VS2qNtx4RqsVm43Iy0qB3jFOVvOHNJEKbrT/4VDXey633JDmugeyOHz5HWgxsOgWJ4RjWCraHx+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7975
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-PiBGcm9tOiBIYW5zIGRlIEdvZWRlIDxoZGVnb2VkZT4NCj4gT24gMTAvMTYvMjMgMTg6MDUsIFNo
-ZXZjaGVua28sIEFuZHJpeSB3cm90ZToNCj4gPiBPbiBNb24sIE9jdCAxNiwgMjAyMyBhdCAwNjo0
-NDoyMVBNICswMzAwLCBXdSwgV2VudG9uZyB3cm90ZToNCj4gPj4+IEZyb206IGdyZWdraEBsaW51
-eGZvdW5kYXRpb24ub3JnDQo+ID4+PiBPbiBNb24sIE9jdCAxNiwgMjAyMyBhdCAwMzowNTowOVBN
-ICswMDAwLCBXdSwgV2VudG9uZyB3cm90ZToNCj4gPj4+Pj4gRnJvbTogU2hldmNoZW5rbywgQW5k
-cml5DQo+ID4+Pj4+IE9uIE1vbiwgT2N0IDE2LCAyMDIzIGF0IDA4OjUyOjI4QU0gKzAzMDAsIFd1
-LCBXZW50b25nIHdyb3RlOg0KPiA+DQo+ID4gLi4uDQo+ID4NCj4gPj4+Pj4gQnV0IHRoaXMgZG9l
-cyBub3QgY29uZmlybSBpZiB5b3UgaGF2ZSBzdWNoIGRldmljZXMuIE1vcmVvdmVyLCBNeQ0KPiA+
-Pj4+PiBxdWVzdGlvbiBhYm91dCBfQ0lEIHBlciBmdW5jdGlvbiBzdGF5cyB0aGUgc2FtZS4gV2h5
-IGZpcm13YXJlIGlzDQo+ID4+Pj4+IG5vdCB1c2luZw0KPiA+Pj4gaXQ/DQo+ID4+Pj4NCj4gPj4+
-PiBZZXMsIGJvdGggX0FEUiBhbmQgX0NJRCBjYW4gc3RvcCBncm93aW5nIGxpc3QgaW4gdGhlIGRy
-aXZlci4gQW5kDQo+ID4+Pj4gZm9yIF9BRFIsIGl0IGFsc28gb25seSByZXF1aXJlIG9uZSBJRCBw
-ZXIgZnVuY3Rpb24uIEkgZG9uJ3Qga25vdw0KPiA+Pj4+IHdoeSBCSU9TIHRlYW0gZG9lc24ndCBz
-ZWxlY3QgX0NJRCwgYnV0IEkgaGF2ZSBzdWdnZXN0ZWQgdXNlIF9BRFINCj4gPj4+PiBpbnRlcm5h
-bGx5LCBhbmQgLCB0byBtYWtlIHRoaW5ncyBtb3ZpbmcgZm9yd2FyZCwgdGhlIGRyaXZlciBhZGRz
-DQo+ID4+Pj4gc3VwcG9ydCBmb3IgX0FEUiBoZXJlDQo+ID4+PiBmaXJzdC4NCj4gPj4+Pg0KPiA+
-Pj4+IEJ1dCB5b3UncmUgcmlnaHQsIF9DSUQgaXMgYW5vdGhlciBzb2x1dGlvbiBhcyB3ZWxsLCB3
-ZSB3aWxsIGRpc2N1c3MNCj4gPj4+PiBpdCB3aXRoIGZpcm13YXJlIHRlYW0gbW9yZS4NCj4gPj4+
-DQo+ID4+PiBTaG91bGQgSSByZXZlcnQgdGhpcyBzZXJpZXMgbm93IHVudGlsIHRoaXMgZ2V0cyBz
-b3J0ZWQgb3V0Pw0KPiA+Pg0KPiA+PiBDdXJyZW50IF9BRFIgc3VwcG9ydCBpcyBhIHNvbHV0aW9u
-LCBJIGRvbid0IHRoaW5rIF9DSUQgaXMgYmV0dGVyIHRoYW4NCj4gPj4gX0FEUiB0byBib3RoIHN0
-b3AgZ3Jvd2luZyBsaXN0IGluIGRyaXZlciBhbmQgc3VwcG9ydCB0aGUgc2hpcHBlZCBoYXJkd2Fy
-ZSBhdA0KPiB0aGUgc2FtZSB0aW1lLg0KPiA+Pg0KPiA+PiBBbmR5LCB3aGF0J3MgeW91ciBpZGVh
-Pw0KPiA+DQo+ID4gSW4gbXkgb3BpbmlvbiBpZiBfQ0lEIGNhbiBiZSBtYWRlLCBpdCdzIGJldHRl
-ciB0aGFuIF9BRFIuIEFzIHVzaW5nDQo+ID4gX0FEUiBsaWtlIHlvdSBkbyBpcyBhIGJpdCBvZiBn
-cmV5IGFyZWEgaW4gdGhlIEFDUEkgc3BlY2lmaWNhdGlvbi4NCj4gPiBJLm8udy4gY2FuIHlvdSBn
-ZXQgYSBjb25maXJtYXRpb24sIGxldCdzIHNheSwgZnJvbSBNaWNyb3NvZnQsIHRoYXQNCj4gPiB0
-aGV5IHdpbGwgZ28geW91ciB3YXkgZm9yIG90aGVyIHNpbWlsYXIgZGV2aWNlcz8NCj4gPg0KPiA+
-IEJ0dywgTWljcm9zb2Z0IGhhcyB0aGVpciBvd24gc29sdXRpb24gYWN0dWFsbHkgdXNpbmcgX0FE
-UiBmb3IgdGhlIHNvDQo+ID4gY2FsbGVkICJ3aXJlZCIgVVNCIGRldmljZXMuIElzIGl0IHlvdXIg
-Y2FzZT8gSWYgc28sIEknbSBub3Qgc3VyZSB3aHkNCj4gPiBfSElEIGhhcyBiZWVuIHVzZWQgZnJv
-bSBkYXkgMS4uLg0KDQpUaGFua3MgZm9yIHlvdXIgaW5mbywgd2Ugd2lsbCBkaXNjdXNzIG1vcmUg
-d2l0aCB0aGVtLCBidXQgSSBhbHNvIHRoaW5rIHdlDQpzaG91bGQga2VlcCB0aGlzIHNlcmllcyBh
-bmQgSSB3aWxsIGRvIHRoZSBmb2xsb3cgdXAgYXMgSGFucycgc3VnZ2VzdC4NCg0KPiA+IEFsc28g
-SSBzdWdnZXN0IHRvIHdhaXQgZm9yIEhhbnMnIG9waW5pb24gb24gdGhlIHRvcGljLg0KPiANCj4g
-SSBkZWZpbml0ZWx5IGRvbid0IHRoaW5rIHdlIHNob3VsZCByZXZlcnQgdGhlIGVudGlyZSBzZXJp
-ZXMgc2luY2UgdGhpcyBzdXBwb3J0cw0KPiBhY3R1YWwgaHcgd2hpY2ggaGFzIGFscmVhZHkgYmVl
-biBzaGlwcGluZyBmb3IgeWVhcnMuDQoNClRvdGFsbHkgYWdyZWUsIHRoYW5rcw0KDQo+IA0KPiBC
-dXQgaWYgdGhlIF9BRFIgc3VwcG9ydCBpcyBvbmx5IHRoZXJlIHRvIHN1cHBvcnQgZnV0dXJlIGh3
-IGFuZCBpdCBpcyBub3QgZXZlbg0KPiBjZXJ0YWluIHlldCB0aGF0IHRoYXQgZnV0dXJlIGh3IGlz
-IGFjdHVhbGx5IGdvaW5nIHRvIGJlIHVzaW5nIF9BRFIgc3VwcG9ydCB0aGVuIEkNCj4gYmVsaWV2
-ZSB0aGF0IGEgZm9sbG93LXVwIHBhdGNoIHRvIGRyb3AgX0FEUiBzdXBwb3J0IGZvciBub3cgaXMg
-aW4gb3JkZXIuIFdlIGNhbg0KPiB0aGVuIHJlLWludHJvZHVjZSBpdCAocmV2ZXJ0IHRoZSBmb2xs
-b3cgdXAgcGF0Y2gpIGlmIGZ1dHVyZSBodyBhY3R1YWxseSBzdGFydHMgdXNpbmcNCj4gX0FEUiBz
-dXBwb3J0Lg0KDQpZZXMsIHRoYW5rcy4NCg0KPiANCj4gU3BlY2lmaWNhbGx5IHdoYXQgSSdtIHN1
-Z2dlc3RpbmcgaXMgc29tZXRoaW5nIGxpa2UgdGhlIGZvbGxvd2luZzoNCj4gDQo+IGRpZmYgLS1n
-aXQgYS9kcml2ZXJzL3VzYi9taXNjL3VzYi1samNhLmMgYi9kcml2ZXJzL3VzYi9taXNjL3VzYi1s
-amNhLmMgaW5kZXgNCj4gYzlkZWNkMDM5NmQ0Li5lMWJiYWY5NjQ3ODYgMTAwNjQ0DQo+IC0tLSBh
-L2RyaXZlcnMvdXNiL21pc2MvdXNiLWxqY2EuYw0KPiArKysgYi9kcml2ZXJzL3VzYi9taXNjL3Vz
-Yi1samNhLmMNCj4gQEAgLTQ1Nyw4ICs0NTcsOCBAQCBzdGF0aWMgdm9pZCBsamNhX2F1eGRldl9h
-Y3BpX2JpbmQoc3RydWN0IGxqY2FfYWRhcHRlcg0KPiAqYWRhcCwNCj4gIAkJCQkgIHU2NCBhZHIs
-IHU4IGlkKQ0KPiAgew0KPiAgCXN0cnVjdCBsamNhX21hdGNoX2lkc193YWxrX2RhdGEgd2QgPSB7
-IDAgfTsNCj4gLQlzdHJ1Y3QgYWNwaV9kZXZpY2UgKnBhcmVudCwgKmFkZXY7DQo+ICAJc3RydWN0
-IGRldmljZSAqZGV2ID0gYWRhcC0+ZGV2Ow0KPiArCXN0cnVjdCBhY3BpX2RldmljZSAqcGFyZW50
-Ow0KPiAgCWNoYXIgdWlkWzRdOw0KPiANCj4gIAlwYXJlbnQgPSBBQ1BJX0NPTVBBTklPTihkZXYp
-Ow0KPiBAQCAtNDY2LDE3ICs0NjYsNyBAQCBzdGF0aWMgdm9pZCBsamNhX2F1eGRldl9hY3BpX2Jp
-bmQoc3RydWN0IGxqY2FfYWRhcHRlcg0KPiAqYWRhcCwNCj4gIAkJcmV0dXJuOw0KPiANCj4gIAkv
-Kg0KPiAtCSAqIGdldCBhdXhkZXYgQUNQSSBoYW5kbGUgZnJvbSB0aGUgQUNQSSBkZXZpY2UgZGly
-ZWN0bHkNCj4gLQkgKiB1bmRlciB0aGUgcGFyZW50IHRoYXQgbWF0Y2hlcyBfQURSLg0KPiAtCSAq
-Lw0KPiAtCWFkZXYgPSBhY3BpX2ZpbmRfY2hpbGRfZGV2aWNlKHBhcmVudCwgYWRyLCBmYWxzZSk7
-DQo+IC0JaWYgKGFkZXYpIHsNCj4gLQkJQUNQSV9DT01QQU5JT05fU0VUKCZhdXhkZXYtPmRldiwg
-YWRldik7DQo+IC0JCXJldHVybjsNCj4gLQl9DQo+IC0NCj4gLQkvKg0KPiAtCSAqIF9BRFIgaXMg
-YSBncmV5IGFyZWEgaW4gdGhlIEFDUEkgc3BlY2lmaWNhdGlvbiwgc29tZQ0KPiArCSAqIEN1cnJl
-bnRseSBMSkNBIGh3IGRvZXMgbm90IHVzZSBfQURSIGluc3RlYWQgY3VycmVudA0KPiAgCSAqIHBs
-YXRmb3JtcyB1c2UgX0hJRCB0byBkaXN0aW5ndWlzaCBjaGlsZHJlbiBkZXZpY2VzLg0KPiAgCSAq
-Lw0KPiAgCXN3aXRjaCAoYWRyKSB7DQo+IA0KPiBBcyBhIGZvbGxvdy11cCBwYXRjaCB0byB0aGUg
-ZXhpc3Rpbmcgc2VyaWVzLg0KPiANCj4gUmVnYXJkcywNCj4gDQo+IEhhbnMNCg==
+From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+
+One of the reasons to do it is to save some CPU cycles on cpu_freq_get()
+under mutex. The second reason if the (false-positive) lockdep splat caused
+by the recursive feature of the "prepare_lock" (one clock instance is I2C
+peripheral clock and another is pcf85063 RTC as clock provider):
+
+======================================================
+WARNING: possible circular locking dependency detected
+5.15.71+... #1 Tainted: G           O
+------------------------------------------------------
+.../2332 is trying to acquire lock:
+ffff8000096cae08 (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock+0x50/0xb0
+
+but task is already holding lock:
+ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus+0x2c/0x3c
+
+which lock already depends on the new lock.
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (i2c_register_adapter){+.+.}-{3:3}:
+       lock_acquire+0x68/0x8c
+       rt_mutex_lock_nested+0x88/0xe0
+       i2c_adapter_lock_bus+0x2c/0x3c
+       i2c_transfer+0x58/0x130
+       regmap_i2c_read+0x64/0xb0
+       _regmap_raw_read+0x114/0x440
+       _regmap_bus_read+0x4c/0x84
+       _regmap_read+0x6c/0x270
+       regmap_read+0x54/0x80
+       pcf85063_probe+0xec/0x4cc
+       i2c_device_probe+0x10c/0x350
+       really_probe+0xc4/0x470
+       __driver_probe_device+0x11c/0x190
+       driver_probe_device+0x48/0x110
+       __device_attach_driver+0xc4/0x160
+       bus_for_each_drv+0x80/0xe0
+       __device_attach+0xb0/0x1f0
+       device_initial_probe+0x1c/0x2c
+       bus_probe_device+0xa4/0xb0
+       device_add+0x398/0x8ac
+       device_register+0x28/0x40
+       i2c_new_client_device+0x144/0x290
+       of_i2c_register_devices+0x18c/0x230
+       i2c_register_adapter+0x1dc/0x6b0
+       __i2c_add_numbered_adapter+0x68/0xbc
+       i2c_add_adapter+0xb0/0xe0
+       lpi2c_imx_probe+0x354/0x5e0
+       platform_probe+0x70/0xec
+       really_probe+0xc4/0x470
+       __driver_probe_device+0x11c/0x190
+       driver_probe_device+0x48/0x110
+       __device_attach_driver+0xc4/0x160
+       bus_for_each_drv+0x80/0xe0
+       __device_attach+0xb0/0x1f0
+       device_initial_probe+0x1c/0x2c
+       bus_probe_device+0xa4/0xb0
+       deferred_probe_work_func+0xa0/0xfc
+       process_one_work+0x2ac/0x6f4
+       worker_thread+0x7c/0x47c
+       kthread+0x150/0x16c
+       ret_from_fork+0x10/0x20
+
+-> #1 (rtc_pcf85063:560:(&config->regmap)->lock){+.+.}-{3:3}:
+       lock_acquire+0x68/0x8c
+       __mutex_lock+0x9c/0x4d0
+       mutex_lock_nested+0x48/0x5c
+       regmap_lock_mutex+0x1c/0x30
+       regmap_read+0x44/0x80
+       pcf85063_clkout_recalc_rate+0x34/0x80
+       __clk_register+0x520/0x880
+       devm_clk_register+0x64/0xc4
+       pcf85063_probe+0x24c/0x4cc
+       i2c_device_probe+0x10c/0x350
+       really_probe+0xc4/0x470
+       __driver_probe_device+0x11c/0x190
+       driver_probe_device+0x48/0x110
+       __device_attach_driver+0xc4/0x160
+       bus_for_each_drv+0x80/0xe0
+       __device_attach+0xb0/0x1f0
+       device_initial_probe+0x1c/0x2c
+       bus_probe_device+0xa4/0xb0
+       device_add+0x398/0x8ac
+       device_register+0x28/0x40
+       i2c_new_client_device+0x144/0x290
+       of_i2c_register_devices+0x18c/0x230
+       i2c_register_adapter+0x1dc/0x6b0
+       __i2c_add_numbered_adapter+0x68/0xbc
+       i2c_add_adapter+0xb0/0xe0
+       lpi2c_imx_probe+0x354/0x5e0
+       platform_probe+0x70/0xec
+       really_probe+0xc4/0x470
+       __driver_probe_device+0x11c/0x190
+       driver_probe_device+0x48/0x110
+       __device_attach_driver+0xc4/0x160
+       bus_for_each_drv+0x80/0xe0
+       __device_attach+0xb0/0x1f0
+       device_initial_probe+0x1c/0x2c
+       bus_probe_device+0xa4/0xb0
+       deferred_probe_work_func+0xa0/0xfc
+       process_one_work+0x2ac/0x6f4
+       worker_thread+0x7c/0x47c
+       kthread+0x150/0x16c
+       ret_from_fork+0x10/0x20
+
+-> #0 (prepare_lock){+.+.}-{3:3}:
+       __lock_acquire+0x1298/0x20d0
+       lock_acquire.part.0+0xf0/0x250
+       lock_acquire+0x68/0x8c
+       __mutex_lock+0x9c/0x4d0
+       mutex_lock_nested+0x48/0x5c
+       clk_prepare_lock+0x50/0xb0
+       clk_get_rate+0x28/0x80
+       lpi2c_imx_xfer+0xb0/0xa9c
+       __i2c_transfer+0x174/0xa80
+       i2c_transfer+0x68/0x130
+       regmap_i2c_read+0x64/0xb0
+       _regmap_raw_read+0x114/0x440
+       regmap_raw_read+0x19c/0x28c
+       regmap_bulk_read+0x1b8/0x244
+       at24_read+0x14c/0x2c4
+       nvmem_reg_read+0x2c/0x54
+       bin_attr_nvmem_read+0x8c/0xbc
+       sysfs_kf_bin_read+0x74/0x94
+       kernfs_fop_read_iter+0xb0/0x1d0
+       new_sync_read+0xf0/0x184
+       vfs_read+0x154/0x1f0
+       ksys_read+0x70/0x100
+       __arm64_sys_read+0x24/0x30
+       invoke_syscall+0x50/0x120
+       el0_svc_common.constprop.0+0x68/0x124
+       do_el0_svc+0x30/0x9c
+       el0_svc+0x54/0x110
+       el0t_64_sync_handler+0xa4/0x130
+       el0t_64_sync+0x1a0/0x1a4
+
+other info that might help us debug this:
+
+Chain exists of:
+  prepare_lock --> rtc_pcf85063:560:(&config->regmap)->lock --> i2c_register_adapter
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(i2c_register_adapter);
+                               lock(rtc_pcf85063:560:(&config->regmap)->lock);
+                               lock(i2c_register_adapter);
+  lock(prepare_lock);
+
+ *** DEADLOCK ***
+
+4 locks held by .../2332:
+ #0: ffff0000146eb288 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_read_iter+0x74/0x1d0
+ #1: ffff000010fe4400 (kn->active#72){.+.+}-{0:0}, at: kernfs_fop_read_iter+0x7c/0x1d0
+ #2: ffff0000110168e8 (&at24->lock){+.+.}-{3:3}, at: at24_read+0x8c/0x2c4
+ #3: ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus+0x2c/0x3c
+
+stack backtrace:
+CPU: 1 PID: 2332 Comm: ... Tainted: G           O      5.15.71+... #1
+Hardware name: ... (DT)
+Call trace:
+ dump_backtrace+0x0/0x1d4
+ show_stack+0x20/0x2c
+ dump_stack_lvl+0x8c/0xb8
+ dump_stack+0x18/0x34
+ print_circular_bug+0x1f8/0x200
+ check_noncircular+0x130/0x144
+ __lock_acquire+0x1298/0x20d0
+ lock_acquire.part.0+0xf0/0x250
+ lock_acquire+0x68/0x8c
+ __mutex_lock+0x9c/0x4d0
+ mutex_lock_nested+0x48/0x5c
+ clk_prepare_lock+0x50/0xb0
+ clk_get_rate+0x28/0x80
+ lpi2c_imx_xfer+0xb0/0xa9c
+ __i2c_transfer+0x174/0xa80
+ i2c_transfer+0x68/0x130
+ regmap_i2c_read+0x64/0xb0
+ _regmap_raw_read+0x114/0x440
+ regmap_raw_read+0x19c/0x28c
+ regmap_bulk_read+0x1b8/0x244
+ at24_read+0x14c/0x2c4
+ nvmem_reg_read+0x2c/0x54
+ bin_attr_nvmem_read+0x8c/0xbc
+ sysfs_kf_bin_read+0x74/0x94
+ kernfs_fop_read_iter+0xb0/0x1d0
+ new_sync_read+0xf0/0x184
+ vfs_read+0x154/0x1f0
+ ksys_read+0x70/0x100
+ __arm64_sys_read+0x24/0x30
+ invoke_syscall+0x50/0x120
+ el0_svc_common.constprop.0+0x68/0x124
+ do_el0_svc+0x30/0x9c
+ el0_svc+0x54/0x110
+ el0t_64_sync_handler+0xa4/0x130
+ el0t_64_sync+0x1a0/0x1a4
+
+Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+This is a v6 picking up Alexander Sverdlin's patch. Up to v5 is done by
+Alexander Sverdlin.
+I'm not sure if in this case both my R-b and S-o-b are necessary/desired.
+
+Changelog:
+v6: - rebased to next-20231017
+    - Just replaced clk_get_rate with atomic_read to shrink the diff
+v5: rebased onto Wolfram's i2c/for-next
+v4: switched to atomic_t
+    included clk_rate_exclusive_get()/clk_rate_exclusive_put()
+v3: fixed build error reported by kernel test robot <lkp@intel.com>
+    https://lore.kernel.org/oe-kbuild-all/202303102010.pAv56wKs-lkp@intel.com/
+v2: added clk_notifier as Alexander suggested
+
+ drivers/i2c/busses/i2c-imx-lpi2c.c | 41 +++++++++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+index 678b30e90492a..e04faa261e7b1 100644
+--- a/drivers/i2c/busses/i2c-imx-lpi2c.c
++++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+@@ -5,6 +5,7 @@
+  * Copyright 2016 Freescale Semiconductor, Inc.
+  */
+ 
++#include <linux/atomic.h>
+ #include <linux/clk.h>
+ #include <linux/completion.h>
+ #include <linux/delay.h>
+@@ -99,6 +100,8 @@ struct lpi2c_imx_struct {
+ 	__u8			*rx_buf;
+ 	__u8			*tx_buf;
+ 	struct completion	complete;
++	struct notifier_block	clk_change_nb;
++	atomic_t		rate_per;
+ 	unsigned int		msglen;
+ 	unsigned int		delivered;
+ 	unsigned int		block_data;
+@@ -197,6 +200,20 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *lpi2c_imx)
+ 	} while (1);
+ }
+ 
++static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
++				   unsigned long action, void *data)
++{
++	struct clk_notifier_data *ndata = data;
++	struct lpi2c_imx_struct *lpi2c_imx = container_of(nb,
++							  struct lpi2c_imx_struct,
++							  clk_change_nb);
++
++	if (action & POST_RATE_CHANGE)
++		atomic_set(&lpi2c_imx->rate_per, ndata->new_rate);
++
++	return NOTIFY_OK;
++}
++
+ /* CLKLO = I2C_CLK_RATIO * CLKHI, SETHOLD = CLKHI, DATAVD = CLKHI/2 */
+ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+ {
+@@ -207,7 +224,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+ 
+ 	lpi2c_imx_set_mode(lpi2c_imx);
+ 
+-	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
++	clk_rate = atomic_read(&lpi2c_imx->rate_per);
+ 	if (!clk_rate)
+ 		return -EINVAL;
+ 
+@@ -590,6 +607,28 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	lpi2c_imx->clk_change_nb.notifier_call = lpi2c_imx_clk_change_cb;
++	ret = devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
++					 &lpi2c_imx->clk_change_nb);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret,
++				     "can't register peripheral clock notifier\n");
++	/*
++	 * Lock the clock rate to avoid rate change between clk_get_rate() and
++	 * atomic_set()
++	 */
++	ret = clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
++	if (ret) {
++		dev_err(&pdev->dev, "can't lock I2C peripheral clock rate\n");
++		return ret;
++	}
++	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx->clks[0].clk));
++	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
++	if (!atomic_read(&lpi2c_imx->rate_per)) {
++		dev_err(&pdev->dev, "can't get I2C peripheral clock rate\n");
++		return -EINVAL;
++	}
++
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
+ 	pm_runtime_use_autosuspend(&pdev->dev);
+ 	pm_runtime_get_noresume(&pdev->dev);
+-- 
+2.34.1
+
