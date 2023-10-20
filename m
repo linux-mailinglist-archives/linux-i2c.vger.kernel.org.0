@@ -2,31 +2,32 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B297D12B7
-	for <lists+linux-i2c@lfdr.de>; Fri, 20 Oct 2023 17:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D42D7D12BC
+	for <lists+linux-i2c@lfdr.de>; Fri, 20 Oct 2023 17:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377701AbjJTPa0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 20 Oct 2023 11:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
+        id S1377717AbjJTPa2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 20 Oct 2023 11:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377601AbjJTPa0 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Oct 2023 11:30:26 -0400
+        with ESMTP id S1377703AbjJTPa1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 20 Oct 2023 11:30:27 -0400
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8168D1A8;
-        Fri, 20 Oct 2023 08:30:23 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 98EF4C000A;
-        Fri, 20 Oct 2023 15:30:20 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD04AD41;
+        Fri, 20 Oct 2023 08:30:24 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 13D32C0015;
+        Fri, 20 Oct 2023 15:30:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1697815821;
+        t=1697815823;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UnpnmeYe94FI9Jfaf1RckC7fZwJT75cGxhssDXRtfLA=;
-        b=a6if/b3SxaI+6gCiPw/KJlnsg/xbge9hbOApvWT9BcBUmIPuNcGXH4DVGZmJtFBBofYzD4
-        Sc8ahz78YsknF/xDUjPRcktF3h4jDhnneh86GA7DcoTHq44B7yu+92+EBMVFjKS+hQDPL2
-        a/gKqbAcwAojaTnznhpm2O6POVI2OoXow+3FFr65mMWTpKg4Y1f4zMeq64dT1RSKLp95u3
-        cDx0gUMG/qk5lY0IHks90EsEUYgu7rPdZfmMhQ2aAUFs8KYHVKLaxt83Qv9+q72CMexeIA
-        QQf1HHc5tyaFfqDYQJ7AjooUAmOVAl4sKJprFDrgaxxIlBPjpCSvY15RXcjpGg==
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AM62ZlFQTzCoejFnnmrothFoj82sgbfnGqDeWLVxoAQ=;
+        b=Xzd6NvEU6m3B9XH238lvcZlu8oA05x/xQM4wq17E0ZSl2TtwSBTsBDhNEyuoCsYWhcohcf
+        oKxPZgijH1BA//6g0glVVqtBdodUpuKDIyKD8etscS8vAlveDeB5xCrniUHqQkJ36TqIPJ
+        8X9B/MMGBwi/aeGo/6iqz/E1AhBw9aVZyLWlPz4/XIpBMXFFpc6CvwVr9OJz+83/ODy8v+
+        0EwKlhvfsgSPKOzhUvvyn6GfoUJ1Rd5R9qGjQIpA5TKpJqjjkTOYpu4OxQXVx/2GT1Bwif
+        6nZqxkcqJoK/u+W1s8t7W27zCRlcoboMkCkU1u96honkOQ4nw+aCS0MydQ/esg==
 From:   Herve Codina <herve.codina@bootlin.com>
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Peter Rosin <peda@axentia.se>,
@@ -40,13 +41,16 @@ Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
         Horatiu Vultur <horatiu.vultur@microchip.com>,
         Steen Hegelund <steen.hegelund@microchip.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>
-Subject: [PATCH v3 0/3] Fix i2c mux module refcount issues
-Date:   Fri, 20 Oct 2023 17:30:10 +0200
-Message-ID: <20231020153017.759926-1-herve.codina@bootlin.com>
+        Herve Codina <herve.codina@bootlin.com>,
+        stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v3 1/3] i2c: muxes: i2c-mux-pinctrl: Use of_get_i2c_adapter_by_node()
+Date:   Fri, 20 Oct 2023 17:30:11 +0200
+Message-ID: <20231020153017.759926-2-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20231020153017.759926-1-herve.codina@bootlin.com>
+References: <20231020153017.759926-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: herve.codina@bootlin.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -58,62 +62,39 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi,
-
-Some i2c mux drivers wrongly use the pair of_find_i2c_adapter_by_node()
-/ i2c_put_adapter() to lock the parent adapter.
+i2c-mux-pinctrl uses the pair of_find_i2c_adapter_by_node() /
+i2c_put_adapter(). These pair alone is not correct to properly lock the
+I2C parent adapter.
 
 Indeed, i2c_put_adapter() decrements the module refcount while
 of_find_i2c_adapter_by_node() does not increment it. This leads to an
-overflow over zero of the parent adapter user counter.
+underflow of the parent module refcount.
 
-Identified mux drivers impacted are:
-- i2c-mux-gpmux
-- i2c-demux-pinctrl
-- i2c-mux-pinctrl
+Use the dedicated function, of_get_i2c_adapter_by_node(), to handle
+correctly the module refcount.
 
-Commit 48e9743dd648 ("i2c: core: add and export of_get_i2c_adapter_by_node()
-interface") introduces of_get_i2c_adapter_by_node() to correctly handle
-this refcount issue.
+Fixes: c4aee3e1b0de ("i2c: mux: pinctrl: remove platform_data")
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Cc: stable@vger.kernel.org
+Acked-by: Peter Rosin <peda@axentia.se>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+---
+ drivers/i2c/muxes/i2c-mux-pinctrl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This series fixes the 3 identified mux drivers replacing the
-of_find_i2c_adapter_by_node() call by an of_get_i2c_adapter_by_node()
-call.
-
-Compare to the previous iteration
-  https://lore.kernel.org/linux-kernel/20231019101017.425284-1-herve.codina@bootlin.com/
-This v3 series:
- - Fixes a wrong <tab> char in a commit log message
- - Add 'Cc: stable@vger.kernel.org'
- - Add Reviewed-by tags
-
-Best regards,
-Hervé
-
-Changes v2 -> v3
-  - Patch 2
-    Replace a wrong <tab> char by a <space> char in commit message
-
-  - All patches
-    Add 'Cc: stable@vger.kernel.org'
-    Add 'Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>'
-
-Changes v1 -> v2:
-  - All patches
-    Fix commit log
-    Add relevant Fixes tag
-    Add 'Acked-by: Peter Rosin <peda@axentia.se>'
-
-Herve Codina (3):
-  i2c: muxes: i2c-mux-pinctrl: Use of_get_i2c_adapter_by_node()
-  i2c: muxes: i2c-demux-pinctrl: Use of_get_i2c_adapter_by_node()
-  i2c: muxes: i2c-mux-gpmux: Use of_get_i2c_adapter_by_node()
-
- drivers/i2c/muxes/i2c-demux-pinctrl.c | 2 +-
- drivers/i2c/muxes/i2c-mux-gpmux.c     | 2 +-
- drivers/i2c/muxes/i2c-mux-pinctrl.c   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/i2c/muxes/i2c-mux-pinctrl.c b/drivers/i2c/muxes/i2c-mux-pinctrl.c
+index 18236b9fa14a..6ebca7bfd8a2 100644
+--- a/drivers/i2c/muxes/i2c-mux-pinctrl.c
++++ b/drivers/i2c/muxes/i2c-mux-pinctrl.c
+@@ -62,7 +62,7 @@ static struct i2c_adapter *i2c_mux_pinctrl_parent_adapter(struct device *dev)
+ 		dev_err(dev, "Cannot parse i2c-parent\n");
+ 		return ERR_PTR(-ENODEV);
+ 	}
+-	parent = of_find_i2c_adapter_by_node(parent_np);
++	parent = of_get_i2c_adapter_by_node(parent_np);
+ 	of_node_put(parent_np);
+ 	if (!parent)
+ 		return ERR_PTR(-EPROBE_DEFER);
 -- 
 2.41.0
 
