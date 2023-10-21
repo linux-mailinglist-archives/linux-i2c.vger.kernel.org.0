@@ -2,52 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A477D1EFB
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 Oct 2023 20:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2D77D1EFC
+	for <lists+linux-i2c@lfdr.de>; Sat, 21 Oct 2023 20:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbjJUSpB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 Oct 2023 14:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
+        id S229633AbjJUStJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 21 Oct 2023 14:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231904AbjJUSpA (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 Oct 2023 14:45:00 -0400
+        with ESMTP id S229621AbjJUStI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 Oct 2023 14:49:08 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4702F1A8;
-        Sat, 21 Oct 2023 11:44:59 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F4D3C433C8;
-        Sat, 21 Oct 2023 18:44:58 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75426F7
+        for <linux-i2c@vger.kernel.org>; Sat, 21 Oct 2023 11:49:07 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629E6C433C8;
+        Sat, 21 Oct 2023 18:49:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697913898;
-        bh=U7YZ7LHKux4WrkPmJ5+OeCogRcj6c+fb/+ZlwkDYgFA=;
+        s=k20201202; t=1697914147;
+        bh=fMfHXPImar36k+jb9Y4wWT2Y0hcY3ugNeNmCmLNH1eo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iZ9tHtFyKus3+qKD5jnQLzV6FJbDG2Vf4hG0fKTjhpQD31kpWOG/zaH30zwnEE8Tg
-         42dfu1xPd1pi636IL4JJNNChMAiARawEuZAKb5sTGcDSQLvVgQT/5BuKgdjg2z9SBr
-         vywRbhqmBgNqabLxPvuka0bfSQ7G82os5hFvXR8fKaHcF5C1HFk7U7S40rSVxJdJ1v
-         obpjPoXZSOyhshBx7GHliOdN88lXswdI23ilKYvjf0Aynl404tPTnt2+cwjgwqAdAn
-         E9racParcarBcoctuuSDE1mL/Y2EOcYuzoQ1C1khKsx8tcyLLMVDNjqjg0lnooxsb8
-         ZRa2xqwuGCBvg==
-Date:   Sat, 21 Oct 2023 20:44:55 +0200
+        b=MrbBQd+vTBfnrwhPwHYtLUFEEqqE7EHzCF9DdlQphO7xTPu0vJAls2XwFCjxsytKV
+         S7TlDfonYkTbsSFB7nFTW8UaqzZA7NK57jD2kYux7jM3Rv7O+XX4byu8sri7/PxWab
+         +vmLXclWi8P4GT0393qqRqsszBHdxw3lUj/fVPeBJ3Y/tLeAiB4mylHeH8IVMeaPP+
+         FNZ6rW1EdfmghmgIpISmBLVN0kcTmAn0FYvW1GzNQqhmtcew35yQ+NMmAWa4uVutQg
+         hPtPGtabvCfrrqPcpOZiyB9oDDPqoXGO7mzZT8p60Eoy5d8Hm6qFIgI+QC+Cz1RWja
+         fUIoCk/V0zNoA==
+Date:   Sat, 21 Oct 2023 20:49:03 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-i2c@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Andi Shyti <andi.shyti@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: Re: [PATCH v3] i2c: exynos5: add support for atomic transfers
-Message-ID: <ZTQcJ0gixlvWgWiN@ninjato>
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c: i801: Simplify class-based client device
+ instantiation
+Message-ID: <ZTQdHw8nmy5mx5qW@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Andi Shyti <andi.shyti@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-References: <CGME20231006150811eucas1p1a9e2b98d191bb8093daf38daba14e9a0@eucas1p1.samsung.com>
- <20231006150804.4113844-1-m.szyprowski@samsung.com>
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <2192294e-99ab-4c7d-86b1-edff058d82f3@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZSe3s/CW1plPwvyh"
+        protocol="application/pgp-signature"; boundary="qJgJe456IidEUJE6"
 Content-Disposition: inline
-In-Reply-To: <20231006150804.4113844-1-m.szyprowski@samsung.com>
+In-Reply-To: <2192294e-99ab-4c7d-86b1-edff058d82f3@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -59,40 +57,46 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---ZSe3s/CW1plPwvyh
+--qJgJe456IidEUJE6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 06, 2023 at 05:08:03PM +0200, Marek Szyprowski wrote:
-> Add support for atomic transfers using polling mode with interrupts
-> intentionally disabled. This removes the warning introduced by commit
-> 63b96983a5dd ("i2c: core: introduce callbacks for atomic transfers")
-> during system reboot and power-off.
+On Tue, Oct 10, 2023 at 09:27:44PM +0200, Heiner Kallweit wrote:
+> Now that the legacy eeprom driver was removed, the only remaining i2c
+> client driver with class SPD autodetection is jc42, and this driver
+> supports also class HWMON. Therefore we can remove class SPD from the
+> supported classes of the i801 adapter driver.
+> Legacy class-based instantiation shouldn't be used in new code, so I
+> think we can remove also the generic logic that ensures that supported
+> classes of parent and muxed adapters don't overlap.
 >=20
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Note: i801 parent supports just class HWMON now, and muxed childs
+> class SPD, so the supported classes don't overlap.
+>=20
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
 Applied to for-next, thanks!
 
 
---ZSe3s/CW1plPwvyh
+--qJgJe456IidEUJE6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU0HCcACgkQFA3kzBSg
-KbbZhw/+I+IddjVMqvVb2IJUPgXP00i7HwYYQgOjreVJ0uDIjmp3ig7UW8+1WR7b
-817CcjD9veOBTQdNGIMnpJAe8ykAdsnzjNVXazWgMXLLMhLGTQCGPpLDMn0CvoVY
-JdbfjnmX1M2WSUHEVaWaper5jrXY24/bXdlIpD+08ioRpB5ErQcgo+5S5bIjavcn
-GTRb+HSa3UtAQ1w+9DvDphEH/7Eeobrni1O9/FPbZEDJMdJLVGqAMgRhKkmfmwsS
-5r1Crpa6QbuvSwWr4weg37/RU1tx0lPHHmDBTDqTEFjrorYarmYvYfI2tswaJvv5
-r8kD4f/r9mUNTt9kYurjOZACgaPGhxmuVJx2KB4i0mJujlgPQakAiUbJeXTO21PH
-8/EgEiiaik5wRh8APAb0W0MG+BCFUkBT9aGZQHjpOie42F+MT07hlDnOBcPSGwEc
-bxn8f+VyT+134CR69YEiHcXN12FF5PWGHS53gYva7MhAPUiYXjL0CnVOlW+vz7lK
-E50jxwDEFvrwfIqHCcb1M7rKSrQ6xBd9rOUxFAx7IO8Z2/bBM4UVfyCwPNTq2Oge
-5VBtD6oasHxOdGhJw+xj95RcohUQ9bKCiTl8/HIhlTM+rY10ZN3IyzfH6F8rIwxT
-MvFVCOBIIZ3F24s0WHv6UOKkOvV4hZ1KcaK2uJdJB8FI3FTLBTA=
-=BhhW
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU0HR8ACgkQFA3kzBSg
+Kba5QQ/+LHZtUaTVWtbVqdrnyx5sk2hZzAaZVmHad8llxXh2tpfXbepgzFdeaOvC
+Qitf6rs2aO1QHMvxMLFhHtexIRHwIiW14eKWQjPtpP2X09YdZYHYb3PVBkvSBwXn
+NxetQ1iSIcICIzk9J+BN/++rwPJPwQSJAkc+3a0lHUw17ML000zqDp/7R8Vu1m1S
+uXR7p7KOv8LRbdLCkPUSXTmf5eKscrywToALgKx6vXr1T3oSah8znZHcmU3X9FiV
+9c38t7gp1vRr4l9DSANZF4yDJXSVdnLqUZdZ7o5Qpbm8x7pb1u00Ugs1OfMaaRJd
+gXZDqUJG7B1DXDl0BdSbp2ztmPKhVx/ntM3muoHlr7GLTuKJAZEHbXH1npsyEH/Q
+8zsc/fcPC4Xen8VacwXFkAvqU6ea1NOcTnkh30vi/fcVmx3Q3oiYFANf74mLg6Gv
+tgGeB1aLE3bD+UfkTg1YSdS5qkn5P5nwNrs1WY/+azi8ldCYsZoWm1MO3FtqVqW+
+EmQHr7ZJbjFEQ3DY5WmUBR4zjH/aDvE27bl/WTGTsbRM7MH5Ni6lUTv3oLYSQJxp
+kT+y4TvEfRRneRPPnyweoIzL7dudddA4pci1xO64j4EZvJNMv8TQfQf7jfDRSvrJ
+E5N0YXjKN4GPfkhUfpS/cGUYwAebDSteKVa9D/h56Hvq94d6TUI=
+=Kpwi
 -----END PGP SIGNATURE-----
 
---ZSe3s/CW1plPwvyh--
+--qJgJe456IidEUJE6--
