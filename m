@@ -2,56 +2,58 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E437D1F2E
-	for <lists+linux-i2c@lfdr.de>; Sat, 21 Oct 2023 21:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591DD7D23AE
+	for <lists+linux-i2c@lfdr.de>; Sun, 22 Oct 2023 17:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjJUTz0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 21 Oct 2023 15:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
+        id S231974AbjJVPqM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 22 Oct 2023 11:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjJUTzZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 21 Oct 2023 15:55:25 -0400
+        with ESMTP id S231859AbjJVPqK (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 22 Oct 2023 11:46:10 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95671A3;
-        Sat, 21 Oct 2023 12:55:20 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E416DC433C7;
-        Sat, 21 Oct 2023 19:55:19 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBE5F3;
+        Sun, 22 Oct 2023 08:46:09 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8D6C433C7;
+        Sun, 22 Oct 2023 15:46:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697918120;
-        bh=SL/hcOv59qKo7ZWTGHs9joohW/5eC1ELIbxsk+1bozo=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=lGnFdBlI3d/NyjWNPrFUowko2MJAkEuCRPhAb+ppIR+k2qAlEDQKAV+p2QWedttpA
-         29eWEgUeJ26yYS56TC4vjglgQTMdgNz3T93PiyQ1xY58BaHGWli1SlYPImk45Vab12
-         w1ffljgEOfjw7s9w1joedRh5JNEhiGr78BzQLJ8B/hjklnWB6zkaIXdTgeFKjJRY/f
-         fn29Hrne6zdY/tK8IvFOYthAE+GTA8DU8BRiCocJ8FLHs47gt+AnOFLw2eJjrH7myl
-         PS+2lMXHkA14atWBCmDEwuVLmo4al6wO01J6eCk2yS8a/4+YmoTimLf7XUh3ym/5qA
-         mg4jH041Tn6Ig==
-Date:   Sat, 21 Oct 2023 21:55:14 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        s=k20201202; t=1697989568;
+        bh=Xo1aAShOpDFjWy+HRaK/7Q6/WA9vzKHM+5HWt4xx4Rs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=P2laS/JT7gVy922d3l/258y6M8rdxC5VoX389qLWOVndwzYQb505bzl1+jTOgCfpC
+         og7V5Exd7TCPwBrMqT+S++AV+Cv/lLL5QIZk/k8o1PwYIfiUBryxoCM2/AJlISYlZb
+         HwDeU3zfVS7hlQzJLZL2yM5yz0yPPYwXTZETXm8pulXBG4DsuSelLPlq40RZPUJX+H
+         Fwn/L4fHf2fxCoS1rZMmlQk71DimEwao7HQ9gv7iE7RYER6i6gzZvaS0VuW/7HEhbJ
+         9byoocsijjlM98DMyV5shvJFSQD76H7k/lcpiRzOVCmzbQ6iPdVskRnxp9/a+hJPOT
+         exyayAV9vwq6g==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
         Andi Shyti <andi.shyti@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: Re: [PATCH v3] i2c: exynos5: add support for atomic transfers
-Message-ID: <ZTQsohbemoDB6tTV@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-i2c@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-References: <CGME20231006150811eucas1p1a9e2b98d191bb8093daf38daba14e9a0@eucas1p1.samsung.com>
- <20231006150804.4113844-1-m.szyprowski@samsung.com>
- <ZTQcJ0gixlvWgWiN@ninjato>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Luca Weiss <luca.weiss@fairphone.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: Re: (subset) [PATCH v2 0/2] Add CCI support for SC7280
+Date:   Sun, 22 Oct 2023 08:50:16 -0700
+Message-ID: <169798982325.271027.1504545156625784176.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231002-sc7280-cci-v2-0-9333fda4612a@fairphone.com>
+References: <20231002-sc7280-cci-v2-0-9333fda4612a@fairphone.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o6t9XrjrTUeQDojD"
-Content-Disposition: inline
-In-Reply-To: <ZTQcJ0gixlvWgWiN@ninjato>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,47 +61,17 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---o6t9XrjrTUeQDojD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, 02 Oct 2023 08:55:29 +0200, Luca Weiss wrote:
+> Add the dts nodes for the camera control interface found on the SC7280
+> SoC. And then enable the CCI nodes in the Fairphone 5 dts.
+> 
+> 
 
-On Sat, Oct 21, 2023 at 08:44:55PM +0200, Wolfram Sang wrote:
-> On Fri, Oct 06, 2023 at 05:08:03PM +0200, Marek Szyprowski wrote:
-> > Add support for atomic transfers using polling mode with interrupts
-> > intentionally disabled. This removes the warning introduced by commit
-> > 63b96983a5dd ("i2c: core: introduce callbacks for atomic transfers")
-> > during system reboot and power-off.
-> >=20
-> > Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
->=20
-> Applied to for-next, thanks!
+Applied, thanks!
 
-Marek, since you have hardware, are you maybe interested in reviewing /
-testing this patch?
+[2/2] arm64: dts: qcom: sc7280: Add Camera Control Interface busses
+      commit: 0c149ca7653286496130e872f47a4b834348ea10
 
-http://patchwork.ozlabs.org/project/linux-i2c/patch/20220912085943.1098651-=
-1-camel.guo@axis.com/
-
-
---o6t9XrjrTUeQDojD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU0LJ4ACgkQFA3kzBSg
-KbZS4BAAn9YB/X0C3Ye2E9J5JNVGqkxG+6TKyDM/ZJMIXix2pV5j6SrteOH8mBT4
-CmMGm4KepKbSNxc+Wh2FJAw2ygqCG19wTD6ThPLE4Bf9Z7ATeJX9ZVRAfq7Aavuz
-OrnbrV47Lo7+M7HkgwHtcZ0huJR0EVAxKumfNQmMOYUSTpXbO6WT2vM2jCzzba08
-EEv61xUwYaD3YCREo7r+B2zs4ANg8q8RemW8gzZ5HRwrhWni71TtaJpWVutSiK2i
-6rnMr/k5jXHPtMi58rg/knX0RG0tfDaMQ/nY6zwOlKAa6KO7xbv/evKf1nKltS2h
-ljp6e5sK2lXnHNEjpMd2mOJgBBFV2DDAVxJ7DmVnpGeXeztNBZm2/96bSOBuo6/T
-6MGldQWHkVJmevArn6RwrIWC5O7GU+/E1acunWV88gg4NXPc7kdDi3gbvxljVX6Z
-cYhoze90NqDl068d9Yo2MJAOj5JjEkboe9MKZWW/EaR8aS0ihPMcjQNhbf9W05cb
-h31zJ711o/L1KF+fmtkeVASTfTZliG6f3AO19IRi47Pbd+f/GZX8nt9HcshjuR10
-PdJOXQAT1pLhyvnRYzEWZlZZx8Lb96lcSNcmdg2Bm38Gof1s/A+HEoCb/HPmS/3j
-YX80AJVCrtd4mzKAr7kCaAzQ0Xozy4wlSRBIyTth9JltTTutI3M=
-=rplA
------END PGP SIGNATURE-----
-
---o6t9XrjrTUeQDojD--
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
