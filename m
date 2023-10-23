@@ -2,29 +2,29 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173867D3399
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Oct 2023 13:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 155E87D3424
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Oct 2023 13:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233778AbjJWLcJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 23 Oct 2023 07:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S234160AbjJWLhD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 23 Oct 2023 07:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjJWLcI (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 Oct 2023 07:32:08 -0400
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64867DF;
-        Mon, 23 Oct 2023 04:32:05 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vukm8c._1698060721;
-Received: from 30.97.48.63(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vukm8c._1698060721)
+        with ESMTP id S234164AbjJWLhC (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 Oct 2023 07:37:02 -0400
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83ADDFF;
+        Mon, 23 Oct 2023 04:36:58 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VuktlA6_1698061013;
+Received: from 30.97.48.63(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VuktlA6_1698061013)
           by smtp.aliyun-inc.com;
-          Mon, 23 Oct 2023 19:32:02 +0800
-Message-ID: <27d2f363-e24a-736a-9c4e-cff79ff958e0@linux.alibaba.com>
-Date:   Mon, 23 Oct 2023 19:32:17 +0800
+          Mon, 23 Oct 2023 19:36:54 +0800
+Message-ID: <d028322f-ca9c-f18e-2a96-8c950a991a1a@linux.alibaba.com>
+Date:   Mon, 23 Oct 2023 19:37:10 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH V2 3/7] i2c: sprd: Use global variables to record I2C
- ack/nack status instead of local variables
+Subject: Re: [PATCH V2 4/7] i2c: sprd: Add I2C controller driver to support
+ dynamic switching of 400K/1M/3.4M frequency
 To:     Huangzheng Lai <Huangzheng.Lai@unisoc.com>,
         Andi Shyti <andi.shyti@kernel.org>
 Cc:     Orson Zhai <orsonzhai@gmail.com>,
@@ -33,9 +33,9 @@ Cc:     Orson Zhai <orsonzhai@gmail.com>,
         huangzheng lai <laihuangzheng@gmail.com>,
         Xiongpeng Wu <xiongpeng.wu@unisoc.com>
 References: <20231023081158.10654-1-Huangzheng.Lai@unisoc.com>
- <20231023081158.10654-4-Huangzheng.Lai@unisoc.com>
+ <20231023081158.10654-5-Huangzheng.Lai@unisoc.com>
 From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20231023081158.10654-4-Huangzheng.Lai@unisoc.com>
+In-Reply-To: <20231023081158.10654-5-Huangzheng.Lai@unisoc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-13.2 required=5.0 tests=BAYES_00,
@@ -51,90 +51,150 @@ X-Mailing-List: linux-i2c@vger.kernel.org
 
 
 On 10/23/2023 4:11 PM, Huangzheng Lai wrote:
-> We found that when the interrupt bit of the I2C controller is cleared,
-> the ack/nack bit is also cleared at the same time. After clearing the
-> interrupt bit in sprd_i2c_isr(), incorrect ack/nack information will be
-> obtained in sprd_i2c_isr_thread(), resulting in incorrect communication
-> when nack cannot be recognized. To solve this problem, we used a global
+> When I2C-slaves supporting different frequencies use the same I2C
+> controller, the I2C controller usually only operates at lower frequencies.
+> In order to improve the performance of I2C-slaves transmission supporting
+> faster frequencies, we dynamically configure the I2C operating frequency
+> based on the value of the input parameter msg ->flag.
 
-This is a hardware bug?
+I am not sure if this is suitable to expand the msg->flag. Andi, how do 
+you think? Thanks.
 
-> variable to record ack/nack information before clearing the interrupt
-> bit instead of a local variable.
-> 
-> Fixes: 8b9ec0719834 ("i2c: Add Spreadtrum I2C controller driver")
-> Cc: <stable@vger.kernel.org> # v4.14+
 > Signed-off-by: Huangzheng Lai <Huangzheng.Lai@unisoc.com>
 > ---
->   drivers/i2c/busses/i2c-sprd.c | 11 ++++++-----
->   1 file changed, 6 insertions(+), 5 deletions(-)
+>   drivers/i2c/busses/i2c-sprd.c | 101 +++++++++++++++++++---------------
+>   1 file changed, 57 insertions(+), 44 deletions(-)
 > 
 > diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sprd.c
-> index aa602958d4fd..dec627ef408c 100644
+> index dec627ef408c..f1f7fad42ecd 100644
 > --- a/drivers/i2c/busses/i2c-sprd.c
 > +++ b/drivers/i2c/busses/i2c-sprd.c
-> @@ -85,6 +85,7 @@ struct sprd_i2c {
->   	struct clk *clk;
->   	u32 src_clk;
->   	u32 bus_freq;
-> +	bool ack_flag;
->   	struct completion complete;
->   	struct reset_control *rst;
->   	u8 *buf;
-> @@ -119,6 +120,7 @@ static void sprd_i2c_clear_ack(struct sprd_i2c *i2c_dev)
+> @@ -75,7 +75,14 @@
+>   #define SPRD_I2C_PM_TIMEOUT	1000
+>   /* timeout (ms) for transfer message */
+>   #define I2C_XFER_TIMEOUT	1000
+> -
+> +/* dynamic modify clk_freq flag  */
+> +#define I2C_3M4_FLAG		0x0100
+> +#define I2C_1M_FLAG		0x0080
+> +#define I2C_400K_FLAG		0x0040
+> +
+> +#define I2C_FREQ_400K		400000
+> +#define I2C_FREQ_1M		1000000
+> +#define I2C_FREQ_3_4M		3400000
+>   /* SPRD i2c data structure */
+>   struct sprd_i2c {
+>   	struct i2c_adapter adap;
+> @@ -94,6 +101,49 @@ struct sprd_i2c {
+>   	int err;
+>   };
+>   
+> +static void sprd_i2c_set_clk(struct sprd_i2c *i2c_dev, u32 freq)
+> +{
+> +	u32 apb_clk = i2c_dev->src_clk;
+> +	/*
+> +	 * From I2C databook, the prescale calculation formula:
+> +	 * prescale = freq_i2c / (4 * freq_scl) - 1;
+> +	 */
+> +	u32 i2c_dvd = apb_clk / (4 * freq) - 1;
+> +	/*
+> +	 * From I2C databook, the high period of SCL clock is recommended as
+> +	 * 40% (2/5), and the low period of SCL clock is recommended as 60%
+> +	 * (3/5), then the formula should be:
+> +	 * high = (prescale * 2 * 2) / 5
+> +	 * low = (prescale * 2 * 3) / 5
+> +	 */
+> +	u32 high = ((i2c_dvd << 1) * 2) / 5;
+> +	u32 low = ((i2c_dvd << 1) * 3) / 5;
+> +	u32 div0 = I2C_ADDR_DVD0_CALC(high, low);
+> +	u32 div1 = I2C_ADDR_DVD1_CALC(high, low);
+> +
+> +	writel(div0, i2c_dev->base + ADDR_DVD0);
+> +	writel(div1, i2c_dev->base + ADDR_DVD1);
+> +
+> +	/* Start hold timing = hold time(us) * source clock */
+> +	switch (freq) {
+> +	case I2C_MAX_STANDARD_MODE_FREQ:
+> +		writel((4 * apb_clk) / 1000000, i2c_dev->base + ADDR_STA0_DVD);
+> +		break;
+> +	case I2C_MAX_FAST_MODE_FREQ:
+> +		writel((6 * apb_clk) / 10000000, i2c_dev->base + ADDR_STA0_DVD);
+> +		break;
+> +	case I2C_MAX_FAST_MODE_PLUS_FREQ:
+> +		writel((8 * apb_clk) / 10000000, i2c_dev->base + ADDR_STA0_DVD);
+> +		break;
+> +	case I2C_MAX_HIGH_SPEED_MODE_FREQ:
+> +		writel((8 * apb_clk) / 10000000, i2c_dev->base + ADDR_STA0_DVD);
+> +		break;
+> +	default:
+> +		dev_err(i2c_dev->dev, "Unsupported frequency: %d\n", freq);
+> +		break;
+> +	}
+> +}
+> +
+>   static void sprd_i2c_set_count(struct sprd_i2c *i2c_dev, u32 count)
 >   {
->   	u32 tmp = readl(i2c_dev->base + I2C_STATUS);
->   
-> +	i2c_dev->ack_flag = 0;
->   	writel(tmp & ~I2C_RX_ACK, i2c_dev->base + I2C_STATUS);
->   }
->   
-> @@ -393,7 +395,6 @@ static irqreturn_t sprd_i2c_isr_thread(int irq, void *dev_id)
->   {
->   	struct sprd_i2c *i2c_dev = dev_id;
->   	struct i2c_msg *msg = i2c_dev->msg;
-> -	bool ack = !(readl(i2c_dev->base + I2C_STATUS) & I2C_RX_ACK);
-
-Before this patch, we will re-read the ack bit form the register, but 
-now we just read it in sprd_i2c_isr(). Is it possible that we will miss 
-the ack bit?
-
->   	u32 i2c_tran;
->   
->   	if (msg->flags & I2C_M_RD)
-> @@ -409,7 +410,7 @@ static irqreturn_t sprd_i2c_isr_thread(int irq, void *dev_id)
->   	 * For reading data, ack is always true, if i2c_tran is not 0 which
->   	 * means we still need to contine to read data from slave.
->   	 */
-> -	if (i2c_tran && ack) {
-> +	if (i2c_tran && i2c_dev->ack_flag) {
->   		sprd_i2c_data_transfer(i2c_dev);
->   		return IRQ_HANDLED;
+>   	writel(count, i2c_dev->base + I2C_COUNT);
+> @@ -269,6 +319,12 @@ static int sprd_i2c_handle_msg(struct i2c_adapter *i2c_adap,
+>   		sprd_i2c_send_stop(i2c_dev, !!is_last_msg);
 >   	}
-> @@ -420,7 +421,7 @@ static irqreturn_t sprd_i2c_isr_thread(int irq, void *dev_id)
->   	 * If we did not get one ACK from slave when writing data, we should
->   	 * return -EIO to notify users.
->   	 */
-> -	if (!ack)
-> +	if (!i2c_dev->ack_flag)
->   		i2c_dev->err = -EIO;
->   	else if (msg->flags & I2C_M_RD && i2c_dev->count)
->   		sprd_i2c_read_bytes(i2c_dev, i2c_dev->buf, i2c_dev->count);
-> @@ -437,7 +438,6 @@ static irqreturn_t sprd_i2c_isr(int irq, void *dev_id)
->   {
->   	struct sprd_i2c *i2c_dev = dev_id;
->   	struct i2c_msg *msg = i2c_dev->msg;
-> -	bool ack = !(readl(i2c_dev->base + I2C_STATUS) & I2C_RX_ACK);
->   	u32 i2c_tran;
 >   
->   	if (msg->flags & I2C_M_RD)
-> @@ -456,7 +456,8 @@ static irqreturn_t sprd_i2c_isr(int irq, void *dev_id)
->   	 * means we can read all data in one time, then we can finish this
->   	 * transmission too.
->   	 */
-> -	if (!i2c_tran || !ack) {
-> +	i2c_dev->ack_flag = !(readl(i2c_dev->base + I2C_STATUS) & I2C_RX_ACK);
-> +	if (!i2c_tran || !i2c_dev->ack_flag) {
->   		sprd_i2c_clear_start(i2c_dev);
->   		sprd_i2c_clear_irq(i2c_dev);
->   	}
+> +	if (msg->flags & I2C_400K_FLAG)
+> +		sprd_i2c_set_clk(i2c_dev, I2C_FREQ_400K);
+> +	else if (msg->flags & I2C_1M_FLAG)
+> +		sprd_i2c_set_clk(i2c_dev, I2C_FREQ_1M);
+> +	else if (msg->flags & I2C_3M4_FLAG)
+> +		sprd_i2c_set_clk(i2c_dev, I2C_FREQ_3_4M);
+>   	/*
+>   	 * We should enable rx fifo full interrupt to get data when receiving
+>   	 * full data.
+> @@ -331,49 +387,6 @@ static const struct i2c_algorithm sprd_i2c_algo = {
+>   	.functionality = sprd_i2c_func,
+>   };
+>   
+> -static void sprd_i2c_set_clk(struct sprd_i2c *i2c_dev, u32 freq)
+> -{
+> -	u32 apb_clk = i2c_dev->src_clk;
+> -	/*
+> -	 * From I2C databook, the prescale calculation formula:
+> -	 * prescale = freq_i2c / (4 * freq_scl) - 1;
+> -	 */
+> -	u32 i2c_dvd = apb_clk / (4 * freq) - 1;
+> -	/*
+> -	 * From I2C databook, the high period of SCL clock is recommended as
+> -	 * 40% (2/5), and the low period of SCL clock is recommended as 60%
+> -	 * (3/5), then the formula should be:
+> -	 * high = (prescale * 2 * 2) / 5
+> -	 * low = (prescale * 2 * 3) / 5
+> -	 */
+> -	u32 high = ((i2c_dvd << 1) * 2) / 5;
+> -	u32 low = ((i2c_dvd << 1) * 3) / 5;
+> -	u32 div0 = I2C_ADDR_DVD0_CALC(high, low);
+> -	u32 div1 = I2C_ADDR_DVD1_CALC(high, low);
+> -
+> -	writel(div0, i2c_dev->base + ADDR_DVD0);
+> -	writel(div1, i2c_dev->base + ADDR_DVD1);
+> -
+> -	/* Start hold timing = hold time(us) * source clock */
+> -	switch (freq) {
+> -	case I2C_MAX_STANDARD_MODE_FREQ:
+> -		writel((4 * apb_clk) / 1000000, i2c_dev->base + ADDR_STA0_DVD);
+> -		break;
+> -	case I2C_MAX_FAST_MODE_FREQ:
+> -		writel((6 * apb_clk) / 10000000, i2c_dev->base + ADDR_STA0_DVD);
+> -		break;
+> -	case I2C_MAX_FAST_MODE_PLUS_FREQ:
+> -		writel((8 * apb_clk) / 10000000, i2c_dev->base + ADDR_STA0_DVD);
+> -		break;
+> -	case I2C_MAX_HIGH_SPEED_MODE_FREQ:
+> -		writel((8 * apb_clk) / 10000000, i2c_dev->base + ADDR_STA0_DVD);
+> -		break;
+> -	default:
+> -		dev_err(i2c_dev->dev, "Unsupported frequency: %d\n", freq);
+> -		break;
+> -	}
+> -}
+> -
+>   static void sprd_i2c_enable(struct sprd_i2c *i2c_dev)
+>   {
+>   	u32 tmp = I2C_DVD_OPT;
