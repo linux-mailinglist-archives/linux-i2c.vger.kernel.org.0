@@ -2,54 +2,73 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C597D3ACB
-	for <lists+linux-i2c@lfdr.de>; Mon, 23 Oct 2023 17:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93ABC7D3AE9
+	for <lists+linux-i2c@lfdr.de>; Mon, 23 Oct 2023 17:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbjJWPam (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Mon, 23 Oct 2023 11:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
+        id S229989AbjJWPgZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Mon, 23 Oct 2023 11:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233111AbjJWPaj (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 Oct 2023 11:30:39 -0400
+        with ESMTP id S229569AbjJWPgZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Mon, 23 Oct 2023 11:36:25 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096A9DF
-        for <linux-i2c@vger.kernel.org>; Mon, 23 Oct 2023 08:30:36 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272F7C433C8;
-        Mon, 23 Oct 2023 15:30:35 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B28ADB;
+        Mon, 23 Oct 2023 08:36:23 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 440D7C433C8;
+        Mon, 23 Oct 2023 15:36:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698075036;
-        bh=XyfpdNDvubt7VnnaXaRUy+Y4CWfWOk0Uoqeb8DZcKAY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gMtX+RDbLzf9amlshj8uImbXVbci8/MOSeMTPy8C+toSYFujYjuN1s6pwzUycf9fD
-         JKLgvfUtMSSq1B7w0hq5D7fCBWxGpg5x0eEFKMC52bXFoLoolosr7emZJh9pNqdWIN
-         GUTklx4atYETgBeoFF+vENkaDYnSHNtXKoCJARjJ+g4t9/rgb1g0+o5J2cvEY+8qXd
-         6N11u6TeiRf1phH9Ehae2MeeqJ2aQg4VBx+uxzqhyNrJsNcHfQ4UN3eOveAsCIrDyB
-         zLL0ej7i7hDZUIDCdIdVLJz83dpfgE0G2cJUxcBW7W2kfoBcXckF2UmG8uqkLtNg3r
-         A+Y5hj8CeP8Eg==
-Date:   Mon, 23 Oct 2023 17:30:33 +0200
+        s=k20201202; t=1698075382;
+        bh=GjXvcSO/i6FF/OlNaJfRF+sQGbecxltiNDipUhA7AB4=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=sgfRDy2e5QPF/UqBmV4/zbV2K5RPcCyGcHK4oaRv5OtJ1hyrcX/STTBuIIrs4wLPG
+         2pFD7871CcQJXtWvBh/hyGF0Ut9Fys9tqaiO1X9MYnC5IDDW/ynbGIqc/7mOxm68ns
+         McCpTf+5t0S1464Mj14zcecHl7VAn5No+ABYNI5nRiui94ClbGAe+UQ2bjnzXBFzgX
+         1QI0D8VMV6FExZjhbe1Qhp87xnX90bN2v2Q5ROuhaTMTWNswVARfPwm40QcjXOkHwd
+         mNxyJQlO4jtENF79RzQAJFgJzy2852R5ARDwBCAv4AL66ax+/9PqFfwSdYDmU1Ftc1
+         thPMt39SBYdGA==
+Date:   Mon, 23 Oct 2023 17:36:19 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Linux I2C <linux-i2c@vger.kernel.org>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Subject: Re: [PATCH 12/15] i2c: busses: stm32f7: Use devm_clk_get_enabled()
-Message-ID: <ZTaRmeCYE+9hoSG4@ninjato>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v5 13/44] i2c: add HAS_IOPORT dependencies
+Message-ID: <ZTaS8/Z4p8bLoHF1@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-References: <20230611225702.891856-1-andi.shyti@kernel.org>
- <20230611225702.891856-13-andi.shyti@kernel.org>
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        Arnd Bergmann <arnd@kernel.org>, linux-i2c@vger.kernel.org
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+ <20230522105049.1467313-14-schnelle@linux.ibm.com>
+ <ZRCju+Ctuu2Mf+1c@shikoro>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WpXSZ0mZsGZEZcbN"
+        protocol="application/pgp-signature"; boundary="IKJd4WrwHJvKoZ2A"
 Content-Disposition: inline
-In-Reply-To: <20230611225702.891856-13-andi.shyti@kernel.org>
+In-Reply-To: <ZRCju+Ctuu2Mf+1c@shikoro>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,43 +79,48 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---WpXSZ0mZsGZEZcbN
+--IKJd4WrwHJvKoZ2A
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 12, 2023 at 12:56:59AM +0200, Andi Shyti wrote:
-> Replace the pair of functions, devm_clk_get() and
-> clk_prepare_enable(), with a single function
-> devm_clk_get_enabled().
+On Sun, Sep 24, 2023 at 11:01:47PM +0200, Wolfram Sang wrote:
+> On Mon, May 22, 2023 at 12:50:18PM +0200, Niklas Schnelle wrote:
+> > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
+> > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > those drivers using them.
+> >=20
+> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 >=20
-> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-> Cc: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
-> Cc: Alain Volmat <alain.volmat@foss.st.com>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> In RFC v1, you agreed to drop PARPORT [1]. Is there a reason you haven't
+> done this so far?
+>=20
+> [1] https://patchwork.ozlabs.org/project/linux-i2c/patch/20211227164317.4=
+146918-11-schnelle@linux.ibm.com/
 
-Applied to for-next, thanks!
+Shall I apply this with or without PARPORT?
 
 
---WpXSZ0mZsGZEZcbN
+--IKJd4WrwHJvKoZ2A
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU2kZkACgkQFA3kzBSg
-KbYTJw/5AXItbjVZFtPdZekNyHCYqdOGhKeC/bxRkdiSvoj3luddsTQilR93huGq
-+MHl2hhf0Ry10y1IXhcWkozK2Srb3t6VWGBAo/eFcue6pkh6MF5B1L33ELFZPnNG
-0Xje/fnKzmImKxO6dxriJ5MrHZ7UGaXpcKojQz9WpQ2tunatUFP1R9ukIN5X73n5
-6tgLeO77gwYLzNvr/nskduUwmj9W3e7CcMABidIgDJJtSkKYyFOW5y/afD794QvJ
-p0biylXFAaI/n4N4sGtqGFc+7dhqLpiQjrhWo6Qp0NjnN8gJ3tmvUuamngrrD0JH
-RLVjf1Aai4w3gfay0QUrWlQ+qiea+IXiVu4kuGCiZaJ2PrYYfvs2XtYquoM1/Qku
-e4UEsjrZFVqiNP/HBkV46oW6BLus7os8hCYNyYAd9b+nDgSyYXmBBmRvcsuDsZ1k
-R5gHo9krng2DSQoSEFLdl0BwX+e1sDRFY+2DBSPgDi2J8oBt6xMEDp/n2KHeEdGr
-hha8kKmJ449y3lt+alV0FZGQL28DlPWOf6QzOtjF3EHnIN8VfX0/FXKHYv00FARS
-oxt8IghNn223k9oVxfD5UtUcTd/YnGCDzetqjK9Wq/Zv7YkLMBZRoj63pAwTXYj0
-Xc1VoOA1MKzsnic9pMMCH+k36Jcdj4hmV02G68HKd9AvM9qMEIA=
-=0jLW
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU2kvMACgkQFA3kzBSg
+Kbatiw//U8VXBAC3aPMTbD6m0NSoMa1PF0OiVlizyXToMW0qVjXRKbhDGpWMV9rq
+ML2nNXfCNCwnsI/NdYX5KD8NtBaKIu7ecIGZ1xaF8eqWaSPbVxCuK/zKwrBgFcjb
+eakTvDuWnNWVzgXDd1J2/oaIfTvYUfXI4rbm7SBlPFysGNjzgixUf3XtJ+9Ou97z
+ydKK886E0sKpzpwKl2c3CIqUMZYTDAFu+EVWimk8/u6fSRp+0peEBRDv6hgTbO4Y
+5KHwdh6WddCZ8KODGx9f0ZW1vxO530SRGoqiK6p/8b4YIMQ7gfhD4rb2r/seSpGJ
+0BhLY//IE2+Pj2QLXrELinaJGFyk5PXLsdlDCkstcLjyvB2l2xkvgJZTbDfM+gM5
+OiXThEmz4RUxaL3npTBrC6U7z8hWqS+XfkKQ8OYXXY8IPiuwXwuJIUPDUCFqhKec
+srmuu0bd4F9JYPOzJCERwbDVYI7mFq9lReuAJSE+GfSLeV16kpL3woGRZLKdzbav
+lhGSOliYGqEINY2xATuYc85IGrAkN7PeRcK5643A8obdnH8mNKlzezm92dzCdqfb
+WB2Rx2khFBqZiA1+fx9PLhS9EMF7yneQ83pqDUgvzeRm6zKiWzDViX1vy/tDj0vv
+ob4loEiEXp70Wb8uif1uYYLdmc3IBdWBLNfYeBJEFAf97PyaopQ=
+=U36p
 -----END PGP SIGNATURE-----
 
---WpXSZ0mZsGZEZcbN--
+--IKJd4WrwHJvKoZ2A--
