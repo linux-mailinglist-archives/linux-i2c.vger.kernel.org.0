@@ -2,96 +2,83 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFE47D5C38
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 22:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99317D5C3E
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 22:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344301AbjJXUOB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Oct 2023 16:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
+        id S1344256AbjJXUOr (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Oct 2023 16:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344246AbjJXUOB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 16:14:01 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942BB10D7
-        for <linux-i2c@vger.kernel.org>; Tue, 24 Oct 2023 13:13:58 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 62F5D2C0630;
-        Wed, 25 Oct 2023 09:13:56 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1698178436;
-        bh=rblvtLA85SZ5PGutT03BXnsamdXjHxQuoTmCtyr8kN0=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=SoPh22DqsLo19EKJvKSbefWTX1WZgFqhhK6n77/iqmTIolfAmBtX5SwgnIA4c4P2K
-         RJKoSzPgVlIvaUO+4QDr7YlWy546RALXp7KZyLRbc+hHnCCc2/UNdBFCbJpOcxPk6a
-         0wB0CfAGwh1LVdyqwASPtcL5bipBw0RwHxdIYWbWb/SaJSFE0EvaPesu0Kl+RMyqcX
-         pwxsg1j28GszmCIs+nEPdatnTSLRJof5/SOO3SWB4OiZOrNieGrwCmupTDiNyzlEHz
-         HCD1FcWhCYK3ABkptIxwxLBpvHiJUzd2x7CSFVg6e1iJi5vbIOEKCvxpN4gaUSo0JT
-         zyJUZhhZpZ4dw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B653825840001>; Wed, 25 Oct 2023 09:13:56 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.39; Wed, 25 Oct 2023 09:13:56 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Wed, 25 Oct 2023 09:13:55 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.039; Wed, 25 Oct 2023 09:13:55 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Andi Shyti <andi.shyti@kernel.org>
-CC:     "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] i2c: mv64xxx: add an optional reset-gpios property
-Thread-Topic: [PATCH v3 2/2] i2c: mv64xxx: add an optional reset-gpios
- property
-Thread-Index: AQHaAgcy5mKiozoBFUuv9b6R9rUkyLBYf5+AgAAPnoA=
-Date:   Tue, 24 Oct 2023 20:13:55 +0000
-Message-ID: <4b548124-d1d5-4746-a5bd-03757013282d@alliedtelesis.co.nz>
-References: <20231018210805.1569987-1-chris.packham@alliedtelesis.co.nz>
- <20231018210805.1569987-3-chris.packham@alliedtelesis.co.nz>
- <20231024191801.kofb6cbczswp7xxn@zenone.zhora.eu>
-In-Reply-To: <20231024191801.kofb6cbczswp7xxn@zenone.zhora.eu>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EFB243D0527FEB4D94CD7B6F69E3B465@atlnz.lc>
-Content-Transfer-Encoding: base64
+        with ESMTP id S1343896AbjJXUOq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 16:14:46 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6B5E8;
+        Tue, 24 Oct 2023 13:14:44 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7202C433C8;
+        Tue, 24 Oct 2023 20:14:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698178484;
+        bh=4NpmDn3tQbzBHiZ0ROs1DdItLc5V7g3xpUtTffxVMnc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OkCQZLI/dAFo1q/sUPglJJr/mrlllBh62SaHxGT1LCKJTW8p4l65swOWiB/oWbJ42
+         k86r5sdgZGYZoLbIFiCGUjVLQ2Jywe32c/by2k+9f0uQHiVxEXGGpWiA+uOlmSiy6A
+         NecEvwDBEfjlDI+UdfPfxAsC8V9/9JFgHi5OtN5FwCMuI4bPbUXwnkiuwAhI3fbOS/
+         6klkByPam1m+lIf9K8W36B6kaSGgZMif5tY6F3k2s3dBgWbFcbPatOUa02xt6xwQM8
+         Zdhz5LdqdBxF4YbnGzyaSGCjN0C1sgCGqt8MFl3Th+IqjWZlT/+03gVZ/8+JYmt8Wd
+         Q5SDuE/2yFXNw==
+Date:   Tue, 24 Oct 2023 22:14:40 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Piyush Malgujar <pmalgujar@marvell.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rric@kernel.org, cchavva@marvell.com, sgarapati@marvell.com,
+        jannadurai@marvell.com
+Subject: Re: [PATCH v2 0/4] i2c: thunderx: Marvell thunderx i2c changes
+Message-ID: <20231024201440.ey7pjah7fq33mbwm@zenone.zhora.eu>
+References: <20230728120004.19680-1-pmalgujar@marvell.com>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=L6ZjvNb8 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=3z5DDspM-FWoKCHjgUUA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230728120004.19680-1-pmalgujar@marvell.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQpPbiAyNS8xMC8yMyAwODoxOCwgQW5kaSBTaHl0aSB3cm90ZToNCj4gSGkgQ2hyaXMsDQo+DQo+
-IGFzIHlvdSBhcmUgd29ya2luZyBvbiB0aGUgdjQuLi4NCj4NCj4gLi4uDQo+DQo+PiArCWlmIChk
-cnZfZGF0YS0+cmVzZXRfZ3Bpbykgew0KPj4gKwkJdXNsZWVwX3JhbmdlKHJlc2V0X2R1cmF0aW9u
-LCByZXNldF9kdXJhdGlvbiArIDEwKTsNCj4gSSdtIG5vdCBhZ2FpbnN0IHRoaXMsIGJ1dCBpdCdz
-IG5vdCBvcHRpbWFsIHVubGVzcyB3ZSBrbm93IG1vcmUgb3INCj4gbGVzcyB3aGF0IHRvIGV4cGVj
-dCBmcm9tIHJlc2V0X2R1cmF0aW9uLg0KPg0KPiBEbyB3ZSBoYXZlIGEgcm91Z2ggaWRlYSBvZiB3
-aGF0IHJlc2V0X2R1cmF0aW9uIGlzPyBJZiB3ZSBkb24ndA0KPiB0aGVuIHlvdSBjb3VsZCBjb25z
-aWRlciB1c2luZyBhIGdlbmVyaWMgImZzbGVlcChyZXNldF9kdXJhdGlvbik7Ig0KPiBXb3VsZCBp
-dCB3b3JrPw0KZmxzZWVwKCkgd291bGQgd29yayBmb3IgbWUuIEFsbCBvZiB0aGUgZGV2aWNlcyBJ
-J20gdGVzdGluZyB3aXRoIHNlZW0gdG8gDQpiZSBmaW5lIHdpdGggYSB2ZXJ5IHNob3J0IHJlc2V0
-IHB1bHNlLCB0aGV5J2QgcHJvYmFibHkgYmUgZmluZSB3aXRoIG5vIA0KZGVsYXkgYXQgYWxsLg0K
-Pg0KPiBSZXN0IGxvb2tzIGdvb2QuDQo+DQo+IEFuZGk=
+Hi Piyush,
+
+On Fri, Jul 28, 2023 at 05:00:00AM -0700, Piyush Malgujar wrote:
+> The changes are for Marvell OcteonTX2 SOC family:
+> 
+> - Handling clock divisor logic using subsytem ID
+> - Support for high speed mode
+> - Handle watchdog timeout
+> - Added ioclk support
+> 
+> Changes since V1:
+> - Addressed comments, added defines as required
+> - Removed unnecessary code
+> - Added a patch to support ioclk if sclk not present in ACPI table
+> 
+> Piyush Malgujar (1):
+>   i2c: thunderx: Adding ioclk support
+> 
+> Suneel Garapati (3):
+>   i2c: thunderx: Clock divisor logic changes
+>   i2c: thunderx: Add support for High speed mode
+>   i2c: octeon: Handle watchdog timeout
+> 
+>  drivers/i2c/busses/i2c-octeon-core.c     | 96 ++++++++++++++++++------
+>  drivers/i2c/busses/i2c-octeon-core.h     | 27 +++++++
+>  drivers/i2c/busses/i2c-thunderx-pcidrv.c | 23 ++++--
+>  3 files changed, 115 insertions(+), 31 deletions(-)
+
+I was going through the patches that failed to receive an answer,
+is this series still valid? Do you still need a round of review
+here?
+
+Andi
