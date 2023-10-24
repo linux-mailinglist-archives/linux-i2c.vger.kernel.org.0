@@ -2,134 +2,96 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDF87D5CEA
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 23:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFE47D5C38
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 22:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344155AbjJXVLB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Oct 2023 17:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        id S1344301AbjJXUOB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Oct 2023 16:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbjJXVK7 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 17:10:59 -0400
-X-Greylist: delayed 5367 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 Oct 2023 14:10:56 PDT
-Received: from se1i-lax1.servconfig.com (se1i-lax1.servconfig.com [173.231.224.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9A610CF;
-        Tue, 24 Oct 2023 14:10:56 -0700 (PDT)
-Received: from res345.servconfig.com ([192.145.232.116])
-        by se1-lax1.servconfig.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <security1@usersuportt2307.tech>)
-        id 1qvNGF-0002oA-J7; Tue, 24 Oct 2023 15:40:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=usersuportt2307.tech; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Subject:To:From:Date:MIME-Version:Sender:Reply-To:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+BEqPn4LiF/VIj56I8Kk8asVbvcLjvRFPTpKmB2EgsY=; b=PgxO1XdNXxg/ZtmNRpmXPqNhRG
-        Za1vb8I0c/H8+Ka61saYTXOfHMXF4+77hL94uZoJWWyZ19UuoJqJgkqFSU24fSMiT5d6r/EE/E1wy
-        6Bsjr75Mu+wAWS/d/laCYGZqJ6B1eCK5yRn9SLaayvSvcpbd1idgWDc0vf44Wb+w3Ws255TaJJcpN
-        9NAa5dLj2nwbf6O88O3bVfYe3Msnq9pC2RISW+p0T6090mjcjyzhjWvMlpnVQBflIrQJpl86KekFr
-        R/12fSbhOknbYl/0P10fQ+depRqClPdMLJebcB5mvqijmjNz7PdL1V3KWC6X44dxXqLDpi/5XhJeD
-        M9vXUb5g==;
-Received: from [::1] (port=37724 helo=res345.servconfig.com)
-        by res345.servconfig.com with esmtpa (Exim 4.96.2)
-        (envelope-from <security1@usersuportt2307.tech>)
-        id 1qvNG1-00848o-28;
-        Tue, 24 Oct 2023 12:40:05 -0700
+        with ESMTP id S1344246AbjJXUOB (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 16:14:01 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942BB10D7
+        for <linux-i2c@vger.kernel.org>; Tue, 24 Oct 2023 13:13:58 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 62F5D2C0630;
+        Wed, 25 Oct 2023 09:13:56 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1698178436;
+        bh=rblvtLA85SZ5PGutT03BXnsamdXjHxQuoTmCtyr8kN0=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=SoPh22DqsLo19EKJvKSbefWTX1WZgFqhhK6n77/iqmTIolfAmBtX5SwgnIA4c4P2K
+         RJKoSzPgVlIvaUO+4QDr7YlWy546RALXp7KZyLRbc+hHnCCc2/UNdBFCbJpOcxPk6a
+         0wB0CfAGwh1LVdyqwASPtcL5bipBw0RwHxdIYWbWb/SaJSFE0EvaPesu0Kl+RMyqcX
+         pwxsg1j28GszmCIs+nEPdatnTSLRJof5/SOO3SWB4OiZOrNieGrwCmupTDiNyzlEHz
+         HCD1FcWhCYK3ABkptIxwxLBpvHiJUzd2x7CSFVg6e1iJi5vbIOEKCvxpN4gaUSo0JT
+         zyJUZhhZpZ4dw==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B653825840001>; Wed, 25 Oct 2023 09:13:56 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.39; Wed, 25 Oct 2023 09:13:56 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
+ SMTP Server (TLS) id 15.0.1497.48; Wed, 25 Oct 2023 09:13:55 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.039; Wed, 25 Oct 2023 09:13:55 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Andi Shyti <andi.shyti@kernel.org>
+CC:     "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] i2c: mv64xxx: add an optional reset-gpios property
+Thread-Topic: [PATCH v3 2/2] i2c: mv64xxx: add an optional reset-gpios
+ property
+Thread-Index: AQHaAgcy5mKiozoBFUuv9b6R9rUkyLBYf5+AgAAPnoA=
+Date:   Tue, 24 Oct 2023 20:13:55 +0000
+Message-ID: <4b548124-d1d5-4746-a5bd-03757013282d@alliedtelesis.co.nz>
+References: <20231018210805.1569987-1-chris.packham@alliedtelesis.co.nz>
+ <20231018210805.1569987-3-chris.packham@alliedtelesis.co.nz>
+ <20231024191801.kofb6cbczswp7xxn@zenone.zhora.eu>
+In-Reply-To: <20231024191801.kofb6cbczswp7xxn@zenone.zhora.eu>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.33.22.30]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <EFB243D0527FEB4D94CD7B6F69E3B465@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Date:   Tue, 24 Oct 2023 12:40:05 -0700
-From:   security1@usersuportt2307.tech
-To:     undisclosed-recipients:;
-Subject: 7:40:03 PM  Telegram Login Alert  10/24/2023
-User-Agent: Roundcube Webmail/1.6.0
-Message-ID: <498d99a713532bbc48d5915a976756ec@usersuportt2307.tech>
-X-Sender: security1@usersuportt2307.tech
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Get-Message-Sender-Via: res345.servconfig.com: authenticated_id: security1@usersuportt2307.tech
-X-Authenticated-Sender: res345.servconfig.com: security1@usersuportt2307.tech
-X-Originating-IP: 192.145.232.116
-X-SpamExperts-Domain: res345.servconfig.com
-X-SpamExperts-Username: 192.145.232.116
-Authentication-Results: servconfig.com; auth=pass smtp.auth=192.145.232.116@res345.servconfig.com
-X-SpamExperts-Outgoing-Class: ham
-X-SpamExperts-Outgoing-Evidence: Combined (0.29)
-X-Recommended-Action: accept
-X-Filter-ID: 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
-X-Report-Abuse-To: spam@se1-lax1.servconfig.com
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=L6ZjvNb8 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=3z5DDspM-FWoKCHjgUUA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Someone just got access to your messages!
-We detected a new login to your account from
-MacBook Air M2, Stockholm. Is it you?
-
-https://short.gy/JR9hpn
-
-LAT: 59.334591, LONG: 18.063240
-  10/24/2023 7:40:03 PM
+DQpPbiAyNS8xMC8yMyAwODoxOCwgQW5kaSBTaHl0aSB3cm90ZToNCj4gSGkgQ2hyaXMsDQo+DQo+
+IGFzIHlvdSBhcmUgd29ya2luZyBvbiB0aGUgdjQuLi4NCj4NCj4gLi4uDQo+DQo+PiArCWlmIChk
+cnZfZGF0YS0+cmVzZXRfZ3Bpbykgew0KPj4gKwkJdXNsZWVwX3JhbmdlKHJlc2V0X2R1cmF0aW9u
+LCByZXNldF9kdXJhdGlvbiArIDEwKTsNCj4gSSdtIG5vdCBhZ2FpbnN0IHRoaXMsIGJ1dCBpdCdz
+IG5vdCBvcHRpbWFsIHVubGVzcyB3ZSBrbm93IG1vcmUgb3INCj4gbGVzcyB3aGF0IHRvIGV4cGVj
+dCBmcm9tIHJlc2V0X2R1cmF0aW9uLg0KPg0KPiBEbyB3ZSBoYXZlIGEgcm91Z2ggaWRlYSBvZiB3
+aGF0IHJlc2V0X2R1cmF0aW9uIGlzPyBJZiB3ZSBkb24ndA0KPiB0aGVuIHlvdSBjb3VsZCBjb25z
+aWRlciB1c2luZyBhIGdlbmVyaWMgImZzbGVlcChyZXNldF9kdXJhdGlvbik7Ig0KPiBXb3VsZCBp
+dCB3b3JrPw0KZmxzZWVwKCkgd291bGQgd29yayBmb3IgbWUuIEFsbCBvZiB0aGUgZGV2aWNlcyBJ
+J20gdGVzdGluZyB3aXRoIHNlZW0gdG8gDQpiZSBmaW5lIHdpdGggYSB2ZXJ5IHNob3J0IHJlc2V0
+IHB1bHNlLCB0aGV5J2QgcHJvYmFibHkgYmUgZmluZSB3aXRoIG5vIA0KZGVsYXkgYXQgYWxsLg0K
+Pg0KPiBSZXN0IGxvb2tzIGdvb2QuDQo+DQo+IEFuZGk=
