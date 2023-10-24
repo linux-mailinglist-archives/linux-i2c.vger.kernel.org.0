@@ -2,47 +2,45 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C127D59CF
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 19:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BAF7D5B55
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 21:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjJXRex (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Oct 2023 13:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
+        id S1344240AbjJXTSJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Oct 2023 15:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234315AbjJXRew (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 13:34:52 -0400
+        with ESMTP id S1344021AbjJXTSI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 15:18:08 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40001B3
-        for <linux-i2c@vger.kernel.org>; Tue, 24 Oct 2023 10:34:50 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90501C433C7;
-        Tue, 24 Oct 2023 17:34:49 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FD6109;
+        Tue, 24 Oct 2023 12:18:07 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8486C433C7;
+        Tue, 24 Oct 2023 19:18:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698168890;
-        bh=WMFWKDGHXaFpHcCYCCZf9b2QWb84y9lvP49pgqjr4DA=;
+        s=k20201202; t=1698175087;
+        bh=02/KBKaqOhmo7sOtLmLAqh48v9xojz8EBNv27xQczDE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BuGJytx7gaw9npJLowQanXT5gUgrsxBbSCR9f1kvWA44qQo6fmM83p7Dl8y09Lawj
-         +N4ELwu1+V+79Iy5h2ogs9CRzDISiVyDCpvRSklSapXKFDwk4GIdK56HNqS78fZJgY
-         XVukmFgUreCRab8UoB84tiTMaoBVOC0EUNCsfD56cMdvdBRrS2OqFoI4koRJFGN+L3
-         ptgbCWAQewjdlgAd1Yn95N9ViO0lopL/mXPSYoaHQINKVGJvuCeyEO17vmDp8YMt4E
-         MrTLnuRveBH4mMihr26ZHgRRtAm+mhRpRwAQZht/ij/VGB1bFCSSSyq53hJHDyGnGT
-         2D22Vg3L0+sUA==
-Date:   Tue, 24 Oct 2023 19:34:47 +0200
+        b=jfL0deDbHCTASTwvVJtZBMDhQANaLR5aZwQZSZoUEihfydVA5yplYU+Oo4mx9S994
+         zaLf8hToZCK4JEMlsOZlq23xcoGZqlzHv++c2jpO6KTUvROV9PxK5G9ElS2+wqirEZ
+         i6Ln7xFeGyMgc9gpYAPfojvOaYHb7zdVH8+2j7+NEsjREre0k1nj8MWS5Na9Yk2Lj1
+         PKpiWr/CcqmFmSUaFmvOGwlhDNX+4Xxy/o111+daFm1MtEA9K/8atAEow8Vn8LqfXZ
+         fdoBttptHYI5fBGpHYra/YrYK8hnfWmwP7cEpQpSkccLhdsNYyEWXmRLqdm5EIeyHz
+         iqvQ60J86to5g==
+Date:   Tue, 24 Oct 2023 21:18:01 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH 2/2] i2c: i801: Use new helper acpi_use_parent_companion
-Message-ID: <20231024173447.yfgan6kxb6fbjncq@zenone.zhora.eu>
-References: <90bd1071-317e-4dfe-b94b-9bcee15d66c5@gmail.com>
- <6e935761-5b36-411a-ac82-cbc394bba7b6@gmail.com>
- <206f0f25-8a83-4e53-89fd-cbe025e5798d@gmail.com>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     gregory.clement@bootlin.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] i2c: mv64xxx: add an optional reset-gpios property
+Message-ID: <20231024191801.kofb6cbczswp7xxn@zenone.zhora.eu>
+References: <20231018210805.1569987-1-chris.packham@alliedtelesis.co.nz>
+ <20231018210805.1569987-3-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <206f0f25-8a83-4e53-89fd-cbe025e5798d@gmail.com>
+In-Reply-To: <20231018210805.1569987-3-chris.packham@alliedtelesis.co.nz>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,29 +50,22 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Heiner,
+Hi Chris,
 
-On Sun, Oct 15, 2023 at 11:36:17PM +0200, Heiner Kallweit wrote:
-> Use new helper acpi_use_parent_companion to simplify the code.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  drivers/i2c/busses/i2c-i801.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index a41f5349a..ac223146c 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -1620,7 +1620,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  	priv->adapter.class = I2C_CLASS_HWMON;
->  	priv->adapter.algo = &smbus_algorithm;
->  	priv->adapter.dev.parent = &dev->dev;
-> -	ACPI_COMPANION_SET(&priv->adapter.dev, ACPI_COMPANION(&dev->dev));
-> +	acpi_use_parent_companion(&priv->adapter.dev);
+as you are working on the v4...
 
-I find this neater.
+...
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> +	if (drv_data->reset_gpio) {
+> +		usleep_range(reset_duration, reset_duration + 10);
+
+I'm not against this, but it's not optimal unless we know more or
+less what to expect from reset_duration.
+
+Do we have a rough idea of what reset_duration is? If we don't
+then you could consider using a generic "fsleep(reset_duration);"
+Would it work?
+
+Rest looks good.
 
 Andi
