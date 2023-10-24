@@ -2,83 +2,52 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980387D58C4
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 18:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5352B7D5908
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 18:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343998AbjJXQkE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Oct 2023 12:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
+        id S1343914AbjJXQoJ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Oct 2023 12:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343912AbjJXQkD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 12:40:03 -0400
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACFBD7D;
-        Tue, 24 Oct 2023 09:40:00 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5845213c583so1594680eaf.0;
-        Tue, 24 Oct 2023 09:40:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698165599; x=1698770399;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4dgLAi1M/nR9fJIQpQVSn3gxY5AOxSN1+8PQWp2ZK3E=;
-        b=dJEL+fgbBkqa2Hxr8owONWDH6pO4QAKL8M6N0LblYDn0D+mvusaM9LI019LIX+Wr3i
-         SBvjWPRMymU3blibDCev3SK/2zggSLh7i4IpkcLL7+56UwaN+3Q+SvbKam8pCpGxanbT
-         He27KYjc4yS6cs4vdNENuanBRdI3kaR7tLAO5bj36M1FDWyM3CJw3cp0SmL52BmqFpit
-         BdEzxk39cE/f7g8NzIovM7D42nhpblBaxWAThWlKCuq1CXkrmypanbfJwfKuwEnp/Q8S
-         InLGUYhaL1tKdHvTD1oRCIWiQ8RKhoO9Sv7r+HPRugFqxsbmNwjwBGYgYl7NZvibTWWM
-         mHUQ==
-X-Gm-Message-State: AOJu0YxSrNVMn+fgX2LQrUQlYDXBSzDJcV9rjwPhKfF+AMIxCWFlyWiP
-        Fy1vX2SNzu3oZN9A3IdBaw==
-X-Google-Smtp-Source: AGHT+IH7r1RypTRYYRKdrh1wNi7leTTNBWI9FBY2oTxpLiREvX3LYW7p4YgROHwYcoRP/a6v+9+WQw==
-X-Received: by 2002:a4a:df11:0:b0:582:28e:93a8 with SMTP id i17-20020a4adf11000000b00582028e93a8mr12468463oou.3.1698165599325;
-        Tue, 24 Oct 2023 09:39:59 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f22-20020a4ad816000000b0057aef3cab33sm2002659oov.21.2023.10.24.09.39.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Oct 2023 09:39:58 -0700 (PDT)
-Received: (nullmailer pid 4062523 invoked by uid 1000);
-        Tue, 24 Oct 2023 16:39:56 -0000
-Date:   Tue, 24 Oct 2023 11:39:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
-        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
-        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
-        andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
-        lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
-        arnd@kernel.org, richardcochran@gmail.com,
-        Frank Rowand <frowand.list@gmail.com>, peng.fan@oss.nxp.com,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-p.hy@lists.infradead.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v6 10/11] ARM: dts: stm32: add ETZPC as a system bus for
- STM32MP15x boards
-Message-ID: <20231024163956.GA4049342-robh@kernel.org>
-References: <20231010125719.784627-1-gatien.chevallier@foss.st.com>
- <20231010125719.784627-11-gatien.chevallier@foss.st.com>
- <20231010184212.GA1221641-robh@kernel.org>
- <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
- <20231012153012.GA698406-robh@kernel.org>
- <b16ed06f-66fd-457b-9610-a67ad07deb60@foss.st.com>
+        with ESMTP id S1343847AbjJXQoI (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 12:44:08 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE6593;
+        Tue, 24 Oct 2023 09:44:06 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA18BC433C8;
+        Tue, 24 Oct 2023 16:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698165845;
+        bh=r07UHKkl86rdMpQ7rTOkyf3+czc76gYAgS9XGHFVCgs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BjtMEDC1HKl7I9RiMkoZqP1/cuqwYFg0wcLdGPwf0n6F6QOL7EvTLUWXvIe4J/H78
+         dHiEXAYnptg3E/wOLz3X9l0vMkoYOhkajpfiFDhUYxReRg6SwY/43tV8QPorP3uFgZ
+         8YbdvvYI283Spzw16g73UC1ShiPp53IT9yf3nksBSaOEUTDm80B7oyKW+BNpAYUOjv
+         sfL91f+jMRTVwCebNLllgnI4idwMyB+/NZP2nf3wI/Kf21PLwaftd61sIGzjFwPY5E
+         tYs3GrHMpmBhsHtnD+hQwvQ9tGgcZr9mpGro1YkE0+5Rsj/xUxuP6ZgolbfjrrjvYV
+         0slMjgarQG4AQ==
+Date:   Tue, 24 Oct 2023 17:44:01 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: i2c-demux-pinctrl: Convert to
+ json-schema
+Message-ID: <20231024-extinct-mummy-d015dad84a9d@spud>
+References: <28c173dfbbc17403b0c5a6f27661d7bd33a86f84.1698068607.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="hNENZ+3onzk9rqVp"
 Content-Disposition: inline
-In-Reply-To: <b16ed06f-66fd-457b-9610-a67ad07deb60@foss.st.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <28c173dfbbc17403b0c5a6f27661d7bd33a86f84.1698068607.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,97 +55,400 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On Mon, Oct 16, 2023 at 02:02:39PM +0200, Gatien CHEVALLIER wrote:
-> Hi Rob,
-> 
-> On 10/12/23 17:30, Rob Herring wrote:
-> > On Wed, Oct 11, 2023 at 10:49:58AM +0200, Gatien CHEVALLIER wrote:
-> > > Hi Rob,
-> > > 
-> > > On 10/10/23 20:42, Rob Herring wrote:
-> > > > On Tue, Oct 10, 2023 at 02:57:18PM +0200, Gatien Chevallier wrote:
-> > > > > ETZPC is a firewall controller. Put all peripherals filtered by the
-> > > > > ETZPC as ETZPC subnodes and reference ETZPC as an
-> > > > > access-control-provider.
-> > > > > 
-> > > > > For more information on which peripheral is securable or supports MCU
-> > > > > isolation, please read the STM32MP15 reference manual.
-> > > > > 
-> > > > > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> > > > > ---
-> > > > > 
-> > > > > Changes in V6:
-> > > > >       	- Renamed access-controller to access-controllers
-> > > > >       	- Removal of access-control-provider property
-> > > > > 
-> > > > > Changes in V5:
-> > > > >       	- Renamed feature-domain* to access-control*
-> > > > > 
-> > > > >    arch/arm/boot/dts/st/stm32mp151.dtsi  | 2756 +++++++++++++------------
-> > > > >    arch/arm/boot/dts/st/stm32mp153.dtsi  |   52 +-
-> > > > >    arch/arm/boot/dts/st/stm32mp15xc.dtsi |   19 +-
-> > > > >    3 files changed, 1450 insertions(+), 1377 deletions(-)
-> > > > 
-> > > > This is not reviewable. Change the indentation and any non-functional
-> > > > change in one patch and then actual changes in another.
-> > > 
-> > > Ok, I'll make it easier to read.
-> > > 
-> > > > 
-> > > > This is also an ABI break. Though I'm not sure it's avoidable. All the
-> > > > devices below the ETZPC node won't probe on existing kernel. A
-> > > > simple-bus fallback for ETZPC node should solve that.
-> > > > 
-> > > 
-> > > I had one issue when trying with a simple-bus fallback that was the
-> > > drivers were probing even though the access rights aren't correct.
-> > > Hence the removal of the simple-bus compatible in the STM32MP25 patch.
-> > 
-> > But it worked before, right? So the difference is you have either added
-> > new devices which need setup or your firmware changed how devices are
-> > setup (or not setup). Certainly can't fix the latter case. You just need
-> > to be explicit about what you are doing to users.
-> > 
-> 
-> I should've specified it was during a test where I deliberately set
-> incorrect rights on a peripheral and enabled its node to see if the
-> firewall would allow the creation of the device.
-> 
-> > 
-> > > Even though a node is tagged with the OF_POPULATED flag when checking
-> > > the access rights with the firewall controller, it seems that when
-> > > simple-bus is probing, there's no check of this flag.
-> > 
-> > It shouldn't. Those flags are for creating the devices (or not) and
-> > removing only devices of_platform_populate() created.
-> > 
-> 
-> About the "simple-bus" being a fallback, I think I understood why I saw
-> that the devices were created.
-> 
-> All devices under a node whose compatible is "simple-bus" are created
-> in of_platform_device_create_pdata(), called by
-> of_platform_default_populate_init() at arch_initcall level. This
-> before the firewall-controller has a chance to populate it's bus.
-> 
-> Therefore, when I flag nodes when populating the firewall-bus, the
-> devices are already created. The "simple-bus" mechanism is not a
-> fallback here as it precedes the driver probe.
-> 
-> Is there a safe way to safely remove/disable a device created this way?
 
-There's 2 ways to handle this. Either controlling creating the device or 
-controlling probing the device. The latter should just work with 
-fw_devlink dependency. The former probably needs some adjustment to 
-simple-pm-bus driver if you have 'simple-bus' compatible. You want it to 
-probe on old kernels and not probe on new kernels with your firewall 
-driver. Look at the commit history for simple-pm-bus. There was some 
-discussion on it as well.
+--hNENZ+3onzk9rqVp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Devices that are under the firewall controller (simple-bus) node
-> should not be probed before it as they're child of it.
+On Mon, Oct 23, 2023 at 03:53:00PM +0200, Geert Uytterhoeven wrote:
+> Convert the pinctrl-based I2C bus demultiplexer Device Tree binding
+> documentation to json-schema.
+>=20
+> Update the example to match reality.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-fw_devlink should take care of parent/child dependencies without any 
-explicit handling of the access ctrl binding.
+This conversion seems fine to me.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Rob
+Thanks,
+Conor.
+
+> ---
+> The example includes changes from "[PATCH 0/3] dts: renesas: Fix I2C bus
+> demux node names and ADV751[13] power supplies"
+> (https://lore.kernel.org/r/cover.1698068646.git.geert+renesas@glider.be)
+>=20
+>  .../bindings/i2c/i2c-demux-pinctrl.txt        | 135 --------------
+>  .../bindings/i2c/i2c-demux-pinctrl.yaml       | 172 ++++++++++++++++++
+>  2 files changed, 172 insertions(+), 135 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-demux-pinct=
+rl.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-demux-pinct=
+rl.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.txt =
+b/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.txt
+> deleted file mode 100644
+> index 86b2e433a969013c..0000000000000000
+> --- a/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.txt
+> +++ /dev/null
+> @@ -1,135 +0,0 @@
+> -Pinctrl-based I2C Bus DeMux
+> -
+> -This binding describes an I2C bus demultiplexer that uses pin multiplexi=
+ng to
+> -route the I2C signals, and represents the pin multiplexing configuration=
+ using
+> -the pinctrl device tree bindings. This may be used to select one I2C IP =
+core at
+> -runtime which may have a better feature set for a given task than anothe=
+r I2C
+> -IP core on the SoC. The most simple example is to fall back to GPIO bitb=
+anging
+> -if your current runtime configuration hits an errata of the internal IP =
+core.
+> -
+> -    +-------------------------------+
+> -    | SoC                           |
+> -    |                               |   +-----+  +-----+
+> -    |   +------------+              |   | dev |  | dev |
+> -    |   |I2C IP Core1|--\           |   +-----+  +-----+
+> -    |   +------------+   \-------+  |      |        |
+> -    |                    |Pinctrl|--|------+--------+
+> -    |   +------------+   +-------+  |
+> -    |   |I2C IP Core2|--/           |
+> -    |   +------------+              |
+> -    |                               |
+> -    +-------------------------------+
+> -
+> -Required properties:
+> -- compatible: "i2c-demux-pinctrl"
+> -- i2c-parent: List of phandles of I2C masters available for selection. T=
+he first
+> -	      one will be used as default.
+> -- i2c-bus-name: The name of this bus. Also needed as pinctrl-name for th=
+e I2C
+> -		parents.
+> -
+> -Furthermore, I2C mux properties and child nodes. See i2c-mux.yaml in this
+> -directory.
+> -
+> -Example:
+> -
+> -Here is a snipplet for a bus to be demuxed. It contains various i2c clie=
+nts for
+> -HDMI, so the bus is named "i2c-hdmi":
+> -
+> -	i2chdmi: i2c@8 {
+> -
+> -		compatible =3D "i2c-demux-pinctrl";
+> -		i2c-parent =3D <&gpioi2c>, <&iic2>, <&i2c2>;
+> -		i2c-bus-name =3D "i2c-hdmi";
+> -		#address-cells =3D <1>;
+> -		#size-cells =3D <0>;
+> -
+> -		ak4643: sound-codec@12 {
+> -			compatible =3D "asahi-kasei,ak4643";
+> -
+> -			#sound-dai-cells =3D <0>;
+> -			reg =3D <0x12>;
+> -		};
+> -
+> -		composite-in@20 {
+> -			compatible =3D "adi,adv7180";
+> -			reg =3D <0x20>;
+> -			remote =3D <&vin1>;
+> -
+> -			port {
+> -				adv7180: endpoint {
+> -					bus-width =3D <8>;
+> -					remote-endpoint =3D <&vin1ep0>;
+> -				};
+> -			};
+> -		};
+> -
+> -		hdmi@39 {
+> -			compatible =3D "adi,adv7511w";
+> -			reg =3D <0x39>;
+> -			interrupt-parent =3D <&gpio1>;
+> -			interrupts =3D <15 IRQ_TYPE_LEVEL_LOW>;
+> -
+> -			adi,input-depth =3D <8>;
+> -			adi,input-colorspace =3D "rgb";
+> -			adi,input-clock =3D "1x";
+> -			adi,input-style =3D <1>;
+> -			adi,input-justification =3D "evenly";
+> -
+> -			ports {
+> -				#address-cells =3D <1>;
+> -				#size-cells =3D <0>;
+> -
+> -				port@0 {
+> -					reg =3D <0>;
+> -					adv7511_in: endpoint {
+> -						remote-endpoint =3D <&du_out_lvds0>;
+> -					};
+> -				};
+> -
+> -				port@1 {
+> -					reg =3D <1>;
+> -					adv7511_out: endpoint {
+> -						remote-endpoint =3D <&hdmi_con>;
+> -					};
+> -				};
+> -			};
+> -		};
+> -	};
+> -
+> -And for clarification, here are the snipplets for the i2c-parents:
+> -
+> -	gpioi2c: i2c@9 {
+> -		#address-cells =3D <1>;
+> -		#size-cells =3D <0>;
+> -		compatible =3D "i2c-gpio";
+> -		gpios =3D <&gpio5 6 GPIO_ACTIVE_HIGH /* sda */
+> -			 &gpio5 5 GPIO_ACTIVE_HIGH /* scl */
+> -			>;
+> -		i2c-gpio,delay-us =3D <5>;
+> -	};
+> -
+> -...
+> -
+> -&i2c2	{
+> -	pinctrl-0 =3D <&i2c2_pins>;
+> -	pinctrl-names =3D "i2c-hdmi";
+> -
+> -	clock-frequency =3D <100000>;
+> -};
+> -
+> -...
+> -
+> -&iic2	{
+> -	pinctrl-0 =3D <&iic2_pins>;
+> -	pinctrl-names =3D "i2c-hdmi";
+> -
+> -	clock-frequency =3D <100000>;
+> -};
+> -
+> -Please note:
+> -
+> -- pinctrl properties for the parent I2C controllers need a pinctrl state
+> -  with the same name as i2c-bus-name, not "default"!
+> -
+> -- the i2c masters must have their status "disabled". This driver will
+> -  enable them at runtime when needed.
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.yaml=
+ b/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.yaml
+> new file mode 100644
+> index 0000000000000000..2c08f2a7cf1ee28c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.yaml
+> @@ -0,0 +1,172 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/i2c-demux-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Pinctrl-based I2C Bus Demultiplexer
+> +
+> +maintainers:
+> +  - Wolfram Sang <wsa+renesas@sang-engineering.com>
+> +
+> +description: |
+> +  This binding describes an I2C bus demultiplexer that uses pin multiple=
+xing to
+> +  route the I2C signals, and represents the pin multiplexing configurati=
+on
+> +  using the pinctrl device tree bindings.  This may be used to select on=
+e I2C
+> +  IP core at runtime which may have a better feature set for a given tas=
+k than
+> +  another I2C IP core on the SoC.  The most simple example is to fall ba=
+ck to
+> +  GPIO bitbanging if your current runtime configuration hits an errata o=
+f the
+> +  internal IP core.
+> +
+> +      +-------------------------------+
+> +      | SoC                           |
+> +      |                               |   +-----+  +-----+
+> +      |   +------------+              |   | dev |  | dev |
+> +      |   |I2C IP Core1|--\           |   +-----+  +-----+
+> +      |   +------------+   \-------+  |      |        |
+> +      |                    |Pinctrl|--|------+--------+
+> +      |   +------------+   +-------+  |
+> +      |   |I2C IP Core2|--/           |
+> +      |   +------------+              |
+> +      |                               |
+> +      +-------------------------------+
+> +
+> +allOf:
+> +  - $ref: i2c-mux.yaml
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: i2c-demux-pinctrl
+> +
+> +  i2c-parent:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description:
+> +      List of phandles of I2C masters available for selection.  The firs=
+t one
+> +      will be used as default.
+> +
+> +  i2c-bus-name:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description:
+> +      The name of this bus.  Also needed as pinctrl-name for the I2C par=
+ents.
+> +
+> +required:
+> +  - compatible
+> +  - i2c-parent
+> +  - i2c-bus-name
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    gpioi2c2: i2c-9 {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +        compatible =3D "i2c-gpio";
+> +        scl-gpios =3D <&gpio5 5 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +        sda-gpios =3D <&gpio5 6 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +        i2c-gpio,delay-us =3D <5>;
+> +
+> +        // The I2C controller must have its status "disabled".  The I2C =
+bus
+> +        // demultiplexer will enable it at runtime when needed.
+> +        status =3D "disabled";
+> +    };
+> +
+> +    iic2: i2c@e6520000 {
+> +        reg =3D <0xe6520000 0x425>;
+> +        pinctrl-0 =3D <&iic2_pins>;
+> +        // The pinctrl property for the parent I2C controller needs a pi=
+nctrl
+> +        // state with the same name as i2c-bus-name in the I2C bus demul=
+tiplexer
+> +        // node, not "default"!
+> +        pinctrl-names =3D "i2c-hdmi";
+> +
+> +        clock-frequency =3D <100000>;
+> +
+> +        // The I2C controller must have its status "disabled".  The I2C =
+bus
+> +        // demultiplexer will enable it at runtime when needed.
+> +        status =3D "disabled";
+> +    };
+> +
+> +    i2c2: i2c@e6530000 {
+> +        reg =3D <0 0xe6530000 0 0x40>;
+> +        pinctrl-0 =3D <&i2c2_pins>;
+> +        // The pinctrl property for the parent I2C controller needs a pi=
+nctrl
+> +        // state with the same name as i2c-bus-name in the I2C bus demul=
+tiplexer
+> +        // node, not "default"!
+> +        pinctrl-names =3D "i2c-hdmi";
+> +
+> +        clock-frequency =3D <100000>;
+> +
+> +        // The I2C controller must have its status "disabled".  The I2C =
+bus
+> +        // demultiplexer will enable it at runtime when needed.
+> +        status =3D "disabled";
+> +    };
+> +
+> +    // Example for a bus to be demuxed.  It contains various I2C clients=
+ for
+> +    // HDMI, so the bus is named "i2c-hdmi":
+> +    i2chdmi: i2c-mux3 {
+> +            compatible =3D "i2c-demux-pinctrl";
+> +            i2c-parent =3D <&iic2>, <&i2c2>, <&gpioi2c2>;
+> +            i2c-bus-name =3D "i2c-hdmi";
+> +            #address-cells =3D <1>;
+> +            #size-cells =3D <0>;
+> +
+> +            ak4643: codec@12 {
+> +                    compatible =3D "asahi-kasei,ak4643";
+> +                    #sound-dai-cells =3D <0>;
+> +                    reg =3D <0x12>;
+> +            };
+> +
+> +            composite-in@20 {
+> +                    compatible =3D "adi,adv7180";
+> +                    reg =3D <0x20>;
+> +
+> +                    port {
+> +                            adv7180: endpoint {
+> +                                    bus-width =3D <8>;
+> +                                    remote-endpoint =3D <&vin1ep0>;
+> +                            };
+> +                    };
+> +            };
+> +
+> +            hdmi@39 {
+> +                    compatible =3D "adi,adv7511w";
+> +                    reg =3D <0x39>;
+> +                    interrupt-parent =3D <&gpio1>;
+> +                    interrupts =3D <15 IRQ_TYPE_LEVEL_LOW>;
+> +                    clocks =3D <&cec_clock>;
+> +                    clock-names =3D "cec";
+> +
+> +                    avdd-supply =3D <&fixedregulator1v8>;
+> +                    dvdd-supply =3D <&fixedregulator1v8>;
+> +                    pvdd-supply =3D <&fixedregulator1v8>;
+> +                    dvdd-3v-supply =3D <&fixedregulator3v3>;
+> +                    bgvdd-supply =3D <&fixedregulator1v8>;
+> +
+> +                    adi,input-depth =3D <8>;
+> +                    adi,input-colorspace =3D "rgb";
+> +                    adi,input-clock =3D "1x";
+> +
+> +                    ports {
+> +                            #address-cells =3D <1>;
+> +                            #size-cells =3D <0>;
+> +
+> +                            port@0 {
+> +                                    reg =3D <0>;
+> +                                    adv7511_in: endpoint {
+> +                                            remote-endpoint =3D <&lvds0_=
+out>;
+> +                                    };
+> +                            };
+> +
+> +                            port@1 {
+> +                                    reg =3D <1>;
+> +                                    adv7511_out: endpoint {
+> +                                            remote-endpoint =3D <&hdmi_c=
+on_out>;
+> +                                    };
+> +                            };
+> +                    };
+> +            };
+> +    };
+> --=20
+> 2.34.1
+>=20
+
+--hNENZ+3onzk9rqVp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTf0UQAKCRB4tDGHoIJi
+0rIYAP9mphufOriWvXiRrx0VtN5ljnDxao9zO6Um/QraSH2usAD/X+YQaZjZSX1X
+PNyswoJxGeUxK6gHYtX/Rl7FE8hs2Qw=
+=x4F7
+-----END PGP SIGNATURE-----
+
+--hNENZ+3onzk9rqVp--
