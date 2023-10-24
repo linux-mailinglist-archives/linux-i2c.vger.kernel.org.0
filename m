@@ -2,135 +2,154 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DA47D49A3
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 10:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3737D5110
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 15:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbjJXIPH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Oct 2023 04:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
+        id S234767AbjJXNJZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Oct 2023 09:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232924AbjJXIPG (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 04:15:06 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA75AE9
-        for <linux-i2c@vger.kernel.org>; Tue, 24 Oct 2023 01:15:03 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        with ESMTP id S234764AbjJXNJX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 09:09:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570341707;
+        Tue, 24 Oct 2023 06:09:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 5D9782C0547;
-        Tue, 24 Oct 2023 21:15:01 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1698135301;
-        bh=a7rNjQU28ksuExI8JtKe/7t79lDDXhncoO0YZS25u08=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=UbL6YWnQAR2ss1kkQh2SNlqiUghE7jiH+nPoIpn25rsuIEUhkfG2zx0hD6c2joj+C
-         sLf4+7WRWf7Ov1DMP64p4CeThlE8YetKH+jQehTyumsH0hxtn0w/1TTQjVu4QHP1Uj
-         toPkblITZQERvlXQ8KzvmcB5BkWhVkinV2tHghmkkULE8Zkl2bYd9SonxrBleQKIUI
-         3m4PambrY8cXDA4M4rImGe/IURLsC1sSjLigWltPmdaq2CVZs34IXSd9Ml2Ee/wUGU
-         XGtKSfrmcR1U9I0LqomZDT2JQ4eyLL1sSAdnoAC9ouhsiUH/imF/dCsVAz9XbobIFm
-         QZKFAIq5J/cvw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B65377d050001>; Tue, 24 Oct 2023 21:15:01 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.39; Tue, 24 Oct 2023 21:15:01 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.48; Tue, 24 Oct 2023 21:15:00 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.039; Tue, 24 Oct 2023 21:15:00 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] i2c: mv64xxx: add an optional reset-gpios property
-Thread-Topic: [PATCH v3 2/2] i2c: mv64xxx: add an optional reset-gpios
- property
-Thread-Index: AQHaAgcy5mKiozoBFUuv9b6R9rUkyLBXxl+A
-Date:   Tue, 24 Oct 2023 08:15:00 +0000
-Message-ID: <78c5eeb7-214d-43d2-91e7-7eb50a1543de@alliedtelesis.co.nz>
-References: <20231018210805.1569987-1-chris.packham@alliedtelesis.co.nz>
- <20231018210805.1569987-3-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20231018210805.1569987-3-chris.packham@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.32.14.96]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <726BCCC326F776428AD7BDA67F787942@atlnz.lc>
-Content-Transfer-Encoding: base64
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 554381FE71;
+        Tue, 24 Oct 2023 13:09:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1698152959; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2mgIghIL+k9sM7wUKoTnltFr1Chr7zlpGRP2FGIbTeg=;
+        b=rBZehXn49NF+QLTASoDA+513B8aQQRt430H/SArjtpHvsCWcZJgMKnxXXuBtsmS95zch2t
+        rm7pvs9HqCEbfCGCVvuHRMektDlM85T4v1n7y5guQsnVXn52SMLLgGg8+wFivAecwVM4oi
+        1FOE8hT+eE6+pplcDIV6Dmcy5P8y0eM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1698152959;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2mgIghIL+k9sM7wUKoTnltFr1Chr7zlpGRP2FGIbTeg=;
+        b=X48yXCX6jjwc1caF2fEp9NWeIiolU/t1IWJ0Q7nobF6DGKh/zcHDSpYivLcqxnxhB1JevD
+        sUaXaHV4ssZ9uYBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 09D891391C;
+        Tue, 24 Oct 2023 13:09:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FlNaAP/BN2VVewAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 24 Oct 2023 13:09:19 +0000
+Date:   Tue, 24 Oct 2023 15:09:17 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Wilczynski, Michal" <michal.wilczynski@intel.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH 2/2] i2c: i801: Use new helper acpi_use_parent_companion
+Message-ID: <20231024150917.79736389@endymion.delvare>
+In-Reply-To: <e86fb57b-afc6-478b-9a9d-543b87bc8d3d@gmail.com>
+References: <90bd1071-317e-4dfe-b94b-9bcee15d66c5@gmail.com>
+        <6e935761-5b36-411a-ac82-cbc394bba7b6@gmail.com>
+        <206f0f25-8a83-4e53-89fd-cbe025e5798d@gmail.com>
+        <66418e44-6862-4555-9280-2633ffb34d23@intel.com>
+        <CAJZ5v0hfSZCgoW1mq=jeqjMBtsr=6JJaG8OWfUkAW80KF509Nw@mail.gmail.com>
+        <e86fb57b-afc6-478b-9a9d-543b87bc8d3d@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=L6ZjvNb8 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oOnywjR1vmkA:10 a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=M7cbq605zZYUMcyVNpMA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Authentication-Results: smtp-out2.suse.de;
+        none
+X-Spam-Level: 
+X-Spam-Score: -7.10
+X-Spamd-Result: default: False [-7.10 / 50.00];
+         ARC_NA(0.00)[];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         MIME_GOOD(-0.10)[text/plain];
+         NEURAL_HAM_LONG(-3.00)[-1.000];
+         HAS_ORG_HEADER(0.00)[];
+         DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+         NEURAL_HAM_SHORT(-1.00)[-1.000];
+         RCPT_COUNT_SEVEN(0.00)[7];
+         FREEMAIL_TO(0.00)[gmail.com];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         RCVD_COUNT_TWO(0.00)[2];
+         RCVD_TLS_ALL(0.00)[];
+         BAYES_HAM(-3.00)[100.00%]
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQpPbiAxOS8xMC8yMyAxMDowOCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4gU29tZSBoYXJkd2Fy
-ZSBkZXNpZ25zIGhhdmUgYSBHUElPIHVzZWQgdG8gY29udHJvbCB0aGUgcmVzZXQgb2YgYWxsIHRo
-ZQ0KPiBkZXZpY2VzIG9uIGFuZCBJMkMgYnVzLiBJdCdzIG5vdCBwb3NzaWJsZSBmb3IgZXZlcnkg
-Y2hpbGQgbm9kZSB0bw0KPiBkZWNsYXJlIGEgcmVzZXQtZ3Bpb3MgcHJvcGVydHkgYXMgb25seSB0
-aGUgZmlyc3QgZGV2aWNlIHByb2JlZCB3b3VsZCBiZQ0KPiBhYmxlIHRvIHN1Y2Nlc3NmdWxseSBy
-ZXF1ZXN0IGl0ICh0aGUgb3RoZXJzIHdpbGwgZ2V0IC1FQlVTWSkuIFJlcHJlc2VudA0KPiB0aGlz
-IGtpbmQgb2YgaGFyZHdhcmUgZGVzaWduIGJ5IGFzc29jaWF0aW5nIHRoZSByZXNldC1ncGlvcyB3
-aXRoIHRoZQ0KPiBwYXJlbnQgSTJDIGJ1cy4gVGhlIHJlc2V0IGxpbmUgd2lsbCBiZSByZWxlYXNl
-ZCBwcmlvciB0byB0aGUgY2hpbGQgSTJDDQo+IGRldmljZXMgYmVpbmcgcHJvYmVkLg0KPg0KPiBT
-aWduZWQtb2ZmLWJ5OiBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMu
-Y28ubno+DQo+IC0tLQ0KPg0KPiBOb3RlczoNCj4gICAgICBDaGFuZ2VzIGluIHYzOg0KPiAgICAg
-IC0gUmVuYW1lIHJlc2V0LWRlbGF5IHRvIHJlc2V0LWR1cmF0aW9uDQo+ICAgICAgLSBVc2UgcmVz
-ZXQtZHVyYXRpb24tdXMgcHJvcGVydHkgdG8gY29udHJvbCB0aGUgcmVzZXQgcHVsc2UgcmF0aGVy
-IHRoYW4NCj4gICAgICAgIGRlbGF5aW5nIGFmdGVyIHRoZSByZXNldA0KPiAgICAgIENoYW5nZXMg
-aW4gdjI6DQo+ICAgICAgLSBBZGQgYSBwcm9wZXJ0eSB0byBjb3ZlciB0aGUgbGVuZ3RoIG9mIGRl
-bGF5IGFmdGVyIHJlbGVhc2luZyB0aGUgcmVzZXQNCj4gICAgICAgIEdQSU8NCj4gICAgICAtIFVz
-ZSBkZXZfZXJyX3Byb2JlKCkgd2hlbiByZXF1ZXNpbmcgdGhlIEdQSU8gZmFpbHMNCj4NCj4gICBk
-cml2ZXJzL2kyYy9idXNzZXMvaTJjLW12NjR4eHguYyB8IDE1ICsrKysrKysrKysrKysrKw0KPiAg
-IDEgZmlsZSBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspDQo+DQo+IGRpZmYgLS1naXQgYS9kcml2
-ZXJzL2kyYy9idXNzZXMvaTJjLW12NjR4eHguYyBiL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXY2
-NHh4eC5jDQo+IGluZGV4IGVmZDI4YmJlY2Y2MS4uMjhmMTFkMmU4MDBiIDEwMDY0NA0KPiAtLS0g
-YS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW12NjR4eHguYw0KPiArKysgYi9kcml2ZXJzL2kyYy9i
-dXNzZXMvaTJjLW12NjR4eHguYw0KDQprZXJuZWwgdGVzdCByb2JvdCBwb2ludHMgb3V0IEknbSBt
-aXNzaW5nIGFuIGluY2x1ZGUgb2YgZ3Bpby9jb25zdW1lci5oIA0KSSdsbCBmaXggdGhhdCB3aXRo
-IGEgdjQuIEknbGwgZ2l2ZSBpdCBhIGNvdXBsZSBvZiBkYXlzIGJlZm9yZSBzZW5kaW5nIGl0IA0K
-b3V0IGp1c3QgaW4gY2FzZSB0aGVyZSBhcmUgYW55IG1vcmUgY29tbWVudHMuDQoNCj4gQEAgLTE2
-MCw2ICsxNjAsNyBAQCBzdHJ1Y3QgbXY2NHh4eF9pMmNfZGF0YSB7DQo+ICAgCWJvb2wJCQljbGtf
-bl9iYXNlXzA7DQo+ICAgCXN0cnVjdCBpMmNfYnVzX3JlY292ZXJ5X2luZm8JcmluZm87DQo+ICAg
-CWJvb2wJCQlhdG9taWM7DQo+ICsJc3RydWN0IGdwaW9fZGVzYwkqcmVzZXRfZ3BpbzsNCj4gICB9
-Ow0KPiAgIA0KPiAgIHN0YXRpYyBzdHJ1Y3QgbXY2NHh4eF9pMmNfcmVncyBtdjY0eHh4X2kyY19y
-ZWdzX212NjR4eHggPSB7DQo+IEBAIC0xMDM2LDYgKzEwMzcsNyBAQCBtdjY0eHh4X2kyY19wcm9i
-ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZCkNCj4gICAJc3RydWN0IG12NjR4eHhfaTJjX2Rh
-dGEJCSpkcnZfZGF0YTsNCj4gICAJc3RydWN0IG12NjR4eHhfaTJjX3BkYXRhCSpwZGF0YSA9IGRl
-dl9nZXRfcGxhdGRhdGEoJnBkLT5kZXYpOw0KPiAgIAlzdHJ1Y3QgcmVzb3VyY2UgKnJlczsNCj4g
-Kwl1MzIJcmVzZXRfZHVyYXRpb247DQo+ICAgCWludAlyYzsNCj4gICANCj4gICAJaWYgKCghcGRh
-dGEgJiYgIXBkLT5kZXYub2Zfbm9kZSkpDQo+IEBAIC0xMDgzLDYgKzEwODUsMTQgQEAgbXY2NHh4
-eF9pMmNfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGQpDQo+ICAgCWlmIChkcnZfZGF0
-YS0+aXJxIDwgMCkNCj4gICAJCXJldHVybiBkcnZfZGF0YS0+aXJxOw0KPiAgIA0KPiArCWRydl9k
-YXRhLT5yZXNldF9ncGlvID0gZGV2bV9ncGlvZF9nZXRfb3B0aW9uYWwoJnBkLT5kZXYsICJyZXNl
-dCIsIEdQSU9EX09VVF9ISUdIKTsNCj4gKwlpZiAoSVNfRVJSKGRydl9kYXRhLT5yZXNldF9ncGlv
-KSkNCj4gKwkJcmV0dXJuIGRldl9lcnJfcHJvYmUoJnBkLT5kZXYsIFBUUl9FUlIoZHJ2X2RhdGEt
-PnJlc2V0X2dwaW8pLA0KPiArCQkJCSAgICAgIkNhbm5vdCBnZXQgcmVzZXQgZ3Bpb1xuIik7DQo+
-ICsJcmMgPSBkZXZpY2VfcHJvcGVydHlfcmVhZF91MzIoJnBkLT5kZXYsICJyZXNldC1kdXJhdGlv
-bi11cyIsICZyZXNldF9kdXJhdGlvbik7DQo+ICsJaWYgKHJjKQ0KPiArCQlyZXNldF9kdXJhdGlv
-biA9IDE7DQo+ICsNCj4gICAJaWYgKHBkYXRhKSB7DQo+ICAgCQlkcnZfZGF0YS0+ZnJlcV9tID0g
-cGRhdGEtPmZyZXFfbTsNCj4gICAJCWRydl9kYXRhLT5mcmVxX24gPSBwZGF0YS0+ZnJlcV9uOw0K
-PiBAQCAtMTEyMSw2ICsxMTMxLDExIEBAIG12NjR4eHhfaTJjX3Byb2JlKHN0cnVjdCBwbGF0Zm9y
-bV9kZXZpY2UgKnBkKQ0KPiAgIAkJCWdvdG8gZXhpdF9kaXNhYmxlX3BtOw0KPiAgIAl9DQo+ICAg
-DQo+ICsJaWYgKGRydl9kYXRhLT5yZXNldF9ncGlvKSB7DQo+ICsJCXVzbGVlcF9yYW5nZShyZXNl
-dF9kdXJhdGlvbiwgcmVzZXRfZHVyYXRpb24gKyAxMCk7DQo+ICsJCWdwaW9kX3NldF92YWx1ZV9j
-YW5zbGVlcChkcnZfZGF0YS0+cmVzZXRfZ3BpbywgMCk7DQo+ICsJfQ0KPiArDQo+ICAgCXJjID0g
-cmVxdWVzdF9pcnEoZHJ2X2RhdGEtPmlycSwgbXY2NHh4eF9pMmNfaW50ciwgMCwNCj4gICAJCQkg
-TVY2NFhYWF9JMkNfQ1RMUl9OQU1FLCBkcnZfZGF0YSk7DQo+ICAgCWlmIChyYykgew==
+Hi Heiner and all,
+
+On Mon, 16 Oct 2023 22:05:51 +0200, Heiner Kallweit wrote:
+> On 16.10.2023 19:32, Rafael J. Wysocki wrote:
+> > On Mon, Oct 16, 2023 at 6:10=E2=80=AFPM Wilczynski, Michal
+> > <michal.wilczynski@intel.com> wrote: =20
+> >> On 10/15/2023 11:36 PM, Heiner Kallweit wrote: =20
+> >>> Use new helper acpi_use_parent_companion to simplify the code.
+> >>>
+> >>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> >>> ---
+> >>>  drivers/i2c/busses/i2c-i801.c | 2 +-
+> >>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i=
+801.c
+> >>> index a41f5349a..ac223146c 100644
+> >>> --- a/drivers/i2c/busses/i2c-i801.c
+> >>> +++ b/drivers/i2c/busses/i2c-i801.c
+> >>> @@ -1620,7 +1620,7 @@ static int i801_probe(struct pci_dev *dev, cons=
+t struct pci_device_id *id)
+> >>>       priv->adapter.class =3D I2C_CLASS_HWMON;
+> >>>       priv->adapter.algo =3D &smbus_algorithm;
+> >>>       priv->adapter.dev.parent =3D &dev->dev;
+> >>> -     ACPI_COMPANION_SET(&priv->adapter.dev, ACPI_COMPANION(&dev->dev=
+));
+> >>> +     acpi_use_parent_companion(&priv->adapter.dev); =20
+> >>
+> >> I think this case is a bit too trivial for a helper, it's one line bef=
+ore, and
+> >> one line after, so it doesn't really save much. =20
+
+I must say I share Michal's skepticism.
+
+> > If this pattern is repeated in multiple places, the helper makes sense =
+IMO.
+>=20
+> I didn't check each usage in detail, but this should be the places where =
+the new
+> helper can be used.
+> Another advantage IMO is that the helper, being a function instead of a m=
+acro,
+> is type-safe.
+
+If type safety is a concern then I'd rather turn ACPI_COMPANION_SET to
+an inline function (which would make more sense than a macro anyway
+IMHO, as it has an intended side effect).
+
+--=20
+Jean Delvare
+SUSE L3 Support
