@@ -2,154 +2,181 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3737D5110
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 15:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980387D58C4
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 18:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234767AbjJXNJZ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Oct 2023 09:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        id S1343998AbjJXQkE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Oct 2023 12:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234764AbjJXNJX (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 09:09:23 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570341707;
-        Tue, 24 Oct 2023 06:09:21 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 554381FE71;
-        Tue, 24 Oct 2023 13:09:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1698152959; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2mgIghIL+k9sM7wUKoTnltFr1Chr7zlpGRP2FGIbTeg=;
-        b=rBZehXn49NF+QLTASoDA+513B8aQQRt430H/SArjtpHvsCWcZJgMKnxXXuBtsmS95zch2t
-        rm7pvs9HqCEbfCGCVvuHRMektDlM85T4v1n7y5guQsnVXn52SMLLgGg8+wFivAecwVM4oi
-        1FOE8hT+eE6+pplcDIV6Dmcy5P8y0eM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1698152959;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2mgIghIL+k9sM7wUKoTnltFr1Chr7zlpGRP2FGIbTeg=;
-        b=X48yXCX6jjwc1caF2fEp9NWeIiolU/t1IWJ0Q7nobF6DGKh/zcHDSpYivLcqxnxhB1JevD
-        sUaXaHV4ssZ9uYBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 09D891391C;
-        Tue, 24 Oct 2023 13:09:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FlNaAP/BN2VVewAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 24 Oct 2023 13:09:19 +0000
-Date:   Tue, 24 Oct 2023 15:09:17 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Wilczynski, Michal" <michal.wilczynski@intel.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH 2/2] i2c: i801: Use new helper acpi_use_parent_companion
-Message-ID: <20231024150917.79736389@endymion.delvare>
-In-Reply-To: <e86fb57b-afc6-478b-9a9d-543b87bc8d3d@gmail.com>
-References: <90bd1071-317e-4dfe-b94b-9bcee15d66c5@gmail.com>
-        <6e935761-5b36-411a-ac82-cbc394bba7b6@gmail.com>
-        <206f0f25-8a83-4e53-89fd-cbe025e5798d@gmail.com>
-        <66418e44-6862-4555-9280-2633ffb34d23@intel.com>
-        <CAJZ5v0hfSZCgoW1mq=jeqjMBtsr=6JJaG8OWfUkAW80KF509Nw@mail.gmail.com>
-        <e86fb57b-afc6-478b-9a9d-543b87bc8d3d@gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        with ESMTP id S1343912AbjJXQkD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 12:40:03 -0400
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACFBD7D;
+        Tue, 24 Oct 2023 09:40:00 -0700 (PDT)
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5845213c583so1594680eaf.0;
+        Tue, 24 Oct 2023 09:40:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698165599; x=1698770399;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4dgLAi1M/nR9fJIQpQVSn3gxY5AOxSN1+8PQWp2ZK3E=;
+        b=dJEL+fgbBkqa2Hxr8owONWDH6pO4QAKL8M6N0LblYDn0D+mvusaM9LI019LIX+Wr3i
+         SBvjWPRMymU3blibDCev3SK/2zggSLh7i4IpkcLL7+56UwaN+3Q+SvbKam8pCpGxanbT
+         He27KYjc4yS6cs4vdNENuanBRdI3kaR7tLAO5bj36M1FDWyM3CJw3cp0SmL52BmqFpit
+         BdEzxk39cE/f7g8NzIovM7D42nhpblBaxWAThWlKCuq1CXkrmypanbfJwfKuwEnp/Q8S
+         InLGUYhaL1tKdHvTD1oRCIWiQ8RKhoO9Sv7r+HPRugFqxsbmNwjwBGYgYl7NZvibTWWM
+         mHUQ==
+X-Gm-Message-State: AOJu0YxSrNVMn+fgX2LQrUQlYDXBSzDJcV9rjwPhKfF+AMIxCWFlyWiP
+        Fy1vX2SNzu3oZN9A3IdBaw==
+X-Google-Smtp-Source: AGHT+IH7r1RypTRYYRKdrh1wNi7leTTNBWI9FBY2oTxpLiREvX3LYW7p4YgROHwYcoRP/a6v+9+WQw==
+X-Received: by 2002:a4a:df11:0:b0:582:28e:93a8 with SMTP id i17-20020a4adf11000000b00582028e93a8mr12468463oou.3.1698165599325;
+        Tue, 24 Oct 2023 09:39:59 -0700 (PDT)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f22-20020a4ad816000000b0057aef3cab33sm2002659oov.21.2023.10.24.09.39.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Oct 2023 09:39:58 -0700 (PDT)
+Received: (nullmailer pid 4062523 invoked by uid 1000);
+        Tue, 24 Oct 2023 16:39:56 -0000
+Date:   Tue, 24 Oct 2023 11:39:56 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+Cc:     Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
+        olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
+        mchehab@kernel.org, fabrice.gasnier@foss.st.com,
+        andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
+        lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
+        arnd@kernel.org, richardcochran@gmail.com,
+        Frank Rowand <frowand.list@gmail.com>, peng.fan@oss.nxp.com,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-p.hy@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v6 10/11] ARM: dts: stm32: add ETZPC as a system bus for
+ STM32MP15x boards
+Message-ID: <20231024163956.GA4049342-robh@kernel.org>
+References: <20231010125719.784627-1-gatien.chevallier@foss.st.com>
+ <20231010125719.784627-11-gatien.chevallier@foss.st.com>
+ <20231010184212.GA1221641-robh@kernel.org>
+ <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
+ <20231012153012.GA698406-robh@kernel.org>
+ <b16ed06f-66fd-457b-9610-a67ad07deb60@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-Authentication-Results: smtp-out2.suse.de;
-        none
-X-Spam-Level: 
-X-Spam-Score: -7.10
-X-Spamd-Result: default: False [-7.10 / 50.00];
-         ARC_NA(0.00)[];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         MIME_GOOD(-0.10)[text/plain];
-         NEURAL_HAM_LONG(-3.00)[-1.000];
-         HAS_ORG_HEADER(0.00)[];
-         DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-         NEURAL_HAM_SHORT(-1.00)[-1.000];
-         RCPT_COUNT_SEVEN(0.00)[7];
-         FREEMAIL_TO(0.00)[gmail.com];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         RCVD_COUNT_TWO(0.00)[2];
-         RCVD_TLS_ALL(0.00)[];
-         BAYES_HAM(-3.00)[100.00%]
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b16ed06f-66fd-457b-9610-a67ad07deb60@foss.st.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Heiner and all,
+On Mon, Oct 16, 2023 at 02:02:39PM +0200, Gatien CHEVALLIER wrote:
+> Hi Rob,
+> 
+> On 10/12/23 17:30, Rob Herring wrote:
+> > On Wed, Oct 11, 2023 at 10:49:58AM +0200, Gatien CHEVALLIER wrote:
+> > > Hi Rob,
+> > > 
+> > > On 10/10/23 20:42, Rob Herring wrote:
+> > > > On Tue, Oct 10, 2023 at 02:57:18PM +0200, Gatien Chevallier wrote:
+> > > > > ETZPC is a firewall controller. Put all peripherals filtered by the
+> > > > > ETZPC as ETZPC subnodes and reference ETZPC as an
+> > > > > access-control-provider.
+> > > > > 
+> > > > > For more information on which peripheral is securable or supports MCU
+> > > > > isolation, please read the STM32MP15 reference manual.
+> > > > > 
+> > > > > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> > > > > ---
+> > > > > 
+> > > > > Changes in V6:
+> > > > >       	- Renamed access-controller to access-controllers
+> > > > >       	- Removal of access-control-provider property
+> > > > > 
+> > > > > Changes in V5:
+> > > > >       	- Renamed feature-domain* to access-control*
+> > > > > 
+> > > > >    arch/arm/boot/dts/st/stm32mp151.dtsi  | 2756 +++++++++++++------------
+> > > > >    arch/arm/boot/dts/st/stm32mp153.dtsi  |   52 +-
+> > > > >    arch/arm/boot/dts/st/stm32mp15xc.dtsi |   19 +-
+> > > > >    3 files changed, 1450 insertions(+), 1377 deletions(-)
+> > > > 
+> > > > This is not reviewable. Change the indentation and any non-functional
+> > > > change in one patch and then actual changes in another.
+> > > 
+> > > Ok, I'll make it easier to read.
+> > > 
+> > > > 
+> > > > This is also an ABI break. Though I'm not sure it's avoidable. All the
+> > > > devices below the ETZPC node won't probe on existing kernel. A
+> > > > simple-bus fallback for ETZPC node should solve that.
+> > > > 
+> > > 
+> > > I had one issue when trying with a simple-bus fallback that was the
+> > > drivers were probing even though the access rights aren't correct.
+> > > Hence the removal of the simple-bus compatible in the STM32MP25 patch.
+> > 
+> > But it worked before, right? So the difference is you have either added
+> > new devices which need setup or your firmware changed how devices are
+> > setup (or not setup). Certainly can't fix the latter case. You just need
+> > to be explicit about what you are doing to users.
+> > 
+> 
+> I should've specified it was during a test where I deliberately set
+> incorrect rights on a peripheral and enabled its node to see if the
+> firewall would allow the creation of the device.
+> 
+> > 
+> > > Even though a node is tagged with the OF_POPULATED flag when checking
+> > > the access rights with the firewall controller, it seems that when
+> > > simple-bus is probing, there's no check of this flag.
+> > 
+> > It shouldn't. Those flags are for creating the devices (or not) and
+> > removing only devices of_platform_populate() created.
+> > 
+> 
+> About the "simple-bus" being a fallback, I think I understood why I saw
+> that the devices were created.
+> 
+> All devices under a node whose compatible is "simple-bus" are created
+> in of_platform_device_create_pdata(), called by
+> of_platform_default_populate_init() at arch_initcall level. This
+> before the firewall-controller has a chance to populate it's bus.
+> 
+> Therefore, when I flag nodes when populating the firewall-bus, the
+> devices are already created. The "simple-bus" mechanism is not a
+> fallback here as it precedes the driver probe.
+> 
+> Is there a safe way to safely remove/disable a device created this way?
 
-On Mon, 16 Oct 2023 22:05:51 +0200, Heiner Kallweit wrote:
-> On 16.10.2023 19:32, Rafael J. Wysocki wrote:
-> > On Mon, Oct 16, 2023 at 6:10=E2=80=AFPM Wilczynski, Michal
-> > <michal.wilczynski@intel.com> wrote: =20
-> >> On 10/15/2023 11:36 PM, Heiner Kallweit wrote: =20
-> >>> Use new helper acpi_use_parent_companion to simplify the code.
-> >>>
-> >>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> >>> ---
-> >>>  drivers/i2c/busses/i2c-i801.c | 2 +-
-> >>>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i=
-801.c
-> >>> index a41f5349a..ac223146c 100644
-> >>> --- a/drivers/i2c/busses/i2c-i801.c
-> >>> +++ b/drivers/i2c/busses/i2c-i801.c
-> >>> @@ -1620,7 +1620,7 @@ static int i801_probe(struct pci_dev *dev, cons=
-t struct pci_device_id *id)
-> >>>       priv->adapter.class =3D I2C_CLASS_HWMON;
-> >>>       priv->adapter.algo =3D &smbus_algorithm;
-> >>>       priv->adapter.dev.parent =3D &dev->dev;
-> >>> -     ACPI_COMPANION_SET(&priv->adapter.dev, ACPI_COMPANION(&dev->dev=
-));
-> >>> +     acpi_use_parent_companion(&priv->adapter.dev); =20
-> >>
-> >> I think this case is a bit too trivial for a helper, it's one line bef=
-ore, and
-> >> one line after, so it doesn't really save much. =20
+There's 2 ways to handle this. Either controlling creating the device or 
+controlling probing the device. The latter should just work with 
+fw_devlink dependency. The former probably needs some adjustment to 
+simple-pm-bus driver if you have 'simple-bus' compatible. You want it to 
+probe on old kernels and not probe on new kernels with your firewall 
+driver. Look at the commit history for simple-pm-bus. There was some 
+discussion on it as well.
 
-I must say I share Michal's skepticism.
+> Devices that are under the firewall controller (simple-bus) node
+> should not be probed before it as they're child of it.
 
-> > If this pattern is repeated in multiple places, the helper makes sense =
-IMO.
->=20
-> I didn't check each usage in detail, but this should be the places where =
-the new
-> helper can be used.
-> Another advantage IMO is that the helper, being a function instead of a m=
-acro,
-> is type-safe.
+fw_devlink should take care of parent/child dependencies without any 
+explicit handling of the access ctrl binding.
 
-If type safety is a concern then I'd rather turn ACPI_COMPANION_SET to
-an inline function (which would make more sense than a macro anyway
-IMHO, as it has an intended side effect).
-
---=20
-Jean Delvare
-SUSE L3 Support
+Rob
