@@ -2,100 +2,79 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E98D7D5D58
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 23:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8D67D5E37
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Oct 2023 00:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjJXVkb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Oct 2023 17:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
+        id S1344484AbjJXWbb (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Oct 2023 18:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344272AbjJXVka (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 17:40:30 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03401A6;
-        Tue, 24 Oct 2023 14:40:29 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FC3EC433C8;
-        Tue, 24 Oct 2023 21:40:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698183628;
-        bh=F4moDtJBsvM9k5YRWcGiZLJiEXlG4reTo0D2QY0C0dg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oosxYUuzADM8NPpyDf8JiuQjauehWEnVJjvBPI+XZbNdM6cP66MQ8UcicQ4XfXAur
-         j5i1meCrUH73sGd/0LE7t3kgZthIEtHRfAx5dSbVMY5anlaYejy5drPA4xt0v2zagM
-         VskR+wBh3JvCaC26F5NQiQroCoBXDYPd5t0pkosfmJACpJR+DNI2L1rEMK0FjuSs/X
-         YEOG0hdgStFnvEVJ/GqaqjGyTIa6LgsPGBX6Mzb8fv3W0NUfLwT/D4ABOBsItZwY/f
-         mMeA+mDDpMtfP8/X0os0lOV7ABxTqul/CGv+n0t9JT/nzzyaoclgXJZKKIRpQhOPK+
-         6F6hwk4SKQlVA==
-Date:   Tue, 24 Oct 2023 23:40:25 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Huangzheng Lai <Huangzheng.Lai@unisoc.com>
-Cc:     Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huangzheng lai <laihuangzheng@gmail.com>,
-        Xiongpeng Wu <xiongpeng.wu@unisoc.com>
-Subject: Re: [PATCH V2 0/7] i2c: sprd: Modification of UNISOC Platform I2C
- Driver
-Message-ID: <20231024214025.rfix4tzqzxlazbgh@zenone.zhora.eu>
-References: <20231023081158.10654-1-Huangzheng.Lai@unisoc.com>
+        with ESMTP id S1344515AbjJXWbX (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 18:31:23 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FAD3849
+        for <linux-i2c@vger.kernel.org>; Tue, 24 Oct 2023 15:30:42 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 5208C2C02E0;
+        Wed, 25 Oct 2023 11:30:35 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1698186635;
+        bh=BJyb8WCZNp/Hae7wlZqfwiEnwQZsmQKh19okRh+cMxw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uzFlkGFQrkoMNSt/vOaQDLPxO9T1c/ee5kk4Z+BU6meMvLYLVnvIVKkyXSomppUZR
+         nC2G8VxoVyAQgYByl/0Dcr4/LnqUa/5qfua4dELW+gsWbIYABTSBVnZ3a1ScSqY9oC
+         lwglbP6bM+QbsMFtS9KX2o2hFG4AwiEn6kPvQZYp4TW3s2mPl164gwn22RlBv98ru7
+         oLzOvXRlvZ6wnyEi08HFXRiixHA6fn5+b6MGfyVkIVVJWCMG+8kNm1HDhaS+s3svjO
+         0pW9CobR+5bhSB0yQC8F+3mx8RJTn2txowcJGA0tFjo4NaT3+/JiyLBw6zNP9IJ1bD
+         h/49+hUZwgSCQ==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6538458b0000>; Wed, 25 Oct 2023 11:30:35 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 1363413EDA9;
+        Wed, 25 Oct 2023 11:30:35 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 0EF36280F0D; Wed, 25 Oct 2023 11:30:35 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     gregory.clement@bootlin.com, andi.shyti@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v4 0/2] i2c: mv64xxx: reset-gpios
+Date:   Wed, 25 Oct 2023 11:30:30 +1300
+Message-ID: <20231024223032.3387487-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231023081158.10654-1-Huangzheng.Lai@unisoc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=L6ZjvNb8 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=bhdUkHdE2iEA:10 a=DesYK6339MVhjp1_Vu4A:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Huangzheng,
+This series adds the ability to associate a gpio with an I2C bus so that
+downstream devices can be brought out of reset when the host controller i=
+s
+probed.
 
-could you please use the [PATCH RESEND...] prefix when sending
-the patch as it is?
+Chris Packham (2):
+  dt-bindings: i2c: mv64xxx: add reset-gpios property
+  i2c: mv64xxx: add an optional reset-gpios property
 
-Thanks,
-Andi
+ .../bindings/i2c/marvell,mv64xxx-i2c.yaml        | 10 ++++++++++
+ drivers/i2c/busses/i2c-mv64xxx.c                 | 16 ++++++++++++++++
+ 2 files changed, 26 insertions(+)
 
-On Mon, Oct 23, 2023 at 04:11:51PM +0800, Huangzheng Lai wrote:
-> Recently, some bugs have been discovered during use, patch3 and 
-> patch5-6 are bug fixes. Also, this patchset add new features:
-> patch1 allows I2C to use more frequencies for communication,
-> patch2 allows I2C to use 'reset framework' for reset, and patch4 allows
-> I2C controller to dynamically switch frequencies during use.
-> 
-> change in V2
-> -Using 'I2C' instead of 'IIC' in the patch set.
-> -Using imperative form in patch subject.
-> -Use 'switch case' instead of 'else if' in PATCH 1/7.
-> -Modify if (i2c_dev->rst != NULL) to if (i2c_dev->rst) in PATCH 2/7.
-> -Modify some dev_err() to dev_warn() or dev_dbg().
-> -Clear i2c_dev->ack_flag in sprd_i2c_clear_ack() in PATCH 3/7.
-> -Modify the indentation format of the code in PATCH 4/7.
-> -Move sprd_i2c_enable() above its caller in PATCH 5/7.
-> -Remove 'Set I2C_RX_ACK when clear irq' commit.
-> -Add Fixes tags. 
-> 
-> Huangzheng Lai (7):
->   i2c: sprd: Add configurations that support 1Mhz and 3.4Mhz frequencies
->   i2c: sprd: Add I2C driver to use 'reset framework' function
->   i2c: sprd: Use global variables to record I2C ack/nack status instead
->     of local variables
->   i2c: sprd: Add I2C controller driver to support dynamic switching of
->     400K/1M/3.4M frequency
->   i2c: sprd: Configure the enable bit of the I2C controller before each
->     transmission initiation
->   i2c: sprd: Increase the waiting time for I2C transmission to avoid
->     system crash issues
->   i2c: sprd: Add I2C_NACK_EN and I2C_TRANS_EN control bits
-> 
->  drivers/i2c/busses/i2c-sprd.c | 166 ++++++++++++++++++++++------------
->  1 file changed, 106 insertions(+), 60 deletions(-)
-> 
-> -- 
-> 2.17.1
-> 
+--=20
+2.42.0
+
