@@ -2,105 +2,157 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5937D5CA0
-	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 22:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A527D5D1B
+	for <lists+linux-i2c@lfdr.de>; Tue, 24 Oct 2023 23:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344178AbjJXUyL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Oct 2023 16:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
+        id S234997AbjJXVU1 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 24 Oct 2023 17:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344129AbjJXUyK (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 16:54:10 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1E8E5
-        for <linux-i2c@vger.kernel.org>; Tue, 24 Oct 2023 13:54:07 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id EC38D2C0405;
-        Wed, 25 Oct 2023 09:54:05 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1698180845;
-        bh=fLHqJdJd48UyHWtd0EGaU7vVHXl/x/Z3zkyLMQrEvpc=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=X94BXjcT3SRvVZs6KmmyrTjJ+57ri2e8sCXX9Ky0nQE3Vk9YW7/BWjiDAFkwzmx49
-         EL2ImCEY/0h1yFbtcfR4khUxH6J8kzRoTuMWuzXrNt1cdUuyX0DXzItaIo3duX2Fc2
-         rDOQqA/ahw+BbweV0RTxYktDf163kFSwy0Ga8teZ+gCzxvHPCtn2tgKFwmf7I0V4SB
-         IeO52Zuy7dGxxIsF3+z/4Vsy4ysGyyDVMFsK3lIokq16CTzXzw/h36mv5VMLiRQiRC
-         cwy1O7iFqWBU7NlOPCYM0PfvwAA9Z+N1NrlF6KsmyByvZl8gu/VY+7Sn2Hln2cQVV9
-         ci30cRrmaScOQ==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B65382eed0002>; Wed, 25 Oct 2023 09:54:05 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.39; Wed, 25 Oct 2023 09:54:05 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.039; Wed, 25 Oct 2023 09:54:05 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Andi Shyti <andi.shyti@kernel.org>
-CC:     "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] i2c: mv64xxx: add an optional reset-gpios property
-Thread-Topic: [PATCH v3 2/2] i2c: mv64xxx: add an optional reset-gpios
- property
-Thread-Index: AQHaAgcy5mKiozoBFUuv9b6R9rUkyLBYf5+AgAAPnoCAAAaKgIAABK+A
-Date:   Tue, 24 Oct 2023 20:54:05 +0000
-Message-ID: <61593e5f-5d54-4e33-8926-ef68e7fba49e@alliedtelesis.co.nz>
-References: <20231018210805.1569987-1-chris.packham@alliedtelesis.co.nz>
- <20231018210805.1569987-3-chris.packham@alliedtelesis.co.nz>
- <20231024191801.kofb6cbczswp7xxn@zenone.zhora.eu>
- <4b548124-d1d5-4746-a5bd-03757013282d@alliedtelesis.co.nz>
- <20231024203719.bbk7g4q7e4mzar36@zenone.zhora.eu>
-In-Reply-To: <20231024203719.bbk7g4q7e4mzar36@zenone.zhora.eu>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E22D3B47BCDFFF4782BFCC81DA2D87CE@atlnz.lc>
-Content-Transfer-Encoding: base64
+        with ESMTP id S235015AbjJXVUV (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 17:20:21 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDFA10E6;
+        Tue, 24 Oct 2023 14:20:07 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67E5DC433C7;
+        Tue, 24 Oct 2023 21:20:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698182407;
+        bh=c/dSmB2+7TABcInFdYu7kldVit4Y6fD+dg6VWYg0+oM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pJjX9zGcKCOSoYN22PbETI4bvQR8ZUFiLi3Alp5AFijhocOt/ivXUoNcOwDvfNH7X
+         BQUQl33eJi6a2poDckq8XjEI+BdAXyjuoMiC2QQS10PDIjlljX38nxmcjlTwUwzXB0
+         c9z0NMxGKwgSLr14lMPmkyZLoRzKxSh4sV3jEfdta/MfxiM+m99Rgzvg9f0VZyuZ9M
+         Uu4Hbqo+XCJTJdiYAAEJPIqTKY44uOxj2EKJHiwI1xkK/h3bUIEWe8SyV7C+KrKNoC
+         GJuOpaiB2YgoA3czd/55nFXg71hWy++Y4Yd/+LLVzNi+2rBngcT8beHEmgZ1po8yn0
+         haKiETCebPCVw==
+Date:   Tue, 24 Oct 2023 23:20:03 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Huangzheng Lai <Huangzheng.Lai@unisoc.com>
+Cc:     Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huangzheng lai <laihuangzheng@gmail.com>,
+        Xiongpeng Wu <xiongpeng.wu@unisoc.com>
+Subject: Re: [PATCH V2 3/7] i2c: sprd: Use global variables to record I2C
+ ack/nack status instead of local variables
+Message-ID: <20231024212003.rfakablxfst5nxba@zenone.zhora.eu>
+References: <20231023081158.10654-1-Huangzheng.Lai@unisoc.com>
+ <20231023081158.10654-4-Huangzheng.Lai@unisoc.com>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=L6ZjvNb8 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=j4pAPGAPlXPPLMPtUHsA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231023081158.10654-4-Huangzheng.Lai@unisoc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-DQpPbiAyNS8xMC8yMyAwOTozNywgQW5kaSBTaHl0aSB3cm90ZToNCj4gSGkgQ2hyaXMsDQo+DQo+
-Pj4gYXMgeW91IGFyZSB3b3JraW5nIG9uIHRoZSB2NC4uLg0KPj4+DQo+Pj4gLi4uDQo+Pj4NCj4+
-Pj4gKwlpZiAoZHJ2X2RhdGEtPnJlc2V0X2dwaW8pIHsNCj4+Pj4gKwkJdXNsZWVwX3JhbmdlKHJl
-c2V0X2R1cmF0aW9uLCByZXNldF9kdXJhdGlvbiArIDEwKTsNCj4+PiBJJ20gbm90IGFnYWluc3Qg
-dGhpcywgYnV0IGl0J3Mgbm90IG9wdGltYWwgdW5sZXNzIHdlIGtub3cgbW9yZSBvcg0KPj4+IGxl
-c3Mgd2hhdCB0byBleHBlY3QgZnJvbSByZXNldF9kdXJhdGlvbi4NCj4+Pg0KPj4+IERvIHdlIGhh
-dmUgYSByb3VnaCBpZGVhIG9mIHdoYXQgcmVzZXRfZHVyYXRpb24gaXM/IElmIHdlIGRvbid0DQo+
-Pj4gdGhlbiB5b3UgY291bGQgY29uc2lkZXIgdXNpbmcgYSBnZW5lcmljICJmc2xlZXAocmVzZXRf
-ZHVyYXRpb24pOyINCj4+PiBXb3VsZCBpdCB3b3JrPw0KPj4gZmxzZWVwKCkgd291bGQgd29yayBm
-b3IgbWUuIEFsbCBvZiB0aGUgZGV2aWNlcyBJJ20gdGVzdGluZyB3aXRoIHNlZW0gdG8NCj4+IGJl
-IGZpbmUgd2l0aCBhIHZlcnkgc2hvcnQgcmVzZXQgcHVsc2UsIHRoZXknZCBwcm9iYWJseSBiZSBm
-aW5lIHdpdGggbm8NCj4+IGRlbGF5IGF0IGFsbC4NCj4geW91IGtub3cgdGhpcyBiZXR0ZXIgdGhh
-biBtZSA6LSkNCj4gSWYgeW91IHNheSB0aGF0IGEgZGVsYXkgaXMgbm90IG5lY2Vzc2FyeSwgdGhl
-biBJJ20gYWxzbyBmaW5lLg0KPg0KPiBJbiBhbnkgY2FzZSwgd2UgYXJlIGluIHByb2JlIGFuZCBJ
-IGRvbid0IHRoaW5rIGl0J3MgdGltZQ0KPiBjcml0aWNhbCwgc28gdGhhdCBhIGxpdHRsZSBkZWxh
-eSB3b3VsZG4ndCBodXJ0IGFuZCBtYWtlIGV2ZXJ5b25lDQo+IGhhcHB5Lg0KPg0KPiBFaXRoZXIg
-d2F5IEknbSBmaW5lIGFzIGxvbmcgYXMgeW91IHVzZSB0aGUgY29ycmVjdCBzbGVlcGluZw0KPiBm
-dW5jdGlvbi4NCg0KTXkgcGFydGljdWxhciBoYXJkd2FyZSBkb2Vzbid0IG5lZWQgaXQgYnV0IGZv
-ciB0aGlzIHRvIGJlIGdlbmVyYWxseSANCnVzYWJsZSBJIHRoaW5rIGl0IGlzIG5lY2Vzc2FyeSB0
-byBwcm92aWRlIHRoZSBjYXBhYmlsaXR5IGZvciBzb21lIGtpbmQgDQpvZiBoYXJkd2FyZSBzcGVj
-aWZpYyByZXNldC1kdXJhdGlvbi4gSSdsbCBsb29rIGF0IGZzbGVlcCgpIGZvciB2NCAob3IgDQpz
-YXkgd2h5IEkndmUgc3R1Y2sgd2l0aCB1c2xlZXBfcmFuZ2UoKSBpbiB0aGUgY2hhbmdlbG9nKS4N
-Cg0KPiBBbmRp
+Hi Huangzheng,
+
+On Mon, Oct 23, 2023 at 04:11:54PM +0800, Huangzheng Lai wrote:
+> We found that when the interrupt bit of the I2C controller is cleared,
+> the ack/nack bit is also cleared at the same time. After clearing the
+> interrupt bit in sprd_i2c_isr(), incorrect ack/nack information will be
+> obtained in sprd_i2c_isr_thread(), resulting in incorrect communication
+> when nack cannot be recognized. To solve this problem, we used a global
+> variable to record ack/nack information before clearing the interrupt
+> bit instead of a local variable.
+> 
+> Fixes: 8b9ec0719834 ("i2c: Add Spreadtrum I2C controller driver")
+> Cc: <stable@vger.kernel.org> # v4.14+
+> Signed-off-by: Huangzheng Lai <Huangzheng.Lai@unisoc.com>
+> ---
+>  drivers/i2c/busses/i2c-sprd.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sprd.c
+> index aa602958d4fd..dec627ef408c 100644
+> --- a/drivers/i2c/busses/i2c-sprd.c
+> +++ b/drivers/i2c/busses/i2c-sprd.c
+> @@ -85,6 +85,7 @@ struct sprd_i2c {
+>  	struct clk *clk;
+>  	u32 src_clk;
+>  	u32 bus_freq;
+> +	bool ack_flag;
+
+So that you are telling me that this is not racy because we won't
+receive any irq until we pull the ack down. Am I understanding
+correctly?
+
+But if this patch is fixing an unstable ack flag, how can I
+believe this won't end up into a race?
+
+>  	struct completion complete;
+>  	struct reset_control *rst;
+>  	u8 *buf;
+> @@ -119,6 +120,7 @@ static void sprd_i2c_clear_ack(struct sprd_i2c *i2c_dev)
+>  {
+>  	u32 tmp = readl(i2c_dev->base + I2C_STATUS);
+>  
+> +	i2c_dev->ack_flag = 0;
+>  	writel(tmp & ~I2C_RX_ACK, i2c_dev->base + I2C_STATUS);
+>  }
+>  
+> @@ -393,7 +395,6 @@ static irqreturn_t sprd_i2c_isr_thread(int irq, void *dev_id)
+>  {
+>  	struct sprd_i2c *i2c_dev = dev_id;
+>  	struct i2c_msg *msg = i2c_dev->msg;
+> -	bool ack = !(readl(i2c_dev->base + I2C_STATUS) & I2C_RX_ACK);
+
+Where exactly did you see the ack going to '0', here in the
+thread or in handler?
+
+>  	u32 i2c_tran;
+>  
+>  	if (msg->flags & I2C_M_RD)
+> @@ -409,7 +410,7 @@ static irqreturn_t sprd_i2c_isr_thread(int irq, void *dev_id)
+>  	 * For reading data, ack is always true, if i2c_tran is not 0 which
+>  	 * means we still need to contine to read data from slave.
+>  	 */
+> -	if (i2c_tran && ack) {
+> +	if (i2c_tran && i2c_dev->ack_flag) {
+>  		sprd_i2c_data_transfer(i2c_dev);
+>  		return IRQ_HANDLED;
+>  	}
+> @@ -420,7 +421,7 @@ static irqreturn_t sprd_i2c_isr_thread(int irq, void *dev_id)
+>  	 * If we did not get one ACK from slave when writing data, we should
+>  	 * return -EIO to notify users.
+>  	 */
+> -	if (!ack)
+> +	if (!i2c_dev->ack_flag)
+>  		i2c_dev->err = -EIO;
+>  	else if (msg->flags & I2C_M_RD && i2c_dev->count)
+>  		sprd_i2c_read_bytes(i2c_dev, i2c_dev->buf, i2c_dev->count);
+> @@ -437,7 +438,6 @@ static irqreturn_t sprd_i2c_isr(int irq, void *dev_id)
+>  {
+>  	struct sprd_i2c *i2c_dev = dev_id;
+>  	struct i2c_msg *msg = i2c_dev->msg;
+> -	bool ack = !(readl(i2c_dev->base + I2C_STATUS) & I2C_RX_ACK);
+>  	u32 i2c_tran;
+>  
+>  	if (msg->flags & I2C_M_RD)
+> @@ -456,7 +456,8 @@ static irqreturn_t sprd_i2c_isr(int irq, void *dev_id)
+>  	 * means we can read all data in one time, then we can finish this
+>  	 * transmission too.
+>  	 */
+> -	if (!i2c_tran || !ack) {
+> +	i2c_dev->ack_flag = !(readl(i2c_dev->base + I2C_STATUS) & I2C_RX_ACK);
+> +	if (!i2c_tran || !i2c_dev->ack_flag) {
+>  		sprd_i2c_clear_start(i2c_dev);
+
+this clear_start() is called both here and in the thread, why?
+
+Andi
+
+>  		sprd_i2c_clear_irq(i2c_dev);
+>  	}
+> -- 
+> 2.17.1
+> 
