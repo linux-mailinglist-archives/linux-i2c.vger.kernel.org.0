@@ -2,158 +2,144 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B207D60A9
-	for <lists+linux-i2c@lfdr.de>; Wed, 25 Oct 2023 05:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CAE7D6B17
+	for <lists+linux-i2c@lfdr.de>; Wed, 25 Oct 2023 14:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232667AbjJYDzm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 24 Oct 2023 23:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
+        id S234846AbjJYMRt (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 25 Oct 2023 08:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232706AbjJYDzk (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 24 Oct 2023 23:55:40 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B123C0
-        for <linux-i2c@vger.kernel.org>; Tue, 24 Oct 2023 20:55:38 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id CDC1D2C08C9;
-        Wed, 25 Oct 2023 16:55:36 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1698206136;
-        bh=w6roZGHMb0LOJxdVMG+K5YrKTIEQmrJ1Sow/7D1pHGI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EU4IE1Sst4kQR7sBGOifbRQZsc59YAPS/8kIVqTiOqUC2LgIG7Ur3P3kTxhmBst/a
-         n3MvSHpYlPimpoEqdVL5pjwwFAuaqOJU2Dn9WMXYHz4Zfh6lzaGwPFs9BB5WxWlSLR
-         mthwJtBA1ZxKFeZfVMQQ3NcSmCVcpgg/t0hggthKVNxVFzMETt+g+Cs5eotbEc2i+0
-         +hb6Qj4NdI3H2Nuf7shItTIqquFsbAj0RvxW+f6uXsB4an73KRJ89NMBALlPj+h5Zc
-         +A05B9PFtYtL59Z/jnTrywDC5+Z3H85Bul3gUBLZT26J8Ax2HZkrjL+HYgeQ1BckUB
-         598xhOMVg3Zxw==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B653891b80000>; Wed, 25 Oct 2023 16:55:36 +1300
-Received: from hamishm-dl.ws.atlnz.lc (hamishm-dl.ws.atlnz.lc [10.33.24.11])
-        by pat.atlnz.lc (Postfix) with ESMTP id 9532F13EDA9;
-        Wed, 25 Oct 2023 16:55:36 +1300 (NZDT)
-Received: by hamishm-dl.ws.atlnz.lc (Postfix, from userid 1133)
-        id 93835242FEC; Wed, 25 Oct 2023 16:55:36 +1300 (NZDT)
-From:   Hamish Martin <hamish.martin@alliedtelesis.co.nz>
-To:     gupt21@gmail.com, jikos@kernel.org, benjamin.tissoires@redhat.com,
-        Enrik.Berkhan@inka.de, sven.zuehlsdorf@vigem.de
-Cc:     linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        Hamish Martin <hamish.martin@alliedtelesis.co.nz>
-Subject: [PATCH 5/5] HID: mcp2221: Handle reads greater than 60 bytes
-Date:   Wed, 25 Oct 2023 16:55:14 +1300
-Message-ID: <20231025035514.3450123-6-hamish.martin@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231025035514.3450123-1-hamish.martin@alliedtelesis.co.nz>
-References: <20231025035514.3450123-1-hamish.martin@alliedtelesis.co.nz>
+        with ESMTP id S1343780AbjJYMRq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 25 Oct 2023 08:17:46 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFBB18D
+        for <linux-i2c@vger.kernel.org>; Wed, 25 Oct 2023 05:17:39 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20231025121735euoutp013997a2d9adc12346e7834b8c4d3283ab~RWOB78rJR1351913519euoutp019
+        for <linux-i2c@vger.kernel.org>; Wed, 25 Oct 2023 12:17:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20231025121735euoutp013997a2d9adc12346e7834b8c4d3283ab~RWOB78rJR1351913519euoutp019
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1698236255;
+        bh=koPmnIYR71MLFlw+rXLBLGv9mCLgWqZkiQU0rYit4sc=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=t4QhUNIUTrf9qz+kqjlsdgGot6auWNAn7Qx1TCd03shSHkv9KgGVTeH71oGZ7q6KC
+         QwgniJdWdinUxpe6ty4X5Hi00jwA03RhFimTk3wHsnA6y30LMUjSlWj31k7VSm/1t6
+         3O5cbHcZAp1hHvFdnzntawdQZcwvLiayLUv3XPuA=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20231025121735eucas1p246d9725304ab07e9689ac3ab638e7eed~RWOBpXS8j1127511275eucas1p2L;
+        Wed, 25 Oct 2023 12:17:35 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id F9.C0.11320.F5709356; Wed, 25
+        Oct 2023 13:17:35 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20231025121735eucas1p22b65a2c0bc6d30342c4935e3903823a1~RWOBXsbsS0172101721eucas1p2n;
+        Wed, 25 Oct 2023 12:17:35 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20231025121735eusmtrp1ae83709764d1ef5dc79590213cc257b4~RWOBXFbHf2882328823eusmtrp1O;
+        Wed, 25 Oct 2023 12:17:35 +0000 (GMT)
+X-AuditID: cbfec7f4-97dff70000022c38-2d-6539075f8d8f
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 29.B7.25043.E5709356; Wed, 25
+        Oct 2023 13:17:34 +0100 (BST)
+Received: from AMDC4653.digital.local (unknown [106.120.51.32]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20231025121734eusmtip28e9ff31896a5b187787f2384d39232d6~RWOA57erR0336403364eusmtip2Y;
+        Wed, 25 Oct 2023 12:17:34 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH v2 0/3] Add atomic transfers to s3c24xx i2c driver
+Date:   Wed, 25 Oct 2023 14:17:22 +0200
+Message-Id: <20231025121725.46028-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=L6ZjvNb8 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=bhdUkHdE2iEA:10 a=9W1-fauBzXCwDuBwIPUA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupmleLIzCtJLcpLzFFi42LZduznOd14dstUg6YXQhYP5m1js7j/tYPR
+        Yu/rrewWHX+/MFrMOL+PyWLtkbvsFnf3z2V0YPfYtKqTzePOtT1sHn1bVjF6fN4kF8ASxWWT
+        kpqTWZZapG+XwJXx7thmpoKf7BXT705ha2DcwtbFyMkhIWAisWDbIiYQW0hgBaPErs32XYxc
+        QPYXRom/N1tYIZzPjBJL/u5lguno/HAQKrGcUWLqktdsCC33FjGCVLEJGEp0ve0C2yEi4CAx
+        b+13dpAiZoHLjBLT5mwDGyUs4CSxoH8XWBGLgKrEg/eb2EFsXgFbiWNr9rNDrJOX2H/wLDNE
+        XFDi5MwnLCA2M1C8eetsZoiaiRwSHz64QtguEns37IOKC0u8Or4Fao6MxOnJPSwgR0gItDNK
+        LPh9nwnCmcAo0fD8FiNElbXEnXO/gC7iANqgKbF+lz6IKSHgKLFzohiEySdx460gxAl8EpO2
+        TWeGCPNKdLQJQcxQk5h1fB3c1oMXLkGVeEjsO8cLCelYidOrW1kmMCrMQvLXLCR/zUK4YAEj
+        8ypG8dTS4tz01GKjvNRyveLE3OLSvHS95PzcTYzA9HL63/EvOxiXv/qod4iRiYPxEKMEB7OS
+        CG+kj0WqEG9KYmVValF+fFFpTmrxIUZpDhYlcV7VFPlUIYH0xJLU7NTUgtQimCwTB6dUA1Nx
+        V/oc93k7bPtNTy+3Wx/9+/C8RVet6p+7eCpG6wZwRbT53F3tbbexVMhr/xVGdXPvjDeL9p5y
+        eP9wue6XeXwP/H9N07mlLqFzTOhL9e8i81bXvcbzxPm8799t/HT+gXj+whWeyf8WLcz0/PKO
+        87OL1VITo2qjWM2+81+fB23Kvfd969XHfyqkf+sxHDXwffcnpZEn4+0my/UbE9pP1/v+2HRF
+        cP5KpXcbo7acW/LUdfN0l4/RLNdjbXuP6rWWTX7kvOC84PLQyNPxKR8z94qtSJxUGMW8KX7D
+        wrX1jx7W7Gn7Hfz+jIxmwNffffP+z/B9ueSF9eU3qduqjcRF6tzXLGMosvrbeeVej+OW5HV9
+        SizFGYmGWsxFxYkATrWvWp4DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCLMWRmVeSWpSXmKPExsVy+t/xe7px7JapBmff2lg8mLeNzeL+1w5G
+        i72vt7JbdPz9wmgx4/w+Jou1R+6yW9zdP5fRgd1j06pONo871/awefRtWcXo8XmTXABLlJ5N
+        UX5pSapCRn5xia1StKGFkZ6hpYWekYmlnqGxeayVkamSvp1NSmpOZllqkb5dgl7Gu2ObmQp+
+        sldMvzuFrYFxC1sXIyeHhICJROeHg6xdjFwcQgJLGSW+7/8OlZCRODmtgRXCFpb4c62LDaLo
+        E6PEpdc/GUESbAKGEl1vu8AaRAScJG4vmgU2iVngOtCkA//AioSBEgv6d4EVsQioSjx4v4kd
+        xOYVsJU4tmY/O8QGeYn9B88yQ8QFJU7OfMICYjMDxZu3zmaewMg3C0lqFpLUAkamVYwiqaXF
+        uem5xUZ6xYm5xaV56XrJ+bmbGIHBve3Yzy07GFe++qh3iJGJg/EQowQHs5IIb6SPRaoQb0pi
+        ZVVqUX58UWlOavEhRlOg+yYyS4km5wPjK68k3tDMwNTQxMzSwNTSzFhJnNezoCNRSCA9sSQ1
+        OzW1ILUIpo+Jg1OqgSllUnFk1D3f1U3Gu6OlbtZotIi+UdjJdvY2c767nZd2R+G67esjj4fM
+        kgn78b54jWWIiqb2nNn53f/tpt065H9NaePn6Eey4VkbtsrEz5NsF358dJHkhMMzKrXnt2fU
+        1zk6bm1dP/f9Kr7ubcUrGDr8kzYk81ap1X9gjDzu9sW45V2/UKlFgPzHHvaZpyJSTGx+BUwp
+        6LM/13VjyYqQvyZujXbuEz5MvXHqvaGPU4359jLRxdM3X+bguPAv1JPXMKWtdk/m3WDjl5Uz
+        EmUsRD5MTv5s0jPjtdPp2hrNmRyaG6KkpzXWim6O82WzrtMXK7y3M0hRcOmOWpcZs7b/aLx0
+        eeq0g7x/Tpo8lE3kVmIpzkg01GIuKk4EAIVLuwX3AgAA
+X-CMS-MailID: 20231025121735eucas1p22b65a2c0bc6d30342c4935e3903823a1
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20231025121735eucas1p22b65a2c0bc6d30342c4935e3903823a1
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20231025121735eucas1p22b65a2c0bc6d30342c4935e3903823a1
+References: <CGME20231025121735eucas1p22b65a2c0bc6d30342c4935e3903823a1@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-When a user requests more than 60 bytes of data the MCP2221 must chunk
-the data in chunks up to 60 bytes long (see command/response code 0x40
-in the datasheet).
-In order to signal that the device has more data the (undocumented) byte
-at byte index 2 of the Get I2C Data response uses the value 0x54. This
-contrasts with the case for the final data chunk where the value
-returned is 0x55 (MCP2221_I2C_READ_COMPL). The fact that 0x55 was not
-returned in the response was interpreted by the driver as a failure
-meaning that all reads of more than 60 bytes would fail.
+Dear All,
 
-Add support for reads that are split over multiple chunks by looking for
-the response code indicating that more data is expected and continuing
-the read as the code intended. Some timing delays are required to ensure
-the chip has time to refill its FIFO as data is read in from the I2C
-bus. This timing has been tested in my system when configured for bus
-speeds of 50KHz, 100KHz, and 400KHz and operates well.
+This patchset adds support for atomic transfers, which has been added to
+the i2c core recently by the commit 63b96983a5dd ("i2c: core: introduce
+callbacks for atomic transfers") to hide warnings observed during system
+reboot and power-off. Almost everything needed for that was already in
+the driver as so called polling mode. Unfortunately, that polling mode
+has been tested only with single message, write transfers so far and it
+turned out that it doesn't work well with read and multi-message
+transfers, so first it had to be fixed.
 
-Signed-off-by: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
----
- drivers/hid/hid-mcp2221.c | 32 +++++++++++++++++++++++---------
- 1 file changed, 23 insertions(+), 9 deletions(-)
+Best regards,
+Marek Szyprowski
 
-diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
-index d0dd14cb4156..f9cceaeffd08 100644
---- a/drivers/hid/hid-mcp2221.c
-+++ b/drivers/hid/hid-mcp2221.c
-@@ -49,6 +49,7 @@ enum {
- 	MCP2221_I2C_MASK_ADDR_NACK =3D 0x40,
- 	MCP2221_I2C_WRADDRL_SEND =3D 0x21,
- 	MCP2221_I2C_ADDR_NACK =3D 0x25,
-+	MCP2221_I2C_READ_PARTIAL =3D 0x54,
- 	MCP2221_I2C_READ_COMPL =3D 0x55,
- 	MCP2221_ALT_F_NOT_GPIOV =3D 0xEE,
- 	MCP2221_ALT_F_NOT_GPIOD =3D 0xEF,
-@@ -297,6 +298,7 @@ static int mcp_i2c_smbus_read(struct mcp2221 *mcp,
- {
- 	int ret;
- 	u16 total_len;
-+	int retries =3D 0;
-=20
- 	mcp->txbuf[0] =3D type;
- 	if (msg) {
-@@ -320,20 +322,31 @@ static int mcp_i2c_smbus_read(struct mcp2221 *mcp,
- 	mcp->rxbuf_idx =3D 0;
-=20
- 	do {
-+		/* Wait for the data to be read by the device */
-+		usleep_range(980, 1000);
-+
- 		memset(mcp->txbuf, 0, 4);
- 		mcp->txbuf[0] =3D MCP2221_I2C_GET_DATA;
-=20
- 		ret =3D mcp_send_data_req_status(mcp, mcp->txbuf, 1);
--		if (ret)
--			return ret;
--
--		ret =3D mcp_chk_last_cmd_status_free_bus(mcp);
--		if (ret)
--			return ret;
--
--		usleep_range(980, 1000);
-+		if (ret) {
-+			if (retries < 5) {
-+				/* The data wasn't ready to read.
-+				 * Wait a bit longer and try again.
-+				 */
-+				usleep_range(90, 100);
-+				retries++;
-+			} else {
-+				return ret;
-+			}
-+		} else {
-+			retries =3D 0;
-+		}
- 	} while (mcp->rxbuf_idx < total_len);
-=20
-+	usleep_range(980, 1000);
-+	ret =3D mcp_chk_last_cmd_status_free_bus(mcp);
-+
- 	return ret;
- }
-=20
-@@ -799,7 +812,8 @@ static int mcp2221_raw_event(struct hid_device *hdev,
- 				mcp->status =3D -EIO;
- 				break;
- 			}
--			if (data[2] =3D=3D MCP2221_I2C_READ_COMPL) {
-+			if (data[2] =3D=3D MCP2221_I2C_READ_COMPL ||
-+			    data[2] =3D=3D MCP2221_I2C_READ_PARTIAL) {
- 				buf =3D mcp->rxbuf;
- 				memcpy(&buf[mcp->rxbuf_idx], &data[4], data[3]);
- 				mcp->rxbuf_idx =3D mcp->rxbuf_idx + data[3];
---=20
-2.42.0
+
+Changelog:
+v2:
+- updated and extended commit messages
+
+
+Patch summary:
+
+Marek Szyprowski (3):
+  i2c: s3c24xx: fix read transfers in polling mode
+  i2c: s3c24xx: fix transferring more than one message in polling mode
+  i2c: s3c24xx: add support for atomic transfers
+
+ drivers/i2c/busses/i2c-s3c2410.c | 55 +++++++++++++++++++++-----------
+ 1 file changed, 36 insertions(+), 19 deletions(-)
+
+-- 
+2.34.1
 
