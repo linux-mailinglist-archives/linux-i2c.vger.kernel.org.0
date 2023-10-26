@@ -2,136 +2,111 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3FE7D81B0
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Oct 2023 13:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575717D832D
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Oct 2023 14:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjJZLTC (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Oct 2023 07:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
+        id S230177AbjJZMyl (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Oct 2023 08:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbjJZLTB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Oct 2023 07:19:01 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDA91AE;
-        Thu, 26 Oct 2023 04:18:57 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BC95C433C8;
-        Thu, 26 Oct 2023 11:18:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698319137;
-        bh=IWCVDeQfz80D8KxF6kheGRzPjVWrUAfuCZcpuboGmCo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Iy28Uvj1JRA+FjBIpi31KjtxkmSjyeaP2x5v0hv7FqFgBiFZG02l8lVWudm+XYr/c
-         o504d36X29yZPYoUxDclN7bFcxePLaufNzxJ5349nRDuKj2Ncz9mJD6tnZkJtTgGBd
-         ISOA4l/+VuNis/wKkjlWFNiVX1pmZimREsnaz0OA+pfUb4HHpeOAcbdMcozv7WgBPF
-         quQaJx6PZZDO4WU3Su3Zu6/Ra2cRXFoSdY+rhAshoEO0z50xWgQOf2yr7tvUqLoJnv
-         dyOwkTI053yfrWznYQmR9Nu0bwEJl0E0Ii4IrKaw/W9x7SP9EJstjfWAE1EoSb7Say
-         042hg67nCsDmw==
-Date:   Thu, 26 Oct 2023 13:18:53 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Jan Bottorff <janb@os.amperecomputing.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Yann Sionneau <ysionneau@kalrayinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Yann Sionneau <yann@sionneau.net>,
-        Will Deacon <will@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: designware: Fix corrupted memory seen in the ISR
-Message-ID: <ZTpLHZZYtd1WgBu6@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Jan Bottorff <janb@os.amperecomputing.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Yann Sionneau <ysionneau@kalrayinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Yann Sionneau <yann@sionneau.net>, Will Deacon <will@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <ZQm1UyZ0g7KxRW3a@arm.com>
- <cde7e2fc-2e13-4b82-98b3-3d3a52c4c185@os.amperecomputing.com>
- <p7wl7fk4cdyhvw2mfsa6sfc7dhfls3foplmzwj6pzstargt2oh@33zuuznup2gq>
- <ZQq2cT+/QCenR5gx@shikoro>
- <ba6d4378-b646-4514-3a45-4b6c951fbb9c@kalrayinc.com>
- <9219ad29-b9a3-4f07-81b5-43b4b6d9d178@os.amperecomputing.com>
- <d65lwrkji3rvw6r4jdcumo4zu3hbu6zpv6xq73hw6hcshvhtkw@jvuohb3f3loo>
- <3a305e74-2235-47ab-8564-0c594f24dc0a@os.amperecomputing.com>
- <ZRSEntqne/1y1ozq@shikoro>
- <1d56ceef-6573-43b9-a050-124c341a0698@linux.intel.com>
+        with ESMTP id S230105AbjJZMyk (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Oct 2023 08:54:40 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5C812A;
+        Thu, 26 Oct 2023 05:54:38 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39QALq2P007775;
+        Thu, 26 Oct 2023 05:54:35 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pfpt0220; bh=g1V7wwkUPbnoJiIPN3V1FwlNaUNkXv3AH/vM2O8hOFM=;
+ b=YNIsmpkCx4mmhYSk8THrC8ioKwgiEIqeRQidPTt6aC0NPGZp+pDN9tH1K5HwN3YoqPia
+ XRzFGaOvtWTLbu4uIZ9pse+uaXkLN3nBegvnKtn9IFwfLfW2QhHKLBrLiXlEWWQ6VARB
+ 8TilOF8uVULGuupbhnCzKunc7MvaU/lYvLmkTOLWgCRu+f8qZPxDonPIp5eIvJGDUskO
+ gncqDl+tRxbI+0Sb9el0tS1ooJXBwVEeQpIVYHYZbWoIgfLFZWSjYdtFGXLnMSU/N4Yn
+ 4AsBmy8VFvUsu9psUGU4GXnPDoGwqLpGh1733Frm1wO03vgmLpWldj+3d4cZm4hWKxtb Xw== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3txcsr26xw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 26 Oct 2023 05:54:35 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 26 Oct
+ 2023 05:54:30 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Thu, 26 Oct 2023 05:54:30 -0700
+Received: from Dell2s-9 (unknown [10.110.150.250])
+        by maili.marvell.com (Postfix) with ESMTP id E7AB73F7097;
+        Thu, 26 Oct 2023 05:54:29 -0700 (PDT)
+Date:   Thu, 26 Oct 2023 05:54:29 -0700
+From:   Piyush Malgujar <pmalgujar@marvell.com>
+To:     Andi Shyti <andi.shyti@kernel.org>
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <rric@kernel.org>, <cchavva@marvell.com>, <sgarapati@marvell.com>,
+        <jannadurai@marvell.com>
+Subject: Re: [PATCH v2 0/4] i2c: thunderx: Marvell thunderx i2c changes
+Message-ID: <20231026125429.GA22428@Dell2s-9>
+References: <20230728120004.19680-1-pmalgujar@marvell.com>
+ <20231024201440.ey7pjah7fq33mbwm@zenone.zhora.eu>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o4CF2TM7pvgzMj7x"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1d56ceef-6573-43b9-a050-124c341a0698@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231024201440.ey7pjah7fq33mbwm@zenone.zhora.eu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-ORIG-GUID: P7QQPQ46ZBItY3Q0sigTu8a3c05aoSbI
+X-Proofpoint-GUID: P7QQPQ46ZBItY3Q0sigTu8a3c05aoSbI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-26_10,2023-10-26_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+On Tue, Oct 24, 2023 at 10:14:40PM +0200, Andi Shyti wrote:
+> Hi Piyush,
+> 
+> On Fri, Jul 28, 2023 at 05:00:00AM -0700, Piyush Malgujar wrote:
+> > The changes are for Marvell OcteonTX2 SOC family:
+> > 
+> > - Handling clock divisor logic using subsytem ID
+> > - Support for high speed mode
+> > - Handle watchdog timeout
+> > - Added ioclk support
+> > 
+> > Changes since V1:
+> > - Addressed comments, added defines as required
+> > - Removed unnecessary code
+> > - Added a patch to support ioclk if sclk not present in ACPI table
+> > 
+> > Piyush Malgujar (1):
+> >   i2c: thunderx: Adding ioclk support
+> > 
+> > Suneel Garapati (3):
+> >   i2c: thunderx: Clock divisor logic changes
+> >   i2c: thunderx: Add support for High speed mode
+> >   i2c: octeon: Handle watchdog timeout
+> > 
+> >  drivers/i2c/busses/i2c-octeon-core.c     | 96 ++++++++++++++++++------
+> >  drivers/i2c/busses/i2c-octeon-core.h     | 27 +++++++
+> >  drivers/i2c/busses/i2c-thunderx-pcidrv.c | 23 ++++--
+> >  3 files changed, 115 insertions(+), 31 deletions(-)
+> 
+> I was going through the patches that failed to receive an answer,
+> is this series still valid? Do you still need a round of review
+> here?
+> 
+> Andi
 
---o4CF2TM7pvgzMj7x
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Andi,
 
-On Fri, Sep 29, 2023 at 11:48:10AM +0300, Jarkko Nikula wrote:
-> On 9/27/23 22:38, Wolfram Sang wrote:
-> >=20
-> > > So my next question, is the change to dw_reg_write something that I s=
-hould
-> > > write and submit, or should someone else submit something more genera=
-lized,
-> > > like option 2 above? I don't own the i2c driver, I'm just trying to f=
-ix one
-> > > issue on one processor with minimal risk of breaking something. I don=
-'t have
-> > > the broader view of what's optimal for the whole DesignWare i2c drive=
-r. I
-> > > also don't have any way to test changes on other models of processors.
-> >=20
-> > Well, I guess this is a question for the designware maintainers: do we
-> > want this one conversion from *_relaxed to non-relaxed. Or are we
-> > playing safe by using non-relaxed all the time. I would suggest the
-> > latter because the drivers I look after hardly write registers in a hot
-> > path (and not many of them at a time). But you guys know your driver
-> > better...
-> >=20
-> Well I don't have any preference (read enough knowledge) either here and I
-> hardly think performance becomes issue in any configuration.
+Yes, these patches are still valid. These have been acked by you
+and were waiting to get reply from Robert.
+Please review the patches.
 
-So, someone wants to come up with a patch to move to non-relaxed io
-accessors?
-
-
---o4CF2TM7pvgzMj7x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU6Sx0ACgkQFA3kzBSg
-KbaEwxAAhYGFsc2Ic1zZ5TXouwBdmMiFzU4cUxRwQCghgpdhWQi56LAU9jW8xzeb
-ZaAPq3k+/CARf2WdvlQ/EGIKO4SDNQudnpUWU+smJbLeLiWkRcHJVzGLfzq2q5F+
-Mq5v1GNhl10Z2MSX8H+WSByGpAeYDC8/baba/zaR3KjdA/7dE5DNKHETG58aNQ7e
-Uy8yaWQbrIx9mW1hGeReTW1cWk+xpOKYrYNJcxi7NkPSZDufbINiJKdKvbsAytKz
-L0JBl3mo+bIut8H5SWHGkEbY5LBDAgsOSCnHVzI89pMZgmfT7ep9+mPsLSw0KGwL
-XofbaKzYa/qT8JfOn/6dVedntUEHmpmhM1ZpuweGDwH5XSWcTUlt5J3nN46NI5OS
-TkiWfhyHTg1Xn+Tr6ENMZRzshvnewzKimjLBQacdHgItnJ36PTuPi+FhoTxZtJ+j
-2XJEz4BsPLoNJdwp6ACowQdmjYXgYl5U2bjlBlc+O/TX72tZI2okadIKb9GjcZ5Q
-grp7GTB/tPblPsO4y7GdwTTBlQsWO9eHUl+3kaILpSRCuDditRR3BrJnAFCbFkCf
-wQvbLWyKa8ArnKizUwEL7zv4jsI5brYkxHGkbC/oOjQXiWsNumOjaHK985taHFk3
-T+xcW0ckSVjTV5x4DiL+UyfB71uqHdzpb8QB1fL2lqHgZAWYOuw=
-=Kdgb
------END PGP SIGNATURE-----
-
---o4CF2TM7pvgzMj7x--
+Thanks,
+Piyush
