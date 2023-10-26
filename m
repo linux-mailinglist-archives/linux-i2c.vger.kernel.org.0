@@ -2,104 +2,100 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6597D879F
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Oct 2023 19:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB317D8968
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Oct 2023 22:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjJZRhv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Oct 2023 13:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        id S232088AbjJZUE6 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Oct 2023 16:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjJZRhu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Oct 2023 13:37:50 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665EE1A6
-        for <linux-i2c@vger.kernel.org>; Thu, 26 Oct 2023 10:37:48 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69B20C433C7;
-        Thu, 26 Oct 2023 17:37:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698341868;
-        bh=FHKLhTfiGbtt7lUYh4l/mhrzXwDvQvqOgR3+Lhvtngs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KACfl63GSk4SX8PsDPcuAFkoeIc3ZfpqrIy2gxYHe8Z7fUjdevduG0xLSAA2zNW5J
-         RktoA4HOJCpPv3F3xp1oZZYe3W53JmNH5NYAs/k264DIaklpoDN6vaD24tBRIddJhJ
-         wQWYXBDvimnAQ38EnklF6v/dmpWCjSZm05pvXZEovIJf7JJoP/5rlC5KzGHwvLL0Qc
-         E+eJx2IAKdTU8OIIxrtw14t6aqHJlnUaG9WMLOdmgeIbEu7IyGW0fCYvtK4eLU1HrZ
-         xPIESUD3zzZD80b5Kp2soddwo8czAH0Ba3KMkyVOvCaTQtBzxAZX+mSUQMeS26iV3o
-         shTSMLWTUR6eg==
-Date:   Thu, 26 Oct 2023 19:37:44 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] i2c: Mark I2C_CLASS_DDC as deprecated and emit warning
- if adapters declare support for it
-Message-ID: <ZTqj6BKcNYzEkZpp@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <5c521229-18be-47dc-baa9-cabd78420cad@gmail.com>
+        with ESMTP id S231397AbjJZUE5 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Oct 2023 16:04:57 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85D4129
+        for <linux-i2c@vger.kernel.org>; Thu, 26 Oct 2023 13:04:54 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 02AA72C022F;
+        Fri, 27 Oct 2023 09:04:53 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1698350693;
+        bh=14khyxyRz0AEdMDJBhA0pwsxUcUvMqnGAK+iD1nf9Lk=;
+        h=From:To:Subject:Date:References:In-Reply-To:From;
+        b=Dj1gkZ2klwj/gUuvdIO6Sg1KQCMkT0Jq6dDwlQxHPS//kq4LfeCk/t1JKLNatBa2F
+         whh9oMyDo+A7+cXxaou4lxdCF3/hcU/O9hYtwTJGjnqqFsJ/dNAv/+7QeMC+an7Hzw
+         lNj0BHZm4SLOVM/JfTzJqksgYafzu5fICC6XIZrD9bH9hhH67n21unuoZSFq9kZguo
+         BYZ67bMkfSqMguf1KgVi3JWYpcebwf0Tal2i+w20ZVTxElW0XZF3R8r9VdL9y0G4Op
+         bP48Z382tJOYFrAt2sNLYfAnJH+QmvqMC+SKKQAKvfbSojBwczuIVWp8i6OzW1VJZT
+         Y6QLnAMCuQBUA==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B653ac6640001>; Fri, 27 Oct 2023 09:04:52 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.39; Fri, 27 Oct 2023 09:04:52 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
+ SMTP Server (TLS) id 15.0.1497.48; Fri, 27 Oct 2023 09:04:52 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.039; Fri, 27 Oct 2023 09:04:52 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Wolfram Sang <wsa@kernel.org>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 1/2] dt-bindings: i2c: mv64xxx: add reset-gpios
+ property
+Thread-Topic: [PATCH v4 1/2] dt-bindings: i2c: mv64xxx: add reset-gpios
+ property
+Thread-Index: AQHaBsm0MVpXubST+Eu8gnhTr522BbBbFBGAgACTygA=
+Date:   Thu, 26 Oct 2023 20:04:52 +0000
+Message-ID: <a739c815-3b9a-4847-a4ec-1fa4cefe8bdb@alliedtelesis.co.nz>
+References: <20231024223032.3387487-1-chris.packham@alliedtelesis.co.nz>
+ <20231024223032.3387487-2-chris.packham@alliedtelesis.co.nz>
+ <ZTpKa7R/xxKeCo+z@ninjato>
+In-Reply-To: <ZTpKa7R/xxKeCo+z@ninjato>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.33.22.30]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A99BB1CAB1C0B94281B9396B3D65448D@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nnHOYA/20KqsmnRe"
-Content-Disposition: inline
-In-Reply-To: <5c521229-18be-47dc-baa9-cabd78420cad@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=L6ZjvNb8 c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=Ke-4JIrgrsVg7Y4wD88A:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-
---nnHOYA/20KqsmnRe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Heiner!
-
-> With removal of the legacy eeprom driver the only i2c client device
-> driver with I2C_CLASS_DDC is gone, so it's time to mark I2C_CLASS_DDC
-> as deprecated.
-
-OK, but I will need to wait until the eeprom-removal hits mainline.
-
-> Use pr_warn_once, because graphics adapters can have several i2c
-> busses and we may see the warning multiple times otherwise.
->=20
-> Note:
-> Driver staging/olpc_dcon declares support for classes HWMON and DDC,
-> but only HWMON is used with the scx200_acb adapter driver on olpc
-> devices.
-
-And why don't we remove its DDC declaration here in this patch?
-
-Thanks for cleaning this up!
-
-Regards,
-
-   Wolfram
-
-
---nnHOYA/20KqsmnRe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU6o+QACgkQFA3kzBSg
-KbZrBBAAs6P+Fe0ieX+ybPK38c6eHYqp+rRXYjB8Siy/tgmZLPce2HM46rX5zRKW
-G/SgKOuk9Cn1IW2s/itzOLyiJrr5JtbbgQ5NW2nheCGeTk5fVBWMjZKcwyg6W3K8
-jMjtUpDIwtenbBsj43F1ieDiiV4/vM0pdpt//eeqRQnS8uiEb/HJLd+wJm2S9gcR
-wlIhMM5Goo2wGjuT1zhgGdobq5Uct3y1x31NqNJasK4OtIked9f5h4d1FEZKI1WZ
-2WB3LUXMOYFwL8gbHdCn/zs4WbY7LRiyJLCUZ7N8zVvihjvcdT8U77YqOA+FnoV0
-vWjU0hWryfAJ9cNa+CtUMEW16fT4QxJq6NCc2Mtp+doUambtm8OcoLsyDyE9AGRf
-Gius5E25HzL7G5ZFvpiFAAVRwpPdjW2xQdcs4z3AzaNSP1NicKx5baxEDUov5xkf
-nIQxba49wmx3MoCsYerY5BV6FjIEBZOuMq2K1Zv2qHXm//cFJLrIOnOX/kuE7XhF
-EjJ/SpwomjGan2lhcq3eBPD6YThChFY8+MfWgCFiXiokROuieh4W8jptfh78NmXL
-H1MAr7D8qmkg38TV94CuM5lUAC2KK+j5X1dfsEcHS2aTFQcdvE+oZmKdwVyqd9wX
-INywo3CtpXYABblFQf5Rm5VuHMh/1a2jCy8lgbYogKAiFyS7pOA=
-=Q7US
------END PGP SIGNATURE-----
-
---nnHOYA/20KqsmnRe--
+KHJlc2VuZCBhcyBwbGFpbiB0ZXh0KQ0KDQoNCk9uIDI3LzEwLzIzIDAwOjE1LCBXb2xmcmFtIFNh
+bmcgd3JvdGU6DQo+PiArICByZXNldC1ncGlvczoNCj4+ICsgICAgZGVzY3JpcHRpb246DQo+PiAr
+ICAgICAgR1BJTyBwaW4gcHJvdmlkaW5nIGEgY29tbW9uIHJlc2V0IGZvciBhbGwgZG93bnN0cmVh
+bSBkZXZpY2VzLiBUaGlzIEdQSU8NCj4+ICsgICAgICB3aWxsIGJlIGFzc2VydGVkIHRoZW4gcmVs
+ZWFzZWQgYmVmb3JlIHRoZSBkb3duc3RyZWFtIGRldmljZXMgYXJlIHByb2JlZC4NCj4gSG93IGFi
+b3V0IHJlbmFtaW5nIHRoaXMgdG8gImJ1cy1yZXNldC1ncGlvcyI/DQo+DQo+IFJlYXNvbjogV2hl
+biBJIHJlYWQgInJlc2V0LWdwaW9zIiwgdGhlbiBJIGFzc3VtZSB0aGUgZGV2aWNlIGl0c2VsZiB3
+aWxsDQo+IGJlIHJlc2V0LiBJbiB0aGlzIGNhc2UsIHRoZSBNYXJ2ZWxsIEkyQyBjb250cm9sbGVy
+LiBTb21lIEkyQyBtdXggZGV2aWNlcw0KPiBhbmQgUENBOTU2NCBhbHJlYWR5IHVzZSB0aGUgcHJv
+cGVydHkgbGlrZSBJIGRlc2NyaWJlZC4NCg0KSSBkb24ndCBoYXZlIGFuIG9iamVjdGlvbiB0byAi
+YnVzLXJlc2V0LWdwaW9zIiBpdCB3b3VsZCBiZSB0cml2aWFsIGZvciANCm1lIHRvIHNwaW4gYSB2
+NSB3aXRoIHRoZSBuYW1pbmcgY2hhbmdlZCBpZiBldmVyeW9uZSBpcyBpbiBhZ3JlZW1lbnQgDQoo
+Z2l2ZW4gbXkgdGltZXpvbmUgSSBtaWdodCBqdXN0IHNlbmQgb3V0IGEgdjUgd2l0aCB0aGlzIGNo
+YW5nZSBhbmQgdGhlbiANCml0IGNhbiBiZSBhcmd1ZWQgd2hldGhlciB0byBhcHBseSB2NCBvciB2
+NSku
