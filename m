@@ -2,69 +2,64 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6902F7D8997
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Oct 2023 22:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028B27D89A5
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Oct 2023 22:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjJZUSE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Oct 2023 16:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
+        id S231896AbjJZUW0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Oct 2023 16:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232059AbjJZUSD (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Oct 2023 16:18:03 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCA61B1;
-        Thu, 26 Oct 2023 13:18:01 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1e10ba12fd3so899800fac.1;
-        Thu, 26 Oct 2023 13:18:01 -0700 (PDT)
+        with ESMTP id S231971AbjJZUWZ (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Oct 2023 16:22:25 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1148E191
+        for <linux-i2c@vger.kernel.org>; Thu, 26 Oct 2023 13:22:24 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6ce2bcb131fso869625a34.1
+        for <linux-i2c@vger.kernel.org>; Thu, 26 Oct 2023 13:22:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698351480; x=1698956280; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=07Ui+9lOZ5SHQZ2es0x0P8HbzMtRlHTTlpZsM2IC7m0=;
-        b=iksQDlbm4pAR7GqAl6wtbFnw7EtNZ/Yt/2TVUHLMvRImXBoZM35M47zZOUTA9zq41d
-         tl2bjU5wFwuPfLupNuXPBzXZcbfPL/SzBHcZnJ7SlqzPq1hZbgK2AhbBzXWDT8v/zjED
-         nVWpjVyKuutuyW7gcyB4lOdhSk5GDSmePF0lgibenE3PugpkbngojkL/x8huS8CK3H4N
-         0wBTV8NbtO32GDRAsRBuLe0ban1B2t4vjt1xiNuFyehijAnMePt1i9bWXQKU7X6fJPAo
-         6lJM2hD16EeepIrlFgs//v7ACd0irBvD68azkrvJ25NhnO74N/2A8RyB+YnYKfk6ZoOW
-         2OlA==
+        d=gmail.com; s=20230601; t=1698351743; x=1698956543; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ITV7DfUrBErTol4ZaiZ+WFwhsF5OaCUltzrNUsSzGsY=;
+        b=bE3aJsPHZnRNogsIbyNMl2B8/xAwlFWyPENlorEIChIbJt6gkiUTdr7duJIayLquj3
+         gYPSqFoHD7C4XDU8K3TfOGGnYq6KKIIuMt6bHulaA6Vc+Uf1fEIJPHbMJGOpjNwuHEVN
+         ua1l4uvP2NvEP3ErPOk5a+cIuZ0Q0q+qP7uPC1aynd3gfiJYMlOtQXYNM9LJZVXPweIs
+         KsN2hhez/qWj02gR49NXu0+NWhS5p9gbYI8SnDuA2pCPsieSdA2eNXvoorP1/ihdZQJ9
+         En9PWDEGT84mOuGSWNN6cuJ9jZ2RyfB6+1WpwwY8TUJfDLxwV6JSluNNDaaRsH35eeUy
+         /EZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698351480; x=1698956280;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=07Ui+9lOZ5SHQZ2es0x0P8HbzMtRlHTTlpZsM2IC7m0=;
-        b=o+bwJMvbJkXQElnANVZNH2APmFamavTtuMVnTnpgS6UwlKqkzKfi5Du85c0JObvPkS
-         TkJay5L1/4u9I0Bm2MrW47CVTM2o3oefYc5wWEk8mj52fQ1Qaz2X5M+yIGm6AQPQSQl7
-         BZngJKSxRe1lGLoNKytiAsgr3HjRV1NtEPjyorPkitsst+8s9EUxxyJhPJ2BzryI2GAc
-         9JsECyzUkGl/SjBjgr3Cjda821y6YUQX2G5DF1vdtG2ySM1TlHCcp3rHjn0blVtPjwlE
-         EWFnvmCx+q7Re0jUPHyHcT0MIq3OxdwnndB31ENyE466ogfPBknGpU9JJGlWhnceFPXQ
-         jCmw==
-X-Gm-Message-State: AOJu0YzhTVX8TVRFMkNCTS/O8ONAaxt8dfuZCns/U/IzweJwa3lpx1KH
-        o4x1NrQ1OBGsN3V0hOGugvtdGHkrshA=
-X-Google-Smtp-Source: AGHT+IE4aJUBYDPZBs+yPfTzhtb9gDAa54bBXzEeO5fpsTqB3xOZHDAPVFC5rFkbzO1MJG70SVUTWA==
-X-Received: by 2002:a05:6871:8785:b0:1ea:206e:cb10 with SMTP id td5-20020a056871878500b001ea206ecb10mr916993oab.22.1698351480388;
-        Thu, 26 Oct 2023 13:18:00 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698351743; x=1698956543;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ITV7DfUrBErTol4ZaiZ+WFwhsF5OaCUltzrNUsSzGsY=;
+        b=W3RPM7vF+FqVhKTaBtPcb0kJPpJX1FYWg5ohShgR6R0twpjysoRMbxvITjowLRCj5T
+         0fGTiHLi4CB/StJ6pJ4+rLOwT5PQy7dwcNwOI5UN80vjDwHlkYhkwMDwoF4TXSWlw24w
+         cQQtPVnHMlgAxfj4Q2Ud3AVMxGU3deD3BBMmRfH+zeW2MM6TkaqjBCY5yhgQyKkZvDON
+         v6YIGJZD4IbZ3WaUWsRR0ni6BEjEmibX4ThilwmUinrLMeokyVHdrryt3po6MgBaGVZd
+         9tA9Rr+K2tFsBOzOjXzxLaMGJ0k7KBbQr8d9nl/amPD95tYu81vE3us6PPI3JJcPXzYh
+         NiWw==
+X-Gm-Message-State: AOJu0YxxvZQQcDZy7FyrrNJQWDAy+KbNK/8KoCqGDgefJS9XRCEuA1fJ
+        q3GRJy6V0vYmMec69gB147iPMV9yPfE=
+X-Google-Smtp-Source: AGHT+IGP2uRqgOLMw/KzmYgN8tLHP2jFEDSY3mkVlOZXHQANxpmbJ4tp1uuG78U7TXuA4AkfgJuOZA==
+X-Received: by 2002:a05:6830:61a:b0:6bf:12:5189 with SMTP id w26-20020a056830061a00b006bf00125189mr497589oti.26.1698351743127;
+        Thu, 26 Oct 2023 13:22:23 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:95bf:4b00:95bb:38e6:4df0:e5c4? (dynamic-2a02-3100-95bf-4b00-95bb-38e6-4df0-e5c4.310.pool.telefonica.de. [2a02:3100:95bf:4b00:95bb:38e6:4df0:e5c4])
-        by smtp.googlemail.com with ESMTPSA id w20-20020a056830411400b006b8c87551e8sm1022ott.35.2023.10.26.13.17.58
+        by smtp.googlemail.com with ESMTPSA id i22-20020a9d68d6000000b006ce33ba6474sm2899oto.4.2023.10.26.13.22.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Oct 2023 13:18:00 -0700 (PDT)
-Message-ID: <91ce35e4-8796-4d29-8121-20a39daedea8@gmail.com>
-Date:   Thu, 26 Oct 2023 22:17:57 +0200
+        Thu, 26 Oct 2023 13:22:22 -0700 (PDT)
+Message-ID: <6e50ca17-18bf-4bcb-a69b-c9e7736ce677@gmail.com>
+Date:   Thu, 26 Oct 2023 22:22:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] ACPI: Add helper acpi_use_parent_companion
-To:     Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        linux-acpi@vger.kernel.org
-References: <90bd1071-317e-4dfe-b94b-9bcee15d66c5@gmail.com>
- <6e935761-5b36-411a-ac82-cbc394bba7b6@gmail.com>
- <20231024173338.haei2py7izlqxjmw@zenone.zhora.eu> <ZTqhNCNCtUk+mz1n@shikoro>
+Subject: Re: [PATCH] i2c: Mark I2C_CLASS_DDC as deprecated and emit warning if
+ adapters declare support for it
 Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <5c521229-18be-47dc-baa9-cabd78420cad@gmail.com>
+ <ZTqj6BKcNYzEkZpp@shikoro>
 From:   Heiner Kallweit <hkallweit1@gmail.com>
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
@@ -109,31 +104,44 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <ZTqhNCNCtUk+mz1n@shikoro>
+In-Reply-To: <ZTqj6BKcNYzEkZpp@shikoro>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 26.10.2023 19:26, Wolfram Sang wrote:
+On 26.10.2023 19:37, Wolfram Sang wrote:
+> Hi Heiner!
 > 
->> Wolfram, can we take this in i2c? Otherwise this will take two
->> release rounds to get in.
+>> With removal of the legacy eeprom driver the only i2c client device
+>> driver with I2C_CLASS_DDC is gone, so it's time to mark I2C_CLASS_DDC
+>> as deprecated.
 > 
-> In general, I can, no problem. But there is still on-going discussion
-> regarding patch 2. So, I will wait for a conclusion there. I am not
-> familiar enough with ACPI to have an own opinion about that topic.
+> OK, but I will need to wait until the eeprom-removal hits mainline.
 > 
-Not sure whether the discussion is ongoing, my impression is it stalled.
-Rafael as ACPI maintainer thinks the helper makes sense and therefore
-acked it. Andi shares this opinion, and others like Jean have doubts.
-For sure I won't receive a Turing award for this helper, but it's IMO
-better than the cascaded macros.
+>> Use pr_warn_once, because graphics adapters can have several i2c
+>> busses and we may see the warning multiple times otherwise.
+>>
+>> Note:
+>> Driver staging/olpc_dcon declares support for classes HWMON and DDC,
+>> but only HWMON is used with the scx200_acb adapter driver on olpc
+>> devices.
+> 
+> And why don't we remove its DDC declaration here in this patch?
+> 
+OK, will submit this as follow-up.
+
+> Thanks for cleaning this up!
+> 
+> Regards,
+> 
+>    Wolfram
+> 
 
