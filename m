@@ -2,65 +2,66 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028B27D89A5
-	for <lists+linux-i2c@lfdr.de>; Thu, 26 Oct 2023 22:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F06F7D89D4
+	for <lists+linux-i2c@lfdr.de>; Thu, 26 Oct 2023 22:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbjJZUW0 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Oct 2023 16:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
+        id S229785AbjJZUtc (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 26 Oct 2023 16:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbjJZUWZ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Oct 2023 16:22:25 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1148E191
-        for <linux-i2c@vger.kernel.org>; Thu, 26 Oct 2023 13:22:24 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6ce2bcb131fso869625a34.1
-        for <linux-i2c@vger.kernel.org>; Thu, 26 Oct 2023 13:22:24 -0700 (PDT)
+        with ESMTP id S229649AbjJZUtb (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Oct 2023 16:49:31 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB961A7
+        for <linux-i2c@vger.kernel.org>; Thu, 26 Oct 2023 13:49:29 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-3b2e4107f47so864269b6e.2
+        for <linux-i2c@vger.kernel.org>; Thu, 26 Oct 2023 13:49:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698351743; x=1698956543; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ITV7DfUrBErTol4ZaiZ+WFwhsF5OaCUltzrNUsSzGsY=;
-        b=bE3aJsPHZnRNogsIbyNMl2B8/xAwlFWyPENlorEIChIbJt6gkiUTdr7duJIayLquj3
-         gYPSqFoHD7C4XDU8K3TfOGGnYq6KKIIuMt6bHulaA6Vc+Uf1fEIJPHbMJGOpjNwuHEVN
-         ua1l4uvP2NvEP3ErPOk5a+cIuZ0Q0q+qP7uPC1aynd3gfiJYMlOtQXYNM9LJZVXPweIs
-         KsN2hhez/qWj02gR49NXu0+NWhS5p9gbYI8SnDuA2pCPsieSdA2eNXvoorP1/ihdZQJ9
-         En9PWDEGT84mOuGSWNN6cuJ9jZ2RyfB6+1WpwwY8TUJfDLxwV6JSluNNDaaRsH35eeUy
-         /EZw==
+        d=gmail.com; s=20230601; t=1698353369; x=1698958169; darn=vger.kernel.org;
+        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gJjai3VGOwsHwC0U2O9UgtGT7zp2nRk2Qh6Ik0LTrGM=;
+        b=kaNH/Aki8ujiMg8eZVEZohHy6NN3R+dB6FVTTBeAq2k5ydN8TKY9czn3yBGFuz2HbQ
+         PjE5UgQsPsijGAOMd4TTV2fBsBR4O4NooRYd+UVhfDf/K7U7VYefEKBlnlqaYtJxxHDf
+         Nz32U6V52ZHq0SpvrMpoDBFaX9k9FEq+aNoURf+CpRr8UsCbvvctScl3PDjWmgCALQD8
+         FYIe8UaCLCPtch+v5nht0e06SLoXDegb6tJAM97h77Ubwpwpt5BzETMn3sgwEdv+UIi+
+         rpDWS4j8jdk9y0Cq1LXo/KOXc22eNkH4jz+7y4Q6/izcr6Qo1PTR9xYaJjDsyLd5iRAk
+         rw6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698351743; x=1698956543;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1698353369; x=1698958169;
+        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ITV7DfUrBErTol4ZaiZ+WFwhsF5OaCUltzrNUsSzGsY=;
-        b=W3RPM7vF+FqVhKTaBtPcb0kJPpJX1FYWg5ohShgR6R0twpjysoRMbxvITjowLRCj5T
-         0fGTiHLi4CB/StJ6pJ4+rLOwT5PQy7dwcNwOI5UN80vjDwHlkYhkwMDwoF4TXSWlw24w
-         cQQtPVnHMlgAxfj4Q2Ud3AVMxGU3deD3BBMmRfH+zeW2MM6TkaqjBCY5yhgQyKkZvDON
-         v6YIGJZD4IbZ3WaUWsRR0ni6BEjEmibX4ThilwmUinrLMeokyVHdrryt3po6MgBaGVZd
-         9tA9Rr+K2tFsBOzOjXzxLaMGJ0k7KBbQr8d9nl/amPD95tYu81vE3us6PPI3JJcPXzYh
-         NiWw==
-X-Gm-Message-State: AOJu0YxxvZQQcDZy7FyrrNJQWDAy+KbNK/8KoCqGDgefJS9XRCEuA1fJ
-        q3GRJy6V0vYmMec69gB147iPMV9yPfE=
-X-Google-Smtp-Source: AGHT+IGP2uRqgOLMw/KzmYgN8tLHP2jFEDSY3mkVlOZXHQANxpmbJ4tp1uuG78U7TXuA4AkfgJuOZA==
-X-Received: by 2002:a05:6830:61a:b0:6bf:12:5189 with SMTP id w26-20020a056830061a00b006bf00125189mr497589oti.26.1698351743127;
-        Thu, 26 Oct 2023 13:22:23 -0700 (PDT)
+        bh=gJjai3VGOwsHwC0U2O9UgtGT7zp2nRk2Qh6Ik0LTrGM=;
+        b=qQRGo0+wjfAMHxkDY7Re0aC0XR8b8cxvk/Yui+54kWvfd2zypllds0Xz5Aw5fzwzFV
+         GeNZh+aPB4T5EwsVKE0toV84hYLvpJRHXSiPttchLq9+oWCIbgcIHH8UcE/0Dt6vNuCd
+         5GpvKjYk27/rus9yPcXwl/NtCVkIuz1Q+8Ir7s4Wgk1mp8vF67x5lVuxWIJvONhdEAIg
+         NCCQnlH4mVrPBreKR0t40ZLom4Bd+1mcV0VVZ3QsBq2nns+yQLeCEo/MGS9cxqGBdPFx
+         gA4sEM6NM1hd/2n/UQNmyL85PVp2SwGmhBYs8LkdoMNFPHSKc02XQv+DADhcUofHUjf2
+         ogoA==
+X-Gm-Message-State: AOJu0YwSdN8M/qVgoKvoxtPJMWu6h2cVDGwr79cQpFYcA57gpZ3xXIab
+        xo/GDWJq1jYDEdzrpjxpCpA=
+X-Google-Smtp-Source: AGHT+IEf9lIE8p3xJjhCUgB6e5TmFDWolM7ODCud1kszkEoiDHo4k6JopL/fHLT4lbeSkJ15q2V61Q==
+X-Received: by 2002:a54:418f:0:b0:3b2:d9d8:4039 with SMTP id 15-20020a54418f000000b003b2d9d84039mr581113oiy.24.1698353368981;
+        Thu, 26 Oct 2023 13:49:28 -0700 (PDT)
 Received: from ?IPV6:2a02:3100:95bf:4b00:95bb:38e6:4df0:e5c4? (dynamic-2a02-3100-95bf-4b00-95bb-38e6-4df0-e5c4.310.pool.telefonica.de. [2a02:3100:95bf:4b00:95bb:38e6:4df0:e5c4])
-        by smtp.googlemail.com with ESMTPSA id i22-20020a9d68d6000000b006ce33ba6474sm2899oto.4.2023.10.26.13.22.22
+        by smtp.googlemail.com with ESMTPSA id bh16-20020a056808181000b003b2e536a96dsm26178oib.24.2023.10.26.13.49.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Oct 2023 13:22:22 -0700 (PDT)
-Message-ID: <6e50ca17-18bf-4bcb-a69b-c9e7736ce677@gmail.com>
-Date:   Thu, 26 Oct 2023 22:22:21 +0200
+        Thu, 26 Oct 2023 13:49:28 -0700 (PDT)
+Message-ID: <da3070d9-e016-4167-843f-a08d5b2dc1fe@gmail.com>
+Date:   Thu, 26 Oct 2023 22:49:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: Mark I2C_CLASS_DDC as deprecated and emit warning if
- adapters declare support for it
 Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>,
+To:     Jens Frederich <jfrederich@gmail.com>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     linux-staging@lists.linux.dev,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <5c521229-18be-47dc-baa9-cabd78420cad@gmail.com>
- <ZTqj6BKcNYzEkZpp@shikoro>
 From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH] staging: olpc_dcon: Remove I2C_CLASS_DDC support
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -104,44 +105,50 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <ZTqj6BKcNYzEkZpp@shikoro>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 26.10.2023 19:37, Wolfram Sang wrote:
-> Hi Heiner!
-> 
->> With removal of the legacy eeprom driver the only i2c client device
->> driver with I2C_CLASS_DDC is gone, so it's time to mark I2C_CLASS_DDC
->> as deprecated.
-> 
-> OK, but I will need to wait until the eeprom-removal hits mainline.
-> 
->> Use pr_warn_once, because graphics adapters can have several i2c
->> busses and we may see the warning multiple times otherwise.
->>
->> Note:
->> Driver staging/olpc_dcon declares support for classes HWMON and DDC,
->> but only HWMON is used with the scx200_acb adapter driver on olpc
->> devices.
-> 
-> And why don't we remove its DDC declaration here in this patch?
-> 
-OK, will submit this as follow-up.
+olpc_dcon is the only remaining i2c client device driver declaring
+I2C_CLASS_DDC support after the legacy eeprom driver has been removed.
 
-> Thanks for cleaning this up!
-> 
-> Regards,
-> 
->    Wolfram
-> 
+olpc_dcon is only used on olpc devices, connected to an i2c adapter
+driven by scx200_acb. This adapter driver declares support for
+I2C_CLASS_HWMON and I2C_CLASS_SPD. Therefore we can safely drop
+I2C_CLASS_DDC support in olpc_dcon.
+
+That's the last step before I2C_CLASS_DDC can be removed in general.
+
+This patch is solely based on documentation, and I don't have an olpc
+device for testing. Therefore some testing would be appreciated before
+patch is applied.
+
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ drivers/staging/olpc_dcon/olpc_dcon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/olpc_dcon/olpc_dcon.c b/drivers/staging/olpc_dcon/olpc_dcon.c
+index d5271eac1..08ec3aae9 100644
+--- a/drivers/staging/olpc_dcon/olpc_dcon.c
++++ b/drivers/staging/olpc_dcon/olpc_dcon.c
+@@ -777,7 +777,7 @@ static struct i2c_driver dcon_driver = {
+ 		.name	= "olpc_dcon",
+ 		.pm = &dcon_pm_ops,
+ 	},
+-	.class = I2C_CLASS_DDC | I2C_CLASS_HWMON,
++	.class = I2C_CLASS_HWMON,
+ 	.id_table = dcon_idtable,
+ 	.probe = dcon_probe,
+ 	.remove = dcon_remove,
+-- 
+2.42.0
 
