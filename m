@@ -2,172 +2,118 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1E97DA100
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Oct 2023 20:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6493E7DA13C
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Oct 2023 21:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346544AbjJ0SsE (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Oct 2023 14:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
+        id S231351AbjJ0TWm (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Oct 2023 15:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235244AbjJ0Srq (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Oct 2023 14:47:46 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F2D1BCC
-        for <linux-i2c@vger.kernel.org>; Fri, 27 Oct 2023 11:47:23 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-32db8f8441eso1632594f8f.0
-        for <linux-i2c@vger.kernel.org>; Fri, 27 Oct 2023 11:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1698432441; x=1699037241; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KM+51/Ab8q9Ob1ygxdet2j1y8TyHO4eFE3VACdVz/qw=;
-        b=hCuE/XxwPWtTF5iPZCADkjYwkp3/0mZ6nKDv0DQRwhpG7VqVl6uaOMi8jODvzcPCKU
-         3/rLFVByVldZignqZ8Pu2hoQy4huW4sidrnJtIq5OTI2qgCCK0gVBKjFTehBnURx5ahP
-         WvrgmMdLu4wXIcCC0V8qAthInYguwJmi8PpYCzjN4o0MwLIknYh1PJE4XFwPQzn2XLwA
-         aLBvZ9o+lFjAoxBo4YvRM0nCXn4NNX3ESvwvNZr104NUKwV/bbrXwIm0TtoC4kehqXOw
-         GHddrQwKZCwpvXbPG6uBw3vD6PWijNYwMec8oAGWfi/4kEfrot7lkuvV4AbGpXqcS85U
-         aAtQ==
+        with ESMTP id S230451AbjJ0TWm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Oct 2023 15:22:42 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A6818A;
+        Fri, 27 Oct 2023 12:22:39 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1e5bc692721so1448839fac.0;
+        Fri, 27 Oct 2023 12:22:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698432441; x=1699037241;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KM+51/Ab8q9Ob1ygxdet2j1y8TyHO4eFE3VACdVz/qw=;
-        b=IhsBV5n5gihLg1RPssdboonjGRicQRtTTkdL/F6v4L8N4THRq3l2maWHWOrBPyIf2D
-         ce7Dfb95jIREC9oIlWfcK7/lxTQ5cmUS9HqjX4MRkW15EUq+9diapHeDQIu7zl1SYpQY
-         sCSQCIiyyyLffSPEzD+/sfSvFjMENoV9kqaN+9w7tYFCEVFy6O+/WLFC2XKb+nmJruos
-         E/yC3EE0zL/sJHUKxXJdTNArt2fU3EQBltUIsvrPSgidgEhDPTyShcOOybrZgBM1JZEM
-         kMIsw2lhm4+gdviQMybRrDsYuZsUYWTV4jxZMkBMGZQqckGEKiameGQX6xstVBQ2Rsqq
-         kQYg==
-X-Gm-Message-State: AOJu0YyE/1pFNhWCIYUmYWuR5gnMNCB6vfOv/3SjAGoKh1FtUJ0uUs6k
-        DGsitB2eJIC/LWlSN8C0WOqeNUa+gbEl+F7pou5j+Q==
-X-Google-Smtp-Source: AGHT+IFWqlm00BaupR79L1SlcmNEIRt9UdMgo4l4svnvWQ4cGIzxVBiML9tRB/CNAPiaAGmfj7WFSQ==
-X-Received: by 2002:a5d:5b0e:0:b0:32d:ad4a:bcef with SMTP id bx14-20020a5d5b0e000000b0032dad4abcefmr3447970wrb.2.1698432440652;
-        Fri, 27 Oct 2023 11:47:20 -0700 (PDT)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id j12-20020adfe50c000000b0032d893d8dc8sm2298527wrm.2.2023.10.27.11.47.19
+        d=1e100.net; s=20230601; t=1698434558; x=1699039358;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A9jsGRebq8pjluBKi445sl0SsEqPdZ2Zl/0kDDzL9uM=;
+        b=ZPaqGMLoGsU5CRBRi9UtF4mI9UdY6gQaiW+pxIq+wy/lKVS2fZZOjn4wPGpd2pCWOv
+         C/3X3PjVNotwuOLMUV+t0Cwysf6184Vp34yODSomWjalKNs8pWlUloq2fEs93+DyicZ3
+         P1njzd2Pl0IkOhbTFAnbqqF6LxwgDxSJnLjLfSGG2Hm8RggMmTDbFjQpHQbDTvzmhM6X
+         JVPd361m5UkPL+5VrJTscZXZe63FUMs3sq5weFOja+lK08jVQgSvKHZAztSnfcHWvwL1
+         +ZsFpnPmUgoCcTIfSVv5sq/3+tFcKnP6tDgaKKdbsFFEV/VVJm+h6w8RDmPqcbFnQhAm
+         rp8w==
+X-Gm-Message-State: AOJu0Yy3nfjTCGtWbsLmVEiItVJVAjoNlo25ZLwGukayA4PxrKBjOOI+
+        +F2f06iEyAK/oYUu3sSUvw==
+X-Google-Smtp-Source: AGHT+IGI5DUU/lE7E5bfhiKYkZ2U5RZ+9Ps+0bmLbokwsngLhoH+QPV0HcchdfFxVVZX3O0J0iDL9g==
+X-Received: by 2002:a05:6870:582:b0:1e9:f4e4:2882 with SMTP id m2-20020a056870058200b001e9f4e42882mr4189126oap.38.1698434558282;
+        Fri, 27 Oct 2023 12:22:38 -0700 (PDT)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ea53-20020a056870073500b001e9ce1b5e8fsm415203oab.15.2023.10.27.12.22.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Oct 2023 11:47:20 -0700 (PDT)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     andi.shyti@kernel.org, robh@kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/2] i2c: muxes: pca954x: Enable features on MAX7357
-Date:   Fri, 27 Oct 2023 18:47:08 +0000
-Message-ID: <20231027184709.1541375-2-naresh.solanki@9elements.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231027184709.1541375-1-naresh.solanki@9elements.com>
-References: <20231027184709.1541375-1-naresh.solanki@9elements.com>
+        Fri, 27 Oct 2023 12:22:37 -0700 (PDT)
+Received: (nullmailer pid 3086934 invoked by uid 1000);
+        Fri, 27 Oct 2023 19:22:36 -0000
+Date:   Fri, 27 Oct 2023 14:22:36 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        krzysztof.kozlowski+dt@linaro.org, gregory.clement@bootlin.com,
+        andi.shyti@kernel.org, conor+dt@kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>
+Subject: Re: [PATCH v5 1/2] dt-bindings: i2c: mv64xxx: add bus-reset-gpios
+ property
+Message-ID: <20231027192236.GA2946793-robh@kernel.org>
+References: <20231027033104.1348921-1-chris.packham@alliedtelesis.co.nz>
+ <20231027033104.1348921-2-chris.packham@alliedtelesis.co.nz>
+ <ZTt+ZgNe5Y35E/C2@shikoro>
+ <7bfa2f6c-3e99-49a6-9b5a-81398d4bce7e@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7bfa2f6c-3e99-49a6-9b5a-81398d4bce7e@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+On Fri, Oct 27, 2023 at 01:25:56PM +0200, Krzysztof Kozlowski wrote:
+> On 27/10/2023 11:09, Wolfram Sang wrote:
+> > On Fri, Oct 27, 2023 at 04:31:03PM +1300, Chris Packham wrote:
+> >> Add bus-reset-gpios and bus-reset-duration-us properties to the
+> >> marvell,mv64xxx-i2c binding. These can be used to describe hardware
+> >> where a common reset GPIO is connected to all downstream devices on and
+> >> I2C bus. This reset will be asserted then released before the downstream
+> >> devices on the bus are probed.
+> >>
+> >> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> >> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > Krzysztof, are you fine with this change?
+> 
+> Actually no. NAK.
+> 
+> Not because of the naming, but because the new name triggered some new
+> paths in my brain which brought the point - this is old problem of power
+> sequencing of children.
+> 
+> I believe this must be solved in more generic way. First - generic for
+> all I2C devices. Second - generic also matching other buses/subsystems,
+> which have similar problem. We did it for USB (onboard USB), MMC
+> (unloved MMC power sequence) and now we are doing it for PCIe and few
+> others (Cc: Abel)
 
-Enable additional features based on DT settings and unconditionally
-release the shared interrupt pin after 1.6 seconds and allow to use
-it as reset.
+Unlike the others I2C doesn't expect to access the bus/device before 
+devices probe, right?
 
-These features aren't enabled by default and it's up to board designer
-to validate for proper functioning and detection of devices in secondary
-bus as sometimes it can cause secondary bus being disabled.
+> https://lpc.events/event/17/contributions/1507/
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+Oh, good!
 
----
-Changes in V5:
-- Fix typos
-- Update comment
-- Add newline in dev_warn
-Changes in V4:
-- Drop max7358
-- Update #define
-- Move conf variable
-- Print warning when I2C_FUNC_SMBUS_WRITE_BYTE_DATA isn't supported
-Changes in V3:
-- Delete unused #define
-- Update pca954x_init
-- Update commit message
-Changes in V2:
-- Update comments
-- Update check for DT properties
----
- drivers/i2c/muxes/i2c-mux-pca954x.c | 43 ++++++++++++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
+> Current solution is heavily limited. What about regulators? What about
+> buses having 2 reset lines (still the same bus)? What about sequence?
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 2219062104fb..f5dfc33b97c0 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -57,6 +57,20 @@
- 
- #define PCA954X_IRQ_OFFSET 4
- 
-+/*
-+ * MAX7357's configuration register is writeable after POR, but
-+ * can be locked by setting the basic mode bit. MAX7358 configuration
-+ * register is locked by default and needs to be unlocked first.
-+ * The configuration register holds the following settings:
-+ */
-+#define MAX7357_CONF_INT_ENABLE			BIT(0)
-+#define MAX7357_CONF_FLUSH_OUT			BIT(1)
-+#define MAX7357_CONF_RELEASE_INT		BIT(2)
-+#define MAX7357_CONF_DISCON_SINGLE_CHAN		BIT(4)
-+#define MAX7357_CONF_PRECONNECT_TEST		BIT(7)
-+
-+#define MAX7357_POR_DEFAULT_CONF		MAX7357_CONF_INT_ENABLE
-+
- enum pca_type {
- 	max_7356,
- 	max_7357,
-@@ -470,7 +484,34 @@ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
- 	else
- 		data->last_chan = 0; /* Disconnect multiplexer */
- 
--	ret = i2c_smbus_write_byte(client, data->last_chan);
-+	if (device_is_compatible(&client->dev, "maxim,max7357")) {
-+		if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WRITE_BYTE_DATA)) {
-+			u8 conf = MAX7357_POR_DEFAULT_CONF;
-+			/*
-+			 * The interrupt signal is shared with the reset pin. Release the
-+			 * interrupt after 1.6 seconds to allow using the pin as reset.
-+			 */
-+			conf |= MAX7357_CONF_RELEASE_INT;
-+
-+			if (device_property_read_bool(&client->dev, "maxim,isolate-stuck-channel"))
-+				conf |= MAX7357_CONF_DISCON_SINGLE_CHAN;
-+			if (device_property_read_bool(&client->dev,
-+						      "maxim,send-flush-out-sequence"))
-+				conf |= MAX7357_CONF_FLUSH_OUT;
-+			if (device_property_read_bool(&client->dev,
-+						      "maxim,preconnection-wiggle-test-enable"))
-+				conf |= MAX7357_CONF_PRECONNECT_TEST;
-+
-+			ret = i2c_smbus_write_byte_data(client, data->last_chan, conf);
-+		} else {
-+			dev_warn(&client->dev, "Write byte data not supported."
-+				 "Cannot enable enhanced mode features\n");
-+			ret = i2c_smbus_write_byte(client, data->last_chan);
-+		}
-+	} else {
-+		ret = i2c_smbus_write_byte(client, data->last_chan);
-+	}
-+
- 	if (ret < 0)
- 		data->last_chan = 0;
- 
--- 
-2.41.0
+A more complicated case should be handled by the device's driver. If the 
+GPIO reset was not shared we'd be handling it there too. I think what's 
+needed is to solve the shared aspect. That's already done with reset 
+subsys, so I think making 'reset-gpios' handled by it too is the way 
+forward. That would handle the QCA WiFi/BT case I think.
 
+I'm not sure waiting for that or something else to happen is worth 
+holding up this simple case. It's not the only case of a common reset 
+for a bus (MDIO).
+
+Rob
