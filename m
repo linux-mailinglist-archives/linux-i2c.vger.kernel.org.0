@@ -2,102 +2,104 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829C07D97FF
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Oct 2023 14:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B927D990A
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Oct 2023 14:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345539AbjJ0M1Z (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Oct 2023 08:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
+        id S1345598AbjJ0Mzq (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Oct 2023 08:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjJ0M1Y (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Oct 2023 08:27:24 -0400
-Received: from mail.bugwerft.de (mail.bugwerft.de [46.23.86.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3392F121
-        for <linux-i2c@vger.kernel.org>; Fri, 27 Oct 2023 05:27:21 -0700 (PDT)
-Received: from [172.24.14.91] (unknown [62.214.9.170])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id 3FDF62800EE;
-        Fri, 27 Oct 2023 12:27:18 +0000 (UTC)
-Message-ID: <117fc55f-05b8-41f9-8e46-e7c1d5202cdc@zonque.org>
-Date:   Fri, 27 Oct 2023 14:27:17 +0200
+        with ESMTP id S1345541AbjJ0Mzp (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Oct 2023 08:55:45 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D161B1;
+        Fri, 27 Oct 2023 05:55:43 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D6DC433CC;
+        Fri, 27 Oct 2023 12:55:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698411340;
+        bh=wSX3hZkZaTrYS5zn46sQAvcYVUlw291hdHsmheCFw7A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T3uPk2WaIv4i+lUBOQtRXwUHb6Q58T0/wvONVvtFSn1Maj2zynMwpNQLYcJMhojwb
+         m4OF8V5DmUPf5d9ZqiJvGGXq1kmX0DYJhYCkDy8aOYjXbpOisO7srwSCXzBgOKt8Y7
+         cuG6nloPsP8cLC46m9ETXxE4Q2kfi03LdjvVovY/QfoQoTiWHILg0XA1pMsnBvHcpz
+         bSCYynI2H3pxPJ9goZ81qdQrFgDxJqSvn/ARGKbLQGp+tepha+6nJVrzD9agmDzh0f
+         USBH9Ou1z9sp2GZDdfEnonBMQhPzlmnxvxohAj/G8Huch9rDMnltoNcnWRILfLMQin
+         1wXMMhIWCtpqQ==
+Date:   Fri, 27 Oct 2023 14:55:37 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        gregory.clement@bootlin.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] i2c: mv64xxx: add an optional bus-reset-gpios
+ property
+Message-ID: <20231027125537.5d5cu3wc4r4c2yb4@zenone.zhora.eu>
+References: <20231027033104.1348921-1-chris.packham@alliedtelesis.co.nz>
+ <20231027033104.1348921-3-chris.packham@alliedtelesis.co.nz>
+ <65911ec0-e073-435f-846a-c5501dd5d3a9@linaro.org>
+ <9eebec9b-e6fd-4a22-89ea-b434f446e061@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: core: fix lockdep warning for sparsely nested
- adapter chain
-Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-References: <20231018094613.849007-1-daniel@zonque.org>
- <ZTqcB/JOZ8+GXq4b@shikoro>
-From:   Daniel Mack <daniel@zonque.org>
-In-Reply-To: <ZTqcB/JOZ8+GXq4b@shikoro>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9eebec9b-e6fd-4a22-89ea-b434f446e061@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Wolfram,
+Hi Krzysztof,
 
-On 10/26/23 19:04, Wolfram Sang wrote:
-> On Wed, Oct 18, 2023 at 11:46:13AM +0200, Daniel Mack wrote:
->> When adapters are chained in a sparse manner (with intermediate MFD devices,
+On Fri, Oct 27, 2023 at 01:37:05PM +0200, Krzysztof Kozlowski wrote:
+> On 27/10/2023 13:27, Krzysztof Kozlowski wrote:
+> > On 27/10/2023 05:31, Chris Packham wrote:
+> >> Some hardware designs have a GPIO used to control the reset of all the
+> >> devices on and I2C bus. It's not possible for every child node to
+> >> declare a reset-gpios property as only the first device probed would be
+> >> able to successfully request it (the others will get -EBUSY). Represent
 > 
-> So, you have an MFD including an i2c-mux or something?
+> Cc: Mark,
+> 
+> Also this part is not true. If the bus is non-discoverable, then it is
+> possible to have reset-gpios in each probed device. You can share GPIOs,
+> so no problem with -EBUSY at all.
+> 
+> The problem is doing reset:
+> 1. in proper moment for all devices
+> 2. without affecting other devices when one unbinds/remove()
 
-Yes exactly. I have an I2C device that creates MFD devices, and one of
-them creates a child device which is an I2C host. So the hosts are not
-directly linked to one another but in a spare manner.
+yes, I thought that we could get to this point, but I did not
+object the patch as I didn't see an immediate better solution. I
+would still be OK to merge it until we develop something better.
 
->> for instance) the code currently fails to use the correct subclass for
->> the adapter's bus_lock which leads to false-positive lockdep warnings.
->>
->> Fix this by walking the entire pedigree of the device and count all
->> adapters along the way instead of just checking the immediate parent.
-> 
-> Sounds reasonable to me.
-> 
->>
->> Signed-off-by: Daniel Mack <daniel@zonque.org>
->> ---
->> This hit me when during the development of a driver stack that isn't
->> submitted mainline yet. This patch could however be discussed
->> independently I think.
-> 
-> Yes, it can :)
-> 
->>
->>  drivers/i2c/i2c-core-base.c | 6 ++++--
->>  1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
->> index 60746652fd52..4692a1e5ea0a 100644
->> --- a/drivers/i2c/i2c-core-base.c
->> +++ b/drivers/i2c/i2c-core-base.c
->> @@ -1189,9 +1189,11 @@ static void i2c_adapter_dev_release(struct device *dev)
->>  unsigned int i2c_adapter_depth(struct i2c_adapter *adapter)
->>  {
->>  	unsigned int depth = 0;
->> +	struct device *parent;
->>  
->> -	while ((adapter = i2c_parent_is_i2c_adapter(adapter)))
-> 
-> I never noticed we overwrite the 'adapter' function argument. Much
-> better with your version and the local variable.
-> 
->> -		depth++;
->> +	for (parent = adapter->dev.parent; parent; parent = parent->parent)
->> +		if (parent->type == &i2c_adapter_type)
->> +			depth++;
-> 
-> I am not sure myself. Is the code explaining itself or should we add a
-> short comment why we use a for-loop? I tend to leave it as is.
+Let me mull this over and will be back to the topic.
 
-It's pretty obvious what it does I would say.
+Thanks, Krzysztof!
+Andi
 
-
-Thanks,
-Daniel
-
+> The (2) above is not solveable easy in kernel and we already had nice
+> talks about it just few days ago:
+> 1. Apple case:
+> https://social.treehouse.systems/@marcan/111268780311634160
+> 
+> 2. my WSA884x:
+> https://lore.kernel.org/alsa-devel/84f9f1c4-0627-4986-8160-b4ab99469b81@linaro.org/
+> 
+> Last,
+> I would like to apologize to you Chris. I understand that bringing such
+> feedback at v5 is not that good. I had plenty of time to say something
+> earlier, so this is not really professional from my side. I am sorry,
+> just my brain did not connect all these topics together.
+> 
+> I apologize.
+> 
+> Best regards,
+> Krzysztof
