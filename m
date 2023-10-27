@@ -2,158 +2,102 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753C67D8D74
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Oct 2023 05:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C417D8F9A
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Oct 2023 09:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjJ0DbS (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 26 Oct 2023 23:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
+        id S234902AbjJ0HVV (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Oct 2023 03:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234963AbjJ0DbQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 26 Oct 2023 23:31:16 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496C71B2
-        for <linux-i2c@vger.kernel.org>; Thu, 26 Oct 2023 20:31:12 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 32C782C018E;
-        Fri, 27 Oct 2023 16:31:09 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1698377469;
-        bh=eKuOlH3mcTKwkcxUdBepoU2Jh55BslCIjozuw6RTt1Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UHGTRAqko+Q0b0WXRqZnJjtX6W3JwCDQH/zLSuA5oX7hJzut+1BPG6zaAj4HGmO6j
-         fAM/rnMR60SAQhghD1ffROFIWIO25LOqQ4tIcZSoORNxUtu7lJTV1RhOM3Gpjt2bM6
-         b+9wSSykJWQCey0ap2xUM8sc6PL4HRfvtw2k8JdsdBR+mYrLUIJIwTmSDIfjyuLkpv
-         vU3wRq/F4oKhQT6UBqcxckPDNnE9Sh0B9s8pfXUtqoMLu6XAGFexfrLvPZLcDwn0Gc
-         fLp6qdjaJxdjxhvlbkS6tx5j1Fs1XF4gD934eB/mhyvr13216Y9Ygp9ybP6OjUAgO9
-         WLYzQ3W+qtt7g==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B653b2efc0002>; Fri, 27 Oct 2023 16:31:08 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 6086313EE87;
-        Fri, 27 Oct 2023 16:31:08 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 5E956280347; Fri, 27 Oct 2023 16:31:08 +1300 (NZDT)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     gregory.clement@bootlin.com, andi.shyti@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v5 2/2] i2c: mv64xxx: add an optional bus-reset-gpios property
-Date:   Fri, 27 Oct 2023 16:31:04 +1300
-Message-ID: <20231027033104.1348921-3-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231027033104.1348921-1-chris.packham@alliedtelesis.co.nz>
-References: <20231027033104.1348921-1-chris.packham@alliedtelesis.co.nz>
+        with ESMTP id S232306AbjJ0HVU (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Oct 2023 03:21:20 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2E6194;
+        Fri, 27 Oct 2023 00:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698391278; x=1729927278;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rxlH5HwmCqZqMfavoFfoGzozPhjQGaJre4NyNPdtwOc=;
+  b=d/qH66dfNj839STjPsvi+5B/ZVbJO75+yt0XsYet5hkDw4DoDxYF98L4
+   GuvCLHzN/THL9zQyJJXmyQIdgtp2S6ZbOLVsOESOravnBvh3wnXxvK7uS
+   0HVVVpgqpcWkDc8rw1UFv3fYr3Y3OS4ifklFZn2o9K8xiRX8GKtDQgvPN
+   1sQukPo2sr1LoshNh3STE/tCaQcp67hCginlKp+24deLKtCltjEQUsfG4
+   9ftZ2tpImEvgnIUqJTKp2JtCpZ0Z2OXsh+e8yYh2/WG4koo4Np70XaoJL
+   cPFR/Owh8ZZstXTlZ+3RCOUvov5vMAz9Y6qid3iJl5Y7zpwvdA1C3cKsS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10875"; a="378093016"
+X-IronPort-AV: E=Sophos;i="6.03,255,1694761200"; 
+   d="scan'208";a="378093016"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 00:21:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10875"; a="829886894"
+X-IronPort-AV: E=Sophos;i="6.03,255,1694761200"; 
+   d="scan'208";a="829886894"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Oct 2023 00:21:14 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qwH9c-000Aak-2D;
+        Fri, 27 Oct 2023 07:21:12 +0000
+Date:   Fri, 27 Oct 2023 15:20:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
+ bindings
+Message-ID: <202310271540.4uI1Fgxe-lkp@intel.com>
+References: <20231026081514.3610343-2-Delphine_CC_Chiu@Wiwynn.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=L6ZjvNb8 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=bhdUkHdE2iEA:10 a=VsZq4EHS3crWG1I_hwYA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231026081514.3610343-2-Delphine_CC_Chiu@Wiwynn.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Some hardware designs have a GPIO used to control the reset of all the
-devices on and I2C bus. It's not possible for every child node to
-declare a reset-gpios property as only the first device probed would be
-able to successfully request it (the others will get -EBUSY). Represent
-this kind of hardware design by associating the bus-reset-gpios with the
-parent I2C bus. The reset line will be released prior to the child I2C
-devices being probed.
+Hi Delphine,
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
+kernel test robot noticed the following build warnings:
 
-Notes:
-    Changes in v5:
-    - Rename reset-gpios and reset-duration-us to bus-reset-gpios and
-      bus-reset-duration-us as requested by Wolfram
-    Changes in v4:
-    - Add missing gpio/consumer.h
-    - use fsleep() for enforcing reset-duration
-    Changes in v3:
-    - Rename reset-delay to reset-duration
-    - Use reset-duration-us property to control the reset pulse rather th=
-an
-      delaying after the reset
-    Changes in v2:
-    - Add a property to cover the length of delay after releasing the res=
-et
-      GPIO
-    - Use dev_err_probe() when requesing the GPIO fails
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.6-rc7 next-20231026]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- drivers/i2c/busses/i2c-mv64xxx.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Delphine-CC-Chiu/dt-bindings-hwmon-Add-lltc-ltc4286-driver-bindings/20231026-161739
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20231026081514.3610343-2-Delphine_CC_Chiu%40Wiwynn.com
+patch subject: [PATCH v2 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver bindings
+reproduce: (https://download.01.org/0day-ci/archive/20231027/202310271540.4uI1Fgxe-lkp@intel.com/reproduce)
 
-diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv=
-64xxx.c
-index efd28bbecf61..6e2762d22e5a 100644
---- a/drivers/i2c/busses/i2c-mv64xxx.c
-+++ b/drivers/i2c/busses/i2c-mv64xxx.c
-@@ -13,6 +13,7 @@
- #include <linux/slab.h>
- #include <linux/module.h>
- #include <linux/spinlock.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
- #include <linux/mv643xx_i2c.h>
-@@ -160,6 +161,7 @@ struct mv64xxx_i2c_data {
- 	bool			clk_n_base_0;
- 	struct i2c_bus_recovery_info	rinfo;
- 	bool			atomic;
-+	struct gpio_desc	*reset_gpio;
- };
-=20
- static struct mv64xxx_i2c_regs mv64xxx_i2c_regs_mv64xxx =3D {
-@@ -1036,6 +1038,7 @@ mv64xxx_i2c_probe(struct platform_device *pd)
- 	struct mv64xxx_i2c_data		*drv_data;
- 	struct mv64xxx_i2c_pdata	*pdata =3D dev_get_platdata(&pd->dev);
- 	struct resource *res;
-+	u32	reset_duration;
- 	int	rc;
-=20
- 	if ((!pdata && !pd->dev.of_node))
-@@ -1083,6 +1086,14 @@ mv64xxx_i2c_probe(struct platform_device *pd)
- 	if (drv_data->irq < 0)
- 		return drv_data->irq;
-=20
-+	drv_data->reset_gpio =3D devm_gpiod_get_optional(&pd->dev, "bus-reset",=
- GPIOD_OUT_HIGH);
-+	if (IS_ERR(drv_data->reset_gpio))
-+		return dev_err_probe(&pd->dev, PTR_ERR(drv_data->reset_gpio),
-+				     "Cannot get reset gpio\n");
-+	rc =3D device_property_read_u32(&pd->dev, "bus-reset-duration-us", &res=
-et_duration);
-+	if (rc)
-+		reset_duration =3D 1;
-+
- 	if (pdata) {
- 		drv_data->freq_m =3D pdata->freq_m;
- 		drv_data->freq_n =3D pdata->freq_n;
-@@ -1121,6 +1132,11 @@ mv64xxx_i2c_probe(struct platform_device *pd)
- 			goto exit_disable_pm;
- 	}
-=20
-+	if (drv_data->reset_gpio) {
-+		fsleep(reset_duration);
-+		gpiod_set_value_cansleep(drv_data->reset_gpio, 0);
-+	}
-+
- 	rc =3D request_irq(drv_data->irq, mv64xxx_i2c_intr, 0,
- 			 MV64XXX_I2C_CTLR_NAME, drv_data);
- 	if (rc) {
---=20
-2.42.0
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310271540.4uI1Fgxe-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
+
+>> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/ltc4286.rst
+>> MAINTAINERS:27681: WARNING: unknown document: ../devicetree/bindings/hwmon/ltc4286
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
