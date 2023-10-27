@@ -2,242 +2,156 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CF37D9D20
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Oct 2023 17:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B743B7DA0FE
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Oct 2023 20:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346162AbjJ0Pi3 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Oct 2023 11:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
+        id S1346535AbjJ0SsD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Oct 2023 14:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbjJ0Pi2 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Oct 2023 11:38:28 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D48AC;
-        Fri, 27 Oct 2023 08:38:25 -0700 (PDT)
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39RCc60x010675;
-        Fri, 27 Oct 2023 17:37:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        message-id:date:mime-version:from:subject:to:cc:references
-        :in-reply-to:content-type:content-transfer-encoding; s=
-        selector1; bh=137N9qL9i5h4t8Cbod1j95elUvUuNi+rOMR+/nkEcGo=; b=EX
-        /VSOoOTnYBW0p53Tuy8tkZXHrE9TCpRNA/bI48SzdaVOLcAioGGb2rDjfu4AwA5k
-        v32rhDVol8dtT3+OOAzKYell3XeaqdcateC0Ht5f5f44AtAT8RLKlj4pjSRODpXr
-        C0G+tE9HPuhvxq3nm5EGbDWsx+uMm9et8AnfTgvKf1VjaRyB+OoZrlta+QCeusS4
-        DtxnglJxdX6gQPW+fzfVM9T+lLDdVWAiWn4tSE7mlX17rCSRm6jWnka0+g6Fhf8e
-        vNoBtK5Ifbj7KqtJXykvIpXKvK2oehCiK/hsOAlK4WYKA3vfmSNeg4DV8PILG2Rh
-        7NAyCWbRDCK0IX4FDaoA==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tywqq4fmr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Oct 2023 17:37:17 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 023E9100062;
-        Fri, 27 Oct 2023 17:37:14 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6CD2C27DB5D;
-        Fri, 27 Oct 2023 17:37:14 +0200 (CEST)
-Received: from [10.201.20.32] (10.201.20.32) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 27 Oct
- 2023 17:37:12 +0200
-Message-ID: <8fa014c3-c0e9-4183-b4fb-90962f71295a@foss.st.com>
-Date:   Fri, 27 Oct 2023 17:37:11 +0200
+        with ESMTP id S235238AbjJ0Srq (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Oct 2023 14:47:46 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DE41BC
+        for <linux-i2c@vger.kernel.org>; Fri, 27 Oct 2023 11:47:22 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-4083f61322fso18458645e9.1
+        for <linux-i2c@vger.kernel.org>; Fri, 27 Oct 2023 11:47:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1698432439; x=1699037239; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eNQIp/KBXkssBnXnURnyXEtwPP/esZe3h0yYIlPjhVo=;
+        b=QeNtJAt/rdAhVrhvVRHNzf+dYPFLSSlLB1aEaI4Z6ZhcB6zUdTFKAuJ4iZmA9m7y30
+         4XBDnhfk1R9O4BYjV5TjvXzl+iDXoYQkjucAvEsutBB0i68PkAQfuyDIdiObltYosgEJ
+         ZWNXquJ6HrJFbq2QW1q13kfPcOINXDT+lNtWYpgOJGvR+Ar4mdV0t4uzwPbNqpQxL2T6
+         ExrEJd6WxC9eSx97KwLythW1xTRlI6qoJQf/63TD5pDk4xpa9PIWA199TvR78a3snvMZ
+         /ouScNJG8gRR6V746eV5FFE2Jx3W6RRzKaOxwwff4WsZMaPp3N6XkeKnH24dMLKi6lAj
+         xM3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698432439; x=1699037239;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eNQIp/KBXkssBnXnURnyXEtwPP/esZe3h0yYIlPjhVo=;
+        b=sMJC+iiPmKItYW+4cksHjuOIGB3iXN5kmNm+CjWxuHVCduiLxXkGbZS8tKxd+6flDW
+         e1Gl9nPfQYU4XoFPLb0oobpIiJ+qoIrjeh031MwwmGXVmazlm9qDK8mL/2RpQYuDbetO
+         D6nsEHwzqe8qamxaMrtC/INj5KmaSh0HNkJc+Gcu4Yu2QgK/aHe1bVZ41roKYDaCS7mH
+         DXa1svc8Ey7pDr1SNW+f1wMpoRcTQcpAy57YzBkmbfD+w5k8uxHu6R7w3ecAdbvE5B42
+         ueFy/RMMDN1BZtS7FErYPiDi3vW29BIPGWeTKvly+f/KDKK/6vIHEeUkZMKhjQsplXNr
+         +BjA==
+X-Gm-Message-State: AOJu0YxiGGC0omn6VA8oKAb2oRkjvQdVx/An24Bp/xxS+Hl0agg2sy1V
+        CsLc+67Qa03dJeoT6wU7e9GgTA==
+X-Google-Smtp-Source: AGHT+IEvA2K/8e37Llc60+TgJ1tU9QqM7b5P36PhoN+eWvM81UvJpQDoYjKsJZcLO6J4djyErmX9YA==
+X-Received: by 2002:a05:6000:10c5:b0:32d:9a17:2a70 with SMTP id b5-20020a05600010c500b0032d9a172a70mr2605651wrx.68.1698432439392;
+        Fri, 27 Oct 2023 11:47:19 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id j12-20020adfe50c000000b0032d893d8dc8sm2298527wrm.2.2023.10.27.11.47.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Oct 2023 11:47:18 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+To:     Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     robh@kernel.org, Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 1/2] dt-bindings: i2c: pca954x: Add custom properties for MAX7357
+Date:   Fri, 27 Oct 2023 18:47:07 +0000
+Message-ID: <20231027184709.1541375-1-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-Subject: Re: [PATCH v6 10/11] ARM: dts: stm32: add ETZPC as a system bus for
- STM32MP15x boards
-To:     Rob Herring <robh@kernel.org>
-CC:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
-        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
-        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
-        <fabrice.gasnier@foss.st.com>, <andi.shyti@kernel.org>,
-        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <hugues.fruchet@foss.st.com>,
-        <lee@kernel.org>, <will@kernel.org>, <catalin.marinas@arm.com>,
-        <arnd@kernel.org>, <richardcochran@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>, <peng.fan@oss.nxp.com>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-p.hy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20231010125719.784627-1-gatien.chevallier@foss.st.com>
- <20231010125719.784627-11-gatien.chevallier@foss.st.com>
- <20231010184212.GA1221641-robh@kernel.org>
- <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
- <20231012153012.GA698406-robh@kernel.org>
- <b16ed06f-66fd-457b-9610-a67ad07deb60@foss.st.com>
- <20231024163956.GA4049342-robh@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20231024163956.GA4049342-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.20.32]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-27_14,2023-10-27_01,2023-05-22_02
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
+Maxim Max7357 has a configuration register to enable additional
+features. These features aren't enabled by default & its up to
+board designer to enable the same as it may have unexpected side effects.
 
-On 10/24/23 18:39, Rob Herring wrote:
-> On Mon, Oct 16, 2023 at 02:02:39PM +0200, Gatien CHEVALLIER wrote:
->> Hi Rob,
->>
->> On 10/12/23 17:30, Rob Herring wrote:
->>> On Wed, Oct 11, 2023 at 10:49:58AM +0200, Gatien CHEVALLIER wrote:
->>>> Hi Rob,
->>>>
->>>> On 10/10/23 20:42, Rob Herring wrote:
->>>>> On Tue, Oct 10, 2023 at 02:57:18PM +0200, Gatien Chevallier wrote:
->>>>>> ETZPC is a firewall controller. Put all peripherals filtered by the
->>>>>> ETZPC as ETZPC subnodes and reference ETZPC as an
->>>>>> access-control-provider.
->>>>>>
->>>>>> For more information on which peripheral is securable or supports MCU
->>>>>> isolation, please read the STM32MP15 reference manual.
->>>>>>
->>>>>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->>>>>> ---
->>>>>>
->>>>>> Changes in V6:
->>>>>>        	- Renamed access-controller to access-controllers
->>>>>>        	- Removal of access-control-provider property
->>>>>>
->>>>>> Changes in V5:
->>>>>>        	- Renamed feature-domain* to access-control*
->>>>>>
->>>>>>     arch/arm/boot/dts/st/stm32mp151.dtsi  | 2756 +++++++++++++------------
->>>>>>     arch/arm/boot/dts/st/stm32mp153.dtsi  |   52 +-
->>>>>>     arch/arm/boot/dts/st/stm32mp15xc.dtsi |   19 +-
->>>>>>     3 files changed, 1450 insertions(+), 1377 deletions(-)
->>>>>
->>>>> This is not reviewable. Change the indentation and any non-functional
->>>>> change in one patch and then actual changes in another.
->>>>
->>>> Ok, I'll make it easier to read.
->>>>
->>>>>
->>>>> This is also an ABI break. Though I'm not sure it's avoidable. All the
->>>>> devices below the ETZPC node won't probe on existing kernel. A
->>>>> simple-bus fallback for ETZPC node should solve that.
->>>>>
->>>>
->>>> I had one issue when trying with a simple-bus fallback that was the
->>>> drivers were probing even though the access rights aren't correct.
->>>> Hence the removal of the simple-bus compatible in the STM32MP25 patch.
->>>
->>> But it worked before, right? So the difference is you have either added
->>> new devices which need setup or your firmware changed how devices are
->>> setup (or not setup). Certainly can't fix the latter case. You just need
->>> to be explicit about what you are doing to users.
->>>
->>
->> I should've specified it was during a test where I deliberately set
->> incorrect rights on a peripheral and enabled its node to see if the
->> firewall would allow the creation of the device.
->>
->>>
->>>> Even though a node is tagged with the OF_POPULATED flag when checking
->>>> the access rights with the firewall controller, it seems that when
->>>> simple-bus is probing, there's no check of this flag.
->>>
->>> It shouldn't. Those flags are for creating the devices (or not) and
->>> removing only devices of_platform_populate() created.
->>>
->>
->> About the "simple-bus" being a fallback, I think I understood why I saw
->> that the devices were created.
->>
->> All devices under a node whose compatible is "simple-bus" are created
->> in of_platform_device_create_pdata(), called by
->> of_platform_default_populate_init() at arch_initcall level. This
->> before the firewall-controller has a chance to populate it's bus.
->>
->> Therefore, when I flag nodes when populating the firewall-bus, the
->> devices are already created. The "simple-bus" mechanism is not a
->> fallback here as it precedes the driver probe.
->>
->> Is there a safe way to safely remove/disable a device created this way?
-> 
-> There's 2 ways to handle this. Either controlling creating the device or
-> controlling probing the device. The latter should just work with
-> fw_devlink dependency. The former probably needs some adjustment to
-> simple-pm-bus driver if you have 'simple-bus' compatible. You want it to
-> probe on old kernels and not probe on new kernels with your firewall
-> driver. Look at the commit history for simple-pm-bus. There was some
-> discussion on it as well.
-> 
+These should be validated for proper functioning & detection of devices
+in secondary bus as sometimes it can cause secondary bus being disabled.
 
-Hi Rob,
+Add booleans for:
+ - maxim,isolate-stuck-channel
+ - maxim,send-flush-out-sequence
+ - maxim,preconnection-wiggle-test-enable
 
-First, thank you for your suggestions.
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+Changes in V4:
+- Drop max7358.
+Changes in V3:
+- Update commit message
+Changes in V2:
+- Update properties.
+---
+ .../bindings/i2c/i2c-mux-pca954x.yaml         | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-Regarding controlling probing the device: the philosophy of the firewall
-controller was to check a device secure configuration to determine if
-its associated driver should be probed (+handle some firewall
-resources). I'd rather avoid it so that the device isn't created at all.
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+index 2d7bb998b0e9..9aa0585200c9 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+@@ -71,6 +71,23 @@ properties:
+     description: A voltage regulator supplying power to the chip. On PCA9846
+       the regulator supplies power to VDD2 (core logic) and optionally to VDD1.
+ 
++  maxim,isolate-stuck-channel:
++    type: boolean
++    description: Allows to use non faulty channels while a stuck channel is
++      isolated from the upstream bus. If not set all channels are isolated from
++      the upstream bus until the fault is cleared.
++
++  maxim,send-flush-out-sequence:
++    type: boolean
++    description: Send a flush-out sequence to stuck auxiliary buses
++      automatically after a stuck channel is being detected.
++
++  maxim,preconnection-wiggle-test-enable:
++    type: boolean
++    description: Send a STOP condition to the auxiliary buses when the switch
++      register activates a channel to detect a stuck high fault. On fault the
++      channel is isolated from the upstream bus.
++
+ required:
+   - compatible
+   - reg
+@@ -95,6 +112,19 @@ allOf:
+         "#interrupt-cells": false
+         interrupt-controller: false
+ 
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - maxim,max7357
++    then:
++      properties:
++        maxim,isolate-stuck-channel: false
++        maxim,send-flush-out-sequence: false
++        maxim,preconnection-wiggle-test-enable: false
++
+ unevaluatedProperties: false
+ 
+ examples:
 
-I took a look on the simple-bus driver side. I don't see an obvious way
-on how to do it as the firewall controller driver is a module while the
-devices being populated is done at arch initcall level.
+base-commit: 9b156db7e479ac996ae9dc93a0cce3b3df3d0307
+-- 
+2.41.0
 
-I ended up with two propositions:
-
-1)I took a shot at implementing a new flag "OF_ACCESS_GRANTED" that
-should be set in the first call of the of_platform_bus_create()
-function for every child node of a "default bus" (simple-bus,
-simple-pm-bus, ...) having the access-controllers property.
-This flag should be unset by the access controller if the access is
-not granted. This covers the particular case where the access controller
-has a simple-bus fallback whilst not creating the devices on the first
-try for the bus' childs.
-
-This way, the first round of of_platform_populate() done at arch init
-call level won't create the devices of an access controller child
-nodes. Then, the firewall controller has a chance to clear the flag
-before the second call to this function by the simple-pm-bus driver.
-
-If the controller module isn't present, then it's a simple-bus
-behavior to extent of the child devices not being all created in the
-first place. This shouldn't be an issue as in only concerns childs
-of such bus that aren't probed before the bus driver.
-
-I have a patch that I can send as RFC on top of my series if my
-explanation isn't clear enough.
-
-2)Make the STM32_FIREWALL configuration switch select the OF_DYNAMIC
-one. This way I can use of_detach_node() function to remove the node
-from the device tree. The cons of this is the device tree is now
-used at runtime.
-
-Are you considering one of these two proposition as a viable solution?
-
-Best regards,
-Gatien
-
->> Devices that are under the firewall controller (simple-bus) node
->> should not be probed before it as they're child of it.
-> 
-> fw_devlink should take care of parent/child dependencies without any
-> explicit handling of the access ctrl binding.
-> 
-> Rob
