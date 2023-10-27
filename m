@@ -2,69 +2,68 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33E27D968C
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Oct 2023 13:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C509B7D9692
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Oct 2023 13:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345649AbjJ0L0H (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Oct 2023 07:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
+        id S231302AbjJ0L1t (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Oct 2023 07:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345688AbjJ0L0G (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Oct 2023 07:26:06 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48F9D43
-        for <linux-i2c@vger.kernel.org>; Fri, 27 Oct 2023 04:25:59 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2c50d1b9f22so26117921fa.0
-        for <linux-i2c@vger.kernel.org>; Fri, 27 Oct 2023 04:25:59 -0700 (PDT)
+        with ESMTP id S229633AbjJ0L1s (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Oct 2023 07:27:48 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9E69C
+        for <linux-i2c@vger.kernel.org>; Fri, 27 Oct 2023 04:27:45 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-507962561adso2943864e87.0
+        for <linux-i2c@vger.kernel.org>; Fri, 27 Oct 2023 04:27:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698405958; x=1699010758; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1698406063; x=1699010863; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=9y6LmXOwEW312Rhq3CPGU89SHAaxq5yj0JeMnIHrcaM=;
-        b=lprC/dP/95pzk0C+CQhiQSM9mh9aryTituR5oGWnkb62Q0R5VykN6JUb6KnzpP2F7t
-         d2n1/LZvUlAgDrmipFPkR4GpvLt6bqtaTVQs3zZcCgAMv1nJg+wIQOgEsniLuE5psZQd
-         QYif3WqS7LHN0NdI6Q0BkCDG42hlH9jKamWX5VzWEqmQ8mUeHbEBgwnDbU89NxXVdTGN
-         V+EA61Srof3sV4vREAwHSKb/j+Y28r7F21r2tVfh1eGs33QWeMTlJJb0imjIUy4HFSzD
-         XdOuIE116Gh/VF2UvApod1VwjoyaV5SZSq2/kw/3TRMG4PRqorhV537yXpLlJ2ZbhrN/
-         KWnA==
+        bh=FVAaLrP2Y61ubiHPirPmK1VRJY7APR1sGBGoK51Hgs0=;
+        b=CxM/mo0w4UKAjdM/C+fC3a4HpxcM6lXzTcqpYbzcb3IbvjBMMiKNWGjV4fvX+tu40O
+         ciF9nj6045HLOIEtn9sT/Gy/MYIsukHPFUVSG0NaoVeIOtNt875EnJJrj2tJrCs56EjH
+         XfCxRkxNIr+tH+Oo4Dr653OVHRGCVQApOT+P3elqqi1RIlMth0FS0JKTcSRd+Q9bOu0g
+         M5LuGaSG/RjGzjg+joirF0QUSWfvP4uMEpJVbDeOillZy19ihj/p7+pMNZfezGiQxCJA
+         JsI5z2jPoPXEeIrq8pefJigB4THO4g2dGr8Q6vrJ4he9dj+jGRz0hRnJpC2DBDI0s5IK
+         Jglw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698405958; x=1699010758;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1698406063; x=1699010863;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9y6LmXOwEW312Rhq3CPGU89SHAaxq5yj0JeMnIHrcaM=;
-        b=vQz2v9TROdiQGURd/wFc41xIvBOX1BFzQOptzyLP0n/GtH6BN9ejNto4nsc0yPzcV9
-         V9Nnym8pCqM2lK/mCpA1kL0RTjTSJi0mamBsF5GMjlQZU/MEdIWFzdYD771vXB15sofw
-         xxYSqHDZ+qFcsAn4r0FDEXjpS822ipFLMrY2ywj0c6HQRigKDdjYwS3ysKBPSqa+mpAv
-         dwNImJBruqN2p7xcdFgVYlv620azHYub4jt9hXWcF7dXgRHiGoIz5P3ZeURnxiqg7ixf
-         VnQsmnhvVMGk7X1TTAYBUWpcHVXSF5/x/byZgoshXVmb4sfpsqlksVbSrxM/dB8O/NxP
-         mzeg==
-X-Gm-Message-State: AOJu0Yz4GEfiwSTGgSEeIUb2W/QE+N+9l1R6abi9vn9e6f1BXKJIhIns
-        v3mRpAE+cWmXFONMcV1w+EE6GA==
-X-Google-Smtp-Source: AGHT+IFRkexNgJpWRS+yzP5zEwgjOKhCx1ox+0JLdEC7upd7ErsJaMQzzXQMoPegeOn4fsR2Ozjmew==
-X-Received: by 2002:a2e:1454:0:b0:2c5:169f:ff03 with SMTP id 20-20020a2e1454000000b002c5169fff03mr1592852lju.5.1698405957743;
-        Fri, 27 Oct 2023 04:25:57 -0700 (PDT)
+        bh=FVAaLrP2Y61ubiHPirPmK1VRJY7APR1sGBGoK51Hgs0=;
+        b=vyOvSSF01rZghE2+MT1D7kX9AOqRnstnNu6lYB8zR4VvAWQlKsP38rbCTybNaVF34z
+         CUjbAYacTNwGrhz2VDx2J7Uqc5aOmBv7KXa+KFfMGsxoivkxKAOtn+9q3hte1PGfuo7X
+         eHOu4M1N8EBl1Uo7AK/EqqydJEsh37AgvcYBX6kxE2gbOsTZFwHnIOSawX8edZYERDEQ
+         Jq5ZGwi0STyxiSTmz1yciqkJb3ee2Ps3t+i9VN1EdJKJjVa1AWVdLhwjPeGbwZW40OjS
+         jHB5cKHKLMw/6QMh0vuib5WdfpcyNOeOpPeQM0nMe6dTEiK0M9FoXEFqpJ5OrplnVmqk
+         zhmg==
+X-Gm-Message-State: AOJu0Yy7QwatoTREFgOrOMCGGIENFQK9vlMjWaZL1Hw+X6xNLkljrn1f
+        ZkxxHRFr20m3b0ViOp14s405Ng==
+X-Google-Smtp-Source: AGHT+IH+dqTHg10CwxCucNCfbSzI4LM/y6MsDOYnq63zNrsswueakJnPPsD2A4UstWSXUns++3C1+w==
+X-Received: by 2002:a19:ad44:0:b0:4fb:9f93:365f with SMTP id s4-20020a19ad44000000b004fb9f93365fmr1592200lfd.38.1698406063485;
+        Fri, 27 Oct 2023 04:27:43 -0700 (PDT)
 Received: from [192.168.0.22] ([78.10.206.168])
-        by smtp.gmail.com with ESMTPSA id d21-20020a2eb055000000b002c004175d26sm250041ljl.56.2023.10.27.04.25.56
+        by smtp.gmail.com with ESMTPSA id z6-20020ac25de6000000b004fddb0eb961sm248896lfq.18.2023.10.27.04.27.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Oct 2023 04:25:57 -0700 (PDT)
-Message-ID: <7bfa2f6c-3e99-49a6-9b5a-81398d4bce7e@linaro.org>
-Date:   Fri, 27 Oct 2023 13:25:56 +0200
+        Fri, 27 Oct 2023 04:27:43 -0700 (PDT)
+Message-ID: <65911ec0-e073-435f-846a-c5501dd5d3a9@linaro.org>
+Date:   Fri, 27 Oct 2023 13:27:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] dt-bindings: i2c: mv64xxx: add bus-reset-gpios
+Subject: Re: [PATCH v5 2/2] i2c: mv64xxx: add an optional bus-reset-gpios
  property
 Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        krzysztof.kozlowski+dt@linaro.org, gregory.clement@bootlin.com,
-        andi.shyti@kernel.org, robh+dt@kernel.org, conor+dt@kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        gregory.clement@bootlin.com, andi.shyti@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, Abel Vesa <abel.vesa@linaro.org>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20231027033104.1348921-1-chris.packham@alliedtelesis.co.nz>
- <20231027033104.1348921-2-chris.packham@alliedtelesis.co.nz>
- <ZTt+ZgNe5Y35E/C2@shikoro>
+ <20231027033104.1348921-3-chris.packham@alliedtelesis.co.nz>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -110,11 +109,11 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <ZTt+ZgNe5Y35E/C2@shikoro>
+In-Reply-To: <20231027033104.1348921-3-chris.packham@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -123,35 +122,79 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 27/10/2023 11:09, Wolfram Sang wrote:
-> On Fri, Oct 27, 2023 at 04:31:03PM +1300, Chris Packham wrote:
->> Add bus-reset-gpios and bus-reset-duration-us properties to the
->> marvell,mv64xxx-i2c binding. These can be used to describe hardware
->> where a common reset GPIO is connected to all downstream devices on and
->> I2C bus. This reset will be asserted then released before the downstream
->> devices on the bus are probed.
->>
->> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 27/10/2023 05:31, Chris Packham wrote:
+> Some hardware designs have a GPIO used to control the reset of all the
+> devices on and I2C bus. It's not possible for every child node to
+> declare a reset-gpios property as only the first device probed would be
+> able to successfully request it (the others will get -EBUSY). Represent
+> this kind of hardware design by associating the bus-reset-gpios with the
+> parent I2C bus. The reset line will be released prior to the child I2C
+> devices being probed.
 > 
-> Krzysztof, are you fine with this change?
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     Changes in v5:
+>     - Rename reset-gpios and reset-duration-us to bus-reset-gpios and
+>       bus-reset-duration-us as requested by Wolfram
+>     Changes in v4:
+>     - Add missing gpio/consumer.h
+>     - use fsleep() for enforcing reset-duration
+>     Changes in v3:
+>     - Rename reset-delay to reset-duration
+>     - Use reset-duration-us property to control the reset pulse rather than
+>       delaying after the reset
+>     Changes in v2:
+>     - Add a property to cover the length of delay after releasing the reset
+>       GPIO
+>     - Use dev_err_probe() when requesing the GPIO fails
+> 
+>  drivers/i2c/busses/i2c-mv64xxx.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
+> index efd28bbecf61..6e2762d22e5a 100644
+> --- a/drivers/i2c/busses/i2c-mv64xxx.c
+> +++ b/drivers/i2c/busses/i2c-mv64xxx.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/module.h>
+>  #include <linux/spinlock.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/i2c.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/mv643xx_i2c.h>
+> @@ -160,6 +161,7 @@ struct mv64xxx_i2c_data {
+>  	bool			clk_n_base_0;
+>  	struct i2c_bus_recovery_info	rinfo;
+>  	bool			atomic;
+> +	struct gpio_desc	*reset_gpio;
+>  };
+>  
+>  static struct mv64xxx_i2c_regs mv64xxx_i2c_regs_mv64xxx = {
+> @@ -1036,6 +1038,7 @@ mv64xxx_i2c_probe(struct platform_device *pd)
+>  	struct mv64xxx_i2c_data		*drv_data;
+>  	struct mv64xxx_i2c_pdata	*pdata = dev_get_platdata(&pd->dev);
+>  	struct resource *res;
+> +	u32	reset_duration;
+>  	int	rc;
+>  
+>  	if ((!pdata && !pd->dev.of_node))
+> @@ -1083,6 +1086,14 @@ mv64xxx_i2c_probe(struct platform_device *pd)
+>  	if (drv_data->irq < 0)
+>  		return drv_data->irq;
+>  
+> +	drv_data->reset_gpio = devm_gpiod_get_optional(&pd->dev, "bus-reset", GPIOD_OUT_HIGH);
+> +	if (IS_ERR(drv_data->reset_gpio))
+> +		return dev_err_probe(&pd->dev, PTR_ERR(drv_data->reset_gpio),
+> +				     "Cannot get reset gpio\n");
+> +	rc = device_property_read_u32(&pd->dev, "bus-reset-duration-us", &reset_duration);
+> +	if (rc)
+> +		reset_duration = 1;
 
-Actually no. NAK.
-
-Not because of the naming, but because the new name triggered some new
-paths in my brain which brought the point - this is old problem of power
-sequencing of children.
-
-I believe this must be solved in more generic way. First - generic for
-all I2C devices. Second - generic also matching other buses/subsystems,
-which have similar problem. We did it for USB (onboard USB), MMC
-(unloved MMC power sequence) and now we are doing it for PCIe and few
-others (Cc: Abel)
-
-https://lpc.events/event/17/contributions/1507/
-
-Current solution is heavily limited. What about regulators? What about
-buses having 2 reset lines (still the same bus)? What about sequence?
+No, this should be solved by core - for entire I2C at minimum. This is
+not specific to this device.
 
 Best regards,
 Krzysztof
