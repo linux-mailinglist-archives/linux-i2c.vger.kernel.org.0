@@ -2,46 +2,47 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B467D9A31
-	for <lists+linux-i2c@lfdr.de>; Fri, 27 Oct 2023 15:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D825A7D9A69
+	for <lists+linux-i2c@lfdr.de>; Fri, 27 Oct 2023 15:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345989AbjJ0Nj5 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Oct 2023 09:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
+        id S1346010AbjJ0Nth (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 27 Oct 2023 09:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345976AbjJ0Nj4 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Oct 2023 09:39:56 -0400
+        with ESMTP id S1345688AbjJ0Ntg (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Oct 2023 09:49:36 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA70FD6;
-        Fri, 27 Oct 2023 06:39:54 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBFE0C433CA;
-        Fri, 27 Oct 2023 13:39:53 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A695A1A1;
+        Fri, 27 Oct 2023 06:49:34 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5975C433C7;
+        Fri, 27 Oct 2023 13:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698413994;
-        bh=txH5nrL7NdHO+GWvWn+139Hu1jj1aXH2akfnzHdvnro=;
+        s=k20201202; t=1698414574;
+        bh=Y3T8Ej/d94US2MC/2hjrB80zkXVgMtKI8mo7rB2YXoQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o87ZwCa9Swlo8dTL1IjPQA4WGsn20bgwHegsocyLJ73HLGX8Z1iBj9Do6Hh+kv58V
-         owR7fb7xAzcWkWvZ1mNTu+80U5oVjx/PdmJ9XnDQjEAoxppOHMNXeZ3jMm3FVxPQdV
-         fCMXM2lzCRhc67bXdC0o7jwbkgCbJuK/0+A3vPOd+0ayQqyMEhMEi0bIKr5geWzIbI
-         ZuN7Xx9VfRpuxWKppAvgahT2fG8EB9qcbRXn65j/U6GoL7OEADxYV4m5yy0OKgWK1t
-         Rjpybq298kkq5Rd2CacPMzC9h2CFDb9QnP6Bs0vaxHY6lVa2QpQ6wJ2MRiPthOS6ko
-         xmBOaVrxUMIYQ==
-Date:   Fri, 27 Oct 2023 15:39:50 +0200
+        b=J5kYGGzJLDsq3Xo+nPz8Kwa5mmiBQ+J1+DGtLj6ppVvfD3y2BHTUQLOki+ikvxV3Y
+         Ab/Wg6R8fq3/TplgvS9wHzzPqPY5TrW5cBFwOTWHzLDdE0goPVXlguSaZtxzoz447J
+         Id9xlUFHOgKGyd0hQm0wemywK+v7BkAsLSccyn1N/NO0V+9Y7a962c5ghxtctKjw+I
+         Ra6wKQmqqxWOZTr2pTYmw5hBEXCmxBfaTyOT2uTHbdPZaVWR2yhKW67sP1C2V+Z1ty
+         aPzCFG9tjl3FA8UXs+An2K37Os668BBSo2SDWx2tUH/UgzhJvaWDm2j+AKyuRdCG0r
+         4CybxoRuo6ahg==
+Date:   Fri, 27 Oct 2023 15:49:30 +0200
 From:   Andi Shyti <andi.shyti@kernel.org>
 To:     Marek Szyprowski <m.szyprowski@samsung.com>
 Cc:     linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Alim Akhtar <alim.akhtar@samsung.com>,
         Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH v2 1/3] i2c: s3c24xx: fix read transfers in polling mode
-Message-ID: <20231027133950.kntkq6ddgifaor76@zenone.zhora.eu>
+Subject: Re: [PATCH v2 2/3] i2c: s3c24xx: fix transferring more than one
+ message in polling mode
+Message-ID: <20231027134930.tb7vd3goxw2zamgw@zenone.zhora.eu>
 References: <20231025121725.46028-1-m.szyprowski@samsung.com>
- <CGME20231025121737eucas1p1b5f0db709d99f8004f6177591cce0c8f@eucas1p1.samsung.com>
- <20231025121725.46028-2-m.szyprowski@samsung.com>
+ <CGME20231025121739eucas1p26ce7f34cb63076626d40e08962497a0b@eucas1p2.samsung.com>
+ <20231025121725.46028-3-m.szyprowski@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231025121725.46028-2-m.szyprowski@samsung.com>
+In-Reply-To: <20231025121725.46028-3-m.szyprowski@samsung.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -52,50 +53,92 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Marek,
-
-On Wed, Oct 25, 2023 at 02:17:23PM +0200, Marek Szyprowski wrote:
-> To properly handle read transfers in polling mode, no waiting for the ACK
-> state is needed as it will never come. Just wait a bit to ensure start
-> state is on the bus and continue processing next bytes.
+On Wed, Oct 25, 2023 at 02:17:24PM +0200, Marek Szyprowski wrote:
+> To properly handle ACK on the bus when transferring more than one
+> message in polling mode, move the polling handling loop from
+> s3c24xx_i2c_message_start() to s3c24xx_i2c_doxfer(). This way
+> i2c_s3c_irq_nextbyte() is always executed till the end, properly
+> acknowledging the IRQ bits and no recursive calls to
+> i2c_s3c_irq_nextbyte() are made.
+> 
+> While touching this, also fix finishing transfers in polling mode by
+> using common code path and always waiting for the bus to become idle
+> and disabled.
 > 
 > Fixes: 117053f77a5a ("i2c: s3c2410: Add polling mode support")
 > Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
->  drivers/i2c/busses/i2c-s3c2410.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+>  drivers/i2c/busses/i2c-s3c2410.c | 25 ++++++++++---------------
+>  1 file changed, 10 insertions(+), 15 deletions(-)
 > 
 > diff --git a/drivers/i2c/busses/i2c-s3c2410.c b/drivers/i2c/busses/i2c-s3c2410.c
-> index 127eb3805fac..f9dcb1112a61 100644
+> index f9dcb1112a61..8da85cb42980 100644
 > --- a/drivers/i2c/busses/i2c-s3c2410.c
 > +++ b/drivers/i2c/busses/i2c-s3c2410.c
-> @@ -216,8 +216,13 @@ static bool is_ack(struct s3c24xx_i2c *i2c)
->  	int tries;
+> @@ -275,16 +275,6 @@ static void s3c24xx_i2c_message_start(struct s3c24xx_i2c *i2c,
 >  
->  	for (tries = 50; tries; --tries) {
-> -		if (readl(i2c->regs + S3C2410_IICCON)
-> -			& S3C2410_IICCON_IRQPEND) {
-> +		unsigned long tmp = readl(i2c->regs + S3C2410_IICCON);
-> +
-> +		if (!(tmp & S3C2410_IICCON_ACKEN)) {
-> +			usleep_range(100, 200);
-> +			return true;
-
-What is the real issue here? Is the value of S3C2410_IICCON_ACKEN
-enabling/disabling irq's?
-
-Besides, if we use polling mode, shouldn't we disable the acks
-already in probe (even though they are disabled by default),
-never enable them before starting the message and avoid checking
-here everytime?
-
-Andi
-
+>  	stat |= S3C2410_IICSTAT_START;
+>  	writel(stat, i2c->regs + S3C2410_IICSTAT);
+> -
+> -	if (i2c->quirks & QUIRK_POLL) {
+> -		while ((i2c->msg_num != 0) && is_ack(i2c)) {
+> -			i2c_s3c_irq_nextbyte(i2c, stat);
+> -			stat = readl(i2c->regs + S3C2410_IICSTAT);
+> -
+> -			if (stat & S3C2410_IICSTAT_ARBITR)
+> -				dev_err(i2c->dev, "deal with arbitration loss\n");
+> -		}
+> -	}
+>  }
+>  
+>  static inline void s3c24xx_i2c_stop(struct s3c24xx_i2c *i2c, int ret)
+> @@ -691,7 +681,7 @@ static void s3c24xx_i2c_wait_idle(struct s3c24xx_i2c *i2c)
+>  static int s3c24xx_i2c_doxfer(struct s3c24xx_i2c *i2c,
+>  			      struct i2c_msg *msgs, int num)
+>  {
+> -	unsigned long timeout;
+> +	unsigned long timeout = 0;
+>  	int ret;
+>  
+>  	ret = s3c24xx_i2c_set_master(i2c);
+> @@ -711,16 +701,21 @@ static int s3c24xx_i2c_doxfer(struct s3c24xx_i2c *i2c,
+>  	s3c24xx_i2c_message_start(i2c, msgs);
+>  
+>  	if (i2c->quirks & QUIRK_POLL) {
+> -		ret = i2c->msg_idx;
+> +		while ((i2c->msg_num != 0) && is_ack(i2c)) {
+> +			unsigned long stat = readl(i2c->regs + S3C2410_IICSTAT);
+>  
+> -		if (ret != num)
+> -			dev_dbg(i2c->dev, "incomplete xfer (%d)\n", ret);
+> +			i2c_s3c_irq_nextbyte(i2c, stat);
+>  
+> -		goto out;
+> +			stat = readl(i2c->regs + S3C2410_IICSTAT);
+> +			if (stat & S3C2410_IICSTAT_ARBITR)
+> +				dev_err(i2c->dev, "deal with arbitration loss\n");
 > +		}
-> +		if (tmp & S3C2410_IICCON_IRQPEND) {
->  			if (!(readl(i2c->regs + S3C2410_IICSTAT)
->  				& S3C2410_IICSTAT_LASTBIT))
->  				return true;
+> +		goto skip_waiting;
+
+please use else.
+
+ 	if (i2c->quirks & QUIRK_POLL)
+		while ((i2c->msg_num != 0) && is_ack(i2c)) {
+			...
+		}
+	else
+	 	timeout = wait_even...
+	
+	ret = i2c->msg_idx;
+
+>  	}
+>  
+>  	timeout = wait_event_timeout(i2c->wait, i2c->msg_num == 0, HZ * 5);
+>  
+> + skip_waiting:
+>  	ret = i2c->msg_idx;
+>  
+>  	/*
 > -- 
 > 2.34.1
 > 
