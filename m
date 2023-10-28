@@ -2,99 +2,130 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3157DA515
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Oct 2023 05:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3227DA549
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Oct 2023 08:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233040AbjJ1DzR (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 27 Oct 2023 23:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
+        id S229475AbjJ1GYP (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 28 Oct 2023 02:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjJ1DzQ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 27 Oct 2023 23:55:16 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F7E10A;
-        Fri, 27 Oct 2023 20:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698465313; x=1730001313;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qDzqr30MeOgL/N0BmqbgF3J5CqRGi7sdwxlhCyhEzw0=;
-  b=VciHVq8RNen2+p7pTeAZVSrT5C23q0LpdTIE1eiy4TTxsGHJlSp5KEUX
-   wFc0tSjLIie1AvNoqubw2dj0C9hFP9QPBwOsXnHYEsVv01/hKvNn3kNQJ
-   afoMGpZTcJ0VF1aM8ygwPI2XkmUCYzuvv7//jdY751+ihxOyiVEWM078c
-   pusvIVOwsB0wF/ChCRcZwJnL+6Df5bv8idsJF86uX6H2JBrm7WIaYM3XV
-   YO5/2tcYZ59QaUovp3lDOoFgGiTBnkJaZO7Pv7iN1nG7TCoQOxjPhVeKy
-   K/zQktFjuMP3NMZ6xZ5qdOnT8dRGEa1ELbC0oadLwrI4vzwmPvkh1QeY2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="676147"
-X-IronPort-AV: E=Sophos;i="6.03,258,1694761200"; 
-   d="scan'208";a="676147"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 20:55:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="933283132"
-X-IronPort-AV: E=Sophos;i="6.03,258,1694761200"; 
-   d="scan'208";a="933283132"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 Oct 2023 20:55:08 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qwaPi-000BSd-2O;
-        Sat, 28 Oct 2023 03:55:06 +0000
-Date:   Sat, 28 Oct 2023 11:54:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, patrick@stwcx.xyz,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     oe-kbuild-all@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: pmbus: Add ltc4286 driver
-Message-ID: <202310281159.Y11xKbmu-lkp@intel.com>
-References: <20231026081514.3610343-3-Delphine_CC_Chiu@Wiwynn.com>
+        with ESMTP id S229460AbjJ1GYP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 28 Oct 2023 02:24:15 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5141F11B;
+        Fri, 27 Oct 2023 23:24:13 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BAF3C433C8;
+        Sat, 28 Oct 2023 06:24:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698474252;
+        bh=huMuC9eD6QFppqGFj2d2KbgVfFm/ibyW7QtYs7CXVjE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ijwcilxu5csfY0vEjKFFyc18dKh4m0JPxe13OG1jiI1Kj3zWAcXwXDwX8HlDcwgAo
+         XjVlN1yI8WwjejOJUlkSKgz5yLl0YyWmuS/8R9WdrFs0HW/jA7Dn5bpoZQUjUw34ay
+         g37Dnh8jJ+wayTF5AWs2SsO/Q1jdnuCc/21YQd5zTiyvp/JksFagn7x3ecpotkMPxa
+         Xlh0z3L7a3cysgY8njfbfKemsKLyXvLZwAdTF+Uyuwh4dI/bhFB979oSpsaJM92+CH
+         R/pcYkFevSZjwuDTWuSZLKnJbWeIVOG/LdajAX6txTjErnrxwJ/UqPqYq+/Y9znIzG
+         /qRl0uGFVWJPg==
+Date:   Sat, 28 Oct 2023 08:24:04 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andi Shyti <andi.shyti@kernel.org>
+Subject: [PULL REQUEST] i2c-for-6.6-rc8
+Message-ID: <ZTypBKf7VqKqnTuG@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andi Shyti <andi.shyti@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eoPy7XQcgNvfdFmT"
 Content-Disposition: inline
-In-Reply-To: <20231026081514.3610343-3-Delphine_CC_Chiu@Wiwynn.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Delphine,
 
-kernel test robot noticed the following build warnings:
+--eoPy7XQcgNvfdFmT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.6-rc7 next-20231027]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The following changes since commit 94f6f0550c625fab1f373bb86a6669b45e9748b3:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Delphine-CC-Chiu/dt-bindings-hwmon-Add-lltc-ltc4286-driver-bindings/20231026-161739
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20231026081514.3610343-3-Delphine_CC_Chiu%40Wiwynn.com
-patch subject: [PATCH v2 2/2] hwmon: pmbus: Add ltc4286 driver
-reproduce: (https://download.01.org/0day-ci/archive/20231028/202310281159.Y11xKbmu-lkp@intel.com/reproduce)
+  Linux 6.6-rc5 (2023-10-08 13:49:43 -0700)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310281159.Y11xKbmu-lkp@intel.com/
+are available in the Git repository at:
 
-All warnings (new ones prefixed by >>):
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.6-rc8
 
->> Documentation/hwmon/ltc4286.rst: WARNING: document isn't included in any toctree
+for you to fetch changes up to c896ff2dd8f30a6b0a922c83a96f6d43f05f0e92:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  i2c: stm32f7: Fix PEC handling in case of SMBUS transfers (2023-10-21 20:31:04 +0200)
+
+----------------------------------------------------------------
+Bugfixes for Axxia when it is a target and for PEC handling of stm32f7.
+Plus, fixing an of node leak pattern in the mux subsystem.
+
+----------------------------------------------------------------
+Alain Volmat (1):
+      i2c: stm32f7: Fix PEC handling in case of SMBUS transfers
+
+Herve Codina (3):
+      i2c: muxes: i2c-mux-pinctrl: Use of_get_i2c_adapter_by_node()
+      i2c: muxes: i2c-demux-pinctrl: Use of_get_i2c_adapter_by_node()
+      i2c: muxes: i2c-mux-gpmux: Use of_get_i2c_adapter_by_node()
+
+Jian Zhang (1):
+      i2c: aspeed: Fix i2c bus hang in slave read
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andrew Jeffery (2):
+      (Test) i2c: aspeed: Fix i2c bus hang in slave read
+      (Rev.) i2c: aspeed: Fix i2c bus hang in slave read
+
+Jonathan Cameron (3):
+      (Rev.) i2c: muxes: i2c-mux-gpmux: Use of_get_i2c_adapter_by_node()
+      (Rev.) i2c: muxes: i2c-demux-pinctrl: Use of_get_i2c_adapter_by_node()
+      (Rev.) i2c: muxes: i2c-mux-pinctrl: Use of_get_i2c_adapter_by_node()
+
+Pierre-Yves MORDRET (1):
+      (Rev.) i2c: stm32f7: Fix PEC handling in case of SMBUS transfers
+
+ drivers/i2c/busses/i2c-aspeed.c       | 3 ++-
+ drivers/i2c/busses/i2c-stm32f7.c      | 9 ++++++---
+ drivers/i2c/muxes/i2c-demux-pinctrl.c | 2 +-
+ drivers/i2c/muxes/i2c-mux-gpmux.c     | 2 +-
+ drivers/i2c/muxes/i2c-mux-pinctrl.c   | 2 +-
+ 5 files changed, 11 insertions(+), 7 deletions(-)
+
+--eoPy7XQcgNvfdFmT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU8qQQACgkQFA3kzBSg
+KbY60Q/9F4XvNPPADRy/0JKcXi3Y3RorEUExrSv3bw8++E/p0WVIJduI6Jj9dHAF
+GF/u6uq2BnNT5oNq5/aHUeaMTVcLKQQDWWTU+LjP2B2zyMedTbwSLUUI5NOJceeS
+shzIDf6TddM0KnZeQqgnVtwdjv+Jul2B/jKntWBLBeAIDA4g0I99f4R8s2f/cASA
+u/ZkYf0+lepzI879OaXniq+XoAmGQOe7i+ZZ6ICSCKtnSSUmg/hFtKXhpIZGsb+m
+dEOY4akPQEDy+nFUxUWeM8cZS7tK9t6cpbuHjakMY61uW3XUE+rVPEJqUXhb0UDy
+a3QKeWUMyEre0Iya4ApHGhj5i53vZ4tYD3tHJIZ+MMygTpCkdF6zW3AUO5mSxSGB
+iiBtrCym8n+/aHVy2hsSf1J81Ljjx+Y0NYwPFtW9wMtWtGRm6bMgOjqpyv7l09nl
+0cRovyLrD+dw+vaN9iHYQgQtWwiGQiqnsCWkoVU0D61moOTFwGwgEO12dMxhZHIe
+6mBwr2cNZmSdyuRfuLC0mxJZqqxEvEvaxzLk69TibLKX7oSMGvCTimpwVI1YtVPe
+OKjQcFy12MPMrKcmrVR2xxqdm/Y7X7HPTP9upQr7Tx/qJ+O7Zwep6Ze7kKQPFN3B
+LmbxG3bOmgeLEMJtxXS2T3pfIgi4SQHS+wfwM+8OVaDmbCDTKUA=
+=E4mS
+-----END PGP SIGNATURE-----
+
+--eoPy7XQcgNvfdFmT--
