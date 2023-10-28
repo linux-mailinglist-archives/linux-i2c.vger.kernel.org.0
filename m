@@ -2,49 +2,45 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5647DA6FE
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Oct 2023 14:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE007DA704
+	for <lists+linux-i2c@lfdr.de>; Sat, 28 Oct 2023 14:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbjJ1MfB (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 28 Oct 2023 08:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
+        id S229468AbjJ1MrQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sat, 28 Oct 2023 08:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjJ1MfB (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 28 Oct 2023 08:35:01 -0400
+        with ESMTP id S229446AbjJ1MrP (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sat, 28 Oct 2023 08:47:15 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCACB4;
-        Sat, 28 Oct 2023 05:34:59 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A956C433C8;
-        Sat, 28 Oct 2023 12:34:58 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC98DB4
+        for <linux-i2c@vger.kernel.org>; Sat, 28 Oct 2023 05:47:13 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC2B7C433C8;
+        Sat, 28 Oct 2023 12:47:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698496498;
-        bh=p7/kVm22CneRRAqwEGgytP+JuiIpjltRjwiPqlsMYMU=;
+        s=k20201202; t=1698497232;
+        bh=etyMXCiu9Vov6M3/4UgP+1Q7+cqy25OzHkVPRxl84Cs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jzG2ctY45APflwmer9GE1gm4JAsUBnv6IOzTCBmJnaUz9YpHwp9GV8PqZOH/5kwiP
-         W6gB9cVxM+Og9YYoCUkRkQFLqupt7ocTdB2fS7E93gMDyZP/Q97LxujofnPcyJG+oS
-         b5rB68/sGVGHX2a8YQllppM0ynwwPCWkTTQvlUDUHF8cdnX+ivJn+Qp+wHVpLG2f/i
-         5xRyY9qIFLvb9XseogGvdAgt3EeBjGMSt7wkNMltbkP83gUqhIVqOdzwL8x+EnmwaP
-         leWTdoxWk5qTEkk0OFYbhq0ebkD7c4e3q6m1yVARTBYlcQiiR9lcJgkUzZ/GAGAHql
-         rSqx8fexiqaDA==
-Date:   Sat, 28 Oct 2023 14:34:55 +0200
+        b=HY43KX1CHDq9icnAR/wzupbpFsAljAxRi37tOt9UOh3bOidZ4jPRbkjJhsbokRSnG
+         B0IiuS9jXHoBxZQJdchS8SsDxDzfmnOE5EbO5U4cSn/Q0E+s5metJUWbXnjKjvBYy1
+         O3TmU0v6TNrv5Dw9bGdXNPDWp6DphFyl1IgZFxzwejr7rUkMtSFunox/7dkyaUP/+G
+         XyPzwR2aqyd56Z9VpcCijXMoUd/SHWM4cWDd+gMtAVl/joMbQEYZKqR864A7uQoam4
+         Ozv6O9W5I7fqMhqR5z2bZnwesRR3cxIB1WdJqvTFPSTrRCxmefXF5Y3pI8cgB+zhIm
+         nF+v/vg7JS/1A==
+Date:   Sat, 28 Oct 2023 14:47:09 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: axxia: eliminate kernel-doc warnings
-Message-ID: <ZTz/721T79wA4e1I@shikoro>
+To:     Daniel Mack <daniel@zonque.org>
+Cc:     linux-i2c@vger.kernel.org
+Subject: Re: [PATCH] i2c: core: fix lockdep warning for sparsely nested
+ adapter chain
+Message-ID: <ZT0Cza5q5Cjuqyeh@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
-References: <20231026053918.17347-1-rdunlap@infradead.org>
+        Daniel Mack <daniel@zonque.org>, linux-i2c@vger.kernel.org
+References: <20231018094613.849007-1-daniel@zonque.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UcUZCVDFWYcPKrvP"
+        protocol="application/pgp-signature"; boundary="i5wyaVInG9c65XPw"
 Content-Disposition: inline
-In-Reply-To: <20231026053918.17347-1-rdunlap@infradead.org>
+In-Reply-To: <20231018094613.849007-1-daniel@zonque.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,64 +51,43 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---UcUZCVDFWYcPKrvP
+--i5wyaVInG9c65XPw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 25, 2023 at 10:39:18PM -0700, Randy Dunlap wrote:
-> Add kernel-doc for 'slave' and 'irq' in struct axxia_i2c_dev.
-> Drop kernel-doc notation ("/**") for static functions since they
-> are not usually documented with kernel-doc.
+On Wed, Oct 18, 2023 at 11:46:13AM +0200, Daniel Mack wrote:
+> When adapters are chained in a sparse manner (with intermediate MFD devic=
+es,
+> for instance) the code currently fails to use the correct subclass for
+> the adapter's bus_lock which leads to false-positive lockdep warnings.
 >=20
-> Prevents these kernel-doc warnings:
+> Fix this by walking the entire pedigree of the device and count all
+> adapters along the way instead of just checking the immediate parent.
 >=20
-> i2c-axxia.c:150: warning: Function parameter or member 'slave' not descri=
-bed in 'axxia_i2c_dev'
-> i2c-axxia.c:150: warning: Function parameter or member 'irq' not describe=
-d in 'axxia_i2c_dev'
-> i2c-axxia.c:172: warning: Function parameter or member 'ns' not described=
- in 'ns_to_clk'
-> i2c-axxia.c:172: warning: Function parameter or member 'clk_mhz' not desc=
-ribed in 'ns_to_clk'
-> i2c-axxia.c:172: warning: No description found for return value of 'ns_to=
-_clk'
-> i2c-axxia.c:271: warning: Function parameter or member 'idev' not describ=
-ed in 'axxia_i2c_empty_rx_fifo'
-> i2c-axxia.c:271: warning: No description found for return value of 'axxia=
-_i2c_empty_rx_fifo'
-> i2c-axxia.c:303: warning: Function parameter or member 'idev' not describ=
-ed in 'axxia_i2c_fill_tx_fifo'
->=20
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/all/202310181049.Vo62moV1-lkp@intel.com/
-> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
-> Cc: Andi Shyti <andi.shyti@kernel.org>
-> Cc: Wolfram Sang <wsa@kernel.org>
-> Cc: linux-i2c@vger.kernel.org
+> Signed-off-by: Daniel Mack <daniel@zonque.org>
 
 Applied to for-next, thanks!
 
 
---UcUZCVDFWYcPKrvP
+--i5wyaVInG9c65XPw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU8/+8ACgkQFA3kzBSg
-Kbbt3w/+Oa8WEC0nS6eEPdPAfaGtDcQ310leFDm4/6/HUTit1rlLze3Cue2955Yp
-KQagXs3xfN7eHkX5aStDSqtbqFn5yAoG0Ye3+fSVEq4jec5M7AAv9DWLCTON2mss
-mMvJMDMag0cmh+n6s4Dck06qGW721IWvRH0zjf4afDYwwKBYAGIUgPUiNCI50hJo
-VAIvmE1TihQVIE7Wy/RASGjgbuAQl3xi624iypGsxiKXQ2nvw4gM32qQbcghK/83
-q8VIegQVRC3imBEZx1fYOd9DPS6gwSxDuX+MmNFWYiPgyZ2Bs+S30RZhB0V43l2i
-9YSQUgt3v9fIvY5riZA09S2Rm0QY/Hh+akDzgOW1/WJWomv+D09J0Ok+sfqvWl5r
-QGoeJ7WInlrn+qY+CSdbQjwxt11uvr1ZInWmb3s7xhED/Jnjh6tOfYyfmiLn4ffb
-T4mNYSn2IJw2iUGjPvj0Y17/jIuTesnLlX9Og5tPtJUI7GHbvfxqFs0hehTLntqX
-GfFDRlvyZpCnPg9MG0m/iVsHojhq6kEmWusbkKeNU+lo0GZbwnefoj8ZhrpGKIGG
-vkCQRusVBs5prlx26GGlVQzxsSGXZeQeXwfu5uMG3APwVT9vH2Ni83fuwW/pCKq2
-2kc1ot94Kl83ClwaoaoW7DLd6BLZZmemPATKj4JnjX5/JfJQUko=
-=tkAU
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU9AswACgkQFA3kzBSg
+KbZ3KBAApyzxi+AE5TPnCd16cpaqFd9OtUCGer3+LOpENY14xrcI1i8U8OkaufVZ
+f8+ifvY5mk9vgZVTjWxgtaDzVpGIKJx98hqUE0NbFOmIsFmJDIeSEVJ5sJSkS3ON
+tyT7Miq9DTIet7xwH+m9JOKmFnRWwDM508FR99H7awEcg5wHb1FmA2wbNxgJTQBa
+WLIBKivgEDoyPTsNd0T8Dq1y/zGU2C8p+Qa+MXROigWZlSEkIWTzv/ClElXOY0qp
+RwFY/anEwgx6dMCVr7ivaTkJ+cjfs7/PLcrRd8XcOgfakA7Wm71RXR4SWlJtcIdr
+K2Yv3XP92U7Gc2YM+zR9Zhv4lXX0pZM9FupRRQhzF9FgZgZ0zxUj3yd+SEsCsJi9
+pHkSRmEuGDi7Ne/nx/pur32CR0CgQL3bhy87RufMaMar99VNRieTEUDrFv1tC5oB
+xNhtIDyujulDUprmcHbz0MwTtBU3gagm3VXvgQyXsqS1xt9D3iHpHqIGTJAqTgGg
++E0o4IuLHB2L+yi4PgxpABUQy9708B/OtLG0SOtd6JGy0MvyqXF2EwRWs7/ip2FU
+VKzJuszhO9fAouzX8hMc8xu0JBXZrVuXaGDPLn60hA86vTzc5jC+yFT8hn/8YkFO
+UAxiypsuE773FphNzna6bgimHGzjc6sne1GLWIU6eFoqcHTtrbI=
+=VU10
 -----END PGP SIGNATURE-----
 
---UcUZCVDFWYcPKrvP--
+--i5wyaVInG9c65XPw--
