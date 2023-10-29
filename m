@@ -2,52 +2,48 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7CD7DA8F5
-	for <lists+linux-i2c@lfdr.de>; Sat, 28 Oct 2023 21:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C024F7DAD74
+	for <lists+linux-i2c@lfdr.de>; Sun, 29 Oct 2023 18:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjJ1TgM (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sat, 28 Oct 2023 15:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
+        id S229689AbjJ2RMA (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 29 Oct 2023 13:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjJ1TgM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sat, 28 Oct 2023 15:36:12 -0400
+        with ESMTP id S229533AbjJ2RMA (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 29 Oct 2023 13:12:00 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1F5E0;
-        Sat, 28 Oct 2023 12:36:09 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF41C433C8;
-        Sat, 28 Oct 2023 19:36:08 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4B6AF;
+        Sun, 29 Oct 2023 10:11:56 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98838C433C7;
+        Sun, 29 Oct 2023 17:11:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698521769;
-        bh=AJ6ovljbj6MisbZ3hfwRo2Cpjpm1JHKytVq4TooG3mE=;
+        s=k20201202; t=1698599516;
+        bh=PraBZzwFCJ7Cwj/1VkXk0MBu6spK3fQhhidNROag0kI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WJDMgbvKdfcVn4Am/PD5xyskObSaDktzj7IovTU0TDqVk5hpNNCIpg3ms17aIXhHH
-         r67WG7+GBoqzU7scD58xAnGTA/eeoAqV4TsUYNKcdrnddbRqsclrvaC50tZxPKfXk2
-         1HYfUrGLxi1ZU6tAjNTlchsMj2jVb7lXUVlIgAZpWECkxdYH+ebIAgrd0l6brIjUwy
-         jCuuMsXHwFfXGWOOJV1bETUGVPM5DqwhAnPu2gIy/+YOGpbB/V0hjPhwEwLI5+yzdm
-         pdvpnhLOUQ0TeCd+FsQ8XVT0sOjJKT/ynIRtBthwRhzUBYlDvOy/Smbixu+rnwVe9s
-         7gNE6ZjkMiWjA==
-Date:   Sat, 28 Oct 2023 21:36:05 +0200
+        b=FI21k8ThBaCJpHUzUYTjNWicUgyM5p/xOh1dpK1gyDSz2QRr51axyGIjtgdljCRKr
+         L3PA57nJHpAavc0nqbjPT+xJ1AV4o/PXBvxjJzIGhev3FS9i76/USaBeM9wMezz6DX
+         39owGGc2v+RLHoVzZ5Y18lwVdR9ZQqor75SOSoQpP26GMLfQLi1knyvupawh06H999
+         rS7VpLe08vPi2G0LWh/ebM4oCWWe1o3nRwSPcIqmniprpGk81eeS+R/VBqzU9dBJui
+         l4KZPePzUxOQXQIoDv1Rq5oLUGDgu1aQRozYy22Gi1gJqWKaBXqJw3Xbcw2Xnx+38g
+         srZ5Irg/nCfTw==
+Date:   Sun, 29 Oct 2023 18:11:49 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Samuel Holland <samuel.holland@sifive.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: ocores: Move system PM hooks to the NOIRQ phase
-Message-ID: <ZT1ipfs3XzrKChmi@shikoro>
+To:     Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
+Cc:     rric@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chris.Packham@alliedtelesis.co.nz
+Subject: Re: [PATCH] i2c:thunderx:Add disabled node check
+Message-ID: <ZT6SVZNUT/KPucdI@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Samuel Holland <samuel.holland@sifive.com>,
-        Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230717203857.2626773-1-samuel.holland@sifive.com>
- <20231024202030.o3pyswa4css5lnwr@zenone.zhora.eu>
+        Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>,
+        rric@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chris.Packham@alliedtelesis.co.nz
+References: <20230711054147.506437-1-aryan.srivastava@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GSjqUPDK1r46QXAL"
+        protocol="application/pgp-signature"; boundary="Af+7Wv27sclYo7SW"
 Content-Disposition: inline
-In-Reply-To: <20231024202030.o3pyswa4css5lnwr@zenone.zhora.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+In-Reply-To: <20230711054147.506437-1-aryan.srivastava@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,48 +53,39 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---GSjqUPDK1r46QXAL
+--Af+7Wv27sclYo7SW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > When an I2C device contains a wake IRQ subordinate to a regmap-irq chip,
-> > the regmap-irq code must be able to perform I2C transactions during
-> > suspend_device_irqs() and resume_device_irqs(). Therefore, the bus must
-> > be suspended/resumed during the NOIRQ phase.
-> >=20
-> > Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
+On Tue, Jul 11, 2023 at 05:41:46PM +1200, Aryan Srivastava wrote:
+> Add check for disabled nodes. These nodes should not be probed. Can
+> result in logging for HW which is not present.
 >=20
-> I think this patch has failed to receive some comments, I'll go
-> ahead and give it my blessing:
->=20
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> Signed-off-by: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
 
-It needs to be rebased on top of 0ad93449b043 ("i2c: ocores: Remove
-#ifdef guards for PM related functions"), though. This series did clean
-this up for the whole subsystem. It also introduced using pm_sleep_ptr
-which probably was missing here?
+I am confused. This is a PCI driver, no? Why should we deal with DT
+settings here?
 
 
---GSjqUPDK1r46QXAL
+--Af+7Wv27sclYo7SW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU9Yp0ACgkQFA3kzBSg
-KbZHuxAAkAxotUygWyZRw5UqlHp3CMUnpxJMGt+ceCx22eOs8cp7P7oMB8crKacP
-Ut0dgZiWzfb57/IPuRJ8NkzoP6OYsg9cfc1mnYu4YdEtdMTBVlavk4LAcS99ft+M
-xo8hN9vNvK9sCOBijX6yR2z8bSJgXsmK8Y7QFHijhtlZLk0GnnIeJwDHF9Ihz0YS
-5O900EiIefsRvYw3WghKIRkFcFeOkwnQRtg3RnYSosXtcuJ+8N4uKI4zS7ga4uLE
-Wvif/SaciSsCVNO/r4NZ/K41bBuOCceEldxAv26/gjlzMvHL68G83tWlcN7Qf0MI
-o1RXbcEKmOvR2mSksK4cvwjw0KZ3tSWX3mSDX5aOUBhRnd+7P+qHfg/NSzzuUBxR
-rG9TElEQtNs5lO+xkCcAW2QTcRw2j/21ktfm97zdArDjt9qxN2Q5azFjPe3ExpEs
-dK9MaOd+BxGgPCgCuMLUkcVm+GhzBmOIZKSJACeTos5fzwNPizPBb7iolxX6fvHx
-8R7ZrlMiC0qx6S5arbY7Vov4HpQKUyU14FT9+eqGjTyWAcff4YzbPUzUjfy2N1D+
-GKrgbauw4RmCwToVHs0Yfbf58hrqpzluohSIbDWT4YqRFGTxjfmUOH3DmwOuMf7x
-wcJxDwHiXMdhfXhDZRvS4VIoFaGJQ8dqKcZegGJfd6QItt48FnU=
-=91ge
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU+klEACgkQFA3kzBSg
+Kbb+EA//ac7/KLcvCg7NLwIGDESEirlAsLpGr4nI/zpvKUMHesKpV+JCuzAx3gi8
+VET41JSYqzjyfvAdoi9E6gR39/vlEMGdvpW0wrf7yGlwCxokn3ECYJ/O4xETTouc
+a3nsKRreYST5sO2OGCutGnRT3UM92iafCk4rjQ8+vAXQ+uj5C2aLxEahAK6T0fji
+HRBL4tLbtfwmcmGhfksHqj5E1s1trYzd01Cjeok1ye20Hk9zoCYeej5C+QooUBFg
+VwuSmzrddk7J+1UlOb8blrEJssIOi4rpWab2F/ZzN89xkpvogUCLfUhNCqpTRuXi
+M77QrDpzWF4bMirGZkdt1Zlh9rZGmj/VAXWEnpyGTlHoFYyP6ojmsQC0Jofw5FrE
+U4F/m+zlgiVl0BAYbmkKqXq1MJhL/IPIJ+XPw6995hluZKgrAaup33zSQ2BpGOpn
+6HusiYfctkrZBDqwhK+BY5woWtB6QHHTt1OxNJA41h4iO4E1cTOn+L0kNaGkovP3
+IotdIUOaSdRgB35WFJuX2lZvUk1Gc5cPeywpZIM1Wx4p6ImWKADajv5o0vDDMqSR
+jpdijVwq6UfqxpdsInK6P+TP+5BQsvNNAipSylXA8KYC6VTSfDrgmoRKqgeb1U+u
+krx1xI1TrRdfmJA90tDnGHsXBhz6kWrVluK1Jj7ybVwH39ugrqU=
+=nmih
 -----END PGP SIGNATURE-----
 
---GSjqUPDK1r46QXAL--
+--Af+7Wv27sclYo7SW--
