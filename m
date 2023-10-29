@@ -2,53 +2,51 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C044D7DAD80
-	for <lists+linux-i2c@lfdr.de>; Sun, 29 Oct 2023 18:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1F17DADF0
+	for <lists+linux-i2c@lfdr.de>; Sun, 29 Oct 2023 20:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjJ2RZn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 29 Oct 2023 13:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
+        id S229533AbjJ2T3n (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 29 Oct 2023 15:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjJ2RZm (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 29 Oct 2023 13:25:42 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC682AB;
-        Sun, 29 Oct 2023 10:25:40 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7471C433C8;
-        Sun, 29 Oct 2023 17:25:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698600340;
-        bh=HPQRMUVS1V2LjKPce0wyFQlweC21CxGf3flRl1o5x/g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qp3oD0/D/6HmQCxJMUYOQT1DL/kkFEbBIfw4WLMeN9CCuD5lkaTNi+Lwz2I2A0qIL
-         oFXMQ/umkuWjNIuER6eaiT77J3D4jGunWEm48K0AKbMo8vpvMVrewxWSCrskcYjLiY
-         eJZCw9AdPhL3V4X3trcqzrvQ6Zt1/DBjB4sPnrbl7q9V2pDgaNZZlcHcLrHEj3/tuj
-         U0pxFb/cL2CpgINtZayCH8J/uFbu8gH6H6PRZT3xZc9z+YrIYg3TFIhX5ZZteRiyDn
-         zVPcSVjAbHIghd1KrSuFcTsnLqN7sAHILyAIP8/kf1U5XM8eCGYD1c/3L8UNu//RRc
-         7dA27ZGnp0vww==
-Date:   Sun, 29 Oct 2023 18:25:37 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Riwen Lu <luriwen@hotmail.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiongxin@kylinos.cn, Riwen Lu <luriwen@kylinos.cn>
-Subject: Re: [PATCH v1] i2c: i2c-core-base: Modify the maximum idr id for i2c
- adapter
-Message-ID: <ZT6VkUjzhy3/rEP2@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Riwen Lu <luriwen@hotmail.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xiongxin@kylinos.cn,
-        Riwen Lu <luriwen@kylinos.cn>
-References: <TYCP286MB26079F414019C8AC9303E412B1E69@TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM>
- <Y7wvLi2lA1bSH5By@ninjato>
- <TYCP286MB2607A8F23BC707F4E4FD8859B1FF9@TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM>
+        with ESMTP id S229529AbjJ2T3m (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 29 Oct 2023 15:29:42 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673E59B
+        for <linux-i2c@vger.kernel.org>; Sun, 29 Oct 2023 12:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sang-engineering.com; h=date:from:to:cc:subject:message-id
+        :references:mime-version:content-type:in-reply-to; s=k1; bh=p9zr
+        TD00DIpe6oylzEgJGwQE8pK2cLRj8DxtFfGEiMQ=; b=bFgaGK7F7IzVg56PCsa7
+        1fGZ28vsCEefZu+LcreA4Q/bGACjqnsoeyeIpGHm3g50ubd2a1u6BReW0szod+3B
+        44pqvZX2GmuRIxKRgrVHxAwcylptSa7jZHf2W2MQWerNTXY8LiEMrZcvLE1MkENr
+        6+Doe2aGc99keRwcXShWQH4vD/AHkz5M1EvInfH3rCBRfi/4D1rf+S2xQGzH35gI
+        zi0Vscki/TqhJfnmm2oZM4KBXxkvJxSCbsyVSesklo4kZ7FSWjvInNXqqsg0H0Mb
+        xtwkVEjU91F1zmL8fgN3EA+9ZRapF08mnSHD1KJR89+ov+cJm3eArwsy84woRIBg
+        gw==
+Received: (qmail 3888756 invoked from network); 29 Oct 2023 20:29:35 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 Oct 2023 20:29:35 +0100
+X-UD-Smtp-Session: l3s3148p1@THIM8d8I5JRehhre
+Date:   Sun, 29 Oct 2023 20:29:34 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     ye.xingchen@zte.com.cn
+Cc:     peda@axentia.se, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: mux: Convert to use sysfs_emit_at() API
+Message-ID: <ZT6ynvEUT1gWr4FZ@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        ye.xingchen@zte.com.cn, peda@axentia.se, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <202212071048339386860@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mJtofPj6c6/iEMDq"
+        protocol="application/pgp-signature"; boundary="8h6Xx8JROQRZl63F"
 Content-Disposition: inline
-In-Reply-To: <TYCP286MB2607A8F23BC707F4E4FD8859B1FF9@TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202212071048339386860@zte.com.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,44 +54,41 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---mJtofPj6c6/iEMDq
-Content-Type: text/plain; charset=utf-8
+--8h6Xx8JROQRZl63F
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> The Phytium i2c driver would register the i2c adapter with idr id 0 by
-> calling function i2c_add_numbered_adapter(adap). Then, function
-> idr_alloc(&i2c_adapter_idr, adap, adap->nr, adap->nr + 1, GFP_KERNEL)=EF=
-=BC=9B
-> allocate the idr failed because idr id adap->nr(It equal to _UID) has been
-> allocated by MWV207 GPU, and print the following error:
+On Wed, Dec 07, 2022 at 10:48:33AM +0800, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 >=20
-> couldn't get idr
-> i2c-phytium-platform PHYT0038:00: fail to add adapter: -16
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
+>=20
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
-i2c-phytium-platform is not an upstream driver, right? Why does it not
-simply use i2c_add_adapter() instead of i2c_add_numbered_adapter()?
+Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---mJtofPj6c6/iEMDq
+--8h6Xx8JROQRZl63F
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU+lZAACgkQFA3kzBSg
-KbYCKQ/+JNKaF3np2WhIeAFiW4M1ewdsE0Do931EqeeRBbKQffivEV0hlWd2V4D1
-6kvbBs/1IHua5S/DwKIpo+NvoLgcMSbHONfVoI6Frs76CFUz4MOKo8JvUVydMfnm
-Ig7XQ58qkjHKQIxexS9q7dVDbAZ2sHS9olJgCVAihFpeKxNMkijuAKbzFcWsbNop
-TagoeL4gSMFyFmFQ7je2NdfOYShLcIJpruYJVnBfcxtpPPd7J0KDTxEUC+M1Fay8
-bAh8/uNf1MdZomMZtukNDgq43ewv874eSJVc38JnpQ6vHijF98uaFsH5GSSaNpbj
-2r6MWGng5XlHBmHo/8hNN1r5zOY4INs6k8ml+udgnL4j5YG6uA+rl2wu0SLdYGC2
-gyeeuAWCpppeVu3ox1rCWmvSNZVUK09bXt5oPKVuaSvq1NK9ZD2tl0OMWDHUM2JY
-fheimO+Obfyh/352NjvtuMA2gvLY9c8JCeww5Z2m74/8qYWc3aDFBNSXiTeyseNl
-5nafOEC34l9YLX0sTMV4LPJ7qlte328hm4hLuh8XPYOdxtIY8qkoihHUy8dr3RhD
-XvI4RUEVzMV65TCGOlo6ae64gVT5WGkkF7OTQzQtyEFQ428y3WaJTbp1m/pvVW8v
-3KNVKPm3aLO73F2AnggWM271pTBRIDG525P32akyn+ItQGJYoHM=
-=6XA5
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU+spoACgkQFA3kzBSg
+KbZQ9A/9E6bzVQmP1mu1+IVaakSwjZ/vEKPpsODnIxahg+yxFBg+R+z9AdAdLinC
+6SCU4rbgnnVoyx0N4X7QvHY3x2Lcjxm2lvnyJFgFAn4s31DNlkXON6+XmA+6v6NM
+C25x3HeqQJJ+h0hiCyd34/MHK71pqiH4Khk7KMMB9LhGS1ERuuLRKWIloAjp24N6
+wPh7KmkuhiktX88fYbssLXew3kLHN/UW2Ey3fhCiNn4S8DAJ0U7wCtW4v45HERlz
+STlg2bh4OpWr+uPtXIjPl0XPBH0pDKVGJRQ+e5qSWhe+fiad8ExwksZkCfSb3CIE
+4SX7OuGzLjZA/rX+Zdk8lVXBwrQa57Tp6bc3ROPOWvVTlH/rx5BXXQOMLhPQLvK3
+jqAJoT+BE3r7PbutyAxEu+UhasIUwKlxblSM4+CwZcyV2UJgvNRZU32ZmCguygHC
+a2JAJvI6bxr6ro3JuF48+3U0RJNoeApaQAM/A8j9RKdJgFCZS/wsN/+UL6VOtzp9
+cDRqp2l7RWbTcrcqJ1vrIGYe9qFJL1u3vh5n9ltZ84We1xN/ciN8XuSt8SF9qROu
+NAu2jOuSjv0EpnGeLjM0qh/KteEJBL7c6IZ+/5MCvWJCSOzUNCcU7vXZDX0hEmx9
+Js7GAfDC0jOoLBuHJDNCd72Ru/Fel2dWpnP3lhkJ1fFOShEdY7M=
+=hJmj
 -----END PGP SIGNATURE-----
 
---mJtofPj6c6/iEMDq--
+--8h6Xx8JROQRZl63F--
