@@ -2,46 +2,50 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EAD47DAD7A
-	for <lists+linux-i2c@lfdr.de>; Sun, 29 Oct 2023 18:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C044D7DAD80
+	for <lists+linux-i2c@lfdr.de>; Sun, 29 Oct 2023 18:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjJ2RRN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Sun, 29 Oct 2023 13:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
+        id S229689AbjJ2RZn (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Sun, 29 Oct 2023 13:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjJ2RRM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Sun, 29 Oct 2023 13:17:12 -0400
+        with ESMTP id S229512AbjJ2RZm (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Sun, 29 Oct 2023 13:25:42 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713F4AB;
-        Sun, 29 Oct 2023 10:17:10 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F652C433C7;
-        Sun, 29 Oct 2023 17:17:09 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC682AB;
+        Sun, 29 Oct 2023 10:25:40 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7471C433C8;
+        Sun, 29 Oct 2023 17:25:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698599830;
-        bh=kqHOtdnj+507j2C+JnNESsq5H7LYdz0LhzhA6Vu3rfQ=;
+        s=k20201202; t=1698600340;
+        bh=HPQRMUVS1V2LjKPce0wyFQlweC21CxGf3flRl1o5x/g=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XsE4M9P0mzhzERev83qkMJuMvJH4/AdIG2ZtGMSLbeAjhCZsip6fsg4WDtFH2niRp
-         kqMi4prFv/tLAmSnC1Ph+uXxURhIRLU5atU6gjlDQs5Rmerr+GklwSSfL8WgTtZ8d8
-         HnZIUE/YaRQjgY2zzLc5TxE7NycUFTWQgDQ2JV+GHM9z5HnwzphW6crER2HTws34sD
-         h05ntOySmUa7leVhGHu/Z4Ki8qQgYjQmDiRZJ08OH9bgp7gVKAtZaVgI4YuETK/nor
-         /owuA8fQytpfT6nJkOVKUABHI26ocivq0rJXXwx+zNE9oL+Gh6JM21nbfNwNuM+w0F
-         w5LAjZLs6IAUQ==
-Date:   Sun, 29 Oct 2023 18:17:06 +0100
+        b=Qp3oD0/D/6HmQCxJMUYOQT1DL/kkFEbBIfw4WLMeN9CCuD5lkaTNi+Lwz2I2A0qIL
+         oFXMQ/umkuWjNIuER6eaiT77J3D4jGunWEm48K0AKbMo8vpvMVrewxWSCrskcYjLiY
+         eJZCw9AdPhL3V4X3trcqzrvQ6Zt1/DBjB4sPnrbl7q9V2pDgaNZZlcHcLrHEj3/tuj
+         U0pxFb/cL2CpgINtZayCH8J/uFbu8gH6H6PRZT3xZc9z+YrIYg3TFIhX5ZZteRiyDn
+         zVPcSVjAbHIghd1KrSuFcTsnLqN7sAHILyAIP8/kf1U5XM8eCGYD1c/3L8UNu//RRc
+         7dA27ZGnp0vww==
+Date:   Sun, 29 Oct 2023 18:25:37 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Marius Hoch <mail@mariushoch.de>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] i2c: i801: Force no IRQ for Dell Latitude E7450
-Message-ID: <ZT6TknMc+34NCqPG@shikoro>
+To:     Riwen Lu <luriwen@hotmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiongxin@kylinos.cn, Riwen Lu <luriwen@kylinos.cn>
+Subject: Re: [PATCH v1] i2c: i2c-core-base: Modify the maximum idr id for i2c
+ adapter
+Message-ID: <ZT6VkUjzhy3/rEP2@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Marius Hoch <mail@mariushoch.de>, Jean Delvare <jdelvare@suse.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230514103634.235917-1-mail@mariushoch.de>
+        Riwen Lu <luriwen@hotmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xiongxin@kylinos.cn,
+        Riwen Lu <luriwen@kylinos.cn>
+References: <TYCP286MB26079F414019C8AC9303E412B1E69@TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM>
+ <Y7wvLi2lA1bSH5By@ninjato>
+ <TYCP286MB2607A8F23BC707F4E4FD8859B1FF9@TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LVHbfEbx9LzAVSb2"
+        protocol="application/pgp-signature"; boundary="mJtofPj6c6/iEMDq"
 Content-Disposition: inline
-In-Reply-To: <20230514103634.235917-1-mail@mariushoch.de>
+In-Reply-To: <TYCP286MB2607A8F23BC707F4E4FD8859B1FF9@TYCP286MB2607.JPNP286.PROD.OUTLOOK.COM>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,60 +56,44 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---LVHbfEbx9LzAVSb2
-Content-Type: text/plain; charset=us-ascii
+--mJtofPj6c6/iEMDq
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, May 14, 2023 at 12:36:32PM +0200, Marius Hoch wrote:
-> The Dell Latitude E7450 uses IRQ 18 for the accelerometer,
-> but also claims that the SMBus uses IRQ 18. This will
-> result in:
->=20
-> i801_smbus 0000:00:1f.3: PCI INT C: failed to register GSI
-> i801_smbus 0000:00:1f.3: Failed to enable SMBus PCI device (-16)
-> i801_smbus: probe of 0000:00:1f.3 failed with error -16
->=20
-> Force the SMBus IRQ to IRQ_NOTCONNECTED in this case, so that
-> we fall back to polling, which also seems to be what the (very
-> dated) Windows 7 drivers on the Dell Latitude E7450 do.
->=20
-> This was tested on Dell Latitude E7450.
->=20
-> I chose to explicitly list all affected devices here, but
-> alternatively it would be possible to do this programmatically:
-> If the initial pcim_enable_device fails and we're on (any)
-> Dell Latitude, re-try with IRQ_NOTCONNECTED.
->=20
-> Marius Hoch (2):
->   i2c: i801: Force no IRQ for Dell Latitude E7450
->   i2c: i801: Force no IRQ for further Dell Latitudes
->=20
->  drivers/i2c/busses/i2c-i801.c | 34 ++++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
 
-Where are we with this patch set? Other solution found already?
-Discussion stalled? Too much other things going on?
+> The Phytium i2c driver would register the i2c adapter with idr id 0 by
+> calling function i2c_add_numbered_adapter(adap). Then, function
+> idr_alloc(&i2c_adapter_idr, adap, adap->nr, adap->nr + 1, GFP_KERNEL)=EF=
+=BC=9B
+> allocate the idr failed because idr id adap->nr(It equal to _UID) has been
+> allocated by MWV207 GPU, and print the following error:
+>=20
+> couldn't get idr
+> i2c-phytium-platform PHYT0038:00: fail to add adapter: -16
+
+i2c-phytium-platform is not an upstream driver, right? Why does it not
+simply use i2c_add_adapter() instead of i2c_add_numbered_adapter()?
 
 
---LVHbfEbx9LzAVSb2
+--mJtofPj6c6/iEMDq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU+k5IACgkQFA3kzBSg
-KbafUxAAgd58sc/w7TNN3XnqkARACN+uSB+NhVdhfF7g2NJbNSpUzXWttkaBD8L8
-fqlX8gD9sNHs4cBL0MlCnUPDoA67flTb/q96Sk6zadnAL4eNW4v1bQpxHK1StNqR
-8bEeEYAyoUGX6Xe2rdYiESHjtFNy2YCMX6pzAvLJn+yHwTrMcrYFU/VtOHi7HfA/
-qiTUZJbLfrl1OXxqcuEBUyYB2WhXed/SRsO0NdKhkpwn90V/s4EwrlVXjGpuUKdn
-0mI+OrCTt8umBQDn023FWtvUX8lWww4KQOo2szsMD/deCt4YzsYLO00Aj1z/T+GY
-YvYYo4R1W9zVZnbXq7w+nihYIApiaEN3QiICzbo4YvubRqyMeJ1B+vSutIrLVFKS
-gT2T90sMtWKxXjS/zAFSCB63dgabml8QB1o1SqdsLHL9l7vrnKK7TKXDrzo5I+Jg
-z/2mdCsxyaPHMjHRhk9dKQ3BtOHPSXsKajePtkgj1RYuOpSbI4EMt92l+luVgCUK
-s5miafDazxyru0b8F7zccy0FvMwXhJSMHChlfzjVbAvjwr/s79bzPEPuRNRoqJFB
-QXeODrTouBci68cqnV+eq3KL334+2mNB/yiVIWyckrcrmVdzXye+f1HshKNFwL2y
-XtPHFHG1lDWLVdbIq3O6kEm+Skr/5cDWSerAT8q/g5a1HaIJzM0=
-=yPh2
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmU+lZAACgkQFA3kzBSg
+KbYCKQ/+JNKaF3np2WhIeAFiW4M1ewdsE0Do931EqeeRBbKQffivEV0hlWd2V4D1
+6kvbBs/1IHua5S/DwKIpo+NvoLgcMSbHONfVoI6Frs76CFUz4MOKo8JvUVydMfnm
+Ig7XQ58qkjHKQIxexS9q7dVDbAZ2sHS9olJgCVAihFpeKxNMkijuAKbzFcWsbNop
+TagoeL4gSMFyFmFQ7je2NdfOYShLcIJpruYJVnBfcxtpPPd7J0KDTxEUC+M1Fay8
+bAh8/uNf1MdZomMZtukNDgq43ewv874eSJVc38JnpQ6vHijF98uaFsH5GSSaNpbj
+2r6MWGng5XlHBmHo/8hNN1r5zOY4INs6k8ml+udgnL4j5YG6uA+rl2wu0SLdYGC2
+gyeeuAWCpppeVu3ox1rCWmvSNZVUK09bXt5oPKVuaSvq1NK9ZD2tl0OMWDHUM2JY
+fheimO+Obfyh/352NjvtuMA2gvLY9c8JCeww5Z2m74/8qYWc3aDFBNSXiTeyseNl
+5nafOEC34l9YLX0sTMV4LPJ7qlte328hm4hLuh8XPYOdxtIY8qkoihHUy8dr3RhD
+XvI4RUEVzMV65TCGOlo6ae64gVT5WGkkF7OTQzQtyEFQ428y3WaJTbp1m/pvVW8v
+3KNVKPm3aLO73F2AnggWM271pTBRIDG525P32akyn+ItQGJYoHM=
+=6XA5
 -----END PGP SIGNATURE-----
 
---LVHbfEbx9LzAVSb2--
+--mJtofPj6c6/iEMDq--
