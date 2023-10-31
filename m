@@ -2,160 +2,148 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531AD7DCEFF
-	for <lists+linux-i2c@lfdr.de>; Tue, 31 Oct 2023 15:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD117DCF69
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 Oct 2023 15:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234896AbjJaOPD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 31 Oct 2023 10:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        id S235102AbjJaOnH (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 Oct 2023 10:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235317AbjJaOO6 (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Oct 2023 10:14:58 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB5AED;
-        Tue, 31 Oct 2023 07:14:56 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5ac865d1358so4233442a12.3;
-        Tue, 31 Oct 2023 07:14:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698761696; x=1699366496; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=kRNwzlQyH+VlpdFxfnUe4Y/Tf26qonfvNmh3DCH6lvA=;
-        b=JCrdSmmlOjER7c2+TICqjTaf/jMkGVujW4+TfVJaiYdRfq4KFCtcMvAX26sKbWJ8Yl
-         J1/d2blR/gDf1/LM8PLUAZEQKLqtTsSNakVH4Z5KkrSCW+1c5kTrKx0tb/tQ/Nm0FevM
-         MjtQVLUlHeMkYVUW0c7GjMw5U4XxGsJahh7e10PlAplWmNpaFSnYM11VK+7d19sQ4Gr+
-         N5uU0sUfdXf03EIWfrXlsi3xZf7sja47o8O7+ppofhu4q7U71vNNiKisurmSIu6lOSnL
-         AfRPvzO15rtl+YP8mvPI2WVJOf+2jNvLkyyfD1AvB08ZQMhXfaLiR/ZQ3N/qPY1hLHty
-         8oSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698761696; x=1699366496;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kRNwzlQyH+VlpdFxfnUe4Y/Tf26qonfvNmh3DCH6lvA=;
-        b=GnLxwXiCFDCPFQkXLCXZO87WvIGOsdDhkLBLJbADu5JwItvrN7aOTXtN2XgYelglwx
-         kAyRo1QjorT4Az5SFRVfddNf95kbX3FbcukSAXYr7aNKdz72si/tQ5SW0YPUluIItFVl
-         4MOd1BQVpfRiz3hcV+5LCvAJdfKOlxY3GaXLXdhoLPdynq8Wpq0GJiNgo+kzN47lzYod
-         NS+FG0tEyWI/bAwdj1b/xb7csvnv9Nq7li9ey4y8kvXBqbnnXlc5MkXyb93fJjdlddup
-         dKFuYxZ8LCwNU72ud4sgS9tsCw1tirwtFX0piLF7XbZgv0QpNWt8Bbyev8m5MZjiHzBX
-         yh0Q==
-X-Gm-Message-State: AOJu0Yx+R90fjfgHpvfPlUp8BvKfACTTHI7oiMxl8cwycL2COhBqwr+i
-        1LnxZQXY0dMllgNEOsiFQvo=
-X-Google-Smtp-Source: AGHT+IHy9Jj/Ww6f5TztL4zM9r3f+RpZejaBc/tHMpRDznCvumjJsGKs+jo2tnC2WQLeoa8SG2Anog==
-X-Received: by 2002:a17:90a:94ca:b0:280:1695:7b5 with SMTP id j10-20020a17090a94ca00b00280169507b5mr8318468pjw.12.1698761695920;
-        Tue, 31 Oct 2023 07:14:55 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b16-20020a17090ae39000b0026b12768e46sm1160685pjz.42.2023.10.31.07.14.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Oct 2023 07:14:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <708e84f3-01ac-455e-9b66-2f0e2be1a874@roeck-us.net>
-Date:   Tue, 31 Oct 2023 07:14:54 -0700
+        with ESMTP id S233002AbjJaOnG (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Oct 2023 10:43:06 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEBADA
+        for <linux-i2c@vger.kernel.org>; Tue, 31 Oct 2023 07:43:03 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20231031144300euoutp01b3b3e8652066f8ac9896a10df93a5c79~TOEtQ1yfB0837908379euoutp01F
+        for <linux-i2c@vger.kernel.org>; Tue, 31 Oct 2023 14:43:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20231031144300euoutp01b3b3e8652066f8ac9896a10df93a5c79~TOEtQ1yfB0837908379euoutp01F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1698763380;
+        bh=M1VOT/wnYBEVpplIfhFiz/j+COOovxfcbFgBB2hb6Wc=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=AmyKs3fJKM6AnecMj5rrEU35bq+GG4jYMirlfbFj/jVGAgNOKnYWvpJLr5WpFh7mP
+         aJ7anmsrYsKFead54Eu8BWo4YQRx4SiR+uWXLM954I70+6+oN9sBnfJTNXrn0MyyeJ
+         A51iglApGfTVNP1f1a+cqcEM65sh8wgvnb7BtPSw=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20231031144300eucas1p1119502dad12149fa1c5639c6c105c45a~TOEs3h93m2373223732eucas1p1x;
+        Tue, 31 Oct 2023 14:43:00 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id D8.F5.11320.37211456; Tue, 31
+        Oct 2023 14:43:00 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20231031144259eucas1p181b91aded840d6706c569530488e683e~TOEsSPbXn2373223732eucas1p1w;
+        Tue, 31 Oct 2023 14:42:59 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20231031144259eusmtrp2e03a543eaab67bff4a62522315ef042d~TOEsRrk1E2417424174eusmtrp2U;
+        Tue, 31 Oct 2023 14:42:59 +0000 (GMT)
+X-AuditID: cbfec7f4-993ff70000022c38-6a-6541127368d6
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id F4.7A.10549.37211456; Tue, 31
+        Oct 2023 14:42:59 +0000 (GMT)
+Received: from AMDC4653.digital.local (unknown [106.120.51.32]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20231031144258eusmtip205e6b8aa4a451b0ca1f6872336952d9a~TOEruyvqs1965119651eusmtip2J;
+        Tue, 31 Oct 2023 14:42:58 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: [PATCH v3 0/3] Add atomic transfers to s3c24xx i2c driver
+Date:   Tue, 31 Oct 2023 15:42:49 +0100
+Message-Id: <20231031144252.2112593-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
- bindings
-Content-Language: en-US
-To:     Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>,
-        Conor Dooley <conor@kernel.org>
-Cc:     "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20231026081514.3610343-1-Delphine_CC_Chiu@Wiwynn.com>
- <20231026081514.3610343-2-Delphine_CC_Chiu@Wiwynn.com>
- <20231026-dicing-crispy-a10af575d3e5@spud>
- <fffa4330-8d01-8498-4c5f-772ebf2a6b5a@roeck-us.net>
- <20231026-poison-encrypt-1df55e023867@spud>
- <c734e26a-6fad-bc23-ec58-10c6a440ec83@roeck-us.net>
- <SG2PR04MB55438AA9A2989F406012A4D4A1A0A@SG2PR04MB5543.apcprd04.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <SG2PR04MB55438AA9A2989F406012A4D4A1A0A@SG2PR04MB5543.apcprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAKsWRmVeSWpSXmKPExsWy7djPc7olQo6pBoc+MVo8mLeNzeL+1w5G
+        i8v7tS32vt7KbtHx9wujxYzz+5gs1h65y25xd/9cRgcOj02rOtk87lzbw+bRt2UVo8fnTXIB
+        LFFcNimpOZllqUX6dglcGVsnL2Us2MNRsfPaU5YGxhdsXYycHBICJhLzLt1l7GLk4hASWMEo
+        8XzWDLCEkMAXRomVp+UhEp8ZJf5eeQbXcf3BI6iO5YwSe0+dYYNwgDoezFrKCFLFJmAo0fW2
+        C6xDRMBBYt7a7+wgNrPAP0aJ71/0QGxhASeJz/N6mboYOThYBFQlLj4pAwnzCthLbJ75mRFi
+        mbzE/oNnmSHighInZz5hgRgjL9G8dTYzyF4JgbkcEi0TbzBBNLhIzF97GsoWlnh1fAs7hC0j
+        8X/nfCaIhnZGiQW/70M5ExglGp7fglpnLXHn3C82kIuYBTQl1u/Shwg7Sly7/YYZJCwhwCdx
+        460gxBF8EpO2TYcK80p0tAlBVKtJzDq+Dm7twQuXmCFsD4k3E5YxQkI3VmL7oytsExgVZiF5
+        bRaS12Yh3LCAkXkVo3hqaXFuemqxUV5quV5xYm5xaV66XnJ+7iZGYKI5/e/4lx2My1991DvE
+        yMTBeIhRgoNZSYT3sKlDqhBvSmJlVWpRfnxRaU5q8SFGaQ4WJXFe1RT5VCGB9MSS1OzU1ILU
+        IpgsEwenVANT8K9Fk1dcktLLVl4TpxLbrOXOKDrj36fuJVe3eJ9nXLG5na3oSUnGpuTvWdc9
+        zrvf7nq9qWTG3d+TV2+P5bU/rXtk8g6FTxXlTOfKd9115pskni14Yrdmg3+ei4daakLamcPr
+        2EzUp57Wvhcf+Lw4bM6ZIK6fehdljzLFTziT8Lo4S7zT12TPLY+/3Q5mii0u3z+xrvt6nm/b
+        vm2FTtLdbO/fy2xgzjmrwzpDo2TxmlY102sX/cNt5FSstUpnMC3afqvVM9L55gxFs0t+hVsd
+        sjRfFc15tGqWzK/G+7Pvzdb2NZ20nDWneEq33OENyz25+CLlGZYeXd8nLHqw6i/3sfsyxs3m
+        rM02U9P17Q2UWIozEg21mIuKEwEhiEKdowMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOLMWRmVeSWpSXmKPExsVy+t/xe7rFQo6pBi++ils8mLeNzeL+1w5G
+        i8v7tS32vt7KbtHx9wujxYzz+5gs1h65y25xd/9cRgcOj02rOtk87lzbw+bRt2UVo8fnTXIB
+        LFF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZllqUX6dgl6GVsn
+        L2Us2MNRsfPaU5YGxhdsXYycHBICJhLXHzxi7GLk4hASWMoo8fn8QSaIhIzEyWkNrBC2sMSf
+        a11sEEWfGCWWn38L1s0mYCjR9bYLzBYRcJK4vWgWK0gRs0ATk0THiUXsIAlhoMTneb1AUzk4
+        WARUJS4+KQMJ8wrYS2ye+ZkRYoG8xP6DZ5kh4oISJ2c+YQGxmYHizVtnM09g5JuFJDULSWoB
+        I9MqRpHU0uLc9NxiQ73ixNzi0rx0veT83E2MwBDfduzn5h2M81591DvEyMTBeIhRgoNZSYT3
+        sKlDqhBvSmJlVWpRfnxRaU5q8SFGU6DzJjJLiSbnA6MsryTe0MzA1NDEzNLA1NLMWEmc17Og
+        I1FIID2xJDU7NbUgtQimj4mDU6qBSXyN5dTdE3W+biu8cVR4gwjHof3L5T+2KbvViZzeZCu1
+        6NvLnxNTrxtIO/JNt2rcN8G6Pnjn/qtnq57cSP+vlPnJ9t6XH21tZVXCR0zqnWa2hZ247PJ2
+        /1PTF7KGOU4dDwy35k4Kv9bxc+Uxy388ayfPu92astFqxi4D2YS5GvPm1PtvDVSIurmR8bxa
+        yzPWXypuLGzrCvm0bplOcLs0OdGn+/YXRZvFeyUe1LSyvODmzlmVP1P98ee7GRcUPH2YpA73
+        XFmrfnie7gwNIabCdsWjt3ufBzKpx97K8/Y68XaxyLvw8i4z9hN3ahg/ljRtCtDgZjt6zLRz
+        WjdzlEDB5fRNM04sZfqw+1GdvN/2I0osxRmJhlrMRcWJAOlcphP6AgAA
+X-CMS-MailID: 20231031144259eucas1p181b91aded840d6706c569530488e683e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20231031144259eucas1p181b91aded840d6706c569530488e683e
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20231031144259eucas1p181b91aded840d6706c569530488e683e
+References: <CGME20231031144259eucas1p181b91aded840d6706c569530488e683e@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 10/30/23 23:25, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
-[ ... ]
->>
->> Actually, turns out there is some contradiction in the LTC4286 datasheet.
->> It mentions different coefficients in different places. It is all but impossible to
->> determine if the datasheet is wrong or if the chip uses a variety of coefficients
->> unless one has a real chip available. Sigh :-(.
-> We are not the chip vendor, but we could forward your question to vendor.
-> Could you point out the exact places (which pages) where are the contradiction in LTC4286 datasheet?
-> 
+Dear All,
 
-See "PMBUS COMMAND SUMMARY", default values:
+This patchset adds support for atomic transfers, which has been added to
+the i2c core recently by the commit 63b96983a5dd ("i2c: core: introduce
+callbacks for atomic transfers") to hide warnings observed during system
+reboot and power-off. Almost everything needed for that was already in
+the driver as so called polling mode. Unfortunately, that polling mode
+has been tested only with single message, write transfers so far and it
+turned out that it doesn't work well with read and multi-message
+transfers, so first it had to be fixed.
 
-"IOUT_OC_WARN_LIMIT" says "21.3 mV/RSENSE"
+Best regards,
+Marek Szyprowski
 
-"PIN_OP_WARN_LIMIT" says "2.8/RSENSE"
 
-This seems to contradict "Table 8. PMBus M, B, and R Parameters". But then,
-reading it again (and again), I think it is just an odd and confusing way
-of trying to describe the 0x7fff default register values. Sorry for the noise.
+Changelog:
+v3:
+- fixed style issue pointed by Andi, extended commit message
 
-Guenter
+v2:
+- updated and extended commit messages
+
+
+Patch summary:
+
+Marek Szyprowski (3):
+  i2c: s3c24xx: fix read transfers in polled mode
+  i2c: s3c24xx: fix transferring more than one message in polled mode
+  i2c: s3c24xx: add support for atomic transfers
+
+ drivers/i2c/busses/i2c-s3c2410.c | 57 ++++++++++++++++++++------------
+ 1 file changed, 36 insertions(+), 21 deletions(-)
+
+-- 
+2.34.1
 
