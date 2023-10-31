@@ -2,241 +2,199 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA7E7DC642
-	for <lists+linux-i2c@lfdr.de>; Tue, 31 Oct 2023 07:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DB07DC63D
+	for <lists+linux-i2c@lfdr.de>; Tue, 31 Oct 2023 07:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbjJaGGL (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 31 Oct 2023 02:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S234987AbjJaGH7 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 31 Oct 2023 02:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjJaGGJ (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Oct 2023 02:06:09 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2056.outbound.protection.outlook.com [40.107.255.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C44F5;
-        Mon, 30 Oct 2023 23:05:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T2W/cu7JN8hQRr6daFDeazHWPrVQEAN9KyWdi1dY+JwaIqezPN4nw9eLuwNEfpFt+iLfb3JWw14P1MsHrkoKoFD8tsNBc4/2ZGpEj8XOT2bn5itX9SgD9cI+2pq0ZVJYXO2dEfTSGawh+HV3HPDztcEBhxThYste5FG3/3BBYS6Tvn3MkL0z+CW7A4kjvooWtcJbZ3dUuzOsieO5IQd7uu9FVZ7f+DewZk+k370Bl+G0JlfGAm7CJVa/4QJgJ/fLu5NT89dekqdvYaDJ/aNCOj6WHSq9P9LZ+l6K2blAG+yj0bgIC2FCpr8ycjQBVlIYsKED+j4pbWb8GMAEA+gljA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8zlaR2nGzIsQ+dXF6OApNIVnP8cLN3aV9RLxVbN20vE=;
- b=F654EMmd3wCh633ipJIdL3oUuuQZdzTrfzoKCZcROwk20v8lI/fs8eyPK7dnDVHkqRpuNlr1jwjxGSlR5hKGe9545ZcdicND82V3Qj97DRHdqxsfQiGZgzZiZrGGUxQTw8cQJU+jBWfE1/k1nFKOpbWSraXXnlkKXfUtfYZg2MqwLJnwn9B7zu8U8yg+eS8KA1sUjgh/5WNTW3kyCKkoi7KBDPpfcD47t+vEvI/ztMSONKJF2WOXtst1lUhZ2pM9rPPoRoLL95QGw1wZShP36pZcjksK9wdovTbgnBg/U2Evs4ToKhdPd45SHq6utfWpJnTTa69ZTbp+QBfHSaT/sQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wiwynn.com; dmarc=pass action=none header.from=wiwynn.com;
- dkim=pass header.d=wiwynn.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8zlaR2nGzIsQ+dXF6OApNIVnP8cLN3aV9RLxVbN20vE=;
- b=n5NunxVdX3SIYQWbuxxKQ16q9D9Opb730M2NpvzpV7RiYXy+22X2LrAz9uZRWQ42owf5tsAqt+u2QW7bhCRqtVVewnfbfZeUr0bleSNL3NS3Qx7zHkk1QkRruW7pKiJoto2GCa/q6U6z43mUNAN9+YxuLDsjzSGM9bp4GBm8ixwA/I8f6NIgrVIsfOPaWKUSnZDtejRE55qt/VzZ9YbZKNRMT6mD032VolSDxj5p/soq7aUWkMwRxR6S5inhwwmxcmdDdOOJUcc4QkWYPbL0DFiZdFM0Zs3pXXxIVg5hdVDTnNeY769hNaK6/bdfW/QooFQHbbT8YFg4t8SyjFcO8A==
-Received: from SG2PR04MB5543.apcprd04.prod.outlook.com (2603:1096:4:172::14)
- by SEZPR04MB6187.apcprd04.prod.outlook.com (2603:1096:101:cf::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.29; Tue, 31 Oct
- 2023 05:59:46 +0000
-Received: from SG2PR04MB5543.apcprd04.prod.outlook.com
- ([fe80::4c7a:8fd8:1527:9287]) by SG2PR04MB5543.apcprd04.prod.outlook.com
- ([fe80::4c7a:8fd8:1527:9287%4]) with mapi id 15.20.6933.029; Tue, 31 Oct 2023
- 05:59:46 +0000
-From:   Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
-To:     Conor Dooley <conor@kernel.org>, Guenter Roeck <linux@roeck-us.net>
-CC:     Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>,
-        "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: RE: [PATCH v2 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
- bindings
-Thread-Topic: [PATCH v2 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
- bindings
-Thread-Index: AQHaB+SV8Z0lWuQfqk2pb+fPvv8kdLBcIN+AgAAMSACAAASRgIAHPWNQ
-Date:   Tue, 31 Oct 2023 05:59:46 +0000
-Message-ID: <SG2PR04MB5543067739D9E579F262CCB2A1A0A@SG2PR04MB5543.apcprd04.prod.outlook.com>
-References: <20231026081514.3610343-1-Delphine_CC_Chiu@Wiwynn.com>
- <20231026081514.3610343-2-Delphine_CC_Chiu@Wiwynn.com>
- <20231026-dicing-crispy-a10af575d3e5@spud>
- <fffa4330-8d01-8498-4c5f-772ebf2a6b5a@roeck-us.net>
- <20231026-poison-encrypt-1df55e023867@spud>
-In-Reply-To: <20231026-poison-encrypt-1df55e023867@spud>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wiwynn.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SG2PR04MB5543:EE_|SEZPR04MB6187:EE_
-x-ms-office365-filtering-correlation-id: 795f84fe-c425-4213-e27e-08dbd9d695bb
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jBfbcqDb9HDq1YRnd13zjXqpD71L+cD+59Dx9bxBeaLCECSVFLx0myHUjjgtpK+7iPoNzCXDnHm4coOXzc3HiNkXUBHdJYB1SJTNrXqKWfusy/+cK/7KOTlrHNNSxkL4Bph7aAsKqsOparAfOpabQWDYufAz43j128XkXR6cwANnjmYF6baSp07+rggAcA7Vme9itq3bvDHEztrEq2tTCxSESbZycD/3vRS3Q88cixtEjMIWKlD2Ax/4m8shkxnKHPK69w7UtLL50LWyMbXmc6UqkZEGOiN6Nuwh8x0CLNZR7o5fbyl4m7GnCjWLaOopP2PHgyCE7OWSWXA+dm8HxsRhDJF1XFtgHMaVdcAjQTb5YxCvlEfGh0A04YdelFkKFn7tWNXrA3lKrWFEurebDEs8P/BHsGlcMu6tWkDc6dKq9oER61XJLNdwRa7wvP9JwNx7CaJ0drlYKCLbeoGLL35LhHM/KCbPYSlhfR0rYB1zY+sFFlwFWUZL1/fvokDeke/KuEX0Ijcq+zAcjWqMl9QNyys6SkVNNJ0Blk1E/P900e+rC2Nikh3wzLMQbaTQhiJe2Bv+rXiKBSycfwtmYVkU1lDTDH1ApIFextYYZ4E=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR04MB5543.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(39860400002)(136003)(346002)(376002)(451199024)(186009)(1800799009)(64100799003)(26005)(55016003)(7696005)(6506007)(9686003)(53546011)(38070700009)(38100700002)(33656002)(122000001)(86362001)(83380400001)(7416002)(5660300002)(52536014)(41300700001)(316002)(64756008)(54906003)(66446008)(66556008)(66476007)(66946007)(76116006)(110136005)(71200400001)(4326008)(478600001)(8676002)(8936002)(2906002)(966005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TrkPYPZENdo4Snkd4vmHOIbf4mNssVgwMqfNEXMl1ZzJqWv5uYH+6xEuZDe2?=
- =?us-ascii?Q?fCSP92G8MwHaDwOAslvc9IrMCoyTKusDMoIwhZvo7ZusvBZdVrMKzvBoGwDD?=
- =?us-ascii?Q?lF6dhOgb1Qm6wZ+7kVB/1csOHSagATfWT/GbFUYA/81+EJdVsl/lqwOkeIPo?=
- =?us-ascii?Q?Srl0GTx7KX+1AfLw0qPE1R6SL/1ESl4kslpwRpkv/VmRHD71DItV7M/UgMFI?=
- =?us-ascii?Q?NDxVLGuoF0gHO54p2KdV8HIvUGDoDHCp6p1Lrc7bvofF0P4inL3l/H5AjDGv?=
- =?us-ascii?Q?NZxR9KE4s3c/eNyETiNR+azL7fFkF2aId2oErRZ6jyY1gDJlbzO4u4yDk1eJ?=
- =?us-ascii?Q?MtQhVsOdXVWiY/5l3TES7ds8I+s1sU8qqPPO3Sfi3udCwdcObsK1yqixOoR/?=
- =?us-ascii?Q?oY2VR+Y9rwK4VkK4PM9wofuBR+6RkknXsXJR3Dr8g81G1cg8PPP6dEaPrbup?=
- =?us-ascii?Q?OSmvTYFtvDhkxIyJTLDhMYmvlAGgnJoCHSzfESC2CrvtvfbhJVy1P0O69YIx?=
- =?us-ascii?Q?d6MFV9nNOd8yNEN0hFi9JEJU8o1Kf1bdZ9VUuYTWFTttZ0R2hVpjFDLbI+Jf?=
- =?us-ascii?Q?i8P4RRMj1PmgGamUjEy3VQU98ymARzBSiiz2jJvr/WBFVFJzv183ARYX1oPy?=
- =?us-ascii?Q?UjBPULBbkSWd7PC/OP1Pm2G0nlssfELraP5FaP8gdnr5h4JkPvG0izT+Kb/C?=
- =?us-ascii?Q?XPXgtaLBydKmRMojj/kXNaT1l6w8GIDO8lS1/NjbuCLN0ZAEd7NcUgzz9pOW?=
- =?us-ascii?Q?Hgw/UYiBw93MXuEd6BdDS6rTmpWHcgvOQZI1/ik2BF/Km5q8fkvqxHxrCfOx?=
- =?us-ascii?Q?ZvBFD5hjivHrDtIVtWgEoBCEvtOSFzvVyrpISyXtPhrA1YBkZlohjEXEZgZD?=
- =?us-ascii?Q?FExSdQzIaMt6dvbcGU9lI+wn15kU0dDFKduJILeHQt5xmJncrl/XRSOipUyX?=
- =?us-ascii?Q?STXdckpiwsKE3PMqHJzOoxSE6OOn/drRos6NlzMVJ/IBMmFJ6ZFTH+c1ckjr?=
- =?us-ascii?Q?aA72l59Q0Mv6MskJhBvlA4y57rK199A9zduicWbZEUXWMoQ+X4G1e5oDtLsj?=
- =?us-ascii?Q?xLGA1W1gKRojP0tbsXAE+AT5f/jBhv/exc9GX8zoRO9qT2Ii4taRFcDztyst?=
- =?us-ascii?Q?mHC5LgILTWCI1OB4ZLUiosIhwvykV8Gjq3ZnjY8hsFHWorfcJzDqou1413KZ?=
- =?us-ascii?Q?StZQFr3+jaeBpYckZBNbbotbc5oy+DiqBISY6ZclUNoNFvcaXcWZjEe2ITwa?=
- =?us-ascii?Q?O0g/HOu/5p2tKtrIYyqTInle2z+/44cEjHrQ2EeSSSSlhKeAnSEldvVpbmnK?=
- =?us-ascii?Q?bCapKmJWt7aa1W/McT0vnAUiG+0C5X/GBF+mtashhW0n1vOveVJoF89Rm747?=
- =?us-ascii?Q?G1GULbSHUc7dKNCed7NjrhwMxFXzxchFayKoMIx0k0Kv+dXzKc/WyPAgDFt4?=
- =?us-ascii?Q?umXTbMOohD+TzUVzd+0KawzT0WgAvjkWtgTKpC+fA9PoGmN2GHs3lFb5GJZP?=
- =?us-ascii?Q?c79j6ZosrnKcdgg8s7b4e+yfPG2hBhvdzxngq1XcYyzWeMfvLTOWIT63tuRj?=
- =?us-ascii?Q?sqy9Pke8Qs2QDYLbyEbf8re7q5fuD1fNQfl0ZH1W?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S235104AbjJaGHy (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 31 Oct 2023 02:07:54 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A5611B
+        for <linux-i2c@vger.kernel.org>; Mon, 30 Oct 2023 23:07:38 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5401bab7525so8920473a12.2
+        for <linux-i2c@vger.kernel.org>; Mon, 30 Oct 2023 23:07:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698732456; x=1699337256; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ti+gd1S2oN/iUTNC/6buX1WfsVyGVF4t1qDxc027Lfs=;
+        b=NjiS1CrSO6QumQq+s8UsWjUhF+Km+iaSdt6oLsBn24Hp3eDRHNMPak8UX8TQggHds2
+         bBjdLSqBaVVPT4MxPUWU60WNRkS+TWFCqTAbcJtXBTZrfOhK1YE0OsZnDxUf5gRfSi+v
+         JtYhe2tDM0PfX9FaRE6vvYhSTjbSNFGdfHt3fbIznAes70/0+4+gEm/TtA2rwFCnkEbg
+         u5mEdOEsILecdJxoYfZep2/4ltmaowVfD9of/ZnQtptAntnduBiw+qbKibVDJQbXw9cs
+         tjVW64TLrg/xIytW6pKcH+Vo8xG9XWtnH2AMaI7EZR6BrX59r172fHL3XZWI3PuF5lZD
+         V8ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698732456; x=1699337256;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ti+gd1S2oN/iUTNC/6buX1WfsVyGVF4t1qDxc027Lfs=;
+        b=WcELR/kIgbVly7UcutafbZtNqv1WbvMmtiEsXWmMeL919V6ZLAoLXmDy/HDJlDV4d3
+         YmAsDUy70Su1dEb/3QCZXhSTLhLEQ5LkPnfkt6r8b1tTx2ofYCaGg7FQtnjl7ykJXk/7
+         Qefkgdu0ZuPvo3pR5XB7ZPiBw2y5aY9OC+XaGPZqgudn/B02mCY20e0N+pKqIzM5Joa0
+         OnhdurTq70k5sosdFKQ8nojBsAae/4dB0VAdAulUJafSG7qd0UhW2RAscdG7dCy0X8If
+         C9Z5Gm7wP8n++wI9bPz+DviCEnmBOaeBS4g55j1ic5/hE+El6Fy8JtsZKMf5JofxdkFr
+         ujew==
+X-Gm-Message-State: AOJu0YxGp/z4t3I3Dl2v+I4WB08bUmvgl9AczDSgMkhHy1u5rSsYARhy
+        kTq0PLxWGNKYSs9T67DP9zbczK625ROl8HZzCj0=
+X-Google-Smtp-Source: AGHT+IGfPZ8p4VcGZA07o/r00CiXXAQ87F+ZZS2kbmHd57X0oeSiKhqhNLEOaYWf1vvFWwEOLuwp4w==
+X-Received: by 2002:a50:9e87:0:b0:53d:a1c0:410f with SMTP id a7-20020a509e87000000b0053da1c0410fmr8364052edf.2.1698732076574;
+        Mon, 30 Oct 2023 23:01:16 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.218.126])
+        by smtp.gmail.com with ESMTPSA id d29-20020a50f69d000000b00522828d438csm531565edn.7.2023.10.30.23.01.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Oct 2023 23:01:16 -0700 (PDT)
+Message-ID: <22c74d90-19f8-4a68-ad01-1b7ed833cf91@linaro.org>
+Date:   Tue, 31 Oct 2023 07:01:13 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR04MB5543.apcprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 795f84fe-c425-4213-e27e-08dbd9d695bb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Oct 2023 05:59:46.1213
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: asViWF4TvUL8pNUXRfCmPRSQAmV1as6Si/4OxW5NmQZmqRoQzvgnsZ9IBorxm8lvupwtpQBOTXpMwueWhiA2oA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR04MB6187
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/2] i2c: mv64xxx: add an optional bus-reset-gpios
+ property
+Content-Language: en-US
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20231027033104.1348921-1-chris.packham@alliedtelesis.co.nz>
+ <20231027033104.1348921-3-chris.packham@alliedtelesis.co.nz>
+ <65911ec0-e073-435f-846a-c5501dd5d3a9@linaro.org>
+ <9eebec9b-e6fd-4a22-89ea-b434f446e061@linaro.org>
+ <b91223a3-d835-47c0-976b-3ebdfe84d1f8@alliedtelesis.co.nz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <b91223a3-d835-47c0-976b-3ebdfe84d1f8@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-> -----Original Message-----
-> From: Conor Dooley <conor@kernel.org>
-> Sent: Thursday, October 26, 2023 11:26 PM
-> To: Guenter Roeck <linux@roeck-us.net>
-> Cc: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>;
-> patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>; Rob Herring
-> <robh+dt@kernel.org>; Krzysztof Kozlowski
-> <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley <conor+dt@kernel.org>;
-> Jonathan Corbet <corbet@lwn.net>; linux-i2c@vger.kernel.org;
-> linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org;
-> linux-kernel@vger.kernel.org; linux-doc@vger.kernel.org
-> Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
-> bindings
->=20
-> On Thu, Oct 26, 2023 at 08:09:52AM -0700, Guenter Roeck wrote:
-> > On 10/26/23 07:25, Conor Dooley wrote:
-> > > Hey,
-> > >
-> > > On Thu, Oct 26, 2023 at 04:15:11PM +0800, Delphine CC Chiu wrote:
-> > > > Add a device tree bindings for ltc4286 driver.
-> > >
-> > > Bindings are for devices, not for drivers.
-> > >
-> > > >
-> > > > Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> > > >
-> > > > Changelog:
-> > > >    v2 - Revise vrange_select_25p6 to adi,vrange-select-25p6
-> > > >       - Add type for adi,vrange-select-25p6
-> > > >       - Revise rsense-micro-ohms to shunt-resistor-micro-ohms
-> > > > ---
-> > > >   .../bindings/hwmon/lltc,ltc4286.yaml          | 50
-> +++++++++++++++++++
-> > > >   MAINTAINERS                                   | 10 ++++
-> > > >   2 files changed, 60 insertions(+)
-> > > >   create mode 100644
-> > > > Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
-> > > >
-> > > > diff --git
-> > > > a/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
-> > > > b/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..17022de657bb
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml
-> > > > @@ -0,0 +1,50 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML
-> > > > +1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/hwmon/lltc,ltc4286.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: LTC4286 power monitors
-> > > > +
-> > > > +maintainers:
-> > > > +  - Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    enum:
-> > > > +      - lltc,ltc4286
-> > > > +      - lltc,ltc4287
-> > >
-> > > I don't recall seeing an answer to Guenter about this ltc4287 device:
-> > > https://lore.kernel.org/all/22f6364c-611c-ffb6-451c-9ddc20418d0a@roe
-> > > ck-us.net/
-> > >
-> >
-> > At least the chip does officially exist now, and a datasheet is availab=
-le.
-> >
-> > https://www.analog.com/en/products/ltc4287.html
-> >
-> > It shows that coefficients for the telemetry commands are different,
-> > meaning that indeed both chips need to be explicitly referenced in the
-> > properties description (and handled in the driver, which proves my
-> > point of needing a datasheet before accepting such a driver).
->=20
-> Oh neat, would've been good if that'd been mentioned!
->=20
-> > > > +
-> > > > +  reg:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  adi,vrange-select-25p6:
-> > > > +    description:
-> > > > +      This property is a bool parameter to represent the
-> > > > +      voltage range is 25.6 or not for this chip.
-> > >
-> > > 25.6 what? Volts? microvolts?
-> > > What about Guenter's suggestion to name this so that it better
-> > > matches the other, similar properties?
-> > >
-> >
-> > I still would prefer one of the more common properties.
-> > I still prefer adi,vrange-high-enable.
->=20
-> I think, from reading the previous version, that this is actually the low=
-er voltage
-> range, as there is a 102.x $unit range too that is the default in the har=
-dware.
-> Obviously, the use of the property could be inverted to match that naming
-> however.
-We will use adi,vrange-low-enable instead of adi,vrange-select-25p6
+On 29/10/2023 21:48, Chris Packham wrote:
+> 
+> On 28/10/23 00:37, Krzysztof Kozlowski wrote:
+>> On 27/10/2023 13:27, Krzysztof Kozlowski wrote:
+>>> On 27/10/2023 05:31, Chris Packham wrote:
+>>>> Some hardware designs have a GPIO used to control the reset of all the
+>>>> devices on and I2C bus. It's not possible for every child node to
+>>>> declare a reset-gpios property as only the first device probed would be
+>>>> able to successfully request it (the others will get -EBUSY). Represent
+>> Cc: Mark,
+>>
+>> Also this part is not true. If the bus is non-discoverable, then it is
+>> possible to have reset-gpios in each probed device. You can share GPIOs,
+>> so no problem with -EBUSY at all.
+> 
+> Last time I checked you couldn't share GPIOs. If that's no longer the 
+> case then I can probably make what I need to happen work. It still 
+> creates an issue that I have multiple PCA954x muxes connected to a 
+> common reset GPIO so as each mux is probed the PCA954x driver will 
+> toggle the reset. That's probably OK as the PCA954x is sufficiently 
+> stateless that the extra resets won't do any harm but if it were a more 
+> complicated device then there would be issues.
 
->=20
-> Cheers,
-> Conor.
+I know, but this is a broader problem, not really specific to this one
+device. I also argue that your I2C controller does not actually have
+this reset line.
+
+> 
+> Having some kind of ref-counted reset controller that is implemented 
+> with GPIOs is probably the better solution. I was kind of surprised that 
+> nothing existed like that in drivers/reset.
+
+reset controller framework already supports this. The point is that GPIO
+reset is not a reset controller, so in terms of bindings "resets"
+property does not fit it.
+
+> 
+>> The problem is doing reset:
+>> 1. in proper moment for all devices
+>> 2. without affecting other devices when one unbinds/remove()
+>>
+>> The (2) above is not solveable easy in kernel and we already had nice
+>> talks about it just few days ago:
+>> 1. Apple case:
+>> https://scanmail.trustwave.com/?c=20988&d=6qC75SLs-9PNM1ZHpLa6reGv82R6opEUmyI62vCytQ&u=https%3a%2f%2fsocial%2etreehouse%2esystems%2f%40marcan%2f111268780311634160
+>>
+>> 2. my WSA884x:
+>> https://scanmail.trustwave.com/?c=20988&d=6qC75SLs-9PNM1ZHpLa6reGv82R6opEUmyJk3q3j7g&u=https%3a%2f%2flore%2ekernel%2eorg%2falsa-devel%2f84f9f1c4-0627-4986-8160-b4ab99469b81%40linaro%2eorg%2f
+> Apologies for the mangled links (they're more secure now at least that's 
+> what our IS team have been sold).
+>> Last,
+>> I would like to apologize to you Chris. I understand that bringing such
+>> feedback at v5 is not that good. I had plenty of time to say something
+>> earlier, so this is not really professional from my side. I am sorry,
+>> just my brain did not connect all these topics together.
+>>
+>> I apologize.
+> 
+> Actually I kind of expected this feedback. I figured I could start with 
+> the driver that is currently causing me issues and once the dt-binding 
+> was considered good enough it might migrate to the i2c core.
+> 
+>>
+
+
+Best regards,
+Krzysztof
+
