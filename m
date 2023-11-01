@@ -2,127 +2,178 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D437DE1FF
-	for <lists+linux-i2c@lfdr.de>; Wed,  1 Nov 2023 15:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 577D47DE4DB
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 Nov 2023 17:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjKANzT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Nov 2023 09:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
+        id S1344293AbjKAQwT (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Nov 2023 12:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjKANzS (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Nov 2023 09:55:18 -0400
-X-Greylist: delayed 3987 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Nov 2023 06:55:11 PDT
-Received: from se4q-iad1.servconfig.com (se4q-iad1.servconfig.com [199.250.217.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CEB83
-        for <linux-i2c@vger.kernel.org>; Wed,  1 Nov 2023 06:55:11 -0700 (PDT)
-Received: from ecres346.servconfig.com ([198.46.85.8])
-        by se4-iad1.servconfig.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <refunds@usersuportt2130.tech>)
-        id 1qyAdh-0007v8-Gz; Wed, 01 Nov 2023 08:48:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=usersuportt2130.tech; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Subject:To:From:Date:MIME-Version:Sender:Reply-To:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=sPzxQPVXQm/xDAt/dtVtJhxYSMacqE9XFFygup28CVc=; b=bbP3oyagm5sRdx7vfi2dHORXBG
-        dEwSzoVWarKy9TyZO2c+eO3/R9vQlyRWfRSt1HCTBJin37Cfda7spurzmc6FH+rB6CLbbCXDydjdx
-        kwtpC4Gnslb3+0Y77hW/roKYQ+4D5x9YN0x4unQxTYYCdoK4iu28jY4wCaVM+HR3Fs679Z1ktxKbI
-        iWQJfMy0QFCqF9OsHBIyg/hKNuIe4+FK7cJg/+A9qhy3I2AmP+8icylfabKBGD3gJWH8kFehBwf00
-        AH9503WVWscAyZRgUlwIck7HwjIT19MJZrA6vrrd9RB1eNOe7jvYxk05MvUzVa8E8HPeVFEwE1YI1
-        82sQsS5g==;
-Received: from [::1] (port=36610 helo=ecres346.servconfig.com)
-        by ecres346.servconfig.com with esmtpa (Exim 4.96.2)
-        (envelope-from <refunds@usersuportt2130.tech>)
-        id 1qyAdd-00ElEP-2l;
-        Wed, 01 Nov 2023 08:48:01 -0400
+        with ESMTP id S1344277AbjKAQwS (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Nov 2023 12:52:18 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2105.outbound.protection.outlook.com [40.107.220.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E3010C;
+        Wed,  1 Nov 2023 09:52:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BldDb84QxppI8M//kSeqdO5AlhhKE2GVK8VDEF8lrQIGPYTdZig1MyTO46PMjbYN4lnC0oMKANlLh/iosNq70AK9KMHK2cS8N3NmdZunhRmHhIiTeDP75qshnVMkyWsUI7NynlUROOKOheXwHWg8P66Yao3kKigyMN/TMXtrQPux+Y+VPr83G1cSiM59GPBBDcnyaduPuMGnUUiHOfnHxvND2zsR4Jv7YZjO9Eb3GKHlY243f5Pdy+S12OdgXJAseUHVe9VfhiPFWyIoLHGRgx6Yhz68qytpegJYQ4MmY+VGs79GtoMub/Acwav6MPuqBbOqE4EiuRWjwf4YW8CTgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1NwzRR1oaLJ8aAqAwd2yWmi4XuyO9HkhbWWGKyKE0HI=;
+ b=A7LLeU23RQWEbussanku4BlZW2c9laERlDUy0ZEt94s6D2Ng5x4tRtjgVMlxpis12mRDgWTi0KCZV/Ts9mmnWSFPKocoyYgYYmU9SVx4tUdI185e2VsVP8kA0krWDkz82i8huGajSQ6ZCNNGeLrwsT/sYp/lzsy5wKwZFdO3jVvTr30EUYh54rF+rAlIvZbJymPaTT5fr6EYD44wSajjYAQ/bt+ibGkLJ5nW8d+Ki4sEonoHDnVnADTe8V9YXdYigljw7e8fMuJ5TVzwuno9x9knF/imA1iIV0kQrPPg/fwMHiybRli0+6pMgKg3IYzYkGFp51TxlikbgC3YEV8ggQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1NwzRR1oaLJ8aAqAwd2yWmi4XuyO9HkhbWWGKyKE0HI=;
+ b=M+6ezH2PUru5DWDVoLH0sefKdTwImr30VMjfarpflk4ACSPTx39TxBN58Kr+4okV/I3TPV8GTjLxumc2Y45I5Zmw2TIhAHIlWOAExQR7KiwuKflJCbyWvKrKejeXjTQN6O2nQ14ukG5qDGjGR4pzUi56H0rX2n3wKQMziXLT2AY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from PH0PR01MB7475.prod.exchangelabs.com (2603:10b6:510:f2::9) by
+ BN0PR01MB6912.prod.exchangelabs.com (2603:10b6:408:16b::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6954.19; Wed, 1 Nov 2023 16:52:08 +0000
+Received: from PH0PR01MB7475.prod.exchangelabs.com ([fe80::b84:304e:acf:afcb])
+ by PH0PR01MB7475.prod.exchangelabs.com ([fe80::b84:304e:acf:afcb%6]) with
+ mapi id 15.20.6907.032; Wed, 1 Nov 2023 16:52:08 +0000
+Message-ID: <9e89a22d-7370-4814-ac60-d60cf4a9e63c@os.amperecomputing.com>
+Date:   Wed, 1 Nov 2023 09:51:58 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] i2c: designware: Fix corrupted memory seen in the ISR
+Content-Language: en-US
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Yann Sionneau <yann@sionneau.net>,
+        Wolfram Sang <wsa@kernel.org>,
+        Yann Sionneau <ysionneau@kalrayinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Julian Vetter <jvetter@kalrayinc.com>,
+        Jonathan Borne <jborne@kalray.eu>
+References: <ba6d4378-b646-4514-3a45-4b6c951fbb9c@kalrayinc.com>
+ <9219ad29-b9a3-4f07-81b5-43b4b6d9d178@os.amperecomputing.com>
+ <d65lwrkji3rvw6r4jdcumo4zu3hbu6zpv6xq73hw6hcshvhtkw@jvuohb3f3loo>
+ <3a305e74-2235-47ab-8564-0c594f24dc0a@os.amperecomputing.com>
+ <ZRSEntqne/1y1ozq@shikoro>
+ <1d56ceef-6573-43b9-a050-124c341a0698@linux.intel.com>
+ <ZTpLHZZYtd1WgBu6@ninjato>
+ <ab57ba73-ce62-43fc-9cb1-d2db1bd13cd9@os.amperecomputing.com>
+ <7ee0acbd-e332-4dc5-a6e6-0df58913ff71@sionneau.net>
+ <846d933a-598f-43e7-8478-04f3a0d20d1c@linux.intel.com>
+ <wlhhgjsh7hw76m637zpj6c4fmzsd2znphrb3dujen5ieukdbwr@yantuxgq3yb7>
+From:   Jan Bottorff <janb@os.amperecomputing.com>
+In-Reply-To: <wlhhgjsh7hw76m637zpj6c4fmzsd2znphrb3dujen5ieukdbwr@yantuxgq3yb7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH0PR03CA0397.namprd03.prod.outlook.com
+ (2603:10b6:610:11b::30) To PH0PR01MB7475.prod.exchangelabs.com
+ (2603:10b6:510:f2::9)
 MIME-Version: 1.0
-Date:   Wed, 01 Nov 2023 08:48:01 -0400
-From:   refunds@usersuportt2130.tech
-To:     undisclosed-recipients:;
-Subject: 12:47:59  VAT Invoice - Payment Request  01/11/2023
-User-Agent: Roundcube Webmail/1.6.0
-Message-ID: <0e8abbcad8be2949ff3ac52ced205360@usersuportt2130.tech>
-X-Sender: refunds@usersuportt2130.tech
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Get-Message-Sender-Via: ecres346.servconfig.com: authenticated_id: refunds@usersuportt2130.tech
-X-Authenticated-Sender: ecres346.servconfig.com: refunds@usersuportt2130.tech
-X-Originating-IP: 198.46.85.8
-X-SpamExperts-Domain: ecres346.servconfig.com
-X-SpamExperts-Username: 198.46.85.8
-Authentication-Results: servconfig.com; auth=pass smtp.auth=198.46.85.8@ecres346.servconfig.com
-X-SpamExperts-Outgoing-Class: unsure
-X-SpamExperts-Outgoing-Evidence: Combined (0.50)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT90jVzTLJt3vj6cAu5S4eQ0PUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5xCVkUQhkWjznmAXzUM59FDeCQmMU7KFFgiWIBAXnrBXy1J
- uvIGdAZ+nRcg18lyspSXJ1AVmYXsWXtl1W2Ega+sBivM2KAdHVK8gEgmj+tZxvg4T07jGoX0mJjJ
- zGR1AVPHTLt5lZGXA+9Lr/xZ7jT103gML4oXg0IQZnwEmzwVrk3Gob85SarLSjMujRiqaKoWzQBd
- zZEeVgNeNc4aqxV32bHIcdVcfSh/8PzeL5+jy9VllbYl8mifNK82JwyIdPYZBa9UORLQxLi6axhO
- Q6XhuKjpTzqywApLauPBI4SnEu+s2TLYFrpbH36fRL1wPmp9j1HzX1ni7vKal/3r6X7vuf3k7Q21
- gKwfLiUQjQwxWzFQ32MgDgpchp4PEKDOFDMHPjH3zcmFJRZtGj5eOFe4FtBR1LpID8h7lvcd2st5
- Oi3Yssv2sSCSI1P0UNVCZ6/hRXgwlbhmLl5QJ4ZXedmosyR7xnSQvNSHi1Ut4NfV1NXJJSG6qZoW
- bQwHg908jZXNB09OyPKSlbu1K7gY8+1KVVJqzYwTPF8fI2AHYhoKM2H1TBUQPhK3/iTCpJA5M7GC
- scUwt2IKFbHQR8Tjix0+9+yKbt9N4m4k1oP58wV/twRugAyToGNUrewF79966PKVgdb9T8rr/jsg
- Gl/n+805zjVN8uwLYGUeGjM8/NoWo8DX8cC7v+tc12g3WqWOy1aAyUkZddJqP9eA0YGB4V/0/E4U
- RARNwHAnnSH4fAMpA4u6yfwyU3nYCJMEs5MGUebq1NL8B3CFIKtwoyoQPWOP0vMPkU75mEPocZpp
- P87T6sTRAWbl7BuaoESCh9Z95BgVhO3OTh04yBAU/xNNadhQr4e0TovDKogoECSjVndLEu9y4fgK
- XXXqh6q9juCEyK19x49rgA7CBsh4G+k3+4Lk6ZPvDISgn6tDFodjtQNtJKC662tI40JQoJKdWjp1
- S4475A4TL0JyBFvMuDrD85yyY3633jKnmDBxoDJ/Wit/S/BuyOSLlRuJjxt0UnQYBmkow3VrBfA/
- /LY1tH5PL1rCXJ8ERGG7oijg1bJSZZCe9ikb+tiVsFtDQ5V8LNuObPi9pZ+yiANbEOhyc6ZanYrA
- 1pzQEwwi2Qt/xg2b7lNyfUm9TrauA6Thb3+NZ6d3dMAYw0nckCzgSVWO3eqMFYX3bcHPmVKbWx8/
- kwOxjr6wmXcUjrKvP6HLGoBtYU0HeyVADEW8td6lcv8FgFDqy1VLmaIEzunoyu4rZ3sSaxitf3C6
- L6isgeCJgaVjSr0MHh+gXil4AotJjY1UsMnQZLG5OsGpJGqHY38l04hMKteNN8V+gO2/C5N76JNk
- S61My2h8yD8zHQGmQhxOdOmhlh0up/IDWxg+YCV6+lA0yqHaXb+FLCd5MeWT8+6pot5XooWblIL9
- UDeQntn3AmJP4tAnAnrwjx8EBlyOeSj4JtOpJ/c44QSayA13wJ8B7cZ+lcaBF+XdzrHGiuRWnqtw
- FYlgJ4a/ns886/SZ5ReNkXZhZA6K2unQujzmWCDkClFyxx0KWQI2zJZF9cQS8/sXFcw0KKQ5NgR+
- ahRjGYaTByilhR/OAA7ghkWcfjS/vFsG6O7eu2irga30G1Aa733zwXlF74V+fDxRrnWbqd2ZPrfD
- B+7qsb5/tXzxvwkUVdBikoQk4Ndu06h2Q8QP5GQeNUYfRmau9/mTrgV1DsBTAH/LY9epCo9oOMqX
- JUhzjVQKa/sMjH2SHvwzRHU/6sq0RElhP7E8Vsgk0SC5aVko+unajIndQ6hz4B1F00VU8glPcosH
- VKetsgCSTJFDmwdfh0bxwIakfoo+8Jo9gzCaS1hGW6rScVSuT5PjWiXGEncMLKWVwHr+D0Kg58ok
- aXFOE9F/Z6SgKs2P2p/VK61cl3uw0jIR5npYQHgiZtH9np5JHUYXNw8HVCze8VhfPzNJ1ki0XwLl
- I2bkA1XTqkr6Suqnu0Y/psQuzTjF0AuhaxEVGb2NOtSTdgoyJVt7FlwyPe1+jRo/hbUdHpCjmaWu
- BSm5ug859t5Zm0OOefk8LbDww7nBVFwsAYpLPFdJd8WPtXpBXxjV1MOOZsKt1rGm2uqQGEU1POMm
- k+v2OFWor41XypUamUdylUIKhf3z2GAHxH7IXEOXwd+N5JMzdBoKi9A4zGig6UDGE6t4vdmMJrfw
- Zch1pNbUiDeC5FH3jE5IB43rebZzzHTtz34qwLD38pijbU6HXXtpnAioFDWuOwFAIGEEeM+4tYIY
- g10mxZUJ2sQsiwQzKw+6v3CaIMG6s7LqJDbgQR4w+A4ehkiXzoIJTPhUeMMg/HQtLUOX+vgyQHpR
- 59cdtTZjuncJYARKU3MdMJdfOLNpLb/0V4zTiplm8k4hu1/rdU1t/SWu+yxj6TsA9AmUg4yFKpMk
- JUW7xj0dybwp+I95ebsl9sqUhn/6xo+/SrjgIEzANFG/zoFtbhG4gGLEHJgfmT+WJALxB/mBld40
- eTXlWiUAYdLmsJdAoPIla8uks9tudOZIqj0J6nOID5G+BsH0Ww3WZg7DYzOOgJVQ0bb4mI/JftGC
- cSOJ/gjucI8aradTws0icbXBy0Si+qMrQilr+yrnbXSp7WUROg==
-X-Report-Abuse-To: spam@se1-lax1.servconfig.com
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,FROM_FMBLA_NEWDOM,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,
-        RCVD_IN_MSPIKE_L4,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED,URIBL_DBL_SPAM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR01MB7475:EE_|BN0PR01MB6912:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7c9a722a-a3bd-41cc-5790-08dbdafae239
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B4UtM/cLpdB2miSUJvMLNVg9zZyjpsD6w1drk7/7fALakT1LttKP/46aGTwQHyZTv/N61IYlc9pCVRWBs4saNuRitQQ3ezZrufApVeIQb5nf09b45FJjk3rSATCa80D0UdouQnnVwUJRJiMaFkgEBfrBa7RP7f137EPBGRMAhEMeJUbVUBxDH49rMMEG74RaksVWTtiqDDiVIJacXCDTjCbB4UdbdCukbTDHP20Fp3oLjvh251/D3o/IhYhmEFZuGFJhGB8j6Qjn+gd5sWYoA0PQgqAJjcoajgBdlbUW/mgUP7dmHaaWZ/nlwiGITcHuvhY7/c0yOAq6miIO9+gmMVVOaHFh4SiLF0Ckr+G7VgnsXNw3BNHBIG94pkcMByf9GI0qVmY2JZIFXdiu/yAuw0W5V+CDJfhc0nqt4/kaafRwMhfXK9/f/WaBviJtuUPiShUrwaNKpIUUsmLO9WyXCsDUAEEf6ABhoFal17dQyU1Eb+FNF7YEKADe+OhIzzXALoFBUJKcf2iCs2T/G093xpr3K36NO9TTuR4x2n51jZM+q6jXTas4RXZ88LDzQnCgujI6pb9ECEad2+l9BHlglu6qprU4GRDkTLMTAYihg1YRDHt/C0fvuqZF+1UhYYF4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB7475.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(346002)(39850400004)(366004)(376002)(230922051799003)(1800799009)(186009)(451199024)(64100799003)(6916009)(316002)(86362001)(2616005)(31696002)(2906002)(66476007)(83380400001)(54906003)(26005)(66556008)(66946007)(478600001)(53546011)(41300700001)(6506007)(6512007)(38100700002)(4326008)(8676002)(8936002)(6666004)(31686004)(6486002)(7416002)(5660300002)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dGRPNDZiK2pCbDFndERtak9UQ2hOZnh3ZnFUZVJSVjFiVjBEcHJXWG5jK1R4?=
+ =?utf-8?B?V3R0UHM1VXErMGZhUHFRdENLbU9FZHpMVXFuam9Ycm53K3VUYnNjQk9KMHJx?=
+ =?utf-8?B?VUVWVkUvWjhKVFBDOFJQOVdsYkdKZDBaWnF3UWVNb05Oa0dpZU8vMWpMOUJO?=
+ =?utf-8?B?dzFDQTBYYWU4a3dnbisvK2xvM2o1KzRtcENYLzZnQkVnNDZZTllmTTdMdmV3?=
+ =?utf-8?B?NWJDTXEySXA4OExYOHpVOUFLUlRtcFUvb0V4bjVVak1DUkJRODNCS0Y2anpv?=
+ =?utf-8?B?dGsvRE9IUGlkZm9LRWpoT0N3OHh4ZHhkTk5NWnlPWnV3aFMxa0dISVdXYjBF?=
+ =?utf-8?B?VW1CNGJDSEprcDZOdU9OcjJaUGZ3QXJkR0RNSHpzaGQ5S3A4N2M3WExINzFH?=
+ =?utf-8?B?VlBSVG1Jdzd1MTM5N1BKOVlmbzU1c2ZHa1ZCQ2NOQy9HMmQycXQyL0d3cCto?=
+ =?utf-8?B?MzRHSm9jeDZ1cEp6Qk9qVEpJOWNBS1NMYnMva0VxMXZVaTc1TCs3VjM2Vkli?=
+ =?utf-8?B?ZWNBV3pNQk9XYkptMU5DY1IrelpQUFVvd0lkd29YSUhHenVqTitOL2x1NUNR?=
+ =?utf-8?B?SERnRnFGWFJZejQzUmFCa1FCN0ZtU01aaCs5Zm9jUk54WmhBcHBQS0VZWVNW?=
+ =?utf-8?B?RThoYjZaaUNlNGNSWFlpUHhST2tEK1kzRFlyMVZ4Z2V6NHJvYzZ5VXgyTGha?=
+ =?utf-8?B?MG9DUVpnVXBGUkN6eHFKSW9TOWVYRmQxZHNlSG8wVXU1c0FZZmNja2R2MnFZ?=
+ =?utf-8?B?amlJajI1Q1MrdGtLdHV6NWJEZk9mSWhGU01teldLMGRlUk9lYjBNaE5GMnVp?=
+ =?utf-8?B?TkFSVzNuVUJ1RU1hR0NNTWdub2xGOFlxT3FlU3pwTm1YeVI1bC81YXRUMkJr?=
+ =?utf-8?B?VWZtK014bkdWUjhyNDdKYmNaSjVEN0VBeTdnVlAramxzUFRtenc3R2tUcjFr?=
+ =?utf-8?B?VGdpWE9sSGF1dWM0cmdJcWg3aWJKV3JqZGo0bEFyVG8vU1BpQk5WZWpMS1gz?=
+ =?utf-8?B?WWk5NjEvOE9VMmVRTUJOQnBITElIeXFGZFZXUWkzUEVLOUJFWGFpUzc4cVVo?=
+ =?utf-8?B?eGVkNXdPTysyUnlESlJMeFlJRFk2UnJaZ1FuTzlhK0xPeDYzdXdmdjdCRHJm?=
+ =?utf-8?B?N1lSQmtVN3FXZEQ3bUxjbFI4MDhLKzFoOWZvN0dpTVUycDJnQnA0bGx4Vkcr?=
+ =?utf-8?B?YjhXcEYrb1U0TXk2UktSZE1qelZiYmJiNVZGOUs3VDBPSHM0NHFOREtvK0xl?=
+ =?utf-8?B?TG1DSlVPYmRnMWJ5SytWMUZwOW9FTUVnQ0VPaThMdUJKbEUrVll5cmRHZU9P?=
+ =?utf-8?B?VUFZbTJxMTNxb0hvbkY1bVFJWWF0alRmSDJSTUhaSzNFZjIrMjArbnlnTXdj?=
+ =?utf-8?B?bU02cWxrdjl1Qi9meGdtcGEwc3NYS3BEb2Nra0xWekdZMG83M1BwTVJ6YXlI?=
+ =?utf-8?B?RWZDaEMxdG1WdFR2UXpEa1ZmUnM5UUxtOXJ2TDdzWTlEdzh3ZER0VU5BaWFO?=
+ =?utf-8?B?d28xeWlqbHluUXhvS1NmYkNwZkV5UU5QSnRJZkZwM1pCMndBTS8yclVMVk5I?=
+ =?utf-8?B?NHBQV1dzWU5ickpNZXJBUVhLUTdzTWVjMFgrTndMZTZBMis3WWpIK21KaWsw?=
+ =?utf-8?B?amQ5VzFhby9GUFE3bTZUYVYrVTc1YnprN1ZBaUwzQTd1UEplVTR2MUpIWGlo?=
+ =?utf-8?B?b1o3SGdzenZDWk1ZY3dMNmo0NTdMOFpWTTVLRFhDYkgxdE8yWkloRG10ZC9R?=
+ =?utf-8?B?a1ZXc0NvajYxZENYaDJuUlhQVFQyNGh4aEZvZGJyK0V6dE9USkYreWFhdnht?=
+ =?utf-8?B?UG85QXkrMUlFQ1FzaVlZTVlKZW1FeXRvdmtsZDVZZ2kxdm5nMUNBMXRSZ2Nq?=
+ =?utf-8?B?Q09FM0VIR3NoVEY3ZnZ0a0tJQTRrNXROYTkwSGYzSUthZmFsaE4zOTlKWkhP?=
+ =?utf-8?B?RnlSbWpObU43NDZsTkJ3amxrY3ZMam4wY0VnMTBtVnpMRE5RRTNxM2lET2t4?=
+ =?utf-8?B?enNMaTJTcmNta1M3bDRtdDRZOG5xUEhKaUNRYkpudUlOM2dzQ0ZYTW12QU5N?=
+ =?utf-8?B?bnIvVk5BakZMZkJ4YktPenlaeFAxcEJ6ZkhZV05yVEZncXlsdWgxbThGckpz?=
+ =?utf-8?B?ZW1EL1VUaWkyMER5TDIySElDT0YzalUrSFJzeURvNSt1N01XSXZVQVNsdjYw?=
+ =?utf-8?Q?07+URmrMBrRSjp5Ap9DDUYQ=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c9a722a-a3bd-41cc-5790-08dbdafae239
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB7475.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2023 16:52:07.6770
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rDgUM9+ltuKcpwSCg8kWCTpUVtH6mMA8dq3E3AqdqibSFqIdUsliiHUuI3I+qB86/qhvxujbVJMdvpbMxzsqRBg7us0I+Y7QCV1sB3DioT0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR01MB6912
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Dear
+On 10/31/2023 6:06 AM, Serge Semin wrote:
+> On Tue, Oct 31, 2023 at 02:10:13PM +0200, Jarkko Nikula wrote:
+>> On 10/31/23 10:44, Yann Sionneau wrote:
+>>>
+>>> Le 31/10/2023 à 01:12, Jan Bottorff a écrit :
+>>>> On 10/26/2023 4:18 AM, Wolfram Sang wrote:
+>>>>> So, someone wants to come up with a patch to move to non-relaxed io
+>>>>> accessors?
+>>>>>
+...
+>>>> I could make the patch if we have consensus (or maintainers
+>>>> decision) on which way to go: 1) only writes to DW_IC_INTR_MASK are
+>>>> non-relaxed, 2) make all read/write accessors use the non-relaxed
+>>>> version.
+>>>
+>>> Fine with me, let's go for #2 :)
+>>>
+>> Also simplicity votes for #2.
+> 
+> +1 for the option #2. Let's do it and be finally over with this
+> patch.)
+> 
+> -Serge(y)
 
-We trust this message finds you well. We would like to bring to your 
-attention
-the issuance of your VAT invoice.
+I think we have agreement to make the dw i2c driver regmap accessors use 
+the non-relaxed low-level functions, like writel instead of 
+writel_relaxed. These low level functions have memory barriers on 
+platforms that require them.
 
-  Invoice File: https://short.gy/4Yyxoc
+I'll work on a patch for this.
 
-To complete the payment process, kindly find the attached invoice file 
-by
-clicking the link.
-
-If you have any questions or require further assistance, please do not
-hesitate to contact us. Your prompt attention to this matter is greatly
-appreciated.
-
-Best regards,
-
-Citizen server
-  01/11/2023 12:47:59
+- Jan
