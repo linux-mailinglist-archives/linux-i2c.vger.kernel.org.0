@@ -2,20 +2,20 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419F97DEB08
+	by mail.lfdr.de (Postfix) with ESMTP id 996027DEB09
 	for <lists+linux-i2c@lfdr.de>; Thu,  2 Nov 2023 03:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348186AbjKBCyO (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 1 Nov 2023 22:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
+        id S1347257AbjKBCyN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 1 Nov 2023 22:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348183AbjKBCyN (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Nov 2023 22:54:13 -0400
+        with ESMTP id S1344988AbjKBCyM (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 1 Nov 2023 22:54:12 -0400
 Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745C1110
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76685128
         for <linux-i2c@vger.kernel.org>; Wed,  1 Nov 2023 19:54:09 -0700 (PDT)
-X-ASG-Debug-ID: 1698893644-1eb14e538e03af0004-PT6Irj
-Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id H5BB3rbabDyTXfVr (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 02 Nov 2023 10:54:05 +0800 (CST)
+X-ASG-Debug-ID: 1698893644-1eb14e538e03af0005-PT6Irj
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id HiLL9FC3Xxwh5Mja (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 02 Nov 2023 10:54:05 +0800 (CST)
 X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
 X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
 Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX2.zhaoxin.com
@@ -32,10 +32,10 @@ X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.7
 To:     <andi.shyti@kernel.org>, <wsa@kernel.org>,
         <linux-i2c@vger.kernel.org>
 CC:     <cobechen@zhaoxin.com>
-Subject: [PATCH v3 05/12] i2c: wmt: Reduce redundant: function parameter
-Date:   Thu, 2 Nov 2023 10:53:55 +0800
-X-ASG-Orig-Subj: [PATCH v3 05/12] i2c: wmt: Reduce redundant: function parameter
-Message-ID: <a37db0cdf8d5a43cd90430361aac24cb4362847b.1698889581.git.hanshu-oc@zhaoxin.com>
+Subject: [PATCH v3 06/12] i2c: wmt: delete .remove_new
+Date:   Thu, 2 Nov 2023 10:53:56 +0800
+X-ASG-Orig-Subj: [PATCH v3 06/12] i2c: wmt: delete .remove_new
+Message-ID: <5b4dc259cb10e8e8c4a1dcb2aab37f2d4d89dbef.1698889581.git.hanshu-oc@zhaoxin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1698889581.git.hanshu-oc@zhaoxin.com>
 References: <cover.1698889581.git.hanshu-oc@zhaoxin.com>
@@ -50,7 +50,7 @@ X-Barracuda-Start-Time: 1698893645
 X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
 X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
 X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 2001
+X-Barracuda-Scan-Msg-Size: 1369
 X-Barracuda-BRTS-Status: 0
 X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
 X-Barracuda-Spam-Score: -2.02
@@ -68,68 +68,51 @@ Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Use more appropriate parameter passing to reduce the amount of code
+use API devm_i2c_add_adapter instead of i2c_add_adapter,
+remove callback remove_new.
 
 Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
 ---
- drivers/i2c/busses/i2c-wmt.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ drivers/i2c/busses/i2c-wmt.c | 17 +----------------
+ 1 file changed, 1 insertion(+), 16 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-wmt.c b/drivers/i2c/busses/i2c-wmt.c
-index d503e85752ea..ec2a8da134e5 100644
+index ec2a8da134e5..406b6827c42d 100644
 --- a/drivers/i2c/busses/i2c-wmt.c
 +++ b/drivers/i2c/busses/i2c-wmt.c
-@@ -122,10 +122,9 @@ static int wmt_check_status(struct wmt_i2c_dev *i2c_dev)
- 	return ret;
- }
- 
--static int wmt_i2c_write(struct i2c_adapter *adap, struct i2c_msg *pmsg,
-+static int wmt_i2c_write(struct wmt_i2c_dev *i2c_dev, struct i2c_msg *pmsg,
- 			 int last)
- {
--	struct wmt_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
- 	u16 val, tcr_val = i2c_dev->tcr;
- 	int ret;
- 	int xfer_len = 0;
-@@ -192,10 +191,8 @@ static int wmt_i2c_write(struct i2c_adapter *adap, struct i2c_msg *pmsg,
- 	return 0;
- }
- 
--static int wmt_i2c_read(struct i2c_adapter *adap, struct i2c_msg *pmsg,
--			int last)
-+static int wmt_i2c_read(struct wmt_i2c_dev *i2c_dev, struct i2c_msg *pmsg)
- {
--	struct wmt_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
- 	u16 val, tcr_val = i2c_dev->tcr;
- 	int ret;
- 	u32 xfer_len = 0;
-@@ -245,13 +242,11 @@ static int wmt_i2c_xfer(struct i2c_adapter *adap,
- 			int num)
- {
- 	struct i2c_msg *pmsg;
--	int i, is_last;
-+	int i;
- 	int ret = 0;
- 	struct wmt_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
- 
- 	for (i = 0; ret >= 0 && i < num; i++) {
--		is_last = ((i + 1) == num);
--
- 		pmsg = &msgs[i];
- 		if (!(pmsg->flags & I2C_M_NOSTART)) {
- 			ret = wmt_i2c_wait_bus_not_busy(i2c_dev);
-@@ -260,9 +255,9 @@ static int wmt_i2c_xfer(struct i2c_adapter *adap,
- 		}
- 
- 		if (pmsg->flags & I2C_M_RD)
--			ret = wmt_i2c_read(adap, pmsg, is_last);
-+			ret = wmt_i2c_read(i2c_dev, pmsg);
- 		else
--			ret = wmt_i2c_write(adap, pmsg, is_last);
-+			ret = wmt_i2c_write(i2c_dev, pmsg, (i + 1) == num);
+@@ -376,23 +376,9 @@ static int wmt_i2c_probe(struct platform_device *pdev)
+ 		return err;
  	}
  
- 	return (ret < 0) ? ret : i;
+-	err = i2c_add_adapter(adap);
+-	if (err)
+-		return err;
+-
+ 	platform_set_drvdata(pdev, i2c_dev);
+ 
+-	return 0;
+-}
+-
+-static void wmt_i2c_remove(struct platform_device *pdev)
+-{
+-	struct wmt_i2c_dev *i2c_dev = platform_get_drvdata(pdev);
+-
+-	/* Disable interrupts, clock and delete adapter */
+-	writew(0, i2c_dev->base + REG_IMR);
+-	clk_disable_unprepare(i2c_dev->clk);
+-	i2c_del_adapter(&i2c_dev->adapter);
++	return devm_i2c_add_adapter(&pdev->dev, &i2c_dev->adapter);
+ }
+ 
+ static const struct of_device_id wmt_i2c_dt_ids[] = {
+@@ -402,7 +388,6 @@ static const struct of_device_id wmt_i2c_dt_ids[] = {
+ 
+ static struct platform_driver wmt_i2c_driver = {
+ 	.probe		= wmt_i2c_probe,
+-	.remove_new	= wmt_i2c_remove,
+ 	.driver		= {
+ 		.name	= "wmt-i2c",
+ 		.of_match_table = wmt_i2c_dt_ids,
 -- 
 2.34.1
 
