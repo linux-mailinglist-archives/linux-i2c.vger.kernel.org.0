@@ -2,203 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4747E0059
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Nov 2023 11:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96BFF7E003B
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Nov 2023 11:29:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346886AbjKCJRf (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Nov 2023 05:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
+        id S229930AbjKCKV2 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Nov 2023 06:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346878AbjKCJRe (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Nov 2023 05:17:34 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5EBDE
-        for <linux-i2c@vger.kernel.org>; Fri,  3 Nov 2023 02:17:27 -0700 (PDT)
-Received: from dlp.unisoc.com ([10.29.3.86])
-        by SHSQR01.spreadtrum.com with ESMTP id 3A39HDMF020188;
-        Fri, 3 Nov 2023 17:17:13 +0800 (+08)
-        (envelope-from Huangzheng.Lai@unisoc.com)
-Received: from SHDLP.spreadtrum.com (shmbx04.spreadtrum.com [10.0.1.214])
-        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4SMFPn17H3z2LqmCc;
-        Fri,  3 Nov 2023 17:12:29 +0800 (CST)
-Received: from xm9614pcu.spreadtrum.com (10.13.2.29) by shmbx04.spreadtrum.com
- (10.0.1.214) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Fri, 3 Nov
- 2023 17:17:11 +0800
-From:   Huangzheng Lai <Huangzheng.Lai@unisoc.com>
-To:     Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        huangzheng lai <laihuangzheng@gmail.com>,
-        Huangzheng Lai <Huangzheng.Lai@unisoc.com>,
-        Xiongpeng Wu <xiongpeng.wu@unisoc.com>
-Subject: [PATCH] dt-bindings: i2c: Add yaml for Spreadtrum I2C controller
-Date:   Fri, 3 Nov 2023 17:16:53 +0800
-Message-ID: <20231103091653.4591-1-Huangzheng.Lai@unisoc.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S229805AbjKCKV1 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Nov 2023 06:21:27 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6416DD7;
+        Fri,  3 Nov 2023 03:21:21 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3b2ea7cc821so1151539b6e.1;
+        Fri, 03 Nov 2023 03:21:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699006880; x=1699611680;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=LTK0kHcHXKMRZq1fvvgaafZQnou0Z3OBHj53xDl18ng=;
+        b=krDEccaDbi8+KyNYPJSB9o/DVnlanAGiJ+TMq3mKErSAx/8HKbtyFSRiswcCYOqm0w
+         twX2D4Je3U3fA+WnIldVeJta57lbsn8rd040pS3xxTj+dFJohTCfJYpYhVmJVmMOOsi8
+         xbOeGvdRnD/E4VHc9udSEmD30YeJ+zSC05WYwYibxtrN9Q+Xo3nEQz19R6UYM6XRLG/g
+         gRydDOL8CMBWEgt46H8rIyBLP+lb5sbq733M8YznjwNDyeiNBSB9JCVeqkw7lPE7d7mQ
+         V7y2DnBWT2mbzG3ngN/+UGdhuSIfpKBL07FGaxMBrEByXKiYOiJGRPUXQQlJipq3cR8p
+         UaIA==
+X-Gm-Message-State: AOJu0YyB1kTta9uVRqikz4tzKlFW8wclZzSl4mZOQdNpZbDvFgoiEgeX
+        ptTTPoQgbGeCU+FEILtcpQ==
+X-Google-Smtp-Source: AGHT+IHoi5Ah7YtWDdBl+iV5e4j5JCiHEOTBVVHtU82pAReNiVxK6n+DZFFTwx3DoOB3eowJfeBlBg==
+X-Received: by 2002:aca:1204:0:b0:3b2:ecab:900e with SMTP id 4-20020aca1204000000b003b2ecab900emr20799399ois.15.1699006880535;
+        Fri, 03 Nov 2023 03:21:20 -0700 (PDT)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u21-20020a056808115500b003af60f06629sm229573oiu.6.2023.11.03.03.21.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Nov 2023 03:21:19 -0700 (PDT)
+Received: (nullmailer pid 488800 invoked by uid 1000);
+        Fri, 03 Nov 2023 10:21:18 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.13.2.29]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- shmbx04.spreadtrum.com (10.0.1.214)
-X-MAIL: SHSQR01.spreadtrum.com 3A39HDMF020188
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Huangzheng Lai <Huangzheng.Lai@unisoc.com>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        huangzheng lai <laihuangzheng@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Xiongpeng Wu <xiongpeng.wu@unisoc.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>
+In-Reply-To: <20231103091653.4591-1-Huangzheng.Lai@unisoc.com>
+References: <20231103091653.4591-1-Huangzheng.Lai@unisoc.com>
+Message-Id: <169900687819.488783.15775505208515245193.robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: i2c: Add yaml for Spreadtrum I2C
+ controller
+Date:   Fri, 03 Nov 2023 05:21:18 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add a yaml file to replace the txt file. Due to the recent addition
-of the 'reset' framework to the Spreadtrum I2C driver to reset the
-controller, information related to the 'reset' attribute has been
-added to the bindings file.
 
-Change in V2
--Rename 'i2c-sprd.txt' to 'sprd,sc9860-i2c.yaml'.
--Add ref to i2c-controller.
--Drop items in 'compatible'.
--Add describe for 'reg' items.
--Drop 'clocks' description and just maxItems: 3.
--Fix typo in 'clo-frequency': Contains.
--Add explanation in commit message explaining why 'resets' be added.
--Drop '#size-cells' and 'address-cells' in properties and required.
--Drop description of 'resets'.
--Add child node in examples.
+On Fri, 03 Nov 2023 17:16:53 +0800, Huangzheng Lai wrote:
+> Add a yaml file to replace the txt file. Due to the recent addition
+> of the 'reset' framework to the Spreadtrum I2C driver to reset the
+> controller, information related to the 'reset' attribute has been
+> added to the bindings file.
+> 
+> Change in V2
+> -Rename 'i2c-sprd.txt' to 'sprd,sc9860-i2c.yaml'.
+> -Add ref to i2c-controller.
+> -Drop items in 'compatible'.
+> -Add describe for 'reg' items.
+> -Drop 'clocks' description and just maxItems: 3.
+> -Fix typo in 'clo-frequency': Contains.
+> -Add explanation in commit message explaining why 'resets' be added.
+> -Drop '#size-cells' and 'address-cells' in properties and required.
+> -Drop description of 'resets'.
+> -Add child node in examples.
+> 
+> Signed-off-by: Huangzheng Lai <Huangzheng.Lai@unisoc.com>
+> ---
+>  .../devicetree/bindings/i2c/i2c-sprd.txt      | 31 --------
+>  .../bindings/i2c/sprd,sc9860-i2c.yaml         | 75 +++++++++++++++++++
+>  2 files changed, 75 insertions(+), 31 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-sprd.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/sprd,sc9860-i2c.yaml
+> 
 
-Signed-off-by: Huangzheng Lai <Huangzheng.Lai@unisoc.com>
----
- .../devicetree/bindings/i2c/i2c-sprd.txt      | 31 --------
- .../bindings/i2c/sprd,sc9860-i2c.yaml         | 75 +++++++++++++++++++
- 2 files changed, 75 insertions(+), 31 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-sprd.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/sprd,sc9860-i2c.yaml
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-sprd.txt b/Documentation/devicetree/bindings/i2c/i2c-sprd.txt
-deleted file mode 100644
-index 7b6b3b8d0d11..000000000000
---- a/Documentation/devicetree/bindings/i2c/i2c-sprd.txt
-+++ /dev/null
-@@ -1,31 +0,0 @@
--I2C for Spreadtrum platforms
--
--Required properties:
--- compatible: Should be "sprd,sc9860-i2c".
--- reg: Specify the physical base address of the controller and length
--  of memory mapped region.
--- interrupts: Should contain I2C interrupt.
--- clock-names: Should contain following entries:
--  "i2c" for I2C clock,
--  "source" for I2C source (parent) clock,
--  "enable" for I2C module enable clock.
--- clocks: Should contain a clock specifier for each entry in clock-names.
--- clock-frequency: Contains desired I2C bus clock frequency in Hz.
--- #address-cells: Should be 1 to describe address cells for I2C device address.
--- #size-cells: Should be 0 means no size cell for I2C device address.
--
--Optional properties:
--- Child nodes conforming to I2C bus binding
--
--Examples:
--i2c0: i2c@70500000 {
--	compatible = "sprd,sc9860-i2c";
--	reg = <0 0x70500000 0 0x1000>;
--	interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
--	clock-names = "i2c", "source", "enable";
--	clocks = <&clk_i2c3>, <&ext_26m>, <&clk_ap_apb_gates 11>;
--	clock-frequency = <400000>;
--	#address-cells = <1>;
--	#size-cells = <0>;
--};
--
-diff --git a/Documentation/devicetree/bindings/i2c/sprd,sc9860-i2c.yaml b/Documentation/devicetree/bindings/i2c/sprd,sc9860-i2c.yaml
-new file mode 100644
-index 000000000000..f7dd5f116e0c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/sprd,sc9860-i2c.yaml
-@@ -0,0 +1,75 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright 2020 Unisoc Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/sprd,sc9860-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Unisoc I2C Controller Device
-+
-+maintainers:
-+  - Huangzheng Lai <laihuangzheng@gmail.com>
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+properties:
-+  compatible:
-+    const: sprd,sc9860-i2c
-+
-+  reg:
-+    description: physical base address of the controller, length of memory mapped region.
-+    maxItems: 2
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: i2c
-+      - const: source
-+      - const: enable
-+
-+  clocks:
-+    maxItems: 3
-+
-+  clock-frequency:
-+    description: Contains desired I2C bus clock frequency in Hz.
-+    minimum: 100000
-+    maximum: 3400000
-+
-+  reset-names:
-+    const: i2c_rst
-+
-+  resets:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clock-names
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c0: i2c@2240000 {
-+            compatible = "sprd,sc9860-i2c";
-+            reg = <0 0x2240000 0 0x1000>;
-+            interrupts = <11>;
-+            clock-names = "i2c", "source", "enable";
-+            clocks = <&clk_i2c3>, <&ext_26m>, <&clk_ap_apb_gates 11>;
-+            clock-frequency = <400000>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            reset-names = "i2c_rst";
-+            resets = <&apahb_gate 3>;
-+
-+            charger@63 {
-+                    compatible = "sprd,sc2731-charger";
-+                    reg = <0x63>;
-+            };
-+    };
-+
--- 
-2.17.1
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/sprd,sc9860-i2c.example.dtb: i2c@2240000: '#address-cells', '#size-cells', 'charger@63' do not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/i2c/sprd,sc9860-i2c.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231103091653.4591-1-Huangzheng.Lai@unisoc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
