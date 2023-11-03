@@ -2,36 +2,37 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7379F7E026F
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Nov 2023 12:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F787E0273
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Nov 2023 12:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjKCL70 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Nov 2023 07:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
+        id S233005AbjKCL7v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Nov 2023 07:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233005AbjKCL7Z (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Nov 2023 07:59:25 -0400
+        with ESMTP id S229486AbjKCL7v (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Nov 2023 07:59:51 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7423DD47;
-        Fri,  3 Nov 2023 04:59:22 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B303CC433C8;
-        Fri,  3 Nov 2023 11:59:18 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1712D4D;
+        Fri,  3 Nov 2023 04:59:48 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F09C433C9;
+        Fri,  3 Nov 2023 11:59:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699012762;
-        bh=5Dhf8Ir5TswWgOXTGHeCG9FSxtaoKRrn6eBt5c7IV3c=;
+        s=k20201202; t=1699012788;
+        bh=lp4m60Y8QS5W5e92yJb9zzs6N/q4MC9uOyBnUUdzA8w=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=l2GcnwgRhaB5VHmF4HR+VcaXLV2J8tPKlDdIziRDT4/T85ca335zn5BPkLQjelau1
-         2VknViRhM2/29TiDSdpVPmMlaswu7/vYAKb0TA7oKFygZGW/JDQOnZDwqDm9Lz2xHj
-         cvPgPOuFz9tBRfx7oLv2L3PgAcKcaAO0rtzQDZRXD6/ZjkoF9jccji5vr51yeU4EyU
-         Ckh8LO99nnQwcifYL1QlSWDhZLiRQQHt0TUKOrIyV2wKBm/g0P6d9JE2uR+BdgkUSC
-         +ZmLpi9qzOfSyjijwLpgTRdjEdRyu426jdOHXud7tNiwjrF6+YIjW9HaevkOZ8GZZD
-         aL4Wf66qLdBeg==
-Message-ID: <4e6d286e-a40b-4c6a-afe2-ab91c576a235@kernel.org>
-Date:   Fri, 3 Nov 2023 12:59:14 +0100
+        b=IvJYhrAOB+gburM95X5rz4m8nQPW5zZQaCKrQrHl56J7gDEa9q9Gzw9LD4dkvon4z
+         qWrdP+tEMmiC6We1WiHFJ99lvxv4F6RH/m95klTwzaB1GuAoP6YUD94YsOhhVZuTAR
+         nIydAJRGxfkRM6uwPKIkZX082TCv7DBju45d4Ckor/vq8+rGAsA0qD3ABLiCOCOvKA
+         r6TJTcSW3EKRSx8Pr2/FtoqIaRqrvwyCEIPApbKlj60dZKob0nXlI32k+VeFNhxysn
+         RMuL1X4HmVbg6fhhEjC+kbteGBPnSPOFyezgp5VM3CMKBsTYcEZRrJYsxtuR7xSiS/
+         QJ87ERYUaRjJw==
+Message-ID: <c7eb2642-93ed-46b6-a189-18111bed5435@kernel.org>
+Date:   Fri, 3 Nov 2023 12:59:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 2/7] i2c: sprd: Add I2C driver to use 'reset framework'
- function
+Subject: Re: [PATCH V2 3/7] i2c: sprd: Use global variables to record I2C
+ ack/nack status instead of local variables
+Content-Language: en-US
 To:     Huangzheng Lai <Huangzheng.Lai@unisoc.com>,
         Andi Shyti <andi.shyti@kernel.org>
 Cc:     Orson Zhai <orsonzhai@gmail.com>,
@@ -41,8 +42,7 @@ Cc:     Orson Zhai <orsonzhai@gmail.com>,
         huangzheng lai <laihuangzheng@gmail.com>,
         Xiongpeng Wu <xiongpeng.wu@unisoc.com>
 References: <20231023081158.10654-1-Huangzheng.Lai@unisoc.com>
- <20231023081158.10654-3-Huangzheng.Lai@unisoc.com>
-Content-Language: en-US
+ <20231023081158.10654-4-Huangzheng.Lai@unisoc.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -87,7 +87,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20231023081158.10654-3-Huangzheng.Lai@unisoc.com>
+In-Reply-To: <20231023081158.10654-4-Huangzheng.Lai@unisoc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -101,34 +101,19 @@ List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 On 23/10/2023 10:11, Huangzheng Lai wrote:
-> Add the 'reset framework' function for I2C drivers, which
-> resets the I2C controller when a timeout exception occurs.
+> We found that when the interrupt bit of the I2C controller is cleared,
+> the ack/nack bit is also cleared at the same time. After clearing the
+> interrupt bit in sprd_i2c_isr(), incorrect ack/nack information will be
+> obtained in sprd_i2c_isr_thread(), resulting in incorrect communication
+> when nack cannot be recognized. To solve this problem, we used a global
+> variable to record ack/nack information before clearing the interrupt
+> bit instead of a local variable.
 > 
+> Fixes: 8b9ec0719834 ("i2c: Add Spreadtrum I2C controller driver")
+> Cc: <stable@vger.kernel.org> # v4.14+
 > Signed-off-by: Huangzheng Lai <Huangzheng.Lai@unisoc.com>
-> ---
->  drivers/i2c/busses/i2c-sprd.c | 19 +++++++++++++++++--
 
-
->  		return -ETIMEDOUT;
-> -
-> +	}
->  	return i2c_dev->err;
->  }
->  
-> @@ -544,6 +554,11 @@ static int sprd_i2c_probe(struct platform_device *pdev)
->  		return ret;
->  
->  	platform_set_drvdata(pdev, i2c_dev);
-> +	i2c_dev->rst = devm_reset_control_get(i2c_dev->dev, "i2c_rst");
-
-NAK
-
-This is not documented in the bindings. You cannot sneak properties
-without their documentation. Also, you cannot sneak new properties to
-bindings conversion patches!
-
-Send proper patchset following submission rules, so first documentation,
-then driver implementing new feature. One patchset.
+Fixes must be send independent of features.
 
 Best regards,
 Krzysztof
