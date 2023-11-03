@@ -2,119 +2,99 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F787E0273
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 Nov 2023 12:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068577E033A
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 Nov 2023 13:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233005AbjKCL7v (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Fri, 3 Nov 2023 07:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
+        id S229488AbjKCM73 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Fri, 3 Nov 2023 08:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjKCL7v (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Nov 2023 07:59:51 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1712D4D;
-        Fri,  3 Nov 2023 04:59:48 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F09C433C9;
-        Fri,  3 Nov 2023 11:59:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699012788;
-        bh=lp4m60Y8QS5W5e92yJb9zzs6N/q4MC9uOyBnUUdzA8w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IvJYhrAOB+gburM95X5rz4m8nQPW5zZQaCKrQrHl56J7gDEa9q9Gzw9LD4dkvon4z
-         qWrdP+tEMmiC6We1WiHFJ99lvxv4F6RH/m95klTwzaB1GuAoP6YUD94YsOhhVZuTAR
-         nIydAJRGxfkRM6uwPKIkZX082TCv7DBju45d4Ckor/vq8+rGAsA0qD3ABLiCOCOvKA
-         r6TJTcSW3EKRSx8Pr2/FtoqIaRqrvwyCEIPApbKlj60dZKob0nXlI32k+VeFNhxysn
-         RMuL1X4HmVbg6fhhEjC+kbteGBPnSPOFyezgp5VM3CMKBsTYcEZRrJYsxtuR7xSiS/
-         QJ87ERYUaRjJw==
-Message-ID: <c7eb2642-93ed-46b6-a189-18111bed5435@kernel.org>
-Date:   Fri, 3 Nov 2023 12:59:45 +0100
+        with ESMTP id S229379AbjKCM73 (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Fri, 3 Nov 2023 08:59:29 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8AD83;
+        Fri,  3 Nov 2023 05:59:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699016363; x=1730552363;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LUZaFXx8eCpqoFt+eWSDUqbx3codm6TDAZME80lLwFU=;
+  b=hG4J2C6Z0x6I0lnjP6eEv+d87aZU5u2mUtlrdBf3wSgY3TpwvdxKJJOI
+   gyqS0ClNvxcQDzaeaSQMm/PrzmDtQlmzFh3exE/uapsqUCcl1RSJf8ZG3
+   Tt0clrKIhFhLVasAw9Gqp5dUdaAMDZnBQhBUB11QCrpSgiPeJhen8+QWl
+   YblCYmbSIwYPP99cqVHGByJe1RGz9LPD9CIM1sDNq3Vu5IN47ERnHfLHP
+   gJ9Dwz67IJMwrvVHFR3qefIxagv6INmVZb26dlEKte9R+9r4uPzAmo1at
+   YVOW2YWYyY5n+ps8lhzHyTIjKWKttUtVSzo83vFxD7JI3UaBi/0R12vlD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="387829497"
+X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
+   d="scan'208";a="387829497"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 05:59:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="905339441"
+X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
+   d="scan'208";a="905339441"
+Received: from mylly.fi.intel.com (HELO [10.237.72.161]) ([10.237.72.161])
+  by fmsmga001.fm.intel.com with ESMTP; 03 Nov 2023 05:59:20 -0700
+Message-ID: <849f77be-7cce-4c12-9064-4344e801afa5@linux.intel.com>
+Date:   Fri, 3 Nov 2023 14:59:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 3/7] i2c: sprd: Use global variables to record I2C
- ack/nack status instead of local variables
+Subject: Re: [PATCH v2] i2c: designware: Disable TX_EMPTY irq while waiting
+ for block length byte
+To:     Tam Nguyen <tamnguyenchi@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     patches@amperecomputing.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com,
+        chuong@os.amperecomputing.com, darren@os.amperecomputing.com,
+        stable@vger.kernel.org
+References: <20231102033009.4555-1-tamnguyenchi@os.amperecomputing.com>
 Content-Language: en-US
-To:     Huangzheng Lai <Huangzheng.Lai@unisoc.com>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huangzheng lai <laihuangzheng@gmail.com>,
-        Xiongpeng Wu <xiongpeng.wu@unisoc.com>
-References: <20231023081158.10654-1-Huangzheng.Lai@unisoc.com>
- <20231023081158.10654-4-Huangzheng.Lai@unisoc.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20231023081158.10654-4-Huangzheng.Lai@unisoc.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20231102033009.4555-1-tamnguyenchi@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-On 23/10/2023 10:11, Huangzheng Lai wrote:
-> We found that when the interrupt bit of the I2C controller is cleared,
-> the ack/nack bit is also cleared at the same time. After clearing the
-> interrupt bit in sprd_i2c_isr(), incorrect ack/nack information will be
-> obtained in sprd_i2c_isr_thread(), resulting in incorrect communication
-> when nack cannot be recognized. To solve this problem, we used a global
-> variable to record ack/nack information before clearing the interrupt
-> bit instead of a local variable.
+On 11/2/23 05:30, Tam Nguyen wrote:
+> During SMBus block data read process, we have seen high interrupt rate
+> because of TX_EMPTY irq status while waiting for block length byte (the
+> first data byte after the address phase). The interrupt handler does not
+> do anything because the internal state is kept as STATUS_WRITE_IN_PROGRESS.
+> Hence, we should disable TX_EMPTY IRQ until I2C DesignWare receives
+> first data byte from I2C device, then re-enable it to resume SMBus
+> transaction.
 > 
-> Fixes: 8b9ec0719834 ("i2c: Add Spreadtrum I2C controller driver")
-> Cc: <stable@vger.kernel.org> # v4.14+
-> Signed-off-by: Huangzheng Lai <Huangzheng.Lai@unisoc.com>
-
-Fixes must be send independent of features.
-
-Best regards,
-Krzysztof
-
+> It takes 0.789 ms for host to receive data length from slave.
+> Without the patch, i2c_dw_isr() is called 99 times by TX_EMPTY interrupt.
+> And it is none after applying the patch.
+> 
+> Cc: stable@vger.kernel.org
+> Co-developed-by: Chuong Tran <chuong@os.amperecomputing.com>
+> Signed-off-by: Chuong Tran <chuong@os.amperecomputing.com>
+> Signed-off-by: Tam Nguyen <tamnguyenchi@os.amperecomputing.com>
+> ---
+> v2:
+> 	+ Reduce the indentations level
+> 	+ Use regmap_update_bits for bitfield update
+> 	+ Rewrite comment statement                     [Serge]
+> 	+ Update commit message
+> 	+ Add Co-developed-by tag for co-authors        [Andy]
+> 
+> v1:
+>    https://lore.kernel.org/lkml/avd7jhwexehgbvi6euzdwvf5zvqqgjx4ozo6uxu2qpmlarvva3@sgkce3rvovwk/T/
+> ---
+>   drivers/i2c/busses/i2c-designware-master.c | 19 ++++++++++++++++---
+>   1 file changed, 16 insertions(+), 3 deletions(-)
+> 
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
