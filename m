@@ -2,101 +2,71 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 402427E4A7A
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 Nov 2023 22:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E55EA7E4BB0
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 Nov 2023 23:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232753AbjKGVU4 (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Tue, 7 Nov 2023 16:20:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
+        id S234114AbjKGW2q (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Tue, 7 Nov 2023 17:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233299AbjKGVUz (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Nov 2023 16:20:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295A7A3
-        for <linux-i2c@vger.kernel.org>; Tue,  7 Nov 2023 13:20:53 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E9E7C433C8;
-        Tue,  7 Nov 2023 21:20:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699392052;
-        bh=W4Vcs4W/QfgDu1Xzrorr5cB8wMT6B6DnEaw8yq6P+ck=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tdcKygywjnc8prB4lfa3U4LeXqjjLqtJn2Rk2aorrM6UeK4ZvAYEyY1bDvcXMPInf
-         rWgcNFQLpT+UFLZEvHi6Z1Ur5rw7hxrHyohgYtZ2DZNbnuHoEoanE3OOtqOaf5tvKI
-         z6cHNvfknFIOZbQxtfvpJ0UepkH6Qm2U9LZTDqXIzFW80cmCfCtZ8WxynT23WfeDjB
-         P6okGlZrXUnoAo87M8H2pnu+bWIGxdIgDyX4/wR4yQomyvq01/cZatad85RH7ShN7Y
-         QHx9QlHSxonbkRkRJrbPAtDOTWSkbLjsMO0At0tS25htiHPQrN28NxqN2Lkg+zbIKH
-         HYWO1xdCAuLEw==
-Date:   Tue, 7 Nov 2023 22:20:49 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 1/1] i2c: lpi2c: use clk notifier for rate changes
-Message-ID: <20231107212049.csimqzzvim5uecpa@zenone.zhora.eu>
-References: <20231107141201.623482-1-alexander.stein@ew.tq-group.com>
+        with ESMTP id S235158AbjKGW2p (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Tue, 7 Nov 2023 17:28:45 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2D1A125;
+        Tue,  7 Nov 2023 14:28:43 -0800 (PST)
+Received: from [100.64.208.100] (unknown [20.29.225.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id EE43A20B74C0;
+        Tue,  7 Nov 2023 14:28:41 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EE43A20B74C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1699396122;
+        bh=S9s3c5YNHfRfLceRTHugRNStaMoSl9vmEEBV0lGYlMs=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=XtA/Oe8SbUmElUAGnJgU6O4BudYZEW9MerJPkZVPuJBFyH6J4u28iPg3jucGxQefV
+         1PUwKCALbfRY3zK0NHu6bDP7/DDbvIPGt5RpyrMCzx9WHbaA6QQfuHHKNIROk6cWj0
+         +CuOHNyK5fsT+DxIt/Na+RUxfyOSXL4ofet19bA0=
+Message-ID: <6231246b-f8a5-4a6b-a7b2-dc2815ffa85b@linux.microsoft.com>
+Date:   Tue, 7 Nov 2023 14:28:40 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231107141201.623482-1-alexander.stein@ew.tq-group.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: iproc: handle invalid slave state
+Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>, roman.bacik@broadcom.com,
+        andi.shyti@kernel.org, rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230824212351.24346-1-roman.bacik@broadcom.com>
+ <ZOzxJSeHhB1vrXff@ninjato>
+From:   Vijay Balakrishna <vijayb@linux.microsoft.com>
+In-Reply-To: <ZOzxJSeHhB1vrXff@ninjato>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Alexander,
 
-is it my mail client not working or is is your patch that has
-gone through something terribly bad?
 
-Andi
-
-On Tue, Nov 07, 2023 at 03:12:01PM +0100, Alexander Stein wrote:
-> * CLKLO = I2C_CLK_RATIO * CLKHI, SETHOLD = CLKHI, DATAVD = CLKHI/2 */
->  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
->  {
-> @@ -207,7 +224,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
->  
->  	lpi2c_imx_set_mode(lpi2c_imx);
->  
-> -	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
-> +	clk_rate = atomic_read(&lpi2c_imx->rate_per);
->  	if (!clk_rate)
->  		return -EINVAL;
->  
-> @@ -590,6 +607,27 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
->  
-> +	lpi2c_imx->clk_change_nb.notifier_call = lpi2c_imx_clk_change_cb;
-> +	ret = devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
-> +					 &lpi2c_imx->clk_change_nb);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "can't register peripheral clock notifier\n");
-> +	/*
-> +	 * Lock the clock rate to avoid rate change between clk_get_rate() and
-> +	 * atomic_set()
-> +	 */
-> +	ret = clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "can't lock I2C peripheral clock rate\n");
-> +
-> +	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx->clks[0].clk));
-> +	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
-> +	if (!atomic_read(&lpi2c_imx->rate_per))
-> +		return dev_err_probe(&pdev->dev, -EINVAL,
-> +				     "can't get I2C peripheral clock rate\n");
-> +
->  	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
->  	pm_runtime_use_autosuspend(&pdev->dev);
->  	pm_runtime_get_noresume(&pdev->dev);
-> -- 
-> 2.34.1
+On 8/28/2023 12:10 PM, Wolfram Sang wrote:
+> On Thu, Aug 24, 2023 at 02:23:51PM -0700, roman.bacik@broadcom.com wrote:
+>> From: Roman Bacik <roman.bacik@broadcom.com>
+>>
+>> Add the code to handle an invalid state when both bits S_RX_EVENT
+>> (indicating a transaction) and S_START_BUSY (indicating the end
+>> of transaction - transition of START_BUSY from 1 to 0) are set in
+>> the interrupt status register during a slave read.
+>>
+>> Signed-off-by: Roman Bacik <roman.bacik@broadcom.com>
+>> Fixes: 1ca1b4516088 ("i2c: iproc: handle Master aborted error")
 > 
+> Applied to for-next, thanks!
+> 
+
+Hi Wolfram,
+
+I don't see this patch neither in I2C for-next nor in linux-next.  May 
+be got lost by accident, please update.
+
+Thanks,
+Vijay
+
