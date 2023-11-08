@@ -2,178 +2,126 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4157E6113
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Nov 2023 00:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3A67E6116
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Nov 2023 00:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjKHXiQ (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Nov 2023 18:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
+        id S229554AbjKHXjD (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Nov 2023 18:39:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjKHXiP (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Nov 2023 18:38:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CF325A3
-        for <linux-i2c@vger.kernel.org>; Wed,  8 Nov 2023 15:38:13 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F853C433C8;
-        Wed,  8 Nov 2023 23:38:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699486693;
-        bh=uvL2MnYVp0ebYGPTyQbPvwSG463QIb7Nm57fVszG2AE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=avY5NSye8tE6uhdAQMjs34rdgPofZL3GKfJI5STkhRt8TZTBWAAKmiNCGyoDgxB83
-         wFu8+N1lhqSVjrHSisg1jnzaqNz4ZYZVgFxhb82wPmnfljRwOb1PSF60fss1d1ru3R
-         mmDDfk/3uiIR0o4DXxbDH9ETd7NH8QVdr5BMjIGOOEYJ88MhMBon8o1lvDu2mJ3GOI
-         T59cKx17+JRgm6RkC3e6Bud3vu4LsM0aIs9Ze0cEQWPPv5sr0FNFR9aJkacpwxZZFM
-         UT3hfXUGdhlbOyTrU/Z/ZjAJ7QMF+/g27SFLfg+xZf12gJa97CLoduSqfCYFp5u9la
-         4/hSvMnUuZPmw==
-Date:   Thu, 9 Nov 2023 00:38:09 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 1/1] i2c: lpi2c: use clk notifier for rate changes
-Message-ID: <20231108233809.u3nvxlttmts6tj2m@zenone.zhora.eu>
-References: <20231107141201.623482-1-alexander.stein@ew.tq-group.com>
+        with ESMTP id S229473AbjKHXjD (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Nov 2023 18:39:03 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4583025B5;
+        Wed,  8 Nov 2023 15:38:59 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1BEB6240002;
+        Wed,  8 Nov 2023 23:38:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1699486737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZWGdlfzeQ997IaAZInKpU2sKbuC+Orz4F3vDh0PjvMg=;
+        b=N5+lAS1QuxDD2SdkvbVdLw6qWEExpftDZPduFcY4jvX3tX20kCAWoNxKTCbZRtf9w+ouLF
+        l4fKQQcmYAJfL8NzZdxIG/Zw2NQvea1Blg8JDbZhLzGFqwUFZSMLAZQbKEtgh+f0oxmK4T
+        EpVXWt1UurkD/XfaaScPMdGHnbdIhAsxc8NUUIWyZcFHTWS+vs9cASEwT34LE+hQQNy3eN
+        0IDd6wLXmMcmnxq54uddsLKPdwBZzrwtOTy4lTn/ffsBGYKNJFjj8vvBRXDFioGx8SKIzF
+        K8zpiBozZs5QOnMp5PMhArdwmbRirW7GuvBX/PaIdsbwc92dALc61l+dNbST7Q==
+Date:   Thu, 9 Nov 2023 00:38:54 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
+Subject: Re: [PATCH 06/17] dt-bindings: rtc: s3c-rtc: add specific
+ compatibles for existing SoC
+Message-ID: <202311082338542f79f576@mail.local>
+References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
+ <20231108104343.24192-7-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231107141201.623482-1-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20231108104343.24192-7-krzysztof.kozlowski@linaro.org>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Alexander,
-
-On Tue, Nov 07, 2023 at 03:12:01PM +0100, Alexander Stein wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+On 08/11/2023 11:43:32+0100, Krzysztof Kozlowski wrote:
+> Samsung Exynos SoC reuses several devices from older designs, thus
+> historically we kept the old (block's) compatible only.  This works fine
+> and there is no bug here, however guidelines expressed in
+> Documentation/devicetree/bindings/writing-bindings.rst state that:
+> 1. Compatibles should be specific.
+> 2. We should add new compatibles in case of bugs or features.
 > 
-> Instead of repeatedly calling clk_get_rate for each transfer, register
-> a clock notifier to update the cached divider value each time the clock
-> rate actually changes.
-> There is also a lockdep splat if a I2C based clock provider needs to
-> access the i2c bus while in recalc_rate(). "prepare_lock" is about to
-> be locked recursively.
+> Add compatibles specific to each SoC in front of all old-SoC-like
+> compatibles.
 > 
-> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-What's the exact fix here? Is it the lockdep warning? Is it
-actually causing a real deadlock?
-
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-> Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> 
 > ---
-> Changes in v7:
-> * Use dev_err_probe
-> * Reworked/Shortened the commit message
->  It is not about saving CPU cycles, but to avoid locking the clk subsystem
->  upon each transfer.
 > 
->  drivers/i2c/busses/i2c-imx-lpi2c.c | 40 +++++++++++++++++++++++++++++-
->  1 file changed, 39 insertions(+), 1 deletion(-)
+> I propose to take the patch through Samsung SoC (me). See cover letter
+> for explanation.
+> ---
+>  Documentation/devicetree/bindings/rtc/s3c-rtc.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> index 678b30e90492a..3070e605fd8ff 100644
-> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> @@ -5,6 +5,7 @@
->   * Copyright 2016 Freescale Semiconductor, Inc.
->   */
+> diff --git a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
+> index d51b236939bf..bf4e11d6dffb 100644
+> --- a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
+> @@ -17,6 +17,11 @@ properties:
+>            - samsung,s3c2416-rtc
+>            - samsung,s3c2443-rtc
+>            - samsung,s3c6410-rtc
+> +      - items:
+> +          - enum:
+> +              - samsung,exynos7-rtc
+> +              - samsung,exynos850-rtc
+> +          - const: samsung,s3c6410-rtc
+>        - const: samsung,exynos3250-rtc
+>          deprecated: true
 >  
-> +#include <linux/atomic.h>
->  #include <linux/clk.h>
->  #include <linux/completion.h>
->  #include <linux/delay.h>
-> @@ -99,6 +100,8 @@ struct lpi2c_imx_struct {
->  	__u8			*rx_buf;
->  	__u8			*tx_buf;
->  	struct completion	complete;
-> +	struct notifier_block	clk_change_nb;
-> +	atomic_t		rate_per;
->  	unsigned int		msglen;
->  	unsigned int		delivered;
->  	unsigned int		block_data;
-> @@ -197,6 +200,20 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *lpi2c_imx)
->  	} while (1);
->  }
->  
-> +static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
-> +				   unsigned long action, void *data)
-> +{
-> +	struct clk_notifier_data *ndata = data;
-> +	struct lpi2c_imx_struct *lpi2c_imx = container_of(nb,
-> +							  struct lpi2c_imx_struct,
-> +							  clk_change_nb);
-> +
-> +	if (action & POST_RATE_CHANGE)
-> +		atomic_set(&lpi2c_imx->rate_per, ndata->new_rate);
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
->  /* CLKLO = I2C_CLK_RATIO * CLKHI, SETHOLD = CLKHI, DATAVD = CLKHI/2 */
->  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
->  {
-> @@ -207,7 +224,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
->  
->  	lpi2c_imx_set_mode(lpi2c_imx);
->  
-> -	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
-> +	clk_rate = atomic_read(&lpi2c_imx->rate_per);
->  	if (!clk_rate)
->  		return -EINVAL;
-
-Doesn't seem like EINVAL, defined as "Invalid argument", is the
-correct number here. As we are failing to read the clock rate, do
-you think EIO is better?
-
->  
-> @@ -590,6 +607,27 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
->  
-> +	lpi2c_imx->clk_change_nb.notifier_call = lpi2c_imx_clk_change_cb;
-> +	ret = devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
-> +					 &lpi2c_imx->clk_change_nb);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "can't register peripheral clock notifier\n");
-
-can't we fall back to how things were instead of failing the
-probe? But I'm not sure it would remove the lockdep warning,
-though. I can live with it.
-
-> +	/*
-> +	 * Lock the clock rate to avoid rate change between clk_get_rate() and
-> +	 * atomic_set()
-> +	 */
-> +	ret = clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "can't lock I2C peripheral clock rate\n");
-> +
-> +	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx->clks[0].clk));
-> +	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
-> +	if (!atomic_read(&lpi2c_imx->rate_per))
-> +		return dev_err_probe(&pdev->dev, -EINVAL,
-> +				     "can't get I2C peripheral clock rate\n");
-> +
-
-Not a bad patch, would be nice if all the above was provided by
-the library so that other drivers can use it.
-
-Andi
-
->  	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
->  	pm_runtime_use_autosuspend(&pdev->dev);
->  	pm_runtime_get_noresume(&pdev->dev);
 > -- 
 > 2.34.1
 > 
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
