@@ -2,93 +2,101 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E0D7E5283
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 Nov 2023 10:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25C27E5288
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 Nov 2023 10:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235476AbjKHJQv (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Nov 2023 04:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
+        id S235393AbjKHJSU (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Nov 2023 04:18:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235408AbjKHJQu (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Nov 2023 04:16:50 -0500
+        with ESMTP id S235475AbjKHJST (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Nov 2023 04:18:19 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CDF92;
-        Wed,  8 Nov 2023 01:16:48 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F33CC433C9;
-        Wed,  8 Nov 2023 09:16:47 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09D410A
+        for <linux-i2c@vger.kernel.org>; Wed,  8 Nov 2023 01:18:17 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9DA5C433C7;
+        Wed,  8 Nov 2023 09:18:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699435007;
-        bh=Uyo/fe9L3givN13VvXpLahGfLtRfH9/ftSHaq1Ecsjk=;
+        s=k20201202; t=1699435097;
+        bh=bSm6jEOqooYuoqoXFz+RxpEyBDmFfEV0S8uqG48Y7ek=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TGagmRWwqyeWELZw86f4nLPx0IazSVUU6IREpNTQXdeJWkGQOIcaRUyBccWXhUXI8
-         8ksGyfj268wvHCGkXczuO58cESjFyWFwgXDMKnlRz5yGsILQi3o68JPsmAlZ3wTNgF
-         N9W/gCalm45qShVO7UzyifE/EZb2C4vviT/Mk/ZGEpyMT7H/V/WGKKaWZ74fg6u1pB
-         6BQbOX+yvHqkNN3cMj3EvTwTiwvayp22FbqJCROv5IxkgpaQrWgKbM5ESucOnT2JFx
-         3rjWoLQRNHLxXYitWJp1u47srM6ZkcWAlCWGXBrsiQmqC0eaI5Ze0Rus+ecmzSf5Kt
-         J5xUMKMjdTuZA==
-Date:   Wed, 8 Nov 2023 10:16:44 +0100
+        b=AeY1zSy5+eJafNYr1KSrpYAhhWwvy/d3KyZkLGwaY5WBoMysQyhQnIWriPeoPKGVE
+         rNLeWV5Jc9oKUpa+CMLMUKY75McE4dZy285SyaFvqwHu//EOqYU8FW6/akNtyQ6DbV
+         AZx7I3pbSW3avXgs0r38b+weoSpNWjrJ22Es63O1uq8C8rf+zTH7WmXwSZiS9cfVVF
+         C3UBCpb/kZr5r8Sn9eYYmK3BDuwHN2Yu1cng/0bzHCFq5/SgMxH0Uc2gyYiWJfMbSO
+         bWuxNGoWCmMoW3Po7fTpYey67xDvs2gPeYkEe4/ntkx6DmDs4Zn+imTIX7BSPvP7Wc
+         MJbNzP8jUkYUg==
+Date:   Wed, 8 Nov 2023 10:18:14 +0100
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Vijay Balakrishna <vijayb@linux.microsoft.com>
-Cc:     roman.bacik@broadcom.com, andi.shyti@kernel.org, rjui@broadcom.com,
-        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: iproc: handle invalid slave state
-Message-ID: <ZUtR/Jan+0sE3QVb@ninjato>
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v7 1/1] i2c: lpi2c: use clk notifier for rate changes
+Message-ID: <ZUtSVr/cI/EVgq0M@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Vijay Balakrishna <vijayb@linux.microsoft.com>,
-        roman.bacik@broadcom.com, andi.shyti@kernel.org, rjui@broadcom.com,
-        sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230824212351.24346-1-roman.bacik@broadcom.com>
- <ZOzxJSeHhB1vrXff@ninjato>
- <6231246b-f8a5-4a6b-a7b2-dc2815ffa85b@linux.microsoft.com>
+        Andi Shyti <andi.shyti@kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20231107141201.623482-1-alexander.stein@ew.tq-group.com>
+ <20231107212049.csimqzzvim5uecpa@zenone.zhora.eu>
+ <22082032.EfDdHjke4D@steina-w>
+ <20231108091513.6ddwhu6o6lbvvmag@zenone.zhora.eu>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ldSLwsX2k/yfiJ2p"
+        protocol="application/pgp-signature"; boundary="FoCUYU+NpuFkyMW3"
 Content-Disposition: inline
-In-Reply-To: <6231246b-f8a5-4a6b-a7b2-dc2815ffa85b@linux.microsoft.com>
+In-Reply-To: <20231108091513.6ddwhu6o6lbvvmag@zenone.zhora.eu>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
 
---ldSLwsX2k/yfiJ2p
+--FoCUYU+NpuFkyMW3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Vijay,
 
-> I don't see this patch neither in I2C for-next nor in linux-next.  May be
-> got lost by accident, please update.
+> If you see your part in my reply down here you see that some
+> parts are missing. Perhaps there is a bug in lei that has missed
+> the top part of your patch because in lore I see that, indeed,
+> there is nothing wrong with your mail.
 
-Yes, I am sorry. This likely got lost somewhere because of an error on
-my side. I'll apply it again. Thank you a lot for notifying me!
-
-Kind regards,
-
-   Wolfram
+Seems to be a lei bug, indeed. I can apply the patch from my mutt inbox
+without a problem.
 
 
---ldSLwsX2k/yfiJ2p
+--FoCUYU+NpuFkyMW3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmVLUfwACgkQFA3kzBSg
-Kbbteg//a3GyhJ9/7FHetY4CuhdpxMZsrIgGbZTpHPE5tvASRO8zehmUfKboB3is
-BWfgbXFCsmhR0YBze0+1FrThcoDa88qWnR+fDgG7gNx8hDZRzPT35JkfrD2sjWsF
-8Nd/uCBilGcKX3WWIIK8P1KJcDq9xWQXGIPqLGt/Kisg8/pAiJ0PIrFDpKayVL+o
-KXTTRYUHZ3AgYfSsVlSrVsh2PfxjE52HmtSGuxpYJT3V915v2VF+TcFlEMlpig5L
-LTpvCdWeSSkdC7lWYhfytRZG35eD3haNmLx77xvQPW+LZcCBbXAO5DAjMcRPj4xn
-a0jcGDZfr4nk4AzpqPHXtczdUWsiiiDc/L98868o31+GExT8d/xLcKXkC3YDcrBy
-fvlVntq0Lqlh8ufl/Q5nqYp9YZG/0Wqpc3xSLGk/pPVuZNkezSqnEbxBj04Wmi6d
-z5ml69UVaxRczmR13b0fa5w26uqlvdeYO6FjkKoxn5pmb0ONw0DmqcQk1su4iD+r
-1DDU4iInABKe/4lLOQ5Yf/+qSo8c74hm9ZjV8Yed95iOivEZoCR4ZvIkF/KwkWeH
-DaSWVWPH6SaORkU4CP1lxYigx7nCTPTU7Mp/VeQLLltDHldmMjKxFbb+kIvsY+84
-4KeV9BJGCZgHoQ0IZk3ycsmpVZbR16LPJ1us/oN81YSlmqeYc00=
-=v1ug
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmVLUlYACgkQFA3kzBSg
+KbZ3rg/+Kwpe8giT0k1ZBFzoH941h4z5WYUqtlWSHxiSEndkd3u2dBElBhQHux4H
+KkYa2Kx1jx2n2S/j3UevCkii4LcRoaknA1FIovkKwt1LvrpVvg5U19VIM6oyXXg3
+Yb96dQH2Pc+2G1hqFTRvYI89VPssOHPVwxu29kQAg9O4zVX+UBCYFf98ifNUYpn+
+T/ujlMqkrNzwIschvSWgAqzsxI84+sJ+B6SCOBbniTWeX2vYBitpNkougngEUykn
+bgzmJ6PkNlqJA+pmKKjm9teiUpKatnarTim/YyKa5qajNl0o9CaNDkEcB5uJSzHN
+TnsEU61AwY0a+RtfgILjXZ9HSne0Vz0Ow45+r3ih6h7BtbJqJ6STwsphYuBaI15k
+RczXyIj7NmMAZmBFXr0rqT4mnoeobnoyzLAhUgET2/fzGqI2pThjG4+3FaJrt+x2
+9l64zjv5brSyqnHuQ9r0sOv2BN8d8D8Q2BoIKaFGoH4mjMmsvN9ZnPnF2/QX3OJL
+OrD6pfIm4c0QkMFa0Uc9FWGUhT0OD0uSE9AxU15zSUftQ6IA0y1kTe60IYkNy0cF
+36tQTR9MRvJbJOC3g6m2m3HETWC8PcgOyE9V6EpijispeSl5iqijxhEaNaQS0zJ+
+xsqY89XqrZcS3alvNPZFnh44DSrWihZCZhvP9VzrEOu4YH3Sgbk=
+=M/kl
 -----END PGP SIGNATURE-----
 
---ldSLwsX2k/yfiJ2p--
+--FoCUYU+NpuFkyMW3--
