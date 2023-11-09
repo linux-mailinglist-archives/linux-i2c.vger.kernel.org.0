@@ -2,455 +2,206 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E2D7E61E5
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Nov 2023 02:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CB07E6275
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Nov 2023 03:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjKIBuN (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Wed, 8 Nov 2023 20:50:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
+        id S231187AbjKICzg (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Wed, 8 Nov 2023 21:55:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbjKIBuM (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Nov 2023 20:50:12 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2073.outbound.protection.outlook.com [40.107.117.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773FA269E;
-        Wed,  8 Nov 2023 17:50:09 -0800 (PST)
+        with ESMTP id S229923AbjKICzf (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Wed, 8 Nov 2023 21:55:35 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2134.outbound.protection.outlook.com [40.107.92.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DCB25AC;
+        Wed,  8 Nov 2023 18:55:33 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fve2InbtGOq9oSlu0G59eaIY8xpgCR4pIH+PoqVH31WjuW06YDruX0V8bqx5UHKkZ3jmPQsZl4MX13TWA8uqOdEj0w+vxd3HD9RpNm/eF1JkyARIE9mXjVIMuXOXxHa26xr5KiV6W+/CNPLxBpWToXv0CbdEjLkm2BYmDcWq9HiRFHHJUMaqPAG/mJGpX5skdDntlbGOeuQe2lc8N58Z1tZUCcYzU5rgzq76DErBrcm1ZXkIi5wUkcfzsMAOyHIHmcxCseywMM+o+vpOfJ8rp40+PYtHwKRL7h+zjU1e2Au8bVwSv5fQ56ob5d7A3YC5IgIAA7VcqCOTnnEZLvmsjw==
+ b=U9OOFRYu6kzYzdD62uhVSG/Gi/6bzFez2qtW7deEXs6rL/wgrjUlFrBX/OZXTz+eFbLX9qJQa3MHm3MCC3N/VBfDA7QIoFY1k754tGBfbqYYnW4s6SIOn/Qdql0DE2CDxSkeCR+qpAiHwfdgdaD6UfrkC3wsOrEIfpf6BeHnwZ1Q54TwJHW59e11mDhrLsyOoKdGbm0pHaplM/P86maCos3ainnFPjCUxHNRtrCbQGWbSTd/fobFG1SLRp1Q860m9ECnWiNPFLgqh46JmrxTgPUIfTrhe7FuqX5P6br38rQ+yY/8lMHkvGDuxBRCfVA0ke+1jHbRpP2cOJEjTqwX+A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6xAJoqXTjp7anwVoo3/HbsH7rYkryE3zap6wVl4dunk=;
- b=PE/sq4MDdaTRnBmfokBGaVCJU33qvhDSm6EADNP1ZXSY1z1z2t/+997Ynf487vmC3w8LK2VcEvn8cycDltbmohZc9RJGgGmcQu/CUX/j4y8GnhLhGtA6KcfeYiemNt5MOvYd+SXjTIvACbwHtzFhRb+duMYqnmJbZYVGktN4ox1roPqc6rVkvsJXVvRkPNBI1DZqgq4AQeoz/oA3rghL7l2WhMVHr4YSNL1HkAco2UZ0TPrigWrkTxCI9LNauvyZIUZChp4t+m/2X9X3V1N0JydXsQmWu2Rkf8rKfJhimaz8gv6qUV/iZ7lTVTods6/AJlxBJSZYvUeykQ0M4FvChw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 211.20.1.79) smtp.rcpttodomain=stwcx.xyz smtp.mailfrom=wiwynn.com; dmarc=fail
- (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=wiwynn.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wiwynn.com;
- s=selector2;
+ bh=ZRvGpXj32m43nUxGco1SX8huZ7tg4sUt7ODR16BS97E=;
+ b=emLVodVQwnR2b2vnZrEnb4PzKWfxLfFPBYVyfVSAivO/RraqnnNiCcCKITume1SLgJyrZS/NkVdjMcjZrrWFDTEZOB4WEILAtkdYziL2t2cHWLSm+bwDvA1Vd4syRU8PEa+ttTRdu21SXAXx/3hB6HXvj3tq0aNVy0FMvsW9WXF/qFuM/CZeAOStcKzGVeo/7lmXCqZw1Rzyn6Um+pZ03QCdBsKYc5UI5o01Q+w5cT79BK+2RNJkWD536R2ArPz0e3f7T6IjhFgbmZ6JqJ/+dCgdaVq9WlDY1TaprGGb+rWtNrw46QUQ4xfULKYLqLTezStuvWgSbef/qsrfzqEozw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6xAJoqXTjp7anwVoo3/HbsH7rYkryE3zap6wVl4dunk=;
- b=JARd55ThX0MlRJ3zElhhE47n4mQveG7AdXFK4V/DDKYNtYu9QOm5yHX2sSSZ3s5ROk0XcshuyqN7pdy+In+dnP/K+VNELSj3B5iOl102FmciDxxtl7PifFTFIupR7Kyj6axDtXEdVPSRtC5ca5vXiBFTvJEm8YLxi5K5kYG6P8afN/rTftYntpuE4JpwVc5FO2wCLaorfjj/n98M/ItNbPJofSQsI6p4QWK9w/bnBb46w1CRCX+dXLaMhRqkimDMhle5DAf1nk0fSkpin3lrkHyQwHCen7SY4SbbPIzEUTV5YagsLUTEiMn3FaQQBwv6aZ1deBAWX+wDleme5JaquQ==
-Received: from PS2PR02CA0056.apcprd02.prod.outlook.com (2603:1096:300:5a::20)
- by KL1PR0401MB6586.apcprd04.prod.outlook.com (2603:1096:820:b4::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Thu, 9 Nov
- 2023 01:50:05 +0000
-Received: from HK3PEPF0000021A.apcprd03.prod.outlook.com
- (2603:1096:300:5a:cafe::c4) by PS2PR02CA0056.outlook.office365.com
- (2603:1096:300:5a::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6977.19 via Frontend
- Transport; Thu, 9 Nov 2023 01:50:04 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 211.20.1.79)
- smtp.mailfrom=Wiwynn.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=Wiwynn.com;
-Received-SPF: Fail (protection.outlook.com: domain of Wiwynn.com does not
- designate 211.20.1.79 as permitted sender) receiver=protection.outlook.com;
- client-ip=211.20.1.79; helo=localhost.localdomain;
-Received: from localhost.localdomain (211.20.1.79) by
- HK3PEPF0000021A.mail.protection.outlook.com (10.167.8.36) with Microsoft SMTP
- Server id 15.20.6977.18 via Frontend Transport; Thu, 9 Nov 2023 01:50:04
- +0000
-From:   Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-To:     patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v4 2/2] hwmon: pmbus: Add ltc4286 driver
-Date:   Thu,  9 Nov 2023 09:49:46 +0800
-Message-Id: <20231109014948.2334465-3-Delphine_CC_Chiu@Wiwynn.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231109014948.2334465-1-Delphine_CC_Chiu@Wiwynn.com>
-References: <20231109014948.2334465-1-Delphine_CC_Chiu@Wiwynn.com>
-MIME-Version: 1.0
+ bh=ZRvGpXj32m43nUxGco1SX8huZ7tg4sUt7ODR16BS97E=;
+ b=M6Davt4SbuQ0Y/B73Iq4dM0hSwybWeMQeavStmLLVYJ1dSA4k6AnJLII/UeCULaALcCde1ZdYa25/AN9saI79rHYlb34L3BSc0TdU46ClEQ+nMlLL/PSfQx+97OmTm4YPz8hHI2y3uHOrBWTRKkNU58sMZJpR5iE1gfWfaRrebk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from PH0PR01MB7475.prod.exchangelabs.com (2603:10b6:510:f2::9) by
+ MW6PR01MB8365.prod.exchangelabs.com (2603:10b6:303:248::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6954.29; Thu, 9 Nov 2023 02:55:29 +0000
+Received: from PH0PR01MB7475.prod.exchangelabs.com
+ ([fe80::a0b7:3abe:edf1:51af]) by PH0PR01MB7475.prod.exchangelabs.com
+ ([fe80::a0b7:3abe:edf1:51af%4]) with mapi id 15.20.6954.025; Thu, 9 Nov 2023
+ 02:55:28 +0000
+From:   Jan Bottorff <janb@os.amperecomputing.com>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Andi Shyti <andi.shyti@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Bottorff <janb@os.amperecomputing.com>
+Subject: [PATCH v3] i2c: designware: Fix corrupted memory seen in the ISR
+Date:   Thu,  9 Nov 2023 02:55:18 +0000
+Message-Id: <20231109025518.1989953-1-janb@os.amperecomputing.com>
+X-Mailer: git-send-email 2.34.1
 Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HK3PEPF0000021A:EE_|KL1PR0401MB6586:EE_
 Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: f45e3f51-0c5a-4515-f054-08dbe0c63195
+X-ClientProxiedBy: CH0PR03CA0401.namprd03.prod.outlook.com
+ (2603:10b6:610:11b::35) To PH0PR01MB7475.prod.exchangelabs.com
+ (2603:10b6:510:f2::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR01MB7475:EE_|MW6PR01MB8365:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7b6e732a-f80e-485c-6259-08dbe0cf54a6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0478kSZXyu6m6Bge5TEFTSsBFb3cOnSWooYHw1vno1+mIAPZykGleK/ET4OSAKvXAFw0N5WjDavWm6rhJ5Gbv55WD+z+pcr2rmtxHu5XJ7rDLGQCzIhHiHlCTyczwCrgD2sDDFfZUsMgeZW+NHpbmes/WLzX+j+HEIyj+AwRt7qfVUYD8lQlDctaoWdDhQpmMQGp+2zGUSh1OLtasZSHG0nEtFLUf6d1+B0qJSe/p/vtGlSc2y2GfpQOZHC6ydSwgqMhIwlTaxodZCPjcZkuGy0ImZ69tsLqVdE8Odv+q0/DPr5WkIfT3ZBoG5Ye+rPT9e+RFE0rR5dodgdDNcCh/PGGFizGB6e3yZCjTFLWx1c4fsUp5UmVJ6RUH222qO1w2je9JaVr52VZV4uqWw3cuU6/0vgDTyInzbsDJxGMoULXlc3X8/Hu1KoAoA0FrrsnF3MFBj3bAV6ayYb6NgmZrTZVpxmiY4UdCKGTwccRXcXs48DsbCiGxSQfJOcaPyKcI0fObnO4S9XysppGRVzVTV6N2wcbPGWojhAnjfR0xKBxh+OU0Yh2e15QOjAB87CiIUz3kYfZBC19YsM4a9wk9YR3+SoQYvpb8Dnglto49mOvpE5Ya2yUmdd1hUzctId7pY4sJAQy0q+ckElSJGi5A7zcXA2xSqpTnQ344FiZzqGD4W0b8+7mws874Zel+70wzAaxg7As093Y8gelHvJ9lQ==
-X-Forefront-Antispam-Report: CIP:211.20.1.79;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:localhost.localdomain;PTR:211-20-1-79.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(6069001)(4636009)(39860400002)(396003)(346002)(376002)(136003)(230922051799003)(451199024)(186009)(64100799003)(1800799009)(82310400011)(46966006)(36840700001)(36860700001)(9316004)(30864003)(2906002)(966005)(5660300002)(41300700001)(316002)(36736006)(478600001)(70206006)(36756003)(54906003)(110136005)(8936002)(8676002)(4326008)(70586007)(47076005)(40480700001)(7049001)(86362001)(7416002)(1076003)(6486002)(356005)(81166007)(83380400001)(66574015)(336012)(82740400003)(6506007)(2616005)(956004)(6666004)(26005)(6512007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: wiwynn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2023 01:50:04.0457
+X-Microsoft-Antispam-Message-Info: X9/4sv1R3Z/lZijaxloeImPjKthv5WX9OFjxVUBASTv5uWj8qXHi5+2IqZ6TA9YsOM7gR/K1fQwaJ1XBgow1VuNDIGX9FxAC0FNmOFD8H7M211ejpEhpyOlJAuhXgpltCv1AJu2ZIFJxOqpA+tU3OArv3inVuHIfAa8r9TkZ7NQIWgFvoGytCSrJCafPmIYLAJ/vQWH901imiWWYkgFWmn+3oRn5RuMy2+/LuTycJe7GHKHdmRgcT6djkLz0JGDi+7ly912GHrHMBscLakeLVjcHIDeL9G2N5ZtFR9xwtevfbnoT7ot3kySidmD9DPTkl5mB5xoXdDYsWgYOildlNo7RFMSTk0ZRAOjmZnoGDq9TxfyA3BAk03pQ5Sg3/IP+wFTIz/kTQBie/fegq7vUVtWy8xr/dS+5j1g62vNd+AyrVFz3EcAs8N9GYtJuIiLjqjGnAvcMCzK86d+24utX0jzvslzqb/shujinPdfcy0D0DvcWCUKNysMXx6VLGa4znMa6x3/mnDuZtiDe68DUgXu09sxXbMo8HCAMyUpuQ/bP9/HLA1OMqVSDnIPR7FkY3EZG6Hyhl0I4E8py9RipX50VyptXQzmZd+wewfQSluWrpdZBlr5yRtmqAnUyCjLy
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB7475.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(346002)(366004)(376002)(396003)(39850400004)(230922051799003)(451199024)(64100799003)(186009)(1800799009)(66946007)(110136005)(5660300002)(316002)(66556008)(66476007)(107886003)(26005)(1076003)(8936002)(8676002)(4326008)(83380400001)(38350700005)(2616005)(6486002)(6512007)(2906002)(478600001)(52116002)(6506007)(38100700002)(86362001)(41300700001)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Jbt3pE7oPr8znO64vM47uvcpZY4wKf0KAv7+wMaLyHcJltUYOwNdl/Epoi/7?=
+ =?us-ascii?Q?lg2QWK1i6u4OxyWtHMYQyWsslmGbRACRty3q44Advs3+Pu+XNpwfCilIBQkl?=
+ =?us-ascii?Q?eYVqCSf75Kt8vmuFcRlIAJ3z0C/E8kPWKOcX4GCJ/ZC7D/XWU43f5qdARRjO?=
+ =?us-ascii?Q?hRjOHqM2aK6mfebU7gmnikOY+BfCw0linQPYTh7InBgXc/sOSJ7NColIG4dV?=
+ =?us-ascii?Q?YeJ0HMfefWte7mdKfEks01WFxhMd68yLbezcQcIuW2biv9mNVlB/J9jGwr5A?=
+ =?us-ascii?Q?YDswjxeeX1axjmEDrKcprfliwRZwvDSm//G93xTwkaGLk7VewdUIQ3wWWtpI?=
+ =?us-ascii?Q?X8Z+bRdj26hBtHQqxxdHqHycsayRElwruGok4pNAQNFy+W9XLb82QZnl2yy5?=
+ =?us-ascii?Q?V3cjVwUpfHq56nalWy6SxDON8LpuZimUlQw6x/BsuChS5vgBtLgqX+d6cC9K?=
+ =?us-ascii?Q?ogGqam53vpo+T7rt87dfQ3Zj83EeYNsxTawaLFpSHuKdmge7fCHQYKVXIvJ6?=
+ =?us-ascii?Q?OqA/8ykAvk92X7mazzf3VJwOAPerlluDM78o+TMgCk6piW4Wtrr+A3TzH6sD?=
+ =?us-ascii?Q?xQMGn2FEirXsm5Gshszr0Mkz8ykoXi0e30903RWOqO30oQE8JuAe9QMm5QGK?=
+ =?us-ascii?Q?P1ghtpnJw9z/7Plp2TYsczAapsvfLUFeSrsmoU/kp/i27TElWJ7jzYpcjEdD?=
+ =?us-ascii?Q?uGAm2z5WJTQoPGpURTxZEBdhSjnKzSX5OUXZtMl+4DdhS4xcyLIoTd3iapbe?=
+ =?us-ascii?Q?0DxwmRGjRkWonHvs34SP1wMMfhy5HKqyEtb9qotzM+a5OJIszf5RwTe1r11h?=
+ =?us-ascii?Q?whkv5+89qWw8zmG8jBKd4sTvqKZGazNGkMdgFZYRkLYf5Uu2RaPREfKAcoJG?=
+ =?us-ascii?Q?5ftf8NYgUsMxU+Hk5pvNBjnu1RifQCZMkG3bw4Xxsv7YwlZrFY8Fp6s5X97I?=
+ =?us-ascii?Q?HVHIjI51jHjC6VcZE6hGWiPKVG67mxU1+NZw4GukMCgZ8SF0laNKJuAWzWON?=
+ =?us-ascii?Q?XaVZ9zQaG56iM1YEv1d9IRwBEufrrfHDIe3vgqCpzC8Y8icol8JIKMCvL74E?=
+ =?us-ascii?Q?afFqyqlHqYkvvbSkiVt09YbH6SsAog4PlUbWMIMgi96oSpOTjbGdyPDgGJhv?=
+ =?us-ascii?Q?jOTsTfFFWMxj51STeSe7QL4IzhuL4oYomxoU4AJkTnR5Sl+69sxWI1xujbdj?=
+ =?us-ascii?Q?P0rTO0RtuAtC7Zm95zdzz3VtUAuuPqnkbuJoGZ10ksABI0MorVu1RQ6aQRqs?=
+ =?us-ascii?Q?DXbkaTRaZj8FlYYOi0yCbgxnfffXHTcanoVFkMnrPzo21JV1FfJg+SeQ6l08?=
+ =?us-ascii?Q?j7IK+tKPJ7h97HFz9Vhfi6Iy5zFu+xm8igkfWng38kU/V9ZbCgGn5qEpeMAy?=
+ =?us-ascii?Q?QkgIjMk6ur4LEfUcuitYPiG0TyJ+4uT2uRuEL9Q7Z0YT+wvMqkDO3UtItH3l?=
+ =?us-ascii?Q?bcAhNuAj5Qibo0EXA2OQmlMz0t83/NuoIf/lOHFHb2uuVZbVn/FkoNPbLs4H?=
+ =?us-ascii?Q?rDXHG09y2QskxNgsX+E68NtvCLwBwz0LhLB4xiB/r5KfzNHIoTMepN/Br9PK?=
+ =?us-ascii?Q?GRA3K8JrM6JSDRJb+OsgjKSVRTdnum+XWK49WL63ZlWP1uvzjZtNsEVP2y5Q?=
+ =?us-ascii?Q?XBnBliAjY6mcL/ZKZODFI7I=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b6e732a-f80e-485c-6259-08dbe0cf54a6
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB7475.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2023 02:55:28.7947
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f45e3f51-0c5a-4515-f054-08dbe0c63195
-X-MS-Exchange-CrossTenant-Id: da6e0628-fc83-4caf-9dd2-73061cbab167
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=da6e0628-fc83-4caf-9dd2-73061cbab167;Ip=[211.20.1.79];Helo=[localhost.localdomain]
-X-MS-Exchange-CrossTenant-AuthSource: HK3PEPF0000021A.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0401MB6586
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BjL0ogXn0oS26x2rdcQu36PvMtAqkrZUSj8z9h7L9htqMWVvOyfieiDuVWPNPEzoilsIq0pgJvR0Q5udWELcPWcqvc3THYAd1r2yt8PfRBs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR01MB8365
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Add a driver to support ltc4286 chip
+When running on a many core ARM64 server, errors were
+happening in the ISR that looked like corrupted memory. These
+corruptions would fix themselves if small delays were inserted
+in the ISR. Errors reported by the driver included "i2c_designware
+APMC0D0F:00: i2c_dw_xfer_msg: invalid target address" and
+"i2c_designware APMC0D0F:00:controller timed out" during
+in-band IPMI SSIF stress tests.
 
-Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+The problem was determined to be memory writes in the driver were not
+becoming visible to all cores when execution rapidly shifted between
+cores, like when a register write immediately triggers an ISR.
+Processors with weak memory ordering, like ARM64, make no
+guarantees about the order normal memory writes become globally
+visible, unless barrier instructions are used to control ordering.
 
-Changelog:
-  v4 - Add empty line before "config SENSORS_LTC4286" in Kconfig
-     - Add ltc4286 to Documentation/hwmon/index.rst
-     - Revise comment typo
-     - Use devm_kmemdup instead of memcpy
-     - Check MBR value before writting into
-  v3 - Use dev_err_probe() instead of dev_err()
-     - The VRANGE_SELECT bit only be written if it actually changed
-     - Avoid the info pointer being overwritten
-     - Check the MBR value range to avoid overflow
-     - Revise ltc4286.rst to corrcet description
-  v2 - Revise Linear Technologies LTC4286 to
-       Analog Devices LTC4286 in Kconfig
-     - Add more description for this driver in Kconfig
-     - Add some comments for MBR setting in ltc4286.c
-     - Add ltc4286.rst
+To solve this, regmap accessor functions configured by this driver
+were changed to use non-relaxed forms of the low-level register
+access functions, which include a barrier on platforms that require
+it. This assures memory writes before a controller register access are
+visible to all cores. The community concluded defaulting to correct
+operation outweighed defaulting to the small performance gains from
+using relaxed access functions. Being a low speed device added weight to
+this choice of default register access behavior.
+
+Signed-off-by: Jan Bottorff <janb@os.amperecomputing.com>
 ---
- Documentation/hwmon/index.rst   |   1 +
- Documentation/hwmon/ltc4286.rst |  95 +++++++++++++++++
- drivers/hwmon/pmbus/Kconfig     |  10 ++
- drivers/hwmon/pmbus/Makefile    |   1 +
- drivers/hwmon/pmbus/ltc4286.c   | 177 ++++++++++++++++++++++++++++++++
- 5 files changed, 284 insertions(+)
- create mode 100644 Documentation/hwmon/ltc4286.rst
- create mode 100644 drivers/hwmon/pmbus/ltc4286.c
+ drivers/i2c/busses/i2c-designware-common.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 72f4e6065bae..080827cc4c34 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -128,6 +128,7 @@ Hardware Monitoring Kernel Drivers
-    ltc4245
-    ltc4260
-    ltc4261
-+   ltc4286
-    max127
-    max15301
-    max16064
-diff --git a/Documentation/hwmon/ltc4286.rst b/Documentation/hwmon/ltc4286.rst
-new file mode 100644
-index 000000000000..2cd149676d86
---- /dev/null
-+++ b/Documentation/hwmon/ltc4286.rst
-@@ -0,0 +1,95 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver ltc4286
-+=====================
-+
-+Supported chips:
-+
-+  * Analog Devices LTC4286
-+
-+    Prefix: 'ltc4286'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4286.pdf
-+
-+  * Analog Devices LTC4287
-+
-+    Prefix: 'ltc4287'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ltc4287.pdf
-+
-+Author: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-+
-+
-+Description
-+-----------
-+
-+This driver supports hardware monitoring for Analog Devices LTC4286
-+and LTC4287 Hot-Swap Controller and Digital Power Monitors.
-+
-+LTC4286 and LTC4287 are hot-swap controllers that allow a circuit board
-+to be removed from or inserted into a live backplane. They also feature
-+current and voltage readback via an integrated 12 bit analog-to-digital
-+converter (ADC), accessed using a PMBus interface.
-+
-+The driver is a client driver to the core PMBus driver. Please see
-+Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-+
-+
-+Usage Notes
-+-----------
-+
-+This driver does not auto-detect devices. You will have to instantiate the
-+devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-+details.
-+
-+The shunt value in micro-ohms can be set via device tree at compile-time. Please
-+refer to the Documentation/devicetree/bindings/hwmon/lltc,ltc4286.yaml for bindings
-+if the device tree is used.
-+
-+
-+Platform data support
-+---------------------
-+
-+The driver supports standard PMBus driver platform data. Please see
-+Documentation/hwmon/pmbus.rst for details.
-+
-+
-+Sysfs entries
-+-------------
-+
-+The following attributes are supported. Limits are read-write, history reset
-+attributes are write-only, all other attributes are read-only.
-+
-+======================= =======================================================
-+in1_label		"vin"
-+in1_input		Measured voltage.
-+in1_alarm		Input voltage alarm.
-+in1_min 		Minimum input voltage.
-+in1_max 		Maximum input voltage.
-+
-+in2_label		"vout1"
-+in2_input		Measured voltage.
-+in2_alarm		Output voltage alarm.
-+in2_min 		Minimum output voltage.
-+in2_max 		Maximum output voltage.
-+
-+curr1_label		"iout1"
-+curr1_input		Measured current.
-+curr1_alarm		Output current alarm.
-+curr1_max		Maximum current.
-+
-+power1_label		"pin"
-+power1_input		Input power.
-+power1_alarm		Input power alarm.
-+power1_max		Maximum poewr.
-+
-+temp1_input		Chip temperature.
-+temp1_min		Minimum chip temperature.
-+temp1_max		Maximum chip temperature.
-+temp1_crit		Critical chip temperature.
-+temp1_alarm		Chip temperature alarm.
-+======================= =======================================================
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index b4e93bd5835e..2d4f972e5a65 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -227,6 +227,16 @@ config SENSORS_LTC3815
- 	  This driver can also be built as a module. If so, the module will
- 	  be called ltc3815.
+diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+index affcfb243f0f..35f762872b8a 100644
+--- a/drivers/i2c/busses/i2c-designware-common.c
++++ b/drivers/i2c/busses/i2c-designware-common.c
+@@ -63,7 +63,7 @@ static int dw_reg_read(void *context, unsigned int reg, unsigned int *val)
+ {
+ 	struct dw_i2c_dev *dev = context;
  
-+config SENSORS_LTC4286
-+	bool "Analog Devices LTC4286"
-+	help
-+	  LTC4286 is an integrated solution for hot swap applications that
-+	  allows a board to be safely inserted and removed from a live
-+	  backplane.
-+	  This chip could be used to monitor voltage, current, ...etc.
-+	  If you say yes here you get hardware monitoring support for Analog
-+	  Devices LTC4286.
-+
- config SENSORS_MAX15301
- 	tristate "Maxim MAX15301"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 84ee960a6c2d..94e28f6d6a61 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -24,6 +24,7 @@ obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
- obj-$(CONFIG_SENSORS_LT7182S)	+= lt7182s.o
- obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
- obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
-+obj-$(CONFIG_SENSORS_LTC4286)	+= ltc4286.o
- obj-$(CONFIG_SENSORS_MAX15301)	+= max15301.o
- obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
- obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
-diff --git a/drivers/hwmon/pmbus/ltc4286.c b/drivers/hwmon/pmbus/ltc4286.c
-new file mode 100644
-index 000000000000..e6690b38349a
---- /dev/null
-+++ b/drivers/hwmon/pmbus/ltc4286.c
-@@ -0,0 +1,177 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/pmbus.h>
-+#include "pmbus.h"
-+
-+/* LTC4286 register */
-+#define LTC4286_MFR_CONFIG1	0xF2
-+
-+/* LTC4286 configuration */
-+#define VRANGE_SELECT_BIT	BIT(1)
-+
-+#define LTC4286_MFR_ID_SIZE	3
-+#define VRANGE_25P6		0
-+
-+/*
-+ * Initialize the MBR as default settings which is referred to LTC4286 datasheet
-+ * (March 22, 2022 version) table 3 page 16
-+ */
-+static struct pmbus_driver_info ltc4286_info = {
-+	.pages = 1,
-+	.format[PSC_VOLTAGE_IN] = direct,
-+	.format[PSC_VOLTAGE_OUT] = direct,
-+	.format[PSC_CURRENT_OUT] = direct,
-+	.format[PSC_POWER] = direct,
-+	.format[PSC_TEMPERATURE] = direct,
-+	.m[PSC_VOLTAGE_IN] = 32,
-+	.b[PSC_VOLTAGE_IN] = 0,
-+	.R[PSC_VOLTAGE_IN] = 1,
-+	.m[PSC_VOLTAGE_OUT] = 32,
-+	.b[PSC_VOLTAGE_OUT] = 0,
-+	.R[PSC_VOLTAGE_OUT] = 1,
-+	.m[PSC_CURRENT_OUT] = 1024,
-+	.b[PSC_CURRENT_OUT] = 0,
-+	/*
-+	 * The rsense value used in MBR formula in LTC4286 datasheet should be ohm unit.
-+	 * However, the rsense value that user input is micro ohm.
-+	 * Thus, the MBR setting which involves rsense should be shifted by 6 digits.
-+	 */
-+	.R[PSC_CURRENT_OUT] = 3 - 6,
-+	.m[PSC_POWER] = 1,
-+	.b[PSC_POWER] = 0,
-+	/*
-+	 * The rsense value used in MBR formula in LTC4286 datasheet should be ohm unit.
-+	 * However, the rsense value that user input is micro ohm.
-+	 * Thus, the MBR setting which involves rsense should be shifted by 6 digits.
-+	 */
-+	.R[PSC_POWER] = 4 - 6,
-+	.m[PSC_TEMPERATURE] = 1,
-+	.b[PSC_TEMPERATURE] = 273,
-+	.R[PSC_TEMPERATURE] = 0,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-+		   PMBUS_HAVE_PIN | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_VOUT |
-+		   PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_TEMP,
-+};
-+
-+static const struct i2c_device_id ltc4286_id[] = { { "ltc4286", 0 },
-+						   { "ltc4287", 1 },
-+						   {} };
-+MODULE_DEVICE_TABLE(i2c, ltc4286_id);
-+
-+static int ltc4286_probe(struct i2c_client *client)
-+{
-+	int ret;
-+	int temp_setting;
-+	const struct i2c_device_id *mid;
-+	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
-+	struct pmbus_driver_info *info;
-+	u32 rsense;
-+
-+	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
-+	if (ret < 0) {
-+		return dev_err_probe(&client->dev, ret,
-+				     "Failed to read manufacturer id\n");
-+	}
-+
-+	/*
-+	 * Refer to ltc4286 datasheet page 20
-+	 * the manufacturer id is LTC
-+	 */
-+	if (ret != LTC4286_MFR_ID_SIZE ||
-+	    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
-+		return dev_err_probe(&client->dev, ret,
-+				     "Manufacturer id mismatch\n");
-+	}
-+
-+	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
-+	if (ret < 0) {
-+		return dev_err_probe(&client->dev, ret,
-+				     "Failed to read manufacturer model\n");
-+	}
-+
-+	for (mid = ltc4286_id; mid->name[0]; mid++) {
-+		if (!strncasecmp(mid->name, block_buffer, strlen(mid->name)))
-+			break;
-+	}
-+	if (!mid->name[0])
-+		return dev_err_probe(&client->dev, -ENODEV,
-+				     "Unsupported device\n");
-+
-+	ret = of_property_read_u32(client->dev.of_node,
-+				   "shunt-resistor-micro-ohms", &rsense);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (rsense == 0)
-+		return -EINVAL;
-+
-+	if (rsense > INT_MAX)
-+		return -ERANGE;
-+
-+	info = devm_kmemdup(&client->dev, &ltc4286_info, sizeof(*info),
-+			    GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	/* Default of VRANGE_SELECT = 1, 102.4V */
-+	if (device_property_read_bool(&client->dev, "adi,vrange-low-enable")) {
-+		/* Setup MFR1 CONFIG register bit 1 VRANGE_SELECT */
-+		ret = i2c_smbus_read_word_data(client, LTC4286_MFR_CONFIG1);
-+		if (ret < 0)
-+			return dev_err_probe(
-+				&client->dev, ret,
-+				"Failed to read manufacturer configuration one\n");
-+
-+		ret &= ~VRANGE_SELECT_BIT; /* VRANGE_SELECT = 0, 25.6V */
-+		ret = i2c_smbus_write_word_data(client, LTC4286_MFR_CONFIG1,
-+						ret);
-+		if (ret < 0)
-+			return dev_err_probe(&client->dev, ret,
-+					     "Failed to set vrange\n");
-+
-+		info->m[PSC_VOLTAGE_IN] = 128;
-+		info->m[PSC_VOLTAGE_OUT] = 128;
-+
-+		temp_setting = 4 * rsense;
-+		if (temp_setting > INT_MAX)
-+			return dev_err_probe(&client->dev, -ERANGE,
-+					     "Power coefficient overflow\n");
-+		info->m[PSC_POWER] = temp_setting;
-+	} else {
-+		info->m[PSC_POWER] = rsense;
-+	}
-+
-+	temp_setting = 1024 * rsense;
-+	if (temp_setting > INT_MAX)
-+		return dev_err_probe(&client->dev, -ERANGE,
-+				     "Current coefficient overflow\n");
-+	info->m[PSC_CURRENT_OUT] = temp_setting;
-+
-+	return pmbus_do_probe(client, info);
-+}
-+
-+static const struct of_device_id ltc4286_of_match[] = {
-+	{ .compatible = "lltc,ltc4286" },
-+	{ .compatible = "lltc,ltc4287" },
-+	{}
-+};
-+
-+static struct i2c_driver ltc4286_driver = {
-+	.driver = {
-+		.name = "ltc4286",
-+		.of_match_table = ltc4286_of_match,
-+	},
-+	.probe = ltc4286_probe,
-+	.id_table = ltc4286_id,
-+};
-+
-+module_i2c_driver(ltc4286_driver);
-+
-+MODULE_AUTHOR("Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>");
-+MODULE_DESCRIPTION("PMBUS driver for LTC4286 and compatibles");
-+MODULE_LICENSE("GPL");
+-	*val = readl_relaxed(dev->base + reg);
++	*val = readl(dev->base + reg);
+ 
+ 	return 0;
+ }
+@@ -72,7 +72,7 @@ static int dw_reg_write(void *context, unsigned int reg, unsigned int val)
+ {
+ 	struct dw_i2c_dev *dev = context;
+ 
+-	writel_relaxed(val, dev->base + reg);
++	writel(val, dev->base + reg);
+ 
+ 	return 0;
+ }
+@@ -81,7 +81,7 @@ static int dw_reg_read_swab(void *context, unsigned int reg, unsigned int *val)
+ {
+ 	struct dw_i2c_dev *dev = context;
+ 
+-	*val = swab32(readl_relaxed(dev->base + reg));
++	*val = swab32(readl(dev->base + reg));
+ 
+ 	return 0;
+ }
+@@ -90,7 +90,7 @@ static int dw_reg_write_swab(void *context, unsigned int reg, unsigned int val)
+ {
+ 	struct dw_i2c_dev *dev = context;
+ 
+-	writel_relaxed(swab32(val), dev->base + reg);
++	writel(swab32(val), dev->base + reg);
+ 
+ 	return 0;
+ }
+@@ -99,8 +99,8 @@ static int dw_reg_read_word(void *context, unsigned int reg, unsigned int *val)
+ {
+ 	struct dw_i2c_dev *dev = context;
+ 
+-	*val = readw_relaxed(dev->base + reg) |
+-		(readw_relaxed(dev->base + reg + 2) << 16);
++	*val = readw(dev->base + reg) |
++		(readw(dev->base + reg + 2) << 16);
+ 
+ 	return 0;
+ }
+@@ -109,8 +109,8 @@ static int dw_reg_write_word(void *context, unsigned int reg, unsigned int val)
+ {
+ 	struct dw_i2c_dev *dev = context;
+ 
+-	writew_relaxed(val, dev->base + reg);
+-	writew_relaxed(val >> 16, dev->base + reg + 2);
++	writew(val, dev->base + reg);
++	writew(val >> 16, dev->base + reg + 2);
+ 
+ 	return 0;
+ }
 -- 
-2.25.1
+2.34.1
 
