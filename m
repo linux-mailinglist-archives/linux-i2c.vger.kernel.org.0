@@ -2,257 +2,150 @@ Return-Path: <linux-i2c-owner@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE467E6651
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 Nov 2023 10:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7390D7E669D
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 Nov 2023 10:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjKIJKy (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
-        Thu, 9 Nov 2023 04:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S234297AbjKIJXi (ORCPT <rfc822;lists+linux-i2c@lfdr.de>);
+        Thu, 9 Nov 2023 04:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbjKIJKy (ORCPT
-        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Nov 2023 04:10:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7034F210A
-        for <linux-i2c@vger.kernel.org>; Thu,  9 Nov 2023 01:10:51 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0395C433C8;
-        Thu,  9 Nov 2023 09:10:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699521051;
-        bh=7U7PWgCvHIPjShUaspWfK1AyHapZpXmCD1A+goqKk/U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V6PYbn4MPFXHbs9ScFJCWc2uizxbRxhSP0umM4+ihm/jTDzN7HskNVi+oeIzI9+Ex
-         tkNqXzlWYkVV6U3B7s+OX2bmkPzLkrXiVzv40snyEKA2NHpB7XE4aJLGCSRfNFrnxA
-         Hafg2MYtgx+j6jqvBFbit9Ljhn4VQLSskS7nYUHJYqCqCIAdhLNtJhRZf3tyXuL1Gm
-         hUOdN5wS0AsBTVh4ctpoe/aMD/NB2F9fo7FMia9aEGkyiFPxP+akLn5kOINOlNJMCo
-         5UIJLbEfna8zeFmPVQqCvKoh+j32LSkIKxd3bk35F1Y1NKxkNyRbNR1N5vE/TgV1ob
-         qkIWv8Mn8/5rw==
-Date:   Thu, 9 Nov 2023 10:10:46 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 1/1] i2c: lpi2c: use clk notifier for rate changes
-Message-ID: <20231109091046.4hrvxr7g5imfrykq@zenone.zhora.eu>
-References: <20231107141201.623482-1-alexander.stein@ew.tq-group.com>
- <20231108233809.u3nvxlttmts6tj2m@zenone.zhora.eu>
- <3597042.R56niFO833@steina-w>
+        with ESMTP id S234320AbjKIJXh (ORCPT
+        <rfc822;linux-i2c@vger.kernel.org>); Thu, 9 Nov 2023 04:23:37 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCA1270C
+        for <linux-i2c@vger.kernel.org>; Thu,  9 Nov 2023 01:23:34 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9d2e6c8b542so101501966b.0
+        for <linux-i2c@vger.kernel.org>; Thu, 09 Nov 2023 01:23:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1699521813; x=1700126613; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eNQIp/KBXkssBnXnURnyXEtwPP/esZe3h0yYIlPjhVo=;
+        b=eOaLlZmgZ43wYgk2ruMRhebXYpyIQ7XB4SRsMaBi6YL/6ZTQcH99pW/YABiy7Sp5jZ
+         1ZdudT7FgqCm2LLATi+sOemtp/XHipyJaHDct+mwwMPzXLI1pPvsm+8sPfeRQhD3DlfT
+         FPa+jLxskb5kvEPFGJlBHnlwXXZfDz6lzZHgQfodEj2J0MTPnsmDfxMI9mx++Guuma86
+         PmTAvBZVy09qZlKPbQY4K1yrhrfXyGX38ef+NHsA0W91UyDwjZ5VxO761yzNv8teeAYV
+         H6ML3jcX+/fHPMp1fVujCzMyymb/nUDCKyhNal4zeG2jMSMGgzBU1dCSXCLPbeNuWMcu
+         2+Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699521813; x=1700126613;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eNQIp/KBXkssBnXnURnyXEtwPP/esZe3h0yYIlPjhVo=;
+        b=saE0jnjQH0OjQspZ0YANGnDIDBGb06HxbaVWvVRpN9xD4U/838/pnOWjm+5K5/BucM
+         w3SbrKZ5GxTsGN7xkNAxRbB3c1At3hI667PZbVrtAyDuPbVtWt/a/K/Nn8HROL4OjN+E
+         Bb4vNbkjetQfnQ7mb5qAI6YOPZ2CyoiBk2CjIi+9nEkD/JD6Ylfnd8KN62Sv0GPFqaY2
+         Bzk613SB2KS03tYXi/yhnZLMsn2bb8+sHtQgii276U4QV7oeD7upjKnBUBhIcCpYiJYm
+         CYN1MNl68KQVCyhExbiYv5uUHSX6FTo8LbUyvg2SXixyoGVJFIXDcJBlOAknnBBIGgkC
+         dd6Q==
+X-Gm-Message-State: AOJu0Yx5SfmfCUFv7IEtRvsKqPiKsKcfIIm4lB2PoJXrh3xJjgYXP0De
+        CYnnPi46DXfCECItmayt/G9dcvenFts2dNxoiCOZDQ==
+X-Google-Smtp-Source: AGHT+IH4me2HKSYcglcNZV5PHQM7TvfR+M1iz+M5Q/szKPL4PSN4JIOUc+KCQ7mA3sUCi/3NYyrCPw==
+X-Received: by 2002:a17:907:d1d:b0:9bf:4e0b:fb11 with SMTP id gn29-20020a1709070d1d00b009bf4e0bfb11mr3964112ejc.8.1699521812481;
+        Thu, 09 Nov 2023 01:23:32 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id c7-20020a7bc847000000b0040836519dd9sm1453917wml.25.2023.11.09.01.23.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Nov 2023 01:23:32 -0800 (PST)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+To:     Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     robh@kernel.org, Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH v5 1/2] dt-bindings: i2c: pca954x: Add custom properties for MAX7357
+Date:   Thu,  9 Nov 2023 09:23:26 +0000
+Message-ID: <20231109092328.3238241-1-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3597042.R56niFO833@steina-w>
 Precedence: bulk
 List-ID: <linux-i2c.vger.kernel.org>
 X-Mailing-List: linux-i2c@vger.kernel.org
 
-Hi Alexander,
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-On Thu, Nov 09, 2023 at 08:54:51AM +0100, Alexander Stein wrote:
-> Am Donnerstag, 9. November 2023, 00:38:09 CET schrieb Andi Shyti:
-> > On Tue, Nov 07, 2023 at 03:12:01PM +0100, Alexander Stein wrote:
-> > > Instead of repeatedly calling clk_get_rate for each transfer, register
-> > > a clock notifier to update the cached divider value each time the clock
-> > > rate actually changes.
-> > > There is also a lockdep splat if a I2C based clock provider needs to
-> > > access the i2c bus while in recalc_rate(). "prepare_lock" is about to
-> > > be locked recursively.
-> > > 
-> > > Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
-> > 
-> > What's the exact fix here? Is it the lockdep warning? Is it
-> > actually causing a real deadlock?
-> 
-> We've seen actual deadlocks on our imx8qxp based hardware using a downstream 
-> kernel, so we have implemented as similar fix [1]. This happened using 
-> tlv320aic32x4 audio codec.
-> The backtrace is similar, a i2c based clock provider is trying t issue an i2c 
-> transfer while adding the clock, thus 'prepare_lock' is already locked.
-> Lockdep raises an error both for downstream kernel as well as mainline, both 
-> for tlv320aic32x4 or pcf85063.
+Maxim Max7357 has a configuration register to enable additional
+features. These features aren't enabled by default & its up to
+board designer to enable the same as it may have unexpected side effects.
 
-yes, if the clock is using the same controller then it's likely
-that you might end up in a deadlock. This is why I like this
-patch and I believe this shouild go in the library at some point.
+These should be validated for proper functioning & detection of devices
+in secondary bus as sometimes it can cause secondary bus being disabled.
 
-But the deadlock is not mentioned in the commit log and lockdep
-doesn't always mean deadlock.
+Add booleans for:
+ - maxim,isolate-stuck-channel
+ - maxim,send-flush-out-sequence
+ - maxim,preconnection-wiggle-test-enable
 
-> [1] https://github.com/tq-systems/linux-tqmaxx/commit/
-> b0339ff83a979f2ea066012b9209ea7c54f2b4e7
-> 
-> > > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-> > > Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > > ---
-> > > Changes in v7:
-> > > * Use dev_err_probe
-> > > * Reworked/Shortened the commit message
-> > > 
-> > >  It is not about saving CPU cycles, but to avoid locking the clk subsystem
-> > >  upon each transfer.
-> > >  
-> > >  drivers/i2c/busses/i2c-imx-lpi2c.c | 40 +++++++++++++++++++++++++++++-
-> > >  1 file changed, 39 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> > > b/drivers/i2c/busses/i2c-imx-lpi2c.c index 678b30e90492a..3070e605fd8ff
-> > > 100644
-> > > --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> > > +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> > > @@ -5,6 +5,7 @@
-> > > 
-> > >   * Copyright 2016 Freescale Semiconductor, Inc.
-> > >   */
-> > > 
-> > > +#include <linux/atomic.h>
-> > > 
-> > >  #include <linux/clk.h>
-> > >  #include <linux/completion.h>
-> > >  #include <linux/delay.h>
-> > > 
-> > > @@ -99,6 +100,8 @@ struct lpi2c_imx_struct {
-> > > 
-> > >  	__u8			*rx_buf;
-> > >  	__u8			*tx_buf;
-> > >  	struct completion	complete;
-> > > 
-> > > +	struct notifier_block	clk_change_nb;
-> > > +	atomic_t		rate_per;
-> > > 
-> > >  	unsigned int		msglen;
-> > >  	unsigned int		delivered;
-> > >  	unsigned int		block_data;
-> > > 
-> > > @@ -197,6 +200,20 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct
-> > > *lpi2c_imx)> 
-> > >  	} while (1);
-> > >  
-> > >  }
-> > > 
-> > > +static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
-> > > +				   unsigned long action, void *data)
-> > > +{
-> > > +	struct clk_notifier_data *ndata = data;
-> > > +	struct lpi2c_imx_struct *lpi2c_imx = container_of(nb,
-> > > +							  struct 
-> lpi2c_imx_struct,
-> > > +							  
-> clk_change_nb);
-> > > +
-> > > +	if (action & POST_RATE_CHANGE)
-> > > +		atomic_set(&lpi2c_imx->rate_per, ndata->new_rate);
-> > > +
-> > > +	return NOTIFY_OK;
-> > > +}
-> > > +
-> > > 
-> > >  /* CLKLO = I2C_CLK_RATIO * CLKHI, SETHOLD = CLKHI, DATAVD = CLKHI/2 */
-> > >  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
-> > >  {
-> > > 
-> > > @@ -207,7 +224,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct
-> > > *lpi2c_imx)> 
-> > >  	lpi2c_imx_set_mode(lpi2c_imx);
-> > > 
-> > > -	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
-> > > +	clk_rate = atomic_read(&lpi2c_imx->rate_per);
-> > > 
-> > >  	if (!clk_rate)
-> > >  	
-> > >  		return -EINVAL;
-> > 
-> > Doesn't seem like EINVAL, defined as "Invalid argument", is the
-> > correct number here. As we are failing to read the clock rate, do
-> > you think EIO is better?
-> 
-> Well, this is already the current error code. In both the old and new code I 
-> would consider this error case as 'no clock rate provided' rather than failing 
-> to read. I would reject EIO as there is no IO transfer for retrieving the 
-> clock rate.
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+Changes in V4:
+- Drop max7358.
+Changes in V3:
+- Update commit message
+Changes in V2:
+- Update properties.
+---
+ .../bindings/i2c/i2c-mux-pca954x.yaml         | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-It's definitely not EINVAL as we are failing not because of
-invalid arguments. I thought of EIO because at some point the
-clock rate has been retrieved (or set, thus i/o) and "rate_per"
-updated accordingly. But I agree that's not the perfect value
-either.
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+index 2d7bb998b0e9..9aa0585200c9 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+@@ -71,6 +71,23 @@ properties:
+     description: A voltage regulator supplying power to the chip. On PCA9846
+       the regulator supplies power to VDD2 (core logic) and optionally to VDD1.
+ 
++  maxim,isolate-stuck-channel:
++    type: boolean
++    description: Allows to use non faulty channels while a stuck channel is
++      isolated from the upstream bus. If not set all channels are isolated from
++      the upstream bus until the fault is cleared.
++
++  maxim,send-flush-out-sequence:
++    type: boolean
++    description: Send a flush-out sequence to stuck auxiliary buses
++      automatically after a stuck channel is being detected.
++
++  maxim,preconnection-wiggle-test-enable:
++    type: boolean
++    description: Send a STOP condition to the auxiliary buses when the switch
++      register activates a channel to detect a stuck high fault. On fault the
++      channel is isolated from the upstream bus.
++
+ required:
+   - compatible
+   - reg
+@@ -95,6 +112,19 @@ allOf:
+         "#interrupt-cells": false
+         interrupt-controller: false
+ 
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - maxim,max7357
++    then:
++      properties:
++        maxim,isolate-stuck-channel: false
++        maxim,send-flush-out-sequence: false
++        maxim,preconnection-wiggle-test-enable: false
++
+ unevaluatedProperties: false
+ 
+ examples:
 
-I couldn't think of a better error value, though.
+base-commit: 9b156db7e479ac996ae9dc93a0cce3b3df3d0307
+-- 
+2.41.0
 
-> > > @@ -590,6 +607,27 @@ static int lpi2c_imx_probe(struct platform_device
-> > > *pdev)> 
-> > >  	if (ret)
-> > >  	
-> > >  		return ret;
-> > > 
-> > > +	lpi2c_imx->clk_change_nb.notifier_call = lpi2c_imx_clk_change_cb;
-> > > +	ret = devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
-> > > +					 &lpi2c_imx->clk_change_nb);
-> > > +	if (ret)
-> > > +		return dev_err_probe(&pdev->dev, ret,
-> > > +				     "can't register peripheral clock 
-> notifier\n");
-> > 
-> > can't we fall back to how things were instead of failing the
-> > probe? But I'm not sure it would remove the lockdep warning,
-> > though. I can live with it.
-> 
-> I don't see a reason why you would want to continue if 
-> devm_clk_notifier_register() failed. It's either ENOMEM, EINVAL (if you pass 
-> NULL for clk or notifier block) or EEXIST if registered twice. So in reality 
-> only ENOMEM is possible, but then things went south already.
-
-why do you care? If ENOMEM has failed, then let the driver fail
-on its own, don't be the one pulling the trigger.
-
-But I'm not strong here: it's not completely wrong to bail out,
-either.
-
-Andi
-
-> Best regards,
-> Alexander
-> 
-> > > +	/*
-> > > +	 * Lock the clock rate to avoid rate change between clk_get_rate() 
-> and
-> > > +	 * atomic_set()
-> > > +	 */
-> > > +	ret = clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
-> > > +	if (ret)
-> > > +		return dev_err_probe(&pdev->dev, ret,
-> > > +				     "can't lock I2C peripheral clock 
-> rate\n");
-> > > +
-> > > +	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx-
-> >clks[0].clk));
-> > > +	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
-> > > +	if (!atomic_read(&lpi2c_imx->rate_per))
-> > > +		return dev_err_probe(&pdev->dev, -EINVAL,
-> > > +				     "can't get I2C peripheral clock 
-> rate\n");
-> > > +
-> > 
-> > Not a bad patch, would be nice if all the above was provided by
-> > the library so that other drivers can use it.
-> > 
-> > Andi
-> > 
-> > >  	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
-> > >  	pm_runtime_use_autosuspend(&pdev->dev);
-> > >  	pm_runtime_get_noresume(&pdev->dev);
-> 
-> 
-> -- 
-> TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
-> Amtsgericht München, HRB 105018
-> Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
-> http://www.tq-group.com/
-> 
-> 
