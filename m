@@ -1,96 +1,145 @@
-Return-Path: <linux-i2c+bounces-4-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-11-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ABC67E7EEB
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Nov 2023 18:48:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D48AA7E8130
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Nov 2023 19:24:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9C6E2817A3
-	for <lists+linux-i2c@lfdr.de>; Fri, 10 Nov 2023 17:48:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 74C4BB20D93
+	for <lists+linux-i2c@lfdr.de>; Fri, 10 Nov 2023 18:24:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2ABA3C068;
-	Fri, 10 Nov 2023 17:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66E5D3A287;
+	Fri, 10 Nov 2023 18:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="y9V1NKpK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZWQuGxOD"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFE1374E5
-	for <linux-i2c@vger.kernel.org>; Fri, 10 Nov 2023 17:46:45 +0000 (UTC)
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2653A21A
-	for <linux-i2c@vger.kernel.org>; Fri, 10 Nov 2023 07:03:28 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-da2b9234a9fso2264925276.3
-        for <linux-i2c@vger.kernel.org>; Fri, 10 Nov 2023 07:03:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699628607; x=1700233407; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LI+FAc5jUx2iUB/tuWRLdQMnq28TFVaG5me1J01BIf8=;
-        b=y9V1NKpKF4d5L3P/DBn4TVIqL66A+IEcNHDf/ocQ9H7cZY8zPVSmvoe8tvcgcNI9iR
-         V4mzFKc7bCNSAiFuMPJGTUH3vz0OUfuJTWqL6WDtjrDUBqo0Ysg6EOQw0TCFhQc1AJSx
-         9SXmEEP8+wXWAxODqQOTD0L6lSMW+5YkNkCGGz5mxX6YgGV66N72Y61Z/hfBQmOTVsBH
-         1SWt95Sr2aSYvszKNB6Vn0MrSmtN/WvBAY2yr/vUHPMVdvht5qU3jK2GM6X9Sr7B1DCq
-         cG7cLDVNHb0iWNtXWhRHSI5FAkCK1LrneCA8rW1Sps4SeXtwhGH56uoV/KRy3BQtfBjl
-         yEjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699628607; x=1700233407;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LI+FAc5jUx2iUB/tuWRLdQMnq28TFVaG5me1J01BIf8=;
-        b=S+64hvDOFAmY7QKQ/+h6TeSteyZjW2J9WdWqSJENhE5DsDyJQ7Ha4Sc09hlBcs1Hm+
-         jVTsswzVh0KQ/AuiKPDtxXY+impyiLcKXudqWdPNsI0XOQ4FmLcvyof2vUsVVf0tCEUg
-         PIqQO4k77ffbBHbUiSs9/bDEeL6RujKngFvTS8qbWTos1WHPOvMttjafX5v4tqDr0LHD
-         M4PRqhsuJIWtf/UgwkpA9guUm8ZEgeWqUtSKWST0vrOALwofeEYSg1v1KzxuAjCdAenn
-         fH7eJdHaQnh40WeqCNY8LyJ6jk+A+bCS6JRVhuAXpnkyoo86f9/IujW5cvyznb3CvMNf
-         +LrA==
-X-Gm-Message-State: AOJu0YwypMwP4q/d3IHm9pMiGWKuRJWa9oLNnd+599xKvKkS0znaghyC
-	ZjxdmCOSaGEljzfVFcN0dmEjk91aGX9wKdcaZBQMdA==
-X-Google-Smtp-Source: AGHT+IEQr+nD2hM97g1wEMewiNYcV+P/h9wqI2rtiaJOKCE6z3RIk8Z4M5U5zFWunLk3FdUgIGa/re/G/hYUqKHqlxQ=
-X-Received: by 2002:a25:dccf:0:b0:d81:6151:2031 with SMTP id
- y198-20020a25dccf000000b00d8161512031mr7684797ybe.61.1699628607664; Fri, 10
- Nov 2023 07:03:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01E139878
+	for <linux-i2c@vger.kernel.org>; Fri, 10 Nov 2023 18:24:49 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933C71DF64;
+	Fri, 10 Nov 2023 10:24:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699640658; x=1731176658;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iMLEVEwDpe0uU/yEiANhauWEw+kQk3zn+3BbIbhPfjc=;
+  b=ZWQuGxODaTgEDh3Qo7RhT2KPRNjVwlVhEo/E1dFl1/NVQ1wz2euKU7Q7
+   1rGUeYcxXfaZARcLSsuGiSjL4k57HVXSVF+X4Lv3W/ZkJ0iRFB+B9a+JO
+   05Ax8/gS6GguVlkbxnjhxydBkKdLdKUNZKDX+Rdom0haJU5H+7Uu78Ph/
+   QwWgnXinHxMZCJP1S8ev3EIEVXHlpmNVhFesPP0Mo4zg30qAG5PvAQOz3
+   QIsc62HESYF2XYKvOedApptJgAXB554pgAUeB9C9wwIn8bTRBAfPRfUOj
+   Ci50WK1QjtlL/ARXDex+q3PQEYcO+HKcCyObHPIuEzINllvybdsLaBu/O
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="375251902"
+X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
+   d="scan'208";a="375251902"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2023 10:23:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10890"; a="798663737"
+X-IronPort-AV: E=Sophos;i="6.03,291,1694761200"; 
+   d="scan'208";a="798663737"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 10 Nov 2023 10:23:08 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 46CA872F; Fri, 10 Nov 2023 20:23:07 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH v3 00/25] i2c: designware: code consolidation & cleanups
+Date: Fri, 10 Nov 2023 20:11:20 +0200
+Message-ID: <20231110182304.3894319-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231110093039.190076-1-robert.marko@sartura.hr>
-In-Reply-To: <20231110093039.190076-1-robert.marko@sartura.hr>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 10 Nov 2023 16:03:15 +0100
-Message-ID: <CACRpkdZ3UU=Zo7aqaYqZENHmEmy+hYMDNCFMw5hikMDKG1Skfg@mail.gmail.com>
-Subject: Re: [PATCH] Revert "i2c: pxa: move to generic GPIO recovery"
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: andi.shyti@kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux@armlinux.org.uk, wsa@kernel.org, 
-	codrin.ciubotariu@microchip.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 10, 2023 at 10:30=E2=80=AFAM Robert Marko <robert.marko@sartura=
-.hr> wrote:
+The series now consists the following groups of patches:
+- fixing cleanup order in error path and remove (patches 1-5)
+- refactoring i2c_dw_*_lock_support() (patches 6-7)
+- refactoring module alias and device ID tables (patches 8-11)
+- unifying firmware parsing and configuring code (patches 12-16)
+- miscellaneous cleanups (patches 17-18,22-25)
+- consolidating PM ops (patch 19)
+- using device_set_node() for all drivers (patches 20-21)
 
-> This reverts commit 0b01392c18b9993a584f36ace1d61118772ad0ca.
->
-> Conversion of PXA to generic I2C recovery, makes the I2C bus completely
-> lock up if recovery pinctrl is present in the DT and I2C recovery is
-> enabled.
->
-> So, until the generic I2C recovery can also work with PXA lets revert
-> to have working I2C and I2C recovery again.
->
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> Cc: stable@vger.kernel.org # 5.11+
+The "Consolidate PM ops" might be considered as rft, however I don't think
+we have any hardware where the behaviour will be changed, anyways, good
+to test.
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Changelog v3:
+- doubled the size of the series
+- fixed compilation error (LKP)
+- added tags (Andi)
 
-Yours,
-Linus Walleij
+v2: https://lore.kernel.org/r/20231109182823.3531846-1-andriy.shevchenko@linux.intel.com
+
+Changelog v2:
+- reworked the series to make it less twisted (Jarkko, Andi)
+- added tags to the patches that have been rebased (Andi, Mario, Jarkko)
+- introduced a few new changes (PM ops, export namespace)
+
+v1: https://lore.kernel.org/r/20230725143023.86325-1-andriy.shevchenko@linux.intel.com
+
+Andy Shevchenko (25):
+  i2c: designware: Delete adapter before disabling in
+    i2c_dw_pci_remove()
+  i2c: designware: Fix PM calls order in dw_i2c_plat_probe()
+  i2c: designware: Fix reset call order in dw_i2c_plat_probe()
+  i2c: designware: Let PCI core to take care about interrupt vectors
+  i2c: designware: Fix lock probe call order in dw_i2c_plat_probe()
+  i2c: designware: Replace a while-loop by for-loop
+  i2c: designware: Save pointer to semaphore callbacks instead of index
+  i2c: designware: Add missing 'c' into PCI IDs variable name
+  i2c: designware: Replace MODULE_ALIAS() with MODULE_DEVICE_TABLE()
+  i2c: designware: Unify terminator in device ID tables
+  i2c: designware: Always provide device ID tables
+  i2c: designware: Drop return value from i2c_dw_acpi_configure()
+  i2c: designware: Drop return value from dw_i2c_of_configure()
+  i2c: designware: Rename dw_i2c_of_configure() -> i2c_dw_of_configure()
+  i2c: designware: Consolidate firmware parsing and configuring code
+  i2c: designware: Unify the firmware type checks
+  i2c: designware: Move exports to I2C_DW namespaces
+  i2c: designware: Remove ->disable() callback
+  i2c: designware: Consolidate PM ops
+  i2c: designware: Uninline i2c_dw_probe()
+  i2c: designware: Propagate firmware node
+  i2c: designware: Use pci_get_drvdata()
+  i2c: designware: Use temporary variable for struct device
+  i2c: designware: Get rid of redundant 'else'
+  i2c: designware: Fix spelling and other issues in the comments
+
+ drivers/i2c/busses/i2c-designware-amdpsp.c  |  10 +-
+ drivers/i2c/busses/i2c-designware-common.c  | 166 +++++++++-
+ drivers/i2c/busses/i2c-designware-core.h    |  47 +--
+ drivers/i2c/busses/i2c-designware-master.c  |  19 +-
+ drivers/i2c/busses/i2c-designware-pcidrv.c  | 118 ++-----
+ drivers/i2c/busses/i2c-designware-platdrv.c | 337 +++++++-------------
+ drivers/i2c/busses/i2c-designware-slave.c   |  12 +-
+ 7 files changed, 338 insertions(+), 371 deletions(-)
+
+-- 
+2.43.0.rc1.1.gbec44491f096
+
 
