@@ -1,37 +1,37 @@
-Return-Path: <linux-i2c+bounces-88-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-89-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC23F7E9184
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Nov 2023 16:48:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E45B77E9187
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Nov 2023 16:48:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D3C61F20F7D
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Nov 2023 15:48:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7485BB20969
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Nov 2023 15:48:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E322C14F6E;
-	Sun, 12 Nov 2023 15:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A4B514F9F;
+	Sun, 12 Nov 2023 15:48:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t/vtTlKU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TYAtmcL5"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E68414F6C
-	for <linux-i2c@vger.kernel.org>; Sun, 12 Nov 2023 15:48:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 584B2C433CC;
-	Sun, 12 Nov 2023 15:48:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF85214F8D
+	for <linux-i2c@vger.kernel.org>; Sun, 12 Nov 2023 15:48:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C892EC433C7;
+	Sun, 12 Nov 2023 15:48:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699804128;
-	bh=XPWJGZALjZK7J71TiOpQmIGmPkfODPV/wRHmnmjv6EU=;
+	s=k20201202; t=1699804131;
+	bh=/sz/PYVhkf2zzxhQ2AS2MPuC1i3bcGRyoZgRgbl0yvs=;
 	h=From:To:Cc:Subject:Date:From;
-	b=t/vtTlKUvrShLvdKQug8GcH2Ccq02/Df+e/rMnxZMKuRJGDg73uUziKkA2Vn3BTDt
-	 qqpLjm2wBWVreTp9Kr86L8lL6mY4B6k0RQokKFsrEU/7EawcSlq/WqiZRi/8Hhshia
-	 TYTtCIizbKTtbOFG3QJtqVzY9qU2L9Sx7/KHcs1plZkEX2RIOF1fta54Z4lTxMZjQr
-	 OfMRISXfSBuGwSj/DuY9yj8rKEt+FhiQV1PxptKT8bGbUUDCLsOwJcdTfOmsc/E88b
-	 WdVzsCOaXe4cWzE7t2bXkKQ2ibO2xrxFZUnlEQUjut2vHAyH4L9bHpaJSa2ChFEtlm
-	 ePQkdJziZ4yjw==
+	b=TYAtmcL5h5sHj8mFc51TxEbSrMgm7wg4xNuYEWAnXe1WInTzUE1FiIRCicrApwSMM
+	 UiW3q+us+Coh6Q/DFhVy3HGXkvxliycyngczJRVMPESmDkZGQ8Y/texneGFPTp/r6T
+	 eXBjv5fNBdkmZ9438Nh1l3mmnbtsuCEiGBpdmfe6+68F45IRpNq6ALItMOCjAJhcJx
+	 gVnmZTklLhBnpE3DYVLtwMZex1Avw4tK5AAqOXvdS9HrM08RL76JmEmS6nJYgyP2or
+	 ncTmKrP4GR7qRgfCRPf4hGPgmO6hqN8Qh0MOafpc4m5XIow9O8siR6HbXPo1MztygW
+	 5ZVxAivs/iqQg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -40,9 +40,9 @@ Cc: Philipp Stanner <pstanner@redhat.com>,
 	Wolfram Sang <wsa@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10] i2c: dev: copy userspace array safely
-Date: Sun, 12 Nov 2023 10:48:45 -0500
-Message-ID: <20231112154845.229303-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4] i2c: dev: copy userspace array safely
+Date: Sun, 12 Nov 2023 10:48:48 -0500
+Message-ID: <20231112154848.229338-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.200
+X-stable-base: Linux 5.4.260
 Content-Transfer-Encoding: 8bit
 
 From: Philipp Stanner <pstanner@redhat.com>
@@ -73,7 +73,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-index dafad891998ec..eef58daf1f013 100644
+index 7da6ca26a5f56..5669c8b56b264 100644
 --- a/drivers/i2c/i2c-dev.c
 +++ b/drivers/i2c/i2c-dev.c
 @@ -451,8 +451,8 @@ static long i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
