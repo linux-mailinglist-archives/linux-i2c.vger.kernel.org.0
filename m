@@ -1,37 +1,37 @@
-Return-Path: <linux-i2c+bounces-79-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-80-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D5D97E9004
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Nov 2023 14:24:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B06E17E9007
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Nov 2023 14:24:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D77F7280D90
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Nov 2023 13:24:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6ACD4280DBB
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Nov 2023 13:24:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E0DD8BF4;
-	Sun, 12 Nov 2023 13:24:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8C758BF4;
+	Sun, 12 Nov 2023 13:24:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="syklgCW4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sydTs7YZ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB4014283;
-	Sun, 12 Nov 2023 13:24:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98F05C433C9;
-	Sun, 12 Nov 2023 13:24:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C16111BF;
+	Sun, 12 Nov 2023 13:24:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BFB8C433CC;
+	Sun, 12 Nov 2023 13:24:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699795477;
-	bh=molfT1j+T0iqaQ9D5qyzAkhYjMx29wLuP00lIpLbnlM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=syklgCW4jLsmQunfol5HClRHH10Va0sLscer19/iO71Va/r4UIQA4Ymaw6u5YP07I
-	 8d/xOr5LSWfLFf7+x1fZgi3ZwYE5qaNFelARWupKKBtr1y4cUVhXR1uNi/++qjCUra
-	 /uz2ICla9Nzh8dWbDA6CGSM9VY+RS0utXDPbkSMtR9t4nFslxYsLackrKVS5YbGLoy
-	 Jwx+5FtaKu/NnWyHltB9h2C2IFQuZTPB1BkSqXO3PPIshGYcWvR0r5zDAzT8NwiLQb
-	 GjL2u9eJ+sEkPlEBY0JPad+R7abyTukfkv3QkGFszUT312b6oVfAdaVQvj50nqigQs
-	 triT/UPfHfUKQ==
+	s=k20201202; t=1699795486;
+	bh=bLEEQRy0ruNhv2+OyXHuZ6I30HdiPO+33fSao6p0PUs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=sydTs7YZOECHdK84a5j0dQlapb+Gi0lu9tM+aQn8D4ohM/gv+CbLG2Lfjn8RpFnNV
+	 kIsIYJ00JkzrTHc6EsYJpWBRnOnRI0IpyYQ8oC8XJr4FhySjsgwbuHtF7Tpez9DUJI
+	 +qh+HDmVk62fqNSEHAWhCH96MlpqTOn/sDuQwp/N1B0yztqviiDU8NZ0+6mJQv/9IL
+	 3oHZZzj7hvGKygioizjlHBiZhXbvS8wpWLTg+uj836c6mLu3nPQJAWBCbTzaatSsxD
+	 TA/tPzK9bCdynofSua1MVMfyGeUEnFpMTigs3SQGabF5808dGpaHTk/Z2GnoNrmV6d
+	 T5WnLZg7EfYLw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -46,12 +46,10 @@ Cc: Axel Lin <axel.lin@ingics.com>,
 	linux-i2c@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-sunxi@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 2/4] i2c: sun6i-p2wi: Prevent potential division by zero
-Date: Sun, 12 Nov 2023 08:24:22 -0500
-Message-ID: <20231112132432.174680-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10] i2c: sun6i-p2wi: Prevent potential division by zero
+Date: Sun, 12 Nov 2023 08:24:42 -0500
+Message-ID: <20231112132442.174812-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231112132432.174680-1-sashal@kernel.org>
-References: <20231112132432.174680-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,7 +58,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.138
+X-stable-base: Linux 5.10.200
 Content-Transfer-Encoding: 8bit
 
 From: Axel Lin <axel.lin@ingics.com>
@@ -79,7 +77,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+)
 
 diff --git a/drivers/i2c/busses/i2c-sun6i-p2wi.c b/drivers/i2c/busses/i2c-sun6i-p2wi.c
-index 9e3483f507ff5..f2ed13b551088 100644
+index 2f6f6468214dd..4f7a4f5a1150a 100644
 --- a/drivers/i2c/busses/i2c-sun6i-p2wi.c
 +++ b/drivers/i2c/busses/i2c-sun6i-p2wi.c
 @@ -201,6 +201,11 @@ static int p2wi_probe(struct platform_device *pdev)
