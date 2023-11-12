@@ -1,54 +1,48 @@
-Return-Path: <linux-i2c+bounces-83-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-84-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEFDB7E900A
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Nov 2023 14:25:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B94137E917A
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Nov 2023 16:48:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77FBA280DF4
-	for <lists+linux-i2c@lfdr.de>; Sun, 12 Nov 2023 13:24:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D353C1C2039E
+	for <lists+linux-i2c@lfdr.de>; Sun, 12 Nov 2023 15:48:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC0BD8F6C;
-	Sun, 12 Nov 2023 13:24:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4278314AB6;
+	Sun, 12 Nov 2023 15:48:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4gasymp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DcIn3VqS"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC078BEC;
-	Sun, 12 Nov 2023 13:24:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2366C433D9;
-	Sun, 12 Nov 2023 13:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDE7385
+	for <linux-i2c@vger.kernel.org>; Sun, 12 Nov 2023 15:48:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED107C433C7;
+	Sun, 12 Nov 2023 15:48:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699795498;
-	bh=fA/Gl85/aqYKqIqYNvGeoHYQKLCcLZ+PRdv4RZjBolk=;
+	s=k20201202; t=1699804112;
+	bh=JN7wJA9CtpvoZfbvM/IzDnWhbSnNlqcLwOqpyrdrisQ=;
 	h=From:To:Cc:Subject:Date:From;
-	b=G4gasympdwV0LTZFszLaEsnVxur1LcQ9mupuXVEF/d/u0In3xvHjHyDe+C23ARXlP
-	 /oZUWp+4Y4eJ7VKnFFmOrykf84ss0pTRAlDmh5ooE8bLeVVVGXKp3mc+WIsLeXO4LV
-	 Vay3bn2vp5PLMR0uB0HZsKOgXZXHwoRAulBaZAPbTshvWuTZJyWu3OmsyYZPCLXumN
-	 K6oQX5bIdbFQajlWbvbvqsYtukbj4BEY0/WnDoaW4dIFkPOyl7kzLkwxf7azfM4fW3
-	 TK4M5fy/TS5AaczRg3zrpmSDNWlL5IQozQtzZPdr+TBCLlGiHjuxAb7APcJDTHY2up
-	 21c10MbWUfx+A==
+	b=DcIn3VqSuUj/9nXbjTpRR/KMgDeQ2rsT4fwk2ri4CPyQ8GbKQ5fs1poCoqb2jeCpN
+	 5/ZqoYT6PtrHQ8djNBxSD7JJWtHL2Cs88vG9vx20Ed3E2/tYv+CLcUwJGrreZI3v9A
+	 PnITYAzFGLibdNke8oWC85mItRx9PYYOol6hUg2j3/wtJyJRF85pf59SJw+14CtHuG
+	 SmJo2VNrflvcIb32xXja3MLepZmoXKVtlRP9+2Hl+zNTNpI9zVpmPoKUFgjG3bum3k
+	 mQluWko27Sv8UBIorqu4tsL8k4pR+YfiNn7Nifp72KozufH+HbT05tTE0SXcuyXEl5
+	 rFj+XSRZ3d+Pg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Axel Lin <axel.lin@ingics.com>,
-	Boris Brezillon <boris.brezillon@free-electrons.com>,
+Cc: Philipp Stanner <pstanner@redhat.com>,
+	Dave Airlie <airlied@redhat.com>,
 	Wolfram Sang <wsa@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	andi.shyti@kernel.org,
-	wens@csie.org,
-	jernej.skrabec@gmail.com,
-	samuel@sholland.org,
-	linux-i2c@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.14] i2c: sun6i-p2wi: Prevent potential division by zero
-Date: Sun, 12 Nov 2023 08:24:54 -0500
-Message-ID: <20231112132454.174917-1-sashal@kernel.org>
+	linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6] i2c: dev: copy userspace array safely
+Date: Sun, 12 Nov 2023 10:48:28 -0500
+Message-ID: <20231112154829.229142-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -58,40 +52,41 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.14.329
+X-stable-base: Linux 6.6.1
 Content-Transfer-Encoding: 8bit
 
-From: Axel Lin <axel.lin@ingics.com>
+From: Philipp Stanner <pstanner@redhat.com>
 
-[ Upstream commit 5ac61d26b8baff5b2e5a9f3dc1ef63297e4b53e7 ]
+[ Upstream commit cc9c54232f04aef3a5d7f64a0ece7df00f1aaa3d ]
 
-Make sure we don't OOPS in case clock-frequency is set to 0 in a DT. The
-variable set here is later used as a divisor.
+i2c-dev.c utilizes memdup_user() to copy a userspace array. This is done
+without an overflow check.
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
-Acked-by: Boris Brezillon <boris.brezillon@free-electrons.com>
+Use the new wrapper memdup_array_user() to copy the array more safely.
+
+Suggested-by: Dave Airlie <airlied@redhat.com>
+Signed-off-by: Philipp Stanner <pstanner@redhat.com>
 Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-sun6i-p2wi.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/i2c/i2c-dev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-sun6i-p2wi.c b/drivers/i2c/busses/i2c-sun6i-p2wi.c
-index 7c07ce116e384..540c33f4e3500 100644
---- a/drivers/i2c/busses/i2c-sun6i-p2wi.c
-+++ b/drivers/i2c/busses/i2c-sun6i-p2wi.c
-@@ -202,6 +202,11 @@ static int p2wi_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index a01b59e3599b5..7d337380a05d9 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -450,8 +450,8 @@ static long i2cdev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 		if (rdwr_arg.nmsgs > I2C_RDWR_IOCTL_MAX_MSGS)
+ 			return -EINVAL;
  
-+	if (clk_freq == 0) {
-+		dev_err(dev, "clock-frequency is set to 0 in DT\n");
-+		return -EINVAL;
-+	}
-+
- 	if (of_get_child_count(np) > 1) {
- 		dev_err(dev, "P2WI only supports one slave device\n");
- 		return -EINVAL;
+-		rdwr_pa = memdup_user(rdwr_arg.msgs,
+-				      rdwr_arg.nmsgs * sizeof(struct i2c_msg));
++		rdwr_pa = memdup_array_user(rdwr_arg.msgs,
++					    rdwr_arg.nmsgs, sizeof(struct i2c_msg));
+ 		if (IS_ERR(rdwr_pa))
+ 			return PTR_ERR(rdwr_pa);
+ 
 -- 
 2.42.0
 
