@@ -1,78 +1,78 @@
-Return-Path: <linux-i2c+bounces-111-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-112-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 791807E9AF4
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Nov 2023 12:24:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5E8E7E9AF7
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Nov 2023 12:24:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3435E280D54
-	for <lists+linux-i2c@lfdr.de>; Mon, 13 Nov 2023 11:24:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 900C9280D3E
+	for <lists+linux-i2c@lfdr.de>; Mon, 13 Nov 2023 11:24:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E303A1CAB0;
-	Mon, 13 Nov 2023 11:24:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3564A1CFAD;
+	Mon, 13 Nov 2023 11:24:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CWbxVelf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AKCjsQ2o"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2EA1CFAD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D02A1CA96
 	for <linux-i2c@vger.kernel.org>; Mon, 13 Nov 2023 11:24:11 +0000 (UTC)
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73020D68;
-	Mon, 13 Nov 2023 03:24:09 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2c509f2c46cso60713081fa.1;
-        Mon, 13 Nov 2023 03:24:09 -0800 (PST)
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5649BD64;
+	Mon, 13 Nov 2023 03:24:10 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2c5028e5b88so60567081fa.3;
+        Mon, 13 Nov 2023 03:24:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699874647; x=1700479447; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1699874648; x=1700479448; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5Op/de/de9WVnMjIIu+X6jQDnWmnKOCxjgzgj2VkHDA=;
-        b=CWbxVelfwIj9gYt86n5iK2fDrfqB3lGbqjT6ZswuhmuvSkCaDz81Whz84Lv44X734q
-         maX7CjSxAUyDM3QJWvrpunCDtLdDVl2puoJ7qnp6K1Agc7tCVu7a71wdq6ki7XhFk2/7
-         1W9w1X659rzuvLhZ3eKze2tT1UUxB+KZwQVWGqhHzYY5tkQKNGl7/MJfAD1X4cRS9P3J
-         QyfdNWPHcXnMTzlN2J+QJPyuBwDnB7T+lp1Te7icR/xae8d7f8oMSrfODLcoWtxy3uWh
-         rQ3Ahz7OKvNroaQ3DDKBsVE/B4qfrq8AxNQbSEekOsRFZNIBQlkn4qV6BH/+C4Qr5+am
-         d06g==
+        bh=suS4LCfsusePiDPKTqW40E2H77s8OXx5HVyNs+o+yDE=;
+        b=AKCjsQ2oyI70y1Di4HELVlyc6admFlE7MSgNUuc4whagEphc7soDrTPig9D5QP7yqB
+         f0+ClqVr0/Je0QZXdaE7TeJNzwOWwyA39E+saoOqQk0OF3Ns47vlrlfuNZhiBK2R/1LC
+         BOgDMvD38xanE9jGPlLi3mYI1P+9v65KBX8bdtUdRReP1HBrrGDIfrHYuS4gtyHnHgnQ
+         PLNfHXMMxFJKHI53nPF+rJjvsefv/ZbS6CRxslltenVtj4/GNelnbucUWWGuhDcA1gsF
+         4VIgJAYHJXV4yfAgb09/wwTdBLnzRqMIgkKaRD+UgGvvBKOVhOhFoRux+6ahr5Bdp2ze
+         p+8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699874647; x=1700479447;
+        d=1e100.net; s=20230601; t=1699874648; x=1700479448;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5Op/de/de9WVnMjIIu+X6jQDnWmnKOCxjgzgj2VkHDA=;
-        b=p2nHglkVUN9jtke2EgYUvZId9XBjsaJYRAaWIzFnRKCQS+eMG1KdBBjo/RE9LyheF4
-         Ps7ja1Ly7hbBrTdMF16+GmOxd3PUFfQ5K2nJdoc0tV/9DF/lvm8/dVE+JzFWVpEY5hFA
-         /h1asVpNcnKKuKm2ErJlZBPck5LN00SV1J3Tf0vbTBWOxW5InGNaNN+jxhfEE9h3F2d7
-         hW2NGvle93+ZhVaTH64lnEVihOzcFK9XPEwngailXgX3pE6rtLI9fDdYyyhkwwJ4ehbl
-         Hlicq0BHropcOu2xT8ISf0G9hLohEp5xdKoYagKqFnYMKTmVpKQxttX1QWle+jJ3roZY
-         h+SA==
-X-Gm-Message-State: AOJu0YwKexP8Wn4v/PPknF3V9Ye6Pyipv9wm6Pb96aYjLfSyg5AR/Jof
-	9bw+IAkD8mhF4YuIDQKIB42FpE5kKEo=
-X-Google-Smtp-Source: AGHT+IEJsBMp4JbvFi4pspNX0Uzx9z5MBDoZN9PZxWzXZcpLsSgHiFtlq5yu+gjphO5CZmj++0wsZw==
-X-Received: by 2002:a05:651c:1049:b0:2c5:1f70:a266 with SMTP id x9-20020a05651c104900b002c51f70a266mr4020462ljm.50.1699874647541;
-        Mon, 13 Nov 2023 03:24:07 -0800 (PST)
+        bh=suS4LCfsusePiDPKTqW40E2H77s8OXx5HVyNs+o+yDE=;
+        b=NDdBb02YKbPztyfkcd7tayRXu9OdhCm3l6cm0/bDgCQ7dETiZJlBbqyNa7Ngj8KJ2S
+         OXc5n04rMb5T7U5Wm5wjUbrRH/YiuGiSEPO0Awa00XKdzoJJactdFUIKTzbKKJ3sZBVD
+         oKuD5q9tRsgqr418GAyHAyOY4gBFdMX7n72dyDi2sqePNzHpxZfeWmnOerD9yXAEXwuq
+         JzmhmIhBQ7m6BiKGBEWKKLeg+i6doU0XbIMDe0/SgX6/xD6xatr38xgRaMCzFn1kbjZo
+         lE5gE8wFpv3yqThSUGn2dwi4qLLFFaXctBeLrabn5/AjxxDGhdZWWxgUJAfFfJutJAhH
+         rAHg==
+X-Gm-Message-State: AOJu0YxB/AHwXL1hfpc9OUsXzXfD5auh1t4abKu045YPN0A7JpGO1K0O
+	ZwUXz1mKIGY3L26KC9rldDc=
+X-Google-Smtp-Source: AGHT+IF2LC+FtafvR61kuDtbo2rv3av6bi24h2BSF0FTWH3WvMa6H2hTWbFG6Bmtzn7VrYm9qOaXwA==
+X-Received: by 2002:a2e:f0a:0:b0:2c6:f17d:ae84 with SMTP id 10-20020a2e0f0a000000b002c6f17dae84mr4752809ljp.3.1699874648370;
+        Mon, 13 Nov 2023 03:24:08 -0800 (PST)
 Received: from zotac.lan. (dynamic-2a01-0c22-6e16-fe00-2223-08ff-fe18-0310.c22.pool.telefonica.de. [2a01:c22:6e16:fe00:2223:8ff:fe18:310])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05600c4f1300b0040772138bb7sm13565787wmq.2.2023.11.13.03.24.06
+        by smtp.gmail.com with ESMTPSA id l19-20020a05600c4f1300b0040772138bb7sm13565787wmq.2.2023.11.13.03.24.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Nov 2023 03:24:07 -0800 (PST)
+        Mon, 13 Nov 2023 03:24:08 -0800 (PST)
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Wolfram Sang <wsa@kernel.org>,
-	Alex Deucher <alexander.deucher@amd.com>
+	Sui Jingfeng <suijingfeng@loongson.cn>
 Cc: linux-i2c@vger.kernel.org,
 	Heiner Kallweit <hkallweit1@gmail.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
 	David Airlie <airlied@gmail.com>,
 	Daniel Vetter <daniel@ffwll.ch>,
-	amd-gfx@lists.freedesktop.org,
 	dri-devel@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 07/20] drivers/gpu/drm: remove I2C_CLASS_DDC support
-Date: Mon, 13 Nov 2023 12:23:31 +0100
-Message-ID: <20231113112344.719-8-hkallweit1@gmail.com>
+Subject: [PATCH 08/20] drivers/gpu/drm/loongson/lsdc_i2c.c: remove I2C_CLASS_DDC support
+Date: Mon, 13 Nov 2023 12:23:32 +0100
+Message-ID: <20231113112344.719-9-hkallweit1@gmail.com>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <20231113112344.719-1-hkallweit1@gmail.com>
 References: <20231113112344.719-1-hkallweit1@gmail.com>
@@ -94,33 +94,20 @@ Preferably this series should be applied via the i2c tree.
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c |    1 -
- drivers/gpu/drm/radeon/radeon_i2c.c     |    1 -
- 2 files changed, 2 deletions(-)
+ drivers/gpu/drm/loongson/lsdc_i2c.c |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c
-index 82608df43..d79cb13e1 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c
-@@ -175,7 +175,6 @@ struct amdgpu_i2c_chan *amdgpu_i2c_create(struct drm_device *dev,
+diff --git a/drivers/gpu/drm/loongson/lsdc_i2c.c b/drivers/gpu/drm/loongson/lsdc_i2c.c
+index 9625d0b1d..ce90c2553 100644
+--- a/drivers/gpu/drm/loongson/lsdc_i2c.c
++++ b/drivers/gpu/drm/loongson/lsdc_i2c.c
+@@ -154,7 +154,6 @@ int lsdc_create_i2c_chan(struct drm_device *ddev,
+ 	adapter = &li2c->adapter;
+ 	adapter->algo_data = &li2c->bit;
+ 	adapter->owner = THIS_MODULE;
+-	adapter->class = I2C_CLASS_DDC;
+ 	adapter->dev.parent = ddev->dev;
+ 	adapter->nr = -1;
  
- 	i2c->rec = *rec;
- 	i2c->adapter.owner = THIS_MODULE;
--	i2c->adapter.class = I2C_CLASS_DDC;
- 	i2c->adapter.dev.parent = dev->dev;
- 	i2c->dev = dev;
- 	i2c_set_adapdata(&i2c->adapter, i2c);
-diff --git a/drivers/gpu/drm/radeon/radeon_i2c.c b/drivers/gpu/drm/radeon/radeon_i2c.c
-index 314d066e6..3d174390a 100644
---- a/drivers/gpu/drm/radeon/radeon_i2c.c
-+++ b/drivers/gpu/drm/radeon/radeon_i2c.c
-@@ -918,7 +918,6 @@ struct radeon_i2c_chan *radeon_i2c_create(struct drm_device *dev,
- 
- 	i2c->rec = *rec;
- 	i2c->adapter.owner = THIS_MODULE;
--	i2c->adapter.class = I2C_CLASS_DDC;
- 	i2c->adapter.dev.parent = dev->dev;
- 	i2c->dev = dev;
- 	i2c_set_adapdata(&i2c->adapter, i2c);
 
 
