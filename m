@@ -1,300 +1,178 @@
-Return-Path: <linux-i2c+bounces-145-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-146-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F4157EAF9D
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Nov 2023 13:04:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E3137EAFD2
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Nov 2023 13:27:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E905C2811B3
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Nov 2023 12:04:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D43A12811AD
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Nov 2023 12:27:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6363D993;
-	Tue, 14 Nov 2023 12:04:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E930A3FB0B;
+	Tue, 14 Nov 2023 12:27:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jackHD5w"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="khfz9Qdj"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1013D3BC
-	for <linux-i2c@vger.kernel.org>; Tue, 14 Nov 2023 12:04:44 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754CDF0;
-	Tue, 14 Nov 2023 04:04:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699963482; x=1731499482;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ACHsUrV+LT8uOqK2cdANSecqOdxav3f6s1+XieV0sTM=;
-  b=jackHD5wYNGFaPTk9by/crf1kbxH8An/EjjLZppKlY1z8YpGn1u+H6e0
-   e++fwMxC3SUUvIevjOnagoHwBHPiPnNY+YGMDgu3TBT2aw/Pxg36P1JVl
-   LFSKMbhdPP8gJibj9shE94OAKNfPRgZkZIgkGhnUddCD7IDIgbGrvqyc1
-   rsaAyNSJ4uReVGKW7P/qYMngOf26KmQS5Oa1xXFiCgfnKGeu1N9nnRA2E
-   T7+SQL7cRYUa5i7CLcyu3iaY/x8NnRfRjhJI2sw1t4H5vc7VUiqZIfL8T
-   Tb1vO33GZzglbgTgHu9Mazmo8bRn7212tToD4eTiuOkwI3etZwlv1N7u9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="387802770"
-X-IronPort-AV: E=Sophos;i="6.03,302,1694761200"; 
-   d="scan'208";a="387802770"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 04:04:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10893"; a="714557269"
-X-IronPort-AV: E=Sophos;i="6.03,302,1694761200"; 
-   d="scan'208";a="714557269"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 04:04:38 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC3)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1r2s9j-0000000DnmU-0bgH;
-	Tue, 14 Nov 2023 14:04:35 +0200
-Date: Tue, 14 Nov 2023 14:04:34 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Heiner Kallweit <hkallweit1@gmail.com>, Keith Busch <kbusch@kernel.org>,
-	Lukas Wunner <lukas@wunner.de>
-Cc: Wolfram Sang <wsa@kernel.org>,
-	Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
-	Jean Delvare <jdelvare@suse.de>,
-	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [bug report] lockdep WARN at PCI device rescan
-Message-ID: <ZVNiUuyHaez8rwL-@smile.fi.intel.com>
-References: <6xb24fjmptxxn5js2fjrrddjae6twex5bjaftwqsuawuqqqydx@7cl3uik5ef6j>
- <ZVNJCxh5vgj22SfQ@shikoro>
- <ea31480f-2887-41fe-a560-f4bb1103479e@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 824243B282
+	for <linux-i2c@vger.kernel.org>; Tue, 14 Nov 2023 12:27:12 +0000 (UTC)
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1BED1
+	for <linux-i2c@vger.kernel.org>; Tue, 14 Nov 2023 04:27:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1699964831; x=1731500831;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=JZctFU5m/dXUIFR7HKC2+eJt3NNeiLinqCxMe3AvGR0=;
+  b=khfz9Qdj1cmVtFHLWROYYKBejEUVukQn4crGTklpXw8uMQEAsj6DDIY5
+   aKHPNz2EdrHoNZfGuVNAmKbEyYZm1MN2XfZdRBCWlqxCoEEVsKmViQdLb
+   0fHENGiuR9vTwS6EaaKwuZn0P7F1OAhU7fKgGavWg+FJL9amGHifhmKds
+   HNwkliufzp6DPziywBjshTHVhjV/y/oUzwHj+OczpFjgfbcwD8oztJfXI
+   UNH1v+/JsIua2wYaHCcVaiPKB67omIDZeVoFEdo985xWffsYKGkW/lNkf
+   ezYZH+mPQfryocE2ZBhQmkzaI9ODds5qaEE06WckEOtOd5rYLWGEWgCoX
+   g==;
+X-IronPort-AV: E=Sophos;i="6.03,302,1694728800"; 
+   d="scan'208";a="33970392"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 14 Nov 2023 13:27:09 +0100
+Received: from steina-w.localnet (steina-w.tq-net.de [10.123.53.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id D602828007F;
+	Tue, 14 Nov 2023 13:27:07 +0100 (CET)
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Dong Aisheng <aisheng.dong@nxp.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Wolfram Sang <wsa@kernel.org>, Alexander Sverdlin <alexander.sverdlin@siemens.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, NXP Linux Team <linux-imx@nxp.com>, linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v7 1/1] i2c: lpi2c: use clk notifier for rate changes
+Date: Tue, 14 Nov 2023 13:27:11 +0100
+Message-ID: <2912069.e9J7NaK4W3@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20231110122720.cyxtnpj5k6bip3ok@zenone.zhora.eu>
+References: <20231107141201.623482-1-alexander.stein@ew.tq-group.com> <20231109091046.4hrvxr7g5imfrykq@zenone.zhora.eu> <20231110122720.cyxtnpj5k6bip3ok@zenone.zhora.eu>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ea31480f-2887-41fe-a560-f4bb1103479e@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-On Tue, Nov 14, 2023 at 11:47:15AM +0100, Heiner Kallweit wrote:
-> On 14.11.2023 11:16, Wolfram Sang wrote:
-> > On Tue, Nov 14, 2023 at 06:54:29AM +0000, Shinichiro Kawasaki wrote:
-> >> Hello there.
-> >>
-> >> Recently I tried a couple of commands below on the kernel v6.6 and v6.7-rc1,
-> >> then observed a lockdep WARN at the second command [1]. The first command
-> >> removes a PCI device, and the second command rescans whole PCI devices to
-> >> regain the removed device.
-> >>
-> >>  # echo 1 > /sys/bus/pci/devices/0000:51:00.0/remove
-> >>  # echo 1 > /sys/bus/pci/rescan
-> >>
-> >> I tried this rescan for SAS-HBA or AHCI controller with HDDs. When those devices
-> >> are left in weird status after some kernel tests, I want to remove the SAS-HBA
-> >> and AHCI controller and rescan to get back the devices in good status. This
-> >> rescan looks working good except the WARN.
-> >>
-> >> The lockdep splat indicates possible deadlock between pci_rescan_remove_lock
-> >> and work_completion lock have deadlock possibility. Is the lockdep WARN a known
-> >> issue? I found a similar discussion in the past [2], but it did not discuss the
-> >> work_completion lock, so my observation looks a new, different issue.
-> >>
-> >> In the call stack, I found that the workqueue thread for i801_probe() calls
-> >> p2sb_bar(), which locks pci_rescan_remove_lock. IMHO, the issue cause looks that
-> >> pci_rescan_remove_lock is locked in both workqueue context and non-workqueue
-> >> context. As a fix trial, I created a quick patch [3]. It calls i801_probe() in
-> >> non-workqueue context only by adding a new flag to struct pci_driver. With this,
-> >> I observed the lockdep WARN disappears. Is this a good solution approach? If
-> >> not, is there any other better solution?
+Hi Andi,
 
-Thanks for the report!
+Am Freitag, 10. November 2023, 13:27:20 CET schrieb Andi Shyti:
+> Alexander,
+>=20
+> if you...
+>=20
+> On Thu, Nov 09, 2023 at 10:10:46AM +0100, Andi Shyti wrote:
+> > On Thu, Nov 09, 2023 at 08:54:51AM +0100, Alexander Stein wrote:
+> > > Am Donnerstag, 9. November 2023, 00:38:09 CET schrieb Andi Shyti:
+> > > > On Tue, Nov 07, 2023 at 03:12:01PM +0100, Alexander Stein wrote:
+> > > > > Instead of repeatedly calling clk_get_rate for each transfer,
+> > > > > register
+> > > > > a clock notifier to update the cached divider value each time the
+> > > > > clock
+> > > > > rate actually changes.
+> > > > > There is also a lockdep splat if a I2C based clock provider needs=
+ to
+> > > > > access the i2c bus while in recalc_rate(). "prepare_lock" is about
+> > > > > to
+> > > > > be locked recursively.
+> > > > >=20
+> > > > > Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus drive=
+r")
+> > > >=20
+> > > > What's the exact fix here? Is it the lockdep warning? Is it
+> > > > actually causing a real deadlock?
+> > >=20
+> > > We've seen actual deadlocks on our imx8qxp based hardware using a
+> > > downstream kernel, so we have implemented as similar fix [1]. This
+> > > happened using tlv320aic32x4 audio codec.
+> > > The backtrace is similar, a i2c based clock provider is trying t issue
+> > > an i2c transfer while adding the clock, thus 'prepare_lock' is already
+> > > locked. Lockdep raises an error both for downstream kernel as well as
+> > > mainline, both for tlv320aic32x4 or pcf85063.
+> >=20
+> > yes, if the clock is using the same controller then it's likely
+> > that you might end up in a deadlock. This is why I like this
+> > patch and I believe this shouild go in the library at some point.
+> >=20
+> > But the deadlock is not mentioned in the commit log and lockdep
+> > doesn't always mean deadlock.
+>=20
+> ... improve the commit message, reporting the real deadlock case
+> instead of a lockdep warning and...
 
-> > Thanks for the report and the proposed solution. I'll add the i801
-> > experts, Jean and Heiner, to CC.
-> 
-> + Bjorn, Andy
+I've improved the commit message about an actual deadlock.
 
-+ Keith and Lukas as per [2].
+> [...]
+>=20
+> > > > > @@ -207,7 +224,7 @@ static int lpi2c_imx_config(struct
+> > > > > lpi2c_imx_struct
+> > > > > *lpi2c_imx)>
+> > > > >=20
+> > > > >  	lpi2c_imx_set_mode(lpi2c_imx);
+> > > > >=20
+> > > > > -	clk_rate =3D clk_get_rate(lpi2c_imx->clks[0].clk);
+> > > > > +	clk_rate =3D atomic_read(&lpi2c_imx->rate_per);
+> > > > >=20
+> > > > >  	if (!clk_rate)
+> > > > >  =09
+> > > > >  		return -EINVAL;
+> > > >=20
+> > > > Doesn't seem like EINVAL, defined as "Invalid argument", is the
+> > > > correct number here. As we are failing to read the clock rate, do
+> > > > you think EIO is better?
+> > >=20
+> > > Well, this is already the current error code. In both the old and new
+> > > code I would consider this error case as 'no clock rate provided'
+> > > rather than failing to read. I would reject EIO as there is no IO
+> > > transfer for retrieving the clock rate.
+> >=20
+> > It's definitely not EINVAL as we are failing not because of
+> > invalid arguments. I thought of EIO because at some point the
+> > clock rate has been retrieved (or set, thus i/o) and "rate_per"
+> > updated accordingly. But I agree that's not the perfect value
+> > either.
+> >=20
+> > I couldn't think of a better error value, though.
+>=20
+> ... find a more appropriate error number, I will ack this patch.
 
-> i801 just uses p2sb_bar(), I don't see any issue in i801. Root cause seems to
-> be in the PCI subsystem. Calling p2sb_bar() from a PCI driver probe callback
-> seems to be problematic, nevertheless it's a valid API usage.
+Thinking about this again, I think EINVAL is an appropriate error code.
+The parent clock frequency is also an input for the i2c transfer. So if, fo=
+r=20
+whatever reason, that clock frequency is 0, it is an invalid value (argumen=
+t).
+I've checked other drivers what they do if that clock is 0. Unfortunately m=
+ost=20
+don't consider this case at all. But some do, so e.g. i2c_lpc2k_probe() or=
+=20
+dc_i2c_init_hw() both return EINVAL if the clk or a calculated divider is 0.
 
-Yeah, the problem is that we have a PCI (kind of) device that needs to be
-communicated with in order to instantiate a driver from whatever bus we are
-trying to do.
+> If the deadlock you mentioned is a warning from the lockdep, then
+> please remove the "Fixes:" tag.
 
-> The proposed fix helps to get an idea of how to work around the issue.
-> But IMO it more cures a symptom than fixes the root cause.
+It's not just a lockdep warning, the deadlock actually happened.
 
-I agree, and reading [2] makes me think the same, i.e. that currently this is
-a Big PCI lock for everything.
+Best regards,
+Alexander
 
-I wanted, before reading [2], to propose to make it nested, but I think it's
-not gonna fly,
+> Andi
 
-So, currently I'm lack of (good) ideas and would like to hear other (more
-experienced) PCI developers on how is to address this...
 
-> >> [1] kernel message log at the second command
-> >>
-> >> [  242.922091] ======================================================
-> >> [  242.931663] WARNING: possible circular locking dependency detected
-> >> [  242.938292] mpt3sas_cm1: 63 BIT PCI BUS DMA ADDRESSING SUPPORTED, total mem (56799464 kB)
-> >> [  242.939415] 6.7.0-rc1-kts #1 Not tainted
-> >> [  242.939419] ------------------------------------------------------
-> >> [  242.939421] bash/1615 is trying to acquire lock:
-> >> [  242.939424] ff1100017bf87910 ((work_completion)(&wfc.work)){+.+.}-{0:0}, at: __flush_work+0xc5/0x980
-> >> [  242.989069] 
-> >>                but task is already holding lock:
-> >> [  243.000283] ffffffff870bf4a8 (pci_rescan_remove_lock){+.+.}-{3:3}, at: rescan_store+0x96/0xd0
-> >> [  243.012269] 
-> >>                which lock already depends on the new lock.
-> >>
-> >> [  243.028569] 
-> >>                the existing dependency chain (in reverse order) is:
-> >> [  243.041611] 
-> >>                -> #1 (pci_rescan_remove_lock){+.+.}-{3:3}:
-> >> [  243.053709]        __mutex_lock+0x16a/0x1880
-> >> [  243.060767]        p2sb_bar+0xa7/0x250
-> >> [  243.067213]        i801_add_tco_spt.constprop.0+0x88/0x1f0 [i2c_i801]
-> >> [  243.076707]        i801_add_tco+0x18a/0x210 [i2c_i801]
-> >> [  243.084727]        i801_probe+0x99c/0x1500 [i2c_i801]
-> >> [  243.092618]        local_pci_probe+0xd6/0x190
-> >> [  243.099708]        work_for_cpu_fn+0x4e/0xa0
-> >> [  243.106673]        process_one_work+0x736/0x1230
-> >> [  243.114012]        worker_thread+0x723/0x1300
-> >> [  243.121039]        kthread+0x2ee/0x3d0
-> >> [  243.127372]        ret_from_fork+0x2d/0x70
-> >> [  243.134073]        ret_from_fork_asm+0x1b/0x30
-> >> [  243.141140] 
-> >>                -> #0 ((work_completion)(&wfc.work)){+.+.}-{0:0}:
-> >> [  243.153341]        __lock_acquire+0x2e74/0x5ea0
-> >> [  243.160490]        lock_acquire+0x196/0x4b0
-> >> [  243.167236]        __flush_work+0xe2/0x980
-> >> [  243.173882]        work_on_cpu_key+0xcc/0xf0
-> >> [  243.180709]        pci_device_probe+0x548/0x740
-> >> [  243.187813]        really_probe+0x3df/0xb80
-> >> [  243.194525]        __driver_probe_device+0x18c/0x450
-> >> [  243.202128]        driver_probe_device+0x4a/0x120
-> >> [  243.209437]        __device_attach_driver+0x15e/0x270
-> >> [  243.217149]        bus_for_each_drv+0x101/0x170
-> >> [  243.224260]        __device_attach+0x189/0x380
-> >> [  243.231254]        pci_bus_add_device+0x9f/0xf0
-> >> [  243.238360]        pci_bus_add_devices+0x7f/0x190
-> >> [  243.245639]        pci_bus_add_devices+0x114/0x190
-> >> [  243.253017]        pci_rescan_bus+0x23/0x30
-> >> [  243.259711]        rescan_store+0xa2/0xd0
-> >> [  243.266187]        kernfs_fop_write_iter+0x356/0x530
-> >> [  243.273735]        vfs_write+0x513/0xd60
-> >> [  243.280090]        ksys_write+0xe7/0x1b0
-> >> [  243.286412]        do_syscall_64+0x5d/0xe0
-> >> [  243.292908]        entry_SYSCALL_64_after_hwframe+0x6e/0x76
-> >> [  243.301053] 
-> >>                other info that might help us debug this:
-> >>
-> >> [  243.315550]  Possible unsafe locking scenario:
-> >>
-> >> [  243.325803]        CPU0                    CPU1
-> >> [  243.332654]        ----                    ----
-> >> [  243.339492]   lock(pci_rescan_remove_lock);
-> >> [  243.345937]                                lock((work_completion)(&wfc.work));
-> >> [  243.355852]                                lock(pci_rescan_remove_lock);
-> >> [  243.365170]   lock((work_completion)(&wfc.work));
-> >> [  243.372235] 
-> >>                 *** DEADLOCK ***
-> >>
-> >> [  243.384100] 5 locks held by bash/1615:
-> >> [  243.390048]  #0: ff1100013f4b0418 (sb_writers#4){.+.+}-{0:0}, at: ksys_write+0xe7/0x1b0
-> >> [  243.400833]  #1: ff11000128429888 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x21d/0x530
-> >> [  243.412623]  #2: ff11000103849968 (kn->active#136){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x241/0x530
-> >> [  243.424832]  #3: ffffffff870bf4a8 (pci_rescan_remove_lock){+.+.}-{3:3}, at: rescan_store+0x96/0xd0
-> >> [  243.436773]  #4: ff1100019cc7e1a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x67/0x380
-> >> [  243.448048] 
-> >>                stack backtrace:
-> >> [  243.456654] CPU: 16 PID: 1615 Comm: bash Not tainted 6.7.0-rc1-kts #1
-> >> [  243.465797] Hardware name: Supermicro SYS-520P-WTR/X12SPW-TF, BIOS 1.2 02/14/2022
-> >> [  243.476145] Call Trace:
-> >> [  243.480820]  <TASK>
-> >> [  243.485084]  dump_stack_lvl+0x57/0x90
-> >> [  243.491112]  check_noncircular+0x2e1/0x3c0
-> >> [  243.497630]  ? __pfx_check_noncircular+0x10/0x10
-> >> [  243.504747]  ? __pfx___bfs+0x10/0x10
-> >> [  243.510680]  ? lockdep_lock+0xbc/0x1a0
-> >> [  243.516811]  ? __pfx_lockdep_lock+0x10/0x10
-> >> [  243.523436]  __lock_acquire+0x2e74/0x5ea0
-> >> [  243.529866]  ? __pfx___lock_acquire+0x10/0x10
-> >> [  243.536682]  lock_acquire+0x196/0x4b0
-> >> [  243.542710]  ? __flush_work+0xc5/0x980
-> >> [  243.548829]  ? __pfx_lock_acquire+0x10/0x10
-> >> [  243.555442]  ? __pfx___lock_acquire+0x10/0x10
-> >> [  243.562252]  ? driver_probe_device+0x4a/0x120
-> >> [  243.569061]  ? __device_attach_driver+0x15e/0x270
-> >> [  243.576282]  ? mark_lock+0xee/0x16c0
-> >> [  243.582222]  ? __flush_work+0xc5/0x980
-> >> [  243.588364]  __flush_work+0xe2/0x980
-> >> [  243.594300]  ? __flush_work+0xc5/0x980
-> >> [  243.600425]  ? __queue_work+0x4e4/0xe30
-> >> [  243.606658]  ? __pfx___flush_work+0x10/0x10
-> >> [  243.613287]  ? lock_is_held_type+0xce/0x120
-> >> [  243.619917]  ? queue_work_on+0x69/0xa0
-> >> [  243.626032]  ? lockdep_hardirqs_on+0x7d/0x100
-> >> [  243.632834]  work_on_cpu_key+0xcc/0xf0
-> >> [  243.638950]  ? __pfx_work_on_cpu_key+0x10/0x10
-> >> [  243.645849]  ? __pfx_work_for_cpu_fn+0x10/0x10
-> >> [  243.652738]  ? __pfx_local_pci_probe+0x10/0x10
-> >> [  243.659638]  pci_device_probe+0x548/0x740
-> >> [  243.666057]  ? __pfx_pci_device_probe+0x10/0x10
-> >> [  243.673057]  ? kernfs_create_link+0x167/0x230
-> >> [  243.679855]  really_probe+0x3df/0xb80
-> >> [  243.685860]  __driver_probe_device+0x18c/0x450
-> >> [  243.692737]  driver_probe_device+0x4a/0x120
-> >> [  243.699314]  __device_attach_driver+0x15e/0x270
-> >> [  243.706297]  ? __pfx___device_attach_driver+0x10/0x10
-> >> [  243.713890]  bus_for_each_drv+0x101/0x170
-> >> [  243.720312]  ? __pfx_bus_for_each_drv+0x10/0x10
-> >> [  243.727294]  ? lockdep_hardirqs_on+0x7d/0x100
-> >> [  243.734063]  ? _raw_spin_unlock_irqrestore+0x35/0x60
-> >> [  243.741505]  __device_attach+0x189/0x380
-> >> [  243.747747]  ? __pfx___device_attach+0x10/0x10
-> >> [  243.754554]  pci_bus_add_device+0x9f/0xf0
-> >> [  243.760836]  pci_bus_add_devices+0x7f/0x190
-> >> [  243.767328]  pci_bus_add_devices+0x114/0x190
-> >> [  243.773890]  pci_rescan_bus+0x23/0x30
-> >> [  243.779741]  rescan_store+0xa2/0xd0
-> >> [  243.785362]  ? __pfx_rescan_store+0x10/0x10
-> >> [  243.791785]  kernfs_fop_write_iter+0x356/0x530
-> >> [  243.798516]  vfs_write+0x513/0xd60
-> >> [  243.804054]  ? __pfx_vfs_write+0x10/0x10
-> >> [  243.810193]  ? __fget_light+0x51/0x220
-> >> [  243.816125]  ? __pfx_lock_release+0x10/0x10
-> >> [  243.822555]  ksys_write+0xe7/0x1b0
-> >> [  243.828097]  ? __pfx_ksys_write+0x10/0x10
-> >> [  243.834327]  ? syscall_enter_from_user_mode+0x22/0x90
-> >> [  243.841736]  ? lockdep_hardirqs_on+0x7d/0x100
-> >> [  243.848366]  do_syscall_64+0x5d/0xe0
-> >> [  243.854114]  ? do_syscall_64+0x6c/0xe0
-> >> [  243.860053]  ? do_syscall_64+0x6c/0xe0
-> >> [  243.865989]  ? lockdep_hardirqs_on+0x7d/0x100
-> >> [  243.872608]  ? do_syscall_64+0x6c/0xe0
-> >> [  243.878537]  ? lockdep_hardirqs_on+0x7d/0x100
-> >> [  243.885147]  entry_SYSCALL_64_after_hwframe+0x6e/0x76
-> >> [  243.892555] RIP: 0033:0x7fee10d53c34
-> >> [  243.898305] Code: c7 00 16 00 00 00 b8 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 80 3d 35 77 0d 00 00 74 13 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 54 c3 0f 1f 00 55 48 89 e5 48 83 ec 20 48 89
-> >> [  243.922266] RSP: 002b:00007ffd173e68e8 EFLAGS: 00000202 ORIG_RAX: 0000000000000001
-> >> [  243.932655] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fee10d53c34
-> >> [  243.942564] RDX: 0000000000000002 RSI: 000055f17c9c4bc0 RDI: 0000000000000001
-> >> [  243.952485] RBP: 00007ffd173e6910 R08: 0000000000000073 R09: 0000000000000001
-> >> [  243.962408] R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000002
-> >> [  243.972328] R13: 000055f17c9c4bc0 R14: 00007fee10e245c0 R15: 00007fee10e21f20
-> >> [  243.982259]  </TASK>
-> >>
-> >> [2] https://patchwork.kernel.org/project/linux-pci/patch/20180921205752.3191-1-keith.busch@intel.com/
-
--- 
-With Best Regards,
-Andy Shevchenko
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
 
 
