@@ -1,74 +1,78 @@
-Return-Path: <linux-i2c+bounces-158-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-159-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BAF97EB5FB
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Nov 2023 18:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 84F557EB690
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Nov 2023 19:43:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 337C41C20A8C
-	for <lists+linux-i2c@lfdr.de>; Tue, 14 Nov 2023 17:58:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B567F1C20A9B
+	for <lists+linux-i2c@lfdr.de>; Tue, 14 Nov 2023 18:43:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A05632C1B0;
-	Tue, 14 Nov 2023 17:58:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D33FC33CC6;
+	Tue, 14 Nov 2023 18:43:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N7WKoep4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qgd4PSIA"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D743B2C1AF
-	for <linux-i2c@vger.kernel.org>; Tue, 14 Nov 2023 17:58:19 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F4C10F;
-	Tue, 14 Nov 2023 09:58:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699984698; x=1731520698;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z3Fyn127jjAlpYKhsnD4n33xhw25l7W/N9ueAQRBmng=;
-  b=N7WKoep4eg23DAJKK28bKjBKBwxkAP8MdOj83ZzWYDxwkjcHWVHXWQqx
-   kft2APw5jFEFpmQ5vAVUEIUgjOsxYG+xx3a21OtJx4Rrjr5MVjUuARV9W
-   WIj1WxnSsnd/fK5Xy9fvTDFI5+tT2el3+lBiYqtiGryhYIMyqas7EWCHy
-   PxlprsJ1hsN6awUopn1CaK6HMbLCsMhHe1IN/OaDp6WxUw2yR0HV3QeUb
-   j7N/OYB8LreO/oxC75KMBCBlaHqY4dtPEuawG84ztp8nvBmYgs2A/vUrg
-   nzhRYLS3LuPQgEvFUbnZ6vX+YzjHsQwW6zjVpjlqeJSLCsTZnn6jDuha+
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10894"; a="381107009"
-X-IronPort-AV: E=Sophos;i="6.03,302,1694761200"; 
-   d="scan'208";a="381107009"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 09:58:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10894"; a="1096176298"
-X-IronPort-AV: E=Sophos;i="6.03,302,1694761200"; 
-   d="scan'208";a="1096176298"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2023 09:58:15 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC3)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1r2xfw-0000000DttA-1JSP;
-	Tue, 14 Nov 2023 19:58:12 +0200
-Date: Tue, 14 Nov 2023 19:58:11 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>, Keith Busch <kbusch@kernel.org>,
-	Wolfram Sang <wsa@kernel.org>,
-	Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
-	Jean Delvare <jdelvare@suse.de>,
-	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [bug report] lockdep WARN at PCI device rescan
-Message-ID: <ZVO1M2289uvElgOi@smile.fi.intel.com>
-References: <6xb24fjmptxxn5js2fjrrddjae6twex5bjaftwqsuawuqqqydx@7cl3uik5ef6j>
- <ZVNJCxh5vgj22SfQ@shikoro>
- <ea31480f-2887-41fe-a560-f4bb1103479e@gmail.com>
- <ZVNiUuyHaez8rwL-@smile.fi.intel.com>
- <20231114155701.GA27547@wunner.de>
- <ZVOcPOlkkBk3Xfm5@smile.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A06917992
+	for <linux-i2c@vger.kernel.org>; Tue, 14 Nov 2023 18:43:41 +0000 (UTC)
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2082ECC;
+	Tue, 14 Nov 2023 10:43:40 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-3b6c31e604cso3600393b6e.2;
+        Tue, 14 Nov 2023 10:43:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699987419; x=1700592219; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=iad1M7sTlxmoH5/Gz+DQ7dI9dCA8jhAGqNXduqEs6bo=;
+        b=Qgd4PSIAU6ZL/6b7ELPOhZ8QxtHywJnhZe0b8NpNrxH5K4Lxv/zx6z5whEoUipPGmv
+         kpmweA1T6DPnvnjmC13iz1FULNZhfBSMf54vj/vhGwubz4bdgOd/BXuiwe6am3IdoOrn
+         Tnvn7wVjcRReZ7WZy/7cXMA87Z0thnCxWvMmYitW9dutvupZIBDJ9NMQMlAVySaZBpNb
+         +roKSWPbe8fCwOA/vUCaFsvOUqv0AdxIrd71J36DKayRPPcg5BQe5DTv5/yISXPGoDsF
+         qCCWbKGEa5fxe4M3VRj7l3rBYlt0Ihlf3SSTkyNElVL8titV65+NgTOCe/fmylI4bbRB
+         KRLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699987419; x=1700592219;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iad1M7sTlxmoH5/Gz+DQ7dI9dCA8jhAGqNXduqEs6bo=;
+        b=fdRFVbFn/A7vcBTB7DXJN9goOOSObSF6Jn26xwlvtgGyk1i04cv+SEeyeyE9qQE7L5
+         Sk+83agVGyYei7+JwFFOyfb6gUdNGIcKTdJvmAoxb71T5aAXzVdyngPQUPKkBQ2MQfRw
+         xYVyd7+EbJzekRPEsc+4pJ1ybNSncFurx3dFb47svUfZOxEG4MgLgqFx+oF8WUOmOYJK
+         FMMtvZeuM2zfwk+Muo4K1DvDqt+hnhNVwof4Ti48e7/MhRoKK7ldkvsurL8TMvFXs/Yk
+         negehR54GFVYtqBUwgaqVWGyV/RvzMcujEsW67iDE7AE3HVKwQP8cxrzdKxCzV54sPn8
+         Bmsg==
+X-Gm-Message-State: AOJu0Yx9vS60JEH7STlAoQ+AJO273YAJXYgqM41R5PMkm4LqYAJ5/9ZN
+	9rTusgTQQyKGJXnbHZQiwo4=
+X-Google-Smtp-Source: AGHT+IH98vlzW4/W9fI0+WeMmjyz/fdNutPArPXFhZ5iM81GrHnw6IYD0fyPYRqcN6w9w9NBy4yOGg==
+X-Received: by 2002:a05:6870:3d99:b0:1e9:8780:a0e with SMTP id lm25-20020a0568703d9900b001e987800a0emr14899288oab.28.1699987419384;
+        Tue, 14 Nov 2023 10:43:39 -0800 (PST)
+Received: from neuromancer. ([75.28.21.198])
+        by smtp.gmail.com with ESMTPSA id ec21-20020a0568708c1500b001e5ad4b2f65sm1470312oab.19.2023.11.14.10.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Nov 2023 10:43:38 -0800 (PST)
+Message-ID: <6553bfda.050a0220.b2675.7cce@mx.google.com>
+X-Google-Original-Message-ID: <ZVO/2ZR/bzbmbiVv@neuromancer.>
+Date: Tue, 14 Nov 2023 12:43:37 -0600
+From: Chris Morgan <macroalpha82@gmail.com>
+To: Benjamin Bara <bbara93@gmail.com>
+Cc: benjamin.bara@skidata.com, dmitry.osipenko@collabora.com,
+	heiko@sntech.de, jonathanh@nvidia.com, lee@kernel.org,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-tegra@vger.kernel.org, max.schwarz@online.de, nm@ti.com,
+	peterz@infradead.org, rafael.j.wysocki@intel.com,
+	richard.leitner@linux.dev, stable@vger.kernel.org,
+	treding@nvidia.com, wsa+renesas@sang-engineering.com,
+	wsa@kernel.org
+Subject: Re: [PATCH v7 2/5] i2c: core: run atomic i2c xfer when !preemptible
+References: <655238b2.050a0220.209e.4ad5@mx.google.com>
+ <20231113154826.2856145-1-bbara93@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,51 +81,49 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZVOcPOlkkBk3Xfm5@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20231113154826.2856145-1-bbara93@gmail.com>
 
-On Tue, Nov 14, 2023 at 06:11:40PM +0200, Andy Shevchenko wrote:
-> On Tue, Nov 14, 2023 at 04:57:01PM +0100, Lukas Wunner wrote:
-> > On Tue, Nov 14, 2023 at 02:04:34PM +0200, Andy Shevchenko wrote:
-> > > On Tue, Nov 14, 2023 at 11:47:15AM +0100, Heiner Kallweit wrote:
-> > > > On 14.11.2023 11:16, Wolfram Sang wrote:
-> > > > > On Tue, Nov 14, 2023 at 06:54:29AM +0000, Shinichiro Kawasaki wrote:
-
-...
-
-> > > > > > The lockdep splat indicates possible deadlock between
-> > > > > > pci_rescan_remove_lock and work_completion lock have deadlock
-> > > > > > possibility.
-> > > > > > In the call stack, I found that the workqueue thread for
-> > > > > > i801_probe() calls p2sb_bar(), which locks pci_rescan_remove_lock.
-> > > > 
-> > > > i801 just uses p2sb_bar(), I don't see any issue in i801. Root cause
-> > > > seems to be in the PCI subsystem. Calling p2sb_bar() from a PCI driver
-> > > > probe callback seems to be problematic, nevertheless it's a valid API
-> > > > usage.
-> > > 
-> > > So, currently I'm lack of (good) ideas and would like to hear other (more
-> > > experienced) PCI developers on how is to address this...
-> > 
-> > Can you add a p2sb_bar_locked() library call which is used by the
-> > i801 probe path?
-> > 
-> > Basically rename p2sb_bar() to __p2sb_bar() and add a third parameter
-> > of type boolean which signifies whether it's invoked in locked context
-> > or not, then call that from p2sb_bar() and p2sb_bar_locked() wrappers.
+On Mon, Nov 13, 2023 at 04:48:26PM +0100, Benjamin Bara wrote:
+> Hi!
 > 
-> It may work, I assume. Let me cook the patch.
+> Thanks for testing and the feedback!
+> 
+> On Mon, 13 Nov 2023 at 15:54, Chris Morgan <macroalpha82@gmail.com> wrote:
+> > I can confirm I no longer get any of the errors with this patch. Tested
+> > on both an Anbernic RG353P (RK3566 with an RK817 PMIC) and an Odroid
+> > Go Advance (RK3326 with an RK817 PMIC). The device appears to shut
+> > down consistently again and I no longer see these messages in my dmesg
+> > log when I shut down.
+> 
+> Just to make sure: Are you compiling with CONFIG_PREEMPTION (and
+> therefore CONFIG_PREEMPT_COUNT)?
+> 
+> If yes, could you please also test the following patch? Because I am not
+> sure yet how polling can be false in a "polling required" situation,
+> meaning .master_xfer() is called instead of .master_xfer_atomic() (while
+> your test shows that irq_disabled() is true, which is basically done
+> with !preemptible()). The patch should test the other way round: if the
+> situation is found, force an atomic transfer instead.
+> 
+> Thank you!
+> 
+> diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
+> index a044ca0c35a1..6e3e8433018f 100644
+> --- a/drivers/i2c/busses/i2c-rk3x.c
+> +++ b/drivers/i2c/busses/i2c-rk3x.c
+> @@ -1131,6 +1131,10 @@ static int rk3x_i2c_xfer_common(struct i2c_adapter *adap,
+>  static int rk3x_i2c_xfer(struct i2c_adapter *adap,
+>                          struct i2c_msg *msgs, int num)
+>  {
+> +       if (irqs_disabled()) {
+> +               WARN_ONCE(1, "Landed in non-atomic handler with disabled IRQs");
+> +               return rk3x_i2c_xfer_common(adap, msgs, num, true);
+> +       }
+>         return rk3x_i2c_xfer_common(adap, msgs, num, false);
+>  }
+> 
 
-Hmm... But this will open a window when probing phase happens, e.g. during
-boot time, no? If somebody somehow calls for full rescan, we may end up in
-the situation when P2SB is gone before accessing it in p2sb_bar().
+I have CONFIG_PREEMPT_VOLUNTARY=y but CONFIG_PREEMPTION is not set.
 
-Now I'm wondering why simple pci_dev_get() can't be sufficient in the
-p2sb_bar().
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thank you.
 
