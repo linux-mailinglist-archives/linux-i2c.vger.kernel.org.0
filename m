@@ -1,166 +1,120 @@
-Return-Path: <linux-i2c+bounces-183-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-184-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 999FB7ED610
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Nov 2023 22:30:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BE0C7ED64F
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Nov 2023 22:54:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54C6B280E02
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Nov 2023 21:30:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C193B1F257C6
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Nov 2023 21:53:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A811141755;
-	Wed, 15 Nov 2023 21:30:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 997173DB95;
+	Wed, 15 Nov 2023 21:53:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="l8lPqWeQ"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="lc9R61nx"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E78AB
-	for <linux-i2c@vger.kernel.org>; Wed, 15 Nov 2023 13:29:57 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id ada2fe7eead31-45fb946612bso31883137.1
-        for <linux-i2c@vger.kernel.org>; Wed, 15 Nov 2023 13:29:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700083797; x=1700688597; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nvwColjd0CZMsWSs31lKcrK/j6omfRcU5Ub2F8LVHb8=;
-        b=l8lPqWeQTF91cVX5IG2FZxN7cHL8bmcU/ZVZm60dATwrAAMZePivoZo8T3NQuMjerq
-         7GhAoMt+VIrl7tle8tdsox9Vg4ghc4a9uuwHHUarH058+SrzupIEbX0zTw77lAkNpg+b
-         orXbA94FsdriMAVR8NZWZ8Jfopz07VwYbJMGbZWGXpg+Rh0balkbVkiYRl2mIf7hz629
-         UTpJ0v339YGTFaMHrwnz0GSaCwhgwfIF1Nxq+ig9DAf9tU0TikxLEIGPi4YpCc5ey4Jo
-         /6ARRi1htIwTTe2ObRs1flsFoaTjduIv/UVBwJ8Kspr9Jd5onRDfPdHs6HwHanoXrLqR
-         yK+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700083797; x=1700688597;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nvwColjd0CZMsWSs31lKcrK/j6omfRcU5Ub2F8LVHb8=;
-        b=sEyXVlWEKK0Ua0p5dLJrdpIQ28mAM7lAsEEMAUPKnfnMOxqFgVp7snHMSiugD30G3a
-         xLRBu72jE6JfyRAL6jxLnNl+ek95FwZHJSWycR4VV3BoUWW437eOGK1u7HH6soQPe1NJ
-         MSP3NS1nB4zbtGjYoyDBV+85t4SxJjmIN6GpV1at/P1NY89smST4R0Hd5Y6TOGLjOZKc
-         nDpM4S55OY8zZ+erRsYDMxkl6whwiuY+txFzRQkxrJj3C7l16vyryZBscK8NBrUrXuGn
-         eE3TPxl+uNTactf4rlYv/Bm1fSMlSXdyOd/tyvWpVzJVwZYZWXM8ItT2QMrkd8aIr38c
-         YbNg==
-X-Gm-Message-State: AOJu0Yx1pVYtyNS6+4IZ0bCU6QKw10Y9VPxwqh6nvk/IGE2agJ9eVODR
-	grOMWyCfKeMwr5aBMA3/xzSOfA==
-X-Google-Smtp-Source: AGHT+IFBVDh6PZcXH9v8G8FdwT9GTwpdMrkBMDicH5Zp1VA+Spg6JoCp9ZyIvbPpywauQoBL8h2WLQ==
-X-Received: by 2002:a05:6102:158f:b0:45d:b6af:99ae with SMTP id g15-20020a056102158f00b0045db6af99aemr14927812vsv.35.1700083796873;
-        Wed, 15 Nov 2023 13:29:56 -0800 (PST)
-Received: from [172.25.83.73] ([12.186.190.2])
-        by smtp.gmail.com with ESMTPSA id g9-20020ac84dc9000000b0041cb787ff41sm3793918qtw.67.2023.11.15.13.29.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Nov 2023 13:29:56 -0800 (PST)
-Message-ID: <f24b9b2d-aeb1-47f7-bf21-4383fdcf94aa@linaro.org>
-Date: Wed, 15 Nov 2023 22:29:55 +0100
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C2319B
+	for <linux-i2c@vger.kernel.org>; Wed, 15 Nov 2023 13:53:49 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 393652C044A;
+	Thu, 16 Nov 2023 10:53:46 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1700085226;
+	bh=oo5m3qyagvPDHSC+KwUDEF9RLpa1IBC5fH94joe2/eo=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=lc9R61nxte8zp1/WIlTNf7WVhCFzpXK9fLRYP8G3vxtf+J2z6mPchRanC65/J6QYO
+	 mv5OsdCCzJ7dSeGsVw8/cOdEng4ePNHk8CCNtH8lNcecGiIR3mP0MhBqucibCKOdRq
+	 6ecCOACvrWXe0qYRePAkMOp+OeW91jXVAZ0pzQRY9VXpTfESvjYKC/cGVdQZg4VhIa
+	 HXYZGWKTDBC5tyT23pizBduIp5gSU44UPE0gMxx9Vp5z5Fs5InLbw0Ab0XW3mbyOJQ
+	 wvYSgARW77Ne4a9OgSGwPYcQ5cpy9oucSkwWKDRdWFhZF4fB+p3aIh/DYCD3xGc0sb
+	 egVEhx2EIgCIw==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B65553dea0001>; Thu, 16 Nov 2023 10:53:46 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.39; Thu, 16 Nov 2023 10:53:46 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
+ SMTP Server (TLS) id 15.0.1497.48; Thu, 16 Nov 2023 10:53:45 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.039; Thu, 16 Nov 2023 10:53:45 +1300
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, "wsa@kernel.org"
+	<wsa@kernel.org>, "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "gregory.clement@bootlin.com"
+	<gregory.clement@bootlin.com>
+CC: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: add bus-reset-gpios property
+Thread-Topic: [PATCH v6 1/2] dt-bindings: i2c: add bus-reset-gpios property
+Thread-Index: AQHaF3ftbmVMkvsnVUGkUfJZcnXixrB7DOKAgAAGpwA=
+Date: Wed, 15 Nov 2023 21:53:45 +0000
+Message-ID: <5a52b0c9-8858-4f55-8dd7-9269c29c10a7@alliedtelesis.co.nz>
+References: <20231115035753.925534-1-chris.packham@alliedtelesis.co.nz>
+ <20231115035753.925534-2-chris.packham@alliedtelesis.co.nz>
+ <f24b9b2d-aeb1-47f7-bf21-4383fdcf94aa@linaro.org>
+In-Reply-To: <f24b9b2d-aeb1-47f7-bf21-4383fdcf94aa@linaro.org>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-originating-ip: [10.32.14.96]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B1D6441B8311464BA666AA1FA29E90D8@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: add bus-reset-gpios property
-Content-Language: en-US
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>, wsa@kernel.org,
- andi.shyti@kernel.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- gregory.clement@bootlin.com
-Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231115035753.925534-1-chris.packham@alliedtelesis.co.nz>
- <20231115035753.925534-2-chris.packham@alliedtelesis.co.nz>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
- m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
- HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
- XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
- mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
- v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
- cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
- rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
- qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
- aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
- gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
- dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
- NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
- hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
- oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
- H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
- yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
- 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
- 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
- +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
- FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
- 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
- DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
- oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
- 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
- Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
- qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
- /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
- qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
- EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
- KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
- fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231115035753.925534-2-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=AZXP4EfG c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oOnywjR1vmkA:10 a=IkcTkHD0fZMA:10 a=BNY50KLci1gA:10 a=S1fl2u1ynVkmC_t_ytwA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-On 15/11/2023 04:57, Chris Packham wrote:
-> Add bus-reset-gpios and bus-reset-duration-us properties to the binding
-> description for i2c busses. These can be used to describe hardware where
-> a common reset GPIO is connected to all downstream devices on and I2C
-> bus. This reset will be asserted then released before the downstream
-> devices on the bus are probed.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-
-...
-
-> 
->  Documentation/devicetree/bindings/i2c/i2c.txt | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
-> index fc3dd7ec0445..3f95d71b9985 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c.txt
-> +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
-> @@ -99,6 +99,14 @@ wants to support one of the below features, it should adapt these bindings.
->  	indicates that the system is accessible via this bus as an endpoint for
->  	MCTP over I2C transport.
->  
-> +- bus-reset-gpios:
-> +	GPIO pin providing a common reset for all downstream devices. This GPIO
-> +	will be asserted then released before the downstream devices are probed.
-
-I initially reviewed it, but did not think enough about it. After more
-consideration, I believe this is not a property of the I2C bus
-controller. This is a property of each device, even if the GPIO is the same.
-
-Linux kernel already supports shared GPIO, so you only need
-enable-ref-counting on it.
-
-Putting it into the controller bindings looks like solving OS issue with
-incorrect hardware description.
-
-Best regards,
-Krzysztof
-
+SGkgS3J5c3RvZiwNCg0KT24gMTYvMTEvMjMgMTA6MjksIEtyenlzenRvZiBLb3psb3dza2kgd3Jv
+dGU6DQo+IE9uIDE1LzExLzIwMjMgMDQ6NTcsIENocmlzIFBhY2toYW0gd3JvdGU6DQo+PiBBZGQg
+YnVzLXJlc2V0LWdwaW9zIGFuZCBidXMtcmVzZXQtZHVyYXRpb24tdXMgcHJvcGVydGllcyB0byB0
+aGUgYmluZGluZw0KPj4gZGVzY3JpcHRpb24gZm9yIGkyYyBidXNzZXMuIFRoZXNlIGNhbiBiZSB1
+c2VkIHRvIGRlc2NyaWJlIGhhcmR3YXJlIHdoZXJlDQo+PiBhIGNvbW1vbiByZXNldCBHUElPIGlz
+IGNvbm5lY3RlZCB0byBhbGwgZG93bnN0cmVhbSBkZXZpY2VzIG9uIGFuZCBJMkMNCj4+IGJ1cy4g
+VGhpcyByZXNldCB3aWxsIGJlIGFzc2VydGVkIHRoZW4gcmVsZWFzZWQgYmVmb3JlIHRoZSBkb3du
+c3RyZWFtDQo+PiBkZXZpY2VzIG9uIHRoZSBidXMgYXJlIHByb2JlZC4NCj4+DQo+PiBTaWduZWQt
+b2ZmLWJ5OiBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMuY28ubno+
+DQo+PiAtLS0NCj4+DQo+IC4uLg0KPg0KPj4gICBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
+ZGluZ3MvaTJjL2kyYy50eHQgfCA4ICsrKysrKysrDQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCA4IGlu
+c2VydGlvbnMoKykNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
+L2JpbmRpbmdzL2kyYy9pMmMudHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
+L2kyYy9pMmMudHh0DQo+PiBpbmRleCBmYzNkZDdlYzA0NDUuLjNmOTVkNzFiOTk4NSAxMDA2NDQN
+Cj4+IC0tLSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLnR4dA0K
+Pj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMudHh0DQo+
+PiBAQCAtOTksNiArOTksMTQgQEAgd2FudHMgdG8gc3VwcG9ydCBvbmUgb2YgdGhlIGJlbG93IGZl
+YXR1cmVzLCBpdCBzaG91bGQgYWRhcHQgdGhlc2UgYmluZGluZ3MuDQo+PiAgIAlpbmRpY2F0ZXMg
+dGhhdCB0aGUgc3lzdGVtIGlzIGFjY2Vzc2libGUgdmlhIHRoaXMgYnVzIGFzIGFuIGVuZHBvaW50
+IGZvcg0KPj4gICAJTUNUUCBvdmVyIEkyQyB0cmFuc3BvcnQuDQo+PiAgIA0KPj4gKy0gYnVzLXJl
+c2V0LWdwaW9zOg0KPj4gKwlHUElPIHBpbiBwcm92aWRpbmcgYSBjb21tb24gcmVzZXQgZm9yIGFs
+bCBkb3duc3RyZWFtIGRldmljZXMuIFRoaXMgR1BJTw0KPj4gKwl3aWxsIGJlIGFzc2VydGVkIHRo
+ZW4gcmVsZWFzZWQgYmVmb3JlIHRoZSBkb3duc3RyZWFtIGRldmljZXMgYXJlIHByb2JlZC4NCj4g
+SSBpbml0aWFsbHkgcmV2aWV3ZWQgaXQsIGJ1dCBkaWQgbm90IHRoaW5rIGVub3VnaCBhYm91dCBp
+dC4gQWZ0ZXIgbW9yZQ0KPiBjb25zaWRlcmF0aW9uLCBJIGJlbGlldmUgdGhpcyBpcyBub3QgYSBw
+cm9wZXJ0eSBvZiB0aGUgSTJDIGJ1cw0KPiBjb250cm9sbGVyLiBUaGlzIGlzIGEgcHJvcGVydHkg
+b2YgZWFjaCBkZXZpY2UsIGV2ZW4gaWYgdGhlIEdQSU8gaXMgdGhlIHNhbWUuDQo+DQo+IExpbnV4
+IGtlcm5lbCBhbHJlYWR5IHN1cHBvcnRzIHNoYXJlZCBHUElPLCBzbyB5b3Ugb25seSBuZWVkDQo+
+IGVuYWJsZS1yZWYtY291bnRpbmcgb24gaXQuDQoNClRoYXQncyB0aGUga2luZCBvZiBicmVhZGNy
+dW1iIEkgbmVlZC4gQWx0aG91Z2ggSSBjYW4ndCBzZWUgDQplbmFibGUtcmVmLWNvdW50aW5nIGFz
+IGFueSBraW5kIG9mIERUIHByb3BlcnR5LiBEbyB5b3UgbWVhbiANCkdQSU9EX0ZMQUdTX0JJVF9O
+T05FWENMVVNJVkU/DQoNCj4gUHV0dGluZyBpdCBpbnRvIHRoZSBjb250cm9sbGVyIGJpbmRpbmdz
+IGxvb2tzIGxpa2Ugc29sdmluZyBPUyBpc3N1ZSB3aXRoDQo+IGluY29ycmVjdCBoYXJkd2FyZSBk
+ZXNjcmlwdGlvbi4NClllcyB0aGF0J3MgZW50aXJlbHkgd2hhdHMgaGFwcGVuaW5nIGhlcmUuDQo+
+IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6dG9mDQo+
 
