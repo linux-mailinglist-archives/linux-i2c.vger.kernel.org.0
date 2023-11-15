@@ -1,181 +1,110 @@
-Return-Path: <linux-i2c+bounces-174-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-175-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 990937EC208
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Nov 2023 13:17:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A7537EC408
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Nov 2023 14:48:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D8EE281409
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Nov 2023 12:17:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73665B209B0
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Nov 2023 13:48:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EF4318043;
-	Wed, 15 Nov 2023 12:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 705E41A703;
+	Wed, 15 Nov 2023 13:48:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="buWUoiNI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kSBZrxjY"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11030179B8
-	for <linux-i2c@vger.kernel.org>; Wed, 15 Nov 2023 12:17:40 +0000 (UTC)
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F69EC7
-	for <linux-i2c@vger.kernel.org>; Wed, 15 Nov 2023 04:17:39 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-41eae4f0ee6so39134981cf.3
-        for <linux-i2c@vger.kernel.org>; Wed, 15 Nov 2023 04:17:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700050658; x=1700655458; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NwOU1eQ+YKTD4yQGGCQJLYddK4he3i15lU45I5FAEyE=;
-        b=buWUoiNIHEcHc4hdkPKviopRlpqwqXMdi4/rOmI7glVANV78fd8AKhd+frtlY5Vwnh
-         tgMhAy0MjmOfK4I8IsMukHyVe75T2QeswNxOew9XrPzgxWXjkVAFTg4g9GJmq/uILwgv
-         MkV3zyE4lkI7pVa4Sg6aM+vx2Axk66p+sxRHQJTrqYHtKdpX8orkwjCN8pkbGEhPTvgK
-         hFZ5tO2xF0mxnQF9wHVZb/cwM8cIJu20sH4Y0rtFgLLAr9RELhpXjVToUBqQSkEXXmpW
-         MOjrCfeNr+iXROMyFe7FT88B66YhKqFTsXLyO9F9AiAKOMl0l0zN93nfhtrAz4oJFIyT
-         24xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700050658; x=1700655458;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NwOU1eQ+YKTD4yQGGCQJLYddK4he3i15lU45I5FAEyE=;
-        b=aT4G40shuzV+h4rufz9dCu63eWJEk7Y864o7X2V1LLu3x5BgTvMkg/Q3wGZqPKvdka
-         5u7nBhAs8aHr8D0aaZ46GqAOqaZsbTNMioyLNq1oFdNW0ZI91n0eBZQzZd24mzFul+K/
-         rZWiR70IsD2zdYL5Sg7wAKBBTha1fjOiO6VRFua033piY3vsFkUh3wvB8YpmG1q1zriq
-         kuY+3LmdWYNKWgwVQIxkQc0LqweJ9HVJiw9QMG2Txoe2xhmxNpeGGyS/Lir4wV1j7UI8
-         HZoyjy5ehOr3K6VGoBa0WfkSx2l8RoQF9+boo31KFclKVS/9ZYmixTQLWDO9LB3X3uB1
-         zi6Q==
-X-Gm-Message-State: AOJu0Yzg/gaHVap38tMuimw3vaU7WlRveqBISZ3nsIhKenSXnDCgLXo6
-	d9A67jR/+8IuQ20JCSUfJDWlDQ==
-X-Google-Smtp-Source: AGHT+IFQ37CO8FSGToXU4RQ6qFrxhCQbUJbC0uTbVgxOKU5Xh/kEVwqQpAIIcBT7RUj7XUpbd3TdGw==
-X-Received: by 2002:a05:622a:1aaa:b0:416:5dca:3c9d with SMTP id s42-20020a05622a1aaa00b004165dca3c9dmr5820552qtc.16.1700050658671;
-        Wed, 15 Nov 2023 04:17:38 -0800 (PST)
-Received: from [192.168.212.13] ([12.191.197.195])
-        by smtp.gmail.com with ESMTPSA id 3-20020ac85643000000b0041b9b6eb309sm3497310qtt.93.2023.11.15.04.17.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Nov 2023 04:17:38 -0800 (PST)
-Message-ID: <4f431cc6-4f13-47bb-ba35-44bddf047e02@linaro.org>
-Date: Wed, 15 Nov 2023 13:17:34 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1DD1A261
+	for <linux-i2c@vger.kernel.org>; Wed, 15 Nov 2023 13:48:28 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29E2AC;
+	Wed, 15 Nov 2023 05:48:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700056108; x=1731592108;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1u10bwHQDzE5uIfqyJfipjClovLVgHJkX794aOUElLk=;
+  b=kSBZrxjY+BjaysKGLAusng1H1iWFkiGMGd4birl4DXOUlFtz9rT79izs
+   hpednhOAU67uzqk1ftoKKb126aM1wm1pAo45Fbld7lrKDcqLZY9zC3arZ
+   l/1W5HpztcIsVLEwnpS4X2p4q3GCXEIkh2pFsnpXJ9L3zYKnAgVDD4ria
+   OrGTFkfFf3quZC4v6g9q2/7UtUR0U6jmZUYbPzs/l/uJ6tNs0mrhpcb1X
+   6OQ0qX7bB/FZXoiVq/GS1lFSjXrcB2XRETIe4VUysaf+9xfIbx1Nm6LfV
+   yOVA8huXbI8oO9zuztL+5x8ggoGs7N00IW5xxi2gdowcrUZ7z/MJNs287
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10894"; a="12426388"
+X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
+   d="scan'208";a="12426388"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 05:48:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10894"; a="888597743"
+X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
+   d="scan'208";a="888597743"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 05:48:24 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1r3GFg-0000000EKO7-3NGU;
+	Wed, 15 Nov 2023 15:48:20 +0200
+Date: Wed, 15 Nov 2023 15:48:20 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH v3 02/25] i2c: designware: Fix PM calls order in
+ dw_i2c_plat_probe()
+Message-ID: <ZVTMJA5JsQI13dhz@smile.fi.intel.com>
+References: <20231110182304.3894319-1-andriy.shevchenko@linux.intel.com>
+ <20231110182304.3894319-3-andriy.shevchenko@linux.intel.com>
+ <e299ee44-7de1-4542-828d-a0c86b217fb4@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
- bindings
-Content-Language: en-US
-To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>,
- Conor Dooley <conor@kernel.org>
-Cc: "patrick@stwcx.xyz" <patrick@stwcx.xyz>, Jean Delvare
- <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-References: <20231109014948.2334465-1-Delphine_CC_Chiu@Wiwynn.com>
- <20231109014948.2334465-2-Delphine_CC_Chiu@Wiwynn.com>
- <20231109-obscurity-dress-4d1d3370ea56@spud>
- <SG2PR04MB5543AB6AB419CA76DBD5E023A1B1A@SG2PR04MB5543.apcprd04.prod.outlook.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <SG2PR04MB5543AB6AB419CA76DBD5E023A1B1A@SG2PR04MB5543.apcprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e299ee44-7de1-4542-828d-a0c86b217fb4@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On 15/11/2023 09:38, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
->> -----Original Message-----
->> From: Conor Dooley <conor@kernel.org>
->> Sent: Friday, November 10, 2023 1:10 AM
->> To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
->> Cc: patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>; Guenter Roeck
->> <linux@roeck-us.net>; Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
->> <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley <conor+dt@kernel.org>;
->> Jonathan Corbet <corbet@lwn.net>; linux-i2c@vger.kernel.org;
->> linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org;
->> linux-kernel@vger.kernel.org; linux-doc@vger.kernel.org
->> Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
->> bindings
->>
->> On Thu, Nov 09, 2023 at 09:49:45AM +0800, Delphine CC Chiu wrote:
->>> Add a device tree bindings for ltc4286 device.
->>>
->>> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
->>>
->>> Changelog:
->>>   v4 - Revise some inappropriate writing in yaml file
->>>   v3 - Revise adi,vrange-select-25p6 to adi,vrange-low-enable
->>>   v2 - Revise vrange_select_25p6 to adi,vrange-select-25p6
->>>      - Add type for adi,vrange-select-25p6
->>>      - Revise rsense-micro-ohms to shunt-resistor-micro-ohms
->>
->> Your changelog should be below the --- line.
+On Wed, Nov 15, 2023 at 01:14:36PM +0200, Jarkko Nikula wrote:
+> On 11/10/23 20:11, Andy Shevchenko wrote:
+> > We should not mix managed calls with non-managed. This will break
+> > the calls order at the error path and ->remove() stages. Fix this
+> > by wrapping PM ops to become managed one.
+> > 
+> > Fixes: 36d48fb5766a ("i2c: designware-platdrv: enable RuntimePM before registering to the core")
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> We will add --- line on our changelog.
-> 
->> You also omitted the tag I left on the previous version.
-> 
-> Could you point out the exact places that we omit?
+> I fail to see what was broken in above commit and how this patch fixes it?
 
-Open the previous email and read it fully. Did you or did you not get a tag?
+The order of the unwiding probed flow is broken now as devm_*() mixed with
+non-devm_*() calls. This makes all non-devm_*() calls that interleave devm_*()
+ones to be also devm_*()-wrapped.
 
-> Thanks.
-> 
->> With the changelog fixed:
->> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Best regards,
-Krzysztof
+...
+
+> Is it intended change the reset isn't asserted after this patch in case
+> i2c_dw_probe() fails?
+
+Did you miss that this is become managed with this patch and hence the above
+is false scenario?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
