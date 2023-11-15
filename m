@@ -1,120 +1,179 @@
-Return-Path: <linux-i2c+bounces-184-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-185-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BE0C7ED64F
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Nov 2023 22:54:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B22AD7ED78D
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Nov 2023 23:46:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C193B1F257C6
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 Nov 2023 21:53:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E318A1C20B78
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 Nov 2023 22:46:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 997173DB95;
-	Wed, 15 Nov 2023 21:53:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB94C43ADD;
+	Wed, 15 Nov 2023 22:46:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="lc9R61nx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mHyjgMg6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C2319B
-	for <linux-i2c@vger.kernel.org>; Wed, 15 Nov 2023 13:53:49 -0800 (PST)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 393652C044A;
-	Thu, 16 Nov 2023 10:53:46 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1700085226;
-	bh=oo5m3qyagvPDHSC+KwUDEF9RLpa1IBC5fH94joe2/eo=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=lc9R61nxte8zp1/WIlTNf7WVhCFzpXK9fLRYP8G3vxtf+J2z6mPchRanC65/J6QYO
-	 mv5OsdCCzJ7dSeGsVw8/cOdEng4ePNHk8CCNtH8lNcecGiIR3mP0MhBqucibCKOdRq
-	 6ecCOACvrWXe0qYRePAkMOp+OeW91jXVAZ0pzQRY9VXpTfESvjYKC/cGVdQZg4VhIa
-	 HXYZGWKTDBC5tyT23pizBduIp5gSU44UPE0gMxx9Vp5z5Fs5InLbw0Ab0XW3mbyOJQ
-	 wvYSgARW77Ne4a9OgSGwPYcQ5cpy9oucSkwWKDRdWFhZF4fB+p3aIh/DYCD3xGc0sb
-	 egVEhx2EIgCIw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B65553dea0001>; Thu, 16 Nov 2023 10:53:46 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.39; Thu, 16 Nov 2023 10:53:46 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Thu, 16 Nov 2023 10:53:45 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.039; Thu, 16 Nov 2023 10:53:45 +1300
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, "wsa@kernel.org"
-	<wsa@kernel.org>, "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "gregory.clement@bootlin.com"
-	<gregory.clement@bootlin.com>
-CC: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC571AC;
+	Wed, 15 Nov 2023 14:46:06 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3b6d88dbaa3so112319b6e.1;
+        Wed, 15 Nov 2023 14:46:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700088365; x=1700693165; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8GRR5+TtT69P//O5Q8RWJy3CDQOAIoE5wweaPetEfz0=;
+        b=mHyjgMg6IcYpAyRsjaTqNK9TCLsL6h4DV133+xiuitD7tMXeDbhRs2Lb/G/REwGeaI
+         y236aeXyENdDf9hUe2jehkUPRsmhcSFYKgh6g+8KLWEYBQXBuoQWc9Wf7O1HOqSw0Nu+
+         xIUd4PCmsWawPI8yOjZzF/llfTHmt1+vAtABBDKWF/3K7PocYLmzZIPNvkEF8evw8kf1
+         ipsGP7d51iAq2dFoU4ZvN9ceshOd3vzCo5r0nDCXvHRZrEMVN97K3MSeEamBPocNXWto
+         YUojP1Y328nmvPoa0Hr2JM0pqWSPsKc9I5puKm1nQyio+GN4hx41ovYv4QMOtZwYNqnH
+         j25w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700088365; x=1700693165;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8GRR5+TtT69P//O5Q8RWJy3CDQOAIoE5wweaPetEfz0=;
+        b=D7prfZFQTZ6bbDmU0wNamF9LTrUicfQd/EdNusNEsE72s63byRxifxVu8trV6YIQPE
+         wRAKSxoIFYERKowrD9AGdDbUScHnyuA1R+LCIxjfFFM2yV9kU3BeeQ102gALDD/p+067
+         ru/qr67ZBgPWsfSWUIxZLkSCRxMuY0TkiHdpOk37JoZ34O+aOQAxfXDQXZMcW1kmkA+k
+         CaeKbZDlZs1xOjm6XLCcv/AIcnrF2KzwTYTa1R0RWK2HknA5LxSo43ruFOwYhsi5oaDx
+         MmeM7SaW6dmsSpSDqRKEdP1CS8tk3haInzZTavTaT9XVIdPvdkffDFtWo6LgsRmdM1BJ
+         Ii3g==
+X-Gm-Message-State: AOJu0YwrhY4CtRbSwFWieebmNUJC1yGgrjpp1ZmQ7SV6VRE29UsejrVG
+	EzD1FqcuYD2Py5kqN3tt+7Tt+qz5WdY=
+X-Google-Smtp-Source: AGHT+IEbaMZLZppucpqDyccqgHp3E4itdOMwPQDI8ude5VDnReEr7rQm62RVYEEJSUegcE1B5kUZvA==
+X-Received: by 2002:a54:4389:0:b0:3b5:9541:cb43 with SMTP id u9-20020a544389000000b003b59541cb43mr15234608oiv.14.1700088365661;
+        Wed, 15 Nov 2023 14:46:05 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h1-20020a056808014100b003ae0e57874fsm1626254oie.21.2023.11.15.14.46.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Nov 2023 14:46:05 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 15 Nov 2023 14:46:03 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
+Cc: "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
 	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: add bus-reset-gpios property
-Thread-Topic: [PATCH v6 1/2] dt-bindings: i2c: add bus-reset-gpios property
-Thread-Index: AQHaF3ftbmVMkvsnVUGkUfJZcnXixrB7DOKAgAAGpwA=
-Date: Wed, 15 Nov 2023 21:53:45 +0000
-Message-ID: <5a52b0c9-8858-4f55-8dd7-9269c29c10a7@alliedtelesis.co.nz>
-References: <20231115035753.925534-1-chris.packham@alliedtelesis.co.nz>
- <20231115035753.925534-2-chris.packham@alliedtelesis.co.nz>
- <f24b9b2d-aeb1-47f7-bf21-4383fdcf94aa@linaro.org>
-In-Reply-To: <f24b9b2d-aeb1-47f7-bf21-4383fdcf94aa@linaro.org>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-originating-ip: [10.32.14.96]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B1D6441B8311464BA666AA1FA29E90D8@atlnz.lc>
-Content-Transfer-Encoding: base64
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] hwmon: pmbus: Add ltc4286 driver
+Message-ID: <e2d17ee5-f09a-4c29-b719-9ac6178af1e4@roeck-us.net>
+References: <20231026081514.3610343-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20231026081514.3610343-3-Delphine_CC_Chiu@Wiwynn.com>
+ <2ef2e804-d498-a2ae-9717-dd03bfd26853@roeck-us.net>
+ <SG2PR04MB5543FEAFC1777ADE29239AC9A1A0A@SG2PR04MB5543.apcprd04.prod.outlook.com>
+ <e223764a-c081-4634-810b-56886a29804a@roeck-us.net>
+ <SG2PR04MB55436CFA902895FD5472838AA1A9A@SG2PR04MB5543.apcprd04.prod.outlook.com>
+ <4b73a239-c90e-4515-b89d-65de15a1e9a9@roeck-us.net>
+ <SG2PR04MB55430E53CC7229B5BB5592E7A1B1A@SG2PR04MB5543.apcprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=AZXP4EfG c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oOnywjR1vmkA:10 a=IkcTkHD0fZMA:10 a=BNY50KLci1gA:10 a=S1fl2u1ynVkmC_t_ytwA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SG2PR04MB55430E53CC7229B5BB5592E7A1B1A@SG2PR04MB5543.apcprd04.prod.outlook.com>
 
-SGkgS3J5c3RvZiwNCg0KT24gMTYvMTEvMjMgMTA6MjksIEtyenlzenRvZiBLb3psb3dza2kgd3Jv
-dGU6DQo+IE9uIDE1LzExLzIwMjMgMDQ6NTcsIENocmlzIFBhY2toYW0gd3JvdGU6DQo+PiBBZGQg
-YnVzLXJlc2V0LWdwaW9zIGFuZCBidXMtcmVzZXQtZHVyYXRpb24tdXMgcHJvcGVydGllcyB0byB0
-aGUgYmluZGluZw0KPj4gZGVzY3JpcHRpb24gZm9yIGkyYyBidXNzZXMuIFRoZXNlIGNhbiBiZSB1
-c2VkIHRvIGRlc2NyaWJlIGhhcmR3YXJlIHdoZXJlDQo+PiBhIGNvbW1vbiByZXNldCBHUElPIGlz
-IGNvbm5lY3RlZCB0byBhbGwgZG93bnN0cmVhbSBkZXZpY2VzIG9uIGFuZCBJMkMNCj4+IGJ1cy4g
-VGhpcyByZXNldCB3aWxsIGJlIGFzc2VydGVkIHRoZW4gcmVsZWFzZWQgYmVmb3JlIHRoZSBkb3du
-c3RyZWFtDQo+PiBkZXZpY2VzIG9uIHRoZSBidXMgYXJlIHByb2JlZC4NCj4+DQo+PiBTaWduZWQt
-b2ZmLWJ5OiBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMuY28ubno+
-DQo+PiAtLS0NCj4+DQo+IC4uLg0KPg0KPj4gICBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
-ZGluZ3MvaTJjL2kyYy50eHQgfCA4ICsrKysrKysrDQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCA4IGlu
-c2VydGlvbnMoKykNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
-L2JpbmRpbmdzL2kyYy9pMmMudHh0IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L2kyYy9pMmMudHh0DQo+PiBpbmRleCBmYzNkZDdlYzA0NDUuLjNmOTVkNzFiOTk4NSAxMDA2NDQN
-Cj4+IC0tLSBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLnR4dA0K
-Pj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMudHh0DQo+
-PiBAQCAtOTksNiArOTksMTQgQEAgd2FudHMgdG8gc3VwcG9ydCBvbmUgb2YgdGhlIGJlbG93IGZl
-YXR1cmVzLCBpdCBzaG91bGQgYWRhcHQgdGhlc2UgYmluZGluZ3MuDQo+PiAgIAlpbmRpY2F0ZXMg
-dGhhdCB0aGUgc3lzdGVtIGlzIGFjY2Vzc2libGUgdmlhIHRoaXMgYnVzIGFzIGFuIGVuZHBvaW50
-IGZvcg0KPj4gICAJTUNUUCBvdmVyIEkyQyB0cmFuc3BvcnQuDQo+PiAgIA0KPj4gKy0gYnVzLXJl
-c2V0LWdwaW9zOg0KPj4gKwlHUElPIHBpbiBwcm92aWRpbmcgYSBjb21tb24gcmVzZXQgZm9yIGFs
-bCBkb3duc3RyZWFtIGRldmljZXMuIFRoaXMgR1BJTw0KPj4gKwl3aWxsIGJlIGFzc2VydGVkIHRo
-ZW4gcmVsZWFzZWQgYmVmb3JlIHRoZSBkb3duc3RyZWFtIGRldmljZXMgYXJlIHByb2JlZC4NCj4g
-SSBpbml0aWFsbHkgcmV2aWV3ZWQgaXQsIGJ1dCBkaWQgbm90IHRoaW5rIGVub3VnaCBhYm91dCBp
-dC4gQWZ0ZXIgbW9yZQ0KPiBjb25zaWRlcmF0aW9uLCBJIGJlbGlldmUgdGhpcyBpcyBub3QgYSBw
-cm9wZXJ0eSBvZiB0aGUgSTJDIGJ1cw0KPiBjb250cm9sbGVyLiBUaGlzIGlzIGEgcHJvcGVydHkg
-b2YgZWFjaCBkZXZpY2UsIGV2ZW4gaWYgdGhlIEdQSU8gaXMgdGhlIHNhbWUuDQo+DQo+IExpbnV4
-IGtlcm5lbCBhbHJlYWR5IHN1cHBvcnRzIHNoYXJlZCBHUElPLCBzbyB5b3Ugb25seSBuZWVkDQo+
-IGVuYWJsZS1yZWYtY291bnRpbmcgb24gaXQuDQoNClRoYXQncyB0aGUga2luZCBvZiBicmVhZGNy
-dW1iIEkgbmVlZC4gQWx0aG91Z2ggSSBjYW4ndCBzZWUgDQplbmFibGUtcmVmLWNvdW50aW5nIGFz
-IGFueSBraW5kIG9mIERUIHByb3BlcnR5LiBEbyB5b3UgbWVhbiANCkdQSU9EX0ZMQUdTX0JJVF9O
-T05FWENMVVNJVkU/DQoNCj4gUHV0dGluZyBpdCBpbnRvIHRoZSBjb250cm9sbGVyIGJpbmRpbmdz
-IGxvb2tzIGxpa2Ugc29sdmluZyBPUyBpc3N1ZSB3aXRoDQo+IGluY29ycmVjdCBoYXJkd2FyZSBk
-ZXNjcmlwdGlvbi4NClllcyB0aGF0J3MgZW50aXJlbHkgd2hhdHMgaGFwcGVuaW5nIGhlcmUuDQo+
-IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6dG9mDQo+
+On Wed, Nov 15, 2023 at 08:42:22AM +0000, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
+> > -----Original Message-----
+> > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+> > Sent: Tuesday, November 7, 2023 11:30 AM
+> > To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>;
+> > patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>; Jonathan Corbet
+> > <corbet@lwn.net>
+> > Cc: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+> > <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley <conor+dt@kernel.org>;
+> > linux-i2c@vger.kernel.org; linux-hwmon@vger.kernel.org;
+> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > linux-doc@vger.kernel.org
+> > Subject: Re: [PATCH v2 2/2] hwmon: pmbus: Add ltc4286 driver
+> > 
+> >   Security Reminder: Please be aware that this email is sent by an external
+> > sender.
+> > 
+> > On 11/6/23 19:08, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
+> > >> -----Original Message-----
+> > >> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+> > >> Sent: Tuesday, October 31, 2023 9:47 PM
+> > >> To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>;
+> > >> patrick@stwcx.xyz; Jean Delvare <jdelvare@suse.com>; Jonathan Corbet
+> > >> <corbet@lwn.net>
+> > >> Cc: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+> > >> <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley
+> > >> <conor+dt@kernel.org>; linux-i2c@vger.kernel.org;
+> > >> linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org;
+> > >> linux-kernel@vger.kernel.org; linux-doc@vger.kernel.org
+> > >> Subject: Re: [PATCH v2 2/2] hwmon: pmbus: Add ltc4286 driver
+> > >>
+> > >>    Security Reminder: Please be aware that this email is sent by an
+> > >> external sender.
+> > >>
+> > >> On 10/30/23 23:46, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
+> > >> [ ... ]
+> > >>>>
+> > >>>>> +
+> > >>>>> +     ret = of_property_read_u32(client->dev.of_node,
+> > >>>>> +                                "shunt-resistor-micro-ohms",
+> > >>>> &rsense);
+> > >>>>> +     if (ret < 0)
+> > >>>>> +             return ret;
+> > >>>>> +
+> > >>>>> +     if (rsense == 0)
+> > >>>>> +             return -EINVAL;
+> > >>>>> +
+> > >>>>> +     info = &ltc4286_info;
+> > >>>>> +
+> > >>>>> +     /* Default of VRANGE_SELECT = 1, 102.4V */
+> > >>>>> +     if (device_property_read_bool(&client->dev,
+> > >>>> "adi,vrange-select-25p6")) {
+> > >>>>
+> > >>>> What if the adi,vrange-select-25p6 property is not provided, but
+> > >>>> the chip is programmed for this range ?
+> > >>> The binding document tells programmers how to fill the dts.
+> > >>> Thus, programmers must fill this property if their system is 25.6
+> > >>> volts voltage
+> > >> range.
+> > >>>
+> > >>
+> > >> Sure, but there is no else case, meaning VRANGE_SELECT is unmodified
+> > >> in that case. There is no guarantee that the chip is in its power-on state.
+> > >
+> > > The else case is in v2 ltc4286.c line 133 It means that the voltage
+> > > range for programmer is 102.4 volts which is default value, so driver
+> > > doesn't need to do any change for VRANGE_SELECT bit.
+> > 
+> > There is no guarantee that the value wasn't changed before the driver was
+> > loaded.
+> 
+> We still can’t get your point.
+> Could you tell us about your concern here?
+
+I have repeated it several times. You are making assumptions about
+register values when the driver is loaded. Those asumptions
+are wrong since the state of the chip is unknown when the driver
+is loaded. Any entty (BIOS, ROMMON, i2cset, some operating system
+loaded earlier, or even some other driver or platform code) may
+have changed those values.
+
+On top of that, as I also have pointed out, LTC4287 supports
+saving its configuration data in eeprom. That means that any chip
+configuration set during production or anytime later will be
+retained, meaning any assumption about chip configuration
+when the driver is loaded is even more wrong.
+
+Guenter
 
