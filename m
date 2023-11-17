@@ -1,62 +1,61 @@
-Return-Path: <linux-i2c+bounces-201-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-202-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 560057EE8FB
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Nov 2023 22:53:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00A8E7EEC55
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Nov 2023 07:41:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F41B51F24C62
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 Nov 2023 21:53:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADA27281116
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Nov 2023 06:41:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E04495E4;
-	Thu, 16 Nov 2023 21:53:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 960E463C1;
+	Fri, 17 Nov 2023 06:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gtRkkNwf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cXyBdO6o"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A5C11F;
-	Thu, 16 Nov 2023 13:53:03 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-5c1f8b0c149so499046a12.3;
-        Thu, 16 Nov 2023 13:53:03 -0800 (PST)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75466D68
+	for <linux-i2c@vger.kernel.org>; Thu, 16 Nov 2023 22:41:04 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-4079ed65471so13438395e9.1
+        for <linux-i2c@vger.kernel.org>; Thu, 16 Nov 2023 22:41:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700171583; x=1700776383; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=6C9AZL6xuvaw9TUCVtQuHjnxGIMH+zJ13tnQH5dBkZE=;
-        b=gtRkkNwfJGoShFNZF04TeLD2uD63PsUXm6TORBHJ/0nKNVCCi9R+FWUpGZ6APmZAzG
-         39z4KgwqOF0SOrRaPHJqfijW2K4Xzkb9oiAYL4/G01imExMfKr0Vivd8F12vvrI8yw0H
-         Um5rryh/FD2mdWEhG9y8GuYhT89nFH2IUJcKSGuoGnTrIuoZvuXneIxzUgMfNuXJCZTH
-         KgxkisMiCUsDRMZGjlDLvsrgufDdPOFpAQF+E02NgEmmKlBK95MmWRw2d0FhirBp1PZU
-         YIOsSeyfqGsPs93YQkax2m04F7qxTT81Z9TFj2CRbMxw82wc3aG0CsKVx2ZxKQk6ydhr
-         f4hQ==
+        d=gmail.com; s=20230601; t=1700203263; x=1700808063; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=JlgVTuejQa/lV6ReGk/RIpb+zqQD3zqpKbctMFlPTVU=;
+        b=cXyBdO6oPqWNReCvXEo+y4FkTa4wMm8YUJTSeWYZmLV/cWzRGRiMPZ450mbhLdkHA5
+         G5a2e/zSeWqtBgO/UqKRmwCRdiEezs6VJZdDEYlBDlEIA09l6fuU/5uXPhn8YoHouwr8
+         OIpu0ScwZM4Q1FOfzAsSZnD1NXLq+GelQVZTasTqPw4OFni3HLQemNAmcpRby6po7HGw
+         YR/LGKOJ/WFalr5fSkd24NoycMzZ5uCu0OKRRkLBM6moOb2ag75ZR5DWZBOjXZLluT8u
+         BQ8lqRaxJIyA+c3Xq+LVAZXWdzWQWnWEA8Blv4Lwy2m50c8L6UkEjaEcEedSGq26QbAS
+         v2dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700171583; x=1700776383;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1700203263; x=1700808063;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6C9AZL6xuvaw9TUCVtQuHjnxGIMH+zJ13tnQH5dBkZE=;
-        b=BeGmdAgcA9rtAXH/Rrp1cf54OIhHofczb6HBuc64gtkPlW+/f0Paiy91OXhHeBEuAQ
-         LElfwZMfo4X4xYzQuxegIt16SLkRDIQAyLjy4dgxohP4xeSc/uD96mvUwaNgQtS7MpKO
-         O3FYOKW/QfTZ3lQp3ctp4HNK7/nDicqaNKfZ7C8Z5x9GQVhiPb32QiUfqfrQkgFMl5Hw
-         u833wTKp5Sw5MHHj+gNKrrdBHD6rYHCb76fx8HBMeyarCwmiWMwjZoKcBGA/gkGfQRjk
-         nx8/EKbiNsUu41evoqGCTk7ujn7k1g9hqFVEoQweB96Q8iqytlU1UNNPnqV7DBLkyhDx
-         TrbA==
-X-Gm-Message-State: AOJu0YzHJiLjvAOXksL1zFy9IsOEAU+yJYbQ8068clDtb7gbXy6p10Hj
-	AFKiqa95y98YsQHMKU5MmlM=
-X-Google-Smtp-Source: AGHT+IFmlZ7+0Z1cztjaS5xXqOKocmLLq6Xgy++RtEF26Fl5qnKdIu1mkWfw/y6y3FCTA8TeAs1qFw==
-X-Received: by 2002:a05:6a20:a112:b0:14c:c393:6af with SMTP id q18-20020a056a20a11200b0014cc39306afmr16401691pzk.0.1700171582658;
-        Thu, 16 Nov 2023 13:53:02 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id cm7-20020a056a020a0700b005b92ba3938dsm137240pgb.77.2023.11.16.13.53.00
+        bh=JlgVTuejQa/lV6ReGk/RIpb+zqQD3zqpKbctMFlPTVU=;
+        b=IZbJRm8fv7acfTKNymhFS1ELcoPQrTvy337nxqxDwD9zWEK7bQR31IUIIyHtaNliEj
+         Xsol4qt2YPC+df3HhjX0CJeMfyl2/t2dxxQU233Do/DzrqPZjY7qaT/chruoP8fqdi21
+         G4WD9bQgoOvn7Ukj6bkjYjQOf5H8H7iHrS6HJKGaW7zBh4AtDchaGs7fv2zvTke0uj6u
+         Ld+Lq3vD42PPTxkPF8YqAW0XLr6IrQceTnGqCHDDlyDx8vBRRUnKHS3Ump3LA6OxpJSM
+         vpnEIBajV1J6VhMVEVnfWrQcisj4iK/li/q4dNCOaWQwJ/AnJnxppTNHBM9bTOnjc0Kl
+         3qog==
+X-Gm-Message-State: AOJu0Yx47DFoL1JOcy0V3NHnUlhuFyqg1RLyUqdGbWi02PLhR0t4LYmz
+	3kILrP/qpE0iC9nSXfzP/Y9TDSrYp9E=
+X-Google-Smtp-Source: AGHT+IHFmsyQSLGgM51GzWnHqmWnvNA+OWkPDwdu0Mxml5S4mVJ9Zcp8HFqlAOrWkyhT+vT21JsBYQ==
+X-Received: by 2002:a05:600c:894:b0:40a:44c0:fd43 with SMTP id l20-20020a05600c089400b0040a44c0fd43mr3759560wmp.17.1700203262581;
+        Thu, 16 Nov 2023 22:41:02 -0800 (PST)
+Received: from ?IPV6:2a01:c23:b96e:ed00:c0d:6914:f32c:c6f8? (dynamic-2a01-0c23-b96e-ed00-0c0d-6914-f32c-c6f8.c23.pool.telefonica.de. [2a01:c23:b96e:ed00:c0d:6914:f32c:c6f8])
+        by smtp.googlemail.com with ESMTPSA id 19-20020a05600c025300b004053e9276easm5905539wmj.32.2023.11.16.22.41.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Nov 2023 13:53:01 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <780fd479-a3c0-49d0-b632-4bff171fe067@roeck-us.net>
-Date: Thu, 16 Nov 2023 13:53:00 -0800
+        Thu, 16 Nov 2023 22:41:02 -0800 (PST)
+Message-ID: <48c6cfce-5b36-4dbb-9422-a0175203fb51@gmail.com>
+Date: Fri, 17 Nov 2023 07:41:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -64,98 +63,77 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/2] hwmon: pmbus: Add ltc4286 driver
+Subject: Re: [PATCH] eeprom: ee1004: Add support for multiple i2c busses
+From: Heiner Kallweit <hkallweit1@gmail.com>
+To: Jean Delvare <jdelvare@suse.com>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <ab18528d-e0be-49f6-8ea3-1f4e73fa353a@gmail.com>
 Content-Language: en-US
-To: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, patrick@stwcx.xyz,
- Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>
-Cc: Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
- linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20231116023027.24855-1-Delphine_CC_Chiu@Wiwynn.com>
- <20231116023027.24855-3-Delphine_CC_Chiu@Wiwynn.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231116023027.24855-3-Delphine_CC_Chiu@Wiwynn.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+In-Reply-To: <ab18528d-e0be-49f6-8ea3-1f4e73fa353a@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/15/23 18:30, Delphine CC Chiu wrote:
-> Add a driver to support ltc4286 chip
+On 15.11.2023 16:30, Heiner Kallweit wrote:
+> There are systems with more than 8 memory slots where the i2c bus for
+> SPD is multiplexed. i2c_register_spd() isn't used yet on such systems,
+> but it's planned. So we need to extend ee1004 accordingly.
+> With this extension a maximum of 8 i2c busses is supported.
 > 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> I don't have such a system for testing, therefore I just verified
+> that the driver still works on a system with a single i2c bus.
 > 
-> -------------------------------------------------------------
-[ ... ]
+> For the sake of simplicity the extension uses the existing global
+> mutex to protect access on all busses. This could be improved,
+> but we support 8 busses only, and SPD data is small and rarely
+> accessed, so it shouldn't be a problem.
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
 
-> +	/* Default of VRANGE_SELECT = 1, 102.4V */
-> +	if (device_property_read_bool(&client->dev, "adi,vrange-low-enable")) {
-> +		/* Setup MFR1 CONFIG register bit 1 VRANGE_SELECT */
-> +		ret = i2c_smbus_read_word_data(client, LTC4286_MFR_CONFIG1);
-> +		if (ret < 0)
-> +			return dev_err_probe(
-> +				&client->dev, ret,
-> +				"Failed to read manufacturer configuration one\n");
-> +
-> +		ret &= ~VRANGE_SELECT_BIT; /* VRANGE_SELECT = 0, 25.6V */
-> +		ret = i2c_smbus_write_word_data(client, LTC4286_MFR_CONFIG1,
-> +						ret);
-> +		if (ret < 0)
-> +			return dev_err_probe(&client->dev, ret,
-> +					     "Failed to set vrange\n");
-> +
-> +		info->m[PSC_VOLTAGE_IN] = 128;
-> +		info->m[PSC_VOLTAGE_OUT] = 128;
-> +		info->m[PSC_POWER] = 4 * rsense;
-> +	} else {
-> +		info->m[PSC_POWER] = rsense;
-> +	}
-
-My feedback has not been addressed.
-
-Guenter
+I sent a v2 that improves the code.
 
 
