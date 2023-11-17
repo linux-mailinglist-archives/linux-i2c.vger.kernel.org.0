@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-207-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-208-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E05CE7EF409
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Nov 2023 15:08:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D73E7EF44D
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Nov 2023 15:18:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FCF72813A6
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 Nov 2023 14:08:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49B35B20C1B
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 Nov 2023 14:18:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9818C328D2;
-	Fri, 17 Nov 2023 14:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D3FC34CEB;
+	Fri, 17 Nov 2023 14:18:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I1brDbqN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oIymag3H"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BC8C5;
-	Fri, 17 Nov 2023 06:08:40 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC520D4E;
+	Fri, 17 Nov 2023 06:18:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700230120; x=1731766120;
+  t=1700230697; x=1731766697;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=l+Kj4OtVTtx7rbh+BfmdDrOXOtH14Y7IhTMpmwIbWhA=;
-  b=I1brDbqN80AYO3pukIIqSZsPVu/E7mHsZkoEq1mQst3WkOV8bTPirKOw
-   rhBUPlTXKfWVForIgpbVNvMak+JKMV0cq3+vmq84EUod4H8A612PZ9EQ8
-   Xjy4UxwIhDtqv8D0F5xbTHQyaFpYUlz6cn6ZOS4CWHtOfHxuUIcmakron
-   nfChGv9+jzbXal5L6vKK3o4koXvtsUvBtWfCKeBeGnSGA2NY/i6vIWi0I
-   AsRO9FlOD2/4mVkamSHvUBcf0jj1Hvu10wg+AKJV41Hj6aGbx6YE1KU4Y
-   XWpvDsbfP3Ol2d8+lR5ha6AX/ibQxHgvvZRGlcappHb4inqNB0iXNXY+q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="391087741"
+  bh=n8a3frJ+c4ycX1Uta+3lEgUlnjIE1SdkmtkrM452bKc=;
+  b=oIymag3HLU+u/isl/AOAdSdWiWUXE3NJnqjb9e6tPZOxxgh9R8AgcN5l
+   B/cMtUCDexEPiv5cmQiYY6aQyLMnRBHi44JIfXD7kqJVrNUGUs2TMGj2s
+   6GuIWc3ZdwJauikePIqqTH8Q6I2ab70F/sCoaLUSyoCCaQkZqN0Y8z9DD
+   MhWs6gzTA93vZ40GE8MDNLc3cZWwADfa7cru5DN+Aq1nLS8Mu3+piua6T
+   nKvPuwmWGVhvPGD/4nWK4TxArQCXygSZRKrVApQnqfogBNNZERgOj3RxD
+   RMmwlq4fnvxXU4tbxFvugxxP/R8QEOfpIBAJ61BQzHxcYAHe/kLYvNWEO
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="394154592"
 X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="391087741"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 06:08:39 -0800
+   d="scan'208";a="394154592"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 06:18:17 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="909443226"
+X-IronPort-AV: E=McAfee;i="6600,9927,10897"; a="939159997"
 X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="909443226"
+   d="scan'208";a="939159997"
 Received: from unknown (HELO [10.237.72.75]) ([10.237.72.75])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Nov 2023 06:08:37 -0800
-Message-ID: <cb9e7b22-cc46-4e8a-937f-bd395d05a999@linux.intel.com>
-Date: Fri, 17 Nov 2023 16:08:36 +0200
+  by orsmga005.jf.intel.com with ESMTP; 17 Nov 2023 06:18:14 -0800
+Message-ID: <a6df86e7-e7e9-4acb-b6f2-0dde55884433@linux.intel.com>
+Date: Fri, 17 Nov 2023 16:18:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -54,8 +54,8 @@ User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 10/25] i2c: designware: Unify terminator in device ID
  tables
 Content-Language: en-US
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
+To: Mario Limonciello <mario.limonciello@amd.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
  Herbert Xu <herbert@gondor.apana.org.au>, Wolfram Sang <wsa@kernel.org>,
  linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
@@ -63,19 +63,21 @@ Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
  Philipp Zabel <p.zabel@pengutronix.de>, Hans de Goede <hdegoede@redhat.com>
 References: <20231110182304.3894319-1-andriy.shevchenko@linux.intel.com>
  <20231110182304.3894319-11-andriy.shevchenko@linux.intel.com>
+ <382a9f86-f907-4432-9580-3a1b1b449121@amd.com>
 From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20231110182304.3894319-11-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <382a9f86-f907-4432-9580-3a1b1b449121@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 11/10/23 20:11, Andy Shevchenko wrote:
-> Make the terminator entry look the same in all device ID tables.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->   drivers/i2c/busses/i2c-designware-pcidrv.c  | 2 +-
->   drivers/i2c/busses/i2c-designware-platdrv.c | 4 ++--
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
+On 11/10/23 21:38, Mario Limonciello wrote:
+> On 11/10/2023 12:11, Andy Shevchenko wrote:
+>> Make the terminator entry look the same in all device ID tables.
+>>
+>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+
+Sorry replying twice, wanted to make sure Mario's tag is noted.
+
 Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+
 
