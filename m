@@ -1,101 +1,113 @@
-Return-Path: <linux-i2c+bounces-237-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-238-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 729D47F018F
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Nov 2023 18:43:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C6E67F01BB
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Nov 2023 18:57:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CB881F2317C
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Nov 2023 17:43:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FC9F1F23226
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Nov 2023 17:57:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 181961C2AE;
-	Sat, 18 Nov 2023 17:43:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AC5F199B9;
+	Sat, 18 Nov 2023 17:57:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S345bEvs"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="RHTYULPA"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C64DD61;
-	Sat, 18 Nov 2023 09:42:48 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-40806e4106dso2722565e9.1;
-        Sat, 18 Nov 2023 09:42:48 -0800 (PST)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4EDA5
+	for <linux-i2c@vger.kernel.org>; Sat, 18 Nov 2023 09:57:19 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9e2838bcb5eso425084666b.0
+        for <linux-i2c@vger.kernel.org>; Sat, 18 Nov 2023 09:57:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700329365; x=1700934165; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xoOuxVfYX3lHdi36PKjYbl3tsLm17OpynR1y+9rBRUM=;
-        b=S345bEvs9q0MqPOtaAOcFjLkuKJYcZuBe9+JHYMUOJ/aidB/fA8FAwWff0YZn7Vld5
-         DAXfGYN1AL4uDos8ZAOjWGzbccx4ihr+ljiDm71OcTdhbptVH96J6eCudD3bpEBrlSJ0
-         rB+USljCL3nLz9tJ4oVmoo2IHVoy+pTPkjlFqt2MTk+BO2RAlivRgFB7udVuU3GoSCO9
-         Mc5O7zM/M31VxOb3cMOfegY+beqWdx7LnDKCqcG2eMwIOaESYwecQoP5dZm5pICuKDQq
-         ceTznY3dSIV/VeKhfcxD6NXFNVUVlC+VRTnIW6pLfXWF4Qo5xFR4mxYt+FBUHVEZCPZv
-         T2iQ==
+        d=linux-foundation.org; s=google; t=1700330238; x=1700935038; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eduw7ZGLL5eENX3+AcWvHdPEGppFMGVV13Yx0vFVox0=;
+        b=RHTYULPADunx/kNpYRdFn2trk89MqvzIEwy3gxnkQh6r9sollWjeI7XJ7Ca4YySUhI
+         U9pilWNFof+0V8YfwM4WQLhQSrg/6uRqywl+jdR7TcFoCrHsB1XPxokyC/sMPuVxDx81
+         I3hE92342075xFLHifE/lR4cLN/XEpft7lQCk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700329365; x=1700934165;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xoOuxVfYX3lHdi36PKjYbl3tsLm17OpynR1y+9rBRUM=;
-        b=XUNJdvD0BFcFJ5f7hGSqOserz6eraMqyNXI+7A8r2aotfeMQfuHdWoKpY5yQBTTnK1
-         2zBIU8BwZ0O6xkbR4MLxERYccj0J5jHuZIHb9mO6dZOVPNSuVoL0AJs97rfPqn6rzw9h
-         QgAA7aYPu+gciCNJI1LawmTQLqhfZO1g3wdPqpY+oJX2AuiBkqSONccrMhPHjPgDC1AH
-         W1w3X7GVP2+fJwWu217WLz/3ENV/t7CsH/PXMduov6BdQMFF/5AqCOxVh7RatTtntqod
-         uO/P2vWUyrap+CKepFnl0nQDRjRjCb5+OMJiEUDbNw7PcOZhtzXzZM22zhXbypfqR89u
-         UkOQ==
-X-Gm-Message-State: AOJu0YyZ+MTkA/RnrRk2pBMY9zAV9VumrV6axJ79gNaBEdMmkLti3dd3
-	PIO9S4JVbH1Wr8h5nWQOLNg=
-X-Google-Smtp-Source: AGHT+IEfGC11GbAgY9a3iwog8RZFBCmOzsqpJ0VCuNPTs77rF0/5JKKRTlqJUA+zSfuaII4HOyGD2Q==
-X-Received: by 2002:a05:600c:4f56:b0:3fe:1fd9:bedf with SMTP id m22-20020a05600c4f5600b003fe1fd9bedfmr2222060wmq.11.1700329365491;
-        Sat, 18 Nov 2023 09:42:45 -0800 (PST)
-Received: from zotac.lan. (dynamic-2a01-0c22-77bf-8300-2223-08ff-fe18-0310.c22.pool.telefonica.de. [2a01:c22:77bf:8300:2223:8ff:fe18:310])
-        by smtp.gmail.com with ESMTPSA id y10-20020a05600c340a00b004068de50c64sm6964211wmp.46.2023.11.18.09.42.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Nov 2023 09:42:45 -0800 (PST)
-From: Heiner Kallweit <hkallweit1@gmail.com>
-To: Wolfram Sang <wsa@kernel.org>
-Cc: linux-i2c@vger.kernel.org,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 20/20] include/linux/i2c.h: remove I2C_CLASS_DDC support
-Date: Sat, 18 Nov 2023 18:42:20 +0100
-Message-ID: <20231118174221.851-21-hkallweit1@gmail.com>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231118174221.851-1-hkallweit1@gmail.com>
-References: <20231118174221.851-1-hkallweit1@gmail.com>
+        d=1e100.net; s=20230601; t=1700330238; x=1700935038;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eduw7ZGLL5eENX3+AcWvHdPEGppFMGVV13Yx0vFVox0=;
+        b=wOOKAKI0tch+ocM8vTFOp42YtjVSmWgMctELyDmecBLZFcDdklt25bDLe9Gtay0bnO
+         wl1sFytbsImSKj9SSBsLn+HEgzi3sHqgMQBB9mFi5UTwfXie4XmL2YakuVMJ6PzsGRFu
+         gwpvKHlyHrcJcz+WV3y45VrI3ZL1ckVl2oqpJ1m4DHaZ/YKXv4C+C+x5BCzy9+Fj9yQg
+         CrwLo3oykS0ZdqXC8wpWcW3GeorPg7rGGKK5JQdbmFUSPzAQVPmZmdKXh1417WBcmmAy
+         DymB/H6Vk/NqO1hq03HEYWON4UGomLBW/lDA+PwDzlpI/YCXctBFEm55C2nt0eHNynEU
+         KiHw==
+X-Gm-Message-State: AOJu0YyKmz+OgxyjjYXo92zDVaml7foTRGy8OMjfP49FwtUZg1Q+AY/w
+	PBret6tP9cm0kX9bZ3OTdqmcbGLPsQuD3Iu2DxLHZlGO
+X-Google-Smtp-Source: AGHT+IH1+51dNOG8BUSy3GhvaRhAjUK1Mnjqcc5AO3DNxuMoX3G3Sg/i7sOLJucKGenZDfBVjp4RbA==
+X-Received: by 2002:a17:906:15d:b0:9e6:ccad:b45d with SMTP id 29-20020a170906015d00b009e6ccadb45dmr1725939ejh.49.1700330237854;
+        Sat, 18 Nov 2023 09:57:17 -0800 (PST)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id g15-20020a170906538f00b0099ce025f8ccsm2067478ejo.186.2023.11.18.09.57.16
+        for <linux-i2c@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Nov 2023 09:57:16 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5409bc907edso4206113a12.0
+        for <linux-i2c@vger.kernel.org>; Sat, 18 Nov 2023 09:57:16 -0800 (PST)
+X-Received: by 2002:a05:6402:26d4:b0:548:7a3a:ef39 with SMTP id
+ x20-20020a05640226d400b005487a3aef39mr1440410edd.35.1700330236507; Sat, 18
+ Nov 2023 09:57:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <ZVf/pqw5YcF7sldg@shikoro>
+In-Reply-To: <ZVf/pqw5YcF7sldg@shikoro>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sat, 18 Nov 2023 09:56:59 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi9a9u+1cAxxHw7KxXsfPvdWCbhatK7enFSjgwjrovCZA@mail.gmail.com>
+Message-ID: <CAHk-=wi9a9u+1cAxxHw7KxXsfPvdWCbhatK7enFSjgwjrovCZA@mail.gmail.com>
+Subject: Re: [PULL REQUEST] i2c-for-6.7-rc2
+To: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-After removal of the legacy EEPROM driver and I2C_CLASS_DDC support in
-olpc_dcon there's no i2c client driver left supporting I2C_CLASS_DDC.
-Class-based device auto-detection is a legacy mechanism and shouldn't
-be used in new code. So we can remove this class completely now.
+On Fri, 17 Nov 2023 at 16:05, Wolfram Sang <wsa@kernel.org> wrote:
+>
+> Jan Bottorff (1):
+>       i2c: designware: Fix corrupted memory seen in the ISR
 
-Preferably this series should be applied via the i2c tree.
+I have pulled this, but honestly, looking at the patch, I really get
+the feeling that there's some deeper problem going on.
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Either the designware driver doesn't do the right locking, or the
+relaxed IO accesses improperly are escaping the locks that do exist.
 
----
- include/linux/i2c.h |    1 -
- 1 file changed, 1 deletion(-)
+Either way, just changing "writel_relaxed()" to "writel()" seems to be wrong.
 
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 0dae9db27..d029aade3 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -850,7 +850,6 @@ static inline void i2c_mark_adapter_resumed(struct i2c_adapter *adap)
- 
- /* i2c adapter classes (bitmask) */
- #define I2C_CLASS_HWMON		(1<<0)	/* lm_sensors, ... */
--#define I2C_CLASS_DDC		(1<<3)	/* DDC bus on graphics adapters */
- #define I2C_CLASS_SPD		(1<<7)	/* Memory modules */
- /* Warn users that the adapter doesn't support classes anymore */
- #define I2C_CLASS_DEPRECATED	(1<<8)
+Of course, it is entirely possible that those accesses should never
+have been relaxed in the first place, and that the actual access
+ordering between two accesses in the same thread matters. For example,
+the code did
 
+        *val = readw_relaxed(dev->base + reg) |
+                (readw_relaxed(dev->base + reg + 2) << 16);
+
+and if the order of those two readw's mattered, then the "relaxed" was
+always entirely wrong.
+
+But the commit message seems to very much imply a multi-thread issue,
+and for *that* issue, doing "writel_relaxed" -> "writel" is very much
+wrong. The only thing fixing threading issues is proper locks (or
+_working_ locks).
+
+Removing the "relaxed" may *hide* the issue, but doesn't really fix it.
+
+For the arm64 people I brought in: this is now commit f726eaa787e9
+("i2c: designware: Fix corrupted memory seen in the ISR") upstream.
+I've done the pull, because even if this is purely a "hide the
+problem" fix, it's better than what the code did. I'm just asking that
+people look at this a bit more.
+
+                   Linus
 
