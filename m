@@ -1,68 +1,72 @@
-Return-Path: <linux-i2c+bounces-242-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-241-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B3797F01D5
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Nov 2023 19:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 656367F01D2
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Nov 2023 19:05:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF2E11C20904
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Nov 2023 18:05:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9693B1C208BB
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Nov 2023 18:05:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 212731C688;
-	Sat, 18 Nov 2023 18:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C821C28F;
+	Sat, 18 Nov 2023 18:05:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fck8uCd0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KZa2Xia/"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD57D5;
-	Sat, 18 Nov 2023 10:05:11 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-507a55302e0so4478341e87.0;
-        Sat, 18 Nov 2023 10:05:11 -0800 (PST)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ABAE6;
+	Sat, 18 Nov 2023 10:05:12 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9df8d0c2505so579278566b.0;
+        Sat, 18 Nov 2023 10:05:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700330710; x=1700935510; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700330711; x=1700935511; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=m823d+6CNTStctZTlRF6jC0ql5SePV7hnpsYwUIZVes=;
-        b=fck8uCd08+QY15tjX0829cssiL6fl8beopVa0m6+LIRApg2iN1Xtk8bxahGcIW+cSt
-         FPzrCdUW1DpVNzAX6qN0288+FYGzvMwAjz6iuDYxmV+EeIG34ORCpJp35VBw9hSPE48p
-         Iyph66NftfA9S7I4hiC2DOaXqlQblEQqXrcxSkSr2AlTVWL9ESv3468K75kt35mEMbRa
-         oXtTAzIVUBHrHuqsFNRNG/oOU7BZI9ttCxzR8p8hWKEzbmDvsSL1SbSiS4ZYML7+De1F
-         DPM5bIoLdLHctkyAspUCyAl/1rD5MxSmnMMxwOVIGRaAU2PinpgoYBqajY8zBGofOjCI
-         8eqw==
+        bh=ZEQQ4sBftaBxEQfqkfYlxYDOwzoa8t3+UXmC0vdAGio=;
+        b=KZa2Xia/iQXFdBV84GKBJ2jo5iqcLvUFFXEP2+pd4EEBveWryZYrHM4CBEjwkdwW+q
+         9IAI9vSeX/T7mm5bQnEsBesvn11mGLqFmb6a7dHJDPkm6JZc5G7BxvnFfwh+Iqb0ZMmD
+         h6rUs/GKeVbG42MXgY6bTomST658EpzoJn0LS3s7ValvMiXir+2DcjuCyX8ioRv+Ef7F
+         JQGwFZ1Yf9gF/Anu1ga3QGK7s1Syqy6KIRUtnRM0We/OBFlFLz4Hf0xW3VKiVrfRREyi
+         WtwCUBCnX+o0s05YFRsq9qXyABOapKO2SIDpIs863vxP6Zc2+rbMz3aNt4AOsQZPAhK7
+         7yew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700330710; x=1700935510;
+        d=1e100.net; s=20230601; t=1700330711; x=1700935511;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=m823d+6CNTStctZTlRF6jC0ql5SePV7hnpsYwUIZVes=;
-        b=UJ5Vw2rsEDqTrwFNGKPSYnPca5t3w5x8OqGuFYhH4npe+7MwkjH2fFHhw4Umz9bVuX
-         9ka9VgjRLXRqmcixD6j39Q2mCmGvA56HZcq+L6HkjyTOna3Jsru32VT7QjUXIchX60vr
-         /DYmB2vkdtdj6OaPFVVxCAp4thq61j5HeGH1IWbXJLcEI+izh+oTxtTJJlmGd5EWCqyf
-         7q+FKkmdjqHs4wd9Cfc2vMG67qBDscnJfNvMEWZ72LYGuCUSWBI4YS/qS+htcalTLK2y
-         0y9JpkNb0pPtAkow6XXeYV5GVf6wULdylA612T1o5FbKUS9AHyp5RHfdM24cXBD4LUrx
-         4ZOQ==
-X-Gm-Message-State: AOJu0YyW3gfxWfpImOAq0r1EalHLoDfq9tAa/nn99eWaOmSa03mh0Ndi
-	QVC1Bd8Xp1m/s3GqWlFIlJM=
-X-Google-Smtp-Source: AGHT+IFROdg7gPmlIFCPse42v7vDQFPS0hPiJBsGanKEvSk5SpE6uuegk9VurbWaA5W951lqH1JOYg==
-X-Received: by 2002:ac2:554f:0:b0:509:4adb:1dd3 with SMTP id l15-20020ac2554f000000b005094adb1dd3mr2004957lfk.56.1700330709801;
-        Sat, 18 Nov 2023 10:05:09 -0800 (PST)
+        bh=ZEQQ4sBftaBxEQfqkfYlxYDOwzoa8t3+UXmC0vdAGio=;
+        b=WGCwlXpO/I2MM3ngdq/uLuBeraXp+E4AJp5WTITjFb5RPLUbchFFKCcy4Q5tSJiDjS
+         VPkJtgLU1CwkDg3Ehlu62wVUPax2oolAJUympqUb1mdAHuqTs5COi/Xmg57F5mBF6GKL
+         I8HZLdHC58FyQB8QHRPk3iCMLYJn6gGAoku4CoQf/GWIwnjN4+G8fHZL0+F0da0O4bD6
+         Mj1o7fKzKwlJiZv9wGRJS7FG6Pjsy96yIqX2iA8Bqz2NjP5LopBTZvqTM1Vcz0Hb8ZtJ
+         Zu5Gj3v7ELfemwXWrCjS0MxKsDUKXc9YvE92vbHaJqukZDwgGK5lLH64JHeibv5TAMEU
+         Ts+A==
+X-Gm-Message-State: AOJu0YzBZxbjB3cWsIL+StsBgKj09hQNppUfBfgXheCUJzp2VOfV2pYB
+	tdxNPtPCA94TMNx79KfcJ5qzKsPzUhux1w==
+X-Google-Smtp-Source: AGHT+IGYLilIkdrNACXRJAHaolL+uXijwWBEXjtZAesjgsYT4+SMXgcWH+uTG6gF4MPghLKCC6/PYA==
+X-Received: by 2002:a17:907:d21:b0:9f4:1bd6:2d26 with SMTP id gn33-20020a1709070d2100b009f41bd62d26mr10976580ejc.0.1700330710912;
+        Sat, 18 Nov 2023 10:05:10 -0800 (PST)
 Received: from zotac.lan. (dynamic-2a01-0c22-77bf-8300-2223-08ff-fe18-0310.c22.pool.telefonica.de. [2a01:c22:77bf:8300:2223:8ff:fe18:310])
         by smtp.gmail.com with ESMTPSA id m20-20020a1709062b9400b009f2c769b4ebsm2079456ejg.151.2023.11.18.10.05.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Nov 2023 10:05:09 -0800 (PST)
+        Sat, 18 Nov 2023 10:05:10 -0800 (PST)
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Wolfram Sang <wsa@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>
+	Viresh Kumar <vireshk@kernel.org>
 Cc: linux-i2c@vger.kernel.org,
 	Heiner Kallweit <hkallweit1@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
+	Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	greybus-dev@lists.linaro.org,
+	linux-staging@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 01/10] drivers/i2c/busses: Don't let i2c adapters declare I2C_CLASS_SPD support if they support I2C_CLASS_HWMON
-Date: Sat, 18 Nov 2023 19:04:55 +0100
-Message-ID: <20231118180504.1785-2-hkallweit1@gmail.com>
+Subject: [PATCH 02/10] drivers/staging/greybus/i2c.c: Don't let i2c adapters declare I2C_CLASS_SPD support if they support I2C_CLASS_HWMON
+Date: Sat, 18 Nov 2023 19:04:56 +0100
+Message-ID: <20231118180504.1785-3-hkallweit1@gmail.com>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <20231118180504.1785-1-hkallweit1@gmail.com>
 References: <20231118180504.1785-1-hkallweit1@gmail.com>
@@ -85,175 +89,21 @@ Series was created supported by Coccinelle and its splitpatch.
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
 ---
- drivers/i2c/busses/i2c-ali1535.c |    2 +-
- drivers/i2c/busses/i2c-ali15x3.c |    2 +-
- drivers/i2c/busses/i2c-amd756.c  |    2 +-
- drivers/i2c/busses/i2c-amd8111.c |    2 +-
- drivers/i2c/busses/i2c-isch.c    |    2 +-
- drivers/i2c/busses/i2c-nforce2.c |    2 +-
- drivers/i2c/busses/i2c-piix4.c   |    2 +-
- drivers/i2c/busses/i2c-sis5595.c |    2 +-
- drivers/i2c/busses/i2c-sis630.c  |    2 +-
- drivers/i2c/busses/i2c-sis96x.c  |    2 +-
- drivers/i2c/busses/i2c-via.c     |    2 +-
- drivers/i2c/busses/i2c-viapro.c  |    2 +-
- 12 files changed, 12 insertions(+), 12 deletions(-)
+ drivers/staging/greybus/i2c.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-ali1535.c b/drivers/i2c/busses/i2c-ali1535.c
-index ee83c4581..461eb23f9 100644
---- a/drivers/i2c/busses/i2c-ali1535.c
-+++ b/drivers/i2c/busses/i2c-ali1535.c
-@@ -477,7 +477,7 @@ static const struct i2c_algorithm smbus_algorithm = {
+diff --git a/drivers/staging/greybus/i2c.c b/drivers/staging/greybus/i2c.c
+index de2f6516d..22325ab9d 100644
+--- a/drivers/staging/greybus/i2c.c
++++ b/drivers/staging/greybus/i2c.c
+@@ -264,7 +264,7 @@ static int gb_i2c_probe(struct gbphy_device *gbphy_dev,
+ 	/* Looks good; up our i2c adapter */
+ 	adapter = &gb_i2c_dev->adapter;
+ 	adapter->owner = THIS_MODULE;
+-	adapter->class = I2C_CLASS_HWMON | I2C_CLASS_SPD;
++	adapter->class = I2C_CLASS_HWMON;
+ 	adapter->algo = &gb_i2c_algorithm;
  
- static struct i2c_adapter ali1535_adapter = {
- 	.owner		= THIS_MODULE,
--	.class          = I2C_CLASS_HWMON | I2C_CLASS_SPD,
-+	.class          = I2C_CLASS_HWMON,
- 	.algo		= &smbus_algorithm,
- };
- 
-diff --git a/drivers/i2c/busses/i2c-ali15x3.c b/drivers/i2c/busses/i2c-ali15x3.c
-index 0231c5be6..d2fa30deb 100644
---- a/drivers/i2c/busses/i2c-ali15x3.c
-+++ b/drivers/i2c/busses/i2c-ali15x3.c
-@@ -461,7 +461,7 @@ static const struct i2c_algorithm smbus_algorithm = {
- 
- static struct i2c_adapter ali15x3_adapter = {
- 	.owner		= THIS_MODULE,
--	.class          = I2C_CLASS_HWMON | I2C_CLASS_SPD,
-+	.class          = I2C_CLASS_HWMON,
- 	.algo		= &smbus_algorithm,
- };
- 
-diff --git a/drivers/i2c/busses/i2c-amd756.c b/drivers/i2c/busses/i2c-amd756.c
-index ef1307a25..208310db9 100644
---- a/drivers/i2c/busses/i2c-amd756.c
-+++ b/drivers/i2c/busses/i2c-amd756.c
-@@ -285,7 +285,7 @@ static const struct i2c_algorithm smbus_algorithm = {
- 
- struct i2c_adapter amd756_smbus = {
- 	.owner		= THIS_MODULE,
--	.class          = I2C_CLASS_HWMON | I2C_CLASS_SPD,
-+	.class          = I2C_CLASS_HWMON,
- 	.algo		= &smbus_algorithm,
- };
- 
-diff --git a/drivers/i2c/busses/i2c-amd8111.c b/drivers/i2c/busses/i2c-amd8111.c
-index 1ed7e945b..42a9b1221 100644
---- a/drivers/i2c/busses/i2c-amd8111.c
-+++ b/drivers/i2c/busses/i2c-amd8111.c
-@@ -449,7 +449,7 @@ static int amd8111_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	smbus->adapter.owner = THIS_MODULE;
- 	snprintf(smbus->adapter.name, sizeof(smbus->adapter.name),
- 		"SMBus2 AMD8111 adapter at %04x", smbus->base);
--	smbus->adapter.class = I2C_CLASS_HWMON | I2C_CLASS_SPD;
-+	smbus->adapter.class = I2C_CLASS_HWMON;
- 	smbus->adapter.algo = &smbus_algorithm;
- 	smbus->adapter.algo_data = smbus;
- 
-diff --git a/drivers/i2c/busses/i2c-isch.c b/drivers/i2c/busses/i2c-isch.c
-index 1dc1ceaa4..416a9968e 100644
---- a/drivers/i2c/busses/i2c-isch.c
-+++ b/drivers/i2c/busses/i2c-isch.c
-@@ -249,7 +249,7 @@ static const struct i2c_algorithm smbus_algorithm = {
- 
- static struct i2c_adapter sch_adapter = {
- 	.owner		= THIS_MODULE,
--	.class		= I2C_CLASS_HWMON | I2C_CLASS_SPD,
-+	.class		= I2C_CLASS_HWMON,
- 	.algo		= &smbus_algorithm,
- };
- 
-diff --git a/drivers/i2c/busses/i2c-nforce2.c b/drivers/i2c/busses/i2c-nforce2.c
-index 38d203d93..fab662e6b 100644
---- a/drivers/i2c/busses/i2c-nforce2.c
-+++ b/drivers/i2c/busses/i2c-nforce2.c
-@@ -349,7 +349,7 @@ static int nforce2_probe_smb(struct pci_dev *dev, int bar, int alt_reg,
- 		return -EBUSY;
- 	}
- 	smbus->adapter.owner = THIS_MODULE;
--	smbus->adapter.class = I2C_CLASS_HWMON | I2C_CLASS_SPD;
-+	smbus->adapter.class = I2C_CLASS_HWMON;
- 	smbus->adapter.algo = &smbus_algorithm;
- 	smbus->adapter.algo_data = smbus;
- 	smbus->adapter.dev.parent = &dev->dev;
-diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-index 809fbd014..6a0392172 100644
---- a/drivers/i2c/busses/i2c-piix4.c
-+++ b/drivers/i2c/busses/i2c-piix4.c
-@@ -943,7 +943,7 @@ static int piix4_add_adapter(struct pci_dev *dev, unsigned short smba,
- 	}
- 
- 	adap->owner = THIS_MODULE;
--	adap->class = I2C_CLASS_HWMON | I2C_CLASS_SPD;
-+	adap->class = I2C_CLASS_HWMON;
- 	adap->algo = sb800_main ? &piix4_smbus_algorithm_sb800
- 				: &smbus_algorithm;
- 
-diff --git a/drivers/i2c/busses/i2c-sis5595.c b/drivers/i2c/busses/i2c-sis5595.c
-index 486f1e9df..32476dc10 100644
---- a/drivers/i2c/busses/i2c-sis5595.c
-+++ b/drivers/i2c/busses/i2c-sis5595.c
-@@ -353,7 +353,7 @@ static const struct i2c_algorithm smbus_algorithm = {
- 
- static struct i2c_adapter sis5595_adapter = {
- 	.owner		= THIS_MODULE,
--	.class          = I2C_CLASS_HWMON | I2C_CLASS_SPD,
-+	.class          = I2C_CLASS_HWMON,
- 	.algo		= &smbus_algorithm,
- };
- 
-diff --git a/drivers/i2c/busses/i2c-sis630.c b/drivers/i2c/busses/i2c-sis630.c
-index 87d56250d..3505cf29c 100644
---- a/drivers/i2c/busses/i2c-sis630.c
-+++ b/drivers/i2c/busses/i2c-sis630.c
-@@ -493,7 +493,7 @@ static const struct i2c_algorithm smbus_algorithm = {
- 
- static struct i2c_adapter sis630_adapter = {
- 	.owner		= THIS_MODULE,
--	.class		= I2C_CLASS_HWMON | I2C_CLASS_SPD,
-+	.class		= I2C_CLASS_HWMON,
- 	.algo		= &smbus_algorithm,
- 	.retries	= 3
- };
-diff --git a/drivers/i2c/busses/i2c-sis96x.c b/drivers/i2c/busses/i2c-sis96x.c
-index cde800398..77529dda6 100644
---- a/drivers/i2c/busses/i2c-sis96x.c
-+++ b/drivers/i2c/busses/i2c-sis96x.c
-@@ -228,7 +228,7 @@ static const struct i2c_algorithm smbus_algorithm = {
- 
- static struct i2c_adapter sis96x_adapter = {
- 	.owner		= THIS_MODULE,
--	.class		= I2C_CLASS_HWMON | I2C_CLASS_SPD,
-+	.class		= I2C_CLASS_HWMON,
- 	.algo		= &smbus_algorithm,
- };
- 
-diff --git a/drivers/i2c/busses/i2c-via.c b/drivers/i2c/busses/i2c-via.c
-index ad4f09c7f..7ed29992a 100644
---- a/drivers/i2c/busses/i2c-via.c
-+++ b/drivers/i2c/busses/i2c-via.c
-@@ -70,7 +70,7 @@ static struct i2c_algo_bit_data bit_data = {
- 
- static struct i2c_adapter vt586b_adapter = {
- 	.owner		= THIS_MODULE,
--	.class          = I2C_CLASS_HWMON | I2C_CLASS_SPD,
-+	.class          = I2C_CLASS_HWMON,
- 	.name		= "VIA i2c",
- 	.algo_data	= &bit_data,
- };
-diff --git a/drivers/i2c/busses/i2c-viapro.c b/drivers/i2c/busses/i2c-viapro.c
-index 970ccdcbb..2cc7bba3b 100644
---- a/drivers/i2c/busses/i2c-viapro.c
-+++ b/drivers/i2c/busses/i2c-viapro.c
-@@ -304,7 +304,7 @@ static const struct i2c_algorithm smbus_algorithm = {
- 
- static struct i2c_adapter vt596_adapter = {
- 	.owner		= THIS_MODULE,
--	.class		= I2C_CLASS_HWMON | I2C_CLASS_SPD,
-+	.class		= I2C_CLASS_HWMON,
- 	.algo		= &smbus_algorithm,
- };
- 
+ 	adapter->dev.parent = &gbphy_dev->dev;
 
 
