@@ -1,150 +1,136 @@
-Return-Path: <linux-i2c+bounces-216-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-217-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E80157EFC8D
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Nov 2023 01:31:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6A567F0162
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Nov 2023 18:42:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D727CB20B8D
-	for <lists+linux-i2c@lfdr.de>; Sat, 18 Nov 2023 00:31:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 676B91F22D9F
+	for <lists+linux-i2c@lfdr.de>; Sat, 18 Nov 2023 17:42:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EA70809;
-	Sat, 18 Nov 2023 00:31:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E8CA14F6B;
+	Sat, 18 Nov 2023 17:42:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=feathertop.org header.i=@feathertop.org header.b="e6ivXeFT";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="tcgV+BHI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XnnARijD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628AFD7E;
-	Fri, 17 Nov 2023 16:31:40 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailout.nyi.internal (Postfix) with ESMTP id 3E5FE5C00C6;
-	Fri, 17 Nov 2023 19:31:37 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 17 Nov 2023 19:31:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=feathertop.org;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:sender:subject:subject:to:to;
-	 s=fm3; t=1700267497; x=1700353897; bh=/fgtpcHgSxhcVDgEhVXlZfO4k
-	mpZ8rHgP4Q8kKZbK4M=; b=e6ivXeFTXs5gXSZGLuPHQSxnsnd6VdT0Z7xa1YFFP
-	9bQVQiGEtlKamwaC6NW3sQyDpuRgrQEAYUcfQvmYbTCJefqghurV6VghLHu1GUb4
-	1w8WJep1aQ29DBUb03nIFNKaJ5VVv7JaQmryfYejtiBZjSBWZGYMSrMbb88huuQx
-	hAkc5/xL+uS20k1rmawPYPs+7L4y1mpQc1R0Sbx0VNbo9s0w1WJ+7GPBuKOwzMHm
-	cQQrU+DES/ugkMbXHjdTaEaKLZ6kGa0vRogV7p42MZlKlV07hav7ll+Lf9z9v4kh
-	w70LwBceXs6HUDO7+tYn1TddI4uqL6nCEkFRLoP6sPp2Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1700267497; x=1700353897; bh=/fgtpcHgSxhcVDgEhVXlZfO4kmpZ8rHgP4Q
-	8kKZbK4M=; b=tcgV+BHIAFVsPOQiKqiUTt7uiAwP0SDmi8yxdPnnq9RsyLrU2ZI
-	u1hRvxGx4snh6K1ZQri6wT05TWJ7bXErs+5+AEydJcoyJCfL7LRmAWZYv2ft5RHM
-	XR968j3O/NgYKW+ZLIO2WhjWUIvkO3X1avWJPTneYH+Rjlqp99FhaUxUFAQTGieD
-	JThnZH/z6zPWo3v73je1CJ4ADmq/kN+nHfuILO80kkWOCBQsDBN5//o5jA0P4Zz/
-	abivR8fc4GraGy8inpvuPmfT8tSZCyWcnIbxy23ufUUtnmA4LIrMu7X3MijV0+6t
-	i7Xeq6/Q1SHN1HIW0pvgoPJY/RBSRro8+bg==
-X-ME-Sender: <xms:5wVYZZW84nky9C-XfBq4BqgzVZ9uk249k7Tr5jXf9jyXo_Gbctyv0g>
-    <xme:5wVYZZlFSvKgFwzU7uQOiFALjOcEwZCMk36rW4d7ERwV4XneFhuIF8yv_1QAeJGas
-    X3iZl7eqg>
-X-ME-Received: <xmr:5wVYZVZwk7K_2mzydasM1YRR-eacjdWlzIIGW2nJcN9kvhoCRY2nK-ywxABqeNyWRE-MRJw4Smadq66_tmC2yUUqR6XGdqFDzlnFmg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeguddgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtvdejnecuhfhrohhmpefvihhm
-    ucfnuhhnnhcuoehtihhmsehfvggrthhhvghrthhophdrohhrgheqnecuggftrfgrthhtvg
-    hrnhepheehgfelhfffgeefkefgjeelkeduleefvefhgfekgfetfeetvdeigeekjedvffeh
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepthhimh
-    esfhgvrghthhgvrhhtohhprdhorhhg
-X-ME-Proxy: <xmx:5wVYZcWE3-eI4J2rxdiu_cnBn08MbWGWmietTU6dUgHUA8y71C-lpQ>
-    <xmx:5wVYZTlKVAMMpO47ZuMQD538iYBo8SgH-PfI8I4rgvP68a7wh7mSkQ>
-    <xmx:5wVYZZdsBYEjrbX4ArUrtgpGM6H6FReVtCdEjN2b6ylD9xgLpF7rUQ>
-    <xmx:6QVYZV4a99zVCYA47QtxzuN2_pXV-4u2Eje8H0BgK7czo3gRFddQXA>
-Feedback-ID: i1f8241ce:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 17 Nov 2023 19:31:31 -0500 (EST)
-Message-ID: <d552f438-157a-4682-8d74-6e05ce5a2c91@feathertop.org>
-Date: Sat, 18 Nov 2023 11:31:26 +1100
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1DDC0;
+	Sat, 18 Nov 2023 09:42:28 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-40838915cecso4678365e9.2;
+        Sat, 18 Nov 2023 09:42:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700329346; x=1700934146; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4/UMvWLGwbB65y4MgNgbTrhLeriroJNqxOaU5RBpd/A=;
+        b=XnnARijDh1M/UQgQZs9Z/DUnt/ayVcFB3fjt9I0JChHWd4ePxAQPF3MhJgdHrvxlxp
+         4YZLRIy03ZEV0LARepP5UyMfgg0gxM9xqAoTE89OB5+/cV0EhIJiSB04TjAbLUYFazHW
+         OhbWrnfzjd1/gvpV+i4bfxgFfoA7ezkLLJ4/UwkAudF7ccEx/Zz5AVAaposwTvhTBlum
+         iHqi/wF78iBrw0TYyVj8FlofFZFFjSzoo5vKY3KC3ybWLB19vxHSiUDTB0UMYT1FKKEj
+         9QAWjVPbU2eXcfUVq8HIBuih8lR1WN3o1vFIgjqWA1+QnrqbZo6Zlsogqk9Lr5y81P8P
+         /cPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700329346; x=1700934146;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4/UMvWLGwbB65y4MgNgbTrhLeriroJNqxOaU5RBpd/A=;
+        b=hjM7/cMSPMiIFrhkPxJ8aVdgZkn9CHvYJx8XhR2meDUWs32LL35PszwWL8ZKn7ExJl
+         0noq58aNYhCEf4QE25O3XgS0FGY+rcelo1SsuWTLHpRdYZV5aMQI1LPO5tsA5PW2jvKY
+         ndFf7qMdZvDniINnmvcu68OAU06lQu2T8NSwh/gT66eX9OdawxGS8kdlQrEIdb2+yDgD
+         aNkWhCKlgHGVI4IYtJNP0e+PsPX6WoxW7MTTo2cEHqBT5VRjSP2fRhTbJsHOb6bqlGfY
+         UHpnwVMSHXctoT+zojVlMIeRGXhfEO97ToByq9Nz8LA7Map3Q8+ox0TFZw3L0E8P1+1f
+         E2ZA==
+X-Gm-Message-State: AOJu0YzJhqzPfuK8rlr/mnLP0U2d+R1SA/aM5UA5gDLarzLTaC6xnp6u
+	Nk91CyO5traHgdX8l2gWfu8=
+X-Google-Smtp-Source: AGHT+IGJBMJGBtOSgxjPC+wTqBOjKUX0OkeFIG96ALnW2TXBuODjpDTjYiE8IirfVuZmHsPbu37kWw==
+X-Received: by 2002:a05:600c:46cd:b0:407:7ea1:e9a4 with SMTP id q13-20020a05600c46cd00b004077ea1e9a4mr2170232wmo.5.1700329345971;
+        Sat, 18 Nov 2023 09:42:25 -0800 (PST)
+Received: from zotac.lan. (dynamic-2a01-0c22-77bf-8300-2223-08ff-fe18-0310.c22.pool.telefonica.de. [2a01:c22:77bf:8300:2223:8ff:fe18:310])
+        by smtp.gmail.com with ESMTPSA id y10-20020a05600c340a00b004068de50c64sm6964211wmp.46.2023.11.18.09.42.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Nov 2023 09:42:25 -0800 (PST)
+From: Heiner Kallweit <hkallweit1@gmail.com>
+To: Wolfram Sang <wsa@kernel.org>,
+	intel-gfx@lists.freedesktop.org
+Cc: linux-i2c@vger.kernel.org,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	linux-fbdev@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org,
+	linux-rockchip@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Jocelyn Falempe <jfalempe@redhat.com>,
+	linux-sunxi@lists.linux.dev,
+	linux-mediatek@lists.infradead.org,
+	Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org,
+	freedreno@lists.freedesktop.org,
+	Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Yongqin Liu <yongqin.liu@linaro.org>,
+	John Stultz <jstultz@google.com>
+Subject: [PATCH 00/20] remove I2C_CLASS_DDC support
+Date: Sat, 18 Nov 2023 18:42:00 +0100
+Message-ID: <20231118174221.851-1-hkallweit1@gmail.com>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/8] i2c: rk3x: Adjust grf offset for i2c2 on rv1126
-Content-Language: en-US
-To: Heiko Stuebner <heiko@sntech.de>, linux-rockchip@lists.infradead.org,
- devicetree@vger.kernel.org
-Cc: Jagan Teki <jagan@edgeble.ai>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Rob Herring <robh+dt@kernel.org>, linux-arm-kernel@lists.infradead.org,
- Conor Dooley <conor+dt@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- linux-i2c@vger.kernel.org
-References: <20231113120705.1647498-1-tim@feathertop.org>
- <20231113120705.1647498-4-tim@feathertop.org> <4846724.GXAFRqVoOG@phil>
-From: Tim Lunn <tim@feathertop.org>
-In-Reply-To: <4846724.GXAFRqVoOG@phil>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Heiko,
+After removal of the legacy EEPROM driver and I2C_CLASS_DDC support in
+olpc_dcon there's no i2c client driver left supporting I2C_CLASS_DDC.
+Class-based device auto-detection is a legacy mechanism and shouldn't
+be used in new code. So we can remove this class completely now.
 
-On 11/17/23 06:54, Heiko Stuebner wrote:
-> Hi,
->
-> Am Montag, 13. November 2023, 13:07:00 CET schrieb Tim Lunn:
->> Rockchip RV1126 has a special case grf offset/mask for i2c2
-> This sounds misleading. When looking at the soc-data, the grf offset
-> seems to be the same for all busses of the rv1126, only the offset
-> seems to be different for i2c2.
->
-> Sadly I don't have (and didn't find any) rv1126 TRM, so couldn't verify.
->
-> Change itself looks nice. As it's only this one bus of one soc so far,
-> we likely won't need a more involved solution just now.
->
-Thanks for your comments. I agree it sounds a bit misleading, I will clarify
-  the commit message and comments in v2 of this series.
+Preferably this series should be applied via the i2c tree.
 
-Unfortunately I dont have access to the TRM either, however I have validated
-  that this fixes i2c2 on actual hardware.
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
->
->> Signed-off-by: Tim Lunn <tim@feathertop.org>
->> ---
->>
->>   drivers/i2c/busses/i2c-rk3x.c | 8 ++++++--
->>   1 file changed, 6 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
->> index a044ca0c35a1..83b7bf7b48a7 100644
->> --- a/drivers/i2c/busses/i2c-rk3x.c
->> +++ b/drivers/i2c/busses/i2c-rk3x.c
->> @@ -1288,8 +1288,12 @@ static int rk3x_i2c_probe(struct platform_device *pdev)
->>   			return -EINVAL;
->>   		}
->>   
->> -		/* 27+i: write mask, 11+i: value */
->> -		value = BIT(27 + bus_nr) | BIT(11 + bus_nr);
->> +		if (i2c->soc_data == &rv1126_soc_data && bus_nr == 2)
->> +			/* rv1126 i2c2 set pmugrf offset-0x118, bit-4 */
-> same here, comment could drop the offset reference I guess.
->
->> +			value = BIT(20) | BIT(4);
->> +		else
->> +			/* 27+i: write mask, 11+i: value */
->> +			value = BIT(27 + bus_nr) | BIT(11 + bus_nr);
->>   
->>   		ret = regmap_write(grf, i2c->soc_data->grf_offset, value);
->>   		if (ret != 0) {
->>
->
-> Heiko
->
->
+---
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c           |    1 -
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |    1 -
+ drivers/gpu/drm/ast/ast_i2c.c                     |    1 -
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c         |    1 -
+ drivers/gpu/drm/display/drm_dp_helper.c           |    1 -
+ drivers/gpu/drm/display/drm_dp_mst_topology.c     |    1 -
+ drivers/gpu/drm/gma500/cdv_intel_dp.c             |    1 -
+ drivers/gpu/drm/gma500/intel_gmbus.c              |    1 -
+ drivers/gpu/drm/gma500/oaktrail_hdmi_i2c.c        |    1 -
+ drivers/gpu/drm/gma500/psb_intel_sdvo.c           |    1 -
+ drivers/gpu/drm/hisilicon/hibmc/hibmc_drm_i2c.c   |    1 -
+ drivers/gpu/drm/i915/display/intel_gmbus.c        |    1 -
+ drivers/gpu/drm/i915/display/intel_sdvo.c         |    1 -
+ drivers/gpu/drm/loongson/lsdc_i2c.c               |    1 -
+ drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c           |    1 -
+ drivers/gpu/drm/mgag200/mgag200_i2c.c             |    1 -
+ drivers/gpu/drm/msm/hdmi/hdmi_i2c.c               |    1 -
+ drivers/gpu/drm/radeon/radeon_i2c.c               |    1 -
+ drivers/gpu/drm/rockchip/inno_hdmi.c              |    1 -
+ drivers/gpu/drm/rockchip/rk3066_hdmi.c            |    1 -
+ drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c            |    1 -
+ drivers/video/fbdev/core/fb_ddc.c                 |    1 -
+ drivers/video/fbdev/cyber2000fb.c                 |    1 -
+ drivers/video/fbdev/i740fb.c                      |    1 -
+ drivers/video/fbdev/intelfb/intelfb_i2c.c         |   15 +++++----------
+ drivers/video/fbdev/matrox/i2c-matroxfb.c         |   12 ++++--------
+ drivers/video/fbdev/s3fb.c                        |    1 -
+ drivers/video/fbdev/tdfxfb.c                      |    1 -
+ drivers/video/fbdev/tridentfb.c                   |    1 -
+ drivers/video/fbdev/via/via_i2c.c                 |    1 -
+ include/linux/i2c.h                               |    1 -
+ 31 files changed, 9 insertions(+), 47 deletions(-)
 
