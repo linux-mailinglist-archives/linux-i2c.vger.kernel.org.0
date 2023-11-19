@@ -1,171 +1,131 @@
-Return-Path: <linux-i2c+bounces-252-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-253-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 728887F045A
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 Nov 2023 05:46:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66A847F04D4
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 Nov 2023 09:39:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E2641F22373
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 Nov 2023 04:46:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9C0AB2098E
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 Nov 2023 08:39:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E192185A;
-	Sun, 19 Nov 2023 04:46:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C15146B4;
+	Sun, 19 Nov 2023 08:39:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mDfEcYn3"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="2RKkF2RM";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="TOc2xSAW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3895192;
-	Sat, 18 Nov 2023 20:46:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700369207; x=1731905207;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yjy1hnZoy8EpUYxdS9+3c1qFSR3s+PuC8hjfRrt0Szg=;
-  b=mDfEcYn3BX1g8QyE+2uUcUa0Pk7MMY2TBDQFYTmUay1tLDHvPFfmpezl
-   MRSXevyvSBcyp8EZw+TLJPVHkfWB16Mr9wWjEd2BsR9q6+a9XprM6fPGR
-   FUUxgPFw4+0lYepHYnmPQVpdXMJNIFIoP+wGDt24z0a0tUBbudqCv3pD4
-   mGattaTDTdLNMLOFiCdPbuXGIm8a5p54re7Lr7T6Nv3brTd5m0B2BhGHL
-   bjC5pgkON8j8nRv3T1pHw34fbtR1WmRaKZ1iI52/cLuCXlpXeJW28S53l
-   1pBsFEwAeDBvN4QEB2K8JS91y2ADQyLYfmaF339FRSYBbTfvPbJjRT9V5
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="390331100"
-X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="390331100"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2023 20:46:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10898"; a="889610134"
-X-IronPort-AV: E=Sophos;i="6.04,209,1695711600"; 
-   d="scan'208";a="889610134"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 18 Nov 2023 20:46:44 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r4Zhi-0004eV-0z;
-	Sun, 19 Nov 2023 04:46:42 +0000
-Date: Sun, 19 Nov 2023 12:46:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Heiner Kallweit <hkallweit1@gmail.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Helge Deller <deller@gmx.de>
-Cc: oe-kbuild-all@lists.linux.dev, linux-i2c@vger.kernel.org,
-	Heiner Kallweit <hkallweit1@gmail.com>, linux-fbdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 05/20] drivers/video/fbdev: remove I2C_CLASS_DDC
- support
-Message-ID: <202311191235.fdwRQUG6-lkp@intel.com>
-References: <20231118174221.851-6-hkallweit1@gmail.com>
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A954A2
+	for <linux-i2c@vger.kernel.org>; Sun, 19 Nov 2023 00:39:05 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id D35E0228B8;
+	Sun, 19 Nov 2023 08:39:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1700383143; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VfAceHUWlJwBfoe48AJnPOJCRJwPYKNQdgDMr91G+Cc=;
+	b=2RKkF2RMUktWBscXOisL68kZDjyeoLrrpLr/TowuwCKsxrnL6OSH2QXR1Hg+KUfUmvo6dq
+	h80qECVefwcEVFQJaqtBpqCJzFOEe26TBgjUQhG0PKFzfFWT0F97/YyQFV8uF/x1s3vOet
+	Xg3tWIGJHY+IZJ+PfCY3S06eBYY/RCc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1700383143;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VfAceHUWlJwBfoe48AJnPOJCRJwPYKNQdgDMr91G+Cc=;
+	b=TOc2xSAWpKrR4tPLWVVZWfdu/yZr4Vi0oXkZ7bjPvge8B3nmzifiEeVe2Yq/ojJvu+8NvH
+	rBPnDZtN+XL8jgDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AC188139C4;
+	Sun, 19 Nov 2023 08:39:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id rKl8KKfJWWX2FgAAMHmgww
+	(envelope-from <jdelvare@suse.de>); Sun, 19 Nov 2023 08:39:03 +0000
+Date: Sun, 19 Nov 2023 09:39:02 +0100
+From: Jean Delvare <jdelvare@suse.de>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: linux-i2c@vger.kernel.org
+Subject: Re: [PATCH RFC] i2c: i801: Add i801_register_jc42, similar to
+ i2c_register_spd
+Message-ID: <20231119093902.739b4602@endymion.delvare>
+In-Reply-To: <5f2ed562-319c-4439-a235-c1a01373c1fe@gmail.com>
+References: <79977020-69c3-4f87-b861-b043c7fb9077@gmail.com>
+	<b9a832d6-f7a8-4a9d-b639-181e074b4e9a@gmail.com>
+	<20231114150001.6823e277@endymion.delvare>
+	<37aa2c39-8192-42be-8021-a2147252f27b@gmail.com>
+	<5f2ed562-319c-4439-a235-c1a01373c1fe@gmail.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231118174221.851-6-hkallweit1@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spam-Level: 
+X-Spam-Score: -1.76
+X-Spamd-Result: default: False [-1.76 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 HAS_ORG_HEADER(0.00)[];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCPT_COUNT_TWO(0.00)[2];
+	 FREEMAIL_TO(0.00)[gmail.com];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_COUNT_TWO(0.00)[2];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-0.46)[79.09%]
 
 Hi Heiner,
 
-kernel test robot noticed the following build errors:
+On Wed, 15 Nov 2023 12:00:18 +0100, Heiner Kallweit wrote:
+> After thinking once more about it I think we have to do it from the
+> ee1004 driver for DDR4. For DDR3 from at24. Only this way we can read
+> the "temp sensor present" flag from SPD. E.g. for ee1004 the SPD EEPROM
+> may be switched to the second page and we have to switch it to the first
+> page first.
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm-intel/for-linux-next drm-intel/for-linux-next-fixes sunxi/sunxi/for-next wsa/i2c/for-next drm-tip/drm-tip linus/master v6.7-rc1 next-20231117]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+We indeed need to read the EEPROM data at some point. My initial
+thinking was to instantiate the at24 or ee1004 device first (from
+i2c-smbus), then read the value from the EEPROM and instantiate the
+jc42 device (still from i2c-smbus). This requires an internal read
+function. I think we already have that in at24, because it uses the
+nvmem framework, but ee1004 lacks it as far as I can see.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Heiner-Kallweit/drivers-gpu-drm-rockchip-remove-I2C_CLASS_DDC-support/20231119-014549
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20231118174221.851-6-hkallweit1%40gmail.com
-patch subject: [PATCH v2 05/20] drivers/video/fbdev: remove I2C_CLASS_DDC support
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231119/202311191235.fdwRQUG6-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231119/202311191235.fdwRQUG6-lkp@intel.com/reproduce)
+But anyway, if you have another approach which works, that's equally
+fine with me.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311191235.fdwRQUG6-lkp@intel.com/
+> I'll send a RFC patch for this. Unfortunately I have no RAM with temp
+> sensor to test it.
 
-All errors (new ones prefixed by >>):
-
-   drivers/video/fbdev/matrox/i2c-matroxfb.c: In function 'i2c_matroxfb_probe':
->> drivers/video/fbdev/matrox/i2c-matroxfb.c:178:23: error: too many arguments to function 'i2c_bus_reg'
-     178 |                 err = i2c_bus_reg(&m2info->maven, minfo,
-         |                       ^~~~~~~~~~~
-   drivers/video/fbdev/matrox/i2c-matroxfb.c:102:12: note: declared here
-     102 | static int i2c_bus_reg(struct i2c_bit_adapter* b, struct matrox_fb_info* minfo,
-         |            ^~~~~~~~~~~
-
-
-vim +/i2c_bus_reg +178 drivers/video/fbdev/matrox/i2c-matroxfb.c
-
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  141  
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  142  static void* i2c_matroxfb_probe(struct matrox_fb_info* minfo) {
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  143  	int err;
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  144  	unsigned long flags;
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  145  	struct matroxfb_dh_maven_info* m2info;
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  146  
-2fdbe5cf27aff9 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2007-02-12  147  	m2info = kzalloc(sizeof(*m2info), GFP_KERNEL);
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  148  	if (!m2info)
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  149  		return NULL;
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  150  
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  151  	matroxfb_DAC_lock_irqsave(flags);
-316b4d644caceb drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2009-09-22  152  	matroxfb_DAC_out(minfo, DAC_XGENIODATA, 0xFF);
-316b4d644caceb drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2009-09-22  153  	matroxfb_DAC_out(minfo, DAC_XGENIOCTRL, 0x00);
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  154  	matroxfb_DAC_unlock_irqrestore(flags);
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  155  
-fc2d10ddfc8989 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2009-09-22  156  	switch (minfo->chip) {
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  157  		case MGA_2064:
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  158  		case MGA_2164:
-c1b6b4f2342d07 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-07-14  159  			err = i2c_bus_reg(&m2info->ddc1, minfo,
-c1b6b4f2342d07 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-07-14  160  					  DDC1B_DATA, DDC1B_CLK,
-d0e2994db76d4c drivers/video/fbdev/matrox/i2c-matroxfb.c Heiner Kallweit 2023-11-18  161  					  "DDC:fb%u #0");
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  162  			break;
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  163  		default:
-c1b6b4f2342d07 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-07-14  164  			err = i2c_bus_reg(&m2info->ddc1, minfo,
-c1b6b4f2342d07 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-07-14  165  					  DDC1_DATA, DDC1_CLK,
-d0e2994db76d4c drivers/video/fbdev/matrox/i2c-matroxfb.c Heiner Kallweit 2023-11-18  166  					  "DDC:fb%u #0");
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  167  			break;
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  168  	}
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  169  	if (err)
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  170  		goto fail_ddc1;
-fc2d10ddfc8989 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2009-09-22  171  	if (minfo->devflags.dualhead) {
-d0e2994db76d4c drivers/video/fbdev/matrox/i2c-matroxfb.c Heiner Kallweit 2023-11-18  172  		err = i2c_bus_reg(&m2info->ddc2, minfo, DDC2_DATA, DDC2_CLK, "DDC:fb%u #1");
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  173  		if (err == -ENODEV) {
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  174  			printk(KERN_INFO "i2c-matroxfb: VGA->TV plug detected, DDC unavailable.\n");
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  175  		} else if (err)
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  176  			printk(KERN_INFO "i2c-matroxfb: Could not register secondary output i2c bus. Continuing anyway.\n");
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  177  		/* Register maven bus even on G450/G550 */
-c1b6b4f2342d07 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-07-14 @178  		err = i2c_bus_reg(&m2info->maven, minfo,
-c1b6b4f2342d07 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-07-14  179  				  MAT_DATA, MAT_CLK, "MAVEN:fb%u", 0);
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  180  		if (err)
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  181  			printk(KERN_INFO "i2c-matroxfb: Could not register Maven i2c bus. Continuing anyway.\n");
-10546355323e48 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-08-12  182  		else {
-10546355323e48 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-08-12  183  			struct i2c_board_info maven_info = {
-10546355323e48 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-08-12  184  				I2C_BOARD_INFO("maven", 0x1b),
-10546355323e48 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-08-12  185  			};
-10546355323e48 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-08-12  186  			unsigned short const addr_list[2] = {
-10546355323e48 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-08-12  187  				0x1b, I2C_CLIENT_END
-10546355323e48 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-08-12  188  			};
-10546355323e48 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-08-12  189  
-a72e27f7a47069 drivers/video/fbdev/matrox/i2c-matroxfb.c Wolfram Sang    2019-11-06  190  			i2c_new_scanned_device(&m2info->maven.adapter,
-9a94241afcc9a4 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2010-08-11  191  					       &maven_info, addr_list, NULL);
-10546355323e48 drivers/video/matrox/i2c-matroxfb.c       Jean Delvare    2008-08-12  192  		}
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  193  	}
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  194  	return m2info;
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  195  fail_ddc1:;
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  196  	kfree(m2info);
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  197  	printk(KERN_ERR "i2c-matroxfb: Could not register primary adapter DDC bus.\n");
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  198  	return NULL;
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  199  }
-^1da177e4c3f41 drivers/video/matrox/i2c-matroxfb.c       Linus Torvalds  2005-04-16  200  
+Neither do I :-(
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jean Delvare
+SUSE L3 Support
 
