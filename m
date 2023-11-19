@@ -1,131 +1,136 @@
-Return-Path: <linux-i2c+bounces-253-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-254-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66A847F04D4
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 Nov 2023 09:39:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CB1D7F051D
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 Nov 2023 11:15:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9C0AB2098E
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 Nov 2023 08:39:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DAEEB209D2
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 Nov 2023 10:15:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C15146B4;
-	Sun, 19 Nov 2023 08:39:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCA175231;
+	Sun, 19 Nov 2023 10:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="2RKkF2RM";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="TOc2xSAW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jL7E5l2l"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A954A2
-	for <linux-i2c@vger.kernel.org>; Sun, 19 Nov 2023 00:39:05 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id D35E0228B8;
-	Sun, 19 Nov 2023 08:39:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1700383143; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VfAceHUWlJwBfoe48AJnPOJCRJwPYKNQdgDMr91G+Cc=;
-	b=2RKkF2RMUktWBscXOisL68kZDjyeoLrrpLr/TowuwCKsxrnL6OSH2QXR1Hg+KUfUmvo6dq
-	h80qECVefwcEVFQJaqtBpqCJzFOEe26TBgjUQhG0PKFzfFWT0F97/YyQFV8uF/x1s3vOet
-	Xg3tWIGJHY+IZJ+PfCY3S06eBYY/RCc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1700383143;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VfAceHUWlJwBfoe48AJnPOJCRJwPYKNQdgDMr91G+Cc=;
-	b=TOc2xSAWpKrR4tPLWVVZWfdu/yZr4Vi0oXkZ7bjPvge8B3nmzifiEeVe2Yq/ojJvu+8NvH
-	rBPnDZtN+XL8jgDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AC188139C4;
-	Sun, 19 Nov 2023 08:39:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id rKl8KKfJWWX2FgAAMHmgww
-	(envelope-from <jdelvare@suse.de>); Sun, 19 Nov 2023 08:39:03 +0000
-Date: Sun, 19 Nov 2023 09:39:02 +0100
-From: Jean Delvare <jdelvare@suse.de>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: linux-i2c@vger.kernel.org
-Subject: Re: [PATCH RFC] i2c: i801: Add i801_register_jc42, similar to
- i2c_register_spd
-Message-ID: <20231119093902.739b4602@endymion.delvare>
-In-Reply-To: <5f2ed562-319c-4439-a235-c1a01373c1fe@gmail.com>
-References: <79977020-69c3-4f87-b861-b043c7fb9077@gmail.com>
-	<b9a832d6-f7a8-4a9d-b639-181e074b4e9a@gmail.com>
-	<20231114150001.6823e277@endymion.delvare>
-	<37aa2c39-8192-42be-8021-a2147252f27b@gmail.com>
-	<5f2ed562-319c-4439-a235-c1a01373c1fe@gmail.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A58B6;
+	Sun, 19 Nov 2023 02:14:51 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5431614d90eso4857597a12.1;
+        Sun, 19 Nov 2023 02:14:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700388890; x=1700993690; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4/UMvWLGwbB65y4MgNgbTrhLeriroJNqxOaU5RBpd/A=;
+        b=jL7E5l2lX83YvyxCyw+5hnLKm3CSOvLjmhMPaWAzS0ixWMAw/Y6z/bBz5SvCMlFE6B
+         MFrFXQMjjhehSDjAyaxH0dwRMJwtfIxRP9rYnmALAxTzFJDEPCJ1EpY0JoY8dr8AfC0a
+         IYLW7VE7G4Qzz1NYFJ1MSNOueY5eUUSD9pSpP3WMdaIyn99rYOiUQd7/5RrShuuBDUaN
+         TGfx1dvv2rKD12PaJ0lJ4H2tEu6lcnUvGRzUWiJqjVra7hTv+CleFh83zMev9ZeUfGT7
+         wRUu+bWDOG8bgY/mZjxKtZf7NZ5d1W2F6FsSEOFVWJkwBUWDF+Xww5xosAN2OlxVib3q
+         hUDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700388890; x=1700993690;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4/UMvWLGwbB65y4MgNgbTrhLeriroJNqxOaU5RBpd/A=;
+        b=FoqADeoRHiIhdiB6g2lAra6tRrEIzkEo8KWo274kXd7JI6xIjVL1EqSM0JTbUw3VoM
+         g7EVvYhSnDoGAFhbTmjYG/qZUgju3uvQoeKqflM6zSeBZeN0e2XVhrc4CTlYaj0HFn+w
+         1Epu1Z/Bbw9DUVIIgs8jcxDRD2pra36HqojAXcYqO8Ic3gNTJFUQi1058duiO+RgZtIs
+         cZSOjkNP9QvY6fu0dfrZQNQIKKLXvgKNHyns53TianOYb/BQvYWDW4Eq9+L8O+8Cqfo3
+         XKNQZxbfOK5HlUdoCylKoTiEfAEUeG0Ivtwq8TicemjNmrUMCLq61N/K0RgtmXbhcH3a
+         6kkw==
+X-Gm-Message-State: AOJu0Yy8xWQmw4QCUkqGyyK5qtuarAdM7dTbt1pxEZESBzAhyajAywrb
+	wJ5hzKGAWCBDmfGkyxLclnc=
+X-Google-Smtp-Source: AGHT+IHOF+5hNhpCmZw786pHF3YEeb1uoXP2y9dXXmqI2pn0mNpGlk9gn3AwL3Ck7UOdLXgeibJ+dg==
+X-Received: by 2002:a17:906:ae51:b0:9bf:63b2:b6e2 with SMTP id lf17-20020a170906ae5100b009bf63b2b6e2mr3041311ejb.26.1700388889532;
+        Sun, 19 Nov 2023 02:14:49 -0800 (PST)
+Received: from zotac.lan. (dynamic-2a01-0c23-bde4-3e00-2223-08ff-fe18-0310.c23.pool.telefonica.de. [2a01:c23:bde4:3e00:2223:8ff:fe18:310])
+        by smtp.gmail.com with ESMTPSA id p20-20020a17090628d400b009928b4e3b9fsm2743581ejd.114.2023.11.19.02.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Nov 2023 02:14:49 -0800 (PST)
+From: Heiner Kallweit <hkallweit1@gmail.com>
+To: Wolfram Sang <wsa@kernel.org>,
+	intel-gfx@lists.freedesktop.org
+Cc: linux-i2c@vger.kernel.org,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	linux-fbdev@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org,
+	linux-rockchip@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Jocelyn Falempe <jfalempe@redhat.com>,
+	linux-sunxi@lists.linux.dev,
+	linux-mediatek@lists.infradead.org,
+	Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org,
+	freedreno@lists.freedesktop.org,
+	Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Yongqin Liu <yongqin.liu@linaro.org>,
+	John Stultz <jstultz@google.com>
+Subject: [PATCH 00/20] remove I2C_CLASS_DDC support
+Date: Sun, 19 Nov 2023 11:14:25 +0100
+Message-ID: <20231119101445.4737-1-hkallweit1@gmail.com>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spam-Level: 
-X-Spam-Score: -1.76
-X-Spamd-Result: default: False [-1.76 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 HAS_ORG_HEADER(0.00)[];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 RCPT_COUNT_TWO(0.00)[2];
-	 FREEMAIL_TO(0.00)[gmail.com];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_COUNT_TWO(0.00)[2];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-0.46)[79.09%]
+Content-Transfer-Encoding: 8bit
 
-Hi Heiner,
+After removal of the legacy EEPROM driver and I2C_CLASS_DDC support in
+olpc_dcon there's no i2c client driver left supporting I2C_CLASS_DDC.
+Class-based device auto-detection is a legacy mechanism and shouldn't
+be used in new code. So we can remove this class completely now.
 
-On Wed, 15 Nov 2023 12:00:18 +0100, Heiner Kallweit wrote:
-> After thinking once more about it I think we have to do it from the
-> ee1004 driver for DDR4. For DDR3 from at24. Only this way we can read
-> the "temp sensor present" flag from SPD. E.g. for ee1004 the SPD EEPROM
-> may be switched to the second page and we have to switch it to the first
-> page first.
+Preferably this series should be applied via the i2c tree.
 
-We indeed need to read the EEPROM data at some point. My initial
-thinking was to instantiate the at24 or ee1004 device first (from
-i2c-smbus), then read the value from the EEPROM and instantiate the
-jc42 device (still from i2c-smbus). This requires an internal read
-function. I think we already have that in at24, because it uses the
-nvmem framework, but ee1004 lacks it as far as I can see.
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
-But anyway, if you have another approach which works, that's equally
-fine with me.
+---
 
-> I'll send a RFC patch for this. Unfortunately I have no RAM with temp
-> sensor to test it.
-
-Neither do I :-(
-
--- 
-Jean Delvare
-SUSE L3 Support
+ drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c           |    1 -
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |    1 -
+ drivers/gpu/drm/ast/ast_i2c.c                     |    1 -
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c         |    1 -
+ drivers/gpu/drm/display/drm_dp_helper.c           |    1 -
+ drivers/gpu/drm/display/drm_dp_mst_topology.c     |    1 -
+ drivers/gpu/drm/gma500/cdv_intel_dp.c             |    1 -
+ drivers/gpu/drm/gma500/intel_gmbus.c              |    1 -
+ drivers/gpu/drm/gma500/oaktrail_hdmi_i2c.c        |    1 -
+ drivers/gpu/drm/gma500/psb_intel_sdvo.c           |    1 -
+ drivers/gpu/drm/hisilicon/hibmc/hibmc_drm_i2c.c   |    1 -
+ drivers/gpu/drm/i915/display/intel_gmbus.c        |    1 -
+ drivers/gpu/drm/i915/display/intel_sdvo.c         |    1 -
+ drivers/gpu/drm/loongson/lsdc_i2c.c               |    1 -
+ drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c           |    1 -
+ drivers/gpu/drm/mgag200/mgag200_i2c.c             |    1 -
+ drivers/gpu/drm/msm/hdmi/hdmi_i2c.c               |    1 -
+ drivers/gpu/drm/radeon/radeon_i2c.c               |    1 -
+ drivers/gpu/drm/rockchip/inno_hdmi.c              |    1 -
+ drivers/gpu/drm/rockchip/rk3066_hdmi.c            |    1 -
+ drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c            |    1 -
+ drivers/video/fbdev/core/fb_ddc.c                 |    1 -
+ drivers/video/fbdev/cyber2000fb.c                 |    1 -
+ drivers/video/fbdev/i740fb.c                      |    1 -
+ drivers/video/fbdev/intelfb/intelfb_i2c.c         |   15 +++++----------
+ drivers/video/fbdev/matrox/i2c-matroxfb.c         |   12 ++++--------
+ drivers/video/fbdev/s3fb.c                        |    1 -
+ drivers/video/fbdev/tdfxfb.c                      |    1 -
+ drivers/video/fbdev/tridentfb.c                   |    1 -
+ drivers/video/fbdev/via/via_i2c.c                 |    1 -
+ include/linux/i2c.h                               |    1 -
+ 31 files changed, 9 insertions(+), 47 deletions(-)
 
