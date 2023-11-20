@@ -1,77 +1,100 @@
-Return-Path: <linux-i2c+bounces-306-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-307-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C2F07F1503
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 14:56:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1E037F1589
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 15:18:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA450282483
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 13:56:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E410B21910
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 14:18:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37FB91BDC5;
-	Mon, 20 Nov 2023 13:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22341C2BB;
+	Mon, 20 Nov 2023 14:18:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="c9pGTjRp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IysuBBeN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB644EE;
-	Mon, 20 Nov 2023 05:56:05 -0800 (PST)
-Received: from [100.107.97.3] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id DAD116600367;
-	Mon, 20 Nov 2023 13:56:03 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1700488564;
-	bh=LRGku4mgI3CyWNGC5qdMEGicvWEaOWczf1gTa2doZpI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=c9pGTjRpycIcF0pdwS4h+ZJFwwEsCe6B92BIOnLdsALi4qQ634vUfl9h82aIRi6aL
-	 Xb/GnBNmauxMVgbNA8CPIfzzoGbHXhEs2HmNzrjVG6/cMUJ4r42k6Fc80/IexCWs0q
-	 HMvRUHL57K0xfvASYsEazM8Z7f6YFqvHggz1ySIo2qiSjvh4fPN42V+CG8sibmfN6z
-	 lnl+V1jRvkkY7DTs2f6kir6cQb2vSLB0PDU+yesdf0s26ZDgtbGvTm77lawNlaenLA
-	 qG7cwXYQPYGv29BIGNbVDOjwhlKa46K8xBLHrbbj8GiNOt1eEvulQOksZxXgXCv0rY
-	 55NaZJWd6S60Q==
-Message-ID: <17be794c-1e75-4843-8dda-63ca7b879c5d@collabora.com>
-Date: Mon, 20 Nov 2023 14:56:01 +0100
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89ADC122;
+	Mon, 20 Nov 2023 06:17:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700489879; x=1732025879;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B7RCqjrWDo5drKFOH8dltxPhvMHnYEipg2nYYnxlRsk=;
+  b=IysuBBeN5pv1rb6KJ/op2BcNfsOIX555DM8QYQR0+ANw3Z3SIAYwNFwC
+   b4Fyq9ViXEJGztGCaaOGBZIHhJYDI3Z7kkxv4xavX3DwqZXJ+exsSQk4L
+   lJobaA+yesFasdUMtoRz4Ul7/Ab+ya6HjhHKQMhqHbqt7SKbgqQJp2TnJ
+   z8/Mmk92D0j9Y27+UsbAnBoXv8pyNcqTkNZih712743ou9G0D/PUD9p+j
+   XG+9TSGvcIKBMMni7xZNUcBI+YFaV8eLsmQ/uTjZxUu2ZyiHfDk6ce9JZ
+   T9UjNoGUkGe8vp/kHTqfxxWDkcGFoj74mihevFsiiTJ4WNnsRKY/rMXuc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="10299910"
+X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
+   d="scan'208";a="10299910"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 06:17:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="795480716"
+X-IronPort-AV: E=Sophos;i="6.04,214,1695711600"; 
+   d="scan'208";a="795480716"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 06:17:45 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1r555q-0000000FZL2-1T36;
+	Mon, 20 Nov 2023 16:17:42 +0200
+Date: Mon, 20 Nov 2023 16:17:41 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH v3 10/25] i2c: designware: Unify terminator in device ID
+ tables
+Message-ID: <ZVtqhWZLkKFa2QUt@smile.fi.intel.com>
+References: <20231110182304.3894319-1-andriy.shevchenko@linux.intel.com>
+ <20231110182304.3894319-11-andriy.shevchenko@linux.intel.com>
+ <382a9f86-f907-4432-9580-3a1b1b449121@amd.com>
+ <a6df86e7-e7e9-4acb-b6f2-0dde55884433@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 12/20] drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c: remove
- I2C_CLASS_DDC support
-Content-Language: en-US
-To: Heiner Kallweit <hkallweit1@gmail.com>, Wolfram Sang <wsa@kernel.org>,
- Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc: linux-i2c@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Matthias Brugger <matthias.bgg@gmail.com>, dri-devel@lists.freedesktop.org,
- linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-References: <20231119112826.5115-1-hkallweit1@gmail.com>
- <20231119112826.5115-13-hkallweit1@gmail.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20231119112826.5115-13-hkallweit1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a6df86e7-e7e9-4acb-b6f2-0dde55884433@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Il 19/11/23 12:28, Heiner Kallweit ha scritto:
-> After removal of the legacy EEPROM driver and I2C_CLASS_DDC support in
-> olpc_dcon there's no i2c client driver left supporting I2C_CLASS_DDC.
-> Class-based device auto-detection is a legacy mechanism and shouldn't
-> be used in new code. So we can remove this class completely now.
+On Fri, Nov 17, 2023 at 04:18:13PM +0200, Jarkko Nikula wrote:
+> On 11/10/23 21:38, Mario Limonciello wrote:
+> > On 11/10/2023 12:11, Andy Shevchenko wrote:
+> > > Make the terminator entry look the same in all device ID tables.
+> > > 
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 > 
-> Preferably this series should be applied via the i2c tree.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> Sorry replying twice, wanted to make sure Mario's tag is noted.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I am using `b4`, it collects tags from the entire thread (each email from it),
+so no need to send twice or care about other's tags).
+
+> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+
+Thank you for the review!
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
 
