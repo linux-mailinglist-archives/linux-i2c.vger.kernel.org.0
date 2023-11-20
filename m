@@ -1,73 +1,73 @@
-Return-Path: <linux-i2c+bounces-354-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-355-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB3847F1F96
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 22:47:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E8617F1F99
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 22:47:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBEB61C216AA
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 21:46:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E153A1F23C74
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 21:47:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D79F39858;
-	Mon, 20 Nov 2023 21:46:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3171239842;
+	Mon, 20 Nov 2023 21:46:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S6oeHTuq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LXyrklz9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E3ED54;
-	Mon, 20 Nov 2023 13:46:45 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-32f78dcf036so3595673f8f.0;
-        Mon, 20 Nov 2023 13:46:45 -0800 (PST)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B1FD63;
+	Mon, 20 Nov 2023 13:46:46 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-332c46d5988so1117817f8f.1;
+        Mon, 20 Nov 2023 13:46:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700516804; x=1701121604; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700516805; x=1701121605; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mvYv7yv0Rz2qXj3RF4iM+eVeFbHCrgQ2kQmEmocPEPY=;
-        b=S6oeHTuqo9Cu2jPbQ3WAd/KLLo/MJ1AasiPwxFVLCz7SCg0CbVplwEnBFerioZVKOL
-         hAR7S4ZgTQc7n+S1T+KsgxVpcUlYDy0SS3TeF0EnBfQZ10xFhGJf+3DN6rizpd+cNmZV
-         626gaOK6dBa4Ly4heXRdUDhtEu2SfftESNm6C413pAYCTMERI2wTpUJ2B/fmjhy9P2H6
-         eFlfEPTxoYDjDHD/A7LPcGky+/f3sEM0QYBz806qPMx2QPyhWK0yhMpHCNylJ0klSQrh
-         NuBl1FqMLd2D6zr3Pq0LjaFObY5YTqbfkOV1/E1sBLw+gBcjFfaD8c3HxsINPxcC0R7T
-         3fhg==
+        bh=GFB7iCk0Bd2syBjc9Ptoymcq6fnpGc3VauDL49PiFhg=;
+        b=LXyrklz9NdIABktGaWIu9SmMhyCrDNoXI2o00RsbYG163kgsVMykEO5+e1uc56ERyI
+         jaQ2LpR0+xF/c4xOH1bx//Sk0o8tvS6sfjJNpt2AAad5aXMVH8Rb4dGDxSy3xmQ6yk4b
+         a0ZfVeb51hMhX1Cw3CRkbFcZi9HDVDhr2eEZkUMHWwogqqAjAEBSvAUM1SWwuc+XYHa6
+         UGmDAoBN2L8ikID6ePl5vzeS8GZhxbqm6/d6qglJbPQceZTaoqPaYia+hDajr3AudyE1
+         SnCf7oVu5J0Waa5f24HR9q3ZQWkRL83Ppi/n53rY9EhGzSa7ag+ihJo9PCwU/UFcPDcJ
+         x14g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700516804; x=1701121604;
+        d=1e100.net; s=20230601; t=1700516805; x=1701121605;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mvYv7yv0Rz2qXj3RF4iM+eVeFbHCrgQ2kQmEmocPEPY=;
-        b=DyfedBdIdRwY9VVUErcrv27Ym5xG7OrUbK00fVbcxxL4RmiLb5LOTbp+EzN5rpK2Je
-         JPAMMN9MKZw2Np0NcLNKAbzEzJijdadUU3xznpgcHiPOQFrNdZKvpUl9XoXjeErB8lbB
-         ukLhw4G2vT8p4R1r2OYIyy4+djI+NYNa5+a03cxaKojmJupb587KHtECud6AvMKseIL9
-         OoXxxg7Hqy7I7ZNjeeKaqvO0DF2bd/qNhRaO4iM81IZFtDnzUzEZUOm5luGOj56niUte
-         +EVJpoAjhptcc0yMRyy3KrCGeQe9X0tP8qEw7jPKGjxzBTp8Y1iHgezSQuXFifLc86Vv
-         U6Tg==
-X-Gm-Message-State: AOJu0YyDimCwgVaVZKqutGgMNXHDlZov2vk9CFty6til4VCXuy8hJnpz
-	t9dAiiu+Oh5QwjtG9jBqxD8=
-X-Google-Smtp-Source: AGHT+IFhVjIKyJHoTFDY1S25E30i9YBHBvrq3sray80zY0SoXNdaGxfljpNF4jtOS6XdTV+AbxDGhw==
-X-Received: by 2002:a5d:6da6:0:b0:32d:a366:7073 with SMTP id u6-20020a5d6da6000000b0032da3667073mr659505wrs.14.1700516804106;
+        bh=GFB7iCk0Bd2syBjc9Ptoymcq6fnpGc3VauDL49PiFhg=;
+        b=hryciiSj5mZ7HVwHax84BUbw7c+UykxM7hDbrHWghEHTOxtRNoHS67q4BaYNFdplMS
+         KVC8gdpGbN6lyJgjtL1P4SEj4n9sOVdD34mVf0nTVFJH3eIwi9N14XkTcvutZQ6a3/hU
+         999FnmO4lTS58mSXPu9aFpQZJd+oDe1PILvwoKCVVHUACEQ8SMena/0LabnfwZogoisD
+         L16qZlmUrkEsRK41k1Yu2GKb/WIv+uhsOgeDnzo69YkoG68xlVldR9tIjpurO8I62vLv
+         L3UKQT3KdODguoWPKIHvR4GCC7X3bIv44B9WUXJNdMTPTQQcYbd2ARaTMpmRkp7ZjGMM
+         Vf0w==
+X-Gm-Message-State: AOJu0YyFhKQlQ8KEfboiZFYJuUNPT+76Y+venARGxw2C3td9AH3Q0kKQ
+	odx1hqzs4hAX2qeSx+DOXqI=
+X-Google-Smtp-Source: AGHT+IFO9ZmrSbH6A+/A5LyWdCeKfgaeedlrEYc7qHHXqeUF8v+awr8pU44qCeg4rV4R9MhiuP768w==
+X-Received: by 2002:a05:6000:18ad:b0:32d:b06c:d30b with SMTP id b13-20020a05600018ad00b0032db06cd30bmr6861142wri.55.1700516804962;
         Mon, 20 Nov 2023 13:46:44 -0800 (PST)
 Received: from zotac.lan. (dynamic-2a02-3100-9030-5a00-2223-08ff-fe18-0310.310.pool.telefonica.de. [2a02:3100:9030:5a00:2223:8ff:fe18:310])
-        by smtp.gmail.com with ESMTPSA id i13-20020a5d584d000000b00332cb0937f4sm2667052wrf.33.2023.11.20.13.46.43
+        by smtp.gmail.com with ESMTPSA id i13-20020a5d584d000000b00332cb0937f4sm2667052wrf.33.2023.11.20.13.46.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Nov 2023 13:46:43 -0800 (PST)
+        Mon, 20 Nov 2023 13:46:44 -0800 (PST)
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Wolfram Sang <wsa@kernel.org>,
-	Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
 Cc: linux-i2c@vger.kernel.org,
 	Heiner Kallweit <hkallweit1@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
 	Maxime Ripard <mripard@kernel.org>,
 	Thomas Zimmermann <tzimmermann@suse.de>,
 	David Airlie <airlied@gmail.com>,
 	Daniel Vetter <daniel@ffwll.ch>,
 	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 18/20] drivers/gpu/drm/gma500: remove I2C_CLASS_DDC support
-Date: Mon, 20 Nov 2023 22:46:21 +0100
-Message-ID: <20231120214624.9378-19-hkallweit1@gmail.com>
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH v4 19/20] drivers/gpu/drm/display: remove I2C_CLASS_DDC support
+Date: Mon, 20 Nov 2023 22:46:22 +0100
+Message-ID: <20231120214624.9378-20-hkallweit1@gmail.com>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <20231120214624.9378-1-hkallweit1@gmail.com>
 References: <20231120214624.9378-1-hkallweit1@gmail.com>
@@ -86,62 +86,37 @@ be used in new code. So we can remove this class completely now.
 
 Preferably this series should be applied via the i2c tree.
 
+Acked-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
 ---
- drivers/gpu/drm/gma500/cdv_intel_dp.c      |    1 -
- drivers/gpu/drm/gma500/intel_gmbus.c       |    1 -
- drivers/gpu/drm/gma500/oaktrail_hdmi_i2c.c |    1 -
- drivers/gpu/drm/gma500/psb_intel_sdvo.c    |    1 -
- 4 files changed, 4 deletions(-)
+ drivers/gpu/drm/display/drm_dp_helper.c       |    1 -
+ drivers/gpu/drm/display/drm_dp_mst_topology.c |    1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/gma500/cdv_intel_dp.c b/drivers/gpu/drm/gma500/cdv_intel_dp.c
-index 8992a9507..dd1eb7e98 100644
---- a/drivers/gpu/drm/gma500/cdv_intel_dp.c
-+++ b/drivers/gpu/drm/gma500/cdv_intel_dp.c
-@@ -855,7 +855,6 @@ cdv_intel_dp_i2c_init(struct gma_connector *connector,
+diff --git a/drivers/gpu/drm/display/drm_dp_helper.c b/drivers/gpu/drm/display/drm_dp_helper.c
+index f3680f4e6..ac901f4b4 100644
+--- a/drivers/gpu/drm/display/drm_dp_helper.c
++++ b/drivers/gpu/drm/display/drm_dp_helper.c
+@@ -2102,7 +2102,6 @@ int drm_dp_aux_register(struct drm_dp_aux *aux)
+ 	if (!aux->ddc.algo)
+ 		drm_dp_aux_init(aux);
  
- 	memset(&intel_dp->adapter, '\0', sizeof (intel_dp->adapter));
- 	intel_dp->adapter.owner = THIS_MODULE;
--	intel_dp->adapter.class = I2C_CLASS_DDC;
- 	strncpy (intel_dp->adapter.name, name, sizeof(intel_dp->adapter.name) - 1);
- 	intel_dp->adapter.name[sizeof(intel_dp->adapter.name) - 1] = '\0';
- 	intel_dp->adapter.algo_data = &intel_dp->algo;
-diff --git a/drivers/gpu/drm/gma500/intel_gmbus.c b/drivers/gpu/drm/gma500/intel_gmbus.c
-index 09cedabf4..aa4550985 100644
---- a/drivers/gpu/drm/gma500/intel_gmbus.c
-+++ b/drivers/gpu/drm/gma500/intel_gmbus.c
-@@ -411,7 +411,6 @@ int gma_intel_setup_gmbus(struct drm_device *dev)
- 		struct intel_gmbus *bus = &dev_priv->gmbus[i];
+-	aux->ddc.class = I2C_CLASS_DDC;
+ 	aux->ddc.owner = THIS_MODULE;
+ 	aux->ddc.dev.parent = aux->dev;
  
- 		bus->adapter.owner = THIS_MODULE;
--		bus->adapter.class = I2C_CLASS_DDC;
- 		snprintf(bus->adapter.name,
- 			 sizeof(bus->adapter.name),
- 			 "gma500 gmbus %s",
-diff --git a/drivers/gpu/drm/gma500/oaktrail_hdmi_i2c.c b/drivers/gpu/drm/gma500/oaktrail_hdmi_i2c.c
-index fc9a34ed5..6daa6669e 100644
---- a/drivers/gpu/drm/gma500/oaktrail_hdmi_i2c.c
-+++ b/drivers/gpu/drm/gma500/oaktrail_hdmi_i2c.c
-@@ -168,7 +168,6 @@ static struct i2c_adapter oaktrail_hdmi_i2c_adapter = {
- 	.name		= "oaktrail_hdmi_i2c",
- 	.nr		= 3,
- 	.owner		= THIS_MODULE,
--	.class		= I2C_CLASS_DDC,
- 	.algo		= &oaktrail_hdmi_i2c_algorithm,
- };
+diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+index 0e0d0e76d..4376e2c1f 100644
+--- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
++++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+@@ -5803,7 +5803,6 @@ static int drm_dp_mst_register_i2c_bus(struct drm_dp_mst_port *port)
+ 	aux->ddc.algo_data = aux;
+ 	aux->ddc.retries = 3;
  
-diff --git a/drivers/gpu/drm/gma500/psb_intel_sdvo.c b/drivers/gpu/drm/gma500/psb_intel_sdvo.c
-index d6fd5d726..e4f914dec 100644
---- a/drivers/gpu/drm/gma500/psb_intel_sdvo.c
-+++ b/drivers/gpu/drm/gma500/psb_intel_sdvo.c
-@@ -2426,7 +2426,6 @@ psb_intel_sdvo_init_ddc_proxy(struct psb_intel_sdvo *sdvo,
- 			  struct drm_device *dev)
- {
- 	sdvo->ddc.owner = THIS_MODULE;
--	sdvo->ddc.class = I2C_CLASS_DDC;
- 	snprintf(sdvo->ddc.name, I2C_NAME_SIZE, "SDVO DDC proxy");
- 	sdvo->ddc.dev.parent = dev->dev;
- 	sdvo->ddc.algo_data = sdvo;
+-	aux->ddc.class = I2C_CLASS_DDC;
+ 	aux->ddc.owner = THIS_MODULE;
+ 	/* FIXME: set the kdev of the port's connector as parent */
+ 	aux->ddc.dev.parent = parent_dev;
 
 
