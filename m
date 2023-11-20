@@ -1,58 +1,58 @@
-Return-Path: <linux-i2c+bounces-304-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-305-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3E077F1224
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 12:34:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45B387F122D
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 12:35:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 792FE28264E
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 11:34:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFC17281723
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 11:35:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC0014F83;
-	Mon, 20 Nov 2023 11:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE7614AB0;
+	Mon, 20 Nov 2023 11:35:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mk7K+tOD";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xiLzaE1B"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Q5Pudbcp";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="SBqRNCeH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D2F172B;
-	Mon, 20 Nov 2023 03:34:48 -0800 (PST)
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB7FD78;
+	Mon, 20 Nov 2023 03:35:47 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 425FE1F891;
-	Mon, 20 Nov 2023 11:34:47 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id E131A2190C;
+	Mon, 20 Nov 2023 11:35:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1700480087; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1700480145; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=5u2hf9u/fheIlD5C/+wh7AE8PQs/IetZ0l59tBeclCc=;
-	b=mk7K+tOD0nb83iN5+UVXmnvokLdtXteuEvw759Kfi9mNHc9EnsVx5djlwEeiAd5booM2fx
-	E5RL6R6yktdL9B8x2/ditCM3+SL7dF0ewwm1oTVMqqokTd9VIVkHQO0rPcFC9132PPGsrv
-	YnCT3ZwXNHjNb+0Ga0/qNljREodVmPQ=
+	bh=Q+c9KCNCk4phwSWIGOwpqJ0qmONW0iqFNOW1khLxYWo=;
+	b=Q5PudbcpHQnR0Ab89sx0fg4bnjxusH+EGdvIFrTdsyIUfJxwtlxvN7NqD/S8/eiSUOrYO/
+	xLK7Uuj+COiLTLHXEieSoBKvA7KqsawICQ+rCfEoiu2yjwIs266/u5P3H+LUnFaaRfFVfA
+	W1/XgJ2rCq6KSKWPwP/UB5pzsRynBl8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1700480087;
+	s=susede2_ed25519; t=1700480145;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=5u2hf9u/fheIlD5C/+wh7AE8PQs/IetZ0l59tBeclCc=;
-	b=xiLzaE1BH00oCndoTthUe23SROLoKDrl550aI8ZkxHgWjpKCPOcd/ZzlApUooQo1MCWf2H
-	Dcljr507B0vgEtBg==
+	bh=Q+c9KCNCk4phwSWIGOwpqJ0qmONW0iqFNOW1khLxYWo=;
+	b=SBqRNCeH2FLdjUc4Pu04z7Bl6gHvZrz8VEd98mv5TpRNymFVQ2hDnom2OeYPr1+NtBMMMw
+	ZX0Xw7uvj9GEM8Dg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
 	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 122E813499;
-	Mon, 20 Nov 2023 11:34:47 +0000 (UTC)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA95913499;
+	Mon, 20 Nov 2023 11:35:45 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
 	by imap2.suse-dmz.suse.de with ESMTPSA
-	id dmaRA1dEW2WBOwAAMHmgww
-	(envelope-from <tzimmermann@suse.de>); Mon, 20 Nov 2023 11:34:47 +0000
-Message-ID: <505590b9-9458-4af1-b8c7-11980aa4e288@suse.de>
-Date: Mon, 20 Nov 2023 12:34:46 +0100
+	id 4Hm/J5FEW2WBOwAAMHmgww
+	(envelope-from <tzimmermann@suse.de>); Mon, 20 Nov 2023 11:35:45 +0000
+Message-ID: <950888cc-9d7e-4253-8821-e843ef32b6ec@suse.de>
+Date: Mon, 20 Nov 2023 12:35:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -60,18 +60,16 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 02/20] drivers/gpu/drm/mgag200/mgag200_i2c.c: remove
+Subject: Re: [PATCH v3 17/20] drivers/gpu/drm/ast/ast_i2c.c: remove
  I2C_CLASS_DDC support
 Content-Language: en-US
 To: Heiner Kallweit <hkallweit1@gmail.com>, Wolfram Sang <wsa@kernel.org>,
  Dave Airlie <airlied@redhat.com>
-Cc: linux-i2c@vger.kernel.org, Jocelyn Falempe <jfalempe@redhat.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org
+Cc: Jocelyn Falempe <jfalempe@redhat.com>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+ linux-i2c@vger.kernel.org
 References: <20231119101445.4737-1-hkallweit1@gmail.com>
- <20231119101445.4737-3-hkallweit1@gmail.com>
+ <20231119101445.4737-18-hkallweit1@gmail.com>
 From: Thomas Zimmermann <tzimmermann@suse.de>
 Autocrypt: addr=tzimmermann@suse.de; keydata=
  xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
@@ -97,11 +95,11 @@ Autocrypt: addr=tzimmermann@suse.de; keydata=
  SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
  Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
  4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <20231119101445.4737-3-hkallweit1@gmail.com>
+In-Reply-To: <20231119101445.4737-18-hkallweit1@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="------------s7IF5EGqdKBQA0bVZEBQB4E5"
-Authentication-Results: smtp-out2.suse.de;
+ boundary="------------Dal7yWifu1tGxRxXL2MVTv81"
+Authentication-Results: smtp-out1.suse.de;
 	none
 X-Spam-Level: 
 X-Spam-Score: -5.29
@@ -115,43 +113,40 @@ X-Spamd-Result: default: False [-5.29 / 50.00];
 	 TO_MATCH_ENVRCPT_ALL(0.00)[];
 	 MIME_GOOD(-0.20)[multipart/signed,multipart/mixed,text/plain];
 	 HAS_ATTACHMENT(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%];
-	 MIME_BASE64_TEXT_BOGUS(1.00)[];
-	 MID_RHS_MATCH_FROM(0.00)[];
 	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 MIME_BASE64_TEXT_BOGUS(1.00)[];
+	 BAYES_HAM(-3.00)[100.00%];
 	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	 NEURAL_HAM_SHORT(-0.20)[-1.000];
 	 MIME_BASE64_TEXT(0.10)[];
-	 RCPT_COUNT_SEVEN(0.00)[11];
+	 RCPT_COUNT_SEVEN(0.00)[8];
 	 SIGNED_PGP(-2.00)[];
 	 FREEMAIL_TO(0.00)[gmail.com,kernel.org,redhat.com];
 	 FUZZY_BLOCKED(0.00)[rspamd.com];
 	 FROM_EQ_ENVFROM(0.00)[];
 	 MIME_TRACE(0.00)[0:+,1:+,2:+,3:~];
-	 FREEMAIL_CC(0.00)[vger.kernel.org,redhat.com,linux.intel.com,kernel.org,gmail.com,ffwll.ch,lists.freedesktop.org];
 	 RCVD_COUNT_TWO(0.00)[2];
-	 RCVD_TLS_ALL(0.00)[]
+	 RCVD_TLS_ALL(0.00)[];
+	 MID_RHS_MATCH_FROM(0.00)[]
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------s7IF5EGqdKBQA0bVZEBQB4E5
-Content-Type: multipart/mixed; boundary="------------x1Kjt2D34EBRTI9q2aYQ30it";
+--------------Dal7yWifu1tGxRxXL2MVTv81
+Content-Type: multipart/mixed; boundary="------------n2jKO0zPuEt2E7ncKRUIRjS0";
  protected-headers="v1"
 From: Thomas Zimmermann <tzimmermann@suse.de>
 To: Heiner Kallweit <hkallweit1@gmail.com>, Wolfram Sang <wsa@kernel.org>,
  Dave Airlie <airlied@redhat.com>
-Cc: linux-i2c@vger.kernel.org, Jocelyn Falempe <jfalempe@redhat.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org
-Message-ID: <505590b9-9458-4af1-b8c7-11980aa4e288@suse.de>
-Subject: Re: [PATCH v3 02/20] drivers/gpu/drm/mgag200/mgag200_i2c.c: remove
+Cc: Jocelyn Falempe <jfalempe@redhat.com>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+ linux-i2c@vger.kernel.org
+Message-ID: <950888cc-9d7e-4253-8821-e843ef32b6ec@suse.de>
+Subject: Re: [PATCH v3 17/20] drivers/gpu/drm/ast/ast_i2c.c: remove
  I2C_CLASS_DDC support
 References: <20231119101445.4737-1-hkallweit1@gmail.com>
- <20231119101445.4737-3-hkallweit1@gmail.com>
-In-Reply-To: <20231119101445.4737-3-hkallweit1@gmail.com>
+ <20231119101445.4737-18-hkallweit1@gmail.com>
+In-Reply-To: <20231119101445.4737-18-hkallweit1@gmail.com>
 
---------------x1Kjt2D34EBRTI9q2aYQ30it
+--------------n2jKO0zPuEt2E7ncKRUIRjS0
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: base64
 
@@ -165,46 +160,44 @@ bXBsZXRlbHkgbm93Lg0KPiANCj4gUHJlZmVyYWJseSB0aGlzIHNlcmllcyBzaG91bGQgYmUg
 YXBwbGllZCB2aWEgdGhlIGkyYyB0cmVlLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogSGVpbmVy
 IEthbGx3ZWl0IDxoa2FsbHdlaXQxQGdtYWlsLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IFRob21h
 cyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IA0KPiAtLS0NCj4gICBk
-cml2ZXJzL2dwdS9kcm0vbWdhZzIwMC9tZ2FnMjAwX2kyYy5jIHwgICAgMSAtDQo+ICAgMSBm
-aWxlIGNoYW5nZWQsIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L2dwdS9kcm0vbWdhZzIwMC9tZ2FnMjAwX2kyYy5jIGIvZHJpdmVycy9ncHUvZHJtL21nYWcy
-MDAvbWdhZzIwMF9pMmMuYw0KPiBpbmRleCAwYzQ4YmRmM2UuLjQyM2ViMzAyYiAxMDA2NDQN
-Cj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL21nYWcyMDAvbWdhZzIwMF9pMmMuYw0KPiArKysg
-Yi9kcml2ZXJzL2dwdS9kcm0vbWdhZzIwMC9tZ2FnMjAwX2kyYy5jDQo+IEBAIC0xMDYsNyAr
-MTA2LDYgQEAgaW50IG1nYWcyMDBfaTJjX2luaXQoc3RydWN0IG1nYV9kZXZpY2UgKm1kZXYs
-IHN0cnVjdCBtZ2FfaTJjX2NoYW4gKmkyYykNCj4gICAJaTJjLT5kYXRhID0gQklUKGluZm8t
-PmkyYy5kYXRhX2JpdCk7DQo+ICAgCWkyYy0+Y2xvY2sgPSBCSVQoaW5mby0+aTJjLmNsb2Nr
-X2JpdCk7DQo+ICAgCWkyYy0+YWRhcHRlci5vd25lciA9IFRISVNfTU9EVUxFOw0KPiAtCWky
-Yy0+YWRhcHRlci5jbGFzcyA9IEkyQ19DTEFTU19EREM7DQo+ICAgCWkyYy0+YWRhcHRlci5k
-ZXYucGFyZW50ID0gZGV2LT5kZXY7DQo+ICAgCWkyYy0+ZGV2ID0gZGV2Ow0KPiAgIAlpMmNf
-c2V0X2FkYXBkYXRhKCZpMmMtPmFkYXB0ZXIsIGkyYyk7DQo+IA0KDQotLSANClRob21hcyBa
-aW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNv
-bHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5i
-ZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0Rv
-bmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
+cml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9pMmMuYyB8ICAgIDEgLQ0KPiAgIDEgZmlsZSBjaGFu
+Z2VkLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJt
+L2FzdC9hc3RfaTJjLmMgYi9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9pMmMuYw0KPiBpbmRl
+eCAwZTg0NWU3YWMuLmU1ZDNmNzEyMSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJt
+L2FzdC9hc3RfaTJjLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfaTJjLmMN
+Cj4gQEAgLTEyMCw3ICsxMjAsNiBAQCBzdHJ1Y3QgYXN0X2kyY19jaGFuICphc3RfaTJjX2Ny
+ZWF0ZShzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KQ0KPiAgIAkJcmV0dXJuIE5VTEw7DQo+ICAg
+DQo+ICAgCWkyYy0+YWRhcHRlci5vd25lciA9IFRISVNfTU9EVUxFOw0KPiAtCWkyYy0+YWRh
+cHRlci5jbGFzcyA9IEkyQ19DTEFTU19EREM7DQo+ICAgCWkyYy0+YWRhcHRlci5kZXYucGFy
+ZW50ID0gZGV2LT5kZXY7DQo+ICAgCWkyYy0+ZGV2ID0gZGV2Ow0KPiAgIAlpMmNfc2V0X2Fk
+YXBkYXRhKCZpMmMtPmFkYXB0ZXIsIGkyYyk7DQo+IA0KDQotLSANClRob21hcyBaaW1tZXJt
+YW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9u
+cyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBH
+ZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0RvbmFsZCwg
+Qm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
 
---------------x1Kjt2D34EBRTI9q2aYQ30it--
+--------------n2jKO0zPuEt2E7ncKRUIRjS0--
 
---------------s7IF5EGqdKBQA0bVZEBQB4E5
+--------------Dal7yWifu1tGxRxXL2MVTv81
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmVbRFYFAwAAAAAACgkQlh/E3EQov+Do
-lxAAmL2PYuMwAQ/352gCCOCddccNm/vHMCkXUv9WJ7mGQmzDlBL7c7Qr5gPA87f1E/nDuDZATRtZ
-XNeO4FIFXtSnSCRoNRzyq2QtE+f7EYNPB3JkMyUKwbBMF5vyDm7qWNXcr+7jeBKPqf5FvJaEYcEc
-sETHnMUBvNulxBwbvyClW/DrJ0a2qBVDm9m844mwIxcpJv/Qf+CKl+nOLuBLUUetcVLwxoghdgkE
-jR/k96ZMfbR4eTe6vp3S8y41JhPUH+Jc+ixHfQG1nAI4yHIlISZI4ejBrW8i1+ys2y/IHxtcs9YP
-AJ6KB/QOeYibaY9GZ7Y7fVxbKU2OzVeidbtaS91hK0zNmPqZfDmJdA55B0pcuWNfYBY2L1fSsku9
-4n/RePNyN39wYfyo5jtCH3epzdW4/EXBNxm1YRxQ6Vn/YKAF0Tthd6fpaXJu2SjTGoAPZRFF8A5Q
-4j4UAgelmgvlJekY04/sG0FY08iZNnzyGt6V7/SD6JYvAIuM+aud1GtJeZ1R187W2YNh0tuVx9Ow
-2HRCbvP2VlRoEV0r51j3GlsYbpVVNxlKJVv08wk6Zj6k05zdGSsj2q+2krK8vT2x9gdNBq4nsjGO
-tvQASuitCkyT48yz31k4wz+66Gww1j8jnDgZNiKyxfYAGP/d/crJm7E4YTUzsx0XmmugRMxH/Gzs
-53A=
-=ai4n
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmVbRJEFAwAAAAAACgkQlh/E3EQov+C/
+hQ//VOrLXUUM9ZeD3F9PjPkmpsTVaJhhcUOTYPEP8ayHEpGBRDNYDr38R7U3X7TZtJDCp4bWxHFl
+EHJmbD/35LyujEwhUQWTR+Zg/BfhWa+GMf4ymI60kgxM505JGDUcllXuu7Zo3qPY2+BvXFm6wdHm
+EJz8+jCCxVKsLhN09Mn678OaNfJiRPc/LtA3NKBuELJDjyNJCVypUI2i0YgUAs5Fxm6eozjfaqCi
+sJszxsPDtUuApMwJ1BE7AjapowSjFTfaGqzFo2WOoq8VqsXaU5oMI9ZEn2VBgRI2MEgyOqyyiwWq
+pj/fxOfqSRnwC1NvWDA2AsSzGR6hrqnDchDo2WCPSbqREpk2kUDthVzBoivLe6RZ2XKU7cpYPtwH
+v6BRQBVlMi87IR1JpRDolBwC6mtUQWJfB5phOkqVnY4y2P4lfG9pLNQyAkFIZwioSqYs2RTvIKHL
+z1+WhFH3hJB+1SQXyK46ApxH15aBNrAiHZfSj55krYzfQaYmSheAJLpH5u21bX1+58AzUQLBeGno
+Ok5esc/Bu/CBPECr5I4yI8DvUs0ZCT0kTQzl38f7rXDwJOx5XemqcjRRB5pyD8Z3bryZdEZg5Z53
+bT4IKm6+zA/JCAnHq3l/9+2eO4VeDc0lNKaHNYhKMFlBdfTzQ9P1IgyQFuOhBaRna7wk6/tQWrVo
+zfo=
+=zJQi
 -----END PGP SIGNATURE-----
 
---------------s7IF5EGqdKBQA0bVZEBQB4E5--
+--------------Dal7yWifu1tGxRxXL2MVTv81--
 
