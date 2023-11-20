@@ -1,182 +1,210 @@
-Return-Path: <linux-i2c+bounces-303-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-304-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C1857F1005
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 11:14:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3E077F1224
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 12:34:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42DE328211C
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 10:14:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 792FE28264E
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 Nov 2023 11:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B54F12B8E;
-	Mon, 20 Nov 2023 10:14:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC0014F83;
+	Mon, 20 Nov 2023 11:34:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="UGcENXqJ"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mk7K+tOD";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xiLzaE1B"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92EACF
-	for <linux-i2c@vger.kernel.org>; Mon, 20 Nov 2023 02:13:59 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ce675e45f9so9989185ad.3
-        for <linux-i2c@vger.kernel.org>; Mon, 20 Nov 2023 02:13:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1700475239; x=1701080039; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e4CHijFD14Xxg2nzR9yrp9XXk5gOBgZhgDt97xki324=;
-        b=UGcENXqJkfP9gvFqYp0Wv5Rfj74PoKsdf23GntM8pBrfEUYUjxI+JtKyBMfN0wUDsL
-         IZCpJs+7B3PEfYzl7aeGmAHahRFG9fnXA0xjx3rb0qxej54bqbEMy8z4gesVMo1rR1VH
-         SBYDfueczrbLEgUBRVUW2mI6tJwtnRzA9kxeipz5K2F7tg24a3z20BVs8dU/95S3VLaQ
-         EZoXFQp3VTBb8/d8k1rupxUymT5JWql2Y9ww7N84aGaiNQ3N6xCo43EF6kXVTKzG1bxx
-         T2sYtaGps65Pcv0IdaRGMqPb+isBfinJWgA9EX2nDjneEyPzlYUjZRPKNVVdk9koDAUW
-         8U1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700475239; x=1701080039;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e4CHijFD14Xxg2nzR9yrp9XXk5gOBgZhgDt97xki324=;
-        b=HfyWcerWbdSqwrYAx01A+HnFSlbZXufTiErc1nteFfsBaIIZh8YdtqroHzc0ulS6wz
-         Wi4rItGIpIvOHt0Y9XqvE7i2lixscADjrWsDeYdT02d2qn/5II+ruMOHD360i9Gkferp
-         jeR9F1nnCRWs3YGuJfhQPP3BHSbghkC5lhFMjY90DxUOoiE7e7WVR+g2meeg+WVcmGJS
-         TVjikw7kgNc8YKJe27whEDimXJ6aZKAAVeSRQZhSOrKEm5L3Ux9QmVVnnE+/Laj6ECct
-         QwII0YGhjbhyTNtzcfIK8PbAdNX0KfFQACM1IJ+7BQNNSJD54Jc9GAmHH5ie53K8Jgnk
-         NVmA==
-X-Gm-Message-State: AOJu0YwBgKP91BNf5bVAQu+nE8s3oPL4x6zNY8wJ5KP7GKuhiuBbE50m
-	XzA0vMLhu4kKCDoQc1MlLqSqS9+aQQ3tof94EWwKMg==
-X-Google-Smtp-Source: AGHT+IFxeznwRXbUI/ATv0ljCmhUfIlt2taW5Q9dqhCz/w1a8E3CS+tUVscaaFjOyu9FSokpE+ofKjokvND/rVJ3QKo=
-X-Received: by 2002:a17:90b:38c1:b0:280:ff37:8981 with SMTP id
- nn1-20020a17090b38c100b00280ff378981mr4581829pjb.44.1700475239416; Mon, 20
- Nov 2023 02:13:59 -0800 (PST)
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D2F172B;
+	Mon, 20 Nov 2023 03:34:48 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 425FE1F891;
+	Mon, 20 Nov 2023 11:34:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1700480087; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=5u2hf9u/fheIlD5C/+wh7AE8PQs/IetZ0l59tBeclCc=;
+	b=mk7K+tOD0nb83iN5+UVXmnvokLdtXteuEvw759Kfi9mNHc9EnsVx5djlwEeiAd5booM2fx
+	E5RL6R6yktdL9B8x2/ditCM3+SL7dF0ewwm1oTVMqqokTd9VIVkHQO0rPcFC9132PPGsrv
+	YnCT3ZwXNHjNb+0Ga0/qNljREodVmPQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1700480087;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=5u2hf9u/fheIlD5C/+wh7AE8PQs/IetZ0l59tBeclCc=;
+	b=xiLzaE1BH00oCndoTthUe23SROLoKDrl550aI8ZkxHgWjpKCPOcd/ZzlApUooQo1MCWf2H
+	Dcljr507B0vgEtBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 122E813499;
+	Mon, 20 Nov 2023 11:34:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id dmaRA1dEW2WBOwAAMHmgww
+	(envelope-from <tzimmermann@suse.de>); Mon, 20 Nov 2023 11:34:47 +0000
+Message-ID: <505590b9-9458-4af1-b8c7-11980aa4e288@suse.de>
+Date: Mon, 20 Nov 2023 12:34:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231109092328.3238241-1-naresh.solanki@9elements.com> <20231109092328.3238241-2-naresh.solanki@9elements.com>
-In-Reply-To: <20231109092328.3238241-2-naresh.solanki@9elements.com>
-From: Naresh Solanki <naresh.solanki@9elements.com>
-Date: Mon, 20 Nov 2023 15:43:50 +0530
-Message-ID: <CABqG17gj+NFQUrXByp07YMMh0aAhV7=szXuQfATu4DtRoB9BRA@mail.gmail.com>
-Subject: Re: [RESEND PATCH v5 2/2] i2c: muxes: pca954x: Enable features on MAX7357
-To: Peter Rosin <peda@axentia.se>
-Cc: andi.shyti@kernel.org, robh@kernel.org, 
-	Patrick Rudolph <patrick.rudolph@9elements.com>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 02/20] drivers/gpu/drm/mgag200/mgag200_i2c.c: remove
+ I2C_CLASS_DDC support
+Content-Language: en-US
+To: Heiner Kallweit <hkallweit1@gmail.com>, Wolfram Sang <wsa@kernel.org>,
+ Dave Airlie <airlied@redhat.com>
+Cc: linux-i2c@vger.kernel.org, Jocelyn Falempe <jfalempe@redhat.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org
+References: <20231119101445.4737-1-hkallweit1@gmail.com>
+ <20231119101445.4737-3-hkallweit1@gmail.com>
+From: Thomas Zimmermann <tzimmermann@suse.de>
+Autocrypt: addr=tzimmermann@suse.de; keydata=
+ xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
+ XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
+ BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
+ hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
+ 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
+ AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
+ AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
+ AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
+ lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
+ U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
+ vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
+ 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
+ j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
+ T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
+ 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
+ GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
+ hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
+ EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
+ C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
+ yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
+ SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
+ Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
+ 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
+In-Reply-To: <20231119101445.4737-3-hkallweit1@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------s7IF5EGqdKBQA0bVZEBQB4E5"
+Authentication-Results: smtp-out2.suse.de;
+	none
+X-Spam-Level: 
+X-Spam-Score: -5.29
+X-Spamd-Result: default: False [-5.29 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 XM_UA_NO_VERSION(0.01)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.20)[multipart/signed,multipart/mixed,text/plain];
+	 HAS_ATTACHMENT(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%];
+	 MIME_BASE64_TEXT_BOGUS(1.00)[];
+	 MID_RHS_MATCH_FROM(0.00)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 MIME_BASE64_TEXT(0.10)[];
+	 RCPT_COUNT_SEVEN(0.00)[11];
+	 SIGNED_PGP(-2.00)[];
+	 FREEMAIL_TO(0.00)[gmail.com,kernel.org,redhat.com];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+,1:+,2:+,3:~];
+	 FREEMAIL_CC(0.00)[vger.kernel.org,redhat.com,linux.intel.com,kernel.org,gmail.com,ffwll.ch,lists.freedesktop.org];
+	 RCVD_COUNT_TWO(0.00)[2];
+	 RCVD_TLS_ALL(0.00)[]
 
-Hi
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------s7IF5EGqdKBQA0bVZEBQB4E5
+Content-Type: multipart/mixed; boundary="------------x1Kjt2D34EBRTI9q2aYQ30it";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Heiner Kallweit <hkallweit1@gmail.com>, Wolfram Sang <wsa@kernel.org>,
+ Dave Airlie <airlied@redhat.com>
+Cc: linux-i2c@vger.kernel.org, Jocelyn Falempe <jfalempe@redhat.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <505590b9-9458-4af1-b8c7-11980aa4e288@suse.de>
+Subject: Re: [PATCH v3 02/20] drivers/gpu/drm/mgag200/mgag200_i2c.c: remove
+ I2C_CLASS_DDC support
+References: <20231119101445.4737-1-hkallweit1@gmail.com>
+ <20231119101445.4737-3-hkallweit1@gmail.com>
+In-Reply-To: <20231119101445.4737-3-hkallweit1@gmail.com>
 
-I wanted to confirm whether there are any additional details or
-modifications needed on my end to expedite the review
-process.
-I am more than willing to address any concerns or make
-necessary adjustments to ensure that the patch is aligned
+--------------x1Kjt2D34EBRTI9q2aYQ30it
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Regards,
-Naresh
+DQoNCkFtIDE5LjExLjIzIHVtIDExOjE0IHNjaHJpZWIgSGVpbmVyIEthbGx3ZWl0Og0KPiBB
+ZnRlciByZW1vdmFsIG9mIHRoZSBsZWdhY3kgRUVQUk9NIGRyaXZlciBhbmQgSTJDX0NMQVNT
+X0REQyBzdXBwb3J0IGluDQo+IG9scGNfZGNvbiB0aGVyZSdzIG5vIGkyYyBjbGllbnQgZHJp
+dmVyIGxlZnQgc3VwcG9ydGluZyBJMkNfQ0xBU1NfRERDLg0KPiBDbGFzcy1iYXNlZCBkZXZp
+Y2UgYXV0by1kZXRlY3Rpb24gaXMgYSBsZWdhY3kgbWVjaGFuaXNtIGFuZCBzaG91bGRuJ3QN
+Cj4gYmUgdXNlZCBpbiBuZXcgY29kZS4gU28gd2UgY2FuIHJlbW92ZSB0aGlzIGNsYXNzIGNv
+bXBsZXRlbHkgbm93Lg0KPiANCj4gUHJlZmVyYWJseSB0aGlzIHNlcmllcyBzaG91bGQgYmUg
+YXBwbGllZCB2aWEgdGhlIGkyYyB0cmVlLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogSGVpbmVy
+IEthbGx3ZWl0IDxoa2FsbHdlaXQxQGdtYWlsLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IFRob21h
+cyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQo+IA0KPiAtLS0NCj4gICBk
+cml2ZXJzL2dwdS9kcm0vbWdhZzIwMC9tZ2FnMjAwX2kyYy5jIHwgICAgMSAtDQo+ICAgMSBm
+aWxlIGNoYW5nZWQsIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L2dwdS9kcm0vbWdhZzIwMC9tZ2FnMjAwX2kyYy5jIGIvZHJpdmVycy9ncHUvZHJtL21nYWcy
+MDAvbWdhZzIwMF9pMmMuYw0KPiBpbmRleCAwYzQ4YmRmM2UuLjQyM2ViMzAyYiAxMDA2NDQN
+Cj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL21nYWcyMDAvbWdhZzIwMF9pMmMuYw0KPiArKysg
+Yi9kcml2ZXJzL2dwdS9kcm0vbWdhZzIwMC9tZ2FnMjAwX2kyYy5jDQo+IEBAIC0xMDYsNyAr
+MTA2LDYgQEAgaW50IG1nYWcyMDBfaTJjX2luaXQoc3RydWN0IG1nYV9kZXZpY2UgKm1kZXYs
+IHN0cnVjdCBtZ2FfaTJjX2NoYW4gKmkyYykNCj4gICAJaTJjLT5kYXRhID0gQklUKGluZm8t
+PmkyYy5kYXRhX2JpdCk7DQo+ICAgCWkyYy0+Y2xvY2sgPSBCSVQoaW5mby0+aTJjLmNsb2Nr
+X2JpdCk7DQo+ICAgCWkyYy0+YWRhcHRlci5vd25lciA9IFRISVNfTU9EVUxFOw0KPiAtCWky
+Yy0+YWRhcHRlci5jbGFzcyA9IEkyQ19DTEFTU19EREM7DQo+ICAgCWkyYy0+YWRhcHRlci5k
+ZXYucGFyZW50ID0gZGV2LT5kZXY7DQo+ICAgCWkyYy0+ZGV2ID0gZGV2Ow0KPiAgIAlpMmNf
+c2V0X2FkYXBkYXRhKCZpMmMtPmFkYXB0ZXIsIGkyYyk7DQo+IA0KDQotLSANClRob21hcyBa
+aW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNv
+bHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5i
+ZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0Rv
+bmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
 
-On Thu, 9 Nov 2023 at 14:53, Naresh Solanki
-<naresh.solanki@9elements.com> wrote:
->
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->
-> Enable additional features based on DT settings and unconditionally
-> release the shared interrupt pin after 1.6 seconds and allow to use
-> it as reset.
->
-> These features aren't enabled by default and it's up to board designer
-> to validate for proper functioning and detection of devices in secondary
-> bus as sometimes it can cause secondary bus being disabled.
->
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
->
-> ---
-> Changes in V5:
-> - Fix typos
-> - Update comment
-> - Add newline in dev_warn
-> Changes in V4:
-> - Drop max7358
-> - Update #define
-> - Move conf variable
-> - Print warning when I2C_FUNC_SMBUS_WRITE_BYTE_DATA isn't supported
-> Changes in V3:
-> - Delete unused #define
-> - Update pca954x_init
-> - Update commit message
-> Changes in V2:
-> - Update comments
-> - Update check for DT properties
-> ---
->  drivers/i2c/muxes/i2c-mux-pca954x.c | 43 ++++++++++++++++++++++++++++-
->  1 file changed, 42 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-> index 2219062104fb..f5dfc33b97c0 100644
-> --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-> +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-> @@ -57,6 +57,20 @@
->
->  #define PCA954X_IRQ_OFFSET 4
->
-> +/*
-> + * MAX7357's configuration register is writeable after POR, but
-> + * can be locked by setting the basic mode bit. MAX7358 configuration
-> + * register is locked by default and needs to be unlocked first.
-> + * The configuration register holds the following settings:
-> + */
-> +#define MAX7357_CONF_INT_ENABLE                        BIT(0)
-> +#define MAX7357_CONF_FLUSH_OUT                 BIT(1)
-> +#define MAX7357_CONF_RELEASE_INT               BIT(2)
-> +#define MAX7357_CONF_DISCON_SINGLE_CHAN                BIT(4)
-> +#define MAX7357_CONF_PRECONNECT_TEST           BIT(7)
-> +
-> +#define MAX7357_POR_DEFAULT_CONF               MAX7357_CONF_INT_ENABLE
-> +
->  enum pca_type {
->         max_7356,
->         max_7357,
-> @@ -470,7 +484,34 @@ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
->         else
->                 data->last_chan = 0; /* Disconnect multiplexer */
->
-> -       ret = i2c_smbus_write_byte(client, data->last_chan);
-> +       if (device_is_compatible(&client->dev, "maxim,max7357")) {
-> +               if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WRITE_BYTE_DATA)) {
-> +                       u8 conf = MAX7357_POR_DEFAULT_CONF;
-> +                       /*
-> +                        * The interrupt signal is shared with the reset pin. Release the
-> +                        * interrupt after 1.6 seconds to allow using the pin as reset.
-> +                        */
-> +                       conf |= MAX7357_CONF_RELEASE_INT;
-> +
-> +                       if (device_property_read_bool(&client->dev, "maxim,isolate-stuck-channel"))
-> +                               conf |= MAX7357_CONF_DISCON_SINGLE_CHAN;
-> +                       if (device_property_read_bool(&client->dev,
-> +                                                     "maxim,send-flush-out-sequence"))
-> +                               conf |= MAX7357_CONF_FLUSH_OUT;
-> +                       if (device_property_read_bool(&client->dev,
-> +                                                     "maxim,preconnection-wiggle-test-enable"))
-> +                               conf |= MAX7357_CONF_PRECONNECT_TEST;
-> +
-> +                       ret = i2c_smbus_write_byte_data(client, data->last_chan, conf);
-> +               } else {
-> +                       dev_warn(&client->dev, "Write byte data not supported."
-> +                                "Cannot enable enhanced mode features\n");
-> +                       ret = i2c_smbus_write_byte(client, data->last_chan);
-> +               }
-> +       } else {
-> +               ret = i2c_smbus_write_byte(client, data->last_chan);
-> +       }
-> +
->         if (ret < 0)
->                 data->last_chan = 0;
->
-> --
-> 2.41.0
->
+--------------x1Kjt2D34EBRTI9q2aYQ30it--
+
+--------------s7IF5EGqdKBQA0bVZEBQB4E5
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmVbRFYFAwAAAAAACgkQlh/E3EQov+Do
+lxAAmL2PYuMwAQ/352gCCOCddccNm/vHMCkXUv9WJ7mGQmzDlBL7c7Qr5gPA87f1E/nDuDZATRtZ
+XNeO4FIFXtSnSCRoNRzyq2QtE+f7EYNPB3JkMyUKwbBMF5vyDm7qWNXcr+7jeBKPqf5FvJaEYcEc
+sETHnMUBvNulxBwbvyClW/DrJ0a2qBVDm9m844mwIxcpJv/Qf+CKl+nOLuBLUUetcVLwxoghdgkE
+jR/k96ZMfbR4eTe6vp3S8y41JhPUH+Jc+ixHfQG1nAI4yHIlISZI4ejBrW8i1+ys2y/IHxtcs9YP
+AJ6KB/QOeYibaY9GZ7Y7fVxbKU2OzVeidbtaS91hK0zNmPqZfDmJdA55B0pcuWNfYBY2L1fSsku9
+4n/RePNyN39wYfyo5jtCH3epzdW4/EXBNxm1YRxQ6Vn/YKAF0Tthd6fpaXJu2SjTGoAPZRFF8A5Q
+4j4UAgelmgvlJekY04/sG0FY08iZNnzyGt6V7/SD6JYvAIuM+aud1GtJeZ1R187W2YNh0tuVx9Ow
+2HRCbvP2VlRoEV0r51j3GlsYbpVVNxlKJVv08wk6Zj6k05zdGSsj2q+2krK8vT2x9gdNBq4nsjGO
+tvQASuitCkyT48yz31k4wz+66Gww1j8jnDgZNiKyxfYAGP/d/crJm7E4YTUzsx0XmmugRMxH/Gzs
+53A=
+=ai4n
+-----END PGP SIGNATURE-----
+
+--------------s7IF5EGqdKBQA0bVZEBQB4E5--
 
