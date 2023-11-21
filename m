@@ -1,78 +1,87 @@
-Return-Path: <linux-i2c+bounces-365-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-366-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2998F7F277B
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Nov 2023 09:31:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B51037F283B
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Nov 2023 09:58:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59C361C21937
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Nov 2023 08:31:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 602802820F0
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Nov 2023 08:58:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 033A93B7AD;
-	Tue, 21 Nov 2023 08:31:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74670249E3;
+	Tue, 21 Nov 2023 08:58:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LZS0Mpbj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SsBtLgmc"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65A43B79D;
-	Tue, 21 Nov 2023 08:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81623C433C7;
-	Tue, 21 Nov 2023 08:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700555468;
-	bh=z4UtWQZZa+ttzNxT4dJLgWb71f/Kl8eEqsMtKTWnNEI=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=LZS0MpbjcH4E3jcE7IxOrDpOyqzlUQOWrXSGR0l9IgMsDjKEr+nGBZMSkhFLb2uYG
-	 LHBzcjKug4c5NS6qE/WOLtt3qjh0joHqMe7HDojtiMCPO3q10pVFMLw2hLzIFn1y5y
-	 /UsiINKQHhyDYzFW0d185wvNtL7gRSOKRR62RXhZP+jDQb8Nf+JZXy5kzgNRmMTeSz
-	 8iaLs2l8N7dGibLOtGR1QxwzunP165mAt2HSA2E2O9O7hA8GmzUr7Sz0LkuGibpiV3
-	 Oxv3eTQmCg9gcWhienCGy9KpKdYPYWM09QGmVRhRp9YbbDj3Ilglt8LDIXELcyTtLK
-	 i2SWNfkKjc6xw==
-Date: Tue, 21 Nov 2023 09:31:04 +0100 (CET)
-From: Jiri Kosina <jikos@kernel.org>
-To: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
-cc: gupt21@gmail.com, benjamin.tissoires@redhat.com, Enrik.Berkhan@inka.de, 
-    sven.zuehlsdorf@vigem.de, linux-i2c@vger.kernel.org, 
-    linux-input@vger.kernel.org
-Subject: Re: [PATCH 0/5] MCP2221 Improvements
-In-Reply-To: <20231025035514.3450123-1-hamish.martin@alliedtelesis.co.nz>
-Message-ID: <nycvar.YFH.7.76.2311210930440.29220@cbobk.fhfr.pm>
-References: <20231025035514.3450123-1-hamish.martin@alliedtelesis.co.nz>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6656E7;
+	Tue, 21 Nov 2023 00:58:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700557109; x=1732093109;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=htt+X8f+FjchoXwuJTnW2vNFwbgd57Lg5mit0MjBw8w=;
+  b=SsBtLgmcJ3sOswtND+0fGmmrseId7W+mC/kq1EbK7MkIMCgQHJ/m5vCm
+   mW3Z+r3zuHrIX9d/AvxCN3h4sfT0KEQPplDO8JHTuTDwpaHXpmTot1H1S
+   mtNrbhpJ7EPko6gZjuSuEfkZf8dHTncphO9VTolqEzkkNkYzqqeRs951y
+   66VjdoSntY3aK3xUarjvs8iBJosQv4hv3L37fopsagDYVdshVkRiMoCOR
+   fbvRZXBNmOU/+p5aqY74vv/OR2mx2mSf0VE8f9LV/nednQe+/Z1+gY+p3
+   KAzqUGKt82wiVWFvqtXB0iqDmRbyTI6Nj5h0pMUOM11X3CH/2PCgV03IE
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="456132993"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="456132993"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 00:58:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10900"; a="890195495"
+X-IronPort-AV: E=Sophos;i="6.04,215,1695711600"; 
+   d="scan'208";a="890195495"
+Received: from cdeakx-mobl.amr.corp.intel.com (HELO localhost) ([10.252.58.54])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 00:58:23 -0800
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>, Wolfram Sang <wsa@kernel.org>,
+ intel-gfx@lists.freedesktop.org
+Cc: linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org, Yongqin
+ Liu <yongqin.liu@linaro.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Marijn Suijten <marijn.suijten@somainline.org>, Sumit Semwal
+ <sumit.semwal@linaro.org>, amd-gfx@lists.freedesktop.org,
+ linux-rockchip@lists.infradead.org, Xinwei Kong
+ <kong.kongxinwei@hisilicon.com>, linux-sunxi@lists.linux.dev, Jonas
+ Karlman <jonas@kwiboo.se>, linux-arm-msm@vger.kernel.org,
+ linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ Jocelyn Falempe <jfalempe@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-i2c@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>, John
+ Stultz <jstultz@google.com>, Heiner Kallweit <hkallweit1@gmail.com>,
+ freedreno@lists.freedesktop.org, Laurent Pinchart
+ <Laurent.pinchart@ideasonboard.com>
+Subject: Re: [Intel-gfx] [PATCH v4 00/20] remove I2C_CLASS_DDC support
+In-Reply-To: <20231120214624.9378-1-hkallweit1@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20231120214624.9378-1-hkallweit1@gmail.com>
+Date: Tue, 21 Nov 2023 10:58:20 +0200
+Message-ID: <87h6lfo53n.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain
 
-On Wed, 25 Oct 2023, Hamish Martin wrote:
+On Mon, 20 Nov 2023, Heiner Kallweit <hkallweit1@gmail.com> wrote:
+> v4:
+> - more ack and review tags
 
-> Recently I've been prototyping a new system which uses a MCP2221 chip as
-> the I2C bus. During that development a few issues were found that form
-> the patches in this series.
-> 
-> The first two are resolving long standing issues that have both been
-> reported before, patches submitted, but it appears never accepted.
-> The ACPI patch resolves an issue in my x86_64 system.
-> The final two address fundamental issues with the driver that have not
-> worked correctly from the beginning it seems.
-> 
-> Please review and let me know what you think.
-
-Hi,
-
-I have applied 1/5 and 2/5 for 6.7 and the rest of the series for 6.8.
+Please do not send new versions just to record the acks and
+reviews. They should be added while applying the patches.
 
 Thanks,
+Jani.
 
 -- 
-Jiri Kosina
-SUSE Labs
-
+Jani Nikula, Intel
 
