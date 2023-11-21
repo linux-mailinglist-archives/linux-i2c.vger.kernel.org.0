@@ -1,61 +1,60 @@
-Return-Path: <linux-i2c+bounces-367-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-368-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7258A7F2E3B
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Nov 2023 14:25:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A90C7F2E66
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Nov 2023 14:34:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 128E8B21ACB
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 Nov 2023 13:25:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6947A1C2182A
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 Nov 2023 13:34:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAE44168CB;
-	Tue, 21 Nov 2023 13:25:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4014E3986D;
+	Tue, 21 Nov 2023 13:34:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W7mHQi8a"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L2aH3nfN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C351BB;
-	Tue, 21 Nov 2023 05:25:21 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-548f0b7ab9eso1538886a12.3;
-        Tue, 21 Nov 2023 05:25:21 -0800 (PST)
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5D6D45
+	for <linux-i2c@vger.kernel.org>; Tue, 21 Nov 2023 05:34:35 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9ae2cc4d17eso756813966b.1
+        for <linux-i2c@vger.kernel.org>; Tue, 21 Nov 2023 05:34:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700573120; x=1701177920; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=m92K+MDAt/mcnsYqpnD286mgL18e1jbSNxgzizE2vc0=;
-        b=W7mHQi8aZJ2Nznt/WNs2ca+gIJIpgdRsuk1a4k8DDHissX1pw1e0UITDIaxR7uBHBE
-         Zu4XVCaBtyGefLzZcwtC2DTEXJNVuAC+4oSsHNLte6FLzP8ti2zIhW5f9/yci1l9l/Ua
-         BJgrJnOdePfgiezEhXlzkZ1e4GME8dMucjFcu12zKjSsnNVCR4wP0iECbmqVTCRsXoYG
-         19czRi2Kmu/h4mV9Lxu4KIni2Y//d3EnQZyPDbECWhmp2ucvySmta5ymT+MrQp/jcsl7
-         f3+FSF8YONGOmx/8lA43Ju152/dr2+EJ8qhM2FkblIuwIHIqvawaNBq3JeHM7ZX3TrpP
-         dZ4A==
+        d=gmail.com; s=20230601; t=1700573674; x=1701178474; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WK+C2Y8Rt86x7zpHxQcNYl48dK8RCXicMXMq80fMJeI=;
+        b=L2aH3nfNAfGfEFQF9Z/yXsxxAK1IuzSvkKSkEJCcDZoc2J3Jae9v7L8My5svU7EYpW
+         4IGlSbiuQXhBUhtGu/Gyp80AR0o8KS8I7X0u4+bmWtj4SA9Sj2geTjUvmSL29ys+xa7T
+         pNpPe9VwL8gcNjQ1r6n5DdTZTj2asgOWtcYOiyQ4T4FhLyVCHYBTr4rZUJK//EiudiqL
+         Jbv8jdr4dlSA0QARcqSUzjdvqrC+SsyxpFnhrGUKFlVKe5keBc1X/K9wdS0FzuaO/Bzk
+         IyXL4tMgiF8HCLKXwRzPSDTyjtgY9jT+82vovUgJYSLCQ/jOLCQWbZMPNGgQyGTVOv33
+         734A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700573120; x=1701177920;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m92K+MDAt/mcnsYqpnD286mgL18e1jbSNxgzizE2vc0=;
-        b=jV+F4J0aEI+AjAv8uCi9vCHPiHmumkl8gLp6W06gnaPw0MGFkUYVZW62hFUeuZEeDP
-         DRxOuko5763ABSMROmGaE+nHtULTc7u9vPJWrX82YRksuRQ3W80Wl8XGvqc25D3cboUe
-         g6fi392llOhm64rk608H/0L6mrMnpJhecWjyw7P06aYydfD9qcLEPSEfdUghzmcQ9nZU
-         TVt+gvzmTly+vVy5Jt3BqQKjW28Cf2lmojtlJ0QFvQVIJmBkF90XbvIHlExaTzz8URMN
-         IsxqJv37jd1fi8hBXLjqf2WjLGp69nGVk6dEiWzrkisk6lFMWDkPCycbgCLJ3JlhhviR
-         2NLg==
-X-Gm-Message-State: AOJu0YyhOU8sqWG5UKPFyUdGuQ1ZPIlEpmTkKYK1fpb0xgwIGUBuyURH
-	WcuaOZHRPPJAOz7CzA/7qyg=
-X-Google-Smtp-Source: AGHT+IFeVg0d+ORZfLoV2hl/dUB5IqhT2S/nhE3hYYfAZSZypJJtkrq2Fw+2ndptvfPv114T0zoi/Q==
-X-Received: by 2002:aa7:d8cc:0:b0:540:97b5:3719 with SMTP id k12-20020aa7d8cc000000b0054097b53719mr1597855eds.25.1700573119970;
-        Tue, 21 Nov 2023 05:25:19 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700573674; x=1701178474;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WK+C2Y8Rt86x7zpHxQcNYl48dK8RCXicMXMq80fMJeI=;
+        b=ChvqM+63FaeDWq3M45/ZszPJk2Q6/8x81B/WQCz6/GCROCVtSav7hjsHkKwrBTDC8+
+         rA95BZegIXDkk0RtAtxeGBEz2UJJ/+1xGSu8GlIvIm1ByxukB7XA5ryOnNwPJMKUb6qr
+         r1TOq2xMrRvdPGLS9i+bs3iOW9Z7jb4pit2rimF+LnJ0SVmqSGo+Sdu8EEsQqSlIOV8e
+         Ctwf/PnOZoeEPFHVtfGhEBkAnQYblNU4bF8hOsfFPYP52hJLK9iGroFs+JfdN8RacIxN
+         ToXTOWo07mLBC8UNnpovmeADYumdKOUPnkzCYguE9aO2YcTyE9/PF6fwFdBm5iHImTkT
+         0hEA==
+X-Gm-Message-State: AOJu0Yy1I7t84Zmy0dEYzKTfHdWRbXe4XBaqySA+1D/02y5rbJm/BrdK
+	wSZU8rd830iPVCOiT+oblA0=
+X-Google-Smtp-Source: AGHT+IHQ8dKHYp+Ht4pLDHqzQiQOupryullii3ARZoApdnzW1Ug7aTyKZKBvLC8lU4md2NbA2Xop5g==
+X-Received: by 2002:a17:907:20dc:b0:9e7:d1ab:e90b with SMTP id qq28-20020a17090720dc00b009e7d1abe90bmr7947089ejb.19.1700573673463;
+        Tue, 21 Nov 2023 05:34:33 -0800 (PST)
 Received: from ?IPV6:2a01:c23:c095:ed00:bc3d:5c69:4067:a24b? (dynamic-2a01-0c23-c095-ed00-bc3d-5c69-4067-a24b.c23.pool.telefonica.de. [2a01:c23:c095:ed00:bc3d:5c69:4067:a24b])
-        by smtp.googlemail.com with ESMTPSA id j19-20020aa7ca53000000b005488ae52752sm3212156edt.18.2023.11.21.05.25.18
+        by smtp.googlemail.com with ESMTPSA id fy11-20020a170906b7cb00b009fbce971196sm3515621ejb.111.2023.11.21.05.34.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Nov 2023 05:25:19 -0800 (PST)
-Message-ID: <c636a24f-0390-49a2-9012-9abf9794abc3@gmail.com>
-Date: Tue, 21 Nov 2023 13:25:18 +0100
+        Tue, 21 Nov 2023 05:34:32 -0800 (PST)
+Message-ID: <631925ab-c117-411c-a150-5ab2a4dc8fd7@gmail.com>
+Date: Tue, 21 Nov 2023 13:34:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -63,25 +62,17 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [Intel-gfx] [PATCH v4 00/20] remove I2C_CLASS_DDC support
-To: Jani Nikula <jani.nikula@linux.intel.com>, Wolfram Sang <wsa@kernel.org>,
- intel-gfx@lists.freedesktop.org
-Cc: linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Yongqin Liu <yongqin.liu@linaro.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, amd-gfx@lists.freedesktop.org,
- linux-rockchip@lists.infradead.org,
- Xinwei Kong <kong.kongxinwei@hisilicon.com>, linux-sunxi@lists.linux.dev,
- Jonas Karlman <jonas@kwiboo.se>, linux-arm-msm@vger.kernel.org,
- linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- Jocelyn Falempe <jfalempe@redhat.com>, linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
- John Stultz <jstultz@google.com>, freedreno@lists.freedesktop.org,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-References: <20231120214624.9378-1-hkallweit1@gmail.com>
- <87h6lfo53n.fsf@intel.com>
+Subject: Re: [PATCH RFC] i2c: i801: Add i801_register_jc42, similar to
+ i2c_register_spd
 Content-Language: en-US
+To: Jean Delvare <jdelvare@suse.de>
+Cc: linux-i2c@vger.kernel.org
+References: <79977020-69c3-4f87-b861-b043c7fb9077@gmail.com>
+ <b9a832d6-f7a8-4a9d-b639-181e074b4e9a@gmail.com>
+ <20231114150001.6823e277@endymion.delvare>
+ <37aa2c39-8192-42be-8021-a2147252f27b@gmail.com>
+ <5f2ed562-319c-4439-a235-c1a01373c1fe@gmail.com>
+ <20231119093902.739b4602@endymion.delvare>
 From: Heiner Kallweit <hkallweit1@gmail.com>
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
@@ -126,24 +117,40 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <87h6lfo53n.fsf@intel.com>
+In-Reply-To: <20231119093902.739b4602@endymion.delvare>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 21.11.2023 09:58, Jani Nikula wrote:
-> On Mon, 20 Nov 2023, Heiner Kallweit <hkallweit1@gmail.com> wrote:
->> v4:
->> - more ack and review tags
+On 19.11.2023 09:39, Jean Delvare wrote:
+> Hi Heiner,
 > 
-> Please do not send new versions just to record the acks and
-> reviews. They should be added while applying the patches.
+> On Wed, 15 Nov 2023 12:00:18 +0100, Heiner Kallweit wrote:
+>> After thinking once more about it I think we have to do it from the
+>> ee1004 driver for DDR4. For DDR3 from at24. Only this way we can read
+>> the "temp sensor present" flag from SPD. E.g. for ee1004 the SPD EEPROM
+>> may be switched to the second page and we have to switch it to the first
+>> page first.
 > 
-Right, typically also patchwork interprets and shows A-b and R-b when
-sent as a reply to a patch of the series. I sent a new version because
-an A-b covered multiple patches and was sent as reply to the cover letter.
+> We indeed need to read the EEPROM data at some point. My initial
+> thinking was to instantiate the at24 or ee1004 device first (from
+> i2c-smbus), then read the value from the EEPROM and instantiate the
+> jc42 device (still from i2c-smbus). This requires an internal read
+> function. I think we already have that in at24, because it uses the
+> nvmem framework, but ee1004 lacks it as far as I can see.
+> 
+I sent RFC patches for both, ee1004 and at24.
 
-> Thanks,
-> Jani.
+> But anyway, if you have another approach which works, that's equally
+> fine with me.
 > 
-Heiner
+>> I'll send a RFC patch for this. Unfortunately I have no RAM with temp
+>> sensor to test it.
+> 
+> Neither do I :-(
+> 
+I organized a DDR4 module with temp sensor and the ee1004 RFC patch
+properly instantiated the temp sensor.
+Surprisingly I found that my old DDR4 modules also have a temp sensor,
+it's just not advertised in SPD.
+
 
