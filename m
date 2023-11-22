@@ -1,165 +1,106 @@
-Return-Path: <linux-i2c+bounces-383-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-384-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D184B7F4ABF
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Nov 2023 16:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EF3CF7F4BC5
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Nov 2023 16:59:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47BADB20E56
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Nov 2023 15:35:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8EC2FB20C55
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Nov 2023 15:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB01D4CE06;
-	Wed, 22 Nov 2023 15:35:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 961B64F214;
+	Wed, 22 Nov 2023 15:59:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AlT2Sb5q"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="sKg//tqh"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA7E4CDFB
-	for <linux-i2c@vger.kernel.org>; Wed, 22 Nov 2023 15:35:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A989C433CC;
-	Wed, 22 Nov 2023 15:35:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700667352;
-	bh=wy23UtIXrthgj2eEEYgrBaW36bslAFzoQLlkGnSsD+A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AlT2Sb5qadUUsNXXF6i3wA7QdvERdZ0b532Tl2g2Z1wo78frdU5w6tJzUOE/dxVpp
-	 E7GF9jLYwy2f/+AgSPEHFFPzgc3OjvlrgAl+H28U2UrV5BZhk4ugWhnxSlyP4xVj5n
-	 LQtcTGTAGgwgmJBzU0ga8vgX88sqY/lWYIC4M57+0djFvewBbtTHxBXT1H+LouVIb6
-	 8FumhQsXmMoYDzqR0mSykXbYcMMqj5KxUAY5kyMY4pnXV9aU9npb/e6b/zWZc9jEGY
-	 MXBdQCgq+VGGf6fw9WJ6gJDRs5tB28IhyBQREi8lBOiYkGTo8tAzAGolUeE29l/FyZ
-	 r2CMmQ8ZKN6ow==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Jan Bottorff <janb@os.amperecomputing.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	andi.shyti@kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 2/7] i2c: designware: Fix corrupted memory seen in the ISR
-Date: Wed, 22 Nov 2023 10:35:30 -0500
-Message-ID: <20231122153541.853179-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231122153541.853179-1-sashal@kernel.org>
-References: <20231122153541.853179-1-sashal@kernel.org>
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5724109
+	for <linux-i2c@vger.kernel.org>; Wed, 22 Nov 2023 07:59:35 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-332c46d5988so2550096f8f.1
+        for <linux-i2c@vger.kernel.org>; Wed, 22 Nov 2023 07:59:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1700668774; x=1701273574; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8wkJWpPzXVPRgDS/WddlejSs7PCXn5mUATF2Jmfj7mc=;
+        b=sKg//tqh1z9aGk7XKkuZC03JnUdIOOwA4hKRj5RNEIokZ83SxsUQRJ+M9nvkclyR4C
+         bFMVMv2wDMQxRClMaS/02ipTiZpaQZ8jZy+tMCvg4Y8611bbB06QJjBY1hHOF2/YVqUg
+         tjxI11yJnYYA2LWCeRAR+mN/NerpVCM4ittVvLcXms34QE532XL38EDLk75JziGHYK1j
+         dobBgTTeNkEb8k+QRfthGTVlEp8tk7leR8THw00Py6UpSApbBvHMBFKuJOXF3nd5PBwJ
+         zMSwK3TSsOvN2kHPlveuZ12lwhO56hMDmzJt8G0+la5ZiK5wZd7kMzolhRwtCxjurlaX
+         Lrzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700668774; x=1701273574;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8wkJWpPzXVPRgDS/WddlejSs7PCXn5mUATF2Jmfj7mc=;
+        b=Bz+gjgdAb4ze2nrvZ9iBcYnX4x+L22RoFZIKSB7gCs+Ihcl95JlkZKnpbNpifHz/qK
+         ZoNKO5zOjg31whzf+CqGplO27IL+IcIUBHRiQDBfLJbq4IqAODY45VgWvL9xcsnz9YEg
+         PPHVPp5CRpegDDmZYXjKkoe33owfjCt9iLdhXQUdEsuBl0Kjsu6ThFs5lJlzbWnF9ScF
+         7TemBaCXeo1g7DCVpElF6MK10AjwTxTC0mVCcNVAcqJTTeI6atafsZoFKmjX43ho7Cln
+         s32oNJ/4SfVWrSE0325eQlLAGSdcvaYBU6Anvl1LcMaq3PBvMFgXerSf466udqvhP3Rf
+         LwTg==
+X-Gm-Message-State: AOJu0YzucTVstXG5HH6MgqLzZE2IiaYvQEH8vOb3X6N2T/c/AkDeluln
+	sbMCal0vK29C0EtLE2QbUKcrEPrrSFwpKkOoCik=
+X-Google-Smtp-Source: AGHT+IEfa2urc0vHXWsGVTyp1rNTre0crbZVtzuV+wVShCjSUhwjtJ8mLf33LNBqi7aCq+6Vowt6LA==
+X-Received: by 2002:a5d:59a2:0:b0:32d:a495:a9b7 with SMTP id p2-20020a5d59a2000000b0032da495a9b7mr1710247wrr.61.1700668774009;
+        Wed, 22 Nov 2023 07:59:34 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:bc76:bea6:6d96:7507])
+        by smtp.gmail.com with ESMTPSA id t16-20020a05600c199000b0040b1a3c83b6sm2644279wmq.40.2023.11.22.07.59.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Nov 2023 07:59:33 -0800 (PST)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Wolfram Sang <wsa@the-dreams.de>
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH] eeprom: at24: use of_match_ptr()
+Date: Wed, 22 Nov 2023 16:59:16 +0100
+Message-Id: <20231122155916.38037-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.201
 Content-Transfer-Encoding: 8bit
 
-From: Jan Bottorff <janb@os.amperecomputing.com>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-[ Upstream commit f726eaa787e9f9bc858c902d18a09af6bcbfcdaf ]
+This driver does not depend on CONFIG_OF so using of_match_ptr() makes
+sense to reduce the size a bit.
 
-When running on a many core ARM64 server, errors were
-happening in the ISR that looked like corrupted memory. These
-corruptions would fix themselves if small delays were inserted
-in the ISR. Errors reported by the driver included "i2c_designware
-APMC0D0F:00: i2c_dw_xfer_msg: invalid target address" and
-"i2c_designware APMC0D0F:00:controller timed out" during
-in-band IPMI SSIF stress tests.
-
-The problem was determined to be memory writes in the driver were not
-becoming visible to all cores when execution rapidly shifted between
-cores, like when a register write immediately triggers an ISR.
-Processors with weak memory ordering, like ARM64, make no
-guarantees about the order normal memory writes become globally
-visible, unless barrier instructions are used to control ordering.
-
-To solve this, regmap accessor functions configured by this driver
-were changed to use non-relaxed forms of the low-level register
-access functions, which include a barrier on platforms that require
-it. This assures memory writes before a controller register access are
-visible to all cores. The community concluded defaulting to correct
-operation outweighed defaulting to the small performance gains from
-using relaxed access functions. Being a low speed device added weight to
-this choice of default register access behavior.
-
-Signed-off-by: Jan Bottorff <janb@os.amperecomputing.com>
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Tested-by: Serge Semin <fancer.lancer@gmail.com>
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- drivers/i2c/busses/i2c-designware-common.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/misc/eeprom/at24.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index 682fffaab2b40..c9f7783ac7cb1 100644
---- a/drivers/i2c/busses/i2c-designware-common.c
-+++ b/drivers/i2c/busses/i2c-designware-common.c
-@@ -63,7 +63,7 @@ static int dw_reg_read(void *context, unsigned int reg, unsigned int *val)
- {
- 	struct dw_i2c_dev *dev = context;
- 
--	*val = readl_relaxed(dev->base + reg);
-+	*val = readl(dev->base + reg);
- 
- 	return 0;
- }
-@@ -72,7 +72,7 @@ static int dw_reg_write(void *context, unsigned int reg, unsigned int val)
- {
- 	struct dw_i2c_dev *dev = context;
- 
--	writel_relaxed(val, dev->base + reg);
-+	writel(val, dev->base + reg);
- 
- 	return 0;
- }
-@@ -81,7 +81,7 @@ static int dw_reg_read_swab(void *context, unsigned int reg, unsigned int *val)
- {
- 	struct dw_i2c_dev *dev = context;
- 
--	*val = swab32(readl_relaxed(dev->base + reg));
-+	*val = swab32(readl(dev->base + reg));
- 
- 	return 0;
- }
-@@ -90,7 +90,7 @@ static int dw_reg_write_swab(void *context, unsigned int reg, unsigned int val)
- {
- 	struct dw_i2c_dev *dev = context;
- 
--	writel_relaxed(swab32(val), dev->base + reg);
-+	writel(swab32(val), dev->base + reg);
- 
- 	return 0;
- }
-@@ -99,8 +99,8 @@ static int dw_reg_read_word(void *context, unsigned int reg, unsigned int *val)
- {
- 	struct dw_i2c_dev *dev = context;
- 
--	*val = readw_relaxed(dev->base + reg) |
--		(readw_relaxed(dev->base + reg + 2) << 16);
-+	*val = readw(dev->base + reg) |
-+		(readw(dev->base + reg + 2) << 16);
- 
- 	return 0;
- }
-@@ -109,8 +109,8 @@ static int dw_reg_write_word(void *context, unsigned int reg, unsigned int val)
- {
- 	struct dw_i2c_dev *dev = context;
- 
--	writew_relaxed(val, dev->base + reg);
--	writew_relaxed(val >> 16, dev->base + reg + 2);
-+	writew(val, dev->base + reg);
-+	writew(val >> 16, dev->base + reg + 2);
- 
- 	return 0;
- }
+diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+index f61a80597a22..76a0b9b2fcc4 100644
+--- a/drivers/misc/eeprom/at24.c
++++ b/drivers/misc/eeprom/at24.c
+@@ -18,6 +18,7 @@
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/nvmem-provider.h>
++#include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/property.h>
+@@ -812,7 +813,7 @@ static struct i2c_driver at24_driver = {
+ 	.driver = {
+ 		.name = "at24",
+ 		.pm = &at24_pm_ops,
+-		.of_match_table = at24_of_match,
++		.of_match_table = of_match_ptr(at24_of_match),
+ 		.acpi_match_table = ACPI_PTR(at24_acpi_ids),
+ 	},
+ 	.probe = at24_probe,
 -- 
-2.42.0
+2.40.1
 
 
