@@ -1,37 +1,37 @@
-Return-Path: <linux-i2c+bounces-382-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-383-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF43C7F4AAE
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Nov 2023 16:35:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D184B7F4ABF
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Nov 2023 16:36:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D1EC1C20ACE
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Nov 2023 15:35:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47BADB20E56
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Nov 2023 15:35:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A8A24CDFE;
-	Wed, 22 Nov 2023 15:35:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB01D4CE06;
+	Wed, 22 Nov 2023 15:35:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LDtzBfC8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AlT2Sb5q"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C1C4CDE1
-	for <linux-i2c@vger.kernel.org>; Wed, 22 Nov 2023 15:35:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED988C433CD;
-	Wed, 22 Nov 2023 15:35:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA7E4CDFB
+	for <linux-i2c@vger.kernel.org>; Wed, 22 Nov 2023 15:35:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A989C433CC;
+	Wed, 22 Nov 2023 15:35:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700667320;
-	bh=bD2NyGW9U7P0uVZroA1oltAJcXnIkFUEAopSBtZoSPA=;
+	s=k20201202; t=1700667352;
+	bh=wy23UtIXrthgj2eEEYgrBaW36bslAFzoQLlkGnSsD+A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LDtzBfC8aVhIRKzsjx/N9uzbrWff/BtxGHqKbzjEBZYLqSV+RssCOA+RfGTd7ieSI
-	 HGXgfEX4ASD74QOxzHie3ExMsOI0zJxlrvSh9gf4AZgm489hpae9i3TZXRnVbhspof
-	 TsxQYkHN0Rx2n/0KNm2Ps+OFRxDX+OvPZ6qlzEhUOvHpw0qnebgpuVmSs1MFDzYasl
-	 RevEK5rTz+EfGC94wVyx6ZfcWESFJ9iBxjztnNMETUTAEsiir8js6GTS9+jb+QJfgV
-	 bzHYgkyv7m03uQNSp9t0Sp2UEULg7Mu0tKISTYGg1+2OA9DwX8eAOsiBrYb0d9/89g
-	 lhB9kixjSPRjg==
+	b=AlT2Sb5qadUUsNXXF6i3wA7QdvERdZ0b532Tl2g2Z1wo78frdU5w6tJzUOE/dxVpp
+	 E7GF9jLYwy2f/+AgSPEHFFPzgc3OjvlrgAl+H28U2UrV5BZhk4ugWhnxSlyP4xVj5n
+	 LQtcTGTAGgwgmJBzU0ga8vgX88sqY/lWYIC4M57+0djFvewBbtTHxBXT1H+LouVIb6
+	 8FumhQsXmMoYDzqR0mSykXbYcMMqj5KxUAY5kyMY4pnXV9aU9npb/e6b/zWZc9jEGY
+	 MXBdQCgq+VGGf6fw9WJ6gJDRs5tB28IhyBQREi8lBOiYkGTo8tAzAGolUeE29l/FyZ
+	 r2CMmQ8ZKN6ow==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -42,12 +42,12 @@ Cc: Jan Bottorff <janb@os.amperecomputing.com>,
 	Sasha Levin <sashal@kernel.org>,
 	andi.shyti@kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 2/7] i2c: designware: Fix corrupted memory seen in the ISR
-Date: Wed, 22 Nov 2023 10:35:02 -0500
-Message-ID: <20231122153512.853015-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 2/7] i2c: designware: Fix corrupted memory seen in the ISR
+Date: Wed, 22 Nov 2023 10:35:30 -0500
+Message-ID: <20231122153541.853179-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231122153512.853015-1-sashal@kernel.org>
-References: <20231122153512.853015-1-sashal@kernel.org>
+In-Reply-To: <20231122153541.853179-1-sashal@kernel.org>
+References: <20231122153541.853179-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.139
+X-stable-base: Linux 5.10.201
 Content-Transfer-Encoding: 8bit
 
 From: Jan Bottorff <janb@os.amperecomputing.com>
@@ -98,7 +98,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
-index 4e752321b95e0..cb1d8d192ac0c 100644
+index 682fffaab2b40..c9f7783ac7cb1 100644
 --- a/drivers/i2c/busses/i2c-designware-common.c
 +++ b/drivers/i2c/busses/i2c-designware-common.c
 @@ -63,7 +63,7 @@ static int dw_reg_read(void *context, unsigned int reg, unsigned int *val)
