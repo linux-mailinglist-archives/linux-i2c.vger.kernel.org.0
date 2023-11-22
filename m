@@ -1,132 +1,165 @@
-Return-Path: <linux-i2c+bounces-377-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-378-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 949847F45E9
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Nov 2023 13:23:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6E9E7F4A57
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Nov 2023 16:32:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 34D1BB20DBB
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 Nov 2023 12:23:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36B9FB20E37
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 Nov 2023 15:32:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08024D5A7;
-	Wed, 22 Nov 2023 12:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B1A755792;
+	Wed, 22 Nov 2023 15:32:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=feathertop.org header.i=@feathertop.org header.b="w50EY/dh";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eRQYkEDL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YkToUuvm"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0761A8;
-	Wed, 22 Nov 2023 04:23:25 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.west.internal (Postfix) with ESMTP id 0A7193200B0F;
-	Wed, 22 Nov 2023 07:23:23 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 22 Nov 2023 07:23:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=feathertop.org;
-	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
-	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm3; t=1700655803; x=
-	1700742203; bh=EqvpFO7uAp2dtrS7PSLLP170vBC1DS2T9wR02twt9S4=; b=w
-	50EY/dh0oz2zSNEc9IgmM+0kBop2AA1twiXR37JbZWYc4gR/2POSSizxcMKwjpe8
-	IA4NMw7ZcSwBi8g6x6KI0TSkrbMRDOQeCYTmvLondazOsD68XgfMjUfOrCTf6Z55
-	/ynShZxZvWmt3O72sM4FPFyV6/pubs8w01/CFgriCjz3sMaA73lQQ4v/Ac3F6JkG
-	oyRpiIgdHkG+HrrZO4chqDBtOYE6KHW0Lg9E2SQvKWTwbhiVfXXBZEEESkpC+T7W
-	2zVkEirKqSq29WogMfzGmOfsuPiwJdoo6O1Jo6wdhLhsbTKJShsgSdP65hzxhCTq
-	fjB1hYgAflI5jV7g9FoRQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1700655803; x=
-	1700742203; bh=EqvpFO7uAp2dtrS7PSLLP170vBC1DS2T9wR02twt9S4=; b=e
-	RQYkEDLXQgIVH1nZCehJYorDBVfwGZiSpAxk9oyqiHpPNBsLqk3MQiwXAHzuKnKg
-	1WUraeGGkeVC1gdCKdzigRqeIRWJvBhPX4g1oqxOJX2ZjSEUttgvQEfpsnE9P71u
-	XEto2zlbomrJW85c58ncnAa/gKHF9FZBkm9Qg8465B76LrT8pNuoaiWdSFVRzqNr
-	o6UYmUhCVyyD9Ae3jDrGPODGme0ElalRq346E5SW3fzN0TS4iWofFt6A1LuSEQxJ
-	wiJgLYUezGrhLaKrpadStj5B9JDQNqDx6ehyfEx1IlxFhoZDO29LUxup7NvHbfJ/
-	8WhJoJv+l0imGiIcDQsFA==
-X-ME-Sender: <xms:u_JdZbyr3X_IMdPdVaEkpZJfmiT4a3OquYWhc7JlWLuOEBqmaasrlQ>
-    <xme:u_JdZTQj8zog1yA2KNiBwv5IDXS1-AHDoXpGvbvk-WuCk3OLipja4Vs_9w-v-0V6H
-    p5ImIn0uA>
-X-ME-Received: <xmr:u_JdZVUNdw6JXYaCHEDwX6FWAyS-b338NNGSputHEpkU1zZMB6YOiLuKvdK8w81bMPVP-7Fa1WEmMjmKDSG5yOE4Vw7oN5n_ZMA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehuddgfeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepvfhimhcu
-    nfhunhhnuceothhimhesfhgvrghthhgvrhhtohhprdhorhhgqeenucggtffrrghtthgvrh
-    hnpeefffeuhfetgeeikeejvefgtdefteehgfdvhfetfeeuffeuhffhfeekgfekgeehieen
-    ucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehtihhmse
-    hfvggrthhhvghrthhophdrohhrgh
-X-ME-Proxy: <xmx:u_JdZVh36mOMtPiF1lyQqmP1t8QiQOrtsSKOgV-_C-Q7IUM6RYmYIg>
-    <xmx:u_JdZdCkccMwx0OUttXzBWtJzfq6mBJXqPpPjTmBS7vyGkbTB9HCqw>
-    <xmx:u_JdZeKoHCJWs4OroaXBIvn9K0eRun8zoGjXk9vh-h5RGJPkz8PsNQ>
-    <xmx:u_JdZRsebGSgzpcE75tupvOUaJhrVRBlWCWkPl3kq8-qD5ZzjnKliQ>
-Feedback-ID: i1f8241ce:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Nov 2023 07:23:18 -0500 (EST)
-Received: by feathertop.org (sSMTP sendmail emulation); Wed, 22 Nov 2023 23:23:13 +1100
-From: Tim Lunn <tim@feathertop.org>
-To: linux-rockchip@lists.infradead.org,
-	devicetree@vger.kernel.org
-Cc: Tim Lunn <tim@feathertop.org>,
-	Jagan Teki <jagan@edgeble.ai>,
-	Rob Herring <robh+dt@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	Heiko Stuebner <heiko@sntech.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E215655773
+	for <linux-i2c@vger.kernel.org>; Wed, 22 Nov 2023 15:32:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3D3CC433C7;
+	Wed, 22 Nov 2023 15:32:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700667147;
+	bh=Nd7niRJLK/Dc/ombTHxhGHMDuswzQzOViRz1EU1UyJY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=YkToUuvmj+fxeiezHRqO6txdyS5TnPKJxjAOZ7XSAm5XzoFWdYp2afEXOrr+9jnS6
+	 bF/16eJCzKGe3cu22HWINgusF2dFvrv7Mzn1IlkAXfCt8fDUQIB8g+D7USSV+0IFWi
+	 6Ch2iT29VetmVr/LX9z5J1pgC8v/SFtpfBRDi4BZcCRJiDPc0AGPMXAUbNv/5SWyRk
+	 8R3VSx9lhXeoL0zvrnt6tGibMa2W5aRotoGF00VvrN9J/91pPxZFL3Gz7ifyxYoTtW
+	 sPJo9oTzobcbN+yn7DAij7HS+ckEez51ZMaeUSufi3t+DR2eJcBX6dH9uvzMMlQttU
+	 TyrWd1WwwIvOg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Jan Bottorff <janb@os.amperecomputing.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	andi.shyti@kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH v2 3/9] i2c: rk3x: Adjust offset for i2c2 on rv1126
-Date: Wed, 22 Nov 2023 23:22:26 +1100
-Message-Id: <20231122122232.952696-4-tim@feathertop.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231122122232.952696-1-tim@feathertop.org>
-References: <20231122122232.952696-1-tim@feathertop.org>
+Subject: [PATCH AUTOSEL 6.6 04/17] i2c: designware: Fix corrupted memory seen in the ISR
+Date: Wed, 22 Nov 2023 10:31:33 -0500
+Message-ID: <20231122153212.852040-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231122153212.852040-1-sashal@kernel.org>
+References: <20231122153212.852040-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.6.2
 Content-Transfer-Encoding: 8bit
 
-Rockchip RV1126 has special case mask bits for i2c2.
+From: Jan Bottorff <janb@os.amperecomputing.com>
 
-i2c2 wasnt previously enabled in rv1126.dtsi, adding DT node alone
-is not sufficient to enable i2c2. This patch fixes the i2c2 bus.
+[ Upstream commit f726eaa787e9f9bc858c902d18a09af6bcbfcdaf ]
 
-Signed-off-by: Tim Lunn <tim@feathertop.org>
+When running on a many core ARM64 server, errors were
+happening in the ISR that looked like corrupted memory. These
+corruptions would fix themselves if small delays were inserted
+in the ISR. Errors reported by the driver included "i2c_designware
+APMC0D0F:00: i2c_dw_xfer_msg: invalid target address" and
+"i2c_designware APMC0D0F:00:controller timed out" during
+in-band IPMI SSIF stress tests.
+
+The problem was determined to be memory writes in the driver were not
+becoming visible to all cores when execution rapidly shifted between
+cores, like when a register write immediately triggers an ISR.
+Processors with weak memory ordering, like ARM64, make no
+guarantees about the order normal memory writes become globally
+visible, unless barrier instructions are used to control ordering.
+
+To solve this, regmap accessor functions configured by this driver
+were changed to use non-relaxed forms of the low-level register
+access functions, which include a barrier on platforms that require
+it. This assures memory writes before a controller register access are
+visible to all cores. The community concluded defaulting to correct
+operation outweighed defaulting to the small performance gains from
+using relaxed access functions. Being a low speed device added weight to
+this choice of default register access behavior.
+
+Signed-off-by: Jan Bottorff <janb@os.amperecomputing.com>
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Tested-by: Serge Semin <fancer.lancer@gmail.com>
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
+ drivers/i2c/busses/i2c-designware-common.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Changes in v2:
-- i2c: clarify commit message
-
- drivers/i2c/busses/i2c-rk3x.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-index a044ca0c35a1..151927466d1d 100644
---- a/drivers/i2c/busses/i2c-rk3x.c
-+++ b/drivers/i2c/busses/i2c-rk3x.c
-@@ -1288,8 +1288,11 @@ static int rk3x_i2c_probe(struct platform_device *pdev)
- 			return -EINVAL;
- 		}
+diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+index affcfb243f0f5..35f762872b8a5 100644
+--- a/drivers/i2c/busses/i2c-designware-common.c
++++ b/drivers/i2c/busses/i2c-designware-common.c
+@@ -63,7 +63,7 @@ static int dw_reg_read(void *context, unsigned int reg, unsigned int *val)
+ {
+ 	struct dw_i2c_dev *dev = context;
  
--		/* 27+i: write mask, 11+i: value */
--		value = BIT(27 + bus_nr) | BIT(11 + bus_nr);
-+		if (i2c->soc_data == &rv1126_soc_data && bus_nr == 2)
-+			value = BIT(20) | BIT(4);
-+		else
-+			/* 27+i: write mask, 11+i: value */
-+			value = BIT(27 + bus_nr) | BIT(11 + bus_nr);
+-	*val = readl_relaxed(dev->base + reg);
++	*val = readl(dev->base + reg);
  
- 		ret = regmap_write(grf, i2c->soc_data->grf_offset, value);
- 		if (ret != 0) {
+ 	return 0;
+ }
+@@ -72,7 +72,7 @@ static int dw_reg_write(void *context, unsigned int reg, unsigned int val)
+ {
+ 	struct dw_i2c_dev *dev = context;
+ 
+-	writel_relaxed(val, dev->base + reg);
++	writel(val, dev->base + reg);
+ 
+ 	return 0;
+ }
+@@ -81,7 +81,7 @@ static int dw_reg_read_swab(void *context, unsigned int reg, unsigned int *val)
+ {
+ 	struct dw_i2c_dev *dev = context;
+ 
+-	*val = swab32(readl_relaxed(dev->base + reg));
++	*val = swab32(readl(dev->base + reg));
+ 
+ 	return 0;
+ }
+@@ -90,7 +90,7 @@ static int dw_reg_write_swab(void *context, unsigned int reg, unsigned int val)
+ {
+ 	struct dw_i2c_dev *dev = context;
+ 
+-	writel_relaxed(swab32(val), dev->base + reg);
++	writel(swab32(val), dev->base + reg);
+ 
+ 	return 0;
+ }
+@@ -99,8 +99,8 @@ static int dw_reg_read_word(void *context, unsigned int reg, unsigned int *val)
+ {
+ 	struct dw_i2c_dev *dev = context;
+ 
+-	*val = readw_relaxed(dev->base + reg) |
+-		(readw_relaxed(dev->base + reg + 2) << 16);
++	*val = readw(dev->base + reg) |
++		(readw(dev->base + reg + 2) << 16);
+ 
+ 	return 0;
+ }
+@@ -109,8 +109,8 @@ static int dw_reg_write_word(void *context, unsigned int reg, unsigned int val)
+ {
+ 	struct dw_i2c_dev *dev = context;
+ 
+-	writew_relaxed(val, dev->base + reg);
+-	writew_relaxed(val >> 16, dev->base + reg + 2);
++	writew(val, dev->base + reg);
++	writew(val >> 16, dev->base + reg + 2);
+ 
+ 	return 0;
+ }
 -- 
-2.40.1
+2.42.0
 
 
