@@ -1,71 +1,77 @@
-Return-Path: <linux-i2c+bounces-414-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-415-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 285FB7F5B5A
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 10:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C45B37F5B5C
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 10:41:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6F6928181F
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 09:41:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8074E281802
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 09:41:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3654021A1D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA60F22069;
 	Thu, 23 Nov 2023 09:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fjWwVPsU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nt2Q063x"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4733FD68;
-	Thu, 23 Nov 2023 01:40:57 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-a02d91ab199so82436066b.0;
-        Thu, 23 Nov 2023 01:40:57 -0800 (PST)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42199D72;
+	Thu, 23 Nov 2023 01:40:58 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9fa45e75ed9so88638866b.1;
+        Thu, 23 Nov 2023 01:40:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700732456; x=1701337256; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700732457; x=1701337257; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4GQVLU0yIdzvkWpe6EOtR/8b+D+v0ZubEgK+LbytqFk=;
-        b=fjWwVPsUARNs/VHoDvw+mL4gcuTLMp87TVPPHIXI4vRAwPTQf1iHkbSebo6UJRon04
-         tPCZjQBz4+0S+YCvq4bvmPjqshFlAE2+okqWk0w9H3YaY/9BhDOSZ5cgk8ngIQ8kdYUd
-         ephbv23hFWXKs9BaAw+RSy+6BXnRNE1IJdafCfKBpv+4mtNSpJo4NexAhH0uOz5oCl3S
-         KSEWFoGsHn3sLePq+be9kkERR7OOJeYZSnjY212XtJVG7YU1ExkdP1a8DvTxO6lZ2Fyo
-         1rSxOd+jLAvQmkFMyEZloLl0ckLnQmySRIdEl88n+mLX0oV83YntN7i1/RENesFf2Imc
-         v2bQ==
+        bh=clBWu+ZkOHv5aLxF4Jumr7Rdkfthd/rp2JM9TiGQIuQ=;
+        b=Nt2Q063xHLxk0zpMYkopuHqXGTDi+RnvKZdZDL8qQbHhN4xgIJLY4pmAZGfFS8sPz8
+         nT0JsohlKhtFcV7nA55I6NLegVWTg3A1hoGrUl/idRQ77BbPL6vuf+mJ61QZkGDz5q3r
+         MBQOPBcOkrslZQuznKrGXlE9KFZXQPunQlpftL/+LFULRo4Ngi8AdT6GnOvo7GfwlAgl
+         Fo4Lkp93TBWETEsPXbJdaJF3qBqBB63RVuLOv1Q39rIXifXsm1UR6H+NvLV/NxMHCvaZ
+         IKUVMzYaMbuWlA10E5Ctlz5HPWb7J0q6izcHy4qLY46RsLAMoYMTD/WKU9AUH+W4y6gu
+         ZP2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700732456; x=1701337256;
+        d=1e100.net; s=20230601; t=1700732457; x=1701337257;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4GQVLU0yIdzvkWpe6EOtR/8b+D+v0ZubEgK+LbytqFk=;
-        b=hgu9yuraYqQohUH32EqSrDp6cdSjFuQqC90twdC95t/aTMvzbgJyWfgQSjSwSOEgJO
-         bRtK3uT9tWLVAgzRRySNUcRThNqd9rDHCDEvjH4VsUYw3YkJt+hFmK/bUC7lpY5O1zf4
-         PfXHfkKV1LQofZPH+jEYVqfdGI8pOA6i+hb5HWoibcyfjMa6TC6Pb1dqPQmsZ6zoDKbE
-         a9rsRLdNFveaevxMkIPLiF50YgZguIOG99P6C21doUoX+nl+7RAskPEw3sxAKgi62Vwn
-         DA/Jlgq1P6vzD85jwivfH4/UtWnXgEVHdxKl787dG/KuY5LhsvQbaFbzrBIRzYvDMefy
-         ed2Q==
-X-Gm-Message-State: AOJu0Yx2yGuFGK3WW/Fvz4LA20QkH5eILXlC25RT+ykWxJ1Yw3gud3jK
-	yFLmetk+Hbc7pMKixt8Dnhc=
-X-Google-Smtp-Source: AGHT+IFW7oGp/sxqiNU9T6YyLWfXmVFxlR+ROFim07r/08bufC+IIaX6Uvxyofr/jhfjkQUrN3Ji5Q==
-X-Received: by 2002:a17:906:1855:b0:a00:8706:c82b with SMTP id w21-20020a170906185500b00a008706c82bmr3269223eje.47.1700732455722;
-        Thu, 23 Nov 2023 01:40:55 -0800 (PST)
+        bh=clBWu+ZkOHv5aLxF4Jumr7Rdkfthd/rp2JM9TiGQIuQ=;
+        b=bFpwORXjaBkul4+E+ZjwuIWiJ+iKVF4oWFtvZkzbfv035uI3j1BH5WnMNcN6azb8DD
+         4hN3YBznR42MLOkrvST5e3DZztym/B3pPjRA0jkY8ccXGWDbVPc/8X5/QgM87GPKtt79
+         wuPfGypvx4KE2Iy90fdk8lLCWCw8S5tSyFyWGWRgBAhGSZtOGn6uw4Q9a6HYhUuO4Z+w
+         OQTjsfAxUNRLmrtGr99JIaKWf9vC9f+H/p3O3pbOPRONagE/qyiYmNgSQI8nfpvazHQu
+         HQJojP8JqB6jt3XX2ZwTjCEgFhqJk7OBdDdIf3blEWwYea/u3da8uY4WpGmJLcH8um+t
+         yhsw==
+X-Gm-Message-State: AOJu0Ywlw+NBRdnm8AW46GAsd+IlsOFSWeJHvxPyVkJPMw88BQ6KmEFV
+	qEqYkj9QmRsyeHMVWuYzmBg=
+X-Google-Smtp-Source: AGHT+IHq8vY/hRvfYfdj8oyzjE1msXHk0E43hTKOhiKHBd9IaWBYhWspiL+jJRvOCphRN+F9o76e6Q==
+X-Received: by 2002:a17:907:9207:b0:9fa:ca0c:ac42 with SMTP id ka7-20020a170907920700b009faca0cac42mr3054539ejb.64.1700732456620;
+        Thu, 23 Nov 2023 01:40:56 -0800 (PST)
 Received: from zotac.lan. (dynamic-2a01-0c23-c0f2-3200-2223-08ff-fe18-0310.c23.pool.telefonica.de. [2a01:c23:c0f2:3200:2223:8ff:fe18:310])
         by smtp.gmail.com with ESMTPSA id s9-20020a1709066c8900b009e5ce1acb01sm546199ejr.103.2023.11.23.01.40.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Nov 2023 01:40:55 -0800 (PST)
+        Thu, 23 Nov 2023 01:40:56 -0800 (PST)
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Wolfram Sang <wsa@kernel.org>,
-	Maik Broemme <mbroemme@libmpq.org>
+	Rob Clark <robdclark@gmail.com>
 Cc: linux-i2c@vger.kernel.org,
 	Heiner Kallweit <hkallweit1@gmail.com>,
-	Helge Deller <deller@gmx.de>,
-	linux-fbdev@vger.kernel.org,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	linux-arm-msm@vger.kernel.org,
 	dri-devel@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org,
 	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v5 13/20] drivers/video/fbdev/intelfb/intelfb_i2c.c: remove I2C_CLASS_DDC support
-Date: Thu, 23 Nov 2023 10:40:33 +0100
-Message-ID: <20231123094040.592-14-hkallweit1@gmail.com>
+Subject: [PATCH v5 14/20] drivers/gpu/drm/msm/hdmi/hdmi_i2c.c: remove I2C_CLASS_DDC support
+Date: Thu, 23 Nov 2023 10:40:34 +0100
+Message-ID: <20231123094040.592-15-hkallweit1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231123094040.592-1-hkallweit1@gmail.com>
 References: <20231123094040.592-1-hkallweit1@gmail.com>
@@ -84,67 +90,25 @@ be used in new code. So we can remove this class completely now.
 
 Preferably this series should be applied via the i2c tree.
 
-Acked-by: Helge Deller <deller@gmx.de>
+Acked-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
 ---
- drivers/video/fbdev/intelfb/intelfb_i2c.c |   15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/msm/hdmi/hdmi_i2c.c |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/intelfb/intelfb_i2c.c b/drivers/video/fbdev/intelfb/intelfb_i2c.c
-index 3300bd31d..f24c7cb4c 100644
---- a/drivers/video/fbdev/intelfb/intelfb_i2c.c
-+++ b/drivers/video/fbdev/intelfb/intelfb_i2c.c
-@@ -99,8 +99,7 @@ static int intelfb_gpio_getsda(void *data)
+diff --git a/drivers/gpu/drm/msm/hdmi/hdmi_i2c.c b/drivers/gpu/drm/msm/hdmi/hdmi_i2c.c
+index de182c004..7aa500d24 100644
+--- a/drivers/gpu/drm/msm/hdmi/hdmi_i2c.c
++++ b/drivers/gpu/drm/msm/hdmi/hdmi_i2c.c
+@@ -249,7 +249,6 @@ struct i2c_adapter *msm_hdmi_i2c_init(struct hdmi *hdmi)
  
- static int intelfb_setup_i2c_bus(struct intelfb_info *dinfo,
- 				 struct intelfb_i2c_chan *chan,
--				 const u32 reg, const char *name,
--				 int class)
-+				 const u32 reg, const char *name)
- {
- 	int rc;
  
-@@ -108,7 +107,6 @@ static int intelfb_setup_i2c_bus(struct intelfb_info *dinfo,
- 	chan->reg			= reg;
- 	snprintf(chan->adapter.name, sizeof(chan->adapter.name),
- 		 "intelfb %s", name);
--	chan->adapter.class		= class;
- 	chan->adapter.owner		= THIS_MODULE;
- 	chan->adapter.algo_data		= &chan->algo;
- 	chan->adapter.dev.parent	= &chan->dinfo->pdev->dev;
-@@ -144,8 +142,7 @@ void intelfb_create_i2c_busses(struct intelfb_info *dinfo)
- 	dinfo->output[i].type = INTELFB_OUTPUT_ANALOG;
- 
- 	/* setup the DDC bus for analog output */
--	intelfb_setup_i2c_bus(dinfo, &dinfo->output[i].ddc_bus, GPIOA,
--			      "CRTDDC_A", I2C_CLASS_DDC);
-+	intelfb_setup_i2c_bus(dinfo, &dinfo->output[i].ddc_bus, GPIOA, "CRTDDC_A");
- 	i++;
- 
- 	/* need to add the output busses for each device
-@@ -159,10 +156,8 @@ void intelfb_create_i2c_busses(struct intelfb_info *dinfo)
- 	case INTEL_855GM:
- 	case INTEL_865G:
- 		dinfo->output[i].type = INTELFB_OUTPUT_DVO;
--		intelfb_setup_i2c_bus(dinfo, &dinfo->output[i].ddc_bus,
--				      GPIOD, "DVODDC_D", I2C_CLASS_DDC);
--		intelfb_setup_i2c_bus(dinfo, &dinfo->output[i].i2c_bus,
--				      GPIOE, "DVOI2C_E", 0);
-+		intelfb_setup_i2c_bus(dinfo, &dinfo->output[i].ddc_bus, GPIOD, "DVODDC_D");
-+		intelfb_setup_i2c_bus(dinfo, &dinfo->output[i].i2c_bus, GPIOE, "DVOI2C_E");
- 		i++;
- 		break;
- 	case INTEL_915G:
-@@ -176,7 +171,7 @@ void intelfb_create_i2c_busses(struct intelfb_info *dinfo)
- 		/* SDVO ports have a single control bus - 2 devices */
- 		dinfo->output[i].type = INTELFB_OUTPUT_SDVO;
- 		intelfb_setup_i2c_bus(dinfo, &dinfo->output[i].i2c_bus,
--				      GPIOE, "SDVOCTRL_E", 0);
-+				      GPIOE, "SDVOCTRL_E");
- 		/* TODO: initialize the SDVO */
- 		/* I830SDVOInit(pScrn, i, DVOB); */
- 		i++;
+ 	i2c->owner = THIS_MODULE;
+-	i2c->class = I2C_CLASS_DDC;
+ 	snprintf(i2c->name, sizeof(i2c->name), "msm hdmi i2c");
+ 	i2c->dev.parent = &hdmi->pdev->dev;
+ 	i2c->algo = &msm_hdmi_i2c_algorithm;
 
 
