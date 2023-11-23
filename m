@@ -1,60 +1,60 @@
-Return-Path: <linux-i2c+bounces-431-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-432-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B7977F68B6
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 22:38:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 807E77F68C0
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 22:59:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B1841C20B18
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 21:37:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C3D61C20AB7
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 21:59:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50530156F0;
-	Thu, 23 Nov 2023 21:37:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 029751803D;
+	Thu, 23 Nov 2023 21:58:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DYAjoOIA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gNBBv6f4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA0BD62;
-	Thu, 23 Nov 2023 13:37:51 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-a011e9bf336so178163566b.3;
-        Thu, 23 Nov 2023 13:37:51 -0800 (PST)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDCDD5A;
+	Thu, 23 Nov 2023 13:58:54 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-a049d19b63bso179057466b.2;
+        Thu, 23 Nov 2023 13:58:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700775470; x=1701380270; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:cc:references
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20230601; t=1700776733; x=1701381533; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5SiogyRR4wGlp0aCovt/3hIDL7TVNtSyHU8dAkrzsME=;
-        b=DYAjoOIAsS0eUJOtbWfYcBDNZct5nzIzhWPiInz7c6jeSZga75Js8W5Uy4+va35JXW
-         zPDHvSXyQIKotoYKtJVafyywCPuObQWOvztIAkfICPf/xDOEjC/50E7eC7A8P/7HmKA8
-         ILQPq7K5lsDg7ydUZrtlwbp/czk7ZNo/D57nfk9zkppplzB1GqSUWjifoT3yj1SFDIXp
-         l9jsEfyodMyaGl6x7drEes4COt8ICNfAJCZCG950Nw3TstYhHoSN/GJqElbdAXCJQYke
-         fnKmeBkUNJgKOV5/cw04FYXe+aYcYPak6eRfs4d+54ntFkk8cJcddnP6CkyldyQNp2Lx
-         a3Ow==
+        bh=12Q5AnLjxvYR9nCPjSjcaal74McNKCML5m9yOv+zaI4=;
+        b=gNBBv6f4J3hCEa4537gb3pqI2OfnzOA30ecWEMGNTrp8OOY6/zBgA/Tvqx4sf+Fscw
+         SZTYVDqLVktuyU1axZbzPMWbTUSEqpuR+plv11Efxa7vLbS0i+q2iON/2ZkRXVPWzvjK
+         j6Mr0wvPq+BFySKeSz0wtJmtnYIjfYMdzOzSxxjsonA1hfBNKtOxNy5XLFlTkn6PxchX
+         RxzwjN1sTEFx8yLFOJxAkEf/mkM1vvNFAd3pRJmq5Gi+7dsQYAHK/8vWVV/k+Sa+8I9l
+         glljTfqu0UV4a76YnDSsVga2iEPVkO7/8eYNH8/wSS3zMqP5vL5WvJwNk7MIvueCeCyz
+         eouA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700775470; x=1701380270;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:cc:references
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1700776733; x=1701381533;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5SiogyRR4wGlp0aCovt/3hIDL7TVNtSyHU8dAkrzsME=;
-        b=Y19vGLYn3QkNAQI1rbZ6AJxwk0ROGO2kwru2LVWIP9KtTSkTyBGEQhmyTFPxnqBlbJ
-         r3trufyLqhtAv6Y2zPyHyhCKP1MEa56aTk9FsoWJTkebRKcNkFTheTE8K295Sw7i1cW1
-         32SzXOGBCgPFJSztOhIQ7Br6WDjWCoECoLUONy4HCEH6InW1BlRznFyWbW+M9dd+P+nj
-         0BPK+BPRsmlk/+bjoTDzuloDfDSuSCA0Rhc7U8Z4l/sgkN6E3+jrcCPdw2nf5qUEOCfL
-         fVEvKw+uYbIM97l3yI6C6nj0dxrYgySu+DyMkzvIfTLHFtbXYCa1S1EoiEb1k1appEpy
-         hl2w==
-X-Gm-Message-State: AOJu0YzjQqWavQRVcObHW073uvFRbRqvGT/BM3rWV43H8AiaWZJJj0Zj
-	EQMhamCA0f/BRyD7G3x4ma8=
-X-Google-Smtp-Source: AGHT+IFft/gzlywAE3emkERxnx325iF2U8wYbuxvx58ORM9fMAVvn2JU8OCHOOKxHMvm314Qlv0nzg==
-X-Received: by 2002:a17:906:41b:b0:9b2:982e:339a with SMTP id d27-20020a170906041b00b009b2982e339amr425470eja.22.1700775469435;
-        Thu, 23 Nov 2023 13:37:49 -0800 (PST)
+        bh=12Q5AnLjxvYR9nCPjSjcaal74McNKCML5m9yOv+zaI4=;
+        b=OznQZ/lwLFR1zu91fuprco/xhZMYlmEXaO7jzVzKZySAyFZ4aH9kkMZsvIN/tTTlxM
+         ZkfZ3Csd+Yd9StdB9BRd9ASbTRrxVYhwg51sFpD1K3DB2M0E5Q0b48wUcj0Auah0y/yO
+         YzrP4NPZoMjEF16i7udyzdAGEUzfaVZS1B7UJ9DmjovbjCz4KfAAfTzVoXR2OTAvO6Bh
+         yL9qcYB78tO3TTV2jKiCzKviL+yxngve+8yeHgrJzDoztH63utj85PpSPfEpkn9fJ7zH
+         dWD3bPH+Gl/O/l9VUfU/4/N9nYVnSFalgCy2i5B8766DDGwCu/MH6sQ0Qh/iwYlSfysp
+         6z9g==
+X-Gm-Message-State: AOJu0Yx1eCQGSiKL3vMiGQUP1j0D2PpVYOndjqRn3WemgNkn1IBP+hSF
+	Sq8hcrqa9fflHTt6qyJHe00=
+X-Google-Smtp-Source: AGHT+IGQDMws8zW/C78iQmSEqbu/kROowyA8NJy4jo3VskBbqEv6a08N1Oxj8KeePaI7NrFxFhIz2Q==
+X-Received: by 2002:a17:906:a448:b0:a02:14d6:2854 with SMTP id cb8-20020a170906a44800b00a0214d62854mr400177ejb.59.1700776733171;
+        Thu, 23 Nov 2023 13:58:53 -0800 (PST)
 Received: from ?IPV6:2a01:c23:c0f2:3200:3595:63df:4916:a21d? (dynamic-2a01-0c23-c0f2-3200-3595-63df-4916-a21d.c23.pool.telefonica.de. [2a01:c23:c0f2:3200:3595:63df:4916:a21d])
-        by smtp.googlemail.com with ESMTPSA id c24-20020a170906529800b009fe2f96ee9bsm1233238ejm.8.2023.11.23.13.37.48
+        by smtp.googlemail.com with ESMTPSA id hb19-20020a170906b89300b009a1a653770bsm1232801ejb.87.2023.11.23.13.58.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Nov 2023 13:37:49 -0800 (PST)
-Message-ID: <2569273b-2601-422b-a16e-031d7c5b4087@gmail.com>
-Date: Thu, 23 Nov 2023 22:37:49 +0100
+        Thu, 23 Nov 2023 13:58:52 -0800 (PST)
+Message-ID: <19d86ace-a0ea-41d4-82d7-e77ef79e58f7@gmail.com>
+Date: Thu, 23 Nov 2023 22:58:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,19 +62,14 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] media: exynos4-is: fimc-is-i2c: remove I2C_CLASS_SPD
- support
+Subject: Re: [PATCH 01/10] drivers/i2c/busses: Don't let i2c adapters declare
+ I2C_CLASS_SPD support if they support I2C_CLASS_HWMON
 Content-Language: en-US
-To: Wolfram Sang <wsa@kernel.org>
-References: <e4395454-c500-4d76-af74-42e29d4b40d8@gmail.com>
- <ZV+9Iauj5y7q8R6H@ninjato>
-Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, linux-samsung-soc@vger.kernel.org,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- linux-media@vger.kernel.org, Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
+ linux-kernel@vger.kernel.org
+References: <20231118180504.1785-1-hkallweit1@gmail.com>
+ <20231118180504.1785-2-hkallweit1@gmail.com> <ZV+8z7zloE/gn/4p@ninjato>
 From: Heiner Kallweit <hkallweit1@gmail.com>
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
@@ -119,57 +114,30 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <ZV+9Iauj5y7q8R6H@ninjato>
+In-Reply-To: <ZV+8z7zloE/gn/4p@ninjato>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 23.11.2023 21:59, Wolfram Sang wrote:
-> On Wed, Nov 08, 2023 at 07:42:37AM +0100, Heiner Kallweit wrote:
->> This I2C bus is used by the firmware only and it seems I2C_CLASS_SPD
->> device auto-detection has never been used. So we can safely remove it.
->> That's one further step towards removing I2C_CLASS_SPD completely.
->>
->> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+On 23.11.2023 21:57, Wolfram Sang wrote:
 > 
-> As I want to apply this cleanup early in the cycle, could we have an ack
-> for me to modify this subsystem via I2C, please?
+>> Series was created supported by Coccinelle and its splitpatch.
+> 
+> I don't know splitpatch. However, I don't understand its result. Why
+> isn't there one patch for all in drivers/i2c/busses? Also, the subject
+> prefix should be plain "i2c: <do x for all drivers>" or something.
 > 
 
-Today I received the following, patch has been applied via the
-linux-media tree already.
+AFAIK splitpatch uses get_maintainer.pl and creates one patch per
+maintainer(s). It's not smart enough to group changes per module.
+What I see is that the subject prefix often is based on personal
+preference of the subsystem maintainer, so far I don't see a rule.
+Therefore splitpatch seems to use the longest common part of file
+path's of grouped patches.
 
-[git:media_stage/master] media: exynos4-is: fimc-is-i2c: remove I2C_CLASS_SPD support
-
-This is an automatic generated email to let you know that the following patch were queued:
-
-Subject: media: exynos4-is: fimc-is-i2c: remove I2C_CLASS_SPD support
-Author:  Heiner Kallweit <hkallweit1@gmail.com>
-Date:    Wed Nov 8 07:42:37 2023 +0100
-
-This I2C bus is used by the firmware only and it seems I2C_CLASS_SPD
-device auto-detection has never been used. So we can safely remove it.
-That's one further step towards removing I2C_CLASS_SPD completely.
-
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+I'd appreciate hints on maybe better tools for creating patches for
+tree-wide changes. If possible I'd like to avoid having to manually
+split and adjust the patches.
 
 
->> ---
->>  drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.c | 1 -
->>  1 file changed, 1 deletion(-)
->>
->> diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.c b/drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.c
->> index bef6e9b4a..44363c424 100644
->> --- a/drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.c
->> +++ b/drivers/media/platform/samsung/exynos4-is/fimc-is-i2c.c
->> @@ -57,7 +57,6 @@ static int fimc_is_i2c_probe(struct platform_device *pdev)
->>  	strscpy(i2c_adap->name, "exynos4x12-isp-i2c", sizeof(i2c_adap->name));
->>  	i2c_adap->owner = THIS_MODULE;
->>  	i2c_adap->algo = &fimc_is_i2c_algorithm;
->> -	i2c_adap->class = I2C_CLASS_SPD;
->>  
->>  	platform_set_drvdata(pdev, isp_i2c);
->>  	pm_runtime_enable(&pdev->dev);
 
 
