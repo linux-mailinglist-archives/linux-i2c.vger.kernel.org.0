@@ -1,119 +1,90 @@
-Return-Path: <linux-i2c+bounces-422-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-423-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF3A57F5C4C
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 11:30:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45AD27F5D8B
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 12:14:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64B4CB20FB8
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 10:30:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C98AFB210AD
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 11:14:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 591DB225DA;
-	Thu, 23 Nov 2023 10:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FEA222EFC;
+	Thu, 23 Nov 2023 11:14:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="bayoDUzH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SH6nd9tb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F53B1A8
-	for <linux-i2c@vger.kernel.org>; Thu, 23 Nov 2023 02:30:37 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-4084de32db5so4628005e9.0
-        for <linux-i2c@vger.kernel.org>; Thu, 23 Nov 2023 02:30:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1700735436; x=1701340236; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tDvQiw4cemCoVq0HDRpi4PQAGFKid5h4mEpxV2nsTWE=;
-        b=bayoDUzHcPEGup2iGzwEYZIBD2pc+esFdlbzb3OKbGUdjFFEdf8gY0Rk5E0cbkRNDw
-         J8Bjy6Ek92rsYl7mWYXft7Sx2iCENinlfK7yAGMVTPxvzLGeMf+Vnjg6XXFNCH1gtYJj
-         yLsA0H5e87mxkzvD4Y/Ypea+7pH3bBJ/hKDdNZmlx9lCkzoZSuh9BZ84QIe8uI7etmAp
-         aVv833+FmlpR71Tp/5JPZ+Ju6dHDMC/BxlIvBmuXsS7jHmybWBe6xvYPfm+vSQ+c6v+a
-         xr8Of/GyTT220axJwGV43i86G/X4W4PmfHbKgt4VE3B81FnvbU+NbdaCWSY83759Erhb
-         TM8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700735436; x=1701340236;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tDvQiw4cemCoVq0HDRpi4PQAGFKid5h4mEpxV2nsTWE=;
-        b=bQfWTV5Cb/OyQ5dvefCcTPuLeTmdbIVsTjklN2ZVLON5YM9RT8dQR5nWu3kA8tW9XM
-         4NpP2+UpgPZWlavD7URLgDtKlwBjgaD4cBckDTFBzPGMYMp4LAZU+q+0owbUyhA42EbV
-         ckvvyhui5W+dELnLkguq3Xq4gxKmT/nEXuY4ibUBf9fdN99fbzXn4WX7d03zVL4Un0x+
-         7vRk0CEq9W5qXxEC40+TgHupQo12plEjPDWZeEqfU5A0ySDOL8CNv0bfgBlq8UdUMi4i
-         P9gowVu1IbLmuYDsRqwEeFNK0W4dfB1tr3f6gozrq02hCRbnHBVahL3PAeWv5bybJZZf
-         k9IA==
-X-Gm-Message-State: AOJu0YyBm2t8OqfxJavJNwtQXCGVYunbxUMRJhWMFtOk7xgM1vmmsx7L
-	xX/vGNheGh97VN6GKOnrRbRfEw==
-X-Google-Smtp-Source: AGHT+IHU7fDCbDaC4fsuwrpKT4bl5Qi/bZUq9jazliF+vOB4RrDB8zsSzqbs9eH1GvvGjjdhMLY2Cw==
-X-Received: by 2002:a05:600c:4ed2:b0:40b:35f2:3b42 with SMTP id g18-20020a05600c4ed200b0040b35f23b42mr1022638wmq.22.1700735434977;
-        Thu, 23 Nov 2023 02:30:34 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:9abb:eb66:c3a9:102e])
-        by smtp.gmail.com with ESMTPSA id f12-20020a5d664c000000b003316be2df7fsm1257834wrw.17.2023.11.23.02.30.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Nov 2023 02:30:34 -0800 (PST)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Wolfram Sang <wsa@the-dreams.de>,
-	Peter Rosin <peda@axentia.se>
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v2] eeprom: at24: use of_match_ptr()
-Date: Thu, 23 Nov 2023 11:30:32 +0100
-Message-Id: <20231123103032.11396-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.40.1
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854891AE;
+	Thu, 23 Nov 2023 03:14:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700738070; x=1732274070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f96XyUr097Mm9GcRMiQP6oB3PyFc743sh+fNU1O5iBY=;
+  b=SH6nd9tbLVou+llhBqehsRZpAaqM6nQk1MASy9OVdBKyLAYp8VoCDkLg
+   vFsYk9p2WNfWrTdE7a4/VPvNhUttjQW/pl79X/fcwwFTUrZIS9Bgn5kp7
+   9EpcYBsKZvgvk+DMjTLlbT26hxudHeEM2QHKu9g7veEgekEGavdRId2UV
+   HO/tkqv64ma/3YEAjfnon8hoaruw/9R22UN0V02SyGwRmT4zjgE0beck4
+   fSGzUwThKq4rBToaLKHV49xD/gJ5T6QgXjimcGWuQXPVPBGfHs3ASlJZq
+   wWZ5eCRyeJSbRgqEPiYw2BVUQRwBq/lhV3mJb7M0Iu6c5o/EMdgq5OQaK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="5439201"
+X-IronPort-AV: E=Sophos;i="6.04,221,1695711600"; 
+   d="scan'208";a="5439201"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2023 03:14:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="890762366"
+X-IronPort-AV: E=Sophos;i="6.04,221,1695711600"; 
+   d="scan'208";a="890762366"
+Received: from amongesa-mobl.ger.corp.intel.com (HELO intel.com) ([10.252.57.132])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2023 03:14:24 -0800
+Date: Thu, 23 Nov 2023 12:14:21 +0100
+From: Andi Shyti <andi.shyti@linux.intel.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Wolfram Sang <wsa@kernel.org>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Jani Nikula <jani.nikula@intel.com>,
+	intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	David Airlie <airlied@gmail.com>
+Subject: Re: [Intel-gfx] [PATCH v5 15/20] drivers/gpu/drm/i915/display:
+ remove I2C_CLASS_DDC support
+Message-ID: <ZV80DQqQthCLMX2P@ashyti-mobl2.lan>
+References: <20231123094040.592-1-hkallweit1@gmail.com>
+ <20231123094040.592-16-hkallweit1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231123094040.592-16-hkallweit1@gmail.com>
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hi Heiner,
 
-This driver does not depend on CONFIG_OF so using of_match_ptr() makes
-sense to reduce the size a bit.
+On Thu, Nov 23, 2023 at 10:40:35AM +0100, Heiner Kallweit wrote:
+> After removal of the legacy EEPROM driver and I2C_CLASS_DDC support in
+> olpc_dcon there's no i2c client driver left supporting I2C_CLASS_DDC.
+> Class-based device auto-detection is a legacy mechanism and shouldn't
+> be used in new code. So we can remove this class completely now.
+> 
+> Preferably this series should be applied via the i2c tree.
+> 
+> Acked-by: Jani Nikula <jani.nikula@intel.com>
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
-v1 -> v2:
-- use __maybe_unused to avoid warnings about at24_of_match not being used
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
 
- drivers/misc/eeprom/at24.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index f61a80597a22..8279adade07e 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -18,6 +18,7 @@
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/nvmem-provider.h>
-+#include <linux/of.h>
- #include <linux/of_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/property.h>
-@@ -242,7 +243,7 @@ static const struct i2c_device_id at24_ids[] = {
- };
- MODULE_DEVICE_TABLE(i2c, at24_ids);
- 
--static const struct of_device_id at24_of_match[] = {
-+static const struct of_device_id __maybe_unused at24_of_match[] = {
- 	{ .compatible = "atmel,24c00",		.data = &at24_data_24c00 },
- 	{ .compatible = "atmel,24c01",		.data = &at24_data_24c01 },
- 	{ .compatible = "atmel,24cs01",		.data = &at24_data_24cs01 },
-@@ -812,7 +813,7 @@ static struct i2c_driver at24_driver = {
- 	.driver = {
- 		.name = "at24",
- 		.pm = &at24_pm_ops,
--		.of_match_table = at24_of_match,
-+		.of_match_table = of_match_ptr(at24_of_match),
- 		.acpi_match_table = ACPI_PTR(at24_acpi_ids),
- 	},
- 	.probe = at24_probe,
--- 
-2.40.1
-
+Thanks,
+Andi
 
