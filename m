@@ -1,136 +1,97 @@
-Return-Path: <linux-i2c+bounces-394-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-395-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30FC47F56F8
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 04:17:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 363AE7F57E6
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 06:53:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BC8DB21202
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 03:17:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67CEC1C20C9A
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 05:53:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 947228F6D;
-	Thu, 23 Nov 2023 03:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F52DBE5B;
+	Thu, 23 Nov 2023 05:53:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ow8/Xogw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iG0XtYAH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477B91A5;
-	Wed, 22 Nov 2023 19:17:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700709437; x=1732245437;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cTFDlUOA7dBQQhst5UG03MmMQeoIcoQQ9SKjzBU8kaA=;
-  b=Ow8/XogwxAgNBRl7yJROolAsDUei7jNukQvBfmkgvYS45u4MIsllH7xx
-   6lzRsE6KFmSeCXblOiwN56c/pLaEB1ZH5u1zStuHDUOHM1FWqygxSoKuN
-   +w6wi6geMB2xHllpoJm55o7u890edFwdCq5GmEj6+iveu1kIGFZJchtx0
-   xLOwrSkX2wx5kTMEd4ha3e1KP6HUY0jDrufbUswdAfkSutkvKCLKUIuII
-   rx4qrBVhTGhATq0ip0FKgq8rYkbBFR2iLh5S3q5BPMUveYCi3n8WqpVHO
-   XLZ2zCpMRpVxfkfDCW9BtkX+ZkbIqu9grngxY0IBRP6+P+Vs3mHRbbLVf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="372348542"
-X-IronPort-AV: E=Sophos;i="6.04,220,1695711600"; 
-   d="scan'208";a="372348542"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2023 19:17:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,220,1695711600"; 
-   d="scan'208";a="8521856"
-Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 22 Nov 2023 19:17:15 -0800
-Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r60DI-0001Am-0Y;
-	Thu, 23 Nov 2023 03:17:12 +0000
-Date: Thu, 23 Nov 2023 11:16:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH] eeprom: at24: use of_match_ptr()
-Message-ID: <202311231054.oSloZJkd-lkp@intel.com>
-References: <20231122155916.38037-1-brgl@bgdev.pl>
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12600191
+	for <linux-i2c@vger.kernel.org>; Wed, 22 Nov 2023 21:53:37 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9fffa4c4f43so61521466b.3
+        for <linux-i2c@vger.kernel.org>; Wed, 22 Nov 2023 21:53:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700718815; x=1701323615; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lovwCQ5LMuFRkaWZgi8g2zkAYUc81iOG0XuMLog8jAk=;
+        b=iG0XtYAHWKpUL3vbEwlI8OdLK13EMCxf/geAnzsXOkWOIhLyIl0bFEIfAcKVEIw6lw
+         8SnvQl59HkhwAec+eEoQ4Z/p9Rgdf3Qv1l/YOM1bIp//HFgxrLJPFDP6Lck/ZkOYoXUB
+         CMTCHxhVEWDEoFgJF+uC2cqL2tVq7ppRtkB8pPe40nnJM+V1lkY3yqUTHl9X8iI7qeod
+         lEEUK/mXAtEtYHsek7DLENmOBWb3y6n1J0kTMaW+fR+t7HBTyv6QHbud3jmznG3EFOu3
+         GyAIIHx/REdkViJQUf6WaMx7T+9/Y6jvfGFib1FTCK6VYCe0MaL/+W7+hYM6jng+YXVH
+         OIIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700718815; x=1701323615;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lovwCQ5LMuFRkaWZgi8g2zkAYUc81iOG0XuMLog8jAk=;
+        b=JqA5nJER+OQNN1e7n1/zKb4t/9xEjTK2hkmvjoOOLTkCqNxboCP5vkMnWAZskhnlVk
+         cs7Ge2gqD1mZkN/jqhzwnTbYV6aZbn5NL4679VymnDf3oc4uBMheQnVm4i95bc8t6RqS
+         RPRoLM7xsTyG9wmvPGt2amOx7kJjpsFJVvNTtZXD6xtBhYt3C8pdCEI5mm/20iE9+48L
+         uc8q4NpdsebG8caE+Bk9Zj8awV2mRa4pfpmJPoamgHiEyEoFvIJMLRUrtRshF3MDINVR
+         cNx7fDownEftI6rB6RzpcpZRnDXGdpLm9e2g5GCPG2qYpO3K/PLge6DJFF9PvmxLJyNU
+         qTiw==
+X-Gm-Message-State: AOJu0Yy4A+nuA2N60jgFkQIRx57SsEJYEnnKw48x3XwwlSwue/SUD33k
+	xlalf+KMCM+KB66LE7KoOtdYLQ9g/dDrLG2cjfg=
+X-Google-Smtp-Source: AGHT+IFnusxPZNCN+tWvK9sHSEzZXOz0mrbFean0bSIzw9XOSGxvydJO9eHyLdcMilm6PxQWe6vV1/VYJ6rutzs2Y6o=
+X-Received: by 2002:a17:906:209:b0:a00:2686:6b42 with SMTP id
+ 9-20020a170906020900b00a0026866b42mr3304564ejd.10.1700718815265; Wed, 22 Nov
+ 2023 21:53:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231122155916.38037-1-brgl@bgdev.pl>
+References: <20231121180855.1278717-1-robert.hancock@calian.com>
+In-Reply-To: <20231121180855.1278717-1-robert.hancock@calian.com>
+From: Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
+Date: Thu, 23 Nov 2023 11:23:23 +0530
+Message-ID: <CAKfKVtGT1Aq8gQR9uazjm=yGjRRTj-cKYe-_4n4ME3sThaPTzQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Xilinx I2C driver fixes
+To: Robert Hancock <robert.hancock@calian.com>
+Cc: "michal.simek@amd.com" <michal.simek@amd.com>, "ben-linux@fluff.org" <ben-linux@fluff.org>, 
+	"andi.shyti@kernel.org" <andi.shyti@kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Bartosz,
+On Tue, Nov 21, 2023 at 11:42=E2=80=AFPM Robert Hancock
+<robert.hancock@calian.com> wrote:
+>
+> A couple of fixes for the Xilinx I2C driver.
 
-kernel test robot noticed the following build warnings:
+Thanks for the fix is there a way i can reproduce the issue reported here.
 
-[auto build test WARNING on brgl/gpio/for-next]
-[also build test WARNING on linus/master v6.7-rc2 next-20231122]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/eeprom-at24-use-of_match_ptr/20231123-000103
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20231122155916.38037-1-brgl%40bgdev.pl
-patch subject: [PATCH] eeprom: at24: use of_match_ptr()
-config: i386-buildonly-randconfig-001-20231123 (https://download.01.org/0day-ci/archive/20231123/202311231054.oSloZJkd-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231123/202311231054.oSloZJkd-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311231054.oSloZJkd-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/misc/eeprom/at24.c:246:34: warning: 'at24_of_match' defined but not used [-Wunused-const-variable=]
-    static const struct of_device_id at24_of_match[] = {
-                                     ^~~~~~~~~~~~~
-
-
-vim +/at24_of_match +246 drivers/misc/eeprom/at24.c
-
-2b7a5056a0a7ff drivers/i2c/chips/at24.c   Wolfram Sang             2008-07-14  245  
-7f2a2f0d0d66b2 drivers/misc/eeprom/at24.c Javier Martinez Canillas 2017-10-01 @246  static const struct of_device_id at24_of_match[] = {
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  247  	{ .compatible = "atmel,24c00",		.data = &at24_data_24c00 },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  248  	{ .compatible = "atmel,24c01",		.data = &at24_data_24c01 },
-0f30aca72c3b68 drivers/misc/eeprom/at24.c Bartosz Golaszewski      2017-12-28  249  	{ .compatible = "atmel,24cs01",		.data = &at24_data_24cs01 },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  250  	{ .compatible = "atmel,24c02",		.data = &at24_data_24c02 },
-0f30aca72c3b68 drivers/misc/eeprom/at24.c Bartosz Golaszewski      2017-12-28  251  	{ .compatible = "atmel,24cs02",		.data = &at24_data_24cs02 },
-0f30aca72c3b68 drivers/misc/eeprom/at24.c Bartosz Golaszewski      2017-12-28  252  	{ .compatible = "atmel,24mac402",	.data = &at24_data_24mac402 },
-0f30aca72c3b68 drivers/misc/eeprom/at24.c Bartosz Golaszewski      2017-12-28  253  	{ .compatible = "atmel,24mac602",	.data = &at24_data_24mac602 },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  254  	{ .compatible = "atmel,spd",		.data = &at24_data_spd },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  255  	{ .compatible = "atmel,24c04",		.data = &at24_data_24c04 },
-0f30aca72c3b68 drivers/misc/eeprom/at24.c Bartosz Golaszewski      2017-12-28  256  	{ .compatible = "atmel,24cs04",		.data = &at24_data_24cs04 },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  257  	{ .compatible = "atmel,24c08",		.data = &at24_data_24c08 },
-0f30aca72c3b68 drivers/misc/eeprom/at24.c Bartosz Golaszewski      2017-12-28  258  	{ .compatible = "atmel,24cs08",		.data = &at24_data_24cs08 },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  259  	{ .compatible = "atmel,24c16",		.data = &at24_data_24c16 },
-0f30aca72c3b68 drivers/misc/eeprom/at24.c Bartosz Golaszewski      2017-12-28  260  	{ .compatible = "atmel,24cs16",		.data = &at24_data_24cs16 },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  261  	{ .compatible = "atmel,24c32",		.data = &at24_data_24c32 },
-4791146e9055dd drivers/misc/eeprom/at24.c Marek Vasut              2023-10-10  262  	{ .compatible = "atmel,24c32d-wl",	.data = &at24_data_24c32d_wlp },
-0f30aca72c3b68 drivers/misc/eeprom/at24.c Bartosz Golaszewski      2017-12-28  263  	{ .compatible = "atmel,24cs32",		.data = &at24_data_24cs32 },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  264  	{ .compatible = "atmel,24c64",		.data = &at24_data_24c64 },
-3774740fb22162 drivers/misc/eeprom/at24.c Alexander Stein          2023-10-13  265  	{ .compatible = "atmel,24c64d-wl",	.data = &at24_data_24c64d_wlp },
-0f30aca72c3b68 drivers/misc/eeprom/at24.c Bartosz Golaszewski      2017-12-28  266  	{ .compatible = "atmel,24cs64",		.data = &at24_data_24cs64 },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  267  	{ .compatible = "atmel,24c128",		.data = &at24_data_24c128 },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  268  	{ .compatible = "atmel,24c256",		.data = &at24_data_24c256 },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  269  	{ .compatible = "atmel,24c512",		.data = &at24_data_24c512 },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  270  	{ .compatible = "atmel,24c1024",	.data = &at24_data_24c1024 },
-d08aea21c89dc2 drivers/misc/eeprom/at24.c Maxim Kochetkov          2021-12-10  271  	{ .compatible = "atmel,24c1025",	.data = &at24_data_24c1025 },
-37cf28d3b5bca1 drivers/misc/eeprom/at24.c Adrian Bunk              2018-11-29  272  	{ .compatible = "atmel,24c2048",	.data = &at24_data_24c2048 },
-b680f4fa74496a drivers/misc/eeprom/at24.c Sven Van Asbroeck        2017-12-20  273  	{ /* END OF LIST */ },
-7f2a2f0d0d66b2 drivers/misc/eeprom/at24.c Javier Martinez Canillas 2017-10-01  274  };
-7f2a2f0d0d66b2 drivers/misc/eeprom/at24.c Javier Martinez Canillas 2017-10-01  275  MODULE_DEVICE_TABLE(of, at24_of_match);
-7f2a2f0d0d66b2 drivers/misc/eeprom/at24.c Javier Martinez Canillas 2017-10-01  276  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> Changed since v1:
+> -Fixed an issue in first patch where an additional message could still ha=
+ve
+> been written to the TX FIFO without waiting for it to empty.
+>
+> Robert Hancock (2):
+>   i2c: xiic: Wait for TX empty to avoid missed TX NAKs
+>   i2c: xiic: Try re-initialization on bus busy timeout
+>
+>  drivers/i2c/busses/i2c-xiic.c | 61 +++++++++++++++++++++--------------
+>  1 file changed, 36 insertions(+), 25 deletions(-)
+>
+> --
+> 2.42.0
+>
+>
 
