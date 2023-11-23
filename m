@@ -1,69 +1,67 @@
-Return-Path: <linux-i2c+bounces-421-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-422-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B72667F5B70
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 10:41:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF3A57F5C4C
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 11:30:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 470EFB20E6C
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 09:41:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64B4CB20FB8
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 Nov 2023 10:30:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF05224D4;
-	Thu, 23 Nov 2023 09:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 591DB225DA;
+	Thu, 23 Nov 2023 10:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="njKKRA1x"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="bayoDUzH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC84D50;
-	Thu, 23 Nov 2023 01:41:03 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-548b54ed16eso899757a12.0;
-        Thu, 23 Nov 2023 01:41:03 -0800 (PST)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F53B1A8
+	for <linux-i2c@vger.kernel.org>; Thu, 23 Nov 2023 02:30:37 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-4084de32db5so4628005e9.0
+        for <linux-i2c@vger.kernel.org>; Thu, 23 Nov 2023 02:30:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700732462; x=1701337262; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xoOuxVfYX3lHdi36PKjYbl3tsLm17OpynR1y+9rBRUM=;
-        b=njKKRA1xeZ0YPPMTB9xB3fUKJ9aCj4TrC51CWaENnDqPGU8di8X3WBiAslbmRbFFt9
-         goHIsDNXzchKvUQ/zdOX0a1IA3XvdcCfjeC/KN46y1ysbGzywzKq3PuJECAZHhxtGiLo
-         G2QQ0+U0DHnmgVrgNjg3Y1Uo/8PR3WQNwIUWzzQpV8Qjw4fy3xLimerLI52kAPzu+wev
-         eK3D7qI1VXjYwThjgaR6n2rEJNDnPGcwUe7MOqsI9ZnFixYN/jEaTQHfgIwmXTRl0ANW
-         AJwvZL4TRezK7rAnGpELy7t96SY2lxffEfIn597LbV8M2XgkL0HPF/gQSV9nRK7SMwHr
-         bdAA==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1700735436; x=1701340236; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tDvQiw4cemCoVq0HDRpi4PQAGFKid5h4mEpxV2nsTWE=;
+        b=bayoDUzHcPEGup2iGzwEYZIBD2pc+esFdlbzb3OKbGUdjFFEdf8gY0Rk5E0cbkRNDw
+         J8Bjy6Ek92rsYl7mWYXft7Sx2iCENinlfK7yAGMVTPxvzLGeMf+Vnjg6XXFNCH1gtYJj
+         yLsA0H5e87mxkzvD4Y/Ypea+7pH3bBJ/hKDdNZmlx9lCkzoZSuh9BZ84QIe8uI7etmAp
+         aVv833+FmlpR71Tp/5JPZ+Ju6dHDMC/BxlIvBmuXsS7jHmybWBe6xvYPfm+vSQ+c6v+a
+         xr8Of/GyTT220axJwGV43i86G/X4W4PmfHbKgt4VE3B81FnvbU+NbdaCWSY83759Erhb
+         TM8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700732462; x=1701337262;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xoOuxVfYX3lHdi36PKjYbl3tsLm17OpynR1y+9rBRUM=;
-        b=HLKbzzfbEZ2J5KV5llYxY2LIuhoyQPldLL5xYCuLnUH76d1EjFn5JRQlZvFFtLp73o
-         t3PKfso+mcqaT41ytAhx9ibgitfbVumnfCXhmkIUTfuVUQ6Tki+HNiUbMVKTWrb00D/G
-         qHZu+N7cqCkNLI4eXE+3Qmv3VKZh/waofz6rEBZ4H+4CWlwnKsT7thwqvig7BxJ8q2i4
-         M+rAJX2tHdUAiSSXf5j5IeMOoPZGQiWPhF4bhwSsC11KCSVKedUfVgCUplg0lQC2ltsF
-         9njM35ce9zL5KNPCfjD4HCavvD1o7h3zUnAye3nIecKEY0IvMl0pSmgDEkjIB6vdVu3U
-         2Uyw==
-X-Gm-Message-State: AOJu0YwXTp4TnYU3NLWAUZfk5azdP6hTnD6C+jfHjqriyVy7yus7deqq
-	g67pb6hTHAkFB/oTwyijXogNkZERp/E=
-X-Google-Smtp-Source: AGHT+IF2ce8O4Dy0JVMTvh8ywPgv8CHjTNcsicVHS4uyWnf5FWv5HXbuEkjOnpvoMHQySO7ke4A8Qg==
-X-Received: by 2002:a17:906:8a:b0:a03:d8ea:a264 with SMTP id 10-20020a170906008a00b00a03d8eaa264mr3680644ejc.2.1700732462058;
-        Thu, 23 Nov 2023 01:41:02 -0800 (PST)
-Received: from zotac.lan. (dynamic-2a01-0c23-c0f2-3200-2223-08ff-fe18-0310.c23.pool.telefonica.de. [2a01:c23:c0f2:3200:2223:8ff:fe18:310])
-        by smtp.gmail.com with ESMTPSA id s9-20020a1709066c8900b009e5ce1acb01sm546199ejr.103.2023.11.23.01.41.01
+        d=1e100.net; s=20230601; t=1700735436; x=1701340236;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tDvQiw4cemCoVq0HDRpi4PQAGFKid5h4mEpxV2nsTWE=;
+        b=bQfWTV5Cb/OyQ5dvefCcTPuLeTmdbIVsTjklN2ZVLON5YM9RT8dQR5nWu3kA8tW9XM
+         4NpP2+UpgPZWlavD7URLgDtKlwBjgaD4cBckDTFBzPGMYMp4LAZU+q+0owbUyhA42EbV
+         ckvvyhui5W+dELnLkguq3Xq4gxKmT/nEXuY4ibUBf9fdN99fbzXn4WX7d03zVL4Un0x+
+         7vRk0CEq9W5qXxEC40+TgHupQo12plEjPDWZeEqfU5A0ySDOL8CNv0bfgBlq8UdUMi4i
+         P9gowVu1IbLmuYDsRqwEeFNK0W4dfB1tr3f6gozrq02hCRbnHBVahL3PAeWv5bybJZZf
+         k9IA==
+X-Gm-Message-State: AOJu0YyBm2t8OqfxJavJNwtQXCGVYunbxUMRJhWMFtOk7xgM1vmmsx7L
+	xX/vGNheGh97VN6GKOnrRbRfEw==
+X-Google-Smtp-Source: AGHT+IHU7fDCbDaC4fsuwrpKT4bl5Qi/bZUq9jazliF+vOB4RrDB8zsSzqbs9eH1GvvGjjdhMLY2Cw==
+X-Received: by 2002:a05:600c:4ed2:b0:40b:35f2:3b42 with SMTP id g18-20020a05600c4ed200b0040b35f23b42mr1022638wmq.22.1700735434977;
+        Thu, 23 Nov 2023 02:30:34 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:9abb:eb66:c3a9:102e])
+        by smtp.gmail.com with ESMTPSA id f12-20020a5d664c000000b003316be2df7fsm1257834wrw.17.2023.11.23.02.30.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Nov 2023 01:41:01 -0800 (PST)
-From: Heiner Kallweit <hkallweit1@gmail.com>
-To: Wolfram Sang <wsa@kernel.org>
+        Thu, 23 Nov 2023 02:30:34 -0800 (PST)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Wolfram Sang <wsa@the-dreams.de>,
+	Peter Rosin <peda@axentia.se>
 Cc: linux-i2c@vger.kernel.org,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 20/20] include/linux/i2c.h: remove I2C_CLASS_DDC support
-Date: Thu, 23 Nov 2023 10:40:40 +0100
-Message-ID: <20231123094040.592-21-hkallweit1@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231123094040.592-1-hkallweit1@gmail.com>
-References: <20231123094040.592-1-hkallweit1@gmail.com>
+	linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v2] eeprom: at24: use of_match_ptr()
+Date: Thu, 23 Nov 2023 11:30:32 +0100
+Message-Id: <20231123103032.11396-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -72,30 +70,50 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-After removal of the legacy EEPROM driver and I2C_CLASS_DDC support in
-olpc_dcon there's no i2c client driver left supporting I2C_CLASS_DDC.
-Class-based device auto-detection is a legacy mechanism and shouldn't
-be used in new code. So we can remove this class completely now.
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Preferably this series should be applied via the i2c tree.
+This driver does not depend on CONFIG_OF so using of_match_ptr() makes
+sense to reduce the size a bit.
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- include/linux/i2c.h |    1 -
- 1 file changed, 1 deletion(-)
+v1 -> v2:
+- use __maybe_unused to avoid warnings about at24_of_match not being used
 
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 0dae9db27..d029aade3 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -850,7 +850,6 @@ static inline void i2c_mark_adapter_resumed(struct i2c_adapter *adap)
+ drivers/misc/eeprom/at24.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+index f61a80597a22..8279adade07e 100644
+--- a/drivers/misc/eeprom/at24.c
++++ b/drivers/misc/eeprom/at24.c
+@@ -18,6 +18,7 @@
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/nvmem-provider.h>
++#include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/property.h>
+@@ -242,7 +243,7 @@ static const struct i2c_device_id at24_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(i2c, at24_ids);
  
- /* i2c adapter classes (bitmask) */
- #define I2C_CLASS_HWMON		(1<<0)	/* lm_sensors, ... */
--#define I2C_CLASS_DDC		(1<<3)	/* DDC bus on graphics adapters */
- #define I2C_CLASS_SPD		(1<<7)	/* Memory modules */
- /* Warn users that the adapter doesn't support classes anymore */
- #define I2C_CLASS_DEPRECATED	(1<<8)
+-static const struct of_device_id at24_of_match[] = {
++static const struct of_device_id __maybe_unused at24_of_match[] = {
+ 	{ .compatible = "atmel,24c00",		.data = &at24_data_24c00 },
+ 	{ .compatible = "atmel,24c01",		.data = &at24_data_24c01 },
+ 	{ .compatible = "atmel,24cs01",		.data = &at24_data_24cs01 },
+@@ -812,7 +813,7 @@ static struct i2c_driver at24_driver = {
+ 	.driver = {
+ 		.name = "at24",
+ 		.pm = &at24_pm_ops,
+-		.of_match_table = at24_of_match,
++		.of_match_table = of_match_ptr(at24_of_match),
+ 		.acpi_match_table = ACPI_PTR(at24_acpi_ids),
+ 	},
+ 	.probe = at24_probe,
+-- 
+2.40.1
 
 
