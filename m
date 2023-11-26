@@ -1,142 +1,110 @@
-Return-Path: <linux-i2c+bounces-451-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-452-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E25E67F8F1F
-	for <lists+linux-i2c@lfdr.de>; Sat, 25 Nov 2023 21:48:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 799277F9181
+	for <lists+linux-i2c@lfdr.de>; Sun, 26 Nov 2023 07:04:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FB791C20C8A
-	for <lists+linux-i2c@lfdr.de>; Sat, 25 Nov 2023 20:48:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6157B20EAD
+	for <lists+linux-i2c@lfdr.de>; Sun, 26 Nov 2023 06:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8C0330D05;
-	Sat, 25 Nov 2023 20:48:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A5323C35;
+	Sun, 26 Nov 2023 06:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V3H6UDq7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YBk1Z0wx"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660972D029;
-	Sat, 25 Nov 2023 20:48:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487CBC433C8;
-	Sat, 25 Nov 2023 20:48:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700945313;
-	bh=MP615DG3faCXFei6ez6/qbJ2Qn+AxlK3zXjwrEKNgcs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=V3H6UDq7A3kCMLfHpZpSX7FXfzHuWMOtsplTH0sNtXsZgArz+P0U4eBCtxi3NSFFd
-	 /Qh78hVGqFA0WqXtaEMTLiv8fodY0nCNwQemnzy2nkPIc8A948DHrbP8ShAHXs9JEh
-	 DZSd65o2b/ffSmFfCaSmhQJlMgtpbBWoxv52RCHkCAWexYJeYwHrGLN9suMTTHOnuk
-	 DdSGqivh1nxdaSurglxzzB29rEdm+mzoC6D5xHsCr4gfSyRMDlvOZaKdKmw5u63wzf
-	 fjwHu1uh7qGvuEyyEExZqT+BueoGfafWluF3pHxDvInU7XHZpnYl45oF6XMQNbYQcP
-	 bHLD2kxsjKD7g==
-Date: Sat, 25 Nov 2023 20:48:14 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
- <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Andi Shyti <andi.shyti@kernel.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Ulf
- Hansson <ulf.hansson@linaro.org>, Tomasz Figa <tomasz.figa@gmail.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>, Linus Walleij
- <linus.walleij@linaro.org>, Thierry Reding <thierry.reding@gmail.com>, Uwe
- =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@pengutronix.de>,
- Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, Liam
- Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Jaehoon
- Chung <jh80.chung@samsung.com>, Sam Protsenko <semen.protsenko@linaro.org>,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
- alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH 10/17] dt-bindings: iio: samsung,exynos-adc: add
- specific compatibles for existing SoC
-Message-ID: <20231125204814.10fe16fa@jic23-huawei>
-In-Reply-To: <20231108104343.24192-11-krzysztof.kozlowski@linaro.org>
-References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
-	<20231108104343.24192-11-krzysztof.kozlowski@linaro.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E7810D;
+	Sat, 25 Nov 2023 22:04:02 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id a1e0cc1a2514c-7bae8dd095cso1052421241.3;
+        Sat, 25 Nov 2023 22:04:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700978641; x=1701583441; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lHH9CY/YqMo7brFyHOai+ndS76FkZ3H1nz6R6LrdAVg=;
+        b=YBk1Z0wx/rP7WHtJx/QM0f990StwIRg/XD2OlMzzfE4jKbKMRLWrVG5R7Mxzd5h35d
+         96nLzFnU/kMr4stjfM9+DDM6ebkTM0GxZDz6pgPiExK0oBLUzCU4URZiYbqyhKjgUUTC
+         sz2Hfo17eg7Ztb02p03HdMOAbXDoKQKddm92X2SNdYGrbj8/y7E+5XjNm9mW6qjU6dnR
+         bSUJaLLWFFZe4J14ni0hB9+nQmOOXEah5s9ciZCpJOEHMTioId9tfOlQXaDylIvBjtQH
+         D25z6cYLpeMvuo/BbE0fvbZQeXdTHVO5NWTPgZfdFrlqmB/WXrdTEzP1soXHIuHn88ac
+         vqjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700978641; x=1701583441;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lHH9CY/YqMo7brFyHOai+ndS76FkZ3H1nz6R6LrdAVg=;
+        b=ZCzOBEdxMFDd9sdFIuMfNlnSWqDV4mv/yafW0YY4H1YNFWaqrV/GR/sqCsZbMUQ5M+
+         61+MNZrctjAxa9d9yu74dD4fo5Ej5s7+UoGLBfzb5PekroM3D4cTtF7VT8prHf0izh1D
+         hfjLOHM68P4iSkgws3XlDL7KHKG9KWMrPZFA6TfIoK7KrwE6JiQUWOWDZWQllPy2LD46
+         TxE13FWVPJjV0WojQUU4EZ2lB/aoQ11ah5mhX9kTQFSieSDr1T3haHXeTK20yf4arWos
+         MaEZv6JDzbDMTOtDGf0l5a2D5NQMM1mQunIiK6JayacPcac3xPg7c7UQ1EyR020RiOch
+         P3Iw==
+X-Gm-Message-State: AOJu0YzHixgqSp2EmJUyXnJxwqW49EEVtRoKcCTEGoH6Y4/voyxGJWen
+	tCOLU8BU497nJVvAc/TKp8Syz+Cyzd5VYrDOkzM=
+X-Google-Smtp-Source: AGHT+IHLRhMJYQeBCOLZWde7GehiGvp2CeeXwmeo/Cb6wVo9SAexhiAS3U+NJNh8FxJY8Qa/fKK61eRtSYxSc9j5ugs=
+X-Received: by 2002:a05:6122:16a8:b0:4a4:cd2:5ebe with SMTP id
+ 40-20020a05612216a800b004a40cd25ebemr2735306vkl.12.1700978641255; Sat, 25 Nov
+ 2023 22:04:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20231124101619.6470-1-hkallweit1@gmail.com> <20231124101619.6470-11-hkallweit1@gmail.com>
+In-Reply-To: <20231124101619.6470-11-hkallweit1@gmail.com>
+From: jim.cromie@gmail.com
+Date: Sat, 25 Nov 2023 23:03:35 -0700
+Message-ID: <CAJfuBxw4=Aku32yx3e0zbTCARSo9r1ST71UoaC-Dp3K3_m44jQ@mail.gmail.com>
+Subject: Re: [PATCH v2 10/10] i2c: scx200_acb: Don't let i2c adapters declare
+ I2C_CLASS_SPD support if they support I2C_CLASS_HWMON
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org, 
+	Andi Shyti <andi.shyti@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed,  8 Nov 2023 11:43:36 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Fri, Nov 24, 2023 at 3:16=E2=80=AFAM Heiner Kallweit <hkallweit1@gmail.c=
+om> wrote:
+>
+> After removal of the legacy eeprom driver the only remaining I2C
+> client device driver supporting I2C_CLASS_SPD is jc42. Because this
+> driver also supports I2C_CLASS_HWMON, adapters don't have to
+> declare support for I2C_CLASS_SPD if they support I2C_CLASS_HWMON.
+> It's one step towards getting rid of I2C_CLASS_SPD mid-term.
+>
+> Series was created supported by Coccinelle and its splitpatch.
+>
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>
 
-> Samsung Exynos SoC reuses several devices from older designs, thus
-> historically we kept the old (block's) compatible only.  This works fine
-> and there is no bug here, however guidelines expressed in
-> Documentation/devicetree/bindings/writing-bindings.rst state that:
-> 1. Compatibles should be specific.
-> 2. We should add new compatibles in case of bugs or features.
-> 
-> Add compatibles specific to each SoC in front of all old-SoC-like
-> compatibles.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
+Acked:
+
+
 > ---
-> 
-> I propose to take the patch through Samsung SoC (me). See cover letter
-> for explanation.
-> ---
->  .../bindings/iio/adc/samsung,exynos-adc.yaml  | 29 +++++++++++--------
->  1 file changed, 17 insertions(+), 12 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
-> index 582d0a03b814..4e40f6bed5db 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
-> @@ -11,18 +11,23 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - samsung,exynos-adc-v1                 # Exynos5250
-> -      - samsung,exynos-adc-v2
-> -      - samsung,exynos3250-adc
-> -      - samsung,exynos4212-adc                # Exynos4212 and Exynos4412
-> -      - samsung,exynos7-adc
-> -      - samsung,s3c2410-adc
-> -      - samsung,s3c2416-adc
-> -      - samsung,s3c2440-adc
-> -      - samsung,s3c2443-adc
-> -      - samsung,s3c6410-adc
-> -      - samsung,s5pv210-adc
-> +    oneOf:
-> +      - enum:
-> +          - samsung,exynos-adc-v1                 # Exynos5250
-> +          - samsung,exynos-adc-v2
-> +          - samsung,exynos3250-adc
-> +          - samsung,exynos4212-adc                # Exynos4212 and Exynos4412
-> +          - samsung,exynos7-adc
-> +          - samsung,s3c2410-adc
-> +          - samsung,s3c2416-adc
-> +          - samsung,s3c2440-adc
-> +          - samsung,s3c2443-adc
-> +          - samsung,s3c6410-adc
-> +          - samsung,s5pv210-adc
-> +      - items:
-> +          - enum:
-> +              - samsung,exynos5433-adc
-> +          - const: samsung,exynos7-adc
->  
->    reg:
->      maxItems: 1
-
+>  drivers/i2c/busses/scx200_acb.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/i2c/busses/scx200_acb.c b/drivers/i2c/busses/scx200_=
+acb.c
+> index 83c1db610..3648382b8 100644
+> --- a/drivers/i2c/busses/scx200_acb.c
+> +++ b/drivers/i2c/busses/scx200_acb.c
+> @@ -427,7 +427,7 @@ static struct scx200_acb_iface *scx200_create_iface(c=
+onst char *text,
+>         snprintf(adapter->name, sizeof(adapter->name), "%s ACB%d", text, =
+index);
+>         adapter->owner =3D THIS_MODULE;
+>         adapter->algo =3D &scx200_acb_algorithm;
+> -       adapter->class =3D I2C_CLASS_HWMON | I2C_CLASS_SPD;
+> +       adapter->class =3D I2C_CLASS_HWMON;
+>         adapter->dev.parent =3D dev;
+>
+>         mutex_init(&iface->mutex);
+>
 
