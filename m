@@ -1,109 +1,183 @@
-Return-Path: <linux-i2c+bounces-471-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-472-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E5E07F9A76
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Nov 2023 08:05:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25B5E7F9B52
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Nov 2023 09:08:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8DD71C2042B
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Nov 2023 07:05:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8126280DB9
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Nov 2023 08:08:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FAB9DF53;
-	Mon, 27 Nov 2023 07:05:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B42B710A34;
+	Mon, 27 Nov 2023 08:08:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KFm27/He"
+	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="TPIysxwV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6358812F;
-	Sun, 26 Nov 2023 23:05:04 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-a02d12a2444so555255766b.3;
-        Sun, 26 Nov 2023 23:05:04 -0800 (PST)
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8550BB5;
+	Mon, 27 Nov 2023 00:08:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BTgW/YDOmJT+eHiuI2Akv5d0ErTjsBP1ZNnhSrvB5fVLnPFWrTVJbjvKlHxw11j15tPBdUHis7kUDr0D7fW14diZRGHjMEgth0WLERxZxT+3TFA6j3HO6i5SKYeIMs8NfAtne7i0H78jbFjXz85cqIOQTVMfZGtG2E8VY48IoNMFzIZ5DsOjeSnn/hxM8NLPMaC6xEgWoyroP7TQPHUZcGaVSZYz3+bicXyyFAd+ueuDNwCn4AL+66GIVxI89m7meyLq6j2CliLxiRgGL3LD1fw+Fdvknl3L+OyqYP4tEOQuJJ3VD9SlIQabwj8GaJc5GxioKBAM85dLccrIh0gjrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zuDCknC0k5CJjp+ssj8BbXc0Z+kcu1L6HYB4R5mlmxc=;
+ b=S/mLxaI74x/X0roEUDzG4l0XFKF/1xk+HaFNLo4iJeqdpF/i7a/z7VikKiiriImnM6EL0mXKDuiB3hQ9BM8N/3MK/P6JzosyzJOb/uF1+Tzt0s6IPens/5oSbf1/UD5uq4PQFFYDwZxl2vpwpHiDeSdhWEnkfCNqAYFVSD1XbpsQn3I2IVNhW0qXhp4x9IFQx0dzBI/QZZR6ad7f46FNagV2ANvfoNey3xr1uzSPX9I3oWQ+TZQeJ1eM/+uhjhJKdzKUbKYixGvxnsHgi+4UzDhG3DorwR8FnnnUVPAefN2Wh0IdDE4HM6yCXZs8pPhCSnGfipJMmhCV8wNFaNI7nQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701068703; x=1701673503; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=njKIqe2mNiRdX5LaAFqRQiCwPnpSDRZxDJdhCHqWXjY=;
-        b=KFm27/HeZ/b7wqKHOFGTBZ8e7iHDHwJM9rf0n/IHFED/1pbnD0apQfIq1rAVm6tMtS
-         fnXvbuS+7iCFXDy4vSZ85Hv7bN3B8y+OYDWUcnQ4aqoRQLBo3a7wTscQGDcXg8qHqovs
-         IvadzjxQZu0S6qYMlZJ2flUrVrK0Az8RueP33cO73T1CkXkqeSet082MmEJqAgmXKHPk
-         FSyCN5Jhk5DBnWF61Uydy5Ffv+VzrppzrxswLBaA/ajv4ndvKVTd2YS1KMkPP/Ga/Nld
-         THZO+I0kHe1Kk2xT5z4QRsaSkvfZUJC4K1sraxwOpl7PELM3zaFVZloZCLdFHwmzY9T2
-         RkIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701068703; x=1701673503;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=njKIqe2mNiRdX5LaAFqRQiCwPnpSDRZxDJdhCHqWXjY=;
-        b=ScOBy78w60cN6anybmCgct1ktnNLfI+9k5mLSyqKxqgEddBzqmqtHdwXafs/xUW1iM
-         SSJqaMg5tjyEV4xRi7urzpgdrvuTgl0jG4AMmf49ZB+AHZnjFJt6nyHiKlhVFsoTceuj
-         VAe0XPoVDAUohd65qimIcaQgaajL/hSA0ETfq03CDX+nC8IPbmjN5QcJcq/rF7e2Y8Iu
-         5kYmcx3UmXYBboPSgZ2H57XTP42DL8akgEgr4KSGZSB3pR4YInZzEcOZvy2sqXTVT5aD
-         Suo5syVvuiql6SufcsBZOB4i9b7eXP1VwvQ8YY/gXJRep7PImJhRP1oD3H09DXGI8stS
-         94Sw==
-X-Gm-Message-State: AOJu0YxxdmLbsjvBAc0JhcJC7CcjhW4vsjgylzihYeV50Qi+Sawi4Nlx
-	qQGDnL01HU5YjI1qlJsjhpTHN1yllw+rTlcn6W/QO7CyptTdNg==
-X-Google-Smtp-Source: AGHT+IGxqUO5X+l6WGxxe/nXpbFmqbv3pQHqKJ3PxzE2p4nS4DzebTb7Js9cjbYVIzm9Dcn6VgNxA/Er0b8cuJFP/4s=
-X-Received: by 2002:a17:906:66c1:b0:9ff:77c2:e67f with SMTP id
- k1-20020a17090666c100b009ff77c2e67fmr7216953ejp.33.1701068702634; Sun, 26 Nov
- 2023 23:05:02 -0800 (PST)
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zuDCknC0k5CJjp+ssj8BbXc0Z+kcu1L6HYB4R5mlmxc=;
+ b=TPIysxwVsNowTrRwjg+gf1NbQenyg3Zs91OIT64QWr9HvBsS/YEmzGdSxws7mQCbavPlfm6KcgEYVJa//M5m5j7YxMXQwt8dMIJBVoNyiyRQEa2DfvSn0P/cT6/lu+V85yXqzquZu/3yjwXtT91cVmtSg99zdGT49RrM5JW4Z5Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11) by
+ SJ2PR01MB8077.prod.exchangelabs.com (2603:10b6:a03:4f3::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.25; Mon, 27 Nov 2023 08:08:16 +0000
+Received: from SN4PR01MB7455.prod.exchangelabs.com
+ ([fe80::5682:1d84:171a:1d68]) by SN4PR01MB7455.prod.exchangelabs.com
+ ([fe80::5682:1d84:171a:1d68%3]) with mapi id 15.20.7025.022; Mon, 27 Nov 2023
+ 08:08:15 +0000
+Message-ID: <854762fb-1767-4208-a7fc-10580730c1f3@os.amperecomputing.com>
+Date: Mon, 27 Nov 2023 15:08:02 +0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: aspeed: Acknowledge Tx ack late when in
+ SLAVE_READ_PROCESSED
+Content-Language: en-CA
+To: Cosmo Chou <chou.cosmo@gmail.com>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>
+Cc: linux-arm-kernel@lists.infradead.org, jae.hyun.yoo@linux.intel.com,
+ andi.shyti@kernel.org, linux-aspeed@lists.ozlabs.org,
+ openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org, wsa@kernel.org,
+ brendan.higgins@linux.dev, cosmo.chou@quantatw.com, joel@jms.id.au,
+ linux@roeck-us.net, linux-i2c@vger.kernel.org
+References: <20231120091746.2866232-1-chou.cosmo@gmail.com>
+ <fdd884426497486c6b17795b4edc66243bdc7350.camel@codeconstruct.com.au>
+ <CAOeEDyumVdi-3O3apMUFJ695V3YcZqZQ7wvzYL2YfU88XJ3Dxw@mail.gmail.com>
+From: Quan Nguyen <quan@os.amperecomputing.com>
+In-Reply-To: <CAOeEDyumVdi-3O3apMUFJ695V3YcZqZQ7wvzYL2YfU88XJ3Dxw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2P153CA0003.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:140::20) To SN4PR01MB7455.prod.exchangelabs.com
+ (2603:10b6:806:202::11)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231120091746.2866232-1-chou.cosmo@gmail.com> <fdd884426497486c6b17795b4edc66243bdc7350.camel@codeconstruct.com.au>
-In-Reply-To: <fdd884426497486c6b17795b4edc66243bdc7350.camel@codeconstruct.com.au>
-From: Cosmo Chou <chou.cosmo@gmail.com>
-Date: Mon, 27 Nov 2023 15:04:51 +0800
-Message-ID: <CAOeEDyumVdi-3O3apMUFJ695V3YcZqZQ7wvzYL2YfU88XJ3Dxw@mail.gmail.com>
-Subject: Re: [PATCH] i2c: aspeed: Acknowledge Tx ack late when in SLAVE_READ_PROCESSED
-To: Andrew Jeffery <andrew@codeconstruct.com.au>
-Cc: brendan.higgins@linux.dev, benh@kernel.crashing.org, joel@jms.id.au, 
-	andi.shyti@kernel.org, linux@roeck-us.net, wsa@kernel.org, 
-	jae.hyun.yoo@linux.intel.com, linux-i2c@vger.kernel.org, 
-	openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org, 
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	cosmo.chou@quantatw.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4PR01MB7455:EE_|SJ2PR01MB8077:EE_
+X-MS-Office365-Filtering-Correlation-Id: 720d0133-50cc-4631-47ed-08dbef2001bb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	5TLUwdoKyUVDQ/qPQK9Z3UYt611GdsvbP803J9eP/D5GXPzhkzZZVQdcc41iYxDXz1d6YXsnnhHMcIA16Gh2n5fsYzhWvuHvN1t4U1oOtY2Dh6aewLhvyJ45yGlDE2XU0u0rEviil9fYEQRiuVqdeLFndrRvlPZ4R8EF9IqDNNzlCiYAcc1ojr4/WP79bM/7TUthaw8j/dMVqhYOcMhkXxrX/ZtgkMShCND2oTSUANRflh0FG/W8xt+bgY0idy/ffB/tbEzSGggpAIZYgvUxhzORaOuTF3iSyDv0EHokW87DURIId71Dk8e3WUZ40WH9odeAHVU3eIgGtVqLsThLpNWW3d4MqhpZSSkOs+pYGSZetBKz/Jn/8CIxGojqNIQDItkKH6HFs+ZG6h4J5jgl2chkvBUtZCr8XdHEETGFP5PQA52id3sISg3TFx2DKiLoUYXCKFduvmhHRsxxnKiLgtsYUWi3x3kupTtjatyLeadaIjtwvbW/SCuRrwEnzrfF/if76X/EwNey7ZU8jnBvNHDsfKqqjkuVmP8kSUhPQkZqUludZfy4pY+X1nUys7HcJHOcGoGKMYR0qZlph4xDg7Np5EkYgnvv3XqVmfk7NJCwSJWhQEaIz3R2LbShAJC9mb+eIMN6ulCzuiWpvt1kDg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR01MB7455.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(346002)(366004)(136003)(376002)(396003)(230922051799003)(186009)(451199024)(64100799003)(1800799012)(26005)(31686004)(6486002)(2616005)(478600001)(6506007)(6666004)(966005)(6512007)(53546011)(38100700002)(31696002)(86362001)(41300700001)(5660300002)(110136005)(66946007)(66476007)(66556008)(7416002)(4001150100001)(316002)(2906002)(4326008)(8676002)(8936002)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bG5XU2F4THhJd2FpSkhqOHRDNDhTRWVSSkxFRXhVU0dvcm5OOENpaUtUN0xN?=
+ =?utf-8?B?dmJwRjRKdGJYWWt6Yi8vcWlzY2VCSURiRE81Mk44ejFDT1NkcDZPcGFTQmg0?=
+ =?utf-8?B?SDdXUVdwZDMvbktpZmU2RjBFV3QrMmhYSFYxQnFGeENvSDBycFd5Y2MvaDFJ?=
+ =?utf-8?B?VWt6UWVCZ0xVWXRTMzZKODhRYkZ2dDVER2plRGNVdVZBZzdXS2l1N1hKZkRq?=
+ =?utf-8?B?ZzhFQkZjSDJZM2FvZlVNWEFKSm9GZFdPRU83d21XYjh3VDkzQVZpbFhQdDlt?=
+ =?utf-8?B?WGd3c1dGU3M2ZWJzM2FkWmVvemFqYmNNMDd3OEVDSk1EbVkxMzFKbkNycjQy?=
+ =?utf-8?B?WWF0WEJvNEI4dG9GbGx6eVhlZGdRQ2MySGVrNGszU2xXRTFBOHRuV29DYTdW?=
+ =?utf-8?B?UkZuZ0hRVVJBVmlna1N5U2s1V0FWanN0UVhVencxcUduVmVwU2V2OUFWeit2?=
+ =?utf-8?B?clI5cjhWckhhN1dpNXJ1K3FJdWdqeHo5a3hTenNnQk1USXNRTlMwS21LQWkx?=
+ =?utf-8?B?dnRQSlJtdEtscVhqZ01LWHBBL1VxcmZ4d1ZSSFlSeC9kQysvekVpMXZObk1O?=
+ =?utf-8?B?UXJWek03NXhYNlI3MnhIbDV5RWhyVkxWcHdrYkY0dkpuNkZJcTlGNktRa2VU?=
+ =?utf-8?B?Wjdmd0tSRHVPSVZaQ2ZOeTZFUHdzUFYxWWlNMkRJUkhUaEdDeXgvaktCWWxx?=
+ =?utf-8?B?eVUxUURsUUZxenlpeFB4eGFiZDBDMmtYbVJBcC9MQ0s3dmNFcEFEc0hqUWtU?=
+ =?utf-8?B?cHFVSU5YN1cyUStpMVdBa3BGRFVQYWRGQ2h5ajdOS2d4alBSM3VUVTB5WDNZ?=
+ =?utf-8?B?bGlGcDZCZnBzYVl2TGRQTm9qMDl4dFlPWjQ4MmNLT3lVTzhhYzRtbGt2Yk4r?=
+ =?utf-8?B?NnRKUFEwY0d6UldtQ1orUHdxL1VCN1czcjZxMnRYanJxeUtLRnhGc0tOR2xj?=
+ =?utf-8?B?N2F5dUwwUk05UWxGeVE0TURzL1RYaDMralhFR21UV2FxVElGcURvWmU3Y1J0?=
+ =?utf-8?B?QXdpVmJwUXhzeVBIQ01tdDNCU1Z4YU1TbDlhRUVMOHYydjhoVUFKcmt1TlY4?=
+ =?utf-8?B?c2xnZTZtblY3bFZPNlVkMlVCQVFUZ0grcDk5OXpzUTVNU0o4aWg5cGJla3Mv?=
+ =?utf-8?B?MlJQUG0yWDd4cXhSeTZQSFhVRDViaGdjbEI5THQvWVlnemMwdEw2d3o0Ylpm?=
+ =?utf-8?B?QkFMcGJXVk9SMG9WbFU4MzhoZ2JaN1ozNXRqSU04Nnk4VVBzRThvRDZZNERT?=
+ =?utf-8?B?a1M4dGdRZlNySVU3ME1rWUVQZ2hCK3Fyd0pvRjBoZW5BellBVnQ0WFd6MFls?=
+ =?utf-8?B?OUVrUkEzZVVqcmRPa2FyeWhJSDJEMU1pRXQxbzV6TzdYN2RkdG5YcHByL3lq?=
+ =?utf-8?B?NHBjNys4SEVOTExSRnFBWXNOMXljV25lSFdpQjJNeStlaWUzRGdQN0paZ2ta?=
+ =?utf-8?B?eHlwQmhPRExyVFlveWxKdStQZ0hieVdDeUFwRzV2Vlg4bFFaVlRRN1ZvU0NL?=
+ =?utf-8?B?VkxseVVyeEZPblZYVTZpZ0l5ZDZza0ozSnROeHQycnNqejd2K0prbXExd25M?=
+ =?utf-8?B?UHpqM3JpNFIyRDhBS0hXMVlRU2ZaZ0FQL00rNndZRGw4S1BBTDVPbEJ3dUdF?=
+ =?utf-8?B?UzlkT0VSYjY2ZTNRR1pJU3ZFKzhtVWhpVktBVFN0UkNCSFdGOUgyV0FBMWZm?=
+ =?utf-8?B?Z2pIN0lnYVBuQUxuNnN1eVVXaWpqbVNWWTBOaW1jMzh5bjdnRkdGVlpxeVlF?=
+ =?utf-8?B?dGFLNzR6Z1E3S29URzNNZ0E5SkRsUU1lTk1lQWNOSWMrbEtFSmc3WTJHWWto?=
+ =?utf-8?B?YXZpb0VvWFpVYlQ1bWNmeUNuc214aWV5SGpqM2tNb2ErSERkYm1xTVFwRUo4?=
+ =?utf-8?B?akJCYTNZRE1hV1JicjNnS2puYjVSY29UNmx6U3RJZk1OdU0zWjhPZkdmZnJj?=
+ =?utf-8?B?c3Y2MTdIeDlSUkNvdHZVZW80NkplUXNkNFAwTmJhSXhaM1hKYUhSZEN1cDVh?=
+ =?utf-8?B?NGk4b2VTdVhaUU9qMWtpL3cxVUQwOW5WVmhVRlFJeCtFREdOSFZyRTAwZWZh?=
+ =?utf-8?B?WVZ3ODN2dFd1bnJzWEpvaENDc0t0dDNYMFMyOVBReUc2SlQrcXF0b1dBZ1cz?=
+ =?utf-8?B?NFJNZEc1QmZuMHBwTU95OERKMEs2dkFEYVk1Zk5uekUwWjRpOG9pRDRaSnNL?=
+ =?utf-8?Q?uhYi3dTxt99f+bT8oB0sk1o=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 720d0133-50cc-4631-47ed-08dbef2001bb
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR01MB7455.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2023 08:08:15.3089
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HjlDUBqxWg+lidbXLN+cxeTyI+MMnSc6OSIL9ppJWYazX2L1sPhZdFAv73VlLHQ3fZkmPN9Dj9lYC8vxq/67BwZokK53mva/IKRlJU+4oEI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR01MB8077
 
-Andrew Jeffery <andrew@codeconstruct.com.au> wrote on Mon, 2023-11-27
-at 11:23 AM:
->
-> On Mon, 2023-11-20 at 17:17 +0800, Cosmo Chou wrote:
-> > commit 2be6b47211e1 ("i2c: aspeed: Acknowledge most interrupts early
-> > in interrupt handler") moved most interrupt acknowledgments to the
-> > start of the interrupt handler to avoid race conditions. However,
-> > slave Tx ack status shouldn't be cleared before SLAVE_READ_PROCESSED
-> > is handled.
-> >
-> > Acknowledge Tx ack status after handling SLAVE_READ_PROCESSED to fix
-> > the problem that the next byte is not sent correctly.
->
-> What does this mean in practice? Can you provide more details? It
-> sounds like you've seen concrete problems and it would be nice to
-> capture what it was that occurred.
->
-> Andrew
 
-For a normal slave transaction, a master attempts to read out N bytes
-from BMC: (BMC addr: 0x20)
-[S] [21] [A] [1st_B] [1_ack] [2nd_B] [2_ack] ... [Nth_B] [N] [P]
 
-T1: when [21] [A]: Both INTR_SLAVE_MATCH and INTR_RX_DONE rise,
-INTR_RX_DONE is not cleared until BMC is ready to send the 1st_B:
-https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c#L294
-That is, BMC stretches the SCL until ready to send the 1st_B.
+On 27/11/2023 14:04, Cosmo Chou wrote:
+> Andrew Jeffery <andrew@codeconstruct.com.au> wrote on Mon, 2023-11-27
+> at 11:23 AM:
+>>
+>> On Mon, 2023-11-20 at 17:17 +0800, Cosmo Chou wrote:
+>>> commit 2be6b47211e1 ("i2c: aspeed: Acknowledge most interrupts early
+>>> in interrupt handler") moved most interrupt acknowledgments to the
+>>> start of the interrupt handler to avoid race conditions. However,
+>>> slave Tx ack status shouldn't be cleared before SLAVE_READ_PROCESSED
+>>> is handled.
+>>>
+>>> Acknowledge Tx ack status after handling SLAVE_READ_PROCESSED to fix
+>>> the problem that the next byte is not sent correctly.
+>>
+>> What does this mean in practice? Can you provide more details? It
+>> sounds like you've seen concrete problems and it would be nice to
+>> capture what it was that occurred.
+>>
+>> Andrew
+> 
+> For a normal slave transaction, a master attempts to read out N bytes
+> from BMC: (BMC addr: 0x20)
+> [S] [21] [A] [1st_B] [1_ack] [2nd_B] [2_ack] ... [Nth_B] [N] [P]
+> 
+> T1: when [21] [A]: Both INTR_SLAVE_MATCH and INTR_RX_DONE rise,
+> INTR_RX_DONE is not cleared until BMC is ready to send the 1st_B:
+> https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c#L294
+> That is, BMC stretches the SCL until ready to send the 1st_B.
+> 
+> T2: when [1_ack]: INTR_TX_ACK rises, but it's cleared at the start of
+> the ISR, so that BMC does not stretch the SCL, the master continues
+> to read 2nd_B before BMC is ready to send the 2nd_B.
+> 
+> To fix this, do not clear INTR_TX_ACK until BMC is ready to send data:
+> https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c#L302
+> 
 
-T2: when [1_ack]: INTR_TX_ACK rises, but it's cleared at the start of
-the ISR, so that BMC does not stretch the SCL, the master continues
-to read 2nd_B before BMC is ready to send the 2nd_B.
+This looks like the same issue, but we chose to ack them late. Same with 
+INTR_RX_DONE.
 
-To fix this, do not clear INTR_TX_ACK until BMC is ready to send data:
-https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c#L302
+https://lore.kernel.org/all/20210616031046.2317-3-quan@os.amperecomputing.com/
 
-Cosmo
+
+- Quan
 
