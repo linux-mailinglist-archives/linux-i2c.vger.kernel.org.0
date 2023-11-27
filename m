@@ -1,119 +1,113 @@
-Return-Path: <linux-i2c+bounces-484-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-485-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36ACB7FAE21
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 00:00:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78C777FAEB8
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 00:54:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 404F21C20BDB
-	for <lists+linux-i2c@lfdr.de>; Mon, 27 Nov 2023 23:00:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 332E4281752
+	for <lists+linux-i2c@lfdr.de>; Mon, 27 Nov 2023 23:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD5B148CF4;
-	Mon, 27 Nov 2023 23:00:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6800A49F7D;
+	Mon, 27 Nov 2023 23:54:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="GcF5S01D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bslYKD5t"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B47019D;
-	Mon, 27 Nov 2023 15:00:12 -0800 (PST)
-Received: from [192.168.68.112] (ppp118-210-131-38.adl-adc-lon-bras33.tpg.internode.on.net [118.210.131.38])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id DC2FB200EF;
-	Tue, 28 Nov 2023 07:00:02 +0800 (AWST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1701126006;
-	bh=jeaVBZ61hYUULmiG4P1ndu1Q2m319cZm4MzoynyxVlQ=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=GcF5S01D0K9OrzUP0huZxWEqVkzKv+ALVQNJLjU286ml3+TWPtHI2Zc8t6o8wULQk
-	 KqmZkOUx0cGc5393b6urtjElVwWj3lGCg4obKPoov+MkKuHgNZZMKJV/ofccGs7cFX
-	 RFwEHtRS1QEG1fEyjt7aZe/h33NCJjvIcqSNRTRoHy2/N4rEquFYON9Y1iqm0rzJEv
-	 C5nfRoagxZnIgxEWBCdb1IL9THFhXkg6oGh70riVnXa5jPtyduaH/9GenlWyUlxYKi
-	 kIKcmX/4E5/YnNDHVydkF6JAVm+AICdzgHsd4IY2w2/68iom6sRDaqwziTv7BzQsrw
-	 JBe2POQtO3KnA==
-Message-ID: <d0773df55a6fe8a5c9b1a3d7c8dd2e1343643272.camel@codeconstruct.com.au>
-Subject: Re: [PATCH] i2c: aspeed: Acknowledge Tx ack late when in
- SLAVE_READ_PROCESSED
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Quan Nguyen <quan@os.amperecomputing.com>, Cosmo Chou
- <chou.cosmo@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org, jae.hyun.yoo@linux.intel.com, 
- andi.shyti@kernel.org, linux-aspeed@lists.ozlabs.org,
- openbmc@lists.ozlabs.org,  linux-kernel@vger.kernel.org, wsa@kernel.org,
- brendan.higgins@linux.dev,  cosmo.chou@quantatw.com, joel@jms.id.au,
- linux@roeck-us.net,  linux-i2c@vger.kernel.org
-Date: Tue, 28 Nov 2023 09:30:01 +1030
-In-Reply-To: <854762fb-1767-4208-a7fc-10580730c1f3@os.amperecomputing.com>
-References: <20231120091746.2866232-1-chou.cosmo@gmail.com>
-	 <fdd884426497486c6b17795b4edc66243bdc7350.camel@codeconstruct.com.au>
-	 <CAOeEDyumVdi-3O3apMUFJ695V3YcZqZQ7wvzYL2YfU88XJ3Dxw@mail.gmail.com>
-	 <854762fb-1767-4208-a7fc-10580730c1f3@os.amperecomputing.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2633248CDD
+	for <linux-i2c@vger.kernel.org>; Mon, 27 Nov 2023 23:54:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32217C433C8;
+	Mon, 27 Nov 2023 23:54:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701129278;
+	bh=a4P4BVbYULK6L0Qcy9l2Nr9bwz51FMIOg7cjJS/nXYc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bslYKD5tUGWZ5VSkxmL+cLa+gMT+XtEYLO9BWapWvLceaa88PssY9/4CTV+dXRCvd
+	 6IhiiX/Q1brdnbjkBXsNvfclpuDKcKLrQqWFwFysyOsGdJvgD9nNsWXS88+anMvXVx
+	 F5MUM6tfr9M206FhKnogoEANUBjVlokkcCVzQJja+aky1jjL+tZB+SeQmcglrLPKsh
+	 dtTityQ7Ek4LW3WNsgx2UsghXr488n4T2gc7M0bNTNy7++qqucyG+MivIGAAz7ZbnB
+	 wIt0MurNIjj4i48Vk3piofcL3x+LfTZZD7fDkYMWB6X035SsUTqgEErQZMh6clNjmB
+	 yF+F9SwCzWz8g==
+Date: Tue, 28 Nov 2023 00:54:34 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v4 07/24] i2c: designware: Add missing 'c' into PCI IDs
+ variable name
+Message-ID: <20231127235434.p6c6lxcjbxkerhoj@zenone.zhora.eu>
+References: <20231120144641.1660574-1-andriy.shevchenko@linux.intel.com>
+ <20231120144641.1660574-8-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231120144641.1660574-8-andriy.shevchenko@linux.intel.com>
 
-On Mon, 2023-11-27 at 15:08 +0700, Quan Nguyen wrote:
->=20
-> On 27/11/2023 14:04, Cosmo Chou wrote:
-> > Andrew Jeffery <andrew@codeconstruct.com.au> wrote on Mon, 2023-11-27
-> > at 11:23 AM:
-> > >=20
-> > > On Mon, 2023-11-20 at 17:17 +0800, Cosmo Chou wrote:
-> > > > commit 2be6b47211e1 ("i2c: aspeed: Acknowledge most interrupts earl=
-y
-> > > > in interrupt handler") moved most interrupt acknowledgments to the
-> > > > start of the interrupt handler to avoid race conditions. However,
-> > > > slave Tx ack status shouldn't be cleared before SLAVE_READ_PROCESSE=
-D
-> > > > is handled.
-> > > >=20
-> > > > Acknowledge Tx ack status after handling SLAVE_READ_PROCESSED to fi=
-x
-> > > > the problem that the next byte is not sent correctly.
-> > >=20
-> > > What does this mean in practice? Can you provide more details? It
-> > > sounds like you've seen concrete problems and it would be nice to
-> > > capture what it was that occurred.
-> > >=20
-> > > Andrew
-> >=20
-> > For a normal slave transaction, a master attempts to read out N bytes
-> > from BMC: (BMC addr: 0x20)
-> > [S] [21] [A] [1st_B] [1_ack] [2nd_B] [2_ack] ... [Nth_B] [N] [P]
-> >=20
-> > T1: when [21] [A]: Both INTR_SLAVE_MATCH and INTR_RX_DONE rise,
-> > INTR_RX_DONE is not cleared until BMC is ready to send the 1st_B:
-> > https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-as=
-peed.c#L294
-> > That is, BMC stretches the SCL until ready to send the 1st_B.
-> >=20
-> > T2: when [1_ack]: INTR_TX_ACK rises, but it's cleared at the start of
-> > the ISR, so that BMC does not stretch the SCL, the master continues
-> > to read 2nd_B before BMC is ready to send the 2nd_B.
-> >=20
-> > To fix this, do not clear INTR_TX_ACK until BMC is ready to send data:
-> > https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-as=
-peed.c#L302
-> >=20
->=20
-> This looks like the same issue, but we chose to ack them late. Same with=
-=20
-> INTR_RX_DONE.
->=20
-> https://lore.kernel.org/all/20210616031046.2317-3-quan@os.amperecomputing=
-.com/
+Hi Andy,
 
-From a brief inspection I prefer the descriptions in your series Quan.
-Looks like we dropped the ball a bit there though on the review - can
-you resend your series based on 6.7-rc1 or so and Cc Cosmo?
+On Mon, Nov 20, 2023 at 04:41:49PM +0200, Andy Shevchenko wrote:
+> Add missing 'c' into i2c_designware_pci_ids variable name.
+> 
+> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/i2c/busses/i2c-designware-pcidrv.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+> index e67956845c19..ed2f9e7ba5d3 100644
+> --- a/drivers/i2c/busses/i2c-designware-pcidrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+> @@ -355,7 +355,7 @@ static void i2c_dw_pci_remove(struct pci_dev *pdev)
+>  	i2c_del_adapter(&dev->adapter);
+>  }
+>  
+> -static const struct pci_device_id i2_designware_pci_ids[] = {
+> +static const struct pci_device_id i2c_designware_pci_ids[] = {
+>  	/* Medfield */
+>  	{ PCI_VDEVICE(INTEL, 0x0817), medfield },
+>  	{ PCI_VDEVICE(INTEL, 0x0818), medfield },
+> @@ -403,16 +403,16 @@ static const struct pci_device_id i2_designware_pci_ids[] = {
+>  	{ PCI_VDEVICE(ATI,  0x7464), navi_amd },
+>  	{ 0,}
+>  };
+> -MODULE_DEVICE_TABLE(pci, i2_designware_pci_ids);
+> +MODULE_DEVICE_TABLE(pci, i2c_designware_pci_ids);
+>  
+>  static struct pci_driver dw_i2c_driver = {
+>  	.name		= DRIVER_NAME,
+> -	.id_table	= i2_designware_pci_ids,
+>  	.probe		= i2c_dw_pci_probe,
+>  	.remove		= i2c_dw_pci_remove,
+>  	.driver         = {
+>  		.pm     = &i2c_dw_pm_ops,
+>  	},
+> +	.id_table	= i2c_designware_pci_ids,
 
-Cheers,
+why this change?
 
-Andrew
+Thanks,
+Andi
+
+>  };
+>  module_pci_driver(dw_i2c_driver);
+>  
+> -- 
+> 2.43.0.rc1.1.gbec44491f096
+> 
 
