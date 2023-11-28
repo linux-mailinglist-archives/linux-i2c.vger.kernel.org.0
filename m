@@ -1,195 +1,173 @@
-Return-Path: <linux-i2c+bounces-507-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-503-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 545DF7FB6F5
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 11:16:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BC067FB67B
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 11:00:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D810BB21ACC
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 10:16:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F6CF1C21042
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 10:00:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5EF34E1CA;
-	Tue, 28 Nov 2023 10:16:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF6204BAAB;
+	Tue, 28 Nov 2023 10:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernkonzept.com header.i=@kernkonzept.com header.b="bRvo0HuL"
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="DPmy9lQD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570AA12C
-	for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 02:16:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kernkonzept.com; s=mx1; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
-	Reply-To:Content-ID:Content-Description;
-	bh=DTg3r4s2dq7irVOmMsd/CGuliapoNYe5wHImtDJ9WS0=; b=bRvo0HuLxOYk643Rru5OD62uMA
-	wLoJqM+cxZ9oFqxb6Ikj1xcFGAHwFEOSKrv0afkPCyKsOkOnD2smw+XOStqx2pAU0BPLuSOwYwBz9
-	Bj5wgtYp+DUF853pZKX2e3kEr2CEIgo5B2l4IK8lHYiEIs7f3Voa3friROnt7ysehS3YYZO1p6D1b
-	tzIA7d38j3Yke2uMff0RZDNjuTrU7DOlf2wAU6rfx8fui06ySGaaOZH88sSQqK5rq8ucqEOKQ3s2W
-	4MgvNDxMOC08yqBgMdW0rLa1PrxiOJwTzgocFUkFtJMvYkMGI+McEshHi2pYs/OeIhgrDYlVgz93z
-	oJMn64Ag==;
-Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
-	by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.96)
-	id 1r7uhw-008Pi6-07;
-	Tue, 28 Nov 2023 10:48:44 +0100
-From: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Date: Tue, 28 Nov 2023 10:48:37 +0100
-Subject: [PATCH 3/3] i2c: qup: Vote for interconnect bandwidth to DRAM
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D29AE6
+	for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 02:00:18 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-332ca7f95e1so3660210f8f.0
+        for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 02:00:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1701165615; x=1701770415; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KM+51/Ab8q9Ob1ygxdet2j1y8TyHO4eFE3VACdVz/qw=;
+        b=DPmy9lQD8Oa8gozxHMssDF4akvL8spS8WhcoTdR1cXi/IbG1+0ra0JGQCzaN8hCmUA
+         ypV7h25+dNieVZxrWHck5nMFM0Mce2BZ4hkUbp42MsT1FPagR01/z+5gEioByxw7NYFW
+         YnP9tvr89pVV+gSQblrhEO3ckPk2mwgv8SojmHjXmTaGuoGWr4ncgXej2A1JmfO//a2Z
+         acO4dBWGazMn6FfltV86MRAiaxcbzHM6OASRwGrYmV95UrK0xghrg7bbFAfFcwSh8Nkf
+         aEJY8/9trkS3ErMakqIHhjR46415jiHPS502cgc/buo/aVzpNaKX44mDrhg421eIviue
+         wRNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701165615; x=1701770415;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KM+51/Ab8q9Ob1ygxdet2j1y8TyHO4eFE3VACdVz/qw=;
+        b=WXEy5BfPHm/cipmb/fIWPg3gCLAHPjY/2TABNp4UmHe4wFmzSuecgXAxQz7jm0Mpkg
+         WCQUPMXv0f6pAKpcpUs35btgFej7647l+Nh8is2hDGxGIXzSKhDMtosAGyKol98HHrKv
+         py/oOBtmjqKWTRyUf5NssyB6pyi3PAkmEf4wWg0JkyfjF85GkhXlrffdYhOo36kKoNeH
+         vASNX71ps2ST/vv9NzUhj02CIyMlEc8IJctoYzOnwjLqjODSfT29FzBtlHDrplO/Lpqj
+         EKpdWi/eu23Q44D89hPHRPlhOPR7TZ+cO0RFpeu7vMSBY1wsDmFItNqS9CVD+NwL7C/A
+         UoCw==
+X-Gm-Message-State: AOJu0Yy6oxofAsCI2D5pRJ901wRCrgJdV+N7R0/El+uLfBFVS4FOmG+S
+	BfbBJaXoJRfJpPN16OmKY8sGnA==
+X-Google-Smtp-Source: AGHT+IGCxctw2ZM4M4swOO43u0BADO9IEzug1carEuaCnXRjujpSdATC0LQNJ2aDdBBmxFQivkVGZA==
+X-Received: by 2002:a5d:4a4e:0:b0:332:e715:f0c3 with SMTP id v14-20020a5d4a4e000000b00332e715f0c3mr9596437wrs.60.1701165615169;
+        Tue, 28 Nov 2023 02:00:15 -0800 (PST)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id m5-20020a5d56c5000000b00332cbd59f8bsm14437444wrw.25.2023.11.28.02.00.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Nov 2023 02:00:14 -0800 (PST)
+From: Naresh Solanki <naresh.solanki@9elements.com>
+To: Peter Rosin <peda@axentia.se>
+Cc: andi.shyti@kernel.org,
+	robh@kernel.org,
+	Patrick Rudolph <patrick.rudolph@9elements.com>,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH v5 2/2] i2c: muxes: pca954x: Enable features on MAX7357
+Date: Tue, 28 Nov 2023 10:00:08 +0000
+Message-ID: <20231128100009.3727407-2-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231128-i2c-qup-dvfs-v1-3-59a0e3039111@kernkonzept.com>
-References: <20231128-i2c-qup-dvfs-v1-0-59a0e3039111@kernkonzept.com>
-In-Reply-To: <20231128-i2c-qup-dvfs-v1-0-59a0e3039111@kernkonzept.com>
-To: Wolfram Sang <wsa@kernel.org>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, 
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org, 
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-X-Mailer: b4 0.12.4
+Content-Transfer-Encoding: 8bit
 
-When the I2C QUP controller is used together with a DMA engine it needs
-to vote for the interconnect path to the DRAM. Otherwise it may be
-unable to access the memory quickly enough.
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-The requested peak bandwidth is dependent on the I2C core clock.
+Enable additional features based on DT settings and unconditionally
+release the shared interrupt pin after 1.6 seconds and allow to use
+it as reset.
 
-To avoid sending votes too often the bandwidth is always requested when
-a DMA transfer starts, but dropped only on runtime suspend. Runtime
-suspend should only happen if no transfer is active. After resumption we
-can defer the next vote until the first DMA transfer actually happens.
+These features aren't enabled by default and it's up to board designer
+to validate for proper functioning and detection of devices in secondary
+bus as sometimes it can cause secondary bus being disabled.
 
-The implementation is largely identical to the one introduced for
-spi-qup in commit ecdaa9473019 ("spi: qup: Vote for interconnect
-bandwidth to DRAM") since both drivers represent the same hardware
-block.
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
 
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 ---
-The bandwidth calculation is taken over from Qualcomm's
-downstream/vendor driver [1]. Due to lack of documentation about the
-interconnect setup/behavior I cannot say exactly if this is right.
-Unfortunately, this is not implemented very consistently downstream...
-
-[1]: https://git.codelinaro.org/clo/la/kernel/msm-3.10/-/commit/67174e2624ea64814231e7e1e4af83fd882302c6
+Changes in V5:
+- Fix typos
+- Update comment
+- Add newline in dev_warn
+Changes in V4:
+- Drop max7358
+- Update #define
+- Move conf variable
+- Print warning when I2C_FUNC_SMBUS_WRITE_BYTE_DATA isn't supported
+Changes in V3:
+- Delete unused #define
+- Update pca954x_init
+- Update commit message
+Changes in V2:
+- Update comments
+- Update check for DT properties
 ---
- drivers/i2c/busses/i2c-qup.c | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ drivers/i2c/muxes/i2c-mux-pca954x.c | 43 ++++++++++++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-qup.c b/drivers/i2c/busses/i2c-qup.c
-index 598102d16677..ee92a315f074 100644
---- a/drivers/i2c/busses/i2c-qup.c
-+++ b/drivers/i2c/busses/i2c-qup.c
-@@ -14,6 +14,7 @@
- #include <linux/dma-mapping.h>
- #include <linux/err.h>
- #include <linux/i2c.h>
-+#include <linux/interconnect.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/module.h>
-@@ -150,6 +151,8 @@
- /* TAG length for DATA READ in RX FIFO  */
- #define READ_RX_TAGS_LEN		2
+diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
+index 2219062104fb..f5dfc33b97c0 100644
+--- a/drivers/i2c/muxes/i2c-mux-pca954x.c
++++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+@@ -57,6 +57,20 @@
  
-+#define QUP_BUS_WIDTH			8
+ #define PCA954X_IRQ_OFFSET 4
+ 
++/*
++ * MAX7357's configuration register is writeable after POR, but
++ * can be locked by setting the basic mode bit. MAX7358 configuration
++ * register is locked by default and needs to be unlocked first.
++ * The configuration register holds the following settings:
++ */
++#define MAX7357_CONF_INT_ENABLE			BIT(0)
++#define MAX7357_CONF_FLUSH_OUT			BIT(1)
++#define MAX7357_CONF_RELEASE_INT		BIT(2)
++#define MAX7357_CONF_DISCON_SINGLE_CHAN		BIT(4)
++#define MAX7357_CONF_PRECONNECT_TEST		BIT(7)
 +
- static unsigned int scl_freq;
- module_param_named(scl_freq, scl_freq, uint, 0444);
- MODULE_PARM_DESC(scl_freq, "SCL frequency override");
-@@ -227,6 +230,7 @@ struct qup_i2c_dev {
- 	int			irq;
- 	struct clk		*clk;
- 	struct clk		*pclk;
-+	struct icc_path		*icc_path;
- 	struct i2c_adapter	adap;
- 
- 	int			clk_ctl;
-@@ -255,6 +259,10 @@ struct qup_i2c_dev {
- 	/* To configure when bus is in run state */
- 	u32			config_run;
- 
-+	/* bandwidth votes */
-+	u32			src_clk_freq;
-+	u32			cur_bw_clk_freq;
++#define MAX7357_POR_DEFAULT_CONF		MAX7357_CONF_INT_ENABLE
 +
- 	/* dma parameters */
- 	bool			is_dma;
- 	/* To check if the current transfer is using DMA */
-@@ -453,6 +461,23 @@ static int qup_i2c_bus_active(struct qup_i2c_dev *qup, int len)
- 	return ret;
- }
+ enum pca_type {
+ 	max_7356,
+ 	max_7357,
+@@ -470,7 +484,34 @@ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
+ 	else
+ 		data->last_chan = 0; /* Disconnect multiplexer */
  
-+static int qup_i2c_vote_bw(struct qup_i2c_dev *qup, u32 clk_freq)
-+{
-+	u32 needed_peak_bw;
-+	int ret;
+-	ret = i2c_smbus_write_byte(client, data->last_chan);
++	if (device_is_compatible(&client->dev, "maxim,max7357")) {
++		if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WRITE_BYTE_DATA)) {
++			u8 conf = MAX7357_POR_DEFAULT_CONF;
++			/*
++			 * The interrupt signal is shared with the reset pin. Release the
++			 * interrupt after 1.6 seconds to allow using the pin as reset.
++			 */
++			conf |= MAX7357_CONF_RELEASE_INT;
 +
-+	if (qup->cur_bw_clk_freq == clk_freq)
-+		return 0;
++			if (device_property_read_bool(&client->dev, "maxim,isolate-stuck-channel"))
++				conf |= MAX7357_CONF_DISCON_SINGLE_CHAN;
++			if (device_property_read_bool(&client->dev,
++						      "maxim,send-flush-out-sequence"))
++				conf |= MAX7357_CONF_FLUSH_OUT;
++			if (device_property_read_bool(&client->dev,
++						      "maxim,preconnection-wiggle-test-enable"))
++				conf |= MAX7357_CONF_PRECONNECT_TEST;
 +
-+	needed_peak_bw = Bps_to_icc(clk_freq * QUP_BUS_WIDTH);
-+	ret = icc_set_bw(qup->icc_path, 0, needed_peak_bw);
-+	if (ret)
-+		return ret;
++			ret = i2c_smbus_write_byte_data(client, data->last_chan, conf);
++		} else {
++			dev_warn(&client->dev, "Write byte data not supported."
++				 "Cannot enable enhanced mode features\n");
++			ret = i2c_smbus_write_byte(client, data->last_chan);
++		}
++	} else {
++		ret = i2c_smbus_write_byte(client, data->last_chan);
++	}
 +
-+	qup->cur_bw_clk_freq = clk_freq;
-+	return 0;
-+}
-+
- static void qup_i2c_write_tx_fifo_v1(struct qup_i2c_dev *qup)
- {
- 	struct qup_i2c_block *blk = &qup->blk;
-@@ -840,6 +865,10 @@ static int qup_i2c_bam_xfer(struct i2c_adapter *adap, struct i2c_msg *msg,
- 	int ret = 0;
- 	int idx = 0;
+ 	if (ret < 0)
+ 		data->last_chan = 0;
  
-+	ret = qup_i2c_vote_bw(qup, qup->src_clk_freq);
-+	if (ret)
-+		return ret;
-+
- 	enable_irq(qup->irq);
- 	ret = qup_i2c_req_dma(qup);
- 
-@@ -1645,6 +1674,7 @@ static void qup_i2c_disable_clocks(struct qup_i2c_dev *qup)
- 	config = readl(qup->base + QUP_CONFIG);
- 	config |= QUP_CLOCK_AUTO_GATE;
- 	writel(config, qup->base + QUP_CONFIG);
-+	qup_i2c_vote_bw(qup, 0);
- 	clk_disable_unprepare(qup->pclk);
- }
- 
-@@ -1745,6 +1775,11 @@ static int qup_i2c_probe(struct platform_device *pdev)
- 			goto fail_dma;
- 		}
- 		qup->is_dma = true;
-+
-+		qup->icc_path = devm_of_icc_get(&pdev->dev, NULL);
-+		if (IS_ERR(qup->icc_path))
-+			return dev_err_probe(&pdev->dev, PTR_ERR(qup->icc_path),
-+					     "failed to get interconnect path\n");
- 	}
- 
- nodma:
-@@ -1793,6 +1828,7 @@ static int qup_i2c_probe(struct platform_device *pdev)
- 		qup_i2c_enable_clocks(qup);
- 		src_clk_freq = clk_get_rate(qup->clk);
- 	}
-+	qup->src_clk_freq = src_clk_freq;
- 
- 	/*
- 	 * Bootloaders might leave a pending interrupt on certain QUP's,
-
 -- 
-2.39.2
+2.41.0
 
 
