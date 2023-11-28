@@ -1,55 +1,55 @@
-Return-Path: <linux-i2c+bounces-498-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-499-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 917297FB497
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 09:45:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD88D7FB49C
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 09:45:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FE511F20F77
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 08:45:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30ED7B20D20
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 08:45:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCD65199B0;
-	Tue, 28 Nov 2023 08:45:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3838199B2;
+	Tue, 28 Nov 2023 08:45:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PVg+vAbG"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gmHJQWie"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A216A1A3
-	for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 00:45:06 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1d00689f5c8so324655ad.3
-        for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 00:45:06 -0800 (PST)
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D604A10C1
+	for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 00:45:11 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1cfbda041f3so21645215ad.2
+        for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 00:45:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1701161106; x=1701765906; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1701161111; x=1701765911; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kHxxwveZDRAPnfOWumxXktb5k7NbUjKgtDpJO55ZaA8=;
-        b=PVg+vAbG5Eli/fKzjnqSzq3QEwBSoaN9bOYtemv4oCkYgNDbXV7U2P5Sz7GwuxRSwY
-         cAWt8nh6n4Jqufzl4cYLtzzmNGOkzTHSGqJkWIWElJlOwJPUV59MYPgi9Qy0+oqrYyZb
-         EBV/JQsIk7XOGsrA7Mavoiqn8zqa1sW9x2hnk=
+        bh=rrIzkF3BPgnSgOC4+jRg+GY/s6tE7F98s9pAwcg2bLw=;
+        b=gmHJQWieuKvv+lZayWffijw/IQ+TkyU2V+mDe5qluwQihRNeS0D4D/H9HEOvqYZWNi
+         tzgSxYTj75/rmyctOyeQEf3EHZnqmB0BX7RiYVAdZohgqHUn+9yMdxMFkl2skvL9GUdT
+         euFhX+aMC+2R66t6wban6eLSmjopA0XgKWiCE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701161106; x=1701765906;
+        d=1e100.net; s=20230601; t=1701161111; x=1701765911;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kHxxwveZDRAPnfOWumxXktb5k7NbUjKgtDpJO55ZaA8=;
-        b=kofo3v1jT9XyKp9V84SnqwesxC7qzvgo1IoGrs1Q2N9dO/JMmLu7LCW2CcCzTF4mFT
-         T6Z0gK2cU1PjO8FqwHM8tXECShecu56LbDFdKuC7EmY6EQiRF5pX1jT84ZMlP/qAR1cL
-         rskgf1HcsdcLl/Y9vOHeOQVFbLD4bNIjWzh5AOtO7JiGt6jVM8Bvh/lk3rsjSQAgVp4m
-         +ChcBdUdBX6OGrekjsj7hjA+B7Dzl9FfR9A98+OiiYm0LcAbGPtEi3aryZlivHsxtbhO
-         pykYT24EvoEbY3gcYUyjGwuUu5QPaBg5anEjdCaLsBCZPJP5SLffhZ8OJw2owpAHa1/x
-         YUnw==
-X-Gm-Message-State: AOJu0YxUzVJHuVyEoZjAVB57SHiJbzjv59/LnGzfPjFO4OiUjBpbbScZ
-	vzPXU+g3Cf1V/Ph5c1GnaLA/cw==
-X-Google-Smtp-Source: AGHT+IFwNRanqg6iNjPiAn8C7xAInJUbYOtL1AJjn6XOh76hm70XQlF/qqZTYAqMlV2R/DvAZERpiQ==
-X-Received: by 2002:a17:902:d2c1:b0:1cf:ccc3:c9d7 with SMTP id n1-20020a170902d2c100b001cfccc3c9d7mr7924520plc.3.1701161106024;
-        Tue, 28 Nov 2023 00:45:06 -0800 (PST)
+        bh=rrIzkF3BPgnSgOC4+jRg+GY/s6tE7F98s9pAwcg2bLw=;
+        b=WqaiN1dEanPEaefXr/iYICUzcb9/TIMtMjjFq/UaWPPFvcqYSaarqY4bzzMqoNC1yk
+         Ai/7qLtRWM5sJbKC+LtVdz07GgVAJFpd4tuJdv2ja6UTjYQue+ygnEM4nS7F3Mj+cGUZ
+         zCjro2m1MTM67neoNd3qnYKEbH/QGkE18Tubu4XDR+EnwcVcyrgQAjK0wgqPkjpubZaF
+         Wyd30z+KT9aLf69XHaMSv9ZSpQa6VAlNWyhjXnShuQtf4nT8WBOmDl/PX5tH2ckPyPoZ
+         yCmn78AavYQIDfdvgwpEyChF6+PQppizth/MJ581emuxQDRTX0TMjlWkF8d7GSqTlFzs
+         ChSQ==
+X-Gm-Message-State: AOJu0YxysP1oR8OBVjQAuxHIUDmkJ1tByi5XBPn1frMc9hnmrJwYHqFF
+	+cIunNfH6q3HaZswC6ndOA+SwQ==
+X-Google-Smtp-Source: AGHT+IEJ8bYtjQkgtD3EytEtczIspfAvOpqGUCTKBUGdEVYLqzk3kuxJ5+ccBoS4ivRCvYA3p8TkZg==
+X-Received: by 2002:a17:903:1ce:b0:1cf:c518:fa39 with SMTP id e14-20020a17090301ce00b001cfc518fa39mr7406158plh.19.1701161111196;
+        Tue, 28 Nov 2023 00:45:11 -0800 (PST)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:a990:1e95:a915:9c70])
-        by smtp.gmail.com with ESMTPSA id j1-20020a170902c08100b001ab39cd875csm8358074pld.133.2023.11.28.00.45.01
+        by smtp.gmail.com with ESMTPSA id j1-20020a170902c08100b001ab39cd875csm8358074pld.133.2023.11.28.00.45.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Nov 2023 00:45:05 -0800 (PST)
+        Tue, 28 Nov 2023 00:45:10 -0800 (PST)
 From: Chen-Yu Tsai <wenst@chromium.org>
 To: Rob Herring <robh+dt@kernel.org>,
 	Frank Rowand <frowand.list@gmail.com>,
@@ -84,9 +84,9 @@ Cc: Chen-Yu Tsai <wenst@chromium.org>,
 	Jeff LaBundy <jeff@labundy.com>,
 	linux-input@vger.kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: [RFC PATCH v3 1/5] of: dynamic: Add of_changeset_update_prop_string
-Date: Tue, 28 Nov 2023 16:42:30 +0800
-Message-ID: <20231128084236.157152-2-wenst@chromium.org>
+Subject: [RFC PATCH v3 2/5] i2c: of: Introduce component probe function
+Date: Tue, 28 Nov 2023 16:42:31 +0800
+Message-ID: <20231128084236.157152-3-wenst@chromium.org>
 X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
 In-Reply-To: <20231128084236.157152-1-wenst@chromium.org>
 References: <20231128084236.157152-1-wenst@chromium.org>
@@ -98,90 +98,192 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a helper function to add string property updates to an OF changeset.
-This is similar to of_changeset_add_prop_string(), but instead of adding
-the property (and failing if it exists), it will update the property.
+Some devices are designed and manufactured with some components having
+multiple drop-in replacement options. These components are often
+connected to the mainboard via ribbon cables, having the same signals
+and pin assignments across all options. These may include the display
+panel and touchscreen on laptops and tablets, and the trackpad on
+laptops. Sometimes which component option is used in a particular device
+can be detected by some firmware provided identifier, other times that
+information is not available, and the kernel has to try to probe each
+device.
 
-This shall be used later in the DT hardware prober.
+This change attempts to make the "probe each device" case cleaner. The
+current approach is to have all options added and enabled in the device
+tree. The kernel would then bind each device and run each driver's probe
+function. This works, but has been broken before due to the introduction
+of asynchronous probing, causing multiple instances requesting "shared"
+resources, such as pinmuxes, GPIO pins, interrupt lines, at the same
+time, with only one instance succeeding. Work arounds for these include
+moving the pinmux to the parent I2C controller, using GPIO hogs or
+pinmux settings to keep the GPIO pins in some fixed configuration, and
+requesting the interrupt line very late. Such configurations can be seen
+on the MT8183 Krane Chromebook tablets, and the Qualcomm sc8280xp-based
+Lenovo Thinkpad 13S.
+
+Instead of this delicate dance between drivers and device tree quirks,
+this change introduces a simple I2C component probe. function For a
+given class of devices on the same I2C bus, it will go through all of
+them, doing a simple I2C read transfer and see which one of them responds.
+It will then enable the device that responds.
+
+This requires some minor modifications in the existing device tree. The
+status for all the device nodes for the component options must be set
+to "failed-needs-probe". This makes it clear that some mechanism is
+needed to enable one of them, and also prevents the prober and device
+drivers running at the same time.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-
 ---
-New patch added in v3.
+Changes since v2:
+- New patch split out from "of: Introduce hardware prober driver"
+- Addressed Rob's comments
+  - Move i2c prober to i2c subsystem
+  - Use of_node_is_available() to check if node is enabled.
+  - Use OF changeset API to update status property
+- Addressed Andy's comments
+  - Probe function now accepts "struct device *dev" instead to reduce
+    line length and dereferences
+  - Move "ret = 0" to just before for_each_child_of_node(i2c_node, node)
 ---
- drivers/of/dynamic.c | 47 ++++++++++++++++++++++++++++++++++++++++++++
- include/linux/of.h   |  3 +++
- 2 files changed, 50 insertions(+)
+ drivers/i2c/i2c-core-of.c | 110 ++++++++++++++++++++++++++++++++++++++
+ include/linux/i2c.h       |   4 ++
+ 2 files changed, 114 insertions(+)
 
-diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
-index f63250c650ca..d22aad938667 100644
---- a/drivers/of/dynamic.c
-+++ b/drivers/of/dynamic.c
-@@ -1039,3 +1039,50 @@ int of_changeset_add_prop_u32_array(struct of_changeset *ocs,
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(of_changeset_add_prop_u32_array);
+diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+index a6c407d36800..3a0b4986c585 100644
+--- a/drivers/i2c/i2c-core-of.c
++++ b/drivers/i2c/i2c-core-of.c
+@@ -217,4 +217,114 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+ struct notifier_block i2c_of_notifier = {
+ 	.notifier_call = of_i2c_notify,
+ };
 +
-+static int of_changeset_update_prop_helper(struct of_changeset *ocs,
-+					   struct device_node *np,
-+					   const struct property *pp)
-+{
-+	struct property *new_pp;
-+	int ret;
-+
-+	new_pp = __of_prop_dup(pp, GFP_KERNEL);
-+	if (!new_pp)
-+		return -ENOMEM;
-+
-+	ret = of_changeset_update_property(ocs, np, new_pp);
-+	if (ret) {
-+		kfree(new_pp->name);
-+		kfree(new_pp->value);
-+		kfree(new_pp);
-+	}
-+
-+	return ret;
-+}
++/*
++ * Some devices, such as Google Hana Chromebooks, are produced by multiple
++ * vendors each using their preferred components. Such components are all
++ * in the device tree. Instead of having all of them enabled and having each
++ * driver separately try and probe its device while fighting over shared
++ * resources, they can be marked as "fail-needs-probe" and have a prober
++ * figure out which one is actually used beforehand.
++ *
++ * This prober assumes such drop-in parts are on the same I2C bus, have
++ * non-conflicting addresses, and can be directly probed by seeing which
++ * address responds.
++ *
++ * TODO:
++ * - Support handling common regulators and GPIOs.
++ * - Support I2C muxes
++ */
 +
 +/**
-+ * of_changeset_update_prop_string - Add a string property update to a changeset
++ * i2c_of_probe_component() - probe for devices of "type" on the same i2c bus
++ * @dev: &struct device of the caller, only used for dev_* printk messages
++ * @type: a string to match the device node name prefix to probe for
 + *
-+ * @ocs:	changeset pointer
-+ * @np:		device node pointer
-+ * @prop_name:	name of the property to be updated
-+ * @str:	pointer to null terminated string
-+ *
-+ * Create a string property to be updated and add it to a changeset.
-+ *
-+ * Return: 0 on success, a negative error value in case of an error.
++ * Probe for possible I2C components of the same "type" on the same I2C bus
++ * that have their status marked as "fail".
 + */
-+int of_changeset_update_prop_string(struct of_changeset *ocs,
-+				    struct device_node *np,
-+				    const char *prop_name, const char *str)
++int i2c_of_probe_component(struct device *dev, const char *type)
 +{
-+	struct property prop;
++	struct device_node *node, *i2c_node;
++	struct i2c_adapter *i2c;
++	struct of_changeset *ocs = NULL;
++	int ret;
 +
-+	prop.name = (char *)prop_name;
-+	prop.length = strlen(str) + 1;
-+	prop.value = (void *)str;
++	node = of_find_node_by_name(NULL, type);
++	if (!node)
++		return dev_err_probe(dev, -ENODEV, "Could not find %s device node\n", type);
 +
-+	return of_changeset_update_prop_helper(ocs, np, &prop);
++	i2c_node = of_get_next_parent(node);
++	if (!of_node_name_eq(i2c_node, "i2c")) {
++		of_node_put(i2c_node);
++		return dev_err_probe(dev, -EINVAL, "%s device isn't on I2C bus\n", type);
++	}
++
++	for_each_child_of_node(i2c_node, node) {
++		if (!of_node_name_prefix(node, type))
++			continue;
++		if (of_device_is_available(node)) {
++			/*
++			 * Device tree has component already enabled. Either the
++			 * device tree isn't supported or we already probed once.
++			 */
++			of_node_put(node);
++			of_node_put(i2c_node);
++			return 0;
++		}
++	}
++
++	i2c = of_get_i2c_adapter_by_node(i2c_node);
++	if (!i2c) {
++		of_node_put(i2c_node);
++		return dev_err_probe(dev, -EPROBE_DEFER, "Couldn't get I2C adapter\n");
++	}
++
++	ret = 0;
++	for_each_child_of_node(i2c_node, node) {
++		union i2c_smbus_data data;
++		u32 addr;
++
++		if (!of_node_name_prefix(node, type))
++			continue;
++		if (of_property_read_u32(node, "reg", &addr))
++			continue;
++		if (i2c_smbus_xfer(i2c, addr, 0, I2C_SMBUS_READ, 0, I2C_SMBUS_BYTE, &data) < 0)
++			continue;
++
++		dev_info(dev, "Enabling %pOF\n", node);
++
++		ocs = kzalloc(sizeof(*ocs), GFP_KERNEL);
++		if (!ocs) {
++			ret = -ENOMEM;
++			goto err_put_node;
++		}
++
++		/* Found a device that is responding */
++		of_changeset_init(ocs);
++		ret = of_changeset_update_prop_string(ocs, node, "status", "okay");
++		if (ret)
++			goto err_free_ocs;
++		ret = of_changeset_apply(ocs);
++		if (ret)
++			goto err_destroy_ocs;
++
++		of_node_put(node);
++		break;
++	}
++
++	i2c_put_adapter(i2c);
++	of_node_put(i2c_node);
++
++	return 0;
++
++err_destroy_ocs:
++	of_changeset_destroy(ocs);
++err_free_ocs:
++	kfree(ocs);
++err_put_node:
++	of_node_put(node);
++	return ret;
 +}
-+EXPORT_SYMBOL_GPL(of_changeset_update_prop_string);
-diff --git a/include/linux/of.h b/include/linux/of.h
-index 6a9ddf20e79a..c69bc7da380e 100644
---- a/include/linux/of.h
-+++ b/include/linux/of.h
-@@ -1601,6 +1601,9 @@ static inline int of_changeset_add_prop_u32(struct of_changeset *ocs,
- {
- 	return of_changeset_add_prop_u32_array(ocs, np, prop_name, &val, 1);
- }
-+int of_changeset_update_prop_string(struct of_changeset *ocs,
-+				    struct device_node *np,
-+				    const char *prop_name, const char *str);
++EXPORT_SYMBOL_GPL(i2c_of_probe_component);
+ #endif /* CONFIG_OF_DYNAMIC */
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 0dae9db27538..75fbbd5a4b15 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -997,6 +997,10 @@ const struct of_device_id
+ int of_i2c_get_board_info(struct device *dev, struct device_node *node,
+ 			  struct i2c_board_info *info);
  
- #else /* CONFIG_OF_DYNAMIC */
- static inline int of_reconfig_notifier_register(struct notifier_block *nb)
++#if IS_ENABLED(CONFIG_OF_DYNAMIC)
++int i2c_of_probe_component(struct device *dev, const char *type);
++#endif
++
+ #else
+ 
+ static inline struct i2c_client *of_find_i2c_device_by_node(struct device_node *node)
 -- 
 2.43.0.rc1.413.gea7ed67945-goog
 
