@@ -1,152 +1,105 @@
-Return-Path: <linux-i2c+bounces-518-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-519-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C05307FC684
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 21:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CD637FC6E5
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 22:07:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D14C61C20FD9
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 20:59:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E6521C215C6
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 21:07:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3BAD4438A;
-	Tue, 28 Nov 2023 20:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05F2042A97;
+	Tue, 28 Nov 2023 21:07:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cTHEKupm"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82F6198D
-	for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 12:59:26 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r85AN-0006nV-7B; Tue, 28 Nov 2023 21:58:47 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r85AI-00CFt4-DE; Tue, 28 Nov 2023 21:58:42 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r85AI-00AOAR-2T; Tue, 28 Nov 2023 21:58:42 +0100
-Date: Tue, 28 Nov 2023 21:58:41 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Tomasz Figa <tomasz.figa@gmail.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jaehoon Chung <jh80.chung@samsung.com>,
-	Sam Protsenko <semen.protsenko@linaro.org>,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH 00/17] dt-bindings: samsung: add specific
- compatibles for existing SoC
-Message-ID: <20231128205841.al23ra5s34rn3muj@pengutronix.de>
-References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
- <170119374454.445690.515311393756577368.b4-ty@gmail.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8BFD44367;
+	Tue, 28 Nov 2023 21:07:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30D3CC433C8;
+	Tue, 28 Nov 2023 21:07:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701205634;
+	bh=IVw3bUqj96xvMhDrvVTGpuXVF4X6lVujV/9OUJK9BNI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=cTHEKupmG7Q9tJP8bIE3KCijOkIcZIMe5HV9l7fnG9UFD5ZZAojr8eB1oYUtf108l
+	 8bTZVISWXDik00Gp+l2yBZUFkSE02ll2Un0Dei15js1fyQDboAgMeuTXAWEYGR4Ezb
+	 l9AuREuY2mue/s7jn9AcpveU2LW2x7kW0oyUUAtakXQlRTUjgUvP+SyBxmUE86q35h
+	 YtS51qxz3xNTXaMlf54QcB7ddTpnt5MBlL6zUmNP4ION9QiOVew0Shxt2f8Ngh/oHa
+	 0zP7KylIFTreWGjVlanrZTFOsnY0Kc6Rlwk1zQcQ8DefHA2Q6MecgwutEQf8uYnYkb
+	 ZUFcAOsRpKSqA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Hamish Martin <hamish.martin@alliedtelesis.co.nz>,
+	Jiri Kosina <jkosina@suse.cz>,
+	Sasha Levin <sashal@kernel.org>,
+	gupt21@gmail.com,
+	jikos@kernel.org,
+	benjamin.tissoires@redhat.com,
+	linux-i2c@vger.kernel.org,
+	linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 24/40] HID: mcp2221: Set driver data before I2C adapter add
+Date: Tue, 28 Nov 2023 16:05:30 -0500
+Message-ID: <20231128210615.875085-24-sashal@kernel.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231128210615.875085-1-sashal@kernel.org>
+References: <20231128210615.875085-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bibczb2zawwhoawf"
-Content-Disposition: inline
-In-Reply-To: <170119374454.445690.515311393756577368.b4-ty@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.6.3
+Content-Transfer-Encoding: 8bit
 
+From: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
 
---bibczb2zawwhoawf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[ Upstream commit f2d4a5834638bbc967371b9168c0b481519f7c5e ]
 
-On Tue, Nov 28, 2023 at 06:49:23PM +0100, Thierry Reding wrote:
->=20
-> On Wed, 08 Nov 2023 11:43:26 +0100, Krzysztof Kozlowski wrote:
-> > Merging
-> > =3D=3D=3D=3D=3D=3D=3D
-> > I propose to take entire patchset through my tree (Samsung SoC), becaus=
-e:
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The process of adding an I2C adapter can invoke I2C accesses on that new
+adapter (see i2c_detect()).
 
-> > 1. Next cycle two new SoCs will be coming (Google GS101 and ExynosAutov=
-920), so
-> >    they will touch the same lines in some of the DT bindings (not all, =
-though).
-> >    It is reasonable for me to take the bindings for the new SoCs, to ha=
-ve clean
-> >    `make dtbs_check` on the new DTS.
-> > 2. Having it together helps me to have clean `make dtbs_check` within m=
-y tree
-> >    on the existing DTS.
-> > 3. No drivers are affected by this change.
-> > 4. I plan to do the same for Tesla FSD and Exynos ARM32 SoCs, thus expe=
-ct
-> >    follow up patchsets.
-> >=20
-> > [...]
->=20
-> Applied, thanks!
->=20
-> [12/17] dt-bindings: pwm: samsung: add specific compatibles for existing =
-SoC
->         commit: 5d67b8f81b9d598599366214e3b2eb5f84003c9f
+Ensure we have set the adapter's driver data to avoid null pointer
+dereferences in the xfer functions during the adapter add.
 
-You didn't honor (or even comment) Krzysztof's proposal to take the
-whole patchset via his tree (marked above). Was there some off-list
-agreement?
+This has been noted in the past and the same fix proposed but not
+completed. See:
+https://lore.kernel.org/lkml/ef597e73-ed71-168e-52af-0d19b03734ac@vigem.de/
 
-Best regards
-Uwe
+Signed-off-by: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hid/hid-mcp2221.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
+index 72883e0ce7575..b95f31cf0fa21 100644
+--- a/drivers/hid/hid-mcp2221.c
++++ b/drivers/hid/hid-mcp2221.c
+@@ -1157,12 +1157,12 @@ static int mcp2221_probe(struct hid_device *hdev,
+ 	snprintf(mcp->adapter.name, sizeof(mcp->adapter.name),
+ 			"MCP2221 usb-i2c bridge");
+ 
++	i2c_set_adapdata(&mcp->adapter, mcp);
+ 	ret = devm_i2c_add_adapter(&hdev->dev, &mcp->adapter);
+ 	if (ret) {
+ 		hid_err(hdev, "can't add usb-i2c adapter: %d\n", ret);
+ 		return ret;
+ 	}
+-	i2c_set_adapdata(&mcp->adapter, mcp);
+ 
+ #if IS_REACHABLE(CONFIG_GPIOLIB)
+ 	/* Setup GPIO chip */
+-- 
+2.42.0
 
---bibczb2zawwhoawf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVmVIAACgkQj4D7WH0S
-/k4mPQgAuzfJsEw0Nil25KsPJwyY53qFjfCGd8WTObzTDFpeIlzV2EL87bWT2Gtd
-vEFgfX2Uj+RoOLX5CNnyuEfwH5e+O5oVYF9gfpsdqtRTJ3zyPV3dUiFCaIh2KNqZ
-aaY1tsb4vECeh7dmEL/y2VUWoO2bAa08sZe6EpJXOkeUWN54VdTCMBwncH1utjgh
-Tb/pHhjkfvdcbXuvxsFY4gL86pT8BER5EjIRZZaPN0kHDrGTBR+ZqjFvMVWTrFbq
-IUK1gAMX+BOooJDwVFE4SeRta6p/lfClW73PbWk1++SyLPA2KbTp8jTul4qgXWKT
-IbIJY8Qwg5trzJ0LHDMX3a02COS9hg==
-=P7ML
------END PGP SIGNATURE-----
-
---bibczb2zawwhoawf--
 
