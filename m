@@ -1,192 +1,140 @@
-Return-Path: <linux-i2c+bounces-489-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-490-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB1BB7FB32A
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 08:50:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA1EC7FB334
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 08:52:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECD151C20A90
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 07:50:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92C0E281EB2
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 07:51:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18AC813FF1;
-	Tue, 28 Nov 2023 07:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CB7213AF5;
+	Tue, 28 Nov 2023 07:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="C95q25I6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MAw7RHO2"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2094.outbound.protection.outlook.com [40.107.237.94])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1341A5;
-	Mon, 27 Nov 2023 23:50:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hMdVUwpy8KpOCPGT7MX+66w1FAE8e50sW2iKzWbb0iWj9bdzzUBll2WRyTxcIe31+6L4yjMGNMHCHEL1o4WdbNH0LCsM7TAE/EgrYpwpJ9Qq7E3u2ULDGOZFCKJbK0nEt54BbvX+yWQRhuzQpq1wwq1GOLFTOLKr5/xggEomiZUrGn7pVH5CY4vXTZj3U5JZMajckIvUQSFhQAPdbU13stw8tpYyZ57Gk4HKtGwRyoGS44Qn//KHSTs4lLEBvxmFn/pnHFCWwACQJI0lEmaxZurju5OUpYpRv2Oe+w0URtHipdtRjx32wcZopHlOXZEBbk7Rjt2GcNJJTi1sa7bcMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mj61uW5yJwFvTNQDIxRpGVPNzMnW9GRwZpBwW8q9sOY=;
- b=cWcR/p8nSq/bl6Lj1n3FVvUxDQM5CPFIGO8HnrQx9tqJOld4Ubpj05dtx1OKsas4YSvDgW+w1GAo/7WjabFczjE7HTpBnKSu34Y7bZJhmIAEgjynRiYt5d/0JJDrLo9nSJs+MwvN6o+aT2MQnnUMlQiJWF96r3OJP7zRdPt8GfnUbeUXacW7WNQt7pMD2Qt73w+GeHq5QaVu2f0cotx/czTICpwe3MTm3LIaBw4luT9nrEUzd+cG/f1EIwZ0zl06c69WWZOzBbMv5H1QJklTgrYw0/SclJati3+AvGShw3lhlEOWpjNmTiqdvnfIGktKLVjhOC8F+CSEwZ2cWV5JQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B86C1
+	for <linux-i2c@vger.kernel.org>; Mon, 27 Nov 2023 23:51:52 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5441305cbd1so6664036a12.2
+        for <linux-i2c@vger.kernel.org>; Mon, 27 Nov 2023 23:51:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mj61uW5yJwFvTNQDIxRpGVPNzMnW9GRwZpBwW8q9sOY=;
- b=C95q25I6JNVj3E46ibB1c9WQCLDf/g3Tlw2PtLPcZFrNxkxNBmhbmRnBWggdtR1KSUMwcKabPANGaWQ4nGtUNhBevhV1tfuYqNkl1KY37LP976rxYoR6MvtJudCXVPdSyqQmY4mFUisG8S9hE6efJCEdfB4R9fyoAjrTT72vWFI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11) by
- CH3PR01MB8441.prod.exchangelabs.com (2603:10b6:610:1a4::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7025.29; Tue, 28 Nov 2023 07:50:09 +0000
-Received: from SN4PR01MB7455.prod.exchangelabs.com
- ([fe80::5682:1d84:171a:1d68]) by SN4PR01MB7455.prod.exchangelabs.com
- ([fe80::5682:1d84:171a:1d68%3]) with mapi id 15.20.7025.022; Tue, 28 Nov 2023
- 07:50:09 +0000
-Message-ID: <878e8af6-25c7-428a-8fee-f924744382c1@os.amperecomputing.com>
-Date: Tue, 28 Nov 2023 14:49:57 +0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: aspeed: Acknowledge Tx ack late when in
- SLAVE_READ_PROCESSED
-Content-Language: en-CA
-To: Andrew Jeffery <andrew@codeconstruct.com.au>,
- Cosmo Chou <chou.cosmo@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org, jae.hyun.yoo@linux.intel.com,
- andi.shyti@kernel.org, linux-aspeed@lists.ozlabs.org,
- openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org, wsa@kernel.org,
- brendan.higgins@linux.dev, cosmo.chou@quantatw.com, joel@jms.id.au,
- linux@roeck-us.net, linux-i2c@vger.kernel.org
-References: <20231120091746.2866232-1-chou.cosmo@gmail.com>
- <fdd884426497486c6b17795b4edc66243bdc7350.camel@codeconstruct.com.au>
- <CAOeEDyumVdi-3O3apMUFJ695V3YcZqZQ7wvzYL2YfU88XJ3Dxw@mail.gmail.com>
- <854762fb-1767-4208-a7fc-10580730c1f3@os.amperecomputing.com>
- <d0773df55a6fe8a5c9b1a3d7c8dd2e1343643272.camel@codeconstruct.com.au>
-From: Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <d0773df55a6fe8a5c9b1a3d7c8dd2e1343643272.camel@codeconstruct.com.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2P153CA0007.APCP153.PROD.OUTLOOK.COM (2603:1096::17) To
- SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11)
+        d=linaro.org; s=google; t=1701157911; x=1701762711; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=diLUBKxJ7l6En7yqtshs/4XmYEvA4pN8uSRRykBAsQI=;
+        b=MAw7RHO2vPmUlWcFJ27RVe11LoPRtsP0tAvwM8s65/54vfKxJHl/0mqPjT2zaRzV3s
+         ASA+v/mQ6i70YA8UentUV9kicZhA3wCPWMUKUfzFmErBRUinhW7AXFiVAqXrTzfGV1R6
+         Hu1oGIBaleP48v0ZJJEGl7M9sI2kzRaXAsw1pF8Phgn0dXn+UBv98zzG27/AMC0nC6+C
+         nmARLcl45yvFcN6rP1Qzk3yyGJ0zY+s9ak/yWBJs0s/hUrt6pjxyFEBKbOid0n47sXxS
+         3zQkBETc1HtHvQYBuFzIGy9wkrBJgD+pWUymw4ftx7rEyi86YgRRri+RN713lXbRVWTL
+         Ez2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701157911; x=1701762711;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=diLUBKxJ7l6En7yqtshs/4XmYEvA4pN8uSRRykBAsQI=;
+        b=AHoh5nr207Fklm2VTvDtnv1PZnbybVlruF+Sz1adF9TwqkQ1wDAPHUJWLn6AEWhnq5
+         mWh2C6FMMXTYJVi+E/fsAvg3DEbamia6Yatp5Va7EIUCYKC/ypi3IiuGUzQQ06b+FTQD
+         VqTutBU+cv305HOg3/FZUKRltdaW6hmTHF9/BUBvbm9Jq8IhBjCePSQYivwGLkMVq+WR
+         X9XboXl9kEOcunyp1h0iRPv8xeaDA4rpRmuQvfncYXriOpIVBUtBhVJvvg5XnR6W4F6j
+         nB0mQV0ovfUyqQsIdWsTG9GBcp7Z1ftxUvvOnuEfyPgzerGCBR1nbwH2UTZa9G4Rzkz1
+         xUfw==
+X-Gm-Message-State: AOJu0YwjhnxmcmPOSsqxfSI6G9ohMQi7AF5TZFj0ckL78WX0FQcmHNIg
+	hHtBfFPPU3PypLas9MW5hK40zg==
+X-Google-Smtp-Source: AGHT+IFMLbrMJAnZXnIsnzrNevzEXAlbqZ6Bd6m49ADJTApDCW5INT8IlzqmgXbDUf4sIJoyYncBrQ==
+X-Received: by 2002:a17:906:eb01:b0:9ff:53b6:f951 with SMTP id mb1-20020a170906eb0100b009ff53b6f951mr10046289ejb.23.1701157911325;
+        Mon, 27 Nov 2023 23:51:51 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.223.109])
+        by smtp.gmail.com with ESMTPSA id xa20-20020a170907b9d400b00a0be4fec1b4sm3787635ejc.138.2023.11.27.23.51.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Nov 2023 23:51:50 -0800 (PST)
+Message-ID: <87c2fa30-dcef-4cf6-9d30-56f3fe2f0f0a@linaro.org>
+Date: Tue, 28 Nov 2023 08:51:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4PR01MB7455:EE_|CH3PR01MB8441:EE_
-X-MS-Office365-Filtering-Correlation-Id: ffe1b500-e613-4114-4cc4-08dbefe6a497
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Z1RNKp5ZJ1xFBVbwlAltRRyJIgj8Ic5A7swW7cvCdM93L3+1wirlgceAwM6t0GGvr94wwf6htd53tOITgxC3xPpTI0AIvOPi0HbyBUR1TlDZ6BEFc5+oPXijVsdIJmszE1W0FIa2IgV0pxkSsyhjUL8dUqSyefXByLYL+mFleF8gphIkFRvtlW1IQr59qhJSo44k5Zeh7aVuftiVldkjaDlxTpO/hM7Ogc8apK1xGSnZ5KG/k80UgnILDvSFnlh/0SD/6p68GRQzKVNrqHqCkLRpnlRlc8M4AAfW1GnKD41Arg3V+qBsQAdn5OmMn/rAHgggSJrW7DVyuIN9q3n8yIObmaJxGSnx2VV1AEevWnEP73YYAKcVtE/47ZITV8FpYVYUDnZy+s/wreQ0lxSq/z44AlXWLQosJ/9MdAQ8EPHdG3aWXmH9Bg8ZhefxfC9l8WAuYC6QDXuZeOy0vBUQ4sj7kk2Ym2AtA6KtoM7aiOXQs/Ivgq8Nmv9H87T7Avf6mdFV6JAJfnL1TzTvhUvjR+V73YDozTu7VxDWR92RoD/3P+Yyf6gxxITxhtlKLdnVNFMpBc3BnfOYNk76FEc0qfE7M3EC4S7avJhTGeTmxz/q8wUjrvgET4v5EVfBujnT6VXuJRW4BKJrlL3/b9I/9w==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR01MB7455.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(396003)(346002)(366004)(39850400004)(230922051799003)(1800799012)(64100799003)(186009)(451199024)(38100700002)(41300700001)(4001150100001)(31686004)(26005)(2906002)(7416002)(5660300002)(86362001)(2616005)(66476007)(6512007)(53546011)(6506007)(8936002)(6666004)(8676002)(31696002)(4326008)(478600001)(6486002)(966005)(316002)(66946007)(110136005)(66556008)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?c1NTYmxjNVIvMU84R0ViTWl5UFRrOC9JemE2b0dPUkgrTTZXTUlZcGtlVFp4?=
- =?utf-8?B?YUVYZWkvNHBiS2JvWitHV2s0SThiK0tXOW55SjlTYnN5bkhUMFRMWGM4eDE4?=
- =?utf-8?B?K093bDJ3UUF6S0h6NmxzQjZXbzNBOERzRjY5OWEweTRtM2hRMm5PU2xwNk41?=
- =?utf-8?B?UU1lWEJkVmZaYm5vY0FxY2l6VmtGQ2RRTlE0TzFtZWxjY2dzcC9nOWNJVHE3?=
- =?utf-8?B?Mk9wMzZrb3N0ekQrR3VYUXd1eWRRcFk1UGhya0ZlL0tMRUU2c3pDU2NENzFQ?=
- =?utf-8?B?NW1UNXhIa3JWb1hGU1JsK01RNVRROEl0aE02a2hyaVhaN0JQemVoNUFrTmhk?=
- =?utf-8?B?cUZZVHZEcnA3aE8vZy90UmQwTVFEODlhSitjTHpqTVVRL2dTNC92VFcyUVRH?=
- =?utf-8?B?RStNcGFRdERhRVlWNmpZbjJlalNqaC9WS2hiVncyd2grbmNyQ1U1VVdzRUd0?=
- =?utf-8?B?YUFjaGpjdk5yUUFlbDZ0WGZDdzF0MTQ0VnRJMGtvY2pHVDFLSStPb1lLU1Vt?=
- =?utf-8?B?aS9Dd1FSSGZ4eGx2Y1VwOE9KNHhDdlBiZDVZWmx4WHI2aTh1NDRSY0tsS0tj?=
- =?utf-8?B?M0tNRytZRWN3UmpkNUdKOEFxN1FsOTlBL1prZU1PMGJYUWY2NWRxbEFxNWcr?=
- =?utf-8?B?dUtCOUkyaXlhS2M4SzlDZDhFcW8xeW9HWmNGZGkvaEZzSFUwY0J3ZlRuUjFj?=
- =?utf-8?B?VnQ0T3poaUo3ZjI1amt5SUpEN2t6K0NER3B0QVpyVFNlOWgxaVYwYXRsa1pj?=
- =?utf-8?B?TE1reHFsYjNnUFB6VkRGTXM3cmpMeUE4WWZ2Z0dPZlVHdUJtTEwvblZvVEdu?=
- =?utf-8?B?b0pCRitHdDEzQVRWdm5DZndPODVNZEpNQm40K3VveHk3dTJlTFFpNkU0V3Q0?=
- =?utf-8?B?Z2E3ZHVmWVhScWVxZXJsQ0RZMGxKeElFUi9rb3hUZ2VuOVhhVE54YWJ3WTlU?=
- =?utf-8?B?VEJKaEMreHAxcjAzanVpbTlxTGg3eWVFajJRQmYyRUlCSW1WK0N5cU1rY3Zj?=
- =?utf-8?B?dDAyQ1dzWmFHYjJhT1lmN2xwcHRTVmd1NkhWOVJ1Y2Mvd0tRS1Y1aE51a1Nj?=
- =?utf-8?B?WEl5SEJEOVk1QUVRNTNEY0xSelNJZWVhb0JqMnpKbnZMaWtUREFjcEdxWTNz?=
- =?utf-8?B?anI2eGc0aEZ0eW45YWFMeXdEbHh6VHhPbHJTU2UxZ2lDK0F6K3JGcnh4QmZE?=
- =?utf-8?B?VU5nbFNCMWt6Y0FFa3NyZUR5d2NsM0phSi84bHl0bXhuc1dub1k2QTZGOVM3?=
- =?utf-8?B?aGNXanZPOThJZU9mdEhyVzJzeGlHUmwxbXJSY1RJOVhHR3FDM0pLa0F3L3ZT?=
- =?utf-8?B?TGdTUlhSSG1pNk1pTGxNNkZrYURrK2JEZnNzRjk1MWVKRkk5TGtyZnhVUG5S?=
- =?utf-8?B?UnpMZW9jME9PRlAva2JVSndLYnlxVWdqajc0Zlg4dUdORnVTNjhWYWFYYU9L?=
- =?utf-8?B?NXpJeWdqRTVCQTFweDZoMlJrRVF2ZE9vNDZUSStpTENtNjZORW9COFZaZ2dN?=
- =?utf-8?B?ZERmc0swSm5PY3p0L1JzL0dvblk1MTQ5TjZmK0V2Q01CRVNYSTJodWxyWTJZ?=
- =?utf-8?B?c3R5bmVIR1lRUUFMelQ5aXFHMHB0M3pBVGoycW9hbWY2bkRNdjJOdmRHYlBp?=
- =?utf-8?B?dGlTTU11UjlWMk9UVGl2d0ljSW1jbm9lSWxMQWN4U2hiUzc1Tm03VFBQelpy?=
- =?utf-8?B?OVpxYkZEUXJZM0VFeXQ4UkxPNUlzdDJ4K2JDdkdsNEQ4bG9QZ0kwQjJIMEw2?=
- =?utf-8?B?N0dHWVdpWm5nbmFOVXBqK3UzanlLSUZxcjE5ZTRHUFpGemJ5bnVvWmFzN2Rz?=
- =?utf-8?B?MGVMY21wZFNhZnNvVWVscCtteXR0aEpRcTVRREQzRVJJZGpCZUVLeHQ5MTI5?=
- =?utf-8?B?ekw2WUt3VkM4bGtudVNmSmFpRURWajdTWExqUlRlZ1RtLytFRnh5bVFTbmRG?=
- =?utf-8?B?Z1ZoTmNWZGExVEJxcUp3OVNZUitvNUZycXpFNmZrMzZLK0NYN2hVRU56YWwz?=
- =?utf-8?B?QmZHYWtjVmlFS0xqa3hxTUltcmIwZkQ1VlBPelRLWjJ2cS9vRXNzZWlzNGVz?=
- =?utf-8?B?T2Z4MzVhSDVnb0pOUG5xTXR0YzA3Z1paMlpYWk8weFg1SWN5Ujg0NElrMlRW?=
- =?utf-8?B?Vm52aFp3UGNDWjlHVHAyamMwYVhiMmVuTU5yQStQYitwMGptZWJlSlh0S3Nw?=
- =?utf-8?Q?lYj79GHNq8CeMvrcV3H0HYI=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffe1b500-e613-4114-4cc4-08dbefe6a497
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR01MB7455.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2023 07:50:09.0786
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rZ3G+gey1RhzGEj2VTj5G4eXRlyLyq02MyLY3ULIz5a2pDpLU+UCBrYQaXnMwidlJLEMDalGvbXN7JHKIEZoU3ZW4ZIc41X2EOrSPEuQxZE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR01MB8441
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/5] dt-bindings: at24: add ROHM BR24G04
+Content-Language: en-US
+To: Roland Hieber <rhi@pengutronix.de>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
+ Li Yang <leoyang.li@nxp.com>
+Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, Philipp Zabel <p.zabel@pengutronix.de>
+References: <20231127-b4-imx7-var-som-gome-v1-0-f26f88f2d0bc@pengutronix.de>
+ <20231127-b4-imx7-var-som-gome-v1-1-f26f88f2d0bc@pengutronix.de>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231127-b4-imx7-var-som-gome-v1-1-f26f88f2d0bc@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-
-On 28/11/2023 06:00, Andrew Jeffery wrote:
-> On Mon, 2023-11-27 at 15:08 +0700, Quan Nguyen wrote:
->>
->> On 27/11/2023 14:04, Cosmo Chou wrote:
->>> Andrew Jeffery <andrew@codeconstruct.com.au> wrote on Mon, 2023-11-27
->>> at 11:23 AM:
->>>>
->>>> On Mon, 2023-11-20 at 17:17 +0800, Cosmo Chou wrote:
->>>>> commit 2be6b47211e1 ("i2c: aspeed: Acknowledge most interrupts early
->>>>> in interrupt handler") moved most interrupt acknowledgments to the
->>>>> start of the interrupt handler to avoid race conditions. However,
->>>>> slave Tx ack status shouldn't be cleared before SLAVE_READ_PROCESSED
->>>>> is handled.
->>>>>
->>>>> Acknowledge Tx ack status after handling SLAVE_READ_PROCESSED to fix
->>>>> the problem that the next byte is not sent correctly.
->>>>
->>>> What does this mean in practice? Can you provide more details? It
->>>> sounds like you've seen concrete problems and it would be nice to
->>>> capture what it was that occurred.
->>>>
->>>> Andrew
->>>
->>> For a normal slave transaction, a master attempts to read out N bytes
->>> from BMC: (BMC addr: 0x20)
->>> [S] [21] [A] [1st_B] [1_ack] [2nd_B] [2_ack] ... [Nth_B] [N] [P]
->>>
->>> T1: when [21] [A]: Both INTR_SLAVE_MATCH and INTR_RX_DONE rise,
->>> INTR_RX_DONE is not cleared until BMC is ready to send the 1st_B:
->>> https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c#L294
->>> That is, BMC stretches the SCL until ready to send the 1st_B.
->>>
->>> T2: when [1_ack]: INTR_TX_ACK rises, but it's cleared at the start of
->>> the ISR, so that BMC does not stretch the SCL, the master continues
->>> to read 2nd_B before BMC is ready to send the 2nd_B.
->>>
->>> To fix this, do not clear INTR_TX_ACK until BMC is ready to send data:
->>> https://github.com/torvalds/linux/blob/master/drivers/i2c/busses/i2c-aspeed.c#L302
->>>
->>
->> This looks like the same issue, but we chose to ack them late. Same with
->> INTR_RX_DONE.
->>
->> https://lore.kernel.org/all/20210616031046.2317-3-quan@os.amperecomputing.com/
+On 27/11/2023 22:11, Roland Hieber wrote:
+> From: Philipp Zabel <p.zabel@pengutronix.de>
 > 
->  From a brief inspection I prefer the descriptions in your series Quan.
-> Looks like we dropped the ball a bit there though on the review - can
-> you resend your series based on 6.7-rc1 or so and Cc Cosmo?
+> Add compatible for ROHM Semiconductor BR24G04 EEPROMs.
 > 
-Yes, sure, I'll rebase on v6.7 and resend the series shortly.
-Thanks,
-- Quan
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
 
