@@ -1,55 +1,47 @@
-Return-Path: <linux-i2c+bounces-515-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-516-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0930F7FC0A0
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 18:51:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8FA37FC0A1
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 18:52:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85827B214E1
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 17:51:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 701CB1F20F20
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 17:52:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0A5239AF6;
-	Tue, 28 Nov 2023 17:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0032839AF3;
+	Tue, 28 Nov 2023 17:52:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GVaHFP0H"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10C219B0;
-	Tue, 28 Nov 2023 09:51:03 -0800 (PST)
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3b843b61d8aso3406574b6e.0;
-        Tue, 28 Nov 2023 09:51:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701193863; x=1701798663;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rtDiBDpbSsaK/40eNfowXr9JW3UeNKxQY42yopiiEic=;
-        b=R2WMQFrqMTfzdaBcOy1kZ27dghURAf8QeWtTyll8DatTny6Oaa7UlSrqAHvK+W4lMM
-         KTsp3d2x23XCtd5I7zXt/T5qr2A2lPWhtXkQeEOm68UGsEvzH16PeWYnk+Djf8rhh7N+
-         hViweyNB3pYW2afZ95CxWxjlx4GtiQOcLeZhQYwNHdtop6LARGpupgv/L+TU31a9bqn+
-         2eteOGepY3oEPkJ5Pq2pT/sNZSaf+145m/BI4f+RvnvMfNUrr0U4yI/T4EIXXzrEXHdA
-         L4CfEutzB7ve7OG6Oz6Tasfi1aYGneW4G00s/auloncGkKuK4GDI6ovwpNJRcvK0mcsA
-         FtyA==
-X-Gm-Message-State: AOJu0Yz45RSpzGSzjRJFBek/iTVAFnVReoY229l5Qbl2tDDqM/nqDqJW
-	nzLi3Xct1GobZNkXMTxU7w==
-X-Google-Smtp-Source: AGHT+IGyrf3xV7VF9mmcR/1MNWmRUWyPFWgPE84xGDUfKPMTqGRzo9+FNmbBO0RjyNoK6EO1MYUi2g==
-X-Received: by 2002:a05:6808:1488:b0:3b8:402d:578b with SMTP id e8-20020a056808148800b003b8402d578bmr23511881oiw.25.1701193863065;
-        Tue, 28 Nov 2023 09:51:03 -0800 (PST)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s4-20020a056808208400b003b83bb8dbcesm896556oiw.30.2023.11.28.09.51.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Nov 2023 09:51:02 -0800 (PST)
-Received: (nullmailer pid 3558571 invoked by uid 1000);
-	Tue, 28 Nov 2023 17:51:01 -0000
-Date: Tue, 28 Nov 2023 11:51:01 -0600
-From: Rob Herring <robh@kernel.org>
-To: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Cc: Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org, linux-i2c@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, linux-kernel@vger.kernel.org, Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>, Wolfram Sang <wsa@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH 2/3] dt-bindings: i2c: qup: Document interconnects
-Message-ID: <170119386108.3558514.18152654833892721560.robh@kernel.org>
-References: <20231128-i2c-qup-dvfs-v1-0-59a0e3039111@kernkonzept.com>
- <20231128-i2c-qup-dvfs-v1-2-59a0e3039111@kernkonzept.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC3D39AD4
+	for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 17:52:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA7B4C433C8;
+	Tue, 28 Nov 2023 17:52:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701193931;
+	bh=fIENyWx1p7BpJfaucZBxmc/ZLBKGsHeNB6XalPqHagY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GVaHFP0HS1UBadW+JZbhURBZ5MrshziTIOE0oBHVmBWSE53RugvD6SJ8Kh8GN/Xpz
+	 sjJqJK2IH9aL9OFqb2lsjNcphaldkHChg+ew9lIOODULEF/7x34Nc/Z3KLTFkv9C/h
+	 eqHrb49ns0Zo47owKsM0izffmMukUCXXVJfQ0R1l819GKQuvd/CbzLVen1u5Qa8Cwb
+	 1yKbKv5nAuADzMJslKWjfbNskMPlxOGch4uCQ1i2L4Pg3XcmL/9jhkMxV8MVQKlI4c
+	 cudLg94i2PKhjYsQn2+aM3751WpEF7q4/jDVKQpNj/stqjMofNf+zd7s/9kgqgFY06
+	 ZHlQdamnIgXYA==
+Date: Tue, 28 Nov 2023 18:52:07 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Naresh Solanki <naresh.solanki@9elements.com>
+Cc: Peter Rosin <peda@axentia.se>, robh@kernel.org,
+	Patrick Rudolph <patrick.rudolph@9elements.com>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v5 2/2] i2c: muxes: pca954x: Enable features on
+ MAX7357
+Message-ID: <20231128175207.jzeiaxc2kxusl2fd@zenone.zhora.eu>
+References: <20231128100009.3727407-2-naresh.solanki@9elements.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -58,20 +50,26 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231128-i2c-qup-dvfs-v1-2-59a0e3039111@kernkonzept.com>
+In-Reply-To: <20231128100009.3727407-2-naresh.solanki@9elements.com>
 
+Hi Naresh,
 
-On Tue, 28 Nov 2023 10:48:36 +0100, Stephan Gerhold wrote:
-> When the I2C QUP controller is used together with a DMA engine it needs
-> to vote for the interconnect path to the DRAM. Otherwise it may be
-> unable to access the memory quickly enough.
+On Tue, Nov 28, 2023 at 10:00:08AM +0000, Naresh Solanki wrote:
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
 > 
-> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-> ---
->  Documentation/devicetree/bindings/i2c/qcom,i2c-qup.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+> Enable additional features based on DT settings and unconditionally
+> release the shared interrupt pin after 1.6 seconds and allow to use
+> it as reset.
 > 
+> These features aren't enabled by default and it's up to board designer
+> to validate for proper functioning and detection of devices in secondary
+> bus as sometimes it can cause secondary bus being disabled.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 
+Thanks,
+Andi
 
