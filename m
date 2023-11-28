@@ -1,139 +1,88 @@
-Return-Path: <linux-i2c+bounces-502-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-504-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 558937FB4AA
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 09:45:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E60877FB6EC
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 11:16:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4917281F22
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 08:45:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 241781C213EE
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 10:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EF301EB3F;
-	Tue, 28 Nov 2023 08:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7404D5B9;
+	Tue, 28 Nov 2023 10:16:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="M7OCSlHr"
+	dkim=pass (2048-bit key) header.d=kernkonzept.com header.i=@kernkonzept.com header.b="bLCJbpS1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96B919A7
-	for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 00:45:27 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1cf856663a4so36006265ad.3
-        for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 00:45:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1701161126; x=1701765926; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dxKs9xH99OQyNQM5ja7w5sBqIVdDZ2l2tkwooD9gc1c=;
-        b=M7OCSlHrgPke0dbRqhyKdV1U2j9DpXjb4BCazCV3m+84qXU2FL1ddycrfXCIqHph/f
-         ho6kJGxPgWAnRHqRtJAJRY2tqfLbYFoAVS5FClxouPLTXDerBCtgJN1NI8jPG81stcAm
-         tovPvDMh9jBVtmUBDucEX24Dj789D8LC366RQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701161126; x=1701765926;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dxKs9xH99OQyNQM5ja7w5sBqIVdDZ2l2tkwooD9gc1c=;
-        b=tnOMjdl6BOsIU2TUDphW9C1BBZ/LxQVW0gzk6Zc0AT2Dg1va1mB9eeO7OAsF/G8ksY
-         qXEQylaU6Flsieiu5FGXpLPXlWmH67eGyMbzEOY6t60N+EeTF2F5Ux/wGLDqfXmxgd0a
-         hF+eW/lvEbnDsuO0F44FkVb5yBEfCqa++wVGIEnPiyRrXXA7ognl/v8JN0T2Rwd24fim
-         U9zLfcJ29o5GURsG4nMCA35cTwZn+Zf0VDTqFB1gjiLPfs5ir0w68m0X2voxWmcOTwNY
-         QWOAaTBROtnAH7vxZEPaLCQ8zzTx2OBS9GDTB5ZNlg9Uqw9p56dzNfZajUb0bOu7MArw
-         et/w==
-X-Gm-Message-State: AOJu0YyjRuJxhu3vLW7rRVFL/XMgAv5MIW809pRpdiWDyTG4+BdzPh17
-	iyf/MCtBA1Ggs7UeRCsENHQP3w==
-X-Google-Smtp-Source: AGHT+IEHq/8o8TRy8LBy9PDIxcsp3BaVE1rQDjyRLP/di+1I1g3a9pBwAwe3ppG7Mgw8ZIdwK6eHKA==
-X-Received: by 2002:a17:902:988b:b0:1cf:b130:e9af with SMTP id s11-20020a170902988b00b001cfb130e9afmr10074896plp.20.1701161126645;
-        Tue, 28 Nov 2023 00:45:26 -0800 (PST)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:a990:1e95:a915:9c70])
-        by smtp.gmail.com with ESMTPSA id j1-20020a170902c08100b001ab39cd875csm8358074pld.133.2023.11.28.00.45.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Nov 2023 00:45:26 -0800 (PST)
-From: Chen-Yu Tsai <wenst@chromium.org>
-To: Rob Herring <robh+dt@kernel.org>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Chen-Yu Tsai <wenst@chromium.org>,
-	chrome-platform@lists.linux.dev,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Johan Hovold <johan@kernel.org>,
-	Hsin-Yi Wang <hsinyi@chromium.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	andriy.shevchenko@linux.intel.com,
-	Jiri Kosina <jikos@kernel.org>,
-	linus.walleij@linaro.org,
-	broonie@kernel.org,
-	gregkh@linuxfoundation.org,
-	hdegoede@redhat.com,
-	james.clark@arm.com,
-	james@equiv.tech,
-	keescook@chromium.org,
-	rafael@kernel.org,
-	tglx@linutronix.de,
-	Jeff LaBundy <jeff@labundy.com>,
-	linux-input@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: [RFC PATCH v3 5/5] arm64: dts: mediatek: mt8173-elm-hana: Add G2touch G7500 touchscreen
-Date: Tue, 28 Nov 2023 16:42:34 +0800
-Message-ID: <20231128084236.157152-6-wenst@chromium.org>
-X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
-In-Reply-To: <20231128084236.157152-1-wenst@chromium.org>
-References: <20231128084236.157152-1-wenst@chromium.org>
+X-Greylist: delayed 1660 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Nov 2023 02:16:22 PST
+Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27A5135
+	for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 02:16:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kernkonzept.com; s=mx1; h=Cc:To:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-Id:Date:Subject:From:References:In-Reply-To:Reply-To:
+	Content-ID:Content-Description;
+	bh=qqD5FhYjTlrMhvo9H9Ud7tOWyJdz/L1HRDU0aJZunQs=; b=bLCJbpS15T6e6UbeFBQuRcwcAy
+	WRIkpCQVF1x0WSK/YCENnhXMk5gd31wDctSwhTOMPwgWm8wdgga2k2Cz2k5PbOLJ4HM7Y62kzWK1I
+	XZ+NPKRxMQx1F1F3Ph2aAo4nfADdjz8BY1w+GXO31WTcxzz4nBa5IffczTRTskGkO+Y39E87yC0dv
+	qtJ6OrL0biub8GhYcwg28WfQK+N5GXoOml6Bpfoa0ZyRFnJSlhwIGSpjV/NdIxwFhrxfV5+gji3Ld
+	xegF/08FluSg6sK9HoB82ua2/1qigPzLJUfsmXS9FPvhf0RuKCWf03TNfQCoZE3x2xuEuW2lyu2t6
+	iM75m4UQ==;
+Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
+	by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.96)
+	id 1r7uhr-008Pi6-2D;
+	Tue, 28 Nov 2023 10:48:39 +0100
+From: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Subject: [PATCH 0/3] i2c: qup: Allow scaling power domains and interconnect
+Date: Tue, 28 Nov 2023 10:48:34 +0100
+Message-Id: <20231128-i2c-qup-dvfs-v1-0-59a0e3039111@kernkonzept.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHK3ZWUC/x3MQQqAIBBA0avErBtQA9GuEi1Kx5qNmVIE0t2Tl
+ m/xf4VCmanA2FXIdHPhIzbIvgO3L3EjZN8MSqhBSqGRlcPzSujvUHB1WpCy1nhvoCUpU+Dn303
+ z+35PDgNQXgAAAA==
+To: Wolfram Sang <wsa@kernel.org>
+Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+X-Mailer: b4 0.12.4
 
-This introduces yet another second-source touchscreen found on Hana.
-This is a G2touch G7500 touchscreen, which is compatible with HID over
-I2C.
+Make it possible to scale performance states of the power domain and
+interconnect of the I2C QUP controller.
 
-Add a device node for it. In keeping with the new scheme for second
-source components, mark it as "failed-needs-probe".
+This is necessary to guarantee performance with power management
+enabled. Otherwise these resources might run at minimal performance
+state which is not sufficient for certain workloads.
 
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 ---
-Changes since v2:
-- Drop class from status
----
- arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Stephan Gerhold (3):
+      dt-bindings: i2c: qcom,i2c-qup: Document power-domains
+      dt-bindings: i2c: qup: Document interconnects
+      i2c: qup: Vote for interconnect bandwidth to DRAM
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtsi
-index 1d68bc6834e4..216d8b43be05 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtsi
-@@ -31,6 +31,15 @@ touchscreen3: touchscreen@20 {
- 		interrupts = <88 IRQ_TYPE_LEVEL_LOW>;
- 		status = "fail-needs-probe";
- 	};
-+
-+	touchscreen4: touchscreen@40 {
-+		compatible = "hid-over-i2c";
-+		reg = <0x40>;
-+		hid-descr-addr = <0x0001>;
-+		interrupt-parent = <&pio>;
-+		interrupts = <88 IRQ_TYPE_LEVEL_LOW>;
-+		status = "fail-needs-probe";
-+	};
- };
- 
- &i2c4 {
+ .../devicetree/bindings/i2c/qcom,i2c-qup.yaml      | 14 +++++++++
+ drivers/i2c/busses/i2c-qup.c                       | 36 ++++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
+---
+base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
+change-id: 20231106-i2c-qup-dvfs-bc60e2998dd8
+
+Best regards,
 -- 
-2.43.0.rc1.413.gea7ed67945-goog
+Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
 
 
