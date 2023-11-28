@@ -1,55 +1,55 @@
-Return-Path: <linux-i2c+bounces-499-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-500-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD88D7FB49C
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 09:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 872E07FB49E
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 09:45:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30ED7B20D20
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 08:45:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC503B21605
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 Nov 2023 08:45:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3838199B2;
-	Tue, 28 Nov 2023 08:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4030A19478;
+	Tue, 28 Nov 2023 08:45:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gmHJQWie"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="m27szb8L"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D604A10C1
-	for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 00:45:11 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1cfbda041f3so21645215ad.2
-        for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 00:45:11 -0800 (PST)
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9FD10E7
+	for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 00:45:17 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6cbe6d514cdso4224796b3a.1
+        for <linux-i2c@vger.kernel.org>; Tue, 28 Nov 2023 00:45:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1701161111; x=1701765911; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1701161116; x=1701765916; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rrIzkF3BPgnSgOC4+jRg+GY/s6tE7F98s9pAwcg2bLw=;
-        b=gmHJQWieuKvv+lZayWffijw/IQ+TkyU2V+mDe5qluwQihRNeS0D4D/H9HEOvqYZWNi
-         tzgSxYTj75/rmyctOyeQEf3EHZnqmB0BX7RiYVAdZohgqHUn+9yMdxMFkl2skvL9GUdT
-         euFhX+aMC+2R66t6wban6eLSmjopA0XgKWiCE=
+        bh=W8/TdtPK7mZHmPEMzqlWjR5HwzhRhEqW5dnoF8OBNcQ=;
+        b=m27szb8LxKARre4eazapdHG3ArkqLpOcvNNIFBH8kxUG6vmSzX2a9revgy+8tQVUbx
+         itpJ1RHDege9HG9CCdktKupNQccZnI9PJ4JLCbilNUzimUJKK2KVJ/HJBWEhOA3UzFkI
+         S8I1Qv9hoGC1ODJzoT/JxGk6jSRwwLH+VwQNE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701161111; x=1701765911;
+        d=1e100.net; s=20230601; t=1701161116; x=1701765916;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rrIzkF3BPgnSgOC4+jRg+GY/s6tE7F98s9pAwcg2bLw=;
-        b=WqaiN1dEanPEaefXr/iYICUzcb9/TIMtMjjFq/UaWPPFvcqYSaarqY4bzzMqoNC1yk
-         Ai/7qLtRWM5sJbKC+LtVdz07GgVAJFpd4tuJdv2ja6UTjYQue+ygnEM4nS7F3Mj+cGUZ
-         zCjro2m1MTM67neoNd3qnYKEbH/QGkE18Tubu4XDR+EnwcVcyrgQAjK0wgqPkjpubZaF
-         Wyd30z+KT9aLf69XHaMSv9ZSpQa6VAlNWyhjXnShuQtf4nT8WBOmDl/PX5tH2ckPyPoZ
-         yCmn78AavYQIDfdvgwpEyChF6+PQppizth/MJ581emuxQDRTX0TMjlWkF8d7GSqTlFzs
-         ChSQ==
-X-Gm-Message-State: AOJu0YxysP1oR8OBVjQAuxHIUDmkJ1tByi5XBPn1frMc9hnmrJwYHqFF
-	+cIunNfH6q3HaZswC6ndOA+SwQ==
-X-Google-Smtp-Source: AGHT+IEJ8bYtjQkgtD3EytEtczIspfAvOpqGUCTKBUGdEVYLqzk3kuxJ5+ccBoS4ivRCvYA3p8TkZg==
-X-Received: by 2002:a17:903:1ce:b0:1cf:c518:fa39 with SMTP id e14-20020a17090301ce00b001cfc518fa39mr7406158plh.19.1701161111196;
-        Tue, 28 Nov 2023 00:45:11 -0800 (PST)
+        bh=W8/TdtPK7mZHmPEMzqlWjR5HwzhRhEqW5dnoF8OBNcQ=;
+        b=vHyMEZnEBiYi/EJBAG2pdbgxdZCSgjGfgoGcUbe2spuRItX+Sl+YOqh3sgdslC7i/I
+         WRw0fiNYjegD3nT/PohaxoMdoc0NdVgz+oygeGoFkRbQ1vBi1SVbUQwhGRpEmWa15J1w
+         /2Y66PHIv5SKPufdovz/anbuYrK+ick8ysyB5u2yHynSV+aSAjZDUKP4GcBIL/vj504i
+         u+rD2hAQRlFW569z9WR/eNPV8I9UGCxw3APl59jk2Ilcq7DljOhqGxJZr4EaSkV4PGbT
+         y4s77L016gBYRDS/WfBZt0405fRJhuLJxRcMnPVUIPsD69uDwpZ9HBiOuamvF8KzXATb
+         SmOQ==
+X-Gm-Message-State: AOJu0YyiM2iFQ7nVS6C+jpU0sEimNf0gIj2Kkm75N2aZgQndli6gGvvS
+	jjD40fHLmCCCTK2mmgIyb7KOgQ==
+X-Google-Smtp-Source: AGHT+IG6UzF6jCgkNYomISFp5LxHRmJmbSt0cMuJU32MtFDCyOlf9c7ui7iv5r+wF6dwufogT4B1GQ==
+X-Received: by 2002:a05:6a20:d48d:b0:189:dc00:cf85 with SMTP id im13-20020a056a20d48d00b00189dc00cf85mr14610135pzb.36.1701161116308;
+        Tue, 28 Nov 2023 00:45:16 -0800 (PST)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:a990:1e95:a915:9c70])
-        by smtp.gmail.com with ESMTPSA id j1-20020a170902c08100b001ab39cd875csm8358074pld.133.2023.11.28.00.45.06
+        by smtp.gmail.com with ESMTPSA id j1-20020a170902c08100b001ab39cd875csm8358074pld.133.2023.11.28.00.45.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Nov 2023 00:45:10 -0800 (PST)
+        Tue, 28 Nov 2023 00:45:15 -0800 (PST)
 From: Chen-Yu Tsai <wenst@chromium.org>
 To: Rob Herring <robh+dt@kernel.org>,
 	Frank Rowand <frowand.list@gmail.com>,
@@ -84,9 +84,9 @@ Cc: Chen-Yu Tsai <wenst@chromium.org>,
 	Jeff LaBundy <jeff@labundy.com>,
 	linux-input@vger.kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: [RFC PATCH v3 2/5] i2c: of: Introduce component probe function
-Date: Tue, 28 Nov 2023 16:42:31 +0800
-Message-ID: <20231128084236.157152-3-wenst@chromium.org>
+Subject: [RFC PATCH v3 3/5] platform/chrome: Introduce device tree hardware prober
+Date: Tue, 28 Nov 2023 16:42:32 +0800
+Message-ID: <20231128084236.157152-4-wenst@chromium.org>
 X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
 In-Reply-To: <20231128084236.157152-1-wenst@chromium.org>
 References: <20231128084236.157152-1-wenst@chromium.org>
@@ -122,168 +122,172 @@ on the MT8183 Krane Chromebook tablets, and the Qualcomm sc8280xp-based
 Lenovo Thinkpad 13S.
 
 Instead of this delicate dance between drivers and device tree quirks,
-this change introduces a simple I2C component probe. function For a
-given class of devices on the same I2C bus, it will go through all of
-them, doing a simple I2C read transfer and see which one of them responds.
+this change introduces a simple I2C component prober. For any given
+class of devices on the same I2C bus, it will go through all of them,
+doing a simple I2C read transfer and see which one of them responds.
 It will then enable the device that responds.
 
-This requires some minor modifications in the existing device tree. The
-status for all the device nodes for the component options must be set
-to "failed-needs-probe". This makes it clear that some mechanism is
+This requires some minor modifications in the existing device tree.
+The status for all the device nodes for the component options must be
+set to "failed-needs-probe". This makes it clear that some mechanism is
 needed to enable one of them, and also prevents the prober and device
 drivers running at the same time.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
 Changes since v2:
-- New patch split out from "of: Introduce hardware prober driver"
 - Addressed Rob's comments
-  - Move i2c prober to i2c subsystem
-  - Use of_node_is_available() to check if node is enabled.
-  - Use OF changeset API to update status property
+  - Move remaining driver code to drivers/platform/chrome/
+  - Depend on rather than select CONFIG_I2C
+  - Copy machine check to driver init function
 - Addressed Andy's comments
-  - Probe function now accepts "struct device *dev" instead to reduce
-    line length and dereferences
+  - Explicitly mention "device tree" or OF in driver name, description
+    and Kconfig symbol
+  - Drop filename from inside the file
+  - Switch to passing "struct device *" to shorten lines
   - Move "ret = 0" to just before for_each_child_of_node(i2c_node, node)
----
- drivers/i2c/i2c-core-of.c | 110 ++++++++++++++++++++++++++++++++++++++
- include/linux/i2c.h       |   4 ++
- 2 files changed, 114 insertions(+)
+  - Make loop variable size_t (instead of unsigned int as Andy asked)
+  - Use PLATFORM_DEVID_NONE instead of raw -1
+  - Use standard goto error path pattern in hw_prober_driver_init()
 
-diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-index a6c407d36800..3a0b4986c585 100644
---- a/drivers/i2c/i2c-core-of.c
-+++ b/drivers/i2c/i2c-core-of.c
-@@ -217,4 +217,114 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
- struct notifier_block i2c_of_notifier = {
- 	.notifier_call = of_i2c_notify,
- };
+- Changes since v1:
+  - New patch
+---
+ drivers/platform/chrome/Kconfig               | 11 +++
+ drivers/platform/chrome/Makefile              |  1 +
+ .../platform/chrome/chromeos_of_hw_prober.c   | 89 +++++++++++++++++++
+ 3 files changed, 101 insertions(+)
+ create mode 100644 drivers/platform/chrome/chromeos_of_hw_prober.c
+
+diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
+index 7a83346bfa53..aa161f2f09e3 100644
+--- a/drivers/platform/chrome/Kconfig
++++ b/drivers/platform/chrome/Kconfig
+@@ -61,6 +61,17 @@ config CHROMEOS_TBMC
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called chromeos_tbmc.
+ 
++config CHROMEOS_OF_HW_PROBER
++	bool "ChromeOS Device Tree Hardware Prober"
++	depends on OF
++	depends on I2C
++	select OF_DYNAMIC
++	default OF
++	help
++	  This option enables the device tree hardware prober for ChromeOS
++	  devices. The driver will probe the correct component variant in
++	  devices that have multiple drop-in options for one component.
 +
+ config CROS_EC
+ 	tristate "ChromeOS Embedded Controller"
+ 	select CROS_EC_PROTO
+diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
+index 2dcc6ccc2302..21a9d5047053 100644
+--- a/drivers/platform/chrome/Makefile
++++ b/drivers/platform/chrome/Makefile
+@@ -8,6 +8,7 @@ obj-$(CONFIG_CHROMEOS_ACPI)		+= chromeos_acpi.o
+ obj-$(CONFIG_CHROMEOS_LAPTOP)		+= chromeos_laptop.o
+ obj-$(CONFIG_CHROMEOS_PRIVACY_SCREEN)	+= chromeos_privacy_screen.o
+ obj-$(CONFIG_CHROMEOS_PSTORE)		+= chromeos_pstore.o
++obj-$(CONFIG_CHROMEOS_OF_HW_PROBER)	+= chromeos_of_hw_prober.o
+ obj-$(CONFIG_CHROMEOS_TBMC)		+= chromeos_tbmc.o
+ obj-$(CONFIG_CROS_EC)			+= cros_ec.o
+ obj-$(CONFIG_CROS_EC_I2C)		+= cros_ec_i2c.o
+diff --git a/drivers/platform/chrome/chromeos_of_hw_prober.c b/drivers/platform/chrome/chromeos_of_hw_prober.c
+new file mode 100644
+index 000000000000..13aaad6382aa
+--- /dev/null
++++ b/drivers/platform/chrome/chromeos_of_hw_prober.c
+@@ -0,0 +1,89 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * Some devices, such as Google Hana Chromebooks, are produced by multiple
-+ * vendors each using their preferred components. Such components are all
-+ * in the device tree. Instead of having all of them enabled and having each
-+ * driver separately try and probe its device while fighting over shared
-+ * resources, they can be marked as "fail-needs-probe" and have a prober
-+ * figure out which one is actually used beforehand.
++ * ChromeOS Device Tree Hardware Prober
 + *
-+ * This prober assumes such drop-in parts are on the same I2C bus, have
-+ * non-conflicting addresses, and can be directly probed by seeing which
-+ * address responds.
-+ *
-+ * TODO:
-+ * - Support handling common regulators and GPIOs.
-+ * - Support I2C muxes
++ * Copyright (c) 2023 Google LLC
 + */
++
++#include <linux/array_size.h>
++#include <linux/i2c.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++
++#define DRV_NAME	"chromeos_of_hw_prober"
 +
 +/**
-+ * i2c_of_probe_component() - probe for devices of "type" on the same i2c bus
-+ * @dev: &struct device of the caller, only used for dev_* printk messages
-+ * @type: a string to match the device node name prefix to probe for
++ * struct hw_prober_entry - Holds an entry for the hardware prober
 + *
-+ * Probe for possible I2C components of the same "type" on the same I2C bus
-+ * that have their status marked as "fail".
++ * @compatible:	compatible string to match against the machine
++ * @prober:	prober function to call when machine matches
++ * @data:	extra data for the prober function
 + */
-+int i2c_of_probe_component(struct device *dev, const char *type)
++struct hw_prober_entry {
++	const char *compatible;
++	int (*prober)(struct device *dev, const void *data);
++	const void *data;
++};
++
++static int chromeos_i2c_component_prober(struct device *dev, const void *data)
 +{
-+	struct device_node *node, *i2c_node;
-+	struct i2c_adapter *i2c;
-+	struct of_changeset *ocs = NULL;
++	const char *type = data;
++
++	return i2c_of_probe_component(dev, type);
++}
++
++static const struct hw_prober_entry hw_prober_platforms[] = {
++	{ .compatible = "google,hana", .prober = chromeos_i2c_component_prober, .data = "touchscreen" },
++	{ .compatible = "google,hana", .prober = chromeos_i2c_component_prober, .data = "trackpad" },
++};
++
++static int chromeos_of_hw_prober_probe(struct platform_device *pdev)
++{
++	for (size_t i = 0; i < ARRAY_SIZE(hw_prober_platforms); i++)
++		if (of_machine_is_compatible(hw_prober_platforms[i].compatible)) {
++			int ret;
++
++			ret = hw_prober_platforms[i].prober(&pdev->dev,
++							    hw_prober_platforms[i].data);
++			if (ret)
++				return ret;
++		}
++
++	return 0;
++}
++
++static struct platform_driver chromeos_of_hw_prober_driver = {
++	.probe	= chromeos_of_hw_prober_probe,
++	.driver	= {
++		.name = DRV_NAME,
++	},
++};
++
++static int __init chromeos_of_hw_prober_driver_init(void)
++{
++	struct platform_device *pdev;
++	size_t i;
 +	int ret;
 +
-+	node = of_find_node_by_name(NULL, type);
-+	if (!node)
-+		return dev_err_probe(dev, -ENODEV, "Could not find %s device node\n", type);
++	for (i = 0; i < ARRAY_SIZE(hw_prober_platforms); i++)
++		if (of_machine_is_compatible(hw_prober_platforms[i].compatible))
++			break;
++	if (i == ARRAY_SIZE(hw_prober_platforms))
++		return 0;
 +
-+	i2c_node = of_get_next_parent(node);
-+	if (!of_node_name_eq(i2c_node, "i2c")) {
-+		of_node_put(i2c_node);
-+		return dev_err_probe(dev, -EINVAL, "%s device isn't on I2C bus\n", type);
-+	}
++	ret = platform_driver_register(&chromeos_of_hw_prober_driver);
++	if (ret)
++		return ret;
 +
-+	for_each_child_of_node(i2c_node, node) {
-+		if (!of_node_name_prefix(node, type))
-+			continue;
-+		if (of_device_is_available(node)) {
-+			/*
-+			 * Device tree has component already enabled. Either the
-+			 * device tree isn't supported or we already probed once.
-+			 */
-+			of_node_put(node);
-+			of_node_put(i2c_node);
-+			return 0;
-+		}
-+	}
-+
-+	i2c = of_get_i2c_adapter_by_node(i2c_node);
-+	if (!i2c) {
-+		of_node_put(i2c_node);
-+		return dev_err_probe(dev, -EPROBE_DEFER, "Couldn't get I2C adapter\n");
-+	}
-+
-+	ret = 0;
-+	for_each_child_of_node(i2c_node, node) {
-+		union i2c_smbus_data data;
-+		u32 addr;
-+
-+		if (!of_node_name_prefix(node, type))
-+			continue;
-+		if (of_property_read_u32(node, "reg", &addr))
-+			continue;
-+		if (i2c_smbus_xfer(i2c, addr, 0, I2C_SMBUS_READ, 0, I2C_SMBUS_BYTE, &data) < 0)
-+			continue;
-+
-+		dev_info(dev, "Enabling %pOF\n", node);
-+
-+		ocs = kzalloc(sizeof(*ocs), GFP_KERNEL);
-+		if (!ocs) {
-+			ret = -ENOMEM;
-+			goto err_put_node;
-+		}
-+
-+		/* Found a device that is responding */
-+		of_changeset_init(ocs);
-+		ret = of_changeset_update_prop_string(ocs, node, "status", "okay");
-+		if (ret)
-+			goto err_free_ocs;
-+		ret = of_changeset_apply(ocs);
-+		if (ret)
-+			goto err_destroy_ocs;
-+
-+		of_node_put(node);
-+		break;
-+	}
-+
-+	i2c_put_adapter(i2c);
-+	of_node_put(i2c_node);
++	pdev = platform_device_register_simple(DRV_NAME, PLATFORM_DEVID_NONE, NULL, 0);
++	if (IS_ERR(pdev))
++		goto err;
 +
 +	return 0;
 +
-+err_destroy_ocs:
-+	of_changeset_destroy(ocs);
-+err_free_ocs:
-+	kfree(ocs);
-+err_put_node:
-+	of_node_put(node);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(i2c_of_probe_component);
- #endif /* CONFIG_OF_DYNAMIC */
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 0dae9db27538..75fbbd5a4b15 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -997,6 +997,10 @@ const struct of_device_id
- int of_i2c_get_board_info(struct device *dev, struct device_node *node,
- 			  struct i2c_board_info *info);
- 
-+#if IS_ENABLED(CONFIG_OF_DYNAMIC)
-+int i2c_of_probe_component(struct device *dev, const char *type);
-+#endif
++err:
++	platform_driver_unregister(&chromeos_of_hw_prober_driver);
 +
- #else
- 
- static inline struct i2c_client *of_find_i2c_device_by_node(struct device_node *node)
++	return PTR_ERR(pdev);
++}
++device_initcall(chromeos_of_hw_prober_driver_init);
 -- 
 2.43.0.rc1.413.gea7ed67945-goog
 
