@@ -1,125 +1,137 @@
-Return-Path: <linux-i2c+bounces-543-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-544-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8167C7FD772
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 14:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D78127FD8B9
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 14:55:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B22881C20F16
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 13:04:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14F8C1C20D9F
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 13:55:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3CF1DFF1;
-	Wed, 29 Nov 2023 13:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98934225D5;
+	Wed, 29 Nov 2023 13:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="vnn1ywX5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WR7SWPcq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B597810E2;
-	Wed, 29 Nov 2023 05:04:38 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3AT8vK3V030958;
-	Wed, 29 Nov 2023 14:04:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	selector1; bh=6AU3mM4W4Dpoj7He082seCwDnAZEhdu+kcbYvk2yFl8=; b=vn
-	n1ywX5H+G/YjKEflyGiG9D5Eq1ZqDVDyHX0Q4+u6lQSRJv9xI9JzT+ti7Ogp0TJD
-	P5krJ8rTIXcTVLd8EYr0KuQS6Lex5FQSwSMqKp7svbQtremZmG+6NzfaDrJMBbUk
-	GIgBq9wGPMFbVCaI2MLOWqsfNM6iyFD2O852zibsPA3nT7e2QPSF1SYeOV+fNnQl
-	gvpt89XjC7TWvTdUQFWZYAsY/mbsmEmvEM3tkD/k8gwWcc23Uxrg15SzSoIImxhj
-	zeQK/bjngqqAYarZ8CBhj0Ou766NpzF3ctpRDpx4ClRxr3QWFYvvGnIecjLX4Rpw
-	gEoaHzAvbX/NFM4OuTIA==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3uk9521ay0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 29 Nov 2023 14:04:28 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4C2EC10002A;
-	Wed, 29 Nov 2023 14:04:27 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CA9B421D387;
-	Wed, 29 Nov 2023 14:04:27 +0100 (CET)
-Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 29 Nov
- 2023 14:04:27 +0100
-From: Alain Volmat <alain.volmat@foss.st.com>
-To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre
- Torgue <alexandre.torgue@foss.st.com>,
-        Pierre-Yves MORDRET
-	<pierre-yves.mordret@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>
-CC: <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 7/7] arm64: dts: st: add i2c2 / i2c8 properties on stm32mp257f-ev1
-Date: Wed, 29 Nov 2023 13:59:16 +0100
-Message-ID: <20231129125920.1702497-8-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231129125920.1702497-1-alain.volmat@foss.st.com>
-References: <20231129125920.1702497-1-alain.volmat@foss.st.com>
+X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Nov 2023 05:55:04 PST
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2098F;
+	Wed, 29 Nov 2023 05:55:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701266105; x=1732802105;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7125ARMLtQIJtXfuOMwEC7WJB+aSFeYK25LGSUB5H+U=;
+  b=WR7SWPcqYQ5ISzJfOme7gtcLOi3s/smGl6WbcJPz7nRqdTyAkRtmhnvm
+   t4WDrem8GcSI1hgghg7msby9WNqynpkt+Zg/XyLnYScjbLJd+mjMndoO0
+   e3D/RTXuX05HJ+E6VIvaTgUCGTFPv+PhkqR+JhCoSZ5k/iheHanqLE49X
+   zdQ0MZmKjevFWyaQOD/4HfQbthx0niLYLkH+AEaLnCCU4Me/jYjo93WBp
+   QcsDFk+ISSKuBAAth6YTrT+Li3M/0wbojR3axjaUkdIJu2QQNryVQE4OG
+   NYfHntuR0Av1zJm+1ynG7RUuo4J/Wt46Z59/SHe9X7ENTZl8E3qKMQ/2g
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="63866"
+X-IronPort-AV: E=Sophos;i="6.04,235,1695711600"; 
+   d="scan'208";a="63866"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 05:54:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="886866508"
+X-IronPort-AV: E=Sophos;i="6.04,235,1695711600"; 
+   d="scan'208";a="886866508"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 05:54:00 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1r8L0n-00000000SC8-1Dt4;
+	Wed, 29 Nov 2023 15:53:57 +0200
+Date: Wed, 29 Nov 2023 15:53:56 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Lukas Wunner <lukas@wunner.de>
+Cc: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Keith Busch <kbusch@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+	Jean Delvare <jdelvare@suse.de>,
+	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [bug report] lockdep WARN at PCI device rescan
+Message-ID: <ZWdCdMtLjZS2mDTQ@smile.fi.intel.com>
+References: <ea31480f-2887-41fe-a560-f4bb1103479e@gmail.com>
+ <ZVNiUuyHaez8rwL-@smile.fi.intel.com>
+ <20231114155701.GA27547@wunner.de>
+ <ZVOcPOlkkBk3Xfm5@smile.fi.intel.com>
+ <ZVO1M2289uvElgOi@smile.fi.intel.com>
+ <eaawoi5jqrwnzq3scgltqxj47faywztn4lbpkz4haugxvgu5df@koy3qciquklu>
+ <ZWC_0eG2UBMKAD3C@smile.fi.intel.com>
+ <2vzf5sj76j3p747dfbhnusu5daxzog25io4s7d5uvzvtghvo24@567tghzifylu>
+ <20231129111739.GA14152@wunner.de>
+ <ZWdBnMTOq9wIt9L-@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-29_09,2023-11-29_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZWdBnMTOq9wIt9L-@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Add properties for i2c2 and i2c8 available on the stm32mp257f-ev1.
-i2c2 is enabled since several devices are attached to it while
-i2c8 is kept disabled since only used via the gpio expansion connector.
+On Wed, Nov 29, 2023 at 03:50:21PM +0200, Andy Shevchenko wrote:
+> On Wed, Nov 29, 2023 at 12:17:39PM +0100, Lukas Wunner wrote:
+> > On Tue, Nov 28, 2023 at 07:45:06AM +0000, Shinichiro Kawasaki wrote:
+> > > On Nov 24, 2023 / 17:22, Andy Shevchenko wrote:
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
----
- arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+...
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index b2d3afb15758..0ea8e69bfb3d 100644
---- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-+++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -55,6 +55,26 @@ &arm_wdt {
- 	status = "okay";
- };
- 
-+&i2c2 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&i2c2_pins_a>;
-+	pinctrl-1 = <&i2c2_sleep_pins_a>;
-+	i2c-scl-rising-time-ns = <100>;
-+	i2c-scl-falling-time-ns = <13>;
-+	clock-frequency = <400000>;
-+	status = "okay";
-+};
-+
-+&i2c8 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&i2c8_pins_a>;
-+	pinctrl-1 = <&i2c8_sleep_pins_a>;
-+	i2c-scl-rising-time-ns = <57>;
-+	i2c-scl-falling-time-ns = <7>;
-+	clock-frequency = <400000>;
-+	status = "disabled";
-+};
-+
- &sdmmc1 {
- 	pinctrl-names = "default", "opendrain", "sleep";
- 	pinctrl-0 = <&sdmmc1_b4_pins_a>;
+> > > > Another possible solution I was thinking about is to have a local cache,
+> > > > so, make p2sb.c to be called just after PCI enumeration at boot time
+> > > > to cache the P2SB device's bar, and then cache the bar based on the device
+> > > > in question at the first call. Yet it may not remove all theoretical /
+> > > > possible scenarios with dead lock (taking into account hotpluggable
+> > > > devices), but won't fail the i801 driver in the above use case IIUC.
+> > > 
+> > > Thanks for the idea. I created an experimental patch below (it does not guard
+> > > list nor free the list elements, so it is incomplete). I confirmed that this
+> > > patch avoids the deadlock. So your idea looks working. I still observe the
+> > > deadlock WARN, but it looks better than the hang by the deadlock.
+> > 
+> > Your patch uses a list to store a multitude of struct resource.
+> > Is that actually necessary?  I thought there can only be a single
+> > P2SB device in the system?
+> > 
+> > > Having said that, Heiner says in another mail that "A solution has to support
+> > > pci drivers using p2sb_bar() in probe()". This idea does not fulfill it. Hmm.
+> > 
+> > Basically what you need to do is create two initcalls:
+> > 
+> > Add one arch_initcall to unhide the P2SB device.
+> > 
+> > The P2SB subsequently gets enumerated by the PCI core in a subsys_initcall.
+> > 
+> > Then add an fs_initcall which extracts and stashes the struct resource,
+> > hides the P2SB device and destroys the corresponding pci_dev.
+> > 
+> > Then you don't need to acquire any locks at runtime, just retrieve the
+> > stashed struct resource.
+> > 
+> > This approach will result in the P2SB device briefly being enumerated
+> > and a driver could in theory bind to it.  Andy, is this a problem?
+> > I'm not seeing any drivers in the tree which bind to 8086/c5c5.
+> 
+> At least one problem just out of my head. The P2SB on many system is PCI
+> function 0. Unhiding the P2SB unhides all functions on that device, and
+> we have use cases for those (that's why we have two first parameters to
+> p2sb_bar() in case we want non-default device to be looked at).
+
+For the clarity this is true for ATOM_GOLDMONT (see p2sb_cpu_ids array).
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
 
