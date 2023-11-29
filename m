@@ -1,127 +1,102 @@
-Return-Path: <linux-i2c+bounces-533-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-534-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 883387FD1DC
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 10:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 07F557FD55B
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 12:17:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A515B21289
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 09:14:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59B13B2120C
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 11:17:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E5312B94;
-	Wed, 29 Nov 2023 09:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="MrKQXUGI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D673E1C697;
+	Wed, 29 Nov 2023 11:17:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD5C85
-	for <linux-i2c@vger.kernel.org>; Wed, 29 Nov 2023 01:14:03 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id a1e0cc1a2514c-7c4602ad8baso1639343241.3
-        for <linux-i2c@vger.kernel.org>; Wed, 29 Nov 2023 01:14:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1701249242; x=1701854042; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jIMu2gy1DtmikoCfchTvOV2bl6nFUJDXNkFi9sSRetA=;
-        b=MrKQXUGIAd0d43mL8cEZleQQ8pxkN5xA2l3zKmPjGDnyo14XmMQR/sjBh4JQQPhWaN
-         mNYWSBNiDNivgmLGU5eBHjWpdRJiRHf7w12f2Hx/lVkV/NlZVYcitNqdAx52U+X/M6O3
-         j2uo7TCl7VknZbmtoop7U2NqmMZbcbStpk3DrrqtiKEkJnUx4Ol57vXzlkPbCRB1NXis
-         BLOUcHaBtTh5XNwKrYzMzspmq7ZuPsH/CXE0Ly8D4YpAdIHk2Xx4KHrVGzYoiTfdbRK0
-         1IwU9nfo6QiXlhrnoFRs7JEVMHDmWLjlyxUNVV7N9ny4WUHxDKFXedX7bNKC/40zo/B4
-         NAvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701249242; x=1701854042;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jIMu2gy1DtmikoCfchTvOV2bl6nFUJDXNkFi9sSRetA=;
-        b=Irz3m/75Xc7crGcioLWrpyrkL8JaYna3qIx6+rVpHtQPTgScodvnR2/rzsqPRlpzss
-         wBEbrTFxXQLDYngnlfl4NwlCUvHZB/V6rZ8kkjpoWFSUK1SJpvoQ5ehrxLScEEfeouBS
-         V22gFaUors8w6o1tggb5wnph2g8lI0f5YO9J8eftb0yMS9SikPdexyUm2hhWH1oiMkhB
-         rVhF/AyijoJzbHLIpMQiqNFyMhvPJhQmo2B68x6dXOm9pkq2j7LZiWLZRsI1GfTyDz+U
-         k874M7w6g2KWe/jsYzUreazMwqwwGlh2xDLZ/HO3zMU9ns/yGAKgM7JMT7jTdzBE3mFl
-         NMCg==
-X-Gm-Message-State: AOJu0YxSFY9/tw7SUw/4NgFU59JVefJNbfIZ8KKp4zJWjIDL1iQqa0HV
-	56DYRHwSBkaTt5X6C23s11klc7eUHO8xOrgJaieHmw==
-X-Google-Smtp-Source: AGHT+IEWQpF7n/VRP1a03EcSHWgG73bdr7xdU+s/MO65we+YnMT5ycq1KQh5qPJsyWEwKH36YfJn9Sonu9Jdzoxuaok=
-X-Received: by 2002:a67:e3ce:0:b0:462:a044:aee0 with SMTP id
- k14-20020a67e3ce000000b00462a044aee0mr16831554vsm.15.1701249242319; Wed, 29
- Nov 2023 01:14:02 -0800 (PST)
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1F42106
+	for <linux-i2c@vger.kernel.org>; Wed, 29 Nov 2023 03:17:46 -0800 (PST)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id C2324100D9414;
+	Wed, 29 Nov 2023 12:17:39 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 8859AE45B; Wed, 29 Nov 2023 12:17:39 +0100 (CET)
+Date: Wed, 29 Nov 2023 12:17:39 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Keith Busch <kbusch@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+	Jean Delvare <jdelvare@suse.de>,
+	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [bug report] lockdep WARN at PCI device rescan
+Message-ID: <20231129111739.GA14152@wunner.de>
+References: <6xb24fjmptxxn5js2fjrrddjae6twex5bjaftwqsuawuqqqydx@7cl3uik5ef6j>
+ <ZVNJCxh5vgj22SfQ@shikoro>
+ <ea31480f-2887-41fe-a560-f4bb1103479e@gmail.com>
+ <ZVNiUuyHaez8rwL-@smile.fi.intel.com>
+ <20231114155701.GA27547@wunner.de>
+ <ZVOcPOlkkBk3Xfm5@smile.fi.intel.com>
+ <ZVO1M2289uvElgOi@smile.fi.intel.com>
+ <eaawoi5jqrwnzq3scgltqxj47faywztn4lbpkz4haugxvgu5df@koy3qciquklu>
+ <ZWC_0eG2UBMKAD3C@smile.fi.intel.com>
+ <2vzf5sj76j3p747dfbhnusu5daxzog25io4s7d5uvzvtghvo24@567tghzifylu>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231123103032.11396-1-brgl@bgdev.pl>
-In-Reply-To: <20231123103032.11396-1-brgl@bgdev.pl>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 29 Nov 2023 10:13:51 +0100
-Message-ID: <CAMRc=McTQEcwS6JqRsVoZjPYB=KLCjDW7vqjnvL6np8hSfJP+Q@mail.gmail.com>
-Subject: Re: [PATCH v2] eeprom: at24: use of_match_ptr()
-To: Wolfram Sang <wsa@the-dreams.de>, Peter Rosin <peda@axentia.se>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2vzf5sj76j3p747dfbhnusu5daxzog25io4s7d5uvzvtghvo24@567tghzifylu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Nov 23, 2023 at 11:30=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl=
-> wrote:
->
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> This driver does not depend on CONFIG_OF so using of_match_ptr() makes
-> sense to reduce the size a bit.
->
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
-> v1 -> v2:
-> - use __maybe_unused to avoid warnings about at24_of_match not being used
->
->  drivers/misc/eeprom/at24.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-> index f61a80597a22..8279adade07e 100644
-> --- a/drivers/misc/eeprom/at24.c
-> +++ b/drivers/misc/eeprom/at24.c
-> @@ -18,6 +18,7 @@
->  #include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/nvmem-provider.h>
-> +#include <linux/of.h>
->  #include <linux/of_device.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/property.h>
-> @@ -242,7 +243,7 @@ static const struct i2c_device_id at24_ids[] =3D {
->  };
->  MODULE_DEVICE_TABLE(i2c, at24_ids);
->
-> -static const struct of_device_id at24_of_match[] =3D {
-> +static const struct of_device_id __maybe_unused at24_of_match[] =3D {
->         { .compatible =3D "atmel,24c00",          .data =3D &at24_data_24=
-c00 },
->         { .compatible =3D "atmel,24c01",          .data =3D &at24_data_24=
-c01 },
->         { .compatible =3D "atmel,24cs01",         .data =3D &at24_data_24=
-cs01 },
-> @@ -812,7 +813,7 @@ static struct i2c_driver at24_driver =3D {
->         .driver =3D {
->                 .name =3D "at24",
->                 .pm =3D &at24_pm_ops,
-> -               .of_match_table =3D at24_of_match,
-> +               .of_match_table =3D of_match_ptr(at24_of_match),
->                 .acpi_match_table =3D ACPI_PTR(at24_acpi_ids),
->         },
->         .probe =3D at24_probe,
-> --
-> 2.40.1
->
+On Tue, Nov 28, 2023 at 07:45:06AM +0000, Shinichiro Kawasaki wrote:
+> On Nov 24, 2023 / 17:22, Andy Shevchenko wrote:
+> > Another possible solution I was thinking about is to have a local cache,
+> > so, make p2sb.c to be called just after PCI enumeration at boot time
+> > to cache the P2SB device's bar, and then cache the bar based on the device
+> > in question at the first call. Yet it may not remove all theoretical /
+> > possible scenarios with dead lock (taking into account hotpluggable
+> > devices), but won't fail the i801 driver in the above use case IIUC.
+> 
+> Thanks for the idea. I created an experimental patch below (it does not guard
+> list nor free the list elements, so it is incomplete). I confirmed that this
+> patch avoids the deadlock. So your idea looks working. I still observe the
+> deadlock WARN, but it looks better than the hang by the deadlock.
 
-Patch applied.
+Your patch uses a list to store a multitude of struct resource.
+Is that actually necessary?  I thought there can only be a single
+P2SB device in the system?
 
-Bart
+> Having said that, Heiner says in another mail that "A solution has to support
+> pci drivers using p2sb_bar() in probe()". This idea does not fulfill it. Hmm.
+
+Basically what you need to do is create two initcalls:
+
+Add one arch_initcall to unhide the P2SB device.
+
+The P2SB subsequently gets enumerated by the PCI core in a subsys_initcall.
+
+Then add an fs_initcall which extracts and stashes the struct resource,
+hides the P2SB device and destroys the corresponding pci_dev.
+
+Then you don't need to acquire any locks at runtime, just retrieve the
+stashed struct resource.
+
+This approach will result in the P2SB device briefly being enumerated
+and a driver could in theory bind to it.  Andy, is this a problem?
+I'm not seeing any drivers in the tree which bind to 8086/c5c5.
+
+Thanks,
+
+Lukas
 
