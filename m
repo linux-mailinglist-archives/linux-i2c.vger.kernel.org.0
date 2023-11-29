@@ -1,153 +1,93 @@
-Return-Path: <linux-i2c+bounces-545-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-546-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 673C97FD934
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 15:23:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB07B7FDD8E
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 17:47:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22029283035
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 14:23:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC6F31C209A8
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 16:47:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 273AB3065E;
-	Wed, 29 Nov 2023 14:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60CEC38FA4;
+	Wed, 29 Nov 2023 16:47:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L80lP7/D"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WLP04NEX"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D521D30340;
-	Wed, 29 Nov 2023 14:23:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE4E8C433C8;
-	Wed, 29 Nov 2023 14:23:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701267817;
-	bh=uEINnHilNNToAZ1GUBzJz7tVwPdn3y3/jPZhz8a3h3A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L80lP7/DmFjx490yhyox7mwpHFUwjNzTYtOjS2so9TvD4ri5AnHVF3lE0FbCWeVpX
-	 riTz70eyypHC9pvz2VTcNGuSaKjNgAqPV7b3nhobMqbe0tc860r0tI2NrIyRUgjnO9
-	 DRK5oFj7Dd+jtzQMWsgBgs43xVCPA9l0odYE6PX2f7Wb5hkQcIzM3S7kpImE/bopUX
-	 QojwpElox1iuTbWfjDCPqion/nebzRC1EJX3PkPK1Z9M0Pz7gAHMbHNfiqvMB8vPHx
-	 8e6Lflr9nevBFjB3KuP7Pd9w+VzqAjCBvfOIaRJTMliS3wJpDx5136pJRNTHh7CUxF
-	 W2+7eVJkjqL8w==
-Date: Wed, 29 Nov 2023 14:23:32 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Alain Volmat <alain.volmat@foss.st.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/7] dt-bindings: i2c: document st,stm32mp25-i2c
- compatible
-Message-ID: <20231129-haste-emperor-3a8ba335b267@spud>
-References: <20231129125920.1702497-1-alain.volmat@foss.st.com>
- <20231129125920.1702497-4-alain.volmat@foss.st.com>
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA90190;
+	Wed, 29 Nov 2023 08:47:25 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5F84BFF813;
+	Wed, 29 Nov 2023 16:47:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1701276444;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VkefkReIWzyqiZJSPhEnTXAmzyUb/Ar5C+Xf+28fWzA=;
+	b=WLP04NEXoF/EPNmxNPgwLICEHOen2oXanUWKsWRA1iZ/LZ+Qlo2awceFETEXMG1y8IfaUy
+	3tTEMg09JL03ejZwL+eEGrpRQ1gyuQzVpW/ZUmxXeIaIKfdLQu/iYafXA0x9a1muGB2ALN
+	h/9O6HydnjVKJS9HwOX/87S7q9ZBkgj08miJRdUhTqNiTiIaDoRjOWjCDgJXhKrY/l4x3s
+	v8OZKcQP66DmMgpFcaH53QUTu8q3+Ilso0ECJ2fgkKANdrAbIBc0uExmedh6m8fwDfVX9l
+	DIzGskzZEn5oMiHPHwEoadfjGwTHhNqey+gjV0KATl+6GmOvQXATEBcw4UWeZg==
+Date: Wed, 29 Nov 2023 17:47:22 +0100
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Marco Felsch <m.felsch@pengutronix.de>, richard@nod.at, vigneshr@ti.com,
+ arnd@arndb.de, gregkh@linuxfoundation.org, linux-i2c@vger.kernel.org,
+ linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+ kernel@pengutronix.de
+Subject: Re: [RFC PATCH] mtd: devices: add AT24 eeprom support
+Message-ID: <20231129174722.7d4e768c@xps-13>
+In-Reply-To: <CAMRc=MdsEWxJLHL__zYXGEMYvvLSH99GsTRv_NTaVXt2fGtNvg@mail.gmail.com>
+References: <20231127164623.1008176-1-m.felsch@pengutronix.de>
+	<CAMRc=MdsEWxJLHL__zYXGEMYvvLSH99GsTRv_NTaVXt2fGtNvg@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="zQpTz0PrtyWzX5co"
-Content-Disposition: inline
-In-Reply-To: <20231129125920.1702497-4-alain.volmat@foss.st.com>
-
-
---zQpTz0PrtyWzX5co
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Wed, Nov 29, 2023 at 01:59:12PM +0100, Alain Volmat wrote:
-> Add a new compatible st,stm32mp25-i2c for the STM32MP25 series which
-> has only one interrupt line for both events and errors and differs in
-> term of handling of FastModePlus.
+Hello,
+
+brgl@bgdev.pl wrote on Wed, 29 Nov 2023 10:10:28 +0100:
+
+> On Mon, Nov 27, 2023 at 5:46=E2=80=AFPM Marco Felsch <m.felsch@pengutroni=
+x.de> wrote:
+> > =20
 >=20
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> ---
->  .../devicetree/bindings/i2c/st,stm32-i2c.yaml | 49 +++++++++++++++----
->  1 file changed, 39 insertions(+), 10 deletions(-)
+> [snip]
 >=20
-> diff --git a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml b/Do=
-cumentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> index 94b75d9f66cd..6a69bb6de23e 100644
-> --- a/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml
-> @@ -19,6 +19,7 @@ allOf:
->                - st,stm32f7-i2c
->                - st,stm32mp13-i2c
->                - st,stm32mp15-i2c
-> +              - st,stm32mp25-i2c
->      then:
->        properties:
->          i2c-scl-rising-time-ns:
-> @@ -41,6 +42,43 @@ allOf:
->          clock-frequency:
->            enum: [100000, 400000]
-> =20
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - st,stm32f4-i2c
-> +              - st,stm32f7-i2c
-> +              - st,stm32mp13-i2c
-> +              - st,stm32mp15-i2c
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          items:
-> +            - description: interrupt ID for I2C event
-> +            - description: interrupt ID for I2C error
-> +
-> +        interrupt-names:
-> +          items:
-> +            - const: event
-> +            - const: error
-> +
+> >
+> > I dropped the backward compatibility since this is a new driver not
+> > having to deal with it. The old and the new driver can not be used by
+> > the same kernel config. So it is either using the MTD eeprom driver
+> > supporting partitioning and NVMEM or the older one which does not
+> > support partitioning but keeps the backward compatibility.
+> >
+> > Comments and suggestions are very welcome :) =20
+>=20
+> I skimmed through the code. Nothing obviously wrong. What I would
+> suggest - if we're going to have two at24 drivers - is a lot more code
+> reuse. I dislike the idea of having basically the same code in two
+> places in the kernel and having to fix bugs in both.
 
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - st,stm32mp25-i2c
-> +    then:
+Agreed.
 
-Should this not just be "else:"?
+> Though if I'm being honest - I would prefer a single driver with
+> backwards compatibility. Have you estimated the effort it would take
+> to abstract both nvmem and mtd?
 
-> +      properties:
-> +        interrupts:
-> +          items:
-> +            - description: common interrupt for events and errors
-> +
-> +        interrupt-names:
-> +          items:
-> +            - const: event
-> +
+Also agreed :-)
 
-Cheers,
-Conor.
-
---zQpTz0PrtyWzX5co
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZWdJYAAKCRB4tDGHoIJi
-0g/dAQD+vb0YxP+0kOTPgO9Ix2HQBWIP8nOO1XqZgVw+O7daxQD9HemclzlDL37e
-tMu44zbX0HySlWbw3cPX0YDONRIM3Q8=
-=2fR5
------END PGP SIGNATURE-----
-
---zQpTz0PrtyWzX5co--
+Thanks,
+Miqu=C3=A8l
 
