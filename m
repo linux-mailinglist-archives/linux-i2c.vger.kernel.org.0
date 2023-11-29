@@ -1,65 +1,66 @@
-Return-Path: <linux-i2c+bounces-526-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-527-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61E507FD08C
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 09:20:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9458B7FD0A0
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 09:24:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 918941C20A4B
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 08:20:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C63991C20961
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 Nov 2023 08:24:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAE8811CA8;
-	Wed, 29 Nov 2023 08:20:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5565711C91;
+	Wed, 29 Nov 2023 08:23:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fHBgrL2r"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hjdvXDGD"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F021735
-	for <linux-i2c@vger.kernel.org>; Wed, 29 Nov 2023 00:20:21 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-50bbef0e5d5so1879887e87.1
-        for <linux-i2c@vger.kernel.org>; Wed, 29 Nov 2023 00:20:21 -0800 (PST)
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B11819B0
+	for <linux-i2c@vger.kernel.org>; Wed, 29 Nov 2023 00:23:54 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-50bc39dcbcbso896194e87.1
+        for <linux-i2c@vger.kernel.org>; Wed, 29 Nov 2023 00:23:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1701246020; x=1701850820; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1701246232; x=1701851032; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kGQdzNcCy7JJPTMsdtSjV4HF9Py88/78L/fuExW3uc0=;
-        b=fHBgrL2riGo55WbAksoZkVDiTWuj64ymcaDVZEYbKimH7b75b+TcrCLAUZVc8P6Tur
-         XzTDsgbVXTw+v2DIIKtL9MhTQJyBHpzEPAjKujGhexmmne3GkaUWZCyFMQzLJv5w+K36
-         /ivVlPj5EUedeP/VaCWaJaStr7m/TeG8rfs3M=
+        bh=k7+haveSoq7m2f2Pj8HBweyY+n64mswSOvsdXSe1aV8=;
+        b=hjdvXDGDD08RCKyP1WgixBq2jpGt75z1x6E/hpnjKvO7mKkV9cul30JkBYKnQ8FVV3
+         rL9BZ0tLuidlItrJOCVz+4pzpl7A9pD0LR0NcsdWdJlcMg9fYT+1y52vF+S345lXc8Da
+         Gxql1X2l8GdOWSv/ZL9gGe2uMW7kc2aPHmfko=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701246020; x=1701850820;
+        d=1e100.net; s=20230601; t=1701246232; x=1701851032;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kGQdzNcCy7JJPTMsdtSjV4HF9Py88/78L/fuExW3uc0=;
-        b=Oq35G/SeGqJ91C8YDIAuPFSreLGXqpZUjN05U02sK3ebvna8l5xbUmoWgVhvAZIE8H
-         SvlpZFbtv1JT6GdsXcdw0PMF8doVt4T323ILheCfWqtGbiT9jvFLXYn+ttXNq1hUbmsq
-         3N1gCkDD4ckATKHYOrW7vVBiNpywwYQwggkndoxHMpnPT6ZxYQFEtRWrxIjpPA+w4BMb
-         hTI9ulZw9KYgMzRyHkQovyMdKSNQdzIIYu2JEHyKkIhCJKUpG44AXtDkAYEOtZAFo0sX
-         hHPa+JP6ZSKUcS3J9SOIrNk5EKzwG6o1NiZCKL1umG8HOtv7KCjshJF0jRr1FvWKIIdm
-         YKcA==
-X-Gm-Message-State: AOJu0YxV6S/gg8CQS9YU4VhAfenP+imC1nBPf1ZY/4jQ34Qg/TdmG6UG
-	ReGlql4acSx52OjzWOSRscu2MeHhrDlGgt6rafsDJA==
-X-Google-Smtp-Source: AGHT+IEh1TZm31uTy9yl8JaoDy75uNislLbWP0HEQgS4BWTnpP4KSfrLHeULqt0bxB2I0d2oNC/cmwQl0Wsw43+9ohk=
-X-Received: by 2002:a05:6512:10d6:b0:50b:c501:72d with SMTP id
- k22-20020a05651210d600b0050bc501072dmr923175lfg.61.1701246019908; Wed, 29 Nov
- 2023 00:20:19 -0800 (PST)
+        bh=k7+haveSoq7m2f2Pj8HBweyY+n64mswSOvsdXSe1aV8=;
+        b=VP3ZXNSN1YfME8+2jfjiHafWy9xXiqmBz2SQrB1ubVkEoN0BsHHxCN2fAFxxfW0RHH
+         L48qehuGRoSUqk30QAnBvMuStfY/Rhde3vY5Dfbe3p4uVk4sSwI7JZqWoMSeAD+WqMF9
+         53o2mjsm/ooFdm6RgJAfwXkhkRk+xSPgvn0l/0rDDjL8Dw2HutUVNakYeLTPGW0spf2o
+         AZZuSNmVztsc11xJizBTBTmRCUxELSg8B8Ro78ytC8dRK5Msm0U3OhCuTT785/dUvncs
+         al/qwTHho2jUU/l3FPZoyEbHgITVZkiHvGU9AKOruQ4p1QLsW3CrN1eHOZHXGs5uBc9T
+         J9xg==
+X-Gm-Message-State: AOJu0YyleO4/l8GZlIyh6dTF/wzc00WOrhuJlyJOuz/SCV2aF44ycrJl
+	gr7AGzKu4WZ7koJL/mTAtYgnXvTSeIJJIabXPedPcw==
+X-Google-Smtp-Source: AGHT+IEtWhB/1EU4Pgqrnwxww3bANfSl0NJ1NAjrSVHkHzZ34kpFTEDs7eij5sHcmcrKNah8R2KVsBjvlDihDkrrAjY=
+X-Received: by 2002:a05:6512:3081:b0:507:a1dd:5a86 with SMTP id
+ z1-20020a056512308100b00507a1dd5a86mr12720343lfd.13.1701246232561; Wed, 29
+ Nov 2023 00:23:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231128084236.157152-1-wenst@chromium.org> <20231128084236.157152-3-wenst@chromium.org>
- <ZWYTzGGToEmSu-Yh@smile.fi.intel.com>
-In-Reply-To: <ZWYTzGGToEmSu-Yh@smile.fi.intel.com>
+References: <20231128084236.157152-1-wenst@chromium.org> <20231128084236.157152-4-wenst@chromium.org>
+ <ZWYUi3Q5ptQXR0uQ@smile.fi.intel.com>
+In-Reply-To: <ZWYUi3Q5ptQXR0uQ@smile.fi.intel.com>
 From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Wed, 29 Nov 2023 16:20:08 +0800
-Message-ID: <CAGXv+5EBBtbpDA8scVBFysYrk6s8JUd_-JcqbX3oubO60Uc_ZA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 2/5] i2c: of: Introduce component probe function
+Date: Wed, 29 Nov 2023 16:23:41 +0800
+Message-ID: <CAGXv+5EG4wO2sD0f_j1VDTkOcyN46oyfTYs3nf7cP7xFPg1fYQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 3/5] platform/chrome: Introduce device tree
+ hardware prober
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Rob Herring <robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
@@ -78,10 +79,10 @@ Cc: Rob Herring <robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 29, 2023 at 12:22=E2=80=AFAM Andy Shevchenko
+On Wed, Nov 29, 2023 at 12:26=E2=80=AFAM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 >
-> On Tue, Nov 28, 2023 at 04:42:31PM +0800, Chen-Yu Tsai wrote:
+> On Tue, Nov 28, 2023 at 04:42:32PM +0800, Chen-Yu Tsai wrote:
 > > Some devices are designed and manufactured with some components having
 > > multiple drop-in replacement options. These components are often
 > > connected to the mainboard via ribbon cables, having the same signals
@@ -110,62 +111,61 @@ n
 > > Lenovo Thinkpad 13S.
 > >
 > > Instead of this delicate dance between drivers and device tree quirks,
-> > this change introduces a simple I2C component probe. function For a
-> > given class of devices on the same I2C bus, it will go through all of
-> > them, doing a simple I2C read transfer and see which one of them respon=
-ds.
+> > this change introduces a simple I2C component prober. For any given
+> > class of devices on the same I2C bus, it will go through all of them,
+> > doing a simple I2C read transfer and see which one of them responds.
 > > It will then enable the device that responds.
 > >
-> > This requires some minor modifications in the existing device tree. The
-> > status for all the device nodes for the component options must be set
-> > to "failed-needs-probe". This makes it clear that some mechanism is
+> > This requires some minor modifications in the existing device tree.
+> > The status for all the device nodes for the component options must be
+> > set to "failed-needs-probe". This makes it clear that some mechanism is
 > > needed to enable one of them, and also prevents the prober and device
 > > drivers running at the same time.
 >
 > ...
 >
-> > +/**
-> > + * i2c_of_probe_component() - probe for devices of "type" on the same =
-i2c bus
-> > + * @dev: &struct device of the caller, only used for dev_* printk mess=
-ages
-> > + * @type: a string to match the device node name prefix to probe for
-> > + *
-> > + * Probe for possible I2C components of the same "type" on the same I2=
-C bus
-> > + * that have their status marked as "fail".
+> > +#include <linux/array_size.h>
+> > +#include <linux/i2c.h>
+> > +#include <linux/of.h>
+> > +#include <linux/platform_device.h>
 >
-> Definitely you haven't run kernel-doc validation.
+> init.h for init calls.
 
-Right. Will add missing parts.
+Added to next version.
 
-> > + */
+> > +static int chromeos_of_hw_prober_probe(struct platform_device *pdev)
+> > +{
+> > +     for (size_t i =3D 0; i < ARRAY_SIZE(hw_prober_platforms); i++)
+> > +             if (of_machine_is_compatible(hw_prober_platforms[i].compa=
+tible)) {
+> > +                     int ret;
 >
-> ...
+> Perhaps
 >
-> > +             return dev_err_probe(dev, -ENODEV, "Could not find %s dev=
-ice node\n", type);
+>                 if (!of_machine_is_compatible(hw_prober_platforms[i].comp=
+atible))
+>                         continue;
 >
-> I haven't noticed clear statement in the description that this API is onl=
-y for
-> the ->probe() stages.
+> ?
 
-Will add that to the Context part of the kernel-doc.
+Works for me. One less level of indentation.
 
-> ...
->
-> > +             if (i2c_smbus_xfer(i2c, addr, 0, I2C_SMBUS_READ, 0, I2C_S=
-MBUS_BYTE, &data) < 0)
-> > +                     continue;
->
-> This will require the device to be powered on. Are you sure it will be al=
-ways
-> the case?
-
-This is left as TODO. The devices I have tie the component power supplies
-to an always on power rail. I guess I could get a trace of the function
-calls to see if things are running as they should. Not sure if that is
-enough?
-
+Thanks
 ChenYu
+
+> > +                     ret =3D hw_prober_platforms[i].prober(&pdev->dev,
+> > +                                                         hw_prober_pla=
+tforms[i].data);
+> > +                     if (ret)
+> > +                             return ret;
+> > +             }
+> > +
+> > +     return 0;
+> > +}
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
