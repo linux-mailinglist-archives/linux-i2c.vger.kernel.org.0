@@ -1,252 +1,305 @@
-Return-Path: <linux-i2c+bounces-561-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-562-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26CBE7FE95D
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Nov 2023 07:53:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 698A47FE9BF
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Nov 2023 08:31:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D34AA2821C0
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 Nov 2023 06:53:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2BA7B20E42
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 Nov 2023 07:31:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118E1171CD;
-	Thu, 30 Nov 2023 06:53:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F4541F939;
+	Thu, 30 Nov 2023 07:31:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="RSSOOOIu"
+	dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com header.b="gmRzovOk";
+	dkim=pass (1024-bit key) header.d=sharedspace.onmicrosoft.com header.i=@sharedspace.onmicrosoft.com header.b="wdmLUlhb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2127.outbound.protection.outlook.com [40.107.212.127])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562A710E5;
-	Wed, 29 Nov 2023 22:53:31 -0800 (PST)
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618BDB9;
+	Wed, 29 Nov 2023 23:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1701329459; x=1732865459;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=vEPkbqyk4vF1TaQTLYfdhkdhdcjF0rp9VqF/cibYEhc=;
+  b=gmRzovOkYgl2OyswlRV3oIKp0Ek8J9KSe7Vjk8h4Hq/Ergc8enOTiQeZ
+   6xXZzMaeKx/uFpA1FiGgcBwVP7XH0Fz4srf/MukBeZIu2EyN4xONjN5dh
+   kC5jjyNxugrHf5sWT3nZejcq4nLOsLuHHT0pCCqZP2p51a1DQiVb+Wgs8
+   N00s6qV2nQupP7Yjk4S3Tycs+EB3XQBH8PGsJdoGyl5g6+K0vCBGP85u0
+   0VQnwW5TnGZD/NOuy4RSBGjiXABaDjyLb3iFvZ/h++ch4B/mvQ+nJeAc/
+   or9QjepyULBV29XDfVcJImV+UksdOO1rzBS6FPLOA2orPvyVG8H7ir68j
+   A==;
+X-CSE-ConnectionGUID: RSwiLQe8Q2Wai9C9n+OqDQ==
+X-CSE-MsgGUID: 2VGY38RZSfCQBLBqnoNpPA==
+X-IronPort-AV: E=Sophos;i="6.04,237,1695657600"; 
+   d="scan'208";a="3793303"
+Received: from mail-co1nam11lp2169.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.169])
+  by ob1.hgst.iphmx.com with ESMTP; 30 Nov 2023 15:30:58 +0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZboDBgDocarYd8kjzoEglGh+qpBrzFvFS0YFZ4I3Tx+oOrHhZVz9hsWsVP24Axq7oNjXnDxn6/Q5Ac1mq0CzPuM3OF8ZC9h+UF2cT0PqBp8yrL71HFPQGJ7xfu1GE3tPQTZMzpYxBXe3Uid6UW2ezP9CbgiK9M6Zcdm/46VAYaHtmvz1EIzDi70JjTma674Cz7WcJTQuxEM3fUQUhY9Ja85hStPzzwKw5IK8sJYt5HZOH7aHHfWbde02yDiBG65IpAe2MtKQ3A0csoNqFkD2r1zIzGKilhsuX/Sf4LxucPInHzQIwuKvXo0YauhtcTIyHnKN59t2ypqfoDPzlwpNuA==
+ b=Vf8JfNZiwxdEoByMtUMsBDg2Nf3u5VVKZac9E0ZOvia7ss2eQKcK2NV2lZiddICYC1DiZkIUSnrOvwUI2AA1r3MxuIj7mO/xZLtOpVz3Us0+hxmJe3qih8suTlzZXeSvNPBj7CW7v0d1OKRJPe11m9YlFrdooUlP6sqVvBNTBpMV16/OFqq/0idqcjaKSFGI5bdSUBHGC+D5Bi8RGSw6QkDEDOwO/EqxE3fc2Ex61xscnH7f7UnZfdIMbE0flvm+DqrZLhYyt6y9Wxo9wNJqMh7zZ2u9Vut6Uj34K+LeBCwnKCJbMX90y9eBBOUIHW+kQYTBPoH9lPTC1LG8WwyIEw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QstX0oUovXITfXSNz2qRU0uKNbgkVM9/YaMS2McO0Tk=;
- b=M8viMY4V0kEbCyh6KZ51FtgLAtFzmT7qSJZUCyKjMfqbvKgUu/ZAWxopfjvQV+Yp5RK/ZJZ7tSY8unQJ/z6ecleutRPmR00oHk+0pmPeQFyhVkRtw1o4f4iNOxCcFRVkEjaoA/kbYV+wROtFj0lX4UsPnSt7ujvsdPVMLrTT/S3r/hmfN2/ApWyxG7eDPCwHIzn/hWNQO6olB853Ts1MRvmoUN7Tfholz3y4FIQCtiR/LiiuBESS65dQZIW4ux69r6YPQKU6uTbSeLfdLMWlWJNHdmIaA8U/m+bdF+WpQZscD1ePY5JxvIBVQqKwG3nDTI0OTji91krZszNmbONfuw==
+ bh=jPDA3bMvYmZoLkd2xbDpjGaOop8GMy+7lMDVFlLeZw8=;
+ b=SdzySgY5IDZLknASW/RXL4HfofiGVgUCjwnXW22Ju72oLM8QRRSebrieX76b2AyrvdzraLrO0WGUnwMGAEXjouwEbbZIsjT56LVUhouvoWoZ0jTcfUV79FtGkEacp60eMc4zXFWDfvvHM+7oC2eFtRsmUJW9FFpClyIgcr66Q7uGp6nnp6CsGckk8jb2bUKV1/EB6mTarOyLzREfUbNu9LE3wrTg0eKH65fKI/LYQu37ZWGuvYWO22uvbGpUWWAsSnWYJbMvTVDiaItR+NunehlmwZ906RKQ7sTFYaQDfVzmRcc1qM8ezT7JKgb65cxSoFB0XVqrhtIvicERwKc+fQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QstX0oUovXITfXSNz2qRU0uKNbgkVM9/YaMS2McO0Tk=;
- b=RSSOOOIuxjqfOPbDRiPpPx04lZy+5P2nbhp7BoPPUzEYZ4AgFfpfOTBE41Id0slslrKGjPEGZdKFeIjRZ9qz4B84YEuwAq/CwFa7JtApa0Yo7p9Zr9CZa9zrt7qS3ndOx/eUqhAr0VZCHtNsuCTr8/fqlerldSN798lBdzQBm10=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11) by
- CH0PR01MB6953.prod.exchangelabs.com (2603:10b6:610:106::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7046.23; Thu, 30 Nov 2023 06:53:28 +0000
-Received: from SN4PR01MB7455.prod.exchangelabs.com
- ([fe80::5682:1d84:171a:1d68]) by SN4PR01MB7455.prod.exchangelabs.com
- ([fe80::5682:1d84:171a:1d68%3]) with mapi id 15.20.7025.022; Thu, 30 Nov 2023
- 06:53:27 +0000
-Message-ID: <9ec9b363-0e70-496e-9083-6382a579a0bf@os.amperecomputing.com>
-Date: Thu, 30 Nov 2023 13:53:22 +0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 RESEND 1/2] i2c: aspeed: Fix unhandled Tx done with NAK
-Content-Language: en-CA
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
- Benjamin Herrenschmidt <benh@kernel.crashing.org>,
- Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>,
- Wolfram Sang <wsa@kernel.org>, Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
- Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
- openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- Cosmo Chou <chou.cosmo@gmail.com>,
- Open Source Submission <patches@amperecomputing.com>,
- Phong Vo <phong@os.amperecomputing.com>,
- "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20231128075236.2724038-1-quan@os.amperecomputing.com>
- <20231128075236.2724038-2-quan@os.amperecomputing.com>
- <20231129003542.jfhhotebweb3uwyb@zenone.zhora.eu>
- <3f37c359-1c71-421f-b7d9-054696735adc@os.amperecomputing.com>
- <20231129212552.3uy7oqm5fz5h2m6b@zenone.zhora.eu>
-From: Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <20231129212552.3uy7oqm5fz5h2m6b@zenone.zhora.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI1PR02CA0049.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::18) To SN4PR01MB7455.prod.exchangelabs.com
- (2603:10b6:806:202::11)
+ bh=jPDA3bMvYmZoLkd2xbDpjGaOop8GMy+7lMDVFlLeZw8=;
+ b=wdmLUlhb8/VF2g24DIZADeNIfvT3nyxhucmIfvCJ6yu/8ykg3x0FccstHF1CNh9Q2BhSEmsXUDLb/dDTqDLM5lSmq2VLrqSSanz5CPurE6iREzxfwa2tV/APLHCIcVd4LriqaGC0jGP+JatVaUWem+TQgOhpnT3zXrzM+xwPFew=
+Received: from BN0PR04MB8048.namprd04.prod.outlook.com (2603:10b6:408:15f::17)
+ by MW6PR04MB8820.namprd04.prod.outlook.com (2603:10b6:303:244::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.23; Thu, 30 Nov
+ 2023 07:30:56 +0000
+Received: from BN0PR04MB8048.namprd04.prod.outlook.com
+ ([fe80::58b4:c149:69dc:1d2d]) by BN0PR04MB8048.namprd04.prod.outlook.com
+ ([fe80::58b4:c149:69dc:1d2d%4]) with mapi id 15.20.7046.024; Thu, 30 Nov 2023
+ 07:30:56 +0000
+From: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: Lukas Wunner <lukas@wunner.de>, Heiner Kallweit <hkallweit1@gmail.com>,
+	Keith Busch <kbusch@kernel.org>, Wolfram Sang <wsa@kernel.org>, Jean Delvare
+	<jdelvare@suse.de>, "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, Bjorn Helgaas
+	<bhelgaas@google.com>
+Subject: Re: [bug report] lockdep WARN at PCI device rescan
+Thread-Topic: [bug report] lockdep WARN at PCI device rescan
+Thread-Index:
+ AQHaFsdpw8Adedg0CUyhPBScx+2k2LB5mcWAgAAIiICAABWaAIAAQPKAgAAEGACAAB3DgIAPP5sAgABMVoCABcllAIABzbqAgAArvHSAASc/gA==
+Date: Thu, 30 Nov 2023 07:30:56 +0000
+Message-ID: <rsrhixediftppmm2n7rzciirdpjnymzsn76lffnd4kzovxaf42@5hddblagaytt>
+References: <ZVNiUuyHaez8rwL-@smile.fi.intel.com>
+ <20231114155701.GA27547@wunner.de> <ZVOcPOlkkBk3Xfm5@smile.fi.intel.com>
+ <ZVO1M2289uvElgOi@smile.fi.intel.com>
+ <eaawoi5jqrwnzq3scgltqxj47faywztn4lbpkz4haugxvgu5df@koy3qciquklu>
+ <ZWC_0eG2UBMKAD3C@smile.fi.intel.com>
+ <2vzf5sj76j3p747dfbhnusu5daxzog25io4s7d5uvzvtghvo24@567tghzifylu>
+ <20231129111739.GA14152@wunner.de> <ZWdBnMTOq9wIt9L-@smile.fi.intel.com>
+ <ZWdCdMtLjZS2mDTQ@smile.fi.intel.com>
+In-Reply-To: <ZWdCdMtLjZS2mDTQ@smile.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN0PR04MB8048:EE_|MW6PR04MB8820:EE_
+x-ms-office365-filtering-correlation-id: 6bb8f52c-b149-49c8-bd38-08dbf1764a91
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ zrSiHyA4VcZEFqhgWQKn+Fj0SlBidXzDemKdPNNWl4et9VPygggIpqT8wExMYOzg9zOh7b1rsZ5Ti+FiD6FAtC9QGUzx2tllinmBxT8k7p/bYC5Qq4GbpEUQk8KjhuEaXRwTi7FEYbuHdz5bX8wKmKKIVmmhH9uy3VnTKxbietc/6frT6UbrrlQG5ibmTLsTfuEnSW3Cowi0uRO40LXu5puHkTF5v6D9uvROCepG7E7lKBjezjG4j1W0Bz8rZ9LEKGnkrgFo7sUBXUJ/hj1RaUbZ3Puf/UDoXkv1DkysscCFVgylJRk2utuQoivQRyFtahj7RxCFgynCwAiVTdOeP+Tmun95WM7Eg8l/A+71H/nCF/nPK42jMBIUe9iPtNJzkiuJvdFPoEuL4QLb1U9oAmMAX1pn/bQ5cYCG7AoH7coIcttkqw4arcI21/CBvqRJXC9Ln/GvOofiHvJ+j+Zy0FafQIEp2gOadf5EsFo/+c1/Zs3yZS6SFIWYAkCTRC4rqBRxpO6st12Gue/FU6skNKmy6XeJthVJuMx3fcP4jZYOEOZ29ohIw+r9RMPheTXsmhArk2O8GhR35k9W3bppzSrVSKFJKRK9vtLiNaPbSxLEzh7b7mjDlsa6jAFmsZ/8YZrb8pUdyFJ3sEI7vlDeH05aFsj5bMfB4L8PjkZGVvA=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR04MB8048.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(366004)(376002)(136003)(346002)(39860400002)(396003)(230922051799003)(451199024)(186009)(1800799012)(64100799003)(83380400001)(6916009)(38070700009)(26005)(66556008)(66476007)(54906003)(66446008)(66946007)(64756008)(2906002)(91956017)(33716001)(5660300002)(8676002)(8936002)(4326008)(86362001)(44832011)(316002)(6506007)(41300700001)(9686003)(76116006)(6512007)(478600001)(6486002)(71200400001)(82960400001)(122000001)(38100700002)(202311291699003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?UBHGepencoSnCtslovmOAHTZivQ0Pxc+C5t5Cb6JQfPvDGeSs8f99y0r00BE?=
+ =?us-ascii?Q?JLWbRlheeN0dmWoHMPFyEiTo6cgLGMcRgc9DcvItjl41XfXhe0HJmJ4b1LxN?=
+ =?us-ascii?Q?bAI1mF/4bcUjktytflshh/4ZCSrhKiz963u1/fMAKLBebednRnPG4lmsfZQd?=
+ =?us-ascii?Q?BEQKEqEE4Wz8c7O2PxOCLb7zJzuwB5HcVWgu4riwzMfuiY8f/XVo4ITcqOE1?=
+ =?us-ascii?Q?U6Sjw41rWB4ElhOZ964fHzcBaYIlg5sLCHKtvXSNOBwG1VGXhChy7hoGtR6M?=
+ =?us-ascii?Q?o7eh3eIa9eQOjtc+QW38SV5kSnOIyMGVa6n5NULQWxGwlJk02u9yVYnpt9Kw?=
+ =?us-ascii?Q?DvyzjwSCWBehIj68QXQcunSDmxHHvLh+IZ8soS1cc6Rfjzuf4jbbdxKgfeYx?=
+ =?us-ascii?Q?UOihqLK9O7UhAfr+jsTEgVxmMi++33oKwvp5Qayokn0dkjVsSvmrQbZFEo/r?=
+ =?us-ascii?Q?2f3QZVWuk19NDR6B/hWSXwJBajzTN59tmifG6Mc90RMqFSHo2HpOjkYLydHE?=
+ =?us-ascii?Q?YyNNRVWaHm5suYnnQz+XukREyJAVjSk50MCwMulriV9OoHQ9EYvu5S2BhMJY?=
+ =?us-ascii?Q?Df8Ew8X64ljTjUXBakHk1BmWcJG6cnQ0McBfjvwACLBGkgomvk/5wkLb0uYq?=
+ =?us-ascii?Q?1DbOwFOILKb90frMslSGry5aonLusd1ZEKXDhWI4XUhxQpQaxRlwO0pNiT8d?=
+ =?us-ascii?Q?ShuhqaxySQ2OJTDNmOmXux/TO+Sjz0L34DuaH/mKfc01yLpHIN8pbv7c2XIA?=
+ =?us-ascii?Q?Hen0vGWEuYihROoTAt2yXpZ1H9aZK5WQTL7uWGkLM5v0ihCgXsZLufTgk5qB?=
+ =?us-ascii?Q?u6Wq4WCJAA7pV5s8L50seWwE63W1NFFAn8jbeTwfj7I7ou8FxTi/mz9tuEw5?=
+ =?us-ascii?Q?dEjUu3PkAMdwb3Eo9qB3g2Z5x+JesLGyxiIERI/PCJoWKkb4Mm5egfX6IBPD?=
+ =?us-ascii?Q?8eTSWSUNSye5S3B2tOjNLvNSSoxYFnLw5nEwQJjWOzQSAHGqf4F1NOC5RN4e?=
+ =?us-ascii?Q?LPUSb5/PIkdNmmutm78e+8Q0U+E97rdgj6MeASqVhMJvphuo1p7YupidxXp3?=
+ =?us-ascii?Q?Gz/9rtor6lva5FYbZwzq9JdOZDzBomaOtGLdlpN20U7xh1LRNGxGqlGkWIpf?=
+ =?us-ascii?Q?GlBpOfdXRu8H6/UjdoAY7fxgY3rlsE4CZqvYUHeJJPbJ32bXb5np6/KCZMKo?=
+ =?us-ascii?Q?pnfozTrf4Dxwos4i6OJwVHU/1DEx5qGnIALm85cGcy2lm9vTPyJQILmiyc7f?=
+ =?us-ascii?Q?PC8HPY57fkn627JPcoeYpFQXjPb+3leBWJ5lIhtTNkqqzYa6dmLawTBOkPKh?=
+ =?us-ascii?Q?mRsWRzbbHMrrjrkxaXyj4Nta8O7Huw/au6PA1cJZj52u82bgcUoA9xFNnQEn?=
+ =?us-ascii?Q?TJkkoitSAg3bjoZrzrOWYo94c14/IkvlpU+RhZWltYncCavsUOgN5aAZQiLJ?=
+ =?us-ascii?Q?gZaea9YysWO6SNEN8r36UL08ItsULVOVxG0CsCYk0sVbNNh/vSCrNnQ+ojid?=
+ =?us-ascii?Q?CcY1f0KD1LeYT6E2JAsC4hxPd+o4PaD0/c97XAYiIHOT+1g96KMtv3ldmHJ0?=
+ =?us-ascii?Q?O5++8KiwztW1qdg0yzlbhgV5OmTDB3ZwajXCoWzeWguny8GfrqLZeQMko7ii?=
+ =?us-ascii?Q?qSeMsIaF9tWJ0O854Tjegd4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <E77A85A8D58E8C4D87A501D028A3FE8E@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4PR01MB7455:EE_|CH0PR01MB6953:EE_
-X-MS-Office365-Filtering-Correlation-Id: 38c66bf3-f305-4516-c85e-08dbf1710e5b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	jjlMxQwTKfhjVk/t6IlWRoV6BPysqrkJ3m+kl82KY3M1QRltfKcZbWSCup0QAgM07DOJGQ0YKBNNaIrkg35MVzckwysDB+SqT8Zamdg8kNrbKSELXmEN3OPuY3A3ogY0Rw3EXhpMJROxSttkkCcpiRh/eWpGiz52i3gvV/jg5DFQrakmUpa939KW7tU3UcPd0nUx/3OUQdormB2W6hZXqbfbeqQS/4yWbs931DoiwdsQP18nxMNYOg0aWAis9rzgqeIHvjnvW1lbKz/6IEkjfxvW/xpQwqueDBtn20kWPFECDnFMJEVhFXsD1s0KxfbYKOEDkPru2OpsB2ueYw/qlqMrEjIXGhmhajLqECXVvrahe8MaEWENRswMc4/Vjv9iHNGRNsG1lUbKHbp2Ull54YYmceykMusCY7ArhsvsXI2A6oBxh7aFfc21F1kgg0G0XLp4IJI9HYth+5SfHd4Wecch05OOFkWvu9CcOTDWmuY6jz5ojNA/nT8tUDuVv89GGk+SD6PgF+V9+L+Yls6t6jDOx9OWIe5JePoYsbeFMVfVPJqjifGzkVIbnvUvV6EbMqYbs8w5aRkiM2OP4iz7JXX20FuUemSfc5Y96Pag+4RXjqSV/qLPoJeJbM4WKDDj+o9KoEGD6UPbx6ghkH5qOA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR01MB7455.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(376002)(346002)(396003)(366004)(136003)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(41300700001)(66946007)(66556008)(66476007)(54906003)(6916009)(31696002)(83380400001)(31686004)(4326008)(38100700002)(8676002)(478600001)(6486002)(966005)(2906002)(7416002)(5660300002)(316002)(8936002)(86362001)(202311291699003)(6666004)(6512007)(53546011)(6506007)(2616005)(107886003)(26005)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S0M2Syt6dmVjMnp2RTY4MjJJM21UZWNiK280cGlHZ0dGK3ZpWDkybUI0UE5u?=
- =?utf-8?B?NzJ1c0MzZmk3TXdUZ1BSQXFRK2UwWndVdFJxVTlNa0xqTzErVFdGdXdXNE1O?=
- =?utf-8?B?T1dBak8wc2xadTAweTBDamRIS1dqWENGYlJrQU1ZZktrUUR3UUdLL3p0dE54?=
- =?utf-8?B?aFhNRlBuWDZsdndRdXdieUxXeGdPdkQvQUdPakg4NldIaUtWbVR5Y1paaTA0?=
- =?utf-8?B?QTVOS1JycDB1OHA1Y2p1T0NnSkNETVZ5d01PWWNNdlpVZlpBdk0wanNwVjR4?=
- =?utf-8?B?citoQngzR21FdmpNMm94Q3BSOWhoL1EyZlhXaWIyWVF4azNyd2tQSHN1enNo?=
- =?utf-8?B?WmZHRjRmSDdTZFlTTFVlWlhqNFl3cmozNU5JQWJZQi9aVzh2ZnNwcXlvdm0r?=
- =?utf-8?B?bDhZOE1DdDd3L0liY2pDQzIvdFUyZ2xJUHlockFuUU5XU3h6ZEVYSEcvV0dZ?=
- =?utf-8?B?Q2JuQm1mSE1MaUtacmNMUXhUZUg5NnhHWFpqOEhJU2pram1FQVp6WGtJRXd2?=
- =?utf-8?B?U244N0NZQWR3Q2VhdVFoWU9TdUtVMnQyc3F4dnBka1h3cGtYNTQ3ZFR2ZnBV?=
- =?utf-8?B?TEM3M3o3UStsd1ZueFpwbmZMZ1VGQkdmdzlpWDFjaDF6cWRINFVFT2gzemhk?=
- =?utf-8?B?M2Rzd0U4Y3NxcC9TblZqQ2lUWWRqVnRLZ2JMQlgvWEE3dFRoM0gyMHZ2MENE?=
- =?utf-8?B?Z0RlbkRXYVBGdXRCTzZPNlo0T0o1OGpmcXN5VmVCNHJNOHJKRHoxYUp5ckth?=
- =?utf-8?B?RXpMcjcvRlJ6TTVsc05mSFQrT0syZVdxNXYvWTNnaEhqODdNUzVqUTdvRTBY?=
- =?utf-8?B?bXNqRElUQWZTY0JRRUdybjJRclNhdEo3TEo4UEZOY21meG85eU1zWlpneWRr?=
- =?utf-8?B?VXBuRFFzdkhTNEpvNy9SL3Nvc1p1bWlhSlU3N1JoaXVLem84K0pUMmtoUFE2?=
- =?utf-8?B?SWxibkZIdURpUzlMY2pRR3R2Q1lZWC9wODhXSGpEZmI5T2FwTWs5Yk0vNnJw?=
- =?utf-8?B?VXBaWXNyU3NrVTY5K2xnRXNnOGo4ckpRYmFSVFZqOG5ERnM0eDVmbmZQWVpE?=
- =?utf-8?B?VGlZbkVJdEM2R0xIYWp3YlFFUm9ZNGRwd0hFaEdaVTZWTlhxZklYbEsxTVd6?=
- =?utf-8?B?TTIrUXI5R3VYeUx5LyswU0F3YWthUElwYzhUZE5vdmRSdDR1WnBGcG5SWlBk?=
- =?utf-8?B?ZE9aUXlNb2hYaVZhakt4TWpCWllYZzk3MUtCQ0hoSHRkVnQ3OVEzVWJSSm53?=
- =?utf-8?B?a3JiTEZOQlVtZFI1dGZSdjA1V01GRE9BNERSZjJrVTVTeG5BTlRLNWo5QUlj?=
- =?utf-8?B?WG5LWERaWHhlTGtnb0pqNE9IVnVxQnZ5TDFJK2ZreGd4TG9DMEEweVRUVGdN?=
- =?utf-8?B?QTdtQnRzT0ROVktLSEIrWURrSC9QWEJOSVpxZFVyOUVnUTVhb1FwOTlPeGpa?=
- =?utf-8?B?QjllZzBsaVhaWVoyTlhvaDBpWW01WXhSZldWVG1nd1M1QndDM01HaEdHZE80?=
- =?utf-8?B?dk5Fb0VHZ1BGWEpOaGpnY3N1a3dYaHIvejZqeFNFV3RFWFcxRk5CYWdYRXFY?=
- =?utf-8?B?enhzWGRNelNETFV3NzhLZXNKOXRLbGFFbXR5NWlDenZFbWpDN2ExbkxjNThY?=
- =?utf-8?B?T0JzcmMwaVpRNWZKeldnQWZlb0R0MzRibjRUSm5ZY2VRSHdzZkswdUpRMkxY?=
- =?utf-8?B?WlZhVjZBVHNWb0VBL3dwQzBrYXpBMUgzaUUva3JlUVJ2NW5Mc0U5ME9QRm11?=
- =?utf-8?B?ZGd1TnBuOHRxMTdHZGZGWFY3WmIvZ3hYN3Z5Z2I4aG9uMHNkTEIvZ0NOYUsv?=
- =?utf-8?B?RmxCbjNDTHRBVmxhaFIwaG0vU0dTbk5vVW8xV0VjOWZsbXlmNTg2TGJKMXdT?=
- =?utf-8?B?ZElFeUg0Ujk3WkxDRHF2dnR1Y2VPRlBsWTZLQjZudlNkQ09meGRzODRNYjhp?=
- =?utf-8?B?TTV4OFFKNjBISjZrTW0xQzJnaDZ2QlU4djdIN2pIN3p6bWxEL240eGpXc0ph?=
- =?utf-8?B?WERieSt3ZnRXeFoxYzUyMXJIQUtFSWxXbWIxVXJKRkJWZmQ5L2E4Smd4UlhT?=
- =?utf-8?B?a1ZXVHQ4dnR0WUpFVzV4ZFVpdkNRYlpJbGZxeGNGSFRQeDRFR3dKdVpDTE5t?=
- =?utf-8?B?RXBkcFQxMEVFYXUwaUhCeTZwVVR3TldpNlpJWmV4Z0FWTWpnVjZjWVpnc08r?=
- =?utf-8?Q?uvf25l+VytdStmCi+dL5ods=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38c66bf3-f305-4516-c85e-08dbf1710e5b
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR01MB7455.prod.exchangelabs.com
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	=?us-ascii?Q?H32kKK1lmk48x9kDtgY+49+cMns42D9wvAkN65CzHDJ17C6M7MkWHL0t1bEE?=
+ =?us-ascii?Q?DAFHIZPWOPpYgAZ7lxLJSoOtM5uEMZQWMMqrYr8ybfa0Qm1z68q5wwLcbyTr?=
+ =?us-ascii?Q?z+osx03H01hAGresOvHU87ezkIJdyGNYFtASsffhr7jugBU4HOO5MjueLpMG?=
+ =?us-ascii?Q?olj2GO2J4YAHyunk2NpYlc6D/KEkB0B8oqK7x5En9Qq/67nF0ySvk/Z+YFxY?=
+ =?us-ascii?Q?etjt07JuZK4WZ4YlmuGJQhgbGeBD97jmYYyd5apkEM+E3q0qzhSIZ7qgHY+k?=
+ =?us-ascii?Q?5DD8YVK7AR+b78AIZslbhosKUlvk0gLYKsQWCmDjKHEqgADwEHuISgctpw9w?=
+ =?us-ascii?Q?fXwBmoZOXUBa3Xh9pUhF7sZA/t3jP/OqrtpSeCOb0lzkoiRLDiLv5p1b87fu?=
+ =?us-ascii?Q?iL22qxXXBCToeXDSXUVzh8XeH2fGES/OHpnqW6ZnZofG4zSR2exJr72HS5Kw?=
+ =?us-ascii?Q?NT3hBCa/sBwzs7cLG82HQhh6oPbKrUBhvBBZB7BOXHxXWgKLev8Dstm8AFZB?=
+ =?us-ascii?Q?VrxZZNpukcIsDcKhCHUWxms93R775WnD1Vb0XJl2L6dNkD7rx4CeqF63cXdE?=
+ =?us-ascii?Q?B2JJt+rbA2u01mqo6ET2eAZWHqgQ2Cr13A68+qseUFmyUCzhso29wlTajHb6?=
+ =?us-ascii?Q?HnVdGlMo2Agk+QMnDp8l/KSHeQFzGHIhnkocVk8fLxgZz150sTpVQ7Sf+sQC?=
+ =?us-ascii?Q?YhaqBxmx4QaV/KRmTWHIPu0cgSiOs0dr0SDXFFOOTtt8F6nth5VWJaNZUZh3?=
+ =?us-ascii?Q?jSEXGgxVtJbXywJp6nJA6R9b7X+fjf7s+XgiiNRYjXwPn7hSYQkrTWiroSvL?=
+ =?us-ascii?Q?2IR3cdA5rTBnUnmgY8Jp4OGthde0BPVblB2yGiG8sT3j4k6rG5jp7qgNG7gk?=
+ =?us-ascii?Q?Ert49pXcJNnIcb3x7B9Yz4goecD4uL9GGOZ/dYE+Lfkcm8AVAsje7Lesxpp9?=
+ =?us-ascii?Q?bzMc3ioGKQ1g2xnih43CJg=3D=3D?=
+X-OriginatorOrg: wdc.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2023 06:53:27.9022
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR04MB8048.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6bb8f52c-b149-49c8-bd38-08dbf1764a91
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2023 07:30:56.1994
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CCpFRDp+ZcgfmPH0Dq914T4AXqdI6Iz+MHhbAEWKGzIc7ZY/cldIampIk1tux/QD/SONwmDKp+qlY1V5TtONkOi0MOTUjFVvyIBZP85jejk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB6953
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xTrux6+Is65HK2nvHzQ7lMmB0XOm6iZb0iS9/sWAe3DkAC+PmO29JpaUFMKN1N49nIAjeBM4WZ7h5azlBmFJAFhMZqyDv0VHiRfpnmdwmhQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR04MB8820
 
+On Nov 29, 2023 / 15:53, Andy Shevchenko wrote:
+> On Wed, Nov 29, 2023 at 03:50:21PM +0200, Andy Shevchenko wrote:
+> > On Wed, Nov 29, 2023 at 12:17:39PM +0100, Lukas Wunner wrote:
+> > > On Tue, Nov 28, 2023 at 07:45:06AM +0000, Shinichiro Kawasaki wrote:
+> > > > On Nov 24, 2023 / 17:22, Andy Shevchenko wrote:
+>=20
+> ...
+>=20
+> > > > > Another possible solution I was thinking about is to have a local=
+ cache,
+> > > > > so, make p2sb.c to be called just after PCI enumeration at boot t=
+ime
+> > > > > to cache the P2SB device's bar, and then cache the bar based on t=
+he device
+> > > > > in question at the first call. Yet it may not remove all theoreti=
+cal /
+> > > > > possible scenarios with dead lock (taking into account hotpluggab=
+le
+> > > > > devices), but won't fail the i801 driver in the above use case II=
+UC.
+> > > >=20
+> > > > Thanks for the idea. I created an experimental patch below (it does=
+ not guard
+> > > > list nor free the list elements, so it is incomplete). I confirmed =
+that this
+> > > > patch avoids the deadlock. So your idea looks working. I still obse=
+rve the
+> > > > deadlock WARN, but it looks better than the hang by the deadlock.
+> > >=20
+> > > Your patch uses a list to store a multitude of struct resource.
+> > > Is that actually necessary?  I thought there can only be a single
+> > > P2SB device in the system?
 
+Yes, the list might be too much. I was not sure what is the expected number=
+ of
+P2SB resources to be cached. I found drivers/mfd/lpc_ich.c calls p2sb_bar()=
+ at
+two places for devfn=3D0 and devfn=3D(13,2), so at least two resources look
+required. Not sure about the future. If two static resources are sufficient=
+, the
+code will be simpler.
 
-On 30/11/2023 04:25, Andi Shyti wrote:
-> Hi Quan,
-> 
->> On 29/11/2023 07:35, Andi Shyti wrote:
->>> Hi Quan,
->>>
->>> On Tue, Nov 28, 2023 at 02:52:35PM +0700, Quan Nguyen wrote:
->>>> Under normal conditions, after the last byte is sent by the Slave, the
->>>> TX_NAK interrupt is raised.  However, it is also observed that
->>>> sometimes the Master issues the next transaction too quickly while the
->>>> Slave IRQ handler is not yet invoked and the TX_NAK interrupt for the
->>>> last byte of the previous READ_PROCESSED state has not been ack’ed.
->>>> This TX_NAK interrupt is then raised together with SLAVE_MATCH interrupt
->>>> and RX_DONE interrupt of the next coming transaction from Master. The
->>>> Slave IRQ handler currently handles the SLAVE_MATCH and RX_DONE, but
->>>> ignores the TX_NAK, causing complaints such as
->>>> "aspeed-i2c-bus 1e78a040.i2c-bus: irq handled != irq. Expected
->>>> 0x00000086, but was 0x00000084"
->>>>
->>>> This commit adds code to handle this case by emitting a SLAVE_STOP event
->>>> for the TX_NAK before processing the RX_DONE for the coming transaction
->>>> from the Master.
->>>>
->>>> Fixes: f9eb91350bb2 ("i2c: aspeed: added slave support for Aspeed I2C driver")
->>>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
->>>> ---
->>>> v2:
->>>>     + Split to separate series [Joel]
->>>>     + Added the Fixes line [Joel]
->>>>     + Revised commit message [Quan]
->>>>
->>>> v1:
->>>>     + First introduced in
->>>> https://lore.kernel.org/all/20210519074934.20712-1-quan@os.amperecomputing.com/
->>>> ---
->>>>    drivers/i2c/busses/i2c-aspeed.c | 5 +++++
->>>>    1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
->>>> index 28e2a5fc4528..79476b46285b 100644
->>>> --- a/drivers/i2c/busses/i2c-aspeed.c
->>>> +++ b/drivers/i2c/busses/i2c-aspeed.c
->>>> @@ -253,6 +253,11 @@ static u32 aspeed_i2c_slave_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
->>>>    	/* Slave was requested, restart state machine. */
->>>>    	if (irq_status & ASPEED_I2CD_INTR_SLAVE_MATCH) {
->>>> +		if (irq_status & ASPEED_I2CD_INTR_TX_NAK &&
->>>> +		    bus->slave_state == ASPEED_I2C_SLAVE_READ_PROCESSED) {
->>>> +			irq_handled |= ASPEED_I2CD_INTR_TX_NAK;
->>>> +			i2c_slave_event(slave, I2C_SLAVE_STOP, &value);
->>>> +		}
->>>
->>> this is a duplicate of a later "if (...)" satement. What is the
->>> need for having them both?
->>>
->> Thanks Andi for the review.
->>
->> I assumed the if statement you mentioned is here in [1]. If so, then that is
->> not duplicate.
->>
->> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/i2c/busses/i2c-aspeed.c?h=v6.7-rc3#n287
->>
->>
->> The if statement is to process the case when Slave sending data to Master
->> but being NAK, the I2C_SLAVE_STOP event will emit later in switch-case
->> statement. But it is only for the case INTR_TX_NAK without INTR_SLAVE_MATCH.
->>
->> The new code is for the case of INTR_TX_NAK with INTR_SLAVE_MATCH. What it
->> does is to detect if there is a mix of INTR_TX_NAK of previous i2c
->> transaction and the start of new i2c transaction, indicate by
->> INTR_SLAVE_MATCH which is only raised when Slave found its address matched
->> on the first byte it received. If so, the new code will try to emit the
->> I2C_SLAVE_STOP first to complete the previous transaction and process the
->> rest as a new request.
->>
->> So if this was the case (with INTR_SLAVE_MATCH), the INTR_RX_DONE should
->> always raise with INTR_SLAVE_MATCH because Slave did receive the data which
->> matched with its Slave address. And this will be translated into either
->> I2C_SLAVE_[READ|WRITE]_REQUESTED and that make the if statement you
->> mentioned [1] evaluate to false and skip.
->>
->> So, in short, the new code is trying to handle the case of INTR_TX_NAK with
->> INTR_SLAVE_MATCH first before let the rest process as normal.
-> 
-> yes, I saw that, but wasn't it easier to do something like this:
-> 
-> 	if (irq_status & ASPEED_I2CD_INTR_TX_NAK &&
-> 	    bus->slave_state == ASPEED_I2C_SLAVE_READ_PROCESSED) {
-> 		irq_handled |= ASPEED_I2CD_INTR_TX_NAK;
-> 		bus->slave_state = ASPEED_I2C_SLAVE_STOP;
-> 
-> 		if (irq_status & ASPEED_I2CD_INTR_SLAVE_MATCH)
-> 			i2c_slave_event(slave, I2C_SLAVE_STOP, &value);
-> 
-> 	}
-> 
-> But I see that Andrew has done some similar comment, also for
-> patch 2. You can answer both in the same mail, not to duplicate
-> the answer :-)
-> 
-> We can wait for him to reply.
-> 
+> > >=20
+> > > > Having said that, Heiner says in another mail that "A solution has =
+to support
+> > > > pci drivers using p2sb_bar() in probe()". This idea does not fulfil=
+l it. Hmm.
+> > >=20
+> > > Basically what you need to do is create two initcalls:
+> > >=20
+> > > Add one arch_initcall to unhide the P2SB device.
+> > >=20
+> > > The P2SB subsequently gets enumerated by the PCI core in a subsys_ini=
+tcall.
+> > >=20
+> > > Then add an fs_initcall which extracts and stashes the struct resourc=
+e,
+> > > hides the P2SB device and destroys the corresponding pci_dev.
+> > >=20
+> > > Then you don't need to acquire any locks at runtime, just retrieve th=
+e
+> > > stashed struct resource.
+> > >=20
+> > > This approach will result in the P2SB device briefly being enumerated
+> > > and a driver could in theory bind to it.  Andy, is this a problem?
+> > > I'm not seeing any drivers in the tree which bind to 8086/c5c5.
+> >=20
+> > At least one problem just out of my head. The P2SB on many system is PC=
+I
+> > function 0. Unhiding the P2SB unhides all functions on that device, and
+> > we have use cases for those (that's why we have two first parameters to
+> > p2sb_bar() in case we want non-default device to be looked at).
+>=20
+> For the clarity this is true for ATOM_GOLDMONT (see p2sb_cpu_ids array).
 
-I think Andrew's idea to handle the STOP conditions prior is much 
-better. Will test and post the next version ASAP.
+Lukas, thank you for the idea. If I understand the comment by Andy correctl=
+y,
+P2SB should not be unhidden between arch_initcall and fs_initcall. Hmm.
 
-Thanks a lot for the review
-- Quan
+This made me think: how about to unhide and hide P2SB just during fs_initca=
+ll
+to cache the P2SB resources? To try it, I added a function below on top of =
+the
+previous trial patch. The added function calls p2sb_bar() for devfn=3D0 at
+fs_initcall so that the resource is cached before probe of i2c-i801. This w=
+orked
+good on my system. It avoided the deadlock as well as the lockdep WARN :)
+
+static int __init p2sb_fs_init(void)
+{
+	struct pci_bus *bus;
+	struct resource mem;
+	int ret =3D 0;
+
+	bus =3D pci_find_bus(0, 0);
+	if (bus) {
+		ret =3D p2sb_bar(bus, 0, &mem);
+		if (ret)
+			pr_err("p2sb_bar failed: %d", ret);
+	}
+	return 0;
+}
+fs_initcall(p2sb_fs_init);
+
+The result of the trial is encouraging, but I'm not yet sure if this idea i=
+s
+really feasible. I have three questions in my mind:
+
+- The trial function above assumed the P2SB device is at the PCI bus number=
+=3D0
+  and domain=3D0. It is ok on my system, but is it valid always? I see this=
+ is
+  valid at least for drivers/edac/pdn2_edac.c and
+  drivers/watchdog/simatic-ipc-wdt.c, but not sure for drivers/mfd/lpc_ich.=
+c
+  and drivers/i2c/busses/i2c-i801.
+
+- The trial function above only caches the resource for devfn=3D0. This is =
+not
+  enough for drivers/mfd/lpc_ich.c. Another resource for devfn=3D(13,2) sho=
+uld be
+  cached. It does not look good to hardcode these devfns and cache them alw=
+ays.
+  It looks required to communicate devfn to cache from p2sb_bar() caller dr=
+ivers
+  to p2sb. How can we do it?
+
+- Does this work when suspend-resume happens?
+
+Comments on the questions will be appreciated.=
 
