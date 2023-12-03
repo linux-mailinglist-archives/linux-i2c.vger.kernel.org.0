@@ -1,104 +1,93 @@
-Return-Path: <linux-i2c+bounces-582-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-583-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A64D801945
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Dec 2023 02:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 83D9380211B
+	for <lists+linux-i2c@lfdr.de>; Sun,  3 Dec 2023 06:32:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20FBE1F21100
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Dec 2023 01:05:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1291C1F21014
+	for <lists+linux-i2c@lfdr.de>; Sun,  3 Dec 2023 05:32:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DACC91385;
-	Sat,  2 Dec 2023 01:05:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB2D710F5;
+	Sun,  3 Dec 2023 05:32:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="a0EPLaI4"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="XvUNJYkq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABD2D54
-	for <linux-i2c@vger.kernel.org>; Fri,  1 Dec 2023 17:05:17 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2c9b7bd6fffso37418621fa.3
-        for <linux-i2c@vger.kernel.org>; Fri, 01 Dec 2023 17:05:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1701479114; x=1702083914; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2AjpI9QlzX4/sI/azrgjTOEsQmOURin+5qeGoAR1AD0=;
-        b=a0EPLaI4cvYoLGFDQ4wvcxqtrXokdits6Y+5uJmSSo24pLxeqD2l4iozxuVZcEtOYu
-         yc+wBGr5sHILyPmpARjWCgN/deb8JiUJkXVS7vj854HRShLiVSo6A9C333IdVg52/iHK
-         tj4f/v4wfbttEjOrIldpymjz0oT+UtUkBlydA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701479114; x=1702083914;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2AjpI9QlzX4/sI/azrgjTOEsQmOURin+5qeGoAR1AD0=;
-        b=ucWlHl3zoaCygkiKeRvGJEiZDgowMa99gU0Bjgk4cBi/EU9WE9u2He7yZ09dGM6zVH
-         a/SLuFIhkQzVjg0uvZHWMPxuraRbYVQD445pAAc2suEbaQYlDZnmtmBts+RZH93Dokrb
-         iNEgD/9fexKE8xgdiJedUHnz64E47tPzrzDAGpmzs95ZFBifDxMJmvxnyxkSvA2c8YUJ
-         UUkRqA83BUSc76GeUyzuH0J5FlFmJxibZ2XqGbgrRXLvOq69xmwx0M808nqVroZaZB+p
-         kKCNqyQalQWhRymc9jL7Z1cPK/qCpvvA+gzvmqltE8F+MKnXM9MdjrcBZ2SbbJYmIH5W
-         pV6w==
-X-Gm-Message-State: AOJu0Yzsosi4n8CHSuU37iyAhpgX312VAuUS1VXP7EKyCu/NFpU0bF1X
-	X7MPyQjW8MFkCFi1/ilICnic8tmOwUXsJZNe2AliMUk/
-X-Google-Smtp-Source: AGHT+IH1MrfDPdCqNeVXZFk/Rq+YCIy6esr/zBep1W+LUJSC/Rl5DVzJaYmyM+vmYUwMy4dmQESMyA==
-X-Received: by 2002:a2e:b951:0:b0:2c9:d863:2c30 with SMTP id 17-20020a2eb951000000b002c9d8632c30mr1133125ljs.89.1701479114683;
-        Fri, 01 Dec 2023 17:05:14 -0800 (PST)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
-        by smtp.gmail.com with ESMTPSA id zh20-20020a170906881400b00a1a6793f5e5sm81901ejb.125.2023.12.01.17.05.13
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Dec 2023 17:05:13 -0800 (PST)
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-40b51e26a7aso12495e9.1
-        for <linux-i2c@vger.kernel.org>; Fri, 01 Dec 2023 17:05:13 -0800 (PST)
-X-Received: by 2002:a7b:c4c6:0:b0:40b:3d89:ba70 with SMTP id
- g6-20020a7bc4c6000000b0040b3d89ba70mr237236wmk.7.1701478730440; Fri, 01 Dec
- 2023 16:58:50 -0800 (PST)
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54FE0FA;
+	Sat,  2 Dec 2023 21:32:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=ahHhTIoYSuW4oEicRP
+	fZHV0EEIBQvulbWrXXGWxCOmM=; b=XvUNJYkqX6ES1MpGQU5tjupJCMhggBgbx9
+	JsJ844kAK5zlGURHSsHHO2wkH2EssxUt4n1uJvUcYEa7TW3f7BPvg07JuinM6XVJ
+	cyukBIGDrZlB0oei2XvKNq+MIGEw/Wa35Qzu/k753g9njzuMFde2HxQ3UCepH50+
+	Z5r5U/FOs=
+Received: from localhost.localdomain (unknown [39.144.190.5])
+	by zwqz-smtp-mta-g5-4 (Coremail) with SMTP id _____wDH11fPEmxlBd11CA--.4371S2;
+	Sun, 03 Dec 2023 13:32:00 +0800 (CST)
+From: Haoran Liu <liuhaoran14@163.com>
+To: andi.shyti@kernel.org
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Haoran Liu <liuhaoran14@163.com>
+Subject: [PATCH] [i2c] robotfuzz-osif: Add error handling for i2c_add_adapter in osif_probe
+Date: Sat,  2 Dec 2023 21:31:42 -0800
+Message-Id: <20231203053142.37453-1-liuhaoran14@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:_____wDH11fPEmxlBd11CA--.4371S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cw4xuryfGFy8AF1DJw1fJFb_yoW8Aw43pw
+	4DKw4DCryUXwna93ZrJa18XryY93yrGFW7CF9rCws3Zan8JFyqqrWftFyS9a48GrZ7Za13
+	Xryqv347CF1UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zifWr_UUUUU=
+X-CM-SenderInfo: xolxxtxrud0iqu6rljoofrz/1tbiwhA7glc668iM4AAAsJ
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231128084236.157152-1-wenst@chromium.org> <20231128084236.157152-5-wenst@chromium.org>
-In-Reply-To: <20231128084236.157152-5-wenst@chromium.org>
-From: Doug Anderson <dianders@chromium.org>
-Date: Fri, 1 Dec 2023 16:58:34 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=W01gfxV6RN2o6CVS7jjf8qgKP-jUy9Bp94d2hWzVC48A@mail.gmail.com>
-Message-ID: <CAD=FV=W01gfxV6RN2o6CVS7jjf8qgKP-jUy9Bp94d2hWzVC48A@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 4/5] arm64: dts: mediatek: mt8173-elm-hana: Mark
- touchscreens and trackpads as fail
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
-	Hsin-Yi Wang <hsinyi@chromium.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	andriy.shevchenko@linux.intel.com, Jiri Kosina <jikos@kernel.org>, 
-	linus.walleij@linaro.org, broonie@kernel.org, gregkh@linuxfoundation.org, 
-	hdegoede@redhat.com, james.clark@arm.com, james@equiv.tech, 
-	keescook@chromium.org, rafael@kernel.org, tglx@linutronix.de, 
-	Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+This patch introduces error handling for the i2c_add_adapter. This missing
+error handling was identified through static analysis, revealing that the
+function did not properly address potential failures of i2c_add_adapter.
+Previously, such a failure could result in incomplete initialization of
+the I2C adapter, leading to erratic behavior.
 
-On Tue, Nov 28, 2023 at 12:45=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> =
-wrote:
->
-> @@ -44,6 +46,7 @@ trackpad2: trackpad@2c {
->                 reg =3D <0x2c>;
->                 hid-descr-addr =3D <0x0020>;
->                 wakeup-source;
-> +               status =3D "fail-needs-probe";
+Although the error addressed by this patch may not occur in the current
+environment, I still suggest implementing these error handling routines
+if the function is not highly time-sensitive. As the environment evolves
+or the code gets reused in different contexts, there's a possibility that
+these errors might occur. In case you find this addition unnecessary, I
+completely understand and respect your perspective. My intention was to
+enhance the robustness of the code, but I acknowledge that practical
+considerations and current functionality might not warrant this change
+at this point.
 
-While doing this, you could also remove the hack where the trackpad
-IRQ pinctrl is listed under i2c4.
+Signed-off-by: Haoran Liu <liuhaoran14@163.com>
+---
+ drivers/i2c/busses/i2c-robotfuzz-osif.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-robotfuzz-osif.c b/drivers/i2c/busses/i2c-robotfuzz-osif.c
+index 66dfa211e736..0f4d84449050 100644
+--- a/drivers/i2c/busses/i2c-robotfuzz-osif.c
++++ b/drivers/i2c/busses/i2c-robotfuzz-osif.c
+@@ -161,7 +161,12 @@ static int osif_probe(struct usb_interface *interface,
+ 		return ret;
+ 	}
+ 
+-	i2c_add_adapter(&(priv->adapter));
++	ret = i2c_add_adapter(&(priv->adapter));
++	if (ret) {
++		dev_err(&interface->dev, "i2c_add_adapter failed: %d\n", ret);
++		usb_put_dev(priv->usb_dev);
++		return ret;
++	}
+ 
+ 	version = le16_to_cpu(priv->usb_dev->descriptor.bcdDevice);
+ 	dev_info(&interface->dev,
+-- 
+2.17.1
+
 
