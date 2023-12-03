@@ -1,44 +1,45 @@
-Return-Path: <linux-i2c+bounces-586-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-587-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 974338023C1
-	for <lists+linux-i2c@lfdr.de>; Sun,  3 Dec 2023 13:32:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 753708023C6
+	for <lists+linux-i2c@lfdr.de>; Sun,  3 Dec 2023 13:38:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C93101C208EF
-	for <lists+linux-i2c@lfdr.de>; Sun,  3 Dec 2023 12:32:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 074451F20FBD
+	for <lists+linux-i2c@lfdr.de>; Sun,  3 Dec 2023 12:38:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14AFFF505;
-	Sun,  3 Dec 2023 12:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 108C89455;
+	Sun,  3 Dec 2023 12:38:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SPu3hqDM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAGTqSdd"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D0BE57E
-	for <linux-i2c@vger.kernel.org>; Sun,  3 Dec 2023 12:32:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63AE7C433C7;
-	Sun,  3 Dec 2023 12:32:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C619728F8
+	for <linux-i2c@vger.kernel.org>; Sun,  3 Dec 2023 12:38:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5874C433C8;
+	Sun,  3 Dec 2023 12:38:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701606738;
-	bh=PycW9pImrBxPDkpzjAXQLsgJs8sFKWW+LBXyqGYkdBw=;
+	s=k20201202; t=1701607123;
+	bh=KJLmOLDiWbHbRIU1hyOCjhwNtBTithDUQc0qUnhefM4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SPu3hqDMmEDDKD3D1kWDjGnG9JdJpeeX1qQ9tcZ/9zvitW3wMbk5D3ato+AT30N32
-	 17G13f8gj6BHIhrvAqszm539J1f2yZgz0MKdRWfMWw3i1ga/+1IXQT7c1KbjJfaRzD
-	 kdAXJ0QPEL7Pp1c55rpzGpGhUl6fOHut0m3e22XrgZB6t+B944rLldrgg8FTJYuvqx
-	 jMI0qmePKIC/FrwadjwLYVvaSep29WJxYa+cm4hhY25hOQSP5rpYr4aBPnzitnF5fn
-	 ynbAHN0+kHngbUVQHNrRNgWgXtqRHYKMM+TC2EekgM8VgaMjf7f9NDkOWeQbku7jr7
-	 DatTw5eKfRj7w==
-Date: Sun, 3 Dec 2023 13:32:14 +0100
+	b=AAGTqSddmoKlbybMyrq26jGubAQDYywlmGPYshsq2jY6ZlzOq2NHigE/c4mfgGf9y
+	 A/YVWcKNZEpdSWO7ps/+TTsGfcFUK3N3SucyIK9V8bSLziVK00xYx36nJffamlpbtr
+	 UJLV00STptEret0Tcs08K6aZDGY//1NYng2MmGGg3YSqnXz5StOvM3yboUvPh7MjPm
+	 LENuj7QGU7JgqRZjlDDeD8PYBnQyDHCh2VwMuDXUZq6LyxRGuGEIjmEgydvPCSQd0P
+	 cq6etxKZddcASX716yPrAxAdD+3OexNd+zgJrKE9QLVvXaFUcz0cUDTWxcX+rXRUf6
+	 s7Wrs3tzAn30g==
+Date: Sun, 3 Dec 2023 13:38:39 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
 To: Haoran Liu <liuhaoran14@163.com>
 Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [i2c] viperboard: Add error handling in vprbrd_i2c_probe
-Message-ID: <20231203123214.u5jrfayhh3zfjqey@zenone.zhora.eu>
-References: <20231203091208.38360-1-liuhaoran14@163.com>
+Subject: Re: [PATCH] [i2c] robotfuzz-osif: Add error handling for
+ i2c_add_adapter in osif_probe
+Message-ID: <20231203123839.nu2jcqk3dp2jvgru@zenone.zhora.eu>
+References: <20231203053142.37453-1-liuhaoran14@163.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -47,29 +48,25 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231203091208.38360-1-liuhaoran14@163.com>
+In-Reply-To: <20231203053142.37453-1-liuhaoran14@163.com>
 
 Hi Haoran,
 
-the patch makes sense, but...
+I made some comments on your 3rd patch. Could you please combine
+these three patches into a single series?
 
-On Sun, Dec 03, 2023 at 01:12:08AM -0800, Haoran Liu wrote:
-> This patch introduces improved error handling for the i2c_add_adapter.
-> The necessity for this enhancement was identified through static analysis,
-> revealing that the function previously did not properly manage potential
-> failures of i2c_add_adapter. Prior to this patch, a failure in
-> i2c_add_adapter could result in partial initialization of the I2C adapter,
-> leading to unstable operation.
+Also, please remove the [i2c] tag from the subject.
 
-Please use the imperative form. Instead of starting with 'This
-patch introduces...' you can write something like 'Check the
-return value of i2c_add_adapter...'.
+Thanks,
+Andi
 
-"Check" is in imperative form.
-
-Using the imperative form is crucial for a clear understanding of
-what the patch accomplishes.
-
+On Sat, Dec 02, 2023 at 09:31:42PM -0800, Haoran Liu wrote:
+> This patch introduces error handling for the i2c_add_adapter. This missing
+> error handling was identified through static analysis, revealing that the
+> function did not properly address potential failures of i2c_add_adapter.
+> Previously, such a failure could result in incomplete initialization of
+> the I2C adapter, leading to erratic behavior.
+> 
 > Although the error addressed by this patch may not occur in the current
 > environment, I still suggest implementing these error handling routines
 > if the function is not highly time-sensitive. As the environment evolves
@@ -79,45 +76,30 @@ what the patch accomplishes.
 > enhance the robustness of the code, but I acknowledge that practical
 > considerations and current functionality might not warrant this change
 > at this point.
-
-The second paragraph does not describe anything functional
-related to the patch; it's a message to the reviewers. Please add
-it after the '---' section.
-
+> 
 > Signed-off-by: Haoran Liu <liuhaoran14@163.com>
 > ---
->  drivers/i2c/busses/i2c-viperboard.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  drivers/i2c/busses/i2c-robotfuzz-osif.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/i2c/busses/i2c-viperboard.c b/drivers/i2c/busses/i2c-viperboard.c
-> index 9e153b5b0e8e..13a07290ecf6 100644
-> --- a/drivers/i2c/busses/i2c-viperboard.c
-> +++ b/drivers/i2c/busses/i2c-viperboard.c
-> @@ -400,7 +400,11 @@ static int vprbrd_i2c_probe(struct platform_device *pdev)
->  	vb_i2c->i2c.dev.parent = &pdev->dev;
+> diff --git a/drivers/i2c/busses/i2c-robotfuzz-osif.c b/drivers/i2c/busses/i2c-robotfuzz-osif.c
+> index 66dfa211e736..0f4d84449050 100644
+> --- a/drivers/i2c/busses/i2c-robotfuzz-osif.c
+> +++ b/drivers/i2c/busses/i2c-robotfuzz-osif.c
+> @@ -161,7 +161,12 @@ static int osif_probe(struct usb_interface *interface,
+>  		return ret;
+>  	}
 >  
->  	/* attach to i2c layer */
-> -	i2c_add_adapter(&vb_i2c->i2c);
-> +	ret = i2c_add_adapter(&vb_i2c->i2c);
+> -	i2c_add_adapter(&(priv->adapter));
+> +	ret = i2c_add_adapter(&(priv->adapter));
 > +	if (ret) {
-> +		dev_err(&pdev->dev, "i2c_add_adapter failed: %d\n", ret);
-
-Please use:
-
-	return dev_err_probe(&pdev->dev, ret, "...");
-
-Additionally, I suggest rewording the error message to something
-that might be more meaningful for non-kernel developers, such as:
-"Failed to register the i2c adapter"
-
-Thanks,
-Andi
-
+> +		dev_err(&interface->dev, "i2c_add_adapter failed: %d\n", ret);
+> +		usb_put_dev(priv->usb_dev);
 > +		return ret;
 > +	}
 >  
->  	platform_set_drvdata(pdev, vb_i2c);
->  
+>  	version = le16_to_cpu(priv->usb_dev->descriptor.bcdDevice);
+>  	dev_info(&interface->dev,
 > -- 
 > 2.17.1
 > 
