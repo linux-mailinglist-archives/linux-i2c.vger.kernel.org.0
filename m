@@ -1,66 +1,66 @@
-Return-Path: <linux-i2c+bounces-598-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-599-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05790802BCC
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Dec 2023 07:59:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD1E0802BFD
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Dec 2023 08:25:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD0B01C2092A
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Dec 2023 06:59:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62FF21F21111
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Dec 2023 07:25:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 731FD8F6A;
-	Mon,  4 Dec 2023 06:59:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4EE19469;
+	Mon,  4 Dec 2023 07:25:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="K4cPDqo/"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iD65mHNY"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ADCD3
-	for <linux-i2c@vger.kernel.org>; Sun,  3 Dec 2023 22:59:42 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-50be10acaf9so2049417e87.1
-        for <linux-i2c@vger.kernel.org>; Sun, 03 Dec 2023 22:59:42 -0800 (PST)
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1A9FE
+	for <linux-i2c@vger.kernel.org>; Sun,  3 Dec 2023 23:24:55 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-50be03cc8a3so2782942e87.1
+        for <linux-i2c@vger.kernel.org>; Sun, 03 Dec 2023 23:24:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1701673180; x=1702277980; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1701674693; x=1702279493; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OTNkS8LTnRqCQunaTUOLLsKXlHNWnzfg0xMTKbfGJJg=;
-        b=K4cPDqo/LdCnBQ3arJxu73zcZVxTziEBFMdpc3X40hGxTKLwZPWb5T+nOkQGHbHRS5
-         Vpd5hYrJuegi7dMayKz+UkVC/Kw5hPgWaUmjLcMEDI04q3qX1u0YSl45k2Toc/SDp/lV
-         2N01Nbuw1vJZoqRHE/MYAZNVI/iQ/epx4Olh4=
+        bh=6Xxz1IMztyI/DW8EzDBtMH+QkyqwQ5t+SJRSYEC/SOc=;
+        b=iD65mHNYTVsaATpGhHMlCRNLFfSnxqdxPDshLNMj8FIn6q4HrsMPDzouP/sVNn+O7u
+         CuE3d9eXxoLV7rrBLNHZnIHAmuDwHHtGpnZlc31uWuGslkLhr0FPq7E/qhpAMAgAY6e7
+         801yX/7aXIVD7UAd3gLgXEA4W2xc2tkIXwtHA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701673180; x=1702277980;
+        d=1e100.net; s=20230601; t=1701674693; x=1702279493;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OTNkS8LTnRqCQunaTUOLLsKXlHNWnzfg0xMTKbfGJJg=;
-        b=Lzr1iIFR/Wbct3wuPrJIamgRROLwmrjSc5Of78b2eTtVz1XSCNXduClFU5e9H6Imry
-         GbMuEqAok21Y3I8GYjcObM4a8cQOhLhWTwr+gQnZotxFic3c7SUJ6uM+Uw22dMPf1CHa
-         GGFlO9cF0GWAYq1k/cx4uspTqJWOY+ciYB22JVR8BdEcH3E87dlpIubB86ZQgrozx1ME
-         MX41VuQOD9i+su3R3i6FfFTbGBqtlYJyQzmZLbdGXTmcA1eSk8LgaUBXq0DnWUw5dll/
-         GFgqcNl7LWtRaYrXpw/qbJssXhpAOCLv57JakfLBPoVxAAhPNRu9XbM49rER7YzKPcM8
-         XIMg==
-X-Gm-Message-State: AOJu0YxrfaykUaBDb1QRAKzm5O5gtcuW9pRsCeW89CaSVwk2LfmuohqR
-	18gFmfbGpLRPh27Qh1Iwi+lwJqT3AL4gQ0dI/0/Yhw==
-X-Google-Smtp-Source: AGHT+IHoyWO3QIHEBY5JdBrYFEV7xzgnarDfjr1JxVNq6dHU5EQ6tbsFVJqwEhCrsQ2CBaDRnPGYgwSDkHN9tbdxHX4=
-X-Received: by 2002:a05:6512:b9e:b0:50b:ed31:72a4 with SMTP id
- b30-20020a0565120b9e00b0050bed3172a4mr1697429lfv.28.1701673180528; Sun, 03
- Dec 2023 22:59:40 -0800 (PST)
+        bh=6Xxz1IMztyI/DW8EzDBtMH+QkyqwQ5t+SJRSYEC/SOc=;
+        b=KHgl8Y5cvSqSPu1eQ9mUcPbI/wy2ARjrYCCy+J7X0taG0F4y1MR9/FCcjehbPGUIQk
+         RfwrjF+EVdsQe0eWk2Uo9lP51wF774YoDgJ+EbJ5AuC7LY+Xx8KkSfwn8Ou1Mz0mgJOq
+         UqNkAYRQc/cNLmDtNbbHbtBNLE3rVQuj/hbdQ/1L+RU3hWnxB4aILZrS4nPCLfeG4tND
+         r/znu5pH8dQ9vFf9s1DhYty3tbIQyvBaX/7SQwAu+bdSOOyZb/O3f55JNRMv5m2m9naa
+         sj14TIiZGjw3AiHQOF0J80dxZSEVvz6GLthDmc75oIbOxBkYveky5hQSZPYzuPbedu9c
+         KawQ==
+X-Gm-Message-State: AOJu0YzD7rjapDmsYWkcRCzyqoZVIuSmlJQy0mmqgTPFXgiwlmFhoMnk
+	GtwHx54+2PnvhcQ6mmGC88lU9y+5e7cLr25ZPVGAZA==
+X-Google-Smtp-Source: AGHT+IFtbMn5A8+mOCK7ju+ZruOqp6ANHem62c8eBAnYZlXhRPomaeKDI0QPJC1GJ9Q8Tj324VrRaJX0WX0KLLlp1+M=
+X-Received: by 2002:a19:ac4a:0:b0:50b:f51a:299a with SMTP id
+ r10-20020a19ac4a000000b0050bf51a299amr600460lfc.32.1701674693388; Sun, 03 Dec
+ 2023 23:24:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231128084236.157152-1-wenst@chromium.org> <20231128084236.157152-5-wenst@chromium.org>
- <CAD=FV=W01gfxV6RN2o6CVS7jjf8qgKP-jUy9Bp94d2hWzVC48A@mail.gmail.com>
-In-Reply-To: <CAD=FV=W01gfxV6RN2o6CVS7jjf8qgKP-jUy9Bp94d2hWzVC48A@mail.gmail.com>
+References: <20231128084236.157152-1-wenst@chromium.org> <20231128084236.157152-4-wenst@chromium.org>
+ <CAD=FV=XV0+G=uFBE_n6WFGVW2szGcKToZgCNTdSrNf3LVk9MOQ@mail.gmail.com>
+In-Reply-To: <CAD=FV=XV0+G=uFBE_n6WFGVW2szGcKToZgCNTdSrNf3LVk9MOQ@mail.gmail.com>
 From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Mon, 4 Dec 2023 14:59:29 +0800
-Message-ID: <CAGXv+5E+R292XsOFSL-j0KJMmVJjWtxMRgCK8besP7mo6NDOWA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 4/5] arm64: dts: mediatek: mt8173-elm-hana: Mark
- touchscreens and trackpads as fail
+Date: Mon, 4 Dec 2023 15:24:42 +0800
+Message-ID: <CAGXv+5Hz3wfjCRa2AiOQgOv7zo8bzAmtG=a=jWJhO2MZNrFtpw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 3/5] platform/chrome: Introduce device tree
+ hardware prober
 To: Doug Anderson <dianders@chromium.org>
 Cc: Rob Herring <robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
@@ -87,21 +87,65 @@ On Sat, Dec 2, 2023 at 8:58=E2=80=AFAM Doug Anderson <dianders@chromium.org=
 > On Tue, Nov 28, 2023 at 12:45=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org=
 > wrote:
 > >
-> > @@ -44,6 +46,7 @@ trackpad2: trackpad@2c {
-> >                 reg =3D <0x2c>;
-> >                 hid-descr-addr =3D <0x0020>;
-> >                 wakeup-source;
-> > +               status =3D "fail-needs-probe";
+> > @@ -61,6 +61,17 @@ config CHROMEOS_TBMC
+> >           To compile this driver as a module, choose M here: the
+> >           module will be called chromeos_tbmc.
+> >
+> > +config CHROMEOS_OF_HW_PROBER
+> > +       bool "ChromeOS Device Tree Hardware Prober"
 >
-> While doing this, you could also remove the hack where the trackpad
-> IRQ pinctrl is listed under i2c4.
+> Any reason that it can't be a module?
 
-Sure. I do think we can do away with it though. According to at least one
-schematic, the interrupt line has pull-ups on both sides of the voltage
-shifter.
+No technical one. However if it's a module, the user has to manually load
+it. So I think it's more of a usability thing.
 
-BTW, The touchscreen doesn't have pinctrl entries. This has pull-ups on
-both sides of the voltage shifter as well.
+OOTH I think this needs to be a module if I2C is built as a module.
+Somehow I had thought of it at one point but then it slipped my mind.
+
+> > +       depends on OF
+> > +       depends on I2C
+> > +       select OF_DYNAMIC
+> > +       default OF
+>
+> You probably don't want "default OF". This means that everyone will
+> automatically get this new driver enabled which is unlikely to be
+> right.
+
+I thought this whole section was guarded behind KCONFIG_CHROME_PLATFORMS.
+So if the user has CHROME_PLATFORMS enabled and has OF enabled, they
+likely need the prober.
+
+> > +static int chromeos_of_hw_prober_probe(struct platform_device *pdev)
+> > +{
+> > +       for (size_t i =3D 0; i < ARRAY_SIZE(hw_prober_platforms); i++)
+> > +               if (of_machine_is_compatible(hw_prober_platforms[i].com=
+patible)) {
+> > +                       int ret;
+> > +
+> > +                       ret =3D hw_prober_platforms[i].prober(&pdev->de=
+v,
+> > +                                                           hw_prober_p=
+latforms[i].data);
+> > +                       if (ret)
+>
+> Should it only check for -EPROBE_DEFER here? ...and then maybe warn
+> for other cases and go through the loop? If there's some error
+> enabling the touchscreen I'd still want the trackpad to probe...
+
+Makes sense. However there's no extra information to give in the
+warning though.
+
+> > +                               return ret;
+> > +               }
+> > +
+> > +       return 0;
+>
+> Random thought: once we get here, the driver is useless / just wasting
+> memory. Any way to have it freed? ;-)
+
+I don't think there is a good way to do that, except maybe marking all
+the functions as __init? But that likely doesn't work in combination
+with deferred probing (say the i2c driver is a module).
 
 ChenYu
 
