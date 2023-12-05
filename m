@@ -1,107 +1,171 @@
-Return-Path: <linux-i2c+bounces-622-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-623-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79EB3805696
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 14:54:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B428805998
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 17:13:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2EDCC1F2162F
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 13:54:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E55A1C210C5
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 16:13:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D16DD5EE92;
-	Tue,  5 Dec 2023 13:54:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bp98KUM1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7857463DEF;
+	Tue,  5 Dec 2023 16:13:17 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE92F90;
-	Tue,  5 Dec 2023 05:54:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701784457; x=1733320457;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U6+ZEYEE65DEUZnqgjF0DfTrL06shSvTTu7ShXbuoiI=;
-  b=Bp98KUM1tmGYR3LEtHp6iDsNub6V7o1eLw9CND/3fgmAuOas8InyJiFC
-   HaTzfy18O3G1TtIn+FA1QxAAM/Pt0PvtpP3sZhwyeZzL3uXC0Xo6PuoXj
-   tB2f8mPhrEr/EyUNYP7UC9la28AtW952BLA4mkTDS9QhTTYe8PB4e7CZZ
-   D/Rhbpi666UAOadd6UW2DfQ2LSKeXJ3lE7tU/hLc7MFFapAT82Wy5zeqJ
-   FX+ASIUMwSVVPY2yxFeW9xdp6hOckOu3SMGTvxBoiIvKox1fS7MWn1q5M
-   qiEwXBqNVDURf+w35Za9DknZYhMVWyU4tGS8xRgzielTtFRN0hl9C3l5J
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="15443570"
-X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="15443570"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 05:54:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="888939287"
-X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="888939287"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Dec 2023 05:54:13 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAVsJ-00096I-1r;
-	Tue, 05 Dec 2023 13:54:11 +0000
-Date: Tue, 5 Dec 2023 21:53:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alain Volmat <alain.volmat@foss.st.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFB89E
+	for <linux-i2c@vger.kernel.org>; Tue,  5 Dec 2023 08:13:14 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rAY21-00048v-Nv; Tue, 05 Dec 2023 17:12:21 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rAY1z-00DmUU-DU; Tue, 05 Dec 2023 17:12:19 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rAY1z-00EqaV-2n; Tue, 05 Dec 2023 17:12:19 +0100
+Date: Tue, 5 Dec 2023 17:12:18 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Thierry Reding <thierry.reding@gmail.com>
+Cc: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
 	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/7] arm64: dts: st: add all 8 i2c nodes on stm32mp251
-Message-ID: <202312052114.dqhaFgjJ-lkp@intel.com>
-References: <20231129125920.1702497-6-alain.volmat@foss.st.com>
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Tomasz Figa <tomasz.figa@gmail.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jaehoon Chung <jh80.chung@samsung.com>,
+	Sam Protsenko <semen.protsenko@linaro.org>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	kernel@pengutronix.de
+Subject: Re: (subset) [PATCH 00/17] dt-bindings: samsung: add specific
+ compatibles for existing SoC
+Message-ID: <20231205161218.wymlzvhk4pnnkwze@pengutronix.de>
+References: <20231108104343.24192-1-krzysztof.kozlowski@linaro.org>
+ <170119374454.445690.515311393756577368.b4-ty@gmail.com>
+ <20231128205841.al23ra5s34rn3muj@pengutronix.de>
+ <ZW8ZNZ_FJSV8fq-U@orome.fritz.box>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dyjed4xxkou772mg"
 Content-Disposition: inline
-In-Reply-To: <20231129125920.1702497-6-alain.volmat@foss.st.com>
+In-Reply-To: <ZW8ZNZ_FJSV8fq-U@orome.fritz.box>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-Hi Alain,
 
-kernel test robot noticed the following build errors:
+--dyjed4xxkou772mg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on atorgue-stm32/stm32-next robh/for-next linus/master v6.7-rc4 next-20231205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hello Thierry,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alain-Volmat/i2c-stm32f7-perform-most-of-irq-job-in-threaded-handler/20231129-210806
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-patch link:    https://lore.kernel.org/r/20231129125920.1702497-6-alain.volmat%40foss.st.com
-patch subject: [PATCH 5/7] arm64: dts: st: add all 8 i2c nodes on stm32mp251
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20231205/202312052114.dqhaFgjJ-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312052114.dqhaFgjJ-lkp@intel.com/reproduce)
+On Tue, Dec 05, 2023 at 01:36:05PM +0100, Thierry Reding wrote:
+> On Tue, Nov 28, 2023 at 09:58:41PM +0100, Uwe Kleine-K=F6nig wrote:
+> > On Tue, Nov 28, 2023 at 06:49:23PM +0100, Thierry Reding wrote:
+> > >=20
+> > > On Wed, 08 Nov 2023 11:43:26 +0100, Krzysztof Kozlowski wrote:
+> > > > Merging
+> > > > =3D=3D=3D=3D=3D=3D=3D
+> > > > I propose to take entire patchset through my tree (Samsung SoC), be=
+cause:
+> >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> >=20
+> > > > 1. Next cycle two new SoCs will be coming (Google GS101 and ExynosA=
+utov920), so
+> > > >    they will touch the same lines in some of the DT bindings (not a=
+ll, though).
+> > > >    It is reasonable for me to take the bindings for the new SoCs, t=
+o have clean
+> > > >    `make dtbs_check` on the new DTS.
+> > > > 2. Having it together helps me to have clean `make dtbs_check` with=
+in my tree
+> > > >    on the existing DTS.
+> > > > 3. No drivers are affected by this change.
+> > > > 4. I plan to do the same for Tesla FSD and Exynos ARM32 SoCs, thus =
+expect
+> > > >    follow up patchsets.
+> > > >=20
+> > > > [...]
+> > >=20
+> > > Applied, thanks!
+> > >=20
+> > > [12/17] dt-bindings: pwm: samsung: add specific compatibles for exist=
+ing SoC
+> > >         commit: 5d67b8f81b9d598599366214e3b2eb5f84003c9f
+> >=20
+> > You didn't honor (or even comment) Krzysztof's proposal to take the
+> > whole patchset via his tree (marked above). Was there some off-list
+> > agreement?
+>=20
+> I had read all that and then looking at patchwork saw that you had
+> marked all other patches in the series as "handled-elsewhere" and only
+> this one was left as "new", so I assumed that, well, everything else was
+> handled elsewhere and I was supposed to pick this one up...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312052114.dqhaFgjJ-lkp@intel.com/
+I didn't mark it as handled-elsewhere, but my expectation was that you
+might want to send an Ack only.
 
-All errors (new ones prefixed by >>):
+For today's series by Krzysztof I acked and marked the patch as
+handled-elsewhere (together with the rest of the series that isn't pwm
+related). So you have to consult your inbox if you still want to send an
+Ack for that one.
 
->> Error: arch/arm64/boot/dts/st/stm32mp251.dtsi:134.20-21 syntax error
-   FATAL ERROR: Unable to parse input tree
+Best regards
+Uwe
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--dyjed4xxkou772mg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVvS+IACgkQj4D7WH0S
+/k4wwAf6AlMbQoIitSxoLyL8EPf/AFm1OReNOJVSWyeoYnXJ6AOvGwmxAqCesfcV
+8NCugoHjF1JiraIJPpyVgrmmas8T0uk5v4N32GPcL7ld1hBZGsH8B9GsuTioS5R7
++pMOUKwLPmf+vPiDCjkvAL9B3HOBCCSHjU6g9vf2b4O0dNvJK+vVFOuKPF5r+GQr
+fFPsuCRnPkkHNn8PWA6HWPUR+0V1rsyiabnsgxlnC6PPyu64tC9aD2Xto0+kM0D0
+WAdt4elH5P373tccyXATCZK4xaJWO4eHbzJTeVOCeEqcjB55BwuzMgVP8xQ85Mrx
+RHto9piBhu5zc5d4EcBjLTp4QpooUg==
+=k470
+-----END PGP SIGNATURE-----
+
+--dyjed4xxkou772mg--
 
