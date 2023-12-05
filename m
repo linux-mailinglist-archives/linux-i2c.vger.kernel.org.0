@@ -1,115 +1,119 @@
-Return-Path: <linux-i2c+bounces-619-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-620-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 358E5804E22
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 10:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 749DB805020
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 11:23:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BABC0B20BED
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 09:41:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E136FB20D9A
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 10:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0773841237;
-	Tue,  5 Dec 2023 09:41:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 175814F216;
+	Tue,  5 Dec 2023 10:22:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="OYuCQ8kw"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732F5A0
-	for <linux-i2c@vger.kernel.org>; Tue,  5 Dec 2023 01:41:46 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rARve-0002oj-Qq; Tue, 05 Dec 2023 10:41:22 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rARvb-00DiEE-96; Tue, 05 Dec 2023 10:41:19 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rARva-00EdG6-Vg; Tue, 05 Dec 2023 10:41:18 +0100
-Date: Tue, 5 Dec 2023 10:41:18 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-fsd@tesla.com,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 2/6] dt-bindings: pwm: samsung: add specific compatible
- for Tesla FSD
-Message-ID: <20231205094118.jmzeyf23rv6gdiin@pengutronix.de>
-References: <20231205092229.19135-1-krzysztof.kozlowski@linaro.org>
- <20231205092229.19135-3-krzysztof.kozlowski@linaro.org>
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B54790;
+	Tue,  5 Dec 2023 02:22:53 -0800 (PST)
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id C34556602F1E;
+	Tue,  5 Dec 2023 10:22:49 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1701771771;
+	bh=3U+2S6yFT5IinHlDHOnGowPBFs7ClJzaLOhopmK8tJk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OYuCQ8kwdLnWkv1MfHToaXZ587QswHOutjKlfKfVYjCnU/s92pr8c3o9SnFkhf9BG
+	 Ji4lDYcYURVmRno7WIM+Ij42lFOpJD6ckjLuX6BZkwXXXUZ7cM5ErLHx/gOOJ3zwRR
+	 lLAdVr5MwcRSd96WdScV8w+5+I8XbztbTAMbi9Qlgou0pRMfrT50bHtA66RFzozoSI
+	 1TwY5RvAbJBq78cU+3pbZR+kXl2hc3VhM6d9tly282icyqWUOqGDNRUKOPZhQzer3u
+	 gftavexdPt6RBGhr1ej4AKrch5TdmIjafkGQ2o6HvEUgPjXiD2JNSK5Ydr5172HmNn
+	 7unW/WF969rzw==
+Message-ID: <3700f05f-2411-4422-972f-f3df690efb84@collabora.com>
+Date: Tue, 5 Dec 2023 11:22:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="cp7g3cuaqtzc7z3g"
-Content-Disposition: inline
-In-Reply-To: <20231205092229.19135-3-krzysztof.kozlowski@linaro.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v3 4/5] arm64: dts: mediatek: mt8173-elm-hana: Mark
+ touchscreens and trackpads as fail
+To: Doug Anderson <dianders@chromium.org>, Chen-Yu Tsai <wenst@chromium.org>
+Cc: Rob Herring <robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>, Wolfram Sang <wsa@kernel.org>,
+ Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+ Hsin-Yi Wang <hsinyi@chromium.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ andriy.shevchenko@linux.intel.com, Jiri Kosina <jikos@kernel.org>,
+ linus.walleij@linaro.org, broonie@kernel.org, gregkh@linuxfoundation.org,
+ hdegoede@redhat.com, james.clark@arm.com, james@equiv.tech,
+ keescook@chromium.org, rafael@kernel.org, tglx@linutronix.de,
+ Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org,
+ linux-i2c@vger.kernel.org
+References: <20231128084236.157152-1-wenst@chromium.org>
+ <20231128084236.157152-5-wenst@chromium.org>
+ <CAD=FV=W01gfxV6RN2o6CVS7jjf8qgKP-jUy9Bp94d2hWzVC48A@mail.gmail.com>
+ <CAGXv+5E+R292XsOFSL-j0KJMmVJjWtxMRgCK8besP7mo6NDOWA@mail.gmail.com>
+ <CAD=FV=UQkAjgMuR85cPikNtCxsODWPWs7cibOcOoNGdjSSvF8Q@mail.gmail.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <CAD=FV=UQkAjgMuR85cPikNtCxsODWPWs7cibOcOoNGdjSSvF8Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+Il 04/12/23 17:50, Doug Anderson ha scritto:
+> Hi,
+> 
+> On Sun, Dec 3, 2023 at 10:59 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>>
+>> On Sat, Dec 2, 2023 at 8:58 AM Doug Anderson <dianders@chromium.org> wrote:
+>>>
+>>> Hi,
+>>>
+>>> On Tue, Nov 28, 2023 at 12:45 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>>>>
+>>>> @@ -44,6 +46,7 @@ trackpad2: trackpad@2c {
+>>>>                  reg = <0x2c>;
+>>>>                  hid-descr-addr = <0x0020>;
+>>>>                  wakeup-source;
+>>>> +               status = "fail-needs-probe";
+>>>
+>>> While doing this, you could also remove the hack where the trackpad
+>>> IRQ pinctrl is listed under i2c4.
+>>
+>> Sure. I do think we can do away with it though. According to at least one
+>> schematic, the interrupt line has pull-ups on both sides of the voltage
+>> shifter.
+>>
+>> BTW, The touchscreen doesn't have pinctrl entries. This has pull-ups on
+>> both sides of the voltage shifter as well.
+> 
+> I dunno if the convention is different on Mediatek boards, but at
+> least on boards I've been involved with in the past we've always put
+> pinctrl entries just to make things explicit. This meant that we
+> didn't rely on the firmware/bootrom/defaults to leave pulls in any
+> particular state. ...otherwise those external pull-ups could be
+> fighting with internal pull-downs, right?
+> 
 
---cp7g3cuaqtzc7z3g
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+MediaTek boards aren't special and there's no good reason for those to rely on
+firmware/bootrom/defaults - so there is no good reason to avoid declaring any
+relevant pinctrl entry.
 
-Hello,
+Cheers,
+Angelo
 
-On Tue, Dec 05, 2023 at 10:22:25AM +0100, Krzysztof Kozlowski wrote:
-> Tesla FSD is a derivative of Samsung Exynos SoC, thus just like the
-> others it reuses several devices from older designs.  Historically we
-> kept the old (block's) compatible only.  This works fine and there is no
-> bug here, however guidelines expressed in
-> Documentation/devicetree/bindings/writing-bindings.rst state that:
-> 1. Compatibles should be specific.
-> 2. We should add new compatibles in case of bugs or features.
->=20
-> Add Tesla FSD compatible specific to be used with an existing fallback.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---cp7g3cuaqtzc7z3g
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVu8D4ACgkQj4D7WH0S
-/k6WcwgAnoOjaDQOULY0T9a1mZleUthBs7BZfHbzl654kG/dUyPLtgTqvHicRyzy
-5XJaEwWEbpi85HooPmSwOS8gpZlJzSaojw6Ypsq7JKwEZGYc4+UyVpIwNlK26lSn
-7AIAlQjVOYZd477x1pnWSpFuCT2LKSGTl3+wTZRCEICVEsuaAaa6yPFQF8zYq7sL
-u5IwHfdUPCsJ0hZ8Ak2gogdw4vhl2vGI5aqcA8dFRt6XbByvRtNmVgcgF3I+DjLO
-dW9wCF1NleYaKeFyVMiXNMxC8Z0Nj72X60JIY6dDv6BQn1fOzhqHjNSIyboKhhiu
-QM7ZDuHdH8leR3uTw4prmiK/JsnATw==
-=r1vU
------END PGP SIGNATURE-----
-
---cp7g3cuaqtzc7z3g--
 
