@@ -1,129 +1,81 @@
-Return-Path: <linux-i2c+bounces-607-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-608-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21401803AD3
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Dec 2023 17:50:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE0C3804316
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 01:06:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D13FB280DA0
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Dec 2023 16:50:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58ABD1F2136F
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 00:06:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7241128E3D;
-	Mon,  4 Dec 2023 16:50:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="MrxO8J5F"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D28F644;
+	Tue,  5 Dec 2023 00:06:17 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CD9B4
-	for <linux-i2c@vger.kernel.org>; Mon,  4 Dec 2023 08:50:41 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-a1b03886fd7so223287966b.2
-        for <linux-i2c@vger.kernel.org>; Mon, 04 Dec 2023 08:50:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1701708638; x=1702313438; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O8E333mX0LWpYdsutAHYgoOIGzA9DDLQh7glRXD1fJM=;
-        b=MrxO8J5FnBfMYJPpXZeaHmjExUVo6fckVZ09qMyo6cpBlfZ7hF/BXTNxzov7OJB+Wg
-         U0+L5FGKNDDLbYu7eMr168/zOWWj7rJDa3GTGQ+ZwmZ2qOFy85oYi/rk40c/mEwQe4Hh
-         noDp1hx9vgoTnm/QxBc9xiYudYiUGex+2MP8A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701708638; x=1702313438;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O8E333mX0LWpYdsutAHYgoOIGzA9DDLQh7glRXD1fJM=;
-        b=uYLkig+wnLuToIhgs0hIRIZHjZhNtJGNBo0w/vo4EmP2hMi0eljUJ994XhS7dkRstg
-         bkjTqW+YHggumX9OfRzV3/D0gCVmWVqXQ4m4lA/eVGAUZzLx3GJjRcM3cFaDxCZgLYRX
-         qoLra1bIbGyPLUm+/egaaVb6iC3zk+/GtVh2nYcZgejrA2vrX/Jjs9UHrqU12gzbR7t8
-         X95qeG6B+HTuReRVR+X/ssW5MPMOdiMjbBKbyff5OjuJ1zZTQLucIE93yO8IQvX+PJjd
-         Wpg6DuNUt86xupCkkZKtWRSkGn6si1Ko9uamb0XlzSfU8RtFlpz2x8eWVhfie/6FdXg9
-         hSHg==
-X-Gm-Message-State: AOJu0YzD5i1wjUM96R4zgG2eJ8HTBcXoWdwDjxmFIDgBk9YuB33rV+IB
-	WIpq0AkJflPR6Rc0X6RcALfidYxQswROcxBgb2zWlPnJ
-X-Google-Smtp-Source: AGHT+IFrZYivpM6ZHJYQNXW3MvBvQetU4gHaBZ61eKJ+WY6PG9yPHcRvzjmBCCUaY0WCEnFQ2l5ncQ==
-X-Received: by 2002:a17:907:6d17:b0:a19:a1ba:da56 with SMTP id sa23-20020a1709076d1700b00a19a1bada56mr3688917ejc.125.1701708637866;
-        Mon, 04 Dec 2023 08:50:37 -0800 (PST)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id hp3-20020a1709073e0300b00a1b77475b93sm1209829ejc.5.2023.12.04.08.50.37
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Dec 2023 08:50:37 -0800 (PST)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-54c79cca895so16430a12.0
-        for <linux-i2c@vger.kernel.org>; Mon, 04 Dec 2023 08:50:37 -0800 (PST)
-X-Received: by 2002:a05:600c:5247:b0:405:320a:44f9 with SMTP id
- fc7-20020a05600c524700b00405320a44f9mr414355wmb.5.1701708616473; Mon, 04 Dec
- 2023 08:50:16 -0800 (PST)
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14522101;
+	Mon,  4 Dec 2023 16:06:11 -0800 (PST)
+Received: from i53875b61.versanet.de ([83.135.91.97] helo=phil.lan)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1rAIwu-0001qb-BG; Tue, 05 Dec 2023 01:06:04 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: Tim Lunn <tim@feathertop.org>,
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	linux-arm-kernel@lists.infradead.org,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jagan Teki <jagan@edgeble.ai>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	linux-i2c@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: (subset) [PATCH v3 0/8] Add support for Sonoff iHost RV1126 Smart Home Gateway
+Date: Tue,  5 Dec 2023 01:06:01 +0100
+Message-Id: <170173468934.501889.1733383840975468730.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231203124004.2676174-1-tim@feathertop.org>
+References: <20231203124004.2676174-1-tim@feathertop.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231128084236.157152-1-wenst@chromium.org> <20231128084236.157152-5-wenst@chromium.org>
- <CAD=FV=W01gfxV6RN2o6CVS7jjf8qgKP-jUy9Bp94d2hWzVC48A@mail.gmail.com> <CAGXv+5E+R292XsOFSL-j0KJMmVJjWtxMRgCK8besP7mo6NDOWA@mail.gmail.com>
-In-Reply-To: <CAGXv+5E+R292XsOFSL-j0KJMmVJjWtxMRgCK8besP7mo6NDOWA@mail.gmail.com>
-From: Doug Anderson <dianders@chromium.org>
-Date: Mon, 4 Dec 2023 08:50:01 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=UQkAjgMuR85cPikNtCxsODWPWs7cibOcOoNGdjSSvF8Q@mail.gmail.com>
-Message-ID: <CAD=FV=UQkAjgMuR85cPikNtCxsODWPWs7cibOcOoNGdjSSvF8Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 4/5] arm64: dts: mediatek: mt8173-elm-hana: Mark
- touchscreens and trackpads as fail
-To: Chen-Yu Tsai <wenst@chromium.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
-	Hsin-Yi Wang <hsinyi@chromium.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	andriy.shevchenko@linux.intel.com, Jiri Kosina <jikos@kernel.org>, 
-	linus.walleij@linaro.org, broonie@kernel.org, gregkh@linuxfoundation.org, 
-	hdegoede@redhat.com, james.clark@arm.com, james@equiv.tech, 
-	keescook@chromium.org, rafael@kernel.org, tglx@linutronix.de, 
-	Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi,
+On Sun, 3 Dec 2023 23:39:56 +1100, Tim Lunn wrote:
+> Sonoff iHost is gateway device designed to provide a Smart Home Hub,
+> most notably it includes builtin radios for Wifi, BT and Zigbee, which
+> make it suitable SBC for use with many of the open home automation
+> platforms. It is availabe in two versions, first is based on
+> Rockchip RV1126 and 4GB DDR4 RAM. There is a second version based off
+> the RV1109 dual core SoC and 2GB RAM.
+> 
+> [...]
 
-On Sun, Dec 3, 2023 at 10:59=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.org> w=
-rote:
->
-> On Sat, Dec 2, 2023 at 8:58=E2=80=AFAM Doug Anderson <dianders@chromium.o=
-rg> wrote:
-> >
-> > Hi,
-> >
-> > On Tue, Nov 28, 2023 at 12:45=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.o=
-rg> wrote:
-> > >
-> > > @@ -44,6 +46,7 @@ trackpad2: trackpad@2c {
-> > >                 reg =3D <0x2c>;
-> > >                 hid-descr-addr =3D <0x0020>;
-> > >                 wakeup-source;
-> > > +               status =3D "fail-needs-probe";
-> >
-> > While doing this, you could also remove the hack where the trackpad
-> > IRQ pinctrl is listed under i2c4.
->
-> Sure. I do think we can do away with it though. According to at least one
-> schematic, the interrupt line has pull-ups on both sides of the voltage
-> shifter.
->
-> BTW, The touchscreen doesn't have pinctrl entries. This has pull-ups on
-> both sides of the voltage shifter as well.
+Applied, thanks!
 
-I dunno if the convention is different on Mediatek boards, but at
-least on boards I've been involved with in the past we've always put
-pinctrl entries just to make things explicit. This meant that we
-didn't rely on the firmware/bootrom/defaults to leave pulls in any
-particular state. ...otherwise those external pull-ups could be
-fighting with internal pull-downs, right?
+[1/8] ARM: dts: rockchip: rv1126: Add alternate UART pins
+      commit: 86fd29b0329c95d4136a5dcef555287a0be8a038
+[2/8] ARM: dts: rockchip: rv1126: Serial aliases
+      commit: 30250a587bddb5265bceb9f8397c459f5cc04e0c
+[4/8] ARM: dts: rockchip: rv1126: Add i2c2 nodes
+      commit: 655ff5d45dc9de5e67c839af4baf47eaffed348f
+[5/8] ARM: dts: rockchip: rv1126: Split up rgmii1 pinctrl
+      commit: d3bab19c83c7ce24e89d9f08f09e596c39b14658
+[6/8] ARM: dts: rockchip: Add rv1109 SoC
+      commit: bd6f1b13b972caebf54be1fb3bc2eb9f47de9d63
+[7/8] ARM: dts: Add Sonoff iHost Smart Home Hub
+      commit: 0f385eea8157bcb36d30d9f96105251465bc6684
+[8/8] dt-bindings: arm: rockchip: Add Sonoff iHost
+      commit: 98feed126e7dcae617af3b0e76f50160806e3233
 
--Doug
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
 
