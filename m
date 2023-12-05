@@ -1,58 +1,58 @@
-Return-Path: <linux-i2c+bounces-617-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-618-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13D8D804DAC
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 10:23:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41FA9804DB4
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 10:23:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF1B61F21495
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 09:23:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 77197B20D7A
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Dec 2023 09:23:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B4D13FB28;
-	Tue,  5 Dec 2023 09:22:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB373F8EA;
+	Tue,  5 Dec 2023 09:22:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Zn3Iyeem"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fkbZaldq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7123018F
-	for <linux-i2c@vger.kernel.org>; Tue,  5 Dec 2023 01:22:48 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-40c09b021daso25530185e9.0
-        for <linux-i2c@vger.kernel.org>; Tue, 05 Dec 2023 01:22:48 -0800 (PST)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E817F1B6
+	for <linux-i2c@vger.kernel.org>; Tue,  5 Dec 2023 01:22:50 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40c09dfa03cso23618785e9.2
+        for <linux-i2c@vger.kernel.org>; Tue, 05 Dec 2023 01:22:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701768167; x=1702372967; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1701768169; x=1702372969; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KDQvRMNMCDsySKsLvfWU4d3cyjxohNNvIIg/FZa633s=;
-        b=Zn3IyeemD7sk0z64sIoJskAbnJSUM9NbCbfz/OOqIJN8Ff9wG2B+jrmvXDlySLsnJK
-         NBDXbE073M4bybSdjtR9VR6t4aRhOjgPbOAGe/kyMxYOhTzRYsQ7kaDz0tfGJ5M7mknY
-         /HsjVwYYQxTsfAANvZZ+GwyCWWDKVxlv76soGzBCG3M6SahyHDq1Eb3ru1LhCdN9KYhy
-         14bKJl9Z98nNAZXCkctMFDm+zANgrGvtSx1lB+5JFcIL1lgRtOau9HhZ7ginREHq5NUK
-         mu27Wo4MPpOED8BDYBDey0jbbloVnnb689jZv29WFZjE/mKcCB/Su1/+1/AWGqsDcVY+
-         2NwQ==
+        bh=ic+lMCTjLKoS5KBhhnqOhZn1klxqPT1vX3hBzFZYLC4=;
+        b=fkbZaldqKPC6zsr6QLYOouE3OP/CSXAcl9bQY6E5ccEpWK0p4Gfi3GlK6GINf/ypDG
+         411FNVwteZQLcwWAP5vB34Tl9pny6QmDrKxW0Y8teCGY4eA4+QFxHGwdlwfR3Bp2re6n
+         G3L+bAMl8kgDphrghyadrfXxeOYJR2f6w5JsSnm9sPYaEFTLbBWlEJrEyEIHInHXXRZr
+         K9PlLMAHBVyYUKGbcstODy8vtPpZxKHVA2sT+nId7MPWPRZNgygrCU2wJyuW8RIpUL2E
+         A0MOmS5OXZOZvx2MVDyTUe0RSLcUO71gU7Sdx+14JT0w7whF1lSC1a8r3gDQUu3tt31a
+         ZylA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701768167; x=1702372967;
+        d=1e100.net; s=20230601; t=1701768169; x=1702372969;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KDQvRMNMCDsySKsLvfWU4d3cyjxohNNvIIg/FZa633s=;
-        b=kgLxoMQ6SuE7ois2C2EAWPD5COLCiUEiD/yoS/epyHb6I46LOW0iKbrdEXIlhQeSmt
-         PiR+SkS4VzUYsSt2poXP79kZH5TW3hr59hvqgYvzq+CIqVTKsjb+YE3Fb9y2WqwZgZwc
-         VQ2CL+3pvfdJ2bAyc4E1a52cqecoQ+OVvXX5fhRddS4fTNfTXBsCydWfmj3qw7dbqJdZ
-         VSf6ga09X41Fqb48vvMsPVuYuo6kLPBodIBqD0XKepNgRpXwYfW56WYO3HEgLUjR+Ep2
-         R2hGGibnd57tIYQb3WoNUA95tPtDR6QTEdBFooy0M/9ymVdcSXTefcB/FDiF/4pwx4L+
-         4egQ==
-X-Gm-Message-State: AOJu0YzqDNPxIDgBl/+7+2OvJsSAgzI/XXx/1M0nrkxDOpc3Ex8leR5k
-	garCUhRYdXWJwBuOdXXEkCasKg==
-X-Google-Smtp-Source: AGHT+IEzeGcT+5e2hM4rC9GBzraQmLLysONbGyiPU8Nzz9RHij9fek/9MzPiwPnfnBz/PliCUqdVmg==
-X-Received: by 2002:a05:600c:21ce:b0:40b:acfb:5d04 with SMTP id x14-20020a05600c21ce00b0040bacfb5d04mr247995wmj.222.1701768167020;
-        Tue, 05 Dec 2023 01:22:47 -0800 (PST)
+        bh=ic+lMCTjLKoS5KBhhnqOhZn1klxqPT1vX3hBzFZYLC4=;
+        b=lRmCIgB9F+FvIRcK8m21h1nyTuXpjSvSUt1BO4UtnN38wwVdCTx84aq5J3NbKKvuMB
+         AAY8tNk9g/mnRTJbRdnevWhcbjivGhCc1kGyMIC7R5HtNQbm1YLOMGvPsG7crEkjZ4VZ
+         K5Xk+UTayMiFCesrr1VYycmfl1qjC5K5kWUYlIuq2iZ5OQOOfHZstRVzSPFj0NbYSHKx
+         2ow+EpEP1kXW00DbNr9+N9nM0Q1jjAsTWOjZo5rceSMIzKqdOP+O2GZo1ikP5lQzXWrf
+         k70faYUINBUhJLZcGAuQ5RbkF0/y+oh11qCwsMEeEh/VXs//IKUCCjyjvK5Ci3xUbQks
+         ebRw==
+X-Gm-Message-State: AOJu0YwjZuhzyFgyvK7Gmqc2Kpzz/z0OICxJ9ZYnVrT0k1z8X1QBrizj
+	yoSxatlo+Hbd96fwiF6oR/jQgA==
+X-Google-Smtp-Source: AGHT+IHfoP0ThFOjNsS+ibdhONyg8AlmPEXQCpblukDPZWzThPMdS6QotAP5FclOjbMTSVPpJ94S6w==
+X-Received: by 2002:a05:600c:a05:b0:40c:503:24de with SMTP id z5-20020a05600c0a0500b0040c050324demr254274wmp.88.1701768169249;
+        Tue, 05 Dec 2023 01:22:49 -0800 (PST)
 Received: from krzk-bin.. ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c4eca00b0040596352951sm21692287wmq.5.2023.12.05.01.22.45
+        by smtp.gmail.com with ESMTPSA id g10-20020a05600c4eca00b0040596352951sm21692287wmq.5.2023.12.05.01.22.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Dec 2023 01:22:46 -0800 (PST)
+        Tue, 05 Dec 2023 01:22:48 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Andi Shyti <andi.shyti@kernel.org>,
 	Rob Herring <robh+dt@kernel.org>,
@@ -75,9 +75,9 @@ To: Andi Shyti <andi.shyti@kernel.org>,
 	linux-serial@vger.kernel.org,
 	linux-watchdog@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5/6] dt-bindings: watchdog: samsung: add specific compatible for Tesla FSD
-Date: Tue,  5 Dec 2023 10:22:28 +0100
-Message-Id: <20231205092229.19135-6-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 6/6] arm64: dts: fsd: add specific compatibles for Tesla FSD
+Date: Tue,  5 Dec 2023 10:22:29 +0100
+Message-Id: <20231205092229.19135-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231205092229.19135-1-krzysztof.kozlowski@linaro.org>
 References: <20231205092229.19135-1-krzysztof.kozlowski@linaro.org>
@@ -98,6 +98,8 @@ Documentation/devicetree/bindings/writing-bindings.rst state that:
 2. We should add new compatibles in case of bugs or features.
 
 Add Tesla FSD compatible specific to be used with an existing fallback.
+This will also help reviews of new code using existing DTS as template.
+No functional impact on Linux drivers behavior.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
@@ -106,41 +108,154 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 I propose to take the patch through Samsung SoC (me). See cover letter
 for explanation.
 ---
- .../bindings/watchdog/samsung-wdt.yaml        | 21 ++++++++++++-------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ arch/arm64/boot/dts/tesla/fsd.dtsi | 32 +++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-index 8fb6656ba0c2..ea2d206b05ab 100644
---- a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-@@ -16,14 +16,19 @@ description: |+
+diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
+index bb50a9f7db4a..9db162afc834 100644
+--- a/arch/arm64/boot/dts/tesla/fsd.dtsi
++++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
+@@ -581,7 +581,7 @@ pdma1: dma-controller@14290000 {
+ 		};
  
- properties:
-   compatible:
--    enum:
--      - samsung,s3c2410-wdt                   # for S3C2410
--      - samsung,s3c6410-wdt                   # for S3C6410, S5PV210 and Exynos4
--      - samsung,exynos5250-wdt                # for Exynos5250
--      - samsung,exynos5420-wdt                # for Exynos5420
--      - samsung,exynos7-wdt                   # for Exynos7
--      - samsung,exynos850-wdt                 # for Exynos850
--      - samsung,exynosautov9-wdt              # for Exynosautov9
-+    oneOf:
-+      - enum:
-+          - samsung,s3c2410-wdt                   # for S3C2410
-+          - samsung,s3c6410-wdt                   # for S3C6410, S5PV210 and Exynos4
-+          - samsung,exynos5250-wdt                # for Exynos5250
-+          - samsung,exynos5420-wdt                # for Exynos5420
-+          - samsung,exynos7-wdt                   # for Exynos7
-+          - samsung,exynos850-wdt                 # for Exynos850
-+          - samsung,exynosautov9-wdt              # for Exynosautov9
-+      - items:
-+          - enum:
-+              - tesla,fsd-wdt
-+          - const: samsung,exynos7-wdt
+ 		serial_0: serial@14180000 {
+-			compatible = "samsung,exynos4210-uart";
++			compatible = "tesla,fsd-uart", "samsung,exynos4210-uart";
+ 			reg = <0x0 0x14180000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>;
+ 			dmas = <&pdma1 1>, <&pdma1 0>;
+@@ -593,7 +593,7 @@ serial_0: serial@14180000 {
+ 		};
  
-   reg:
-     maxItems: 1
+ 		serial_1: serial@14190000 {
+-			compatible = "samsung,exynos4210-uart";
++			compatible = "tesla,fsd-uart", "samsung,exynos4210-uart";
+ 			reg = <0x0 0x14190000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 172 IRQ_TYPE_LEVEL_HIGH>;
+ 			dmas = <&pdma1 3>, <&pdma1 2>;
+@@ -605,12 +605,12 @@ serial_1: serial@14190000 {
+ 		};
+ 
+ 		pmu_system_controller: system-controller@11400000 {
+-			compatible = "samsung,exynos7-pmu", "syscon";
++			compatible = "tesla,fsd-pmu", "samsung,exynos7-pmu", "syscon";
+ 			reg = <0x0 0x11400000 0x0 0x5000>;
+ 		};
+ 
+ 		watchdog_0: watchdog@100a0000 {
+-			compatible = "samsung,exynos7-wdt";
++			compatible = "tesla,fsd-wdt", "samsung,exynos7-wdt";
+ 			reg = <0x0 0x100a0000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 471 IRQ_TYPE_LEVEL_HIGH>;
+ 			samsung,syscon-phandle = <&pmu_system_controller>;
+@@ -619,7 +619,7 @@ watchdog_0: watchdog@100a0000 {
+ 		};
+ 
+ 		watchdog_1: watchdog@100b0000 {
+-			compatible = "samsung,exynos7-wdt";
++			compatible = "tesla,fsd-wdt", "samsung,exynos7-wdt";
+ 			reg = <0x0 0x100b0000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 472 IRQ_TYPE_LEVEL_HIGH>;
+ 			samsung,syscon-phandle = <&pmu_system_controller>;
+@@ -628,7 +628,7 @@ watchdog_1: watchdog@100b0000 {
+ 		};
+ 
+ 		watchdog_2: watchdog@100c0000 {
+-			compatible = "samsung,exynos7-wdt";
++			compatible = "tesla,fsd-wdt", "samsung,exynos7-wdt";
+ 			reg = <0x0 0x100c0000 0x0 0x100>;
+ 			interrupts = <GIC_SPI 473 IRQ_TYPE_LEVEL_HIGH>;
+ 			samsung,syscon-phandle = <&pmu_system_controller>;
+@@ -637,7 +637,7 @@ watchdog_2: watchdog@100c0000 {
+ 		};
+ 
+ 		pwm_0: pwm@14100000 {
+-			compatible = "samsung,exynos4210-pwm";
++			compatible = "tesla,fsd-pwm", "samsung,exynos4210-pwm";
+ 			reg = <0x0 0x14100000 0x0 0x100>;
+ 			samsung,pwm-outputs = <0>, <1>, <2>, <3>;
+ 			#pwm-cells = <3>;
+@@ -647,7 +647,7 @@ pwm_0: pwm@14100000 {
+ 		};
+ 
+ 		pwm_1: pwm@14110000 {
+-			compatible = "samsung,exynos4210-pwm";
++			compatible = "tesla,fsd-pwm", "samsung,exynos4210-pwm";
+ 			reg = <0x0 0x14110000 0x0 0x100>;
+ 			samsung,pwm-outputs = <0>, <1>, <2>, <3>;
+ 			#pwm-cells = <3>;
+@@ -657,7 +657,7 @@ pwm_1: pwm@14110000 {
+ 		};
+ 
+ 		hsi2c_0: i2c@14200000 {
+-			compatible = "samsung,exynos7-hsi2c";
++			compatible = "tesla,fsd-hsi2c", "samsung,exynos7-hsi2c";
+ 			reg = <0x0 0x14200000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
+ 			#address-cells = <1>;
+@@ -670,7 +670,7 @@ hsi2c_0: i2c@14200000 {
+ 		};
+ 
+ 		hsi2c_1: i2c@14210000 {
+-			compatible = "samsung,exynos7-hsi2c";
++			compatible = "tesla,fsd-hsi2c", "samsung,exynos7-hsi2c";
+ 			reg = <0x0 0x14210000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 149 IRQ_TYPE_LEVEL_HIGH>;
+ 			#address-cells = <1>;
+@@ -683,7 +683,7 @@ hsi2c_1: i2c@14210000 {
+ 		};
+ 
+ 		hsi2c_2: i2c@14220000 {
+-			compatible = "samsung,exynos7-hsi2c";
++			compatible = "tesla,fsd-hsi2c", "samsung,exynos7-hsi2c";
+ 			reg = <0x0 0x14220000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 150 IRQ_TYPE_LEVEL_HIGH>;
+ 			#address-cells = <1>;
+@@ -696,7 +696,7 @@ hsi2c_2: i2c@14220000 {
+ 		};
+ 
+ 		hsi2c_3: i2c@14230000 {
+-			compatible = "samsung,exynos7-hsi2c";
++			compatible = "tesla,fsd-hsi2c", "samsung,exynos7-hsi2c";
+ 			reg = <0x0 0x14230000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 151 IRQ_TYPE_LEVEL_HIGH>;
+ 			#address-cells = <1>;
+@@ -709,7 +709,7 @@ hsi2c_3: i2c@14230000 {
+ 		};
+ 
+ 		hsi2c_4: i2c@14240000 {
+-			compatible = "samsung,exynos7-hsi2c";
++			compatible = "tesla,fsd-hsi2c", "samsung,exynos7-hsi2c";
+ 			reg = <0x0 0x14240000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH>;
+ 			#address-cells = <1>;
+@@ -722,7 +722,7 @@ hsi2c_4: i2c@14240000 {
+ 		};
+ 
+ 		hsi2c_5: i2c@14250000 {
+-			compatible = "samsung,exynos7-hsi2c";
++			compatible = "tesla,fsd-hsi2c", "samsung,exynos7-hsi2c";
+ 			reg = <0x0 0x14250000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH>;
+ 			#address-cells = <1>;
+@@ -735,7 +735,7 @@ hsi2c_5: i2c@14250000 {
+ 		};
+ 
+ 		hsi2c_6: i2c@14260000 {
+-			compatible = "samsung,exynos7-hsi2c";
++			compatible = "tesla,fsd-hsi2c", "samsung,exynos7-hsi2c";
+ 			reg = <0x0 0x14260000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH>;
+ 			#address-cells = <1>;
+@@ -748,7 +748,7 @@ hsi2c_6: i2c@14260000 {
+ 		};
+ 
+ 		hsi2c_7: i2c@14270000 {
+-			compatible = "samsung,exynos7-hsi2c";
++			compatible = "tesla,fsd-hsi2c", "samsung,exynos7-hsi2c";
+ 			reg = <0x0 0x14270000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
+ 			#address-cells = <1>;
 -- 
 2.34.1
 
