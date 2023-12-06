@@ -1,174 +1,168 @@
-Return-Path: <linux-i2c+bounces-634-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-635-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AE128075F2
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Dec 2023 18:01:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 385DF8076B3
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Dec 2023 18:36:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCBDA1F212AD
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Dec 2023 17:01:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE4741F211F3
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Dec 2023 17:36:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1339149F6D;
-	Wed,  6 Dec 2023 17:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62A4F6A031;
+	Wed,  6 Dec 2023 17:36:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Lg+uQ0ZV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="erFTzDZr"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC48D3
-	for <linux-i2c@vger.kernel.org>; Wed,  6 Dec 2023 09:01:19 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-a1db6c63028so93590966b.2
-        for <linux-i2c@vger.kernel.org>; Wed, 06 Dec 2023 09:01:19 -0800 (PST)
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DBDD40
+	for <linux-i2c@vger.kernel.org>; Wed,  6 Dec 2023 09:35:57 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5482df11e73so78083a12.0
+        for <linux-i2c@vger.kernel.org>; Wed, 06 Dec 2023 09:35:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1701882078; x=1702486878; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6USO49247dIS4iM67DLL61cvXhjKL/DNTtVy5lpNUks=;
-        b=Lg+uQ0ZVQkeebudztZX5+ujD8tCcYzcIj63pKJVuZ5ANSGk/CN2jn/OXUL4XAOqn23
-         gAWRa3V8QtgpsDU5gBCkppeFrPx6181NngjWmgKA6CcuBlc68WtfQdlIOqZqvSMdFFkJ
-         3Cu8MJM4Ff2fz9Vn5TAviEjxRmoVrvETo3CzE=
+        d=linaro.org; s=google; t=1701884156; x=1702488956; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5gdPFt8BdmSDXII3E32UP5ZmZMEA7jETxyKZk3XrFV8=;
+        b=erFTzDZrb5EDYjHe5m5pIvj61XP9WqJqeumqMSpvIL9KKdbN2seBoNzxQ7/1nWLPR8
+         5uwWknJSj3VGgF9QZbc4R7KyZCRRHuRepzLSAUha/efbAiHDDncKGUaZdlH287W6gEec
+         Bzhscb0yTz418SNcaxFApeJJ+vTPIP0Yjs60HUAiy6AJN7JO0ecsLBml3gIjhG/wYOcG
+         Nk+hc5jOWZdR2bzbwnpAGC2d2zBPyv2bh+TovKo+S5hJ7jGs7iTqutSn1jAgEDcuWCpP
+         5XAwqf660xcD7ed2I37HDXCeFweUZeqth7N5Wi5hA5VnUwyC7cPK4Eyev4N+U2k8romR
+         +0uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701882078; x=1702486878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6USO49247dIS4iM67DLL61cvXhjKL/DNTtVy5lpNUks=;
-        b=PmE/JMqIao83QVOm/X5J6q7CJcMX64QueW/N2hF6pcPcCYIa7mfUbOSWzc1D6/OycS
-         SK0UHVxxRxNkwBRak4J/o/BR16e8zA/3DsVFbeumwFNdpBwAUdoRrTQb7RJFLcMKDhQw
-         eUJx/7SMN6RBaLNmkFCwoYahUqSRAc3r/VnWGj+Js8aHIS20TomIOXRMpunE+8JU+xav
-         t3ZrnTIiAVRUmJOPQyPqknQwtFR1C6ckxII9/JUR0j1bWJcP0dPqJoDsgDcAWtEsy6tj
-         gWrFoaIrxiappKHkFuatGPGbjkHKNNC4w6jPVos/LlDpeu0y6W1B2TGpGPyJQDcGYkv6
-         wF+g==
-X-Gm-Message-State: AOJu0YxYvP1RH60v3jYus6y+l1guZuI3ktxUsUTTplIRrR5yT9Zafxyp
-	oVcxq0Y+2CvozlpFckxAn8c/ME7+DTF3RqaLqFYFaHAl
-X-Google-Smtp-Source: AGHT+IHxF41Hwa36PxsREZq4TMhutbL5mdOoqawjVeSOcDr+uUQIiz71PhFCz2wlnVL886XUaovkJw==
-X-Received: by 2002:a17:906:5586:b0:a19:a19a:eacb with SMTP id y6-20020a170906558600b00a19a19aeacbmr759891ejp.132.1701882078016;
-        Wed, 06 Dec 2023 09:01:18 -0800 (PST)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id md10-20020a170906ae8a00b00a19084099a4sm177326ejb.16.2023.12.06.09.01.17
-        for <linux-i2c@vger.kernel.org>
+        d=1e100.net; s=20230601; t=1701884156; x=1702488956;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5gdPFt8BdmSDXII3E32UP5ZmZMEA7jETxyKZk3XrFV8=;
+        b=vlXWLf/e/q653kKvKWcobvHo1tukC+mn702/6E8yTxxH6SjdhLZ+ORop0DwCFJBwns
+         PzMk0r+mlpKMnhpyoGBQSeRkP8r6IS8n5HpJmdnQpY3Lg6v5K0snUJ49J8PVut2so3Dj
+         adMaP8NSPZ87CyTLCuNN/hhWV47OjjA6PtG4noYq6+5kw4M2+7TES9j9VSOrbKpnqPuo
+         ggm/PfNvGccunbESOWBUEZMvDqSMUbHN64q2jrHlSE9tPNMsMGmdDBmhV/9wJV1gmqMx
+         JhC7IuOXOu6tSuqdQhcrjjjxtKh85VUCempzxTDcovIakQg6J2uswTplDtaxaTWsMJzU
+         gYcw==
+X-Gm-Message-State: AOJu0Yy21ru8wbFakQWhaqI+aVEadx4dveULrZ6Q1RXYx3+KwRXgkE2g
+	f8aXoEtxL7Z61O5TetV7hp8ekg==
+X-Google-Smtp-Source: AGHT+IErqATdwEIlZ3NSGTprM7HJykavuFniKFr5YhXv0PkeVLHBLZ+4qOrkqp3q7goWYCRNBFUdPw==
+X-Received: by 2002:a17:906:aac5:b0:a1c:6dfd:1480 with SMTP id kt5-20020a170906aac500b00a1c6dfd1480mr748849ejb.136.1701884156395;
+        Wed, 06 Dec 2023 09:35:56 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.218.27])
+        by smtp.gmail.com with ESMTPSA id le14-20020a170907170e00b009fc42f37970sm203581ejc.171.2023.12.06.09.35.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Dec 2023 09:01:17 -0800 (PST)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-548ae9a5eeaso12009a12.1
-        for <linux-i2c@vger.kernel.org>; Wed, 06 Dec 2023 09:01:17 -0800 (PST)
-X-Received: by 2002:a05:600c:4e8d:b0:40b:33aa:a2b9 with SMTP id
- f13-20020a05600c4e8d00b0040b33aaa2b9mr101895wmq.4.1701882057134; Wed, 06 Dec
- 2023 09:00:57 -0800 (PST)
+        Wed, 06 Dec 2023 09:35:55 -0800 (PST)
+Message-ID: <cfd9cbc6-5f66-4929-9afb-3a572e93e8ae@linaro.org>
+Date: Wed, 6 Dec 2023 18:35:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231128084236.157152-1-wenst@chromium.org> <20231128084236.157152-5-wenst@chromium.org>
- <CAD=FV=W01gfxV6RN2o6CVS7jjf8qgKP-jUy9Bp94d2hWzVC48A@mail.gmail.com>
- <CAGXv+5E+R292XsOFSL-j0KJMmVJjWtxMRgCK8besP7mo6NDOWA@mail.gmail.com>
- <CAD=FV=UQkAjgMuR85cPikNtCxsODWPWs7cibOcOoNGdjSSvF8Q@mail.gmail.com>
- <3700f05f-2411-4422-972f-f3df690efb84@collabora.com> <CAGXv+5G5fFTv8zn=YamSdccjuYemE5oKBqjb8CSyGzu9aMJ0eg@mail.gmail.com>
- <4b9ea82c-d1a4-47b6-ba03-346cfdedef05@collabora.com>
-In-Reply-To: <4b9ea82c-d1a4-47b6-ba03-346cfdedef05@collabora.com>
-From: Doug Anderson <dianders@chromium.org>
-Date: Wed, 6 Dec 2023 09:00:40 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=UMRRYieChp2+4Z6zxL-CSVZabiokuHH=qrnMMSmjNM2Q@mail.gmail.com>
-Message-ID: <CAD=FV=UMRRYieChp2+4Z6zxL-CSVZabiokuHH=qrnMMSmjNM2Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 4/5] arm64: dts: mediatek: mt8173-elm-hana: Mark
- touchscreens and trackpads as fail
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Chen-Yu Tsai <wenst@chromium.org>, Rob Herring <robh+dt@kernel.org>, 
-	Frank Rowand <frowand.list@gmail.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, Wolfram Sang <wsa@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
-	Hsin-Yi Wang <hsinyi@chromium.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	andriy.shevchenko@linux.intel.com, Jiri Kosina <jikos@kernel.org>, 
-	linus.walleij@linaro.org, broonie@kernel.org, gregkh@linuxfoundation.org, 
-	hdegoede@redhat.com, james.clark@arm.com, james@equiv.tech, 
-	keescook@chromium.org, rafael@kernel.org, tglx@linutronix.de, 
-	Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/6] dt-bindings: pwm: samsung: add specific compatible
+ for Tesla FSD
+Content-Language: en-US
+To: Thierry Reding <thierry.reding@gmail.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Wim Van Sebroeck
+ <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>,
+ linux-fsd@tesla.com, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20231205092229.19135-1-krzysztof.kozlowski@linaro.org>
+ <20231205092229.19135-3-krzysztof.kozlowski@linaro.org>
+ <ZXCeWmEO3PJiK0m5@orome.fritz.box>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <ZXCeWmEO3PJiK0m5@orome.fritz.box>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On 06/12/2023 17:16, Thierry Reding wrote:
+> On Tue, Dec 05, 2023 at 10:22:25AM +0100, Krzysztof Kozlowski wrote:
+>> Tesla FSD is a derivative of Samsung Exynos SoC, thus just like the
+>> others it reuses several devices from older designs.  Historically we
+>> kept the old (block's) compatible only.  This works fine and there is no
+>> bug here, however guidelines expressed in
+>> Documentation/devicetree/bindings/writing-bindings.rst state that:
+>> 1. Compatibles should be specific.
+>> 2. We should add new compatibles in case of bugs or features.
+>>
+>> Add Tesla FSD compatible specific to be used with an existing fallback.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> ---
+>>
+>> I propose to take the patch through Samsung SoC (me). See cover letter
+>> for explanation.
+>> ---
+>>  Documentation/devicetree/bindings/pwm/pwm-samsung.yaml | 1 +
+>>  1 file changed, 1 insertion(+)
+> 
+> You point to the guidelines that say we should have specific compatible> strings, but then the string that you add seems very generic. Now, I'm
+> obviously not an expert on Tesla hardware, but just FSD seems to be
+> quite generic according to the internet. It seems like the chip derived
+> from Samsung used to be known as AP3/HW3, but there's now also AP4/HW4,
+> so I wonder if those differ in some way and if these shouldn't include
+> some sort of version/generation number.
 
-On Wed, Dec 6, 2023 at 2:02=E2=80=AFAM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 06/12/23 03:55, Chen-Yu Tsai ha scritto:
-> > On Tue, Dec 5, 2023 at 6:22=E2=80=AFPM AngeloGioacchino Del Regno
-> > <angelogioacchino.delregno@collabora.com> wrote:
-> >>
-> >> Il 04/12/23 17:50, Doug Anderson ha scritto:
-> >>> Hi,
-> >>>
-> >>> On Sun, Dec 3, 2023 at 10:59=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.=
-org> wrote:
-> >>>>
-> >>>> On Sat, Dec 2, 2023 at 8:58=E2=80=AFAM Doug Anderson <dianders@chrom=
-ium.org> wrote:
-> >>>>>
-> >>>>> Hi,
-> >>>>>
-> >>>>> On Tue, Nov 28, 2023 at 12:45=E2=80=AFAM Chen-Yu Tsai <wenst@chromi=
-um.org> wrote:
-> >>>>>>
-> >>>>>> @@ -44,6 +46,7 @@ trackpad2: trackpad@2c {
-> >>>>>>                   reg =3D <0x2c>;
-> >>>>>>                   hid-descr-addr =3D <0x0020>;
-> >>>>>>                   wakeup-source;
-> >>>>>> +               status =3D "fail-needs-probe";
-> >>>>>
-> >>>>> While doing this, you could also remove the hack where the trackpad
-> >>>>> IRQ pinctrl is listed under i2c4.
-> >>>>
-> >>>> Sure. I do think we can do away with it though. According to at leas=
-t one
-> >>>> schematic, the interrupt line has pull-ups on both sides of the volt=
-age
-> >>>> shifter.
-> >>>>
-> >>>> BTW, The touchscreen doesn't have pinctrl entries. This has pull-ups=
- on
-> >>>> both sides of the voltage shifter as well.
-> >>>
-> >>> I dunno if the convention is different on Mediatek boards, but at
-> >>> least on boards I've been involved with in the past we've always put
-> >>> pinctrl entries just to make things explicit. This meant that we
-> >>> didn't rely on the firmware/bootrom/defaults to leave pulls in any
-> >>> particular state. ...otherwise those external pull-ups could be
-> >>> fighting with internal pull-downs, right?
-> >>>
-> >>
-> >> MediaTek boards aren't special and there's no good reason for those to=
- rely on
-> >> firmware/bootrom/defaults - so there is no good reason to avoid declar=
-ing any
-> >> relevant pinctrl entry.
-> >
-> > I think this should be migrated to use the proper GPIO bindings: the
-> > GPIO_PULL_UP / GPIO_PULL_DOWN / GPIO_BIAS_DISABLE flags.
-> >
-> > But that's a different discussion.
-> >
->
-> 100% agreed.
+That's the compatible chosen that time for entire platform, as a
+consensus, for all SoC components. Thus the PWM compatible is as
+specific as it can get.
 
-I guess I'd need to see patches as an example to see how this looks,
-but I'm at least slightly skeptical. In this case the GPIO is
-indirectly specified via "interrupts". Would you add these flags to
-the interrupts specifier, too? There's another potential pull as well
-(PIN_CONFIG_BIAS_BUS_HOLD) as well as other pin configuration
-(PIN_CONFIG_INPUT_DEBOUNCE, for instance). Do we try to fit all of
-these into the GPIO / interrupt specifier?
+Best regards,
+Krzysztof
 
-Certainly I will admit that this is a complicated topic, but it seems
-weird to say that we use pinctrl to specify pin configuration / pulls
-for all pins except ones that are configured as GPIOs or GPIO
-interrupts.
-
--Doug
 
