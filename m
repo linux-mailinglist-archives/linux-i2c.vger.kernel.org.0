@@ -1,140 +1,138 @@
-Return-Path: <linux-i2c+bounces-627-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-628-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6D9F80654B
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Dec 2023 03:56:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5472806A9F
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Dec 2023 10:24:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E4E48B20F9C
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Dec 2023 02:56:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E70C1F211AC
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Dec 2023 09:24:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 873FE6AB7;
-	Wed,  6 Dec 2023 02:56:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33D281A70E;
+	Wed,  6 Dec 2023 09:23:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DE1M362M"
+	dkim=pass (2048-bit key) header.d=friendlyarm-com.20230601.gappssmtp.com header.i=@friendlyarm-com.20230601.gappssmtp.com header.b="QimAQ8iy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A271AA
-	for <linux-i2c@vger.kernel.org>; Tue,  5 Dec 2023 18:55:58 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-50be4f03b06so4211284e87.0
-        for <linux-i2c@vger.kernel.org>; Tue, 05 Dec 2023 18:55:58 -0800 (PST)
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9236CD5B
+	for <linux-i2c@vger.kernel.org>; Wed,  6 Dec 2023 01:06:57 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-28655c04da3so525834a91.0
+        for <linux-i2c@vger.kernel.org>; Wed, 06 Dec 2023 01:06:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1701831356; x=1702436156; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kAjB+OSC2G0sATXrxYuI8k53/GEiZUhN5YxDKMU/l7c=;
-        b=DE1M362Mr3J/o1u4oHby3q8T9PzICCGMhNDiPxByQf26C+O8nh+Ac0/iEtSpdkOHdK
-         npS7G+QzxOjRmZJc0xTj6esaIRFMbt429pOLjuowICKmitmWx6K2WZayTLw7uA2VKbB+
-         7OhrbyrAUf9ARrYLCWK+Hnw5xPz9s9W4Hv7Og=
+        d=friendlyarm-com.20230601.gappssmtp.com; s=20230601; t=1701853617; x=1702458417; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vkgnInx34MsdRC00k2I9y+o/ne93gzAEsHKwXhaX8A0=;
+        b=QimAQ8iyaUOdup2m6AGC1hbBh5vYSjA0MUj+FwRsUAo7Qp4bNh1lLzCyd72ukcNTgm
+         pQPCqe7zk9g/1fUO4fqJao6w+GZrS5EulUhZXiz8gH0DJyfzW/EUqsI4jCgBkvkEHO/n
+         9s5bKGBplbohpkBfWUZXre7w0wQNUINV4+WDDVqIiedS6Q1vflO/gRj97Pk56dEOQ4zh
+         71b4cUyUO11HZlmj691nXXWmCjDkwZ9hFhqWuJyGkWegcW6IHMm8zG4b6bPB0dqZvDAP
+         Syx0D3KhmOxBlfYUI/EuZdgrcm19iLhqXXvK0Hpx0bY+rCc4SgFUiCGFVu7mgSiUWQmP
+         JpwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701831356; x=1702436156;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kAjB+OSC2G0sATXrxYuI8k53/GEiZUhN5YxDKMU/l7c=;
-        b=QcGvKynb388pTKm2YwraBk01gMpwqL6f7adTgChAoBetm7FaR6g+NCR9yVWbAYr3Y5
-         dG/wKnVo67PCwY8fFVeI4q/BJOmF7ne+zwqlVqINye1kMVltwTRLFwG6AHtUwLQahEdf
-         qviRTgeQ7s2uR1FNuV2Y8On9mrIveZrOEVDagZL0g35JhlxlElY3C/kK3rbyGKXe3uce
-         kfU5K+pZBMI2WoosvvlEnx9DjXwUlYOr5LTJtRhB8HMvhgQkZ5OMq2B1+yRxtTMswi0r
-         pyhyaWLuCaw8Y/4PZ/Rs3UDFT77j3iKhR14lw8udKbfjlf9Sef3c6DH2/ZiY+aXeK+en
-         pgxA==
-X-Gm-Message-State: AOJu0Yy0mim5P1gFVM52pijnxhVpE9WG1J6yk9Gmn6TtvGA3OGUr7xTi
-	d/n+UqllHQaaxbNW0QQQUJKAQiWJLDPkxOyY4t2hGg==
-X-Google-Smtp-Source: AGHT+IHnNZLv+A8rBD2iJfouOzY8bodAfVe2SPHWkYOI3dEcOPciD4ew3LweH+XusZAZCM5WonigRoCXzwrqYp9fpWQ=
-X-Received: by 2002:a05:6512:1107:b0:50b:f88d:f83b with SMTP id
- l7-20020a056512110700b0050bf88df83bmr112272lfg.78.1701831355848; Tue, 05 Dec
- 2023 18:55:55 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701853617; x=1702458417;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vkgnInx34MsdRC00k2I9y+o/ne93gzAEsHKwXhaX8A0=;
+        b=rINRdeGx9JATz39BuGBs7Bhc4m4eyNBuO7wY8bIV0VaVtF2A1Qp92LI4qtT+bKyvX9
+         Ur0LKedq2nbI3k6QsIATEgLWwwztm5a52FsJyBoGoD48ZZTVjCTWhcg/x+JUtNiDwRuI
+         IE4qpsYUnHBHjfl90F5FHD12p2TVY5yCsPWgxG7WaZwX++Q0HRMV1NgW8vMKeY8q+fXn
+         q8/yFa3PbvrE9KfuODlUbQhyTOR0Ual6k0ex3VyY9xJx6vGMYBiozzmTdFAgOOCbh+f3
+         4mLJPIi9O2tXoUsmlD3WpaPux+DBoFmLZO47UldRkpb94v+z/7EijpW8ujFedlx5dU0F
+         VSSg==
+X-Gm-Message-State: AOJu0Yy+F6WJsdV9RZPMGQ7FrS+HTv4t9KKf1ffF184fp11Ga2W2LgWD
+	j4K/OL4Qfc6eSOpk7Od0oJ/7zk/tG/NEBacHc7KPxw==
+X-Google-Smtp-Source: AGHT+IHrGxsDqoubS9LhJ6U+qoCk+pQ/zFRwTborkh3P26N1W35bYry7lNZkS91ue9idDeKXGjDzeQ==
+X-Received: by 2002:a17:90b:1b46:b0:286:c155:10e0 with SMTP id nv6-20020a17090b1b4600b00286c15510e0mr827953pjb.31.1701853616973;
+        Wed, 06 Dec 2023 01:06:56 -0800 (PST)
+Received: from jensen.next (li999-236.members.linode.com. [45.33.49.236])
+        by smtp.gmail.com with ESMTPSA id mi7-20020a17090b4b4700b00286a708cd07sm4967797pjb.57.2023.12.06.01.06.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Dec 2023 01:06:56 -0800 (PST)
+From: Jensen Huang <jensenhuang@friendlyarm.com>
+To: Heiko Stuebner <heiko@sntech.de>,
+	Andi Shyti <andi.shyti@kernel.org>
+Cc: Jensen Huang <jensenhuang@friendlyarm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: rk3x: fix potential spinlock recursion on poll
+Date: Wed,  6 Dec 2023 17:06:40 +0800
+Message-ID: <20231206090641.18849-1-jensenhuang@friendlyarm.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231128084236.157152-1-wenst@chromium.org> <20231128084236.157152-5-wenst@chromium.org>
- <CAD=FV=W01gfxV6RN2o6CVS7jjf8qgKP-jUy9Bp94d2hWzVC48A@mail.gmail.com>
- <CAGXv+5E+R292XsOFSL-j0KJMmVJjWtxMRgCK8besP7mo6NDOWA@mail.gmail.com>
- <CAD=FV=UQkAjgMuR85cPikNtCxsODWPWs7cibOcOoNGdjSSvF8Q@mail.gmail.com> <3700f05f-2411-4422-972f-f3df690efb84@collabora.com>
-In-Reply-To: <3700f05f-2411-4422-972f-f3df690efb84@collabora.com>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Wed, 6 Dec 2023 10:55:44 +0800
-Message-ID: <CAGXv+5G5fFTv8zn=YamSdccjuYemE5oKBqjb8CSyGzu9aMJ0eg@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 4/5] arm64: dts: mediatek: mt8173-elm-hana: Mark
- touchscreens and trackpads as fail
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Doug Anderson <dianders@chromium.org>, Rob Herring <robh+dt@kernel.org>, 
-	Frank Rowand <frowand.list@gmail.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, Wolfram Sang <wsa@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
-	Hsin-Yi Wang <hsinyi@chromium.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	andriy.shevchenko@linux.intel.com, Jiri Kosina <jikos@kernel.org>, 
-	linus.walleij@linaro.org, broonie@kernel.org, gregkh@linuxfoundation.org, 
-	hdegoede@redhat.com, james.clark@arm.com, james@equiv.tech, 
-	keescook@chromium.org, rafael@kernel.org, tglx@linutronix.de, 
-	Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 5, 2023 at 6:22=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 04/12/23 17:50, Doug Anderson ha scritto:
-> > Hi,
-> >
-> > On Sun, Dec 3, 2023 at 10:59=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.or=
-g> wrote:
-> >>
-> >> On Sat, Dec 2, 2023 at 8:58=E2=80=AFAM Doug Anderson <dianders@chromiu=
-m.org> wrote:
-> >>>
-> >>> Hi,
-> >>>
-> >>> On Tue, Nov 28, 2023 at 12:45=E2=80=AFAM Chen-Yu Tsai <wenst@chromium=
-.org> wrote:
-> >>>>
-> >>>> @@ -44,6 +46,7 @@ trackpad2: trackpad@2c {
-> >>>>                  reg =3D <0x2c>;
-> >>>>                  hid-descr-addr =3D <0x0020>;
-> >>>>                  wakeup-source;
-> >>>> +               status =3D "fail-needs-probe";
-> >>>
-> >>> While doing this, you could also remove the hack where the trackpad
-> >>> IRQ pinctrl is listed under i2c4.
-> >>
-> >> Sure. I do think we can do away with it though. According to at least =
-one
-> >> schematic, the interrupt line has pull-ups on both sides of the voltag=
-e
-> >> shifter.
-> >>
-> >> BTW, The touchscreen doesn't have pinctrl entries. This has pull-ups o=
-n
-> >> both sides of the voltage shifter as well.
-> >
-> > I dunno if the convention is different on Mediatek boards, but at
-> > least on boards I've been involved with in the past we've always put
-> > pinctrl entries just to make things explicit. This meant that we
-> > didn't rely on the firmware/bootrom/defaults to leave pulls in any
-> > particular state. ...otherwise those external pull-ups could be
-> > fighting with internal pull-downs, right?
-> >
->
-> MediaTek boards aren't special and there's no good reason for those to re=
-ly on
-> firmware/bootrom/defaults - so there is no good reason to avoid declaring=
- any
-> relevant pinctrl entry.
+Possible deadlock scenario (on reboot):
+rk3x_i2c_xfer_common(polling)
+    -> rk3x_i2c_wait_xfer_poll()
+        -> rk3x_i2c_irq(0, i2c);
+            --> spin_lock(&i2c->lock);
+            ...
+        <rk3x i2c interrupt>
+        -> rk3x_i2c_irq(0, i2c);
+            --> spin_lock(&i2c->lock); (deadlock here)
 
-I think this should be migrated to use the proper GPIO bindings: the
-GPIO_PULL_UP / GPIO_PULL_DOWN / GPIO_BIAS_DISABLE flags.
+Store the IRQ number and disable/enable it around the polling transfer.
+This patch has been tested on NanoPC-T4.
 
-But that's a different discussion.
+Signed-off-by: Jensen Huang <jensenhuang@friendlyarm.com>
+---
+ drivers/i2c/busses/i2c-rk3x.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-ChenYu
+diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
+index a044ca0c35a1..94514637c3bd 100644
+--- a/drivers/i2c/busses/i2c-rk3x.c
++++ b/drivers/i2c/busses/i2c-rk3x.c
+@@ -200,6 +200,7 @@ struct rk3x_i2c {
+ 	struct clk *clk;
+ 	struct clk *pclk;
+ 	struct notifier_block clk_rate_nb;
++	int irq;
+ 
+ 	/* Settings */
+ 	struct i2c_timings t;
+@@ -1087,13 +1088,18 @@ static int rk3x_i2c_xfer_common(struct i2c_adapter *adap,
+ 
+ 		spin_unlock_irqrestore(&i2c->lock, flags);
+ 
+-		rk3x_i2c_start(i2c);
+-
+ 		if (!polling) {
++			rk3x_i2c_start(i2c);
++
+ 			timeout = wait_event_timeout(i2c->wait, !i2c->busy,
+ 						     msecs_to_jiffies(WAIT_TIMEOUT));
+ 		} else {
++			disable_irq(i2c->irq);
++			rk3x_i2c_start(i2c);
++
+ 			timeout = rk3x_i2c_wait_xfer_poll(i2c);
++
++			enable_irq(i2c->irq);
+ 		}
+ 
+ 		spin_lock_irqsave(&i2c->lock, flags);
+@@ -1310,6 +1316,8 @@ static int rk3x_i2c_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	i2c->irq = irq;
++
+ 	platform_set_drvdata(pdev, i2c);
+ 
+ 	if (i2c->soc_data->calc_timings == rk3x_i2c_v0_calc_timings) {
+-- 
+2.42.0
+
 
