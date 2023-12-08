@@ -1,108 +1,135 @@
-Return-Path: <linux-i2c+bounces-683-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-684-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 136E280A224
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Dec 2023 12:27:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D09F80A2F8
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Dec 2023 13:17:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4527281877
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Dec 2023 11:27:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D72FF1F213F0
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Dec 2023 12:17:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA1DD1B26D;
-	Fri,  8 Dec 2023 11:27:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 220321C29C;
+	Fri,  8 Dec 2023 12:17:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=scram.de header.i=@scram.de header.b="OgcexWGU"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="QMXTiAbp"
 X-Original-To: linux-i2c@vger.kernel.org
-X-Greylist: delayed 916 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 08 Dec 2023 03:27:34 PST
-Received: from esg.nwe.de (esg.nwe.de [195.226.126.84])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301BA10CF
-	for <linux-i2c@vger.kernel.org>; Fri,  8 Dec 2023 03:27:34 -0800 (PST)
-X-ASG-Debug-ID: 1702033934-1ed71d5dc8174fa10001-PT6Irj
-Received: from mail.scram.de ([213.206.175.31]) by esg.nwe.de with ESMTP id FtJNBH7NCVyVmvNv (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Fri, 08 Dec 2023 12:12:14 +0100 (CET)
-X-Barracuda-Envelope-From: jochen@scram.de
-X-Barracuda-Effective-Source-IP: UNKNOWN[213.206.175.31]
-X-Barracuda-Apparent-Source-IP: 213.206.175.31
-Received: (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client did not present a certificate)
-	(Authenticated sender)
-	by mail.scram.de (Postfix) with ESMTPSA id F1F218A7031;
-	Fri,  8 Dec 2023 12:12:13 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.scram.de F1F218A7031
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=scram.de;
-	s=mail2021; t=1702033934;
-	bh=s9yrExIa366dn3S+pFGBrRwPq6geDOwSJ/tc3OqUeD8=;
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9794A1986;
+	Fri,  8 Dec 2023 04:17:33 -0800 (PST)
+Received: from [10.3.2.161] (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dmitry.osipenko)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 7AD4F66073AA;
+	Fri,  8 Dec 2023 12:17:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1702037851;
+	bh=jBMziga07aVp3bL6kAN2tx7XMOjaakjxVjC5JZZa2zs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OgcexWGUSpSg89Uyju9wzf1zesFDFmj3KHKrqKaOzOH4JVPRVn1mj1zH471YFcm8a
-	 q0tu5GgkxvUm0dACo27WH6zWOD+KeHMI3Lp0XpkutPCKt1sCLpLmilXR5TNBwv6L0M
-	 uUthIG4o4C6QUmbwZn6jNgGvBuL682o804l6WyDc=
-Message-ID: <950ac94b-f488-4879-973e-4014f224c62f@scram.de>
-Date: Fri, 8 Dec 2023 12:12:13 +0100
+	b=QMXTiAbpKT36vzwizHSRDGx7XNQyAPt6w/AA54Xy/B00HQ5lEyJbi3oH5WbFENwAj
+	 mp6E7V8KUVcD0k2oHA/jQHloJevjOuQsr/6h1+Ma45vVsQuaPnFXxgMFRpPDu9ZM4L
+	 uv161qtyHHpYhG8xchf9YJv3Ea0nB4hulWGCxvgEVc4vriK+nq+5PBz3dXQK2k5Alp
+	 T+cwyt1jmFv8D7LMUs2IQDB9B8L6WCziGQBlInTyFOHzNCIQyKv2JVOcP53SLYaCGT
+	 JLERN18XqzjGChfGr26wqhIa9FvUmpXDr6AqV8OD7F7Y0FCzyA5yFjIxgSZZ/BxwCM
+	 6c+S71rVWf+3g==
+Message-ID: <94bf6180-8abf-777d-2dce-498efafb57c1@collabora.com>
+Date: Fri, 8 Dec 2023 15:17:25 +0300
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] i2c: cpm: Remove linux,i2c-index conversion from be32
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
- Andi Shyti <andi.shyti@kernel.org>
-X-ASG-Orig-Subj: Re: [PATCH v2] i2c: cpm: Remove linux,i2c-index conversion from be32
-Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-i2c@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <460afa20784a445dff05b552ebb8c6a389d9de85.1701901105.git.christophe.leroy@csgroup.eu>
-From: Jochen Friedrich <jochen@scram.de>
-In-Reply-To: <460afa20784a445dff05b552ebb8c6a389d9de85.1701901105.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Barracuda-Connect: UNKNOWN[213.206.175.31]
-X-Barracuda-Start-Time: 1702033934
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://195.226.126.84:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at nwe.de
-X-Barracuda-Scan-Msg-Size: 1290
-X-Barracuda-BRTS-Status: 0
-X-Barracuda-Spam-Score: 0.40
-X-Barracuda-Spam-Status: No, SCORE=0.40 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=5.0 tests=BSF_SC0_SA085b
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.117807
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------------------------
-	0.40 BSF_SC0_SA085b         Custom Rule SA085b
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v2] i2c: rk3x: fix potential spinlock recursion on poll
+Content-Language: en-US
+To: Jensen Huang <jensenhuang@friendlyarm.com>
+Cc: Dragan Simic <dsimic@manjaro.org>, Heiko Stuebner <heiko@sntech.de>,
+ Andi Shyti <andi.shyti@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Chris Morgan <macroalpha82@gmail.com>,
+ Benjamin Bara <bbara93@gmail.com>
+References: <20231207082200.16388-1-jensenhuang@friendlyarm.com>
+ <ebf6cf8ec3b5befd673d295061fa2738@manjaro.org>
+ <CAMpZ1qHUnTDQ78gdrQF9Sx_-XfLM-B+H-0bL1-+twKsno+JOvg@mail.gmail.com>
+ <5e11553952c02ad20591992be4284bbd@manjaro.org>
+ <95cc7716-ba01-e239-e7c0-eba0b7da7955@collabora.com>
+ <CAMpZ1qENxWsDnvke4jMvK9tYpta3dThHUHxjDWO-u2JV+8dZdQ@mail.gmail.com>
+From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAMpZ1qENxWsDnvke4jMvK9tYpta3dThHUHxjDWO-u2JV+8dZdQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Acked-By: Jochen Friedrich <jochen@scram.de>
+On 12/8/23 11:53, Jensen Huang wrote:
+> On Fri, Dec 8, 2023 at 12:00 AM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>>
+>> On 12/7/23 17:10, Dragan Simic wrote:
+>>> On 2023-12-07 10:25, Jensen Huang wrote:
+>>>> On Thu, Dec 7, 2023 at 4:37 PM Dragan Simic <dsimic@manjaro.org> wrote:
+>>>>>
+>>>>> On 2023-12-07 09:21, Jensen Huang wrote:
+>>>>>> Possible deadlock scenario (on reboot):
+>>>>>> rk3x_i2c_xfer_common(polling)
+>>>>>>     -> rk3x_i2c_wait_xfer_poll()
+>>>>>>         -> rk3x_i2c_irq(0, i2c);
+>>>>>>             --> spin_lock(&i2c->lock);
+>>>>>>             ...
+>>>>>>         <rk3x i2c interrupt>
+>>>>>>         -> rk3x_i2c_irq(0, i2c);
+>>>>>>             --> spin_lock(&i2c->lock); (deadlock here)
+>>>>>>
+>>>>>> Store the IRQ number and disable/enable it around the polling
+>>>>> transfer.
+>>>>>> This patch has been tested on NanoPC-T4.
+>>>>>
+>>>>> In case you haven't already seen the related discussion linked below,
+>>>>> please have a look.  I also added more people to the list of recipients,
+>>>>> in an attempt to make everyone aware of the different approaches to
+>>>>> solving this issue.
+>>>>>
+>>>>> https://lore.kernel.org/all/655177f4.050a0220.d85c9.3ba0@mx.google.com/T/#m6fc9c214452fec6681843e7f455978c35c6f6c8b
+>>>>
+>>>> Thank you for providing the information. I hadn't seen this link before.
+>>>> After carefully looking into the related discussion, it appears that
+>>>> Dmitry Osipenko is already working on a suitable patch. To avoid
+>>>> duplication
+>>>> or conflicts, my patch can be discarded.
+>>>
+>>> Thank you for responding so quickly.  Perhaps it would be best to hear
+>>> from Dmitry as well, before discarding anything.  It's been a while
+>>> since Dmitry wrote about working on the patch, so he might have
+>>> abandoned it.
+>>
+>> This patch is okay. In general, will be better to have IRQ disabled by
+>> default like I did in my variant, it should allow to remove the spinlock
+>> entirely. Of course this also can be done later on in a follow up
+>> patches. Jensen, feel free to use my variant of the patch, add my
+>> s-o-b+co-developed tags to the commit msg if you'll do. Otherwise I'll
+>> be able to send my patch next week.
+> 
+> Thank you for the suggestion. I've updated the patch to your variant, and
+> as confirmed by others, reboots are functioning correctly. I measured the
+> overhead of enable_irq/disable_irq() by calculating ktime in the
+> updated version,
+> and on rk3399, the minimum delta I observed was 291/875 ns. This extra
+> cost may impact most interrupt-based transfers. Therefore, I personally lean
+> towards the current v2 patch and handle the spinlock and irqsave/restore in
+> a follow up patch. I'd like to hear everyone's thoughts on this.
 
-Am 06.12.2023 um 23:24 schrieb Christophe Leroy:
-> sparse reports an error on some data that gets converted from be32.
->
-> That's because that data is typed u32 instead of __be32.
->
-> The type is correct, the be32_to_cpu() conversion is not.
->
-> Remove the conversion.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202312042210.QL4DA8Av-lkp@intel.com/
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
-> v2: Use u32 directly, remove be32_to_cpu().
-> ---
->   drivers/i2c/busses/i2c-cpm.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/i2c/busses/i2c-cpm.c b/drivers/i2c/busses/i2c-cpm.c
-> index 9a664abf734d..771d60bc8d71 100644
-> --- a/drivers/i2c/busses/i2c-cpm.c
-> +++ b/drivers/i2c/busses/i2c-cpm.c
-> @@ -658,7 +658,7 @@ static int cpm_i2c_probe(struct platform_device *ofdev)
->   	/* register new adapter to i2c module... */
->   
->   	data = of_get_property(ofdev->dev.of_node, "linux,i2c-index", &len);
-> -	cpm->adap.nr = (data && len == 4) ? be32_to_cpup(data) : -1;
-> +	cpm->adap.nr = (data && len == 4) ? *data : -1;
->   	result = i2c_add_numbered_adapter(&cpm->adap);
->   
->   	if (result < 0)
+Please don't use ktime for perf measurements, ktime itself is a slow API
+and it should be 200us that ktime takes itself. Also, the 0.2us is
+practically nothing, especially compared to I2C transfers measured in ms.
+
+I'm fine with keeping your v2 variant for the bug fix if you prefer
+that. Thanks for addressing the issue :)
+
+-- 
+Best regards,
+Dmitry
+
 
