@@ -1,144 +1,117 @@
-Return-Path: <linux-i2c+bounces-685-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-686-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35C8C80A6ED
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Dec 2023 16:10:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F322580A99C
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Dec 2023 17:47:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E06621F214F3
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Dec 2023 15:10:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADB21281209
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Dec 2023 16:47:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DF4C225D2;
-	Fri,  8 Dec 2023 15:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8EEB37154;
+	Fri,  8 Dec 2023 16:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="w429hnML"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5851BFC;
-	Fri,  8 Dec 2023 07:10:17 -0800 (PST)
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3b9d2b8c3c6so1388694b6e.1;
-        Fri, 08 Dec 2023 07:10:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702048217; x=1702653017;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xNnSwjzfk0DFwMUnASYe+Mep7H717D8Hg3L4xcCwxL4=;
-        b=l4SjBFP+Nj7oam8uEENpy0Nd4C03Vqhm9k5WFFCwmmgL+B9GkSLhs2wi1C55L2wgZk
-         QGTY6UpnuvrEZdjLrQRXDB+daGiOltaRTAhMLf2oJg08TJc9X2AVVAmVBjQzTBYyESTc
-         6uJGonMvLL4IpWuU93TL853ucTPNUprlsgCvcm1LcB+v7UW4tnuTeW5Q7AJ5a1KtUW74
-         ey+NZP9QXrEsq6zKgb95LCTDPT/AWgQQpC5EyfND6sLucUQ5zW99CcnS0nZVyp9HnMZn
-         lqIxxebEQG8E2ZQai1/RgTzQyL5nR0m0TBU3GmCNEenGQm+Ry0sFKn2yudyYQLZBMV3d
-         GlGg==
-X-Gm-Message-State: AOJu0Ywkh6tpjzseG8D7cMGi7V2Q0pDWwDSqiEPd+7cN5thYSeAnf4nE
-	nqV+k43BxMFj2O6lRDIsoQ==
-X-Google-Smtp-Source: AGHT+IEvVmbu2+Qv9wFJy8R9H8r5dTeownvX+CKH+WYzlbAzevvw6b0vu0w5WzVXyWLw9sofpqWUuA==
-X-Received: by 2002:a05:6808:d4d:b0:3b8:b063:8258 with SMTP id w13-20020a0568080d4d00b003b8b0638258mr172675oik.90.1702048217115;
-        Fri, 08 Dec 2023 07:10:17 -0800 (PST)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 14-20020aca280e000000b003b8b3bdeb6bsm348309oix.30.2023.12.08.07.10.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Dec 2023 07:10:16 -0800 (PST)
-Received: (nullmailer pid 1354509 invoked by uid 1000);
-	Fri, 08 Dec 2023 15:10:11 -0000
-Date: Fri, 8 Dec 2023 09:10:11 -0600
-From: Rob Herring <robh@kernel.org>
-To: Doug Anderson <dianders@chromium.org>
-Cc: Chen-Yu Tsai <wenst@chromium.org>, Frank Rowand <frowand.list@gmail.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Wolfram Sang <wsa@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
-	Hsin-Yi Wang <hsinyi@chromium.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	andriy.shevchenko@linux.intel.com, Jiri Kosina <jikos@kernel.org>, 
-	linus.walleij@linaro.org, broonie@kernel.org, gregkh@linuxfoundation.org, 
-	hdegoede@redhat.com, james.clark@arm.com, james@equiv.tech, 
-	keescook@chromium.org, rafael@kernel.org, tglx@linutronix.de, 
-	Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [RFC PATCH v3 2/5] i2c: of: Introduce component probe function
-Message-ID: <20231208151011.GA1289359-robh@kernel.org>
-References: <20231128084236.157152-1-wenst@chromium.org>
- <20231128084236.157152-3-wenst@chromium.org>
- <CAD=FV=U_+iQJtV0Wii89DQT1V_fJCeS9wcqA8EJAs-hmmmLLLg@mail.gmail.com>
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439C9198D;
+	Fri,  8 Dec 2023 08:47:47 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3B8GfGOd008039;
+	Fri, 8 Dec 2023 17:47:31 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=selector1; bh=x2MSP5Q
+	i75jzKXhvK1uOkEyWudp+uieZW3Apd56nqak=; b=w429hnML1chz9C80cpFndXU
+	uK5kPvFd38w33BWt4lNUurLCwMnhhIiFXRYZEpmFixmVFGalkJzS8F3Y0W6B212+
+	WmIJPfp7vHd77rzfJSdZQz5tiI7wIkNcbZ7h3LJ7+lx1F4ABuq/FS3ddkDvZzjCy
+	vp1GVoHrogxFZmtYE0CVUb6m5J0MrWebASRCq70c3Odr1y4bywBS92OOZX7kdv0A
+	uZCYb8tj27yAI5f0Pkj9FfyVXCByeA+2uUwhr+ocfK7ANJkl7rYtSdxz8N8UIWi2
+	gc4aoWupDDwAhgWIinkHB5t0dSuMubWTyE8+P2Gj64E5pZWvLeTThSkukEQwMAA=
+	=
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3utd2pnf0c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 Dec 2023 17:47:31 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5AC64100056;
+	Fri,  8 Dec 2023 17:47:30 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 53A2623692D;
+	Fri,  8 Dec 2023 17:47:30 +0100 (CET)
+Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 8 Dec
+ 2023 17:47:30 +0100
+From: Alain Volmat <alain.volmat@foss.st.com>
+To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre
+ Torgue <alexandre.torgue@foss.st.com>,
+        Pierre-Yves MORDRET
+	<pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>
+CC: Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/7] i2c: stm32f7: enhancements and support for stm32mp25
+Date: Fri, 8 Dec 2023 17:47:09 +0100
+Message-ID: <20231208164719.3584028-1-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=U_+iQJtV0Wii89DQT1V_fJCeS9wcqA8EJAs-hmmmLLLg@mail.gmail.com>
+Content-Type: text/plain
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-08_11,2023-12-07_01,2023-05-22_02
 
-On Fri, Dec 01, 2023 at 04:57:46PM -0800, Doug Anderson wrote:
-> Hi,
-> 
-> On Tue, Nov 28, 2023 at 12:45 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
-> >
-> > @@ -217,4 +217,114 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
-> >  struct notifier_block i2c_of_notifier = {
-> >         .notifier_call = of_i2c_notify,
-> >  };
-> > +
-> > +/*
-> > + * Some devices, such as Google Hana Chromebooks, are produced by multiple
-> > + * vendors each using their preferred components. Such components are all
-> > + * in the device tree. Instead of having all of them enabled and having each
-> > + * driver separately try and probe its device while fighting over shared
-> > + * resources, they can be marked as "fail-needs-probe" and have a prober
-> > + * figure out which one is actually used beforehand.
-> > + *
-> > + * This prober assumes such drop-in parts are on the same I2C bus, have
-> > + * non-conflicting addresses, and can be directly probed by seeing which
-> > + * address responds.
-> > + *
-> > + * TODO:
-> > + * - Support handling common regulators and GPIOs.
-> 
-> IMO you should prototype how you're going to handle regulators and
-> GPIOs before finalizing the design. I was going to write that you
-> should just document that it was up to the caller to power things up
-> before calling this function, but then I realized that the caller
-> would have to duplicate much of this function in order to do so. In
-> the very least they'd have to find the nodes of the relevant devices
-> so that they could grab regulators and/or GPIOs. In order to avoid
-> this duplication, would the design need to change? Perhaps this would
-> be as simple as adding a callback function here that's called with all
-> of the nodes before probing? If that's right, it would be nice to have
-> that callback from the beginning so we don't need two variants of the
-> function...
-> 
-> > + * - Support I2C muxes
-> > + */
-> > +
-> > +/**
-> > + * i2c_of_probe_component() - probe for devices of "type" on the same i2c bus
-> > + * @dev: &struct device of the caller, only used for dev_* printk messages
-> > + * @type: a string to match the device node name prefix to probe for
-> > + *
-> > + * Probe for possible I2C components of the same "type" on the same I2C bus
-> > + * that have their status marked as "fail".
-> 
-> Should document these current limitations with the code:
-> 
-> * Assumes that across the entire device tree the only instances of
-> nodes named "type" are ones we're trying to handle second sourcing
-> for. In other words if we're searching for "touchscreen" then all
-> nodes named "touchscreen" are ones that need to be probed.
+This series first perform enhancements in the way interrupt are handled
+and cleanup in messages.
+Then it adds support for the stm32mp25 which differs in that
+it only has a single irq line for both event/error and has a
+different handling of the FastModePlus.
+Support is then enabled within the stm32mp25 related device-trees.
 
-named "type" and marked as needs probe.
+Changelog:
+v2: - correct st,stm32-i2c.yaml.  Use if then else scheme to indicate
+      number of interrupts / interrupt-names depending on the
+      compatible while keeping the description within the common part
 
-> 
-> * Assumes that there is exactly one group of each "type". In other
-> words, if we're searching for "touchscreen" then exactly one
-> touchscreen will be enabled across the whole tree.
+    - correct 2 maybe-uninitialized warnings
+          * ret in stm32f7_i2c_write_fm_plus_bits
+          * irq_error in stm32f7_i2c_probe, move the platform_get_irq
+            within the same if block as devm_request_threaded_irq
 
-Does that need to be a limitation? If you just keep going thru all 
-devices, wouldn't that just work?
+Alain Volmat (7):
+  i2c: stm32f7: perform most of irq job in threaded handler
+  i2c: stm32f7: simplify status messages in case of errors
+  dt-bindings: i2c: document st,stm32mp25-i2c compatible
+  i2c: stm32f7: add support for stm32mp25 soc
+  arm64: dts: st: add all 8 i2c nodes on stm32mp251
+  arm64: dts: st: add i2c2/i2c8 pins for stm32mp25
+  arm64: dts: st: add i2c2 / i2c8 properties on stm32mp257f-ev1
 
-Rob
+ .../devicetree/bindings/i2c/st,stm32-i2c.yaml |  28 ++
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi |  36 ++
+ arch/arm64/boot/dts/st/stm32mp251.dtsi        |  96 +++++
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts    |  20 ++
+ drivers/i2c/busses/i2c-stm32f7.c              | 334 ++++++++++--------
+ 5 files changed, 357 insertions(+), 157 deletions(-)
+
+-- 
+2.25.1
+
 
