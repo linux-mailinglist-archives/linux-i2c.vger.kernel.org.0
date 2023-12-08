@@ -1,251 +1,140 @@
-Return-Path: <linux-i2c+bounces-681-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-682-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5087B809AEA
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Dec 2023 05:16:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D1CD809EA4
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Dec 2023 09:54:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03BEF281B3F
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Dec 2023 04:16:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E98E1C209D7
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Dec 2023 08:54:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C615946BF;
-	Fri,  8 Dec 2023 04:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 735FF11185;
+	Fri,  8 Dec 2023 08:54:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UW/QgOZT"
+	dkim=pass (2048-bit key) header.d=friendlyarm-com.20230601.gappssmtp.com header.i=@friendlyarm-com.20230601.gappssmtp.com header.b="AVhC9k83"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743421718;
-	Thu,  7 Dec 2023 20:16:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702008977; x=1733544977;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SxevhwPvl1dlX54v2YDQvnciLdpmAuA4/R+k34yhueQ=;
-  b=UW/QgOZTwTX4Bu5Rp8NgE/VBmc1fS7HYj0POBM/RFFFK85zrW1B5WNrW
-   RZB5nOczK9//6r8wOznLz0BkFuWrx6ylIDUxziljSS8NqiE+VcFarXJ2n
-   7eOseytMsQ1xDJ5+56LYMbiYkk70ofvOrtq4wG/ypw5a+ReWrCAZL+28J
-   8+vFBGQyE3QztTy6s1rBJm8ccCWgujyDqufYamIjRWf/wTN0rr+aXV3SW
-   24C1rbqlaMlet6axpRXAh55bXwtun+LpGbx5t0WVLegiUeWVsWBskUvRf
-   ME0C/oD63obijaOG5xMzeyF+5rduBC7LC/d6wGDsHYm2Uh80KZ+CoeIGA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="374519751"
-X-IronPort-AV: E=Sophos;i="6.04,259,1695711600"; 
-   d="scan'208";a="374519751"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 20:16:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,259,1695711600"; 
-   d="scan'208";a="19953059"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 07 Dec 2023 20:16:15 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rBSHc-000DEh-0s;
-	Fri, 08 Dec 2023 04:16:12 +0000
-Date: Fri, 8 Dec 2023 12:15:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Elad Nachman <enachman@marvell.com>, gregory.clement@bootlin.com,
-	andi.shyti@kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	enachman@marvell.com, cyuval@marvell.com
-Subject: Re: [PATCH v2 1/1] i2c: busses: i2c-mv64xxx: fix arb-loss i2c lock
-Message-ID: <202312081143.38GWJJ2J-lkp@intel.com>
-References: <20231207165027.2628302-2-enachman@marvell.com>
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CB51736
+	for <linux-i2c@vger.kernel.org>; Fri,  8 Dec 2023 00:54:00 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-54dccf89cfdso2066228a12.0
+        for <linux-i2c@vger.kernel.org>; Fri, 08 Dec 2023 00:54:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=friendlyarm-com.20230601.gappssmtp.com; s=20230601; t=1702025639; x=1702630439; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZznzSpsp3ftowq6O5Q/Cg5o9GO0Eay4RAUCcfPR/vuE=;
+        b=AVhC9k83gKxJJxcAdzBoWahkcE4gAJu5o35ldYSxUWTwhNWFeCORdCVNbPnQNKiMtS
+         L5j1HgpPnOg0r5fxmWG1MEoXLxY4rFiGt5r0pHhkpSOWxav1ejVsu33AJmAIrNPP2Rw/
+         NHcgqu6DXS8t5POAF6AtsGzoryUyItMEQ76kMibCHr/0zNSPaTRQsA598b65RaC6pJne
+         JgOh33vJIZEjA7yD5+QeD2AeQwfK3YAGwVlKYvRzAx0x7BJ/Iu+2rvd+6yJtNLJI86za
+         KDk7Xgt2NLPxGh4bd2Q+UL8KjFquxxuqhgK8XsdohDnhWEPXITQ/1f7bV4wIor8mQ5Ud
+         eJVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702025639; x=1702630439;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZznzSpsp3ftowq6O5Q/Cg5o9GO0Eay4RAUCcfPR/vuE=;
+        b=QNoS8Vc2ZDcpQAbUHV8JGi7neSDhDO5PBu+RSZ+pmTz3mvYQgYxB1Na3gL0L1ucOw/
+         4HmosRkyrmQcqVdKUy0ww1OtsRZRG+JyvfOL5Sl4FaLQp+YTvRq2fKS+CveJ6OOrHMGD
+         h/v01GDURpb02/DEBQFXLaAsycBYSHdNqMk8Nc0W8MpAqIqU5x+4UIC/VPVSehY2SN3Z
+         9bAaX/Kaj5jqnn4kHhO554gudXK6hAw8iEy2vMn9I6YvBncIcTKHsolJMcVZuTW02+yn
+         mW+VeIaZudV7QU64Vao+WSBT0ZyPUJ5XaxUsQpFQbI7Cq23UurJx0KfgRG+3q6fyf/wc
+         sLiA==
+X-Gm-Message-State: AOJu0Ywdofg6heEKRvNJGQyo7td7dTYwQK8AIpxRC7MpGSmQkIJXXw7T
+	C9LIZ+axb+IAwPXAGFzJrc4mf30qDXMekfXAJcqbBSLf+pTUbUIU4WHYBw==
+X-Google-Smtp-Source: AGHT+IG6wWYNBrrrHbbpkx0reOlvqmH2SLrfVA+FsX8/gXSUGmBCwnqS4MaSnlIwYSWUKYoWn9oTxFidRIiBD1QBaxM=
+X-Received: by 2002:a50:a6d6:0:b0:54c:4837:9a9f with SMTP id
+ f22-20020a50a6d6000000b0054c48379a9fmr2315391edc.70.1702025638968; Fri, 08
+ Dec 2023 00:53:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231207165027.2628302-2-enachman@marvell.com>
+References: <20231207082200.16388-1-jensenhuang@friendlyarm.com>
+ <ebf6cf8ec3b5befd673d295061fa2738@manjaro.org> <CAMpZ1qHUnTDQ78gdrQF9Sx_-XfLM-B+H-0bL1-+twKsno+JOvg@mail.gmail.com>
+ <5e11553952c02ad20591992be4284bbd@manjaro.org> <95cc7716-ba01-e239-e7c0-eba0b7da7955@collabora.com>
+In-Reply-To: <95cc7716-ba01-e239-e7c0-eba0b7da7955@collabora.com>
+From: Jensen Huang <jensenhuang@friendlyarm.com>
+Date: Fri, 8 Dec 2023 16:53:47 +0800
+Message-ID: <CAMpZ1qENxWsDnvke4jMvK9tYpta3dThHUHxjDWO-u2JV+8dZdQ@mail.gmail.com>
+Subject: Re: [PATCH v2] i2c: rk3x: fix potential spinlock recursion on poll
+To: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc: Dragan Simic <dsimic@manjaro.org>, Heiko Stuebner <heiko@sntech.de>, 
+	Andi Shyti <andi.shyti@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Chris Morgan <macroalpha82@gmail.com>, 
+	Benjamin Bara <bbara93@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Elad,
+On Fri, Dec 8, 2023 at 12:00=E2=80=AFAM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+>
+> On 12/7/23 17:10, Dragan Simic wrote:
+> > On 2023-12-07 10:25, Jensen Huang wrote:
+> >> On Thu, Dec 7, 2023 at 4:37=E2=80=AFPM Dragan Simic <dsimic@manjaro.or=
+g> wrote:
+> >>>
+> >>> On 2023-12-07 09:21, Jensen Huang wrote:
+> >>> > Possible deadlock scenario (on reboot):
+> >>> > rk3x_i2c_xfer_common(polling)
+> >>> >     -> rk3x_i2c_wait_xfer_poll()
+> >>> >         -> rk3x_i2c_irq(0, i2c);
+> >>> >             --> spin_lock(&i2c->lock);
+> >>> >             ...
+> >>> >         <rk3x i2c interrupt>
+> >>> >         -> rk3x_i2c_irq(0, i2c);
+> >>> >             --> spin_lock(&i2c->lock); (deadlock here)
+> >>> >
+> >>> > Store the IRQ number and disable/enable it around the polling
+> >>> transfer.
+> >>> > This patch has been tested on NanoPC-T4.
+> >>>
+> >>> In case you haven't already seen the related discussion linked below,
+> >>> please have a look.  I also added more people to the list of recipien=
+ts,
+> >>> in an attempt to make everyone aware of the different approaches to
+> >>> solving this issue.
+> >>>
+> >>> https://lore.kernel.org/all/655177f4.050a0220.d85c9.3ba0@mx.google.co=
+m/T/#m6fc9c214452fec6681843e7f455978c35c6f6c8b
+> >>
+> >> Thank you for providing the information. I hadn't seen this link befor=
+e.
+> >> After carefully looking into the related discussion, it appears that
+> >> Dmitry Osipenko is already working on a suitable patch. To avoid
+> >> duplication
+> >> or conflicts, my patch can be discarded.
+> >
+> > Thank you for responding so quickly.  Perhaps it would be best to hear
+> > from Dmitry as well, before discarding anything.  It's been a while
+> > since Dmitry wrote about working on the patch, so he might have
+> > abandoned it.
+>
+> This patch is okay. In general, will be better to have IRQ disabled by
+> default like I did in my variant, it should allow to remove the spinlock
+> entirely. Of course this also can be done later on in a follow up
+> patches. Jensen, feel free to use my variant of the patch, add my
+> s-o-b+co-developed tags to the commit msg if you'll do. Otherwise I'll
+> be able to send my patch next week.
 
-kernel test robot noticed the following build warnings:
+Thank you for the suggestion. I've updated the patch to your variant, and
+as confirmed by others, reboots are functioning correctly. I measured the
+overhead of enable_irq/disable_irq() by calculating ktime in the
+updated version,
+and on rk3399, the minimum delta I observed was 291/875 ns. This extra
+cost may impact most interrupt-based transfers. Therefore, I personally lea=
+n
+towards the current v2 patch and handle the spinlock and irqsave/restore in
+a follow up patch. I'd like to hear everyone's thoughts on this.
 
-[auto build test WARNING on wsa/i2c/for-next]
-[also build test WARNING on linus/master v6.7-rc4 next-20231207]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Elad-Nachman/i2c-busses-i2c-mv64xxx-fix-arb-loss-i2c-lock/20231208-005406
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-patch link:    https://lore.kernel.org/r/20231207165027.2628302-2-enachman%40marvell.com
-patch subject: [PATCH v2 1/1] i2c: busses: i2c-mv64xxx: fix arb-loss i2c lock
-config: i386-buildonly-randconfig-004-20231208 (https://download.01.org/0day-ci/archive/20231208/202312081143.38GWJJ2J-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312081143.38GWJJ2J-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312081143.38GWJJ2J-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/i2c/busses/i2c-mv64xxx.c:440:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                           if (!ret) {
-                                ^~~
-   drivers/i2c/busses/i2c-mv64xxx.c:372:12: note: initialize the variable 'ret' to silence this warning
-           int i, ret;
-                     ^
-                      = 0
-   1 warning generated.
-
-
-vim +/ret +440 drivers/i2c/busses/i2c-mv64xxx.c
-
-   367	
-   368	static void
-   369	mv64xxx_i2c_do_action(struct mv64xxx_i2c_data *drv_data)
-   370	{
-   371		struct pinctrl *pc;
-   372		int i, ret;
-   373	
-   374		switch(drv_data->action) {
-   375		case MV64XXX_I2C_ACTION_SEND_RESTART:
-   376			/* We should only get here if we have further messages */
-   377			BUG_ON(drv_data->num_msgs == 0);
-   378	
-   379			drv_data->msgs++;
-   380			drv_data->num_msgs--;
-   381			mv64xxx_i2c_send_start(drv_data);
-   382	
-   383			if (drv_data->errata_delay)
-   384				udelay(5);
-   385	
-   386			/*
-   387			 * We're never at the start of the message here, and by this
-   388			 * time it's already too late to do any protocol mangling.
-   389			 * Thankfully, do not advertise support for that feature.
-   390			 */
-   391			drv_data->send_stop = drv_data->num_msgs == 1;
-   392			break;
-   393	
-   394		case MV64XXX_I2C_ACTION_CONTINUE:
-   395			writel(drv_data->cntl_bits,
-   396				drv_data->reg_base + drv_data->reg_offsets.control);
-   397			break;
-   398	
-   399		case MV64XXX_I2C_ACTION_SEND_ADDR_1:
-   400			writel(drv_data->addr1,
-   401				drv_data->reg_base + drv_data->reg_offsets.data);
-   402			writel(drv_data->cntl_bits,
-   403				drv_data->reg_base + drv_data->reg_offsets.control);
-   404			break;
-   405	
-   406		case MV64XXX_I2C_ACTION_SEND_ADDR_2:
-   407			writel(drv_data->addr2,
-   408				drv_data->reg_base + drv_data->reg_offsets.data);
-   409			writel(drv_data->cntl_bits,
-   410				drv_data->reg_base + drv_data->reg_offsets.control);
-   411			break;
-   412	
-   413		case MV64XXX_I2C_ACTION_SEND_DATA:
-   414			writel(drv_data->msg->buf[drv_data->byte_posn++],
-   415				drv_data->reg_base + drv_data->reg_offsets.data);
-   416			writel(drv_data->cntl_bits,
-   417				drv_data->reg_base + drv_data->reg_offsets.control);
-   418			break;
-   419	
-   420		case MV64XXX_I2C_ACTION_RCV_DATA:
-   421			drv_data->msg->buf[drv_data->byte_posn++] =
-   422				readl(drv_data->reg_base + drv_data->reg_offsets.data);
-   423			writel(drv_data->cntl_bits,
-   424				drv_data->reg_base + drv_data->reg_offsets.control);
-   425			break;
-   426	
-   427		case MV64XXX_I2C_ACTION_UNLOCK_BUS:
-   428			if (!drv_data->soft_reset)
-   429				break;
-   430	
-   431			pc = devm_pinctrl_get(drv_data->adapter.dev.parent);
-   432			if (IS_ERR(pc)) {
-   433				dev_err(&drv_data->adapter.dev,
-   434					"failed to get pinctrl for bus unlock!\n");
-   435				break;
-   436			}
-   437	
-   438			/* Change i2c MPPs state to act as GPIOs: */
-   439			if (pinctrl_select_state(pc, drv_data->i2c_gpio_state) >= 0) {
- > 440				if (!ret) {
-   441					/*
-   442					 * Toggle i2c scl (serial clock) 10 times.
-   443					 * 10 clocks are enough to transfer a full
-   444					 * byte plus extra as seen from tests with
-   445					 * Ubiquity SFP module causing the issue.
-   446					 * This allows the slave that occupies
-   447					 * the bus to transmit its remaining data,
-   448					 * so it can release the i2c bus:
-   449					 */
-   450					for (i = 0; i < 10; i++) {
-   451						gpio_set_value(drv_data->scl_gpio, 1);
-   452						udelay(100);
-   453						gpio_set_value(drv_data->scl_gpio, 0);
-   454					};
-   455				}
-   456	
-   457				/* restore i2c pin state to MPPs: */
-   458				pinctrl_select_state(pc, drv_data->i2c_mpp_state);
-   459			}
-   460	
-   461			/*
-   462			 * Trigger controller soft reset
-   463			 * This register is write only, with none of the bits defined.
-   464			 * So any value will do.
-   465			 * 0x1 just seems more intuitive than 0x0 ...
-   466			 */
-   467			writel(0x1, drv_data->reg_base + drv_data->reg_offsets.soft_reset);
-   468			/* wait for i2c controller to complete reset: */
-   469			udelay(100);
-   470			/*
-   471			 * need to proceed to the data stop condition generation clause.
-   472			 * This is needed after clock toggling to put the i2c slave
-   473			 * in the correct state.
-   474			 */
-   475			fallthrough;
-   476	
-   477		case MV64XXX_I2C_ACTION_RCV_DATA_STOP:
-   478			drv_data->msg->buf[drv_data->byte_posn++] =
-   479				readl(drv_data->reg_base + drv_data->reg_offsets.data);
-   480			if (!drv_data->atomic)
-   481				drv_data->cntl_bits &= ~MV64XXX_I2C_REG_CONTROL_INTEN;
-   482			writel(drv_data->cntl_bits | MV64XXX_I2C_REG_CONTROL_STOP,
-   483				drv_data->reg_base + drv_data->reg_offsets.control);
-   484			drv_data->block = 0;
-   485			if (drv_data->errata_delay)
-   486				udelay(5);
-   487	
-   488			wake_up(&drv_data->waitq);
-   489			break;
-   490	
-   491		case MV64XXX_I2C_ACTION_INVALID:
-   492		default:
-   493			dev_err(&drv_data->adapter.dev,
-   494				"mv64xxx_i2c_do_action: Invalid action: %d\n",
-   495				drv_data->action);
-   496			drv_data->rc = -EIO;
-   497			fallthrough;
-   498		case MV64XXX_I2C_ACTION_SEND_STOP:
-   499			if (!drv_data->atomic)
-   500				drv_data->cntl_bits &= ~MV64XXX_I2C_REG_CONTROL_INTEN;
-   501			writel(drv_data->cntl_bits | MV64XXX_I2C_REG_CONTROL_STOP,
-   502				drv_data->reg_base + drv_data->reg_offsets.control);
-   503			drv_data->block = 0;
-   504			wake_up(&drv_data->waitq);
-   505			break;
-   506		}
-   507	}
-   508	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+Best regards,
+Jensen
 
