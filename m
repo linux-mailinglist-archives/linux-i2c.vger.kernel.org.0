@@ -1,80 +1,117 @@
-Return-Path: <linux-i2c+bounces-699-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-700-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFBBE80B151
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Dec 2023 02:14:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0235980B1D5
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Dec 2023 04:10:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C5F7281942
-	for <lists+linux-i2c@lfdr.de>; Sat,  9 Dec 2023 01:14:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 80512B20BD6
+	for <lists+linux-i2c@lfdr.de>; Sat,  9 Dec 2023 03:10:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB8FA80A;
-	Sat,  9 Dec 2023 01:14:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m10ex5B7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50C9510F6;
+	Sat,  9 Dec 2023 03:10:52 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5E67F8
-	for <linux-i2c@vger.kernel.org>; Sat,  9 Dec 2023 01:14:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB189C433C7;
-	Sat,  9 Dec 2023 01:14:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702084485;
-	bh=yW/oNjayrBgmBQcnKaR/BHHHylnywMfGm38sEfYKmLw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m10ex5B7xuxpfbrUpv9WoB9vpJEyd34DLVdb1+6i+oxZrtIHQZEp4rJj/ADeVjkWA
-	 Evx5Z0HXbeHMAPOes8z3rRfUE2EM6zPoDc3HP408d7+g48J21i4Qrfsbn/D/5Akmf9
-	 9QuLA2W/B9hO7s6TX49TMZ3D3Zgy0CFUa6dy84cOg7nPNME/XX1VQz+K1ZyOJP5ul/
-	 t4nm//F4NHhuTQNbjRpOkHDvjG9QsLtf4ddo090XwyGvD2Gk5Nz6jqyUOzqO5bLp4J
-	 Q7OqPWZntFPWHM1XARaCXH1cnMpe5e7EWYwiODBvTKAfCteHZagvzy/3wIWxKzU9X4
-	 wvXhsKo87Ky/g==
-Date: Sat, 9 Dec 2023 02:14:36 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Mario Limonciello <mario.limonciello@amd.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Serge Semin <fancer.lancer@gmail.com>
-Subject: Re: [PATCH v5 24/24] i2c: designware: Fix spelling and other issues
- in the comments
-Message-ID: <20231209011436.rwvaivgewhbthtzl@zenone.zhora.eu>
-References: <20231207141653.2785124-1-andriy.shevchenko@linux.intel.com>
- <20231207141653.2785124-25-andriy.shevchenko@linux.intel.com>
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC95A6;
+	Fri,  8 Dec 2023 19:10:46 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+	by ex01.ufhost.com (Postfix) with ESMTP id BAF6E24E203;
+	Sat,  9 Dec 2023 11:10:44 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 9 Dec
+ 2023 11:10:44 +0800
+Received: from localhost.localdomain (202.188.176.82) by EXMBX072.cuchost.com
+ (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 9 Dec
+ 2023 11:10:41 +0800
+From: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+To: Michal Simek <michal.simek@amd.com>, Andi Shyti <andi.shyti@kernel.org>
+CC: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>, Ley Foon Tan
+	<leyfoon.tan@starfivetech.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1] i2c: cadence: Add system suspend and resume PM support
+Date: Sat, 9 Dec 2023 11:09:55 +0800
+Message-ID: <20231209030955.1156905-1-jisheng.teoh@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231207141653.2785124-25-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX072.cuchost.com
+ (172.16.6.82)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
+Enable device system suspend and resume PM support, and mark the device
+state as suspended during system suspend to reject any data transfer.
 
-On Thu, Dec 07, 2023 at 04:14:04PM +0200, Andy Shevchenko wrote:
-> Fix spelling and other issues, such as kernel-doc reported about,
-> in the comments. While at it, fix some indentation issues as well.
-> 
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> Tested-by: Serge Semin <fancer.lancer@gmail.com>
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Link: https://lore.kernel.org/r/20231120144641.1660574-25-andriy.shevchenko@linux.intel.com
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+---
+ drivers/i2c/busses/i2c-cadence.c | 33 ++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-ca=
+dence.c
+index de3f58b60dce..c42d6afded2a 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -1176,6 +1176,18 @@ static int __maybe_unused cdns_i2c_runtime_suspend=
+(struct device *dev)
+ 	return 0;
+ }
+=20
++static int __maybe_unused cdns_i2c_suspend(struct device *dev)
++{
++	struct cdns_i2c *xi2c =3D dev_get_drvdata(dev);
++
++	i2c_mark_adapter_suspended(&xi2c->adap);
++
++	if (!pm_runtime_status_suspended(dev))
++		return cdns_i2c_runtime_suspend(dev);
++
++	return 0;
++}
++
+ /**
+  * cdns_i2c_init -  Controller initialisation
+  * @id:		Device private data structure
+@@ -1219,7 +1231,28 @@ static int __maybe_unused cdns_i2c_runtime_resume(=
+struct device *dev)
+ 	return 0;
+ }
+=20
++static int __maybe_unused cdns_i2c_resume(struct device *dev)
++{
++	struct cdns_i2c *xi2c =3D dev_get_drvdata(dev);
++	int err;
++
++	err =3D cdns_i2c_runtime_resume(dev);
++	if (err)
++		return err;
++
++	if (pm_runtime_status_suspended(dev)) {
++		cdns_i2c_runtime_suspend(dev);
++		if (err)
++			return err;
++	}
++
++	i2c_mark_adapter_resumed(&xi2c->adap);
++
++	return 0;
++}
++
+ static const struct dev_pm_ops cdns_i2c_dev_pm_ops =3D {
++	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(cdns_i2c_suspend, cdns_i2c_resume)
+ 	SET_RUNTIME_PM_OPS(cdns_i2c_runtime_suspend,
+ 			   cdns_i2c_runtime_resume, NULL)
+ };
+--=20
+2.25.1
 
-Andi I think everything here has been reviewed.
-
-Thanks,
-Andi
 
