@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-725-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-730-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0E0580D651
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Dec 2023 19:32:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6283F80D6B5
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Dec 2023 19:34:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65067B20E82
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Dec 2023 18:32:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 867431C215E4
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Dec 2023 18:34:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32B4A51C39;
-	Mon, 11 Dec 2023 18:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F61153811;
+	Mon, 11 Dec 2023 18:33:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="yVdjOT1d"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="j+OG/A9I"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7200AC;
-	Mon, 11 Dec 2023 10:32:33 -0800 (PST)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BBHxgm3023809;
-	Mon, 11 Dec 2023 19:31:34 +0100
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDB7B4;
+	Mon, 11 Dec 2023 10:33:33 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3BBBp5CV026654;
+	Mon, 11 Dec 2023 19:32:42 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-transfer-encoding:content-type; s=
-	selector1; bh=iI5H47zvcA4f2T9X0SOLjyUIMcFUo42eiKhj9yV6NCc=; b=yV
-	djOT1deCHGOmPjNVxLwzgMLwCwQ8eecbXf1tx+Vfp57/qfxggvAGhk9UE5llAhDr
-	Z9bFcVO1Nf/riQGFjnM9EOolVSSSO4Bc8rWaqjzOkKVskXlE2hYrhwAzz4nnU+2H
-	yoiyZYT3PHXsbVKo6ksEG/gVUZecZ3MzWJY3kTpzE3/AibBogBB/MKP5YJ7+MHiQ
-	+4aUF3qBMhoP8vhLuE/EUsdOPITtrk9iFTKOvrkkc98qt7S5U0HBunYsvi2cpivH
-	UhyTx2CN5tBFEuP//aUNai5ktyybN4tn0nFoZ4w0Y9Vzragizj7Pc20kBVd0AVYL
-	0HaKp6ASnYUrAApj5+4Q==
+	selector1; bh=Yx/iN2e/UUXXv4odNw1PrUQv1/sBds6u8ptetj9Y7lY=; b=j+
+	OG/A9I1IKBdAWxX2NrSkvaZTb92O6JLyMzrMTQUqCQnjr4ZH5QUV1ST7sgq2eVaZ
+	8yLxSMwXjiWfDwVMOBSIarCAVDoayeN5uhWb66D8oprFEuifzSTIljZBFQvx5XZF
+	B0EVyYVG4PX3RpokIQf5bkCIm0sNIUnnbax8zRLee3Op9851xw2qoqjff13jDu2Z
+	2pF644bnjtY4/UVxd8w/6e5z/5hsd0Xxjfxfzfw4g6CcBiO1CzNblb9Xeo5IdydB
+	dpVPTdV7LOumlYDNe+DIZxVvsp4TTHbVF3LEsZkAiSH11Yel2u8xceYUlMAdPBvX
+	uYkrZqmJxVZtUcC/I8DA==
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3uve88r1mb-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3uvgf1g0s5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Dec 2023 19:31:34 +0100 (CET)
+	Mon, 11 Dec 2023 19:32:42 +0100 (CET)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 49BAC100064;
-	Mon, 11 Dec 2023 19:31:31 +0100 (CET)
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F321210005C;
+	Mon, 11 Dec 2023 19:32:41 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3AFD922FA46;
-	Mon, 11 Dec 2023 19:31:31 +0100 (CET)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E2DBB23BE03;
+	Mon, 11 Dec 2023 19:32:41 +0100 (CET)
 Received: from localhost (10.252.9.5) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 11 Dec
- 2023 19:31:30 +0100
+ 2023 19:32:41 +0100
 From: Gatien Chevallier <gatien.chevallier@foss.st.com>
 To: <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
         <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
@@ -70,9 +70,9 @@ CC: <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-usb@vger.kernel.org>,
         Gatien Chevallier
 	<gatien.chevallier@foss.st.com>
-Subject: [PATCH v7 03/13] dt-bindings: bus: document RIFSC
-Date: Mon, 11 Dec 2023 19:30:34 +0100
-Message-ID: <20231211183044.808204-4-gatien.chevallier@foss.st.com>
+Subject: [PATCH v7 04/13] dt-bindings: bus: document ETZPC
+Date: Mon, 11 Dec 2023 19:30:35 +0100
+Message-ID: <20231211183044.808204-5-gatien.chevallier@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231211183044.808204-1-gatien.chevallier@foss.st.com>
 References: <20231211183044.808204-1-gatien.chevallier@foss.st.com>
@@ -90,18 +90,18 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-12-11_08,2023-12-07_01,2023-05-22_02
 
-Document RIFSC (RIF security controller). RIFSC is a firewall controller
-composed of different kinds of hardware resources.
+Document ETZPC (Extended TrustZone protection controller). ETZPC is a
+firewall controller.
 
 Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
 ---
 
 Changes in V6:
-	- Renamed access-controller to access-controllers
-	- Removal of access-control-provider property
-	- Removal of access-controller and access-controller-names
-	  declaration in the patternProperties field. Add
-	  additionalProperties: true in this field.
+    	- Renamed access-controller to access-controllers
+    	- Removal of access-control-provider property
+    	- Removal of access-controller and access-controller-names
+    	  declaration in the patternProperties field. Add
+    	  additionalProperties: true in this field.
 
 Changes in V5:
 	- Renamed feature-domain* to access-control*
@@ -114,52 +114,38 @@ Changes in V2:
 	- Declare "feature-domain-names" as an optional
 	  property for child nodes
 	- Fix description of "feature-domains" property
+	- Reordered the properties so it matches ETZPC
+	- Add missing "feature-domain-controller" property
 
- .../bindings/bus/st,stm32mp25-rifsc.yaml      | 96 +++++++++++++++++++
- 1 file changed, 96 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
+ .../bindings/bus/st,stm32-etzpc.yaml          | 87 +++++++++++++++++++
+ 1 file changed, 87 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
 
-diff --git a/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
+diff --git a/Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml b/Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
 new file mode 100644
-index 000000000000..95aa7f04c739
+index 000000000000..9ca0ad39bc19
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml
-@@ -0,0 +1,96 @@
++++ b/Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml
+@@ -0,0 +1,87 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/bus/st,stm32mp25-rifsc.yaml#
++$id: http://devicetree.org/schemas/bus/st,stm32-etzpc.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: STM32 Resource isolation framework security controller
++title: STM32 Extended TrustZone protection controller
++
++description: |
++  The ETZPC configures TrustZone security in a SoC having bus masters and
++  devices with programmable-security attributes (securable resources).
 +
 +maintainers:
 +  - Gatien Chevallier <gatien.chevallier@foss.st.com>
 +
-+description: |
-+  Resource isolation framework (RIF) is a comprehensive set of hardware blocks
-+  designed to enforce and manage isolation of STM32 hardware resources like
-+  memory and peripherals.
-+
-+  The RIFSC (RIF security controller) is composed of three sets of registers,
-+  each managing a specific set of hardware resources:
-+    - RISC registers associated with RISUP logic (resource isolation device unit
-+      for peripherals), assign all non-RIF aware peripherals to zero, one or
-+      any security domains (secure, privilege, compartment).
-+    - RIMC registers: associated with RIMU logic (resource isolation master
-+      unit), assign all non RIF-aware bus master to one security domain by
-+      setting secure, privileged and compartment information on the system bus.
-+      Alternatively, the RISUP logic controlling the device port access to a
-+      peripheral can assign target bus attributes to this peripheral master port
-+      (supported attribute: CID).
-+    - RISC registers associated with RISAL logic (resource isolation device unit
-+      for address space - Lite version), assign address space subregions to one
-+      security domains (secure, privilege, compartment).
-+
 +properties:
 +  compatible:
 +    contains:
-+      const: st,stm32mp25-rifsc
++      const: st,stm32-etzpc
 +
 +  reg:
 +    maxItems: 1
@@ -199,26 +185,33 @@ index 000000000000..95aa7f04c739
 +
 +examples:
 +  - |
-+    // In this example, the usart2 device refers to rifsc as its domain
++    // In this example, the usart2 device refers to rifsc as its access
 +    // controller.
 +    // Access rights are verified before creating devices.
 +
 +    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/stm32mp13-clks.h>
++    #include <dt-bindings/reset/stm32mp13-resets.h>
 +
-+    rifsc: bus@42080000 {
-+        compatible = "st,stm32mp25-rifsc";
-+        reg = <0x42080000 0x1000>;
++    etzpc: bus@5c007000 {
++        compatible = "st,stm32-etzpc";
++        reg = <0x5c007000 0x400>;
 +        #address-cells = <1>;
 +        #size-cells = <1>;
 +        #access-controller-cells = <1>;
 +        ranges;
 +
-+        usart2: serial@400e0000 {
-+              compatible = "st,stm32h7-uart";
-+              reg = <0x400e0000 0x400>;
-+              interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
-+              clocks = <&ck_flexgen_08>;
-+              access-controllers = <&rifsc 32>;
++        usart2: serial@4c001000 {
++            compatible = "st,stm32h7-uart";
++            reg = <0x4c001000 0x400>;
++            interrupts-extended = <&exti 27 IRQ_TYPE_LEVEL_HIGH>;
++            clocks = <&rcc USART2_K>;
++            resets = <&rcc USART2_R>;
++            wakeup-source;
++            dmas = <&dmamux1 43 0x400 0x5>,
++                    <&dmamux1 44 0x400 0x1>;
++            dma-names = "rx", "tx";
++            access-controllers = <&etzpc 17>;
 +        };
 +    };
 -- 
