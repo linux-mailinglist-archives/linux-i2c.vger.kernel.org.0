@@ -1,238 +1,133 @@
-Return-Path: <linux-i2c+bounces-719-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-720-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D94A980C648
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Dec 2023 11:23:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2440280C8D6
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Dec 2023 13:01:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C8351F2105A
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Dec 2023 10:23:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 535011C209DA
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Dec 2023 12:01:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE50B22319;
-	Mon, 11 Dec 2023 10:22:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EECB38FA6;
+	Mon, 11 Dec 2023 12:01:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=os.amperecomputing.com header.i=@os.amperecomputing.com header.b="n9JsUr30"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="awCT9xfC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD6CE5;
-	Mon, 11 Dec 2023 02:22:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WDidnJPACR/yJ0Xsc1RdAqqO7RjX8fZwHDwQMxjo7CC1xfL81Ti/61MeplPhpra0YxcA4sw/1HDzx5Y2k3Cc+X4I1F0fAlsbCMMm0IjT7mkBgeJZgS+KUQm4L8T9aVUvnZADViXIQ9/szQfAxAZReRPCezCHLe2tGP11U6srcp0/V4t5216SIP9RGJNlh/Yp9DAFXn3lODGpCAC0d4AozrWUFS9DRLiqwCnpVoVt0uJ+AsLT4VUVka21igSg5zerqgCq38BRNBomVWDtAyp3iIHbgykOOMhvSdA4EnheGGqlfWl1bgnFIXviGahR2CAXIi/U4pGRvUQ/fH0Q9kLmkw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AL8ucwBp7iSZS1mOKdfvDd6/FN0LMGhmG9Mje9C0kSA=;
- b=S/Jgydl1F99LJwmnMpoPMMfZ23emQgjLWhYhzYfu2TqV4kADXQLRXcZVpYCIQLqiw4yNHEeEyLm23avYoST5RoqVS3US/nrEWMsHGj6xlTdhYRRLVmKEcBW/vOO6fOeisaBNMPb06t+pnD/ybh8z04Q/i5hcbeVRC+vG1spfb0GuP7SJ6i7SZxt0HPdWfAqDBZ8wStmG3Bn2qjOZnpuM9m1H6HvyQVD6pRVHlMgu8uXVOQE6TxXWF+9piejVpR3FFq6b2GWzAUf2N7CHzt+ZbdYLd5iJYCzwauSkLHuMmgPARWgwkFWBk/7IzXH/QiYw0S4rPY135fTikA/GvTtyuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AL8ucwBp7iSZS1mOKdfvDd6/FN0LMGhmG9Mje9C0kSA=;
- b=n9JsUr30Xzb3j/SbO45wKRo/uEs21FVacYgyyaYA/3nGcZSFTbG3txYtveVH7BneyZRjzbsbblGzFXKGfGG8Hh8z455aPYX/uhkR08XyiDlBG+pVsfdrEtyRJxBkghpEBVWmMtc/Ap0rUrFdK2bmV68XS7qP1kEyMy6Rfbk+24E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11) by
- CO1PR01MB6568.prod.exchangelabs.com (2603:10b6:303:f9::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7068.33; Mon, 11 Dec 2023 10:22:49 +0000
-Received: from SN4PR01MB7455.prod.exchangelabs.com
- ([fe80::5682:1d84:171a:1d68]) by SN4PR01MB7455.prod.exchangelabs.com
- ([fe80::5682:1d84:171a:1d68%3]) with mapi id 15.20.7068.031; Mon, 11 Dec 2023
- 10:22:49 +0000
-From: Quan Nguyen <quan@os.amperecomputing.com>
-To: Brendan Higgins <brendan.higgins@linux.dev>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Wolfram Sang <wsa@kernel.org>,
-	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-i2c@vger.kernel.org,
-	openbmc@lists.ozlabs.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org
-Cc: Cosmo Chou <chou.cosmo@gmail.com>,
-	Open Source Submission <patches@amperecomputing.com>,
-	Phong Vo <phong@os.amperecomputing.com>,
-	"Thang Q . Nguyen" <thang@os.amperecomputing.com>,
-	Quan Nguyen <quan@os.amperecomputing.com>
-Subject: [PATCH v4 2/2] i2c: aspeed: Acknowledge Tx done with and without ACK irq late
-Date: Mon, 11 Dec 2023 17:22:17 +0700
-Message-Id: <20231211102217.2436294-3-quan@os.amperecomputing.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20231211102217.2436294-1-quan@os.amperecomputing.com>
-References: <20231211102217.2436294-1-quan@os.amperecomputing.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2P153CA0007.APCP153.PROD.OUTLOOK.COM (2603:1096::17) To
- SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11)
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81080137;
+	Mon, 11 Dec 2023 04:01:40 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BB9IEYK009898;
+	Mon, 11 Dec 2023 04:01:36 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=pfpt0220; bh=h0QNwsIs
+	xCVCFnb61YiC0y8uyBswFifMu55wtofMhKA=; b=awCT9xfCMKHJgzaWicpcLmAs
+	jqpxb/mwQpK+R3grVz1y1fz19XU3JY9JzCLkzWVWWg3nU5VTUuTPEhAPjGHL8HwV
+	gAi37qrDqv2ka9m2TSpRZ9yp/gsm8wYgJCQ0R9ns797zPHkx6kYybjLOe745Ebkd
+	CGYNWxwBLFqeMsOWtVh185ka3CFgUDaL/20qrVngQbGdsqIzyDCyutopq1i9vCS8
+	Jt0s2VpWbkdSV0tSBjkIqZVvKf0qTaavWBwb6JY/PVam6BTY+Hp7qERcZzud1EDm
+	v/nYAiYeM5KpqbqheIhZHhtJxVMYOX9kh4iY9jHoDmdaOqvJACDm82sbea9qpQ==
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3uwyp4gfjk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+	Mon, 11 Dec 2023 04:01:36 -0800 (PST)
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 11 Dec
+ 2023 04:01:35 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Mon, 11 Dec 2023 04:01:34 -0800
+Received: from dc3lp-swdev041.marvell.com (dc3lp-swdev041.marvell.com [10.6.60.191])
+	by maili.marvell.com (Postfix) with ESMTP id 530E63F7045;
+	Mon, 11 Dec 2023 04:01:33 -0800 (PST)
+From: Elad Nachman <enachman@marvell.com>
+To: <gregory.clement@bootlin.com>, <andi.shyti@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <enachman@marvell.com>, <cyuval@marvell.com>
+Subject: [PATCH v3 0/1] i2c: busses: i2c-mv64xxx: fix arb-loss i2c lock
+Date: Mon, 11 Dec 2023 14:01:28 +0200
+Message-ID: <20231211120129.3719469-1-enachman@marvell.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN4PR01MB7455:EE_|CO1PR01MB6568:EE_
-X-MS-Office365-Filtering-Correlation-Id: a303e0ec-eb89-417a-744d-08dbfa331fd5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	U9mw8C6ILK3csf8axLoZ2t6tMXF7AO5KSaNrw6FKIUmMZSFIXwD+EtS+t2s1sLNHq21eDoFTc0xpvRdh150sWIiED5njgrQOoKCIAijWOhYS3tG1VIvT5B95goL4d1Uj1rXqBj3byYDVaySjSl2ItTjKpkwFMJDNFJFLvScISpKyEEB6FJnu+zceahim+nu/z/DBwFIaD9GfU10LzeK6VxkVPyjzcrnoYxKIBa52cu+YqhEklgoMvPSjtD/hyle3YYofk5v+AmYuPqk0aEYpugl2vzICAbJFqsoTKk662BriWxFpOiKA0A5h28fLiXsQjLPPeJ8lHdGaBMdX4NcQlP0+xSJp2Eog6PeWH+tZu2Q874jvDf2c6nBGz/Fg4oYab10yxdZBgnOO9g6EI2f1zBrSQMUQSqEzGZCfU/qflYyW3EHzQTI1bbQ9bB7KQIJU2ILwaq93RT4eiFywlTOFUJFBtZlUHiBsQL7GM0aU/1rebaS3vn6r9m7WgC890PoHPkeMm7x7VNcuiyFzPL73xJREuCM6HQd+6mnof0VRkIOJ5pOseN9Gy+Ehj7wYTwu1HOS3FZiFRec4fAdsioRLDogyLJMdO7p2oHRbbqd7LPL4PA+3MBsqWOxfnOJUMMC7
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR01MB7455.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(39850400004)(136003)(396003)(346002)(366004)(230922051799003)(451199024)(1800799012)(186009)(64100799003)(1076003)(26005)(107886003)(2616005)(6506007)(6512007)(6666004)(52116002)(83380400001)(5660300002)(7416002)(41300700001)(2906002)(4326008)(478600001)(966005)(6486002)(8676002)(8936002)(66946007)(110136005)(66556008)(316002)(66476007)(54906003)(86362001)(38100700002)(38350700005)(921008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?lHduaNS8DVTh9rEkMjoGrFTJdjb3/AG2NOLmhLfENOAT/NMI4E0Be5DpsA3O?=
- =?us-ascii?Q?KoLVzlQyMs9IQGzEvOrZ3qz3ukLTcOnaxvmVYzTJte9aO5Std4Fga4UIDmET?=
- =?us-ascii?Q?RYypn+7lvkLTRZIE6d8BNvyA+UBuLNvcQ0JP+D5ntL7mcFwTfnMmdRjvmy4V?=
- =?us-ascii?Q?9x7qQ3bvV8qyPkCMD9GTHbZpJDvuskAMzeB1l06260QX9SOkso6AyxfTFa0D?=
- =?us-ascii?Q?amAajX/+vVDNZNZdb1euUHay8q6Ckx49grcfgTkq57oD0Z0wQLwYkab6aZwZ?=
- =?us-ascii?Q?jgZ/+/ZjGfbUXthXYqiD6GtcReOLpH1TjOxzFxsP2ZdSeks12E6ib/bpiI3E?=
- =?us-ascii?Q?qIWgAdZ75AcVhpwI4nsbu4X2Ojh3HFAxIGHMB6xyKj3gh9Y5QjtWaTDQZsZM?=
- =?us-ascii?Q?dKAANbL5fOlS6ZKTEQFrjYvHCoJta7vh5JQ2U9OzZJlQPiMP079LOVTlxNl4?=
- =?us-ascii?Q?xj6BqBnpLc1t7FNHZEkqN4DQIFUjyQ9/NQ29UylTTVd/FeO8FIHP1DMkWnIe?=
- =?us-ascii?Q?Z2XoB/cBG6uRF4J4Jq2rqImwaURLo0QPPsdyqXMhYflv3+GqcmRNJR8n459f?=
- =?us-ascii?Q?W5e7VUM/cWugCQTHVt3SHYgBtPUw8mTemXd5kNP3/z5oLAAhSnAK3esCXk0w?=
- =?us-ascii?Q?eu9tuikIatKFlCOYl0LkMsUm2KKMqJZTIt/d9ukzOf1shW7U7H9pqpbGa1rH?=
- =?us-ascii?Q?q2Jq2uz16qRicuqOd20sA+VrIeXrdAgAZqQE5Q0k8kptmJ/lM10PDWcRK86s?=
- =?us-ascii?Q?AJfZxvWiWrnaHhDSNaCROWWK3OaNScD1I11DuRG9lzaiolnU2LTpuOZTGHo9?=
- =?us-ascii?Q?U+5pwg/bPFZiYhuG6Z70M2K8mQYNBmb+xs9Rdv3irRBJh2+hzqRhDCyjFlYF?=
- =?us-ascii?Q?pmITgi+fJt5siORHX6v4iEno/XINZENB55S3WFt48t129DHzlkH46o0BlrAk?=
- =?us-ascii?Q?1k+1Gjirq1NSgvCqi8BUjepP/pQbfpxS+DKV35bCW4v43XBp/hB7t5Ox+Hkt?=
- =?us-ascii?Q?wrp3+MuUouVs0NRFn/GcARXGTN6xSTG5a4MHND5cORLoHnA2Pmn2IzLA8ugD?=
- =?us-ascii?Q?v/7vWGbWHpa7dFjkTsHTDELFliOYAbnGdpuh3rLvvoJG06bGd+7EofLpk91u?=
- =?us-ascii?Q?EBgIdBVsphStGbsJputrMdvjWSUgwiePRvDGfWvKNIpr9sOFLjSs7ecIaKq8?=
- =?us-ascii?Q?6H7pfBahPyaSckhXoBLa+kgp44hScV91kNjpX9kd4264wRFjdZghArsqvCwu?=
- =?us-ascii?Q?LR70OXRIwU+EIZHasM/AgveGeUztzI1x1EffXAIqaGoHgT5nMsXkbkGkqaQD?=
- =?us-ascii?Q?z/xyeRNVM5WzQ57RKRV/OON/ovPqQKVKWN0pUvPkLUquJecmjOsaEqIfeAhc?=
- =?us-ascii?Q?oRHIj5tdfzf6hvezt/NwisMCWAmoe+bFBv806f4i/9s1kirhlxfY3iuRz4vv?=
- =?us-ascii?Q?KZ3PUptRBuoHRunZPxD2sdtCdo8TSMGDTPrY+K4XhOL/MByV30bGnKAhowol?=
- =?us-ascii?Q?zJBiFrCBVeotRLkKkUkItn+7eO/bEXg5BHYNZXsRr/lEKh69X9CQLfLXkow8?=
- =?us-ascii?Q?N/G4TPd7Jt6x7UA2M6NVGEs7/hTvr+jbWsUBXG2cfJTtC2OttmH2tiBLO8+i?=
- =?us-ascii?Q?+fE5kvhlyyDJ8dwk2sQmUDE=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a303e0ec-eb89-417a-744d-08dbfa331fd5
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR01MB7455.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Dec 2023 10:22:49.1549
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PItBE7hQJPUk1izhwECgYdVAJft+7UDK0p7N2wmh4omF1x975WbDKas1MPK9DhOef3sW9bJsTMWYQG6MVpLVByfIORcLa6ukgJqjVLG2GmE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR01MB6568
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: _89VZfFsXvVH5A_7vJDI7Kvq921FjJ-J
+X-Proofpoint-GUID: _89VZfFsXvVH5A_7vJDI7Kvq921FjJ-J
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
 
-Commit 2be6b47211e1 ("i2c: aspeed: Acknowledge most interrupts early in
-interrupt handler") acknowledges most interrupts early before the slave
-irq handler is executed, except for the "Receive Done Interrupt status"
-which is acknowledged late in the interrupt.
-However, it has been observed that the early acknowledgment of "Transmit
-Done Interrupt Status" (with ACK or NACK) often causes the interrupt to
-be raised in READ REQUEST state, that shows the
-"Unexpected ACK on read request." complaint messages.
+From: Elad Nachman <enachman@marvell.com>
 
-Assuming that the "Transmit Done" interrupt should only be acknowledged
-once it is truly processed, this commit fixes that issue by acknowledging
-interrupts for both ACK and NACK cases late in the interrupt handler.
+i2c: busses: i2c-mv64xxx: fix arb-loss i2c lock
 
-Fixes: 2be6b47211e1 ("i2c: aspeed: Acknowledge most interrupts early in interrupt handler")
-Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
----
-v4:
-  + Switch to use define macro instead of variable             [Andrew]
-  + Make the early ack conditionally to avoid unnecessary
-writel()/readl()                                                 [Quan]
+Some i2c slaves, mainly SFPs, might cause the bus to lose arbitration
+while slave is in the middle of responding.
+This means that the i2c slave has not finished the transmission, but
+the master has already finished toggling the clock, probably due to
+the slave missing some of the master's clocks.
+This was seen with Ubiquity SFP module.
+This is typically caused by slaves which do not adhere completely
+to the i2c standard.
+
+The solution is to change the I2C mode from mpps to gpios, and toggle
+the i2c_scl gpio to emulate bus clock toggling, so slave will finish
+its transmission, driven by the manual clock toggling, and will release
+the i2c bus.
 
 v3:
-  + Fix the unconditinal write when ack the irqs               [Andrew]
-  + Refactor the code to enhance code readability                [Quan]
-  + Fix grammar in commit message                                [Quan]
+   1) Remove unused / un-initialized variable
+
+   2) Replace devm_pinctrl_get() with pinctrl_get() and pinctrl_put() pair
+      in probe and device removal.
+
+   3) Replace atomic sleeps with usleep_range()
+
+   4) Rework comment to start with a capital letter
 
 v2:
-  + Split to separate series                                     [Joel]
-  + Added the Fixes line                                         [Joel]
-  + Fixed multiline comment                                      [Joel]
-  + Refactor irq clearing code                          [Joel, Guenter]
-  + Revised commit message                                       [Joel]
-  + Revised commit message                                       [Quan]
-  + About a note to remind why the readl() should immediately follow the
-writel() to fix the race condition when clearing irq status from commit
-c926c87b8e36 ("i2c: aspeed: Avoid i2c interrupt status clear race
-condition"), I think it looks straight forward in this patch and decided
-not to add that note.                                            [Joel]
+   1) Explain more about cause of issue in commit message
 
-v1:
-  + First introduced in
-https://lore.kernel.org/all/20210519074934.20712-1-quan@os.amperecomputing.com/
----
- drivers/i2c/busses/i2c-aspeed.c | 27 ++++++++++++++++++++-------
- 1 file changed, 20 insertions(+), 7 deletions(-)
+   2) Change variable name to something clearer
 
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index 5511fd46a65e..0f67218cf04a 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -93,6 +93,10 @@
- 		 ASPEED_I2CD_INTR_RX_DONE |				       \
- 		 ASPEED_I2CD_INTR_TX_NAK |				       \
- 		 ASPEED_I2CD_INTR_TX_ACK)
-+#define ASPEED_I2CD_INTR_ACK_RX_TX					       \
-+		(ASPEED_I2CD_INTR_RX_DONE |				       \
-+		 ASPEED_I2CD_INTR_TX_ACK |				       \
-+		 ASPEED_I2CD_INTR_TX_NAK)
- 
- /* 0x14 : I2CD Command/Status Register   */
- #define ASPEED_I2CD_SCL_LINE_STS			BIT(18)
-@@ -622,10 +626,19 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
- 
- 	spin_lock(&bus->lock);
- 	irq_received = readl(bus->base + ASPEED_I2C_INTR_STS_REG);
--	/* Ack all interrupts except for Rx done */
--	writel(irq_received & ~ASPEED_I2CD_INTR_RX_DONE,
--	       bus->base + ASPEED_I2C_INTR_STS_REG);
--	readl(bus->base + ASPEED_I2C_INTR_STS_REG);
-+
-+	/*
-+	 * Early acking of INTR_RX_DONE and INTR_TX_[ACK|NAK] would indicate HW to
-+	 * start receiving or sending new data, and this may cause a race condition
-+	 * as the irq handler has not yet handled these irqs but is being acked.
-+	 * Let's ack them late at the end of the irq handler when those are truly processed.
-+	 */
-+	if (irq_received & ~ASPEED_I2CD_INTR_ACK_RX_TX) {
-+		writel(irq_received & ~ASPEED_I2CD_INTR_ACK_RX_TX,
-+		       bus->base + ASPEED_I2C_INTR_STS_REG);
-+		readl(bus->base + ASPEED_I2C_INTR_STS_REG);
-+	}
-+
- 	irq_received &= ASPEED_I2CD_INTR_RECV_MASK;
- 	irq_remaining = irq_received;
- 
-@@ -668,12 +681,12 @@ static irqreturn_t aspeed_i2c_bus_irq(int irq, void *dev_id)
- 			"irq handled != irq. expected 0x%08x, but was 0x%08x\n",
- 			irq_received, irq_handled);
- 
--	/* Ack Rx done */
--	if (irq_received & ASPEED_I2CD_INTR_RX_DONE) {
--		writel(ASPEED_I2CD_INTR_RX_DONE,
-+	if (irq_received & ASPEED_I2CD_INTR_ACK_RX_TX) {
-+		writel(irq_received & ASPEED_I2CD_INTR_ACK_RX_TX,
- 		       bus->base + ASPEED_I2C_INTR_STS_REG);
- 		readl(bus->base + ASPEED_I2C_INTR_STS_REG);
- 	}
-+
- 	spin_unlock(&bus->lock);
- 	return irq_remaining ? IRQ_NONE : IRQ_HANDLED;
- }
+   3) Leave space between comments
+
+   4) Remove redundant blank line
+
+   5) Add error message if pinctrl get failed
+
+   6) Move gpio request to probe function
+
+   7) Fix commenting style
+
+   8) Explain in comments why 10 togglings are required
+
+   9) Move from mdelay to udelay, reducing delay time
+
+   10) Explain in comments what is the value written
+       to the reset register.
+
+   11) Explain why fallthrough is required (generate stop condition)
+
+   12) Explain why in case of missing i2c arbitration loss details,
+       driver probe will not fail, in order to be backward compatible
+       with older dts files
+
+Elad Nachman (1):
+  i2c: busses: i2c-mv64xxx: fix arb-loss i2c lock
+
+ drivers/i2c/busses/i2c-mv64xxx.c | 118 ++++++++++++++++++++++++++++++-
+ 1 file changed, 117 insertions(+), 1 deletion(-)
+
 -- 
-2.35.1
+2.25.1
 
 
