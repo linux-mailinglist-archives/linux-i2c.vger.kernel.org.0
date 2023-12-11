@@ -1,69 +1,75 @@
-Return-Path: <linux-i2c+bounces-722-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-723-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B70A180CA8F
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Dec 2023 14:10:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54FAA80CE27
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Dec 2023 15:18:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 618941F21568
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Dec 2023 13:10:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E971DB213AC
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Dec 2023 14:18:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 102263D96A;
-	Mon, 11 Dec 2023 13:10:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE229487B4;
+	Mon, 11 Dec 2023 14:18:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fZapfq/T"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DWteeA9G"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E7EC3;
-	Mon, 11 Dec 2023 05:10:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702300208; x=1733836208;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/7AH75cKbyzblVZ0o25ripAHfzcB/lqxf3+MfjM04+A=;
-  b=fZapfq/T/99MJHilXq4o58be0deuRM5iroXQoZEl73OTeFq6aWnERrt6
-   NtAurLI7tKCgwNgVmTFgj8mVnMsStnhkdDgNqOWUhUMbTL2UREiY3KA6a
-   vxTh845ohOH8eiqAay8FlGYhn4nLiGGUXMOwOf2j9VV+X8Tynp2jBncoi
-   gHBjbunE1sbDtOBXrDmR8RBRz4yWOrERKFBi08ApO05msyoWOPRe7DqGl
-   xmXDbjoiYyeIjAzMOgoiSPuUOZaOzDHVxVqKD0MBwPCwtRJbNCsiXo8nH
-   VJGqxQUgLEisNIoRPOcVGMB73OpmuukvGuRO2lvs+DD6Vz20bDfRntDQx
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="1762895"
-X-IronPort-AV: E=Sophos;i="6.04,267,1695711600"; 
-   d="scan'208";a="1762895"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 05:10:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="843508656"
-X-IronPort-AV: E=Sophos;i="6.04,267,1695711600"; 
-   d="scan'208";a="843508656"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 05:10:03 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rCg2q-00000004mo9-2Q7O;
-	Mon, 11 Dec 2023 15:10:00 +0200
-Date: Mon, 11 Dec 2023 15:10:00 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Mario Limonciello <mario.limonciello@amd.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Serge Semin <fancer.lancer@gmail.com>
-Subject: Re: [PATCH v5 24/24] i2c: designware: Fix spelling and other issues
- in the comments
-Message-ID: <ZXcKKHcmK5ULzE3a@smile.fi.intel.com>
-References: <20231207141653.2785124-1-andriy.shevchenko@linux.intel.com>
- <20231207141653.2785124-25-andriy.shevchenko@linux.intel.com>
- <20231209011436.rwvaivgewhbthtzl@zenone.zhora.eu>
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CA9212F;
+	Mon, 11 Dec 2023 06:17:53 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1d03bcf27e9so26945025ad.0;
+        Mon, 11 Dec 2023 06:17:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702304273; x=1702909073; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yQCSZCHRZifXrm2rHeeJVxoyk1kBTheYDBk9lmCNOio=;
+        b=DWteeA9G9+KWL1JJ5nyOscj1KRl3rN/30VZq1cON/fFiRpJdS4ngFCo1kKKb2wXzI8
+         koUYTRiuaO5t3nigev7a46Jc6n6b5GsYxUTuDOz5bGbEaVK0jTtgj4pGl/YyytOc/zlr
+         PWUwSJl49ruIwmKvd3PWRVK+aQOpup5jF9EPyESDGBhVWav2pNS+lfVy6sJcyroInjbk
+         R3yI0OUlXJbk+7IUoz4y/9EC4W4nqxomhBKJ9uAcsoHrbvbFYiV+4zr/qfczf2Y0AtGY
+         a+ItubsUhoTuK7gF1KqwF8t2ZqzvLAjRuy0ANUVLNBrcCY8SHn6eWf7MNGE+86vndsrB
+         LjAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702304273; x=1702909073;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yQCSZCHRZifXrm2rHeeJVxoyk1kBTheYDBk9lmCNOio=;
+        b=myIwWmw/lU3Rlzr2ezxK6ruDQHh0ED+U2oSbxCW5B+dBtsfs4gEdCVHnWzlDV+9dV3
+         qVoj97BXFMfzMvIzP3s93I8tnIpIVABTWGiCzY4M7J7HY4a0/AWBdlqeDW0cqKxXebji
+         uTY99wzNu2cI0geGVL4gKn4JmLMzTe831xwUEl5orJl5kBiwDu0EbJ/uVPzCREM16n3/
+         ZSwxTQPdyL2XuA6iH2ZQIBTW6WuwwHgrigUSpw5zmxqWpIvYtUvcnEUMa1fJTD62eF9o
+         4XGYbSMcs+eVfut1lM8ubWfSUef9GN4dWgE0BegPwrjf3fhktY3EdbcHYQglfozTEutw
+         kC0g==
+X-Gm-Message-State: AOJu0YzUGhhN68GD8q2oVZMWSIp1bACNvR8AcqZ2M273sZB/ufqSCvaz
+	w06ujFDXz7yjARPWpiY5n+0=
+X-Google-Smtp-Source: AGHT+IGgbLZWtCsbqHPS5cp/C5+jKiGs3bIxlGTixkc0tac/6iObkizX9mZzNwEHQcFHKHYBel0W6w==
+X-Received: by 2002:a17:90b:1191:b0:286:c105:2373 with SMTP id gk17-20020a17090b119100b00286c1052373mr1896361pjb.45.1702304272647;
+        Mon, 11 Dec 2023 06:17:52 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l17-20020a17090aaa9100b0028593e9eaadsm8462569pjq.31.2023.12.11.06.17.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 06:17:52 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 11 Dec 2023 06:17:51 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc: patrick@stwcx.xyz, Jean Delvare <jdelvare@suse.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-i2c@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v7 1/2] dt-bindings: hwmon: Add lltc ltc4286 driver
+ bindings
+Message-ID: <a71eae64-680a-414a-84e1-709c27a90d0a@roeck-us.net>
+References: <20231123015440.199822-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20231123015440.199822-2-Delphine_CC_Chiu@Wiwynn.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -72,32 +78,17 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231209011436.rwvaivgewhbthtzl@zenone.zhora.eu>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20231123015440.199822-2-Delphine_CC_Chiu@Wiwynn.com>
 
-On Sat, Dec 09, 2023 at 02:14:36AM +0100, Andi Shyti wrote:
-> On Thu, Dec 07, 2023 at 04:14:04PM +0200, Andy Shevchenko wrote:
-> > Fix spelling and other issues, such as kernel-doc reported about,
-> > in the comments. While at it, fix some indentation issues as well.
-> > 
-> > Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> > Tested-by: Serge Semin <fancer.lancer@gmail.com>
-> > Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> > Link: https://lore.kernel.org/r/20231120144641.1660574-25-andriy.shevchenko@linux.intel.com
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Thu, Nov 23, 2023 at 09:54:36AM +0800, Delphine CC Chiu wrote:
+> Add a device tree bindings for ltc4286 device.
 > 
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-> 
-> Andi I think everything here has been reviewed.
+> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
 
-How often do you speak to yourself? :-)
+Applied.
 
-Thank you for the review!
-And I think Wolfram can apply it now if he has no concerns.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Guenter
 
