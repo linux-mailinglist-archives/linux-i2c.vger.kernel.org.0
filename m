@@ -1,52 +1,52 @@
-Return-Path: <linux-i2c+bounces-763-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-764-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1793811EFC
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Dec 2023 20:35:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2C9C811F17
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Dec 2023 20:40:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BB3E282A70
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Dec 2023 19:35:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E90031C2131D
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Dec 2023 19:40:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B65168285;
-	Wed, 13 Dec 2023 19:35:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9896F6829F;
+	Wed, 13 Dec 2023 19:40:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UciZAyJp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lL9acd/5"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BDD9C;
-	Wed, 13 Dec 2023 11:35:02 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB40E0;
+	Wed, 13 Dec 2023 11:40:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702496102; x=1734032102;
+  t=1702496431; x=1734032431;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=sNFNGP5i3euntVPkAioPBY5yW1MCBKQIcWUNZfB3GYg=;
-  b=UciZAyJpCwrBwtSbpur2KYrw4hB75BarSCSZxm/snWoAUEdP8gzTHCa2
-   RgmINWQ8L/vPjdsZYPt9ILZnLh2RyvUWYjeQJiy8h60vl8VTd00x85rmM
-   R29DfgqPrXm9S9oZ2s6/8t2QnSaMs8MG1QgR4R9vZPTVrGW6uOYk7v7qt
-   o+FvU0Gp3fh5OmXpiBfjeLyv7wpBTAMpOzYTmk0Al9J/zjhKxkALf2vpP
-   5PGKRG9urv/+S9mF/f+KnG5kd9X7aH/F+NsIf9wh/xUGNGmmqacla0+su
-   9LATk+8ppQ9dxhzXvXxXJSn9oSUasyEgPqM0PbWPAJcDGRe1yMeNh8i+Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="397799684"
+  bh=TB6pdHRQrOCaGMVFpuGPsB29t4yb42FXCMwWcj1ZwFY=;
+  b=lL9acd/50tmS4n/6fGFTtWucnFVoEQCDfLYwD7PcbN9NzMmT4AaSVdTB
+   sul3FnkseHcKHYeunYtKenLYEdMD7PnIFbYK24xFbPTq0Zq0ybTp7uFjp
+   03ZQkZYe8n0WA0RUTNHlI9ySgPUTHeo+GQ05naxJCVgtu47VLxKZVAPhw
+   xMiapz95LrC8QBSx+SOUJHjo3YRYTHM9q1na040jXRgf2uOwIq8tDk/03
+   qJDsIy0UQ0J2yTl0qWfuUbcT8Q+quiY9Dj7yGQc0H32zTzDelB85yfn+N
+   +KgN+4p7Vbh+vrllAUkaU9Elbqe7ctPx17xbQS3MrRLNzPIh9yTjgIMyg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="380003847"
 X-IronPort-AV: E=Sophos;i="6.04,273,1695711600"; 
-   d="scan'208";a="397799684"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 11:35:02 -0800
+   d="scan'208";a="380003847"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 11:40:31 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="774060567"
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="802985825"
 X-IronPort-AV: E=Sophos;i="6.04,273,1695711600"; 
-   d="scan'208";a="774060567"
+   d="scan'208";a="802985825"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 11:34:58 -0800
+  by orsmga008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 11:40:28 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.97)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rDV0R-00000005cq3-3OC5;
-	Wed, 13 Dec 2023 21:34:55 +0200
-Date: Wed, 13 Dec 2023 21:34:55 +0200
+	id 1rDV5l-00000005cxH-1HEp;
+	Wed, 13 Dec 2023 21:40:25 +0200
+Date: Wed, 13 Dec 2023 21:40:25 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Mark Hasemeyer <markhas@chromium.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Raul Rangel <rrangel@chromium.org>,
@@ -58,7 +58,7 @@ Cc: LKML <linux-kernel@vger.kernel.org>, Raul Rangel <rrangel@chromium.org>,
 	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
 Subject: Re: [PATCH v1 1/6] gpiolib: acpi: Modify acpi_dev_irq_wake_get_by to
  use resource
-Message-ID: <ZXoHXwmwzczAqlLv@smile.fi.intel.com>
+Message-ID: <ZXoIqfXVYiYAuL86@smile.fi.intel.com>
 References: <20231213110009.v1.1.Ifd0903f1c351e84376d71dbdadbd43931197f5ea@changeid>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -78,47 +78,15 @@ On Wed, Dec 13, 2023 at 11:00:19AM -0700, Mark Hasemeyer wrote:
 > 
 > This should keep the API more robust over time as flags are added,
 > modified, or removed. It also more closely matches acpi_irq_get which
-
-acpi_irq_get()
-
 > take a resource as an argument.
 > 
 > Rename the function to acpi_dev_get_gpio_irq_resource to better describe
-
-acpi_dev_get_gpio_irq_resource()
-
 > the function's new behavior.
 
-...
+I have got only one patch out of 6.
+Also the series is missing a cover letter.
 
-> + * @r: pointer to resource to populate with irq information. It is not modified on failure.
-
-IRQ
-
-I don't think the second remark is even needed. It's usual approach, i.e.
-we expect no changes in the output if error condition is met.
-
-...
-
-> + * Irq number will be available in the resource structure.
-
-IRQ
-
-...
-
-> +			*r = (struct resource)DEFINE_RES_IRQ(irq);
-
-Why do you need "(struct resource)" annotation?
-
-...
-
-> +	struct resource irqres;
->  	struct i2c_acpi_irq_context irq_ctx = {
->  		.irq = -ENOENT,
->  	};
-
-Hmm... I'm wondering if we can reuse irqres as a context to the respective
-lookup calls.
+Please, fix both issues in the next version of the series.
 
 -- 
 With Best Regards,
