@@ -1,115 +1,133 @@
-Return-Path: <linux-i2c+bounces-759-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-760-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A457811424
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Dec 2023 15:06:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EA388115E1
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Dec 2023 16:13:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C33C0281317
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Dec 2023 14:06:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B130D1F217A8
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Dec 2023 15:13:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA432E651;
-	Wed, 13 Dec 2023 14:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A2AF315B0;
+	Wed, 13 Dec 2023 15:13:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S8vI+aer"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="UfZX8Aj0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1F011B;
-	Wed, 13 Dec 2023 06:06:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702476360; x=1734012360;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lLDH5uYOeaQnhamK2tYMH/VlP6LJt6utjNNQt+hkSQU=;
-  b=S8vI+aerwXaE8KcmxhaobIdvC45z+WfpYBgM7qu2ofRZ0GG349AF+j/m
-   m2kCPmZowmogia1t/7AVD0JBnOtN7p1T+BiWxrJFBXAxW2BxCZZfstnaK
-   PibbqCuEdxjxD7PtFWPlS+IBD8CnGvIroPbuyornGR2wJ9W7jlJLh7V85
-   pxb9lXxepkF3r6CspmJzr6i2HuCEBJd6tsSG+j8c02/IoarEnxKMgWFpa
-   2ZGpaYHA1fvePHTBbIMfvRFz8jiI04taZ5aJQQy7caob3ufktsa78pW7h
-   tGypNUE7CzI5crV8u6gDkd+7p8MHI3l1nKV9J4zNzfHJtDpWqB35ym4zl
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="426090697"
-X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
-   d="scan'208";a="426090697"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 06:06:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="767229612"
-X-IronPort-AV: E=Sophos;i="6.04,272,1695711600"; 
-   d="scan'208";a="767229612"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 06:05:57 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rDPs2-00000005Xgc-2rMy;
-	Wed, 13 Dec 2023 16:05:54 +0200
-Date: Wed, 13 Dec 2023 16:05:54 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Cc: platform-driver-x86@vger.kernel.org,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH RFC v2] platform/x86: p2sb: Allow p2sb_bar() calls during
- PCI device probe
-Message-ID: <ZXm6QrRkyzGRg8SB@smile.fi.intel.com>
-References: <20231212114746.183639-1-shinichiro.kawasaki@wdc.com>
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1568CB0;
+	Wed, 13 Dec 2023 07:13:37 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BDBP9iL006807;
+	Wed, 13 Dec 2023 07:13:23 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=pfpt0220; bh=h0QNwsIs
+	xCVCFnb61YiC0y8uyBswFifMu55wtofMhKA=; b=UfZX8Aj0ErqBfh2mlJAzJlfz
+	9i+DM64msaTL1/IclVsrPG3bCuoYvvxngzgaNMu60pp3NanQn7aLo/TY3sVbUrfE
+	vVHtw67pa5jwOceuNy6yNB3XKjcLy6Yc9IF3iJwfwTT0CojkWTObKCPQq3tf7JaW
+	0G+YIqfdQ9G3ejop6rLicLMw3Tnw7Jl8YfbqqghvewWRRrCNJ5spNyUGTQ9lNBKE
+	b1zcUEUizrMTj40YwsFbYx9BU9tjYQB1a8U7zb8jxuhXlR8cl9cmGIa1b5KXfdvG
+	ayrqrnoqqEai4i5DyKT1jRDXEH8U0VBLCBlWmo8rsbnK3cEGMFr2dFw7u0uXbg==
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3uybqmgras-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+	Wed, 13 Dec 2023 07:13:23 -0800 (PST)
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 13 Dec
+ 2023 07:13:21 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 13 Dec 2023 07:13:21 -0800
+Received: from dc3lp-swdev041.marvell.com (dc3lp-swdev041.marvell.com [10.6.60.191])
+	by maili.marvell.com (Postfix) with ESMTP id 97E905B6943;
+	Wed, 13 Dec 2023 07:13:19 -0800 (PST)
+From: Elad Nachman <enachman@marvell.com>
+To: <gregory.clement@bootlin.com>, <andi.shyti@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <enachman@marvell.com>, <cyuval@marvell.com>
+Subject: [PATCH v3 0/1] i2c: busses: i2c-mv64xxx: fix arb-loss i2c lock
+Date: Wed, 13 Dec 2023 17:13:11 +0200
+Message-ID: <20231213151312.1165115-1-enachman@marvell.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231212114746.183639-1-shinichiro.kawasaki@wdc.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: fW9T9wHimsPpN25zWGrXT3Fd-nLuGaFD
+X-Proofpoint-ORIG-GUID: fW9T9wHimsPpN25zWGrXT3Fd-nLuGaFD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
 
-On Tue, Dec 12, 2023 at 08:47:46PM +0900, Shin'ichiro Kawasaki wrote:
-> p2sb_bar() unhides P2SB device to get resources from the device. It
-> guards the operation by locking pci_rescan_remove_lock so that parallel
-> rescans do not find the P2SB device. However, this lock causes deadlock
-> when PCI bus rescan is triggered by /sys/bus/pci/rescan. The rescan
-> locks pci_rescan_remove_lock and probes PCI devices. When PCI devices
-> call p2sb_bar() during probe, it locks pci_rescan_remove_lock again.
-> Hence the deadlock.
-> 
-> To avoid the deadlock, do not lock pci_rescan_remove_lock in p2sb_bar().
-> Instead, do the lock at fs_initcall. Introduce p2sb_cache_resources()
-> for fs_initcall which gets and caches the P2SB resources. At p2sb_bar(),
-> refer the cache and return to the caller.
+From: Elad Nachman <enachman@marvell.com>
 
-...
+i2c: busses: i2c-mv64xxx: fix arb-loss i2c lock
 
-> +/* Cache BAR0 of P2SB device from function 0 ot 7 */
-> +#define NR_P2SB_RES_CACHE 8
+Some i2c slaves, mainly SFPs, might cause the bus to lose arbitration
+while slave is in the middle of responding.
+This means that the i2c slave has not finished the transmission, but
+the master has already finished toggling the clock, probably due to
+the slave missing some of the master's clocks.
+This was seen with Ubiquity SFP module.
+This is typically caused by slaves which do not adhere completely
+to the i2c standard.
 
-Here... (at least some better comment with TODO needs to be added,
-and next patches can address that).
+The solution is to change the I2C mode from mpps to gpios, and toggle
+the i2c_scl gpio to emulate bus clock toggling, so slave will finish
+its transmission, driven by the manual clock toggling, and will release
+the i2c bus.
 
->  	struct resource *bar0 = &pdev->resource[0];
+v3:
+   1) Remove unused / un-initialized variable
 
-...and here... (okay, not exactly here, but with the same idea,
-to use pci_resource_n() macro)
+   2) Replace devm_pinctrl_get() with pinctrl_get() and pinctrl_put() pair
+      in probe and device removal.
 
-> +	if (!PCI_FUNC(devfn_p2sb)) {
-> +		slot_p2sb = PCI_SLOT(devfn_p2sb);
-> +		for (fn = 1; fn < 8; fn++)
+   3) Replace atomic sleeps with usleep_range()
 
-...and here...
+   4) Rework comment to start with a capital letter
 
-> +			p2sb_scan_and_cache(bus, PCI_DEVFN(slot_p2sb, fn));
-> +	}
+v2:
+   1) Explain more about cause of issue in commit message
 
-...and so on I gave comments. Any reason why they left unaddressed?
+   2) Change variable name to something clearer
+
+   3) Leave space between comments
+
+   4) Remove redundant blank line
+
+   5) Add error message if pinctrl get failed
+
+   6) Move gpio request to probe function
+
+   7) Fix commenting style
+
+   8) Explain in comments why 10 togglings are required
+
+   9) Move from mdelay to udelay, reducing delay time
+
+   10) Explain in comments what is the value written
+       to the reset register.
+
+   11) Explain why fallthrough is required (generate stop condition)
+
+   12) Explain why in case of missing i2c arbitration loss details,
+       driver probe will not fail, in order to be backward compatible
+       with older dts files
+
+Elad Nachman (1):
+  i2c: busses: i2c-mv64xxx: fix arb-loss i2c lock
+
+ drivers/i2c/busses/i2c-mv64xxx.c | 118 ++++++++++++++++++++++++++++++-
+ 1 file changed, 117 insertions(+), 1 deletion(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
 
