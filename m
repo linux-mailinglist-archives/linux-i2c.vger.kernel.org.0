@@ -1,93 +1,152 @@
-Return-Path: <linux-i2c+bounces-815-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-816-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3972C813C26
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 21:57:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30D06813D43
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 23:28:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B5891C21BD7
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 20:57:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 626CE1C21E46
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 22:28:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F026A001;
-	Thu, 14 Dec 2023 20:57:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAB8367206;
+	Thu, 14 Dec 2023 22:28:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ciwv4FcI"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="IMWJZBmt"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B73A6A35D
-	for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 20:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dbc72b692adso5149613276.2
-        for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 12:57:07 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692182C69D;
+	Thu, 14 Dec 2023 22:28:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+Received: from [192.168.68.112] (ppp118-210-187-191.adl-adc-lon-bras34.tpg.internode.on.net [118.210.187.191])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id D39A420034;
+	Fri, 15 Dec 2023 06:21:05 +0800 (AWST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1702587426; x=1703192226; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TmJ2EkA5b2Ie92om73Fjs7VxNUILpDnlthZoiY7r/uk=;
-        b=ciwv4FcIi6VElud4i9m1U2zfN9XilX3Bjj1eL9DUmN5aNUINZgWlcK2551PyEctTj8
-         XH+jyJBy/6HDp1Gq+sYtgfX5MvB6pYZ5dJHDEemlKf0XG9FW2dto3dZtXrXLLLX/1cjY
-         8dmWzUzmjQ78UyNI4GSDxVqnFI0X76eylJ3fo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702587426; x=1703192226;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TmJ2EkA5b2Ie92om73Fjs7VxNUILpDnlthZoiY7r/uk=;
-        b=J5thN8oc76N9ly06KHOAVqxft93q2+iPVsf5/w0UJh4hcs1/4jcwAnv5r5eUFaQ5fL
-         8Dqyd2+AIEhB72NHJ7rfTlvEZg1asg66OwlDAlx/D4IVLCqGc3dErqbEdzlXwX4ft3qs
-         9nw80ryeOcNOEZog9AzA/Z5UOcJeZtvqtg7bcw4h3jlq3qR7aNvZ0ltmpOJWk4cCX8y8
-         Cyfg2s1lCvX4f/cdS+JYE+WN9tx7jMSDzLJMdyJMQ45JGMgo0inEiEjt+KnVea1JrQIY
-         8+VPRvSI8qI8+YlbskG/z+C0wsAAocL9w2Fr6NX9M71s2al72w+w5E8BPh9XyvKRsSJy
-         T2fA==
-X-Gm-Message-State: AOJu0Yx91QB9/sanVN6X3G0/0f9H60CMtqnXHupaC6CtGHtEbC8Bl3cL
-	5YU9rOYnKZ8+08XwdIwSIRi4PfbgHmmoW9X6ufCXdg==
-X-Google-Smtp-Source: AGHT+IFKPiofPKyJq4evcKGhUZXmOHPCzsYS9WeMsD/j7wDylDwhkNTj8Q+0CSvKieikxCEL/IE81iNVZx2vVFRhhk4=
-X-Received: by 2002:a25:cb4e:0:b0:dbc:d37f:4434 with SMTP id
- b75-20020a25cb4e000000b00dbcd37f4434mr2198318ybg.7.1702587426332; Thu, 14 Dec
- 2023 12:57:06 -0800 (PST)
+	d=codeconstruct.com.au; s=2022a; t=1702592469;
+	bh=BGWPGfhl0ltwnlLE/nuPazf5YbLmd4b70ljGryNav64=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=IMWJZBmtSZGz8fkLlX/NAMm/kPBlN1o06WmMS40kxpap8N23ucFlz0CsPwOLaEKK/
+	 xMU3VCpaU72AIa+e8JbmcCL2FJOxa+/Y9kQCOsCSY+oFD/AEVCI4dxVGSAkMHhbubn
+	 2/hPvLvNg5JNAlqNXTUmx9JomL2xwv9OF5MYmKaL5jYPtPzvVMSZyCKigNeFTf93BA
+	 NA/cFW43MWxHVkgeFMmTDEh+vgM0OjDh0NKNvZh271S8Ve2HIwfU5jKZ90eyseTHiZ
+	 tJsuMEKHJQpBNQLH3bZZ9KNddteV2ouDQ4GCA81DmsUnKgM3KI9uNVJnPkUp2rtJSW
+	 MG+4P0YfwWZsg==
+Message-ID: <54cba87a0df233b8762e43b742afe8e44a77a60c.camel@codeconstruct.com.au>
+Subject: Re: [PATCH v4 2/2] i2c: aspeed: Acknowledge Tx done with and
+ without ACK irq late
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: Quan Nguyen <quan@os.amperecomputing.com>, Brendan Higgins
+ <brendan.higgins@linux.dev>, Benjamin Herrenschmidt
+ <benh@kernel.crashing.org>,  Joel Stanley <joel@jms.id.au>, Andi Shyti
+ <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>, Jae Hyun Yoo
+ <jae.hyun.yoo@linux.intel.com>, Guenter Roeck <linux@roeck-us.net>, 
+ linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org, 
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
+ linux-kernel@vger.kernel.org
+Cc: Cosmo Chou <chou.cosmo@gmail.com>, Open Source Submission
+	 <patches@amperecomputing.com>, Phong Vo <phong@os.amperecomputing.com>, 
+	"Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Date: Fri, 15 Dec 2023 08:51:03 +1030
+In-Reply-To: <2eab42cde34723a195e7a0287db08b25f8388a3b.camel@codeconstruct.com.au>
+References: <20231211102217.2436294-1-quan@os.amperecomputing.com>
+	 <20231211102217.2436294-3-quan@os.amperecomputing.com>
+	 <2eab42cde34723a195e7a0287db08b25f8388a3b.camel@codeconstruct.com.au>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231213110009.v1.1.Ifd0903f1c351e84376d71dbdadbd43931197f5ea@changeid>
- <ZXoHXwmwzczAqlLv@smile.fi.intel.com>
-In-Reply-To: <ZXoHXwmwzczAqlLv@smile.fi.intel.com>
-From: Mark Hasemeyer <markhas@chromium.org>
-Date: Thu, 14 Dec 2023 13:56:55 -0700
-Message-ID: <CANg-bXBdQP4OMzkpm_cgeiJOj176j=FdekvvyomZDVUGwe4M4A@mail.gmail.com>
-Subject: Re: [PATCH v1 1/6] gpiolib: acpi: Modify acpi_dev_irq_wake_get_by to
- use resource
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, Raul Rangel <rrangel@chromium.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Len Brown <lenb@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Wolfram Sang <wsa@kernel.org>, linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-> > +                     *r = (struct resource)DEFINE_RES_IRQ(irq);
->
-> Why do you need "(struct resource)" annotation?
+> On Mon, 2023-12-11 at 17:22 +0700, Quan Nguyen wrote:
+> > Commit 2be6b47211e1 ("i2c: aspeed: Acknowledge most interrupts early in
+> > interrupt handler") acknowledges most interrupts early before the slave
+> > irq handler is executed, except for the "Receive Done Interrupt status"
+> > which is acknowledged late in the interrupt.
+> > However, it has been observed that the early acknowledgment of "Transmi=
+t
+> > Done Interrupt Status" (with ACK or NACK) often causes the interrupt to
+> > be raised in READ REQUEST state, that shows the
+> > "Unexpected ACK on read request." complaint messages.
+> >=20
+> > Assuming that the "Transmit Done" interrupt should only be acknowledged
+> > once it is truly processed, this commit fixes that issue by acknowledgi=
+ng
+> > interrupts for both ACK and NACK cases late in the interrupt handler.
+> >=20
+> > Fixes: 2be6b47211e1 ("i2c: aspeed: Acknowledge most interrupts early in=
+ interrupt handler")
+> > Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+>=20
+> Reviewed-by: Andrew Jeffery <andrew@codeconstruct.com.au>
 
-I don't. I originally started working on this patch on a kernel
-version that didn't have 52c4d11f1dce ("resource: Convert
-DEFINE_RES_NAMED() to be compound literal").
+So I just booted this series on v6.7-rc5 under qemu v8.2.0-rc4 and
+found this:
 
-> > +     struct resource irqres;
-> >       struct i2c_acpi_irq_context irq_ctx = {
-> >               .irq = -ENOENT,
-> >       };
->
-> Hmm... I'm wondering if we can reuse irqres as a context to the respective
-> lookup calls.
+```
+$ qemu-system-arm \
+	-M ast2600-evb \
+	-kernel build.aspeed_g5/arch/arm/boot/zImage \
+	-dtb build.aspeed_g5/arch/arm/boot/dts/aspeed/aspeed-ast2600-evb.dtb \
+	-initrd ~/src/buildroot.org/buildroot/output/images/rootfs.cpio.xz \
+	-nographic 2>&1 \
+	| ts -s
+...
+00:00:03 [    1.089187] Freeing initrd memory: 3308K
+00:00:05 smbus: error: Unexpected send start condition in state 1
+00:00:05 smbus: error: Unexpected write in state -1
+00:00:06 [    3.685731] aspeed-i2c-bus 1e78a400.i2c-bus: i2c bus 7 register=
+ed, irq 48
+00:00:06 [    3.688918] aspeed-i2c-bus 1e78a480.i2c-bus: i2c bus 8 register=
+ed, irq 49
+00:00:06 [    3.692326] aspeed-i2c-bus 1e78a500.i2c-bus: i2c bus 9 register=
+ed, irq 50
+00:00:06 [    3.693757] aspeed-i2c-bus 1e78a680.i2c-bus: i2c bus 12 registe=
+red, irq 51
+00:00:06 [    3.695070] aspeed-i2c-bus 1e78a700.i2c-bus: i2c bus 13 registe=
+red, irq 52
+00:00:06 [    3.696184] aspeed-i2c-bus 1e78a780.i2c-bus: i2c bus 14 registe=
+red, irq 53
+00:00:06 [    3.697144] aspeed-i2c-bus 1e78a800.i2c-bus: i2c bus 15 registe=
+red, irq 54
+00:00:06 [    3.699061] aspeed-video 1e700000.video: irq 55
+00:00:06 [    3.699254] aspeed-video 1e700000.video: assigned reserved memo=
+ry node video
+00:00:06 [    3.702755] aspeed-video 1e700000.video: alloc mem size(24576) =
+at 0xbc000000 for jpeg header
+00:00:06 [    3.706139] Driver for 1-wire Dallas network protocol.
+00:00:07 smbus: error: Unexpected send start condition in state -1
+00:00:07 smbus: error: Unexpected write in state -1
+00:00:10 smbus: error: Unexpected send start condition in state -1
+00:00:10 smbus: error: Unexpected write in state -1
+00:00:12 smbus: error: Unexpected send start condition in state -1
+00:00:12 smbus: error: Unexpected write in state -1
+00:00:14 smbus: error: Unexpected send start condition in state -1
+00:00:14 smbus: error: Unexpected write in state -1
+00:00:17 smbus: error: Unexpected send start condition in state -1
+00:00:17 smbus: error: Unexpected write in state -1
+00:00:18 [   14.080141] adt7475 7-002e: Error configuring attenuator bypass
+00:00:19 smbus: error: Unexpected send start condition in state -1
+00:00:19 smbus: error: Unexpected write in state -1
+00:00:21 smbus: error: Unexpected send start condition in state -1
+00:00:21 smbus: error: Unexpected write in state -1
+00:00:24 smbus: error: Unexpected send start condition in state -1
+00:00:24 smbus: error: Unexpected write in state -1
+```
 
-I'll see if I can safely remove it.
+The smbus errors do not occur if I revert this patch.
+
+Can you look into qemu to see if it's a bug in the aspeed i2c
+controller model's state machine?
+
+Cheers,
+
+Andrew
 
