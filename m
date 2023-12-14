@@ -1,143 +1,107 @@
-Return-Path: <linux-i2c+bounces-795-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-796-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1698781332E
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 15:31:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07796813404
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 16:07:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C14EB1F21A23
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 14:31:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8AE0283234
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 15:07:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8321E5A11F;
-	Thu, 14 Dec 2023 14:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0969A5C070;
+	Thu, 14 Dec 2023 15:07:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eh8WBxT6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fCGuC6t2"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5166AE8
-	for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 06:31:28 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-a1d2f89ddabso988030366b.1
-        for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 06:31:28 -0800 (PST)
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674E011D
+	for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 07:07:40 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-5ca29c131ebso3354388a12.0
+        for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 07:07:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702564287; x=1703169087; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VgJQbimhdbaMz8PSS4TWmPrQmjKzzald78cLvtVZ+/M=;
-        b=eh8WBxT6Q0T3qFh1kwRQZApC3AmWMWC21CjpFyCAEALvcBx8K/cxF9foP0qc+YO6u4
-         uIiUjO9uYDmJMdEsIF4h2BqDob2rD4zHhEaYosG/aI4byr5DJDqGNg01sGMpUY0HvP9k
-         nlNugi0HzdUMAhmC5bk/adU02sQkmCaj1STs7OlWVGIR5WXdJ1zPgh68dVaVoCtDYLzO
-         Yk3KDINaJrinLhnFOP2vm3vehZyj1EUU2OzAiQIelhyWhn+TRqP1IS/erCI6MnhSfG5U
-         EgYZI0SnIGOZRgRhJaNE9Y1bhypoa0/KHKPG3bs6XLER/kw7aEOFqs+hydSV2tdFgshX
-         QkLg==
+        d=linaro.org; s=google; t=1702566460; x=1703171260; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J9lMPrZwLiHFysOzsWqCBFNM5vjGopX4XPDNLVg4mW8=;
+        b=fCGuC6t2nN42viOr2YKBAq0Xo+hUP/amRbiGwv5e07F6PM6Mz+7Qzwi8Fs/ucMcYC3
+         jZUtbY7uUH83tmsBWDQiU7PSXgAbdVKVxK+B+ruiRN/iRXF4903eqTh7qyWKvZOzcyHW
+         qNNku8yRzWPt9p6JxnHLUDcBeH9ig3E+74EPq+NhnmScZm//E3f+6h4qQH1yGuztgw+A
+         wEqLBIA4ektv/MpIXTQc5iUHjld32HE0/V2KWFTYrILpAm1FVwRe/csOy2V5o9g+TWIT
+         8P5Ldid5sSWvqZ+MOEw1nX+rfl3Bof3rc60I4FVnfH6ckR8GBKLJf6bggQ0pmgNey/f8
+         Q+Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702564287; x=1703169087;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VgJQbimhdbaMz8PSS4TWmPrQmjKzzald78cLvtVZ+/M=;
-        b=UAXYqFVMGnZ8ph/Yu4ZiveH9PlE6Ab2DsKnyMayW8ycgzk1X1Kfy4WdAX4/BsLFBPR
-         D3dkd7yzAQmbOFjgG3oQ9L00wASG/bmJeBGY9ZnYO4vJJkvcuf7WymwNepYKBih5EUmJ
-         Pg3rX86ILblHaROvTgOIr/p0MhlpZmUXwsBiM1CROaMxHGeM1OSAli0NHLND6nRWku4H
-         d64fVJCgSzR5Ea6ly+l71eOpkEqRhp8SuPEeJZZS4q4LAInA1FYLaTy2XScR6kLgY6eR
-         0w/DDfrs7cpDy2GvjKXF9yveeb2jcdJ6SMep9nj87Haen+MRx37m3UctystepTtnw35S
-         DJRw==
-X-Gm-Message-State: AOJu0YyckDoMNpZJvhscWH+LMWcFLdA4M7s8Cq6HTMnRh8Be81llaabM
-	ZQTKCtWeMo1JWlT/V4LsSUVlbQ==
-X-Google-Smtp-Source: AGHT+IHWZ078ljQ3KvRmktAtxA7HnfQvsB0QqyGy4IG0/hZ9rDcDubhsLYhJrI6GM7rvgcmCHZYcDw==
-X-Received: by 2002:a17:906:4559:b0:a18:8b15:4d3d with SMTP id s25-20020a170906455900b00a188b154d3dmr5541926ejq.77.1702564286762;
-        Thu, 14 Dec 2023 06:31:26 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id hw15-20020a170907a0cf00b00a1f761d9ffdsm8791995ejc.177.2023.12.14.06.31.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Dec 2023 06:31:26 -0800 (PST)
-Message-ID: <584e036a-2ae7-4b88-a517-8f79c6baed4a@linaro.org>
-Date: Thu, 14 Dec 2023 14:31:23 +0000
+        d=1e100.net; s=20230601; t=1702566460; x=1703171260;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J9lMPrZwLiHFysOzsWqCBFNM5vjGopX4XPDNLVg4mW8=;
+        b=uX2HkWFqV7wkdE/tsfBZfbOqEASOhJOIHKsZSEN2m8qBcPHv0H6SfNoC17kTSOCMq0
+         9jJK+sagqGlrmYcLVYWzRlgfk2THgCxPD9lJRbI3ZgPaKBgf5/BFLamSiohjVjWeAhdT
+         GHV2qgL+OMs7c/ZGPygxA2Duj2J//+asvUz3VFIcjrd1RSLwoWzr4CgAC7puafaWenlu
+         K10YObLQTGzWC5xFbO7zgb8k2nvUfY+YYEDXpLbXer/BYU1M3jafVU1ZTkJexmHVk3Nr
+         6pLYumwLdCxAqzsn/fKNiRvjft74q0nSaf/gBT4eXfzxKgDG26K/skARXlxoLoyXfVSn
+         MNeQ==
+X-Gm-Message-State: AOJu0YzBe2j5THHs4dUov3zjGixj0/BpECCJMGoM5GcfvIH13uusd4ms
+	0/WpZ4Li8FW5uxNNvtywSzEe5NvCbMRIa4yf6QxrKA==
+X-Google-Smtp-Source: AGHT+IEe4LHmA9Ois0luIdXZnO0T77VZxNQ9yNINBTZ2R/6zYH/aXq6Vfe7Uba+cQAfGN4QaX7I8+rAiF6Etw8yknyU=
+X-Received: by 2002:a17:90b:388:b0:28a:f2dd:9441 with SMTP id
+ ga8-20020a17090b038800b0028af2dd9441mr1630238pjb.64.1702566459845; Thu, 14
+ Dec 2023 07:07:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 05/13] tty: serial: samsung: add gs101 earlycon support
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, Peter Griffin <peter.griffin@linaro.org>,
- Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- andi.shyti@kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Tomasz Figa <tomasz.figa@gmail.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- Sam Protsenko <semen.protsenko@linaro.org>
-Cc: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- saravanak@google.com, William McVicker <willmcvicker@google.com>,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-serial@vger.kernel.org
-References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
- <20231214105243.3707730-6-tudor.ambarus@linaro.org>
- <1938fcf1-eb5d-4723-a6c6-d2fe2c6dd1c0@app.fastmail.com>
- <8808ceeb-35dc-4094-aec4-f43c7acd6174@linaro.org>
- <6962ac73-2f44-4c9e-8731-152087815454@app.fastmail.com>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <6962ac73-2f44-4c9e-8731-152087815454@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20231214105243.3707730-1-tudor.ambarus@linaro.org> <20231214105243.3707730-2-tudor.ambarus@linaro.org>
+In-Reply-To: <20231214105243.3707730-2-tudor.ambarus@linaro.org>
+From: Sam Protsenko <semen.protsenko@linaro.org>
+Date: Thu, 14 Dec 2023 09:07:28 -0600
+Message-ID: <CAPLW+4kr=aVjuqGz3ps5f6EzM+QASTFEoB57g+fR7jKH0s+1Zw@mail.gmail.com>
+Subject: Re: [PATCH 01/13] dt-bindings: clock: google,gs101: fix CMU_TOP gate
+ clock names
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: peter.griffin@linaro.org, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com, sboyd@kernel.org, 
+	conor+dt@kernel.org, andi.shyti@kernel.org, alim.akhtar@samsung.com, 
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, catalin.marinas@arm.com, 
+	will@kernel.org, s.nawrocki@samsung.com, tomasz.figa@gmail.com, 
+	cw00.choi@samsung.com, arnd@arndb.de, andre.draszik@linaro.org, 
+	saravanak@google.com, willmcvicker@google.com, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Dec 14, 2023 at 4:52=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linaro=
+.org> wrote:
+>
+> The gs101 clock names are derived from the clock register names under
+> some certain rules. In particular, for the gate clocks the following is
+> documented and expected in the gs101 clock driver:
+>
+>   Replace CLK_CON_GAT_CLKCMU      with CLK_GOUT_CMU and gout_cmu
+>   Replace CLK_CON_GAT_GATE_CLKCMU with CLK_GOUT_CMU and gout_cmu
+>
+>   For gates remove _UID _BLK _IPCLKPORT and _RSTNSYNC
+>
 
+Doesn't it break existing gs101 device tree?
 
-On 12/14/23 14:19, Arnd Bergmann wrote:
-> On Thu, Dec 14, 2023, at 13:52, Tudor Ambarus wrote:
->> On 12/14/23 12:01, Arnd Bergmann wrote:
->>> On Thu, Dec 14, 2023, at 11:52, Tudor Ambarus wrote:
->>>> +static int __init gs101_early_console_setup(struct earlycon_device *device,
->>>
->>
->> It works if in device tree one specifies the reg-io-width property and
->> sets it to 4. If the reg-io-width is not specified, the iotype defaults
->> to UPIO_MEM causing the SError interrupt on gs101 which makes the system
->> unusable.
-> 
-> In the case of incorrect DT data like a missing reg-io-width property,
-> I would expect it to still fail once the regular console or tty takes
-> over from earlycon.
-> 
->> Also, if the earlycon comes specified from the kernel params, the
->> of_setup_earlycon() is no longer called and the earlycon will be set
->> solely based on the kernel params buffer, thus allowing users to crash
->> the kernel on wrong earlycon definitions.
-> 
-> But that in turn is the same as specifying any other incorrect earlycon.
+> The CMU TOP gate clock names missed to include the required "CMU"
+> differentiator which will cause name collisions with the gate clock names
+> of other clock units. Fix the TOP gate clock names and include "CMU" in
+> their name.
+>
+> Fixes: 0a910f160638 ("dt-bindings: clock: Add Google gs101 clock manageme=
+nt unit bindings")
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
 
-I don't think you can crash the kernel if you use other earlycon as you
-don't make accesses on the 32bit restricted bus. But I agree that if
-using the correct earlycon name, and mmio instead mmio32, is equivalent
-to not specifying reg-io-width in dt.
-
-> 
->> If you think the change is fine, I can amend the commit message with the
->> description from above.
-> 
-> I'm still not convinced we need a special case here when everything else
-> just requires passing the correct data.
-> 
-
-Well, I made this patch because I used a wrong bootargs earlycon
-configuration and I ended up crashing the kernel. I couldn't see what
-happens as kgdb is not available at that stage. Figuring out what was
-going on made me spend some time. I hoped I'll be helpful and spare
-others of the same mistakes and wasted time.
-
-I'm ok to drop the patch as well, no pushing here. Please ignore.
-Thanks for the review!
-
-Cheers,
-ta
+(snip)
 
