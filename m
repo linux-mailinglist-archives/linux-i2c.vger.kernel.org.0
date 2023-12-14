@@ -1,60 +1,60 @@
-Return-Path: <linux-i2c+bounces-791-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-792-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E373813233
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 14:52:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 828A6813295
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 15:09:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 188401F212F5
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 13:52:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 367CA1F21BD3
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 14:09:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E1A5787D;
-	Thu, 14 Dec 2023 13:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6D4259B4F;
+	Thu, 14 Dec 2023 14:09:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VdUHvjAY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="l+tWKgXG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2888D11B
-	for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 05:52:41 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3333131e08dso8560679f8f.2
-        for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 05:52:41 -0800 (PST)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29060A7
+	for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 06:09:43 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-a1ef2f5ed02so901025566b.1
+        for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 06:09:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702561959; x=1703166759; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702562981; x=1703167781; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZG094W4dIVF1EKcUo638joyg5PWzf0NNJBExtH6MdeE=;
-        b=VdUHvjAYm17GgQFNbWiT9C3kGtSC9fO2fbnkgcUk0T5RTlCsREE0jyzWULmLPqhgU+
-         fh39Hl9h6gPHDiVJamBiga32l69U8+tFnhOyMP8+i6J2BwBpbdUFZpc7Bj8ZhhlqZRAy
-         ktzFT928Kc5GeINswMSOySga6WjiGa8en+pQpY2y7VvfA+ArANGXOQdtDsjHlV6C5xIA
-         ANHp5brvSSFkCEoAWHCKMq0wT2CUbeNOTOFgG1sW8l1tziYGx/O3J5gApIvi6w5gIZqZ
-         +qPWIE8a7xP3EhE9zJYtnUAWJIp8zDkm4q9zA39D2jwtVlgvCIZzdrNBfQMobhPk4spB
-         TQSQ==
+        bh=/3RQuNkLRKG8bKgPIldu8Ku3xY7yfi4XKy/b0IC08t8=;
+        b=l+tWKgXGoq20hunhC7pGAIw0Ef+qDD41fvB2uNYNTNISgK4cq/IjlJUaHRGWSpLAEm
+         loOXKdXf3S8/xmmvyPUTKaGs6i8dYqxYfm/epiMAl0q5LUVIOTjB7IN8WxsO6bxiq2bb
+         G54vt7/xQL6IP/YkrbctQEg4hkY9dNdWSoy4u8Uh8aYbwZQSIH29hxpIUfMX4v7VkJSX
+         ksCmCCqKlXvwRRG6o0GTgyjeoeO8aTGEGcp+sDapYEvcYBervl2GFYrcknfBCV7xycqu
+         1OQY44p/yoq+NbYR+bO1MxCOGhR5K94vpZZ+aXRpRWvSV1v9iuBsGhe72fsVU6iIvOsR
+         6mWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702561959; x=1703166759;
+        d=1e100.net; s=20230601; t=1702562981; x=1703167781;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZG094W4dIVF1EKcUo638joyg5PWzf0NNJBExtH6MdeE=;
-        b=AGqKXoJm05iawI635qk1GA6BW5gazFat8QOuf42ONVg/6OiPcTJPDZYkLr0lQ3/WGS
-         UgHOCMjM+Mrt22M8Jelntiq9wGTOc8RbfUhEXEJd9KUkLy1odZ0j5v2se7L7q8Jilg6k
-         zf2JVSgfqxzETr1Qd9fNOeK4cKAUikSkxxm8Pa06uv/wPoQ0+/apXb4pifA92w/F4e87
-         Tnm8Ec1AaYxkQ8LjUiLcN6r9UAJb9gkeZ8jVkR358ULQZpihBCubNi58M747GaoQ5ttf
-         Gd5MziSXhOA+RYKlTiT2enBL/C95wAZfK+V+4cQVO0cxe9GKT+R5qZR4l/UQcEGTZe3r
-         EU2w==
-X-Gm-Message-State: AOJu0Yz5eRBFLrWnA8rLE+Ilmc5y+w3Rn9qGLn4O+d5cVRYC75Az8p9F
-	RqdWmNc1G7ag2W6jt10lpg0dXA==
-X-Google-Smtp-Source: AGHT+IHZrLMTXyNjcexxbVAiORtydhgsD0STmbd6hhxBV7J4JR7cRSScr8gTPzn4kfe/zjbQxtcR5g==
-X-Received: by 2002:a05:600c:4591:b0:40c:325a:545c with SMTP id r17-20020a05600c459100b0040c325a545cmr4356398wmo.221.1702561959544;
-        Thu, 14 Dec 2023 05:52:39 -0800 (PST)
+        bh=/3RQuNkLRKG8bKgPIldu8Ku3xY7yfi4XKy/b0IC08t8=;
+        b=sSKGgkAsKFcFuc8xP6n2PItK28oJWKejINJKNxmnbgPMWOpsjHiyB75T/Ax9Oy6vN/
+         Lmiqe2I9nPJcsJZq/1lSa3BMiX1B8fSqP8Nvtn32AyeOiUNRFDqluU4k9AA1bGckafBl
+         hKXh+9+UFjwh+8b/nOWVS2xdvyRvfjTPN8OGAEx70Wm/PsgJA7000lmpMGzoU7DE8J9P
+         g635vQ1pRw9BKqNVYxA2je1lzIejBIZb1YdcLK9w9fxMqwfBntKrxGFIdXAk/rk1TmT7
+         gh/Dq9X9etvPDitAgLzzw4Vh+lHaRcytFG7S3JPknDQDVOmh4vY9/Rk1KGuq8bKBvqao
+         Iwpw==
+X-Gm-Message-State: AOJu0YzAFmLU16S7x+EsKnkfa6Xi2Hg8q80cppEDDXAOl5KDIXZ2Vxyu
+	dyxqwDDiqqOJl7vpsON0eCH6Wg==
+X-Google-Smtp-Source: AGHT+IE7Uwl8ErU40fjRiJ15CIiA2TLlXGFMgyYhBgUnAqaz4nDkwt0+SdGL5BjePKkDBG8sk1zFNA==
+X-Received: by 2002:a17:906:d96e:b0:a1c:b4d7:c78a with SMTP id rp14-20020a170906d96e00b00a1cb4d7c78amr4920685ejb.32.1702562981541;
+        Thu, 14 Dec 2023 06:09:41 -0800 (PST)
 Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id tx17-20020a1709078e9100b00a1b75e0e061sm9483197ejc.130.2023.12.14.05.52.37
+        by smtp.gmail.com with ESMTPSA id rm6-20020a1709076b0600b00a1bec12448csm9393020ejc.150.2023.12.14.06.09.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Dec 2023 05:52:38 -0800 (PST)
-Message-ID: <8808ceeb-35dc-4094-aec4-f43c7acd6174@linaro.org>
-Date: Thu, 14 Dec 2023 13:52:35 +0000
+        Thu, 14 Dec 2023 06:09:41 -0800 (PST)
+Message-ID: <64e35ae0-a751-40ee-b27f-8034e7817222@linaro.org>
+Date: Thu, 14 Dec 2023 14:09:38 +0000
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,9 +62,10 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 05/13] tty: serial: samsung: add gs101 earlycon support
+Subject: Re: [PATCH 12/13] arm64: defconfig: sync with savedefconfig
 Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, Peter Griffin <peter.griffin@linaro.org>,
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Arnd Bergmann <arnd@arndb.de>, Peter Griffin <peter.griffin@linaro.org>,
  Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
  Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
  <sboyd@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
@@ -82,51 +83,56 @@ Cc: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
  linux-serial@vger.kernel.org
 References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
- <20231214105243.3707730-6-tudor.ambarus@linaro.org>
- <1938fcf1-eb5d-4723-a6c6-d2fe2c6dd1c0@app.fastmail.com>
+ <20231214105243.3707730-13-tudor.ambarus@linaro.org>
+ <1153987b-a818-454a-a292-57f2b3898771@app.fastmail.com>
+ <93969025-606c-4e4c-9cbc-3c8351f95adb@linaro.org>
 From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <1938fcf1-eb5d-4723-a6c6-d2fe2c6dd1c0@app.fastmail.com>
+In-Reply-To: <93969025-606c-4e4c-9cbc-3c8351f95adb@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
-On 12/14/23 12:01, Arnd Bergmann wrote:
+On 12/14/23 13:19, Krzysztof Kozlowski wrote:
+> On 14/12/2023 13:08, Arnd Bergmann wrote:
 
-Hi, Arnd,
+Hi, Arnd, Krzysztof,
 
 Thanks for the review!
 
-> On Thu, Dec 14, 2023, at 11:52, Tudor Ambarus wrote:
->> +static int __init gs101_early_console_setup(struct earlycon_device *device,
->> +					    const char *opt)
->> +{
->> +	/* gs101 always expects MMIO32 register accesses. */
->> +	device->port.iotype = UPIO_MEM32;
->> +
->> +	return s5pv210_early_console_setup(device, opt);
->> +}
->> +
->> +OF_EARLYCON_DECLARE(gs101, "google,gs101-uart", gs101_early_console_setup);
+>> On Thu, Dec 14, 2023, at 11:52, Tudor Ambarus wrote:
+>>> Sync the defconfig with savedefconfig as config options
+>>> change/move over time.
+>>>
+>>> Generated with the following commands:
+>>> make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- defconfig
+>>> make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- savedefconfig
+>>> cp defconfig arch/arm64/configs/defconfig
+> These are obvious. You cannot do it differently.
+
+This was just a prerequisite patch for the next, where I made a config
+builtin. Modifying defconfig shall be made in a similar manner, but it
+seems it's not the case (144 line change here), and that's why I
+considered it is worth specifying how I did it.
+
 > 
-> It looks like this is already done by of_setup_earlycon() based on
-> the reg-io-width property. Any idea why it doesn't work with the
-> normal s5pv210_early_console_setup() function?
-> 
+>>> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+>>> ---
+>>>  arch/arm64/configs/defconfig | 144 +++++++++++++----------------------
+>>>  1 file changed, 55 insertions(+), 89 deletions(-)
+>> I usually ask for defconfig changes to be merged when someone just
+>> adds a single line per patch, but a 144 line change is clearly too
+>> big, please split this up.
 
-It works if in device tree one specifies the reg-io-width property and
-sets it to 4. If the reg-io-width is not specified, the iotype defaults
-to UPIO_MEM causing the SError interrupt on gs101 which makes the system
-unusable.
+The truth is I didn't think we care what configs get removed after a
+savedefconfig. I see now after Arnd's review that we have a higher goal
+and savedefconfig shall be used to identify misconfiguration.
 
-Also, if the earlycon comes specified from the kernel params, the
-of_setup_earlycon() is no longer called and the earlycon will be set
-solely based on the kernel params buffer, thus allowing users to crash
-the kernel on wrong earlycon definitions.
+> Anyway this should not go via my tree, because of possible conflicts.
+> This commit, so the savedefconfig, must be prepared on linux-next, which
+> should be mentioned in changelog for example. It also is not related to
+> this patchset.
 
-If you think the change is fine, I can amend the commit message with the
-description from above.
-
-Cheers,
+Please ignore this patch. Cheers,
 ta
 
