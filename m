@@ -1,138 +1,121 @@
-Return-Path: <linux-i2c+bounces-792-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-793-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 828A6813295
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 15:09:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B72B8132B3
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 15:13:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 367CA1F21BD3
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 14:09:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E84A81F2145C
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 14:13:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6D4259B4F;
-	Thu, 14 Dec 2023 14:09:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A05359E2A;
+	Thu, 14 Dec 2023 14:13:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="l+tWKgXG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VDnoVLV5"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29060A7
-	for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 06:09:43 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-a1ef2f5ed02so901025566b.1
-        for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 06:09:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702562981; x=1703167781; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/3RQuNkLRKG8bKgPIldu8Ku3xY7yfi4XKy/b0IC08t8=;
-        b=l+tWKgXGoq20hunhC7pGAIw0Ef+qDD41fvB2uNYNTNISgK4cq/IjlJUaHRGWSpLAEm
-         loOXKdXf3S8/xmmvyPUTKaGs6i8dYqxYfm/epiMAl0q5LUVIOTjB7IN8WxsO6bxiq2bb
-         G54vt7/xQL6IP/YkrbctQEg4hkY9dNdWSoy4u8Uh8aYbwZQSIH29hxpIUfMX4v7VkJSX
-         ksCmCCqKlXvwRRG6o0GTgyjeoeO8aTGEGcp+sDapYEvcYBervl2GFYrcknfBCV7xycqu
-         1OQY44p/yoq+NbYR+bO1MxCOGhR5K94vpZZ+aXRpRWvSV1v9iuBsGhe72fsVU6iIvOsR
-         6mWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702562981; x=1703167781;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/3RQuNkLRKG8bKgPIldu8Ku3xY7yfi4XKy/b0IC08t8=;
-        b=sSKGgkAsKFcFuc8xP6n2PItK28oJWKejINJKNxmnbgPMWOpsjHiyB75T/Ax9Oy6vN/
-         Lmiqe2I9nPJcsJZq/1lSa3BMiX1B8fSqP8Nvtn32AyeOiUNRFDqluU4k9AA1bGckafBl
-         hKXh+9+UFjwh+8b/nOWVS2xdvyRvfjTPN8OGAEx70Wm/PsgJA7000lmpMGzoU7DE8J9P
-         g635vQ1pRw9BKqNVYxA2je1lzIejBIZb1YdcLK9w9fxMqwfBntKrxGFIdXAk/rk1TmT7
-         gh/Dq9X9etvPDitAgLzzw4Vh+lHaRcytFG7S3JPknDQDVOmh4vY9/Rk1KGuq8bKBvqao
-         Iwpw==
-X-Gm-Message-State: AOJu0YzAFmLU16S7x+EsKnkfa6Xi2Hg8q80cppEDDXAOl5KDIXZ2Vxyu
-	dyxqwDDiqqOJl7vpsON0eCH6Wg==
-X-Google-Smtp-Source: AGHT+IE7Uwl8ErU40fjRiJ15CIiA2TLlXGFMgyYhBgUnAqaz4nDkwt0+SdGL5BjePKkDBG8sk1zFNA==
-X-Received: by 2002:a17:906:d96e:b0:a1c:b4d7:c78a with SMTP id rp14-20020a170906d96e00b00a1cb4d7c78amr4920685ejb.32.1702562981541;
-        Thu, 14 Dec 2023 06:09:41 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id rm6-20020a1709076b0600b00a1bec12448csm9393020ejc.150.2023.12.14.06.09.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Dec 2023 06:09:41 -0800 (PST)
-Message-ID: <64e35ae0-a751-40ee-b27f-8034e7817222@linaro.org>
-Date: Thu, 14 Dec 2023 14:09:38 +0000
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE659C;
+	Thu, 14 Dec 2023 06:13:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702563191; x=1734099191;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qVWmLmZWB18LARbQELKdDZQ98UegEYFbrzEnCny2biw=;
+  b=VDnoVLV55N0kqxVGBz2rXEQAbBt7g01YmzHzsfVPutKO/Ycu/w5zMHkF
+   HqT+UDs8LKDMlBCiL27E16YOzVbEB8Ot52H0lMv4UHwTnJFI6jGHrFign
+   f/1Bt31EQlrUaOmU9wu2uFUbZwLjHCH22BztHpcpv4iWKo9a0RnHViAh9
+   64HrDg08BEbheMUmnBmW+pSG09OUP8XbHN97uFtgORZJ6Hqy3aCs8L0WX
+   ODWnbR2Uov2V0FYR2OECwT6WNtrZwXkUp3PEc1wiqJfCOFzI2VJvD+H8s
+   OCZGGHnItyHjIg436g+24HogRf3kPobm6n8+bE7HBTvPiNlAOzuUkIrDd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="2283330"
+X-IronPort-AV: E=Sophos;i="6.04,275,1695711600"; 
+   d="scan'208";a="2283330"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2023 06:13:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="892482377"
+X-IronPort-AV: E=Sophos;i="6.04,275,1695711600"; 
+   d="scan'208";a="892482377"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2023 06:13:07 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rDmSW-00000005rZ3-3j41;
+	Thu, 14 Dec 2023 16:13:04 +0200
+Date: Thu, 14 Dec 2023 16:13:04 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc: "platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH RFC v2] platform/x86: p2sb: Allow p2sb_bar() calls during
+ PCI device probe
+Message-ID: <ZXsNcGnlTPwgQE-T@smile.fi.intel.com>
+References: <20231212114746.183639-1-shinichiro.kawasaki@wdc.com>
+ <ZXm6QrRkyzGRg8SB@smile.fi.intel.com>
+ <eo7bnkdph6fwb74zn57r33a6unodkpagpk3dk5euz5cdc2mve4@557h3e3v5og7>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/13] arm64: defconfig: sync with savedefconfig
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Peter Griffin <peter.griffin@linaro.org>,
- Rob Herring <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- andi.shyti@kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Tomasz Figa <tomasz.figa@gmail.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- Sam Protsenko <semen.protsenko@linaro.org>
-Cc: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- saravanak@google.com, William McVicker <willmcvicker@google.com>,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-serial@vger.kernel.org
-References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
- <20231214105243.3707730-13-tudor.ambarus@linaro.org>
- <1153987b-a818-454a-a292-57f2b3898771@app.fastmail.com>
- <93969025-606c-4e4c-9cbc-3c8351f95adb@linaro.org>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <93969025-606c-4e4c-9cbc-3c8351f95adb@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eo7bnkdph6fwb74zn57r33a6unodkpagpk3dk5euz5cdc2mve4@557h3e3v5og7>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
+On Thu, Dec 14, 2023 at 12:55:36AM +0000, Shinichiro Kawasaki wrote:
+> On Dec 13, 2023 / 16:05, Andy Shevchenko wrote:
+> > On Tue, Dec 12, 2023 at 08:47:46PM +0900, Shin'ichiro Kawasaki wrote:
 
+...
 
-On 12/14/23 13:19, Krzysztof Kozlowski wrote:
-> On 14/12/2023 13:08, Arnd Bergmann wrote:
-
-Hi, Arnd, Krzysztof,
-
-Thanks for the review!
-
->> On Thu, Dec 14, 2023, at 11:52, Tudor Ambarus wrote:
->>> Sync the defconfig with savedefconfig as config options
->>> change/move over time.
->>>
->>> Generated with the following commands:
->>> make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- defconfig
->>> make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- savedefconfig
->>> cp defconfig arch/arm64/configs/defconfig
-> These are obvious. You cannot do it differently.
-
-This was just a prerequisite patch for the next, where I made a config
-builtin. Modifying defconfig shall be made in a similar manner, but it
-seems it's not the case (144 line change here), and that's why I
-considered it is worth specifying how I did it.
-
+> > > +/* Cache BAR0 of P2SB device from function 0 ot 7 */
+> > > +#define NR_P2SB_RES_CACHE 8
+> > 
+> > Here... (at least some better comment with TODO needs to be added,
+> > and next patches can address that).
+> > 
+> > >  	struct resource *bar0 = &pdev->resource[0];
+> > 
+> > ...and here... (okay, not exactly here, but with the same idea,
+> > to use pci_resource_n() macro)
+> > 
+> > > +	if (!PCI_FUNC(devfn_p2sb)) {
+> > > +		slot_p2sb = PCI_SLOT(devfn_p2sb);
+> > > +		for (fn = 1; fn < 8; fn++)
+> > 
+> > ...and here...
+> > 
+> > > +			p2sb_scan_and_cache(bus, PCI_DEVFN(slot_p2sb, fn));
+> > > +	}
+> > 
+> > ...and so on I gave comments. Any reason why they left unaddressed?
 > 
->>> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
->>> ---
->>>  arch/arm64/configs/defconfig | 144 +++++++++++++----------------------
->>>  1 file changed, 55 insertions(+), 89 deletions(-)
->> I usually ask for defconfig changes to be merged when someone just
->> adds a single line per patch, but a 144 line change is clearly too
->> big, please split this up.
+> Andy, thanks for the response, but I'm not sure about the comments you gave.
+> I guess you responded to the RFC v1 patch but it somehow did not reach to me,
+> probably. According to the lore archive, only Hans responded to the RFC v1 [1].
+> If this guess is correct, could you resend your comments on the RFC v1?
 
-The truth is I didn't think we care what configs get removed after a
-savedefconfig. I see now after Arnd's review that we have a higher goal
-and savedefconfig shall be used to identify misconfiguration.
+Oh, my... It seems the message was never delivered and I haven't paid attention
+on the bounces.
 
-> Anyway this should not go via my tree, because of possible conflicts.
-> This commit, so the savedefconfig, must be prepared on linux-next, which
-> should be mentioned in changelog for example. It also is not related to
-> this patchset.
+Give me time, I'll try to restore the review from my memory and will send
+a new email.
 
-Please ignore this patch. Cheers,
-ta
+> [1] https://lore.kernel.org/platform-driver-x86/20231201104759.949340-1-shinichiro.kawasaki@wdc.com/
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
