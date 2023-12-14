@@ -1,101 +1,140 @@
-Return-Path: <linux-i2c+bounces-771-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-772-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E945812A2E
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 09:19:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94778812D71
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 11:53:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 016AF1F21674
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 08:19:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6EB71C20B7F
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Dec 2023 10:53:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76578168B8;
-	Thu, 14 Dec 2023 08:19:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1073D977;
+	Thu, 14 Dec 2023 10:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HJi4l5FU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52234CF;
-	Thu, 14 Dec 2023 00:19:45 -0800 (PST)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-5e282ec7537so19738327b3.3;
-        Thu, 14 Dec 2023 00:19:45 -0800 (PST)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E181D125
+	for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 02:52:52 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-40c39ef63d9so54520425e9.3
+        for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 02:52:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702551171; x=1703155971; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6tm42FF4c3bt5Gu3FnnyW38+ClAYR6mlbk3a/l087HU=;
+        b=HJi4l5FUVWZi201yrhNpgWI99iIkM6pOcoM7CzCSKEPkDvNHWpNSNT0ZR/KHhTaISF
+         wESC+4/r+Ybjw+AkvkCDzgaG4vVD/2Bnvi4517VN/rHXXai+aOFT8uAzS3dxYv4CLk3Q
+         gaEFRdlWLaPsCn1iKejHyxQLrXxLMl65wEJQV+f93bYFnBesjO5IstdQ7ZEelICNo9Th
+         Rkhil3WMNHvNmalQWaFkPcqAC1N4qacsyX6c4krlUTzLQ5QcqS5G14ulImXsRA2WvpjE
+         76jt7Quqe0pdoQ41WM4H9my+JX+bE9eq5RjmTMU1sCgcDzvwgMKUVZm4tfoUTEWI61YJ
+         VWbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702541984; x=1703146784;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VPc9UucRRwQsPIIhSc+Zwo7ILNiT77DD2oaIHdq0gow=;
-        b=UQcJlk4BFZT5PY4eB9mQRfnmL8/ivfAvE19crMWWde9REl0k6p0MAAQm2XlHIAikVA
-         /Y0RoSGcYs2VVBeQLD8Gra23fZzVcB3FQ95HGfdqGngo93MD8S+67U4nzPze8vx0doFK
-         Y3fKmwiMaK4hd+oYo200dENeZ+USRQH3IUK3WqkEUJOhaaLzlxclGVVwrrIwoYwlVGpj
-         KVrJikumvziTDW4AziWjdErLlBEOEIpXJinvlbJd2iCJQhUOn9pr5RCa76KOttifJjZT
-         NM6+l59207Op0Yt1OV+QxctQ2bwvac+QBrBQAkvb9/Ir7cLWrWmz5bmdG9BYwHQhPuzy
-         ezAg==
-X-Gm-Message-State: AOJu0Yylr2Dmgd59voaCC9VTflCb9ZoeplhvYfqP7ZJ5FuGIV18Oyja6
-	evE0m+cy4LVcU0Vce0hKCTz0RSwmfYKRFQ==
-X-Google-Smtp-Source: AGHT+IErLVuNeT51nq/c2ikhZIrEUHQnZF3mUanKftBOAb/zlWrmJqh8EG17RQcJ7dMDl27rx6PNuQ==
-X-Received: by 2002:a0d:f9c6:0:b0:5d3:464d:18d0 with SMTP id j189-20020a0df9c6000000b005d3464d18d0mr6842189ywf.22.1702541983945;
-        Thu, 14 Dec 2023 00:19:43 -0800 (PST)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id x8-20020a814a08000000b005d3b4fce438sm5271562ywa.65.2023.12.14.00.19.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Dec 2023 00:19:43 -0800 (PST)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-5e2cfece112so14356677b3.2;
-        Thu, 14 Dec 2023 00:19:43 -0800 (PST)
-X-Received: by 2002:a81:6c4a:0:b0:5e3:6064:e394 with SMTP id
- h71-20020a816c4a000000b005e36064e394mr979772ywc.35.1702541983377; Thu, 14 Dec
- 2023 00:19:43 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702551171; x=1703155971;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6tm42FF4c3bt5Gu3FnnyW38+ClAYR6mlbk3a/l087HU=;
+        b=iLg8kPp6mUCJvNutwfZIDhqyNPtixZ8L0x5X0kyqpc1K0EJ4w3pOsZWT4vVAgev9wV
+         ml50bFIaiQUUWPZOva2Ji+DK+KzWw0UJjCQrenjxsZBt/kUa1XYueT8kvXhQD9bBO8SG
+         ingM/EXeFx4D4qI5H5oktX8oL4DG9SdxoFDd7lxNNa+jIvKo08jFcUaMwj+J4uf9pxOF
+         XOq3/+7+zhAe96X2M04L0eOWkFnIGRW+cJlCxjA4TosVO4hr74dB5d4JVYHTpdZ6XwmV
+         FrLafn9L9zjLFxxf2g86Ue42YLbS1nYQANaNvbf6I4wmek52NpghrjiKaDBq8boMUdka
+         vi/Q==
+X-Gm-Message-State: AOJu0YwBoVK6pI8IWpDIcNce44XD3latHagTPR5nvZzpTVKcg4aQv3O8
+	4gWL5OzNFios9zsY6lBWrZDWCQ==
+X-Google-Smtp-Source: AGHT+IFCKio55lZadUI3MBs5J+fZ9q8GCTSRx+SQFiZCVZbiGTTeCOe8TJ0CPUb0n+BSn7oBZ0NY0w==
+X-Received: by 2002:a7b:cb92:0:b0:40c:3308:3b02 with SMTP id m18-20020a7bcb92000000b0040c33083b02mr5256825wmi.99.1702551171270;
+        Thu, 14 Dec 2023 02:52:51 -0800 (PST)
+Received: from ta2.c.googlers.com.com (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
+        by smtp.gmail.com with ESMTPSA id p7-20020a05600c468700b0040c420eda48sm17614854wmo.22.2023.12.14.02.52.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Dec 2023 02:52:50 -0800 (PST)
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+To: peter.griffin@linaro.org,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	conor+dt@kernel.org,
+	andi.shyti@kernel.org,
+	alim.akhtar@samsung.com,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	s.nawrocki@samsung.com,
+	tomasz.figa@gmail.com,
+	cw00.choi@samsung.com,
+	arnd@arndb.de,
+	semen.protsenko@linaro.org
+Cc: andre.draszik@linaro.org,
+	saravanak@google.com,
+	willmcvicker@google.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH 00/13] GS101 Oriole: CMU_PERIC0 support and USI updates
+Date: Thu, 14 Dec 2023 10:52:30 +0000
+Message-ID: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231214074358.8711-1-wsa+renesas@sang-engineering.com> <20231214074358.8711-3-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20231214074358.8711-3-wsa+renesas@sang-engineering.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 14 Dec 2023 09:19:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW3wo5oaSpE5Pf7p6hg-njaQj1mvqwuVfEMc1YuZvisyQ@mail.gmail.com>
-Message-ID: <CAMuHMdW3wo5oaSpE5Pf7p6hg-njaQj1mvqwuVfEMc1YuZvisyQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] i2c: rcar: add FastMode+ support for Gen4
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 14, 2023 at 8:44=E2=80=AFAM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> To support FM+, we mainly need to turn the SMD constant into a parameter
-> and set it accordingly. That also means we can finally fix SMD to our
-> needs instead of bailing out. A sanity check for SMD then becomes a
-> sanity check for 'x =3D=3D 0'. After all that, activating the enable bit =
-for
-> FM+ is all we need to do. Tested with a Renesas Falcon board using R-Car
-> V3U.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> Changes since v1:
->
-> * rebased to 6.7-rc4
-> * gained S4 specific handling from patch 1
-> * keep SCL filters active for FM+ by still writing to CDF
-> * if default SMD is too large, fix it instead of bailing out
+Add support for PERIC0 clocks. Use them for USI in serial and I2C
+configurations. Tested the serial at different baudrates (115200,
+1M, 3M) and the I2C with an at24 eeprom, all went fine.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Apart of the DT and defconfig changes, the patch set spans through the tty
+and clk subsystems. The expectation is that Krzysztof will apply the whole
+series through the Samsung SoC tree. If the tty and clk subsystem
+maintainers can give an acked-by or reviewed-by on the relevant patches
+that would be most appreciated!
 
-Gr{oetje,eeting}s,
+Thanks!
+ta
 
-                        Geert
+Tudor Ambarus (13):
+  dt-bindings: clock: google,gs101: fix CMU_TOP gate clock names
+  dt-bindings: clock: google,gs101-clock: add PERIC0 clock management
+    unit
+  dt-bindings: i2c: exynos5: add google,gs101-hsi2c compatible
+  dt-bindings: serial: samsung: gs101: make reg-io-width required
+    property
+  tty: serial: samsung: add gs101 earlycon support
+  clk: samsung: gs101: add support for cmu_peric0
+  clk: samsung: gs101: mark PERIC0 IP TOP gate clock as critical
+  arm64: dts: exynos: gs101: enable cmu-peric0 clock controller
+  arm64: dts: exynos: gs101: update USI UART to use peric0 clocks
+  arm64: dts: exynos: gs101: define USI8 with I2C configuration
+  arm64: dts: exynos: gs101: enable eeprom on gs101-oriole
+  arm64: defconfig: sync with savedefconfig
+  arm64: defconfig: make at24 eeprom builtin
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+ .../bindings/clock/google,gs101-clock.yaml    |  25 +-
+ .../devicetree/bindings/i2c/i2c-exynos5.yaml  |   1 +
+ .../bindings/serial/samsung_uart.yaml         |   4 +
+ .../boot/dts/exynos/google/gs101-oriole.dts   |  18 +
+ arch/arm64/boot/dts/exynos/google/gs101.dtsi  |  52 +-
+ arch/arm64/configs/defconfig                  | 146 ++--
+ drivers/clk/samsung/clk-gs101.c               | 748 ++++++++++++++++--
+ drivers/tty/serial/samsung_tty.c              |  11 +
+ include/dt-bindings/clock/google,gs101.h      | 230 ++++--
+ 9 files changed, 980 insertions(+), 255 deletions(-)
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+-- 
+2.43.0.472.g3155946c3a-goog
+
 
