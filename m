@@ -1,64 +1,64 @@
-Return-Path: <linux-i2c+bounces-824-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-825-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79C77814310
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 08:58:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A933381431D
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 09:01:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E28F9B20E5A
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 07:58:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDFF31C20E4F
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 08:01:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F20F107BF;
-	Fri, 15 Dec 2023 07:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C63A10A17;
+	Fri, 15 Dec 2023 08:01:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hSq1FQQh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hOqU/JrF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64D110951
-	for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 07:58:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A795179AF
+	for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 08:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a1f8a1e9637so59534766b.1
-        for <linux-i2c@vger.kernel.org>; Thu, 14 Dec 2023 23:58:47 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40c3f68b69aso3790825e9.1
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 00:01:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702627126; x=1703231926; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702627266; x=1703232066; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EmMERqa5FRYDmluuYvOt81FmFQ/Yl19qAIoykajJP44=;
-        b=hSq1FQQhMt0hq2CraE7vbzr8AOVvt/eUooKWtwtf6fJT0mKUMP3Nc2LMPcLyABl8GM
-         HMdgkjDZqMXmdj1tMMuLHzzodJgU19nl3AUjV2hJ2vRmLSyTLBZl33dvqSLM4cYoCfmw
-         +wyh83KSW9hzMwaW34G5Ea1E7PccoIRezbS8mFBke9idalx6FuhnimK9AdYrDeapY4Q0
-         OccjTHmsuyoHZm02UhmflSLATHI0Yii8TUdmmByWol9G0XdTMidZaRI6jeS4js1JXubo
-         zrqRIg2VJ/01Txd9nIU7sJPoO6Tw9g1LGWL8HFE1MQvcEk3xthT6M3XDydb9Am4sF1EH
-         1boA==
+        bh=qmihgIcpypovKce3Rw8dyfl+3YaY2Yil6pF5hP9z400=;
+        b=hOqU/JrFgkYp9OORf6PRXIKsamX4Mdgkc4gCgAkoPjTxsYk/G73yWyLIWXt6lcP5Oc
+         pJxhuhPHY8qbju7rIC+tVHrA91vKfAaPoh5bokzayUcLWky5Oy6VqJGbQ1rEWeAjiAbp
+         sMh/QPDycMHCjSPgQg6vkQEXOo7QQmCJMwrEiTniBxEvn0sHcKB4boVnUIPAVz4aAymS
+         Z7DqHz8zVnZTJGDgl2rc6P3pPi5wGC9jNlBRTSBjiIUf8gJkof8Gj4MZ6JR+vRC8lFiY
+         bqrv+2fJ1MPYxTnHU5Qkcy4/XAEPUgsBLT4tUIH4Lb653nNvyAjn62tdVgJDXRkqWPF3
+         gNFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702627126; x=1703231926;
+        d=1e100.net; s=20230601; t=1702627266; x=1703232066;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EmMERqa5FRYDmluuYvOt81FmFQ/Yl19qAIoykajJP44=;
-        b=buSIJ9mh+u8ETf3MvWN2vgJVw8lDTD/vLWpjQwmWBbREqJa9NwnQH6RQHUqz+wN/1T
-         EdvWrPIhkhEma1buY2MNjGCNY5uPIGVF3w4Bd/yD/BWftkILMgsNPxrBpnRO+JmqZCqI
-         8CZlnu9mcnPr4eJha+NMIBkT39FwzWQRocwAIEB9bPWxT9atLT6U4Z44l6vPLWXX74gn
-         JzPzbW8vq2D8ohwEWeHKC248sF3s7JzUfj8he9oBqNcm7N3kJDU/PS4T2rUkpZwK5Flf
-         y0BC8bXrUOEsMYgGeq0WZZ0J9OxtEYIT/xIYIJNtnVRcjZBtAEDarOWcvJizGtu3rOv8
-         9AmA==
-X-Gm-Message-State: AOJu0YwOrVQjg+aMHgqPxcHltQFDCmkdr5dJjglDOZqYaabF6/WvXc1n
-	fx5ECE4HkBI5Kpxm5G5fCSVIew==
-X-Google-Smtp-Source: AGHT+IHOzQJai3Azprj89Mkp8JBuaOF1cI0Z5MpZn/dzeX8pzvT1rplL3kytYJFd3f7nVYWD1WZiAA==
-X-Received: by 2002:a17:906:8a55:b0:a1a:81aa:56cc with SMTP id gx21-20020a1709068a5500b00a1a81aa56ccmr12349703ejc.26.1702627125988;
-        Thu, 14 Dec 2023 23:58:45 -0800 (PST)
+        bh=qmihgIcpypovKce3Rw8dyfl+3YaY2Yil6pF5hP9z400=;
+        b=lw+9Wfu4V7zFB0op1qjJYkD1kuhtgCWdCIq9l1X2yqWbthlSB1J+sVvFyOrvEU6Kq4
+         S7kG3SRCtUB5FZh+5z7YuUYx+X4AtEcqV6SwHJoHQNEFtU35XhLLa+Lq6ujjqekMLUCY
+         GcJuunxwBB4HBFBv6Ai4DhIPj6MDXdQFCu8pmAhwbhArqf2agFxsgckrt3yBYfbrj824
+         P4VMlTgU0pTbkR9Q9iRHD61Q3VW90AmUsr2k1RTOSRSHGFnXLYuSiyPX3HLjelKh1Qc+
+         b9f0EJdskABRO6a2vwzR9650rGLpSkawctXE6Y6flPAR3C++DDgpnZsDWPPPcDyhn8W4
+         CUrA==
+X-Gm-Message-State: AOJu0YwJ8OJaf0HKEXHQxk555hJmdNWxOHe3Eprj8gkS9qXFiV1+S3SG
+	67TwvChVoKne1PxxLumrE4geXQ==
+X-Google-Smtp-Source: AGHT+IFaizMfmTfk1pBatmtoqvouAfwt3X/BddgE0L3I+FPpPUI4AV4RF34ktreCHSuhfrS0UreFag==
+X-Received: by 2002:a05:600c:1d23:b0:40c:6a86:3f2e with SMTP id l35-20020a05600c1d2300b0040c6a863f2emr344569wms.96.1702627266298;
+        Fri, 15 Dec 2023 00:01:06 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id qo5-20020a170907874500b00a1b7b0cc30dsm10410257ejc.7.2023.12.14.23.58.43
+        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b0040c4c9c52a3sm16259159wmo.12.2023.12.15.00.01.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Dec 2023 23:58:45 -0800 (PST)
-Message-ID: <8e3335dc-915c-4db2-8884-e16795e166de@linaro.org>
-Date: Fri, 15 Dec 2023 08:58:42 +0100
+        Fri, 15 Dec 2023 00:01:05 -0800 (PST)
+Message-ID: <914b634d-444c-4eae-bc7e-0f20d0629470@linaro.org>
+Date: Fri, 15 Dec 2023 09:01:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -66,23 +66,32 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/13] dt-bindings: serial: samsung: gs101: make
- reg-io-width required property
+Subject: Re: [PATCH 05/13] tty: serial: samsung: add gs101 earlycon support
 Content-Language: en-US
-To: Tudor Ambarus <tudor.ambarus@linaro.org>, peter.griffin@linaro.org,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- mturquette@baylibre.com, sboyd@kernel.org, conor+dt@kernel.org,
- andi.shyti@kernel.org, alim.akhtar@samsung.com, gregkh@linuxfoundation.org,
- jirislaby@kernel.org, catalin.marinas@arm.com, will@kernel.org,
- s.nawrocki@samsung.com, tomasz.figa@gmail.com, cw00.choi@samsung.com,
- arnd@arndb.de, semen.protsenko@linaro.org
-Cc: andre.draszik@linaro.org, saravanak@google.com, willmcvicker@google.com,
+To: Tudor Ambarus <tudor.ambarus@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
+ Peter Griffin <peter.griffin@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+ krzysztof.kozlowski+dt@linaro.org,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ andi.shyti@kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Sylwester Nawrocki <s.nawrocki@samsung.com>,
+ Tomasz Figa <tomasz.figa@gmail.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+ Sam Protsenko <semen.protsenko@linaro.org>
+Cc: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ saravanak@google.com, William McVicker <willmcvicker@google.com>,
  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
  linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
  linux-serial@vger.kernel.org
 References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
- <20231214105243.3707730-5-tudor.ambarus@linaro.org>
+ <20231214105243.3707730-6-tudor.ambarus@linaro.org>
+ <1938fcf1-eb5d-4723-a6c6-d2fe2c6dd1c0@app.fastmail.com>
+ <8808ceeb-35dc-4094-aec4-f43c7acd6174@linaro.org>
+ <6962ac73-2f44-4c9e-8731-152087815454@app.fastmail.com>
+ <584e036a-2ae7-4b88-a517-8f79c6baed4a@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -128,40 +137,52 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231214105243.3707730-5-tudor.ambarus@linaro.org>
+In-Reply-To: <584e036a-2ae7-4b88-a517-8f79c6baed4a@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 14/12/2023 11:52, Tudor Ambarus wrote:
-> GS101 only allows 32-bit register accesses. When using 8-bit reg
-> accesses on gs101, a SError Interrupt is raised causing the system
-> unusable.
+On 14/12/2023 15:31, Tudor Ambarus wrote:
 > 
-> Make reg-io-width a required property and expect for it a value of 4.
 > 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
->  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+> On 12/14/23 14:19, Arnd Bergmann wrote:
+>> On Thu, Dec 14, 2023, at 13:52, Tudor Ambarus wrote:
+>>> On 12/14/23 12:01, Arnd Bergmann wrote:
+>>>> On Thu, Dec 14, 2023, at 11:52, Tudor Ambarus wrote:
+>>>>> +static int __init gs101_early_console_setup(struct earlycon_device *device,
+>>>>
+>>>
+>>> It works if in device tree one specifies the reg-io-width property and
+>>> sets it to 4. If the reg-io-width is not specified, the iotype defaults
+>>> to UPIO_MEM causing the SError interrupt on gs101 which makes the system
+>>> unusable.
+>>
+>> In the case of incorrect DT data like a missing reg-io-width property,
+>> I would expect it to still fail once the regular console or tty takes
+>> over from earlycon.
+>>
+>>> Also, if the earlycon comes specified from the kernel params, the
+>>> of_setup_earlycon() is no longer called and the earlycon will be set
+>>> solely based on the kernel params buffer, thus allowing users to crash
+>>> the kernel on wrong earlycon definitions.
+>>
+>> But that in turn is the same as specifying any other incorrect earlycon.
 > 
-> diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> index 133259ed3a34..cc896d7e2a3d 100644
-> --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> @@ -143,6 +143,10 @@ allOf:
->      then:
->        required:
->          - samsung,uart-fifosize
-> +        - reg-io-width
-> +      properties:
-> +        reg-io-width:
-> +          const: 4
+> I don't think you can crash the kernel if you use other earlycon as you
+> don't make accesses on the 32bit restricted bus. But I agree that if
+> using the correct earlycon name, and mmio instead mmio32, is equivalent
+> to not specifying reg-io-width in dt.
+> 
+>>
+>>> If you think the change is fine, I can amend the commit message with the
+>>> description from above.
+>>
+>> I'm still not convinced we need a special case here when everything else
+>> just requires passing the correct data.
 
-If all your ports are like this, then I say this is compatible-specific.
-Make it here "reg-io-width: false" and set in the driver proper type in
-s3c24xx_serial_init_port_default() (or new function).
-
-Although maybe let's first resolve discussion of next patch.
+We shouldn't need any data from DT for this case, because this property
+apparently can be inferred from the compatible. IOW, GS101 SoC requires
+reg-io-width=4, everywhere, for each node, thus there is no need to
+specify this property. It should be deduced from the compatible.
 
 Best regards,
 Krzysztof
