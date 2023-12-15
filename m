@@ -1,64 +1,65 @@
-Return-Path: <linux-i2c+bounces-848-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-849-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A063815023
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 20:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE287815026
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 20:26:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7EFD1F250B7
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 19:24:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 452BA1F252EA
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 19:26:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A3943FE43;
-	Fri, 15 Dec 2023 19:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CE42405F7;
+	Fri, 15 Dec 2023 19:26:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="g1Y2IM6G"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Fc4XncjT"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5999A3FE4B
-	for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 19:24:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1D71E504
+	for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 19:26:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-9fa45e75ed9so115317166b.1
-        for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 11:24:36 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40c3ca9472dso10988635e9.2
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 11:26:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702668274; x=1703273074; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PoN0LEVREm4hvWDMcEGCq2IUdNzkUqW2PflUkybCDik=;
-        b=g1Y2IM6Gtu/if6TyU+mLOP6RFJczuSqnjtU7kmVFVN1RvjcfQQHp5Rly2TBLJ+E8kt
-         ykS1OJygdMyaYl+CHrV177FZzX2VjFeBBOLiFN5b1At6C6TCk2PkQBjHMoXRQYzWb7NC
-         qJsF27li+qRxJGtfOamqRnurOAxgfQnBPpO+J1teLd3SnYQFfGeq3dgEucVJbQvtMnr3
-         e2qqLhnehyWy3IzjxDCUYvwn2/i8UECc8lHpcFMhfy8y4zdtkrejY1acZIHKVaomi8Aq
-         Lo6+Av1wPydrB7qIbbayoZ+/wSQ5HbDWgYwH/CKmUzDhgKTCO1vak8er4JPHtzAmKzwI
-         tQ5Q==
+        d=linaro.org; s=google; t=1702668360; x=1703273160; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=2i5HjC75fKF2cOyp9U8mOf9VDtn1Lz/xP1cl8618fS8=;
+        b=Fc4XncjTAeMLyU7bPT6MYpKm1KWxWzpoCwMFm6z1m0nbIuOJS2fj+yHwug7xwOn/sT
+         TF5qke/wpW/63aP/m58mVbaXSAtx1jyZmU/P2O0FsFhrs1fDq/8D2KaSLPWHERkVh9zy
+         DS1/OtgXEVanOldB+vkSokUYPGSqkAtcvsDw4Mmh6/sZhnOu9rZwEAhOAWLA40kO1Psx
+         VBNx5dIO2rD/EnfXnmUdgNoCKZ1WcJPmxdnhcd9T64ZXYnDnZIeDXOcfiRsxynN93K8I
+         wsP2UkgWQFSFjkyRA7UtQgvXIQ2x+HyilV+OURt1gxX4n22UGD0Pv39yhV3Nc+83r3OD
+         uxlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702668274; x=1703273074;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PoN0LEVREm4hvWDMcEGCq2IUdNzkUqW2PflUkybCDik=;
-        b=UXIQiSaEj9mN2Pp8pI2NP8KWitUFu+eSYlyLXEoD0Okidr3hxUXP+VBNpP03n2WLTE
-         4AHi55lLk33mRaLvJU0LpcwCtbqNemvzQjan/ybM0vgvZnk4IjdaQTwgq2ph4EsLKs4p
-         cE68KUsJXMIiLjjhyi2SSMHwFEWz69KopOuoIuEbhhutv5U03JJDZpDrSnvPtnOtZyUz
-         Wdm1P/zDdGMeSN7NpV1bPmxs7ynbKCQhyOfYOkYcgSVmB9mDcMIqkZMJXNUGJwYhDPHp
-         xB/TAWvwPzAmuvtUI8V9etu5sHKZNnfDKdeKhbPrjGHar5G02G1SxrTDFJFl6Uhtei4J
-         U23w==
-X-Gm-Message-State: AOJu0YwUYoQ/QcWZIGreTt0c9tVOpWZmll7DxK6O7UIzkNqzQxVbKP0T
-	3DcD7GtTFCEaH8GLbcoLTbRm0Q==
-X-Google-Smtp-Source: AGHT+IFtk5TyMdBQwNglocR5LnfgDGANECd/edeCze0GKlaunERfcr6PTnGsnjZTfowah/1ShijVmA==
-X-Received: by 2002:a17:906:10ce:b0:a19:a19a:ea9c with SMTP id v14-20020a17090610ce00b00a19a19aea9cmr6806544ejv.85.1702668274637;
-        Fri, 15 Dec 2023 11:24:34 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702668360; x=1703273160;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2i5HjC75fKF2cOyp9U8mOf9VDtn1Lz/xP1cl8618fS8=;
+        b=w3HfuO7nGOShqB44CSLYLqj0nTVTaGot1OxtWSHlQXrD7VC266TcZcAWIs6I6bF1kz
+         cudbMY/KSZXRgtmOPAKA62PgjHrmz9WP6r9l9cCC02YAbBcvbkBaBOG6Ja63u0xdVJfZ
+         TZNSH3ExaUu0IEJGnOIcEpncd1GQfcpbbFywAJRCjQeq/IrZdzcRc6Qik8g05YjYaUZ2
+         aaI6t5XxuvnCxosEi4t4hncYns+30b8vk7w/DqL1RaW0uHxSKXSDmc8Da9FSbU1rfC90
+         6u1Yrv7TqG6L79vtam0K5Y4cluDdi7GxWCDe8UW9BTJ+uLgTfH7FZ9eYq1iR/k0W3bJ+
+         auQw==
+X-Gm-Message-State: AOJu0YwdvOR1RyoIffp0PBquFehrBoHEMdu4pFRhSGcKdsAESeq48XZu
+	NnT2vbv3AZPUrhsPkPqexfEKWw==
+X-Google-Smtp-Source: AGHT+IE4G/yK1d2SHMNojQtqWZ6OCcgBD8KzOq9N9qT+hmJcXQ/vEmd5c8U3e9Y+vZb5l23j/cicVA==
+X-Received: by 2002:a05:600c:35d4:b0:40c:7043:63c1 with SMTP id r20-20020a05600c35d400b0040c704363c1mr9439wmq.195.1702668360284;
+        Fri, 15 Dec 2023 11:26:00 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id tp25-20020a170907c49900b00a1f7c502736sm9814135ejc.164.2023.12.15.11.24.32
+        by smtp.gmail.com with ESMTPSA id tp25-20020a170907c49900b00a1f7c502736sm9814135ejc.164.2023.12.15.11.25.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Dec 2023 11:24:34 -0800 (PST)
-Message-ID: <9eedae99-cc9a-4c8f-9a09-789b686cd456@linaro.org>
-Date: Fri, 15 Dec 2023 20:24:31 +0100
+        Fri, 15 Dec 2023 11:25:59 -0800 (PST)
+Message-ID: <7163718b-0a92-4383-b475-aac52354489d@linaro.org>
+Date: Fri, 15 Dec 2023 20:25:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -69,6 +70,7 @@ User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 01/13] dt-bindings: clock: google,gs101: fix CMU_TOP gate
  clock names
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Tudor Ambarus <tudor.ambarus@linaro.org>, peter.griffin@linaro.org,
  robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
  mturquette@baylibre.com, sboyd@kernel.org, conor+dt@kernel.org,
@@ -85,7 +87,7 @@ References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
  <20231214105243.3707730-2-tudor.ambarus@linaro.org>
  <050c3119-0431-4400-9052-7a9c0ec67918@linaro.org>
  <5e454300-f1ef-435c-8c4c-16561502196a@linaro.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ <9eedae99-cc9a-4c8f-9a09-789b686cd456@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -130,43 +132,46 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <5e454300-f1ef-435c-8c4c-16561502196a@linaro.org>
+In-Reply-To: <9eedae99-cc9a-4c8f-9a09-789b686cd456@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 15/12/2023 11:23, Tudor Ambarus wrote:
-> Hi, Krzysztof,
+On 15/12/2023 20:24, Krzysztof Kozlowski wrote:
+> On 15/12/2023 11:23, Tudor Ambarus wrote:
+>> Hi, Krzysztof,
+>>
+>> On 12/15/23 08:13, Krzysztof Kozlowski wrote:
+>>> On 14/12/2023 11:52, Tudor Ambarus wrote:
+>>>> The gs101 clock names are derived from the clock register names under
+>>>> some certain rules. In particular, for the gate clocks the following is
+>>>> documented and expected in the gs101 clock driver:
+>>>>
+>>>>   Replace CLK_CON_GAT_CLKCMU      with CLK_GOUT_CMU and gout_cmu
+>>>>   Replace CLK_CON_GAT_GATE_CLKCMU with CLK_GOUT_CMU and gout_cmu
+>>>>
+>>>>   For gates remove _UID _BLK _IPCLKPORT and _RSTNSYNC
+>>>
+>>> I don't understand what it has to do with the bindings.
+>>>
+>>>>
+>>>> The CMU TOP gate clock names missed to include the required "CMU"
+>>>> differentiator which will cause name collisions with the gate clock names
+>>>> of other clock units. Fix the TOP gate clock names and include "CMU" in
+>>>> their name.
+>>>
+>>> Neither here. Clock names are not related to defines.
+>>>
+>>
+>> When saying "clock names" I meant the clock symbolic names that are
+>> defined in the bindings, the _id passed in GATE(_id, ) if you want.
 > 
-> On 12/15/23 08:13, Krzysztof Kozlowski wrote:
->> On 14/12/2023 11:52, Tudor Ambarus wrote:
->>> The gs101 clock names are derived from the clock register names under
->>> some certain rules. In particular, for the gate clocks the following is
->>> documented and expected in the gs101 clock driver:
->>>
->>>   Replace CLK_CON_GAT_CLKCMU      with CLK_GOUT_CMU and gout_cmu
->>>   Replace CLK_CON_GAT_GATE_CLKCMU with CLK_GOUT_CMU and gout_cmu
->>>
->>>   For gates remove _UID _BLK _IPCLKPORT and _RSTNSYNC
->>
->> I don't understand what it has to do with the bindings.
->>
->>>
->>> The CMU TOP gate clock names missed to include the required "CMU"
->>> differentiator which will cause name collisions with the gate clock names
->>> of other clock units. Fix the TOP gate clock names and include "CMU" in
->>> their name.
->>
->> Neither here. Clock names are not related to defines.
->>
-> 
-> When saying "clock names" I meant the clock symbolic names that are
-> defined in the bindings, the _id passed in GATE(_id, ) if you want.
+> Please re-phrase the commit message to say that you need to rename the
+> defines in the bindings headers. If you change anything else, like clock
+> names, then it should be separate patch.
 
-Please re-phrase the commit message to say that you need to rename the
-defines in the bindings headers. If you change anything else, like clock
-names, then it should be separate patch.
-
-
+I forgot:
+You can also respin this patch separately, as soon as possible, because
+it has to go this cycle.
 
 Best regards,
 Krzysztof
