@@ -1,89 +1,108 @@
-Return-Path: <linux-i2c+bounces-818-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-819-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3219813F5A
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 02:45:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8152D813F97
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 03:10:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F594283E66
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 01:45:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D14B1F22D43
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 02:10:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5DA8807;
-	Fri, 15 Dec 2023 01:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2F7A44;
+	Fri, 15 Dec 2023 02:10:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FH+0aW1i"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ISAgexRu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF7B7EA;
-	Fri, 15 Dec 2023 01:45:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B189C433C8;
-	Fri, 15 Dec 2023 01:45:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702604708;
-	bh=DHXxRklGa7FqMreUEnzq9tpUNw6e/U21hX/acHkDN4o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FH+0aW1i/MPE2ogPdf6OZsP2FWkBvGMIjq8LRGnHlJAlZSl7egpaLJlg1Mysb4LrX
-	 y5om6lZRX4lhE31RmTGkMzWAryHwRuNDAxJTvqwgwkdIhOZzBNO915doYPHlHcOm56
-	 LCmVK6jMRRPBheO9XGzI3wBLh1xFEZum5EPlPfddpuT8Mzwmzd1w3e881RQGj7RPtb
-	 oOa7qheb9KcEixyApTN4jOFM4pnL/ENbHWO5f3T6iNLnVcuDZt0X56imK7rUl9dJ9I
-	 hr19rWMmUZhFe2S2cb4UQy5i2Lu4Zo7Qss7F5FcMIYFVWe4lshj3GRdyHi017DznP9
-	 PjXmLgXCu9CAA==
-Date: Fri, 15 Dec 2023 02:45:05 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Quan Nguyen <quan@os.amperecomputing.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Wolfram Sang <wsa@kernel.org>,
-	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-	Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
-	openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	Cosmo Chou <chou.cosmo@gmail.com>,
-	Open Source Submission <patches@amperecomputing.com>,
-	Phong Vo <phong@os.amperecomputing.com>,
-	"Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v4 2/2] i2c: aspeed: Acknowledge Tx done with and without
- ACK irq late
-Message-ID: <20231215014505.he6ozzxd5jnjgvol@zenone.zhora.eu>
-References: <20231211102217.2436294-1-quan@os.amperecomputing.com>
- <20231211102217.2436294-3-quan@os.amperecomputing.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DF1A38
+	for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 02:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=TwBE
+	iHEpUbhtrkorike2pkAY7DbUk61pqDisyiVmNIc=; b=ISAgexRuVWXqtud5L/8M
+	WuMqnXw9WppTZycTirMNJF47efuX+/YwQAPP/WknMvuqu2jC0qV7hA5znD/bCpm6
+	I//ObAk4sGby2IRK8Jxsxo8MiJqcrQ7WE557UL3AIkHtt2QsmFQAAa080CiohqXg
+	wHwPSy7wWg3cw2RcHcHdgqPq35noSVSPym9QFPTtv8c7vdRAkSofsEQYcTpOVjJx
+	V4+8UT7K0BEA0xrEVzC9QiQdMPt0v4lh9wjA4BHlV9hVKjrpcF6sdBqJFEcNHsUK
+	2BJTQFu+1asElcKejFtSGR4OkagABKXIYK5uUf8o2pmC2Vyzq6KTJT3v4vJl5zRh
+	Tw==
+Received: (qmail 1100441 invoked from network); 15 Dec 2023 03:10:31 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Dec 2023 03:10:31 +0100
+X-UD-Smtp-Session: l3s3148p1@ED5t54IMYMMujnuR
+Date: Fri, 15 Dec 2023 03:10:28 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] i2c: rcar: add FastMode+ support for Gen4
+Message-ID: <ZXu1lMgg8dc40PVC@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+References: <20231214074358.8711-1-wsa+renesas@sang-engineering.com>
+ <20231214074358.8711-3-wsa+renesas@sang-engineering.com>
+ <20231214205449.x7bbu7i7m52ihibz@zenone.zhora.eu>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="A/YQQ/mR7JlW/8CY"
+Content-Disposition: inline
+In-Reply-To: <20231214205449.x7bbu7i7m52ihibz@zenone.zhora.eu>
+
+
+--A/YQQ/mR7JlW/8CY
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231211102217.2436294-3-quan@os.amperecomputing.com>
 
-Hi Quan,
+Hi Andi,
 
-On Mon, Dec 11, 2023 at 05:22:17PM +0700, Quan Nguyen wrote:
-> Commit 2be6b47211e1 ("i2c: aspeed: Acknowledge most interrupts early in
-> interrupt handler") acknowledges most interrupts early before the slave
-> irq handler is executed, except for the "Receive Done Interrupt status"
-> which is acknowledged late in the interrupt.
-> However, it has been observed that the early acknowledgment of "Transmit
-> Done Interrupt Status" (with ACK or NACK) often causes the interrupt to
-> be raised in READ REQUEST state, that shows the
-> "Unexpected ACK on read request." complaint messages.
-> 
-> Assuming that the "Transmit Done" interrupt should only be acknowledged
-> once it is truly processed, this commit fixes that issue by acknowledging
-> interrupts for both ACK and NACK cases late in the interrupt handler.
-> 
-> Fixes: 2be6b47211e1 ("i2c: aspeed: Acknowledge most interrupts early in interrupt handler")
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> as we were here we could have written the register values as
+> 0x%x, but it's also OK to keep the change with a minimal impact.
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+I think it is OK like it is because the datasheet also uses decimal
+values in the formulas.
 
-Thanks,
-Andi
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+
+Thanks!
+
+   Wolfram
+
+
+--A/YQQ/mR7JlW/8CY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmV7tZAACgkQFA3kzBSg
+KbY/NA//fvFqdNgWEsXUtKHDPd6njCRFknId5nlIWCwqK0IEyEW3F+7DvNViRWg4
+MW4fqfW2vFyXx62C2/hovPDfPwWy2ifJ2vvETPzmDnjJv3gOCOO5x7h43h21Fsg2
+zBFz6CodLgXX+pc0mvUw7tJy85UspGwZlTwiq0iIzLuwyo3m9HwJu3yWU/xBslKf
+2qVHOzJ9Xo1rAwx6B7AT5+7yTSiUYagJjG6JJjqn/VUJGcQoX0l5/PRoCVlsjz1C
+29WJU8S1HIa/LI+EtPo+5TvmSN7o12uTK8EVWzFajtSgsMdiO5eMRm+C0HOzGdAA
+t40tQIHS75BWkJAacsbY+BD7rP43Xoami+7ap36ww3b9KGTbHPiLAqcF+Di/5QBi
+n9tUWG5tW0uH2KjVH13ygGAo7O7awvT4HpoIyIPuamyFBgmLguzX5oxWZwWI0bog
+jNclfkv8zPGXUmVxnP1zygVp9p7Ec/eyF+GxbwsfejTYKRYLPKHFhrJ+/KQfkp1F
+CE7wh53pEL151QFdXPwuD1x/ID7M5BeKhMc3Oyi4MAwq+xz04aRoGA/xEIkLMP0M
+AUWhOAjjd0AoI7446crdb60TXsMxiRa0oi6/Ktcj3eG8EHFBHP1NCf0nYilV7r7X
+dM+sAiaiq538+Ljo9vHcr8d9Ajwi1WxGvhM7fk2OQRqN70H9HAs=
+=7mmp
+-----END PGP SIGNATURE-----
+
+--A/YQQ/mR7JlW/8CY--
 
