@@ -1,108 +1,82 @@
-Return-Path: <linux-i2c+bounces-819-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-820-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8152D813F97
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 03:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C0DE8141D8
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 07:35:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D14B1F22D43
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 02:10:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C7DF1F224B6
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 06:35:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2F7A44;
-	Fri, 15 Dec 2023 02:10:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E140D27A;
+	Fri, 15 Dec 2023 06:35:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ISAgexRu"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="RRskmm8L"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30DF1A38
-	for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 02:10:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=TwBE
-	iHEpUbhtrkorike2pkAY7DbUk61pqDisyiVmNIc=; b=ISAgexRuVWXqtud5L/8M
-	WuMqnXw9WppTZycTirMNJF47efuX+/YwQAPP/WknMvuqu2jC0qV7hA5znD/bCpm6
-	I//ObAk4sGby2IRK8Jxsxo8MiJqcrQ7WE557UL3AIkHtt2QsmFQAAa080CiohqXg
-	wHwPSy7wWg3cw2RcHcHdgqPq35noSVSPym9QFPTtv8c7vdRAkSofsEQYcTpOVjJx
-	V4+8UT7K0BEA0xrEVzC9QiQdMPt0v4lh9wjA4BHlV9hVKjrpcF6sdBqJFEcNHsUK
-	2BJTQFu+1asElcKejFtSGR4OkagABKXIYK5uUf8o2pmC2Vyzq6KTJT3v4vJl5zRh
-	Tw==
-Received: (qmail 1100441 invoked from network); 15 Dec 2023 03:10:31 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Dec 2023 03:10:31 +0100
-X-UD-Smtp-Session: l3s3148p1@ED5t54IMYMMujnuR
-Date: Fri, 15 Dec 2023 03:10:28 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] i2c: rcar: add FastMode+ support for Gen4
-Message-ID: <ZXu1lMgg8dc40PVC@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-References: <20231214074358.8711-1-wsa+renesas@sang-engineering.com>
- <20231214074358.8711-3-wsa+renesas@sang-engineering.com>
- <20231214205449.x7bbu7i7m52ihibz@zenone.zhora.eu>
+Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.219])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E1AFD266;
+	Fri, 15 Dec 2023 06:35:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=BpfKy
+	eJPlfchN6x6Bi7CxgQ3q2X6uEtwh0vKfZbphgs=; b=RRskmm8LOF6I/56oV30pQ
+	OSkJWU6Y6XWHf5X3AXJX7RZ7rPT71Row/D1Iw0piW4IXPVT9N/JnhztiTTn5PBMK
+	naaxJjwtyRRhDv3zmAyTNhuDeR1kZLHmJ5TukGuvgEJEflOtk1hEVz+SuocYho5l
+	8JwEms5AiPmdyif9LBHZeg=
+Received: from localhost.localdomain (unknown [39.156.73.13])
+	by zwqz-smtp-mta-g1-0 (Coremail) with SMTP id _____wD3X0eO83tlvVNYBQ--.3606S2;
+	Fri, 15 Dec 2023 14:34:54 +0800 (CST)
+From: cuiguoqi <guoqi0226@163.com>
+To: wsa@kernel.org,
+	linux-i2c@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	cuiguoqi <cuiguoqi@kylinos.cn>
+Subject: [PATCH] i2c: smbus: Fixed uninitialized variable msgbuf in i2c_smbus_xfer_emulated
+Date: Fri, 15 Dec 2023 14:34:52 +0800
+Message-Id: <20231215063452.3097535-1-guoqi0226@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="A/YQQ/mR7JlW/8CY"
-Content-Disposition: inline
-In-Reply-To: <20231214205449.x7bbu7i7m52ihibz@zenone.zhora.eu>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3X0eO83tlvVNYBQ--.3606S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtr1xKFW8CFyfJF47Cr4fuFg_yoWkJFXEkF
+	15Zw1xXrn7AF1a9345KF15ZryYya17Xr1UZa4ft34Fk347twn5JFWDZr9Y9r45XF1ktFW3
+	Zw1q9w1293ZrGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0Jl1DUUUUU==
+X-CM-SenderInfo: 5jxr1xaqsslqqrwthudrp/xtbBdhJHaGDkqfG-5wABsO
 
+From: cuiguoqi <cuiguoqi@kylinos.cn>
 
---A/YQQ/mR7JlW/8CY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+When the slave device is disconnected during i2c transmission, the communication is interrupted because the ACK cannot be received.
+However, if the uninitialized msgbuf1 is used by i2c_smbus_xfer_emulated, abnormal random values will be reported.
+The test proves that the exception communication using SMBUS after initialization is more reliable.
 
-Hi Andi,
+Signed-off-by: cuiguoqi <cuiguoqi@kylinos.cn>
+---
+ drivers/i2c/i2c-core-smbus.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> as we were here we could have written the register values as
-> 0x%x, but it's also OK to keep the change with a minimal impact.
+diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
+index e3b96fc..f7b0980d 100644
+--- a/drivers/i2c/i2c-core-smbus.c
++++ b/drivers/i2c/i2c-core-smbus.c
+@@ -351,6 +351,8 @@ static s32 i2c_smbus_xfer_emulated(struct i2c_adapter *adapter, u16 addr,
+ 	bool wants_pec = ((flags & I2C_CLIENT_PEC) && size != I2C_SMBUS_QUICK
+ 			  && size != I2C_SMBUS_I2C_BLOCK_DATA);
+ 
++	memset(msgbuf0, 0, sizeof(msgbuf0));
++	memset(msgbuf1, 0, sizeof(msgbuf1));
+ 	msgbuf0[0] = command;
+ 	switch (size) {
+ 	case I2C_SMBUS_QUICK:
+-- 
+2.7.4
 
-I think it is OK like it is because the datasheet also uses decimal
-values in the formulas.
-
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-
-Thanks!
-
-   Wolfram
-
-
---A/YQQ/mR7JlW/8CY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmV7tZAACgkQFA3kzBSg
-KbY/NA//fvFqdNgWEsXUtKHDPd6njCRFknId5nlIWCwqK0IEyEW3F+7DvNViRWg4
-MW4fqfW2vFyXx62C2/hovPDfPwWy2ifJ2vvETPzmDnjJv3gOCOO5x7h43h21Fsg2
-zBFz6CodLgXX+pc0mvUw7tJy85UspGwZlTwiq0iIzLuwyo3m9HwJu3yWU/xBslKf
-2qVHOzJ9Xo1rAwx6B7AT5+7yTSiUYagJjG6JJjqn/VUJGcQoX0l5/PRoCVlsjz1C
-29WJU8S1HIa/LI+EtPo+5TvmSN7o12uTK8EVWzFajtSgsMdiO5eMRm+C0HOzGdAA
-t40tQIHS75BWkJAacsbY+BD7rP43Xoami+7ap36ww3b9KGTbHPiLAqcF+Di/5QBi
-n9tUWG5tW0uH2KjVH13ygGAo7O7awvT4HpoIyIPuamyFBgmLguzX5oxWZwWI0bog
-jNclfkv8zPGXUmVxnP1zygVp9p7Ec/eyF+GxbwsfejTYKRYLPKHFhrJ+/KQfkp1F
-CE7wh53pEL151QFdXPwuD1x/ID7M5BeKhMc3Oyi4MAwq+xz04aRoGA/xEIkLMP0M
-AUWhOAjjd0AoI7446crdb60TXsMxiRa0oi6/Ktcj3eG8EHFBHP1NCf0nYilV7r7X
-dM+sAiaiq538+Ljo9vHcr8d9Ajwi1WxGvhM7fk2OQRqN70H9HAs=
-=7mmp
------END PGP SIGNATURE-----
-
---A/YQQ/mR7JlW/8CY--
 
