@@ -1,121 +1,127 @@
-Return-Path: <linux-i2c+bounces-835-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-836-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46976814CB0
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 17:14:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41CA1814DCA
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 18:03:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 791681C23BC2
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 16:14:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D49CD1F24BB5
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 17:03:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B8993A8F9;
-	Fri, 15 Dec 2023 16:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F16A33FB0B;
+	Fri, 15 Dec 2023 17:03:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ILbHAfIc"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="QbLIf5Bm"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9A73DB83;
-	Fri, 15 Dec 2023 16:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702656836; x=1734192836;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jRZ4fvmYc+HtjzVULVdhC6nDL1Y7tBYw7lvsXJ+ZQW8=;
-  b=ILbHAfIcFC5KYDIDdymkNPxSiVHKnthbg5oofxMsFNdun+JciMpalu1X
-   SSk6EESDVVrE6XzZIs3CEwX86IV6pIiIlks+VIevspqIHA99Unw9YRIT0
-   bTtXk6PrTQdAX2kMY8SNUyPsF/Y8pSYMJr0Zd8kvEmOo2nq0kArcXmkHx
-   aFcwK5UrBY6T2Jsu1rSP+5awUscDYb7zGKYuQ9WckMs7uIZYxOFXoq/8t
-   0pSP21HYq5QotW2Z0WhjkA3+bMpgsbQCOepbj0ON7RK47PJxsfmKIr0s8
-   j1YpYk94GC3kua0pKq+/Jd2xOVz1iEapJju84Pt5ClN1i84+0VjBK/tmS
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="16846439"
-X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
-   d="scan'208";a="16846439"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 08:13:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="724500074"
-X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
-   d="scan'208";a="724500074"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 08:13:53 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rEAow-00000006AK8-1aGr;
-	Fri, 15 Dec 2023 18:13:50 +0200
-Date: Fri, 15 Dec 2023 18:13:50 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
-	platform-driver-x86@vger.kernel.org,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	linux-pci@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH RFC v2] platform/x86: p2sb: Allow p2sb_bar() calls during
- PCI device probe
-Message-ID: <ZXx7PpJbfsYxDQzJ@smile.fi.intel.com>
-References: <20231212114746.183639-1-shinichiro.kawasaki@wdc.com>
- <ZXsvkWeJvdkvrf5e@smile.fi.intel.com>
- <20231215075210.GA15884@wunner.de>
- <ZXxynbIS8kd3KQuy@smile.fi.intel.com>
- <20231215154507.GB20902@wunner.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CB03EA78;
+	Fri, 15 Dec 2023 17:03:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3BFDLSlT017503;
+	Fri, 15 Dec 2023 18:02:48 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=selector1; bh=vD6h9pH
+	zJnmCBjscGPQb18sMsLi5KfISG29RwhbGxYI=; b=QbLIf5BmFBOSkCIpMkerL7K
+	93jFOZqTkajmC9EvJt+jWRyOqE+oj6zCuny5JcWWdvIviwGMcfh0f1ziVqck8DVk
+	OuuoujyjkcyA0I5zNJV32aCKMjsy6afNBIjV2bVnqDBa3g23KEu6LBbft6tACNRV
+	xiUEQQqGJg+gU+kpJE4npqDlJlyQBKVpui92RsAipq3P+a8WRS3XE1qjPYFE9uqE
+	3nHZP3QCxrjHqti6o53BojNaMP+T6nyNI6MjqVwLqLuXpsO3Dm4PsAvZgWUHPo9E
+	+IRlLR0YERGrr3PuVduuKROcboPQYK+XRIL2hPbRK/CK1FcCvcyyo0lYfbEmgsw=
+	=
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3v0cbtuhhn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 18:02:47 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 64E4C100052;
+	Fri, 15 Dec 2023 18:02:46 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 585F4237D9B;
+	Fri, 15 Dec 2023 18:02:46 +0100 (CET)
+Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 15 Dec
+ 2023 18:02:46 +0100
+From: Alain Volmat <alain.volmat@foss.st.com>
+To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre
+ Torgue <alexandre.torgue@foss.st.com>,
+        Pierre-Yves MORDRET
+	<pierre-yves.mordret@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>
+CC: Conor Dooley <conor@kernel.org>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/7] i2c: stm32f7: enhancements and support for stm32mp25
+Date: Fri, 15 Dec 2023 18:02:10 +0100
+Message-ID: <20231215170223.95549-1-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231215154507.GB20902@wunner.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-15_10,2023-12-14_01,2023-05-22_02
 
-On Fri, Dec 15, 2023 at 04:45:07PM +0100, Lukas Wunner wrote:
-> On Fri, Dec 15, 2023 at 05:37:01PM +0200, Andy Shevchenko wrote:
-> > On Fri, Dec 15, 2023 at 08:52:10AM +0100, Lukas Wunner wrote:
-> > > On Thu, Dec 14, 2023 at 06:38:41PM +0200, Andy Shevchenko wrote:
-> > > > On Tue, Dec 12, 2023 at 08:47:46PM +0900, Shin'ichiro Kawasaki wrote:
-> > > > > +/* Cache BAR0 of P2SB device from function 0 ot 7 */
-> > > > > +#define NR_P2SB_RES_CACHE 8
-> > > > 
-> > > > This is fifth or so definition for the same, isn't it a good time to create
-> > > > a treewide definition in pci.h?
-> > > 
-> > > This isn't something defined in the PCI spec but rather an x86-specific
-> > > constant, so should preferrably live somewhere in arch/x86/include/asm/.
-> > 
-> > I'm not sure I am following both paragraphs.
-> > 
-> > > If you have a "maximum number of PCI functions per device" constant in mind
-> > > then include/uapi/linux/pci.h might be a good fit.
-> > 
-> > This is indeed what I have had in mind, but why is this x86 specific?
-> > I didn't get...
-> 
-> If you look at it from the angle that you want to cache the
-> BAR of function 0 of the P2SB and of up to 7 additional functions,
-> it's an x86 thing.
-> 
-> If you look at it from the angle "how many functions can a PCIe
-> device have (absent ARI)", it's a PCIe thing.
-> 
-> It depends on the way you look at it. ;)
+This series first perform enhancements in the way interrupt are handled
+and cleanup in messages.
+Then it adds support for the stm32mp25 which differs in that
+it only has a single irq line for both event/error and has a
+different handling of the FastModePlus.
+Support is then enabled within the stm32mp25 related device-trees.
 
-I look here from the PCI specification / similar thing perspective.
+Changelog:
+v3: - addition of 2 commits dealing with readl_relaxed(I2C_ISR) in
+      isr handler and a second one to use dev_err_probe during probe
+    - correction of SOB in commit
 
-My angle here is "cache the BAR of function 0 of P2SB and of up to
-as many as PCI specification dictates the device may have".
+v2: - correct st,stm32-i2c.yaml.  Use if then else scheme to indicate
+      number of interrupts / interrupt-names depending on the
+      compatible while keeping the description within the common part
+
+    - correct 2 maybe-uninitialized warnings
+          * ret in stm32f7_i2c_write_fm_plus_bits
+          * irq_error in stm32f7_i2c_probe, move the platform_get_irq
+            within the same if block as devm_request_threaded_irq
+
+Alain Volmat (9):
+  i2c: stm32f7: use dev_err_probe upon calls of devm_request_irq
+  i2c: stm32f7: perform most of irq job in threaded handler
+  i2c: stm32f7: simplify status messages in case of errors
+  dt-bindings: i2c: document st,stm32mp25-i2c compatible
+  i2c: stm32f7: perform I2C_ISR read once at beginning of event isr
+  i2c: stm32f7: add support for stm32mp25 soc
+  arm64: dts: st: add all 8 i2c nodes on stm32mp251
+  arm64: dts: st: add i2c2/i2c8 pins for stm32mp25
+  arm64: dts: st: add i2c2 / i2c8 properties on stm32mp257f-ev1
+
+ .../devicetree/bindings/i2c/st,stm32-i2c.yaml |  28 ++
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi |  36 ++
+ arch/arm64/boot/dts/st/stm32mp251.dtsi        |  96 +++++
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts    |  20 +
+ drivers/i2c/busses/i2c-stm32f7.c              | 342 +++++++++---------
+ 5 files changed, 358 insertions(+), 164 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
 
