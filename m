@@ -1,64 +1,64 @@
-Return-Path: <linux-i2c+bounces-826-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-827-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B0D481432D
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 09:03:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7149F814339
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 09:04:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DEE6B1F22E57
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 08:03:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C428DB21EEA
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 08:04:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4139410A34;
-	Fri, 15 Dec 2023 08:03:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45AFC111AF;
+	Fri, 15 Dec 2023 08:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="va8PSeGz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RscA19C6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3502418C2D
-	for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 08:02:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FE010A28
+	for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 08:04:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a22f59c6aeaso43613366b.2
-        for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 00:02:58 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a1d2f89ddabso43104066b.1
+        for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 00:04:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702627377; x=1703232177; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702627476; x=1703232276; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BxmUc+PDkzzTs+UokdqbOA3avH8MpjqjASPdVU6AS2Y=;
-        b=va8PSeGzGsd9hYXGeED4hpjsfRbHLdIFYNgIdZfUJ5sq6YC7/IdpyBN+F3wCbCK5mZ
-         2WOBBPMGs0qJMK6UgSWiQdXLO74cgYc+RD3B8jZcOPxcW7gr8O5Km6FYAJkBZOB9KNvm
-         4pCznbtHhaXV6qdXe6aJ3SJpOjvs9ZD6WQXn0P/miGuyd4UMVp42QSlSdaS9xP7/tBw3
-         Z689iYCFbPNlcTXWRIHm6d8Meg17N4H9O5uaRBu72pZZoLP4IOcyeolTex4ob8IX8cyO
-         Ocm3OtOVnQcvp4Z+tLYJWu34GinKp/44xLygLK1BUTXFtqR8GHpRK2n0AwFncXledgnA
-         H84Q==
+        bh=d5odTxpWTtMiHyNqN3Yk0tN+p5CPTI+frNjcQBN0fCk=;
+        b=RscA19C6oQP1wKydCCPjRP9wZ9ZHk2rQ7rvJNuLp95tzdB2/oPC6BJpgn0HcXonEzZ
+         MhpWZd+yRoy6aPgmuaB3ok+Q/PztBMHxItoVxqpxnIeZ4hJZB11AWSTqAG19RYK6FmTh
+         0KeAUihgSokFTLRnYGEfmcBt18jrrKhrirz5Adh/FcYTJCVBQyE0Ht30/z52dUgXQ3Jq
+         aJl9MweKMnQbWq9jPKTv8bhk3bIvbf7+1pDdBOjSOyFNl3sUlYJw/2tCcXyeTIKHgL4L
+         CampXtz8s3CN3VjGe74Im+dXpyCCjR0LwLjjL+25pt8arP0+e7T7VkmFKM5P5UCxx6iY
+         +aVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702627377; x=1703232177;
+        d=1e100.net; s=20230601; t=1702627476; x=1703232276;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BxmUc+PDkzzTs+UokdqbOA3avH8MpjqjASPdVU6AS2Y=;
-        b=rCDCEtOQ23nvkZIYBCLD2YvRyq4y8n2ib4OL+LR8vTuijUNFajB8ffMZuUH6acTpPo
-         3xMj2yuRb3TJUPFoE8eJxShai0/7CdJGmNN0P1HyG+iNxHhvEVMLOBAf3uV23LC6S1qz
-         Anods6JxEUSSB+dez1Tcopjb76P6PO0iL31Qo9kzj/s5RqwQmLG1SkyjYj48LZ2x7/+6
-         rIWs0qMwZWNZGajExGXTOI28OiH0BFp4SFacMjVQn7e5pyRCK+71TR/oxAOTgGS0haYS
-         Fzza82ozwPLUqkielam02DEyc7nUXa6jrUWvyyN02/9/SUymScx8WHZig7mx9WoYXYk/
-         ObJQ==
-X-Gm-Message-State: AOJu0YwF3jmggeFCnLnuHKJYdI0aEkZJAJ6NyM6chyHcz8rg9oZs325G
-	QVj4j2IpE88DaJHB60rZrs67HA==
-X-Google-Smtp-Source: AGHT+IGDciNJgjLp5ZOdnnuXaHyiRut1duefW8ezuqIm8IKlSbBeXpDwGUu8p9lgC1DCBlibXALJlA==
-X-Received: by 2002:a17:907:9690:b0:9ae:46c7:90fe with SMTP id hd16-20020a170907969000b009ae46c790femr6353080ejc.72.1702627377451;
-        Fri, 15 Dec 2023 00:02:57 -0800 (PST)
+        bh=d5odTxpWTtMiHyNqN3Yk0tN+p5CPTI+frNjcQBN0fCk=;
+        b=ah4DYrPvDb3ER9vDdwjJ2CgD5UjKPquk9xMkjrkJXv3WXgwzHKUV3g2DW3gRchrPk8
+         jNtsWkH9S4gd+yN2/B68iSP+UZvH6gN+/kjk6v/QXT4LDZsXP/uzHzCXQLJZjtmXi2B0
+         uLmXD6pp9zyEArTuhL8wGw/mcLD/oEvSEHPgFu1CfCDdwxip5hOzSTz6m9cxQ0y7K8h+
+         +8UoWrWQKd2bSsL1/yddK8KhbbFGZWAtosO8NbE7eycfqP+qDJa1luQJiK1nvcd1iihe
+         8BvcxWYLZ+0RC8G8BFBTEMHm3VfynTfW4cw1Dtt8V7e7axrXtw9dpyPkP6ZkSbOfy8MN
+         KGWQ==
+X-Gm-Message-State: AOJu0Yxr4jFZ0csV9l/M7V6EJf9afN2TvrcSyVw6kRh9WKmZHzMmz2MM
+	bkTPXwGHAINA44hcOoO2sYOMnA==
+X-Google-Smtp-Source: AGHT+IEiNmfziBFibpn4DGoUgzd/sG0L66sXw3f1VXDnmtdXdO6SvBtlKuq7k3Q64D3FJRqu4V62TA==
+X-Received: by 2002:a17:907:bcf:b0:a19:a19b:789f with SMTP id ez15-20020a1709070bcf00b00a19a19b789fmr4900945ejc.98.1702627475694;
+        Fri, 15 Dec 2023 00:04:35 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id tk7-20020a170907c28700b00a1d1ebc2206sm10465696ejc.72.2023.12.15.00.02.55
+        by smtp.gmail.com with ESMTPSA id tk7-20020a170907c28700b00a1d1ebc2206sm10465696ejc.72.2023.12.15.00.04.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Dec 2023 00:02:56 -0800 (PST)
-Message-ID: <90bc9243-5890-45e7-8bf5-80383c88980d@linaro.org>
-Date: Fri, 15 Dec 2023 09:02:54 +0100
+        Fri, 15 Dec 2023 00:04:35 -0800 (PST)
+Message-ID: <11b4e79c-3d39-4924-877d-0f741e5904a8@linaro.org>
+Date: Fri, 15 Dec 2023 09:04:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -66,25 +66,23 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/13] arm64: dts: exynos: gs101: enable cmu-peric0 clock
- controller
+Subject: Re: [PATCH 10/13] arm64: dts: exynos: gs101: define USI8 with I2C
+ configuration
 Content-Language: en-US
-To: Sam Protsenko <semen.protsenko@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: peter.griffin@linaro.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
- sboyd@kernel.org, conor+dt@kernel.org, andi.shyti@kernel.org,
- alim.akhtar@samsung.com, gregkh@linuxfoundation.org, jirislaby@kernel.org,
- catalin.marinas@arm.com, will@kernel.org, s.nawrocki@samsung.com,
- tomasz.figa@gmail.com, cw00.choi@samsung.com, arnd@arndb.de,
- andre.draszik@linaro.org, saravanak@google.com, willmcvicker@google.com,
+To: Tudor Ambarus <tudor.ambarus@linaro.org>, peter.griffin@linaro.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ mturquette@baylibre.com, sboyd@kernel.org, conor+dt@kernel.org,
+ andi.shyti@kernel.org, alim.akhtar@samsung.com, gregkh@linuxfoundation.org,
+ jirislaby@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+ s.nawrocki@samsung.com, tomasz.figa@gmail.com, cw00.choi@samsung.com,
+ arnd@arndb.de, semen.protsenko@linaro.org
+Cc: andre.draszik@linaro.org, saravanak@google.com, willmcvicker@google.com,
  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
  linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
  linux-serial@vger.kernel.org
 References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
- <20231214105243.3707730-9-tudor.ambarus@linaro.org>
- <CAPLW+4=bfcemh-dd7r9hOe0RbtC01+sNpj3ZMMfc8rMezKQfNA@mail.gmail.com>
+ <20231214105243.3707730-11-tudor.ambarus@linaro.org>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -130,43 +128,56 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <CAPLW+4=bfcemh-dd7r9hOe0RbtC01+sNpj3ZMMfc8rMezKQfNA@mail.gmail.com>
+In-Reply-To: <20231214105243.3707730-11-tudor.ambarus@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 14/12/2023 16:39, Sam Protsenko wrote:
-> On Thu, Dec 14, 2023 at 4:52 AM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
->>
->> Enable the cmu-peric0 clock controller. It feeds USI and I3c.
->>
->> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
->> ---
->>  arch/arm64/boot/dts/exynos/google/gs101.dtsi | 12 ++++++++++++
->>  1 file changed, 12 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/exynos/google/gs101.dtsi b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
->> index 9747cb3fa03a..d0b0ad70c6ba 100644
->> --- a/arch/arm64/boot/dts/exynos/google/gs101.dtsi
->> +++ b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
->> @@ -339,6 +339,18 @@ ppi_cluster2: interrupt-partition-2 {
->>                         };
->>                 };
->>
->> +               cmu_peric0: clock-controller@10800000 {
->> +                       compatible = "google,gs101-cmu-peric0";
->> +                       reg = <0x10800000 0x4000>;
->> +                       #clock-cells = <1>;
->> +                       clocks = <&ext_24_5m>,
->> +                                <&cmu_top CLK_DOUT_CMU_PERIC0_BUS>,
->> +                                <&cmu_top CLK_DOUT_CMU_PERIC0_IP>;
->> +                       clock-names = "oscclk",
->> +                                     "dout_cmu_peric0_bus",
+On 14/12/2023 11:52, Tudor Ambarus wrote:
+> USI8 I2C is used to communicate with an eeprom found on the battery
+> connector. Define USI8 in I2C configuration.
 > 
-> I'd pull this line to the above line. Other than that:
+> USI8 CONFIG register comes with a 0x0 reset value, meaning that USI8
+> doesn't have a default protocol (I2C, SPI, UART) at reset. Thus the
+> selection of the protocol is intentionally left for the board dtsi file.
 > 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
+>  arch/arm64/boot/dts/exynos/google/gs101.dtsi | 26 ++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/exynos/google/gs101.dtsi b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
+> index ffb7b4d89a8c..4ea1b180cd0a 100644
+> --- a/arch/arm64/boot/dts/exynos/google/gs101.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
+> @@ -354,6 +354,32 @@ pinctrl_peric0: pinctrl@10840000 {
+>  			interrupts = <GIC_SPI 625 IRQ_TYPE_LEVEL_HIGH 0>;
+>  		};
+>  
+> +		usi8: usi@109700c0 {
+> +			compatible = "google,gs101-usi",
+> +				     "samsung,exynos850-usi";
+> +			reg = <0x109700c0 0x20>;
+> +			ranges;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			clocks = <&cmu_peric0 CLK_DOUT_PERIC0_USI8_USI>,
+> +				 <&cmu_peric0 CLK_GOUT_PERIC0_CLK_PERIC0_USI8_USI_CLK>;
+> +			clock-names = "pclk", "ipclk";
+> +			samsung,sysreg = <&sysreg_peric0 0x101c>;
+> +			status = "disabled";
+> +
+> +			hsi2c_8: i2c@10970000 {
+> +				compatible = "google,gs101-hsi2c",
+> +					     "samsung,exynosautov9-hsi2c";
+> +				reg = <0x10970000 0xc0>;
+> +				interrupts = <GIC_SPI 642
+> +					      IRQ_TYPE_LEVEL_HIGH 0>;
 
-No, it's fine. If clocks span over multiple lines (one clock per line),
-the names should follow in general. It's easier to read and match entries.
+This can be in one line. Limit of 80 is not a hard-limit. It can be
+violated if it improves readability. Especially if is about 1 character
+only.
+
+
 
 Best regards,
 Krzysztof
