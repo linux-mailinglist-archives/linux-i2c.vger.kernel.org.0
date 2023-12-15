@@ -1,146 +1,242 @@
-Return-Path: <linux-i2c+bounces-830-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-831-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05370814579
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 11:24:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F91C8147C3
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 13:13:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8744B1F215AA
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 10:24:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1294B22655
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Dec 2023 12:13:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C7AC19469;
-	Fri, 15 Dec 2023 10:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB6912C689;
+	Fri, 15 Dec 2023 12:13:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eRWotJ23"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="I7ZtUIBX"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE1519454
-	for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 10:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-40c3fe6c1b5so5198765e9.2
-        for <linux-i2c@vger.kernel.org>; Fri, 15 Dec 2023 02:23:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702635836; x=1703240636; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yS+Astco5Bh8/oc41ujRmjEsBCKo5wFUS+A13l4o33Y=;
-        b=eRWotJ23Lg58plC5QVSmTCOVCi/HG2B8Xb3NveC21vJdMk2JPknPsApCsbKSrHrOrd
-         ul0tCXS8hjyUgsQMXoQjfA8+ZNYo7+Hud+bFA8O3u9VsgIumwOkrjzjUHoQB9MLYdE2F
-         PO38bqWBAUcY+7t+PJEy2O78KjG283mteM1NvA3xaQO6us7ZXQVDsv+ASwJJHcD7PMyb
-         25o/OwgJA/w/ii2KxyUw7ISppBRWMt7nyTwTBtxNh40uCX5CJhr7TL86QmIdjskl32qd
-         aq3tzkcL8aaLLHoOA4V6tMsM1eDYBJHMSF6yBVPzyAIanuhuBDKqUte/8egFc59dt3Fz
-         RZAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702635836; x=1703240636;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yS+Astco5Bh8/oc41ujRmjEsBCKo5wFUS+A13l4o33Y=;
-        b=nrDQA7Yq2q3ItA9dsA7BxaSkPNMtBoWbArFKoM9Cp4hj8/hzNm8UDp7Cjlz/Gv9sYW
-         hfy4ppzzI6I96uueva7Sih0Ort9qAtMBgATjNY5Ll2+KA/WnY7JPdF7S1FJN/IBZlfRI
-         EOrBwQQuOHkTcNWqSbssUBLJ7bN/a1p3s4x+qbcKbMDVy/fjXcKgj02pec+qAS2K1MXv
-         PEVRooPx3FgfcSnsUkHx4E7EDynbEJHRlEhyA66b9dALwp3KjAAgawL+1FirzV3JX8w5
-         A+n2YXOIU6AAH9iX3vh7Uh0anjB9OMRCa1qVVNz8Qan6GdlJyl3EXk8gQMY0jWoXw+SU
-         7eCA==
-X-Gm-Message-State: AOJu0YxCMBmsx2dDiRhYVeYB+Ae5Uz7l5JsVVnWZr3SkIF2NoX9AwNx+
-	jrdA8nLbpNi2INUtsVtRO8Gu7g==
-X-Google-Smtp-Source: AGHT+IFji3CPmOm1EiJAz9SOQ55L5S6jb323+mQyesxrwYedW1RG8Pkebp4R1SXKe07O1gvfI7ziOw==
-X-Received: by 2002:a05:600c:444c:b0:40c:3831:27ee with SMTP id v12-20020a05600c444c00b0040c383127eemr5814657wmn.59.1702635836594;
-        Fri, 15 Dec 2023 02:23:56 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id s18-20020a5d4ed2000000b00336421f1818sm5937758wrv.112.2023.12.15.02.23.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Dec 2023 02:23:55 -0800 (PST)
-Message-ID: <5e454300-f1ef-435c-8c4c-16561502196a@linaro.org>
-Date: Fri, 15 Dec 2023 10:23:53 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458FE2C68A;
+	Fri, 15 Dec 2023 12:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3BF9dxop002855;
+	Fri, 15 Dec 2023 13:12:42 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=selector1; bh=kvE5XBu2+Fd93UaI428vG
+	WnjnWCMDEpyRUaHUxWJrW0=; b=I7ZtUIBX3AT99QeCJLaVB0aVgc10L3IImwTqj
+	1gafLIseHZqpj2t5QQep7K8ZyoOJNIThwKPcGQ3PZzdo8e2xZSQ+IPGHNDNYTSOo
+	x/ZA1ofwp59DpNn5HVtHi3WK7YrlvEi3i+aMt4iksblgxFC6ZaYZ5xgS7+weZSXM
+	lnmFXMK5RtheNLKpvT+zKH3kZNWimdDf0QIbWeBqUC8XgeNhjPpvFiO7jNMBFido
+	0pHT/95P0Dfh5Wm+zq8LoKsxrcyuaUNFYgqjjmf+55q6WwiEhXuP/cqwvCZp8I6D
+	Xn6RM1foPk9+pmkuox3wfy6eo++A3wGNp8rJ0gSpStx8SvpzA==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3uxvh9n7pj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 13:12:42 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4E9B3100052;
+	Fri, 15 Dec 2023 13:12:41 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3D041217B7B;
+	Fri, 15 Dec 2023 13:12:41 +0100 (CET)
+Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 15 Dec
+ 2023 13:12:40 +0100
+Date: Fri, 15 Dec 2023 13:12:31 +0100
+From: Alain Volmat <alain.volmat@foss.st.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+CC: Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Pierre-Yves MORDRET
+	<pierre-yves.mordret@foss.st.com>,
+        Conor Dooley <conor@kernel.org>, Rob
+ Herring <robh@kernel.org>,
+        Valentin Caron <valentin.caron@foss.st.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/7] i2c: stm32f7: add support for stm32mp25 soc
+Message-ID: <20231215121231.GA3866676@gnbcxd0016.gnb.st.com>
+Mail-Followup-To: Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
+	Valentin Caron <valentin.caron@foss.st.com>,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20231208164719.3584028-1-alain.volmat@foss.st.com>
+ <20231208164719.3584028-5-alain.volmat@foss.st.com>
+ <20231209000747.4l6462nlzj3po3sf@zenone.zhora.eu>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/13] dt-bindings: clock: google,gs101: fix CMU_TOP gate
- clock names
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- peter.griffin@linaro.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
- sboyd@kernel.org, conor+dt@kernel.org, andi.shyti@kernel.org,
- alim.akhtar@samsung.com, gregkh@linuxfoundation.org, jirislaby@kernel.org,
- catalin.marinas@arm.com, will@kernel.org, s.nawrocki@samsung.com,
- tomasz.figa@gmail.com, cw00.choi@samsung.com, arnd@arndb.de,
- semen.protsenko@linaro.org
-Cc: andre.draszik@linaro.org, saravanak@google.com, willmcvicker@google.com,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-serial@vger.kernel.org
-References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
- <20231214105243.3707730-2-tudor.ambarus@linaro.org>
- <050c3119-0431-4400-9052-7a9c0ec67918@linaro.org>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <050c3119-0431-4400-9052-7a9c0ec67918@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20231209000747.4l6462nlzj3po3sf@zenone.zhora.eu>
+X-Disclaimer: ce message est personnel / this message is private
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-15_06,2023-12-14_01,2023-05-22_02
 
-Hi, Krzysztof,
+Hi Andi,
 
-On 12/15/23 08:13, Krzysztof Kozlowski wrote:
-> On 14/12/2023 11:52, Tudor Ambarus wrote:
->> The gs101 clock names are derived from the clock register names under
->> some certain rules. In particular, for the gate clocks the following is
->> documented and expected in the gs101 clock driver:
->>
->>   Replace CLK_CON_GAT_CLKCMU      with CLK_GOUT_CMU and gout_cmu
->>   Replace CLK_CON_GAT_GATE_CLKCMU with CLK_GOUT_CMU and gout_cmu
->>
->>   For gates remove _UID _BLK _IPCLKPORT and _RSTNSYNC
+thanks for your review.
+
+I'll shortly post a v3 to correct all your comments.
+
+On Sat, Dec 09, 2023 at 01:07:47AM +0100, Andi Shyti wrote:
+> Hi Alain,
 > 
-> I don't understand what it has to do with the bindings.
+> On Fri, Dec 08, 2023 at 05:47:13PM +0100, Alain Volmat wrote:
+> > The stm32mp25 has only a single interrupt line used for both
+> > events and errors. In order to cope with that, reorganise the
+> > error handling code so that it can be called either from the
+> > common handler (used in case of SoC having only a single IT line)
+> > and the error handler for others.
+> > The CR1 register also embeds a new FMP bit, necessary when running
+> > at Fast Mode Plus frequency. This bit should be used instead of
+> > the SYSCFG bit used on other platforms.
+> > Add a new compatible to distinguish between the SoCs and two
+> > boolean within the setup structure in order to know if the
+> > platform has a single/multiple IT lines and if the FMP bit
+> > within CR1 is available or not.
+> > 
+> > Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+> > Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
 > 
->>
->> The CMU TOP gate clock names missed to include the required "CMU"
->> differentiator which will cause name collisions with the gate clock names
->> of other clock units. Fix the TOP gate clock names and include "CMU" in
->> their name.
+> your SoB here should come last because you are the one sending
+> the patch.
+
+Fixed.
+
 > 
-> Neither here. Clock names are not related to defines.
+> > ---
+> >  drivers/i2c/busses/i2c-stm32f7.c | 230 ++++++++++++++++++-------------
+> >  1 file changed, 133 insertions(+), 97 deletions(-)
+> > 
+> > diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
+> > index 2a011deec3c5..5634332900fb 100644
+> > --- a/drivers/i2c/busses/i2c-stm32f7.c
+> > +++ b/drivers/i2c/busses/i2c-stm32f7.c
+> > @@ -50,6 +50,7 @@
+> >  #define STM32F7_I2C_TXDR			0x28
+> >  
+> >  /* STM32F7 I2C control 1 */
+> > +#define STM32_I2C_CR1_FMP			BIT(24)
+> >  #define STM32F7_I2C_CR1_PECEN			BIT(23)
+> >  #define STM32F7_I2C_CR1_ALERTEN			BIT(22)
+> >  #define STM32F7_I2C_CR1_SMBHEN			BIT(20)
+> > @@ -226,6 +227,8 @@ struct stm32f7_i2c_spec {
+> >   * @rise_time: Rise time (ns)
+> >   * @fall_time: Fall time (ns)
+> >   * @fmp_clr_offset: Fast Mode Plus clear register offset from set register
+> > + * @single_it_line: Only a single IT line is used for both events/errors
+> > + * @fmp_cr1_bit: Fast Mode Plus control is done via a bit in CR1
 > 
+> Is the Fast Mode Plus an optional feature?
 
-When saying "clock names" I meant the clock symbolic names that are
-defined in the bindings, the _id passed in GATE(_id, ) if you want.
+Yes, from what I've seen, it seems an optional feature on some versions
+of stm32f7.
 
->>
->> Fixes: 0a910f160638 ("dt-bindings: clock: Add Google gs101 clock management unit bindings")
->> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
->> ---
->>  drivers/clk/samsung/clk-gs101.c          | 167 ++++++++++++-----------
->>  include/dt-bindings/clock/google,gs101.h | 144 +++++++++----------
 > 
-> I miss the point why bindings must be changed with driver.
-
-The clock symbolic names that are defined in the bindings file are used
-as IDs in the clock driver. Having the changes split per file will
-result in compilation errors breaking bisect.
+> >   */
+> >  struct stm32f7_i2c_setup {
+> >  	u32 speed_freq;
+> > @@ -233,6 +236,8 @@ struct stm32f7_i2c_setup {
+> >  	u32 rise_time;
+> >  	u32 fall_time;
+> >  	u32 fmp_clr_offset;
+> > +	bool single_it_line;
+> > +	bool fmp_cr1_bit;
+> >  };
 > 
-> Really, guys, we are milling the first GS101 patches for entire cycle.
-> Almost 3 months. The moment I merge bindings you tell me they are wrong.
-> Few days after merging them.
+> [...]
+> 
+> > -static irqreturn_t stm32f7_i2c_slave_isr_event(struct stm32f7_i2c_dev *i2c_dev)
+> > +static irqreturn_t stm32f7_i2c_slave_isr_event(struct stm32f7_i2c_dev *i2c_dev, u32 status)
+> >  {
+> >  	void __iomem *base = i2c_dev->base;
+> > -	u32 cr2, status, mask;
+> > +	u32 cr2, mask;
+> >  	u8 val;
+> >  	int ret;
+> >  
+> > -	status = readl_relaxed(i2c_dev->base + STM32F7_I2C_ISR);
+> > -
+> 
+> good to see this change here, relates to my comment in patch 1.
+> But I think this should go on a different patch.
 
-I apologize. It happens when we work in parallel. The clock symbolic
-names were mangled just in v6. It was considered that the clock names
-used in the datasheet are too long and the dt becomes unreadable. I just
-recently updated the peric0 clock symbolic names according to the clock
-symbolic name mangling strategy, that's why we spot the inconsistency
-and the symbolic name collision so late.
+Agreed. I've split this small change into a dedicated commit done before
+this patch.
 
-Cheers,
-ta
+> 
+> >  	/* Slave transmitter mode */
+> >  	if (status & STM32F7_I2C_ISR_TXIS) {
+> >  		i2c_slave_event(i2c_dev->slave_running,
+> > @@ -1494,17 +1504,81 @@ static irqreturn_t stm32f7_i2c_slave_isr_event(struct stm32f7_i2c_dev *i2c_dev)
+> >  	return IRQ_HANDLED;
+> >  }
+> 
+> [...]
+> 
+> > -	setup = of_device_get_match_data(&pdev->dev);
+> > -	if (!setup) {
+> > -		dev_err(&pdev->dev, "Can't get device data\n");
+> > -		return -ENODEV;
+> > +		ret = devm_request_threaded_irq(&pdev->dev, irq_error,
+> > +						NULL,
+> > +						stm32f7_i2c_isr_error_thread,
+> > +						IRQF_ONESHOT,
+> > +						pdev->name, i2c_dev);
+> > +		if (ret) {
+> > +			dev_err(&pdev->dev, "Failed to request irq error %i\n",
+> > +				irq_error);
+> 
+> please use dev_err_probe();
+
+Done as well in a dedicated commit at the very beginning of the serie.
+
+> 
+> > +			return ret;
+> > +		}
+> 
+> out of the scope of the patch and just for curiosity: does the
+> driver work without being able to signal on the error interrupt
+> line?
+
+Sorry, not sure to understand the question.  Just for clarification,
+on the MP25 not having a dedicated error line doesn't mean we are not
+signaled for errors.  It is simply they just come via the same
+interrupt line, hence we need to check for both event and error
+within the same handler.
+On systems using two interrupts line, the error interrupt irq line
+should be handled in order to tackle those errors cases.
+Sorry, does this answer your question ?
+
+> 
+> Overall the patch looks good to me, though.
+> 
+> Andi
 
