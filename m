@@ -1,127 +1,87 @@
-Return-Path: <linux-i2c+bounces-871-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-872-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 107D8818B15
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 16:23:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AA10818B26
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 16:25:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B922B22298
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 15:23:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE97B1F23876
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 15:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25D231C6B3;
-	Tue, 19 Dec 2023 15:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C4731C69D;
+	Tue, 19 Dec 2023 15:24:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WsR5eIqp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="buhQIoJL"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63421C69D;
-	Tue, 19 Dec 2023 15:22:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D439FC433C8;
-	Tue, 19 Dec 2023 15:22:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1702999369;
-	bh=vOJ9fKH6Xqs5UvwP9s7vsM9ZkdDZzxdG2BYm96rLvAY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=WsR5eIqpOuTF0cIbg+QKbJk945zH4aWyXTOIY1x3RQA0jbBvivNWsuj7e6Upmrryd
-	 RyL951N7XwvzbPbR4ViNCIRb5JLQqt7ZEr7thVILxZfFjWkwanT8MVZ+xBn2ZcerUg
-	 bXjNwD7NXCrngu8Maaslp8kRTGGO1BmBMQOT/Ooc=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: wsa@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6471D522;
+	Tue, 19 Dec 2023 15:24:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E2E5C433C8;
+	Tue, 19 Dec 2023 15:24:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702999497;
+	bh=Z5r2iggyiWlPUAZbWAbSjId+ThoZdOn1YxqIEOkmg14=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=buhQIoJLeN5iHjaWohjmRrk5VWSZn6oA5JdwE633t2ZsQQzHMnDODzR8dPHY6nJ/G
+	 DFhEnNXKtocvSZVUCjyIoAq0by/qlC0oZzasjUvF2s1d1pUj+1SfXaRr3ZG3A+UtIN
+	 ZNmZqPw+9mz3ej65InMoq8E4hBPk9PaNcj43YVJac0e3WGbLTCeooBW1Cr16ip91lT
+	 AfgNXB/gKnnY3iPAx1exxOuTJHsT09D+l/LU8ZxWT4jIy/ixOEtWD4x+9ZQO6UGshB
+	 iKfjHWl8qGtoda1kXtVu19iAo0CgDkdSZPbOrKT0kja7UOHzsPq30wWccubUf12gsc
+	 jN+i5oI61hoYg==
+Date: Tue, 19 Dec 2023 15:24:51 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: wsa@kernel.org, linux-kernel@vger.kernel.org,
 	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	linux-i2c@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Heiko Stuebner <heiko@sntech.de>, linux-i2c@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org
-Subject: [PATCH] i2c: make i2c_bus_type const
-Date: Tue, 19 Dec 2023 16:22:43 +0100
-Message-ID: <2023121942-jumble-unethical-3163@gregkh>
-X-Mailer: git-send-email 2.43.0
+Subject: Re: [PATCH] i2c: make i2c_bus_type const
+Message-ID: <2512ee2f-05ce-4496-9ac3-f3b3a2e4a6b6@sirena.org.uk>
+References: <2023121942-jumble-unethical-3163@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Lines: 66
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2417; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=vOJ9fKH6Xqs5UvwP9s7vsM9ZkdDZzxdG2BYm96rLvAY=; b=owGbwMvMwCRo6H6F97bub03G02pJDKmNW51Sba1dDtXZnllysInD6hGjp6HmpIbM+iDrWF39f x6PXrh0xLIwCDIxyIopsnzZxnN0f8UhRS9D29Mwc1iZQIYwcHEKwEQKIhjm2U4SyLvO9cnsvoJq 3W9WhQ+C58WMGObp7bSdUBOyNC9E6FVt/PQlO9Sz518HAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="afW+xaqZsOSbFAHv"
+Content-Disposition: inline
+In-Reply-To: <2023121942-jumble-unethical-3163@gregkh>
+X-Cookie: System restarting, wait...
 
-Now that the driver core can properly handle constant struct bus_type,
-move the i2c_bus_type variable to be a constant structure as well, placing
-it into read-only memory which can not be modified at runtime.
 
-Note, the sound/soc/rockchip/rk3399_gru_sound.c also needed tweaking as
-it decided to save off a pointer to a bus type for internal stuff, and
-it was using the i2c_bus_type as well.
+--afW+xaqZsOSbFAHv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Cc: Wolfram Sang <wsa@kernel.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: Heiko Stuebner <heiko@sntech.de>
-Cc: linux-i2c@vger.kernel.org
-Cc: linux-sound@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-rockchip@lists.infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/i2c/i2c-core-base.c           | 2 +-
- include/linux/i2c.h                   | 2 +-
- sound/soc/rockchip/rk3399_gru_sound.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+On Tue, Dec 19, 2023 at 04:22:43PM +0100, Greg Kroah-Hartman wrote:
+> Now that the driver core can properly handle constant struct bus_type,
+> move the i2c_bus_type variable to be a constant structure as well, placing
+> it into read-only memory which can not be modified at runtime.
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index eac90a3cf61a..24c6e1b52668 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -689,7 +689,7 @@ static struct attribute *i2c_dev_attrs[] = {
- };
- ATTRIBUTE_GROUPS(i2c_dev);
- 
--struct bus_type i2c_bus_type = {
-+const struct bus_type i2c_bus_type = {
- 	.name		= "i2c",
- 	.match		= i2c_device_match,
- 	.probe		= i2c_device_probe,
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 0dae9db27538..180462d1a373 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -23,7 +23,7 @@
- #include <linux/swab.h>		/* for swab16 */
- #include <uapi/linux/i2c.h>
- 
--extern struct bus_type i2c_bus_type;
-+extern const struct bus_type i2c_bus_type;
- extern struct device_type i2c_adapter_type;
- extern struct device_type i2c_client_type;
- 
-diff --git a/sound/soc/rockchip/rk3399_gru_sound.c b/sound/soc/rockchip/rk3399_gru_sound.c
-index 1a504ebd3a0e..6c89c7331229 100644
---- a/sound/soc/rockchip/rk3399_gru_sound.c
-+++ b/sound/soc/rockchip/rk3399_gru_sound.c
-@@ -446,7 +446,7 @@ static const struct rockchip_sound_route rockchip_routes[] = {
- 
- struct dailink_match_data {
- 	const char *compatible;
--	struct bus_type *bus_type;
-+	const struct bus_type *bus_type;
- };
- 
- static const struct dailink_match_data dailink_match[] = {
--- 
-2.43.0
+Acked-by: Mark Brown <broonie@kernel.org>
 
+--afW+xaqZsOSbFAHv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWBtcIACgkQJNaLcl1U
+h9AWBgf9GIWnQ9OsLWyHoQ5nwfN1rt2XudsksR4RCKj8rPvwWV4xiTJr8Iwyp5Bx
+uHkUb0QULlGDAZmPQwWIeuEq3QlFMuc1K7ohvPcPhOdJ8ecvhmNdh9lha/whvlK3
+S4XnAlWBg4Jq4g3P6y/C3y7nnIzIbY0K/9uN8HfuGqu9fwo5gXkof3puksGa5ghB
+s3t2PrpYTByhEbroKX7SqMDhtAqLwl2yGbOICXka4zQh3ynthlZ3ycPywXf7/Hvx
+BPva1UzeezeEiDGSKhMvPbMxWh5vVMeoEkQEYmDZRAoAEd522vwZmob8Yawn9Bn1
+Ex2gRrHzcFRCr3D6s8U8hBe32grcLw==
+=PG7I
+-----END PGP SIGNATURE-----
+
+--afW+xaqZsOSbFAHv--
 
