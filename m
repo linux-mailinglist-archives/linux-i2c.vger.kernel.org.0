@@ -1,65 +1,64 @@
-Return-Path: <linux-i2c+bounces-891-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-892-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36DAB81927B
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 22:44:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C429E81935F
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 23:15:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D2061C23CCF
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 21:44:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 799271F26405
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 22:15:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E27C53B78B;
-	Tue, 19 Dec 2023 21:44:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B89B940C1F;
+	Tue, 19 Dec 2023 22:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WJ/M3s2D"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SDalUKlG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394E53B786
-	for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 21:44:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732154CB34
+	for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 22:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40d12ade25dso37110935e9.2
-        for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 13:44:47 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40d2e56f3a6so696575e9.1
+        for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 14:09:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703022286; x=1703627086; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZtmFFtn5frOYNVe98K3JjBM8V3BsafUOuZOR6rzyEi0=;
-        b=WJ/M3s2Dzg+iR7k+yYocRnCbTIRtOcEMIvT1gMpSHoNOOganyuEWNRK/tOG5Bjib5c
-         eD+W0oBcdZVMptcIQ5opFCcstq73mVx0BnbdD5kEPeIgnBEOUQylA4w1mzqW/jSxbHDc
-         fuenNojVKVbsElgU/yINE1Gwa35k3+hrH7ZPDgWi4Kl/UVTNACKo3Y0UaswdzJYvzJhs
-         k5WvDdIatLyaEJLWU6FsfiNfQ3a2uiRZmQANcGe6OCTfZhCpiuxLbCNr2PlLmjRsJ4n9
-         5bvZQU0rdOhAZOg378xZJEXkkCRiddneF23G+s3cF7ZfLJUqygJlZCjtI/B6Xv6HiSDs
-         mPdw==
+        d=gmail.com; s=20230601; t=1703023789; x=1703628589; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:autocrypt:subject:from
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jPF+4pppHAMie2j6BnijrfEybpf5e11aaKiCT0gYa0g=;
+        b=SDalUKlGWSmhiFWTB1ut2RrgPSB3g7a+U24deoGCzCzNQ9LWiSW2t87jEsEl4f5KC7
+         EoV9rGEl4h2t9liOeSg0owy/AeAyNMnnDNDLvaqprJHRz75SUvxDi8MkihMErqSFdvO9
+         r3hGGE/ya5DLo0B75KxsTw9JgiA+ckxg5ZJtgzV89cBcgIpngvo73zSIywa+ssv339sJ
+         atK0heRf/SvYc8ocY5j2tFf/HvS5diQaBS5HvKFYkhLxycEmK326pVQvmQsbXwYxXzti
+         DCin21jP2wJO9cUOY/GXOrHDZ0f0XD3mR+bfwI/BojaSQLaaKSfI4jU49SRp3UmAccDS
+         E3GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703022286; x=1703627086;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZtmFFtn5frOYNVe98K3JjBM8V3BsafUOuZOR6rzyEi0=;
-        b=C5ThXCnPL0c1ZLTIdO2AFtwlAq/T1FgsvKb1H7ZPenWyWPwh528p9DpGI8xMCDUz6l
-         apL+50NFeSyZuHNpqc25f2s6Nt2Tc11KKzGLbHRDApSkfeKZ0pmX70ZhpkS77s/4rIPJ
-         crd1+HmnlZtmNFNhMNOisudmMQaPaJcEW8fshSh09AJpAVk+Jht86SkuUplsUPgcfUgn
-         dgNkkVyQ9ey7gzFzWF/b6EabYcdCf56BYhqeygDPW0py8aYKTbIGjHfES/29mVwY/B2u
-         jvsrDUDqiBmGQNcKF7YJtZq4Cdn21bIv4ndzd2nFpdC+IltCCTtbMTsaFkLO765LmqOQ
-         rqYg==
-X-Gm-Message-State: AOJu0Yx7ddS2CezeUQZefeP7jyTtZcqGurxenJttW4sGdHSvLarU5mt1
-	clecQONdCQF5nhBv8mHfiIBOf1Mq9p8=
-X-Google-Smtp-Source: AGHT+IGAHWKEl5vpGLYZahBzqidPdpt9O7Dg9PjT7iI2ZCmNV++1wid21WiM4aciCaNp3ZzdN2Flgg==
-X-Received: by 2002:a05:600c:444e:b0:40c:48c2:f69f with SMTP id v14-20020a05600c444e00b0040c48c2f69fmr8300038wmn.12.1703022286069;
-        Tue, 19 Dec 2023 13:44:46 -0800 (PST)
+        d=1e100.net; s=20230601; t=1703023789; x=1703628589;
+        h=content-transfer-encoding:cc:to:autocrypt:subject:from
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jPF+4pppHAMie2j6BnijrfEybpf5e11aaKiCT0gYa0g=;
+        b=l2bVNJfHmdruesvHq8vHIaTn1pz0G06cVWoDWz558EHRQOGSZt6ElCcFvBn8CAAInQ
+         MmRy/yQmx9HhyUzGf0K/BdyCOBqjgDIduVByid4MyKylbomdwNfuSpkGTykJh0oahCkM
+         T4MOwmxWxf/G+kAqtTsUu6FPRgTWs0BuuwzyvovkQocc6CTJgP+91ZOdyt3b5KIcYHRC
+         sQr2q/bOpprIFSnW9JKee/fyQTbrzyR8TBhpBC1tEw/EQR1KvFHcobsTtOOtvv2A7NnZ
+         TWupwTyCWkbjtsqSXJ6lmjST4NgNeX3fISm6nLUYyGQdgqk20GjAE0e6Xu/z6CwDqBt7
+         fAQg==
+X-Gm-Message-State: AOJu0YxJuRNR7DsMwC9j4yAuPjoJW0mU3ssJWeQFzLJbpoSIbQ65ZWiR
+	a+PaTVBRCgRS90FjT5nW4svQheYBYNI=
+X-Google-Smtp-Source: AGHT+IExeQC5/HCzIfc8kwltKZ43By8G5TbM195cXGqdkRU4PX4STrwEj70KkyZUJXpttzdXIoCwig==
+X-Received: by 2002:a7b:c7cf:0:b0:40c:6d33:d4d3 with SMTP id z15-20020a7bc7cf000000b0040c6d33d4d3mr967645wmk.59.1703023789277;
+        Tue, 19 Dec 2023 14:09:49 -0800 (PST)
 Received: from ?IPV6:2a01:c23:b834:3300:1863:dc87:812:137a? (dynamic-2a01-0c23-b834-3300-1863-dc87-0812-137a.c23.pool.telefonica.de. [2a01:c23:b834:3300:1863:dc87:812:137a])
-        by smtp.googlemail.com with ESMTPSA id r12-20020a05600c35cc00b0040d3276ba19sm789578wmq.25.2023.12.19.13.44.45
+        by smtp.googlemail.com with ESMTPSA id v4-20020a05600c470400b0040b37f107c4sm4695813wmo.16.2023.12.19.14.09.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Dec 2023 13:44:45 -0800 (PST)
-Message-ID: <c9e9cd8b-0056-41be-b62c-223e494fb069@gmail.com>
-Date: Tue, 19 Dec 2023 22:44:46 +0100
+        Tue, 19 Dec 2023 14:09:48 -0800 (PST)
+Message-ID: <aa063dfb-2a92-40ba-bdab-e972781ae84b@gmail.com>
+Date: Tue, 19 Dec 2023 23:09:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -67,13 +66,9 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: mux: reg: Remove class-based device auto-detection
- support
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
-To: Peter Rosin <peda@axentia.se>
-Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <69f19443-f2ca-4158-9d25-160db55bfb57@gmail.com>
+Subject: [PATCH] eeprom: ee1004: add support for temperature sensor
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -117,67 +112,73 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <69f19443-f2ca-4158-9d25-160db55bfb57@gmail.com>
+To: Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+ Jean Delvare <jdelvare@suse.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 08.11.2023 07:38, Heiner Kallweit wrote:
-> Legacy class-based device auto-detection shouldn't be used in new code.
-> Therefore remove support in i2c-mux-reg as long as we don't have a
-> user of this feature yet.
-> 
-> Link: https://lore.kernel.org/linux-i2c/a22978a4-88e4-46f4-b71c-032b22321599@gmail.com/
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  drivers/i2c/muxes/i2c-mux-reg.c           | 4 +---
->  include/linux/platform_data/i2c-mux-reg.h | 2 --
->  2 files changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/drivers/i2c/muxes/i2c-mux-reg.c b/drivers/i2c/muxes/i2c-mux-reg.c
-> index 9efc1ed01..8489971ba 100644
-> --- a/drivers/i2c/muxes/i2c-mux-reg.c
-> +++ b/drivers/i2c/muxes/i2c-mux-reg.c
-> @@ -159,7 +159,6 @@ static int i2c_mux_reg_probe(struct platform_device *pdev)
->  	struct regmux *mux;
->  	struct i2c_adapter *parent;
->  	struct resource *res;
-> -	unsigned int class;
->  	int i, ret, nr;
->  
->  	mux = devm_kzalloc(&pdev->dev, sizeof(*mux), GFP_KERNEL);
-> @@ -213,9 +212,8 @@ static int i2c_mux_reg_probe(struct platform_device *pdev)
->  
->  	for (i = 0; i < mux->data.n_values; i++) {
->  		nr = mux->data.base_nr ? (mux->data.base_nr + i) : 0;
-> -		class = mux->data.classes ? mux->data.classes[i] : 0;
->  
-> -		ret = i2c_mux_add_adapter(muxc, nr, mux->data.values[i], class);
-> +		ret = i2c_mux_add_adapter(muxc, nr, mux->data.values[i], 0);
->  		if (ret)
->  			goto err_del_mux_adapters;
->  	}
-> diff --git a/include/linux/platform_data/i2c-mux-reg.h b/include/linux/platform_data/i2c-mux-reg.h
-> index 2543c2a1c..e2e895768 100644
-> --- a/include/linux/platform_data/i2c-mux-reg.h
-> +++ b/include/linux/platform_data/i2c-mux-reg.h
-> @@ -17,7 +17,6 @@
->   * @n_values: Number of multiplexer channels
->   * @little_endian: Indicating if the register is in little endian
->   * @write_only: Reading the register is not allowed by hardware
-> - * @classes: Optional I2C auto-detection classes
->   * @idle: Value to write to mux when idle
->   * @idle_in_use: indicate if idle value is in use
->   * @reg: Virtual address of the register to switch channel
-> @@ -30,7 +29,6 @@ struct i2c_mux_reg_platform_data {
->  	int n_values;
->  	bool little_endian;
->  	bool write_only;
-> -	const unsigned int *classes;
->  	u32 idle;
->  	bool idle_in_use;
->  	void __iomem *reg;
+The EE1004 SPD data structure advertises the presence of a thermal
+sensor on a DDR4 module in byte 14, bit 7. Let's use this information
+to explicitly instantiate the thermal sensor I2C client instead of
+having to rely on class-based I2C probing.
 
-Any feedback on this patch? We're at 6.7-rc6 and I if there's any
-feedback I'd like to incorporate it before the 6.8 merge window.
+The temp sensor i2c address can be derived from the SPD i2c address,
+so we can directly instantiate the device and don't have to probe
+for it. If the temp sensor has been instantiated already by other
+means (e.g. class-based auto-detection), then the busy-check in 
+i2c_new_client_device will detect this.
+
+Patch was successfully tested with a Corsair Vengeance RGB PRO
+DDR4 module which comes with a thermal sensor.
+
+Link: https://www.spinics.net/lists/linux-i2c/msg65963.html
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+Patch is the same as the RFC version, it's just re-based.
+---
+ drivers/misc/eeprom/ee1004.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/drivers/misc/eeprom/ee1004.c b/drivers/misc/eeprom/ee1004.c
+index fd12ce06a..21feebc30 100644
+--- a/drivers/misc/eeprom/ee1004.c
++++ b/drivers/misc/eeprom/ee1004.c
+@@ -182,6 +182,22 @@ static struct bin_attribute *ee1004_attrs[] = {
+ 
+ BIN_ATTRIBUTE_GROUPS(ee1004);
+ 
++static void ee1004_probe_temp_sensor(struct i2c_client *client)
++{
++	struct i2c_board_info info = { .type = "jc42" };
++	u8 byte14;
++	int ret;
++
++	/* byte 14, bit 7 is set if temp sensor is present */
++	ret = ee1004_eeprom_read(client, &byte14, 14, 1);
++	if (ret != 1 || !(byte14 & BIT(7)))
++		return;
++
++	info.addr = 0x18 | (client->addr & 7);
++
++	i2c_new_client_device(client->adapter, &info);
++}
++
+ static void ee1004_cleanup(int idx, struct ee1004_bus_data *bd)
+ {
+ 	if (--bd->dev_count == 0) {
+@@ -234,6 +250,9 @@ static int ee1004_probe(struct i2c_client *client)
+ 		dev_dbg(&client->dev, "Currently selected page: %d\n", err);
+ 		bd->current_page = err;
+ 	}
++
++	ee1004_probe_temp_sensor(client);
++
+ 	mutex_unlock(&ee1004_bus_lock);
+ 
+ 	dev_info(&client->dev,
+-- 
+2.43.0
 
 
