@@ -1,95 +1,113 @@
-Return-Path: <linux-i2c+bounces-885-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-886-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EBBC8190B3
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 20:29:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08FA78191B7
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 21:50:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CC782882F9
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 19:28:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D3991F25C2C
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 20:50:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7942938FBB;
-	Tue, 19 Dec 2023 19:28:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 484F939AEB;
+	Tue, 19 Dec 2023 20:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="zuVlHzPR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uInVRD/s"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C2238F94
-	for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 19:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 3E2882C04C7;
-	Wed, 20 Dec 2023 08:28:44 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1703014124;
-	bh=tvMk96Xvb4gcD09CjBZE7bcSGGH4HaxjXg3tNU39+ek=;
-	h=From:To:Subject:Date:References:In-Reply-To:From;
-	b=zuVlHzPRfBziFqomB77rWV/gYvYy72KlrMLD33qp5DmqFHcYBVZUcGxYCCwl8uCj9
-	 dWNJz69N8TZ3L92REQsJJ67q5c3zI4kIF6NmixokchsFXSuaPRSF/ezs6tMcsnKb7f
-	 vr54b7PjGdrYPN+MUsW80H1CE0McweJoFyJSeaj3SS4ywzJK8JqY0b2py0cDJfgqTd
-	 ZKIiwFD7bKwn1mF1kXHi7N6jaF9zGOzYLIdNAgIFv4Ary+BzebUfL5i56UjfjvNX7c
-	 RpjBq4gN8TCyx2AGC70bIb+oXGY4NMvCf7w8YQdBYiwtlCr24aULJ4SdGmMs9zhDxN
-	 xwdf5S99usdyQ==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B6581eeec0001>; Wed, 20 Dec 2023 08:28:44 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Wed, 20 Dec 2023 08:28:43 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.040; Wed, 20 Dec 2023 08:28:43 +1300
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: "wsa@kernel.org" <wsa@kernel.org>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>, "andi.shyti@kernel.org"
-	<andi.shyti@kernel.org>, "robh+dt@kernel.org" <robh+dt@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0074F39ADF;
+	Tue, 19 Dec 2023 20:50:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07F4DC433C7;
+	Tue, 19 Dec 2023 20:50:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703019029;
+	bh=xb8dk6p1RHhv4INmJ7zZ89M+91T1HlupPCg4fGHi3AU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uInVRD/sdb+mv3EVpFUzOgm7aOKLUxR1fpXol3XYR+rF+3U+XLg+CVBt/ZPC2wlmD
+	 EVU4KFlJhMuc8JJLXOpS3R+mJh/MWFGV0Y43a/GFLhZhUj7HDfZvAIkXZKkelwOfkS
+	 jji7q3QkWxr5gcYhmiXcgjAJczWOcXzCYyIS6GyQ3SRaJdDbUYzTNa0b2F9woA7K39
+	 mCfMwZiKSB1sLWGOnOjc/tQrxvbJRt82m8dMdVos92NWbZYKfxcMl5iQQAO7QENQL0
+	 q2CGukfzFIYrYiCT6zdZ+0ULAz+GMeTEbwvIQSXYSw4uF3S4mv57aqgb4/E+Fds76m
+	 dvDUI4E0bmdBg==
+Date: Tue, 19 Dec 2023 21:50:25 +0100
+From: "wsa@kernel.org" <wsa@kernel.org>
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	"andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>,
 	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "gregory.clement@bootlin.com"
-	<gregory.clement@bootlin.com>, "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: add bus-reset-gpios property
-Thread-Topic: [PATCH v6 1/2] dt-bindings: i2c: add bus-reset-gpios property
-Thread-Index: AQHaF3ftbmVMkvsnVUGkUfJZcnXixrB7DOKAgAAGpwCANR4BgIAAKL+A
-Date: Tue, 19 Dec 2023 19:28:43 +0000
-Message-ID: <601d07b5-264d-4322-b92e-63d58b3d69fa@alliedtelesis.co.nz>
+Message-ID: <ZYICEczlao+pg8kd@shikoro>
+Mail-Followup-To: "wsa@kernel.org" <wsa@kernel.org>,
+	Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	"andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 References: <20231115035753.925534-1-chris.packham@alliedtelesis.co.nz>
  <20231115035753.925534-2-chris.packham@alliedtelesis.co.nz>
  <f24b9b2d-aeb1-47f7-bf21-4383fdcf94aa@linaro.org>
  <5a52b0c9-8858-4f55-8dd7-9269c29c10a7@alliedtelesis.co.nz>
  <ZYHMvZ3plIQ0zXWa@shikoro>
-In-Reply-To: <ZYHMvZ3plIQ0zXWa@shikoro>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C91AAF41735B5546A22CFC7736B51905@atlnz.lc>
-Content-Transfer-Encoding: base64
+ <601d07b5-264d-4322-b92e-63d58b3d69fa@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=CYB2G4jl c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=e2cXIFwxEfEA:10 a=VwQbUJbxAAAA:8 a=1yuvT08Q3_qmqAvlgogA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
-X-SEG-SpamProfiler-Score: 0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="KAQIevLhiSubidkk"
+Content-Disposition: inline
+In-Reply-To: <601d07b5-264d-4322-b92e-63d58b3d69fa@alliedtelesis.co.nz>
 
-DQpPbiAyMC8xMi8yMyAwNjowMiwgd3NhQGtlcm5lbC5vcmcgd3JvdGU6DQo+Pj4gUHV0dGluZyBp
-dCBpbnRvIHRoZSBjb250cm9sbGVyIGJpbmRpbmdzIGxvb2tzIGxpa2Ugc29sdmluZyBPUyBpc3N1
-ZSB3aXRoDQo+Pj4gaW5jb3JyZWN0IGhhcmR3YXJlIGRlc2NyaXB0aW9uLg0KPj4gWWVzIHRoYXQn
-cyBlbnRpcmVseSB3aGF0cyBoYXBwZW5pbmcgaGVyZS4NCj4gU28sIHRoaXMgc2VyaWVzIGNhbiBi
-ZSBkcm9wcGVkPw0KPg0KSSBwZXJzb25hbGx5IHdvdWxkIGxpa2UgdG8gc2VlIGl0IGFjY2VwdGVk
-IGJ1dCBpdCBzZWVtcyB0aGVyZSBhcmUgDQpvYmplY3Rpb25zIHRvIHRoaXMgYXBwcm9hY2guIEkn
-dmUgeWV0IHRvIGNvbWUgdXAgd2l0aCBhbnl0aGluZyBiZXR0ZXIgdG8gDQpvZmZlciBhcyBhbiBh
-bHRlcm5hdGl2ZS4=
+
+--KAQIevLhiSubidkk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+
+> I personally would like to see it accepted but it seems there are=20
+> objections to this approach. I've yet to come up with anything better to=
+=20
+> offer as an alternative.
+
+I see. Thanks for the heads up!
+
+
+--KAQIevLhiSubidkk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWCAg0ACgkQFA3kzBSg
+KbYzrw/9HTP8AzWQLqcM+C6TIAYaKJLjE4spZJpDJzE9JJNPDc1avUNCE/2SBn0D
+Y+NHTDDs4mTISseTNlJMAdTC5eRZaaTXYc2OOf6E5F9puJK2bwK7xRsTIHy9IodF
+80Gf3zGyiV6+Xw8XDVDrzL8aPyV+jb/Zwq+iju5RlnqSazNwCJZogyhfcmRbiqQU
+8fQ9arUMHkro0/4lgQmSG4q4cU+uYHuFdXWdiPDSAz1YKym1PHx1wGUu9gHzsFz0
+Q9eczVHvttrWDqa2NEpdAd81rftgsNvywuUwk3Gq7gb3snUne0fKNTrTbNqF7W5t
++H1KV6CcBdAHlbm8Tkbt8ncOx6EpIb71d6KcW98o9Vrqomu3Yo28CaSopresBv9D
+/ZoWEkoSBNkrxYTdG8i/BE5NCH+r8c1WEdKrzCbuVBekJDDvw+oC4tU1rcmUW5Lc
+9rtvQ/q3CjqIaywMmLjqoNWeSYqCdTO/9BWfAZf5bocxwF3vzoJgIsamy1NgRAHB
+X9BlMCv8tvnxQN7siHVR6axNDcOpGmmWYgR4v3Twkh62vyyW4CLqAiAWSaYde3OH
+V3wO1kd1DjxCMtNZ+mUGNQPs6NiWx1KKj8ZoUSusdtZBp9n6yJlKaul5Hll0tx97
+cRAfSfUy6UfVKQLSloM2uloMeA8yR1WbmB8yF4q5RbnMNqPFf0g=
+=kggI
+-----END PGP SIGNATURE-----
+
+--KAQIevLhiSubidkk--
 
