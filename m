@@ -1,60 +1,56 @@
-Return-Path: <linux-i2c+bounces-865-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-866-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA97281874E
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 13:22:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6B0E818793
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 13:36:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EA2E1F24A0C
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 12:22:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8776A1F22436
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 12:36:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE1F01862A;
-	Tue, 19 Dec 2023 12:21:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E9F31802D;
+	Tue, 19 Dec 2023 12:36:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GzdXXPSs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sx8XwVUI"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B196C18641
-	for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 12:21:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90502C433C8;
-	Tue, 19 Dec 2023 12:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF2418622;
+	Tue, 19 Dec 2023 12:36:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC17AC433C7;
+	Tue, 19 Dec 2023 12:36:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702988514;
-	bh=uWwoGx6BSf0sx3lwgE1mNoor+NzDx9o7uDvaSK1T8bI=;
+	s=k20201202; t=1702989381;
+	bh=tiHOc2vd0PeMZmcefRov95UDysQbT1EeRCm2fFpUgQU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GzdXXPSsK0hiixAhqNs+7imikO+MVIDZaFFHk3ZvBhMTdDvYNgNsgjMjZxRpz/CPC
-	 8hF4EvwD59QKRDBfakhFzDxZjE9K2fSAQ4UHAFv9vUZEQsokGnNtruc2mBtjjd+AqP
-	 UZDPNTf6I3dDsv3JUgbnCazUQ+t19CW0rLIrtLr4JpFcLkAHkS65h/Dbz9MXq8Xbnx
-	 KZ2rhg6Lec10aG6bRShM09AOBrlWrtSbkyKQHlQPcj5rTJG4G1CyfJMNkDsxjZ+KPc
-	 Hnr5LNc4OIrdJEGA1Grk3oQ9ez1DgPkg0JQNMwTJa8lFQ7t9IMGbJ+2TY+U6AJEVxi
-	 3oCyghSAQrKJg==
-Date: Tue, 19 Dec 2023 13:21:50 +0100
+	b=Sx8XwVUIxasLh6HVN/W8pU7bRX4zjoBWn7d5JDeV7dh47LKadr6MdqW+EQ16jKN5j
+	 gjF4Qm87OOKGmtS8sW67sncJwB5u0vZjqEfR+HgeyyGLN7lrRBDFAO8BH+f8XT7xCt
+	 1gHNNoVmCPDr1Rj7ZXuMC/FruTuA6gar97X7r3ePywDLF5WjK9Kq8mChVySDNz2R4+
+	 OCX5/OC0l0tcA3Wd11ovN4U7r6etYa1f96orjVP2scOlQa+DU5Gvuy+7VYHIkUsZ3i
+	 pCOJKNHbhF4Od8ex75bifvlf6IGLgf4KbYCg/TWvUtkVhhTnzCsfUyTD/T3QMBFNEl
+	 beMhs4PaBjiCQ==
+Date: Tue, 19 Dec 2023 13:36:17 +0100
 From: Wolfram Sang <wsa@kernel.org>
 To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Evan Quan <evan.quan@amd.com>, Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
-	"open list:AMD KFD" <dri-devel@lists.freedesktop.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] drm/amd/pm: Remove I2C_CLASS_SPD support
-Message-ID: <ZYGK3s0ciA3I1Vnd@shikoro>
+Cc: linux-i2c@vger.kernel.org,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
+	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+	linux-media@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2 00/10] Don't let i2c adapters declare I2C_CLASS_SPD
+ support if they support I2C_CLASS_HWMON
+Message-ID: <ZYGOQYDaXmTK2nke@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Evan Quan <evan.quan@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
-	"open list:AMD KFD" <dri-devel@lists.freedesktop.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <839c0546-9bad-4b5a-9216-d5e3bab32370@gmail.com>
+	Heiner Kallweit <hkallweit1@gmail.com>, linux-i2c@vger.kernel.org,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
+	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+	linux-media@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <20231124101619.6470-1-hkallweit1@gmail.com>
+ <b2dd7159-844e-4d5a-832d-a2e8c0f26f50@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,48 +58,42 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eKnS0Rr6oV1VXCD6"
+	protocol="application/pgp-signature"; boundary="+O02xqf8AKUyujd4"
 Content-Disposition: inline
-In-Reply-To: <839c0546-9bad-4b5a-9216-d5e3bab32370@gmail.com>
+In-Reply-To: <b2dd7159-844e-4d5a-832d-a2e8c0f26f50@gmail.com>
 
 
---eKnS0Rr6oV1VXCD6
+--+O02xqf8AKUyujd4
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 13, 2023 at 12:37:15PM +0100, Heiner Kallweit wrote:
-> I2C_CLASS_SPD was used to expose the EEPROM content to user space,
-> via the legacy eeprom driver. Now that this driver has been removed,
-> we can remove I2C_CLASS_SPD support. at24 driver with explicit
-> instantiation should be used instead.
->=20
-> If in doubt this patch could be applied via the i2c tree.
->=20
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+
+> This series and my other series are sitting idle in patchwork
+> for 3 weeks now. AFAICS they have the needed ack's.
+> Anything missing before they can be applied?
 
 Applied to for-next, thanks!
 
 
---eKnS0Rr6oV1VXCD6
+--+O02xqf8AKUyujd4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWBit4ACgkQFA3kzBSg
-Kba03xAAirEpADqK4nRslNqocGuQh0p92d4JR85d/0ZNNz9mmwluGCKn9YClAb1X
-BI//Xi9OGWsH8WUPF54/jCnGKJZjTAl8oxEvGcTiLAw03PJrLi8Qz2945avrkn51
-ipLZX9R3U4CT8jSRqwfWc5/FCOCwfnSIQ3uvNz1i+yiSl2b5ABL2/AIQxAMNSiSV
-dEhzkPSrdS/N2gYNt0DMsSjIuzgg54BqbNyW/dft2Bg0WFy1sg4Vr1aBx+Rf46Hm
-iaqMyHjVPegQ3PIVtNpt18mVId8q0HB+XR/0xI/JFXTBJT5z17SWZH8dufjbt8wf
-Hf1A3+/WAIF24/JEL6jkdDXfTv/sOr2YDotEpSa6D+vQVT7n7oV8xnfeh/oKt4Ou
-Kx3Ax5Igh7Bo8c0G0S15NVSx+z6YcM/Y4PbRShQ0MkhMZlHPodjnGwmixxDMOslX
-uykOQuVyyYM18DCQeRpZMLxNZBY0k50Ue53b3/oBXYaKuuYKRKt9Sb9e2oZKXehz
-zdp1bTtYWPzLq3Ar/QBn59k/7MejsGRWS4x41EVGswIg5UG1EgNb6B/GsLCUJjLH
-+PTgE9J6WmdmqByc1iHiuJsLv0LeRoGo4uE/vEgxnl+3KhkNj215VVOutiF+Xi/U
-F168k8/sWnxZC1z8Z8PJ4pQmBUEMAq3h8rKqdR8EE5XZdg2BSZ0=
-=ufJA
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWBjkEACgkQFA3kzBSg
+KbaO1hAAooFUEwBmrRIwLhiUmuleNDxpkm2+TJogB4CxDIfA95CV7cwuMB57JD0O
+zpyBvqiaj8yHo9h6QW5u8oeYcyJJAkpO5bAa4JDCAqtvJjoEs1lx1FNvD5JdbwMD
+Nzps601cYoNHO7wGT3Yzv3ZDYFlpUhY1HdcJDRrNxLcIzwDgLHDaIKP/qXF82Fvl
+CFj00WJZ7nKay2vxMF/kHcEsqUTrIxsEgJGio6am7qPeSoCP3/vkl/jiiCrtVlIE
+wPpzNJ1xGCO8UplCczBENJjmaBqLOlToUm4ZuIJE9TPUqj7CL53JvhRUIkeJARuA
+nBwqS4qrGhxSqHugucwkggcKLB/g5iLfFtZrvEXooNX+i0So8+zTWDv6Py+/wtiY
+Kw4dyT0n9obNczQm+VywnGvPQ+DR3cqkYnvAuFd0pPztitYm0MRWdNqpomstpTFU
+f1NaLgQwaib8IP8xwmZ/8WRpB8yrMN0o4CE5ckYtGAV51wC/LBNL8LJNbqq2x2tf
+B7gimHvJ5Otr9t8UY6DJY8K6I5pPKT9yaYTxjgj1rSOj5ANtILP1qzU9ZCWh+qvC
+uqgv0pYoV91nhMtKb5XGzKuvhOrsFjNl0+Ujome0s2EIX0i4qpfbSky1UEux53xM
+mrLf9eN+EyCpqdje8jO4E6DSOrGq4PD7ob4C03v0IJ61jyZou2s=
+=3pKs
 -----END PGP SIGNATURE-----
 
---eKnS0Rr6oV1VXCD6--
+--+O02xqf8AKUyujd4--
 
