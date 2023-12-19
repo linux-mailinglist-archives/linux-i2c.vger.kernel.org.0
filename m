@@ -1,56 +1,66 @@
-Return-Path: <linux-i2c+bounces-875-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-876-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07600818D27
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 18:00:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50A68818D9D
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 18:11:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF79A1F258D3
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 17:00:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C52A286DD7
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 17:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F1A92136B;
-	Tue, 19 Dec 2023 17:00:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56FEC241EF;
+	Tue, 19 Dec 2023 17:02:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fNA/2XfC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VQOBKgeR"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA86E2111E;
-	Tue, 19 Dec 2023 17:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0AB2C433C7;
-	Tue, 19 Dec 2023 17:00:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B77B37148;
+	Tue, 19 Dec 2023 17:02:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9211C433CA;
+	Tue, 19 Dec 2023 17:02:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703005237;
-	bh=wyqFdouZB+qXcm0yj3BUpbhi3BSiihaMQOaN1xGJxSg=;
+	s=k20201202; t=1703005376;
+	bh=+d3PWc22cneSKyoZwUJ946g1x4VmVLxHqaRDVN/mlWM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fNA/2XfCztH582aCt1XpqXYTF8m9kLLaaYwaIzQKdfmBhvyT3MhNKdu7SysKxkFWS
-	 cC++R6pZyFnJmR5gNgLTX+mq2TPu/hofvuYjRdOdZFSoW4dPik4IRSRhAxVmCt/TTJ
-	 ROMN/w7ig/4RfDJxBnT+ZXbSrZn6mzoAOU7u01C/61gz1U2Ry8soZJAgvZbcaPtdb8
-	 hTOJtmxTPlxDNJi78RcX0Jchm/Mtu99j6LtAyuFBDK+e+xzdn0RjAdzJOn0P0P5Xij
-	 8ZPXcSDLy45yVM/8t9hm+2aabjo33HdYqjTrh/SV+Dc/FjSwGm7TXC77JZ5/RDMP2r
-	 9/K9TMPxZSpgA==
-Date: Tue, 19 Dec 2023 18:00:34 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+	b=VQOBKgeR+29pUnTzy/YBIN7/xcmXKfyH49vsfiHy68lvefCR2a43BtKdMrq5HmPra
+	 V0E9TcpqwgguxlylpIwlhsyA2hJGFFCU2StzpKXHQswLVHc3zes4gbcfLjEaKy9y+i
+	 gvX96wjp9hfAI3ystFkmfo5eBVjm2ISj2zXsvbSIpmI8Hr6QZzi7Z2B7O4cpnkOq8L
+	 4WD+n2m31HJfX4OBiZNvsGRze0i7sQFmYxriuxaq+Htgq4P0mdZL/ieJtUddCcxA8Y
+	 0/NHNxImDiKj/vjKLmUkTTfS5e/NZqXlUIFoo6Zq0m6EOD3eBnWO24uO/nZBvL93TU
+	 nILKMp0UPv3Jw==
+Date: Tue, 19 Dec 2023 18:02:53 +0100
+From: "wsa@kernel.org" <wsa@kernel.org>
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	"andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: add bus-reset-gpios property
+Message-ID: <ZYHMvZ3plIQ0zXWa@shikoro>
+Mail-Followup-To: "wsa@kernel.org" <wsa@kernel.org>,
+	Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Chanho Park <chanho61.park@samsung.com>
-Subject: Re: [PATCH v4 0/3] Add atomic transfers to s3c24xx i2c driver
-Message-ID: <ZYHMMqYOUnJymKe+@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Chanho Park <chanho61.park@samsung.com>
-References: <CGME20231108164403eucas1p17da17aee0bae5723e78e6a2e2b76c828@eucas1p1.samsung.com>
- <20231108164354.712406-1-m.szyprowski@samsung.com>
+	"andi.shyti@kernel.org" <andi.shyti@kernel.org>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20231115035753.925534-1-chris.packham@alliedtelesis.co.nz>
+ <20231115035753.925534-2-chris.packham@alliedtelesis.co.nz>
+ <f24b9b2d-aeb1-47f7-bf21-4383fdcf94aa@linaro.org>
+ <5a52b0c9-8858-4f55-8dd7-9269c29c10a7@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -58,73 +68,42 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="oXFm3BITv7V4Qs7B"
+	protocol="application/pgp-signature"; boundary="73ObVNrSXu8UU5Wl"
 Content-Disposition: inline
-In-Reply-To: <20231108164354.712406-1-m.szyprowski@samsung.com>
+In-Reply-To: <5a52b0c9-8858-4f55-8dd7-9269c29c10a7@alliedtelesis.co.nz>
 
 
---oXFm3BITv7V4Qs7B
+--73ObVNrSXu8UU5Wl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Nov 08, 2023 at 05:43:51PM +0100, Marek Szyprowski wrote:
-> Dear All,
->=20
-> This patchset adds support for atomic transfers, which has been added to
-> the i2c core recently by the commit 63b96983a5dd ("i2c: core: introduce
-> callbacks for atomic transfers") to hide warnings observed during system
-> reboot and power-off. Almost everything needed for that was already in
-> the driver as so called polling mode. Unfortunately, that polling mode
-> has been tested only with single message, write transfers so far and it
-> turned out that it doesn't work well with read and multi-message
-> transfers, so first it had to be fixed.
->=20
-> Best regards,
-> Marek Szyprowski
->=20
->=20
-> Changelog:
-> v4:
-> - added a comment about the delay value
->=20
-> v3:
-> - fixed style issue pointed by Andi, extended commit message
->=20
-> v2:
-> - updated and extended commit messages
->=20
->=20
-> Patch summary:
->=20
-> Marek Szyprowski (3):
->   i2c: s3c24xx: fix read transfers in polling mode
->   i2c: s3c24xx: fix transferring more than one message in polling mode
->   i2c: s3c24xx: add support for atomic transfers
->=20
-
-Applied to for-next, thanks!
 
 
---oXFm3BITv7V4Qs7B
+> > Putting it into the controller bindings looks like solving OS issue with
+> > incorrect hardware description.
+> Yes that's entirely whats happening here.
+
+So, this series can be dropped?
+
+
+--73ObVNrSXu8UU5Wl
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWBzDEACgkQFA3kzBSg
-KbZoKg/9GaU/YW2XQbMpXHfUN/reSrfAlfPdze5MSxI2iLUAtrWlvwLPaHaGxWoU
-zLf3uXtDUhdHVQVEo4MJ+sAwcSyCD0WWQIPJv9OSUSdwV+vV5cRbldIGN72ALV7R
-4YIC0rk4b7Br5oGQqs8nPuVgv5U321ZF8xxJrA0Fq09yKf75L+o/SYHMSN+0ODHo
-UZTiFDnx4gcSTvZcRaERVgfS5pg3hX+CtmR0uon9LsgREOBbbTbGLhrNptvXI4xL
-WToNIzbvCR+Q46dm+1N2go/3GWiXgvosRqSnWPu1/bEdUVcFAtBCLpsZ0qVm5PJS
-3E761gwH9hqKp9gzfozlir3bA6+PCLn/Np9jHEAxgZnpTGHHEShtYLTOr/WDXMVR
-i6CwIveFwh9yC1SkVFMhATUCj/MdgqRPv7iaA5g2oLzolC2GQOSWFrS+0p/uJAG1
-jDsILQ50Ocgl3+jYOCX11k3B+ORjumAsFog0j/zKjR2Uayo9crHVcs4bCFuQd4SF
-AutUv8+SXjsWrysnnMpa8Fq4MmNmh+XvQVlD2ekUBQZVatfnMMzAsJFzJRo2lCIz
-WSz+SCHV/AuSvDyZJ8RIiAfX9GmU2J7hUqiVMQl20u+ByA9z2Szdf2zmO5aFFqm+
-cRiPUjzcHGCaIQn8MohqxXtq+FmkZ5ORezcCsK9KuR4oNK1VKPk=
-=hQ8T
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWBzLwACgkQFA3kzBSg
+Kbb77A/9FqgeYX0ZKvzZXeSfMb60AxxuxaGZWce6ogX+I1B0JckQ5t4QrN8TB+Rv
+cBSUnHViBg7CssvtC1WScKLDe0KzO+66xTw1eOUagTdftnE3p+rDAmtbMPUXWaoE
+rCVV540pcXXsfSr/BOdGJLDHeOnwublpF0Wf0R/UwvC4o8V6HJ2koUPZMnjZlHKf
+y62/VxlzRjHXs3ZxLh6D0uEFQR40Bj7Shd8U5wCTsxf0dwejSYmrq/QKSJAQb0Ej
+IkamiDQjDbgN0SyRDobfVk+KsY73Hcbz3/EcjiP3uyh2MjZ2DrjRpC8J1D8oeNbB
+szxwFHfsT1BCrEjWyU48D2dnnFZs9e7D0yfuArcrtGYvIsS98WejYFuPezhqVo5v
+Py6IyDU7vK/J1WaQ5tfwoB8OcSJUcN1yOhxeU+djgQ0gwNANYa7bA8HfcuBjdr4z
+onC/zJyimlAhd5lre1Q/mLAKjrDoYpHGyDvL/8QquJ1fBGDhdXNqsL0djXrwR6LN
+AZ5yet5thI74/X8ht3nFiuP+TxOGWYgOaAPIYR/6g0tDiIHpPPvTYbtPtR3KhrPp
+/r2G2OQkxtA6Q/lWSBwNSl8fHuXHZKWhS+7bvvrhu7boOTguFAlxa0WhNW0emXyJ
+jGVnxshVL45GFepN94yDhSZ1MsJdsgteMP07MGdTEM/e9gZBozw=
+=YJZ7
 -----END PGP SIGNATURE-----
 
---oXFm3BITv7V4Qs7B--
+--73ObVNrSXu8UU5Wl--
 
