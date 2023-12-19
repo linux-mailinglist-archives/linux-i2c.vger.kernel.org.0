@@ -1,113 +1,127 @@
-Return-Path: <linux-i2c+bounces-870-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-871-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C76E818AB0
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 16:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 107D8818B15
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 16:23:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0CD98B24C55
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 15:01:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B922B22298
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 15:23:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AC801D546;
-	Tue, 19 Dec 2023 14:57:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25D231C6B3;
+	Tue, 19 Dec 2023 15:22:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="CwlRqkTU"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WsR5eIqp"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8E41D539
-	for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 14:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40c41b43e1eso58829935e9.1
-        for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 06:57:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1702997861; x=1703602661; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yJyLXJjHyNjZ1VnAqQQxxFFoGu1kUjfRr//VUUtUTdY=;
-        b=CwlRqkTUKc55R7Cxt9FXTT7qtvTu3kNulduE0XvN3Iwiqi4RlVXid4lO64pbgFp0dU
-         YKGaTAfHqgOVdwnnms0KWKKAj/zsSRrNa2X2sIRf7R9V6XDPiuvEK4ZH6d1BZkOO839a
-         +XJrkBdZM9ue38qvwLXked1Yrf7pq1OoLgzzfA5/g/boNjAbEsavYmk9nYqRESKKxlC6
-         YnfCq2r8LEuSBNWQFb1DSBVuZUdFWAcl0VWWkbm8rFElgbqYqIdPY+RFIYrsO+dcDJ0s
-         qQ1uoUh4MnHjorEpC3V/NWqTwOcyT0J7/ecPGTf+UyqNU2uZ9I6erbMDVNj2n6WWEhzz
-         0RhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702997861; x=1703602661;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yJyLXJjHyNjZ1VnAqQQxxFFoGu1kUjfRr//VUUtUTdY=;
-        b=mDo/H8cC4yW02xJFJiWnevJBkin6Y1HpFWi1/Bl4uq9JUnBG09OkYYBT6Wqb0TlIEl
-         HjkTY/+DaIzALIlcjW7l/3xUMD/WRebxPYvRjoZ1q75TTnMJykES/WCylCx5LyFTTddH
-         XcLwpqqxLV/+VdgUnu4xEGL9ktZGcTKpJwSiAFa+pGY6H32NxrBCuQYKQnhJCbHmJLmt
-         2oD5oQQpg8dT4IQUndo7GVF6jTiEBeNH1i2CW+0N4hbcIZVuAb5PnKfB13+RvVG7sKIM
-         oFoQVle1elSFkNN7H1P94KVUxwzupid41aSDnB/lugfAnJwpdIFfXWblwNceb5iX3vZx
-         NYqA==
-X-Gm-Message-State: AOJu0YzlXLEfHqutwmfMPGVycO442DpdNZ6yYbSxJhR6iFwRNfbv5N92
-	ZF1BKC8joc6ipyHU+T+FRKek3F2DJLrPKnSkHuI=
-X-Google-Smtp-Source: AGHT+IEAWiY/Pd0zZygMsYs3U8rqXj91ebxWyGUozce5B0nxQ6Oe2vcTRYbsqtyqcT6qxNsEnnv7Pg==
-X-Received: by 2002:a05:600c:21c7:b0:40c:31ec:eaf with SMTP id x7-20020a05600c21c700b0040c31ec0eafmr8930719wmj.205.1702997860574;
-        Tue, 19 Dec 2023 06:57:40 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:bfd0:6ab0:50e2:7f18])
-        by smtp.gmail.com with ESMTPSA id p20-20020a05600c359400b0040c440f9393sm3185948wmq.42.2023.12.19.06.57.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Dec 2023 06:57:40 -0800 (PST)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Wolfram Sang <wsa@the-dreams.de>
-Cc: linux-i2c@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [GIT PULL] at24: updates for v6.8
-Date: Tue, 19 Dec 2023 15:57:37 +0100
-Message-Id: <20231219145737.30325-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.40.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63421C69D;
+	Tue, 19 Dec 2023 15:22:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D439FC433C8;
+	Tue, 19 Dec 2023 15:22:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1702999369;
+	bh=vOJ9fKH6Xqs5UvwP9s7vsM9ZkdDZzxdG2BYm96rLvAY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=WsR5eIqpOuTF0cIbg+QKbJk945zH4aWyXTOIY1x3RQA0jbBvivNWsuj7e6Upmrryd
+	 RyL951N7XwvzbPbR4ViNCIRb5JLQqt7ZEr7thVILxZfFjWkwanT8MVZ+xBn2ZcerUg
+	 bXjNwD7NXCrngu8Maaslp8kRTGGO1BmBMQOT/Ooc=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: wsa@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	linux-i2c@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Subject: [PATCH] i2c: make i2c_bus_type const
+Date: Tue, 19 Dec 2023 16:22:43 +0100
+Message-ID: <2023121942-jumble-unethical-3163@gregkh>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Lines: 66
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2417; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=vOJ9fKH6Xqs5UvwP9s7vsM9ZkdDZzxdG2BYm96rLvAY=; b=owGbwMvMwCRo6H6F97bub03G02pJDKmNW51Sba1dDtXZnllysInD6hGjp6HmpIbM+iDrWF39f x6PXrh0xLIwCDIxyIopsnzZxnN0f8UhRS9D29Mwc1iZQIYwcHEKwEQKIhjm2U4SyLvO9cnsvoJq 3W9WhQ+C58WMGObp7bSdUBOyNC9E6FVt/PQlO9Sz518HAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Now that the driver core can properly handle constant struct bus_type,
+move the i2c_bus_type variable to be a constant structure as well, placing
+it into read-only memory which can not be modified at runtime.
 
-Wolfram,
+Note, the sound/soc/rockchip/rk3399_gru_sound.c also needed tweaking as
+it decided to save off a pointer to a bus type for internal stuff, and
+it was using the i2c_bus_type as well.
 
-Please pull the following changes for the next merge window. Details are
-in the signed tag.
+Cc: Wolfram Sang <wsa@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-sound@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-rockchip@lists.infradead.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/i2c/i2c-core-base.c           | 2 +-
+ include/linux/i2c.h                   | 2 +-
+ sound/soc/rockchip/rk3399_gru_sound.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks,
-Bartosz
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index eac90a3cf61a..24c6e1b52668 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -689,7 +689,7 @@ static struct attribute *i2c_dev_attrs[] = {
+ };
+ ATTRIBUTE_GROUPS(i2c_dev);
+ 
+-struct bus_type i2c_bus_type = {
++const struct bus_type i2c_bus_type = {
+ 	.name		= "i2c",
+ 	.match		= i2c_device_match,
+ 	.probe		= i2c_device_probe,
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 0dae9db27538..180462d1a373 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -23,7 +23,7 @@
+ #include <linux/swab.h>		/* for swab16 */
+ #include <uapi/linux/i2c.h>
+ 
+-extern struct bus_type i2c_bus_type;
++extern const struct bus_type i2c_bus_type;
+ extern struct device_type i2c_adapter_type;
+ extern struct device_type i2c_client_type;
+ 
+diff --git a/sound/soc/rockchip/rk3399_gru_sound.c b/sound/soc/rockchip/rk3399_gru_sound.c
+index 1a504ebd3a0e..6c89c7331229 100644
+--- a/sound/soc/rockchip/rk3399_gru_sound.c
++++ b/sound/soc/rockchip/rk3399_gru_sound.c
+@@ -446,7 +446,7 @@ static const struct rockchip_sound_route rockchip_routes[] = {
+ 
+ struct dailink_match_data {
+ 	const char *compatible;
+-	struct bus_type *bus_type;
++	const struct bus_type *bus_type;
+ };
+ 
+ static const struct dailink_match_data dailink_match[] = {
+-- 
+2.43.0
 
-The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
-
-  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/at24-updates-for-v6.8
-
-for you to fetch changes up to c692086d74a0184d8993e056dc9273abe690e315:
-
-  dt-bindings: at24: add ROHM BR24G04 (2023-12-01 10:33:14 +0100)
-
-----------------------------------------------------------------
-at24 updates for v6.8
-
-- use of_match_ptr()
-- describe a new model in DT bindings
-
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      eeprom: at24: use of_match_ptr()
-
-Philipp Zabel (1):
-      dt-bindings: at24: add ROHM BR24G04
-
- Documentation/devicetree/bindings/eeprom/at24.yaml | 1 +
- drivers/misc/eeprom/at24.c                         | 5 +++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
 
