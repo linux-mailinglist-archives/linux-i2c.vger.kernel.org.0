@@ -1,59 +1,49 @@
-Return-Path: <linux-i2c+bounces-877-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-878-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E8BC818DA7
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 18:12:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B14B818DA9
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 18:12:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1C6A1C24E72
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 17:12:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8E011F26AF8
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 17:12:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 735DA3715A;
-	Tue, 19 Dec 2023 17:06:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB6C137D38;
+	Tue, 19 Dec 2023 17:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QG+RfNMD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q3WC1B89"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132FA37D21;
-	Tue, 19 Dec 2023 17:06:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C06B3C433CA;
-	Tue, 19 Dec 2023 17:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684CB37D2F
+	for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 17:08:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43CA6C433C8;
+	Tue, 19 Dec 2023 17:08:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703005590;
-	bh=a7OnamfCwWf+orWN0KvpA25yoky33RSY7KSTSqDl/A8=;
+	s=k20201202; t=1703005700;
+	bh=J+Ng+Ix4EiCSWdpru8z+Spb632pbe4eB/i5iY66YcB0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QG+RfNMDFWyLdUnI3z9dEpRaS/CjlNjdf9whequWAeBC/cq2NpTpAAOaJE6WGNqMX
-	 aZwjfMcMV1oQ65I394Yc1ZK42hCLpm4YZMDDPj9iIRcKoy07BQhuREIcyGVOFpiYgg
-	 0xr3pSG/It9HDJhPl0ZNh1CS5kynJQD8QigPks1esTRsEU7/LxYmsh5Jr42BvUXSH+
-	 ENDM9zXsM5dWAcn+beWg5lXRuc5cTwyY8v4T64Yn5TsVrZmdz+YZXKhcoZ6nm6BQhN
-	 jU+mHkzc8PDvgvPO/3bDN5H8/15C7BUiWRl9WyJ1sw2dauEaSgWpysP1GzZr6jutH2
-	 Va2udn3TEkxMQ==
-Date: Tue, 19 Dec 2023 18:06:26 +0100
+	b=q3WC1B89m0p1VQFx47xm9fz6EOFg19+gP8SZFVlIc/EekjXWAfn4GP+T0TR+RrTbz
+	 tp/EF/KGO3GckwsrdHKb178O/k0aPtIzCN1nWnzNrRIOGaxx29w+ygtC1faA05X95I
+	 C9W2HAxrg1WGJ8kpxkZpLhdQ6GMB7/mGrQQLBQ98dj9Y/wjQMFKjiUd6Jj3VdnSLmM
+	 5LEUc+RfIqkhHGh1F+xbDvjvJDHpv9iYvkO1k9aQLlZHzJFh9ImWRsvcU4yKfYdRHz
+	 zWZC3IvQtMwLWkjQ5xy/nRMnh/hr/R/Kp95E25WLj2Woc9nf9CIin3pkGQU3jarj/K
+	 NM0WxfEeOWhfQ==
+Date: Tue, 19 Dec 2023 18:08:17 +0100
 From: Wolfram Sang <wsa@kernel.org>
-To: Tim Lunn <tim@feathertop.org>
-Cc: linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-	Jagan Teki <jagan@edgeble.ai>, Conor Dooley <conor+dt@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3 3/8] i2c: rk3x: Adjust mask/value offset for i2c2 on
- rv1126
-Message-ID: <ZYHNkgxAauYp6ivX@shikoro>
+To: Jean Delvare <jdelvare@suse.de>
+Cc: Linux I2C <linux-i2c@vger.kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH] i2c: smbus: Support up to 8 SPD EEPROMs
+Message-ID: <ZYHOAbm8VSoiUh3M@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Tim Lunn <tim@feathertop.org>, linux-rockchip@lists.infradead.org,
-	devicetree@vger.kernel.org, Jagan Teki <jagan@edgeble.ai>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org
-References: <20231203124004.2676174-1-tim@feathertop.org>
- <20231203124004.2676174-4-tim@feathertop.org>
+	Jean Delvare <jdelvare@suse.de>,
+	Linux I2C <linux-i2c@vger.kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>
+References: <20231114151328.5f40b7c5@endymion.delvare>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -61,52 +51,55 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sByZ41cl6uk/xLbT"
+	protocol="application/pgp-signature"; boundary="tb+nXM6p9mdXF+fF"
 Content-Disposition: inline
-In-Reply-To: <20231203124004.2676174-4-tim@feathertop.org>
+In-Reply-To: <20231114151328.5f40b7c5@endymion.delvare>
 
 
---sByZ41cl6uk/xLbT
+--tb+nXM6p9mdXF+fF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Dec 03, 2023 at 11:39:59PM +1100, Tim Lunn wrote:
-> Rockchip RV1126 is using old style i2c controller, the i2c2
-> bus uses a non-sequential offset in the grf register for the
-> mask/value bits for this bus.
+On Tue, Nov 14, 2023 at 03:13:28PM +0100, Jean Delvare wrote:
+> I originally restricted i2c_register_spd() to only support systems
+> with up to 4 memory slots, so that we can experiment with it on
+> a limited numbers of systems. It's been more than 3 years and it
+> seems to work just fine, so the time has come to lift this arbitrary
+> limitation.
 >=20
-> This patch fixes i2c2 bus on rv1126 SoCs.
+> The maximum number of memory slots which can be connected to a single
+> I2C segment is 8, so support that many SPD EEPROMs. Any system with
+> more than 8 memory slots would have either multiple SMBus channels
+> or SMBus multiplexing, so it would need dedicated care. We'll get to
+> that later as needed.
 >=20
-> Signed-off-by: Tim Lunn <tim@feathertop.org>
-> Acked-by: Heiko Stuebner <heiko@sntech.de>
->=20
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> Cc: Heiner Kallweit <hkallweit1@gmail.com>
+> Cc: Wolfram Sang <wsa@kernel.org>
 
 Applied to for-next, thanks!
 
-But, phew, the fact that this driver _needs_ i2c-aliases in DT should be
-fixed somewhen. I totally overlooked this so far :/
 
-
---sByZ41cl6uk/xLbT
+--tb+nXM6p9mdXF+fF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWBzZIACgkQFA3kzBSg
-KbbCTxAAhKVTE46KK8QieYwxX2cW+2NJfyL0OYbsB05G5G49MqoDkY9qO2m0+p+5
-WWkmnMZHQ90vsx5Rep5qcFUmAC+q+b4+tU9qVT2WEPmdgsiBteDB43HetxdBBbzO
-NwT8Z3uanQpcubf9hzW4v6UZAIrmmpvQWO7LKMa4ZqWtlFIYnyLYCLKl5MK8Rzbi
-n+z/8ppmMp98e/lj153aKh+F8IxLNW5jHy83elAudC2ovyc2veIXhpcxria5S7Ca
-U3KQdFvBdwLoGiAsMsLfRbIRYf9ItR7E4oKTyKnlEJzZF5C4gpjgeEa39w7g/Kl6
-pIS2rnuMKvWObEnyvZGUJBbyxzFkjCOXA1O1wANLgtV3HrTWFifkIdup5pudJtKg
-uhJqlqFfvDDGxpKrdSBFYT82tDL2WON+wiOg5bF7cjLx6r4QZ2MZBaiOmuMnsadE
-BqLwnHjSR9QyAa+2SliYrahWyae9rFxwAVBv+/DrZpuK0L7u1SeMonq/r+jh7Fpf
-yhpQTSW1levm6ltNXPyajNwpZiUKJCMB0yy/Sw/Tnpqw1e+PY0PxenPAgSOBIcPo
-oNtTjhSXfS+QeorHPM9zUDu9OoCGRW412FRXQU6L+NVQOCjFOaX2d6RMPedbOYql
-NZnS9kaFXtWL6roKEwFghdhym4sj6PO5ieJOpdsZh0xcXOUaf4E=
-=Ifc0
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWBzgEACgkQFA3kzBSg
+KbaCMQ/6ArBpQc54DhoxC+n3xoL191qLFdtwjP/v9gLIlCVOH8C2QqtG8/Xtl9I9
+ffpx7/oJaN7f5+Irc8IkX1yFpbz7a+1MkydesPAxkFAi0N0p/gBJsN/BR+UgW62K
+bQ33/cgN9XTpuDDf8spTJmAEzUSLKBv7IGODZkFMoHXKwCvM0GH44lF1hjYxF8k5
+lmc6D7+0PHaFr25jvS7PRBAh9geZmh2aQOn5D2wH00WV6CpXdvTweIhBdSan00EQ
+wms64fWxGpPpx2chcC4OGNlFEazrlTOB159otw7k6Vbj5vNDlYtmDvzirsp6La8W
+gH3rd1XcK1kktn52r+qYg/4/7uMsM6o1jHTqYPlpK45Le+14xnEDTNnd/WeIrHDX
+PnrnaMRdBkQcjJNLdD6ods2PxETTX50dUG65/nnW4jhsxK3jrb/UEjxTLUSIB0VO
+XGDggObf+yK2Zj6b0C4yu1HjzFJ/ykj2YQMCXEB4buSHL/QLa1k2BWUemif7+SZj
+9kDUVcXsUVb3HqdhOAeHuQzaj+gVRftbpB8mDqwO4TiRMQf1fUQZXc57OxzY8gLM
+diLxDxCvdl+z8psUoP7CVr+S2Tcli0YV/yRYkPO96l1NL/VoSCu4Uhe1pbk68fdq
+YEJiirBpKbkqXa1qVKlZo8SJax6XQ0eDv8TvPgFvT75OkfawXSM=
+=rU7F
 -----END PGP SIGNATURE-----
 
---sByZ41cl6uk/xLbT--
+--tb+nXM6p9mdXF+fF--
 
