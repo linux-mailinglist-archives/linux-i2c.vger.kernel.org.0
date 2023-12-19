@@ -1,49 +1,52 @@
-Return-Path: <linux-i2c+bounces-878-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-879-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B14B818DA9
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 18:12:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90FBC818DB7
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 18:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8E011F26AF8
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 17:12:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F78A286299
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 17:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB6C137D38;
-	Tue, 19 Dec 2023 17:08:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55E87328BE;
+	Tue, 19 Dec 2023 17:15:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q3WC1B89"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lB4sf3Ab"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684CB37D2F
-	for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 17:08:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43CA6C433C8;
-	Tue, 19 Dec 2023 17:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E13C31A71
+	for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 17:15:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0835EC433CA;
+	Tue, 19 Dec 2023 17:15:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703005700;
-	bh=J+Ng+Ix4EiCSWdpru8z+Spb632pbe4eB/i5iY66YcB0=;
+	s=k20201202; t=1703006103;
+	bh=3RNCh4FuLOdiuY50xSoF0bFgs7iqSss1AKXgt3Wqwi8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q3WC1B89m0p1VQFx47xm9fz6EOFg19+gP8SZFVlIc/EekjXWAfn4GP+T0TR+RrTbz
-	 tp/EF/KGO3GckwsrdHKb178O/k0aPtIzCN1nWnzNrRIOGaxx29w+ygtC1faA05X95I
-	 C9W2HAxrg1WGJ8kpxkZpLhdQ6GMB7/mGrQQLBQ98dj9Y/wjQMFKjiUd6Jj3VdnSLmM
-	 5LEUc+RfIqkhHGh1F+xbDvjvJDHpv9iYvkO1k9aQLlZHzJFh9ImWRsvcU4yKfYdRHz
-	 zWZC3IvQtMwLWkjQ5xy/nRMnh/hr/R/Kp95E25WLj2Woc9nf9CIin3pkGQU3jarj/K
-	 NM0WxfEeOWhfQ==
-Date: Tue, 19 Dec 2023 18:08:17 +0100
+	b=lB4sf3AbE9mtekgSdKtL/Ho6CvKCy/bEjLUMkBlA7RCzXs5Zylvfkqp+m7IFRyleU
+	 rfVMFezLJwo8fTT1+AxALWpYGEPPWZPSg1rsNBCYcopvFuUzYEKi9NRgC85TAab7pD
+	 KiX7KcIAqaDVg2ivIHXcI91X4uObFVsRZGHyuJ8VSSlb50wJ1MDI4vCA7W/EaitsMe
+	 DVseUybIGWIakJtZdmU8QhfVeiB61uvhUWn6AzPPKTlyOGnEsrKMF6EFnDsAw/6A5Q
+	 YHfUyqIBEDdN9mNB8+DQTkj2pEOciBcPSuj2q4i+ZzQc4xHELkLG7wSorypfyiFoBq
+	 +OdwB3vHOP8VQ==
+Date: Tue, 19 Dec 2023 18:15:00 +0100
 From: Wolfram Sang <wsa@kernel.org>
-To: Jean Delvare <jdelvare@suse.de>
-Cc: Linux I2C <linux-i2c@vger.kernel.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH] i2c: smbus: Support up to 8 SPD EEPROMs
-Message-ID: <ZYHOAbm8VSoiUh3M@shikoro>
+To: Yang Yingliang <yangyingliang@huaweicloud.com>
+Cc: linux-i2c@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
+	konrad.dybcio@linaro.org, andi.shyti@kernel.org,
+	neil.armstrong@linaro.org, yangyingliang@huawei.com
+Subject: Re: [PATCH] i2c: qcom-geni: fix missing clk_disable_unprepare() and
+ geni_se_resources_off()
+Message-ID: <ZYHPlBdlqWWrGa+f@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Jean Delvare <jdelvare@suse.de>,
-	Linux I2C <linux-i2c@vger.kernel.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>
-References: <20231114151328.5f40b7c5@endymion.delvare>
+	Yang Yingliang <yangyingliang@huaweicloud.com>,
+	linux-i2c@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
+	konrad.dybcio@linaro.org, andi.shyti@kernel.org,
+	neil.armstrong@linaro.org, yangyingliang@huawei.com
+References: <20231130014324.2483816-1-yangyingliang@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -51,55 +54,49 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tb+nXM6p9mdXF+fF"
+	protocol="application/pgp-signature"; boundary="FEER8h621Uf2ujP+"
 Content-Disposition: inline
-In-Reply-To: <20231114151328.5f40b7c5@endymion.delvare>
+In-Reply-To: <20231130014324.2483816-1-yangyingliang@huaweicloud.com>
 
 
---tb+nXM6p9mdXF+fF
+--FEER8h621Uf2ujP+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 14, 2023 at 03:13:28PM +0100, Jean Delvare wrote:
-> I originally restricted i2c_register_spd() to only support systems
-> with up to 4 memory slots, so that we can experiment with it on
-> a limited numbers of systems. It's been more than 3 years and it
-> seems to work just fine, so the time has come to lift this arbitrary
-> limitation.
+On Thu, Nov 30, 2023 at 09:43:24AM +0800, Yang Yingliang wrote:
+> From: Yang Yingliang <yangyingliang@huawei.com>
 >=20
-> The maximum number of memory slots which can be connected to a single
-> I2C segment is 8, so support that many SPD EEPROMs. Any system with
-> more than 8 memory slots would have either multiple SMBus channels
-> or SMBus multiplexing, so it would need dedicated care. We'll get to
-> that later as needed.
+> Add missing clk_disable_unprepare() and geni_se_resources_off() in the er=
+ror
+> path in geni_i2c_probe().
 >=20
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> Cc: Heiner Kallweit <hkallweit1@gmail.com>
-> Cc: Wolfram Sang <wsa@kernel.org>
+> Fixes: 14d02fbadb5d ("i2c: qcom-geni: add desc struct to prepare support =
+for I2C Master Hub variant")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-Applied to for-next, thanks!
+Applied to for-current, thanks!
 
 
---tb+nXM6p9mdXF+fF
+--FEER8h621Uf2ujP+
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWBzgEACgkQFA3kzBSg
-KbaCMQ/6ArBpQc54DhoxC+n3xoL191qLFdtwjP/v9gLIlCVOH8C2QqtG8/Xtl9I9
-ffpx7/oJaN7f5+Irc8IkX1yFpbz7a+1MkydesPAxkFAi0N0p/gBJsN/BR+UgW62K
-bQ33/cgN9XTpuDDf8spTJmAEzUSLKBv7IGODZkFMoHXKwCvM0GH44lF1hjYxF8k5
-lmc6D7+0PHaFr25jvS7PRBAh9geZmh2aQOn5D2wH00WV6CpXdvTweIhBdSan00EQ
-wms64fWxGpPpx2chcC4OGNlFEazrlTOB159otw7k6Vbj5vNDlYtmDvzirsp6La8W
-gH3rd1XcK1kktn52r+qYg/4/7uMsM6o1jHTqYPlpK45Le+14xnEDTNnd/WeIrHDX
-PnrnaMRdBkQcjJNLdD6ods2PxETTX50dUG65/nnW4jhsxK3jrb/UEjxTLUSIB0VO
-XGDggObf+yK2Zj6b0C4yu1HjzFJ/ykj2YQMCXEB4buSHL/QLa1k2BWUemif7+SZj
-9kDUVcXsUVb3HqdhOAeHuQzaj+gVRftbpB8mDqwO4TiRMQf1fUQZXc57OxzY8gLM
-diLxDxCvdl+z8psUoP7CVr+S2Tcli0YV/yRYkPO96l1NL/VoSCu4Uhe1pbk68fdq
-YEJiirBpKbkqXa1qVKlZo8SJax6XQ0eDv8TvPgFvT75OkfawXSM=
-=rU7F
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWBz5MACgkQFA3kzBSg
+Kbb+cA//eR20B1iWnPJsh7K2v66jxy+lnbpdJnNEjbpP+Yea2dTm4U/deidwZa5K
+96UWoK5p/4LtZlCIh6Qv0rb90KcnHfr7EHxpnqH3zZ7rLt+MJjqi2/+wULDDgKGL
+M4vitl+KPlIChd27CeIxRZEhbfv5q0E9cQ/8dB8GC8DUneH2mmytZmysjItDd9Sd
+3QJGXXMrTCYpVNRSLm7O3JIulSfhMIp00nnq1V6QonS0r9CEknqE/F2U5mIIJLog
+6AZ3LGKr53Rm7DPAtV1lam9J0dtXikWoKvdLFgHbGrOhTM6zc6PjUTMQj+yOMCg0
+jzkZfJntASAosGO5PM1DfdAQrtm6VKpIMb+asOkVij+JaqzI/d8Prz8TAKQbzOr8
++89AXog7MVTL0Mv/4hRyWp0CpnyCnW1Tzq9i2L/j81nGlCyR661816+dp5L7vcIO
+x/rboExBE77n9y6HlDPBhuJbRImC2Bd2jtXkeg7+ZVZoKmNx1KiTF3vdSgO4hSd3
+ZCDIaeKwSV7i+BWvU8JPxx2AZHOuCv36I5IBgqhIVZBGt0i0iVGRtbQFC2QX7BKy
+LcUVi4iBz67pwSaqBALYaFcc8KGkagZC4KW7U3hkDa2nKjDNR4+J9lNqZ5B2Qcoy
+L+IPpiQcutKcb86I17myIrkx75LRDea31elU6pAddiPjo73Givg=
+=ghmD
 -----END PGP SIGNATURE-----
 
---tb+nXM6p9mdXF+fF--
+--FEER8h621Uf2ujP+--
 
