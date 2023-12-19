@@ -1,263 +1,95 @@
-Return-Path: <linux-i2c+bounces-884-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-885-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A4ED818E22
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 18:32:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EBBC8190B3
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 20:29:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B108928655A
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 17:31:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CC782882F9
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Dec 2023 19:28:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38DA12D7A6;
-	Tue, 19 Dec 2023 17:31:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7942938FBB;
+	Tue, 19 Dec 2023 19:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DREywg/P"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="zuVlHzPR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330F1286A6
-	for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 17:31:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5cda24a77e0so1268574a12.2
-        for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 09:31:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703007110; x=1703611910; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tNuSOIUI5x4sS7b6TcbJmnlVmXjTRkIFXpOBXzrlw3w=;
-        b=DREywg/PBO41JJuxCDs8Oz9LldHyDbpaW6ty4KK5CD/uNipQ7iEI51Xr58/SeiB/dP
-         cFyVue2MQBWH6hURHg9vlaFnaTXU9FtxEtgpvhW2Sx82iL5rEUF2J3LmpLxcudwrgadU
-         V/mv2aYpuO7goABDobJAYDGHXrPOG6PJVVHm+1ASvjqGVqLwlYeTTbQ/XCK9+3MwYSWP
-         vDtacNBkQaC93pIgLQZkAxwZCSclJxRJjQRSMSjQ1AZaPGYK7aIJyLe6BhJhwva8tJJ3
-         2LdhEVWAssQnCidB7e1sXGIoRzneh0wdRnBLDN1Hsgf22AJErdXNRzQflEwQJsg0kSlF
-         vu5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703007110; x=1703611910;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tNuSOIUI5x4sS7b6TcbJmnlVmXjTRkIFXpOBXzrlw3w=;
-        b=EX50rhcycBIh9YmGhm+SQmZxwY7xdRzF7uZNGDX/j+dVZHLeSH4I9Oz9VcAwJL3v89
-         hEaLFTT6RAsueuQhOzFKCJnWyp//vs0332IcBuRF16HVMiNRUFjyrUkxQ5NyNW4VbM7S
-         w1l3d4GWhF+7z+SBlRP2/V9WaXnux0axNKsODXPjnJOK3JolwEyBEloZJZo1wjDtCaE1
-         IinW3ewo9+1DvNgMPkfRtSqUy+dqu3283dW66kUytThRPHdw3A83+yAhIPJCVfLYlTKY
-         83WxNfjSQ4SubhalMhN5uz5w8aMJZs8i9NSl6aR8SUmYTcpxmkikPPShWcLG7rp+sBlX
-         Lt0Q==
-X-Gm-Message-State: AOJu0YwMYZHYSvbhgfNuSWvAbB43e5C9ycRu2MrGWItwHn1ZiTVcKcWn
-	+71zPyTMTCTIAFUzOMH9ZZ4nYzOwhqYPg0tm0nuz5w==
-X-Google-Smtp-Source: AGHT+IF6toKI/birO7V7EAX+ee7fSWrikaqxnZJeZZ4HuIa56CWhnMOsykegcVbxI9Ouxzpo0asNalFIUiBgu+U81/g=
-X-Received: by 2002:a17:90b:24b:b0:28b:8fb6:45d1 with SMTP id
- fz11-20020a17090b024b00b0028b8fb645d1mr1794300pjb.41.1703007110402; Tue, 19
- Dec 2023 09:31:50 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C2238F94
+	for <linux-i2c@vger.kernel.org>; Tue, 19 Dec 2023 19:28:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 3E2882C04C7;
+	Wed, 20 Dec 2023 08:28:44 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1703014124;
+	bh=tvMk96Xvb4gcD09CjBZE7bcSGGH4HaxjXg3tNU39+ek=;
+	h=From:To:Subject:Date:References:In-Reply-To:From;
+	b=zuVlHzPRfBziFqomB77rWV/gYvYy72KlrMLD33qp5DmqFHcYBVZUcGxYCCwl8uCj9
+	 dWNJz69N8TZ3L92REQsJJ67q5c3zI4kIF6NmixokchsFXSuaPRSF/ezs6tMcsnKb7f
+	 vr54b7PjGdrYPN+MUsW80H1CE0McweJoFyJSeaj3SS4ywzJK8JqY0b2py0cDJfgqTd
+	 ZKIiwFD7bKwn1mF1kXHi7N6jaF9zGOzYLIdNAgIFv4Ary+BzebUfL5i56UjfjvNX7c
+	 RpjBq4gN8TCyx2AGC70bIb+oXGY4NMvCf7w8YQdBYiwtlCr24aULJ4SdGmMs9zhDxN
+	 xwdf5S99usdyQ==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B6581eeec0001>; Wed, 20 Dec 2023 08:28:44 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 20 Dec 2023 08:28:43 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.040; Wed, 20 Dec 2023 08:28:43 +1300
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: "wsa@kernel.org" <wsa@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski@linaro.org>, "andi.shyti@kernel.org"
+	<andi.shyti@kernel.org>, "robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "gregory.clement@bootlin.com"
+	<gregory.clement@bootlin.com>, "linux-i2c@vger.kernel.org"
+	<linux-i2c@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: add bus-reset-gpios property
+Thread-Topic: [PATCH v6 1/2] dt-bindings: i2c: add bus-reset-gpios property
+Thread-Index: AQHaF3ftbmVMkvsnVUGkUfJZcnXixrB7DOKAgAAGpwCANR4BgIAAKL+A
+Date: Tue, 19 Dec 2023 19:28:43 +0000
+Message-ID: <601d07b5-264d-4322-b92e-63d58b3d69fa@alliedtelesis.co.nz>
+References: <20231115035753.925534-1-chris.packham@alliedtelesis.co.nz>
+ <20231115035753.925534-2-chris.packham@alliedtelesis.co.nz>
+ <f24b9b2d-aeb1-47f7-bf21-4383fdcf94aa@linaro.org>
+ <5a52b0c9-8858-4f55-8dd7-9269c29c10a7@alliedtelesis.co.nz>
+ <ZYHMvZ3plIQ0zXWa@shikoro>
+In-Reply-To: <ZYHMvZ3plIQ0zXWa@shikoro>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C91AAF41735B5546A22CFC7736B51905@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
- <20231214105243.3707730-8-tudor.ambarus@linaro.org> <CAPLW+4mNjCbJ+VbKR66DFSkiXHyxdjgvwjN7azxjJQ6UxQikEw@mail.gmail.com>
- <f3d61c49-1a46-476c-b7a5-6cc6a06a33ed@linaro.org> <CAPLW+4=tyr8Pcoe6Wm0Wtmkk4udDpuAiOKy7+C+Fwa6mvt3VoQ@mail.gmail.com>
- <5de5cddd-2bab-4408-b31f-f48bef98f14c@linaro.org> <CAPLW+4n-S2jaVPUwKTFC_iabnDd_qDV=ZubMqhz-X9XiZzzJow@mail.gmail.com>
- <4ba80e1e-8fec-4fd2-9140-6da006c9d5f5@linaro.org>
-In-Reply-To: <4ba80e1e-8fec-4fd2-9140-6da006c9d5f5@linaro.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Tue, 19 Dec 2023 11:31:39 -0600
-Message-ID: <CAPLW+4mm8LG=wtJHT5EYhGGiU72qVe70vJv6-JkEGepiXFjcvA@mail.gmail.com>
-Subject: Re: [PATCH 07/13] clk: samsung: gs101: mark PERIC0 IP TOP gate clock
- as critical
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: peter.griffin@linaro.org, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com, sboyd@kernel.org, 
-	conor+dt@kernel.org, andi.shyti@kernel.org, alim.akhtar@samsung.com, 
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, catalin.marinas@arm.com, 
-	will@kernel.org, s.nawrocki@samsung.com, tomasz.figa@gmail.com, 
-	cw00.choi@samsung.com, arnd@arndb.de, andre.draszik@linaro.org, 
-	saravanak@google.com, willmcvicker@google.com, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=CYB2G4jl c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=e2cXIFwxEfEA:10 a=VwQbUJbxAAAA:8 a=1yuvT08Q3_qmqAvlgogA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
 
-On Tue, Dec 19, 2023 at 10:47=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linar=
-o.org> wrote:
->
-> Hi, Sam!
->
-> On 12/14/23 16:43, Sam Protsenko wrote:
-> > On Thu, Dec 14, 2023 at 10:15=E2=80=AFAM Tudor Ambarus <tudor.ambarus@l=
-inaro.org> wrote:
-> >>
-> >>
-> >>
-> >> On 12/14/23 16:09, Sam Protsenko wrote:
-> >>> On Thu, Dec 14, 2023 at 10:01=E2=80=AFAM Tudor Ambarus <tudor.ambarus=
-@linaro.org> wrote:
-> >>>>
-> >>>>
-> >>>>
-> >>>> On 12/14/23 15:37, Sam Protsenko wrote:
-> >>>>> On Thu, Dec 14, 2023 at 4:52=E2=80=AFAM Tudor Ambarus <tudor.ambaru=
-s@linaro.org> wrote:
-> >>>>>>
-> >>>>>> Testing USI8 I2C with an eeprom revealed that when the USI8 leaf c=
-lock
-> >>>>>> is disabled it leads to the CMU_TOP PERIC0 IP gate clock disableme=
-nt,
-> >>>>>> which then makes the system hang. To prevent this, mark
-> >>>>>> CLK_GOUT_CMU_PERIC0_IP as critical. Other clocks will be marked
-> >>>>>> accordingly when tested.
-> >>>>>>
-> >>>>>> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> >>>>>> ---
-> >>>>>>  drivers/clk/samsung/clk-gs101.c | 2 +-
-> >>>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>>>>
-> >>>>>> diff --git a/drivers/clk/samsung/clk-gs101.c b/drivers/clk/samsung=
-/clk-gs101.c
-> >>>>>> index 3d194520b05e..08d80fca9cd6 100644
-> >>>>>> --- a/drivers/clk/samsung/clk-gs101.c
-> >>>>>> +++ b/drivers/clk/samsung/clk-gs101.c
-> >>>>>> @@ -1402,7 +1402,7 @@ static const struct samsung_gate_clock cmu_t=
-op_gate_clks[] __initconst =3D {
-> >>>>>>              "mout_cmu_peric0_bus", CLK_CON_GAT_GATE_CLKCMU_PERIC0=
-_BUS,
-> >>>>>>              21, 0, 0),
-> >>>>>>         GATE(CLK_GOUT_CMU_PERIC0_IP, "gout_cmu_peric0_ip", "mout_c=
-mu_peric0_ip",
-> >>>>>> -            CLK_CON_GAT_GATE_CLKCMU_PERIC0_IP, 21, 0, 0),
-> >>>>>> +            CLK_CON_GAT_GATE_CLKCMU_PERIC0_IP, 21, CLK_IS_CRITICA=
-L, 0),
-> >>>>>
-> >>>>> This clock doesn't seem like a leaf clock. It's also not a bus cloc=
-k.
-> >>>>> Leaving it always running makes the whole PERIC0 CMU clocked, which
-> >>>>> usually should be avoided. Is it possible that the system freezes
-> >>>>> because some other clock (which depends on peric0_ip) gets disabled=
- as
-> >>>>> a consequence of disabling peric0_ip? Maybe it's some leaf clock wh=
-ich
-> >>>>> is not implemented yet in the clock driver? Just looks weird to me
-> >>>>> that the system hangs because of CMU IP clock disablement. It's
-> >>>>> usually something much more specific.
-> >>>>
-> >>>> The system hang happened when I tested USI8 in I2C configuration wit=
-h an
-> >>>> eeprom. After the eeprom is read the leaf gate clock that gets disab=
-led
-> >>>> is the one on PERIC0 (CLK_GOUT_PERIC0_CLK_PERIC0_USI8_USI_CLK). I as=
-sume
-> >>>> this leads to the CMU_TOP gate (CLK_CON_GAT_GATE_CLKCMU_PERIC0_IP)
-> >>>> disablement which makes the system hang. Either marking the CMU_TOP =
-gate
-> >>>> clock as critical (as I did in this patch) or marking the leaf PERIC=
-0
-> >>>> gate clock as critical, gets rid of the system hang. Did I choose wr=
-ong?
-> >>>>
-> >>>
-> >>> Did you already implement 100% of clocks in CMU_PERIC0? If no, there
-> >>
-> >> yes.
->
-> I checked again all the clocks. I implemented all but one, the one
-> defined by the CLK_CON_BUF_CLKBUF_PERIC0_IP register. Unfortunately I
-> don't have any reference on how it should be defined so I won't touch it
-> yet. But I have some good news too, see below.
->
-> >
-> > Ok. Are there any other CMUs (perhaps not implemented yet) which
-> > consume clocks from CMU_PERIC0, specifically PERIC0_IP clock or some
-> > clocks derived from it? If so, is there a chance some particular leaf
-> > clock in those CMUs actually renders the system frozen when disabled
-> > as a consequence of disabling PERIC0_IP, and would explain better why
-> > the freeze happens?
-> >
-> > For now I think it's ok to have that CLK_IS_CRITICAL flag here,
-> > because as you said you implemented all clocks in this CMU and neither
-> > of those looks like a critical one. But I'd advice to add a TODO
-> > comment saying it's probably a temporary solution before actual leaf
-> > clock which leads to freeze is identified (which probably resides in
-> > some other not implemented yet CMU).
-> >
-> >>
-> >>> is a chance some other leaf clock (which is not implemented yet in
-> >>> your driver) gets disabled as a result of PERIC0_IP disablement, whic=
-h
-> >>> might actually lead to that hang you observe. Usually it's some
-> >>> meaningful leaf clock, e.g. GIC or interconnect clocks. Please check
-> >>> clk-exynos850.c driver for CLK_IS_CRITICAL and CLK_IGNORE_UNUSED flag=
-s
-> >>> and the corresponding comments I left there, maybe it'll give you mor=
-e
-> >>> particular idea about what to look for. Yes, making the whole CMU
-> >>> always running without understanding why (i.e. because of which
-> >>> particular leaf clock) might not be the best way of handling this
-> >>
-> >> because of CLK_GOUT_PERIC0_CLK_PERIC0_USI8_USI_CLK
-> >
-> > That's not a root cause here. And I think PERIC0_IP is neither.
-> >
->
-> you were right!
-> >>
-> >>> issue. I might be mistaken, but at least please check if you
-> >>> implemented all clocks for PERIC0 first and if making some meaningful
-> >>> leaf clock critical makes more sense.
-> >>>
->
-> I determined which leaf clocks shall be marked as critical. I enabled
-> the debugfs clock write access. Then I made sure that the parents of the
-> PERIC0 CMU have at least one user so that they don't get disabled after
-> an enable-disable sequence on a leaf clock. The I took all the PERIC0
-> gate clocks and enabled and disabled them one by one. Whichever hang the
-> system when the clock was disabled was marked as critical. The list of
-> critical leaf clocks is as following:
->
-
-Nice! I used somehow similar procedure for clk-exynos850, doing
-basically the same thing, but in core clock driver code.
-
-> "gout_peric0_peric0_cmu_peric0_pclk",
-> "gout_peric0_lhm_axi_p_peric0_i_clk",
-> "gout_peric0_peric0_top1_ipclk_0",
-> "gout_peric0_peric0_top1_pclk_0".
->
-> I'll update v2 with this instead. Thanks for the help, Sam!
-
-Glad you weren't discouraged by my meticulousness :) In clk-exynos850
-I usually used CLK_IGNORE_UNUSED for clocks like XXX_CMU_XXX (in your
-case it's PERIC0_CMU_PERIC0), with a corresponding comment. Those
-clocks usually can be used to disable the bus clock for corresponding
-CMU IP-core (in your case CMU_PERIC0), which makes it impossible to
-access the registers from that CMU block, as its register interface is
-not clocked anymore. Guess I saw something similar in Exynos5433 or
-Exynos7 clk drivers, or maybe Sylwester or Krzysztof told me to do so
--- don't really remember. For AXI clock it also seems logical to keep
-it running (AXI bus might be used for GIC and memory). But again,
-maybe CLK_IGNORE_UNUSED flag would be more appropriate that
-CLK_IS_CRITICAL? For the last two clocks -- it's hard to tell what
-exactly they do. Is TOP1 some other CMU or block name, and is there
-any further users for those clocks?
-
-Anyways, if you are working on v2, please consider doing next two
-things while at it:
-
-  1. For each critical clock: add corresponding comment explaining why
-it's marked so
-  2. Consider using CLK_IGNORE_UNUSED instead of CLK_IS_CRITICAL when
-appropriate; both have their use in different cases
-
-Btw, if you check other Exynos clk drivers, there is a lot of examples
-for flags like those.
-
-> Cheers,
-> ta
+DQpPbiAyMC8xMi8yMyAwNjowMiwgd3NhQGtlcm5lbC5vcmcgd3JvdGU6DQo+Pj4gUHV0dGluZyBp
+dCBpbnRvIHRoZSBjb250cm9sbGVyIGJpbmRpbmdzIGxvb2tzIGxpa2Ugc29sdmluZyBPUyBpc3N1
+ZSB3aXRoDQo+Pj4gaW5jb3JyZWN0IGhhcmR3YXJlIGRlc2NyaXB0aW9uLg0KPj4gWWVzIHRoYXQn
+cyBlbnRpcmVseSB3aGF0cyBoYXBwZW5pbmcgaGVyZS4NCj4gU28sIHRoaXMgc2VyaWVzIGNhbiBi
+ZSBkcm9wcGVkPw0KPg0KSSBwZXJzb25hbGx5IHdvdWxkIGxpa2UgdG8gc2VlIGl0IGFjY2VwdGVk
+IGJ1dCBpdCBzZWVtcyB0aGVyZSBhcmUgDQpvYmplY3Rpb25zIHRvIHRoaXMgYXBwcm9hY2guIEkn
+dmUgeWV0IHRvIGNvbWUgdXAgd2l0aCBhbnl0aGluZyBiZXR0ZXIgdG8gDQpvZmZlciBhcyBhbiBh
+bHRlcm5hdGl2ZS4=
 
