@@ -1,129 +1,129 @@
-Return-Path: <linux-i2c+bounces-901-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-902-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9F6E819D98
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 12:04:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6508C819DBF
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 12:14:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57EC11F23094
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 11:04:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 214AB289598
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 11:14:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AF3321379;
-	Wed, 20 Dec 2023 11:03:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EBB721104;
+	Wed, 20 Dec 2023 11:14:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nwvn1CBD"
+	dkim=pass (2048-bit key) header.d=atomide.com header.i=@atomide.com header.b="ZSPIgHgn"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail5.25mail.st (mail5.25mail.st [74.50.62.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B69224E9;
-	Wed, 20 Dec 2023 11:03:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE109C433CD;
-	Wed, 20 Dec 2023 11:03:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703070186;
-	bh=GrMriv7ivnlP9h7Q18r2uy1Z2grWFasuxR26KwYb0Rs=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DAE121365;
+	Wed, 20 Dec 2023 11:14:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=atomide.com
+Received: from localhost (91-158-86-216.elisa-laajakaista.fi [91.158.86.216])
+	by mail5.25mail.st (Postfix) with ESMTPSA id CAEE3604FD;
+	Wed, 20 Dec 2023 11:14:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=atomide.com;
+	s=25mailst; t=1703070875;
+	bh=rHt+TIbvecVF3zhIa86RfsCbaCT+biJ90R6Ht68Cq7U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nwvn1CBDR+i3BPjmWN8LynrNe7VQW1YBIDFsOxKIBbznBF5Mpp+2lil0a2bNqfODM
-	 aLhiyR8JJne58blG9yQCdJaoB1JG0R1HEa5co6psefejF/iqfDqpQbugByrFd5Q3AW
-	 K39jhol9fvboYfpGEsIsunq5jeWz7r/7XLy17Rwn7iv3ncvtr5ZOJjVSLYLDqZyvfC
-	 p3d6IIKkdnaKAl8r7WQ6LITy9zKiHoolzTZZ8j7t2HZFhCn9npJXw3sghmqyCrouon
-	 7eU6yyDRYG+26QZicjNPSMQQUxyVS1fRCiiHsIcrlKMvH5j7pPKVfcBiGI5LceQlSq
-	 /Tn59zc0nukwg==
-Date: Wed, 20 Dec 2023 12:03:00 +0100
-From: "wsa@kernel.org" <wsa@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Andi Shyti <andi.shyti@kernel.org>,
-	Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: add bus-reset-gpios property
-Message-ID: <ZYLJ5EMKK1jhSclQ@shikoro>
-Mail-Followup-To: "wsa@kernel.org" <wsa@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20231115035753.925534-1-chris.packham@alliedtelesis.co.nz>
- <20231115035753.925534-2-chris.packham@alliedtelesis.co.nz>
- <f24b9b2d-aeb1-47f7-bf21-4383fdcf94aa@linaro.org>
- <5a52b0c9-8858-4f55-8dd7-9269c29c10a7@alliedtelesis.co.nz>
- <ZYHMvZ3plIQ0zXWa@shikoro>
- <601d07b5-264d-4322-b92e-63d58b3d69fa@alliedtelesis.co.nz>
- <ZYICEczlao+pg8kd@shikoro>
- <20231219232545.ksrxgvl7epeewga2@zenone.zhora.eu>
- <e80a06aa-bb44-4993-8e67-dbc910a409ab@linaro.org>
+	b=ZSPIgHgnvKOkJSzwfIt/utAArc87UGiI9JL+CSlwSFWax4aN50Cz2ALjdNsHTUXE+
+	 doAE1NW0Je6DihKezY5aofGzT+Cx++jvHjLZBlgay3SnbZ4MJ/RCZCgHL74yqjgP0T
+	 iXHVDcEMv0UE/H2NsxA8xaeE0CtSIFwG71trSUN3bOL45SGxT1aHdd/w0blLjGjaZc
+	 25BtVMGopeFtHwHtsYOck3eIp2F0/tJFiBoPc50M9P0lpgMBIICJ/gWhMl9xHM0LhS
+	 CJs4Qr4TJekRaw54V9xI0INJl6AfEiRBscp1fTb15TMrjDsOJ+4RXvq+W818ZVSTih
+	 dv4yj8p3FDJSQ==
+Date: Wed, 20 Dec 2023 13:14:15 +0200
+From: Tony Lindgren <tony@atomide.com>
+To: Thomas Richard <thomas.richard@bootlin.com>
+Cc: linux-pm@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-omap@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
+	Kevin Hilman <khilman@kernel.org>,
+	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Kumar Udit <u-kumar1@ti.com>
+Subject: Re: omap-i2c: runtime pm issue during suspend to ram
+Message-ID: <20231220111415.GZ5166@atomide.com>
+References: <f68c9a54-0fde-4709-9d2f-0d23a049341b@bootlin.com>
+ <4c31acd8-4edb-44f5-9a90-cb2f2dc530b6@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="WHFDagMOY8iIgeIJ"
-Content-Disposition: inline
-In-Reply-To: <e80a06aa-bb44-4993-8e67-dbc910a409ab@linaro.org>
-
-
---WHFDagMOY8iIgeIJ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <4c31acd8-4edb-44f5-9a90-cb2f2dc530b6@bootlin.com>
 
+* Thomas Richard <thomas.richard@bootlin.com> [231220 10:50]:
+> On 12/19/23 18:15, Thomas Richard wrote:
+> > Hello,
+> 
+> I add some people in this thread.
+> 
+> > 
+> > I have a gpio expander (pca953x driver) connected to an i2c controller
+> > managed by the omap-i2c driver.
+> > And I have some issues with pm_runtime_force_suspend/resume during
+> > suspend to ram.
+> > For some reasons, related to hardware design, I need to access to this
+> > gpio expander during suspend_noirq and resume_noirq. So I had to move
+> > the suspend/resume of the pca953x to suspend_noirq/resume_noirq.
 
-> >>> I personally would like to see it accepted but it seems there are=20
-> >>> objections to this approach. I've yet to come up with anything better=
- to=20
-> >>> offer as an alternative.
-> >>
-> >> I see. Thanks for the heads up!
-> >=20
-> > I'm also inclined to have this merged. A real fix might take
-> > time.
->=20
-> NAK
->=20
-> If you intend to merge it, then please carry:
+Hmm at noirq level you need to do polling on the i2c controller?
 
-No worries. If this is "abusing" DT, then it is not going to be merged
-by me. I am sorry for Chris, but sometimes simple problems create quite
-some fuzz because Linux hardware abstractions has not foreseen certain
-use cases. Or the APIs dealing with them didn't forsee that. We have
-been there a lot of times :/
+> > diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
+> > index 42165ef57946..fe79b27b46fd 100644
+> > --- a/drivers/i2c/busses/i2c-omap.c
+> > +++ b/drivers/i2c/busses/i2c-omap.c
+> > @@ -1575,9 +1575,24 @@ static int __maybe_unused
+> > omap_i2c_runtime_resume(struct device *dev)
+> >         return 0;
+> >  }
+> > 
+> > +static int omap_i2c_suspend(struct device *dev)
+> > +{
+> > +       pm_runtime_get_sync(dev);
+> > +       pm_runtime_disable(dev);
+> > +       return 0;
+> > +}
 
+If you want the i2c controller enabled during suspend, you can leave it
+enabled above, and as we already have SET_NOIRQ_SYSTEM_SLEEP_PM_OPS
+doing force_suspend() and force_resume(), you can runtime PM put on
+resume. So something like below might do the trick:
 
---WHFDagMOY8iIgeIJ
-Content-Type: application/pgp-signature; name="signature.asc"
+static int omap_i2c_suspend(struct device *dev)
+{
+	return pm_runtime_resume_and_get(dev);
+}
 
------BEGIN PGP SIGNATURE-----
+static int omap_i2c_resume(struct device *dev)
+{
+	pm_runtime_mark_last_busy(dev);
+	pm_runtime_put_autosuspend(dev);
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWCyeEACgkQFA3kzBSg
-KbYtUBAAhgwr4srMDqCAfVg3lItT80XUcPPuD1wSb+62T/SLusHGQAlIh+qwQ02e
-K4+9VWDpZGmlHh00Zsutfu9fcbuRlO3ICI61+7sVp0IoYGJgaCr/t9Zaf59cbIol
-tpLwrZnp1JOu3MYnZa6zmitBhYnqyAzyME4//J4Y8ol7jkWMPIZ4/JwYpQaz3dSL
-jrYcXGBIrZVUAtS9ZGJShExz3tnVmg69cc05noH18rkUUhPCKeqgQhpNbKlwu/Cq
-UqIzYa4MRlY/JXxJcCa0sWtvKOJWxhF1UI1kn53v60znM+Ku+n8uvciX787voveW
-zIq22dNIv1iiA4SX3O8/Ncnvyrk+K2JPFBcPMy/XKN5IWtaWQSZsViZ/Y8Zgtg09
-C4Z/shQwcjzSd2aJhVNdXnR3fiMdiLNivSkHiBji0PM9KWTcG4bXRSGRM35h95v+
-ii6+U13AOp5Thix8oSvmaYv1sH3ZTmkLIh8YHEC9uTVylgIpEoZksOoZn7F+JLrA
-LAF6w4e1mbowBwhM1sS8pQJvjOIQDsO80Ygl1feo/+fA//nZYcQCTCBNDO0mebVw
-CGoOTlAj4IBUzLi524C3ErLAawO+mrkpqOsc2mmtkkNcWOzaCJmtROLh8AL+ugVa
-ll43a7YU4ikQYjfZH3LDE+bzCiaxKrhwp1fRm57D2jn3ISZRslM=
-=Xirm
------END PGP SIGNATURE-----
+	return 0;
+}
 
---WHFDagMOY8iIgeIJ--
+> >  static const struct dev_pm_ops omap_i2c_pm_ops = {
+> >         SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+> >                                       pm_runtime_force_resume)
+> > +       SET_SYSTEM_SLEEP_PM_OPS(omap_i2c_suspend, omap_i2c_resume)
+> >         SET_RUNTIME_PM_OPS(omap_i2c_runtime_suspend,
+> >                            omap_i2c_runtime_resume, NULL)
+> >  };
+
+And with the changes you did to omap_i2c_pm_ops naturally. This way
+the controller should stay active until noirq ops.
+
+Of course it's possible I did not quite understand what you're trying
+to do, but if so please let me know :)
+
+Regards,
+
+Tony
 
