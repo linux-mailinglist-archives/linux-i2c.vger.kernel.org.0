@@ -1,184 +1,216 @@
-Return-Path: <linux-i2c+bounces-920-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-921-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07B8781A7DF
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 22:08:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AF2881AB44
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Dec 2023 00:55:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A0651F23A38
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 21:07:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 807D41C234B2
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 23:55:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A40414879E;
-	Wed, 20 Dec 2023 21:07:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 432BF4B143;
+	Wed, 20 Dec 2023 23:55:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RnEmSUWF"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Q8hr8pYq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E546C48780
-	for <linux-i2c@vger.kernel.org>; Wed, 20 Dec 2023 21:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-33678156e27so70872f8f.1
-        for <linux-i2c@vger.kernel.org>; Wed, 20 Dec 2023 13:07:52 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F47E4B142
+	for <linux-i2c@vger.kernel.org>; Wed, 20 Dec 2023 23:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-7b7fb34265fso9414839f.3
+        for <linux-i2c@vger.kernel.org>; Wed, 20 Dec 2023 15:55:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703106471; x=1703711271; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P0bXIhX+As+sgTpJV4+MRQyPFw6mSo37z8/HwSLHj8U=;
-        b=RnEmSUWFA37HyLSXVPgrL/XPeJs9KsTVDI/PKCYdH9EB0WXKKSxoa7d7em2beZYSES
-         KhxfwaMMw4eVDmi030bvUn7ng4CzCyaXtVKQF8ehFDjX3tKSjRaWBSc9/gMn/+mvor1P
-         FE02Kz2qMwDpQV3Q5fzyHqo4FoGrZnrN7KkdVKh31b6Rv6u+gAerQ2uGl8tBcrDlHkMY
-         BMCYJvYds1fiCJQZyJi5uTTzI/RVtOfoZKXaYyWw679pxDozjGt8MN3hd2SZRrx6cZeh
-         li5ICz2CtrHb2yiHmLxjsawP+Ab+AiQrmWA5kpeZfxs2Z1qp84mNAignYEIDsy/DN7Wf
-         lHsg==
+        d=chromium.org; s=google; t=1703116507; x=1703721307; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wqPdBL+/GuMSQccpt6uaKdYbWfswQmujpY/bP5YPpNI=;
+        b=Q8hr8pYq4FWBKc/qoEPWCGlisUvxT579O0+S7xTRUw6cEhEunxdUKX+ta5Gc9u14O/
+         LRKRHBoOcgL0kh2n53OIED0PpLHs+H0EX9n3VQfo4jul8nSkwJ/UvbbPPbMv00c35V9x
+         lW4VQtlDijHZXwOZQuj2r6ZaTqbfQUAkN1wB0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703106471; x=1703711271;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P0bXIhX+As+sgTpJV4+MRQyPFw6mSo37z8/HwSLHj8U=;
-        b=qFO/oN2diHkVvotHF6o5MApPlHIyCt7vBgyVCdwtj67jFyifte23yDXxdk3ZudIgN7
-         qWRi+RP/1pb7icw5WYCnW21cMdgEJPN+bQBNK1BdwJWOj0Y6cOdiLhPVlVPR5FuM5wLV
-         LA65jAtIENWpM0oa3yrfirTxiDb4Q9gNArl5Z5142Q8NBnrnzH4yzDwMtBV7w0WL2FF6
-         3vzkem2HBv+ZDzolUho7iU+8c+aEkN2hOkfLokmoQbEsi7szJwAG5dPiSXdp5+t+ZwXK
-         IOqvEUYVMerd2P7xgGPOIRBV1ej4x74fNkBlI+LlEEAu8SseQ1fMP9kjY1iZEMheF3pu
-         OKeA==
-X-Gm-Message-State: AOJu0YxSTQUVkQZo6uIUwe1EzkCtDeMmHcev6nHFIddSruA0DB/vEzbi
-	I74mV/5Dw+Ph8tkGNW5q9/I=
-X-Google-Smtp-Source: AGHT+IGftrX+bAzfPFS9nQSZIaPROGrjAC6v1lFkLOqJTnInzRi+XXoPlq8MBF/DerxM4oMwX9TFog==
-X-Received: by 2002:a05:6000:120b:b0:336:7f93:3dcc with SMTP id e11-20020a056000120b00b003367f933dccmr147564wrx.81.1703106470747;
-        Wed, 20 Dec 2023 13:07:50 -0800 (PST)
-Received: from ?IPV6:2a01:c23:c0e1:2b00:cc8d:2472:9da4:1ff3? (dynamic-2a01-0c23-c0e1-2b00-cc8d-2472-9da4-1ff3.c23.pool.telefonica.de. [2a01:c23:c0e1:2b00:cc8d:2472:9da4:1ff3])
-        by smtp.googlemail.com with ESMTPSA id ev12-20020a056402540c00b005537b9f7ce7sm255284edb.68.2023.12.20.13.07.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Dec 2023 13:07:50 -0800 (PST)
-Message-ID: <a9ab1201-58fe-4b86-81fc-b58ce0b3cd2c@gmail.com>
-Date: Wed, 20 Dec 2023 22:07:50 +0100
+        d=1e100.net; s=20230601; t=1703116507; x=1703721307;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wqPdBL+/GuMSQccpt6uaKdYbWfswQmujpY/bP5YPpNI=;
+        b=JI0F8ksqOCOvjPquIz4/J08hNxK/Hx4ChT9sf/eKwKNWY5BweTzTnKgDJlAAwKA/w7
+         bsebdPUIU3j5xNbwTLZWVLvlBNy3m+hJ7h8zWvXRTpHaQFXCj/R5Nhjb9QhLrxJ8038k
+         xyLbJWs07g85F+4gKmHlTx3tY6Fopi6DqqlXBXoyzNQf/7GsW/v/kYcDA22f9qs5lemV
+         v17BKyyDoohGTMwVv/DWNb00Rz9ewfounrrMvpOa4Fcsdb2iXniYzpgehYuK5cb/PYjw
+         UxY3uM38HWtMssd6RyhhWq2ieP/VF6YTAtAdMZzS+k7Jpmm1n1K/sCL+VLPnqmMiRHVs
+         OHTQ==
+X-Gm-Message-State: AOJu0YxvTEit8r67A/7irQpZ+Qz2yBRJviJX3rVvv5e80iBLYwJGxz0l
+	6R77//uE7VfQW4t/zf5WVR/2hA==
+X-Google-Smtp-Source: AGHT+IGvcm8Gmt6btmyTyMqXZVRSOfPvmnIP9TnUstnyKtl6UnorIC2YtaIno3O39yYnkXIJfI/h3g==
+X-Received: by 2002:a05:6602:4148:b0:7b7:b370:bd51 with SMTP id bv8-20020a056602414800b007b7b370bd51mr10520071iob.35.1703116507495;
+        Wed, 20 Dec 2023 15:55:07 -0800 (PST)
+Received: from markhas1.lan (71-218-50-136.hlrn.qwest.net. [71.218.50.136])
+        by smtp.gmail.com with ESMTPSA id bp22-20020a056638441600b0046b39a6f404sm177805jab.17.2023.12.20.15.55.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Dec 2023 15:55:07 -0800 (PST)
+From: Mark Hasemeyer <markhas@chromium.org>
+To: LKML <linux-kernel@vger.kernel.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Raul Rangel <rrangel@chromium.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Rob Herring <robh@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Mark Hasemeyer <markhas@chromium.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Andre Przywara <andre.przywara@arm.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Benson Leung <bleung@chromium.org>,
+	Bhanu Prakash Maiya <bhanumaiya@chromium.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Chen-Yu Tsai <wenst@chromium.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Daniel Scally <djrscally@gmail.com>,
+	David Gow <davidgow@google.com>,
+	Enric Balletbo i Serra <eballetbo@gmail.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Jesper Nilsson <jesper.nilsson@axis.com>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Lee Jones <lee@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mark Brown <broonie@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Prashant Malani <pmalani@chromium.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Rob Barnes <robbarnes@google.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Romain Perier <romain.perier@gmail.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Takashi Iwai <tiwai@suse.de>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Wei Xu <xuwei5@hisilicon.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	chrome-platform@lists.linux.dev,
+	cros-qcom-dts-watchers@chromium.org,
+	devicetree@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-tegra@vger.kernel.org
+Subject: [PATCH v2 00/22] Improve IRQ wake capability reporting and update the cros_ec driver to use it
+Date: Wed, 20 Dec 2023 16:54:14 -0700
+Message-ID: <20231220235459.2965548-1-markhas@chromium.org>
+X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: i801: Use I2C_CLASS_HWMON for i2c mux children
-Content-Language: en-US
-To: Jean Delvare <jdelvare@suse.de>
-Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
- Peter Korsgaard <peter.korsgaard@barco.com>, Peter Rosin <peda@axentia.se>
-References: <45c5366f-cbee-4c7d-bb62-a446935b2729@gmail.com>
- <20231106155036.366fb752@endymion.delvare>
- <a22978a4-88e4-46f4-b71c-032b22321599@gmail.com>
- <20231109145212.01f7b597@endymion.delvare>
- <4fdf5873-b366-4601-a9cd-58814eed321d@gmail.com>
- <20231110120822.7a81421e@endymion.delvare>
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-In-Reply-To: <20231110120822.7a81421e@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10.11.2023 12:08, Jean Delvare wrote:
-> Hi Heiner,
-> 
-> On Thu, 9 Nov 2023 17:34:15 +0100, Heiner Kallweit wrote:
->> On 09.11.2023 14:52, Jean Delvare wrote:
->>> For example, if DMI data says the system is using DDR4 and we were able
->>> to detect and instantiate an ee1004 SPD device at I2C address 0x50 then
->>> we should probe for a JC42.4-compliant temperature sensor device at I2C
->>> address 0x18. An SPD EEPROM at 0x51 would correspond to a possible
->>> JC42.4-compliant device at 0x19, and so on.
->>
->> Nice idea. How about our ASUS use case in i801? i2c_register_spd() isn't
->> called in case of muxing, neither for the parent nor for the mux children.
-> 
-> When I introduced i2c_register_spd(), I wanted to go one step at a
-> time, as I didn't know what to expect due to the wide variety of
-> systems affected. For this reason, systems where the SMBus is
-> multiplexed were originally excluded. There's also a limitation in the
-> function itself, on the number of memory slots, which is 4 for now, but
-> could be lifted to 8 (maximum number of memory slots connected to a
-> single SMBus segment).
-> 
-> The Asus boards we are talking about may have more than 8 memory slots,
-> so they would fail the test. If we want to be able to use
-> i2c_register_spd() on these boards, some adjustments will be needed.
-> For example, we could add a parameter to bypass the memory slot
-> counting, so that the function could be called on children segments
-> (only a subset of the memory slots will be connected to that segment,
-> so the total slot count it irrelevant). We would ignore the DMI data
-> and hard-code dimm_count to 8 in that case, to probe all possible
-> addresses.
-> 
-> Another approach would be to add a parameter (probably a bit field)
-> describing which addresses should be probed, instead of guessing that
-> from the dimm_count collected from DMI data. For the Asus boards in
-> question, the information is known, and this would speed things up a
-> bit by not probing addresses which can't possibly correspond to a
-> memory module on a given board. That's only a minor optimization
-> though, so not necessarily worth it. OTOH having that possibility would
-> give more control on the probing, which may be useful for specific
-> boards.
-> 
+Currently the cros_ec driver assumes that its associated interrupt is
+wake capable. This is an incorrect assumption as some Chromebooks use a
+separate wake pin, while others overload the interrupt for wake and IO.
+This patch train updates the driver to query the underlying ACPI/DT data
+to determine whether or not the IRQ should be enabled for wake.
 
-Apart from the described extension of i2c_register_spd() I wonder where
-to best call it for the muxed smbus segments.
+Both the device tree and ACPI systems have methods for reporting IRQ
+wake capability. In device tree based systems, a node can advertise
+itself as a 'wakeup-source'. In ACPI based systems, GpioInt and
+Interrupt resource descriptors can use the 'SharedAndWake' or
+'ExclusiveAndWake' share types.
 
-At first I think we have to make the assumption that in case of muxing
-memory slots are on the muxed child segments only.
-At least I don't see an easy way to deal with the potential scenario that
-some memory slots are on the parent segment, and some on muxed segments.
+Some logic is added to the platform, ACPI, and DT subsystems to more
+easily pipe wakeirq information up to the driver.
 
-i801_add_mux() instantiates the i2c-mux-gpio platform device, and I think
-loading and probing the i2c-mux-gpio driver can happen asynchronously.
-This would mean we can't call i2c_register_spd() for the child segments
-from i801. So we may have to call it from the i2c-mux-gpio driver.
+Changes in v2:
+-Rebase on linux-next
+-Add cover letter
+-See each patch for patch specific changes
+
+Mark Hasemeyer (22):
+  gpiolib: acpi: Modify acpi_dev_irq_wake_get_by() to use resource
+  i2c: acpi: Modify i2c_acpi_get_irq() to use resource
+  Documentation: devicetree: Clarify wording for wakeup-source property
+  ARM: dts: tegra: Enable cros-ec-spi as wake source
+  ARM: dts: rockchip: rk3288: Enable cros-ec-spi as wake source
+  ARM: dts: samsung: exynos5420: Enable cros-ec-spi as wake source
+  ARM: dts: samsung: exynos5800: Enable cros-ec-spi as wake source
+  arm64: dts: mediatek: mt8173: Enable cros-ec-spi as wake source
+  arm64: dts: mediatek: mt8183: Enable cros-ec-spi as wake source
+  arm64: dts: mediatek: mt8192: Enable cros-ec-spi as wake source
+  arm64: dts: mediatek: mt8195: Enable cros-ec-spi as wake source
+  arm64: dts: tegra: Enable cros-ec-spi as wake source
+  arm64: dts: qcom: sc7180: Enable cros-ec-spi as wake source
+  arm64: dts: qcom: sc7280: Enable cros-ec-spi as wake source
+  arm64: dts: qcom: sdm845: Enable cros-ec-spi as wake source
+  arm64: dts: rockchip: rk3399: Enable cros-ec-spi as wake source
+  of: irq: add wake capable bit to of_irq_resource()
+  of: irq: Add default implementation for of_irq_to_resource()
+  of: irq: Remove extern from function declarations
+  device property: Modify fwnode irq_get() to use resource
+  platform: Modify platform_get_irq_optional() to use resource
+  platform/chrome: cros_ec: Use PM subsystem to manage wakeirq
+
+ .../bindings/power/wakeup-source.txt          | 18 +++--
+ arch/arm/boot/dts/nvidia/tegra124-nyan.dtsi   |  1 +
+ arch/arm/boot/dts/nvidia/tegra124-venice2.dts |  1 +
+ .../rockchip/rk3288-veyron-chromebook.dtsi    |  1 +
+ .../boot/dts/samsung/exynos5420-peach-pit.dts |  1 +
+ .../boot/dts/samsung/exynos5800-peach-pi.dts  |  1 +
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi  |  1 +
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  1 +
+ .../boot/dts/mediatek/mt8192-asurada.dtsi     |  1 +
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      |  1 +
+ .../arm64/boot/dts/nvidia/tegra132-norrin.dts |  1 +
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  1 +
+ .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  1 +
+ .../arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi |  1 +
+ arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi    |  1 +
+ arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi  |  1 +
+ drivers/acpi/property.c                       | 11 ++-
+ drivers/base/platform.c                       | 74 +++++++++++++------
+ drivers/base/property.c                       | 24 +++++-
+ drivers/gpio/gpiolib-acpi.c                   | 25 ++++---
+ drivers/i2c/i2c-core-acpi.c                   | 38 +++++-----
+ drivers/i2c/i2c-core-base.c                   |  6 +-
+ drivers/i2c/i2c-core.h                        |  4 +-
+ drivers/of/irq.c                              | 32 +++++++-
+ drivers/of/property.c                         |  8 +-
+ drivers/platform/chrome/cros_ec.c             |  9 ---
+ drivers/platform/chrome/cros_ec_lpc.c         | 52 ++++++++++++-
+ drivers/platform/chrome/cros_ec_spi.c         | 41 ++++++++--
+ drivers/platform/chrome/cros_ec_uart.c        | 34 +++++++--
+ include/linux/acpi.h                          | 23 +++---
+ include/linux/fwnode.h                        |  8 +-
+ include/linux/of_irq.h                        | 41 +++++-----
+ include/linux/platform_data/cros_ec_proto.h   |  2 -
+ include/linux/platform_device.h               |  3 +
+ include/linux/property.h                      |  2 +
+ 35 files changed, 328 insertions(+), 142 deletions(-)
+
+-- 
+2.43.0.472.g3155946c3a-goog
 
 
