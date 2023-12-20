@@ -1,64 +1,64 @@
-Return-Path: <linux-i2c+bounces-919-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-920-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F00AD81A7D6
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 21:58:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07B8781A7DF
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 22:08:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 263E51C22679
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 20:58:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A0651F23A38
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 21:07:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E314A48CD8;
-	Wed, 20 Dec 2023 20:58:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A40414879E;
+	Wed, 20 Dec 2023 21:07:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mp9DpEkA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RnEmSUWF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372F048CC9
-	for <linux-i2c@vger.kernel.org>; Wed, 20 Dec 2023 20:58:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E546C48780
+	for <linux-i2c@vger.kernel.org>; Wed, 20 Dec 2023 21:07:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-50e384cd6ebso150624e87.3
-        for <linux-i2c@vger.kernel.org>; Wed, 20 Dec 2023 12:58:11 -0800 (PST)
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-33678156e27so70872f8f.1
+        for <linux-i2c@vger.kernel.org>; Wed, 20 Dec 2023 13:07:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703105890; x=1703710690; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20230601; t=1703106471; x=1703711271; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tfWRcBNnXkvtAZ9WAVlGhNrjDGGe9Vg7TqJhFKHVdjM=;
-        b=mp9DpEkAEmv0iokt8JCnNdaW8Qn5aap+olHnbJ3X3GGkmY8j1yfTaxjtpT6ugPJpUN
-         WlRq75j474rwpQ93KCFMrScZAgev3nAPqDL5dBfNDtX/xtUQ/H42f5U72LUQlFfxHs3U
-         wBDda+/UTk0lv3TzCL/SSKFFJUQGURhe4/91HBC2EHKL6nd9CCaD6HziiJeT/JxlXLaz
-         xRwhy4M1+bXq3nFOgLgN+c3JH9qT3F+PSX1AKvNmomVgN3gmm/0Hdb7zQmopUE0uZ82k
-         LCSWC2cC9gEocPOixXgIahsMJfmMYutW4XBMnMZeuR4IfA+UJDbjKH+45WWHwjxHmx67
-         XLEw==
+        bh=P0bXIhX+As+sgTpJV4+MRQyPFw6mSo37z8/HwSLHj8U=;
+        b=RnEmSUWFA37HyLSXVPgrL/XPeJs9KsTVDI/PKCYdH9EB0WXKKSxoa7d7em2beZYSES
+         KhxfwaMMw4eVDmi030bvUn7ng4CzCyaXtVKQF8ehFDjX3tKSjRaWBSc9/gMn/+mvor1P
+         FE02Kz2qMwDpQV3Q5fzyHqo4FoGrZnrN7KkdVKh31b6Rv6u+gAerQ2uGl8tBcrDlHkMY
+         BMCYJvYds1fiCJQZyJi5uTTzI/RVtOfoZKXaYyWw679pxDozjGt8MN3hd2SZRrx6cZeh
+         li5ICz2CtrHb2yiHmLxjsawP+Ab+AiQrmWA5kpeZfxs2Z1qp84mNAignYEIDsy/DN7Wf
+         lHsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703105890; x=1703710690;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1703106471; x=1703711271;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tfWRcBNnXkvtAZ9WAVlGhNrjDGGe9Vg7TqJhFKHVdjM=;
-        b=mTqfG/jXWdQAcjdiMQGNTwMZe9jv9L8GFlyRlPoxyrR0FYbAtH1k669h+c2h7dx7Jx
-         Go3P58NDFgKtiTnJjqEIr4EvxhmJ7GqcYwZuUxjC8PHVcZ6Bapx1uzlVt38dVe+4fprX
-         lIjenZGS0dEos9yLRJZtQhs2XhJLnMyZp9yChtu7cFRsU1GBeaEt+oCkbwUdRP0+C1D9
-         vuNw4NR3VQP2DfpS761dBB3r3JUWWtA2NCjIkWo3dZt6rrKd0vaRWsp5tJa2jvzRCMzF
-         SOKsKGpdXpNdkp/D+LRW1ecuyNhDS1Hyf/KB+019fWXPaYz/WEnGq0aKYN5LIByQIiHE
-         oBoA==
-X-Gm-Message-State: AOJu0Yzk5PTGtFNPIYlgPg0gaoxM7oaeqweniOi7Qc6RvVv2KcYjJmwv
-	v/UAyyRtIRYRlfvtvlsTyqg=
-X-Google-Smtp-Source: AGHT+IF9cOBtYcS0hJyT2Al9cmUIMP/yKstgj78r6cX7f7SsHBjFXHyBm7T7NxqPDlaS0aZ/au1yoQ==
-X-Received: by 2002:a05:6512:15a2:b0:50e:2ce9:fe75 with SMTP id bp34-20020a05651215a200b0050e2ce9fe75mr3093703lfb.73.1703105889853;
-        Wed, 20 Dec 2023 12:58:09 -0800 (PST)
+        bh=P0bXIhX+As+sgTpJV4+MRQyPFw6mSo37z8/HwSLHj8U=;
+        b=qFO/oN2diHkVvotHF6o5MApPlHIyCt7vBgyVCdwtj67jFyifte23yDXxdk3ZudIgN7
+         qWRi+RP/1pb7icw5WYCnW21cMdgEJPN+bQBNK1BdwJWOj0Y6cOdiLhPVlVPR5FuM5wLV
+         LA65jAtIENWpM0oa3yrfirTxiDb4Q9gNArl5Z5142Q8NBnrnzH4yzDwMtBV7w0WL2FF6
+         3vzkem2HBv+ZDzolUho7iU+8c+aEkN2hOkfLokmoQbEsi7szJwAG5dPiSXdp5+t+ZwXK
+         IOqvEUYVMerd2P7xgGPOIRBV1ej4x74fNkBlI+LlEEAu8SseQ1fMP9kjY1iZEMheF3pu
+         OKeA==
+X-Gm-Message-State: AOJu0YxSTQUVkQZo6uIUwe1EzkCtDeMmHcev6nHFIddSruA0DB/vEzbi
+	I74mV/5Dw+Ph8tkGNW5q9/I=
+X-Google-Smtp-Source: AGHT+IGftrX+bAzfPFS9nQSZIaPROGrjAC6v1lFkLOqJTnInzRi+XXoPlq8MBF/DerxM4oMwX9TFog==
+X-Received: by 2002:a05:6000:120b:b0:336:7f93:3dcc with SMTP id e11-20020a056000120b00b003367f933dccmr147564wrx.81.1703106470747;
+        Wed, 20 Dec 2023 13:07:50 -0800 (PST)
 Received: from ?IPV6:2a01:c23:c0e1:2b00:cc8d:2472:9da4:1ff3? (dynamic-2a01-0c23-c0e1-2b00-cc8d-2472-9da4-1ff3.c23.pool.telefonica.de. [2a01:c23:c0e1:2b00:cc8d:2472:9da4:1ff3])
-        by smtp.googlemail.com with ESMTPSA id df23-20020a05640230b700b00553533738f0sm255979edb.57.2023.12.20.12.58.08
+        by smtp.googlemail.com with ESMTPSA id ev12-20020a056402540c00b005537b9f7ce7sm255284edb.68.2023.12.20.13.07.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Dec 2023 12:58:08 -0800 (PST)
-Message-ID: <20bf2d9b-4f36-4279-ace9-8b1bbc6286fb@gmail.com>
-Date: Wed, 20 Dec 2023 21:58:08 +0100
+        Wed, 20 Dec 2023 13:07:50 -0800 (PST)
+Message-ID: <a9ab1201-58fe-4b86-81fc-b58ce0b3cd2c@gmail.com>
+Date: Wed, 20 Dec 2023 22:07:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -66,14 +66,17 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: mux: reg: Remove class-based device auto-detection
- support
+Subject: Re: [PATCH] i2c: i801: Use I2C_CLASS_HWMON for i2c mux children
 Content-Language: en-US
-To: Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- Jean Delvare <jdelvare@suse.com>
-References: <69f19443-f2ca-4158-9d25-160db55bfb57@gmail.com>
- <ZYNSZ+OJ5wEJwoCz@shikoro>
+To: Jean Delvare <jdelvare@suse.de>
+Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+ Peter Korsgaard <peter.korsgaard@barco.com>, Peter Rosin <peda@axentia.se>
+References: <45c5366f-cbee-4c7d-bb62-a446935b2729@gmail.com>
+ <20231106155036.366fb752@endymion.delvare>
+ <a22978a4-88e4-46f4-b71c-032b22321599@gmail.com>
+ <20231109145212.01f7b597@endymion.delvare>
+ <4fdf5873-b366-4601-a9cd-58814eed321d@gmail.com>
+ <20231110120822.7a81421e@endymion.delvare>
 From: Heiner Kallweit <hkallweit1@gmail.com>
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
@@ -118,34 +121,64 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <ZYNSZ+OJ5wEJwoCz@shikoro>
+In-Reply-To: <20231110120822.7a81421e@endymion.delvare>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 20.12.2023 21:45, Wolfram Sang wrote:
-> On Wed, Nov 08, 2023 at 07:38:07AM +0100, Heiner Kallweit wrote:
->> Legacy class-based device auto-detection shouldn't be used in new code.
->> Therefore remove support in i2c-mux-reg as long as we don't have a
->> user of this feature yet.
+On 10.11.2023 12:08, Jean Delvare wrote:
+> Hi Heiner,
+> 
+> On Thu, 9 Nov 2023 17:34:15 +0100, Heiner Kallweit wrote:
+>> On 09.11.2023 14:52, Jean Delvare wrote:
+>>> For example, if DMI data says the system is using DDR4 and we were able
+>>> to detect and instantiate an ee1004 SPD device at I2C address 0x50 then
+>>> we should probe for a JC42.4-compliant temperature sensor device at I2C
+>>> address 0x18. An SPD EEPROM at 0x51 would correspond to a possible
+>>> JC42.4-compliant device at 0x19, and so on.
 >>
->> Link: https://lore.kernel.org/linux-i2c/a22978a4-88e4-46f4-b71c-032b22321599@gmail.com/
->> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>> Nice idea. How about our ASUS use case in i801? i2c_register_spd() isn't
+>> called in case of muxing, neither for the parent nor for the mux children.
 > 
-> Applied to for-next, thanks!
+> When I introduced i2c_register_spd(), I wanted to go one step at a
+> time, as I didn't know what to expect due to the wide variety of
+> systems affected. For this reason, systems where the SMBus is
+> multiplexed were originally excluded. There's also a limitation in the
+> function itself, on the number of memory slots, which is 4 for now, but
+> could be lifted to 8 (maximum number of memory slots connected to a
+> single SMBus segment).
 > 
-> I guess i2c-mux-gpio is more difficult because it has users already?
+> The Asus boards we are talking about may have more than 8 memory slots,
+> so they would fail the test. If we want to be able to use
+> i2c_register_spd() on these boards, some adjustments will be needed.
+> For example, we could add a parameter to bypass the memory slot
+> counting, so that the function could be called on children segments
+> (only a subset of the memory slots will be connected to that segment,
+> so the total slot count it irrelevant). We would ignore the DMI data
+> and hard-code dimm_count to 8 in that case, to probe all possible
+> addresses.
 > 
-Right. i801 has a special handling for certain Asus server models with
-> 8 memory slots where the smbus to the SPD eeproms is gpio-muxed.
-I2C_CLASS_HWMON is passed to the child adapters to probe for DIMM
-thermal sensors.
+> Another approach would be to add a parameter (probably a bit field)
+> describing which addresses should be probed, instead of guessing that
+> from the dimm_count collected from DMI data. For the Asus boards in
+> question, the information is known, and this would speed things up a
+> bit by not probing addresses which can't possibly correspond to a
+> memory module on a given board. That's only a minor optimization
+> though, so not necessarily worth it. OTOH having that possibility would
+> give more control on the probing, which may be useful for specific
+> boards.
+> 
 
-For getting rid of the class-based probing we have to:
-- Extend i2c_register_spd() for use on muxed smbus segments.
-  Then i2c_register_spd() instantiates at24 to handle the SPD eeprom (for DDR3)
-- at24 then checks the SPD for an advertised thermal sensor, and instantiates
-  jc42 to handle the thermal sensor -> a patch for this has been submitted
+Apart from the described extension of i2c_register_spd() I wonder where
+to best call it for the muxed smbus segments.
 
-The extension of i2c_register_spd() needs some more thoughts.
+At first I think we have to make the assumption that in case of muxing
+memory slots are on the muxed child segments only.
+At least I don't see an easy way to deal with the potential scenario that
+some memory slots are on the parent segment, and some on muxed segments.
+
+i801_add_mux() instantiates the i2c-mux-gpio platform device, and I think
+loading and probing the i2c-mux-gpio driver can happen asynchronously.
+This would mean we can't call i2c_register_spd() for the child segments
+from i801. So we may have to call it from the i2c-mux-gpio driver.
 
 
