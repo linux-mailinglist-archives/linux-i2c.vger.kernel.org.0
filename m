@@ -1,64 +1,64 @@
-Return-Path: <linux-i2c+bounces-906-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-907-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45332819F5D
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 13:55:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B429F819F63
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 13:56:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C42D528276D
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 12:55:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D82C01C230E7
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Dec 2023 12:56:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E610250F2;
-	Wed, 20 Dec 2023 12:55:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9904125541;
+	Wed, 20 Dec 2023 12:56:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NUoSf9T7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VMNVjtf6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A506124B4C
-	for <linux-i2c@vger.kernel.org>; Wed, 20 Dec 2023 12:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D984924B4C
+	for <linux-i2c@vger.kernel.org>; Wed, 20 Dec 2023 12:56:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40d38f03712so2500025e9.2
-        for <linux-i2c@vger.kernel.org>; Wed, 20 Dec 2023 04:55:21 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a26988a86f0so51222666b.3
+        for <linux-i2c@vger.kernel.org>; Wed, 20 Dec 2023 04:56:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703076920; x=1703681720; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:autocrypt:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
+        d=gmail.com; s=20230601; t=1703076959; x=1703681759; darn=vger.kernel.org;
+        h=content-transfer-encoding:autocrypt:content-language:cc:to:subject
+         :from:user-agent:mime-version:date:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
         bh=Z5Hooxsqh0YEcABqdO6mBOk4KRlr4/vkcAX+yKb8SpE=;
-        b=NUoSf9T7DaL+fCTScjf/J9g4E2s25iBAeV3k6WxZtE0KaFvdH53OL+qitHGdet9jGr
-         FqmJXh3bciPEPekSY3B7bjY2ACLrdXtAfMFBSWBvUV8uvKCy6syX3nfMnMbX3qr1mwNy
-         dHRmt1BCv1utOpuNd3xoxYC08qUzQikHq0QmLUeVFK+5/CAWNhVj24t/z14g64mIWMoZ
-         ch+erMqbXWYi4+cO+63ck2VlbivxmNa/nroUNLNCIPCtwJiX9xUlcOrk2TRtcoCH12AZ
-         9DphmScUIjW3/bhF2MfL32UucyAk4qtAHNxHmUG7rkWhVaTS7l8konRW6vse1U5exi72
-         e6EA==
+        b=VMNVjtf6w7vgx2VWeKNgaftGW+QSZy+Rj+UTpwd2GHZ86oUapljryUjtGSIUdrlhh4
+         FlL1nBwPS+1nEziJSIsCLjPp2jCO+CNf0nPHo8Vas4JFPFLSZxYAx5lHVDkrwy9DWAgq
+         +e9sZ6aY+sJKDjowm1chPlS2/iDnlmwH+VJWlwbf+4mmIJbokuRGbIv0pAOH3G5cQh74
+         xURUcL9L93Auhi9UdpHMNZtXvLVIjynUSIKIhJmfNxbLtkUYoxQ92pUj8Mhm1asiQxEv
+         w8yoVsqeWm8Vgf3OKx9ix3vteuVWGDyk+ko8Xwl2UD/chEOvq5rh0UehVnzwyiSZfy+K
+         w5Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703076920; x=1703681720;
-        h=content-transfer-encoding:subject:autocrypt:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        d=1e100.net; s=20230601; t=1703076959; x=1703681759;
+        h=content-transfer-encoding:autocrypt:content-language:cc:to:subject
+         :from:user-agent:mime-version:date:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
         bh=Z5Hooxsqh0YEcABqdO6mBOk4KRlr4/vkcAX+yKb8SpE=;
-        b=oVlsSSf4ZYwy5CLNZMniis2mnlG9hN6gRVp/kABZRJO55J14e0eDm6x0oTYI+uRnHn
-         jeAxWurzJ23OZlYUWROgXkeZCMKkq+mgZjKAcJr00IfHamKtyJLuiZ0smVtvBfoIgEWG
-         UrMghK2c3aGXyKiKZ7pLyVkbEtzQVLpIbar7WIZl5UkNcaoTQXzMAQCCutkrZsO8e9ZQ
-         CN/BPIKONoSEavilJf9kWLDoCniaxibXxh7PPjRtBB/lmJcyvBbwkZAOdt3h5d5UVov8
-         SAPO0+VlgjDwJxLgbKctSntpQCXf+ZHZJTd12MCyfBnHPaeWyUdlIibkujWiWzwO9PSQ
-         JvEw==
-X-Gm-Message-State: AOJu0YxYx/kh0KuwIAm5NUMwDt0/EiI992vPANvjcnEI1yByhEOh75E0
-	ZQ2fwaoOSEsxhzFbCs0cQAc=
-X-Google-Smtp-Source: AGHT+IH5NFSqg9GDS8Vh8f/y8W35v9zsMWk3uY1jSUxYzRM5Fe0xiBkwbYHrzvDMUQKHdxaSxkpQJg==
-X-Received: by 2002:a05:600c:600d:b0:40d:2f6f:8f09 with SMTP id az13-20020a05600c600d00b0040d2f6f8f09mr988179wmb.80.1703076919579;
-        Wed, 20 Dec 2023 04:55:19 -0800 (PST)
+        b=e7ONjVuSopBQvm4nMbiloUIyF+VuXt2ro75V1xhwnSjkRYBzEVkuYtAxyf1N/Z+Sgr
+         0A+IXQCKUKwIaLwcpa/dDCHJXRascive+6hhoxSpLCnhOTK1p56MPQbsvqp59JjdSDAr
+         zpbGaPUGD1TA68/LtUVyeYiqF5qgDFNebDsIGQSjp2yHcsc6zJSh+RcSvcT/JYJka/40
+         o6sf1pdlDJGB1QbhF6w3fbI8t7eBgPf5LPBHNbwdIu6kzE+nhuk6saIj3/9Lcb28GbS9
+         ELkitXK6KQMTdLPLljFDppk9mBjM77wJdu4BcXimCj+BG3ayeJJoNrk/q9laPFytbjg+
+         XFKg==
+X-Gm-Message-State: AOJu0YycPdBJHufRPeuxRLCZaxt8QJrC4AdDtKB51tI4zWt5zCTVIVbs
+	hq04eJmzYBkxZn95mnKCorQ=
+X-Google-Smtp-Source: AGHT+IHrnnnaLvs8s8MUT+rY1PvNA1f8LYOO9PUpnz7qKBuzhxkvGI5qSBQqY1Hmwtqrme391mDhhg==
+X-Received: by 2002:a17:907:9518:b0:a23:5814:4b76 with SMTP id ew24-20020a170907951800b00a2358144b76mr2394824ejc.35.1703076959060;
+        Wed, 20 Dec 2023 04:55:59 -0800 (PST)
 Received: from ?IPV6:2a01:c23:c0e1:2b00:cc8d:2472:9da4:1ff3? (dynamic-2a01-0c23-c0e1-2b00-cc8d-2472-9da4-1ff3.c23.pool.telefonica.de. [2a01:c23:c0e1:2b00:cc8d:2472:9da4:1ff3])
-        by smtp.googlemail.com with ESMTPSA id g7-20020a170906348700b00a23359868b1sm4766084ejb.76.2023.12.20.04.55.18
+        by smtp.googlemail.com with ESMTPSA id g7-20020a170906348700b00a23359868b1sm4766084ejb.76.2023.12.20.04.55.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Dec 2023 04:55:19 -0800 (PST)
-Message-ID: <acda79c4-f477-4a35-9f7c-16ef0b665db3@gmail.com>
-Date: Wed, 20 Dec 2023 13:55:18 +0100
+        Wed, 20 Dec 2023 04:55:58 -0800 (PST)
+Message-ID: <68113672-3724-44d5-9ff8-313dd6628f8c@gmail.com>
+Date: Wed, 20 Dec 2023 13:55:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -66,12 +66,14 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Content-Language: en-US
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH RESUBMIT] eeprom: at24: Probe for DDR3 thermal sensor in the
+ SPD case
 To: Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
  Jean Delvare <jdelvare@suse.com>
-From: Heiner Kallweit <hkallweit1@gmail.com>
+Content-Language: en-US
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -115,7 +117,6 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-Subject: eeprom: at24: Probe for DDR3 thermal sensor in the SPD case
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
