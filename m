@@ -1,164 +1,330 @@
-Return-Path: <linux-i2c+bounces-927-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-928-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 268CF81B220
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Dec 2023 10:24:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD94B81B2C9
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Dec 2023 10:43:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48AF01C235DA
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Dec 2023 09:24:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5223E1F257A2
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Dec 2023 09:43:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6B5E4BAB3;
-	Thu, 21 Dec 2023 09:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3192E4BA96;
+	Thu, 21 Dec 2023 09:39:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PzoE/Qrs"
+	dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com header.b="Mb8unmCl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31654BA92
-	for <linux-i2c@vger.kernel.org>; Thu, 21 Dec 2023 09:13:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-553a65b6ad4so707759a12.0
-        for <linux-i2c@vger.kernel.org>; Thu, 21 Dec 2023 01:13:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703150028; x=1703754828; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qskE60hERGmibIUEHX5TLuGnIvoAmwksGtaBHZkrRl0=;
-        b=PzoE/QrsHmtNBGHigOKiwQ7smRYgHG+4U/4KOdoF/rkdsUVpRUmqZScpCEe6v+ury8
-         /1l6FOiH4U1CEQlfX5BH18XJdCs2caZa9WhiAh08JlMN0BRZmRxXySdQzfOCKqdO0tDK
-         W0Us2WYAav3cpeMMPUFgSG6J2rGH+LKI1uStW/5YmTZab0VV8RvLxYByqOQ7xxTovrTF
-         gAxKcyK2eJxYReHKyCfq8WZH5026Zvsa0JNRzIVq794NzqZGNiludb66pHb71qZ8Ox3u
-         ++oYIfMcV5pfL4n18yYh/pSTkVMJwlVeqmIwtGdkroNCR8MAuXAhysEkaThhHn4WcYxR
-         c2hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703150028; x=1703754828;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qskE60hERGmibIUEHX5TLuGnIvoAmwksGtaBHZkrRl0=;
-        b=jcwHLzjkuwysX0CAZcI3Y360OkJzOMMMObG9O+kPyOtlxm8N1BNGuLZpgMvwphFTqB
-         z2DXVOxLvzNaP/bJ+K492v6GnmuukCas/2evE0BCMYoEhuRoeIwAMR9yGul9y7TO7ZJU
-         881NemT22UaqPXmqkcoO0sCxCLupDoPk+kI06kA4VpSqsJvHdq317zs6kb5r2eLzqkBv
-         J1qbsIwvMw2N0rk8EQNwajFvAka+KJnio5Xf41nvRIwoJ1KGG2n0OtELEYriFIiIOiTa
-         PXctVXsKcxMju7Lc7pBu+zM915P3+xxGGr9tVw6OL1ptL/Ip0MDAOKC+XNFndoYMxowv
-         QEzA==
-X-Gm-Message-State: AOJu0YzcwMvDIp8e/6aOHT5zG68nNva1Mis3SlwFpUkcjV7GXYaUUF+c
-	AEd5EOYSu0g4DkEC58J4uUJxQw==
-X-Google-Smtp-Source: AGHT+IHSA9gKzWIah2AwWkX03H61vJxbWtPPe0FuJWHwznKPbHIr/KQ2g7out+AdbMiT8lBaQuz2AQ==
-X-Received: by 2002:a17:906:24a:b0:a23:6244:8370 with SMTP id 10-20020a170906024a00b00a2362448370mr2778742ejl.142.1703150028204;
-        Thu, 21 Dec 2023 01:13:48 -0800 (PST)
-Received: from [192.168.0.22] ([78.10.206.178])
-        by smtp.gmail.com with ESMTPSA id lz2-20020a170906fb0200b00a26aa845084sm201964ejb.17.2023.12.21.01.13.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Dec 2023 01:13:47 -0800 (PST)
-Message-ID: <497e6eda-a416-415a-b468-fe764c14a8aa@linaro.org>
-Date: Thu, 21 Dec 2023 10:13:46 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CF64C3B9;
+	Thu, 21 Dec 2023 09:39:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wdc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1703151584; x=1734687584;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=W6q52LZk8Ew/q6aahEzW6LvHEEQZ4NBGTqli3eKsN+U=;
+  b=Mb8unmClxvbK1lcMNXbYvK1fm3iUBYobUfhxMT+ja5PUkjGtqpzqcFMx
+   YEq1+w+ejhqdY08hGao0nh0tkmAdg8gCxBoIFwRe6noeDHjqw9EcOKoHm
+   N98C2q5i6LdPn+7cBRYb3uqW5uOxhS2SI5ipjltTfr7v+Tj/1SxFfHS6m
+   xi3ayMIOaD+IeDjJvbNRWJEbyZb/efZshvRX5MWGyAwlPMLJBbOeeEUF1
+   ajhwDErnPVaBZuD8vl0B05SZfcgo+8DJ5HbsHoSLkOBp0VFKW7ihBIRsU
+   /sFyCSlzmu+K9S7KV4/0+/ecGg2xEwInoP+PTFwkmMXEt3Pn58PbKBWG2
+   g==;
+X-CSE-ConnectionGUID: d3DcjvxFRumkLgmZDAFjZA==
+X-CSE-MsgGUID: pzUNMZViQcSR6gKPKsYaTA==
+X-IronPort-AV: E=Sophos;i="6.04,293,1695657600"; 
+   d="scan'208";a="5773689"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 21 Dec 2023 17:39:38 +0800
+IronPort-SDR: J5pq32+9nE1DYtO80eCGhNkj1hTSkw/gqGRGWZcE7mwu5qVdCydAkbrBm6+mg1xWpH9tjmwmkI
+ MSkxh7TifSUQ==
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Dec 2023 00:44:40 -0800
+IronPort-SDR: dmJOImxOTW36bNme6GCTZdzDq7mTBJR2aRCao3+pBRtpIU/fRpH39wZsLkNmQJbO2KR2PYZtAc
+ V0UWN+Skyh8w==
+WDCIronportException: Internal
+Received: from unknown (HELO shindev.ssa.fujisawa.hgst.com) ([10.149.66.30])
+  by uls-op-cesaip02.wdc.com with ESMTP; 21 Dec 2023 01:39:37 -0800
+From: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+To: platform-driver-x86@vger.kernel.org
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	linux-pci@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Subject: [PATCH v1] platform/x86: p2sb: Allow p2sb_bar() calls during PCI device probe
+Date: Thu, 21 Dec 2023 18:39:36 +0900
+Message-ID: <20231221093936.1523908-1-shinichiro.kawasaki@wdc.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND PATCH v5 1/2] dt-bindings: i2c: pca954x: Add custom
- properties for MAX7357
-Content-Language: en-US
-To: Wolfram Sang <wsa@kernel.org>,
- Naresh Solanki <naresh.solanki@9elements.com>,
- Rob Herring <robh+dt@kernel.org>, Peter Rosin <peda@axentia.se>,
- Andi Shyti <andi.shyti@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Patrick Rudolph <patrick.rudolph@9elements.com>,
- Rob Herring <robh@kernel.org>, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231220082803.345153-1-naresh.solanki@9elements.com>
- <ZYNTfKLFGrLq8qGY@shikoro>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <ZYNTfKLFGrLq8qGY@shikoro>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 20/12/2023 21:50, Wolfram Sang wrote:
-> On Wed, Dec 20, 2023 at 01:58:01PM +0530, Naresh Solanki wrote:
->> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>
->> Maxim Max7357 has a configuration register to enable additional
->> features. These features aren't enabled by default & its up to
->> board designer to enable the same as it may have unexpected side effects.
->>
->> These should be validated for proper functioning & detection of devices
->> in secondary bus as sometimes it can cause secondary bus being disabled.
->>
->> Add booleans for:
->>  - maxim,isolate-stuck-channel
->>  - maxim,send-flush-out-sequence
->>  - maxim,preconnection-wiggle-test-enable
->>
->> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> Rob, are you really OK with these bindings? They look more like
-> configuration instead of HW description to me.
+p2sb_bar() unhides P2SB device to get resources from the device. It
+guards the operation by locking pci_rescan_remove_lock so that parallel
+rescans do not find the P2SB device. However, this lock causes deadlock
+when PCI bus rescan is triggered by /sys/bus/pci/rescan. The rescan
+locks pci_rescan_remove_lock and probes PCI devices. When PCI devices
+call p2sb_bar() during probe, it locks pci_rescan_remove_lock again.
+Hence the deadlock.
 
-Some explanation was provided here:
-https://lore.kernel.org/all/CABqG17g8QOgU7cObe=4EMLbEC1PeZWxdPXt7zzFs35JGqpRbfg@mail.gmail.com/
+To avoid the deadlock, do not lock pci_rescan_remove_lock in p2sb_bar().
+Instead, do the lock at fs_initcall. Introduce p2sb_cache_resources()
+for fs_initcall which gets and caches the P2SB resources. At p2sb_bar(),
+refer the cache and return to the caller.
 
-AFAIU, these properties are board-design choice.
+Link: https://lore.kernel.org/linux-pci/6xb24fjmptxxn5js2fjrrddjae6twex5bjaftwqsuawuqqqydx@7cl3uik5ef6j/
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+---
+This patch reflects discussions held at the Link tag. I confirmed this patch
+fixes the problem using a system with i2c_i801 device, building i2c_i801
+module as both built-in and loadable. Reviews will be appreicated.
 
-Best regards,
-Krzysztof
+Changes from RFC v2:
+* Reflected review comments on the list
+* Removed RFC prefix
+
+Changes from RFC v1:
+* Fixed a build warning poitned out in llvm list by kernel test robot
+
+ drivers/platform/x86/p2sb.c | 157 +++++++++++++++++++++++++-----------
+ 1 file changed, 112 insertions(+), 45 deletions(-)
+
+diff --git a/drivers/platform/x86/p2sb.c b/drivers/platform/x86/p2sb.c
+index 1cf2471d54dd..faf4c3c7abb0 100644
+--- a/drivers/platform/x86/p2sb.c
++++ b/drivers/platform/x86/p2sb.c
+@@ -26,6 +26,20 @@ static const struct x86_cpu_id p2sb_cpu_ids[] = {
+ 	{}
+ };
+ 
++/*
++ * Cache BAR0 of P2SB device functions 0 to 7
++ * TODO: Move this definition to pci.h together with same other definitions
++ */
++#define NR_P2SB_RES_CACHE 8
++
++struct p2sb_res_cache {
++	u32 bus_dev_id;
++	struct resource res;
++};
++
++static struct p2sb_res_cache p2sb_resources[NR_P2SB_RES_CACHE];
++static struct pci_bus *p2sb_bus;
++
+ static int p2sb_get_devfn(unsigned int *devfn)
+ {
+ 	unsigned int fn = P2SB_DEVFN_DEFAULT;
+@@ -39,10 +53,15 @@ static int p2sb_get_devfn(unsigned int *devfn)
+ 	return 0;
+ }
+ 
++static bool p2sb_valid_resource(struct resource *res)
++{
++	return res->flags;
++}
++
+ /* Copy resource from the first BAR of the device in question */
+-static int p2sb_read_bar0(struct pci_dev *pdev, struct resource *mem)
++static void p2sb_read_bar0(struct pci_dev *pdev, struct resource *mem)
+ {
+-	struct resource *bar0 = &pdev->resource[0];
++	struct resource *bar0 = pci_resource_n(pdev, 0);
+ 
+ 	/* Make sure we have no dangling pointers in the output */
+ 	memset(mem, 0, sizeof(*mem));
+@@ -56,47 +75,50 @@ static int p2sb_read_bar0(struct pci_dev *pdev, struct resource *mem)
+ 	mem->end = bar0->end;
+ 	mem->flags = bar0->flags;
+ 	mem->desc = bar0->desc;
+-
+-	return 0;
+ }
+ 
+-static int p2sb_scan_and_read(struct pci_bus *bus, unsigned int devfn, struct resource *mem)
++static int p2sb_scan_and_cache_devfn(struct pci_bus *bus, unsigned int devfn)
+ {
++	struct p2sb_res_cache *cache = &p2sb_resources[PCI_FUNC(devfn)];
+ 	struct pci_dev *pdev;
+-	int ret;
+ 
+ 	pdev = pci_scan_single_device(bus, devfn);
+ 	if (!pdev)
+ 		return -ENODEV;
+ 
+-	ret = p2sb_read_bar0(pdev, mem);
++	if (!p2sb_valid_resource(pci_resource_n(pdev, 0)))
++		return -ENOENT;
++
++	p2sb_read_bar0(pdev, &cache->res);
++	cache->bus_dev_id = bus->dev.id;
+ 
+ 	pci_stop_and_remove_bus_device(pdev);
+-	return ret;
++	return 0;
+ }
+ 
+-/**
+- * p2sb_bar - Get Primary to Sideband (P2SB) bridge device BAR
+- * @bus: PCI bus to communicate with
+- * @devfn: PCI slot and function to communicate with
+- * @mem: memory resource to be filled in
+- *
+- * The BIOS prevents the P2SB device from being enumerated by the PCI
+- * subsystem, so we need to unhide and hide it back to lookup the BAR.
+- *
+- * if @bus is NULL, the bus 0 in domain 0 will be used.
+- * If @devfn is 0, it will be replaced by devfn of the P2SB device.
+- *
+- * Caller must provide a valid pointer to @mem.
+- *
+- * Locking is handled by pci_rescan_remove_lock mutex.
+- *
+- * Return:
+- * 0 on success or appropriate errno value on error.
+- */
+-int p2sb_bar(struct pci_bus *bus, unsigned int devfn, struct resource *mem)
++static int p2sb_scan_and_cache(struct pci_bus *bus, unsigned int devfn)
++{
++	unsigned int slot, fn;
++	int ret;
++
++	/* Scan the P2SB device and cache its BAR0 */
++	ret = p2sb_scan_and_cache_devfn(bus, devfn);
++	if (ret || PCI_FUNC(devfn) != 0)
++		return ret;
++
++	/*
++	 * When function number of the P2SB device is zero, scan other function
++	 * numbers. If devices are available, cache their BAR0.
++	 */
++	slot = PCI_SLOT(devfn);
++	for (fn = 1; fn < NR_P2SB_RES_CACHE; fn++)
++		p2sb_scan_and_cache_devfn(bus, PCI_DEVFN(slot, fn));
++
++	return 0;
++}
++
++static int p2sb_cache_resources(void)
+ {
+-	struct pci_dev *pdev_p2sb;
+ 	unsigned int devfn_p2sb;
+ 	u32 value = P2SBC_HIDE;
+ 	int ret;
+@@ -106,8 +128,8 @@ int p2sb_bar(struct pci_bus *bus, unsigned int devfn, struct resource *mem)
+ 	if (ret)
+ 		return ret;
+ 
+-	/* if @bus is NULL, use bus 0 in domain 0 */
+-	bus = bus ?: pci_find_bus(0, 0);
++	/* Assume P2SB is on the bus 0 in domain 0 */
++	p2sb_bus = pci_find_bus(0, 0);
+ 
+ 	/*
+ 	 * Prevent concurrent PCI bus scan from seeing the P2SB device and
+@@ -115,30 +137,75 @@ int p2sb_bar(struct pci_bus *bus, unsigned int devfn, struct resource *mem)
+ 	 */
+ 	pci_lock_rescan_remove();
+ 
+-	/* Unhide the P2SB device, if needed */
+-	pci_bus_read_config_dword(bus, devfn_p2sb, P2SBC, &value);
++	/*
++	 * The BIOS prevents the P2SB device from being enumerated by the PCI
++	 * subsystem, so we need to unhide and hide it back to lookup the BAR.
++	 * Unhide the P2SB device here, if needed.
++	 */
++	pci_bus_read_config_dword(p2sb_bus, devfn_p2sb, P2SBC, &value);
+ 	if (value & P2SBC_HIDE)
+-		pci_bus_write_config_dword(bus, devfn_p2sb, P2SBC, 0);
++		pci_bus_write_config_dword(p2sb_bus, devfn_p2sb, P2SBC, 0);
+ 
+-	pdev_p2sb = pci_scan_single_device(bus, devfn_p2sb);
+-	if (devfn)
+-		ret = p2sb_scan_and_read(bus, devfn, mem);
+-	else
+-		ret = p2sb_read_bar0(pdev_p2sb, mem);
+-	pci_stop_and_remove_bus_device(pdev_p2sb);
++	ret = p2sb_scan_and_cache(p2sb_bus, devfn_p2sb);
+ 
+ 	/* Hide the P2SB device, if it was hidden */
+ 	if (value & P2SBC_HIDE)
+-		pci_bus_write_config_dword(bus, devfn_p2sb, P2SBC, P2SBC_HIDE);
+-
++		pci_bus_write_config_dword(p2sb_bus, devfn_p2sb, P2SBC,
++					   P2SBC_HIDE);
+ 	pci_unlock_rescan_remove();
+ 
+-	if (ret)
+-		return ret;
++	return ret;
++}
+ 
+-	if (mem->flags == 0)
++/**
++ * p2sb_bar - Get Primary to Sideband (P2SB) bridge device BAR
++ * @bus: PCI bus to communicate with
++ * @devfn: PCI slot and function to communicate with
++ * @mem: memory resource to be filled in
++ *
++ * If @bus is NULL, the bus 0 in domain 0 will be used.
++ * If @devfn is 0, it will be replaced by devfn of the P2SB device.
++ *
++ * Caller must provide a valid pointer to @mem.
++ *
++ * Return:
++ * 0 on success or appropriate errno value on error.
++ */
++int p2sb_bar(struct pci_bus *bus, unsigned int devfn, struct resource *mem)
++{
++	struct p2sb_res_cache *cache;
++	int ret;
++
++	if (!bus)
++		bus = p2sb_bus;
++
++	if (!devfn) {
++		ret = p2sb_get_devfn(&devfn);
++		if (ret)
++			return ret;
++	}
++
++	cache = &p2sb_resources[PCI_FUNC(devfn)];
++	if (!p2sb_valid_resource(&cache->res) ||
++	    cache->bus_dev_id != bus->dev.id)
+ 		return -ENODEV;
+ 
++	memcpy(mem, &cache->res, sizeof(*mem));
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(p2sb_bar);
++
++static int __init p2sb_fs_init(void)
++{
++	p2sb_cache_resources();
++	return 0;
++}
++
++/*
++ * pci_rescan_remove_lock avoids access to unhidden P2SB devices, but it causes
++ * deadlock with sysfs pci bus rescan. To avoid the deadlock, access to P2SB
++ * devices at an early step in kernel initialization and cache required
++ * resources. This should happen after subsys_initcall which initializes PCI
++ * subsystem and before device_initcall which requires P2SB resources.
++ */
++fs_initcall(p2sb_fs_init);
+-- 
+2.43.0
 
 
