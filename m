@@ -1,330 +1,437 @@
-Return-Path: <linux-i2c+bounces-928-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-929-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD94B81B2C9
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Dec 2023 10:43:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 647C481B5CB
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Dec 2023 13:29:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5223E1F257A2
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Dec 2023 09:43:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F4D6B243C1
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Dec 2023 12:29:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3192E4BA96;
-	Thu, 21 Dec 2023 09:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDD373177;
+	Thu, 21 Dec 2023 12:28:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com header.b="Mb8unmCl"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=list.virtualsheetmusic.com header.i=@list.virtualsheetmusic.com header.b="ZmArNWiW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+Received: from list.virtualsheetmusic.com (list.virtualsheetmusic.com [170.249.201.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CF64C3B9;
-	Thu, 21 Dec 2023 09:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wdc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1703151584; x=1734687584;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=W6q52LZk8Ew/q6aahEzW6LvHEEQZ4NBGTqli3eKsN+U=;
-  b=Mb8unmClxvbK1lcMNXbYvK1fm3iUBYobUfhxMT+ja5PUkjGtqpzqcFMx
-   YEq1+w+ejhqdY08hGao0nh0tkmAdg8gCxBoIFwRe6noeDHjqw9EcOKoHm
-   N98C2q5i6LdPn+7cBRYb3uqW5uOxhS2SI5ipjltTfr7v+Tj/1SxFfHS6m
-   xi3ayMIOaD+IeDjJvbNRWJEbyZb/efZshvRX5MWGyAwlPMLJBbOeeEUF1
-   ajhwDErnPVaBZuD8vl0B05SZfcgo+8DJ5HbsHoSLkOBp0VFKW7ihBIRsU
-   /sFyCSlzmu+K9S7KV4/0+/ecGg2xEwInoP+PTFwkmMXEt3Pn58PbKBWG2
-   g==;
-X-CSE-ConnectionGUID: d3DcjvxFRumkLgmZDAFjZA==
-X-CSE-MsgGUID: pzUNMZViQcSR6gKPKsYaTA==
-X-IronPort-AV: E=Sophos;i="6.04,293,1695657600"; 
-   d="scan'208";a="5773689"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Dec 2023 17:39:38 +0800
-IronPort-SDR: J5pq32+9nE1DYtO80eCGhNkj1hTSkw/gqGRGWZcE7mwu5qVdCydAkbrBm6+mg1xWpH9tjmwmkI
- MSkxh7TifSUQ==
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Dec 2023 00:44:40 -0800
-IronPort-SDR: dmJOImxOTW36bNme6GCTZdzDq7mTBJR2aRCao3+pBRtpIU/fRpH39wZsLkNmQJbO2KR2PYZtAc
- V0UWN+Skyh8w==
-WDCIronportException: Internal
-Received: from unknown (HELO shindev.ssa.fujisawa.hgst.com) ([10.149.66.30])
-  by uls-op-cesaip02.wdc.com with ESMTP; 21 Dec 2023 01:39:37 -0800
-From: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-To: platform-driver-x86@vger.kernel.org
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	linux-pci@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Subject: [PATCH v1] platform/x86: p2sb: Allow p2sb_bar() calls during PCI device probe
-Date: Thu, 21 Dec 2023 18:39:36 +0900
-Message-ID: <20231221093936.1523908-1-shinichiro.kawasaki@wdc.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 637EE6E59A
+	for <linux-i2c@vger.kernel.org>; Thu, 21 Dec 2023 12:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=musicianspage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=musicianspage.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=list.virtualsheetmusic.com; s=y; h=Date:Message-Id:
+	Content-Transfer-Encoding:Content-Type:Reply-To:From:MIME-Version:Subject:To:
+	Sender:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:
+	List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=F8PvBfxdtrZQphTYWdtgq8kPkohkMSxmnnXUvY4AJ90=; b=ZmArNWiWXPEr
+	FZg1nyAfqvPjba/8eGlbMcwLmAISHoeWwyN+wYJfRwn9+J0n4sLJ/y690CPRaSVOqIJ3KSieZv4+I
+	MOjrJca7e2tDCMA6floAhoEBxbc9U7XkUx1DRUczuZsdVStkpnxe/N8CkP0TaMilE6wPpodXRYhrM
+	RWTy4=;
+Received: from root by list.virtualsheetmusic.com with local (Exim 4.92)
+	(envelope-from <no-reply@musicianspage.com>)
+	id 1rGHej-0006M8-Pa
+	for linux-i2c@vger.kernel.org; Thu, 21 Dec 2023 03:56:01 -0800
+To: linux-i2c@vger.kernel.org
+Subject: Music News and Site Updates (December 21, 2023)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Musicians Page <newsletter@musicianspage.com>
+Reply-To: Musicians Page <newsletter@musicianspage.com>
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E1rGHej-0006M8-Pa@list.virtualsheetmusic.com>
+Date: Thu, 21 Dec 2023 03:56:01 -0800
 
-p2sb_bar() unhides P2SB device to get resources from the device. It
-guards the operation by locking pci_rescan_remove_lock so that parallel
-rescans do not find the P2SB device. However, this lock causes deadlock
-when PCI bus rescan is triggered by /sys/bus/pci/rescan. The rescan
-locks pci_rescan_remove_lock and probes PCI devices. When PCI devices
-call p2sb_bar() during probe, it locks pci_rescan_remove_lock again.
-Hence the deadlock.
+Dear &eth;=9F=92=99 All The Girls From Next Door Are Here With Their Ca,
 
-To avoid the deadlock, do not lock pci_rescan_remove_lock in p2sb_bar().
-Instead, do the lock at fs_initcall. Introduce p2sb_cache_resources()
-for fs_initcall which gets and caches the P2SB resources. At p2sb_bar(),
-refer the cache and return to the caller.
+Here is the Newsletter from Musicians Page website:
 
-Link: https://lore.kernel.org/linux-pci/6xb24fjmptxxn5js2fjrrddjae6twex5bjaftwqsuawuqqqydx@7cl3uik5ef6j/
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
----
-This patch reflects discussions held at the Link tag. I confirmed this patch
-fixes the problem using a system with i2c_i801 device, building i2c_i801
-module as both built-in and loadable. Reviews will be appreicated.
+http://www.musicianspage.com
 
-Changes from RFC v2:
-* Reflected review comments on the list
-* Removed RFC prefix
+As you have requested. Read on...
 
-Changes from RFC v1:
-* Fixed a build warning poitned out in llvm list by kernel test robot
+(If you are no longer interested in subscribing to this newsletter, you can=
+ unsubscribe by clicking the link at the bottom of this newsletter. Thanks!=
+)
 
- drivers/platform/x86/p2sb.c | 157 +++++++++++++++++++++++++-----------
- 1 file changed, 112 insertions(+), 45 deletions(-)
 
-diff --git a/drivers/platform/x86/p2sb.c b/drivers/platform/x86/p2sb.c
-index 1cf2471d54dd..faf4c3c7abb0 100644
---- a/drivers/platform/x86/p2sb.c
-+++ b/drivers/platform/x86/p2sb.c
-@@ -26,6 +26,20 @@ static const struct x86_cpu_id p2sb_cpu_ids[] = {
- 	{}
- };
- 
-+/*
-+ * Cache BAR0 of P2SB device functions 0 to 7
-+ * TODO: Move this definition to pci.h together with same other definitions
-+ */
-+#define NR_P2SB_RES_CACHE 8
-+
-+struct p2sb_res_cache {
-+	u32 bus_dev_id;
-+	struct resource res;
-+};
-+
-+static struct p2sb_res_cache p2sb_resources[NR_P2SB_RES_CACHE];
-+static struct pci_bus *p2sb_bus;
-+
- static int p2sb_get_devfn(unsigned int *devfn)
- {
- 	unsigned int fn = P2SB_DEVFN_DEFAULT;
-@@ -39,10 +53,15 @@ static int p2sb_get_devfn(unsigned int *devfn)
- 	return 0;
- }
- 
-+static bool p2sb_valid_resource(struct resource *res)
-+{
-+	return res->flags;
-+}
-+
- /* Copy resource from the first BAR of the device in question */
--static int p2sb_read_bar0(struct pci_dev *pdev, struct resource *mem)
-+static void p2sb_read_bar0(struct pci_dev *pdev, struct resource *mem)
- {
--	struct resource *bar0 = &pdev->resource[0];
-+	struct resource *bar0 = pci_resource_n(pdev, 0);
- 
- 	/* Make sure we have no dangling pointers in the output */
- 	memset(mem, 0, sizeof(*mem));
-@@ -56,47 +75,50 @@ static int p2sb_read_bar0(struct pci_dev *pdev, struct resource *mem)
- 	mem->end = bar0->end;
- 	mem->flags = bar0->flags;
- 	mem->desc = bar0->desc;
+
+
+---------------------------------------------------------------------------=
 -
--	return 0;
- }
- 
--static int p2sb_scan_and_read(struct pci_bus *bus, unsigned int devfn, struct resource *mem)
-+static int p2sb_scan_and_cache_devfn(struct pci_bus *bus, unsigned int devfn)
- {
-+	struct p2sb_res_cache *cache = &p2sb_resources[PCI_FUNC(devfn)];
- 	struct pci_dev *pdev;
--	int ret;
- 
- 	pdev = pci_scan_single_device(bus, devfn);
- 	if (!pdev)
- 		return -ENODEV;
- 
--	ret = p2sb_read_bar0(pdev, mem);
-+	if (!p2sb_valid_resource(pci_resource_n(pdev, 0)))
-+		return -ENOENT;
-+
-+	p2sb_read_bar0(pdev, &cache->res);
-+	cache->bus_dev_id = bus->dev.id;
- 
- 	pci_stop_and_remove_bus_device(pdev);
--	return ret;
-+	return 0;
- }
- 
--/**
-- * p2sb_bar - Get Primary to Sideband (P2SB) bridge device BAR
-- * @bus: PCI bus to communicate with
-- * @devfn: PCI slot and function to communicate with
-- * @mem: memory resource to be filled in
-- *
-- * The BIOS prevents the P2SB device from being enumerated by the PCI
-- * subsystem, so we need to unhide and hide it back to lookup the BAR.
-- *
-- * if @bus is NULL, the bus 0 in domain 0 will be used.
-- * If @devfn is 0, it will be replaced by devfn of the P2SB device.
-- *
-- * Caller must provide a valid pointer to @mem.
-- *
-- * Locking is handled by pci_rescan_remove_lock mutex.
-- *
-- * Return:
-- * 0 on success or appropriate errno value on error.
-- */
--int p2sb_bar(struct pci_bus *bus, unsigned int devfn, struct resource *mem)
-+static int p2sb_scan_and_cache(struct pci_bus *bus, unsigned int devfn)
-+{
-+	unsigned int slot, fn;
-+	int ret;
-+
-+	/* Scan the P2SB device and cache its BAR0 */
-+	ret = p2sb_scan_and_cache_devfn(bus, devfn);
-+	if (ret || PCI_FUNC(devfn) != 0)
-+		return ret;
-+
-+	/*
-+	 * When function number of the P2SB device is zero, scan other function
-+	 * numbers. If devices are available, cache their BAR0.
-+	 */
-+	slot = PCI_SLOT(devfn);
-+	for (fn = 1; fn < NR_P2SB_RES_CACHE; fn++)
-+		p2sb_scan_and_cache_devfn(bus, PCI_DEVFN(slot, fn));
-+
-+	return 0;
-+}
-+
-+static int p2sb_cache_resources(void)
- {
--	struct pci_dev *pdev_p2sb;
- 	unsigned int devfn_p2sb;
- 	u32 value = P2SBC_HIDE;
- 	int ret;
-@@ -106,8 +128,8 @@ int p2sb_bar(struct pci_bus *bus, unsigned int devfn, struct resource *mem)
- 	if (ret)
- 		return ret;
- 
--	/* if @bus is NULL, use bus 0 in domain 0 */
--	bus = bus ?: pci_find_bus(0, 0);
-+	/* Assume P2SB is on the bus 0 in domain 0 */
-+	p2sb_bus = pci_find_bus(0, 0);
- 
- 	/*
- 	 * Prevent concurrent PCI bus scan from seeing the P2SB device and
-@@ -115,30 +137,75 @@ int p2sb_bar(struct pci_bus *bus, unsigned int devfn, struct resource *mem)
- 	 */
- 	pci_lock_rescan_remove();
- 
--	/* Unhide the P2SB device, if needed */
--	pci_bus_read_config_dword(bus, devfn_p2sb, P2SBC, &value);
-+	/*
-+	 * The BIOS prevents the P2SB device from being enumerated by the PCI
-+	 * subsystem, so we need to unhide and hide it back to lookup the BAR.
-+	 * Unhide the P2SB device here, if needed.
-+	 */
-+	pci_bus_read_config_dword(p2sb_bus, devfn_p2sb, P2SBC, &value);
- 	if (value & P2SBC_HIDE)
--		pci_bus_write_config_dword(bus, devfn_p2sb, P2SBC, 0);
-+		pci_bus_write_config_dword(p2sb_bus, devfn_p2sb, P2SBC, 0);
- 
--	pdev_p2sb = pci_scan_single_device(bus, devfn_p2sb);
--	if (devfn)
--		ret = p2sb_scan_and_read(bus, devfn, mem);
--	else
--		ret = p2sb_read_bar0(pdev_p2sb, mem);
--	pci_stop_and_remove_bus_device(pdev_p2sb);
-+	ret = p2sb_scan_and_cache(p2sb_bus, devfn_p2sb);
- 
- 	/* Hide the P2SB device, if it was hidden */
- 	if (value & P2SBC_HIDE)
--		pci_bus_write_config_dword(bus, devfn_p2sb, P2SBC, P2SBC_HIDE);
--
-+		pci_bus_write_config_dword(p2sb_bus, devfn_p2sb, P2SBC,
-+					   P2SBC_HIDE);
- 	pci_unlock_rescan_remove();
- 
--	if (ret)
--		return ret;
-+	return ret;
-+}
- 
--	if (mem->flags == 0)
-+/**
-+ * p2sb_bar - Get Primary to Sideband (P2SB) bridge device BAR
-+ * @bus: PCI bus to communicate with
-+ * @devfn: PCI slot and function to communicate with
-+ * @mem: memory resource to be filled in
-+ *
-+ * If @bus is NULL, the bus 0 in domain 0 will be used.
-+ * If @devfn is 0, it will be replaced by devfn of the P2SB device.
-+ *
-+ * Caller must provide a valid pointer to @mem.
-+ *
-+ * Return:
-+ * 0 on success or appropriate errno value on error.
-+ */
-+int p2sb_bar(struct pci_bus *bus, unsigned int devfn, struct resource *mem)
-+{
-+	struct p2sb_res_cache *cache;
-+	int ret;
-+
-+	if (!bus)
-+		bus = p2sb_bus;
-+
-+	if (!devfn) {
-+		ret = p2sb_get_devfn(&devfn);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	cache = &p2sb_resources[PCI_FUNC(devfn)];
-+	if (!p2sb_valid_resource(&cache->res) ||
-+	    cache->bus_dev_id != bus->dev.id)
- 		return -ENODEV;
- 
-+	memcpy(mem, &cache->res, sizeof(*mem));
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(p2sb_bar);
-+
-+static int __init p2sb_fs_init(void)
-+{
-+	p2sb_cache_resources();
-+	return 0;
-+}
-+
-+/*
-+ * pci_rescan_remove_lock avoids access to unhidden P2SB devices, but it causes
-+ * deadlock with sysfs pci bus rescan. To avoid the deadlock, access to P2SB
-+ * devices at an early step in kernel initialization and cache required
-+ * resources. This should happen after subsys_initcall which initializes PCI
-+ * subsystem and before device_initcall which requires P2SB resources.
-+ */
-+fs_initcall(p2sb_fs_init);
--- 
-2.43.0
 
+If you are not yet registered as a Musician or Band/Ensemble, be sure to si=
+gn-up from the following page (it's free!):
+
+https://www.musicianspage.com/signup.php?email=3Dlinux-i2c@vger.kernel.org
+
+---------------------------------------------------------------------------=
+-
+
+
+
+
+Consider to join with a Standard or Pro Membership
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Either if you are a Musician or a Music Employer, have a look at our Member=
+ship Plans and sign up for the one that best fits your needs:
+
+
+http://www.musicianspage.com/membership.html
+
+
+A Standard or Pro Membership gives you the ability to upload unlimited audi=
+o, video, and sheet music files to your profile; as well as a more complete=
+ resume (or service/company info if you are an employer) and a creative pag=
+e with media content. If you are a musician, you will also have the chance =
+to get featured on the new Musicians Page radio:
+
+http://www.musicianspage.com/music/radio/
+
+
+Musicians Page gives you a professional space on the web to showcase your t=
+alent to potential employers or, for employers, to have a professional and =
+targeted space on the web where to showcase your products or services to po=
+tential prospects. Musicians Page gives you the chance to differentiate you=
+rself from other musicians or the competition who only use amateur channels=
+ such as MySpace, FaceBook, YouTube, or other free sites.
+
+Also, do you know that your profile on Musicians Page is Google optimized?
+
+This means that employers, other musicians or prospects can easily find you=
+ via Google. Our system automatically optimizes every Musician's profile to=
+ appear at the top of Google results for relevant keywords. Just another re=
+ason to take full advantage of all that the Standard and Pro Memberships ha=
+ve to offer, and not rely solely on free social networks that won't optimiz=
+e your profile for others to see at the top of the list!
+
+With a Standard or Pro Membership, you'll also be able to find and apply fo=
+r external jobs Musicians Page finds for you on the web (if you are a music=
+ian) and, with a Pro Membership, be notified via email as soon as a new ext=
+ernal jobs, matching your profile, are found. Or, if you are an employer, b=
+e featured prominently on any webpage of our site to over 2,000 unique user=
+s daily.
+
+Musicians Page is a network for professional musicians and music employers,=
+ built and planned to grow based on professional musicians' and music emplo=
+yers' needs. Don't miss the opportunity to jump on the band wagon from the =
+beginning.
+
+Membership fees are likely to be increased in the coming weeks, so join Mus=
+icians Page today and start networking the right way!
+
+https://www.musicianspage.com/signup.php
+
+
+
+
+Are you looking for musicians, a song writer, a lyricist, a composer?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If so, please post your music job or project on Musicians Page.
+To post a job/project is completely free and takes 5 minutes:
+
+http://www.musicianspage.com/login/panel.php?yourjobs=3D1&postnew=3D1
+
+
+REMEMBER: you can post a job even for a FREE project you need musicians for=
+!
+
+
+
+
+Latest Posted Jobs on Musicians Page
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+KEYBOARD PLAYER
+http://www.musicianspage.com/jobs/7722/
+
+Music Duo
+http://www.musicianspage.com/jobs/7721/
+
+Guitarist needed in Mexico for rock and roll music
+http://www.musicianspage.com/jobs/7720/
+
+KEYBOARD PLAYER
+http://www.musicianspage.com/jobs/7719/
+
+STEEL PAN SOLOIST FOR CRUISE SHIPS URGENT
+http://www.musicianspage.com/jobs/7715/
+
+Lauren Daigle Cover Singer
+http://www.musicianspage.com/jobs/7716/
+
+Violinist Wanted
+http://www.musicianspage.com/jobs/7717/
+
+Power rock/pop trio for cruises
+http://www.musicianspage.com/jobs/7713/
+
+Country Musicians for Cruises
+http://www.musicianspage.com/jobs/7712/
+
+Guitar Violin Duos for Cruises
+http://www.musicianspage.com/jobs/7710/
+
+
+More jobs:
+http://www.musicianspage.com/jobs/
+
+
+
+
+Latest External Jobs or Opportunities (found on the web)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Vocalist &amp; Lead guitarist wanted for cover band project
+http://www.musicianspage.com/extjobs/1256380/
+
+Looking for Drummer and Bassist
+http://www.musicianspage.com/extjobs/1256379/
+
+Looking for drummer (tech-metal  emoviolence  skramz)
+http://www.musicianspage.com/extjobs/1256378/
+
+Seeking vocalists for Projects
+http://www.musicianspage.com/extjobs/1256377/
+
+Looking for a session lead guitarist - heavy/thrash metal
+http://www.musicianspage.com/extjobs/1256376/
+
+Looking for a guitarist with screaming for noise/shoegaze project
+http://www.musicianspage.com/extjobs/1256375/
+
+BASS PLAYER WANTED BY AN ESTABLISHED PUNK ROCK BAND
+http://www.musicianspage.com/extjobs/1256374/
+
+80=E2=80=99s band looking for a lead vocalist M or F
+http://www.musicianspage.com/extjobs/1256373/
+
+Guitarist needed! Southern rock and blues covers
+http://www.musicianspage.com/extjobs/1256372/
+
+Male Singers Needed for Christmas Medley on 12/21 in DC
+http://www.musicianspage.com/extjobs/1256371/
+
+
+More jobs:
+http://www.musicianspage.com/jobs/
+
+
+
+
+Latest Forum Topics
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Help: in which Latin genre would the be included? - by Ignacio Cobian Sanch=
+ez
+posted on the Latin Music forum
+http://www.musicianspage.com/forums/music/latinmusic/9038/
+
+
+Youtube Channel Recommendation/Suggestion - by Classical Music
+posted on the Classical Music forum
+http://www.musicianspage.com/forums/music/classicalmusic/9037/
+
+
+I can write for you any sheet music - by Carolina Escalona
+posted on the Introduce Yourself forum
+http://www.musicianspage.com/forums/general/introduceyou/9036/
+
+
+More forum topics:
+http://www.musicianspage.com/forums/
+
+
+
+
+Latest Uploaded Audio Files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Eye Of The Hurricane by roxanne hall (added by Roxanne Hall)
+Genre: Other...
+http://www.musicianspage.com/musicians/53862/audiofile/22923/
+
+
+Agenda by Gary Justice &amp; Moka Only (added by Gary Justice)
+Genre: R&B/Soul
+http://www.musicianspage.com/musicians/53859/audiofile/22921/
+
+
+Ringtone by Ray Rosa (added by Ray Rosa)
+Genre: Pop
+http://www.musicianspage.com/musicians/9397/audiofile/22920/
+
+
+More audio files:
+http://www.musicianspage.com/audio/
+
+
+We are waiting for your comments and if you have any, please upload your
+own audio files from the page below (you must register first):
+
+https://www.musicianspage.com/login/panel.php?addaudiofiles=3D1
+
+
+
+
+Latest Uploaded Video Files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Duorphe promo video by Duorphe (added by Duorphe)
+Genre: Pop
+http://www.musicianspage.com/musicians/53836/videofile/21169/
+
+
+Master Blues by ARTIZZATE music (added by Orgazzly Organ)
+Genre: World
+http://www.musicianspage.com/musicians/7983/videofile/21163/
+
+
+I Don&#039;t Fit In by roxanne alicia hall (added by Roxanne Hall)
+Genre: Other...
+http://www.musicianspage.com/musicians/53862/videofile/21159/
+
+
+More video files:
+http://www.musicianspage.com/video/
+
+
+We are waiting for your comments and if you have any, please upload your
+own video files from the page below (you must register first):
+
+https://www.musicianspage.com/login/panel.php?addvideofiles=3D1
+
+
+
+
+Latest Uploaded Sheet Music Files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+XLIII Memoriam Vivere by Marisol Jimenez (added by Marisol Jimenez)
+Genre: Contemporary
+http://www.musicianspage.com/musicians/11620/sheetmusic/3278/
+
+
+Symphonic Suite for Concert Band, First Draft by William Malcolm Jones (add=
+ed by William Jones)
+Genre: Classical
+http://www.musicianspage.com/musicians/10888/sheetmusic/3277/
+
+
+SOTF - Piano solo by Ronald Van Deurzen (added by Ronald Van Deurzen)
+Genre: Classical
+http://www.musicianspage.com/musicians/41617/sheetmusic/3274/
+
+
+More sheet music files:
+http://www.musicianspage.com/sheetmusic/
+
+
+We are waiting for your comments and if you have any, please upload your
+own sheet music files from the page below (you must register first):
+
+https://www.musicianspage.com/login/panel.php?addsheetmusic=3D1
+
+
+
+
+Earn money with your website, FaceBook, YouTube or MySpace
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you own a website or simply an account on FaceBook, YouTube, MySpace or =
+Twitter, be sure to check out the Virtual Sheet Music's Affiliate Program w=
+hich entitles you to earn 30% commission on any referred sale.
+
+It is completely free to join:
+
+https://affiliates.virtualsheetmusic.com/
+
+
+and once you have an account, start referring users using a special code to=
+ put on your website or social account (FaceBook, Twitter, etc).
+
+For any further questions, please reply to this email, we will be glad to h=
+elp you step by step.
+
+
+
+
+Join us on the major Social Networks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Stay updated with our latest news on:
+
+1. on FaceBook:
+http://www.facebook.com/MusiciansPage
+
+2. on Twitter:
+http://twitter.com/MusiciansPage
+
+
+
+
+---------------------------------------------------------------------------=
+-----
+
+FEATURE YOURSELF ON MUSICIANS PAGE:
+=20
+If you have an upcoming concert, CD release, special Event, or just want to=
+ promote yourself and your activity, remember you can feature yourself in f=
+ront of thousands of musicians, music lovers, and music employers (includin=
+g music agents, artist management companies, etc.) by exclusively putting y=
+our picture and name on every page of Musicians Page, starting at just $10 =
+(that's right, just 10 bucks!):
+=20
+https://www.musicianspage.com/login/panel.php?featureyourself=3D1
+=20
+Your ad will be displayed exclusively for the duration of your campaign, gi=
+ving you maximum exposure to the Musicians Page community. Musicians Page i=
+s visited by thousands of musicians and people working in the music busines=
+s every day, so consider putting yourself in front of this specialized audi=
+ence.
+
+This is your chance to make new contacts and seize exciting opportunities i=
+n minutes! Don't miss this opportunity now!
+
+---------------------------------------------------------------------------=
+-----
+
+
+
+
+Please feel free to pass this Newsletter along to friends and other musicia=
+ns who might find this content valuable in the same way you do, and be sure=
+ to send us your ideas and thoughts by either replying to this email or by =
+posting your comments and feedback on the dedicated forum below:
+
+http://www.musicianspage.com/forums/general/feedback/
+
+Thank you!
+
+All the best,
+Fabrizio Ferrari, CEO
+Musicians Page
+http://www.musicianspage.com
+Virtual Sheet Music Inc.
+http://www.virtualsheetmusic.com
+29911 Niguel Road, #6992
+Laguna Niguel, CA 92677 (USA)
+Fax: +1 800 717 1876 or +1 973 273 2171
+----------------------------------------------
+This message was sent from Musicians Page
+http://www.musicianspage.com
+To unsubscribe, please go to:
+http://www.musicianspage.com/unsubscribe.php?email=3Dlinux-i2c@vger.kernel=
+=2Eorg
 
