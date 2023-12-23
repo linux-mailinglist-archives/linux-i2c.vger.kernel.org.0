@@ -1,168 +1,100 @@
-Return-Path: <linux-i2c+bounces-980-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-981-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A79481D48B
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Dec 2023 15:21:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C694081D62E
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Dec 2023 20:12:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF3BD1F224BE
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Dec 2023 14:21:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 243BA282E10
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Dec 2023 19:12:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A2ECDF5A;
-	Sat, 23 Dec 2023 14:21:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 965E520320;
+	Sat, 23 Dec 2023 19:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DbNwy6Ab"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yd1OQr+z"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191C5DF49;
-	Sat, 23 Dec 2023 14:21:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E391C433C8;
-	Sat, 23 Dec 2023 14:21:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703341311;
-	bh=RnyXYHP3dMZw4dYJBDRufTXGbo0tO/TG/JCTO5lGdlY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DbNwy6AbD3CubVOOBgojHzQ6n7335C+j06W606+erG8V3mDPX4NpUqo05XM6A4eAx
-	 kVfKIoG35MdZ8TsX+zOHmjELgaFNLeweDo0nUcmHhq3fgXh2dcPabO+4Wu1Wf3FlEj
-	 YE2uW7DMDB12p6LEv6JbXyOrJdBHtunfgpyyflRpf/6Hv6WH31dZPLeOq6BbAF9bgX
-	 xG2WWsIO8RR9H2BmOmPZfm2syvjB6ulfggIOVBkCCk1paqDbAfGR4ShnLEwKBNALrJ
-	 HUwYra+7Fw8Ha+GcdfhNGpAiQ3gq3P0i7rF6ORJOMkp4j/fPn36QsT26mLE1VrYOpd
-	 oXdA0CBO6aclg==
-Received: by pali.im (Postfix)
-	id 52259A3B; Sat, 23 Dec 2023 15:21:48 +0100 (CET)
-Date: Sat, 23 Dec 2023 15:21:48 +0100
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>, Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-	linux-i2c@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	Kai-Heng Feng <kai.heng.feng@canonical.com>,
-	Marius Hoch <mail@mariushoch.de>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Dell.Client.Kernel@dell.com, Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: Ideas for a generic solution to support accelerometer lis3lv02d
- in Dell laptops/notebooks?
-Message-ID: <20231223142148.jl6poaw2eqottzdg@pali>
-References: <4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de>
- <a1128471-bbff-4124-a7e5-44de4b1730b7@redhat.com>
- <20231223125350.xqggx3nyzyjjmnut@pali>
- <79134dc1-c71c-4f9e-b721-52385df62cf5@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2630320310;
+	Sat, 23 Dec 2023 19:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-28beb1d946fso2274869a91.0;
+        Sat, 23 Dec 2023 11:12:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703358723; x=1703963523; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=y4pzyN944tMgsUdo0/fVxnKFBqDFkjcWL3Qdyx8hsEE=;
+        b=Yd1OQr+zLXa736p2ufHsm2fEA/2bIVekzSfRy7kS94Ur1bA4Qg/PZRYat3r+JuqFGm
+         hnZfNU4VJhfVuJ8uzFwlrdlEWUDJ7w4DJ0xr0ATTLqD102/trE1mOI2wQhfEk1V94KiD
+         zS/7hqZQmvtxFYOdxvflZovqe5q9dp1cZ4utElQNLVU6xZloRw3DYDK0utD2PTWeTDFe
+         AiDovetVX52XtKd3Iwd0CuyFwIe9TALzRsRPCRoY9JfSaZOKFvxas0MH1Vub17BOYvnv
+         NeEtVIG7Om+Bd72X6tesOHgdfDTwYUlczxeWj+SUxvnpfViVMF91KaDDxT9VlUhBh5xc
+         9lsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703358723; x=1703963523;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y4pzyN944tMgsUdo0/fVxnKFBqDFkjcWL3Qdyx8hsEE=;
+        b=OLI/fnRqoGXYM5ZhusVDO2ahJNP5ekLXEy6HKu0HsQMxUDmzEgWEwzPf6fnyklTjg+
+         zrwVW2YRqMlnRnsBc07YIP3gwvIXonMhb41YAKWjIkDC8ovPmv7/b7NunMc3LrgXcW6g
+         3K6qPbu0KhLXQJrq9dq7FawcI09kzc6nvdcw89UXOa9rE8oIA+hGB8iukgd7y0sQn+JF
+         OgUgCnSEWtG9CQ6SQI6OIv+jM0v4Ii4ucLKUBYsnrmU/1fDPKgRYxrcR51wOVaKHN4JX
+         llC0E4yyU2ux66PUB+kts0yRzsr/P05eMxL0XHSyptAsBl8/KTgRSXKVAUL+fxgfvqRi
+         gv9Q==
+X-Gm-Message-State: AOJu0Yxscdr5e0ofqUUjiUKROQDaE31CiIEdODcAiqHjKxCqE+3t8165
+	ouDobmv+l+uKt+mRlnXR7Ak=
+X-Google-Smtp-Source: AGHT+IHmixcKdl0lA1Ct/3u5qYBe7W7f24qTu04G3SA9qn6gkHBjIm/NQWD4XmcTgRUhkN9e/lbYvw==
+X-Received: by 2002:a17:902:f7c1:b0:1d3:5fc4:f4cc with SMTP id h1-20020a170902f7c100b001d35fc4f4ccmr3523921plw.29.1703358723287;
+        Sat, 23 Dec 2023 11:12:03 -0800 (PST)
+Received: from attreyee-HP-Pavilion-Laptop-14-ec0xxx.. ([27.5.150.118])
+        by smtp.gmail.com with ESMTPSA id m5-20020a170902db8500b001d04c097d32sm5402100pld.270.2023.12.23.11.12.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Dec 2023 11:12:02 -0800 (PST)
+From: attreyee-muk <tintinm2017@gmail.com>
+To: wsa@kernel.org
+Cc: attreyee-muk <tintinm2017@gmail.com>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] Documentation/i2c: fix spelling error in i2c-address-translators i2c-address-translators
+Date: Sun, 24 Dec 2023 00:38:53 +0530
+Message-Id: <20231223190852.27108-1-tintinm2017@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <79134dc1-c71c-4f9e-b721-52385df62cf5@redhat.com>
-User-Agent: NeoMutt/20180716
 
-On Saturday 23 December 2023 14:40:09 Hans de Goede wrote:
-> Hi,
-> 
-> On 12/23/23 13:53, Pali Rohár wrote:
-> > On Saturday 23 December 2023 13:45:32 Hans de Goede wrote:
-> >> 2. Add a "probe_i2c_address" bool module option and when this
-> >>    is set try to read the WHO_AM_I register, see
-> >>    drivers/misc/lis3lv02d/lis3lv02d.c
-> >>    and if this succeeds and gives a known model id then
-> >>    continue with the found i2c_address. This should first
-> >>    try address 0x29 which seems to be the most common and
-> >>    then try 0x18 and then give up.
-> > 
-> > This is the main problem of the whole email thread. How to figure out
-> > the correct smbus device address.
-> 
-> Ack.
-> 
-> > And we really must not poke random address during kernel boot time.
-> > I think in the past was there enough problems linux kernel broke some HW
-> > or made system unbootable just because it tried to read something from
-> > some random undocumented address.
-> > 
-> > Please do not try random unverified address on all machines.
-> 
-> Right, that is why this sits behind a module option. Also note
-> that the 0x29 / 0x18 addresses are typically used by some
-> sensor ic, which are typically safe to probe.
-> 
-> > smbus is not really bus which provides discovering and identifying
-> > devices on the bus.
-> 
-> I know I have worked on the lm_sensors project and the
-> sensors-detect script in the past. Generally speaking
-> though i2c probing is not that dangerous. But one can
-> get unlucky ...
+Correct to "stretched" from "streched" in "keeps clock streched on bus A
+waiting for reply"
 
-I think that manual probing after user confirmation is acceptable. But
-automatic one without any user confirmation after kernel upgrade for all
-existing and also all future machines is not something which I can say
-that is safe.
+Signed-off-by: Attreyee Mukherjee <tintinm2017@gmail.com>
+---
+ Documentation/i2c/i2c-address-translators.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I have experience when broken bytes in EDID eeprom and monitor
-completely stopped working. It was after manual probing of some eeprom
-driver (so driver of the correct class). If kernel/X11 logs did not
-print warnings about EDID checksum I would not be able to debug & repair
-it.
+diff --git a/Documentation/i2c/i2c-address-translators.rst b/Documentation/i2c/i2c-address-translators.rst
+index b22ce9f41ecf..6845c114e472 100644
+--- a/Documentation/i2c/i2c-address-translators.rst
++++ b/Documentation/i2c/i2c-address-translators.rst
+@@ -71,7 +71,7 @@ Transaction:
+  - Physical I2C transaction on bus A, slave address 0x20
+  - ATR chip detects transaction on address 0x20, finds it in table,
+    propagates transaction on bus B with address translated to 0x10,
+-   keeps clock streched on bus A waiting for reply
++   keeps clock stretched on bus A waiting for reply
+  - Slave X chip (on bus B) detects transaction at its own physical
+    address 0x10 and replies normally
+  - ATR chip stops clock stretching and forwards reply on bus A,
+-- 
+2.34.1
 
-So one can be really unlucky if something happen in the future, like
-changing laptop board wiring, changing accelerator chipset or whatever.
-
-I have also experience with i2c device which have broken first i2c
-single byte read (first after wakeup from low power state) and product
-errata was to put data line to some position for at least some period of
-time before doing the real data transfer.
-
-I rather do not want to image what can happen if similar hw bug is in
-the i2c multiplexer after which are connected more i2c devices...
-
-After those experiences I want to be really safe about what is kernel
-going to do automatically after the boot.
-
-> We should probably first do 2 single byte i2c-reads
-> (not smbus byte reads but plain i2c reads) if there
-> is a i2c device there with the standard smbus register
-> model where there is a 8 bit register address pointer
-> then reading 2 times in a row will read 2 different
-> registers (the internal register address pointer will
-> increment) so we should get 2 different values.
-> 
-> If we get the same value twice then whatever is
-> present on address 0x29 or 0x18 does not follow
-> the standard smbus register addressing and we should
-> refrain from doing a smbus-byte-read, which first
-> sends the register-address to read so involves
-> an actual i2c-*write*.
-> 
-> The combination of determining that normal smbus
-> register addressing is used + only doing reads
-> should make probing pretty safe. And the probing
-> will only happen when the module option is set
-> in the first place.
-
-Hiding all above logic behind module parameter which is disabled by
-default sounds safe. I think that this is something against which should
-not be too much disagreements (expecting that module parameter will have
-correct description with warning, just to be safe).
-
-But well, my guess is that people would like to see accelerometer to
-work out-of-the-box without configuring anything.
-
-And this is possible only by communication with Dell. Dell designers
-should have some ideas how it is suppose to work. And reinventing the
-wheel from scratch in Linux kernel is not the best option.
-
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
-> 
 
