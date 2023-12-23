@@ -1,148 +1,193 @@
-Return-Path: <linux-i2c+bounces-976-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-977-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BCA081D3FB
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Dec 2023 13:19:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA8AA81D407
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Dec 2023 13:45:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BCA51C21565
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Dec 2023 12:19:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 519B71F224DB
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Dec 2023 12:45:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DB00D278;
-	Sat, 23 Dec 2023 12:19:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0FDED29E;
+	Sat, 23 Dec 2023 12:45:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lu1i+UCu"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hL8OhLs8"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A4AD270;
-	Sat, 23 Dec 2023 12:19:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F0F3C433C8;
-	Sat, 23 Dec 2023 12:19:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703333984;
-	bh=rHTtxHf9a3r4vHR095B9f16IsZX5OlwLQpQs/jrKrM8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lu1i+UCub3bVYPAFVUbt96J9iYE38QtWbUazww2LxmfsUF4I47xIjcu50GhjHHYgZ
-	 Vp2G++oq36HrQIz4Kjl8qX8srMImw+M/R9HGOdYcILe8KdiW8mrmXAhigzKtPmK3OK
-	 MF+f8wPWe4U8XgIvdkN5ILgRawQS2gK9vNGnMp5eVmkVi3eC1rYk2e4/7obNTNvHKR
-	 Y97dHXbhbnRWpKw4BP3PbBEY7di4EjTKk3nI0H/aaxgdZt9fJacZFSll0kj3XJj0yr
-	 j1jacGgeL4DvU/0GBaAAvyITDfk8hAeFCTMXZijQ6r5MD9daUO1fJDkFXpTek0Y8ps
-	 yVnxh8Yt/cFFw==
-Received: by pali.im (Postfix)
-	id 8CA35A3B; Sat, 23 Dec 2023 13:19:41 +0100 (CET)
-Date: Sat, 23 Dec 2023 13:19:41 +0100
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Kai-Heng Feng <kai.heng.feng@canonical.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Marius Hoch <mail@mariushoch.de>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Dell.Client.Kernel@dell.com, Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: Ideas for a generic solution to support accelerometer lis3lv02d
- in Dell laptops/notebooks?
-Message-ID: <20231223121941.65di3dimdht4kyw5@pali>
-References: <4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46AFD28A
+	for <linux-i2c@vger.kernel.org>; Sat, 23 Dec 2023 12:45:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1703335547;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sLJFSQIp7fhvFcRrwCoza2064ZaOYLPHw4qUqiS9L7g=;
+	b=hL8OhLs8g5BMoyntu3aL9YUVlG/G1HK0kldGcLR00hpzh10ul05CeXXRZ93vouHh29S9y9
+	cIZRCRbadUfy3fSPK18oOEzhr5GtJdqrouh5EH5Vdf4u1MMGW1NbB7hq/sAgsQ797AH9QR
+	lIVyzGlebfWsLWN1NMAhX+x1iNvYscU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-173-Dwr1Hd6CPEGq-IOAwFdAsA-1; Sat, 23 Dec 2023 07:45:36 -0500
+X-MC-Unique: Dwr1Hd6CPEGq-IOAwFdAsA-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-40d2fa6b23eso23376955e9.2
+        for <linux-i2c@vger.kernel.org>; Sat, 23 Dec 2023 04:45:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703335535; x=1703940335;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sLJFSQIp7fhvFcRrwCoza2064ZaOYLPHw4qUqiS9L7g=;
+        b=eGvgUBSYHBaLFPHPs3D+wXbtXow3t9qXSwixRLh8Z/wdD7K3JVbaTE1zZ9gvNHx+xR
+         Rqu9FsqJoYyeT0S6Re6oHcTeQ1Qc2tAvUw+OH70cIaoaQsFWQm8Z+Dx493pQg5jnjeSF
+         XwejWXOU1owYCFs5Vomg0pRHXGVOVW92RXYvzRn2AsdPASizlnk4Cs8ipX1OOKRTxj+U
+         Crp3BCA9nva3BJOQgMQFR65zyvCXMCp6L2obySIs2FsjEZqgrlmojjnvpvGV0UjO4XSG
+         R7YQ1gsQ/BYN9Nw88nJAUJOjJYp/fbJL5WlksVDD/2vEgiwa9u9B+FyYfD0275F/BIgT
+         QH8g==
+X-Gm-Message-State: AOJu0YyBpEworX6s2R1Sx5RuFW4KANk5WiNRXtzIbWoH+GcCq+Y+sQfi
+	HFZWGt7GXQVVG2ZJbLgrWDZz7ZIZNe4pDfWiCU4YuvkWHFNZ94c2Oxe7L+TlN/AvHUjIszFGDo/
+	QNbGBesKbjgYaVgk5ySjrnifKFQnv
+X-Received: by 2002:a05:600c:5405:b0:40d:4502:741c with SMTP id he5-20020a05600c540500b0040d4502741cmr993934wmb.125.1703335534960;
+        Sat, 23 Dec 2023 04:45:34 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IG/uwyO8H99ZELdCyDLDo/sXgLdn7RQB2aBdzj4SaKIZW+k1CAkDFaKjT3blQp8tsVXKBEzgg==
+X-Received: by 2002:a05:600c:5405:b0:40d:4502:741c with SMTP id he5-20020a05600c540500b0040d4502741cmr993917wmb.125.1703335534465;
+        Sat, 23 Dec 2023 04:45:34 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id j1-20020a170906094100b00a26ae006522sm2302712ejd.122.2023.12.23.04.45.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Dec 2023 04:45:33 -0800 (PST)
+Message-ID: <a1128471-bbff-4124-a7e5-44de4b1730b7@redhat.com>
+Date: Sat, 23 Dec 2023 13:45:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: Ideas for a generic solution to support accelerometer lis3lv02d
+ in Dell laptops/notebooks?
+Content-Language: en-US, nl
+To: Paul Menzel <pmenzel@molgen.mpg.de>, Jean Delvare <jdelvare@suse.com>,
+ Andi Shyti <andi.shyti@kernel.org>
+Cc: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>,
+ Kai-Heng Feng <kai.heng.feng@canonical.com>, Marius Hoch
+ <mail@mariushoch.de>, Mario Limonciello <mario.limonciello@amd.com>,
+ Dell.Client.Kernel@dell.com, Greg KH <gregkh@linuxfoundation.org>
+References: <4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de>
+From: Hans de Goede <hdegoede@redhat.com>
 In-Reply-To: <4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Saturday 23 December 2023 10:39:18 Paul Menzel wrote:
+Hi Paul,
+
+On 12/23/23 10:39, Paul Menzel wrote:
 > Dear Linux folks,
 > 
 > 
-> Currently, on Dell systems with the accelerometer lis3lv02d, its I²C address
-> needs to be added to `dell_lis3lv02d_devices[]` in
-> `drivers/i2c/busses/i2c-i801.c`.
-
-Hello. This is because smbus bus do not have smart discovery
-capabilities like PCIe or USB buses. The device address has to be
-somewhere stored. And at the moment it is in the parent bus driver.
-
-> In Linux 6.7-rc6 that array has nine elements, so only a small fraction of
-> all Dell notebooks is listed. Searching the Linux logs uploaded to the Linux
-> hardware database from May 2023 [1], there are around 129 devices without
-> support in the Linux kernel version the upload was done with.
-
-In Dell ACPI device table is already stored information if the smbus
-device is present in the laptop or not. And there is (or at least was
-for older models) also interrupt number in ACPI device resource list.
-Kernel driver already registers for interrupt events.
-
-What is missing the ACPI device resource list is that smbus device
-address on which is device listening. Or better, it was missing for
-older models. I have not checked new models.
-
-Why it is missing, I have no idea. As ACPI tables are passed to kernel
-by laptop firmware (BIOS/UEFI) I bet that this is just a programming
-error that somebody forgot to put this information there.
-
-I think that it was Mario who is the past confirmed smbus address of few
-models and confirmed also information that address is not really stored
-in the ACPI tables.
-
-Before taking any future steps it would be needed to confirm if the
-smbus device address is still missing in the ACPI device resource list
-in the new laptop models.
-
-> Do you know, how the Microsoft Windows driver is doing this? Is it
-> hard-coded there too, or can it be deduced somehow, for example from the
-> ACPI tables?
-
-In past on Windows laptops it was always needed to install correct and
-specific version of drivers for every laptop, I would not be surprised
-that smbus device address can be there hardcoded too. I really do not
-remember details, it is years ago when I was looking at this particular
-problem. But these practises do not (or at least should not) apply to
-modern Windows machines, so it can be possible that new Windows drivers
-can discover it somehow (read from BIOS, UEFI, EEPROM, ACPI methods,
-etc.). Or there is another option: There is no Windows driver for it at
-all (and so no problem).
-
-If you have such new laptops then the best for you is to do inspection.
-Look how is device driver registered, how the application communicate
-with drivers, look at device resources, etc... Basically Linux kernel
-driver should use same resources as the Windows kernel driver.
-
-> I added some Kai-Heng and Hans to Cc as they might have contact. Dell offers
-> or offered quite a few of the models with official Ubuntu support, so I
-> would have hoped to have a generic solution for this. Maybe Mario can also
-> forward it to the Dell team.
-
-This is really question for Dell people.
-
-We have done the best what we were able, but internal wiring of the
-Dell laptop boards and how it is reported to the operating system is
-really what only Dell firmware people or other Dell team can do it.
-
+> Currently, on Dell systems with the accelerometer lis3lv02d, its I²C address needs to be added to `dell_lis3lv02d_devices[]` in `drivers/i2c/busses/i2c-i801.c`.
 > 
+> In Linux 6.7-rc6 that array has nine elements, so only a small fraction of all Dell notebooks is listed. Searching the Linux logs uploaded to the Linux hardware database from May 2023 [1], there are around 129 devices without support in the Linux kernel version the upload was done with.
 > 
-> Kind regards,
+> Do you know, how the Microsoft Windows driver is doing this? Is it hard-coded there too, or can it be deduced somehow, for example from the ACPI tables?
 > 
-> Paul
-> 
-> 
+> I added some Kai-Heng and Hans to Cc as they might have contact. Dell offers or offered quite a few of the models with official Ubuntu support, so I would have hoped to have a generic solution for this. Maybe Mario can also forward it to the Dell team.
+
+Interesting question.
+
+So there are really 2 issues here:
+
+a. The probe problem you are describing
+
+b. The support for the lis3lv02d is using an old misc-char + input(evdev)
+   userspace API defined in:
+   drivers/platform/x86/dell/dell-smo8800.c
+   drivers/misc/lis3lv02d/lis3lv02d[_i2c].c
+
+   where as it really should be using the IIO interface like
+   almost all other accelerometer chips are doing. There even
+   already is a driver for this:
+   drivers/iio/accel/st_accel[_i2c].c
+
+Here is what I believe should be done to fix this:
+
+1. The handling of instantiating the i2c-client really does NOT
+   belong in drivers/i2c/busses/i2c-i801.c instead some code
+   should be added to drivers/platform/x86/dell/dell-smo8800.c
+   for finding the right i2c-bus and then the code to instantiate
+   the i2c_client for the lis3lv02d device should be moved to
+   drivers/platform/x86/dell/dell-smo8800.c .
+
+2. Add a "probe_i2c_address" bool module option and when this
+   is set try to read the WHO_AM_I register, see
+   drivers/misc/lis3lv02d/lis3lv02d.c
+   and if this succeeds and gives a known model id then
+   continue with the found i2c_address. This should first
+   try address 0x29 which seems to be the most common and
+   then try 0x18 and then give up.
+
+   This should also modify the dmesg "Accelerometer lis3lv02d is
+   present on SMBus but its address is unknown, skipping registration\n"
+
+   message to hint at trying to use the probe_i2c_address option
+   with a remark that this could theoretically be dangerous for
+   the laptop.
+
+   And likewise when probe_i2c_address option is set and the
+   laptop model is not in the DMI list then on successful
+   probe print a message to please report the i2c-address upstream.
+
+   This should resolve (a) from above.
+
+3. Once we have the i2c-client instantiation in dell-smo8800.c
+   we can add a "use_misc_lis3lv02d" boolean module option there
+   which defaults to false.
+
+   And then if we know the i2c-address and use_misc_lis3lv02d is false:
+   2.1 register the i2c_client with "lis3lv02dl_accel"
+       as type instead of "lis3lv02dl", note I think we may need
+       to use different type-s depending on the WHO_AM_I register
+       value, the st_accel.c code needs to be checked for this.
+   2.2 pass the interrupt to the i2c_client driver by setting
+       it in board_info
+   2.3 do not register the dell-smo8800.c IRQ handler
+       (the i2c_client will own the IRQ)
+   2.4 do not register the dell-smo8800.c misc char device
+
+   This solves (b) from above giving us a more standard accel
+   userspace interface. We do need to evaluate how this
+   impacts iio-sensor-proxy though, since this now may start
+   doing screen-rotation based on this!
+
+If you plan to work on this please let me know. I think
+the trickiest issue is going to be to find the right i2c-bus
+in dell-smo8800.c.
+
+Regards,
+
+Hans
+
+
+
+
+
+
 > [1]: https://github.com/linuxhw/Dmesg
 > 
 > 
 > PS: Dell devices in Linux hardware database with accelerometer:
 > 
-> linux-hardware-dmesg/Notebook/Dell (main)$ git grep -l ccelerome | cut -d
-> '/' -f 1,2 | sort -u
+> linux-hardware-dmesg/Notebook/Dell (main)$ git grep -l ccelerome | cut -d '/' -f 1,2 | sort -u
 > Inspiron/Inspiron 11 - 3147
 > Inspiron/Inspiron 5520
 > Inspiron/Inspiron 7547
@@ -278,7 +323,8 @@ really what only Dell firmware people or other Dell team can do it.
 > 
 > Unsupported:
 > 
-> $ git grep ccelerome | grep "is present on SMBus" | cut -d '/' -f 1,2 | sort
-> -u | wc -l
+> $ git grep ccelerome | grep "is present on SMBus" | cut -d '/' -f 1,2 | sort -u | wc -l
 > 129
+> 
+
 
