@@ -1,175 +1,227 @@
-Return-Path: <linux-i2c+bounces-974-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-975-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E62381D1CB
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Dec 2023 04:11:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC25E81D35E
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Dec 2023 10:40:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4225D1C208A1
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Dec 2023 03:11:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F14EB22F63
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Dec 2023 09:40:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2E208BE0;
-	Sat, 23 Dec 2023 03:09:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="luMoaPWh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF2368F7E;
+	Sat, 23 Dec 2023 09:40:25 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399E323DB
-	for <linux-i2c@vger.kernel.org>; Sat, 23 Dec 2023 03:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7811b05d23bso158811285a.0
-        for <linux-i2c@vger.kernel.org>; Fri, 22 Dec 2023 19:09:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1703300985; x=1703905785; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ywzTa8fMWuNa/JuhVm+nHhoMjqqOsifKMd1nKPgEx10=;
-        b=luMoaPWhIhDUdruoTQjWyw+cO20Zc6DH5XiEW8aNY9Dy5ftPaAGbYc13HyqrgvJ4fC
-         ngTb1SeAtW+RwrWh0RSFUyf+dpT8ie4FvJvr19OiP0OenZftbmLJNrz2TqjX8oYZuVJC
-         851xJsi7sYB55os698lZ70G178k1Dk8NhEVys=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703300985; x=1703905785;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ywzTa8fMWuNa/JuhVm+nHhoMjqqOsifKMd1nKPgEx10=;
-        b=vz+6kMZpO3BMDfEqGekSFhHSyjc2slzrs8DYEn3CJpwPfvibyQuv0wDrIymRJMULmi
-         IiLQB7a3ET4WlmgmAm3ll/3BGHkmYzbCLZ81cr/h6ZIxB7cy6Vjnttiu8P3vN8c/lb7D
-         yXrIiL2YyuwEytxZ280YX3a9uB9KSqMIIW1hwQPDD4J7bb3LNxvQAG6I2uxTUmfDmgnW
-         4IChw1JV5WqcITMZ53FZanoXNP5cbzLQoB6U08zklygLj8252bmZyiGc8dRuZsDjKySz
-         RVGAxp6yZbU9wW3aJedD6E/jQUkz/+AotglDJ+1Sci1uIFg58vCdreeyo/dCvjAybQCa
-         IB/Q==
-X-Gm-Message-State: AOJu0Yy8CDoifWC2S66ZFr8HRSJSB4F53fwHv9LbF6oF/iInpTDJ1PZ4
-	TPPTby5qepOk+n79XhfiOGZCIut1Miso3j7TbzfkUlIu0uSP
-X-Google-Smtp-Source: AGHT+IEBvqegMfdoedSyh3kxbutEtn5gV5GDWkisfZz7Iuigcnj/FFwhpAcdsdZp1jH/qHyBjmxuTEjnkwczuhHeur4=
-X-Received: by 2002:a05:620a:4f6:b0:781:37c2:f17a with SMTP id
- b22-20020a05620a04f600b0078137c2f17amr949586qkh.92.1703300985054; Fri, 22 Dec
- 2023 19:09:45 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3C26116;
+	Sat, 23 Dec 2023 09:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.6] (ip5f5af375.dynamic.kabel-deutschland.de [95.90.243.117])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 2E8EF61E5FE01;
+	Sat, 23 Dec 2023 10:39:19 +0100 (CET)
+Message-ID: <4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de>
+Date: Sat, 23 Dec 2023 10:39:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231220165423.v2.1.Ifd0903f1c351e84376d71dbdadbd43931197f5ea@changeid>
- <202312230907.szXqJyXq-lkp@intel.com>
-In-Reply-To: <202312230907.szXqJyXq-lkp@intel.com>
-From: Mark Hasemeyer <markhas@chromium.org>
-Date: Fri, 22 Dec 2023 20:09:34 -0700
-Message-ID: <CANg-bXBWNQpnz99Yf5NmfX03Xa5jsiiw-89NVBqBwhmESnueuw@mail.gmail.com>
-Subject: Re: [PATCH v2 01/22] gpiolib: acpi: Modify acpi_dev_irq_wake_get_by()
- to use resource
-To: kernel test robot <lkp@intel.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, oe-kbuild-all@lists.linux.dev, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>, Raul Rangel <rrangel@chromium.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Andy Shevchenko <andriy.shevchenko@intel.com>, 
-	Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Len Brown <lenb@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Wolfram Sang <wsa-dev@sang-engineering.com>, linux-acpi@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
+Cc: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>,
+ Kai-Heng Feng <kai.heng.feng@canonical.com>,
+ Hans de Goede <hdegoede@redhat.com>, Marius Hoch <mail@mariushoch.de>,
+ Mario Limonciello <mario.limonciello@amd.com>, Dell.Client.Kernel@dell.com,
+ Greg KH <gregkh@linuxfoundation.org>
+Subject: Ideas for a generic solution to support accelerometer lis3lv02d in
+ Dell laptops/notebooks?
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 22, 2023 at 7:09=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Mark,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on robh/for-next]
-> [also build test WARNING on chrome-platform/for-next chrome-platform/for-=
-firmware-next wsa/i2c/for-next driver-core/driver-core-testing driver-core/=
-driver-core-next driver-core/driver-core-linus linus/master v6.7-rc6 next-2=
-0231222]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Hasemeyer/gpi=
-olib-acpi-Modify-acpi_dev_irq_wake_get_by-to-use-resource/20231222-172104
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git fo=
-r-next
-> patch link:    https://lore.kernel.org/r/20231220165423.v2.1.Ifd0903f1c35=
-1e84376d71dbdadbd43931197f5ea%40changeid
-> patch subject: [PATCH v2 01/22] gpiolib: acpi: Modify acpi_dev_irq_wake_g=
-et_by() to use resource
-> config: x86_64-randconfig-161-20231222 (https://download.01.org/0day-ci/a=
-rchive/20231223/202312230907.szXqJyXq-lkp@intel.com/config)
-> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20231223/202312230907.szXqJyXq-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202312230907.szXqJyXq-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/gpio/gpiolib-acpi.c:117: warning: Function parameter or member=
- 'shareable' not described in 'acpi_gpio_info'
->
->
-> vim +117 drivers/gpio/gpiolib-acpi.c
->
-> aa92b6f689acf1 Mika Westerberg 2014-03-10   93
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15   94  /**
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15   95   * struct acpi_gpio_info =
-- ACPI GPIO specific information
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15   96   * @adev: reference to AC=
-PI device which consumes GPIO resource
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15   97   * @flags: GPIO initializ=
-ation flags
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15   98   * @gpioint: if %true thi=
-s GPIO is of type GpioInt otherwise type is GpioIo
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15   99   * @pin_config: pin bias =
-as provided by ACPI
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  100   * @polarity: interrupt p=
-olarity as provided by ACPI
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  101   * @triggering: triggerin=
-g type as provided by ACPI
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  102   * @wake_capable: wake ca=
-pability as provided by ACPI
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  103   * @debounce: debounce ti=
-meout as provided by ACPI
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  104   * @quirks: Linux specifi=
-c quirks as provided by struct acpi_gpio_mapping
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  105   */
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  106  struct acpi_gpio_info {
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  107          struct acpi_devic=
-e *adev;
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  108          enum gpiod_flags =
-flags;
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  109          bool gpioint;
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  110          int pin_config;
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  111          int polarity;
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  112          int triggering;
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  113          bool wake_capable=
-;
-> 189f4620fa2d51 Mark Hasemeyer  2023-12-20  114          bool shareable;
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  115          unsigned int debo=
-unce;
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  116          unsigned int quir=
-ks;
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15 @117  };
-> b7452d670fdef8 Dmitry Torokhov 2022-11-15  118
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Dear Linux folks,
 
-Ack. Missing documentation for acpi_gpio_info.shareable member. Will
-add in next version.
+
+Currently, on Dell systems with the accelerometer lis3lv02d, its I²C 
+address needs to be added to `dell_lis3lv02d_devices[]` in 
+`drivers/i2c/busses/i2c-i801.c`.
+
+In Linux 6.7-rc6 that array has nine elements, so only a small fraction 
+of all Dell notebooks is listed. Searching the Linux logs uploaded to 
+the Linux hardware database from May 2023 [1], there are around 129 
+devices without support in the Linux kernel version the upload was done 
+with.
+
+Do you know, how the Microsoft Windows driver is doing this? Is it 
+hard-coded there too, or can it be deduced somehow, for example from the 
+ACPI tables?
+
+I added some Kai-Heng and Hans to Cc as they might have contact. Dell 
+offers or offered quite a few of the models with official Ubuntu 
+support, so I would have hoped to have a generic solution for this. 
+Maybe Mario can also forward it to the Dell team.
+
+
+Kind regards,
+
+Paul
+
+
+[1]: https://github.com/linuxhw/Dmesg
+
+
+PS: Dell devices in Linux hardware database with accelerometer:
+
+linux-hardware-dmesg/Notebook/Dell (main)$ git grep -l ccelerome | cut 
+-d '/' -f 1,2 | sort -u
+Inspiron/Inspiron 11 - 3147
+Inspiron/Inspiron 5520
+Inspiron/Inspiron 7547
+Inspiron/Inspiron 7548
+Latitude/Latitude 12 Rugged Extreme
+Latitude/Latitude 2110
+Latitude/Latitude 2120
+Latitude/Latitude 3330
+Latitude/Latitude 3380
+Latitude/Latitude 3400
+Latitude/Latitude 3470
+Latitude/Latitude 3480
+Latitude/Latitude 3490
+Latitude/Latitude 3500
+Latitude/Latitude 3570
+Latitude/Latitude 3580
+Latitude/Latitude 3590
+Latitude/Latitude 5280
+Latitude/Latitude 5290
+Latitude/Latitude 5400
+Latitude/Latitude 5401
+Latitude/Latitude 5410
+Latitude/Latitude 5411
+Latitude/Latitude 5414
+Latitude/Latitude 5420 Rugged
+Latitude/Latitude 5424 Rugged
+Latitude/Latitude 5480
+Latitude/Latitude 5490
+Latitude/Latitude 5491
+Latitude/Latitude 5500
+Latitude/Latitude 5501
+Latitude/Latitude 5510
+Latitude/Latitude 5511
+Latitude/Latitude 5531
+Latitude/Latitude 5580
+Latitude/Latitude 5590
+Latitude/Latitude 5591
+Latitude/Latitude 7214
+Latitude/Latitude 7414
+Latitude/Latitude 7424 Rugged Extreme
+Latitude/Latitude E4310
+Latitude/Latitude E5270
+Latitude/Latitude E5410
+Latitude/Latitude E5420
+Latitude/Latitude E5420m
+Latitude/Latitude E5430 non-vPro
+Latitude/Latitude E5430 vPro
+Latitude/Latitude E5440
+Latitude/Latitude E5470
+Latitude/Latitude E5510
+Latitude/Latitude E5520
+Latitude/Latitude E5520m
+Latitude/Latitude E5530 non-vPro
+Latitude/Latitude E5530 vPro
+Latitude/Latitude E5540
+Latitude/Latitude E5570
+Latitude/Latitude E6220
+Latitude/Latitude E6230
+Latitude/Latitude E6320
+Latitude/Latitude E6330
+Latitude/Latitude E6410
+Latitude/Latitude E6420
+Latitude/Latitude E6430
+Latitude/Latitude E6430s
+Latitude/Latitude E6440
+Latitude/Latitude E64406342Q0286-
+Latitude/Latitude E6510
+Latitude/Latitude E6520
+Latitude/Latitude E6530
+Latitude/Latitude E6540
+Latitude/Latitude E7440
+Latitude/Latitude XT3
+Precision/Precision 3510
+Precision/Precision 3520
+Precision/Precision 3530
+Precision/Precision 3540
+Precision/Precision 3541
+Precision/Precision 3550
+Precision/Precision 3551
+Precision/Precision 3571
+Precision/Precision 5510
+Precision/Precision 5520
+Precision/Precision 5530
+Precision/Precision 5540
+Precision/Precision 7510
+Precision/Precision 7520
+Precision/Precision 7530
+Precision/Precision 7540
+Precision/Precision 7710
+Precision/Precision 7720
+Precision/Precision 7730
+Precision/Precision 7740
+Precision/Precision M2800
+Precision/Precision M3800
+Precision/Precision M4500
+Precision/Precision M4600
+Precision/Precision M4700
+Precision/Precision M4800
+Precision/Precision M6600
+Precision/Precision M6700
+Precision/Precision M6800
+Studio/Studio 1458
+Studio/Studio 1557
+Studio/Studio 1558
+Studio/Studio 1569
+Studio/Studio 1747
+Studio/Studio 1749
+Unidentified/Unidentified System
+Vostro/Vostro 3300
+Vostro/Vostro 3350
+Vostro/Vostro 3400
+Vostro/Vostro 3500
+Vostro/Vostro 3550
+Vostro/Vostro 3560
+Vostro/Vostro 3700
+Vostro/Vostro 5468
+Vostro/Vostro 5471
+Vostro/Vostro 5568
+Vostro/Vostro 7580
+Vostro/Vostro V130
+Vostro/Vostro V131
+XPS/XPS 15 7590
+XPS/XPS 15 9530
+XPS/XPS 15 9550
+XPS/XPS 15 9560
+XPS/XPS 15 9570
+XPS/XPS L401X
+XPS/XPS L412Z
+XPS/XPS L421X
+XPS/XPS L501X
+XPS/XPS L521X
+XPS/XPS L701X
+
+Unsupported:
+
+$ git grep ccelerome | grep "is present on SMBus" | cut -d '/' -f 1,2 | 
+sort -u | wc -l
+129
 
