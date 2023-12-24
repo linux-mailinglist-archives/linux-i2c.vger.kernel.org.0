@@ -1,51 +1,51 @@
-Return-Path: <linux-i2c+bounces-984-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-985-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC00F81DC91
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Dec 2023 22:36:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1909F81DC93
+	for <lists+linux-i2c@lfdr.de>; Sun, 24 Dec 2023 22:36:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA4C71C20DE2
-	for <lists+linux-i2c@lfdr.de>; Sun, 24 Dec 2023 21:36:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C25C41F218C7
+	for <lists+linux-i2c@lfdr.de>; Sun, 24 Dec 2023 21:36:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44FC1F517;
-	Sun, 24 Dec 2023 21:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B251FBEE;
+	Sun, 24 Dec 2023 21:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XqAwE5P1"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YrIno9MJ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AEAFEAE5
-	for <linux-i2c@vger.kernel.org>; Sun, 24 Dec 2023 21:36:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18F2F510
+	for <linux-i2c@vger.kernel.org>; Sun, 24 Dec 2023 21:36:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1703453807;
+	s=mimecast20190719; t=1703453809;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hsuJPCc7Y1QpnRJA01GfwB9KUPJKZqy9e15JEuNppOg=;
-	b=XqAwE5P1KmemIgk5jVUgaw1jJuh+Kzy8Dn/ldlJwXfx5R8zrLhP81bVimVl2X6HZZ6zyja
-	In5WeDzKNq7Yw420ME6dzGgzHLnyF+T+WY9/w5HBWDjR7O+IocmHczRu8vGkBRslOqzykl
-	noA5aP4KKqE7YD83FkH640wdZmK3DpI=
+	bh=B7lO1uaz/ZRe5FDaz+Rmivlfd0oloIIxNKefGrRzMRc=;
+	b=YrIno9MJYD3hsI593qevEAZkKuGJbgo47DLO03VaiHxhwJlpPHnWXzMgzTR1EW3Ct4pVE4
+	F6oD7WZu1CfJHN/OHjl9swpnzN5qxPcTDZR0dplU7hTXtxyjyMCGXhlpf/ZZd7JRP+OG2D
+	vJPGwW3Huj1KJ3YTqNSsVRsd1fTK/TY=
 Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
  by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-37-db2_Y567P7apnkNfwm8Rzw-1; Sun,
- 24 Dec 2023 16:36:44 -0500
-X-MC-Unique: db2_Y567P7apnkNfwm8Rzw-1
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-357-hxyS3GeNPqe4x_PnT2y3rw-1; Sun,
+ 24 Dec 2023 16:36:45 -0500
+X-MC-Unique: hxyS3GeNPqe4x_PnT2y3rw-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B1E573C025B6;
-	Sun, 24 Dec 2023 21:36:42 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9AD2A3869144;
+	Sun, 24 Dec 2023 21:36:44 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.24])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 05D3F2026D66;
-	Sun, 24 Dec 2023 21:36:40 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E2D3D2026D66;
+	Sun, 24 Dec 2023 21:36:42 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
 	Jean Delvare <jdelvare@suse.com>,
@@ -61,9 +61,9 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	Wolfram Sang <wsa@kernel.org>,
 	platform-driver-x86@vger.kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH 1/6] platform/x86: dell-smo8800: Only load on Dell laptops
-Date: Sun, 24 Dec 2023 22:36:17 +0100
-Message-ID: <20231224213629.395741-2-hdegoede@redhat.com>
+Subject: [PATCH 2/6] platform/x86: dell-smo8800: Change probe() ordering a bit
+Date: Sun, 24 Dec 2023 22:36:18 +0100
+Message-ID: <20231224213629.395741-3-hdegoede@redhat.com>
 In-Reply-To: <20231224213629.395741-1-hdegoede@redhat.com>
 References: <20231224213629.395741-1-hdegoede@redhat.com>
 Precedence: bulk
@@ -75,37 +75,55 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
 
-The SMO8xxx ACPI HIDs are generic accelerometer ids which are also used
-by other vendors. Add a sys_vendor check to ensure that the dell-smo8800
-driver only loads on Dell laptops.
+Retrieve the IRQ number from the platform_device a bit earlier
+and only call platform_set_drvdata() on successful probe
+(the drvdata is only used from the remove() callback).
+
+This is a preparation patch for moving the lis3lv02d i2c_client
+instantiation from the i2c-i801 driver to dell-smo8800.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/platform/x86/dell/dell-smo8800.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/platform/x86/dell/dell-smo8800.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/platform/x86/dell/dell-smo8800.c b/drivers/platform/x86/dell/dell-smo8800.c
-index f7ec17c56833..4d5f778fb599 100644
+index 4d5f778fb599..86f898a857e1 100644
 --- a/drivers/platform/x86/dell/dell-smo8800.c
 +++ b/drivers/platform/x86/dell/dell-smo8800.c
-@@ -10,6 +10,7 @@
+@@ -125,19 +125,17 @@ static int smo8800_probe(struct platform_device *device)
  
- #define DRIVER_NAME "smo8800"
+ 	init_waitqueue_head(&smo8800->misc_wait);
  
-+#include <linux/dmi.h>
- #include <linux/fs.h>
- #include <linux/interrupt.h>
- #include <linux/kernel.h>
-@@ -108,6 +109,9 @@ static int smo8800_probe(struct platform_device *device)
- 	int err;
- 	struct smo8800_device *smo8800;
- 
-+	if (!dmi_match(DMI_SYS_VENDOR, "Dell Inc."))
-+		return false;
++	err = platform_get_irq(device, 0);
++	if (err < 0)
++		return err;
++	smo8800->irq = err;
 +
- 	smo8800 = devm_kzalloc(&device->dev, sizeof(*smo8800), GFP_KERNEL);
- 	if (!smo8800) {
- 		dev_err(&device->dev, "failed to allocate device data\n");
+ 	err = misc_register(&smo8800->miscdev);
+ 	if (err) {
+ 		dev_err(&device->dev, "failed to register misc dev: %d\n", err);
+ 		return err;
+ 	}
+ 
+-	platform_set_drvdata(device, smo8800);
+-
+-	err = platform_get_irq(device, 0);
+-	if (err < 0)
+-		goto error;
+-	smo8800->irq = err;
+-
+ 	err = request_threaded_irq(smo8800->irq, smo8800_interrupt_quick,
+ 				   smo8800_interrupt_thread,
+ 				   IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+@@ -151,6 +149,7 @@ static int smo8800_probe(struct platform_device *device)
+ 
+ 	dev_dbg(&device->dev, "device /dev/freefall registered with IRQ %d\n",
+ 		 smo8800->irq);
++	platform_set_drvdata(device, smo8800);
+ 	return 0;
+ 
+ error:
 -- 
 2.43.0
 
