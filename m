@@ -1,142 +1,190 @@
-Return-Path: <linux-i2c+bounces-1000-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1001-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 607AA81E3F0
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Dec 2023 01:43:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5653381E776
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 Dec 2023 13:50:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD43D282E65
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Dec 2023 00:43:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB08A1F2286F
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 Dec 2023 12:50:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C44BF5CD0D;
-	Tue, 26 Dec 2023 00:25:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5D604EB27;
+	Tue, 26 Dec 2023 12:50:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o6fu21Ed"
+	dkim=pass (1024-bit key) header.d=o2.pl header.i=@o2.pl header.b="b0FJyeS9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E405CD04;
-	Tue, 26 Dec 2023 00:25:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D477C433C9;
-	Tue, 26 Dec 2023 00:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703550349;
-	bh=wEme5zOXjNS4jm4i7jwulhr8cvuV5k7DomlCN/6/p40=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=o6fu21Ed6WHxPVKs1TCS+3nY2bRYLthl93sXCfvfP6cKEEad2WpzuQjHGsaYuxyRb
-	 nGSCMau1t4363ICT1L6Ded0fCkT/LidlefRai4Ldfxbhqf/cT++vNEygOOsHCSOxIr
-	 TOZLucKcU486uLNKTCu2T+RRNKHZrfXqtncW2m1cxoXurvTL+sGHYfrdVVzjT8crph
-	 qhXIKAtIYBEe+iZJxXV58NmoL2ndW5yt4WvrhxpZAQAxs+1QMk14HKZ/CEvtJHkDIR
-	 8OO6Ojy6qilwiJGS0M764RrqBTWNJEFZ02uo3rBddd48wfmyxieFDHl1TICDXVrEY3
-	 CXDPxkCsS1ftQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Jensen Huang <jensenhuang@friendlyarm.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210FE4E63E
+	for <linux-i2c@vger.kernel.org>; Tue, 26 Dec 2023 12:49:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=o2.pl
+Received: (wp-smtpd smtp.tlen.pl 8832 invoked from network); 26 Dec 2023 13:43:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1703594596; bh=p3a/CmiIGmTbIqlEI01R2R9B6ytZl+y74tl8q7fDC1A=;
+          h=From:To:Cc:Subject;
+          b=b0FJyeS9pVHKwnmHz6ayOg4dqU80VvmeyhEnrv78HucxkjUq7z3nZepMXlF7cPmXL
+           wZQ4SU++GAwKBWlKDpkhdZ1502euO7G3r5gk96nOnJehKyhUWfYgZdbzpWnsMkSHaf
+           zHIGT2fujQWEG6l3kmwTaHUB+huuRE3LY4qj2EA4=
+Received: from aafb137.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.131.137])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-pci@vger.kernel.org>; 26 Dec 2023 13:43:16 +0100
+From: =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To: linux-pci@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 8/9] i2c: rk3x: fix potential spinlock recursion on poll
-Date: Mon, 25 Dec 2023 19:24:52 -0500
-Message-ID: <20231226002526.6605-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231226002526.6605-1-sashal@kernel.org>
-References: <20231226002526.6605-1-sashal@kernel.org>
+Cc: =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Borislav Petkov <bp@suse.de>,
+	Jean Delvare <jdelvare@suse.de>
+Subject: [PATCH v4] acpi,pci: warn about duplicate IRQ routing entries returned from _PRT
+Date: Tue, 26 Dec 2023 13:42:54 +0100
+Message-Id: <20231226124254.66102-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.205
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-WP-MailID: 2bf909a71691b5886bff2a8b5697113c
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 000000A [8XME]                               
 
-From: Jensen Huang <jensenhuang@friendlyarm.com>
+On some platforms, the ACPI _PRT function returns duplicate interrupt
+routing entries. Linux uses the first matching entry, but sometimes the
+second matching entry contains the correct interrupt vector.
 
-[ Upstream commit 19cde9c92b8d3b7ee555d0da3bcb0232d3a784f4 ]
+As a debugging aid, print a warning to dmesg if duplicate interrupt
+routing entries are present. This way, we could check how many models
+are affected.
 
-Possible deadlock scenario (on reboot):
-rk3x_i2c_xfer_common(polling)
-    -> rk3x_i2c_wait_xfer_poll()
-        -> rk3x_i2c_irq(0, i2c);
-            --> spin_lock(&i2c->lock);
-            ...
-        <rk3x i2c interrupt>
-        -> rk3x_i2c_irq(0, i2c);
-            --> spin_lock(&i2c->lock); (deadlock here)
+This happens on a Dell Latitude E6500 laptop with the i2c-i801 Intel
+SMBus controller. This controller is nonfunctional unless its interrupt
+usage is disabled (using the "disable_features=0x10" module parameter).
 
-Store the IRQ number and disable/enable it around the polling transfer.
-This patch has been tested on NanoPC-T4.
+After investigation, it turned out that the driver was using an
+incorrect interrupt vector: in lspci output for this device there was:
+        Interrupt: pin B routed to IRQ 19
+but after running i2cdetect (without using any i2c-i801 module
+parameters) the following was logged to dmesg:
 
-Signed-off-by: Jensen Huang <jensenhuang@friendlyarm.com>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+        [...]
+        i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
+        i801_smbus 0000:00:1f.3: Transaction timeout
+        i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
+        i801_smbus 0000:00:1f.3: Transaction timeout
+        irq 17: nobody cared (try booting with the "irqpoll" option)
+
+Existence of duplicate entries in a table returned by the _PRT method
+was confirmed by disassembling the ACPI DSDT table.
+
+Windows XP is using IRQ3 (as reported by HWiNFO32 and in the Device
+Manager), which is neither of the two vectors returned by _PRT.
+As HWiNFO32 decoded contents of the SPD EEPROMs, the i2c-i801 device is
+working under Windows. It appears that Windows has reconfigured the
+chipset independently to use another interrupt vector for the device.
+This is possible, according to the chipset datasheet [1], page 436 for
+example (PIRQ[n]_ROUT—PIRQ[A,B,C,D] Routing Control Register).
+
+[1] https://www.intel.com/content/dam/doc/datasheet/io-controller-hub-9-datasheet.pdf
+
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Jean Delvare <jdelvare@suse.de>
+Previously-reviewed-by: Jean Delvare <jdelvare@suse.de>
+Previously-tested-by: Jean Delvare <jdelvare@suse.de>
+
 ---
- drivers/i2c/busses/i2c-rk3x.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-index 13c14eb175e94..6abcf975a2db9 100644
---- a/drivers/i2c/busses/i2c-rk3x.c
-+++ b/drivers/i2c/busses/i2c-rk3x.c
-@@ -178,6 +178,7 @@ struct rk3x_i2c_soc_data {
-  * @clk: function clk for rk3399 or function & Bus clks for others
-  * @pclk: Bus clk for rk3399
-  * @clk_rate_nb: i2c clk rate change notify
-+ * @irq: irq number
-  * @t: I2C known timing information
-  * @lock: spinlock for the i2c bus
-  * @wait: the waitqueue to wait for i2c transfer
-@@ -200,6 +201,7 @@ struct rk3x_i2c {
- 	struct clk *clk;
- 	struct clk *pclk;
- 	struct notifier_block clk_rate_nb;
-+	int irq;
+I'm resurrecting an older patch that was discussed back in January:
+
+https://lore.kernel.org/lkml/20230121153314.6109-1-mat.jonczyk@o2.pl/T/#u
+
+To consider: should we print a warning or an error in case of duplicate
+entries? This may not be serious enough to disturb the user with an
+error message at boot.
+
+I'm also looking into modifying the i2c-i801 driver to disable its usage
+of interrupts if one did not fire.
+
+v2: - add a newline at the end of the kernel log message,
+    - replace: "if (match == NULL)" -> "if (!match)"
+    - patch description tweaks.
+v3: - fix C style issues pointed by Jean Delvare,
+    - switch severity from warning to error.
+v3 RESEND: retested on top of v6.2-rc4
+v4: - rebase and retest on top of v6.7-rc7
+    - switch severity back to warning,
+    - change pr_err() to dev_warn() and simplify the code,
+    - modify patch description (describe Windows behaviour etc.)
+---
+ drivers/acpi/pci_irq.c | 25 ++++++++++++++++++++++---
+ 1 file changed, 22 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
+index ff30ceca2203..1fcf72e335b0 100644
+--- a/drivers/acpi/pci_irq.c
++++ b/drivers/acpi/pci_irq.c
+@@ -203,6 +203,8 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
+ 	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+ 	struct acpi_pci_routing_table *entry;
+ 	acpi_handle handle = NULL;
++	struct acpi_prt_entry *match = NULL;
++	const char *match_int_source = NULL;
  
- 	/* Settings */
- 	struct i2c_timings t;
-@@ -1087,13 +1089,18 @@ static int rk3x_i2c_xfer_common(struct i2c_adapter *adap,
+ 	if (dev->bus->bridge)
+ 		handle = ACPI_HANDLE(dev->bus->bridge);
+@@ -219,13 +221,30 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
  
- 		spin_unlock_irqrestore(&i2c->lock, flags);
- 
--		rk3x_i2c_start(i2c);
--
- 		if (!polling) {
-+			rk3x_i2c_start(i2c);
+ 	entry = buffer.pointer;
+ 	while (entry && (entry->length > 0)) {
+-		if (!acpi_pci_irq_check_entry(handle, dev, pin,
+-						 entry, entry_ptr))
+-			break;
++		struct acpi_prt_entry *curr;
 +
- 			timeout = wait_event_timeout(i2c->wait, !i2c->busy,
- 						     msecs_to_jiffies(WAIT_TIMEOUT));
- 		} else {
-+			disable_irq(i2c->irq);
-+			rk3x_i2c_start(i2c);
++		if (!acpi_pci_irq_check_entry(handle, dev, pin, entry, &curr)) {
++			if (!match) {
++				match = curr;
++				match_int_source = entry->source;
++			} else {
++				dev_warn(&dev->dev, FW_BUG
++				       "ACPI _PRT returned duplicate IRQ routing entries for INT%c: %s[%d] and %s[%d]\n",
++				       pin_name(curr->pin),
++				       match_int_source, match->index,
++				       entry->source, curr->index);
++				/* We use the first matching entry nonetheless,
++				 * for compatibility with older kernels.
++				 */
++			}
++		}
 +
- 			timeout = rk3x_i2c_wait_xfer_poll(i2c);
-+
-+			enable_irq(i2c->irq);
- 		}
- 
- 		spin_lock_irqsave(&i2c->lock, flags);
-@@ -1301,6 +1308,8 @@ static int rk3x_i2c_probe(struct platform_device *pdev)
- 		return ret;
+ 		entry = (struct acpi_pci_routing_table *)
+ 		    ((unsigned long)entry + entry->length);
  	}
  
-+	i2c->irq = irq;
++	*entry_ptr = match;
 +
- 	platform_set_drvdata(pdev, i2c);
- 
- 	if (i2c->soc_data->calc_timings == rk3x_i2c_v0_calc_timings) {
+ 	kfree(buffer.pointer);
+ 	return 0;
+ }
+
+base-commit: 861deac3b092f37b2c5e6871732f3e11486f7082
 -- 
-2.43.0
+2.25.1
 
 
