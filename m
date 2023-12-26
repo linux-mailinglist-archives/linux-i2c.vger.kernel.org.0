@@ -1,37 +1,37 @@
-Return-Path: <linux-i2c+bounces-999-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1000-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B44D781E3D7
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Dec 2023 01:40:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 607AA81E3F0
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 Dec 2023 01:43:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C85DA1C213BE
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Dec 2023 00:40:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD43D282E65
+	for <lists+linux-i2c@lfdr.de>; Tue, 26 Dec 2023 00:43:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20D925B1FD;
-	Tue, 26 Dec 2023 00:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C44BF5CD0D;
+	Tue, 26 Dec 2023 00:25:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HO4eJZN5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o6fu21Ed"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C9D5B1F6;
-	Tue, 26 Dec 2023 00:24:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FAF4C433C7;
-	Tue, 26 Dec 2023 00:24:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E405CD04;
+	Tue, 26 Dec 2023 00:25:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D477C433C9;
+	Tue, 26 Dec 2023 00:25:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703550291;
+	s=k20201202; t=1703550349;
 	bh=wEme5zOXjNS4jm4i7jwulhr8cvuV5k7DomlCN/6/p40=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HO4eJZN5coauanQ5u5psBlD5OsWEdN2F1lnM4ILOpN0V3IK2D1H67jeU2OMBDB7KT
-	 VZpDs2F5muEEzL0BWRLJp+4mLdg5GXrAdFzp84dC4GXxTqxCm72GHwOEYejuqh8fJ3
-	 fy227KSPuS7qoKcNBySzsZQ55yUjPgv/NwE24GwUKXPDGJST6zCMeNE0VUSDsQF9DW
-	 7PCzru3iPCk5blK+JD+ndh6xFsly5OZUE6F1/wYXsY45SKnPDTYh9CTPzQ0I51Pdpb
-	 Io79uIbVnCSvwH733q7oEnI3t6cmboWKvsqlr9EvE7NK0XQLWIaM4dp1PZ6cP0vXYk
-	 ezf/OPw6luqxw==
+	b=o6fu21Ed6WHxPVKs1TCS+3nY2bRYLthl93sXCfvfP6cKEEad2WpzuQjHGsaYuxyRb
+	 nGSCMau1t4363ICT1L6Ded0fCkT/LidlefRai4Ldfxbhqf/cT++vNEygOOsHCSOxIr
+	 TOZLucKcU486uLNKTCu2T+RRNKHZrfXqtncW2m1cxoXurvTL+sGHYfrdVVzjT8crph
+	 qhXIKAtIYBEe+iZJxXV58NmoL2ndW5yt4WvrhxpZAQAxs+1QMk14HKZ/CEvtJHkDIR
+	 8OO6Ojy6qilwiJGS0M764RrqBTWNJEFZ02uo3rBddd48wfmyxieFDHl1TICDXVrEY3
+	 CXDPxkCsS1ftQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -43,12 +43,12 @@ Cc: Jensen Huang <jensenhuang@friendlyarm.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 10/11] i2c: rk3x: fix potential spinlock recursion on poll
-Date: Mon, 25 Dec 2023 19:23:59 -0500
-Message-ID: <20231226002420.6303-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 8/9] i2c: rk3x: fix potential spinlock recursion on poll
+Date: Mon, 25 Dec 2023 19:24:52 -0500
+Message-ID: <20231226002526.6605-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231226002420.6303-1-sashal@kernel.org>
-References: <20231226002420.6303-1-sashal@kernel.org>
+In-Reply-To: <20231226002526.6605-1-sashal@kernel.org>
+References: <20231226002526.6605-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.145
+X-stable-base: Linux 5.10.205
 Content-Transfer-Encoding: 8bit
 
 From: Jensen Huang <jensenhuang@friendlyarm.com>
