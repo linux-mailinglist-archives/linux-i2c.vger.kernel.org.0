@@ -1,33 +1,33 @@
-Return-Path: <linux-i2c+bounces-1013-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1014-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 405A581EC10
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F0EC81EC0F
 	for <lists+linux-i2c@lfdr.de>; Wed, 27 Dec 2023 05:40:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF5D61F21C83
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Dec 2023 04:40:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B63B42835EB
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Dec 2023 04:40:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 322DA5228;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CF74522C;
 	Wed, 27 Dec 2023 04:40:05 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FC9442F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703A646A1
 	for <linux-i2c@vger.kernel.org>; Wed, 27 Dec 2023 04:40:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-X-ASG-Debug-ID: 1703651993-086e230f27056f0001-PT6Irj
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id BybeZvGx8EyxpkC7 (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Wed, 27 Dec 2023 12:39:53 +0800 (CST)
+X-ASG-Debug-ID: 1703651993-086e230f27056f0002-PT6Irj
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id FNcQELCVt0wxbDiB (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Wed, 27 Dec 2023 12:39:53 +0800 (CST)
 X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
 X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
 Received: from ZXBJMBX02.zhaoxin.com (10.29.252.6) by ZXSHMBX3.zhaoxin.com
  (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 27 Dec
- 2023 12:39:52 +0800
+ 2023 12:39:53 +0800
 Received: from ml-HP-ProDesk-680-G4-MT.zhaoxin.com (10.28.66.68) by
  ZXBJMBX02.zhaoxin.com (10.29.252.6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -37,13 +37,13 @@ From: Hans Hu <hanshu-oc@zhaoxin.com>
 X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.6
 To: <wsa@kernel.org>, <linux-i2c@vger.kernel.org>
 CC: <andi.shyti@kernel.org>, <cobechen@zhaoxin.com>, <hanshu-oc@zhaoxin.com>
-Subject: [PATCH v4 0/8] i2c: add zhaoxin i2c controller driver
-Date: Wed, 27 Dec 2023 12:39:43 +0800
-X-ASG-Orig-Subj: [PATCH v4 0/8] i2c: add zhaoxin i2c controller driver
-Message-ID: <cover.1703647471.git.hanshu-oc@zhaoxin.com>
+Subject: [PATCH v4 1/8] i2c: wmt: create wmt_i2c_init for general init
+Date: Wed, 27 Dec 2023 12:39:44 +0800
+X-ASG-Orig-Subj: [PATCH v4 1/8] i2c: wmt: create wmt_i2c_init for general init
+Message-ID: <acef54645a54bb85b2ae81b530f155c4dcdf9086.1703647471.git.hanshu-oc@zhaoxin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1698889581.git.hanshu-oc@zhaoxin.com>
-References: <cover.1698889581.git.hanshu-oc@zhaoxin.com>
+In-Reply-To: <cover.1703647471.git.hanshu-oc@zhaoxin.com>
+References: <cover.1703647471.git.hanshu-oc@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -59,8 +59,8 @@ X-Barracuda-Start-Time: 1703651993
 X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
 X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
 X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1346
-X-Barracuda-BRTS-Status: 1
+X-Barracuda-Scan-Msg-Size: 3304
+X-Barracuda-BRTS-Status: 0
 X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
 X-Barracuda-Spam-Score: -2.02
 X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
@@ -69,35 +69,119 @@ X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.118618
 	 pts rule name              description
 	---- ---------------------- --------------------------------------------------
 
-In version v4, the patch consists of 8 files. 
-This version is based on the latest for-next branch,
-with some adjustments as suggested by Wolfram.
+Some common initialization actions are put in the function
+wmt_i2c_init(), which is convenient to share with zhaoxin.
 
-Hans Hu (8):
-  i2c: wmt: create wmt_i2c_init for general init
-  i2c: wmt: rename marcos with prefix WMTI2C_
-  i2c: wmt: adjust line length to meet style
-  i2c: wmt: split out common files
-  i2c: wmt: rename with prefix VIAI2C_ and viai2c_
-  i2c: wmt: fix a bug when thread blocked
-  i2c: wmt: add platform type VIAI2C_PLAT_WMT
-  i2c: add zhaoxin i2c controller driver
+Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
+---
+ drivers/i2c/busses/i2c-wmt.c | 67 +++++++++++++++++++-----------------
+ 1 file changed, 36 insertions(+), 31 deletions(-)
 
- MAINTAINERS                            |   8 +
- drivers/i2c/busses/Kconfig             |  10 +
- drivers/i2c/busses/Makefile            |   4 +
- drivers/i2c/busses/i2c-viai2c-common.c | 278 +++++++++++++++++
- drivers/i2c/busses/i2c-viai2c-common.h |  79 +++++
- drivers/i2c/busses/i2c-wmt-plt.c       | 139 +++++++++
- drivers/i2c/busses/i2c-wmt.c           | 417 -------------------------
- drivers/i2c/busses/i2c-zhaoxin-plt.c   | 299 ++++++++++++++++++
- 8 files changed, 817 insertions(+), 417 deletions(-)
- create mode 100644 drivers/i2c/busses/i2c-viai2c-common.c
- create mode 100644 drivers/i2c/busses/i2c-viai2c-common.h
- create mode 100644 drivers/i2c/busses/i2c-wmt-plt.c
- delete mode 100644 drivers/i2c/busses/i2c-wmt.c
- create mode 100644 drivers/i2c/busses/i2c-zhaoxin-plt.c
-
+diff --git a/drivers/i2c/busses/i2c-wmt.c b/drivers/i2c/busses/i2c-wmt.c
+index ec2a8da134e5..e2a8708cd913 100644
+--- a/drivers/i2c/busses/i2c-wmt.c
++++ b/drivers/i2c/busses/i2c-wmt.c
+@@ -286,6 +286,38 @@ static irqreturn_t wmt_i2c_isr(int irq, void *data)
+ 	return IRQ_HANDLED;
+ }
+ 
++int wmt_i2c_init(struct platform_device *pdev, struct wmt_i2c_dev **pi2c_dev)
++{
++	int err;
++	struct wmt_i2c_dev *i2c_dev;
++	struct device_node *np = pdev->dev.of_node;
++
++	i2c_dev = devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
++	if (!i2c_dev)
++		return -ENOMEM;
++
++	i2c_dev->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
++	if (IS_ERR(i2c_dev->base))
++		return PTR_ERR(i2c_dev->base);
++
++	i2c_dev->irq = irq_of_parse_and_map(np, 0);
++	if (!i2c_dev->irq)
++		return -EINVAL;
++
++	err = devm_request_irq(&pdev->dev, i2c_dev->irq, wmt_i2c_isr,
++					0, pdev->name, i2c_dev);
++	if (err)
++		return dev_err_probe(&pdev->dev, err,
++				"failed to request irq %i\n", i2c_dev->irq);
++
++	i2c_dev->dev = &pdev->dev;
++	init_completion(&i2c_dev->complete);
++	platform_set_drvdata(pdev, i2c_dev);
++
++	*pi2c_dev = i2c_dev;
++	return 0;
++}
++
+ static int wmt_i2c_reset_hardware(struct wmt_i2c_dev *i2c_dev)
+ {
+ 	int err;
+@@ -327,19 +359,9 @@ static int wmt_i2c_probe(struct platform_device *pdev)
+ 	int err;
+ 	u32 clk_rate;
+ 
+-	i2c_dev = devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
+-	if (!i2c_dev)
+-		return -ENOMEM;
+-
+-	i2c_dev->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+-	if (IS_ERR(i2c_dev->base))
+-		return PTR_ERR(i2c_dev->base);
+-
+-	i2c_dev->irq = irq_of_parse_and_map(np, 0);
+-	if (!i2c_dev->irq) {
+-		dev_err(&pdev->dev, "irq missing or invalid\n");
+-		return -EINVAL;
+-	}
++	err = wmt_i2c_init(pdev, &i2c_dev);
++	if (err)
++		return err;
+ 
+ 	i2c_dev->clk = of_clk_get(np, 0);
+ 	if (IS_ERR(i2c_dev->clk)) {
+@@ -351,15 +373,6 @@ static int wmt_i2c_probe(struct platform_device *pdev)
+ 	if (!err && (clk_rate == I2C_MAX_FAST_MODE_FREQ))
+ 		i2c_dev->tcr = TCR_FAST_MODE;
+ 
+-	i2c_dev->dev = &pdev->dev;
+-
+-	err = devm_request_irq(&pdev->dev, i2c_dev->irq, wmt_i2c_isr, 0,
+-							"i2c", i2c_dev);
+-	if (err) {
+-		dev_err(&pdev->dev, "failed to request irq %i\n", i2c_dev->irq);
+-		return err;
+-	}
+-
+ 	adap = &i2c_dev->adapter;
+ 	i2c_set_adapdata(adap, i2c_dev);
+ 	strscpy(adap->name, "WMT I2C adapter", sizeof(adap->name));
+@@ -368,21 +381,13 @@ static int wmt_i2c_probe(struct platform_device *pdev)
+ 	adap->dev.parent = &pdev->dev;
+ 	adap->dev.of_node = pdev->dev.of_node;
+ 
+-	init_completion(&i2c_dev->complete);
+-
+ 	err = wmt_i2c_reset_hardware(i2c_dev);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "error initializing hardware\n");
+ 		return err;
+ 	}
+ 
+-	err = i2c_add_adapter(adap);
+-	if (err)
+-		return err;
+-
+-	platform_set_drvdata(pdev, i2c_dev);
+-
+-	return 0;
++	return i2c_add_adapter(adap);
+ }
+ 
+ static void wmt_i2c_remove(struct platform_device *pdev)
 -- 
 2.34.1
 
