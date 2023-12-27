@@ -1,237 +1,111 @@
-Return-Path: <linux-i2c+bounces-1005-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1006-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 369AB81E93C
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Dec 2023 20:22:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E495781EB03
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Dec 2023 01:35:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58C831C213EA
-	for <lists+linux-i2c@lfdr.de>; Tue, 26 Dec 2023 19:22:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 794F6283427
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Dec 2023 00:35:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 443915221;
-	Tue, 26 Dec 2023 19:22:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16362A40;
+	Wed, 27 Dec 2023 00:35:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IWWLBUJd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxGB0zE3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8E15231
-	for <linux-i2c@vger.kernel.org>; Tue, 26 Dec 2023 19:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-7ba903342c2so340271539f.3
-        for <linux-i2c@vger.kernel.org>; Tue, 26 Dec 2023 11:22:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1703618525; x=1704223325; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AKIUdkV/1A01PP0FPQ/QEtq0fQ17bu4UaB0r+uKx4yQ=;
-        b=IWWLBUJdfTtwbMK8z/f3wIYgJYT+AY0M+43AAYhm6p4FbWl/2GYSTh33E8DWZfCsDo
-         epbv0dlE0g8cFWIC2Me1eXZygBsSjMw88aWxMvWVFVCVINmO77x7zjnrYtfmkQb5QbCy
-         y+KJEGa4UwGKzPu9uww2gKS8Sd3gAtb2ZKyPc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703618525; x=1704223325;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AKIUdkV/1A01PP0FPQ/QEtq0fQ17bu4UaB0r+uKx4yQ=;
-        b=Y8nm4nBy54Dhqj9W/LYhA6q2HGiC4XAe0slRfCKtoSLj0qEvpkSyVgUmIkIw07Ej1b
-         TC4PgjyVUeg75vxvdicEOqjqGMAB4tgQOKQHRnVlClLeOF6BVw0V+qEjp6m2C689X9dz
-         RGoNNZjeVfb2H6elZoN81Th1axigvcv2a6pWolaofFvHuI/AA1I1wqnao7dSYyX+qbBy
-         XsWd0SFi8SS35DRd+e5yIPyBo45K4ZJXQF2bSxahCTNsUgGnvu66fLg4Jqcmntolkjn2
-         /xDgYbHsnjSKeEOgWBiRrkmoj5IgT2PILPGW+OqJjJG4nvckvi3jR7m7VilzbnzOQ2YC
-         uxLA==
-X-Gm-Message-State: AOJu0Yxt6RCGE/TyFdTIOUzdD1uNnRQVAvVUpF/RvyPkP4QIr8REYFvs
-	Ro5wo0aZqF4U4cnT/ekUvKAQhkbrBGzb
-X-Google-Smtp-Source: AGHT+IFe98tpmnyGtdOkmoEf9LvtaFp/IaLWH4/Vxw1n0npaKmIeSbPscfFCAZFZe/U4DbMmRxYbTA==
-X-Received: by 2002:a05:6602:123b:b0:7b7:acc0:6dd8 with SMTP id z27-20020a056602123b00b007b7acc06dd8mr10342620iot.31.1703618524785;
-        Tue, 26 Dec 2023 11:22:04 -0800 (PST)
-Received: from markhas1.lan (71-218-50-136.hlrn.qwest.net. [71.218.50.136])
-        by smtp.gmail.com with ESMTPSA id gw3-20020a0566381ee300b0046b692e719esm3207609jab.150.2023.12.26.11.22.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Dec 2023 11:22:04 -0800 (PST)
-From: Mark Hasemeyer <markhas@chromium.org>
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Raul Rangel <rrangel@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Mark Hasemeyer <markhas@chromium.org>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	linux-acpi@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB26720EB;
+	Wed, 27 Dec 2023 00:35:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07299C433C7;
+	Wed, 27 Dec 2023 00:34:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703637300;
+	bh=QQSzTEKVkjhzMRUNMGeszGHif36iIyhtPSxVUIgASzk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=dxGB0zE3RjIgHayBFc1uA1yap6INDB3FVNo1Zq0h5lm3KiTYy/oY3FDpRKh3OktVp
+	 1rzTAD+osz5VIGcyTeX4+WCu9+/OWgUXBwBWF5glUzWHm8r1cnMF9s1CsIJM9+fyJf
+	 yP/BmVVu8ZPUHSOtpCuXk4qLP249+JDCJeicsx16rLCXaPPmus4bxOBxMhlWkxR6wn
+	 5h7I4aIZI7di/1HaZt8L7y7AlisOzxJWK4eLiDp3F2its93Tw3/zsZaKiCT3sJuGuH
+	 3PS8ev+J7PgRTHCHVTXaHW7LmYseCUpgjJvZsx+FjUrxPe53+u9WKb6Pbooo2oFI42
+	 XXqPgrrjPqb7w==
+Date: Tue, 26 Dec 2023 18:34:58 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc: platform-driver-x86@vger.kernel.org,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH v3 03/24] i2c: acpi: Modify i2c_acpi_get_irq() to use resource
-Date: Tue, 26 Dec 2023 12:21:07 -0700
-Message-ID: <20231226122113.v3.3.Ib65096357993ff602e7dd0000dd59a36571c48d8@changeid>
-X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-In-Reply-To: <20231226192149.1830592-1-markhas@chromium.org>
-References: <20231226192149.1830592-1-markhas@chromium.org>
+Subject: Re: [PATCH v3] platform/x86: p2sb: Allow p2sb_bar() calls during PCI
+ device probe
+Message-ID: <20231227003458.GA1485669@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231225092656.2153894-1-shinichiro.kawasaki@wdc.com>
 
-The i2c_acpi_irq_context structure provides redundant information that
-can be provided with struct resource.
+On Mon, Dec 25, 2023 at 06:26:56PM +0900, Shin'ichiro Kawasaki wrote:
+> ...
 
-Refactor i2c_acpi_get_irq() to use struct resource instead of struct
-i2c_acpi_irq_context.
+> +static int p2sb_valid_resource(struct resource *res)
+> +{
+> +	return res->flags ? 0 : -ENOENT;
+> +}
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+This got worse because it's *named* like a boolean, but the return
+value can't be used like a boolean, which makes callers really hard to
+read, e.g., this:
 
-Signed-off-by: Mark Hasemeyer <markhas@chromium.org>
----
+  if (p2sb_valid_resource(res))
+    /* do something */
 
-Changes in v3:
--Add Suggested-by
--Check resource flags for valid irq
--Drop error pointer check
--Invert error checking logic in i2c_acpi_get_irq()
--Drop redundant 0 in struct resource init
--Drop unnecessary check for irq > 0 when setting I2C_CLIENT_WAKE
+does exactly the opposite of what the reader expects.
 
-Changes in v2:
--New patch
+I see that you want to use this -ENOENT return value in the callers:
 
- drivers/i2c/i2c-core-acpi.c | 43 ++++++++++++++-----------------------
- drivers/i2c/i2c-core-base.c |  6 +++---
- drivers/i2c/i2c-core.h      |  4 ++--
- 3 files changed, 21 insertions(+), 32 deletions(-)
+> +static int p2sb_scan_and_cache(struct pci_bus *bus, unsigned int devfn)
+> +{
+> + ...
+> +	return p2sb_valid_resource(&p2sb_resources[PCI_FUNC(devfn)].res);
+> +}
 
-diff --git a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
-index 8126a87baf3d4..e48bb24b72127 100644
---- a/drivers/i2c/i2c-core-acpi.c
-+++ b/drivers/i2c/i2c-core-acpi.c
-@@ -175,64 +175,53 @@ static int i2c_acpi_do_lookup(struct acpi_device *adev,
- 
- static int i2c_acpi_add_irq_resource(struct acpi_resource *ares, void *data)
- {
--	struct i2c_acpi_irq_context *irq_ctx = data;
--	struct resource r;
-+	struct resource *r = data;
- 
--	if (irq_ctx->irq > 0)
-+	if (r->flags)
- 		return 1;
- 
--	if (!acpi_dev_resource_interrupt(ares, 0, &r))
-+	if (!acpi_dev_resource_interrupt(ares, 0, r))
- 		return 1;
- 
--	irq_ctx->irq = i2c_dev_irq_from_resources(&r, 1);
--	irq_ctx->wake_capable = r.flags & IORESOURCE_IRQ_WAKECAPABLE;
-+	i2c_dev_irq_from_resources(r, 1);
- 
- 	return 1; /* No need to add resource to the list */
- }
- 
- /**
-- * i2c_acpi_get_irq - get device IRQ number from ACPI
-+ * i2c_acpi_get_irq - get device IRQ number from ACPI and populate resource
-  * @client: Pointer to the I2C client device
-- * @wake_capable: Set to true if the IRQ is wake capable
-+ * @r: resource with populated IRQ information
-  *
-  * Find the IRQ number used by a specific client device.
-  *
-  * Return: The IRQ number or an error code.
-  */
--int i2c_acpi_get_irq(struct i2c_client *client, bool *wake_capable)
-+int i2c_acpi_get_irq(struct i2c_client *client, struct resource *r)
- {
- 	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
- 	struct list_head resource_list;
--	struct resource irqres;
--	struct i2c_acpi_irq_context irq_ctx = {
--		.irq = -ENOENT,
--	};
- 	int ret;
- 
-+	if (!r)
-+		return -EINVAL;
-+
- 	INIT_LIST_HEAD(&resource_list);
- 
- 	ret = acpi_dev_get_resources(adev, &resource_list,
--				     i2c_acpi_add_irq_resource, &irq_ctx);
-+				     i2c_acpi_add_irq_resource, r);
- 	if (ret < 0)
- 		return ret;
- 
- 	acpi_dev_free_resource_list(&resource_list);
- 
--	if (irq_ctx.irq == -ENOENT) {
--		ret = acpi_dev_get_gpio_irq_resource(adev, NULL, 0, &irqres);
--		if (ret)
--			return ret;
--		irq_ctx.irq = irqres.start;
--		irq_ctx.wake_capable = irqres.flags & IORESOURCE_IRQ_WAKECAPABLE;
--	}
--
--	if (irq_ctx.irq < 0)
--		return irq_ctx.irq;
-+	if (!r->flags)
-+		ret = acpi_dev_get_gpio_irq_resource(adev, NULL, 0, r);
- 
--	if (wake_capable)
--		*wake_capable = irq_ctx.wake_capable;
-+	if (!r->flags)
-+		return ret;
- 
--	return irq_ctx.irq;
-+	return r->start;
- }
- 
- static int i2c_acpi_get_info(struct acpi_device *adev,
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 3bd48d4b6318f..0339c298ba50b 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -513,10 +513,10 @@ static int i2c_device_probe(struct device *dev)
- 			if (irq == -EINVAL || irq == -ENODATA)
- 				irq = of_irq_get(dev->of_node, 0);
- 		} else if (ACPI_COMPANION(dev)) {
--			bool wake_capable;
-+			struct resource r = {};
- 
--			irq = i2c_acpi_get_irq(client, &wake_capable);
--			if (irq > 0 && wake_capable)
-+			irq = i2c_acpi_get_irq(client, &r);
-+			if (r.flags & IORESOURCE_IRQ_WAKECAPABLE)
- 				client->flags |= I2C_CLIENT_WAKE;
- 		}
- 		if (irq == -EPROBE_DEFER) {
-diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
-index 05b8b8dfa9bdd..b5dc559c49d11 100644
---- a/drivers/i2c/i2c-core.h
-+++ b/drivers/i2c/i2c-core.h
-@@ -61,11 +61,11 @@ static inline int __i2c_check_suspended(struct i2c_adapter *adap)
- #ifdef CONFIG_ACPI
- void i2c_acpi_register_devices(struct i2c_adapter *adap);
- 
--int i2c_acpi_get_irq(struct i2c_client *client, bool *wake_capable);
-+int i2c_acpi_get_irq(struct i2c_client *client, struct resource *r);
- #else /* CONFIG_ACPI */
- static inline void i2c_acpi_register_devices(struct i2c_adapter *adap) { }
- 
--static inline int i2c_acpi_get_irq(struct i2c_client *client, bool *wake_capable)
-+static inline int i2c_acpi_get_irq(struct i2c_client *client, struct resource *r)
- {
- 	return 0;
- }
--- 
-2.43.0.472.g3155946c3a-goog
+> + * 0 on success or appropriate errno value on error.
+> + */
+> +int p2sb_bar(struct pci_bus *bus, unsigned int devfn, struct resource *mem)
+> +{
+> + ...
+> +	ret = p2sb_valid_resource(&cache->res);
+> +	if (ret)
+> +		return ret;
 
+But I think these would be much clearer as something like this:
+
+  static bool p2sb_valid_resource(struct resource *res)
+  {
+    if (res->flags)
+      return true;
+
+    return false;
+  }
+
+  static int p2sb_scan_and_cache(struct pci_bus *bus, unsigned int devfn)
+  {
+    ...
+    if (!p2sb_valid_resource(&p2sb_resources[PCI_FUNC(devfn)].res))
+      return -ENOENT;
+
+    return 0;
+  }
+
+Bjorn
 
