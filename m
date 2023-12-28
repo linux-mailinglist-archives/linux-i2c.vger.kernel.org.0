@@ -1,214 +1,155 @@
-Return-Path: <linux-i2c+bounces-1039-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1040-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD48981F5A2
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Dec 2023 08:50:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0AF981F842
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Dec 2023 13:58:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9BC21C21CD5
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Dec 2023 07:50:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2E5A1C21E5C
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Dec 2023 12:58:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 312185380;
-	Thu, 28 Dec 2023 07:49:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6664079EE;
+	Thu, 28 Dec 2023 12:58:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ir6VXvSj"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Pm+ekVmV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAF963AC
-	for <linux-i2c@vger.kernel.org>; Thu, 28 Dec 2023 07:49:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6BC749A
+	for <linux-i2c@vger.kernel.org>; Thu, 28 Dec 2023 12:58:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3368b9bbeb4so5094534f8f.2
-        for <linux-i2c@vger.kernel.org>; Wed, 27 Dec 2023 23:49:50 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40d5aa35b60so19154865e9.0
+        for <linux-i2c@vger.kernel.org>; Thu, 28 Dec 2023 04:58:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703749789; x=1704354589; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DPH9AYxPTCLROk2PqQ2BSAenaIiGgIq9psooBBXVlnA=;
-        b=Ir6VXvSj6Q2YmuuXfEtr7zhoYnTM/agKZmxicD+QkP7KPa076YuFKZpobYgDjHYecU
-         AqpSd/sZR88FI/TSbbvW3pwknSH3VTrCahBpLFDkzpJlIU0I7/6rzBPBajt7zcZRUVPf
-         NTVovPo1THNtz2Nm87IXC4I3C4MJNP0/EfS+Vm5AJC8YdDIHsyr35aG76EYF8AfdBgdt
-         KrZWCCZIVWfTnsKaXQmjdkLpdvqZmackD3hjdvVxct+jxWRa6n811ADMusJJHRKV38hI
-         8vWhLyL9+PcejwJkG/zlK4UxsFREBTYMvBtwHyGpqf8yHQAuFPZoV2rJ8M0FNNxU4NZ4
-         arfQ==
+        d=linaro.org; s=google; t=1703768291; x=1704373091; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PsbdU9VAZ2t0ZraxiZCzdliAmxrS9fPUQ39YR7Q+Pfc=;
+        b=Pm+ekVmVfzrmjlBm7t02AUl7MY5cy+1ckn584dT6J2YvKK8C2ON/z6yi0VBfaG9qsv
+         OyyuuaNx68DwBcD9708lH++G8SQiir2RQnRzzXkRgHUpM+rM8Ndj6WQfcI2IxeU5pMfp
+         8EHhv5DrzJltXn/UvJ0G8PDxsDHcGZfjxLBHhEV7uE0bU8THy4rA0AyM5rqTNKQ63JNd
+         f3Mr9WcpQTEyxe9vUPdITiZptsXjFYaVzSmaA81we3DWcSU5rNNboxxje3RrZ7/XpwmJ
+         YjviQcpjmxlnb50UI4QJ7D+94Ar+3q3Rs9OzFXXfGO58b2w6HfBbxTnT0I47J5Fz1zMG
+         GZbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703749789; x=1704354589;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DPH9AYxPTCLROk2PqQ2BSAenaIiGgIq9psooBBXVlnA=;
-        b=REkyectrwmEn8yIRaKv0hinngDagTJf7EBIAK3j+/L4lzXm8QyAsGxDhsV6OhlmbWI
-         RzzGW7aQxJOlvV6b6FenAPSENJYud0eRMBpDyRbJFKkOjeuPmq/9kx0ro5AS7gOhVhaa
-         55f9xexzMxfoRuQmF2wjFB5cjdLT8t4pWIKqF10LYCqFJhqQBVDgkN6Gyg2hqntcezjl
-         ia/DX/w+l0Bqk5sIKZCDn9ccqPZ3IPOHX3pPHZw2H87GISTFsocBOMCLMvRCVMv9wVo+
-         IYUCb+HLKBkrN4LgGBq4U65dFjJWLxgzfzAS6eM/mpU29N5/c8zn5l/w0XMPm45F+m+G
-         FvrA==
-X-Gm-Message-State: AOJu0YyNqedjLabodBJROJLcY3Ll1D1cEKTPdrG+7x9/Sk4vb5or8VKk
-	VCJjKUY+1m67ggvvByPsF8MItk/iqbRg2Q==
-X-Google-Smtp-Source: AGHT+IHuuf6SKbSYGy72wo6zNB6tHC+YGDelclJWtS6iyk2u5tfkq2RRgqJShnKZ27R45rO7VF6WWQ==
-X-Received: by 2002:a05:600c:4b1b:b0:40d:27e9:b5ca with SMTP id i27-20020a05600c4b1b00b0040d27e9b5camr2529125wmp.365.1703749789063;
-        Wed, 27 Dec 2023 23:49:49 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id n2-20020a05600c3b8200b0040d5ab35657sm7908475wms.4.2023.12.27.23.49.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Dec 2023 23:49:48 -0800 (PST)
-Message-ID: <68b64171-6548-44b0-b5c9-8a5343b57828@linaro.org>
-Date: Thu, 28 Dec 2023 07:49:46 +0000
+        d=1e100.net; s=20230601; t=1703768291; x=1704373091;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PsbdU9VAZ2t0ZraxiZCzdliAmxrS9fPUQ39YR7Q+Pfc=;
+        b=PgmbxWznkn74beQ8kQKIh9C5TjjeJyeAm8bBklwLS5X9vdJuJ3UZNZOSkpHbLBzD63
+         QUMG0NGhp5F7SDOnOEG2MFyieMCGa3bfeGcAye9A58ppT+eQgT8b00C4I8bEuN2OeEU+
+         oq2JdIowXpRR+bPsUvOWgTPisW11hyd3x+TlaKGWAlgVaZh1x0y++yi1jfTftkrqC/Ee
+         Hugh/FiGe8gyTWuN7s1KI5Nkn3yMAe5lxLjfmbrIZaVnyQM43L4i5XMtIy4ESDnCiSvu
+         9v0jZjPvxlU+8Om5OhsUveB6xVt7MEFgJpXY+KSF+miZZ1qZ4AekBGHlNbGn2pcRs4Ou
+         5TGg==
+X-Gm-Message-State: AOJu0YyHfF5HtGibuAKCTirWcQcJLogrPwGn2xniPyLu5HtiJLcOd9oL
+	AH+Uox7oOVUl8AwC3Tfvnkfu9iAmAV+FYA==
+X-Google-Smtp-Source: AGHT+IGT7Y/qsBkm1bYAfjc8+SVNa4uWWCNwMUN+bOyOZVmpbQ+Xf82nttKJqv9IsUBfmEvzJTA/nQ==
+X-Received: by 2002:a05:600c:468c:b0:40d:4d91:609b with SMTP id p12-20020a05600c468c00b0040d4d91609bmr2711558wmo.355.1703768290528;
+        Thu, 28 Dec 2023 04:58:10 -0800 (PST)
+Received: from ta2.c.googlers.com.com (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
+        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b0040d5aca25f1sm8615807wmq.17.2023.12.28.04.58.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Dec 2023 04:58:09 -0800 (PST)
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+To: peter.griffin@linaro.org,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	conor+dt@kernel.org,
+	andi.shyti@kernel.org,
+	alim.akhtar@samsung.com,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	s.nawrocki@samsung.com,
+	tomasz.figa@gmail.com,
+	cw00.choi@samsung.com,
+	arnd@arndb.de,
+	semen.protsenko@linaro.org
+Cc: andre.draszik@linaro.org,
+	saravanak@google.com,
+	willmcvicker@google.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	kernel-team@android.com,
+	Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH v2 00/12] GS101 Oriole: CMU_PERIC0 support and USI updates
+Date: Thu, 28 Dec 2023 12:57:53 +0000
+Message-ID: <20231228125805.661725-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/13] dt-bindings: clock: google,gs101-clock: add PERIC0
- clock management unit
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Peter Griffin <peter.griffin@linaro.org>
-Cc: sboyd@kernel.org, conor+dt@kernel.org, andi.shyti@kernel.org,
- alim.akhtar@samsung.com, gregkh@linuxfoundation.org, jirislaby@kernel.org,
- catalin.marinas@arm.com, will@kernel.org, s.nawrocki@samsung.com,
- tomasz.figa@gmail.com, cw00.choi@samsung.com, arnd@arndb.de,
- semen.protsenko@linaro.org, andre.draszik@linaro.org, saravanak@google.com,
- willmcvicker@google.com, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
- <20231214105243.3707730-3-tudor.ambarus@linaro.org>
- <20231220150726.GA223267-robh@kernel.org>
- <173b06ab-2518-49ee-a67f-85256bc5b6a7@linaro.org>
- <425a228e-b2d3-4b19-9bcb-6ee1a90cd2ef@linaro.org>
- <7b39f962-8040-48b0-8580-abf5970bfad0@linaro.org>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <7b39f962-8040-48b0-8580-abf5970bfad0@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Add support for PERIC0 clocks. Use them for USI in serial and I2C
+configurations. Tested the serial at different baudrates (115200,
+1M, 3M) and the I2C with an at24 eeprom, all went fine.
 
+Apart of the DT and defconfig changes, the patch set spans through the tty
+and clk subsystems. The expectation is that Krzysztof will apply the whole
+series through the Samsung SoC tree. If the tty and clk subsystem
+maintainers can give an acked-by or reviewed-by on the relevant patches
+that would be most appreciated!
 
-On 12/28/23 07:30, Krzysztof Kozlowski wrote:
-> On 27/12/2023 13:38, Tudor Ambarus wrote:
->> Hi, Rob,
->>
->> On 12/21/23 07:20, Tudor Ambarus wrote:
->>>
->>>
->>> On 12/20/23 15:07, Rob Herring wrote:
->>>> On Thu, Dec 14, 2023 at 10:52:32AM +0000, Tudor Ambarus wrote:
->>>>> Add dt-schema documentation for the Connectivity Peripheral 0 (PERIC0)
->>>>> clock management unit.
->>>>>
->>>>> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
->>>>> ---
->>>>>  .../bindings/clock/google,gs101-clock.yaml    | 25 +++++-
->>>>>  include/dt-bindings/clock/google,gs101.h      | 86 +++++++++++++++++++
->>>>>  2 files changed, 109 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/clock/google,gs101-clock.yaml b/Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
->>>>> index 3eebc03a309b..ba54c13c55bc 100644
->>>>> --- a/Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
->>>>> +++ b/Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
->>>>> @@ -30,14 +30,15 @@ properties:
->>>>>        - google,gs101-cmu-top
->>>>>        - google,gs101-cmu-apm
->>>>>        - google,gs101-cmu-misc
->>>>> +      - google,gs101-cmu-peric0
->>>>>  
->>>>>    clocks:
->>>>>      minItems: 1
->>>>> -    maxItems: 2
->>>>> +    maxItems: 3
->>>>>  
->>>>>    clock-names:
->>>>>      minItems: 1
->>>>> -    maxItems: 2
->>>>> +    maxItems: 3
->>>>>  
->>>>>    "#clock-cells":
->>>>>      const: 1
->>>>> @@ -88,6 +89,26 @@ allOf:
->>>>>              - const: dout_cmu_misc_bus
->>>>>              - const: dout_cmu_misc_sss
->>>>>  
->>>>> +  - if:
->>>>> +      properties:
->>>>> +        compatible:
->>>>> +          contains:
->>>>> +            const: google,gs101-cmu-peric0
->>>>> +
->>>>> +    then:
->>>>> +      properties:
->>>>> +        clocks:
->>>>> +          items:
->>>>> +            - description: External reference clock (24.576 MHz)
->>>>> +            - description: Connectivity Peripheral 0 bus clock (from CMU_TOP)
->>>>> +            - description: Connectivity Peripheral 0 IP clock (from CMU_TOP)
->>>>> +
->>>>> +        clock-names:
->>>>> +          items:
->>>>> +            - const: oscclk
->>>>> +            - const: dout_cmu_peric0_bus
->>>>> +            - const: dout_cmu_peric0_ip
->>>>
->>>> 'bus' and 'ip' are sufficient because naming is local to the module. The 
->>>> same is true on 'dout_cmu_misc_bus'. As that has not made a release, 
->>>> please fix all of them.
->>>>
->>>
->>> Ok, will fix them shortly. Thanks, Rob!
->>
->> I tried your suggestion at
->> https://lore.kernel.org/linux-arm-kernel/c6cc6e74-6c3d-439b-8dc1-bc50a88a3d8f@linaro.org/
->>
->> and we noticed that we'd have to update the clock driver as well.
->> These CMUs set the DT clock-name of the parent clock in the driver in
->> struct samsung_cmu_info::clk_name[]. The driver then tries to enable the
->> parent clock based on the clock-name in exynos_arm64_register_cmu().
->>
->> In order to enable the parent clock of the CMU the following would be
->> needed in the driver:
->>
->> diff --git a/drivers/clk/samsung/clk-gs101.c
->> b/drivers/clk/samsung/clk-gs101.c
->> index 68a27b78b00b..e91836ea3a98 100644
->> --- a/drivers/clk/samsung/clk-gs101.c
->> +++ b/drivers/clk/samsung/clk-gs101.c
->> @@ -2476,7 +2476,7 @@ static const struct samsung_cmu_info misc_cmu_info
->> __initconst = {
->>         .nr_clk_ids             = CLKS_NR_MISC,
->>         .clk_regs               = misc_clk_regs,
->>         .nr_clk_regs            = ARRAY_SIZE(misc_clk_regs),
->> -       .clk_name               = "dout_cmu_misc_bus",
->> +       .clk_name               = "bus",
-> 
-> Yes, obviously, the names are used...
-> 
-> The entire point was that a week ago Rob said:
-> "As that has not made a release,  please fix all of them."
-> but if you keep waiting, like 8 days for this simple patch, his
-> statement is not true anymore.
-> 
-
-I saw the problem at the end of Thursday, reported it, and after that I
-entered vacation.
-
-> The only point was to send a fix *the next day*, so I would apply it and
-> send further. You kind of solved that problem by waiting entire week for
-> a simple driver and DTS change.
-> 
-Why can't we queue the name fix as a patch for v6.8-rc1? Of course if
-you consider that the change is worth it. As I said, I lean towards not
-changing it.
-
-Thanks,
+Thanks!
 ta
+
+changes in v2:
+- gs101 serial - infer the reg-io-width from the compatible as the entire
+  PERIC block allows just 32-bit register accesses.
+- identify the critical clocks from PERIC0 and mark them accordingly
+  (if disabled these clocks hang the system even if their parents are
+   still enabled).
+- update dtsi and use USI's gate clocks instead of the dividers clocks
+- move hsi2c_8 cells and pinctrls into dtsi
+- address Sam's cosmetic changes in the device tree files
+- drop defconfig patches (savedefconfig output & at24 eeprom enablement)
+- collect Acked-by and Reviewed-by tags
+- changes log in each patch as well, in the comments section under
+  ```---```
+
+
+Tudor Ambarus (12):
+  dt-bindings: clock: google,gs101-clock: add PERIC0 clock management
+    unit
+  dt-bindings: i2c: exynos5: add google,gs101-hsi2c compatible
+  dt-bindings: serial: samsung: do not allow reg-io-width for gs101
+  tty: serial: samsung: prepare for different IO types
+  tty: serial: samsung: set UPIO_MEM32 iotype for gs101
+  tty: serial: samsung: add gs101 earlycon support
+  clk: samsung: gs101: add support for cmu_peric0
+  arm64: dts: exynos: gs101: remove reg-io-width from serial
+  arm64: dts: exynos: gs101: enable cmu-peric0 clock controller
+  arm64: dts: exynos: gs101: update USI UART to use peric0 clocks
+  arm64: dts: exynos: gs101: define USI8 with I2C configuration
+  arm64: dts: exynos: gs101: enable eeprom on gs101-oriole
+
+ .../bindings/clock/google,gs101-clock.yaml    |  25 +-
+ .../devicetree/bindings/i2c/i2c-exynos5.yaml  |   1 +
+ .../bindings/serial/samsung_uart.yaml         |   2 +
+ .../boot/dts/exynos/google/gs101-oriole.dts   |  14 +
+ arch/arm64/boot/dts/exynos/google/gs101.dtsi  |  56 +-
+ drivers/clk/samsung/clk-gs101.c               | 583 ++++++++++++++++++
+ drivers/tty/serial/samsung_tty.c              |  58 +-
+ include/dt-bindings/clock/google,gs101.h      |  81 +++
+ 8 files changed, 796 insertions(+), 24 deletions(-)
+
+-- 
+2.43.0.472.g3155946c3a-goog
+
 
