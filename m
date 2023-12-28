@@ -1,93 +1,93 @@
-Return-Path: <linux-i2c+bounces-1027-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1028-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B3E181F184
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Dec 2023 20:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B28DB81F40C
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Dec 2023 03:05:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D471283C8B
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Dec 2023 19:06:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EF65282181
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Dec 2023 02:05:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7540E47F65;
-	Wed, 27 Dec 2023 19:06:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cb7d04ki"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4370910EF;
+	Thu, 28 Dec 2023 02:05:49 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A68C47F5B;
-	Wed, 27 Dec 2023 19:06:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 484EBC433C9;
-	Wed, 27 Dec 2023 19:06:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703703972;
-	bh=N0cqGhgpGMxjcJPO+bFemFvFTjsgoCCZ480Wv6YlprQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cb7d04kin1cLjy4u43wi/K5MMN+zeT3A8wy+7NvSzhv1gPZXPLsF0DrmnYLc621cU
-	 f/sO9S5IEWuISsR8eC7NfYN/+Wh9ao/QFIgBp+Vy/6dzi+bvkgBl1P8tBtCbhCLaau
-	 MylVJxWvp5MMgMMY/iRCboxnpNzMIMjdK3/PeiqMk5uU50DnD2cPwkt4s6FDZNnTy+
-	 pohfSqm+VLFjhm5kIv8/rG4AmG7CVos3CAOxWI8DeT6nr07QOi89RPiaycL0GDQq7b
-	 l6F3UQZ8BNXxRDnn2X4kDN1VLFL4Od2vJXsLXQYH7+hLIjxEkoabXcEyQWWvBs4xdR
-	 UCkLGROybjMZg==
-Date: Wed, 27 Dec 2023 20:06:09 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: attreyee-muk <tintinm2017@gmail.com>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation/i2c: fix spelling error in
- i2c-address-translators i2c-address-translators
-Message-ID: <ZYx1obB8KiuLEyI5@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	attreyee-muk <tintinm2017@gmail.com>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-References: <20231223190852.27108-1-tintinm2017@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8E810E4
+	for <linux-i2c@vger.kernel.org>; Thu, 28 Dec 2023 02:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1703729140-1eb14e0c7c069b0001-PT6Irj
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id ADagWOQbVUFv0uNN (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 28 Dec 2023 10:05:40 +0800 (CST)
+X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 28 Dec
+ 2023 10:05:40 +0800
+Received: from [10.28.66.68] (10.28.66.68) by ZXBJMBX03.zhaoxin.com
+ (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 28 Dec
+ 2023 10:05:39 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Message-ID: <05c886c4-1cf2-4bee-b4b4-387bfe87e063@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.66.68
+Date: Thu, 28 Dec 2023 10:05:36 +0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/9gIhJ5YNjtlsPpd"
-Content-Disposition: inline
-In-Reply-To: <20231223190852.27108-1-tintinm2017@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/8] i2c: wmt: create wmt_i2c_init for general init
+To: Wolfram Sang <wsa@kernel.org>, <linux-i2c@vger.kernel.org>,
+	<andi.shyti@kernel.org>, <cobechen@zhaoxin.com>
+X-ASG-Orig-Subj: Re: [PATCH v4 1/8] i2c: wmt: create wmt_i2c_init for general init
+References: <cover.1703647471.git.hanshu-oc@zhaoxin.com>
+ <acef54645a54bb85b2ae81b530f155c4dcdf9086.1703647471.git.hanshu-oc@zhaoxin.com>
+ <ZYx0VPVmyQhtG+B9@shikoro>
+Content-Language: en-US
+From: Hans Hu <HansHu-oc@zhaoxin.com>
+In-Reply-To: <ZYx0VPVmyQhtG+B9@shikoro>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ ZXBJMBX03.zhaoxin.com (10.29.252.7)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1703729140
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 717
+X-Barracuda-BRTS-Status: 0
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.118654
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
 
 
---/9gIhJ5YNjtlsPpd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2023/12/28 03:00, Wolfram Sang wrote:
+> On Wed, Dec 27, 2023 at 12:39:44PM +0800, Hans Hu wrote:
+>> Some common initialization actions are put in the function
+>> wmt_i2c_init(), which is convenient to share with zhaoxin.
+>>
+>> Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
+> I get a build error:
+>
+>    CC      drivers/i2c/busses/i2c-wmt.o
+> drivers/i2c/busses/i2c-wmt.c:289:5: error: no previous prototype for ‘wmt_i2c_init’ [-Werror=missing-prototypes]
+>    289 | int wmt_i2c_init(struct platform_device *pdev, struct wmt_i2c_dev **pi2c_dev)
+>        |     ^~~~~~~~~~~~
 
-On Sun, Dec 24, 2023 at 12:38:53AM +0530, attreyee-muk wrote:
-> Correct to "stretched" from "streched" in "keeps clock streched on bus A
-> waiting for reply"
->=20
-> Signed-off-by: Attreyee Mukherjee <tintinm2017@gmail.com>
 
-Applied to for-current, thanks!
+Sorry, I only checked after the last V4 patch using sparse/cocci/smatch. 
+Fixed V5 will be re-sent within an hour.
 
-
---/9gIhJ5YNjtlsPpd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWMdaEACgkQFA3kzBSg
-KbYwxw//TDGxwy2faRT3Tf4wA099JyOOhrEaBFSA7u5X9S7ETu8/0PfRTkSErg2U
-hbo2EE70xDQOM5cLh9MUsrLED5R2iA/sEkL2AQW8jZVA14aQkrD0OtJgd7kTP5w5
-qSxiNasfuIn+4ODNiwVdT18c48qvdOtp5TCXvSbRRqXLZlgBFN1IX7lKVzdhSGU9
-AdAeG0gxPrEaHRhuz5xIKJRrGji1R97kx91dTnD+46MvtidetNg+SEHQMKQdfPJv
-zO0qRXeglUXCjukZyrSlYzSZh9aCY27R3hytgec8MvlonFZbxVHlAwAgtvIbYYtY
-RM5WfrPgFN3ICSrQgQ+ieGa/R0FXopej+8oGLTPRmSN97wq13Kd0mnf8PcxfsOh4
-lbp/FeghE7LY94Xclvn+evCO1N2TPv/THIgJe1WDYnPdhueF/ACGh6LHRkDbF0yI
-Ca7vEIzIn0tNuwRZuwuqCYlv7fTnkF1beWMlbadMLugY374tKT/QGDVlHk22ACrp
-ZQnVsQRDL91Gcf3/ifUrh9iQlsuFW3zpUo8yzkCjQPmvpn9VgL1eqNtbbdFS2RGy
-QwOHn9ZtN/K1qKikS9+IUm1eCel+B2KQNYxN2cw6vGXj69hOSsOKK5DeOUAFnZDF
-Y82AiEOe1WrB37OuLi6dOsjYLCarERdpvviilyuahB9g5RFBwug=
-=tMa3
------END PGP SIGNATURE-----
-
---/9gIhJ5YNjtlsPpd--
 
