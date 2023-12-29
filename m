@@ -1,102 +1,153 @@
-Return-Path: <linux-i2c+bounces-1069-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1070-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EED281FD4E
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Dec 2023 07:39:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71F5D81FE03
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Dec 2023 09:04:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38BD11F21A1D
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Dec 2023 06:39:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8B93B20E81
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Dec 2023 08:04:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C097E6128;
-	Fri, 29 Dec 2023 06:39:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84B0A7472;
+	Fri, 29 Dec 2023 08:04:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com header.b="pkZzruut"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oIzOOtvL"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA12F259A;
-	Fri, 29 Dec 2023 06:39:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wdc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1703831963; x=1735367963;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Flx901Kgose+/GX8hPePgXRAU7GSK47n8SUv6VUgW1Q=;
-  b=pkZzruutNSRVwe5tDTwBI3JhfHlWKuaL4pjs5pp7VMzobVeFOpyJ80Wt
-   55LNK84CwcWReA7R6IMn6GOwo9hk6HrLTO/oqTXM6DgIeRx1o7YAhaEBW
-   7hJeK4YOdr88j11WDkaAyFUn3aodHuiXe6/Irnjbqv3F30E3Y1NiCzzdr
-   NEpHzW8cu0uqYD1VwG4jpaRTVkAtOIaWxRAnWCBP6uEdf7hgAAPBzVa7a
-   UP4NTGOqNumkpT8wbE5QkbBVS3JVsV2UT22mwNnlyDgbwojPcEE3+zrRY
-   QaEXVHZEl2M7aEpWf2RAuK7cOhEgNW8G9O0IEQBOegTDKV949Za+CaOeU
-   w==;
-X-CSE-ConnectionGUID: Z6EgstluRCifEc/bfIuA8Q==
-X-CSE-MsgGUID: DVL5CWkzQeu+0Ime845s0Q==
-X-IronPort-AV: E=Sophos;i="6.04,314,1695657600"; 
-   d="scan'208";a="6253595"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 29 Dec 2023 14:39:16 +0800
-IronPort-SDR: tHOB6AOVPTYw10E7yqxyzhp3IBlEDwezUhtxN5WLTBr5plXyuc4Oe+lKAnDXHfUP4PpGzaMHc+
- O7aG8DWqPNrA==
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Dec 2023 21:49:49 -0800
-IronPort-SDR: 99XcEEeBRcC0tCWFO0X60GreLMm8Xba4XYxkK0G5POBP+OBaE6UjTUZVJu8Scum7Hl6rHtBvb5
- bvqnpnsmdA+Q==
-WDCIronportException: Internal
-Received: from unknown (HELO shindev.ssa.fujisawa.hgst.com) ([10.149.66.30])
-  by uls-op-cesaip01.wdc.com with ESMTP; 28 Dec 2023 22:39:16 -0800
-From: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-To: platform-driver-x86@vger.kernel.org
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	linux-pci@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Subject: [PATCH v5 2/2] platform/x86: p2sb: Use pci_resource_n() in p2sb_read_bar0()
-Date: Fri, 29 Dec 2023 15:39:12 +0900
-Message-ID: <20231229063912.2517922-3-shinichiro.kawasaki@wdc.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231229063912.2517922-1-shinichiro.kawasaki@wdc.com>
-References: <20231229063912.2517922-1-shinichiro.kawasaki@wdc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECF66AA8
+	for <linux-i2c@vger.kernel.org>; Fri, 29 Dec 2023 08:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-336897b6bd6so6478031f8f.2
+        for <linux-i2c@vger.kernel.org>; Fri, 29 Dec 2023 00:04:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703837065; x=1704441865; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0VWBP1TVQ7NQgud/UujhhMlQGKCoT87k5cfBJC4USCo=;
+        b=oIzOOtvLX8oxOgl/kB564knQV/hbgkwMOwaJO2aVa7wgYIPpEClXudNixvSPtV6SaH
+         NrUXUDEeCG3cRZNH+zSfxK05qr4rkUJmjn0viGUbAE63tdS98HEQfhYpiYFblH7RzjiZ
+         4AOGZNqIqrGjS+sSL4Zkf7utLvqLgSyBUIJOwZ0nrG76WEWx6XDQ6M1jElU+mpSDyH5n
+         7CppcQPlEOV1VbIFKCF78EZ3GyUmTIqOBndylxLsGDoQR/+u++oHRshpIFGnqnupxS51
+         QgMHO1Guth+gZueg+IvQed9GNVWcAD67L3qmOpKvKV+Wufg5rouHF1RyRztWBC+uIoZM
+         xneg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703837065; x=1704441865;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0VWBP1TVQ7NQgud/UujhhMlQGKCoT87k5cfBJC4USCo=;
+        b=MkeIcJs8L72I1thk6pJar/Qfes/kbXnSJE9QtEaqNnxzRRo2mBvvcFi41TBtl1Yz30
+         u1wmXYbF8rn79+3Lp8m22IJcJIbOlIjO9bkzLGG0CRKexn/AqU9LRueXWaDM4FWNwXms
+         R2sq55hv2S5N4Zx4EUOUPV+lc8h13QBPvWxw/hu3/42L8W4RB1swnjJ1zam/L1QqgZUl
+         Rn60Vhg0I2cgHu1ppkZQG58KhHVQXVNE5zLm1DPZi57GKnzr9tP/inTsxaxsk6Bo7hBz
+         oeKXI4OhhAI7upeZyyI5raIiQ0ITcv69rQQG1ah5Mtw5G/Zk0Lattt60qzwgfYMusXSd
+         wEzg==
+X-Gm-Message-State: AOJu0Yw4AA8TR0pO4SPrT5DPf/uDpVOHt8xq4iVnL/azLiiX9HX4LzMs
+	lujVHCt5jrT3TkKSoMb1ST5SfyE6b0H39A==
+X-Google-Smtp-Source: AGHT+IH9Rs1zXW90kwlrJC3ECsTBcBWiMXn1x3xfOgBLp2MCsAomAneZT6yIkeYVWtcDHWBCYYJ7vg==
+X-Received: by 2002:a05:6000:100b:b0:336:8d4f:6b1b with SMTP id a11-20020a056000100b00b003368d4f6b1bmr6064936wrx.131.1703837064908;
+        Fri, 29 Dec 2023 00:04:24 -0800 (PST)
+Received: from [192.168.2.107] ([79.115.63.202])
+        by smtp.gmail.com with ESMTPSA id d5-20020adffbc5000000b00336e69fbc32sm7218151wrs.102.2023.12.29.00.04.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Dec 2023 00:04:24 -0800 (PST)
+Message-ID: <387303b4-d912-480c-a50c-9f9efa386ef3@linaro.org>
+Date: Fri, 29 Dec 2023 08:04:21 +0000
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 11/12] arm64: dts: exynos: gs101: define USI8 with I2C
+ configuration
+Content-Language: en-US
+To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ peter.griffin@linaro.org, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+ sboyd@kernel.org, conor+dt@kernel.org, andi.shyti@kernel.org,
+ alim.akhtar@samsung.com, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+ s.nawrocki@samsung.com, tomasz.figa@gmail.com, cw00.choi@samsung.com,
+ arnd@arndb.de, semen.protsenko@linaro.org
+Cc: saravanak@google.com, willmcvicker@google.com,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-serial@vger.kernel.org, kernel-team@android.com
+References: <20231228125805.661725-1-tudor.ambarus@linaro.org>
+ <20231228125805.661725-12-tudor.ambarus@linaro.org>
+ <a40b5d0dc3e151fede14aa00bcb853d1eeb8824b.camel@linaro.org>
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <a40b5d0dc3e151fede14aa00bcb853d1eeb8824b.camel@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Accesses to resource[] member of struct pci_dev shall be wrapped with
-pci_resource_n() for future compatibility. Call the helper function in
-p2sb_read_bar0().
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
----
- drivers/platform/x86/p2sb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/p2sb.c b/drivers/platform/x86/p2sb.c
-index fcf1ce8bbdc5..99a0e456f075 100644
---- a/drivers/platform/x86/p2sb.c
-+++ b/drivers/platform/x86/p2sb.c
-@@ -65,7 +65,7 @@ static bool p2sb_valid_resource(struct resource *res)
- /* Copy resource from the first BAR of the device in question */
- static void p2sb_read_bar0(struct pci_dev *pdev, struct resource *mem)
- {
--	struct resource *bar0 = &pdev->resource[0];
-+	struct resource *bar0 = pci_resource_n(pdev, 0);
- 
- 	/* Make sure we have no dangling pointers in the output */
- 	memset(mem, 0, sizeof(*mem));
--- 
-2.43.0
+On 12/28/23 14:04, André Draszik wrote:
+> Hi Tudor,
 
+Hi!
+
+> 
+> On Thu, 2023-12-28 at 12:58 +0000, Tudor Ambarus wrote:
+>> [...]
+>>
+>> diff --git a/arch/arm64/boot/dts/exynos/google/gs101.dtsi b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
+>> index 0e5b1b490b0b..c6ae33016992 100644
+>> --- a/arch/arm64/boot/dts/exynos/google/gs101.dtsi
+>> +++ b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
+>> @@ -354,6 +354,35 @@ pinctrl_peric0: pinctrl@10840000 {
+>>  			interrupts = <GIC_SPI 625 IRQ_TYPE_LEVEL_HIGH 0>;
+>>  		};
+>>  
+>> +		usi8: usi@109700c0 {
+>> +			compatible = "google,gs101-usi",
+>> +				     "samsung,exynos850-usi";
+>> +			reg = <0x109700c0 0x20>;
+>> +			ranges;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			clocks = <&cmu_peric0 CLK_GOUT_PERIC0_PERIC0_TOP0_IPCLK_7>,
+>> +				 <&cmu_peric0 CLK_GOUT_PERIC0_CLK_PERIC0_USI8_USI_CLK>;
+>> +			clock-names = "pclk", "ipclk";
+> 
+> Given the clock-names, shouldn't the clock indices be the other way around? Also see below.
+
+You're right, they should have been the other way around! Didn't make
+any difference at testing because the usi driver uses
+clk_bulk_prepare_enable(), what matters is the order of clocks in the
+i2c node, and those are fine.
+
+> 
+>> +			samsung,sysreg = <&sysreg_peric0 0x101c>;
+>> +			status = "disabled";
+>> +
+>> +			hsi2c_8: i2c@10970000 {
+>> +				compatible = "google,gs101-hsi2c",
+>> +					     "samsung,exynosautov9-hsi2c";
+>> +				reg = <0x10970000 0xc0>;
+>> +				interrupts = <GIC_SPI 642 IRQ_TYPE_LEVEL_HIGH 0>;
+>> +				#address-cells = <1>;
+>> +				#size-cells = <0>;
+>> +				pinctrl-names = "default";
+>> +				pinctrl-0 = <&hsi2c8_bus>;
+>> +				clocks = <&cmu_peric0 CLK_GOUT_PERIC0_PERIC0_TOP0_IPCLK_7>,
+>> +					 <&cmu_peric0 CLK_GOUT_PERIC0_CLK_PERIC0_USI8_USI_CLK>;
+>> +				clock-names = "hsi2c", "hsi2c_pclk";
+> 
+> Here, pclk == CLK_GOUT_PERIC0_CLK_PERIC0_USI8_USI_CLK (which is correct, I believe), whereas
+> above pclk == CLK_GOUT_PERIC0_PERIC0_TOP0_IPCLK_7
+> 
+
+Indeed, I'll reverse the order for the USI clocks and do some more
+testing. Thanks!
+ta
 
