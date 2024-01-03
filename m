@@ -1,190 +1,154 @@
-Return-Path: <linux-i2c+bounces-1087-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1088-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAE6D823033
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jan 2024 16:07:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F187482307B
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jan 2024 16:25:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 598D4285155
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jan 2024 15:07:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5F171F2483A
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jan 2024 15:25:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB7571A71B;
-	Wed,  3 Jan 2024 15:07:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B50EE1B26F;
+	Wed,  3 Jan 2024 15:25:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LY8TF53j"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lOP+rSO+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A261A704;
-	Wed,  3 Jan 2024 15:07:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB11C433C8;
-	Wed,  3 Jan 2024 15:07:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704294458;
-	bh=FCWeGqBB2LoWam8qeYDl6io0kV3y6U6ulHjprFNadU4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LY8TF53jXlgvYfoUfXYHSI9V4LXC6wAVztuySm8Gxb7i58suU6vAm/h8ua4URP2cT
-	 /by7N5Nh0NOpimjVHMZru0eArpOwYgSVyWyo2a8UYjoXkv9Ra3IToB2y6/YxtSYWSF
-	 z2DeGg3H88S5XuwQImnNSdnXoGJ16Ohmb5bGvircawzncFDVHFpARL069/eigGH2bJ
-	 QBtBHohxOsMHrQW2X1JB5WV9o8/Fa7s9udZPAtnJpzzt9jS7SYxyLug5m4wLijU4NE
-	 I7mrM2wNmGlLCVu2FCBIaRN9DZrJE2hUDrqB8pGdSEAW6UIzqLswghBSCdIIA/wgU2
-	 044qpmw1I+azQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC99D1B268;
+	Wed,  3 Jan 2024 15:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704295521; x=1735831521;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lLvRN6Vgg9jzrWkSLBTHIGTCs88oK3ZBLYQBbiDRE9M=;
+  b=lOP+rSO+xauMRKgd3gQXa9Sa3gppGFPTOiUBiQPrJWcVqfneyILwzE+L
+   b1YDAgGi3TsDFzZESbqDUFjLQIVvG4SHFwR9EuNuVJo/vjFQ+dScWR2ow
+   f5lQfslug9+WrqncLDNskAT+30N+KFZeYCWnli6BqY2zqsT10RaqLM2Rt
+   hF7Pv0gL07bjQ/zH8MGHdp0xN3q0bcIJX2rnObGjBGau0V8CIeZn5v4sh
+   j4QU5IutQOduldyG5sp41OOKQtxrEhZK8QRfmYtdCEKJLCZx9INm0U0qM
+   4009paf3qWDZfi1oIkSRfe/oTo17qZL8fHQl2volS7CmuqE6KJ+uJr8NA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="377177058"
+X-IronPort-AV: E=Sophos;i="6.04,327,1695711600"; 
+   d="scan'208";a="377177058"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 07:25:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="923575360"
+X-IronPort-AV: E=Sophos;i="6.04,327,1695711600"; 
+   d="scan'208";a="923575360"
+Received: from unknown (HELO [10.237.72.158]) ([10.237.72.158])
+  by fmsmga001.fm.intel.com with ESMTP; 03 Jan 2024 07:25:18 -0800
+Message-ID: <888da30a-c1ed-4fb0-af81-787fd868ce20@linux.intel.com>
+Date: Wed, 3 Jan 2024 17:25:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 03 Jan 2024 16:07:32 +0100
-From: Michael Walle <mwalle@kernel.org>
-To: Benjamin Bara <bbara93@gmail.com>
-Cc: benjamin.bara@skidata.com, dmitry.osipenko@collabora.com,
- jonathanh@nvidia.com, lee@kernel.org, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, nm@ti.com,
- peterz@infradead.org, rafael.j.wysocki@intel.com, richard.leitner@linux.dev,
- stable@vger.kernel.org, treding@nvidia.com,
- wsa+renesas@sang-engineering.com, wsa@kernel.org
-Subject: Re: [PATCH v7 2/5] Re: i2c: core: run atomic i2c xfer when
- !preemptible
-In-Reply-To: <CAJpcXm5gFMYnJ9bSA9nOXhKoibfedxjhRfu92dCmi6sVG3e=7Q@mail.gmail.com>
-References: <20230327-tegra-pmic-reboot-v7-2-18699d5dcd76@skidata.com>
- <20240102150350.3180741-1-mwalle@kernel.org>
- <CAJpcXm7W2vckakdFYiT4jssea-AzrZMsjHijfa+QpfzDVL+E3A@mail.gmail.com>
- <5e13f5e2da9c4f8fc0d4da2ab4b40383@kernel.org>
- <CAJpcXm5gFMYnJ9bSA9nOXhKoibfedxjhRfu92dCmi6sVG3e=7Q@mail.gmail.com>
-Message-ID: <6f321c457d1c66783480382929c94e0c@kernel.org>
-X-Sender: mwalle@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: i2c-designware: NULL ptr at RIP: 0010:regmap_read+0x12/0x70
+Content-Language: en-US
+To: "V, Narasimhan" <Narasimhan.V@amd.com>, Borislav Petkov <bp@alien8.de>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Cc: lkml <linux-kernel@vger.kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
+ "Limonciello, Mario" <Mario.Limonciello@amd.com>
+References: <20231229120820.GCZY62tM7z4v2XmOAZ@fat_crate.local>
+ <8169d773-f9ec-4092-b036-9e4fd59966c3@linux.intel.com>
+ <DM4PR12MB508654DF49FE079D6C283D658961A@DM4PR12MB5086.namprd12.prod.outlook.com>
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <DM4PR12MB508654DF49FE079D6C283D658961A@DM4PR12MB5086.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Benjamin,
+On 1/2/24 17:47, V, Narasimhan wrote:
+> [AMD Official Use Only - General]
+> 
+> 
+> No, we don't see this issue on linus' tree or on linux-next in the till 
+> the previous week
+> 
+Thanks, this indeed shows it's a regression coming from recent Andy's 
+patchset. Notes and questions below:
 
->> >> With preemption disabled, this boils down to
->> >>   return system_state > SYSTEM_RUNNING (&& !0)
->> >>
->> >> and will then generate a backtrace splash on each reboot on our
->> >> board:
->> >>
->> >> # reboot -f
->> >> [   12.687169] No atomic I2C transfer handler for 'i2c-0'
->> >> ...
->> >> [   12.806359] Call trace:
->> >> [   12.808793]  i2c_smbus_xfer+0x100/0x118
->> >> ...
->> >>
->> >> I'm not sure if this is now the expected behavior or not. There will
->> >> be
->> >> no backtraces, if I build a preemptible kernel, nor will there be
->> >> backtraces if I revert this patch.
->> >
->> >
->> > thanks for the report.
->> >
->> > In your case, the warning comes from shutting down a regulator during
->> > device_shutdown(), so nothing really problematic here.
->> 
->> I tend to disagree. Yes it's not problematic. But from a users point 
->> of
->> view, you get a splash of *many* backtraces on every reboot. Btw, one
->> should really turn this into a WARN_ONCE(). But even in this case you
->> might scare users which will eventually lead to more bug reports.
-> 
-> Sure, but the correct "fix" would be to implement an atomic handler if
-> the i2c is used during this late stage. I just meant that the
-> device_shutdown() is less problematic than the actual reboot handler.
-> Your PMIC seems to not have a reboot handler (registered (yet)), and is
-> therefore not "affected".
-> 
->> > However, later in
->> > the "restart sequence", IRQs are disabled before the restart handlers
->> > are called. If the reboot handlers would rely on irq-based
->> > ("non-atomic") i2c transfer, they might not work properly.
->> 
->> I get this from a technical point of view and agree that the correct
->> fix is to add the atomic variant to the i2c driver, which begs the
->> question, if adding the atomic variant to the driver will be 
->> considered
->> as a Fixes patch.
-> 
-> I can add a Fixes when I post it. Although the initial patch just makes
-> the actual problem "noisier".
+> [    6.245173] i2c_designware AMDI0010:00: Unknown Synopsys component type: 0xffffffff
 
-As far as I understand, there was no problem (for me at least),
-because the interrupts were still enabled at this time. But now,
-there is the problem with getting these backtraces and with that
-the user reports.
+This made me scratching my head since driver probing will fail in this 
+case with -ENODEV and I could not trigger runtime PM activity in such 
+case but perhaps this is timing specific which happens to happen in your 
+case.
 
-Don't get me wrong, I'm all for the correct fix here. But at the
-same time I fear all the reports we'll be getting. And in the meantime
-there was already a new one.
+Out of curiosity do you see this same "i2c_designware AMDI0010:00: 
+Unknown Synopsys component type: 0xffffffff" error on Vanilla or is it 
+also regression in linux-next?
 
->> Do I get it correct, that in my case the interrupts are still enabled?
->> Otherwise I'd have gotten this warning even before your patch, 
->> correct?
-> 
-> Yes, device_shutdown() is called during
-> kernel_{shutdown,restart}_prepare(), before
-> machine_{power_off,restart}() is called. The interrupts should 
-> therefore
-> still be enabled in your case.
-> 
->> Excuse my ignorance, but when are the interrupts actually disabled
->> during shutdown?
-> 
-> This is usually one of the first things done in machine_restart(),
-> before the architecture-specific restart handlers are called (which
-> might use i2c). Same for machine_power_off().
+> [    6.252683] BUG: kernel NULL pointer dereference, address: 00000000000001fc
+> [    6.256551] #PF: supervisor read access in kernel mode
+> [    6.256551] #PF: error_code(0x0000) - not-present page
+> [    6.256551] PGD 0 
+> [    6.256551] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> [    6.256551] CPU: 32 PID: 211 Comm: kworker/32:0 Not tainted 6.7.0-rc6-next-20231222-1703820640818 #1
+> [    6.256551] Workqueue: pm pm_runtime_work
+> [    6.256551] RIP: 0010:regmap_read+0x12/0x70
+> [    6.256551] Code: 00 00 00 00 0f 1f 40 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 0f 1f 44 00 00 55 48 89 e5 41 55 41 54 53 <8b> 87 fc 01 00 00 83 e8 01 85 f0 75 42 48 89 fb 41 89 f4 49 89 d5
+> [    6.256551] RSP: 0018:ff7fa5c740bcbc98 EFLAGS: 00010246
+> [    6.256551] RAX: 0000000000000000 RBX: ff38ff5c159f1028 RCX: 0000000000000008
+> [    6.256551] RDX: ff7fa5c740bcbcc4 RSI: 0000000000000034 RDI: 0000000000000000
+> [    6.256551] RBP: ff7fa5c740bcbcb0 R08: ff38ff5c02ceb8b0 R09: ff38ff5c002a4500
+> [    6.256551] R10: 0000000000000003 R11: 0000000000000003 R12: ff38ff5c159f1028
+> [    6.256551] R13: 0000000000000000 R14: 0000000000000000 R15: ff38ff5c159ed8f4
+> [    6.256551] FS:  0000000000000000(0000) GS:ff38ff6b0d200000(0000) knlGS:0000000000000000
+> [    6.256551] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    6.256551] CR2: 00000000000001fc CR3: 000000007403c001 CR4: 0000000000771ef0
+> [    6.256551] PKRU: 55555554
+> [    6.256551] Call Trace:
+> [    6.256551]  <TASK>
+> [    6.256551]  ? show_regs+0x6d/0x80
+> [    6.256551]  ? __die+0x29/0x70
+> [    6.256551]  ? page_fault_oops+0x153/0x4a0
+> [    6.256551]  ? do_user_addr_fault+0x30f/0x6c0
+> [    6.256551]  ? exc_page_fault+0x7c/0x190
+> [    6.256551]  ? asm_exc_page_fault+0x2b/0x30
+> [    6.256551]  ? regmap_read+0x12/0x70
+> [    6.256551]  ? update_load_avg+0x82/0x7d0
+> [    6.256551]  __i2c_dw_disable+0x38/0x180
+> [    6.256551]  i2c_dw_disable+0x3f/0xb0
+> [    6.256551]  i2c_dw_runtime_suspend+0x33/0x50
 
-Thanks for explaining.
+I think this Oops comes because of the first commit in the patchset:
 
->> >> OTOH, the driver I'm using (drivers/i2c/busses/i2c-mt65xx.c) has no
->> >> *_atomic(). So the warning is correct. There is also [1], which seems
->> >> to
->> >> be the same issue I'm facing.
->> >>
->> >> -michael
->> >>
->> >> [1]
->> >> https://lore.kernel.org/linux-i2c/13271b9b-4132-46ef-abf8-2c311967bb46@mailbox.org/
->> >
->> >
->> > I tried to implement an atomic handler for the mt65xx, but I don't have
->> > the respective hardware available to test it. I decided to use a
->> > similar
->> > approach as done in drivers/i2c/busses/i2c-rk3x.c, which calls the IRQ
->> > handler in a while loop if an atomic xfer is requested. IMHO, this
->> > should work with IRQs enabled and disabled, but I am not sure if this
->> > is
->> > the best approach...
->> 
->> Thanks for already looking into that. Do you want to submit it as an
->> actual patch? If so, you can add
->> 
->> Tested-by: Michael Walle <mwalle@kernel.org>
-> 
-> Yes, I can do that - thanks for the quick feedback.
-> 
->> But again, it would be nice if we somehow can get rid of this huge
->> splash
->> of backtraces on 6.7.x (I guess it's already too late 6.7).
-> 
-> IMHO, converting the error to WARN_ONCE() makes sense to reduce the
-> noise, but helps having more reliable reboot handling via i2c. Do you
-> think this is a sufficient "short-term solution" to reduce the noise
-> before the missing atomic handlers are actually implemented?
+bd466a892612 ("i2c: designware: Fix PM calls order in dw_i2c_plat_probe()"
 
-Turning that WARN into a WARN_ONCE is one thing. But it is still odd
-that don't I get a warning with preemption enabled. Is that because
-preemptible() will still return 1 until interrupts are actually 
-disabled?
-Can we achieve something similar with kernels without preemption 
-support?
-IOW, just warn iff there is an actual error, that is if i2c_xfer()
-is called with interrupt off?
+Do you see the issue if you test at that commit?
 
--michael
+Before that commit when the i2c_dw_probe() path fails we explicitly 
+disable the runtime PM before returning but now let the managed calls to 
+do it. Perhaps there is some time window that runtime suspending occurs 
+in parallel while drivers base is executing post probe code?
+
+dw_i2c_plat_probe
+	i2c_dw_probe
+		i2c_dw_probe_master
+			i2c_dw_init_regmap
+				-> failure and thus dev->map is not set
+
+i2c_dw_runtime_suspend
+	i2c_dw_disable
+		__i2c_dw_disable
+			regmap_read(dev->map, ...)
+				-> Oops because dev->map is NULL
+
+Other PM related commit in the patchset is commit 2347b8dc0d2e ("i2c: 
+designware: Consolidate PM ops") but I don't think that is the reason.
 
