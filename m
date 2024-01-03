@@ -1,180 +1,200 @@
-Return-Path: <linux-i2c+bounces-1084-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1085-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A846B822D7F
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jan 2024 13:49:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2A70822DCE
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jan 2024 13:58:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9AB241C23449
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jan 2024 12:49:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 874861F2122C
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Jan 2024 12:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B688219447;
-	Wed,  3 Jan 2024 12:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9F371C28C;
+	Wed,  3 Jan 2024 12:56:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M4eUVlXl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iePa/tXS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB802199A0;
-	Wed,  3 Jan 2024 12:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-50ea9db9e12so58356e87.0;
-        Wed, 03 Jan 2024 04:49:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704286179; x=1704890979; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wlvdoIdh11FpuRMZ6FedfzqCuHP7jE4LAthy5mimGQ4=;
-        b=M4eUVlXlnNKPbawHLNel63bX+s5Co1T15fJ/5Z+gIQ94DNktS4t2uaypEeH25Vliwt
-         254Ku5dJvFvW0T8XEpvHicUNXXFUADvqJdE8Wszu4MrlHz4nsiuQYiFO/Pgwn4+4uLmR
-         NHYlCj7onUVHPLmvj2n6+eRoY1OVpfDqK5sHD1rfvl0fuNkGP+8n7W4szRSsiW73r1hR
-         KFNAjpy4Ef92gdCNlKinXmZVJFGXc67PKXGajSGLgdKdLVt8mInhxCV/0FJwom4BMF7B
-         j/NiA+VdjoG8AiTS6LKHKAx4qAbP1lhEVmbXhQRa5h/SeIjfO8n5gSgPyHbO8Aj2B0D9
-         mmBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704286179; x=1704890979;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wlvdoIdh11FpuRMZ6FedfzqCuHP7jE4LAthy5mimGQ4=;
-        b=fO9Z0xGa6xx7MInb/O3Ahqe9l+/Kfkorxd+AkLj2sZJvBolyIcDj+6iWkyw7jrid69
-         EgntWHc+VeU5v2zAcx1x47VTNBNzXO+RaFaKbdrgXTIHYd9owyetgV5cVmP60WVOlPyy
-         P9r7Ua9ba1h29+l7AmnGkyWwsmbMq2iSP6fJ+BiLVx9B7YD7plr/fvHcl9usx/XjLERV
-         cxiB/HvJYP8VHbQONZTSd6gphiYRbArtHQwupKdENNYvfkJm0s+ij6XNPiAGDj4Fxl9V
-         0uuPXaTT1aYrqTWnpIrNs1O0RpVfoFNTEQNEQW8pBBS+HJ6/h+mpcO+t1dhCkIXzFhNZ
-         AxsQ==
-X-Gm-Message-State: AOJu0YwGCtm/2jan1+dGwrJO+37u7jyEF9iSUWSsP6wNY312Ghzl3+Jf
-	b+fJPW6d5pw4nTNCvQrHhVxDrllRpuUKJSZzRoA=
-X-Google-Smtp-Source: AGHT+IF5nUu5SjTdeixsvM0AnrVzAg36rJLUQKIKz0wXFwrkqJgkNYNb/njuK9ibM12aGzMMq1XCAbpPloAxjBeWqfA=
-X-Received: by 2002:a05:6512:98a:b0:50e:3b0b:8cd1 with SMTP id
- w10-20020a056512098a00b0050e3b0b8cd1mr6626174lft.95.1704286178705; Wed, 03
- Jan 2024 04:49:38 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861AC1C289
+	for <linux-i2c@vger.kernel.org>; Wed,  3 Jan 2024 12:56:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 975F4C433C8;
+	Wed,  3 Jan 2024 12:56:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704286582;
+	bh=VtKs6t83KSsmBNsRCCVUeAE/850Hp6jbrRqKZlyyqrI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iePa/tXScDIL72xP6Q4iLCWkTCAd5H/mccmCcwsFGRUm/hrBgcNRYSUQPjA3QVZyS
+	 InETFafUxmpJ87MF1l/g/GO8/QyzP+XCMrPUvucd5XvpYmIO8GcvyGDWEkRTwr1K1H
+	 GtbrAHzwbWUNolD82k3OEjdZeII60G6+WLYt6xALC6Ur8C88uXnXP1rJ29Z47PO7W9
+	 a7S/0rSKnR/vBSAuvkg4iyKsmwR5FELDgolPg3bch8f3optLDRG0NwjLsb867n+XaD
+	 Z/cNRswV8uqDvlVRhKHZKNufhk1/uoUbeUl+lzdNikUbDfq4NWxkKMlMOWF1rzPMo+
+	 jiulucVuDiS4Q==
+Date: Wed, 3 Jan 2024 13:56:18 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Hans Hu <hanshu-oc@zhaoxin.com>
+Cc: wsa@kernel.org, linux-i2c@vger.kernel.org, cobechen@zhaoxin.com
+Subject: Re: [PATCH v6 1/8] i2c: wmt: create wmt_i2c_init for general init
+Message-ID: <20240103125618.pzp4wtvinz2et4zp@zenone.zhora.eu>
+References: <cover.1703830854.git.hanshu-oc@zhaoxin.com>
+ <19a2be1aeb0d935b433d0b0eff0dabaeaaaa3de7.1703830854.git.hanshu-oc@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230327-tegra-pmic-reboot-v7-2-18699d5dcd76@skidata.com>
- <20240102150350.3180741-1-mwalle@kernel.org> <CAJpcXm7W2vckakdFYiT4jssea-AzrZMsjHijfa+QpfzDVL+E3A@mail.gmail.com>
- <5e13f5e2da9c4f8fc0d4da2ab4b40383@kernel.org>
-In-Reply-To: <5e13f5e2da9c4f8fc0d4da2ab4b40383@kernel.org>
-From: Benjamin Bara <bbara93@gmail.com>
-Date: Wed, 3 Jan 2024 13:49:27 +0100
-Message-ID: <CAJpcXm5gFMYnJ9bSA9nOXhKoibfedxjhRfu92dCmi6sVG3e=7Q@mail.gmail.com>
-Subject: Re: [PATCH v7 2/5] Re: i2c: core: run atomic i2c xfer when !preemptible
-To: Michael Walle <mwalle@kernel.org>
-Cc: benjamin.bara@skidata.com, dmitry.osipenko@collabora.com, 
-	jonathanh@nvidia.com, lee@kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, nm@ti.com, 
-	peterz@infradead.org, rafael.j.wysocki@intel.com, richard.leitner@linux.dev, 
-	stable@vger.kernel.org, treding@nvidia.com, wsa+renesas@sang-engineering.com, 
-	wsa@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <19a2be1aeb0d935b433d0b0eff0dabaeaaaa3de7.1703830854.git.hanshu-oc@zhaoxin.com>
 
-Hi Michael,
+Hi Hans,
 
-On Wed, 3 Jan 2024 at 10:20, Michael Walle <mwalle@kernel.org> wrote:
-> >> With preemption disabled, this boils down to
-> >>   return system_state > SYSTEM_RUNNING (&& !0)
-> >>
-> >> and will then generate a backtrace splash on each reboot on our
-> >> board:
-> >>
-> >> # reboot -f
-> >> [   12.687169] No atomic I2C transfer handler for 'i2c-0'
-> >> ...
-> >> [   12.806359] Call trace:
-> >> [   12.808793]  i2c_smbus_xfer+0x100/0x118
-> >> ...
-> >>
-> >> I'm not sure if this is now the expected behavior or not. There will
-> >> be
-> >> no backtraces, if I build a preemptible kernel, nor will there be
-> >> backtraces if I revert this patch.
-> >
-> >
-> > thanks for the report.
-> >
-> > In your case, the warning comes from shutting down a regulator during
-> > device_shutdown(), so nothing really problematic here.
->
-> I tend to disagree. Yes it's not problematic. But from a users point of
-> view, you get a splash of *many* backtraces on every reboot. Btw, one
-> should really turn this into a WARN_ONCE(). But even in this case you
-> might scare users which will eventually lead to more bug reports.
+On Fri, Dec 29, 2023 at 02:30:32PM +0800, Hans Hu wrote:
+> v4->v5:
+> 	add previous prototype 'static' for wmt_i2c_init().
+> 
+> Some common initialization actions are put in the function
+> wmt_i2c_init(), which is convenient to share with zhaoxin.
+> 
+> Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
+> ---
+>  drivers/i2c/busses/i2c-wmt.c | 67 +++++++++++++++++++-----------------
+>  1 file changed, 36 insertions(+), 31 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-wmt.c b/drivers/i2c/busses/i2c-wmt.c
+> index ec2a8da134e5..f1888f100d83 100644
+> --- a/drivers/i2c/busses/i2c-wmt.c
+> +++ b/drivers/i2c/busses/i2c-wmt.c
+> @@ -286,6 +286,38 @@ static irqreturn_t wmt_i2c_isr(int irq, void *data)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> +static int wmt_i2c_init(struct platform_device *pdev, struct wmt_i2c_dev **pi2c_dev)
 
-Sure, but the correct "fix" would be to implement an atomic handler if
-the i2c is used during this late stage. I just meant that the
-device_shutdown() is less problematic than the actual reboot handler.
-Your PMIC seems to not have a reboot handler (registered (yet)), and is
-therefore not "affected".
+looks good, I would rather make this a 
 
-> > However, later in
-> > the "restart sequence", IRQs are disabled before the restart handlers
-> > are called. If the reboot handlers would rely on irq-based
-> > ("non-atomic") i2c transfer, they might not work properly.
->
-> I get this from a technical point of view and agree that the correct
-> fix is to add the atomic variant to the i2c driver, which begs the
-> question, if adding the atomic variant to the driver will be considered
-> as a Fixes patch.
+   static struct wmt_i2c_dev *wmt_i2c_init(struct platform_device *pdev)
+   {
+	struct wmt_i2c_dev *i2c_dev;
+   	...
+	return i2c_dev;
+   }
 
-I can add a Fixes when I post it. Although the initial patch just makes
-the actual problem "noisier".
+kind of function and call it as:
 
-> Do I get it correct, that in my case the interrupts are still enabled?
-> Otherwise I'd have gotten this warning even before your patch, correct?
+   i2c_dev = wmt_i2c_init(...);
+   if (IS_ERR(i2c_dev))
+   	return ERR_PTR(i2c_dev);
 
-Yes, device_shutdown() is called during
-kernel_{shutdown,restart}_prepare(), before
-machine_{power_off,restart}() is called. The interrupts should therefore
-still be enabled in your case.
+Not a binding comment. It just looks nicer; in that case I would
+call the function wmt_i2c_dev_alloc().
 
-> Excuse my ignorance, but when are the interrupts actually disabled
-> during shutdown?
+In any case:
 
-This is usually one of the first things done in machine_restart(),
-before the architecture-specific restart handlers are called (which
-might use i2c). Same for machine_power_off().
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 
-> >> OTOH, the driver I'm using (drivers/i2c/busses/i2c-mt65xx.c) has no
-> >> *_atomic(). So the warning is correct. There is also [1], which seems
-> >> to
-> >> be the same issue I'm facing.
-> >>
-> >> -michael
-> >>
-> >> [1]
-> >> https://lore.kernel.org/linux-i2c/13271b9b-4132-46ef-abf8-2c311967bb46@mailbox.org/
-> >
-> >
-> > I tried to implement an atomic handler for the mt65xx, but I don't have
-> > the respective hardware available to test it. I decided to use a
-> > similar
-> > approach as done in drivers/i2c/busses/i2c-rk3x.c, which calls the IRQ
-> > handler in a while loop if an atomic xfer is requested. IMHO, this
-> > should work with IRQs enabled and disabled, but I am not sure if this
-> > is
-> > the best approach...
->
-> Thanks for already looking into that. Do you want to submit it as an
-> actual patch? If so, you can add
->
-> Tested-by: Michael Walle <mwalle@kernel.org>
+Andi
 
-Yes, I can do that - thanks for the quick feedback.
-
-> But again, it would be nice if we somehow can get rid of this huge
-> splash
-> of backtraces on 6.7.x (I guess it's already too late 6.7).
-
-IMHO, converting the error to WARN_ONCE() makes sense to reduce the
-noise, but helps having more reliable reboot handling via i2c. Do you
-think this is a sufficient "short-term solution" to reduce the noise
-before the missing atomic handlers are actually implemented?
+> +{
+> +	int err;
+> +	struct wmt_i2c_dev *i2c_dev;
+> +	struct device_node *np = pdev->dev.of_node;
+> +
+> +	i2c_dev = devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
+> +	if (!i2c_dev)
+> +		return -ENOMEM;
+> +
+> +	i2c_dev->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+> +	if (IS_ERR(i2c_dev->base))
+> +		return PTR_ERR(i2c_dev->base);
+> +
+> +	i2c_dev->irq = irq_of_parse_and_map(np, 0);
+> +	if (!i2c_dev->irq)
+> +		return -EINVAL;
+> +
+> +	err = devm_request_irq(&pdev->dev, i2c_dev->irq, wmt_i2c_isr,
+> +					0, pdev->name, i2c_dev);
+> +	if (err)
+> +		return dev_err_probe(&pdev->dev, err,
+> +				"failed to request irq %i\n", i2c_dev->irq);
+> +
+> +	i2c_dev->dev = &pdev->dev;
+> +	init_completion(&i2c_dev->complete);
+> +	platform_set_drvdata(pdev, i2c_dev);
+> +
+> +	*pi2c_dev = i2c_dev;
+> +	return 0;
+> +}
+> +
+>  static int wmt_i2c_reset_hardware(struct wmt_i2c_dev *i2c_dev)
+>  {
+>  	int err;
+> @@ -327,19 +359,9 @@ static int wmt_i2c_probe(struct platform_device *pdev)
+>  	int err;
+>  	u32 clk_rate;
+>  
+> -	i2c_dev = devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
+> -	if (!i2c_dev)
+> -		return -ENOMEM;
+> -
+> -	i2c_dev->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+> -	if (IS_ERR(i2c_dev->base))
+> -		return PTR_ERR(i2c_dev->base);
+> -
+> -	i2c_dev->irq = irq_of_parse_and_map(np, 0);
+> -	if (!i2c_dev->irq) {
+> -		dev_err(&pdev->dev, "irq missing or invalid\n");
+> -		return -EINVAL;
+> -	}
+> +	err = wmt_i2c_init(pdev, &i2c_dev);
+> +	if (err)
+> +		return err;
+>  
+>  	i2c_dev->clk = of_clk_get(np, 0);
+>  	if (IS_ERR(i2c_dev->clk)) {
+> @@ -351,15 +373,6 @@ static int wmt_i2c_probe(struct platform_device *pdev)
+>  	if (!err && (clk_rate == I2C_MAX_FAST_MODE_FREQ))
+>  		i2c_dev->tcr = TCR_FAST_MODE;
+>  
+> -	i2c_dev->dev = &pdev->dev;
+> -
+> -	err = devm_request_irq(&pdev->dev, i2c_dev->irq, wmt_i2c_isr, 0,
+> -							"i2c", i2c_dev);
+> -	if (err) {
+> -		dev_err(&pdev->dev, "failed to request irq %i\n", i2c_dev->irq);
+> -		return err;
+> -	}
+> -
+>  	adap = &i2c_dev->adapter;
+>  	i2c_set_adapdata(adap, i2c_dev);
+>  	strscpy(adap->name, "WMT I2C adapter", sizeof(adap->name));
+> @@ -368,21 +381,13 @@ static int wmt_i2c_probe(struct platform_device *pdev)
+>  	adap->dev.parent = &pdev->dev;
+>  	adap->dev.of_node = pdev->dev.of_node;
+>  
+> -	init_completion(&i2c_dev->complete);
+> -
+>  	err = wmt_i2c_reset_hardware(i2c_dev);
+>  	if (err) {
+>  		dev_err(&pdev->dev, "error initializing hardware\n");
+>  		return err;
+>  	}
+>  
+> -	err = i2c_add_adapter(adap);
+> -	if (err)
+> -		return err;
+> -
+> -	platform_set_drvdata(pdev, i2c_dev);
+> -
+> -	return 0;
+> +	return i2c_add_adapter(adap);
+>  }
+>  
+>  static void wmt_i2c_remove(struct platform_device *pdev)
+> -- 
+> 2.34.1
+> 
 
