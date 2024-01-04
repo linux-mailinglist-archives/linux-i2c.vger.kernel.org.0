@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-1113-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1114-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 565C38241DA
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jan 2024 13:36:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 551848241DC
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jan 2024 13:36:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E883C286CC9
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jan 2024 12:36:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBBF3B23D73
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jan 2024 12:36:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8263219EE;
-	Thu,  4 Jan 2024 12:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 453AD21A1C;
+	Thu,  4 Jan 2024 12:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RQMFOwfV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A013222303;
-	Thu,  4 Jan 2024 12:36:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout2.hostsharing.net (Postfix) with ESMTPS id 715ED2800B4AC;
-	Thu,  4 Jan 2024 13:36:21 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 526D51093B; Thu,  4 Jan 2024 13:36:21 +0100 (CET)
-Date: Thu, 4 Jan 2024 13:36:21 +0100
-From: Lukas Wunner <lukas@wunner.de>
-To: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Cc: Klara Modin <klarasmodin@gmail.com>,
-	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
-	"hdegoede@redhat.com" <hdegoede@redhat.com>,
-	"ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-	"platform-driver-x86@vger.kernel.org" <platform-driver-x86@vger.kernel.org>
-Subject: Re: [PATCH v5 1/2] platform/x86: p2sb: Allow p2sb_bar() calls during
- PCI device probe
-Message-ID: <20240104123621.GA4876@wunner.de>
-References: <CABq1_vjfyp_B-f4LAL6pg394bP6nDFyvg110TOLHHb0x4aCPeg@mail.gmail.com>
- <oe4cs5ptinmmdaxv6xa524whc7bppfqa7ern5jzc3aca5nffpm@xbmv34mjjxvv>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C4421A17
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Jan 2024 12:36:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E281C433C7;
+	Thu,  4 Jan 2024 12:36:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704371795;
+	bh=WTnSTLWTpcsxP68BJlplYARARnwD3ck6cI4RPWH7K9I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RQMFOwfV89FocxbAGLEBx0yOfXa2pZ2zsUBFJq0czWzMyqXkR6EdXMcXuqSZUAiwm
+	 l33HMmttuT4nSHcfNkXCNEpTe8ySDvBppYeNOWCj1uvSrNOoP2n5Ae86tiW9uSXQ0P
+	 TXYXGxnD7Vkx6dYIEUJ9uS296ncNSPQeqT/XPE8hlaSDd6fpiBll6Nnui2NHafZAfL
+	 6s40f3QdM8sTne1ov+5/+39ZJ2Pu8dmGBf6H3Wwm7yktpqJ2kUNJNC7uobpxqEmN0X
+	 mAAxpmDEFm0D0BCPlujy35ilVwjHUaIDZtiPoOsf+hkvoItDDwv9NIRvSQsNQGnfAy
+	 T7crlw3t+toxQ==
+Date: Thu, 4 Jan 2024 13:36:31 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Hans Hu <HansHu-oc@zhaoxin.com>
+Cc: wsa@kernel.org, linux-i2c@vger.kernel.org, cobechen@zhaoxin.com
+Subject: Re: [PATCH v6 4/8] i2c: wmt: split out common files
+Message-ID: <qejha3sggk2yrphrh3fkwfhpgrvvih24xglsirgsrrjzwf2x3t@nvqbinp6kam2>
+References: <cover.1703830854.git.hanshu-oc@zhaoxin.com>
+ <1871ceb5c3d6804c6a7f7a38327919861985c066.1703830854.git.hanshu-oc@zhaoxin.com>
+ <20240103172103.oyt5piqfpnk5krc4@zenone.zhora.eu>
+ <a3156a84-20da-488d-823b-7cdb149c7fa6@zhaoxin.com>
+ <didspodgkj3rthhydnwvhrbpomxx375si67pmfl6vuysrcuurp@a4qbekhbc5el>
+ <8a437732-b74f-436d-b267-f274f917e638@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,17 +52,36 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <oe4cs5ptinmmdaxv6xa524whc7bppfqa7ern5jzc3aca5nffpm@xbmv34mjjxvv>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <8a437732-b74f-436d-b267-f274f917e638@zhaoxin.com>
 
-On Thu, Jan 04, 2024 at 08:41:28AM +0000, Shinichiro Kawasaki wrote:
-> My mere idea was to just blacklist Intel CPUs with family != 6.
+Hi Hans,
 
-The P2SB device has Vendor ID 0x8086, Device ID 0xc5c5, so just match
-for that?  The IDE controller in question has [8086:244b].  Class codes
-also differ, so that would be another suitable method for differentiation.
+> > > > >    MAINTAINERS                            |   2 +-
+> > > > >    drivers/i2c/busses/Makefile            |   2 +
+> > > > >    drivers/i2c/busses/i2c-viai2c-common.c | 234 ++++++++++++++
+> > > > >    drivers/i2c/busses/i2c-viai2c-common.h |  66 ++++
+> > > > >    drivers/i2c/busses/i2c-wmt-plt.c       | 137 ++++++++
+> > > > 'plt' stands for?
+> > > 
+> > > 'plt' is short for 'platform', since it is not suitable,
+> > it's suitable, sure... but not immediately understandable. Your
+> > choice if you want to change it.
+> > 
+> > > do you think it is better to change it to 'i2c-wmt-platform.c' or
+> > > 'i2c-viai2c-wmt.c' ?
+> > I would rename things to:
+> > 
+> > i2c-via-wmt.c
+> > i2c-via-common.c
+> > i2c-via-zhaoxin.c
+> > 
+> > But of course it's not binding.
+> 
+> 
+> if so, I choose to 'i2c-viai2c-*.c', because there's already a driver called
+> 'i2c-via.c'.
 
-Thanks,
+ack!
 
-Lukas
+Andi
 
