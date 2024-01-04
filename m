@@ -1,82 +1,112 @@
-Return-Path: <linux-i2c+bounces-1106-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1107-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AD32823E7D
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jan 2024 10:22:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6A35823EB4
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jan 2024 10:33:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C27AB21786
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jan 2024 09:22:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E25D1F250A9
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Jan 2024 09:33:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC8B72031E;
-	Thu,  4 Jan 2024 09:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15BB5208B7;
+	Thu,  4 Jan 2024 09:33:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hW5cPXd/"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="xh3IQYRJ";
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="MRqTjz27"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786AA2030F
-	for <linux-i2c@vger.kernel.org>; Thu,  4 Jan 2024 09:22:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFBB6C433C7;
-	Thu,  4 Jan 2024 09:22:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704360152;
-	bh=4w/HKoE2TavhG9ffpA7qZv02rh2VTwWf0g2gBhNhZuY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hW5cPXd/KN1UU3j/6I8QxPEEaie1xGL5o6PY+pslC8Oz16n7kypYXCmNPSxHamUh8
-	 V8Gr37ck/LmVLfH4f8xq+zlQHJ7lceZsQ5wC+0Jv4YrXTrf8RojD25unqKd4g8Qubt
-	 KwpeTsrQbKMP6rwxg0lUL5uLjKT2vsQ+B7W7618XuU3FQSfGPXbzFpU4ibn2YHuk39
-	 MUyVhZGdkw75WXW9k8QMwpTdQnFOAGs5wODBxLdQEYHYy2zNjpRotzQkBibSdwyMrd
-	 Nf+P//0s2Kgui1rrpdruldrUKJv/vL4H8jprNzQz3uKcJO4lbf4Uom6vByUdmop3hO
-	 Fyp0WUYWa4pPA==
-Date: Thu, 4 Jan 2024 10:22:26 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Hans Hu <HansHu-oc@zhaoxin.com>
-Cc: wsa@kernel.org, linux-i2c@vger.kernel.org, cobechen@zhaoxin.com
-Subject: Re: [PATCH v6 4/8] i2c: wmt: split out common files
-Message-ID: <didspodgkj3rthhydnwvhrbpomxx375si67pmfl6vuysrcuurp@a4qbekhbc5el>
-References: <cover.1703830854.git.hanshu-oc@zhaoxin.com>
- <1871ceb5c3d6804c6a7f7a38327919861985c066.1703830854.git.hanshu-oc@zhaoxin.com>
- <20240103172103.oyt5piqfpnk5krc4@zenone.zhora.eu>
- <a3156a84-20da-488d-823b-7cdb149c7fa6@zhaoxin.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3714E208A3;
+	Thu,  4 Jan 2024 09:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4T5LxX19dsz9sbW;
+	Thu,  4 Jan 2024 10:33:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1704360816;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0B70DhyM+XHlKDKnZ8jGXOAYbR3zpWvPHTzWDUxdkCs=;
+	b=xh3IQYRJJXnYTZOzmAPrrldYe7aa+2aio2m6JfHmLx0NrdjvS+2xcKxp+PX7htQBh2lcaz
+	QbDjFz0PoWGvj1ShXlt3tC1G7s77i+kKe4E7Zkx3Nx71xqxuu2oFho9zx1xooWrgKYqF8L
+	Oe4ypVCbCnuPKfdNySZuP0VHmic1do1iGc3SbqJLGoHK+EPuKiw0XnPZDW+S+isbK2XkVw
+	BJz2DS0J1QLfSMOsu3aGu1tGzjxaNdKwt6YKIcdItt1nK5fFJvUT29JycgfrlaYTfmw/qH
+	iVcLf/Ru2G9crI4K2ss3ZtwaxigWoP7phQzwIQR0ZdDjpdgvUQ70ObXpGZU9yA==
+Message-ID: <7f483c9d-54cd-4c2f-9e7d-9fdb3fd4bbd3@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1704360814;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0B70DhyM+XHlKDKnZ8jGXOAYbR3zpWvPHTzWDUxdkCs=;
+	b=MRqTjz27baddQA03NM97tD9DwmFwdJRENj2qfAZb3w2PSv8+ix9fDwkkkXrpjjZ+W8p/wJ
+	GtCSPk8Ur74r4RL2sNiMXunNsPm5E1t1Pa/pJ3d9yq+aMQdN3MjdrKnm+OzTezP1Zz31sw
+	8SEMtwlMp7qFBTbCGHbbDOVjKUPLrM8ydfbcckhcO8p1OIbUdfjcUZFFkXn9ys9UB6e17s
+	XPHsmpwlY19Cj3/pfXjcdtJQMt/2XEUbRHmAFaq8RAs1H9HSjasnXPz4xMRHuQteXdVn8y
+	+NUetXyBoJnT9nclGWmzlaLFWdvI6DjOnG1S+sIO/BOCc2NOWaOdkSdYqAl35Q==
+Date: Thu, 4 Jan 2024 10:33:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a3156a84-20da-488d-823b-7cdb149c7fa6@zhaoxin.com>
+Subject: Re: [PATCH] i2c: core: Fix atomic xfer check for non-preempt config
+To: Benjamin Bara <bbara93@gmail.com>, Wolfram Sang <wsa@kernel.org>,
+ Lee Jones <lee@kernel.org>, Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc: peterz@infradead.org, mwalle@kernel.org,
+ Erhard Furtner <erhard_f@mailbox.org>, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Benjamin Bara <benjamin.bara@skidata.com>,
+ stable@vger.kernel.org
+References: <20240104-i2c-atomic-v1-1-a3a186f21c36@skidata.com>
+Content-Language: en-US
+From: Tor Vic <torvic9@mailbox.org>
+In-Reply-To: <20240104-i2c-atomic-v1-1-a3a186f21c36@skidata.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-MBO-RS-ID: 39f56c071403599b82f
+X-MBO-RS-META: j5fuf5o34z1y46q48ku5atw3w5cbgsyi
 
-Hi Hans,
 
-> > >   MAINTAINERS                            |   2 +-
-> > >   drivers/i2c/busses/Makefile            |   2 +
-> > >   drivers/i2c/busses/i2c-viai2c-common.c | 234 ++++++++++++++
-> > >   drivers/i2c/busses/i2c-viai2c-common.h |  66 ++++
-> > >   drivers/i2c/busses/i2c-wmt-plt.c       | 137 ++++++++
-> > 'plt' stands for?
+
+On 1/4/24 09:17, Benjamin Bara wrote:
+> From: Benjamin Bara <benjamin.bara@skidata.com>
 > 
+> Since commit aa49c90894d0 ("i2c: core: Run atomic i2c xfer when
+> !preemptible"), the whole reboot/power off sequence on non-preempt kernels
+> is using atomic i2c xfer, as !preemptible() always results to 1.
 > 
-> 'plt' is short for 'platform', since it is not suitable,
+> During device_shutdown(), the i2c might be used a lot and not all busses
+> have implemented an atomic xfer handler. This results in a lot of
+> avoidable noise, like:
+> 
+> [   12.687169] No atomic I2C transfer handler for 'i2c-0'
+> [   12.692313] WARNING: CPU: 6 PID: 275 at drivers/i2c/i2c-core.h:40 i2c_smbus_xfer+0x100/0x118
+> ...
+> 
+> Fix this by allowing non-atomic xfer when the interrupts are enabled, as
+> it was before.
+> 
+> Fixes: aa49c90894d0 ("i2c: core: Run atomic i2c xfer when !preemptible")
+> Cc: stable@vger.kernel.org # v5.2+
+> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 
-it's suitable, sure... but not immediately understandable. Your
-choice if you want to change it.
+On x86_64 and 6.7-rc8 with voluntary preemption:
 
-> do you think it is better to change it to 'i2c-wmt-platform.c' or
-> 'i2c-viai2c-wmt.c' ?
+Tested-by: Tor Vic <torvic9@mailbox.org>
 
-I would rename things to:
+Thanks for the fix!
 
-i2c-via-wmt.c
-i2c-via-common.c
-i2c-via-zhaoxin.c
-
-But of course it's not binding.
-
-Andi
+> 
+> Best regards,
 
