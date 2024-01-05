@@ -1,88 +1,94 @@
-Return-Path: <linux-i2c+bounces-1135-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1136-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05EE98250F1
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jan 2024 10:37:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFF42825148
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jan 2024 10:55:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD5521F22B9B
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jan 2024 09:37:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D975284CD4
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Jan 2024 09:55:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D262420A;
-	Fri,  5 Jan 2024 09:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7DCD24A1C;
+	Fri,  5 Jan 2024 09:54:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MkjD5d9g"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kk7YZpDh"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52CBD24201
-	for <linux-i2c@vger.kernel.org>; Fri,  5 Jan 2024 09:37:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B89C433C7;
-	Fri,  5 Jan 2024 09:37:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1704447468;
-	bh=0qUNWcbeidvtM2mXPzICv14D2IvpBcRS7BJ0wSPDCpw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MkjD5d9gqeXhmkbgh/H0HxXi+VOCyB8qA4mguXOLHSkXwWu+RbV0R1d4PjJaN/g5z
-	 gz0Jfq4tPpxBz0CWOJ9G3NwZ+Fsd1+7oLFoopG6+Ot0gQQAk+1gKObfIdnkNW++w/i
-	 nzrshQ0q88zvv0NtrBnGG5keXn4GSxWjYZtBU+Y4=
-Date: Fri, 5 Jan 2024 10:37:45 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH] eeprom: at24: Use pm_runtime_resume_and_get to simplify
- the code
-Message-ID: <2024010512-dancing-multiply-26d1@gregkh>
-References: <c3045427-da42-4f7c-8a96-3c4756646cd0@gmail.com>
- <CAMRc=MeKEVFFE6Pw3KBXTVgA3Y0sUswBKAWqEOSDyZk_QLhQQA@mail.gmail.com>
- <a1e908ce-9d5b-4d0e-8002-b25d4b6a7172@gmail.com>
- <CAMRc=MetjCb-42uPBEU53RFD1_CcwJ9d22eGHbX1HESOdp1nig@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FB124A0C;
+	Fri,  5 Jan 2024 09:54:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704448498; x=1735984498;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=7ObWYYBLn40f0UahgV/luBpVWwgWk04CpAkgRbzVTHg=;
+  b=Kk7YZpDhcqpNGHOl0pFyCaSgMOwrD5DIrDpaK0f/ZuPCLaQKEbb8wtbZ
+   cpVASDGtbi9iTPTFZDAXEDnrBspSRhj5ZsdZjjjO5tiu78rNCT2PXXgPa
+   SVJAxUyf3JSAcPfXUNTgGtEfjs4lm2i2t/hy8odKmjjTKBN18C2mCLIX6
+   XaeGlG/Y0NRqnoRguxvUKkX0GHIS953iW4KAhwgHq8nfyJjZfnuVH7ofR
+   BBD19moBabk+h5R/OKRBO2vOQlPpEVGgD8Kh8l7KjfD2dA8AbAjLK6bc7
+   /8v0n/gdXs0Odbj3jxNq0QmQezxbQxcAf5JTO+cRKunWKiR5QUEz70EpC
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10943"; a="4242941"
+X-IronPort-AV: E=Sophos;i="6.04,333,1695711600"; 
+   d="scan'208";a="4242941"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2024 01:54:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10943"; a="846533687"
+X-IronPort-AV: E=Sophos;i="6.04,333,1695711600"; 
+   d="scan'208";a="846533687"
+Received: from unknown (HELO [10.237.72.158]) ([10.237.72.158])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Jan 2024 01:54:52 -0800
+Message-ID: <10f00229-4cc0-4511-a39e-14e2c58ba98a@linux.intel.com>
+Date: Fri, 5 Jan 2024 11:54:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=MetjCb-42uPBEU53RFD1_CcwJ9d22eGHbX1HESOdp1nig@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 00/24] i2c: designware: code consolidation & cleanups
+To: Wolfram Sang <wsa@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Andi Shyti
+ <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Jan Dabros <jsd@semihalf.com>, Philipp Zabel <p.zabel@pengutronix.de>
+References: <20231207141653.2785124-1-andriy.shevchenko@linux.intel.com>
+ <ZYBgB3J51hfGQSVX@smile.fi.intel.com> <ZYFvEn0/xxIhGnlT@shikoro>
+Content-Language: en-US
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <ZYFvEn0/xxIhGnlT@shikoro>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jan 05, 2024 at 10:35:18AM +0100, Bartosz Golaszewski wrote:
-> On Fri, Jan 5, 2024 at 10:32 AM Heiner Kallweit <hkallweit1@gmail.com> wrote:
-> >
-> > On 05.01.2024 10:22, Bartosz Golaszewski wrote:
-> > > On Wed, Dec 20, 2023 at 4:11 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
-> > >>
-> > >> Use helper pm_runtime_resume_and_get() to simplify the code.
-> > >>
-> > >> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> > >> ---
-> > >
-> > > This looks good, but I had already sent out my PR to Wolfram when you
-> > > sent it, so I'll queue it for v6.9.
-> > >
-> > I just received an automated note from Greg that he applied this patch
-> > via the char-misc tree. The same applies to "eeprom: at24: Probe for
-> > DDR3 thermal sensor in the SPD case"
-> >
-> > > Bart
-> > Heiner
-> >
+Hi Wolfram
+
+On 12/19/23 12:23, Wolfram Sang wrote:
 > 
-> Huh? Greg, I typically pick up patches for at24 and send them through
-> the I2C tree (as per the MAINTAINERS file).
+>> Wolfram, is there any chance to get this into this (v6.8) cycle?
+> 
+> Sure, due to lots of travels and other issues I am in general very late
+> with preparing the merge window.
+> 
+> Applied to for-next, thanks!
+> 
+Can we put this on hold from not being queued into v6.8 or better drop 
+the whole patchset?
 
-Sorry about that, I caught this in my sweep of patches sent to me.  As
-you wanted it applied anyway, all should be good, git can handle the
-merge just fine.
+Andy is right now out of office and there is a serious i2c-designware 
+regression in linux-next on AMD machine and I'm not able to figure out 
+quickly reason for it:
 
-thanks,
-
-greg k-h
+https://lore.kernel.org/linux-i2c/20231229120820.GCZY62tM7z4v2XmOAZ@fat_crate.local/
 
