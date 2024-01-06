@@ -1,227 +1,182 @@
-Return-Path: <linux-i2c+bounces-1169-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1170-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F379825D87
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 02:03:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59067825F6A
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 13:13:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 279C91C23AAC
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 01:03:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBC66283D7E
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 12:13:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5043510F9;
-	Sat,  6 Jan 2024 01:03:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AE016FC8;
+	Sat,  6 Jan 2024 12:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com header.b="EpCFQRm9";
-	dkim=pass (1024-bit key) header.d=sharedspace.onmicrosoft.com header.i=@sharedspace.onmicrosoft.com header.b="v8QKoP6D"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PHKZQSDy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07701FB9;
-	Sat,  6 Jan 2024 01:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wdc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1704502996; x=1736038996;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=fDdtoQKvMNPYKykCrW2L6REEg3qK6FvddlT+BPfUovc=;
-  b=EpCFQRm9w1bVTdfaUvoEuOMacTXluEv+OVVYY7OV61hIujEpY7JfKF8z
-   4AuyhXq1ljnPMCMWEy87ssTqUwqDFBNkAz08Lby9HAzA+VDHN8OHKKjun
-   lJJseVhDOqCb1dyKwKYfG4CwKRnjMAQT10+aGcOsR/z3A06OG+TyzOt6t
-   R6B6rImSjGGXOMQHHsc8N2YW9NR3dT0UW977UivVWjCk6MQ7eqUwmxBym
-   AJmFrm29u49zIwtNAaAkvYbmIPqfFaKKlujdzQtJ70Mill6rErNl83OK2
-   VyLRx4S+4BQ+0Xi31j/X+C5M1XK8gx2c2UKnvGvz9KFWy6WaHGyR7De+H
-   g==;
-X-CSE-ConnectionGUID: NbB/2YQLT1SAasL2Q4JDAg==
-X-CSE-MsgGUID: pAmTp8k+Rmq0rfm1j5y70w==
-X-IronPort-AV: E=Sophos;i="6.04,335,1695657600"; 
-   d="scan'208";a="6493590"
-Received: from mail-dm6nam11lp2168.outbound.protection.outlook.com (HELO NAM11-DM6-obe.outbound.protection.outlook.com) ([104.47.57.168])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Jan 2024 09:03:09 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EjE7kizAlKnm6La2HmiYJdXACRZW+t7k+tYqoo6UjKBq3tYTNGrUZ+LMYFf3ERAbvlCvUEnJ4pRH358wP+Z+Mxk6XaTqYtgPrDGyXwsLSRZ37LmnvmFWhlNsm4lUbk2i12j5UrsRp8YAKgXIepSxSP0PV5o6vr2Gc+JKdpGGX60g9Z86onwH8N7WgYlpALYiFc2LoQRsmXm8sOa+xc1RbAkky2k8HMRT0xqvJ0N1txg01EPFqDrOx9mTJgrK1b6goPNmauSuhE0f5EVsz8c4wUZYz5GBHWBmhEr6VqpnInBkmPPv+0smOH7TlzZK+wHqKXmbQ9RxmWlwn9lzJzPOWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pn2iU7dYWMfsfoYwYOvQ7lLltE4IKK3tQI8SnypF65I=;
- b=hd19D+KCPfWM8s83Z4oECxhfLELRWNKKbzzSGXLza+qMrScf75ci7+oL3iDUu5jDisYE19vYHONoDqJt8PhGU1bTsUqSSbwVlwd7Gl6cLxBmVddOdMBDvrDupxMus5a0I+GjxZdGNPy8GVPoiiPt6w8vB5j9NkwgB7QQA8zVARuqtEZWSzHxfiDjq8UF0Cl8Tpv6gVyTK5z621lBEMHz4BR+ADqK4zYnokNtX2XC5LCxA8cuClru8JE/d13xByw21+nMw2LNQFz6j2f0rKxGypexpL9/gDce5psfZoQuNibpNfpNzdphw8ghLqH5GHzbu9Ew0GDk/hV3H3w4qvzG4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pn2iU7dYWMfsfoYwYOvQ7lLltE4IKK3tQI8SnypF65I=;
- b=v8QKoP6Dn68vMeecv8yxKD2lNtl9Y0FhAq0ZANbnzSmgEuHHsiaJMnXc+cIb++oNo5qJAovrToetJxgGH+0bJOnbgV7FqDyCI3OIe8Pd2uUL6dRZPosg0qnmfbK92QyfBHNV/FjReL9t/GwmjN7cr0DydztdyL71v4pGRxC+lmQ=
-Received: from DM8PR04MB8037.namprd04.prod.outlook.com (2603:10b6:8:f::6) by
- DS0PR04MB8697.namprd04.prod.outlook.com (2603:10b6:8:12d::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7159.16; Sat, 6 Jan 2024 01:03:08 +0000
-Received: from DM8PR04MB8037.namprd04.prod.outlook.com
- ([fe80::81a9:5f87:e955:16b4]) by DM8PR04MB8037.namprd04.prod.outlook.com
- ([fe80::81a9:5f87:e955:16b4%3]) with mapi id 15.20.7159.015; Sat, 6 Jan 2024
- 01:03:07 +0000
-From: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-To: Klara Modin <klarasmodin@gmail.com>
-CC: Lukas Wunner <lukas@wunner.de>, "andriy.shevchenko@linux.intel.com"
-	<andriy.shevchenko@linux.intel.com>, "hdegoede@redhat.com"
-	<hdegoede@redhat.com>, "ilpo.jarvinen@linux.intel.com"
-	<ilpo.jarvinen@linux.intel.com>, "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>, "linux-pci@vger.kernel.org"
-	<linux-pci@vger.kernel.org>, "platform-driver-x86@vger.kernel.org"
-	<platform-driver-x86@vger.kernel.org>
-Subject: Re: [PATCH v5 1/2] platform/x86: p2sb: Allow p2sb_bar() calls during
- PCI device probe
-Thread-Topic: [PATCH v5 1/2] platform/x86: p2sb: Allow p2sb_bar() calls during
- PCI device probe
-Thread-Index:
- AQHaPow80BKhEPvQJ0yVwJLvsqPQE7DJVoSAgABBoYCAAUomAIAAB4QAgAAcSwCAABYzgIAA3tKA
-Date: Sat, 6 Jan 2024 01:03:07 +0000
-Message-ID: <h4ok2zbyijoe7fi6h26j3r4qzuwhspwkuyyc3w26buxx7f567a@7ikkcpifi2y2>
-References:
- <CABq1_vjfyp_B-f4LAL6pg394bP6nDFyvg110TOLHHb0x4aCPeg@mail.gmail.com>
- <oe4cs5ptinmmdaxv6xa524whc7bppfqa7ern5jzc3aca5nffpm@xbmv34mjjxvv>
- <20240104123621.GA4876@wunner.de>
- <b565j7nbqu67pjhjw6ei7i3nkazazirl4dyxhaem3z7ghii3gs@dngmvjcylrjp>
- <20240105084454.GA28978@wunner.de>
- <4fjboeaslgcgjtkwemog5qrbbfnew4qcsoyrqbxmt3icesiint@plrjgqxt7naw>
- <CABq1_vjp3fRWC4HJfG+1VyhYYcQG9tJVvj_LCRQ7nBtTLs8fLA@mail.gmail.com>
-In-Reply-To:
- <CABq1_vjp3fRWC4HJfG+1VyhYYcQG9tJVvj_LCRQ7nBtTLs8fLA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR04MB8037:EE_|DS0PR04MB8697:EE_
-x-ms-office365-filtering-correlation-id: ea327a15-2b49-4b11-03c3-08dc0e533ec4
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- Ydex2+ew0PgyTFeHNbFXno+OiTLgoTdEdjstBC1t86b26kxeFrWdCZgqqnM+QuEOKnTbqUlEV72R+XC4qu+I+cifQAcVhT0GXPpcgf0c8lwvqbcxveo0eHVTey1aIxY/QmwJpvgj0YnbB8mqSPCY7TCD2/bXiBxsN3c+lijBGLgcACvwN+txybJ+u2WEmzMoy3B6zbVuRYHwvkhBnVBTtD6f65xJLXnWtiO5hYRIB0aU5aytgGsNBamFJBdU406gjN7HLvdZ9TvDWKwfw1EoN5zquHCwktDBGtrbZm1N/GUDe4MKMskODwh20iwNgyya4SjV7c4wlkYGUWMJurt7UFNb3EVdUHw8oYJruHdzb7KhNX9bf7yCLQ/eHRMRJW/2WC8aZ8VvfQW+zoyEPMvKlxixLBG/yzBcJKE03jONp8c3pfCu9PXEsFVlD2MfLEZizVhTW5NkhU/fYbn8POo6n7TZM0CQ7xgSWToUGel26SDhEVsB4q97/uIQOaz2bXm35ouke2iSJKHbZrF05iOv875oT+ju6citnFDNDUPtj/EGu0xoILB7WcYhvC/y43r/eY8S4n4dNn1Ac5pQkpm6ejTKaeM3pHKx+hsPlwDuZ/B/65u1PhvJw5SrTA71NqZt
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8037.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(376002)(366004)(346002)(396003)(39860400002)(136003)(230922051799003)(1800799012)(451199024)(186009)(64100799003)(9686003)(26005)(38100700002)(122000001)(5660300002)(316002)(8676002)(6512007)(4326008)(64756008)(66556008)(6486002)(6916009)(66476007)(66446008)(6506007)(2906002)(8936002)(71200400001)(44832011)(478600001)(54906003)(33716001)(91956017)(41300700001)(76116006)(66946007)(82960400001)(86362001)(38070700009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?E2oBnn8u5CA8vp/4hxGcaO7hAj99BrsrwJ04f5iwhF4dkmFr57NZpxIdf+Rg?=
- =?us-ascii?Q?PX6SH9dgrEaVhDIS21i7tEbszEGgTV2j+1Mg2hRrOupRI/F7oj11v0i2F7+t?=
- =?us-ascii?Q?YVKSEpj21NK/ikOUSO/8/DM/W8wi74awrn1ivmwm2dWlvx9MvRpdpQOj2NPO?=
- =?us-ascii?Q?vu7kxUT6ECH9sJTHxQ/GHmOC5N19YwgR8tgYlPx9BR1NDumEr1rv50BC3cPj?=
- =?us-ascii?Q?Ejgwpem64XojIfK857ojn7V6R/3kArIFD8PTyNBPBgCrftquTtdvL3J4GpH6?=
- =?us-ascii?Q?QFOudKe+Lpm628EJ5fdibrwKlWbb/4UEkANW8xK8QZHRV1XP+SLN8aP5j9i6?=
- =?us-ascii?Q?Ol7YEVfWFv2I80vnA/7Ix3wEhnCfrPJ8tWJS0YCpEYNXsStdDQy7aWbGdHIS?=
- =?us-ascii?Q?1R3xDSsSu5RNfuBOu0VEjSqvotigSRXzsJPj3uNQLBX2oeI7Znqed0vfRDxe?=
- =?us-ascii?Q?9PXX7coS/CcDKUSIJ4dPC7CLZbRZi+SMf1+uddd+Ioe0NvjKmaEBv+90QVGq?=
- =?us-ascii?Q?XpzIQTQJk9D0NIQIg9dQB5oBRs2TD8zDMLIrBK9X6Z93LnWPgvBpmdzoCeAM?=
- =?us-ascii?Q?PZFaKYaYMOsZfPIOl0F5J7jP4KULwINWYFbvTqf1n0Y0pQsOA/jlbt9V5ed6?=
- =?us-ascii?Q?V4LGrm54/nykJ57IyP0RYg7euOr/s2CppnSc/hOQIVQjvkn2IeYftY4Ln6E/?=
- =?us-ascii?Q?Hd3is7aO2UewlGRVLNzP+k+mBC7d8tk7DV9dM/ksjglO2OTGXk+DyhPg25lu?=
- =?us-ascii?Q?oL1S3bTi9CmT9/H+X8ISUrSRwYcLTs+t5Dt7EuVoMEloOzw25xEp37aiOghE?=
- =?us-ascii?Q?ZQ7goqeKuyCmfgPE3+JuJwWJywxRSemnttUcIPa4j4W3NDMYJIFrZz9ytekA?=
- =?us-ascii?Q?SnGoxresbF8vtxbX1tXuBbn043xWbXPafJR/6WTa5twlpzVQ/AtNnye1SpL8?=
- =?us-ascii?Q?MXUHZDLiV0L4ifMODPKKSdCfhYApkNLtiurjPlsKIoaq8MazC0g/V46yNVHn?=
- =?us-ascii?Q?t9TxnSqFYpmgNg87foeVB5lf7Vha9x0JC0j1oKhtuOcBP7u1/3hS3/qS6MwU?=
- =?us-ascii?Q?IAy7dahWwxE+TLhpmVgXggGKmd3zMcfERQMTUd/gOGAaspzxW0XWwmQchuzz?=
- =?us-ascii?Q?iN+70D5dq9D6IPhTD6+A9AyZFG+b8FFyxF23LA8qNRqudMnmez6D4lsQXbqK?=
- =?us-ascii?Q?BIWVQdvQenebJQVMwSRxITeNVAkoeJCLKRi7DKMUq60fzI3WypF8K3iQZOqF?=
- =?us-ascii?Q?Z5VPysBgpDyM1AWYr7NhjUSPHceyuptBmLuuHjiAyQuXpXW7a5Cu2NB7dtge?=
- =?us-ascii?Q?Ep0S8V6rFmTd3kkkout3cHu2wPA8I20CtHrWDaZSEDPVytipH2+NKCRkyUyS?=
- =?us-ascii?Q?NEobC4e3s+78WDFwiDpAZhcpMkMtozeI3BQhGqQ+r6MRJV0+feXGrh940lO8?=
- =?us-ascii?Q?Zzlu5aSw0Zp2aikmnqUoF9EQldvRYQNRNCL2kBuowKVp1mfxLjDUOTMhdOpg?=
- =?us-ascii?Q?F7Tj2l0SaEMSGuI6pmtPyr7KMForjSmP79vexxrhJWifdJ6eDKQNRQ6pcybp?=
- =?us-ascii?Q?bmjoSUg9UKAjRhkt9qG3hYZ0LhhUqfEGsmidv0ZFmF09sxC+J+dIeWucuJjA?=
- =?us-ascii?Q?TRXeTbid5k+xiAfp6pc/RbY=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C446C87554D26D4AA623742ABDD81740@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898707496
+	for <linux-i2c@vger.kernel.org>; Sat,  6 Jan 2024 12:13:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1704543191;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SJwHL0gnGivLO6oy/SpfbK1U9/fXgdjOFm8COmcetDU=;
+	b=PHKZQSDyTJjKsb3tkq07aRSIdTFXPpoPVpGhHqxV/J45a6cyDX8eZlnmreT8F4sjP+kzjO
+	hJW+dzJP0cnznXdPirI9qbV8KpYR0vvXQvHibyn7hKFMiJ3bYRBWgEPTT0g1S+xQQ1w49y
+	2WFKoQ8Qs3WYa44C4w47NykTrB9Oafc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-377-si142YiaM_qj4r5EeJhKCw-1; Sat, 06 Jan 2024 07:13:04 -0500
+X-MC-Unique: si142YiaM_qj4r5EeJhKCw-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-40d85858180so2928595e9.0
+        for <linux-i2c@vger.kernel.org>; Sat, 06 Jan 2024 04:13:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704543183; x=1705147983;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SJwHL0gnGivLO6oy/SpfbK1U9/fXgdjOFm8COmcetDU=;
+        b=u3gmJeOVoqQFTJv+JMGSQ5P6S8TLyMSjIYLD7NNqNDxta9tsp0hYt3INQ5lm1Gp3Zm
+         rDI1AB6idaK6JpZuoD06gr8nQVwhPNb1O9lTGedDygJMogZpPsmgYGNqXI6cmsl5YzrF
+         kkOIpq46KQkS9x84JTxgdD1LyEfVVYhNtxfOTWNfGtHO4mQoR1mnctfF+y92EAeHF7qM
+         b5KFeLDddtpXuwROco+LRuEZOfv1kVqPvLBNFnvncERgBX5pB898xo7MNqOw0b4H76hX
+         BuwViVoy2Aivi3GD2XGq2Jl0mpeaTmaVEDWXL/PHOZZ+c3M3cYvKL/sVuw+htwcA2j1w
+         d0rg==
+X-Gm-Message-State: AOJu0YyJYDzQigJg8X4EwzSlSKovJX5VDwxpI10plTWVCuEUin6j10qw
+	RovxZWRCg3XDViUaCrRCJUR0tohn95DVQOh3SzNH7nPxti96rRdqqhPMk9GavYutmuOOtUHhDyS
+	uMdOXQigscU8DtE4X5VpE3f60/pwM
+X-Received: by 2002:a05:600c:1e1c:b0:40d:887e:fc8a with SMTP id ay28-20020a05600c1e1c00b0040d887efc8amr481774wmb.101.1704543183707;
+        Sat, 06 Jan 2024 04:13:03 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEGFCfVmwmTWnvOVFKVy59z1/GbNtLf57o0fcmJm5/Cm82FpRJpOq0WBvg2Rs1ICCqy/8y6Cg==
+X-Received: by 2002:a05:600c:1e1c:b0:40d:887e:fc8a with SMTP id ay28-20020a05600c1e1c00b0040d887efc8amr481764wmb.101.1704543183366;
+        Sat, 06 Jan 2024 04:13:03 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id wk16-20020a170907055000b00a2a13835f4csm215437ejb.167.2024.01.06.04.13.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 Jan 2024 04:13:02 -0800 (PST)
+Message-ID: <821bfe95-8ace-4f6d-acdc-5771cb72b276@redhat.com>
+Date: Sat, 6 Jan 2024 13:13:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	gjUOVV7QWdip3kYR6zgHpE9wstD4XE8zn6VDtAJhru4JkckJk8qY0rg4P4foMg9WWkzQI4cF0g0gG7M1KTJ+CqIhrO0QeQRtwxXTXTN4Pla65YRWZBMkYjQHhAM20zsUSXMV4r0EGeeq+177iKvWAd5QDw0ZTSzyFlotRZoBPbOzkI8xE6TUKLQWEcxxXgM7NLVUFdhRidpgVWe1Iw3IuRX0jq2BAsn/DlJRxInNCuJLHUbWy/R6Dl6YCWnb9LpsTcGOu3fMZku5B0l93NJjpvxbYeTs5edRbZaLrER4zrVP41j0hoRk160s9QiDLBFdjM/ktjkqG50neVAyhwzeYiMAZeHwGoo5R7ukeiqMYJIbfLBQT760i8OzaTJ8EzP/b+ou52DlyiDeKnfzrZz5V3I9C8FSNaLAEoAaEBGXGIb/nv7JeToofiJzhYgCxKA3wJhvMuWVD30tu0yQfOw1/qU6koIWt4rvRtYjLRWMvYlMa13vc7LTPtbZgSCETy7kVZCEk+MD2CZ6NrnCJicUHuYxFEYgwl9l0KbJW0W8JeVAvwzl3Tzlerfwx9kb/5nTNYDh6G5QeqR3+EelXSEKQFvqr+lAHg7nxslYDZPE1LYNzEKv7dduFtTYI9tlYlb1
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8037.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea327a15-2b49-4b11-03c3-08dc0e533ec4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jan 2024 01:03:07.7334
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6MFnIhlkDyTjzrZnzR38ORFdO70PYv+oivKkzmTO6dQN6SlLRs/k6ZTVWyLgw71oyF/L05Kt1ApKL/kyVWwKihRjJ7IHSaiXv4J9GUqn8so=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR04MB8697
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/6] platform/x86: dell-smo8800: Move instantiation of
+ lis3lv02d i2c_client from i2c-i801 to dell-smo8800
+To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
+ Eric Piel <eric.piel@tremplin-utc.net>, Paul Menzel <pmenzel@molgen.mpg.de>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Andy Shevchenko <andy@kernel.org>, Dell.Client.Kernel@dell.com,
+ Marius Hoch <mail@mariushoch.de>, Kai Heng Feng
+ <kai.heng.feng@canonical.com>, Wolfram Sang <wsa@kernel.org>,
+ platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20231224213629.395741-1-hdegoede@redhat.com>
+ <20231224213629.395741-4-hdegoede@redhat.com>
+ <20231224215502.dq6a2sq2hdfrpwof@pali>
+ <a37ddb76-c93e-4422-80eb-11dae0985093@redhat.com>
+ <20240105182603.2bpvszkl7u7n4xyj@pali>
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20240105182603.2bpvszkl7u7n4xyj@pali>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Jan 05, 2024 / 12:45, Klara Modin wrote:
-> Den fre 5 jan. 2024 kl 11:26 skrev Shinichiro Kawasaki
-> <shinichiro.kawasaki@wdc.com>:
-> >
-> > On Jan 05, 2024 / 09:44, Lukas Wunner wrote:
-> > > On Fri, Jan 05, 2024 at 08:18:05AM +0000, Shinichiro Kawasaki wrote:
-> > > > --- a/drivers/platform/x86/p2sb.c
-> > > > +++ b/drivers/platform/x86/p2sb.c
-> > > > @@ -150,6 +153,14 @@ static int p2sb_cache_resources(void)
-> > > >     if (!bus)
-> > > >             return -ENODEV;
-> > > >
-> > > > +   /*
-> > > > +    * When a device with same devfn exists and it is not P2SB, do =
-not
-> > > > +    * touch it.
-> > > > +    */
-> > > > +   pci_bus_read_config_dword(bus, devfn_p2sb, PCI_CLASS_REVISION, =
-&class);
-> > > > +   if (!PCI_POSSIBLE_ERROR(class) && class >> 8 !=3D P2SB_CLASS_CO=
-DE)
-> > > > +           return -ENODEV;
-> > > > +
-> > >
-> > > The function should probably return if PCI_POSSIBLE_ERROR() is true.
-> >
-> > At this point, the P2SB device can be still hidden and PCI_POSSIBLE_ERR=
-OR() can
-> > be true. In that case, the function should not return.
-> >
-> > > Also I think you can use PCI_CLASS_MEMORY_OTHER, so how about:
-> > >
-> > >       if (PCI_POSSIBLE_ERROR(class) || class >> 16 !=3D PCI_CLASS_MEM=
-ORY_OTHER)
-> > >               return -ENODEV;
-> > >
-> > > Can alternatively use "class >> 8 !=3D PCI_CLASS_MEMORY_OTHER << 8" i=
-f you
-> > > want to ensure the lowest byte is 0x00.
-> >
-> > Thanks, it looks the better to use PCI_CLASS_MEMORY_OTHER. Will reflect=
- it when
-> > I create the formal fix patch.
->=20
-> Both of the variants seem to work for me.
->=20
-> I tried the first patch on its own (059b825c5234), with
->        if (!PCI_POSSIBLE_ERROR(class) && class >> 8 !=3D P2SB_CLASS_CODE)
->                return -ENODEV;
->=20
-> Then Lukas' suggestion (b97584391ea7), with
->         if (PCI_POSSIBLE_ERROR(class) || class >> 16 !=3D PCI_CLASS_MEMOR=
-Y_OTHER)
->                 return -ENODEV;
->=20
-> Tested-by: Klara Modin <klarasmodin@gmail.com>
+Hi,
 
-Thank you for trying it out. This fix approach looks good :) I will create =
-a
-formal patch next week for review.=
+On 1/5/24 19:26, Pali Rohár wrote:
+> On Friday 05 January 2024 17:31:32 Hans de Goede wrote:
+>> Hi Pali,
+>>
+>> On 12/24/23 22:55, Pali Rohár wrote:
+>>> On Sunday 24 December 2023 22:36:19 Hans de Goede wrote:
+>>>> +static int smo8800_find_i801(struct device *dev, void *data)
+>>>> +{
+>>>> +	static const u16 i801_idf_pci_device_ids[] = {
+>>>> +		0x1d70, /* Patsburg (PCH) */
+>>>> +		0x1d71, /* Patsburg (PCH) */
+>>>> +		0x1d72, /* Patsburg (PCH) */
+>>>> +		0x8d7d, /* Wellsburg (PCH) */
+>>>> +		0x8d7e, /* Wellsburg (PCH) */
+>>>> +		0x8d7f, /* Wellsburg (PCH) */
+>>>> +	};
+>>>
+>>> I'm not happy with seeing another hardcoded list of device ids in the
+>>> driver. Are not we able to find compatible i801 adapter without need to
+>>> hardcode this list there in smo driver?
+>>
+>> I agree that having this hardcoded is not ideal.
+>>
+>> The problem is that for a couple of generations (Patsburg is for
+>> Sandy Bridge and Ivybridge and Wellsburg is for Haswell and Broadwell)
+>> intel had multiple i2c-i801 controllers / I2C-busses in the PCH
+>> and the i2c_client needs to be instantiated on the primary
+>> i2c-i801 (compatible) controller.
+>>
+>> Luckily Intel has only done this for these 2 generations PCH
+>> all older and newer PCHs only have 1 i2c-i801 I2C bus.
+>>
+>> So even though having this hardcoded is not ideal,
+>> the list should never change since it is only for
+>> this 2 somewhat old PCH generations and new generations
+>> are not impacted. So I believe that this is the best
+>> solution.
+> 
+> I see. Seems that this is the best solution which we have.
+> 
+> Anyway, is not possible to use pci_dev_driver() to find i801 driver and
+> from it takes that list of devices which have FEATURE_IDF flag? I have
+> looked at the code only quickly and maybe it could be possible. Just an
+> idea.
+
+That is an interesting idea, but ...
+
+that would mean interpreting the driver_data set by the i2c-i801
+driver inside the dell-smo8800 code, so this would basically rely on
+the meaning of that driver_data never changing. I would rather just
+duplicate the 6 PCI ids and decouple the 2 drivers.
+
+Regards,
+
+Hans
+
+
+
+
+>>>> +	struct i2c_adapter *adap, **adap_ret = data;
+>>>> +	struct pci_dev *pdev;
+>>>> +	int i;
+>>>> +
+>>>> +	adap = i2c_verify_adapter(dev);
+>>>> +	if (!adap)
+>>>> +		return 0;
+>>>> +
+>>>> +	if (!strstarts(adap->name, "SMBus I801 adapter"))
+>>>> +		return 0;
+>>>> +
+>>>> +	/* The parent of an I801 adapter is always a PCI device */
+>>>> +	pdev = to_pci_dev(adap->dev.parent);
+>>>> +	for (i = 0; i < ARRAY_SIZE(i801_idf_pci_device_ids); i++) {
+>>>> +		if (pdev->device == i801_idf_pci_device_ids[i])
+>>>> +			return 0; /* Only register client on main SMBus channel */
+>>>> +	}
+>>>> +
+>>>> +	*adap_ret = i2c_get_adapter(adap->nr);
+>>>> +	return 1;
+>>>> +}
+>>>
+>>
+> 
+
 
