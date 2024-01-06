@@ -1,164 +1,120 @@
-Return-Path: <linux-i2c+bounces-1171-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1172-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DB13825F6F
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 13:16:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65AD1825F88
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 13:48:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBFF91F23279
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 12:16:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 094B8B22914
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 12:48:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A612E6FC9;
-	Sat,  6 Jan 2024 12:16:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 215F76FCB;
+	Sat,  6 Jan 2024 12:48:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NsJWQq87"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="FSJLArIM"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA046FAE;
-	Sat,  6 Jan 2024 12:16:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B350C433C8;
-	Sat,  6 Jan 2024 12:16:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704543408;
-	bh=HybGMDQq3v2XjGRGZU36KQebR8y0K0uE5cQ/WhHgI/A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NsJWQq87EzuGFADup9GgvI2qaPLfByfXQqo4Ufseko1OKYbdOAx+3048dRdP+6l1l
-	 mJwJOaDaOwKg6XHfUHWAaaMoDRiBuo0ApPSOZTbsixHnT4a3zscCFXiR+0gmclpcgZ
-	 1+x2Bjm4RkfTwm+PZ/iYrCEIhsCjbubirMrtUEtqWPwkq/IROYWlrd3x2HS9QBZbnf
-	 qWTINrr4yPh6sp+fS9o111tNQ+zp7+c2l3xhidNY2LPQzvBKnRaPCXiV5ff0QymdKh
-	 g46lOfGJ4piRiKarhfgBuUS/VCx8IQTwp94meBYtEVFFeJh/RNeXUGxLX8Wc3HiMIj
-	 3CsNcSyiV0M5w==
-Received: by pali.im (Postfix)
-	id CB73C88D; Sat,  6 Jan 2024 13:16:44 +0100 (CET)
-Date: Sat, 6 Jan 2024 13:16:44 +0100
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Eric Piel <eric.piel@tremplin-utc.net>,
-	Paul Menzel <pmenzel@molgen.mpg.de>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Andy Shevchenko <andy@kernel.org>, Dell.Client.Kernel@dell.com,
-	Marius Hoch <mail@mariushoch.de>,
-	Kai Heng Feng <kai.heng.feng@canonical.com>,
-	Wolfram Sang <wsa@kernel.org>, platform-driver-x86@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5778A6FC9
+	for <linux-i2c@vger.kernel.org>; Sat,  6 Jan 2024 12:48:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from pop-os.home ([92.140.202.140])
+	by smtp.orange.fr with ESMTPA
+	id M66OrfxTUx8edM66OrYd6Z; Sat, 06 Jan 2024 13:48:37 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1704545317;
+	bh=wMo3OL1UV9ggs46JbwA/uXhDsmPRILP1vW1vh9k8l3Y=;
+	h=From:To:Cc:Subject:Date;
+	b=FSJLArIMjWvmTKEo9wcC5fNVOSpcPdnq6T4CdnN/LQpV9xQ6rGRHCLfSWyob0lRTP
+	 uLwyVHoVsJlm0T8zPZTFwWjrUYh0pbIJrelo1xD7fnY92y5oI3PcPKYmOGYOeTtUxS
+	 j3NFrZchazAoZIjrXYpf3TdILkwJU/pDtFwKnqLGO9utncm1TRm8Zfp2gMuHDrFoIH
+	 7nFyM1GSkhRGxZU9FG4XV9veJ8FfXE+AukCtEZXS9gw2HoiVY5UzLDIqGBVSnZGD+z
+	 Fy5VbmQm9pZGaIhr8bQ1v7j/e6a00Aw2Aa33TC5Y+nnGK7t/KAQcMbuu6KSMBEG8dj
+	 bp6GCUlGN2xbg==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 06 Jan 2024 13:48:37 +0100
+X-ME-IP: 92.140.202.140
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Ard Biesheuvel <ardb@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Wolfram Sang <wsa@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
 	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 3/6] platform/x86: dell-smo8800: Move instantiation of
- lis3lv02d i2c_client from i2c-i801 to dell-smo8800
-Message-ID: <20240106121644.eohsme67ikqkdyzu@pali>
-References: <20231224213629.395741-1-hdegoede@redhat.com>
- <20231224213629.395741-4-hdegoede@redhat.com>
- <20231224215502.dq6a2sq2hdfrpwof@pali>
- <a37ddb76-c93e-4422-80eb-11dae0985093@redhat.com>
- <20240105182603.2bpvszkl7u7n4xyj@pali>
- <821bfe95-8ace-4f6d-acdc-5771cb72b276@redhat.com>
+Subject: [PATCH 1/2] i2c: synquacer: Fix an error handling path in synquacer_i2c_probe()
+Date: Sat,  6 Jan 2024 13:48:24 +0100
+Message-Id: <a0fdf90803ab44508aa07f9190af5e00272231df.1704545258.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <821bfe95-8ace-4f6d-acdc-5771cb72b276@redhat.com>
-User-Agent: NeoMutt/20180716
 
-On Saturday 06 January 2024 13:13:01 Hans de Goede wrote:
-> Hi,
-> 
-> On 1/5/24 19:26, Pali Rohár wrote:
-> > On Friday 05 January 2024 17:31:32 Hans de Goede wrote:
-> >> Hi Pali,
-> >>
-> >> On 12/24/23 22:55, Pali Rohár wrote:
-> >>> On Sunday 24 December 2023 22:36:19 Hans de Goede wrote:
-> >>>> +static int smo8800_find_i801(struct device *dev, void *data)
-> >>>> +{
-> >>>> +	static const u16 i801_idf_pci_device_ids[] = {
-> >>>> +		0x1d70, /* Patsburg (PCH) */
-> >>>> +		0x1d71, /* Patsburg (PCH) */
-> >>>> +		0x1d72, /* Patsburg (PCH) */
-> >>>> +		0x8d7d, /* Wellsburg (PCH) */
-> >>>> +		0x8d7e, /* Wellsburg (PCH) */
-> >>>> +		0x8d7f, /* Wellsburg (PCH) */
-> >>>> +	};
-> >>>
-> >>> I'm not happy with seeing another hardcoded list of device ids in the
-> >>> driver. Are not we able to find compatible i801 adapter without need to
-> >>> hardcode this list there in smo driver?
-> >>
-> >> I agree that having this hardcoded is not ideal.
-> >>
-> >> The problem is that for a couple of generations (Patsburg is for
-> >> Sandy Bridge and Ivybridge and Wellsburg is for Haswell and Broadwell)
-> >> intel had multiple i2c-i801 controllers / I2C-busses in the PCH
-> >> and the i2c_client needs to be instantiated on the primary
-> >> i2c-i801 (compatible) controller.
-> >>
-> >> Luckily Intel has only done this for these 2 generations PCH
-> >> all older and newer PCHs only have 1 i2c-i801 I2C bus.
-> >>
-> >> So even though having this hardcoded is not ideal,
-> >> the list should never change since it is only for
-> >> this 2 somewhat old PCH generations and new generations
-> >> are not impacted. So I believe that this is the best
-> >> solution.
-> > 
-> > I see. Seems that this is the best solution which we have.
-> > 
-> > Anyway, is not possible to use pci_dev_driver() to find i801 driver and
-> > from it takes that list of devices which have FEATURE_IDF flag? I have
-> > looked at the code only quickly and maybe it could be possible. Just an
-> > idea.
-> 
-> That is an interesting idea, but ...
-> 
-> that would mean interpreting the driver_data set by the i2c-i801
-> driver inside the dell-smo8800 code, so this would basically rely on
-> the meaning of that driver_data never changing. I would rather just
-> duplicate the 6 PCI ids and decouple the 2 drivers.
+If an error occurs after the clk_prepare_enable() call, it should be undone
+by a corresponding clk_disable_unprepare() call, as already done in the
+remove() function.
 
-It was just an alternative idea.
+As devm_clk_get() is used, we can switch to devm_clk_get_enabled() to
+handle it automatically and fix the probe.
 
-In case of code duplication I would suggest to write a comment on both
-places (into i801 and smo drivers) that this information is duplicated
-in both drivers and should be synchronized in case somebody would need
-to modify it at either place.
+Update the remove() function accordingly and remove the now useless
+clk_disable_unprepare() call.
 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
-> 
-> >>>> +	struct i2c_adapter *adap, **adap_ret = data;
-> >>>> +	struct pci_dev *pdev;
-> >>>> +	int i;
-> >>>> +
-> >>>> +	adap = i2c_verify_adapter(dev);
-> >>>> +	if (!adap)
-> >>>> +		return 0;
-> >>>> +
-> >>>> +	if (!strstarts(adap->name, "SMBus I801 adapter"))
-> >>>> +		return 0;
-> >>>> +
-> >>>> +	/* The parent of an I801 adapter is always a PCI device */
-> >>>> +	pdev = to_pci_dev(adap->dev.parent);
-> >>>> +	for (i = 0; i < ARRAY_SIZE(i801_idf_pci_device_ids); i++) {
-> >>>> +		if (pdev->device == i801_idf_pci_device_ids[i])
-> >>>> +			return 0; /* Only register client on main SMBus channel */
-> >>>> +	}
-> >>>> +
-> >>>> +	*adap_ret = i2c_get_adapter(adap->nr);
-> >>>> +	return 1;
-> >>>> +}
-> >>>
-> >>
-> > 
-> 
+Fixes: 0d676a6c4390 ("i2c: add support for Socionext SynQuacer I2C controller")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/i2c/busses/i2c-synquacer.c | 20 +++++++-------------
+ 1 file changed, 7 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-synquacer.c b/drivers/i2c/busses/i2c-synquacer.c
+index bbea521b05dd..a73f5bb9a164 100644
+--- a/drivers/i2c/busses/i2c-synquacer.c
++++ b/drivers/i2c/busses/i2c-synquacer.c
+@@ -550,17 +550,13 @@ static int synquacer_i2c_probe(struct platform_device *pdev)
+ 	device_property_read_u32(&pdev->dev, "socionext,pclk-rate",
+ 				 &i2c->pclkrate);
+ 
+-	i2c->pclk = devm_clk_get(&pdev->dev, "pclk");
+-	if (PTR_ERR(i2c->pclk) == -EPROBE_DEFER)
+-		return -EPROBE_DEFER;
+-	if (!IS_ERR_OR_NULL(i2c->pclk)) {
+-		dev_dbg(&pdev->dev, "clock source %p\n", i2c->pclk);
+-
+-		ret = clk_prepare_enable(i2c->pclk);
+-		if (ret)
+-			return dev_err_probe(&pdev->dev, ret, "failed to enable clock\n");
+-		i2c->pclkrate = clk_get_rate(i2c->pclk);
+-	}
++	i2c->pclk = devm_clk_get_enabled(&pdev->dev, "pclk");
++	if (IS_ERR(i2c->pclk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(i2c->pclk),
++				     "failed to get and enable clock\n");
++
++	dev_dbg(&pdev->dev, "clock source %p\n", i2c->pclk);
++	i2c->pclkrate = clk_get_rate(i2c->pclk);
+ 
+ 	if (i2c->pclkrate < SYNQUACER_I2C_MIN_CLK_RATE ||
+ 	    i2c->pclkrate > SYNQUACER_I2C_MAX_CLK_RATE)
+@@ -615,8 +611,6 @@ static void synquacer_i2c_remove(struct platform_device *pdev)
+ 	struct synquacer_i2c *i2c = platform_get_drvdata(pdev);
+ 
+ 	i2c_del_adapter(&i2c->adapter);
+-	if (!IS_ERR(i2c->pclk))
+-		clk_disable_unprepare(i2c->pclk);
+ };
+ 
+ static const struct of_device_id synquacer_i2c_dt_ids[] __maybe_unused = {
+-- 
+2.34.1
+
 
