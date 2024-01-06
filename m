@@ -1,50 +1,51 @@
-Return-Path: <linux-i2c+bounces-1181-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1183-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 139B0826081
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 17:09:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 948AD82608E
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 17:10:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5FA11F23D56
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 16:09:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1B0EAB21B3C
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 16:10:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94DCC8498;
-	Sat,  6 Jan 2024 16:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C4F28485;
+	Sat,  6 Jan 2024 16:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gr352ZMq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KtRfWiAV"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92F28495
-	for <linux-i2c@vger.kernel.org>; Sat,  6 Jan 2024 16:09:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD358495
+	for <linux-i2c@vger.kernel.org>; Sat,  6 Jan 2024 16:09:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704557387;
+	s=mimecast20190719; t=1704557391;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=krEyvDdmungdj9thTPeBJ8vUUrGzrmBq18aadwXqG6c=;
-	b=Gr352ZMqWQnZdXR3If/EtAAnauvJ5im4NBGzzNoZappDF21QgLpDCbuugHWjm4pN2VdRTZ
-	kVV01h2nNlsLXFcmz0PFvhLakuLpv+fTI1TKZIEN3FzCvMt78A6NVLjrZW9brQ08PxqQwB
-	gGwX4ZMWiuKehUad4mrS69YxgcZCJ5g=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=n2hBJGz2Wi/NPBvzLa93WdECv6trQwPMVFDwcu22NUY=;
+	b=KtRfWiAVldWu6zuQc2acaHhCrR+8+vhdQbwsbzROhKfhdzwiQaH1+GxeEkC0m7WvSgAHD5
+	iA5NHctoAfTK2fifceCznSL/1n4MDdDNcevM2ebQqdM1kEjB+c+7EWkO++0wW/8WkQXEE4
+	nX+FNNkhxiN8dBNWPyh+aQk3UMPEAzU=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-443-VMQHEYFEMKmq7qcrMeGGdQ-1; Sat, 06 Jan 2024 11:09:44 -0500
-X-MC-Unique: VMQHEYFEMKmq7qcrMeGGdQ-1
+ us-mta-623-eCfChzjBMguSfeeVReIJDA-1; Sat, 06 Jan 2024 11:09:46 -0500
+X-MC-Unique: eCfChzjBMguSfeeVReIJDA-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F3F985A58B;
-	Sat,  6 Jan 2024 16:09:43 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6E76B85A588;
+	Sat,  6 Jan 2024 16:09:45 +0000 (UTC)
 Received: from localhost.localdomain (unknown [10.39.192.13])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id EB2E13C27;
-	Sat,  6 Jan 2024 16:09:40 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B0D3D3C27;
+	Sat,  6 Jan 2024 16:09:43 +0000 (UTC)
 From: Hans de Goede <hdegoede@redhat.com>
 To: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
@@ -60,9 +61,11 @@ Cc: Hans de Goede <hdegoede@redhat.com>,
 	platform-driver-x86@vger.kernel.org,
 	Wolfram Sang <wsa@kernel.org>,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH v2 0/6] i2c-i801 / dell-smo8800: Move instantiation of lis3lv02d i2c_client from i2c-i801 to dell-smo8800
-Date: Sat,  6 Jan 2024 17:09:27 +0100
-Message-ID: <20240106160935.45487-1-hdegoede@redhat.com>
+Subject: [PATCH v2 1/6] platform/x86: dell-smo8800: Change probe() ordering a bit
+Date: Sat,  6 Jan 2024 17:09:28 +0100
+Message-ID: <20240106160935.45487-2-hdegoede@redhat.com>
+In-Reply-To: <20240106160935.45487-1-hdegoede@redhat.com>
+References: <20240106160935.45487-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -72,51 +75,55 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
 
-Hi All,
+Retrieve the IRQ number from the platform_device a bit earlier
+and only call platform_set_drvdata() on successful probe
+(the drvdata is only used from the remove() callback).
 
-Here is a patch series which implements my suggestions from:
-https://lore.kernel.org/linux-i2c/4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de/
-to improve the lis3lv02d accel support on Dell laptops.
+This is a preparation patch for moving the lis3lv02d i2c_client
+instantiation from the i2c-i801 driver to dell-smo8800.
 
-Jean, Andi the actual move is in patch 2/6 after 1 small prep patch on
-the dell-smo8800 side. My plan for merging this is to create an immutable
-branch based on 6.8-rc1 (once it is out) + these 6 patches and then send
-a pull-request for this. Can I have your Ack for the i2c-i801 changes in
-patch 2/6?
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/platform/x86/dell/dell-smo8800.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-I think you'll like the changes there since they only remove code
-on the i2c-i801.c side :)
-
-Changes in v2:
-- Drop "[PATCH 1/6] platform/x86: dell-smo8800: Only load on Dell laptops"
-- Use a pci_device_id table to check for IDF (non main) i2c-i801 SMBusses
-- Add a comment documenting the IDF PCI device ids
-- Keep using drivers/misc/lis3lv02d/lis3lv02d.c by default
-- Rename the module-parameter to use_iio_driver which can be set to
-  use the IIO st_accel driver instead
-- Add a new patch adding the accelerometer address for the 2 models
-  I have tested this on to dell_lis3lv02d_devices[]
-
-Regards,
-
-Hans
-
-
-Hans de Goede (6):
-  platform/x86: dell-smo8800: Change probe() ordering a bit
-  platform/x86: dell-smo8800: Move instantiation of lis3lv02d i2c_client
-    from i2c-i801 to dell-smo8800
-  platform/x86: dell-smo8800: Pass the IRQ to the lis3lv02d i2c_client
-  platform/x86: dell-smo8800: Allow using the IIO st_accel driver
-  platform/x86: dell-smo8800: Add support for probing for the
-    accelerometer i2c address
-  platform/x86: dell-smo8800: Add a couple more models to
-    dell_lis3lv02d_devices[]
-
- drivers/i2c/busses/i2c-i801.c            | 122 --------
- drivers/platform/x86/dell/dell-smo8800.c | 341 +++++++++++++++++++++--
- 2 files changed, 319 insertions(+), 144 deletions(-)
-
+diff --git a/drivers/platform/x86/dell/dell-smo8800.c b/drivers/platform/x86/dell/dell-smo8800.c
+index f7ec17c56833..87339cc78880 100644
+--- a/drivers/platform/x86/dell/dell-smo8800.c
++++ b/drivers/platform/x86/dell/dell-smo8800.c
+@@ -121,19 +121,17 @@ static int smo8800_probe(struct platform_device *device)
+ 
+ 	init_waitqueue_head(&smo8800->misc_wait);
+ 
++	err = platform_get_irq(device, 0);
++	if (err < 0)
++		return err;
++	smo8800->irq = err;
++
+ 	err = misc_register(&smo8800->miscdev);
+ 	if (err) {
+ 		dev_err(&device->dev, "failed to register misc dev: %d\n", err);
+ 		return err;
+ 	}
+ 
+-	platform_set_drvdata(device, smo8800);
+-
+-	err = platform_get_irq(device, 0);
+-	if (err < 0)
+-		goto error;
+-	smo8800->irq = err;
+-
+ 	err = request_threaded_irq(smo8800->irq, smo8800_interrupt_quick,
+ 				   smo8800_interrupt_thread,
+ 				   IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+@@ -147,6 +145,7 @@ static int smo8800_probe(struct platform_device *device)
+ 
+ 	dev_dbg(&device->dev, "device /dev/freefall registered with IRQ %d\n",
+ 		 smo8800->irq);
++	platform_set_drvdata(device, smo8800);
+ 	return 0;
+ 
+ error:
 -- 
 2.43.0
 
