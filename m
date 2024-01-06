@@ -1,135 +1,184 @@
-Return-Path: <linux-i2c+bounces-1174-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1175-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ED68825FA8
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 14:24:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52D88825FD7
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 15:26:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4A5B1C2103A
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 13:24:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBF311F227FD
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Jan 2024 14:26:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31DA87482;
-	Sat,  6 Jan 2024 13:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="paGwgqXz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BAD67490;
+	Sat,  6 Jan 2024 14:26:29 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E326F7460;
-	Sat,  6 Jan 2024 13:24:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C1BC433C8;
-	Sat,  6 Jan 2024 13:24:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704547453;
-	bh=TlMHSqxHU37Zxw/t3TKF2WBr6mHeSCy9KXBlDmERdnk=;
-	h=Date:From:To:Cc:Subject:From;
-	b=paGwgqXzM6syGnihaK6y0SzCZpVqQd6fmrlC+lF4bwXikZlL+wwKFN2nSINPrk9Dz
-	 iprVrFIEgOxafJ3W7yGiO38c/8qe3ktAUCvfaZQMK4IzoujltB9CnoE3M1oIx6Jc7h
-	 MllwFCaAz5hTvrf9mai9FhKDKxVScIgbihkYOZLRx+Kh7MFzoq+GZq6ELDpVLQ5US2
-	 xnfrXCez5laHrnsvGnGVTJL2nfcbu6LH/H8z8h637Oz3m9cj7tIbChU9kHYW5bOApq
-	 u9YN8x1po9Tr09DFAw0CdPQHIhzYnNvZ5CsNRQrTRKtyytiUCS9fkzH9hrO8/+1/Ue
-	 I7wvF/1VAGVug==
-Date: Sat, 6 Jan 2024 14:24:10 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PULL REQUEST] i2c-for-6.7-final
-Message-ID: <ZZlUemoyS-PDZc0q@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF20B7483;
+	Sat,  6 Jan 2024 14:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.224] (ip5f5ae9df.dynamic.kabel-deutschland.de [95.90.233.223])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7AC6961E5FE01;
+	Sat,  6 Jan 2024 15:23:20 +0100 (CET)
+Message-ID: <65457151-4ddc-4eb4-8e3b-b9c1098c23bb@molgen.mpg.de>
+Date: Sat, 6 Jan 2024 15:23:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qO5l4UjlZX/eRPzZ"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/6] i2c-i801 / dell-smo8800: Move instantiation of
+ lis3lv02d i2c_client from i2c-i801 to dell-smo8800
+Content-Language: en-US
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
+ Eric Piel <eric.piel@tremplin-utc.net>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Andy Shevchenko <andy@kernel.org>, Dell.Client.Kernel@dell.com,
+ Marius Hoch <mail@mariushoch.de>, Kai Heng Feng
+ <kai.heng.feng@canonical.com>, Wolfram Sang <wsa@kernel.org>,
+ platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20231224213629.395741-1-hdegoede@redhat.com>
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20231224213629.395741-1-hdegoede@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Dear Hans,
 
 
---qO5l4UjlZX/eRPzZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Linus,
-
-this branch was tested by buildbots successfully in the last days.
-Sadly, I had to rebase it a few minutes ago because I needed to fixup
-the name of one author and also added a few Link:-tags for the crucial
-commit here, so we have better documentation. So, no code changes, only
-changes to the commit messages. Sorry for not catching this earlier!
-
-All the best for 2024,
-
-   Wolfram
+Thank you very much for working on this issue and even sending patches 
+so quickly.
 
 
-The following changes since commit 861deac3b092f37b2c5e6871732f3e11486f7082:
+Am 24.12.23 um 22:36 schrieb Hans de Goede:
 
-  Linux 6.7-rc7 (2023-12-23 16:25:56 -0800)
+> Here is a patch series which implements my suggestions from:
+> https://lore.kernel.org/linux-i2c/4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de/
+> to improve the lis3lv02d accel support on Dell laptops.
+> 
+> Jean, Andi the actual move is in patch 3/6 after some small prep patches
+> on the dell-smo8800 side. My plan for merging this is to create
+> an immutable branch based on 6.8-rc1 (once it is out) + these 6 patches and
+> then send a pull-request for this. Can I have your Ack for the i2c-i801
+> changes in patch 3/6? I think you'll like the changes there since they only
+> remove code :)
 
-are available in the Git repository at:
+> Hans de Goede (6):
+>    platform/x86: dell-smo8800: Only load on Dell laptops
+>    platform/x86: dell-smo8800: Change probe() ordering a bit
+>    platform/x86: dell-smo8800: Move instantiation of lis3lv02d i2c_client from i2c-i801 to dell-smo8800
+>    platform/x86: dell-smo8800: Pass the IRQ to the lis3lv02d i2c_client
+>    platform/x86: dell-smo8800: Instantiate an i2c_client for the IIO st_accel driver
+>    platform/x86: dell-smo8800: Add support for probing for the accelerometer i2c address
+> 
+>   drivers/i2c/busses/i2c-i801.c            | 122 --------
+>   drivers/platform/x86/dell/dell-smo8800.c | 337 +++++++++++++++++++++--
+>   2 files changed, 316 insertions(+), 143 deletions(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.7-final
+This Thursday, I tested this on the Dell Inc. XPS 15 7590/0VYV0G, BIOS 
+1.24.0 09/11/2023.
 
-for you to fetch changes up to a3368e1186e3ce8e38f78cbca019622095b1f331:
+First just with your patch-set and trying the parameter:
 
-  i2c: core: Fix atomic xfer check for non-preempt config (2024-01-06 14:10:10 +0100)
+     [    0.000000] Command line: BOOT_IMAGE=/vmlinuz-6.7.0-rc8+ 
+root=UUID=9fa41e21-7a5f-479e-afdc-9a5503368d8e ro quiet rd.luks=1 
+rd.auto=1 dell-smo8800.probe_i2c_addr=0x29
+     […]
+     [   28.826356] smo8800 SMO8810:00: Accelerometer lis3lv02d is 
+present on SMBus but its address is unknown, skipping registration
+     [   28.826359] smo8800 SMO8810:00: Pass 
+dell_smo8800.probe_i2c_addr=1 on the kernel commandline to probe, this 
+may be dangerous!
 
-----------------------------------------------------------------
-Improve the detection when to run atomic transfer handlers for kernels
-with preemption disabled. This removes some false positive splats a
-number of users were seeing if their driver didn't have support for
-atomic transfers. Also, fix a typo in the docs while we are here.
+I misread the parameter documentation, but didn’t see the message back 
+then, and just saved the log files.
 
-----------------------------------------------------------------
-Attreyee Mukherjee (1):
-      Documentation/i2c: fix spelling error in i2c-address-translators
+So, I added an entry for the device, and got:
 
-Benjamin Bara (1):
-      i2c: core: Fix atomic xfer check for non-preempt config
+     [   19.197838] smo8800 SMO8810:00: Registered lis2de12 
+accelerometer on address 0x29
 
 
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Michael Walle (1):
-      (Test) i2c: core: Fix atomic xfer check for non-preempt config
+Kind regards,
 
-Tor Vic (1):
-      (Test) i2c: core: Fix atomic xfer check for non-preempt config
+Paul
 
- Documentation/i2c/i2c-address-translators.rst | 2 +-
- drivers/i2c/i2c-core.h                        | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
 
---qO5l4UjlZX/eRPzZ
-Content-Type: application/pgp-signature; name="signature.asc"
+PS: I still seem to miss some config option in my custom Linux kernel 
+configuration, as with my self-built Linux kernel, the accelerometer is 
+not detected as an input device.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWZVHkACgkQFA3kzBSg
-KbaZWQ//Q3ygs6zzVgJpyYIXJ1XHQvqZ7oHO8CJJ88KDWOCosWKBhKdSkCZUO5TC
-y9FxLSuRob8rWy9/Ps+mbSSWEVCR7tmwPcR+Mg24EfhAju6R/79DGycbCZg83aA5
-CVqsVi2PZGA9reAkxIjvF4bh1A9ph0wh/2aUQkrO/Yf7DKqI0BuiYExe+woZg093
-aEWs/toQba9wzfCpx8bceFSo2bp3XciVggMcyDlYl1fBjRaINQckLNnL2MdncwmO
-lUQfW1AQ1Ou45Bs6l/BaFK8kVbBekuQgc7+MWMV51SN9D/xEGg93EsBaGPfEtvmA
-NuopC9f/DT363vZxtdEqIei/fDMPLw5XRy6xv+otdoT+XxNvcoeZ+lUi6GkXsGTN
-Ju5OrmR8CpcyGR4ARS45CCE+2Keb6nhlbX+2WU6jNh2RDzxE5k9MBWHYoELnZZzf
-JMMWPGRuqX9Peo8lXRcekaVaBRHzPu2zqwA0VEh53ET5931OYj5wpDsDp1X94WQp
-13Sx758jr632VSoH6Rhwqfu2EjQgJT1BFxq00KApolrFJ8uu2+6RRiiBVZfbhB7B
-swp39mfXFVCVR4rVBju8MzlaflIqIbJKQb1dZBYZvBeGpdHUz0e56QhBcMjFjvvq
-//PNkrHf1tPQAMR38EeoeEtd0kghSt1+hZBCL3jRcEJ6g/emrBQ=
-=ar59
------END PGP SIGNATURE-----
-
---qO5l4UjlZX/eRPzZ--
+```
+$ sudo dmesg | grep input
+[    0.648449] input: AT Translated Set 2 keyboard as 
+/devices/platform/i8042/serio0/input/input0
+[   19.164633] input: Intel HID events as 
+/devices/platform/INT33D5:00/input/input2
+[   19.176109] input: Intel HID 5 button array as 
+/devices/platform/INT33D5:00/input/input3
+[   19.200645] input: Lid Switch as 
+/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0D:00/input/input4
+[   19.230941] input: Power Button as 
+/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0C:00/input/input5
+[   19.231434] input: Sleep Button as 
+/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0E:00/input/input6
+[   19.350390] input: PC Speaker as /devices/platform/pcspkr/input/input7
+[   19.996196] input: Dell WMI hotkeys as 
+/devices/platform/PNP0C14:05/wmi_bus/wmi_bus-PNP0C14:05/9DBB5994-A997-11DA-B012-B622A1EF5492/input/input9
+[   20.014546] input: SYNA2393:00 06CB:7A13 Mouse as 
+/devices/pci0000:00/0000:00:15.1/i2c_designware.1/i2c-2/i2c-SYNA2393:00/0018:06CB:7A13.0001/input/input10
+[   20.047534] input: SYNA2393:00 06CB:7A13 Touchpad as 
+/devices/pci0000:00/0000:00:15.1/i2c_designware.1/i2c-2/i2c-SYNA2393:00/0018:06CB:7A13.0001/input/input11
+[   20.047667] hid-generic 0018:06CB:7A13.0001: input,hidraw0: I2C HID 
+v1.00 Mouse [SYNA2393:00 06CB:7A13] on i2c-SYNA2393:00
+[   20.048874] input: WCOM490B:00 056A:490B Touchscreen as 
+/devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-1/i2c-WCOM490B:00/0018:056A:490B.0002/input/input13
+[   20.049014] input: WCOM490B:00 056A:490B as 
+/devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-1/i2c-WCOM490B:00/0018:056A:490B.0002/input/input14
+[   20.049089] input: WCOM490B:00 056A:490B Stylus as 
+/devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-1/i2c-WCOM490B:00/0018:056A:490B.0002/input/input15
+[   20.049186] input: WCOM490B:00 056A:490B as 
+/devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-1/i2c-WCOM490B:00/0018:056A:490B.0002/input/input16
+[   20.065066] input: WCOM490B:00 056A:490B Mouse as 
+/devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-1/i2c-WCOM490B:00/0018:056A:490B.0002/input/input17
+[   20.065360] hid-generic 0018:056A:490B.0002: input,hidraw1: I2C HID 
+v1.00 Mouse [WCOM490B:00 056A:490B] on i2c-WCOM490B:00
+[   20.760879] input: SYNA2393:00 06CB:7A13 Mouse as 
+/devices/pci0000:00/0000:00:15.1/i2c_designware.1/i2c-2/i2c-SYNA2393:00/0018:06CB:7A13.0001/input/input18
+[   20.760979] input: SYNA2393:00 06CB:7A13 Touchpad as 
+/devices/pci0000:00/0000:00:15.1/i2c_designware.1/i2c-2/i2c-SYNA2393:00/0018:06CB:7A13.0001/input/input19
+[   20.761032] hid-multitouch 0018:06CB:7A13.0001: input,hidraw0: I2C 
+HID v1.00 Mouse [SYNA2393:00 06CB:7A13] on i2c-SYNA2393:00
+[   21.083016] input: Wacom HID 490B Pen as 
+/devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-1/i2c-WCOM490B:00/0018:056A:490B.0002/input/input21
+[   21.083149] input: Wacom HID 490B Finger as 
+/devices/pci0000:00/0000:00:15.0/i2c_designware.0/i2c-1/i2c-WCOM490B:00/0018:056A:490B.0002/input/input22
+[   25.850198] input: Video Bus as 
+/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/LNXVIDEO:00/input/input24
+[   25.850344] input: Video Bus as 
+/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:0b/LNXVIDEO:01/input/input25
+[   26.027649] snd_hda_codec_realtek hdaudioC0D0:    inputs:
+[   26.132076] input: HDA Intel PCH Headphone Mic as 
+/devices/pci0000:00/0000:00:1f.3/sound/card0/input26
+[   26.132148] input: HDA Intel PCH HDMI/DP,pcm=3 as 
+/devices/pci0000:00/0000:00:1f.3/sound/card0/input27
+[   26.132192] input: HDA Intel PCH HDMI/DP,pcm=7 as 
+/devices/pci0000:00/0000:00:1f.3/sound/card0/input28
+[   26.132233] input: HDA Intel PCH HDMI/DP,pcm=8 as 
+/devices/pci0000:00/0000:00:1f.3/sound/card0/input29
+[   28.659169] rfkill: input handler disabled
+[   47.283492] rfkill: input handler enabled
+[   52.883611] rfkill: input handler disabled
+```
 
