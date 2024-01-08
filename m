@@ -1,94 +1,167 @@
-Return-Path: <linux-i2c+bounces-1205-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1206-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 890DC826BA7
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jan 2024 11:37:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D820C826CD4
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jan 2024 12:31:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34E12282BAA
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jan 2024 10:37:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A1D01F224A7
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Jan 2024 11:31:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D116C13FF0;
-	Mon,  8 Jan 2024 10:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TlmbdrEW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C68F14A9F;
+	Mon,  8 Jan 2024 11:31:04 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6144E13FEB;
-	Mon,  8 Jan 2024 10:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-466fb1cbfe9so79487137.0;
-        Mon, 08 Jan 2024 02:37:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704710269; x=1705315069; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LkXZpj9IoPppjOKTWfm9hJl1kmHy1SjAqR3mOM+/XXE=;
-        b=TlmbdrEW7plBnM/S5ygKmKdE3pBDeL7FfWwOXWOhrQiXem6VpPMkpuk0jiR4ONvnfg
-         KegZn5trARK4MgwKErRU1jMbRK6EifE8wxP308BPhzUzeyVEW3V2ui08L4yQmtOGsFKy
-         amseyCho2fEMaqohWa2EkDCy8+AbOLM133RUYJFKGrogxzKTYcAPaQbnHqh8MnPfMADN
-         bQaI8547g+J76WWEVm3tbs68br37zomuST5PU/XOHmnRvTZssllozoMzwTl0QkpP//p4
-         /Qh7y8FKD7Da9HFl5Up7t7Gh4G/rK1u14wehAJFaUervfrBRVNrGVhP4KfgzHONDtNSY
-         qMnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704710269; x=1705315069;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LkXZpj9IoPppjOKTWfm9hJl1kmHy1SjAqR3mOM+/XXE=;
-        b=Hd7W4IMIDOrATz1gswIKS6T9/gLW2ZKvzWHq+ntJ/Ue+v94p9VD/qMGq30y8NxhCuU
-         izx3wGa75aodyDdz+sWWS/ZucL6KsjM3FuCk5zL0bRfz/Y/JUJnfpJ3i6pNNqlDQHvui
-         x4NZfYaTHrahyLh+okLiQu2kit1NIy203/JEqIsVRpQHHhY2VEYyVrA6TR8M2dLnloD7
-         2vM6BWsQR+FvZsKy9KgfwHRTEVXOKJ4DGTObO7V0U2WAIwURlXUuIPdqWdFxetyoDH20
-         NsiSQ2c40IL47P3C/klv6SBqOuxQDRuXuyCLF54NVm+XCBwY4UzJMjR+eR2m9RFK5iT3
-         44BQ==
-X-Gm-Message-State: AOJu0YzftxN/QkAC3QD83YvfgzNqaZk7VHUfajkeb97Svi6SgBh8RRni
-	I5D+Nxs5bfIWXftp0hs0hsre6sjRuZluwzs1GuI=
-X-Google-Smtp-Source: AGHT+IFNTAMeCc4HAtGA/zPMHZDW+GxuGDccVtJh4vedf8EFdatFE+mFgumfdXVcfky8EcBkOL8jGCsnJCEYQ4hDMGk=
-X-Received: by 2002:a05:6102:668d:b0:467:d9f6:f96e with SMTP id
- gw13-20020a056102668d00b00467d9f6f96emr228015vsb.32.1704710269116; Mon, 08
- Jan 2024 02:37:49 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B116614A93;
+	Mon,  8 Jan 2024 11:30:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.6] (unknown [95.90.244.77])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 822E061E5FE03;
+	Mon,  8 Jan 2024 12:29:40 +0100 (CET)
+Message-ID: <a504d2b4-44f3-4e47-8566-d2b32451d861@molgen.mpg.de>
+Date: Mon, 8 Jan 2024 12:29:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240108062059.3583028-1-shinichiro.kawasaki@wdc.com>
-In-Reply-To: <20240108062059.3583028-1-shinichiro.kawasaki@wdc.com>
-From: Klara Modin <klarasmodin@gmail.com>
-Date: Mon, 8 Jan 2024 11:37:38 +0100
-Message-ID: <CABq1_vgw6W4OmdFqed1PpZaWSJHA-81gwR_E3FgXOECNNFcjOg@mail.gmail.com>
-Subject: Re: [PATCH v6 0/2] platform/x86: p2sb: Fix deadlock at sysfs PCI bus rescan
-To: "Shin'ichiro Kawasaki" <shinichiro.kawasaki@wdc.com>
-Cc: platform-driver-x86@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Lukas Wunner <lukas@wunner.de>, 
-	linux-pci@vger.kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/6] i2c-i801 / dell-smo8800: Move instantiation of
+ lis3lv02d i2c_client from i2c-i801 to dell-smo8800
+Content-Language: en-US
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
+ Eric Piel <eric.piel@tremplin-utc.net>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Andy Shevchenko <andy@kernel.org>, Dell.Client.Kernel@dell.com,
+ Marius Hoch <mail@mariushoch.de>, Kai Heng Feng
+ <kai.heng.feng@canonical.com>, Wolfram Sang <wsa@kernel.org>,
+ platform-driver-x86@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20231224213629.395741-1-hdegoede@redhat.com>
+ <65457151-4ddc-4eb4-8e3b-b9c1098c23bb@molgen.mpg.de>
+ <2af43c2f-6b6a-4080-90a4-dc655cedd8a2@redhat.com>
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <2af43c2f-6b6a-4080-90a4-dc655cedd8a2@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Den m=C3=A5n 8 jan. 2024 kl 07:21 skrev Shin'ichiro Kawasaki
-<shinichiro.kawasaki@wdc.com>:
-> Klara,
->
-> I hesitated to add your Tested-by tag to the v6 patch, since I modified t=
-he code
-> slightly from the code you tested (I used pci_bus_read_config_word() inst=
-ead of
-> pci_bus_read_config_dword() to avoid a shift operator). I hope you have t=
-ime to
-> afford to test this series again.
+Dear Hans,
 
-I can confirm that the patchset is still working correctly on my
-machine with this change.
 
-Thanks,
-Tested-by Klara Modin <klarasmodin@gmail.com>
+Again, thank you for your reply.
+
+
+Am 06.01.24 um 17:15 schrieb Hans de Goede:
+
+> On 1/6/24 15:23, Paul Menzel wrote:
+
+[…]
+
+>> Am 24.12.23 um 22:36 schrieb Hans de Goede:
+>>
+>>> Here is a patch series which implements my suggestions from:
+>>> https://lore.kernel.org/linux-i2c/4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de/
+>>> to improve the lis3lv02d accel support on Dell laptops.
+>>>
+>>> Jean, Andi the actual move is in patch 3/6 after some small prep patches
+>>> on the dell-smo8800 side. My plan for merging this is to create
+>>> an immutable branch based on 6.8-rc1 (once it is out) + these 6 patches and
+>>> then send a pull-request for this. Can I have your Ack for the i2c-i801
+>>> changes in patch 3/6? I think you'll like the changes there since they only
+>>> remove code :)
+>>
+>>> Hans de Goede (6):
+>>>     platform/x86: dell-smo8800: Only load on Dell laptops
+>>>     platform/x86: dell-smo8800: Change probe() ordering a bit
+>>>     platform/x86: dell-smo8800: Move instantiation of lis3lv02d i2c_client from i2c-i801 to dell-smo8800
+>>>     platform/x86: dell-smo8800: Pass the IRQ to the lis3lv02d i2c_client
+>>>     platform/x86: dell-smo8800: Instantiate an i2c_client for the IIO st_accel driver
+>>>     platform/x86: dell-smo8800: Add support for probing for the accelerometer i2c address
+>>>
+>>>    drivers/i2c/busses/i2c-i801.c            | 122 --------
+>>>    drivers/platform/x86/dell/dell-smo8800.c | 337 +++++++++++++++++++++--
+>>>    2 files changed, 316 insertions(+), 143 deletions(-)
+>>
+>> This Thursday, I tested this on the Dell Inc. XPS 15 7590/0VYV0G, BIOS 1.24.0 09/11/2023.
+> 
+> Interesting, can you run:
+> 
+> sudo acpidump -o acpidump.txt and then send me a private email
+> with the generated acpidump.txt attached ?
+
+Please find it in the Linux Kernel Bugzilla [1], where I attached it to 
+another issue.
+
+>> First just with your patch-set and trying the parameter:
+>>
+>>      [    0.000000] Command line: BOOT_IMAGE=/vmlinuz-6.7.0-rc8+ root=UUID=9fa41e21-7a5f-479e-afdc-9a5503368d8e ro quiet rd.luks=1 rd.auto=1 dell-smo8800.probe_i2c_addr=0x29
+>>      […]
+>>      [   28.826356] smo8800 SMO8810:00: Accelerometer lis3lv02d is present on SMBus but its address is unknown, skipping registration
+>>      [   28.826359] smo8800 SMO8810:00: Pass dell_smo8800.probe_i2c_addr=1 on the kernel commandline to probe, this may be dangerous!
+>>
+>> I misread the parameter documentation, but didn’t see the message back then, and just saved the log files.
+>>
+>> So, I added an entry for the device, and got:
+>>
+>>      [   19.197838] smo8800 SMO8810:00: Registered lis2de12 accelerometer on address 0x29
+> 
+> Ok, that looks good. Can you provide the output of:
+> 
+> cat /sys/class/dmi/id/product_name
+
+ From my upload to Hardware for Linux [2]:
+
+XPS 15 7590
+
+> So that we can also add an entry for this upstream ?
+
+I already sent a patch, that got applied [3].
+
+>> PS: I still seem to miss some config option in my custom Linux
+>> kernel configuration, as with my self-built Linux kernel, the
+>> accelerometer is not detected as an input device.
+> 
+> Right, v1 of my patches changed the code to by default instantiate an i2c_client
+> to which the st_accel IIO driver will bind. Using the IIO framework is
+> how accelerometers are handled normally and the handling of these "freefall"
+> sensors so far has been a bit different, so I tried to make them more like
+> normal accelerometers which don't do the joystick emulation.
+> 
+> But Pali and Andy pointed out to me that there is userspace code out
+> there relying on /dev/freefall, so for v2 of the patches I've kept
+> the old behavior by default.
+> 
+> I've just posted v2 of the patches.
+> 
+> Note with v1 you can also get the old behavior by adding
+> dell_smo8800.use_misc_lis3lv02d=1 to the kernel commandline.
+> 
+> Adding that (or switching to the v2 patches) should give you
+> an input device.
+
+Thank you very much. I am going to test them as soon as possible.
+
+
+Kind regards,
+
+Paul
+
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=218287
+      "`ACPI Error: AE_ERROR, Returned by Handler for [PCI_Config] 
+(20230628/evregion-300)`"
+[2]: https://linux-hardware.org/?probe=74136911a0&log=dmidecode
+[3]: 
+https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git/commit/?h=i2c/for-next&id=dc3293b460db70e3b5b76175d1a158dc802b9740
 
