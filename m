@@ -1,65 +1,65 @@
-Return-Path: <linux-i2c+bounces-1258-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1259-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A661682A205
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jan 2024 21:18:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18F4182A206
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jan 2024 21:18:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9453C1C22774
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jan 2024 20:18:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B482E28DA2B
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jan 2024 20:18:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFDC95810B;
-	Wed, 10 Jan 2024 20:14:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EA894EB24;
+	Wed, 10 Jan 2024 20:15:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M4dl1DBc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m5DP4kI0"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F3C158103
-	for <linux-i2c@vger.kernel.org>; Wed, 10 Jan 2024 20:14:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E2464E1BD
+	for <linux-i2c@vger.kernel.org>; Wed, 10 Jan 2024 20:15:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a2bdc3a3c84so108147266b.0
-        for <linux-i2c@vger.kernel.org>; Wed, 10 Jan 2024 12:14:44 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-40e5a5b0fb5so5413915e9.3
+        for <linux-i2c@vger.kernel.org>; Wed, 10 Jan 2024 12:15:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704917683; x=1705522483; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1704917721; x=1705522521; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=r6p3qOItLuY2UixPprsZ8WxGQ4HjbFMSwgZxlGyvdZU=;
-        b=M4dl1DBcx/f5QxUaVmDkdT3oMgZU0/WbV0rVWp39CEhVtRl8407lWagHWWjcIn184T
-         vXH4vH+fYecTnVKzZioELD075WmONpMqXOUVTAE7tF+X8IjEDqvZc8rSeXhO234zP8uG
-         Rj3/GFpFADxubRypNWfM8Vk/BURnxNhAWsoPLlXj9KE49JO/97H84Y0IGz7jhzk2jsMe
-         QaebRfFhKZhBWarBS6sCGdoHNQXRXS1VeLAmOqE1ieDkOCrK4zKRPDdG5XW09FfZwP2W
-         0C8EoCofvrap3P6Dl7lFRe2qtM76XO+n5kNe4P9AMiGTpUuyOkA5fhts3u7TPh97Zpk+
-         TfDA==
+        bh=zUha32C7Up/DhjYELAbnhrN1gcffSzH1UVEunFTRUz4=;
+        b=m5DP4kI0o5eRxJI4usTQCeUXnit0JLJMH030MIzYOJTqO3WGQdJ1b/WvdAm4yg9ZXd
+         p+E6kH0G9E5BO5h3xv2Wx6WrEyZGTF2375cKfVyUu0vMqUAeZYmxpfLntsJNBC+dAvWR
+         knp4JGYJeSaAako7t7sD0S6pC+HyGUgA76fpGGl85OK6Zbix3GSsyvGS5Jxzv9+rxxt2
+         8R4ZiFvUHRiMZRKHm+lXmNsC2rDkNZkeQpOupi5IzR4kB+VG+dztkYjhThF5iG6q7SEO
+         oLcuqUZs4JxBM6V2f3Tq4LAVzicQ6pb8XTvVvYGE5F/IpuTlhjOEJbTDzbRN/jTsReZ+
+         ALkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704917683; x=1705522483;
+        d=1e100.net; s=20230601; t=1704917721; x=1705522521;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=r6p3qOItLuY2UixPprsZ8WxGQ4HjbFMSwgZxlGyvdZU=;
-        b=CzsZEys2297Y/bgWEQyy07gK01Ee5RbOfLf4CEXDg0Oxzl/GbEmrzbS5t4ZtYeZJhV
-         fIjJjgGuCXx1kybxqTTUVMTqDng/IqV3rWTAxMLyykHqzFzApYE3k3yJKsgY6MWN5xuk
-         cOnSCpXU1KomRyeYosKd095J3uSyRdWSMIY7ES7JqmERF4Mz/gWtCzmudJIGxQfHECPW
-         u3/bfBD8tKys47OcRBA6ISxZYpW5zVF9hYJIkq2yGUnLDfsoTpDc3rEOLabcaxgfq/gi
-         VgXAMoi/8OrDEO68V1/+zA09/cWGOp2qR5W8cxBLqkMgQkPP6Symec6TheyQBdFWAh8T
-         LHqA==
-X-Gm-Message-State: AOJu0YyMLXqnu1fG3DC7BA3dtZLnSApKG5stclgJ76OQu1Sr+PlOY8R1
-	egWqs+POAWtRXwpu7sjgFwE=
-X-Google-Smtp-Source: AGHT+IHbfWK3FDkeuocXjBkw4VYw3/ORLIECPqWuaoH8IYMkE4vKHpegA98VIgw3l1XmV70x8vIVnA==
-X-Received: by 2002:a17:906:b42:b0:a23:4e3f:a2fd with SMTP id v2-20020a1709060b4200b00a234e3fa2fdmr39772ejg.5.1704917683146;
-        Wed, 10 Jan 2024 12:14:43 -0800 (PST)
+        bh=zUha32C7Up/DhjYELAbnhrN1gcffSzH1UVEunFTRUz4=;
+        b=dgCbZ/PkfEWb/1bzWudWmJISYfeFFGL0KkH8iQnM3tIKfc0YIyTQbNYGKx9/ntwqLI
+         khB65701/8xSWBBBQ9Ifphjs7jmo3ZlFfkizIQT3DW8yS756PGJK8fQmvNDAVVfU2+cu
+         TTL9fjvWXiwBxtM0rz9hi7F+2joGMnf3zQ0D5XPyRJEiYrZPIoAiGxp3Afv0sS8eNSTD
+         ZpSzHckCVzJ+VB8SVjp0cdMCCVWJDF4J0TjcFkKCbV7HA7bi6vYkB3EaDP+0OBJ7FL0z
+         ewpFw/srp70ryEdUJTj8iX820ILGj72cGM/8QtBz96bZ1esvWPgU35YucjmeYysSK+VZ
+         bKHg==
+X-Gm-Message-State: AOJu0YxCuft60jPDcHW4b0DeRJl6L7HuS8yTvEnx4/AXSOKEvQbGTLbV
+	2FqV2p/Gy7fgy49rOciyJnmaA+CWOug=
+X-Google-Smtp-Source: AGHT+IGo6a9riW8crkjSigpfL2KmpFv5uxUc7rBCSOiMASt0Q3yVAVk6VzvQgbc1YCS8wGQe/SaDwQ==
+X-Received: by 2002:a05:600c:4e86:b0:40d:8944:657b with SMTP id f6-20020a05600c4e8600b0040d8944657bmr834627wmq.26.1704917721387;
+        Wed, 10 Jan 2024 12:15:21 -0800 (PST)
 Received: from ?IPV6:2a01:c23:bd4e:3500:5df0:e74e:ef8d:49d1? (dynamic-2a01-0c23-bd4e-3500-5df0-e74e-ef8d-49d1.c23.pool.telefonica.de. [2a01:c23:bd4e:3500:5df0:e74e:ef8d:49d1])
-        by smtp.googlemail.com with ESMTPSA id lk19-20020a170906cb1300b00a2c20c5f444sm264915ejb.6.2024.01.10.12.14.42
+        by smtp.googlemail.com with ESMTPSA id lk19-20020a170906cb1300b00a2c20c5f444sm264915ejb.6.2024.01.10.12.15.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jan 2024 12:14:42 -0800 (PST)
-Message-ID: <53e5c71a-d954-4211-91a1-de067451d532@gmail.com>
-Date: Wed, 10 Jan 2024 21:14:42 +0100
+        Wed, 10 Jan 2024 12:15:21 -0800 (PST)
+Message-ID: <8dadb1d5-bbdb-4e5c-b302-b9be112a3f1b@gmail.com>
+Date: Wed, 10 Jan 2024 21:15:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 2/4] i2c: mux: add basic support for calling i2c_register_spd
- on muxed bus segments
+Subject: [PATCH 3/4] i2c: mux: gpio: Allow to call i2c_register_spd on a muxed
+ segment
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
@@ -123,49 +123,47 @@ In-Reply-To: <fc057deb-49f9-49cf-9549-13b2538ed92b@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-This extension allows mux drivers to instruct i2c_mux_add_adapter to
-call i2c_register_spd. First user of this feature will be gpio mux.
+Allow the gpio-based multiplexer to call i2c_register_spd on
+muxed segments. First user will be i801.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/i2c-mux.c   | 4 ++++
- include/linux/i2c-mux.h | 1 +
- 2 files changed, 5 insertions(+)
+ drivers/i2c/muxes/i2c-mux-gpio.c           | 1 +
+ include/linux/platform_data/i2c-mux-gpio.h | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/drivers/i2c/i2c-mux.c b/drivers/i2c/i2c-mux.c
-index 57ff09f18..ada9c764f 100644
---- a/drivers/i2c/i2c-mux.c
-+++ b/drivers/i2c/i2c-mux.c
-@@ -22,6 +22,7 @@
- #include <linux/acpi.h>
- #include <linux/i2c.h>
- #include <linux/i2c-mux.h>
-+#include <linux/i2c-smbus.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of.h>
-@@ -429,6 +430,9 @@ int i2c_mux_add_adapter(struct i2c_mux_core *muxc,
- 	dev_info(&parent->dev, "Added multiplexed i2c bus %d\n",
- 		 i2c_adapter_id(&priv->adap));
+diff --git a/drivers/i2c/muxes/i2c-mux-gpio.c b/drivers/i2c/muxes/i2c-mux-gpio.c
+index 6b979a0a6..c841407c7 100644
+--- a/drivers/i2c/muxes/i2c-mux-gpio.c
++++ b/drivers/i2c/muxes/i2c-mux-gpio.c
+@@ -161,6 +161,7 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
+ 	}
+ 	mux->gpios = muxc->priv;
+ 	muxc->priv = mux;
++	muxc->register_spd = mux->data.register_spd;
  
-+	if (muxc->register_spd)
-+		i2c_register_spd(&priv->adap);
-+
- 	muxc->adapter[muxc->num_adapters++] = &priv->adap;
- 	return 0;
+ 	platform_set_drvdata(pdev, muxc);
  
-diff --git a/include/linux/i2c-mux.h b/include/linux/i2c-mux.h
-index 98ef73b7c..ec51d9bc4 100644
---- a/include/linux/i2c-mux.h
-+++ b/include/linux/i2c-mux.h
-@@ -21,6 +21,7 @@ struct i2c_mux_core {
- 	unsigned int mux_locked:1;
- 	unsigned int arbitrator:1;
- 	unsigned int gate:1;
+diff --git a/include/linux/platform_data/i2c-mux-gpio.h b/include/linux/platform_data/i2c-mux-gpio.h
+index 5e4c2c272..cbeb74f92 100644
+--- a/include/linux/platform_data/i2c-mux-gpio.h
++++ b/include/linux/platform_data/i2c-mux-gpio.h
+@@ -20,6 +20,7 @@
+  * @n_values: Number of multiplexer positions (busses to instantiate)
+  * @classes: Optional I2C auto-detection classes
+  * @idle: Bitmask to write to MUX when idle or GPIO_I2CMUX_NO_IDLE if not used
++ * @register_spd: call i2c_register_spd for the child adapters on muxed segments
+  */
+ struct i2c_mux_gpio_platform_data {
+ 	int parent;
+@@ -28,6 +29,7 @@ struct i2c_mux_gpio_platform_data {
+ 	int n_values;
+ 	const unsigned *classes;
+ 	unsigned idle;
 +	unsigned int register_spd:1;
+ };
  
- 	void *priv;
- 
+ #endif /* _LINUX_I2C_MUX_GPIO_H */
 -- 
 2.43.0
 
