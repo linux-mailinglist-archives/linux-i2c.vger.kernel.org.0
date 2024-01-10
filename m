@@ -1,127 +1,117 @@
-Return-Path: <linux-i2c+bounces-1251-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1252-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEBDD829552
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jan 2024 09:44:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28FA28295A7
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jan 2024 10:04:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C511B24113
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jan 2024 08:44:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBF27284D08
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jan 2024 09:04:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578D937149;
-	Wed, 10 Jan 2024 08:43:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E4023A8DB;
+	Wed, 10 Jan 2024 09:04:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CeRlS2K7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hqvnyL/t"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCB833CFD;
-	Wed, 10 Jan 2024 08:43:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5542a7f1f3cso4470780a12.2;
-        Wed, 10 Jan 2024 00:43:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803EE3B18E
+	for <linux-i2c@vger.kernel.org>; Wed, 10 Jan 2024 09:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3374c693f92so3098529f8f.1
+        for <linux-i2c@vger.kernel.org>; Wed, 10 Jan 2024 01:04:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704876230; x=1705481030; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xBqz+NKkAhcga/7KbDtJF7MTdjSbEbQnaZUr3GeRp3U=;
-        b=CeRlS2K73BZ0jiyfJrcSerCsePBTyIHLp0H4SIPv3t0uJxqKsGuZ9vvx8nq0oXovs6
-         HMK7XGcZKns/hTbuP7YxldMSggFbtirGJ5O/jApBW2XjVMDtJvbilGsgPsscdyHf224O
-         WLYTlQmq8cHFppBRoH+Y0WDB+6bE96qtS3Q29bt+51CFlAfQCov2RC+jdsRrr2Y3L+4O
-         ep2+C1/2P58Gd5kvZjtvU0irueC2FGJesEYjwRWnm4JCSMH8zx26q5XZxKy/cvne+AO2
-         KvtsxlpliQsHB+MzXDT92hRYzgxmb/3/K8EdeGYOHuJRQoIJHPpYWzSEvT8bR4oPCbu1
-         kktQ==
+        d=linaro.org; s=google; t=1704877478; x=1705482278; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9ENsgunoGMbZfgvfEWJ+ROzlMs04fiRcUoBPATIiU24=;
+        b=hqvnyL/tBS0TlBEYRYtcX/s2PRQstLiA5MRdZX+Iw0SYA+1MnyfsqVk5pmuLqbLq9b
+         5NQyN4LkRzJcqRUBZg/W91WVrw/d0ya6YPn2+6I2DwBCRiAU/S6KBnQ6A2bK5m980TJh
+         g/SpbEkiwobk+Wb7QEncVtZCI61Mpnpu0FKUDc6UyuwuWXytrmLRPwJ/uB2XhhukR4bb
+         hoA16KxMS4mvfHC8DSDdHW5kIVPrCB0fF5IdBIIqFT+kbrqJkhbgkWZjvdgR08X5hd8e
+         1IGhBwNTX6Zi94vcBw16P//lFnsAMO3Me6Qjlin8RHYbFT1jk8IkpcnX+Dmdc7BNSz01
+         EbdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704876230; x=1705481030;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xBqz+NKkAhcga/7KbDtJF7MTdjSbEbQnaZUr3GeRp3U=;
-        b=X1AT9lvB6QH5BaZ/KSQIyoJdFunQfGm8W58tPHUrs/CU8AbBo4r/elET1MfDXCbms3
-         UZl4j7V1b3dERAW9atQfZRNrl78Yp2KwltFX9Q0/swxoWwEKq4uSzr5tlvEuIFZL8OSe
-         rPk2jVmZmsIfOr4jXMhkd6755jCt7O7zC6L2kiI5EZVEHEtvUtf62dRjkB7rpX+XjuOD
-         c6GL+kazhGYEpLJR8TyY96DI8sYb6r2QUgogXSHqAsTMiHkVlJie/ZJ597xcP9NW3mY7
-         6JhWeBLeQvWT/XlXh8ANr8WwRZx52mjugzCtiBYHyvPZ5gBzfFT8QBD/FF0gBxqM+kcD
-         FPpw==
-X-Gm-Message-State: AOJu0YymHhJQtpWp+1cmmnVyamF8WV4MYd1seyxxdkcliQtGMujzLIPD
-	C9xEVvqoxdF+dpBF1FxN67+axy3T7R+h56X+eQxLUydIL08=
-X-Google-Smtp-Source: AGHT+IHa/PFtRzn+HpK1gr7bBYK+GoY2so+241U3ZxtOU8InhDxiYMj+taDmyfj/73a7cxq+54y7jqF4GNUm8x5fFJs=
-X-Received: by 2002:a17:906:3e08:b0:a2a:2498:93c5 with SMTP id
- k8-20020a1709063e0800b00a2a249893c5mr424762eji.73.1704876229573; Wed, 10 Jan
- 2024 00:43:49 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704877478; x=1705482278;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9ENsgunoGMbZfgvfEWJ+ROzlMs04fiRcUoBPATIiU24=;
+        b=d+yzajFMOakoOXBXfky5IsVzfA6+1DAsk/JHwkGmybQkzyRad0he3I5s88a2D3z5xv
+         pbKnnnGWn/8DOvON3YkysGQmdO6nolSXU2h+1MVhls1hNscmzGLPJztK8POvgOVQSXW+
+         8QiaY+KOGiCLh06XfIOeBE1EKkqUJ7umHlW/FkbMj5KhvpGBW90UIiGdztWZTYznMBV4
+         n2h6rjT6QWVIJtVzuozbER0DoJm+5uFspn4MgNV7V9RTp7JzPyk/usYjaT9aDx430qZK
+         3cd62NOsU3vsEGsxLue/CUYLbVwNx3mjS8vO9LGWH+0oQr3scS12rRnqLxQ2nbXHQhiS
+         ZZSA==
+X-Gm-Message-State: AOJu0YyfLRJ2GuIIp1wIPH0ygRG+MOE8ccEMPQMn98zvq3VNtfHZTQwG
+	Ighg2yQv5jg/zOIRJYG9uf48dTvrQdhqNQ==
+X-Google-Smtp-Source: AGHT+IGmH7obDcrHPPh8+GTeUn69iyrivY7YHG42CJn+av2pD9yAeNWytG456eVVXSfxMThA2UVowA==
+X-Received: by 2002:a5d:6a01:0:b0:336:66f0:e8b8 with SMTP id m1-20020a5d6a01000000b0033666f0e8b8mr342757wru.89.1704877477728;
+        Wed, 10 Jan 2024 01:04:37 -0800 (PST)
+Received: from [192.168.2.107] ([79.115.63.202])
+        by smtp.gmail.com with ESMTPSA id e8-20020a5d5008000000b00336e6014263sm4339124wrt.98.2024.01.10.01.04.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Jan 2024 01:04:37 -0800 (PST)
+Message-ID: <aeee178d-f4ea-4732-98f4-fa28fcf2990f@linaro.org>
+Date: Wed, 10 Jan 2024 09:04:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240109145121.8850-1-rand.sec96@gmail.com>
-In-Reply-To: <20240109145121.8850-1-rand.sec96@gmail.com>
-From: Tali Perry <tali.perry1@gmail.com>
-Date: Wed, 10 Jan 2024 10:43:38 +0200
-Message-ID: <CAHb3i=ttHrFw7NuL3qw1xdXDkGu9tOQdH+WuCMWgukmU6QrTKA@mail.gmail.com>
-Subject: Re: [PATCH] i2c: Fix NULL pointer dereference in npcm_i2c_reg_slave
-To: Rand Deeb <rand.sec96@gmail.com>
-Cc: Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>, 
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, 
-	Benjamin Fair <benjaminfair@google.com>, openbmc@lists.ozlabs.org, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	deeb.rand@confident.ru, lvc-project@linuxtesting.org, 
-	voskresenski.stanislav@confident.ru
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Jan 9, 2024 at 4:52=E2=80=AFPM Rand Deeb <rand.sec96@gmail.com> wro=
-te:
->
-> In the npcm_i2c_reg_slave function, a potential NULL pointer dereference
-> issue occurs when 'client' is NULL. This patch adds a proper NULL check f=
-or
-> 'client' at the beginning of the function to prevent undefined behavior.
->
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->
-> Signed-off-by: Rand Deeb <rand.sec96@gmail.com>
-> ---
->  drivers/i2c/busses/i2c-npcm7xx.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-np=
-cm7xx.c
-> index c1b679737240..cfabfb50211d 100644
-> --- a/drivers/i2c/busses/i2c-npcm7xx.c
-> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> @@ -1243,13 +1243,14 @@ static irqreturn_t npcm_i2c_int_slave_handler(str=
-uct npcm_i2c *bus)
->  static int npcm_i2c_reg_slave(struct i2c_client *client)
->  {
->         unsigned long lock_flags;
-> -       struct npcm_i2c *bus =3D i2c_get_adapdata(client->adapter);
-> -
-> -       bus->slave =3D client;
-> +       struct npcm_i2c *bus;
->
-> -       if (!bus->slave)
-> +       if (!client)
->                 return -EINVAL;
->
-> +       bus =3D i2c_get_adapdata(client->adapter);
-> +       bus->slave =3D client;
-> +
->         if (client->flags & I2C_CLIENT_TEN)
->                 return -EAFNOSUPPORT;
->
-> --
-> 2.34.1
->
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 03/12] dt-bindings: serial: samsung: do not allow
+ reg-io-width for gs101
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ peter.griffin@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+ gregkh@linuxfoundation.org
+Cc: mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+ conor+dt@kernel.org, andi.shyti@kernel.org, alim.akhtar@samsung.com,
+ jirislaby@kernel.org, s.nawrocki@samsung.com, tomasz.figa@gmail.com,
+ cw00.choi@samsung.com, linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+ andre.draszik@linaro.org, kernel-team@android.com, willmcvicker@google.com
+References: <20240109125814.3691033-1-tudor.ambarus@linaro.org>
+ <20240109125814.3691033-4-tudor.ambarus@linaro.org>
+ <5d24a5da-e4cd-4d32-ba2b-8e91cfc7dced@linaro.org>
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <5d24a5da-e4cd-4d32-ba2b-8e91cfc7dced@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-Thanks for the patch!
 
-Reviewed-by:tali.perry1@gmail.com
+On 1/10/24 08:06, Krzysztof Kozlowski wrote:
+> On 09/01/2024 13:58, Tudor Ambarus wrote:
+>> All gs101 serial ports are restricted to 32-bit register accesses.
+>> This requirement will be inferred from the compatible. Do not allow
+>> the reg-io-width property for the google,gs101-uart compatible.
+>>
+>> Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
+>> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+>> ---
+>> v3: collect Peter's R-b tag
+>> v2: new patch
+>>
+> 
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Please split the serial patches into separate patchset and send them
+> usual way, so Greg can pick them up. GS101 was merged, thus this is not
+> initial submission anymore.
+> 
+
+Got it, will do. Thanks.
+ta
 
