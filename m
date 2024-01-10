@@ -1,178 +1,197 @@
-Return-Path: <linux-i2c+bounces-1261-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1262-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D5B082A459
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jan 2024 23:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE27482A4B0
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jan 2024 00:00:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93B1E1C2219C
-	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jan 2024 22:56:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA28E1C22434
+	for <lists+linux-i2c@lfdr.de>; Wed, 10 Jan 2024 23:00:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33AE74F8B9;
-	Wed, 10 Jan 2024 22:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51FCE4EB55;
+	Wed, 10 Jan 2024 23:00:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2KD2+XTj"
+	dkim=pass (1024-bit key) header.d=axentia.se header.i=@axentia.se header.b="WGZoQ8Hu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2087.outbound.protection.outlook.com [40.107.223.87])
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2090.outbound.protection.outlook.com [40.107.7.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3111E4F88F;
-	Wed, 10 Jan 2024 22:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62ACF4EB41
+	for <linux-i2c@vger.kernel.org>; Wed, 10 Jan 2024 23:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axentia.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axentia.se
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lu9l0r7cBmuqtrNtSmWnBB65FDHKrxRVLR4X/HeQLsGot7Rkjz0sHiJiwxB/zIMOUJhAsrf7UOM46s3yXaNM99lrayYJYAdUhZZ/nZB7WgXV4SaYznm8Wmg1LwVVf2t9OGpBrx3vP9QKFA9UlVnIM27c1xJo+MFnfWVH/Qbc/kIYFk8WRQ8Fntuc0VmjmiIBU1iMraRX0H7TMe06dRB73awhgetzBJPXQsVBjYY31WS5VeHJZ3LFoO1dQFBnaeXX3M9K7fm4L2D5i/0yatsWlaQd2ogMOOaeQN+2zV2N8QPCP6myQTA65+kE12+0ZLQXPKp1zrT6QMA1Zr6d+yFJcQ==
+ b=oGoY+DnzSzKjrdVTMToJXS5QquUS7pbdVuh+8dgBVjYfhHjf/6YdqzS5EMShTBlUwclb4xZAUbmHwzt2bgH9hvg/6Qr4Yrhekl7rzGZY8z9XNJKx+5tIuh/D7pKlzNDNvIdyEqv+3T5cG9xeM5njVC5KMzstKkx+Txjm85YOqnsNLcFvbKiRtmQGWtdsF9gUHddN92Da4bTCn3daMgj03DzgqZab+B6DoMM0yVtOAW1W85bmVgCT+9RGXvBHNlbLT08N9esraL+u1uTD5je0bNVnW5eVhJi3XPj0d6hpszpAxcq6NPvKJIV0rnotUZoTcnaI3greilfexgnvRf36lw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UNgln3DY7WlozI6XFeneuQj4f/QnjBhtq0tzFZ8ACis=;
- b=BcSJDWZr0TLzPHrOmBGq+nPSkq/YqSZF1bJpbW8htYeLnbKEl1U157ZbzsswymOEJB37X7eTap3QI3Zt4fqmBh3n3Ts7ta1d9Wefjp9Bd2q9AriRWXN4e72b1OKxCYDsXNH/w2abuoLbzjRsqEsXbaHrB0gn0kBGkmAu97md7+5sh6L8GRxAZRsbnH0qE4m7SvqCsLtmE55rel9c/vd4GdSY5UM30RiYujaQskqyLTUA8H/HxORCtBfvp5PnmXJok+mkO2p8mQIZDrlPisjO7p2UFE+fexyRukPzuNPxE+KkDxBj7BQDu9PNv9feLQvY5lECKoJKfdRh8SznHFdDUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=RXTuAlGh7EGucZAvLZXt61irDlufi7nTyOnePizPSyo=;
+ b=m0wMF6gfbe/avHLcYGVg0q1IcbrSiFzEci8/7QD9jEjxHdKWrDISItWsgCauPXQzy+T4sPsa68qlqAJNehVyFgCAsphM+HcpYYYgL48MsMMBfO1denKgjFztvRP6Pq39GV5yByv7To6UMNq9y3TyqvAX8twGKhsqM3+1kdg1aIvGSvKlkqOIzjO1WAE/I/LsTSwMYraB3wp5uq3Ua7e3kumghC0V1PPsgVsE/X5vTIODqmZJKvJyP1GYQeIUs4iALCp/8oQGe6837wJ1UMmUFWYxt7aQ6hlQ/LN9WNIyvZlM0kW6hVihuIKge/0xYcBMNqSIUSQhR43Z1rdYs2RjTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
+ dkim=pass header.d=axentia.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UNgln3DY7WlozI6XFeneuQj4f/QnjBhtq0tzFZ8ACis=;
- b=2KD2+XTjQsyB2aukj4scjyEJZrwkEhGdGk8edmRSe7IwI2igZPXkQkFjlku/4vLPOzg0vw8uYOQi4zHYJhBC3uOnNgwKqFLgxQ9KJQzTr1SdUruLgZ3Cmm2ZrdR64T2C8Nzv49TQmN/6uu4PHwjiYUqN4OF459k87686Q4jG7gw=
-Received: from CH0PR03CA0286.namprd03.prod.outlook.com (2603:10b6:610:e6::21)
- by BL1PR12MB5317.namprd12.prod.outlook.com (2603:10b6:208:31f::17) with
+ bh=RXTuAlGh7EGucZAvLZXt61irDlufi7nTyOnePizPSyo=;
+ b=WGZoQ8HuH4E3Oeq984FtuBbObZl5XIu/ZnE3Gvra8Tnbceg3CxUe8HhdLeUjQeryGhKUB7Vhw/ty7BCQvZAu/s5ORfS8UozpHZDjqgvtMr288xPDZ+E4Ohi76UJEmeKwB8y6IvEcjYqftXJx+V7V9hslkaVTsNtGkPfAQNqQDeQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axentia.se;
+Received: from DU0PR02MB8500.eurprd02.prod.outlook.com (2603:10a6:10:3e3::8)
+ by DU0PR02MB7971.eurprd02.prod.outlook.com (2603:10a6:10:34f::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.17; Wed, 10 Jan
- 2024 22:56:21 +0000
-Received: from DS2PEPF00003447.namprd04.prod.outlook.com
- (2603:10b6:610:e6:cafe::9d) by CH0PR03CA0286.outlook.office365.com
- (2603:10b6:610:e6::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.18 via Frontend
- Transport; Wed, 10 Jan 2024 22:56:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS2PEPF00003447.mail.protection.outlook.com (10.167.17.74) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7181.14 via Frontend Transport; Wed, 10 Jan 2024 22:56:21 +0000
-Received: from [10.236.30.70] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Wed, 10 Jan
- 2024 16:56:20 -0600
-Message-ID: <27cf56b5-d21b-4906-823f-a9e567fc26e2@amd.com>
-Date: Wed, 10 Jan 2024 16:56:19 -0600
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.23; Wed, 10 Jan
+ 2024 23:00:11 +0000
+Received: from DU0PR02MB8500.eurprd02.prod.outlook.com
+ ([fe80::4c56:a71b:d42d:11ba]) by DU0PR02MB8500.eurprd02.prod.outlook.com
+ ([fe80::4c56:a71b:d42d:11ba%3]) with mapi id 15.20.7181.015; Wed, 10 Jan 2024
+ 23:00:10 +0000
+Message-ID: <029a9957-0436-3a6d-e0d3-78fe2c2a9954@axentia.se>
+Date: Thu, 11 Jan 2024 00:00:08 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/4] i2c: smbus: Prepare i2c_register_spd for usage on
+ muxed segments
+Content-Language: sv-SE, en-US
+To: Heiner Kallweit <hkallweit1@gmail.com>, Jean Delvare <jdelvare@suse.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@the-dreams.de>,
+ Peter Korsgaard <peter.korsgaard@barco.com>
+Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <fc057deb-49f9-49cf-9549-13b2538ed92b@gmail.com>
+ <74a310ba-bba8-40f8-82d8-fc0963840a36@gmail.com>
+From: Peter Rosin <peda@axentia.se>
+In-Reply-To: <74a310ba-bba8-40f8-82d8-fc0963840a36@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: GVX0EPF0000FA94.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:144:1:0:4:0:17) To DU0PR02MB8500.eurprd02.prod.outlook.com
+ (2603:10a6:10:3e3::8)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: i2c-designware: NULL ptr at RIP: 0010:regmap_read+0x12/0x70
-Content-Language: en-US
-To: Jarkko Nikula <jarkko.nikula@linux.intel.com>, "V, Narasimhan"
-	<Narasimhan.V@amd.com>, Borislav Petkov <bp@alien8.de>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-CC: lkml <linux-kernel@vger.kernel.org>, Andy Shevchenko
-	<andriy.shevchenko@linux.intel.com>, Mika Westerberg
-	<mika.westerberg@linux.intel.com>, Jan Dabros <jsd@semihalf.com>, Andi Shyti
-	<andi.shyti@kernel.org>, "Limonciello, Mario" <Mario.Limonciello@amd.com>
-References: <20231229120820.GCZY62tM7z4v2XmOAZ@fat_crate.local>
- <8169d773-f9ec-4092-b036-9e4fd59966c3@linux.intel.com>
- <DM4PR12MB508654DF49FE079D6C283D658961A@DM4PR12MB5086.namprd12.prod.outlook.com>
- <888da30a-c1ed-4fb0-af81-787fd868ce20@linux.intel.com>
- <DM4PR12MB5086DE2882C7C5044697B1C38967A@DM4PR12MB5086.namprd12.prod.outlook.com>
- <adf6c24a-d94b-40e5-b645-0c6b23b2d513@linux.intel.com>
- <DM4PR12MB508652E9A422CF639C2FEEC0896A2@DM4PR12MB5086.namprd12.prod.outlook.com>
- <e059928c-6fab-4ca2-9615-4401ee16fb82@linux.intel.com>
-From: Kim Phillips <kim.phillips@amd.com>
-Autocrypt: addr=kim.phillips@amd.com; keydata=
- xsBNBFh3uA4BCACmMh2JZ9f6vavU7XWTg45pl64x61cugDKZ34jiRLohU280rECk+kyXrKGB
- GdtV5+8tZWhMCyn151/C/OEYIi3CP5DY6wyrjbFkhI8ohqR4VqyC9gWAqD25coTQpOHyt7pd
- 8EvSBDAuL031gqw5w6JNeqEbMplZeToy5Rgdr1i35MZOzyIaO01H+F2/sOL7qk6pY21y5Flj
- ojjFT/uWg7eodnOu/BJ1Uem6FaO6ovYSAMOaCs/GpguznsS76ORsH6Jnyp6+e3KlZe/F2M7H
- 5HWCVsS5np2rf1luDsfHKV7HCd2+4iFRhxjbbulSBRMn7zx16PEGh8ccNwJm9/nwof6jABEB
- AAHNI0tpbSBQaGlsbGlwcyA8a2ltLnBoaWxsaXBzQGFtZC5jb20+wsCOBBMBCgA4FiEEaBZs
- 4ROWXWKVJWj8Z9viHdU8iO8FAmHm/zMCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQ
- Z9viHdU8iO8aXQgAnByD4TUD+xGXXDAkIopwqip2Vfy3qzNhmfzdvLxKxsb6I6Tf1l2pMPGP
- EHxDPfuQhheyh+iRWrba6flwBGaNriJTFuVpQUGoRcjV11F2cpEbToqv2LGPaXIpc7IxEoRt
- lg9VKr70XcRePKq4iH5e7wrmzACP9UlvaKlRJl97FTckZIguQQMZe9kqLga1yRDqcQVN5Kj6
- IP6V8WzRz0qGpVE1GE/vjYH13o2qHrvp9d/zlPBTZFwhNpLBn4JHohyxQ63t7eZ1L4U66Caq
- jZ0lhdN/psHJWab0SeIIRAG5+WLMcRbx3+LPjzIyrXJSonsm4t5lU3RmGmWwJSunxGDu1s7A
- TQRYd7gOAQgAp2VJv7J5eaWVdHvazWijdobOXSa13GnV8DXENQLQSSQlxGkLkYa3nDHr6Xjk
- z2NPFn4cf8GgMd7Bd4p3MR6DbwA4qKE+8ZW2x4XdH///HGDDEI69sDZEzLPXgl/9dv49dxym
- Q/nuco2KtF4xaMS/mjRsv7Eu5oGH+2+vPKe7L8ykXUh7SJmr0tI2/y9A6MVOPckdenywmKQ+
- 6R0gw6aL2OeUyWZLS/e/3+0zFmQxeTyHpoJb8cNk/XqUGsBXsTO6y+7fdykpXNCfeJL/bSGE
- SXgwRROHCnQeKwVbbvEU/e5GZlNnKXoD7u2jyJxt4NTG2c0Jze+W3MPwh1wxzNg6BQARAQAB
- wsBfBBgBCAAJBQJYd7gOAhsMAAoJEGfb4h3VPIjv33EIAIRVHWqFbAYPZZtYKdwugwzL0FKa
- X0VbkUvKNG8SQAcdvkKmnSITWrIbecHPQaSqrtl/W8qKD6YFNOC9JNCHEfyLPTxo33WonQpo
- utm5nbRS1p45Mk65Uu76qhuHMjPnOgbMqmRHgWjIRiNfKm1QD5/3bml08HnJ1PuucuxI4HkK
- SWR00RE4Jyhxi1ISB3UEQ98iZtobAkTYa3aZ6xCZzd+v+o4CkLDKtS8vrBXpppi/HAeRlL7m
- waGKsjcegLX8cEHSblIct+9KKjUrE8uZyokt67sTYDlPapVCkhTtKn5O88jXkqA2PgAU6XqP
- KeUe7zYeAD22yc9K+Ovi7bZ9I5o=
-In-Reply-To: <e059928c-6fab-4ca2-9615-4401ee16fb82@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PEPF00003447:EE_|BL1PR12MB5317:EE_
-X-MS-Office365-Filtering-Correlation-Id: ebb93c3d-a7d5-49e4-4e21-08dc122f5d23
+X-MS-TrafficTypeDiagnostic: DU0PR02MB8500:EE_|DU0PR02MB7971:EE_
+X-MS-Office365-Filtering-Correlation-Id: 061c045f-35ce-41e9-3025-08dc122fe555
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	HkDEDhF0Z0x5wTYQ/wkPHffn0Rn1G4eFRIjAydrG9UmZePT7FovCdjpU42CRNP0gfzSJ3BbHMjoB4TwQKzOknwZSB3knmMGsh/aQ1FdywZb6iaEsx6K5tUAA12+bxuEVEOXRaEEboiXP06afN5ZGOnlK52iBW7zwAWyHKNFTb0oYd9tOda5newZUsev6Q12XAN7J97aPJx0/CS+81fQ3c4LrXr/23FDUxjtjc59BVoNnH521uRtKUdt13AR3kho1mUUrG6Tdmc3MQsRm5OFw+w8UVHPs/4GlImrdmxF8sfkacUXjeFrEaxQg7DEFXWEFrNxP4lnoJ7qvF0q//UeMOcF/G1hvWMWl2JqxcIO9yf9r1GUSpl11NYkvP8xyaeEpITRarbdLRmgU6Yuft8G4AVSCmp4jH/jjLKzz2q+R75D/9b/sishx/49aaDb53y6U9YYYU/lWUyN0SoCjH8pmdL+2eiOEDCPyhiZT7dUJaUa/GMWDwi2+ZHaxL/scs13rCGCf+dgrMVj4SpGTSEyNlmMQEo8C8tx8s1mb/dHSSXv/tLCAS9C5uX327w317AKIA/ANv78sxgzE7vfS6ndnrqieXZB+53qBIFEl/NotuNYTy8cy9PIFVgPNpO9RtpYW49ADLOa3Z8j+84b2A3MmnmHsGy2EXHIrcUbRnHPXixZFGEZ5OcxbVQ44HHq2mWxBpVG9NdX5xg09Chny0gJZ5s9H5qv6oBvO/w6XkTtETuzgYxZSX8ee90LfrZ8C2JkhqWEe7U/xEy0UXZRJTbmFXjn5NC1RnO5L7Z/3Ku+UIMWl00e3ZZdn9Azj17nr13El
+	UIkiec5NArwdFa53LnM8rklvvBKo/jljy4bjULbxnJGQn8rHn1L6B1YyS4ksDmS3YlgPhsLK+m6apT2x/eoZACGsMwMx79s7HTd9usGEV6o5ATIxMXYZf6ewOdTogqftymsA/15rqGhSYGfIEkdA/DhtRtyK73ubH2l1SqKXi9tzNlRelw3qnJbKiNUsVlifRTTGy+jky+1agqywdUzuM0cUAlHLdP+snicUIGVHG5fG0JT1mSj3tFz5qTjflyaYslbb5w4YDX+MGVIHpVWuDunUigs3g0pTajlNnqEKAssqdg8rihAZkw+naynkwXubeTDSoMhcWbZMtCchjcgw4D/7F+V6C1duY1vC9WXLuisRVMjfQLXlr+sxhWfIdl4WXYU15jXcVPQPmaP2rZO/vHq4S+UOGHmmg4a+xlyf/3911AkDsxclo9bbwKJZPaDL8FOAZ5b7eDes8JL6mKh7kHHQe7QM0PGHpxP1wbNjdkYqE5E49sSzCpuSfOzr28XnhyDFmnIxpUPpqrod6SjDuWlVpArfKzVO+evSVsGj+vCQH7xtSwJZUJv3Jq4GEK0WDD07MimVfgY32CU9uCc6x3HLFsRLv1PdyJzvJ+tnXiRuzu0HD5D0IEwPOYPa4NDDCa0DT54QBv6UoEOj0VOTXg==
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(39860400002)(136003)(376002)(346002)(230922051799003)(82310400011)(186009)(1800799012)(64100799003)(451199024)(46966006)(40470700004)(36840700001)(53546011)(478600001)(16576012)(8936002)(4326008)(8676002)(70586007)(70206006)(316002)(54906003)(2616005)(110136005)(47076005)(36860700001)(26005)(83380400001)(426003)(16526019)(336012)(5660300002)(44832011)(2906002)(41300700001)(36756003)(82740400003)(81166007)(356005)(31696002)(86362001)(40480700001)(31686004)(40460700003)(43740500002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2024 22:56:21.4188
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR02MB8500.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(136003)(366004)(39830400003)(346002)(396003)(230922051799003)(1800799012)(186009)(451199024)(64100799003)(41300700001)(83380400001)(31686004)(66476007)(66946007)(66556008)(36756003)(2906002)(110136005)(6512007)(6506007)(2616005)(26005)(38100700002)(31696002)(86362001)(8936002)(316002)(5660300002)(8676002)(6486002)(478600001)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?YWw4T3ZzajBOYjNqNlh5dlNyVkg5YmVQMG9WTk1hcU5wWFNZOUFFWWRDUlk2?=
+ =?utf-8?B?Tllsd2EvWkNxV0hsK2JxWXZkMnZkc3ZQeTBrQ2F3d0tpcHgwUCtPL0MrQ0Za?=
+ =?utf-8?B?VkxqUEZHb2FYOVA0amhPVUZEWkErM0ZPOGRGcGU0N2w5dGFpa0Q1TFRrVzZI?=
+ =?utf-8?B?NG9qVG5YcDBFcXR3TUcrQU5wQ05CSG92Y0l3M1JBaHZ6Zm8yOUF3bDArZ05i?=
+ =?utf-8?B?d3FEYjYyemx1ZDRTVkFsdG1WOHZLZGpBQkRtZXpmeGlHZEQxQkVNOVpvVEpM?=
+ =?utf-8?B?QVFFZGt6MmR4Z3dvMVpsVzdJS1gybEpVRXYzbWNsVFhPN0FIYU4xUk53UVhI?=
+ =?utf-8?B?VHgyRlRXUUZWaEdIcWdvWmVBOHYyK1dtSVFYL0NXbHNKQ2pTcGtPTUZUK3k3?=
+ =?utf-8?B?ZTJQVFJIb01hN0U3NlhySXFrUGtjY2FrRW94UkJrSVVKZ2tJeStjc21uOVY1?=
+ =?utf-8?B?ZTZlYXZXUW9VRTRsR3IyZDcvQzRhUDZwWXJ4aHIxMWEybE9yOVJUN2w0djVv?=
+ =?utf-8?B?YXNiK3VhcmFHN0lLSCt5ZEZKQ3h4WHlPd3VCQ3c4dWtTNDNTTUtWWVpibGtw?=
+ =?utf-8?B?Q3dRcXYwSTRueTJjdW1la0cyaFJsakliZWtYOWYvS2gybnJ1bE4ycVFORS9P?=
+ =?utf-8?B?MEc3VTdjeHZMa2Z0RnBta1ZWTFRsV1NDZmQ4VHRHS2RqZFpUWlZhVnB4NnA5?=
+ =?utf-8?B?UEJBY2ppMVhIQVlVSXIzTUN6UmRyKzUrdlpUQXNERlpRMzN2VFhLcEJHcnJq?=
+ =?utf-8?B?VGhwR1lvOEhNcDdIdmtYUVVOMy9RL1NVRlZqejMyVk9PWHNJQWp4T2cxTDl0?=
+ =?utf-8?B?cXZyckFqM2gxbm5NNXlEUWpCbDFUUnVxTnlJNDRvTGZCL3UxNHJ3Q2RJQkg0?=
+ =?utf-8?B?VEgwK0VCYW5MMkIwRlpNWENNZElQYVNFZjQ1aHZvZnRjN1k0UTUrbnVoMmNj?=
+ =?utf-8?B?aVp2b1NZVEJMRDRTQ1M1REFNUytKLzlUc3Q3WTQ4d29HdjUrWGZkbFRmNVNK?=
+ =?utf-8?B?aTIzclZqM2NpMktjS3dPVkxyS2dTK2ZEZU5PZFlaQWxpaDFCK1dZWjhrcmFU?=
+ =?utf-8?B?dnovRzZHdE9PdzVnWFc0RC9wRzAwTjk2aGV1bzVBbVpWRWc0YjVtbCs3YU1B?=
+ =?utf-8?B?cDJjYlF2aDVKOXBrenJLL0JVU2pKUGZsVUhzUjU5eU9UTWY2aHE1M2REbE9N?=
+ =?utf-8?B?Vjhqb3RIQWJvNHlCU2llVWlyVlUxLzJkS3gyTmdBQzZ1TEI1Tndad2xUQXJK?=
+ =?utf-8?B?ZEtvcnVNUE03bWw0YUlud2RJSDN4ZWgwWWQrbS9iUlExcUNvSkZJWWY3akpM?=
+ =?utf-8?B?S09rMTdwQnd2LzVVcFVIQmd3dTF1VTg0cE81Tk9hTDZnaE51K2srSi85aHRq?=
+ =?utf-8?B?bXd4UmlvdVlNTjhjS2JyNVlBYVhNbDNjRWlzUktDK055VCtBZ3JZRTdvSEtw?=
+ =?utf-8?B?Yy94RjVrQVJiMFFEakQwNjhCVE4zWEN5NCtIMVhSaTQ0dTlmeDhYMmpITWZ0?=
+ =?utf-8?B?WFY4NEgvMmlEMmdGNXhjeWF5aURiZE9iZnhpcGdJRE5yeitQZHhiVko0Tmkw?=
+ =?utf-8?B?WmZBOTdEaHZhL21zeXBzNG1LK2w5ejN6cktoSTJsbWxoaHV4Z0QvKy9sSGF6?=
+ =?utf-8?B?QzhIeHJMT21HQUlVUnlmbHF1bDNVSUordnYydFhobVF1aXFoQ2R6SS9lOE9y?=
+ =?utf-8?B?VUtlRklSWGNncHJKSkl3ZmFCVTBRU1hoWHMvVUNDYjA3dzJpQlRUcTIrOGc5?=
+ =?utf-8?B?ZTJqc1JTMS9QSHBxYWUySno1ZVFsc3htT3MwVWc5cEU5d0FVVlRJS2ZQZWs2?=
+ =?utf-8?B?U3hSSVNUcjhLV1VVZXgyV20xbHJNNlVGVDhVZEZWeHlWZEMxQVByVGFiTXBX?=
+ =?utf-8?B?aW1ZK1hTVlAxZjBGN2dNY3lmWnNvQnFtRHdXTDU4TE40MTg0bWpzTE5uRGR3?=
+ =?utf-8?B?V0FOT2R0L3BtMWVCRmh4VkQ5SEdCVVNzMDdjcWI4MlBnNE85dTNqdnlkUlFX?=
+ =?utf-8?B?bHBNV0VaeEtXRWIwYkpJSGkyMVljd0E5S3hoTUx5Y1BvWVhzRk9MZFFCcklK?=
+ =?utf-8?B?a1YwOTQzSC83THBSczRLQmtUR2psaEp5SndWMnd0M2lYSjVoeHo4TGRvM2Zn?=
+ =?utf-8?Q?3NYbWzsUFU59Qy5seNJ66Me8v?=
+X-OriginatorOrg: axentia.se
+X-MS-Exchange-CrossTenant-Network-Message-Id: 061c045f-35ce-41e9-3025-08dc122fe555
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR02MB8500.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2024 23:00:10.1633
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ebb93c3d-a7d5-49e4-4e21-08dc122f5d23
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS2PEPF00003447.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5317
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eDUqKmw68PWhnQzCpyGZ8duH2SYt6jmEWafuNbu5Rbc9vNpuhBObOdR8AqeP44br
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR02MB7971
 
-Hi,
+Hi!
 
-On 1/9/24 4:11 AM, Jarkko Nikula wrote> On 1/9/24 09:56, V, Narasimhan wrote:
->>   * Looks like the issue is with this below commit:
->>   * i2c: designware: Fix lock probe call order in dw_i2c_plat_probe()
->>
-> Hmm... This makes me even more confused since your device AMDI0010 should not even use the access semaphore.
+2024-01-10 at 21:13, Heiner Kallweit wrote:
+> If this is an adapter on a muxed bus segment, assume that each segment
+> is connected to a subset of the (> 8) overall memory slots. In this
+> case let's probe the maximum of 8 slots, however stop if the number
+> of overall populated slots is reached.
 > 
-> So linux-next works if you run a commit before it or revert these three patches? (commit 2f571a725434 ("i2c: designware: Fix lock probe call order in dw_i2c_plat_probe()") doesn't revert without reverting two other related commits after it)
+> If we're not on a muxed segment and the total number of slots is > 8,
+> report an error, because then not all SPD eeproms can be addressed.
+> Presumably the bus is muxed, but the mux config is missing.
 > 
-> git show f9b51f600217b38f46ea39d6aa445e594bf3eb30 |patch -p1 -R
-> git show b8034c7d28a988be82efbf4d65faa847334811f7 |patch -p1 -R
-> git show 2f571a72543463ef07dc3ac61e7b703b9ad997f9 |patch -p1 -R
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+>  drivers/i2c/i2c-smbus.c | 19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
+> index 74807c6db..e94714d5a 100644
+> --- a/drivers/i2c/i2c-smbus.c
+> +++ b/drivers/i2c/i2c-smbus.c
+> @@ -351,13 +351,18 @@ void i2c_register_spd(struct i2c_adapter *adap)
+>  	if (!dimm_count)
+>  		return;
+>  
+> -	dev_info(&adap->dev, "%d/%d memory slots populated (from DMI)\n",
+> -		 dimm_count, slot_count);
+> -
+> -	if (slot_count > 8) {
+> -		dev_warn(&adap->dev,
+> -			 "Systems with more than 8 memory slots not supported yet, not instantiating SPD\n");
+> -		return;
+> +	/* Check whether we're a child adapter on a muxed segment */
+> +	if (i2c_parent_is_i2c_adapter(adap)) {
+> +		if (slot_count > 8)
+> +			slot_count = 8;'
 
-Narasimhan is right, if I check out, build and boot this commit:
+The comment "Only works on systems with 1 to 8 memory slots" above
+i2c_register_spd() is now incorrect and needs adjusting.
 
-       2f571a725434 i2c: designware: Fix lock probe call order in dw_i2c_plat_probe()
+> +	} else {
+> +		dev_info(&adap->dev, "%d/%d memory slots populated (from DMI)\n",
+> +			 dimm_count, slot_count);
+> +		if (slot_count > 8) {
+> +			dev_err(&adap->dev,
+> +				"More than 8 memory slots on a single bus, mux config missing?\n");
+> +			return;
+> +		}
+>  	}
+>  
+>  	/*
 
-I get the same stacktrace on the serial console.
+The loop below this hunk is limited by dimm_count, but it is checked
+separately for each muxed segment. It is therefore now possible to
+instantiate a total number of slots larger than the dimm_count.
+That was not possible before. I don't know if that's a problem, but
+the check have been (silently) relaxed.
 
-If I try the previous commit (174a0c565cea "efi/loongarch: Directly position the loaded image file"),
-the system boots fine.
-
-The same thing happens with the three reversions above:
-next-20240110 gets the stacktrace, but with the three
-reversions, it doesn't.
-
-Is your parallel post probe runtime suspending time window
-theory no longer applicable?  These AMD EPYC systems have a
-lot more cores than their client equivalents, and AMD power
-management code has had a lot of improvements lately.
-
-Thanks,
-
-Kim
+Cheers,
+Peter
 
