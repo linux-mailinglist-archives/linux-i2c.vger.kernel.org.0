@@ -1,217 +1,155 @@
-Return-Path: <linux-i2c+bounces-1264-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1265-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6786A82A997
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jan 2024 09:51:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE99082A9BC
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jan 2024 09:53:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D7691C2358C
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jan 2024 08:51:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AD6B289064
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jan 2024 08:53:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5614DFBFC;
-	Thu, 11 Jan 2024 08:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0725FC0A;
+	Thu, 11 Jan 2024 08:53:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DYmmgc9U"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21814FC10
-	for <linux-i2c@vger.kernel.org>; Thu, 11 Jan 2024 08:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rNqmj-0001ht-Ud; Thu, 11 Jan 2024 09:51:33 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rNqmg-001sxL-Vn; Thu, 11 Jan 2024 09:51:30 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rNqmg-00796n-2r;
-	Thu, 11 Jan 2024 09:51:30 +0100
-Date: Thu, 11 Jan 2024 09:51:30 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: Dong Aisheng <aisheng.dong@nxp.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Wolfram Sang <wsa@kernel.org>, Alexander Sverdlin <alexander.sverdlin@siemens.com>, 
-	linux-i2c@vger.kernel.org, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	linux-arm-kernel@lists.infradead.org, NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v8 1/1] i2c: lpi2c: use clk notifier for rate changes
-Message-ID: <zac3ukluinnmybdmmkwqbq3zjlha4f5pri4zhxrfg2vfshr7ez@nc25m4uxmroc>
-References: <20240110120556.519800-1-alexander.stein@ew.tq-group.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF5AEFBF0
+	for <linux-i2c@vger.kernel.org>; Thu, 11 Jan 2024 08:53:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-50eabbc3dccso5590119e87.2
+        for <linux-i2c@vger.kernel.org>; Thu, 11 Jan 2024 00:53:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704963214; x=1705568014; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=01lGEtDxdau3gAhM3+zApps0xo9Z5hzOauxAkYb6JpQ=;
+        b=DYmmgc9Udg9aV1haFpikZp51jdlZVMz9IFwJQCg0BVND4LDfj97xb5V5QVEZGr7vbp
+         OXaBkmccrDpr/vv3yznI1Agsp9fjH11LJo2aTK4Mg4PgtZYKrdRM6dPNgnBt+gVFR0Ch
+         /0cR1UyLB9lWi+tvabLnS9nOqrDz952V4IWmF6O0SQxiDleQ8YoTWHeV49q9PTcu4lsL
+         JoBa0bENqlNPKgzpb/fLKrb/6Pr5ElrhoyPR8igW8MeVUc9bwrH57f/uGU99gp1/CapO
+         lLWWD42/SdBMJgvUHtv66HhokF1aZRt1Ar6s0yoZv0mLKDtnJqFVjllrs/LwdrXJN/8F
+         exVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704963214; x=1705568014;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=01lGEtDxdau3gAhM3+zApps0xo9Z5hzOauxAkYb6JpQ=;
+        b=JLiF6oqLlFFvczPUvQSx+MkZ8imnym29H984mjta42gokOUf8WhMWFq4BtE7gA3jvg
+         0MlMEy0Y/KUYe6HEH4bWr1rQCRwKZHX2on5ZD8ZsH2F05/86+2V852kpRp6Ntjat2ifH
+         O2te+WKxOJRg2Vs4sUhVFofMYDgn5XmY4ahUp9ATqbrRb2ykXJU4WklMSL2DyZ8PWyl7
+         7+QOI3JlRh6i0TEG28/uv7u3KC4frDeF3eBW7icY9k61EfT6zZIAmWscGDspUCAMGkjy
+         A/vDYIpL7TpswfIEtRIvDj9A4XwkCeDv6JEDV7WDiORZ54OsY/07xRaQ66EfZ7fz+OeR
+         NnAA==
+X-Gm-Message-State: AOJu0Yynv+YX1O7eeT4PPjQr3wGRoTPd4jXNsOFHsG18au2DDFHi/sm+
+	n4UI01uGHEG6ZfxGThntIgMhoyvUaaWdcw==
+X-Google-Smtp-Source: AGHT+IGvk8RsJRaCtASz+jgJVzAGcAzuuEgQ7JIFXiNqf78cH7ppAdAIjvHzo67wiBSkdWlugrU05A==
+X-Received: by 2002:ac2:593b:0:b0:50e:da89:cf07 with SMTP id v27-20020ac2593b000000b0050eda89cf07mr194259lfi.94.1704963213999;
+        Thu, 11 Jan 2024 00:53:33 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.223.112])
+        by smtp.gmail.com with ESMTPSA id az8-20020a05600c600800b0040e49045e0asm1050480wmb.48.2024.01.11.00.53.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Jan 2024 00:53:32 -0800 (PST)
+Message-ID: <34337634-5a34-4824-9779-bed99b1e213b@linaro.org>
+Date: Thu, 11 Jan 2024 09:53:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="j2noxqvniyazonyh"
-Content-Disposition: inline
-In-Reply-To: <20240110120556.519800-1-alexander.stein@ew.tq-group.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: muxes: pca954x: Allow sharing reset GPIO
+Content-Language: en-US
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>, peda@axentia.se,
+ p.zabel@pengutronix.de
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240108041913.7078-1-chris.packham@alliedtelesis.co.nz>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240108041913.7078-1-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
---j2noxqvniyazonyh
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-On Wed, Jan 10, 2024 at 01:05:56PM +0100, Alexander Stein wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
->=20
-> Instead of repeatedly calling clk_get_rate for each transfer, register
-> a clock notifier to update the cached divider value each time the clock
-> rate actually changes.
-> A deadlock has been observed while adding tlv320aic32x4 audio codec to
-> the system. When this clock provider adds its clock, the clk mutex is
-> locked already, it needs to access i2c, which in return needs the mutex
-> for clk_get_rate as well.
->=20
-> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-> Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+On 08/01/2024 05:19, Chris Packham wrote:
+> Some hardware designs with multiple PCA954x devices use a reset GPIO
+> connected to all the muxes. Support this configuration by making use of
+> the reset controller framework which can deal with the shared reset
+> GPIOs. Fall back to the old GPIO descriptor method if the reset
+> controller framework is not enabled.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
-> Changes in v8:
-> * Improved commit message describing an actual observed deadlock
->=20
-> Changes in v7:
-> * Use dev_err_probe
-> * Reworked/Shortened the commit message
->  It is not about saving CPU cycles, but to avoid locking the clk subsystem
->  upon each transfer.
->=20
->  drivers/i2c/busses/i2c-imx-lpi2c.c | 40 +++++++++++++++++++++++++++++-
->  1 file changed, 39 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-=
-imx-lpi2c.c
-> index 678b30e90492a..3070e605fd8ff 100644
-> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> @@ -5,6 +5,7 @@
->   * Copyright 2016 Freescale Semiconductor, Inc.
->   */
-> =20
-> +#include <linux/atomic.h>
->  #include <linux/clk.h>
->  #include <linux/completion.h>
->  #include <linux/delay.h>
-> @@ -99,6 +100,8 @@ struct lpi2c_imx_struct {
->  	__u8			*rx_buf;
->  	__u8			*tx_buf;
->  	struct completion	complete;
-> +	struct notifier_block	clk_change_nb;
-> +	atomic_t		rate_per;
->  	unsigned int		msglen;
->  	unsigned int		delivered;
->  	unsigned int		block_data;
-> @@ -197,6 +200,20 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *=
-lpi2c_imx)
->  	} while (1);
->  }
-> =20
-> +static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
-> +				   unsigned long action, void *data)
-> +{
-> +	struct clk_notifier_data *ndata =3D data;
-> +	struct lpi2c_imx_struct *lpi2c_imx =3D container_of(nb,
-> +							  struct lpi2c_imx_struct,
-> +							  clk_change_nb);
-> +
-> +	if (action & POST_RATE_CHANGE)
-> +		atomic_set(&lpi2c_imx->rate_per, ndata->new_rate);
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
->  /* CLKLO =3D I2C_CLK_RATIO * CLKHI, SETHOLD =3D CLKHI, DATAVD =3D CLKHI/=
-2 */
->  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
->  {
-> @@ -207,7 +224,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *=
-lpi2c_imx)
-> =20
->  	lpi2c_imx_set_mode(lpi2c_imx);
-> =20
-> -	clk_rate =3D clk_get_rate(lpi2c_imx->clks[0].clk);
-> +	clk_rate =3D atomic_read(&lpi2c_imx->rate_per);
->  	if (!clk_rate)
->  		return -EINVAL;
-> =20
-> @@ -590,6 +607,27 @@ static int lpi2c_imx_probe(struct platform_device *p=
-dev)
->  	if (ret)
->  		return ret;
-> =20
-> +	lpi2c_imx->clk_change_nb.notifier_call =3D lpi2c_imx_clk_change_cb;
-> +	ret =3D devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
-> +					 &lpi2c_imx->clk_change_nb);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "can't register peripheral clock notifier\n");
-> +	/*
-> +	 * Lock the clock rate to avoid rate change between clk_get_rate() and
-> +	 * atomic_set()
-> +	 */
-> +	ret =3D clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "can't lock I2C peripheral clock rate\n");
-> +
-> +	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx->clks[0].clk));
-> +	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
-> +	if (!atomic_read(&lpi2c_imx->rate_per))
-> +		return dev_err_probe(&pdev->dev, -EINVAL,
-> +				     "can't get I2C peripheral clock rate\n");
-> +
+> 
+> Notes:
+>     This patch goes on top of Krzysztof's series adding the GPIO based reset
+>     controller[1]. With this I'm able to correctly describe my hardware
+>     platform in the DTS and have the resets appropriately controlled.
+>     
+>     Krzysztof, I'd be really happy if you included this in your series (if
+>     there is another round) but I'd also be OK with waiting until your
+>     series is in and re-sending this after.
 
-If the clkrate isn't expected to actually change, you can just delay the
-call to clk_rate_exclusive_put() until driver unbind time and not
-register a notifier at all. The result would be more lightweight, you
-wouldn't even need an atomic variable for .rate_per.
+Sure, I can take send it together.
 
-https://lore.kernel.org/all/20240104225512.1124519-2-u.kleine-koenig@pengut=
-ronix.de/
-might be beneficial for that.
+>     
+>     [1] - https://lore.kernel.org/lkml/20240105155918.279657-1-krzysztof.kozlowski@linaro.org/
+> 
 
-Having said that, improving the locking in the clk framework to not
-trigger this deadlock would be nice.
 
-Best regards
-Uwe
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Best regards,
+Krzysztof
 
---j2noxqvniyazonyh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWfrBEACgkQj4D7WH0S
-/k5AmAf/X/cJzH5AEbFxQ9KMNhp+kVjtFDmm3H0blDvactJSisu+bxixea+Rirzr
-n+eePI9G80hnXDs2WiNXrliT5az39yANHvknKxZ3Eu4FE6EoywiJIKLMaNO4kUFv
-viXpuXp+ZBgq8ZU2pZUHjcxMAwR4I0UjiczURj+XMmynK0TRfPXEhKlNvejIuJqE
-MNw+wKlAcmCdODnhg+kvoWaAozgjnlQvc94zmy2CLDgBc+GM3FVWbz6NlgDpTJzM
-KrX+YHbGpRfpUhpy+/K+NaToOiYTPDGpiux1UKC/dllOSMW85pH3W200PfkCwVMw
-NAA2yzbQN5gWk7r/8Kbz4xR5TfzfWw==
-=xibz
------END PGP SIGNATURE-----
-
---j2noxqvniyazonyh--
 
