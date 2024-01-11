@@ -1,201 +1,217 @@
-Return-Path: <linux-i2c+bounces-1263-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1264-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AA2682A7DF
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jan 2024 07:49:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6786A82A997
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jan 2024 09:51:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECEA4282054
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jan 2024 06:49:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D7691C2358C
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Jan 2024 08:51:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51022539D;
-	Thu, 11 Jan 2024 06:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HrSuoyWq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5614DFBFC;
+	Thu, 11 Jan 2024 08:51:50 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8313F53A0
-	for <linux-i2c@vger.kernel.org>; Thu, 11 Jan 2024 06:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-55745901085so6293127a12.0
-        for <linux-i2c@vger.kernel.org>; Wed, 10 Jan 2024 22:49:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704955774; x=1705560574; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dd07QyDIoOP3gzmBg4u8BJA36mwkVT6PTALF/MNB+YA=;
-        b=HrSuoyWqmV9eDnox8KI885CPg0+uS5UHOtat9v1r837rJgNH5eJauNfAuZF60MiCEm
-         htu5QB5IMaL/Obob9brmaMIyS3OcPHYk7087IMOK5yDeAh/6rHSqpxZKUTMs/dg2N05+
-         MO9ziWKHVyQyvvJrp+3xGdCrTW+/xSs18hRenAS5i9xZ38EMQ+7kd9sgtNRy1q5GagVg
-         /JlUmTO247+dxDk0xihBEwWXr2tOjcT+u6I90aeIkl7vhk+D+Xl2UX8F6wrC26pklNR+
-         CwZXsPKQPbIbDgvlnbyFZD3lkpOIPQsvq2ChNrDxIV8RkqRCex/qQ8iL9KUXsYsV6onI
-         XT+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704955774; x=1705560574;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dd07QyDIoOP3gzmBg4u8BJA36mwkVT6PTALF/MNB+YA=;
-        b=Mx2GCV6CBakFXg72XPZf+Uljj+2RjroM6Ior1cw5QfGmYwdL7T9KwS13BX2flxGTtS
-         r/r/A/inRF3LCB6yMGrfIzAdD2AX8MmZA/3eMReO4W5kdurdrOWSUEaEHRAaUtMmd2gx
-         bAmqHpbMxxGnp+hO3ENXOyfI/3Bc9MYzCmxxXDAgRXrp2B7UfbjC/32qGfksRkQKPpGS
-         wUPLQO4hMTYow0fq15HmARa6SJQ7xBIJyfllPWbAOfExRGLWgfm/BnYFnocABFazOCXi
-         xaHdPJUdE+utuWVzz3C5/2iEknlvqZgiTjbQl0eM9e0cQhgbD/XMMt8hVE6QYmV6wlDI
-         CTBQ==
-X-Gm-Message-State: AOJu0YwIhbsJjOEqcJyMKxOmq5pRbOXRDuYHiy5OzojZyVNpdzn+7X0X
-	rFcD6F1/NtQsL0q0WaoTuWU=
-X-Google-Smtp-Source: AGHT+IF5gBIDJFfQWndGQMtUIS0IcEMggkm6/fZMl7y5pB0NN6ixNRnVpFJ95NjcbtIGENBfPR72qw==
-X-Received: by 2002:a05:6402:1299:b0:553:29f0:d4ad with SMTP id w25-20020a056402129900b0055329f0d4admr267203edv.82.1704955774271;
-        Wed, 10 Jan 2024 22:49:34 -0800 (PST)
-Received: from ?IPV6:2a01:c23:bc57:a800:a010:8c1:dbe7:d401? (dynamic-2a01-0c23-bc57-a800-a010-08c1-dbe7-d401.c23.pool.telefonica.de. [2a01:c23:bc57:a800:a010:8c1:dbe7:d401])
-        by smtp.googlemail.com with ESMTPSA id r25-20020aa7d159000000b005585d2361d3sm254178edo.48.2024.01.10.22.49.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jan 2024 22:49:33 -0800 (PST)
-Message-ID: <3d48b7b8-7644-493b-b8f7-820dc7abc813@gmail.com>
-Date: Thu, 11 Jan 2024 07:49:34 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21814FC10
+	for <linux-i2c@vger.kernel.org>; Thu, 11 Jan 2024 08:51:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rNqmj-0001ht-Ud; Thu, 11 Jan 2024 09:51:33 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rNqmg-001sxL-Vn; Thu, 11 Jan 2024 09:51:30 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rNqmg-00796n-2r;
+	Thu, 11 Jan 2024 09:51:30 +0100
+Date: Thu, 11 Jan 2024 09:51:30 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: Dong Aisheng <aisheng.dong@nxp.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Wolfram Sang <wsa@kernel.org>, Alexander Sverdlin <alexander.sverdlin@siemens.com>, 
+	linux-i2c@vger.kernel.org, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	linux-arm-kernel@lists.infradead.org, NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v8 1/1] i2c: lpi2c: use clk notifier for rate changes
+Message-ID: <zac3ukluinnmybdmmkwqbq3zjlha4f5pri4zhxrfg2vfshr7ez@nc25m4uxmroc>
+References: <20240110120556.519800-1-alexander.stein@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] i2c: smbus: Prepare i2c_register_spd for usage on
- muxed segments
-To: Peter Rosin <peda@axentia.se>, Jean Delvare <jdelvare@suse.com>,
- Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@the-dreams.de>,
- Peter Korsgaard <peter.korsgaard@barco.com>
-Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <fc057deb-49f9-49cf-9549-13b2538ed92b@gmail.com>
- <74a310ba-bba8-40f8-82d8-fc0963840a36@gmail.com>
- <029a9957-0436-3a6d-e0d3-78fe2c2a9954@axentia.se>
-Content-Language: en-US
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-In-Reply-To: <029a9957-0436-3a6d-e0d3-78fe2c2a9954@axentia.se>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="j2noxqvniyazonyh"
+Content-Disposition: inline
+In-Reply-To: <20240110120556.519800-1-alexander.stein@ew.tq-group.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-On 11.01.2024 00:00, Peter Rosin wrote:
-> Hi!
-> 
-> 2024-01-10 at 21:13, Heiner Kallweit wrote:
->> If this is an adapter on a muxed bus segment, assume that each segment
->> is connected to a subset of the (> 8) overall memory slots. In this
->> case let's probe the maximum of 8 slots, however stop if the number
->> of overall populated slots is reached.
->>
->> If we're not on a muxed segment and the total number of slots is > 8,
->> report an error, because then not all SPD eeproms can be addressed.
->> Presumably the bus is muxed, but the mux config is missing.
->>
->> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->> ---
->>  drivers/i2c/i2c-smbus.c | 19 ++++++++++++-------
->>  1 file changed, 12 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
->> index 74807c6db..e94714d5a 100644
->> --- a/drivers/i2c/i2c-smbus.c
->> +++ b/drivers/i2c/i2c-smbus.c
->> @@ -351,13 +351,18 @@ void i2c_register_spd(struct i2c_adapter *adap)
->>  	if (!dimm_count)
->>  		return;
->>  
->> -	dev_info(&adap->dev, "%d/%d memory slots populated (from DMI)\n",
->> -		 dimm_count, slot_count);
->> -
->> -	if (slot_count > 8) {
->> -		dev_warn(&adap->dev,
->> -			 "Systems with more than 8 memory slots not supported yet, not instantiating SPD\n");
->> -		return;
->> +	/* Check whether we're a child adapter on a muxed segment */
->> +	if (i2c_parent_is_i2c_adapter(adap)) {
->> +		if (slot_count > 8)
->> +			slot_count = 8;'
-> 
-> The comment "Only works on systems with 1 to 8 memory slots" above
-> i2c_register_spd() is now incorrect and needs adjusting.
-> 
-Right, this comment can be removed.
-I'll wait for more feedback on the series before submitting a v2.
 
->> +	} else {
->> +		dev_info(&adap->dev, "%d/%d memory slots populated (from DMI)\n",
->> +			 dimm_count, slot_count);
->> +		if (slot_count > 8) {
->> +			dev_err(&adap->dev,
->> +				"More than 8 memory slots on a single bus, mux config missing?\n");
->> +			return;
->> +		}
->>  	}
->>  
->>  	/*
-> 
-> The loop below this hunk is limited by dimm_count, but it is checked
-> separately for each muxed segment. It is therefore now possible to
-> instantiate a total number of slots larger than the dimm_count.
-> That was not possible before. I don't know if that's a problem, but
-> the check have been (silently) relaxed.
-> 
-That's intentional. Keeping the current logic would have required to
-add some kind of counter at the parent level, keeping track of how many
-memory modules were instantiated per muxed segment.
-For the sake of simplicity this was omitted. Instead we may probe more
-slots than needed, however only impact should be that i2c_register_spd()
-may take a little bit longer on affected systems.
+--j2noxqvniyazonyh
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Cheers,
-> Peter
+Hello,
 
-Heiner
+On Wed, Jan 10, 2024 at 01:05:56PM +0100, Alexander Stein wrote:
+> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+>=20
+> Instead of repeatedly calling clk_get_rate for each transfer, register
+> a clock notifier to update the cached divider value each time the clock
+> rate actually changes.
+> A deadlock has been observed while adding tlv320aic32x4 audio codec to
+> the system. When this clock provider adds its clock, the clk mutex is
+> locked already, it needs to access i2c, which in return needs the mutex
+> for clk_get_rate as well.
+>=20
+> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+> Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+> Changes in v8:
+> * Improved commit message describing an actual observed deadlock
+>=20
+> Changes in v7:
+> * Use dev_err_probe
+> * Reworked/Shortened the commit message
+>  It is not about saving CPU cycles, but to avoid locking the clk subsystem
+>  upon each transfer.
+>=20
+>  drivers/i2c/busses/i2c-imx-lpi2c.c | 40 +++++++++++++++++++++++++++++-
+>  1 file changed, 39 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-=
+imx-lpi2c.c
+> index 678b30e90492a..3070e605fd8ff 100644
+> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> @@ -5,6 +5,7 @@
+>   * Copyright 2016 Freescale Semiconductor, Inc.
+>   */
+> =20
+> +#include <linux/atomic.h>
+>  #include <linux/clk.h>
+>  #include <linux/completion.h>
+>  #include <linux/delay.h>
+> @@ -99,6 +100,8 @@ struct lpi2c_imx_struct {
+>  	__u8			*rx_buf;
+>  	__u8			*tx_buf;
+>  	struct completion	complete;
+> +	struct notifier_block	clk_change_nb;
+> +	atomic_t		rate_per;
+>  	unsigned int		msglen;
+>  	unsigned int		delivered;
+>  	unsigned int		block_data;
+> @@ -197,6 +200,20 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *=
+lpi2c_imx)
+>  	} while (1);
+>  }
+> =20
+> +static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
+> +				   unsigned long action, void *data)
+> +{
+> +	struct clk_notifier_data *ndata =3D data;
+> +	struct lpi2c_imx_struct *lpi2c_imx =3D container_of(nb,
+> +							  struct lpi2c_imx_struct,
+> +							  clk_change_nb);
+> +
+> +	if (action & POST_RATE_CHANGE)
+> +		atomic_set(&lpi2c_imx->rate_per, ndata->new_rate);
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+>  /* CLKLO =3D I2C_CLK_RATIO * CLKHI, SETHOLD =3D CLKHI, DATAVD =3D CLKHI/=
+2 */
+>  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+>  {
+> @@ -207,7 +224,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *=
+lpi2c_imx)
+> =20
+>  	lpi2c_imx_set_mode(lpi2c_imx);
+> =20
+> -	clk_rate =3D clk_get_rate(lpi2c_imx->clks[0].clk);
+> +	clk_rate =3D atomic_read(&lpi2c_imx->rate_per);
+>  	if (!clk_rate)
+>  		return -EINVAL;
+> =20
+> @@ -590,6 +607,27 @@ static int lpi2c_imx_probe(struct platform_device *p=
+dev)
+>  	if (ret)
+>  		return ret;
+> =20
+> +	lpi2c_imx->clk_change_nb.notifier_call =3D lpi2c_imx_clk_change_cb;
+> +	ret =3D devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
+> +					 &lpi2c_imx->clk_change_nb);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "can't register peripheral clock notifier\n");
+> +	/*
+> +	 * Lock the clock rate to avoid rate change between clk_get_rate() and
+> +	 * atomic_set()
+> +	 */
+> +	ret =3D clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "can't lock I2C peripheral clock rate\n");
+> +
+> +	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx->clks[0].clk));
+> +	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
+> +	if (!atomic_read(&lpi2c_imx->rate_per))
+> +		return dev_err_probe(&pdev->dev, -EINVAL,
+> +				     "can't get I2C peripheral clock rate\n");
+> +
+
+If the clkrate isn't expected to actually change, you can just delay the
+call to clk_rate_exclusive_put() until driver unbind time and not
+register a notifier at all. The result would be more lightweight, you
+wouldn't even need an atomic variable for .rate_per.
+
+https://lore.kernel.org/all/20240104225512.1124519-2-u.kleine-koenig@pengut=
+ronix.de/
+might be beneficial for that.
+
+Having said that, improving the locking in the clk framework to not
+trigger this deadlock would be nice.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--j2noxqvniyazonyh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWfrBEACgkQj4D7WH0S
+/k5AmAf/X/cJzH5AEbFxQ9KMNhp+kVjtFDmm3H0blDvactJSisu+bxixea+Rirzr
+n+eePI9G80hnXDs2WiNXrliT5az39yANHvknKxZ3Eu4FE6EoywiJIKLMaNO4kUFv
+viXpuXp+ZBgq8ZU2pZUHjcxMAwR4I0UjiczURj+XMmynK0TRfPXEhKlNvejIuJqE
+MNw+wKlAcmCdODnhg+kvoWaAozgjnlQvc94zmy2CLDgBc+GM3FVWbz6NlgDpTJzM
+KrX+YHbGpRfpUhpy+/K+NaToOiYTPDGpiux1UKC/dllOSMW85pH3W200PfkCwVMw
+NAA2yzbQN5gWk7r/8Kbz4xR5TfzfWw==
+=xibz
+-----END PGP SIGNATURE-----
+
+--j2noxqvniyazonyh--
 
