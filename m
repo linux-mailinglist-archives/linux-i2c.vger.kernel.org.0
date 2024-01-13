@@ -1,65 +1,65 @@
-Return-Path: <linux-i2c+bounces-1289-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1290-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD34782CC7D
-	for <lists+linux-i2c@lfdr.de>; Sat, 13 Jan 2024 12:28:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AE8982CC81
+	for <lists+linux-i2c@lfdr.de>; Sat, 13 Jan 2024 12:28:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D00FB2327F
-	for <lists+linux-i2c@lfdr.de>; Sat, 13 Jan 2024 11:28:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDB161F22BA1
+	for <lists+linux-i2c@lfdr.de>; Sat, 13 Jan 2024 11:28:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D510620DEA;
-	Sat, 13 Jan 2024 11:28:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B628210E8;
+	Sat, 13 Jan 2024 11:28:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iqdkTSDq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrTJMdUz"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD8F1EF01
-	for <linux-i2c@vger.kernel.org>; Sat, 13 Jan 2024 11:28:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D265210E6
+	for <linux-i2c@vger.kernel.org>; Sat, 13 Jan 2024 11:28:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5590f5fa93cso121981a12.0
-        for <linux-i2c@vger.kernel.org>; Sat, 13 Jan 2024 03:28:02 -0800 (PST)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5537dd673e5so5918028a12.0
+        for <linux-i2c@vger.kernel.org>; Sat, 13 Jan 2024 03:28:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705145281; x=1705750081; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705145322; x=1705750122; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=zUha32C7Up/DhjYELAbnhrN1gcffSzH1UVEunFTRUz4=;
-        b=iqdkTSDqre3Ye04r93i2FXf6ntx87cGp93Rg/+4lI5xV2WJKqi7HC6UATuJleqV2/N
-         z6edpNusYLxej2WUdf/F1tTSRgpPvcegjZIKRxoqxYxYRWtsxwhyhcnfuw8fozVe30VC
-         S4a9DlrwdsgZvcTK7ZE1xRC5NXSu6SDCPH/50aEhCk7pk1Ez3v5S4KJikHjglJdbGeFt
-         QojSI+ZayZhb7e5bWj2/MtYV2Nu9FPbfS/ZHz526hDOXlmmTJ7Gp1o8MGnEAAXmxs7SZ
-         asFmuUOioD/4QdogpOtuKQFJjCCz+TUo02578/UpP7fonMwnQiFs+Mub4PdKF2z0jP4e
-         mb0A==
+        bh=eZSGjavzMUfm362ryRQkY7Uf/93vytn3D/7BnA+MQHI=;
+        b=VrTJMdUz3rxOxcm4I7Mq/z1TPnhQFNfQdGvaoyBflC8Fg9oTDik8VFs68WrrHFsGwT
+         n9kBflvepQJpxSmUpfzsnSOKyE+1zK5rs1NlfLbSDwOtsn+duwVWiHABGXfGL5DJ2k7O
+         aglUyfyYRyVlrzizuPeYvrSE0BjPbPeE705eNRtVDP0erQAgvaK/kvyVwrhNHyWiNQYC
+         87CtMC/yMtaTOyotrVbgIxo6yvOL0H+nSmz4E097j9zSWPWO8iAxoT26osSxG8wD3LiV
+         iP/BhymbmIHUaIJbHAqP1VGxQexPemkA7NnVU/0p+CoPaS99NtCpd6T2dYh3CPn1bZme
+         FBSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705145281; x=1705750081;
+        d=1e100.net; s=20230601; t=1705145322; x=1705750122;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zUha32C7Up/DhjYELAbnhrN1gcffSzH1UVEunFTRUz4=;
-        b=nfkNHGjopjF+Et5CWGcQduLVgd+iR7B6Cq8ucbcTVxirHnwcRk/nAWMVGqMvei8Edj
-         m6pFQ9VoJldNpPK499xKut1wLtIXBvTj5Sz4cZqLrNLLTqooksQIh/MS21apBvjb+rth
-         mcInzdYAp3GAltZxqelmCOohHIvzXGEQ76n58QDKYIiy791ufbiUgG5tDJvIPIyCeSGD
-         WGzPaHMHzKjvKABOgl36eVizS8X5tDsRt0xr58oVVCUiW6qdtJ861sXxkiWdtKNfO4LN
-         cFfqCuHbNvjNsNToTnxFcoJedCecqbgkW83Soy4sTpSy8BjNgEeOKwVRe1jTlw4+35OQ
-         TRpQ==
-X-Gm-Message-State: AOJu0Yxmkh1XhotVSoaKDxfwBOyzWhH5GZ7O7Z1rlMAHqXUzo/7F3wmT
-	OwcEBC7gl9v9ZWtGchBXJk4+EjH6ocg=
-X-Google-Smtp-Source: AGHT+IH9Jf9k2sxaq/HZ/9IaDk+Z3QJVKg7qjMxx6VzS877/lQGKZdEIWkYs/rKcPb9hiRfdzUrqqA==
-X-Received: by 2002:a05:6402:1745:b0:555:3b98:7540 with SMTP id v5-20020a056402174500b005553b987540mr1261975edx.33.1705145281265;
-        Sat, 13 Jan 2024 03:28:01 -0800 (PST)
+        bh=eZSGjavzMUfm362ryRQkY7Uf/93vytn3D/7BnA+MQHI=;
+        b=Xx9WI/ZMtSPiSTqrryR9H1MeCE6/1/EYKZIxy90A/ZsWNwbDDF5jkvHJRAStZ/Z/42
+         LZnw/bL6b1eOCLHQA5jsIHyYN4HcrBW9zjk/tJHOwWgPYYBnRII3SPfvGTglKpM2ekc5
+         svzRv4bPEPuUWNhKc0s7/SlVxxMwjfYoc76+ssV+ii+i+/VVoIgrq6VZIXlgBGKWEvQU
+         PaMQRO8+1JeMTfe9ud9MkNEWM/bv46fzut09CFlGhhwLafqjMvdAdDKJAwhRYnggkNIO
+         nedfG2G1+WCePF4wC/B4yncNutBwc/64psuWAOdx2JvewrO0nBRme0dgshw64nqvp51U
+         WDlQ==
+X-Gm-Message-State: AOJu0Yxpnj1rSiwkh+CJl0eU6+kjoWWVRWGbPRTi8Hl8egnHP9eMa9eg
+	8RCEdeo0jrl0ewdMfcBHhN8=
+X-Google-Smtp-Source: AGHT+IEa4lhUcKSp1g9zqS47f1yv5ZzNFvE0JM+IZJfYvxUQa+c5oRG8FaAyJ+qoM6k8KLrNTR+bYg==
+X-Received: by 2002:aa7:d4cb:0:b0:558:6000:6b0f with SMTP id t11-20020aa7d4cb000000b0055860006b0fmr1533398edr.74.1705145322506;
+        Sat, 13 Jan 2024 03:28:42 -0800 (PST)
 Received: from ?IPV6:2a01:c22:6f53:1400:a4e3:d977:260a:1bdd? (dynamic-2a01-0c22-6f53-1400-a4e3-d977-260a-1bdd.c22.pool.telefonica.de. [2a01:c22:6f53:1400:a4e3:d977:260a:1bdd])
-        by smtp.googlemail.com with ESMTPSA id u23-20020a05640207d700b005573b375589sm2833313edy.96.2024.01.13.03.28.00
+        by smtp.googlemail.com with ESMTPSA id u23-20020a05640207d700b005573b375589sm2833313edy.96.2024.01.13.03.28.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Jan 2024 03:28:00 -0800 (PST)
-Message-ID: <a239882a-5181-47a2-be83-44522f5b16cc@gmail.com>
-Date: Sat, 13 Jan 2024 12:28:01 +0100
+        Sat, 13 Jan 2024 03:28:42 -0800 (PST)
+Message-ID: <0e3b68f7-f287-48bf-b087-09ec137a48bb@gmail.com>
+Date: Sat, 13 Jan 2024 12:28:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH v2 3/4] i2c: mux: gpio: Allow to call i2c_register_spd on a
- muxed segment
+Subject: [PATCH v2 4/4] i2c: i801: Call i2c_register_spd() on muxed bus
+ segments
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
@@ -123,47 +123,26 @@ In-Reply-To: <9f37f64e-f5b8-4928-8716-6d2846c2688a@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Allow the gpio-based multiplexer to call i2c_register_spd on
-muxed segments. First user will be i801.
+Instruct child adapters to call i2c_register_spd() for each muxed
+bus segment.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/muxes/i2c-mux-gpio.c           | 1 +
- include/linux/platform_data/i2c-mux-gpio.h | 2 ++
- 2 files changed, 3 insertions(+)
+ drivers/i2c/busses/i2c-i801.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/i2c/muxes/i2c-mux-gpio.c b/drivers/i2c/muxes/i2c-mux-gpio.c
-index 6b979a0a6..c841407c7 100644
---- a/drivers/i2c/muxes/i2c-mux-gpio.c
-+++ b/drivers/i2c/muxes/i2c-mux-gpio.c
-@@ -161,6 +161,7 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
- 	}
- 	mux->gpios = muxc->priv;
- 	muxc->priv = mux;
-+	muxc->register_spd = mux->data.register_spd;
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 3932e8d96..15c93ec5b 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -1404,6 +1404,7 @@ static void i801_add_mux(struct i801_priv *priv)
+ 	gpio_data.n_values = mux_config->n_values;
+ 	gpio_data.classes = mux_config->classes;
+ 	gpio_data.idle = I2C_MUX_GPIO_NO_IDLE;
++	gpio_data.register_spd = 1;
  
- 	platform_set_drvdata(pdev, muxc);
- 
-diff --git a/include/linux/platform_data/i2c-mux-gpio.h b/include/linux/platform_data/i2c-mux-gpio.h
-index 5e4c2c272..cbeb74f92 100644
---- a/include/linux/platform_data/i2c-mux-gpio.h
-+++ b/include/linux/platform_data/i2c-mux-gpio.h
-@@ -20,6 +20,7 @@
-  * @n_values: Number of multiplexer positions (busses to instantiate)
-  * @classes: Optional I2C auto-detection classes
-  * @idle: Bitmask to write to MUX when idle or GPIO_I2CMUX_NO_IDLE if not used
-+ * @register_spd: call i2c_register_spd for the child adapters on muxed segments
-  */
- struct i2c_mux_gpio_platform_data {
- 	int parent;
-@@ -28,6 +29,7 @@ struct i2c_mux_gpio_platform_data {
- 	int n_values;
- 	const unsigned *classes;
- 	unsigned idle;
-+	unsigned int register_spd:1;
- };
- 
- #endif /* _LINUX_I2C_MUX_GPIO_H */
+ 	/* Register GPIO descriptor lookup table */
+ 	lookup = devm_kzalloc(dev,
 -- 
 2.43.0
 
