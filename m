@@ -1,77 +1,94 @@
-Return-Path: <linux-i2c+bounces-1293-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1294-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F256C82CE50
-	for <lists+linux-i2c@lfdr.de>; Sat, 13 Jan 2024 20:40:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D77282D004
+	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jan 2024 09:34:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D4A41C20CB5
-	for <lists+linux-i2c@lfdr.de>; Sat, 13 Jan 2024 19:40:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25FF6282A36
+	for <lists+linux-i2c@lfdr.de>; Sun, 14 Jan 2024 08:34:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73C7763CB;
-	Sat, 13 Jan 2024 19:40:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA9B1878;
+	Sun, 14 Jan 2024 08:34:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="EkQrlm9F"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="abAvIo5G"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9531963B9
-	for <linux-i2c@vger.kernel.org>; Sat, 13 Jan 2024 19:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A681876
+	for <linux-i2c@vger.kernel.org>; Sun, 14 Jan 2024 08:34:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=NEicbFM6ufiWn2
-	F+93/G45Dh99cE/lbny42DPAanW0A=; b=EkQrlm9FwnvUN00REf2wH5jQCumnyy
-	h6oObSkvaqxRKOCeOhBhB3cwzB4ffF7WbMl7qgFIqRhIUU+PJYbkHNLDvHss92cV
-	MDuNQiZlt/N3GmQY6OQ6tBKS0ED4CosLt44L8FnQYjkpWLFlaIymlWU3Q3+iYrs/
-	D6IXpF5+5pITzZHAucU5kRUQcQxmiEGdSQHEPnDqpWa82FN5Rq58O5G+7fhW6WFm
-	ne3kmR6Q4QMI9qC7y+ZH6NcxkvJUUtGkv+yl5dOGD5zlcolGNx8TOABsqFmF7o6y
-	r3xjnvmUt5nbrlR4CPLjLdcb2TlNl1yXrZbiiWxZb05KgAqSElIjJ4zQ==
-Received: (qmail 1629115 invoked from network); 13 Jan 2024 20:39:55 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jan 2024 20:39:55 +0100
-X-UD-Smtp-Session: l3s3148p1@Z4Lr8dgOMnZQk7GI
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=JYdZ
+	TJOgA1hh+qhARPKertZnUoZS1wEqx8XXCR7Nh7E=; b=abAvIo5GDVhVYeCW14FO
+	+JtO4zzzYsGFGUrxbeTDeQjMwvWxyI9+0CfBtUpoEjJazQ0yUVp4phDFGQsSw6Jn
+	LJu9H5FcPYq6iBNWYySsIq4ifLY6gMKmlEPxkhZblXqS4VnXUdOB3z3FLuBJ3GGJ
+	tuYXYdsy80B9jdPh5M7qShsRe0Kt92fBIUOxI2IAJacFgpqVHrG5Kujj+RxgJ1co
+	yZqO/5m23i8DSGDOz2GR0ulNqjwfHGcXiuwKwivy1vtvPbVYtjiDcVWnNz8SH1KW
+	DwEpbZwJX5DxekCwP3aXx1G3vn1QITGl419J/Nm4AEv0yRXZdHGah3593FVV1zri
+	cg==
+Received: (qmail 1756940 invoked from network); 14 Jan 2024 09:34:06 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jan 2024 09:34:06 +0100
+X-UD-Smtp-Session: l3s3148p1@5GCbwuMOeF5Qk7GI
+Date: Sun, 14 Jan 2024 09:34:05 +0100
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
-Cc: linux-renesas-soc@vger.kernel.org,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH] MAINTAINERS: use proper email for my I2C work
-Date: Sat, 13 Jan 2024 20:39:43 +0100
-Message-ID: <20240113193942.2388-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.43.0
+Cc: linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: use proper email for my I2C work
+Message-ID: <ZaOcfeFY4lgtOmn8@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+References: <20240113193942.2388-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+BUwKiRL+Rj5C8ab"
+Content-Disposition: inline
+In-Reply-To: <20240113193942.2388-2-wsa+renesas@sang-engineering.com>
 
-Renesas is solely funding my I2C maintenance meanwhile, give them credit
-for that by using this email address.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--+BUwKiRL+Rj5C8ab
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 012df8ccf34e..1a1824790239 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9988,7 +9988,7 @@ F:	Documentation/i2c/busses/i2c-parport.rst
- F:	drivers/i2c/busses/i2c-parport.c
- 
- I2C SUBSYSTEM
--M:	Wolfram Sang <wsa@kernel.org>
-+M:	Wolfram Sang <wsa+renesas@sang-engineering.com>
- L:	linux-i2c@vger.kernel.org
- S:	Maintained
- W:	https://i2c.wiki.kernel.org/
--- 
-2.43.0
+On Sat, Jan 13, 2024 at 08:39:43PM +0100, Wolfram Sang wrote:
+> Renesas is solely funding my I2C maintenance meanwhile, give them credit
+> for that by using this email address.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
+Applied to for-next, thanks!
+
+
+--+BUwKiRL+Rj5C8ab
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWjnHkACgkQFA3kzBSg
+KbZbEA/+IHInM7qp/6WOsRQZbfinbSstUjMaV1BuF2nKf1IXzxfabsbH5okAuh1B
+8xOEMjuvtjiVd0uf89Uk3B0qgOnt9y1ydBPPUwe91h6MpC7AWpW1gGw5LLcfCX2Y
+qIlXiMHPNF9A44v8mVQ1grsPVhapqfGXVRc/Cd29dcxoX4HWyyGyjh/PFuPf7sNE
+ovIbDdPJ9HgIVD1pMfRhCc14YwCvCMlMWoXCxDsutOUOehsumaZid1+WP66VYU9L
++4TsFMhftSVM4EbNiCmNs//e92GTqy9XHr2m05trS05+Eejeh32xqnrAMkI8rUeS
+DzxY5eKranOv+ELvE1EyBEiugcNDi7ObKig/joikimuIbEWBi86lGOrBnc1sJaqR
+z3PVOJamMtRHK1dlyzBC5pkBFPu4DSl6wHJXtpsBikKyePlA5EMsDkGwujnV0ZOv
+Pwf7HmIoXJc37EM1Kaljk/VTh8RqppNnonLZjU9fmzcBIjoUhbIbUO+ond8dmm0p
+auwfdKvbGJ16dRwzljBLmn4rWL9z1vFQtsMHww9LY7Jlh3kk6DipWgVkzMnHeEHi
+3bVtq2OIQRbdSQ33RmcyuOiGpoVwTRofDaG5gibCFUobP5vr7ZGkTl6UAiZEAiBA
+32Mak9nSURykVqdR2O52nbxzLucz42YocmUWQcvPdK+T1Az++rU=
+=YuLa
+-----END PGP SIGNATURE-----
+
+--+BUwKiRL+Rj5C8ab--
 
