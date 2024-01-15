@@ -1,86 +1,75 @@
-Return-Path: <linux-i2c+bounces-1326-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1327-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE3EA82E29B
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 23:31:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 346C082E2B4
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 23:45:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24CD1B22142
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 22:31:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49A951C220C7
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 22:45:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDA621B7E0;
-	Mon, 15 Jan 2024 22:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EDB01B5BB;
+	Mon, 15 Jan 2024 22:45:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=axentia.se header.i=@axentia.se header.b="GeILUdNQ"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="S5onbD/K"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2132.outbound.protection.outlook.com [40.107.13.132])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2064.outbound.protection.outlook.com [40.107.94.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BAB91B5BB;
-	Mon, 15 Jan 2024 22:31:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=axentia.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axentia.se
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1D81B5A4
+	for <linux-i2c@vger.kernel.org>; Mon, 15 Jan 2024 22:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=neWrLDfLuZGYCCpfp6EalCwCPh5Y65lyVBE4mbffDzqIgKouvD86ypy39JexA4w3SCeXxt1EJdIGa/mwmU70BQ3UM3GnK0FuamagfFjKwBnoH5mFX43xKV3WsHQEORD3EnwtdIIwcUpxt5h19oVFoIaUXR9LqM/GrUqZiByWqqUHvUZqWeZlfQZWfbMWxiG8zuQHsOf0je2ayZ7N+gIq2sIFxr/INxKiI5NXeqb1JSiqsyJ/dI6P0CahK8yIZmbdFtuidUFlJxE9NI92QVn/13WkjXpaLoiTmxOzDBizWCoJa8+h1AqJyuxeiV523U0Zr6yml8VgRxnpnmlzhC6hng==
+ b=lqB671MPfmPPCFoGsz0/baPftsjf/q107tK0TO7Ggxhgl8yxx9zQCfZAFFiPKW1kOo4BNhHGkkq3qIaLFiC7nzvUjfRDy9PTWerx5acuQQv9sK88J7HxvTVyPJo0MQOwPvJxq5sEl/Fq7rwhJjx+NjHjSjgpQo3yhQcsJu1h2O+gi9XC/wbjMtNkwSbtCFxAmlOG8t0T0eihs+zMUFossaFLkyNWif3p64ZbLt5rpQBAKM9FaI+dbQKtAD8L3kjtxyKoFr5ex1mYYUoHkCrkN6hhWuBF1h6zbYcPA5YnI5hnz1gOU8tanXxZr5WWpAddbWw+ku9nxG55Y3M9a/gSFg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+QTl0O/f2VIvEidNODRaEcebBWX0rCI4I68ZXLsxDWg=;
- b=l1kucPMhbqYmBn4XqaktP0mVjbnSSpVHHMS2WgcJDyTc/5s+p7hbGzP4p9NqrRtenAaDRI4G6hyDZNbRsBDPO4/mSCRLjrZT7VLRQioG3VWHs39FXLctg6mbMZaYP73x2TDwe2F6nVypRBsz9wkLes0FoIHfppr4m/6Sbl6LWTIj75cTgqUs5uejxH/6StUVZKFzH/mzNDdtT1C4OYXxmRTJUJsjIH00v5TZO59z+6WZlIx0uC8BT1Zw00r82h1Z/X2bJl5T7HdnpCKwpGuCCSO+T6chqxo8Oqs7N/U3ujr0Jdj1HursSs6GtryXJvGfxnhrbWKTYnias0H8VAhnog==
+ bh=ePPu1ALTTGp+hCTV72IqF7Bd7B8NP7bThhht+BkqSfU=;
+ b=KgD7l+j69gezKydeXHO10H/42f2bvifjlVIbk4lnBx1irLa8bOfV75JGe5FFsjXJBmHTIZNVSKNDq2fZOgnha/Am+NhIAH7AqngQZvxjj22LWsQje0qNOwQpqIEolvd1CTMxvAvC25LJVNs7Qv54CrK0buAHcwq0ss6ogHWdMP6DYqf1wj4fJQXhXNETvML75KBTOC4izkuaUpVSgdc43cvM4SnETL28HiihSRWtdptm7/Zfx3LwnkqfJlMiDjhza6JfdxO5jT2+hf3RFJC141fNha4VkgdQHzcKW7eYkHqW1W5/yNe+dNqRs4eo4AavJGDObcrBvij8/eiAJvGLYA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+QTl0O/f2VIvEidNODRaEcebBWX0rCI4I68ZXLsxDWg=;
- b=GeILUdNQbFLUjKKBB/Rn/LszSnLBO+gzA4eXLBWIOWgOmuAUJ5BfFb4r3bHoJLEfETenPrlnp/YdoC6B8GhW72ejq1fr9m3xZ1bfgZXV0dRGNEYR7hAZW/vcCOrbQ688qBl6ezWJAWenmPPzaBEsZWU6WwhA0L8Pr1YLdH1SH3s=
+ bh=ePPu1ALTTGp+hCTV72IqF7Bd7B8NP7bThhht+BkqSfU=;
+ b=S5onbD/K7YRPVtjXEdhRHb/EA1zi5ST7tkM5LYGVrIXn//Yi2UHlvuPGlTjCfL2ETA4+rcFiLVZoRKHSEeDQDwsVMdBUe8myL2l3f2IGNqBcgCTnUwdNQYHJRt/6GVrmNG099D/HV9QF9vvDcZVaqwwq1R3tmExwqPfmI/j4csA=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from DU0PR02MB8500.eurprd02.prod.outlook.com (2603:10a6:10:3e3::8)
- by VI0PR02MB10535.eurprd02.prod.outlook.com (2603:10a6:800:1b8::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.26; Mon, 15 Jan
- 2024 22:31:14 +0000
-Received: from DU0PR02MB8500.eurprd02.prod.outlook.com
- ([fe80::4c56:a71b:d42d:11ba]) by DU0PR02MB8500.eurprd02.prod.outlook.com
- ([fe80::4c56:a71b:d42d:11ba%3]) with mapi id 15.20.7181.027; Mon, 15 Jan 2024
- 22:31:13 +0000
-Message-ID: <c147ae1b-87cc-52b1-4ec7-684d5e7cc5db@axentia.se>
-Date: Mon, 15 Jan 2024 23:31:10 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 04/14] mux: mmio: Add resume support
-To: Thomas Richard <thomas.richard@bootlin.com>,
- Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
- <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
- Tony Lindgren <tony@atomide.com>, Haojian Zhuang
- <haojian.zhuang@linaro.org>, Vignesh R <vigneshr@ti.com>,
- Aaro Koskinen <aaro.koskinen@iki.fi>,
- Janusz Krzysztofik <jmkrzyszt@gmail.com>, Andi Shyti
- <andi.shyti@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Tom Joseph <tjoseph@cadence.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
- Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>
-Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
- theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com
-References: <20240102-j7200-pcie-s2r-v1-0-84e55da52400@bootlin.com>
- <20240102-j7200-pcie-s2r-v1-4-84e55da52400@bootlin.com>
-Content-Language: sv-SE, en-US
-From: Peter Rosin <peda@axentia.se>
-In-Reply-To: <20240102-j7200-pcie-s2r-v1-4-84e55da52400@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6263.namprd12.prod.outlook.com (2603:10b6:8:95::17) by
+ DM4PR12MB6086.namprd12.prod.outlook.com (2603:10b6:8:b2::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7159.23; Mon, 15 Jan 2024 22:45:37 +0000
+Received: from DS7PR12MB6263.namprd12.prod.outlook.com
+ ([fe80::7a38:8f14:8998:89a7]) by DS7PR12MB6263.namprd12.prod.outlook.com
+ ([fe80::7a38:8f14:8998:89a7%3]) with mapi id 15.20.7181.022; Mon, 15 Jan 2024
+ 22:45:37 +0000
+Message-ID: <00f98ff9-ce2f-4edd-b4e4-a17e1a0170cd@amd.com>
+Date: Mon, 15 Jan 2024 16:44:24 -0600
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: designware: Revert recent changes to
+ i2c_dw_probe_lock_support()
+Content-Language: en-US
+From: Kim Phillips <kim.phillips@amd.com>
+To: Jarkko Nikula <jarkko.nikula@linux.intel.com>, linux-i2c@vger.kernel.org
+Cc: Wolfram Sang <wsa@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
+ Borislav Petkov <bp@alien8.de>, V Narasimhan <Narasimhan.V@amd.com>
+References: <20240111125658.921083-1-jarkko.nikula@linux.intel.com>
+ <f5493701-4cc7-42c2-b9bb-958744bd8626@amd.com>
+ <9bb96130-d662-4904-9e4b-6a823b51a990@linux.intel.com>
+ <614a9b32-d6e9-4506-a7a0-164954badffe@amd.com>
+Organization: AMD
+In-Reply-To: <614a9b32-d6e9-4506-a7a0-164954badffe@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: GV2PEPF00003830.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:144:1:0:5:0:1c) To DU0PR02MB8500.eurprd02.prod.outlook.com
- (2603:10a6:10:3e3::8)
+X-ClientProxiedBy: SA9PR11CA0004.namprd11.prod.outlook.com
+ (2603:10b6:806:6e::9) To DS7PR12MB6263.namprd12.prod.outlook.com
+ (2603:10b6:8:95::17)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -88,156 +77,151 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR02MB8500:EE_|VI0PR02MB10535:EE_
-X-MS-Office365-Filtering-Correlation-Id: cb70fa68-84d2-4963-b4ea-08dc1619ae6a
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6263:EE_|DM4PR12MB6086:EE_
+X-MS-Office365-Filtering-Correlation-Id: 922009ac-b13f-4bf7-1b4e-08dc161bb170
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	m0YZiRNLMrMocaIoLNxIeq31qLvuGArwGzit5a6BX+g/ar4UZsvcHrkR3MwJ7GFlg45zVIJov+4newfnfZtLhiXkYZtxaqMpHOS1CBiWWhdMQvG31XQJIxGufhIFitfCEuhzmUVD24uSyYQ0jhttciOwJuIgCsLVwefv3+QAbomoa70Vv/DheJs6rra4Y520UD5DEzViENJP4ekZ/z5e78d7ncEj1zcrrS6HMyLVt/Jjurb8eGIlM2D5GATBy1eHNEgmJXtXYCbqdsapOeJFKPwBpuMmUbcJilDUV4I1y8+GQn1wVjBp7hFKuU3qEqAo+iq9Ug4uGHhQuk10kY9a9NWzAi7WUp/ztd1NXlZNg0WUCy9CK0PS7SuST6CE+423PbmRkHPqHZc015730a4xQQbz4vNEa3TGl5W0wd50E0YzkNAc4BuNphbx2+78sBOTWakd/sxU3Di/o17KHRIBSbmMTKfJaF+EPeY8fAYNrMkxqeaBnIUKfVw0PICphzamDQ5VuQ+SZV8+GPrTdbmjCg/pOOJuMPns6ix5i/ZC37kZumHPTrIJCsBgQ9PMmZNk8cMoPyD3u2g1tz1qTlbkv+YFd2TfPdUmcMw7edwpSEn6rXKE3fdgQdfBYHiOFKldL/6R/kk4riweqH4gWAecBBrjkL9pcVFGwxyHgpIYm20=
+	uceECKvQo+E5HHymJp3qv8aqs3Cwh5eDby1sDloBuZm4W895IANL2+8s1qW5YuzZRBPjQUqmwYTynFwBn4pmEnwNeQbaxntfPtJ39QDZNTLij8vxTT2UQ0ObX8MGmHCTPD8EixRADa69kdPsuKR8IT7z82Rb7PO8+55KVYzkFsaZouVgEkd8mbehIEec/NTUEZ77Ch/3o9KqcWJwlKaWjlFFIE6JM7DiIJyvSEFbAUFWHiIx+5NcbAJR3DmXhpympz0GPqJHt3OUgrkjMj0uxDfznFdVAj9QvDhWyNMycPiCVDl3cIDRZQos8Zv8dpgNQLxr0Xi+ZJl6Tsieo7k+f0Gzz8b07f8W8J+ypoRMHUDMRCo8TJfIoW6lspyUJk2Kt8fXt2JR91OUf8g8iUz5Ro56mlCh+iihoZdeab/Asj1cKgLd3qV4GzUQ4n9ZcE6VvupQLXsKWZXg+hZvzc4OWSEQ2X2Na9i1krfzUxYA2Ssg4SQHn4SE/NTFW/8eZGCyVBpHI7kU3KCiWPNp2fVDKSR5XL+cVwSyC1RIvzy/7rGTT6OLlnvxKuddQr2xvo/c0t0tH1OovW/DI+rVwd3DJABFklVhrgNjHxl4nJqvdeWs2PUG72gn0l/m7RIXEnj/3GSxfxiPzTQrIdeob8r7ieR58O01Dl7m+IQ6bVE2VPNuWq1YVaku6DeR4yM3fZuA
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR02MB8500.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(396003)(346002)(39840400004)(366004)(136003)(230922051799003)(451199024)(1800799012)(186009)(64100799003)(66574015)(83380400001)(2616005)(66946007)(38100700002)(8676002)(5660300002)(8936002)(6512007)(4326008)(41300700001)(7416002)(478600001)(26005)(6486002)(6506007)(921011)(66556008)(110136005)(66476007)(316002)(2906002)(36756003)(86362001)(31696002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6263.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(136003)(346002)(396003)(39860400002)(230173577357003)(230273577357003)(230922051799003)(451199024)(1800799012)(186009)(64100799003)(8676002)(8936002)(4326008)(44832011)(2906002)(5660300002)(4001150100001)(478600001)(86362001)(31696002)(36756003)(6666004)(6486002)(2616005)(83380400001)(26005)(38100700002)(41300700001)(53546011)(6512007)(6506007)(36916002)(316002)(54906003)(66946007)(66476007)(66556008)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?QnVGRlU3Z2E4K2VjVlVjcGpSbmxnVE41VWRSTzkzUTdGVXhzT0ExdDk5dSti?=
- =?utf-8?B?UW8zZi8zZlgrMDdZdGZ2TXpzN0Z3cnNuWkJPc21OK0Y1bjdvK0pQUElGZ2ZO?=
- =?utf-8?B?M3pGWjJKZFhJdHk5bm5RRVhORS9mVEE1aWpSSEdkd0R1WjM5dHVqLzBnZEZJ?=
- =?utf-8?B?NnRkQ2JtYTVFanpIcVpkSWx1QVJJd1JQMEptZUM4MHlVRitrYS8rK28rdzVj?=
- =?utf-8?B?ZUMrdVNDVWVEUzNZZzlyM2UxT1NDeE5XaXRFczNIc1E2U0RmbjBIaTBydnVN?=
- =?utf-8?B?Ty8zQ2QrUHJjbFZIRXVoOXVqNnVrYzh3eUZMQVowTEI3N0ZKVEhlRUswdytF?=
- =?utf-8?B?ZmlORzZTZnpwVXF6T3EwZTZwSXZreDR1dDBsaDJ2UDhycjlqcmp5b01heTdh?=
- =?utf-8?B?TUlNVWhKUjBIaUt4WnN0cFMvbW91cytGTDN3U09OaVpXQW9lTG0vd1pvaDBZ?=
- =?utf-8?B?Yi9TMEpEZWY1RGJ0ZlNkL0FJbS9YY3RBSTJIa3Y4cG1PMEQwQlBIM3RlUE9E?=
- =?utf-8?B?NUFMenRSVUM0UTNaNXBDRzIwN0QvL3U5RGtuU2Fpdzg2UDNvQUFuOHlNM2s5?=
- =?utf-8?B?Ukl4Tmo5TmZiOEdHcXJneXh1OTRKZFlQR3N2SnRlUGF1bWw2WGN5dWtoWStL?=
- =?utf-8?B?NE5qSEdvdmdvZXZYTllTTnVYSHFRUFhVSXl3RE1PWEFWTVZueVVYMFE1WmY3?=
- =?utf-8?B?c1BROWlsemhKWFVNTzRJUmhROEpvQXBzUDFDMWIwdEkweERwbVhiTUZmYXd4?=
- =?utf-8?B?eU5TVytXRW9sT3pYbFNPWVRod3FKdXI1dVAvT3VGMFJpSFh6Y3Brdk96aE8y?=
- =?utf-8?B?bkMrSE5kT1ZFcCtGUkphRkI3Qk9IVlp1dGkzRWFHdUo3N295eUE4VExvaFR0?=
- =?utf-8?B?WE5oMEpCVHI2WEN0OGV0cE1mRkVQVU9NRGFJc3kxaVZzQzVEYVFjQUJFL3p1?=
- =?utf-8?B?bEtZeG81QlZIbTRYTlZNL0N1QktrRTFSWTNPVWdNWnZNQXJFTVBuZ20zS0dj?=
- =?utf-8?B?WlZhR0pPYW44T24rc0xMbnRGUUJlN2JBUGMrRjcyYzlKaC9vU2oyOXZteWcy?=
- =?utf-8?B?QnF5OEt6WkhEdjhuTWlZN1pQWjh4Y2FNNU9jSzBuVTloTGRNRHUzQVc5UXFB?=
- =?utf-8?B?TENjeVMrMnlOY1Fic3haU056RDhGL3dUZVozL21EVzNDMVEvMlpCNWdheTV3?=
- =?utf-8?B?YkY4ZTFTbzNubzEwM2JZK3ZHMFZBeHgzQUlEWTZJOVBsODQrTFVPQlVQaEdQ?=
- =?utf-8?B?NDJZMW9pb002SEN6Z0sxak51Nklqb29iRldWNTJMeDd3cEpBNHhGdkovVHpw?=
- =?utf-8?B?dkVpOHEzQStyUXdlSjZQeC9razdqUEhSNUUyVU5rRkE2a3Uvb21NaDhRZmI1?=
- =?utf-8?B?U1Rpb1FTYjU5R3dxMU9TaHgyMVpaVDdyWnNuZDIwY1JPWmNSVGUxd2VyL2Zn?=
- =?utf-8?B?L2VmZnpsM0xSaVdXR2QxMHZJNHRxRmkvSjVXMk9iSGRRT2Zac2lReDZ6RDFr?=
- =?utf-8?B?WkRxQ2JUZkRLaHdGb1ltR0xGbG9Ua1RZMlpHd0g5SkRaTEt1QXlLQnNoTWo3?=
- =?utf-8?B?bk1XY2t2RWZOclZ5ZERmTVVyYlV5THVKeGI5Um9NdWdreFgybFlDQm5QM1hN?=
- =?utf-8?B?L3FkT1YwK0ttTVlJaTV3UFJLbVhaREtRTEFoWUk0Ry9PUEtQSnNQWEhKZDJF?=
- =?utf-8?B?dExkUVJKNFhQWGVQVHY0NDRLT2lvS1VFdTg5TEV2VFlDaUF6RkNmM3VoWlJF?=
- =?utf-8?B?MGsvMnFOR0lPM2R6eStTd1lzcFV1U1lDSGd1L1Z4dEJEWS9qc0hEMkkyWm1G?=
- =?utf-8?B?MGYyQ3k3THpXTGk5bko3bzQvVUZUMHpmZjB0blgvYUh0Q3lJb3QrRHJBaDBD?=
- =?utf-8?B?RXlSRDdlS1hDdDEvd21xODJndU1VTWtsT2Frb0MvRlFJL1ZVbDQvZkxUQUdM?=
- =?utf-8?B?SWhUTkdMU3JxUUR5Z1Z2NEk2QmYrVE9Zb3I1azMxUVF4QWdJWnZEUzJXbUtC?=
- =?utf-8?B?TkVkaGpyZ0JjWEUrN3U5SDNxc0M1a3U1QkdwZkM5UzVRK2xKTlZXQ3I1U1gz?=
- =?utf-8?B?UnNTTU9va240Q1kwSlpyNCtMTnBVRGVNSXYwV3ZsbEo4c0tmVDN4QnNlWXBv?=
- =?utf-8?Q?YfpAVvwRYTuzzv5K842jzkoRa?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb70fa68-84d2-4963-b4ea-08dc1619ae6a
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR02MB8500.eurprd02.prod.outlook.com
+	=?utf-8?B?cDE2TVJIUSs3WVNmK0pVQ3Nrc0tTUFFFZDhaU3JvUmN0UlRqeG80djNCcXJN?=
+ =?utf-8?B?TWlrOUtCQjFPSTRHVXZUYkxjazBUYUtnSWVDN3JuVTR2bEE3UVZ2VGgybWlk?=
+ =?utf-8?B?K1I2RTlIUjFVZGlnclphZFpwYldXQk92dHpmNUphOFFscGdaNlB4dlRTTFY4?=
+ =?utf-8?B?U2lBOG1qT1ZJZCtLK1AzSVQyUjV3bll4L1g4b0Vva0RJc2VzcE9FaENiNmpr?=
+ =?utf-8?B?R0pVdXRuUFM2Ym9MUGJPNURwc3llVXIvL3FJamlaSDZuYzBLMlFac2k0WEw3?=
+ =?utf-8?B?KzFUS2lTNGluMXhDZ2NnMURmK1E3d01scmFTSDQ3TUxTdllXWi9meFhxbGZC?=
+ =?utf-8?B?eVcyT2t4WHIrRXJwdnRFa2MwWlB5YVRMamVzNytIaU41MitEdnBPc0d3aE1z?=
+ =?utf-8?B?OG52Y0Fnd0M1Q2JycWI0c05mNG5zMWNyZzcvbFJIWlZzTUdCSkk2RDQ3akc5?=
+ =?utf-8?B?eXhMMzFUU0RXSFh2b3g1VERPbzlLWVRtU25NN3F5bFlJbEhnQUNDS2g5OWxk?=
+ =?utf-8?B?a2ZTS3IyU1YzQXU4ZS9rTCtmMDFrZ3dpSmNRdjl6WVNPOFhhem43bXhBNmxs?=
+ =?utf-8?B?dlczZnBqaDR0VzZOSEhySzlyTFV2Z0ZvaWxQTDR2M0pobUVCUUQ4SjMrL3RO?=
+ =?utf-8?B?WEI5elhFckdmSXZ0Y202YktoWGNBUjFuV1dIenlhUFVjdVhaN2NHeXVlMVNV?=
+ =?utf-8?B?cnljbEJTSWV1UU83WGx3cytRZ1l4elRvdndQc1ErQWp5bXRySkZFbFpzTTBW?=
+ =?utf-8?B?ZWh3Ny9sM2RPM3dOVzQ3bU9PVWIzcUZZSkgyWlBaL2VyeGpNaDU3dDNmRlhr?=
+ =?utf-8?B?NnB3OE41dmJGM3JVemQxVEZmTXpkSUxlTGZJK1FydHNFTFRyNHoyK2ZyK1Mx?=
+ =?utf-8?B?UDRDTkQyQW9yQWpYRU9kUHFXWkJjQ1YzZDBDQVFjLzZMMTJxaFRtZFhDZUNh?=
+ =?utf-8?B?eTMybndlWFNWUGV3L0dSQThiaCtBdUwzWnNIaHd0WEV1N3hTQVh1Z1k3U3Qy?=
+ =?utf-8?B?ZURKdVNlQ0VaZGNkR3Y1dkVGMkh1anJ2dzdDRFNmUm9UcFRJVHlyU3ZFOTRz?=
+ =?utf-8?B?SWZLMTZ0MmdTNGxFczB2OUxmRWV5WVlydXpCNnpubDA2SFNyQmMyZDlnZ1Fk?=
+ =?utf-8?B?aXdGMTJjRjFDUFhYNy9BTnZENEt1ZTZxeUlxaC9MekRsdlFlZUFNd3FYa1Zo?=
+ =?utf-8?B?c2w5U2d5NTZQTlg0cWZPUkVOSytGakl4RnRZRGc1WjRXSmRnOXRjRkFOOFNC?=
+ =?utf-8?B?T1gxN0daZkdXSlVCTXdhUW9NOTNCdWhhbGUrRlU4MFhqTEhObnR5NG1WL3BO?=
+ =?utf-8?B?ZkZKejBxZlFHRGwzSjFsc2lydTRrWkMwK2xUcnpvcWVqUmNuUklSS25PT1JO?=
+ =?utf-8?B?SGE0RWpRSU80RUI1QUUzN28xYXdxOWRhVGxCTEExVGNqOEIxYkE4emlhNGJr?=
+ =?utf-8?B?cHg4YnBJc0xDTHlYVklkVGtmeHlrZlhBeHRLdERXSEtwV3JjUWJOMml3NzRv?=
+ =?utf-8?B?bWlGaVZrczFOY3N4akU0K05XS3l4eHpHV1JSbStwKzVWYnFManE3VTYzZDdX?=
+ =?utf-8?B?RFV4WURoOWFSVUFkYzZBSXFTbldDWG9zeXZwVFVtRVg5WWxPVHBvUXhFT2Fw?=
+ =?utf-8?B?NGRRQ29vcUFmaXFKTG5GNG83cWdiNEwzU0thVzBlNlpJdG5nWkcvNlozUnVt?=
+ =?utf-8?B?ckZuQkFKOEk0bm0xZEVQMXlwamJxS2lOQ2hIVWY2YzNRVlh5ZUlKUi9jc0s1?=
+ =?utf-8?B?UnlMYU5kODZHS0VOK3dHVTBTZHZmczFkSlZSNW5pMlNnUStnallUUS91bTdO?=
+ =?utf-8?B?STRObmZZd0FjSUlBOVNiYkM1ZDR2anBDaXk1NjBlMTBTWlBBUWhseHZkMnBH?=
+ =?utf-8?B?bS9uS2ZwYzN1bG0wNWYraUtRc045V1ZVUjlwSWw3clFnaHJxZWdNc1ZVQWVO?=
+ =?utf-8?B?Vll1S0VOczRlZjZQY1pxemRuZis3N0tzbW16NzB0VjAzK0hGc2poMWlDZ1Nz?=
+ =?utf-8?B?WkVtRDVVMG5PWUhnT0tyV0JOdDl4d2NGYjQwdlY0L3RnUUtsbDl5UXJSV3l3?=
+ =?utf-8?B?Ym8ySXZqSy8va3VJaDZsMUtJcGNhV2MvaG9sdW1BVUQ3T0dRZEw4bUsrVkpz?=
+ =?utf-8?Q?eBI+Qiuncq5GNR2FE8Srk4FRJ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 922009ac-b13f-4bf7-1b4e-08dc161bb170
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6263.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2024 22:31:13.7393
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2024 22:45:37.7905
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bhydkCJxfHzwjonOSyo0e3X3H5e+fm3TparmHQlrVViUiB56e5PPEalqtqJUTtec
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR02MB10535
+X-MS-Exchange-CrossTenant-UserPrincipalName: YNo8GWc0FtuKt1v8aau3B7yE8zNeOOKZM/KOfsS4MnehHPuvgVlbkpmYQ+AfMDtznnNcP7a4JpUcUQ83Qx689g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6086
 
-Hi!
 
-2024-01-15 at 17:14, Thomas Richard wrote:
-> From: Théo Lebrun <theo.lebrun@bootlin.com>
+
+On 1/15/24 3:16 PM, Kim Phillips wrote:
+> On 1/12/24 2:13 AM, Jarkko Nikula wrote:
+>> Hi
 > 
-> Implement resume support
-
-What Andy said, and please don't omit punctuation. Try to make it a
-pleasure to read your patches!
-
+> Hi,
 > 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
-> ---
->  drivers/mux/mmio.c | 34 ++++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
+>> On 1/11/24 19:56, Kim Phillips wrote:
+>>>> [    6.245173] i2c_designware AMDI0010:00: Unknown Synopsys component type: 0xffffffff
+>>
+>> This has puzzled me all the time since I'm unable to see which one of Andy's patches could cause it. However controller is clearly powered down since DW_IC_COMP_TYPE register reads 0xffffffff.
+
+Just FYI, that message is apparently 'normal' as, e.g., a stable v6.4
+based tree emits it, but it doesn't crash because of it:
+
+[    7.640335] usbcore: registered new device driver usb
+[    7.663651] i2c_designware AMDI0010:00: Unknown Synopsys component type: 0xffffffff
+[    7.677362] i2c_designware AMDI0010:01: Unknown Synopsys component type: 0xffffffff
+[    7.738163] pps_core: LinuxPPS API ver. 1 registered
+
+>> That I'd call as a regression one. Second regression is the Oops and I was speculating if commit bd466a892612 ("i2c: designware: Fix PM calls order in dw_i2c_plat_probe()") can cause it.
+
+So I just tested checking out bd466a892612, and indeed it produces
+the stacktrace.  Prior to that commit is v6.7-rc3, which boots fine.
+So right now I'm suspecting bd466a892612 is to blame for the stacktrace.
+
+Thanks,
+
+Kim
+
+>>> Hold on, I'm testing this on top of next-20240111 and still seeing the splat...
+>>>
+>> Btw, does this reproduce always? Can we be mislead if it happens somewhat randomly? Happens to boot once we revert some commits and then at another Andy's nearby commit does not and we make the wrong conclusion?
 > 
-> diff --git a/drivers/mux/mmio.c b/drivers/mux/mmio.c
-> index fd1d121a584b..ab4ef195fc0d 100644
-> --- a/drivers/mux/mmio.c
-> +++ b/drivers/mux/mmio.c
-> @@ -125,13 +125,47 @@ static int mux_mmio_probe(struct platform_device *pdev)
->  
->  	mux_chip->ops = &mux_mmio_ops;
->  
-> +	dev_set_drvdata(dev, mux_chip);
-> +
->  	return devm_mux_chip_register(dev, mux_chip);
->  }
->  
-> +#ifdef CONFIG_PM
-> +static int mux_mmio_resume_noirq(struct device *dev)
-> +{
-> +	struct mux_chip *mux_chip = dev_get_drvdata(dev);
-> +	int global_ret = 0;
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < mux_chip->controllers; i++) {
-> +		struct mux_control *mux = &mux_chip->mux[i];
-> +		int val = mux->cached_state;
-
-You are not supposed to look at (or change) cached_state outside the
-mux core.
-
-> +		int ret;
-> +
-> +		if (val == MUX_IDLE_AS_IS)
-
-The cached_state can never be MUX_IDLE_AS_IS. Sure, it happens to have
-the same actual value as the correct MUX_CACHE_UNKNOWN, but abusing
-that is all kinds of wrong.
-
-> +			continue;
-> +
-> +		ret = mux_mmio_set(mux, val);
-> +		if (ret) {
-
-If mux_mmio_set() fails, cached_state ends up wrong as it should be set
-to MUX_CACHE_UNKNOWN on failure. Low-level stuff like this needs to be
-done by the mux core, or things becomes a maintenance hazard...
-
-So, the meat of this function belongs in the mux core since none of
-it looks mmio specific. It could probably be named mux_chip_resume()
-or something such. That makes it simple to use the correct constant,
-and the mux_control_set() helper makes it easy to get the handling of
-cached_state right.
-
-Cheers,
-Peter
-
-> +			dev_err(dev, "control %u: error restoring mux: %d\n", i, ret);
-> +			if (!global_ret)
-> +				global_ret = ret;
-> +		}
-> +	}
-> +
-> +	return global_ret;
-> +}
-> +#endif
-> +
-> +static const struct dev_pm_ops mux_mmio_pm_ops = {
-> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(NULL, mux_mmio_resume_noirq)
-> +};
-> +
->  static struct platform_driver mux_mmio_driver = {
->  	.driver = {
->  		.name = "mmio-mux",
->  		.of_match_table	= mux_mmio_dt_ids,
-> +		.pm = &mux_mmio_pm_ops,
->  	},
->  	.probe = mux_mmio_probe,
->  };
+> It's possible, yes, since we initially blamed commit 2f571a725434
+> ("i2c: designware: Fix lock probe call order in dw_i2c_plat_probe()")
+> and now testing this patch produces the failure: I'm pretty sure
+> that those two boots were using the same exact kernel code base,
+> yet one didn't produce the stacktrace, and the other did.
 > 
+> I've since updated my BIOS to the latest, and did a factory reset
+> on both the host and BMC to try to be more stably reproducible, but
+> we shall see.
+> 
+>> Does bisecting between v6.7-rc1 and next-20240111 lead anywhere?
+> 
+> Not really, unfortunately:
+> 
+> # bad: [9e21984d62c56a0f6d1fc6f76b646212cfd7fe88] Add linux-next specific files for 20240111
+> # good: [b85ea95d086471afb4ad062012a4d73cd328fa86] Linux 6.7-rc1
+> git bisect start 'next-20240111' 'v6.7-rc1'
+> # good: [0e7cc4233dafe9474ab32825bda3a8fed92b08bb] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
+> git bisect good 0e7cc4233dafe9474ab32825bda3a8fed92b08bb
+> # bad: [627690dd85803b0ac9861751c663bad0d5ff6c1a] Merge branch 'drm-next' of git://git.freedesktop.org/git/drm/drm.git
+> git bisect bad 627690dd85803b0ac9861751c663bad0d5ff6c1a
+> # good: [cdf1b6bad35cbc1e2be672982cb0dc7825dafe14] Merge branch 'main' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
+> git bisect good cdf1b6bad35cbc1e2be672982cb0dc7825dafe14
+> # good: [04194a4f780895799cf83c86d5bb8bc11560a536] drm/xe: Fix lockdep warning from xe_vm_madvise
+> git bisect good 04194a4f780895799cf83c86d5bb8bc11560a536
+> # good: [b6e1b708176846248c87318786d22465ac96dd2c] drm/xe: Remove uninitialized variable from warning
+> git bisect good b6e1b708176846248c87318786d22465ac96dd2c
+> # good: [0f35b0a7b8fa402adbffa2565047cdcc4c480153] Revert "drm/amdkfd: Relocate TBA/TMA to opposite side of VM hole"
+> git bisect good 0f35b0a7b8fa402adbffa2565047cdcc4c480153
+> # good: [d4ca26ac4be0d9aea7005c40df75e6775749671b] drm/msm/dp: call dp_display_get_next_bridge() during probe
+> git bisect good d4ca26ac4be0d9aea7005c40df75e6775749671b
+> # good: [6aaff21547a08e5a151fbf7a3f7be5a68877d9e3] Merge tag 'drm-intel-next-2023-12-18' of git://anongit.freedesktop.org/drm/drm-intel into drm-next
+> git bisect good 6aaff21547a08e5a151fbf7a3f7be5a68877d9e3
+> # good: [3c064aea46d071ccf95a142be5532768a7fa6f02] Merge tag 'drm-misc-next-fixes-2024-01-04' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
+> git bisect good 3c064aea46d071ccf95a142be5532768a7fa6f02
+> # good: [b76c01f1d950425924ee1c1377760de3c024ef78] Merge tag 'drm-intel-gt-next-2023-12-15' of git://anongit.freedesktop.org/drm/drm-intel into drm-next
+> git bisect good b76c01f1d950425924ee1c1377760de3c024ef78
+> # good: [f48705f473cea37efeeaa6a197ae12730c112863] Bluetooth: Remove HCI_POWER_OFF_TIMEOUT
+> git bisect good f48705f473cea37efeeaa6a197ae12730c112863
+> # good: [7974b2128489d062c9d21419633eebde07f07032] Bluetooth: hci_event: Fix wrongly recorded wakeup BD_ADDR
+> git bisect good 7974b2128489d062c9d21419633eebde07f07032
+> # good: [f8c47ee39e6dc6170da06865b84e8c8b08e87ab0] Bluetooth: hci_event: Use HCI error defines instead of magic values
+> git bisect good f8c47ee39e6dc6170da06865b84e8c8b08e87ab0
+> # good: [ba0bc076e90fa6ae1284fc0b34d7460531c45ab7] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git
+> git bisect good ba0bc076e90fa6ae1284fc0b34d7460531c45ab7
+> # first bad commit: [627690dd85803b0ac9861751c663bad0d5ff6c1a] Merge branch 'drm-next' of git://git.freedesktop.org/git/drm/drm.git
+> 
+> Let me know if there are other ideas, otherwise I'll wait for the
+> series with the rearranged series from Andy.
+> 
+> Thanks,
+> 
+> Kim
 
