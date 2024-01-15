@@ -1,97 +1,132 @@
-Return-Path: <linux-i2c+bounces-1296-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1297-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B352B82D454
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 07:58:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4B8882D9E5
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 14:18:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BFCC2814E5
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 06:58:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 58EE3B20F40
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 13:18:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 855E23C15;
-	Mon, 15 Jan 2024 06:58:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W6yM9KO9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 611F3168D8;
+	Mon, 15 Jan 2024 13:18:23 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D153F3C0B
-	for <linux-i2c@vger.kernel.org>; Mon, 15 Jan 2024 06:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705301917; x=1736837917;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=GthENmDP5Xl6UBnbPyVkMGnv3vbBOBTnop7jZJN7k4U=;
-  b=W6yM9KO9YbuQuRK0lN8z44Oc+vtqgT0iLZ8ilfA1ialAmUn8ZQB5lJ5I
-   3ryi8pDW6XUvVZRn2QemT88vQAnqbIHcaCvNEqW+4vC0qtdbChANT66rv
-   L2BREHPNP6vRPue4fVPR4cok6Da3H6E1Gl4059w4M4rfGepJBn41OKcmz
-   fRzcyLEKk+uo2W7ZNU4xC9vFHQ95anPXujhsVyU3z2mzfGSeZvD4MbQl/
-   UzC9Ud0rvCMSTQrYtiYGy5pKGdPLefoW2V+Ba3ETGI2eG0N2dMY1f1iHT
-   fqkclxHolEqPoS7TfZVPehXOTSOAYbGVv7ZQ2EL9Lu1GfE/5VxVDqUf6N
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="13027020"
-X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="13027020"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2024 22:58:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="906973695"
-X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
-   d="scan'208";a="906973695"
-Received: from marquiz-s-2.fi.intel.com (HELO [10.237.72.58]) ([10.237.72.58])
-  by orsmga004.jf.intel.com with ESMTP; 14 Jan 2024 22:58:33 -0800
-Message-ID: <5c47fe25-082d-485a-b840-abe6b17834b6@linux.intel.com>
-Date: Mon, 15 Jan 2024 08:58:32 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31342168D0
+	for <linux-i2c@vger.kernel.org>; Mon, 15 Jan 2024 13:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:1376:70aa:e074:32d3])
+	by albert.telenet-ops.be with bizsmtp
+	id b1JF2B00534Hgv9061JFN4; Mon, 15 Jan 2024 14:18:15 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1rPMqI-00FdvR-7U;
+	Mon, 15 Jan 2024 14:18:15 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1rPMr0-00C0Eo-WC;
+	Mon, 15 Jan 2024 14:18:15 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH/RFC] i2c: sh_mobile: Switch R-Mobile A1/APE6 and SH-Mobile AG5 to new frequency calculation
+Date: Mon, 15 Jan 2024 14:18:12 +0100
+Message-Id: <f030f08f72dbcf83887013d000c1e2a1a9ffac81.1705324589.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: designware: Revert recent changes to
- i2c_dw_probe_lock_support()
-Content-Language: en-US
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Wolfram Sang <wsa@kernel.org>, Kim Phillips <kim.phillips@amd.com>,
- linux-i2c@vger.kernel.org, Mika Westerberg
- <mika.westerberg@linux.intel.com>, Jan Dabros <jsd@semihalf.com>,
- Andi Shyti <andi.shyti@kernel.org>, Borislav Petkov <bp@alien8.de>,
- V Narasimhan <Narasimhan.V@amd.com>
-References: <20240111125658.921083-1-jarkko.nikula@linux.intel.com>
- <f5493701-4cc7-42c2-b9bb-958744bd8626@amd.com>
- <9bb96130-d662-4904-9e4b-6a823b51a990@linux.intel.com>
- <ZaLj5Gg-k2b-TWFK@shikoro> <ZaQUi17I_3s4GjUL@smile.fi.intel.com>
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <ZaQUi17I_3s4GjUL@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 1/14/24 19:06, Andy Shevchenko wrote:
-> On Sat, Jan 13, 2024 at 08:26:28PM +0100, Wolfram Sang wrote:
->>>> Hold on, I'm testing this on top of next-20240111 and still seeing the
->>>> splat...
->>>>
->>> Btw, does this reproduce always? Can we be mislead if it happens somewhat
->>> randomly? Happens to boot once we revert some commits and then at another
->>> Andy's nearby commit does not and we make the wrong conclusion?
->>
->> Thanks for all the work trying to find the regression so far. As I want
->> to send out my pull request soon, I think it is safest if I revert the
->> whole series and we start with a clean new version.
-> 
-> Oh, but true. Let's start over later on. I will rearrange patches and Cc to AMD
-> in the next version, so we will have unquestionable ones first.
-> 
-I think everybody also likes sentence below from 
-Documentation/process/submitting-patches.rst:
+Switch the R-Mobile A1, R-Mobile APE6, and SH-Mobile AG5 SoCs to the new
+frequency calculation formula, to (a) avoid running the I2C bus too fast,
+and (b) bring the low/high ratio closer to the recommended ratio 5/4.
 
-"If you cannot condense your patch set into a smaller set of patches,
-then only post say 15 or so at a time and wait for review and integration."
+Measurement results on R-Mobile APE6 and SH-Mobile AG5 (fck=104 MHz,
+clks_per_count=2):
+  100 kHz: 106 kHz LH=1.12 before, 99.6 kHz L/H=1.22 after
+  400 kHz: 384 kHz LH=1.67 before, 392 kHz L/H=1.27 after
+
+Measurement results on R-Mobile A1 (fck=49.5 MHz, clks_per_count=1):
+  100 kHz: 106 kHz L/H=1.09 before, 99.6 kHz L/H=1.20 after
+
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Measurements after applying "[PATCH 1/3] ARM: dts: renesas: r8a73a4: Fix
+external clocks and clock rate"[1].  Before, the clock rates were even
+4% higher.
+
+Notes:
+  - fast_clock_dt_config is now unused, so I guess we should drop it,
+    and rename v2_freq_calc_dt_config to fast_clock_dt_config?
+  - The formulas in the documentation for R-Mobile A1 do not include the
+    "-1" and "-5", presumably this is for rounding?
+  - The formulas in the documentation for SH-Mobile AG5 include
+    the "-1" and "-5" in the example for 400 kHz, but not in the example
+    for 100 kHz.
+  - The SH-Mobile AG5 documentation suggests to use an L/H ratio of 5/3
+    instead of 5/4 for 400 kHz, which means the old formula is better
+    for 400 kHz?
+  - Remaining users of the old formula are sh7343, sh7366, and sh772[234].
+    At least for sh772[234], the "Transfer Rate" formula in the
+    documentation is the same as for R-Mobile A1.  Hence probably we
+    should switch the default_dt_config and the default fallback to the
+    "v2" formula, too?
+  - I am still a bit puzzled, as the "v2" formula introduced in commit
+    4ecfb9d3b229fff5 ("i2c: sh_mobile: add new frequency calculation for
+    later SoC") is basically what the driver did before commit
+    23a612916a51cc37 ("i2c: i2c-sh_mobile: optimize ICCH/ICCL values
+    according to I2C bus speed")?
+
+[1] https://lore.kernel.org/r/1692bc8cd465d62168cbf110522ad62a7af3f606.1705315614.git.geert+renesas@glider.be
+---
+ drivers/i2c/busses/i2c-sh_mobile.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-sh_mobile.c b/drivers/i2c/busses/i2c-sh_mobile.c
+index 5adbe62cf6212865..9e2e12d482d8e640 100644
+--- a/drivers/i2c/busses/i2c-sh_mobile.c
++++ b/drivers/i2c/busses/i2c-sh_mobile.c
+@@ -773,7 +773,7 @@ static int sh_mobile_i2c_r8a7740_workaround(struct sh_mobile_i2c_data *pd)
+ 	iic_wr(pd, ICCR, ICCR_TRS);
+ 	udelay(10);
+ 
+-	return sh_mobile_i2c_init(pd);
++	return sh_mobile_i2c_v2_init(pd);
+ }
+ 
+ static const struct sh_mobile_dt_config default_dt_config = {
+@@ -797,7 +797,7 @@ static const struct sh_mobile_dt_config r8a7740_dt_config = {
+ };
+ 
+ static const struct of_device_id sh_mobile_i2c_dt_ids[] = {
+-	{ .compatible = "renesas,iic-r8a73a4", .data = &fast_clock_dt_config },
++	{ .compatible = "renesas,iic-r8a73a4", .data = &v2_freq_calc_dt_config },
+ 	{ .compatible = "renesas,iic-r8a7740", .data = &r8a7740_dt_config },
+ 	{ .compatible = "renesas,iic-r8a774c0", .data = &v2_freq_calc_dt_config },
+ 	{ .compatible = "renesas,iic-r8a7790", .data = &v2_freq_calc_dt_config },
+@@ -807,7 +807,7 @@ static const struct of_device_id sh_mobile_i2c_dt_ids[] = {
+ 	{ .compatible = "renesas,iic-r8a7794", .data = &v2_freq_calc_dt_config },
+ 	{ .compatible = "renesas,iic-r8a7795", .data = &v2_freq_calc_dt_config },
+ 	{ .compatible = "renesas,iic-r8a77990", .data = &v2_freq_calc_dt_config },
+-	{ .compatible = "renesas,iic-sh73a0", .data = &fast_clock_dt_config },
++	{ .compatible = "renesas,iic-sh73a0", .data = &v2_freq_calc_dt_config },
+ 	{ .compatible = "renesas,rcar-gen2-iic", .data = &v2_freq_calc_dt_config },
+ 	{ .compatible = "renesas,rcar-gen3-iic", .data = &v2_freq_calc_dt_config },
+ 	{ .compatible = "renesas,rmobile-iic", .data = &default_dt_config },
+-- 
+2.34.1
+
 
