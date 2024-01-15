@@ -1,71 +1,71 @@
-Return-Path: <linux-i2c+bounces-1320-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1321-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE1FF82E131
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 21:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE0CB82E139
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 21:04:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E50D71C221E8
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 20:03:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10E341C2219E
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 20:04:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7BDF19475;
-	Mon, 15 Jan 2024 20:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 918651946C;
+	Mon, 15 Jan 2024 20:04:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PHu8vTJP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qt19dkz2"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009EF1A712;
-	Mon, 15 Jan 2024 20:02:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E375A19473;
+	Mon, 15 Jan 2024 20:04:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a28cc85e6b5so1085481166b.1;
-        Mon, 15 Jan 2024 12:02:40 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a2ac304e526so875419666b.0;
+        Mon, 15 Jan 2024 12:04:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705348959; x=1705953759; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705349063; x=1705953863; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fv9XBLOpYPAupVH4VJlqIAgoTeB9qFyrwGApny5s9n4=;
-        b=PHu8vTJPRE26Zt5pCNgDk+i5OJ1KW/fJ2GIvRZ5MTnZj3EQRhmOVYmcGhcLXD4lZ6K
-         bRq/X4YELInOL3Th7K+zQXsMrVBjuxuWjofZOVQTB22J0dAAhQpxXj2pJSXDb5b092fn
-         eUjp4sOqbzbN/Vx85hSZbAOtP6YF48oTg5gaTulmZyoLKra6zoLFE21qOuNo2B0TQzJx
-         l12pRoWPmfLDURSf71+RSgU8K4ndWBMIHDNWUE4HuTb+FFh2eOJE94FSjWd6vXhWc/NQ
-         5nctcAi/tznlnUJQXFyhj7sha0tdPNS2jDuZ1geaHO/P6TUVxieuWwGJSOLIxhKxvADk
-         GKDQ==
+        bh=i8RSS6kBkW56tbpViMqYqGAGsyQRy2p0tJi4wBiJqmU=;
+        b=Qt19dkz21V/R2GXWp7oDtra0RNPCYrhAsjD74TMAGKgGMm/fGSdwa2qEBBlAdxzwM7
+         IrB9zuFEKyXZnMygfOv+7lIbLsKXX4dlSPkfqgJY3PTKCtKbaqIWKvDsXoMyq3V3FIFh
+         UJyfvbqQX/rBIap5NYxHKNBLN+gzB2x3nP2+htUvbxeH0OeTgFafvDdSoHqQSzsm4UvF
+         B8Ky4VDczkm3Ir6l6FN1fCsBTq81jK+gCa+rZ/qcE57sZwHsOip14PFigUrORjS3O1lk
+         yNzihSk7awcmTwVncu5fleBWu2hOw59wRc2cQf38aKA88GkpGYCu5uXNL38kIY9ljScJ
+         7y/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705348959; x=1705953759;
+        d=1e100.net; s=20230601; t=1705349063; x=1705953863;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fv9XBLOpYPAupVH4VJlqIAgoTeB9qFyrwGApny5s9n4=;
-        b=UgguxIvuIzHcLGqM29HpTPMSjJw+D5b2i6z92ljHY57svtsDwOYMgBalFBYehURJkS
-         UX8q0+C2SomysYELY38PXxTqg0jwep4G4wmjBLWRk4/lOkmQJZTTVgwYmOISb2NWS3Ij
-         e1PvHzeRRPgQumHaFHekMtdOrnhMT0n5U97+BLVNBIrauCb4LxLK414lhCkuDg9vsYb9
-         PRGgUNn6IHabaEj9A+xlzwHJD2HDiApEegTMZoSlyrd9FTNcx1BmXc+JnzD+0Q+kHcj6
-         t3vIU7bZkouM7WW72lYyZcJjIboCWfSvwB4+ljF/2QHEidgG6Bga1lvZ3pSHSWpRgPLA
-         CwSA==
-X-Gm-Message-State: AOJu0YwmNMapzYQDDzrao56vlmcVHzTi8rCaA7C9oaqk+qdrTN63XWoY
-	WfIAjskIJ3VmsxtAdIHM5/8fV6X4jQm09j2YYeA=
-X-Google-Smtp-Source: AGHT+IFGtkui4lng3GSiRYoHvFlRcvlu7L0C2EI9PWrxqxFGpBJHPQ/cYp9p96ExxQEDsVPdlsgZU/bzCs9OSzxXglE=
-X-Received: by 2002:a17:906:b053:b0:a2a:7404:cf5d with SMTP id
- bj19-20020a170906b05300b00a2a7404cf5dmr2017687ejb.114.1705348959235; Mon, 15
- Jan 2024 12:02:39 -0800 (PST)
+        bh=i8RSS6kBkW56tbpViMqYqGAGsyQRy2p0tJi4wBiJqmU=;
+        b=sMAkybBqbCA6BmvWPZS5g8L9ToetSGeXPp8KqUsNbo7NIYXKf7G4PAlitXIPuc3fEA
+         h7guLMYGWiIVKJDdEBD1RTDDbTEbMGr8RpOtGCsgE3nu+JdcczW7XKgKHAL5z0uUdzYf
+         kUjRagAGnIwB8BXtwrX4WPLsCXl/Cief52s1ZGHFcRw/FKBEm9cGxd63nAXZcL03Is+M
+         /6DuoWKgH4yfGrwUziw81IO9v/hmZzsd3VVod+OT8GQh2qeG1iuKN7ajFlYpx8wrc8Vl
+         zMCvEy36kS9S+ouupdoPACImWhyfEEvyZs2xg1/Udi5JWxx6ol0LhXj/MeB++IBiAiws
+         ZU3w==
+X-Gm-Message-State: AOJu0YzMAHJyD1tpMMXlDw4Gmm2ryRWZ2E2z4IJmveCkHM8t0UsWPRkN
+	tC8Iv9WKTbpfxnuyBkLKtSiVzQJ46iKpmcJIy/w=
+X-Google-Smtp-Source: AGHT+IFJ3GSf+wjuplgZ/O7AubrBpCxq5ZziDSX/b+fRkPr0IsBfvOcIfeT/L2dW0x0aOspKjHv4GueCmR/QMik45Zg=
+X-Received: by 2002:a17:907:d89:b0:a27:be67:1743 with SMTP id
+ go9-20020a1709070d8900b00a27be671743mr3863297ejc.40.1705349063219; Mon, 15
+ Jan 2024 12:04:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240102-j7200-pcie-s2r-v1-0-84e55da52400@bootlin.com> <20240102-j7200-pcie-s2r-v1-2-84e55da52400@bootlin.com>
-In-Reply-To: <20240102-j7200-pcie-s2r-v1-2-84e55da52400@bootlin.com>
+References: <20240102-j7200-pcie-s2r-v1-0-84e55da52400@bootlin.com> <20240102-j7200-pcie-s2r-v1-3-84e55da52400@bootlin.com>
+In-Reply-To: <20240102-j7200-pcie-s2r-v1-3-84e55da52400@bootlin.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Mon, 15 Jan 2024 22:02:01 +0200
-Message-ID: <CAHp75Verff06LE0QFaDRoun=ANpGfVU1tHknvvQZd_KyzLVP5Q@mail.gmail.com>
-Subject: Re: [PATCH 02/14] pinctrl: pinctrl-single: move suspend/resume to suspend_noirq/resume_noirq
+Date: Mon, 15 Jan 2024 22:03:46 +0200
+Message-ID: <CAHp75Vcr+pSjj+27WmW5GmC_QvpJu3E81C-GjxqdhrCAByevpQ@mail.gmail.com>
+Subject: Re: [PATCH 03/14] i2c: omap: wakeup the controller during suspend callback
 To: Thomas Richard <thomas.richard@bootlin.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
 	Andy Shevchenko <andy@kernel.org>, Tony Lindgren <tony@atomide.com>, 
@@ -87,54 +87,33 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Jan 15, 2024 at 6:16=E2=80=AFPM Thomas Richard
 <thomas.richard@bootlin.com> wrote:
 >
-> The goal is to extend the active period of pinctrl.
-> Some devices may need active pinctrl after suspend and/or before resume.
-> So move suspend/resume to suspend_noirq/resume_noirq to have active
-> pinctrl until suspend_noirq (included), and from resume_noirq
-> (included).
+> A device may need the controller up during suspend_noirq or
+> resume_noirq.
+> But if the controller is autosuspended, there is no way to wakeup it
+> during suspend_noirq or resume_noirq because runtime pm is disabled
+> at this time.
+>
+> The suspend callback wakes up the controller, so it is available until
+> its suspend_noirq callback (pm_runtime_force_suspend).
+> During the resume, it's restored by resume_noirq callback
+> (pm_runtime_force_resume). Then resume callback enables autosuspend.
+>
+> So the controller is up during a little time slot in suspend and resume
+> sequences even if it's not used.
+
+Same comment
 
 ->...callback...()
-(Same comment I have given for the first patch)
 
 ...
 
->         struct pcs_device *pcs;
+>  }
 >
-> -       pcs =3D platform_get_drvdata(pdev);
-> +       pcs =3D dev_get_drvdata(dev);
->         if (!pcs)
->                 return -EINVAL;
+> +
 
-Drop dead code.
-This should be simple one line after your change.
+Stray blank line is added.
 
-       struct pcs_device *pcs =3D dev_get_drvdata(dev);
-
-...
-
->         struct pcs_device *pcs;
->
-> -       pcs =3D platform_get_drvdata(pdev);
-> +       pcs =3D dev_get_drvdata(dev);
->         if (!pcs)
->                 return -EINVAL;
-
-Ditto.
-
-...
-
-> +static const struct dev_pm_ops pinctrl_single_pm_ops =3D {
-> +       SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pinctrl_single_suspend_noirq,
-> +                                     pinctrl_single_resume_noirq)
-> +};
-
-Use proper / modern macro.
-
-...
-
->  #endif
-
-Why ifdeferry is needed (esp. taking into account pm_ptr() use below)?
+> +static int omap_i2c_suspend(struct device *dev)
 
 --=20
 With Best Regards,
