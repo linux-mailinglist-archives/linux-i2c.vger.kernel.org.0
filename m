@@ -1,71 +1,71 @@
-Return-Path: <linux-i2c+bounces-1322-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1323-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD14482E142
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 21:06:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B6EB82E148
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 21:09:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 692282838A1
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 20:06:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE23E282B05
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 20:09:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD1BE19471;
-	Mon, 15 Jan 2024 20:06:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FB1A1946F;
+	Mon, 15 Jan 2024 20:09:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D4NHu6N7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="heHjV5H1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D46518E2A;
-	Mon, 15 Jan 2024 20:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A031A18E3A;
+	Mon, 15 Jan 2024 20:09:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-55969c01168so1388652a12.1;
-        Mon, 15 Jan 2024 12:06:29 -0800 (PST)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a28ab7ae504so868856466b.3;
+        Mon, 15 Jan 2024 12:09:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705349188; x=1705953988; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705349363; x=1705954163; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=87z/U/eZmGA0TAuJWEdp0n7QdUhBeveGTh40YHaQDwQ=;
-        b=D4NHu6N7CpjfCfWhuL4FAv97HkJvhuR++KXjQqvRchEjgm4it5w07ETx6kIibNpSoh
-         k1IYEhVen57wNaqlcdaGcPrqEqVgLrWsA7qbUayk9LmWUAMWFBk2TUfpiZuPgK6VMf9P
-         Z+UVfGyF5o/bomXrtPJ8+1m3rfRAXVLkZmpImtf6bGj0O79gqtM0ZYFVZlCcUV5y9i7H
-         p1TJjLqJlVj+HOFBS6w69XscaYQEUpq20EkIK+tTwl0soYPyDumEyrReu576ABF97Yv/
-         Xv9QPtNNqBKICnErO1j+TirzygBVTswYHPLdZ/A2dyneX7b8ZBrd5mLbjGs7bqhvL6Vz
-         msug==
+        bh=eTSsmF9bay5eiASBLzGyhlZe0LQNn59Lj5uJ3Vfhg1s=;
+        b=heHjV5H1+l/x0SMXp2JLdQ7NrEDSyNzT7Elipm7NMRIM6UBR8h7hAfDAz5L2o8wFIV
+         byXARA72cDQQPGKXdW0iIFRxlWIPHFcccH/f4DCxk4wU2c/Hns2pBcOm3QIbJScU5rHd
+         CrvvBsJL7xOYSLlf44Z3t+Drv85XrhPpZck3OaSaL0FZkPW/0Tguqm0T3CGJD69EVg0f
+         xoqzsEusxgCr5nQGx6KV37nWyOUu3MzvELN9AteUs0nBgcPs2TWFJngHKUuG0aayjM/l
+         UbeVnYKQc3dGr1ZmuafkvcmhZbRbF3r7FVVh2cXFX5rCthDwX4tjGeejOWA+B8Sj+EpH
+         qKhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705349188; x=1705953988;
+        d=1e100.net; s=20230601; t=1705349363; x=1705954163;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=87z/U/eZmGA0TAuJWEdp0n7QdUhBeveGTh40YHaQDwQ=;
-        b=OiuEc0kKIVnTo8lzucNDyfidTHW7lq7mWG2KBMavhhPtzjxn7BYKQlR47VAdXPO/mZ
-         0SWoftjlhfxQeOf6zAl3LnjrrgJ0fpPiiojphTZ0LduRFBBD26VwckZEP1YkmY4/nNJZ
-         T/F9I7Dmp4R39Cx4pZWeME8VKywKOki2ggYYISFkQfMbsUo3awy2L1KXnjgpq2I5KIy9
-         4CJdaY28ELccP+pOtdkpORzOhzpE7HmDW5vYL0DiybC+tCrT9x7dXOanBxriXMbhbGd7
-         mrl+Jf3Br71bBT8HwBKef/rOdX9oPCndoZj4SX1cUQkPma3ixxuVEV2ZYIAbFacVlFoQ
-         jnOg==
-X-Gm-Message-State: AOJu0YxCFZ9oXxJULJpvh0XPv+kf0+NG6+OHp1A6PIN7mFyLZ+WvOmB4
-	tvy2W29+IDWSAKQ4gSMQXdpa618PVpBoqdn8AXo=
-X-Google-Smtp-Source: AGHT+IHsGuZhFMr80G5DfnYOLEnb6oIGs7BJiiLJfQW8ZbTBFNvUcUSdt4iuoqGylqjyWRGa+ORIiKkxjeS8hFu9nm0=
-X-Received: by 2002:a17:907:3dac:b0:a23:690e:48bf with SMTP id
- he44-20020a1709073dac00b00a23690e48bfmr7583783ejc.12.1705349188168; Mon, 15
- Jan 2024 12:06:28 -0800 (PST)
+        bh=eTSsmF9bay5eiASBLzGyhlZe0LQNn59Lj5uJ3Vfhg1s=;
+        b=bmkp6oxlVeGcWUMzOmpd6/UBrZNks/evvDXDNUpt08+R8P6j3+IgjOKPFs0UxkzGmG
+         k81S0o1ZtdH/30dukzrBWwuTLGpOHZmsGTJq6CIJteR45U6uHY9flO04Kiy/SalxSBJW
+         edFL09+OHit80GD3lOOSzhMzflaAg8/+P/JGVrFaaabGMH9evK2fjwuRtppf1GSnnCSh
+         lPy9bVDfyG4QMHEp19lIaTDpwwfo9LrIOK4nt9o1iYeHqRiv86eWbpCIw0vu0MB57rV9
+         TpS271f4cflDe4XqNeAPYENZ6byx5s0a0Jxk0RNdQyG9YnuVjKGelV1lYjR19R3faOh6
+         j3rA==
+X-Gm-Message-State: AOJu0YxD24MVkeVanUjiwFGfGJivA1hK6ps/brgdlXS1Oftdih9GLpjL
+	8It0JpN2MzlAckAMCdprI7J7h0XzDpNGT9iv/oM=
+X-Google-Smtp-Source: AGHT+IH4K/0MSQ2AdSJavyYxu02KhPdDIrkcZQ+IgMJl9YgR7xGb5Z6QZpkBkLn2Jd6lpzIzNOMcDN2koWupF26hQB8=
+X-Received: by 2002:a17:906:fc10:b0:a2e:51bb:6e97 with SMTP id
+ ov16-20020a170906fc1000b00a2e51bb6e97mr121762ejb.67.1705349362821; Mon, 15
+ Jan 2024 12:09:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240102-j7200-pcie-s2r-v1-0-84e55da52400@bootlin.com> <20240102-j7200-pcie-s2r-v1-4-84e55da52400@bootlin.com>
-In-Reply-To: <20240102-j7200-pcie-s2r-v1-4-84e55da52400@bootlin.com>
+References: <20240102-j7200-pcie-s2r-v1-0-84e55da52400@bootlin.com> <20240102-j7200-pcie-s2r-v1-13-84e55da52400@bootlin.com>
+In-Reply-To: <20240102-j7200-pcie-s2r-v1-13-84e55da52400@bootlin.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Mon, 15 Jan 2024 22:05:52 +0200
-Message-ID: <CAHp75VdtL+RncgLWghTy0qneobM+UUFr6Wnc78maOmeLZEpQOA@mail.gmail.com>
-Subject: Re: [PATCH 04/14] mux: mmio: Add resume support
+Date: Mon, 15 Jan 2024 22:08:45 +0200
+Message-ID: <CAHp75VcZXyGNY1jVNch1X6J5BqtbL6Hbh2o6yAd8Hp7-n4xAag@mail.gmail.com>
+Subject: Re: [PATCH 13/14] PCI: j721e: move reset GPIO to device struct
 To: Thomas Richard <thomas.richard@bootlin.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
 	Andy Shevchenko <andy@kernel.org>, Tony Lindgren <tony@atomide.com>, 
@@ -89,22 +89,22 @@ On Mon, Jan 15, 2024 at 6:16=E2=80=AFPM Thomas Richard
 >
 > From: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 >
-> Implement resume support
-
-Why?
-
-...
-
-> +#ifdef CONFIG_PM
-
-No ifdeffery, use proper macros.
+> Move reset GPIO to device struct, so it can be used at suspend and
+> resume stages.
 
 ...
 
-> +                       dev_err(dev, "control %u: error restoring mux: %d=
-\n", i, ret);
+> -       struct gpio_desc *gpiod;
 
-Won't anything go wrong and spam the log buffer?
+You can leave this and make the patch much lighter.
+
+...
+
+>                         if (ret !=3D -EPROBE_DEFER)
+>                                 dev_err(dev, "Failed to get reset GPIO\n"=
+);
+
+Side note (not related to this change): perhaps dev_err_probe()?
 
 --=20
 With Best Regards,
