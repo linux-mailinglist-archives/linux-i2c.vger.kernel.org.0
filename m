@@ -1,45 +1,44 @@
-Return-Path: <linux-i2c+bounces-1309-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1310-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6045E82DD50
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 17:18:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4D0482DD58
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 17:18:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87A9F1C2085B
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 16:18:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24201282AE8
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Jan 2024 16:18:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 779E518E11;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C74F918E39;
 	Mon, 15 Jan 2024 16:16:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Crp6RWxA"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="F/+6IPqF"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE4A17C95;
-	Mon, 15 Jan 2024 16:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A26418048;
+	Mon, 15 Jan 2024 16:16:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 77D41C000B;
-	Mon, 15 Jan 2024 16:16:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BDBC5C0013;
+	Mon, 15 Jan 2024 16:16:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1705335378;
+	t=1705335379;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=luuiYzsnns/OhtWeHFFRwSXyejuX6Zby2kvPJdFacfc=;
-	b=Crp6RWxAJP1bUpPZkHVslhQDy0LElcVFI6AwLcwULZs5RsYzIudWQYt8Q3iRhDgSSnaVZK
-	7ymwpYUXf0wGkO5wq+5zCpEykusRLnHd/2731m5szrEcC5N5vLQ/lkof9wfprFL2GDVlYU
-	afNaDKsSr4+VALNWEMFWoWM0E5iBdmI/TqzLmaSDb8LhG0uu0N1htYIBEBKEjvqeHJsd6I
-	PLElpPuwjvTy40jIgKBGS+dcAtKQwxZDjDs4wNOTVGcTD54SeSVUhAphBiFx+ccLAAaDHM
-	9Zw+x3r/aYZpT99MMMs2BmRWWIFYXclINT6abTZtRXkI30meD4hNw7NHLai+Rw==
+	bh=j40X4Nu4eW/wfOAO/d7B3IGTPdOyDBc/O2ndpv/7HmA=;
+	b=F/+6IPqFmci0LEpiKsOSrjUeL2jGbhF/9atcE8qzUcQtLYK/brxsei7e3RZeUzfNzN4Zl2
+	BGlSDC3rbCowgKD1C6eTFBU1KYs8J170dSsLKAxAGLb2ni6COkWoRLHmLL1jwYqx3Ch5Af
+	zl09x0HFnGDfU3Fi/Bad5Ts6Eepgr9LpWyS/LUKkUKi5kJ8CbI3poOU9kBNwb4eqj3eSz7
+	8SkHeoB8uoXuyuGPqE9qRUEGtApJV5vm5q2cBoX+Qj9/W5zB4Y1Y4Og2oXQprGsUYBsgdE
+	PrfoPZIl7V9Vcn9ajzE7R+g0B2UK1Y+noBqRgt17q0pucMB5duEqKE63/r9EsA==
 From: Thomas Richard <thomas.richard@bootlin.com>
-Date: Mon, 15 Jan 2024 17:14:44 +0100
-Subject: [PATCH 03/14] i2c: omap: wakeup the controller during suspend
- callback
+Date: Mon, 15 Jan 2024 17:14:45 +0100
+Subject: [PATCH 04/14] mux: mmio: Add resume support
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -47,8 +46,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240102-j7200-pcie-s2r-v1-3-84e55da52400@bootlin.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240102-j7200-pcie-s2r-v1-4-84e55da52400@bootlin.com>
 References: <20240102-j7200-pcie-s2r-v1-0-84e55da52400@bootlin.com>
 In-Reply-To: <20240102-j7200-pcie-s2r-v1-0-84e55da52400@bootlin.com>
 To: Linus Walleij <linus.walleij@linaro.org>, 
@@ -72,53 +71,67 @@ Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
 X-Mailer: b4 0.12.0
 X-GND-Sasl: thomas.richard@bootlin.com
 
-A device may need the controller up during suspend_noirq or
-resume_noirq.
-But if the controller is autosuspended, there is no way to wakeup it
-during suspend_noirq or resume_noirq because runtime pm is disabled
-at this time.
+From: Théo Lebrun <theo.lebrun@bootlin.com>
 
-The suspend callback wakes up the controller, so it is available until
-its suspend_noirq callback (pm_runtime_force_suspend).
-During the resume, it's restored by resume_noirq callback
-(pm_runtime_force_resume). Then resume callback enables autosuspend.
+Implement resume support
 
-So the controller is up during a little time slot in suspend and resume
-sequences even if it's not used.
-
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 ---
- drivers/i2c/busses/i2c-omap.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/mux/mmio.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
-index 42165ef57946..57f0738fa748 100644
---- a/drivers/i2c/busses/i2c-omap.c
-+++ b/drivers/i2c/busses/i2c-omap.c
-@@ -1575,9 +1575,24 @@ static int __maybe_unused omap_i2c_runtime_resume(struct device *dev)
- 	return 0;
+diff --git a/drivers/mux/mmio.c b/drivers/mux/mmio.c
+index fd1d121a584b..ab4ef195fc0d 100644
+--- a/drivers/mux/mmio.c
++++ b/drivers/mux/mmio.c
+@@ -125,13 +125,47 @@ static int mux_mmio_probe(struct platform_device *pdev)
+ 
+ 	mux_chip->ops = &mux_mmio_ops;
+ 
++	dev_set_drvdata(dev, mux_chip);
++
+ 	return devm_mux_chip_register(dev, mux_chip);
  }
  
-+
-+static int omap_i2c_suspend(struct device *dev)
++#ifdef CONFIG_PM
++static int mux_mmio_resume_noirq(struct device *dev)
 +{
-+	return pm_runtime_resume_and_get(dev);
++	struct mux_chip *mux_chip = dev_get_drvdata(dev);
++	int global_ret = 0;
++	unsigned int i;
++
++	for (i = 0; i < mux_chip->controllers; i++) {
++		struct mux_control *mux = &mux_chip->mux[i];
++		int val = mux->cached_state;
++		int ret;
++
++		if (val == MUX_IDLE_AS_IS)
++			continue;
++
++		ret = mux_mmio_set(mux, val);
++		if (ret) {
++			dev_err(dev, "control %u: error restoring mux: %d\n", i, ret);
++			if (!global_ret)
++				global_ret = ret;
++		}
++	}
++
++	return global_ret;
 +}
++#endif
 +
-+static int omap_i2c_resume(struct device *dev)
-+{
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
++static const struct dev_pm_ops mux_mmio_pm_ops = {
++	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(NULL, mux_mmio_resume_noirq)
++};
 +
-+	return 0;
-+}
-+
- static const struct dev_pm_ops omap_i2c_pm_ops = {
- 	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
- 				      pm_runtime_force_resume)
-+	SET_SYSTEM_SLEEP_PM_OPS(omap_i2c_suspend, omap_i2c_resume)
- 	SET_RUNTIME_PM_OPS(omap_i2c_runtime_suspend,
- 			   omap_i2c_runtime_resume, NULL)
+ static struct platform_driver mux_mmio_driver = {
+ 	.driver = {
+ 		.name = "mmio-mux",
+ 		.of_match_table	= mux_mmio_dt_ids,
++		.pm = &mux_mmio_pm_ops,
+ 	},
+ 	.probe = mux_mmio_probe,
  };
 
 -- 
