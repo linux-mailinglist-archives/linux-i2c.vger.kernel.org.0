@@ -1,158 +1,92 @@
-Return-Path: <linux-i2c+bounces-1332-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1333-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFD8F82F146
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 16:19:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0909582F1D2
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 16:50:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2227C1C2361F
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 15:19:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87D2EB229C6
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 15:50:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC1B11C291;
-	Tue, 16 Jan 2024 15:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 213141C695;
+	Tue, 16 Jan 2024 15:50:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D7hkVFcF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 193861BF5D
-	for <linux-i2c@vger.kernel.org>; Tue, 16 Jan 2024 15:19:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rPlD3-0000to-Uy; Tue, 16 Jan 2024 16:18:37 +0100
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rPlD0-000Gxq-M0; Tue, 16 Jan 2024 16:18:34 +0100
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rPlD0-000D8R-1w;
-	Tue, 16 Jan 2024 16:18:34 +0100
-Message-ID: <800d202864c1730622a19998728c5a8b576d1931.camel@pengutronix.de>
-Subject: Re: [PATCH v3 5/5] i2c: muxes: pca954x: Allow sharing reset GPIO
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Bjorn Andersson
- <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Srinivas
- Kandagatla <srinivas.kandagatla@linaro.org>, Banajit Goswami
- <bgoswami@quicinc.com>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
- <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley <conor+dt@kernel.org>,
- Peter Rosin <peda@axentia.se>, Jaroslav Kysela <perex@perex.cz>,  Takashi
- Iwai <tiwai@suse.com>, linux-arm-msm@vger.kernel.org,
- alsa-devel@alsa-project.org,  linux-sound@vger.kernel.org,
- devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
- linux-i2c@vger.kernel.org
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>, Bartosz Golaszewski
-	 <brgl@bgdev.pl>, Sean Anderson <sean.anderson@seco.com>
-Date: Tue, 16 Jan 2024 16:18:34 +0100
-In-Reply-To: <20240112163608.528453-6-krzysztof.kozlowski@linaro.org>
-References: <20240112163608.528453-1-krzysztof.kozlowski@linaro.org>
-	 <20240112163608.528453-6-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8E81BF53;
+	Tue, 16 Jan 2024 15:50:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FCBBC433C7;
+	Tue, 16 Jan 2024 15:50:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705420204;
+	bh=i3khedQ+kiQ0f7qWV61kvzfkthuUNxWpEynNOJvz5Ak=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=D7hkVFcFHNtDHPtRPUO+psut8uD4XDQ6J6Z1j1aS25VcpxgYMF04nRcp021DwdSuU
+	 blLjX3+dH65ZlAXHYHJP1NrqwAxhuMgbD1rG5IRXwiXmUA8epSC/TYjopWZggSd7Z0
+	 LvTJ6v8QKqnmqA1f/yD2zFgtNpOcRxehzcVV1Q/zyInUErQNUo/aMEr2lVAg9bPyJs
+	 uqnU1XsKgJUNFx9JcDsP6Mt5VSCwTGpBJG4Yshf0Swzg2I8uFVndetcfiGcwpch+Dd
+	 SBQgciWT8/tKGvHdFkMLWjCHNOxapWZw4qPWi3e2JtPeJM2DsR973TyY3f4pqj2qS/
+	 kWeSsW7GjwAJw==
+Date: Tue, 16 Jan 2024 09:50:02 -0600
+From: Rob Herring <robh@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: cw00.choi@samsung.com, willmcvicker@google.com, andi.shyti@kernel.org,
+	gregkh@linuxfoundation.org, linux-samsung-soc@vger.kernel.org,
+	tomasz.figa@gmail.com, Sam Protsenko <semen.protsenko@linaro.org>,
+	peter.griffin@linaro.org, s.nawrocki@samsung.com,
+	andre.draszik@linaro.org, linux-serial@vger.kernel.org,
+	linux-clk@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	jirislaby@kernel.org, linux-i2c@vger.kernel.org,
+	alim.akhtar@samsung.com, linux-arm-kernel@lists.infradead.org,
+	robh+dt@kernel.org, sboyd@kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, kernel-team@android.com,
+	mturquette@baylibre.com, conor+dt@kernel.org
+Subject: Re: [PATCH v3 01/12] dt-bindings: clock: google,gs101-clock: add
+ PERIC0 clock management unit
+Message-ID: <170542020157.4185440.8965772370823681119.robh@kernel.org>
+References: <20240109125814.3691033-1-tudor.ambarus@linaro.org>
+ <20240109125814.3691033-2-tudor.ambarus@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240109125814.3691033-2-tudor.ambarus@linaro.org>
 
-On Fr, 2024-01-12 at 17:36 +0100, Krzysztof Kozlowski wrote:
-> From: Chris Packham <chris.packham@alliedtelesis.co.nz>
->=20
-> Some hardware designs with multiple PCA954x devices use a reset GPIO
-> connected to all the muxes. Support this configuration by making use of
-> the reset controller framework which can deal with the shared reset
-> GPIOs. Fall back to the old GPIO descriptor method if the reset
-> controller framework is not enabled.
->=20
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Acked-by: Peter Rosin <peda@axentia.se>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Link: https://lore.kernel.org/r/20240108041913.7078-1-chris.packham@allie=
-dtelesis.co.nz
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->=20
+
+On Tue, 09 Jan 2024 12:58:03 +0000, Tudor Ambarus wrote:
+> Add dt-schema documentation for the Connectivity Peripheral 0 (PERIC0)
+> clock management unit.
+> 
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 > ---
->=20
-> If previous patches are fine, then this commit is independent and could
-> be taken via I2C.
->=20
-> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Sean Anderson <sean.anderson@seco.com>
-> ---
->  drivers/i2c/muxes/i2c-mux-pca954x.c | 46 ++++++++++++++++++++++++-----
->  1 file changed, 38 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-=
-mux-pca954x.c
-> index 2219062104fb..1702e8d49b91 100644
-> --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-> +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-> @@ -49,6 +49,7 @@
->  #include <linux/pm.h>
->  #include <linux/property.h>
->  #include <linux/regulator/consumer.h>
-> +#include <linux/reset.h>
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
->  #include <dt-bindings/mux/mux.h>
-> @@ -102,6 +103,9 @@ struct pca954x {
->  	unsigned int irq_mask;
->  	raw_spinlock_t lock;
->  	struct regulator *supply;
-> +
-> +	struct gpio_desc *reset_gpio;
-> +	struct reset_control *reset_cont;
->  };
-> =20
->  /* Provide specs for the MAX735x, PCA954x and PCA984x types we know abou=
-t */
-> @@ -477,6 +481,35 @@ static int pca954x_init(struct i2c_client *client, s=
-truct pca954x *data)
->  	return ret;
->  }
-> =20
-> +static int pca954x_get_reset(struct device *dev, struct pca954x *data)
-> +{
-> +	data->reset_cont =3D devm_reset_control_get_optional_shared(dev, NULL);
-> +	if (IS_ERR(data->reset_cont))
-> +		return dev_err_probe(dev, PTR_ERR(data->reset_cont),
-> +				     "Failed to get reset\n");
-> +	else if (data->reset_cont)
-> +		return 0;
-> +
-> +	/*
-> +	 * fallback to legacy reset-gpios
-> +	 */
+> v3:
+> - rename the clock names to just "bus" and "ip" as per Rob's suggestion
+> - collect Peter's R-b tag
+> 
+> v2:
+> - fix comments as per Sam's suggestion and collect his R-b tag
+> - Rob's suggestion of renaming the clock-names to just "bus" and "ip"
+>   was not implemented as I felt it affects readability in the driver
+>   and consistency with other exynos clock drivers. I will happily update
+>   the names in the -rc phase if someone else has a stronger opinion than
+>   mine.
+> 
+>  .../bindings/clock/google,gs101-clock.yaml    | 25 +++++-
+>  include/dt-bindings/clock/google,gs101.h      | 81 +++++++++++++++++++
+>  2 files changed, 104 insertions(+), 2 deletions(-)
+> 
 
-devm_reset_control_get_optional_shared() won't return NULL if the
-"reset-gpios" property is found in the device tree, so the GPIO
-fallback is dead code.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-> +	data->reset_gpio =3D devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HI=
-GH);
-> +	if (IS_ERR(data->reset_gpio)) {
-> +		return dev_err_probe(dev, PTR_ERR(data->reset_gpio),
-> +				     "Failed to get reset gpio");
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-
-regards
-Philipp
 
