@@ -1,48 +1,47 @@
-Return-Path: <linux-i2c+bounces-1343-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1344-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B136082F412
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 19:20:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF41782F421
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 19:23:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6556E1F24A2F
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 18:20:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 919DFB21720
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 18:22:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 769B11CFBE;
-	Tue, 16 Jan 2024 18:19:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 785151CD39;
+	Tue, 16 Jan 2024 18:22:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DsPYcpVq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CBatexrm"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE831CFAE;
-	Tue, 16 Jan 2024 18:19:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2784C10A1D;
+	Tue, 16 Jan 2024 18:22:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705429182; cv=none; b=uS+fGuxlHIPzHAem07HLwlTW5dBuIWZfAAS1k6v52Dsb/V2owD8Y/ZR5Znj02N4eOByafREGSAAQeosgeYSh0qzHsRgV/Wq3mgeOdGcP+S1geyX5dwpg86Vnqp2NvLlsISVoQMKck9KUZiUsCz85F9w49RdANrjMrUSsLlKi45A=
+	t=1705429367; cv=none; b=lBC2Ee+6lHMUhuTH3JB7C2oVCceBLZcuUVTtCwh1exh0vjcSLgP0j3WZBwqGrM1vax3M0Ebbrnk10Q5MRkULH5t4dMTyz1sZMqrecwWT/oDTVgkpN+2pvXQWtRCnFBjBkhQXH1X0Ru00XoT4CbtHC1QzQOdVlZ0LWB8sCxx7QUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705429182; c=relaxed/simple;
-	bh=cK0uK7R2+gEbjOCsenY8rYIQosqscpXTCp6F+qM8Pd8=;
+	s=arc-20240116; t=1705429367; c=relaxed/simple;
+	bh=24yf9WQZM8mCzBoY4DhIxhCfHQZP8hu82jOqs15h0jg=;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To; b=f4qqqu70PiY9s2RJIg1vFMbhOBJJrv52f+4/jsYkaxi57jZ2W7SIAMtX+XwwFcXgBljGh+5tFyOCaPUXJUCTXI8wkt/31vujlAMpGdhqPoBG0xItl0ZQ+wc8C760n3eWSnPuWHXTJnZDnNyzTXDwo4rThA2yKc47T2THVs29cKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DsPYcpVq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4490FC433F1;
-	Tue, 16 Jan 2024 18:19:41 +0000 (UTC)
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To; b=RZco8vEJ7rZYjwc/s5veyZx0m7cpsjM5xWvDQx4fH8c64LLue1qy7ch8sMy/jglDMxewbUT766CTs8HySrsXxYQ8FgNPiYlNKwEqZGsC8wNtQZC9tyQ2mObE4jymNYBuO2sRkxEiP/TL/rEIOJb9eXH7VB8KRq1DIyDAzKljG6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CBatexrm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D20CC433F1;
+	Tue, 16 Jan 2024 18:22:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705429181;
-	bh=cK0uK7R2+gEbjOCsenY8rYIQosqscpXTCp6F+qM8Pd8=;
+	s=k20201202; t=1705429366;
+	bh=24yf9WQZM8mCzBoY4DhIxhCfHQZP8hu82jOqs15h0jg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=DsPYcpVqeSMaQVwap6TSM10XjoOPuojT6s+DQLUtOv+G5QecnwOOLG/Btd30B9sKD
-	 sPLkDVnjb3Ujys/qaKlj6P/2Q2Q976Ex1Qvf1/GH+yU1SiUnOC2LJ6MwMU6A0kkb4b
-	 laB0h0Yy1fmCV5dvcsLx+/XtcTFLtVXXPReiJfAINVpuOKuFIX3CfdDb/k7vHjTyE8
-	 EpnyMDv5x9RZhgd0oSGVD9/8ujhuWDfhz67X1nUEGE7Q2EVz0/eU202+tc6yopwHJk
-	 mlhOdTwzbhGv1kssB7mJQ3FfHQgC/qjiMsfFWtIYbEVwdvWBzJM/I/6Y3PGVRbGwm5
-	 BA2iB9BUFtu6Q==
-Date: Tue, 16 Jan 2024 12:19:39 -0600
+	b=CBatexrm9aBNAYXsNpveWnrw+Di773YudoVO/VDqgpP9FKlSYHdGeCs9ySe0HGtWK
+	 so2FLx7CeRayeJj9Z8kDp8bZqEEJxqHCJNS8c7tRBEMn8ySC/D9sH5IShv/Qo2Gila
+	 wWFRNUHVyYshYfyYmIKD3cxzN/7U7Wl9fvvywrJvdzChhTimASQuKCYIKy5nyIsOoN
+	 f/v4avvA0QcnowjCCBcL0oOvQHhzavvXAnirlz3cJXInydu6jFKaIIj/QeIkONkFoS
+	 KSS5MkeXX+d1acaZzpQ/8hWvCjtvGU+aU4P2i/MhH3Czdl1GJCYXt9uBuT7TSbAFul
+	 v2V7zez4Z1JzA==
+Date: Tue, 16 Jan 2024 12:22:44 -0600
 From: Bjorn Helgaas <helgaas@kernel.org>
 To: Thomas Richard <thomas.richard@bootlin.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>,
@@ -65,51 +64,33 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
 	theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com,
 	u-kumar1@ti.com
-Subject: Re: [PATCH 13/14] PCI: j721e: move reset GPIO to device struct
-Message-ID: <20240116181939.GA101049@bhelgaas>
+Subject: Re: [PATCH 11/14] phy: cadence-torrent: add suspend and resume
+ support
+Message-ID: <20240116182244.GA101245@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240102-j7200-pcie-s2r-v1-13-84e55da52400@bootlin.com>
+In-Reply-To: <20240102-j7200-pcie-s2r-v1-11-84e55da52400@bootlin.com>
 
-On Mon, Jan 15, 2024 at 05:14:54PM +0100, Thomas Richard wrote:
-> From: Théo Lebrun <theo.lebrun@bootlin.com>
-> 
-> Move reset GPIO to device struct, so it can be used at suspend and
-> resume stages.
+On Mon, Jan 15, 2024 at 05:14:52PM +0100, Thomas Richard wrote:
+> Add suspend and resume support.
+> The alread_configured flag is cleared during suspend stage to force the
+> phy initialization during the resume stage.
 
-s/Move/Add/ since we're not moving it from one struct to another.  (In
-subject also.)
+s/alread_configured/already_configured/
 
-s/device struct/struct j721e_pcie/ since "device struct" could also
-refer to the "struct device", which is obviously not relevant here.
+Wrap to fill 75 columns.  Add a blank line if you intend two
+paragraphs.
 
-BTW, if you capitalize the PCI subject lines to match previous
-history, it will save some work when applying this series.
+I don't know whether there's a strong convention in drivers/phy, but I
+see several commit logs that capitalize "PHY".  "Phy" is not a
+standard English word, so I think the capitalization makes it easier
+to read.
 
-Also rewrap commit logs to fill 75 columns and add blank lines between
-paragraphs (noticed in patch 12/14).
-
-> @@ -54,6 +54,7 @@ struct j721e_pcie {
->  	struct clk		*refclk;
->  	u32			mode;
->  	u32			num_lanes;
-> +	struct gpio_desc	*reset_gpio;
->  	void __iomem		*user_cfg_base;
->  	void __iomem		*intd_cfg_base;
->  	u32			linkdown_irq_regfield;
-> @@ -359,7 +360,6 @@ static int j721e_pcie_probe(struct platform_device *pdev)
->  	struct j721e_pcie *pcie;
->  	struct cdns_pcie_rc *rc = NULL;
->  	struct cdns_pcie_ep *ep = NULL;
-> -	struct gpio_desc *gpiod;
->  	void __iomem *base;
->  	struct clk *clk;
->  	u32 num_lanes;
+Bjorn
 
