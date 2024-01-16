@@ -1,107 +1,158 @@
-Return-Path: <linux-i2c+bounces-1331-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1332-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4D3282EAB9
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 09:15:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFD8F82F146
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 16:19:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F1DB4B22565
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 08:15:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2227C1C2361F
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 15:19:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7849511713;
-	Tue, 16 Jan 2024 08:15:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E4AbxJ6k"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC1B11C291;
+	Tue, 16 Jan 2024 15:19:12 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D55111BE
-	for <linux-i2c@vger.kernel.org>; Tue, 16 Jan 2024 08:15:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705392930; x=1736928930;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=e9YbhuA296OITph7d/3ff0u8oHV/mANIphFHzWxR3q0=;
-  b=E4AbxJ6kkc/1M5qjLJb3vvyqmnysWuJeVpQzCPgwRzmu8fUgN2nUkWb1
-   JBwevea9HMI+PUFXt31fXCNtwfp20ewd7XR8EC59cBDitLjWGpq47pdmX
-   KJbOVIGkB45tZUa/O46d4Xvy5MNZ74hm2gxIdHTRsy5UXYyXOae08qmgX
-   wiZXW1Qy/dmpuz2FwcgNVo4l8HTIsRugJyID/mlj2o84yUN/VT9pg9jjl
-   S2+/oa5yxY9TyonoMok4lWtFYgMS8nLo2HfFtcRn4Jt1OuWUnDvxBZEDh
-   dx5BT8CoOQT+6jR4+lp4MuVFPstqb40lIZGLkNGXx5gLyxcc0t8d7IgGs
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10954"; a="18387498"
-X-IronPort-AV: E=Sophos;i="6.04,198,1695711600"; 
-   d="scan'208";a="18387498"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2024 00:15:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10954"; a="733529450"
-X-IronPort-AV: E=Sophos;i="6.04,198,1695711600"; 
-   d="scan'208";a="733529450"
-Received: from unknown (HELO [10.237.72.158]) ([10.237.72.158])
-  by orsmga003.jf.intel.com with ESMTP; 16 Jan 2024 00:15:26 -0800
-Message-ID: <f4b3cc62-8620-4810-97f7-bcc39220b12e@linux.intel.com>
-Date: Tue, 16 Jan 2024 10:15:25 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 193861BF5D
+	for <linux-i2c@vger.kernel.org>; Tue, 16 Jan 2024 15:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1rPlD3-0000to-Uy; Tue, 16 Jan 2024 16:18:37 +0100
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1rPlD0-000Gxq-M0; Tue, 16 Jan 2024 16:18:34 +0100
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1rPlD0-000D8R-1w;
+	Tue, 16 Jan 2024 16:18:34 +0100
+Message-ID: <800d202864c1730622a19998728c5a8b576d1931.camel@pengutronix.de>
+Subject: Re: [PATCH v3 5/5] i2c: muxes: pca954x: Allow sharing reset GPIO
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Bjorn Andersson
+ <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Srinivas
+ Kandagatla <srinivas.kandagatla@linaro.org>, Banajit Goswami
+ <bgoswami@quicinc.com>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown
+ <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley <conor+dt@kernel.org>,
+ Peter Rosin <peda@axentia.se>, Jaroslav Kysela <perex@perex.cz>,  Takashi
+ Iwai <tiwai@suse.com>, linux-arm-msm@vger.kernel.org,
+ alsa-devel@alsa-project.org,  linux-sound@vger.kernel.org,
+ devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
+ linux-i2c@vger.kernel.org
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>, Bartosz Golaszewski
+	 <brgl@bgdev.pl>, Sean Anderson <sean.anderson@seco.com>
+Date: Tue, 16 Jan 2024 16:18:34 +0100
+In-Reply-To: <20240112163608.528453-6-krzysztof.kozlowski@linaro.org>
+References: <20240112163608.528453-1-krzysztof.kozlowski@linaro.org>
+	 <20240112163608.528453-6-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: designware: Revert recent changes to
- i2c_dw_probe_lock_support()
-To: Kim Phillips <kim.phillips@amd.com>, linux-i2c@vger.kernel.org
-Cc: Wolfram Sang <wsa@kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
- Borislav Petkov <bp@alien8.de>, V Narasimhan <Narasimhan.V@amd.com>
-References: <20240111125658.921083-1-jarkko.nikula@linux.intel.com>
- <f5493701-4cc7-42c2-b9bb-958744bd8626@amd.com>
- <9bb96130-d662-4904-9e4b-6a823b51a990@linux.intel.com>
- <614a9b32-d6e9-4506-a7a0-164954badffe@amd.com>
- <00f98ff9-ce2f-4edd-b4e4-a17e1a0170cd@amd.com>
-Content-Language: en-US
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <00f98ff9-ce2f-4edd-b4e4-a17e1a0170cd@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-On 1/16/24 00:44, Kim Phillips wrote:
-> On 1/15/24 3:16 PM, Kim Phillips wrote:
->> On 1/12/24 2:13 AM, Jarkko Nikula wrote:
->>> On 1/11/24 19:56, Kim Phillips wrote:
->>>>> [    6.245173] i2c_designware AMDI0010:00: Unknown Synopsys 
->>>>> component type: 0xffffffff
->>>
->>> This has puzzled me all the time since I'm unable to see which one of 
->>> Andy's patches could cause it. However controller is clearly powered 
->>> down since DW_IC_COMP_TYPE register reads 0xffffffff.
-> 
-> Just FYI, that message is apparently 'normal' as, e.g., a stable v6.4
-> based tree emits it, but it doesn't crash because of it:
-> 
-Ah, makes sense. I understood from Narasimhan's earlier mail vanilla 
-doesn't show it and that made me confused.
+On Fr, 2024-01-12 at 17:36 +0100, Krzysztof Kozlowski wrote:
+> From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+>=20
+> Some hardware designs with multiple PCA954x devices use a reset GPIO
+> connected to all the muxes. Support this configuration by making use of
+> the reset controller framework which can deal with the shared reset
+> GPIOs. Fall back to the old GPIO descriptor method if the reset
+> controller framework is not enabled.
+>=20
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Acked-by: Peter Rosin <peda@axentia.se>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Link: https://lore.kernel.org/r/20240108041913.7078-1-chris.packham@allie=
+dtelesis.co.nz
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>=20
+> ---
+>=20
+> If previous patches are fine, then this commit is independent and could
+> be taken via I2C.
+>=20
+> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Sean Anderson <sean.anderson@seco.com>
+> ---
+>  drivers/i2c/muxes/i2c-mux-pca954x.c | 46 ++++++++++++++++++++++++-----
+>  1 file changed, 38 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-=
+mux-pca954x.c
+> index 2219062104fb..1702e8d49b91 100644
+> --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
+> +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> @@ -49,6 +49,7 @@
+>  #include <linux/pm.h>
+>  #include <linux/property.h>
+>  #include <linux/regulator/consumer.h>
+> +#include <linux/reset.h>
+>  #include <linux/slab.h>
+>  #include <linux/spinlock.h>
+>  #include <dt-bindings/mux/mux.h>
+> @@ -102,6 +103,9 @@ struct pca954x {
+>  	unsigned int irq_mask;
+>  	raw_spinlock_t lock;
+>  	struct regulator *supply;
+> +
+> +	struct gpio_desc *reset_gpio;
+> +	struct reset_control *reset_cont;
+>  };
+> =20
+>  /* Provide specs for the MAX735x, PCA954x and PCA984x types we know abou=
+t */
+> @@ -477,6 +481,35 @@ static int pca954x_init(struct i2c_client *client, s=
+truct pca954x *data)
+>  	return ret;
+>  }
+> =20
+> +static int pca954x_get_reset(struct device *dev, struct pca954x *data)
+> +{
+> +	data->reset_cont =3D devm_reset_control_get_optional_shared(dev, NULL);
+> +	if (IS_ERR(data->reset_cont))
+> +		return dev_err_probe(dev, PTR_ERR(data->reset_cont),
+> +				     "Failed to get reset\n");
+> +	else if (data->reset_cont)
+> +		return 0;
+> +
+> +	/*
+> +	 * fallback to legacy reset-gpios
+> +	 */
 
-> So I just tested checking out bd466a892612, and indeed it produces
-> the stacktrace.  Prior to that commit is v6.7-rc3, which boots fine.
-> So right now I'm suspecting bd466a892612 is to blame for the stacktrace.
-> 
-This also makes most sense to me and was my first guess. I let Andy to 
-look at more deeply does my speculation about runtime PM being active in 
-parallel with post probe code since before his commit driver disabled 
-the runtime PM before returning from probe.
+devm_reset_control_get_optional_shared() won't return NULL if the
+"reset-gpios" property is found in the device tree, so the GPIO
+fallback is dead code.
 
-Now if after that commit oops doesn't occur always it will easily 
-misguide in bisecting and can lead to random results. Those are very 
-hard to track sometimes. Good that you found this issue very immediately 
-when code went to linux-next!
+> +	data->reset_gpio =3D devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HI=
+GH);
+> +	if (IS_ERR(data->reset_gpio)) {
+> +		return dev_err_probe(dev, PTR_ERR(data->reset_gpio),
+> +				     "Failed to get reset gpio");
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+
+regards
+Philipp
 
