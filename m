@@ -1,134 +1,115 @@
-Return-Path: <linux-i2c+bounces-1342-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1343-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DA4082F3C4
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 19:11:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B136082F412
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 19:20:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5278B23B18
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 18:11:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6556E1F24A2F
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 18:20:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E33E1CD21;
-	Tue, 16 Jan 2024 18:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 769B11CFBE;
+	Tue, 16 Jan 2024 18:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tmddb43k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DsPYcpVq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03EA1CF8A
-	for <linux-i2c@vger.kernel.org>; Tue, 16 Jan 2024 18:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE831CFAE;
+	Tue, 16 Jan 2024 18:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705428694; cv=none; b=XWkX0+QGrmhemfd/uRWwh2lHcWIfCgUe40UrN215tKtntt11brDMs8oA+tu10LcS8X2Je5h1+UHKUJxXU48zNEkxZP9skpoKmxqfDjrsthn0xd3Ft5Th3cAhyKPFxG1mluhQJ44fLXd+qqbDy9vy5wxHuuWBDbdZbCDFfbzt3as=
+	t=1705429182; cv=none; b=uS+fGuxlHIPzHAem07HLwlTW5dBuIWZfAAS1k6v52Dsb/V2owD8Y/ZR5Znj02N4eOByafREGSAAQeosgeYSh0qzHsRgV/Wq3mgeOdGcP+S1geyX5dwpg86Vnqp2NvLlsISVoQMKck9KUZiUsCz85F9w49RdANrjMrUSsLlKi45A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705428694; c=relaxed/simple;
-	bh=M0Ooulm9S8WHLNo6AfrCErL0/OwFMQeru2lh9LT1eww=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:MIME-Version:
-	 References:In-Reply-To:From:Date:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding; b=Y92vCj04OY/XT0gkYC9pKZd1IeCdRH2DkkfaiWZWcCn+jEv8XQfhFITrh6hhDOx2A+Vdg/fH/2buFCvHa56S5G0M5cVs+Lui2XZ1ZnJwS3o7cIKSylfSAK11pU/QQ1hjb6MzrDL4wy2Vr9N5JRlHopVCV3WVvQiDYKksleI8L7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tmddb43k; arc=none smtp.client-ip=209.85.166.44
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7bbec1d1c9dso504953239f.1
-        for <linux-i2c@vger.kernel.org>; Tue, 16 Jan 2024 10:11:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705428692; x=1706033492; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SNxgcWOo1csnjFsBhzJAhb4fTQBuYKqyH36PPDUAqrM=;
-        b=tmddb43klQoDUO20LffXTBLPfgv4Y9FAsY3TKpVG1j6i6Mwoin4jsgY10a/KNQ7JoS
-         JJaNAFKUgr2U+TVWa2mUpPgkbD9owDRbNonMWozlnjB6RyIdbAyOM/Nx45qJgfffrv3H
-         rvHoOsUqLiJfUYDMp12k9HlQ8fuf/LDeGp3QSKOtAZlyLoYkNd9lixsp4KHnR43mdMOq
-         p0PfTYEDXjOhD5XacqcnKFR7zuXSrVolRnlvtiZ9id0U3/rS+SZFwbeXZMxuUmfPJNsO
-         mkLddh5Grv2lHkTlQsRtYUcoAtsdaxT49lb+Wl72hEvD+s/BTKLhKPB1gJB8SePSvuai
-         UUzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705428692; x=1706033492;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SNxgcWOo1csnjFsBhzJAhb4fTQBuYKqyH36PPDUAqrM=;
-        b=MG30KSck6VTt9pkfIwYY/uNbAGdji/UNwpE1rOhiguRYQsdihuzyyMtcbRdUypaVFv
-         9KpPXxalLV9YDTIuP8ZoNSAkHalPsjoQCFlxvNLlODktMpZ9d7XNDCawRvTnvcxa4rn7
-         auLtcEwteg+IX+SmGUTQ5LsHcCyLlU2ppS3hMDbdiZzp4IVRBH7ElmPJL7Xop2n47dXi
-         O9UooFpJzJYM8T7sl+wre/FFD+X9AukHpOxTS852ohoxqi3qmIKS12u/gFJgxG6oCexz
-         26uZaIm+6pw+GqQsiOSWWm90Os/BGZGs82mZxr9eS/ommb5zbqAWFA6xg4xyvxBBerfw
-         Pb3g==
-X-Gm-Message-State: AOJu0YyBJPWP9O7MOJHi/SIH9qpYPGHF1e3vDtJuEHt/bIUBVASjzwgZ
-	7mtZi809OaseG6Q2KTFTZusnHO3MnnoQpdpF72filUo4JD7bWw==
-X-Google-Smtp-Source: AGHT+IE5QD79wikGUbt+f+gyh/dGDvkkcbx8JHtG+ewUTqw1m7M5U8NmftDLIr2A/UQiHvfv2iLRDc2vlArXMBbwfU0=
-X-Received: by 2002:a6b:cd0c:0:b0:7bf:554c:bb63 with SMTP id
- d12-20020a6bcd0c000000b007bf554cbb63mr1637673iog.14.1705428692146; Tue, 16
- Jan 2024 10:11:32 -0800 (PST)
+	s=arc-20240116; t=1705429182; c=relaxed/simple;
+	bh=cK0uK7R2+gEbjOCsenY8rYIQosqscpXTCp6F+qM8Pd8=;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To; b=f4qqqu70PiY9s2RJIg1vFMbhOBJJrv52f+4/jsYkaxi57jZ2W7SIAMtX+XwwFcXgBljGh+5tFyOCaPUXJUCTXI8wkt/31vujlAMpGdhqPoBG0xItl0ZQ+wc8C760n3eWSnPuWHXTJnZDnNyzTXDwo4rThA2yKc47T2THVs29cKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DsPYcpVq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4490FC433F1;
+	Tue, 16 Jan 2024 18:19:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705429181;
+	bh=cK0uK7R2+gEbjOCsenY8rYIQosqscpXTCp6F+qM8Pd8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=DsPYcpVqeSMaQVwap6TSM10XjoOPuojT6s+DQLUtOv+G5QecnwOOLG/Btd30B9sKD
+	 sPLkDVnjb3Ujys/qaKlj6P/2Q2Q976Ex1Qvf1/GH+yU1SiUnOC2LJ6MwMU6A0kkb4b
+	 laB0h0Yy1fmCV5dvcsLx+/XtcTFLtVXXPReiJfAINVpuOKuFIX3CfdDb/k7vHjTyE8
+	 EpnyMDv5x9RZhgd0oSGVD9/8ujhuWDfhz67X1nUEGE7Q2EVz0/eU202+tc6yopwHJk
+	 mlhOdTwzbhGv1kssB7mJQ3FfHQgC/qjiMsfFWtIYbEVwdvWBzJM/I/6Y3PGVRbGwm5
+	 BA2iB9BUFtu6Q==
+Date: Tue, 16 Jan 2024 12:19:39 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Thomas Richard <thomas.richard@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andy Shevchenko <andy@kernel.org>, Tony Lindgren <tony@atomide.com>,
+	Haojian Zhuang <haojian.zhuang@linaro.org>,
+	Vignesh R <vigneshr@ti.com>, Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Tom Joseph <tjoseph@cadence.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
+	theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com,
+	u-kumar1@ti.com
+Subject: Re: [PATCH 13/14] PCI: j721e: move reset GPIO to device struct
+Message-ID: <20240116181939.GA101049@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240109125814.3691033-1-tudor.ambarus@linaro.org> <20240109125814.3691033-4-tudor.ambarus@linaro.org>
-In-Reply-To: <20240109125814.3691033-4-tudor.ambarus@linaro.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Tue, 16 Jan 2024 12:11:20 -0600
-Message-ID: <CAPLW+4=BO6jkN+RRhO=8=79XtoOTRdfrEQBgDDzq8seWi8YMaA@mail.gmail.com>
-Subject: Re: [PATCH v3 03/12] dt-bindings: serial: samsung: do not allow
- reg-io-width for gs101
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: peter.griffin@linaro.org, krzysztof.kozlowski+dt@linaro.org, 
-	gregkh@linuxfoundation.org, mturquette@baylibre.com, sboyd@kernel.org, 
-	robh+dt@kernel.org, conor+dt@kernel.org, andi.shyti@kernel.org, 
-	alim.akhtar@samsung.com, jirislaby@kernel.org, s.nawrocki@samsung.com, 
-	tomasz.figa@gmail.com, cw00.choi@samsung.com, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-serial@vger.kernel.org, andre.draszik@linaro.org, 
-	kernel-team@android.com, willmcvicker@google.com, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240102-j7200-pcie-s2r-v1-13-84e55da52400@bootlin.com>
 
-On Tue, Jan 9, 2024 at 6:59=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linaro.=
-org> wrote:
->
-> All gs101 serial ports are restricted to 32-bit register accesses.
-> This requirement will be inferred from the compatible. Do not allow
-> the reg-io-width property for the google,gs101-uart compatible.
->
-> Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
+On Mon, Jan 15, 2024 at 05:14:54PM +0100, Thomas Richard wrote:
+> From: Théo Lebrun <theo.lebrun@bootlin.com>
+> 
+> Move reset GPIO to device struct, so it can be used at suspend and
+> resume stages.
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+s/Move/Add/ since we're not moving it from one struct to another.  (In
+subject also.)
 
-> v3: collect Peter's R-b tag
-> v2: new patch
->
->  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b=
-/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> index 133259ed3a34..0f0131026911 100644
-> --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> @@ -143,6 +143,8 @@ allOf:
->      then:
->        required:
->          - samsung,uart-fifosize
-> +      properties:
-> +        reg-io-width: false
->
->  unevaluatedProperties: false
->
-> --
-> 2.43.0.472.g3155946c3a-goog
->
->
+s/device struct/struct j721e_pcie/ since "device struct" could also
+refer to the "struct device", which is obviously not relevant here.
+
+BTW, if you capitalize the PCI subject lines to match previous
+history, it will save some work when applying this series.
+
+Also rewrap commit logs to fill 75 columns and add blank lines between
+paragraphs (noticed in patch 12/14).
+
+> @@ -54,6 +54,7 @@ struct j721e_pcie {
+>  	struct clk		*refclk;
+>  	u32			mode;
+>  	u32			num_lanes;
+> +	struct gpio_desc	*reset_gpio;
+>  	void __iomem		*user_cfg_base;
+>  	void __iomem		*intd_cfg_base;
+>  	u32			linkdown_irq_regfield;
+> @@ -359,7 +360,6 @@ static int j721e_pcie_probe(struct platform_device *pdev)
+>  	struct j721e_pcie *pcie;
+>  	struct cdns_pcie_rc *rc = NULL;
+>  	struct cdns_pcie_ep *ep = NULL;
+> -	struct gpio_desc *gpiod;
+>  	void __iomem *base;
+>  	struct clk *clk;
+>  	u32 num_lanes;
 
