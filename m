@@ -1,152 +1,188 @@
-Return-Path: <linux-i2c+bounces-1348-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1349-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6548083005F
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Jan 2024 08:12:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B411283045F
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Jan 2024 12:16:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15BB5B23F2C
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Jan 2024 07:12:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F7CB1F240B9
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Jan 2024 11:16:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 192088F59;
-	Wed, 17 Jan 2024 07:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 514BC1DDE7;
+	Wed, 17 Jan 2024 11:16:37 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B248F47
-	for <linux-i2c@vger.kernel.org>; Wed, 17 Jan 2024 07:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CD71DDD5
+	for <linux-i2c@vger.kernel.org>; Wed, 17 Jan 2024 11:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705475518; cv=none; b=RTT8tRzjyrFJDqYeo7mTAXLtEoJPpTA+qRNRRkYqqOoiD4Uh+gxMVi3+tUb3CaNwfgOxwLjgu6OdPqG82+5TP9zGR1dhVQzSdCOJhwxQOxq9xOgwPJgMSNAhutrV642S6gjhUe3lgWzTg1CjEecWabvAaZ0VRL68smUTvOnABYA=
+	t=1705490197; cv=none; b=bQGvZas+e6tYqVlB57hBaPUUFDAlpWqnRS7RfeZ/eo/fkm9k/GqYztRqoS+1NHTJ7uErU2kpR4sSljwugUydL5PqPSn+D4X3QuoI1uWhyeMX5XBYkB7R5urCC0yZ312GpB28vSu3I8G4LznKHPALoFyciyo69Q72Skc93P9HOLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705475518; c=relaxed/simple;
-	bh=Pe/8Y5e8wjnwxOK1x/nv/CC2IZ1uQR+cdiBkKxq8rXM=;
-	h=Received:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-SA-Exim-Connect-IP:X-SA-Exim-Mail-From:
-	 X-SA-Exim-Scanned:X-PTX-Original-Recipient; b=ccVtdrznXwUqJLdKzruWUFFCzqamF4pYdDwlVC1245o4qNvkLlIh5eruiyfXZVsOpAn3z09xAfmLq1JlifC72wTaOp8hKXMv18RQPmz+lQ4v02QoqaOYT1pHX0Ni4kigchlP0RB+iB7C0eufNw3XYo4Ea96Lk0AXwPzlQzhO1Os=
+	s=arc-20240116; t=1705490197; c=relaxed/simple;
+	bh=5qKlaLziljLZ5noa6CzlpJUbxw1PitV5B5D7RLl7cCY=;
+	h=Received:Received:Received:Message-ID:Subject:From:To:Cc:Date:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:
+	 User-Agent:MIME-Version:X-SA-Exim-Connect-IP:X-SA-Exim-Mail-From:
+	 X-SA-Exim-Scanned:X-PTX-Original-Recipient; b=fo3CH823QIKMBWKc9QSWtF3jY8pRQocOaVQyjbhOqK0QkGSq0g3xKxiEsO7gaDIwmf7ykVDdrAkTi0SWuHap2ZMP5+scR4uzYHcbhO4Ifngs91OcnNTm2WULpOsc0snSCvcZk8ssl4xPOPoUO0sETL2SRwYPlWC6kINmCI+dYgk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rQ05H-0003ap-S1; Wed, 17 Jan 2024 08:11:35 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1rQ3tx-0002Yp-2t; Wed, 17 Jan 2024 12:16:09 +0100
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rQ05G-000Pil-Vi; Wed, 17 Jan 2024 08:11:34 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rQ05G-001Sjq-2q;
-	Wed, 17 Jan 2024 08:11:34 +0100
-Date: Wed, 17 Jan 2024 08:11:34 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: Dong Aisheng <aisheng.dong@nxp.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Alexander Sverdlin <alexander.sverdlin@siemens.com>, 
-	Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, linux-clk@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH v8 1/1] i2c: lpi2c: use clk notifier for rate changes
-Message-ID: <k3fmklckbxvv4ke6htt3r4u536mu5l3dyq63ys3tujsmk73eei@3y3ovsegskhr>
-References: <20240110120556.519800-1-alexander.stein@ew.tq-group.com>
- <zac3ukluinnmybdmmkwqbq3zjlha4f5pri4zhxrfg2vfshr7ez@nc25m4uxmroc>
- <4540211.LvFx2qVVIh@steina-w>
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1rQ3tt-000S1i-0W; Wed, 17 Jan 2024 12:16:05 +0100
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1rQ3ts-0004u3-31;
+	Wed, 17 Jan 2024 12:16:04 +0100
+Message-ID: <568f2bcb1bea01c36f59650d5cc5a84612197f8b.camel@pengutronix.de>
+Subject: Re: [PATCH v3 5/5] i2c: muxes: pca954x: Allow sharing reset GPIO
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Srinivas Kandagatla
+ <srinivas.kandagatla@linaro.org>, Banajit Goswami <bgoswami@quicinc.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,  Rob
+ Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+ Peter Rosin <peda@axentia.se>, Jaroslav Kysela <perex@perex.cz>, Takashi
+ Iwai <tiwai@suse.com>,  "linux-arm-msm@vger.kernel.org"
+ <linux-arm-msm@vger.kernel.org>, "alsa-devel@alsa-project.org"
+ <alsa-devel@alsa-project.org>, "linux-sound@vger.kernel.org"
+ <linux-sound@vger.kernel.org>, "devicetree@vger.kernel.org"
+ <devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "linux-i2c@vger.kernel.org"
+ <linux-i2c@vger.kernel.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Sean Anderson
+ <sean.anderson@seco.com>
+Date: Wed, 17 Jan 2024 12:16:04 +0100
+In-Reply-To: <4c6c5d07-ac53-4da9-93e0-1286ca5eb44b@alliedtelesis.co.nz>
+References: <20240112163608.528453-1-krzysztof.kozlowski@linaro.org>
+	 <20240112163608.528453-6-krzysztof.kozlowski@linaro.org>
+	 <800d202864c1730622a19998728c5a8b576d1931.camel@pengutronix.de>
+	 <4c6c5d07-ac53-4da9-93e0-1286ca5eb44b@alliedtelesis.co.nz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7su3qk7xlya2eo4h"
-Content-Disposition: inline
-In-Reply-To: <4540211.LvFx2qVVIh@steina-w>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-
---7su3qk7xlya2eo4h
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello Alexander,
-
-On Wed, Jan 17, 2024 at 08:02:19AM +0100, Alexander Stein wrote:
-> Am Donnerstag, 11. Januar 2024, 09:51:30 CET schrieb Uwe Kleine-K=F6nig:
-> > On Wed, Jan 10, 2024 at 01:05:56PM +0100, Alexander Stein wrote:
-> > > +	lpi2c_imx->clk_change_nb.notifier_call =3D lpi2c_imx_clk_change_cb;
-> > > +	ret =3D devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].c=
-lk,
-> > > +					 &lpi2c_imx->clk_change_nb);
-> > > +	if (ret)
-> > > +		return dev_err_probe(&pdev->dev, ret,
-> > > +				     "can't register peripheral clock notifier\n");
+On Di, 2024-01-16 at 19:58 +0000, Chris Packham wrote:
+> On 17/01/24 04:18, Philipp Zabel wrote:
+> > On Fr, 2024-01-12 at 17:36 +0100, Krzysztof Kozlowski wrote:
+> > > From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> > >=20
+> > > Some hardware designs with multiple PCA954x devices use a reset GPIO
+> > > connected to all the muxes. Support this configuration by making use =
+of
+> > > the reset controller framework which can deal with the shared reset
+> > > GPIOs. Fall back to the old GPIO descriptor method if the reset
+> > > controller framework is not enabled.
+> > >=20
+> > > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> > > Acked-by: Peter Rosin <peda@axentia.se>
+> > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > Link: https://scanmail.trustwave.com/?c=3D20988&d=3D8p6m5Tfi2yYJWYV9x=
+YGcYnz7UYxB6WTGTPkmGu7b8A&u=3Dhttps%3a%2f%2flore%2ekernel%2eorg%2fr%2f20240=
+108041913%2e7078-1-chris%2epackham%40alliedtelesis%2eco%2enz
+> > > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > >=20
+> > > ---
+> > >=20
+> > > If previous patches are fine, then this commit is independent and cou=
+ld
+> > > be taken via I2C.
+> > >=20
+> > > Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> > > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> > > Cc: Sean Anderson <sean.anderson@seco.com>
+> > > ---
+> > >   drivers/i2c/muxes/i2c-mux-pca954x.c | 46 ++++++++++++++++++++++++--=
+---
+> > >   1 file changed, 38 insertions(+), 8 deletions(-)
+> > >=20
+> > > diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/=
+i2c-mux-pca954x.c
+> > > index 2219062104fb..1702e8d49b91 100644
+> > > --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
+> > > +++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
+> > > @@ -49,6 +49,7 @@
+> > >   #include <linux/pm.h>
+> > >   #include <linux/property.h>
+> > >   #include <linux/regulator/consumer.h>
+> > > +#include <linux/reset.h>
+> > >   #include <linux/slab.h>
+> > >   #include <linux/spinlock.h>
+> > >   #include <dt-bindings/mux/mux.h>
+> > > @@ -102,6 +103,9 @@ struct pca954x {
+> > >   	unsigned int irq_mask;
+> > >   	raw_spinlock_t lock;
+> > >   	struct regulator *supply;
+> > > +
+> > > +	struct gpio_desc *reset_gpio;
+> > > +	struct reset_control *reset_cont;
+> > >   };
+> > >  =20
+> > >   /* Provide specs for the MAX735x, PCA954x and PCA984x types we know=
+ about */
+> > > @@ -477,6 +481,35 @@ static int pca954x_init(struct i2c_client *clien=
+t, struct pca954x *data)
+> > >   	return ret;
+> > >   }
+> > >  =20
+> > > +static int pca954x_get_reset(struct device *dev, struct pca954x *dat=
+a)
+> > > +{
+> > > +	data->reset_cont =3D devm_reset_control_get_optional_shared(dev, NU=
+LL);
+> > > +	if (IS_ERR(data->reset_cont))
+> > > +		return dev_err_probe(dev, PTR_ERR(data->reset_cont),
+> > > +				     "Failed to get reset\n");
+> > > +	else if (data->reset_cont)
+> > > +		return 0;
+> > > +
 > > > +	/*
-> > > +	 * Lock the clock rate to avoid rate change between clk_get_rate() =
-and
-> > > +	 * atomic_set()
+> > > +	 * fallback to legacy reset-gpios
 > > > +	 */
-> > > +	ret =3D clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
-> > > +	if (ret)
-> > > +		return dev_err_probe(&pdev->dev, ret,
-> > > +				     "can't lock I2C peripheral clock rate\n");
-> > > +
-> > > +	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx-clks[0].clk=
-));
-> > > +	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
-> > > +	if (!atomic_read(&lpi2c_imx->rate_per))
-> > > +		return dev_err_probe(&pdev->dev, -EINVAL,
-> > > +				     "can't get I2C peripheral clock rate\n");
-> > > +
-> >=20
-> > If the clkrate isn't expected to actually change, you can just delay the
-> > call to clk_rate_exclusive_put() until driver unbind time and not
-> > register a notifier at all. The result would be more lightweight, you
-> > wouldn't even need an atomic variable for .rate_per.
+> > devm_reset_control_get_optional_shared() won't return NULL if the
+> > "reset-gpios" property is found in the device tree, so the GPIO
+> > fallback is dead code.
 >=20
-> On imx93 I don't expect the parent clock rate to change, as each lpi2c=20
-> peripheral has its own dedicated root clock.
-> On imx8qxp and imx8qm lpi2c has it's own "clock tree", but these clocks a=
-re=20
-> managed by the system controller.
-> Now idea about imx95 as this one apparently uses SCMI based clock driver.
-> No idea about imx7ulp, imx8ulp and imx8dxl.
+> Hmm, I was attempting to handle the case where CONFIG_RESET_GPIO wasn't=
+=20
+> set [...]
+> [...] it looks like we'd get -EPROBE_DEFER. I could change to check
+> for that or just remove the GPIO fallback entirely. Any preference?
 
-Then maybe pick the easier approach and only start with a notifier when
-the need arises?
+I hadn't considered this.
 
-Best regards
-Uwe
+If CONFIG_RESET_GPIO=3Dn, devm_reset_control_get_optional_shared()
+probably shouldn't return -EPROBE_DEFER. If we change that, the GPIO
+fallback here can stay as is.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+The alternative would be to drop the fallback and select RESET_GPIO.
+Using -EPROBE_DEFER for fallback detection is no good, as there could
+be a valid probe deferral if reset-gpio is compiled as a module that
+will be loaded later.
 
---7su3qk7xlya2eo4h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWnfaUACgkQj4D7WH0S
-/k49ogf8CmOvjetSmlgCRZfTd43zbT3eB6YozAGqQhKOcafIsxOCjmYpxo9BhHLv
-HUJx9WChVtqpMpOQl8yiddK/JYw1DhrxVPA1F0yZoCAN3xhQr2forIL1779KPjOB
-0LZVlz+NfHwugYkIqMVgCA/pMAsUs0ZKeOx+QMdgD3WL3bQKZJAp8XgbM39bukxC
-1eu4Obf7cXDHohL72af3KE4r8pT4xysJVZoyqQXRbE0fnlsSdMBo/x1KyEWVeLnI
-Fjts83IukWcklsbr2et4XcLdkTg7uoMpH6NZ5ytLCEEVjHeHNBBbwtGypZDJkTgo
-9tpSXRFiRVcKsosO8zecV9tVrWw4YQ==
-=8uuq
------END PGP SIGNATURE-----
-
---7su3qk7xlya2eo4h--
+regards
+Philipp
 
