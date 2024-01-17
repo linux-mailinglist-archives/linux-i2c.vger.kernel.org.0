@@ -1,168 +1,246 @@
-Return-Path: <linux-i2c+bounces-1346-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1347-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 222A082FA05
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 22:22:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6AD9830056
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Jan 2024 08:02:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1EED1C25EF8
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Jan 2024 21:22:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EAF82846B0
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Jan 2024 07:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20210612EE;
-	Tue, 16 Jan 2024 19:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DF248C06;
+	Wed, 17 Jan 2024 07:02:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="gwHVhC2C"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="Vtoo4+yu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67BC612EA
-	for <linux-i2c@vger.kernel.org>; Tue, 16 Jan 2024 19:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B348BFC;
+	Wed, 17 Jan 2024 07:02:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705435098; cv=none; b=L8zxrU/ETn2KrlVSlL9KQTnyBv6+XTbArpli1eXcZ21W07VyOgowleZECf7E73NecD2pL+bySgvweEYCbjNCoju7aITptSjLxiTLBLlNJtabywMangngwlzBGD1Rud5rTpriI+NGXDOuSEXl1kcnRqQrfhLJ3gLZu+hbsa3254M=
+	t=1705474951; cv=none; b=DJOifI32R7RXBgjsf+EJHthR/fFZfxLXoYyE4OUi5j8rvbFr3NABUK/iIRqKSUk+gIIHmH7+CN+In0ge/sscn+llIbCJDOe4gGLqXrEBkxC4giqbokEjoo1Ow6OPiobALT6BcyMJcnhY0yyrmV0vI+vSBcTy/l3CXL2KYxAklT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705435098; c=relaxed/simple;
-	bh=m7wSxdVOaZ1i1jVeM8/JbhFQZmZwRKPRQYMQT50flwU=;
-	h=Received:DKIM-Signature:Received:Received:Received:From:To:CC:
-	 Subject:Thread-Topic:Thread-Index:Date:Message-ID:References:
-	 In-Reply-To:Accept-Language:Content-Language:X-MS-Has-Attach:
-	 X-MS-TNEF-Correlator:x-originating-ip:Content-Type:Content-ID:
-	 Content-Transfer-Encoding:MIME-Version:X-SEG-SpamProfiler-Analysis:
-	 X-SEG-SpamProfiler-Score; b=cQCGDAx09GFdMlCroqLZs1OCs/YaiNGk0JJmN9n5d0eQ3w4D/hYajcNQdjEUhSF6P1izy2th1XUxRQaOe/qCNmRYuLDDBx6p3PFLXYn/Eapb53cnLiP8JrbYcMAoQDk5tkhtGOuPoRbcQI/adtLCmTmlN6j+KHoNsp2BepExv00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=gwHVhC2C; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	s=arc-20240116; t=1705474951; c=relaxed/simple;
+	bh=+dM7HI1jh3P9t3ioHNK2rqVu7GjhetbUqmNQDuxjB+w=;
+	h=DKIM-Signature:X-IronPort-AV:Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:Organization:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type; b=H9Vv8wcW7NpXz61OKYWrXrH4S6sC9v75WeOTTuVGavchq8JKT7c8Kz9lu9zIKASKvJwqJEiP4k/ZmrWKDiJwyyreZMLLG4EK1RQysMXOpZW2EWZhuXO/r36bjO5/1cMqKCamH+/r4CssmnhslcmIjvweYF9l7eB7wmewlfzUm+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=Vtoo4+yu; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1705474948; x=1737010948;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=oNLqTvGPmd1Ui6gPLR4huN4NYNmbZkrcJXe+IiUdCmQ=;
+  b=Vtoo4+yucLRZmk8XlN8oRF+8DjesBZz4yHQ/LOv6X+pDQJkvkxaue8yg
+   +/HWEe785SPYmbeNtpIG0wsZlLtb23HxlTYc3EArgiuNASpQ3KFo0iuUL
+   FfO9IkcBac/o40OATqc4ag/RQZQahl7L+JbXorKtgZc+f7kGFgo2VrZcZ
+   +CzaGDjPOuE7e749ULhyTIjfjYzLY7MLgltAHpvZF8O6AuTaqB0SlVk4o
+   gT0hoN0w15Sa7bABCoTb0C/qlHI76URqMHToCiGhQ5IrC+foHrR0XrsPZ
+   ViujsBtOg7UY7fnVM5F4PvbsqZMcqcmE5ukKnBOL879a7VyGHqVs7rh9b
+   w==;
+X-IronPort-AV: E=Sophos;i="6.05,200,1701126000"; 
+   d="scan'208";a="34929989"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 17 Jan 2024 08:02:20 +0100
+Received: from steina-w.localnet (steina-w.tq-net.de [10.123.53.25])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 5B0F12C02AE;
-	Wed, 17 Jan 2024 08:58:13 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1705435093;
-	bh=m7wSxdVOaZ1i1jVeM8/JbhFQZmZwRKPRQYMQT50flwU=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=gwHVhC2C8PVwAw1SsadeAGITsha9gBemsoDBN3M5NGrIF0pmT9cn1uJUPjn+slUGC
-	 TuvMsU4ACftQE4X+O2GhlTeIEswZ2W5EhRG8nuylzIETYgHFZszY556x/noevyfH7+
-	 MyZ3iVOuyD39zhwtCyzrTtdbUnvnuczJPgedUZQUrKr5SqydQ7U8fnCyY+Nk3QOJMh
-	 ZKjJbuVezl75h+aLzTWSVOvkDMPp1q2boLyhEPgP8AY5RM4zZz3ErsWI8Atp+QQDRJ
-	 Y2Sv5qLBi/nMCGp8pK1VguaHEJ3y0bUl7O2eXTxOKXN/uuIGhGOVnLKyd7Y/VUgIf9
-	 kyp7bLL5BJ+NA==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B65a6dfd50001>; Wed, 17 Jan 2024 08:58:13 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Wed, 17 Jan 2024 08:58:13 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.040; Wed, 17 Jan 2024 08:58:13 +1300
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Philipp Zabel <p.zabel@pengutronix.de>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>, Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Srinivas Kandagatla
-	<srinivas.kandagatla@linaro.org>, Banajit Goswami <bgoswami@quicinc.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, "Rob
- Herring" <robh+dt@kernel.org>, Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
-	Peter Rosin <peda@axentia.se>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
-	<tiwai@suse.com>, "linux-arm-msm@vger.kernel.org"
-	<linux-arm-msm@vger.kernel.org>, "alsa-devel@alsa-project.org"
-	<alsa-devel@alsa-project.org>, "linux-sound@vger.kernel.org"
-	<linux-sound@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>
-CC: Bartosz Golaszewski <brgl@bgdev.pl>, Sean Anderson
-	<sean.anderson@seco.com>
-Subject: Re: [PATCH v3 5/5] i2c: muxes: pca954x: Allow sharing reset GPIO
-Thread-Topic: [PATCH v3 5/5] i2c: muxes: pca954x: Allow sharing reset GPIO
-Thread-Index: AQHaRXWBLMixCZ8WK0+mNOuBScg1h7DbubEAgABOIQA=
-Date: Tue, 16 Jan 2024 19:58:12 +0000
-Message-ID: <4c6c5d07-ac53-4da9-93e0-1286ca5eb44b@alliedtelesis.co.nz>
-References: <20240112163608.528453-1-krzysztof.kozlowski@linaro.org>
- <20240112163608.528453-6-krzysztof.kozlowski@linaro.org>
- <800d202864c1730622a19998728c5a8b576d1931.camel@pengutronix.de>
-In-Reply-To: <800d202864c1730622a19998728c5a8b576d1931.camel@pengutronix.de>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E5E79E64E8AE744098FF4C08FB92D028@atlnz.lc>
-Content-Transfer-Encoding: base64
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 0A1A2280075;
+	Wed, 17 Jan 2024 08:02:20 +0100 (CET)
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Dong Aisheng <aisheng.dong@nxp.com>, Andi Shyti <andi.shyti@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Wolfram Sang <wsa@kernel.org>, Alexander Sverdlin <alexander.sverdlin@siemens.com>, linux-i2c@vger.kernel.org, Pengutronix Kernel Team <kernel@pengutronix.de>, linux-arm-kernel@lists.infradead.org, NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v8 1/1] i2c: lpi2c: use clk notifier for rate changes
+Date: Wed, 17 Jan 2024 08:02:19 +0100
+Message-ID: <4540211.LvFx2qVVIh@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <zac3ukluinnmybdmmkwqbq3zjlha4f5pri4zhxrfg2vfshr7ez@nc25m4uxmroc>
+References: <20240110120556.519800-1-alexander.stein@ew.tq-group.com> <zac3ukluinnmybdmmkwqbq3zjlha4f5pri4zhxrfg2vfshr7ez@nc25m4uxmroc>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=LZFCFQXi c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=dEuoMetlWLkA:10 a=KKAkSRfTAAAA:8 a=62ntRvTiAAAA:8 a=VwQbUJbxAAAA:8 a=vE6nA0IPAAAA:8 a=uLhZSfaJXi4u2qP_6tYA:9 a=QEXdDO2ut3YA:10 a=cvBusfyB2V15izCimMoJ:22 a=pToNdpNmrtiFLRE6bQ9Z:22 a=AjGcO6oz07-iQ99wixmX:22 a=_s8P6U4_B6QeRRtK5oEG:22
-X-SEG-SpamProfiler-Score: 0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-DQpPbiAxNy8wMS8yNCAwNDoxOCwgUGhpbGlwcCBaYWJlbCB3cm90ZToNCj4gT24gRnIsIDIwMjQt
-MDEtMTIgYXQgMTc6MzYgKzAxMDAsIEtyenlzenRvZiBLb3psb3dza2kgd3JvdGU6DQo+PiBGcm9t
-OiBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMuY28ubno+DQo+Pg0K
-Pj4gU29tZSBoYXJkd2FyZSBkZXNpZ25zIHdpdGggbXVsdGlwbGUgUENBOTU0eCBkZXZpY2VzIHVz
-ZSBhIHJlc2V0IEdQSU8NCj4+IGNvbm5lY3RlZCB0byBhbGwgdGhlIG11eGVzLiBTdXBwb3J0IHRo
-aXMgY29uZmlndXJhdGlvbiBieSBtYWtpbmcgdXNlIG9mDQo+PiB0aGUgcmVzZXQgY29udHJvbGxl
-ciBmcmFtZXdvcmsgd2hpY2ggY2FuIGRlYWwgd2l0aCB0aGUgc2hhcmVkIHJlc2V0DQo+PiBHUElP
-cy4gRmFsbCBiYWNrIHRvIHRoZSBvbGQgR1BJTyBkZXNjcmlwdG9yIG1ldGhvZCBpZiB0aGUgcmVz
-ZXQNCj4+IGNvbnRyb2xsZXIgZnJhbWV3b3JrIGlzIG5vdCBlbmFibGVkLg0KPj4NCj4+IFNpZ25l
-ZC1vZmYtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5u
-ej4NCj4+IEFja2VkLWJ5OiBQZXRlciBSb3NpbiA8cGVkYUBheGVudGlhLnNlPg0KPj4gUmV2aWV3
-ZWQtYnk6IEtyenlzenRvZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9y
-Zz4NCj4+IExpbms6IGh0dHBzOi8vc2Nhbm1haWwudHJ1c3R3YXZlLmNvbS8/Yz0yMDk4OCZkPThw
-Nm01VGZpMnlZSldZVjl4WUdjWW56N1VZeEI2V1RHVFBrbUd1N2I4QSZ1PWh0dHBzJTNhJTJmJTJm
-bG9yZSUyZWtlcm5lbCUyZW9yZyUyZnIlMmYyMDI0MDEwODA0MTkxMyUyZTcwNzgtMS1jaHJpcyUy
-ZXBhY2toYW0lNDBhbGxpZWR0ZWxlc2lzJTJlY28lMmVueg0KPj4gU2lnbmVkLW9mZi1ieTogS3J6
-eXN6dG9mIEtvemxvd3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPj4NCj4+
-IC0tLQ0KPj4NCj4+IElmIHByZXZpb3VzIHBhdGNoZXMgYXJlIGZpbmUsIHRoZW4gdGhpcyBjb21t
-aXQgaXMgaW5kZXBlbmRlbnQgYW5kIGNvdWxkDQo+PiBiZSB0YWtlbiB2aWEgSTJDLg0KPj4NCj4+
-IENjOiBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMuY28ubno+DQo+
-PiBDYzogQmFydG9zeiBHb2xhc3pld3NraSA8YnJnbEBiZ2Rldi5wbD4NCj4+IENjOiBTZWFuIEFu
-ZGVyc29uIDxzZWFuLmFuZGVyc29uQHNlY28uY29tPg0KPj4gLS0tDQo+PiAgIGRyaXZlcnMvaTJj
-L211eGVzL2kyYy1tdXgtcGNhOTU0eC5jIHwgNDYgKysrKysrKysrKysrKysrKysrKysrKysrLS0t
-LS0NCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDM4IGluc2VydGlvbnMoKyksIDggZGVsZXRpb25zKC0p
-DQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaTJjL211eGVzL2kyYy1tdXgtcGNhOTU0eC5j
-IGIvZHJpdmVycy9pMmMvbXV4ZXMvaTJjLW11eC1wY2E5NTR4LmMNCj4+IGluZGV4IDIyMTkwNjIx
-MDRmYi4uMTcwMmU4ZDQ5YjkxIDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9pMmMvbXV4ZXMvaTJj
-LW11eC1wY2E5NTR4LmMNCj4+ICsrKyBiL2RyaXZlcnMvaTJjL211eGVzL2kyYy1tdXgtcGNhOTU0
-eC5jDQo+PiBAQCAtNDksNiArNDksNyBAQA0KPj4gICAjaW5jbHVkZSA8bGludXgvcG0uaD4NCj4+
-ICAgI2luY2x1ZGUgPGxpbnV4L3Byb3BlcnR5Lmg+DQo+PiAgICNpbmNsdWRlIDxsaW51eC9yZWd1
-bGF0b3IvY29uc3VtZXIuaD4NCj4+ICsjaW5jbHVkZSA8bGludXgvcmVzZXQuaD4NCj4+ICAgI2lu
-Y2x1ZGUgPGxpbnV4L3NsYWIuaD4NCj4+ICAgI2luY2x1ZGUgPGxpbnV4L3NwaW5sb2NrLmg+DQo+
-PiAgICNpbmNsdWRlIDxkdC1iaW5kaW5ncy9tdXgvbXV4Lmg+DQo+PiBAQCAtMTAyLDYgKzEwMyw5
-IEBAIHN0cnVjdCBwY2E5NTR4IHsNCj4+ICAgCXVuc2lnbmVkIGludCBpcnFfbWFzazsNCj4+ICAg
-CXJhd19zcGlubG9ja190IGxvY2s7DQo+PiAgIAlzdHJ1Y3QgcmVndWxhdG9yICpzdXBwbHk7DQo+
-PiArDQo+PiArCXN0cnVjdCBncGlvX2Rlc2MgKnJlc2V0X2dwaW87DQo+PiArCXN0cnVjdCByZXNl
-dF9jb250cm9sICpyZXNldF9jb250Ow0KPj4gICB9Ow0KPj4gICANCj4+ICAgLyogUHJvdmlkZSBz
-cGVjcyBmb3IgdGhlIE1BWDczNXgsIFBDQTk1NHggYW5kIFBDQTk4NHggdHlwZXMgd2Uga25vdyBh
-Ym91dCAqLw0KPj4gQEAgLTQ3Nyw2ICs0ODEsMzUgQEAgc3RhdGljIGludCBwY2E5NTR4X2luaXQo
-c3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwgc3RydWN0IHBjYTk1NHggKmRhdGEpDQo+PiAgIAly
-ZXR1cm4gcmV0Ow0KPj4gICB9DQo+PiAgIA0KPj4gK3N0YXRpYyBpbnQgcGNhOTU0eF9nZXRfcmVz
-ZXQoc3RydWN0IGRldmljZSAqZGV2LCBzdHJ1Y3QgcGNhOTU0eCAqZGF0YSkNCj4+ICt7DQo+PiAr
-CWRhdGEtPnJlc2V0X2NvbnQgPSBkZXZtX3Jlc2V0X2NvbnRyb2xfZ2V0X29wdGlvbmFsX3NoYXJl
-ZChkZXYsIE5VTEwpOw0KPj4gKwlpZiAoSVNfRVJSKGRhdGEtPnJlc2V0X2NvbnQpKQ0KPj4gKwkJ
-cmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2LCBQVFJfRVJSKGRhdGEtPnJlc2V0X2NvbnQpLA0KPj4g
-KwkJCQkgICAgICJGYWlsZWQgdG8gZ2V0IHJlc2V0XG4iKTsNCj4+ICsJZWxzZSBpZiAoZGF0YS0+
-cmVzZXRfY29udCkNCj4+ICsJCXJldHVybiAwOw0KPj4gKw0KPj4gKwkvKg0KPj4gKwkgKiBmYWxs
-YmFjayB0byBsZWdhY3kgcmVzZXQtZ3Bpb3MNCj4+ICsJICovDQo+IGRldm1fcmVzZXRfY29udHJv
-bF9nZXRfb3B0aW9uYWxfc2hhcmVkKCkgd29uJ3QgcmV0dXJuIE5VTEwgaWYgdGhlDQo+ICJyZXNl
-dC1ncGlvcyIgcHJvcGVydHkgaXMgZm91bmQgaW4gdGhlIGRldmljZSB0cmVlLCBzbyB0aGUgR1BJ
-Tw0KPiBmYWxsYmFjayBpcyBkZWFkIGNvZGUuDQoNCkhtbSwgSSB3YXMgYXR0ZW1wdGluZyB0byBo
-YW5kbGUgdGhlIGNhc2Ugd2hlcmUgQ09ORklHX1JFU0VUX0dQSU8gd2Fzbid0IA0Kc2V0IG9yIHRo
-ZSByZXNldCBjb3JlIHdhc24ndCBlbmFibGVkLiBJdCBkb2Vzbid0IGFwcGVhciB0aGF0IHRoZSBs
-YXR0ZXIgDQppcyBldmVuIHBvc3NpYmxlIHNvIG5vIG5lZWQgdG8gd29ycnkgYWJvdXQgdGhhdC4g
-Rm9yIHRoZSBmb3JtZXIgaXQgbG9va3MgDQpsaWtlIHdlJ2QgZ2V0IC1FUFJPQkVfREVGRVIuIEkg
-Y291bGQgY2hhbmdlIHRvIGNoZWNrIGZvciB0aGF0IG9yIGp1c3QgDQpyZW1vdmUgdGhlIEdQSU8g
-ZmFsbGJhY2sgZW50aXJlbHkuIEFueSBwcmVmZXJlbmNlPw0KDQo+DQo+PiArCWRhdGEtPnJlc2V0
-X2dwaW8gPSBkZXZtX2dwaW9kX2dldF9vcHRpb25hbChkZXYsICJyZXNldCIsIEdQSU9EX09VVF9I
-SUdIKTsNCj4+ICsJaWYgKElTX0VSUihkYXRhLT5yZXNldF9ncGlvKSkgew0KPj4gKwkJcmV0dXJu
-IGRldl9lcnJfcHJvYmUoZGV2LCBQVFJfRVJSKGRhdGEtPnJlc2V0X2dwaW8pLA0KPj4gKwkJCQkg
-ICAgICJGYWlsZWQgdG8gZ2V0IHJlc2V0IGdwaW8iKTsNCj4+ICsJfQ0KPj4gKw0KPj4gKwlyZXR1
-cm4gMDsNCj4+ICt9DQo+PiArDQo+IHJlZ2FyZHMNCj4gUGhpbGlwcA==
+Hello Uwe,
+
+Am Donnerstag, 11. Januar 2024, 09:51:30 CET schrieb Uwe Kleine-K=F6nig:
+> Hello,
+>=20
+> On Wed, Jan 10, 2024 at 01:05:56PM +0100, Alexander Stein wrote:
+> > From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+> >=20
+> > Instead of repeatedly calling clk_get_rate for each transfer, register
+> > a clock notifier to update the cached divider value each time the clock
+> > rate actually changes.
+> > A deadlock has been observed while adding tlv320aic32x4 audio codec to
+> > the system. When this clock provider adds its clock, the clk mutex is
+> > locked already, it needs to access i2c, which in return needs the mutex
+> > for clk_get_rate as well.
+> >=20
+> > Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+> > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+> > Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > ---
+> > Changes in v8:
+> > * Improved commit message describing an actual observed deadlock
+> >=20
+> > Changes in v7:
+> > * Use dev_err_probe
+> > * Reworked/Shortened the commit message
+> >=20
+> >  It is not about saving CPU cycles, but to avoid locking the clk subsys=
+tem
+> >  upon each transfer.
+> > =20
+> >  drivers/i2c/busses/i2c-imx-lpi2c.c | 40 +++++++++++++++++++++++++++++-
+> >  1 file changed, 39 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> > b/drivers/i2c/busses/i2c-imx-lpi2c.c index 678b30e90492a..3070e605fd8ff
+> > 100644
+> > --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> > +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> > @@ -5,6 +5,7 @@
+> >=20
+> >   * Copyright 2016 Freescale Semiconductor, Inc.
+> >   */
+> >=20
+> > +#include <linux/atomic.h>
+> >=20
+> >  #include <linux/clk.h>
+> >  #include <linux/completion.h>
+> >  #include <linux/delay.h>
+> >=20
+> > @@ -99,6 +100,8 @@ struct lpi2c_imx_struct {
+> >=20
+> >  	__u8			*rx_buf;
+> >  	__u8			*tx_buf;
+> >  	struct completion	complete;
+> >=20
+> > +	struct notifier_block	clk_change_nb;
+> > +	atomic_t		rate_per;
+> >=20
+> >  	unsigned int		msglen;
+> >  	unsigned int		delivered;
+> >  	unsigned int		block_data;
+> >=20
+> > @@ -197,6 +200,20 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct
+> > *lpi2c_imx)>=20
+> >  	} while (1);
+> > =20
+> >  }
+> >=20
+> > +static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
+> > +				   unsigned long action, void *data)
+> > +{
+> > +	struct clk_notifier_data *ndata =3D data;
+> > +	struct lpi2c_imx_struct *lpi2c_imx =3D container_of(nb,
+> > +							  struct=20
+lpi2c_imx_struct,
+> > +							 =20
+clk_change_nb);
+> > +
+> > +	if (action & POST_RATE_CHANGE)
+> > +		atomic_set(&lpi2c_imx->rate_per, ndata->new_rate);
+> > +
+> > +	return NOTIFY_OK;
+> > +}
+> > +
+> >=20
+> >  /* CLKLO =3D I2C_CLK_RATIO * CLKHI, SETHOLD =3D CLKHI, DATAVD =3D CLKH=
+I/2 */
+> >  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+> >  {
+> >=20
+> > @@ -207,7 +224,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct
+> > *lpi2c_imx)>=20
+> >  	lpi2c_imx_set_mode(lpi2c_imx);
+> >=20
+> > -	clk_rate =3D clk_get_rate(lpi2c_imx->clks[0].clk);
+> > +	clk_rate =3D atomic_read(&lpi2c_imx->rate_per);
+> >=20
+> >  	if (!clk_rate)
+> >  =09
+> >  		return -EINVAL;
+> >=20
+> > @@ -590,6 +607,27 @@ static int lpi2c_imx_probe(struct platform_device
+> > *pdev)>=20
+> >  	if (ret)
+> >  =09
+> >  		return ret;
+> >=20
+> > +	lpi2c_imx->clk_change_nb.notifier_call =3D lpi2c_imx_clk_change_cb;
+> > +	ret =3D devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
+> > +					 &lpi2c_imx->clk_change_nb);
+> > +	if (ret)
+> > +		return dev_err_probe(&pdev->dev, ret,
+> > +				     "can't register peripheral clock=20
+notifier\n");
+> > +	/*
+> > +	 * Lock the clock rate to avoid rate change between clk_get_rate()=20
+and
+> > +	 * atomic_set()
+> > +	 */
+> > +	ret =3D clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
+> > +	if (ret)
+> > +		return dev_err_probe(&pdev->dev, ret,
+> > +				     "can't lock I2C peripheral clock=20
+rate\n");
+> > +
+> > +	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx-
+>clks[0].clk));
+> > +	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
+> > +	if (!atomic_read(&lpi2c_imx->rate_per))
+> > +		return dev_err_probe(&pdev->dev, -EINVAL,
+> > +				     "can't get I2C peripheral clock=20
+rate\n");
+> > +
+>=20
+> If the clkrate isn't expected to actually change, you can just delay the
+> call to clk_rate_exclusive_put() until driver unbind time and not
+> register a notifier at all. The result would be more lightweight, you
+> wouldn't even need an atomic variable for .rate_per.
+
+On imx93 I don't expect the parent clock rate to change, as each lpi2c=20
+peripheral has its own dedicated root clock.
+On imx8qxp and imx8qm lpi2c has it's own "clock tree", but these clocks are=
+=20
+managed by the system controller.
+Now idea about imx95 as this one apparently uses SCMI based clock driver.
+No idea about imx7ulp, imx8ulp and imx8dxl.
+
+Best regards,
+Alexander
+
+> https://lore.kernel.org/all/20240104225512.1124519-2-u.kleine-koenig@peng=
+utr
+> onix.de/ might be beneficial for that.
+>=20
+> Having said that, improving the locking in the clk framework to not
+> trigger this deadlock would be nice.
+>=20
+> Best regards
+> Uwe
+
+
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
+
 
