@@ -1,113 +1,107 @@
-Return-Path: <linux-i2c+bounces-1366-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1367-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8784B831048
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jan 2024 01:03:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F1A783128D
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jan 2024 06:52:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7F291C211EB
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jan 2024 00:03:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07B90281569
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Jan 2024 05:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D16928DA2;
-	Thu, 18 Jan 2024 00:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7108C147;
+	Thu, 18 Jan 2024 05:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="hn8FgZrz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KCXElkuO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FA5288CF
-	for <linux-i2c@vger.kernel.org>; Thu, 18 Jan 2024 00:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9613DC126;
+	Thu, 18 Jan 2024 05:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705536188; cv=none; b=f308eS+O39uNDDQMNd4hp3IhQpV6K/eCJRUZTkZbyCjXltp162LbZPO+nyZgiIzHkdLyIfqYvng6eRP0NAVDZuY/yG5wLZhwty5p9PTeqTKFqGSX/1hqluH2JPLZYWdybKs8Fv/0e9MqGQpVCVD91xq0AzGu98j77p5oG1hwY+4=
+	t=1705557125; cv=none; b=SO6Nhkv3RG4F5y5bYcbMv0eETzfwWvalP8+hemKE1EK9wx/idKyqCW3T9vdvKPZJpwNySaOHfH/fgQw3Ho2Ccml4tYt/UM4dXAnqZRA6fc/eo/qV+MnzO1MOvRHD3dunBI5HL0uVYam6Y++99naGEg75lRXUzvLOCpjRbvgaX78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705536188; c=relaxed/simple;
-	bh=NEZVzybzPmNdcNoWNoKOGDd68kDR5PZhrPaw6Fk3lrc=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:
-	 Received:X-Received:MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gmail-Original-Message-ID:Message-ID:Subject:To:Content-Type; b=Uizv6P/goXRKBzWNFimMBNkG0c95BvGlkG+JqTDW+q82wJgDsKLpqDnLa8Ppl7pfpE9OjQRB6PelxDKM5vRNV7tALVu7albbku3T/AoJXrW7LXJpVX5t6ygytDQ5XllmzEamvirRVgzzlpK3s6onmV20M/shaxbqYtdblvWw7vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=hn8FgZrz; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a298accc440so1427363766b.1
-        for <linux-i2c@vger.kernel.org>; Wed, 17 Jan 2024 16:03:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1705536184; x=1706140984; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4tTFhSt6TuecBRZDSOhTGNO151it+ibIw2r69xqrYOE=;
-        b=hn8FgZrzwmLkJvYmvqtLt5HFvlGwNe6RLRBKrPTMuA74dBfX1X5fkBg4gHPvPozhTs
-         gnGTfoFYjWvGwE8A3fkF1uyklRMGSgctsemPKhicWo5LYIDR04AxkIT/dg/PHiTSQScr
-         ND3/ScMcPc98xasjJesIwTAB7959GTLDIt7sg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705536184; x=1706140984;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4tTFhSt6TuecBRZDSOhTGNO151it+ibIw2r69xqrYOE=;
-        b=p9LytqAX45m9w35HT1LIGleCRV+uAO6TR9v6d8XX5RecpCGkTWWJQoKgbka9/h/c80
-         YL74GRPzC/D01NMo6jJqNHg4wa0l1zG6LjpUBtwHUrE189ZrA4o2sK+Ig0bkkKFHcWOS
-         knfGdHNOd8Sxu742pKpzb8a7ZHGgD9XUcLvEG8KY/ZoDJxSye2q00cYRve2jb9OA31cv
-         unNSq+lgKrdyJY5EsbcGk6wtQRZw0IJf2TltIF9NGIYd5YKYWXxllRdHAtJhshnXSSAW
-         beIsWO6YyR0YiizxpP7hsBWvNJN6R/CcvVlToYHCQ/fMMcKlJT/SfQjdpJXxr149j1P+
-         +W6w==
-X-Gm-Message-State: AOJu0YzDmhVwlJdDcfAjdA8Zttyjettu3H8DxUS86zQrwF6QMojNioIc
-	fuVa3suq/Cne8PsaB+JvymCAh+xLQbTNjBLsk+WzOI+WwMb6sbhd6gLAZTXnT3mTEMJ33Y+Ij+d
-	zxOfVTA==
-X-Google-Smtp-Source: AGHT+IHNFWHl5IqW1UPu0uLZ1MS1ngChi4u5ERxsEjQtriQ2dnqeVCWf70fr04KoTvzTMsrg1xDKcQ==
-X-Received: by 2002:a17:906:fb93:b0:a26:e013:947f with SMTP id lr19-20020a170906fb9300b00a26e013947fmr2668ejb.76.1705536184423;
-        Wed, 17 Jan 2024 16:03:04 -0800 (PST)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id cx6-20020a170907168600b00a2d5ef80043sm5597528ejd.129.2024.01.17.16.03.02
-        for <linux-i2c@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jan 2024 16:03:03 -0800 (PST)
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-559dbeba085so1532115a12.0
-        for <linux-i2c@vger.kernel.org>; Wed, 17 Jan 2024 16:03:02 -0800 (PST)
-X-Received: by 2002:aa7:c48b:0:b0:559:b870:e868 with SMTP id
- m11-20020aa7c48b000000b00559b870e868mr50225edq.12.1705536182387; Wed, 17 Jan
- 2024 16:03:02 -0800 (PST)
+	s=arc-20240116; t=1705557125; c=relaxed/simple;
+	bh=geY3+RLqrFptZ9PpXvvLfsyGzOnN912nGbIFsj+YlLA=;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 Mail-Followup-To:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=qDNtyCgEfi9CegpXs2wAR69PdkjNHYn11UjSHgDBPcZaSlQUWqd0MqiPKaWaqjvEhXT5MYjIxOrhFqMtO6LYcjcLmJ/SRV/WOl3csNjwkEVaWkVNhBNZfdM39eLYyr8catU3AttP440WhSwqq7vnS+5/VtC6f7+4I9ILIZpFZP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KCXElkuO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CAC7C43399;
+	Thu, 18 Jan 2024 05:52:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705557125;
+	bh=geY3+RLqrFptZ9PpXvvLfsyGzOnN912nGbIFsj+YlLA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KCXElkuOhNm4Bx1OPinvXfJ9jQzL/CLWDfy0lgJmU21PVZ8uqeQyzPpI02bqv7jkG
+	 qBsgs9sDFJ7iJ4WKPwzWtR09WlspWIC32L1XQqB3hePOWvbUYDALprk9Vin0uwox9W
+	 fN8CrKbZJozOYbAVvtwqC7cJED7k+vT/iH5jLmBrwJQ0a0QsXClxRVRFIWeQ9ZyLWj
+	 ujgkroT8vpDxU/FCAyF2QwSN7t6FtiQ4Vt1BEYKb6TtOJVQ/6aNrGWKaTRUAaBBgiK
+	 +yc0voMWMRgXHF+jPMT+AJd1BCKTO+7zHzJ3N0GffjkKrxta4ao00XNdM/whKP5rZQ
+	 rHoML7PlSuq3w==
+Date: Thu, 18 Jan 2024 06:52:00 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Kim Phillips <kim.phillips@amd.com>
+Subject: Re: [PULL REQUEST] i2c-for-6.8-rc1-fixed
+Message-ID: <Zai8gFMzdP5mqqOi@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Kim Phillips <kim.phillips@amd.com>
+References: <ZahG7xgHJ4Tf8mHI@shikoro>
+ <CAHk-=wgSF9zaUCMWe8FuLrfwS0PxJXyxQxFGn7_W22C0rTaQXQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZahG7xgHJ4Tf8mHI@shikoro>
-In-Reply-To: <ZahG7xgHJ4Tf8mHI@shikoro>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 17 Jan 2024 16:02:45 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgSF9zaUCMWe8FuLrfwS0PxJXyxQxFGn7_W22C0rTaQXQ@mail.gmail.com>
-Message-ID: <CAHk-=wgSF9zaUCMWe8FuLrfwS0PxJXyxQxFGn7_W22C0rTaQXQ@mail.gmail.com>
-Subject: Re: [PULL REQUEST] i2c-for-6.8-rc1-fixed
-To: Wolfram Sang <wsa@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>, 
-	Kim Phillips <kim.phillips@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="BmVMOqKrXq7xmAU1"
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgSF9zaUCMWe8FuLrfwS0PxJXyxQxFGn7_W22C0rTaQXQ@mail.gmail.com>
 
-On Wed, 17 Jan 2024 at 13:30, Wolfram Sang <wsa@kernel.org> wrote:
->
->  And a big series for the
-> designware-driver needed to be reverted because issues have been
-> reported late in the cycle and no incremental fix has been found yet.
-> This is the fixed pull requested with a missing revert added.
 
-Honestly, with three quarters of the commits being the broken series,
-followed by reverting it, I get the feeling that this would be better
-rebased.
+--BmVMOqKrXq7xmAU1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I don't like rebasing, but I also don't like "look, we had most of
-these commits broken, so we just reverted them all" all noticed before
-it even hits my tree.
 
-So I really feel like at that point you go "this branch was a failure"
-and start anew - aka rebase. Along with a big explanation of why a
-recent rebase ended up happening, so that there is no confusion about
-it.
+> Honestly, with three quarters of the commits being the broken series,
+> followed by reverting it, I get the feeling that this would be better
+> rebased.
 
-              Linus
+Sure thing, will do.
+
+
+--BmVMOqKrXq7xmAU1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWovHwACgkQFA3kzBSg
+KbZThQ//Tvz7MwOzvSOx/z3GqyqJWAS+exmeXll8WgXZq6zoXU6MtYCU/Fu/8nZZ
+sEB1a0roJ1PGHhW7VjVA080PvpdadAvN5dCCAahJy/KMGd51Xa4yTk2SAwE2axgG
+cU4xnK4FgbflQaxC4s660hKCmrHf29kAigVnPoN5Gw12rDS94xrPOq5/6H4N1uIK
+3aNsUNg3lZoivrGCNDyoPSNLI5rI1ClmdQDL8OLr9l+fCuZoF71o4zFbPt3+adU8
+GyhxPQNcnrl5krXK/9Pstk2I2IPxJdW5oKV3HwJeHfPQoU+L8Rn3QKFwG9bOCVQg
+HxvFR+byRLdiQoH504uJ6zIThgeBc9Tjim7uRTCvQXLTxemBajtwfsWb5BHq9bKH
+h1TUDYzTl8v5Hf/enXrtXbR7Q3z58lXbKlfHop2bC1Vp3P6p400e7dEhGiVEDZE8
+W5+8FfUVznepqSD1C0EHl/rK9hzvYZcns3Sy1w59J71sq6/I+9DxgkS66TfQkKi3
+JWkBMQYKzN+HS2mna1gp1cFUzEKcy4Hx0MJ3YMlVffJh83tKPyCSpqVUbSuJE9DV
+YX9XrpL+dsYVV9LFB7Qgc0by1jzH6BDzpfxe7WcJtSAw92ZVOQLNG7LYHe7KnDwk
+VGt1OPK7rbtYbWTBlQBGiG7LooH4VIX0cieJjPdM9uj+5RnDpjM=
+=TH0H
+-----END PGP SIGNATURE-----
+
+--BmVMOqKrXq7xmAU1--
 
