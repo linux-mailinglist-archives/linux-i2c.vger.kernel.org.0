@@ -1,195 +1,176 @@
-Return-Path: <linux-i2c+bounces-1375-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1376-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9059B8323FF
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 05:08:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F1AC8324FD
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 08:22:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FBBF286685
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 04:08:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2E291F239CD
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 07:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D961870;
-	Fri, 19 Jan 2024 04:07:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D2448F61;
+	Fri, 19 Jan 2024 07:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="Lq+51E+J"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2084.outbound.protection.partner.outlook.cn [139.219.17.84])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8E31C30;
-	Fri, 19 Jan 2024 04:07:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.84
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705637262; cv=fail; b=ROAeq+8zqeMu4Mk3LR4WX6FriNtst1c4ib61vYKAt8JiHfHydcw02fi3GanwFteVGfe9SEqIBN1HP0rEQDAIIvo+l1N65NDNxw2zCd2bnyIczyGHeNdw2LzvO6F9d+xr5GJiQafTlPOeHTgO8wdtPg1kVrZSkICbyFurPsK0C8I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705637262; c=relaxed/simple;
-	bh=ZvL3V+AhywgSrOoq2sSvuSZDy3tF2fm83s+8ynxOPsk=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=AQJFGAemAGppoL8ukX6pX+f6av+aYQOcrN+OEXKlGcBZScdqPPooh6nhrvqNa0wzVtcaquo0uKnKwvntHXk7vXf/N+0ooWZXeAhJCGnuHyB8qBrhwuanOc5TdVgHwAlzJHQznlAwdzZmWHExuk4rOgLWoqape+0nGQGNTMECeI8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b/NV0tR8sfdeADM+fRIu0FY7DFOZHod0JU0BRzqN0Yz3BbtCV01o5GiHJOpcjtUNMyJRBtx+uMZNcSn5CBM0qfe526rg+Xv0LpYCSJAzX11qbfb5jnOTtPINYJ8wFNUrEYDqbW/S8HHVIHN20Pg9LzZjthMgwi6SitiZ8eh6NhOy48crmxFrmAjJ8AYXF+d+Mkgo/G2/Aob82LP3Xzn2XR5JE8TNkpUOXsrMlDUZDCpdeHFPWghGsWHkogfEmHG9STrL87l3SVK0owjxHHYr0yXzKMApGq0ZnjcdKlvpqbd5LVYTIMSanA+zpiwgAH6VJ4bF7fYnupXVfKQKEffOYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zHN2yRlgc83yoJrdYEEwnwT3hYYCyF7Hma4hPrSLxnU=;
- b=A0RImxqRWeeTRrqlFC5QlqVn/uBBWOG8BZt+IsJwbzrSE0btPYfLaSt7VvCQAyVkGoX2HPfZpisPUrQ/A2KDQudSrX/otYW1QC9O7jprlSQQkbIdpH16LSGK1pxYOqjjvvgof89TuO7B68FAFq7/WS2XGG5fgmGpOKOWNtfviKCakFX3IReuLGmHaPOdkTM8bAIfyt21LzA9ki1vqgqbK05RKaLxBBv84wp6z3xmyGMcT51RZvZx1IpbYG82cYSQp+DcYYZerBkVwKglRdNQ7Z8qIAaC3OxLZLKe27bgpTvLjXpLYLm+9nbCINwx4gEeOEJ+6egfHdCYa4jAZK9cHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-Received: from ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:19::6) by ZQ0PR01MB1272.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:18::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.32; Fri, 19 Jan
- 2024 01:33:49 +0000
-Received: from ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
- ([fe80::1dbb:b090:7d89:4e22]) by
- ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn ([fe80::1dbb:b090:7d89:4e22%4])
- with mapi id 15.20.7181.032; Fri, 19 Jan 2024 01:33:49 +0000
-From: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
-To: Michal Simek <michal.simek@amd.com>,
-	Andi Shyti <andi.shyti@kernel.org>
-Cc: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
-	Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-	linux-arm-kernel@lists.infradead.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9757484
+	for <linux-i2c@vger.kernel.org>; Fri, 19 Jan 2024 07:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705648955; cv=none; b=i1zI/0THrIhgzf2va/ErPRDvsY6EahMBN13zx58gWC3EDa96YkLxacw3eZgfOD2WYibaTEeeJNGLMibAwN55AGdeTiF4tW2W5Ecy+h8Ko/gIwm+n2iotTAUdg2KdAtoQFeGF3t4PCjVWnkgykHjn13lmW622MDek0/NmPNmaYRw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705648955; c=relaxed/simple;
+	bh=nnWfCzzOtGl2qmTPtruKnwqq4F+2FkHRy/q7ecIu840=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ErhkN8rQvbLLtC9dWE9TiVECzyZNDBafRtiP2CpqfNl2Md/k4WVBgCvQeVtQWgXAhr0Bth1RSmOPBtpOj0KiT0bQDfzb/80EYs9RLIt6MBtwTGVxsnAewDvnPnsamk1kTNt6w5QZTf2gSNOJyjIunn/I+mQtUwBkDs8Z3TO2om0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=Lq+51E+J; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1705648952; x=1737184952;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ToCD64IZyp9R5KDsXQDCPabTKt3AQPT7ipiSDB71oLo=;
+  b=Lq+51E+JfEyW7tiMLG5RSlez2pRNde+8obGeRNbYD73T+qoC0JWN7Mpj
+   27Mc2hev8WlbA9QjLJL2atkAhlti9ZSlGmlxBiuvRn+NWpUkXoyF4ldQr
+   3XK/lTOeyilvtJAV4N0KYQcguYa3tjfl0SpGbTB09HBE5DHWp8G1989rP
+   zD3lWyTUCEeWMdNAJl0ohf00/3mrhc342eYotHyjNKd112sN1kR8b3lnQ
+   ObEkGvJIEk6Ga5jRhk5ul6Jmao+vABLGxCch/9hk+Kf0vyL5zDvbRhIp7
+   JSTlbihe3cNy5dyFjnToLkrNyxj4EFPtJWQw+5vHSuCdIYQaSkmPSc3eU
+   g==;
+X-IronPort-AV: E=Sophos;i="6.05,204,1701126000"; 
+   d="scan'208";a="34974265"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 19 Jan 2024 08:22:29 +0100
+Received: from steina-w.tq-net.de (steina-w.tq-net.de [10.123.53.25])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 13478280075;
+	Fri, 19 Jan 2024 08:22:29 +0100 (CET)
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Dong Aisheng <aisheng.dong@nxp.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	NXP Linux Team <linux-imx@nxp.com>,
 	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 RESEND] i2c: cadence: Add system suspend and resume PM support
-Date: Fri, 19 Jan 2024 09:33:26 +0800
-Message-ID: <20240119013326.3405484-1-jisheng.teoh@starfivetech.com>
-X-Mailer: git-send-email 2.43.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: NT0PR01CA0025.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c510:c::7) To ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:19::6)
+	linux-arm-kernel@lists.infradead.org,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Subject: [PATCH v2 1/1] i2c: lpi2c: Avoid calling clk_get_rate during transfer
+Date: Fri, 19 Jan 2024 08:22:23 +0100
+Message-Id: <20240119072223.3986183-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: ZQ0PR01MB1160:EE_|ZQ0PR01MB1272:EE_
-X-MS-Office365-Filtering-Correlation-Id: d89e61b0-d0ef-4615-f584-08dc188eafb8
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	wA+9CpdICGnhXRtYYppajEP7uvl4h/k5vRfuyW2MtpYttl4SefVxZFM9FIXKgyeWIeEuLxy6CVtaXoiXCzKzlOUuZs7HMVyU1hII2VSrEK0ZAF2Yx3NWxozxfcGO9WXtngo0QhFjRmO1tTn6Ynv/UJpYSel09rBMVm6mtfqLxp/szQaKsMe69aK4wUYTT+JJ/0BC/Q0ew2e8OdvHOqoHPW5vHh4eX1nEVyKYK8e2WBX4Pfkd+fJt4V52DLemU8Ma/MzvZ81QGXWRmVjbDSU73ERQvL5SRzlXOO0C+e+N9tuGS4bvEm83+vhFMDtc98H67UHnsPsCPT33OcauPIsT6s53PlXZVqOJUOOXtamJxN5jafTr57DwsmZF49D9QpdgdVVNvjjHCAW57VHA1UvNIMD/wCFNSr6AqDKigxT9jpBGH+sCsBukcBhpvoF9K6I7cLnPSCE5wVzHmRb+nh5fm4UKTPUl6e3KjTaBM/KfMEfSDare131Md2jI1CpT8I9rjyr6UB7QhSTc6IjwQJ3byFGjYrKgfQEMvkBpL9wP1wQlX34//jtKLnuJE5Is4ydl
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(39830400003)(136003)(366004)(346002)(396003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(38100700002)(26005)(1076003)(2616005)(6666004)(52116002)(2906002)(5660300002)(15650500001)(83380400001)(41300700001)(508600001)(966005)(4326008)(8676002)(8936002)(66556008)(66476007)(54906003)(110136005)(66946007)(40180700001)(40160700002)(86362001)(36756003)(38350700005)(41320700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?EeGM9vJB3C/IM6uCUI9CrZAddFDqBdmyITWlf9oI5iuE0u5lzVEfCcDdumrg?=
- =?us-ascii?Q?dwzpQngcAyLewWK8+Jxl3orjnjwYrSA3em5ECX292+jPfMYemsl1Q1YtwRTE?=
- =?us-ascii?Q?yP9q4ILEV4TZ67+YuiVTyLLjy2yiaokcd+QAp5hqxxE5n8hIR3ge1WkD9UV0?=
- =?us-ascii?Q?x0OgRm6St57eJT8kX3svFkdxvF8exBjovn+nZMDtMWZXJciZyhf8zcYkqdX3?=
- =?us-ascii?Q?QG4n+KrV8GnQs0XKTZ9myjNYQvW9avwhN4IzaTEqd4hqcI7cYk20fVGZikxI?=
- =?us-ascii?Q?9WKJwsDR376eragAe8gmPoDy83HM8NIdVvVgLE4eDY+GcrbNtSHflDIQR1wU?=
- =?us-ascii?Q?RYwb32SfxBRw/P7tTPMbEnYTx/DeomfjQ1cnmYGlsRQTozixQQtAihkkXRVv?=
- =?us-ascii?Q?D7F8xT8UTPaMrvZXEdPmKhIzmBYoE3WqiL34+suwZJ1Zdb9bS3ELfFeXeQT0?=
- =?us-ascii?Q?U5S+6eCxDp5g6FneLBtKCcmGeWGJ4TX3YsSrB8WaRO69t0dZ6dKqxrCSw5pm?=
- =?us-ascii?Q?GF3jqbXcM1m696NZ+kSbXaFe/zEYHIb6r/a9OSudyE4s3A47hhsgx2E3ufR3?=
- =?us-ascii?Q?uXGRFXjcHfF3iL1t7HN2jhLK5WyMf9ucv59v7Kna/9u1lnMzels9n6tvlCzX?=
- =?us-ascii?Q?Jbrpav3lpkl3nUdL9nvtyfUp62gs5rn/gIoOhCTG4bjOYfQC0gx/r5aqTZcD?=
- =?us-ascii?Q?eSr+pDBppJil1SUMJyoVZI/T+6ZYEWf4p00XMhKdYxC08PegiaevI3tZ6gh+?=
- =?us-ascii?Q?XLxsqkr6XJnbo61CY4zj5oWC67IYgu25wGDT2IgQwcTpdyBANM8kr5DfIsBE?=
- =?us-ascii?Q?MgQrYE5wJ4AlVQPyB7oOes6rYloO+db42lj8XOebCvnD1Cp8My21x9DqhrlF?=
- =?us-ascii?Q?OAN5jF7Wzv+3XqZxF5LR15zGwRtfTdZ+18seLcrpQ5c/PHqctNFuCbIqmOlM?=
- =?us-ascii?Q?tTdoN1EvtSxEBoQLzzUvEGvxVy+NOhewH02xHhuaa/+zt7iiyjuNwUDTXjxH?=
- =?us-ascii?Q?pbpTTuPfLMzl+j6wDmjI2NzSQky5N4UNqE8HwBQcgo32z7yTLL4ihP9j6aL0?=
- =?us-ascii?Q?wD+kkRY55+mDQkqOvRNkizR9HJWEDvgg/ttoZa7m6z5J/MFxgzte4tzoIJG9?=
- =?us-ascii?Q?aiVxTAgX28WRtt0NwtZ/YKMjdMSSqe7qcAlJ1rjHrw79Z6QM4MdUet82r8Oy?=
- =?us-ascii?Q?5EiCIUH4NhnBm/gGPnId/x6tcrAq6tbjGmZXTiG2aAXDqLlWxckgGR4ZsDNG?=
- =?us-ascii?Q?+MVtgM6J5oztrGFv3xT8cOrVgjVX9yWpHs3TyGcwTEkoDA0yznryNnQO7qBR?=
- =?us-ascii?Q?1VHRZQyvD6DB9FdSk1zkPTEoMWmIm5wBHV8/ZOmRI7WwaFpETCYcsvzefHcE?=
- =?us-ascii?Q?ldn+TP79eF3LRfxDkHVm/0oNof9mryIOaYcfOOZV/ZVMXOASZI6yorAc83+t?=
- =?us-ascii?Q?kT6VuIdx4tHp9rLnROGFmT1K1HRfmXVMqGWGvk0NhyHXC5aBEl+lbxddxjl3?=
- =?us-ascii?Q?iUWaVtERGRSRdGcj9Kq6TJCjS1wHZjVUCy2HS1D7fZEqvYVqgYnMi3elaTHt?=
- =?us-ascii?Q?9+2Qo+FqWM1315c5zX06rPpKSCFplg8N28B9PMXIzOwoJSTdJHGcBmAJVDos?=
- =?us-ascii?Q?EQ=3D=3D?=
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d89e61b0-d0ef-4615-f584-08dc188eafb8
-X-MS-Exchange-CrossTenant-AuthSource: ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2024 01:33:49.4561
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UP+mF4bJgGMVpqvG+w9rg91J08WDTvW/tAF36R366lVU/AkbXvYDopo0YCH1TtOxceWAjW5m8aSbdvfx1AwQNwr0zQLxoZACfPDy0xHTnls=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ0PR01MB1272
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Enable device system suspend and resume PM support, and mark the device
-state as suspended during system suspend to reject any data transfer.
+Instead of repeatedly calling clk_get_rate for each transfer, lock
+the clock rate and cache the value.
+A deadlock has been observed while adding tlv320aic32x4 audio codec to
+the system. When this clock provider adds its clock, the clk mutex is
+locked already, it needs to access i2c, which in return needs the mutex
+for clk_get_rate as well.
 
-Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 ---
-Initial v2 was archived, previous discussion can be found in [1].
-[1]: https://lore.kernel.org/all/20231209131516.1916550-1-jisheng.teoh@starfivetech.com/
+This is an alternative, lightweight approach replacing the patch [1] and
+depends on [2].
+The issue to address is still removing the call to clk_get_rate() during each
+transfer, which might reuslt in a deadlock. lockdep also complains about this
+call chain.
 
-Changes since v1:
-- Add missing err assignment in cdns_i2c_resume().
----
- drivers/i2c/busses/i2c-cadence.c | 33 ++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+Instead of adding a clock notifier, lock the peripheral clock rate and cache
+the peripheral clock rate.
+Currently LPI2C is available in the following SoC:
+* i.MX7ULP
+* i.MX8ULP
+* i.MX8DXL
+* i.MX8X
+* i.MX8
+* i.MX93
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index de3f58b60dce..4bb7d6756947 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -1176,6 +1176,18 @@ static int __maybe_unused cdns_i2c_runtime_suspend(struct device *dev)
- 	return 0;
- }
+Additionally I expect both i.MX91 and i.MX95 to also use this driver.
+
+This patch assumes the parent clock rate never changes. This is apparently true
+for i.MX93 as each I2C has it's own lpi2c*_root clock. On i.MX8 and i.MX8X
+clocks are managed by SCU with it's own dedicated firmware. I can't say if the
+clock never changes though. I have no idea about the other SoC.
+
+Changes in v2:
+* Removed redundent clk_rate check in lpi2c_imx_config (I opted to keep
+  the local variable to not extent the calculation code lines)
+* Collected R-b
+
+Best regards,
+Alexander
+
+[1] https://lore.kernel.org/all/20240110120556.519800-1-alexander.stein@ew.tq-group.com/
+[2] https://lore.kernel.org/all/20240104225512.1124519-2-u.kleine-koenig@pengutronix.de/
+
+ drivers/i2c/busses/i2c-imx-lpi2c.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+index 678b30e90492a..14473c223cfa7 100644
+--- a/drivers/i2c/busses/i2c-imx-lpi2c.c
++++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+@@ -99,6 +99,7 @@ struct lpi2c_imx_struct {
+ 	__u8			*rx_buf;
+ 	__u8			*tx_buf;
+ 	struct completion	complete;
++	unsigned long		rate_per;
+ 	unsigned int		msglen;
+ 	unsigned int		delivered;
+ 	unsigned int		block_data;
+@@ -207,9 +208,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
  
-+static int __maybe_unused cdns_i2c_suspend(struct device *dev)
-+{
-+	struct cdns_i2c *xi2c = dev_get_drvdata(dev);
-+
-+	i2c_mark_adapter_suspended(&xi2c->adap);
-+
-+	if (!pm_runtime_status_suspended(dev))
-+		return cdns_i2c_runtime_suspend(dev);
-+
-+	return 0;
-+}
-+
- /**
-  * cdns_i2c_init -  Controller initialisation
-  * @id:		Device private data structure
-@@ -1219,7 +1231,28 @@ static int __maybe_unused cdns_i2c_runtime_resume(struct device *dev)
- 	return 0;
- }
+ 	lpi2c_imx_set_mode(lpi2c_imx);
  
-+static int __maybe_unused cdns_i2c_resume(struct device *dev)
-+{
-+	struct cdns_i2c *xi2c = dev_get_drvdata(dev);
-+	int err;
+-	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
+-	if (!clk_rate)
+-		return -EINVAL;
++	clk_rate = lpi2c_imx->rate_per;
+ 
+ 	if (lpi2c_imx->mode == HS || lpi2c_imx->mode == ULTRA_FAST)
+ 		filt = 0;
+@@ -590,6 +589,20 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	/*
++	 * Lock the parent clock rate to avoid getting parent clock upon
++	 * each transfer
++	 */
++	ret = devm_clk_rate_exclusive_get(&pdev->dev, lpi2c_imx->clks[0].clk);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret,
++				     "can't lock I2C peripheral clock rate\n");
 +
-+	err = cdns_i2c_runtime_resume(dev);
-+	if (err)
-+		return err;
++	lpi2c_imx->rate_per = clk_get_rate(lpi2c_imx->clks[0].clk);
++	if (!lpi2c_imx->rate_per)
++		return dev_err_probe(&pdev->dev, -EINVAL,
++				     "can't get I2C peripheral clock rate\n");
 +
-+	if (pm_runtime_status_suspended(dev)) {
-+		err = cdns_i2c_runtime_suspend(dev);
-+		if (err)
-+			return err;
-+	}
-+
-+	i2c_mark_adapter_resumed(&xi2c->adap);
-+
-+	return 0;
-+}
-+
- static const struct dev_pm_ops cdns_i2c_dev_pm_ops = {
-+	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(cdns_i2c_suspend, cdns_i2c_resume)
- 	SET_RUNTIME_PM_OPS(cdns_i2c_runtime_suspend,
- 			   cdns_i2c_runtime_resume, NULL)
- };
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
+ 	pm_runtime_use_autosuspend(&pdev->dev);
+ 	pm_runtime_get_noresume(&pdev->dev);
 -- 
-2.43.0
+2.34.1
 
 
