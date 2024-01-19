@@ -1,176 +1,123 @@
-Return-Path: <linux-i2c+bounces-1376-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1377-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F1AC8324FD
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 08:22:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7557F832542
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 08:48:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2E291F239CD
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 07:22:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC733B24863
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 07:48:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D2448F61;
-	Fri, 19 Jan 2024 07:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="Lq+51E+J"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31264D51A;
+	Fri, 19 Jan 2024 07:48:25 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9757484
-	for <linux-i2c@vger.kernel.org>; Fri, 19 Jan 2024 07:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CD0C13B
+	for <linux-i2c@vger.kernel.org>; Fri, 19 Jan 2024 07:48:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705648955; cv=none; b=i1zI/0THrIhgzf2va/ErPRDvsY6EahMBN13zx58gWC3EDa96YkLxacw3eZgfOD2WYibaTEeeJNGLMibAwN55AGdeTiF4tW2W5Ecy+h8Ko/gIwm+n2iotTAUdg2KdAtoQFeGF3t4PCjVWnkgykHjn13lmW622MDek0/NmPNmaYRw=
+	t=1705650505; cv=none; b=izha0M5051OSChqGYyelReJKhRHfDPkkgmXp4k9QMUd/uV+BvKmc5Ya7QnsfgHd22AVlj/5Mu+RqXp7hllC/SVA3LqJXpiInRozB3ccy76yvZ2g9KaeGfuTsqk8UogglnwE4KXm8B8ZRo3eOVlGOHKuXlupyy8pM4/XW00aFqJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705648955; c=relaxed/simple;
-	bh=nnWfCzzOtGl2qmTPtruKnwqq4F+2FkHRy/q7ecIu840=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ErhkN8rQvbLLtC9dWE9TiVECzyZNDBafRtiP2CpqfNl2Md/k4WVBgCvQeVtQWgXAhr0Bth1RSmOPBtpOj0KiT0bQDfzb/80EYs9RLIt6MBtwTGVxsnAewDvnPnsamk1kTNt6w5QZTf2gSNOJyjIunn/I+mQtUwBkDs8Z3TO2om0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=Lq+51E+J; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1705648952; x=1737184952;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ToCD64IZyp9R5KDsXQDCPabTKt3AQPT7ipiSDB71oLo=;
-  b=Lq+51E+JfEyW7tiMLG5RSlez2pRNde+8obGeRNbYD73T+qoC0JWN7Mpj
-   27Mc2hev8WlbA9QjLJL2atkAhlti9ZSlGmlxBiuvRn+NWpUkXoyF4ldQr
-   3XK/lTOeyilvtJAV4N0KYQcguYa3tjfl0SpGbTB09HBE5DHWp8G1989rP
-   zD3lWyTUCEeWMdNAJl0ohf00/3mrhc342eYotHyjNKd112sN1kR8b3lnQ
-   ObEkGvJIEk6Ga5jRhk5ul6Jmao+vABLGxCch/9hk+Kf0vyL5zDvbRhIp7
-   JSTlbihe3cNy5dyFjnToLkrNyxj4EFPtJWQw+5vHSuCdIYQaSkmPSc3eU
-   g==;
-X-IronPort-AV: E=Sophos;i="6.05,204,1701126000"; 
-   d="scan'208";a="34974265"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 19 Jan 2024 08:22:29 +0100
-Received: from steina-w.tq-net.de (steina-w.tq-net.de [10.123.53.25])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 13478280075;
-	Fri, 19 Jan 2024 08:22:29 +0100 (CET)
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Dong Aisheng <aisheng.dong@nxp.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	linux-i2c@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Subject: [PATCH v2 1/1] i2c: lpi2c: Avoid calling clk_get_rate during transfer
-Date: Fri, 19 Jan 2024 08:22:23 +0100
-Message-Id: <20240119072223.3986183-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1705650505; c=relaxed/simple;
+	bh=98x17gfSn37fP/15pq0Qdb4F/N6T4BWQT5oZafYwklc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NvKXCnsMH3VWqr3YPe03/K9AmurfT+PHVSVv0s/AMZkMZL+c42SHPlyc71GSrLQqQMcJd95ZX7Yr5TWgXoGwh8MDXqVgISjvZjdt5wMlOiOW32THTXIJzZ/iS4UhywfA7139h+dKaJTrb8QRhsS9MQbnsD2KtRGy9Euk18LdcHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rQjbf-0002NN-7C; Fri, 19 Jan 2024 08:48:03 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rQjbe-000ru1-BA; Fri, 19 Jan 2024 08:48:02 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rQjbe-0034dW-0o;
+	Fri, 19 Jan 2024 08:48:02 +0100
+Date: Fri, 19 Jan 2024 08:48:02 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: Dong Aisheng <aisheng.dong@nxp.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	NXP Linux Team <linux-imx@nxp.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] i2c: lpi2c: Avoid calling clk_get_rate during
+ transfer
+Message-ID: <iw3yolk5ijgksusesossqot6cvemktjnlt74djofr3zhqk3w7p@tnc4fl6n7hyw>
+References: <20240119072223.3986183-1-alexander.stein@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7idu3t4wkvu2sonr"
+Content-Disposition: inline
+In-Reply-To: <20240119072223.3986183-1-alexander.stein@ew.tq-group.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-Instead of repeatedly calling clk_get_rate for each transfer, lock
-the clock rate and cache the value.
-A deadlock has been observed while adding tlv320aic32x4 audio codec to
-the system. When this clock provider adds its clock, the clk mutex is
-locked already, it needs to access i2c, which in return needs the mutex
-for clk_get_rate as well.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
----
-This is an alternative, lightweight approach replacing the patch [1] and
-depends on [2].
-The issue to address is still removing the call to clk_get_rate() during each
-transfer, which might reuslt in a deadlock. lockdep also complains about this
-call chain.
+--7idu3t4wkvu2sonr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Instead of adding a clock notifier, lock the peripheral clock rate and cache
-the peripheral clock rate.
-Currently LPI2C is available in the following SoC:
-* i.MX7ULP
-* i.MX8ULP
-* i.MX8DXL
-* i.MX8X
-* i.MX8
-* i.MX93
+Hello Alexander,
 
-Additionally I expect both i.MX91 and i.MX95 to also use this driver.
+On Fri, Jan 19, 2024 at 08:22:23AM +0100, Alexander Stein wrote:
+> Instead of repeatedly calling clk_get_rate for each transfer, lock
+> the clock rate and cache the value.
+> A deadlock has been observed while adding tlv320aic32x4 audio codec to
+> the system. When this clock provider adds its clock, the clk mutex is
+> locked already, it needs to access i2c, which in return needs the mutex
+> for clk_get_rate as well.
+>=20
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> ---
+> This is an alternative, lightweight approach replacing the patch [1] and
+> depends on [2].
 
-This patch assumes the parent clock rate never changes. This is apparently true
-for i.MX93 as each I2C has it's own lpi2c*_root clock. On i.MX8 and i.MX8X
-clocks are managed by SCU with it's own dedicated firmware. I can't say if the
-clock never changes though. I have no idea about the other SoC.
+If the kernel build bots find your patch they will likely trip over not
+being able to parse that. If you want to prevent this, you could make
+use of git format-patch's --base parameter.
 
-Changes in v2:
-* Removed redundent clk_rate check in lpi2c_imx_config (I opted to keep
-  the local variable to not extent the calculation code lines)
-* Collected R-b
+Best regards
+Uwe
 
-Best regards,
-Alexander
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-[1] https://lore.kernel.org/all/20240110120556.519800-1-alexander.stein@ew.tq-group.com/
-[2] https://lore.kernel.org/all/20240104225512.1124519-2-u.kleine-koenig@pengutronix.de/
+--7idu3t4wkvu2sonr
+Content-Type: application/pgp-signature; name="signature.asc"
 
- drivers/i2c/busses/i2c-imx-lpi2c.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-index 678b30e90492a..14473c223cfa7 100644
---- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-+++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-@@ -99,6 +99,7 @@ struct lpi2c_imx_struct {
- 	__u8			*rx_buf;
- 	__u8			*tx_buf;
- 	struct completion	complete;
-+	unsigned long		rate_per;
- 	unsigned int		msglen;
- 	unsigned int		delivered;
- 	unsigned int		block_data;
-@@ -207,9 +208,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
- 
- 	lpi2c_imx_set_mode(lpi2c_imx);
- 
--	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
--	if (!clk_rate)
--		return -EINVAL;
-+	clk_rate = lpi2c_imx->rate_per;
- 
- 	if (lpi2c_imx->mode == HS || lpi2c_imx->mode == ULTRA_FAST)
- 		filt = 0;
-@@ -590,6 +589,20 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	/*
-+	 * Lock the parent clock rate to avoid getting parent clock upon
-+	 * each transfer
-+	 */
-+	ret = devm_clk_rate_exclusive_get(&pdev->dev, lpi2c_imx->clks[0].clk);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "can't lock I2C peripheral clock rate\n");
-+
-+	lpi2c_imx->rate_per = clk_get_rate(lpi2c_imx->clks[0].clk);
-+	if (!lpi2c_imx->rate_per)
-+		return dev_err_probe(&pdev->dev, -EINVAL,
-+				     "can't get I2C peripheral clock rate\n");
-+
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
- 	pm_runtime_use_autosuspend(&pdev->dev);
- 	pm_runtime_get_noresume(&pdev->dev);
--- 
-2.34.1
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWqKTEACgkQj4D7WH0S
+/k4lcQf9GxclO7LmiPA+7+Xa9A1xcgeHY0QZD7eWQE+MfELh1CDB93k/hJNiyVE0
+4TwMFC8a0TFCx7E4pFo5H2rRd2uKLoqAlglH1qKaA+2iMIQQ6fNYqSmoKNLC5dop
+GClEdALtIP4i+YHjgDYRK7gcNCoGiT/R7l/unoeRuBeu7JuKV+NTwy0XTSno2ReS
+v2EZ80DLHJ/Pkz1CDTCW2Yq5/gh/pCJUYNNUvLT+auoz/0C9O4QkxR9haaSDSmYH
+IqmE2dTWi/M98jTcBJPDay39Fhjsa6PgB+etXr+tzocGgTZrVGfbVsKhU3QiTsgL
+w0+j9cvA41uh54CnKSbzUdiVY7FhWw==
+=QDjl
+-----END PGP SIGNATURE-----
 
+--7idu3t4wkvu2sonr--
 
