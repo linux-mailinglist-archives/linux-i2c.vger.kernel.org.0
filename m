@@ -1,52 +1,52 @@
-Return-Path: <linux-i2c+bounces-1387-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1388-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BF35832C87
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 16:50:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAEAD832CD9
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 17:08:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 549E3286106
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 15:50:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 715141F226EB
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 16:08:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DFF854BDF;
-	Fri, 19 Jan 2024 15:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1967554F86;
+	Fri, 19 Jan 2024 16:08:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jAd3/erb"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WONIpkeF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5BF54BCA;
-	Fri, 19 Jan 2024 15:50:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4D054FBB;
+	Fri, 19 Jan 2024 16:08:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705679416; cv=none; b=uHGohhPcXngQW+2MAloMPbz29pXPC8sTrwxgBrIJx07MkKfcIBEjntxCgAyhyX6wOtQnU/LMaTiBOmmq4lLy9wC0pjDw7/n7XXbTHEPHx+7MqtMkR1OaziFqHOi5gCzmSO6NELV+2AKZvJstm/B3h4lO8czOhJzkm5BEDe4G87g=
+	t=1705680505; cv=none; b=m84GWfpJcHwEXujRuBCjRCDweTB6ZwfOFPhFU8mkdCobaAL9bhbm8wXRPzZKSpoKorVyA/Q/qyNXhcvz5pELYloeRY4WtqmvVj22GCC4RnLU1tG7GAo2L/eIIj4WH1gdyd7Mb4QZpaLth2/iLt8cG5cXSWGL6qazgH2GSqNari0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705679416; c=relaxed/simple;
-	bh=WEVXR1pA/pzCxaNHR1riPhSJRcWD8lgDhDQ+LReDBqM=;
+	s=arc-20240116; t=1705680505; c=relaxed/simple;
+	bh=f1NTbZpi6beXqIjw6g6+qGt7w9p6IgHNGpWIbTLSFgs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h599hiBpSFHONWN6BLMFXP8hQ0rcbpn9PpVG9x1EU6XLT9vDS2TaaPo1yTkeplopk05XJaKWXgp+hNbaf+Qs+2KSG3asEFMb9km1EqyjzUO7FLinrh18ONPn/ofCpsnJwKjoAkTiV4JOzsMKzNZJS1dpoiKGWwZJxdkatfxX/hk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jAd3/erb; arc=none smtp.client-ip=217.70.183.198
+	 In-Reply-To:Content-Type; b=dxh05/nLCJwSqcpsrtgTcjV5t1tgpJ2Z+v4jWFSqv3mqLaluz+1ElzPkWTkGygPW7NRayKurHATPrx9IC7MMkXx1HyHkmD1lJj/0JaMFV7lCkwtgx50LaqDpdAZxGWC9rTbkq2xbIvPBIR5GqiqhSvkQLn/v5529gjcKLHbOwT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WONIpkeF; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 26730C000A;
-	Fri, 19 Jan 2024 15:50:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 65E85240008;
+	Fri, 19 Jan 2024 16:08:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1705679405;
+	t=1705680495;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=no9Zk1+Ofv930fy1IruQYBJcZcLId9qedsWBTajBqLk=;
-	b=jAd3/erbItSU8bRgfAurVO1vRfyY/x0FFjkEhN5ogLafuPpdFJlYMmw2mvONe7FjotJExF
-	BCJ0M7Lt4+ymTm4ZxxE8hUAKY/pe8tNemwOl1tSMTwHlHpwxf5NQblXa4VMrDmXoQsrNS5
-	5b/Rmf+/gXOlw2geifYAL25tJpZnR5yejCKR8gMnrQ17x0KZP6d/kMzlnHMV5f8bI4EVi7
-	dkvJwUcXwAyhIksBlz/wEdHtqMQyIg4YOvKycNYAi3OZvUi9otL4B/8Q0qUTWFa7aAlIJM
-	jJIjiN22G+zWSX/1su7DBWwGIYuS9eT9gCUYSoahyvjaAQq5ux+PvpfWVOZocw==
-Message-ID: <a4627e51-c851-4abf-a3b2-222b2b315d4e@bootlin.com>
-Date: Fri, 19 Jan 2024 16:50:00 +0100
+	bh=/lcPvgWIm/QbVzXxcPjjQvz3cRLruCD/tBqEeHF3XX0=;
+	b=WONIpkeF6OM+U5keRwkDYZGMolP5XktgDBB6mIAe8MUTsy79HiG6aPHFRUwt+zvQnJD1yV
+	rhimS5Xv0eRylsTuhD2McG83J2YXfxvXNhUbjh/C+EXBuXMvv5+07L8LSuG0ozxWPYlwY/
+	aNSMECbf8FnizI8ADDg3l8yKMTxFLFAw5gxxCKPkDelc+OqObRloUw9fEpi35HIqKz+mBP
+	wPtcYc/iRsKufncWrvdORBHBKi/t3Zi4ATWX3EAfBtizCbIK5XiiUMupEJBg9I+eWfq8I+
+	stz/4f2GuyfGsCnAIosFOmQIF5TolDLgz4bAPmE8Q0y3roHYchplOYTQKxUDog==
+Message-ID: <223422cc-2a1c-417b-8fa1-20d3b3eb41ef@bootlin.com>
+Date: Fri, 19 Jan 2024 17:08:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -54,7 +54,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/14] gpio: pca953x: move suspend/resume to
+Subject: Re: [PATCH 02/14] pinctrl: pinctrl-single: move suspend/resume to
  suspend_noirq/resume_noirq
 Content-Language: en-US
 To: Andy Shevchenko <andy.shevchenko@gmail.com>
@@ -76,41 +76,81 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
  linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
  theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com
 References: <20240102-j7200-pcie-s2r-v1-0-84e55da52400@bootlin.com>
- <20240102-j7200-pcie-s2r-v1-1-84e55da52400@bootlin.com>
- <CAHp75VezeBp3Umg4prvdS83WrHViyTs-hBV0SejVD2BBnGYEvg@mail.gmail.com>
+ <20240102-j7200-pcie-s2r-v1-2-84e55da52400@bootlin.com>
+ <CAHp75Verff06LE0QFaDRoun=ANpGfVU1tHknvvQZd_KyzLVP5Q@mail.gmail.com>
 From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <CAHp75VezeBp3Umg4prvdS83WrHViyTs-hBV0SejVD2BBnGYEvg@mail.gmail.com>
+In-Reply-To: <CAHp75Verff06LE0QFaDRoun=ANpGfVU1tHknvvQZd_KyzLVP5Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: thomas.richard@bootlin.com
 
-On 1/15/24 20:56, Andy Shevchenko wrote:
+On 1/15/24 21:02, Andy Shevchenko wrote:
 > On Mon, Jan 15, 2024 at 6:16 PM Thomas Richard
 > <thomas.richard@bootlin.com> wrote:
 >>
->> Some IOs can be needed during suspend_noirq/resume_noirq.
+>> The goal is to extend the active period of pinctrl.
+>> Some devices may need active pinctrl after suspend and/or before resume.
+>> So move suspend/resume to suspend_noirq/resume_noirq to have active
+>> pinctrl until suspend_noirq (included), and from resume_noirq
+>> (included).
 > 
-> ->suspend_noirq() / ->resume_noirq()
-> 
->> So move suspend/resume callbacks to noirq.
+> ->...callback...()
+> (Same comment I have given for the first patch)
+
+fixed
+
 > 
 > ...
 > 
->> -static DEFINE_SIMPLE_DEV_PM_OPS(pca953x_pm_ops, pca953x_suspend, pca953x_resume);
->> +static const struct dev_pm_ops pca953x_pm_ops = {
->> +       SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pca953x_suspend_noirq, pca953x_resume_noirq)
+>>         struct pcs_device *pcs;
+>>
+>> -       pcs = platform_get_drvdata(pdev);
+>> +       pcs = dev_get_drvdata(dev);
+>>         if (!pcs)
+>>                 return -EINVAL;
+> 
+> Drop dead code.
+> This should be simple one line after your change.
+> 
+>        struct pcs_device *pcs = dev_get_drvdata(dev);
+> 
+
+dead code dropped
+
+> ...
+> 
+>>         struct pcs_device *pcs;
+>>
+>> -       pcs = platform_get_drvdata(pdev);
+>> +       pcs = dev_get_drvdata(dev);
+>>         if (!pcs)
+>>                 return -EINVAL;
+> 
+> Ditto.
+> 
+> ...
+
+dead code dropped
+
+> 
+>> +static const struct dev_pm_ops pinctrl_single_pm_ops = {
+>> +       SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pinctrl_single_suspend_noirq,
+>> +                                     pinctrl_single_resume_noirq)
 >> +};
 > 
-> Please, use correct / modern macro.
+> Use proper / modern macro.
+
+fixed, use DEFINE_NOIRQ_DEV_PM_OPS now
+
 > 
+> ...
+> 
+>>  #endif
+> 
+> Why ifdeferry is needed (esp. taking into account pm_ptr() use below)?
 
-Hello Andy,
-
-Thanks for the reviews.
-
-I applied your comments for the next iteration.
-
-Regards,
+We may have an "unused variable" warning for pinctrl_single_pm_ops if
+CONFIG_PM is undefined (due to pm_ptr).
 
 -- 
 Thomas Richard, Bootlin
