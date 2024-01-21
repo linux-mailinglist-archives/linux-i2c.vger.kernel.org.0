@@ -1,76 +1,56 @@
-Return-Path: <linux-i2c+bounces-1392-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1393-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA27D8330A6
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 23:07:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 647108357C2
+	for <lists+linux-i2c@lfdr.de>; Sun, 21 Jan 2024 21:35:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BDEB1F23071
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Jan 2024 22:07:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EB84B218AF
+	for <lists+linux-i2c@lfdr.de>; Sun, 21 Jan 2024 20:35:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15DB258AC4;
-	Fri, 19 Jan 2024 22:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16479381DC;
+	Sun, 21 Jan 2024 20:35:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H0eg5u8Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cLGeSNd+"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F42B56475;
-	Fri, 19 Jan 2024 22:06:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81471EB52;
+	Sun, 21 Jan 2024 20:35:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705702012; cv=none; b=tzk3U0rANN31aUWhTaaOsX0G1P+gH9goe3Oe80zCB/cAnTdaOMTVeh5fuBYUK400cxdGO0BgvF3ZiE/qAh3B3vTfwyw7AdwOsqeZgw4RuH3We2WhigUBch8ooYmfmVmMdNYdGMf8o31CaEBIjoGtyUESr/A2iyaIH2sitvGpyXA=
+	t=1705869321; cv=none; b=T2AWSeqmE8P1pRielDfnwMtn7nm9H5lp+EuG9hSrUWUTnUsUN4h2zsYEIydmWZ1Bw40DXb7Am49Y7vmAoAhEjTddwa+7XxnaqlI3vkZt6G345wMkJD1sYy+ymUsUib9VyIaFKYde1jNvq4g7BugtWUMwVbW45NkG1eBYbdKEiN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705702012; c=relaxed/simple;
-	bh=bAiP8neWkuFOr1UcviXY9sGWpEscgq5SMLZxG3s9Dt8=;
+	s=arc-20240116; t=1705869321; c=relaxed/simple;
+	bh=kju28fnm0YhQwAXc8auDx07XfLJgrU+ex3+0la1SOE4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IyzRQGp+4KX2Pj6c32h+wj95+6zaxG1UOJCjiRayKBL9I6TUynaRuY0R1gFkRXr78u5z51p3zW1NXaOOlaNGICQjvTIJJGQr0y19zLuu7E36vWtk3MPLlv0lSSP4pdfGo2wogj6hWe1WAQSUWYF3els0TihSxDjuwQsZsN3YozI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H0eg5u8Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E49C433F1;
-	Fri, 19 Jan 2024 22:06:50 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=g6tBjcc6QVvA6NhhFksPDmmsftzwInDJ4X47euhxCuAuGGZunG1x6SOv62f5IwLJEtv7e+XDIkLJHUSGZgAI3RmhPcAxSkY/0k8/mB/z34GnZQC9InQik3gHVMVg2ygQemD7acwOEj/v7gaxMJz/5KB6gKWtWm/V2o2Xl7zMlfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cLGeSNd+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C26CC433F1;
+	Sun, 21 Jan 2024 20:35:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705702012;
-	bh=bAiP8neWkuFOr1UcviXY9sGWpEscgq5SMLZxG3s9Dt8=;
+	s=k20201202; t=1705869321;
+	bh=kju28fnm0YhQwAXc8auDx07XfLJgrU+ex3+0la1SOE4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H0eg5u8QwEQ6ypQgu+Ro/nkwaVoSk6fZjoWXqYEmXDBBypv3SaURpbSvuGPnkUm9o
-	 0iLO54XqFDrY5SKuQZx1PtWWdbaWIgzQTzV0z70555OEw/cl0wpl9rZN9FKfkiyBAu
-	 SnG9Ko2Xb/Ck170Mviz7ss9Pl+yNAe9Xg7Gdjqf86+CfI4wXVZ78Auk6i3XkpHvEn8
-	 o34tv8O0Sbg6s3KM1vurE0tBmVLz8HbPfZTpKnkQxTLGN+n1rFaTju4cEt2Sd0Ic8a
-	 RkPd0onKWlpH1K9oGo+Gggwbv4VFEK2eJRyldbIWTPpp09a5rhij2/rv2jp9evvYPK
-	 wyA/FwbQHedSA==
-Date: Fri, 19 Jan 2024 16:06:48 -0600
-From: Rob Herring <robh@kernel.org>
-To: Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc: olivier.moysan@foss.st.com, gregkh@linuxfoundation.org,
-	richardcochran@gmail.com, arnd@kernel.org,
-	alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-	linux-usb@vger.kernel.org, mchehab@kernel.org, peng.fan@oss.nxp.com,
-	pabeni@redhat.com, rcsekar@samsung.com,
-	alexandre.torgue@foss.st.com, fabrice.gasnier@foss.st.com,
-	linux-serial@vger.kernel.org, Oleksii_Moisieiev@epam.com,
-	linux-spi@vger.kernel.org, will@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, lars@metafoo.de,
-	conor+dt@kernel.org, linux-mmc@vger.kernel.org, kuba@kernel.org,
-	linux-media@vger.kernel.org, arnaud.pouliquen@foss.st.com,
-	andi.shyti@kernel.org, ulf.hansson@linaro.org,
-	Frank Rowand <frowand.list@gmail.com>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-phy@lists.infradead.org, jic23@kernel.org,
-	linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, robh+dt@kernel.org, lee@kernel.org,
-	catalin.marinas@arm.com, mkl@pengutronix.de,
-	herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, hugues.fruchet@foss.st.com,
-	edumazet@google.com, netdev@vger.kernel.org, vkoul@kernel.org,
-	wg@grandegger.com, linux-i2c@vger.kernel.org, davem@davemloft.net
-Subject: Re: [PATCH v9 02/13] dt-bindings: treewide: add access-controllers
- description
-Message-ID: <170570200425.1132338.1743644162144723458.robh@kernel.org>
-References: <20240105130404.301172-1-gatien.chevallier@foss.st.com>
- <20240105130404.301172-3-gatien.chevallier@foss.st.com>
+	b=cLGeSNd+NTi5H2HTjAtyYNDWRZhNjUJpyn5xCGixeCn2GYeEVhsyNHa+Nv3z3HN4d
+	 FnRWlVtTKbC8LXXnkBjZS0pV781PM2sN9MLZ6QOcKVkNRYSibsCdVXD0CsW+g9mnk3
+	 Am6QEYQS37sEzgOWynSfZP40QxoNX20+6fTHMz30LA9NlKw6z6CZ+fIZYL7+FZ8xrJ
+	 5BUqlzv6inLsdFaIwmm0HOMuGRTdbSKqeCyNDoNhRqSDUrdtH4F5J7yAerpr/WeEiG
+	 Bs82ee2fRHvMFNXOdg6DEuiy2eV238he/HJ4ZrgYClDAjoKz8uQ/mvp5u0UY7RgOhQ
+	 auKFQbfx+xlbg==
+Date: Sun, 21 Jan 2024 21:35:15 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+Cc: Michal Simek <michal.simek@amd.com>, 
+	Ley Foon Tan <leyfoon.tan@starfivetech.com>, linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 RESEND] i2c: cadence: Add system suspend and resume PM
+ support
+Message-ID: <ko44i4n5synf3uugp4wmjoe6eikyw3bzjtmarduwvskmk4d3dr@uewx27aa6ake>
+References: <20240119013326.3405484-1-jisheng.teoh@starfivetech.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -79,66 +59,94 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240105130404.301172-3-gatien.chevallier@foss.st.com>
+In-Reply-To: <20240119013326.3405484-1-jisheng.teoh@starfivetech.com>
 
+Hi Ji Sheng,
 
-On Fri, 05 Jan 2024 14:03:53 +0100, Gatien Chevallier wrote:
-> access-controllers is an optional property that allows a peripheral to
-> refer to one or more domain access controller(s).
+I'm not fully conviced here.
+
+On Fri, Jan 19, 2024 at 09:33:26AM +0800, Ji Sheng Teoh wrote:
+> Enable device system suspend and resume PM support, and mark the device
+> state as suspended during system suspend to reject any data transfer.
 > 
-> Description of this property is added to all peripheral binding files of
-> the peripheral under the STM32 firewall controller. It allows an accurate
-> representation of the hardware, where various peripherals are connected
-> to a firewall bus. The firewall can then check the peripheral accesses
-> before allowing its device to probe.
-> 
-> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
 > ---
+> Initial v2 was archived, previous discussion can be found in [1].
+> [1]: https://lore.kernel.org/all/20231209131516.1916550-1-jisheng.teoh@starfivetech.com/
 > 
-> Changes in V6:
-> 	- Minor changes in commit message
-> 	- Renamed access-controller to access-controllers
+> Changes since v1:
+> - Add missing err assignment in cdns_i2c_resume().
+> ---
+>  drivers/i2c/busses/i2c-cadence.c | 33 ++++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
 > 
-> Changes in V5:
-> 	- Discarded review tags as the content has changed
-> 	- Renamed feature-domains to access-controller
-> 
-> Changes in V4:
-> 	- Added Jonathan's tag for IIO
-> 
-> Changes in V2:
-> 	- Add missing "feature-domains" property declaration
-> 	  in bosch,m_can.yaml and st,stm32-cryp.yaml files
-> 
->  Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml   | 4 ++++
->  Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml   | 4 ++++
->  Documentation/devicetree/bindings/dma/st,stm32-dma.yaml       | 4 ++++
->  Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml    | 4 ++++
->  Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml       | 4 ++++
->  Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml   | 4 ++++
->  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml       | 4 ++++
->  Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml   | 4 ++++
->  Documentation/devicetree/bindings/media/cec/st,stm32-cec.yaml | 4 ++++
->  Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml    | 4 ++++
->  .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml        | 4 ++++
->  Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml   | 4 ++++
->  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml    | 4 ++++
->  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml          | 4 ++++
->  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml    | 4 ++++
->  Documentation/devicetree/bindings/net/stm32-dwmac.yaml        | 4 ++++
->  Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml  | 4 ++++
->  .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml       | 4 ++++
->  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml       | 4 ++++
->  Documentation/devicetree/bindings/serial/st,stm32-uart.yaml   | 4 ++++
->  Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml     | 4 ++++
->  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml     | 4 ++++
->  Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml | 4 ++++
->  Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml      | 4 ++++
->  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml       | 4 ++++
->  Documentation/devicetree/bindings/usb/dwc2.yaml               | 4 ++++
->  26 files changed, 104 insertions(+)
-> 
+> diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+> index de3f58b60dce..4bb7d6756947 100644
+> --- a/drivers/i2c/busses/i2c-cadence.c
+> +++ b/drivers/i2c/busses/i2c-cadence.c
+> @@ -1176,6 +1176,18 @@ static int __maybe_unused cdns_i2c_runtime_suspend(struct device *dev)
+>  	return 0;
+>  }
+>  
+> +static int __maybe_unused cdns_i2c_suspend(struct device *dev)
+> +{
+> +	struct cdns_i2c *xi2c = dev_get_drvdata(dev);
+> +
+> +	i2c_mark_adapter_suspended(&xi2c->adap);
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+this should go before the return '0' after checking that
+cdns_i2c_runtime_suspend(), even though we know it always returns
+'0', we still can use likely or unlikely.
 
+> +	if (!pm_runtime_status_suspended(dev))
+> +		return cdns_i2c_runtime_suspend(dev);
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * cdns_i2c_init -  Controller initialisation
+>   * @id:		Device private data structure
+> @@ -1219,7 +1231,28 @@ static int __maybe_unused cdns_i2c_runtime_resume(struct device *dev)
+>  	return 0;
+>  }
+>  
+> +static int __maybe_unused cdns_i2c_resume(struct device *dev)
+> +{
+> +	struct cdns_i2c *xi2c = dev_get_drvdata(dev);
+> +	int err;
+> +
+> +	err = cdns_i2c_runtime_resume(dev);
+> +	if (err)
+> +		return err;
+> +
+> +	if (pm_runtime_status_suspended(dev)) {
+> +		err = cdns_i2c_runtime_suspend(dev);
+> +		if (err)
+> +			return err;
+
+We call the cdns_i2c_resume() functions to come up from a
+suspended state. But, if we fail to resume, we call the suspend
+and return '0' (because this always returns '0').
+
+In other words, if we take this path, we call resume, but we
+still end up suspended and return success.
+
+Andi
+
+> +	}
+> +
+> +	i2c_mark_adapter_resumed(&xi2c->adap);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct dev_pm_ops cdns_i2c_dev_pm_ops = {
+> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(cdns_i2c_suspend, cdns_i2c_resume)
+>  	SET_RUNTIME_PM_OPS(cdns_i2c_runtime_suspend,
+>  			   cdns_i2c_runtime_resume, NULL)
+>  };
+> -- 
+> 2.43.0
+> 
 
