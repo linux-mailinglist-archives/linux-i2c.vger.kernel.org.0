@@ -1,52 +1,52 @@
-Return-Path: <linux-i2c+bounces-1417-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1418-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDE58836585
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jan 2024 15:34:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71BCB836C14
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jan 2024 17:57:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A74C3281560
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jan 2024 14:34:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22DB01F24BF2
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jan 2024 16:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01803D972;
-	Mon, 22 Jan 2024 14:33:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE2015F574;
+	Mon, 22 Jan 2024 15:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iyDQ3mV2"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="aVCff82c"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F99E3D546;
-	Mon, 22 Jan 2024 14:33:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723B53D963;
+	Mon, 22 Jan 2024 15:30:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705934033; cv=none; b=qKGFoaake9yXOX8EjMVSaqqRfLHGs+6mgbucwHIAgoMdcFzLZc2nY3YEMgQTvjBMMX8tju25GLENn/9jrrv+0im+TUQvqyDB/q5igh+mwEALd3cQWYeI8FrmPV0uUttAR4HLwbmGfwSCHnGZ7wXhxBLKC5wqhA+/S+wT7asjew0=
+	t=1705937434; cv=none; b=ZcaW5xhWQDpTf2MMTGr73OIl9U8GjY37a/GoJ5+04Ns0gQUCK8f0YSlP9nGK63xJL90k2Z4aas9yj3YahoVkuXUGP76pTh4NPKuG29WPZSCUW5jQg6VWaiInq/zynT4PwOZ+LiHw42cGO54hKD3tcHSuZrmxw+5hgcpjVKg+Tc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705934033; c=relaxed/simple;
-	bh=Rf7Jgcc8Z6wSO7zZHP0dF/g0jawoHIFG5QnvQX8+fDQ=;
+	s=arc-20240116; t=1705937434; c=relaxed/simple;
+	bh=gVMMJSucJVrsOQI7wa8WRq4Iqy9YmtcGWO5GPgFu3T4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BnI9BZKjacPkRbDG5R5f2bihHLfK7u47tYcxFl4bwIuLf2BqqUCRj8wtxcsnHTGWVc7wiAPIXw/5N8NIa8BMa7rI7dIujXBkEX+Bl3j0fccYT4ceViF+Tki0TglYPp4oztuCsvCRfSu7GdoIj3ZJXsP21MVDQch3xxIq0EOOSrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iyDQ3mV2; arc=none smtp.client-ip=217.70.183.198
+	 In-Reply-To:Content-Type; b=KxjCU+cXCOndsPlWnK+JUnyiN+lqPGtP2Q4cWmjVZRi0lJ8gShwsQIFF7dRmxZdekWXVO7Kk0FQrakkWbKCIutFGY0pnAdX5687/fJYFVYrysGdsNQ+3btAWFltSqwQKWHYtRLzCDePYH5ueCvnuJpb9EGV7FaGFd50lQ6+eX/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=aVCff82c; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B9AD3C0005;
-	Mon, 22 Jan 2024 14:33:47 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E11E740005;
+	Mon, 22 Jan 2024 15:30:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1705934029;
+	t=1705937428;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ECi8ka7o1qBq74OdBGRcMDsclI+BCMKdvpZSkSVLU5c=;
-	b=iyDQ3mV2HYp9n6jneaoazt/KuPqicWfJiZkwpHsB42dxKDV8a1uDS6ss0GeAMuass4XZhM
-	RynadnWy/eWHcEfPdnp6xnFS/nRFlSVsPxhu3zGw5+7itca99ey3jHqb9PKY5tB0Sblduw
-	BK4sHegl3lmj6Uz2+oX/9fpruduP/U35zav7+2dMH+/nGHfinVAYM06VL8fD/sMoz+qEWp
-	K2waEve2OrLdorRlnfCMTPUgfIzWiR9Ou4I65R8Hr//9gwjVSeOh9JaAqgmfuxPnNBVgy0
-	lUt+dPqyOEpAQUpnIYdZG1BWm9x1fP/pacpIWJbdT7Hiud0xlghzcBww476yAg==
-Message-ID: <b59067f0-fdba-40d1-bb52-9f66fd833f40@bootlin.com>
-Date: Mon, 22 Jan 2024 15:33:47 +0100
+	bh=Ad8iZ7cAOLjC59VsXGmNvP0Dte+iZHPsXSv80mGa8CY=;
+	b=aVCff82cAuUdGWnH6XJ5zxRCCb74hOkkbM+j+P+f8CkTkim32vuf+HKFY9Kt2/sX+1eDq1
+	3s/POnlwJJi2GuKXxbTIMbWYpV/NbIqDQBnJ4zlAaMiyVmVn+eqSpBsrMxnYcSX2zvNW3k
+	3N5pReSGFlppvUTmwSqQxqa1kXzcXd+ErnfpGawcUR4dvFZIJjjwoOyrTuluKifAAp1BNx
+	HvdRodBSQRvBf3KlAenpmTj6amh/BRx3m5fsVT8T95utZkNphW4e1R2MINb4jt+L0hVCN7
+	vzwZ9lmNs1zn5a1nWyNnE6oYFbm2hZUkfOYNsOfddRAWok8+bjtjY5uUNSOVRA==
+Message-ID: <9cb47f37-bd98-4136-b844-33cf2be593df@bootlin.com>
+Date: Mon, 22 Jan 2024 16:30:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -54,8 +54,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/14] pinctrl: pinctrl-single: move suspend/resume to
- suspend_noirq/resume_noirq
+Subject: Re: [PATCH 14/14] PCI: j721e: add suspend and resume support
 Content-Language: en-US
 To: Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>,
@@ -76,48 +75,84 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
  linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
  theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com
 References: <20240102-j7200-pcie-s2r-v1-0-84e55da52400@bootlin.com>
- <20240102-j7200-pcie-s2r-v1-2-84e55da52400@bootlin.com>
- <CAHp75Verff06LE0QFaDRoun=ANpGfVU1tHknvvQZd_KyzLVP5Q@mail.gmail.com>
- <223422cc-2a1c-417b-8fa1-20d3b3eb41ef@bootlin.com>
- <CAHp75VcaABafPh7o1TjrHW2txXRRSxjT443XJe33gfS1YD4bhA@mail.gmail.com>
+ <20240102-j7200-pcie-s2r-v1-14-84e55da52400@bootlin.com>
+ <CAHp75VfPQz4PWdzFUU_n+R=XohBjyXM0zsjD-bUD2jmb42ds8Q@mail.gmail.com>
 From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <CAHp75VcaABafPh7o1TjrHW2txXRRSxjT443XJe33gfS1YD4bhA@mail.gmail.com>
+In-Reply-To: <CAHp75VfPQz4PWdzFUU_n+R=XohBjyXM0zsjD-bUD2jmb42ds8Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: thomas.richard@bootlin.com
 
-On 1/19/24 17:11, Andy Shevchenko wrote:
-> On Fri, Jan 19, 2024 at 6:08 PM Thomas Richard
-> <thomas.richard@bootlin.com> wrote:
->> On 1/15/24 21:02, Andy Shevchenko wrote:
->>> On Mon, Jan 15, 2024 at 6:16 PM Thomas Richard
->>> <thomas.richard@bootlin.com> wrote:
-> 
-> ...
-> 
->>>> +static const struct dev_pm_ops pinctrl_single_pm_ops = {
->>>> +       SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pinctrl_single_suspend_noirq,
->>>> +                                     pinctrl_single_resume_noirq)
->>>> +};
->>>
->>> Use proper / modern macro.
->>
->> fixed, use DEFINE_NOIRQ_DEV_PM_OPS now
-> 
-> ...
-> 
->>>>  #endif
->>>
->>> Why ifdeferry is needed (esp. taking into account pm_ptr() use below)?
->>
->> We may have an "unused variable" warning for pinctrl_single_pm_ops if
->> CONFIG_PM is undefined (due to pm_ptr).
-> 
-> This is coupled with the above. Fixing above will automatically make
-> the right thing.
+Hello Andy,
 
-Yes you're right.
-By the way I can use pm_sleep_ptr instead of pm_ptr.
+On 1/15/24 21:13, Andy Shevchenko wrote:
+> On Mon, Jan 15, 2024 at 6:16 PM Thomas Richard
+> <thomas.richard@bootlin.com> wrote:
+>>
+>> From: Théo Lebrun <theo.lebrun@bootlin.com>
+>>
+>> Add suspend and resume support for rc mode.
+> 
+> Same comments as for earlier patches.
+> Since it's wide, please, check the whole series for the same issues
+> and address them.
+> 
+> ...
+> 
+>> +               if (pcie->reset_gpio)
+> 
+> Dup, why?
+
+This pcie->reset_gpio corresponds to PERST# of PCIe endpoints.
+I assert it during suspend, because I have to deassert it (with a delay)
+during resume stage [1].
+
+> 
+>> +                       gpiod_set_value_cansleep(pcie->reset_gpio, 0);
+> 
+> ...
+> 
+>> +               if (pcie->reset_gpio) {
+>> +                       usleep_range(100, 200);
+> 
+> fsleep() ?
+> Btw, why is it needed here, perhaps a comment?
+
+The comment should be the same than in the probe [1].
+Should I copy it? Or should I just add a reference to the probe?
+
+[1]
+https://elixir.bootlin.com/linux/v6.8-rc1/source/drivers/pci/controller/cadence/pci-j721e.c#L535
+
+> 
+>> +                       gpiod_set_value_cansleep(pcie->reset_gpio, 1);
+>> +               }
+> 
+> ...
+> 
+>> +               ret = cdns_pcie_host_setup(rc, false);
+>> +               if (ret < 0) {
+>> +                       clk_disable_unprepare(pcie->refclk);
+>> +                       return -ENODEV;
+> 
+> Why is the error code being shadowed?
+
+Yes I should return ret instead.
+
+> 
+>> +               }
+> 
+> ...
+> 
+>> +#define cdns_pcie_to_rc(p) container_of(p, struct cdns_pcie_rc, pcie)
+> 
+> Is container_of.h included in this file?
+
+linux/container_of.h is included in linux/kernel.h.
+And linux/kernel.h is included in pcie-cadence.h
+(https://elixir.bootlin.com/linux/v6.8-rc1/source/drivers/pci/controller/cadence/pcie-cadence.h#L9).
+
+Regards,
 
 -- 
 Thomas Richard, Bootlin
