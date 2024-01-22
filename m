@@ -1,119 +1,90 @@
-Return-Path: <linux-i2c+bounces-1399-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1400-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ED4B835E49
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jan 2024 10:33:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8585835E6C
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jan 2024 10:44:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDE801C21AC5
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jan 2024 09:33:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C6B1286E4F
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jan 2024 09:44:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB0939AE3;
-	Mon, 22 Jan 2024 09:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4763139FD4;
+	Mon, 22 Jan 2024 09:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eSivbJZy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PM50PtRT"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4389739AD8;
-	Mon, 22 Jan 2024 09:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DAF639FCB;
+	Mon, 22 Jan 2024 09:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705916017; cv=none; b=IVc2PHVUio42Wgg4l5xOLT58Y9u4qEEQ1unScMvCUqHvx9+7mgiVIsVt8CE+6/ZxQ8r+46w/GpDviVXRlyirMEAzvPxKlZmCuDF4GHzBspQHJrXpF0XlbUm5s+POnKhRrWeiog0fyMLsqBy+uGBPltaMzV4Mf88Gt0VGhILXPkE=
+	t=1705916668; cv=none; b=tikItKhOrEjRExjlLJvqxLJMQi3yvgbK4kmrATWAeM3lu11iW2R0HNn2YOs93cI8VmvfoUX3oJwLqdhCrQyx250dBgnCff2mH7DpornY/FITI4NUGt4VL/MtwlQtjTGGOSaD+T3/R1388o3Gzxwv5WeQKArTxM48EDmg9AtHq2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705916017; c=relaxed/simple;
-	bh=FEQhqxSV27zZJ+eMJHKx6BwCXQ+B3EXodIj+ZGRhYMw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aiNG895+TgS8DUdtJd2cqqfXITkT3lDag9y8+fXfoq4L4bNyqGqPTMviiYI8KFpBx02ZWwiuubtFZARdYLBDS3N9dwVRbi3jyKsgL/nU4y4Q4Kylc9F11AfWUyXIY+5IfCXOz5HyLz+L+coEnA73YuZ8QpFmLW0skHusnpyMB6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eSivbJZy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75667C433B1;
-	Mon, 22 Jan 2024 09:33:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705916016;
-	bh=FEQhqxSV27zZJ+eMJHKx6BwCXQ+B3EXodIj+ZGRhYMw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eSivbJZyjMXi8CBUBLt9HCaLfcfjX3qhxScAt1zF+wbszJMLD6ucqYNQYWIvaNgcv
-	 1kYUaukIW+RDNQQAE1n5lr9fOP/Zi2webjTzn/zjQVvCfKGqArFqR4cEoq81FhofZ/
-	 jEVSaKOdGMi0hgF5FWjBDlPeCHmZ0ATlZ57KWiqtER2upN0ozrOAXcBL0ysxALIg7Y
-	 Ck5QBdKM/L3U8646BfJ1N7npHXohRjTDcy73GpgF3PYyX153eeD98k0dnS8/VoZvo/
-	 ixAo5YdN1YyKQvDWVm2zjVROcTvlBAg+F4Ece4ZdCWbYcwPYSZk2YL3mk9Hge47Nfn
-	 gCzMIgIuaWKug==
-Date: Mon, 22 Jan 2024 09:33:31 +0000
-From: Conor Dooley <conor@kernel.org>
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc: aisheng.dong@nxp.com, andi.shyti@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-	festevam@gmail.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH] dt-bindings: i2c: imx-lpi2c: add i.MX95 LPI2C
-Message-ID: <20240122-blade-saddling-784b57593913@spud>
-References: <20240122091230.2075378-1-peng.fan@oss.nxp.com>
+	s=arc-20240116; t=1705916668; c=relaxed/simple;
+	bh=Ohr+Vouf7XGi+Wqm8IrXkgBSGkSJpYLg67JTzZnLkyU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UNwz2kQ+BL8v88908ohC2+WKeH47as2Ehp+9L6zVjgf75mfMZad8L2hKKYLcGt4tlvGoASis1ZzJmBBiX55xKGG5pHlgQ4KHdtnKr0I2fokfywLlhycLOxrfXEdiWyC1/7YXTEWyRJ+oDEjAF8si36SsTTh3Fy5giFn+45Exp7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PM50PtRT; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705916666; x=1737452666;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ohr+Vouf7XGi+Wqm8IrXkgBSGkSJpYLg67JTzZnLkyU=;
+  b=PM50PtRT34bEtk0pAGfX9w0ZzKlg1YfH0JDTAPmk9EvTRhVztXLfGbQf
+   8LoN8A+oaOXQZlFXVqAgjFfII33qcK4hcnIMi651egFUElgfqCcFLkGl6
+   mLdlxJ+nLsgnVMNw7Idvz3TLnQLYUIFCZMI7HuesqWSodGuat4OgWyWo5
+   zlyiQkkH8OA9ZJ2QA4r/frk9PDsNMB1L1UYDnH3kLkb6jwlMgoN3ptoqa
+   yp5wW5+7qJPpCvUNQR0nikIw82I0AC1L/dvkNR440gJv987oEMeiTRxLD
+   67A3ay5W6FEH/S0QMonsIrjfjcP052qNs46hEoVjdnWYRTTBa9dREBka1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="7907987"
+X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
+   d="scan'208";a="7907987"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 01:44:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="904795273"
+X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
+   d="scan'208";a="904795273"
+Received: from marquiz-s-2.fi.intel.com (HELO [10.237.72.58]) ([10.237.72.58])
+  by fmsmga002.fm.intel.com with ESMTP; 22 Jan 2024 01:44:23 -0800
+Message-ID: <2caa903b-e5a6-499c-84ea-b8f85e4d1c71@linux.intel.com>
+Date: Mon, 22 Jan 2024 11:44:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="IxqgPqMNTPtHQsCg"
-Content-Disposition: inline
-In-Reply-To: <20240122091230.2075378-1-peng.fan@oss.nxp.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 2/2] i2c: designware: constify regmap_config
+To: Raag Jadav <raag.jadav@intel.com>, mika.westerberg@linux.intel.com,
+ andriy.shevchenko@linux.intel.com, jsd@semihalf.com, andi.shyti@kernel.org
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240122033108.31053-1-raag.jadav@intel.com>
+ <20240122033108.31053-2-raag.jadav@intel.com>
+Content-Language: en-US
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20240122033108.31053-2-raag.jadav@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
---IxqgPqMNTPtHQsCg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Jan 22, 2024 at 05:12:30PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
->=20
-> Add i.MX95 LPI2C compatible entry, same as i.MX93 compatible
-> with i.MX7ULP.
->=20
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-Cheers,
-Conor.
-
+On 1/22/24 05:31, Raag Jadav wrote:
+> We never modify regmap_config, mark it as const.
+> 
+> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
 > ---
->  Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml b/D=
-ocumentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
-> index 4656f5112b84..54d500be6aaa 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml
-> @@ -24,6 +24,7 @@ properties:
->                - fsl,imx8qm-lpi2c
->                - fsl,imx8ulp-lpi2c
->                - fsl,imx93-lpi2c
-> +              - fsl,imx95-lpi2c
->            - const: fsl,imx7ulp-lpi2c
-> =20
->    reg:
-> --=20
-> 2.37.1
->=20
+>   drivers/i2c/busses/i2c-designware-platdrv.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+Both:
 
---IxqgPqMNTPtHQsCg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZa42awAKCRB4tDGHoIJi
-0sXtAQDqKcW3ThYABJF7wDEf9gUZpjjOYvWKr08fw5UcV1ocwQEAmlvD2zONN6TB
-hDd2AdTmLhZAzGLhgGRhjuV2YDJLBQo=
-=S8yJ
------END PGP SIGNATURE-----
-
---IxqgPqMNTPtHQsCg--
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
