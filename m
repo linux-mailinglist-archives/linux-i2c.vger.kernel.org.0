@@ -1,71 +1,71 @@
-Return-Path: <linux-i2c+bounces-1405-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1407-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DB86836198
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jan 2024 12:30:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0A2683619C
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jan 2024 12:30:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4EC91F27AF3
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jan 2024 11:30:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AD6628EB67
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Jan 2024 11:30:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97AD44D5A7;
-	Mon, 22 Jan 2024 11:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CF1F4E1C7;
+	Mon, 22 Jan 2024 11:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OnyQGiH2"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eRwQAzxS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAEDF44382
-	for <linux-i2c@vger.kernel.org>; Mon, 22 Jan 2024 11:15:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC49B4D5AE
+	for <linux-i2c@vger.kernel.org>; Mon, 22 Jan 2024 11:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705922127; cv=none; b=QpKfSkdZbeH0p16ucC6dohJ12V/lpCbQ0VM0smtNu94QVKoTvTzr2tT0pDPlWqyT2queIkfYjE2RjyTpNzkNBaO1y65tceCaPnr6oOEAvc4GON/HJ7XiJIIe4lz3P2QYqzHw9FnVjoTcqwV8YwJNNWrgzTpAAtxk+ZC2iClEjRo=
+	t=1705922129; cv=none; b=HRgp2ETp6sTAi4T1KJwW+LY4sxxzqPp6qT/6y0MizsIkZaJ49Om9EZ5xvkzDDjCT0evPQ78UkuXZ/OZ0n66X58CxmbVZBKo8NMqGNhWHCN1tJM3U0Evt01au28ifpQMJXXsL2sck08d35UaOlC0MdGvUO7ICuDxeFFbt64EOXTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705922127; c=relaxed/simple;
-	bh=albfJglPJn3ssNA9OQ0+BcTtP0NJbKv2rqqOBTOmm9Y=;
+	s=arc-20240116; t=1705922129; c=relaxed/simple;
+	bh=zqUosqAADFAXSU49W7yNSpBo5ZdibFlcSgW7jwkjAr4=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=foF9x4bIVZdbtgUDBCgtS50Zh1WykwMnBmvFysrpOP4N5gCUiZXipMJ1fdP3wnZIf8v/X9ePcLcEwP4+cUh5QvnMW//76outvh5HStVqIsj0liI+vW96owUzQYcvE8kVcwRHZQAUXWMo0ULxqAGVPcHbC/mjkXIPWtnPzwx6avU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OnyQGiH2; arc=none smtp.client-ip=209.85.208.44
+	 MIME-Version:Content-Type; b=r8jtBZS6Xza4oBmOBkdMxGMZsFezMW3esf0YxzyR6AzoXNf/z2wKWgih5wlCBe+GtuYGpI+NcTk9pvoE9D8qlSN248paMOzww4EtQLw8LKuoD3cnL1AqrnpcFjB30UNzOGD1F7+JYVvwZ7LI7bU8EFZ0x1B20TYC+nUmANASEgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eRwQAzxS; arc=none smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-55783b7b47aso3429442a12.0
-        for <linux-i2c@vger.kernel.org>; Mon, 22 Jan 2024 03:15:25 -0800 (PST)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-55a86795a3bso2290783a12.1
+        for <linux-i2c@vger.kernel.org>; Mon, 22 Jan 2024 03:15:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705922124; x=1706526924; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1705922126; x=1706526926; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yB7OVA1P0mhrGxcomQ6lLJeP9poLHGdENpnblkn7H3w=;
-        b=OnyQGiH2hfm35vhwJaNyRF/1gaoaKQJOVFANLcBtoFAaYXFH4wORrzibT9pQoHYf4Q
-         ZUyfa093qPhD552D6RdD93mx6D1FmnveAtF3F5IhElaUplyB3V8wM2LtnLO0FD2A1xeM
-         iS+DpLuox7oE0IqxVNXQ558IRaSd2EVk+YT7h/Bsm9KJIl4jkEEhsR40oF09umfeJjqk
-         vtgBYUtzda9bmToXV/UVh5LogK7dyvDdRIqhzaS4blgLKUV0sxIc9oQREL3Ow3lWmaxi
-         bt+gqCAKrJzIdKTQXA7e7JeS/ZkKNiObQWyQcFXE7mofC//ykXRvIEFax/QUy1Ua8ZZc
-         McBQ==
+        bh=d1etBiuY4Gx5fpLncSE9pUUIVH+BLsAa47XQpuiDMaA=;
+        b=eRwQAzxS6iHR5qP7hDPFXSEiQwXyw6me7hoGsBZkbCME4b/EDt/+d9m5FAg58gERmw
+         crdyU1xPFwSJVV2F9Vm8zWRk8694FerwubhtWsjAVH4ZRm5/WpqklNjthYfDK7DSaZkd
+         Wyi0BOy0p1lk9V6yG/AQiWoj8J/5iF5pokQPKzVRshKbmaiKkw20J1D9es2lS6xPyzmR
+         yVCGKWghh9kGPnFdwuXznYMhOBXa9dz1yQozLzz37gtALTqpNBAzdRD0b+xhTjmHnhT5
+         k9lAKyoavpO76/7WBl/9bvpJUgB3sXPi1on5ZW0DPnyUcClXJOxywz87iBKjNPHqE8dG
+         Usdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705922124; x=1706526924;
+        d=1e100.net; s=20230601; t=1705922126; x=1706526926;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yB7OVA1P0mhrGxcomQ6lLJeP9poLHGdENpnblkn7H3w=;
-        b=EyLdTusoqrnhskygVzB3xRFN6nHsRRoksh4vYaxePitVcLHp7YVogzK73gK1IXecqH
-         X8kBiJu5LwLtwLqkZo55eThtKl8cP6/ca7shfB3MRPw4wUGQ62bpHMs3EMaS9UqakCz5
-         1czL6B27nRRFCGBsh25xKnaEETX81Z57DWwjH32PGcL6T75FszbeU+UVMIckN0Eq0kPg
-         1bQVBClYGZxlJOb5zKVTTTbC3Nvqz8xVFA3LuYPGwZa41IE0mzJGt6/nczslZTl5mmhF
-         RZH4wot8RbTPQdWaTHP0Gs9LUQqXa3LyKp3w4A/XcBFnWvD7gW9+aUsPB+aYCPuh/pAW
-         EPDg==
-X-Gm-Message-State: AOJu0YxH/AEnwF9M+Uo1oa01xMtVA8tgUeFfZ8b0RGNWuLO4yY6QznyR
-	Tvc4KGL/99eGHfJ2QrYII3oXKQHof0n7+v2xui1QrOx9RHHZFuCEUCMP+7DhjBY=
-X-Google-Smtp-Source: AGHT+IFSPy9JFcq1dRkyFAlcLaJyWOEFdcFz75lX719Kgl3pUfgnHj0jC82Yo2VkfKn88Qf470OoHA==
-X-Received: by 2002:a50:ed9a:0:b0:559:fa7a:d6aa with SMTP id h26-20020a50ed9a000000b00559fa7ad6aamr2114097edr.61.1705922124368;
-        Mon, 22 Jan 2024 03:15:24 -0800 (PST)
+        bh=d1etBiuY4Gx5fpLncSE9pUUIVH+BLsAa47XQpuiDMaA=;
+        b=ckqUPlsvvTCII1lLXc83Plm9SKwlOxjohJb06/TT/tLI8kUn0W2jFXvk42MD3wX6lG
+         Dkx0vslZnO4xL1qYwn6bOAKPSDf8nOr+xgyfUKWdA4FP/+OpcOVOnMirtbGpuja7h5e9
+         RgimsbO/6Cky6OrvX8tfi91TsGf7679yzDMj9r5xuNhbhC0kM2txtDAiIpq8BSWazwHA
+         UNvodH8r+dRlkcpSBoeYZbTdEiTCJ3awsSaZwUEZ6e5Gca8fldAX1HNwfsH+45rqPQpj
+         hU/F7YuL+S/AKKwNGh/ktglh7V8yLaBhfhf5os01STOb70Bpt10VSg+F0yTsG3q7X1lH
+         x4uw==
+X-Gm-Message-State: AOJu0YzZP0ItTJexquFMj+Dyvp8YkfrQhY5lGK43FKyCQzd2Xbe1aIzc
+	Dln4kJsbucdtQI7m4iW5TfTDqpQ7yPrGD+78EnX7iAaGQhdNUNlen4qp3794/ys=
+X-Google-Smtp-Source: AGHT+IFQKi18QeQZr2+FZ1aV3dK9rg37DrM/PU/a1FLNq79hBsfDW+nKFDeUDYP1JekAUJlndzmQPQ==
+X-Received: by 2002:a50:ff17:0:b0:55a:3c3b:9880 with SMTP id a23-20020a50ff17000000b0055a3c3b9880mr1437666edu.60.1705922126038;
+        Mon, 22 Jan 2024 03:15:26 -0800 (PST)
 Received: from [127.0.1.1] ([178.197.215.66])
-        by smtp.gmail.com with ESMTPSA id h27-20020a056402095b00b0055c643f4f8asm179422edz.32.2024.01.22.03.15.22
+        by smtp.gmail.com with ESMTPSA id h27-20020a056402095b00b0055c643f4f8asm179422edz.32.2024.01.22.03.15.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jan 2024 03:15:24 -0800 (PST)
+        Mon, 22 Jan 2024 03:15:25 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: peter.griffin@linaro.org, mturquette@baylibre.com, sboyd@kernel.org, 
  robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
@@ -77,13 +77,13 @@ Cc: andi.shyti@kernel.org, alim.akhtar@samsung.com, s.nawrocki@samsung.com,
  linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
  andre.draszik@linaro.org, semen.protsenko@linaro.org, 
  willmcvicker@google.com, kernel-team@android.com
-In-Reply-To: <20240119111132.1290455-7-tudor.ambarus@linaro.org>
+In-Reply-To: <20240119111132.1290455-8-tudor.ambarus@linaro.org>
 References: <20240119111132.1290455-1-tudor.ambarus@linaro.org>
- <20240119111132.1290455-7-tudor.ambarus@linaro.org>
-Subject: Re: (subset) [PATCH v4 6/8] arm64: dts: exynos: gs101: update USI
- UART to use peric0 clocks
-Message-Id: <170592212285.45273.9589761352391920632.b4-ty@linaro.org>
-Date: Mon, 22 Jan 2024 12:15:22 +0100
+ <20240119111132.1290455-8-tudor.ambarus@linaro.org>
+Subject: Re: (subset) [PATCH v4 7/8] arm64: dts: exynos: gs101: define USI8
+ with I2C configuration
+Message-Id: <170592212446.45273.6681368312727990012.b4-ty@linaro.org>
+Date: Mon, 22 Jan 2024 12:15:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -95,20 +95,20 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.12.4
 
 
-On Fri, 19 Jan 2024 11:11:30 +0000, Tudor Ambarus wrote:
-> Get rid of the dummy clock and start using the cmu_peric0 clocks
-> for the usi_uart and serial_0 nodes.
+On Fri, 19 Jan 2024 11:11:31 +0000, Tudor Ambarus wrote:
+> USI8 I2C is used to communicate with an eeprom found on the battery
+> connector. Define USI8 in I2C configuration.
 > 
-> Tested the serial at 115200, 1000000 and 3000000 baudrates,
-> everthing went fine.
-> 
+> USI8 CONFIG register comes with a 0x0 reset value, meaning that USI8
+> doesn't have a default protocol (I2C, SPI, UART) at reset. Thus the
+> selection of the protocol is intentionally left for the board dts file.
 > 
 > [...]
 
 Applied, thanks!
 
-[6/8] arm64: dts: exynos: gs101: update USI UART to use peric0 clocks
-      https://git.kernel.org/krzk/linux/c/e58513b2ff78c70805d3bd7d96bfd76576d4c9e3
+[7/8] arm64: dts: exynos: gs101: define USI8 with I2C configuration
+      https://git.kernel.org/krzk/linux/c/9ca7055a35a7b2b373ead6f3a67ee8b5e0e6e468
 
 Best regards,
 -- 
