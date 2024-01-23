@@ -1,129 +1,104 @@
-Return-Path: <linux-i2c+bounces-1429-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1430-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8008083887A
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jan 2024 09:07:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC6C78388B5
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jan 2024 09:20:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38F4D2840BA
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jan 2024 08:07:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6DA261F23BCE
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jan 2024 08:20:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E38D5731C;
-	Tue, 23 Jan 2024 08:06:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AC5156B65;
+	Tue, 23 Jan 2024 08:20:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="aBl1u3WK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B146F57316
-	for <linux-i2c@vger.kernel.org>; Tue, 23 Jan 2024 08:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9CF56768;
+	Tue, 23 Jan 2024 08:20:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705997192; cv=none; b=OYRygFKJprIeK2zQteh1gpSbAyLjiA0GaS870sTMLJodRCjKm0rMnodu5FxbW4DSLuDcas3js6/2u7zfMl8jnTTJgxn6PpHsSRJ5/hdDvPezZ+lvu9qLzr44SnBZ20i0HcPmAfGaXnT4in1Wxxf7hMtQd5Mql88nMQIj8Nsfm7o=
+	t=1705998023; cv=none; b=PQ2v7hChx0MYxd2bMyGgN+yRP8OgZeW6wTxo2QN6NE3Rd42yccQAGKF2ttlyK8JZBry+z6dPkHFYXmwhIY6xIq5msZRz99H5YqCLBAvTDfDoFei5QqpYeB00QCSXTKpBPOEuP4PUri58sROq0hYHS71046OsjS+WKh0ek/SdONg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705997192; c=relaxed/simple;
-	bh=1TVbFpb2qzCl2NEaUM5NvTtzbQL4H6HFaoyz8fyLNc8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kbgY7NqG16jeW5JH1pcfYp61NvWlEoAuN4l4fy6H+EcldQeQop8D+NvNljqswaPiyXnbzDHWBBVldbWBHU3hGEvmwT4GYSnVTp5mFMx8kzJXeaXMOtTfxssIQPCAxQVGNOShgHNRuckRBwILzE51qJ0xqoThL6Vtms2LiWWUS60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4TK04x6Dkcz1Q87p;
-	Tue, 23 Jan 2024 16:05:21 +0800 (CST)
-Received: from kwepemm600002.china.huawei.com (unknown [7.193.23.29])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1A68118005E;
-	Tue, 23 Jan 2024 16:06:23 +0800 (CST)
-Received: from localhost.localdomain (10.67.165.2) by
- kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 23 Jan 2024 16:06:22 +0800
-From: Devyn Liu <liudingyuan@huawei.com>
-To: <andi.shyti@kernel.org>
-CC: <yangyicong@hisilicon.com>, <f.fangjian@huawei.com>,
-	<jonathan.cameron@huawei.com>, <linux-i2c@vger.kernel.org>,
-	<liudingyuan@huawei.com>
-Subject: [PATCH 2/2] i2c: hisi: Add clearing tx aempty interrupt operation
-Date: Tue, 23 Jan 2024 16:02:22 +0800
-Message-ID: <20240123080222.1512009-3-liudingyuan@huawei.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20240123080222.1512009-1-liudingyuan@huawei.com>
-References: <20240123080222.1512009-1-liudingyuan@huawei.com>
+	s=arc-20240116; t=1705998023; c=relaxed/simple;
+	bh=8w+80Oj0dEeWrwkODQ7mQYpIvHywugtJ5h/IUiUyu0o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WNpW4LbEsemrwmCilHdILlCqQWY+1CTyuq/wnN41oO8DwgZb78vUWVRJ0lkXWU0boPyWk4N5F8Ff5A4wKs7kvLhXNXaHH45Ttcv5/DYj2UJ43rwlL6E0vZovoKtvrQa0Q/NbK1ToZkviv00zYm00cLXqeq2KdxPORXiRx53Uz5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=aBl1u3WK; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 48FE360005;
+	Tue, 23 Jan 2024 08:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1705998012;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hRb7TeIHk44yo6aUmwYhCI2i2ouU8zTc+wLvrMIpmr4=;
+	b=aBl1u3WK+HzKOi12YlfomEPiXE7oEjgKgdx9VA4kJ607Zqrod7ESeoT2g8JjsJyFYARVSn
+	8hqbBf0oCB1OO9XCYJ3b6msx1ODtd6kQ7Vay/Tdi6BA24BUi5FaTbbtBFHkTplj3lzkmZl
+	bfkxBc0hTEk1hKVRwHEWMpi11uw5zt683rJdppYxfmIKeTti0ptM74oGMWiRGnDs77h6Y/
+	kbZbcbW1GElFkmmQFze0Nrx4jgK01qfw99AtNBOnhPsRX/dUlhYpmcp6GJ9B8UcDZaBhSi
+	Gn0nD1t7Ef5dFHw/aG5RzE8T4P2ifgrIZMFb4h1Tx4a20+06K+UVKPoynRFrQg==
+Message-ID: <d005e3c5-08b3-4a4f-b1ed-e02bde82c2f9@bootlin.com>
+Date: Tue, 23 Jan 2024 09:20:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600002.china.huawei.com (7.193.23.29)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 05/14] phy: ti: phy-j721e-wiz: make wiz_clock_init
+ callable multiple times
+Content-Language: en-US
+To: Vinod Koul <vkoul@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
+ Tony Lindgren <tony@atomide.com>, Haojian Zhuang
+ <haojian.zhuang@linaro.org>, Vignesh R <vigneshr@ti.com>,
+ Aaro Koskinen <aaro.koskinen@iki.fi>,
+ Janusz Krzysztofik <jmkrzyszt@gmail.com>, Andi Shyti
+ <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Tom Joseph <tjoseph@cadence.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
+ theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com
+References: <20240102-j7200-pcie-s2r-v1-0-84e55da52400@bootlin.com>
+ <20240102-j7200-pcie-s2r-v1-5-84e55da52400@bootlin.com>
+ <Za9oR8BpoufCRNIw@matsya>
+From: Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <Za9oR8BpoufCRNIw@matsya>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
 
-The driver receives the tx fifo almost empty(aempty) interrupt and
-reads the tx_aempty_int_mstat to start a round of data transfer.
-The operation of clearing the TX aempty interrupt after completing
-a write cycle is added to ensure that the FIFO is truly at almost
-empty status when an aempty interrupt is received.
-The threshold for fifo almost empty interrupt is defined as 1.
+>>  
+>> -	ret = wiz_clock_init(wiz, node);
+>> +	ret = wiz_clock_init(wiz, node, true);
+> 
+> You are calling it one once? So what am I missing
 
-Signed-off-by: Devyn Liu <liudingyuan@huawei.com>
----
- drivers/i2c/busses/i2c-hisi.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+In patch 6/14, wiz_clock_init is called in resume_noirq callback:
 
-diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-index 82a0c739aae4..08f6f97722a8 100644
---- a/drivers/i2c/busses/i2c-hisi.c
-+++ b/drivers/i2c/busses/i2c-hisi.c
-@@ -57,6 +57,8 @@
- #define   HISI_I2C_FS_SPK_LEN_CNT	GENMASK(7, 0)
- #define HISI_I2C_HS_SPK_LEN		0x003c
- #define   HISI_I2C_HS_SPK_LEN_CNT	GENMASK(7, 0)
-+#define HISI_I2C_TX_INT_CLR		0x0040
-+#define   HISI_I2C_TX_AEMPTY_INT		BIT(0)
- #define HISI_I2C_INT_MSTAT		0x0044
- #define HISI_I2C_INT_CLR		0x0048
- #define HISI_I2C_INT_MASK		0x004C
-@@ -124,6 +126,11 @@ static void hisi_i2c_clear_int(struct hisi_i2c_controller *ctlr, u32 mask)
- 	writel_relaxed(mask, ctlr->iobase + HISI_I2C_INT_CLR);
- }
- 
-+static void hisi_i2c_clear_tx_int(struct hisi_i2c_controller *ctlr, u32 mask)
-+{
-+	writel_relaxed(mask, ctlr->iobase + HISI_I2C_TX_INT_CLR);
-+}
-+
- static void hisi_i2c_handle_errors(struct hisi_i2c_controller *ctlr)
- {
- 	u32 int_err = ctlr->xfer_err, reg;
-@@ -168,6 +175,7 @@ static int hisi_i2c_start_xfer(struct hisi_i2c_controller *ctlr)
- 	writel(reg, ctlr->iobase + HISI_I2C_FIFO_CTRL);
- 
- 	hisi_i2c_clear_int(ctlr, HISI_I2C_INT_ALL);
-+	hisi_i2c_clear_tx_int(ctlr, HISI_I2C_TX_AEMPTY_INT);
- 	hisi_i2c_enable_int(ctlr, HISI_I2C_INT_ALL);
- 
- 	return 0;
-@@ -323,6 +331,8 @@ static void hisi_i2c_xfer_msg(struct hisi_i2c_controller *ctlr)
- 	 */
- 	if (ctlr->msg_tx_idx == ctlr->msg_num)
- 		hisi_i2c_disable_int(ctlr, HISI_I2C_INT_TX_EMPTY);
-+
-+	hisi_i2c_clear_tx_int(ctlr, HISI_I2C_TX_AEMPTY_INT);
- }
- 
- static irqreturn_t hisi_i2c_irq(int irq, void *context)
-@@ -363,6 +373,7 @@ static irqreturn_t hisi_i2c_irq(int irq, void *context)
- 	if (int_stat & HISI_I2C_INT_TRANS_CPLT) {
- 		hisi_i2c_disable_int(ctlr, HISI_I2C_INT_ALL);
- 		hisi_i2c_clear_int(ctlr, HISI_I2C_INT_ALL);
-+		hisi_i2c_clear_tx_int(ctlr, HISI_I2C_TX_AEMPTY_INT);
- 		complete(ctlr->completion);
- 	}
- 
+ret = wiz_clock_init(wiz, node, false);
+
+Regards
+
 -- 
-2.30.0
+Thomas Richard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
