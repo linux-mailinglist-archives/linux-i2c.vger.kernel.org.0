@@ -1,73 +1,73 @@
-Return-Path: <linux-i2c+bounces-1433-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1434-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0832E838959
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jan 2024 09:44:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B45678389CE
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jan 2024 09:58:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AC5B1F2A802
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jan 2024 08:44:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DF1328C3A4
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Jan 2024 08:58:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C79AB56B8F;
-	Tue, 23 Jan 2024 08:44:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6D7C57300;
+	Tue, 23 Jan 2024 08:58:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t50ntD9r"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="z8DbXT/k"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3AFB53812
-	for <linux-i2c@vger.kernel.org>; Tue, 23 Jan 2024 08:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF1757306
+	for <linux-i2c@vger.kernel.org>; Tue, 23 Jan 2024 08:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705999456; cv=none; b=XEDVuQweDlMSpi5mPnX5fBGg/3rCheWrsV46A5/vOeSzEBqWi9JjMjjuGqsKTEOR5p+3nKW6qNsIrOWBsRyk1KiV8eQMzwIDL6iKB89d789LBU8kTHADhhNQ6wsgiCXespc74ZzUYkSdBAGacH91tevVeOfSLkeg3I8kPuEma2A=
+	t=1706000282; cv=none; b=WU8qKV38pEDUjgOpYWBu136yTNceN1iZpFos+ur7sbMc7vLXL7n5X1JIrzYNSV6cy3do/CRzVna9c0Gll5jYyJrB0S3+O3rmorTmuXmK+QVlOO3RS4aQnr8A/LKbR6psQf9oKXNwx03OoPRMwSnfMNPwg+T0jS4Iyb+jsnxeGbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705999456; c=relaxed/simple;
-	bh=XSNvohCgV32XPbdJ4I5vxeLwZq6rkyLtN+BZ5kBxXFc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AAwTfyrPFfgMdxuF0KRR8xL060SfuUa5VCT80TTI69qlmPH+e6jsCBwefqjOrmXuimic2n9+9vR7cBuIUHmpeWx43EAk0if6+RCwqlnULpm4mgx6cn6kD/6toIv6FC3kwFWOzEbiMqpIvh1j3t5b2r2IJL+WIDaJwyRxSHWcvFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=t50ntD9r; arc=none smtp.client-ip=209.85.221.52
+	s=arc-20240116; t=1706000282; c=relaxed/simple;
+	bh=TAEtUX7AGoyoblV1ruTY9aKViipB6cuUSDtLLHtj3nI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=bGZv4cG22yKELLsdFvIsewzXQR2egM6s6rfYNJaUxrITYilS0ioyI/YM2eqVlac6mevSZYiI9X0prvCdepfelvQQ/OzaptNii12Fmw3XbN16H6MPXBEF4qgN9K0JWuF927NOKmGW9Ql2Mxx2Yh7EQrBQKXQwor+EgbUdlwDEeeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=z8DbXT/k; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-337d99f9cdfso3573832f8f.0
-        for <linux-i2c@vger.kernel.org>; Tue, 23 Jan 2024 00:44:14 -0800 (PST)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-339261a6ec2so2529280f8f.0
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Jan 2024 00:58:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705999453; x=1706604253; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1706000279; x=1706605079; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ma5Kq0bHkD89bVvP36sa3XpLa+3324OtVXoHXXzuuhQ=;
-        b=t50ntD9rQ11tb3olifDO30RTSGFNIna+h5F3slUXQcBbfbzM7ZDQb2MHfhbr8gHpeL
-         SDejdDarTc9jKqlIvZTN1X1zdUZaZMjtujaaiWFo4O8C9/yqDxkGFtxDPOF7hJtipNWx
-         BCBW0ISGdVQqSDTBcnBbbP/rEu18QdSUYf06wvD8JHbvueuSY557mhhZAU9PqeOaonAg
-         9Co9LLrt6dHiMnWI5I0sBSetS8Q8Geku5u5z43e0+MWGbVnG1mseIupuQERmmSJ0g8mO
-         pKnkQVswloMNVUndFUnNhWaHGINi/EKBUhQHfGlpmlRDcxo5mkw3nK0L6nuYfBGKAdoX
-         xeVw==
+        bh=TAEtUX7AGoyoblV1ruTY9aKViipB6cuUSDtLLHtj3nI=;
+        b=z8DbXT/kdFV0e0nY8Z8IvqQblLXQqGHBUUSFCR2J+Tuw/+Ny0j1ZD4thYXycifoDYp
+         +kUvdHbUE/cl5Vm4U+M+9ILz/btOQz5uZF/BgXx9JThOls9gl3N06auXkpA/HX7WBxq9
+         JHrSfmf0YNPOk7cVwQlBaRZHlq6WIf9rSBmp/5OALpodjBosOXrs6fS0ATrBaRQgh1og
+         zn52dOamL7hps+6szezlozyBm/a57nksL5jAMD05RBkeVYJL/WhV75EuSj0ErAM1v/zu
+         y2310jEF75Am0YdWjfCZ2Hdsi4+2eyj+z2ebBAociR3s85CJIvrfzKN2XGN1zIjC/vQk
+         n+zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705999453; x=1706604253;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20230601; t=1706000279; x=1706605079;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ma5Kq0bHkD89bVvP36sa3XpLa+3324OtVXoHXXzuuhQ=;
-        b=YoUn0F9TlN6YEtKt2tAS/nB7fcADEi0xvQ3gQB7lT0220H6UJvi3mQ2B6Pc2s7yVxf
-         sGObSi4mzweiVWAWot0T+lDotM+byeNRq3fArffS1Z3KXwTuWT5Nz08hNxhLRTKMs0gS
-         Dl9I6fP860Uufm+7VFDUlaa/ONDWOreBEPXKgI8V8tyXSRRsgdTgo/TJdCR9UVBsasyc
-         09JKUJEG0/PJ+zJQndhr8ahK6+HhnHq7xrg8FTPmt+eWqgRLI535FS7YKtFTZd5no3zr
-         kLwckG3cSq35zOqtxe13dA9kAtiYBPrBkEENpPGAnn1nzRDaWH6SMZwXEovRUtLp0jwg
-         JlzA==
-X-Gm-Message-State: AOJu0YyxOKsXh2EVsrcjxg32+zrbm87QDm/hq2U3VDoV/mI8gQZY6HXZ
-	BFBfoPNYJ+9Zqcr/8425ekjfTOGNpdE2psYKT12e4Y+x3d2wPVjx+a9l5Y0Ses8=
-X-Google-Smtp-Source: AGHT+IG9PBVRz0dQ2rSoN//HLB0yJeK1aumb6sZ9GfxpHdrXQd5I8uNEgskVud+OAnrofzcNMPxNJA==
-X-Received: by 2002:a05:6000:18a4:b0:337:c4ec:9d55 with SMTP id b4-20020a05600018a400b00337c4ec9d55mr3341615wri.132.1705999453016;
-        Tue, 23 Jan 2024 00:44:13 -0800 (PST)
+        bh=TAEtUX7AGoyoblV1ruTY9aKViipB6cuUSDtLLHtj3nI=;
+        b=cTZiIT0srdq5zQpL+fP+zh1rMUGc2vkKL0H6halMwHUKgkAXUlPjjZp1TXen2yriA+
+         qbBK0Ftafhngn3P08tFoSvHeqllOEQz3ZCiFIkHBWwe3daCWcbYLiF0QXsA8aMTm6LaR
+         ObeapogdcHYfLGal+XxxNmhgj0WFh656LIZpdcsdj03RJVVvPnwakxdvsnD5mTYH0UmE
+         mol5yigZbFOxyn0G8e4JEPDCdxeg0Ds0ZVjTgaKomaLTqRiCpBwvQsPccRSJL+AvExim
+         xCBTEfukN5w3wBb6TnAiGHZyzrzhVs4m9OzFo7TiFLCMVC7SP9cxQX7gJPALRZvRqXY/
+         zclQ==
+X-Gm-Message-State: AOJu0Ywbxiw5bUzUI1oYcRZmumJcKZLLF0PQ2ItB49MIwUtHvTgitGOB
+	A+P+Cp/G3TUL0jIP0y8tUcTtXcl4T7t1U5RSNOWfLocIf6XtHg6zCHoJwG1RVzA=
+X-Google-Smtp-Source: AGHT+IHD5YKuEThiIkbL848qL0TZ9zQd7/ZSj6LMVYqVOpW3dwe4BCu01VjMMqTy+/OCYMe98X1PcQ==
+X-Received: by 2002:a5d:4f8e:0:b0:337:bb0f:3702 with SMTP id d14-20020a5d4f8e000000b00337bb0f3702mr3615197wru.35.1706000279311;
+        Tue, 23 Jan 2024 00:57:59 -0800 (PST)
 Received: from [192.168.2.107] ([79.115.63.202])
-        by smtp.gmail.com with ESMTPSA id cp9-20020a056000400900b003392ded41c7sm6371364wrb.39.2024.01.23.00.44.11
+        by smtp.gmail.com with ESMTPSA id h2-20020a5d5042000000b00337d941604bsm11559252wrt.98.2024.01.23.00.57.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jan 2024 00:44:12 -0800 (PST)
-Message-ID: <a2c64a9f-4467-44ef-a13d-0af80abf4dfd@linaro.org>
-Date: Tue, 23 Jan 2024 08:44:10 +0000
+        Tue, 23 Jan 2024 00:57:58 -0800 (PST)
+Message-ID: <9d5249a6-5838-4af1-be18-3b9a9e34a937@linaro.org>
+Date: Tue, 23 Jan 2024 08:57:56 +0000
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,6 +78,7 @@ User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 7/8] arm64: dts: exynos: gs101: define USI8 with I2C
  configuration
 Content-Language: en-US
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
  peter.griffin@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
  robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
@@ -93,51 +94,31 @@ References: <20240119111132.1290455-1-tudor.ambarus@linaro.org>
  <9d12f4f9-1892-48f3-b8d1-8f59788cc91d@linaro.org>
  <6ddbf20c-6929-4cb0-9fdb-570cc7170b9c@linaro.org>
  <7fdc00e1-0a93-43a6-8fb6-c447ad8aef64@linaro.org>
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <7fdc00e1-0a93-43a6-8fb6-c447ad8aef64@linaro.org>
+ <a2c64a9f-4467-44ef-a13d-0af80abf4dfd@linaro.org>
+In-Reply-To: <a2c64a9f-4467-44ef-a13d-0af80abf4dfd@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
-On 1/23/24 08:39, Krzysztof Kozlowski wrote:
-> On 23/01/2024 09:34, Tudor Ambarus wrote:
+On 1/23/24 08:44, Tudor Ambarus wrote:
+>> However I don't fully understand why that dependency - except patch hunk
+>> context - exists. You shouldn't have such dependency.
 >>
->>
->> On 1/23/24 07:52, Krzysztof Kozlowski wrote:
->>> On 19/01/2024 12:11, Tudor Ambarus wrote:
->>>> USI8 I2C is used to communicate with an eeprom found on the battery
->>>> connector. Define USI8 in I2C configuration.
->>>>
->>>> USI8 CONFIG register comes with a 0x0 reset value, meaning that USI8
->>>> doesn't have a default protocol (I2C, SPI, UART) at reset. Thus the
->>>> selection of the protocol is intentionally left for the board dts file.
->>>
->>> ... and dropped, because this patch does not build:
->>> https://krzk.eu/#/builders/29/builds/3869
->>> and I missed weird dependency mentioned in cover letter:
->>>
->>> "This patch set shall be queued after the cmu_misc clock name fixes from:"
->>>
->>> Sorry, this cannot work like that. DTS for new features cannot build
->>> depend on driver changes.
->>
->> No worries. What shall I do so that you re-consider the dropped patches?
->> I'm not yet familiar with your release management, but I guess that if
->> you submit your "fixes-clk" branch for integration into v6.8-rc2, and
->> then merge v6.8-rc2 into your "next/dt64", you'll then be able to queue
->> the dropped patches as well.
-> 
-> It is nothing specific to my release management but years old rule: DTS
-> branch cannot contain driver commits. It is nothing new, discussed on
-> mailing lists for various SoC architectures many times.
+> Let me try offline, I'll get back to you.
 
-Okay, thanks for the explanation.
+The dropped patches depend on the dt-bindings patch that you queued
+through the "next/drivers" branch:
 
-> 
-> However I don't fully understand why that dependency - except patch hunk
-> context - exists. You shouldn't have such dependency.
-> 
+b393a6c5e656 dt-bindings: clock: google,gs101-clock: add PERIC0 clock
+management unit
 
-Let me try offline, I'll get back to you.
+We need the peric0 bindings that are referenced in device tree, that's
+why the next/dt64 branch failed to build.
+
+Please let me know if there's something on my side that I have to do
+(now or in the future).
+
+Thanks,
+ta
 
