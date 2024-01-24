@@ -1,60 +1,57 @@
-Return-Path: <linux-i2c+bounces-1447-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1448-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 706DA83B1D0
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Jan 2024 20:07:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73B6F83B56C
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Jan 2024 00:08:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A44171C212F0
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Jan 2024 19:07:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 141841F22F10
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Jan 2024 23:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A06133420;
-	Wed, 24 Jan 2024 19:06:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ton5xh4y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CB8F135A77;
+	Wed, 24 Jan 2024 23:07:57 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 20.mo584.mail-out.ovh.net (20.mo584.mail-out.ovh.net [46.105.33.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED197133419;
-	Wed, 24 Jan 2024 19:06:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A417E5
+	for <linux-i2c@vger.kernel.org>; Wed, 24 Jan 2024 23:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.33.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706123164; cv=none; b=f7MiBbsprjzEryg0c1JjwFeFBM5weyDQEnvyPyyhgGxRu+NtegyiUK1jcp8sM0IA89LYZWsLYxBZlKHoR5IZ123kAogzVQWdiyYDsAv4fyz7FiVEqQkughCQhHkw9lHA7cCzeU25zoh2SN0ZnIfXwHjYifMhT2zWF90ug7QtIH4=
+	t=1706137677; cv=none; b=oVfNL0EqqitdO72BJTYCMFhFxhpuHQ2jiy3TmW/PI2PV6Mcx3ZJtBOsTfkCeWjp48Rdr8fs7lSHl6kZq2K4oyvnTN9AtwGl7XQJ0b94QmZR5+pXeHd+sseRNB7gErN2XCzOsaVLVCI62naod6CsyD2+7XyWB6tZMZaDd2JQ9VxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706123164; c=relaxed/simple;
-	bh=kV3NuM/ThI2ctlYG96NqZpX0dOEPgAX+5rJlxXkagyc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kUZXfz5vLvPCnvDybqhzjUIO07QTEcs2DLNdQcXUdfLUWZLljlhsR8srreTIptYAB1ITIJUSgMgiNBuZLbBRRu9DUmrkeyEcz/JbAmoehDGWZuc2+283NF4dhWFhWsz0kfBZ+POQcjqepj5EGEfeyCozWrCB+ooLJnIeKJaBjHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ton5xh4y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F5EC433F1;
-	Wed, 24 Jan 2024 19:06:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706123163;
-	bh=kV3NuM/ThI2ctlYG96NqZpX0dOEPgAX+5rJlxXkagyc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ton5xh4yaVGx8UA2icp9+gasMr7pCs47dGdFHCtq8ObBbtRRmoLsLZDiYa3rVWTQd
-	 vK4z8JqS3o6yhmMxflih2fv9tm2olSMHh5Mbq74In1EQxmxHBe9/YQ5hcqua+zZGpH
-	 8udn0UQ0NvXipmQ66lSIBqUXywKm7E1TONNp8l6aWOUwmu1ZZSOVwikqBt/xr1N3tp
-	 Jw+jo966NMtGeuo6iISogVNhJcl37ckuw4CkNxzGjJwfzHLYc1sPpdfQX+krJg9thm
-	 uEOj75v+3jVg7AV9VnoyyQw6ZeTpfZMcrjm9eMu4X0pMn/S+/nGviDD7KwZyePHMmQ
-	 9LTABCuY/c81w==
-From: Rob Herring <robh@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: i2c: mux: i2c-demux-pinctrl: Define "i2c-parent" constraints
-Date: Wed, 24 Jan 2024 13:05:51 -0600
-Message-ID: <20240124190552.1551929-2-robh@kernel.org>
+	s=arc-20240116; t=1706137677; c=relaxed/simple;
+	bh=HGyNHMMKLOTJaC3+awYAmNT9tInVpb7Uuo75K5WBxn8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kvtN0gTCnsqAt5NqUTXjVpGwuULW7Ec6qboIprg2+At2CLU2TvY8j0qyckiyDLB/O7VJHuWeC8gPZ3tVlnFl2KnUgtI0pd1Vv3t7otyTk31PWQNUlZwFi5DVZrDU5eCeGch7GhwMxCm0C9SXBommCYGxsYQsEsNHaqIdV6DcdqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.33.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
+Received: from director1.ghost.mail-out.ovh.net (unknown [10.108.25.4])
+	by mo584.mail-out.ovh.net (Postfix) with ESMTP id E46D527E79
+	for <linux-i2c@vger.kernel.org>; Wed, 24 Jan 2024 22:50:48 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-hj5nj (unknown [10.110.113.182])
+	by director1.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 0FEBE1FE70;
+	Wed, 24 Jan 2024 22:50:47 +0000 (UTC)
+Received: from etezian.org ([37.59.142.102])
+	by ghost-submission-6684bf9d7b-hj5nj with ESMTPSA
+	id I82xOkeUsWVyhRkA3HD0yg
+	(envelope-from <andi@etezian.org>); Wed, 24 Jan 2024 22:50:47 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-102R0047556fd25-d410-442e-97f9-46ad02d884c8,
+                    45966BE1DD11163008BB7B2F56A64F52B223FDBD) smtp.auth=andi@etezian.org
+X-OVh-ClientIp:194.230.145.39
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Peter Rosin <peda@axentia.se>,
+	linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: [PATCH] MAINTAINERS: Update i2c host drivers repository
+Date: Wed, 24 Jan 2024 23:50:31 +0100
+Message-ID: <20240124225031.3152667-1-andi.shyti@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240124190552.1551929-1-robh@kernel.org>
-References: <20240124190552.1551929-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,29 +59,35 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 10684790117257185863
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdelvddgtddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepudegkeetueefvdegkeevleekheevfeejfedtvefhveelgfeutddvhedvheefiefhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpohiilhgrsghsrdhorhhgnecukfhppeduvdejrddtrddtrddupdduleegrddvfedtrddugeehrdefledpfeejrdehledrudegvddruddtvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoegrnhguihesvghtvgiiihgrnhdrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekgedpmhhouggvpehsmhhtphhouhht
 
-The 'phandle-array' type is a bit ambiguous. It can be either just an
-array of phandles or an array of phandles plus args. "i2c-parent" is
-the former and needs to constrain each entry to a single phandle value.
+The i2c host patches are now set to be merged into the following
+repository:
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
+
+Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+Cc: Wolfram Sang <wsa@kernel.org>
 ---
- Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.yaml b/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.yaml
-index dd3d24212551..b813f6d4810c 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/i2c/i2c-demux-pinctrl.yaml
-@@ -40,6 +40,8 @@ properties:
- 
-   i2c-parent:
-     $ref: /schemas/types.yaml#/definitions/phandle-array
-+    items:
-+      maxItems: 1
-     description:
-       List of phandles of I2C masters available for selection.  The first one
-       will be used as default.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 39219b144c239..ec0ffff6ded40 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10091,7 +10091,7 @@ L:	linux-i2c@vger.kernel.org
+ S:	Maintained
+ W:	https://i2c.wiki.kernel.org/
+ Q:	https://patchwork.ozlabs.org/project/linux-i2c/list/
+-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
+ F:	Documentation/devicetree/bindings/i2c/
+ F:	drivers/i2c/algos/
+ F:	drivers/i2c/busses/
 -- 
 2.43.0
 
