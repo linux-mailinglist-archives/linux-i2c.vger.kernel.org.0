@@ -1,54 +1,54 @@
-Return-Path: <linux-i2c+bounces-1468-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1469-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 350DE83DC73
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 15:41:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A37FE83DC79
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 15:41:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 682161C2106D
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 14:41:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AC861F29BA7
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 14:41:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BD4720B12;
-	Fri, 26 Jan 2024 14:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01C4620DD4;
+	Fri, 26 Jan 2024 14:38:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="px9ryNFe"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JrLwE1Yh"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB234208B4;
-	Fri, 26 Jan 2024 14:38:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511DF20B09;
+	Fri, 26 Jan 2024 14:38:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706279887; cv=none; b=XJmRgnmx4OpPcx46he0qEvhq0cxBZH38HVjr37cocaUKqvIeJ9718btaaAE1rtfeCzvNjz/9A651umS1eeeatl1GJVmvhfvC5Jh2a89udb8yL2mpGgxc7sio+4x30P1HNJqo0Yn/qAabG7Wc+urx3cHo+/HtbYhVNy0b1IsDYwg=
+	t=1706279889; cv=none; b=kEItzJVYU/6mccbHzvuinPDuKK4u7H7Iu8v9yCQnbKkmlnej01TQjx1VOGjNs6SB6/GsypX/URzzLUIANmQIICQafLhGA0qPrShhfO/dr+i108drnVPZywGtLut+hHKvzdR34GqslqalXSsR1jxeq3PNvLzKMZr5oSXWWlow9wQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706279887; c=relaxed/simple;
-	bh=h2doF4pJz4p0ih3lMwW5gETWtTTVip38zl0Ov4IjGUg=;
+	s=arc-20240116; t=1706279889; c=relaxed/simple;
+	bh=N5GNsjjoLnYF5yXRjNxB9YLN8O7X9FCTQwNNwXBMd/Y=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ON0MT8T+gBnJ/RAn9EaRc2ZPs7Sut8TTvGpOEHQpq8Isj+dMvuCZnj2LCuW4bEpYHx3jYzdKB9XAMBGq/2S+1gkiveJgMzVgrNzBB6HPmwW/QJcHGuIxIOpb7r2/mhW0F0weDw927fGMMFw53SKMjt6VFd7u5z3EXT7VzO6hPOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=px9ryNFe; arc=none smtp.client-ip=217.70.183.194
+	 In-Reply-To:To:Cc; b=IPvJArIZzrpmEMR73maixicJJyMXYgxHJvwoIKme1IW04AkDmOVxMGnLDz5idV5vrGBL2s52Ic14bFymAmwWBaVQAvqEFPlzqBBnEDCIPeSJlRoqkyZ+H5zgjzjDWWUGuaGIVo7JrdSPFjdo+X57/VrNcXTBGdoIwoVzUbL6vbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JrLwE1Yh; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7820340002;
-	Fri, 26 Jan 2024 14:38:00 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4A4CC40006;
+	Fri, 26 Jan 2024 14:38:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1706279883;
+	t=1706279885;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=CVpiN82f3zCgJBhjbVDcCVvrfuyt97XnSCcK895Im2c=;
-	b=px9ryNFeMKXk7pLDO4zGLrbwm1wFyczUEnneQAqKIGrfrjUr0+iMPzdZD+DSV/HhXrvm4G
-	Fj1B8tCtWRGRW9DuVLvzyERry+/UxdW35d2Tr/ggp3DZ1rxqWE1eMQUqk5NxQjFM8dBjC+
-	8+amNhn/yVYUw7L5O08ZdgK2KphlobFp7MFg80hmoByGkwjZoZk/NtBcG8Gr5Bvcaean4e
-	AXUbYFu+M0ut3S5yy10oXWkhUct5mfK+afGgbgLhwuOiLEVanQ0odHEqvHhyNmZnsuetnc
-	wfpKolkCxyymi9vJJX3XORHm0S3nzL3YyKhImRqtzDRbj5yYn8E/9+mk2T1Rcw==
+	bh=L1Wa2mY0ZsxjqXg85U4q4TJn+2bPk0WDE8ok1dd694Q=;
+	b=JrLwE1YhIpUGiROfu5Z8MPi46E2d+RrF/zQoKlXIwnH2k9kF57QC6Uex4mY2QvRtCzjED1
+	h8ga3G6Ua8bxI+VSx31SrVOL5Gb37K4odJvfa2R5S6UmyIBQJufg0s7rvzG7gqyKa1QLRO
+	N8mOLdwusdyTbNFpSi2qjD1d1CK5Nmvyo1g6u7ygIBAWknlBtu4FZDIaXwc0pE7H9KUcBn
+	Dnj2eyJNAAGWM6BanbHn9JmlVfO1XTMPgP2c+I4rKwCcjmRn+mXkA2yvsE0QvImileV9zB
+	YEDcQlpKKu1W105qqUHJ59nYkHSZBsN2Xpqzg3BJCk1CPJukul03PadoC5w68w==
 From: Thomas Richard <thomas.richard@bootlin.com>
-Date: Fri, 26 Jan 2024 15:36:53 +0100
-Subject: [PATCH v2 11/15] phy: cadence-torrent: remove noop_ops phy
- operations
+Date: Fri, 26 Jan 2024 15:36:54 +0100
+Subject: [PATCH v2 12/15] phy: cadence-torrent: add suspend and resume
+ support
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -56,8 +56,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240102-j7200-pcie-s2r-v2-11-8e4f7d228ec2@bootlin.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240102-j7200-pcie-s2r-v2-12-8e4f7d228ec2@bootlin.com>
 References: <20240102-j7200-pcie-s2r-v2-0-8e4f7d228ec2@bootlin.com>
 In-Reply-To: <20240102-j7200-pcie-s2r-v2-0-8e4f7d228ec2@bootlin.com>
 To: Linus Walleij <linus.walleij@linaro.org>, 
@@ -81,86 +81,90 @@ Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
 X-Mailer: b4 0.12.0
 X-GND-Sasl: thomas.richard@bootlin.com
 
-Even if a PHY is already configured, the PHY operations are needed during
-resume stage, as the PHY is in reset state.
-The noop_ops PHY operations is removed to always have PHY operations.
-The already_configured flag is checked at the begening of init, configure
-and poweron operations to keep the already_configured behaviour.
+Add suspend and resume support.
+
+The already_configured flag is cleared during suspend stage to force the
+PHY initialization during the resume stage.
+
+Based on the work of Théo Lebrun <theo.lebrun@bootlin.com>
 
 Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 ---
- drivers/phy/cadence/phy-cadence-torrent.c | 30 +++++++++++++-----------------
- 1 file changed, 13 insertions(+), 17 deletions(-)
+ drivers/phy/cadence/phy-cadence-torrent.c | 54 +++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
 diff --git a/drivers/phy/cadence/phy-cadence-torrent.c b/drivers/phy/cadence/phy-cadence-torrent.c
-index a1e9d06453e6..70413fca5776 100644
+index 70413fca5776..5f4ecf371030 100644
 --- a/drivers/phy/cadence/phy-cadence-torrent.c
 +++ b/drivers/phy/cadence/phy-cadence-torrent.c
-@@ -1593,6 +1593,9 @@ static int cdns_torrent_dp_configure(struct phy *phy,
- 	struct cdns_torrent_phy *cdns_phy = dev_get_drvdata(phy->dev.parent);
- 	int ret;
+@@ -3006,6 +3006,59 @@ static void cdns_torrent_phy_remove(struct platform_device *pdev)
+ 	cdns_torrent_clk_cleanup(cdns_phy);
+ }
  
-+	if (cdns_phy->already_configured)
-+		return 0;
++static int cdns_torrent_phy_suspend_noirq(struct device *dev)
++{
++	struct cdns_torrent_phy *cdns_phy = dev_get_drvdata(dev);
++	int i;
 +
- 	ret = cdns_torrent_dp_verify_config(inst, &opts->dp);
- 	if (ret) {
- 		dev_err(&phy->dev, "invalid params for phy configure\n");
-@@ -1628,6 +1631,12 @@ static int cdns_torrent_phy_on(struct phy *phy)
- 	u32 read_val;
- 	int ret;
- 
-+	if (cdns_phy->already_configured) {
-+		/* Give 5ms to 10ms delay for the PIPE clock to be stable */
-+		usleep_range(5000, 10000);
-+		return 0;
++	reset_control_assert(cdns_phy->phy_rst);
++	reset_control_assert(cdns_phy->apb_rst);
++	for (i = 0; i < cdns_phy->nsubnodes; i++)
++		reset_control_assert(cdns_phy->phys[i].lnk_rst);
++
++	if (!cdns_phy->already_configured)
++		clk_disable_unprepare(cdns_phy->clk);
++	else
++		cdns_phy->already_configured = 0;
++
++	return 0;
++}
++
++static int cdns_torrent_phy_resume_noirq(struct device *dev)
++{
++	struct cdns_torrent_phy *cdns_phy = dev_get_drvdata(dev);
++	int node = cdns_phy->nsubnodes;
++	int ret, i;
++
++	ret = cdns_torrent_clk(cdns_phy);
++	if (ret)
++		goto clk_cleanup;
++
++	/* Enable APB */
++	reset_control_deassert(cdns_phy->apb_rst);
++
++	if (cdns_phy->nsubnodes > 1) {
++		ret = cdns_torrent_phy_configure_multilink(cdns_phy);
++		if (ret)
++			goto put_lnk_rst;
 +	}
 +
- 	if (cdns_phy->nsubnodes == 1) {
- 		/* Take the PHY lane group out of reset */
- 		reset_control_deassert(inst->lnk_rst);
-@@ -2306,6 +2315,9 @@ static int cdns_torrent_phy_init(struct phy *phy)
- 	u32 num_regs;
- 	int i, j;
- 
-+	if (cdns_phy->already_configured)
-+		return 0;
++	return 0;
 +
- 	if (cdns_phy->nsubnodes > 1) {
- 		if (phy_type == TYPE_DP)
- 			return cdns_torrent_dp_multilink_init(cdns_phy, inst, phy);
-@@ -2443,19 +2455,6 @@ static const struct phy_ops cdns_torrent_phy_ops = {
- 	.owner		= THIS_MODULE,
++put_lnk_rst:
++	for (i = 0; i < node; i++)
++		reset_control_assert(cdns_phy->phys[i].lnk_rst);
++	reset_control_assert(cdns_phy->apb_rst);
++	clk_disable_unprepare(cdns_phy->clk);
++clk_cleanup:
++	cdns_torrent_clk_cleanup(cdns_phy);
++	return ret;
++}
++
++static DEFINE_NOIRQ_DEV_PM_OPS(cdns_torrent_phy_pm_ops,
++			       cdns_torrent_phy_suspend_noirq,
++			       cdns_torrent_phy_resume_noirq);
++
+ /* USB and DP link configuration */
+ static struct cdns_reg_pairs usb_dp_link_cmn_regs[] = {
+ 	{0x0002, PHY_PLL_CFG},
+@@ -4577,6 +4630,7 @@ static struct platform_driver cdns_torrent_phy_driver = {
+ 	.driver = {
+ 		.name	= "cdns-torrent-phy",
+ 		.of_match_table	= cdns_torrent_phy_of_match,
++		.pm	= pm_sleep_ptr(&cdns_torrent_phy_pm_ops),
+ 	}
  };
- 
--static int cdns_torrent_noop_phy_on(struct phy *phy)
--{
--	/* Give 5ms to 10ms delay for the PIPE clock to be stable */
--	usleep_range(5000, 10000);
--
--	return 0;
--}
--
--static const struct phy_ops noop_ops = {
--	.power_on	= cdns_torrent_noop_phy_on,
--	.owner		= THIS_MODULE,
--};
--
- static
- int cdns_torrent_phy_configure_multilink(struct cdns_torrent_phy *cdns_phy)
- {
-@@ -2870,10 +2869,7 @@ static int cdns_torrent_phy_probe(struct platform_device *pdev)
- 		of_property_read_u32(child, "cdns,ssc-mode",
- 				     &cdns_phy->phys[node].ssc_mode);
- 
--		if (!cdns_phy->already_configured)
--			gphy = devm_phy_create(dev, child, &cdns_torrent_phy_ops);
--		else
--			gphy = devm_phy_create(dev, child, &noop_ops);
-+		gphy = devm_phy_create(dev, child, &cdns_torrent_phy_ops);
- 		if (IS_ERR(gphy)) {
- 			ret = PTR_ERR(gphy);
- 			goto put_child;
+ module_platform_driver(cdns_torrent_phy_driver);
 
 -- 
 2.39.2
