@@ -1,81 +1,81 @@
-Return-Path: <linux-i2c+bounces-1485-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1486-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8EE383E44D
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 22:53:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00A6483E45A
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 22:55:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64F432860D0
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 21:53:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B173F285F28
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 21:55:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38D1B24B3B;
-	Fri, 26 Jan 2024 21:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BB0B25558;
+	Fri, 26 Jan 2024 21:55:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LG52CtNc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SqFGMHFy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A051CD34;
-	Fri, 26 Jan 2024 21:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2FE82554F;
+	Fri, 26 Jan 2024 21:55:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706305978; cv=none; b=JluaPOS2k9V+flsqVM9zyWEkK7eOvMHrlWZxQU6jfUQMompfGQtlB48KkvsL3zzeN/zUUD2YUSkxUSZjhoUCNkhTP5TwIGN9ulvPz6AK3imKRZ2WyiwliRR40yG//ZDfb/blKejqf8V5QckoOi980mLUzlBcmNXEpPXuRRwNJOo=
+	t=1706306143; cv=none; b=nNrmF7bRuPm8qNyNmxP3SWOiSP+Td1J+WJ/kgNAxPE0MbWt0cQyJ2wxyrWLjUsYmJZ1UbdDFmNNFcWNgC1VpLU/mK7gsvFwKBFtsVg2Oebxw+opc5MmZZQ+Wdw6iiy0WCJvhU/GIySfW18R5Dg74ql6xS9eXkNkE5pxxITZtDZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706305978; c=relaxed/simple;
-	bh=UiYEGeSKvmD1AptgnorZy5fQNkEfpWdosA24Vbe8h4k=;
+	s=arc-20240116; t=1706306143; c=relaxed/simple;
+	bh=WhxgiR2rTnnQ+bwG5tvmMIB6amadVcuzuZ7pAt5Crcw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mq05rMIYnxCE89wNBsqGTCY1lVd8m+1j5ZgbpPo8VeQbyIJohyLO9cSuxGzoEcXaOQSNl1w7qIiS7dpaYMRA/Rx3qjaTNnVWSDKZmdC3xFJMIL8KC69ngS9kH5wG58Oi70OH6kGiCmEU+M7Pf8Y4ce+4EMPhKAk7nuBzHVzUTiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LG52CtNc; arc=none smtp.client-ip=209.85.128.42
+	 To:Cc:Content-Type; b=oLE1sgB8j5T2M62qIT85uYZMv7Td7XmsAJgQdY6/TjJaII3ODNkJhHtkRK+WYoJ9ZJ9mX4uFrkVMUP4KrYyHHbFVOs3iMuZDQFm1RtriKPQyQOkh2FQu21W8oI5fAX12opDf+NAYcbE2w9FMG4O7EGqeb8fiPKUDgosAZEo3GZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SqFGMHFy; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40eeadb7151so3351875e9.1;
-        Fri, 26 Jan 2024 13:52:56 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a271a28aeb4so77238966b.2;
+        Fri, 26 Jan 2024 13:55:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706305974; x=1706910774; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706306140; x=1706910940; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PwCn1j7lcGKWVrBf99kL7TfgwgawY1TDNPn2McRxeCs=;
-        b=LG52CtNcU7t9JG9W2hcxNLhAias7mth8QQwG13lLU/YxzyrVZbNMz7oCr4NuDHTs8D
-         zwzGFHaycj0YurMsnOTBTRRT/90lEIhBqrMuajm0karAyVbN114tBRpkHVQMTZ+TToSn
-         NUL5XgEAHZtcTQPXR0HlsJRXyC9eAstLP3DUAOMUT0DvnzcvN+oanPaFPNYjxdWGXXUo
-         fhrhykqDi6c11ffWa6vRljPCCgSwRsEqIzOF22igRex6NncfZ2d0tpc8FDvYsXAsP2KQ
-         XpTCc855Kk59k3lqXc7hZG3Fj/WiJkm4GcT3KngRmHhQ6FU+j/OXdZ858wgMjl/VMieK
-         iMow==
+        bh=7Eex8zgmPiS6cd/0RWckNbah/punqtBDfU6VumuTjFQ=;
+        b=SqFGMHFygI5gTmwDbsFHGC7dvL0kz73tWiRzt8X3RQWYZ3itGM1m15e8qqyx/CIMbQ
+         S5/is2J/Jzbko04aTAa86zC1qIMOAX3WPCAPVU/jpFi8ZchgNFrpC8QSgwY5Zcycunik
+         /rflsT6gEYX41osiZjZtZyxnmMOIsbJqzdNffSIdtUSDGiOF+fUR5c4op9jpeUIRKkjm
+         y9OOc5pPcwXvyKQnQcPEMRCYGI9Bm5rYeNaUwy9AHdggxvYEZMRI8jCpJxf/hoeDwJQ1
+         LbbxbxVGJv6kvaHDaZvpI2cVCr5YiaOcYQBZVxtGKknmi3Z3HfWqiuRmGcUPW4R++hsT
+         j2Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706305974; x=1706910774;
+        d=1e100.net; s=20230601; t=1706306140; x=1706910940;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PwCn1j7lcGKWVrBf99kL7TfgwgawY1TDNPn2McRxeCs=;
-        b=mPiGBRuiLYr+KmnBalS7X8tahmVsVDgz4yHurwjt+P73oaWZyLjc2Lpg5ibb8sesuE
-         mu8MvDn0UgaB802rlMm7bjnHUnFp2TyUH1O7DbvcllSxUiWimnsh0LzszqexM8/kQEKa
-         TfoSaZbl6b0KVE3lsZcFFSCW7mHxsFCcShRLQlE4+bkoEGvwu5kBvTjCJB4tPercPdpv
-         AKNx0yoF3bYKbWdDDHnjIIrT2lig3O7+Dq/CG9X7eToe2qAd1NCKR1OknmqbkOGh8M+c
-         m/R0TIeOE0+vEHsIJQr7b2PDOHZtT49M7nDd8V2RHu9rXHisbm7boHVVVd+BmCU79APi
-         ScGg==
-X-Gm-Message-State: AOJu0YwfGrevBBbYgllFcMJPi5y1FUObtrDnHIhzS0ojudBNyIo8zg5R
-	F12/uB+weIUyWF+KRrs0dc7wBYi/DDVuWVyfzcGbOWx24oW6Rep+5UcrSXSUJUugf30V60FTQ7h
-	mXfhn+czzXGbe4TQaSSKY0S4F0jA+TX9uQ3o=
-X-Google-Smtp-Source: AGHT+IE3SFA0KCMxm+4oSxONJ/cUqn4ELR89+v7l0jha8W5oz2rXn+Wjpw8sRwRY94Be8UqpZqINDwOAhPfYMYSbD6I=
-X-Received: by 2002:a05:600c:43c5:b0:40e:becd:d5eb with SMTP id
- f5-20020a05600c43c500b0040ebecdd5ebmr312299wmn.185.1706305974596; Fri, 26 Jan
- 2024 13:52:54 -0800 (PST)
+        bh=7Eex8zgmPiS6cd/0RWckNbah/punqtBDfU6VumuTjFQ=;
+        b=XtzASeSVHc3cpZUOE3VLQ+nvtxD5imZ5Ce40krVQ+qa3m8o3yPI+cu3kERTh71Qlkc
+         /FFAGPhFWv4z832QMjXatPizGdFeFwjnVwcxYSADVCpzewpaLsDFowvOEl270ux+v/uW
+         nzYMeTBKkSixXNdDtaFJfR/ALZNg/953ppDn86FFOvrrFOlRsmBocJ0X4yvd2rqi3R0i
+         sJsZDKWtkLzAkuXdC2x1cKUnX39NJ5eyKgPwRRfLgyfWTgJIOAwwBSLzK2+Y6j7XZvic
+         HTGoC10bUAlR8JnsMXGwqRAJBUmCGo8aq2VgtdAdm6z3pZsnfgmarNdJTuXIa23i5NHc
+         M2Fw==
+X-Gm-Message-State: AOJu0YyIESfSoz4viGII38E8c9lYgox0WCTZLOEBW4rau7pOspO2015q
+	OGJIDS715lSD+degtAwaLdaa7cXhCM5NsewhurAHjMeUcxm8az5QndlicBk86Q+7qIwhIfrj2Jv
+	Vz0j/l6guifUKNc7ktEiPGH1v0mg=
+X-Google-Smtp-Source: AGHT+IEBOcQl+eA0DkV9Z5QVSjTUy7lBkqFnE6O8BX8N2DGGcgPCadgeO4ln7Re5ueD6foFwcdrwD9BT1gB5PR9Nesc=
+X-Received: by 2002:a17:906:9ac9:b0:a27:6615:15ed with SMTP id
+ ah9-20020a1709069ac900b00a27661515edmr221845ejc.42.1706306139794; Fri, 26 Jan
+ 2024 13:55:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240102-j7200-pcie-s2r-v2-0-8e4f7d228ec2@bootlin.com> <20240102-j7200-pcie-s2r-v2-14-8e4f7d228ec2@bootlin.com>
-In-Reply-To: <20240102-j7200-pcie-s2r-v2-14-8e4f7d228ec2@bootlin.com>
+References: <20240102-j7200-pcie-s2r-v2-0-8e4f7d228ec2@bootlin.com> <20240102-j7200-pcie-s2r-v2-15-8e4f7d228ec2@bootlin.com>
+In-Reply-To: <20240102-j7200-pcie-s2r-v2-15-8e4f7d228ec2@bootlin.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 26 Jan 2024 23:52:18 +0200
-Message-ID: <CAHp75VdTPFKgvBqoNBe55LoqPyAY_EDpCZT30qWuGDNvPJgA4Q@mail.gmail.com>
-Subject: Re: [PATCH v2 14/15] PCI: j721e: add reset GPIO to struct j721e_pcie
+Date: Fri, 26 Jan 2024 23:55:03 +0200
+Message-ID: <CAHp75Vfzvi-08DUvmBO8Lt1a-orozD+Z=YNOQJykJKWDZA5gGA@mail.gmail.com>
+Subject: Re: [PATCH v2 15/15] PCI: j721e: add suspend and resume support
 To: Thomas Richard <thomas.richard@bootlin.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
 	Andy Shevchenko <andy@kernel.org>, Tony Lindgren <tony@atomide.com>, 
@@ -99,27 +99,30 @@ On Fri, Jan 26, 2024 at 4:38=E2=80=AFPM Thomas Richard
 >
 > From: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 >
-> Add reset GPIO to struct j721e_pcie, so it can be used at suspend and
-> resume stages.
+> Add suspend and resume support. Only the rc mode is supported.
+>
+> During the suspend stage PERST# is asserted, then deasserted during the
+> resume stage.
 
 ...
 
-> +               pcie->reset_gpio =3D devm_gpiod_get_optional(dev, "reset"=
-, GPIOD_OUT_LOW);
-> +               if (IS_ERR(pcie->reset_gpio)) {
-> +                       ret =3D PTR_ERR(pcie->reset_gpio);
->                         if (ret !=3D -EPROBE_DEFER)
->                                 dev_err(dev, "Failed to get reset GPIO\n"=
-);
+> +static int j721e_pcie_suspend_noirq(struct device *dev)
+> +{
+> +       struct j721e_pcie *pcie =3D dev_get_drvdata(dev);
+> +
+> +       if (pcie->mode =3D=3D PCI_MODE_RC) {
+> +               gpiod_set_value_cansleep(pcie->reset_gpio, 0);
+> +               clk_disable_unprepare(pcie->refclk);
 
-A side note: At some point would be nice to see this being changed to simpl=
-y
+Same Q as in a few mails before: Do you need unprepare? What will be
+the benefit from a PM perspective?
 
-  ret =3D dev_err_probe(...);
-  goto ...;
-
->                         goto err_get_sync;
-
+> +       }
+> +
+> +       cdns_pcie_disable_phy(pcie->cdns_pcie);
+> +
+> +       return 0;
+> +}
 
 --=20
 With Best Regards,
