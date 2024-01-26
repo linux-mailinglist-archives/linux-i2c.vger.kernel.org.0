@@ -1,54 +1,54 @@
-Return-Path: <linux-i2c+bounces-1459-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1458-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C83BE83DC33
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 15:38:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4192D83DC2C
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 15:38:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FC92281A8C
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 14:38:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 677CF1C20BDA
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 14:38:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80911CD3C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CAE91CD26;
 	Fri, 26 Jan 2024 14:37:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QeD+UINS"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Eduz/GPt"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3E21CD1A;
-	Fri, 26 Jan 2024 14:37:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49BEB1CD09;
+	Fri, 26 Jan 2024 14:37:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706279864; cv=none; b=AdQZ5x3eqNjl8A1s9gbLDs+NjGjZwYJetvckUMjdhbchGRKJR8FNeRWrig52yIG2OL/xnowUZZ2MMaxBFKho4KYFs7Qpq2TFiUOudUVjV9A08cTbl5/DrwmfFS6H8HBuOaYyb9RccXYN7BUdncHtkkOxn+48DV6Qbo+X/7/Kv+g=
+	t=1706279864; cv=none; b=snDYHl79pceta2E7D/5VldafaeuV42h9YCpJRCzcgeJSvS13ZIklhHD4M1RwKdlypGVpNMDPlTDDxBOfqQTWbpP1YDEYht33b2yR7hR1t4kuI+fnGMK5eez1cyzCglbudfTRLAJf6lZ1Y7amuVopr3FrzPiXs2WvS005sroqk3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1706279864; c=relaxed/simple;
-	bh=BLC9y/pBFPu9WfpypKFGXfgo4cG5qrErXSPYt3f0ihE=;
+	bh=2AsuUxlX9MVpETBNp+iFT3Mn1IsIz33sSQXe/x2/9zk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kUjdWYr2QlTbc0PSc51GhSen+cEEO9g4f9f8UseUk7G0kOrkIl37tEVNh9V3iFamP8eazTscZ5u2FRqdmsEjhnmZEuzRF8WlosDUCojO9sjBcE8t/zIzg12xh7eQHNg8rmn+j0QEt8206q+qydO3iCvr2XOdxX0+1rRtRNYcYDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QeD+UINS; arc=none smtp.client-ip=217.70.183.194
+	 In-Reply-To:To:Cc; b=jbSccqyNin/A6pT80Cv+HGVyfHwQehkYZinhoBBjR+xuzywLRB/ZARxGRBOPusZ8khRJAbpEKqvH723yaLY/hiQwuO4hq3axmsPvX1Yyn4Q/fmqgScjzXLzwqPE0biclt19aeIz0Ywol+TFI80IPiguA7OQ7sOV2GtPIj939JMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Eduz/GPt; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D48BD40010;
-	Fri, 26 Jan 2024 14:37:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6711C40004;
+	Fri, 26 Jan 2024 14:37:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1706279854;
+	t=1706279858;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=UeT42sEpDDYGcpf5YrXoKh3jtRRClLytLS9mk4kxR3s=;
-	b=QeD+UINS/zyJVUS478SNFmS/cAWoK6t9gopcTzrs5nJYkpqEUtEvkahDp7Vc5PIPAQBQI+
-	Dnw0MvCHZlPJ4wDUiqAGUgN2QReYkr5W+fx9cYu7BuYJAYCJ8KPAdaFBRELUGFbYgIaGe7
-	rDS/Awtg1g8wuh/+xpjgb1yMR3WhaSLEeqqeXRQU8WgMdVzepnDLESUlgcTLrgrIkIAiuV
-	9BIj+isUeaxYUTYAB9O/sqtXDAyPI7O+VlXojO7xSLrHrg0B07UD6fxYI+GK3KX2BUHjix
-	KgPxn9S7mfQOKMiDtTc0IiTESa5jDd+dWvrAzP2ftvTRvWTE2/0vMD19UByEcg==
+	bh=bBvfyrsgnxZkigb51H7bXjq0DEAjmH59sXjUpzTvFno=;
+	b=Eduz/GPtIshO4mhHx0xqXY9W397R7/7eTiPnCpA1xinvHumYUW15LbC6hpiJ8vUVPJusIO
+	1/fi+ua9yXAwEL5p3+mXoMJ+HN+LjJKuAfLXINAN0FmNgv0Hqia+1z3w+j1YSD9ES1AMKl
+	45WY9fSHJZ6Za1bEzrYDRWc0g4sbE+p9Ls/4k+LbLuL/ZnsftWzBvr0dgpug8OgL/SK5mZ
+	cX5bDEhyCrjk4GvrxP3WhZXqmv2StRGvA9KGTV3k0LRh2JrWJ0w21qnHZTNVRPPYOdU+Q9
+	IbDVUT5+UK6L1Jk6if5RmpuOa/tg9LnIalVXenvesLE4Mxi4WyO4pk//kzgSUg==
 From: Thomas Richard <thomas.richard@bootlin.com>
-Date: Fri, 26 Jan 2024 15:36:43 +0100
-Subject: [PATCH v2 01/15] gpio: pca953x: move suspend()/resume() to
- suspend_noirq()/resume_noirq()
+Date: Fri, 26 Jan 2024 15:36:44 +0100
+Subject: [PATCH v2 02/15] pinctrl: pinctrl-single: move suspend()/resume()
+ callbacks to noirq
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240102-j7200-pcie-s2r-v2-1-8e4f7d228ec2@bootlin.com>
+Message-Id: <20240102-j7200-pcie-s2r-v2-2-8e4f7d228ec2@bootlin.com>
 References: <20240102-j7200-pcie-s2r-v2-0-8e4f7d228ec2@bootlin.com>
 In-Reply-To: <20240102-j7200-pcie-s2r-v2-0-8e4f7d228ec2@bootlin.com>
 To: Linus Walleij <linus.walleij@linaro.org>, 
@@ -81,46 +81,89 @@ Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
 X-Mailer: b4 0.12.0
 X-GND-Sasl: thomas.richard@bootlin.com
 
-Some IOs can be needed during suspend_noirq()/resume_noirq().
-So move suspend()/resume() to noirq.
+The goal is to extend the active period of pinctrl.
+Some devices may need active pinctrl after suspend() and/or before
+resume().
+So move suspend()/resume() to suspend_noirq()/resume_noirq() in order to
+have active pinctrl until suspend_noirq() (included), and from
+resume_noirq() (included).
+
+The deprecated API has been removed to use the new one (dev_pm_ops struct).
 
 Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 ---
- drivers/gpio/gpio-pca953x.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/pinctrl/pinctrl-single.c | 28 +++++++++-------------------
+ 1 file changed, 9 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index 00ffa168e405..6e495fc67a93 100644
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -1234,7 +1234,7 @@ static void pca953x_save_context(struct pca953x_chip *chip)
- 	regcache_cache_only(chip->regmap, true);
- }
- 
--static int pca953x_suspend(struct device *dev)
-+static int pca953x_suspend_noirq(struct device *dev)
- {
- 	struct pca953x_chip *chip = dev_get_drvdata(dev);
- 
-@@ -1248,7 +1248,7 @@ static int pca953x_suspend(struct device *dev)
+diff --git a/drivers/pinctrl/pinctrl-single.c b/drivers/pinctrl/pinctrl-single.c
+index 19cc0db771a5..0dd4b0e11adf 100644
+--- a/drivers/pinctrl/pinctrl-single.c
++++ b/drivers/pinctrl/pinctrl-single.c
+@@ -1625,7 +1625,6 @@ static int pcs_irq_init_chained_handler(struct pcs_device *pcs,
  	return 0;
  }
  
--static int pca953x_resume(struct device *dev)
-+static int pca953x_resume_noirq(struct device *dev)
+-#ifdef CONFIG_PM
+ static int pcs_save_context(struct pcs_device *pcs)
  {
- 	struct pca953x_chip *chip = dev_get_drvdata(dev);
- 	int ret;
-@@ -1268,7 +1268,8 @@ static int pca953x_resume(struct device *dev)
- 	return ret;
+ 	int i, mux_bytes;
+@@ -1690,14 +1689,9 @@ static void pcs_restore_context(struct pcs_device *pcs)
+ 	}
  }
  
--static DEFINE_SIMPLE_DEV_PM_OPS(pca953x_pm_ops, pca953x_suspend, pca953x_resume);
-+static DEFINE_NOIRQ_DEV_PM_OPS(pca953x_pm_ops,
-+			       pca953x_suspend_noirq, pca953x_resume_noirq);
+-static int pinctrl_single_suspend(struct platform_device *pdev,
+-					pm_message_t state)
++static int pinctrl_single_suspend_noirq(struct device *dev)
+ {
+-	struct pcs_device *pcs;
+-
+-	pcs = platform_get_drvdata(pdev);
+-	if (!pcs)
+-		return -EINVAL;
++	struct pcs_device *pcs = dev_get_drvdata(dev);
  
- /* convenience to stop overlong match-table lines */
- #define OF_653X(__nrgpio, __int) ((void *)(__nrgpio | PCAL653X_TYPE | __int))
+ 	if (pcs->flags & PCS_CONTEXT_LOSS_OFF) {
+ 		int ret;
+@@ -1710,20 +1704,19 @@ static int pinctrl_single_suspend(struct platform_device *pdev,
+ 	return pinctrl_force_sleep(pcs->pctl);
+ }
+ 
+-static int pinctrl_single_resume(struct platform_device *pdev)
++static int pinctrl_single_resume_noirq(struct device *dev)
+ {
+-	struct pcs_device *pcs;
+-
+-	pcs = platform_get_drvdata(pdev);
+-	if (!pcs)
+-		return -EINVAL;
++	struct pcs_device *pcs = dev_get_drvdata(dev);
+ 
+ 	if (pcs->flags & PCS_CONTEXT_LOSS_OFF)
+ 		pcs_restore_context(pcs);
+ 
+ 	return pinctrl_force_default(pcs->pctl);
+ }
+-#endif
++
++static DEFINE_NOIRQ_DEV_PM_OPS(pinctrl_single_pm_ops,
++			       pinctrl_single_suspend_noirq,
++			       pinctrl_single_resume_noirq);
+ 
+ /**
+  * pcs_quirk_missing_pinctrl_cells - handle legacy binding
+@@ -1986,11 +1979,8 @@ static struct platform_driver pcs_driver = {
+ 	.driver = {
+ 		.name		= DRIVER_NAME,
+ 		.of_match_table	= pcs_of_match,
++		.pm = pm_sleep_ptr(&pinctrl_single_pm_ops),
+ 	},
+-#ifdef CONFIG_PM
+-	.suspend = pinctrl_single_suspend,
+-	.resume = pinctrl_single_resume,
+-#endif
+ };
+ 
+ module_platform_driver(pcs_driver);
 
 -- 
 2.39.2
