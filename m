@@ -1,82 +1,82 @@
-Return-Path: <linux-i2c+bounces-1481-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1482-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12B4D83E42C
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 22:45:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8504A83E431
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 22:46:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A635D1F22C2A
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 21:45:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 105B7B23234
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 21:46:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA4C624B30;
-	Fri, 26 Jan 2024 21:44:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C48A24B33;
+	Fri, 26 Jan 2024 21:46:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J0LpjUWf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ApkyqvK3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5DF25545;
-	Fri, 26 Jan 2024 21:44:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC5381CD34;
+	Fri, 26 Jan 2024 21:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706305496; cv=none; b=K3IdpSlTWdUJi68pkz1YjeTs7vabxxTjvLy9Q1VT/hq7Aiflfwe0tL0zqsMrNRS9vXK11mnSYAxspDBq1XMG0a7f8XY3UxlRhkt9MUJj3sU1TZamRRNUsOeTOLFmch5AWweiin/xQCGec7d/cdb4lcnhXX2/LBzCaHsCG0fqb9U=
+	t=1706305569; cv=none; b=SGt9wrdB0z+lMrMnjXk328MHB1te5XLgJxqKCIAV/Ja28SYu0kP9xJGlZ50GFRMjP6hYyNC7gS4HUNXFrMlQEv5r0c6Onkjpilp7KqIyVfECTapG+zL2CYVwAyhD5zK8slPWMFWj16Zoht//w+9g11EV2p2oyRmhgd9SV+8mrkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706305496; c=relaxed/simple;
-	bh=RhbeD1Xxr/wpT5U9hvDzAgq+te6qw2fPHn5v6yeDkdI=;
+	s=arc-20240116; t=1706305569; c=relaxed/simple;
+	bh=HQkL6ngwMWDmrq3Sj7a3dyToWvz/1Fxwyt+zP1pM9/I=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cv5F2H7pyrpT5+CyC8mMYAf+nLKAiNSd8/JW+JZyM/+bJROmwOBwztEoIfcnmylw3z0aYUhPgBWa3GdI0Uq1vPV0rrYOEf/zBMyBs9KUavuFGJ/OswIhofSR+GpE+0MErMBc5HZ1xwQn2HMX9p9dD1WIflHvuzl1qHr2Hzk/SFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J0LpjUWf; arc=none smtp.client-ip=209.85.218.49
+	 To:Cc:Content-Type; b=qXMg7Y25a0lv+5uopMz7W4y4/p/+nFu3xyXggYco8bABRPWsNX5t93FpzcDkGCGcmzWoV5tFcM1utudERAaW3gUPQ/PkhW8QZq5u+zvh5K09MNgikLHVE9adNmv7DzLxov5sLkW1PhAMPFRfFvi/79QkiAalpg9FHadZ7i/PJSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ApkyqvK3; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a28a6cef709so80906266b.1;
-        Fri, 26 Jan 2024 13:44:54 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-55817a12ad8so624902a12.2;
+        Fri, 26 Jan 2024 13:46:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706305493; x=1706910293; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706305566; x=1706910366; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pZbGUMmKtRc78Vd0IFN0doHJAOFPz59sSFpDCt1ZMOA=;
-        b=J0LpjUWfkyEQu7K5UgY39yV4XG0yVEQLo0KLcSKlllfTGvR62+esWdUGYAI8EJNNyO
-         Ndpupuxviul+8v9ypXMYHewsH3SA+LnIJD57L2q5qh2B8MmmAQE8Jqoc0+IHPM1ET7Yg
-         MbbXbkzKfSYWJ+8pV+HFa0qn1QcxOE9oGuzMsDa8tklKeJ1z8mIFfWNVgYAmT+na8AoV
-         Ipdy6gLJJWkcWmvacmJ3JTGMzTs8ebfxB33zCTMir5bUmKlBPZCENBWodKKNvGb30q0P
-         2+A4Tb7/NDKuDH3E5R8U+yznRAQ5IfNgZ1w432vxz1DlPw6/l551z8hb6mZzZ9RW0+d5
-         jyqg==
+        bh=HQkL6ngwMWDmrq3Sj7a3dyToWvz/1Fxwyt+zP1pM9/I=;
+        b=ApkyqvK3ryDdu1TmhS4VHF8hP9dIpmwAmRSC4f83YPMq70xp4fK3xhPeKkuNDl/ai0
+         nv+rKOz/0uL0fTD2Jcjf+P4ieCj64OdZWjPyLJuu6KG4Ec7QX0VlAjL5npvb+ImVAtHq
+         W5V9lBnwU+vz84oezsYjxqW+J4JN+KsvAWHr8w5AZakOR+hQkp7ByJbLS8i9uG79RtlC
+         PWeeOEWLqqgCKg5TySJHbMjil9o5QjWcyBnI4wiSGznL/7TZE+aMEOIc2JnaXur7Thf9
+         HOO8thVLE9qeiYGvmImvwt4XJExW0V1K/kRkgRQAb64eFeX7VgK9wkYni0+jBDW98Dnr
+         OlNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706305493; x=1706910293;
+        d=1e100.net; s=20230601; t=1706305566; x=1706910366;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pZbGUMmKtRc78Vd0IFN0doHJAOFPz59sSFpDCt1ZMOA=;
-        b=k2TjDkrMu5iWldU1lSmUzJqpWn8uD0ZjJ/82i7kUbvYbo0MB835OSx4WV6jjjcps2W
-         gV4B9Ru2mHHsIaU7E9dIwkPUBgYt/nk+a2rZdT5+q+U2vgHq3gu0XoOxrya6+MAQnFfu
-         cANofsLQUdOMGgeSB61tatxTpWd4Cs2SjOqS8mG0Fx/U3uW2qCvrGXA3/WHMh9krGItu
-         Q2xSu2DIjg5Wq9jkc0OK5LcIQUb6UTXBxRSLWeT1A7iNeqR5N2odN3v8AW5cQ/5HuTpq
-         gxTqTnuySy19NopfkAznmtfIQ4SVg8II5wnnJO6qQrzTMPZj7fs3p1K3Cml8ZePtnLi6
-         qwMQ==
-X-Gm-Message-State: AOJu0YzvvAlrVF9WroRKXmATJ1Df/+mDSKuiPsJxmERR4m1ZzMQ8ztGn
-	wFH33Wz75oG6osgoI1fjH8Zv2R0uvYqY/iWAmz7JMO3Z/jjRiDUIdje0vfR3hQQkwrTOETP0psC
-	PoDCZAT6He4m5RgTpCAq/sb3C7kU=
-X-Google-Smtp-Source: AGHT+IEVMVE1cmDyN4zaRyBnLDzB7920s27ax/GY3ERq+4K8hxg3bppm3gfHC1JNrG8Vsr8Xu76G+2g0Gd/k/gs2hPE=
-X-Received: by 2002:a17:906:a042:b0:a31:58fc:bd83 with SMTP id
- bg2-20020a170906a04200b00a3158fcbd83mr240807ejb.10.1706305493198; Fri, 26 Jan
- 2024 13:44:53 -0800 (PST)
+        bh=HQkL6ngwMWDmrq3Sj7a3dyToWvz/1Fxwyt+zP1pM9/I=;
+        b=NCiKLgHz2TJS03Ni6xgNdEm9IruqWn7juVjpRnUcjFXUXAN0fvm/m4fZHH3omFv/Ck
+         Q2oHE5js+4C4EIB27angS0kwxK9punjn/FAkpt+JailCa0VWhHfDfP475tClHog4Sxy7
+         YPwwEq6SkqJCOK69pF+kvBm+b9rO4SBhRO4NtWF3CiviZln5tHwRHEqtV60CIlEjOTTm
+         mIN1BgT/uBVTjupTNQp6UB/Wb6d68eIoqsEEhn2ijl9iwI+XQhCZqXVATcg5Y6kKnwvS
+         jfu1YSuvsx9Bo7DqdlQUX1RvvAq+kKk3O9Uz33en+W46utzKAJJDEJJBAWdkZn01Y9zl
+         F5kA==
+X-Gm-Message-State: AOJu0YwX9ZDqV4aP+oDhEO6dNhvB23CD6qPXuoyFegUpQhg5DN53fdyD
+	mhZhfeEFkyrtyra8Wdr/szVdW6COhqLK+a/CPfQqQL03F5O7AwCiKC3DfiT6EoBgGaG5+sYLNBl
+	/hu+q29sAyYvy3Aly80+v3NgvxsE=
+X-Google-Smtp-Source: AGHT+IFuaN66sH/Q1hNZyw9mZrIx0mYKhx0F1IQ/t/bx/vsOS7NFf3pBAuGabC39Y7mXEG7N/TyC/Sukm+qc+ZnwxjE=
+X-Received: by 2002:a17:906:f858:b0:a30:a4d4:b4a9 with SMTP id
+ ks24-20020a170906f85800b00a30a4d4b4a9mr206016ejb.44.1706305566044; Fri, 26
+ Jan 2024 13:46:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240102-j7200-pcie-s2r-v2-0-8e4f7d228ec2@bootlin.com> <20240102-j7200-pcie-s2r-v2-8-8e4f7d228ec2@bootlin.com>
-In-Reply-To: <20240102-j7200-pcie-s2r-v2-8-8e4f7d228ec2@bootlin.com>
+References: <20240102-j7200-pcie-s2r-v2-0-8e4f7d228ec2@bootlin.com> <20240102-j7200-pcie-s2r-v2-9-8e4f7d228ec2@bootlin.com>
+In-Reply-To: <20240102-j7200-pcie-s2r-v2-9-8e4f7d228ec2@bootlin.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 26 Jan 2024 23:44:16 +0200
-Message-ID: <CAHp75VdkWNqyy1Xe1oPDegjoO9X+zFh+zU62o3QomKmFo+LQWg@mail.gmail.com>
-Subject: Re: [PATCH v2 08/15] phy: cadence-torrent: extract calls to clk_get
- from cdns_torrent_clk
+Date: Fri, 26 Jan 2024 23:45:29 +0200
+Message-ID: <CAHp75Ve440129bHZ3e7Sq1EsGtEzSwYaGfgAPfiN0LE7bw6oXQ@mail.gmail.com>
+Subject: Re: [PATCH v2 09/15] phy: cadence-torrent: register resets even if
+ the phy is already configured
 To: Thomas Richard <thomas.richard@bootlin.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
 	Andy Shevchenko <andy@kernel.org>, Tony Lindgren <tony@atomide.com>, 
@@ -95,29 +95,18 @@ Cc: Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 26, 2024 at 4:37=E2=80=AFPM Thomas Richard
+On Fri, Jan 26, 2024 at 4:39=E2=80=AFPM Thomas Richard
 <thomas.richard@bootlin.com> wrote:
 >
-> Extract calls to clk_get from cdns_torrent_clk into a separate function.
-> It needs to call cdns_torrent_clk at resume without looking up the clock.
+> Resets are needed during suspend and resume stages.
+> So they shall be registered during the probe even the phy is already
+> initialized.
 >
-> Based on the work of Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> The function cdns_torrent_reset is renamed cdns_torrent_of_get_reset to
+> make it clear.
 
-(Just a side question: Have you used --histogram diff algo when
-preparing the series? Please use, if not)
-
-...
-
-
-> -       cdns_phy->clk =3D devm_clk_get(dev, "refclk");
-> +       cdns_phy->clk =3D devm_clk_get(cdns_phy->dev, "refclk");
->         if (IS_ERR(cdns_phy->clk)) {
-> -               dev_err(dev, "phy ref clock not found\n");
-> +               dev_err(cdns_phy->dev, "phy ref clock not found\n");
->                 return PTR_ERR(cdns_phy->clk);
->         }
-
-Same issue as I noted in a previous email.
+Functions are referred to as func().
+It is also applicable to other commit messages in this series.
 
 --=20
 With Best Regards,
