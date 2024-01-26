@@ -1,268 +1,125 @@
-Return-Path: <linux-i2c+bounces-1480-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1481-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCECD83E426
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 22:43:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12B4D83E42C
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 22:45:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F16111C23261
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 21:43:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A635D1F22C2A
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Jan 2024 21:45:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB9D24B2B;
-	Fri, 26 Jan 2024 21:43:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA4C624B30;
+	Fri, 26 Jan 2024 21:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="inziZ7Od"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J0LpjUWf"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CB5325547;
-	Fri, 26 Jan 2024 21:43:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5DF25545;
+	Fri, 26 Jan 2024 21:44:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706305419; cv=none; b=C9dQMVyB7gbSL8+AJ8iUEd0RFdVlAyIWXBpbCXcYfLIzGIXp7C1M5uhjOOFtG0mqwnyoTWxcLSE9fq1Mose1p3+stWMRNSjq+jVW5MWExW9n3E3PPhr0WKqzTawIITdZ3TSO6thRDJ1GTCu7bqcvpAIu1Ocz5jbMjYHoH+ugY1Q=
+	t=1706305496; cv=none; b=K3IdpSlTWdUJi68pkz1YjeTs7vabxxTjvLy9Q1VT/hq7Aiflfwe0tL0zqsMrNRS9vXK11mnSYAxspDBq1XMG0a7f8XY3UxlRhkt9MUJj3sU1TZamRRNUsOeTOLFmch5AWweiin/xQCGec7d/cdb4lcnhXX2/LBzCaHsCG0fqb9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706305419; c=relaxed/simple;
-	bh=dGrX54JKc+ouW6Qe0kG/VCojouMRzfaNqMwu+WvsiFc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=SYMuWaMovCEMM5gjnvBUH/+UXePHlAjCI2gjA5SPFZLreE/5Qnb2LbQMLhXsqaC2N3rfINOB0w8RQ3JlMim2qO351c0KZjb1aRMao/wQH9zjFlgNhPwZSyC6vYb9yHuMKLn+terewkCjHPNPjDmwezrsxG/DNKUyJrxnCk9HU3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=inziZ7Od; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 961A3C433C7;
-	Fri, 26 Jan 2024 21:43:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706305418;
-	bh=dGrX54JKc+ouW6Qe0kG/VCojouMRzfaNqMwu+WvsiFc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=inziZ7Od0BGG1wapyJIji2rltHuK546vmXLekUOdBNw/zMUrSH2tgyR1YKfQmJn4M
-	 N1+zl9watQThzgAgk8RE2pO0XK1QnC0cHtdKlrKTitAUps1IeWFw6GfOy5bjUe+Hv+
-	 V+Cdi+n9V0pzYBeo0IYDQf8PmsTZaH7cv7hgX1k11+wZCP0KsvSbIyiB4LF7xSSMs+
-	 aye2qeqK6Fr+cledVAy1shXdxvxjyXid+UmGLvgkZvxC3UgJ76iEE5eOGXe5LlWYE0
-	 RvRtKuc/RdIa+w13sopOKhLWhybqs1dTXcw0lfTDT2P9mqOdlcBua7lRghb3vl5Ed6
-	 IeFIC4kPDDvOg==
-Date: Fri, 26 Jan 2024 15:43:36 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andy@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Haojian Zhuang <haojian.zhuang@linaro.org>,
-	Vignesh R <vigneshr@ti.com>, Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Tom Joseph <tjoseph@cadence.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
-	theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com,
-	u-kumar1@ti.com
-Subject: Re: [PATCH v2 13/15] PCI: cadence: add resume support to
- cdns_pcie_host_setup()
-Message-ID: <20240126214336.GA453589@bhelgaas>
+	s=arc-20240116; t=1706305496; c=relaxed/simple;
+	bh=RhbeD1Xxr/wpT5U9hvDzAgq+te6qw2fPHn5v6yeDkdI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cv5F2H7pyrpT5+CyC8mMYAf+nLKAiNSd8/JW+JZyM/+bJROmwOBwztEoIfcnmylw3z0aYUhPgBWa3GdI0Uq1vPV0rrYOEf/zBMyBs9KUavuFGJ/OswIhofSR+GpE+0MErMBc5HZ1xwQn2HMX9p9dD1WIflHvuzl1qHr2Hzk/SFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J0LpjUWf; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a28a6cef709so80906266b.1;
+        Fri, 26 Jan 2024 13:44:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706305493; x=1706910293; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pZbGUMmKtRc78Vd0IFN0doHJAOFPz59sSFpDCt1ZMOA=;
+        b=J0LpjUWfkyEQu7K5UgY39yV4XG0yVEQLo0KLcSKlllfTGvR62+esWdUGYAI8EJNNyO
+         Ndpupuxviul+8v9ypXMYHewsH3SA+LnIJD57L2q5qh2B8MmmAQE8Jqoc0+IHPM1ET7Yg
+         MbbXbkzKfSYWJ+8pV+HFa0qn1QcxOE9oGuzMsDa8tklKeJ1z8mIFfWNVgYAmT+na8AoV
+         Ipdy6gLJJWkcWmvacmJ3JTGMzTs8ebfxB33zCTMir5bUmKlBPZCENBWodKKNvGb30q0P
+         2+A4Tb7/NDKuDH3E5R8U+yznRAQ5IfNgZ1w432vxz1DlPw6/l551z8hb6mZzZ9RW0+d5
+         jyqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706305493; x=1706910293;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pZbGUMmKtRc78Vd0IFN0doHJAOFPz59sSFpDCt1ZMOA=;
+        b=k2TjDkrMu5iWldU1lSmUzJqpWn8uD0ZjJ/82i7kUbvYbo0MB835OSx4WV6jjjcps2W
+         gV4B9Ru2mHHsIaU7E9dIwkPUBgYt/nk+a2rZdT5+q+U2vgHq3gu0XoOxrya6+MAQnFfu
+         cANofsLQUdOMGgeSB61tatxTpWd4Cs2SjOqS8mG0Fx/U3uW2qCvrGXA3/WHMh9krGItu
+         Q2xSu2DIjg5Wq9jkc0OK5LcIQUb6UTXBxRSLWeT1A7iNeqR5N2odN3v8AW5cQ/5HuTpq
+         gxTqTnuySy19NopfkAznmtfIQ4SVg8II5wnnJO6qQrzTMPZj7fs3p1K3Cml8ZePtnLi6
+         qwMQ==
+X-Gm-Message-State: AOJu0YzvvAlrVF9WroRKXmATJ1Df/+mDSKuiPsJxmERR4m1ZzMQ8ztGn
+	wFH33Wz75oG6osgoI1fjH8Zv2R0uvYqY/iWAmz7JMO3Z/jjRiDUIdje0vfR3hQQkwrTOETP0psC
+	PoDCZAT6He4m5RgTpCAq/sb3C7kU=
+X-Google-Smtp-Source: AGHT+IEVMVE1cmDyN4zaRyBnLDzB7920s27ax/GY3ERq+4K8hxg3bppm3gfHC1JNrG8Vsr8Xu76G+2g0Gd/k/gs2hPE=
+X-Received: by 2002:a17:906:a042:b0:a31:58fc:bd83 with SMTP id
+ bg2-20020a170906a04200b00a3158fcbd83mr240807ejb.10.1706305493198; Fri, 26 Jan
+ 2024 13:44:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240102-j7200-pcie-s2r-v2-13-8e4f7d228ec2@bootlin.com>
+References: <20240102-j7200-pcie-s2r-v2-0-8e4f7d228ec2@bootlin.com> <20240102-j7200-pcie-s2r-v2-8-8e4f7d228ec2@bootlin.com>
+In-Reply-To: <20240102-j7200-pcie-s2r-v2-8-8e4f7d228ec2@bootlin.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Fri, 26 Jan 2024 23:44:16 +0200
+Message-ID: <CAHp75VdkWNqyy1Xe1oPDegjoO9X+zFh+zU62o3QomKmFo+LQWg@mail.gmail.com>
+Subject: Re: [PATCH v2 08/15] phy: cadence-torrent: extract calls to clk_get
+ from cdns_torrent_clk
+To: Thomas Richard <thomas.richard@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Andy Shevchenko <andy@kernel.org>, Tony Lindgren <tony@atomide.com>, 
+	Haojian Zhuang <haojian.zhuang@linaro.org>, Vignesh R <vigneshr@ti.com>, 
+	Aaro Koskinen <aaro.koskinen@iki.fi>, Janusz Krzysztofik <jmkrzyszt@gmail.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Tom Joseph <tjoseph@cadence.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-pci@vger.kernel.org, 
+	gregory.clement@bootlin.com, theo.lebrun@bootlin.com, 
+	thomas.petazzoni@bootlin.com, u-kumar1@ti.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In subject, capitalize "Add ..." to follow historical convention.
-Also the other driver/pci/ patches.
+On Fri, Jan 26, 2024 at 4:37=E2=80=AFPM Thomas Richard
+<thomas.richard@bootlin.com> wrote:
+>
+> Extract calls to clk_get from cdns_torrent_clk into a separate function.
+> It needs to call cdns_torrent_clk at resume without looking up the clock.
+>
+> Based on the work of Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
-On Fri, Jan 26, 2024 at 03:36:55PM +0100, Thomas Richard wrote:
-> From: Théo Lebrun <theo.lebrun@bootlin.com>
-> 
-> That function mixes probe structure init and hardware config.
-> The whole hardware config part must be done at resume after a suspend to
-> ram.
-> We therefore pass it a boolean flag determining if we are at probe or at
-> resume.
+(Just a side question: Have you used --histogram diff algo when
+preparing the series? Please use, if not)
 
-s/That function/cdns_pcie_host_setup()/ so the commit log stands
-alone even without the subject line.
+...
 
-s/ram/RAM/
 
-Add blank line between paragraphs (or rewrap into a single paragraph).
+> -       cdns_phy->clk =3D devm_clk_get(dev, "refclk");
+> +       cdns_phy->clk =3D devm_clk_get(cdns_phy->dev, "refclk");
+>         if (IS_ERR(cdns_phy->clk)) {
+> -               dev_err(dev, "phy ref clock not found\n");
+> +               dev_err(cdns_phy->dev, "phy ref clock not found\n");
+>                 return PTR_ERR(cdns_phy->clk);
+>         }
 
-This is pretty similar but slightly different from the DWC pattern:
+Same issue as I noted in a previous email.
 
-  imx6_pcie_probe
-    ... do structure init ...
-    if (RC)
-      dw_pcie_host_init
-	pp->ops->init
-	  imx6_pcie_host_init
-
-  imx6_pcie_resume_noirq
-    imx6_pcie_host_init
-
-  j721e_pcie_probe
-    j721e_pcie_ctrl_init
-    if (RC)
-      cdns_pcie_host_setup(true)
-
-  j721e_pcie_resume_noirq
-    j721e_pcie_ctrl_init
-    if (RC)
-      cdns_pcie_host_setup(false)
-
-It'd be super nice to have them the same.  Passing in a "probe" flag
-works but seems a little harder to read in cdns_pcie_host_setup() and
-you have to keep track of what it means in the callers.
-
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
-> ---
->  drivers/pci/controller/cadence/pci-j721e.c         |  2 +-
->  drivers/pci/controller/cadence/pcie-cadence-host.c | 49 ++++++++++++----------
->  drivers/pci/controller/cadence/pcie-cadence-plat.c |  2 +-
->  drivers/pci/controller/cadence/pcie-cadence.h      |  4 +-
->  4 files changed, 30 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
-> index 2c87e7728a65..9b343a46da11 100644
-> --- a/drivers/pci/controller/cadence/pci-j721e.c
-> +++ b/drivers/pci/controller/cadence/pci-j721e.c
-> @@ -509,7 +509,7 @@ static int j721e_pcie_probe(struct platform_device *pdev)
->  			gpiod_set_value_cansleep(gpiod, 1);
->  		}
->  
-> -		ret = cdns_pcie_host_setup(rc);
-> +		ret = cdns_pcie_host_setup(rc, true);
->  		if (ret < 0) {
->  			clk_disable_unprepare(pcie->refclk);
->  			goto err_pcie_setup;
-> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> index 5b14f7ee3c79..dd4d876a9138 100644
-> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> @@ -497,14 +497,14 @@ static int cdns_pcie_host_init(struct device *dev,
->  	return cdns_pcie_host_init_address_translation(rc);
->  }
->  
-> -int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
-> +int cdns_pcie_host_setup(struct cdns_pcie_rc *rc, bool probe)
->  {
->  	struct device *dev = rc->pcie.dev;
->  	struct platform_device *pdev = to_platform_device(dev);
->  	struct device_node *np = dev->of_node;
->  	struct pci_host_bridge *bridge;
->  	enum cdns_pcie_rp_bar bar;
-> -	struct cdns_pcie *pcie;
-> +	struct cdns_pcie *pcie = &rc->pcie;
->  	struct resource *res;
->  	int ret;
->  
-> @@ -512,26 +512,27 @@ int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
->  	if (!bridge)
->  		return -ENOMEM;
->  
-> -	pcie = &rc->pcie;
-> -	pcie->is_rc = true;
-> +	if (probe) {
-> +		pcie->is_rc = true;
->  
-> -	rc->vendor_id = 0xffff;
-> -	of_property_read_u32(np, "vendor-id", &rc->vendor_id);
-> +		rc->vendor_id = 0xffff;
-> +		of_property_read_u32(np, "vendor-id", &rc->vendor_id);
->  
-> -	rc->device_id = 0xffff;
-> -	of_property_read_u32(np, "device-id", &rc->device_id);
-> +		rc->device_id = 0xffff;
-> +		of_property_read_u32(np, "device-id", &rc->device_id);
->  
-> -	pcie->reg_base = devm_platform_ioremap_resource_byname(pdev, "reg");
-> -	if (IS_ERR(pcie->reg_base)) {
-> -		dev_err(dev, "missing \"reg\"\n");
-> -		return PTR_ERR(pcie->reg_base);
-> -	}
-> +		pcie->reg_base = devm_platform_ioremap_resource_byname(pdev, "reg");
-> +		if (IS_ERR(pcie->reg_base)) {
-> +			dev_err(dev, "missing \"reg\"\n");
-> +			return PTR_ERR(pcie->reg_base);
-> +		}
->  
-> -	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg");
-> -	rc->cfg_base = devm_pci_remap_cfg_resource(dev, res);
-> -	if (IS_ERR(rc->cfg_base))
-> -		return PTR_ERR(rc->cfg_base);
-> -	rc->cfg_res = res;
-> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg");
-> +		rc->cfg_base = devm_pci_remap_cfg_resource(dev, res);
-> +		if (IS_ERR(rc->cfg_base))
-> +			return PTR_ERR(rc->cfg_base);
-> +		rc->cfg_res = res;
-> +	}
->  
->  	if (rc->quirk_detect_quiet_flag)
->  		cdns_pcie_detect_quiet_min_delay_set(&rc->pcie);
-> @@ -555,12 +556,14 @@ int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
->  	if (ret)
->  		return ret;
->  
-> -	if (!bridge->ops)
-> -		bridge->ops = &cdns_pcie_host_ops;
-> +	if (probe) {
-> +		if (!bridge->ops)
-> +			bridge->ops = &cdns_pcie_host_ops;
->  
-> -	ret = pci_host_probe(bridge);
-> -	if (ret < 0)
-> -		goto err_init;
-> +		ret = pci_host_probe(bridge);
-> +		if (ret < 0)
-> +			goto err_init;
-> +	}
->  
->  	return 0;
->  
-> diff --git a/drivers/pci/controller/cadence/pcie-cadence-plat.c b/drivers/pci/controller/cadence/pcie-cadence-plat.c
-> index 0456845dabb9..071423091668 100644
-> --- a/drivers/pci/controller/cadence/pcie-cadence-plat.c
-> +++ b/drivers/pci/controller/cadence/pcie-cadence-plat.c
-> @@ -86,7 +86,7 @@ static int cdns_plat_pcie_probe(struct platform_device *pdev)
->  			goto err_get_sync;
->  		}
->  
-> -		ret = cdns_pcie_host_setup(rc);
-> +		ret = cdns_pcie_host_setup(rc, true);
->  		if (ret)
->  			goto err_init;
->  	} else {
-> diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
-> index 373cb50fcd15..3b0da889ed64 100644
-> --- a/drivers/pci/controller/cadence/pcie-cadence.h
-> +++ b/drivers/pci/controller/cadence/pcie-cadence.h
-> @@ -515,11 +515,11 @@ static inline bool cdns_pcie_link_up(struct cdns_pcie *pcie)
->  }
->  
->  #ifdef CONFIG_PCIE_CADENCE_HOST
-> -int cdns_pcie_host_setup(struct cdns_pcie_rc *rc);
-> +int cdns_pcie_host_setup(struct cdns_pcie_rc *rc, bool probe);
->  void __iomem *cdns_pci_map_bus(struct pci_bus *bus, unsigned int devfn,
->  			       int where);
->  #else
-> -static inline int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
-> +static inline int cdns_pcie_host_setup(struct cdns_pcie_rc *rc, bool probe)
->  {
->  	return 0;
->  }
-> 
-> -- 
-> 2.39.2
-> 
+--=20
+With Best Regards,
+Andy Shevchenko
 
