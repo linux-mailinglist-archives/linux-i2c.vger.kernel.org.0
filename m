@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-1493-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1494-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84B0F83F040
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Jan 2024 22:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A70F883F049
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Jan 2024 22:53:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F63F282C7D
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Jan 2024 21:46:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61087283A96
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Jan 2024 21:53:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7FF81B5BB;
-	Sat, 27 Jan 2024 21:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F9051B7FA;
+	Sat, 27 Jan 2024 21:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJFqJgRC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cTBgjxua"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48DBB1B271;
-	Sat, 27 Jan 2024 21:46:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC3A1B297;
+	Sat, 27 Jan 2024 21:53:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706391985; cv=none; b=mUDL8IovCSOrtwAPMIqkEomt3VxLfk5XWyk4nbminuBHJrvjHdpnW0oB1Ppoa8CbGbhHZJX4BOek5m86t6cKhyRPM3WUrKE50a1n5D33CUM0BzrW1D+H92hfvjBrgjZS27TSR5YQ2q7aDNZSgDkJwgBQu0rruEO0vRPOXmeA+PA=
+	t=1706392422; cv=none; b=sl2/oyw5nB5WHb57WegPAQp+kjTs4e7E1/JkprrIcoM0JFq4NKBWkrUGHnRvev0gWFYmESI9HbcA6xKQ9puFbHO8BT2cBjhcRAlHYCrM2aX91zLL1QrXLf1d+AnrHAEvS4bV1R9CiAvOo8t0g79KYNShAAW4s2xMHWrF/JrTB8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706391985; c=relaxed/simple;
-	bh=SErjFBICAWxRTxTFw2so2di/v5LFUPRZOMxTT+5uyqY=;
+	s=arc-20240116; t=1706392422; c=relaxed/simple;
+	bh=NwU+oQa1r9cqfqb+Y9Gu8poXEe3DEKlOE0uxQ1/xnls=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DfuituOAVA5W3+7rDJ2xfo/2Q0l5QcSAA1xlK3CsVkC8Lw5yMy3oVLc34IERoJMrvhvOvkLH3ESoPHGxEXPGiyqe4cJkiDwgrgJ4Acotb5BhIu7U8G7N9QOfuT7fG3Qg4d10Yb2RH0VLQYXPWOmysmI/+4sVR7XHSZzJVW/lJMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BJFqJgRC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A7AFC433C7;
-	Sat, 27 Jan 2024 21:46:23 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=c4MuohfWcsagq/blEdhNvl/nTJ6IO+cLaEnf/VnFW5XDt1GOmnOMWo3sQZMEWelVSJe4aIM/9Q+qxA8GfRlhMIOyetxMiT2lB4Ws81CmMlhetO+xb2d3hzisttZ0pI3kJ4zAoYMXG1OhlV8C7S2fmCOLTEt1hkVtdfgRQC1yWgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cTBgjxua; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 556C4C433F1;
+	Sat, 27 Jan 2024 21:53:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706391984;
-	bh=SErjFBICAWxRTxTFw2so2di/v5LFUPRZOMxTT+5uyqY=;
+	s=k20201202; t=1706392421;
+	bh=NwU+oQa1r9cqfqb+Y9Gu8poXEe3DEKlOE0uxQ1/xnls=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BJFqJgRCiVMNZX+V2TC3V0uQ1Q9GGncokLQikLTlsvHbP0c2jzCg/ddXZkWnKWPgT
-	 IOIRBPj+Q27jll86wkFQEPd1TlRJge92vUiAgl7pBSYHv/+Wj4HPz5giLUC1xTmpv2
-	 S9503BZ29w1y0lBgShOk9pJJ8HdceEEgoUu880ddhkgihwDMg7Mghl9G2pv3s2Fcwx
-	 80xY1DDANGPeMGi2OD60DnkG0CGu5sip2JVMW46HYJXEKw6d6SuZMF11yvqVI4/lGV
-	 Fau6lNL4FcYxEX72Z59QewSz1lV6swlpJVO998IiQhpvy+UMJ15Ub1sP/Yaasq83ao
-	 XXz8oextlma7g==
-Date: Sat, 27 Jan 2024 22:46:19 +0100
+	b=cTBgjxuaJoqtWft7Gv4EaWo+W+B6XihNrDLZ6i31t9w7tWduK4DLx4e50PMoZVB45
+	 zmdMUTEcC8YKEqDcvbLamELjPbIYT7h0MgFmEdzz7FdlodSK4L9QUmP+ZzAANC2jjF
+	 79etyTz2pRLTF1BtviheweuWuroOadw86bd3tvUfNtYtV9qDtXD4ijH2fAIYPsnJud
+	 N6YkeepTGppZQmlJZQ4qM+SqAmPk62FnJhftYlAd+3HpNZl3sHJQk7wObw3vK8qtrY
+	 DYM3RzLmMzws7bASNt+/Wz699iNaam82CdOgQHd0ieAKDrGFqg1GKvzJS9qCu2c41N
+	 Ov9Ck6cIjWYOw==
+Date: Sat, 27 Jan 2024 22:53:36 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
 To: Thomas Richard <thomas.richard@bootlin.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>, 
@@ -56,11 +56,11 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org, 
 	linux-phy@lists.infradead.org, linux-pci@vger.kernel.org, gregory.clement@bootlin.com, 
 	theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com
-Subject: Re: [PATCH v2 01/15] gpio: pca953x: move suspend()/resume() to
- suspend_noirq()/resume_noirq()
-Message-ID: <jwal3js3xjnbx46syf2jldsdx7fp4yv63fvsbnwo5npbbxapdu@n2flwlvsaetg>
+Subject: Re: [PATCH v2 02/15] pinctrl: pinctrl-single: move
+ suspend()/resume() callbacks to noirq
+Message-ID: <k6tf2ryu3jxmeirmo6ymhtaqugi7u67qwwypxq7yvsymenq4pi@isoii76ej3ry>
 References: <20240102-j7200-pcie-s2r-v2-0-8e4f7d228ec2@bootlin.com>
- <20240102-j7200-pcie-s2r-v2-1-8e4f7d228ec2@bootlin.com>
+ <20240102-j7200-pcie-s2r-v2-2-8e4f7d228ec2@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -69,18 +69,23 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240102-j7200-pcie-s2r-v2-1-8e4f7d228ec2@bootlin.com>
+In-Reply-To: <20240102-j7200-pcie-s2r-v2-2-8e4f7d228ec2@bootlin.com>
 
 Hi Thomas,
 
-On Fri, Jan 26, 2024 at 03:36:43PM +0100, Thomas Richard wrote:
-> Some IOs can be needed during suspend_noirq()/resume_noirq().
-> So move suspend()/resume() to noirq.
-> 
-> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+...
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> -	struct pcs_device *pcs;
+> -
+> -	pcs = platform_get_drvdata(pdev);
+> -	if (!pcs)
+> -		return -EINVAL;
+> +	struct pcs_device *pcs = dev_get_drvdata(dev);
 
-Thanks,
+I think this cleanup can be placed in a different patch. Besides,
+it's not mentioned in the commit log.
+
+Otherwise looks good.
+
 Andi
 
