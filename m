@@ -1,72 +1,72 @@
-Return-Path: <linux-i2c+bounces-1489-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1490-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B594583EDCB
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Jan 2024 16:08:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE02A83EDD1
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Jan 2024 16:15:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45D43282DA6
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Jan 2024 15:08:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48F971F22579
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Jan 2024 15:15:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C456B28DDB;
-	Sat, 27 Jan 2024 15:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9267D29410;
+	Sat, 27 Jan 2024 15:15:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kk2JusP9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fwe53THe"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE39728DC3;
-	Sat, 27 Jan 2024 15:08:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C251B2940C
+	for <linux-i2c@vger.kernel.org>; Sat, 27 Jan 2024 15:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706368104; cv=none; b=hFyhCCqYmfBmmdFU/udfkGw3Z+YLXAG8CHFAHhJcMbk94ZXxzBwzqD2u73h2WNq8zrKBcx41MCUCv46J6tk3oFjFOH4BvMdYOhypjTsfqpiCEy0tyUIfORdqg00yJuwItdFEC5w44V23co4Kj5V+5OKx8Tvz4C5/7b9blTLjMI4=
+	t=1706368512; cv=none; b=D292K8n75uc3yTzA7+zG5CxVJ147fbPka/y5p2hbxFv68tP9AoC471FZR2J7kwaJeFTdzCYNWY2K3ECuVFxgu/oEsnIBl+oHRNBkei5IVMxK8NQ5oP2IXRGYv2gdhG2s5SJpAB7uwqWYA5+b9SYmAZnXbxll4CEG7gqnxkzT96A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706368104; c=relaxed/simple;
-	bh=EUgSR1oTkWHarmyT4u/qmQ39R7n6XpugK4cL4Lb41hE=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=C8MUEfEDz17D+r8zcRyKBKXf4afjW0wm4fqb4xCSq3vUJkiMuYS24g2ozFZh/60iKA8VDAElY9jLtAW2Uw/DvKc+/PzMYB6GHFbuAT9DaSTIvm0Dw4DIkbs8NFO128gpnDZylMbnDrnh0PxOlY698fjt88FFGKyyKtTIco556w8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kk2JusP9; arc=none smtp.client-ip=209.85.128.52
+	s=arc-20240116; t=1706368512; c=relaxed/simple;
+	bh=7qX4hB96GF4zN1OHKlcAbEgh+uu0B3vV43MZfwfXGPc=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=dwqkf8BCDsXQ+eena0IOvSp/6F4kbhpdnE5fHlU+IuwpDbJEV53mmcep3LTrLN536w2hyMypYo0nCncfleVAEjBiiErSG6mZTmoGReN/XlPIKIdrE3H9phAUMEc73fCpypWSMvYOX/aSkojVYPZvlpxiuGGLuKtelKpXvjB8CIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fwe53THe; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-40ef0643722so2417115e9.3;
-        Sat, 27 Jan 2024 07:08:21 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a34fa0c4bbbso102062466b.1
+        for <linux-i2c@vger.kernel.org>; Sat, 27 Jan 2024 07:15:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706368100; x=1706972900; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706368509; x=1706973309; darn=vger.kernel.org;
         h=content-transfer-encoding:autocrypt:subject:from:cc:to
          :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=W9Tmk54Ih6QTsbnzKsc1ARHNXPxP0sj4tGD9ehMJxc0=;
-        b=Kk2JusP9/yRdc19WZXAr6lyQa0ibbuSF+xCs7WvvFWPYmslK43VYNeyrB90nt8id2n
-         hM44HCPatS2N2+c0TlYZFTj2l6VkKkP11bWAVuvQaU3HNxppIVr0jREF+0QExGZzKch3
-         pKskdCs7/tukLO6JN+cRxWvOP+MFRVnaXrdpAbjCJVsuLKvS/7hk+sQSLdJBgch8iu9r
-         8xP0/WoK2QBYn9utH6pTPeL+igggHkIxJOB2IM6//HmO80FTBYhVaVrVf6XZsKaJO+Kh
-         eahyW7S4kH5hvHdOPghPNL3HOdvQZCcyDGPB8iAQp1uUoyvmegwIRB998xopHFqwKnXn
-         110Q==
+        bh=nooz5O7xWoBX6xEB7S6cvaVCkubJbclux/Nif5L6HqY=;
+        b=Fwe53THeqnLuiT4lhZxYes8WoMlmQXq7UvLD56/YaY7DCut3jvJT9E1Jbm07QnzV+7
+         rbOOF5TkIP8d9k12+YEigNE6zDdn6iSeorXx75exfdr4RhF1r0z479DdQ0Wzd1yvpnc7
+         JNuyHhaZEAygh2ZAlUIq0zvoV2ACxR5thygOGY8YxFVymb0WGWf1kUvbzoVpxt1TYxjU
+         LZBzjyN4aPUuZ7R84blyvf906nxp8ORJ8q3De3Xm9+9nsBWcAmNwY4pjsYcA0gjct75O
+         /oOL+Tcuac32aT94D/SbQ0kEKi8M+Y1d0/jwy7k1noRRY6DNNoZIUSn8BjgZoR2nYGLB
+         bVIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706368100; x=1706972900;
+        d=1e100.net; s=20230601; t=1706368509; x=1706973309;
         h=content-transfer-encoding:autocrypt:subject:from:cc:to
          :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W9Tmk54Ih6QTsbnzKsc1ARHNXPxP0sj4tGD9ehMJxc0=;
-        b=JUIZL5skBdp/W91iWDHfa8Q0rov9pvmK+GbUW6L5KlFTmI/cMmtM+sS7FUahl0BG4q
-         XGMU15b4umVK5mNoBfeFM6LsfvED7A9LPgju1N1mwk4YwOcqmB4ChO6VBayoTpqABUgq
-         nt7ff/pM17gMB20uJvZ3kTiIs5i66cs0clGICHJ1qE0TzedLsVfyM01RBKeewbp/6DHe
-         Sj+wkMcAh939kT7ZxaVH+Mse+YubVWP7b9aslmo0yulIaoPg2TSUluTRoN9Rjl2gmweA
-         RowPg3ifH4IcmnnYTqNZ2c5pUREU8uVLjTc5DA0J2dvtAPgWK2vQvKCegPYDmc8zbxq7
-         zbIQ==
-X-Gm-Message-State: AOJu0Yxc12qQKLnIl6pD4VYvCgieJBAJiDuwbHBbKQRaeEYbW4nP3Qot
-	F+dxkTIncFLJuXfTY2K0vD6fBkDT3Nd8isw2h76QutcFcbjlXgul
-X-Google-Smtp-Source: AGHT+IHM0JSeSL6GMQiER8epziVModGgC4osdX7E1or9xWZGk6g5nCQ6UMLS7pcpwRPM0DOYmu4Fiw==
-X-Received: by 2002:a05:600c:1f84:b0:40e:ac4f:7156 with SMTP id je4-20020a05600c1f8400b0040eac4f7156mr1452209wmb.5.1706368099967;
-        Sat, 27 Jan 2024 07:08:19 -0800 (PST)
+        bh=nooz5O7xWoBX6xEB7S6cvaVCkubJbclux/Nif5L6HqY=;
+        b=W3Uw/3pwO7TFkowHRPx/RJQikJBzgNJLg9bNj9GXfxqCcmH4pWUSWY9PPh1IXcy3pH
+         4C5b9GzkKqQ/9pwE8WbRJByIHlH2beI2xlhYKA3a60WvsA9UlDAByZKchK1+0rldhUAS
+         y7tR/DKkVbmQnEJf64fsM+aCsvwm7oTWVHMeqqDghkE9d9jJsfyKH5WGKwB8h6qiCQyW
+         rJg7NcX9eeDb1Tax5Mu805TFPj/JxMyM0jO8CKb0QMScAs2z/Dhda0X+t3PFo6Sn6/zv
+         lgzFCN5xPgAX4PLgos3fJAvuuo3FQsm3iQpzK6dRKwD1iYeaQtnFLp6CEg/QtnlV2uj+
+         803Q==
+X-Gm-Message-State: AOJu0YxtL/I4I6yciVi+VFbTe1/UpXkC+97Pr6hn0Ng2ltez/ea2pOTz
+	sYTxIQWZi2oWAxDOREcj8EPrf/XJI8jGxPRycm1iGQzNAs3sTWMkMh5TbXEw
+X-Google-Smtp-Source: AGHT+IEigGURfhV4t9at+wUksF/2zu95Q9uYsKS6+z8uK+4YEQju6ugC2b2iKVUw/IFb4Ff3XexgQA==
+X-Received: by 2002:a17:906:7f8e:b0:a30:dfa9:87ba with SMTP id f14-20020a1709067f8e00b00a30dfa987bamr1129209ejr.53.1706368508658;
+        Sat, 27 Jan 2024 07:15:08 -0800 (PST)
 Received: from ?IPV6:2a01:c23:b938:5400:11ba:857c:4df8:38b0? (dynamic-2a01-0c23-b938-5400-11ba-857c-4df8-38b0.c23.pool.telefonica.de. [2a01:c23:b938:5400:11ba:857c:4df8:38b0])
-        by smtp.googlemail.com with ESMTPSA id l1-20020a05600c4f0100b0040e549c77a1sm8947020wmq.32.2024.01.27.07.08.19
+        by smtp.googlemail.com with ESMTPSA id n11-20020a1709061d0b00b00a31805b4165sm1860177ejh.11.2024.01.27.07.15.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Jan 2024 07:08:19 -0800 (PST)
-Message-ID: <77b5ab8e-20f2-4310-bd89-57db99e2f53b@gmail.com>
-Date: Sat, 27 Jan 2024 16:08:18 +0100
+        Sat, 27 Jan 2024 07:15:08 -0800 (PST)
+Message-ID: <18568237-0b57-4b74-86ec-a6c358a4e058@gmail.com>
+Date: Sat, 27 Jan 2024 16:15:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -75,14 +75,12 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-US
-To: Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
- David Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+To: Corey Minyard <minyard@acm.org>
+Cc: openipmi-developer@lists.sourceforge.net,
  "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
 From: Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH net-next] mlxsw: remove I2C_CLASS_HWMON from drivers w/o
- detect and address_list
+Subject: [PATCH] ipmi: ipmb: Remove I2C_CLASS_HWMON from drivers w/o detect
+ and address_list
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -136,21 +134,21 @@ precondition isn't met.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/net/ethernet/mellanox/mlxsw/minimal.c | 1 -
+ drivers/char/ipmi/ipmi_ipmb.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlxsw/minimal.c b/drivers/net/ethernet/mellanox/mlxsw/minimal.c
-index 6b98c3287..f0ceb196a 100644
---- a/drivers/net/ethernet/mellanox/mlxsw/minimal.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/minimal.c
-@@ -708,7 +708,6 @@ static const struct i2c_device_id mlxsw_m_i2c_id[] = {
+diff --git a/drivers/char/ipmi/ipmi_ipmb.c b/drivers/char/ipmi/ipmi_ipmb.c
+index 4e335832f..9e5c6d682 100644
+--- a/drivers/char/ipmi/ipmi_ipmb.c
++++ b/drivers/char/ipmi/ipmi_ipmb.c
+@@ -567,7 +567,6 @@ static const struct i2c_device_id ipmi_ipmb_id[] = {
+ MODULE_DEVICE_TABLE(i2c, ipmi_ipmb_id);
  
- static struct i2c_driver mlxsw_m_i2c_driver = {
- 	.driver.name = "mlxsw_minimal",
--	.class = I2C_CLASS_HWMON,
- 	.id_table = mlxsw_m_i2c_id,
- };
- 
+ static struct i2c_driver ipmi_ipmb_driver = {
+-	.class		= I2C_CLASS_HWMON,
+ 	.driver = {
+ 		.name = DEVICE_NAME,
+ 		.of_match_table = of_ipmi_ipmb_match,
 -- 
 2.43.0
 
