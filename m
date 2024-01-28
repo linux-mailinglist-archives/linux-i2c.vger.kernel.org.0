@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-1499-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1500-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57C9E83F6F9
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jan 2024 17:22:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A63783F759
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jan 2024 17:31:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1421F288C33
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jan 2024 16:22:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2CB11F219FE
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jan 2024 16:31:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57E0F58ABA;
-	Sun, 28 Jan 2024 16:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2867C67E66;
+	Sun, 28 Jan 2024 16:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S0bcu7Nn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GM1TlSKZ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1056A5915B;
-	Sun, 28 Jan 2024 16:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8AD167E60;
+	Sun, 28 Jan 2024 16:14:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706458381; cv=none; b=q0uHO+mxPWku6JKwSdTlBHChgoXRSaXB+6CeegBUCTDbPB2injl+prApEhwCVHHk/7y0qvwna6PrQVbRJyGu6IrnI0luyeun9v5V0WC+SlaM7sn6ayYvnQatStk5QOgTluxoAFeIWanh22XWbwSOM8y6l/sBL7MI5xAI9WOO7zc=
+	t=1706458451; cv=none; b=oOUOLm22CKa+/vSSPeIS/ZvtANAQ1uxrEBmOGSywHm6ZRjLbDmRPhQJsPKXkXU5fTiP0Ay/UCYp93JGLdRZsi1XV53+kVQeppBqHonn+xo+3AWja3hyJwUzxLmPmxw7kCK/AJsNwiKTrD9uHJ3Fb0n7w/TrcbTorL0CSw587fx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706458381; c=relaxed/simple;
+	s=arc-20240116; t=1706458451; c=relaxed/simple;
 	bh=4Gqb/Kft+ydmG62lfpNUxY10aIVDjYIQjA1SGPOZj7U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T/rRbqWtGl1T7lEioRt80khLd1b4U7gex5uVQZXYmeKSaM4wB0nD2ES1/tWms4PSDnoP9aorhMRit3t2YmfG8RRA/AzhpBz1oH/mjkQioYHB4Pl5FvwA0D+cgOSpo1CLgUzV0EXJdL2US9Zn/JzzUQtLmY9v09kLwU2R7FP1Nm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S0bcu7Nn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 836A7C43394;
-	Sun, 28 Jan 2024 16:12:59 +0000 (UTC)
+	 MIME-Version; b=Q1gNy2FVcl0Hg/na7RcEjokeVYBaudxVH3Z83+FUpyRruz6uDkig28uaUVXPywCp26mjddh2w9yriBLKF95+/Bf09r6yzZ74IQG11uRYoFgaiPID4I3Elg3FJg+TWjm07MWqY3Jcdke93cKLN7JANSydaFRYc9OZeM0HD+DhXro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GM1TlSKZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97D7CC433F1;
+	Sun, 28 Jan 2024 16:14:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706458380;
+	s=k20201202; t=1706458451;
 	bh=4Gqb/Kft+ydmG62lfpNUxY10aIVDjYIQjA1SGPOZj7U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=S0bcu7NnBXaetr1p08xjP/tzQj2ecLM6y4CDB9HWju+1doAMzgP/fuSODPbL+IqVP
-	 wbLwAR+2p/Uc/XaJPOyBojJQPtGZWOnWEkylZxXgHHxCTrpQmpCxNsGPDuH1zL8v5G
-	 leG1LMXi7IYkAR/nTDdZ/ZUgAqj7gljYMHBF8uTFki9+o07PJoM6Rb0Q2ep/fXlbQM
-	 dg25n6hcTdc7Xq4jaxJQeD6AmX0EigBZU1Cf6WwZiswtHzAN9WIGBjBSzu40lhL3Fa
-	 pBo/u8dT8tuDTFObvoZP7uaxev/OAXXHjcRrLlM4V1n8QqsEBdIuZv+1wOdVzJ1wJf
-	 IxVxZV2VzQy/w==
+	b=GM1TlSKZ4fucQqpQWAGBbXOWz/4ME9lbto9ilQZewvMNTPcqOv5X2mc54ysTP/18h
+	 ltTUlJFHkpZFD93DCcv9DVwDBG+dU8wjs5yTjd38OOjjnFkbf1kvEhTHyFSkwXaoOH
+	 k4ubFM+v3OJGqcGUPXGTVv/imPMer/CLN9j3mnJaO1ncmZjuf78iGAWASVFVImDeGu
+	 lja0dtRfhXje7hUlPrT8+XaJbCUsAm7SYcsv9VOA8AIvcfZSS/kBBlHAbyA5AhlzF3
+	 J3JgxiAlPsCZYRul83JEr4HuRVgjUv7DIYpNamcmPptpvFA94PxG0yB/wUrZ2TEDGC
+	 QLde+SwL3SE/A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Tim Lunn <tim@feathertop.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.7 39/39] i2c: rk3x: Adjust mask/value offset for i2c2 on rv1126
-Date: Sun, 28 Jan 2024 11:10:59 -0500
-Message-ID: <20240128161130.200783-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 31/31] i2c: rk3x: Adjust mask/value offset for i2c2 on rv1126
+Date: Sun, 28 Jan 2024 11:13:01 -0500
+Message-ID: <20240128161315.201999-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240128161130.200783-1-sashal@kernel.org>
-References: <20240128161130.200783-1-sashal@kernel.org>
+In-Reply-To: <20240128161315.201999-1-sashal@kernel.org>
+References: <20240128161315.201999-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7.2
+X-stable-base: Linux 6.6.14
 Content-Transfer-Encoding: 8bit
 
 From: Tim Lunn <tim@feathertop.org>
