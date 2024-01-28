@@ -1,113 +1,183 @@
-Return-Path: <linux-i2c+bounces-1501-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1502-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 023B283F7A3
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jan 2024 17:38:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4E2E83F876
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jan 2024 18:13:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 353D21C22949
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jan 2024 16:38:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AF101F21AA9
+	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jan 2024 17:13:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AF7F12A14E;
-	Sun, 28 Jan 2024 16:15:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA45F2C6AA;
+	Sun, 28 Jan 2024 17:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f6SQ8S2h"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KY1un6OB"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2E912A144;
-	Sun, 28 Jan 2024 16:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B442A2C68B;
+	Sun, 28 Jan 2024 17:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706458516; cv=none; b=cm0FO36SZPVJ8ZOSzW03vbVq+b/7nn62TYHIu+l+Nhiku1vrkvPVQ6s5K+/QcBB/rilpPxivkriNZpX29MeEQpH9xOWzm+t9OtIL5fTjsyTRwdYwPJDi/mxjsLAB2tj+Th8Dlt+tkpd76vEcPI9MbqF453MA4bdams52/dGIKYQ=
+	t=1706461997; cv=none; b=iaIA6GivhSTajkfJVcFSdFg1hPG4gLzFhMqoHSqZwejdlKR9QhD5cVJaKCDQkNbRnEj0hh7WYbPWv9q/ojJlBnFbk+zJqLK7WWmWxR5Klq3jBM60rkH4FOb6sLNg0Kcc7bInZTYfusz9IgpP4w3Z3AoJRnA3gbzIBImiot8o/ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706458516; c=relaxed/simple;
-	bh=G+N+8BBIfAm8TLoRk47DdnlMegqEadH0LZkeQEpo5w4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EaJBoZBzeY4nGVPnBTqbMylpQ6oIznzVx9Z/hKrM8JHLAcmD7H/xddDx6222DiR5Gq4PJ0t0jgXVsLRV51eK8b3J3x8X1kfRR4L6/bi3ak2JoK9l3vsK489bnfyv/TmVaSO4xHf42AoOR5kVD7IjJcXov1u6an6j6ekPwMawfi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f6SQ8S2h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD7CC433F1;
-	Sun, 28 Jan 2024 16:15:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706458515;
-	bh=G+N+8BBIfAm8TLoRk47DdnlMegqEadH0LZkeQEpo5w4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=f6SQ8S2hOMVO7w/RmJJr9TPOEsrxLYVk16BUb+y2Zd4g+XWurlxBj2t5GMa/0lV47
-	 8/GtGBCaVHIsAFZOeml3AiN4sY5xI9aYH2ZMV2XQzNkUza7rAmJea7/OnHIHvFnR/p
-	 qRohB1ukSqhNAonxtIgnlkFTRWe4BNTucKvINLv7x5RMg84K7LUbK0YXBVlKcAx3Cq
-	 aPolGreXFfFOYx0E0KT8BmLZ/N3l/LmQPdoH9rqO4LtmQcQ0AoferZxmxpykZVXsfh
-	 h1cexw8PKlfUqAdKX9CdjG4ORtjHF7oMdWCUaMpqgCMT43rZnkmCgGNRzIpGKg2+bo
-	 Kb+YI6bsN6+1Q==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Tim Lunn <tim@feathertop.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 27/27] i2c: rk3x: Adjust mask/value offset for i2c2 on rv1126
-Date: Sun, 28 Jan 2024 11:14:12 -0500
-Message-ID: <20240128161424.203600-27-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240128161424.203600-1-sashal@kernel.org>
-References: <20240128161424.203600-1-sashal@kernel.org>
+	s=arc-20240116; t=1706461997; c=relaxed/simple;
+	bh=jNDfSP0iz6F45hxisn1nC9nJOoP8Llt5SFMdhiO4ow8=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Lc14tjP5VG3+E2G6bPxV/9jQxz/Qye+2cQhikwRzuvvBskFjEIGXjrHV5C3bHs4SYN7UaWgEPEZ5j2xaNtIzwVC1FhkaCtR+uzblBuQBeqqvZeZB0nY4VWuGEPaZtF3D+LZB1326BjrXokU++gzxCnGc7Mbx6EyWfGnaZ5zXQlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KY1un6OB; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d8cec0f71aso2782435ad.1;
+        Sun, 28 Jan 2024 09:13:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706461995; x=1707066795; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=6cDy7Rb25xoEXZNoitNmW/3Zfu/z4arLpo3N6K1MDEs=;
+        b=KY1un6OB5x0a8E+t2A1PFv6n8QmxOnuvq1EcGpWi4vNjE7ReZvrV4oeLbObwKS2osT
+         5rXQ11METOk5GfmOP8RGbOmJMWvr3Jers654XazEIHctnQ0yzXfCzqznDWbHUFX8e+H+
+         Bc+JopscQZLTBY1ysB/+UKcS697QePgGQhz9D4GLTng1hwG2UZ8Fc534oZeTrnqettfK
+         2ob3aCZ13naOqU/DM8o0HssNEHQowxx+kDRmMnkcWEzHZZjp38K+GlSEen+1y9XWndhx
+         jOBSOiv6BptI95EuWkg6ZAi+UGN2sG0RyvcnVc6Xkoyz9twFCz+Vn4t7ysBPPeggyhFh
+         /zNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706461995; x=1707066795;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6cDy7Rb25xoEXZNoitNmW/3Zfu/z4arLpo3N6K1MDEs=;
+        b=I9b0h1wekW42HQNT16BVbUMDpQC5vXiWvxS2csyghqJ4YAdMJRt6R/vN4mh9MxOZTx
+         eQriFV40uD78cmg5f9ekn8woD6mrVm1+ldwU4KkyOcnZ2Om4fkks6k0BtzjUpOhNivRc
+         iFkBR+Uw/sisZcRCtESMEkh0xyuv/Q2n8s7BPRoTb7QrvLTWdBgLeeRiG8pYGkXnbg0u
+         BJGU5gCYK6EFbNWHThVuoRj3eB1G8fEXj9PopbY/vaQNyPZnpn3N52bhDy6Yl/IBY3O7
+         Dj22Vv1tqf3gZIuZRKk/6ClYDaj15hnYG+HPlGgw0ZvguymMYoBTQ2mpnpk9dAadaI9L
+         C31A==
+X-Gm-Message-State: AOJu0Yy6QbCyddPjfdiUTK9SxZ6iRiYwOwFU2pihE8SzY2pSURDTIT8s
+	VDF/0wmRedE1U4u+w3hrgTMV/mF87DnfCfFn/41PL7WM40XuJ7PH
+X-Google-Smtp-Source: AGHT+IHG4xQpWy5Yeqyu7lIOVrg/6i6qbqw0HjEhQzLzzE2jHDaUtrmZQMKIruoyu8kYli+xdFUaMw==
+X-Received: by 2002:a17:902:e84a:b0:1d8:dbd0:bb42 with SMTP id t10-20020a170902e84a00b001d8dbd0bb42mr759372plg.21.1706461994795;
+        Sun, 28 Jan 2024 09:13:14 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j71-20020a63804a000000b005d7c02994c4sm4560870pgd.60.2024.01.28.09.13.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Jan 2024 09:13:13 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <cc561e9a-e493-43dd-ac9b-cf14786130ff@roeck-us.net>
+Date: Sun, 28 Jan 2024 09:13:12 -0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.75
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] hwmon: Add driver for MPS MPQ8785 Synchronous
+ Step-Down Converter
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+To: Charles Hsu <ythsu0511@gmail.com>
+Cc: jdelvare@suse.com, corbet@lwn.net, Delphine_CC_Chiu@wiwynn.com,
+ linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+ Charles.Hsu@quantatw.com
+References: <20240126075213.1707572-1-ythsu0511@gmail.com>
+ <81860c27-43ac-4e55-a653-e7f5597ffa93@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <81860c27-43ac-4e55-a653-e7f5597ffa93@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Tim Lunn <tim@feathertop.org>
+On 1/27/24 16:00, Guenter Roeck wrote:
+> On Fri, Jan 26, 2024 at 03:52:13PM +0800, Charles Hsu wrote:
+>> Add support for mpq8785 device from Monolithic Power Systems, Inc.
+>> (MPS) vendor. This is synchronous step-down controller.
+>>
+> 
+> "(MPS) vendor" above has no value.
+> 
+> I find no reference that this chip actually exists. Sorry, but I can not
+> apply such patches without confirmation that the chip actually exists.
+> 
 
-[ Upstream commit 92a85b7c6262f19c65a1c115cf15f411ba65a57c ]
+I since learned that the chip does exist, so this is no longer a concern.
 
-Rockchip RV1126 is using old style i2c controller, the i2c2
-bus uses a non-sequential offset in the grf register for the
-mask/value bits for this bus.
+>> Signed-off-by: Charles Hsu <ythsu0511@gmail.com>
+>> ---
+>> Change in v1:
+>>      Initial patchset.
+> 
+> A change log or v1 tag is not needed for the first version of a patch
+> or patch series.
+> 
+>> ---
+> ...
+>> +		PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT |
+>> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
+> 
+> I am not too happy that all those drivers claim to have no output status
+> registers. It always makes me wonder if the definitions are just copied
+> from one driver to the next.
 
-This patch fixes i2c2 bus on rv1126 SoCs.
+I also learned that the chip supports additional status registers. Please
+list all supported status registers.
 
-Signed-off-by: Tim Lunn <tim@feathertop.org>
-Acked-by: Heiko Stuebner <heiko@sntech.de>
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-rk3x.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+I also learned that the chips voltage output mode is configurable. As such,
 
-diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-index 6aa4f1f06240..c8cd5cadcf56 100644
---- a/drivers/i2c/busses/i2c-rk3x.c
-+++ b/drivers/i2c/busses/i2c-rk3x.c
-@@ -1295,8 +1295,12 @@ static int rk3x_i2c_probe(struct platform_device *pdev)
- 			return -EINVAL;
- 		}
- 
--		/* 27+i: write mask, 11+i: value */
--		value = BIT(27 + bus_nr) | BIT(11 + bus_nr);
-+		/* rv1126 i2c2 uses non-sequential write mask 20, value 4 */
-+		if (i2c->soc_data == &rv1126_soc_data && bus_nr == 2)
-+			value = BIT(20) | BIT(4);
-+		else
-+			/* 27+i: write mask, 11+i: value */
-+			value = BIT(27 + bus_nr) | BIT(11 + bus_nr);
- 
- 		ret = regmap_write(grf, i2c->soc_data->grf_offset, value);
- 		if (ret != 0) {
--- 
-2.43.0
++	.format[PSC_CURRENT_OUT] = direct,
+
+won't do because it cause instantiation to fail due to mode mismatch
+in pmbus_identify_common() if the mode is configured to linear or vid mode.
+This will need to be addressed.
+
+Thanks,
+Guenter
 
 
