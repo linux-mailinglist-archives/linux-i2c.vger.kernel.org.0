@@ -1,154 +1,165 @@
-Return-Path: <linux-i2c+bounces-1504-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1505-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 415E283FAE6
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jan 2024 00:19:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 496BC83FDFE
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jan 2024 07:10:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ECDB61F224FF
-	for <lists+linux-i2c@lfdr.de>; Sun, 28 Jan 2024 23:19:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C7B31C2334A
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jan 2024 06:10:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47737446C5;
-	Sun, 28 Jan 2024 23:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC6345BF0;
+	Mon, 29 Jan 2024 06:10:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=feathertop.org header.i=@feathertop.org header.b="MTt7WYjl";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HtZoouw2"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XyFrEVFf"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846311E4A8;
-	Sun, 28 Jan 2024 23:19:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0E3446C4;
+	Mon, 29 Jan 2024 06:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706483987; cv=none; b=SJk29p/ywJDXoz6PpHFfdOpmRm2C8J0xm7mUSg+u1FtxNyDNFgILe1cvhxhYLXEr8hzQnJ1OsymExtB3EVDhB3p5oBdthc7TjJW1Fsnx8xRezy2nLEMa7dCOdOlVIyYCdpXttGokzTzGKBLDTXIm77yRkK/DCDyzeIFu9/eFxyA=
+	t=1706508618; cv=none; b=UKZZUe5Wy8Ns1Mr4jbyfFXN26itX7txd1ydtNtDLEnZczk6VUv6nkXicRfHs3hXMiWYGx8fgLnq6bh8sOoE+KSu8lE/kkgrERiVq0+asOpPdpLWUAp0NvJLc8fDIima6ZXxgkqljbvOe71OquIWO/4cBsgBmfG30qS6rIvPTGpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706483987; c=relaxed/simple;
-	bh=QEUfb2sA8KJ3vwu3DjUFRPuqRsbyUiZ+F9amISTLbU8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Mx5v3LivOm8yIExudMHmgKbw8Mpt/OZ19/Ch0BiRY9KToLfPpVi6qvsH/b1PT892Uc/gLnFXdmfxojU9NFYbi9qxfkldBBwMmIle9ZpwoTtprjO4/wwGZ6iqdUf5Px/NsimFM0Vzl4cTAGe/3lRVg56BgXwib0zE5MQWWc33iKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=feathertop.org; spf=pass smtp.mailfrom=feathertop.org; dkim=pass (2048-bit key) header.d=feathertop.org header.i=@feathertop.org header.b=MTt7WYjl; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HtZoouw2; arc=none smtp.client-ip=64.147.123.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=feathertop.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=feathertop.org
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailout.west.internal (Postfix) with ESMTP id C6D8F3200A7A;
-	Sun, 28 Jan 2024 18:19:43 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute7.internal (MEProxy); Sun, 28 Jan 2024 18:19:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=feathertop.org;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm2;
-	 t=1706483983; x=1706570383; bh=1fKfNWclQmzN7rLysWXCqLcTCDbjGptQ
-	Vt1xQ/FClcA=; b=MTt7WYjl2HZPvvVjU3x1449zJ75O42f4XLIyEEXaZehlmBfv
-	7b7Sf8dK1z2x5qip0c+5b9/1RhsR/5K46hSZ6KISGh8yB9pZT1rai1gewNj0aASB
-	MMsOqixRmsCDX4qu1qwU+HVgAQuBUbq8+QoExkvTGFGVD1L0eC2OluF14umQ9hVa
-	7DDXxzHLmdJP9oUeV9tOiXPiZRnK9AOAtMYqIzdSjl3oL7rmlYxxRivHyNfOKQZG
-	H6Lf+xOYF6Eisb4nl3i5kIjq9fVYtz0qMqGMW8dG3C1XegO5mVvbIprtByuf3EcQ
-	jR+l9mrtfU2eqZaHMAdZBwFxHuDbkuMk97XsoQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1706483983; x=
-	1706570383; bh=1fKfNWclQmzN7rLysWXCqLcTCDbjGptQVt1xQ/FClcA=; b=H
-	tZoouw2KWp888ydU+aBBPKcYu3/9eLYWilcQVPQobJnsnjpo018BlGWkbW0sQUK/
-	kwsvhZUyNMMOvvnOKi5EiIHBDcGUbQ9jXQm76TtgR3KDch+NLPUOIxa7fouiwlPF
-	CydOXmzkC18BjLuUwbuUtJk5PSlsrJHOvKMGD2K2ewNe4lRdezOwBS2QuSPkI7QC
-	rRpuilma1cEOx3h/ucmQ5mTlYMaSeSFnQ4/cw7QMOjDXKYwLQsAB+qpJRAelmwQJ
-	B7Rvf4xVSPYH3F9sUEBXO9CdSllZ5SP+iODiUAb4+w3e/Ekdby83ESWBESjzJDo1
-	DxSG4K7kOaSXMN8C0UEvQ==
-X-ME-Sender: <xms:DuG2ZQXsxg30Bgpj0yLpIiO13CyGwVPLDSzI-FnjJaiO87ZqhpuNbg>
-    <xme:DuG2ZUkYUcicLuK-olDOCl6KGQOm5xXbWKfLwZCcnG70IKtT0QmPC4hjkkXXJm5sc
-    vJBInn9wg>
-X-ME-Received: <xmr:DuG2ZUZFBc83PoUuvkUtd0I3PzySMUp5jywhDF_WDC9_zC1x89_GgRE7R7LDIV0oB9ERzfYafUO1sXU1sujAfQ-QtbHB8Zy1khTkmA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrfedtfedgtdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpefvihhm
-    ucfnuhhnnhcuoehtihhmsehfvggrthhhvghrthhophdrohhrgheqnecuggftrfgrthhtvg
-    hrnhepueegfefgveeuiedtheffgfefveejkeetiefhhfdvjeevlefhueekudeuleeghfek
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepthhimh
-    esfhgvrghthhgvrhhtohhprdhorhhg
-X-ME-Proxy: <xmx:DuG2ZfXO5rafG7DDuUnj8H8nidQvmanzsnFODoAkDDz7u6URHBVZfA>
-    <xmx:DuG2ZakAVrrsPN5fxrPtXjx0SFRlKkRekDq9DT2hFDrskRC1hffkJg>
-    <xmx:DuG2ZUe66EWt5D3omkzr7KK9QXlmsc-DVKAhbQ6CCG0E_pIpP5UCyg>
-    <xmx:D-G2ZcVGRdLsXVztB9damzissF5osJhFZBQzxpqdd8BggjP5B3avSQ>
-Feedback-ID: i1f8241ce:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 28 Jan 2024 18:19:39 -0500 (EST)
-Message-ID: <030766c0-a6b9-401d-9e9a-fe5d11c5d381@feathertop.org>
-Date: Mon, 29 Jan 2024 10:19:35 +1100
+	s=arc-20240116; t=1706508618; c=relaxed/simple;
+	bh=jcqJD0v4CV6bRhYa0gKiHSfLGMsUg7xc0NXAopIXwew=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=u7L3kNxRgxCgt7mOzCuclCTa49JFK+mOt1ZSsIFDL+TEvYCqBc3R8l28ypgb9jIJcPeeO4YtcpC1SDGAIoyaI1gRvtVuFaMXbLpSXpnhub3Aw3XGgCRadKIT4DfM3bK2CiI5BvgwuAzjezN15M/l8aPi4+g+rNULyeK5BaDDy9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XyFrEVFf; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40T3lNHf018658;
+	Mon, 29 Jan 2024 06:10:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id; s=qcppdkim1; bh=fZX0r032TCAf
+	fHZLe8mY0s06DUIcXsbsa7Eh7JqVMLk=; b=XyFrEVFf6zM6RpVkrwVEw2LmzZOb
+	QmEgfZgeOKEg1Zb11linpleHvfQ1VRZMmEBOu5IV2Zo83aJ+pmnQYwKsj/2JseQO
+	jjjjXIwR83o/QdocXytl1hycs29rp4Uq2JwXqLW1mYxy/w8/wUvATq6yEzcFFLDw
+	Bb2fpU7cHrb0uI6VbysADkeC6qg406iDlxO7NIbG+fRuCpyPamCUQV5N2yDP1m/V
+	m+qH6bfd8V6IwUXtOI16rOutKYePZxBAVlgJDK5J2J2+6oqLE3Nyg9hlUoUluUHa
+	Th2Qy5WvyHc3tIuKIweKfvy1Dl8LSVHfRR+bVKMrdMT5gxhYZRnJnSNOOw==
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vx23k8d9p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 29 Jan 2024 06:10:12 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 40T6A9wY020666;
+	Mon, 29 Jan 2024 06:10:09 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3vvtwknh0x-1;
+	Mon, 29 Jan 2024 06:10:09 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40T6A9J0020660;
+	Mon, 29 Jan 2024 06:10:09 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-vdadhani-hyd.qualcomm.com [10.213.106.28])
+	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 40T6A7ak020632;
+	Mon, 29 Jan 2024 06:10:09 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 4047106)
+	id 0B9615001C1; Mon, 29 Jan 2024 11:40:06 +0530 (+0530)
+From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+To: andersson@kernel.org, konrad.dybcio@linaro.org, andi.shyti@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vkoul@kernel.org,
+        quic_bjorande@quicinc.com, manivannan.sadhasivam@linaro.org
+Cc: quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
+        Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Subject: [V2] i2c: i2c-qcom-geni: Correct I2C TRE sequence
+Date: Mon, 29 Jan 2024 11:40:03 +0530
+Message-Id: <20240129061003.4085-1-quic_vdadhani@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 2wrUhd0eEdoqHX1vfwnWRRKhWPgRdGNk
+X-Proofpoint-GUID: 2wrUhd0eEdoqHX1vfwnWRRKhWPgRdGNk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-29_02,2024-01-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
+ mlxscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401190000 definitions=main-2401290042
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH AUTOSEL 6.1 27/27] i2c: rk3x: Adjust mask/value offset for
- i2c2 on rv1126
-Content-Language: en-US
-To: Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-Cc: Heiko Stuebner <heiko@sntech.de>, Andi Shyti <andi.shyti@kernel.org>,
- Wolfram Sang <wsa@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org
-References: <20240128161424.203600-1-sashal@kernel.org>
- <20240128161424.203600-27-sashal@kernel.org>
-From: Tim Lunn <tim@feathertop.org>
-In-Reply-To: <20240128161424.203600-27-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-Hi Sasha,
+For i2c read operation, we are getting gsi mode timeout due
+to malformed TRE(Transfer Ring Element). Currently we are
+configuring incorrect TRE sequence in gpi driver
+(drivers/dma/qcom/gpi.c) as below
 
-   Support for the rv1126 SoC was only added around linux 6.2 and 6.3, 
-thus doesnt make sense to pick this patch up in 6.1
+- Sets up CONFIG
+- Sets up DMA tre
+- Sets up GO tre
 
-Regards
-   Tim
+As per HPG(Hardware programming guide), We should configure TREs in below
+sequence for any i2c transfer
 
-On 1/29/24 03:14, Sasha Levin wrote:
-> From: Tim Lunn <tim@feathertop.org>
->
-> [ Upstream commit 92a85b7c6262f19c65a1c115cf15f411ba65a57c ]
->
-> Rockchip RV1126 is using old style i2c controller, the i2c2
-> bus uses a non-sequential offset in the grf register for the
-> mask/value bits for this bus.
->
-> This patch fixes i2c2 bus on rv1126 SoCs.
->
-> Signed-off-by: Tim Lunn <tim@feathertop.org>
-> Acked-by: Heiko Stuebner <heiko@sntech.de>
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   drivers/i2c/busses/i2c-rk3x.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-> index 6aa4f1f06240..c8cd5cadcf56 100644
-> --- a/drivers/i2c/busses/i2c-rk3x.c
-> +++ b/drivers/i2c/busses/i2c-rk3x.c
-> @@ -1295,8 +1295,12 @@ static int rk3x_i2c_probe(struct platform_device *pdev)
->   			return -EINVAL;
->   		}
->   
-> -		/* 27+i: write mask, 11+i: value */
-> -		value = BIT(27 + bus_nr) | BIT(11 + bus_nr);
-> +		/* rv1126 i2c2 uses non-sequential write mask 20, value 4 */
-> +		if (i2c->soc_data == &rv1126_soc_data && bus_nr == 2)
-> +			value = BIT(20) | BIT(4);
-> +		else
-> +			/* 27+i: write mask, 11+i: value */
-> +			value = BIT(27 + bus_nr) | BIT(11 + bus_nr);
->   
->   		ret = regmap_write(grf, i2c->soc_data->grf_offset, value);
->   		if (ret != 0) {
+- Sets up CONFIG tre
+- Sets up GO tre
+- Sets up DMA tre
+
+For only write operation or write followed by read operation,
+existing software sequence is correct.
+
+for only read operation, TRE sequence need to be corrected.
+Hence, we have changed the sequence to submit GO tre before DMA tre.
+
+Tested covering i2c read/write transfer on QCM6490 RB3 board.
+
+Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Fixes: commit d8703554f4de ("i2c: qcom-geni: Add support for GPI DMA")
+---
+v1 -> v2:
+- Remove redundant check.
+- update commit log.
+- add fix tag.
+---
+---
+ drivers/i2c/busses/i2c-qcom-geni.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+index 0d2e7171e3a6..da94df466e83 100644
+--- a/drivers/i2c/busses/i2c-qcom-geni.c
++++ b/drivers/i2c/busses/i2c-qcom-geni.c
+@@ -613,20 +613,20 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
+ 
+ 		peripheral.addr = msgs[i].addr;
+ 
++		ret =  geni_i2c_gpi(gi2c, &msgs[i], &config,
++				    &tx_addr, &tx_buf, I2C_WRITE, gi2c->tx_c);
++		if (ret)
++			goto err;
++
+ 		if (msgs[i].flags & I2C_M_RD) {
+ 			ret =  geni_i2c_gpi(gi2c, &msgs[i], &config,
+ 					    &rx_addr, &rx_buf, I2C_READ, gi2c->rx_c);
+ 			if (ret)
+ 				goto err;
+-		}
+-
+-		ret =  geni_i2c_gpi(gi2c, &msgs[i], &config,
+-				    &tx_addr, &tx_buf, I2C_WRITE, gi2c->tx_c);
+-		if (ret)
+-			goto err;
+ 
+-		if (msgs[i].flags & I2C_M_RD)
+ 			dma_async_issue_pending(gi2c->rx_c);
++		}
++
+ 		dma_async_issue_pending(gi2c->tx_c);
+ 
+ 		timeout = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
+
 
