@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-1510-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1511-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0A10841574
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jan 2024 23:16:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C19BC841596
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jan 2024 23:24:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72A371F24C5E
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jan 2024 22:16:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7973C282242
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Jan 2024 22:24:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0B3B159587;
-	Mon, 29 Jan 2024 22:16:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09C0E159589;
+	Mon, 29 Jan 2024 22:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MQZAohOc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ck2k0fZw"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BCEC15956E;
-	Mon, 29 Jan 2024 22:16:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD21604C5;
+	Mon, 29 Jan 2024 22:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706566609; cv=none; b=Dp/o3WP4xVKLrVHQPyl1Q7xdnmfp7B3898QDaJ0Aaikb5mKHHi7MAWQ7VsnGLlZHIeA1TUlhLkhvQtYcBtKb/SFm/G3v10XsN/uMVoTMMGzRFuUTC4+IcE7MpZ0l1SIN7i/5Pg2BH5jwpiA8oKb5RZjT8vK87vrS6Ahs88AZrW8=
+	t=1706567059; cv=none; b=SfCuUhB17tOT1m7HkIvKvcDmwGHHWsOA2d/gHBi7/Mr6SmXqaYntHZRlNVxWr4ZjgA/W/57uJYaYXFnLWR57V/uUaxni6B/+B+iSIzTkOoXSXJV8LEtH8j4kSIWgI4v4bjuSFC3AiHAcMbZXwmgox0pDeXQvKK/OQtSkZS8IGik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706566609; c=relaxed/simple;
-	bh=fWlUMRgvqVY95h4dXufWc8ddniO0qcwX7UwmN7CzrKY=;
+	s=arc-20240116; t=1706567059; c=relaxed/simple;
+	bh=ybFG/1Z4KxjabyhfsG3KnCV0yC0WVemE8bZH31BWBWs=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=qTrGaDsxABPRYBO77pCXAtCPHM9LiRnp8/RMBRZjGQcXkjyK0I6K6+gMyBPHyb3A/BKmpH7C4iNrIkZ6XTwIuU7LKmJrmkRs2brY+mU+RK8XerSUYzNfGDXdikbWlUNC0tEFUwDm/9VG6vfMgg0Bs5lTBJpLu6M1MAnThlOBjgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MQZAohOc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A644C433F1;
-	Mon, 29 Jan 2024 22:16:48 +0000 (UTC)
+	 Content-Disposition:In-Reply-To; b=LKCkAd4RSdtnwguZOzkaRwvaEJdX4xNP7lq6EKac4pXwJmonhMuQ3eTX2GOCZ4An8PmO+OY3r75/9LsiffqmEDKXOPN9hacN+2aZsA+zjcccQPgEb+7eSZfiasq4/AyLAppj28rQv4LrLLQyMrAKjGPwrIoA4WbOiWtMoIb5/Tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ck2k0fZw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37A73C433C7;
+	Mon, 29 Jan 2024 22:24:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706566608;
-	bh=fWlUMRgvqVY95h4dXufWc8ddniO0qcwX7UwmN7CzrKY=;
+	s=k20201202; t=1706567059;
+	bh=ybFG/1Z4KxjabyhfsG3KnCV0yC0WVemE8bZH31BWBWs=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=MQZAohOc8Dgk2cjX6jvaB2a8InqsFsEgUpwwpZU2S7fbZRA0vBXW6WQSwHknPL5pw
-	 Db8Yfblz+iPuvPB/SJoPzIfMgTJVjPMp80BU6HK9ZWiykjcov7UibFqd9OAb/hbzTo
-	 02w2rI+/oZM/9FvV4tFg8DgNOGIo438LRESCHy+xdUfXgegDc4FK6gwqbOM1S1KUfk
-	 93rCTIQMZz7MV4r01diHmg33R/SlkevQOAMb86W1RWwkaeO63dCQN5tCYK1C+q17z/
-	 GuvYkKdEKIKG/PsskcufS7cJyHu5gt6cbRS3bxgctjjxpKbilNfvy8YnhfdMXizSJf
-	 Dz3Pdr5WXM7sA==
-Date: Mon, 29 Jan 2024 16:16:47 -0600
+	b=Ck2k0fZwm/Pk8pIi0KJeREyhovqDDsGwMIZgTbTDEMIvOq+jcsS6gwzg6tSqm2yg/
+	 Un7ZiJ28Dy5HREDsy3riYcb7eyEhabvcj1iKQ4sPAxSVHGGGB0HE/fsf2aBy4FAhMQ
+	 pEC7ux/ujiSzz8Y7i5g4gIQxwMxX5NHtu9xqWz+Qb4x2l05G7BsmL3oMOh4m6siavA
+	 TCiOXzOQdnUGZzjSpIyAukY0UNO5mkt2X8Sy5TzavFpMOQQLgruDl//y/D89GDN+T+
+	 JkRoApJbNDyjseUhath0mAq9O1iHmGXNMri1QlN1mzR6hlIcdcMBI3yBc8XFxF9QZ+
+	 VFCMG08qKy0mw==
+Date: Mon, 29 Jan 2024 16:24:17 -0600
 From: Bjorn Helgaas <helgaas@kernel.org>
 To: Thomas Richard <thomas.richard@bootlin.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>,
@@ -66,7 +66,7 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	u-kumar1@ti.com
 Subject: Re: [PATCH v2 13/15] PCI: cadence: add resume support to
  cdns_pcie_host_setup()
-Message-ID: <20240129221647.GA477676@bhelgaas>
+Message-ID: <20240129222417.GA477936@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,51 +76,30 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240126214336.GA453589@bhelgaas>
+In-Reply-To: <20240129221647.GA477676@bhelgaas>
 
-On Fri, Jan 26, 2024 at 03:43:39PM -0600, Bjorn Helgaas wrote:
-> In subject, capitalize "Add ..." to follow historical convention.
-> Also the other driver/pci/ patches.
-> 
-> On Fri, Jan 26, 2024 at 03:36:55PM +0100, Thomas Richard wrote:
-> > From: Théo Lebrun <theo.lebrun@bootlin.com>
-> > 
-> > That function mixes probe structure init and hardware config.
-> > The whole hardware config part must be done at resume after a suspend to
-> > ram.
-> > We therefore pass it a boolean flag determining if we are at probe or at
-> > resume.
-> ...
+On Mon, Jan 29, 2024 at 04:16:49PM -0600, Bjorn Helgaas wrote:
+> On Fri, Jan 26, 2024 at 03:43:39PM -0600, Bjorn Helgaas wrote:
+> > On Fri, Jan 26, 2024 at 03:36:55PM +0100, Thomas Richard wrote:
+> > > From: Théo Lebrun <theo.lebrun@bootlin.com>
+> > > 
+> > > That function mixes probe structure init and hardware config.
+> > > The whole hardware config part must be done at resume after a suspend to
+> > > ram.
+> > > We therefore pass it a boolean flag determining if we are at probe or at
+> > > resume.
+> > ...
 
-> This is pretty similar but slightly different from the DWC pattern:
+> > It'd be super nice to have them the same.  Passing in a "probe" flag
+> > works but seems a little harder to read in cdns_pcie_host_setup() and
+> > you have to keep track of what it means in the callers.
 > 
->   imx6_pcie_probe
->     ... do structure init ...
->     if (RC)
->       dw_pcie_host_init
-> 	pp->ops->init
-> 	  imx6_pcie_host_init
-> 
->   imx6_pcie_resume_noirq
->     imx6_pcie_host_init
-> 
->   j721e_pcie_probe
->     j721e_pcie_ctrl_init
->     if (RC)
->       cdns_pcie_host_setup(true)
-> 
->   j721e_pcie_resume_noirq
->     j721e_pcie_ctrl_init
->     if (RC)
->       cdns_pcie_host_setup(false)
-> 
-> It'd be super nice to have them the same.  Passing in a "probe" flag
-> works but seems a little harder to read in cdns_pcie_host_setup() and
-> you have to keep track of what it means in the callers.
+> Maybe a better way to say this is that this patch uses the "probe"
+> flag to select the behavior of cdns_pcie_host_setup(), and I think it
+> would be nicer to split those two behaviors into separate functions.
 
-Maybe a better way to say this is that this patch uses the "probe"
-flag to select the behavior of cdns_pcie_host_setup(), and I think it
-would be nicer to split those two behaviors into separate functions.
+Oops, sorry, Andy, I wrote this before I saw your similar response
+from last Friday.  Didn't mean to repeat what you already said!
 
 Bjorn
 
