@@ -1,74 +1,74 @@
-Return-Path: <linux-i2c+bounces-1531-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1532-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56473842132
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Jan 2024 11:25:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 494588422D7
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Jan 2024 12:23:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0ADF1F24F38
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Jan 2024 10:25:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 014AC28AB11
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Jan 2024 11:22:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11D8960DE0;
-	Tue, 30 Jan 2024 10:25:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0BBF67A13;
+	Tue, 30 Jan 2024 11:20:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zgt6GEtW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nJP6ISWi"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320CC60DC9
-	for <linux-i2c@vger.kernel.org>; Tue, 30 Jan 2024 10:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1F767728
+	for <linux-i2c@vger.kernel.org>; Tue, 30 Jan 2024 11:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706610333; cv=none; b=CnPBa5rf1NLePaS8mNeSxBTRb/d+kSWolu4CzEQCjXSr7DlEqrArSuUMXFgz62+JrsIQckUVAeD8NQYtXeyIFBG1g6heIqkgC6fr9BeR3CLNGlSodHQHHmyP4q2balWbwAkfTDLcb75zjK4nE3OvZwVdqW1qQrXGdpzMMroZO4s=
+	t=1706613627; cv=none; b=XC8kK/xlrZ4FNavsiTufMqbs0TR73TZ6/2MosIa0l+G3yhjtQqA66j9zxVArGLgcJlR+BQ5HLkSOlmYieCecOXnsM9y4jojEIXJZOr2NXUZBFGtBA6Chxf1b4S6yRnmv/dNSoun7o9mmgDWkA4Y1bVeYJ8xiENU535aNb+wcq/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706610333; c=relaxed/simple;
-	bh=Ala16XimMYoYU4tjF/aQ6fzkIdLIHH/TOImFMV6xJ0E=;
+	s=arc-20240116; t=1706613627; c=relaxed/simple;
+	bh=eE7X9ELnFk79hjndP00m/JkECRv7ZNM4/CB8pG7QJic=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OB3Yk7OqFYc0cyOOoxk7laCvP6igmxV3VJxvbhSTdm+hp9Am8UZ0yazzDnNhSOtxeaykjRzyF8wB+0rvhTIFnZxHZdbgTFtijfjNN4E1lvhagxr7UUx3KkF2ATyC8CQ2ZOwcK18itUOZcKndQNDXUvNf2x2IRU+USTugl9xV940=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zgt6GEtW; arc=none smtp.client-ip=209.85.221.43
+	 In-Reply-To:Content-Type; b=gLbC17khz2VKyTvt0YdNCsWhw7SQobarnH4XSoiFYrnLZnz8ehTdeK4MWeM752D0nslOD64Ng71DuaOKTyUKKsfXGcKBrAZ1roj/IeNSIzs2Iu4qODLzdrGg05gPISGcPMIe29XJqS6qpfYAxKHp4aBwoUd0XsK4hKuQW1n1Kn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nJP6ISWi; arc=none smtp.client-ip=209.85.208.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-33ae51f8111so1852067f8f.2
-        for <linux-i2c@vger.kernel.org>; Tue, 30 Jan 2024 02:25:31 -0800 (PST)
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d057b6ddfdso8507671fa.2
+        for <linux-i2c@vger.kernel.org>; Tue, 30 Jan 2024 03:20:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706610330; x=1707215130; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706613623; x=1707218423; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=glMkDewCSikWZVDLoYe1Er6Q7Qb8O+nKFzVFfR++JZU=;
-        b=Zgt6GEtWmAForhxMXZAlsfpuDcDkxE6rLlkFgpcdiRv97W+PXK/pYg7RMDDKkpLu1E
-         VX4qgBUlht8fXhFl4eKEwLX0F47FscH/3WjYO1gIKtuu28IWzWWZCuA302eyC3pPAP0V
-         jMBDFfoBsUrsh8XMcm4PQCBs5hHZlikZOeRbuqga9hBnnz8tNZ1dUw/kTqM6+/bjVCA3
-         AkJyU6RMDnexV5HH1W+B9e0oR+QXkjVoM3BCtMs76cHQVERUuLLLjtcAyzVdnyuBF4CQ
-         JiCG2iDaeJa4KR7iDs5tq84rmf4L8hRKOKzShMgBlFognK+a8cwmyiC9y1Tsjlf8wmWF
-         vlqA==
+        bh=tgSRAWSwZR816u7TdF0rLXInk65s70XdLh+P3j7g7t4=;
+        b=nJP6ISWiJjWkXVQLNFiH5Y6yTXU03/W2VtaUZgOLpxH761l+G35CpqxQY6rJCs4zqn
+         /KxYEyj63JXKzm9Rf2CmwvpDpth5oMCi+w6eU28jsuwriv1ICVRp0SLPTsBD5jPNCOeW
+         UeEuIp91qVj49uz9E80/F/R0YWDi5CbWUkepyP5iz0Qlq/G7UDNC8Jtv+nKMeAUQsp/R
+         OaOsO5A/KaBaCztmsPdjgdmb9eaOxI7a0LIudzeZRngUYttHHFZEBwrlrU5Jkfytqmhw
+         +PTS46ZowoNr3ZxwtuywS1be0AjWLNamlCcikNWq8lcscXp/XGGInjs/so39dRQOPMQg
+         iG1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706610330; x=1707215130;
+        d=1e100.net; s=20230601; t=1706613623; x=1707218423;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=glMkDewCSikWZVDLoYe1Er6Q7Qb8O+nKFzVFfR++JZU=;
-        b=VGYD3LOepcIGmpIZEciG8gU8/7imdvoprJiV1VCZdIqhPPdwlaJ2O0OabjIbOb1mVl
-         moosal813ltcb1I7DXSsPs1+edSYfUPWaOrCidWJseMmYTR0UFSdB35n2Awbut+bTHDO
-         /oYhpJA2vF1Xn1alTBAuG3HqMOH6RC1MSDgBSC45VTlHdsSaeTRL7lZuMMg+i3eIcTyD
-         Aj2DOMFCvgRokj0hNfj0qEH0FASr6hoEmqX6kiJvPAmtzhhFgyOzaBFoYchyBogiaK+X
-         saWFPjMrVBS4ys/na1SM3+c2MmoQoTHYNTftLyESHt8+/IThwe7GpEMsAMDLK+7J+pGh
-         6GFA==
-X-Gm-Message-State: AOJu0YyuxMWDlI9xwpFSLgAVAiDnqI9SttTjjy3RRTwlkVkKPy0+GGcl
-	75ynYb4THw/5zr7dZyzZPi4Z+z8pykE5rdJsDEHKSCMD248aDUb7
-X-Google-Smtp-Source: AGHT+IEvkKdo3iB5r9/x9TyOY4bSmIX1MXAHBPNoyfxFIm4lu0+94oiAgepgey+BXSVrPxmSx5hRlA==
-X-Received: by 2002:a5d:588a:0:b0:33a:f41e:f68b with SMTP id n10-20020a5d588a000000b0033af41ef68bmr3993204wrf.25.1706610330052;
-        Tue, 30 Jan 2024 02:25:30 -0800 (PST)
+        bh=tgSRAWSwZR816u7TdF0rLXInk65s70XdLh+P3j7g7t4=;
+        b=sV4xBeBmN3E4QIoA9VBmKaScrHLbpcJn000RC5MMbgZyWVJHp1yEFQhZnQtH4zr/PO
+         DhFJNWZ0QWsO23BnwepHwNZdMqRNd3QzuzBG8T2j9zll5XdgIr5jxpjyUJkNmvNwfUgr
+         vuxrqTHTHhUXmLD+Kyurh3XHGZ423hs6t4/hSx74NYNG8sxpqmWq640taQTQIwkL7Tuk
+         Skxvnx/0oM9kqronyaFKz+Uw5YmPwbRJEbHtHyQEmWDUuPLTt8g98cQ6bA4ZkEkqGust
+         qpIcbaHXs1JGm2KIpNGJczGNs1vwuJ+DFKaoGoZMhUCUT24YwzE8F0y5tT/pCq7++kdU
+         FEQw==
+X-Gm-Message-State: AOJu0YxT95pJBq/86dCuUOqhlmBtYcWpjYK+5wE9Qlq0wxUh1gjQCCvj
+	vUJSW+ok3F3q2P1wsM18XDfHBcymqB/X2w45w1Lq1WrbDpiOFT5FlY0qAwMK
+X-Google-Smtp-Source: AGHT+IHZB158iBD6dN5gSXZD4/zS/2aoV1KhZ/s2n1eNzOT5UKF22dAnHq8eGgF7UasTjH5AO18pTA==
+X-Received: by 2002:ac2:4d17:0:b0:50e:f5b5:71af with SMTP id r23-20020ac24d17000000b0050ef5b571afmr4988017lfi.40.1706613623173;
+        Tue, 30 Jan 2024 03:20:23 -0800 (PST)
 Received: from ?IPV6:2a01:c22:7399:9100:1c45:43fe:6a:a7e6? (dynamic-2a01-0c22-7399-9100-1c45-43fe-006a-a7e6.c22.pool.telefonica.de. [2a01:c22:7399:9100:1c45:43fe:6a:a7e6])
-        by smtp.googlemail.com with ESMTPSA id eo6-20020a056000428600b0033af5086c2dsm2952420wrb.58.2024.01.30.02.25.29
+        by smtp.googlemail.com with ESMTPSA id bi20-20020a05600c3d9400b0040ef04987e7sm8889358wmb.16.2024.01.30.03.20.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jan 2024 02:25:29 -0800 (PST)
-Message-ID: <b86980f9-add0-4e59-bb4b-4353344d5f2d@gmail.com>
-Date: Tue, 30 Jan 2024 11:25:33 +0100
+        Tue, 30 Jan 2024 03:20:22 -0800 (PST)
+Message-ID: <ed800c55-fffe-4080-9e0c-ae13bcc76353@gmail.com>
+Date: Tue, 30 Jan 2024 12:20:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,15 +76,13 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/8] i2c: i801: Use i2c core default adapter timeout
+Subject: Re: [PATCH 6/8] i2c: i801: Split i801_block_transaction
 To: Andi Shyti <andi.shyti@kernel.org>
 Cc: Jean Delvare <jdelvare@suse.com>,
  "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
 References: <0d6a1cdb-39a1-4fad-a6e4-48953619f33b@gmail.com>
- <380b592a-cb28-47ef-b110-e2ee6e8550fb@gmail.com>
- <dgctw2imnpwhlef72pkcubaok2zi7s3ej3m3cdvlhmjv6xv3be@sltjtakw24jt>
- <5816ddf4-1623-4bbd-9178-342a79eab768@gmail.com>
- <7ljbyo7slq74nnwelifdtjhfopy2vozo4qy7cfvrzbeqderpox@ijrb5fqwfztn>
+ <a5920bf7-91ef-4cf3-b6c5-0979e9325d7a@gmail.com>
+ <pnzgygb7zlm5x2xkn6i7etzrmcf5rrfyaxh2s5zvbmuoqmqh63@m5wravpyp32r>
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
@@ -130,44 +128,68 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <7ljbyo7slq74nnwelifdtjhfopy2vozo4qy7cfvrzbeqderpox@ijrb5fqwfztn>
+In-Reply-To: <pnzgygb7zlm5x2xkn6i7etzrmcf5rrfyaxh2s5zvbmuoqmqh63@m5wravpyp32r>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 30.01.2024 11:00, Andi Shyti wrote:
+On 30.01.2024 01:09, Andi Shyti wrote:
 > Hi Heiner,
 > 
->>> On Fri, Sep 22, 2023 at 09:35:55PM +0200, Heiner Kallweit wrote:
->>>> I see no need for a driver-specific timeout value, therefore let's go
->>>> with the i2c core default timeout of 1s set by i2c_register_adapter().
->>>
->>> Why is the timeout value not needed in your opinion? Is the
->>> datasheet specifying anything here?
->>>
->> I2C core sets a timeout of 1s if driver doesn't set a timeout value.
->> So for me the question is: Is there an actual need or benefit of
->> setting a lower timeout value? And that's something I don't see.
+> ...
 > 
-> yes, that's why I am asking and I would like to have an opinion
-> from Jean. I will try to get hold of the datasheets, as well and
-> see if there is any constraint on the timeout.
+>> +static int i801_i2c_block_transaction(struct i801_priv *priv, union i2c_smbus_data *data,
+>> +				      u8 addr, u8 hstcmd, char read_write, int command)
+>> +{
+>> +	int result;
+>> +	u8 hostc;
+>> +
+>> +	if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
+>> +		return -EPROTO;
+>> +	/*
+>> +	 * NB: page 240 of ICH5 datasheet shows that the R/#W bit should be cleared here,
+>> +	 * even when reading. However if SPD Write Disable is set (Lynx Point and later),
+>> +	 * the read will fail if we don't set the R/#W bit.
+>> +	 */
+>> +	i801_set_hstadd(priv, addr,
+>> +			priv->original_hstcfg & SMBHSTCFG_SPD_WD ? read_write : I2C_SMBUS_WRITE);
+>> +
+>> +	/* NB: page 240 of ICH5 datasheet shows that DATA1 is the cmd field when reading */
+>> +	if (read_write == I2C_SMBUS_READ)
+>> +		outb_p(hstcmd, SMBHSTDAT1(priv));
+>> +	else
+>>  		outb_p(hstcmd, SMBHSTCMD(priv));
+>> -		break;
+>> +
+>> +	if (read_write == I2C_SMBUS_WRITE) {
+>> +		/* set I2C_EN bit in configuration register */
+>> +		pci_read_config_byte(priv->pci_dev, SMBHSTCFG, &hostc);
+>> +		pci_write_config_byte(priv->pci_dev, SMBHSTCFG, hostc | SMBHSTCFG_I2C_EN);
+>> +	} else if (!(priv->features & FEATURE_I2C_BLOCK_READ)) {
+>> +		pci_err(priv->pci_dev, "I2C block read is unsupported!\n");
+>> +		return -EOPNOTSUPP;
+>>  	}
 > 
-The datasheet for the 7-series (doc# 326776-003) states:
+> These two if...else blocks can be merged.
+> 
+Yes, but I didn't do it because they cover different functionality.
+IMO it's better readable this way.
 
-5.21.3.2 Bus Time Out (The PCH as SMBus Master)
-If there is an error in the transaction, such that an SMBus device does not signal an
-acknowledge, or holds the clock lower than the allowed time-out time, the transaction
-will time out. The PCH will discard the cycle and set the DEV_ERR bit. The time out
-minimum is 25 ms (800 RTC clocks). The time-out counter inside the PCH will start
-after the last bit of data is transferred by the PCH and it is waiting for a response.
-The 25-ms time-out counter will not count under the following conditions:
-1. BYTE_DONE_STATUS bit (SMBus I/O Offset 00h, Bit 7) is set
-2. The SECOND_TO_STS bit (TCO I/O Offset 06h, Bit 1) is not set (this indicates that
-the system has not locked up).
+> But here the case of "command == I2C_SMBUS_BLOCK_DATA" is doing
+> something different from the original code. E.g. if command =
+> I2C_SMBUS_BLOCK_DATA and read_write = READ, then there is a
+> functional change. Or am I getting confused?
+> 
 
-It's my understanding that the chip will signal timeout after 25ms. So we should never
-have the case that the host timeout kicks in (as long as it's >25ms).
-So the host timeout value doesn't really matter.
+At least there's no intentional functional change.
+Can you describe the functional change you see?
+Then it's easier to comment.
+
+And yes: All the strange and misleading function argument naming
+makes it quite confusing. This starts in I2C core:
+
+smbus_xfer() has an argument "command", which is typically
+a data value. See i2c_smbus_write_byte()
+Argument "size" however is actually the command.
 
 > Thanks,
 > Andi
