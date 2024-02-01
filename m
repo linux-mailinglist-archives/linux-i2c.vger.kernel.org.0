@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-1601-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1602-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C49CF8461CD
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 21:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DB30D8461D0
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 21:14:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31EC21F24795
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 20:12:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65C321F24A38
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 20:14:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B84E885293;
-	Thu,  1 Feb 2024 20:12:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE7C685293;
+	Thu,  1 Feb 2024 20:14:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fwmasc7a"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jHy0b/Nc"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04A18529A
-	for <linux-i2c@vger.kernel.org>; Thu,  1 Feb 2024 20:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163298527E
+	for <linux-i2c@vger.kernel.org>; Thu,  1 Feb 2024 20:14:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706818356; cv=none; b=uK01QXcYsijfw1N1u/oJN/T/qCQvXMME7RJF81RNcjml6w6yIKH7dUUZ2nRUfcQe+nd9GcaE/LuLn76WUZc0GOLS8doxDKMo4B9jheXv31c87Rv4YI6mq61/I9qfxvb7slu4czykSm9NYyXMfGN1C3deFOVBTedrl343lBmS1YQ=
+	t=1706818459; cv=none; b=lvAPWtjDt2Ymijp5hL4YJjL7C7/gpocC61Oz0pxXjnHX3zZozG4f485EnheDWnD0SHq8QiMHqSK5Wy/Zef0a4oDqnWh2VclcUUm2aYCohBl51qfWdBQWFTHt9RzNtr55a6qXh09LUXTulWNGfLNeqtT4JrB4ArifS0nAwJ+Flxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706818356; c=relaxed/simple;
-	bh=2HJ+B16mLkvhL0iUt3gQQJ+TpCBoeqWfPrrpvGZAdc4=;
+	s=arc-20240116; t=1706818459; c=relaxed/simple;
+	bh=kmGxJ+th+CyHg41CR7R0tPldVDDidf85ZtRyciUrk+s=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=X5JW9UZnDFcuxFEH9/UxrVmKMKEMUKQjq4OW8mNkYULcfi0v4GCuceih0IJ6mfyFFxocVFGDRuGT7u6wB9LvtRJEZd/6Ib8tbSCtOAUc1FK+w5A9XDLZhpck51UGjz/OOtMRjX6ONZO1h2SwcowP3D8q3nDqdRH56C5mjh+Xqbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fwmasc7a; arc=none smtp.client-ip=209.85.208.48
+	 In-Reply-To:Content-Type; b=UzhYl4yrHlqbT5mnY/IrNPnRrARIGT86Gt1RLd+PMHuGUdBrial0X3Fewx14noQv9ejchFeDJqBt7t9BZtiO5kSVfgx98cWQNawijBnhXU6pNuTwNl9PLxUgEtXogkIhGbJ4q5YEG22YbnUBONlL6nZr2g9oZ9/AHP/59HwlfT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jHy0b/Nc; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-55f19a3ca7aso4787747a12.1
-        for <linux-i2c@vger.kernel.org>; Thu, 01 Feb 2024 12:12:34 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a359e6fde44so142115766b.3
+        for <linux-i2c@vger.kernel.org>; Thu, 01 Feb 2024 12:14:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706818353; x=1707423153; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706818456; x=1707423256; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=vot9IyyGdhvJEfeD3k6UjAazk9zF3vdcSvI6M1mka4g=;
-        b=fwmasc7anlcqgq8ITyIXXRVvsCvZ/oTR93wCo1VeJ/npHUu9AilBzObK7lXZw9KDaf
-         SMDJO1LnMeHCe2Jvnvni6y48SXs9TPBFCrkqU/o/IUwQog+Sk1iJLdh0bgd2v4FEm5x1
-         DIGY5PAGjgQiimy22Yy7tUUDgad61ojx3H/I0yzE5A7+pVaXQv36E/ZXRfkWomXsphA2
-         6SIyC7uh7eYFkfLhpIHJ3GmQTzFf/0M+XjJNSEupdqzmlYdy+V9yrS7G5fMW9p//GXVT
-         SoL8ds0PIzIYoCMgvqOk1/xG++SjvjQe1bC4xPRv/baVgnRH75Mg11pwgZLrZviOT4Z2
-         PNRQ==
+        bh=DA4VcpHeL8FllydO+CljKhyboV14PR/HZGqZXTalrAU=;
+        b=jHy0b/NcvTVBakuUzAycl/eLa91HLGKKoPB10E2col+H2RYghryEIul76A/lDLmVQS
+         DKmTi2YYVJZ/ckcNJlkHYyv7Pfbg1XdtfAEQvNrXaWsS/Flksz1410olZSi+b+ZUp/S0
+         JQ+bEs8zLgzsHrvebs1SyDKTsVxrq86S8Ed5BZUpO1AkQAI6AV0nji9VuD/qxnIb1zz1
+         1xd1+T+utCAf9nHH8TurdXs98F92ALxYavxVFw8GSZmE87gEugu79KBrOPsQTPhbO/gx
+         WFc/nq9CXujqYpmmhNGIbmFO5YiypdKHzkitCapKfl4REvvtGmPUL0e2oHuvCzBzW44K
+         GUYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706818353; x=1707423153;
+        d=1e100.net; s=20230601; t=1706818456; x=1707423256;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vot9IyyGdhvJEfeD3k6UjAazk9zF3vdcSvI6M1mka4g=;
-        b=FSMiqeNJG6DBtg+xU6WzBgcbat4kE1JzYWOzQjvu+j0XzzvIQ3H2qrjxG8Yypkw5xt
-         e/DtTQ5Hk1Ii/gVHANbeZSbymaWCBcApBhKNjDPy62QiGbqKHJra66KwRk0dqA+V8OOl
-         A912/pmhSQ9IBKC7qIJ8orIbIxinjP0lWkx8Rw7731mAerCTNHowZUn/YSalODmieFa2
-         0QZH2ohKenhLI9qIv7appVqzaLb1scD1eOg+P5kAEpsuPL4nafCAowXU/hKFUI7O6U5L
-         kUyq2Xkka+98mB1D24jnju8+ulWGY5aN8Zsw6wY9m3DpxfkrcctILnylNrnQEF0xSsx3
-         Lo9w==
-X-Gm-Message-State: AOJu0Yz1m7ZvmzQCOeEJ3eEDG7eHL/y1Gr09C7ewoPz4GNAHmia91VOV
-	wR23hBvtrcdc2VQA3mkslFu89j5mUUVHNEOV7DiMMgZXbaNCzS+T
-X-Google-Smtp-Source: AGHT+IGvatJ6JW6ZqMzqkl9ycP12Wu7uZTmZ1YF1LJd2DHaOwDoa1g3hdMYVTlPun8eOLMJOZZTTdg==
-X-Received: by 2002:a17:906:af09:b0:a35:6669:9fe with SMTP id lx9-20020a170906af0900b00a35666909femr71727ejb.32.1706818352826;
-        Thu, 01 Feb 2024 12:12:32 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWd+8BXrWXpDnm4fwSRU4LJc6+EsUT16x5wOogmdaUbQZCumRqPsDDGDk1cb1I6FnBz7oLI+U0h9ALIrotTaGwrr7tgTNrtxIUztkZnmn5/OJk=
+        bh=DA4VcpHeL8FllydO+CljKhyboV14PR/HZGqZXTalrAU=;
+        b=ZyrEfK84iARo13vul1weokqo89RaB1TyvUb6rKJpsy1D0qvuvvRvWhw/yQGlolMi4l
+         1psDREh7UFBL/3kSqeyIyIU8LyM3uVm02t/yXv5Twyn1J2elzPSI0uHAJ4O0FFIsC01m
+         uGGF5poy952FW4JT2CiA6KpBNOtgt345pMNgYt+y5mumzebXaz5tp0iXz8z/7TeMQKTM
+         BgggcYCAHVfAI5mRnX82uVYUxRJ3/a+x4DsSOTUAqPTCLhqKmI1Xzbs2T3/6Pjk+WbmF
+         +KSzbfgzDNnhg3XA+ETQusKws2L0R+YvLXwn964T7xQN2KCiWyzGpy9fnJ9WiZx303Vu
+         gPTQ==
+X-Gm-Message-State: AOJu0Yx6eo0zNuPSPrIxX5zqKKffccKZstqOP1RBgk3Juyxsb4zWoWYQ
+	xKcc4VFJ0HeOYqwcysJLgIRJTcE4rP17tZh/7DLXF7N9jwNZwpB+
+X-Google-Smtp-Source: AGHT+IHPQ+9DiEp+ZESqxazY0uWQnxS46IrzHjpl3WXMU7/TsunMx3cC68mreoTpOv18m3GYXIhGcw==
+X-Received: by 2002:a17:906:5fd7:b0:a35:ba57:42bc with SMTP id k23-20020a1709065fd700b00a35ba5742bcmr4467226ejv.64.1706818456141;
+        Thu, 01 Feb 2024 12:14:16 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXrW7cTFkiTyfW4vP9NfXaYIC7JDSHSwNXpD0u9fmkWyGVEny2DRx9lyI5i+OuxZZlDv4j64lQu2XTYZMtT9Dc2tF+ddLGzTd97jUR0BBJF9gM=
 Received: from ?IPV6:2a01:c23:bcb7:3100:59fd:7b30:8e23:b0ac? (dynamic-2a01-0c23-bcb7-3100-59fd-7b30-8e23-b0ac.c23.pool.telefonica.de. [2a01:c23:bcb7:3100:59fd:7b30:8e23:b0ac])
-        by smtp.googlemail.com with ESMTPSA id cb11-20020a170906a44b00b00a349318ea10sm114415ejb.199.2024.02.01.12.12.32
+        by smtp.googlemail.com with ESMTPSA id g21-20020a170906595500b00a3109a492d4sm126321ejr.20.2024.02.01.12.14.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Feb 2024 12:12:32 -0800 (PST)
-Message-ID: <9d06c7d6-8c62-4e44-9e3e-334ac14e38a1@gmail.com>
-Date: Thu, 1 Feb 2024 21:12:33 +0100
+        Thu, 01 Feb 2024 12:14:15 -0800 (PST)
+Message-ID: <5fa1476a-083c-48a8-a71d-a46a1ed8f1fa@gmail.com>
+Date: Thu, 1 Feb 2024 21:14:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,7 +77,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH v2 4/5] i2c: i801: Add SMBUS_LEN_SENTINEL
+Subject: [PATCH v2 5/5] i2c: i801: Add helper i801_get_block_len
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>,
@@ -131,69 +131,89 @@ In-Reply-To: <54845225-ffa5-4983-8bb5-3aa70ef72c72@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Add a sentinel length value that is used to check whether we should
-read and use the length value provided by the slave device.
-This simplifies the currently used checks.
+Avoid code duplication and factor out retrieving and checking the
+block length value to new helper i801_get_block_len().
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
 v2:
-- add comments
+- in the error case go to label out instead of directly bailing
+  out in i801_block_transaction_by_block()
 ---
- drivers/i2c/busses/i2c-i801.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 35 ++++++++++++++++++++---------------
+ 1 file changed, 20 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 24eb187db..514711406 100644
+index 514711406..c4af2f3ca 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -205,6 +205,8 @@
- #define STATUS_FLAGS		(SMBHSTSTS_BYTE_DONE | SMBHSTSTS_INTR | \
- 				 STATUS_ERROR_FLAGS)
+@@ -330,6 +330,18 @@ MODULE_PARM_DESC(disable_features, "Disable selected driver features:\n"
+ 	"\t\t  0x10  don't use interrupts\n"
+ 	"\t\t  0x20  disable SMBus Host Notify ");
  
-+#define SMBUS_LEN_SENTINEL (I2C_SMBUS_BLOCK_MAX + 1)
++static int i801_get_block_len(struct i801_priv *priv)
++{
++	u8 len = inb_p(SMBHSTDAT0(priv));
 +
- /* Older devices have their ID defined in <linux/pci_ids.h> */
- #define PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS		0x02a3
- #define PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS		0x06a3
-@@ -541,9 +543,11 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
- static void i801_isr_byte_done(struct i801_priv *priv)
++	if (len < 1 || len > I2C_SMBUS_BLOCK_MAX) {
++		pci_err(priv->pci_dev, "Illegal SMBus block read size %u\n", len);
++		return -EPROTO;
++	}
++
++	return len;
++}
++
+ static int i801_check_and_clear_pec_error(struct i801_priv *priv)
  {
- 	if (priv->is_read) {
--		/* For SMBus block reads, length is received with first byte */
--		if (((priv->cmd & 0x1c) == I801_BLOCK_DATA) &&
--		    (priv->count == 0)) {
-+		/* At transfer start i801_smbus_block_transaction() marks
-+		 * the block length as invalid. Check for this sentinel value
-+		 * and read the block length from SMBHSTDAT0.
-+		 */
-+		if (priv->len == SMBUS_LEN_SENTINEL) {
- 			priv->len = inb_p(SMBHSTDAT0(priv));
- 			if (priv->len < 1 || priv->len > I2C_SMBUS_BLOCK_MAX) {
- 				dev_err(&priv->pci_dev->dev,
-@@ -698,8 +702,11 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
- 		if (status)
- 			return status;
+ 	u8 status;
+@@ -525,12 +537,11 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
  
--		if (i == 1 && read_write == I2C_SMBUS_READ
--		 && command != I2C_SMBUS_I2C_BLOCK_DATA) {
-+		/* At transfer start i801_smbus_block_transaction() marks
-+		 * the block length as invalid. Check for this sentinel value
-+		 * and read the block length from SMBHSTDAT0.
-+		 */
-+		if (len == SMBUS_LEN_SENTINEL) {
- 			len = inb_p(SMBHSTDAT0(priv));
- 			if (len < 1 || len > I2C_SMBUS_BLOCK_MAX) {
- 				dev_err(&priv->pci_dev->dev,
-@@ -806,7 +813,7 @@ static int i801_smbus_block_transaction(struct i801_priv *priv, union i2c_smbus_
- 					u8 addr, u8 hstcmd, char read_write, int command)
- {
- 	if (read_write == I2C_SMBUS_READ && command == I2C_SMBUS_BLOCK_DATA)
--		data->block[0] = I2C_SMBUS_BLOCK_MAX;
-+		data->block[0] = SMBUS_LEN_SENTINEL; /* Mark block length as invalid */
- 	else if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
- 		return -EPROTO;
+ 	if (read_write == I2C_SMBUS_READ ||
+ 	    command == I2C_SMBUS_BLOCK_PROC_CALL) {
+-		len = inb_p(SMBHSTDAT0(priv));
+-		if (len < 1 || len > I2C_SMBUS_BLOCK_MAX) {
+-			status = -EPROTO;
++		status = i801_get_block_len(priv);
++		if (status < 0)
+ 			goto out;
+-		}
  
++		len = status;
+ 		data->block[0] = len;
+ 		for (i = 0; i < len; i++)
+ 			data->block[i + 1] = inb_p(SMBBLKDAT(priv));
+@@ -548,14 +559,11 @@ static void i801_isr_byte_done(struct i801_priv *priv)
+ 		 * and read the block length from SMBHSTDAT0.
+ 		 */
+ 		if (priv->len == SMBUS_LEN_SENTINEL) {
+-			priv->len = inb_p(SMBHSTDAT0(priv));
+-			if (priv->len < 1 || priv->len > I2C_SMBUS_BLOCK_MAX) {
+-				dev_err(&priv->pci_dev->dev,
+-					"Illegal SMBus block read size %d\n",
+-					priv->len);
++			priv->len = i801_get_block_len(priv);
++			if (priv->len < 0)
+ 				/* FIXME: Recover */
+ 				priv->len = I2C_SMBUS_BLOCK_MAX;
+-			}
++
+ 			priv->data[-1] = priv->len;
+ 		}
+ 
+@@ -707,11 +715,8 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+ 		 * and read the block length from SMBHSTDAT0.
+ 		 */
+ 		if (len == SMBUS_LEN_SENTINEL) {
+-			len = inb_p(SMBHSTDAT0(priv));
+-			if (len < 1 || len > I2C_SMBUS_BLOCK_MAX) {
+-				dev_err(&priv->pci_dev->dev,
+-					"Illegal SMBus block read size %d\n",
+-					len);
++			len = i801_get_block_len(priv);
++			if (len < 0) {
+ 				/* Recover */
+ 				while (inb_p(SMBHSTSTS(priv)) &
+ 				       SMBHSTSTS_HOST_BUSY)
 -- 
 2.43.0
 
