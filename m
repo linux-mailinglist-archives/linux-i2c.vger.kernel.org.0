@@ -1,199 +1,129 @@
-Return-Path: <linux-i2c+bounces-1586-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1587-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31FDE84569F
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 12:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B7CC8456B3
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 12:59:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96FFA1F28817
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 11:55:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF7991F25FAD
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 11:59:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3A315D5C1;
-	Thu,  1 Feb 2024 11:54:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1775415D5BB;
+	Thu,  1 Feb 2024 11:59:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="O6vF4Bja"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Aer6V52l"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6839115B961
-	for <linux-i2c@vger.kernel.org>; Thu,  1 Feb 2024 11:54:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9FA15CD76
+	for <linux-i2c@vger.kernel.org>; Thu,  1 Feb 2024 11:59:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706788460; cv=none; b=nDqWrNoKfKTHfaFD8S4/WBcWZimD39EbMgt97cuzFi1oZYl5/12XGZAIXKHom7QuzPIF1fBVdzdfX9ZCG+K0+tXvSU5/z18l7izXkfcMl4djjrGXzcigR1lJHivpXYMVwlrMPLkhFLqmjYAiAcnsOQy5rM41oiBsH15WWPDHoas=
+	t=1706788773; cv=none; b=Zk84LcclecWLBYuaigzXMVzfOgk1XO4Pt05XMHBXKd/8UIDZ4lkYYWtuFTjd4Jr2YV5d3JnxUn3THXkig16IGpCCOz7rXHQUsjMzlEgJkD8/eC2mZGh7/+7be/6yl1aLon5ZMpbSwZPgT7Qo+vBleBcVAKTmsHeMPJiX23YSJZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706788460; c=relaxed/simple;
-	bh=xZlpBSv6fkEsA2L7w/b7DPQtVdArKyORbXqibI/jExE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GK7R2bTiU76mSr4MOkrSVLNd5EXm7VQXsDzeZ9bz0jMLjgQc5bRwGOtKGbhF2zrJgNT7YkGxwXnC3qFtaEkBn7+yaNHocS7elqx3KFY1XR0TNG7MXMCe885wOSakOiNG4SwvdtRi/jq92vMfwjiHLeWqzN8wrzP8tFJoYZUaX8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=O6vF4Bja; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dc6d5267cceso724923276.1
-        for <linux-i2c@vger.kernel.org>; Thu, 01 Feb 2024 03:54:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706788457; x=1707393257; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4H6LBU62Ttqy2KFiZYwMZoro4w2GfWXjhJ/+N8HmJ1Q=;
-        b=O6vF4BjaZHJsVk+if3ylpZuTdmZqQl6byk8gKQnHWFhb7sWpaCl4/h9/WhoUZGcjlj
-         RAZiLtkhd1ruUsusSrcVKZ1Tnd/T1CFs2eI6MQw3j6Sa6/KJo4bE68rJjUD750+bev/8
-         dd4lZ4plJzB64YdWPfNV3gBpPeD6AUx7TS4Y4YKBZyUlVNsaFebumcaOoyuiH+YuOHEB
-         D48jOgfx9soZEeuFaGD1rVQTqbwb9qO9za29W8sZRgG4kwGQdX7TpsOk69P7PLlm6G+Z
-         acLlCRoCSvBXJeB2k3voGjmkFEIf3hGp648irabqF+TTul9B+RCSNRE3aMUAIZA1sJ0O
-         7GgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706788457; x=1707393257;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4H6LBU62Ttqy2KFiZYwMZoro4w2GfWXjhJ/+N8HmJ1Q=;
-        b=FzG+MBd6fywVwIPqvSxklMob9cRj1CNeNpQ1SDrenTHGwTIS9RTVQPG/M/wkiu9Xwv
-         Q914CwcjJjnM4Mpp1TLSSUwHdcmVCHWvUZ4SpA1tTC3lTv5qTIR+pZsvw2/9tjEfumLv
-         gitYdm0wq5bVQ4JNc+hQjJROcoB93vcQn0k15iJwt5+XX+c9u268r5cH+IgO+BIrIX3/
-         GUgaAVgLrlolDzl03xR+fdSVDo1UDVHBROAE+lJp3Ws6ydt4ztH2uDZlv9GIPUhQ8yOH
-         HI0K3r5/c3tYCfx3ppeADZpc9L6G8It/qPIOR/idpNR2V7ZvcVszZj4G5O0RmACpKf9Z
-         irUQ==
-X-Gm-Message-State: AOJu0YyC6V0aifl8u+CyhDPWPvvAAvm8PkK5jrAsAnEerqrwgUVH/kpn
-	9W0+8p4j7+CxFAnbqdPNgLhqwnhGiVHMSKzJ3yoZZk4V0NdR28/6g65EBzrHw+vlNBtjw1lXfYZ
-	2hgR7wWdHhdH/A763SDhIKAu4buoWfLecSnfF6Q==
-X-Google-Smtp-Source: AGHT+IHE6MUPQe2v8rCH9yiwR/6CfzgY+yrYyn3lZn+9J44z3It/avkbHeViCgHRCdu6QmraEUiD0NAB+hbfkJ9jn3w=
-X-Received: by 2002:a25:2e4a:0:b0:dc6:ad45:3c51 with SMTP id
- b10-20020a252e4a000000b00dc6ad453c51mr4463301ybn.36.1706788457347; Thu, 01
- Feb 2024 03:54:17 -0800 (PST)
+	s=arc-20240116; t=1706788773; c=relaxed/simple;
+	bh=fGisqsNWKySzDDozins5KfoINvrR5jFi657cn9t62e8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lc3pWEx2c8vjRW6KI1uRZSChv3s70QSs/4g1wSgUjB9/Cwj46dZt6Bxinm8+KLAuhK4stDnojy0PJUgZLyYpNVaar0uFkMRIv/H5yVN0fMwBl5qYvQxLaVZgpTDKsOEroCJYCTRF7NuZhy9kVhvQymtQS3JruWfGwI2nYBEIF70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Aer6V52l; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706788772; x=1738324772;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fGisqsNWKySzDDozins5KfoINvrR5jFi657cn9t62e8=;
+  b=Aer6V52ll/xP/Rcrp8bOnQXpqbW1fpCJyq5SNUUP9BxlFSI0fJ73WVpV
+   uBDLu0Ca27Y/dNjvQEdL0InynqGkLZJoPd+B9VZKfZ+03c8yJC3pMIWMb
+   66HQhZJ4Avi70Y47utfb07epm8ba81KONGh8mPYmXAlF4zuxYwrAcknac
+   gr/UN9GOG+QDQbjsIlFT3+ViNkeYfPEQkaR05f3v4qv4l6gga771zxh/s
+   XYEAMp44kNN1ONtr0638Jc4Lqxz0RfT4yLEggeXrf++3je5zQrnGfpUJ+
+   05cO7ZcAfV4J0VF4clN8e0g4XSRxrJ/cVWDrRzhGu2iMbOtKoMCe6xRr+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="10531073"
+X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
+   d="scan'208";a="10531073"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 03:59:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="738409874"
+X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
+   d="scan'208";a="738409874"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 03:59:28 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rVVgu-00000000pAX-0reG;
+	Thu, 01 Feb 2024 13:57:12 +0200
+Date: Thu, 1 Feb 2024 13:57:11 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, Jiawen Wu <jiawenwu@trustnetic.com>,
+	Sanket Goswami <Sanket.Goswami@amd.com>,
+	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+	Ruhl@smile.fi.intel.com, Michael J <michael.j.ruhl@intel.com>
+Subject: Re: [PATCH 1/6] i2c: designware: Uniform initialization flow for
+ polling mode
+Message-ID: <ZbuHF31mMv_KN2J4@smile.fi.intel.com>
+References: <20240131141653.2689260-1-jarkko.nikula@linux.intel.com>
+ <20240131141653.2689260-2-jarkko.nikula@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240201101323.13676-1-quic_vdadhani@quicinc.com>
-In-Reply-To: <20240201101323.13676-1-quic_vdadhani@quicinc.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Thu, 1 Feb 2024 13:54:06 +0200
-Message-ID: <CAA8EJpqQtHDRK2pex+5F-fMRTosJuFCx59e89MWhnie1O3dHKA@mail.gmail.com>
-Subject: Re: [V3] i2c: i2c-qcom-geni: Correct I2C TRE sequence
-To: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Cc: andersson@kernel.org, konrad.dybcio@linaro.org, andi.shyti@kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, vkoul@kernel.org, quic_bjorande@quicinc.com, 
-	manivannan.sadhasivam@linaro.org, bryan.odonoghue@linaro.org, 
-	quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240131141653.2689260-2-jarkko.nikula@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, 1 Feb 2024 at 12:13, Viken Dadhaniya <quic_vdadhani@quicinc.com> wrote:
->
-> For i2c read operation in GSI mode, we are getting timeout
-> due to malformed TRE basically incorrect TRE sequence
-> in gpi(drivers/dma/qcom/gpi.c) driver.
->
-> TRE stands for Transfer Ring Element - which is basically an element with
-> size of 4 words. It contains all information like slave address,
-> clk divider, dma address value data size etc).
->
-> Mainly we have 3 TREs(Config, GO and DMA tre).
-> - CONFIG TRE : consists of internal register configuration which is
->                required before start of the transfer.
-> - DMA TRE :    contains DDR/Memory address, called as DMA descriptor.
-> - GO TRE :     contains Transfer directions, slave ID, Delay flags, Length
->                of the transfer.
->
-> Driver calls GPI driver API to config each TRE depending on the protocol.
-> If we see GPI driver, for RX operation we are configuring DMA tre and
-> for TX operation we are configuring GO tre.
->
-> For read operation tre sequence will be as below which is not aligned
-> to hardware programming guide.
->
-> - CONFIG tre
-> - DMA tre
-> - GO tre
->
-> As per Qualcomm's internal Hardware Programming Guide, we should configure
-> TREs in below sequence for any RX only transfer.
->
-> - CONFIG tre
-> - GO tre
-> - DMA tre
->
-> In summary, for RX only transfers, we are reordering DMA and GO TREs.
-> Tested covering i2c read/write transfer on QCM6490 RB3 board.
+On Wed, Jan 31, 2024 at 04:16:47PM +0200, Jarkko Nikula wrote:
+> Currently initialization flow in i2c_dw_probe_master() skips a few steps
+> and has code duplication for polling mode implementation.
+> 
+> Simplify this by adding a new ACCESS_POLLING flag that is set for those
+> two platforms that currently use polling mode and use it to skip
+> interrupt handler setup.
 
-This hasn't improved. You must describe what is the connection between
-TRE types and the geni_i2c_gpi calls.
-It is not obvious until somebody looks into the GPI DMA driver.
+...
 
-Another point, for some reason you are still using just the patch
-version in email subject. Please fix your setup so that the email
-subject also includes the `[PATCH` part in the subject, which is there
-by default.
-Hint: git format-patch -1 -v4 will do that for you without a need to
-correct anything afterwards.
+>  #define ACCESS_INTR_MASK			BIT(0)
+>  #define ACCESS_NO_IRQ_SUSPEND			BIT(1)
+>  #define ARBITRATION_SEMAPHORE			BIT(2)
+> +#define ACCESS_POLLING				BIT(3)
 
->
-> Fixes: d8703554f4de ("i2c: qcom-geni: Add support for GPI DMA")
-> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+For the sake of consistency, you may incorporate internal patch from somebody
+else to move to the same prefix  (namespace) for ARBITRATION_SEMAPHORE.
 
-I think you got some review tags for v2, didn't you? They should have
-been included here, otherwise the efforts spent by the reviewer are
-lost.
+...
 
-> ---
-> v2 -> v3:
-> - Update commit log to explain change in simple way.
-> - Correct fix tag format.
->
-> v1 -> v2:
-> - Remove redundant check.
-> - update commit log.
-> - add fix tag.
-> ---
-> ---
->  drivers/i2c/busses/i2c-qcom-geni.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 0d2e7171e3a6..da94df466e83 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -613,20 +613,20 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
->
->                 peripheral.addr = msgs[i].addr;
->
-> +               ret =  geni_i2c_gpi(gi2c, &msgs[i], &config,
-> +                                   &tx_addr, &tx_buf, I2C_WRITE, gi2c->tx_c);
-> +               if (ret)
-> +                       goto err;
-> +
->                 if (msgs[i].flags & I2C_M_RD) {
->                         ret =  geni_i2c_gpi(gi2c, &msgs[i], &config,
->                                             &rx_addr, &rx_buf, I2C_READ, gi2c->rx_c);
->                         if (ret)
->                                 goto err;
-> -               }
-> -
-> -               ret =  geni_i2c_gpi(gi2c, &msgs[i], &config,
-> -                                   &tx_addr, &tx_buf, I2C_WRITE, gi2c->tx_c);
-> -               if (ret)
-> -                       goto err;
->
-> -               if (msgs[i].flags & I2C_M_RD)
->                         dma_async_issue_pending(gi2c->rx_c);
-> +               }
-> +
->                 dma_async_issue_pending(gi2c->tx_c);
->
->                 timeout = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
-> --
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-> of Code Aurora Forum, hosted by The Linux Foundation
->
->
+> +	if (!(dev->flags & ACCESS_POLLING)) {
 
+Actually seems to me that is better to have in a separate helper and you
+then can do here something like
+
+	ret = i2c_dw_request_irq(...);
+	if (ret)
+		return ret;
+
+> +		ret = devm_request_irq(dev->dev, dev->irq, i2c_dw_isr,
+> +				       irq_flags, dev_name(dev->dev), dev);
+> +		if (ret) {
+> +			dev_err(dev->dev, "failure requesting irq %i: %d\n",
+> +				dev->irq, ret);
+> +			return ret;
+> +		}
 
 -- 
-With best wishes
-Dmitry
+With Best Regards,
+Andy Shevchenko
+
+
 
