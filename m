@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-1600-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1601-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6E1C8461CC
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 21:11:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C49CF8461CD
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 21:12:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F26EAB24E8C
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 20:11:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31EC21F24795
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 20:12:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A1D8529A;
-	Thu,  1 Feb 2024 20:11:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B84E885293;
+	Thu,  1 Feb 2024 20:12:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oq2rD+Y2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fwmasc7a"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4DE8528E
-	for <linux-i2c@vger.kernel.org>; Thu,  1 Feb 2024 20:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04A18529A
+	for <linux-i2c@vger.kernel.org>; Thu,  1 Feb 2024 20:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706818290; cv=none; b=EoJt7pGjhIJvPXSWpOKELWwj5o2j7pqMFJZOuL9FFKbw+NLP6YPBsC7Qft1dI+6hCF7RLXp24opQ0kg39qTNCsrjLgvyasBXmjnUhZ2u1Ww0M3xgTQsKw8zXnjrj+5DTePmM7rU4naEZ5x5JjK96qxPnq2QzQjDf0F6GhCZNlAM=
+	t=1706818356; cv=none; b=uK01QXcYsijfw1N1u/oJN/T/qCQvXMME7RJF81RNcjml6w6yIKH7dUUZ2nRUfcQe+nd9GcaE/LuLn76WUZc0GOLS8doxDKMo4B9jheXv31c87Rv4YI6mq61/I9qfxvb7slu4czykSm9NYyXMfGN1C3deFOVBTedrl343lBmS1YQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706818290; c=relaxed/simple;
-	bh=UgWeAAVf9siBe++4hNWMaqXJoulggWwd4XWfymnlkgQ=;
+	s=arc-20240116; t=1706818356; c=relaxed/simple;
+	bh=2HJ+B16mLkvhL0iUt3gQQJ+TpCBoeqWfPrrpvGZAdc4=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=LIGyYWJuOpkhc1xE3412GYpvK79N4+pa17dbpjDjJ2y+iFzo13S6dmnKX+4GVjnrxKPuNrKsbR5/hd53CjWbYXUBnl+1nYr55BvV31QsPzI685XSApmZfTAQWge9Tlh1vl9qrCh1ssblyC3sdwibMPZiiMv7wzvxLyGMXFfDSKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oq2rD+Y2; arc=none smtp.client-ip=209.85.218.45
+	 In-Reply-To:Content-Type; b=X5JW9UZnDFcuxFEH9/UxrVmKMKEMUKQjq4OW8mNkYULcfi0v4GCuceih0IJ6mfyFFxocVFGDRuGT7u6wB9LvtRJEZd/6Ib8tbSCtOAUc1FK+w5A9XDLZhpck51UGjz/OOtMRjX6ONZO1h2SwcowP3D8q3nDqdRH56C5mjh+Xqbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fwmasc7a; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a26f73732c5so208295066b.3
-        for <linux-i2c@vger.kernel.org>; Thu, 01 Feb 2024 12:11:28 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-55f19a3ca7aso4787747a12.1
+        for <linux-i2c@vger.kernel.org>; Thu, 01 Feb 2024 12:12:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706818287; x=1707423087; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706818353; x=1707423153; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=lBXjT/pjd5QCS7CfT4+C53H6bHqWr9YfEtVQDFTqXT0=;
-        b=Oq2rD+Y2zSuGk+mkG9cEfpv/zMa/NiMZBNHt06ieKJsRV+TQohtz1S69ipXpoQ6KCK
-         ULTGbv+OwSzsyRZ2NCHqbf0CT2TZkcBSB1RySxBFuSi4bA03rTZ1IEYbtW1J8Azjoxt8
-         oqrXZG0eT7SP4eTwPvehn995vb8TYQT/DYQ4rLQBsNhhsgcmjm20lKxEOH09+Qte6zn/
-         W/JWSX1/fbSF/1qVIy6QpuQL8IHXMcQKpl/Qh94Gh/OTYkTldPQuKjtD4FwtkJYT5WQe
-         FvhL1eWjUSq0rix4kRzyjxgeAzVgM2DYRRtF1rmliYI4EtYJjrEyLYziL+ZT2ESA3jMj
-         iEDQ==
+        bh=vot9IyyGdhvJEfeD3k6UjAazk9zF3vdcSvI6M1mka4g=;
+        b=fwmasc7anlcqgq8ITyIXXRVvsCvZ/oTR93wCo1VeJ/npHUu9AilBzObK7lXZw9KDaf
+         SMDJO1LnMeHCe2Jvnvni6y48SXs9TPBFCrkqU/o/IUwQog+Sk1iJLdh0bgd2v4FEm5x1
+         DIGY5PAGjgQiimy22Yy7tUUDgad61ojx3H/I0yzE5A7+pVaXQv36E/ZXRfkWomXsphA2
+         6SIyC7uh7eYFkfLhpIHJ3GmQTzFf/0M+XjJNSEupdqzmlYdy+V9yrS7G5fMW9p//GXVT
+         SoL8ds0PIzIYoCMgvqOk1/xG++SjvjQe1bC4xPRv/baVgnRH75Mg11pwgZLrZviOT4Z2
+         PNRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706818287; x=1707423087;
+        d=1e100.net; s=20230601; t=1706818353; x=1707423153;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lBXjT/pjd5QCS7CfT4+C53H6bHqWr9YfEtVQDFTqXT0=;
-        b=rGm1DG6jrxnf0lgnuZKGTKyqio7LiBea7apsM7h1JsPhAFOCDk0rxxbivJ9KYeVQpf
-         5p/WpVgWD5k6h/ORbYxAEn7KEiiGqjxZxziOG0pMjjxxD8uiCtx3hJPKd3rZ4sXfO0ex
-         +f7w4EpGtOT42mJRp1fE4nTI/HyyfIS1GjSE5pb2vtQryH9lJYRCP72p9a6dAqhMHGy5
-         dDvYlATyoKNXJE7JeuCgDDBqv6s0NTp0X52+UgXeXZI3/nbMrs3g/gTAcFGxEnUvIXd0
-         hof8QEqWbygmQeUIBAshQvbQx4KnWm97RiT/TmyH+WX+YNFlxQaD6HonAD8J93jx5lGM
-         7ztg==
-X-Gm-Message-State: AOJu0YxY1kr8Sw6Myct0qZYGg6Mue4BUa8djAgZyIfjGExWOchC42ctM
-	Qkn9uUWnGVZMOWubs3+4el02bAATpI8rVHVL1yxIfsHVeasVTUEM9vq+WZ94
-X-Google-Smtp-Source: AGHT+IFn+7/ow8pNYBvqPIFk4LzG/m32mAr7A0koTfX12eKqMwFDP821P8PGO5iVh5Z7izyF2wjw8g==
-X-Received: by 2002:a17:907:7746:b0:a36:f811:44f5 with SMTP id kx6-20020a170907774600b00a36f81144f5mr128774ejc.47.1706818286730;
-        Thu, 01 Feb 2024 12:11:26 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUsi6lUpl3WOttjDOeNuVjKwjuQ3PVTv5oQT19gccRDIsjFNtjh7SQL4gq+onwq0TvxdyzLn5juxWwjg8Z+BDNGAzzpmFBQL36OlqIq2lkFZno=
+        bh=vot9IyyGdhvJEfeD3k6UjAazk9zF3vdcSvI6M1mka4g=;
+        b=FSMiqeNJG6DBtg+xU6WzBgcbat4kE1JzYWOzQjvu+j0XzzvIQ3H2qrjxG8Yypkw5xt
+         e/DtTQ5Hk1Ii/gVHANbeZSbymaWCBcApBhKNjDPy62QiGbqKHJra66KwRk0dqA+V8OOl
+         A912/pmhSQ9IBKC7qIJ8orIbIxinjP0lWkx8Rw7731mAerCTNHowZUn/YSalODmieFa2
+         0QZH2ohKenhLI9qIv7appVqzaLb1scD1eOg+P5kAEpsuPL4nafCAowXU/hKFUI7O6U5L
+         kUyq2Xkka+98mB1D24jnju8+ulWGY5aN8Zsw6wY9m3DpxfkrcctILnylNrnQEF0xSsx3
+         Lo9w==
+X-Gm-Message-State: AOJu0Yz1m7ZvmzQCOeEJ3eEDG7eHL/y1Gr09C7ewoPz4GNAHmia91VOV
+	wR23hBvtrcdc2VQA3mkslFu89j5mUUVHNEOV7DiMMgZXbaNCzS+T
+X-Google-Smtp-Source: AGHT+IGvatJ6JW6ZqMzqkl9ycP12Wu7uZTmZ1YF1LJd2DHaOwDoa1g3hdMYVTlPun8eOLMJOZZTTdg==
+X-Received: by 2002:a17:906:af09:b0:a35:6669:9fe with SMTP id lx9-20020a170906af0900b00a35666909femr71727ejb.32.1706818352826;
+        Thu, 01 Feb 2024 12:12:32 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWd+8BXrWXpDnm4fwSRU4LJc6+EsUT16x5wOogmdaUbQZCumRqPsDDGDk1cb1I6FnBz7oLI+U0h9ALIrotTaGwrr7tgTNrtxIUztkZnmn5/OJk=
 Received: from ?IPV6:2a01:c23:bcb7:3100:59fd:7b30:8e23:b0ac? (dynamic-2a01-0c23-bcb7-3100-59fd-7b30-8e23-b0ac.c23.pool.telefonica.de. [2a01:c23:bcb7:3100:59fd:7b30:8e23:b0ac])
-        by smtp.googlemail.com with ESMTPSA id cb11-20020a170906a44b00b00a349318ea10sm114415ejb.199.2024.02.01.12.11.26
+        by smtp.googlemail.com with ESMTPSA id cb11-20020a170906a44b00b00a349318ea10sm114415ejb.199.2024.02.01.12.12.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Feb 2024 12:11:26 -0800 (PST)
-Message-ID: <25037b79-7b38-4e0a-a5e9-91138e7e88e2@gmail.com>
-Date: Thu, 1 Feb 2024 21:11:27 +0100
+        Thu, 01 Feb 2024 12:12:32 -0800 (PST)
+Message-ID: <9d06c7d6-8c62-4e44-9e3e-334ac14e38a1@gmail.com>
+Date: Thu, 1 Feb 2024 21:12:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,7 +77,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH v2 3/5] i2c: i801: Split i801_block_transaction
+Subject: [PATCH v2 4/5] i2c: i801: Add SMBUS_LEN_SENTINEL
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>,
@@ -131,156 +131,68 @@ In-Reply-To: <54845225-ffa5-4983-8bb5-3aa70ef72c72@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-i2c and smbus block transaction handling have little in common,
-therefore split this function to improve code readability.
+Add a sentinel length value that is used to check whether we should
+read and use the length value provided by the slave device.
+This simplifies the currently used checks.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 112 +++++++++++++++-------------------
- 1 file changed, 50 insertions(+), 62 deletions(-)
+v2:
+- add comments
+---
+ drivers/i2c/busses/i2c-i801.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 156bace92..24eb187db 100644
+index 24eb187db..514711406 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -802,77 +802,65 @@ static int i801_simple_transaction(struct i801_priv *priv, union i2c_smbus_data
- 	return 0;
- }
+@@ -205,6 +205,8 @@
+ #define STATUS_FLAGS		(SMBHSTSTS_BYTE_DONE | SMBHSTSTS_INTR | \
+ 				 STATUS_ERROR_FLAGS)
  
--/* Block transaction function */
--static int i801_block_transaction(struct i801_priv *priv, union i2c_smbus_data *data,
--				  u8 addr, u8 hstcmd, char read_write, int command)
-+static int i801_smbus_block_transaction(struct i801_priv *priv, union i2c_smbus_data *data,
-+					u8 addr, u8 hstcmd, char read_write, int command)
++#define SMBUS_LEN_SENTINEL (I2C_SMBUS_BLOCK_MAX + 1)
++
+ /* Older devices have their ID defined in <linux/pci_ids.h> */
+ #define PCI_DEVICE_ID_INTEL_COMETLAKE_SMBUS		0x02a3
+ #define PCI_DEVICE_ID_INTEL_COMETLAKE_H_SMBUS		0x06a3
+@@ -541,9 +543,11 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
+ static void i801_isr_byte_done(struct i801_priv *priv)
  {
--	int result = 0;
--	unsigned char hostc;
--
+ 	if (priv->is_read) {
+-		/* For SMBus block reads, length is received with first byte */
+-		if (((priv->cmd & 0x1c) == I801_BLOCK_DATA) &&
+-		    (priv->count == 0)) {
++		/* At transfer start i801_smbus_block_transaction() marks
++		 * the block length as invalid. Check for this sentinel value
++		 * and read the block length from SMBHSTDAT0.
++		 */
++		if (priv->len == SMBUS_LEN_SENTINEL) {
+ 			priv->len = inb_p(SMBHSTDAT0(priv));
+ 			if (priv->len < 1 || priv->len > I2C_SMBUS_BLOCK_MAX) {
+ 				dev_err(&priv->pci_dev->dev,
+@@ -698,8 +702,11 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
+ 		if (status)
+ 			return status;
+ 
+-		if (i == 1 && read_write == I2C_SMBUS_READ
+-		 && command != I2C_SMBUS_I2C_BLOCK_DATA) {
++		/* At transfer start i801_smbus_block_transaction() marks
++		 * the block length as invalid. Check for this sentinel value
++		 * and read the block length from SMBHSTDAT0.
++		 */
++		if (len == SMBUS_LEN_SENTINEL) {
+ 			len = inb_p(SMBHSTDAT0(priv));
+ 			if (len < 1 || len > I2C_SMBUS_BLOCK_MAX) {
+ 				dev_err(&priv->pci_dev->dev,
+@@ -806,7 +813,7 @@ static int i801_smbus_block_transaction(struct i801_priv *priv, union i2c_smbus_
+ 					u8 addr, u8 hstcmd, char read_write, int command)
+ {
  	if (read_write == I2C_SMBUS_READ && command == I2C_SMBUS_BLOCK_DATA)
- 		data->block[0] = I2C_SMBUS_BLOCK_MAX;
+-		data->block[0] = I2C_SMBUS_BLOCK_MAX;
++		data->block[0] = SMBUS_LEN_SENTINEL; /* Mark block length as invalid */
  	else if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
  		return -EPROTO;
- 
--	switch (command) {
--	case I2C_SMBUS_BLOCK_DATA:
--		i801_set_hstadd(priv, addr, read_write);
--		outb_p(hstcmd, SMBHSTCMD(priv));
--		break;
--	case I2C_SMBUS_I2C_BLOCK_DATA:
--		/*
--		 * NB: page 240 of ICH5 datasheet shows that the R/#W
--		 * bit should be cleared here, even when reading.
--		 * However if SPD Write Disable is set (Lynx Point and later),
--		 * the read will fail if we don't set the R/#W bit.
--		 */
--		i801_set_hstadd(priv, addr,
--				priv->original_hstcfg & SMBHSTCFG_SPD_WD ?
--				read_write : I2C_SMBUS_WRITE);
--		if (read_write == I2C_SMBUS_READ) {
--			/* NB: page 240 of ICH5 datasheet also shows
--			 * that DATA1 is the cmd field when reading
--			 */
--			outb_p(hstcmd, SMBHSTDAT1(priv));
--		} else
--			outb_p(hstcmd, SMBHSTCMD(priv));
--
--		if (read_write == I2C_SMBUS_WRITE) {
--			/* set I2C_EN bit in configuration register */
--			pci_read_config_byte(priv->pci_dev, SMBHSTCFG, &hostc);
--			pci_write_config_byte(priv->pci_dev, SMBHSTCFG,
--					      hostc | SMBHSTCFG_I2C_EN);
--		} else if (!(priv->features & FEATURE_I2C_BLOCK_READ)) {
--			dev_err(&priv->pci_dev->dev,
--				"I2C block read is unsupported!\n");
--			return -EOPNOTSUPP;
--		}
--		break;
--	case I2C_SMBUS_BLOCK_PROC_CALL:
-+	if (command == I2C_SMBUS_BLOCK_PROC_CALL)
- 		/* Needs to be flagged as write transaction */
- 		i801_set_hstadd(priv, addr, I2C_SMBUS_WRITE);
-+	else
-+		i801_set_hstadd(priv, addr, read_write);
-+	outb_p(hstcmd, SMBHSTCMD(priv));
-+
-+	if (priv->features & FEATURE_BLOCK_BUFFER)
-+		return i801_block_transaction_by_block(priv, data, read_write, command);
-+	else
-+		return i801_block_transaction_byte_by_byte(priv, data, read_write, command);
-+}
-+
-+static int i801_i2c_block_transaction(struct i801_priv *priv, union i2c_smbus_data *data,
-+				      u8 addr, u8 hstcmd, char read_write, int command)
-+{
-+	int result;
-+	u8 hostc;
-+
-+	if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
-+		return -EPROTO;
-+	/*
-+	 * NB: page 240 of ICH5 datasheet shows that the R/#W bit should be cleared here,
-+	 * even when reading. However if SPD Write Disable is set (Lynx Point and later),
-+	 * the read will fail if we don't set the R/#W bit.
-+	 */
-+	i801_set_hstadd(priv, addr,
-+			priv->original_hstcfg & SMBHSTCFG_SPD_WD ? read_write : I2C_SMBUS_WRITE);
-+
-+	/* NB: page 240 of ICH5 datasheet shows that DATA1 is the cmd field when reading */
-+	if (read_write == I2C_SMBUS_READ)
-+		outb_p(hstcmd, SMBHSTDAT1(priv));
-+	else
- 		outb_p(hstcmd, SMBHSTCMD(priv));
--		break;
-+
-+	if (read_write == I2C_SMBUS_WRITE) {
-+		/* set I2C_EN bit in configuration register */
-+		pci_read_config_byte(priv->pci_dev, SMBHSTCFG, &hostc);
-+		pci_write_config_byte(priv->pci_dev, SMBHSTCFG, hostc | SMBHSTCFG_I2C_EN);
-+	} else if (!(priv->features & FEATURE_I2C_BLOCK_READ)) {
-+		pci_err(priv->pci_dev, "I2C block read is unsupported!\n");
-+		return -EOPNOTSUPP;
- 	}
- 
--	/* Experience has shown that the block buffer can only be used for
--	   SMBus (not I2C) block transactions, even though the datasheet
--	   doesn't mention this limitation. */
--	if ((priv->features & FEATURE_BLOCK_BUFFER) &&
--	    command != I2C_SMBUS_I2C_BLOCK_DATA)
--		result = i801_block_transaction_by_block(priv, data,
--							 read_write,
--							 command);
--	else
--		result = i801_block_transaction_byte_by_byte(priv, data,
--							     read_write,
--							     command);
-+	/* Block buffer isn't supported for I2C block transactions */
-+	result = i801_block_transaction_byte_by_byte(priv, data, read_write, command);
- 
--	if (command == I2C_SMBUS_I2C_BLOCK_DATA
--	 && read_write == I2C_SMBUS_WRITE) {
--		/* restore saved configuration register value */
-+	/* restore saved configuration register value */
-+	if (read_write == I2C_SMBUS_WRITE)
- 		pci_write_config_byte(priv->pci_dev, SMBHSTCFG, hostc);
--	}
-+
- 	return result;
- }
- 
-@@ -903,10 +891,10 @@ static s32 i801_access(struct i2c_adapter *adap, u16 addr,
- 		outb_p(inb_p(SMBAUXCTL(priv)) & (~SMBAUXCTL_CRC),
- 		       SMBAUXCTL(priv));
- 
--	if (size == I2C_SMBUS_BLOCK_DATA ||
--	    size == I2C_SMBUS_I2C_BLOCK_DATA ||
--	    size == I2C_SMBUS_BLOCK_PROC_CALL)
--		ret = i801_block_transaction(priv, data, addr, command, read_write, size);
-+	if (size == I2C_SMBUS_BLOCK_DATA || size == I2C_SMBUS_BLOCK_PROC_CALL)
-+		ret = i801_smbus_block_transaction(priv, data, addr, command, read_write, size);
-+	else if (size == I2C_SMBUS_I2C_BLOCK_DATA)
-+		ret = i801_i2c_block_transaction(priv, data, addr, command, read_write, size);
- 	else
- 		ret = i801_simple_transaction(priv, data, addr, command, read_write, size);
  
 -- 
 2.43.0
