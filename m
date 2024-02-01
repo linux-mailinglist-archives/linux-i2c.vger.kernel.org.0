@@ -1,94 +1,102 @@
-Return-Path: <linux-i2c+bounces-1563-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1564-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DECA3844D1A
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 00:41:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 388F9844EFA
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 03:06:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EE111F299D8
-	for <lists+linux-i2c@lfdr.de>; Wed, 31 Jan 2024 23:41:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E975E28A9E0
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 02:06:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CD493A8DA;
-	Wed, 31 Jan 2024 23:32:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3DAFF504;
+	Thu,  1 Feb 2024 02:06:08 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 7.mo576.mail-out.ovh.net (7.mo576.mail-out.ovh.net [46.105.50.32])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF55F3A8D5
-	for <linux-i2c@vger.kernel.org>; Wed, 31 Jan 2024 23:32:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.50.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B56529406
+	for <linux-i2c@vger.kernel.org>; Thu,  1 Feb 2024 02:06:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706743958; cv=none; b=C/GSwk94pgbgaSB0lqYf16ARpNzsOru++oTOh/zi26bUPdwnKXtLMbrQN4cbTNwGSKzI24VIVIG8yXkmCHEyzpv2ZTX2kwnSLrAzhXr4mPulFE6WZYyUz3IoD8wYSi4+grt1tsxv+T7AwGM4Rf0DZ2NTgJTZOQRM+AvGHJvB80g=
+	t=1706753168; cv=none; b=Mjgo0yGmnIDYnDguJPBJNFULPWwZ8wKug/s05zk+SxJ6nsNvTQjJAGBsGYvVKQO2vitS9U43d2XWeyW+pyj7M1Akaad4GMQN1pudKG4JjV0J3IVBbjllae0OSyxcVFVeQCEBTKeygi1tchbTSkhr9O2vYs7C7J++P4tvhpjZOSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706743958; c=relaxed/simple;
-	bh=SJyruhk8di3+s0IFG1DaDJLPgvRj9rA6PUe5z5vSynI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=hOPF6u3h7TeDqjAaaFNyQ3Q2ki3NRqNOEZyxtuhC4rLtIv4cLNpASmAoSvA7vbk07fPTVTkpfWO7l6hnNokhhRjnwZfqF7ESsZ5dEScIC3crfVcFh7/Zeh9kuuxewm+6i5vU4qdWQ8snx6My5ROmGFw4qZQy/pPl1a16TM5/vug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.50.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director9.ghost.mail-out.ovh.net (unknown [10.108.17.160])
-	by mo576.mail-out.ovh.net (Postfix) with ESMTP id 8025B34156
-	for <linux-i2c@vger.kernel.org>; Wed, 31 Jan 2024 22:55:58 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-qnxlc (unknown [10.110.178.109])
-	by director9.ghost.mail-out.ovh.net (Postfix) with ESMTPS id E62891FDEA;
-	Wed, 31 Jan 2024 22:55:57 +0000 (UTC)
-Received: from etezian.org ([37.59.142.103])
-	by ghost-submission-6684bf9d7b-qnxlc with ESMTPSA
-	id a6okHf3PumWafAAALVocug
-	(envelope-from <andi@etezian.org>); Wed, 31 Jan 2024 22:55:57 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-103G00550b5628a-d37b-4c62-bb6d-ee46a59a6475,
-                    F33A5955C440BB32736DBBB85AFDD5E0974CF895) smtp.auth=andi@etezian.org
-X-OVh-ClientIp:89.217.109.169
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
- linux-sh@vger.kernel.org
-In-Reply-To: <93f3b97c20164510ed80928500a8d443d7e23adb.1706717315.git.geert+renesas@glider.be>
-References: <93f3b97c20164510ed80928500a8d443d7e23adb.1706717315.git.geert+renesas@glider.be>
-Subject: Re: [PATCH v2] i2c: sh_mobile: Switch R-Mobile A1/APE6 and
- SH-Mobile AG5 to new frequency calculation
-Message-Id: <170674175669.3296177.3403969696614918570.b4-ty@kernel.org>
-Date: Wed, 31 Jan 2024 23:55:56 +0100
+	s=arc-20240116; t=1706753168; c=relaxed/simple;
+	bh=951F+J0ektV+0ETEizX5Rp38SNn0bDEwx87yfqSu1dk=;
+	h=CC:Subject:To:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=OO7cc13WTO4NqFeLm2vfRCvZFzkaOVVM4m8IYYTy3icU4HYh/DM0kmNjHQxzfFcfg+q9M/WnKzpZc12ynAYbAWgSNyIV//9p2vScf6n8eADlBZLPOLTyOJadb7AORrDHttihWPpcYzea/UViaBaFUbjcMlNiJcKilUuHihRJXOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4TQMf23gSDz1gyJy;
+	Thu,  1 Feb 2024 10:04:10 +0800 (CST)
+Received: from canpemm500009.china.huawei.com (unknown [7.192.105.203])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5506A1400CA;
+	Thu,  1 Feb 2024 10:06:01 +0800 (CST)
+Received: from [10.67.121.177] (10.67.121.177) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 1 Feb 2024 10:06:00 +0800
+CC: <yangyicong@hisilicon.com>, <f.fangjian@huawei.com>,
+	<jonathan.cameron@huawei.com>, <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH 1/2] i2c: hisi: Optimized the value setting of maxwrite
+ limit to fifo depth - 1
+To: Devyn Liu <liudingyuan@huawei.com>, <andi.shyti@kernel.org>
+References: <20240123080222.1512009-1-liudingyuan@huawei.com>
+ <20240123080222.1512009-2-liudingyuan@huawei.com>
+From: Yicong Yang <yangyicong@huawei.com>
+Message-ID: <828dc58a-6c39-c778-9bc6-0421dce40b77@huawei.com>
+Date: Thu, 1 Feb 2024 10:06:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <20240123080222.1512009-2-liudingyuan@huawei.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.4
-X-Ovh-Tracer-Id: 14987416613218880247
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrfedutddgtdegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevjghfuffkffggtgfgofesthejredtredtjeenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepffetheduffdvhfdugfffudfgjeejudehheegfeeguefhieeugffhgfeuffdvgfefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpkeelrddvudejrddutdelrdduieelpdefjedrheelrddugedvrddutdefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorghnughisegvthgviihirghnrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehjeeipdhmohguvgepshhmthhpohhuth
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
 
-Hi
-
-On Wed, 31 Jan 2024 17:09:30 +0100, Geert Uytterhoeven wrote:
-> Switch the R-Mobile A1, R-Mobile APE6, and SH-Mobile AG5 SoCs to the new
-> frequency calculation formula, to (a) avoid running the I2C bus too fast,
-> and (b) bring the low/high ratio closer to the recommended ratio 5/4.
+On 2024/1/23 16:02, Devyn Liu wrote:
+> The driver finishs a write cycle by read the fifo tx full status
+> or write limit decrease to 0. The driver starts to write data to
+> the FIFO after the I2C FIFO almost empty interrupt is reported.
+> The threshold for FIFO empty interrupt is that the amount of data in
+> the FIFO is less than or equal to 1.
+> Reduce write maxwrite to the fifo depth - 1. Limiting the number of
+> data to be written at a time to remaining fifo capacity.
 > 
-> As this makes fast_clock_dt_config and v2_freq_calc_dt_config identical,
-> merge them into a single fast_clock_dt_config.
+> Signed-off-by: Devyn Liu <liudingyuan@huawei.com>
+
+Looks good to me. Just one nit below. so,
+
+Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
+
+> ---
+>  drivers/i2c/busses/i2c-hisi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> [...]
+> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+> index dfad5bad5075..82a0c739aae4 100644
+> --- a/drivers/i2c/busses/i2c-hisi.c
+> +++ b/drivers/i2c/busses/i2c-hisi.c
+> @@ -266,7 +266,7 @@ static int hisi_i2c_read_rx_fifo(struct hisi_i2c_controller *ctlr)
+>  
+>  static void hisi_i2c_xfer_msg(struct hisi_i2c_controller *ctlr)
+>  {
+> -	int max_write = HISI_I2C_TX_FIFO_DEPTH;
+> +	int max_write = HISI_I2C_TX_FIFO_DEPTH - 1;
 
-Applied to i2c/i2c-host on
+Would it be more readable to use HISI_I2C_TX_F_AE_THRESH instead of '1'?
 
-git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
-
-Thank you,
-Andi
-
-Patches applied
-===============
-[1/1] i2c: sh_mobile: Switch R-Mobile A1/APE6 and SH-Mobile AG5 to new frequency calculation
-      commit: 5266be22421c9419ec239486c7f38bf997739fce
-
+>  	bool need_restart = false, last_msg;
+>  	struct i2c_msg *cur_msg;
+>  	u32 cmd, fifo_state;
+> 
 
