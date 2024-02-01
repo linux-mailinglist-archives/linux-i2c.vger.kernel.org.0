@@ -1,74 +1,74 @@
-Return-Path: <linux-i2c+bounces-1576-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1577-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC7D7845215
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 08:35:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DE57845218
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 08:35:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72C6F28FD6E
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 07:35:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2484D1C25102
+	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 07:35:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FEC71586F8;
-	Thu,  1 Feb 2024 07:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 941F0158D78;
+	Thu,  1 Feb 2024 07:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Xg/pO1Ap"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pCja0pvr"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3EA1586D2
-	for <linux-i2c@vger.kernel.org>; Thu,  1 Feb 2024 07:33:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2421586C8
+	for <linux-i2c@vger.kernel.org>; Thu,  1 Feb 2024 07:34:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706772834; cv=none; b=t8/XafS9mAnZj310qrGLRpnF7tKGUX85elw4l+q7VBR098s40MyCInqPl8D9eXiuZWilATPKrSkjK00BwZriyzYrqTViYAD1+ME9lJw4yxCNos3uPo2ghSEqUGYBojlq1n3OJlyE3Cqtyos5ApV0km3ilmiGK5uqjvHKWeJEA0M=
+	t=1706772894; cv=none; b=kdHzM35oXybNIlZLMO+0yUfv9PU+CRea5vmG8ypR2EF7qNF7ArZCNITkdLtNeUFPOQOgz9OOWGvoXtPD4iqi1074MADMEQYZgvohxZjcquHOj3W9f9IN13X/kABNwFN9oAleWV7QRdVV74fcpKk/6hu6ZBeyGJkLbtcslW3GuHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706772834; c=relaxed/simple;
-	bh=+l2Ag7PX16j96Ov/hwHWa1239FQ+HRP1iBdLX4+eWTA=;
+	s=arc-20240116; t=1706772894; c=relaxed/simple;
+	bh=omvxYYUVzlZlGzNuwC3pg5IItgbXs8aIOXIcPUGiF7g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=RY02BCJP8KvnylsbZSIPdmUM0/Cb5v3zy6NyDPAz1XAa6pFzEoOhfJ9fdPizWeKUQbqA9v3Riuqz8L9HYbmeUaG6/nPzfeGJHIePvIdAjbIKzD17OFZfdT84S33mhcjsH3gj3oGofiX85968hE1jFTXOUDiY5vXI1yoGJwWCB1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Xg/pO1Ap; arc=none smtp.client-ip=209.85.208.45
+	 In-Reply-To:Content-Type; b=gLPdMiC34vtmWMkiTPYn/Px36lLg5wc55E0Z2CWvRE8FT8T+QpbO8UUNfVGkzU42TYV53haQMRyywjT77eukzSfmdvbjmB5XBy3uRzcQbvZhWz3HX//ffng1vc4SN+g5gtsMKvAzJ/dsDSamiu3fCgUKIhveO6B3NAHJrAtqfV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pCja0pvr; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-55ef0465507so667578a12.3
-        for <linux-i2c@vger.kernel.org>; Wed, 31 Jan 2024 23:33:52 -0800 (PST)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a3122b70439so69671166b.3
+        for <linux-i2c@vger.kernel.org>; Wed, 31 Jan 2024 23:34:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706772831; x=1707377631; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706772891; x=1707377691; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5bhHrpfsefGDzlPnEVd7TFzEGIjcYRazdyAMstd3JmE=;
-        b=Xg/pO1ApvURlhKLNM0QWb3B1ffoogTBSOaArSMM1X/5b+FWU1BmrDtf7VnMvp+ep24
-         09LW0sCwEjoLTFlBc1Z1l10xDEPDCqS70ULTTKNuTuRQJKl02FPR8EaGiJQHtUaeEFNM
-         F/TF+DO8DzLOqFFAaPKHPfc2x8XgCs/5sxe+zlG7m2Ewc4/BD+Lfjpg7tBuVJLW0GfSg
-         n3S1XVW7lJAzMRxBNZXLWpvsW5b6A4cbJV8OfSjg7Ihv58TMc4tzpN5A6nMBUzkQzR2X
-         9zOVQl1zZ4OZiXwPXoPiTdxTrEbLU0XsaR8DOdkzOmOhtqtpSKD7y+i/TL6aw53IodnS
-         QXCA==
+        bh=UtV5UaZkBV/O98jA24IeLSwwKAMs6w3Dse18asYSD/s=;
+        b=pCja0pvrLA9Bk+URJDOJ/apBVKszBhxV10uzzBM7viUTVPXuZIs5Lgsb19fEUhqoTp
+         SZv13SuKWfD1M2wQWb4J5UUL1+h+JiR7+noLB8Cp36fjkM5K07arwu4g9P7gXOKRvCy3
+         pYcaVngCrPVNBcAuTIpcc40QyNvTqh0L1cV8A6mbtLDaaX0abOa/2vZ64QNsktJc720D
+         NVcFN1xUXECF1x3CT20pcI8PW8yBbJqrEgQiQz/C8W52qJb6Zvs12qN+eQEcmsTuLimv
+         //MQzc8MQ8BThyovLSnTFZhKuINt3CtyQ+ohesXxX1K6u4OZvXULNoOd3hYY+JfOwsPW
+         i4mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706772831; x=1707377631;
+        d=1e100.net; s=20230601; t=1706772891; x=1707377691;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5bhHrpfsefGDzlPnEVd7TFzEGIjcYRazdyAMstd3JmE=;
-        b=foUdZq6hiiBntf9j0IgjWHlCggYnhwRU5JSMyxSLcXHkizddhAs617O8kaBhfYfXac
-         PV2Uo2cErNski94JKW1/yEhzkYlUXctWqYyYdLEi8cNuLl9J9IklTrdp8iGRY6+dM1Zw
-         Bm3Zfi+511vPDYKhdtDrEmwrCoQlspNkuaWg2opqi1qAkBNjtUzzqD9kyKt3oD99AwD4
-         zULVHB6J6Rk2F3xVjHI39h5FSECOM8Jo0riw+IQG4KR70hEULjOZHW699SG5LZRNWVAM
-         ymzrtw+2f5esUkx39+gEJnT/KsbeB75mq8ucXdOC/9ZL+aKZG34IY0MDrjFjoez9mOEN
-         ixJA==
-X-Gm-Message-State: AOJu0Ywi080b/FbPDeOFdVPArLk9zHwwOzHzvFQy0FcKLtaXzYQljwwX
-	Ku8QFfreHm67SifE805jr9/YGx5LSrp/Znc5Gm5Du5IYXitoyv8gzoL6FO5WSRY=
-X-Google-Smtp-Source: AGHT+IGfUC7SaoWq03EXY79Tj1+PRlpzWgfNFGy0dKh7FelV7UWKCaZTOgiWOtumoPm/ca+A4Xdn1g==
-X-Received: by 2002:a17:906:ff53:b0:a30:f4a2:5688 with SMTP id zo19-20020a170906ff5300b00a30f4a25688mr1089269ejb.1.1706772830870;
-        Wed, 31 Jan 2024 23:33:50 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVl/eANfocFl7Zfj5p9HB6h8o5t43trQRVW02PggdwOwb5yPn56NonJOhL+DMASe4xZQ69I7puHdbllIj59J/AFbkCbGK89pJ5in4sVfSb98fdQGhNWEiwYK7C3uEoXJ+eFN4Xf6qcnfA+aAFi8HRc2ozKaz5N7FDj5a+rtz0MTcbvGFwRYi1n67rwMIxMH48cGarxpTD05y/1aJKH3B4iyvjzFV+DEPutrbZjSE2i3Nsqpp1iPjOHl9G/3SGOO38R09KwSCLkmJv2oU3gcvcNv+1f7yRs9iVMEcgk86yTEwrmJJkMSJCEvAXPrJbHce8LPI5ali7T30i+dXO3H2sxaVmIlMezp2nx8rwTeSwB+smzvQDRzq1a3AFLmwcdvooV6/2uLLbooiDspr8sACZ55hkvPDXZursEk9xGH22BdMzQr2S/X1PMVYQjnDr+pDzt/5BVTKRhvS/uAVP6zDBalerF87XPqyDo5M+L9d/KQimripEVkJopr2GzMV5pxdmxVffSM1J9Z+kpQ4U80x/Qt
+        bh=UtV5UaZkBV/O98jA24IeLSwwKAMs6w3Dse18asYSD/s=;
+        b=DUpauRPF3oe/P8X/0gCxJmM66jur5eKokTE8fYNrycx0uU6PAgKmRBcTFXSimBqWnl
+         c383bLUyf31BgtZYl5xdUNMcwfPW0pfLGqys95lj4+O8l0CPkrF/Y7/n3HhYxBgE3dLi
+         eFmrLW2vz2BhCvEWC7nWd6+LK7Ge4ThpC6HM7UziYQi7DOuCrwJumktIgkpjD1O+z75z
+         0OoEVqs0ueOpvh6uZW0y5VZzPsuv2ZMBFh6D3pjcEr8s9eRa0mtJZZiwpPYth3C4KmWR
+         Edyv/fVCjfYB/LS3u1jGYsc4MhuPszjmiOuAGGHK0DeMRqYh9bVuGjtrdtC8U3rKEDlr
+         FFJA==
+X-Gm-Message-State: AOJu0YxtNV8mhu7ogzl5x+rb2Sa/fFXe0DKxx5BhsgsjoxpE0z6fgFry
+	ao8eM4upVpzOX9kiqQZT4rx0c+S7TMw3lR59riH/wtvzVkKmOhnAjJ7w6Iug8k4=
+X-Google-Smtp-Source: AGHT+IEI865AQKJCC9ukvAzwdj1LCnq7rbIiaYBs0SWcbAE8pnG/riFO2ce3yzMWUPNI9ffNlnjWjg==
+X-Received: by 2002:a17:906:35d8:b0:a28:ec67:185f with SMTP id p24-20020a17090635d800b00a28ec67185fmr2809335ejb.60.1706772890806;
+        Wed, 31 Jan 2024 23:34:50 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWBYAzr1O6DzSnGY9lCpfJUuluBb6TpJN42UMf0hjku2Q/zrCF3RB2qCNxSqRERsxUwXP68SBGb0C6g+mA/Tj2YdrRX1evv8DVeXKHEJlWGbRgVLmWx09GIWVlFssKBc/WB0TG5CV++wNXfBjzTS3nT/NFNp4HTEp/gx7G89qFdVvbI0qvJwbPjYyeBVq8+SWWkXqHQ5CW90LPUXpJgXsuiV25ouRw9CWOL/xByTyjLbApqy3/8sadmmOxMIJ+swsBueewIUba6XtJ3BtbkmW6aDSYEEgYERatBFP53WTcxduTH/W3jxljtfq/rCs6H0BdjEcJNEWSQarTSTRbsld4Vo8DKekUv43N0WmzOuniIDreAvwqTiDLBxQoMEfgEpMf7Ut9c1jGmAAxmJysvFiyFo3nfh2p4mgU9p4LAf3L7wA/9Gnm/fAppYurgdtNHhQtAfcCwHLDBdROE/JgFeC33Jhf30I+I1t05i7jDnyeEFwvad09wnQKdq/G1AyWLXC+TnXhI70xy0pujG0haSpow
 Received: from [192.168.1.20] ([178.197.222.62])
-        by smtp.gmail.com with ESMTPSA id tk3-20020a170907c28300b00a35464aab3asm5732191ejc.97.2024.01.31.23.33.49
+        by smtp.gmail.com with ESMTPSA id tk3-20020a170907c28300b00a35464aab3asm5732191ejc.97.2024.01.31.23.34.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Jan 2024 23:33:50 -0800 (PST)
-Message-ID: <00f8ae5d-5556-4ef6-9bb9-d1cdac5bea9e@linaro.org>
-Date: Thu, 1 Feb 2024 08:33:48 +0100
+        Wed, 31 Jan 2024 23:34:50 -0800 (PST)
+Message-ID: <b4b2ec92-b0ad-4702-94a6-ac128181d801@linaro.org>
+Date: Thu, 1 Feb 2024 08:34:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,8 +76,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: i2c: designware: allow fine tuning
- tuning waveform from device tree
+Subject: Re: [PATCH 2/2] i2c: designware: allow fine tuning tuning waveform
+ from device tree
 Content-Language: en-US
 To: Aahil Awatramani <aahila@google.com>, David Dillow <dillow@google.com>,
  Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -90,6 +90,7 @@ To: Aahil Awatramani <aahila@google.com>, David Dillow <dillow@google.com>,
  Jan Dabros <jsd@semihalf.com>, linux-i2c@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20240201044623.374389-1-aahila@google.com>
+ <20240201044623.374389-2-aahila@google.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -135,38 +136,33 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240201044623.374389-1-aahila@google.com>
+In-Reply-To: <20240201044623.374389-2-aahila@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 01/02/2024 05:46, Aahil Awatramani wrote:
-> The Synopsys i2c driver allows a user to override the parameters
-
-Driver? That already suggests it is not suitable for binding...
-
-> controlling the waveform using ACPI; this is useful for fine tuning when
-> needed to make spec compliance. Extend this support to the device tree to
-> allow non-ACPI platforms the same capabilities.
-> 
-> Signed-off-by: Aahil Awatramani <aahila@google.com>
-> ---
->  Documentation/devicetree/bindings/i2c/i2c.txt | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
-> index fc3dd7ec0445..3c33c36571f9 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c.txt
-> +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
-> @@ -45,6 +45,24 @@ wants to support one of the below features, it should adapt these bindings.
->  	Number of nanoseconds the SCL signal takes to rise; t(r) in the I2C
->  	specification.
 >  
-> +- i2c-scl-ss-hcnt
-> +	HCNT value for standard speed mode in I2C Controller.
+> +static void i2c_parse_cnt(struct device *dev, char *prop_name, u16 *cnt)
+> +{
+> +	u32 tmp_cnt;
+> +	int ret;
+> +
+> +	ret = device_property_read_u32(dev, prop_name, &tmp_cnt);
+> +	if (ret)
+> +		return;
+> +	*cnt = tmp_cnt;
+> +}
+> +
+>  static int dw_i2c_of_configure(struct platform_device *pdev)
+>  {
+>  	struct dw_i2c_dev *dev = platform_get_drvdata(pdev);
+> @@ -146,6 +157,15 @@ static int dw_i2c_of_configure(struct platform_device *pdev)
+>  		break;
+>  	}
+>  
+> +	i2c_parse_cnt(&pdev->dev, "i2c-scl-ss-hcnt", &dev->ss_hcnt);
 
-I have no clue what is HCNT, so I expect you to help us understand what
-is this and why this is suitable for DT. Your reference to driver
-suggests it is not suitable for DT.
+Please post your DTS and post results of testing it against bindings.
 
 Best regards,
 Krzysztof
