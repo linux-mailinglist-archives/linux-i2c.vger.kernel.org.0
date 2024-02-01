@@ -1,76 +1,96 @@
-Return-Path: <linux-i2c+bounces-1605-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1607-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B11668462A0
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 22:31:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13BF18464EF
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Feb 2024 01:13:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D61A1F24334
-	for <lists+linux-i2c@lfdr.de>; Thu,  1 Feb 2024 21:31:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46B761C23FBC
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Feb 2024 00:13:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D0A13D0AF;
-	Thu,  1 Feb 2024 21:31:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ViXrHEOW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D20DA15AB;
+	Fri,  2 Feb 2024 00:12:58 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 5.mo584.mail-out.ovh.net (5.mo584.mail-out.ovh.net [188.165.44.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 244A93D0A4;
-	Thu,  1 Feb 2024 21:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1B415A5
+	for <linux-i2c@vger.kernel.org>; Fri,  2 Feb 2024 00:12:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.44.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706823085; cv=none; b=g0Jb2teSOahNKFQ8wquCesOEJPj75rwsNgEBX/Npj2HczPmQcUqLI9q1asDf5RqQkph2mYh8vLsere9NGKH3kiUqkFhnDFpalWyksonMbQTFAgkRmtNLvU0a17vOy4ZbdaKmd0C53Ix3p8KoLdlCD80V+2tLdzuw1Ch/079Y9Wc=
+	t=1706832778; cv=none; b=M95y7N3uxznjnXY2K8CN/6hQx7SG0QhJ+uOODQLH2VEU8oYCVakRmoA5/E1/L0NjRAGBeQye1Ygu5nwkPpeJZecsIq4aDd29pf/Mgzzynqqq2MWma/WYmV9Gp6BiXufubUvFEbAfS+u/t1DNt3N9550r2FVcNp1zOyqcL0bVy64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706823085; c=relaxed/simple;
-	bh=zCGwWu2bOg9jz3i7zKwlejA4b+KeB3Jj+XHu4j5HP0c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AYNDAebKOnHNdR3f6yMdk53Df13BuKowU96UlG8A3dGC+QMlWSv0+vyP1RRfS4kq+h/hupnpWvu4GpgacE3O9oIpmoQXn5/OJwSWx6GVKhAvaxxuA7yzMA6W034q4heehSezHoFDY4LAxjHJuq/t9k9+CgLeEshCjdbx/aOyTP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ViXrHEOW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F289FC433F1;
-	Thu,  1 Feb 2024 21:31:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706823084;
-	bh=zCGwWu2bOg9jz3i7zKwlejA4b+KeB3Jj+XHu4j5HP0c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ViXrHEOWwR9G4iXP0iyvq/rlm9pEKxlrSiD7YVioCGcTHmwZZcwlaN18aNlU3rXdI
-	 d6xT3RY9rj8ldO2DKDD6/X4ScB7jioTyzP03rdvf3lh99g7eVaOG79TtFBcCdzfcuZ
-	 1ZbCu/xk32mP2Wfwh/qK3qZHcqCHGKXwEfj1olL9G0vPobUQuiaaDsZiISN7bX0jf5
-	 0x6zSZ1XAco+7kNSDPZF/mjNxaVJXJZqxbR8GVm30LIabfdherQ0zMc5yKE8lwjwWj
-	 nejLlYvtvA1AQHOfnAKAtIbXfzn9NFEBaU6Fwj5yks8QxFZ3q0XXPxWwB2gqN/7+Iy
-	 iySPr1GvPk7Eg==
-Date: Thu, 1 Feb 2024 22:31:20 +0100
+	s=arc-20240116; t=1706832778; c=relaxed/simple;
+	bh=ja821KrifeOtFVHPJ+9i5EO0qr674NBfKKBH97DNeNE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=PrhqRNr8kGPaudVKi5nlLE/xXuPuMcgHAV03WLjYAu7dyswhOY277V/Cvo9T5Rf+0V/x3cAFpWyOwa7vYscu7XZd0KybEhr9Z+KsJC5Y3BagxK7wEHgEt/wS8KRt09QvYwJqTl3MTMan7GM4ik4AVJ/27frX0IUKFUyJS34CUf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=188.165.44.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
+Received: from director5.ghost.mail-out.ovh.net (unknown [10.108.2.55])
+	by mo584.mail-out.ovh.net (Postfix) with ESMTP id C292528B4A
+	for <linux-i2c@vger.kernel.org>; Thu,  1 Feb 2024 23:33:38 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-2gdsq (unknown [10.108.42.63])
+	by director5.ghost.mail-out.ovh.net (Postfix) with ESMTPS id BAF401FE52;
+	Thu,  1 Feb 2024 23:33:36 +0000 (UTC)
+Received: from etezian.org ([37.59.142.106])
+	by ghost-submission-6684bf9d7b-2gdsq with ESMTPSA
+	id yX9DG1AqvGVeIQAA5wC6tQ
+	(envelope-from <andi@etezian.org>); Thu, 01 Feb 2024 23:33:36 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-106R0063d639488-3c4d-442d-b4bc-ee04ceb04c76,
+                    16159D31D4BC2DC989EAC12674B0EBCF52923421) smtp.auth=andi@etezian.org
+X-OVh-ClientIp:89.217.109.169
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: renesas,rcar-i2c: Add r8a779h0 support
-Message-ID: <3b3yc5phep7j3dgooaickcfegem3wicupwlespzlihbsojigue@yen737m3g2iw>
-References: <b83a745334b0aea8bffae5a41db2543100ad5e30.1706789816.git.geert+renesas@glider.be>
+To: Devyn Liu <liudingyuan@huawei.com>
+Cc: yangyicong@hisilicon.com, f.fangjian@huawei.com, 
+ jonathan.cameron@huawei.com, linux-i2c@vger.kernel.org
+In-Reply-To: <20240201061345.3111600-1-liudingyuan@huawei.com>
+References: <20240201061345.3111600-1-liudingyuan@huawei.com>
+Subject: Re: [PATCH v2 0/2] i2c: hisi: Clear the interrupt status and
+ optimize writing limitation
+Message-Id: <170683041545.3022989.8699813586542251748.b4-ty@kernel.org>
+Date: Fri, 02 Feb 2024 00:33:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b83a745334b0aea8bffae5a41db2543100ad5e30.1706789816.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.4
+X-Ovh-Tracer-Id: 3049499900862466574
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrfeduvddgtdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevjghfuffkffggtgfgofesthejredtredtjeenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepffetheduffdvhfdugfffudfgjeejudehheegfeeguefhieeugffhgfeuffdvgfefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpkeelrddvudejrddutdelrdduieelpdefjedrheelrddugedvrddutdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorghnughisegvthgviihirghnrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeegpdhmohguvgepshhmthhpohhuth
 
-Hi Geert,
+Hi
 
-On Thu, Feb 01, 2024 at 01:18:51PM +0100, Geert Uytterhoeven wrote:
-> Document support for the I2C Bus Interfaces in the Renesas R-Car V4M
-> (R8A779H0) SoC.
+On Thu, 01 Feb 2024 14:13:43 +0800, Devyn Liu wrote:
+> Devyn Liu (2):
+>   i2c: hisi: Optimized the value setting of maxwrite limit to fifo depth
+>     - 1
+>   i2c: hisi: Add clearing tx aempty interrupt operation
 > 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> drivers/i2c/busses/i2c-hisi.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> [...]
 
-Acked-by: Andi Shyti <andi.shyti@kernel.org>
+Applied to i2c/i2c-host on
 
-Thanks,
+git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
+
+Thank you,
 Andi
+
+Patches applied
+===============
+[1/2] i2c: hisi: Optimized the value setting of maxwrite limit to fifo depth - 1
+      commit: 69dc3880100288972fe341c2c59c40fdecf511f5
+[2/2] i2c: hisi: Add clearing tx aempty interrupt operation
+      commit: 2f9af34c79ffd97858649822e1730ead2a31f6c6
+
 
