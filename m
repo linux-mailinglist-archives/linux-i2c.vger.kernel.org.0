@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-1609-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1610-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCA8D8468E8
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Feb 2024 08:03:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DFF68468E9
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Feb 2024 08:03:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 946D928C850
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Feb 2024 07:03:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C943528DC92
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Feb 2024 07:03:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7D3618C08;
-	Fri,  2 Feb 2024 07:01:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5711B18E11;
+	Fri,  2 Feb 2024 07:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HgQF1an7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fRleRLL4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D9718AEE
-	for <linux-i2c@vger.kernel.org>; Fri,  2 Feb 2024 07:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882EE18E12
+	for <linux-i2c@vger.kernel.org>; Fri,  2 Feb 2024 07:02:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706857303; cv=none; b=HWznp3EXm4XYNHqmfqQHVldzLcHc2W9jy5rx3pHQTGNR9ArMwP6sgd8Q/2JUTUAU6DXA/PZY/oZ/1YX8rqvqTkQDJdvD2eDCSNUxleu4rywQpLpyjo5D3+YKxGHTczIksBk1rXM6EbavbRVH7zWFj7GuFzgDV/4HA5GyvxOTyqw=
+	t=1706857341; cv=none; b=QhfPAtsQaovR4nQwRbY0j4tj6hKws7h9BNxAypVSPUVFv8zRai4/CyIIXSY9yGTO+a5vMM9BshWYs5PH/wL8UJkQgLhWh478Cv3BF7gtzNjaLeSyfaKunfDyvoOhVLWgYKxf3jNsYVgaGmKJgzkNaaxehok9eMGuO+hO90E1uZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706857303; c=relaxed/simple;
-	bh=owVQLKr6rpnxB3Phw+LfqRTsk/Ggy2NJGYylyhXqk3k=;
+	s=arc-20240116; t=1706857341; c=relaxed/simple;
+	bh=fve07InBj9wYw56bY6g1yshIjEjacjDwh16fxJqt19M=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=cznzjiHQfVy8Ror/8JQivDWeZzd82OaSS/th1W1Fnwt4HNdAgVvhIJlXZANCbN9HNRoDkc6vOtx5E4pbCqroWROc1oaxVD6QGPtyq4wKWmrjHAvASOg4W2yGmZeRDiC+iYDtUvx5fMfctpETwe7kC1KqyJOn20QJ4a0MvSv72Dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HgQF1an7; arc=none smtp.client-ip=209.85.208.53
+	 In-Reply-To:Content-Type; b=FnQfGqIanbeAQPBLVL8tm0G2bJS0rEacl27NZ/f8dcCslMnzdD9fXlYghtxMYsF+zRWKxrxXZqBMnfwLIiQSu4CCIi5BcAsvXAM+2OE3jRHyj5MFOsDBK4jZ5Fo9uC4EYOxK704gwg+KdW7poac2ikEiYv4SlN9gaLoJAVg+J0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fRleRLL4; arc=none smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-55f15762840so2128339a12.0
-        for <linux-i2c@vger.kernel.org>; Thu, 01 Feb 2024 23:01:41 -0800 (PST)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a364b5c5c19so290576866b.1
+        for <linux-i2c@vger.kernel.org>; Thu, 01 Feb 2024 23:02:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706857300; x=1707462100; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706857338; x=1707462138; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=0HjmSHBbMzkUICJtwESwKX7/y9Aw2qA4XC0RG+MyGE4=;
-        b=HgQF1an7NOZIPjHdJVgrjrHcmj4dZnyxRCAFMCDplWDOV1PnQhpio9uX90HG1UGkG7
-         3V2pzaLXddsNxFG1vuKH/f+rE8ATyOljRQ5Uirx7zd2GdSuKv7YxC8z/jtblBzpgvVuj
-         Nx/rQ5pl6veu/z/ri90j6w9mZqQ/Il6N6W6TQ7SEplc3fEh92xZ16oighKFrnGwGL869
-         kc65l7oZHTjrd4+26bfFmXeytt0IjBGeteEef/u9Nen4A/4kwaQlhJ0VVtUqdyQhsTcs
-         kDywgu9pgIsa8CFVCfXoaBhzLvyPlD4m5v7faVL/tCn26uCAm7+6K9KE1+WU2jb/hqyA
-         Wa9A==
+        bh=cnOacyhJglkzROB1Zm6vEH9B1X6rxEKHJsPgyQcXjH8=;
+        b=fRleRLL4dIVni2+1yD5RQvQ2n6EdgebK6aFdaEZa+QhqGZjW+8r3bU/Mezs83B0ewL
+         1/zoIQbKckY2ROluO/esMf5OISx++vRzUwtdYPq9kID9bZvmFv2/bq1a4OTQUSiynHD2
+         xD75gncVykvYq9+DyUXsEgPyfBv9OGuREjV4nGo7aTC2xaJLj6HVdDV51eAaED2ssfhH
+         vipAtVCt/SZf+EN4qrZnH6vb1o6ommtVHu2qWRT9ZAL7JQHc1XPETL98LbvlR5jHQM9r
+         oV/MiFk/cpDmFANld4jbwYbzvw0oNBoze/Dqph3VlP5BDUFORFEes3SyiVIgVkvTtnR0
+         MYUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706857300; x=1707462100;
+        d=1e100.net; s=20230601; t=1706857338; x=1707462138;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0HjmSHBbMzkUICJtwESwKX7/y9Aw2qA4XC0RG+MyGE4=;
-        b=jFYA7pKqsYlylMJ4+6YLDXDvoGqIpkjAZwcuNY120tH0SjQZtP56reLwNiFI+UsXY+
-         xSWAnXCYa2whM+t8bJxF1XJf065j4GDkIduFddI5MtR12Pnemih8twUKJ/FQLV+OcO52
-         uZ2onn8qTSRpfeaacF8a+ol7ggOvRqpANs/TtByhcc8tYQ3cWMfT9t9GMF5pnIkMe9Wj
-         3SBhZu8+Mo3OfEHt7E2foBsU/sG5gBLrgoJ1EXixmrYtO24zalhUhtSxYI8Gv3x9mV8Q
-         yw6458lPofy+QuHEsRCTxJp7a0zOBRVd78AK3pyNNqrbiDI9J7eDAYCsK2Ze5kA/zvAu
-         u2gg==
-X-Gm-Message-State: AOJu0YwesgOUd0Go+LJ7lnJNYY0SeUku4FES5V5WA75AUGbVKWv3WVD/
-	9wOtpAYKuFzyuqdwF41aqKiwRqnO12hWHryeI2+AxyI8raph85rGJgFdNq2F
-X-Google-Smtp-Source: AGHT+IEZLEjTBVJtEy4LJ0UkzAMZmIgehOE1sZPx4F8glLhU881knXD73IaVBJpLSJvBtZbIVGKMZg==
-X-Received: by 2002:a17:906:e0d7:b0:a36:1240:71d with SMTP id gl23-20020a170906e0d700b00a361240071dmr4851282ejb.53.1706857299586;
-        Thu, 01 Feb 2024 23:01:39 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWNQWEuIyLrnF4cTZVlJViV3CfkpMfeFDYoCyJkjYJun6fzDR6griguflHoqeV04KJbcSkTGP1N/EPpGTL5BQ9hx/wVRf6lhB0WOg6ztIYiJmq5049ulDliy+WrKW9ihajbNn31mM2yPg==
+        bh=cnOacyhJglkzROB1Zm6vEH9B1X6rxEKHJsPgyQcXjH8=;
+        b=u8kNjpqcl8a0djJ6WZr6FJ4sQTLm4ypBFcX7y+oe14ciLryQWQirC/Cde7cGT9eqae
+         /AzPfVV76VbUF8K7Fa99GZor8sAwwgDgVUUPajSyGEk5uSThpmLubMkXsHIRKIyfiPW3
+         HdxtWi5OaLj1swurM2CKiajqQUFShloCEsiXkFUrpwJMZtBZCOP2i+YMNy7Bs0BnXAVy
+         Lz9HAe7LAByqQWpzYKRbnVFAnfUD9KSGyI+D+OQa19t4/9C3/5PS4luJo06GBhawKLqM
+         ZDPr1e4IschTFKj2fZI4HQFRIBkFC4iOn0NExvES36ej/qzjqqYJwxhwNuG57my9Mw/R
+         Ckzw==
+X-Gm-Message-State: AOJu0Ywh5lZ6hiWt/xPU5LpMnIGcAlAqXc9kos4wqFF/X13VAJoUR3v7
+	QansKor0ZPlmQSoquAsjlUPm2O9FYCtBcEbFufnBCCJdr3FnvM/zMtcj8obK
+X-Google-Smtp-Source: AGHT+IGkgilOMrh+kOrz0Xzsh+mCkYYuow4rCfb/pFA4oZKFOgP0vu0Tan3Los+eaiH63BEXoYIprg==
+X-Received: by 2002:a17:906:e0cd:b0:a35:3bed:6cb4 with SMTP id gl13-20020a170906e0cd00b00a353bed6cb4mr4864758ejb.66.1706857337576;
+        Thu, 01 Feb 2024 23:02:17 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWNPtJCPkcJt1Wn3u8BzMqEhdynRfeD/eM8JNyw4QjuHOmVaE5jrthrSHva4+KKe4ULB8mRzTRULiTULJvgPoTRiPjf92hB/BteBTA7i4k7IGB5XJWD0l69r7KuKSXxymxRw/Z60AFT5A==
 Received: from ?IPV6:2a01:c22:7392:d000:5c1a:bcfc:a8a4:5bea? (dynamic-2a01-0c22-7392-d000-5c1a-bcfc-a8a4-5bea.c22.pool.telefonica.de. [2a01:c22:7392:d000:5c1a:bcfc:a8a4:5bea])
-        by smtp.googlemail.com with ESMTPSA id c3-20020a170906340300b00a35a659cab5sm563728ejb.179.2024.02.01.23.01.38
+        by smtp.googlemail.com with ESMTPSA id c3-20020a170906340300b00a35a659cab5sm563728ejb.179.2024.02.01.23.02.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Feb 2024 23:01:39 -0800 (PST)
-Message-ID: <35e178dc-120f-4035-bbb2-85417d2f2c4d@gmail.com>
-Date: Fri, 2 Feb 2024 08:01:41 +0100
+        Thu, 01 Feb 2024 23:02:17 -0800 (PST)
+Message-ID: <e97f8214-bc10-4cdb-8ac4-788c4b4b6f88@gmail.com>
+Date: Fri, 2 Feb 2024 08:02:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,8 +77,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH v3 1/5] i2c: i801: Define FEATURES_ICH5 as an extension of
- FEATURES_ICH4
+Subject: [PATCH v3 2/5] i2c: i801: Add helper i801_check_and_clear_pec_error
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
@@ -132,33 +131,84 @@ In-Reply-To: <4e4ec801-474c-472f-b90d-edd1efd68d24@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-This change simplifies the code a little and makes clearer that the
-ICH5 feature set is an extension of the ICH4 feature set.
+Avoid code duplication and factor out checking and clearing PEC error
+bit to new helper i801_check_and_clear_pec_error().
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 ---
- drivers/i2c/busses/i2c-i801.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 38 ++++++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index b9b850b69..44ae6326d 100644
+index 44ae6326d..156bace92 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -969,11 +969,10 @@ static const struct i2c_algorithm smbus_algorithm = {
- 	.functionality	= i801_func,
- };
+@@ -328,11 +328,27 @@ MODULE_PARM_DESC(disable_features, "Disable selected driver features:\n"
+ 	"\t\t  0x10  don't use interrupts\n"
+ 	"\t\t  0x20  disable SMBus Host Notify ");
  
--#define FEATURES_ICH5	(FEATURE_BLOCK_PROC | FEATURE_I2C_BLOCK_READ	| \
--			 FEATURE_IRQ | FEATURE_SMBUS_PEC		| \
--			 FEATURE_BLOCK_BUFFER | FEATURE_HOST_NOTIFY)
- #define FEATURES_ICH4	(FEATURE_SMBUS_PEC | FEATURE_BLOCK_BUFFER | \
- 			 FEATURE_HOST_NOTIFY)
-+#define FEATURES_ICH5	(FEATURES_ICH4 | FEATURE_BLOCK_PROC | \
-+			 FEATURE_I2C_BLOCK_READ | FEATURE_IRQ)
++static int i801_check_and_clear_pec_error(struct i801_priv *priv)
++{
++	u8 status;
++
++	if (!(priv->features & FEATURE_SMBUS_PEC))
++		return 0;
++
++	status = inb_p(SMBAUXSTS(priv)) & SMBAUXSTS_CRCE;
++	if (status) {
++		outb_p(status, SMBAUXSTS(priv));
++		return -EBADMSG;
++	}
++
++	return 0;
++}
++
+ /* Make sure the SMBus host is ready to start transmitting.
+    Return 0 if it is, -EBUSY if it is not. */
+ static int i801_check_pre(struct i801_priv *priv)
+ {
+-	int status;
++	int status, result;
  
- static const struct pci_device_id i801_ids[] = {
- 	{ PCI_DEVICE_DATA(INTEL, 82801AA_3,			0)				 },
+ 	status = inb_p(SMBHSTSTS(priv));
+ 	if (status & SMBHSTSTS_HOST_BUSY) {
+@@ -353,13 +369,9 @@ static int i801_check_pre(struct i801_priv *priv)
+ 	 * the hardware was already in this state when the driver
+ 	 * started.
+ 	 */
+-	if (priv->features & FEATURE_SMBUS_PEC) {
+-		status = inb_p(SMBAUXSTS(priv)) & SMBAUXSTS_CRCE;
+-		if (status) {
+-			pci_dbg(priv->pci_dev, "Clearing aux status flags (%02x)\n", status);
+-			outb_p(status, SMBAUXSTS(priv));
+-		}
+-	}
++	result = i801_check_and_clear_pec_error(priv);
++	if (result)
++		pci_dbg(priv->pci_dev, "Clearing aux status flag CRCE\n");
+ 
+ 	return 0;
+ }
+@@ -408,14 +420,12 @@ static int i801_check_post(struct i801_priv *priv, int status)
+ 		 * bit is harmless as long as it's cleared before
+ 		 * the next operation.
+ 		 */
+-		if ((priv->features & FEATURE_SMBUS_PEC) &&
+-		    (inb_p(SMBAUXSTS(priv)) & SMBAUXSTS_CRCE)) {
+-			outb_p(SMBAUXSTS_CRCE, SMBAUXSTS(priv));
+-			result = -EBADMSG;
+-			dev_dbg(&priv->pci_dev->dev, "PEC error\n");
++		result = i801_check_and_clear_pec_error(priv);
++		if (result) {
++			pci_dbg(priv->pci_dev, "PEC error\n");
+ 		} else {
+ 			result = -ENXIO;
+-			dev_dbg(&priv->pci_dev->dev, "No response\n");
++			pci_dbg(priv->pci_dev, "No response\n");
+ 		}
+ 	}
+ 	if (status & SMBHSTSTS_BUS_ERR) {
 -- 
 2.43.0
 
