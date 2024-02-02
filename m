@@ -1,75 +1,63 @@
-Return-Path: <linux-i2c+bounces-1613-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1614-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8756846901
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Feb 2024 08:06:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 042FE846E28
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Feb 2024 11:43:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 615332960F8
-	for <lists+linux-i2c@lfdr.de>; Fri,  2 Feb 2024 07:06:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CF491C25B73
+	for <lists+linux-i2c@lfdr.de>; Fri,  2 Feb 2024 10:43:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED28617C60;
-	Fri,  2 Feb 2024 07:06:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2ADF13BEA7;
+	Fri,  2 Feb 2024 10:43:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RpFmY5E+"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HEd8nRDl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297AB17C67
-	for <linux-i2c@vger.kernel.org>; Fri,  2 Feb 2024 07:06:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6CF813D508;
+	Fri,  2 Feb 2024 10:43:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706857592; cv=none; b=FmO6lAw8ny99GHLPq2svkZOZHTuuMAPEy6k+BSpZilH6Skr1P4ZrUxN4Qf7S+K6h7ct16j51ME73RwLW9NTQD8Oq1p0U8ONKJTzIYmLwvcW7aDK9BCYCjS81rPsgJLi7gVx2GnP6bONzb9Op3M+oQSYO29p7bMQ0ejlti1g5xRo=
+	t=1706870600; cv=none; b=E+RgF9q0bealRcQJmt65srMdH89E891fGBPX+0cyklaBQlZyyTli3qAYdYVgPmboBIp/nSZR9rRYlefL8ivVqHCSfrDYihY964/rTglYpC82SPvAonuA3D0DbCje5p49kX+Qm2taBX8BW7LI4QVu0NsN3G/1QI+3g58wU0fvqqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706857592; c=relaxed/simple;
-	bh=dJWpJxmWVYgcHkY3YoLw4L9O6QS4Xq/IR5XUlCyZiAA=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=hZ6RmIbfywzYc68vaDIur7mYRB+toOm+1OvxIWj1QpgIYWlQyPJwYE3XZ4SA2SOM0Vcx76AhsyTNMx6Sx79zxf3OLyXZ57YcCIGHec3Kj60gKlUh4MpXJnJdKEa5RwZlLrmwJ5tUgjEHG3yuIWCb4rvh4zIqqeHzX41FRBMhvkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RpFmY5E+; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a3604697d63so266565066b.3
-        for <linux-i2c@vger.kernel.org>; Thu, 01 Feb 2024 23:06:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706857589; x=1707462389; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=2P+2nWu3iGITgq75CUIQnkUJLgdxtzlwZ1tx/cks1Mw=;
-        b=RpFmY5E+4DQC4pdMvFLwJnb0h8kH5D/s/AZSPSEorwDXW/LIp7TOVCXSXdnssAjFwh
-         tx9hLa7TfnBTUZIP8vbj5vkfpzGNwVS0Uvd96eo9oTlPOBGVnFN3A86HfgjnrlMfunuz
-         P3k+nKBSi9Unpk+TOE51ZnhZB/ETMu5/T+NfArcLRl/Y/0BQoDsm0x+N1RuJORNVK/AE
-         8LSb4wPd2Cv8H0LHtRJhhfKVcdgDrUMIMCjm+l/rFzFUmDvk10fOZ1cjg2J6gUq4AiyP
-         kw0tkPWSTp8pbxRb3jAJmOK4XKQzGBrb3EnSYAYAizkr5l3Pnh+QdGsJ9MOxDdAUASyw
-         iXmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706857589; x=1707462389;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2P+2nWu3iGITgq75CUIQnkUJLgdxtzlwZ1tx/cks1Mw=;
-        b=jdKvLIy73SSj4cih4fS2fa73L7iieWkRIroIlGRk/c6BOr55y9MfgLYBzK8idTu+WF
-         TJkkMEmPNHoNnOdQ4Qx7xkXKe6vIsDVGs1Q7iBe4MhN5oYOv97VZrRPEwQvE3MmKidHD
-         NO6OvJ7IHxPP+p0cC+yKG4BU7+usmh0e+C+/pDm8VNIMPixLNXv/qY19O4cvAE54d/pU
-         I6T21c9XaIPoU1PZZqkzBNlOLMzumVBwQealC+BjbxJzTtF+qwmprDK2kVt9z1wmiHV2
-         x2fAdSp6QT3jVQeNX1CFguzhaPsY9xKHt/tbEIeeB6R9BREf0Ocs7EjW+cEZqD/d6LL9
-         H7bw==
-X-Gm-Message-State: AOJu0Yy/nh2NozWyMtdnBjBD1O2kT8TSmHk0BCgKR2sLmHMGgDrwLUdz
-	zsxOMw1t0L2ptitJxCVTIT0+QYkGObuszl2H6OJ4j4Rtb4bFScxx
-X-Google-Smtp-Source: AGHT+IFkEvNW0LIlSKYB5s907dm1q0yVmS+N5y7lEP3MfcIqf9bZV4f+9YR+AUrP5+C2UOcW24Bg7A==
-X-Received: by 2002:a17:906:bce7:b0:a31:45a6:2bb5 with SMTP id op7-20020a170906bce700b00a3145a62bb5mr4952665ejb.40.1706857588993;
-        Thu, 01 Feb 2024 23:06:28 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCV/hmJnhgT+YerZWQc+655k1uTzMbo3XtRz5je6R0RsbQCCWGMLKXw5pJIK0FMuB1B3rZ/PV3oCNB608G6rQIz/RFrtnjv5cGQSi4l3VQAI7g7L/Cixr3x2pqeNJ4lFAgK4m2pEkqHpcQ==
-Received: from ?IPV6:2a01:c22:7392:d000:5c1a:bcfc:a8a4:5bea? (dynamic-2a01-0c22-7392-d000-5c1a-bcfc-a8a4-5bea.c22.pool.telefonica.de. [2a01:c22:7392:d000:5c1a:bcfc:a8a4:5bea])
-        by smtp.googlemail.com with ESMTPSA id c3-20020a170906340300b00a35a659cab5sm568494ejb.179.2024.02.01.23.06.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Feb 2024 23:06:28 -0800 (PST)
-Message-ID: <c7e808ba-b333-4c5c-be75-7b74e02aad95@gmail.com>
-Date: Fri, 2 Feb 2024 08:06:30 +0100
+	s=arc-20240116; t=1706870600; c=relaxed/simple;
+	bh=SmvyNI8V8SRPPIBI9d2Z5GeFHvqDc4/qCw2OJw6A41A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=MikUN3BkI06a2Qy/JxpkaXY0FnWu8UbeNQL5IWbz5LpFMVf1og/dXmE32wqKXhH/HHKaUgoBZyB9KiExE/UvpScZT5nr09alKTrTwR4v1NSMWLpCbiYqYIzXwV672QG2ZJDtrtKBUoSE9iyjyykGI2t98qKUuIyeUb0Zg9YTW2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HEd8nRDl; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4127OSoi012151;
+	Fri, 2 Feb 2024 10:43:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=/bFRhgcsa6swu4QEu0V5icLUy7y+bHlwEkZkKhWnGDQ=; b=HE
+	d8nRDl9venLpdy69Cz3xvcdaSlQAbDv1q0VPJnZ2oEB+43sr81mANHcrciSdkW5b
+	IDYejUeUl+QepjlB+kXEKpyPS/nXDgqJt7mdu3V7QlPsL39QD7EYu71P4Nx7P3/i
+	HevRMwn8grwAjQaNJnS21ZBOGdYlKHMhjYxcrS8uibMvN5DGoV3QBDYjKRDtoE8m
+	xfhi7SbSBWYwC8qIQTqQPe9Wa8CaP7g+JppDfNCxP7jhgcPxv7b2k503doYEFyQ6
+	M/yxjkHXCNwt4odattFPa3s/MY+Kyh9jkte9jHCj0tMsqt7npIUYEE00t0E6EQOT
+	ucw/V4zJ6v5ptLZAWDxw==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w0pwc14n3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Feb 2024 10:43:14 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 412AhD1o007580
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 2 Feb 2024 10:43:13 GMT
+Received: from [10.216.22.4] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 2 Feb
+ 2024 02:43:09 -0800
+Message-ID: <60b5e755-352b-476d-8c6e-2170594ae80d@quicinc.com>
+Date: Fri, 2 Feb 2024 16:13:06 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,145 +65,161 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH v3 5/5] i2c: i801: Add helper i801_get_block_len
+Subject: Re: [V3] i2c: i2c-qcom-geni: Correct I2C TRE sequence
 Content-Language: en-US
-From: Heiner Kallweit <hkallweit1@gmail.com>
-To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
-Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <4e4ec801-474c-472f-b90d-edd1efd68d24@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-In-Reply-To: <4e4ec801-474c-472f-b90d-edd1efd68d24@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <andi.shyti@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <vkoul@kernel.org>, <quic_bjorande@quicinc.com>,
+        <manivannan.sadhasivam@linaro.org>, <bryan.odonoghue@linaro.org>,
+        <quic_msavaliy@quicinc.com>, <quic_vtanuku@quicinc.com>
+References: <20240201101323.13676-1-quic_vdadhani@quicinc.com>
+ <CAA8EJpqQtHDRK2pex+5F-fMRTosJuFCx59e89MWhnie1O3dHKA@mail.gmail.com>
+From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+In-Reply-To: <CAA8EJpqQtHDRK2pex+5F-fMRTosJuFCx59e89MWhnie1O3dHKA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-
-Avoid code duplication and factor out retrieving and checking the
-block length value to new helper i801_get_block_len().
-
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
-v2:
-- in the error case go to label out instead of directly bailing
-  out in i801_block_transaction_by_block()
----
- drivers/i2c/busses/i2c-i801.c | 35 ++++++++++++++++++++---------------
- 1 file changed, 20 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 15d251288..918c794c7 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -330,6 +330,18 @@ MODULE_PARM_DESC(disable_features, "Disable selected driver features:\n"
- 	"\t\t  0x10  don't use interrupts\n"
- 	"\t\t  0x20  disable SMBus Host Notify ");
- 
-+static int i801_get_block_len(struct i801_priv *priv)
-+{
-+	u8 len = inb_p(SMBHSTDAT0(priv));
-+
-+	if (len < 1 || len > I2C_SMBUS_BLOCK_MAX) {
-+		pci_err(priv->pci_dev, "Illegal SMBus block read size %u\n", len);
-+		return -EPROTO;
-+	}
-+
-+	return len;
-+}
-+
- static int i801_check_and_clear_pec_error(struct i801_priv *priv)
- {
- 	u8 status;
-@@ -525,12 +537,11 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
- 
- 	if (read_write == I2C_SMBUS_READ ||
- 	    command == I2C_SMBUS_BLOCK_PROC_CALL) {
--		len = inb_p(SMBHSTDAT0(priv));
--		if (len < 1 || len > I2C_SMBUS_BLOCK_MAX) {
--			status = -EPROTO;
-+		status = i801_get_block_len(priv);
-+		if (status < 0)
- 			goto out;
--		}
- 
-+		len = status;
- 		data->block[0] = len;
- 		for (i = 0; i < len; i++)
- 			data->block[i + 1] = inb_p(SMBBLKDAT(priv));
-@@ -549,14 +560,11 @@ static void i801_isr_byte_done(struct i801_priv *priv)
- 		 * and read the block length from SMBHSTDAT0.
- 		 */
- 		if (priv->len == SMBUS_LEN_SENTINEL) {
--			priv->len = inb_p(SMBHSTDAT0(priv));
--			if (priv->len < 1 || priv->len > I2C_SMBUS_BLOCK_MAX) {
--				dev_err(&priv->pci_dev->dev,
--					"Illegal SMBus block read size %d\n",
--					priv->len);
-+			priv->len = i801_get_block_len(priv);
-+			if (priv->len < 0)
- 				/* FIXME: Recover */
- 				priv->len = I2C_SMBUS_BLOCK_MAX;
--			}
-+
- 			priv->data[-1] = priv->len;
- 		}
- 
-@@ -709,11 +717,8 @@ static int i801_block_transaction_byte_by_byte(struct i801_priv *priv,
- 		 * and read the block length from SMBHSTDAT0.
- 		 */
- 		if (len == SMBUS_LEN_SENTINEL) {
--			len = inb_p(SMBHSTDAT0(priv));
--			if (len < 1 || len > I2C_SMBUS_BLOCK_MAX) {
--				dev_err(&priv->pci_dev->dev,
--					"Illegal SMBus block read size %d\n",
--					len);
-+			len = i801_get_block_len(priv);
-+			if (len < 0) {
- 				/* Recover */
- 				while (inb_p(SMBHSTSTS(priv)) &
- 				       SMBHSTSTS_HOST_BUSY)
--- 
-2.43.0
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nPIsaKzv9CiCTO9j9lSyRU9i9KPsLtxm
+X-Proofpoint-ORIG-GUID: nPIsaKzv9CiCTO9j9lSyRU9i9KPsLtxm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-02_04,2024-01-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
+ phishscore=0 bulkscore=0 mlxscore=0 suspectscore=0 adultscore=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402020078
 
 
+On 2/1/2024 5:24 PM, Dmitry Baryshkov wrote:
+> On Thu, 1 Feb 2024 at 12:13, Viken Dadhaniya <quic_vdadhani@quicinc.com> wrote:
+>>
+>> For i2c read operation in GSI mode, we are getting timeout
+>> due to malformed TRE basically incorrect TRE sequence
+>> in gpi(drivers/dma/qcom/gpi.c) driver.
+>>
+>> TRE stands for Transfer Ring Element - which is basically an element with
+>> size of 4 words. It contains all information like slave address,
+>> clk divider, dma address value data size etc).
+>>
+>> Mainly we have 3 TREs(Config, GO and DMA tre).
+>> - CONFIG TRE : consists of internal register configuration which is
+>>                 required before start of the transfer.
+>> - DMA TRE :    contains DDR/Memory address, called as DMA descriptor.
+>> - GO TRE :     contains Transfer directions, slave ID, Delay flags, Length
+>>                 of the transfer.
+>>
+>> Driver calls GPI driver API to config each TRE depending on the protocol.
+>> If we see GPI driver, for RX operation we are configuring DMA tre and
+>> for TX operation we are configuring GO tre.
+>>
+>> For read operation tre sequence will be as below which is not aligned
+>> to hardware programming guide.
+>>
+>> - CONFIG tre
+>> - DMA tre
+>> - GO tre
+>>
+>> As per Qualcomm's internal Hardware Programming Guide, we should configure
+>> TREs in below sequence for any RX only transfer.
+>>
+>> - CONFIG tre
+>> - GO tre
+>> - DMA tre
+>>
+>> In summary, for RX only transfers, we are reordering DMA and GO TREs.
+>> Tested covering i2c read/write transfer on QCM6490 RB3 board.
+> 
+> This hasn't improved. You must describe what is the connection between
+> TRE types and the geni_i2c_gpi calls.
+> It is not obvious until somebody looks into the GPI DMA driver.
+> 
+> Another point, for some reason you are still using just the patch
+> version in email subject. Please fix your setup so that the email
+> subject also includes the `[PATCH` part in the subject, which is there
+> by default.
+> Hint: git format-patch -1 -v4 will do that for you without a need to
+> correct anything afterwards.
+> 
+
+At high level, let me explain the I2C to GPI driver flow in general.
+
+I2C driver calls GPI driver exposed functions which will prepare all the 
+TREs as per programming guide and
+queues to the GPI DMA engine for execution. Upon completion of the 
+Transfer, GPI DMA engine will generate an
+interrupt which will be handled inside the GPIO driver. Then GPI driver 
+will call DMA framework registered callback by i2c.
+Upon receiving this callback, i2c driver marks the transfer completion.
+
+>>
+>> Fixes: d8703554f4de ("i2c: qcom-geni: Add support for GPI DMA")
+>> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+> 
+> I think you got some review tags for v2, didn't you? They should have
+> been included here, otherwise the efforts spent by the reviewer are
+> lost.
+> 
+
+Sorry, missed to add reviewed-by tag.
+Andi will help to update.
+
+>> ---
+>> v2 -> v3:
+>> - Update commit log to explain change in simple way.
+>> - Correct fix tag format.
+>>
+>> v1 -> v2:
+>> - Remove redundant check.
+>> - update commit log.
+>> - add fix tag.
+>> ---
+>> ---
+>>   drivers/i2c/busses/i2c-qcom-geni.c | 14 +++++++-------
+>>   1 file changed, 7 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+>> index 0d2e7171e3a6..da94df466e83 100644
+>> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+>> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+>> @@ -613,20 +613,20 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
+>>
+>>                  peripheral.addr = msgs[i].addr;
+>>
+>> +               ret =  geni_i2c_gpi(gi2c, &msgs[i], &config,
+>> +                                   &tx_addr, &tx_buf, I2C_WRITE, gi2c->tx_c);
+>> +               if (ret)
+>> +                       goto err;
+>> +
+>>                  if (msgs[i].flags & I2C_M_RD) {
+>>                          ret =  geni_i2c_gpi(gi2c, &msgs[i], &config,
+>>                                              &rx_addr, &rx_buf, I2C_READ, gi2c->rx_c);
+>>                          if (ret)
+>>                                  goto err;
+>> -               }
+>> -
+>> -               ret =  geni_i2c_gpi(gi2c, &msgs[i], &config,
+>> -                                   &tx_addr, &tx_buf, I2C_WRITE, gi2c->tx_c);
+>> -               if (ret)
+>> -                       goto err;
+>>
+>> -               if (msgs[i].flags & I2C_M_RD)
+>>                          dma_async_issue_pending(gi2c->rx_c);
+>> +               }
+>> +
+>>                  dma_async_issue_pending(gi2c->tx_c);
+>>
+>>                  timeout = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
+>> --
+>> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+>> of Code Aurora Forum, hosted by The Linux Foundation
+>>
+>>
+> 
+> 
 
