@@ -1,61 +1,100 @@
-Return-Path: <linux-i2c+bounces-1622-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1623-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5B4D8488C2
-	for <lists+linux-i2c@lfdr.de>; Sat,  3 Feb 2024 21:45:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A52D8488CD
+	for <lists+linux-i2c@lfdr.de>; Sat,  3 Feb 2024 21:48:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24A171C21BD6
-	for <lists+linux-i2c@lfdr.de>; Sat,  3 Feb 2024 20:45:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19A821F237F5
+	for <lists+linux-i2c@lfdr.de>; Sat,  3 Feb 2024 20:48:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DEEDF9E9;
-	Sat,  3 Feb 2024 20:45:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9717B12B80;
+	Sat,  3 Feb 2024 20:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WMJq28W6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GN/4T/Rq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB01113FF1
-	for <linux-i2c@vger.kernel.org>; Sat,  3 Feb 2024 20:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B6811C8B;
+	Sat,  3 Feb 2024 20:47:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706993129; cv=none; b=mcbFur8NWLYrdWRB12Ub/n7eS100LWcjP65u686KuKwBmd1iOylnvPE+O7LsaQgarRsJirk25bocrs24tcSLsXtKIG3JbLQnh/9iy8WCElsBN9yVZEToB22SezB0doCrpFHeCho5kLtv86oY0VVDk+Pa3HelG591dKZOlPzQlxE=
+	t=1706993264; cv=none; b=jlHohH7yfiqm1aODvTEoRzozoJHyHq1DQ7ES2BOcq9dVz2b+4SNndJB+s/+bk8J3g6DofQPr4y1npog3G2IG4G4mHLUVM2cxA/h4uk/6BMUqOIDNV7ie7I63ID0ZT2BZisuax44gcmHw1qfETMPElhTTUaUPmIWMGa7B90w/jjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706993129; c=relaxed/simple;
-	bh=eQqAeYsRQkEwd2mqks3TTEvg18c6MGX7SIaOmWY9X3o=;
+	s=arc-20240116; t=1706993264; c=relaxed/simple;
+	bh=f2I8gWEzkwSZbGGlhrQHuwLADXjkshYxOtnScKHw11s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ki18NB7mxdQURF5GjHKo9HCgm7XBsBxEbzPI4dCIwjB/Ngw9Z7GEHRnMD5FwAaU5YUjgb9RDwCUlleyZ/eY5cLcSAsoud1PTH0C71Cdj73hFAAQOgfHF35tS0Cg6YG+Ue0iU8wLCEgyvOaPXU2PrWSZ08hACyHhm2MdhE6k0f58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WMJq28W6; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=V3Tc
-	O0m3MJGbolHZ6yonazC2e8zsiMfbBe4010swlIo=; b=WMJq28W6paJwCT61HcvX
-	GmDzoAJOs7f59n1uLPZWQmsr+FCTtAJrDI2HPHw6r32BKf5yrRafCAj9NBrgyR60
-	Br1zkhg+Eoa4njKhbzSErv+PBe1gTO+LdFmAxZ2JhmNS8zPu12Q8AtX9j3OxVmj0
-	1bHuxqvzwZuRRKkc0mWySX1z/kPQx4CmOTTs8LlqPtsoE6w5NLEZKGy8pXzfPI/K
-	lw0/W4wr6egvWmgLoPjEp4dtt9yj2hj1ha9jwyZE15lryBjRHN5YQ+Ka9nKiNF0m
-	iqU94WSuz/P/RwGHsTvovdytk7uxudijLHs0cEiyW1IJkvxoC52lQQ/gG/u5PYg3
-	rg==
-Received: (qmail 317273 invoked from network); 3 Feb 2024 21:45:21 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Feb 2024 21:45:21 +0100
-X-UD-Smtp-Session: l3s3148p1@FjmkToAQbOYgAQnoAGo3AKaQ4acoehG5
-Date: Sat, 3 Feb 2024 21:45:20 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] i2c: rcar: Prepare for the advent of ARCH_RCAR_GEN4
-Message-ID: <Zb6l4PbN3l4SPvRN@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org
-References: <bf7b105f7d9728ae5cd9fa99d1cdd278d71e7df2.1704723713.git.geert+renesas@glider.be>
+	 Content-Type:Content-Disposition:In-Reply-To; b=M2ieEU5QHTImoDhGtfYNa29Wywi7gIvfmRQDOwqtEX7rQU3S70ZYCAa0Q37NDayfaw5QzJSdzRrwKGUDkcG+c0mOxfiuM6qN9KQ/GLWe4Kk9MBpW7RMnsPttj1gIs8KJjDm2MNRl4GAsJXdiHVc2GPNXG4wN40yX/1kkA+4unpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GN/4T/Rq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2F8C433F1;
+	Sat,  3 Feb 2024 20:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706993263;
+	bh=f2I8gWEzkwSZbGGlhrQHuwLADXjkshYxOtnScKHw11s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GN/4T/RqtAM5pPUfQihjK3Wa8sAV3pUsmPhYvA/cg2Mt2nro2ZyjanWbrJsFNV3X0
+	 z5BUbR+pQSMZAeHOP3sXKHIURcwPfLXvK10KTL7JVV6BMqAtJcWeBZZaUNH8BgEZwr
+	 WzCvc/4pSyEOOKjimaGiYIRPvzhm5cFZkClqVzDoxmb/PXTafnKB5XS5SvdpzINgmK
+	 q/IJVnPabe73UT5UmIzBjjFDfb7yi95qtdPjsD2ng69sNJ9Ox97m8liHEvjdKMoKE0
+	 QcQjfDe1BO9oUeMuwNyLPZn3s3kiyHosGSbJT7/8lpjlfsPnQ91fjVkcMwRyGM/tUl
+	 QPqwMl+qAzuzA==
+Date: Sat, 3 Feb 2024 21:47:39 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Cc: Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
+	herbert@gondor.apana.org.au, davem@davemloft.net,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, alexandre.torgue@foss.st.com, vkoul@kernel.org,
+	jic23@kernel.org, olivier.moysan@foss.st.com,
+	arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
+	fabrice.gasnier@foss.st.com, andi.shyti@kernel.org,
+	ulf.hansson@linaro.org, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, hugues.fruchet@foss.st.com, lee@kernel.org,
+	will@kernel.org, catalin.marinas@arm.com, arnd@kernel.org,
+	richardcochran@gmail.com, Frank Rowand <frowand.list@gmail.com>,
+	peng.fan@oss.nxp.com, lars@metafoo.de, rcsekar@samsung.com,
+	wg@grandegger.com, mkl@pengutronix.de, linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
+	linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+	netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 02/13] dt-bindings: treewide: add access-controllers
+ description
+Message-ID: <Zb6ma9lHMu3SAe0U@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Gatien Chevallier <gatien.chevallier@foss.st.com>,
+	Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
+	herbert@gondor.apana.org.au, davem@davemloft.net,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, alexandre.torgue@foss.st.com, vkoul@kernel.org,
+	jic23@kernel.org, olivier.moysan@foss.st.com,
+	arnaud.pouliquen@foss.st.com, mchehab@kernel.org,
+	fabrice.gasnier@foss.st.com, andi.shyti@kernel.org,
+	ulf.hansson@linaro.org, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, hugues.fruchet@foss.st.com, lee@kernel.org,
+	will@kernel.org, catalin.marinas@arm.com, arnd@kernel.org,
+	richardcochran@gmail.com, Frank Rowand <frowand.list@gmail.com>,
+	peng.fan@oss.nxp.com, lars@metafoo.de, rcsekar@samsung.com,
+	wg@grandegger.com, mkl@pengutronix.de, linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
+	linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+	netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-usb@vger.kernel.org
+References: <20231212152356.345703-1-gatien.chevallier@foss.st.com>
+ <20231212152356.345703-3-gatien.chevallier@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -63,46 +102,50 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yYQfSxAMBRmPkTiI"
+	protocol="application/pgp-signature"; boundary="VPm+VxExOC+V7OZ+"
 Content-Disposition: inline
-In-Reply-To: <bf7b105f7d9728ae5cd9fa99d1cdd278d71e7df2.1704723713.git.geert+renesas@glider.be>
+In-Reply-To: <20231212152356.345703-3-gatien.chevallier@foss.st.com>
 
 
---yYQfSxAMBRmPkTiI
+--VPm+VxExOC+V7OZ+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 08, 2024 at 03:24:20PM +0100, Geert Uytterhoeven wrote:
-> Currently, all Kconfig symbols for R-Car Gen4 SoCs select
-> ARCH_RCAR_GEN3, which might confuse the casual reader.  Prepare for the
-> advent of ARCH_RCAR_GEN4 by extending the dependency for auto-selecting
-> reset controller support.
+On Tue, Dec 12, 2023 at 04:23:45PM +0100, Gatien Chevallier wrote:
+> access-controllers is an optional property that allows a peripheral to
+> refer to one or more domain access controller(s).
 >=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Description of this property is added to all peripheral binding files of
+> the peripheral under the STM32 firewall controller. It allows an accurate
+> representation of the hardware, where various peripherals are connected
+> to a firewall bus. The firewall can then check the peripheral accesses
+> before allowing its device to probe.
+>=20
+> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com> # for I2C
 
 
---yYQfSxAMBRmPkTiI
+--VPm+VxExOC+V7OZ+
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmW+peAACgkQFA3kzBSg
-KbaIDw/4zF03lZqaS7yWml+cqkjAvwhlsiPZLFtVBxwUDQTbXuneziaWBQbPt5gR
-MWnKxvKAa8yjfVQVV22xMeE+qc+zceMMiYneg/IsgXH507z3oIuuLYcf50aocwRd
-XUZW6y9Ey6vq9atx/mnFUaziGEhyh2olO59ya/H83+xEA1O27jrK+3NEzWvoZY73
-nvbXLfIdD0PydzbMFAIqwKG63HzKXVVkqbJLz0ucxJsb8g0OwytIcrCQh2VSibJB
-oRlBI+VtIusYyUtaAnhXOsU/AtvCLN7gNkT3GisU7spGkIHgtlXYqKmJs+QzlMCO
-mlfuSseTPJkauyOAFlo3NwRK4tJIS2RDjQn3bvIgJtz0k8KllJsr+5xi0NyRfj5v
-Vod7vaF1FxlHPXogDRxvtXowxMYe7nmGb2JNEfxOwhhh3GG7PBXZg+Ce/kDTfre0
-QofX/Nca9oel8yaI930ws56vYRCodliK4FI5gl2GBzQTDLtlXOOyHCN8WPYkXVyf
-v0qwpmJaG6qd0mNeU9IoeFwGcXKo0lx1BIPloheDK65ZUXcS4rxs/jZIiSSY1fZj
-JuM/uz03yU3F4u7+YZo6r4oOPZhsITi3FqBlPZuMEtOukTmGhsj7htl3IMJZxKFO
-qDLeLAinJnKFWFFIA/TGocmtVO0h55/rcrvScnw3hftgr4g/gA==
-=D2c8
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmW+pmsACgkQFA3kzBSg
+KbY64RAAof4Gx7h4jhXu9UFvGgxDMB7nucJwU2vnrWAQqslpX78IIuHnDzQGSdx4
+YeqQnv3x5PquSqBz8x/rnE1ptR0LqnAgeJdEOQB0AAicQ+VFy75kPngr9dtiCJuf
+SrCwaIYQ13qIhhC6pa7HTEUSQN/KX6DVSffmeJmOJoHIqGa1L1ldEH5tujF71Plb
+q5ugpGi2Jkmb+UU5/EaXadNKZ5b3BSp/xWur8Eemy9Z4DqqoipzJRzSJHufFNZDR
+pRdNn14JQlzQ948vT+YdpGqPE6jrVpd48rygAjaXsPx3cVQx7ouU6tKPnFLjtgyp
+tb0R2ZIQNXVaQV36XLwhvv0qFqHEiY36q+GjYSEbMHbO1b0+zneKgmZXNSwCclEp
+WQ8DrD3UEKTXcDHmoRV5GVgzZyk7wmK8zq3jofTemYyfKhSvsmAiufzZCQLV/9GI
+ScuNib34aJrsiIXiD40DsFNcutPh2v+aBXQmtfpkA++3ZvY9aBQa5KeEqzrKPaa0
+AVXFtXPN4hnNkUzTogCTHEvL7dYtbi0h7W5fun3D5kOLdZuewR8vFAotIaDRG7tB
+S7AWJDu+x2RT2xAs2yJEfSHMwoBZRdq3nJVugmRDb+VELZmIDBdN4vwBRXfi+cHr
+ouzPgt76DcQhfF6JGRUhloWtVuWW3QRQ1uYMpWUrKztG+3WiqBU=
+=nMRV
 -----END PGP SIGNATURE-----
 
---yYQfSxAMBRmPkTiI--
+--VPm+VxExOC+V7OZ+--
 
