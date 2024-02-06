@@ -1,60 +1,60 @@
-Return-Path: <linux-i2c+bounces-1647-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1648-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5208184B8B1
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 16:00:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7874184B880
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 15:54:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9465AB2AD1B
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 14:52:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4263CB2D2B3
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 14:52:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B51F132C26;
-	Tue,  6 Feb 2024 14:52:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5853132C20;
+	Tue,  6 Feb 2024 14:52:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LJaCbN+Y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YojNNIh3"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F454132C28
-	for <linux-i2c@vger.kernel.org>; Tue,  6 Feb 2024 14:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4278A132C28
+	for <linux-i2c@vger.kernel.org>; Tue,  6 Feb 2024 14:52:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707231148; cv=none; b=bubHIJ8X4754XaYLWq9nX8jXbhDvRI7izXJIzAM1HwgOZ8rOPIgUmg5d2AfnjVzZKb03RVWDRkpbV6v+gULTPO/U7zds0gof2P3rmLBcWOkSbfZ0FaGnVsZ7EapyFB4r5c0vCInm2UEtde3TvHLKR58si2kw6vSlHEnl0uCoE7I=
+	t=1707231151; cv=none; b=Cwmr9ez/spRNvMPy4jZ0LYmSzv6jIbtF3lwKJHzJECgj4cpFejv9k8/NLWaMD+Hebu2iYNEIAii8AP6ubZUF3pAQNcen63OfUWnCrKvYG4/2VpIswHpE/er39XTA+iCYr7hvTgM5hfvJ56/lMLQTPw8ex+jQG2N223+5nYlhCAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707231148; c=relaxed/simple;
-	bh=UoiwHy7xqEgMy8eOAK4q8jh0JHOFwvCIB7tA/aMNWu8=;
+	s=arc-20240116; t=1707231151; c=relaxed/simple;
+	bh=RIeQppRksYdqroSbN6cbQBlwoXZYeq5mRmaIR1aKDJU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BCSTNX67F39d/k7LPQPhDW6xapCuVkpQsCE/Zq24dL8eEBSE5cvHm34baaF6EYMxeUhBY6fectiBCkV8Mni5m1ZfVxBcgUrLw0bewxYJ9g+g/cGKIKBFATVGUXGv7WUqfJc1aB9sj2q7zuF2cBa8/BGXcuXCKxC+YIkznTi/iCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LJaCbN+Y; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version; b=m0QnfxD2c//FU9ZlX/9DuQ3tox/+VyKcVy7uSeafKjP1RiZdmG3RJPuRJIRVIhsul/cb1KaBMCvFf/MYc2SPFedZ5NaPBvl+leJRv9QmPQBDzZcZJtzpzaEHaBPS+DOzQopQ/TFlTrB9G3gP4b8vw/M2QHscJs65PALytznogec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YojNNIh3; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707231147; x=1738767147;
+  t=1707231150; x=1738767150;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=UoiwHy7xqEgMy8eOAK4q8jh0JHOFwvCIB7tA/aMNWu8=;
-  b=LJaCbN+YDM2r6VnOj+Bc2GJliBv5mEy4hpY0MMIn5bUES6wBmVqWNxcV
-   SWpCCERX9E2Z0enmUDtdKC+3rLJT64W9a3wI30ZxiG4j1ojXIb5O9aE3/
-   W3VcK8g5EosWbDXFmN016M/BHqBF1umYJNkU/o0YVLh3ou5LhvLCPWDpk
-   28Z9+d69/HEDa/qsbcSWgjMYBC3F1oMgX31QCQM8bzBWd04cR49yQige+
-   ji7IcKwiP1BbatJj7nTy7zStk75RG0egEqsD6EJP4nGHHE+UO4RAYHRpi
-   tgtV0+YeOOF3suiv/3pf3R4HpQztzGeiAResm8DHAlTGa3yu2NBbFPnyF
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="26206714"
+  bh=RIeQppRksYdqroSbN6cbQBlwoXZYeq5mRmaIR1aKDJU=;
+  b=YojNNIh3BGiEKxli5yeRR0Y3xzWFo46LMRLZq8XMJMi25Fg+nlx5Lu7g
+   qp+IGU9Po3OAAEJaz4Smh2jSJ5OO6UBBHm6jtvU9OeJxw7fjaq1+zKbED
+   JbuRZqEcMAkyRVrbVmfMrTvQNN3wwM1N/pqlxbmMEal2lGDzzS5FjiZ3g
+   8Vc8HUvsCL3UdsVUkro6D5T+ancR2xAV/PF0JRW6EjJ6XuzxrLT9bU0tQ
+   S2SGZYDEp3lZ6Qt21TWyDohFqWailfshBziX8QemrLlj0Tw5I7dIkLG3U
+   33tctggjuckNOTuOwoC9kfQ7VJA6pfBniOcCFKzixOVbBcZV96obqjAWV
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="26206744"
 X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="26206714"
+   d="scan'208";a="26206744"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 06:52:27 -0800
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 06:52:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="933482012"
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="933482037"
 X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="933482012"
+   d="scan'208";a="933482037"
 Received: from marquiz-s-2.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.58])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Feb 2024 06:52:24 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 06 Feb 2024 06:52:27 -0800
 From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 To: linux-i2c@vger.kernel.org
 Cc: Andi Shyti <andi.shyti@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Andi Shyti <andi.shyti@kernel.org>,
 	michael.j.ruhl@intel.com,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH v2 7/9] i2c: designware: Move interrupt handling functions before i2c_dw_xfer()
-Date: Tue,  6 Feb 2024 16:51:56 +0200
-Message-ID: <20240206145158.227254-8-jarkko.nikula@linux.intel.com>
+Subject: [PATCH v2 8/9] i2c: designware: Fix RX FIFO depth define on Wangxun 10Gb NIC
+Date: Tue,  6 Feb 2024 16:51:57 +0200
+Message-ID: <20240206145158.227254-9-jarkko.nikula@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240206145158.227254-1-jarkko.nikula@linux.intel.com>
 References: <20240206145158.227254-1-jarkko.nikula@linux.intel.com>
@@ -81,261 +81,32 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Code is more logically arranged when i2c_dw_read_clear_intrbits() and
-i2c_dw_isr() are located before i2c_dw_xfer().
+I believe RX FIFO depth define 0 is incorrect on Wangxun 10Gb NIC. It
+must be at least 1 since code is able to read received data from the
+DW_IC_DATA_CMD register.
 
-Real reason for this is to prepare for more shared code between
-interrupt and polling mode code.
+For now this define is irrelevant since the txgbe_i2c_dw_xfer_quirk()
+doesn't use the rx_fifo_depth member variable of struct dw_i2c_dev but
+is needed when converting code into generic polling mode implementation.
 
 Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 ---
- drivers/i2c/busses/i2c-designware-master.c | 226 ++++++++++-----------
- 1 file changed, 113 insertions(+), 113 deletions(-)
+ drivers/i2c/busses/i2c-designware-core.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-index 2e8f9733ddd3..856c955c6560 100644
---- a/drivers/i2c/busses/i2c-designware-master.c
-+++ b/drivers/i2c/busses/i2c-designware-master.c
-@@ -633,119 +633,6 @@ i2c_dw_read(struct dw_i2c_dev *dev)
- 	}
- }
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index ee1dbdb52d3e..94da70ce1f32 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -320,7 +320,7 @@ struct dw_i2c_dev {
+ #define AMD_UCSI_INTR_EN			0xd
  
--/*
-- * Prepare controller for a transaction and call i2c_dw_xfer_msg.
-- */
--static int
--i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
--{
--	struct dw_i2c_dev *dev = i2c_get_adapdata(adap);
--	int ret;
--
--	dev_dbg(dev->dev, "%s: msgs: %d\n", __func__, num);
--
--	pm_runtime_get_sync(dev->dev);
--
--	/*
--	 * Initiate I2C message transfer when polling mode is enabled,
--	 * As it is polling based transfer mechanism, which does not support
--	 * interrupt based functionalities of existing DesignWare driver.
--	 */
--	switch (dev->flags & MODEL_MASK) {
--	case MODEL_AMD_NAVI_GPU:
--		ret = amd_i2c_dw_xfer_quirk(adap, msgs, num);
--		goto done_nolock;
--	case MODEL_WANGXUN_SP:
--		ret = txgbe_i2c_dw_xfer_quirk(adap, msgs, num);
--		goto done_nolock;
--	default:
--		break;
--	}
--
--	reinit_completion(&dev->cmd_complete);
--	dev->msgs = msgs;
--	dev->msgs_num = num;
--	dev->cmd_err = 0;
--	dev->msg_write_idx = 0;
--	dev->msg_read_idx = 0;
--	dev->msg_err = 0;
--	dev->status = 0;
--	dev->abort_source = 0;
--	dev->rx_outstanding = 0;
--
--	ret = i2c_dw_acquire_lock(dev);
--	if (ret)
--		goto done_nolock;
--
--	ret = i2c_dw_wait_bus_not_busy(dev);
--	if (ret < 0)
--		goto done;
--
--	/* Start the transfers */
--	i2c_dw_xfer_init(dev);
--
--	/* Wait for tx to complete */
--	if (!wait_for_completion_timeout(&dev->cmd_complete, adap->timeout)) {
--		dev_err(dev->dev, "controller timed out\n");
--		/* i2c_dw_init implicitly disables the adapter */
--		i2c_recover_bus(&dev->adapter);
--		i2c_dw_init_master(dev);
--		ret = -ETIMEDOUT;
--		goto done;
--	}
--
--	/*
--	 * We must disable the adapter before returning and signaling the end
--	 * of the current transfer. Otherwise the hardware might continue
--	 * generating interrupts which in turn causes a race condition with
--	 * the following transfer.  Needs some more investigation if the
--	 * additional interrupts are a hardware bug or this driver doesn't
--	 * handle them correctly yet.
--	 */
--	__i2c_dw_disable_nowait(dev);
--
--	if (dev->msg_err) {
--		ret = dev->msg_err;
--		goto done;
--	}
--
--	/* No error */
--	if (likely(!dev->cmd_err && !dev->status)) {
--		ret = num;
--		goto done;
--	}
--
--	/* We have an error */
--	if (dev->cmd_err == DW_IC_ERR_TX_ABRT) {
--		ret = i2c_dw_handle_tx_abort(dev);
--		goto done;
--	}
--
--	if (dev->status)
--		dev_err(dev->dev,
--			"transfer terminated early - interrupt latency too high?\n");
--
--	ret = -EIO;
--
--done:
--	i2c_dw_release_lock(dev);
--
--done_nolock:
--	pm_runtime_mark_last_busy(dev->dev);
--	pm_runtime_put_autosuspend(dev->dev);
--
--	return ret;
--}
--
--static const struct i2c_algorithm i2c_dw_algo = {
--	.master_xfer = i2c_dw_xfer,
--	.functionality = i2c_dw_func,
--};
--
--static const struct i2c_adapter_quirks i2c_dw_quirks = {
--	.flags = I2C_AQ_NO_ZERO_LEN,
--};
--
- static u32 i2c_dw_read_clear_intrbits(struct dw_i2c_dev *dev)
- {
- 	unsigned int stat, dummy;
-@@ -872,6 +759,119 @@ static irqreturn_t i2c_dw_isr(int this_irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
+ #define TXGBE_TX_FIFO_DEPTH			4
+-#define TXGBE_RX_FIFO_DEPTH			0
++#define TXGBE_RX_FIFO_DEPTH			1
  
-+/*
-+ * Prepare controller for a transaction and call i2c_dw_xfer_msg.
-+ */
-+static int
-+i2c_dw_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
-+{
-+	struct dw_i2c_dev *dev = i2c_get_adapdata(adap);
-+	int ret;
-+
-+	dev_dbg(dev->dev, "%s: msgs: %d\n", __func__, num);
-+
-+	pm_runtime_get_sync(dev->dev);
-+
-+	/*
-+	 * Initiate I2C message transfer when polling mode is enabled,
-+	 * As it is polling based transfer mechanism, which does not support
-+	 * interrupt based functionalities of existing DesignWare driver.
-+	 */
-+	switch (dev->flags & MODEL_MASK) {
-+	case MODEL_AMD_NAVI_GPU:
-+		ret = amd_i2c_dw_xfer_quirk(adap, msgs, num);
-+		goto done_nolock;
-+	case MODEL_WANGXUN_SP:
-+		ret = txgbe_i2c_dw_xfer_quirk(adap, msgs, num);
-+		goto done_nolock;
-+	default:
-+		break;
-+	}
-+
-+	reinit_completion(&dev->cmd_complete);
-+	dev->msgs = msgs;
-+	dev->msgs_num = num;
-+	dev->cmd_err = 0;
-+	dev->msg_write_idx = 0;
-+	dev->msg_read_idx = 0;
-+	dev->msg_err = 0;
-+	dev->status = 0;
-+	dev->abort_source = 0;
-+	dev->rx_outstanding = 0;
-+
-+	ret = i2c_dw_acquire_lock(dev);
-+	if (ret)
-+		goto done_nolock;
-+
-+	ret = i2c_dw_wait_bus_not_busy(dev);
-+	if (ret < 0)
-+		goto done;
-+
-+	/* Start the transfers */
-+	i2c_dw_xfer_init(dev);
-+
-+	/* Wait for tx to complete */
-+	if (!wait_for_completion_timeout(&dev->cmd_complete, adap->timeout)) {
-+		dev_err(dev->dev, "controller timed out\n");
-+		/* i2c_dw_init implicitly disables the adapter */
-+		i2c_recover_bus(&dev->adapter);
-+		i2c_dw_init_master(dev);
-+		ret = -ETIMEDOUT;
-+		goto done;
-+	}
-+
-+	/*
-+	 * We must disable the adapter before returning and signaling the end
-+	 * of the current transfer. Otherwise the hardware might continue
-+	 * generating interrupts which in turn causes a race condition with
-+	 * the following transfer.  Needs some more investigation if the
-+	 * additional interrupts are a hardware bug or this driver doesn't
-+	 * handle them correctly yet.
-+	 */
-+	__i2c_dw_disable_nowait(dev);
-+
-+	if (dev->msg_err) {
-+		ret = dev->msg_err;
-+		goto done;
-+	}
-+
-+	/* No error */
-+	if (likely(!dev->cmd_err && !dev->status)) {
-+		ret = num;
-+		goto done;
-+	}
-+
-+	/* We have an error */
-+	if (dev->cmd_err == DW_IC_ERR_TX_ABRT) {
-+		ret = i2c_dw_handle_tx_abort(dev);
-+		goto done;
-+	}
-+
-+	if (dev->status)
-+		dev_err(dev->dev,
-+			"transfer terminated early - interrupt latency too high?\n");
-+
-+	ret = -EIO;
-+
-+done:
-+	i2c_dw_release_lock(dev);
-+
-+done_nolock:
-+	pm_runtime_mark_last_busy(dev->dev);
-+	pm_runtime_put_autosuspend(dev->dev);
-+
-+	return ret;
-+}
-+
-+static const struct i2c_algorithm i2c_dw_algo = {
-+	.master_xfer = i2c_dw_xfer,
-+	.functionality = i2c_dw_func,
-+};
-+
-+static const struct i2c_adapter_quirks i2c_dw_quirks = {
-+	.flags = I2C_AQ_NO_ZERO_LEN,
-+};
-+
- void i2c_dw_configure_master(struct dw_i2c_dev *dev)
- {
- 	struct i2c_timings *t = &dev->timings;
+ struct i2c_dw_semaphore_callbacks {
+ 	int	(*probe)(struct dw_i2c_dev *dev);
 -- 
 2.43.0
 
