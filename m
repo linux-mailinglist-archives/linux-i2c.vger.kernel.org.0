@@ -1,107 +1,125 @@
-Return-Path: <linux-i2c+bounces-1653-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1654-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2929884B99A
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 16:30:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CD3984BE38
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 20:42:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C6FD1C2134C
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 15:30:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 97AFAB22ED7
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 19:42:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA79613173E;
-	Tue,  6 Feb 2024 15:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D66217BB4;
+	Tue,  6 Feb 2024 19:42:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HfoH8biZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xrzo3OKO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305E11E521
-	for <linux-i2c@vger.kernel.org>; Tue,  6 Feb 2024 15:30:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADE417BA0;
+	Tue,  6 Feb 2024 19:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707233438; cv=none; b=XJd5d65KoBraE6N9JB5S8+FVHxa4Bq6wmLt+9bnA5ZbL96+aFv3G+kw0obvIaFqUKuJs6wt46+iQfyNT8+wDsWTBvbvoWE6h4V1IfE2A6MMqkFWsxaruQTu1HsKyMVbw8tYhmUX80LoV7K/MLGaOyn9w5hW8s/tVFFM3Ue74+hg=
+	t=1707248550; cv=none; b=q0TbRUiTwN8dtMsLWOenGgM9OJeMXrvgqrOEKCqxAgiMl8s14Kw3vVz3YrTqNkf1VoS5rnwhKZCZHgGG6ZX+mKHYSNENS23phIcFMXdUXmmzg3os43ulg4H3MmtU/U964xu/hfh0waVY1ZQlhLQSvwz/Tl8LjBS4u9sJpyxJ5Dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707233438; c=relaxed/simple;
-	bh=KnJMmwXaWwy4l2nSQ8FZN0S4eej82LF2/eNENYhe3pE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pJtjFMCLq6Mggia0Vt4bsEuFDnHdlAOgzg44NQX1DC0av6fnzWqLGNKHrM3w1mu91nAqT7K6XMkDNWQ1KJ8/I3ogs51tT0QZvH/GHw1czU9smhHeyC41mye0H8DsUh0hL6Af0bG3/3kfyofl2dWybp+G8BwGU10AUaJnufLIMxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HfoH8biZ; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707233437; x=1738769437;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KnJMmwXaWwy4l2nSQ8FZN0S4eej82LF2/eNENYhe3pE=;
-  b=HfoH8biZRX7ePnRZCdodY+FZIN8zRa32UGyAo5UtIbVO9qxluILjSZgE
-   tN4Zm4w5E1BrwtKwKresAT1Ds7jgmOqle8lxlLeSK1yaQADaQ8ju7OouT
-   feWo9wtBxrXGFyGR9nWYV8V2rQ/L3COG0iZbqWOQNkSxfpBYQsavOH1z1
-   OrZJqF6ijalJlyh0UPO5QOgja1bWGc9vfbgYvBXp5O8O07eHO2TGtZBFu
-   gowKGuFG1bJVkHFVK/hvEnoe69Z89MJgV8PuSbOwa4WDMfNVU+nK8JAPo
-   jL6eDJSOhG7RxSwp6955aBoOQ/T1ZqBjmv7NQARGhQtBvHzowkSanKHNS
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="657704"
-X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="657704"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 07:30:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="909667356"
-X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="909667356"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 07:30:33 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rXNP4-00000002NJx-3DxL;
-	Tue, 06 Feb 2024 17:30:30 +0200
-Date: Tue, 6 Feb 2024 17:30:30 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Jiawen Wu <jiawenwu@trustnetic.com>,
-	Sanket Goswami <Sanket.Goswami@amd.com>,
-	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-	michael.j.ruhl@intel.com, Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v2 1/9] i2c: designware: Add some flexiblity to the model
- info
-Message-ID: <ZcJQljILDGq9Xk_A@smile.fi.intel.com>
-References: <20240206145158.227254-1-jarkko.nikula@linux.intel.com>
- <20240206145158.227254-2-jarkko.nikula@linux.intel.com>
+	s=arc-20240116; t=1707248550; c=relaxed/simple;
+	bh=J0UzCl31wEHiXY4sb/ZjBK1ln7klxa08h7c306ggFVM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=faKXrin38ZBbKcpSLvruPI7aTnQEFTPcT/fPsWvWofv3SkHduO32LlQfWaFIkJUDKv5OJB2/r43DRINfGwMHuqMSsbgD5Da4IPL1Rqc/kDDtWCAprjH1L5Y07ZA6XmmrVRp/EdqCJ6ArkggGjjHqPlF7+fgkf8dYsHoRxFO8bCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xrzo3OKO; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-51117bfd452so10098354e87.3;
+        Tue, 06 Feb 2024 11:42:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707248546; x=1707853346; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eWGkE/O3QdNQnmc268O5sKVqO5KYwMpumGh7IlwPz/A=;
+        b=Xrzo3OKOyto1cefoc3WxuoBgaWNsXKZKi54iClzGh7qNCskF+aOZOr0bJkXvzvJky5
+         zqpZ6zKGb6cUfOCZHGXgG4np1Ulgek2i4v86qnPfkJfABwVSBVyMoIMhwPRpHnkdHuCi
+         6JS1+nYJQxdaaZofyjqmglJMFpuuuGwWLhQieNahG+2Cug0I2oFQ6AGWcGXW5fJXWMM1
+         rKP/3fN/j7XcgHKpRTPoFlNRfsBTT+iGuFHuhq1OUqPBhGHbf6H6eWllN8hufFJCx+yM
+         4iSuRhlU1lo8fQjF1/Y5fQvCjWNMmHkzSGE4FbGcN0wxUG53SWP7j9RRU2FsiYh8buqr
+         L5Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707248546; x=1707853346;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eWGkE/O3QdNQnmc268O5sKVqO5KYwMpumGh7IlwPz/A=;
+        b=b00x4pJHEs0XWQbxIGeoTHdSqYaoPeAy0SFSJNwrz/DRgDKplUc4xmQRTwiLt0XcEJ
+         gTFJi4ieo/E11HB5Hgamhvl6gTiP6VTUvV5XgoEdlAzufVVjYFm0BBzJLv0xB90tr6cU
+         WFWqUHlPrUV9UbPzi0cBI49Xkq86c0qX13FcmlfST/RmEQ4tavDJ3XyqXRrmddIgkBD6
+         IMPwYGbcWu2jIfNViTP6IdpdbS3UEOGbmnzXDA6xYOxZVvlI+CCoc6Sa0OgLWl//Oc7u
+         ws0V2MCha3DAijvCmFLLTlTo4n3kwRx7VAnIqPFF1wIvZ+xOASu6GZ1SO0+16g1gOSym
+         9HgQ==
+X-Gm-Message-State: AOJu0YzW/O4rrWM88qxC8lnNfPNWSV0oTHlFXXbrVZpgcRSpjEhlacWu
+	gH9ejGbghD1HtoqbdDsLw7RYC6sEJIX+o/RbVVtBqIdcUdxkb+tn
+X-Google-Smtp-Source: AGHT+IE7qevWSjL8dZocgLqsAfOGZXBUdZnhZIDLJrbJ5gp+vAPBcJr9RN8VTY1CGdMesP+xRq4odA==
+X-Received: by 2002:ac2:5f8e:0:b0:511:4f00:45b2 with SMTP id r14-20020ac25f8e000000b005114f0045b2mr2029806lfe.25.1707248545910;
+        Tue, 06 Feb 2024 11:42:25 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXUVAWc+6q004yovkdqQYOAJoHZ+Kon+sQNc0F1CW4Y65FY5PoMZqCbf5ehtHMwBb7jV/8xV5gfNxiubKHO9FL/z8DhVg7fQnyPrUFGy/YXvEedjYDCo+R1xM1Df392uLlu/mkXHbw7ylZSGciLWTr/5orAigaXGH9Jezut+c/+HcCJEbeGrdHO6cjc7rED9TBZ+PQ+vE4E3bx9/aAzioi/x3j6oDEmM9N7cDJrLXMmOI4JhwEilWmKr3rzqQq9kydblQBtnoJuoEkH3Ebuk/WY8+ENtn0Ur16IHHV3bfM1OUgZYi9qj493KFhjpw1EGNxgTfmv8Ct0lUOQxPDIgc6DEDZn4ByySzKWioyvMjZINerb/leStX7PdNpgZcDdymgeffyFkcfFLcMuBA6I9T1TsjQkcF+zAEAVg2a+61gZhDD17Qy+
+Received: from rand-ubuntu-development.dl.local (mail.confident.ru. [85.114.29.218])
+        by smtp.gmail.com with ESMTPSA id v20-20020ac25934000000b005115eec02d0sm234324lfi.234.2024.02.06.11.42.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Feb 2024 11:42:25 -0800 (PST)
+From: Rand Deeb <rand.sec96@gmail.com>
+To: Avi Fishman <avifishman70@gmail.com>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Patrick Venture <venture@google.com>,
+	Nancy Yuen <yuenn@google.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	openbmc@lists.ozlabs.org,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: deeb.rand@confident.ru,
+	lvc-project@linuxtesting.org,
+	voskresenski.stanislav@confident.ru,
+	Rand Deeb <rand.sec96@gmail.com>
+Subject: [PATCH] i2c: Remove redundant comparison in npcm_i2c_reg_slave
+Date: Tue,  6 Feb 2024 22:42:01 +0300
+Message-Id: <20240206194201.10054-1-rand.sec96@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240206145158.227254-2-jarkko.nikula@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 06, 2024 at 04:51:50PM +0200, Jarkko Nikula wrote:
-> From: "Michael J. Ruhl" <michael.j.ruhl@intel.com>
-> 
-> Currently the way to identify a model is via a bit field, of which
-> 4 bits are currently defined.
-> 
-> Use a shifted value to that more models can be defined.
+In the npcm_i2c_reg_slave() function, there was a redundant
+comparison that checked if 'bus->slave' was null immediately after
+assigning it the 'client' value. There were concerns about a
+potential null dereference because of `client->adapter`, but
+according to Wolfram Sang, "we trusted ourselves here" Therefore,
+this comparison is unnecessary.
 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-While this is true review, internally we're still discussing
-the possibility of moving to plain numbers and shift, so we
-may add arrays which are indexed in model-based way.
+Signed-off-by: Rand Deeb <rand.sec96@gmail.com>
+---
+ drivers/i2c/busses/i2c-npcm7xx.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
+diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+index c1b679737240..bdf35b86e559 100644
+--- a/drivers/i2c/busses/i2c-npcm7xx.c
++++ b/drivers/i2c/busses/i2c-npcm7xx.c
+@@ -1247,9 +1247,6 @@ static int npcm_i2c_reg_slave(struct i2c_client *client)
+ 
+ 	bus->slave = client;
+ 
+-	if (!bus->slave)
+-		return -EINVAL;
+-
+ 	if (client->flags & I2C_CLIENT_TEN)
+ 		return -EAFNOSUPPORT;
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
 
