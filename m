@@ -1,59 +1,60 @@
-Return-Path: <linux-i2c+bounces-1640-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1641-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E664A84B868
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 15:52:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E99584B869
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 15:52:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1F19285E35
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 14:52:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 077891F26855
+	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 14:52:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 282BD132C03;
-	Tue,  6 Feb 2024 14:52:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1CB7132C04;
+	Tue,  6 Feb 2024 14:52:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VARhIllL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RUO2ZSdt"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BDD8132C35
-	for <linux-i2c@vger.kernel.org>; Tue,  6 Feb 2024 14:52:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034B3133282
+	for <linux-i2c@vger.kernel.org>; Tue,  6 Feb 2024 14:52:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707231126; cv=none; b=prdYUQ5rqKKfBGveqzAtuC+k0QicOyTH+cEqX8PZp10xr07JxDWaxyeHYUMdSgBGPQbAnKLYez2xNisN5ygm2tWfe0uOyMq5xIsYvFS2kwDFM0rHKI1OWuFX2qVohzuVdosYBceQrCN3Ry/vrC3MW+2ngxA9RXrDXZ2xVNnof0A=
+	t=1707231129; cv=none; b=GkCHMvKDQZvxx0BVlTjY0FQ5LYAr7B6YeopEwuqX/NvwR8e7TZeL/6TzCVee5gomVKWYrdqepJfDeli6baBFM6FxBjse1T0lZq8zIApYs1N0xhzZjVo416UCuVk1tlq88bximR10XuGh/YCgb5vjvt1Zra0z22oyU6bUVDGZhec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707231126; c=relaxed/simple;
-	bh=08SGlZZyuJVAV8BD3ZNbuScuN/UMeRKLCJk+Qhd/shk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qu4EptGeuoXsgrRwktaO27hZi44Leq9xoDkQsOzCdSVrA6kfTEnvAcrRS4rnCA6sBWHyr6xZf0dDGzFBkh1HGOhPhc8PXWJ1P2MX719DnVi/bv2qDorvgD4b9chPzII1JH2UkIcXMvPiv+kljqp/gpvYBSRVOU2ymoONNumfDPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VARhIllL; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1707231129; c=relaxed/simple;
+	bh=sKBP/0cCh2+waP1FdOLfePMO3191pbtjj5ecHS18hjs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TXgEu9Q+Gnfa6ZaTmr6Af+P0ANEPl/Ymx/x0Cp8wWyD3AvFkRXjtv3d3uD5KallJ8+gZgbszuX4Z8yHRWTfMe6ARoKxpzUkkKf6cEPsqmX1LUUb2Oh7IgDaUBxXsDgCNlO+gpE5BIfN9jha2FEuUfw/xbpsCgJ/Mv18pWoaZmKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RUO2ZSdt; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707231125; x=1738767125;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=08SGlZZyuJVAV8BD3ZNbuScuN/UMeRKLCJk+Qhd/shk=;
-  b=VARhIllLbLB9W5s3nYC3uk0HVp27aC6GoNTEm81j1mQ7MJ+fZeZxK/40
-   q5h1D6IcyHzG5eSSI3UBTAKRAM6NFpIw1vfYuQdOxxxDXoga6SY0v/VSV
-   CnghlxCLWktiOF+0tcdy0h+pKjlZToB2dSj89Sj0HpIsq7AeTwlZEm/f+
-   hD+w132+sID/OwtuTtwXe2pJtq9QYE26sPut2In+93hKQDHCtp/0DtcPn
-   m5pNIHrhBEq3XTC908jCwmjPpzWoWWCoMo2umkx9b6rG+KDFp8zJbsAdY
-   9/1eyXzPsPYgnOQ39p9QjMdn6mb//iOnWPJaNJByGmncUrFlWZvijp2pA
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="26206556"
+  t=1707231128; x=1738767128;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=sKBP/0cCh2+waP1FdOLfePMO3191pbtjj5ecHS18hjs=;
+  b=RUO2ZSdt8LmHHcDvD1qLcOcgqLfUfFcNb723mcPJ4Fkc/AbwZxBFdhnC
+   EGgmic6aCqxESyhAwf2gb7ol2TBbdSA58zwATPl/j84Cb2RUHji1OE8tc
+   0tez1Cqo4y/cWark8aLr5dcmMghbQwW0sqvvR82GlGQCbltAldGCZmIpt
+   hRPHl8Ojj7xEF60rokC6Oxxlsq3Sc73k/6hw7HXho/6UESbTo+mzJ1c5s
+   jyc1/Kdz2STiLFQF0cs5kosvt8Z5rmD5YCOiVx7y0fP7sKIUQ0fAqxHwb
+   LJbjskA8JmKrWGHsM6paO4BE5NGzyEmQ0tFviKlHP8rcby+8xZ091DE9Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="26206579"
 X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="26206556"
+   d="scan'208";a="26206579"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 06:52:04 -0800
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 06:52:08 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="933481869"
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="933481903"
 X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="933481869"
+   d="scan'208";a="933481903"
 Received: from marquiz-s-2.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.58])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Feb 2024 06:52:00 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 06 Feb 2024 06:52:04 -0800
 From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 To: linux-i2c@vger.kernel.org
 Cc: Andi Shyti <andi.shyti@kernel.org>,
@@ -66,66 +67,54 @@ Cc: Andi Shyti <andi.shyti@kernel.org>,
 	michael.j.ruhl@intel.com,
 	Hans de Goede <hdegoede@redhat.com>,
 	Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: [PATCH v2 0/9] i2c: designware: Generic polling mode code
-Date: Tue,  6 Feb 2024 16:51:49 +0200
-Message-ID: <20240206145158.227254-1-jarkko.nikula@linux.intel.com>
+Subject: [PATCH v2 1/9] i2c: designware: Add some flexiblity to the model info
+Date: Tue,  6 Feb 2024 16:51:50 +0200
+Message-ID: <20240206145158.227254-2-jarkko.nikula@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240206145158.227254-1-jarkko.nikula@linux.intel.com>
+References: <20240206145158.227254-1-jarkko.nikula@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi
+From: "Michael J. Ruhl" <michael.j.ruhl@intel.com>
 
-This is mostly the same than the first version implementing generic
-polling mode code for the i2c-designware except three more patches added
-before them.
+Currently the way to identify a model is via a bit field, of which
+4 bits are currently defined.
 
-Andy had an idea we should have more consistency to platform flags naming
-and the first three patches are around that. Michael started the
-conversion so I took his patch from an internal set and put first. Since
-this version touches Intel PUNIT semaphore code I Cc'ed Hans.
+Use a shifted value to that more models can be defined.
 
-Andy and Andi had comments to "Uniform initialization flow for polling
-mode" but I decided to not implement a separate helpter function for
-interrupt request as it in my opinnion does not make code any easier to
-read.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Michael J. Ruhl <michael.j.ruhl@intel.com>
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-designware-core.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I also wanted to retain single return point in the
-i2c_dw_wait_transfer() implemented by the last patch since I had some
-debug code there when doing the first version.
-
-v1:
-https://lore.kernel.org/linux-i2c/20240131141653.2689260-1-jarkko.nikula@linux.intel.com/
-
-Jarkko Nikula (8):
-  i2c: designware: Convert arbitration semaphore flag as semaphore type
-  i2c: designware: Convert shared_with_punit boolean as semaphore type
-  i2c: designware: Uniform initialization flow for polling mode
-  i2c: designware: Do not enable interrupts shortly in polling mode
-  i2c: designware: Use accessors to DW_IC_INTR_MASK register
-  i2c: designware: Move interrupt handling functions before
-    i2c_dw_xfer()
-  i2c: designware: Fix RX FIFO depth define on Wangxun 10Gb NIC
-  i2c: designware: Implement generic polling mode code for Wangxun 10Gb
-    NIC
-
-Michael J. Ruhl (1):
-  i2c: designware: Add some flexiblity to the model info
-
- drivers/i2c/busses/i2c-designware-amdpsp.c   |   2 +-
- drivers/i2c/busses/i2c-designware-baytrail.c |   2 +-
- drivers/i2c/busses/i2c-designware-common.c   |   2 +-
- drivers/i2c/busses/i2c-designware-core.h     |  38 +-
- drivers/i2c/busses/i2c-designware-master.c   | 417 ++++++++-----------
- drivers/i2c/busses/i2c-designware-pcidrv.c   |   2 +-
- drivers/i2c/busses/i2c-designware-platdrv.c  |  12 +-
- 7 files changed, 223 insertions(+), 252 deletions(-)
-
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index a7f6f3eafad7..4e1f0924f493 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -304,10 +304,10 @@ struct dw_i2c_dev {
+ #define ACCESS_NO_IRQ_SUSPEND			BIT(1)
+ #define ARBITRATION_SEMAPHORE			BIT(2)
+ 
+-#define MODEL_MSCC_OCELOT			BIT(8)
+-#define MODEL_BAIKAL_BT1			BIT(9)
+-#define MODEL_AMD_NAVI_GPU			BIT(10)
+-#define MODEL_WANGXUN_SP			BIT(11)
++#define MODEL_MSCC_OCELOT			(1 << 8)
++#define MODEL_BAIKAL_BT1			(2 << 8)
++#define MODEL_AMD_NAVI_GPU			(3 << 8)
++#define MODEL_WANGXUN_SP			(4 << 8)
+ #define MODEL_MASK				GENMASK(11, 8)
+ 
+ /*
 -- 
 2.43.0
 
