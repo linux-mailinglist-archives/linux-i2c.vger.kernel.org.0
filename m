@@ -1,121 +1,136 @@
-Return-Path: <linux-i2c+bounces-1655-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1656-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55F6C84BE53
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 20:52:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEE5584DDC6
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Feb 2024 11:08:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04A842876A1
-	for <lists+linux-i2c@lfdr.de>; Tue,  6 Feb 2024 19:52:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D6E71F21822
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Feb 2024 10:08:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C2DF1B270;
-	Tue,  6 Feb 2024 19:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF8F871B4B;
+	Thu,  8 Feb 2024 10:02:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kz7SoHQc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VHeqwAoN"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0E71AAD3;
-	Tue,  6 Feb 2024 19:52:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641A16F52C;
+	Thu,  8 Feb 2024 10:02:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707249131; cv=none; b=mfnjZJjrCrCnVoVpjoFcNjCuS1rZbEj0D0mRtbgmTyIOFf/ILqjkyvsNFCcuW5UPa0L0OKr+agkt85UtDRPG66bBa+GjQkvCfEtHA8VD3FetPUNLr8NRie8BPeMMe1GY+owJrTtJEDrf6SXFjOu9WjSzqQchtHbiKl9iQALcPVY=
+	t=1707386557; cv=none; b=FgJey1UN89d3gyjIm0Pyi7TlRXn9l1XxTlLRr217alcWJ45RRfMN93ciGDTWw5fxHpQ89F+udupN1MI8uzKucS6joj9Dcc2TJxhlWk5oG2Sy1oBmnNKdtdmdhp1gQI3+MEOsgoIyN7cMqzEv8J3VCTiZBBz2UO+3IwMk9TakBTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707249131; c=relaxed/simple;
-	bh=fZx4pRcUc3za8T9n9tUmT3V2JcZVmsY/cAiohlWM/TI=;
+	s=arc-20240116; t=1707386557; c=relaxed/simple;
+	bh=D96AYJ0yVRf7SBQeHRHG9hGhNFiOxzG3tk5OOOiG5iI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rh2IHYr+37M+it6Ojj0qdymMZzx4SXkpukD3W0DiFe00aVGsj/zIf3BAIlfl+4EwR4MbKU5vP31wj7dz2bm4KEw7TOZELX0JCIU90W2psnXsjckGQ82KK0KbeIqV4cVS7YIdL611obFg2XAovmPhwSs7kexuZ5fJZBbMOKYq7dY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kz7SoHQc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAFA8C433C7;
-	Tue,  6 Feb 2024 19:52:09 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=VedGqiWrmlcm9NINqTNv0Vk2FlLSQZjDbEkyVdqyXMe/ScF1zq+KgDSurKQSIUjrUodU8EQy/zskx6a5G2dtUUwVO8vq2MdkoUsf8Ma2dLxfEXQ8nfwa+RVklqPuxHQyVjpIWItHdhgpEEKOKUDYwkV1jlZ6GjOT/hx+Z/+u+Uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VHeqwAoN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33ADDC433F1;
+	Thu,  8 Feb 2024 10:02:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707249130;
-	bh=fZx4pRcUc3za8T9n9tUmT3V2JcZVmsY/cAiohlWM/TI=;
+	s=k20201202; t=1707386556;
+	bh=D96AYJ0yVRf7SBQeHRHG9hGhNFiOxzG3tk5OOOiG5iI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kz7SoHQcZnrQNGofmOvgUq1NYXOKfi78ER9R7f1WE7u6k4TGOgErJiuHTjTMHtkU7
-	 b0C5oOFjSIJyrUYNmL1vsAbCQg3in+MfyxWbWDKULEl5XPQA8FZuc14SJtuVUAXRct
-	 19BbB8vq2Z4PnJOBUbmAkW/657abiTLSsVl3sc4JPJ475XPYjFxxdT8zoSvm6FlFHR
-	 30zWR2Hy8HGTUto8eIH7I75P3KyZfPgI7L0eqNPe4qV5erhqMMBvvWEvyLaGXC9GSH
-	 79YUXyWfieoPmuNt/Rwbx6029yURZl3XV+iJv7P3Y6XkoMQPaEDgcv+EFwajv19GwJ
-	 5zS1nyNj+E4+A==
-Date: Tue, 6 Feb 2024 20:52:06 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Rand Deeb <rand.sec96@gmail.com>
-Cc: Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>, openbmc@lists.ozlabs.org,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	deeb.rand@confident.ru, lvc-project@linuxtesting.org,
-	voskresenski.stanislav@confident.ru
-Subject: Re: [PATCH] i2c: Remove redundant comparison in npcm_i2c_reg_slave
-Message-ID: <ZcKN5isE0B6q88Fa@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Rand Deeb <rand.sec96@gmail.com>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>, openbmc@lists.ozlabs.org,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	deeb.rand@confident.ru, lvc-project@linuxtesting.org,
-	voskresenski.stanislav@confident.ru
-References: <20240206194201.10054-1-rand.sec96@gmail.com>
+	b=VHeqwAoNV7C/gX+AnZEx/HQqAh/y+NET+LhOfaOfSSEWMQXVj5Y6SpJgGXjQMUeZt
+	 gFTzmmmCA5hHb/LpelrqtBl0QK1JNu/9LkP//tgwsIdySN50IBdCQW42kgDGVkwY/R
+	 AcER4mY5OQ2OHqOW1E0U+Tdo+a1Ka3IJ627Xx1TQPQKpyAS5p/ClTaWnPqGHTaR3FK
+	 w0WJ0BLvHNgNhDT/A97tMRR5d6a7/m8Dz4Nxeg2b2akfBzXYXVO9Zr4YLw3dUx4gI1
+	 k56zrnrNv8MrjhoVUTEGsV4/XrV964hS28JhP2onb8qzNxwd4UskxtVnNaTtiXajs2
+	 d/NVwAAkPydpQ==
+Date: Thu, 8 Feb 2024 11:02:33 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, andersson@kernel.org, 
+	konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, vkoul@kernel.org, quic_bjorande@quicinc.com, 
+	manivannan.sadhasivam@linaro.org, bryan.odonoghue@linaro.org, quic_msavaliy@quicinc.com, 
+	quic_vtanuku@quicinc.com
+Subject: Re: [V3] i2c: i2c-qcom-geni: Correct I2C TRE sequence
+Message-ID: <uswznu3h53gcefpdc4vxozz32ecdcjvzmr7admwc4h54o27bfy@qqoevrl3dcyt>
+References: <20240201101323.13676-1-quic_vdadhani@quicinc.com>
+ <CAA8EJpqQtHDRK2pex+5F-fMRTosJuFCx59e89MWhnie1O3dHKA@mail.gmail.com>
+ <60b5e755-352b-476d-8c6e-2170594ae80d@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/c+/7Pm9wtwRPq0h"
-Content-Disposition: inline
-In-Reply-To: <20240206194201.10054-1-rand.sec96@gmail.com>
-
-
---/c+/7Pm9wtwRPq0h
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <60b5e755-352b-476d-8c6e-2170594ae80d@quicinc.com>
 
-On Tue, Feb 06, 2024 at 10:42:01PM +0300, Rand Deeb wrote:
-> In the npcm_i2c_reg_slave() function, there was a redundant
-> comparison that checked if 'bus->slave' was null immediately after
-> assigning it the 'client' value. There were concerns about a
-> potential null dereference because of `client->adapter`, but
-> according to Wolfram Sang, "we trusted ourselves here" Therefore,
-> this comparison is unnecessary.
->=20
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->=20
-> Signed-off-by: Rand Deeb <rand.sec96@gmail.com>
+Hi Viken, Dmitry,
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Fri, Feb 02, 2024 at 04:13:06PM +0530, Viken Dadhaniya wrote:
+> 
+> On 2/1/2024 5:24 PM, Dmitry Baryshkov wrote:
+> > On Thu, 1 Feb 2024 at 12:13, Viken Dadhaniya <quic_vdadhani@quicinc.com> wrote:
+> > > 
+> > > For i2c read operation in GSI mode, we are getting timeout
+> > > due to malformed TRE basically incorrect TRE sequence
+> > > in gpi(drivers/dma/qcom/gpi.c) driver.
+> > > 
+> > > TRE stands for Transfer Ring Element - which is basically an element with
+> > > size of 4 words. It contains all information like slave address,
+> > > clk divider, dma address value data size etc).
+> > > 
+> > > Mainly we have 3 TREs(Config, GO and DMA tre).
+> > > - CONFIG TRE : consists of internal register configuration which is
+> > >                 required before start of the transfer.
+> > > - DMA TRE :    contains DDR/Memory address, called as DMA descriptor.
+> > > - GO TRE :     contains Transfer directions, slave ID, Delay flags, Length
+> > >                 of the transfer.
+> > > 
+> > > Driver calls GPI driver API to config each TRE depending on the protocol.
+> > > If we see GPI driver, for RX operation we are configuring DMA tre and
+> > > for TX operation we are configuring GO tre.
+> > > 
+> > > For read operation tre sequence will be as below which is not aligned
+> > > to hardware programming guide.
+> > > 
+> > > - CONFIG tre
+> > > - DMA tre
+> > > - GO tre
+> > > 
+> > > As per Qualcomm's internal Hardware Programming Guide, we should configure
+> > > TREs in below sequence for any RX only transfer.
+> > > 
+> > > - CONFIG tre
+> > > - GO tre
+> > > - DMA tre
+> > > 
+> > > In summary, for RX only transfers, we are reordering DMA and GO TREs.
+> > > Tested covering i2c read/write transfer on QCM6490 RB3 board.
+> > 
+> > This hasn't improved. You must describe what is the connection between
+> > TRE types and the geni_i2c_gpi calls.
+> > It is not obvious until somebody looks into the GPI DMA driver.
+> > 
+> > Another point, for some reason you are still using just the patch
+> > version in email subject. Please fix your setup so that the email
+> > subject also includes the `[PATCH` part in the subject, which is there
+> > by default.
+> > Hint: git format-patch -1 -v4 will do that for you without a need to
+> > correct anything afterwards.
+> > 
+> 
+> At high level, let me explain the I2C to GPI driver flow in general.
+> 
+> I2C driver calls GPI driver exposed functions which will prepare all the
+> TREs as per programming guide and
+> queues to the GPI DMA engine for execution. Upon completion of the Transfer,
+> GPI DMA engine will generate an
+> interrupt which will be handled inside the GPIO driver. Then GPI driver will
+> call DMA framework registered callback by i2c.
+> Upon receiving this callback, i2c driver marks the transfer completion.
 
+Any news about this? Dmitry do you still have concerns? We can
+add this last description in the commit log, as well, if needed.
 
---/c+/7Pm9wtwRPq0h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXCjeIACgkQFA3kzBSg
-Kba5Ow//TTSg9C/r5uHjS757qdLJr5CtKt2ZGXCoiBz/JxVUr5V6F2diEjjqizrC
-p0ixL2q1MDpvF4ZUAgwnI+Ht+e71py3Sto8MlfPRWBchfP/ugE9ehK+RWyOho43x
-xNlwQqtSOqQG7NtpfOtNSnYHNSYpeD4/giZToeL2mV5d2cXidxYLP1rinoYni4ec
-ECqS1eLZV+8pxdkd5X3Im7ahFfPb1hkrWr3yajswDxLdIo8ImEuUiVUMoau5cYNp
-4ukBDe76MAweDpwMg4EyIoax2AYRl2ULub227IH5usbOZ1gTIZvH3DeLd5CMrhFx
-kvqElCljKdAWfIxytJvTmThl4rMmdxo0/Sa1k9Jv3Rzhu9V6tTdm+WrG7pst5Fjc
-9wlwgfUsbMCMMGc3QAlP7WfG9g4w4MwUCZZ9DI2gdHQTz9//y41fvAz2TAXz2MBK
-ka7UHwGziX1bhomFJO4jin5mKlPceC0TvEefn2zh0pMTSL7puN3S4yYp45x9cKkQ
-cl7iRX2+Na582dlJJWq3YZRBFTzGgTup0vrKPZ+lOG0esgJjOQ73oJoq8YC9qlD9
-8gCbxtYMqWvzM3vdyRpL/z0YqDjgfd/3IDgchMP3IhX2w5b3aAahj2Cnr8SdQrfV
-vM64XBVkntSTZpWDWGAaYPbB4eeLtLhz7RTexwSAMPJxMn65uNw=
-=Z6/z
------END PGP SIGNATURE-----
-
---/c+/7Pm9wtwRPq0h--
+Andi
 
