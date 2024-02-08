@@ -1,52 +1,52 @@
-Return-Path: <linux-i2c+bounces-1661-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1662-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9133A84E465
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Feb 2024 16:52:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F80B84E4E2
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Feb 2024 17:20:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BEE12831BA
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Feb 2024 15:52:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2627128C275
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Feb 2024 16:19:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70BF37D3E0;
-	Thu,  8 Feb 2024 15:52:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DDB47EF05;
+	Thu,  8 Feb 2024 16:19:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bSe9PK47"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QNqfu+Sy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B677CF23;
-	Thu,  8 Feb 2024 15:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00D87EEF8;
+	Thu,  8 Feb 2024 16:19:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707407552; cv=none; b=aLlgxfBfv9Q9k4Izdqzf5bSJbCEewUilQjqcOR+T/65IflVlr47DFHwoqVpIEY2UYftC41VWH6w9N5beuYocaVR3w5hMxH26XzdAZsN3nHs1Zll703F6lpmCiRIu53YfGdh5esOYV8M530uNSWqt04P7Ggw1j60ovtt7cUO2SrY=
+	t=1707409179; cv=none; b=VLzcDaf9I19japxnwwOBSrQr+P8ty3KdVDPgWfyLSfjMYDa2mIU94duIVx0SlLGJbGgGHt6kNUKZ9m0hEkcLv0FUi91DrnfyVvFHy/rTOL5xMy2ampzSLYZYjoKEGaG6wmSP2DO0E1cExFahFzFLhbG2B+rv8jxy8OOZRrqgfJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707407552; c=relaxed/simple;
-	bh=8wAkocgzW4T8kfmPqArrycrun16teDyWi7a3ZHxhggs=;
+	s=arc-20240116; t=1707409179; c=relaxed/simple;
+	bh=VvSGNV6b13e7HPMqih9K802mDaoqJaDzuGfo7FTl4pk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d4r3IvoVaD5Uh0zzGfDJRaP0rZUO8RpOUSpkQodxYd+Jo52+Q0ZiQ4WxfqijQ2nsm2tO7TBjbAi7CN7FtCq3cc3V4gUx1Qe5MAm7BnfaR9i3FSoqNPTOY5wHhi1ndajBTKjQ88ZIfOt8BkdhF47bVrW+BNwJYp2Dpch+rnVz2Rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bSe9PK47; arc=none smtp.client-ip=217.70.183.201
+	 In-Reply-To:Content-Type; b=OHyUTYygUbpYb7FmfF/SFRfxOVta4A1S975ZOX0XFX5GGynlhcx8XdFT4EzsE/HV+jgZXGrqwn+J2rDp5pjv8PGukLojFeEebpxcF1BrapmZvLMfzJlbGsiVenLcCQiKc3ml97GVHztmADOm60J+VgYjUnxGcj59wSEz3GPOaNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QNqfu+Sy; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B13ED1BF20A;
-	Thu,  8 Feb 2024 15:52:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1ECA340004;
+	Thu,  8 Feb 2024 16:19:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1707407547;
+	t=1707409168;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=9B0wVUjPxEv2QBY9FiBPeeaEoehsJ57DXumqRBJ/n6U=;
-	b=bSe9PK47gxI5Clu47C1OkB0hXrB4/Yfweuei1EH2vhYWYd3laL6W+TiYxCyyvTkw7aMyFY
-	2hZMMYKlSvj+uw71BKP+ZjuHyon9VbbyCJMhjpeE3UfPF4Odtm6B8OTTi5Y2XGDKBeWOot
-	IvyCXhQZHbTyL9Bdg+Hfq9jc6pB5YXz5+L0iV+bH5as0slbejB4i7wlbPQC73R/5CiRor0
-	Nz08kVh+TUDv0mPCpgThMEyPuqx3ZevOHu6WaCgexl1xV6DeGRqQ1vgEg9esdEaKScr7Dl
-	DQg3zvx1T8ri0oglXQHSOwSndU/GYFTcHS8QR3AGbEARe5DJAV7bGCZOMjWyjg==
-Message-ID: <8228b76f-ce15-4335-8a09-08d0d57974b1@bootlin.com>
-Date: Thu, 8 Feb 2024 16:52:24 +0100
+	bh=U2TLPkr/TOdJMNowIWx3rjtlSXIwzGhq1RSaqhd7JXE=;
+	b=QNqfu+SyJHYhyGlvwAZsb9NUhHgTVxE3ArJ09CQwC/vdWPX0zKeI6EiZWzY9kjfvj8COxc
+	RbVvS+FPBwH6mVflj/a+xeG6nBzagrBVOnxsuU1P4ftNAozaKHz6E94P7KM+5I5Xt+irc2
+	wVoDH5jtXIVQgw7ZR3xpEG3vNPmPUv+EgoX/4Oq0rFASzSzplEiqpIioYDlta0lHCcr6DQ
+	WXWQ8BNt0m5cWKAP8ne7CScpygoxdJgtMpDfKE6ZJMiuRBWU55NuCOj/AtC3kEzTZ/ZJRq
+	Ie5Ym+Lj8MKHGPDFZBwc5YwnluGyQkVPvx03Mn35D4XW7GHaAPo7708x1Ks4VQ==
+Message-ID: <95032042-787e-494a-bad9-81b62653de52@bootlin.com>
+Date: Thu, 8 Feb 2024 17:19:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -54,15 +54,16 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/15] pinctrl: pinctrl-single: move suspend()/resume()
- callbacks to noirq
-To: Andi Shyti <andi.shyti@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
- Tony Lindgren <tony@atomide.com>, Haojian Zhuang
+Subject: Re: [PATCH 01/14] gpio: pca953x: move suspend/resume to
+ suspend_noirq/resume_noirq
+Content-Language: en-US
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Tony Lindgren <tony@atomide.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Andy Shevchenko <andy@kernel.org>, Haojian Zhuang
  <haojian.zhuang@linaro.org>, Vignesh R <vigneshr@ti.com>,
  Aaro Koskinen <aaro.koskinen@iki.fi>,
- Janusz Krzysztofik <jmkrzyszt@gmail.com>, Peter Rosin <peda@axentia.se>,
+ Janusz Krzysztofik <jmkrzyszt@gmail.com>, Andi Shyti
+ <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
  Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
  Philipp Zabel <p.zabel@pengutronix.de>, Tom Joseph <tjoseph@cadence.com>,
  Lorenzo Pieralisi <lpieralisi@kernel.org>,
@@ -73,51 +74,52 @@ Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
  linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
  linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
  theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com
-References: <20240102-j7200-pcie-s2r-v2-0-8e4f7d228ec2@bootlin.com>
- <20240102-j7200-pcie-s2r-v2-2-8e4f7d228ec2@bootlin.com>
- <CACRpkdYBnQ6xh2yNsnvquTOq5r7NeDhot6To9myfuNbonKcgzQ@mail.gmail.com>
- <6hyubhrho6xbki6yxtmqedylc2gpeyj4yu5gtrjrq4nsthcr7g@elfukmqeve2a>
-Content-Language: en-US
+References: <20240102-j7200-pcie-s2r-v1-0-84e55da52400@bootlin.com>
+ <20240102-j7200-pcie-s2r-v1-1-84e55da52400@bootlin.com>
+ <20240116074333.GO5185@atomide.com>
+ <31c42f08-7d5e-4b91-87e9-bfc7e2cfdefe@bootlin.com>
+ <CACRpkdYUVbFoDq91uLbUy8twtG_AiD+CY2+nqzCyHV7ZyBC3sA@mail.gmail.com>
 From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <6hyubhrho6xbki6yxtmqedylc2gpeyj4yu5gtrjrq4nsthcr7g@elfukmqeve2a>
+In-Reply-To: <CACRpkdYUVbFoDq91uLbUy8twtG_AiD+CY2+nqzCyHV7ZyBC3sA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: thomas.richard@bootlin.com
 
-On 1/29/24 23:49, Andi Shyti wrote:
-> Hi Linus,
-> 
-> On Sat, Jan 27, 2024 at 11:31:11PM +0100, Linus Walleij wrote:
->> On Fri, Jan 26, 2024 at 3:37 PM Thomas Richard
->> <thomas.richard@bootlin.com> wrote:
->>
->>> The goal is to extend the active period of pinctrl.
->>> Some devices may need active pinctrl after suspend() and/or before
->>> resume().
->>> So move suspend()/resume() to suspend_noirq()/resume_noirq() in order to
->>> have active pinctrl until suspend_noirq() (included), and from
->>> resume_noirq() (included).
+On 1/28/24 01:12, Linus Walleij wrote:
+> On Fri, Jan 19, 2024 at 6:01 PM Thomas Richard
+> <thomas.richard@bootlin.com> wrote:
+>> On 1/16/24 08:43, Tony Lindgren wrote:
+>>> * Thomas Richard <thomas.richard@bootlin.com> [240115 16:16]:
+>>>> Some IOs can be needed during suspend_noirq/resume_noirq.
+>>>> So move suspend/resume callbacks to noirq.
 >>>
->>> The deprecated API has been removed to use the new one (dev_pm_ops struct).
+>>> So have you checked that the pca953x_save_context() and restore works
+>>> this way? There's i2c traffic and regulators may sleep.. I wonder if
+>>> you instead just need to leave gpio-pca953x enabled in some cases
+>>> instead?
 >>>
->>> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 >>
->> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->>
->> Do you want to merge this as a series or is this something I
->> should just apply?
+>> Yes I tested it, and it works (with my setup).
+>> But this patch may have an impact for other people.
+>> How could I leave it enabled in some cases ?
 > 
-> there is still a comment from me pending.
+> I guess you could define both pca953x_suspend() and
+> pca953x_suspend_noirq() and selectively bail out on one
+> path on some systems?
 
-Hi Andi,
+Yes.
 
-Based on your comment, for the next iteration, I will move the cleanup
-in a dedicated patch.
-
-@Linus, you can apply pinctrl patches once everything is ok for you.
+What do you think if I use a property like for example "ti,pm-noirq" to
+select the right path ?
+Is a property relevant for this use case ?
 
 Regards,
 
+> 
+> Worst case using if (of_machine_is_compatible("my,machine"))...
+> 
+> Yours,
+> Linus Walleij
 -- 
 Thomas Richard, Bootlin
 Embedded Linux and Kernel engineering
