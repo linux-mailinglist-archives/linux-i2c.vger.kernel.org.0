@@ -1,105 +1,126 @@
-Return-Path: <linux-i2c+bounces-1660-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1661-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6505084E349
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Feb 2024 15:34:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9133A84E465
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Feb 2024 16:52:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04D6CB233D4
-	for <lists+linux-i2c@lfdr.de>; Thu,  8 Feb 2024 14:34:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BEE12831BA
+	for <lists+linux-i2c@lfdr.de>; Thu,  8 Feb 2024 15:52:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2057992A;
-	Thu,  8 Feb 2024 14:34:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70BF37D3E0;
+	Thu,  8 Feb 2024 15:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IyVEfMyG"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bSe9PK47"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5465E6A347;
-	Thu,  8 Feb 2024 14:34:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B677CF23;
+	Thu,  8 Feb 2024 15:52:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707402874; cv=none; b=MX9uakV+Hn7ZId5g13SKJgqOqbBElGvHUmh4guJuPLhI0Vvjb/y7Ttc2LRzEgRx8fGQo2TCuMtKaaW9d3VAEEhYWqcx5Yd9dHAfJO0G7eOYCXL92VK61iEisZEKTflnzf//yvwFROrrYUfE6J9Zflc+1MVbtNiMLzAhUyPKq6eg=
+	t=1707407552; cv=none; b=aLlgxfBfv9Q9k4Izdqzf5bSJbCEewUilQjqcOR+T/65IflVlr47DFHwoqVpIEY2UYftC41VWH6w9N5beuYocaVR3w5hMxH26XzdAZsN3nHs1Zll703F6lpmCiRIu53YfGdh5esOYV8M530uNSWqt04P7Ggw1j60ovtt7cUO2SrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707402874; c=relaxed/simple;
-	bh=cjeBQF+H60qIRCN8KiTSL9BpFV9avuvy09H2SemvsUI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VmVVMHW0ZjfNfHjuWJW4wt1I/sSYKboocwwbxMIM6ZGP8uq0B97EkzscEGW+kE8BMLGaaebp/xeN1BFq83OynBsvw6/p1ojgSinWWlF0ZRfWhvC3s9/fDu+q6XGXi+9ogn2akTFtzxnxBstR0rGH1Kq8LNhviPffSbLrLUxIO9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IyVEfMyG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7192BC433F1;
-	Thu,  8 Feb 2024 14:34:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707402873;
-	bh=cjeBQF+H60qIRCN8KiTSL9BpFV9avuvy09H2SemvsUI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IyVEfMyGfOFoou2K8QzU1KqpicVeCZb0GO870IEZ2BfvNSHL+O763XVE+6Co4+NZi
-	 733hgpRETljSCdt8xfp0EeZ0Ti2awUJ+oSIfAe2XVz0WeEFkijI5S0dlBUU6k5E7fk
-	 MI2E9xYe/qQLfJFnJi8575kBzTPmSu9RxFYfBri6fxgQfpBn0sgSsrHqyWoIKr/Ham
-	 oybP3+loI6ITuzFtC7IZhx2u12zG4jg2IIaZivD3c+UzSxoBMRr7lknnlahSSIMFK0
-	 9Tut197zeX0mk5ycsGQHn1FJjfkpu+FEiu2j+9zF/Yhw4aHwJw9V+vkN1SfQbDCl+0
-	 hDm7nsxrys/3Q==
-Date: Thu, 8 Feb 2024 14:34:30 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>, regressions@lists.linux.dev
-Subject: Re: [REGRESSION] `lis3lv02d_i2c_suspend()` causes `unbalanced
- disables for regulator-dummy` and `Failed to disable Vdd_IO: -EIO`
-Message-ID: <ZcTmdg2qTq0bP0ul@finisterre.sirena.org.uk>
-References: <5fc6da74-af0a-4aac-b4d5-a000b39a63a5@molgen.mpg.de>
+	s=arc-20240116; t=1707407552; c=relaxed/simple;
+	bh=8wAkocgzW4T8kfmPqArrycrun16teDyWi7a3ZHxhggs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d4r3IvoVaD5Uh0zzGfDJRaP0rZUO8RpOUSpkQodxYd+Jo52+Q0ZiQ4WxfqijQ2nsm2tO7TBjbAi7CN7FtCq3cc3V4gUx1Qe5MAm7BnfaR9i3FSoqNPTOY5wHhi1ndajBTKjQ88ZIfOt8BkdhF47bVrW+BNwJYp2Dpch+rnVz2Rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bSe9PK47; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B13ED1BF20A;
+	Thu,  8 Feb 2024 15:52:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1707407547;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9B0wVUjPxEv2QBY9FiBPeeaEoehsJ57DXumqRBJ/n6U=;
+	b=bSe9PK47gxI5Clu47C1OkB0hXrB4/Yfweuei1EH2vhYWYd3laL6W+TiYxCyyvTkw7aMyFY
+	2hZMMYKlSvj+uw71BKP+ZjuHyon9VbbyCJMhjpeE3UfPF4Odtm6B8OTTi5Y2XGDKBeWOot
+	IvyCXhQZHbTyL9Bdg+Hfq9jc6pB5YXz5+L0iV+bH5as0slbejB4i7wlbPQC73R/5CiRor0
+	Nz08kVh+TUDv0mPCpgThMEyPuqx3ZevOHu6WaCgexl1xV6DeGRqQ1vgEg9esdEaKScr7Dl
+	DQg3zvx1T8ri0oglXQHSOwSndU/GYFTcHS8QR3AGbEARe5DJAV7bGCZOMjWyjg==
+Message-ID: <8228b76f-ce15-4335-8a09-08d0d57974b1@bootlin.com>
+Date: Thu, 8 Feb 2024 16:52:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="WpfLvOBs6QH8Jk+0"
-Content-Disposition: inline
-In-Reply-To: <5fc6da74-af0a-4aac-b4d5-a000b39a63a5@molgen.mpg.de>
-X-Cookie: You might have mail.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 02/15] pinctrl: pinctrl-single: move suspend()/resume()
+ callbacks to noirq
+To: Andi Shyti <andi.shyti@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
+ Tony Lindgren <tony@atomide.com>, Haojian Zhuang
+ <haojian.zhuang@linaro.org>, Vignesh R <vigneshr@ti.com>,
+ Aaro Koskinen <aaro.koskinen@iki.fi>,
+ Janusz Krzysztofik <jmkrzyszt@gmail.com>, Peter Rosin <peda@axentia.se>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Tom Joseph <tjoseph@cadence.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
+ theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com
+References: <20240102-j7200-pcie-s2r-v2-0-8e4f7d228ec2@bootlin.com>
+ <20240102-j7200-pcie-s2r-v2-2-8e4f7d228ec2@bootlin.com>
+ <CACRpkdYBnQ6xh2yNsnvquTOq5r7NeDhot6To9myfuNbonKcgzQ@mail.gmail.com>
+ <6hyubhrho6xbki6yxtmqedylc2gpeyj4yu5gtrjrq4nsthcr7g@elfukmqeve2a>
+Content-Language: en-US
+From: Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <6hyubhrho6xbki6yxtmqedylc2gpeyj4yu5gtrjrq4nsthcr7g@elfukmqeve2a>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: thomas.richard@bootlin.com
 
+On 1/29/24 23:49, Andi Shyti wrote:
+> Hi Linus,
+> 
+> On Sat, Jan 27, 2024 at 11:31:11PM +0100, Linus Walleij wrote:
+>> On Fri, Jan 26, 2024 at 3:37 PM Thomas Richard
+>> <thomas.richard@bootlin.com> wrote:
+>>
+>>> The goal is to extend the active period of pinctrl.
+>>> Some devices may need active pinctrl after suspend() and/or before
+>>> resume().
+>>> So move suspend()/resume() to suspend_noirq()/resume_noirq() in order to
+>>> have active pinctrl until suspend_noirq() (included), and from
+>>> resume_noirq() (included).
+>>>
+>>> The deprecated API has been removed to use the new one (dev_pm_ops struct).
+>>>
+>>> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+>>
+>> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>>
+>> Do you want to merge this as a series or is this something I
+>> should just apply?
+> 
+> there is still a comment from me pending.
 
---WpfLvOBs6QH8Jk+0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Andi,
 
-On Fri, Feb 02, 2024 at 12:38:04PM +0100, Paul Menzel wrote:
+Based on your comment, for the next iteration, I will move the cleanup
+in a dedicated patch.
 
-> Testing commit 2f189493ae32 (i2c: i801: Add lis3lv02d for Dell XPS 15 759=
-0)
-> [1], it=E2=80=99s very likely this commit, it turns out, that Linux logs =
-the warning
-> below during ACPI S3 suspend:
+@Linus, you can apply pinctrl patches once everything is ok for you.
 
-The driver is just buggy here AFAICT, it's powering off the device in
-both runtime suspend and runtime resume so if the device is runtime
-suspended when system suspend happens then it'll power off the device
-again.  The runtime suspend and system suspend need to talk to each
-other here.
+Regards,
 
---WpfLvOBs6QH8Jk+0
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+Thomas Richard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXE5nYACgkQJNaLcl1U
-h9D2FQf/aIy1W/ZQfqQl38qjH+AxWm2uBJTRKtUWbZlYKX75+sYgnz+SSeSNs5Uf
-tQ1fFae7U27jP4eqD10dVVx9iInwPHg7MZMSr5eEoZHKxpTDBZzDFNbYFXeuwZNi
-cR7lGKdqV2zBhKeGip+h+JzwPZk5kSzM96lUFe1QJZwCKvr9ocj6fqIedTrtbkCC
-Mn37SnlSTz9H3/0+uk3xMyop1EePKJSmpgGORA6t6TfPzPhqhjBkyFDc5XpqmDtK
-v3p6QH0xRTLQbvzo2fAEXgYGPdOifKXk6jqDWZ/l3aOSzMu6+Zmcf3hVt/zIcsWT
-ft9AUmNoVO3FiPNqqcaqCpMC4oZWnQ==
-=MLow
------END PGP SIGNATURE-----
-
---WpfLvOBs6QH8Jk+0--
 
