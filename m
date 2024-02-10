@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-1682-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1683-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5EE78504EE
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Feb 2024 16:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EB168504EF
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Feb 2024 16:28:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EB0E284A39
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Feb 2024 15:27:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B688284A30
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Feb 2024 15:28:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 308865BAD4;
-	Sat, 10 Feb 2024 15:27:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 019B65BAD4;
+	Sat, 10 Feb 2024 15:28:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bPtNSMMD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XtgHfzob"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED8F5B69F
-	for <linux-i2c@vger.kernel.org>; Sat, 10 Feb 2024 15:27:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2188F364BF
+	for <linux-i2c@vger.kernel.org>; Sat, 10 Feb 2024 15:28:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707578871; cv=none; b=fYHs1DJWhQ2oCr9GFOdbubmMFm+qAsen83XPEeoSqrIwR7mn6NMqEvgepHU+xoT/SoZGkDD9RGS3vSS9A1UqBYAsWq7mjXC3MWpkpGikwRoNTjPAA5eG222ZHhISRWhjC9WeiG4/Ts6v4R921bulqVKNJ+e2ZTdd2MTXmuSoq/s=
+	t=1707578929; cv=none; b=AHcuL4wuU5QQ3lG01n12wMvs672L8oP4QeKBsq2LiKHGlS8wZ6G/Ytkk+XO/QJIbgAm4OTk5lRjCDHEHithUuyJI8y84XEZ0Xp24cGGAQZOUNVwOWA4BKKB3y734g87YRXNERaCcndgS8JbkBVn0SbP+5PIA8WAHVts7BJgnUXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707578871; c=relaxed/simple;
-	bh=oaoDt5yf3FC+k/UiYMLvFIGyh3iegfWsot4Hn5r9Nyg=;
+	s=arc-20240116; t=1707578929; c=relaxed/simple;
+	bh=THIf63cNe0hbAUzX3bzh1vx1MO0mrsr1I2B/KDD74fc=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=InBUhWfej7DV+Ik7HFgDP2mQ2y/iFBaIqC+A/bkIhI/YooF6nTJdZeOQYxg0/wLvGOFzjkNtghzQMLhkEnXhTwtkv5Ja0UPrQW2xqfD0Jy2PmbNbfBSV5sj6TyhJYDwJ6LaLqFUvLQr+vUp+djYJlDfUhBF+bv6wXWa5mqxQna8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bPtNSMMD; arc=none smtp.client-ip=209.85.208.51
+	 In-Reply-To:Content-Type; b=pP3E75VvLWSq24Hyrl8FbWFcQxQdsxHAOprM+HT6DzWAL0+sNPG3S2OAV/MBpPAZPtjA4Uc66lmWjxdnn+RkxdOFfOmdwX0pMOCx0UX940yyJmC6CWkNuCwc4RnK9nKROj/D163fAPplqySI4b314/c0moqe8Ls0qPC/eB0XLkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XtgHfzob; arc=none smtp.client-ip=209.85.208.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5610b9855a8so4831320a12.0
-        for <linux-i2c@vger.kernel.org>; Sat, 10 Feb 2024 07:27:48 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-56174bbad45so420168a12.1
+        for <linux-i2c@vger.kernel.org>; Sat, 10 Feb 2024 07:28:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707578867; x=1708183667; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707578926; x=1708183726; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=OUqH6U2FqffRJUXLWYxAToa5lBPKpOUcvs42qsO04Js=;
-        b=bPtNSMMDEUokIDVAWcxeSMyUThGm64tGGPaAa7GlcUaZMuoh+oDgQ45RFGJ+Im3YmS
-         0BRvHlQFG1duC5ez6vE8u1JC5OG7sLzgLaRBG8U5wg+yZyiZcwWjtaUEzl4MqX1spcgk
-         vUfyBAf7Qvz+CSEJz+HEJwXLrBjpUcjRCr152y3QD+iwia3+BAo2TNvOE4vkVdNpbEer
-         b19fh0dK1WMdCSTt3VgsMTg/qoShj1VZQXEkzg1NFcfOay6FB+La17KeQ4tWtpkRqTsq
-         luz6oDkpr2b0OfcLZ6bQ7HHPigSoEa7nR0fGs73LK0w0GThFYgVfVtfHNEaCBDmuXHoe
-         PoZA==
+        bh=pnrbItPU1eG4106CUvQNvjYzD7Nm3Z4rSfas2ScFL7Y=;
+        b=XtgHfzobijVAo9m1QOrUAw8KHI5u1e3yg9IOjMhEFgeMfd0hfZZ9+mcgMexpFO1AEX
+         f+Uw7bY9U+VR46/OBZziRZT6zudpHQ4ny1XVvkbzg6UkQURSvMDZPbRqd/aRwx6+bVK/
+         Yc/NE9hmgr408rbGGWvy0Q++xwlKCP4qHRS0Dnr9IohK/7XlFGnEReYqM1L1n7juOnu5
+         5lEW8jeLwE3db65PmyRmPDqmma3RbfU3IUdGg25r9fIniQkBez1Rp6kxQufQG1Ishgyx
+         40bAp9OnzG8PhmoUWf2c0r2VvjTrk2GZL/gjDva5xEgyCF7HZ48nsFw3SeyDwdmdMAdw
+         rLKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707578867; x=1708183667;
+        d=1e100.net; s=20230601; t=1707578926; x=1708183726;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OUqH6U2FqffRJUXLWYxAToa5lBPKpOUcvs42qsO04Js=;
-        b=Xjgms9idl/0SiuCiE/PJD3m8blhFO27vqHzXap9F62kbC3KalaTFgcDspVSMgQh3aX
-         DBbyNj6z7mx3o42bW70SalSW+369EB2AyYKjyLZtGZ2tsv6y+XLR+WbdE0B/olavo/3b
-         dMx42+1LZahGj8teewQR7wMfSrlhHEPVug5U/QNGk1+4TNdhCZXccpHu+iVTi6OERpgk
-         b5qoK8Nh3p/Qz1RKnD2/uQyoWgrFFEQ6L8zdLS4gAeKPEcnzPDG+4+tCUe3QNIZ24Tbm
-         2Tlxm7HkuZwO4mZmUvP8SQn245osHV1eUa8A7UrWW0dN3d6XXDjZRwqAvaR4RLPhB5T2
-         IUig==
-X-Gm-Message-State: AOJu0Yz4XLCPGl+a61FB9oQh7W85E18RLI4TQ1Uj+W3f5FiHD4pQ36Kz
-	ah/D36MY5S6YGveVNvA9cM0NkUtfIAajFTy70sdOgFBzBbSYaT1j3PZ6gzKa
-X-Google-Smtp-Source: AGHT+IH0PsMNJgtGm4u6Dbsc0Uc9ctI4KeUVFteuKudMGB2TcrEXNCJYzI/lFCQjd2pOzfPBYC5Wqw==
-X-Received: by 2002:a05:6402:559:b0:561:33dd:621c with SMTP id i25-20020a056402055900b0056133dd621cmr2234205edx.7.1707578867046;
-        Sat, 10 Feb 2024 07:27:47 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUjHUv0WhHJ9nQC83T2JoTwhb2ZFkdS+lqF21mwENGh+E3HmPv6lFCg5ZpJ76qB+YqQwX/20M7xZUkG4Ga6YU2EWZGYZN8=
+        bh=pnrbItPU1eG4106CUvQNvjYzD7Nm3Z4rSfas2ScFL7Y=;
+        b=qp3FWVxW/+TbQKfpHaAl9p8aeoJHiaoYpUknbTKnfXKMRcBFbFslL0e9Me1gIF7sEy
+         XCmLA/kaqDAUswlGMMR/53pUYjxkmZwVgEnoXwtGYXJBdcL9sr4O6iptzgZkJfujNxJb
+         rjS6MIhAMQnYR+Q+/nnJH0LK9v9lvFcZh2UuIRtMGTENiGtz+pv+MOOJKdMUKUQYn2ln
+         yz92M2vDS6dX+ixRLx5QtIMd1eeo/4AIiJ0K7Hpg+agk2dmHRJIa3EIYz2H0AJ84xdaS
+         BvjHHl9MkEPWilUiCUlNI+Vtk7VEkBV8v7IkpR6Z551fgyOodteKrc2XkHP5HAZqmB8B
+         wIkg==
+X-Gm-Message-State: AOJu0YzpxstdBcYgGCUMn/uKNHOX+DNqTw0cuPJxhnFrLBw9RvPP6CQw
+	ShHXssZmC9V/2aNEYcyHL1O66AsaasfTKgX7l3Z9+RcwaZw/2IkaEsNLS5/5
+X-Google-Smtp-Source: AGHT+IEIy/gv/0pHeI6U6lF+MZkOKv5jB2yK5wgr7CWBtGq1IdyU8timMRb4ATBEiHPSQewwoijY3A==
+X-Received: by 2002:aa7:d40f:0:b0:561:3de1:ba36 with SMTP id z15-20020aa7d40f000000b005613de1ba36mr1354877edq.34.1707578926257;
+        Sat, 10 Feb 2024 07:28:46 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV5iZvNyIEknwaXsKmtWP9aQS1jWrYwtZCzwuj35mlnvQF6lxlcAVoIGx9E6XOQwmSOATLQgOOxHPvYf/+uGci+RHseWAc=
 Received: from ?IPV6:2a01:c23:c5e3:d400:ad36:6b8:178b:1fc8? (dynamic-2a01-0c23-c5e3-d400-ad36-06b8-178b-1fc8.c23.pool.telefonica.de. [2a01:c23:c5e3:d400:ad36:6b8:178b:1fc8])
-        by smtp.googlemail.com with ESMTPSA id d13-20020a056402400d00b00560b0b707adsm851631eda.73.2024.02.10.07.27.46
+        by smtp.googlemail.com with ESMTPSA id d13-20020a056402400d00b00560b0b707adsm851631eda.73.2024.02.10.07.28.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Feb 2024 07:27:46 -0800 (PST)
-Message-ID: <e3ef7a1e-be00-4efe-a708-3ce0459801f6@gmail.com>
-Date: Sat, 10 Feb 2024 16:27:47 +0100
+        Sat, 10 Feb 2024 07:28:45 -0800 (PST)
+Message-ID: <68c013cc-70bd-4c5b-b6b3-5f2d87a218fa@gmail.com>
+Date: Sat, 10 Feb 2024 16:28:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,7 +77,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 1/3] i2c: i801: Cosmetic improvements
+Subject: [PATCH 2/3] i2c: i801: Move i801_wait_intr and i801_wait_byte_done in
+ the code
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
@@ -130,184 +131,99 @@ In-Reply-To: <d761a722-d400-4d6b-8866-4bb25d349184@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-- Use pci_err et al instead of dev_err to simplify the code
-- Combine an error and subsequent debug message in i801_check_post()
-- use format %pr to print resource
+Move both functions to avoid forward declarations in a subsequent patch.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 54 ++++++++++++++---------------------
- 1 file changed, 22 insertions(+), 32 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 68 +++++++++++++++++------------------
+ 1 file changed, 34 insertions(+), 34 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 918c794c7..4951d7d90 100644
+index 4951d7d90..751b7c6d2 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -398,25 +398,22 @@ static int i801_check_post(struct i801_priv *priv, int status)
- 	 * If the SMBus is still busy, we give up
- 	 */
- 	if (unlikely(status < 0)) {
--		dev_err(&priv->pci_dev->dev, "Transaction timeout\n");
-+		pci_err(priv->pci_dev, "Timeout, terminating transaction\n");
- 		/* try to stop the current command */
--		dev_dbg(&priv->pci_dev->dev, "Terminating the current operation\n");
- 		outb_p(SMBHSTCNT_KILL, SMBHSTCNT(priv));
- 		usleep_range(1000, 2000);
- 		outb_p(0, SMBHSTCNT(priv));
+@@ -330,6 +330,40 @@ MODULE_PARM_DESC(disable_features, "Disable selected driver features:\n"
+ 	"\t\t  0x10  don't use interrupts\n"
+ 	"\t\t  0x20  disable SMBus Host Notify ");
  
- 		/* Check if it worked */
- 		status = inb_p(SMBHSTSTS(priv));
--		if ((status & SMBHSTSTS_HOST_BUSY) ||
--		    !(status & SMBHSTSTS_FAILED))
--			dev_err(&priv->pci_dev->dev,
--				"Failed terminating the transaction\n");
-+		if ((status & SMBHSTSTS_HOST_BUSY) || !(status & SMBHSTSTS_FAILED))
-+			pci_err(priv->pci_dev, "Failed terminating the transaction\n");
- 		return -ETIMEDOUT;
- 	}
- 
- 	if (status & SMBHSTSTS_FAILED) {
- 		result = -EIO;
--		dev_err(&priv->pci_dev->dev, "Transaction failed\n");
-+		pci_err(priv->pci_dev, "Transaction failed\n");
- 	}
- 	if (status & SMBHSTSTS_DEV_ERR) {
- 		/*
-@@ -444,7 +441,7 @@ static int i801_check_post(struct i801_priv *priv, int status)
- 	}
- 	if (status & SMBHSTSTS_BUS_ERR) {
- 		result = -EAGAIN;
--		dev_dbg(&priv->pci_dev->dev, "Lost arbitration\n");
-+		pci_dbg(priv->pci_dev, "Lost arbitration\n");
- 	}
- 
++/* Wait for BUSY being cleared and either INTR or an error flag being set */
++static int i801_wait_intr(struct i801_priv *priv)
++{
++	unsigned long timeout = jiffies + priv->adapter.timeout;
++	int status, busy;
++
++	do {
++		usleep_range(250, 500);
++		status = inb_p(SMBHSTSTS(priv));
++		busy = status & SMBHSTSTS_HOST_BUSY;
++		status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
++		if (!busy && status)
++			return status & STATUS_ERROR_FLAGS;
++	} while (time_is_after_eq_jiffies(timeout));
++
++	return -ETIMEDOUT;
++}
++
++/* Wait for either BYTE_DONE or an error flag being set */
++static int i801_wait_byte_done(struct i801_priv *priv)
++{
++	unsigned long timeout = jiffies + priv->adapter.timeout;
++	int status;
++
++	do {
++		usleep_range(250, 500);
++		status = inb_p(SMBHSTSTS(priv));
++		if (status & (STATUS_ERROR_FLAGS | SMBHSTSTS_BYTE_DONE))
++			return status & STATUS_ERROR_FLAGS;
++	} while (time_is_after_eq_jiffies(timeout));
++
++	return -ETIMEDOUT;
++}
++
+ static int i801_get_block_len(struct i801_priv *priv)
+ {
+ 	u8 len = inb_p(SMBHSTDAT0(priv));
+@@ -447,40 +481,6 @@ static int i801_check_post(struct i801_priv *priv, int status)
  	return result;
-@@ -572,8 +569,7 @@ static void i801_isr_byte_done(struct i801_priv *priv)
- 		if (priv->count < priv->len)
- 			priv->data[priv->count++] = inb(SMBBLKDAT(priv));
- 		else
--			dev_dbg(&priv->pci_dev->dev,
--				"Discarding extra byte on block read\n");
-+			pci_dbg(priv->pci_dev, "Discarding extra byte on block read\n");
- 
- 		/* Set LAST_BYTE for last byte of read transaction */
- 		if (priv->count == priv->len - 1)
-@@ -1262,7 +1258,7 @@ static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
- 	}
- 
- 	if (i == ARRAY_SIZE(dell_lis3lv02d_devices)) {
--		dev_warn(&priv->pci_dev->dev,
-+		pci_warn(priv->pci_dev,
- 			 "Accelerometer lis3lv02d is present on SMBus but its"
- 			 " address is unknown, skipping registration\n");
- 		return;
-@@ -1533,7 +1529,7 @@ static void i801_add_tco(struct i801_priv *priv)
- 		priv->tco_pdev = i801_add_tco_spt(pci_dev, tco_res);
- 
- 	if (IS_ERR(priv->tco_pdev))
--		dev_warn(&pci_dev->dev, "failed to create iTCO device\n");
-+		pci_warn(pci_dev, "failed to create iTCO device\n");
  }
  
- #ifdef CONFIG_ACPI
-@@ -1562,8 +1558,8 @@ i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bits,
- 	if (!priv->acpi_reserved && i801_acpi_is_smbus_ioport(priv, address)) {
- 		priv->acpi_reserved = true;
- 
--		dev_warn(&pdev->dev, "BIOS is accessing SMBus registers\n");
--		dev_warn(&pdev->dev, "Driver SMBus register access inhibited\n");
-+		pci_warn(pdev, "BIOS is accessing SMBus registers\n");
-+		pci_warn(pdev, "Driver SMBus register access inhibited\n");
- 
- 		/*
- 		 * BIOS is accessing the host controller so prevent it from
-@@ -1644,8 +1640,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	/* Disable features on user request */
- 	for (i = 0; i < ARRAY_SIZE(i801_feature_names); i++) {
- 		if (priv->features & disable_features & (1 << i))
--			dev_notice(&dev->dev, "%s disabled by user\n",
--				   i801_feature_names[i]);
-+			pci_notice(dev, "%s disabled by user\n", i801_feature_names[i]);
- 	}
- 	priv->features &= ~disable_features;
- 
-@@ -1655,8 +1650,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 
- 	err = pcim_enable_device(dev);
- 	if (err) {
--		dev_err(&dev->dev, "Failed to enable SMBus PCI device (%d)\n",
--			err);
-+		pci_err(dev, "Failed to enable SMBus PCI device (%d)\n", err);
- 		return err;
- 	}
- 	pcim_pin_device(dev);
-@@ -1664,8 +1658,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	/* Determine the address of the SMBus area */
- 	priv->smba = pci_resource_start(dev, SMBBAR);
- 	if (!priv->smba) {
--		dev_err(&dev->dev,
--			"SMBus base address uninitialized, upgrade BIOS\n");
-+		pci_err(dev, "SMBus base address uninitialized, upgrade BIOS\n");
- 		return -ENODEV;
- 	}
- 
-@@ -1674,26 +1667,24 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 
- 	err = pcim_iomap_regions(dev, 1 << SMBBAR, DRV_NAME);
- 	if (err) {
--		dev_err(&dev->dev,
--			"Failed to request SMBus region 0x%lx-0x%Lx\n",
--			priv->smba,
--			(unsigned long long)pci_resource_end(dev, SMBBAR));
-+		pci_err(dev, "Failed to request SMBus region %pr\n",
-+			pci_resource_n(dev, SMBBAR));
- 		i801_acpi_remove(priv);
- 		return err;
- 	}
- 
--	pci_read_config_byte(priv->pci_dev, SMBHSTCFG, &priv->original_hstcfg);
-+	pci_read_config_byte(dev, SMBHSTCFG, &priv->original_hstcfg);
- 	i801_setup_hstcfg(priv);
- 	if (!(priv->original_hstcfg & SMBHSTCFG_HST_EN))
--		dev_info(&dev->dev, "Enabling SMBus device\n");
-+		pci_info(dev, "Enabling SMBus device\n");
- 
- 	if (priv->original_hstcfg & SMBHSTCFG_SMB_SMI_EN) {
--		dev_dbg(&dev->dev, "SMBus using interrupt SMI#\n");
-+		pci_dbg(dev, "SMBus using interrupt SMI#\n");
- 		/* Disable SMBus interrupt feature if SMBus using SMI# */
- 		priv->features &= ~FEATURE_IRQ;
- 	}
- 	if (priv->original_hstcfg & SMBHSTCFG_SPD_WD)
--		dev_info(&dev->dev, "SPD Write Disable is set\n");
-+		pci_info(dev, "SPD Write Disable is set\n");
- 
- 	/* Clear special mode bits */
- 	if (priv->features & (FEATURE_SMBUS_PEC | FEATURE_BLOCK_BUFFER))
-@@ -1712,7 +1703,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		/* Complain if an interrupt is already pending */
- 		pci_read_config_word(priv->pci_dev, PCI_STATUS, &pcists);
- 		if (pcists & PCI_STATUS_INTERRUPT)
--			dev_warn(&dev->dev, "An interrupt is pending!\n");
-+			pci_warn(dev, "An interrupt is pending!\n");
- 	}
- 
- 	if (priv->features & FEATURE_IRQ) {
-@@ -1721,12 +1712,11 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		err = devm_request_irq(&dev->dev, dev->irq, i801_isr,
- 				       IRQF_SHARED, DRV_NAME, priv);
- 		if (err) {
--			dev_err(&dev->dev, "Failed to allocate irq %d: %d\n",
--				dev->irq, err);
-+			pci_err(dev, "Failed to allocate irq %d: %d\n", dev->irq, err);
- 			priv->features &= ~FEATURE_IRQ;
- 		}
- 	}
--	dev_info(&dev->dev, "SMBus using %s\n",
-+	pci_info(dev, "SMBus using %s\n",
- 		 priv->features & FEATURE_IRQ ? "PCI interrupt" : "polling");
- 
- 	/* Host notification uses an interrupt */
+-/* Wait for BUSY being cleared and either INTR or an error flag being set */
+-static int i801_wait_intr(struct i801_priv *priv)
+-{
+-	unsigned long timeout = jiffies + priv->adapter.timeout;
+-	int status, busy;
+-
+-	do {
+-		usleep_range(250, 500);
+-		status = inb_p(SMBHSTSTS(priv));
+-		busy = status & SMBHSTSTS_HOST_BUSY;
+-		status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
+-		if (!busy && status)
+-			return status & STATUS_ERROR_FLAGS;
+-	} while (time_is_after_eq_jiffies(timeout));
+-
+-	return -ETIMEDOUT;
+-}
+-
+-/* Wait for either BYTE_DONE or an error flag being set */
+-static int i801_wait_byte_done(struct i801_priv *priv)
+-{
+-	unsigned long timeout = jiffies + priv->adapter.timeout;
+-	int status;
+-
+-	do {
+-		usleep_range(250, 500);
+-		status = inb_p(SMBHSTSTS(priv));
+-		if (status & (STATUS_ERROR_FLAGS | SMBHSTSTS_BYTE_DONE))
+-			return status & STATUS_ERROR_FLAGS;
+-	} while (time_is_after_eq_jiffies(timeout));
+-
+-	return -ETIMEDOUT;
+-}
+-
+ static int i801_transaction(struct i801_priv *priv, int xact)
+ {
+ 	unsigned long result;
 -- 
 2.43.0
 
