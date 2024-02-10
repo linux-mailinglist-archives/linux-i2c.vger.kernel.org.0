@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-1683-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1684-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EB168504EF
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Feb 2024 16:28:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 340048504F3
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Feb 2024 16:31:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B688284A30
-	for <lists+linux-i2c@lfdr.de>; Sat, 10 Feb 2024 15:28:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A13D1C21B83
+	for <lists+linux-i2c@lfdr.de>; Sat, 10 Feb 2024 15:31:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 019B65BAD4;
-	Sat, 10 Feb 2024 15:28:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0915BAE8;
+	Sat, 10 Feb 2024 15:31:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XtgHfzob"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HtpnkUvh"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2188F364BF
-	for <linux-i2c@vger.kernel.org>; Sat, 10 Feb 2024 15:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB445BAE2
+	for <linux-i2c@vger.kernel.org>; Sat, 10 Feb 2024 15:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707578929; cv=none; b=AHcuL4wuU5QQ3lG01n12wMvs672L8oP4QeKBsq2LiKHGlS8wZ6G/Ytkk+XO/QJIbgAm4OTk5lRjCDHEHithUuyJI8y84XEZ0Xp24cGGAQZOUNVwOWA4BKKB3y734g87YRXNERaCcndgS8JbkBVn0SbP+5PIA8WAHVts7BJgnUXI=
+	t=1707579074; cv=none; b=ojN0E7/llsNwjaQ54NU5vVpL+UC4EBeN22I0vUuCXYFNaRaUxnHpB1ytDZV5dw05OZpgIccvG5L/+x40ENDvoYMRvEZKjtwUfOzO8W1bcgn/ojflAq8lkRZBPvO86x6lxCN1GQP5sT0aS5OMzShe+Vc60AybJ2Nnl0Ts1Y6ROhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707578929; c=relaxed/simple;
-	bh=THIf63cNe0hbAUzX3bzh1vx1MO0mrsr1I2B/KDD74fc=;
+	s=arc-20240116; t=1707579074; c=relaxed/simple;
+	bh=XND5jxMyXzeXIIBm1aM65GbeOmD0tbef9c5XIb2j738=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=pP3E75VvLWSq24Hyrl8FbWFcQxQdsxHAOprM+HT6DzWAL0+sNPG3S2OAV/MBpPAZPtjA4Uc66lmWjxdnn+RkxdOFfOmdwX0pMOCx0UX940yyJmC6CWkNuCwc4RnK9nKROj/D163fAPplqySI4b314/c0moqe8Ls0qPC/eB0XLkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XtgHfzob; arc=none smtp.client-ip=209.85.208.45
+	 In-Reply-To:Content-Type; b=Nl4udZNJKTlO9f6dc699JZNCYMW/n4HQMi/8RjL2E3FKQ9rYeMyoBBRIwzNMbm+xFmKhvlZr4DNrjzL0lsSm03MxMHQ0bXTWVdEorTTZsCSPv21dIIk3ki3YUR1vHlhES03vH1SYr/3GYoFDf/5RhdsjYxW4UzoMcRN+oSAgYxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HtpnkUvh; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-56174bbad45so420168a12.1
-        for <linux-i2c@vger.kernel.org>; Sat, 10 Feb 2024 07:28:47 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-55fc7f63639so2534978a12.1
+        for <linux-i2c@vger.kernel.org>; Sat, 10 Feb 2024 07:31:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707578926; x=1708183726; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707579070; x=1708183870; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=pnrbItPU1eG4106CUvQNvjYzD7Nm3Z4rSfas2ScFL7Y=;
-        b=XtgHfzobijVAo9m1QOrUAw8KHI5u1e3yg9IOjMhEFgeMfd0hfZZ9+mcgMexpFO1AEX
-         f+Uw7bY9U+VR46/OBZziRZT6zudpHQ4ny1XVvkbzg6UkQURSvMDZPbRqd/aRwx6+bVK/
-         Yc/NE9hmgr408rbGGWvy0Q++xwlKCP4qHRS0Dnr9IohK/7XlFGnEReYqM1L1n7juOnu5
-         5lEW8jeLwE3db65PmyRmPDqmma3RbfU3IUdGg25r9fIniQkBez1Rp6kxQufQG1Ishgyx
-         40bAp9OnzG8PhmoUWf2c0r2VvjTrk2GZL/gjDva5xEgyCF7HZ48nsFw3SeyDwdmdMAdw
-         rLKA==
+        bh=4TR93Z+epYC3IzPljlWW+negHoj8omyRWaO9e5+QSGQ=;
+        b=HtpnkUvhoJ9CU1NXAm1Jx8c1AeAr7s4ybnZEbonFUNbgMoJrMVtQBMjmi1Cz+gjSOZ
+         2J+6sAcb34Q8LYQ8ki0ZBxUtA/2niz4phFtWz3jkFEhwk9OEdoA3SWHAuGPv8zgE1zlA
+         IPXfL1IWB/ruk2atbPJJhp8j8chVoR+FrIdjv6beL6SwaAVBgHHYRUFHfIJ+I3SyzKbR
+         Rc1m1THoe5DkPVHbgcPjz5XQt8nApOhSyONoljVZRGZ7mI7Eo1GMcwxss3AmJGkhyQ8C
+         TQKMzIdpsNGkjHyN/THuZOm4EOHIQpaD2rcUrn2JE+dVAqe56sh+dr1y2HV+LtU1rlmy
+         0PfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707578926; x=1708183726;
+        d=1e100.net; s=20230601; t=1707579070; x=1708183870;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pnrbItPU1eG4106CUvQNvjYzD7Nm3Z4rSfas2ScFL7Y=;
-        b=qp3FWVxW/+TbQKfpHaAl9p8aeoJHiaoYpUknbTKnfXKMRcBFbFslL0e9Me1gIF7sEy
-         XCmLA/kaqDAUswlGMMR/53pUYjxkmZwVgEnoXwtGYXJBdcL9sr4O6iptzgZkJfujNxJb
-         rjS6MIhAMQnYR+Q+/nnJH0LK9v9lvFcZh2UuIRtMGTENiGtz+pv+MOOJKdMUKUQYn2ln
-         yz92M2vDS6dX+ixRLx5QtIMd1eeo/4AIiJ0K7Hpg+agk2dmHRJIa3EIYz2H0AJ84xdaS
-         BvjHHl9MkEPWilUiCUlNI+Vtk7VEkBV8v7IkpR6Z551fgyOodteKrc2XkHP5HAZqmB8B
-         wIkg==
-X-Gm-Message-State: AOJu0YzpxstdBcYgGCUMn/uKNHOX+DNqTw0cuPJxhnFrLBw9RvPP6CQw
-	ShHXssZmC9V/2aNEYcyHL1O66AsaasfTKgX7l3Z9+RcwaZw/2IkaEsNLS5/5
-X-Google-Smtp-Source: AGHT+IEIy/gv/0pHeI6U6lF+MZkOKv5jB2yK5wgr7CWBtGq1IdyU8timMRb4ATBEiHPSQewwoijY3A==
-X-Received: by 2002:aa7:d40f:0:b0:561:3de1:ba36 with SMTP id z15-20020aa7d40f000000b005613de1ba36mr1354877edq.34.1707578926257;
-        Sat, 10 Feb 2024 07:28:46 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV5iZvNyIEknwaXsKmtWP9aQS1jWrYwtZCzwuj35mlnvQF6lxlcAVoIGx9E6XOQwmSOATLQgOOxHPvYf/+uGci+RHseWAc=
+        bh=4TR93Z+epYC3IzPljlWW+negHoj8omyRWaO9e5+QSGQ=;
+        b=iRh12NxUHqjeJzkknB6jdxVtUiOK01KhMUcpsGq8OK0FWHeaoLB/LOfJj1Um6CLTiE
+         ovu0u9vvFzVpHD/al99veQEdk0cVyQEjPnFk3US7i3Rd4R1InjH4UqNplwTaWIbow5MU
+         +uBnP6sjFptfbiQxtd/ExTssT3awMHLahwznQqBlk/iGe44k73MW9RCZBPDX2mYEk/Ha
+         p9VIqlx0DIRWCiPICSxpNo6eJLbXzam+XnDrh+KFCAdhURNamwYNwbOU/L21jSMTc+t1
+         E6zh+MBqKMIix6VK2hueGbffBGfv58EgZrT9QQFqq40idz/NWL3cigElrH/w/fUa8/Jm
+         xlmQ==
+X-Gm-Message-State: AOJu0Yyu+MGq7m511IokxdhCFKgWwdmCQ3Cj1kQWpwlkamBT/CiFxQS9
+	D3TTTHU2e11klWuSuWhaKVsZBqcLMloinTVGPesxfnkz5EpOX4/KDyge/VO+
+X-Google-Smtp-Source: AGHT+IFThiMybdE0jyVToIPOxFOV46YNKbh2e6MjjTOaaje/pigUFfTFj/nn5qqzw+C5PmBo/fIVtQ==
+X-Received: by 2002:aa7:d8c7:0:b0:561:1364:bd06 with SMTP id k7-20020aa7d8c7000000b005611364bd06mr1342916eds.29.1707579070296;
+        Sat, 10 Feb 2024 07:31:10 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVi+t7Zj0V93g9PfeB4v9j7AkZMJLtX2bJoONPatj6+tQzLoCX6p1aWxeQYrGTnhq4U+S9KjmFUBQEUfBurFViyP6dCBMo=
 Received: from ?IPV6:2a01:c23:c5e3:d400:ad36:6b8:178b:1fc8? (dynamic-2a01-0c23-c5e3-d400-ad36-06b8-178b-1fc8.c23.pool.telefonica.de. [2a01:c23:c5e3:d400:ad36:6b8:178b:1fc8])
-        by smtp.googlemail.com with ESMTPSA id d13-20020a056402400d00b00560b0b707adsm851631eda.73.2024.02.10.07.28.45
+        by smtp.googlemail.com with ESMTPSA id l14-20020a056402124e00b005611917ebabsm826536edw.47.2024.02.10.07.31.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Feb 2024 07:28:45 -0800 (PST)
-Message-ID: <68c013cc-70bd-4c5b-b6b3-5f2d87a218fa@gmail.com>
-Date: Sat, 10 Feb 2024 16:28:46 +0100
+        Sat, 10 Feb 2024 07:31:09 -0800 (PST)
+Message-ID: <c92061e4-20bf-4ace-b04f-fc7774f11e11@gmail.com>
+Date: Sat, 10 Feb 2024 16:31:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,8 +77,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 2/3] i2c: i801: Move i801_wait_intr and i801_wait_byte_done in
- the code
+Subject: [PATCH 3/3] i2c: i801: Improve too small kill wait time in
+ i801_check_post
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>
@@ -131,99 +131,41 @@ In-Reply-To: <d761a722-d400-4d6b-8866-4bb25d349184@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Move both functions to avoid forward declarations in a subsequent patch.
+In my tests terminating a transaction took about 25ms, what is
+in line with the chip-internal timeout as described in 5.21.3.2
+"Bus Time Out" in [0]. Therefore the 2ms delay is too low.
+Instead of a fixed delay let's use i801_wait_intr() here,
+this also facilitates the status handling.
+
+This potential issue seems to have been existing forever, but as no
+related problem is known, treat it as an improvement.
+
+[0] Intel document #326776-003, 7 Series PCH datasheet
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 68 +++++++++++++++++------------------
- 1 file changed, 34 insertions(+), 34 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 4951d7d90..751b7c6d2 100644
+index 751b7c6d2..5a84eb1a6 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -330,6 +330,40 @@ MODULE_PARM_DESC(disable_features, "Disable selected driver features:\n"
- 	"\t\t  0x10  don't use interrupts\n"
- 	"\t\t  0x20  disable SMBus Host Notify ");
+@@ -435,12 +435,11 @@ static int i801_check_post(struct i801_priv *priv, int status)
+ 		pci_err(priv->pci_dev, "Timeout, terminating transaction\n");
+ 		/* try to stop the current command */
+ 		outb_p(SMBHSTCNT_KILL, SMBHSTCNT(priv));
+-		usleep_range(1000, 2000);
++		status = i801_wait_intr(priv);
+ 		outb_p(0, SMBHSTCNT(priv));
  
-+/* Wait for BUSY being cleared and either INTR or an error flag being set */
-+static int i801_wait_intr(struct i801_priv *priv)
-+{
-+	unsigned long timeout = jiffies + priv->adapter.timeout;
-+	int status, busy;
-+
-+	do {
-+		usleep_range(250, 500);
-+		status = inb_p(SMBHSTSTS(priv));
-+		busy = status & SMBHSTSTS_HOST_BUSY;
-+		status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
-+		if (!busy && status)
-+			return status & STATUS_ERROR_FLAGS;
-+	} while (time_is_after_eq_jiffies(timeout));
-+
-+	return -ETIMEDOUT;
-+}
-+
-+/* Wait for either BYTE_DONE or an error flag being set */
-+static int i801_wait_byte_done(struct i801_priv *priv)
-+{
-+	unsigned long timeout = jiffies + priv->adapter.timeout;
-+	int status;
-+
-+	do {
-+		usleep_range(250, 500);
-+		status = inb_p(SMBHSTSTS(priv));
-+		if (status & (STATUS_ERROR_FLAGS | SMBHSTSTS_BYTE_DONE))
-+			return status & STATUS_ERROR_FLAGS;
-+	} while (time_is_after_eq_jiffies(timeout));
-+
-+	return -ETIMEDOUT;
-+}
-+
- static int i801_get_block_len(struct i801_priv *priv)
- {
- 	u8 len = inb_p(SMBHSTDAT0(priv));
-@@ -447,40 +481,6 @@ static int i801_check_post(struct i801_priv *priv, int status)
- 	return result;
- }
- 
--/* Wait for BUSY being cleared and either INTR or an error flag being set */
--static int i801_wait_intr(struct i801_priv *priv)
--{
--	unsigned long timeout = jiffies + priv->adapter.timeout;
--	int status, busy;
--
--	do {
--		usleep_range(250, 500);
+ 		/* Check if it worked */
 -		status = inb_p(SMBHSTSTS(priv));
--		busy = status & SMBHSTSTS_HOST_BUSY;
--		status &= STATUS_ERROR_FLAGS | SMBHSTSTS_INTR;
--		if (!busy && status)
--			return status & STATUS_ERROR_FLAGS;
--	} while (time_is_after_eq_jiffies(timeout));
--
--	return -ETIMEDOUT;
--}
--
--/* Wait for either BYTE_DONE or an error flag being set */
--static int i801_wait_byte_done(struct i801_priv *priv)
--{
--	unsigned long timeout = jiffies + priv->adapter.timeout;
--	int status;
--
--	do {
--		usleep_range(250, 500);
--		status = inb_p(SMBHSTSTS(priv));
--		if (status & (STATUS_ERROR_FLAGS | SMBHSTSTS_BYTE_DONE))
--			return status & STATUS_ERROR_FLAGS;
--	} while (time_is_after_eq_jiffies(timeout));
--
--	return -ETIMEDOUT;
--}
--
- static int i801_transaction(struct i801_priv *priv, int xact)
- {
- 	unsigned long result;
+-		if ((status & SMBHSTSTS_HOST_BUSY) || !(status & SMBHSTSTS_FAILED))
++		if (status < 0 || !(status & SMBHSTSTS_FAILED))
+ 			pci_err(priv->pci_dev, "Failed terminating the transaction\n");
+ 		return -ETIMEDOUT;
+ 	}
 -- 
 2.43.0
 
