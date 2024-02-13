@@ -1,163 +1,178 @@
-Return-Path: <linux-i2c+bounces-1701-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1702-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97A4A8532A7
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Feb 2024 15:07:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A03E68532FB
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Feb 2024 15:23:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 201D91F275FD
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Feb 2024 14:07:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 170931F22046
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Feb 2024 14:23:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A48B15733D;
-	Tue, 13 Feb 2024 14:07:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A87A5822B;
+	Tue, 13 Feb 2024 14:22:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="v/WrsYGC";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="4/ciduut";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="v/WrsYGC";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="4/ciduut"
+	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="IfMLbuos"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C154557310;
-	Tue, 13 Feb 2024 14:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647AF5813F
+	for <linux-i2c@vger.kernel.org>; Tue, 13 Feb 2024 14:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707833238; cv=none; b=qz+hchJhtFI3vgcf89elYzBeHC90XB0M4ggZY+8bH+obtKg+Bgfmp4kOnYjQ2gT5Ue2DcwDr8luNWneFsTS7ytYYgV2OLd9rLSSPQUgwRGASe72q4HFviFdXcgiaONd2EJQk75N5YIL9jyK/hzHBT/7ZDNQRU30RotA4LF2wwjg=
+	t=1707834156; cv=none; b=rdCSnh6ZcZhwNRbRNWXlM05nq4roL+Gv27FVO2in3tLIe6l3U1Mk0skYeCnUY2NVS9HZI0BEtTiK3MXK89wFRIUYRUmFIn4nzo6T2oXE1r/6Hj80OHEMzP0RDfGv/mYCjHHus9wv4iafi6grGkapxCGlKwnYSaBRCdSKFVe+E1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707833238; c=relaxed/simple;
-	bh=bzMsl5t9UG1mFnEdAfVnzq+SbyckqnLeHHNh04s6WDs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ibIt5xcMEu9XC3bXQaLooqOMJLnBw0me3DyCpMyYQ041fWiLUQRn6MEc0l1NES3dgEJqivJ46YkzyHjWMVpuga/SIfI4TH5hdy75BTFLYrTSO3x4Fz1BWt1Vt5OQglvx0APIcsARPZGtdDHhqCak4tttMnzeH5vwukZ0TIPLS34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=v/WrsYGC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=4/ciduut; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=v/WrsYGC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=4/ciduut; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id B6EE321CCA;
-	Tue, 13 Feb 2024 14:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1707833234; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bzMsl5t9UG1mFnEdAfVnzq+SbyckqnLeHHNh04s6WDs=;
-	b=v/WrsYGCpBoL/21he4zED8l0wcZRhQCVSRmnnH2oPDs7N5bK6XRbPODnqFNTa1+cuS/mCB
-	QsqaqUU2CzJ8IBNtCvt7Y3CjNe+uXicnUjx67+6g1zy+JmiMx5I27UBsLwh+I4wTyG6LNs
-	DzvreBhxpzlRuQBk4OYbQfIZc7WXZOw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1707833234;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bzMsl5t9UG1mFnEdAfVnzq+SbyckqnLeHHNh04s6WDs=;
-	b=4/ciduutL+vpr4RUnprhXq9RyiLf3AO1qwQhYT/Z8RbVSaH3N4foKWSU0pgeqtc7/1veJL
-	9b7UTOvU1V0s9sCg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1707833234; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bzMsl5t9UG1mFnEdAfVnzq+SbyckqnLeHHNh04s6WDs=;
-	b=v/WrsYGCpBoL/21he4zED8l0wcZRhQCVSRmnnH2oPDs7N5bK6XRbPODnqFNTa1+cuS/mCB
-	QsqaqUU2CzJ8IBNtCvt7Y3CjNe+uXicnUjx67+6g1zy+JmiMx5I27UBsLwh+I4wTyG6LNs
-	DzvreBhxpzlRuQBk4OYbQfIZc7WXZOw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1707833234;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bzMsl5t9UG1mFnEdAfVnzq+SbyckqnLeHHNh04s6WDs=;
-	b=4/ciduutL+vpr4RUnprhXq9RyiLf3AO1qwQhYT/Z8RbVSaH3N4foKWSU0pgeqtc7/1veJL
-	9b7UTOvU1V0s9sCg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1B3F91370C;
-	Tue, 13 Feb 2024 14:07:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 0uNyO5B3y2X2IwAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Tue, 13 Feb 2024 14:07:12 +0000
-Date: Tue, 13 Feb 2024 15:07:08 +0100
-From: Jean Delvare <jdelvare@suse.de>
-To: Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>, Paul Menzel
- <pmenzel@molgen.mpg.de>, Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa@kernel.org>, linux-i2c@vger.kernel.org, LKML
- <linux-kernel@vger.kernel.org>, Kai-Heng Feng
- <kai.heng.feng@canonical.com>, Marius Hoch <mail@mariushoch.de>, Mario
- Limonciello <mario.limonciello@amd.com>, Dell.Client.Kernel@dell.com, Greg
- KH <gregkh@linuxfoundation.org>
-Subject: Re: Ideas for a generic solution to support accelerometer lis3lv02d
- in Dell laptops/notebooks?
-Message-ID: <20240213150708.57148f6a@endymion.delvare>
-In-Reply-To: <20231223125350.xqggx3nyzyjjmnut@pali>
-References: <4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de>
-	<a1128471-bbff-4124-a7e5-44de4b1730b7@redhat.com>
-	<20231223125350.xqggx3nyzyjjmnut@pali>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
+	s=arc-20240116; t=1707834156; c=relaxed/simple;
+	bh=ZVoWPkWDGGWjLhBURKBmzMi+6xun3d9llfJxTCKJHGg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lO2i+/Y3yAX4f6kZHSHwuGAPT+Ye+ay1pxaK/wrg4j+dtgHVA9nYjsyaPLDxBN2Z+a3INQoVRj2756kHTltIJN/JrpMW+XRTr0hVKjZEWhERXMhZlvsZpRrdmJuC/Sh5Cdg4uve+UMc5hw3bdzrkl/467j/dgrcBTyiYt6RwEeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=IfMLbuos; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-562131bb958so151252a12.2
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Feb 2024 06:22:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google; t=1707834153; x=1708438953; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pe27R5El4Dv++yOPITXX9+jKm5cvh9lf2r0jCzdmu/0=;
+        b=IfMLbuosVUu9hLdyXKGteoM6WQFCQjI1NY2y1X7gf/TrEDibHaLN/fthxu8J1zjnAI
+         KqKh3Cbju9joKL01o8UrrC+L2QoNPtTnkPF2JhIu50XHQ/scpDU8Y+WX9ef2kEWZcTsK
+         Q1NcIwCujzDhY+Bpfeovg8cbgYz5Mlm5i9g0GQD2yQTfVbSnN9SVCtXb0fMoIQ17U9st
+         ZIc1c8BnW75MdTqn0UbahHvKJsyhKmZXG1iPQ8wjsKHS4zYMSfl7k+Vn88emSBCxaONJ
+         jjkpydH53NEOfLBLdzVY/uGmZR6iNxQG4ETi4IRR6o1xxhdd5aEZ2zjIv9AX0KN1PN5H
+         NpLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707834153; x=1708438953;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pe27R5El4Dv++yOPITXX9+jKm5cvh9lf2r0jCzdmu/0=;
+        b=YtuYUeCKWq/z7ujsvgrUNOwtxJyGEpnJc++6ZCtWW9VcD2gu4c/zI6F8rlt8T9B8ZH
+         MXfW94BSZRlh7UueXTFOfVIAtvLgIXKO4zON68acA2ZVHu1LDiQ+FYS3AD2TWOfNaX5k
+         Aw+EL9GXpO+/yntDjZGk7jHxEf70WTXjoXVwb595HqRW5NywsdbfpjAqP9DbGMz3joqi
+         YUAZoO4XJn+SsP6HTfIfuu8/nJvZfSMwPs7RycV34Ymo+lfj3Emr9CkxXnu2gcnwzDbP
+         vTgxGajaz7lzGrhMRznxq257ZBFt56JWR7LASy8qMekooR+IJVbSKSQ+YsjXpJhA9mDG
+         N3fQ==
+X-Gm-Message-State: AOJu0Yw0wNO+FX/stMuulSdzoXFHfGVcBDaDtzEKfnRGuVhu5smvdhlS
+	cK9o7+cErMQYzPf4kdwLy7ebLif9hgmG//K8dxz7t42lCUfVwlSq7Fl8XGhu3oLlq+sODbM8Dp5
+	D
+X-Google-Smtp-Source: AGHT+IEjdJlI+v2B9qEuDNoYryH+pfyZufoSFK6R/DxHy1D5Wnu9OAm2rP/1KTC+/s9cofb5iWWA9g==
+X-Received: by 2002:a17:906:a419:b0:a3d:fb7:84a3 with SMTP id l25-20020a170906a41900b00a3d0fb784a3mr864127ejz.77.1707834152688;
+        Tue, 13 Feb 2024 06:22:32 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXImBO3mmi4JY0TRPPzH+4244VODD/T2hLnxKqUoEVlKwe0g7ic8MIyyAPFjyIGcgh4iWydYEZvYuNSWCg1t2ZMB3LcqXeSPn8B+CrmOaJTTqf/ghzMTQ0DTic2JE3rUNGRPxfQhHU2yWKJIG6eDRySV4mP5csLxky1SKuAAjPoiAVZNIH1jf2NaM8RKe2jrhzryIPQmMKE9ip43fQvQFbySLzCdma6gFXZqpMM/4ZOrtPVWN4EdOldaQSQRA30VGeYFcddDRUyEV92wrOY/rWxQcq0d690exWGMb8XZjI+KQjKQ61iap2Y88tEUgdjPoIGI9n2L47tLdk9pAVEP3AsuzRKY7xZn4sOuEr9hZZWOSHNlQCFn5zwf+T/nHxQTZwP/h+0sq3ebW74WzPqAqiuDsbEiJMebIkTQvwN/4zsvGpkTG6Pp3hdMs8YB2iKONeo5oQ/Fg0c
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id lu1-20020a170906fac100b00a3c97e49bc9sm1322671ejb.218.2024.02.13.06.22.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Feb 2024 06:22:32 -0800 (PST)
+From: Naresh Solanki <naresh.solanki@9elements.com>
+To: Peter Rosin <peda@axentia.se>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: mazziesaccount@gmail.com,
+	Patrick Rudolph <patrick.rudolph@9elements.com>,
+	Naresh Solanki <naresh.solanki@9elements.com>,
+	Rob Herring <robh@kernel.org>,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v5 1/2] dt-bindings: i2c: pca954x: Add custom properties for MAX7357
+Date: Tue, 13 Feb 2024 19:52:26 +0530
+Message-ID: <20240213142228.2146218-1-naresh.solanki@9elements.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spam-Level: 
-X-Spam-Score: -0.37
-X-Spamd-Result: default: False [-0.37 / 50.00];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 HAS_ORG_HEADER(0.00)[];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 SUBJECT_ENDS_QUESTION(1.00)[];
-	 BAYES_HAM(-0.07)[62.27%];
-	 ARC_NA(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 MIME_GOOD(-0.10)[text/plain];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 RCPT_COUNT_TWELVE(0.00)[12];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 RCVD_TLS_ALL(0.00)[]
-X-Spam-Flag: NO
+Content-Transfer-Encoding: 8bit
 
-On Sat, 23 Dec 2023 13:53:50 +0100, Pali Roh=C3=A1r wrote:
-> smbus is not really bus which provides discovering and identifying
-> devices on the bus.
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-For completeness, SMBus version 2.0 actually added support for device
-discovery and even dynamic slave address allocation. This is explained
-in chapter 5, section 5.6 (SMBus Address resolution protocol).
+Maxim Max7357 has a configuration register to enable additional
+features. These features aren't enabled by default & its up to
+board designer to enable the same as it may have unexpected side effects.
 
-Unfortunately, this is an optional feature which requires active
-cooperation from each device connected to the bus. If any device on the
-bus supports SMBus ARP then you should get an answer when probing
-(7-bit) I2C address 0x61.
+These should be validated for proper functioning & detection of devices
+in secondary bus as sometimes it can cause secondary bus being disabled.
 
-Long ago I had a plan to add support for SMBus ARP to the kernel, but
-gave up because I couldn't find any system implementing it. If the
-accelerometer device in Dell laptops supported ARP then we could use it
-to figure out the device's address, unfortunately this doesn't seem to
-be the case.
+Add booleans for:
+ - maxim,isolate-stuck-channel
+ - maxim,send-flush-out-sequence
+ - maxim,preconnection-wiggle-test-enable
 
---=20
-Jean Delvare
-SUSE L3 Support
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+Changes in V5:
+- Append Reviewer-by
+Changes in V4:
+- Drop max7358.
+Changes in V3:
+- Update commit message
+Changes in V2:
+- Update properties.
+---
+ .../bindings/i2c/i2c-mux-pca954x.yaml         | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+index 2d7bb998b0e9..9aa0585200c9 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+@@ -71,6 +71,23 @@ properties:
+     description: A voltage regulator supplying power to the chip. On PCA9846
+       the regulator supplies power to VDD2 (core logic) and optionally to VDD1.
+ 
++  maxim,isolate-stuck-channel:
++    type: boolean
++    description: Allows to use non faulty channels while a stuck channel is
++      isolated from the upstream bus. If not set all channels are isolated from
++      the upstream bus until the fault is cleared.
++
++  maxim,send-flush-out-sequence:
++    type: boolean
++    description: Send a flush-out sequence to stuck auxiliary buses
++      automatically after a stuck channel is being detected.
++
++  maxim,preconnection-wiggle-test-enable:
++    type: boolean
++    description: Send a STOP condition to the auxiliary buses when the switch
++      register activates a channel to detect a stuck high fault. On fault the
++      channel is isolated from the upstream bus.
++
+ required:
+   - compatible
+   - reg
+@@ -95,6 +112,19 @@ allOf:
+         "#interrupt-cells": false
+         interrupt-controller: false
+ 
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - maxim,max7357
++    then:
++      properties:
++        maxim,isolate-stuck-channel: false
++        maxim,send-flush-out-sequence: false
++        maxim,preconnection-wiggle-test-enable: false
++
+ unevaluatedProperties: false
+ 
+ examples:
+
+base-commit: 957bd221ac7b2b56cbdf56739e3a94d4f479209e
+-- 
+2.42.0
+
 
