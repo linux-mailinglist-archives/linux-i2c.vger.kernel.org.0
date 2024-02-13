@@ -1,192 +1,178 @@
-Return-Path: <linux-i2c+bounces-1703-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1704-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEBCB853300
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Feb 2024 15:23:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0455185360C
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Feb 2024 17:31:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F151B1C22919
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Feb 2024 14:23:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8462F1F248E9
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Feb 2024 16:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBB6758AA4;
-	Tue, 13 Feb 2024 14:22:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A43E95DF01;
+	Tue, 13 Feb 2024 16:30:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b="TP/yR7VR"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uIcIWYLI";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="kWY+0Hse";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="QqUGbMwE";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CB4v+WoG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F5158220
-	for <linux-i2c@vger.kernel.org>; Tue, 13 Feb 2024 14:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24AD2919;
+	Tue, 13 Feb 2024 16:30:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707834158; cv=none; b=WaQjpnmnFNW6nEOoYeIRKcmaR83hHz+z4PWsU4sOERWlsH3TVI6lgaObvh7mMWMpnIZMDEazlH2o7jqkTI+hzraSWoeTCD2Ps+6gEMrcSYOfGA8k3sI+TnByYq44tQoZABGq0VEdIzzP44+NKyyCTJY5pe/NItVZqfNT6X6hscA=
+	t=1707841859; cv=none; b=LdKvbjekcHWu9STR/NUyovlCBS980sj34fJH4kWHvh25ElksTQ8nSvXykA3utydvicskqi8PD6Hhh3xiq14L6IHBVhtEILMgjCYKhGr/pDPdULDp/62mPzXZW+pRuEzkNhGm0A/bjjDnLAapHqf0/XQopPIZWEG+h+MXU3oRfGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707834158; c=relaxed/simple;
-	bh=cGDhgb9JjmXcz1B7VT0bk/gyC+uEs/PtygXq4+otMW8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tAUVMLMFlDjGFHmrmFZNL+kUUHtGnJMUU/S1k/c20LAMkvXqgwEKSZS87vdXWqxV5GU/i60aXJjmkgD/f6ji6Hrpo/IkT+auCzFm14nbuf2G9n+9hKM2sMDgFKjcjqRwn2oQVbkp0pVRroepVRE/UcekqCvML1f1PqECZXPnGb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com; spf=pass smtp.mailfrom=9elements.com; dkim=pass (2048-bit key) header.d=9elements.com header.i=@9elements.com header.b=TP/yR7VR; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=9elements.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=9elements.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a271a28aeb4so559419466b.2
-        for <linux-i2c@vger.kernel.org>; Tue, 13 Feb 2024 06:22:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1707834154; x=1708438954; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FCYSTKoBxU4qe92Ir9ZfO3GMV6uHY4MYfHL/wqf2edA=;
-        b=TP/yR7VRXLPX0OG5HSbNrYzroOXb7VcjRpJDaRdrn9WIW/OUGhkdvYsI95ApApjX8l
-         tUlKoi4/YCSAmMW+qe86UQTyY9TynLLj923Qzl0JL5QiznNdlv8YEv3sauq3EgPeJhlE
-         MCMwwOP7eFLKFg8HKYD34hvDoA1SfOdn8fa8l0rEjSRBu0hZ2ZOQTuyofct24v81YNXC
-         N1qYxTmqte1Vw6lJSucgipRSFi6am6F98gxUEA5fdT3EIvkDdks1iLo6/L7HKnqO7LIP
-         tewCHKb01eiYaP1Ir3UnC0mHlxzhCRHyEq0BcZov3b+qFFXpiJ01agQQqWSHzfCqARJb
-         gWTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707834154; x=1708438954;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FCYSTKoBxU4qe92Ir9ZfO3GMV6uHY4MYfHL/wqf2edA=;
-        b=Bdt826SI33+IE6SNtTNcjIYusp8ppOc6FWrL2VhaW3mxiCMzyWB+Br1TscouoaiK8p
-         R/0qpGHvVaxjqBEDvp5ja6CWgt4i6dohepnZoaWm28jvotddNal5v87ih3yAw5QCOAUg
-         4k6JhWngexrpP5eq5WZickqJhZ6tj2nF5IphPMaKSXDqCL+oTfrTHxSMkORvi4Fgc6bC
-         SF89+muQ1mIjJeSGN85sl+jnYP+pDYoECZv3AmEMAA4nj+l7noFows2lchimcAs1ew4d
-         bz6jSOSUJUlL4PWGITY1qyV1FwiVyoCvHkbsyA7nMm7W6KxRFMrXE51XuPNDxoEJiMZw
-         5KUA==
-X-Forwarded-Encrypted: i=1; AJvYcCUSGTrXFl0nhA9WPHKQb3oGgIP2wX8rx600J0NPWL9dDwC9cgWSJnG+zrVaBGa1hYmj4fB2I85gdPIE7tGZ7x9X8vuzJLDgCCCw
-X-Gm-Message-State: AOJu0YwgPcMOUmdJUm5LdsgNn8J1A4ZtnIQwGeDC4GpNg+wpXhZqIWHB
-	j0Qg9a+donxl3IS0r1jEpG3EWu2G5/eLcrCxEpa3eHd2B31Ib/nnNTt4i1mYU8E=
-X-Google-Smtp-Source: AGHT+IHAm5yBpKrrKAQM0NVFE3L0ONc7OAUE4TZQLYXUEswIWkYHS4muNrhIi6ltgFhBibdGbdKPkg==
-X-Received: by 2002:a17:906:8417:b0:a38:7541:36f6 with SMTP id n23-20020a170906841700b00a38754136f6mr7924946ejx.21.1707834154387;
-        Tue, 13 Feb 2024 06:22:34 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW+2fap3g67K+xlSpRgqPTfNeRFPdzmmy/1Sx9FWajc48LBob+MvxXHOnI+Ei/e5oZegJo4x8nh8raGGIC4NyDVAx/TYdDm0DRRf/MIBxmzzQinnbYgCdihQfg11itAXNObnDMKWMSuRULKdzFPimF/I4XLscPtOntuY5iyXPD/3VYuNrAhtJgFBfUD7FNQj68SO6a8UkPfoyzmqyVewj1cCfsgkh+Ows8ZsjYy2jsw6TiVd6Yixmb9ZLRB
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id lu1-20020a170906fac100b00a3c97e49bc9sm1322671ejb.218.2024.02.13.06.22.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 06:22:33 -0800 (PST)
-From: Naresh Solanki <naresh.solanki@9elements.com>
-To: Peter Rosin <peda@axentia.se>
-Cc: mazziesaccount@gmail.com,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	Naresh Solanki <naresh.solanki@9elements.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/2] i2c: muxes: pca954x: Enable features on MAX7357
-Date: Tue, 13 Feb 2024 19:52:27 +0530
-Message-ID: <20240213142228.2146218-2-naresh.solanki@9elements.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20240213142228.2146218-1-naresh.solanki@9elements.com>
-References: <20240213142228.2146218-1-naresh.solanki@9elements.com>
+	s=arc-20240116; t=1707841859; c=relaxed/simple;
+	bh=pbhl7o06F3KTdEXAEDM/E3x0i8cJOTf/7tGEm8pmAxM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DaLzd1erqqR4weVpQPPUnGEmysTPsQf64iSEqJQOrgtFXblbjqzpfkov821nyggu/OaZnnRrCf5lY6venwlrpOf6ic2oZvRms/rLkI33MgMarCmH5KLxoN8v0p5pey2ghmBdS/FuEMUQqR3Z4wdKQPy7eMMNRnHae7Gm1S3Fk4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uIcIWYLI; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=kWY+0Hse; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QqUGbMwE; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CB4v+WoG; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id ED9D01FCEE;
+	Tue, 13 Feb 2024 16:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1707841856; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rh0WxZGNI+843mgcC/hg4m0gdTkh1X753D3mIWPc/T0=;
+	b=uIcIWYLIxt1HSVZMzrKH3J718SpoxUkGptoIOidcIswBpUWSLvqsqbwoHgA2a+MhG0gNCL
+	Wc0it7dUHWvkd65MPigcU3hlq9fFfQyjJEMDeGPlWUZ+KK8QQHRn18g1YCTG2l5rPtZ7C0
+	F7AQ8+knys5ZEvUq4Ac4y0nPH7BuVI0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1707841856;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rh0WxZGNI+843mgcC/hg4m0gdTkh1X753D3mIWPc/T0=;
+	b=kWY+0HsedNUZbDVyu6uhbAqulFcybaWCrt8IYNiuHV9k+22P3cy63h79iHuJnb1BiRnCff
+	ew0LIlA6e5+u1SBA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1707841855; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rh0WxZGNI+843mgcC/hg4m0gdTkh1X753D3mIWPc/T0=;
+	b=QqUGbMwEjiPpN7eYvfAE6ZG1wZcJJVVjRSHlnC5hDbLmgY809hZH6HT/84X4oqcntAlDqc
+	WCFc8Mfi7pVoPxkmNo2zP16p3SpGXNdjfFW4ySPPgU3EhFqEI7beC3LFBahplR2Ovjc77N
+	dVls44s5d4n2rCDa0WYl/o33RGQZcrk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1707841855;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rh0WxZGNI+843mgcC/hg4m0gdTkh1X753D3mIWPc/T0=;
+	b=CB4v+WoGzcv8d9cMvW6dhwB9pwFL2p6Xw+cX1PS06FrfqIryC7dKl3cZybKDucV0pvVUK0
+	o5m0LcHyxvBpTQBA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3AC79136F5;
+	Tue, 13 Feb 2024 16:30:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id E1KYBz6Zy2UpUwAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Tue, 13 Feb 2024 16:30:54 +0000
+Date: Tue, 13 Feb 2024 17:30:50 +0100
+From: Jean Delvare <jdelvare@suse.de>
+To: Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>, Ilpo =?UTF-8?B?SsOkcnZpbmVu?=
+ <ilpo.jarvinen@linux.intel.com>, Andy Shevchenko <andy@kernel.org>, Paul
+ Menzel <pmenzel@molgen.mpg.de>, Andi Shyti <andi.shyti@kernel.org>,
+ eric.piel@tremplin-utc.net, Marius Hoch <mail@mariushoch.de>,
+ Dell.Client.Kernel@dell.com, Kai Heng Feng <kai.heng.feng@canonical.com>,
+ platform-driver-x86@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+ linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] platform/x86: dell-smo8800: Move instantiation
+ of lis3lv02d i2c_client from i2c-i801 to dell-smo8800
+Message-ID: <20240213173050.0cf4a58f@endymion.delvare>
+In-Reply-To: <20240107171055.ac7jtwhu2kbalaou@pali>
+References: <20240106160935.45487-1-hdegoede@redhat.com>
+	<20240106160935.45487-3-hdegoede@redhat.com>
+	<20240107171055.ac7jtwhu2kbalaou@pali>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Authentication-Results: smtp-out2.suse.de;
+	none
+X-Spam-Level: 
+X-Spam-Score: -1.45
+X-Spamd-Result: default: False [-1.45 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 MIME_GOOD(-0.10)[text/plain];
+	 HAS_ORG_HEADER(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCPT_COUNT_TWELVE(0.00)[13];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-0.15)[68.96%]
+X-Spam-Flag: NO
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+Hi Pali, Hans,
 
-Enable additional features based on DT settings and unconditionally
-release the shared interrupt pin after 1.6 seconds and allow to use
-it as reset.
+On Sun, 7 Jan 2024 18:10:55 +0100, Pali Roh=C3=A1r wrote:
+> On Saturday 06 January 2024 17:09:29 Hans de Goede wrote:
+> > It is not necessary to handle the Dell specific instantiation of
+> > i2c_client-s for SMO8xxx ACPI devices without an ACPI I2cResource
+> > inside the generic i801 I2C adapter driver.
+> >=20
+> > The kernel already instantiates platform_device-s for these ACPI devices
+> > and the drivers/platform/x86/dell/dell-smo8800.c driver binds to these
+> > platform drivers.
+> >=20
+> > Move the i2c_client instantiation from the generic i2c-i801 driver to
+> > the Dell specific dell-smo8800 driver.
+> >=20
+> > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> > ---
+> > Changes in v2:
+> > - Use a pci_device_id table to check for IDF (non main) i2c-i801 SMBuss=
+es
+> > - Add a comment documenting the IDF PCI device ids
+> > ---
+> >  drivers/i2c/busses/i2c-i801.c            | 126 +----------------------
+> >  drivers/platform/x86/dell/dell-smo8800.c | 121 +++++++++++++++++++++-
+> >  2 files changed, 123 insertions(+), 124 deletions(-) =20
+>=20
+> I'm looking at this change again and I'm not not sure if it is a good
+> direction to do this movement. (...)
 
-These features aren't enabled by default and it's up to board designer
-to validate for proper functioning and detection of devices in secondary
-bus as sometimes it can cause secondary bus being disabled.
+Same feeling here. Having to lookup the parent i2c bus, which may or
+may not be present yet, doesn't feel good.
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+I wouldn't object if everybody was happy with the move and moving the
+code was solving an actual issue, but that doesn't seem to be the case.
 
----
-Changes in V5:
-- Fix typos
-- Update comment
-- Add newline in dev_warn
-Changes in V4:
-- Drop max7358
-- Update #define
-- Move conf variable
-- Print warning when I2C_FUNC_SMBUS_WRITE_BYTE_DATA isn't supported
-Changes in V3:
-- Delete unused #define
-- Update pca954x_init
-- Update commit message
-Changes in V2:
-- Update comments
-- Update check for DT properties
----
- drivers/i2c/muxes/i2c-mux-pca954x.c | 43 ++++++++++++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 2219062104fb..f5dfc33b97c0 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -57,6 +57,20 @@
- 
- #define PCA954X_IRQ_OFFSET 4
- 
-+/*
-+ * MAX7357's configuration register is writeable after POR, but
-+ * can be locked by setting the basic mode bit. MAX7358 configuration
-+ * register is locked by default and needs to be unlocked first.
-+ * The configuration register holds the following settings:
-+ */
-+#define MAX7357_CONF_INT_ENABLE			BIT(0)
-+#define MAX7357_CONF_FLUSH_OUT			BIT(1)
-+#define MAX7357_CONF_RELEASE_INT		BIT(2)
-+#define MAX7357_CONF_DISCON_SINGLE_CHAN		BIT(4)
-+#define MAX7357_CONF_PRECONNECT_TEST		BIT(7)
-+
-+#define MAX7357_POR_DEFAULT_CONF		MAX7357_CONF_INT_ENABLE
-+
- enum pca_type {
- 	max_7356,
- 	max_7357,
-@@ -470,7 +484,34 @@ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
- 	else
- 		data->last_chan = 0; /* Disconnect multiplexer */
- 
--	ret = i2c_smbus_write_byte(client, data->last_chan);
-+	if (device_is_compatible(&client->dev, "maxim,max7357")) {
-+		if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WRITE_BYTE_DATA)) {
-+			u8 conf = MAX7357_POR_DEFAULT_CONF;
-+			/*
-+			 * The interrupt signal is shared with the reset pin. Release the
-+			 * interrupt after 1.6 seconds to allow using the pin as reset.
-+			 */
-+			conf |= MAX7357_CONF_RELEASE_INT;
-+
-+			if (device_property_read_bool(&client->dev, "maxim,isolate-stuck-channel"))
-+				conf |= MAX7357_CONF_DISCON_SINGLE_CHAN;
-+			if (device_property_read_bool(&client->dev,
-+						      "maxim,send-flush-out-sequence"))
-+				conf |= MAX7357_CONF_FLUSH_OUT;
-+			if (device_property_read_bool(&client->dev,
-+						      "maxim,preconnection-wiggle-test-enable"))
-+				conf |= MAX7357_CONF_PRECONNECT_TEST;
-+
-+			ret = i2c_smbus_write_byte_data(client, data->last_chan, conf);
-+		} else {
-+			dev_warn(&client->dev, "Write byte data not supported."
-+				 "Cannot enable enhanced mode features\n");
-+			ret = i2c_smbus_write_byte(client, data->last_chan);
-+		}
-+	} else {
-+		ret = i2c_smbus_write_byte(client, data->last_chan);
-+	}
-+
- 	if (ret < 0)
- 		data->last_chan = 0;
- 
--- 
-2.42.0
-
+--=20
+Jean Delvare
+SUSE L3 Support
 
