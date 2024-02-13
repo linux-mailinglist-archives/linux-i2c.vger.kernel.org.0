@@ -1,188 +1,125 @@
-Return-Path: <linux-i2c+bounces-1692-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1693-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14DE8852EC0
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Feb 2024 12:06:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40ACC852FCF
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Feb 2024 12:49:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90BBB1F261A0
-	for <lists+linux-i2c@lfdr.de>; Tue, 13 Feb 2024 11:06:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E4F71C2256F
+	for <lists+linux-i2c@lfdr.de>; Tue, 13 Feb 2024 11:49:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 156F22BB11;
-	Tue, 13 Feb 2024 11:06:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B2C037715;
+	Tue, 13 Feb 2024 11:49:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="jRUB4weo";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="vEcezAlF";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="jRUB4weo";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="vEcezAlF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fZKg+pJv"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3957134D8
-	for <linux-i2c@vger.kernel.org>; Tue, 13 Feb 2024 11:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00EF36AFD
+	for <linux-i2c@vger.kernel.org>; Tue, 13 Feb 2024 11:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707822365; cv=none; b=Z/f1iYy6DByFyyEuhDSeBPyTgFtqj4HTybC7z/uLnHuRwuA+u7qFP0sWOvdYDB8VAHVAO2jEv1ljVblPCl771HqRK71ZoGXgr+8jwx1JIWUgvLQMRM5GWfVOKLHx6Jp8NnKX+npf7vgruLzZ+yQc9lFFB6FJLh8tJSKtPzVHP2c=
+	t=1707824979; cv=none; b=lJqzVGUW0+LCgSpW0oesrinPGs4JmyUwL+pY/Z5WaUJBRwv5KmMiY6xTojE6nQbFFHBA1hGmhQNSAeQQk1EFExPslwLkNpop/YV7PBBUOed4JQOQYxh5Peg7h1EDtsQqwicz9bHnCXDTNoR///oep+8mrzPqygsj+b8WFRJXcWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707822365; c=relaxed/simple;
-	bh=Gj/J9IFeN83+SBaXS7XlD/Qdcoc+iOUVweW5mM+BRHI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YtDnhGJuXuCyPf6e4O6RwFCON1lTTj564jJoDE+h6dpA6WHGUog7kIfRIyirU42UGK6UVljyy8FZM0lauX76/QtiUjiNtx+ni04jNuT9qcZ99EyxEAId00Au5NfDGJfI2ebLQFqM2oMciinKWBVQHSq3f24E9zE749nZjGjksUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=jRUB4weo; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=vEcezAlF; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=jRUB4weo; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=vEcezAlF; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id E04521FC81;
-	Tue, 13 Feb 2024 11:05:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1707822359; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hoSy4dC+xhBgrGUCyLVjBhk1s/2UJ6mPQQVulfsbOtI=;
-	b=jRUB4weob/6VDe327tFwlDyqesDbilILIc8k6zG4ZM46i4GbbMBSXfk/ZnSDu1cqT0EPuk
-	oNwxejTwRG9+k1V8DkhYflexWOZK5s3q9koKMJ1Q3ObTIu+/SnHpExiWCVO3RJnSCzl5ra
-	dOzej/OhZL4VmC+H7xnwcnjTtuywLG4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1707822359;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hoSy4dC+xhBgrGUCyLVjBhk1s/2UJ6mPQQVulfsbOtI=;
-	b=vEcezAlFCOK/3801ESj8bPk5IQHSKZbMyjNKIjOwnA8L6kBU8jyd+WC5VJ+LnPE+XXR7QV
-	Bjum4292hcRrFaDg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1707822359; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hoSy4dC+xhBgrGUCyLVjBhk1s/2UJ6mPQQVulfsbOtI=;
-	b=jRUB4weob/6VDe327tFwlDyqesDbilILIc8k6zG4ZM46i4GbbMBSXfk/ZnSDu1cqT0EPuk
-	oNwxejTwRG9+k1V8DkhYflexWOZK5s3q9koKMJ1Q3ObTIu+/SnHpExiWCVO3RJnSCzl5ra
-	dOzej/OhZL4VmC+H7xnwcnjTtuywLG4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1707822359;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hoSy4dC+xhBgrGUCyLVjBhk1s/2UJ6mPQQVulfsbOtI=;
-	b=vEcezAlFCOK/3801ESj8bPk5IQHSKZbMyjNKIjOwnA8L6kBU8jyd+WC5VJ+LnPE+XXR7QV
-	Bjum4292hcRrFaDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B8D5E13404;
-	Tue, 13 Feb 2024 11:05:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id uClcJhZNy2XLcgAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Tue, 13 Feb 2024 11:05:58 +0000
-Date: Tue, 13 Feb 2024 12:05:53 +0100
-From: Jean Delvare <jdelvare@suse.de>
-To: "Zakowski, Piotr" <piotr.zakowski@intel.com>
-Cc: andi.shyti@kernel.org, linux-i2c@vger.kernel.org, "Shepon, Oren"
- <oren.shepon@intel.com>, "Kozlowski, Pawel" <pawel.kozlowski@intel.com>,
- "Usyskin, Alexander" <alexander.usyskin@intel.com>, "Radtke, Jakub"
- <jakub.radtke@intel.com>, Alexander Sverdlin <alexander.sverdlin@gmail.com>
+	s=arc-20240116; t=1707824979; c=relaxed/simple;
+	bh=xHbBia3DvLTgU21+Zj6tVs3LwLBWdlcPQOUblnPl15I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NT6eTMAaDSg9SrDtoFKbM/yyL2SbKtpL+YerTF5nUYZNyOZU4/2MUVaB6JBHrOJKopMbYQ1f/qhPDCl+nh7+XRQPCexbSfepHNA9cLwVsd2KnWPcX0Nh5YIMFsYatUlvo9iaJ/EGck8bMowGsoIcFC/CdnZ2ycBheeVOWSiCgA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fZKg+pJv; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-411d253098eso90265e9.3
+        for <linux-i2c@vger.kernel.org>; Tue, 13 Feb 2024 03:49:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707824976; x=1708429776; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xHbBia3DvLTgU21+Zj6tVs3LwLBWdlcPQOUblnPl15I=;
+        b=fZKg+pJvR9z1SOpo1honLeIKnu+e4WraQkAYhc4xKUHorZFOSpOnssZtLETX8paanB
+         0QGiX8nEdoILI0wbsqEtxMdrqcWVzT6taCTYMXqNscRVpseaUAEWi70XRKIeQ7FOHioy
+         k7vJqk4W0akuUA/ghlP+e2gEREL4dPujWeYBNH/QMDHD0s4bzJBi3YdhlwL94TJ8Kfyp
+         llXvp40jx1uh/aQRT28RJ/yWXEKNnTmrJ1S10qSebTFuug7finQI9DZyPVVIYX06ZdT1
+         p6MMOz8xEcyRnhr42hFrtZmy9N+kkY2JNQbt6W/OxQeZKLy3uJD2c0gEKWcaiINgTBMf
+         Vs7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707824976; x=1708429776;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xHbBia3DvLTgU21+Zj6tVs3LwLBWdlcPQOUblnPl15I=;
+        b=adwnooiuaF9p1mkXEZwBCRu7/uiz+jdmT1bLuVr30sgNDITzLnxr7mtwZQHjKe0thb
+         5/9l+ODp1HAAhmitThh26bnFZZnjWNEg7hN3kF4NxKiR0IGrAMTeOMdTYVN3agtzq4vk
+         G9Vks82knxDICOL0zd6/DnAyoxaHfnDv/jUCecMh3RKyBRhVoTo6GVVJ5yHuvDKuNnlD
+         bAF+BEAtQhNa/CDRtXYvU1b8XI5KJv+NN07diZ/OEWLwaD8UwSJA9OlxyHx7cBbTGT0G
+         Zv/W60m07NDiD3WH5OWMKopw//s2eTzl6GXDASspYkOBCV8F2sgDqTNjYCMXSFbelPTh
+         yUNg==
+X-Gm-Message-State: AOJu0YxqqlBYra9VWiBw80yl/GBUuVEHNVJNAC0XCiPMPcdieaCdfFN/
+	u11XWBmmnH+W3hN/cjPZRq1+HxG4SojqwjT8LPbIZcJ+taQGZh3Q
+X-Google-Smtp-Source: AGHT+IGaSmPVSfMvg8sonjDD6Mbo7U3qTysMfR0101urFHNkfGbYAkipHP0tEt/IAkPUQAw0LO4HQg==
+X-Received: by 2002:a05:600c:46c6:b0:40f:dd72:d9f with SMTP id q6-20020a05600c46c600b0040fdd720d9fmr8047067wmo.39.1707824975522;
+        Tue, 13 Feb 2024 03:49:35 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUbE/NRV1CAdL2X1p8jA1MrQ7cNwuXnFcyhmr+O1M760bmGA7Qw6wM6E1f8RSzFoXjimrmFknX4yc+NeSsEXnXkHT9O1X0T+COH1lzx2LYhtPAg8v+lWrZ2hvSchnqVZXXnfyYWHfb1cJ01kZUzxkWbWDLIsaatOiSl61Ru4I7gU6yv+v6czw4OxCA64iLi8+O0u2eFZ0eLVoYx2Fr39FeS9JIuGIMyppBvnM84NU1SkAy+tz8C8mEc1Z/3/sPkaKY2roVBSMKxZ+pX
+Received: from giga-mm-1.home ([2a02:1210:8690:9300:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id v9-20020a5d4b09000000b0033b843786e1sm4607739wrq.51.2024.02.13.03.49.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Feb 2024 03:49:35 -0800 (PST)
+Message-ID: <28430e65f50749bf446ed621d116ba8fb895add7.camel@gmail.com>
 Subject: Re: Potential bug in SMBus kernel module
-Message-ID: <20240213120553.7b0ab120@endymion.delvare>
-In-Reply-To: <SJ0PR11MB5133C098821363F292316A0088482@SJ0PR11MB5133.namprd11.prod.outlook.com>
-References: <SJ0PR11MB5133C098821363F292316A0088482@SJ0PR11MB5133.namprd11.prod.outlook.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To: Jean Delvare <jdelvare@suse.de>, "Zakowski, Piotr"
+	 <piotr.zakowski@intel.com>
+Cc: andi.shyti@kernel.org, linux-i2c@vger.kernel.org, "Shepon, Oren"
+ <oren.shepon@intel.com>, "Kozlowski, Pawel" <pawel.kozlowski@intel.com>, 
+ "Usyskin, Alexander" <alexander.usyskin@intel.com>, "Radtke, Jakub"
+ <jakub.radtke@intel.com>
+Date: Tue, 13 Feb 2024 12:49:34 +0100
+In-Reply-To: <20240213120553.7b0ab120@endymion.delvare>
+References: 
+	<SJ0PR11MB5133C098821363F292316A0088482@SJ0PR11MB5133.namprd11.prod.outlook.com>
+	 <20240213120553.7b0ab120@endymion.delvare>
+Autocrypt: addr=alexander.sverdlin@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.4 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-Authentication-Results: smtp-out2.suse.de;
-	none
-X-Spamd-Result: default: False [-1.60 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 HAS_ORG_HEADER(0.00)[];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 RCPT_COUNT_SEVEN(0.00)[8];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,intel.com,gmail.com];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spam-Score: -1.60
 
-Hi Piotr,
+Hi Jean, thanks for including me!
 
-Thanks for your bug report.
-
-On Mon, 12 Feb 2024 12:44:35 +0000, Zakowski, Piotr wrote:
-> 4. Observed bug
+On Tue, 2024-02-13 at 12:05 +0100, Jean Delvare wrote:
+> > 4. Observed bug
+> >=20
+> > In the "Block Write-Block Read Process Call", the FIFO index should be =
+cleared twice.
+> > Testing of the Linux driver for the above scenario has shown that it on=
+ly clears once during the write part (writing data to the FIFO buffer) and =
+does not clear before the read part (reading data
+> > from the FIFO buffer).
+> > As a result, the command only returns a portion of the data (N-M) and l=
+eaves behind residual data from previous SMBus commands that used the FIFO =
+buffer.
 >=20
-> In the "Block Write-Block Read Process Call", the FIFO index should be cl=
-eared twice.
-> Testing of the Linux driver for the above scenario has shown that it only=
- clears once during the write part (writing data to the FIFO buffer) and do=
-es not clear before the read part (reading data from the FIFO buffer).
-> As a result, the command only returns a portion of the data (N-M) and lea=
-ves behind residual data from previous SMBus commands that used the FIFO bu=
-ffer.
+> Support for the Block Write-Block Read Process Call command was added
+> to the i2c-i801 driver by Alexander Sverdlin in June 2019. I'm adding
+> him to Cc, but he changed addresses meanwhile, so I hope I got the
+> right Alexander.
 
-Support for the Block Write-Block Read Process Call command was added
-to the i2c-i801 driver by Alexander Sverdlin in June 2019. I'm adding
-him to Cc, but he changed addresses meanwhile, so I hope I got the
-right Alexander.
-
-The i2c-i801 driver received a lot of changes meanwhile, however as far
-as I can see this implementation detail did not change, the data buffer
-index is still only reset once at the beginning of
-i801_block_transaction_by_block(), as it was back then.
-
-Alexander, back when you contributed the code, you said the new command
-was long-time tested, so it's hard to believe it includes the bug
-reported by Piotr. Do you remember which Intel chipset you were using?
-Is the code you submitted exactly what you were using on the hardware,
-or is there a chance that you forgot one change when preparing the
-upstream submission?
-
-Piotr, which Intel chipset have you been testing? Is there a chance
-that different Intel chipsets may behave differently in this respect?
-Out of curiosity, how are you testing the Block Write-Block Read
-Process Call command? Very few target devices support this command.
-
-I looked at the ICH9 datasheet (Intel document number 316972-002) and
-in the description of the "Block Write=E2=80=93Block Read Process Call" com=
-mand
-protocol (section 5.20.1.1, page 217) it is clearly stated:
-
-  "Software must do a read to the command register (offset 2h) to reset
-  the 32 byte buffer pointer prior to reading the block data register."
-
-So I guess the driver should indeed be doing that. But I'd really like
-to understand how this went unnoticed so far.
+While I'm trying to remember the details of the story ;-), could
+you please point me to the full bug report? I suspect it has not actually
+been posted to linux-i2c?
 
 --=20
-Jean Delvare
-SUSE L3 Support
+Alexander Sverdlin.
+
 
