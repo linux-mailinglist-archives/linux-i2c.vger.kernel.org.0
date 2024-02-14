@@ -1,61 +1,64 @@
-Return-Path: <linux-i2c+bounces-1717-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1718-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3449085563B
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Feb 2024 23:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 08CC9855822
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 01:08:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5EFF286802
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Feb 2024 22:40:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFC4628107A
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 00:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2638D18639;
-	Wed, 14 Feb 2024 22:40:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9FE5389;
+	Thu, 15 Feb 2024 00:08:20 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 11.mo583.mail-out.ovh.net (11.mo583.mail-out.ovh.net [46.105.47.167])
+Received: from 7.mo582.mail-out.ovh.net (7.mo582.mail-out.ovh.net [46.105.59.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6D61DDC1
-	for <linux-i2c@vger.kernel.org>; Wed, 14 Feb 2024 22:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.47.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 180E917C8
+	for <linux-i2c@vger.kernel.org>; Thu, 15 Feb 2024 00:08:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.59.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707950457; cv=none; b=IqSqa+5WrkUn+tpFgiPq5t5m5beCiVSv5jquOFSA7X/nHrmICCB18MHzy2JCqpkCayt47CHAvD3Sqx6L0pqkzYIzpi7WiqBp5hLRtdwH3dc++F2ZyX3t6X6cnYAkEOSGU/vDaT310aM3CR9Qw6OJnX0avriv+j6JrYwUeZwrSdw=
+	t=1707955700; cv=none; b=POlechFHGJjWw3LfkrkXM5BlqsWdjQV+17nFrgAQJ+W214dG6KdFwfOLBJPs2mYaXuvduw4BB1cYDIUv2WPHGVRBJSv5J5r1gYVKGxIDqBzZnjWb98mtqRAOIsxHNfF4a5q6/3xzEvrfgmMGJO+Cm9J3HJFNdXV1eazhpk/f9qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707950457; c=relaxed/simple;
-	bh=8IKT/Bb8CyKfUbAKJZcwS4WxswL0YJYeSnHUhSLM34g=;
+	s=arc-20240116; t=1707955700; c=relaxed/simple;
+	bh=Zn2YmXTGnlmFWVJAWE0ZcsbcTLkjNnzhl3e0UcTBfKg=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=MQBnn4HBk0gEkRBn8cBmsvSuJo7NQOGncgmjq5BTu8H9bWZ4yMckveDyMW459UdD/qKrp2gEbyOXD4Ftu+qViN7FxW0/C7YlHV3eM3OxSyFagNYxsW/dqaNiKaseMhZfCaOQZ/S5dQWateNQ7nIoKeLput6rkyYW8S2LxxRrYC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.47.167
+	 MIME-Version:Content-Type; b=b/qABXV3CK+XZk0vR6As1CZqhbknF2i6M4ZfQX6kmuTqkU7bYFwcNOe54AOR6oCgIOI84yRVXrm88jInI/eREtr5HUz/hKj5lf4De5Z2QGwVOgvyL40rEaVHBHZL24km2b1MXLwJHduGduCmJT6cawRf4eTmkvMxejs1myxgkIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.59.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director8.ghost.mail-out.ovh.net (unknown [10.109.148.79])
-	by mo583.mail-out.ovh.net (Postfix) with ESMTP id 4TZt7D4zFrz1G8Q
-	for <linux-i2c@vger.kernel.org>; Wed, 14 Feb 2024 22:25:28 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-g6lsk (unknown [10.110.113.83])
-	by director8.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 5CEE21FDC1;
-	Wed, 14 Feb 2024 22:25:24 +0000 (UTC)
-Received: from etezian.org ([37.59.142.108])
-	by ghost-submission-6684bf9d7b-g6lsk with ESMTPSA
-	id kOdFN9Q9zWW2+BMA5AQA5w
-	(envelope-from <andi@etezian.org>); Wed, 14 Feb 2024 22:25:24 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-108S0028a4cc169-7cca-414a-93f3-2f549766b70e,
+Received: from director5.ghost.mail-out.ovh.net (unknown [10.109.139.43])
+	by mo582.mail-out.ovh.net (Postfix) with ESMTP id 4TZs9H0CWSz1F8Q
+	for <linux-i2c@vger.kernel.org>; Wed, 14 Feb 2024 21:42:11 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-62rx8 (unknown [10.108.54.171])
+	by director5.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 58D4F1FD57;
+	Wed, 14 Feb 2024 21:42:04 +0000 (UTC)
+Received: from etezian.org ([37.59.142.103])
+	by ghost-submission-6684bf9d7b-62rx8 with ESMTPSA
+	id pzx8A6wzzWWJKwIAfHX53g
+	(envelope-from <andi@etezian.org>); Wed, 14 Feb 2024 21:42:04 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-103G00581a402d0-df4d-43c0-80f3-f5461175c724,
                     C0FC2E5C6A7315DD97BDDE4B9606AB6EEADB6D9F) smtp.auth=andi@etezian.org
 X-OVh-ClientIp:89.217.109.169
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Avi Fishman <avifishman70@gmail.com>, 
- Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>, 
- Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, 
- Benjamin Fair <benjaminfair@google.com>, openbmc@lists.ozlabs.org, 
- linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Rand Deeb <rand.sec96@gmail.com>
-Cc: deeb.rand@confident.ru, lvc-project@linuxtesting.org, 
- voskresenski.stanislav@confident.ru
-In-Reply-To: <20240206194201.10054-1-rand.sec96@gmail.com>
-References: <20240206194201.10054-1-rand.sec96@gmail.com>
-Subject: Re: [PATCH] i2c: Remove redundant comparison in npcm_i2c_reg_slave
-Message-Id: <170794952331.4171357.5051078389218008556.b4-ty@kernel.org>
-Date: Wed, 14 Feb 2024 23:25:23 +0100
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Michael Ellerman <mpe@ellerman.id.au>, 
+ Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+ "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
+ Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>, 
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Wolfram Sang <wsa@kernel.org>, 
+ Olof Johansson <olof@lixom.net>, linux-i2c@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20240212111933.963985-1-arnd@kernel.org>
+References: <20240212111933.963985-1-arnd@kernel.org>
+Subject: Re: [PATCH] i2c: pasemi: split driver into two separate modules
+Message-Id: <170794692308.4040459.7350373390928340229.b4-ty@kernel.org>
+Date: Wed, 14 Feb 2024 22:42:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,24 +68,26 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.12.4
-X-Ovh-Tracer-Id: 4456311833711348360
+X-Ovh-Tracer-Id: 3725039842831960594
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudejgdduieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeffteehudffvdfhudfgffdugfejjeduheehgeefgeeuhfeiuefghffgueffvdfgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddruddtkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoegrnhguihesvghtvgiiihgrnhdrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekfedpmhhouggvpehsmhhtphhouhht
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudejgdduheefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeffteehudffvdfhudfgffdugfejjeduheehgeefgeeuhfeiuefghffgueffvdfgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddruddtfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoegrnhguihesvghtvgiiihgrnhdrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekvddpmhhouggvpehsmhhtphhouhht
 
 Hi
 
-On Tue, 06 Feb 2024 22:42:01 +0300, Rand Deeb wrote:
-> In the npcm_i2c_reg_slave() function, there was a redundant
-> comparison that checked if 'bus->slave' was null immediately after
-> assigning it the 'client' value. There were concerns about a
-> potential null dereference because of `client->adapter`, but
-> according to Wolfram Sang, "we trusted ourselves here" Therefore,
-> this comparison is unnecessary.
+On Mon, 12 Feb 2024 12:19:04 +0100, Arnd Bergmann wrote:
+> On powerpc, it is possible to compile test both the new apple (arm) and
+> old pasemi (powerpc) drivers for the i2c hardware at the same time,
+> which leads to a warning about linking the same object file twice:
+> 
+> scripts/Makefile.build:244: drivers/i2c/busses/Makefile: i2c-pasemi-core.o is added to multiple modules: i2c-apple i2c-pasemi
+> 
+> Rework the driver to have an explicit helper module, letting Kbuild
+> take care of whether this should be built-in or a loadable driver.
 > 
 > [...]
 
-Applied to i2c/i2c-host on
+Applied to i2c/i2c-host-fixes on
 
 git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
 
@@ -91,7 +96,7 @@ Andi
 
 Patches applied
 ===============
-[1/1] i2c: Remove redundant comparison in npcm_i2c_reg_slave
-      commit: 48acf8292280f257fb0047478153a81471ee7f4d
+[1/1] i2c: pasemi: split driver into two separate modules
+      commit: 3fab8a74c71a4ba32b2fa1dca7340f9107ff8dfc
 
 
