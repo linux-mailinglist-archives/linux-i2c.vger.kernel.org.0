@@ -1,186 +1,93 @@
-Return-Path: <linux-i2c+bounces-1707-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1708-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B9BF854C01
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Feb 2024 16:00:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2680F854CF3
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Feb 2024 16:35:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A24EB1F215AD
-	for <lists+linux-i2c@lfdr.de>; Wed, 14 Feb 2024 15:00:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9EEF1F2171E
+	for <lists+linux-i2c@lfdr.de>; Wed, 14 Feb 2024 15:35:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E3805B5B8;
-	Wed, 14 Feb 2024 14:59:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="SnYtJkbz";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zdiEosid";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="SnYtJkbz";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zdiEosid"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0837F5CDD1;
+	Wed, 14 Feb 2024 15:34:35 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D9B5B1F3
-	for <linux-i2c@vger.kernel.org>; Wed, 14 Feb 2024 14:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A485B210;
+	Wed, 14 Feb 2024 15:34:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707922795; cv=none; b=VfqhLRnC3o0fHLQArJ31DdpSkXA/bp0EPSPIh6xg++Qz6oIxipOG4gYaOjnwlVuKj1sBQly9R/QuQUogTCPqOOKV9v2GYgjnK29U/cyqaBnv+CJNJywn7DEMfKub/Y2xZUaCc7B947tZUxKcZyDaull1iBWk6L3fyy3ONlh7G4Y=
+	t=1707924874; cv=none; b=Mjd7fQUROU6S+x60fRtPOgYJ+qsDHeAtT8hSvJvuIAIUQdtI8Tn8IUFZvU/RN9DuSDeNSr257LMwKaBOX4Dknq9YJtt9nXM8d+ykQaodDbQ4PpVFaxftCynTP+KRtagPtSWKD4v61oFjuN6KwRDhfKetsl+thVvp4OCIKCDqPVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707922795; c=relaxed/simple;
-	bh=8FlFDJGiyuDb1lJSRuKdK2vunWD4iTZGSovNJiT4uGM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IMnIRq0anXGvM5HQoC9CdQeRHEFoBtRK2OXRPygh3KQF9RCg6mGPmxnqKL+AOCJYUqfgU/LNe4AhrplwhL8T9g4gL8jTU3ANqGJQy7hKYUbQ4dirtoWJ5ek1iZIXTfYC5qBkBZqf7pRpGlTPW1zbgJk7GUFO5t7zpyAokOLHfRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SnYtJkbz; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zdiEosid; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SnYtJkbz; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zdiEosid; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id AE388220DD;
-	Wed, 14 Feb 2024 14:59:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1707922791; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uc3eKSwIvZYbIsASQi8LYx4CaydUYSN+6/MnArSQt6g=;
-	b=SnYtJkbzEl2Yv5SWsWPUI+HgaXHF8LK4pvPsXNPx8hWPD/NLvUR/1WHuLaJQcm+6rm994u
-	ZGY0AozOSwqoV4rE9cqvWMTC475RTj0C0RgWNT+3EvpwmEv54cDLHc2gZ9GEM4Jid+sNQ2
-	wANRjZjox1KDjkwBc/aPOG7uI+5iys8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1707922791;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uc3eKSwIvZYbIsASQi8LYx4CaydUYSN+6/MnArSQt6g=;
-	b=zdiEosidBa7dnFcf88VbGScKNBVIkyDsspFqDvxnbwKp9lVqQ1/MXtmynz4QYmKKACsRei
-	95AxQ2O6Ue3PnpAA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1707922791; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uc3eKSwIvZYbIsASQi8LYx4CaydUYSN+6/MnArSQt6g=;
-	b=SnYtJkbzEl2Yv5SWsWPUI+HgaXHF8LK4pvPsXNPx8hWPD/NLvUR/1WHuLaJQcm+6rm994u
-	ZGY0AozOSwqoV4rE9cqvWMTC475RTj0C0RgWNT+3EvpwmEv54cDLHc2gZ9GEM4Jid+sNQ2
-	wANRjZjox1KDjkwBc/aPOG7uI+5iys8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1707922791;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uc3eKSwIvZYbIsASQi8LYx4CaydUYSN+6/MnArSQt6g=;
-	b=zdiEosidBa7dnFcf88VbGScKNBVIkyDsspFqDvxnbwKp9lVqQ1/MXtmynz4QYmKKACsRei
-	95AxQ2O6Ue3PnpAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 88EFC13A72;
-	Wed, 14 Feb 2024 14:59:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id IBmoGmbVzGXBGwAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Wed, 14 Feb 2024 14:59:50 +0000
-Date: Wed, 14 Feb 2024 15:59:39 +0100
-From: Jean Delvare <jdelvare@suse.de>
-To: Linux I2C <linux-i2c@vger.kernel.org>
-Cc: Piotr Zakowski <piotr.zakowski@intel.com>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	andi.shyti@kernel.org,
-	"Shepon, Oren\"   <oren.shepon@intel.com>, "@imap1.dmz-prg2.suse.org,
-	Kozlowski@imap1.dmz-prg2.suse.org, Pawel@imap1.dmz-prg2.suse.org,
-	" <pawel.kozlowski@intel.com>,  "@imap1.dmz-prg2.suse.org,
-	Usyskin@imap1.dmz-prg2.suse.org, Alexander@imap1.dmz-prg2.suse.org,
-	" <alexander.usyskin@intel.com>, "@imap1.dmz-prg2.suse.org,
-	Radtke@imap1.dmz-prg2.suse.org, "Jakub\"" <jakub.radtke@intel.com>
-Subject: [PATCH] i2c: i801: Fix block process call transactions
-Message-ID: <20240214155939.728155bc@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
+	s=arc-20240116; t=1707924874; c=relaxed/simple;
+	bh=z6CvO0y3Hhjv+q9Wa5CPsASVDU6hsXyXmEuDXE5FZws=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ty9HTiKtWew8Vh7OIG6GYLhSkurHCqBcYd63AW+hV53gTqqgAnsQ8TZ37bwcEIZeO1gO7NB8uRPsbJxM3cNvNGF6OIahOKS975kJSG+Yr8bxF4XjyNLR1j1P72TBaJFQm88qE24CY1CLAg8g5uX6utfzOwiddaW/ZDLlLqNeZ3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1raHHK-00022Q-E6; Wed, 14 Feb 2024 16:34:30 +0100
+Message-ID: <6e20e772-e50e-4600-8325-1878badbbdc8@leemhuis.info>
+Date: Wed, 14 Feb 2024 16:34:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spamd-Result: default: False [3.38 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 BAYES_HAM(-0.02)[52.28%];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 HAS_ORG_HEADER(0.00)[];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 TO_MATCH_ENVRCPT_SOME(0.00)[];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 RCPT_COUNT_TWELVE(0.00)[13];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,suse.de:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 FREEMAIL_CC(0.00)[intel.com,gmail.com,kernel.org,imap1.dmz-prg2.suse.org];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[];
-	 FORGED_RECIPIENTS(2.00)[m:@imap1.dmz-prg2.suse.org,m:Kozlowski@imap1.dmz-prg2.suse.org,m:Pawel@imap1.dmz-prg2.suse.org,m:Usyskin@imap1.dmz-prg2.suse.org,m:Alexander@imap1.dmz-prg2.suse.org,m:Radtke@imap1.dmz-prg2.suse.org,s:alexander.usyskin@intel.com,s:oren.shepon@intel.com,s:pawel.kozlowski@intel.com]
-X-Spam-Level: ***
-X-Spam-Score: 3.38
-X-Spam-Flag: NO
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] `lis3lv02d_i2c_suspend()` causes `unbalanced
+ disables for regulator-dummy` and `Failed to disable Vdd_IO: -EIO`
+Content-Language: en-US, de-DE
+To: Mark Brown <broonie@kernel.org>, Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+ Liam Girdwood <lgirdwood@gmail.com>, LKML <linux-kernel@vger.kernel.org>,
+ Hans de Goede <hdegoede@redhat.com>, regressions@lists.linux.dev
+References: <5fc6da74-af0a-4aac-b4d5-a000b39a63a5@molgen.mpg.de>
+ <ZcTmdg2qTq0bP0ul@finisterre.sirena.org.uk>
+From: "Linux regression tracking (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <ZcTmdg2qTq0bP0ul@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1707924872;7ee0f297;
+X-HE-SMSGID: 1raHHK-00022Q-E6
 
-According to the Intel datasheets, software must reset the block
-buffer index twice for block process call transactions: once before
-writing the outgoing data to the buffer, and once again before
-reading the incoming data from the buffer.
+On 08.02.24 15:34, Mark Brown wrote:
+> On Fri, Feb 02, 2024 at 12:38:04PM +0100, Paul Menzel wrote:
+> 
+>> Testing commit 2f189493ae32 (i2c: i801: Add lis3lv02d for Dell XPS 15 7590)
+>> [1], it’s very likely this commit, it turns out, that Linux logs the warning
+>> below during ACPI S3 suspend:
 
-The driver is currently missing the second reset, causing the wrong
-portion of the block buffer to be read.
+Mark, many thx for your reply:
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Reported-by: Piotr Zakowski <piotr.zakowski@intel.com>
-Closes: https://lore.kernel.org/linux-i2c/20240213120553.7b0ab120@endymion.delvare/
-Fixes: 315cd67c9453 ("i2c: i801: Add Block Write-Block Read Process Call support")
----
-Piotr, does this change make your tests succeed?
+> The driver is just buggy here AFAICT,
 
-Alexander, I don't suppose you still have access to the hardware on
-which you were using block process call transactions back in 2019, but
-maybe you remember having to do the same change to make it work?
+/me reads that as "buggy even before 2f189493ae32, that commit just
+exposed the problem"
 
- drivers/i2c/busses/i2c-i801.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> it's powering off the device in
+> both runtime suspend and runtime resume so if the device is runtime
+> suspended when system suspend happens then it'll power off the device
+> again.  The runtime suspend and system suspend need to talk to each
+> other here.
 
---- linux-6.6.orig/drivers/i2c/busses/i2c-i801.c
-+++ linux-6.6/drivers/i2c/busses/i2c-i801.c
-@@ -500,11 +500,10 @@ static int i801_block_transaction_by_blo
- 	/* Set block buffer mode */
- 	outb_p(inb_p(SMBAUXCTL(priv)) | SMBAUXCTL_E32B, SMBAUXCTL(priv));
- 
--	inb_p(SMBHSTCNT(priv)); /* reset the data buffer index */
--
- 	if (read_write == I2C_SMBUS_WRITE) {
- 		len = data->block[0];
- 		outb_p(len, SMBHSTDAT0(priv));
-+		inb_p(SMBHSTCNT(priv));	/* reset the data buffer index */
- 		for (i = 0; i < len; i++)
- 			outb_p(data->block[i+1], SMBBLKDAT(priv));
- 	}
-@@ -522,6 +521,7 @@ static int i801_block_transaction_by_blo
- 		}
- 
- 		data->block[0] = len;
-+		inb_p(SMBHSTCNT(priv));	/* reset the data buffer index */
- 		for (i = 0; i < len; i++)
- 			data->block[i + 1] = inb_p(SMBBLKDAT(priv));
- 	}
+Well, that was 6 days ago and nothing further happened. Makes me wonder:
+Who will look into this? And when? If not any time soon I guess we
+sooner or later should consider revert this. Yes, the problem is "just"
+a warning, but well, it's not "just" a warning for people using
+panic_on_warn...
 
+Paul, just to be sure: I assume reverting 2f189493ae32 fixes the problem?
 
--- 
-Jean Delvare
-SUSE L3 Support
+Ciao, Thorsten
 
