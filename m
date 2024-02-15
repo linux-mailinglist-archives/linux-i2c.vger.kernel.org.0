@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-1737-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1738-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 758BB85675D
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 16:23:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F19AE856762
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 16:23:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DF5A1F25C22
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 15:23:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 303C41C22863
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 15:23:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 877F3137C4F;
-	Thu, 15 Feb 2024 15:18:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF8AA138496;
+	Thu, 15 Feb 2024 15:18:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZjIA2HtP"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CTlTRNho"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A9913698A;
-	Thu, 15 Feb 2024 15:18:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 147E81369B1;
+	Thu, 15 Feb 2024 15:18:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708010301; cv=none; b=GdvzNfrNiEc1vfbr3PMN5Md5DDo5rD6WklTDr4JF2SY0ZFCoR4y/ZiMonOOjFK5lbkiZd157nsATka2wb+LcDSLqhohj5gF57vU0VDahDrw91ESqn4WHDmilEFQh2VlJoI95N/0v2cGSc17XU6MW9rbAk2BbtRJI3TV+Lo0K5oI=
+	t=1708010302; cv=none; b=HNEvr2CSTzmss5GKp0VLH6p/tSy0cIZGZctMiRbf+6BQJWIoLbsbYgyl0n7C1U9OEsRvKh/zYTEIecMGg5wVWZ6ZjwJlIjVGE0UJPmrTSATz+scHhPHBOmeh7CyJLHTY7tTG4TdSkVZH4jaqSw2Mjso+u9z5prAbVJM36ceQPDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708010301; c=relaxed/simple;
-	bh=2w2Jeas0HTHvkD1vXAGqgrRtxpU1SWleMSDVt8qU37E=;
+	s=arc-20240116; t=1708010302; c=relaxed/simple;
+	bh=2TFlPyM41Sf4t4xii6hgp5vJ3GALCdhGjxyGeqMQFvc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=J+HRdB5OGZRrXJlbkxPFlOPffi8qx6Xu3lY8LEU3/Cy/8RG6hh3FHg2+pKONwp8EIFgb2PAHsjQMPwcb0fOH6TwLadO2c7qK+sxKYR9JGAVzEgafLcb+/CDeAv3ha1WQ7rh1WQY2Ov+pSXvtlTlHCy7xR1vhMVlupTP5F8ROhdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZjIA2HtP; arc=none smtp.client-ip=217.70.183.193
+	 In-Reply-To:To:Cc; b=MUtl/YDu0cQ9YUHNU8cAs7hCjcoE0pfOrPq6vAI37wDfX45Vkrjdtt15oSdEt3Iq2mQyE7OUleRRsoy8F12X/Fp4bYa/ZjofUHXDh+MtNqM4097RFhsQrLsW05Cs47f7TQIkEZNI8kp1zSyA9OVSPrePyoz/pgeHhTv43nqcG3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CTlTRNho; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5A70B240011;
-	Thu, 15 Feb 2024 15:18:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6C64E240014;
+	Thu, 15 Feb 2024 15:18:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708010297;
+	t=1708010298;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=WIGGC0lj48fyJbGMqvl3dkIPzOEFiGF9ZPkrCVi5RWA=;
-	b=ZjIA2HtPvJTv2WhUZQ0z3cbQUg92xBdAbXHiEtRpbgkaAfMA7t++pQjgY1WuiTONb17dnn
-	016yjw4b87/Sp6OQHmKA+1Z51jFnWRRhHX6zKOdhaV8yP61/Cw34Oe2mvLttkUdqPIw193
-	VOto2Ot9CprgUcZVdAEbZNEi9/jpa9dbxbA26VCmK/Xf/mV1Wo+tTP9UfRl0aNHUZjqoMr
-	+kWfU5IRNUx5ZoHdQc7IBC67++fe/gxsNn5IbOa/TpM799uaFakht73vSrXG6sZbNWeiz7
-	kpLbBs7Lnee7JuZmMtlQciobFKFbv1r0PehP9m8LLfeLjS6zz4JdZxo6DHqNsQ==
+	bh=u4vVCbZCdjErPKHgNoTCllAMtn9YdU2fnFLAQjECyy8=;
+	b=CTlTRNhoSLbiKdNqJqJoTxW34TZblJl7HncADB4IKrF2CasieEf6kuQgLn8yrL5MPK1iCa
+	TC4eUeby5RjZNaVO+ufcWQoVFvj5woDEEXH1dQZliElSIDEZ9B7I/vTUA3gtyWyUzeLcHM
+	PtHAnIlk1C0zcWkR4E0wHTHxg+ZwDOSYvwCJZ/eWnll8wzZIqKTa9ClMG/cj/I+ktkwhrf
+	NZXHgNJTkwGAkM9fjEDJeG0mjplmLiXVliAkBYXNEvfY0QhYx72LjBRY9tZNaaeP2zo5AI
+	Q222yjhEVScLtF/CTQMpb7N3mTwxitYkUDAIvmOW83XHkfDwa3uWWbU0tnyv/w==
 From: Thomas Richard <thomas.richard@bootlin.com>
-Date: Thu, 15 Feb 2024 16:18:01 +0100
-Subject: [PATCH v3 16/18] PCI: cadence: set cdns_pcie_host_init() global
+Date: Thu, 15 Feb 2024 16:18:02 +0100
+Subject: [PATCH v3 17/18] PCI: j721e: add reset GPIO to struct j721e_pcie
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -55,8 +55,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240102-j7200-pcie-s2r-v3-16-5c2e4a3fac1f@bootlin.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240102-j7200-pcie-s2r-v3-17-5c2e4a3fac1f@bootlin.com>
 References: <20240102-j7200-pcie-s2r-v3-0-5c2e4a3fac1f@bootlin.com>
 In-Reply-To: <20240102-j7200-pcie-s2r-v3-0-5c2e4a3fac1f@bootlin.com>
 To: Linus Walleij <linus.walleij@linaro.org>, 
@@ -80,64 +80,62 @@ Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
 X-Mailer: b4 0.12.0
 X-GND-Sasl: thomas.richard@bootlin.com
 
-During the resume sequence of the host, cdns_pcie_host_init() needs to be
-called, so set it global.
+From: Théo Lebrun <theo.lebrun@bootlin.com>
 
-The dev function parameter is removed, as it isn't used.
+Add reset GPIO to struct j721e_pcie, so it can be used at suspend and
+resume stages.
 
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 ---
- drivers/pci/controller/cadence/pcie-cadence-host.c | 5 ++---
- drivers/pci/controller/cadence/pcie-cadence.h      | 6 ++++++
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ drivers/pci/controller/cadence/pci-j721e.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-index 93d9922730af..8af95e9da7ce 100644
---- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-+++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-@@ -485,8 +485,7 @@ static int cdns_pcie_host_init_address_translation(struct cdns_pcie_rc *rc)
- 	return cdns_pcie_host_map_dma_ranges(rc);
- }
+diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
+index 2c87e7728a65..9c588e79f5ac 100644
+--- a/drivers/pci/controller/cadence/pci-j721e.c
++++ b/drivers/pci/controller/cadence/pci-j721e.c
+@@ -54,6 +54,7 @@ struct j721e_pcie {
+ 	struct clk		*refclk;
+ 	u32			mode;
+ 	u32			num_lanes;
++	struct gpio_desc	*reset_gpio;
+ 	void __iomem		*user_cfg_base;
+ 	void __iomem		*intd_cfg_base;
+ 	u32			linkdown_irq_regfield;
+@@ -359,7 +360,6 @@ static int j721e_pcie_probe(struct platform_device *pdev)
+ 	struct j721e_pcie *pcie;
+ 	struct cdns_pcie_rc *rc = NULL;
+ 	struct cdns_pcie_ep *ep = NULL;
+-	struct gpio_desc *gpiod;
+ 	void __iomem *base;
+ 	struct clk *clk;
+ 	u32 num_lanes;
+@@ -468,9 +468,9 @@ static int j721e_pcie_probe(struct platform_device *pdev)
  
--static int cdns_pcie_host_init(struct device *dev,
--			       struct cdns_pcie_rc *rc)
-+int cdns_pcie_host_init(struct cdns_pcie_rc *rc)
- {
- 	int err;
+ 	switch (mode) {
+ 	case PCI_MODE_RC:
+-		gpiod = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
+-		if (IS_ERR(gpiod)) {
+-			ret = PTR_ERR(gpiod);
++		pcie->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
++		if (IS_ERR(pcie->reset_gpio)) {
++			ret = PTR_ERR(pcie->reset_gpio);
+ 			if (ret != -EPROBE_DEFER)
+ 				dev_err(dev, "Failed to get reset GPIO\n");
+ 			goto err_get_sync;
+@@ -504,9 +504,9 @@ static int j721e_pcie_probe(struct platform_device *pdev)
+ 		 * mode is selected while enabling the PHY. So deassert PERST#
+ 		 * after 100 us.
+ 		 */
+-		if (gpiod) {
++		if (pcie->reset_gpio) {
+ 			usleep_range(100, 200);
+-			gpiod_set_value_cansleep(gpiod, 1);
++			gpiod_set_value_cansleep(pcie->reset_gpio, 1);
+ 		}
  
-@@ -564,7 +563,7 @@ int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
- 	for (bar = RP_BAR0; bar <= RP_NO_BAR; bar++)
- 		rc->avail_ib_bar[bar] = true;
- 
--	ret = cdns_pcie_host_init(dev, rc);
-+	ret = cdns_pcie_host_init(rc);
- 	if (ret)
- 		return ret;
- 
-diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
-index 4c687aeb810e..d55dfd173f22 100644
---- a/drivers/pci/controller/cadence/pcie-cadence.h
-+++ b/drivers/pci/controller/cadence/pcie-cadence.h
-@@ -516,6 +516,7 @@ static inline bool cdns_pcie_link_up(struct cdns_pcie *pcie)
- 
- #ifdef CONFIG_PCIE_CADENCE_HOST
- int cdns_pcie_host_link_setup(struct cdns_pcie_rc *rc);
-+int cdns_pcie_host_init(struct cdns_pcie_rc *rc);
- int cdns_pcie_host_setup(struct cdns_pcie_rc *rc);
- void __iomem *cdns_pci_map_bus(struct pci_bus *bus, unsigned int devfn,
- 			       int where);
-@@ -525,6 +526,11 @@ static inline int cdns_pcie_host_link_setup(struct cdns_pcie_rc *rc)
- 	return 0;
- }
- 
-+static inline int cdns_pcie_host_init(struct cdns_pcie_rc *rc)
-+{
-+	return 0;
-+}
-+
- static inline int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
- {
- 	return 0;
+ 		ret = cdns_pcie_host_setup(rc);
 
 -- 
 2.39.2
