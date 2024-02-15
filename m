@@ -1,115 +1,123 @@
-Return-Path: <linux-i2c+bounces-1765-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1766-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89FDB856C45
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 19:16:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B41C2856D58
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 20:08:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCEAD1C21C4D
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 18:16:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F6EB28C3BF
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 19:08:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B9B9138494;
-	Thu, 15 Feb 2024 18:16:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3CF2139562;
+	Thu, 15 Feb 2024 19:08:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G0kqmNTp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eAgUsKBd"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEB613173F;
-	Thu, 15 Feb 2024 18:16:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6D81386B3;
+	Thu, 15 Feb 2024 19:08:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708020997; cv=none; b=i6WGMax2lmYajYhBVEn2LLCJYbWBWMOMfniNJ4h2ZrlESSzQbXKHPV7bjNNeyWSVC7cflV4N1aV8L+DY7JC8a2XOMN/1w1dGjNM3juZea2mq+07WGlfqNNZxDA10fJBsvpqhCAJaWyAxJW64zCUJtp703+hS/kEU9qn+hd9Kdsc=
+	t=1708024100; cv=none; b=feKN+e8dEcrLLc+6d6fixb8fNgEX/nQ9scTJzjtzgcDqm9+PgPbR9DFWzPMS9rKrQ9zk/PZeVpATd+ZJaVdbKgnMBYAKsVG4FuBetKa7P47zQZmJcjZc6Ut9vCKFhTE4gMGc9VgsXRb7LOIv3X8DFEulYVoj9yZqg6PCC0+p9zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708020997; c=relaxed/simple;
-	bh=Awfuobtglup8WyFBxQDNA8oCZmqRri8Ujo/a4iJOCY8=;
+	s=arc-20240116; t=1708024100; c=relaxed/simple;
+	bh=zGKMc4hmjCuHx26m6Wg4jWi3wX2vsJdIkSazXYmhNXc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gnCX7jkVbACY7qBzraLRSrw8pWZ15bM/1UBhKxJkTabIECAkDWjmygfw04T/O6wcaH+51YWkc7exoxe10ZpMpRoopFJ8fPoeJACGDnYWERVjKGglZuAcACs2SxwIxupdIv+9N3D5bt0G5HUBV7zIwDDdljFcwd04yRuxRFmi/yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G0kqmNTp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F21B3C433F1;
-	Thu, 15 Feb 2024 18:16:36 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=D2kmfT8scoynYPh4EbE+gbL71YfRBhlZRQSzXN+yfsm9ZSpvqVTP/jDEKcwjfOUcasFBzoDmIb6I2Y3UUfzdCE66pilF7qgqnG9p5YV87RuBESsIar683tc2AE/0GfodxGb20JpjYxAsZf8Y0GjA7PU1Cb2y9t/Pe/CRymDnX18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eAgUsKBd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F94FC433F1;
+	Thu, 15 Feb 2024 19:08:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708020997;
-	bh=Awfuobtglup8WyFBxQDNA8oCZmqRri8Ujo/a4iJOCY8=;
+	s=k20201202; t=1708024100;
+	bh=zGKMc4hmjCuHx26m6Wg4jWi3wX2vsJdIkSazXYmhNXc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=G0kqmNTpIor7iaOu/2rdZjj3yexSHjy0aPtL0aNOqXocBxWRDo8spEueJE7bxj1cL
-	 RYl9w78bsmG+wQDMOWzLnb8PX/3jQ4Xh8cl9mh8we71zaK3eTXgifaKyO/e46YFfot
-	 QTXBOwVTNxvUCZ1DalIieuDa5l9jwR+APUTbsWoPDPk6iN3KyTw2C4pCYVME5JQhiM
-	 HQf/R1QN6JOtTHtEXEpVRk+6xHkcm2Z7iQGLfxePjk7DESqHspDY/xLy1FZf4t6K38
-	 Zc3byWLalus4sXghfKDlfFUNHzmuN2HJNyV2riukbwH8cX+/ARbxuri8gxEAAL5JZJ
-	 pMjbhPg8N6KEw==
-Received: by pali.im (Postfix)
-	id EC44F75F; Thu, 15 Feb 2024 19:16:33 +0100 (CET)
-Date: Thu, 15 Feb 2024 19:16:33 +0100
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Jean Delvare <jdelvare@suse.de>
-Cc: Hans de Goede <hdegoede@redhat.com>,
+	b=eAgUsKBdLrG/AoBl4jxLGxfxS2UGF7JpxEAWtiGZ7rIbBu5BDxt1PhRZzQgrFu1hM
+	 EdFc5TS5FpEw8Oy9zH6BK8FldwnGmhmh5bD4RE6iPJl4pkUKjWX8C6freZOTf/de09
+	 mgXn72+4fpwnGEbmMJMD4CLqfdQkyqQ3Gc3N/tZf95EMegqglwwBQbvAJ31W3IpyHJ
+	 zaPEtXXwtbmz1vrC5Fz7puqKFvltRHUSNR7NEYM5qwIXxkCctCXkP2yuIPY2yImcSA
+	 +Rc42ZUiN40+byDmO2FZmzfsEeoOPjLDSIP1YScjj2uSA6p33mm4qsDeCZGgG8NGDV
+	 36Up7YjWxEOVQ==
+Date: Thu, 15 Feb 2024 20:08:16 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.de>, Hans de Goede <hdegoede@redhat.com>,
 	Paul Menzel <pmenzel@molgen.mpg.de>,
-	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-	linux-i2c@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
 	Kai-Heng Feng <kai.heng.feng@canonical.com>,
 	Marius Hoch <mail@mariushoch.de>,
 	Mario Limonciello <mario.limonciello@amd.com>,
 	Dell.Client.Kernel@dell.com, Greg KH <gregkh@linuxfoundation.org>
 Subject: Re: Ideas for a generic solution to support accelerometer lis3lv02d
  in Dell laptops/notebooks?
-Message-ID: <20240215181633.2aevovw6wkxq5si2@pali>
+Message-ID: <Zc5hIPxzA0oVHoZc@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+	Jean Delvare <jdelvare@suse.de>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Paul Menzel <pmenzel@molgen.mpg.de>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Marius Hoch <mail@mariushoch.de>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Dell.Client.Kernel@dell.com, Greg KH <gregkh@linuxfoundation.org>
 References: <4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de>
  <a1128471-bbff-4124-a7e5-44de4b1730b7@redhat.com>
  <20231223125350.xqggx3nyzyjjmnut@pali>
  <20240213150708.57148f6a@endymion.delvare>
+ <20240215181633.2aevovw6wkxq5si2@pali>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="b95QzZChQrFPri/W"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240213150708.57148f6a@endymion.delvare>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20240215181633.2aevovw6wkxq5si2@pali>
 
-On Tuesday 13 February 2024 15:07:08 Jean Delvare wrote:
-> On Sat, 23 Dec 2023 13:53:50 +0100, Pali Rohár wrote:
-> > smbus is not really bus which provides discovering and identifying
-> > devices on the bus.
-> 
-> For completeness, SMBus version 2.0 actually added support for device
-> discovery and even dynamic slave address allocation. This is explained
-> in chapter 5, section 5.6 (SMBus Address resolution protocol).
-> 
-> Unfortunately, this is an optional feature which requires active
-> cooperation from each device connected to the bus. If any device on the
-> bus supports SMBus ARP then you should get an answer when probing
-> (7-bit) I2C address 0x61.
-> 
-> Long ago I had a plan to add support for SMBus ARP to the kernel, but
-> gave up because I couldn't find any system implementing it. If the
-> accelerometer device in Dell laptops supported ARP then we could use it
-> to figure out the device's address, unfortunately this doesn't seem to
-> be the case.
-> 
-> -- 
-> Jean Delvare
-> SUSE L3 Support
 
-According to my notes, accelerometer in Dell laptops should use
-LNG3DMTR-LGA16-3x3 chipset. From what I found it should be
-pin-compatible with LIS302DL, just in different package.
+--b95QzZChQrFPri/W
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-ST LIS302DL datasheet is on the website:
-https://www.st.com/resource/en/datasheet/lis302dl.pdf
 
-It is dual i2c and SPI bus support chipset. But in the datasheet there
-is nothing about SMBus, looks like this is designed for i2c usage. So I
-highly doubt that chipset supports SMBus version 2.0 with ARP extension.
+> Anyway, SMBus ARP is new thing to me, I have never heard about it or its
+> usage before. Has anybody else found some device which supports it?
+> Would be interesting to know if this is not just another standard which
+> was not publicly deployed yet.
 
-Anyway, SMBus ARP is new thing to me, I have never heard about it or its
-usage before. Has anybody else found some device which supports it?
-Would be interesting to know if this is not just another standard which
-was not publicly deployed yet.
+SMBus ARP was introduced with spec 2.0 in 2000. I personally have never
+seen it used in the wild. I am biased because I am way more familiar
+with embedded than, say, servers. But it tells something that we don't
+have support for it in the Linux Kernel.
+
+
+--b95QzZChQrFPri/W
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXOYRwACgkQFA3kzBSg
+Kbb3vQ//a/t4ssgGJ18uKXlILCbImPCutKb4rulq8S2RotVt1vzB5z78AtX6W1XU
+ty2fjG5YUMW9HtLugHB3F4pKACbR8/TyapeB1HCyljupA5CR2c8gEUG5L0fxGCzf
+RcvwILH+C/koeEQPnA8hmvafqIr0NcP1Bzh4Tk0kXoy6JT8Gk4eQWR/hKXuLimb1
+k+ia/K9mMQZ1z/7aydtUSJq5oEYHN3n16R/4YRVNvBFMTZlmrYGqOln9oUvQWioM
++s/TZ3t4eefQDxRZbdSWvYZY4WJL6eY3hDdOSmWJayx2rmDiyD8kDiqZVRFTPUqC
+2x3UMwbn5tXBl4E1OSl3ZrIFjPVLgVaQcqDclClnTv6jCv1tTPnfDhlWNTzEz+1k
+dnqpym85j8twlSKPYl4yKwgBvgD+MUHm+dGXnpoDYSts4WVFMPTF8UAB/U3T16qR
+C/V1hMlcGvP5Pi+AD4KCP3XYHyFJDiXx9bYmgnEIWecLzKX2NWO9ZQDhrTGl6Cvh
+7UN5IZkUKFnPeUQeJFT7rOkqeO9LvM6RM+nUO5UX41khmF6/ZX3nyELh0tYWL/cU
+egB/2+MP+QTLyPF72zP56fjgOQvojnMEYojOJx/dFTQ8WP6s5qBO2s3CqaPkdCHE
+UbNNgLBFN6k8ABtuI4XXCBh61bWGovUIY4Z6bRGvQGHqvI5AowI=
+=/rOg
+-----END PGP SIGNATURE-----
+
+--b95QzZChQrFPri/W--
 
