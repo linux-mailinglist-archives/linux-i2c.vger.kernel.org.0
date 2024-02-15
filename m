@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-1774-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1778-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F461856FE3
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 23:09:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91E0B856FF0
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 23:10:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD80728210E
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 22:09:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32C2C287148
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 22:10:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB4FE145FF8;
-	Thu, 15 Feb 2024 22:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E1661474B4;
+	Thu, 15 Feb 2024 22:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bYjpVES5"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="h2dHszgp"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB167145342;
-	Thu, 15 Feb 2024 22:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29257146010;
+	Thu, 15 Feb 2024 22:08:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708034905; cv=none; b=XVJXZch0K1SZKU0pmMk3EUiBnjfiwZukVwjj0rkjL7CjOzV7dzlM9CP4YQXqyecwsJrFqEZjmO1+OkSd2e/7h5HCxonMzdReIWJQPXV6QAGfqeqo38r2Gu/EO6kmv3l7MAVu0BlNhkEYsD1VMGy+Akj7jX0uUClgPWhHcioFzkg=
+	t=1708034908; cv=none; b=VnSRIQkzVI2b9tKJRkJOHZzypqfQKrzh5CuqTTgbSXgoQS/zprOgLlJisPV05InLFxiL25kkZc6AfPSzYfBBUtJiN2o8EGgXa8nJo8ooNVyTllKPgG9O9/8JqxjnL1D4akyLnF4nwOA5SFJhOcuukjo/UUTOdFeVUNsuYFj+afY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708034905; c=relaxed/simple;
-	bh=NGXJUu33Lr1l9NXaZa1510h0VGdsd6eNUEVT355jTIo=;
+	s=arc-20240116; t=1708034908; c=relaxed/simple;
+	bh=rnrW55EMd5WY1H/Lf4PHZ/r+oG7ZBsAslE1xLX4eUiA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=o76b/ELuviBHUcVxO0V9jPWCdzCSVBIxms2pFuVjqwaYTHcm0OuCd2u9Y+7Kn2Q3brififT0tFuRy5kIDVANuPiiElpyDkOaNOB36QxX70E3xoi6xboZmBcEDrqUymmp9Ti4PrdQIyjAfBjiZ3HlC86Wr70ArRPhsTqIpGEczYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bYjpVES5; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=j6Uxk/grEN9hMPkOAW26HIuOtE19olK3O+FAPpWPUiNDaUt2voCkbrX4xnhXkbR9wLFSalWnPIuVCIRXmZ8vpxKTqdZ9y8Rbr8GG5WsWT8oleTsPqBWDDuMAIiQDsKb0bOj8ymY1PDyl0C6jw9n6TZCBh/cJjX69kXMav3uFECI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=h2dHszgp; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41FKV1KB020929;
-	Thu, 15 Feb 2024 22:08:10 GMT
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41FM0XBk017924;
+	Thu, 15 Feb 2024 22:08:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=gaRn11yQSzCtGgfOHG0WfDL4IGGOB1/y2J4JPHKXeY0=;
- b=bYjpVES54VvNdAivXZqMmH46h/Rkn4j8PMJ8vJa0DthRR2UfYUq6PBOgYzQUtMrsYf0G
- Ovq52PoYU/ADRBHt8S9AnpOfQdZ3K4jFhgWBN6g7ETzj02Ax0S9X97PolKmGdkqt+XeP
- El96X0bCLWFZomDCmaK0QoinHQd7FCNKR/ETMih7/9xPpM3F3Fy2LcAnY9r5SW5I8oYv
- YfXCLGEIEonCigaHla05nuGN9LZx0cZ40erCQlgGyy3vbl2dZjOOLiJmtfNVa4mV2ENl
- pNr5Xse7TS4klDKgV83bSPkOgoN/TpCVkCarovF0fjz5ezEF8ZRfyQgTufTFaum57bNC nQ== 
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9q0v5yck-1
+ bh=bcqBdP1smZ142CVdipR5CsJhhC56BJDRe32BgoHDJb0=;
+ b=h2dHszgpB5H1g7lkUbxqPswzrsfW/vrwIFlDBpbZOdP1e5+wEmpb0kLkSkznvQg4lcDo
+ bARFQ/4+kBrvJurOt6kKivwXjk3z24HANZcau7gRQlB0QdSb4QWQFMB77+VG5cwEuHEg
+ Iqc0HdLlT87yMJU7maCiSr7GfnLf+sH/rOxZ05mqNT7XnNza5w7Zsho/6PK1Qe8OXQ/G
+ uv5gJYLreAS5A6+RwBuWHTg2pGsXOHvLcnp3UJs6/oCSl/Q2toITOPwGji+VJIEr4B9r
+ qPcYpuzcsGV5Ier0CVL5htWPaRESfQ6WhXgViiY8YsNudrH39tX4j3UY9Y/1KJlu8VZS nA== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9u1bg69b-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Thu, 15 Feb 2024 22:08:10 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41FLbR6U032605;
-	Thu, 15 Feb 2024 22:08:09 GMT
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41FJANdP004251;
+	Thu, 15 Feb 2024 22:08:10 GMT
 Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w6kftyudu-1
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6kv0qtmh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Feb 2024 22:08:09 +0000
+	Thu, 15 Feb 2024 22:08:10 +0000
 Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41FM87F349414650
+	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41FM87kN9306826
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Thu, 15 Feb 2024 22:08:09 GMT
 Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7D31F58080;
+	by IMSVA (Postfix) with ESMTP id D031958072;
 	Thu, 15 Feb 2024 22:08:05 +0000 (GMT)
 Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 315E758082;
+	by IMSVA (Postfix) with ESMTP id 8570558086;
 	Thu, 15 Feb 2024 22:08:05 +0000 (GMT)
 Received: from slate16.aus.stglabs.ibm.com (unknown [9.61.14.18])
 	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
@@ -75,9 +75,9 @@ Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         joel@jms.id.au, jk@ozlabs.org, sboyd@kernel.org,
         mturquette@baylibre.com, robh@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Subject: [PATCH 10/33] fsi: aspeed: Add AST2700 support
-Date: Thu, 15 Feb 2024 16:07:36 -0600
-Message-Id: <20240215220759.976998-11-eajames@linux.ibm.com>
+Subject: [PATCH 11/33] fsi: core: Add slave spinlock
+Date: Thu, 15 Feb 2024 16:07:37 -0600
+Message-Id: <20240215220759.976998-12-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240215220759.976998-1-eajames@linux.ibm.com>
 References: <20240215220759.976998-1-eajames@linux.ibm.com>
@@ -89,94 +89,109 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: lUQIpHZRxAjufZhvUTa8aRO5RhMkXiqI
-X-Proofpoint-GUID: lUQIpHZRxAjufZhvUTa8aRO5RhMkXiqI
+X-Proofpoint-GUID: 1NXmfBBLW8NuuHvZgD0892lFSsN0VJSh
+X-Proofpoint-ORIG-GUID: 1NXmfBBLW8NuuHvZgD0892lFSsN0VJSh
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-15_20,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- suspectscore=0 phishscore=0 mlxlogscore=999 clxscore=1015 impostorscore=0
- malwarescore=0 lowpriorityscore=0 spamscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0 phishscore=0
+ adultscore=0 priorityscore=1501 suspectscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2311290000 definitions=main-2402150171
 
-AST2700 requires a few bits set differently in the OPB retry
-counter register, so add some match data and set the register
-accordingly.
+FSI slave operations were not locked, meaning that during slave
+error recovery operations, other slave accesses may take place,
+resulting in incorrect recovery and additional errors. Make the
+slave access and error recovery atomic with a spinlock. Don't
+use a mutex for future interrupt handling support.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- drivers/fsi/fsi-master-aspeed.c | 28 +++++++++++++++++++++++++---
- 1 file changed, 25 insertions(+), 3 deletions(-)
+ drivers/fsi/fsi-core.c  | 7 +++++++
+ drivers/fsi/fsi-slave.h | 2 ++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/drivers/fsi/fsi-master-aspeed.c b/drivers/fsi/fsi-master-aspeed.c
-index f0a19cd451a0..d6e923b8f501 100644
---- a/drivers/fsi/fsi-master-aspeed.c
-+++ b/drivers/fsi/fsi-master-aspeed.c
-@@ -18,6 +18,10 @@
- 
- #include "fsi-master.h"
- 
-+struct fsi_master_aspeed_data {
-+	u32 opb_retry_counter;
-+};
-+
- struct fsi_master_aspeed {
- 	struct fsi_master	master;
- 	struct mutex		lock;	/* protect HW access */
-@@ -60,6 +64,8 @@ static const u32 fsi_base = 0xa0000000;
- #define OPB1_READ_ORDER2	0x60
- 
- #define OPB_RETRY_COUNTER	0x64
-+#define OPB_RETRY_COUNTER_AST2600	0x00000010
-+#define OPB_RETRY_COUNTER_AST2700	0x000c0010
- 
- /* OPBn_STATUS */
- #define STATUS_HALFWORD_ACK	BIT(0)
-@@ -536,6 +542,8 @@ static int tacoma_cabled_fsi_fixup(struct device *dev)
- 
- static int fsi_master_aspeed_probe(struct platform_device *pdev)
+diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
+index e6ed2d0773b6..eb15e5f5a2ee 100644
+--- a/drivers/fsi/fsi-core.c
++++ b/drivers/fsi/fsi-core.c
+@@ -304,6 +304,7 @@ static int fsi_slave_handle_error(struct fsi_slave *slave, bool write,
+ int fsi_slave_read(struct fsi_slave *slave, uint32_t addr,
+ 			void *val, size_t size)
  {
-+	const struct fsi_master_aspeed_data *md = of_device_get_match_data(&pdev->dev);
-+	u32 opb_retry_counter = md ? md->opb_retry_counter : OPB_RETRY_COUNTER_AST2600;
- 	struct fsi_master_aspeed *aspeed;
- 	int rc, links, reg;
- 	__be32 raw;
-@@ -579,8 +587,7 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
- 	writel(OPB1_XFER_ACK_EN | OPB0_XFER_ACK_EN,
- 			aspeed->base + OPB_IRQ_MASK);
++	unsigned long flags;
+ 	uint8_t id = slave->id;
+ 	int rc, err_rc, i;
  
--	/* TODO: determine an appropriate value */
--	writel(0x10, aspeed->base + OPB_RETRY_COUNTER);
-+	writel(opb_retry_counter, aspeed->base + OPB_RETRY_COUNTER);
+@@ -311,6 +312,7 @@ int fsi_slave_read(struct fsi_slave *slave, uint32_t addr,
+ 	if (rc)
+ 		return rc;
  
- 	writel(ctrl_base, aspeed->base + OPB_CTRL_BASE);
- 	writel(fsi_base, aspeed->base + OPB_FSI_BASE);
-@@ -656,8 +663,23 @@ static int fsi_master_aspeed_remove(struct platform_device *pdev)
- 	return 0;
++	spin_lock_irqsave(&slave->lock, flags);
+ 	for (i = 0; i < slave_retries; i++) {
+ 		rc = fsi_master_read(slave->master, slave->link,
+ 				id, addr, val, size);
+@@ -321,6 +323,7 @@ int fsi_slave_read(struct fsi_slave *slave, uint32_t addr,
+ 		if (err_rc)
+ 			break;
+ 	}
++	spin_unlock_irqrestore(&slave->lock, flags);
+ 
+ 	return rc;
  }
+@@ -329,6 +332,7 @@ EXPORT_SYMBOL_GPL(fsi_slave_read);
+ int fsi_slave_write(struct fsi_slave *slave, uint32_t addr,
+ 			const void *val, size_t size)
+ {
++	unsigned long flags;
+ 	uint8_t id = slave->id;
+ 	int rc, err_rc, i;
  
-+static const struct fsi_master_aspeed_data fsi_master_ast2600_data = {
-+	.opb_retry_counter = OPB_RETRY_COUNTER_AST2600,
-+};
-+
-+static const struct fsi_master_aspeed_data fsi_master_ast2700_data = {
-+	.opb_retry_counter = OPB_RETRY_COUNTER_AST2700,
-+};
-+
- static const struct of_device_id fsi_master_aspeed_match[] = {
--	{ .compatible = "aspeed,ast2600-fsi-master" },
-+	{
-+		.compatible = "aspeed,ast2600-fsi-master",
-+		.data = &fsi_master_ast2600_data,
-+	},
-+	{
-+		.compatible = "aspeed,ast2700-fsi-master",
-+		.data = &fsi_master_ast2700_data,
-+	},
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, fsi_master_aspeed_match);
+@@ -336,6 +340,7 @@ int fsi_slave_write(struct fsi_slave *slave, uint32_t addr,
+ 	if (rc)
+ 		return rc;
+ 
++	spin_lock_irqsave(&slave->lock, flags);
+ 	for (i = 0; i < slave_retries; i++) {
+ 		rc = fsi_master_write(slave->master, slave->link,
+ 				id, addr, val, size);
+@@ -346,6 +351,7 @@ int fsi_slave_write(struct fsi_slave *slave, uint32_t addr,
+ 		if (err_rc)
+ 			break;
+ 	}
++	spin_unlock_irqrestore(&slave->lock, flags);
+ 
+ 	return rc;
+ }
+@@ -1005,6 +1011,7 @@ static int fsi_slave_init(struct fsi_master *master, int link, uint8_t id)
+ 	if (!slave)
+ 		return -ENOMEM;
+ 
++	spin_lock_init(&slave->lock);
+ 	dev_set_name(&slave->dev, "slave@%02x:%02x", link, id);
+ 	slave->dev.type = &cfam_type;
+ 	slave->dev.parent = &master->dev;
+diff --git a/drivers/fsi/fsi-slave.h b/drivers/fsi/fsi-slave.h
+index 42af2fae0329..6f8fb97023fb 100644
+--- a/drivers/fsi/fsi-slave.h
++++ b/drivers/fsi/fsi-slave.h
+@@ -6,6 +6,7 @@
+ 
+ #include <linux/cdev.h>
+ #include <linux/device.h>
++#include <linux/spinlock.h>
+ 
+ #define FSI_SLAVE_BASE			0x800
+ 
+@@ -100,6 +101,7 @@ struct fsi_slave {
+ 	struct device		dev;
+ 	struct fsi_master	*master;
+ 	struct cdev		cdev;
++	spinlock_t		lock;	/* atomic access and error recovery */
+ 	int			cdev_idx;
+ 	int			id;	/* FSI address */
+ 	int			link;	/* FSI link# */
 -- 
 2.39.3
 
