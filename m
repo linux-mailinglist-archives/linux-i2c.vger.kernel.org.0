@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-1792-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1783-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2E2B857028
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 23:12:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FC8A857005
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 23:10:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D67531C21BAE
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 22:12:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 316AE1F23C1B
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 22:10:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF92C14C5A8;
-	Thu, 15 Feb 2024 22:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCD41487E8;
+	Thu, 15 Feb 2024 22:08:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fuz4hOv1"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="g1naOJmO"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C70FB14A090;
-	Thu, 15 Feb 2024 22:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D5014690E;
+	Thu, 15 Feb 2024 22:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708034913; cv=none; b=C29xmP2TV76ljM8CoVc9hkiMTdExpIN0/LYxtMfdt0mKs4fRuzCvz1jIgwJN8nW9c/rFTE3zwulaT5f7OYfeZJXecK0l54v0kZJg4r+dhbN00cMTy/+awtg/aoRJGqzDiVlpsoeRkO9x058vEOSuXbNganQsjNLI7wr/R+ni9ZA=
+	t=1708034909; cv=none; b=Z5+KcU7sgMzUuDi6HTSU79Wv2oAF19dPkmdJqN19TO6BI9u83k3n5Wtwzo5J9uK1Q5wX6xfUCWKgeFvDIc0tIlJKluK6px1agziLMoAug/gkQrqRJY7ihzu7gh6y03d6/aToL6T0mzegMyW7UcAZSpwwR6LS2zz++qORTr7FVXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708034913; c=relaxed/simple;
-	bh=QVu20tcW/pErFdegM6TNMtLP095kS72bKybdH0MbwEw=;
+	s=arc-20240116; t=1708034909; c=relaxed/simple;
+	bh=HehnAuv1ZYMsznUFMzhSA1GnXrpJWSxxtr7AKvAa4Qk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=aSjOeVQWvcaeURN9z3TZzJG8Q3Mi/i4Uteq+BzvGNo7nPa2FkaXlzmaRi40KWSfau2HMimenx/sW2iC269Qi93GaPRJ6ZdatxzFyA+XvMZexmi0z3/F5svQ2srN+pvALrVrFjgdpwuqDgYeSg1oT2YlHcXrDSkH2G4bIp/T5OBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fuz4hOv1; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=ux0rsXdgArnNUgKtbncRWVH11gCrclYV5/tEE4A2rYqgs+4Y0TFbhCDybkF7k16eLWF4ca8rfpKSfmYXCjM5Ppte00Sq25lIOjvbGQeVuGkQdyjY3/ACIgVuQ+w2tg2di7c+jtTlkaavlOpfILDBGuE6RcciFkos1Y3GATRMjdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=g1naOJmO; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41FM0csO018105;
-	Thu, 15 Feb 2024 22:08:17 GMT
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41FM0bJf018030;
+	Thu, 15 Feb 2024 22:08:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=G2U9RCikIAWX79HQyTXxI0GoS+WAxRjBt+QZS9Zg4lY=;
- b=fuz4hOv1M3zbBeE9j/a2icYfCb64RzdwR31wNzdLQIMcQU7z3cPTpzegmHEYk+3mIgLi
- +ugcKcvDgV5vlQ9axu4EJdhi6aaqfTfKpTp7/PlT01u7eBDhGrEsnVWQdfXRthzES1Xn
- yxCU9uFFVb5qRNw44yck0S6ycKRDB4m3CBe2KVofm3FOzkJxIg7/qu8rL5u3IEYZxr1q
- l5IqhSllarI3pp2h8HyWui6u/FVW49fAqWhsWSG35qaR3u0ahjVO6h67aez8raJvVZAw
- OLqvqXLYl4sse52udnWfralEsWB6vNmj1GilJzL6psjoFKjXvNG6dm8kGIMMyZYHO4L8 VQ== 
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9u1bg6ds-1
+ bh=Dtf4pFRJxaKze/HISwspRMMKZvQZJYraVaCTtYgrlqE=;
+ b=g1naOJmOgx2Bc68XO35iF9sp12d2R0FrtyJmi6EJ1hhEnsqm9f2agDF+ReL4LcB6aBr5
+ urEAfEWHpV7gX9QkiQl5lt47/0AO2kcloJcIfIdaaf/E9nqvADicVxnTfSv24CbhZATD
+ ZaowK33FUeJ1sJoiM+Sx25e/Ia4hZtvcHpErYYl+BhSttqMCBiXgRDaEpScgEWokWrwr
+ s/2fUMp5knsxGsn1MiRjvF0o95AGWGtlfJG1PABRNUBJBbZHytXmh8qTqpPMsccoU+xo
+ U4eEL9mLfJFA+B5vNiigPqnloWOzwlZWG658/tQ+uPyGBzGOrVv0OnDtgiCMfvuXh9MN 5Q== 
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9u1bg6bs-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Feb 2024 22:08:16 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41FLklQN032600;
-	Thu, 15 Feb 2024 22:08:15 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w6kftyuet-1
+	Thu, 15 Feb 2024 22:08:14 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41FL3HqD010050;
+	Thu, 15 Feb 2024 22:08:13 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3w6npm781s-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Feb 2024 22:08:15 +0000
+	Thu, 15 Feb 2024 22:08:13 +0000
 Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41FM8CsR18874962
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41FM8B1E12321532
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Feb 2024 22:08:15 GMT
+	Thu, 15 Feb 2024 22:08:13 GMT
 Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CE6E85807C;
-	Thu, 15 Feb 2024 22:08:10 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 2D5055807E;
+	Thu, 15 Feb 2024 22:08:11 +0000 (GMT)
 Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 83D3D58071;
+	by IMSVA (Postfix) with ESMTP id D70DF58063;
 	Thu, 15 Feb 2024 22:08:10 +0000 (GMT)
 Received: from slate16.aus.stglabs.ibm.com (unknown [9.61.14.18])
 	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
@@ -75,9 +75,9 @@ Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         joel@jms.id.au, jk@ozlabs.org, sboyd@kernel.org,
         mturquette@baylibre.com, robh@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Subject: [PATCH 25/33] fsi: hub: Add interrupt support
-Date: Thu, 15 Feb 2024 16:07:51 -0600
-Message-Id: <20240215220759.976998-26-eajames@linux.ibm.com>
+Subject: [PATCH 26/33] ARM: dts: aspeed: FSI interrupt support
+Date: Thu, 15 Feb 2024 16:07:52 -0600
+Message-Id: <20240215220759.976998-27-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240215220759.976998-1-eajames@linux.ibm.com>
 References: <20240215220759.976998-1-eajames@linux.ibm.com>
@@ -89,200 +89,73 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3dTy5CLHc1ofbCEj1Lz_O4McShRkMRj0
-X-Proofpoint-ORIG-GUID: 3dTy5CLHc1ofbCEj1Lz_O4McShRkMRj0
+X-Proofpoint-GUID: mZoi6w3AQ-T8E4aklnpfqBCDxZ5lp3Q8
+X-Proofpoint-ORIG-GUID: mZoi6w3AQ-T8E4aklnpfqBCDxZ5lp3Q8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-15_20,2024-02-14_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- malwarescore=0 spamscore=0 mlxlogscore=752 bulkscore=0 phishscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=445 bulkscore=0 phishscore=0
  adultscore=0 priorityscore=1501 suspectscore=0 lowpriorityscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2311290000 definitions=main-2402150171
 
-The hub master receives it's interrupts from the local slave register
-space, which is handled in the FSI core. Therefore, just route the remote
-slave interrupts to the hub link device interrupts.
+Enable FSI interrupt controllers for AST2600 and P10BMC hub master.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- drivers/fsi/fsi-master-hub.c | 119 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 116 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/aspeed/aspeed-g6.dtsi        | 4 ++++
+ arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi | 2 ++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/drivers/fsi/fsi-master-hub.c b/drivers/fsi/fsi-master-hub.c
-index 92aa07055c56..4c3f77ae1faf 100644
---- a/drivers/fsi/fsi-master-hub.c
-+++ b/drivers/fsi/fsi-master-hub.c
-@@ -7,8 +7,10 @@
+diff --git a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+index c4d1faade8be..e0b44498269f 100644
+--- a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
++++ b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+@@ -865,22 +865,26 @@ i2c: bus@1e78a000 {
+ 			};
  
- #include <linux/delay.h>
- #include <linux/fsi.h>
-+#include <linux/irqchip/chained_irq.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_irq.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
+ 			fsim0: fsi@1e79b000 {
++				#interrupt-cells = <1>;
+ 				compatible = "aspeed,ast2600-fsi-master", "fsi-master";
+ 				reg = <0x1e79b000 0x94>;
+ 				interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&pinctrl_fsi1_default>;
+ 				clocks = <&syscon ASPEED_CLK_GATE_FSICLK>;
++				interrupt-controller;
+ 				status = "disabled";
+ 			};
  
-@@ -35,9 +37,10 @@
-  */
- struct fsi_master_hub {
- 	struct fsi_master	master;
-+	struct irq_domain	*irq_domain;
- 	struct fsi_device	*upstream;
--	uint32_t		addr, size;	/* slave-relative addr of */
--						/* master address space */
-+	uint32_t		addr;
-+	uint32_t		size;
+ 			fsim1: fsi@1e79b100 {
++				#interrupt-cells = <1>;
+ 				compatible = "aspeed,ast2600-fsi-master", "fsi-master";
+ 				reg = <0x1e79b100 0x94>;
+ 				interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-names = "default";
+ 				pinctrl-0 = <&pinctrl_fsi2_default>;
+ 				clocks = <&syscon ASPEED_CLK_GATE_FSICLK>;
++				interrupt-controller;
+ 				status = "disabled";
+ 			};
+ 
+diff --git a/arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi b/arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi
+index a93a241d005a..44e48e39e6e9 100644
+--- a/arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi
++++ b/arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi
+@@ -166,10 +166,12 @@ occ-hwmon {
+ 		};
+ 
+ 		fsi_hub0: hub@3400 {
++			#interrupt-cells = <1>;
+ 			compatible = "fsi-master-hub";
+ 			reg = <0x3400 0x400>;
+ 			#address-cells = <2>;
+ 			#size-cells = <0>;
++			interrupt-controller;
+ 		};
+ 	};
  };
- 
- #define to_fsi_master_hub(m) container_of(m, struct fsi_master_hub, master)
-@@ -77,10 +80,81 @@ static int hub_master_break(struct fsi_master *master, int link)
- 	return hub_master_write(master, link, 0, addr, &cmd, sizeof(cmd));
- }
- 
-+static int hub_master_link_enable(struct fsi_master *master, int link,
-+				  bool enable)
-+{
-+	struct fsi_master_hub *hub = to_fsi_master_hub(master);
-+	u32 srsim = 0xff000000 >> (8 * (link % 4));
-+	int slave_idx = 4 * (link / 4);
-+	__be32 srsim_be;
-+	int ret;
-+
-+	ret = fsi_slave_read(hub->upstream->slave, FSI_SLAVE_BASE + FSI_SRSIM0 + slave_idx,
-+			     &srsim_be, sizeof(srsim_be));
-+	if (ret)
-+		return ret;
-+
-+	if (enable) {
-+		ret = fsi_master_link_enable(master, link, enable);
-+		if (ret)
-+			return ret;
-+
-+		srsim |= be32_to_cpu(srsim_be);
-+		srsim_be = cpu_to_be32(srsim);
-+		ret = fsi_slave_write(hub->upstream->slave,
-+				      FSI_SLAVE_BASE + FSI_SRSIM0 + slave_idx, &srsim_be,
-+				      sizeof(srsim_be));
-+	} else {
-+		srsim = be32_to_cpu(srsim_be) & ~srsim;
-+		srsim_be = cpu_to_be32(srsim);
-+		ret = fsi_slave_write(hub->upstream->slave,
-+				      FSI_SLAVE_BASE + FSI_SRSIM0 + slave_idx, &srsim_be,
-+				      sizeof(srsim_be));
-+		if (ret)
-+			return ret;
-+
-+		ret = fsi_master_link_enable(master, link, enable);
-+	}
-+
-+	return ret;
-+}
-+
-+static irqreturn_t hub_master_irq(int irq, void *data)
-+{
-+	struct fsi_master_hub *hub = data;
-+	struct fsi_master *parent = hub->upstream->slave->master;
-+	unsigned int link = 0;
-+
-+	for (; link < FSI_HUB_MASTER_MAX_LINKS; ++link) {
-+		if (parent->remote_interrupt_status & (1 << link))
-+			fsi_master_irq(&hub->master, hub->irq_domain, link);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int hub_master_irqd_map(struct irq_domain *domain, unsigned int irq,
-+			       irq_hw_number_t hwirq)
-+{
-+	struct fsi_master_hub *hub = domain->host_data;
-+
-+	irq_set_chip_and_handler(irq, &hub->master.irq_chip, handle_simple_irq);
-+	irq_set_chip_data(irq, &hub->master);
-+
-+	return 0;
-+}
-+
-+static const struct irq_domain_ops hub_master_irq_domain_ops = {
-+	.map = hub_master_irqd_map,
-+};
-+
- static void hub_master_release(struct device *dev)
- {
- 	struct fsi_master_hub *hub = to_fsi_master_hub(to_fsi_master(dev));
- 
-+	if (hub->irq_domain)
-+		irq_domain_remove(hub->irq_domain);
-+
- 	regmap_exit(hub->master.map);
- 	kfree(hub);
- }
-@@ -136,6 +210,7 @@ static int hub_master_probe(struct device *dev)
- 	hub->master.read = hub_master_read;
- 	hub->master.write = hub_master_write;
- 	hub->master.send_break = hub_master_break;
-+	hub->master.link_enable = hub_master_link_enable;
- 
- 	dev_set_drvdata(dev, hub);
- 
-@@ -143,9 +218,44 @@ static int hub_master_probe(struct device *dev)
- 	if (rc)
- 		goto err_free;
- 
-+	if (of_property_read_bool(dev->of_node, "interrupt-controller")) {
-+		struct device_node *parent = of_irq_find_parent(dev->of_node);
-+
-+		if (parent) {
-+			struct irq_fwspec fwspec;
-+			unsigned int irq;
-+
-+			fwspec.fwnode = of_node_to_fwnode(parent);
-+			fwspec.param_count = 1;
-+			fwspec.param[0] = (fsi_dev->slave->link * FSI_IRQ_COUNT) + 8;
-+			irq = irq_create_fwspec_mapping(&fwspec);
-+			if (irq) {
-+				unsigned int size = links * FSI_IRQ_COUNT;
-+
-+				hub->irq_domain = irq_domain_add_linear(dev->of_node, size,
-+									&hub_master_irq_domain_ops,
-+									hub);
-+
-+				if (hub->irq_domain) {
-+					rc = devm_request_irq(dev, irq, hub_master_irq, 0,
-+							      dev_name(dev), hub);
-+					if (rc) {
-+						dev_warn(dev, "failed to request irq:%u\n", irq);
-+						irq_domain_remove(hub->irq_domain);
-+						hub->irq_domain = NULL;
-+					} else {
-+						dev_info(dev, "enabling interrupts irq:%u\n", irq);
-+					}
-+				} else {
-+					dev_warn(dev, "failed to create irq domain\n");
-+				}
-+			}
-+		}
-+	}
-+
- 	rc = fsi_master_register(&hub->master);
- 	if (rc)
--		goto err_free;
-+		goto err_irq;
- 
- 	/* At this point, fsi_master_register performs the device_initialize(),
- 	 * and holds the sole reference on master.dev. This means the device
-@@ -157,6 +267,9 @@ static int hub_master_probe(struct device *dev)
- 	get_device(&hub->master.dev);
- 	return 0;
- 
-+err_irq:
-+	if (hub->irq_domain)
-+		irq_domain_remove(hub->irq_domain);
- err_free:
- 	kfree(hub);
- err_release:
 -- 
 2.39.3
 
