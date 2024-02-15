@@ -1,133 +1,95 @@
-Return-Path: <linux-i2c+bounces-1762-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1764-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7478C856A5A
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 18:00:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 326EC856A83
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 18:06:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86361B2536D
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 16:55:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E46BD288AF9
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 17:06:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1489B13AA4D;
-	Thu, 15 Feb 2024 16:52:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76532136668;
+	Thu, 15 Feb 2024 17:06:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Puy0rwxW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uuL2/XHj"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6710F13A245;
-	Thu, 15 Feb 2024 16:52:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24BE912DD9A;
+	Thu, 15 Feb 2024 17:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708015966; cv=none; b=PCwmYLHbQRdjLo2pIL7TV3NIueQI0MmZgCsEJ/8uHHkFr63/hJXDyAWOmqOXUbJ7V8PBXgaEsMQCmykcZv5s7jjzHIt1/MSSXq+mc8+W5spREaZZlYraoY/8POXj3a9M0mLaKiETH9yVJhVdEZnmweq2WCpp6SJH/dktrKwWlAc=
+	t=1708016768; cv=none; b=sMdwbwRRrkLiCwdc2V03yNNxaw7ULy0pKaE6wUutmuDsSXufX5k762saOG1WP5J57W7hvZDCYn3gicEbbkFmspml5uMO73JJVPCJ9END1hEpBlIaOdxHtFALjA7tCUKuuz8y1vwc7GB3uFTQ+LBf6GuwMJczfHj11kf0UZJBVRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708015966; c=relaxed/simple;
-	bh=UvJih+xma5Rq5UrC8pGOHSo+fikaNT91p0IHc5YM7jc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fOyVhhTZemAXwFId7x/eLtHh+6PVhrL/7vIi8mC0NmyuYJTJ2ZMuz/e77+0iTgzVD1rDPd+4XdlNRUZJa5LNCMQ9uOxmuECvh8B9hKx/Bicbdi+j1u4Za25YKJ2hRUS24t7eFQv7LMW9h6AGL+Qu3mcBMGceYlFlrxI/YtFKixA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Puy0rwxW; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EA1E9E0015;
-	Thu, 15 Feb 2024 16:52:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708015962;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GiFCwkZp1j+zGkHFn7RNrGArILflr3YrUZ1AXzVuNHk=;
-	b=Puy0rwxWjmDTOBKb2sbGV5fyIc7/74RRKyfDEgEOtMZjdNSJQ2WyY1gl1DXzAwex5mPdl3
-	QacCUNY23/JCxMcdT2UXKpoTV4B8dO9OsLu+CnNdAiOvBF8bqodVIf9f+1wIvDh+oZr/Lb
-	3PVbqKj8FyTFPRN0sQW1MqBc443CBD8wy3gnce+N+g7kWWOvnUS5KVIUG+Cvmt7Dpp5Amk
-	pOlISBbrivjhkjen8z7ieN07ncee27jTekI5xQSkYvkQlFXtF30ObTZnKhnqS/HlJ0UL2D
-	tYa1JOjSwvUj2FaPQKG0S2AMA1PSTK5JPxcI/BjXz7G1oyYuTy0sF+km1tvdwA==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Thu, 15 Feb 2024 17:52:20 +0100
-Subject: [PATCH 13/13] MIPS: mobileye: eyeq5: add resets to I2C controllers
+	s=arc-20240116; t=1708016768; c=relaxed/simple;
+	bh=nq34IP6sfpD54hsEtrN2j/P+4DNp6g4tkl0Jwz9sTNw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=BeFUc+99OUCTTP/0rnar5a65dcjfEEf4LHMFRHzrr7HfAF0Htf0gLGbsd7zqZDyjX50pq8SfA45elWnwq/CXlqKO8g6Wi401EXElm0HcJsreFe8ZxICpRR0Mya0f3u5xhOgpSMP4EzkExCvcPenpYlOhKziy6QdNDszqd87P6UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uuL2/XHj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B88AC433C7;
+	Thu, 15 Feb 2024 17:06:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708016767;
+	bh=nq34IP6sfpD54hsEtrN2j/P+4DNp6g4tkl0Jwz9sTNw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=uuL2/XHjxDow0CBItd3NuPU14AW2Kvom1K9Wr9j5a43WNbnXKxS6qLs96rgU+lH1b
+	 vYmgKOnPyo1KlOXrOx2rf3woeVDCKAsWKmnttNrVV1Jo5T14L2WXDu0TYPazgiMNVX
+	 cIiQLkeo7lUq7u6QEcgmVUUWkN5Q6F98aLQbtxVr+xFE8r53AynGns+s0Rvq/VRrCm
+	 lw1l5c5W3akEl8k39a6ztwOy3nsGhR9j0EGi6CvA2qt07+VBbt037uX3kPZl3GvY6b
+	 DgKqCyFiw7gPCIV1YPCq3qdxrZsWswZb4+cXHIXesWd2nQ6lOD/p1N93dMixc3IBUq
+	 WGDLgvYo1uQWA==
+Date: Thu, 15 Feb 2024 11:06:05 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Thomas Richard <thomas.richard@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andy Shevchenko <andy@kernel.org>, Tony Lindgren <tony@atomide.com>,
+	Haojian Zhuang <haojian.zhuang@linaro.org>,
+	Vignesh R <vigneshr@ti.com>, Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
+	theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com,
+	u-kumar1@ti.com,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v3 00/18] Add suspend to ram support for PCIe on J7200
+Message-ID: <20240215170605.GA1294576@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240215-mbly-i2c-v1-13-19a336e91dca@bootlin.com>
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
-In-Reply-To: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
-To: Linus Walleij <linus.walleij@linaro.org>, 
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-mips@vger.kernel.org, Gregory Clement <gregory.clement@bootlin.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.12.4
-X-GND-Sasl: theo.lebrun@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240102-j7200-pcie-s2r-v3-0-5c2e4a3fac1f@bootlin.com>
 
-Add resets properties to each I2C controller. This depends on the
-reset-eyeq5 platform reset controller driver.
+On Thu, Feb 15, 2024 at 04:17:45PM +0100, Thomas Richard wrote:
+> This add suspend to ram support for the PCIe (RC mode) on J7200 platform.
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- arch/mips/boot/dts/mobileye/eyeq5.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+>       PCI: cadence: extract link setup sequence from cdns_pcie_host_setup()
+>       PCI: cadence: set cdns_pcie_host_init() global
+>       PCI: j721e: add reset GPIO to struct j721e_pcie
+>       PCI: j721e: add suspend and resume support
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-index d27e164f0fc1..c0842836fcc8 100644
---- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-@@ -80,6 +80,7 @@ i2c0: i2c@300000 {
- 			#size-cells = <0>;
- 			clocks = <&i2c_ser_clk>, <&i2c_clk>;
- 			clock-names = "i2cclk", "apb_pclk";
-+			resets = <&reset 0 13>;
- 			mobileye,olb = <&olb>;
- 			mobileye,id = <0>;
- 		};
-@@ -94,6 +95,7 @@ i2c1: i2c@400000 {
- 			#size-cells = <0>;
- 			clocks = <&i2c_ser_clk>, <&i2c_clk>;
- 			clock-names = "i2cclk", "apb_pclk";
-+			resets = <&reset 0 14>;
- 			mobileye,olb = <&olb>;
- 			mobileye,id = <1>;
- 		};
-@@ -108,6 +110,7 @@ i2c2: i2c@500000 {
- 			#size-cells = <0>;
- 			clocks = <&i2c_ser_clk>, <&i2c_clk>;
- 			clock-names = "i2cclk", "apb_pclk";
-+			resets = <&reset 0 15>;
- 			mobileye,olb = <&olb>;
- 			mobileye,id = <2>;
- 		};
-@@ -122,6 +125,7 @@ i2c3: i2c@600000 {
- 			#size-cells = <0>;
- 			clocks = <&i2c_ser_clk>, <&i2c_clk>;
- 			clock-names = "i2cclk", "apb_pclk";
-+			resets = <&reset 0 16>;
- 			mobileye,olb = <&olb>;
- 			mobileye,id = <3>;
- 		};
-@@ -136,6 +140,7 @@ i2c4: i2c@700000 {
- 			#size-cells = <0>;
- 			clocks = <&i2c_ser_clk>, <&i2c_clk>;
- 			clock-names = "i2cclk", "apb_pclk";
-+			resets = <&reset 0 17>;
- 			mobileye,olb = <&olb>;
- 			mobileye,id = <4>;
- 		};
+The drivers/pci/ subject line pattern is:
 
--- 
-2.43.1
+  PCI: <driver>: <Capitalized verb>
 
+e.g.,
+
+  PCI: cadence: Extract link setup sequence from cdns_pcie_host_setup()
 
