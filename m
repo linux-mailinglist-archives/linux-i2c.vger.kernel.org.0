@@ -1,102 +1,156 @@
-Return-Path: <linux-i2c+bounces-1718-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1719-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08CC9855822
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 01:08:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2586F855F07
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 11:20:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFC4628107A
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 00:08:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A28961F2135B
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 10:20:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9FE5389;
-	Thu, 15 Feb 2024 00:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1529069D04;
+	Thu, 15 Feb 2024 10:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ezusqJV6";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="krP2RrHN";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ezusqJV6";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="krP2RrHN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 7.mo582.mail-out.ovh.net (7.mo582.mail-out.ovh.net [46.105.59.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 180E917C8
-	for <linux-i2c@vger.kernel.org>; Thu, 15 Feb 2024 00:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.59.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B1869D00
+	for <linux-i2c@vger.kernel.org>; Thu, 15 Feb 2024 10:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707955700; cv=none; b=POlechFHGJjWw3LfkrkXM5BlqsWdjQV+17nFrgAQJ+W214dG6KdFwfOLBJPs2mYaXuvduw4BB1cYDIUv2WPHGVRBJSv5J5r1gYVKGxIDqBzZnjWb98mtqRAOIsxHNfF4a5q6/3xzEvrfgmMGJO+Cm9J3HJFNdXV1eazhpk/f9qw=
+	t=1707992397; cv=none; b=shtFj6h+fDMQXzsP3C08j+NncHTikaY/zcPDwPqAHnbT4fErX+7A0wu/PUq6KpYpLrEFuaz4cA0+HS+v8Kor6LuK/QqALe9xN8kzQH/jQBYQMrEuxVVbepvNp27gEBZkQKrws3CsCTga1ePyKIlC6fTPdxUGTpHX6Q6sCkpWDL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707955700; c=relaxed/simple;
-	bh=Zn2YmXTGnlmFWVJAWE0ZcsbcTLkjNnzhl3e0UcTBfKg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=b/qABXV3CK+XZk0vR6As1CZqhbknF2i6M4ZfQX6kmuTqkU7bYFwcNOe54AOR6oCgIOI84yRVXrm88jInI/eREtr5HUz/hKj5lf4De5Z2QGwVOgvyL40rEaVHBHZL24km2b1MXLwJHduGduCmJT6cawRf4eTmkvMxejs1myxgkIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.59.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director5.ghost.mail-out.ovh.net (unknown [10.109.139.43])
-	by mo582.mail-out.ovh.net (Postfix) with ESMTP id 4TZs9H0CWSz1F8Q
-	for <linux-i2c@vger.kernel.org>; Wed, 14 Feb 2024 21:42:11 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-62rx8 (unknown [10.108.54.171])
-	by director5.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 58D4F1FD57;
-	Wed, 14 Feb 2024 21:42:04 +0000 (UTC)
-Received: from etezian.org ([37.59.142.103])
-	by ghost-submission-6684bf9d7b-62rx8 with ESMTPSA
-	id pzx8A6wzzWWJKwIAfHX53g
-	(envelope-from <andi@etezian.org>); Wed, 14 Feb 2024 21:42:04 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-103G00581a402d0-df4d-43c0-80f3-f5461175c724,
-                    C0FC2E5C6A7315DD97BDDE4B9606AB6EEADB6D9F) smtp.auth=andi@etezian.org
-X-OVh-ClientIp:89.217.109.169
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Michael Ellerman <mpe@ellerman.id.au>, 
- Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
- Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>, 
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Wolfram Sang <wsa@kernel.org>, 
- Olof Johansson <olof@lixom.net>, linux-i2c@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20240212111933.963985-1-arnd@kernel.org>
-References: <20240212111933.963985-1-arnd@kernel.org>
-Subject: Re: [PATCH] i2c: pasemi: split driver into two separate modules
-Message-Id: <170794692308.4040459.7350373390928340229.b4-ty@kernel.org>
-Date: Wed, 14 Feb 2024 22:42:03 +0100
+	s=arc-20240116; t=1707992397; c=relaxed/simple;
+	bh=zhVlv+uFJf3aTT0FZykwTxFdm7TsTEFyJuGmM5syBg4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Pm5MNTm7NvQ7XqGIYX7C1HW8RWy+P5HwggFpoJ93745ZV702osok4UQlVeUnXy6Sq9EpXn9mJltPguh1I7avtHRq0bz6RiIF15pHDmSr+rbpxkBHCc65IcFKVvsXQg7diug5oeTtq3s4rPvNsiX50xnzI97Gz50cDEXjh8eafOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ezusqJV6; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=krP2RrHN; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ezusqJV6; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=krP2RrHN; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 94A6021AA2;
+	Thu, 15 Feb 2024 10:19:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1707992394; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Xq+JEC3Lr9IkJ8sa173IbTHxWaSKSYcoajvKlHb7PuE=;
+	b=ezusqJV6YJ+Bsa35aCGim/vbw6I6VwAbiTJMQVLR5tnxb2w1iDPj5bsEhHGMmli0E4RppG
+	jQXrEr+zcnByCRMQeCZc/+akzbRQMOsLOmz2iZj8SYNDBidk/jsZmieUGMjfy5hrm7fHyz
+	rkXgtMptCc8B2YqeLJS6zx+Ow/3kbYE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1707992394;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Xq+JEC3Lr9IkJ8sa173IbTHxWaSKSYcoajvKlHb7PuE=;
+	b=krP2RrHNw/sB0Am/jh5yMnisxsm2YcyMRQ2vOfd4euCz893k5hXIvdmZqodTHYecXVT4MV
+	0/b+9Y3/mazKLdBg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1707992394; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Xq+JEC3Lr9IkJ8sa173IbTHxWaSKSYcoajvKlHb7PuE=;
+	b=ezusqJV6YJ+Bsa35aCGim/vbw6I6VwAbiTJMQVLR5tnxb2w1iDPj5bsEhHGMmli0E4RppG
+	jQXrEr+zcnByCRMQeCZc/+akzbRQMOsLOmz2iZj8SYNDBidk/jsZmieUGMjfy5hrm7fHyz
+	rkXgtMptCc8B2YqeLJS6zx+Ow/3kbYE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1707992394;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Xq+JEC3Lr9IkJ8sa173IbTHxWaSKSYcoajvKlHb7PuE=;
+	b=krP2RrHNw/sB0Am/jh5yMnisxsm2YcyMRQ2vOfd4euCz893k5hXIvdmZqodTHYecXVT4MV
+	0/b+9Y3/mazKLdBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D48C913A82;
+	Thu, 15 Feb 2024 10:19:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id /gkZLUnlzWWYJwAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Thu, 15 Feb 2024 10:19:53 +0000
+Date: Thu, 15 Feb 2024 11:19:51 +0100
+From: Jean Delvare <jdelvare@suse.de>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Linux I2C <linux-i2c@vger.kernel.org>, Piotr Zakowski
+ <piotr.zakowski@intel.com>, Alexander Sverdlin
+ <alexander.sverdlin@gmail.com>
+Subject: Re: [SPAM] [PATCH] i2c: i801: Fix block process call transactions
+Message-ID: <20240215111951.25135462@endymion.delvare>
+In-Reply-To: <22rwbtavuntbe77bstk3wjsdm366csa43nied6u7w4q6o6sveg@jkqor7zklayg>
+References: <20240214155939.728155bc@endymion.delvare>
+	<22rwbtavuntbe77bstk3wjsdm366csa43nied6u7w4q6o6sveg@jkqor7zklayg>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.4
-X-Ovh-Tracer-Id: 3725039842831960594
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudejgdduheefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeffteehudffvdfhudfgffdugfejjeduheehgeefgeeuhfeiuefghffgueffvdfgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddruddtfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoegrnhguihesvghtvgiiihgrnhdrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekvddpmhhouggvpehsmhhtphhouhht
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spam-Level: 
+X-Spam-Score: -1.13
+X-Spamd-Result: default: False [-1.13 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 BAYES_HAM(-1.33)[90.32%];
+	 FROM_HAS_DN(0.00)[];
+	 RCPT_COUNT_THREE(0.00)[4];
+	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 HAS_ORG_HEADER(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 TO_DN_ALL(0.00)[];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.org:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 FREEMAIL_CC(0.00)[vger.kernel.org,intel.com,gmail.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[]
+X-Spam-Flag: NO
 
-Hi
+Hi Andi,
 
-On Mon, 12 Feb 2024 12:19:04 +0100, Arnd Bergmann wrote:
-> On powerpc, it is possible to compile test both the new apple (arm) and
-> old pasemi (powerpc) drivers for the i2c hardware at the same time,
-> which leads to a warning about linking the same object file twice:
-> 
-> scripts/Makefile.build:244: drivers/i2c/busses/Makefile: i2c-pasemi-core.o is added to multiple modules: i2c-apple i2c-pasemi
-> 
-> Rework the driver to have an explicit helper module, letting Kbuild
-> take care of whether this should be built-in or a loadable driver.
-> 
-> [...]
+On Wed, 14 Feb 2024 22:44:12 +0100, Andi Shyti wrote:
+> b4 ty failed to send the thank you letter because there are some
+> addresses that were not accepted
+> (Kozlowski@imap1.dmz-prg2.suse.org?)
 
-Applied to i2c/i2c-host-fixes on
+Sorry for the mess, this seems to be a bug in my email client (Claws
+Mail 4.1.1) when the recipient names are quoted and/or include a comma.
+Ideally my SMTP server should have rejected the message as invalid, but
+it tried its best to still process it.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
+I'll report the issue to the Claws Mail developers.
 
-Thank you,
-Andi
-
-Patches applied
-===============
-[1/1] i2c: pasemi: split driver into two separate modules
-      commit: 3fab8a74c71a4ba32b2fa1dca7340f9107ff8dfc
-
+-- 
+Jean Delvare
+SUSE L3 Support
 
