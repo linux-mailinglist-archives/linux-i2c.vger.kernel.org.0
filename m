@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-1798-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1801-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A3B0857042
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 23:14:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67C31857051
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 23:16:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EAF71C21D03
-	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 22:14:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CE031C214D3
+	for <lists+linux-i2c@lfdr.de>; Thu, 15 Feb 2024 22:16:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3BFB150998;
-	Thu, 15 Feb 2024 22:08:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E76B1153BDC;
+	Thu, 15 Feb 2024 22:08:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TjZ6KKlE"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Jj+LmhxR"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D58414A4C1;
-	Thu, 15 Feb 2024 22:08:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8311474C1;
+	Thu, 15 Feb 2024 22:08:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708034916; cv=none; b=QW/cdZYrD+PjAU9MrDu8B0Ykk7bnt9RCUWWuEywE0iPHXWbV94dihxPPude2S/gbaXtcwtPw1EEEL24ajqVksJ+um5xHMbLVc7umgRXVawab+qc/JNCBIHiWhcTCcCGl7KGKcl+LSmcVzgWRsARBuZbbYdLQYc1iduJ8Hy68WhU=
+	t=1708034921; cv=none; b=ii2NG30ceN6b840RH3eMKbOgvzrpw5tbLDEsjCLpFzVp5gJ2aBmuqCOwFRkVfIWMMrN1fdv5hoJgTd4FkmX3Zee9m/Z/m9FhqVV1CzI1b14mYss7j9qZUf+g6nM3+20bb3zS1AKB1iyHcmfiEneKtidgKPuOQ7tdKt0AH/pLRyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708034916; c=relaxed/simple;
-	bh=B6y6B9hxIpjalSu4scT5stwo1nniyRvVqX9pFP5A6O0=;
+	s=arc-20240116; t=1708034921; c=relaxed/simple;
+	bh=3nimcBkyHMSfym8s4tUd4i+bP6FP4+nFWT7XoE1U7e0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=P8WJV3twDb3eZZwYHyYUlwoUvBWLGoEmoh/slpElzh8qZAywaF/UIfP8wnibmc0aIM/6/LnZn8b5pIw5MUXYGR6zZvf5m/kP06LeNedEdLAWIKanIgdNCDjn33c+jhFJm2a98jxAmRfWvfI2G+JZMgBIZOxtz3aJTjahOYJVYQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TjZ6KKlE; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=arqa/8F1ymIyL0hZqN4t1Ih5BvqXk0x7RNlSxkHQW79Z9aRwFSMkLsW9Y1C2uaC35AELDm0bh6o0jOus8usm6jZCwIsfl8heFLkh5IBkDU14XoBwU3aXZNuHYZudIZcCi72LwXztMfawtqH8Ak2NuOAQwVlGoQb6A9eRdUV/e5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Jj+LmhxR; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41FLV5IF028067;
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41FL0nM9010649;
 	Thu, 15 Feb 2024 22:08:10 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=nC6nQKgwIVNRNF/ysirTWFmoYra4yeqE06hfgRfw7Bw=;
- b=TjZ6KKlEUNNd/JLjA5jRMWbNh+gIIw/09DtVrHv1b3xZ1GngHrebVRPjfyogbdqO77h/
- IQT7LFpA9E/+CJ3wi/WxNUVchna98OuZ240BBfK6KEr+VBciZ+/esGGxOul5ybkNHw1Q
- /LXgvZjTaefmEhoFiCBy4//GxpFgO+Fq+KtudvEe21il1XMFBY8niGptj7t7YlQDRGc6
- kqq38ffq0EFm1EIsw2fi+oXsr/nUdJ57Mbu1EboxCVEXFCyNehIXEMEIfNEIDXqUx4rI
- gSDykn2fl8GJGFpuIwAjMvRKynVD22YvzYGNdWZpsvHumqhISsmAjJOrF4ofilyxaFSA rw== 
+ bh=zrnHDAhdPUnbtmjsykKg9BbRlBjR1tZ8tUSGR8/dp0k=;
+ b=Jj+LmhxRNdBuAR/1xT1pcGhL5Twy853ojKYf36tPXN1ZObIhuetJTG1ea7adSNuQobNl
+ 1Hu106y2tWn08gVBKrBDxB9RHGrG3y3CRIQC92PWycWFjFKkm8KKL1Cg+B1+etRaW464
+ ts40lbY7KX8Oq9cvfwWdjKOo8hkTuYmgltZ62prWzMMw7FHtN5N+f5jndzsHrqf8qeW5
+ nJunvgDMPp28cZHT5fiVsVeTBzOVT3Ef+gW0aeXnzy7jxox9rpBvNvusWbMTAz1t2k2S
+ zZalbQFamA4Acc6HP+g1f0TQGddf9/SKs9hMs8vNfEPc9sy93jPvDcaNLuwtK7lmM2xD Fw== 
 Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9q8n597e-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3w9q8n597p-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Thu, 15 Feb 2024 22:08:10 +0000
 Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41FJlBEd016517;
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41FJfrBV016479;
 	Thu, 15 Feb 2024 22:08:09 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6mymyhc8-1
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3w6mymyhc9-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Thu, 15 Feb 2024 22:08:09 +0000
 Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41FM86nM35782988
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41FM87OO5505808
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Feb 2024 22:08:08 GMT
+	Thu, 15 Feb 2024 22:08:09 GMT
 Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8F00758077;
+	by IMSVA (Postfix) with ESMTP id E88ED5807D;
 	Thu, 15 Feb 2024 22:08:06 +0000 (GMT)
 Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3948E5807B;
+	by IMSVA (Postfix) with ESMTP id 9860058064;
 	Thu, 15 Feb 2024 22:08:06 +0000 (GMT)
 Received: from slate16.aus.stglabs.ibm.com (unknown [9.61.14.18])
 	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
@@ -75,9 +75,9 @@ Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         joel@jms.id.au, jk@ozlabs.org, sboyd@kernel.org,
         mturquette@baylibre.com, robh@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Subject: [PATCH 13/33] fsi: core: Add common regmap master functions
-Date: Thu, 15 Feb 2024 16:07:39 -0600
-Message-Id: <20240215220759.976998-14-eajames@linux.ibm.com>
+Subject: [PATCH 14/33] fsi: hub: Use common initialization and link enable
+Date: Thu, 15 Feb 2024 16:07:40 -0600
+Message-Id: <20240215220759.976998-15-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240215220759.976998-1-eajames@linux.ibm.com>
 References: <20240215220759.976998-1-eajames@linux.ibm.com>
@@ -89,333 +89,244 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: T7DeW3ZIPTcxULpAgB0Xn3S3Tcr74UPr
-X-Proofpoint-ORIG-GUID: T7DeW3ZIPTcxULpAgB0Xn3S3Tcr74UPr
+X-Proofpoint-GUID: iOVfYgi2tLwUNzLc3aTC_wQ4cdI-SGai
+X-Proofpoint-ORIG-GUID: iOVfYgi2tLwUNzLc3aTC_wQ4cdI-SGai
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-15_20,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=809
  impostorscore=0 adultscore=0 suspectscore=0 bulkscore=0 spamscore=0
  lowpriorityscore=0 malwarescore=0 priorityscore=1501 mlxscore=0
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2311290000 definitions=main-2402150171
 
-For hardware FSI masters (Aspeed and hub at the moment), the
-initialization, link enable, and error recovery procedures are
-common. Add a regmap pointer to the master structure so that master
-drivers can let the common code handle these procedures.
+Set up an FSI regmap for the hub master to use the new common
+master initialization and link enable procedures.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- drivers/fsi/Kconfig        |   2 +
- drivers/fsi/fsi-core.c     | 161 ++++++++++++++++++++++++++++++++++++-
- drivers/fsi/fsi-master.h   |  16 ++++
- include/trace/events/fsi.h |  17 ++++
- 4 files changed, 194 insertions(+), 2 deletions(-)
+ drivers/fsi/fsi-master-hub.c | 141 ++++++-----------------------------
+ 1 file changed, 23 insertions(+), 118 deletions(-)
 
-diff --git a/drivers/fsi/Kconfig b/drivers/fsi/Kconfig
-index 79a31593618a..a6760870538d 100644
---- a/drivers/fsi/Kconfig
-+++ b/drivers/fsi/Kconfig
-@@ -7,6 +7,7 @@ menuconfig FSI
- 	tristate "FSI support"
- 	depends on OF
- 	select CRC4
-+	select REGMAP
- 	help
- 	  FSI - the FRU Support Interface - is a simple bus for low-level
- 	  access to POWER-based hardware.
-@@ -37,6 +38,7 @@ config FSI_MASTER_GPIO
- 
- config FSI_MASTER_HUB
- 	tristate "FSI hub master"
-+	select REGMAP_FSI
- 	help
- 	This option enables a FSI hub master driver.  Hub is a type of FSI
- 	master that is connected to the upstream master via a slave.  Hubs
-diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
-index 95f6ce81f8f4..693e7c51b4af 100644
---- a/drivers/fsi/fsi-core.c
-+++ b/drivers/fsi/fsi-core.c
-@@ -18,6 +18,7 @@
+diff --git a/drivers/fsi/fsi-master-hub.c b/drivers/fsi/fsi-master-hub.c
+index 111bf7a11458..92aa07055c56 100644
+--- a/drivers/fsi/fsi-master-hub.c
++++ b/drivers/fsi/fsi-master-hub.c
+@@ -9,6 +9,7 @@
+ #include <linux/fsi.h>
+ #include <linux/module.h>
  #include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/of_device.h>
 +#include <linux/regmap.h>
  #include <linux/slab.h>
- #include <linux/bitops.h>
- #include <linux/cdev.h>
-@@ -1148,18 +1149,50 @@ static int fsi_master_write(struct fsi_master *master, int link,
+ 
+ #include "fsi-master.h"
+@@ -16,8 +17,6 @@
+ 
+ #define FSI_ENGID_HUB_MASTER		0x1c
+ 
+-#define FSI_LINK_ENABLE_SETUP_TIME	10	/* in mS */
+-
+ /*
+  * FSI hub master support
+  *
+@@ -78,134 +77,33 @@ static int hub_master_break(struct fsi_master *master, int link)
+ 	return hub_master_write(master, link, 0, addr, &cmd, sizeof(cmd));
+ }
+ 
+-static int hub_master_link_enable(struct fsi_master *master, int link,
+-				  bool enable)
+-{
+-	struct fsi_master_hub *hub = to_fsi_master_hub(master);
+-	int idx, bit;
+-	__be32 reg;
+-	int rc;
+-
+-	idx = link / 32;
+-	bit = link % 32;
+-
+-	reg = cpu_to_be32(0x80000000 >> bit);
+-
+-	if (!enable)
+-		return fsi_device_write(hub->upstream, FSI_MCENP0 + (4 * idx),
+-					&reg, 4);
+-
+-	rc = fsi_device_write(hub->upstream, FSI_MSENP0 + (4 * idx), &reg, 4);
+-	if (rc)
+-		return rc;
+-
+-	mdelay(FSI_LINK_ENABLE_SETUP_TIME);
+-
+-	return 0;
+-}
+-
+ static void hub_master_release(struct device *dev)
+ {
+ 	struct fsi_master_hub *hub = to_fsi_master_hub(to_fsi_master(dev));
+ 
++	regmap_exit(hub->master.map);
+ 	kfree(hub);
+ }
+ 
+-/* mmode encoders */
+-static inline u32 fsi_mmode_crs0(u32 x)
+-{
+-	return (x & FSI_MMODE_CRS0MASK) << FSI_MMODE_CRS0SHFT;
+-}
+-
+-static inline u32 fsi_mmode_crs1(u32 x)
+-{
+-	return (x & FSI_MMODE_CRS1MASK) << FSI_MMODE_CRS1SHFT;
+-}
+-
+-static int hub_master_init(struct fsi_master_hub *hub)
+-{
+-	struct fsi_device *dev = hub->upstream;
+-	__be32 reg;
+-	int rc;
+-
+-	reg = cpu_to_be32(FSI_MRESP_RST_ALL_MASTER | FSI_MRESP_RST_ALL_LINK
+-			| FSI_MRESP_RST_MCR | FSI_MRESP_RST_PYE);
+-	rc = fsi_device_write(dev, FSI_MRESP0, &reg, sizeof(reg));
+-	if (rc)
+-		return rc;
+-
+-	/* Initialize the MFSI (hub master) engine */
+-	reg = cpu_to_be32(FSI_MRESP_RST_ALL_MASTER | FSI_MRESP_RST_ALL_LINK
+-			| FSI_MRESP_RST_MCR | FSI_MRESP_RST_PYE);
+-	rc = fsi_device_write(dev, FSI_MRESP0, &reg, sizeof(reg));
+-	if (rc)
+-		return rc;
+-
+-	reg = cpu_to_be32(FSI_MECTRL_EOAE | FSI_MECTRL_P8_AUTO_TERM);
+-	rc = fsi_device_write(dev, FSI_MECTRL, &reg, sizeof(reg));
+-	if (rc)
+-		return rc;
+-
+-	reg = cpu_to_be32(FSI_MMODE_EIP | FSI_MMODE_ECRC | FSI_MMODE_EPC
+-			| fsi_mmode_crs0(1) | fsi_mmode_crs1(1)
+-			| FSI_MMODE_P8_TO_LSB);
+-	rc = fsi_device_write(dev, FSI_MMODE, &reg, sizeof(reg));
+-	if (rc)
+-		return rc;
+-
+-	reg = cpu_to_be32(0xffff0000);
+-	rc = fsi_device_write(dev, FSI_MDLYR, &reg, sizeof(reg));
+-	if (rc)
+-		return rc;
+-
+-	reg = cpu_to_be32(~0);
+-	rc = fsi_device_write(dev, FSI_MSENP0, &reg, sizeof(reg));
+-	if (rc)
+-		return rc;
+-
+-	/* Leave enabled long enough for master logic to set up */
+-	mdelay(FSI_LINK_ENABLE_SETUP_TIME);
+-
+-	rc = fsi_device_write(dev, FSI_MCENP0, &reg, sizeof(reg));
+-	if (rc)
+-		return rc;
+-
+-	rc = fsi_device_read(dev, FSI_MAEB, &reg, sizeof(reg));
+-	if (rc)
+-		return rc;
+-
+-	reg = cpu_to_be32(FSI_MRESP_RST_ALL_MASTER | FSI_MRESP_RST_ALL_LINK);
+-	rc = fsi_device_write(dev, FSI_MRESP0, &reg, sizeof(reg));
+-	if (rc)
+-		return rc;
+-
+-	rc = fsi_device_read(dev, FSI_MLEVP0, &reg, sizeof(reg));
+-	if (rc)
+-		return rc;
+-
+-	/* Reset the master bridge */
+-	reg = cpu_to_be32(FSI_MRESB_RST_GEN);
+-	rc = fsi_device_write(dev, FSI_MRESB0, &reg, sizeof(reg));
+-	if (rc)
+-		return rc;
+-
+-	reg = cpu_to_be32(FSI_MRESB_RST_ERR);
+-	return fsi_device_write(dev, FSI_MRESB0, &reg, sizeof(reg));
+-}
+-
+ static int hub_master_probe(struct device *dev)
+ {
++	struct regmap_config hub_master_regmap_config;
+ 	struct fsi_device *fsi_dev = to_fsi_dev(dev);
+ 	struct fsi_master_hub *hub;
++	struct regmap *map;
+ 	uint32_t reg, links;
+-	__be32 __reg;
+ 	int rc;
+ 
+-	rc = fsi_device_read(fsi_dev, FSI_MVER, &__reg, sizeof(__reg));
++	fsi_master_regmap_config(&hub_master_regmap_config);
++	hub_master_regmap_config.reg_base = fsi_dev->addr;
++	map = regmap_init_fsi(fsi_dev, &hub_master_regmap_config);
++	if (IS_ERR(map))
++		return PTR_ERR(map);
++
++	rc = regmap_read(map, FSI_MVER, &reg);
+ 	if (rc)
+-		return rc;
++		goto err_regmap;
+ 
+-	reg = be32_to_cpu(__reg);
+ 	links = (reg >> 8) & 0xff;
+ 	dev_dbg(dev, "hub version %08x (%d links)\n", reg, links);
+ 
+@@ -213,7 +111,7 @@ static int hub_master_probe(struct device *dev)
+ 			FSI_HUB_LINK_SIZE * links);
+ 	if (rc) {
+ 		dev_err(dev, "can't claim slave address range for links");
+-		return rc;
++		goto err_regmap;
+ 	}
+ 
+ 	hub = kzalloc(sizeof(*hub), GFP_KERNEL);
+@@ -229,22 +127,25 @@ static int hub_master_probe(struct device *dev)
+ 	hub->master.dev.parent = dev;
+ 	hub->master.dev.release = hub_master_release;
+ 	hub->master.dev.of_node = of_node_get(dev_of_node(dev));
++	hub->master.map = map;
+ 
+ 	hub->master.lbus_divider = 1;
+ 	hub->master.idx = fsi_dev->slave->link + 1;
+ 	hub->master.n_links = links;
++	hub->master.flags = FSI_MASTER_FLAG_INTERRUPT;
+ 	hub->master.read = hub_master_read;
+ 	hub->master.write = hub_master_write;
+ 	hub->master.send_break = hub_master_break;
+-	hub->master.link_enable = hub_master_link_enable;
+ 
+ 	dev_set_drvdata(dev, hub);
+ 
+-	hub_master_init(hub);
++	rc = fsi_master_init(&hub->master, fsi_device_local_bus_frequency(fsi_dev));
++	if (rc)
++		goto err_free;
+ 
+ 	rc = fsi_master_register(&hub->master);
+ 	if (rc)
+-		goto err_release;
++		goto err_free;
+ 
+ 	/* At this point, fsi_master_register performs the device_initialize(),
+ 	 * and holds the sole reference on master.dev. This means the device
+@@ -256,9 +157,13 @@ static int hub_master_probe(struct device *dev)
+ 	get_device(&hub->master.dev);
+ 	return 0;
+ 
++err_free:
++	kfree(hub);
+ err_release:
+ 	fsi_slave_release_range(fsi_dev->slave, FSI_HUB_LINK_OFFSET,
+ 			FSI_HUB_LINK_SIZE * links);
++err_regmap:
++	regmap_exit(map);
  	return rc;
  }
  
-+int fsi_master_link_enable(struct fsi_master *master, int link, bool enable)
-+{
-+	u32 msiep = 0x80000000 >> (4 * (link % 8));
-+	u32 menp = 0x80000000 >> (link % 32);
-+	int enable_idx = 4 * (link / 32);
-+	int irq_idx = 4 * (link / 8);
-+	int rc;
-+
-+	if (enable) {
-+		rc = regmap_write(master->map, FSI_MSENP0 + enable_idx, menp);
-+		if (rc)
-+			return rc;
-+
-+		mdelay(FSI_LINK_ENABLE_SETUP_TIME);
-+
-+		rc = regmap_write(master->map, FSI_MSSIEP0 + irq_idx, msiep);
-+	} else {
-+		rc = regmap_write(master->map, FSI_MCSIEP0 + irq_idx, msiep);
-+		if (rc)
-+			return rc;
-+
-+		rc = regmap_write(master->map, FSI_MCENP0 + enable_idx, menp);
-+	}
-+
-+	return rc;
-+}
-+EXPORT_SYMBOL_GPL(fsi_master_link_enable);
-+
- static int fsi_master_link_disable(struct fsi_master *master, int link)
- {
- 	if (master->link_enable)
- 		return master->link_enable(master, link, false);
-+	else if (master->map)
-+		return fsi_master_link_enable(master, link, false);
- 
- 	return 0;
- }
- 
--static int fsi_master_link_enable(struct fsi_master *master, int link)
-+static int _fsi_master_link_enable(struct fsi_master *master, int link)
- {
- 	if (master->link_enable)
- 		return master->link_enable(master, link, true);
-+	else if (master->map)
-+		return fsi_master_link_enable(master, link, true);
- 
- 	return 0;
- }
-@@ -1187,7 +1220,7 @@ static int fsi_master_scan(struct fsi_master *master)
- 
- 	trace_fsi_master_scan(master, true);
- 	for (link = 0; link < master->n_links; link++) {
--		rc = fsi_master_link_enable(master, link);
-+		rc = _fsi_master_link_enable(master, link);
- 		if (rc) {
- 			dev_dbg(&master->dev,
- 				"enable link %d failed: %d\n", link, rc);
-@@ -1284,6 +1317,130 @@ static struct class fsi_master_class = {
- 	.dev_groups = master_groups,
- };
- 
-+void fsi_master_error(struct fsi_master *master, int link)
-+{
-+	u32 bits = FSI_MMODE_EIP | FSI_MMODE_RELA;
-+	bool mmode = master->mmode & bits;
-+
-+	if (trace_fsi_master_error_regs_enabled()) {
-+		unsigned int mesrb = 0xffffffff;
-+		unsigned int mstap = 0xffffffff;
-+
-+		regmap_read(master->map, FSI_MESRB0, &mesrb);
-+		regmap_read(master->map, FSI_MSTAP0 + (link * 4), &mstap);
-+
-+		trace_fsi_master_error_regs(master->idx, mesrb, mstap);
-+	}
-+
-+	if (mmode)
-+		regmap_write(master->map, FSI_MMODE, master->mmode & ~bits);
-+
-+	regmap_write(master->map, FSI_MRESP0, FSI_MRESP_RST_ALL_MASTER);
-+
-+	if (mmode)
-+		regmap_write(master->map, FSI_MMODE, master->mmode);
-+}
-+EXPORT_SYMBOL_GPL(fsi_master_error);
-+
-+static inline u32 fsi_mmode_crs0(u32 x)
-+{
-+	return (x & FSI_MMODE_CRS0MASK) << FSI_MMODE_CRS0SHFT;
-+}
-+
-+static inline u32 fsi_mmode_crs1(u32 x)
-+{
-+	return (x & FSI_MMODE_CRS1MASK) << FSI_MMODE_CRS1SHFT;
-+}
-+
-+int fsi_master_init(struct fsi_master *master, unsigned long parent_clock_frequency)
-+{
-+	unsigned int mlevp;
-+	unsigned int maeb;
-+	int div = 1;
-+	int rc;
-+
-+	if (parent_clock_frequency) {
-+		u32 clock_frequency = parent_clock_frequency;
-+
-+		if (!device_property_read_u32(&master->dev, "clock-frequency", &clock_frequency)) {
-+			if (!clock_frequency)
-+				clock_frequency = parent_clock_frequency;
-+		}
-+
-+		div = (parent_clock_frequency + (clock_frequency - 1)) / clock_frequency;
-+		master->clock_frequency = parent_clock_frequency / div;
-+	}
-+
-+	rc = regmap_write(master->map, FSI_MRESP0, FSI_MRESP_RST_ALL_MASTER |
-+			  FSI_MRESP_RST_ALL_LINK | FSI_MRESP_RST_MCR | FSI_MRESP_RST_PYE);
-+	if (rc)
-+		return rc;
-+
-+	rc = regmap_write(master->map, FSI_MECTRL, FSI_MECTRL_EOAE | FSI_MECTRL_P8_AUTO_TERM);
-+	if (rc)
-+		return rc;
-+
-+	master->mmode = FSI_MMODE_ECRC | FSI_MMODE_EPC | fsi_mmode_crs0(div) |
-+		fsi_mmode_crs1(div) | FSI_MMODE_P8_TO_LSB;
-+	rc = regmap_write(master->map, FSI_MMODE, master->mmode);
-+	if (rc)
-+		return rc;
-+
-+	rc = regmap_write(master->map, FSI_MDLYR, 0xffff0000);
-+	if (rc)
-+		return rc;
-+
-+	rc = regmap_write(master->map, FSI_MSENP0, 0xffffffff);
-+	if (rc)
-+		return rc;
-+
-+	mdelay(FSI_LINK_ENABLE_SETUP_TIME);
-+
-+	rc = regmap_write(master->map, FSI_MCENP0, 0xffffffff);
-+	if (rc)
-+		return rc;
-+
-+	rc = regmap_read(master->map, FSI_MAEB, &maeb);
-+	if (rc)
-+		return rc;
-+
-+	rc = regmap_write(master->map, FSI_MRESP0, FSI_MRESP_RST_ALL_MASTER |
-+			  FSI_MRESP_RST_ALL_LINK);
-+	if (rc)
-+		return rc;
-+
-+	rc = regmap_read(master->map, FSI_MLEVP0, &mlevp);
-+	if (rc)
-+		return rc;
-+
-+	rc = regmap_write(master->map, FSI_MRESB0, FSI_MRESB_RST_GEN);
-+	if (rc)
-+		return rc;
-+
-+	rc = regmap_write(master->map, FSI_MRESB0, FSI_MRESB_RST_ERR);
-+	if (rc)
-+		return rc;
-+
-+	if (master->flags & FSI_MASTER_FLAG_INTERRUPT)
-+		master->mmode |= FSI_MMODE_EIP;
-+	if (master->flags & FSI_MASTER_FLAG_RELA)
-+		master->mmode |= FSI_MMODE_RELA;
-+	return regmap_write(master->map, FSI_MMODE, master->mmode);
-+}
-+EXPORT_SYMBOL_GPL(fsi_master_init);
-+
-+void fsi_master_regmap_config(struct regmap_config *config)
-+{
-+	config->reg_bits = 32;
-+	config->val_bits = 32;
-+	config->disable_locking = true;	// master driver will lock
-+	config->fast_io = true;
-+	config->cache_type = REGCACHE_NONE;
-+	config->val_format_endian = REGMAP_ENDIAN_NATIVE;
-+	config->can_sleep = false;
-+}
-+EXPORT_SYMBOL_GPL(fsi_master_regmap_config);
-+
- int fsi_master_register(struct fsi_master *master)
- {
- 	int rc;
-diff --git a/drivers/fsi/fsi-master.h b/drivers/fsi/fsi-master.h
-index 26e636ad9ef6..f4cecdff3834 100644
---- a/drivers/fsi/fsi-master.h
-+++ b/drivers/fsi/fsi-master.h
-@@ -27,6 +27,9 @@
- #define FSI_MLEVP0		0x18		/* R: plug detect */
- #define FSI_MSENP0		0x18		/* S: Set enable */
- #define FSI_MCENP0		0x20		/* C: Clear enable */
-+#define FSI_MSIEP0		0x30		/* R/W: interrupt enable */
-+#define FSI_MSSIEP0		0x50		/* S: Set interrupt enable */
-+#define FSI_MCSIEP0		0x70		/* C: Clear interrupt enable */
- #define FSI_MAEB		0x70		/* R: Error address */
- #define FSI_MVER		0x74		/* R: master version/type */
- #define FSI_MSTAP0		0xd0		/* R: Port status */
-@@ -108,9 +111,15 @@
- 
- /* Misc */
- #define	FSI_CRC_SIZE		4
-+#define FSI_LINK_ENABLE_SETUP_TIME	10	/* in mS */
- 
- /* fsi-master definition and flags */
- #define FSI_MASTER_FLAG_SWCLOCK		0x1
-+#define FSI_MASTER_FLAG_INTERRUPT	0x2
-+#define FSI_MASTER_FLAG_RELA		0x4
-+
-+struct regmap;
-+struct regmap_config;
- 
- /*
-  * Structures and function prototypes
-@@ -120,6 +129,8 @@
- 
- struct fsi_master {
- 	struct device	dev;
-+	struct regmap	*map;
-+	u32		mmode;
- 	unsigned long	clock_frequency;
- 	int		lbus_divider;
- 	int		idx;
-@@ -140,6 +151,11 @@ struct fsi_master {
- 
- #define to_fsi_master(d) container_of(d, struct fsi_master, dev)
- 
-+void fsi_master_error(struct fsi_master *master, int link);
-+int fsi_master_init(struct fsi_master *master, unsigned long parent_clock_frequency);
-+int fsi_master_link_enable(struct fsi_master *master, int link, bool enable);
-+void fsi_master_regmap_config(struct regmap_config *config);
-+
- /**
-  * fsi_master registration & lifetime: the fsi_master_register() and
-  * fsi_master_unregister() functions will take ownership of the master, and
-diff --git a/include/trace/events/fsi.h b/include/trace/events/fsi.h
-index 5509afc98ee8..da977d59e163 100644
---- a/include/trace/events/fsi.h
-+++ b/include/trace/events/fsi.h
-@@ -67,6 +67,23 @@ TRACE_EVENT(fsi_master_error,
- 		  &__entry->data, __entry->ret)
- );
- 
-+TRACE_EVENT(fsi_master_error_regs,
-+	TP_PROTO(int master_idx, uint32_t mesrb, uint32_t mstap),
-+	TP_ARGS(master_idx, mesrb, mstap),
-+	TP_STRUCT__entry(
-+		__field(int, master_idx)
-+		__field(uint32_t, mesrb)
-+		__field(uint32_t, mstap)
-+	),
-+	TP_fast_assign(
-+		__entry->master_idx = master_idx;
-+		__entry->mesrb = mesrb;
-+		__entry->mstap = mstap;
-+	),
-+	TP_printk("fsi%d mesrb:%08x mstap:%08x", __entry->master_idx, __entry->mesrb,
-+		  __entry->mstap)
-+);
-+
- TRACE_EVENT(fsi_master_break,
- 	TP_PROTO(const struct fsi_master *master, int link),
- 	TP_ARGS(master, link),
 -- 
 2.39.3
 
