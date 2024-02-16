@@ -1,119 +1,120 @@
-Return-Path: <linux-i2c+bounces-1828-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1829-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B36C857A82
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 11:41:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08F83857AA2
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 11:49:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 189D41F23A87
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 10:41:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A8F11C21FC4
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 10:49:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0858C52F65;
-	Fri, 16 Feb 2024 10:40:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F52537E8;
+	Fri, 16 Feb 2024 10:48:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lz2U9uLV"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="H7s8TSq/"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E297B1BDE6;
-	Fri, 16 Feb 2024 10:40:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E110535BB;
+	Fri, 16 Feb 2024 10:48:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708080055; cv=none; b=QCcwYZgoDi+rS0Dbw27yn71v4ZlzzvbK7AYVvmbXOvIanDcRwbSz8XG0sdmucFHCjf6gqxGHyRQyP7ceg80uEJGUpKst9wkBCQP+qauatd7/BHxB2j7LVC/kDO4KVD5uZOwlFh3ax8spckPHcwHSoMk8c82NCFp1G7suY6fEXZU=
+	t=1708080538; cv=none; b=ACttQBqHmJ6C2pobJUj1JeHe7ug+yXTYFr2qS1jBUEDouXzYzK8/ZWqDgEa8H00qZpnn4JqpB6VZM2wpko9LBo6boMlnZqTL0ct+mH6cUwC4hbftgci/Z584MxTC5TOuRPDHNEYdGIWUDx3fYP4s6uTGB0q3qAWmOm0TRHTiGT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708080055; c=relaxed/simple;
-	bh=4vCY6JZJluyOURcmliUjf8D4UGdWpWhqShAztx1q4U0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=l3fmVSntOxxdol43dk/rqUaCUxNuq8kAG57GVqsJn+mEHbbZ0Qga4jkNqbvQq2ONkYXjdqa7fR6SID31+j2tJCwf+2j5IpdS8POjx0LUe79PlKvaPdzXoKsC4OxM7DgQsVKTLNKaISgSofd3EksW65DHPLSVLTSVzNY6dJenE/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lz2U9uLV; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3A5F7C000A;
-	Fri, 16 Feb 2024 10:40:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708080050;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pW+H2/+M3nwxvUrdeb949EaUZPq3QzVW/JZ2LL5ih34=;
-	b=lz2U9uLVS3/HdJM1KiMEiUYoPgnBtLLrRboc8aNuca5J5CJu0LxWUJqVuayCZz+nR9Ueem
-	GJV80VRxBtCaNXb+RaZQzFs9VnINWRo7LxEGKea1LN+T5iiTAWeYwM1yVHh4eMOcWhzONe
-	I2fhfxZYlkk+hNNSIbQoJM5bSsSv/VEurY7+Z2pOjHGACRR2Jgv4naaUQuz9SGgpxBbJ5t
-	J27ZBToyYYAC2DSRAZowyPiTmeNOhTg73wSd4xiCwSTtH5AsOiSur6xqzkssVjeJs2Rcb9
-	VG5VdMHV6ulPW1rl2IMIj2P7PThpBSQ5Ct9nhZ0wDGw0WjvznvT9upEFnGxmXg==
+	s=arc-20240116; t=1708080538; c=relaxed/simple;
+	bh=bSQjI5oIAeosqTym3AFvRxCY5213clKyJoH9whfcyjk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FfOqjfmwcfHQlZbm52OZvR3GtDyb2nXGBtvhcXOtJ3EnN0cG7bn6Cv8iUrCfpLCx5DqUjxBBb0yHFVa5cafUldfRfkeEjIbz/fVn5NVFqmZebgz2IihN8laxKpu2hG5xjKM3ZYP9mBMres7BsZaHbnpZZFuYiVmKnwSYKywQsP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=H7s8TSq/; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41GAmR9B056970;
+	Fri, 16 Feb 2024 04:48:27 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1708080507;
+	bh=wBeXLUFC5b4/8RGzmyvF89yYPd110y8htQLDdX2WYTc=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=H7s8TSq/72OiEAd3rL2BUZa9KNNyAB7Wr+7vrd0Mo1gM6SSozbZDMkhsVVnB649xU
+	 AQ1kVHY38XBAREf1YPaI6jqt0jNuzg1bIqCtGX7rJo3Mr9eLWMGUPDmgecIYB6MLES
+	 Sz0EVyu19IuvkIeSFdvq3ht/39IJUFW8kOKph+kU=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41GAmR5L129001
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 16 Feb 2024 04:48:27 -0600
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 16
+ Feb 2024 04:48:27 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 16 Feb 2024 04:48:27 -0600
+Received: from localhost (uda0492258.dhcp.ti.com [172.24.227.9])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41GAmQcT020589;
+	Fri, 16 Feb 2024 04:48:27 -0600
+Date: Fri, 16 Feb 2024 16:18:26 +0530
+From: Siddharth Vadapalli <s-vadapalli@ti.com>
+To: Thomas Richard <thomas.richard@bootlin.com>
+CC: Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski
+	<brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>, Tony Lindgren
+	<tony@atomide.com>,
+        Haojian Zhuang <haojian.zhuang@linaro.org>,
+        Vignesh R
+	<vigneshr@ti.com>, Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik
+	<jmkrzyszt@gmail.com>,
+        Andi Shyti <andi.shyti@kernel.org>, Peter Rosin
+	<peda@axentia.se>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I
+	<kishon@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Lorenzo
+ Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?=
+	<kw@linux.com>,
+        Rob Herring <robh@kernel.org>, Bjorn Helgaas
+	<bhelgaas@google.com>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-omap@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-pci@vger.kernel.org>, <gregory.clement@bootlin.com>,
+        <theo.lebrun@bootlin.com>, <thomas.petazzoni@bootlin.com>,
+        <u-kumar1@ti.com>, <s-vadapalli@ti.com>
+Subject: Re: [PATCH v3 18/18] PCI: j721e: add suspend and resume support
+Message-ID: <aa791703-81d8-420c-ba35-c8fd08bc3f07@ti.com>
+References: <20240102-j7200-pcie-s2r-v3-0-5c2e4a3fac1f@bootlin.com>
+ <20240102-j7200-pcie-s2r-v3-18-5c2e4a3fac1f@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Feb 2024 11:40:50 +0100
-Message-Id: <CZ6FUECKEX2B.36QWZZA5EYPI@bootlin.com>
-Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Andi Shyti"
- <andi.shyti@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Rob Herring"
- <robh@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH 02/13] dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c
- bindings and example
-X-Mailer: aerc 0.15.2
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-2-19a336e91dca@bootlin.com>
- <20240216022227.GA850600-robh@kernel.org>
- <CZ6FD7EHIJDT.32IEDVT9FG2GP@bootlin.com>
- <6effca50-29a4-43b9-86eb-310bd4e08e5c@linaro.org>
-In-Reply-To: <6effca50-29a4-43b9-86eb-310bd4e08e5c@linaro.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240102-j7200-pcie-s2r-v3-18-5c2e4a3fac1f@bootlin.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hello,
+On 24/02/15 04:18PM, Thomas Richard wrote:
+> From: Théo Lebrun <theo.lebrun@bootlin.com>
+> 
+> Add suspend and resume support. Only the rc mode is supported.
+> 
+> During the suspend stage PERST# is asserted, then deasserted during the
+> resume stage.
 
-On Fri Feb 16, 2024 at 11:33 AM CET, Krzysztof Kozlowski wrote:
-> On 16/02/2024 11:18, Th=C3=A9o Lebrun wrote:
-> >=20
-> >>> +        mobileye,id:
-> >>> +          $ref: /schemas/types.yaml#/definitions/uint32
-> >>> +          description: Platform-wide controller ID (integer starting=
- from zero).
-> >>
-> >> instance indexes are a NAK. You can use i2cN aliases if you must.
-> >>
-> >> Why do you need it? To access OLB? If so, add cell args to the OLB=20
-> >> phandle instead.
-> >=20
-> > Why we do what we do: I2C controller must write a 2 bit value depending
-> > on the bus speed. All I2C controllers write into the same register.
->
-> Which register?  Your devices do not share IO address space.
+Wouldn't this imply that the Endpoint device will be reset and therefore
+lose context? Or is it expected that the driver corresponding to the
+Endpoint Function in Linux will restore the state on resume, post reset?
 
-mobileye,olb is a prop with a phandle to a syscon. That syscon contains
-the register we are interested in.
-
-The Linux code side of things is in the following patch. We use
-syscon_regmap_lookup_by_phandle().
-
-   [PATCH 10/13] i2c: nomadik: support Mobileye EyeQ5 I2C controller
-   https://lore.kernel.org/lkml/20240215-mbly-i2c-v1-10-19a336e91dca@bootli=
-n.com/
-
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Siddharth.
 
