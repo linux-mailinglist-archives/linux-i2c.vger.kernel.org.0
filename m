@@ -1,74 +1,74 @@
-Return-Path: <linux-i2c+bounces-1813-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1814-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDB3085775D
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 09:19:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B01AF857763
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 09:19:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7063B1F21A84
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 08:19:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D45311C21B3E
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 08:19:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DED91F932;
-	Fri, 16 Feb 2024 08:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC782031A;
+	Fri, 16 Feb 2024 08:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Uy5AYxOh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hzacaa6S"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953AF1EB56
-	for <linux-i2c@vger.kernel.org>; Fri, 16 Feb 2024 08:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87479200CC
+	for <linux-i2c@vger.kernel.org>; Fri, 16 Feb 2024 08:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708070882; cv=none; b=llT2NUfZMBuU9vvKN6TMjUJbWF3A/lYbxEinO8OxAYr6NycMUd1O1FhBGNtbHrm2522btgcze3kyDN8RIj2TcHETckLNsScNulfYdpm79H6bmrVnS3Ttsa2qbuZPiBoU3lUj/ncDU0EYoePuwArOlGFViTWINw3WtWr/+Evh7fw=
+	t=1708070929; cv=none; b=blyptbIIvTCRPvIPKus+wyWl493HS1PCKTsauYRvXlgsfvs9WZGpXp+jWfJ+SehEp2VWIx3XMeWWgNiBklqapB8SlJKgCN/uQg02B06FC0CfoTpNTsHol0V6eVMj/i4QtzukkPh4aUyIaP9pcOlzF00EGEXr7qMa5t0UiRqrrsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708070882; c=relaxed/simple;
-	bh=oPF8ef+6yr/W20DF7TwW7ntkxnYDm43YEhleUU06/Xc=;
+	s=arc-20240116; t=1708070929; c=relaxed/simple;
+	bh=et7DH+1sqEpwvZZL/f2ZhF9RBoUtd92IEeYl4D859eI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UCxz1XrqxUUCgPyv17OIaHoiHU2KuPm2shCrnA6dkZjDpdUbgdZyuC1DAVbVX3q/ZJ3FD12F0iYP9zrBbWndQmlExJTQ5T/G2BBdy8bPLt2p/YbsaetEXTQHYVBygkl2vZla94Xi1GDA9ZDcPg7Yon439MRb3HASt9/38M/e62I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Uy5AYxOh; arc=none smtp.client-ip=209.85.218.41
+	 In-Reply-To:Content-Type; b=S2uDrlbyPako87i4SebqL8VnJOC0hZ3uYwv4fH3+qSb+Tfd5U5KfQRY0GNBus1O5QN9j35rk/kp40O7+GJiGZPVT+v198iDfhKORzDFwgMIA2sa09vUUF/fJ2Y2ltS361YKVXGvvdkVjUVZRmqixtEfj0zIxBEkV4lbUSDRTfKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hzacaa6S; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a3d6d160529so54448266b.0
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Feb 2024 00:08:00 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-563bb51c36eso1539567a12.2
+        for <linux-i2c@vger.kernel.org>; Fri, 16 Feb 2024 00:08:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708070879; x=1708675679; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1708070925; x=1708675725; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=N6OB5m4wuIFu/x7GV1kdZvkso/J+ioPd+IRVM4oY+6M=;
-        b=Uy5AYxOhW/PBWSCc8d8DdLqH2QQhvKRWaXMFqp8dXTd6Mxeapne3u4W5JPsdissbDO
-         qNPdEAWRzxD2WvpyDqnUWHVGQyB2BmTmTNIllw/1KtVJQjKX1hud/ygzbJP/Q1vyucJn
-         ViXCbOILePvN8M3cN1WC/ulpPKZ/jvCZZ2ZWgoFBOhhTb643WUNWPsbdZI5HXpsi+eNW
-         7BX5RQqnmzI9YuvF05LovofmRQstDCaHCKOo2epK+3FOx3Qf+7ZO7hrv6OojOaQKCDN6
-         ce7O8Kh10EpRgLzimPp+ipIcqIQGtYZ6C4zwKUY1X7Rz/Oxk5jD+0aLNCAtjx6/O5PA9
-         ZFsg==
+        bh=2V6I6OpSex3cs1V6XXm3q9EZRuSLwGlRUlqdJr7y/ZY=;
+        b=hzacaa6SqY8bGmLgWHgH9hpC5J0abEastEerYMWu4CS6VjmZC1/sjNWzI9bN3qr5q9
+         QvXWv8Qh5d4Le7yMJyr76zqBXyyjwnKfYQCy97f+cI+iu1TKaCH/BLy/oociUL+zQJ0u
+         NobpE4PqBRjJysQiZ/U54ya9sOvJpaY0nn9BwMA3hGJHON5l1AJ/4gzEVBAo0N+O0BkY
+         AjnB0J12ye4yqObPm6bSxA4oZDLHX3RQ7bZ73RJK3DiENp4FJPRHL4lqKHWSwZYov/+S
+         /b1cO0iVxIYMYveEdEhDDyHPXgPoBRCzBUJ6g09KkSAO/Lz/d7VfHLUieoF1sZqAiNcV
+         2oQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708070879; x=1708675679;
+        d=1e100.net; s=20230601; t=1708070925; x=1708675725;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N6OB5m4wuIFu/x7GV1kdZvkso/J+ioPd+IRVM4oY+6M=;
-        b=Iq3yUE11916dGZdZkg4hV8zhEXRc5b1crnFtbAYZBjRGgcaNJjYBEWXnUsB0kMFsKv
-         Jw/kk5UfUGI5p0/faUGGNZOTiZ00gy81UwFFvxSibLaTxcgZXusDpACtjFLnzlx8CCTB
-         OqK5X1+Q7IXtF49j7uVaPl1eETCoSyWItRbv3HxZNLtomRHB+9tuhjHETdPc2O2McO3B
-         pqLz6JNRMsxcFFjL9gwoTz+UL7q8AFBzf6ObKifN8/ArP8UvlMpv20b8MoU5qMRbI0lt
-         8bSzTR1uslzkrXIVIGEXyG7hovcpdQf8FujMVTJxVkOfd7EiPJooTW0SmoOi/3IOQIFH
-         1eyw==
-X-Forwarded-Encrypted: i=1; AJvYcCV4ZK3eTyQh7EPFCyQFXhvbCNENirKxRzBUl/Ysbh1UuMvirn8LiI/OdU09wjTKWZRmF+/7sVuvp914QyECh8b503zSkSvss08l
-X-Gm-Message-State: AOJu0YxRoR0R0zb5rJKbQk0vhF3wKtDagK/IT/MYVhj65esqW0NLpB0A
-	KfgAH8tJMl/I2ChTzB73fibXIfPgRaHRZqmUr4CpcpUuApFxKy84F8Mtu36dyY8=
-X-Google-Smtp-Source: AGHT+IEBcu3FwwLDw+11/yy2qakeBJZv4Q17VS7qBGwwLdt894/PbKorl1RA9ucMavmu3KOvIRxOKw==
-X-Received: by 2002:a17:906:3941:b0:a3d:2e36:192d with SMTP id g1-20020a170906394100b00a3d2e36192dmr2834207eje.75.1708070879012;
-        Fri, 16 Feb 2024 00:07:59 -0800 (PST)
+        bh=2V6I6OpSex3cs1V6XXm3q9EZRuSLwGlRUlqdJr7y/ZY=;
+        b=s5+YI8fm4LGbAwI0m5MHSDmTaRcnfcj0Yw2mGZsw+bMB9939BjVFxOspWRKSPtGGPH
+         Mxhj9+caFZ5wnSIuDJU2vNijr6OKiRx1vbCgZVOFFTupWXQuxj8umugEikuWzzxnD8yW
+         k+d8JxrMhlBFVMVBWvZBz0IK7ZKWe5zH5z0ym0apdqbumsCi6KH2k14DFhg8n3PYEnMz
+         s6kztCKBCr66acjiaYI5P9AFswe891bqfFXLfgvU1NOBYWd39MiLc9sVRFwOxkcH/65l
+         sBxIC34/3Hmcg1x9gyp1Yv4b2EZrE3MLWCFKcvsbFOhNcLipk4E0+yT/ID14qNGiUKy/
+         RGAw==
+X-Forwarded-Encrypted: i=1; AJvYcCVhianEFiALjcAhP0tpMlWn9HOxzghqNX5hYW7y3QtR4FhVcGKZa9U3F6ZSLXBbqRR1G5oaMFgO1Rs1egMUhCniC0dTMDCtIhWC
+X-Gm-Message-State: AOJu0YzowvyVZ1IIAQuiyDdO3lJ6aKOEQXRsX2Gyvt8p6usYpyPWU9tB
+	EQikWp+z9CxJwLq3OAw0ob+3XKXp2ZPH64bIHk55yA1M1OWpVaQy9tP8cOGJkN8=
+X-Google-Smtp-Source: AGHT+IG9/wj2lqb9G6jGJ08OjouVPaMfGVcj8DuU0PHMhrDZXCmGYoHKF/xCqwIk5puInxBvhEPxlg==
+X-Received: by 2002:a17:906:249b:b0:a3d:9f30:58b0 with SMTP id e27-20020a170906249b00b00a3d9f3058b0mr2768866ejb.10.1708070924813;
+        Fri, 16 Feb 2024 00:08:44 -0800 (PST)
 Received: from [192.168.0.22] ([78.10.207.130])
-        by smtp.gmail.com with ESMTPSA id s15-20020a17090699cf00b00a3bd8a34b1bsm1319130ejn.164.2024.02.16.00.07.57
+        by smtp.gmail.com with ESMTPSA id s15-20020a17090699cf00b00a3bd8a34b1bsm1319130ejn.164.2024.02.16.00.08.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Feb 2024 00:07:58 -0800 (PST)
-Message-ID: <bc009a2a-fc5a-4fc1-a7ee-e046f4d87f8e@linaro.org>
-Date: Fri, 16 Feb 2024 09:07:57 +0100
+        Fri, 16 Feb 2024 00:08:44 -0800 (PST)
+Message-ID: <67ea1daa-72a5-4dc0-b766-34a99052dabb@linaro.org>
+Date: Fri, 16 Feb 2024 09:08:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,7 +76,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/33] dt-bindings: clock: ast2600: Add FSI clock
+Subject: Re: [PATCH 07/33] ARM: dts: aspeed: p10 and tacoma: Set FSI clock
+ frequency
 Content-Language: en-US
 To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
 Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -85,7 +86,7 @@ Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
  sboyd@kernel.org, mturquette@baylibre.com, robh@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
 References: <20240215220759.976998-1-eajames@linux.ibm.com>
- <20240215220759.976998-2-eajames@linux.ibm.com>
+ <20240215220759.976998-8-eajames@linux.ibm.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -131,19 +132,23 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240215220759.976998-2-eajames@linux.ibm.com>
+In-Reply-To: <20240215220759.976998-8-eajames@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 15/02/2024 23:07, Eddie James wrote:
-> Add a definition for the FSI clock.
+> Now that the driver doesn't hardcode the clock divider, set it
+> in the device tree.
 > 
 > Signed-off-by: Eddie James <eajames@linux.ibm.com>
 > ---
->  include/dt-bindings/clock/ast2600-clock.h | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts | 1 +
+>  arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi     | 1 +
+>  2 files changed, 2 insertions(+)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Please do not mix DTS patches with driver code. DTS goes to the end
+because driver code CANNOT depend on it (there are exceptions but it was
+not explained here).
 
 Best regards,
 Krzysztof
