@@ -1,74 +1,74 @@
-Return-Path: <linux-i2c+bounces-1820-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1821-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 392788578AA
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 10:17:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15A018578AF
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 10:18:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F18B0282AAE
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 09:17:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 246B6B22311
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 09:18:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FA8B1C292;
-	Fri, 16 Feb 2024 09:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFE6E1BC43;
+	Fri, 16 Feb 2024 09:17:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="b6FTe74K"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J/CUTWlV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F7A1BDD6
-	for <linux-i2c@vger.kernel.org>; Fri, 16 Feb 2024 09:17:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA0C1BC37
+	for <linux-i2c@vger.kernel.org>; Fri, 16 Feb 2024 09:17:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708075032; cv=none; b=uEJvC8d3Sb4MC1389cOyN3Vk1VxthLsRS/ThFPlwBI4cg6FD9o186BYYGH6buHvB/2CdE/KvVERk4Ifj7l6xS3c9IiLLajlfXqfaAkK8E2wiP/azIGH3qHLOsgwqdq35sxf1YqGsRfP6eXJnf+LeQpQeGSGfbZQe34lKtEzecaY=
+	t=1708075071; cv=none; b=Gk1cgdHO6Did9LWtTdIhuwRoPCA6xV+5IP6T9EmcDfUPSFAmO7ZcyRskc6euZBUq9D5P2IUPkAjLsxJmMM5GgvnQ2L6vG75LZIAGLYTS5lQZPEuNpMGwpnTrgTo2cb7xL4Nrodobty+B4kEDm7A1w7so8gYvdiPgBqWMK3umpXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708075032; c=relaxed/simple;
-	bh=Iw/Mjp3cgQFeFv6FvDxeUL5ZZJTzEQJTjDgGF96VzhE=;
+	s=arc-20240116; t=1708075071; c=relaxed/simple;
+	bh=ABK9SZFJh3iFrxKkRqATbU8RxTxkltNx7vTWVN5a9oo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YLdRUZnOe1YYjsgkpg5jrCtwyWRFhjjrhN81C78a/wk5xJcYYOlaUXQ16GKwISxY2oxzmDM/j43tTVnJOOcixusxnkjFgIF9Ey3AUbZygrVW8aSkiEx+42314Svz5pWnJGDlKQLAyzl7LOaSKQvyDYo6+nAY6CIvEa8DeQ5Cppo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=b6FTe74K; arc=none smtp.client-ip=209.85.208.48
+	 In-Reply-To:Content-Type; b=u+3zS47AviOQVjMJejyJsLBfutxCz8T2Pdma+6YEofAClBvVP0p0OO9lwoCGDYi10hwuQw+DLQFO6EG9bjt4PjSeMYf53x/xFz5udhPQG1DytpAcyltS3ZHtyLDg/9d4RB2d4w5Kg8Ej61cGtD0CMj+oWjVtM1H9V/fLadQqTXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=J/CUTWlV; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-55a035669d5so2741241a12.2
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Feb 2024 01:17:09 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a3c2efff32aso213850066b.0
+        for <linux-i2c@vger.kernel.org>; Fri, 16 Feb 2024 01:17:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708075028; x=1708679828; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1708075068; x=1708679868; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oIAGCtsHSU2vaGBc5nOfaSyTj9r1XMAdthhQbXQ4a4k=;
-        b=b6FTe74KX+0WaI0oA91SHOVaNVgCWZHH23GC4Ade5cE7NKrcYKmGzIoU17z0TBBgJ3
-         VaTkT57LPx8sAonrxgBHGPp3qwr2lhe9SMujWsvZnZsaoXyhmkOGNNQilUQBohzWzYH5
-         pYp9tf9u+yUuHfztOS3mtzJyg4OVnSB8R1mT0Jc6qT7zOCzZLlxuIBYZb+miySEyMiCs
-         8IJE/gnClCqgneMPxQKfd07HkIHDOFGTJTtizL2SuxNyLSpxe4Dpqjk8L9Ae4Neta3l8
-         Sdf7jmmII15ZZBjTfkpUSGFUISLcfvfYQ+iuGDZTlPiAfUIhOS3+Et9biXNSSJNT3DgF
-         8MDQ==
+        bh=mUfMiYERPQ1ajJgUKEduJKMufk+sBmKDdRWuDOgmHXA=;
+        b=J/CUTWlV6pKwmfsF5tDSZRSXsr5gFDNkbzO+lohqo5YJiEakZ/VJuVycSQqFSJmPNy
+         5ip9Dq7+krS+h4ckGz+qmdkeXA8mSGo2fzkO8TjjFa3AYUy1Rw5+bxgx0ahkiSIcSvBu
+         aOjR48bryfXtsN3LMXgS767+4uYqxMJnHqWxFvTK2KdFLYDzk2mokduy+E/JiHWepTU6
+         Ha/sWVBxaiw5XcosvVJKQ1QD8s9X6icJJ63q557XcisV6QaW9d4qcgdBhsix7LUy4xEM
+         Ces/FBK1LBvIAvuunC42uWW5EVarmlLAxPlwgL3ysyowWHl9sYHI56O3fem8dvO0qrsf
+         sRUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708075028; x=1708679828;
+        d=1e100.net; s=20230601; t=1708075068; x=1708679868;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oIAGCtsHSU2vaGBc5nOfaSyTj9r1XMAdthhQbXQ4a4k=;
-        b=ow0Rp9IdpgR86GXLxI4zFpSDc6m1nOM4ZZdWI1FGJ98HaHhXH0EO6jIFrILTzULhMj
-         DZo0iubjRPwh/0jwesNsrihTseDY8cUY+YoSpLJlaseUyThr6M9JF4eaoFqUvQbEXr3Q
-         cczDip9LB/RviVDLh/ySCEXK48e4vWouUKjDgBsoDhNKNwBTw19xLQA0rUjdewCcWCwy
-         DVhfJcwWasgocbzHVG2C0TtA55lsEQhx25GXHPtqFiVFg5C+0PYRiaHgkCa2KExmxfLL
-         MJrcbFbVIvCYfisVt/bej4x5Aq2FOtx+SDHmmO3UaRSVsBufeO86YQwf81uJgy0Fh65c
-         NavA==
-X-Forwarded-Encrypted: i=1; AJvYcCWILYumETyAmCmUk+CpPyY6iCw+RUo7EMXM8gUioxUUv/Pq4m/IoxsSUxtQThtO/1cnfLF1vbUIRuZssy5tlYf7+nEasN4NH1cO
-X-Gm-Message-State: AOJu0Yz1t/9YD8Dov+kGNGi6NTP7h0V57Rc3Stchru/+WL+OHLL+1RAX
-	96UEnVzornz6JYw+tcADQE/RcWaRsVCzIi7ZVnS5uaRfY4u4B5IO/+IULoVs5xs=
-X-Google-Smtp-Source: AGHT+IGyZO9/H88K7zq3+enqrfVfVYfcgWM7ymRAaGwQ7TcaErbfdXNBtPll+xd7MvBG1McF48Bq+w==
-X-Received: by 2002:a17:906:fa18:b0:a3d:1340:7399 with SMTP id lo24-20020a170906fa1800b00a3d13407399mr2931848ejb.71.1708075027904;
-        Fri, 16 Feb 2024 01:17:07 -0800 (PST)
+        bh=mUfMiYERPQ1ajJgUKEduJKMufk+sBmKDdRWuDOgmHXA=;
+        b=v3Fc4y2kowzgm8QfkhI61DwiNEDBca4tlQIjQeKAWhPADwCzOAic5WYZU1Fj1behKy
+         Az/yz56idUofFtpVY7I8CleKLNN9KP+AO3sqUnFW6PlPWoOb0FEOplfLdrMgVdwtEmos
+         mPQOzmOCZtT8UDIpGyQu9CkBVUTBgP8IwhEWejflep0uDaCcXg2R4Tx4VvP1ciA/+UfV
+         ZV0gQDrWzdmqUJfiucxMIWtTCx17+CclxG6TvkpY1fb7Jp2tqtjWbsWOsPDYYL2gUZ3A
+         pkh0MwRhTG475rIx1Qn9ZRfpKhZ9v4BOBXBUJi2uX3QgPeIa3e/iXET5EycvEScdXPF8
+         GuZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWXoqEuUwAsaLWyyUWSngnlMqGbvy3irk/VMxu324baZMfn7bIeSwnGNaI+GP7EfC6gnKX5uFqbGNdQIQqv2TbyyvufZ5pUt4Ka
+X-Gm-Message-State: AOJu0Yz1EeoODND0G7MA0nHqOa+d7sGSVdu92Fbxg86idxyK99JVHwFq
+	OLVi6NLME06yD/1DB7WAmHS7yKxyPqzaMFs3qhQgukMKHSzcP1yoON95qltHPCk=
+X-Google-Smtp-Source: AGHT+IGuET+EtCs0WnnjR5CAbdKd4XK1m9AeiKfXrzUx1p9v85Q3J3VA4b2RfFMqQIZF/vWftEh1tA==
+X-Received: by 2002:a17:907:1051:b0:a3d:64d4:44bc with SMTP id oy17-20020a170907105100b00a3d64d444bcmr2950207ejb.18.1708075067939;
+        Fri, 16 Feb 2024 01:17:47 -0800 (PST)
 Received: from [192.168.0.22] ([78.10.207.130])
-        by smtp.gmail.com with ESMTPSA id s15-20020a17090699cf00b00a3bd8a34b1bsm1372932ejn.164.2024.02.16.01.17.06
+        by smtp.gmail.com with ESMTPSA id s15-20020a17090699cf00b00a3bd8a34b1bsm1372932ejn.164.2024.02.16.01.17.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Feb 2024 01:17:07 -0800 (PST)
-Message-ID: <c478bb6f-49b8-4251-99e9-46b4c9510953@linaro.org>
-Date: Fri, 16 Feb 2024 10:17:05 +0100
+        Fri, 16 Feb 2024 01:17:47 -0800 (PST)
+Message-ID: <60b568a1-6dc9-4116-af95-bfaaca61677b@linaro.org>
+Date: Fri, 16 Feb 2024 10:17:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,25 +76,26 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 13/13] MIPS: mobileye: eyeq5: add resets to I2C
- controllers
+Subject: Re: [PATCH 01/13] dt-bindings: i2c: nomadik: add timeout-usecs
+ property bindings
 Content-Language: en-US
 To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Linus Walleij <linus.walleij@linaro.org>, Andi Shyti
- <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Rob Herring <robh@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+ Andi Shyti <andi.shyti@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-mips@vger.kernel.org, Gregory Clement <gregory.clement@bootlin.com>,
  Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Tawfik Bayouk <tawfik.bayouk@mobileye.com>
 References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-13-19a336e91dca@bootlin.com>
- <42b7e3bb-a152-4ded-91f3-fb8043a7f413@linaro.org>
- <CZ6DTGBC02P7.1RHCB4E64N88A@bootlin.com>
+ <20240215-mbly-i2c-v1-1-19a336e91dca@bootlin.com>
+ <20240216022704.GB850600-robh@kernel.org>
+ <CZ6E24VPJKJG.35LACFD6ZV5KE@bootlin.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -140,37 +141,48 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <CZ6DTGBC02P7.1RHCB4E64N88A@bootlin.com>
+In-Reply-To: <CZ6E24VPJKJG.35LACFD6ZV5KE@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 16/02/2024 10:05, Théo Lebrun wrote:
+On 16/02/2024 10:16, Théo Lebrun wrote:
 > Hello,
 > 
-> On Fri Feb 16, 2024 at 8:59 AM CET, Krzysztof Kozlowski wrote:
->> On 15/02/2024 17:52, Théo Lebrun wrote:
->>> Add resets properties to each I2C controller. This depends on the
->>> reset-eyeq5 platform reset controller driver.
+> On Fri Feb 16, 2024 at 3:27 AM CET, Rob Herring wrote:
+>> On Thu, Feb 15, 2024 at 05:52:08PM +0100, Théo Lebrun wrote:
+>>> Expose I2C device timeout configuration from devicetree. Use µs as time
+>>> unit and express it in the name.
 >>>
 >>> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 >>> ---
+>>>  Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml | 5 +++++
+>>>  1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml
+>>> index 16024415a4a7..e6b95e3765ac 100644
+>>> --- a/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml
+>>> +++ b/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml
+>>> @@ -70,6 +70,10 @@ properties:
+>>>      minimum: 1
+>>>      maximum: 400000
+>>>  
+>>> +  timeout-usecs:
 >>
->> This should be squashed with previous patch adding i2c controllers.
->> Don't add incomplete nodes just to fix them in next patch.
+>> Use standard unit suffixes.
+>>
+>> We already have at least 2 device specific timeout properties. This one 
+>> should be common. That means you need to add it to i2c-controller.yaml 
+>> in dtschema. GH PR or patch to devicetree-spec list is fine.
 > 
-> The goal was to isolate reset phandles to a single patch. The series
+> i2c-mpc (fsl,timeout) and i2c-gpio (i2c-gpio,timeout-ms). I agree this
+> prop has no reason to be compatible-specific.
+> 
+> Feedback from dt-bindings and I2C host maintainers would be useful: what
+> should the property be named? Having the unit makes it self-descriptive,
+> which sounds like a good idea to me. timeout-usecs, timeout-us, another
+> option?
 
-That was what you did, not the goal. If that's the goal, then it is
-clearly wrong.
-
-> with this patch dropped works because resets in their default state are
-> deasserted, so this isn't a fix. And it allows testing the series on
-> hardware with only the base platform series, which I found useful.
-
-Series or half-of-series? Anyway, commits must be logical chunks, so one
-chunk is to add I2C controllers, not "part of I2C controllers". DTS is
-also independent of drivers (and it will go via different trees!), so
-whatever dependency you think of, it does not exist.
+It must have an unit. That's not negotiable for new properties.
 
 Best regards,
 Krzysztof
