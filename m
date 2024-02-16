@@ -1,74 +1,74 @@
-Return-Path: <linux-i2c+bounces-1814-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1815-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B01AF857763
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 09:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 33E83857767
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 09:20:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D45311C21B3E
-	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 08:19:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 586C51C218FA
+	for <lists+linux-i2c@lfdr.de>; Fri, 16 Feb 2024 08:20:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC782031A;
-	Fri, 16 Feb 2024 08:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9557D208B4;
+	Fri, 16 Feb 2024 08:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hzacaa6S"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VUTlP9Wl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87479200CC
-	for <linux-i2c@vger.kernel.org>; Fri, 16 Feb 2024 08:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13C41B7E2
+	for <linux-i2c@vger.kernel.org>; Fri, 16 Feb 2024 08:09:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708070929; cv=none; b=blyptbIIvTCRPvIPKus+wyWl493HS1PCKTsauYRvXlgsfvs9WZGpXp+jWfJ+SehEp2VWIx3XMeWWgNiBklqapB8SlJKgCN/uQg02B06FC0CfoTpNTsHol0V6eVMj/i4QtzukkPh4aUyIaP9pcOlzF00EGEXr7qMa5t0UiRqrrsI=
+	t=1708070989; cv=none; b=gw8fofeEuYZd07Hyckoerv8IQ4TlOndQlBpSJyLd1A3v5DY5q9yXp95gwlm6xKUx7oO1ltE2iODh/xlZTDMYeSqSddvu6UrVa8jKEBCuG/RLcJf9AMT+FqowcR8RLnuM4SBg+Z1CpU6HFvGJCU0TrCU2JI/MM5BeTbIwHzEzIn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708070929; c=relaxed/simple;
-	bh=et7DH+1sqEpwvZZL/f2ZhF9RBoUtd92IEeYl4D859eI=;
+	s=arc-20240116; t=1708070989; c=relaxed/simple;
+	bh=Bi/WNp7PeLyqEslHVaOjoC4gFVwkPAgURekl3x1Bwr8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S2uDrlbyPako87i4SebqL8VnJOC0hZ3uYwv4fH3+qSb+Tfd5U5KfQRY0GNBus1O5QN9j35rk/kp40O7+GJiGZPVT+v198iDfhKORzDFwgMIA2sa09vUUF/fJ2Y2ltS361YKVXGvvdkVjUVZRmqixtEfj0zIxBEkV4lbUSDRTfKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hzacaa6S; arc=none smtp.client-ip=209.85.208.41
+	 In-Reply-To:Content-Type; b=M7LWk2HBV6wiI4J81z1FVA9hkp55wTfTB6e+ZRm3KO2th4AWIc60tMwu+N3BXUCEP73qAtr1i4kHnC5j/T4w0nqN4oHp4bSrYt0ategnXgMq1Ywr1S2/bv8Heifo+qQ+3+UziJoSPgogRn6k3TTsXpPPaxWTrmYuAxK6xKPT04E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VUTlP9Wl; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-563bb51c36eso1539567a12.2
-        for <linux-i2c@vger.kernel.org>; Fri, 16 Feb 2024 00:08:46 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a29c4bbb2f4so224428166b.1
+        for <linux-i2c@vger.kernel.org>; Fri, 16 Feb 2024 00:09:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708070925; x=1708675725; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1708070986; x=1708675786; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2V6I6OpSex3cs1V6XXm3q9EZRuSLwGlRUlqdJr7y/ZY=;
-        b=hzacaa6SqY8bGmLgWHgH9hpC5J0abEastEerYMWu4CS6VjmZC1/sjNWzI9bN3qr5q9
-         QvXWv8Qh5d4Le7yMJyr76zqBXyyjwnKfYQCy97f+cI+iu1TKaCH/BLy/oociUL+zQJ0u
-         NobpE4PqBRjJysQiZ/U54ya9sOvJpaY0nn9BwMA3hGJHON5l1AJ/4gzEVBAo0N+O0BkY
-         AjnB0J12ye4yqObPm6bSxA4oZDLHX3RQ7bZ73RJK3DiENp4FJPRHL4lqKHWSwZYov/+S
-         /b1cO0iVxIYMYveEdEhDDyHPXgPoBRCzBUJ6g09KkSAO/Lz/d7VfHLUieoF1sZqAiNcV
-         2oQg==
+        bh=WwCRdKBm5GucB6Cv2dQydvaWuqeC0A8WDAYf7dCeUrY=;
+        b=VUTlP9WlvsIN0jANsI2mKTn9yPtKztdzBZ79t4WQqkUN+kQFRhoBdnP4nL7b38YrYQ
+         NYaLVtMBpzzE8GtBudbKSBXKrTkvpMcF5+wdNLEaaIn3jsAT5ct2qQwlXIhuE31/t9H7
+         1954EJc5NeMlBkEtzBragP/fxGiUxYpdOgA0i78jBwaIASrjuKPaw0B+xiSmr3kez+97
+         QO7iAC27z5EfFSjzJRxHyzDjVePXGoQGAXJHUNJvNyKIi6c93ojQr6Wk3VKU7H6NmSi6
+         ZCVZbpCo+oDXYCwbPs7/28n9Pv8SCKV+/jHKyzeGQO6qTIyV6ZoPFRF2MK7RzLY1SjD8
+         B+Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708070925; x=1708675725;
+        d=1e100.net; s=20230601; t=1708070986; x=1708675786;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2V6I6OpSex3cs1V6XXm3q9EZRuSLwGlRUlqdJr7y/ZY=;
-        b=s5+YI8fm4LGbAwI0m5MHSDmTaRcnfcj0Yw2mGZsw+bMB9939BjVFxOspWRKSPtGGPH
-         Mxhj9+caFZ5wnSIuDJU2vNijr6OKiRx1vbCgZVOFFTupWXQuxj8umugEikuWzzxnD8yW
-         k+d8JxrMhlBFVMVBWvZBz0IK7ZKWe5zH5z0ym0apdqbumsCi6KH2k14DFhg8n3PYEnMz
-         s6kztCKBCr66acjiaYI5P9AFswe891bqfFXLfgvU1NOBYWd39MiLc9sVRFwOxkcH/65l
-         sBxIC34/3Hmcg1x9gyp1Yv4b2EZrE3MLWCFKcvsbFOhNcLipk4E0+yT/ID14qNGiUKy/
-         RGAw==
-X-Forwarded-Encrypted: i=1; AJvYcCVhianEFiALjcAhP0tpMlWn9HOxzghqNX5hYW7y3QtR4FhVcGKZa9U3F6ZSLXBbqRR1G5oaMFgO1Rs1egMUhCniC0dTMDCtIhWC
-X-Gm-Message-State: AOJu0YzowvyVZ1IIAQuiyDdO3lJ6aKOEQXRsX2Gyvt8p6usYpyPWU9tB
-	EQikWp+z9CxJwLq3OAw0ob+3XKXp2ZPH64bIHk55yA1M1OWpVaQy9tP8cOGJkN8=
-X-Google-Smtp-Source: AGHT+IG9/wj2lqb9G6jGJ08OjouVPaMfGVcj8DuU0PHMhrDZXCmGYoHKF/xCqwIk5puInxBvhEPxlg==
-X-Received: by 2002:a17:906:249b:b0:a3d:9f30:58b0 with SMTP id e27-20020a170906249b00b00a3d9f3058b0mr2768866ejb.10.1708070924813;
-        Fri, 16 Feb 2024 00:08:44 -0800 (PST)
+        bh=WwCRdKBm5GucB6Cv2dQydvaWuqeC0A8WDAYf7dCeUrY=;
+        b=SFqSQDwqKWDVS9huRjkOgmaACqliOqhLTkZ8vIrJeynNdXJ/yRNsXmkU9WiaF89uLi
+         QTt+SjwBN9x9DtqwFGaU2l8/tSKT6MMC2eItMkHoNUsMEa44dX59lDCcEPR1NoZx7Q6a
+         WZiOLYIxvjsjOnAtZyv8fwOGEb81nQra807mur9ulld+89RwKAS2rk/YIZ+k6OODGrv3
+         cfhZu5Q88TPnjfyrAvs3+kdxbkEboYBtOSXCaEOduCongCuousx1zsqPSbx7VgeHGZUQ
+         h1URK4nTDOlO4GD1vu2/sR1IPl/QuWvo1sg/sTk/DzQYLNAxtmYASGh3Pn3BGGAJN9gu
+         Yy+w==
+X-Forwarded-Encrypted: i=1; AJvYcCXu7ka5cO/MWWmoNP2wWKlzuk6jgBHBQPs6/5TdUxu7g1NLStcTDs7X+hAI9ies76ivpQ5yTWDHOGFXUxwD3N4jXiWEZSEjhMXf
+X-Gm-Message-State: AOJu0YzWnoUhnSgDoPSbQEAMCvGg0d6UIKavHkTK6kRYjitZIJPSdgO3
+	qvR6agFvCih8+TkVN44gLb6qMZbrv1ny366fOpJCIR5FzuRmvxWIr1Pupi4Oh4A=
+X-Google-Smtp-Source: AGHT+IFz2bvWcXxlIMraJJQvlsrXOxXIyT8bn5rY+xsBdXgA0UtwBANanCurUKYMaAsHX3rEOV7Pmw==
+X-Received: by 2002:a17:906:a897:b0:a3d:e54d:7d97 with SMTP id ha23-20020a170906a89700b00a3de54d7d97mr454036ejb.75.1708070986061;
+        Fri, 16 Feb 2024 00:09:46 -0800 (PST)
 Received: from [192.168.0.22] ([78.10.207.130])
-        by smtp.gmail.com with ESMTPSA id s15-20020a17090699cf00b00a3bd8a34b1bsm1319130ejn.164.2024.02.16.00.08.43
+        by smtp.gmail.com with ESMTPSA id s15-20020a17090699cf00b00a3bd8a34b1bsm1319130ejn.164.2024.02.16.00.09.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Feb 2024 00:08:44 -0800 (PST)
-Message-ID: <67ea1daa-72a5-4dc0-b766-34a99052dabb@linaro.org>
-Date: Fri, 16 Feb 2024 09:08:43 +0100
+        Fri, 16 Feb 2024 00:09:45 -0800 (PST)
+Message-ID: <3600c556-ccb3-40a8-9c53-a718a97468ae@linaro.org>
+Date: Fri, 16 Feb 2024 09:09:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,8 +76,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/33] ARM: dts: aspeed: p10 and tacoma: Set FSI clock
- frequency
+Subject: Re: [PATCH 10/33] fsi: aspeed: Add AST2700 support
 Content-Language: en-US
 To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
 Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -86,7 +85,7 @@ Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
  sboyd@kernel.org, mturquette@baylibre.com, robh@kernel.org,
  krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
 References: <20240215220759.976998-1-eajames@linux.ibm.com>
- <20240215220759.976998-8-eajames@linux.ibm.com>
+ <20240215220759.976998-11-eajames@linux.ibm.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -132,23 +131,36 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240215220759.976998-8-eajames@linux.ibm.com>
+In-Reply-To: <20240215220759.976998-11-eajames@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 15/02/2024 23:07, Eddie James wrote:
-> Now that the driver doesn't hardcode the clock divider, set it
-> in the device tree.
+> AST2700 requires a few bits set differently in the OPB retry
+> counter register, so add some match data and set the register
+> accordingly.
 > 
 > Signed-off-by: Eddie James <eajames@linux.ibm.com>
 > ---
->  arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts | 1 +
->  arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi     | 1 +
->  2 files changed, 2 insertions(+)
+>  drivers/fsi/fsi-master-aspeed.c | 28 +++++++++++++++++++++++++---
 
-Please do not mix DTS patches with driver code. DTS goes to the end
-because driver code CANNOT depend on it (there are exceptions but it was
-not explained here).
+
+> +
+>  static const struct of_device_id fsi_master_aspeed_match[] = {
+> -	{ .compatible = "aspeed,ast2600-fsi-master" },
+> +	{
+> +		.compatible = "aspeed,ast2600-fsi-master",
+> +		.data = &fsi_master_ast2600_data,
+> +	},
+> +	{
+> +		.compatible = "aspeed,ast2700-fsi-master",
+
+Undocumented. Really, you do not have checkpatch in IBM?
+
+Please run scripts/checkpatch.pl and fix reported warnings. Some
+warnings can be ignored, but the code here looks like it needs a fix.
+Feel free to get in touch if the warning is not clear.
+
 
 Best regards,
 Krzysztof
