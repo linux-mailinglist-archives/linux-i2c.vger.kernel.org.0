@@ -1,74 +1,80 @@
-Return-Path: <linux-i2c+bounces-1847-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1848-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6868858E0F
-	for <lists+linux-i2c@lfdr.de>; Sat, 17 Feb 2024 09:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7B47858EC2
+	for <lists+linux-i2c@lfdr.de>; Sat, 17 Feb 2024 11:33:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBE681C2148A
-	for <lists+linux-i2c@lfdr.de>; Sat, 17 Feb 2024 08:25:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9A0E1C20F9C
+	for <lists+linux-i2c@lfdr.de>; Sat, 17 Feb 2024 10:33:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F691CF98;
-	Sat, 17 Feb 2024 08:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82A7D487BF;
+	Sat, 17 Feb 2024 10:33:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OwcZuJDQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LMRgw/ij"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74361CD2A
-	for <linux-i2c@vger.kernel.org>; Sat, 17 Feb 2024 08:25:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A674535884
+	for <linux-i2c@vger.kernel.org>; Sat, 17 Feb 2024 10:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708158307; cv=none; b=ga3A8iVtYqtcKkMSyHlFdDa4p8lmCBZ1/mn8YUtvlS/ML89vRYAe/AfPjec2f5F2vELA2UWisB6qYFM4xEsR83f4fcDSVxvf/7rp23p4D+xmTvF0XmLbj9DuXpW5gtxyq/zl8I9iGH0Ywz8WayjkLZLamX8OH8dMcn7BnrJQgsg=
+	t=1708166010; cv=none; b=XfmbTzPhz4/DIdVFTGwe4cV+Z9xv63TImTnuIOV5Joa9yOfmrixhqHMpB0wOWofOH+PaaAgyNPB5JeGOJBQhhCFs4kC5pFu/5o3Zxoxnmiyd8v3xmMbYf88gw1bKTdlxIgH759lzUBF3+GmpFgGRbnamGZz0Byoc72dxrdKU5WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708158307; c=relaxed/simple;
-	bh=dfowKm22jL1oDacE72uZKauixuviw2LROG8o2jxLwgk=;
+	s=arc-20240116; t=1708166010; c=relaxed/simple;
+	bh=BAwzhRsDCszvGkCZpbQAxpfMlN2n3GfPPVFq0MCB2Fk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c2xu8Aoq0us9fBh+I2ii4Gg+NCKUjWPearAmlXuxeMiUAoZs/QinQeIZ18humzS1ATzME+NTqwJX6uSMx9vPpGhN+bpqWkj1Bl7r4DilRNxjju6xkw/val19bSsqdSJY/4XCKC88uUouUmMPa9ySvglcSpq+mMIcdsFSAVzYPqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OwcZuJDQ; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-55f279dca99so3941227a12.3
-        for <linux-i2c@vger.kernel.org>; Sat, 17 Feb 2024 00:25:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708158304; x=1708763104; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9bypr4+I03LVLPYMzCWUReiagB0AomTZPG6880A9org=;
-        b=OwcZuJDQrRBRoFEXzI3fEUYIgE724767RD/ihd32slyxiAjkHvzjqFmhQaW0AFMsYr
-         rNpTeZC/faNK5tweKrKVY/uod8A7zpnGOUPbJRKiFj9X9WThuq+V3NRU8XcbtK4rdCY+
-         mKZ/lSyKJ4ODQP6qd+g4l+LTXOWE9p45EacDHnox1iTE3rcMS5sef0llOGX4wwizn6Nw
-         M+lvH+o6ft7OuPIiE1wonOLm+nKbFnL1UqP2a+HcokEurJV5EIl3cJzFQBH6vph4aQjG
-         re9Vgi7fJpZa7EdKs/+r7JH9+uZ5bYT6DRTz5Qw8Q/cP7QtaSCcN8gy+0VqH2U3gqTaV
-         WRug==
+	 In-Reply-To:Content-Type; b=BLz5ulBOxk54hS7sLy6VjKFdbHbntM38hvUtL2OvkLJcxXELUzPGNTe065bwg4RsA4HH+IL5OA5k7Kiwa6UsHWyscXQKX0bl++bBfmhYPmB0fuPHPuEhK4slMIX4IjwIO2EJXOMXSutXJLwrKYq3O9amfcuVPg/U6y/BF60Zu40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LMRgw/ij; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1708166007;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SOPLsffXfXpiI5OFL9Rz24HEghEnIzQEHLm/BPE3AJ8=;
+	b=LMRgw/ije9KqiJ9DLAQWeR6KCYs3vHKRd0FmR/VsrGCcl5wZNFLmobL1EqKyae0ht+b/SP
+	gjaPql317ZWgdCVwDg/32eg8lBPFdRk7S3GDOj5XKUNUBVo8iLdf4vlAKyIOhtTm3k2vTo
+	nt12+BwZuL2Rtc2LV4p6D1FULz0TJ80=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-693-b1rEynMNPWaUjlpsVt7Wjg-1; Sat, 17 Feb 2024 05:33:24 -0500
+X-MC-Unique: b1rEynMNPWaUjlpsVt7Wjg-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a2f71c9f5d2so122067266b.2
+        for <linux-i2c@vger.kernel.org>; Sat, 17 Feb 2024 02:33:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708158304; x=1708763104;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1708166003; x=1708770803;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9bypr4+I03LVLPYMzCWUReiagB0AomTZPG6880A9org=;
-        b=KKv757GMy4wEwp8HDZtRFYViPl4cspj9b6JUh7qQE32Y1cpzOpwZzzKUiUJuQgnv/g
-         b2lNpM2boe9r3zMfdV7VZDjbonPNrObc5acvUlvTHb7VabzRrNtSap/ovUP14U6NcG1K
-         difK737208D2XS39FnRXECgbOJKKOirPp2s94VxCyH3fN3NBPdhe1aYmezO2ABqArRrU
-         U87FNhzLi2T5LzSEusxIUS48dAKskSxMP+03lucKFGOmCUqQDrRhTUHprH3VM9k+mtpe
-         PI05nijLSuZEK/i1kwRbUq8nJ/gvoPSf0sf0L5LnyE0cJ/S1YKO6Dcrs3v5LuOq7qGnj
-         JCpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+YAMwyXohwwLOWtF7Cjmhrd5z/kGKO1Bns4bI3k9TJ6CX8KrDeWY3OF4k9UFN4MQ3MYtoEZ89Je21NyCHI6MaINL7/b+T4dHV
-X-Gm-Message-State: AOJu0YwADv7tyCxkXdKHyVh6VlZbmP7awcRfUmf+RmXy+aeaFYaOgVaP
-	AkNxNozlzj2SYhG9zCE6DK4qVgwMeiylL1AwRDNTcbKtRk7/IhsHfSnmWxGJNjU=
-X-Google-Smtp-Source: AGHT+IHDs36KqKnn4yFS3zjSh745G56nuB+z1H36+nmojixyor2w67IIUDOFLwO1BC6de1o+hF6JNg==
-X-Received: by 2002:a17:906:8412:b0:a36:c353:952e with SMTP id n18-20020a170906841200b00a36c353952emr4669911ejx.41.1708158304024;
-        Sat, 17 Feb 2024 00:25:04 -0800 (PST)
-Received: from [192.168.0.22] ([78.10.207.130])
-        by smtp.gmail.com with ESMTPSA id cu3-20020a170906ba8300b00a3d014fa12esm763079ejd.196.2024.02.17.00.25.02
+        bh=SOPLsffXfXpiI5OFL9Rz24HEghEnIzQEHLm/BPE3AJ8=;
+        b=Prm3k5Kyc8yxdRRlks7vNAOJ/WtGZ1nuS52JMuOJHnDNxVA9n8LqCZfbqldcQnKud3
+         UPQWnQqibnO5yJChAoTR+vOya2E1qTk69gD4X5qE5/aYZ7txSGUwdblsEBNuSp74+iIS
+         Z93brTg075eNAq6BrtBtX48g9Ktym2tEjMLHTCrA5xfKURWyUwQauzup18kiElaaTBes
+         muqk98n8WnfJJotXQ803DXyZkW9S3C0inNDqUHe9wr71oRN9kavtBV73hnnyp8LgT7lV
+         4xo9B1IfMPAtFrpSCW8XGXNukoUZXMfWIqCa1ge/OgRCA8kXyw2jgB8tg1H3LkMSM1w5
+         /KXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXrSu+p4Hpb3kUl5nBjq5JWvYJDa4YA+kIGk42JCARQtX/wQs2XGJ+6qR9TasS6w+Mz8pFv3KAguHHigkYa2oh5GAPBTPwTRk4I
+X-Gm-Message-State: AOJu0YxfNe2OAWqMwazwTP1NhggXyycVHK8q/EziiXNTb1e3bPcKCVNY
+	6T+30npK219TUfqXzcZYuLHYbhpf+u2Ny5Nub8oKR9gjLSRyA1uzmIWQrLW6WAhOvm32Na6k5Lp
+	Cf9FijvGxzJCafOqIdslxU4GmAOfBKdWxnrcL2i6uUrqYX0whetpF6A77aQvSxdgGwA==
+X-Received: by 2002:a17:906:c198:b0:a3e:34e8:626f with SMTP id g24-20020a170906c19800b00a3e34e8626fmr473211ejz.66.1708166003478;
+        Sat, 17 Feb 2024 02:33:23 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHONzQ4K+GjU2Z5J175Qz7NyRRB4awOxiXjVKAtjliHoLdxNrn+46pvSb8HNB6gPfi69ZapgA==
+X-Received: by 2002:a17:906:c198:b0:a3e:34e8:626f with SMTP id g24-20020a170906c19800b00a3e34e8626fmr473199ejz.66.1708166003069;
+        Sat, 17 Feb 2024 02:33:23 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id ch22-20020a170906c2d600b00a3d943558b8sm854287ejb.134.2024.02.17.02.33.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Feb 2024 00:25:03 -0800 (PST)
-Message-ID: <cf360cbf-7414-4024-8bdd-d2aba7f048b3@linaro.org>
-Date: Sat, 17 Feb 2024 09:25:01 +0100
+        Sat, 17 Feb 2024 02:33:22 -0800 (PST)
+Message-ID: <3e5b47ce-29a9-43a3-92bc-599a9a716fbb@redhat.com>
+Date: Sat, 17 Feb 2024 11:33:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,105 +82,145 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/13] dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c
- bindings and example
-Content-Language: en-US
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Rob Herring <robh@kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
- Andi Shyti <andi.shyti@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, Gregory Clement <gregory.clement@bootlin.com>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-2-19a336e91dca@bootlin.com>
- <20240216022227.GA850600-robh@kernel.org>
- <CZ6FD7EHIJDT.32IEDVT9FG2GP@bootlin.com>
- <6effca50-29a4-43b9-86eb-310bd4e08e5c@linaro.org>
- <CZ6FUECKEX2B.36QWZZA5EYPI@bootlin.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <CZ6FUECKEX2B.36QWZZA5EYPI@bootlin.com>
+Subject: Re: [PATCH v2 2/6] platform/x86: dell-smo8800: Move instantiation of
+ lis3lv02d i2c_client from i2c-i801 to dell-smo8800
+Content-Language: en-US, nl
+To: Jean Delvare <jdelvare@suse.de>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
+ <pali@kernel.org>
+Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Andy Shevchenko <andy@kernel.org>, Paul Menzel <pmenzel@molgen.mpg.de>,
+ Andi Shyti <andi.shyti@kernel.org>, eric.piel@tremplin-utc.net,
+ Marius Hoch <mail@mariushoch.de>, Dell.Client.Kernel@dell.com,
+ Kai Heng Feng <kai.heng.feng@canonical.com>,
+ platform-driver-x86@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+ linux-i2c@vger.kernel.org
+References: <20240106160935.45487-1-hdegoede@redhat.com>
+ <20240106160935.45487-3-hdegoede@redhat.com>
+ <20240107171055.ac7jtwhu2kbalaou@pali>
+ <20240213173050.0cf4a58f@endymion.delvare>
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20240213173050.0cf4a58f@endymion.delvare>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 16/02/2024 11:40, Théo Lebrun wrote:
-> Hello,
+Hi Jean,
+
+On 2/13/24 17:30, Jean Delvare wrote:
+> Hi Pali, Hans,
 > 
-> On Fri Feb 16, 2024 at 11:33 AM CET, Krzysztof Kozlowski wrote:
->> On 16/02/2024 11:18, Théo Lebrun wrote:
+> On Sun, 7 Jan 2024 18:10:55 +0100, Pali Rohár wrote:
+>> On Saturday 06 January 2024 17:09:29 Hans de Goede wrote:
+>>> It is not necessary to handle the Dell specific instantiation of
+>>> i2c_client-s for SMO8xxx ACPI devices without an ACPI I2cResource
+>>> inside the generic i801 I2C adapter driver.
 >>>
->>>>> +        mobileye,id:
->>>>> +          $ref: /schemas/types.yaml#/definitions/uint32
->>>>> +          description: Platform-wide controller ID (integer starting from zero).
->>>>
->>>> instance indexes are a NAK. You can use i2cN aliases if you must.
->>>>
->>>> Why do you need it? To access OLB? If so, add cell args to the OLB 
->>>> phandle instead.
+>>> The kernel already instantiates platform_device-s for these ACPI devices
+>>> and the drivers/platform/x86/dell/dell-smo8800.c driver binds to these
+>>> platform drivers.
 >>>
->>> Why we do what we do: I2C controller must write a 2 bit value depending
->>> on the bus speed. All I2C controllers write into the same register.
+>>> Move the i2c_client instantiation from the generic i2c-i801 driver to
+>>> the Dell specific dell-smo8800 driver.
+>>>
+>>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>>> ---
+>>> Changes in v2:
+>>> - Use a pci_device_id table to check for IDF (non main) i2c-i801 SMBusses
+>>> - Add a comment documenting the IDF PCI device ids
+>>> ---
+>>>  drivers/i2c/busses/i2c-i801.c            | 126 +----------------------
+>>>  drivers/platform/x86/dell/dell-smo8800.c | 121 +++++++++++++++++++++-
+>>>  2 files changed, 123 insertions(+), 124 deletions(-)  
 >>
->> Which register?  Your devices do not share IO address space.
+>> I'm looking at this change again and I'm not not sure if it is a good
+>> direction to do this movement. (...)
 > 
-> mobileye,olb is a prop with a phandle to a syscon. That syscon contains
-> the register we are interested in.
+> Same feeling here. Having to lookup the parent i2c bus, which may or
+> may not be present yet, doesn't feel good.
+> 
+> I wouldn't object if everybody was happy with the move and moving the
+> code was solving an actual issue, but that doesn't seem to be the case.
 
-So exactly what Rob said... I don't understand why you have chosen to go
-with alias.
+I thought you would actually like getting this somewhat clunky code
+which basically works around the hw not being properly described in
+the ACPI tables out of the generic i2c-i801 code.
+
+I didn't get around to answer's Pali's concerns yet, so let me
+start by addressing those since you indicate that you share Pali's
+concerns:
+
+Pali wrote:
+> Now after looking at this change again I see there a problem. If i2c-801
+> driver initialize i2c-801 device after this smo8800 is called then
+> accelerometer i2c device would not happen.
+
+That is a good point (which Jean also points out). But this can simply
+be fixed by making the dell-smo8800's probe() method return -EPROBE_DEFER
+if the i2c-i801 i2c-bus is not present yet (all designs using the
+dell-smo8800 driver will have an i2c-bus so waiting for this to show
+up should not cause regressions).
+
+If we can agree to move forward this series I'll fix this.
+
+Pali wrote:
+> Also it has same problem if PCI i801 device is reloaded or reset.
+
+The i801 device is not hotplugable, so normally this will never
+happen. If the user manually unbinds + rebinds the i2c-i801 driver
+them the i2c_client for the smo88xx device will indeed get removed
+and not re-added. But this will normally never happen and if
+a user is manually poking things then the user can also unbind +
+rebind the dell-mso8800 driver after the i2c-i801 rebind.
+So I don't really see this as an issue.
+
+With those remarks addressed let me try to explain why I think
+that moving this to the dell-smo8800 code is a good idea:
+
+1. It is a SMO88xx ACPI device specific kludge and as such IMHO
+thus belongs in the driver for the SMO88xx ACPI platform_device.
+
+The i2c-i801 driver gets loaded on every x86 system and it is
+undesirable to have this extra code and the DMI table in RAM
+on all those other systems.
+
+2. Further changes in this series, like adding support for
+probing for the i2c address of the lis3lv02d device on models
+not yet in the DMI table, will add a bunch of more code specific
+to SMO88xx ACPI devices. Making the problem of having SMO88xx
+specific code in the generic i2c-i801 driver even bigger.
+The current amount of SMO88xx specific code in the
+generic i2c-i801 driver might be considered acceptable but I'm
+afraid that the amount of code after this series will not be
+acceptable.
+
+3. Some of the changes in this series are harder to implement inside
+the i2c-i801 code, like optionally instantiating an i2c_client for
+the IIO st_accel driver (*) so that the accelerometer gets presented
+to userspace as a standard IIO device like all modern accelerometer
+drivers do.
+
+This requires setting i2c_client.irq and that IRQ comes from
+the SMO88xx ACPI device. So this would require the i2c-i801 code
+to lookup the ACPI device and get the IRQ from there. Where as
+in the SMO88xx ACPI platform_device driver the IRQ is readily
+available.
+
+TL;DR: IMHO all this SMO88xx quirk/glue handling belongs in
+the SMO88xx specific dell-smo8800 driver rather then in
+the generic i2c-i801 code.
+
+Regards,
+
+Hans
 
 
-Best regards,
-Krzysztof
+*) Instead of an i2c_client for the somewhat weird (but still
+default for backward compat) drivers/misc/lis3lv02d/lis3lv02d.c
+driver
+
+
+
+
+
+
 
 
