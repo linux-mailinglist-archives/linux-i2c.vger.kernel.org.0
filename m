@@ -1,100 +1,129 @@
-Return-Path: <linux-i2c+bounces-1854-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1855-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D33A2859B4E
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Feb 2024 05:15:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A9BB859B7F
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Feb 2024 06:04:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 151EB1C20358
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Feb 2024 04:15:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AD1EB21A7E
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Feb 2024 05:04:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D27BBA42;
-	Mon, 19 Feb 2024 04:15:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DAC91CD2A;
+	Mon, 19 Feb 2024 05:04:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b="dnOklByV"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Dw7TTuXW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from sender4-pp-o94.zoho.com (sender4-pp-o94.zoho.com [136.143.188.94])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A955F4417;
-	Mon, 19 Feb 2024 04:14:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.94
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708316100; cv=pass; b=FdVk0ZiLJ9WKSOtYfS5VzVeFDZApiVFiYksyMIKALkieLu+18L8uJYUCZOmy3ujYZi6xxjzxZ9rTblvogHgHbUJW1CYI5kWU43wh+tBRFfLSM0FInp2/KcdEuvtiH82d1OZq0jcaPl6yY80t8O0A58xu8lxW0e2tc/gqDLWjw24=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708316100; c=relaxed/simple;
-	bh=Z1gAb16W9I8PAd503OhSrom3uYR4o1FfjAYY2775p1k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JSf9e8PS+PcJCpQJUK9MlQvv/2/ogRRyNWqV/QtP1aymAZupIGrbM9Geet0Mto9iV02XYNlmGQZS4oO4vT1JeP+Z+hJP2H4FuxdF30TFImlLK8JlBPkAAV49z4g3lqlH+E7SP9xoYutUOj5/gcIhX3tE5VCBeqpXTVXKHhXuw4A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b=dnOklByV; arc=pass smtp.client-ip=136.143.188.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.com
-ARC-Seal: i=1; a=rsa-sha256; t=1708316093; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Xq+ZxHc8S2t1Iw7sZUHLl3hrxN0i84hAFx7P89PHrAxdwx9Id3tCX+9nUuxGJb/bRnB90Ovm2O3Hqx7iB/c9mZXJmKuwVonBG8P1i39doC87LRPi0/X4jsgJaiu4ZcgHpcMG+KWWfBZl4Umh5zDNZilOxGZNLkI3+ECigVtWSy4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1708316093; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=NqPaRh8aOdG4JlDmQudoUBGyUgoKA1SPF8j/TwjjkD0=; 
-	b=NTsKY6qGlrDc/r32vFrNRlpQAL1+XOawa6qW/p823MKcI2/ixw772+/yQYQkAyaC8/wU3HVeGzrcoHhvnGqUzEjPFp3uBA8sDLB2YYROytI0//VG5Go8g6VfIpFQeep0/8dfCp0CPqSibeVfv6cSYhFbg5/RkKl9TzwoS/D/dXs=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=zohomail.com;
-	spf=pass  smtp.mailfrom=safinaskar@zohomail.com;
-	dmarc=pass header.from=<safinaskar@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1708316093;
-	s=zm2022; d=zohomail.com; i=safinaskar@zohomail.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Feedback-ID:Message-Id:Reply-To;
-	bh=NqPaRh8aOdG4JlDmQudoUBGyUgoKA1SPF8j/TwjjkD0=;
-	b=dnOklByVZJUzKrhBIM3uEg5g1B3ZYu6TAnc/O1H1AAEIYRzey1jYGNZQYO2uU7pc
-	UXahOrHUF7uhv1qSORfuGGXyN1VLPL6UxjFJbQh4Se+tPp9skBQnJiFjyGVNFFEQQAx
-	KP5FzXLtugCxHwQKRoi4EazsyLofZNKc+LLgV0T0=
-Received: from localhost.localdomain (212.73.77.98 [212.73.77.98]) by mx.zohomail.com
-	with SMTPS id 1708316090324802.4630218081528; Sun, 18 Feb 2024 20:14:50 -0800 (PST)
-From: Askar Safin <safinaskar@zohomail.com>
-To: bbara93@gmail.com,
-	linux-i2c@vger.kernel.org,
-	Benjamin Bara <benjamin.bara@skidata.com>
-Cc: stable@vger.kernel.org
-Subject: Re: [PATCH] i2c: core: Fix atomic xfer check for non-preempt config
-Date: Mon, 19 Feb 2024 07:14:44 +0300
-Message-ID: <20240219041444.4122-1-safinaskar@zohomail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240104-i2c-atomic-v1-1-a3a186f21c36@skidata.com>
-References: <20240104-i2c-atomic-v1-1-a3a186f21c36@skidata.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7113A1CD07
+	for <linux-i2c@vger.kernel.org>; Mon, 19 Feb 2024 05:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708319046; cv=none; b=FCdjpN3CBD3RwklXYED1Wyca7r4Ar4zHRo8mkvcE300GgaO/nBj/k7QcwuUFBzIveOpjn/jeJP0LyblNl4H7K7BcIVs4Q+xbErIomNH1YKE7FFTbJwcgEGbDnQJU1z+fo1q5XiDEMAjWBz19CIiCPeBUItA0geNYfbt+zAPNenM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708319046; c=relaxed/simple;
+	bh=OQUbTWpsyfJky7G4Vw2b1kIc+3UWUfWO20ZLbqaRsk8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Foa97pgs63pT7pQE+yKC7RhvatAbrA0432v2oKpfVaV4+ePJ3Fh6T+zumaMUM2Kj0VtcZoEQfnSwvtzEQgsfgsQNAj45rxcCI4pzfkM4ujM54YsS7POrzZH67FRJDQ73a6pzXTtoxTjR533+MNGhQPJyyuk+oAXRKbfe4SFapbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Dw7TTuXW; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1d944e8f367so32580855ad.0
+        for <linux-i2c@vger.kernel.org>; Sun, 18 Feb 2024 21:04:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1708319045; x=1708923845; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sy2YaU44Xzss5zx7kgvslISkld6TxisI9EFhWrYVrgI=;
+        b=Dw7TTuXWF+/wl9rqabZuURAUNeki90Dhb7wJXffD/tgbaaapIupaPElsWdK/QJkj8e
+         tV+wwlRXeSPzy9YIuFQP6+6/APiJxRHFPZDMlFXoywJ15OBCsAwjnOXZl7ZIHZHUKAjO
+         OfV1QwZ365h8YtfbdIENCdmi+6vRaxcuP8mKQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708319045; x=1708923845;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sy2YaU44Xzss5zx7kgvslISkld6TxisI9EFhWrYVrgI=;
+        b=EZD3TO5Q/zzqDN8sPtSdJCN/NlOz6R5CF5fvx8X/BfTcalgJdNg5NoCOjlMpCrUEwE
+         E8iFHteWGHaVtOyFGsXiSwqelLMtSnwUEA1YAP8zSV6r4RUKcFh5V3Bdu5p7zCIt2pX3
+         sL+iIGoGO98D80/s7EMNBogHMYQkZ2xA4ii8R0UayjnacJ0t8tjupZBWug6WSHeC0wDK
+         Iy1+Htg+RPldfraq+fLubSO51y5tbtBeQgPSN670NBrvAWS94inGO+frNxYGkAKFSV3D
+         dirNJmFuUzruizm4hbV4231VRH9cIexmY4ic/z4ccfEe9lHBPFETQaJ5dd/RiXE4iXKM
+         LSiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV+/Juxot+1Wk3xBU2lJ9Qwhs28l7BB8399m1idH7gKtY8/FHGHQuttdlliqsmg3PcODQZ50brDoZ8/V/JS3AiGprDn53yCsZDE
+X-Gm-Message-State: AOJu0YzixpRcFCQweQuB1gXDcPbFGGtHywaBqKrmR0RQCCf898RwDH+K
+	qvleCUW4uZ5HcLILF1q33nbfmd6rvN3G7OtLAcPdP1hadz41OatFPhsS+1a2WQ==
+X-Google-Smtp-Source: AGHT+IERCSPk3qDCxDTUOnKHeleegt5yUUSTiYJf6qBv69aCgnYIJ7j9dioWkmCbv0bHPswdvR4mXA==
+X-Received: by 2002:a17:903:1c6:b0:1db:d7a8:850b with SMTP id e6-20020a17090301c600b001dbd7a8850bmr3434760plh.25.1708319044686;
+        Sun, 18 Feb 2024 21:04:04 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id t12-20020a1709028c8c00b001d9773a198esm3420532plo.201.2024.02.18.21.04.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Feb 2024 21:04:03 -0800 (PST)
+Date: Sun, 18 Feb 2024 21:04:03 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Jesse Brandeburg <jesse.brandeburg@intel.com>
+Cc: Jacob Keller <jacob.e.keller@intel.com>, Peter Rosin <peda@axentia.se>,
+	gustavoars@kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH -next] mux: convert mux_chip->mux to flexible array
+Message-ID: <202402182100.1D5BBE45@keescook>
+References: <20230223014221.1710307-1-jacob.e.keller@intel.com>
+ <e8782296-49bc-33a2-47b3-45c204551806@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Feedback-ID: rr080112276daf8834c3f111c7c3b041820000e229be3ef913ee899be9794c1cc24b9d86d518d08e9b01fc15:zu080112274d52255b9387c9753c7da0800000d89620d75a0a4592a3b0f02a9f638f501ca91339394f59be7a:rf0801122cb93009be99b99b2a8a70c126000076b03e12f3a80612ae9ba9216b5f82ad90b9b6bba00939b0b02063c1b07f:ZohoMail
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e8782296-49bc-33a2-47b3-45c204551806@intel.com>
 
-Thanks a lot for this patch! It fixed big backtrace I saw at very last stage of reboot. That
-backtrace occupied whole FullHD screen. Now it is gone. Thanks! My computer is laptop Dell Inspiron.
+On Mon, Feb 27, 2023 at 12:28:43PM -0800, Jesse Brandeburg wrote:
+> On 2/22/2023 5:42 PM, Jacob Keller wrote:
+> > The mux_chip structure size is over allocated to additionally include both
+> > the array of mux controllers as well as a device specific private area.
+> > The controllers array is then pointed to by assigning mux_chip->mux to the
+> > first block of extra memory, while the private area is extracted via
+> > mux_chip_priv() and points to the area just after the controllers.
+> > 
+> > The size of the mux_chip allocation uses direct multiplication and addition
+> > rather than the <linux/overflow.h> helpers. In addition, the mux_chip->mux
+> > struct member wastes space by having to store the pointer as part of the
+> > structures.
+> > 
+> > Convert struct mux_chip to use a flexible array member for the mux
+> > controller array. Use struct_size() and size_add() to compute the size of
+> > the structure while protecting against overflow.
+> > 
+> > After converting the mux pointer, notice that two 4-byte holes remain in
+> > the structure layout due to the alignment requirements for the dev
+> > sub-structure and the ops pointer.
+> > 
+> > These can be easily fixed through re-ordering the id field to the 4-byte
+> > hole just after the controllers member.
+> 
+> Looks good to me (just a driver dev, not a mux dev!). Also added
+> linux-i2c mailing list and a couple others for more review.
+> 
+> Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+> 
+> related thread (cocci script) at [1]
+> 
+> [1]
+> https://lore.kernel.org/all/20230227202428.3657443-1-jacob.e.keller@intel.com/
 
-I hope this patch will soon arrive to debian buster lts
+*thread necromancy*
 
-Askar Safin
+Can we land this? It's the last struct_size() instance that the above
+Coccinelle script flags.
 
-> Since commit aa49c90894d0 ("i2c: core: Run atomic i2c xfer when
-> !preemptible"), the whole reboot/power off sequence on non-preempt kernels
-> is using atomic i2c xfer, as !preemptible() always results to 1.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-> During device_shutdown(), the i2c might be used a lot and not all busses
-> have implemented an atomic xfer handler. This results in a lot of
-> avoidable noise, like:
-
-> [   12.687169] No atomic I2C transfer handler for 'i2c-0'
-> [   12.692313] WARNING: CPU: 6 PID: 275 at drivers/i2c/i2c-core.h:40 i2c_smbus_xfer+0x100/0x118
-> ...
-
-> Fix this by allowing non-atomic xfer when the interrupts are enabled, as
-> it was before.
-
-> Fixes: aa49c90894d0 ("i2c: core: Run atomic i2c xfer when !preemptible")
-> Cc: stable@vger.kernel.org # v5.2+
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+-- 
+Kees Cook
 
