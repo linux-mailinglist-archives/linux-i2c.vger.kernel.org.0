@@ -1,159 +1,116 @@
-Return-Path: <linux-i2c+bounces-1874-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1875-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 872BF85A670
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Feb 2024 15:52:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6813885A676
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Feb 2024 15:53:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CB2C1F21524
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Feb 2024 14:52:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 252CF283A9B
+	for <lists+linux-i2c@lfdr.de>; Mon, 19 Feb 2024 14:53:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA32037700;
-	Mon, 19 Feb 2024 14:52:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4978F376EB;
+	Mon, 19 Feb 2024 14:53:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="aqUuKFXX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DqDohTbf"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E64512EB10;
-	Mon, 19 Feb 2024 14:52:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932641EA80
+	for <linux-i2c@vger.kernel.org>; Mon, 19 Feb 2024 14:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708354363; cv=none; b=dWpswNpDmPC2AiB2yPaOJRfNZiRBsbAdsXShXH1KKyjQio4ENTHZb2GZXTMhVPlfvUXgvvOhFQBzrPYr/v2ZbBK3Jroz0y60NRfWx8Oipf5W+hjpczXDW2RWaKqmWYt5dRJPF/IaRd9rG6yC86NeG+MWbzjg/PPMQgJS4cUwI2s=
+	t=1708354409; cv=none; b=JDBgq4I2AoUtY1zdV1HmFfz43zLaxWPV+ZCvq2MxSnEhwEh2x3sDJY/kg0hopIgpzek1WdSFdNO5zLlHr3Op0/ir84/NoD5GEa2CMqnmCMRgiyXVmUImo7CgH1QePOIiuhG6ZWpPmMxxBq9TOmF0zOcZ7OPYRZa2KVLynUebfXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708354363; c=relaxed/simple;
-	bh=KI8gYtgQc3D6K7JrkCR8/DBx6/PE/xTzlqPXlmn93UQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=CRNuHSDfF5W18RWl69H/IdD9TvWd7qJfuAfefKQv7itK7J0VR6tjb81RbUmXMLuxaRjlVdKRRDLovygLpyVGgtFuEi7PqSo7OHsXFyCzAVKld5yFmj3BzujNz24dqh94rZ8m/tJl0XKs2VcdC23T6jcy4T0KNPTYeJn2wykOrJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=aqUuKFXX; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8A95A60005;
-	Mon, 19 Feb 2024 14:52:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708354359;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7ZI2x7L+5DI9OHRIbLNWtIWuWsNLPZDbExC8tkmjT4Q=;
-	b=aqUuKFXXla1EFJCYNm9WJ4ROhvvw47hyqdD5c80VjAQIDQNfR/kfOwXylSn/abIZA4gNmF
-	VWHmcHDdT2mlxvLEhLkUEsIayg0Z+BGQc7mUH4uBrF4dsRcArXUys3waztbUWZQ9/ciM1F
-	VL72U8mZnu23eFUEMiqSkrMtAR/W6ZpnrruMBCM3G6qACADeBL0DqXUDispK6q5Oc3ARim
-	ZNL7tB/TW8Mm00WcsKUa3XtwhQqiMSqIAAL5intyz6tf57yjQIaY9IDUlzHp4YUNq5kJFx
-	p7AyA6bgBPwKALcdR48Uks7g6qolAjjdBLUjjKP5iNiun1b9vSkKDNPBkzzJ8g==
+	s=arc-20240116; t=1708354409; c=relaxed/simple;
+	bh=zMctZEwS487clYI69wTjBZbHwKLOIJfqLcoi9P7jP1k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lZ28vgWCJwkHq/Wd+iPkBJ2rnqY7PDUqWBTJou2sb+Q/kiT3s1ZQNEGB94mefsAGv/VEvSocO6/Zb0g8aNV0sMbbAdz5S52bQcLphromF8bETu+sYuiTOhk+rRCDUCxapVvAp7LVtMulRU4TxTGIZ+ZyQQ6z80x2zAilWX3DVFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DqDohTbf; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dcc80d6004bso4441287276.0
+        for <linux-i2c@vger.kernel.org>; Mon, 19 Feb 2024 06:53:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708354406; x=1708959206; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zMctZEwS487clYI69wTjBZbHwKLOIJfqLcoi9P7jP1k=;
+        b=DqDohTbfO9dq3v2fymtmMv0A7OPJ2Mnc1HXqKmScqdsCV1QikH7VM3HAmsuFcdtZA2
+         bTJvPadbXostf5R1og7+VmVurwlfdPFR0ynt51b9nSrdqRPUGAxOlVMAPbQgOMu3DeLG
+         NtoSDCu8jjCZkkpf4A4b42qMzP4gIoPAzBKge5G4laxVAo3jO+Y341Yc+OAcr2e1/iUa
+         jTAOXC9wNzXdK+ZhYa3ihcwv9aFJwBBJ1aw33sKvOe6k9qyNWliCFfaN158fWqxku7b3
+         8RbmXke7NnQsEymwBK+WxeBgo+4qIU4ltDvAsVORbL5u2FJ953mkF05FrckueNRuxoHO
+         r75g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708354406; x=1708959206;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zMctZEwS487clYI69wTjBZbHwKLOIJfqLcoi9P7jP1k=;
+        b=WDPb0iVAH0d20A0yDhMHmC4iwk8eGpkNM8yYqlWhSuPLAjCJTYaMG2Z70uZOMHNqxq
+         TYp8xRK4gzd1hegR732kMRWwt8JqnjPIRks0vCwUdJIy/7AGJRsoWADGAT0Tszj4HZpx
+         Y5kOOSXiSjZNYFhdBuQRXUxBs0geVPVrNWUxBFhhkU0o1WESQpXeyvoPVgk53ycMnIvI
+         DQWG5pPykNaiDOLd7B76wZB5PjTAiPFYir+P3wIosIYIqxv9iuCSO7CA5HcrK7Jq7mbI
+         0dgDcgloyaD+0z7LO9FcvyOui4ANpYOysNp0K//B18TTgzPA6RcaG23olJyDLUaZQWb8
+         ajfg==
+X-Forwarded-Encrypted: i=1; AJvYcCX2/n4JWYM3DI/QOfqBB3qzqjinXcQttv9THf8Dp8e1M54cfyQZtG6x2qaN/1QQDp6mlXcTwQct7dybeukVaLFS0JCqopC2fe1w
+X-Gm-Message-State: AOJu0Yw1lgkeCOTNEcLtldRVG3vBYZXTercQP/ryZReQaWqrMvGxbKw1
+	bdTG/nIbxpLuGfrpkF50wqC/JvNxYwx0O0RuMvbJLWh8FJ4P+ztj/fXVaUGCwNh+jIAB1X2fbSW
+	VmcxBUaki97iXNVyXZDYKrVDZUtszWhqdtM/fQA==
+X-Google-Smtp-Source: AGHT+IFjLqSGFbIDvH5cX7ed0opXwPcuJwCD0Xc+ptPIjerX33CSAOO/7gjxJZTJd7jLjzTB0GTLbynGAuFaWNVORRQ=
+X-Received: by 2002:a05:6902:2405:b0:dc7:47b7:9053 with SMTP id
+ dr5-20020a056902240500b00dc747b79053mr12979596ybb.15.1708354406642; Mon, 19
+ Feb 2024 06:53:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Feb 2024 15:52:37 +0100
-Message-Id: <CZ952TBZGEVD.JYSAQGNL1ZAQ@bootlin.com>
-Cc: "Andi Shyti" <andi.shyti@kernel.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Linus Walleij" <linus.walleij@linaro.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH 10/13] i2c: nomadik: support Mobileye EyeQ5 I2C
- controller
-X-Mailer: aerc 0.15.2
+MIME-Version: 1.0
 References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-10-19a336e91dca@bootlin.com>
- <CACRpkdY4PtnWkAEa=8sHdx7zYXLVAsrqKEVJY9m7VqeG5h6ChQ@mail.gmail.com>
-In-Reply-To: <CACRpkdY4PtnWkAEa=8sHdx7zYXLVAsrqKEVJY9m7VqeG5h6ChQ@mail.gmail.com>
-X-GND-Sasl: theo.lebrun@bootlin.com
+ <20240215-mbly-i2c-v1-8-19a336e91dca@bootlin.com> <CACRpkdbuTX50syD0CMFcZXBmAHw4nwpcSc-C1OOUQEA9WHqCwA@mail.gmail.com>
+ <CZ94S0SE0WFN.1RS0SY3KNMWQQ@bootlin.com>
+In-Reply-To: <CZ94S0SE0WFN.1RS0SY3KNMWQQ@bootlin.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 19 Feb 2024 15:53:15 +0100
+Message-ID: <CACRpkdaVCOB_C45KTEtuoZRwb66x1saGHN3A_ZpY7T=a8YtV+Q@mail.gmail.com>
+Subject: Re: [PATCH 08/13] i2c: nomadik: replace jiffies by ktime for FIFO
+ flushing timeout
+To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-arm-kernel@lists.infradead.org, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	Gregory Clement <gregory.clement@bootlin.com>, 
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Mon, Feb 19, 2024 at 3:38=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
+in.com> wrote:
 
-On Mon Feb 19, 2024 at 3:35 PM CET, Linus Walleij wrote:
-> On Thu, Feb 15, 2024 at 5:52=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@boo=
-tlin.com> wrote:
+> Somewhat related to this patch: while writing it, I noticed the total
+> timeout of flush_i2c_fifo() is 10 times the timeout. Without this
+> series, this means 10*200ms of busywaiting!
 >
-> > Add compatible for the integration of the same DB8500 IP block into the
-> > Mobileye EyeQ5 platform. Two quirks are present:
-> >
-> >  - The memory bus only supports 32-bit accesses. One writeb() is done t=
-o
-> >    fill the Tx FIFO which we replace with a writel().
-> >
-> >  - A register must be configured for the I2C speed mode; it is located
-> >    in a shared register region called OLB. We access that memory region
-> >    using a syscon & regmap that gets passed as a phandle (mobileye,olb)=
-.
-> >
-> >    A two-bit enum per controller is written into the register; that
-> >    requires us to know the global index of the I2C
-> >    controller (mobileye,id).
-> >
-> > We add #include <linux/mfd/syscon.h> and <linux/regmap.h> and sort
-> > headers.
-> >
-> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> If you have an opinion on a more sensible option for this I could add a
+> patch to my V2. I don't know enough to pick a sensible value.
 >
-> (...)
->
-> > -               writeb(*priv->cli.buffer, priv->virtbase + I2C_TFR);
-> > +               if (priv->has_32b_bus)
-> > +                       writel(*priv->cli.buffer, priv->virtbase + I2C_=
-TFR);
-> > +               else
-> > +                       writeb(*priv->cli.buffer, priv->virtbase + I2C_=
-TFR);
->
-> Are the other byte accessors working flawlessly? I get the shivers.
-> If it's needed in one place I bet the others prefer 32bit access too.
+> I'm unsure if it makes sense that the timeout of flush_i2c_fifo() is a
+> multiple of the transfer timeout. Does it make sense that those two
+> timeouts are correlated?
 
-I see where your shivers come from; I'll investigate as I don't remember
-my conclusion from the time when I worked on this driver (a few months
-ago).
+I have a *vague* memory of the timeouts for flushing needing to be longer
+but I might be mistaken. This is probably a Srinidhi or even Sachin questio=
+n...
+Sadly I don't have their current mail addresses.
 
-> Further the MIPS is big-endian is it not? It feels that this just happens
-> to work because of byte order access? writel() is little-endian by
-> definition.
-
-Actually, no. Our platform is little-endian.
-
-The full story, summarised: the endianness of our cores in kernel and
-hypervisor mode is defined by a pin read at reset. User mode can toggle
-the endianness at runtime I believe, but that is not of our concern.
-Our endianness in kernel mode is little-endian because the pin in
-question is hardwired to the value meaning little-endian.
-
-> What happens if you replace all writeb():s with something like
->
-> static void nmk_write_reg(struct nmk_i2c_dev *priv, u32 reg, u8 val)
-> {
->     if (IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
->         writeb(val, priv->virtbase + reg + 3);
->         // if this doesn't work then use writeb((u32)val,
-> priv->virtbase + reg) I guess
->    else
->         writeb(val, priv->virtbase + reg);
-> }
->
-> and conversely for readb()?
-
-As mentionned above, big endian isn't the worry for us. I'll be checking
-the readb() calls found in i2c_irq_handler() though.
-
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Yours,
+Linus Walleij
 
