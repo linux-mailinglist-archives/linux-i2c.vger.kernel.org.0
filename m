@@ -1,178 +1,179 @@
-Return-Path: <linux-i2c+bounces-1876-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1877-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D24285A8F0
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Feb 2024 17:28:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8932585B534
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Feb 2024 09:31:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E7F71F2217C
-	for <lists+linux-i2c@lfdr.de>; Mon, 19 Feb 2024 16:28:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 425ED286268
+	for <lists+linux-i2c@lfdr.de>; Tue, 20 Feb 2024 08:31:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF0ED3D384;
-	Mon, 19 Feb 2024 16:28:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A73915CDE6;
+	Tue, 20 Feb 2024 08:31:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="c4YDXXkS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="X4FXMmre"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27E43CF53;
-	Mon, 19 Feb 2024 16:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D475CDEE
+	for <linux-i2c@vger.kernel.org>; Tue, 20 Feb 2024 08:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708360082; cv=none; b=lf1L+E1xTVE6NPpbXCK81K6wyO+zN5HRos7DIMZmx7DaA7m80ZySbXl0tKt8w+Llp6K7ZzDFxKVIgOiLiNnix1mivsymGzrwK/f7fKrG/6mhyZlGlBcVVkgbOOpMLnlE2CK8VY2wreuoQTcEJX4vdV+4rCunEoxQu7mSOBho0AA=
+	t=1708417871; cv=none; b=JdbRTnm0RKLDU9DEv7BTmBHKfQNrSTP72euqmq4AwD4rOM3EK2/KA9nIHwa8gKs6ihIcCG3zIp2utO2EPTqzPP++fmfdcbs4bzB8UefyM6+DFupQHIq9z8g6r1RkIZ/sUowfU43nuk+wf6S+d/X6tD5RGVW2f5Ctrjday8bwAU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708360082; c=relaxed/simple;
-	bh=9JU8MTOHh8Epoa0sQCXObDtkwAXHJu26UejiP9YuhEk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=Vx8bu1uXy6i2xn1OLQCFsMZK8hroZrotarwL1cwkB/e6ebVAyKIvCsqSz36GNFMR1MoD/Zy4pYKo7Oz1ZQk1ib/V6yAVdftxfBem5Fzb55c7gKs8+KTaIsQGqliinK59dfB0pcr7bNzPkm6/NxIr4OhSDrncRFJ1BvSiZhXwbEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=c4YDXXkS; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A9C7340002;
-	Mon, 19 Feb 2024 16:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708360078;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0QSZ4uv/p4jrEtAF8IYICmdIzO8A6oWIZZjz46OQJxA=;
-	b=c4YDXXkSeglvXQRkC8C9eSW8vjieW62azbJ98JOq6+hpqUqn8y6CzjzJJpEJ6OpIjEZPgC
-	Uhkm9TNo59+SKB0GzB39RQnpCL50WsxTpjv12GFQGrjvd1g7gRoD8RCngl/W46fep77eyy
-	P7xvtdjEYUpjRYZcsyE4hP9ipXeTfPOuIUf9vA42KKRjUrP/0Gmdxl+etilbgCR2PWp5Sk
-	SHvQNactB6Nseu0E0hCx/HdxGE+9RMC7HDGSDb4iySDjWPkU9T/QE2LTvamfnZ/dNF/Bwp
-	bxNmNIfO/u1x2ojLgVuNocNUgVgfIFdw63KzTpNVNB9Uv8bXjfXPEVxYQi/q6A==
+	s=arc-20240116; t=1708417871; c=relaxed/simple;
+	bh=z+ya6S79kXt1F9acGghW+fwOJyEHYJ6/iTaudsflj6Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=Lj6nXYNDFhzfzSe8XLTnBXUjXnCWmD3Gc7zpPETYrhDqUZVDtCJwdnLyqvgHf7kI+OhT9vfO2402VwVuNGT30e0czucRSNVevjvl3AsQVZ44ULXecdGPZKym+E9yQF8GFrbBXOp921E5r7FwsHuDpVRRYjND/AKH1HBZcs6aTsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=X4FXMmre; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a28a6cef709so568821666b.1
+        for <linux-i2c@vger.kernel.org>; Tue, 20 Feb 2024 00:31:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708417868; x=1709022668; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ab/JTj1QFpZ37QZKffvrycyGpJUjaXceXuFCIRH5HM=;
+        b=X4FXMmrevDccWxZ+z5eEyJDh7wDCkUl7CUdQQs7BtWySGj85VgrrSkhiMzrJJ9ssO/
+         wbwaB43/WQeKgaoIEUf21p2r0YPWtGZyBps8PTgiZzsXVBnTtS1asBUIFq2DgBuXmHaG
+         EbAbOcZKPUygNB+c4+XNZ1W+gUjtdD3QRLh8C+I+f1FB+wyHWSiI0tty7jawd8zkfP1B
+         S2nlDey73VGsm9denBjY5Jm65HvEPhREmDHjYBO47MufiVhAbRXTXfJS+EcRTi2ho+6P
+         7MU23z42OEJMbDmwOT/lapVKA7itvXNwwPRpAoxLByauO0Y/IrMmGPrqWRNoDZtXhHUx
+         6g5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708417868; x=1709022668;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ab/JTj1QFpZ37QZKffvrycyGpJUjaXceXuFCIRH5HM=;
+        b=ua4HHCS0p+WdwVcJGCmjTjxXWYCiloEBTwMO98GY7QdfIx87etjCoRVrRD/UIa8dbU
+         HFzfmUIfz1qjFKAt3ODoB2L9XmgCEmIysC4A3wZHPieemcwbiuew8PGBLQ/n1sB2zAfQ
+         phSF1pJ1IEEg05Mu/lYaJcPtfcoWrW2MrcBHDIIgCzIW/V66nvWYuk1NfGnUARcUcin6
+         jDnZHJvnBkZ/ZpezOm/T64xdrEQi9STRNbAZHOH0H/VgTmT24pK6dHJnpcF7FV+0+s++
+         Dyc2tn1tchBgzmVfeox6fO6/eJWBAdaXXpHWDXMV3FdS9aq3yCC0eneIVaNlLRgZsEHz
+         8zHg==
+X-Forwarded-Encrypted: i=1; AJvYcCWqf2Uvn7VioVmC0BcxxrDph8TV05HEa3VicWo3L5zczORCdfKGtkweZuKi1N27zM3xWjdrBFlHuf/Sb8o6Z6u/rTqkKWdsvwNI
+X-Gm-Message-State: AOJu0YxGo8FD81JUe3W6OZ68wZhks7KG4r5WRbG+dzyC3vD7u0hWQrfX
+	eqR4MotCE7eZOl6A5TklAUQHNN53htsCne8oPVlakI8CqEl6TazQyF//dojabdiH2n63GscX2h6
+	e
+X-Google-Smtp-Source: AGHT+IGAaEhaVOGHApuf34csO4rKG4tigNNuFaXUxWuI/pXCnkkn8Z9Z0GKlxKZe6WSivDK0AuUr0A==
+X-Received: by 2002:a17:906:60f:b0:a3e:b8ac:288f with SMTP id s15-20020a170906060f00b00a3eb8ac288fmr2516737ejb.4.1708417867681;
+        Tue, 20 Feb 2024 00:31:07 -0800 (PST)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id tz3-20020a170907c78300b00a3e0b7e7217sm3633463ejc.48.2024.02.20.00.31.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Feb 2024 00:31:07 -0800 (PST)
+Date: Tue, 20 Feb 2024 11:31:03 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, Eddie James <eajames@linux.ibm.com>,
+	linux-fsi@lists.ozlabs.org
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	andi.shyti@kernel.org, eajames@linux.ibm.com, alistair@popple.id.au,
+	joel@jms.id.au, jk@ozlabs.org, sboyd@kernel.org,
+	mturquette@baylibre.com, robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Subject: Re: [PATCH 12/33] fsi: core: Allow cfam device type aliases
+Message-ID: <13393c19-6de5-427d-8b4a-2e50cfe9459f@moroto.mountain>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Feb 2024 17:27:56 +0100
-Message-Id: <CZ973SP3M9PS.3GG13IHI2DNR4@bootlin.com>
-To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Linus Walleij"
- <linus.walleij@linaro.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH 10/13] i2c: nomadik: support Mobileye EyeQ5 I2C
- controller
-Cc: "Andi Shyti" <andi.shyti@kernel.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-X-Mailer: aerc 0.15.2
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-10-19a336e91dca@bootlin.com>
- <CACRpkdY4PtnWkAEa=8sHdx7zYXLVAsrqKEVJY9m7VqeG5h6ChQ@mail.gmail.com>
- <CZ952TBZGEVD.JYSAQGNL1ZAQ@bootlin.com>
-In-Reply-To: <CZ952TBZGEVD.JYSAQGNL1ZAQ@bootlin.com>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240215220759.976998-13-eajames@linux.ibm.com>
 
-Hello,
+Hi Eddie,
 
-On Mon Feb 19, 2024 at 3:52 PM CET, Th=C3=A9o Lebrun wrote:
-> On Mon Feb 19, 2024 at 3:35 PM CET, Linus Walleij wrote:
-> > On Thu, Feb 15, 2024 at 5:52=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@b=
-ootlin.com> wrote:
-> >
-> > > Add compatible for the integration of the same DB8500 IP block into t=
-he
-> > > Mobileye EyeQ5 platform. Two quirks are present:
-> > >
-> > >  - The memory bus only supports 32-bit accesses. One writeb() is done=
- to
-> > >    fill the Tx FIFO which we replace with a writel().
-> > >
-> > >  - A register must be configured for the I2C speed mode; it is locate=
-d
-> > >    in a shared register region called OLB. We access that memory regi=
-on
-> > >    using a syscon & regmap that gets passed as a phandle (mobileye,ol=
-b).
-> > >
-> > >    A two-bit enum per controller is written into the register; that
-> > >    requires us to know the global index of the I2C
-> > >    controller (mobileye,id).
-> > >
-> > > We add #include <linux/mfd/syscon.h> and <linux/regmap.h> and sort
-> > > headers.
-> > >
-> > > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> >
-> > (...)
-> >
-> > > -               writeb(*priv->cli.buffer, priv->virtbase + I2C_TFR);
-> > > +               if (priv->has_32b_bus)
-> > > +                       writel(*priv->cli.buffer, priv->virtbase + I2=
-C_TFR);
-> > > +               else
-> > > +                       writeb(*priv->cli.buffer, priv->virtbase + I2=
-C_TFR);
-> >
-> > Are the other byte accessors working flawlessly? I get the shivers.
-> > If it's needed in one place I bet the others prefer 32bit access too.
->
-> I see where your shivers come from; I'll investigate as I don't remember
-> my conclusion from the time when I worked on this driver (a few months
-> ago).
->
-> > Further the MIPS is big-endian is it not? It feels that this just happe=
-ns
-> > to work because of byte order access? writel() is little-endian by
-> > definition.
->
-> Actually, no. Our platform is little-endian.
->
-> The full story, summarised: the endianness of our cores in kernel and
-> hypervisor mode is defined by a pin read at reset. User mode can toggle
-> the endianness at runtime I believe, but that is not of our concern.
-> Our endianness in kernel mode is little-endian because the pin in
-> question is hardwired to the value meaning little-endian.
->
-> > What happens if you replace all writeb():s with something like
-> >
-> > static void nmk_write_reg(struct nmk_i2c_dev *priv, u32 reg, u8 val)
-> > {
-> >     if (IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
-> >         writeb(val, priv->virtbase + reg + 3);
-> >         // if this doesn't work then use writeb((u32)val,
-> > priv->virtbase + reg) I guess
-> >    else
-> >         writeb(val, priv->virtbase + reg);
-> > }
-> >
-> > and conversely for readb()?
->
-> As mentionned above, big endian isn't the worry for us. I'll be checking
-> the readb() calls found in i2c_irq_handler() though.
+kernel test robot noticed the following build warnings:
 
-Follow up on this. It was working by luck.
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- - writeb() are generating Store Byte (sb) instructions which are
-   unsupported on the memory bus.
+url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/dt-bindings-clock-ast2600-Add-FSI-clock/20240216-061934
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20240215220759.976998-13-eajames%40linux.ibm.com
+patch subject: [PATCH 12/33] fsi: core: Allow cfam device type aliases
+config: arm64-randconfig-r081-20240216 (https://download.01.org/0day-ci/archive/20240220/202402201532.dvENQrDs-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 36adfec155de366d722f2bac8ff9162289dcf06c)
 
- - readb() are generating Load Doubleword (ld) instructions and not the
-   expected Load Byte (lb). It explains why readb() are working.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202402201532.dvENQrDs-lkp@intel.com/
 
-To be safe I'll make sure to use readl() and writel() everywhere for our
-compatible. There is one writeb() and three readb(). Only the writeb()
-was covered by this V1.
+smatch warnings:
+drivers/fsi/fsi-core.c:919 __fsi_get_new_minor() error: testing array offset 'type' after use.
 
-Thanks,
+vim +/type +919 drivers/fsi/fsi-core.c
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+3f4ac5b0b27f16 Eddie James            2024-02-15  894  static int __fsi_get_new_minor(struct fsi_slave *slave, struct device_node *np,
+3f4ac5b0b27f16 Eddie James            2024-02-15  895  			       enum fsi_dev_type type, dev_t *out_dev, int *out_index)
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  896  {
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  897  	int cid = slave->chip_id;
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  898  	int id;
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  899  
+3f4ac5b0b27f16 Eddie James            2024-02-15  900  	if (np) {
+3f4ac5b0b27f16 Eddie James            2024-02-15  901  		int aid = of_alias_get_id(np, fsi_dev_type_names[type]);
+                                                                                                                 ^^^^
+if type >= 4 we are in trouble
+
+3f4ac5b0b27f16 Eddie James            2024-02-15  902  
+3f4ac5b0b27f16 Eddie James            2024-02-15  903  		if (aid >= 0) {
+3f4ac5b0b27f16 Eddie James            2024-02-15  904  			/* Use the same scheme as the legacy numbers. */
+3f4ac5b0b27f16 Eddie James            2024-02-15  905  			id = (aid << 2) | type;
+3f4ac5b0b27f16 Eddie James            2024-02-15  906  			id = ida_alloc_range(&fsi_minor_ida, id, id, GFP_KERNEL);
+3f4ac5b0b27f16 Eddie James            2024-02-15  907  			if (id >= 0) {
+3f4ac5b0b27f16 Eddie James            2024-02-15  908  				*out_index = aid;
+3f4ac5b0b27f16 Eddie James            2024-02-15  909  				*out_dev = fsi_base_dev + id;
+3f4ac5b0b27f16 Eddie James            2024-02-15  910  				return 0;
+3f4ac5b0b27f16 Eddie James            2024-02-15  911  			}
+3f4ac5b0b27f16 Eddie James            2024-02-15  912  
+3f4ac5b0b27f16 Eddie James            2024-02-15  913  			if (id != -ENOSPC)
+3f4ac5b0b27f16 Eddie James            2024-02-15  914  				return id;
+3f4ac5b0b27f16 Eddie James            2024-02-15  915  		}
+3f4ac5b0b27f16 Eddie James            2024-02-15  916  	}
+3f4ac5b0b27f16 Eddie James            2024-02-15  917  
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  918  	/* Check if we qualify for legacy numbering */
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20 @919  	if (cid >= 0 && cid < 16 && type < 4) {
+                                                                                    ^^^^^^^^
+checked too late
+
+641511bfcc5e01 Eddie James            2023-06-12  920  		/*
+641511bfcc5e01 Eddie James            2023-06-12  921  		 * Try reserving the legacy number, which has 0 - 0x3f reserved
+641511bfcc5e01 Eddie James            2023-06-12  922  		 * in the ida range. cid goes up to 0xf and type contains two
+641511bfcc5e01 Eddie James            2023-06-12  923  		 * bits, so construct the id with the below two bit shift.
+641511bfcc5e01 Eddie James            2023-06-12  924  		 */
+641511bfcc5e01 Eddie James            2023-06-12  925  		id = (cid << 2) | type;
+85f4e899de32ba Eddie James            2023-06-12  926  		id = ida_alloc_range(&fsi_minor_ida, id, id, GFP_KERNEL);
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  927  		if (id >= 0) {
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  928  			*out_index = fsi_adjust_index(cid);
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  929  			*out_dev = fsi_base_dev + id;
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  930  			return 0;
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  931  		}
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  932  		/* Other failure */
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  933  		if (id != -ENOSPC)
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  934  			return id;
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  935  		/* Fallback to non-legacy allocation */
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  936  	}
+85f4e899de32ba Eddie James            2023-06-12  937  	id = ida_alloc_range(&fsi_minor_ida, FSI_CHAR_LEGACY_TOP,
+85f4e899de32ba Eddie James            2023-06-12  938  			     FSI_CHAR_MAX_DEVICES - 1, GFP_KERNEL);
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  939  	if (id < 0)
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  940  		return id;
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  941  	*out_index = fsi_adjust_index(id);
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  942  	*out_dev = fsi_base_dev + id;
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  943  	return 0;
+0ab5fe5374743d Benjamin Herrenschmidt 2018-06-20  944  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
 
