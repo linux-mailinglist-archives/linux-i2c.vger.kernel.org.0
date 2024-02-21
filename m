@@ -1,151 +1,116 @@
-Return-Path: <linux-i2c+bounces-1899-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1900-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BB3885E4D4
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 18:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F16385E74B
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 20:30:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE48BB22A2D
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 17:45:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F707B22488
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 19:30:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DDDF85C7A;
-	Wed, 21 Feb 2024 17:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 891908612E;
+	Wed, 21 Feb 2024 19:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MACaeRN8"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="BvYDj5kG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED0A85C68;
-	Wed, 21 Feb 2024 17:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC75811E7
+	for <linux-i2c@vger.kernel.org>; Wed, 21 Feb 2024 19:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708537439; cv=none; b=QL9xrvrDjVseL1bmB/hLCHzi+g10CAp2UEEFODriMMmH6CDvY8OVhNUCMoLBguk8q+TdbZ2UOQyj24yu15yW+4xiF3lO4SWfBh/TMoVhkRUOxunJeWL1GbePYXEqJ28LZZUOuRDLQ3AdrvJpJnw8B00hf6Q8GXx4vde2bEAdA6Y=
+	t=1708543834; cv=none; b=X4Gmdq/0iH39KoHe8FcwVE4M0FHAgT2Weww/HyGrFgTNieXQOEWU5XT3/wDhfXlFMSRGo2smdmNaEBDeKu5oGzZctWAU/eBN6yo6bZUql5H6iOOvNUIjVVRWPd+UG5CvQ2gWcvEAdkxGfGM63epPEHPxCrwIXj9eYXpAIpQaVUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708537439; c=relaxed/simple;
-	bh=EAVilG+5m/AHURqch7gUgltSDg888U/L1wVF8AY+h0U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AY5RF0gsevp/1NndpVnoOnRhLQxQ0cE5tK7juC3qI4fcRS9xfZmZjgnlDqkD7qCAF9Zz/JczXodpPUxN7rsbhPmdew0WT93oEI9NnAia/4Y+bZCkJQRAFEbPFNOrskXwEQNBKKogarDIq6W7rt7UsQnUMz3EbUw33zMuz64J4dQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MACaeRN8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8925BC433C7;
-	Wed, 21 Feb 2024 17:43:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708537439;
-	bh=EAVilG+5m/AHURqch7gUgltSDg888U/L1wVF8AY+h0U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MACaeRN8lMsNMrafHUuR5tTV0m/lcwxMQQyOLOx9xox93gvIkFhnYDFoNAb8KS5ue
-	 9CItIdTwwj1ogpri6Xnrhtg6ur7BJ3ixF5oWuGIr/SZkP8ZdGmvVHBr8croJ4NAKD6
-	 kBcyV3MhYosaq9bWezqBbxvlBJ5LqRsxoe3E9K2RY52El6pCRVRv4BEiDujXNiJnOS
-	 tcRwGDfrYA+4RILVxH+jWN8NuvHOWeGrDZG6ajW3Jm8zFkaO0oWNvYPI0oJvmixQ1M
-	 sSKFRMEnTNj46VItzN9Kp7GAUEsfJBTPvVKp22nJ6m/BGI3XUnl3+j5vHDOWdR8JI+
-	 QAVAQllob8p4A==
-Date: Wed, 21 Feb 2024 18:43:55 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh@kernel.org>,
+	s=arc-20240116; t=1708543834; c=relaxed/simple;
+	bh=eI73Aixk2ZKHUCC+WBNzciPi+YGny+3Nqau0gA+LQpY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZS2vJJTFu1MQdDKEsUisBIPBLfWYzjjA5CPgDsuCDBAJMzLD80qiTFBTtT1QnwkGY86YhfmFC6UsY1H0GZw+xubRgZAegfwg636GjCUIFrMNTZp9XGkcwoLMhC+1CKhBv+bMocvVNNOWKj1CJFSdBofDFIj/aiOoBursWZh2+jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=BvYDj5kG; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=KYNKdWlES08xC8
+	IxQFhBeyr/WjAKjrL7fnuvAKo0ujM=; b=BvYDj5kG40dEMpit8vA9MSanfwXVLL
+	zGh9UGUyFGrSltMzj9QJdbQjLztaE0KpG6N0wN5mGg1BGH5dGVLfdPQHZ1ornxrV
+	1diT9JHYxlBVgdeLEqPgeNMytpXIAREJ2Z8QM7W/CTw6ko6NYX1R1Z/SSpb025Du
+	hjuRxw1hRIGtAIVgk+LadiWFZDfKep0fb87jwzovL61CRKSDfrXStiTGU4NAmKTe
+	9Z5ZQdrc+obfCZtQpCnY0KaQm4SHInVoaSW1WX+QsS8vYpXmmrtYP+KRc0wOTB2N
+	dVeNwASObWBRct3ixqLoS3/bUvuf0eF3zV15WdypKeguHcwBsCuWmmRA==
+Received: (qmail 3720737 invoked from network); 21 Feb 2024 20:30:20 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Feb 2024 20:30:20 +0100
+X-UD-Smtp-Session: l3s3148p1@WCl5W+kRkr8ujnsZ
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-i2c@vger.kernel.org
+Cc: Corey Minyard <minyard@acm.org>,
+	Andrew Manley <andrew.manley@sealingtech.com>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
 	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH 01/13] dt-bindings: i2c: nomadik: add timeout-usecs
- property bindings
-Message-ID: <ZdY2WzKbElloXC4-@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Rob Herring <robh@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-1-19a336e91dca@bootlin.com>
- <20240216022704.GB850600-robh@kernel.org>
- <CZ6E24VPJKJG.35LACFD6ZV5KE@bootlin.com>
- <CACRpkdZZhhzg5SY7U5dv_OfLEVejRFom4V9nCfkQXunAw1ZXSw@mail.gmail.com>
- <CZ94LGRSF9KN.15ZO1VRMIQVR8@bootlin.com>
- <CZAX02IL1N1J.2GQR9D73GLRZB@bootlin.com>
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] i2c: imx: when being a target, mark the last read as processed
+Date: Wed, 21 Feb 2024 20:27:13 +0100
+Message-ID: <20240221193013.14233-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="F60VzApEKksHKb8j"
-Content-Disposition: inline
-In-Reply-To: <CZAX02IL1N1J.2GQR9D73GLRZB@bootlin.com>
+Content-Transfer-Encoding: 8bit
 
+From: Corey Minyard <minyard@acm.org>
 
---F60VzApEKksHKb8j
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+When being a target, NAK from the controller means that all bytes have
+been transferred. So, the last byte needs also to be marked as
+'processed'. Otherwise index registers of backends may not increase.
 
-Hi,
+Signed-off-by: Corey Minyard <minyard@acm.org>
+Tested-by: Andrew Manley <andrew.manley@sealingtech.com>
+Reviewed-by: Andrew Manley <andrew.manley@sealingtech.com>
+Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
+[wsa: fixed comment and commit message to properly describe the case]
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-> > > > i2c-mpc (fsl,timeout) and i2c-gpio (i2c-gpio,timeout-ms). I agree this
-> > > > prop has no reason to be compatible-specific.
+Changes since v2:
+* updated commit message and comment
 
-Anyone up to convert these drivers to the new binding and mark the old
-ones as deprecated?
+In the stalled discussion[1], it seems I couldn't make my suggestions
+clear. So, here are the changes how I meant them. I hope this can be
+agreed on.
 
-> > > As Rob mentioned this isn't in the kernel schemas but in dtschema, so
-> > > you need to patch this:
-> > > https://github.com/robherring/dt-schema
+[1] http://patchwork.ozlabs.org/project/linux-i2c/patch/20211112133956.655179-3-minyard@acm.org/
 
-@Rob: My memory fails a little bit about these two schemas: we have the
-github one for generic bindings, not strictly related to Linux, right?
-But why do we have then i2c.txt in ther kernel tree? Why don't we sync
-regularly with the generic schema?
+ drivers/i2c/busses/i2c-imx.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> Note: I've sent a draft patch to dt-schema. See:
-> https://github.com/devicetree-org/dt-schema/pull/129
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index 88a053987403..60e813137f84 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -803,6 +803,11 @@ static irqreturn_t i2c_imx_slave_handle(struct imx_i2c_struct *i2c_imx,
+ 		ctl &= ~I2CR_MTX;
+ 		imx_i2c_write_reg(ctl, i2c_imx, IMX_I2C_I2CR);
+ 		imx_i2c_read_reg(i2c_imx, IMX_I2C_I2DR);
++
++		/* flag the last byte as processed */
++		i2c_imx_slave_event(i2c_imx,
++				    I2C_SLAVE_READ_PROCESSED, &value);
++
+ 		i2c_imx_slave_finish_op(i2c_imx);
+ 		return IRQ_HANDLED;
+ 	}
+-- 
+2.43.0
 
-I used to argue that you can set this timeout to any value in userspace.
-I have been convinced that it might make sense to set it early so it is
-in use already when booting. So, for this pull request:
-
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-All the best,
-
-   Wolfram
-
-
---F60VzApEKksHKb8j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXWNlsACgkQFA3kzBSg
-KbbCIQ//T+UfZwN5sfx3E29io7LplBxBq1Vc1X1yI094wCUlwjSfpIHwZb/eFi3l
-JTOHIoWz6fWb8zhtUfsF5VXj+Mz9R2ZaxSZpwp3ZJsn+qdhR+DpulzqhrLS1Vce/
-dD4DPsVn4fCeXijUtNFZz8fhfqYTW0/8dN1wAAkFTsREfvB99gYuPGU+Ib9f8ELQ
-jP7czMAee4luC2CN2VNmOJZSu9tdEAaxy+ePOZq1PtA2ox6QbMxM98WIURyJ3LCQ
-EpHONtSUXhY4wcVH4C0I/gpZuw5AWk3X6QRvIXyR/kA7TerokwK0F+6X0Ug6b0Hy
-SpKn7vXsPkD1Up+QlJkFQu7psTqYiHHRNPMf5kr+s9CytknreWfburno1a+LeX1j
-dyXXeoTNMRdVjmHgibV/0tAPtgOs0PxzicfsVtDrOTzJ9Qcg5aECGpszIMGD2FDK
-w230+coTWbqiGMakQUkfOM7jayHUwC7WEl+xLXpbyjqAKRYwX3VrMxIW8RHRItQd
-EdLd/FdBp82t9EGlUCabjlyMJNS1N+rQ8PLvKYPtRzl4/7IpQejYd8yZnaX99G6/
-ndJQeRCIt9Wu//PCNkAlQXsyRBkApDk8Ai7tXuJQZC+0Y9Yvuk5/rKRlNwtcoeMX
-8AgdyMQcQH6a/XmBm28kmb1s+mkAbwxDrke88y4hvascDGcJUTs=
-=DKt0
------END PGP SIGNATURE-----
-
---F60VzApEKksHKb8j--
 
