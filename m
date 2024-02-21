@@ -1,57 +1,57 @@
-Return-Path: <linux-i2c+bounces-1886-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1887-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1252585D7B4
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 13:10:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41A4785D7CD
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 13:20:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8F781F23762
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 12:10:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2AD7B21845
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 12:20:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2322B4EB2E;
-	Wed, 21 Feb 2024 12:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B7AD4F889;
+	Wed, 21 Feb 2024 12:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWKZT6g9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o5py4vS7"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B054E1DE
-	for <linux-i2c@vger.kernel.org>; Wed, 21 Feb 2024 12:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B99F4F213
+	for <linux-i2c@vger.kernel.org>; Wed, 21 Feb 2024 12:20:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708517424; cv=none; b=s4LcsPAmkxBX0ssro7LXSPBBJy3MrerJZf28h37tqrOA1NY5UnxcQe+XDhUzeo21icxbzXczgKd5dVm8tvYbXFHD9LgZIjVc0LgLv8a8fdcXjJ7yimM5CRVPo1OBny3AfAM/aJrT7BsZU9ol9qmNsaJ/I4I8KdYM8VM6xf3P7EY=
+	t=1708518002; cv=none; b=tjA2hGzxip4L27mxPTMLBFCjY4Q2xzpTk4SWs0Szb/SCtKRCngGLbAzrRNZRTA6dcWQW+hiX+qAWOcbJkE70J4xYxTI3cBd7iTeBKQpBnneD4ibIyQUA329aWSGF9DxAAGddSLetgub+sIXsmXauAN7xp2jQx4csrwGv63yRft8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708517424; c=relaxed/simple;
-	bh=YDTj7Bk93my02RJrAXYF1eILQrLh3br61up1fUOKHrg=;
+	s=arc-20240116; t=1708518002; c=relaxed/simple;
+	bh=K3KXVPN2qZORpNEcBo0+qHM4sgzLkGQPXs1jagOi4lA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rhocy+5b6Wa9bUykrROW66Y75oWdv8ajm9xqyQgpwosf12vu38NahVg4PTCxMu8Iq2+o0uEUgCLR7G5hCK8CrIglTZgIhLHrKqIpIFX8jqUoOY302orXIzFw8Xv6SZ3qMCv09ZILaGoHgvLUt6JHvYc28HD4TYLl3YOUIgc2SoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWKZT6g9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE367C433F1;
-	Wed, 21 Feb 2024 12:10:23 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=QTvWZjHRfRkg69j60kKjtiJHngixqpGRwknrslaPpdUr+w+/4HNCG5nLhQZXOb4G66cITL9D4LrW+BBQAW9rm6Q/BA8b+5Ly2zpQWQrr9cBpZlVOeYsINYn+3AwfTs5QS6sw2n1KMHJVeDXqkPnbccqz8o31HPWDAxBWtCr3YjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o5py4vS7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F286C433F1;
+	Wed, 21 Feb 2024 12:20:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708517424;
-	bh=YDTj7Bk93my02RJrAXYF1eILQrLh3br61up1fUOKHrg=;
+	s=k20201202; t=1708518001;
+	bh=K3KXVPN2qZORpNEcBo0+qHM4sgzLkGQPXs1jagOi4lA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YWKZT6g9m5F1gndj+QPYh24qajtkKva8UAwqYE93/VZKgnLleDcS2CbUnzzL4CJ/y
-	 7y8c0Ggwr5LKHWexcQB4c/AuiwWQCPaY317urXXT0i5VacEqGXZBLBMcpc1HpWEzhM
-	 gSuKmGHpQNSSUjClsWKbemSwIFkkUGXj4brm5cFe+sJ8kxBXcsfQELEEtO3jQZuRZ8
-	 B8y3pwXFkMyiM4xnrGM3Zh6THQbcrDhakohbQzhRc0ypF8yUU17xoOouMAGrP0TPe8
-	 2ecOv3j6ec8D4ZMdgJLktiVBnWcfM0TbJuZ7HpVa13ZNL9LIUt9WHaxS/oYvOWAzaM
-	 QM0V8Pit6L1Jw==
-Date: Wed, 21 Feb 2024 13:10:21 +0100
+	b=o5py4vS7ILN0IyPV6PUKbG2Rtu9OKx7FIGB2e3+MpTywTqt0AvAjM0tr2xI8WAvGA
+	 7r33xk8Mh2+zMyP43rkAvvhQv25p2iuUFso05+2V5xW19/YIBIf+Azquzh1EW3r/rt
+	 7RCiIvfT4b8lr/yg+gQPBp86YtBK2NWSFCGhHdUwpW/GXhWOhxdBMsfDnMTX+3G8Mm
+	 np583RuJnbFy9JzA+7XWtH/os9GGwRS909li+iWqXotd+yoKK3FautqE8RuIBZ06BY
+	 XgNkNVs+j0nkhgdQ3H9sCEA6A9mAQBvaMN0hYY+QHyYS7/7pYTiaN2XRKrKMNPqSjx
+	 JZK5yMvuwV7LA==
+Date: Wed, 21 Feb 2024 13:19:58 +0100
 From: Wolfram Sang <wsa@kernel.org>
 To: Hans Hu <hanshu-oc@zhaoxin.com>
 Cc: andi.shyti@kernel.org, linux-i2c@vger.kernel.org, cobechen@zhaoxin.com
-Subject: Re: [PATCH v7 1/6] i2c: wmt: create wmt_i2c_init for general init
-Message-ID: <ZdXoLQEqkAXhH1Ya@ninjato>
+Subject: Re: [PATCH v7 2/6] i2c: wmt: split out common files
+Message-ID: <ZdXqbtPXUX_uY_V9@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
 	Hans Hu <hanshu-oc@zhaoxin.com>, andi.shyti@kernel.org,
 	linux-i2c@vger.kernel.org, cobechen@zhaoxin.com
 References: <cover.1704440251.git.hanshu-oc@zhaoxin.com>
- <eb2249f78697bd295d720c14501554a37ab65132.1704440251.git.hanshu-oc@zhaoxin.com>
+ <6ad69f15119b1ab8afc781d31bd4c4557df85ba6.1704440251.git.hanshu-oc@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -59,51 +59,57 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="MLp1H7bOkzsXGczu"
+	protocol="application/pgp-signature"; boundary="z5nK2sqbb5G99niy"
 Content-Disposition: inline
-In-Reply-To: <eb2249f78697bd295d720c14501554a37ab65132.1704440251.git.hanshu-oc@zhaoxin.com>
+In-Reply-To: <6ad69f15119b1ab8afc781d31bd4c4557df85ba6.1704440251.git.hanshu-oc@zhaoxin.com>
 
 
---MLp1H7bOkzsXGczu
+--z5nK2sqbb5G99niy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 05, 2024 at 03:51:44PM +0800, Hans Hu wrote:
-> v5->v7:
-> 	nothing changed.
-> v4->v5:
-> 	add previous prototype 'static' for wmt_i2c_init().
-> 	Link: https://lore.kernel.org/all/ZYx0VPVmyQhtG+B9@shikoro/1-a.txt
+On Fri, Jan 05, 2024 at 03:51:45PM +0800, Hans Hu wrote:
+> v6->v7:
+> 	1. adjust the patch sequence: move the split file patch to the front
+> 	2. rename i2c-wmt-plt.c to i2c-viai2c-wmt.c
+> 	3. remove '#define wmt_i2c viai2c', use viai2c directly
+> 	Link: https://lore.kernel.org/all/1871ceb5c3d6804c6a7f7a38327919861985c0=
+66.1703830854.git.hanshu-oc@zhaoxin.com/
 >=20
-> Some common initialization actions are put in the function
-> wmt_i2c_init(), which is convenient to share with zhaoxin.
+> Since the I2C IP of both wmt and zhaoxin originates from VIA,
+> it is better to separate the common code first.
+> The common driver is named as i2c-viai2c-common.c.
+> Old i2c-wmt.c renamed to i2c-viai2c-wmt.c.
 >=20
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> The MAINTAINERS file will be updated accordingly in upcoming commits.
+>=20
 > Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
+
+Looks good from a high level point of view plus some detail checks:
 
 Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---MLp1H7bOkzsXGczu
+--z5nK2sqbb5G99niy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXV6CkACgkQFA3kzBSg
-KbYrJhAAsB2jYiFMwZCMsixrclrThj7DfF1dhFyBMSeCccZpQXlrKkqEs0bXW2zW
-KPpD8h54NIififqQgnK+tbu1hpYKuKkvyKt5hjuO+sfslvbWgWpq4rVUaJB0YVHm
-tVksX/P8s/jQQ4OODF6rcUImjsU3RD32AMf/s76p5JAzz0+pV60mkicMY+09XGkN
-9JTLnLm7k2oaFbgfevp9a6s3Gka0wZxgJ6vntrHVqLPBTjx9jQE8Od06hRZ36PCQ
-l7RdpaAwj554Cv1IpKugq9zKIoAmQnhKrzjiSUG9N/o5aKTuOsztZC3O9Seuj53H
-wRNwjLpF9BQIvZdtBoeyUjnH/bwiaRq/4Ovy2+uE7GQNPNICEvEQLy1FJ6g+vK1E
-ViwGtLUg4GQSqrTlCaq94cl9erFAZhN+8YKRFxK2Qys/SCU2X1tBJUpr9JWkc9T4
-P+U+d9yq0Mr+DyK7/Xv8u8v4/Stic1UeGapEZLpITho2+/5z/JgltdmxUvOg+bo0
-8EsTVa5mMZPXtrkX3udrIhlxw5p8tGjk3jmCoPtG2ZoR6re2hScr+JdAKb3nxl2i
-Bxoxxr4ipRsqOCIuRe2rGHL3HS9162EwOFSv/zz3mNUbQ67Ou6OFBhU7L6pwTrR/
-mhkQkEd9rkcYrzpp5EjTQHoFDbf0tUBoibSYyVTCYoftognZEC0=
-=OA3S
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXV6m4ACgkQFA3kzBSg
+KbZk/Q//ap++sFl46Xa6BwjXym3+PE/gTpdCtxJ3VRpLjz+WXawqVO2QxYFxmesf
+mwfQU0qhpwlyzhdplChy8fkL5iEIHlwc0VTsVPf/kpEz2AP0xnlCUDdEBkMQ0jah
+ildpllPGVSPzisJlC7Q58u8mma8b+xL56kQjbHoUcwzmf+SrB/pT0qnP/rkj0Xz2
+kwkuLMRMX3T05UBiNofzcgEbINmRGjHco5H0Hl8vOcMmfn8r0uo2Dlcdza0yMoCw
+byNOTZHWOpgJ8x2BasaERzMD7G5u/DNDW+mbQM4aQmW/LpePdT+3+esJ5C+QAMVk
+ldi3HWhUX9k0ZfMguh9dzoM1dqekFLvG1X+27LSvHOX0rWJ1FHmOCuu3CCWLEBdh
+TmOJctXdeDUMTcnB/hbWWEiK9766KRpgwCK/YKYUU/aKZUMYgVfXQYYK16IoSP4P
+uH0kGLZG13k6NX96m8oPM3X/c7S7syYmQhjQZE2M5FR+f4+jlM2rx3EpgWIqnuZu
+hVl1FmYEv388E7ddgoeNfTDakBUGEf6/BmECQ98lM7cFHriKVKtqITR6mfllIfBX
+1q+Tz7O+t+egxg7NqI9nl8zMu6pzdqNTaS8s32yJql22g1BfTjGqHfnD85/dItl/
+TPf3LFwk3ux6QKF8j8gsUdiHzaZM8LDvzcke6qzFJcmvNvK9vEg=
+=Obb2
 -----END PGP SIGNATURE-----
 
---MLp1H7bOkzsXGczu--
+--z5nK2sqbb5G99niy--
 
