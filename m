@@ -1,130 +1,136 @@
-Return-Path: <linux-i2c+bounces-1896-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1897-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2256C85DE9A
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 15:20:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E305585E3DC
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 17:58:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53E211C23BE1
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 14:20:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83EB81F22740
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 16:58:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A4767CF2D;
-	Wed, 21 Feb 2024 14:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC045839EB;
+	Wed, 21 Feb 2024 16:58:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BH3RU58z"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SfJ0k8TL"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A4A69D38;
-	Wed, 21 Feb 2024 14:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE7C82D99;
+	Wed, 21 Feb 2024 16:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708525173; cv=none; b=s7ySvEIystER1Exlmf7nlxhO7zqogkvTYkVF0bXduOEv8q4nYgDjljihpuZanuvIAwqVUCfQlmHxhIRarxBnOYSHJdOKeXtO+kJIpvWBVpuNemFezceCgjN7g+Fa3HZdg4W1OHZf3rxW3ilWasLWFIUbTg0lWvZdxRhIQpnWA9c=
+	t=1708534698; cv=none; b=cMNgn2I/LfhA41dGSfwsYBnY8L8AwTTUyd+8b1Gzo2lsLtgiS7Nve2FWtwdZ45Rxity2ffWd7zF7VO4VoDpFRqUTHU/+IUuXcmn5+Kfu/2PcRdVCZniMAqXY/z16xNTOj0LOyR5gWHURrgodWfgyeyH/ojBr2A1E5bmEoKDRb5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708525173; c=relaxed/simple;
-	bh=7wFKTVlWizL57RttcaVLGrwRB1DayJIhODEBnM4Uul8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qu53vKhUD7q0rP+F1rk6XZ9xzUEhDWZe0P+BPAIjW8RDbUKJHHg8B5vOHfBxrgOZX9V4sxqLct62hRmO3ew40ndCdtnGz9UjD0IcMFapzU7PZmYgLpwQ9PAyZJKZ3jdDIpByagp2ZSPxoGcptHAi8gdMprfh32D0dJrZf2TSBXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BH3RU58z; arc=none smtp.client-ip=217.70.183.195
+	s=arc-20240116; t=1708534698; c=relaxed/simple;
+	bh=wty1BLxtNSbJqrHVxaApJzAOEfZH1zGeAlvur02vYvI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=kThnPf+sQpn4+haKgkZ6CYnyBlgxOB6Ej7q1FS+TmYCGoYxlePcHjVnggyAt1dljoRdNGcL3xRspFJMWYzDNb3wgkminYuOaAhUvta6uzA00QU4I1BoZEOamslW4sSCggoRUATPTzBQnTRw5zPzAZcvYB6udNs0Bv3Le/NGNDCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SfJ0k8TL; arc=none smtp.client-ip=217.70.183.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 334A660005;
-	Wed, 21 Feb 2024 14:19:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 635216000C;
+	Wed, 21 Feb 2024 16:58:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1708525167;
+	t=1708534694;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=djgIwKG8h1E1vBHOq7Yx/ZY0Ehwdq+Fa2OAPhHy5Bg0=;
-	b=BH3RU58z7cr7I5bVawgKgfnYC5GysBok+JTGHq7LVbJ85EirfpHA2o2XLzRR+7UrXVwEfR
-	/wZa6tcSK+DMxgMWmUsnNDaOR0N1r8YgkoRdYceug+1Yk4JmUTFRDvRCA3/cymZ9XpUHr/
-	vd1WaoQ4pQTMeRzCHOJKwuvBlu9/+rOifdvv6q5fqfzwFEr1d5o71iFGgd3kc3AOzFnAO1
-	A1snWfe4kw4sZl4URubjBTzCzQTc4uqweCPYbYIuoPmUagYG9LKMcqiXTtnvElDi8wKgo0
-	I0H6nXBonAHEME2N7LD4uGH31cYGjo3LmMOeUpuFAYUSps2nLsFC7ihsE8gNUA==
-Message-ID: <b0220b02-5058-42ec-ba06-251caa4813dc@bootlin.com>
-Date: Wed, 21 Feb 2024 15:19:14 +0100
+	bh=wty1BLxtNSbJqrHVxaApJzAOEfZH1zGeAlvur02vYvI=;
+	b=SfJ0k8TLbTGFe6vYyZiRNzhgl7QOjFdxgoS6K+byz3NEqavL3nTTuDDhrg3ngPUhK3anxM
+	6KzhhiLlqKkNS1JagCdArjvU2lSR1DuzKGWLYlsvRNlv5G6vMUvkHqxHNW6Js++uVze4LH
+	5Gi6LGEM3pwpq53tW63VvZoIbmx0hf4vH2UMT+91JnWUNM8rKJvbo9GhGuzbtggd9DXR52
+	8Fk5vtUDsHzsigFox75xnFxUjnEZywaEKh5SX2euXoCrw6pNFw12B1317QGh8zgV+NPEqH
+	YZl7UBNflE8i9AaSwJ6FlhnYKvLArPDe5L7bi/DxQD+9VcvWL9afKVHjmuq6fA==
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 02/18] pinctrl: pinctrl-single: remove dead code in
- suspend() and resume() callbacks
-Content-Language: en-US
-To: Andy Shevchenko <andy@kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Tony Lindgren <tony@atomide.com>,
- Haojian Zhuang <haojian.zhuang@linaro.org>, Vignesh R <vigneshr@ti.com>,
- Aaro Koskinen <aaro.koskinen@iki.fi>,
- Janusz Krzysztofik <jmkrzyszt@gmail.com>, Andi Shyti
- <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
- Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
- linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
- theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com
-References: <20240102-j7200-pcie-s2r-v3-0-5c2e4a3fac1f@bootlin.com>
- <20240102-j7200-pcie-s2r-v3-2-5c2e4a3fac1f@bootlin.com>
- <Zc4tedAhqYX3bQcw@smile.fi.intel.com>
- <78add459-a96a-46c6-83ff-e2657d4d3db4@bootlin.com>
- <Zc96dSff5Y-dufrJ@smile.fi.intel.com>
- <a2c3c5b9-79a3-4793-892c-b1ab79b71c7d@bootlin.com>
- <ZdX28EJ9LtDWfVmH@smile.fi.intel.com>
-From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <ZdX28EJ9LtDWfVmH@smile.fi.intel.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: thomas.richard@bootlin.com
+Date: Wed, 21 Feb 2024 17:58:13 +0100
+Message-Id: <CZAX02IL1N1J.2GQR9D73GLRZB@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH 01/13] dt-bindings: i2c: nomadik: add timeout-usecs
+ property bindings
+Cc: "Rob Herring" <robh@kernel.org>, "Andi Shyti" <andi.shyti@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, "Gregory Clement"
+ <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Linus Walleij"
+ <linus.walleij@linaro.org>
+X-Mailer: aerc 0.15.2
+References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
+ <20240215-mbly-i2c-v1-1-19a336e91dca@bootlin.com>
+ <20240216022704.GB850600-robh@kernel.org>
+ <CZ6E24VPJKJG.35LACFD6ZV5KE@bootlin.com>
+ <CACRpkdZZhhzg5SY7U5dv_OfLEVejRFom4V9nCfkQXunAw1ZXSw@mail.gmail.com>
+ <CZ94LGRSF9KN.15ZO1VRMIQVR8@bootlin.com>
+In-Reply-To: <CZ94LGRSF9KN.15ZO1VRMIQVR8@bootlin.com>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On 2/21/24 14:13, Andy Shevchenko wrote:
-> On Wed, Feb 21, 2024 at 12:01:43PM +0100, Thomas Richard wrote:
->> On 2/16/24 16:08, Andy Shevchenko wrote:
->>> On Fri, Feb 16, 2024 at 08:59:47AM +0100, Thomas Richard wrote:
->>>> On 2/15/24 16:27, Andy Shevchenko wrote:
->>>>> On Thu, Feb 15, 2024 at 04:17:47PM +0100, Thomas Richard wrote:
->>>>>> No need to check the pointer returned by platform_get_drvdata(), as
->>>>>> platform_set_drvdata() is called during the probe.
->>>>>
->>>>> This patch should go _after_ the next one, otherwise the commit message doesn't
->>>>> tell full story and the code change bring a potential regression.
->>>>
->>>> Hello Andy,
->>>>
->>>> I'm ok to move this patch after the next one.
->>>> But for my understanding, could you explain me why changing the order is
->>>> important in this case ?
->>>
->>> Old PM calls obviously can be called in different circumstances and these
->>> checks are important.
->>>
->>> Just squash these two patches to avoid additional churn and we are done.
->>
->> You mean invert the order instead of squash.
-> 
-> Either would work, but see how much churn in terms of changing just changed
-> lines it adds.
+Hello,
 
-OK thanks.
+On Mon Feb 19, 2024 at 3:29 PM CET, Th=C3=A9o Lebrun wrote:
+> On Mon Feb 19, 2024 at 3:06 PM CET, Linus Walleij wrote:
+> > On Fri, Feb 16, 2024 at 10:16=E2=80=AFAM Th=C3=A9o Lebrun <theo.lebrun@=
+bootlin.com> wrote:
+> > > i2c-mpc (fsl,timeout) and i2c-gpio (i2c-gpio,timeout-ms). I agree thi=
+s
+> > > prop has no reason to be compatible-specific.
+> > >
+> > > Feedback from dt-bindings and I2C host maintainers would be useful: w=
+hat
+> > > should the property be named? Having the unit makes it self-descripti=
+ve,
+> > > which sounds like a good idea to me. timeout-usecs, timeout-us, anoth=
+er
+> > > option?
+> >
+> > Use i2c-transfer-timeout-ms in my opinion, so it us crystal clear
+> > what that property is for.
+>
+> Using =C2=B5s (microseconds) would be OK? I'm not sure yet about the exac=
+t
+> timeout desired but a one millisecond granularity might not be enough
+> for the Mobileye usecase.
+>
+> Expect incoming patches to use the I2C controller in Fast Mode Plus
+> (1Mbps) and High Speed Mode (3.4Mbps). Gotta go fast!
+>
+> > As Rob mentioned this isn't in the kernel schemas but in dtschema, so
+> > you need to patch this:
+> > https://github.com/robherring/dt-schema
+>
+> Indeed. The other question if we do microseconds is the
+> suffix: -us, -usecs, -microseconds, etc? I picked -usecs for my v1, but
+> a grep tells me I am the only user of this suffix. -us is much more
+> common.
+>
+> BTW i2c-controller.yaml already has a =C2=B5s timeout:
+> i2c-scl-clk-low-timeout-us
 
-I'll squash the two patches. And I'll add a comment which explains that
-I dropped some dead code.
+Note: I've sent a draft patch to dt-schema. See:
+https://github.com/devicetree-org/dt-schema/pull/129
 
-Regards,
+Feedback from I2C maintainers would confirm or infirm that this goes in
+the right direction.
 
--- 
-Thomas Richard, Bootlin
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
-
 
