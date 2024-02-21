@@ -1,93 +1,109 @@
-Return-Path: <linux-i2c+bounces-1885-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1886-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8086B85D762
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 12:49:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1252585D7B4
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 13:10:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B16C91C22D85
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 11:49:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8F781F23762
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 12:10:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8B403F8C2;
-	Wed, 21 Feb 2024 11:48:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2322B4EB2E;
+	Wed, 21 Feb 2024 12:10:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hVN+xFJN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWKZT6g9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C73446420
-	for <linux-i2c@vger.kernel.org>; Wed, 21 Feb 2024 11:48:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B054E1DE
+	for <linux-i2c@vger.kernel.org>; Wed, 21 Feb 2024 12:10:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708516108; cv=none; b=ZrEhzFxVNqNKhklLmsZWjpBXEIHDzt9ATDg/5kNA5jBk+q61hhOugypNFLTNvxQa/ULE30LFdlut8df/FvCGAK4zVrY0vFrzU7zoks2peUOFz4DIQXxo1QKECy78Flxohov3DOBADsYxSqWPUxkMixoa/MOAUtxgzW2WhM/2ico=
+	t=1708517424; cv=none; b=s4LcsPAmkxBX0ssro7LXSPBBJy3MrerJZf28h37tqrOA1NY5UnxcQe+XDhUzeo21icxbzXczgKd5dVm8tvYbXFHD9LgZIjVc0LgLv8a8fdcXjJ7yimM5CRVPo1OBny3AfAM/aJrT7BsZU9ol9qmNsaJ/I4I8KdYM8VM6xf3P7EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708516108; c=relaxed/simple;
-	bh=cB182svhvuZ/FFbWweiD+PX0jtc4FXt22DG27z8JEVk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=Ct3cxFdp14/1/T4M20NtpGQyKOQF7GT55N91UdtBXNyGV+gRlVTha5QAJbSLLzUbcHX9TekSW2/wDqSyzDBpyagjyPKN5XjoncGIaboJKno4IYY+UutqO+o1ITN5fg/emjTqLXiI7tQjoImG7Mma3F4wmuDd9WroEiD4/Cj9lhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hVN+xFJN; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708516107; x=1740052107;
-  h=message-id:date:mime-version:to:cc:from:subject:
-   content-transfer-encoding;
-  bh=cB182svhvuZ/FFbWweiD+PX0jtc4FXt22DG27z8JEVk=;
-  b=hVN+xFJNnu7WMDFHnUG6NADHJ4TqVuaZMMA3LXmxdIdvLyqVWethrLTf
-   Yozkaw63EcFTHJxz+sxNoAayoZT+2AOxDRSkkKCDpccm8CNb25nSX4TCQ
-   QXEqNdjdhX+y2T1tjLDkmJjOHjlrctccN4RhGTZb0nPTg2OzK35X1Ue8v
-   GOmZo0ENNphZ3OPPdvP9If9hp7QpXI9bKQ7Sa1vWqXPQxN6ZiMJzOHW2z
-   AlkmqUKTDWlA03TXlfzXExvnWIqyBvCaf5vlbylVTpiTEy4sF8jBouQmS
-   NAFSQ20TzzR6VjU56az+e3aAYi25jKvWcVSrYZLsfyq5htfj5mt+I0QSE
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10990"; a="5624797"
-X-IronPort-AV: E=Sophos;i="6.06,175,1705392000"; 
-   d="scan'208";a="5624797"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 03:48:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,175,1705392000"; 
-   d="scan'208";a="9700796"
-Received: from pzakowsk-mobl2.ger.corp.intel.com (HELO [10.94.252.46]) ([10.94.252.46])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2024 03:48:24 -0800
-Message-ID: <635a719b-84f1-4460-b4f5-ab6327de9474@linux.intel.com>
-Date: Wed, 21 Feb 2024 12:48:21 +0100
+	s=arc-20240116; t=1708517424; c=relaxed/simple;
+	bh=YDTj7Bk93my02RJrAXYF1eILQrLh3br61up1fUOKHrg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rhocy+5b6Wa9bUykrROW66Y75oWdv8ajm9xqyQgpwosf12vu38NahVg4PTCxMu8Iq2+o0uEUgCLR7G5hCK8CrIglTZgIhLHrKqIpIFX8jqUoOY302orXIzFw8Xv6SZ3qMCv09ZILaGoHgvLUt6JHvYc28HD4TYLl3YOUIgc2SoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWKZT6g9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE367C433F1;
+	Wed, 21 Feb 2024 12:10:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708517424;
+	bh=YDTj7Bk93my02RJrAXYF1eILQrLh3br61up1fUOKHrg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YWKZT6g9m5F1gndj+QPYh24qajtkKva8UAwqYE93/VZKgnLleDcS2CbUnzzL4CJ/y
+	 7y8c0Ggwr5LKHWexcQB4c/AuiwWQCPaY317urXXT0i5VacEqGXZBLBMcpc1HpWEzhM
+	 gSuKmGHpQNSSUjClsWKbemSwIFkkUGXj4brm5cFe+sJ8kxBXcsfQELEEtO3jQZuRZ8
+	 B8y3pwXFkMyiM4xnrGM3Zh6THQbcrDhakohbQzhRc0ypF8yUU17xoOouMAGrP0TPe8
+	 2ecOv3j6ec8D4ZMdgJLktiVBnWcfM0TbJuZ7HpVa13ZNL9LIUt9WHaxS/oYvOWAzaM
+	 QM0V8Pit6L1Jw==
+Date: Wed, 21 Feb 2024 13:10:21 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Hans Hu <hanshu-oc@zhaoxin.com>
+Cc: andi.shyti@kernel.org, linux-i2c@vger.kernel.org, cobechen@zhaoxin.com
+Subject: Re: [PATCH v7 1/6] i2c: wmt: create wmt_i2c_init for general init
+Message-ID: <ZdXoLQEqkAXhH1Ya@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Hans Hu <hanshu-oc@zhaoxin.com>, andi.shyti@kernel.org,
+	linux-i2c@vger.kernel.org, cobechen@zhaoxin.com
+References: <cover.1704440251.git.hanshu-oc@zhaoxin.com>
+ <eb2249f78697bd295d720c14501554a37ab65132.1704440251.git.hanshu-oc@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: jdelvare@suse.de, linux-i2c@vger.kernel.org
-Cc: piotr.zakowski@intel.com, alexander.sverdlin@gmail.com,
- andi.shyti@kernel.org, oren.shepon@intel.com, pawel.kozlowski@intel.com,
- alexander.usyskin@intel.com, jakub.radtke@intel.com
-From: "Zakowski, Piotr" <piotr.zakowski@linux.intel.com>
-Subject: Re: [PATCH] i2c: i801: Fix block process call transactions
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="MLp1H7bOkzsXGczu"
+Content-Disposition: inline
+In-Reply-To: <eb2249f78697bd295d720c14501554a37ab65132.1704440251.git.hanshu-oc@zhaoxin.com>
 
-> Piotr, does this change make your tests succeed?
-Hi Jean,
 
-I applied your change and test now passes the expectations.
+--MLp1H7bOkzsXGczu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Could I confirm with you ioctl() response convention:
-It is expected from driver to return +1 Byte (Byte Count as first byte 
-together with the actual data) in read block commands (i.e. Block Read 
-Command and Block Write - Block Read Process Call)?
+On Fri, Jan 05, 2024 at 03:51:44PM +0800, Hans Hu wrote:
+> v5->v7:
+> 	nothing changed.
+> v4->v5:
+> 	add previous prototype 'static' for wmt_i2c_init().
+> 	Link: https://lore.kernel.org/all/ZYx0VPVmyQhtG+B9@shikoro/1-a.txt
+>=20
+> Some common initialization actions are put in the function
+> wmt_i2c_init(), which is convenient to share with zhaoxin.
+>=20
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
 
-For example:
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Data: 0x5a 0x82 0x64 0xB9 (4 Bytes)
-Return of ioctl() call of Block Read command: 0x04 0x5a 0x82 0x64 0xB9
 
-Best regards,
-Piotr
+--MLp1H7bOkzsXGczu
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXV6CkACgkQFA3kzBSg
+KbYrJhAAsB2jYiFMwZCMsixrclrThj7DfF1dhFyBMSeCccZpQXlrKkqEs0bXW2zW
+KPpD8h54NIififqQgnK+tbu1hpYKuKkvyKt5hjuO+sfslvbWgWpq4rVUaJB0YVHm
+tVksX/P8s/jQQ4OODF6rcUImjsU3RD32AMf/s76p5JAzz0+pV60mkicMY+09XGkN
+9JTLnLm7k2oaFbgfevp9a6s3Gka0wZxgJ6vntrHVqLPBTjx9jQE8Od06hRZ36PCQ
+l7RdpaAwj554Cv1IpKugq9zKIoAmQnhKrzjiSUG9N/o5aKTuOsztZC3O9Seuj53H
+wRNwjLpF9BQIvZdtBoeyUjnH/bwiaRq/4Ovy2+uE7GQNPNICEvEQLy1FJ6g+vK1E
+ViwGtLUg4GQSqrTlCaq94cl9erFAZhN+8YKRFxK2Qys/SCU2X1tBJUpr9JWkc9T4
+P+U+d9yq0Mr+DyK7/Xv8u8v4/Stic1UeGapEZLpITho2+/5z/JgltdmxUvOg+bo0
+8EsTVa5mMZPXtrkX3udrIhlxw5p8tGjk3jmCoPtG2ZoR6re2hScr+JdAKb3nxl2i
+Bxoxxr4ipRsqOCIuRe2rGHL3HS9162EwOFSv/zz3mNUbQ67Ou6OFBhU7L6pwTrR/
+mhkQkEd9rkcYrzpp5EjTQHoFDbf0tUBoibSYyVTCYoftognZEC0=
+=OA3S
+-----END PGP SIGNATURE-----
+
+--MLp1H7bOkzsXGczu--
 
