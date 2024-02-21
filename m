@@ -1,63 +1,85 @@
-Return-Path: <linux-i2c+bounces-1898-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1899-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ABDE85E469
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 18:20:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BB3885E4D4
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 18:45:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BA1A1C22DAC
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 17:20:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE48BB22A2D
+	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 17:45:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5888681203;
-	Wed, 21 Feb 2024 17:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DDDF85C7A;
+	Wed, 21 Feb 2024 17:44:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WDcMzBDU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MACaeRN8"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E171DA32
-	for <linux-i2c@vger.kernel.org>; Wed, 21 Feb 2024 17:19:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED0A85C68;
+	Wed, 21 Feb 2024 17:43:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708535996; cv=none; b=k1a7Ijv+5GljSed3fEBNg5XaZYz6wbXnE9dLQ1PFCGWs1AT5WY7fuzgsIjXlSQAYYeNL5PoI0+Ol4wnZ70TQ90RqltgDCm/HYhcnoWucqQTLFRx1ugdBvWfsbPYG84tnCAOOAQqoWkU/HIdG1u+OiBpnFqpLBHBcP1MzV4cimNQ=
+	t=1708537439; cv=none; b=QL9xrvrDjVseL1bmB/hLCHzi+g10CAp2UEEFODriMMmH6CDvY8OVhNUCMoLBguk8q+TdbZ2UOQyj24yu15yW+4xiF3lO4SWfBh/TMoVhkRUOxunJeWL1GbePYXEqJ28LZZUOuRDLQ3AdrvJpJnw8B00hf6Q8GXx4vde2bEAdA6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708535996; c=relaxed/simple;
-	bh=dnLCuFOs3c+GPF4FRwsf8lBsY9aDG/PjqCo4sPv5sDo=;
+	s=arc-20240116; t=1708537439; c=relaxed/simple;
+	bh=EAVilG+5m/AHURqch7gUgltSDg888U/L1wVF8AY+h0U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gB7ZmhFAEYxKvP5Z8+m2M7zimJzQV60lr05Vxi4OnxIlfOoM1M3D8GLIGveC7AuNwolUt3xiWOCDRyWrH79/uqSpKnJuonkDIkRdaDTQ+gT0aWbP+1SKYevWPkbAJbSGDc8Vx8oBKPZ2YgFPr5L6957meG577arg5f/ZBivxq5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WDcMzBDU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1B9C433C7;
-	Wed, 21 Feb 2024 17:19:55 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=AY5RF0gsevp/1NndpVnoOnRhLQxQ0cE5tK7juC3qI4fcRS9xfZmZjgnlDqkD7qCAF9Zz/JczXodpPUxN7rsbhPmdew0WT93oEI9NnAia/4Y+bZCkJQRAFEbPFNOrskXwEQNBKKogarDIq6W7rt7UsQnUMz3EbUw33zMuz64J4dQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MACaeRN8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8925BC433C7;
+	Wed, 21 Feb 2024 17:43:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708535995;
-	bh=dnLCuFOs3c+GPF4FRwsf8lBsY9aDG/PjqCo4sPv5sDo=;
+	s=k20201202; t=1708537439;
+	bh=EAVilG+5m/AHURqch7gUgltSDg888U/L1wVF8AY+h0U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WDcMzBDUXD/f6TOLBLvS/kDeriT/wUWNy9P/y+A6TJzqJmueAVMBsFte86XWqagGS
-	 W2rkOG5wPn05jRpWE9GqbUUcfOIRrfvUQGeGAY+KheqR5zzBqupuQ77mUlVs5+Mx5i
-	 zV38wf5/saEq1WRiARg06wXTewaacW4eImbIHBUg/j6VLR5u38rNxlyHywc/e4b1aD
-	 4NSi08iiKT1zYTmlXyoiysYgwPqpvvwPI6m3fUiXKixWo6qs9TpiMpCBjk1xdWsi0q
-	 UuNotrodsaP3QC/Q21TmZ/FcmijTqGcOdroZGWAnNCPAly80iAqwMQeg8aCx3GnOcq
-	 q8oR2Ji5Ibuew==
-Date: Wed, 21 Feb 2024 18:19:52 +0100
+	b=MACaeRN8lMsNMrafHUuR5tTV0m/lcwxMQQyOLOx9xox93gvIkFhnYDFoNAb8KS5ue
+	 9CItIdTwwj1ogpri6Xnrhtg6ur7BJ3ixF5oWuGIr/SZkP8ZdGmvVHBr8croJ4NAKD6
+	 kBcyV3MhYosaq9bWezqBbxvlBJ5LqRsxoe3E9K2RY52El6pCRVRv4BEiDujXNiJnOS
+	 tcRwGDfrYA+4RILVxH+jWN8NuvHOWeGrDZG6ajW3Jm8zFkaO0oWNvYPI0oJvmixQ1M
+	 sSKFRMEnTNj46VItzN9Kp7GAUEsfJBTPvVKp22nJ6m/BGI3XUnl3+j5vHDOWdR8JI+
+	 QAVAQllob8p4A==
+Date: Wed, 21 Feb 2024 18:43:55 +0100
 From: Wolfram Sang <wsa@kernel.org>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Peter Rosin <peda@axentia.se>,
-	Peter Korsgaard <peter.korsgaard@barco.com>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2 0/4] i2c: Support i2c_register_spd() on multiplexed
- bus segments
-Message-ID: <ZdYwuELMH0r8EFU7@shikoro>
+To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH 01/13] dt-bindings: i2c: nomadik: add timeout-usecs
+ property bindings
+Message-ID: <ZdY2WzKbElloXC4-@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
-	Peter Korsgaard <peter.korsgaard@barco.com>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <9f37f64e-f5b8-4928-8716-6d2846c2688a@gmail.com>
+	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Rob Herring <robh@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
+ <20240215-mbly-i2c-v1-1-19a336e91dca@bootlin.com>
+ <20240216022704.GB850600-robh@kernel.org>
+ <CZ6E24VPJKJG.35LACFD6ZV5KE@bootlin.com>
+ <CACRpkdZZhhzg5SY7U5dv_OfLEVejRFom4V9nCfkQXunAw1ZXSw@mail.gmail.com>
+ <CZ94LGRSF9KN.15ZO1VRMIQVR8@bootlin.com>
+ <CZAX02IL1N1J.2GQR9D73GLRZB@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,60 +87,65 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="iysZKZhN6F8a3BJw"
+	protocol="application/pgp-signature"; boundary="F60VzApEKksHKb8j"
 Content-Disposition: inline
-In-Reply-To: <9f37f64e-f5b8-4928-8716-6d2846c2688a@gmail.com>
+In-Reply-To: <CZAX02IL1N1J.2GQR9D73GLRZB@bootlin.com>
 
 
---iysZKZhN6F8a3BJw
+--F60VzApEKksHKb8j
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Heiner,
+Hi,
 
-> Note: i801 creates the mux platform device, loading and probing of the
-> mux driver may be asynchronous. Therefore we can't call i2c_register_spd()
-> for the muxed segments from i801. Instead we have to add a flag to the
-> platform data, so that the mux driver knows it's supposed to call
-> i2c_register_spd().
+> > > > i2c-mpc (fsl,timeout) and i2c-gpio (i2c-gpio,timeout-ms). I agree this
+> > > > prop has no reason to be compatible-specific.
 
-Has it been considered to use a bus_notifier and check for
-BUS_NOTIFY_BOUND_DRIVER?
+Anyone up to convert these drivers to the new binding and mark the old
+ones as deprecated?
 
-I'd really like to keep it inside i801 if possible. First, all these
-flags in mux drivers only for this corner case are relatively intrusive.
-Second, selecting SMBUS for I2C_MUX is also a tad too much for my taste.
+> > > As Rob mentioned this isn't in the kernel schemas but in dtschema, so
+> > > you need to patch this:
+> > > https://github.com/robherring/dt-schema
 
-I understand that removing CLASS_SPD is a worthy goal. So, if all fails
-we could still try this. But I'd think with bus_notifiers it should be
-possible to keep it all in i801.
+@Rob: My memory fails a little bit about these two schemas: we have the
+github one for generic bindings, not strictly related to Linux, right?
+But why do we have then i2c.txt in ther kernel tree? Why don't we sync
+regularly with the generic schema?
 
-Do you think this could work?
+> Note: I've sent a draft patch to dt-schema. See:
+> https://github.com/devicetree-org/dt-schema/pull/129
 
-Happy hacking,
+I used to argue that you can set this timeout to any value in userspace.
+I have been convinced that it might make sense to set it early so it is
+in use already when booting. So, for this pull request:
+
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+All the best,
 
    Wolfram
 
 
---iysZKZhN6F8a3BJw
+--F60VzApEKksHKb8j
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXWMLQACgkQFA3kzBSg
-KbbB+Q/+Oq60woDOA7i+AAkBZTNuN4KkDI8sz1WU/oD8n1CNSVxM1DVzPrW9ii0g
-oV6NFQJGIiIyl+9cjMTZdQMvdsRTpfrTnjvkdQvVnFs9u8kt0CXL+PsNNUE9l3yj
-eRcB2YnLm/u28HTJUVCSZXIdkKt391mQ070731jVXsEu87jD20Kv9U+scwdkGkSD
-wGCTYdnQE5BLL4RW6hr0vzKBMHJJ453c+0rt+G4yHEKs8sguzJNR0ZOeyHi/QDu4
-VjF/TEYlQsJMylM7IZ3I2gO5HMoUUZrw9mtsLeSj2mRbPotoBUePmwv1bO+llnom
-i+dbrfr00SMJ3Gxy2gobq+JCSnn6kJPFiH9i6IMIX1F863VL+pU+sllaoGJybHGC
-eH+AWUM3pT2rbRRNU+3J4YYkTH0v+6bs7e3LjIE+SuhtmSILmJNOTbHDHFPXs35H
-9+i7wLATkapjKvUJuknWVua7Sqvk+EHnetb9CpIUL5Ta02D1ovB8KLKf0KAbPeqB
-bK2iKnf0gzlbNECyeBFpS/OpKMZFplXTUHLkG04OLzmZJw5Gp9ARG4ctVp4WqTbk
-kbXmnU1z8ph5IMwNcrxcXPs1mLjgAUbqjXcUcwUAPTzBLcbS0Eel6mqEe1TweK1+
-G3+GVOiNcgYQ0h1Q+G+JqNudwnl/whVJXLRwOPp5zqpuFsB9PYQ=
-=CZ4c
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXWNlsACgkQFA3kzBSg
+KbbCIQ//T+UfZwN5sfx3E29io7LplBxBq1Vc1X1yI094wCUlwjSfpIHwZb/eFi3l
+JTOHIoWz6fWb8zhtUfsF5VXj+Mz9R2ZaxSZpwp3ZJsn+qdhR+DpulzqhrLS1Vce/
+dD4DPsVn4fCeXijUtNFZz8fhfqYTW0/8dN1wAAkFTsREfvB99gYuPGU+Ib9f8ELQ
+jP7czMAee4luC2CN2VNmOJZSu9tdEAaxy+ePOZq1PtA2ox6QbMxM98WIURyJ3LCQ
+EpHONtSUXhY4wcVH4C0I/gpZuw5AWk3X6QRvIXyR/kA7TerokwK0F+6X0Ug6b0Hy
+SpKn7vXsPkD1Up+QlJkFQu7psTqYiHHRNPMf5kr+s9CytknreWfburno1a+LeX1j
+dyXXeoTNMRdVjmHgibV/0tAPtgOs0PxzicfsVtDrOTzJ9Qcg5aECGpszIMGD2FDK
+w230+coTWbqiGMakQUkfOM7jayHUwC7WEl+xLXpbyjqAKRYwX3VrMxIW8RHRItQd
+EdLd/FdBp82t9EGlUCabjlyMJNS1N+rQ8PLvKYPtRzl4/7IpQejYd8yZnaX99G6/
+ndJQeRCIt9Wu//PCNkAlQXsyRBkApDk8Ai7tXuJQZC+0Y9Yvuk5/rKRlNwtcoeMX
+8AgdyMQcQH6a/XmBm28kmb1s+mkAbwxDrke88y4hvascDGcJUTs=
+=DKt0
 -----END PGP SIGNATURE-----
 
---iysZKZhN6F8a3BJw--
+--F60VzApEKksHKb8j--
 
