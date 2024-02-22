@@ -1,72 +1,74 @@
-Return-Path: <linux-i2c+bounces-1931-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1932-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F09D860596
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 23:24:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5ECAF860597
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 23:24:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7CA8288812
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 22:24:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E028A1F24E04
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 22:24:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D701E12D21C;
-	Thu, 22 Feb 2024 22:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D806973F37;
+	Thu, 22 Feb 2024 22:24:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UJ3wDOI7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CMat+FeE"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4B632C84
-	for <linux-i2c@vger.kernel.org>; Thu, 22 Feb 2024 22:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7A213790F
+	for <linux-i2c@vger.kernel.org>; Thu, 22 Feb 2024 22:24:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708640643; cv=none; b=R2ZW6QbpKJMUaK1XxSk0Yp9So2uN4lypOqDsbXJ/HpeimanxlppWIzCcOe3QYTHHfqB8kTooAFR6/KDQbU+cUtyBNZUkvYtbr0l72mUQqrJsCnBAzSNdXQVrHLPZb1NUQhnj0aOhcOLphTHTrHUP2wWdlYv+WsdG8tveayFcL2I=
+	t=1708640693; cv=none; b=thCxyd22MkQNVgzK7sN+4zDsqM5ykxBsXJqBI28OvbtgRzxRKU2Tb3HEv8Bupr6wObZtnOIgZmlzUaSeVwgAanVRZrHsiZ4x6woR7K2vr3qZg5bTyJKS1pghppajdOaUREi88A3k8UDzNXWL2Lqx2MZv664GQtzmO8B85vtS9x4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708640643; c=relaxed/simple;
-	bh=GFMoFv/l8fBsK/ubUe3yAwgj0urzvGnGC5umDQPS3Tk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=qxaFbVu0qWYcjijrxsKJK6wZl8jZw7tEEuxJPpn7lj/IFSYTri5Pw3fmlRpQXcHwKMWGGhwr8//AOhtkq9E5Z2sZJkZWL3mtp1MEVc6f84aanerv7c8J5m+5ce2pMvCrmskxmipvUZvq2ww83qMLNYnZUs32seLD0L6hxz/ZiyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UJ3wDOI7; arc=none smtp.client-ip=209.85.218.41
+	s=arc-20240116; t=1708640693; c=relaxed/simple;
+	bh=L/UpZpzmsf/zTpRhlNqbCh2Lk+jVeODICudMdlZhrCM=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=IWqaeVPko2MQ1DFxuiUTUEIccVKYLX0WU+Xv4ddYZHfbzH+xBKT83xLBiKZn7hds/vcLEJRYuAfBVP2Oe9sYNJv7MWpoigY6t1vHRj3RrwH/KBIX51dhVvZzOMBbo8E5H4vzwgLMQ/0CwjUq5jG/sSGX4hhqTn/AyA3AosjQ7s4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CMat+FeE; arc=none smtp.client-ip=209.85.218.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a3e7ce7dac9so28402966b.1
-        for <linux-i2c@vger.kernel.org>; Thu, 22 Feb 2024 14:24:01 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a3e85a76fa8so20531766b.1
+        for <linux-i2c@vger.kernel.org>; Thu, 22 Feb 2024 14:24:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708640640; x=1709245440; darn=vger.kernel.org;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yoz1tcljZlDPGdBDAMWt2PuBZzr7Fbqbqet4Ndfahb0=;
-        b=UJ3wDOI7nePp/dZe6mol4WehNJbw2+iqiKeCJmj9gaqycujm0cVtddTGS+O412mLQB
-         eWKipsjjeJBrc9U9bu8E16v2ppnEzoYolpGJJvBVfBuVml/gZE7Uzs4SRfLunVK1erLS
-         qXg6iyFdpuNZLN/JHDmconSkhQSucPC7Cj9jr9SDmiDgCJQ/SpwLTv3brPq0rSm8r55S
-         /Pnh3jmmPEoBUOaR5lXWdKcY5EghhuWKHw7KrOOHSDMC8u0EFkmtfyOLsxpm7FQIM+AA
-         cOkCWwlJlgJ9nGKjqU+fOn39Vp1N6oxSFMJWa0RWtWsglngm/nj3+C3B4q4NfQDrrKpK
-         TtXw==
+        d=gmail.com; s=20230601; t=1708640690; x=1709245490; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=HW7v6AAbiLpmy3glMGwYHj0KJ14T6oQjhroJyGEYo0A=;
+        b=CMat+FeEQ2+E0aB4auV9OA6hx11+fgCbElhQtgdc6xsXkeTQqNp0qHV9/aZ88XwFfj
+         8LIvHwHb8RFIobCm7lYfNpcto6TDv64R09uZVKpBGlpEvtv4eUGwJCxWm6I6fi8DfibW
+         +mUdBq2a6iB4LK6yKWZzphzcr5P2+MFNakpnVvunVwFnWFhr9p2JFI2XByez49HzN+/A
+         8ZeKbrDwf+Z+bF76p0nQk4vY6EjjBoX7MMRuGzjfLdmU9EB5R8sNaDe29VE8FrheHVq8
+         4wSYUTUlgRmyLkaSntJ6LWsWYwfM5gCBaGWaRrVWfLGB0IK4J2JeJRLxo7TJYKe8nYbG
+         d4EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708640640; x=1709245440;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yoz1tcljZlDPGdBDAMWt2PuBZzr7Fbqbqet4Ndfahb0=;
-        b=CK2t+HjVpLvY684Uh/Pb3dhYYxU2ae67SsX8BP1liCqm3xsmAfBC69nkZMnpGGgGpk
-         nxdmumK0IYvM9EdOy7GqA6bABXDfU7E6n0FVUruv7fG4if7XKXKPbPEltO+9ZDSPuyAK
-         +PAuxQu3wing0shqO+QH/f12+DU5vJ/e0bm9UNPy+oE8uLAMmYVll4jnk/sy5ofmIvnC
-         pzJxjXfw84M5VEprawcBD03O7Vq+WGA2rMOildeBD49Rnk45X+8PaNqZlH6rCkNqCUGS
-         gZ0DFGDuQodLBl8sBXjfU9AJCaNzPXLS7xlrK6oaQNrHkpWQBJQrws8x0D71Mi/Yce9p
-         QtHg==
-X-Gm-Message-State: AOJu0Yys1goQfYElYUqO8+ib3FuB67r4jhxV1/rx2b5fz2P80l09Cy96
-	kzoQY2xXlmRH0r/Q8eTZk5rrOR2ZPGDz7OPW0l2A2mA4Sp2yDKEi
-X-Google-Smtp-Source: AGHT+IGLgoDjRI8CEzsSAHbyIPmhda8bDttOjZL73uFEZDTltY63yWw9BeYsSEy2Qt/Htgs+ubqK9Q==
-X-Received: by 2002:a17:906:154e:b0:a3e:eebe:7a2f with SMTP id c14-20020a170906154e00b00a3eeebe7a2fmr108341ejd.35.1708640640080;
-        Thu, 22 Feb 2024 14:24:00 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708640690; x=1709245490;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HW7v6AAbiLpmy3glMGwYHj0KJ14T6oQjhroJyGEYo0A=;
+        b=lMT+FSPW5nzXRVxipkT71I+dGPZH1eqZttptzu/QumnnqJdcfmBMqNq1K+ruGVuAqm
+         5zWCh9FGExA9jOuIfQxDcK3eCBi8u/Um17ZsC2+2ny4X+U2T856bABJUau/7FDzHLWXM
+         wXeDQ3s6nQRih8hNgpRRB6zct0ECebLQ1qJ58xwH8gpZkBp5CrEO115t8UHyMZbe+c2N
+         pls5s+xh8MkiAciNEsvJa1yFoWlg9LbroAPqAYULV75YwMPuTZgrmq5oBvkIxp4oxS9D
+         /rGSuJUoi1UXFwU3AaYxRknGO+0e4EM1GtnbPdIen1ciXaSFKMCV1XsRCDE8LC8KL9Y2
+         Z4TQ==
+X-Gm-Message-State: AOJu0YzRu6XYnMB9Pwm6NL23Or+QFzk2jQfBHlBXWpsCK7BQ5UNGnKCG
+	w6Nzuh8qYnZIhM5er072UkEFP2kATcmEO8LLNT4/8oZtXJJ6ycoGbQ7JJFyA
+X-Google-Smtp-Source: AGHT+IF8DWjzMsR1BuiXDmeaXHk0xWOw2vQIj9b4V82m3PAeJkR4bwgoD3XahvEy32Bxajxo5q11rg==
+X-Received: by 2002:a17:906:f847:b0:a3e:bc98:7243 with SMTP id ks7-20020a170906f84700b00a3ebc987243mr95868ejb.71.1708640690019;
+        Thu, 22 Feb 2024 14:24:50 -0800 (PST)
 Received: from ?IPV6:2a01:c22:7266:d800:30f8:c84f:4a91:c419? (dynamic-2a01-0c22-7266-d800-30f8-c84f-4a91-c419.c22.pool.telefonica.de. [2a01:c22:7266:d800:30f8:c84f:4a91:c419])
-        by smtp.googlemail.com with ESMTPSA id vi11-20020a170907d40b00b00a3fb9f1f10csm145712ejc.161.2024.02.22.14.23.59
+        by smtp.googlemail.com with ESMTPSA id vi11-20020a170907d40b00b00a3fb9f1f10csm145712ejc.161.2024.02.22.14.24.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 14:23:59 -0800 (PST)
-Message-ID: <eac54582-44f6-4101-93d9-012eb4ee3241@gmail.com>
-Date: Thu, 22 Feb 2024 23:24:02 +0100
+        Thu, 22 Feb 2024 14:24:49 -0800 (PST)
+Message-ID: <db378364-018e-4e6b-8e41-8cdd21ce2afd@gmail.com>
+Date: Thu, 22 Feb 2024 23:24:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -74,13 +76,14 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: [PATCH RFC 1/2] i2c: smbus: Prepare i2c_register_spd for usage on
+ muxed segments
 Content-Language: en-US
+From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
  Jean Delvare <jdelvare@suse.com>
 Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH RFC 0/2] i2c: i801: Call i2c_register_spd for muxed child
- segments
+References: <eac54582-44f6-4101-93d9-012eb4ee3241@gmail.com>
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -124,27 +127,55 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
+In-Reply-To: <eac54582-44f6-4101-93d9-012eb4ee3241@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Once the gpio mux driver binds to the "i2c-mux-gpio" platform device,
-this creates the i2c adapters for the muxed child segments.
-We can use the bus notifier mechanism to check for creation of the
-child i2d adapters, and call i2c_register_spd() for them. This allows
-to detect all DIMM's on systems with more than 8 memory slots.
+If this is an adapter on a muxed bus segment, assume that each segment
+is connected to a subset of the (> 8) overall memory slots. In this
+case let's probe the maximum of 8 slots, however stop if the number
+of overall populated slots is reached.
 
-I tested that the events are properly recognized. However I don't have
-hw with a muxed SMBUS, so I can't test the actual functionality.
+If we're not on a muxed segment and the total number of slots is > 8,
+report an error, because then not all SPD eeproms can be addressed.
+Presumably the bus is muxed, but the mux config is missing.
 
-Heiner Kallweit (2):
-  i2c: smbus: Prepare i2c_register_spd for usage on muxed segments
-  i2c: i801: Call i2c_register_spd for muxed child segments
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ drivers/i2c/i2c-smbus.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
- drivers/i2c/busses/i2c-i801.c | 23 +++++++++++++++++++++++
- drivers/i2c/i2c-smbus.c       | 18 +++++++++++-------
- 2 files changed, 34 insertions(+), 7 deletions(-)
-
+diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
+index 74807c6db..ad7ea0215 100644
+--- a/drivers/i2c/i2c-smbus.c
++++ b/drivers/i2c/i2c-smbus.c
+@@ -351,13 +351,17 @@ void i2c_register_spd(struct i2c_adapter *adap)
+ 	if (!dimm_count)
+ 		return;
+ 
+-	dev_info(&adap->dev, "%d/%d memory slots populated (from DMI)\n",
+-		 dimm_count, slot_count);
+-
+-	if (slot_count > 8) {
+-		dev_warn(&adap->dev,
+-			 "Systems with more than 8 memory slots not supported yet, not instantiating SPD\n");
+-		return;
++	/* Check whether we're a child adapter on a muxed segment */
++	if (i2c_parent_is_i2c_adapter(adap)) {
++		slot_count = 8;
++	} else {
++		if (slot_count > 8) {
++			dev_err(&adap->dev,
++				"More than 8 memory slots on a single bus, mux config missing?\n");
++			return;
++		}
++		dev_info(&adap->dev, "%d/%d memory slots populated (from DMI)\n",
++			 dimm_count, slot_count);
+ 	}
+ 
+ 	/*
 -- 
 2.43.2
+
 
 
