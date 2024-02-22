@@ -1,104 +1,99 @@
-Return-Path: <linux-i2c+bounces-1915-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1916-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F5A385F48F
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 10:37:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7426985F5EB
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 11:42:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BCBEEB2445A
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 09:37:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28372282C12
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 10:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F4D12BD1C;
-	Thu, 22 Feb 2024 09:37:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZM6OI7Qv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5424405D4;
+	Thu, 22 Feb 2024 10:42:29 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E431799E
-	for <linux-i2c@vger.kernel.org>; Thu, 22 Feb 2024 09:37:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1321F3FE3D
+	for <linux-i2c@vger.kernel.org>; Thu, 22 Feb 2024 10:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.110.167.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708594628; cv=none; b=Ia/BSxU43ayEynU158Pe0fxZR6OE4WREZ0Qws305sU04pvuR73JPpJl3JwNGxWaT5C5UDlftumOYt2+xlptLT9/kyWFbCj506oacE4q0NRbCoZg26FagBTb2Yav9SzDqZ7VsMKzAQs08JZJ8qQc5lQwP45vaPmQDygqjLEfcI0c=
+	t=1708598549; cv=none; b=n+Icg/wnHfXvmfK6Eq+cptDDSqFci6zwmG8ryZIEWdSBo9a6Mr86L+E2IJ9pwjfc4Bxi3oUfAzW3ib3GHwGTbPZylFKz1uc2yOBZhazSSof/jeEwmjDjYUQCH8YBMXM3BBY7E/aIYIp4ziy2wFehp1FGmc31sTA3CIvbTrkHTps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708594628; c=relaxed/simple;
-	bh=YS/dxPsC//E5e9xGP0tJmUKujkHptm7EZpl+Siap5xc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wl7OLJUfQOKZyfQfWaOFCd1x9wJ+rGqWhQLrk3w7eH/V307SS8C1yBfP5wXbkHTNry4gmIZLu7PYBUVRpiztDL48xT4FNhDaz8up+2hrFtO8WWnWsSHqHZMQvg5y/xNnsmkusXpseKp+bBnuUDyGwvmd5tQ0qhqJSp4eb2YYge0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZM6OI7Qv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7181EC433F1;
-	Thu, 22 Feb 2024 09:37:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708594627;
-	bh=YS/dxPsC//E5e9xGP0tJmUKujkHptm7EZpl+Siap5xc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZM6OI7Qv7W0N47Xjm/F7TZKVnSHxn2TfKlFaUGh6mqsDzFkZ2x9hslj3CUmlPQbKA
-	 RNRhyeo3zlZyhiblaq8tF+WSiig5RXR9JAtFU9GAUZdy4XJS5rbefSIuldXpe06y8P
-	 tqwHCo66IezprNGGSatya/jn/UoRNDaaQmPGrv5NCGn4NwT9nWwatQcLRetAixUy97
-	 RwdKUJiPw4o/YlU85DuM0AwJsSVG5fpx/CY20lDyUQeEuQ+pxiPp208tmashrnvQlT
-	 nKTwX2+D4LwPqbeJnlRYxqbqtLqDj73JI3hLdYCT3ksXcalqhgsZ5Bk91tTpbhQqVJ
-	 uBFbiycj7ak5g==
-Date: Thu, 22 Feb 2024 10:37:04 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Hans Hu <HansHu-oc@zhaoxin.com>
-Cc: andi.shyti@kernel.org, linux-i2c@vger.kernel.org, cobechen@zhaoxin.com
-Subject: Re: [PATCH v7 4/6] i2c: wmt: fix a bug when thread blocked
-Message-ID: <ZdcVwJ6iOTEGWYz7@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Hans Hu <HansHu-oc@zhaoxin.com>, andi.shyti@kernel.org,
-	linux-i2c@vger.kernel.org, cobechen@zhaoxin.com
-References: <cover.1704440251.git.hanshu-oc@zhaoxin.com>
- <f56773092681736140447f47962aa2f6c3df3773.1704440251.git.hanshu-oc@zhaoxin.com>
- <ZdXunlc5KQ5JlCA7@ninjato>
- <439eb65d-88de-4e7f-9138-000aefc1c1e4@zhaoxin.com>
+	s=arc-20240116; t=1708598549; c=relaxed/simple;
+	bh=CPTPjlAM0rUokrXzyo3uyoV1fJxDr40Y0Wp47h6UIqg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=VpVfK7nEgV9p1QCZzyTPb27FhgsDPt/fqA7D4P8d6ltMr5Xr72i3obveDZAwrwvwXkxBw2CTENM1UNacSUS+UL7vqARCX/PvhYrEFIlLHJ+9TZpvi1E+AHcQQZWgJw4rhJCpkUblPeArLhcXF6XusOmPQS1iDuiinZ+STNMJezQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=203.110.167.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1708598543-1eb14e0c7c45c90001-PT6Irj
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id uglfx3UJUlJe2DNz (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 22 Feb 2024 18:42:23 +0800 (CST)
+X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 22 Feb
+ 2024 18:42:23 +0800
+Received: from [10.28.66.68] (10.28.66.68) by ZXBJMBX03.zhaoxin.com
+ (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 22 Feb
+ 2024 18:42:22 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Message-ID: <bf3eecf8-59d9-41ef-b58a-5198146ac631@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.66.68
+Date: Thu, 22 Feb 2024 18:42:20 +0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="CVAuqAutzgWbb1p2"
-Content-Disposition: inline
-In-Reply-To: <439eb65d-88de-4e7f-9138-000aefc1c1e4@zhaoxin.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 4/6] i2c: wmt: fix a bug when thread blocked
+To: Wolfram Sang <wsa@kernel.org>, <andi.shyti@kernel.org>,
+	<linux-i2c@vger.kernel.org>, <cobechen@zhaoxin.com>
+X-ASG-Orig-Subj: Re: [PATCH v7 4/6] i2c: wmt: fix a bug when thread blocked
+References: <cover.1704440251.git.hanshu-oc@zhaoxin.com>
+ <f56773092681736140447f47962aa2f6c3df3773.1704440251.git.hanshu-oc@zhaoxin.com>
+ <ZdXunlc5KQ5JlCA7@ninjato> <439eb65d-88de-4e7f-9138-000aefc1c1e4@zhaoxin.com>
+ <ZdcVwJ6iOTEGWYz7@shikoro>
+Content-Language: en-US
+From: Hans Hu <HansHu-oc@zhaoxin.com>
+In-Reply-To: <ZdcVwJ6iOTEGWYz7@shikoro>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ ZXBJMBX03.zhaoxin.com (10.29.252.7)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1708598543
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 425
+X-Barracuda-BRTS-Status: 0
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.121170
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
 
 
---CVAuqAutzgWbb1p2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+>> Thanks for your suggestion, the purpose of this approach is to
+>> reduce the clock stretching caused by the system. Therefore,
+>> I try to put almost all of the processing in the interrupt context.
+> Well, I think per-msg handling in interrupt context is enough. The
+> transfer (consisting of multiple messages) handling is usually best left
+> in process context.
+>
 
+OK, I understand now.
 
-> Thanks for your suggestion, the purpose of this approach is to
-> reduce the clock stretching caused by the system. Therefore,
-> I try to put almost all of the processing in the interrupt context.
+Hans,
+Thank you
 
-Well, I think per-msg handling in interrupt context is enough. The
-transfer (consisting of multiple messages) handling is usually best left
-in process context.
-
-
---CVAuqAutzgWbb1p2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXXFbwACgkQFA3kzBSg
-Kbb5mA//eZyrhczU7CgAu/fwqE3y/EkJ8k0oVjlQDc6bypOfUOUULYWJgRZEmAIx
-uHa0GtioEOt0OnxZWOAlobw2knaiNxBT8s0WjAOL3B673DPVyKHF+UIubaLB4j0q
-TeDXuzc0Wu00yE/o+zb4QxBm3dj0qdDWkw4bMsmFScxYUsa/L3wn1nr5RJOp5hmo
-xG9UVYnZ5g1uw5fie0ZY7G/JrlYQnAiiMjMhlquvxAg1TkqF00lo8q9umzSFNyoB
-Syg6xW9pbGPkndRPfqhKVV3ZyZSSaqwGemObaEeaEXUqslmI0ytU0HGph16821cf
-qP1e8ouwRm3Tc0n+I89Jf9FM+5PZBcu7VojQmbujYTXxZBr5BviMTu1aH3cPlL96
-5orrSQhD2xmvVJhctgypNJV82Y+dQZCg/unInGel5DAn3MMZUjvoAb2X0MT+VVs1
-AuaqAaOLrTdIOTmYFrjjG3KvvihA7ei3+npXUTvxvdVoItViDsGhw+Npz1dQ7dKg
-wk++oNyz/WEFBWEZt7Wsm/yBX6u4tXbSMH+5J/efwVxi9wIkfZgtq2+dY3vLgymO
-vYefVqlAlBjjyyQ5JeVUlDIvEiWpTbxsfsdt7uWkrOjNBnsnbAEvqrAbc2qZ7Fkg
-Dtrc82l39KeP670vyOmpQC8NOktXf92D++5Fq+I+KjHDukcJjuw=
-=XtQU
------END PGP SIGNATURE-----
-
---CVAuqAutzgWbb1p2--
 
