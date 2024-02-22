@@ -1,137 +1,249 @@
-Return-Path: <linux-i2c+bounces-1905-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1906-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2698085EC0E
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 23:55:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5813A85EE75
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 02:10:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8A9E283430
-	for <lists+linux-i2c@lfdr.de>; Wed, 21 Feb 2024 22:55:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2311AB22D5F
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 01:10:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB53580602;
-	Wed, 21 Feb 2024 22:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A820211724;
+	Thu, 22 Feb 2024 01:10:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="R3dNp+Is"
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="mpblMqMu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2093.outbound.protection.outlook.com [40.107.215.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361DA3BB32
-	for <linux-i2c@vger.kernel.org>; Wed, 21 Feb 2024 22:54:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708556102; cv=none; b=hKXLESwEb1zZDDEMmtEx7+KhKWlkwmiC8Q4HZAj57LXspm+PLv8BB81gIHCTuPoi7y+y7+1y4lDGxIe263xkMvrmI39/UhHy8JnNOLWkdyF+kceC0lKv19oAsfx4gE0jvMUGji3gx+ry54DJz1Dm8GThyqk4etIjF7YptX4x77o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708556102; c=relaxed/simple;
-	bh=pcbURWzdWl827aoKY3Vk/lQA+oXSGfG6yAhkFdHlVnI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OmnmsCPZho9QRv8cgFzXt4aa69DjWozxK4/xqh4skp3GefrHRCSASCP8kE5n15mttRU09L4HAsT+FVfHFa8Dlqdi0Dp3dvQwqR6a8LRDNis0GnUhcZ3wsu0YHhFp8cy1n+vGhLPh/n5CvLK4wdUB8AgqRp10qNYn4y3BbcTKKjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=R3dNp+Is; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=pcbU
-	RWzdWl827aoKY3Vk/lQA+oXSGfG6yAhkFdHlVnI=; b=R3dNp+IsGrfldwpg8zov
-	udigOEzC0v1rv/ZerDAc/1dZTZ2rs5R8rBb2Q3APsfzeY92yicYUpa9P43vB5h5v
-	ez533lHhPkHH/hAk1qa3SF5ZKpX5qIHX4NdQVLo8uh6RAsf5UhSK6po0vEpFuznA
-	VfEdO1iMsCOXGgwuXoNnp7cgEA4plhw5EMB2DWeX7us0yK8EfrDlGijAArkByNpd
-	k+aNfiNtrp2+npnYm+189jpHmd1jXVyC0VbkrZ1/eWsZAw1gnCXVyfUwS7fRf6zM
-	JHbEHx6nAJ6sv/4ydmvUuCKJ4ZVy/9f+NwVjYUQVLflTIInOMNFL4EH964gp1nMR
-	oQ==
-Received: (qmail 3765339 invoked from network); 21 Feb 2024 23:54:55 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Feb 2024 23:54:55 +0100
-X-UD-Smtp-Session: l3s3148p1@/zQgN+wRRJcujnsZ
-Date: Wed, 21 Feb 2024 23:54:54 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ECD2111AC;
+	Thu, 22 Feb 2024 01:10:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.93
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708564247; cv=fail; b=mniKxZYh09dyL3wgndSvHt7Q17HNQs3/a1Y/524fJHlt6b8kNjQouin9kkkFpWmxQWwuJ81+S4qKwzLKIy596XNRvuPQP29o+CR13vuqpBq3sQxnMPbFFPh1sYRKUNl/D676pj6gUe9+2hrwoborQXg7agT7tWCX95iTZUvYKyw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708564247; c=relaxed/simple;
+	bh=0m0dG436EqrLXCUIz114REsMOuxhw/QUP0S79Jjc/UI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=YI7EKnmZftM2ol/2ih+s0/Wcwop+hiRtZ9aKYmwxTCUPmxicEiI0icHorDfJ3SErJxdWmkzamCe+pq30M11juQXaClQ8HWZ1y6a1ssw1yaEhvkHyeU3kESxUbJe+G7nxq5yP07psUP2ZDE/8nwMnKlCqjGZnl/5NsB/X/Mcs2vs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=mpblMqMu; arc=fail smtp.client-ip=40.107.215.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cWFP9k2eFNMEmFuUJugMNxSrFfrVZadNZ2TqNy+aA8A2x+fdh6+BtBQCMjJFKqSEYceaScrIv11bK0H5an6/LnkMjh8pmKZmLDu8s+4UWKQ23qXj66VeR2+v3ISIye2XNbNc4SwnjrdXSBs8ZnQNA8lb7AAXfuQVBcLcYw0w9ct/rJgXCcZRx4TfSnkthOln6zA+qV5QU1g+NrMNXrCPiGMGyE8qeEN9vEWVxcn1nBli5UrfrhSX8eiX6Ngd23kSRCPR+/SC0L/vyBi+tMbcVK9E8XkE7EqCZYbHCmYhVl1ww7/AvLXISzy2w8ofuzQv0z0aDHPlONEeO7SNeoJqiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TgSv/N9GYGctwQzkz4soPBAdJVH3d6F2hasa0gC1Q8s=;
+ b=E8fzcfiKv29MNEvy75hVmsP44R8JSD+1+kZwxZTIhhmSwLTh1EST3o1VHxyrZUJe0dCSvbqg3uDZp5dUmk3WvCfOnpzAcdBRENtSn0mcv8duiNqNc5p60XKB8UMBx5+PpZYigHdhy4mucsrXIB9Y0ymBQTedM+1boC72oYtcpadgRa0qNX0iEQmBXUZRcDIG0w92/ScNP96sAx4wrdnQbbspSRY8N9qcz5FY1ziTLdIc60EBe2Zcm1r4Qotu3FxVVhJlT0XGYBnSAoX/sPApU8lFoQjca7K8Xjy2DXLWq9+UWKtSDk7VgaNopG0KJ2IlLYVAOfDuKKpW6B4IYPV/bg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TgSv/N9GYGctwQzkz4soPBAdJVH3d6F2hasa0gC1Q8s=;
+ b=mpblMqMu0emOtyrBuik9lXJgPXJgK9nIZEV+0bL+akJSMk8Rb2lYjo0KMoKzFNEPgnhPTwVfcsLuay0ghI+9fnZK4zFvOssAl5jfI9//9GPx8NKOcmWFdEszrhN81nsq5JM2CGS9YuY/N28YWmfuSbbKCFuxgetHmWw/+QOw2eqR1HOgzzjDHGbb81wd8dC+LNeOszJAHyDefaMK95QW14sEAXpzL9LeyDySf/DcsL+litE4PpXV6Py3iKciebmJBxujcm0yjmZqFwtm5nEo2CxzrqvvWgQhJDZoDKwsCgkSWmug2tu7xxBSss3EwTmSMaMZWSd0n8M/IPccHNu65w==
+Received: from TYZPR06MB6191.apcprd06.prod.outlook.com (2603:1096:400:33d::12)
+ by TY0PR06MB5471.apcprd06.prod.outlook.com (2603:1096:400:265::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.39; Thu, 22 Feb
+ 2024 01:10:40 +0000
+Received: from TYZPR06MB6191.apcprd06.prod.outlook.com
+ ([fe80::e10a:d9a2:5070:6903]) by TYZPR06MB6191.apcprd06.prod.outlook.com
+ ([fe80::e10a:d9a2:5070:6903%5]) with mapi id 15.20.7292.036; Thu, 22 Feb 2024
+ 01:10:39 +0000
+From: Tommy Huang <tommy_huang@aspeedtech.com>
 To: Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org, Corey Minyard <minyard@acm.org>,
-	Andrew Manley <andrew.manley@sealingtech.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: imx: when being a target, mark the last read as
- processed
-Message-ID: <ZdZ_PsNhQ9S1Eab-@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	Corey Minyard <minyard@acm.org>,
-	Andrew Manley <andrew.manley@sealingtech.com>,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20240221193013.14233-2-wsa+renesas@sang-engineering.com>
- <kgfagzj5vez56levwam6n6tzxl2lu7efnw5x3eadl3uophxism@ph2tghrvedg5>
+CC: "brendan.higgins@linux.dev" <brendan.higgins@linux.dev>,
+	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+	"benh@kernel.crashing.org" <benh@kernel.crashing.org>, "joel@jms.id.au"
+	<joel@jms.id.au>, "andrew@aj.id.au" <andrew@aj.id.au>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, BMC-SW <BMC-SW@aspeedtech.com>
+Subject: RE: [PATCH] i2c: aspeed: Fix the dummy irq expected print
+Thread-Topic: [PATCH] i2c: aspeed: Fix the dummy irq expected print
+Thread-Index: AQHaYNBg0EEa3X7oHECRXZPcHJI3VbEVVFwAgAA4R6A=
+Date: Thu, 22 Feb 2024 01:10:39 +0000
+Message-ID:
+ <TYZPR06MB61911F076C8719C6A7D57B97E1562@TYZPR06MB6191.apcprd06.prod.outlook.com>
+References: <20240216120455.4138642-1-tommy_huang@aspeedtech.com>
+ <nbkkaktcozbhly44hii3zwie7ivsra3qxzdibyzhyhooxrudvb@zik6skmkki2c>
+In-Reply-To: <nbkkaktcozbhly44hii3zwie7ivsra3qxzdibyzhyhooxrudvb@zik6skmkki2c>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR06MB6191:EE_|TY0PR06MB5471:EE_
+x-ms-office365-filtering-correlation-id: d8820bd0-5a2c-42f3-ce93-08dc3343159c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ waqxLIgI1RWo/Ls2AmYPiPkv8mR8IT+xAd3wXM3MpIfIZfUVonYtOhSF812eqyT30/F8dce6SHqUKK/7O6/WDPTdty2fFAeZAYT/ItgRkYONav7MJHUkkdJxHpipEn82O4u4nFsb45Wwx9LTz1zswKHlQxoBQt/AMbwWGtRW8/QOkmoukJHYuC97KaNLJVMTsK0sXgBz1dLyF/gVlQd3J1rfWLbHKrWvlHTmFMSdmwD5uLA8xrY4BVwWm+oOBpmNmLuQRIOh7jIGxwnGHnZ4R5gZs0iuYsoITgem5PM4aYnt1hneEtQKLOyUStvLMqjKbpNG4fHXjBZOLFlIMOwClFKlf24kCqxtV0Gi2DXxiCCaOcmL65Mtb21BbAUKll0ugS7e+6W59bQCAjdiw8iClsAQZKxiyoeUrz68RdDem4FD7KmUBLj+x4rjPz2CoRvpz2m4w/lWcwwJhDmUFHLx13X8hq7qAfSusY4JaAdRRxxXI0eL5iGcWZjM+cmFxWLsQ0QgIWWJdVDat6LNPh8sUdoHr99W9iacSabSm02Br5YHLIrErH5UdZFj4qFG/BL58tW3grBK4Nj7zlKzhmH4Ny4w3tpg5UKdOowvbZEXu4pgbj149oMvBmIi+sD04XLG
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6191.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(38070700009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?f9HL50F3UvtPozuC8hLj4ns8McsfcLm5ovag2Dbd3Yx2SNqmya5g2DFZtyLk?=
+ =?us-ascii?Q?YZQzNhP284jTE1cY3Hn/8QvZ60GtorvPN2AWMid16fURcqYxbxJLuwjA9MM0?=
+ =?us-ascii?Q?q5DZpk2eW8nrDm8LD7g/i2kU3n/CPVqj0ZCxr4rbHacwonaVL3dvqtXhScKu?=
+ =?us-ascii?Q?uSVvxwkDleUCWpGtTPeM2Ih3LA3o23uGg5g4CDJ8mprAIAbf+6JJYYMqqkAP?=
+ =?us-ascii?Q?Vpk3VBruzgDVmbb/xwlKBu8F3oUVhLCYSQ9svgOBxj9GRaYFeUwneRIRPJlC?=
+ =?us-ascii?Q?pr7TYesmlkpCf5raHlj1jPqnDkzQWEOhJBuz/twzR405goYJWUOQck5+hLxn?=
+ =?us-ascii?Q?dylHHHe7DIsRVYNEXmq011TAPx5xWvQ0SIqGe+7cQuALXyIbdYhP5YN0h40E?=
+ =?us-ascii?Q?6mWPfkHPtW1U+Wgf7X7LElzSPBeAo0bkKMGObIvHDkjEMYB7cCwgU91cdOUI?=
+ =?us-ascii?Q?e2vLptTJhy+XaO/+MNEhSPL4bvYLnmHpmEPbQb16c2COBLaySsd7KxZAK4LE?=
+ =?us-ascii?Q?kg80TVd7aZ1dPTx3RqEbr6av+UD0L/i121fF8bB9a9rKNfPC4w4HGXmRDsNK?=
+ =?us-ascii?Q?gqncGgoJS0V13gXCfzExyDn+YEX4YNNom0THhw9Kjohsqoh0z3W3roUO561c?=
+ =?us-ascii?Q?hMgaKe2drH94MbAvulKBuHeYscT3/20A62F442q9ZqcdLsUVbwBsMzDqnMus?=
+ =?us-ascii?Q?1R6oD8D7aH9qatXBoaSlypAEn8S0e+Y2OH9knW/Gf8J7OELFCWNBIJ3PMNw1?=
+ =?us-ascii?Q?K7May5lz86jqeJpZoNLrFzgK8TOufIfEVa4YFOBFCuk11z2NCTNr9fQ94H6G?=
+ =?us-ascii?Q?fYd3yGA3R0e6TaB7EOT1XeeJdrmT1qGhDt6BzNAH20K9TrEwu0AYHPiAwytg?=
+ =?us-ascii?Q?GYiDYlYPrnL07oRnDRsbV/gdrBd+1e8W0+bAHFtJ2oPIlalj+LWFVZn/J26H?=
+ =?us-ascii?Q?q5hyn8pPvDG+vLVXve8mTVEPAJoQxze2r46YB2RiVb54mdy42GdU//2+aIgY?=
+ =?us-ascii?Q?kzy+aZQktr98PljOTLBmvgyfkqmvtUg3yYxnJvFWr8rfV02a4jsKtg5MEbUI?=
+ =?us-ascii?Q?q6eRbGhRHMn3aMKc0cg0xm179x4+VOlQ3ZbkI9MFde44kPj5eEygVTHKFu8N?=
+ =?us-ascii?Q?kc+s5e9mEDSJTlaBYlvpaw4Gr5oe5P7GJQo5eZxdfFMDG8y7UEur4H+vHirE?=
+ =?us-ascii?Q?WHuJuNW2s2+TDm9yHJSqter3NXj2R1h5NS7L9eFHq1EmYBMokQuTsvqW68fu?=
+ =?us-ascii?Q?mWE7yryxiU0n+NNn/A714idZ3rGxHztlHjak6y9bXTzVJHV0CdhqSD+GxPbw?=
+ =?us-ascii?Q?6TlFOwCB1bteLLx8X9m3MfdECZr4AUxgSOl16uYJf3DesLCYlHmEle6OiKwi?=
+ =?us-ascii?Q?Dja1U3CTJi+WU6UQWQuusI80n6/ZezSqunVIJlV8iDwlH4ZH0tWBG9P3slM/?=
+ =?us-ascii?Q?SJlGMjMtctoZNBNE8vl0xcg5bmEzB7rwRiL42FSnmfT7EeWMBnUh7HjE/SRT?=
+ =?us-ascii?Q?hL8eqLRtcmF4h6kOgmBiClA+GOdwSYuaEtRzE0vZkBKPjSFWrIX6plDvdqmM?=
+ =?us-ascii?Q?t8349FEgP1eC3k+u4QMFReXh4nBQ4qgk+C/IiKBoOHH8CjGFTpPMBPHzs9NS?=
+ =?us-ascii?Q?RQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wMLlim1uQUSFzSBp"
-Content-Disposition: inline
-In-Reply-To: <kgfagzj5vez56levwam6n6tzxl2lu7efnw5x3eadl3uophxism@ph2tghrvedg5>
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6191.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8820bd0-5a2c-42f3-ce93-08dc3343159c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2024 01:10:39.8079
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Fjlo6n68PIu8T6ZuEifCMasBn5ESt02J1FIhKXFzbRwF17Q4l2SUbyX/zgVjeonPzQqt3oW3XmkfsyFcdwPLmCAQKz0QzcxDaqwX8bG9uMw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5471
 
+Hi Andy,
 
---wMLlim1uQUSFzSBp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+	Thanks for your comment.
 
-On Wed, Feb 21, 2024 at 09:58:23PM +0100, Andi Shyti wrote:
-> Hi Wolfram and Corey,
+> -----Original Message-----
+> From: Andi Shyti <andi.shyti@kernel.org>
+> Sent: Thursday, February 22, 2024 5:15 AM
+> To: Tommy Huang <tommy_huang@aspeedtech.com>
+> Cc: brendan.higgins@linux.dev; p.zabel@pengutronix.de;
+> linux-i2c@vger.kernel.org; openbmc@lists.ozlabs.org;
+> benh@kernel.crashing.org; joel@jms.id.au; andrew@aj.id.au;
+> linux-arm-kernel@lists.infradead.org; linux-aspeed@lists.ozlabs.org;
+> linux-kernel@vger.kernel.org; BMC-SW <BMC-SW@aspeedtech.com>
+> Subject: Re: [PATCH] i2c: aspeed: Fix the dummy irq expected print
 >=20
-> On Wed, Feb 21, 2024 at 08:27:13PM +0100, Wolfram Sang wrote:
-> > From: Corey Minyard <minyard@acm.org>
-> >=20
-> > When being a target, NAK from the controller means that all bytes have
-> > been transferred. So, the last byte needs also to be marked as
-> > 'processed'. Otherwise index registers of backends may not increase.
-> >=20
-> > Signed-off-by: Corey Minyard <minyard@acm.org>
-> > Tested-by: Andrew Manley <andrew.manley@sealingtech.com>
-> > Reviewed-by: Andrew Manley <andrew.manley@sealingtech.com>
-> > Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > [wsa: fixed comment and commit message to properly describe the case]
-> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Hi Tommy,
 >=20
-> is this a fix?
+> On Fri, Feb 16, 2024 at 08:04:55PM +0800, Tommy Huang wrote:
+> > When the i2c error condition occurred and master state was not idle,
+> > the master irq function will goto complete state without any other
+> > interrupt handling. It would cause dummy irq expected print. Under
+> > this condition, assign the irq_status into irq_handle.
+>=20
+> I'm sorry, but I don't understand much from your log here.
+>=20
+> Do you mean that irq_handled in aspeed_i2c_master_irq() is left with some
+> states that is not supposed to have and then you end up printing here:
+>=20
+> 	dev_err(bus->dev,
+> 		"irq handled !=3D irq. expected 0x%08x, but was 0x%08x\n",
+> 		irq_received, irq_handled);
+>=20
+> Can you please explain better?
+>=20
 
-In deed, it is:
+Yes. If the platform met any irq error condition and the i2c wasn't stated =
+under ASPEED_I2C_MASTER_INACTIVE.
+Then the code flow would goto the end of aspeed_i2c_master_irq.
 
-Fixes: f7414cd6923f ("i2c: imx: support slave mode for imx I2C driver")
+	ret =3D aspeed_i2c_is_irq_error(irq_status);
+	if (ret) {
+		...
+		irq_handled |=3D (irq_status & ASPEED_I2CD_INTR_MASTER_ERRORS);
+		if (bus->master_state !=3D ASPEED_I2C_MASTER_INACTIVE) {
+			bus->cmd_err =3D ret;
+			bus->master_state =3D ASPEED_I2C_MASTER_INACTIVE;
+			goto out_complete;
+		}
+	}
 
+Some master interrupt states were not handled under this situation.
+The fake irq not equaled message would be filled into whole of demsg.
+It's most like below example.
 
---wMLlim1uQUSFzSBp
-Content-Type: application/pgp-signature; name="signature.asc"
+...
+aspeed-i2c-bus 1e78a780. i2c-bus: irq handled !=3D irq. expected 0x00000030=
+, but was 0x00000020
+aspeed-i2c-bus 1e78a780. i2c-bus: irq handled !=3D irq. expected 0x00000030=
+, but was 0x00000020
+aspeed-i2c-bus 1e78a780. i2c-bus: irq handled !=3D irq. expected 0x00000030=
+, but was 0x00000020
+...
 
------BEGIN PGP SIGNATURE-----
+I thought the bus->cmd_err has been filled error reason and it would be ret=
+urned to upper layer.
+So, I didn't think the print should be existed.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXWfzoACgkQFA3kzBSg
-KbagAxAAn45Po3ZAJlfnoswOKe4rzonqmkLsAxS1Y5qgSdTMQyanU9l5JjsmyaPT
-xg/t4ZAzx2vwlGMUwQ9pC3Z3Il6LhHPmq598jn/3Vmj+A343ahRyLhWWHh5VP2qu
-iArpIvb98BUeaMdHKKew6Qh319lXMxRgpL1aMDJvWWEMMKJantsrTFywcp3N6WYQ
-R6QYENuvtChkG1MIAkiuDozlKbhxb3SzcXBsezMTuEHfOcCEsItnXdiwpo+FJ0pJ
-xhMw4d6G2I4Qq1xNNPGtmB5a0Xab0QWUKZ8xe0geV3lhWGVqRi+LX/R9CfEy6ge4
-rk4nWiP4t8RQG/+S0nGBo/40zeTx8Bz6KYddR8HLFORH0sRzM07LbXrJMiEWvjjJ
-tx6a1MwWLJ8DE+Wa2UMRVQOrmJLXTr4rb/ONH4G3IKmSUeYD3qxZEnIp0MebIY4X
-J4j6DyRFS7sum6O3IouXiayOL7NSSITX1lt0+zLeVw2dh6aAx+PvrnCY46SKIl+s
-Ai/enUt4CZOt/8QWn5VyNhHBfo1hJIWLh91KQqhZ79k6/XEFj1g3TvnV91eGTqQU
-PFdPipawhcNqBnoZOB+DGPlqzUuiXwJuLgCaWCUtsec1Prm0sIQZ0mqyT6r/7W1B
-BsH8NWzA0G7I7wPCVmT3/QvWsBVeasc9Jn5X753nqQIh/Oq3p2U=
-=w2Tg
------END PGP SIGNATURE-----
+> If that's the case, wouldn't it make more sense to check for
+> bus->master_state !=3D ASPEED_I2C_MASTER_INACTIVE) earlier?
+>=20
 
---wMLlim1uQUSFzSBp--
+Did you suggest to add "bus->master_state !=3D ASPEED_I2C_MASTER_INACTIVE" =
+judgement before print the irq not equal print?
+
+> And, still, If that's the case, I believe you might need the Fixes tag. I=
+t's true that
+> you are not really failing, but you are not reporting a failure by mistak=
+e.
+>=20
+> Thanks,
+> Andi
+>=20
+> > Signed-off-by: Tommy Huang <tommy_huang@aspeedtech.com>
+> > ---
+> >  drivers/i2c/busses/i2c-aspeed.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-aspeed.c
+> > b/drivers/i2c/busses/i2c-aspeed.c index 5511fd46a65e..ce8c4846b7fa
+> > 100644
+> > --- a/drivers/i2c/busses/i2c-aspeed.c
+> > +++ b/drivers/i2c/busses/i2c-aspeed.c
+> > @@ -445,6 +445,7 @@ static u32 aspeed_i2c_master_irq(struct
+> aspeed_i2c_bus *bus, u32 irq_status)
+> >  			irq_status);
+> >  		irq_handled |=3D (irq_status & ASPEED_I2CD_INTR_MASTER_ERRORS);
+> >  		if (bus->master_state !=3D ASPEED_I2C_MASTER_INACTIVE) {
+> > +			irq_handled =3D irq_status;
+> >  			bus->cmd_err =3D ret;
+> >  			bus->master_state =3D ASPEED_I2C_MASTER_INACTIVE;
+> >  			goto out_complete;
+> > --
+> > 2.25.1
+> >
 
