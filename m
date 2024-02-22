@@ -1,89 +1,87 @@
-Return-Path: <linux-i2c+bounces-1927-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1928-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAE098602AB
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 20:28:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CA86860353
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 20:55:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74CC928E1BB
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 19:28:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C88A1F2ACDE
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 19:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C410548F5;
-	Thu, 22 Feb 2024 19:28:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A073D6AFBF;
+	Thu, 22 Feb 2024 19:55:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dDpluMk4"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="dMhLdZCo"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4153138FB2;
-	Thu, 22 Feb 2024 19:28:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48DF6AF95
+	for <linux-i2c@vger.kernel.org>; Thu, 22 Feb 2024 19:55:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708630099; cv=none; b=SrAw2i6OBMEx8IB19hP/sN5mcRO6cy+atU48qAB0DLYyEMRCajSS8UE+L48kH7YzL1mcsZMHGLaJ1kRICZKs6x1ozHbiSINcEIp9Gp6doKkq2vcZnK9hi5INnRbHCkBKJguBmEJRhsjB//CpJPFwZSqVOQeDwoEUyqNhmLxMyNw=
+	t=1708631742; cv=none; b=Flvz4lTRpqYCMneXLVWUMZVgbAFDsbe1fkVQGW1+sPRVPAD4SZJb7U0euYxgtR5AlJ/CZwM36K8PTvs7JJD+9jEruJqAJMMCWE4UZoR8YYwCF0BLfVrWcgwfZQas1ukENqAvU4ox8AzsD/LAL5POiusYXocxRNDgNJj87suO0V8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708630099; c=relaxed/simple;
-	bh=Uyg9dSHslJ9qxNU6tRv4iTy9tiKqRQ5uql4e8bT0C1I=;
+	s=arc-20240116; t=1708631742; c=relaxed/simple;
+	bh=Xj8O+DPx4wU2UfJYi69n5ttyXQyRDoWMxk1LCwlpI8E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aMbOjVqqSNyakepglTtiouynIl6W7Wjz6EkodnAA+p/yOkAxrFRwbvCL0J8CxCq1IAiYtTJlGk2ZUxPol0EvtNGGQ4hME1nEMgjbJ8rzSxDcQ+VUfK+V8vajIfrgni0VBMncrg4BJE4ZY5BBmdLPmNDOwc9fQh0Bg5EL+oejjzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dDpluMk4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E51C433C7;
-	Thu, 22 Feb 2024 19:28:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708630098;
-	bh=Uyg9dSHslJ9qxNU6tRv4iTy9tiKqRQ5uql4e8bT0C1I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dDpluMk4aQFS7LOckKKih/hJjwFlidVqRlOBOHcdSHa8UWxfkWdubrFH6Ft1BbyD4
-	 MhZDasLvf1hEybHeMvyAatR+qF1ij1dwZGfvIsbySRMnnt1RWDDfCRlDT4qFqUiCfH
-	 wOpl6RnHuM84V/aFa1n2aepM8o+JqkLRT/paS6f0lEj2M5v0ULwoyUFU8w9t5gt4ZJ
-	 +P3U30FZlDWy+e+oYWK1HRfey0b743s6y5BPTMV6AexyGTTXDlTSig7sZ6zBYB1PiV
-	 /c0rcqc5pjAjfbkBY5SEf5W1Oqc5JABjiC1/HCXeTZoLdhTo88nYW9mix4FaVaj69l
-	 0b1UW608HxSBQ==
-Date: Thu, 22 Feb 2024 20:28:14 +0100
-From: Wolfram Sang <wsa@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RimT5r5ideMGTtkApd87Ez0OPuWe2qgFBWDUNxPlxC3FovQAk4fcGv+lv3tLKdrWvMVC4yzo+44cqacYd3bwc7NRYKzhlKuweR8+miBshslHTcHF2W+SQ2kU1BZybhBtOI/7eKBFSXfnDIcj3RJHaD5NRe059zfqArHn2bWHfvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=dMhLdZCo; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=jhVW
+	YIYPS+WQc6qJONpuGdYkkC+vizXSWdkxmtKR2Zw=; b=dMhLdZCo1B8/rATCc2vu
+	mLNgJZko4QxGxAqBAHcqm1HMnlSyh3p6MujX/axkL2zz8dOKBqbrKaSsWZzlK2/1
+	lLOLt6chZwcranpAh2zMDdV6DcIHwWDRDhnPfEYVSMYcEKJaZjkHmRGpV9Qo2k1q
+	QAtgFkfbF3TTzNf1+9Uer1VUghhsvMhMPxCrjVcRcSDZwqTSfYA3QG+cI/UmCweK
+	rGJuAkiEyQyyIGAdDDDUn2aHixyNcPeHL+JOW4FjSeYjpFHe5ZHN8iUbSqKQbe8A
+	Nd+ANcb1k4G1B8J5XWOa6OJ10OnuAYQKf3vyh+MsQFvWm4QblGP6iD2T9nu1PTRC
+	zQ==
+Received: (qmail 4086918 invoked from network); 22 Feb 2024 20:55:30 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Feb 2024 20:55:30 +0100
+X-UD-Smtp-Session: l3s3148p1@iyNN0/0R+OQujnsZ
+Date: Thu, 22 Feb 2024 20:55:29 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: Rob Herring <robh@kernel.org>
-Cc: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH 01/13] dt-bindings: i2c: nomadik: add timeout-usecs
- property bindings
-Message-ID: <ZdegTjJpDJGEgdvo@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
+	linux-sound@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: Remove obsolete i2c.txt
+Message-ID: <ZdemsdGQE0RtilCd@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Rob Herring <robh@kernel.org>,
-	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
 	Linus Walleij <linus.walleij@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
- <20240215-mbly-i2c-v1-1-19a336e91dca@bootlin.com>
- <20240216022704.GB850600-robh@kernel.org>
- <CZ6E24VPJKJG.35LACFD6ZV5KE@bootlin.com>
- <CACRpkdZZhhzg5SY7U5dv_OfLEVejRFom4V9nCfkQXunAw1ZXSw@mail.gmail.com>
- <CZ94LGRSF9KN.15ZO1VRMIQVR8@bootlin.com>
- <CZAX02IL1N1J.2GQR9D73GLRZB@bootlin.com>
- <ZdY2WzKbElloXC4-@shikoro>
- <20240222171404.GA3334332-robh@kernel.org>
+	Andi Shyti <andi.shyti@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
+	linux-sound@vger.kernel.org
+References: <20240222174343.3482354-2-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -91,62 +89,65 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="B6WJG40ec9FdGRUS"
+	protocol="application/pgp-signature"; boundary="xwbnszeJhFgpzihu"
 Content-Disposition: inline
-In-Reply-To: <20240222171404.GA3334332-robh@kernel.org>
+In-Reply-To: <20240222174343.3482354-2-robh@kernel.org>
 
 
---B6WJG40ec9FdGRUS
+--xwbnszeJhFgpzihu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > @Rob: My memory fails a little bit about these two schemas: we have the
-> > github one for generic bindings, not strictly related to Linux, right?
+On Thu, Feb 22, 2024 at 10:43:42AM -0700, Rob Herring wrote:
+> Everything in i2c.txt is covered by schemas/i2c/i2c-controller.yaml in
+> dtschema project, so remove i2c.txt and update links to it in the tree.
 >=20
-> Well, NONE of the bindings are strictly related to linux unless they say=
-=20
-> 'linux,' prefix.
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Ok, right, of course. What I meant was probably: why do we have
-controller bindings in the kernel and schema bindings in a github tree?
+Differences to i2c.txt:
 
-For me, this is a tad more difficult to maintain. Like
-i2c-controller.yaml file has the "no-detect" binding which IMO is wrong
-in many ways. I rejected the supporting code for Linux.
+* In the schema, "clock-frequency" has a minimum of 1kHz and a maximum
+  of 3MHz. Why? The specs do not say anything about a minimum freq and
+  fastest speed mentioned in the docs is 5Mhz (Ultra fast mode).
 
-> We need to remove i2c.txt. Often that hasn't happened because we need to=
-=20
-> relicense the text from GPL only to dual licensed. From a quick look,=20
-> i2c/i2c-controller.yaml appears to have everything in i2c.txt, so I=20
-> think we can go ahead and remove it. There's only a few references to=20
-> i2c.txt to update with that. I'll send a patch, but please double check=
-=20
-> whether you think i2c-controller.yaml is missing anything.
+* new binding "i2c-scl-clk-low-timeout-us" has a description which I do
+  not understand. What is a waiting state?
 
-Will do, thanks!
+* new binding "no-detect" is broken. At the least, it should be named
+  something like "bus-fully-described" and then the OS can decide to
+  leave out auto-detection mechanisms. If you are interested in the
+  latter, you can simply disable class based instantiation on the host
+  controller. No need to describe this in DT.
+
+> Wolfram, you can take it or I can.
+
+Once we are done, I guess it is better if you take it.
+
+Thanks for the work,
+
+   Wolfram
 
 
---B6WJG40ec9FdGRUS
+--xwbnszeJhFgpzihu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXXoEoACgkQFA3kzBSg
-Kbb2EA/9Hi0Zf/si4mO1ASJ8MJ4l6Dhz+zE2/Yd6c62lF3Ql+W2/kDCn7Y9ian2Y
-wgrMfigGHubXEDf4q4mlgm3MFMVbbxK0LM5nZCb4+PsS7KsjEIyr5quniPt+iK8Y
-qzvmuq31oleVoO/q+UTNkWlQ9ofVS+gGEfm8YcArndDhTUdYeTfi9AwwVjsyjPgO
-wuuokHdGrS4w3GjlKtZN+osms1ldGa5F7AOgD050/l7qPxImpTYWpoQOXquq7WxW
-6SoHgVu+KP90/ybjX36lfMSg3nfnNP6wALqpoUVvJyzxEt7ukEsMXDlUTZX45BUT
-uEFWL6T+b6b6ZXxvS0uGGZetayd2GKKh1sPPLbBq4Fw5UbkV6pOH4o2Y2so/UeqK
-Px1G23l3jQw7HLUOYuB9qyRVj9hSeby1nJ/nIqTMKMieGUIYx9ixs6M8WgCGBcXj
-yZMrgW+yRxlD0s8P/whrhX7Nt0x7t5ySTGIt8GpuqVymGqOexQP3jHYRbvyGbvWE
-F9TtNLW47Nw1aK9igfbi4yOzy9hJ5w82sH+Ol9m5J9YxLbDeMHB6dwIKE7WOpPWs
-NWLkFRUVJk0+wdUcgO2gH5QBLpRgnQXT7rWX+dcp6XuiG/mUDVYjUuaC0WZOXdf/
-FLp434f9gcj3hQh+5zZCcTaN0jEe/X1HPKZgGZWXgIyhfkT5ciE=
-=d0aY
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXXprEACgkQFA3kzBSg
+Kba7Ng//f2uJIbUxhVqaRPb6cEvRbSMkgp3fOuy7aYo9Chftjp+DCOgB+z/d29DB
+4q9Hsd4mNQAHMYKPeieoE/wm6PC7fQQqw/F4mczeiKY+XS1PpFwSXjS3flVBPYOW
+UeUYPRZCvWFck7FCOUF9XK2qR/88V1pSDzw5kHf8+CABuFX2RSjyVmiXFbdSV1qf
+/I4DfO2M40MkAVGkKIwJcaCBuk6QMjGrJqw+qWYnYmAWsltiWgdy/pOt1Ge03ieM
+CinXc9GP6Jg4eDUcpWLETd3ehz9uV40IPugp7fXJxIR38V0Pxbz1G9BUbPjPCj28
+Mp3lm3o/60TE68NXU0DEN75PpVz/M/zkv9cx0UJucMDFplec/4BH38TzTsNlAPWV
+R5Sh6wD4y6MgfkxqTVEeEaQibH7JTSYK5PwWmR8MNyGk1YN5+avCk2YbUxs618wJ
+jauxhbeZNDQ+XWplirsMKB0lrWbV75OxiJ4sGljcpy16MfXaMfP7J7HG+18GOuS1
+wD0qBTKzSVrClGu79/LwV90OieqSpAJuEbex5Ls4wNV5/VJUj7t4PH2rOPDZRxc4
+nlOpJ5SYSgWwOnGYVgh6wDr6QFCmZGZpQbQlxlezaRkwhQZKmA87/jM+ZkFt8Rwc
+3d5oj6TIiOFWfkl3zdbl9/voX7DTTY3ku/KgG5OvEPy9nl120C0=
+=o5Lw
 -----END PGP SIGNATURE-----
 
---B6WJG40ec9FdGRUS--
+--xwbnszeJhFgpzihu--
 
