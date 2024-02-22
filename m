@@ -1,70 +1,118 @@
-Return-Path: <linux-i2c+bounces-1908-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1909-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8748185F118
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 06:46:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC28F85F236
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 08:56:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 414A1282B7B
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 05:46:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88573283B6C
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 07:56:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC03111B2;
-	Thu, 22 Feb 2024 05:46:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EFoCPecI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BD1B179AD;
+	Thu, 22 Feb 2024 07:56:20 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4A212B70;
-	Thu, 22 Feb 2024 05:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812AB179AC
+	for <linux-i2c@vger.kernel.org>; Thu, 22 Feb 2024 07:56:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708580779; cv=none; b=jHq0pBK318MQRvJmT7+NmGewmSMY8SOewJK6qJGFrMkcC/uZmGfrWZLL5xaFmRTCwVSWWBquTqBNC4X5Hhx3whE5wwBjj9Y52aVLs5Rr0ZTHVeDKGgQl2TKlwEvMY5G2rfwVFbvAUWS6d1eztZaVv7HhkLFhGcdwa0NpuM7vawE=
+	t=1708588580; cv=none; b=YRzApX4gam+0hMn9SGC9G4pxN59wtd6rhwumjWvdDjoNiNcgHXRQhcbgxth+ZMnJdt0HLP8YK1MQOq7yAvbdAGJA0D9nZP9T7yLK08lUkcQsGVit0YRd9bTbJpzLWFHu51v/L2apdJawxfbjaq2+bkgo8A6oWNoVylfR5o3gI+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708580779; c=relaxed/simple;
-	bh=rEo0owgvvOA+g8GumezPSzk2nZFNTPpvIw/utFsAdhk=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=tiuwIYVfkrYxM60MsT70D9Prj1lP5ax4uTk/bxgaIdqI9WKNMWHJljTbf2ox9bPmZKHTNEEvaqarGz9u/LMX+VP2NXRnS2r95x5Y8J0apXF8H96t1FxGN9YzvmZSVYpK3qtIhJe0TSv79gcZQek6MclGXRpAJuQnpvWXO1sP98Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EFoCPecI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B11C433F1;
-	Thu, 22 Feb 2024 05:46:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708580779;
-	bh=rEo0owgvvOA+g8GumezPSzk2nZFNTPpvIw/utFsAdhk=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=EFoCPecIWiE31P8q54+6r7EzV1y2GyHTafjJJno1Px4l+5MYXHYRMMg4bod/skQya
-	 FohIGPemeLgd0fGD7qsnefVoNrEaqHG+R8oMl4gyiQy4yk3Ix9+osXmMdcs1zwZXBR
-	 OBFl/Dmu+T0vdcY3B5hul2goM/I71C2e4Xr6i3EMDxYdh/42oURIu1MXYAzLN//ak/
-	 XQTtS5enm6WNT8fJ65geGaSenfXrIBMmQI7VJK+uaqEmKDTeMnV/9+o1hsHvcrVvpN
-	 wBHNs4cRK9Q3gUtOsgFXviWTmfrgq9M3EjXiqvkvRA2vZaKAd6QvXtkSRGIvMFUucu
-	 w9ug53PcP9OOA==
-Message-ID: <637b5d6b3fd2e4aaff3813f11c0e3800.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1708588580; c=relaxed/simple;
+	bh=7qak9DSlKvtRj666+/v0dbhhOwMqEcQNSSCFeo0Ei54=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fa6FZqNqmdGcyBmKZLK73DDMPM3v2dY7p0YpBObnPryKly0QCjxqR7PfSZl/jj/tijpyFf+JeOiwPemjozhMuRIXykQyBowMSanrrZUv2IxD0MmZeQbXv9Tn9cJF4o+sGS1Pm/LW+8rCxG3H5Bz7g8D9lnwoKZcyK1uJBEOncsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1rd3w2-00081j-D8; Thu, 22 Feb 2024 08:56:02 +0100
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1rd3w0-002Bno-Vd; Thu, 22 Feb 2024 08:56:00 +0100
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1rd3w0-002i6S-2r;
+	Thu, 22 Feb 2024 08:56:00 +0100
+Date: Thu, 22 Feb 2024 08:56:00 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	Corey Minyard <minyard@acm.org>,
+	Andrew Manley <andrew.manley@sealingtech.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: imx: when being a target, mark the last read as
+ processed
+Message-ID: <Zdb-EHnTiez6KP-K@pengutronix.de>
+References: <20240221193013.14233-2-wsa+renesas@sang-engineering.com>
+ <kgfagzj5vez56levwam6n6tzxl2lu7efnw5x3eadl3uophxism@ph2tghrvedg5>
+ <ZdZ_PsNhQ9S1Eab-@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240215220759.976998-3-eajames@linux.ibm.com>
-References: <20240215220759.976998-1-eajames@linux.ibm.com> <20240215220759.976998-3-eajames@linux.ibm.com>
-Subject: Re: [PATCH 02/33] clk: ast2600: Add FSI parent clock with correct rate
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, andi.shyti@kernel.org, eajames@linux.ibm.com, alistair@popple.id.au, joel@jms.id.au, jk@ozlabs.org, mturquette@baylibre.com, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
-Date: Wed, 21 Feb 2024 21:46:17 -0800
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZdZ_PsNhQ9S1Eab-@shikoro>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-Quoting Eddie James (2024-02-15 14:07:28)
-> In order to calculate correct FSI bus clocks, the FSI clock must
-> correctly calculate the rate from the parent (APLL / 4).
->=20
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
+Hi Wolfram,
 
-Applied to clk-next
+On Wed, Feb 21, 2024 at 11:54:54PM +0100, Wolfram Sang wrote:
+> On Wed, Feb 21, 2024 at 09:58:23PM +0100, Andi Shyti wrote:
+> > Hi Wolfram and Corey,
+> > 
+> > On Wed, Feb 21, 2024 at 08:27:13PM +0100, Wolfram Sang wrote:
+> > > From: Corey Minyard <minyard@acm.org>
+> > > 
+> > > When being a target, NAK from the controller means that all bytes have
+> > > been transferred. So, the last byte needs also to be marked as
+> > > 'processed'. Otherwise index registers of backends may not increase.
+> > > 
+> > > Signed-off-by: Corey Minyard <minyard@acm.org>
+> > > Tested-by: Andrew Manley <andrew.manley@sealingtech.com>
+> > > Reviewed-by: Andrew Manley <andrew.manley@sealingtech.com>
+> > > Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > > [wsa: fixed comment and commit message to properly describe the case]
+> > > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> > 
+> > is this a fix?
+> 
+> In deed, it is:
+> 
+> Fixes: f7414cd6923f ("i2c: imx: support slave mode for imx I2C driver")
+
+Looks good :)
+Are any action needed on my side?
+
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
