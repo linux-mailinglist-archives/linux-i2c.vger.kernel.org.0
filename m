@@ -1,153 +1,106 @@
-Return-Path: <linux-i2c+bounces-1928-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1929-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CA86860353
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 20:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D1649860522
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 22:50:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C88A1F2ACDE
-	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 19:55:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70F371F24173
+	for <lists+linux-i2c@lfdr.de>; Thu, 22 Feb 2024 21:50:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A073D6AFBF;
-	Thu, 22 Feb 2024 19:55:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8593812D1F8;
+	Thu, 22 Feb 2024 21:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="dMhLdZCo"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=hoehnp@gmx.de header.b="nohRBohm"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48DF6AF95
-	for <linux-i2c@vger.kernel.org>; Thu, 22 Feb 2024 19:55:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE63373F05;
+	Thu, 22 Feb 2024 21:50:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708631742; cv=none; b=Flvz4lTRpqYCMneXLVWUMZVgbAFDsbe1fkVQGW1+sPRVPAD4SZJb7U0euYxgtR5AlJ/CZwM36K8PTvs7JJD+9jEruJqAJMMCWE4UZoR8YYwCF0BLfVrWcgwfZQas1ukENqAvU4ox8AzsD/LAL5POiusYXocxRNDgNJj87suO0V8=
+	t=1708638651; cv=none; b=eNxMP1KM/1fXuKkEYlvPWbiO2drnnVdgB7mCwBbw/pYs9iSQaLrByLnezxzmjntJO8EPZ/YICJ9bRS2OKlkplZa0TeUrew1Gn+px77HfBy6ErIaX6shj/JIWRWIlIYFCWhKZVQbhegOmW+3ixLFQZON+PWntcI5PHEo0I/tdp+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708631742; c=relaxed/simple;
-	bh=Xj8O+DPx4wU2UfJYi69n5ttyXQyRDoWMxk1LCwlpI8E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RimT5r5ideMGTtkApd87Ez0OPuWe2qgFBWDUNxPlxC3FovQAk4fcGv+lv3tLKdrWvMVC4yzo+44cqacYd3bwc7NRYKzhlKuweR8+miBshslHTcHF2W+SQ2kU1BZybhBtOI/7eKBFSXfnDIcj3RJHaD5NRe059zfqArHn2bWHfvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=dMhLdZCo; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=jhVW
-	YIYPS+WQc6qJONpuGdYkkC+vizXSWdkxmtKR2Zw=; b=dMhLdZCo1B8/rATCc2vu
-	mLNgJZko4QxGxAqBAHcqm1HMnlSyh3p6MujX/axkL2zz8dOKBqbrKaSsWZzlK2/1
-	lLOLt6chZwcranpAh2zMDdV6DcIHwWDRDhnPfEYVSMYcEKJaZjkHmRGpV9Qo2k1q
-	QAtgFkfbF3TTzNf1+9Uer1VUghhsvMhMPxCrjVcRcSDZwqTSfYA3QG+cI/UmCweK
-	rGJuAkiEyQyyIGAdDDDUn2aHixyNcPeHL+JOW4FjSeYjpFHe5ZHN8iUbSqKQbe8A
-	Nd+ANcb1k4G1B8J5XWOa6OJ10OnuAYQKf3vyh+MsQFvWm4QblGP6iD2T9nu1PTRC
-	zQ==
-Received: (qmail 4086918 invoked from network); 22 Feb 2024 20:55:30 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Feb 2024 20:55:30 +0100
-X-UD-Smtp-Session: l3s3148p1@iyNN0/0R+OQujnsZ
-Date: Thu, 22 Feb 2024 20:55:29 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
-	linux-sound@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: Remove obsolete i2c.txt
-Message-ID: <ZdemsdGQE0RtilCd@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Rob Herring <robh@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
-	linux-sound@vger.kernel.org
-References: <20240222174343.3482354-2-robh@kernel.org>
+	s=arc-20240116; t=1708638651; c=relaxed/simple;
+	bh=9ZuRxkDK5H19iw6y42gY5WWcNAPljW3IVJTRFThvddQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=T7rzLWl796PGAAoSYjTrI8nqFmQTYiivQx4TGPOmvt2HgKEa1P6S7hw6AnQL8AIWQNkZ/RNKzI//9KWTettQsvEsAiNRj2pc2siF3UHoQF/0cGy0I7fG9cKAZQYXP45/zGMTCD258FNvdZJN0meOyxAJgGJfASfzl6JyBCkcEGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=hoehnp@gmx.de header.b=nohRBohm; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+	t=1708638635; x=1709243435; i=hoehnp@gmx.de;
+	bh=9ZuRxkDK5H19iw6y42gY5WWcNAPljW3IVJTRFThvddQ=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+	b=nohRBohm5Vs2iN/yG3D7yJKGIpjc4vvk+MXeesmxO/unLNEAMqO+TE2DbuO+VRpP
+	 5SFRd8EOoBwmMNUwwlfD6u51JjamjqqviTItxB2uAIelSND7MxTr+Rtbyf0mFIfRi
+	 HmQ7yu0W9wk8slia8dwTY3whE6smsWroH4Vk3t2zqRehnAqV9zhvfJ2V5Y8GnWQZl
+	 nbv03tm4FF95t3tIe4mI2M1aMtm0ZLVItkrLBJvsKiK9q9cqSlaJQelyfrNdmZKUz
+	 xwJ0MbwhRS34zem4sml09p8rbPrma6kgpcKoEOU5TSeDj4bDFSL31cj0lBmaoA1J5
+	 4kHODSyqE6umIHYKhQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from patrick-dell.lan ([31.18.168.131]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N17Ye-1qwlPc3rXm-012aib; Thu, 22
+ Feb 2024 22:50:35 +0100
+From: =?UTF-8?q?Patrick=20H=C3=B6hn?= <hoehnp@gmx.de>
+To: Jean Delvare <jdelvare@suse.com>,
+	Andi Shyti <andi.shyti@kernel.org>
+Cc: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+	Paul Menzel <pmenzel@molgen.mpg.de>,
+	=?UTF-8?q?Patrick=20H=C3=B6hn?= <hoehnp@gmx.de>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] i2c: i801: Add lis3lv02d for Dell Precision M6800 v2 Bios: A26
+Date: Thu, 22 Feb 2024 22:50:08 +0100
+Message-ID: <20240222215010.31456-1-hoehnp@gmx.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xwbnszeJhFgpzihu"
-Content-Disposition: inline
-In-Reply-To: <20240222174343.3482354-2-robh@kernel.org>
-
-
---xwbnszeJhFgpzihu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:PTbtMT18fAIFxF/WVReDFqsYPgDxOWxtV/YSEMIe+D9c5s7lvws
+ nnLpm6kiduy/Z1DgZEiJ/NaeAI52RhoPsyPujbZvAsbPwdOCstC7KS+V8/cwq5lj85DNR0N
+ 1r18Ez30+TeLEV28CDFBeY/J7I8ugy+e6yVy2LQ2zCf/LMp/OD8WJLZiaYX0FeTRvoTs+qr
+ CP+W1MNEDmooBOmjQRIFQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:ENfj41CSwwk=;eo0DRdun3Q6jkAym3pU+uELER+q
+ v0/UUR+VZa2ggKFUPrzqP9RmjwMqCCOVV1seccu/HrTUkQVAiJS9LXzgpquwWah+OY/QVzdFH
+ jCl05a0BlaiVymhrhKVgKymWZyz++f4eYUFGKnKncyNe2o7ZahZkqf6ru1J7wKJVhB9kZbelk
+ UugvpJ8sf3DuY7v9tsxL/5bFEB1gW2AXFlPkJzDDV2l40JuZWbK5VFDm+m+lUjWKlE0AEHw96
+ KkOO4dtYO4m2wsdYtoDIxQIg5oXwcAtbTsE9lLgZ9kDi1CpXQ3YyzBahYZ/Mg0ZZIqI+6P6+m
+ Jdgj+z4PsdOjKPXwUcxKLZwJm9b7azaMDJTOtMLKzmB76C/54gn2/cHFjDC8d2wUgSIbsohVw
+ fS3XWatI73eewqk8sbiTLEalH9OTCez6idSTiuuM8tFoM+GNo6RFXuWBSF2BmCJynf2OCnRg7
+ 0aSZw3zTxT8+lha6tAr+41rXcahIZfYMj0fWVk8AXEX5fmTlPBh4c/YcsrF54f3R5Wbiq+q5a
+ 1Wx2nk2VtGTHzqLX2Q41aZnmjyhpHna+F5Rc7X8TDKfGHjJySgCyqPVnnDgBzsjg92M9RHWdi
+ o0s8lFC+oBvlI9KQbXzYfpxNirgexzglbZhbRJVWSehwdwTnWscGNmouzR7KxYTYPQ+Y8dLGI
+ Utia/0ZddfDMOUSugfQ+t79ZCLAkYpyIqPgD0rJggoOenc/VDaYGcgYLa+ovL8OpvEJxkmI/L
+ +1kBZfMM257YTqaPiuRBR0CncJwV8EhQPH4DY6a6IYW37qhIAS65xJCIb8GF3xCPbXQe7jrTx
+ Mo537Ds3+lcVrvDRw4SEqVC/DfRdWBKapaWyxMItrc5kw=
 
-On Thu, Feb 22, 2024 at 10:43:42AM -0700, Rob Herring wrote:
-> Everything in i2c.txt is covered by schemas/i2c/i2c-controller.yaml in
-> dtschema project, so remove i2c.txt and update links to it in the tree.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Patrick H=C3=B6hn <hoehnp@gmx.de>
+=2D--
+ drivers/i2c/busses/i2c-i801.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Differences to i2c.txt:
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index 2c36b36d7d51..c1fee2c61da1 100644
+=2D-- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -1231,6 +1231,7 @@ static const struct {
+ 	 */
+ 	{ "Latitude 5480",      0x29 },
+ 	{ "Precision 3540",     0x29 },
++	{ "Precision M6800",    0x29 },
+ 	{ "Vostro V131",        0x1d },
+ 	{ "Vostro 5568",        0x29 },
+ 	{ "XPS 15 7590",        0x29 },
+=2D-
+2.43.0
 
-* In the schema, "clock-frequency" has a minimum of 1kHz and a maximum
-  of 3MHz. Why? The specs do not say anything about a minimum freq and
-  fastest speed mentioned in the docs is 5Mhz (Ultra fast mode).
-
-* new binding "i2c-scl-clk-low-timeout-us" has a description which I do
-  not understand. What is a waiting state?
-
-* new binding "no-detect" is broken. At the least, it should be named
-  something like "bus-fully-described" and then the OS can decide to
-  leave out auto-detection mechanisms. If you are interested in the
-  latter, you can simply disable class based instantiation on the host
-  controller. No need to describe this in DT.
-
-> Wolfram, you can take it or I can.
-
-Once we are done, I guess it is better if you take it.
-
-Thanks for the work,
-
-   Wolfram
-
-
---xwbnszeJhFgpzihu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXXprEACgkQFA3kzBSg
-Kba7Ng//f2uJIbUxhVqaRPb6cEvRbSMkgp3fOuy7aYo9Chftjp+DCOgB+z/d29DB
-4q9Hsd4mNQAHMYKPeieoE/wm6PC7fQQqw/F4mczeiKY+XS1PpFwSXjS3flVBPYOW
-UeUYPRZCvWFck7FCOUF9XK2qR/88V1pSDzw5kHf8+CABuFX2RSjyVmiXFbdSV1qf
-/I4DfO2M40MkAVGkKIwJcaCBuk6QMjGrJqw+qWYnYmAWsltiWgdy/pOt1Ge03ieM
-CinXc9GP6Jg4eDUcpWLETd3ehz9uV40IPugp7fXJxIR38V0Pxbz1G9BUbPjPCj28
-Mp3lm3o/60TE68NXU0DEN75PpVz/M/zkv9cx0UJucMDFplec/4BH38TzTsNlAPWV
-R5Sh6wD4y6MgfkxqTVEeEaQibH7JTSYK5PwWmR8MNyGk1YN5+avCk2YbUxs618wJ
-jauxhbeZNDQ+XWplirsMKB0lrWbV75OxiJ4sGljcpy16MfXaMfP7J7HG+18GOuS1
-wD0qBTKzSVrClGu79/LwV90OieqSpAJuEbex5Ls4wNV5/VJUj7t4PH2rOPDZRxc4
-nlOpJ5SYSgWwOnGYVgh6wDr6QFCmZGZpQbQlxlezaRkwhQZKmA87/jM+ZkFt8Rwc
-3d5oj6TIiOFWfkl3zdbl9/voX7DTTY3ku/KgG5OvEPy9nl120C0=
-=o5Lw
------END PGP SIGNATURE-----
-
---xwbnszeJhFgpzihu--
 
