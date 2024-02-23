@@ -1,219 +1,120 @@
-Return-Path: <linux-i2c+bounces-1939-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1940-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B933860EEC
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 11:10:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52C05861207
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 13:57:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FC901C2175F
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 10:09:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C7021C21194
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 12:57:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876B95CDCE;
-	Fri, 23 Feb 2024 10:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69B3A7D418;
+	Fri, 23 Feb 2024 12:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ivsYU7TL"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="YzF+JLe6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2615CDCA;
-	Fri, 23 Feb 2024 10:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4C77C6D4;
+	Fri, 23 Feb 2024 12:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708682994; cv=none; b=Z/51+0RSqTdCkkxWg8DORj12ro7/GFABXxyLhp82Idbw4srQjGn/0oYL/klOtq5QKJje739lmp4wWrRffQfyAmnt8jaFYX2S5CZg+pyGKzOFKgVHSSVmoLAHgUkFO3OvKSI9J1LtYM9SAqsuOe+SoI9pgkNmdPiY70LHoV1Txng=
+	t=1708693054; cv=none; b=TtS9HdZGU1SMpUslUkGRDFQXJTV0etIsVrLckd63SmlosHCpDSzk0DCOV5/6k8So3uvG7acBrCz0qL21HI6+Tm14Ekx6WIqEORHxBfM4tAwzN4VEh4WftKH8KQ4+QM7BkYO4bb6jXL1zcsTDdmFggdLXMkLqEouOGr24uYv6si8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708682994; c=relaxed/simple;
-	bh=URfFpOQ1isznRhH/xiFa04n/cMubW1udR/5z9a93b5Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z8igX5c+MSgWn3kxyE7fSjZolnKt9oOyLPHkKOvw/NW9y/heNpWB4hXNhLuJODZfJqNbit5pncW+7mAfYK1d2myIBay5V5tycdclZ8y88V8duYUpCTjPCyc6LMjchtDn/YnRSJmF6L2LjZ3++kzn74LLgeEQSkrckt9oOvaLryw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ivsYU7TL; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708682992; x=1740218992;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=URfFpOQ1isznRhH/xiFa04n/cMubW1udR/5z9a93b5Q=;
-  b=ivsYU7TLy9TC0jNoV1QP/ATbjwjFSBiORG+0g0yfMSaIEB9M71nj2exH
-   jeAB360INsnhUawJ0Wi9h3VhoAdOB2wRYMDoHzSlU+wIyayOfDi/cNsL4
-   WhjXYEH4o7a1pAkwcWM3gGBhN/ekDgCWA0wnWJ/NbbaXVfFzHVZZKNz6h
-   xJBJuHx4FgZz1ofPhqu8pZx9kKJOeJCDCYLjQ75cXcQaTEjLKfmJrg+Cj
-   aWiqHTL1nJC/f3jwCt/u9n3GvQAta2GoxM3r6WKgF+bGhNiBsujARQcea
-   oRSwosR3/8i/fJFuUKQyjTjkf70AzdA3gCBQ+3UpdNUfztMBycRFJe6PG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="20527523"
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="20527523"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 02:09:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="5746931"
-Received: from marquiz-s-2.fi.intel.com (HELO [10.237.72.58]) ([10.237.72.58])
-  by fmviesa007.fm.intel.com with ESMTP; 23 Feb 2024 02:09:50 -0800
-Message-ID: <f1631883-3a2b-4e48-aa37-77c8b4564229@linux.intel.com>
-Date: Fri, 23 Feb 2024 12:09:49 +0200
+	s=arc-20240116; t=1708693054; c=relaxed/simple;
+	bh=YgVPolS1tTZInc8r8s8OfjIcZtnNNyoBT+sxat5WFhM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Dq4mz2rFkYpgFNYJnBqJO11ZDMG2PckbtyLDHUAFe86dWa2Nf6HF3xbyO8oXkTRfyppTyxFVxk+4V8io9kzdoL8wvfLNDMONxF3SErSIu6wOEYzbWq+e9Y2x/1Xfl3Ar1D8f8HWNvHcitXwaIEb6bdDeMF9pa+cmu6GVwHDJCVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=YzF+JLe6; arc=none smtp.client-ip=67.231.148.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41N1rK9j005138;
+	Fri, 23 Feb 2024 04:57:30 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=pfpt0220; bh=lmAULftK
+	YPhk58xO0vm8WFR29Q2Sb0lXgcVUSkRmH5k=; b=YzF+JLe6Cjm/YRH1FRFJFSac
+	dI8uy8LaD+iZSKbtmuwWt4X+6Avq2Y45rtSI+kJFo54c6SIE7oXYnaXsQ2TGRECO
+	+i1Wh2o27mB/bsLtFe7zESRdOzAPmn/WUbLNVwWkm52tDAwBoZrU23PGZclPyZCL
+	x31DkN4YBXZ9tMjhmQgFyumAybdUb5J63l2Q5HyGA/2DudTPLcayKxFH+9rw3MMb
+	Snk6UKuGBoHvNEd1Q810N3Xcj4QsMqImO2mV1wShkgL0E4oBFux4qR1Iyg/lb58s
+	3BH9dmiWScOraqngNJ3H6slXNSTJvdx6JOM0dNsFtuvLmjcbqT76PHshOkX/BA==
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3wej3j9rt3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+	Fri, 23 Feb 2024 04:57:30 -0800 (PST)
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 23 Feb
+ 2024 04:57:28 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Fri, 23 Feb 2024 04:57:28 -0800
+Received: from Dell2s-9.sclab.marvell.com (unknown [10.110.150.250])
+	by maili.marvell.com (Postfix) with ESMTP id F0AF73F70CA;
+	Fri, 23 Feb 2024 04:57:27 -0800 (PST)
+From: Piyush Malgujar <pmalgujar@marvell.com>
+To: <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <andi.shyti@kernel.org>
+CC: <sgarapati@marvell.com>, <cchavva@marvell.com>, <jannadurai@marvell.com>,
+        Piyush Malgujar <pmalgujar@marvell.com>
+Subject: [PATCH v4 0/4] i2c: thunderx: Marvell thunderx i2c changes
+Date: Fri, 23 Feb 2024 04:57:21 -0800
+Message-ID: <20240223125725.1709624-1-pmalgujar@marvell.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: irq/51-DLL075B:01 in D state without touchpad usage, interrupts
- increase
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: linux-i2c@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <9181c391-bb08-4c1e-ad27-94b8493df86d@molgen.mpg.de>
- <03572069-c9ab-4912-a6b1-9f9c26ae5384@linux.intel.com>
- <68a6e356-a53e-4bc2-8f5c-4ab36c0c3349@molgen.mpg.de>
-Content-Language: en-US
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <68a6e356-a53e-4bc2-8f5c-4ab36c0c3349@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: JLK29jR__ArX5I1zJidJOH-6yIPOf2HX
+X-Proofpoint-ORIG-GUID: JLK29jR__ArX5I1zJidJOH-6yIPOf2HX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-22_15,2024-02-23_01,2023-05-22_02
 
-On 2/22/24 17:59, Paul Menzel wrote:
-> Dear Jarkko,
-> 
-> 
-> Thank you very much for your reply.
-> 
-> Am 22.02.24 um 16:16 schrieb Jarkko Nikula:
-> 
->> On 2/20/24 18:15, Paul Menzel wrote:
-> 
->>> On a Dell XPS 13 9360 with Debian sid/unstable and Linux 6.8-rc4+ 
->>> (and probably before), I sometimes notice the fan spinning up, and 
->>> trying to figure out why, I noticed that `top` showed 
->>> `irq/51-DLL075B:01` in state D (uninterruptible sleep (usually IO)). 
->>> That is without using the touchpad. I am using an external USB 
->>> keyboard and an external USB mouse.
->>>
->>>
->>>      $ sudo dmesg | grep -e "DMI:" -e "Linux version" -e microcode
->>>          [    0.000000] Linux version 6.8.0-rc4+ 
->>> (build@bohemianrhapsody.molgen.mpg.de) (gcc (Debian 13.2.0-13) 
->>> 13.2.0, GNU ld (GNU Binutils for Debian) 2.42) #25 SMP 
->>> PREEMPT_DYNAMIC Sat Feb 17 05:39:03 CET 2024
->>>      [    0.000000] DMI: Dell Inc. XPS 13 9360/0596KF, BIOS 2.21.0 
->>> 06/02/2022
->>>      [    0.367292] microcode: Current revision: 0x000000f4
->>>      [    0.367293] microcode: Updated early from: 0x000000f0
->>>
->>>      $ sudo dmesg | grep DLL075B
->>>      [    0.967975] input: DLL075B:01 06CB:76AF Mouse as 
->>> /devices/pci0000:00/0000:00:15.1/i2c_designware.1/i2c-2/i2c-DLL075B:01/0018:06CB:76AF.0001/input/input2
->>>      [    0.968302] input: DLL075B:01 06CB:76AF Touchpad as 
->>> /devices/pci0000:00/0000:00:15.1/i2c_designware.1/i2c-2/i2c-DLL075B:01/0018:06CB:76AF.0001/input/input3
->>>      [    0.968569] hid-generic 0018:06CB:76AF.0001: input,hidraw0: 
->>> I2C HID v1.00 Mouse [DLL075B:01 06CB:76AF] on i2c-DLL075B:01
->>>      [   19.753775] input: DLL075B:01 06CB:76AF Mouse as 
->>> /devices/pci0000:00/0000:00:15.1/i2c_designware.1/i2c-2/i2c-DLL075B:01/0018:06CB:76AF.0001/input/input17
->>>      [   19.753950] input: DLL075B:01 06CB:76AF Touchpad as 
->>> /devices/pci0000:00/0000:00:15.1/i2c_designware.1/i2c-2/i2c-DLL075B:01/0018:06CB:76AF.0001/input/input18
->>>      [   19.754654] hid-multitouch 0018:06CB:76AF.0001: 
->>> input,hidraw0: I2C HID v1.00 Mouse [DLL075B:01 06CB:76AF] on 
->>> i2c-DLL075B:01
->>>
->>>  From `top`:
->>>
->>>      206 root     -51   0       0      0      0 D   1,7   0,0   
->>> 8:45.46 irq/51-DLL075B:01
->>>
->>>      $ ps aux | grep 'irq/51'
->>>      root         206  0.2  0.0      0     0 ?        D    Feb17  
->>> 12:11 [irq/51-DLL075B:01]
->>>
->>> The interrupts increase though by around 610 per second (without 
->>> using the device):
->>>
->>>      $ for i in $(seq 1 10); do LANG= date; sudo grep -e '17:' -e 
->>> '51:' /proc/interrupts; sleep 1; done
->>>      Tue Feb 20 17:04:23 CET 2024
->>>        17: 1631256120          0          0    6452384  IR-IO-APIC 
->>> 17-fasteoi   idma64.1, i2c_designware.1
->>>        51:   25255617     109943          0          0  IR-IO-APIC 
->>> 51-fasteoi   DLL075B:01
->>>      Tue Feb 20 17:04:27 CET 2024
->>>        17: 1631295844          0          0    6452384  IR-IO-APIC 
->>> 17-fasteoi   idma64.1, i2c_designware.1
->>>        51:   25256229     109943          0          0  IR-IO-APIC 
->>> 51-fasteoi   DLL075B:01
->>>      Tue Feb 20 17:04:28 CET 2024
->>>        17: 1631335618          0          0    6452384  IR-IO-APIC 
->>> 17-fasteoi   idma64.1, i2c_designware.1
->>>        51:   25256843     109943          0          0  IR-IO-APIC 
->>> 51-fasteoi   DLL075B:01
->>>      Tue Feb 20 17:04:29 CET 2024
->>>        17: 1631375224          0          0    6452384  IR-IO-APIC 
->>> 17-fasteoi   idma64.1, i2c_designware.1
->>>        51:   25257454     109943          0          0  IR-IO-APIC 
->>> 51-fasteoi   DLL075B:01
->>>      Tue Feb 20 17:04:30 CET 2024
->>>        17: 1631415636          0          0    6452384  IR-IO-APIC 
->>> 17-fasteoi   idma64.1, i2c_designware.1
->>>        51:   25258076     109943          0          0  IR-IO-APIC 
->>> 51-fasteoi   DLL075B:01
->>>      Tue Feb 20 17:04:31 CET 2024
->>>        17: 1631455174          0          0    6452384  IR-IO-APIC 
->>> 17-fasteoi   idma64.1, i2c_designware.1
->>>        51:   25258687     109943          0          0  IR-IO-APIC 
->>> 51-fasteoi   DLL075B:01
->>>      Tue Feb 20 17:04:32 CET 2024
->>>        17: 1631494990          0          0    6452384  IR-IO-APIC 
->>> 17-fasteoi   idma64.1, i2c_designware.1
->>>        51:   25259300     109943          0          0  IR-IO-APIC 
->>> 51-fasteoi   DLL075B:01
->>>      Tue Feb 20 17:04:33 CET 2024
->>>        17: 1631534944          0          0    6452384  IR-IO-APIC 
->>> 17-fasteoi   idma64.1, i2c_designware.1
->>>        51:   25259915     109943          0          0  IR-IO-APIC 
->>> 51-fasteoi   DLL075B:01
->>>      Tue Feb 20 17:04:34 CET 2024
->>>        17: 1631574647          0          0    6452384  IR-IO-APIC 
->>> 17-fasteoi   idma64.1, i2c_designware.1
->>>        51:   25260527     109943          0          0  IR-IO-APIC 
->>> 51-fasteoi   DLL075B:01
->>>      Tue Feb 20 17:04:35 CET 2024
->>>        17: 1631613552          0          0    6452384  IR-IO-APIC 
->>> 17-fasteoi   idma64.1, i2c_designware.1
->>>        51:   25261130     109943          0          0  IR-IO-APIC 
->>> 51-fasteoi   DLL075B:01
->>>
->>> The D state increases the load average.
->>>
->>> Is that the expected behavior?
->>
->> No this is not. Touchpad appears to be firing interrupt line 51 
->> continuously and then drivers/hid/i2c-hid/i2c-hid-core.c: 
->> i2c_hid_irq() is trying to read input from touchpad over I2C bus.
->>
->> Not sure is this HW failure or system FW error (there are bad ACPI 
->> tables out there misconfiguring things etc).
-> 
-> It normally works, and I have no idea, if this even contributed to the 
-> laggy system. Right now, the interrupts do not increase when *not* using 
-> the touchpad or touchscreen.
-> 
-Ah, so it triggers randomly? When it happens does the situation remain 
-or does it recover back to normal somehow, e.g. after touching the 
-touchpad, unloading and loading the i2c_hid[_acpi] module, 
-suspend/resume cycle, etc?
+The changes are for Marvell OcteonTX2 SOC family:
 
-> If it helps, the output of `acpidump` is attached to the (unrelated) 
-> Linux Kernel Bugzilla issue *Linux warning `usb: port power management 
-> may be unreliable` on Dell XPS 13 9360* [1].
-> 
-> Do you have a suggestion, what I can do next time, this happens?
-> 
-I'd try to see is it possible to recover back to normal or is reboot 
-required. That might give ideas what might trigger the situation.
+- Handling clock divisor logic using subsytem ID
+- Support for high speed mode
+- Handle watchdog timeout
+- Added ioclk support
 
-> Could Linux detect this situation and log something?
-> 
-Don't know. Perhaps difficult to differentiate from normal touchpad use.
+Changes since V3:
+- Removed the MAINTAINER file change from this series
+- Modified the commit message to include more details
+- Minor changes such as adding macros, comments modified
+  to have more detail as required
+
+Changes since V2:
+- Respinning the series, no functional change
+- Added Marvell member in MAINTAINERS file
+- Added macro OTX2_REF_FREQ_DEFAULT for 100 MHz
+
+Changes since V1:
+- Addressed comments, added defines as required
+- Removed unnecessary code
+- Added a patch to support ioclk if sclk not present in ACPI table
+
+Piyush Malgujar (1):
+  i2c: thunderx: Adding ioclk support
+
+Suneel Garapati (3):
+  i2c: thunderx: Clock divisor logic changes
+  i2c: thunderx: Add support for High speed mode
+  i2c: octeon: Handle watchdog timeout
+
+ drivers/i2c/busses/i2c-octeon-core.c     | 105 +++++++++++++++++------
+ drivers/i2c/busses/i2c-octeon-core.h     |  25 ++++++
+ drivers/i2c/busses/i2c-thunderx-pcidrv.c |  23 +++--
+ 3 files changed, 123 insertions(+), 30 deletions(-)
+
+-- 
+2.43.0
+
 
