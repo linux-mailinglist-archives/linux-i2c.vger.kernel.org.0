@@ -1,114 +1,167 @@
-Return-Path: <linux-i2c+bounces-1951-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1952-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B8FE861968
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 18:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A5A9C861FDC
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 23:34:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D5681C24816
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 17:26:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D70831C23C81
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 22:34:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CDA513B785;
-	Fri, 23 Feb 2024 17:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 736FF143C63;
+	Fri, 23 Feb 2024 22:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="tAk4AQFW"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WNubgYoW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768A61384A3;
-	Fri, 23 Feb 2024 17:25:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C7471803E
+	for <linux-i2c@vger.kernel.org>; Fri, 23 Feb 2024 22:34:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708709130; cv=none; b=CDB6XhNJykIwtpGDmMk9IDFz9Gm4wG53F0EuWmPkyTnxUL6aUCJR2HoRbQGrYpSM4egsZMI3TMIT8Wy0RQuAVOg2Ev5/n6oidj7boBjakDr1KoErJPSj/uV7eOjQscqC9JJCniEohisxmTiHkSsC1iiDYD0Z+uQqu5haZM6SHNA=
+	t=1708727672; cv=none; b=DL2tw6ouplwNusZNmkRV5cHDhc3vZm9sSLL9T2y/Tt6CVlpzl/ksHoeqlHJ+JScKtyiRJWOR5Q9lxq00ZgTMelky0utg1SjSuwsgc45guHOn8PNOC7NuV22+CmzAKGBmNF2qdOO1TgAZ6sgTvNUBiC1cl10p9AfdiB5UqKG46ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708709130; c=relaxed/simple;
-	bh=ndkSQI5Phz/pugFNXsdTMXAeuRKThwlhw4akLYKlS/k=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C9oJm4GNmNGBvNcSs0LcKwhfHACDPmh1R2ZQ/n85kDC9OPDOgWHb16+Z/PQlY3pPr9l2zCWXlCKn+7YvKvmZbpvzNuj7QLx8eOiIyT4cNT1V+lb2VsXIg1AfUUrGdjvm3QNTqSbGuRdoV4jw+Rn6ELJb9kWp3pb+kasZmkg3eMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=tAk4AQFW; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1708709113; x=1740245113;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ndkSQI5Phz/pugFNXsdTMXAeuRKThwlhw4akLYKlS/k=;
-  b=tAk4AQFWYhupwAF9vIBjLZw2txGkWJ0ejHv2revyVhEf6Oyl9Qzlhbj6
-   J/3qyIqWMbIENcNSDkrPOlUM/pvdAWfO8YITeadlA0uB1RNqIpeUWGlvF
-   UotoFuhwe8a1Yuw6Ysc8s3GlpJL6giSNcnjjkCuOnLB2rX0cXqs0FvOzG
-   hdo2v4h5RXych6yVxqT0rkgwsGRv5tuzwuR99bzidKJKn74zZJayLruPh
-   ZokjMzsXihH1VtxWfxFLQweIjBa6tt3MXiEBimYHl60bezjWV+poBrWKi
-   c5tmcBsbUbZLJcVmQrQHijnNnQo4J1v6ObE2g1KC10qSXWCqdAauil/fd
-   w==;
-X-CSE-ConnectionGUID: v7hxkNo6SBe1d+wSFbAzdA==
-X-CSE-MsgGUID: 5MMVxV7kRIq6fdV2JxxX+g==
-X-IronPort-AV: E=Sophos;i="6.06,180,1705388400"; 
-   d="scan'208";a="16734401"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Feb 2024 10:25:10 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 23 Feb 2024 10:25:08 -0700
-Received: from che-lt-i67070.microchip.com (10.10.85.11) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Fri, 23 Feb 2024 10:25:04 -0700
-From: Varshini Rajendran <varshini.rajendran@microchip.com>
-To: <andi.shyti@kernel.org>, <robh+dt@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>, <linux-i2c@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-CC: <varshini.rajendran@microchip.com>
-Subject: [PATCH v4 06/39] dt-bindings: i2c: at91: Add sam9x7 compatible string
-Date: Fri, 23 Feb 2024 22:54:59 +0530
-Message-ID: <20240223172459.671832-1-varshini.rajendran@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240223171342.669133-1-varshini.rajendran@microchip.com>
-References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+	s=arc-20240116; t=1708727672; c=relaxed/simple;
+	bh=OjImI9nqJ8TO8TDyZt96kFcK0C88oOP70tesV0S+yBY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j6/7yBvM9Y5hS/vUO6OH5pg7MlmTkoWl4k0ML46YR8z9zzMb3KzdaxfZGAw65U61EFq4XqjqUHMHoSPXDN+IVVNgoKOq+9EqLOL3DZ2CesLzV8+yuauysbSrjFrJV4CnrrxO58q8gVBR3DUm5i5ON9xknfcgqSzgrh/RunjEVCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WNubgYoW; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=2Wfh
+	FQ80HGIyU4EysZndPKnOpYN/Nd/vyMAbdv2H1oE=; b=WNubgYoWQFi11xP0oDRe
+	z/4cvJH7rLAtEdS7XwEDVqmGY3B/gf0rxuPUCi8SUmKE5NbqOBWwE3iLQxBm9z/Y
+	GEhlSWf36eGtjPd7KjFexqs64aymQbsRPCwOZcBC/7+QRUd4K/1mIjQ6nEUMx9JP
+	AeZM/fNoXKdT96q0u3GhKaPjI1i7SzrnuBKBsjMY7PuqTkzMIFucYW2sTxJNgjBh
+	kSBN6dzu658AL9eQEIOvM/8tXMt79XIyRdZtZrZXHw1xf+F5Z9tYhCEkfE1IKoFx
+	RAyhlfXSm1iJv2YG1wkKEE87gA9pf/lj9V9PaSZ4GoezXe+222K7unYyAizoWy0i
+	lg==
+Received: (qmail 380856 invoked from network); 23 Feb 2024 23:34:20 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 Feb 2024 23:34:20 +0100
+X-UD-Smtp-Session: l3s3148p1@CUgsKRQS0JEujnsZ
+Date: Fri, 23 Feb 2024 23:34:19 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
+	linux-sound@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: Remove obsolete i2c.txt
+Message-ID: <Zdkda5jf072mENvK@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Rob Herring <robh@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
+	linux-sound@vger.kernel.org
+References: <20240222174343.3482354-2-robh@kernel.org>
+ <ZdemsdGQE0RtilCd@shikoro>
+ <CAL_JsqKpn6jqktRLQUx7HMrJG0PZeiOZ=hQnHpZK6AHcM22CLQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="fF2R2D/X283ptnYJ"
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqKpn6jqktRLQUx7HMrJG0PZeiOZ=hQnHpZK6AHcM22CLQ@mail.gmail.com>
 
-Add compatible string for sam9x7.
 
-Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
----
-Changes in v4:
-- Made sam9x7 compatible as an enum with sama7g5 compatible
-- Removed the sam9x7 compatible from allOf section as it was not needed
-  like pointed out
----
- Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+--fF2R2D/X283ptnYJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-index 6adedd3ec399..b1c13bab2472 100644
---- a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-@@ -25,7 +25,9 @@ properties:
-               - atmel,sama5d2-i2c
-               - microchip,sam9x60-i2c
-       - items:
--          - const: microchip,sama7g5-i2c
-+          - enum:
-+              - microchip,sama7g5-i2c
-+              - microchip,sam9x7-i2c
-           - const: microchip,sam9x60-i2c
- 
-   reg:
--- 
-2.25.1
+Hi Rob,
 
+> > * In the schema, "clock-frequency" has a minimum of 1kHz and a maximum
+> >   of 3MHz. Why? The specs do not say anything about a minimum freq and
+> >   fastest speed mentioned in the docs is 5Mhz (Ultra fast mode).
+>=20
+> IIRC, the high speed mode originally topped out at 3MHz. I guess
+> that's been revised.
+
+Hs-mode has a max of 3.4MHz...
+
+>=20
+> We can drop the minimum.
+
+=2E.. but I see you changed min/max now to 1/5000000. That's what I would
+have suggested as well.
+
+
+> > * new binding "i2c-scl-clk-low-timeout-us" has a description which I do
+> >   not understand. What is a waiting state?
+>=20
+> Shrug. May have to look at the MPC h/w that uses the property.
+
+I will also have another look. My gut feeling is that the binding is
+okay, only the description might need an update.
+
+> >
+> > * new binding "no-detect" is broken. At the least, it should be named
+> >   something like "bus-fully-described" and then the OS can decide to
+> >   leave out auto-detection mechanisms. If you are interested in the
+> >   latter, you can simply disable class based instantiation on the host
+> >   controller. No need to describe this in DT.
+>=20
+> I've reverted the property now.
+
+Cool, thanks!
+
+Kind regards,
+
+   Wolfram
+
+
+--fF2R2D/X283ptnYJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXZHWcACgkQFA3kzBSg
+KbYzig//S6LN1IJcbov4tQYqc0ld204PZ2cFEc0wE9p1z2ACiq71IoYiaESHLfjF
+8BndHnuZnCc4LsHNTnDVquUsM54mxypBiXdnBvmmKCrJUlnpDrwlVmRi1yQ0VuFP
+V2/zW4mOesb56puXSfua8Hsyp9M2qEGyjwJSdMMEozyQcBkLausobHQKbphvFhc6
+OAjp1HJvGb9kjrYRGpH6dbDPrk6efXcwKy3n63//ILBcmSloVfFbWgn8n3j7nk1I
+0EDdgRx4MDdz0leMRTlROjl7VtF+EdWeZ0OqIuZPGNxTuk5xXa3XII0bT9+tOBCA
+/c4eLMLua8keQnLJanHxIpcVYv982KNjJMfOaIOI6u0F7UsV6ZRLEQbmzuYE9QpG
+2mK37DgB4b8V85n6HwpXzZaiqOnzEFIJ70ZEDPkVhtEfcNjz5etDvwWomgiotfKO
+QajwbDm9F3R4FcO3EA8WgDR/dDv8cqCXjOfgFyUV9jjbbeDO5rVUMBGLoLSlv1+D
+ysOnVR1JSK6d4wtN6gbCMnzK6aAQPmgdZWq09P5sarNEfGJ3tv6ztUdcfDkoKsiJ
+xfRUrch+VMkrIMbshoICqlRyjtOPMSNpme1eClzMQgd6CDi0mBXJC6fWPmLYV6kS
+Spc1IA87hY7oYQH5LXdd0PwZs/2ulfzTdJ/m90bdPzfIifiVxn4=
+=ITPf
+-----END PGP SIGNATURE-----
+
+--fF2R2D/X283ptnYJ--
 
