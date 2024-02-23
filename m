@@ -1,130 +1,144 @@
-Return-Path: <linux-i2c+bounces-1953-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1954-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0CC3862015
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 23:53:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A1758620D1
+	for <lists+linux-i2c@lfdr.de>; Sat, 24 Feb 2024 00:53:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5AD31F26410
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 22:53:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A49F1F2488D
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 23:53:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD5CF14CAC3;
-	Fri, 23 Feb 2024 22:53:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0825E14DFDF;
+	Fri, 23 Feb 2024 23:53:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gAofBZiN"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bFNTDbX4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 762E1145B1B;
-	Fri, 23 Feb 2024 22:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF18714DFF3
+	for <linux-i2c@vger.kernel.org>; Fri, 23 Feb 2024 23:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708728830; cv=none; b=NouMQeNhHjQM2eQ8HnDqZ+kyQhy1+pnXkUD71UDpSaPkbJWzsj7AxE0cCO5WynK5Oi9Fh2tLCxp4+HxyTkHHsKE4R2VVLs6++thLmQfxzubO2f34QqAN57Jnfcs+nbMAItNDijQtoH/vEJT0y701nCK6a5DX20X3/sOw5YfA9kU=
+	t=1708732385; cv=none; b=q7a5wsePNMpMy4+GOV2Nsbb11PjoEzwWy0/A2RQQUGujy0mTHjJgQbIPHeB3ed2pV8gMyl0rGZYFxd9qaLTJz2VpkRm62iazu8dNnvCbcV+JdrmP4KWRZ27Vs/Wtv5NvikLHerRIUsnd22GrIKa+DgVpG2L/DLN9mNMQ8Oe8tDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708728830; c=relaxed/simple;
-	bh=8fI90c/X8hnq40ZoYMZVuBQV6bfsiyXr3g1YwmXe9gA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=WRqqxEb/DaLNoJoEI8PG8HKDsjqcwwDTixLrSoWEJt8IUe+i4j+HtDTBJ7FuMQDpwe4kgpuF5+PdpZZgFZ39Wzz+k2g5tjLBpxwCXqUMGQFtH3jtO+Ul4ZIwiQZUY+Uo7/kXd8BGrQYmbhPXaPb/N7ncfNeAk6i4VUOL7CzumOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gAofBZiN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C8BC433F1;
-	Fri, 23 Feb 2024 22:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708728830;
-	bh=8fI90c/X8hnq40ZoYMZVuBQV6bfsiyXr3g1YwmXe9gA=;
-	h=Date:From:To:Cc:Subject:From;
-	b=gAofBZiN7cVAP4fKdDIZemGEMo13V0vKOsp4JmYY7W6TfmCJ3Fb1lnL3knaYqFNMA
-	 L9/41+JTv2xGcvxTfDHF8N6X5K0H56AOwltAs34gAVBTQmZCDcxTeDe2oJW/uewVBn
-	 cAaAxyFtY936OgNZXdy2ssSEZPkIR5dmqZlj3+nuf9QBo/1GnvVreqrV5wMgyVFjsK
-	 c+5ofxMbDwdjWRI4wYvra/aNGCFht/Bv7U83bzbjBw26cRnLhuZY2TIW0IH53+WmQR
-	 jiA3G/m9d8V3eIc3jolsenmmKdOebO+zdaEJhsKlBNtpWYi24hfyBViAgvDVigbpd7
-	 wKlji5ZvK/K6w==
-Date: Fri, 23 Feb 2024 23:53:47 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PULL REQUEST] i2c-for-6.8-rc6
-Message-ID: <Zdkh-4-6G9UfkOIu@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>
+	s=arc-20240116; t=1708732385; c=relaxed/simple;
+	bh=zg8HqNF7aNa77zuqfRyQfW/fe99lLofctq+gMMs9G44=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Eimou3HMPMCdO9x2a3Gpw4TaGlStGR0eTb7KJmvibDlX17jRvB4T2NnY0zhDpa0mvkt5X2ve/821ViZd9H+0RJdDJXQPCg310oPud4CD3nvDvPcEpSypAj3TiDiq5b+epz7LOyizY7qmd95f2Ktk5AcMkK6JdrJU2GkfaIxhe+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=bFNTDbX4; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5d8b519e438so1293508a12.1
+        for <linux-i2c@vger.kernel.org>; Fri, 23 Feb 2024 15:52:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1708732377; x=1709337177; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CtZ/gyZzvkeNiWt3oVfT5QTmQaJyVqDv2YJqGRGnkp8=;
+        b=bFNTDbX4t/+wJ17uhYeOwK48ligwrudqgUXrs6T66/iR9ztdLkoTEaH5f6krmWc6bN
+         HSbqmhjOXmNszglAVWbWLLy91gWIdSDFUzj/6QdyXgzQD0bVKyFBbzCIEk5tcP/Nxr5I
+         YIlgaI+ggYj152lj+s8Mf4J3my0SIHzMG+SL4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708732377; x=1709337177;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CtZ/gyZzvkeNiWt3oVfT5QTmQaJyVqDv2YJqGRGnkp8=;
+        b=Ii2mCx8Wj4bnhWndxIfDsaWf1G5s7u4V8nkoSdzbmoGZLUEqYUS7CYwUMBgBSws+M9
+         xTxmGi63c6EZleK6XqTmonc17D+xOIz3C0KOMd3XafJ7eS3RRHjWqvYW2Bz2eXVj14Fj
+         x1lBYCb8JJZqdmuS3HpwXX6cxTt3fhYG2mm/OOUlPwxHN28deS6ODpGFrWlJx2NQhYWv
+         wA0OcPl7UF9iAnN0rGPXP3qG7q+YxkD7eEqoFFyDYFSP1APyRJTNqoLHXgADi4FdWOXC
+         AqgRp88L9o2/AV0y57o+xM/CsZFpBYM6RZzjU3XDBBgBmSvSd79mzdYcIsZWdI2B52p9
+         9ZEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/ARCM9ZviuACj4IMl9kamGMDO353bD7UWoeKvJTpak3Kw4R5VRVz6cCULR08EsGvSHWlqScYVeg2mvAUghwmZpqEUEJPHzydi
+X-Gm-Message-State: AOJu0YxSJOYxLkh3tbfbHI7PL12AcuehnsXCHs5DRpf5xYAT1lUoBsl1
+	Zk+QQ5co96PMyEng4EVcKTBV3Qf6RYl5oPQrNqX3pktKIvUCoZy2YPlzf74BTg==
+X-Google-Smtp-Source: AGHT+IF2ovpdMncpOoipr11gK3mj2YeoUlDG6r4zkubeInfRKqAiH6Gx3gjs5b2QMNtbTaGPmvGiTg==
+X-Received: by 2002:a05:6a20:a49d:b0:19e:a527:96be with SMTP id y29-20020a056a20a49d00b0019ea52796bemr966445pzk.43.1708732377079;
+        Fri, 23 Feb 2024 15:52:57 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id l64-20020a632543000000b005d3bae243bbsm57028pgl.4.2024.02.23.15.52.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Feb 2024 15:52:56 -0800 (PST)
+Date: Fri, 23 Feb 2024 15:52:56 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Jacob Keller <jacob.e.keller@intel.com>
+Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Peter Rosin <peda@axentia.se>, gustavoars@kernel.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH -next] mux: convert mux_chip->mux to flexible array
+Message-ID: <202402231552.26E774D@keescook>
+References: <20230223014221.1710307-1-jacob.e.keller@intel.com>
+ <e8782296-49bc-33a2-47b3-45c204551806@intel.com>
+ <202402182100.1D5BBE45@keescook>
+ <787dcf27-c434-42e0-9c80-35e341aa16c4@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="W+jNT0ni3h6BrAXc"
-Content-Disposition: inline
-
-
---W+jNT0ni3h6BrAXc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <787dcf27-c434-42e0-9c80-35e341aa16c4@intel.com>
 
-The following changes since commit b401b621758e46812da61fa58a67c3fd8d91de0d:
+On Tue, Feb 20, 2024 at 01:27:45PM -0800, Jacob Keller wrote:
+> 
+> 
+> On 2/18/2024 9:04 PM, Kees Cook wrote:
+> > On Mon, Feb 27, 2023 at 12:28:43PM -0800, Jesse Brandeburg wrote:
+> >> On 2/22/2023 5:42 PM, Jacob Keller wrote:
+> >>> The mux_chip structure size is over allocated to additionally include both
+> >>> the array of mux controllers as well as a device specific private area.
+> >>> The controllers array is then pointed to by assigning mux_chip->mux to the
+> >>> first block of extra memory, while the private area is extracted via
+> >>> mux_chip_priv() and points to the area just after the controllers.
+> >>>
+> >>> The size of the mux_chip allocation uses direct multiplication and addition
+> >>> rather than the <linux/overflow.h> helpers. In addition, the mux_chip->mux
+> >>> struct member wastes space by having to store the pointer as part of the
+> >>> structures.
+> >>>
+> >>> Convert struct mux_chip to use a flexible array member for the mux
+> >>> controller array. Use struct_size() and size_add() to compute the size of
+> >>> the structure while protecting against overflow.
+> >>>
+> >>> After converting the mux pointer, notice that two 4-byte holes remain in
+> >>> the structure layout due to the alignment requirements for the dev
+> >>> sub-structure and the ops pointer.
+> >>>
+> >>> These can be easily fixed through re-ordering the id field to the 4-byte
+> >>> hole just after the controllers member.
+> >>
+> >> Looks good to me (just a driver dev, not a mux dev!). Also added
+> >> linux-i2c mailing list and a couple others for more review.
+> >>
+> >> Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+> >>
+> >> related thread (cocci script) at [1]
+> >>
+> >> [1]
+> >> https://lore.kernel.org/all/20230227202428.3657443-1-jacob.e.keller@intel.com/
+> > 
+> > *thread necromancy*
+> > 
+> > Can we land this? It's the last struct_size() instance that the above
+> > Coccinelle script flags.
+> > 
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > 
+> 
+> I'm happy to send a v2 if we need.
 
-  Linux 6.8-rc5 (2024-02-18 12:56:25 -0800)
+Since it's been a while, yeah, can you send a v2?
 
-are available in the Git repository at:
+Thanks!
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.8-rc6
+-Kees
 
-for you to fetch changes up to 87aec499368d488c20292952d6d4be7cb9e49c5e:
-
-  i2c: imx: when being a target, mark the last read as processed (2024-02-23 23:39:35 +0100)
-
-----------------------------------------------------------------
-Passing on a bugfix for host drivers
-
-Andi's PR comment:
-
-One fix in i2c-imx marks the last read as 'processed' to ensure
-proper indexing of the transfers.
-
-----------------------------------------------------------------
-Corey Minyard (1):
-      i2c: imx: when being a target, mark the last read as processed
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Andrew Manley (2):
-      (Test) i2c: imx: when being a target, mark the last read as processed
-      (Rev.) i2c: imx: when being a target, mark the last read as processed
-
-Oleksij Rempel (1):
-      (Rev.) i2c: imx: when being a target, mark the last read as processed
-
- drivers/i2c/busses/i2c-imx.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
---W+jNT0ni3h6BrAXc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXZIfoACgkQFA3kzBSg
-KbYTcw/1EZrGvabgy1mEd1gWPl7QMhRG4Jw0nCv2xNMcmRP1KmnWWzbEsQf1h7pg
-38VNldLVE6brjgmFCBsXW7jI073Zctb9UMeFmibiickI6JL1ES1YC0e7mwiRz2m2
-GWZiVFmyLQFBZTcHWqi4MOk+2oKFXOAPv7+ifTs47k6JYve+Vzd9jaILc2M9sdMv
-3FdAw8iCVRt8WvP5//qPDNJeoKyBa9M2wR9vK2Iy0J2yHsZu/s8SSIDoYOvRUhJC
-vj1X09FrV8/9KcSzYYvQMOefGIfsvotF8qAx6FVQkQ6W8xRJ1VmKGcFNgK/yODyH
-5mKWa/F8hJZQegFenQxrHUQ+fjBHYOwrUaIeEp3Ej9WHFzLtycFrIQzPRqCiwdeC
-aLr952omuLIFdwVJj56eQDQLfFe6bLqEqq+yhNZkwuLc91r5SFhlIue2hV9nUPot
-GsSZ2oLv8yB2zogQGi0UNlLpwcmToGfjnVRylA7jnTSS0igh3A+UUhv3oPCDQA1D
-QukON2YxTAMPjiZAyjlYjUQ0wEKId7M6p5q6ssMIMisq+SfddjVtuWpqRGc5mHHb
-O9K+2LGag3iB6MVNaGrEMTmiJ7xs1rY7UVlL+yOFv7y6M1yllC4ot25BFYyeB9Up
-Y4Xob/50Oy0yr3UQFAgIklY0WHjhDElO8TRhFZ7PkQSiXY4ZNQ==
-=OjSX
------END PGP SIGNATURE-----
-
---W+jNT0ni3h6BrAXc--
+-- 
+Kees Cook
 
