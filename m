@@ -1,120 +1,125 @@
-Return-Path: <linux-i2c+bounces-1947-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1948-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A78F4861569
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 16:20:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6523F861804
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 17:34:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D985F1C21B4E
-	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 15:20:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EFB328C68D
+	for <lists+linux-i2c@lfdr.de>; Fri, 23 Feb 2024 16:34:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C88381AC6;
-	Fri, 23 Feb 2024 15:20:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07657128811;
+	Fri, 23 Feb 2024 16:34:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YbSI4xlg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="brRGHeTv"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939BD8288D
-	for <linux-i2c@vger.kernel.org>; Fri, 23 Feb 2024 15:20:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6B58526B;
+	Fri, 23 Feb 2024 16:34:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708701609; cv=none; b=TWsW3bqNzp7ONUSMHKsqDdTRttKbqn6Gp+Y1We6zGGKmKAIQ/FLcmOGr+snrMk0p0LKbFV5FWOIG4ZTA26Zj6LJzCuvUMi0wQ54+ceIpAhss2EFe6ah/LntqMan3uziSPJjGjb4e4E9XZDKmQ6odawQNgRFQixGiG/R4D4Vry4g=
+	t=1708706089; cv=none; b=n7r+iIQr5endIz5ksiRZziCRhhwipYPHdqM25CwrL9Z/rY/pMdX+Fn/+PCYFCpA/pwZ3hjiOcOJY0v1gZa+EAk7j0nGtFakLL2lNr7FYbGOYw5q/xUpROE8kVE9e1m1nwXmLpok7YL7r4fpvJFEKslCPwn1cZKsfG8ZfUiAj+gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708701609; c=relaxed/simple;
-	bh=WatZofJZa7sGjZjsJdj7Yhpb5Jl5j6pb5w8VvpdiJlM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tI3xNwztgOS3pRGH75qhT05I58xb0NQtcFm/C5WuGuTEfdExcj6/07sgRVc0tx6jnplzY2oa4Gl6vQwOHdHU6fcxx4BCR3oAHa0Rg2Rdd0IwsYHQBPOsphLRjjhu8C1VlsvFcnT6UMrf/zsnZx53KH0lxsLD4Qp71DEyqXNtRvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YbSI4xlg; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708701607; x=1740237607;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WatZofJZa7sGjZjsJdj7Yhpb5Jl5j6pb5w8VvpdiJlM=;
-  b=YbSI4xlgRScPSgFnSGlu2uWg0Fxb/jq+bNwi/9hGip7CY6mdeshBYLH0
-   O7GnBloiRHH502GlWq0nxyKPRiyX1b7FvS/9x8ZNO7qmrtswAGRgvLDAt
-   BZFmNsLbKARDMKJDSCcksT1tP8oL04YWNpRHqnslaNKVMnHjURGBtLJP/
-   lWVTcRS6JICACDN0jYRrie/7xf6tZOTkngljU1i1dbZaVfHAPMzJpE5Pn
-   gJdDAywAqcx13/PFgex8vF+EBcD0hcuKcYjQerQiLuKmVin8Q1IHL6whS
-   WbecqNpHJ8AntI4LcA0/rqhQ8R+SprlK2Id6R2fhI6fgXuNcS2qoAds27
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10993"; a="6837577"
-X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
-   d="scan'208";a="6837577"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 07:20:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10993"; a="913748853"
-X-IronPort-AV: E=Sophos;i="6.06,180,1705392000"; 
-   d="scan'208";a="913748853"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2024 07:20:04 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rdXLF-00000006vwn-2KrM;
-	Fri, 23 Feb 2024 17:20:01 +0200
-Date: Fri, 23 Feb 2024 17:20:01 +0200
-From: 'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
-To: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc: Jiawen Wu <jiawenwu@trustnetic.com>, linux-i2c@vger.kernel.org,
-	'Andi Shyti' <andi.shyti@kernel.org>,
-	'Mika Westerberg' <mika.westerberg@linux.intel.com>,
-	'Jan Dabros' <jsd@semihalf.com>,
-	'Sanket Goswami' <Sanket.Goswami@amd.com>,
-	'Basavaraj Natikar' <Basavaraj.Natikar@amd.com>,
-	michael.j.ruhl@intel.com
-Subject: Re: [PATCH v3 0/6] i2c: designware: Generic polling mode code
-Message-ID: <Zdi3oQ87rfvIMUsH@smile.fi.intel.com>
-References: <20240213124847.672084-1-jarkko.nikula@linux.intel.com>
- <003901da624b$89c7c190$9d5744b0$@trustnetic.com>
- <c813d6d1-e37f-44d5-be40-67976f49cdb7@linux.intel.com>
+	s=arc-20240116; t=1708706089; c=relaxed/simple;
+	bh=ML4ablhECz74yeyKTaRvj0YCaIvVpkryRuSuGokJQxI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=Qe4yrvR8bOM4zN6x/ua6S9T+sKCLiDLRnAKeWg2ebNqpaAl8F6uSntVSQbpLF/eVTHzIgvFOF3NfyHo892WFJUmh/P2a0koq5Y9q8j0uvL6hUaBRh2ckU4HP8SBdnFOhku65lM9sHYuDOwb70FgowniQLTPRn6UR096aPDOF/3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=brRGHeTv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E09C433A6;
+	Fri, 23 Feb 2024 16:34:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708706089;
+	bh=ML4ablhECz74yeyKTaRvj0YCaIvVpkryRuSuGokJQxI=;
+	h=References:In-Reply-To:From:Date:Subject:To:From;
+	b=brRGHeTvcOMxMeLxgsQB9su2KBP0rA/NjlNhGfQHxKx1/0HRxDekA7A4jaNnSAlWt
+	 7WfMIZBQ8LWdXZNmGQwmrGteW9rh69RSXWRYCZy8wf6ZxADgzN8hnzbLXd50eWTNMN
+	 j5x0ABhhn9i9mv+e39KfY+TsjOKuiBkBVfJpjjKW0VOOe2DUGIPHsm0Q/WK2BkQo88
+	 VEx6qRg4vg2kiFf6N5eMQokJveNj7t5vJGK6yLGXemKX9IYnTBk+1PixinifI+eXsw
+	 PWZ7aePCdWa7GyjwQB/VcKWw2llXbwpBrt2KCjQxV+YaYhg5VOu1cPcYZ8JsdQtz8R
+	 g+4jgKRyhDVLg==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-512ea6ce06aso755459e87.2;
+        Fri, 23 Feb 2024 08:34:49 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVjjpj7QQerYrRG8i2K8goT4L+V+83OcKxjd3JlQq9blXqs1zERJlz1/HZyEB9mwRnX72cW8WF05BDcqMPAUjHvQRI1tsx+q42kuUlHtSq2x+HuJZpsrjTTQ9Y0DWePBbMpPgJZUkvn2rZk3oK2pZ7/aXiXCOWbfAwn+0W0MqbV7myHs9q9Mt6TUUeXn5j7ci5+8kL3AfXGap4lX9YKogI=
+X-Gm-Message-State: AOJu0YyKJFz/jF4bzNUjJ+r64A0quFeNfIGYjXZ1ZxPs4fyCVzmMD8G9
+	zqbwdED5OtPux/6nq+Y/46eqsv+oJZr5H+9VfpQ/vZ2lTZg3t2dkxyss5TdEF25qqKK4ehLKMJd
+	Secyn60f1567ErkKfyvk904sVwA==
+X-Google-Smtp-Source: AGHT+IE8kj3sCHnm6X+LNC4ToAKPr4y//DGpPKNeaFXMPaP7aTysr9A9jP71VheZenF8UTShPBeJkUDGcWcar8hx9Y4=
+X-Received: by 2002:ac2:5fd0:0:b0:512:c985:4890 with SMTP id
+ q16-20020ac25fd0000000b00512c9854890mr178807lfg.67.1708706087418; Fri, 23 Feb
+ 2024 08:34:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c813d6d1-e37f-44d5-be40-67976f49cdb7@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com>
+ <20240215-mbly-i2c-v1-1-19a336e91dca@bootlin.com> <20240216022704.GB850600-robh@kernel.org>
+ <CZ6E24VPJKJG.35LACFD6ZV5KE@bootlin.com> <CACRpkdZZhhzg5SY7U5dv_OfLEVejRFom4V9nCfkQXunAw1ZXSw@mail.gmail.com>
+ <CZ94LGRSF9KN.15ZO1VRMIQVR8@bootlin.com> <CZAX02IL1N1J.2GQR9D73GLRZB@bootlin.com>
+ <ZdY2WzKbElloXC4-@shikoro> <20240222171404.GA3334332-robh@kernel.org> <ZdegTjJpDJGEgdvo@shikoro>
+In-Reply-To: <ZdegTjJpDJGEgdvo@shikoro>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 23 Feb 2024 09:34:34 -0700
+X-Gmail-Original-Message-ID: <CAL_JsqLk3UbrXAymTvLQeeS-ACY7makTVYxa9CetO-G-v3TuqA@mail.gmail.com>
+Message-ID: <CAL_JsqLk3UbrXAymTvLQeeS-ACY7makTVYxa9CetO-G-v3TuqA@mail.gmail.com>
+Subject: Re: [PATCH 01/13] dt-bindings: i2c: nomadik: add timeout-usecs
+ property bindings
+To: Wolfram Sang <wsa@kernel.org>, Rob Herring <robh@kernel.org>, 
+	=?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-arm-kernel@lists.infradead.org, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	Gregory Clement <gregory.clement@bootlin.com>, 
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 23, 2024 at 05:09:37PM +0200, Jarkko Nikula wrote:
-> On 2/18/24 11:19, Jiawen Wu wrote:
-> > On Tue, Feb 13, 2024 8:49 PM, Jarkko Nikula wrote:
-> > > Hi Jiawen, Sanket and Basavaraj
-> > > 
-> > > I hope you could give a quick test to this patchset to see it won't cause
-> > > regression on your HW. This is mostly the same than the first version what
-> > > Jiawen tested earlier but in this 3rd version I decided to drop semphore
-> > > touching code patches from v2 due they being out of scope and fix a few
-> > > things noted by Andy.
-> > > 
-> > > Changes are in the patch 3/6 with two minor fixes to comments while moving
-> > > them and the patch 6/6 where i2c_dw_wait_transfer() is slightly modified
-> > > by Andy's suggestion plus I decided to remove one comment which became
-> > > unclear after this patch.
-> > 
-> > Hi Jarkko,
-> > 
-> > I've been testing the v3 patch series on Wangxun 10Gb NIC, it works well, too.
-> > Thanks!
-> > 
-> > Tested-by: Jiawen Wu <jiawenwu@trustnetic.com>
-> > 
-> Andy: Was this set ok in your point of view now?
+On Thu, Feb 22, 2024 at 12:28=E2=80=AFPM Wolfram Sang <wsa@kernel.org> wrot=
+e:
+>
+>
+> > > @Rob: My memory fails a little bit about these two schemas: we have t=
+he
+> > > github one for generic bindings, not strictly related to Linux, right=
+?
+> >
+> > Well, NONE of the bindings are strictly related to linux unless they sa=
+y
+> > 'linux,' prefix.
+>
+> Ok, right, of course. What I meant was probably: why do we have
+> controller bindings in the kernel and schema bindings in a github tree?
 
-Yes, I hoped that Andi applies it earlier last week or so.
+Generally the split is common, stable bindings go in dtschema. This is
+anything we'd consider should be in the DT spec. Though I have 0 plans
+to add anything to the spec because I'd like to generate the spec from
+schema. (Not really working on doing that either though). What's
+stable? Well, no solid definition there other than not new. So new
+things generally go into the kernel tree first.
 
--- 
-With Best Regards,
-Andy Shevchenko
+For device specific bindings, they will never go into dtschema and
+will live where the dts files are.
 
+> For me, this is a tad more difficult to maintain. Like
+> i2c-controller.yaml file has the "no-detect" binding which IMO is wrong
+> in many ways. I rejected the supporting code for Linux.
 
+It was probably added to i2c.txt and I probably said, looks fine, but
+add it to dtschema. Then the Linux support got rejected. We can simply
+remove it if it is not being used.
+
+This is why I'm generally against moving all the DT stuff out of the
+kernel. The reviewing would dry up. I'll try to make sure you see any
+future i2c changes. I take either patches on devicetree-spec list or
+GH PR. Shockingly, I mainly get GH PR.
+
+Rob
 
