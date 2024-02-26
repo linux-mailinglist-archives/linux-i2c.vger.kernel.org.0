@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-1988-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1987-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2293867CEA
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 17:56:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87BE9867CFF
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 17:58:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 114621C2B39A
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 16:56:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D6CAB29044
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 16:55:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB887130AD7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C37D9130AC5;
 	Mon, 26 Feb 2024 16:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EzAdIi1N"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="p0YF905S"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1B912F59D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DF712F596;
 	Mon, 26 Feb 2024 16:53:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708966427; cv=none; b=AS1x/0NxrRh6Lm5qjdJwLQUR2N/mJsISc1zW+iiB2t+fKYIjE+L9YW3heTfkRxJPRGFYxX+egVLZjZBZB5oj1IKHL47U4jSwtiw4aQyffCw7zHwEdc6prFrbTf59f4Iw3TxYmrFM+YcJKiVh2RIr+1eUP0wbZtv08ImKxOnpRVY=
+	t=1708966427; cv=none; b=SWL4JKzFAT/KE8/bXjYnKwStJHgHidZ36Jgi0RN9eQP818XJbH7BLHm/m5JtGwa4KrZnFoLFSRvVv/fOfgpns+05UDYHEPfKXEzwCQ+IKIYde1ybMinJi0j+NJiCbqowvxl404bXD2cyHOEIjn2K2IPlTWF8oeF7aAmduWKGUXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1708966427; c=relaxed/simple;
-	bh=rnrW55EMd5WY1H/Lf4PHZ/r+oG7ZBsAslE1xLX4eUiA=;
+	bh=dag58QHRP1fnYaS6R8SJNNOzUfUDraUYmqyTTX6oECc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sSQNMxEavyzGWpnU3PYlW8OtTxgpVSLyYQWE7nqAkIWOlpVYvXdkk3L34+mZGP5lnalAfkYM9LUxG1/ZqKZqEwAP14XMtGe8F9/ROQz7HS8Y8x7ghNdByIS682CGXPFm782NWafHC1CeP7hR2h7pWe0w6WesAoj9mpf3NxJCqIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EzAdIi1N; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=WEU41TA+iwjxztHI5eb1PsYunRMH/tqSZot8DJB0Ksy6SnIGbBDp5sD1bFZKMYnCZidHmL3pBpwHUAkUZZorgKwTLEPMjkcAlI6SdoMKMbLZ/H6DF3OSiJjtrkUVfog7I4bVwOCiseEkFhYnrjjiduiSU/NOJzXFaqUh/iOcijk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=p0YF905S; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41QGAPmv032560;
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41QGgWSj002982;
 	Mon, 26 Feb 2024 16:53:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=bcqBdP1smZ142CVdipR5CsJhhC56BJDRe32BgoHDJb0=;
- b=EzAdIi1NVXnE+z0nk7YalKHCEtL5d6Sjdwps9boCVbfwfE83eLVEBl0SkYVBgvbtwvzy
- LnY+59v5HQ1LAFYHTYZoRhniCeg46YfMBA1/5dchRu8DFu93heQjK8co5LLjz5X5HH6X
- niEE9vDS+pGqIvyFO0CcATJe3ToyclhBntTCjftpkQuzSuTpgDijT/lg1ZwCoHi/xDmp
- q+uelnaz0Ni/3kgdxwvecyZLUIbf2lnThFVaFF3wbjaA+eR02SCxGFO56TSINmPYlGgR
- jkspPGaPZd3vx5Mulyg7pib3TBacbGgNkYPkDH/z/uPCgE+rNQLggJNQ6qYgS0TIKeAU Gw== 
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wgw0k353b-1
+ bh=rmoDiCu3fC7Vm+wfRrhY6aDgTDEoQqVvLgZuCXucm4A=;
+ b=p0YF905S/AuVXilU6fAKSWE5tClfDmIFKH0QR1ItsvPW0BLP7fZsqC/EGfDPVBEzUj+3
+ 71u0hmv/swejzplAB+4J2VuJRLAxESOaBi4J4dOFvTmpA0mJxmZ9uSm/hwLcO8jmjY1K
+ 76NuHR6t9198D9ZCAb/m+iQHwIXniVtw0ty7/DvrhDRRIudrFRdKU1faPG9XqYVqUn1s
+ rdLZV0kaGotS2uhArjr8kvSMx/tIBRBqhUlCqMGNZhRqIjqiq1caGrZ54pUNLx6HubmF
+ Gi4fvjN9Gvz0fDhVK8KSccRgA4VJSv49+OvZVi6qHt1BKFEpHVetUJa0Vuyu2NnqNZeA Sg== 
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wgxd4g9ur-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 26 Feb 2024 16:53:35 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41QFJsHA008178;
+	Mon, 26 Feb 2024 16:53:34 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3wfv9m2a0b-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Mon, 26 Feb 2024 16:53:34 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41QFTGIc024151;
-	Mon, 26 Feb 2024 16:53:33 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wfw0k23f9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 26 Feb 2024 16:53:33 +0000
 Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41QGrUAx19858038
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41QGrVVc36831748
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Mon, 26 Feb 2024 16:53:33 GMT
 Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CE0DE58043;
-	Mon, 26 Feb 2024 16:53:30 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 9B83D5805D;
+	Mon, 26 Feb 2024 16:53:31 +0000 (GMT)
 Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 213B658053;
+	by IMSVA (Postfix) with ESMTP id E38F458053;
 	Mon, 26 Feb 2024 16:53:30 +0000 (GMT)
 Received: from slate16.aus.stglabs.ibm.com (unknown [9.61.57.130])
 	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
@@ -74,9 +74,9 @@ Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         eajames@linux.ibm.com, alistair@popple.id.au, joel@jms.id.au,
         jk@ozlabs.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         conor+dt@kernel.org, lakshmiy@us.ibmcom
-Subject: [PATCH v2 10/31] fsi: core: Add slave spinlock
-Date: Mon, 26 Feb 2024 10:53:00 -0600
-Message-Id: <20240226165321.91976-11-eajames@linux.ibm.com>
+Subject: [PATCH v2 11/31] fsi: core: Allow cfam device type aliases
+Date: Mon, 26 Feb 2024 10:53:01 -0600
+Message-Id: <20240226165321.91976-12-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240226165321.91976-1-eajames@linux.ibm.com>
 References: <20240226165321.91976-1-eajames@linux.ibm.com>
@@ -88,109 +88,121 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BOQEUV3VespclJ82cBk5wG0RIE0_MtFr
-X-Proofpoint-ORIG-GUID: BOQEUV3VespclJ82cBk5wG0RIE0_MtFr
+X-Proofpoint-GUID: nWDarWJWpsjLqt_it3GQia91Z1aNl05_
+X-Proofpoint-ORIG-GUID: nWDarWJWpsjLqt_it3GQia91Z1aNl05_
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-26_11,2024-02-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- clxscore=1015 impostorscore=0 lowpriorityscore=0 priorityscore=1501
- spamscore=0 suspectscore=0 phishscore=0 bulkscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
+ mlxlogscore=999 spamscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2311290000 definitions=main-2402260128
 
-FSI slave operations were not locked, meaning that during slave
-error recovery operations, other slave accesses may take place,
-resulting in incorrect recovery and additional errors. Make the
-slave access and error recovery atomic with a spinlock. Don't
-use a mutex for future interrupt handling support.
+Other FSI devices can uses aliases for the device numbering, so
+modify the function to get a new minor to allow the cfam type
+to use aliases too.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- drivers/fsi/fsi-core.c  | 7 +++++++
- drivers/fsi/fsi-slave.h | 2 ++
- 2 files changed, 9 insertions(+)
+Changes since v1:
+ - Check fsi device type variable before use to ensure we don't go out
+   of bounds on the fsi_dev_type_names array.
+
+ drivers/fsi/fsi-core.c | 59 +++++++++++++++++++++---------------------
+ 1 file changed, 29 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
-index e6ed2d0773b6..eb15e5f5a2ee 100644
+index eb15e5f5a2ee..8ad4feb71c8e 100644
 --- a/drivers/fsi/fsi-core.c
 +++ b/drivers/fsi/fsi-core.c
-@@ -304,6 +304,7 @@ static int fsi_slave_handle_error(struct fsi_slave *slave, bool write,
- int fsi_slave_read(struct fsi_slave *slave, uint32_t addr,
- 			void *val, size_t size)
- {
-+	unsigned long flags;
- 	uint8_t id = slave->id;
- 	int rc, err_rc, i;
- 
-@@ -311,6 +312,7 @@ int fsi_slave_read(struct fsi_slave *slave, uint32_t addr,
- 	if (rc)
- 		return rc;
- 
-+	spin_lock_irqsave(&slave->lock, flags);
- 	for (i = 0; i < slave_retries; i++) {
- 		rc = fsi_master_read(slave->master, slave->link,
- 				id, addr, val, size);
-@@ -321,6 +323,7 @@ int fsi_slave_read(struct fsi_slave *slave, uint32_t addr,
- 		if (err_rc)
- 			break;
- 	}
-+	spin_unlock_irqrestore(&slave->lock, flags);
- 
- 	return rc;
+@@ -884,12 +884,37 @@ static int fsi_adjust_index(int index)
+ #endif
  }
-@@ -329,6 +332,7 @@ EXPORT_SYMBOL_GPL(fsi_slave_read);
- int fsi_slave_write(struct fsi_slave *slave, uint32_t addr,
- 			const void *val, size_t size)
+ 
+-static int __fsi_get_new_minor(struct fsi_slave *slave, enum fsi_dev_type type,
+-			       dev_t *out_dev, int *out_index)
++static const char *const fsi_dev_type_names[] = {
++	"cfam",
++	"sbefifo",
++	"scom",
++	"occ",
++};
++
++static int __fsi_get_new_minor(struct fsi_slave *slave, struct device_node *np,
++			       enum fsi_dev_type type, dev_t *out_dev, int *out_index)
  {
-+	unsigned long flags;
- 	uint8_t id = slave->id;
- 	int rc, err_rc, i;
+ 	int cid = slave->chip_id;
+ 	int id;
  
-@@ -336,6 +340,7 @@ int fsi_slave_write(struct fsi_slave *slave, uint32_t addr,
- 	if (rc)
- 		return rc;
- 
-+	spin_lock_irqsave(&slave->lock, flags);
- 	for (i = 0; i < slave_retries; i++) {
- 		rc = fsi_master_write(slave->master, slave->link,
- 				id, addr, val, size);
-@@ -346,6 +351,7 @@ int fsi_slave_write(struct fsi_slave *slave, uint32_t addr,
- 		if (err_rc)
- 			break;
- 	}
-+	spin_unlock_irqrestore(&slave->lock, flags);
- 
- 	return rc;
++	if (np && type < 4) {
++		int aid = of_alias_get_id(np, fsi_dev_type_names[type]);
++
++		if (aid >= 0) {
++			/* Use the same scheme as the legacy numbers. */
++			id = (aid << 2) | type;
++			id = ida_alloc_range(&fsi_minor_ida, id, id, GFP_KERNEL);
++			if (id >= 0) {
++				*out_index = aid;
++				*out_dev = fsi_base_dev + id;
++				return 0;
++			}
++
++			if (id != -ENOSPC)
++				return id;
++		}
++	}
++
+ 	/* Check if we qualify for legacy numbering */
+ 	if (cid >= 0 && cid < 16 && type < 4) {
+ 		/*
+@@ -918,36 +943,10 @@ static int __fsi_get_new_minor(struct fsi_slave *slave, enum fsi_dev_type type,
+ 	return 0;
  }
-@@ -1005,6 +1011,7 @@ static int fsi_slave_init(struct fsi_master *master, int link, uint8_t id)
- 	if (!slave)
- 		return -ENOMEM;
  
-+	spin_lock_init(&slave->lock);
- 	dev_set_name(&slave->dev, "slave@%02x:%02x", link, id);
- 	slave->dev.type = &cfam_type;
- 	slave->dev.parent = &master->dev;
-diff --git a/drivers/fsi/fsi-slave.h b/drivers/fsi/fsi-slave.h
-index 42af2fae0329..6f8fb97023fb 100644
---- a/drivers/fsi/fsi-slave.h
-+++ b/drivers/fsi/fsi-slave.h
-@@ -6,6 +6,7 @@
+-static const char *const fsi_dev_type_names[] = {
+-	"cfam",
+-	"sbefifo",
+-	"scom",
+-	"occ",
+-};
+-
+ int fsi_get_new_minor(struct fsi_device *fdev, enum fsi_dev_type type,
+ 		      dev_t *out_dev, int *out_index)
+ {
+-	if (fdev->dev.of_node) {
+-		int aid = of_alias_get_id(fdev->dev.of_node, fsi_dev_type_names[type]);
+-
+-		if (aid >= 0) {
+-			/* Use the same scheme as the legacy numbers. */
+-			int id = (aid << 2) | type;
+-
+-			id = ida_alloc_range(&fsi_minor_ida, id, id, GFP_KERNEL);
+-			if (id >= 0) {
+-				*out_index = aid;
+-				*out_dev = fsi_base_dev + id;
+-				return 0;
+-			}
+-
+-			if (id != -ENOSPC)
+-				return id;
+-		}
+-	}
+-
+-	return __fsi_get_new_minor(fdev->slave, type, out_dev, out_index);
++	return __fsi_get_new_minor(fdev->slave, fdev->dev.of_node, type, out_dev, out_index);
+ }
+ EXPORT_SYMBOL_GPL(fsi_get_new_minor);
  
- #include <linux/cdev.h>
- #include <linux/device.h>
-+#include <linux/spinlock.h>
+@@ -1052,7 +1051,7 @@ static int fsi_slave_init(struct fsi_master *master, int link, uint8_t id)
+ 	}
  
- #define FSI_SLAVE_BASE			0x800
- 
-@@ -100,6 +101,7 @@ struct fsi_slave {
- 	struct device		dev;
- 	struct fsi_master	*master;
- 	struct cdev		cdev;
-+	spinlock_t		lock;	/* atomic access and error recovery */
- 	int			cdev_idx;
- 	int			id;	/* FSI address */
- 	int			link;	/* FSI link# */
+ 	/* Allocate a minor in the FSI space */
+-	rc = __fsi_get_new_minor(slave, fsi_dev_cfam, &slave->dev.devt,
++	rc = __fsi_get_new_minor(slave, slave->dev.of_node, fsi_dev_cfam, &slave->dev.devt,
+ 				 &slave->cdev_idx);
+ 	if (rc)
+ 		goto err_free;
 -- 
 2.39.3
 
