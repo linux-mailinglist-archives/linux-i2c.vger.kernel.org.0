@@ -1,158 +1,140 @@
-Return-Path: <linux-i2c+bounces-1970-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1971-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45E1B866BEA
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 09:16:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76594866E1F
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 10:19:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 699FF1C22A5E
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 08:16:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31B7F285F99
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 09:19:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD421D52C;
-	Mon, 26 Feb 2024 08:16:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E6A91CFAD;
+	Mon, 26 Feb 2024 08:42:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="czpnH9x6";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CZPrINJx";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="czpnH9x6";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CZPrINJx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bhxK74p5"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1C01D524
-	for <linux-i2c@vger.kernel.org>; Mon, 26 Feb 2024 08:16:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA731CAB9;
+	Mon, 26 Feb 2024 08:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708935382; cv=none; b=HEWa6Ag29eumY7SxL1QJ161fhTPhcU4I6sM2GzxRgkqguZO78+vcNRQZpGThDcilLR14iuk9EgLqekt/EC+E6uY58Ui1p5afhaZvlzIHG9eFg81KusVj+H3F7uFYwnaTgsnATZXbK5cz59nLWVkhfgTq2ENJ4SQsMaO9XL7VtG8=
+	t=1708936921; cv=none; b=MtyhUdLqDDmfBTN6m/2fDWEj+5YLqVn4gxrERghmm7JvAbuuMmb3Z9qgAqyJWxfyUQE1GrdrLgWlNNRf8GmZE1JgGTckUf4FnBh5BKJHAsb00XPTjCdryg4l20K9EJTXUZrhf8RE4Helsnwm+lg7fjzXh3+vABPsoakeC5QJX2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708935382; c=relaxed/simple;
-	bh=2RNlqhvRzJvXupO71JICy09qhjSfjIar6HRSOjhxA7w=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XP246NbTfL2iy3TAF4Wh7CEL+Mc8hJYo67y0fAiQzAnEh7TeIPsL/a4yPy2MZRWK+70J7xgR9TWLR1/rbLDqRUWhsrUq+FlxiBjtUkhR2PcZl7HSGQ4yDKYH/SSUPy4ILc0UOTeiRGIu2I6xiBoRmFtXK29J+a1D2rKWz89oBkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=czpnH9x6; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CZPrINJx; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=czpnH9x6; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CZPrINJx; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 2F5E322513;
-	Mon, 26 Feb 2024 08:16:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1708935379; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ThKW/cewZV567LbovOVWv4x90zwJLsIadSWfxqVQiwQ=;
-	b=czpnH9x60WZJJaZKXQSTwozNBG60rlo5gImw3XnFGdHw5bMKSYhb1zvzMdXGFQL17cI8SS
-	2ao2DG3ct/uuNu7UfmWAmrnaX/daXqu960BAo8+k9egxrsZqLWkDgfclgwynQz8Yaw0ddY
-	AZeAL+2dTvv0L18+rtZPOvLWMEUmE+Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1708935379;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ThKW/cewZV567LbovOVWv4x90zwJLsIadSWfxqVQiwQ=;
-	b=CZPrINJxY5oAFdXbxxHQwkoj9lmpu5ziKi0NrY6xTQ0izCJv3RbkOzcpauBJOdIGSkGErH
-	kWVdUE1RUEYAdHCA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1708935379; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ThKW/cewZV567LbovOVWv4x90zwJLsIadSWfxqVQiwQ=;
-	b=czpnH9x60WZJJaZKXQSTwozNBG60rlo5gImw3XnFGdHw5bMKSYhb1zvzMdXGFQL17cI8SS
-	2ao2DG3ct/uuNu7UfmWAmrnaX/daXqu960BAo8+k9egxrsZqLWkDgfclgwynQz8Yaw0ddY
-	AZeAL+2dTvv0L18+rtZPOvLWMEUmE+Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1708935379;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ThKW/cewZV567LbovOVWv4x90zwJLsIadSWfxqVQiwQ=;
-	b=CZPrINJxY5oAFdXbxxHQwkoj9lmpu5ziKi0NrY6xTQ0izCJv3RbkOzcpauBJOdIGSkGErH
-	kWVdUE1RUEYAdHCA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6F97913A80;
-	Mon, 26 Feb 2024 08:16:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id uqtbFtJI3GXvDQAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Mon, 26 Feb 2024 08:16:18 +0000
-Message-ID: <53c2427ccf0d56012b51ff7517616a70a02aaa73.camel@suse.de>
-Subject: Re: [PATCH] i2c: i801: Fix block process call transactions
-From: Jean Delvare <jdelvare@suse.de>
-To: "Zakowski, Piotr" <piotr.zakowski@linux.intel.com>, 
-	linux-i2c@vger.kernel.org
-Cc: piotr.zakowski@intel.com, alexander.sverdlin@gmail.com, 
-	andi.shyti@kernel.org, oren.shepon@intel.com, pawel.kozlowski@intel.com, 
-	alexander.usyskin@intel.com, jakub.radtke@intel.com
-Date: Mon, 26 Feb 2024 09:16:17 +0100
-In-Reply-To: <635a719b-84f1-4460-b4f5-ab6327de9474@linux.intel.com>
-References: <635a719b-84f1-4460-b4f5-ab6327de9474@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	s=arc-20240116; t=1708936921; c=relaxed/simple;
+	bh=cEt/RUX0lThydTXPuAPjsQ4gTtxmbYh9mUY2ih/P5eY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lgoa2lH1HtwcJVReGyz7arvvVQtz3Fv4IzVFLBWpqN7gv5OlKiSBNKPC9wjixj8tPK6Ux889p2gdzvY6irX8emImQRViMcJpkU+ng2rM8yBQLbHljRT0ZDio/ugBzucVplSX88AWOs8hlf0M6C7Fd87vXRNYLjoiHc/8A0JbLkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bhxK74p5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EADDC433C7;
+	Mon, 26 Feb 2024 08:42:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708936921;
+	bh=cEt/RUX0lThydTXPuAPjsQ4gTtxmbYh9mUY2ih/P5eY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bhxK74p5YtnC90wX4cA1Nmh6dihZgxJSx0HfRpclARKsRDJgwhBWWCv8326q1ug2N
+	 2JFQ7+Iza+A2uMQ3SiZHUSNpWZwkBny21B3zNprSQiU0y8cngnSQHgRNevUoVWLm8m
+	 HXLud7VnN5zexuXuXfCPoFlIA8GbHAdY0rw/rrze/0M6vXE5QxcXzTHb9LFngavUve
+	 PLK32NGc72b339ZIYVDn0sK+xhBiqqtCAlpbIoMlmnaIF+Spxt5mmxxnGK9577VlVL
+	 DkSLoXgQ50EpTYa78kPAzChTIqMPYycE4fgxmJgOZrjEVhISnpnti4/NljL+vqc5gr
+	 4zCS55d1gAX3A==
+Date: Mon, 26 Feb 2024 09:41:58 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH 01/13] dt-bindings: i2c: nomadik: add timeout-usecs
+ property bindings
+Message-ID: <ZdxO1l408x7kMwsB@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+References: <20240215-mbly-i2c-v1-1-19a336e91dca@bootlin.com>
+ <20240216022704.GB850600-robh@kernel.org>
+ <CZ6E24VPJKJG.35LACFD6ZV5KE@bootlin.com>
+ <CACRpkdZZhhzg5SY7U5dv_OfLEVejRFom4V9nCfkQXunAw1ZXSw@mail.gmail.com>
+ <CZ94LGRSF9KN.15ZO1VRMIQVR8@bootlin.com>
+ <CZAX02IL1N1J.2GQR9D73GLRZB@bootlin.com>
+ <ZdY2WzKbElloXC4-@shikoro>
+ <20240222171404.GA3334332-robh@kernel.org>
+ <ZdegTjJpDJGEgdvo@shikoro>
+ <CAL_JsqLk3UbrXAymTvLQeeS-ACY7makTVYxa9CetO-G-v3TuqA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spamd-Result: default: False [1.25 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 MID_RHS_MATCH_FROM(0.00)[];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 TAGGED_RCPT(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 BAYES_HAM(-0.15)[68.60%];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	 RCPT_COUNT_SEVEN(0.00)[9];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 FREEMAIL_CC(0.00)[intel.com,gmail.com,kernel.org];
-	 RCVD_TLS_ALL(0.00)[];
-	 SUSPICIOUS_RECIPS(1.50)[]
-X-Spam-Level: *
-X-Spam-Score: 1.25
-X-Spam-Flag: NO
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jGozXIullJVYR1fu"
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqLk3UbrXAymTvLQeeS-ACY7makTVYxa9CetO-G-v3TuqA@mail.gmail.com>
 
-Hi Piotr,
 
-On Wed, 2024-02-21 at 12:48 +0100, Zakowski, Piotr wrote:
-> 
-> I applied your change and test now passes the expectations.
+--jGozXIullJVYR1fu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Sweet, thanks for testing!
+Hi Rob,
 
-> Could I confirm with you ioctl() response convention:
-> It is expected from driver to return +1 Byte (Byte Count as first byte 
-> together with the actual data) in read block commands (i.e. Block Read 
-> Command and Block Write - Block Read Process Call)?
-> 
-> For example:
-> 
-> Data: 0x5a 0x82 0x64 0xB9 (4 Bytes)
-> Return of ioctl() call of Block Read command: 0x04 0x5a 0x82 0x64 0xB9
+> I'll try to make sure you see any future i2c changes.
 
-Yes, this is the expected return.
+Thanks, if you mention @wsakernel I should get notified.
 
--- 
-Jean Delvare
-SUSE L3 Support
+I looked into watching specific directories in Github and I found the
+CODEOWNERS file. But code owners need to have write permissions and I
+am not sure this is worth the hazzle.
+
+Now on to checking that remaining binding...
+
+   Wolfram
+
+
+--jGozXIullJVYR1fu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXcTtIACgkQFA3kzBSg
+KbZ0Eg/9GIPjjbNJOCUz4gJoECPA7PtwjD0jB/4iW1OQQ32akslqKMkl0nIx8HCR
+chtQDMDl8xFHw1eQCV1FWFVorUoVEslcDJDX2CCUUcJGfimb8h/W6AwcEHib7mMu
+nnC/0OYBmDCQ+AU6A9YUYQRkF+j/zclDay5U5v9VNu69IDiE/lyZfem1zdDjJjD7
+WszhKsNhxItWKdWGvURKLkGPpB3jVJqaeaidi9QMm6IHIBLSmHf+fUWGRlaavpG0
+PHLZ2BDXY3+3tZm9oocAiK8CSJeAoo1DXSuz/tGNjamV2cgkDP9SqEaG+4wMoVKI
+pb6FeoKZQrAPCeNkKstYceh8AZtZY5HpgOKib7LhwhMWvJ92nstFU8++7qzus1np
+ibixz+VrQc0Pjm/HsO755vVeyleazBetuhCMHnq1yiYTAad7kkS1KQSFysSaWJVg
+aTbdPC3khK22hZ3kdiVtUw2Gaq3b97xMbx0r0yM3cA8VW9vwUKMNBCVRLtTIF9so
+KtTH1n6ZcPUaLaW6wzYXK8+VsvduSuBVLMFUWum+pZJUL2fxkvJv4z/Tj6zaViqa
+moWgVDVciK+Mh5y6LsvedTXU2Fdtiyoi9VtQTxy+GtE6htoCPGu8DKphNuFHxNCK
+crfhE+pwPhqrtHX9XDWgvzKEzVgSHG9XQ0mCn/rpShWu/KXQ4Gw=
+=oPtZ
+-----END PGP SIGNATURE-----
+
+--jGozXIullJVYR1fu--
 
