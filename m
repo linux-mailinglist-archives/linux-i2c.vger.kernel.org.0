@@ -1,62 +1,65 @@
-Return-Path: <linux-i2c+bounces-2012-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2013-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DF908682CF
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 22:17:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 151268682F2
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 22:25:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD0DCB23356
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 21:17:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DCE21C25C23
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 21:25:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A074A131733;
-	Mon, 26 Feb 2024 21:17:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F0CD131732;
+	Mon, 26 Feb 2024 21:24:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cy2sjjbm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="htjkCQYF"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B72131724;
-	Mon, 26 Feb 2024 21:17:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090C21CA91;
+	Mon, 26 Feb 2024 21:24:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708982222; cv=none; b=QAr8jZuEOR8Y7MLev9SakDU1iOo+mL7eYmzsP3JyFuRW8llLvPH6pnTxpArAKlnJ+K1iFBRBk2FdgBnT9F/sh+IR6gHIPz0KVKf4GNVyEAzb/bdQSiM8tzWsTW3ldRMWiyM5JkKLvQyz+2H3cexMrvJZET4PFZ1V79fCl3mkbSA=
+	t=1708982697; cv=none; b=dMHCP3JLo4tu2UVidCljDv8qOpeN5Z0MyRxsmxBa5V0izGS9etOXrspW/pLfnJRB8IKLXCEOq84XPuBEz9OuqLixEtlSUpYCKSNn9pLjuT8WYVHzASELbnYzu+tcKvYsH54eROVlKTXiJDhjG4EaHyYwocnHdIJ05xWXuT8TJSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708982222; c=relaxed/simple;
-	bh=TlFHGRpMN2lIP1KCLVIFbZ2Q8+BZdD4XBsfshvJl9X8=;
+	s=arc-20240116; t=1708982697; c=relaxed/simple;
+	bh=J8rnf5NHkC26worjsY8jvbTZZZ7pAOtwnba2Nt05aqA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kkkQdqMLAp8DGh0VqZWJ2TDbqjjBMdY7v2BMAQOOARAkNhzv3NA5LlLoPCEcpTnWS/QzjwEbkoz645B3rdSNbjN4QndEIEEMmmS9ZfQIYh1pg2MLyjJcJJa2mRsDw14c/Prw6t7T4RMNQZdU66SidEQTxjfmykaErUQNKOO/Okc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cy2sjjbm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 494D4C433C7;
-	Mon, 26 Feb 2024 21:17:00 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=P3W4yLX3zpItUy4VOQCqdcipgJY1rW0iK49dhGwLnfH8K7DID0P39UxXwPZq7oRXdU7bnAzeFjQ/0dSDry/WliN576X3pniZXS3heT8L6TcF9DSjhijVMtqcGj7bgjSOcDtp3fPCLuW+YwrtZ46UK2eq4XyeaNDcqIgqwah+K6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=htjkCQYF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A73C433F1;
+	Mon, 26 Feb 2024 21:24:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708982221;
-	bh=TlFHGRpMN2lIP1KCLVIFbZ2Q8+BZdD4XBsfshvJl9X8=;
+	s=k20201202; t=1708982696;
+	bh=J8rnf5NHkC26worjsY8jvbTZZZ7pAOtwnba2Nt05aqA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Cy2sjjbmB4vmJ+q7kprnwsTqvJ1VEDx2StVugBIg0rkyjnnuc09tKzvBPOwA9x7rY
-	 coE4434XW4y562yBEzQEgSr+lU0MkepivxTve+usRU2Mp5iKNtWnc0aC2HFXTR/50s
-	 cO9hkybOxSPN+jnYXfImkT1jiL7S1JhhyGCt6OF6MMDOIbdUjL8v/B5EHWYbbSr8rV
-	 3GQ8NfrbZQgBfr6GSpkXDm47P8iUoM9BB1Fktxf90SB4mPeQoOFdM0/EzSPftJNpYG
-	 +txCLGXsgT08BlzPoGN/zvg71D0fv+kpQFPdzX+2Gs6PpVOQ6+DVNtxAZp+edw8ct/
-	 ThBEurpda2s8A==
-Date: Mon, 26 Feb 2024 22:16:58 +0100
+	b=htjkCQYFx/AxoxJBMHA/AkBnVJXJr8BMNkuGK/1PZYsxmemAATJUDM7vQsqd3C528
+	 4CRZT+Afp1edyQccyjwn03zj2rJfr5/ZvTSe4fEZKXbh8sr+aNTRY0wT0XJwj6TMUC
+	 yOM+zQSOCctcY1rJoSMyWDPpK5oNw6Sq/zOmKVKTMXOrudE/wIWIgsujmFtSzIxjfQ
+	 etJGysq3WYwD9ibeRwtC8U7j6KWf0CdTYIWawQyVo7Hxg18Yez4C5Z0IRDh9HqAulh
+	 WEyshJcBIz6YthDxq0w0vpSbjxIGeXpknhFW0PJPaITdoVKaICyyiJXRGveFL6sxFy
+	 7YuHHN3XlNjSw==
+Date: Mon, 26 Feb 2024 22:24:53 +0100
 From: Wolfram Sang <wsa@kernel.org>
-To: Rob Herring <robh+dt@kernel.org>
-Cc: linux-i2c@vger.kernel.org, devicetree-spec@vger.kernel.org,
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"devicetree-spec@vger.kernel.org" <devicetree-spec@vger.kernel.org>,
 	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Subject: Re: dtschema: i2c: messy situation about timeouts
-Message-ID: <Zdz_ytwYd7A2sGsP@shikoro>
+Message-ID: <Zd0Bpa2ciMHmSQrS@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
-	devicetree-spec@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
+	Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"devicetree-spec@vger.kernel.org" <devicetree-spec@vger.kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 References: <ZdxjGwvGXlDGkYs0@shikoro>
- <CAL_JsqKPofALm60XpexAVXj-cYZXyqo-eY0Z+Sx5q4QV0193hw@mail.gmail.com>
+ <ccb58633-5981-4b91-a6ca-a57ea1ce5e40@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -64,71 +67,84 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/g35/2zYLCYErRN/"
+	protocol="application/pgp-signature"; boundary="sAM/eDtNldzBf9Nw"
 Content-Disposition: inline
-In-Reply-To: <CAL_JsqKPofALm60XpexAVXj-cYZXyqo-eY0Z+Sx5q4QV0193hw@mail.gmail.com>
+In-Reply-To: <ccb58633-5981-4b91-a6ca-a57ea1ce5e40@alliedtelesis.co.nz>
 
 
---/g35/2zYLCYErRN/
+--sAM/eDtNldzBf9Nw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Rob,
+Hi Chris,
 
-> > - "i2c-scl-clk-low-timeout-us"
+> > - "i2c-scl-has-clk-low-timeout"
 > >
-> > The description says "Number of microseconds the clock line needs to be
-> > pulled down in order to force a waiting state." What does "forcing a
-> > waiting state" mean here? I don't understand this description.
+> > AFAIU this binding tells that the controller can do clock stretching.
+> > But what for? I don't see why this is important for clients. If
+> > anything, then it would be interesting if the *client* can do clock
+> > stretching and if the controller can actually handle that. But no need
+> > to describe it in DT, we have this as an adapter quirk already
+> > 'I2C_AQ_NO_CLK_STRETCH'.
 >=20
-> Does the commit msg or PR help?:
-> https://github.com/devicetree-org/dt-schema/pull/103
+> Hmm I know of a few adapters that should probably set=20
+> I2C_AQ_NO_CLK_STRETCH based on some Errata. Probably just a=20
 
-I checked it beforehand. Sadly, it didn't help me.
+That would be helpful if you could add that. I always guessed there
+should be more controllers needing the flag but never encountered them
+personally.
 
-> > It is used in the i2c-mpc driver. The use case is simply to put it into
-> > the 'struct i2c_adapter.timeout' member. That timeout is used to
-> > determine if a transfer failed. So, to me, "i2c-transfer-timeout-us"
-> > makes a lot more sense to use here.
-> >
+> documentation exercise. It would be nice to reject clients that need to=
+=20
+> do clock stretching but often it happens as a side effect rather than=20
+> being intentional (I've seen this with i2c clients implemented in=20
+> microcontrollers).
+
+I guess the way forward with that is we add a flag like
+I2C_CLIENT_CLK_STRETCH and let the core figure out if controller and
+client are compatible. Dunno what to do if not, though. Reject? Throw a
+warning that there might be problems? Probably reject by default unless
+overridden by something-meaning-i-know-the-risks.
+
 > > Suggestion: let's remove this binding and conver i2c-mpc to
 > > "i2c-transfer-timeout-us". Yes, not nice to have two deprecated
 > > bindings, but things happened.
 >=20
-> Maybe the core code should read it instead?
+> Sounds like a good idea. We'd obviously need to keep support for the=20
+> existing property but it wouldn't be hard to add=20
+> "i2c-transfer-timeout-us". I'll try to whip up a patch for that sometime=
+=20
+> this week, just need to dust off my Freescale boards.
 
-That's an interesting idea. I'll try to implement this tomorrow.
+Please wait a little with the implementation. I want to try Rob's idea
+to let the core set the timeout flag initially. Dusting off the boards
+for testing would be awesome, though :)
 
-> I think we should mark as deprecated rather than remove unless we can
-> just remove the properties from the kernel. The reason being that
-
-You are right. I should have said "depreacte" instead of remove here.
-
-All the best,
+Happy hacking,
 
    Wolfram
 
 
---/g35/2zYLCYErRN/
+--sAM/eDtNldzBf9Nw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXc/8YACgkQFA3kzBSg
-KbaRWRAAsBO28jn8Qm65w+u9xT/M/D+M8hiSbM30Y1+MSLuGyLW7P/F5YZ95KKiH
-kTwoa51LoL2v0uN9hdUz3Uf7NOfdOhbJuP3mjdv/XrcmRjRH/kdNqGY5DpARpLO8
-QDdtnvqfqzS7YD5kK8CajXS89T2MirmBwMevWJkW1rAIJYT4V35QiJpajspLsmbb
-+x0jRHODJwKeD5+9rko4zP3TmtfdWVBRuxs5SR8PfsBA0of6XrIqQ5Cy0kqiK03R
-MUAKKjrfY29L6/VaaEyMNi8AuAReDTOnfZz2PsA0y2gKSCXls8W8vnewgbvnZ5M+
-PhxhrcnQtZhwEZTJfM3Mt7D6AgaQQhVNzKtHX33MOozu2xmrld6LWrENAQYfERCK
-se1cx9AnlyR1aJrQo0Vk7XHnYR850cuU9jeVh0hNO3pwCwHgIta2oi0hsV2Mc7EU
-dSyyujwsESDYPiezaiyAal6e8MjzkdnePygGZKdFCsiIdu8TjayJTn5Uo3Vmg5Ti
-JRbjgY+uOxcpgPMxTuNsDHuXduBWKpHTJC3aB2j3Ho5h3QnHNgWYqqbnEbswHN/I
-dlXx0nubxxn5AvpGOFhHs2Z5sB0Ry+7ZQPDQZVAUZlClWi+2V+LV2yFreQHV1l/1
-Z5QakbwAcN0yLl+pNqABhiRMlvzIv2/oD1q3HD/OHdp//2b3Nfo=
-=amoX
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXdAaUACgkQFA3kzBSg
+KbZPyA//XSbRCB1slX3Xmfov7xqA8M6nGOeSvzxmYQOi3xrus0GTAtNocz9YveSb
+BGeC4cRDqb1G2l7vJWDkkhAxImlHZfDA3nIg+04ch9VacrpQsisHR7yoTwCURxm5
+VtMnCh+2l4/fPTMAZS/l0IHwxsBKZRocP2QG7kEGRkMA58HvTfW97kYzqYorumX0
+spzXl+3uqsC4hj1IBY6xNxOBz7Vg8GH1hmcXxX1siLQNoOAenpiIzyn6gZicgQYU
+tB1TwMHj4PDVsXKuMG5oEXIuXPThPXqH2gHUzHq/g0iXOESxOIavNS7wbFFrZAyG
+ix3xksfRrEw+h4gD91K3OXPGxc5pCB4zM8g9mY7PFsV7ezbZd6XCE7lgORembH2M
+gaTL/L3srqfdr/EaPiOzayvzteEYpCSusk3Sp2ZTDC36TKmWJlorJSRhtqKC+iif
+yFqEFo1j8XfeBuLUNXc8mP2M5IuPYelzPt/PCN2yoy8BA3OST0+tkMky6XG5PHMP
+5yywSbcEqsRyt9hJZ17ClYSoKKriPU9OuvpffjJrmmOHKSjX0JB2PZXuAlgEyGEF
+RG/1lpbC0ksXvbzwTZwgTMK+gcAsxEUfHRV5jr5AhxH8Z3RpT0oAmVEzhZqTBCZd
+eQAh6RyEzp2udlJWwUIJgLkHMtpPPLA4XFkfDi1kpIzcsAnjES4=
+=ifnO
 -----END PGP SIGNATURE-----
 
---/g35/2zYLCYErRN/--
+--sAM/eDtNldzBf9Nw--
 
