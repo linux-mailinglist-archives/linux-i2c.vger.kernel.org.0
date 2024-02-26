@@ -1,72 +1,72 @@
-Return-Path: <linux-i2c+bounces-1983-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1982-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38421867CDB
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 17:55:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5329F867CD7
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 17:54:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 697CC1C2BAAF
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 16:55:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF80B1F23C97
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 16:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF6A412F5A0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81B1512F386;
 	Mon, 26 Feb 2024 16:53:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="A4NBfdmW"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hfcSVrKb"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037A112EBD3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8379912E1E5;
 	Mon, 26 Feb 2024 16:53:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708966425; cv=none; b=mTgr0NP3yYm+YwNa0sQcsrrN73YJc1DYtLlHhW+Y/NRta76V8sMWgy8fAOeJBRLYvrQO8+bCUfaABrJi8RkswtWrGfkQH2imN3eLbJW7p6aOpIj2wmPYYG3QphDkpRFSi+EZnSKGstxkc6TLYfX8XDcbzptreQCoI1Jt/2mJ5w0=
+	t=1708966425; cv=none; b=gjZXvEWufbIf71xFwxL8uxFIGg6hXbSCE1qroFu0aS+wtPaNfQG5D305ONU0PwkA6TaNe3WBEvY3FbgHRJFdBylCV/CWAsPL8BSac4UfN7Ao+rFss44ON1a+LzC48yHEqjRKbbf8ftmQ5pk/oj9jsqjkJtx30aJjEmmNln7HI6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1708966425; c=relaxed/simple;
-	bh=8D8QTyVR6yty+U+qM3n9DVm64OloOOKGd9a1EBcdczA=;
+	bh=inaKuQeiyTMX0KtjdTI4EyJ9/PXUVO4eL0aHOzMV/Co=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kKod70pD4xfNn0CKYQYGxYBrW1QOTpgBMQzSE+ixQvdP80QHAklzq6Oeux+wWaMH8hj7kYO4EK0ZD+hs6lKTM9/QZQ16UIrLJiCJP4m6rq+ZTMdMf9lY2R6ehko/liCxA3m9+pNWpmZxDNvgXIXkoVC+B8kpbj5Z1EbNfrZ9GfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=A4NBfdmW; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=lKjqteiGnYVzDirP8ZZjCqawj/okvVOSd5bYXNbEOJrBl3JGN0d90AhCsha2jbl9AYVEIhyR7VNHlGfJGraGiwW4RUE1TIk1vKD1bJvMFZFl5/b7WUhhsWR6bGrRvaRb5ChrIz1vRe/AmjxSmYM0mFC95XpGR3y5IUrXLG0ixps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hfcSVrKb; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41QGSHmj014969;
-	Mon, 26 Feb 2024 16:53:30 GMT
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41QGgXK9003017;
+	Mon, 26 Feb 2024 16:53:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=wUxZWtjBlpcd1C3yzncmoKg+sMI8k4edHwJPu5+uZXE=;
- b=A4NBfdmWBP8Gau9jo37+ogCnjTp1KEbKnoXtt4gwCcScM0Wnoh1TBUYKf6zDE5i7dCWD
- GT5RHR4c0+SA1/70umzyILxBnlehRmv7k/LjUmrXKF8+hNtxGxispvG2lI36cHYbQ8lO
- nCp48Sa1kAcZ0VWRcKdLLOjC6IVD2wwFsayPyXfBCQmVf4DIdV0AtyCBVtgJXpVBb4mG
- /oGUhI6dxputW4+H1GAUkVHYSMy/oslNo51O1jZaeVPwU9XnI1jb594KIXKnWtfCsVxh
- QnqDNySaSak5R8ZzCSmDur0cWiJDiwHA3TupaXpEH3k5FBJ9lWq9rWRBosD0an9wA6ON aA== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wgx6g8n9c-1
+ bh=m8S+2xLwMphNFY1D6Sp8VRqoMTm6aplbC8DM8AmNxec=;
+ b=hfcSVrKb5d/XXm0IKvULClB4yGftAFsimV9rJNoEGwo0jrWKl5CypQigu1PDACBy9Tb7
+ Go2FdEWq6/4ROhrdHqlbwNF9aUF1hLTw4HfDAkaNJW6z7emJ3N96yMMmWWa82He3JOEK
+ X0qD2Lj6KHhrgotLgqvISfGnlwkkSjDw63lhVQdooh2qVJUIuiZYlOhB2dcN+XCE49Bs
+ 6xv7oLnjbQBANerbsxDVzNJO+deosO9UXDh6gKo6Q2XpG5DbGtj+/PbJDW1q7JQoBbCY
+ drlyeFFgeyqZiJHNLErEz2HU2E/+++f1RlC5rnPd1dQ2KCn8JOEYLZXuQxgW1tbMIp1a Mw== 
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3wgxd4g9sa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 26 Feb 2024 16:53:31 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41QFUXdZ023777;
+	Mon, 26 Feb 2024 16:53:30 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wfw0k23f0-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Mon, 26 Feb 2024 16:53:30 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 41QG0x4S012312;
-	Mon, 26 Feb 2024 16:53:29 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3wfwg21xvu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 26 Feb 2024 16:53:29 +0000
 Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41QGrQvW8389610
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 41QGrRko50594534
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 26 Feb 2024 16:53:29 GMT
+	Mon, 26 Feb 2024 16:53:30 GMT
 Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C277458061;
-	Mon, 26 Feb 2024 16:53:26 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 927DA58043;
+	Mon, 26 Feb 2024 16:53:27 +0000 (GMT)
 Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0B02E5805F;
+	by IMSVA (Postfix) with ESMTP id D8BF75805F;
 	Mon, 26 Feb 2024 16:53:26 +0000 (GMT)
 Received: from slate16.aus.stglabs.ibm.com (unknown [9.61.57.130])
 	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 26 Feb 2024 16:53:25 +0000 (GMT)
+	Mon, 26 Feb 2024 16:53:26 +0000 (GMT)
 From: Eddie James <eajames@linux.ibm.com>
 To: linux-fsi@lists.ozlabs.org
 Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
@@ -74,9 +74,9 @@ Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         eajames@linux.ibm.com, alistair@popple.id.au, joel@jms.id.au,
         jk@ozlabs.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         conor+dt@kernel.org, lakshmiy@us.ibmcom
-Subject: [PATCH v2 05/31] ARM: dts: aspeed: p10 and tacoma: Set FSI clock frequency
-Date: Mon, 26 Feb 2024 10:52:55 -0600
-Message-Id: <20240226165321.91976-6-eajames@linux.ibm.com>
+Subject: [PATCH v2 06/31] fsi: core: Improve master read/write/error traces
+Date: Mon, 26 Feb 2024 10:52:56 -0600
+Message-Id: <20240226165321.91976-7-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240226165321.91976-1-eajames@linux.ibm.com>
 References: <20240226165321.91976-1-eajames@linux.ibm.com>
@@ -88,50 +88,217 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: W2o1YKkJ9swY8dvkOCrjUxBs0ZnFesCL
-X-Proofpoint-ORIG-GUID: W2o1YKkJ9swY8dvkOCrjUxBs0ZnFesCL
+X-Proofpoint-GUID: wYkkACTCDT0BuXCoho42MRpwo3eINX7v
+X-Proofpoint-ORIG-GUID: wYkkACTCDT0BuXCoho42MRpwo3eINX7v
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-26_11,2024-02-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 spamscore=0 mlxlogscore=815
- priorityscore=1501 adultscore=0 phishscore=0 impostorscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
+ mlxlogscore=949 spamscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2311290000 definitions=main-2402260128
 
-Now that the driver doesn't hardcode the clock divider, set it
-in the device tree.
+Consolidate the master read and write traces into one trace and
+change the result trace into an error trace for less spam.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts | 1 +
- arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi     | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/fsi/fsi-core.c     |  26 +++++----
+ include/trace/events/fsi.h | 112 ++++++++++++-------------------------
+ 2 files changed, 51 insertions(+), 87 deletions(-)
 
-diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts
-index 213023bc5aec..96a8f727bc38 100644
---- a/arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts
-+++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts
-@@ -193,6 +193,7 @@ &fsim0 {
- 	#address-cells = <2>;
- 	#size-cells = <0>;
+diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
+index 9610b5948550..a989a2007c0f 100644
+--- a/drivers/fsi/fsi-core.c
++++ b/drivers/fsi/fsi-core.c
+@@ -1110,14 +1110,15 @@ static int fsi_master_read(struct fsi_master *master, int link,
+ {
+ 	int rc;
  
-+	clock-frequency = <100000000>;
- 	fsi-routing-gpios = <&gpio0 ASPEED_GPIO(Q, 7) GPIO_ACTIVE_HIGH>;
- 	fsi-mux-gpios = <&gpio0 ASPEED_GPIO(B, 0) GPIO_ACTIVE_HIGH>;
+-	trace_fsi_master_read(master, link, slave_id, addr, size);
+-
+ 	rc = fsi_check_access(addr, size);
+-	if (!rc)
++	if (!rc) {
+ 		rc = master->read(master, link, slave_id, addr, val, size);
+-
+-	trace_fsi_master_rw_result(master, link, slave_id, addr, size,
+-			false, val, rc);
++		if (rc)
++			trace_fsi_master_error(master->idx, link, slave_id, addr, size, val, rc,
++					       true);
++		else
++			trace_fsi_master_xfer(master->idx, link, slave_id, addr, size, val, true);
++	}
  
-diff --git a/arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi b/arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi
-index 07ce3b2bc62a..44e48e39e6e9 100644
---- a/arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi
-+++ b/arch/arm/boot/dts/aspeed/ibm-power10-dual.dtsi
-@@ -8,6 +8,7 @@ &fsim0 {
- 	#size-cells = <0>;
+ 	return rc;
+ }
+@@ -1127,14 +1128,15 @@ static int fsi_master_write(struct fsi_master *master, int link,
+ {
+ 	int rc;
  
- 	cfam-reset-gpios = <&gpio0 ASPEED_GPIO(Q, 0) GPIO_ACTIVE_HIGH>;
-+	clock-frequency = <100000000>;
+-	trace_fsi_master_write(master, link, slave_id, addr, size, val);
+-
+ 	rc = fsi_check_access(addr, size);
+-	if (!rc)
++	if (!rc) {
+ 		rc = master->write(master, link, slave_id, addr, val, size);
+-
+-	trace_fsi_master_rw_result(master, link, slave_id, addr, size,
+-			true, val, rc);
++		if (rc)
++			trace_fsi_master_error(master->idx, link, slave_id, addr, size, val, rc,
++					       false);
++		else
++			trace_fsi_master_xfer(master->idx, link, slave_id, addr, size, val, false);
++	}
  
- 	cfam@0,0 {
- 		reg = <0 0>;
+ 	return rc;
+ }
+diff --git a/include/trace/events/fsi.h b/include/trace/events/fsi.h
+index 5ff15126ad9d..fed8835f438e 100644
+--- a/include/trace/events/fsi.h
++++ b/include/trace/events/fsi.h
+@@ -8,101 +8,63 @@
+ 
+ #include <linux/tracepoint.h>
+ 
+-TRACE_EVENT(fsi_master_read,
+-	TP_PROTO(const struct fsi_master *master, int link, int id,
+-			uint32_t addr, size_t size),
+-	TP_ARGS(master, link, id, addr, size),
++TRACE_EVENT(fsi_master_xfer,
++	TP_PROTO(int master_idx, int link, int id, uint32_t addr, size_t size, const void *data,
++		 bool read),
++	TP_ARGS(master_idx, link, id, addr, size, data, read),
+ 	TP_STRUCT__entry(
+-		__field(int,	master_idx)
+-		__field(int,	link)
+-		__field(int,	id)
+-		__field(__u32,	addr)
+-		__field(size_t,	size)
++		__field(int, master_idx)
++		__field(int, link)
++		__field(int, id)
++		__field(uint32_t, addr)
++		__field(int, size)
++		__field(uint32_t, data)
++		__field(bool, read)
+ 	),
+ 	TP_fast_assign(
+-		__entry->master_idx = master->idx;
++		__entry->master_idx = master_idx;
+ 		__entry->link = link;
+ 		__entry->id = id;
+ 		__entry->addr = addr;
+-		__entry->size = size;
+-	),
+-	TP_printk("fsi%d:%02d:%02d %08x[%zu]",
+-		__entry->master_idx,
+-		__entry->link,
+-		__entry->id,
+-		__entry->addr,
+-		__entry->size
+-	)
+-);
+-
+-TRACE_EVENT(fsi_master_write,
+-	TP_PROTO(const struct fsi_master *master, int link, int id,
+-			uint32_t addr, size_t size, const void *data),
+-	TP_ARGS(master, link, id, addr, size, data),
+-	TP_STRUCT__entry(
+-		__field(int,	master_idx)
+-		__field(int,	link)
+-		__field(int,	id)
+-		__field(__u32,	addr)
+-		__field(size_t,	size)
+-		__field(__u32,	data)
+-	),
+-	TP_fast_assign(
+-		__entry->master_idx = master->idx;
+-		__entry->link = link;
+-		__entry->id = id;
+-		__entry->addr = addr;
+-		__entry->size = size;
++		__entry->size = (int)size;
+ 		__entry->data = 0;
+ 		memcpy(&__entry->data, data, size);
++		__entry->read = read;
+ 	),
+-	TP_printk("fsi%d:%02d:%02d %08x[%zu] <= {%*ph}",
+-		__entry->master_idx,
+-		__entry->link,
+-		__entry->id,
+-		__entry->addr,
+-		__entry->size,
+-		(int)__entry->size, &__entry->data
+-	)
++	TP_printk("fsi%d:%02d:%02d %s %08x {%*ph}", __entry->master_idx, __entry->link,
++		  __entry->id, __entry->read ? "read" : "write", __entry->addr, __entry->size,
++		  &__entry->data)
+ );
+ 
+-TRACE_EVENT(fsi_master_rw_result,
+-	TP_PROTO(const struct fsi_master *master, int link, int id,
+-			uint32_t addr, size_t size,
+-			bool write, const void *data, int ret),
+-	TP_ARGS(master, link, id, addr, size, write, data, ret),
++TRACE_EVENT(fsi_master_error,
++	TP_PROTO(int master_idx, int link, int id, uint32_t addr, size_t size, const void *data,
++		 int ret, bool read),
++	TP_ARGS(master_idx, link, id, addr, size, data, ret, read),
+ 	TP_STRUCT__entry(
+-		__field(int,	master_idx)
+-		__field(int,	link)
+-		__field(int,	id)
+-		__field(__u32,	addr)
+-		__field(size_t,	size)
+-		__field(bool,	write)
+-		__field(__u32,	data)
+-		__field(int,	ret)
++		__field(int, master_idx)
++		__field(int, link)
++		__field(int, id)
++		__field(uint32_t, addr)
++		__field(int, size)
++		__field(uint32_t, data)
++		__field(int, ret)
++		__field(bool, read)
+ 	),
+ 	TP_fast_assign(
+-		__entry->master_idx = master->idx;
++		__entry->master_idx = master_idx;
+ 		__entry->link = link;
+ 		__entry->id = id;
+ 		__entry->addr = addr;
+-		__entry->size = size;
+-		__entry->write = write;
++		__entry->size = (int)size;
+ 		__entry->data = 0;
+-		__entry->ret = ret;
+-		if (__entry->write || !__entry->ret)
++		if (!read)
+ 			memcpy(&__entry->data, data, size);
++		__entry->ret = ret;
++		__entry->read = read;
+ 	),
+-	TP_printk("fsi%d:%02d:%02d %08x[%zu] %s {%*ph} ret %d",
+-		__entry->master_idx,
+-		__entry->link,
+-		__entry->id,
+-		__entry->addr,
+-		__entry->size,
+-		__entry->write ? "<=" : "=>",
+-		(int)__entry->size, &__entry->data,
+-		__entry->ret
+-	)
++	TP_printk("fsi%d:%02d:%02d %s %08x {%*ph} %d", __entry->master_idx, __entry->link,
++		  __entry->id, __entry->read ? "read" : "write", __entry->addr, __entry->size,
++		  &__entry->data, __entry->ret)
+ );
+ 
+ TRACE_EVENT(fsi_master_break,
 -- 
 2.39.3
 
