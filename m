@@ -1,118 +1,141 @@
-Return-Path: <linux-i2c+bounces-1975-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-1976-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 677CB86734C
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 12:37:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAE02867977
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 16:07:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C8A5B2D534
-	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 10:52:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAFD61C2B0FC
+	for <lists+linux-i2c@lfdr.de>; Mon, 26 Feb 2024 15:07:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F2A1F61C;
-	Mon, 26 Feb 2024 10:48:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAAF012C7F0;
+	Mon, 26 Feb 2024 14:45:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="SKM4BtoY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qvO8bHcS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895741E516
-	for <linux-i2c@vger.kernel.org>; Mon, 26 Feb 2024 10:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6206B12C521;
+	Mon, 26 Feb 2024 14:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708944505; cv=none; b=RXcMvCSbWWJvSnpqAlY69QZarzNT6aBFy79HcOko1c8UixUmIKfd8JTc7QhlHQVcr8AZccALJPbWyzrzvV1sFKc/P4Z/eJwX5yrgw8W4wP8EboOl1rmWbn8w3mqpvLAqR0Wp+LYcH5ygopI/Tvn4hSOzkmibm4IWVj/bnBGz7SU=
+	t=1708958718; cv=none; b=mSc/GN4HN2eJfPLm+nergrLYlyT9oBiLyyMeMKeFuEh/il0aWuc8TGqALJ/JNWx0Ha81LXlDVZj4t4JSWeiDuxqchmHqsmDKxRs6mXYErEOKu3BCAAiymKyMyIrhNr9ruNE9BgTahfE59DYT1fyk7vGKVPdM5/FFMPcO4Aa9jl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708944505; c=relaxed/simple;
-	bh=93RNERpHXJfqDKfnRao1G0Tupa9b05WDZBwpyK+tePQ=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XiBfQa3mnN0qf4s5cyQU3iw+x1Gc2sRYYDzVAgmmmQgGxQa+p/kHnH3q0ddsxUMgLHBp+AxB1hUbhhZVNkBqB5sdVHWRtHvcEhLhy1gOztvNsWK0G2eZv6LMxK86GvmYgGfioNwnSZcFVEBoI7dYJaNkTzEfTcAYk7RH0w4jR6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=SKM4BtoY; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=93RN
-	ERpHXJfqDKfnRao1G0Tupa9b05WDZBwpyK+tePQ=; b=SKM4BtoYU2550UxfTSZt
-	0UTyjPz1ptTCtt7zuW1WVzx7Rx24whaM4i5b6HkE4c+e9bE5lFZVr7A2fR3qoO/2
-	1+eszLKREzh7xZUjdNLLiXEpgkcZZbIPmaJ2BRWDdApn2TEoslrzH4ssWfeV4olk
-	ZgzUXRiJS0ssjY453dXOnJrgVOkYc/iDr0snhwxEwpMjQZ61zpZsl+dSCvMZgT+0
-	lfL5sJA8REsZg0l4ysRBNM1fHj9AmTvmimzzVd5kCoSTlmfyFmrDvQ+eh4mJi+Oc
-	QV9OmnHXir9IVbkeNJnnt/XvKlfpVPgIJj6YUNymBNbNwT0VuAqjkAyoyTSXZ2bn
-	AA==
-Received: (qmail 1208504 invoked from network); 26 Feb 2024 11:41:37 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Feb 2024 11:41:37 +0100
-X-UD-Smtp-Session: l3s3148p1@XPrTjUYSYHZtKPIz
-Date: Mon, 26 Feb 2024 11:41:36 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Rob Herring <robh@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: i2c: mux: i2c-demux-pinctrl: Drop
- i2c-mux.yaml reference
-Message-ID: <Zdxq4GnRyjC07EH8@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Rob Herring <robh@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240124190552.1551929-1-robh@kernel.org>
- <Zb6nBYTkZmXZ0G2X@shikoro>
+	s=arc-20240116; t=1708958718; c=relaxed/simple;
+	bh=qqBpgIJh+XSrGEenVQxqM7Ai4RpcSrHI+XiY6MqjRI4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=dC91PcGrd8xrgzJ1UrdXTyiJtBgrtipzuq0TpnjYtm6gxno1QD8/1hs951pVvDaZqpljjP3/JZm8hlhPTExWbb1u1Wkri3TiYX9yJhPzZUKbtoGgMzI/90tovRHaxUeLO2eYNNVYFecgBmmHtZUcJ51HhrmO2FBgsGxwxwvWjF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qvO8bHcS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF31C433F1;
+	Mon, 26 Feb 2024 14:45:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708958718;
+	bh=qqBpgIJh+XSrGEenVQxqM7Ai4RpcSrHI+XiY6MqjRI4=;
+	h=References:In-Reply-To:From:Date:Subject:To:From;
+	b=qvO8bHcSVs3P73AkcBDMkN5iF1BfOBxkL5fHqBKxPZkao9X6lGDBXMhmLtB57J2Y1
+	 iERQ5c+3MGGWNKbDvYvj3ZXUSqyD78xc+RL8M26ZW1UXbcEcn4Hlrm//BWSo180Hxh
+	 CmGEvWTe2yi/DqpPd0tpzvH/ODLbfi5YaAl6yP/QxSKcTQ6FaNYwxKwgDYLveXwai/
+	 5NSP1cpAYRFNa7P1UrKDHXgJvXtCHVsajQOerQOhyE23VRUpRjte8PGsGeSEMpz6kn
+	 MmbiE9jiVOKz3+bZ6Tqv1mXxNmZMoDNRjogMACKyA8Rgv/wUKPGcHYJBF7h/2fLuCL
+	 JA2fuvRIju8SA==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-512d6bcd696so2834282e87.1;
+        Mon, 26 Feb 2024 06:45:17 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXf+lfaObK+bGKjMnRk3VfUxx7dzAoxBcDmk32NJ/JymghAIerj6gPMBtIOH7EFiI9M1QF573h5YcNcnL4nxCh+PA0BVBEQtC9oKuEX6vls0AziEDpPO7rf4+xV0iX6NQUhO2XZ69G+IUaS
+X-Gm-Message-State: AOJu0YxaFy0asMg/L6Z+zdDN3EL8eUpnC+hwQdly15zecnaLvfXy2avM
+	xB/yOv4N5qb7LsJKlQCfqydJzzeLsb+0kyPHfkhm7v3FhWHAIlqwTDdDhZXSrPHOTI6SN1+/Jj7
+	h8WJmV/sQ7oX5Q0EeaU4ohQf/tg==
+X-Google-Smtp-Source: AGHT+IGwZvqcMQ2VeEJa09jEXyJRGq3iKl/QPO2dyxhsCm21aP3ssF40pH2Oh/jmbIsOkgjDmh+iZFbB55/98CBniNg=
+X-Received: by 2002:a05:6512:48da:b0:512:ed31:3cdd with SMTP id
+ er26-20020a05651248da00b00512ed313cddmr2174968lfb.18.1708958716153; Mon, 26
+ Feb 2024 06:45:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ZokECiHDjO7diAZl"
-Content-Disposition: inline
-In-Reply-To: <Zb6nBYTkZmXZ0G2X@shikoro>
-
-
---ZokECiHDjO7diAZl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <ZdxjGwvGXlDGkYs0@shikoro>
+In-Reply-To: <ZdxjGwvGXlDGkYs0@shikoro>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Mon, 26 Feb 2024 08:45:03 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKPofALm60XpexAVXj-cYZXyqo-eY0Z+Sx5q4QV0193hw@mail.gmail.com>
+Message-ID: <CAL_JsqKPofALm60XpexAVXj-cYZXyqo-eY0Z+Sx5q4QV0193hw@mail.gmail.com>
+Subject: Re: dtschema: i2c: messy situation about timeouts
+To: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org, 
+	devicetree-spec@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 03, 2024 at 09:50:13PM +0100, Wolfram Sang wrote:
-> On Wed, Jan 24, 2024 at 01:05:50PM -0600, Rob Herring wrote:
-> > The I2C de-mux is different than an I2C mux, so i2c-mux.yaml is not
-> > relevant and shouldn't be referenced.
-> >=20
-> > Signed-off-by: Rob Herring <robh@kernel.org>
->=20
-> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Mon, Feb 26, 2024 at 4:08=E2=80=AFAM Wolfram Sang <wsa@kernel.org> wrote=
+:
+>
+> Hey guys,
+>
+> we have quite a messy situation regarding I2C timeouts in the dtschema.
+> Partly because I was too busy to pay detailed attention, partly because
+> reviewing dtschema changes happen on Github which I totally missed. No
+> complaining, though, here are my observations and suggestions to get it
+> straight. Comments are more than welcome.
+>
+> - "i2c-transfer-timeout-us"
+>
+> Description says "Number of microseconds to wait before considering an
+> I2C transfer has failed."
+>
+> To me, this binding is very descriptive and makes sense. We should keep
+> it. Sadly, it is the newest one and we already have others.
+>
+>
+> - "i2c-scl-has-clk-low-timeout"
+>
+> AFAIU this binding tells that the controller can do clock stretching.
+> But what for? I don't see why this is important for clients. If
+> anything, then it would be interesting if the *client* can do clock
+> stretching and if the controller can actually handle that. But no need
+> to describe it in DT, we have this as an adapter quirk already
+> 'I2C_AQ_NO_CLK_STRETCH'. Two controllers use it, but no client checks
+> for it so far. Coming back to this binding, it is also unused in the
+> kernel.
+>
+> Suggestion: let's remove it
 
-Andi, can you pick these up?
+Seems like it can be implied by compatible... I'll defer to Andi.
 
-Or you negotiate with Rob how you want to handle I2C DT patches. I
-agreed with him that I usually take them. Except for generic cleanups or
-so.
+>
+>
+> - "i2c-scl-clk-low-timeout-us"
+>
+> The description says "Number of microseconds the clock line needs to be
+> pulled down in order to force a waiting state." What does "forcing a
+> waiting state" mean here? I don't understand this description.
 
+Does the commit msg or PR help?:
+https://github.com/devicetree-org/dt-schema/pull/103
 
+>
+> It is used in the i2c-mpc driver. The use case is simply to put it into
+> the 'struct i2c_adapter.timeout' member. That timeout is used to
+> determine if a transfer failed. So, to me, "i2c-transfer-timeout-us"
+> makes a lot more sense to use here.
+>
+> Suggestion: let's remove this binding and conver i2c-mpc to
+> "i2c-transfer-timeout-us". Yes, not nice to have two deprecated
+> bindings, but things happened.
 
---ZokECiHDjO7diAZl
-Content-Type: application/pgp-signature; name="signature.asc"
+Maybe the core code should read it instead?
 
------BEGIN PGP SIGNATURE-----
+I think we should mark as deprecated rather than remove unless we can
+just remove the properties from the kernel. The reason being that
+every property the kernel accesses should be documented. I might start
+actually checking that. That's already done for compatible strings,
+but those are mostly defined by a common pattern we can extract while
+properties are less so.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXcatwACgkQFA3kzBSg
-KbaQnA/9E53iIf+fJ/1fcCXflR+wlGvFZPNH9q4sYiD++nUHyWWYwlw8ACIcqsVF
-1WsQhN1wFS0ClGmK6Pr3UdtsT1Dqq2Nfo2k5ceq+mWJ/fGsMk6+6Tn8iIMmioMif
-eY97O8sG3YofpN61ew6xGKuhEkf7hz+lDoh3bxdlcnECUiZ6oEzPb9GiQy9Xqgtn
-PdZAXc7oqI8U+ydTyEokdAgvurTaTBPcx8ToOf5uptk5Kt+ib77igJDcZVWwi5YB
-ZHJAMRw3Ac5n5/xYQelFnpAVnMLGaU5Bd2G+syLa63ARYw38Y8Y+bhLlqbZ22g+Z
-8rZpe+SvZGeudyRnrT8VrOu4N5vlbUimCNZCRq2dK2nNyi8pGO5UjhTrfOJIiKyr
-aGNIATsA3wN5HEslm9Y7gdjz3RbBuJ3ADeRgcvQgoP5Uvl27+XRo98Z0scxZy33v
-rOodmLUGHqal3nm0w1mU3g525QjVjXA4DzhPkipMQRg8DLFyUmmO7G5CvXz+sJZU
-7bfGN+FG8uRGFA7DdJCQXQhkP2TIMkJbuncSyAaCXSfY2w/+LYM1YtrOKOIT4GLV
-u5z17chqQlFKN2IqM6S264DI73vs6bWVfxdgBtMjsvhJtzJ4wnfk/vHPuTOCctAl
-XQKnoT3v/Tj+U5b0I+ZgcwQlGPJGpTFOu+mMrRY54kfUogxzS6g=
-=GL/q
------END PGP SIGNATURE-----
-
---ZokECiHDjO7diAZl--
+Rob
 
