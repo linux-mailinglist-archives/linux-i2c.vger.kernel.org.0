@@ -1,67 +1,68 @@
-Return-Path: <linux-i2c+bounces-2036-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2037-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49D1486A128
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 21:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48BEF86A153
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 22:04:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D4491C23260
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 20:52:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B0391C23C55
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 21:04:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A391534EE;
-	Tue, 27 Feb 2024 20:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF73114EFCB;
+	Tue, 27 Feb 2024 21:04:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ca5UUYww"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cz62ghy5"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25EA152DE9;
-	Tue, 27 Feb 2024 20:51:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6F951C4C;
+	Tue, 27 Feb 2024 21:04:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709067078; cv=none; b=mSYjjm8YLFlEJGB/W9WHmfOqFi/0Pm1C4jhwK3sYkwrWccNtgbxXQ/oJVCDMYNBPhBeOhJLDCntJ30sK25UrZi3h6wqpSlhiHzIbPmDPsM7D84W4hVoM/2SZRK36diYsJpwORdwvMmkk9NviwDWiCdAKigWa97sJqJX4W+Av6oM=
+	t=1709067872; cv=none; b=C7RoKRtOIFl+CrIld6dcSjuVwFUAqbzRpX2cCxlfRvK3ZC0yqjxjRaxEX3/7EGJ7i9RwfjaDHL1TXY+KHvOci2Uwl21W6KmdZ9NA289Iws2Od9Rc/VdhoE71sH/wALOd6kREOzqcW+5t3nMlKXEWUzrzSV+AwZQNZ/5A9DtlmFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709067078; c=relaxed/simple;
-	bh=cd8fCWScGdOm33tO38jM+0CahWaRNuRPqV225L5QbWs=;
+	s=arc-20240116; t=1709067872; c=relaxed/simple;
+	bh=MWdudiSGoujcNzJfy7mKghCj1DfOqAzSv/aNbtsYw0k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z+mLNOnSNsBDcoQKmHCFgidO3eRS+NTeJBhzCPh5XSW09mYTCgRlNCCanTa3751HiaN4UhSsH5UgETWdDAdgJJhPo1vu9QggvKGN99hcabaKqHkRsIQd2LgC7CzmfFk6gR8ETk8Ze7pT3TqKCksM4OYUPsv/0V9hhS+P83fPYmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ca5UUYww; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D613C433A6;
-	Tue, 27 Feb 2024 20:51:18 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=bNzQpHh1jAMrHYdTH2VeQRnt2bXTPNRFgzkaS/xszL2ECirVqxvMqQOe4RUQvhSRLsjOfQO8uGv93h6qaHNVcEBH4jAZ6q57L29lETrdKKiEmJqOno2G90Pz6sBpl8cvT3KJkpoVGACz7JUOAgLGxy1iQKYLdbpSGP4h4Uw1Q9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cz62ghy5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EABC3C433C7;
+	Tue, 27 Feb 2024 21:04:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709067078;
-	bh=cd8fCWScGdOm33tO38jM+0CahWaRNuRPqV225L5QbWs=;
+	s=k20201202; t=1709067872;
+	bh=MWdudiSGoujcNzJfy7mKghCj1DfOqAzSv/aNbtsYw0k=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ca5UUYwwuQyu8P+1DIwei3ARFoRRUd3UkXWSNvsR26hcnDv61YhkNJl1tjaJkRZTq
-	 Vz7fgo8jtUQpPknIGKZaSQqAN06bB7KDWCJ3A0MhEB0fJjp/6BFg1HE62+I0YNjlwU
-	 UDj7D0cpxlpCoCrIBj9MGYV6c/77xAV4mwwlLJlKfBCQOHCD0SSEr0TnSWCt8Vsf61
-	 Hs/khhKjRK59rls+kudR3mRNlWvGdRQ+gIbi83/+Wm2jfxcLvEkI8Rw7SxV+HEi6el
-	 Cacy49X79zZcNfvxz67VA/0hneBVNrQD+/EmFcR0UeunkOG2FJH4vRkPyu0XlP82vE
-	 1wwiPUoX6Efrw==
+	b=Cz62ghy5t/2+yuYxlsz4VU5OcY1Db0L2IXqbzGQAGIaWPgVIMdRdnHdfw01hdnQf/
+	 cgU3rFrNIksh+0b92Er13dz2sXx3vbOrpb55+kG5jTAzPDPZONQqmjHRiZDRCIc5M8
+	 tbdV0aHPuOi/KUFXMC1urJICyUnLp+zfwBU8zo3L7oKj3bAP2ui/6UTl9OUZezScim
+	 bATFO5Uk6w8T4zPy1HYCflvNbSEQ2SnagIBBbjINJ6EY3STiF2TMTa2ESY/ZGgeD4u
+	 I3mtraBrEom9vrFJhmfr4zTdi2Ep1Nawm5wWwHMs+Cka8avLgcUOgsklcBNiKbXrWp
+	 0xAll6Kfqymew==
 Received: by pali.im (Postfix)
-	id B36CD828; Tue, 27 Feb 2024 21:51:15 +0100 (CET)
-Date: Tue, 27 Feb 2024 21:51:15 +0100
+	id 6FD1C828; Tue, 27 Feb 2024 22:04:29 +0100 (CET)
+Date: Tue, 27 Feb 2024 22:04:29 +0100
 From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Jean Delvare <jdelvare@suse.de>
-Cc: Hans de Goede <hdegoede@redhat.com>,
+To: Andy Shevchenko <andy@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>, Jean Delvare <jdelvare@suse.de>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
 	Paul Menzel <pmenzel@molgen.mpg.de>,
-	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-	linux-i2c@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	Kai-Heng Feng <kai.heng.feng@canonical.com>,
-	Marius Hoch <mail@mariushoch.de>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Dell.Client.Kernel@dell.com, Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: Ideas for a generic solution to support accelerometer lis3lv02d
- in Dell laptops/notebooks?
-Message-ID: <20240227205115.szb32h7hxjjr6z3l@pali>
-References: <4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de>
- <a1128471-bbff-4124-a7e5-44de4b1730b7@redhat.com>
- <20231223125350.xqggx3nyzyjjmnut@pali>
- <20240213150708.57148f6a@endymion.delvare>
- <20240215181633.2aevovw6wkxq5si2@pali>
+	Andi Shyti <andi.shyti@kernel.org>, eric.piel@tremplin-utc.net,
+	Marius Hoch <mail@mariushoch.de>, Dell.Client.Kernel@dell.com,
+	Kai Heng Feng <kai.heng.feng@canonical.com>,
+	platform-driver-x86@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] platform/x86: dell-smo8800: Move instantiation of
+ lis3lv02d i2c_client from i2c-i801 to dell-smo8800
+Message-ID: <20240227210429.l5o52wuexqqmrpol@pali>
+References: <20240106160935.45487-1-hdegoede@redhat.com>
+ <20240106160935.45487-3-hdegoede@redhat.com>
+ <20240107171055.ac7jtwhu2kbalaou@pali>
+ <20240213173050.0cf4a58f@endymion.delvare>
+ <3e5b47ce-29a9-43a3-92bc-599a9a716fbb@redhat.com>
+ <ZdNBGSJ28AcdpC7f@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -71,49 +72,48 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240215181633.2aevovw6wkxq5si2@pali>
+In-Reply-To: <ZdNBGSJ28AcdpC7f@smile.fi.intel.com>
 User-Agent: NeoMutt/20180716
 
-On Thursday 15 February 2024 19:16:33 Pali Rohár wrote:
-> On Tuesday 13 February 2024 15:07:08 Jean Delvare wrote:
-> > On Sat, 23 Dec 2023 13:53:50 +0100, Pali Rohár wrote:
-> > > smbus is not really bus which provides discovering and identifying
-> > > devices on the bus.
-> > 
-> > For completeness, SMBus version 2.0 actually added support for device
-> > discovery and even dynamic slave address allocation. This is explained
-> > in chapter 5, section 5.6 (SMBus Address resolution protocol).
-> > 
-> > Unfortunately, this is an optional feature which requires active
-> > cooperation from each device connected to the bus. If any device on the
-> > bus supports SMBus ARP then you should get an answer when probing
-> > (7-bit) I2C address 0x61.
-> > 
-> > Long ago I had a plan to add support for SMBus ARP to the kernel, but
-> > gave up because I couldn't find any system implementing it. If the
-> > accelerometer device in Dell laptops supported ARP then we could use it
-> > to figure out the device's address, unfortunately this doesn't seem to
-> > be the case.
-> > 
-> > -- 
-> > Jean Delvare
-> > SUSE L3 Support
+On Monday 19 February 2024 13:52:57 Andy Shevchenko wrote:
+> On Sat, Feb 17, 2024 at 11:33:21AM +0100, Hans de Goede wrote:
+> > On 2/13/24 17:30, Jean Delvare wrote:
+> > > On Sun, 7 Jan 2024 18:10:55 +0100, Pali Rohár wrote:
+> > >> On Saturday 06 January 2024 17:09:29 Hans de Goede wrote:
 > 
-> According to my notes, accelerometer in Dell laptops should use
-> LNG3DMTR-LGA16-3x3 chipset. From what I found it should be
-> pin-compatible with LIS302DL, just in different package.
-> 
-> ST LIS302DL datasheet is on the website:
-> https://www.st.com/resource/en/datasheet/lis302dl.pdf
-> 
-> It is dual i2c and SPI bus support chipset. But in the datasheet there
-> is nothing about SMBus, looks like this is designed for i2c usage. So I
-> highly doubt that chipset supports SMBus version 2.0 with ARP extension.
+> FWIW, I agree with Hans on the location of the HW quirks.
+> If there is a possible way to make the actual driver cleaner
+> and collect quirks somewhere else, I'm full support for that.
 
-Now I checked i2c address 0x61 and nothing responds to it.
+Location of the quirks can be moved outside of the i2c-i801.c source
+code relatively easily without need to change the way how parent--child
+relationship currently works.
 
-> Anyway, SMBus ARP is new thing to me, I have never heard about it or its
-> usage before. Has anybody else found some device which supports it?
-> Would be interesting to know if this is not just another standard which
-> was not publicly deployed yet.
+Relevant functions is_dell_system_with_lis3lv02d() and
+register_dell_lis3lv02d_i2c_device() does not use internals of
+i2c-i801 and could be moved into new file, lets say
+drivers/platform/x86/dell/dell-smo8800-plat.c
+Put this file under a new hidden "bool" config option which is auto
+enabled when CONFIG_DELL_SMO8800 is used.
+
+i2c-i801.c currently has code:
+
+	if (is_dell_system_with_lis3lv02d())
+		register_dell_lis3lv02d_i2c_device(priv);
+
+This can be put into a new exported function, e.g.
+void dell_smo8800_scan_i2c(struct i2c_adapter *adapter);
+And i2c-i801.c would call it instead.
+
+register_dell_lis3lv02d_i2c_device just needs "adapter", it does not
+need whole i801 priv struct.
+
+With this simple change all dell smo8800 code would be in its subdir
+drivers/platform/x86/dell/ and i2c-i801.c would get rid of smo code.
+
+This approach does not change any functionality, so should be absolutely
+safe.
+
+Future changes will be done only in drivers/platform/x86/dell/ subdir,
+touching i801 would not be needed at all.
 
