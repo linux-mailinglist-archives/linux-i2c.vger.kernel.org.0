@@ -1,201 +1,132 @@
-Return-Path: <linux-i2c+bounces-2034-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2035-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEFE8869373
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 14:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AC60869D19
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 18:05:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 718D1284271
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 13:45:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9C7328AC3B
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 17:04:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD97413F01E;
-	Tue, 27 Feb 2024 13:44:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 438FA3D541;
+	Tue, 27 Feb 2024 17:04:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AXaYhExR"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="RZWe+Ivl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC622F2D;
-	Tue, 27 Feb 2024 13:44:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233413F9D6
+	for <linux-i2c@vger.kernel.org>; Tue, 27 Feb 2024 17:04:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709041495; cv=none; b=tsNOQXTSCW7GT7NVFFJKyFkTHdjobOleYFUNUYPIEqbm2QlgWA7hVnGrLnd+og0BeH7fESAeCpVbfBPDVtaOs9TwdTcEvJNY64AyNKCgmBx8ejF123qjTiROUWUkK4x7gNVcjYH+iKSCNmvpjMbszjpupZI7VtrOw2pIYjdBqaE=
+	t=1709053494; cv=none; b=Baar21oMrIqAAN0FI96Gckh8A/rmPp639eLTBC4d5t7LaMebYkU21L8NuJv2FSJ6g8P1pRpMDoutm4l/rA44BhsocBnorN8FDsIMWWKWK5WvQ4a9s1AqpTvIjud6V46MA7xgPfl3zdlJzT34aWmMeIH7wj0gKai6UXO23hwD7rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709041495; c=relaxed/simple;
-	bh=WGpQGOAgFLrpnK/N7oCo96mXrwIqmB6vt9lStoSV6lM=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=irLO7oM5pXynNSg8+er/oivHk9sl32JR++FChiaWx65NRB0mAunp36g7+8vGnj5RoVO+knQgueCXAT6krFDgi+28fyPEoEvTYD16u581+gcKye1y1UzoQAM56QiHGxfoV+1crLBNWegS0vHbairccG4mKkdrsg44z2JPKNeWthM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AXaYhExR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6B31C433F1;
-	Tue, 27 Feb 2024 13:44:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709041495;
-	bh=WGpQGOAgFLrpnK/N7oCo96mXrwIqmB6vt9lStoSV6lM=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=AXaYhExReRmR6k8BG6a8PnT8ONjP8I1a/4pg6VfsgZI8YdGyi2e9VymNst+DAdlds
-	 V1OQwN30Ue9iLxOx4sK/aGwdnB3EslY1FViJi0zubpAEqp6HtY+uCxonjkBidcQs7y
-	 9Y2JBEIpiaw8C22dByjiU7x4v167TrRtbazUG61enFHTi2fnCW6/JSefD/GRWJj6r5
-	 E4i+WxeAXVrXRvPgSu4CjfvWFqB+tlqyoQGfbLY8CphIz22syDO45dbM8O0JcH+8en
-	 pJmUONlUF4xZJRfIzPTwhD3g3uNoFhm6QpWzycxnvI5luvbs+tyBkCUwNug9gHAHHn
-	 UU8Y54eGnd+mg==
-Date: Tue, 27 Feb 2024 07:44:53 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1709053494; c=relaxed/simple;
+	bh=nx3Al3sJLVHlvfnNiUefu/fSlBGWeq90iTuG8ElMJVI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uAV7+8/fqOSoYNwFGkplMetVN8m1qjleLYEXUo/hvPMX2sMMiczrU7sMzhVjTQzf6m+HjkGYdDBoLRQPWzt/GQfvSSNSIVziEkfSevZaPx7dWVL5yghcTEAtbgZLXsu+i4Dtvj+bEqi0pIzklEGwV0ZrcXGXwF3tF9cDlUha3EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=RZWe+Ivl; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=nx3A
+	l3sJLVHlvfnNiUefu/fSlBGWeq90iTuG8ElMJVI=; b=RZWe+IvlEXiNRgwQBlBr
+	HkeuLQlomaOzt17btM8FfRjYYXz3GxFr9/zMIUUmAYdMi944hjqvJ6n1YYD/421j
+	IAJ0Fy4gEbKYmsPmAAwLkD9BlkG/fVGmFIEg0cx3oeWCRBJr4gfIZ6DeaPo7i7rU
+	hgyz3v8BnPUXTrABKnkLDBhaejAUAiV/qndSkX11xH0QRyV34l29hMAF6gN/Pxyt
+	kZIYL8ltx8O8ESK60+lQeYkJJyzijLo4Ge+qQm5/9PN7gX/37Zt4vYeNBZRZdlig
+	T9o2CB+cbVIyoVuE440kLAtcQ6NSNZisaw76X7iZOQuY4xoAHZ1qnXFozdWiq9FF
+	Iw==
+Received: (qmail 1670908 invoked from network); 27 Feb 2024 18:04:42 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Feb 2024 18:04:42 +0100
+X-UD-Smtp-Session: l3s3148p1@CKOvBWASTKUujnu9
+Date: Tue, 27 Feb 2024 18:04:41 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
+	linux-sound@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: Remove obsolete i2c.txt
+Message-ID: <Zd4WKY966qe4DC3i@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Rob Herring <robh@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
+	linux-sound@vger.kernel.org
+References: <20240222174343.3482354-2-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: Eddie James <eajames@linux.ibm.com>
-Cc: lakshmiy@us.ibmcom, andi.shyti@kernel.org, alistair@popple.id.au, 
- linux-fsi@lists.ozlabs.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, jk@ozlabs.org, linux-i2c@vger.kernel.org, 
- joel@jms.id.au, conor+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-In-Reply-To: <20240226165321.91976-1-eajames@linux.ibm.com>
-References: <20240226165321.91976-1-eajames@linux.ibm.com>
-Message-Id: <170904127238.3703726.14262120125568615986.robh@kernel.org>
-Subject: Re: [PATCH v2 00/31] fsi: Interrupt support
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="J5qK8c/j+dsQwcO0"
+Content-Disposition: inline
+In-Reply-To: <20240222174343.3482354-2-robh@kernel.org>
 
 
-On Mon, 26 Feb 2024 10:52:50 -0600, Eddie James wrote:
-> This series primarily adds interrupt support to the FSI driver subsystem.
-> The series first improves the clocking model in the FSI core to provide
-> real clock rates to the engine drivers. Then there are various quality,
-> trace, and organizational improvements.
-> Another substantial part of the series is to make some master code common
-> through the use of a regmap to access master structures. This will prove
-> more useful as additional FSI master drivers are added.
-> Finally, interrupt support is added to the I2C driver as an alternative to
-> polling.
-> 
-> Changes since v1:
->  - Remove clock patches since those have been merged
->  - Add AST2700 binding documentation
->  - Fix build warning
-> 
-> Eddie James (31):
->   fsi: Move slave definitions to fsi-slave.h
->   fsi: Improve master indexing
->   fsi: Use a defined value for default echo delay
->   fsi: Expose master-specific local bus clock divider
->   ARM: dts: aspeed: p10 and tacoma: Set FSI clock frequency
->   fsi: core: Improve master read/write/error traces
->   fsi: core: Add slave error trace
->   dt-bindings: fsi: Add AST2700 compatible
->   fsi: aspeed: Add AST2700 support
->   fsi: core: Add slave spinlock
->   fsi: core: Allow cfam device type aliases
->   fsi: core: Add common regmap master functions
->   fsi: hub: Use common initialization and link enable
->   fsi: aspeed: Use common initialization and link enable
->   fsi: aspeed: Remove cfam reset sysfs file in error path and remove
->   fsi: aspeed: Refactor trace functions
->   fsi: aspeed: Don't clear all IRQs during OPB transfers
->   fsi: aspeed: Only read result register for successful read
->   fsi: aspeed: Switch to spinlock
->   fsi: aspeed: Disable relative addressing and IPOLL for cfam reset
->   fsi: aspeed: Use common master error handler
->   fsi: core: Add interrupt support
->   fsi: aspeed: Add interrupt support
->   fsi: hub: Add interrupt support
->   i2c: fsi: Calculate clock divider from local bus frequency
->   i2c: fsi: Improve formatting
->   i2c: fsi: Change fsi_i2c_write_reg to accept data instead of a pointer
->   i2c: fsi: Remove list structure of ports
->   i2c: fsi: Define a function to check status error bits
->   i2c: fsi: Add boolean for skip stop command on abort
->   i2c: fsi: Add interrupt support
-> 
->  .../bindings/fsi/fsi-master-aspeed.txt        |   2 +-
->  .../boot/dts/aspeed/aspeed-bmc-opp-tacoma.dts |   1 +
->  .../arm/boot/dts/aspeed/ibm-power10-dual.dtsi |   1 +
->  drivers/fsi/Kconfig                           |   2 +
->  drivers/fsi/fsi-core.c                        | 528 ++++++++++++++----
->  drivers/fsi/fsi-master-aspeed.c               | 391 +++++++------
->  drivers/fsi/fsi-master-hub.c                  | 231 ++++----
->  drivers/fsi/fsi-master.h                      |  27 +
->  drivers/fsi/fsi-slave.h                       |  89 +++
->  drivers/i2c/busses/i2c-fsi.c                  | 464 ++++++++++-----
->  include/linux/fsi.h                           |   3 +
->  include/trace/events/fsi.h                    | 190 ++++---
->  include/trace/events/fsi_master_aspeed.h      |  86 ++-
->  include/trace/events/i2c_fsi.h                |  45 ++
->  14 files changed, 1421 insertions(+), 639 deletions(-)
->  create mode 100644 include/trace/events/i2c_fsi.h
-> 
-> --
-> 2.39.3
-> 
-> 
-> 
+--J5qK8c/j+dsQwcO0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Feb 22, 2024 at 10:43:42AM -0700, Rob Herring wrote:
+> Everything in i2c.txt is covered by schemas/i2c/i2c-controller.yaml in
+> dtschema project, so remove i2c.txt and update links to it in the tree.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
-My bot found new DT warnings on the .dts files added or changed in this
-series.
+--J5qK8c/j+dsQwcO0
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not.
+-----BEGIN PGP SIGNATURE-----
 
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXeFiUACgkQFA3kzBSg
+KbY1UxAAs23gIOVvLkCmeyrbAAN7i3d7cIQP2kzKq9Z4iouxjZavNTtUoLQI3Dkk
+i2BhJMPBbngmCwt4X+FDvI5qNRbBLNmX11fyuXpND15iRR6dPZ4jPm7VvMBxy62h
+CrNy9H6KK6ydfsaaRCKZvx6SuvcRcPd+rZeHSFLh6/3ESldx7JA/dAtCsFI6KUxF
+58lIqJZg++rAfqxaa2lJJFu180EMRcJzRmGx/c14ySOtYszfEU/KMnSFxdLlStBu
+S74TiQ8Aif+WUILLavWSCBiXJ3L6eiba+0fS0m+68z3x4UbpiMX8J1Zs4wq0TF+I
+wkPJl9iI0EhNZCy2T0l+iAFCBkLG84w9iyd3eQuTyp6Wl2y1jlbw7B4h57P/8CK+
+SWI/E6NdS3Gda5CwQw4zqAMlTv1VaJXpOlJv4MohCy1VfzaK/q/9bR9w9WVFOf0T
+N4ub2OU3EmKrLvxZfJPPbWgSNsS4zuDrZ1EoC7LYP7+Wx15ktYux9a8pRNC2RwhL
+xrRYAR7lPkZwz3IVgrhAFeIssOsWD0C4qOeXvX27cd2mqnDa9xWHIGd1ZEAaiLm7
+5tbuk7aF9qizAL35XAeM7/zZnIvGGNDPeu696we834v6Ud5ThnMqjVTnmDgdBT6h
+ftuE2WjABe5yP+zBZtKDrNFl0Cf1UtJ6DXn7TyDGkdV1GB0IYBk=
+=PXn7
+-----END PGP SIGNATURE-----
 
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y aspeed/aspeed-bmc-opp-tacoma.dtb' for 20240226165321.91976-1-eajames@linux.ibm.com:
-
-arch/arm/boot/dts/aspeed/aspeed-bmc-opp-tacoma.dtb: ahb: apb: {'compatible': ['simple-bus'], '#address-cells': [[1]], '#size-cells': [[1]], 'ranges': True, 'crypto@1e6d0000': {'compatible': ['aspeed,ast2600-hace'], 'reg': [[510459904, 512]], 'interrupts': [[0, 4, 4]], 'clocks': [[2, 9]], 'resets': [[2, 4]]}, 'syscon@1e6e2000': {'compatible': ['aspeed,ast2600-scu', 'syscon', 'simple-mfd'], 'reg': [[510533632, 4096]], 'ranges': [[0, 510533632, 4096]], '#address-cells': [[1]], '#size-cells': [[1]], '#clock-cells': [[1]], '#reset-cells': [[1]], 'phandle': [[2]], 'pinctrl': {'compatible': ['aspeed,ast2600-pinctrl'], 'pinctrl-names': ['default'], 'pinctrl-0': [[13, 14]], 'phandle': [[18]], 'adc0_default': {'function': ['ADC0'], 'groups': ['ADC0']}, 'adc1_default': {'function': ['ADC1'], 'groups': ['ADC1']}, 'adc10_default': {'function': ['ADC10'], 'groups': ['ADC10']}, 'adc11_default': {'function': ['ADC11'], 'groups': ['ADC11']}, 'adc12_default': {'function': ['ADC12'], 'groups': ['ADC12'
- ]}, 'adc13_default': {'function': ['ADC13'], 'groups': ['ADC13']}, 'adc14_default': {'function': ['ADC14'], 'groups': ['ADC14']}, 'adc15_default': {'function': ['ADC15'], 'groups': ['ADC15']}, 'adc2_default': {'function': ['ADC2'], 'groups': ['ADC2']}, 'adc3_default': {'function': ['ADC3'], 'groups': ['ADC3']}, 'adc4_default': {'function': ['ADC4'], 'groups': ['ADC4']}, 'adc5_default': {'function': ['ADC5'], 'groups': ['ADC5']}, 'adc6_default': {'function': ['ADC6'], 'groups': ['ADC6']}, 'adc7_default': {'function': ['ADC7'], 'groups': ['ADC7']}, 'adc8_default': {'function': ['ADC8'], 'groups': ['ADC8']}, 'adc9_default': {'function': ['ADC9'], 'groups': ['ADC9']}, 'bmcint_default': {'function': ['BMCINT'], 'groups': ['BMCINT']}, 'espi_default': {'function': ['ESPI'], 'groups': ['ESPI']}, 'espialt_default': {'function': ['ESPIALT'], 'groups': ['ESPIALT']}, 'fsi1_default': {'function': ['FSI1'], 'groups': ['FSI1'], 'phandle': [[54]]}, 'fsi2_default': {'function': ['FSI2'], 'groups': [
- 'FSI2'], 'phandle': [[56]]}, 'fwspiabr_default': {'function': ['FWSPIABR'], 'groups': ['FWSPIABR']}, 'fwspid_default': {'function': ['FWSPID'], 'groups': ['FWSPID']}, 'fwqspi_default': {'function': ['FWQSPI'], 'groups': ['FWQSPI']}, 'fwspiwp_default': {'function': ['FWSPIWP'], 'groups': ['FWSPIWP']}, 'gpit0_default': {'function': ['GPIT0'], 'groups': ['GPIT0']}, 'gpit1_default': {'function': ['GPIT1'], 'groups': ['GPIT1']}, 'gpit2_default': {'function': ['GPIT2'], 'groups': ['GPIT2']}, 'gpit3_default': {'function': ['GPIT3'], 'groups': ['GPIT3']}, 'gpit4_default': {'function': ['GPIT4'], 'groups': ['GPIT4']}, 'gpit5_default': {'function': ['GPIT5'], 'groups': ['GPIT5']}, 'gpit6_default': {'function': ['GPIT6'], 'groups': ['GPIT6']}, 'gpit7_default': {'function': ['GPIT7'], 'groups': ['GPIT7']}, 'gpiu0_default': {'function': ['GPIU0'], 'groups': ['GPIU0']}, 'gpiu1_default': {'function': ['GPIU1'], 'groups': ['GPIU1']}, 'gpiu2_default': {'function': ['GPIU2'], 'groups': ['GPIU2']}, 'g
- piu3_default': {'function': ['GPIU3'], 'groups': ['GPIU3']}, 'gpiu4_default': {'function': ['GPIU4'], 'groups': ['GPIU4']}, 'gpiu5_default': {'function': ['GPIU5'], 'groups': ['GPIU5']}, 'gpiu6_default': {'function': ['GPIU6'], 'groups': ['GPIU6']}, 'gpiu7_default': {'function': ['GPIU7'], 'groups': ['GPIU7']}, 'hvi3c3_default': {'function': ['I3C3'], 'groups': ['HVI3C3']}, 'hvi3c4_default': {'function': ['I3C4'], 'groups': ['HVI3C4']}, 'i2c1_default': {'function': ['I2C1'], 'groups': ['I2C1'], 'phandle': [[38]]}, 'i2c10_default': {'function': ['I2C10'], 'groups': ['I2C10'], 'phandle': [[47]]}, 'i2c11_default': {'function': ['I2C11'], 'groups': ['I2C11'], 'phandle': [[48]]}, 'i2c12_default': {'function': ['I2C12'], 'groups': ['I2C12'], 'phandle': [[49]]}, 'i2c13_default': {'function': ['I2C13'], 'groups': ['I2C13'], 'phandle': [[50]]}, 'i2c14_default': {'function': ['I2C14'], 'groups': ['I2C14'], 'phandle': [[51]]}, 'i2c15_default': {'function': ['I2C15'], 'groups': ['I2C15'], 'phan
- dle': [[52]]}, 'i2c16_default': {'function': ['I2C16'], 'groups': ['I2C16'], 'phandle': [[53]]}, 'i2c2_default': {'function': ['I2C2'], 'groups': ['I2C2'], 'phandle': [[39]]}, 'i2c3_default': {'function': ['I2C3'], 'groups': ['I2C3'], 'phandle': [[40]]}, 'i2c4_default': {'function': ['I2C4'], 'groups': ['I2C4'], 'phandle': [[41]]}, 'i2c5_default': {'function': ['I2C5'], 'groups': ['I2C5'], 'phandle': [[42]]}, 'i2c6_default': {'function': ['I2C6'], 'groups': ['I2C6'], 'phandle': [[43]]}, 'i2c7_default': {'function': ['I2C7'], 'groups': ['I2C7'], 'phandle': [[44]]}, 'i2c8_default': {'function': ['I2C8'], 'groups': ['I2C8'], 'phandle': [[45]]}, 'i2c9_default': {'function': ['I2C9'], 'groups': ['I2C9'], 'phandle': [[46]]}, 'i3c1_default': {'function': ['I3C1'], 'groups': ['I3C1']}, 'i3c2_default': {'function': ['I3C2'], 'groups': ['I3C2']}, 'i3c3_default': {'function': ['I3C3'], 'groups': ['I3C3']}, 'i3c4_default': {'function': ['I3C4'], 'groups': ['I3C4']}, 'i3c5_default': {'function':
-  ['I3C5'], 'groups': ['I3C5']}, 'i3c6_default': {'function': ['I3C6'], 'groups': ['I3C6']}, 'jtagm_default': {'function': ['JTAGM'], 'groups': ['JTAGM']}, 'lhpd_default': {'function': ['LHPD'], 'groups': ['LHPD']}, 'lhsirq_default': {'function': ['LHSIRQ'], 'groups': ['LHSIRQ']}, 'lpc_default': {'function': ['LPC'], 'groups': ['LPC'], 'phandle': [[13]]}, 'lpchc_default': {'function': ['LPCHC'], 'groups': ['LPCHC']}, 'lpcpd_default': {'function': ['LPCPD'], 'groups': ['LPCPD']}, 'lpcpme_default': {'function': ['LPCPME'], 'groups': ['LPCPME']}, 'lpcsmi_default': {'function': ['LPCSMI'], 'groups': ['LPCSMI']}, 'lsirq_default': {'function': ['LSIRQ'], 'groups': ['LSIRQ'], 'phandle': [[14]]}, 'maclink1_default': {'function': ['MACLINK1'], 'groups': ['MACLINK1']}, 'maclink2_default': {'function': ['MACLINK2'], 'groups': ['MACLINK2']}, 'maclink3_default': {'function': ['MACLINK3'], 'groups': ['MACLINK3']}, 'maclink4_default': {'function': ['MACLINK4'], 'groups': ['MACLINK4']}, 'mdio1_defau
- lt': {'function': ['MDIO1'], 'groups': ['MDIO1'], 'phandle': [[4]]}, 'mdio2_default': {'function': ['MDIO2'], 'groups': ['MDIO2'], 'phandle': [[5]]}, 'mdio3_default': {'function': ['MDIO3'], 'groups': ['MDIO3'], 'phandle': [[6]]}, 'mdio4_default': {'function': ['MDIO4'], 'groups': ['MDIO4'], 'phandle': [[7]]}, 'ncts1_default': {'function': ['NCTS1'], 'groups': ['NCTS1']}, 'ncts2_default': {'function': ['NCTS2'], 'groups': ['NCTS2']}, 'ncts3_default': {'function': ['NCTS3'], 'groups': ['NCTS3']}, 'ncts4_default': {'function': ['NCTS4'], 'groups': ['NCTS4']}, 'ndcd1_default': {'function': ['NDCD1'], 'groups': ['NDCD1']}, 'ndcd2_default': {'function': ['NDCD2'], 'groups': ['NDCD2']}, 'ndcd3_default': {'function': ['NDCD3'], 'groups': ['NDCD3']}, 'ndcd4_default': {'function': ['NDCD4'], 'groups': ['NDCD4']}, 'ndsr1_default': {'function': ['NDSR1'], 'groups': ['NDSR1']}, 'ndsr2_default': {'function': ['NDSR2'], 'groups': ['NDSR2']}, 'ndsr3_default': {'function': ['NDSR3'], 'groups': ['ND
- SR3']}, 'ndsr4_default': {'function': ['NDSR4'], 'groups': ['NDSR4']}, 'ndtr1_default': {'function': ['NDTR1'], 'groups': ['NDTR1']}, 'ndtr2_default': {'function': ['NDTR2'], 'groups': ['NDTR2']}, 'ndtr3_default': {'function': ['NDTR3'], 'groups': ['NDTR3']}, 'ndtr4_default': {'function': ['NDTR4'], 'groups': ['NDTR4']}, 'nri1_default': {'function': ['NRI1'], 'groups': ['NRI1']}, 'nri2_default': {'function': ['NRI2'], 'groups': ['NRI2']}, 'nri3_default': {'function': ['NRI3'], 'groups': ['NRI3']}, 'nri4_default': {'function': ['NRI4'], 'groups': ['NRI4']}, 'nrts1_default': {'function': ['NRTS1'], 'groups': ['NRTS1']}, 'nrts2_default': {'function': ['NRTS2'], 'groups': ['NRTS2']}, 'nrts3_default': {'function': ['NRTS3'], 'groups': ['NRTS3']}, 'nrts4_default': {'function': ['NRTS4'], 'groups': ['NRTS4']}, 'oscclk_default': {'function': ['OSCCLK'], 'groups': ['OSCCLK']}, 'pewake_default': {'function': ['PEWAKE'], 'groups': ['PEWAKE']}, 'pwm0_default': {'function': ['PWM0'], 'groups': [
- 'PWM0']}, 'pwm1_default': {'function': ['PWM1'], 'groups': ['PWM1']}, 'pwm10g0_default': {'function': ['PWM10'], 'groups': ['PWM10G0']}, 'pwm10g1_default': {'function': ['PWM10'], 'groups': ['PWM10G1']}, 'pwm11g0_default': {'function': ['PWM11'], 'groups': ['PWM11G0']}, 'pwm11g1_default': {'function': ['PWM11'], 'groups': ['PWM11G1']}, 'pwm12g0_default': {'function': ['PWM12'], 'groups': ['PWM12G0']}, 'pwm12g1_default': {'function': ['PWM12'], 'groups': ['PWM12G1']}, 'pwm13g0_default': {'function': ['PWM13'], 'groups': ['PWM13G0']}, 'pwm13g1_default': {'function': ['PWM13'], 'groups': ['PWM13G1']}, 'pwm14g0_default': {'function': ['PWM14'], 'groups': ['PWM14G0']}, 'pwm14g1_default': {'function': ['PWM14'], 'groups': ['PWM14G1']}, 'pwm15g0_default': {'function': ['PWM15'], 'groups': ['PWM15G0']}, 'pwm15g1_default': {'function': ['PWM15'], 'groups': ['PWM15G1']}, 'pwm2_default': {'function': ['PWM2'], 'groups': ['PWM2']}, 'pwm3_default': {'function': ['PWM3'], 'groups': ['PWM3']}, 'pw
- m4_default': {'function': ['PWM4'], 'groups': ['PWM4']}, 'pwm5_default': {'function': ['PWM5'], 'groups': ['PWM5']}, 'pwm6_default': {'function': ['PWM6'], 'groups': ['PWM6']}, 'pwm7_default': {'function': ['PWM7'], 'groups': ['PWM7']}, 'pwm8g0_default': {'function': ['PWM8'], 'groups': ['PWM8G0']}, 'pwm8g1_default': {'function': ['PWM8'], 'groups': ['PWM8G1']}, 'pwm9g0_default': {'function': ['PWM9'], 'groups': ['PWM9G0']}, 'pwm9g1_default': {'function': ['PWM9'], 'groups': ['PWM9G1']}, 'qspi1_default': {'function': ['SPI1'], 'groups': ['QSPI1']}, 'qspi2_default': {'function': ['SPI2'], 'groups': ['QSPI2']}, 'rgmii1_default': {'function': ['RGMII1'], 'groups': ['RGMII1']}, 'rgmii2_default': {'function': ['RGMII2'], 'groups': ['RGMII2']}, 'rgmii3_default': {'function': ['RGMII3'], 'groups': ['RGMII3']}, 'rgmii4_default': {'function': ['RGMII4'], 'groups': ['RGMII4']}, 'rmii1_default': {'function': ['RMII1'], 'groups': ['RMII1']}, 'rmii2_default': {'function': ['RMII2'], 'groups': ['
- RMII2']}, 'rmii3_default': {'function': ['RMII3'], 'groups': ['RMII3'], 'phandle': [[8]]}, 'rmii4_default': {'function': ['RMII4'], 'groups': ['RMII4']}, 'rxd1_default': {'function': ['RXD1'], 'groups': ['RXD1'], 'phandle': [[23]]}, 'rxd2_default': {'function': ['RXD2'], 'groups': ['RXD2'], 'phandle': [[29]]}, 'rxd3_default': {'function': ['RXD3'], 'groups': ['RXD3'], 'phandle': [[31]]}, 'rxd4_default': {'function': ['RXD4'], 'groups': ['RXD4'], 'phandle': [[33]]}, 'salt1_default': {'function': ['SALT1'], 'groups': ['SALT1']}, 'salt10g0_default': {'function': ['SALT10'], 'groups': ['SALT10G0']}, 'salt10g1_default': {'function': ['SALT10'], 'groups': ['SALT10G1']}, 'salt11g0_default': {'function': ['SALT11'], 'groups': ['SALT11G0']}, 'salt11g1_default': {'function': ['SALT11'], 'groups': ['SALT11G1']}, 'salt12g0_default': {'function': ['SALT12'], 'groups': ['SALT12G0']}, 'salt12g1_default': {'function': ['SALT12'], 'groups': ['SALT12G1']}, 'salt13g0_default': {'function': ['SALT13'],
-  'groups': ['SALT13G0']}, 'salt13g1_default': {'function': ['SALT13'], 'groups': ['SALT13G1']}, 'salt14g0_default': {'function': ['SALT14'], 'groups': ['SALT14G0']}, 'salt14g1_default': {'function': ['SALT14'], 'groups': ['SALT14G1']}, 'salt15g0_default': {'function': ['SALT15'], 'groups': ['SALT15G0']}, 'salt15g1_default': {'function': ['SALT15'], 'groups': ['SALT15G1']}, 'salt16g0_default': {'function': ['SALT16'], 'groups': ['SALT16G0']}, 'salt16g1_default': {'function': ['SALT16'], 'groups': ['SALT16G1']}, 'salt2_default': {'function': ['SALT2'], 'groups': ['SALT2']}, 'salt3_default': {'function': ['SALT3'], 'groups': ['SALT3']}, 'salt4_default': {'function': ['SALT4'], 'groups': ['SALT4']}, 'salt5_default': {'function': ['SALT5'], 'groups': ['SALT5']}, 'salt6_default': {'function': ['SALT6'], 'groups': ['SALT6']}, 'salt7_default': {'function': ['SALT7'], 'groups': ['SALT7']}, 'salt8_default': {'function': ['SALT8'], 'groups': ['SALT8']}, 'salt9g0_default': {'function': ['SALT9'
- ], 'groups': ['SALT9G0']}, 'salt9g1_default': {'function': ['SALT9'], 'groups': ['SALT9G1']}, 'sd1_default': {'function': ['SD1'], 'groups': ['SD1']}, 'sd2_default': {'function': ['SD2'], 'groups': ['SD2']}, 'emmc_default': {'function': ['EMMC'], 'groups': ['EMMCG4'], 'phandle': [[27]]}, 'sgpm1_default': {'function': ['SGPM1'], 'groups': ['SGPM1'], 'phandle': [[19]]}, 'sgpm2_default': {'function': ['SGPM2'], 'groups': ['SGPM2'], 'phandle': [[20]]}, 'sgps1_default': {'function': ['SGPS1'], 'groups': ['SGPS1']}, 'sgps2_default': {'function': ['SGPS2'], 'groups': ['SGPS2']}, 'sioonctrl_default': {'function': ['SIOONCTRL'], 'groups': ['SIOONCTRL']}, 'siopbi_default': {'function': ['SIOPBI'], 'groups': ['SIOPBI']}, 'siopbo_default': {'function': ['SIOPBO'], 'groups': ['SIOPBO']}, 'siopwreq_default': {'function': ['SIOPWREQ'], 'groups': ['SIOPWREQ']}, 'siopwrgd_default': {'function': ['SIOPWRGD'], 'groups': ['SIOPWRGD']}, 'sios3_default': {'function': ['SIOS3'], 'groups': ['SIOS3']}, 'sio
- s5_default': {'function': ['SIOS5'], 'groups': ['SIOS5']}, 'siosci_default': {'function': ['SIOSCI'], 'groups': ['SIOSCI']}, 'spi1_default': {'function': ['SPI1'], 'groups': ['SPI1'], 'phandle': [[3]]}, 'spi1abr_default': {'function': ['SPI1ABR'], 'groups': ['SPI1ABR']}, 'spi1cs1_default': {'function': ['SPI1CS1'], 'groups': ['SPI1CS1']}, 'spi1wp_default': {'function': ['SPI1WP'], 'groups': ['SPI1WP']}, 'spi2_default': {'function': ['SPI2'], 'groups': ['SPI2']}, 'spi2cs1_default': {'function': ['SPI2CS1'], 'groups': ['SPI2CS1']}, 'spi2cs2_default': {'function': ['SPI2CS2'], 'groups': ['SPI2CS2']}, 'tach0_default': {'function': ['TACH0'], 'groups': ['TACH0']}, 'tach1_default': {'function': ['TACH1'], 'groups': ['TACH1']}, 'tach10_default': {'function': ['TACH10'], 'groups': ['TACH10']}, 'tach11_default': {'function': ['TACH11'], 'groups': ['TACH11']}, 'tach12_default': {'function': ['TACH12'], 'groups': ['TACH12']}, 'tach13_default': {'function': ['TACH13'], 'groups': ['TACH13']}, 't
- ach14_default': {'function': ['TACH14'], 'groups': ['TACH14']}, 'tach15_default': {'function': ['TACH15'], 'groups': ['TACH15']}, 'tach2_default': {'function': ['TACH2'], 'groups': ['TACH2']}, 'tach3_default': {'function': ['TACH3'], 'groups': ['TACH3']}, 'tach4_default': {'function': ['TACH4'], 'groups': ['TACH4']}, 'tach5_default': {'function': ['TACH5'], 'groups': ['TACH5']}, 'tach6_default': {'function': ['TACH6'], 'groups': ['TACH6']}, 'tach7_default': {'function': ['TACH7'], 'groups': ['TACH7']}, 'tach8_default': {'function': ['TACH8'], 'groups': ['TACH8']}, 'tach9_default': {'function': ['TACH9'], 'groups': ['TACH9']}, 'thru0_default': {'function': ['THRU0'], 'groups': ['THRU0']}, 'thru1_default': {'function': ['THRU1'], 'groups': ['THRU1']}, 'thru2_default': {'function': ['THRU2'], 'groups': ['THRU2']}, 'thru3_default': {'function': ['THRU3'], 'groups': ['THRU3']}, 'txd1_default': {'function': ['TXD1'], 'groups': ['TXD1'], 'phandle': [[22]]}, 'txd2_default': {'function': ['T
- XD2'], 'groups': ['TXD2'], 'phandle': [[28]]}, 'txd3_default': {'function': ['TXD3'], 'groups': ['TXD3'], 'phandle': [[30]]}, 'txd4_default': {'function': ['TXD4'], 'groups': ['TXD4'], 'phandle': [[32]]}, 'uart10_default': {'function': ['UART10'], 'groups': ['UART10']}, 'uart11_default': {'function': ['UART11'], 'groups': ['UART11']}, 'uart12g0_default': {'function': ['UART12'], 'groups': ['UART12G0']}, 'uart12g1_default': {'function': ['UART12'], 'groups': ['UART12G1']}, 'uart13g0_default': {'function': ['UART13'], 'groups': ['UART13G0']}, 'uart13g1_default': {'function': ['UART13'], 'groups': ['UART13G1']}, 'uart6_default': {'function': ['UART6'], 'groups': ['UART6'], 'phandle': [[34]]}, 'uart7_default': {'function': ['UART7'], 'groups': ['UART7'], 'phandle': [[35]]}, 'uart8_default': {'function': ['UART8'], 'groups': ['UART8'], 'phandle': [[36]]}, 'uart9_default': {'function': ['UART9'], 'groups': ['UART9'], 'phandle': [[37]]}, 'usb2ah_default': {'function': ['USB2AH'], 'groups':
-  ['USBA'], 'phandle': [[9]]}, 'usb2ad_default': {'function': ['USB2AD'], 'groups': ['USBA'], 'phandle': [[11]]}, 'usb2bh_default': {'function': ['USB2BH'], 'groups': ['USBB'], 'phandle': [[10]]}, 'usb2bd_default': {'function': ['USB2BD'], 'groups': ['USBB'], 'phandle': [[12]]}, 'usb11bhid_default': {'function': ['USB11BHID'], 'groups': ['USBB']}, 'vb_default': {'function': ['VB'], 'groups': ['VB']}, 'vgahs_default': {'function': ['VGAHS'], 'groups': ['VGAHS']}, 'vgavs_default': {'function': ['VGAVS'], 'groups': ['VGAVS']}, 'wdtrst1_default': {'function': ['WDTRST1'], 'groups': ['WDTRST1'], 'phandle': [[24]]}, 'wdtrst2_default': {'function': ['WDTRST2'], 'groups': ['WDTRST2']}, 'wdtrst3_default': {'function': ['WDTRST3'], 'groups': ['WDTRST3']}, 'wdtrst4_default': {'function': ['WDTRST4'], 'groups': ['WDTRST4']}}, 'silicon-id@14': {'compatible': ['aspeed,ast2600-silicon-id', 'aspeed,silicon-id'], 'reg': [[20, 4], [1456, 8]]}, 'smp-memram@180': {'compatible': ['aspeed,ast2600-smpmem']
- , 'reg': [[384, 64]]}, 'interrupt-controller@560': {'#interrupt-cells': [[1]], 'compatible': ['aspeed,ast2600-scu-ic0'], 'reg': [[1376, 4]], 'interrupts': [[0, 12, 4]], 'interrupt-controller': True, 'phandle': [[15]]}, 'interrupt-controller@570': {'#interrupt-cells': [[1]], 'compatible': ['aspeed,ast2600-scu-ic1'], 'reg': [[1392, 4]], 'interrupts': [[0, 41, 4]], 'interrupt-controller': True}}, 'hwrng@1e6e2524': {'compatible': ['timeriomem_rng'], 'reg': [[510534948, 4]], 'period': [[1]], 'quality': [[100]]}, 'display@1e6e6000': {'compatible': ['aspeed,ast2600-gfx', 'syscon'], 'reg': [[510550016, 4096]], 'reg-io-width': [[4]], 'clocks': [[2, 8]], 'resets': [[2, 26]], 'syscon': [[2]], 'status': ['disabled'], 'interrupts': [[0, 14, 4]]}, 'xdma@1e6e7000': {'compatible': ['aspeed,ast2600-xdma'], 'reg': [[510554112, 256]], 'clocks': [[2, 4]], 'resets': [[2, 25], [2, 27]], 'reset-names': ['device', 'root-complex'], 'interrupts-extended': [[1, 0, 6, 4], [15, 2]], 'aspeed,pcie-device': ['bmc'
- ], 'aspeed,scu': [[2]], 'status': ['okay'], 'memory-region': [[16]]}, 'adc@1e6e9000': {'compatible': ['aspeed,ast2600-adc0'], 'reg': [[510562304, 256]], 'clocks': [[2, 53]], 'resets': [[2, 55]], 'interrupts': [[0, 46, 4]], '#io-channel-cells': [[1]], 'status': ['disabled']}, 'adc@1e6e9100': {'compatible': ['aspeed,ast2600-adc1'], 'reg': [[510562560, 256]], 'clocks': [[2, 53]], 'resets': [[2, 55]], 'interrupts': [[0, 46, 4]], '#io-channel-cells': [[1]], 'status': ['disabled']}, 'secure-boot-controller@1e6f2000': {'compatible': ['aspeed,ast2600-sbc'], 'reg': [[510599168, 4096]]}, 'crypto@1e6fa000': {'compatible': ['aspeed,ast2600-acry'], 'reg': [[510631936, 1024], [510722048, 6144]], 'interrupts': [[0, 160, 4]], 'clocks': [[2, 16]], 'aspeed,ahbc': [[17]]}, 'video@1e700000': {'compatible': ['aspeed,ast2600-video-engine'], 'reg': [[510656512, 4096]], 'clocks': [[2, 3], [2, 0]], 'clock-names': ['vclk', 'eclk'], 'interrupts': [[0, 7, 4]], 'status': ['disabled']}, 'gpio@1e780000': {'#gpio-
- cells': [[2]], 'gpio-controller': True, 'compatible': ['aspeed,ast2600-gpio'], 'reg': [[511180800, 1024]], 'interrupts': [[0, 40, 4]], 'gpio-ranges': [[18, 0, 0, 208]], 'ngpios': [[208]], 'clocks': [[2, 53]], 'interrupt-controller': True, '#interrupt-cells': [[2]], 'gpio-line-names': ['', '', '', '', '', '', '', '', 'fsi-mux', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'power-button', '', '', 'checkstop', '', 'presence-ps1', '', 'led-rear-fault', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'presence-ps0', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'led-rear-power', 'led-rear-id', '', 'usb-power', '', '', '', '', '', '', '', '', '', 'bmc-tpm-reset', '', '', 'cfam-reset', '', '', '', '', '', '', 'fsi-routing', '', '', '', '', '', '', '', '', '
- ', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''], 'phandle': [[55]]}, 'sgpiom@1e780500': {'#gpio-cells': [[2]], 'gpio-controller': True, 'compatible': ['aspeed,ast2600-sgpiom'], 'reg': [[511182080, 256]], 'interrupts': [[0, 51, 4]], 'clocks': [[2, 53]], '#interrupt-cells': [[2]], 'interrupt-controller': True, 'bus-frequency': [[12000000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[19]], 'status': ['disabled']}, 'sgpiom@1e780600': {'#gpio-cells': [[2]], 'gpio-controller': True, 'compatible': ['aspeed,ast2600-sgpiom'], 'reg': [[511182336, 256]], 'interrupts': [[0, 70, 4]], 'clocks': [[2, 53]], '#interrupt-cells': [[2]], 'interrupt-controller': True, 'bus-frequency': [[12000000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[20]], 'status': ['disabled']}, 'gpio@1e780800': {'#gpio-
- cells': [[2]], 'gpio-controller': True, 'compatible': ['aspeed,ast2600-gpio'], 'reg': [[511182848, 2048]], 'interrupts': [[0, 11, 4]], 'gpio-ranges': [[18, 0, 208, 36]], 'ngpios': [[36]], 'clocks': [[2, 52]], 'interrupt-controller': True, '#interrupt-cells': [[2]]}, 'rtc@1e781000': {'compatible': ['aspeed,ast2600-rtc'], 'reg': [[511184896, 24]], 'interrupts': [[0, 13, 4]], 'status': ['disabled']}, 'timer@1e782000': {'compatible': ['aspeed,ast2600-timer'], 'reg': [[511188992, 144]], 'interrupts-extended': [[1, 0, 16, 4], [1, 0, 17, 4], [1, 0, 18, 4], [1, 0, 19, 4], [1, 0, 20, 4], [1, 0, 21, 4], [1, 0, 22, 4], [1, 0, 23, 4]], 'clocks': [[2, 52]], 'clock-names': ['PCLK'], 'status': ['disabled']}, 'serial@1e783000': {'compatible': ['snps,dw-apb-uart'], 'reg': [[511193088, 32]], 'reg-shift': [[2]], 'reg-io-width': [[4]], 'interrupts': [[0, 47, 4]], 'clocks': [[2, 22]], 'resets': [[21, 4]], 'no-loopback-test': True, 'pinctrl-names': ['default'], 'pinctrl-0': [[22, 23]], 'status': ['okay']
- }, 'serial@1e784000': {'compatible': ['snps,dw-apb-uart'], 'reg': [[511197184, 4096]], 'reg-shift': [[2]], 'interrupts': [[0, 8, 4]], 'clocks': [[2, 26]], 'no-loopback-test': True}, 'watchdog@1e785000': {'compatible': ['aspeed,ast2600-wdt'], 'reg': [[511201280, 64]], 'aspeed,reset-type': ['none'], 'aspeed,external-signal': True, 'aspeed,ext-push-pull': True, 'aspeed,ext-active-high': True, 'pinctrl-names': ['default'], 'pinctrl-0': [[24]]}, 'watchdog@1e785040': {'compatible': ['aspeed,ast2600-wdt'], 'reg': [[511201344, 64]], 'status': ['okay']}, 'watchdog@1e785080': {'compatible': ['aspeed,ast2600-wdt'], 'reg': [[511201408, 64]], 'status': ['disabled']}, 'watchdog@1e7850c0': {'compatible': ['aspeed,ast2600-wdt'], 'reg': [[511201472, 64]], 'status': ['disabled']}, 'peci-controller@1e78b000': {'compatible': ['aspeed,ast2600-peci'], 'reg': [[511225856, 256]], 'interrupts': [[0, 38, 4]], 'clocks': [[2, 10]], 'resets': [[2, 36]], 'cmd-timeout-ms': [[1000]], 'clock-frequency': [[1000000]]
- , 'status': ['disabled']}, 'lpc@1e789000': {'compatible': ['aspeed,ast2600-lpc-v2', 'simple-mfd', 'syscon'], 'reg': [[511217664, 4096]], 'reg-io-width': [[4]], '#address-cells': [[1]], '#size-cells': [[1]], 'ranges': [[0, 511217664, 4096]], 'kcs@24': {'compatible': ['aspeed,ast2500-kcs-bmc-v2'], 'reg': [[36, 1], [48, 1], [60, 1]], 'interrupts': [[0, 138, 4]], 'clocks': [[2, 6]], 'kcs_chan': [[1]], 'status': ['disabled']}, 'kcs@28': {'compatible': ['aspeed,ast2500-kcs-bmc-v2'], 'reg': [[40, 1], [52, 1], [64, 1]], 'interrupts': [[0, 139, 4]], 'clocks': [[2, 6]], 'status': ['okay'], 'aspeed,lpc-io-reg': [[3240, 3244]]}, 'kcs@2c': {'compatible': ['aspeed,ast2500-kcs-bmc-v2'], 'reg': [[44, 1], [56, 1], [68, 1]], 'interrupts': [[0, 140, 4]], 'clocks': [[2, 6]], 'status': ['okay'], 'aspeed,lpc-io-reg': [[3234]], 'aspeed,lpc-interrupts': [[11, 8]]}, 'kcs@114': {'compatible': ['aspeed,ast2500-kcs-bmc-v2'], 'reg': [[276, 1], [280, 1], [284, 1]], 'interrupts': [[0, 141, 4]], 'clocks': [[2, 6]]
- , 'status': ['disabled']}, 'lpc-ctrl@80': {'compatible': ['aspeed,ast2600-lpc-ctrl'], 'reg': [[128, 128]], 'clocks': [[2, 6]], 'status': ['okay'], 'memory-region': [[25]], 'flash': [[26]]}, 'lpc-snoop@80': {'compatible': ['aspeed,ast2600-lpc-snoop'], 'reg': [[128, 128]], 'interrupts': [[0, 144, 4]], 'clocks': [[2, 6]], 'status': ['disabled']}, 'lhc@a0': {'compatible': ['aspeed,ast2600-lhc'], 'reg': [[160, 36], [200, 8]]}, 'reset-controller@98': {'compatible': ['aspeed,ast2600-lpc-reset'], 'reg': [[152, 4]], '#reset-cells': [[1]], 'phandle': [[21]]}, 'uart-routing@98': {'compatible': ['aspeed,ast2600-uart-routing'], 'reg': [[152, 8]], 'status': ['disabled']}, 'ibt@140': {'compatible': ['aspeed,ast2600-ibt-bmc'], 'reg': [[320, 24]], 'interrupts': [[0, 143, 4]], 'clocks': [[2, 6]], 'status': ['okay']}}, 'sdc@1e740000': {'compatible': ['aspeed,ast2600-sd-controller'], 'reg': [[510918656, 256]], '#address-cells': [[1]], '#size-cells': [[1]], 'ranges': [[0, 510918656, 65536]], 'clocks': [
- [2, 35]], 'status': ['disabled'], 'sdhci@1e740100': {'compatible': ['aspeed,ast2600-sdhci', 'sdhci'], 'reg': [[256, 256]], 'interrupts': [[0, 43, 4]], 'sdhci,auto-cmd12': True, 'clocks': [[2, 60]], 'status': ['disabled']}, 'sdhci@1e740200': {'compatible': ['aspeed,ast2600-sdhci', 'sdhci'], 'reg': [[512, 256]], 'interrupts': [[0, 43, 4]], 'sdhci,auto-cmd12': True, 'clocks': [[2, 60]], 'status': ['disabled']}}, 'sdc@1e750000': {'compatible': ['aspeed,ast2600-sd-controller'], 'reg': [[510984192, 256]], '#address-cells': [[1]], '#size-cells': [[1]], 'ranges': [[0, 510984192, 65536]], 'clocks': [[2, 36]], 'status': ['okay'], 'sdhci@1e750100': {'compatible': ['aspeed,ast2600-sdhci'], 'reg': [[256, 256]], 'sdhci,auto-cmd12': True, 'interrupts': [[0, 15, 4]], 'clocks': [[2, 61]], 'pinctrl-names': ['default'], 'pinctrl-0': [[27]], 'status': ['okay'], 'clk-phase-mmc-hs200': [[36, 270]]}}, 'serial@1e787000': {'compatible': ['aspeed,ast2500-vuart'], 'reg': [[511209472, 64]], 'reg-shift': [[2]],
-  'interrupts': [[0, 147, 4]], 'clocks': [[2, 52]], 'no-loopback-test': True, 'status': ['okay']}, 'serial@1e787800': {'compatible': ['aspeed,ast2500-vuart'], 'reg': [[511211520, 64]], 'reg-shift': [[2]], 'interrupts': [[0, 180, 4]], 'clocks': [[2, 53]], 'no-loopback-test': True, 'status': ['disabled']}, 'serial@1e788000': {'compatible': ['aspeed,ast2500-vuart'], 'reg': [[511213568, 64]], 'reg-shift': [[2]], 'interrupts': [[0, 148, 4]], 'clocks': [[2, 52]], 'no-loopback-test': True, 'status': ['okay']}, 'serial@1e788800': {'compatible': ['aspeed,ast2500-vuart'], 'reg': [[511215616, 64]], 'reg-shift': [[2]], 'interrupts': [[0, 181, 4]], 'clocks': [[2, 53]], 'no-loopback-test': True, 'status': ['disabled']}, 'serial@1e78d000': {'compatible': ['ns16550a'], 'reg': [[511234048, 32]], 'reg-shift': [[2]], 'reg-io-width': [[4]], 'interrupts': [[0, 48, 4]], 'clocks': [[2, 23]], 'resets': [[21, 5]], 'no-loopback-test': True, 'pinctrl-names': ['default'], 'pinctrl-0': [[28, 29]], 'status': ['di
- sabled']}, 'serial@1e78e000': {'compatible': ['ns16550a'], 'reg': [[511238144, 32]], 'reg-shift': [[2]], 'reg-io-width': [[4]], 'interrupts': [[0, 49, 4]], 'clocks': [[2, 24]], 'resets': [[21, 6]], 'no-loopback-test': True, 'pinctrl-names': ['default'], 'pinctrl-0': [[30, 31]], 'status': ['disabled']}, 'serial@1e78f000': {'compatible': ['ns16550a'], 'reg': [[511242240, 32]], 'reg-shift': [[2]], 'reg-io-width': [[4]], 'interrupts': [[0, 50, 4]], 'clocks': [[2, 25]], 'resets': [[21, 7]], 'no-loopback-test': True, 'pinctrl-names': ['default'], 'pinctrl-0': [[32, 33]], 'status': ['disabled']}, 'serial@1e790000': {'compatible': ['ns16550a'], 'reg': [[511246336, 32]], 'reg-shift': [[2]], 'reg-io-width': [[4]], 'interrupts': [[0, 57, 4]], 'clocks': [[2, 27]], 'no-loopback-test': True, 'pinctrl-names': ['default'], 'pinctrl-0': [[34]], 'status': ['disabled']}, 'serial@1e790100': {'compatible': ['ns16550a'], 'reg': [[511246592, 32]], 'reg-shift': [[2]], 'reg-io-width': [[4]], 'interrupts': [
- [0, 58, 4]], 'clocks': [[2, 28]], 'no-loopback-test': True, 'pinctrl-names': ['default'], 'pinctrl-0': [[35]], 'status': ['disabled']}, 'serial@1e790200': {'compatible': ['ns16550a'], 'reg': [[511246848, 32]], 'reg-shift': [[2]], 'reg-io-width': [[4]], 'interrupts': [[0, 59, 4]], 'clocks': [[2, 29]], 'no-loopback-test': True, 'pinctrl-names': ['default'], 'pinctrl-0': [[36]], 'status': ['disabled']}, 'serial@1e790300': {'compatible': ['ns16550a'], 'reg': [[511247104, 32]], 'reg-shift': [[2]], 'reg-io-width': [[4]], 'interrupts': [[0, 60, 4]], 'clocks': [[2, 30]], 'no-loopback-test': True, 'pinctrl-names': ['default'], 'pinctrl-0': [[37]], 'status': ['disabled']}, 'bus@1e78a000': {'compatible': ['simple-bus'], '#address-cells': [[1]], '#size-cells': [[1]], 'ranges': [[0, 511221760, 4096]], 'i2c-bus@80': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[128, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 110, 4]], '
- bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[38]], 'status': ['okay'], 'multi-master': True, 'ibm-panel@62': {'compatible': ['ibm,op-panel'], 'reg': [[1073741922]]}}, 'i2c-bus@100': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[256, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 111, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[39]], 'status': ['okay'], 'tpm@2e': {'compatible': ['nuvoton,npct75x', 'tcg,tpm-tis-i2c'], 'reg': [[46]]}}, 'i2c-bus@180': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[384, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 112, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[40]], 'status': ['okay']}, 'i2c-bus@200': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[512, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'],
-  'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 113, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[41]], 'status': ['okay'], 'bmp280@77': {'compatible': ['bosch,bmp280'], 'reg': [[119]], '#io-channel-cells': [[1]], 'phandle': [[59]]}, 'max31785@52': {'compatible': ['maxim,max31785a'], 'reg': [[82]], '#address-cells': [[1]], '#size-cells': [[0]], 'fan@0': {'compatible': ['pmbus-fan'], 'reg': [[0]], 'tach-pulses': [[2]], 'maxim,fan-rotor-input': ['tach'], 'maxim,fan-pwm-freq': [[25000]], 'maxim,fan-dual-tach': True, 'maxim,fan-no-watchdog': True, 'maxim,fan-no-fault-ramp': True, 'maxim,fan-ramp': [[2]], 'maxim,fan-fault-pin-mon': True}, 'fan@1': {'compatible': ['pmbus-fan'], 'reg': [[1]], 'tach-pulses': [[2]], 'maxim,fan-rotor-input': ['tach'], 'maxim,fan-pwm-freq': [[25000]], 'maxim,fan-dual-tach': True, 'maxim,fan-no-watchdog': True, 'maxim,fan-no-fault-ramp': True, 'maxim,fan-ramp': [[2]], 'maxim,fan-fault-pin-mon': True}, 'fan@2': {'c
- ompatible': ['pmbus-fan'], 'reg': [[2]], 'tach-pulses': [[2]], 'maxim,fan-rotor-input': ['tach'], 'maxim,fan-pwm-freq': [[25000]], 'maxim,fan-dual-tach': True, 'maxim,fan-no-watchdog': True, 'maxim,fan-no-fault-ramp': True, 'maxim,fan-ramp': [[2]], 'maxim,fan-fault-pin-mon': True}, 'fan@3': {'compatible': ['pmbus-fan'], 'reg': [[3]], 'tach-pulses': [[2]], 'maxim,fan-rotor-input': ['tach'], 'maxim,fan-pwm-freq': [[25000]], 'maxim,fan-dual-tach': True, 'maxim,fan-no-watchdog': True, 'maxim,fan-no-fault-ramp': True, 'maxim,fan-ramp': [[2]], 'maxim,fan-fault-pin-mon': True}}, 'dps310@76': {'compatible': ['infineon,dps310'], 'reg': [[118]], '#io-channel-cells': [[0]], 'phandle': [[58]]}, 'pca9552@60': {'compatible': ['nxp,pca9552'], 'reg': [[96]], '#address-cells': [[1]], '#size-cells': [[0]], 'gpio-controller': True, '#gpio-cells': [[2]], 'phandle': [[57]], 'gpio@0': {'reg': [[0]], 'type': [[2]]}, 'gpio@1': {'reg': [[1]], 'type': [[2]]}, 'gpio@2': {'reg': [[2]], 'type': [[2]]}, 'gpio@3'
- : {'reg': [[3]], 'type': [[2]]}, 'gpio@4': {'reg': [[4]], 'type': [[2]]}, 'gpio@5': {'reg': [[5]], 'type': [[2]]}, 'gpio@6': {'reg': [[6]], 'type': [[2]]}, 'gpio@7': {'reg': [[7]], 'type': [[2]]}, 'gpio@8': {'reg': [[8]], 'type': [[2]]}, 'gpio@9': {'reg': [[9]], 'type': [[2]]}, 'gpio@10': {'reg': [[10]], 'type': [[2]]}, 'gpio@11': {'reg': [[11]], 'type': [[2]]}, 'gpio@12': {'reg': [[12]], 'type': [[2]]}, 'gpio@13': {'reg': [[13]], 'type': [[2]]}, 'gpio@14': {'reg': [[14]], 'type': [[2]]}, 'gpio@15': {'reg': [[15]], 'type': [[2]]}}, 'power-supply@68': {'compatible': ['ibm,cffps1'], 'reg': [[104]]}, 'power-supply@69': {'compatible': ['ibm,cffps1'], 'reg': [[105]]}}, 'i2c-bus@280': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[640, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 114, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[42]], 'status': ['okay'], 'tmp423a@4c': {'compatible'
- : ['ti,tmp423'], 'reg': [[76]]}, 'ir35221@70': {'compatible': ['infineon,ir35221'], 'reg': [[112]]}, 'ir35221@71': {'compatible': ['infineon,ir35221'], 'reg': [[113]]}}, 'i2c-bus@300': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[768, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 115, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[43]], 'status': ['okay'], 'tmp423a@4c': {'compatible': ['ti,tmp423'], 'reg': [[76]]}, 'ir35221@70': {'compatible': ['infineon,ir35221'], 'reg': [[112]]}, 'ir35221@71': {'compatible': ['infineon,ir35221'], 'reg': [[113]]}}, 'i2c-bus@380': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[896, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 116, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[44]], 'status': ['disabled']}, 'i2c-bus@400': {'#address-cells
- ': [[1]], '#size-cells': [[0]], 'reg': [[1024, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 117, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[45]], 'status': ['okay']}, 'i2c-bus@480': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[1152, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 118, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[46]], 'status': ['disabled']}, 'i2c-bus@500': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[1280, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 119, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[47]], 'status': ['okay'], 'tmp275@4a': {'compatible': ['ti,tmp275'], 'reg': [[74]]}}, 'i2c-bus@580': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg'
- : [[1408, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 120, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[48]], 'status': ['okay']}, 'i2c-bus@600': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[1536, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 121, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[49]], 'status': ['okay'], 'pca9552@60': {'compatible': ['nxp,pca9552'], 'reg': [[96]], '#address-cells': [[1]], '#size-cells': [[0]], 'gpio-controller': True, '#gpio-cells': [[2]], 'gpio-line-names': ['PS_SMBUS_RESET_N', 'APSS_RESET_N', 'GPU0_TH_OVERT_N_BUFF', 'GPU1_TH_OVERT_N_BUFF', 'GPU2_TH_OVERT_N_BUFF', 'GPU3_TH_OVERT_N_BUFF', 'GPU4_TH_OVERT_N_BUFF', 'GPU5_TH_OVERT_N_BUFF', 'GPU0_PWR_GOOD_BUFF', 'GPU1_PWR_GOOD_BUFF', 'GPU2_PWR_GOOD_BUFF', 'GPU3_PWR_GOOD_BUFF', 'GPU4_PWR_GOOD_BUFF', 'GP
- U5_PWR_GOOD_BUFF', '12V_BREAKER_FLT_N', 'THROTTLE_UNLATCHED_N'], 'gpio@0': {'reg': [[0]], 'type': [[2]]}, 'gpio@1': {'reg': [[1]], 'type': [[2]]}, 'gpio@2': {'reg': [[2]], 'type': [[2]]}, 'gpio@3': {'reg': [[3]], 'type': [[2]]}, 'gpio@4': {'reg': [[4]], 'type': [[2]]}, 'gpio@5': {'reg': [[5]], 'type': [[2]]}, 'gpio@6': {'reg': [[6]], 'type': [[2]]}, 'gpio@7': {'reg': [[7]], 'type': [[2]]}, 'gpio@8': {'reg': [[8]], 'type': [[2]]}, 'gpio@9': {'reg': [[9]], 'type': [[2]]}, 'gpio@10': {'reg': [[10]], 'type': [[2]]}, 'gpio@11': {'reg': [[11]], 'type': [[2]]}, 'gpio@12': {'reg': [[12]], 'type': [[2]]}, 'gpio@13': {'reg': [[13]], 'type': [[2]]}, 'gpio@14': {'reg': [[14]], 'type': [[2]]}, 'gpio@15': {'reg': [[15]], 'type': [[2]]}}, 'rtc@32': {'compatible': ['epson,rx8900'], 'reg': [[50]]}, 'eeprom@51': {'compatible': ['atmel,24c64'], 'reg': [[81]]}, 'ucd90160@64': {'compatible': ['ti,ucd90160'], 'reg': [[100]]}}, 'i2c-bus@680': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[1664, 
- 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 122, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[50]], 'status': ['okay']}, 'i2c-bus@700': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[1792, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 123, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[51]], 'status': ['okay']}, 'i2c-bus@780': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[1920, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'interrupts': [[0, 124, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[52]], 'status': ['disabled']}, 'i2c-bus@800': {'#address-cells': [[1]], '#size-cells': [[0]], 'reg': [[2048, 128]], 'compatible': ['aspeed,ast2600-i2c-bus'], 'clocks': [[2, 53]], 'resets': [[2, 34]], 'inte
- rrupts': [[0, 125, 4]], 'bus-frequency': [[100000]], 'pinctrl-names': ['default'], 'pinctrl-0': [[53]], 'status': ['disabled']}}, 'fsi@1e79b000': {'#interrupt-cells': [[1]], 'compatible': ['aspeed,ast2600-fsi-master', 'fsi-master'], 'reg': [[511291392, 148]], 'interrupts': [[0, 100, 4]], 'pinctrl-names': ['default'], 'pinctrl-0': [[54]], 'clocks': [[2, 45]], 'interrupt-controller': True, 'status': ['okay'], '#address-cells': [[2]], '#size-cells': [[0]], 'clock-frequency': [[100000000]], 'fsi-routing-gpios': [[55, 135, 0]], 'fsi-mux-gpios': [[55, 8, 0]], 'cfam@0,0': {'reg': [[0, 0]], '#address-cells': [[1]], '#size-cells': [[1]], 'chip-id': [[0]], 'scom@1000': {'compatible': ['ibm,fsi2pib'], 'reg': [[4096, 1024]]}, 'i2c@1800': {'compatible': ['ibm,fsi-i2c-master'], 'reg': [[6144, 1024]], '#address-cells': [[1]], '#size-cells': [[0]], 'i2c-bus@0': {'reg': [[0]]}, 'i2c-bus@1': {'reg': [[1]]}, 'i2c-bus@2': {'reg': [[2]]}, 'i2c-bus@3': {'reg': [[3]]}, 'i2c-bus@4': {'reg': [[4]]}, 'i2c-bu
- s@5': {'reg': [[5]]}, 'i2c-bus@6': {'reg': [[6]]}, 'i2c-bus@7': {'reg': [[7]]}, 'i2c-bus@8': {'reg': [[8]]}, 'i2c-bus@9': {'reg': [[9]]}, 'i2c-bus@a': {'reg': [[10]]}, 'i2c-bus@b': {'reg': [[11]]}, 'i2c-bus@c': {'reg': [[12]]}, 'i2c-bus@d': {'reg': [[13]]}, 'i2c-bus@e': {'reg': [[14]]}}, 'sbefifo@2400': {'compatible': ['ibm,p9-sbefifo'], 'reg': [[9216, 1024]], '#address-cells': [[1]], '#size-cells': [[0]], 'occ': {'compatible': ['ibm,p9-occ'], 'reg': [[1]]}}, 'hub@3400': {'compatible': ['fsi-master-hub'], 'reg': [[13312, 1024]], '#address-cells': [[2]], '#size-cells': [[0]], 'no-scan-on-init': True, 'cfam@1,0': {'reg': [[1, 0]], '#address-cells': [[1]], '#size-cells': [[1]], 'chip-id': [[1]], 'scom@1000': {'compatible': ['ibm,fsi2pib'], 'reg': [[4096, 1024]]}, 'i2c@1800': {'compatible': ['ibm,fsi-i2c-master'], 'reg': [[6144, 1024]], '#address-cells': [[1]], '#size-cells': [[0]], 'i2c-bus@0': {'reg': [[0]]}, 'i2c-bus@1': {'reg': [[1]]}, 'i2c-bus@2': {'reg': [[2]]}, 'i2c-bus@3': {'reg
- ': [[3]]}, 'i2c-bus@4': {'reg': [[4]]}, 'i2c-bus@5': {'reg': [[5]]}, 'i2c-bus@6': {'reg': [[6]]}, 'i2c-bus@7': {'reg': [[7]]}, 'i2c-bus@8': {'reg': [[8]]}, 'i2c-bus@9': {'reg': [[9]]}, 'i2c-bus@a': {'reg': [[10]]}, 'i2c-bus@b': {'reg': [[11]]}, 'i2c-bus@c': {'reg': [[12]]}, 'i2c-bus@d': {'reg': [[13]]}, 'i2c-bus@e': {'reg': [[14]]}}, 'sbefifo@2400': {'compatible': ['ibm,p9-sbefifo'], 'reg': [[9216, 1024]], '#address-cells': [[1]], '#size-cells': [[0]], 'occ': {'compatible': ['ibm,p9-occ'], 'reg': [[2]]}}, 'hub@3400': {'compatible': ['fsi-master-hub'], 'reg': [[13312, 1024]], '#address-cells': [[2]], '#size-cells': [[0]], 'no-scan-on-init': True}}}}}, 'fsi@1e79b100': {'#interrupt-cells': [[1]], 'compatible': ['aspeed,ast2600-fsi-master', 'fsi-master'], 'reg': [[511291648, 148]], 'interrupts': [[0, 101, 4]], 'pinctrl-names': ['default'], 'pinctrl-0': [[56]], 'clocks': [[2, 45]], 'interrupt-controller': True, 'status': ['disabled']}, 'dma-controller@1e79e000': {'compatible': ['aspeed,a
- st2600-udma'], 'reg': [[511303680, 4096]], 'interrupts': [[0, 56, 4]], 'dma-channels': [[28]], '#dma-cells': [[1]], 'status': ['disabled']}} should not be valid under {'type': 'object'}
-	from schema $id: http://devicetree.org/schemas/simple-bus.yaml#
-
-
-
-
-
+--J5qK8c/j+dsQwcO0--
 
