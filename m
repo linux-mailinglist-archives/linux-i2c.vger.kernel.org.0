@@ -1,79 +1,60 @@
-Return-Path: <linux-i2c+bounces-2017-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2019-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D4018685AE
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 02:22:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5A678685C4
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 02:28:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86E16B22C74
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 01:22:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5730CB22261
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 01:28:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B4D146BA;
-	Tue, 27 Feb 2024 01:22:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74DF64C89;
+	Tue, 27 Feb 2024 01:28:50 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 13.mo582.mail-out.ovh.net (13.mo582.mail-out.ovh.net [188.165.56.124])
+Received: from 7.mo575.mail-out.ovh.net (7.mo575.mail-out.ovh.net [46.105.63.230])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88B2610D
-	for <linux-i2c@vger.kernel.org>; Tue, 27 Feb 2024 01:21:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.56.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0190A4C7C
+	for <linux-i2c@vger.kernel.org>; Tue, 27 Feb 2024 01:28:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.63.230
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708996922; cv=none; b=spXeH//i1578T0zDhLSW3i0MG+PehgCLEr05a3RZn57i+RYi9KhEWnEYrfIEszMZ02VBohhyOqf8gJHekay2/TVbQRh6g3lBTmdW84TpHiWWx15ispfdDkInbpgrHQm+jxTu0XHFequtp+1/9ru/mKa62Y3a+YYNZj2kv3VozJQ=
+	t=1708997330; cv=none; b=SZ1r79sDZQOJOvebahyOqGtPkhHsxOL5xWkZf3WbW/MS7C3k7TwwiDi/i9HpQQW0k4GpCqJ4FO/+53Qeg5X3IO4GD2l7oLEIKwtREl+nZE2PXotPpKZDPZ+HFqW05NJUk4HYGmovtkHpUEiXVJQvxDyPrCU5q9yjLmn0qW4LQPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708996922; c=relaxed/simple;
-	bh=oP+NUZOFqM2E6ptm+fLs9NHiWljY1OQX7Li7+FuOHyQ=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=qf0QPDrs+KxA/ju+0wx7XSSSLqySCTUutW7tPqOggFVqntnWvfcj03AZXpj9Dk9UvQ5Sc3NPKIVG3djNfztV/ZO1A0uygekfU7yiwI1vBiEc4ltb2lApWBe3AmIGTdqz2bZbBwz9cqtZNy6ZmZyKMFdQ+uTF5PQ8140Jstnh29g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=188.165.56.124
+	s=arc-20240116; t=1708997330; c=relaxed/simple;
+	bh=9maIj3scRE3rvmOZnTWx6mL+LNJKZlpMtlaikbatFF0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=GEVBr5Vc4AH2+7gYQqUVgK9E8ahtiTNcX7qz3Ud/tHyBi1vljfBy7JHOqm246N9eYKDN/iJ+aiQNij9LxAy+T7mnaoRyaDpR9m4heKP71Xsn0+NWgvml1BVHnGMvWovl0zKeU+RKbFSUopfaBZ0m3HnTrjv/0ywLdiBafdqspHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.63.230
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director2.ghost.mail-out.ovh.net (unknown [10.108.9.77])
-	by mo582.mail-out.ovh.net (Postfix) with ESMTP id 4TkKTD31HRz19fn
-	for <linux-i2c@vger.kernel.org>; Tue, 27 Feb 2024 01:21:52 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-f4n6p (unknown [10.111.174.252])
-	by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 605D91FD7C;
-	Tue, 27 Feb 2024 01:21:40 +0000 (UTC)
-Received: from etezian.org ([37.59.142.108])
-	by ghost-submission-6684bf9d7b-f4n6p with ESMTPSA
-	id uPD7FCQ53WXtyQAAxDwYeA
-	(envelope-from <andi@etezian.org>); Tue, 27 Feb 2024 01:21:40 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-108S002fe1109a9-1c88-4d0a-8ee4-2e8d2b473102,
+Received: from director3.ghost.mail-out.ovh.net (unknown [10.108.2.115])
+	by mo575.mail-out.ovh.net (Postfix) with ESMTP id 4TkKTH1BRqz1S7j
+	for <linux-i2c@vger.kernel.org>; Tue, 27 Feb 2024 01:21:55 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-lwnjp (unknown [10.110.96.65])
+	by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 90F361FD2D;
+	Tue, 27 Feb 2024 01:21:53 +0000 (UTC)
+Received: from etezian.org ([37.59.142.96])
+	by ghost-submission-6684bf9d7b-lwnjp with ESMTPSA
+	id iD0THTE53WUzjAAAMhl46g
+	(envelope-from <andi@etezian.org>); Tue, 27 Feb 2024 01:21:53 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-96R001a1306533-5422-4a00-a40e-cbb557c37a92,
                     9285090D84508773EC2C25A4099646E261C64314) smtp.auth=andi@etezian.org
 X-OVh-ClientIp:89.217.109.169
 From: Andi Shyti <andi.shyti@kernel.org>
-To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
- conor+dt@kernel.org, nicolas.ferre@microchip.com, 
- alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
- mturquette@baylibre.com, sboyd@kernel.org, herbert@gondor.apana.org.au, 
- davem@davemloft.net, tglx@linutronix.de, tudor.ambarus@linaro.org, 
- miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com, 
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
- linus.walleij@linaro.org, sre@kernel.org, u.kleine-koenig@pengutronix.de, 
- p.zabel@pengutronix.de, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
- richard.genoud@gmail.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
- lgirdwood@gmail.com, broonie@kernel.org, wim@linux-watchdog.org, 
- linux@roeck-us.net, linux@armlinux.org.uk, andrei.simion@microchip.com, 
- mihai.sain@microchip.com, andre.przywara@arm.com, neil.armstrong@linaro.org, 
- tony@atomide.com, durai.manickamkr@microchip.com, geert+renesas@glider.be, 
- arnd@arndb.de, Jason@zx2c4.com, rdunlap@infradead.org, rientjes@google.com, 
- vbabka@suse.cz, mripard@kernel.org, codrin.ciubotariu@microchip.com, 
- eugen.hristev@collabora.com, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org, 
- linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org, 
- netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org, 
- linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org, 
- linux-serial@vger.kernel.org, alsa-devel@alsa-project.org, 
- linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org, 
- Varshini Rajendran <varshini.rajendran@microchip.com>
-In-Reply-To: <20240223171342.669133-1-varshini.rajendran@microchip.com>
-References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
-Subject: Re: (subset) [PATCH v4 00/39] Add support for sam9x7 SoC family
-Message-Id: <170899689860.412407.545047377007032928.b4-ty@kernel.org>
-Date: Tue, 27 Feb 2024 02:21:38 +0100
+To: linux-i2c@vger.kernel.org, 
+ Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Mika Westerberg <mika.westerberg@linux.intel.com>, 
+ Jan Dabros <jsd@semihalf.com>, Jiawen Wu <jiawenwu@trustnetic.com>, 
+ Sanket Goswami <Sanket.Goswami@amd.com>, 
+ Basavaraj Natikar <Basavaraj.Natikar@amd.com>, michael.j.ruhl@intel.com
+In-Reply-To: <20240213124847.672084-1-jarkko.nikula@linux.intel.com>
+References: <20240213124847.672084-1-jarkko.nikula@linux.intel.com>
+Subject: Re: [PATCH v3 0/6] i2c: designware: Generic polling mode code
+Message-Id: <170899691236.412407.7251512012317912593.b4-ty@kernel.org>
+Date: Tue, 27 Feb 2024 02:21:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -83,22 +64,24 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13.0
-X-Ovh-Tracer-Id: 4120793662683875913
+X-Ovh-Tracer-Id: 4121638084982999631
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrgeefgdeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfgjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeelkefhieeljeejffdtvddthfffleffueekkefgieelveejjedtudettdeghfdutdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddruddtkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekvddpmhhouggvpehsmhhtphhouhht
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrgeefgdeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevjghfuffkffggtgfgofesthejredtredtjeenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepffetheduffdvhfdugfffudfgjeejudehheegfeeguefhieeugffhgfeuffdvgfefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpkeelrddvudejrddutdelrdduieelpdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejhedpmhhouggvpehsmhhtphhouhht
 
 Hi
 
-On Fri, 23 Feb 2024 22:43:42 +0530, Varshini Rajendran wrote:
-> This patch series adds support for the new SoC family - sam9x7.
->  - The device tree, configs and drivers are added
->  - Clock driver for sam9x7 is added
->  - Support for basic peripherals is added
->  - Target board SAM9X75 Curiosity is added
+On Tue, 13 Feb 2024 14:48:41 +0200, Jarkko Nikula wrote:
+> I hope you could give a quick test to this patchset to see it won't cause
+> regression on your HW. This is mostly the same than the first version what
+> Jiawen tested earlier but in this 3rd version I decided to drop semphore
+> touching code patches from v2 due they being out of scope and fix a few
+> things noted by Andy.
 > 
->  Changes in v4:
->  --------------
+> Changes are in the patch 3/6 with two minor fixes to comments while moving
+> them and the patch 6/6 where i2c_dw_wait_transfer() is slightly modified
+> by Andy's suggestion plus I decided to remove one comment which became
+> unclear after this patch.
 > 
 > [...]
 
@@ -111,7 +94,17 @@ Andi
 
 Patches applied
 ===============
-[06/39] dt-bindings: i2c: at91: Add sam9x7 compatible string
-        commit: a856c9e6104f7b4619f09e19ab95903c7888da96
+[1/6] i2c: designware: Uniform initialization flow for polling mode
+      commit: 535677e44d57a31e1363529b5ecddb92653d7136
+[2/6] i2c: designware: Do not enable interrupts shortly in polling mode
+      commit: 64b6426a6e97a95c044fd2fff3f0adf7c1edb60c
+[3/6] i2c: designware: Use accessors to DW_IC_INTR_MASK register
+      commit: 04c71da4a9f4eef94bec153ed667d105dacffda3
+[4/6] i2c: designware: Move interrupt handling functions before i2c_dw_xfer()
+      commit: bd002efaa16e4cfffc25db2d9c4669aaa2b43646
+[5/6] i2c: designware: Fix RX FIFO depth define on Wangxun 10Gb NIC
+      commit: c94612a72ac87b0337a0d85b9263266776ed4190
+[6/6] i2c: designware: Implement generic polling mode code for Wangxun 10Gb NIC
+      commit: 197ecadad842855437a36ffc161648418ae02a97
 
 
