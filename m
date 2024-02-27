@@ -1,132 +1,119 @@
-Return-Path: <linux-i2c+bounces-2035-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2036-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AC60869D19
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 18:05:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49D1486A128
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 21:52:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9C7328AC3B
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 17:04:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D4491C23260
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 20:52:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 438FA3D541;
-	Tue, 27 Feb 2024 17:04:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A391534EE;
+	Tue, 27 Feb 2024 20:51:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="RZWe+Ivl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ca5UUYww"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233413F9D6
-	for <linux-i2c@vger.kernel.org>; Tue, 27 Feb 2024 17:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25EA152DE9;
+	Tue, 27 Feb 2024 20:51:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709053494; cv=none; b=Baar21oMrIqAAN0FI96Gckh8A/rmPp639eLTBC4d5t7LaMebYkU21L8NuJv2FSJ6g8P1pRpMDoutm4l/rA44BhsocBnorN8FDsIMWWKWK5WvQ4a9s1AqpTvIjud6V46MA7xgPfl3zdlJzT34aWmMeIH7wj0gKai6UXO23hwD7rc=
+	t=1709067078; cv=none; b=mSYjjm8YLFlEJGB/W9WHmfOqFi/0Pm1C4jhwK3sYkwrWccNtgbxXQ/oJVCDMYNBPhBeOhJLDCntJ30sK25UrZi3h6wqpSlhiHzIbPmDPsM7D84W4hVoM/2SZRK36diYsJpwORdwvMmkk9NviwDWiCdAKigWa97sJqJX4W+Av6oM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709053494; c=relaxed/simple;
-	bh=nx3Al3sJLVHlvfnNiUefu/fSlBGWeq90iTuG8ElMJVI=;
+	s=arc-20240116; t=1709067078; c=relaxed/simple;
+	bh=cd8fCWScGdOm33tO38jM+0CahWaRNuRPqV225L5QbWs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uAV7+8/fqOSoYNwFGkplMetVN8m1qjleLYEXUo/hvPMX2sMMiczrU7sMzhVjTQzf6m+HjkGYdDBoLRQPWzt/GQfvSSNSIVziEkfSevZaPx7dWVL5yghcTEAtbgZLXsu+i4Dtvj+bEqi0pIzklEGwV0ZrcXGXwF3tF9cDlUha3EY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=RZWe+Ivl; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=nx3A
-	l3sJLVHlvfnNiUefu/fSlBGWeq90iTuG8ElMJVI=; b=RZWe+IvlEXiNRgwQBlBr
-	HkeuLQlomaOzt17btM8FfRjYYXz3GxFr9/zMIUUmAYdMi944hjqvJ6n1YYD/421j
-	IAJ0Fy4gEbKYmsPmAAwLkD9BlkG/fVGmFIEg0cx3oeWCRBJr4gfIZ6DeaPo7i7rU
-	hgyz3v8BnPUXTrABKnkLDBhaejAUAiV/qndSkX11xH0QRyV34l29hMAF6gN/Pxyt
-	kZIYL8ltx8O8ESK60+lQeYkJJyzijLo4Ge+qQm5/9PN7gX/37Zt4vYeNBZRZdlig
-	T9o2CB+cbVIyoVuE440kLAtcQ6NSNZisaw76X7iZOQuY4xoAHZ1qnXFozdWiq9FF
-	Iw==
-Received: (qmail 1670908 invoked from network); 27 Feb 2024 18:04:42 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Feb 2024 18:04:42 +0100
-X-UD-Smtp-Session: l3s3148p1@CKOvBWASTKUujnu9
-Date: Tue, 27 Feb 2024 18:04:41 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
-	linux-sound@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: i2c: Remove obsolete i2c.txt
-Message-ID: <Zd4WKY966qe4DC3i@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Rob Herring <robh@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-i3c@lists.infradead.org,
-	linux-sound@vger.kernel.org
-References: <20240222174343.3482354-2-robh@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z+mLNOnSNsBDcoQKmHCFgidO3eRS+NTeJBhzCPh5XSW09mYTCgRlNCCanTa3751HiaN4UhSsH5UgETWdDAdgJJhPo1vu9QggvKGN99hcabaKqHkRsIQd2LgC7CzmfFk6gR8ETk8Ze7pT3TqKCksM4OYUPsv/0V9hhS+P83fPYmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ca5UUYww; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D613C433A6;
+	Tue, 27 Feb 2024 20:51:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709067078;
+	bh=cd8fCWScGdOm33tO38jM+0CahWaRNuRPqV225L5QbWs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ca5UUYwwuQyu8P+1DIwei3ARFoRRUd3UkXWSNvsR26hcnDv61YhkNJl1tjaJkRZTq
+	 Vz7fgo8jtUQpPknIGKZaSQqAN06bB7KDWCJ3A0MhEB0fJjp/6BFg1HE62+I0YNjlwU
+	 UDj7D0cpxlpCoCrIBj9MGYV6c/77xAV4mwwlLJlKfBCQOHCD0SSEr0TnSWCt8Vsf61
+	 Hs/khhKjRK59rls+kudR3mRNlWvGdRQ+gIbi83/+Wm2jfxcLvEkI8Rw7SxV+HEi6el
+	 Cacy49X79zZcNfvxz67VA/0hneBVNrQD+/EmFcR0UeunkOG2FJH4vRkPyu0XlP82vE
+	 1wwiPUoX6Efrw==
+Received: by pali.im (Postfix)
+	id B36CD828; Tue, 27 Feb 2024 21:51:15 +0100 (CET)
+Date: Tue, 27 Feb 2024 21:51:15 +0100
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Jean Delvare <jdelvare@suse.de>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	Paul Menzel <pmenzel@molgen.mpg.de>,
+	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+	linux-i2c@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Marius Hoch <mail@mariushoch.de>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Dell.Client.Kernel@dell.com, Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: Ideas for a generic solution to support accelerometer lis3lv02d
+ in Dell laptops/notebooks?
+Message-ID: <20240227205115.szb32h7hxjjr6z3l@pali>
+References: <4820e280-9ca4-4d97-9d21-059626161bfc@molgen.mpg.de>
+ <a1128471-bbff-4124-a7e5-44de4b1730b7@redhat.com>
+ <20231223125350.xqggx3nyzyjjmnut@pali>
+ <20240213150708.57148f6a@endymion.delvare>
+ <20240215181633.2aevovw6wkxq5si2@pali>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="J5qK8c/j+dsQwcO0"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240222174343.3482354-2-robh@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240215181633.2aevovw6wkxq5si2@pali>
+User-Agent: NeoMutt/20180716
 
+On Thursday 15 February 2024 19:16:33 Pali Rohár wrote:
+> On Tuesday 13 February 2024 15:07:08 Jean Delvare wrote:
+> > On Sat, 23 Dec 2023 13:53:50 +0100, Pali Rohár wrote:
+> > > smbus is not really bus which provides discovering and identifying
+> > > devices on the bus.
+> > 
+> > For completeness, SMBus version 2.0 actually added support for device
+> > discovery and even dynamic slave address allocation. This is explained
+> > in chapter 5, section 5.6 (SMBus Address resolution protocol).
+> > 
+> > Unfortunately, this is an optional feature which requires active
+> > cooperation from each device connected to the bus. If any device on the
+> > bus supports SMBus ARP then you should get an answer when probing
+> > (7-bit) I2C address 0x61.
+> > 
+> > Long ago I had a plan to add support for SMBus ARP to the kernel, but
+> > gave up because I couldn't find any system implementing it. If the
+> > accelerometer device in Dell laptops supported ARP then we could use it
+> > to figure out the device's address, unfortunately this doesn't seem to
+> > be the case.
+> > 
+> > -- 
+> > Jean Delvare
+> > SUSE L3 Support
+> 
+> According to my notes, accelerometer in Dell laptops should use
+> LNG3DMTR-LGA16-3x3 chipset. From what I found it should be
+> pin-compatible with LIS302DL, just in different package.
+> 
+> ST LIS302DL datasheet is on the website:
+> https://www.st.com/resource/en/datasheet/lis302dl.pdf
+> 
+> It is dual i2c and SPI bus support chipset. But in the datasheet there
+> is nothing about SMBus, looks like this is designed for i2c usage. So I
+> highly doubt that chipset supports SMBus version 2.0 with ARP extension.
 
---J5qK8c/j+dsQwcO0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Now I checked i2c address 0x61 and nothing responds to it.
 
-On Thu, Feb 22, 2024 at 10:43:42AM -0700, Rob Herring wrote:
-> Everything in i2c.txt is covered by schemas/i2c/i2c-controller.yaml in
-> dtschema project, so remove i2c.txt and update links to it in the tree.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-
---J5qK8c/j+dsQwcO0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXeFiUACgkQFA3kzBSg
-KbY1UxAAs23gIOVvLkCmeyrbAAN7i3d7cIQP2kzKq9Z4iouxjZavNTtUoLQI3Dkk
-i2BhJMPBbngmCwt4X+FDvI5qNRbBLNmX11fyuXpND15iRR6dPZ4jPm7VvMBxy62h
-CrNy9H6KK6ydfsaaRCKZvx6SuvcRcPd+rZeHSFLh6/3ESldx7JA/dAtCsFI6KUxF
-58lIqJZg++rAfqxaa2lJJFu180EMRcJzRmGx/c14ySOtYszfEU/KMnSFxdLlStBu
-S74TiQ8Aif+WUILLavWSCBiXJ3L6eiba+0fS0m+68z3x4UbpiMX8J1Zs4wq0TF+I
-wkPJl9iI0EhNZCy2T0l+iAFCBkLG84w9iyd3eQuTyp6Wl2y1jlbw7B4h57P/8CK+
-SWI/E6NdS3Gda5CwQw4zqAMlTv1VaJXpOlJv4MohCy1VfzaK/q/9bR9w9WVFOf0T
-N4ub2OU3EmKrLvxZfJPPbWgSNsS4zuDrZ1EoC7LYP7+Wx15ktYux9a8pRNC2RwhL
-xrRYAR7lPkZwz3IVgrhAFeIssOsWD0C4qOeXvX27cd2mqnDa9xWHIGd1ZEAaiLm7
-5tbuk7aF9qizAL35XAeM7/zZnIvGGNDPeu696we834v6Ud5ThnMqjVTnmDgdBT6h
-ftuE2WjABe5yP+zBZtKDrNFl0Cf1UtJ6DXn7TyDGkdV1GB0IYBk=
-=PXn7
------END PGP SIGNATURE-----
-
---J5qK8c/j+dsQwcO0--
+> Anyway, SMBus ARP is new thing to me, I have never heard about it or its
+> usage before. Has anybody else found some device which supports it?
+> Would be interesting to know if this is not just another standard which
+> was not publicly deployed yet.
 
