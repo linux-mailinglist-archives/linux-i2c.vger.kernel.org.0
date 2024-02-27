@@ -1,226 +1,93 @@
-Return-Path: <linux-i2c+bounces-2016-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2018-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7452868525
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 01:48:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A03F8685BF
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 02:28:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65DC82851E7
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 00:48:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C33531F21BAF
+	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 01:28:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087CC17F8;
-	Tue, 27 Feb 2024 00:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="f/s9uHkM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5ED4C80;
+	Tue, 27 Feb 2024 01:28:00 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from 17.mo583.mail-out.ovh.net (17.mo583.mail-out.ovh.net [46.105.56.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FE14A24
-	for <linux-i2c@vger.kernel.org>; Tue, 27 Feb 2024 00:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BCC4C6F
+	for <linux-i2c@vger.kernel.org>; Tue, 27 Feb 2024 01:27:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.56.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708994921; cv=none; b=ppE4TskkJGNYee8Splb8wiQ48fD79/E3n7kT1YqfuTBmWtsifFpmSCnaXynHSNwyitp5NjpL3/sJyf9AsudGOsIxt9bNBb/jP+tqb9y5eVsNX+0n4MJCiB032bNed7Oj+9XkdDphL+2dySUVs2NVDuLLNuveDRnOvv7lrn6+sf0=
+	t=1708997279; cv=none; b=guOLGAWS2j6wr4/dhxwmyHss6dhzbfK007Pua4DCCnWP/mxLTAd6hTxqAvfS7WqfCx9j8NXtJThkFI6KlP6EsbYcC5sJRV6aI4Y96JTM1B2aqHLshg6kNL3D8nps7QdwBGqDJdeicXaLyMVJUsSKt1jW3U8ASK0ne1f0LcuuTrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708994921; c=relaxed/simple;
-	bh=1d5ZkL9n1t8/7gU9h2KWeJ28p1lq19jfuE6mDI7FasA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qasc4qkGxolqeqw/WqS8PxwYkJHOmFhHYkzOJdiysv60qSeOdngDdgUQtccfDGUX1liDKDRqd0RlM4uG3ATsQ2wK8ikL8jj6EslOWf2154uQf5cOqWeTiy5l/Q+wsJLWbJbv/0ymaD4pQf7lfSTW9EvdhJ21weUAbCS3PZFKgVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=f/s9uHkM; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1d7232dcb3eso26533005ad.2
-        for <linux-i2c@vger.kernel.org>; Mon, 26 Feb 2024 16:48:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708994919; x=1709599719; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HEv2j8AE2R1WryNqIlQAju++XXgILMVuNPnvcySZm4w=;
-        b=f/s9uHkMDWX3yBFa336bVUbwZ9bEJcqPdIY+qrW9PtaaMy/Z9Ki9vhdMABCOoIC7uF
-         KKCC+YNR6Pe8nvjw5oPKwB5jPDmLp4vBK2DbzgtNYy8FPK19s5QEzgLrZ4FAt8mZtg6n
-         seE96dJPjnqy10NcFkGQEWuoob61BFiSV34gA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708994919; x=1709599719;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HEv2j8AE2R1WryNqIlQAju++XXgILMVuNPnvcySZm4w=;
-        b=LzV/Bf16mga88cXk4SW0Cfa/uAvGIdkmb5nOqwuJOS2q0yBea0wYercIrmO5a1TEEG
-         LgCa4HW69h3fk9oGyHRssIf14iyfD8vXLkfQN/yp2Q8yLcPGBFPfiplR+qrgcqX5SWYH
-         1fHuAyZEGMhCvKJjW4jpmILMo/5kHEguNEQsQMZyWwgNNov3Bq0zOqhJeRgiv3hvGGER
-         PJKXJVOdtjyIqL5I21UYXJWmNMb3xixbCTRwYNQkYTXAWF6F9y1FkJFjemeAcsWs8FNE
-         4bweeuYeGE/OJOJJfOCMtGrXBlM91zNBnb0ODziMK8qs5x7qwqWVp0vuwfPIJnrQy8bA
-         4WEA==
-X-Gm-Message-State: AOJu0YwizsSYkNSiCyv7HXSfGgNbYT3PQBR7iXe6wmJfg46nE5qL+V09
-	pSNLHHNUDIix0iKNqqgtOV215XbX4LUf96Z17UlVIJ6SF+DR7ge/MoNnHViSqw==
-X-Google-Smtp-Source: AGHT+IHGJtdVOQpGyp67EsMcKEw8vdfeBxtaDugOps7hSmbzF/cwPxXouymJyTiqq1Ez9gjFIz6aew==
-X-Received: by 2002:a17:902:aa42:b0:1dc:771f:ae56 with SMTP id c2-20020a170902aa4200b001dc771fae56mr7798438plr.29.1708994919507;
-        Mon, 26 Feb 2024 16:48:39 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id p3-20020a170902e34300b001db8a5ea0a3sm283583plc.94.2024.02.26.16.48.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Feb 2024 16:48:38 -0800 (PST)
-Date: Mon, 26 Feb 2024 16:48:38 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Jacob Keller <jacob.e.keller@intel.com>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	gustavoars@kernel.org, Peter Rosin <peda@axentia.se>,
-	Jesse Brandeburg <jesse.brandeburg@intel.com>
-Subject: Re: [PATCH v2] mux: convert mux_chip->mux to flexible array
-Message-ID: <202402261647.CCCF97AF@keescook>
-References: <20240226212925.3781744-1-jacob.e.keller@intel.com>
+	s=arc-20240116; t=1708997279; c=relaxed/simple;
+	bh=b0rYrIvZ2PxxtMVqAv6cvqq7svsw2UjpEiw6r+xa4/E=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=KEAW4LTGIpEmT9hazsZp4mcGhIGDUVovxdn6ZZNEND1QAlpFUpgDTx8pmlNUkD4/O8USPXe6ywPMUycNB8xMsvETXBH8FaqoI3E1ieBR1sKwU4nE4XT6nw4hQ9Fms2jJGn+UoxSuLreiUgG8fJR1/A+y1pm/Ifv5VMeeZOPZRhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.56.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
+Received: from director2.ghost.mail-out.ovh.net (unknown [10.108.2.205])
+	by mo583.mail-out.ovh.net (Postfix) with ESMTP id 4TkKSy6v2wz1FHN
+	for <linux-i2c@vger.kernel.org>; Tue, 27 Feb 2024 01:21:38 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-ktckq (unknown [10.110.113.175])
+	by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 445E91FD7C;
+	Tue, 27 Feb 2024 01:21:35 +0000 (UTC)
+Received: from etezian.org ([37.59.142.105])
+	by ghost-submission-6684bf9d7b-ktckq with ESMTPSA
+	id 3bEUDh853WW1TAkA7T8CUA
+	(envelope-from <andi@etezian.org>); Tue, 27 Feb 2024 01:21:35 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-105G0061aec5354-f92c-4587-a66e-e47a930129e2,
+                    9285090D84508773EC2C25A4099646E261C64314) smtp.auth=andi@etezian.org
+X-OVh-ClientIp:89.217.109.169
+From: Andi Shyti <andi.shyti@kernel.org>
+To: wsa+renesas@sang-engineering.com, aisheng.dong@nxp.com, 
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+ shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+ festevam@gmail.com, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc: linux-imx@nxp.com, linux-i2c@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>, 
+ Conor Dooley <conor.dooley@microchip.com>
+In-Reply-To: <20240226070910.3379108-1-peng.fan@oss.nxp.com>
+References: <20240226070910.3379108-1-peng.fan@oss.nxp.com>
+Subject: Re: [PATCH V2] dt-bindings: i2c: imx-lpi2c: add i.MX95 LPI2C
+Message-Id: <170899689466.412407.9784756949191982375.b4-ty@kernel.org>
+Date: Tue, 27 Feb 2024 02:21:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240226212925.3781744-1-jacob.e.keller@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
+X-Ovh-Tracer-Id: 4116853009816291852
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrgeefgdeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevjghfuffkffggtgfgofesthejredtredtjeenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepffetheduffdvhfdugfffudfgjeejudehheegfeeguefhieeugffhgfeuffdvgfefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpkeelrddvudejrddutdelrdduieelpdefjedrheelrddugedvrddutdehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeefpdhmohguvgepshhmthhpohhuth
 
-On Mon, Feb 26, 2024 at 01:29:25PM -0800, Jacob Keller wrote:
-> The mux_chip structure size is over allocated to additionally include both
-> the array of mux controllers as well as a device specific private area.
-> The controllers array is then pointed to by assigning mux_chip->mux to the
-> first block of extra memory, while the private area is extracted via
-> mux_chip_priv() and points to the area just after the controllers.
-> 
-> The size of the mux_chip allocation uses direct multiplication and addition
-> rather than the <linux/overflow.h> helpers. In addition, the mux_chip->mux
-> struct member wastes space by having to store the pointer as part of the
-> structures.
-> 
-> Convert struct mux_chip to use a flexible array member for the mux
-> controller array. Use struct_size() and size_add() to compute the size of
-> the structure while protecting against overflow.
-> 
-> After converting the mux pointer, notice that two 4-byte holes remain in
-> the structure layout due to the alignment requirements for the dev
-> sub-structure and the ops pointer.
-> 
-> These can be easily fixed through re-ordering the id field to the 4-byte
-> hole just after the controllers member.
-> 
-> This changes the layout from:
-> 
-> struct mux_chip {
->         unsigned int               controllers;          /*     0     4 */
-> 
->         /* XXX 4 bytes hole, try to pack */
-> 
->         struct mux_control *       mux;                  /*     8     8 */
->         struct device              dev __attribute__((__aligned__(8))); /*    16  1488 */
-> 
->         /* XXX last struct has 3 bytes of padding */
-> 
->         /* --- cacheline 23 boundary (1472 bytes) was 32 bytes ago --- */
->         int                        id;                   /*  1504     4 */
-> 
->         /* XXX 4 bytes hole, try to pack */
-> 
->         const struct mux_control_ops  * ops;             /*  1512     8 */
-> 
->         /* size: 1520, cachelines: 24, members: 5 */
->         /* sum members: 1512, holes: 2, sum holes: 8 */
->         /* paddings: 1, sum paddings: 3 */
->         /* forced alignments: 1 */
->         /* last cacheline: 48 bytes */
-> } __attribute__((__aligned__(8)));
-> 
-> To the following:
-> 
-> struct mux_chip {
->         unsigned int               controllers;          /*     0     4 */
->         int                        id;                   /*     4     4 */
->         struct device              dev __attribute__((__aligned__(8))); /*     8  1488 */
-> 
->         /* XXX last struct has 3 bytes of padding */
-> 
->         /* --- cacheline 23 boundary (1472 bytes) was 24 bytes ago --- */
->         const struct mux_control_ops  * ops;             /*  1496     8 */
->         struct mux_control         mux[];                /*  1504     0 */
-> 
->         /* size: 1504, cachelines: 24, members: 5 */
->         /* paddings: 1, sum paddings: 3 */
->         /* forced alignments: 1 */
->         /* last cacheline: 32 bytes */
-> } __attribute__((__aligned__(8)));
-> 
-> This both removes risk of overflowing and performing an under-allocation,
-> as well as saves 16 bytes of otherwise wasted space for every mux_chip.
+Hi
 
-This looks like a great clean-up, thank you!
-
+On Mon, 26 Feb 2024 15:09:10 +0800, Peng Fan (OSS) wrote:
+> Add i.MX95 LPI2C compatible entry, same as i.MX93 compatible
+> with i.MX7ULP.
 > 
-> Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
-> ---
-> Changes since v1:
-> * Rebased and updated the commit message slightly.
 > 
->  drivers/mux/core.c         |  7 +++----
->  include/linux/mux/driver.h | 10 +++++-----
->  2 files changed, 8 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/mux/core.c b/drivers/mux/core.c
-> index 775816112932..9225abca7897 100644
-> --- a/drivers/mux/core.c
-> +++ b/drivers/mux/core.c
-> @@ -98,13 +98,12 @@ struct mux_chip *mux_chip_alloc(struct device *dev,
->  	if (WARN_ON(!dev || !controllers))
->  		return ERR_PTR(-EINVAL);
->  
-> -	mux_chip = kzalloc(sizeof(*mux_chip) +
-> -			   controllers * sizeof(*mux_chip->mux) +
-> -			   sizeof_priv, GFP_KERNEL);
-> +	mux_chip = kzalloc(size_add(struct_size(mux_chip, mux, controllers),
-> +				    sizeof_priv),
-> +			   GFP_KERNEL);
->  	if (!mux_chip)
->  		return ERR_PTR(-ENOMEM);
->  
-> -	mux_chip->mux = (struct mux_control *)(mux_chip + 1);
->  	mux_chip->dev.class = &mux_class;
->  	mux_chip->dev.type = &mux_type;
->  	mux_chip->dev.parent = dev;
-> diff --git a/include/linux/mux/driver.h b/include/linux/mux/driver.h
-> index 18824064f8c0..84dc0d3e79d6 100644
-> --- a/include/linux/mux/driver.h
-> +++ b/include/linux/mux/driver.h
-> @@ -56,18 +56,18 @@ struct mux_control {
->  /**
->   * struct mux_chip -	Represents a chip holding mux controllers.
->   * @controllers:	Number of mux controllers handled by the chip.
-> - * @mux:		Array of mux controllers that are handled.
-> - * @dev:		Device structure.
->   * @id:			Used to identify the device internally.
-> + * @dev:		Device structure.
->   * @ops:		Mux controller operations.
-> + * @mux:		Flexible array of mux controllers that are handled.
->   */
->  struct mux_chip {
->  	unsigned int controllers;
-> -	struct mux_control *mux;
-> -	struct device dev;
->  	int id;
-> -
-> +	struct device dev;
->  	const struct mux_control_ops *ops;
-> +
-> +	struct mux_control mux[];
 
-This can gain the __counted_by annotation as well:
+Applied to i2c/i2c-host on
 
-	struct mux_control mux[] __counted_by(controllers);
+git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
 
-With that:
+Thank you,
+Andi
 
-	Reviewed-by: Kees Cook <keescook@chromium.org>
+Patches applied
+===============
+[1/1] dt-bindings: i2c: imx-lpi2c: add i.MX95 LPI2C
+      commit: 2a8d18cd63dc5175c67a42fe8cb7cd3cd465d845
 
--Kees
-
--- 
-Kees Cook
 
