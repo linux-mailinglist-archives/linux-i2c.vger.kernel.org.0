@@ -1,159 +1,239 @@
-Return-Path: <linux-i2c+bounces-2041-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2042-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B49F86A2AB
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 23:38:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D1C086A6A9
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Feb 2024 03:39:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FBB11C22BF3
-	for <lists+linux-i2c@lfdr.de>; Tue, 27 Feb 2024 22:38:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7936F1F28ECD
+	for <lists+linux-i2c@lfdr.de>; Wed, 28 Feb 2024 02:39:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAC445576E;
-	Tue, 27 Feb 2024 22:38:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBD811CD0F;
+	Wed, 28 Feb 2024 02:39:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jVkHkY4U"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="UXSuuIK9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF52F56449;
-	Tue, 27 Feb 2024 22:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4CA1CD13
+	for <linux-i2c@vger.kernel.org>; Wed, 28 Feb 2024 02:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709073488; cv=none; b=RugHExsgK6STYyQ0wulWff1DTiwUdQBP7UJ83Pz/YSCXFjM8oLOJOhs+81AABxuBJafe/8lrO5WXWEKnQNirH1Z9GcDrTQE3Sf4RjbIblYL4UKHNvBHnsLknmIPlmbFvLAypSPC39F53I4s52fKORUu2NWgg1ZH9fR5YNdZQAsA=
+	t=1709087986; cv=none; b=lJcbuGsZpMV4bcBd/ekesFJrqsQM2ko+2qCKudFpU6hbaannCqV9NA6iIyFsTD7EZVTTyLHogPECVz85K+kgCkSWX933mYt+F9K6M/xSdQh0K47GP2c7pKd1IQcxpHdS4/XKi6NpqhV5FMSif72O0JqPrUrZt6RjyXIvXHZV18c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709073488; c=relaxed/simple;
-	bh=mu6h9vvWY4/hRPWc19p/Du6v/KdKG59t7J/K0sc2jf4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u7AtPd4xOmwUjSb+FEK4MoU0d70X4TsyqRYjsSA8zOYbB4NSy+9+iNMvA99XwdOWICBN2VY4Be/Mc4a3nmVdQl8QGP2qXLGFfpfp7gk0QXQSPPLTCJ09cFnSP2L6WeIU1FK+ZCeOTGRWlhH3YUZZSE/gykg4ws+zejAi2ZqSNIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jVkHkY4U; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a3e85a76fa8so468099966b.1;
-        Tue, 27 Feb 2024 14:38:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709073485; x=1709678285; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mu6h9vvWY4/hRPWc19p/Du6v/KdKG59t7J/K0sc2jf4=;
-        b=jVkHkY4UgL2hAjJXy3c6dCejxRQ9oB1PF/zdIckw+VhI22DBd9vTJYMOFBKPKpA8kA
-         IZnZeswyxIxZb3MrXalkd369JybJW71BNGzpJXQ0/3d3WWFjCXEz2fxA8A8C6CMm41SH
-         HZGepbFiYeVSqeRIST2eG8jbxETzbk9Aa+C9A57nXWFQWlxwz3vvR6VsmNxaYjpbToFH
-         trLvT71Bz8OfrLdWQkTAOK9Dif1k220mztFLkAPOq1XaoK1pyKbkvkHdP1afFkXeyht8
-         6F1C4Yv1H+rkNouKgzqDvGS5i0XEZQ2WMBhanoSbs5s3V5/ERQP5A5/nNxd4PnjgeZxa
-         feYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709073485; x=1709678285;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mu6h9vvWY4/hRPWc19p/Du6v/KdKG59t7J/K0sc2jf4=;
-        b=whB4ZDAoAvWJfQdKddPAsmNS+hkUML+elQm+otYmq8uq6M0TBeRhBAyRFBOvBPU/LJ
-         JJdXcMOm2RW1fF9+mq873f+NYVmINDt2fwIvQwc4LArF6N9N0agppTl+YwrchkmIVXa0
-         vUEpJoKeA0O6ees2hGKsUGTPy12+7uTZDrUFXeapcIoBvpOd6NSMy8/spMQQYPowmNS4
-         8Lv1dqmItHCwkjRrk/NANkRd461+cdpnSVQlw3uB3loYgwYVIb4obdRzgdw1SBUdzB2d
-         mWLrpv3i0BjTais6HzSraHjOVDLMR6DtXF2+MBhwR7G9FLawNDUkhWleSbXTYd21T7m+
-         5qig==
-X-Forwarded-Encrypted: i=1; AJvYcCWFBvwlh6HKlj07VYNlyA6ALBQPgeiXqcjxsU7kwLFQv3H1yeQIE1LdZ5nZ/QA40lczConD7Onp7HizgjUG7IZikgkhIlCAGSg3bE/1C4N/ZLjZXDsVvm2HV4sX3CAdHleX2B/gS7He5+YA2tx12Q==
-X-Gm-Message-State: AOJu0YylNB8YwEIyyhQcez2zzqKjC+Q3Lju0FPO87J4DDtzTgn1y+WVz
-	zdZsNUn06eNEt6N3yvXJ2EtgQ/O12JWh8785D/aWkIYM58r0VJXIrl5qgepLpxjJhX8uPa8mRP0
-	vnGGbUqaVE1xAonN5HfNb6y9VHSY=
-X-Google-Smtp-Source: AGHT+IFMB+lie0FcgAouDa6HZbHwWiVzW7b+SeqikqXKytkx/KVK+dT1xGs5TasEAkcLFFghhAapDyLfl4nx4GIp1iE=
-X-Received: by 2002:a17:906:68c6:b0:a41:392d:e11c with SMTP id
- y6-20020a17090668c600b00a41392de11cmr7933034ejr.26.1709073485078; Tue, 27 Feb
- 2024 14:38:05 -0800 (PST)
+	s=arc-20240116; t=1709087986; c=relaxed/simple;
+	bh=DYKsPK+nAJRHdem3y+JromxDS/bOMz+5yFpxfUA6UcY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O52x4zwWBf64/uqTwkP7i0StOdt1uziUcoYhn4CTdAvRbFgDaeM9mY0470Eyr8FBNbP88Hojqt9xiSN37oUk2WXNZ6lSuypdggicq0GQhIKC8BAIKebBbftiCo+cNYEiSUrDAT49l60L3G9E0ajowkuvYvvgFF8YpHbzI6avPCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=UXSuuIK9; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9A60E2C0F60;
+	Wed, 28 Feb 2024 15:39:40 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1709087980;
+	bh=74NS7Xkcqh5ka9xf2XrX1XQHgALZjeqj8WkhUPSZZYM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=UXSuuIK9goyR5rN58VCscnPrD5Gxu2sbEi8E91bvR3saSdYexpO5T4Ly3bikpM/eY
+	 j8XYiXS6irm4PFryVhI7i3V0Rv7F2hJtFEwKs8TfYJ5IQN815L2syrq68NLAzwBGo1
+	 xiS0h1te7BnNazxVGFDaGAzFf6X0+21H78AE035fdUNWFXTRA1N7Po3UWnOIPxjjSV
+	 uZLF2vjO1RZ301DjltHrNgqF+Wre3BcfU1rVGyr15Opvt+zZwgFKKfOaxnYxY7B5ZI
+	 qmk9VFzYJJG8rb7gqgaXwfLI7MZKbIa5tzy9X9N77E+XBmsEGo/vMqrnAgXS+Z5O6r
+	 21ooNiWJokoxQ==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B65de9cec0000>; Wed, 28 Feb 2024 15:39:40 +1300
+Received: from hamishm-dl.ws.atlnz.lc (hamishm-dl.ws.atlnz.lc [10.33.24.13])
+	by pat.atlnz.lc (Postfix) with ESMTP id 70F7F13EDA8;
+	Wed, 28 Feb 2024 15:39:40 +1300 (NZDT)
+Received: by hamishm-dl.ws.atlnz.lc (Postfix, from userid 1133)
+	id 6D19B240BBF; Wed, 28 Feb 2024 15:39:40 +1300 (NZDT)
+From: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+To: mika.westerberg@linux.intel.com,
+	wsa+renesas@sang-engineering.com
+Cc: linux-i2c@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	Hamish Martin <hamish.martin@alliedtelesis.co.nz>
+Subject: [PATCH 0/1] I2C mux ACPI SSDT overlay removal issue
+Date: Wed, 28 Feb 2024 15:39:24 +1300
+Message-ID: <20240228023925.2814638-1-hamish.martin@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240106160935.45487-1-hdegoede@redhat.com> <20240106160935.45487-3-hdegoede@redhat.com>
- <20240107171055.ac7jtwhu2kbalaou@pali> <20240213173050.0cf4a58f@endymion.delvare>
- <3e5b47ce-29a9-43a3-92bc-599a9a716fbb@redhat.com> <ZdNBGSJ28AcdpC7f@smile.fi.intel.com>
- <20240227210429.l5o52wuexqqmrpol@pali> <CAHp75VeGaKws35x4u-mrmWP2Rd55T6VcR9OjNfh+PsF_M9GR-g@mail.gmail.com>
- <20240227215000.gbmn4n2uzd3hyk3b@pali>
-In-Reply-To: <20240227215000.gbmn4n2uzd3hyk3b@pali>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 28 Feb 2024 00:37:28 +0200
-Message-ID: <CAHp75Ve5S3S0MPuW1v8q3Dx8sbDZH_LCT8a_p7hwojF2aKS8CQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] platform/x86: dell-smo8800: Move instantiation of
- lis3lv02d i2c_client from i2c-i801 to dell-smo8800
-To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc: Andy Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
-	Jean Delvare <jdelvare@suse.de>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Paul Menzel <pmenzel@molgen.mpg.de>, Andi Shyti <andi.shyti@kernel.org>, 
-	eric.piel@tremplin-utc.net, Marius Hoch <mail@mariushoch.de>, 
-	Dell.Client.Kernel@dell.com, Kai Heng Feng <kai.heng.feng@canonical.com>, 
-	platform-driver-x86@vger.kernel.org, Wolfram Sang <wsa@kernel.org>, 
-	linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=BKkQr0QG c=1 sm=1 tr=0 ts=65de9cec a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=k7vzHIieQBIA:10 a=nXG3BeEQHGMQi2UDEzgA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On Tue, Feb 27, 2024 at 11:50=E2=80=AFPM Pali Roh=C3=A1r <pali@kernel.org> =
-wrote:
-> On Tuesday 27 February 2024 23:19:19 Andy Shevchenko wrote:
-> > On Tue, Feb 27, 2024 at 11:04=E2=80=AFPM Pali Roh=C3=A1r <pali@kernel.o=
-rg> wrote:
+I have found an issue with ACPI overlay table removal specifically relate=
+d to I2C multiplexers.
 
+Consider an ACPI SSDT Overlay such as the following which defines a PCA95=
+48 I2C mux "MUX0" on the existing I2C bus "\_SB.I2CA":
+
+DefinitionBlock ("my_mux.asl", "SSDT", 1, "ATL", "RMUX", 0x00000001)
+{
+    External (\_SB.I2CA, DeviceObj)
+
+    Scope (\_SB.I2CA)
+    {
+        // i2c mux (8-Channel)
+        Device (MUX0)
+        {
+            Name (_HID, "PRP0001")  // Use compatible string
+            Name (_CRS, ResourceTemplate ()
+            {
+                I2cSerialBusV2 (0x70, ControllerInitiated,
+                                100000, AddressingMode7Bit,
+                                "\\_SB.I2CA", 0x00,
+                                ResourceConsumer, , Exclusive, )
+            })
+            Name (_DSD, Package ()
+            {
+                ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"), // Devic=
+e Properties UUID
+                Package ()
+                {
+                    Package () { "name", "cex_direct_mux" },
+                    Package () { "compatible", "nxp,pca9548" },
+                    Package () { "i2c-mux-idle-disconnect", "" },
+                }
+            })
+
+            Device (CH00) { name (_ADR, 0) }
+            Device (CH01) { name (_ADR, 1) }
+            Device (CH02) { name (_ADR, 2) }
+            Device (CH03) { name (_ADR, 3) }
+            Device (CH04) { name (_ADR, 4) }
+            Device (CH05) { name (_ADR, 5) }
+            Device (CH06) { name (_ADR, 6) }
+            Device (CH07) { name (_ADR, 7) }
+        }
+    }
+}
+
+When this table is loaded (using configfs method) we see the creation of =
+a device for the overall PCA9548 chip and 8 further devices - one i2c_ada=
+pter each for the mux channels. These are all bound to their ACPI equival=
+ents via an eventual invocation of acpi_bind_one().
+
+When we unload the SSDT overlay (rmdir /sys/kernel/config/acpi/table/my_m=
+ux/) we run into the problem. The ACPI devices are deleted via acpi_devic=
+e_del_work_fn() and the acpi_device_del_list.=20
+
+The following warning and stack trace is output as the deletion does not =
+go smoothly:
+# rmdir /sys/kernel/config/acpi/table/my_mux/
+------------[ cut here ]------------
+kernfs: can not remove 'physical_node', no directory
+WARNING: CPU: 1 PID: 11 at fs/kernfs/dir.c:1674 kernfs_remove_by_name_ns+=
+0xb9/0xc0
+Modules linked in:
+CPU: 1 PID: 11 Comm: kworker/u128:0 Not tainted 6.8.0-rc6+ #1
+Hardware name: congatec AG conga-B7E3/conga-B7E3, BIOS 5.13 05/16/2023
+Workqueue: kacpi_hotplug acpi_device_del_work_fn
+RIP: 0010:kernfs_remove_by_name_ns+0xb9/0xc0
+Code: e4 00 48 89 ef e8 07 71 db ff 5b b8 fe ff ff ff 5d 41 5c 41 5d e9 a=
+7 55 e4 00 0f 0b eb a6 48 c7 c7 f0 38 0d 9d e8 97 0a d5 ff <0f> 0b eb dc =
+0f 1f 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
+RSP: 0018:ffff9f864008fb28 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffff8ef90a8d4940 RCX: 0000000000000000
+RDX: ffff8f000e267d10 RSI: ffff8f000e25c780 RDI: ffff8f000e25c780
+RBP: ffff8ef9186f9870 R08: 0000000000013ffb R09: 00000000ffffbfff
+R10: 00000000ffffbfff R11: ffff8f000e0a0000 R12: ffff9f864008fb50
+R13: ffff8ef90c93dd60 R14: ffff8ef9010d0958 R15: ffff8ef9186f98c8
+FS:  0000000000000000(0000) GS:ffff8f000e240000(0000) knlGS:0000000000000=
+000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f48f5253a08 CR3: 00000003cb82e000 CR4: 00000000003506f0
+Call Trace:
+ <TASK>
+ ? kernfs_remove_by_name_ns+0xb9/0xc0
+ ? __warn+0x7c/0x130
+ ? kernfs_remove_by_name_ns+0xb9/0xc0
+ ? report_bug+0x171/0x1a0
+ ? handle_bug+0x3c/0x70
+ ? exc_invalid_op+0x17/0x70
+ ? asm_exc_invalid_op+0x1a/0x20
+ ? kernfs_remove_by_name_ns+0xb9/0xc0
+ ? kernfs_remove_by_name_ns+0xb9/0xc0
+ acpi_unbind_one+0x108/0x180
+ device_del+0x18b/0x490
+ ? srso_return_thunk+0x5/0x5f
+ ? srso_return_thunk+0x5/0x5f
+ device_unregister+0xd/0x30
+ i2c_del_adapter.part.0+0x1bf/0x250
+ i2c_mux_del_adapters+0xa1/0xe0
+ i2c_device_remove+0x1e/0x80
+ device_release_driver_internal+0x19a/0x200
+ bus_remove_device+0xbf/0x100
+ device_del+0x157/0x490
+ ? __pfx_device_match_fwnode+0x10/0x10
+ ? srso_return_thunk+0x5/0x5f
+ device_unregister+0xd/0x30
+ i2c_acpi_notify+0x10f/0x140
+ notifier_call_chain+0x58/0xd0
+ blocking_notifier_call_chain+0x3a/0x60
+ acpi_device_del_work_fn+0x85/0x1d0
+ process_one_work+0x134/0x2f0
+ worker_thread+0x2f0/0x410
+ ? __pfx_worker_thread+0x10/0x10
+ kthread+0xe3/0x110
+ ? __pfx_kthread+0x10/0x10
+ ret_from_fork+0x2f/0x50
+ ? __pfx_kthread+0x10/0x10
+ ret_from_fork_asm+0x1b/0x30
+ </TASK>
+---[ end trace 0000000000000000 ]---
+...
+repeated 7 more times, 1 for each channel of the mux
 ...
 
-> > I'm wondering why we need all this. We have notifiers when a device is
-> > added / removed. We can provide a board_info for the device and attach
-> > it to the proper adapter, no?
->
-> I do not know how flexible are notifiers. Can notifier call our callback
-> when new "struct i2c_adapter *adapter" was instanced?
+The issue as I see it is that the binding of the ACPI devices to their pe=
+er I2C adapters is not correctly cleaned up.=20
+Digging deeper into the issue we see that the deletion order is such that=
+ the ACPI devices matching the mux channel i2c adapters are deleted first=
+ during the SSDT overlay removal. For each of the channels we see a call =
+to i2c_acpi_notify() with ACPI_RECONFIG_DEVICE_REMOVE but, because these =
+devices are not actually i2c_clients, nothing is done for them.=20
 
-You can follow notifications of *an* I2C adapter being added /
-removed. With that, you can filter which one is that. Based on that
-you may attach a saved (at __init as you talked about in the reply to
-Hans) board_info with all necessary information.
+Later on, after each of the mux channels has been dealt with, we come to =
+delete the i2c_client representing the PCA9548 device. This is the call s=
+tack we see above, whereby the kernel cleans up the i2c_client including =
+destruction of the mux and it's channel adapters (i2c_mux_del_adapters() =
+-> i2c_del_adapter()). At this point we do attempt to unbind from the ACP=
+I peers but those peers no longer exist and so we hit the kernfs errors.
 
-Something like this (combined)
-https://elixir.bootlin.com/linux/latest/source/drivers/ptp/ptp_ocp.c#L4515
-https://elixir.bootlin.com/linux/latest/source/drivers/input/mouse/psmouse-=
-smbus.c#L194
+My proposed fix is to augment i2c_acpi_notify() to handle i2c_adapters. B=
+ut, given that the life cycle of the adapters is linked to the i2c_client=
+, instead of deleting the i2c_adapters during the i2c_acpi_notify(), we i=
+nstead just trigger unbinding of the ACPI device from the adapter device,=
+ and allow the cleanup of the adapter to continue in the way it always ha=
+s.
 
-> > > With this simple change all dell smo8800 code would be in its subdir
-> > > drivers/platform/x86/dell/ and i2c-i801.c would get rid of smo code.
-> > >
-> > > This approach does not change any functionality, so should be absolut=
-ely
-> > > safe.
-> > >
-> > > Future changes will be done only in drivers/platform/x86/dell/ subdir=
-,
-> > > touching i801 would not be needed at all.
-> >
-> > Still these exported functions are not the best solution we can do,
-> > right? We should be able to decouple them without need for the custom
-> > APIs.
->
-> Well, what I described here is a simple change which get rid of the one
-> problem: i2c-i801.c contains SMO88xx related code and changing SMO88xx
-> logic (like adding a new device id) requires touching unrelated
-> i2c-i801.c source file.
+This fix resolves my specific issue with the I2C mux removal. However, I'=
+m not sure about whether there is a better fix for this issue so if you h=
+ave suggestions please let me know. I'm not sure if there needs to be fur=
+ther code to ensure this new code only runs for this specific case where =
+the i2c_adapters are part of an i2c mux. Guidance on this would be apprec=
+iated.
 
-`get rid of one problem` --> `replace one by another (but maybe less
-critical, dunno) problem`. The new one is the spread of custom APIs
-for a single user, which also requires an additional, shared header
-file and all hell with the Kconfig dependencies.
+Hamish Martin (1):
+  i2c: acpi: Unbind mux adapters before delete
 
-> I like small changes which can be easily reviewed and address one
-> problem. Step by step. That is why I proposed it here.
->
-> For decoupling it is needed to get newly instanced adapter (if the
-> mentioned notifier is able to tell this information) and also it is
-> needed to check if the adapter is the i801.
-
-Yes.
-
+ drivers/i2c/i2c-core-acpi.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
 --=20
-With Best Regards,
-Andy Shevchenko
+2.43.0
+
 
