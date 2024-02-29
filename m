@@ -1,54 +1,53 @@
-Return-Path: <linux-i2c+bounces-2061-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2062-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEC7586D192
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Feb 2024 19:11:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3024286D199
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Feb 2024 19:11:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5FADCB249D6
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Feb 2024 18:11:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6AA41F263E5
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Feb 2024 18:11:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0020E7A122;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 865187A141;
 	Thu, 29 Feb 2024 18:10:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AnGjFFU5"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eMuCMAFg"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C697416063E;
-	Thu, 29 Feb 2024 18:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9308B70AE4;
+	Thu, 29 Feb 2024 18:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709230257; cv=none; b=NeAjAltCKbmqh4jsMVpetfvCyTWUmYAxMxmADdzaKvVXve8yg2VrQ1QnbO72RfZ+B8umgy6LQoxqwyQMR1cc3oRuY+LySJjBAUFBDSX5WSpOsCvk+bigkjuTKdyMOWQKp4guWcPoEUjYRYqvb8+PFTFKUb+fgGBXq1C93K5kofU=
+	t=1709230258; cv=none; b=equwyvw3GpItlNYBfLGLnLzZPri9l+gXlOhOfNth8Tvw4rhsOrZB/ZkExnhNtybadSe7cgKFeHYNUN69E+MYIoRYXdYN+PCWf0IDrQxHj1GXFkxcZGysOidl1hTN8MssQvJHTHMSjYIwtuRLrsebqWRpcprgbNf/khzliFggSCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709230257; c=relaxed/simple;
-	bh=LpFcuLraRe7BWVqNKjqBpF37d0hNa+NEq3AANyBCH1Y=;
+	s=arc-20240116; t=1709230258; c=relaxed/simple;
+	bh=miJJTTkCiPwGMNDF2KARqHikECescd5oBPrYE3A6WQk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MTyk7sbyA/0y1VAt/zlJ/Vh8wFyw388tJsqmaUJq0vWnjgGI5IG325xkACE5xAJpGeh3HcU4dd+o2zDpvI6dbv3hFD5N5cxilMOb0kzOKPRSy+52OPnqd+2lSLICIxjy68lmn7h4X5ivUuBXX59hUV1yQD0Pu0EWpOJ0mI1o478=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=AnGjFFU5; arc=none smtp.client-ip=217.70.183.195
+	 In-Reply-To:To:Cc; b=mJPbbukeC+MbXyCCX/m5/RCwhbUypt1ekzapLknHbFWeiMt/qsbN623csTqF+Hjm2nASHSAU+Mbwn2jCr7V4TpCuGK2dlzSxexLRfn6LqR9xLfKMSJdqzRU2X+Ib+a4nLoJzy0GfUMRRi53BdLz2mzmBhLvCa9aZueAE+yQ183g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eMuCMAFg; arc=none smtp.client-ip=217.70.183.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3AC7960005;
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F1D0860006;
 	Thu, 29 Feb 2024 18:10:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709230252;
+	t=1709230253;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=n3ykZDJuu5yB2cRXMdYcgz6EH3xu6RTNJDgFxtnNhQg=;
-	b=AnGjFFU5zZr3ArMGU/5d4Enuu9hYz1+7wRNU1/Prf4Nv+2jOwLj1XOcolR7kjGHFZw63BU
-	/pSVN9IOVRi8Ehkpultv1rt3p+iavsRMwKLm2YBQC1P9iuxF/ZfC+mXilEV+ytZMkwZKuf
-	tGhDJpdndAF/p/kORhg1Zecv9jbGFLSlGX+rGr5247PUQuUhzOl2SEBaroz6VF5ITZKeu4
-	WIbxdrM7zYiWSjh0PgO8M2aQE0Q1/sEsRAYZDhg9cF42zXSl4wDw3ebf5MXe5ivIBOoAsp
-	AzqZUyytLV3djNYFz53Sbc3dqSSgdlVtR9U+pmpsveZ01HJlvrqqlF0jsjIKhg==
+	bh=4fOFj5dg3K7TaQX64fGwyCGx+GtP1xlvjO5rwEKu6Ic=;
+	b=eMuCMAFgafsfwxncHS+aZQYb277Ijt6BWHsbu4zyWZyARHQTCi+3AeaodO9iC0+fi4pNIS
+	dD0CiWXjwEy/qQyPZrvLG/tdHyEFw2B54c8PwDhiAd7fEuhNpFwvMBJmHlyVc7ZbcGAMPl
+	QLVgN/5YRxCz+kxpoX04mQo+B9m+vgnPUdJ9i3gzZ9mx101MgOvMW+5I8kPceElAG6g3f5
+	RojWpqWe8s5aXI1K0TpnueUCFVgklQzR3A9uLfOa9a+JNQY607m9qI57zu6S8RUlJZFUiu
+	icZEz643p5Aq+kAGuJUaZRYLHE8a85OQJ0r3d8vUFfR8ApUyyqlsiXGtHEGbuA==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Thu, 29 Feb 2024 19:10:49 +0100
-Subject: [PATCH v2 01/11] dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c
- bindings and example
+Date: Thu, 29 Feb 2024 19:10:50 +0100
+Subject: [PATCH v2 02/11] dt-bindings: hwmon: lm75: use common hwmon schema
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -57,7 +56,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240229-mbly-i2c-v2-1-b32ed18c098c@bootlin.com>
+Message-Id: <20240229-mbly-i2c-v2-2-b32ed18c098c@bootlin.com>
 References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
 In-Reply-To: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
 To: Linus Walleij <linus.walleij@linaro.org>, 
@@ -71,119 +70,44 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
  Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
  Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ linux-hwmon@vger.kernel.org
 X-Mailer: b4 0.13.0
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Add EyeQ5 bindings to the existing Nomadik I2C dt-bindings. Add the
-EyeQ5-specific property behind a conditional. Add an example for this
-compatible.
+Reference common hwmon schema which has the generic "label" property,
+parsed by Linux hwmon subsystem.
 
+To: Jean Delvare <jdelvare@suse.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- .../devicetree/bindings/i2c/st,nomadik-i2c.yaml    | 48 ++++++++++++++++++++--
- 1 file changed, 44 insertions(+), 4 deletions(-)
+ Documentation/devicetree/bindings/hwmon/lm75.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml b/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml
-index 16024415a4a7..2d9d5b276762 100644
---- a/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml
-@@ -14,9 +14,6 @@ description: The Nomadik I2C host controller began its life in the ST
- maintainers:
-   - Linus Walleij <linus.walleij@linaro.org>
- 
--allOf:
--  - $ref: /schemas/i2c/i2c-controller.yaml#
--
- # Need a custom select here or 'arm,primecell' will match on lots of nodes
- select:
-   properties:
-@@ -24,6 +21,7 @@ select:
-       contains:
-         enum:
-           - st,nomadik-i2c
-+          - mobileye,eyeq5-i2c
-   required:
-     - compatible
- 
-@@ -39,6 +37,10 @@ properties:
-           - const: stericsson,db8500-i2c
-           - const: st,nomadik-i2c
-           - const: arm,primecell
-+      # The variant found on Mobileye EyeQ5
-+      - items:
-+          - const: mobileye,eyeq5-i2c
-+          - const: arm,primecell
- 
-   reg:
-     maxItems: 1
-@@ -55,7 +57,7 @@ properties:
-       - items:
-           - const: mclk
-           - const: apb_pclk
--      # Clock name in DB8500
-+      # Clock name in DB8500 or EyeQ5
-       - items:
-           - const: i2cclk
-           - const: apb_pclk
-@@ -70,6 +72,16 @@ properties:
-     minimum: 1
-     maximum: 400000
- 
-+  mobileye,olb:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    items:
-+      - items:
-+          - description: Phandle to OLB system controller node.
-+          - description: Platform-wide controller ID (integer starting from zero).
-+    description:
-+      The phandle pointing to OLB system controller node, with the I2C
-+      controller index.
-+
- required:
-   - compatible
+diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+index ed269e428a3d..29bd7460cc26 100644
+--- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
++++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+@@ -57,6 +57,7 @@ required:
    - reg
-@@ -79,6 +91,20 @@ required:
  
- unevaluatedProperties: false
+ allOf:
++  - $ref: hwmon-common.yaml#
+   - if:
+       not:
+         properties:
+@@ -71,7 +72,7 @@ allOf:
+       properties:
+         interrupts: false
  
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: mobileye,eyeq5-i2c
-+    then:
-+      required:
-+        - mobileye,olb
-+    else:
-+      properties:
-+        mobileye,olb: false
-+
+-additionalProperties: false
++unevaluatedProperties: false
+ 
  examples:
    - |
-     #include <dt-bindings/interrupt-controller/irq.h>
-@@ -111,5 +137,19 @@ examples:
-       clocks = <&i2c0clk>, <&pclki2c0>;
-       clock-names = "mclk", "apb_pclk";
-     };
-+  - |
-+    #include <dt-bindings/interrupt-controller/mips-gic.h>
-+    i2c@300000 {
-+      compatible = "mobileye,eyeq5-i2c", "arm,primecell";
-+      reg = <0x300000 0x1000>;
-+      interrupt-parent = <&gic>;
-+      interrupts = <GIC_SHARED 1 IRQ_TYPE_LEVEL_HIGH>;
-+      clock-frequency = <400000>;
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      clocks = <&i2c_ser_clk>, <&i2c_clk>;
-+      clock-names = "i2cclk", "apb_pclk";
-+      mobileye,olb = <&olb 0>;
-+    };
- 
- ...
 
 -- 
 2.44.0
