@@ -1,105 +1,144 @@
-Return-Path: <linux-i2c+bounces-2079-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2080-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D600F86D5F5
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Feb 2024 22:14:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A119286D646
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Feb 2024 22:40:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 735D61F24E3E
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Feb 2024 21:14:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B984288376
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Feb 2024 21:40:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037A214567C;
-	Thu, 29 Feb 2024 21:10:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C5516FF5F;
+	Thu, 29 Feb 2024 21:40:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d0N1jv0e"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="aK8P/ajy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A62B14566D
-	for <linux-i2c@vger.kernel.org>; Thu, 29 Feb 2024 21:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDFB5025E
+	for <linux-i2c@vger.kernel.org>; Thu, 29 Feb 2024 21:40:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709241010; cv=none; b=BgGkS/ZNDNjUSbsLqHGHORFfoU7XjSWjNg3WGzH1ThtSy6K7cnYxpQBGBwlC5fzftJqGDOtVmEM2vF6Ug8DoE2H8SDtg52peYTbIsyfARNIeQgLZ9778KXCOOFMJvlEAc0dE9pgard4DGH6Jfw9ZMZNaJG5Q9/kF2/8p2a2lVQE=
+	t=1709242853; cv=none; b=duK8RICzLQIXn6x9WGL894qI/r9PZLz8AW+bGJqmDRRUXw5kA989UXKClppqesZkYLK6gCXc8glcEu3cNdZHVQITXwcqtgvjS59+G15YGLPqeQJNiqXywDLhOfdiPgafEFcwXuvXF8DqqiGo9U+gvOgeoG1xYlHPtGLNFqaADg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709241010; c=relaxed/simple;
-	bh=S8fZ6oYozb5nHV8nQRv8KctbzAfbnxof3VtKQDRYRaA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nrn3NDYfQn0r+UABn9jO63R7393Bfq9VIDc5XhGoklPS9tW5YVhirux0TIk61kveNRI+enw68++mUPcvTCLy6lJdpyzKy7GalcmwByyu3WalHoRSXzdpFctE5sJSgDYLKqiFZcyofmFiqSrK+HisxXwQi8jMN4ts/sF7O+tuSEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d0N1jv0e; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dcbc00f6c04so1469377276.3
-        for <linux-i2c@vger.kernel.org>; Thu, 29 Feb 2024 13:10:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709241006; x=1709845806; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S8fZ6oYozb5nHV8nQRv8KctbzAfbnxof3VtKQDRYRaA=;
-        b=d0N1jv0ecE497SIdHY1a0HCti2dEtiEy95GKD6/ZSYIRxqE2CubgluTDIa0hm4ScFQ
-         Pa9i3kXtrf2sU8cUdQzxmHsrJpUCJlVxiEtaetaZT+FGb6WCrZEypaM3amhqu8abO62Z
-         dFVyfhaGTo+3D/1YFH0G+y7SdNlpDI1SK2tYrIAsELS6Y7B+qDL4odKyrLFPvG3IgwJ8
-         nwQQBkm/3KGg1PlfwC1Fk6+8DuQLF29x/LRS7yT0sENWp2U4NMz0rfxTPRpYwyj7sCPi
-         aP75dC3/mJKsK8noytXh6w9j6yMmxfRkwpa6tMGGbb1L1CVylTnShJ8Gyox5sbS6kfCS
-         oAQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709241006; x=1709845806;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S8fZ6oYozb5nHV8nQRv8KctbzAfbnxof3VtKQDRYRaA=;
-        b=QJaOmWkA3uHlFifiTuFPrfRQy8C4YLvv3ZlydPkNHDb4NaNtGBC5vgSFK/MZAvAUyJ
-         kRpqZm5Ha1Q2FnYYMNifoFa9J0dAsQTwGwQ+Vd8x5jHS9llc/HOGt/j5y27IIjWY5RFd
-         Ipw5UAwnSMVE1EWu8amMAsVcBh6UKmxn7xyKp+QypCBRQfutA1ML7xd5N1dmOnhmO+nd
-         T63+Jnk9gauR2Yyz7vMGQJAwcrtf3ibS9O0attxG2ac4mBUjS5l9Hh0/wsZjP4YpXM/F
-         5+oVFWf1f/foFJNvGbZGIxGRoSTUzsOZRm5frpB7J4uOue9GVnMAGyNenNcIp0gGlFLf
-         cs0w==
-X-Forwarded-Encrypted: i=1; AJvYcCX+umXPfsyvvKZigHjbDKTpAltxKH/e0IJHUTfHg8adbIhNN6PcdCL6sexwL3htz9YflpMdpVyzYsfT3siEKrgbEqDug1kyzCZi
-X-Gm-Message-State: AOJu0YxNMyB/T1RXllsScru6PM0tldrj6UflB0dEmZ3vXRuHvbrn4ac/
-	NquPR6bPwx4oUNJ9GJ/6+CoFA/zTtmcbSI/ykg/VESl+BtkHOQWuhsQQGY2shr+owrq4BRhAGSJ
-	nl5GR/UAubyXAwzGj8Gte5uL3f9vS2Anlxbjm1g==
-X-Google-Smtp-Source: AGHT+IHpqt7WVprMdgDUXDj2HfXpkMExj7EZqboVSsy0vCvMNy6esVauMuDWv/acQi58TDCcoWCPbUaQEY1kCjx06I4=
-X-Received: by 2002:a25:2f45:0:b0:dcc:8f97:9744 with SMTP id
- v66-20020a252f45000000b00dcc8f979744mr3219750ybv.43.1709241006597; Thu, 29
- Feb 2024 13:10:06 -0800 (PST)
+	s=arc-20240116; t=1709242853; c=relaxed/simple;
+	bh=fhe/ofn1EKmGGMfurfxC5mf96CqQP9CEEHxjb0+86qU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=P7KTvITeUelshOM2h3gTRrVquNOhPgF7TJ7pu8w3aq4n9OMzyAR46zH8PcC0T1oswbIQqBDm7rxEEB3dHD8d84G6/5MD/hl8Q7Bx4fzsTkoSDF4gxMfDOQSnQNNPxh1whibqwLT6qp3/RI0+e9NMb9vyEi5DyWjWH9IbtudGR5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=aK8P/ajy; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 57ED72C02AB;
+	Fri,  1 Mar 2024 10:40:46 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1709242846;
+	bh=fhe/ofn1EKmGGMfurfxC5mf96CqQP9CEEHxjb0+86qU=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=aK8P/ajyFSWj40SJs0ggjqvK+ZH/jR5x14svlvnGkWtEf4AdnkAhzQYGjNh0Im6RJ
+	 tlbRCJ8h+H0uFv3WjkWtj7deOxBltM9jMAtv84yScpdfqnU7BfVThtywc24auUbyUs
+	 gVhon8SUM19uhNnIPpSoDApc2norBpnrKl7OA68DjvL6jRmY/hJrRsYQC8ygomqyNp
+	 BqcHooclnHLVphdMdpl8DMg9u+S6aSYZaxwL0z7vLRlF+s8G2ru0n2YptwSRngAhPL
+	 uYynd14g2Q3K+ynGqHXNg9XalOVB1poZqymgQNqrZYdsIFejUL+jRivrRveBYY7us4
+	 00/qnP71CpAgg==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B65e0f9de0001>; Fri, 01 Mar 2024 10:40:46 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.40; Fri, 1 Mar 2024 10:40:46 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
+ SMTP Server (TLS) id 15.0.1497.48; Fri, 1 Mar 2024 10:40:45 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.040; Fri, 1 Mar 2024 10:40:45 +1300
+From: Hamish Martin <Hamish.Martin@alliedtelesis.co.nz>
+To: "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
+CC: "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH 1/1] i2c: acpi: Unbind mux adapters before delete
+Thread-Topic: [PATCH 1/1] i2c: acpi: Unbind mux adapters before delete
+Thread-Index: AQHaae9i75esa4M+fEexG2LDAyR1lLEgPLCAgADFaYA=
+Date: Thu, 29 Feb 2024 21:40:45 +0000
+Message-ID: <13fb90d652547eedb6e1b92dd59183e1109d9d37.camel@alliedtelesis.co.nz>
+References: <20240228023925.2814638-1-hamish.martin@alliedtelesis.co.nz>
+	 <20240228023925.2814638-2-hamish.martin@alliedtelesis.co.nz>
+	 <20240229095411.GF8454@black.fi.intel.com>
+In-Reply-To: <20240229095411.GF8454@black.fi.intel.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4E494EE92CCF104CA56C8BF2CCFC7AD6@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com> <20240229-mbly-i2c-v2-11-b32ed18c098c@bootlin.com>
-In-Reply-To: <20240229-mbly-i2c-v2-11-b32ed18c098c@bootlin.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 29 Feb 2024 22:09:55 +0100
-Message-ID: <CACRpkdai_-FyXc6+oxLK00Esdw+akg0==YEUv+B5nBcWafN6qQ@mail.gmail.com>
-Subject: Re: [PATCH v2 11/11] MIPS: mobileye: eyeq5: add evaluation board I2C
- temp sensor
-To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-arm-kernel@lists.infradead.org, 
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	Gregory Clement <gregory.clement@bootlin.com>, 
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=BKkQr0QG c=1 sm=1 tr=0 ts=65e0f9de a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=fzn4atkRgMAA:10 a=IkcTkHD0fZMA:10 a=K6JAEmCyrfEA:10 a=-fgA3zCWlboLx7rj-HcA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-On Thu, Feb 29, 2024 at 7:11=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
-in.com> wrote:
-
-> Declare the temperature sensor on I2C bus 2. Its label is the schematics
-> identifier.
->
-> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+T24gVGh1LCAyMDI0LTAyLTI5IGF0IDExOjU0ICswMjAwLCBNaWthIFdlc3RlcmJlcmcgd3JvdGU6
+Cj4gT24gV2VkLCBGZWIgMjgsIDIwMjQgYXQgMDM6Mzk6MjVQTSArMTMwMCwgSGFtaXNoIE1hcnRp
+biB3cm90ZToKPiA+IFVuYmluZCBhbnkgaTJjX2FkYXB0ZXJzIG1hdGNoaW5nIGFuIEFDUEkgZGV2
+aWNlIGJlaW5nIHJlbW92ZWQuIFRoaXMKPiA+IGVuc3VyZXMgdGhhdCB0aGUgbGlua2FnZSBiZXR3
+ZWVuIHRoZSBBQ1BJIGRldmljZSBhbmQgdGhlCj4gPiBpMmNfYWRhcHRlciBpcwo+ID4gY29ycmVj
+dGx5IGJyb2tlbiBiZWZvcmUgdGhlIEFDUEkgZGV2aWNlIGlzIGRlc3Ryb3llZC4KCj4gSSBzdWdn
+ZXN0IHRvIG1vdmUgc29tZSBvZiB0aGUgaW5mb3JtYXRpb24gZnJvbSB0aGUgY292ZXIgbGV0dGVy
+IGhlcmUKPiB0bwo+IG1ha2Ugc3VyZSBpdCBpcyBub3QgbG9zdC4gSXQgaW5jbHVkZXMgZ29vZCBh
+bmFseXNpcyBvZiB0aGUgcHJvYmxlbSBzbwo+IHNob3VsZCBiZSBwYXJ0IG9mIHRoZSBjaGFuZ2Vs
+b2cuCk9LLCB0aGFua3MgTWlrYS4gSSB3aWxsIGRvIHRoYXQuCgo+IAo+ID4gU2lnbmVkLW9mZi1i
+eTogSGFtaXNoIE1hcnRpbiA8aGFtaXNoLm1hcnRpbkBhbGxpZWR0ZWxlc2lzLmNvLm56Pgo+ID4g
+LS0tCj4gPiDCoGRyaXZlcnMvaTJjL2kyYy1jb3JlLWFjcGkuYyB8IDE5ICsrKysrKysrKysrKysr
+Ky0tLS0KPiA+IMKgMSBmaWxlIGNoYW5nZWQsIDE1IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25z
+KC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9pMmMtY29yZS1hY3BpLmMgYi9k
+cml2ZXJzL2kyYy9pMmMtY29yZS0KPiA+IGFjcGkuYwo+ID4gaW5kZXggZDYwMzdhMzI4NjY5Li42
+N2ZhOGRlY2NlZjYgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL2kyYy9pMmMtY29yZS1hY3BpLmMK
+PiA+ICsrKyBiL2RyaXZlcnMvaTJjL2kyYy1jb3JlLWFjcGkuYwo+ID4gQEAgLTQ0NSw2ICs0NDUs
+MTEgQEAgc3RhdGljIHN0cnVjdCBpMmNfY2xpZW50Cj4gPiAqaTJjX2FjcGlfZmluZF9jbGllbnRf
+YnlfYWRldihzdHJ1Y3QgYWNwaV9kZXZpY2UgKmFkZXYpCj4gPiDCoMKgwqDCoMKgwqDCoMKgcmV0
+dXJuIGkyY19maW5kX2RldmljZV9ieV9md25vZGUoYWNwaV9md25vZGVfaGFuZGxlKGFkZXYpKTsK
+PiA+IMKgfQo+ID4gwqAKPiA+ICtzdGF0aWMgc3RydWN0IGkyY19hZGFwdGVyICppMmNfYWNwaV9m
+aW5kX2FkYXB0ZXJfYnlfYWRldihzdHJ1Y3QKPiA+IGFjcGlfZGV2aWNlICphZGV2KQo+ID4gK3sK
+PiA+ICvCoMKgwqDCoMKgwqDCoHJldHVybgo+ID4gaTJjX2ZpbmRfYWRhcHRlcl9ieV9md25vZGUo
+YWNwaV9md25vZGVfaGFuZGxlKGFkZXYpKTsKPiA+ICt9Cj4gPiArCj4gPiDCoHN0YXRpYyBpbnQg
+aTJjX2FjcGlfbm90aWZ5KHN0cnVjdCBub3RpZmllcl9ibG9jayAqbmIsIHVuc2lnbmVkCj4gPiBs
+b25nIHZhbHVlLAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCB2b2lkICphcmcpCj4gPiDCoHsKPiA+IEBAIC00NzEsMTEgKzQ3NiwxNyBAQCBz
+dGF0aWMgaW50IGkyY19hY3BpX25vdGlmeShzdHJ1Y3QKPiA+IG5vdGlmaWVyX2Jsb2NrICpuYiwg
+dW5zaWduZWQgbG9uZyB2YWx1ZSwKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoGJyZWFrOwo+ID4gwqAKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgY2xpZW50ID0gaTJjX2FjcGlfZmluZF9jbGllbnRfYnlfYWRldihhZGV2KTsKPiA+
+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoIWNsaWVudCkKPiA+IC3CoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYnJlYWs7Cj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKGNsaWVudCkgewo+ID4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpMmNfdW5yZWdpc3Rlcl9kZXZpY2UoY2xp
+ZW50KTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+cHV0X2RldmljZSgmY2xpZW50LT5kZXYpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoH0KPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBhZGFwdGVyID0g
+aTJjX2FjcGlfZmluZF9hZGFwdGVyX2J5X2FkZXYoYWRldik7Cj4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgaWYgKGFkYXB0ZXIpIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYWNwaV9kZXZpY2Vfbm90aWZ5X3JlbW92ZSgmYWRhcHRl
+ci0+ZGV2KTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgcHV0X2RldmljZSgmYWRhcHRlci0+ZGV2KTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqB9Cj4gCj4gVGhpcyBsb29rcyBnb29kIHRvIG1lLiBJJ20ganVzdCB3b25kZXJpbmcg
+d2hldGhlciB3ZSBoYXZlIHRoZSBzYW1lCj4gaXNzdWUKPiBvbiBEVCBzaWRlIHRvbz8KV2UgZG9u
+J3Qgc2VlIHRoYXQuIFdlIGhhdmUgcGxlbnR5IG9mIHN5c3RlbXMgd2l0aCB0aGUgc2FtZSBiYXNp
+YwpoYXJkd2FyZSBsYXlvdXQgdXNpbmcgZGV2aWNlIHRyZWUgYW5kIGRvbid0IG9ic2VydmUgdGhp
+cyBraW5kIG9mIGlzc3VlLgoKPiAKPiA+IMKgCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgaTJjX3VucmVnaXN0ZXJfZGV2aWNlKGNsaWVudCk7Cj4gPiAtwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgcHV0X2RldmljZSgmY2xpZW50LT5kZXYpOwo+ID4gwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqBicmVhazsKPiA+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiDCoAo+
+ID4gLS0gCj4gPiAyLjQzLjAKCg==
 
