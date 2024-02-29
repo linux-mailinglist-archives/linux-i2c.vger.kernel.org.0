@@ -1,82 +1,82 @@
-Return-Path: <linux-i2c+bounces-2077-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2078-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6BA686D5EC
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Feb 2024 22:13:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FF0986D5EE
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Feb 2024 22:13:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8260A1F22B3C
-	for <lists+linux-i2c@lfdr.de>; Thu, 29 Feb 2024 21:13:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C49A528B575
+	for <lists+linux-i2c@lfdr.de>; Thu, 29 Feb 2024 21:13:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0719513F44D;
-	Thu, 29 Feb 2024 21:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB9B1145642;
+	Thu, 29 Feb 2024 21:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fzs6N6p3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IlBYQ724"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA3613E7EE
-	for <linux-i2c@vger.kernel.org>; Thu, 29 Feb 2024 21:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D2F6D507
+	for <linux-i2c@vger.kernel.org>; Thu, 29 Feb 2024 21:09:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709240946; cv=none; b=GCDEVu0lF08MFV0j6AF4RZp1fPSMgVqipWdYzbqvAcJSjHt3Y7AWG3KgCZaN4NkeGr/UgGZjGgoBCOSjne0xXhspb/jdDIaNW1s7ETBAlnznrxATtKLNd8cANRFaXLZ5DpQdhFW+v2rcRGXIYVsCFAzkkIjfQC24AClu8sr3dhE=
+	t=1709240991; cv=none; b=RJakoJZCQqI9J4vN62+xgozPMK3UKxoaj3/gxpLN69bJx/bLCS4LFBuOMcJjFbmQ4EaQDLLcq5KXQdJPKdsS6vDLMWNAmLuQu2Q7n846fUPL+jMcO6VCHdiljf8LVZMXMcX9HCX+FS1jicHdfYRp+CwitdEg+9kePaw/ZAJbGF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709240946; c=relaxed/simple;
-	bh=abpgfmAPNQgCdMPNqKx7nKf6Y9+2suZjGsQJq2RC0wQ=;
+	s=arc-20240116; t=1709240991; c=relaxed/simple;
+	bh=+OMSuNcz0f+S1pNBRQGA7ZZNiFav/x2zJeSkOoc++p8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q52aJ8wwH8k7xinaZrX051Vru8e2sxJfUYscFgIgTgvjYy5IoZzv1ZFe/mUusRewK1nx9OwReLQtw4Y4vVKARvg8RXBPooVYqzdhVgMel2wYE4G8DZW429f3+OIBra4zCRrJMWP4BzJmtOkFjKBPHQX0hDnaWqU5UEfghAb+r90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fzs6N6p3; arc=none smtp.client-ip=209.85.219.180
+	 To:Cc:Content-Type; b=a/kHaqw/TUi7XbCDq0PnkPZQ4WQ8bCFXiAXUN1CpQIJ3ngYUxFDqvWvnzaF4UW2LgSPP/SuXh0/E7Ip021dOoKsggmAkQaauZ1lrf2MrFAENJFzG5Bsl3X6+Aq6gmX6QnX/+di8XxzB+jFwRSk+llpAAedoaHQ06lemUFp49QDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IlBYQ724; arc=none smtp.client-ip=209.85.219.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-db4364ecd6aso1610095276.2
-        for <linux-i2c@vger.kernel.org>; Thu, 29 Feb 2024 13:09:03 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dcd7c526cc0so1474865276.1
+        for <linux-i2c@vger.kernel.org>; Thu, 29 Feb 2024 13:09:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709240943; x=1709845743; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1709240989; x=1709845789; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZbAUk2ubZXSXJfkn5aB8LTduIIAz+YJ7H6WyL+sPl1k=;
-        b=fzs6N6p3MIg9WyyNS/K08SDeuPHhxJvs9w2saj2KHNSUQX9caSXKndd5QOx59lN+Fh
-         QdgnGKWSk0zpI6bh3O8f6wd4m/ygBg9LTx+OlybMm1S4SfkDucnwo7ca7gXzLekzHHYi
-         n6WiVUMFVBsRTHSr775WytAB1PrryURQgoGWp6wn2XBBMnnbr1uvEQOS8fgHKiqcFHpP
-         heeWJw6dyL+6jZbNJU8FmliUIWZtZxw/6847n3lrhxeI3/xw7Ts3iabQxZECh6FOkbmM
-         2jfdV/yie4/2k+K4gaooYS0MjnMWiA0qpKbZcWRxl2nzQcTlQrDzcbvyLs7UP9Ucv/CB
-         PoMA==
+        bh=+OMSuNcz0f+S1pNBRQGA7ZZNiFav/x2zJeSkOoc++p8=;
+        b=IlBYQ724fgirchkN11P2a+0JNsB2fbfLPnOC5TlpOLT64fOxGS3b8SShCpc0tZZIFY
+         yoA1n1Jk2uhFgMk5+2GQqlM2KBIz9YJLJCFSqo38Q9t30dFvFfz9GSG7/YRcddliHCsE
+         AmXQ5SaOVcvbXytI/mbSZynlk6yhieTOtg+3Nf1I1NkAxrP4QPrI6bg1Tc5A2+AG7H7k
+         R7jNKNfWukO2ZWSWiQZrKTrkJJL1Nm39vzmd4g3TAqJc95Rl/Tm1K02dlo201C4npxwG
+         LTiCWV5J8vGckInQ9mTGo8qvXOagqV1ipuF6SR/rKXWdUhe11xUzDk1yIajvTOA79/nf
+         kNug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709240943; x=1709845743;
+        d=1e100.net; s=20230601; t=1709240989; x=1709845789;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZbAUk2ubZXSXJfkn5aB8LTduIIAz+YJ7H6WyL+sPl1k=;
-        b=guYXZiPuQsoFi+Fj4PKPySNGDtjLZxS+bkQU3AUplaltt2AqrpTrej/ynf+a0PEFdt
-         mu2LKxAmAgJaea2xiO23R9BIeNjnXfCAK3WYsKLLHRme+uJF54JWpQ1OAryxPna7PQQX
-         0pfHdGc3/Kh1KDgAjhWVAZ+p4c5FZnQqseTKMCRAYebcDhtrUrmv+ZOdQqY/BgKNxHQU
-         lZ1uoc28AsNoXf5RI8qx1ElCbjg5oqqK+OohB7oJAziuFw0HmWcDkCrnyyW4uAyxmW3d
-         YJbR+knFpoaZXJ27qSjb9GWT+5m2BSIpZjXpVLjdddJG74qY9N4Avkqmsd0SMXFOjKR9
-         dQ3g==
-X-Forwarded-Encrypted: i=1; AJvYcCX7Yu2aidR4Mj7pUiZpD0YG09rLNSz0RxftbTCNLycOVZVJJWysbttJlVoSOqMYbbbFnT7ZdeGmPzpYBglJWUn7/eO6f0kSLKVI
-X-Gm-Message-State: AOJu0YzDoF1LGOCDQan1cpzizORTO3c8jHWxFIps8+Jdee6cgf5OpmJC
-	aTXdK5l3dm4sM5P6UTpwZ5L4pHF5FpWdTIYy/n+zmlQwQyihWtZwLxao4oLrDnCED2KKzzuMUkH
-	XZKu8GFcasMI4dbgUCA1kCrnz+Xj8n4x1SrrWwQ==
-X-Google-Smtp-Source: AGHT+IF8ln7WLyekvHJT3gKVoSoapL6K1womt5rWIbJrJz0MFoc/wyxR7h/qIOW5MqZBupdkc++ChmM9DDb81ZIyLKM=
-X-Received: by 2002:a25:a2c2:0:b0:dc2:3279:fde5 with SMTP id
- c2-20020a25a2c2000000b00dc23279fde5mr3677872ybn.22.1709240942644; Thu, 29 Feb
- 2024 13:09:02 -0800 (PST)
+        bh=+OMSuNcz0f+S1pNBRQGA7ZZNiFav/x2zJeSkOoc++p8=;
+        b=fwxKZixu0yMof7F9ZIk0yV7Fo8e0Kc98n2WITNgZce0uuFfib+B6nKSdOe4X0gGz6W
+         bF+Vdntg9got1FoeAfbgI7YvKehPeLsdanJfSCt2cAMFYJud+V8Z6ciB9BWdOXwYSknZ
+         QNv7QY+/Vdr0/2BTeEZCJxD8mpf4Zrx/Etq5X+2SQiXRaDtYnCHCuF4f1NfZu1WL0pmv
+         BUPEZPb/vBgvRhBprHAETZ7qsBftYM+i5TbGPBtMzE04eVwgeWBQfWOZLDeMaJLDHIZv
+         96AlxC08FJ5WYdNdgiQ9evwEJ/gmfT23wYvZQCkkJrlHHtH4oV1ktKcp6yzadrUHv6XZ
+         M8fQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVlFOC/s6JuG+G6/b8XqPJIpl7OJxa1e/jotWDezTJpkRr5jIyi9vo/C7QgSeDw9zBxv9BNyF5MWBm0dQ7vyFg5BUQtTuRXRIqZ
+X-Gm-Message-State: AOJu0Yx13ygeMWvX7IqeHvdBFrD3gw73A0cHLXlLa7EirmbcZ1OI7589
+	2hjM6iNq1Wmoir30PkYq2gm4pT7Iebaz5RmwI4dHRBV+gjYIgxx7FXHz1FJSZEjsYGSBTYYFVYC
+	cmKqMSg+RRT3i8lsNJX43ukDzLxmxjnNr8L9RtQ==
+X-Google-Smtp-Source: AGHT+IHbva8VtENYJ0hw2FAcTEKgi5UH/B8oRvg5bufEYQcp/sju2WedSjn4h1t/PREb+YdBoA48AKTJb4go8f2x9Zw=
+X-Received: by 2002:a25:8e85:0:b0:dc6:ff12:1a21 with SMTP id
+ q5-20020a258e85000000b00dc6ff121a21mr2558461ybl.31.1709240989292; Thu, 29 Feb
+ 2024 13:09:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com> <20240229-mbly-i2c-v2-9-b32ed18c098c@bootlin.com>
-In-Reply-To: <20240229-mbly-i2c-v2-9-b32ed18c098c@bootlin.com>
+References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com> <20240229-mbly-i2c-v2-10-b32ed18c098c@bootlin.com>
+In-Reply-To: <20240229-mbly-i2c-v2-10-b32ed18c098c@bootlin.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 29 Feb 2024 22:08:51 +0100
-Message-ID: <CACRpkdbaRy-=p63Hq=ykSUeQ-R2S=DjqSBV6-GQWK4BRJNy+iA@mail.gmail.com>
-Subject: Re: [PATCH v2 09/11] i2c: nomadik: support Mobileye EyeQ5 I2C controller
+Date: Thu, 29 Feb 2024 22:09:38 +0100
+Message-ID: <CACRpkdbzLGViXJ-qFNYhZJ5x2d5zrRe_2sCpwnkjcTNp3C1XmQ@mail.gmail.com>
+Subject: Re: [PATCH v2 10/11] MIPS: mobileye: eyeq5: add 5 I2C controller nodes
 To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
 Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
@@ -89,30 +89,18 @@ Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 29, 2024 at 7:10=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
+On Thu, Feb 29, 2024 at 7:11=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootl=
 in.com> wrote:
 
-> Add compatible for the integration of the same DB8500 IP block into the
-> Mobileye EyeQ5 platform. Two quirks are present:
+> Add the SoC I2C controller nodes to the platform devicetree. Use a
+> default bus frequency of 400kHz. They are AMBA devices that are matched
+> on PeriphID.
 >
->  - The memory bus only supports 32-bit accesses. Avoid writeb() and
->    readb() by introducing helper functions that fallback to writel()
->    and readl().
->
->  - A register must be configured for the I2C speed mode; it is located
->    in a shared register region called OLB. We access that memory region
->    using a syscon & regmap that gets passed as a phandle (mobileye,olb).
->
->    A two-bit enum per controller is written into the register; that
->    requires us to know the global index of the I2C controller (cell arg
->    to the mobileye,olb phandle).
->
-> We add #include <linux/mfd/syscon.h> and <linux/regmap.h> and sort
-> headers.
+> Set transfer timeout to 10ms instead of Linux's default of 200ms.
 >
 > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij
