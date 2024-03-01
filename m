@@ -1,179 +1,172 @@
-Return-Path: <linux-i2c+bounces-2082-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2083-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 525AC86DB67
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Mar 2024 07:20:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D25E86DB90
+	for <lists+linux-i2c@lfdr.de>; Fri,  1 Mar 2024 07:37:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07C88287F82
-	for <lists+linux-i2c@lfdr.de>; Fri,  1 Mar 2024 06:20:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF4671F215BE
+	for <lists+linux-i2c@lfdr.de>; Fri,  1 Mar 2024 06:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272B65F557;
-	Fri,  1 Mar 2024 06:19:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A184667E90;
+	Fri,  1 Mar 2024 06:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ykx1J0B3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IRv798w7"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E0A5F546;
-	Fri,  1 Mar 2024 06:19:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6B4679FB
+	for <linux-i2c@vger.kernel.org>; Fri,  1 Mar 2024 06:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709273997; cv=none; b=cS9LRk0YAocjs0m5sX3wP87Tf9x00YLSMjHtoobx7mpi9Z39sSmMte/FCojKB1qwoef8IVSq51e1da4O0FRCHJIv0/NZDybhgn6fFFSluPRrg7fWT70a1VIc1wNsF+ByLYEeHmmq5+qbInTO9ARS9zb1n4wjDG9nKqTALAR2x5I=
+	t=1709275051; cv=none; b=kbej6ieyWDIkyqWVYMlbaWYNralDXNyw+I6nunfYzjEvP49E8aSEkGBRCTLHFOotKNIZH7nGZ4nHp42BKsTCmfelYtzD+hcSRaSvGtcpTSqfbp8QZN0Ikp+9WhZyUWFbCju6SuDfJfCdi1Dp+LOK7wAzhuwQF5hs8MhAPn+QNA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709273997; c=relaxed/simple;
-	bh=/1GywgjIPQ2LKdb9ixI72PfvKOiRdCEOUUx832Ww1s4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OpTgYTnXX/6oFBlwQe8kDaS9dRML9v+PzRhP7XHJkRBH+ejR89zuxKwX5OKa1YrIXPP+fnGbRUwuE7QdKI/8O/ZVyNfTaaPZ40qiY6Aac+3l9U1s1uvZxTmtgtFPceovkChoptvQ6fMg3z56tI50qaqfHbNE8gLz0aaULzQmBaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ykx1J0B3; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709273997; x=1740809997;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/1GywgjIPQ2LKdb9ixI72PfvKOiRdCEOUUx832Ww1s4=;
-  b=Ykx1J0B3nKXcjvuPexr2KFDLBMdNwiHKEBwLxkGwFmIc0sHGtehWzYvA
-   R+Yhci74Ls/eXGFNOGCL64HYqLOkzmRUFrAlDr1Q7EBPIGC/gsTn535jL
-   8vu3jlaGbb8TbtjSHyEWS+cg4uP34BXPObn3AfUYabs2gxrGfKQa+qTMk
-   uRjtadOXtK1dMKPiCFcC31tkwLjzPrQPcCczOnPXOQiOFPGPmKUIMrzJy
-   w2/p0ugbNkeZHM9DHu3yFg4Xx9bF0TwKYyAW/ylwxTqFotlUVOf0E/j4j
-   UkqKif0krPJTjxILCqzveAJp2byXTNgZPm448l+kiVPwPJrzBiWX9gJN4
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="26257131"
-X-IronPort-AV: E=Sophos;i="6.06,195,1705392000"; 
-   d="scan'208";a="26257131"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Feb 2024 22:19:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10999"; a="937037042"
-X-IronPort-AV: E=Sophos;i="6.06,195,1705392000"; 
-   d="scan'208";a="937037042"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Feb 2024 22:19:53 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id DF1523BC; Fri,  1 Mar 2024 08:19:51 +0200 (EET)
-Date: Fri, 1 Mar 2024 08:19:51 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
-Cc: wsa+renesas@sang-engineering.com, linux-i2c@vger.kernel.org,
-	linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] i2c: acpi: Unbind mux adapters before delete
-Message-ID: <20240301061951.GK8454@black.fi.intel.com>
-References: <20240229214940.299586-1-hamish.martin@alliedtelesis.co.nz>
+	s=arc-20240116; t=1709275051; c=relaxed/simple;
+	bh=KR1HRc74aUbrSrpRVEfAmBIBs7yUcoa2/TqpdH+g/yw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J8yhvvwI/i2KWFRe1bxZvTrluAtRZiruGaUmB4SSBbQDavJy/5HXEdpS0IcoCKS6CWd46j+T7l5AC89tG2cpEN/mgyyG6MRsTfD+jVDpRILdlYlAzpcsyvPEBLv9aKZvZrQRLOk7oOgYHOw/X8IADwL1FND/wQQmKrTPx/rilSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IRv798w7; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a443d2b78caso228784566b.1
+        for <linux-i2c@vger.kernel.org>; Thu, 29 Feb 2024 22:37:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709275047; x=1709879847; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4M7okb8GhI4tXCoo4LKzdrfNya8nZE92SHKif4svAP8=;
+        b=IRv798w7JaikIBysTmpLndsoFifpdqj2O6LSuMONozqMKnwcsl3qHcGcOlXxjRNyTI
+         KEyiLbWOIEyhvl9TnFpDxNbVS74gF9M5rM3lnc2H7t/kd6XD2AGDNHev8tXhltkJGaeN
+         gWDcFsGdQlyyMm2dy+Ukd7WpcsYlXtju3PfiIbpkvbrJOzWPuTWy/U2l8qkOhnsYKiRG
+         VYOb6j+kpUtSHXfMCp+vkC4LRdFrZ0zA8LOtja78MZRsWPwSWTRb5/eKPCnFNkNSbATD
+         +1piTXGxKD3pcpyvcEnFlBsjyNsrX3BL+lYYLz3yXIAdfhQ4hwkAhZFWj9xy5wt1cvty
+         0mkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709275047; x=1709879847;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4M7okb8GhI4tXCoo4LKzdrfNya8nZE92SHKif4svAP8=;
+        b=GkWSlST9CWGFynUtQZF9oCybYQQ93vNBm92rk6iSYGQZt+WA4aEFmpzuLhNp9e2TrC
+         bjcxIsDDcAseBHPvmdtgXZVCfUmT0GmwUuZ4PqG6dYfEt9AQWFvRjzyRgz4JdGmHxn6J
+         4ZJfI2xDp/q+CpFBpfFlna9GxXtzg1bjhdsX+s4j5N9zwJnTEkHgSIxn/x35y8wF2/cS
+         EMa7+4QDhvpoIwlu4qJb7avWl/Bl3GDTqeHlgpebNlc7WPZ61j8/xsjQ7B5hPnMVlNyo
+         OK903fFimcO/iqLu2GX70KhRvw/owsIGk9xmuxAXHxfGMbKqJRwiDbwoJF9t8CUP82cI
+         Er4w==
+X-Forwarded-Encrypted: i=1; AJvYcCULswmIWCC6ja4qKbLniU7xen/ZdCIQZUcQGI73fUWVnEcs/PJ5Qy/rovyFN3SyvNY2lsTEMOtdgRlYi+/lAESJcrIkr54YHaAZ
+X-Gm-Message-State: AOJu0Yx7plSF+XjbkojYGYwt5XxuxVp7RxEtP9h1O9UN/MMODtv6TkcR
+	g1BoWKMzVSbuxiPFAdQNk/tQRyQyghs968jJHlRUSJ867xq1mcjEkyCtm1H2kxo=
+X-Google-Smtp-Source: AGHT+IGzybMf6/ucgzTXJE7eJ0haSUa0ZZ9JwIXeW0ITKUlQU7wWRDKOYTMucnqDAW8gmvuJCcJjDQ==
+X-Received: by 2002:a17:906:f1c9:b0:a44:4329:c091 with SMTP id gx9-20020a170906f1c900b00a444329c091mr624345ejb.74.1709275046744;
+        Thu, 29 Feb 2024 22:37:26 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.222.97])
+        by smtp.gmail.com with ESMTPSA id k3-20020a1709061c0300b00a3e0b7e7217sm1396572ejg.48.2024.02.29.22.37.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Feb 2024 22:37:26 -0800 (PST)
+Message-ID: <6749c8df-c545-4aca-bc18-4dfe9c9f15b0@linaro.org>
+Date: Fri, 1 Mar 2024 07:37:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240229214940.299586-1-hamish.martin@alliedtelesis.co.nz>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 02/11] dt-bindings: hwmon: lm75: use common hwmon
+ schema
+Content-Language: en-US
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Linus Walleij <linus.walleij@linaro.org>, Andi Shyti
+ <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, Gregory Clement <gregory.clement@bootlin.com>,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Jean Delvare
+ <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ linux-hwmon@vger.kernel.org
+References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
+ <20240229-mbly-i2c-v2-2-b32ed18c098c@bootlin.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
+ m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
+ HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
+ XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
+ mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
+ v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
+ cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
+ rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
+ qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
+ aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
+ gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
+ dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
+ NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
+ hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
+ oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
+ H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
+ yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
+ 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
+ 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
+ +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
+ FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
+ 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
+ DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
+ oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
+ 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
+ Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
+ qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
+ /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
+ qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
+ EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
+ KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
+ fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240229-mbly-i2c-v2-2-b32ed18c098c@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 01, 2024 at 10:49:39AM +1300, Hamish Martin wrote:
-> There is an issue with ACPI overlay table removal specifically related
-> to I2C multiplexers.
+On 29/02/2024 19:10, Théo Lebrun wrote:
+> Reference common hwmon schema which has the generic "label" property,
+> parsed by Linux hwmon subsystem.
 > 
-> Consider an ACPI SSDT Overlay that defines a PCA9548 I2C mux on an
-> existing I2C bus. When this table is loaded we see the creation of a
-> device for the overall PCA9548 chip and 8 further devices - one
-> i2c_adapter each for the mux channels. These are all bound to their
-> ACPI equivalents via an eventual invocation of acpi_bind_one().
-> 
-> When we unload the SSDT overlay we run into the problem. The ACPI
-> devices are deleted as normal via acpi_device_del_work_fn() and the
-> acpi_device_del_list.
-> 
-> However, the following warning and stack trace is output as the
-> deletion does not go smoothly:
-> ------------[ cut here ]------------
-> kernfs: can not remove 'physical_node', no directory
-> WARNING: CPU: 1 PID: 11 at fs/kernfs/dir.c:1674 kernfs_remove_by_name_ns+0xb9/0xc0
-> Modules linked in:
-> CPU: 1 PID: 11 Comm: kworker/u128:0 Not tainted 6.8.0-rc6+ #1
-> Hardware name: congatec AG conga-B7E3/conga-B7E3, BIOS 5.13 05/16/2023
-> Workqueue: kacpi_hotplug acpi_device_del_work_fn
-> RIP: 0010:kernfs_remove_by_name_ns+0xb9/0xc0
-> Code: e4 00 48 89 ef e8 07 71 db ff 5b b8 fe ff ff ff 5d 41 5c 41 5d e9 a7 55 e4 00 0f 0b eb a6 48 c7 c7 f0 38 0d 9d e8 97 0a d5 ff <0f> 0b eb dc 0f 1f 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
-> RSP: 0018:ffff9f864008fb28 EFLAGS: 00010286
-> RAX: 0000000000000000 RBX: ffff8ef90a8d4940 RCX: 0000000000000000
-> RDX: ffff8f000e267d10 RSI: ffff8f000e25c780 RDI: ffff8f000e25c780
-> RBP: ffff8ef9186f9870 R08: 0000000000013ffb R09: 00000000ffffbfff
-> R10: 00000000ffffbfff R11: ffff8f000e0a0000 R12: ffff9f864008fb50
-> R13: ffff8ef90c93dd60 R14: ffff8ef9010d0958 R15: ffff8ef9186f98c8
-> FS:  0000000000000000(0000) GS:ffff8f000e240000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f48f5253a08 CR3: 00000003cb82e000 CR4: 00000000003506f0
-> Call Trace:
->  <TASK>
->  ? kernfs_remove_by_name_ns+0xb9/0xc0
->  ? __warn+0x7c/0x130
->  ? kernfs_remove_by_name_ns+0xb9/0xc0
->  ? report_bug+0x171/0x1a0
->  ? handle_bug+0x3c/0x70
->  ? exc_invalid_op+0x17/0x70
->  ? asm_exc_invalid_op+0x1a/0x20
->  ? kernfs_remove_by_name_ns+0xb9/0xc0
->  ? kernfs_remove_by_name_ns+0xb9/0xc0
->  acpi_unbind_one+0x108/0x180
->  device_del+0x18b/0x490
->  ? srso_return_thunk+0x5/0x5f
->  ? srso_return_thunk+0x5/0x5f
->  device_unregister+0xd/0x30
->  i2c_del_adapter.part.0+0x1bf/0x250
->  i2c_mux_del_adapters+0xa1/0xe0
->  i2c_device_remove+0x1e/0x80
->  device_release_driver_internal+0x19a/0x200
->  bus_remove_device+0xbf/0x100
->  device_del+0x157/0x490
->  ? __pfx_device_match_fwnode+0x10/0x10
->  ? srso_return_thunk+0x5/0x5f
->  device_unregister+0xd/0x30
->  i2c_acpi_notify+0x10f/0x140
->  notifier_call_chain+0x58/0xd0
->  blocking_notifier_call_chain+0x3a/0x60
->  acpi_device_del_work_fn+0x85/0x1d0
->  process_one_work+0x134/0x2f0
->  worker_thread+0x2f0/0x410
->  ? __pfx_worker_thread+0x10/0x10
->  kthread+0xe3/0x110
->  ? __pfx_kthread+0x10/0x10
->  ret_from_fork+0x2f/0x50
->  ? __pfx_kthread+0x10/0x10
->  ret_from_fork_asm+0x1b/0x30
->  </TASK>
-> ---[ end trace 0000000000000000 ]---
-> ...
-> repeated 7 more times, 1 for each channel of the mux
-> ...
-> 
-> The issue is that the binding of the ACPI devices to their peer I2C
-> adapters is not correctly cleaned up. Digging deeper into the issue we
-> see that the deletion order is such that the ACPI devices matching the
-> mux channel i2c adapters are deleted first during the SSDT overlay
-> removal. For each of the channels we see a call to i2c_acpi_notify()
-> with ACPI_RECONFIG_DEVICE_REMOVE but, because these devices are not
-> actually i2c_clients, nothing is done for them.
-> 
-> Later on, after each of the mux channels has been dealt with, we come
-> to delete the i2c_client representing the PCA9548 device. This is the
-> call stack we see above, whereby the kernel cleans up the i2c_client
-> including destruction of the mux and its channel adapters. At this
-> point we do attempt to unbind from the ACPI peers but those peers no
-> longer exist and so we hit the kernfs errors.
-> 
-> The fix is to augment i2c_acpi_notify() to handle i2c_adapters. But,
-> given that the life cycle of the adapters is linked to the i2c_client,
-> instead of deleting the i2c_adapters during the i2c_acpi_notify(), we
-> just trigger unbinding of the ACPI device from the adapter device, and
-> allow the clean up of the adapter to continue in the way it always has.
-> 
-> Signed-off-by: Hamish Martin <hamish.martin@alliedtelesis.co.nz>
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Please do not mix independent patchsets. You create unneeded
+dependencies blocking this patch. This patch depends on hwmon work, so
+it cannot go through different tree.
+
+If you insist to combine independent patches, then at least clearly
+express merging strategy or dependency in patch changelog --- .
+
+
+> To: Jean Delvare <jdelvare@suse.com>
+> To: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
 
