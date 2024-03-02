@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-2114-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2115-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DC3A86F1C1
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Mar 2024 18:45:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F6DF86F1C3
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Mar 2024 18:47:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05CC31F214D4
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Mar 2024 17:45:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C6201F2157A
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Mar 2024 17:47:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF5812B9DC;
-	Sat,  2 Mar 2024 17:45:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 363282BB1D;
+	Sat,  2 Mar 2024 17:47:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VY93DY2H"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W/xEaePG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47CC2BCF7;
-	Sat,  2 Mar 2024 17:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C802BB16
+	for <linux-i2c@vger.kernel.org>; Sat,  2 Mar 2024 17:47:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709401552; cv=none; b=O9qsHnULfGR7zFCQBVCeCPJ/3Xts6wSjDamuHS4w77jfW3HrYMuyUqJ+lWvbfqSRufLLn3i53qwHqBHbqR4B/XAhfE4QUk72zp/frwY6EuSibKv/rtsKcpFHmlRuJ50EZSadzqTmtYwJ1lpAFAVJBhpub3KLdbjrD+NEWHuQ2Oo=
+	t=1709401636; cv=none; b=Fxhxw5+I/dLxvDRnIUamM+w5aPd3SuZvvXjokSLGSngwG4nKakt7BEfYndnFgj9xygE4rVf3ZtN21D2gEyeO5HYoGSTTiCKFhqWiiIeNfyEI2IQqcojxoTN5QN1IpKfVw1VoN9jIXkAvBEW9uk1g7AdU+VWpXeBIqdCZZK1X+SI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709401552; c=relaxed/simple;
-	bh=X66Ph8DtwKOgV7WhgccW6ba3WD/IxG6oWrlpNrTNJ5M=;
+	s=arc-20240116; t=1709401636; c=relaxed/simple;
+	bh=c4Qng8Lqqy7k4lOLuQMbxJ6hh2J56OBXbKRKoXt1Kc8=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=GZoGWhFrryitAq6WMGlXg5IS/oz2iC1z0V1Ftv3LK91k/lVFRr5ApGnBSlNJa/wARtMmS/B98sMOspfXJRnv7cQ5DBUh9qBAn6/izTRVQIAKx1/KBLRrN3imE8UCJAW+iY54rmyUyx9EhyaYR38jk80At+UvQtbkRlXZfv3qFiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VY93DY2H; arc=none smtp.client-ip=209.85.208.47
+	 In-Reply-To:Content-Type; b=lVg5VZ86NiYi9LYpCvdYI7JpxPpgdw8eLztnbceeXS3oT7l3IcvCoWzmmXkBEVZrDRjGkAL3NfHCWnjwrtWHdMySd0pJZAqh7Znukb5HBoL6d5jBE4R1hpyS5ChCmLQcAckkeYqL89kN5wspglQI8PufNQckJNMD9yU1aJeWYzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W/xEaePG; arc=none smtp.client-ip=209.85.208.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-565a3910f86so4966974a12.3;
-        Sat, 02 Mar 2024 09:45:50 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-563c403719cso4637592a12.2
+        for <linux-i2c@vger.kernel.org>; Sat, 02 Mar 2024 09:47:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709401549; x=1710006349; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709401633; x=1710006433; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=yrVFJMvetst3Xm/RqXpn850ovd0bJsyoZmCGBSUPBfo=;
-        b=VY93DY2Hdan+SAYvQojQT8L1K2aA7VaIzhh+ailUzT2Pd3X//KlnjnGk4Oah33Ak0x
-         ps2TVpod10p7G4y9CQpEoZpihlEWAQvuqAsYe2eB3YWGE2oGWd6ctR+5LTsMslBSE6oP
-         J2sxXECxc07j4MSddM+m5UFFaZvMXpyGrdySgRGoCbOQMVYyvzgJd81CkKGdLKn5y2JK
-         9nztO8s0wmPmiARBk31UAJfEIm/YIytvDOaGAwfbZx9F3tMYnNpM5IuzRlPWJODwPF9G
-         hzobiwpRb9/YPpjxnLKKymlCaxBw4QiYAr5830Dxk04HkbjzqYBjwr73HsorJSLq8vgo
-         nTuQ==
+        bh=r0SnFufdR/uCrtXrhKUyqsUk0tkBVmIf2gTSiThy/88=;
+        b=W/xEaePGjkmBpBvlo9qdytERNs7uvhwWsK65qkVNuzHBieD8z+Lc+Iy2I2375KJYww
+         M8avg/NcDvW8v/MT7bYFZe7dXJPqiIGnv1CgZnpnn2Xd9l/YSSgFFjih+SpPG0PI7SCS
+         dnD/1LE3htTSCjJc3pvaNW+RnrSrtP6smrVbtEjxxnmC0zOLBvctOEG+nKUq4NlmMAH7
+         FStU82df+IZlLrrw5GSxl3+M3SbvlHhOqbFyeYxWAak9E0Grw7D9b1MypTCz4t1CgVu2
+         VeKFSlZAJ9s6lw1C3+kPy8bD1NI2rju4U0CqFFQMl7YTHfabC/QsIerT2wp8M3eu+hj3
+         ergQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709401549; x=1710006349;
+        d=1e100.net; s=20230601; t=1709401633; x=1710006433;
         h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
          :from:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yrVFJMvetst3Xm/RqXpn850ovd0bJsyoZmCGBSUPBfo=;
-        b=ZCNM+hUWmke5g43w9r6lkvP25S55q5uJAUeCX0sJQFWTPm8RyD/d4R40/PsQZECUGV
-         rL8UOwrMVHZ3NIlj8Q/Kl9kU7b8cUFpCNBeXvF6lj3pL+XtrQ7x04+eQffAmdg3Sxaj8
-         UKi+ZwqmLGOm5Rt8qms14sxvlBZiW3WF8jAMcj3QwAJgec7NwOaAklT2ICiRMSn+HJMi
-         /Kgqu3/QLZ4mTYKipLMixXZJBAQHzON/D21RoROpuHls1tddJJRxLeG8JMTEQyecsuBP
-         prZJHft4/3ad4mD3A/vb5n7GjPUqb1Qyv16X5cj3Kov95oE/foB446l62E/MuzR0vR8p
-         Simw==
-X-Forwarded-Encrypted: i=1; AJvYcCXP5ss7p2WQMqldy9gKfiW2rVXHOLhoQdFBN/04AIGtFi/0iK5fnMCgHv2ZS1IGgIPSjHG/w5bJlc9qRFnbBdDckEQ79+HLqBkN
-X-Gm-Message-State: AOJu0Yw2Dr27yfHUqMBEmyJ2YyzInreDTgrlLXCoL6vqXWQ7vT/tNbRB
-	q0DIKbpyrO6mK2iomGV0FHdKKE7/doDUuWN+4nW/PbHPCxGfVgws
-X-Google-Smtp-Source: AGHT+IEZDExaejol+XfA1TI0jXVdyJ3KAQ8w5amAiRKO6/bg2867yJeulElFqkAkFQJFoDCquilqAw==
-X-Received: by 2002:a17:906:48cf:b0:a45:5c4:852e with SMTP id d15-20020a17090648cf00b00a4505c4852emr231123ejt.28.1709401549090;
-        Sat, 02 Mar 2024 09:45:49 -0800 (PST)
+        bh=r0SnFufdR/uCrtXrhKUyqsUk0tkBVmIf2gTSiThy/88=;
+        b=bRpYceaJjgDFuMxIM3EryeuQvYkaVRxAhPS8Mb7/vC0JKakoVw0P4gubeZVDGZc7v/
+         dbtiSWciUxzQrM7YbN53yKEVhZtzDNhlIl82qEb7LJB3R0P+4fyqC99O4KcWdLIvZUdB
+         zg89O4nTii9i3o4A79PWeWW3popE0RjKuZWBhexcDt5bgV2paUmBzACrK+OOR7hDG2Ym
+         +vxZz30g1x1hmrTQ8yRlNfXmZ+uxVGVGqS2P+0i7HesPk5LGrXQHgifiDm7zoBlixgRI
+         /UJB28zUU2HfK/ax43U4eluKlW2dXjDn9KHcfVW48gzF2uwFatlw2UWlbLvI/g2kApSi
+         xRfg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3VADm9R1ygQnS+Cvc406cq7OCtSUAsdyvAYABzP0sI0o+ClOVKCIte006yHS6HP83IgpiACAxZnvr6LH69ywBixqIsiFhrAwG
+X-Gm-Message-State: AOJu0YzWgzWGZIyk6uRrfROV6wl3FXQQuh11Vkw4YxboplXVVWwLD3pn
+	nZlBQ2eTEvwbhvhojQNGBIT+SlDtCIDOvePIoX9oJwxRWmUuuzwa
+X-Google-Smtp-Source: AGHT+IF4G78vULoU0ATWLSnhcqbQom/BzKH+O134jBr11iDkI98UwoxPdNFgc3RhEiV3T/6KWdCHyw==
+X-Received: by 2002:a17:906:4555:b0:a44:985f:e2ef with SMTP id s21-20020a170906455500b00a44985fe2efmr2955064ejq.77.1709401632470;
+        Sat, 02 Mar 2024 09:47:12 -0800 (PST)
 Received: from ?IPV6:2a01:c23:bcce:a400:2519:2036:7f0:6005? (dynamic-2a01-0c23-bcce-a400-2519-2036-07f0-6005.c23.pool.telefonica.de. [2a01:c23:bcce:a400:2519:2036:7f0:6005])
-        by smtp.googlemail.com with ESMTPSA id d25-20020a1709067f1900b00a440e2ada28sm2893253ejr.201.2024.03.02.09.45.48
+        by smtp.googlemail.com with ESMTPSA id d25-20020a1709067f1900b00a440e2ada28sm2893253ejr.201.2024.03.02.09.47.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Mar 2024 09:45:48 -0800 (PST)
-Message-ID: <2b88cd6d-8be2-48c4-b779-df40ac0472de@gmail.com>
-Date: Sat, 2 Mar 2024 18:45:48 +0100
+        Sat, 02 Mar 2024 09:47:12 -0800 (PST)
+Message-ID: <c2128de2-9ab9-4f47-9783-99e959e11920@gmail.com>
+Date: Sat, 2 Mar 2024 18:47:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,14 +77,14 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Input: bma150: remove I2C_CLASS_HWMON from drivers w/o
+Subject: Re: [PATCH] ipmi: ipmb: Remove I2C_CLASS_HWMON from drivers w/o
  detect and address_list
 Content-Language: en-US
 From: Heiner Kallweit <hkallweit1@gmail.com>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>, Wolfram Sang <wsa@kernel.org>
-Cc: "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+To: Corey Minyard <minyard@acm.org>, Wolfram Sang <wsa@kernel.org>
+Cc: openipmi-developer@lists.sourceforge.net,
  "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <011ac933-2a45-4a63-895d-d45bfcb8576e@gmail.com>
+References: <18568237-0b57-4b74-86ec-a6c358a4e058@gmail.com>
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -128,11 +128,11 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <011ac933-2a45-4a63-895d-d45bfcb8576e@gmail.com>
+In-Reply-To: <18568237-0b57-4b74-86ec-a6c358a4e058@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 27.01.2024 16:18, Heiner Kallweit wrote:
+On 27.01.2024 16:15, Heiner Kallweit wrote:
 > Class-based I2C probing requires detect() and address_list to be
 > set in the I2C client driver, see checks in i2c_detect().
 > It's misleading to declare I2C_CLASS_HWMON support if this
@@ -142,20 +142,20 @@ Any feedback here? Should this better go through the I2C tree?
 
 > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 > ---
->  drivers/input/misc/bma150.c | 1 -
+>  drivers/char/ipmi/ipmi_ipmb.c | 1 -
 >  1 file changed, 1 deletion(-)
 > 
-> diff --git a/drivers/input/misc/bma150.c b/drivers/input/misc/bma150.c
-> index 0fb4cc628..22feaa8c1 100644
-> --- a/drivers/input/misc/bma150.c
-> +++ b/drivers/input/misc/bma150.c
-> @@ -549,7 +549,6 @@ static struct i2c_driver bma150_driver = {
->  		.name	= BMA150_DRIVER,
->  		.pm	= &bma150_pm,
->  	},
+> diff --git a/drivers/char/ipmi/ipmi_ipmb.c b/drivers/char/ipmi/ipmi_ipmb.c
+> index 4e335832f..9e5c6d682 100644
+> --- a/drivers/char/ipmi/ipmi_ipmb.c
+> +++ b/drivers/char/ipmi/ipmi_ipmb.c
+> @@ -567,7 +567,6 @@ static const struct i2c_device_id ipmi_ipmb_id[] = {
+>  MODULE_DEVICE_TABLE(i2c, ipmi_ipmb_id);
+>  
+>  static struct i2c_driver ipmi_ipmb_driver = {
 > -	.class		= I2C_CLASS_HWMON,
->  	.id_table	= bma150_id,
->  	.probe		= bma150_probe,
->  	.remove		= bma150_remove,
+>  	.driver = {
+>  		.name = DEVICE_NAME,
+>  		.of_match_table = of_ipmi_ipmb_match,
 
 
