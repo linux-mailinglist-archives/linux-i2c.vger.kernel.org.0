@@ -1,80 +1,75 @@
-Return-Path: <linux-i2c+bounces-2113-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2114-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50E6986F045
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Mar 2024 12:38:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DC3A86F1C1
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Mar 2024 18:45:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09579B23C25
-	for <lists+linux-i2c@lfdr.de>; Sat,  2 Mar 2024 11:38:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05CC31F214D4
+	for <lists+linux-i2c@lfdr.de>; Sat,  2 Mar 2024 17:45:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2463017553;
-	Sat,  2 Mar 2024 11:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF5812B9DC;
+	Sat,  2 Mar 2024 17:45:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fWD2o0DN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VY93DY2H"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FF217548
-	for <linux-i2c@vger.kernel.org>; Sat,  2 Mar 2024 11:38:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47CC2BCF7;
+	Sat,  2 Mar 2024 17:45:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709379514; cv=none; b=h5gZ5+9RdRrbBAIxEJYMCP+6XD4uV1UlmtwtzB01d3sYmam1dsM7RwjNMfI2nQLTGElm/Pt+hEFv5VFw+9XXTjri6VUsHFpUKk9fiYwwwX8wCBGxaLntrT4ff/wZexjZ/8hXBRfHnZ3yznBx/s1xiw374KLm0RsSLiJKnd3xQZg=
+	t=1709401552; cv=none; b=O9qsHnULfGR7zFCQBVCeCPJ/3Xts6wSjDamuHS4w77jfW3HrYMuyUqJ+lWvbfqSRufLLn3i53qwHqBHbqR4B/XAhfE4QUk72zp/frwY6EuSibKv/rtsKcpFHmlRuJ50EZSadzqTmtYwJ1lpAFAVJBhpub3KLdbjrD+NEWHuQ2Oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709379514; c=relaxed/simple;
-	bh=dR221nuvdid6yanuCziQuzGHHK79PSbWcRvVZnC32jo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X+mj3sghTdhx+2Gk8wi9UcG53gkS8rMf/dUQJqj49VkrAJ35ZoQiaVSqhfZ3MNOLhUYbkzzWabpLNs0bco91AbTbHbnxqfaL3Trjlr78CiiFKJJdhSyAt/BsJ8/R0Vx9Y5oVoHdBCylQlWESX0GT5KV+ylhD5QmbYV0rV2l+dXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fWD2o0DN; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709379511;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UPCs84wnj42hQeMF4SkEh7lGDrpXMEJz0dFw5Fxf5vM=;
-	b=fWD2o0DN9md+mkjMGhAGKk7I9r6tmJFZu9ewJJL6d+ZQmKVPcUidM1bXOsOgS6jkYyraRn
-	dVY8ffuUPe+nAeCFinxoXcV4T+QE03ivPXC2Vgc7MvDGzFFX48o7hSu6m8AgYmt9CVBZku
-	Qqk8xGq6x/k4xiOfQ5MfpUyty7h2MT4=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-141-k3UECcXJMwS_c4MN7mUBTg-1; Sat, 02 Mar 2024 06:38:30 -0500
-X-MC-Unique: k3UECcXJMwS_c4MN7mUBTg-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a3bdd99a243so329203866b.0
-        for <linux-i2c@vger.kernel.org>; Sat, 02 Mar 2024 03:38:29 -0800 (PST)
+	s=arc-20240116; t=1709401552; c=relaxed/simple;
+	bh=X66Ph8DtwKOgV7WhgccW6ba3WD/IxG6oWrlpNrTNJ5M=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=GZoGWhFrryitAq6WMGlXg5IS/oz2iC1z0V1Ftv3LK91k/lVFRr5ApGnBSlNJa/wARtMmS/B98sMOspfXJRnv7cQ5DBUh9qBAn6/izTRVQIAKx1/KBLRrN3imE8UCJAW+iY54rmyUyx9EhyaYR38jk80At+UvQtbkRlXZfv3qFiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VY93DY2H; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-565a3910f86so4966974a12.3;
+        Sat, 02 Mar 2024 09:45:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709401549; x=1710006349; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=yrVFJMvetst3Xm/RqXpn850ovd0bJsyoZmCGBSUPBfo=;
+        b=VY93DY2Hdan+SAYvQojQT8L1K2aA7VaIzhh+ailUzT2Pd3X//KlnjnGk4Oah33Ak0x
+         ps2TVpod10p7G4y9CQpEoZpihlEWAQvuqAsYe2eB3YWGE2oGWd6ctR+5LTsMslBSE6oP
+         J2sxXECxc07j4MSddM+m5UFFaZvMXpyGrdySgRGoCbOQMVYyvzgJd81CkKGdLKn5y2JK
+         9nztO8s0wmPmiARBk31UAJfEIm/YIytvDOaGAwfbZx9F3tMYnNpM5IuzRlPWJODwPF9G
+         hzobiwpRb9/YPpjxnLKKymlCaxBw4QiYAr5830Dxk04HkbjzqYBjwr73HsorJSLq8vgo
+         nTuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709379509; x=1709984309;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UPCs84wnj42hQeMF4SkEh7lGDrpXMEJz0dFw5Fxf5vM=;
-        b=eJrZbjHKxU5Ajm+yUPgVpNyJnSiWxesfR2ChdhM58IKGeJT7Ff8DOsiJmS+TG6uzil
-         dOszssCkUMa+g9OnI0LS45VyeTbnGd7AMVODr9+379U+ittdHIdb9iTiVmDXYEZl1Rg6
-         +tUdwS2Z93fFEcGRlJq8IYTEzVKzL7sOhMTpo7uChNImQujq0kv9Q6ebaZHbJQTrfA4f
-         flysDbOY7GLD5lFIHHsybEveHvUj4AGEM5qiXyeuhPGCC7y59VOfvCe4s8EHryciljVT
-         XAWo9ldY9Ga4Diuriq53yvJCUnYZo/DYA22EYv8LAKC6+LvAYT7GqtXdW9gLPhQcW93+
-         Db5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUf3ywgfidXTiGijBV2aB/ZsUo84oeaNeOU7yMV4vdkcRp9V4FuQDs8fOQAgB5seTPCi7GgoP6mdLpgdNncLdpWiOFOausLsSJN
-X-Gm-Message-State: AOJu0YzsvD3SWVltrRxKI1le0xYy8u3Z3zzn3g1SKz7Rg7rH3l6so6Cf
-	7gOFhxAzz0ZjKxB8kn7iUuZeV2K2fDnkLTuG5wa85jDrlw0z7K7Q6IdYl3edA7DnPNvj8Ec6qFO
-	NJ8jwe6yRCxY+PTqhRcBQ+KyPd44Zto/fh65r3hGFHWaLXP+M5I6zv6ptHw==
-X-Received: by 2002:a17:907:986f:b0:a44:eb5:dd4a with SMTP id ko15-20020a170907986f00b00a440eb5dd4amr3445308ejc.25.1709379508827;
-        Sat, 02 Mar 2024 03:38:28 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG8rVzcoFgf4C/2dGSVoD55sTTAqJJtrcupLNN3P1q1wmz3RJ+u/0w+iKVi+Fq5yMP8wyBSIA==
-X-Received: by 2002:a17:907:986f:b0:a44:eb5:dd4a with SMTP id ko15-20020a170907986f00b00a440eb5dd4amr3445286ejc.25.1709379508448;
-        Sat, 02 Mar 2024 03:38:28 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id qx22-20020a170906fcd600b00a4302eb448dsm2598584ejb.134.2024.03.02.03.38.27
+        d=1e100.net; s=20230601; t=1709401549; x=1710006349;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yrVFJMvetst3Xm/RqXpn850ovd0bJsyoZmCGBSUPBfo=;
+        b=ZCNM+hUWmke5g43w9r6lkvP25S55q5uJAUeCX0sJQFWTPm8RyD/d4R40/PsQZECUGV
+         rL8UOwrMVHZ3NIlj8Q/Kl9kU7b8cUFpCNBeXvF6lj3pL+XtrQ7x04+eQffAmdg3Sxaj8
+         UKi+ZwqmLGOm5Rt8qms14sxvlBZiW3WF8jAMcj3QwAJgec7NwOaAklT2ICiRMSn+HJMi
+         /Kgqu3/QLZ4mTYKipLMixXZJBAQHzON/D21RoROpuHls1tddJJRxLeG8JMTEQyecsuBP
+         prZJHft4/3ad4mD3A/vb5n7GjPUqb1Qyv16X5cj3Kov95oE/foB446l62E/MuzR0vR8p
+         Simw==
+X-Forwarded-Encrypted: i=1; AJvYcCXP5ss7p2WQMqldy9gKfiW2rVXHOLhoQdFBN/04AIGtFi/0iK5fnMCgHv2ZS1IGgIPSjHG/w5bJlc9qRFnbBdDckEQ79+HLqBkN
+X-Gm-Message-State: AOJu0Yw2Dr27yfHUqMBEmyJ2YyzInreDTgrlLXCoL6vqXWQ7vT/tNbRB
+	q0DIKbpyrO6mK2iomGV0FHdKKE7/doDUuWN+4nW/PbHPCxGfVgws
+X-Google-Smtp-Source: AGHT+IEZDExaejol+XfA1TI0jXVdyJ3KAQ8w5amAiRKO6/bg2867yJeulElFqkAkFQJFoDCquilqAw==
+X-Received: by 2002:a17:906:48cf:b0:a45:5c4:852e with SMTP id d15-20020a17090648cf00b00a4505c4852emr231123ejt.28.1709401549090;
+        Sat, 02 Mar 2024 09:45:49 -0800 (PST)
+Received: from ?IPV6:2a01:c23:bcce:a400:2519:2036:7f0:6005? (dynamic-2a01-0c23-bcce-a400-2519-2036-07f0-6005.c23.pool.telefonica.de. [2a01:c23:bcce:a400:2519:2036:7f0:6005])
+        by smtp.googlemail.com with ESMTPSA id d25-20020a1709067f1900b00a440e2ada28sm2893253ejr.201.2024.03.02.09.45.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Mar 2024 03:38:28 -0800 (PST)
-Message-ID: <cc13a44e-ca2b-4c4a-b2c6-23ae4b13f473@redhat.com>
-Date: Sat, 2 Mar 2024 12:38:27 +0100
+        Sat, 02 Mar 2024 09:45:48 -0800 (PST)
+Message-ID: <2b88cd6d-8be2-48c4-b779-df40ac0472de@gmail.com>
+Date: Sat, 2 Mar 2024 18:45:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -82,237 +77,85 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/6] platform/x86: dell-smo8800: Move instantiation of
- lis3lv02d i2c_client from i2c-i801 to dell-smo8800
-Content-Language: en-US, nl
-To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc: Jean Delvare <jdelvare@suse.de>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Andy Shevchenko <andy@kernel.org>, Paul Menzel <pmenzel@molgen.mpg.de>,
- Andi Shyti <andi.shyti@kernel.org>, eric.piel@tremplin-utc.net,
- Marius Hoch <mail@mariushoch.de>, Dell.Client.Kernel@dell.com,
- Kai Heng Feng <kai.heng.feng@canonical.com>,
- platform-driver-x86@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
- linux-i2c@vger.kernel.org
-References: <20240106160935.45487-1-hdegoede@redhat.com>
- <20240106160935.45487-3-hdegoede@redhat.com>
- <20240107171055.ac7jtwhu2kbalaou@pali>
- <20240213173050.0cf4a58f@endymion.delvare>
- <3e5b47ce-29a9-43a3-92bc-599a9a716fbb@redhat.com>
- <20240227214011.xeys7rtukn6hksdw@pali>
- <4344926b-40e9-4423-b208-c18263248a82@redhat.com>
- <20240229205724.4izh253onvh4mijd@pali>
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240229205724.4izh253onvh4mijd@pali>
+Subject: Re: [PATCH] Input: bma150: remove I2C_CLASS_HWMON from drivers w/o
+ detect and address_list
+Content-Language: en-US
+From: Heiner Kallweit <hkallweit1@gmail.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>, Wolfram Sang <wsa@kernel.org>
+Cc: "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <011ac933-2a45-4a63-895d-d45bfcb8576e@gmail.com>
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+In-Reply-To: <011ac933-2a45-4a63-895d-d45bfcb8576e@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hi,
-
-On 2/29/24 21:57, Pali Rohár wrote:
-> On Wednesday 28 February 2024 14:10:14 Hans de Goede wrote:
->>>>> Now after looking at this change again I see there a problem. If i2c-801
->>>>> driver initialize i2c-801 device after this smo8800 is called then
->>>>> accelerometer i2c device would not happen.
->>>>
->>>> That is a good point (which Jean also points out). But this can simply
->>>> be fixed by making the dell-smo8800's probe() method return -EPROBE_DEFER
->>>> if the i2c-i801 i2c-bus is not present yet (all designs using the
->>>> dell-smo8800 driver will have an i2c-bus so waiting for this to show
->>>> up should not cause regressions).
->>>
->>> Adding EPROBE_DEFER just complicates the dependency and state model.
->>> I would really suggest to come up with a simpler solution, not too
->>> complicated where it is required to think a lot if is is correct and if
->>> all edge-cases are handled.
->>
->> I'm not sure what you are worried about here. dell-smo8800 is
->> a leave driver, nothing inside the kernel depends on it being 
->> loaded or not. So there are no -EPROBE_DEFER complexities here,
->> yes -EPROBE_DEFER can become a bit hairy with complex dependency
->> graphs, but this is a very KISS case.
->>
->> Are there any specific scenarios you are actually worried about
->> in this specific case?
+On 27.01.2024 16:18, Heiner Kallweit wrote:
+> Class-based I2C probing requires detect() and address_list to be
+> set in the I2C client driver, see checks in i2c_detect().
+> It's misleading to declare I2C_CLASS_HWMON support if this
+> precondition isn't met.
 > 
-> -EPROBE_DEFER restarts and schedule probing of the device later. It does
-> not inform device manager when it can try do it. So it can try probing
-> it many more times until it decide to not try it again.
+Any feedback here? Should this better go through the I2C tree?
 
-"until it decide to not try it again" is not how the kernel's EPROBE_DEFER
-mechanism works. It will queue a new re-probe of all devices on the
-deferred probe list whenever another driver's probe() method succeeds.
-
-So once i801_probe() returns success, the dell-smo8800 driver's probe()
-will be tried again and at that point the i2c-i801 i2c_adapter exists
-and it will succeed.
-
-Yes the dell-smo8800 driver's probe() may be called multiple times
-before i801_probe(), but that is not an issue.
-
-It is guaranteed that the dell-smo8800 driver's probe() will be called
-at least once after i801_probe() succeeds.
-
-> This
-> asynchronous design is broken and I do not see reason why to use it in
-> another driver
-
-EPROBE_DEFER is used in other cases on x86 platforms too and it is
-used a whole lot on ARM platforms. If you consider EPROBE_DEFER
-fundamentally broken then that is a whole other discussion and
-frankly that is out of scope for this discussion. EPROBE_DEFER
-is a widely used and proven mechanism. Arguing that this patch
-cannot move forward because EPROBE_DEFER has generic issues really
-is out of scope.
-
->>>> If we can agree to move forward this series I'll fix this.
->>>>
->>>> Pali wrote:
->>>>> Also it has same problem if PCI i801 device is reloaded or reset.
->>>>
->>>> The i801 device is not hotplugable, so normally this will never
->>>> happen. If the user manually unbinds + rebinds the i2c-i801 driver
->>>> them the i2c_client for the smo88xx device will indeed get removed
->>>> and not re-added. But this will normally never happen and if
->>>> a user is manually poking things then the user can also unbind +
->>>> rebind the dell-mso8800 driver after the i2c-i801 rebind.
->>>> So I don't really see this as an issue.
->>>
->>> Well, rmmod & modprobe is not the rare cases. Whatever developers say
->>> about rmmod (or modprobe -r or whatever is the way for unloading
->>> modules), this is something which is used by a lot of users and would be
->>> used. 
->>
->> Many modules actually have bugs in there remove paths and crash,
->> this is really not a common case. Sometimes users use rmmod + modprobe
->> surrounding suspend/resume for e.g. a wifi driver to work around
->> suspend/resume problems but I have never heard of this being used
->> for a driver like i2c-i801.
->>
->> And again if users are manually meddling with this, the they can
->> also rmmod + modprobe dell-smo8800 after re-modprobing i2c-i801.
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+>  drivers/input/misc/bma150.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> Argument that other modules have bugs in some code path does not mean to
-> introduce bugs also into other modules. I do not take it.
-
-My remark about many modules having bugs in their remove() path
-was to counter your argument that people do manual rmmod-s all
-the time.
-
-But how many people do or do not do manual rmmods is not
-the fundamental point here.
-
-The fundamental point is that if users make manual rmmod calls then
-they already need to also manually undo the results of the rmmod call.
-So now they will also need to reload dell-smo8800 driver as part of
-the manual undoing. I really don't see a problem with that. Users
-should not be unloading (and 99% is not unloading) the i2c-i801 driver
-in the first place.
-
-
->>>> The i2c-i801 driver gets loaded on every x86 system and it is
->>>> undesirable to have this extra code and the DMI table in RAM
->>>> on all those other systems.
->>>
->>> I think we can take an assumption that ACPI SMO device does not change
->>> it existence or ACPI enabled/disabled state during runtime. So we can
->>> scan for ACPI SMO device just once in function stored in __init section
->>> called during the kernel/module initialization and cache the result
->>> (bool if device was found + its i2c address). After function marked as
->>> __init finish its job then together with DMI tables can be discarded
->>> from RAM. With this way it does take extra memory on every x86 system.
->>> Also we can combine this with an SMO config option, so the whole code
->>> "glue" code would not be compiled when SMO driver is not enabled via
->>> Kconfig.
->>
->> This approach does not work because i2c-i801.c registers a PCI driver,
->> there is no guarantee that the adapter has already been probed and
->> an i2c_adapter has been created before it. A PCI driver's probe()
->> function must not be __init and thus any code which it calls also
->> must not be __init.
->>
->> So the majority of the smo88xx handling can not be __init.
-> 
-> This argument is wrong. smo88xx has nothing with PCI, has even nothing
-> with i2c. The detection is purely ACPI based and this can be called at
-> any time after ACPI initialization. Detection does not need PCI. There
-> is no reason why it cannot be called in __init section after ACPI is
-> done.
-
-My patch series adds support for probing the i2c-address to make it
-easier for users to check what the address of the lis3lv02d chip
-on their laptop model is.
-
-This probing requires access to the actual i2c_adapter which is
-a PCI device. So this can only run after the PCI-driver for the
-i2c-i801 bus has bound, which means after the probe() from the
-PCI driver so it cannot be __init code.
-
-Pali I'm getting the feeling that you have dug in your heels that:
-
-1. Current approach is good
-2. Hans' new approach is bad
-
-And that you are not really given my arguments why moving
-the code out of the i2c-i801 driver is a good idea a fair hearing.
-
-I would like you to try and take some distance from this and
-look at this with more of a helicopter view.
-
-As I mentioned earlier in the thread and as Andy has agreed
-with my main motivation for moving the handling of the i2c_client
-instantation is that this is a SMO88xx ACPI device specific kludge
-and as such IMHO thus belongs in the driver for the SMO88xx ACPI
-platform_device.
-
-Had I been involved in (and have the knowledge of kernel internals
-I have now) the original i2c-i801.c SMO88xx ACPI device changes
-then I would likely have nacked them.
-
-Putting this sort of highly device specific code into generic
-drivers like the i2c-i801 code does not scale. What if tomorrow
-we find some other ACPI device with similar issues are we then
-going to add yet another kludge to the generic shared i2c-i801 code ?
-
-Also note that the i2c-i801.c code already is triggered by
-the presence of certain ACPI hw-ids and we already have a
-mechanism to only load code based on ACPI hw-ids (1), that is
-have a platform_driver with an acpi_match table for those ids,
-which is exactly the mechanism my new approach is using.
-
-From a design perspective the handling of all of this
-*very obviously* belongs in a driver actually binding to
-these ACPI ids and my suggested changes are actually
-following this, what IMHO is the only proper way to handle
-this.
-
-Now if there were big problems with my suggested approach
-then I could understand your reluctance.
-
-But the only real problem you have pointed out is that
-if people *manually* rmmod i2c-i801 that then after *manually*
-modprobing i2c-i801 again the i2c_client for the lis3lv02d chip
-is not automatically re-instated, instead they will need to
-also manually reload the dell-smo8800 driver. Which IMHO
-really is not an issue since they are already manually messing
-with drivers anyways.
-
-And note that even that problem could be fixed by using
-bus-notifiers as Andy suggested. IMHO using notifiers here is
-overkill. But if you are ok with moving this code out of i2c-i801
-and intel dell-smo8800 if I use notifiers in the next version so
-that things will keep working even after a *manual* rmmod of
-i2c-i801 then I'll do so for v3 of the patchset.
-
-Regards,
-
-Hans
-
-
-1) The fact alone that the old approach requires manually
-syncing the 2 copies of the ACPI hw-id tables already
-indicates that the i2c-i801 code is not the right place
-for this functionality.
-
+> diff --git a/drivers/input/misc/bma150.c b/drivers/input/misc/bma150.c
+> index 0fb4cc628..22feaa8c1 100644
+> --- a/drivers/input/misc/bma150.c
+> +++ b/drivers/input/misc/bma150.c
+> @@ -549,7 +549,6 @@ static struct i2c_driver bma150_driver = {
+>  		.name	= BMA150_DRIVER,
+>  		.pm	= &bma150_pm,
+>  	},
+> -	.class		= I2C_CLASS_HWMON,
+>  	.id_table	= bma150_id,
+>  	.probe		= bma150_probe,
+>  	.remove		= bma150_remove,
 
 
