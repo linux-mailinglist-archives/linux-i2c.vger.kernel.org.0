@@ -1,72 +1,72 @@
-Return-Path: <linux-i2c+bounces-2119-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2120-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 420CB86F46E
-	for <lists+linux-i2c@lfdr.de>; Sun,  3 Mar 2024 11:41:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAE9986F46F
+	for <lists+linux-i2c@lfdr.de>; Sun,  3 Mar 2024 11:45:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 700761C20D97
-	for <lists+linux-i2c@lfdr.de>; Sun,  3 Mar 2024 10:41:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 700A628359B
+	for <lists+linux-i2c@lfdr.de>; Sun,  3 Mar 2024 10:45:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E21D79F5;
-	Sun,  3 Mar 2024 10:41:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9705B664;
+	Sun,  3 Mar 2024 10:45:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V3lDqMHX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gh1Aa/t6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5A7B653
-	for <linux-i2c@vger.kernel.org>; Sun,  3 Mar 2024 10:41:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB20B653
+	for <linux-i2c@vger.kernel.org>; Sun,  3 Mar 2024 10:45:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709462509; cv=none; b=TLs1+870wVFWOHQUIP11bCs7gO2PW3W0jVRERCpAqYC1f6HUDYLj+lV5XEJ2qsFH8RDL2yOzrV43yipC2mwYaAYbZjNvBOlBgxW1at+gQ7rm1sGGqKsEkqchKNDE9SePbAPHkMJmnVJI+Ww71ORxog6smXFSScn+i7Ml8jp0QZM=
+	t=1709462727; cv=none; b=BC6hCsI4QMnYls2bRuvhafVrRlz9zLOUJifeZW6kImarlMLx1jerY2UMYoKi1WT83Re5UmwH/gYh/tWzYNrJrGsB2h5BD9uwhZ2Wn0WaztaTbidBdUjB75CWbxNL6Dr79iGgi6a2Hs45N0ltmNtMpY3UXusRdOiwhCHBk6kEu08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709462509; c=relaxed/simple;
-	bh=KPzCYh2fKv69DPiXR/3zeAu/HDIBjv5Qk3PADwFfMmg=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=f/9ypyMxonx4A4mu/DipH/cVxpTLzR4GC0Cy6CvymDHy+nE+OToXKMrmUzYYP2VpQbkr9YBSZV7otiJi4OtZe1O9Q30BK8kBF46O5pkNHu1TnuGwsaL7crlv1sFzoVqErlqdhnhLwjnl1+SnXEGJqKc4DJhINmfKJeuZzbnlfxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V3lDqMHX; arc=none smtp.client-ip=209.85.221.54
+	s=arc-20240116; t=1709462727; c=relaxed/simple;
+	bh=xiR5u5gnbZlSravefIOHPpLN0+Y00zQi6Rge7HYVP44=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=fu7iTfKIDaeyBzXl2c/1/qEUdLHNqAByJpnoB3otLKMDEWEBs6NzrCmO2q5h9DLVNpr7VFuBGA8vmyIDzZ6Df5pVgBOnIKU6RfnWPVEBtDKcjWfzPyAM3LoZS483aEV9nLGzkP100tcOL/c0ULycY9wScfv9VmJO+4HMlCC/Erw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gh1Aa/t6; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-33e2268ed96so1533240f8f.3
-        for <linux-i2c@vger.kernel.org>; Sun, 03 Mar 2024 02:41:47 -0800 (PST)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-412dd2722a5so3427415e9.0
+        for <linux-i2c@vger.kernel.org>; Sun, 03 Mar 2024 02:45:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709462506; x=1710067306; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1709462724; x=1710067524; darn=vger.kernel.org;
         h=content-transfer-encoding:autocrypt:subject:from:cc:to
          :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qF69gJSZVeaA5DDO/eCH4/kzm77b0C/vbT+1KUq97qo=;
-        b=V3lDqMHXMX8IX/PDkS8nwlUzpkHi+GgCZS+2api0Erk/FfAkQLYPgZqX3sXh5JklKP
-         ThyAQbU3PhXg3OZeMGOQw22qTY7mY2k7BxlZA3k6SLYhuaZcOxgDFWs05yiTf6fyEYJV
-         BKUfm7Zhdk3q+ZCBXxNrni5Xj/t8r0KBVNIcjw/TgXxPB6OJBd6k2GSYtR5SXTbys3Te
-         Iy1YbLt9cEbfZzgF6UEzB5lT6ajq8ClGVIR/5y19ns8WCcK2a1zWQ74ORpE+rbXB3bMw
-         rgRi3MIuKvS0WZ8t6+0ncV4ujswNejNpss1Vm/Casn4bQIJChCkORoeezKV9zpHNoykL
-         21jw==
+        bh=1U22v0TIDotidtr0xTuwsjj2rosRbJcGCHyiG0PADqk=;
+        b=gh1Aa/t6EdeZ2qHUCzsYkb0IDUaEyHF+59AKwYwstGUcTx2a+7YhNRknDLDreM2ZE1
+         X+WH/O7W8VoGAZltu84IT1ju+aYq+1Bm5THv6lA6R3QZrHX/uja1COn0jzdkGDIr7dBo
+         CWPGj660x2xuBACkQvHaqfovj1R61zBbt1dj+xU5ICC+r56kG5x7+fDndIFsxXF4dmo4
+         4eEjCNS6rsdVjaMU3M1cXWWFN2kXLeqmAQmpNKw6gXlpksJZoqXCaMbu1TA3XWBIb2Rx
+         DQCACsq+6tP2JiOCsZH2brBuLDRaCAnV9ITBpBlv/e5EoRJLCvgMKUM4qQOMHaZY+O/x
+         PCtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709462506; x=1710067306;
+        d=1e100.net; s=20230601; t=1709462724; x=1710067524;
         h=content-transfer-encoding:autocrypt:subject:from:cc:to
          :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qF69gJSZVeaA5DDO/eCH4/kzm77b0C/vbT+1KUq97qo=;
-        b=gFK+4lJRATiMlbyGlh5Yorpo2JwckhE4mXgo0I6p3jiuLlPK0jb+NT8r2t+7LiKxk8
-         2f54II/wilWl/O+aaMAIInhgxsmSZ9do3nJJ5I/H4qmUgTr3ir+eF1rQB/EwrEiDRIR3
-         QteyJDGP1EAgchQ2YLrlkfBsK5Lb8c97uBKuMP6xR2mLW305RD9LwH0+ocDaqNjD48XB
-         pWIdTBzLb75Yj5TEWvWSrv2hEa5DoAYNhbxFiRI8UZc77lUYyXYgRVbhSmChR79iYOx8
-         E8S8OByKBiDtVdo9yRzqPNyBGlKfuTt4LZln86Ai4ADMnoGu+7UH+C69RxE2abwu/0pY
-         J+pQ==
-X-Gm-Message-State: AOJu0Yx5KBH5kLiTvf3wu9alzu3GdFdf6X2KnIoNvZ03rBEoK7QYmQz6
-	bFn78yPrniVOAtXA5h/XdVMmpUrnE3+Byrv93PzgNDzooH1qB+L8
-X-Google-Smtp-Source: AGHT+IGJSh0CI/C8o723ZPWCDulCb5z7K/l4VRFvgkfYUcq5sfOqLhZen0HcnWpoEbkwxVlgqF16kg==
-X-Received: by 2002:a5d:4a88:0:b0:33d:354a:99a2 with SMTP id o8-20020a5d4a88000000b0033d354a99a2mr4734086wrq.4.1709462505379;
-        Sun, 03 Mar 2024 02:41:45 -0800 (PST)
+        bh=1U22v0TIDotidtr0xTuwsjj2rosRbJcGCHyiG0PADqk=;
+        b=BgY/WqRbXhFCRAmdfJPH8ka++c4YHBF/OlSJ4axEMfVEUr6JevMod5m/wMZ+KWFSPC
+         3wVDp+1HhXuydl8soGypGJZELCZko7LGfeh781FqvIJy18kU2bGWkrhBAmT02i+FG2Zw
+         uYO5ZT0szuCCAweM1oWSNQHSgZYW0BRTAaU4X1c0j8OWeiHpSETXivtTkqDz1YvLusIy
+         gDp+MKmFL19FFvmFE4Gn6eFTbkWS9Fxz6hgHgzclHrTENuBZ+epjo/JaXCXkt2bDeD2d
+         Bz2yuKMDk/97FKCNZyS6ZXK4o2gmRmeZBdVVowZiRTemkehCrZoS8vqWlGBtscXjbInD
+         oPMg==
+X-Gm-Message-State: AOJu0Yzw0HU1NT9JUAPGP3CJqzml7HQWHNL+xi6lNMYiNXGChvJPTb0d
+	dmt8MCAyTvMMNCd+MtryuiYgS73/cVU9jS67DZ+XgluW16PtJeAuh91b5H6c
+X-Google-Smtp-Source: AGHT+IF+EBI6Y78pjXh8mZNNbRdOp1UcNoowVreyvMiW0gjn4E/AaLsqMUyIIpqzls5kZht0QTMmFA==
+X-Received: by 2002:a05:600c:3645:b0:412:b30b:e47b with SMTP id y5-20020a05600c364500b00412b30be47bmr3866925wmq.27.1709462724096;
+        Sun, 03 Mar 2024 02:45:24 -0800 (PST)
 Received: from ?IPV6:2a01:c22:6e8f:5600:94da:8563:d193:d5c4? (dynamic-2a01-0c22-6e8f-5600-94da-8563-d193-d5c4.c22.pool.telefonica.de. [2a01:c22:6e8f:5600:94da:8563:d193:d5c4])
-        by smtp.googlemail.com with ESMTPSA id i16-20020a5d55d0000000b0033cffd1a302sm9329135wrw.57.2024.03.03.02.41.44
+        by smtp.googlemail.com with ESMTPSA id u5-20020a05600c00c500b00412dbf5d6e3sm785072wmm.1.2024.03.03.02.45.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Mar 2024 02:41:45 -0800 (PST)
-Message-ID: <5c8f5f27-9d81-46dd-92d3-d13478b4448b@gmail.com>
-Date: Sun, 3 Mar 2024 11:41:44 +0100
+        Sun, 03 Mar 2024 02:45:23 -0800 (PST)
+Message-ID: <6db1e4ad-14b5-4d0e-ac06-46541970ce0e@gmail.com>
+Date: Sun, 3 Mar 2024 11:45:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -75,12 +75,11 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-US
-To: Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
- Wolfram Sang <wsa@kernel.org>
+To: Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Wolfram Sang <wsa@the-dreams.de>
 Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
 From: Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH v2] i2c: i801: Avoid potential double call to
- gpiod_remove_lookup_table
+Subject: [PATCH v2] i2c: i801: Fix using mux_pdev before it's set
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -127,46 +126,37 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-If registering the platform device fails, the lookup table is
-removed in the error path. On module removal we would try to
-remove the lookup table again. Fix this by leaving it to
-i801_del_mux() to clean up.
+i801_probe_optional_slaves() is called before i801_add_mux().
+This results in mux_pdev being checked before it's set by
+i801_add_mux(). Fix this by changing the order of the calls.
+I consider this safe as I see no dependencies.
 
-Fixes: d308dfbf62ef ("i2c: mux/i801: Switch to use descriptor passing")
+Fixes: 80e56b86b59e ("i2c: i801: Simplify class-based client device instantiation")
 Cc: stable@vger.kernel.org
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
 v2:
 - cc stable
-- free memory allocated for the lookup table
 ---
- drivers/i2c/busses/i2c-i801.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-i801.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 291c609d1..9c624f31c 100644
+index 223cd2b84..8e95db95c 100644
 --- a/drivers/i2c/busses/i2c-i801.c
 +++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1428,7 +1428,6 @@ static void i801_add_mux(struct i801_priv *priv)
- 		lookup->table[i] = GPIO_LOOKUP(mux_config->gpio_chip,
- 					       mux_config->gpios[i], "mux", 0);
- 	gpiod_add_lookup_table(lookup);
--	priv->lookup = lookup;
+@@ -1762,9 +1762,9 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
  
- 	/*
- 	 * Register the mux device, we use PLATFORM_DEVID_NONE here
-@@ -1442,7 +1441,10 @@ static void i801_add_mux(struct i801_priv *priv)
- 				sizeof(struct i2c_mux_gpio_platform_data));
- 	if (IS_ERR(priv->mux_pdev)) {
- 		gpiod_remove_lookup_table(lookup);
-+		devm_kfree(dev, lookup);
- 		dev_err(dev, "Failed to register i2c-mux-gpio device\n");
-+	} else {
-+		priv->lookup = lookup;
- 	}
- }
+ 	i801_enable_host_notify(&priv->adapter);
+ 
+-	i801_probe_optional_slaves(priv);
+ 	/* We ignore errors - multiplexing is optional */
+ 	i801_add_mux(priv);
++	i801_probe_optional_slaves(priv);
+ 
+ 	pci_set_drvdata(dev, priv);
  
 -- 
-2.44.0
+2.43.2
 
 
