@@ -1,126 +1,114 @@
-Return-Path: <linux-i2c+bounces-2121-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2122-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8352A86F496
-	for <lists+linux-i2c@lfdr.de>; Sun,  3 Mar 2024 12:15:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0165C86F4E5
+	for <lists+linux-i2c@lfdr.de>; Sun,  3 Mar 2024 13:50:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5F511C20AF0
-	for <lists+linux-i2c@lfdr.de>; Sun,  3 Mar 2024 11:15:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8DFAAB21C6F
+	for <lists+linux-i2c@lfdr.de>; Sun,  3 Mar 2024 12:50:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DD32AD4C;
-	Sun,  3 Mar 2024 11:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33462BA56;
+	Sun,  3 Mar 2024 12:49:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W6MZ0mrY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WtOIA8hQ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609B2BA46;
-	Sun,  3 Mar 2024 11:15:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C75BA28
+	for <linux-i2c@vger.kernel.org>; Sun,  3 Mar 2024 12:49:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709464520; cv=none; b=V8S3HGBf4LTZXrMH1Qv3Tvuj1Vb6VOWXDkts7Hc5TxmfkGFXJ1RIxGQlasYemSbwjDKGRj4y+u1LLelEEWBV7wztFmtCfqkvG5PNca/+B/0nDqXECmDCJZwXdcIRvcYN7cOY6+pwZdLyEMyDYpM4q5Szs1oGKyRS/drNFlWAIPQ=
+	t=1709470199; cv=none; b=FJAUu54MsXBG6Co5Ksw/LD2yAEFQuMc1DV4KiJqVGpU8doisPVBSFtBJsjBgX2wHcaiaFmUKApssJLo7kL1OsX37nMjwvPmCjKFFH7jXlCZWaf3K60YyODJq4E7NpngZZZLW9vVj24/vIp2uygwOxlr/f5ZMpeBuTm8KudCO7tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709464520; c=relaxed/simple;
-	bh=RB9TQhlSLnlD4Oq8sKe8PbKMl4hDKLEdTEKSxiREv6c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FXYzcUmDXOPAavL6JAF1PJ+0NozXfSfiCs6WwVDS85RXEF0MJWRpeznSD3yF6kdNybxP2dRR3fbRsSgFPn5Z/RQhk32yV4RjNWpHqCnKDx3cSVR2lsRd2Ck8n4LUNOs1Ipr/P6LrZJuaCFPABY3VuSyo/b9ucAmlztrPo/iDDRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W6MZ0mrY; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a3fb8b0b7acso478914666b.2;
-        Sun, 03 Mar 2024 03:15:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709464517; x=1710069317; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RB9TQhlSLnlD4Oq8sKe8PbKMl4hDKLEdTEKSxiREv6c=;
-        b=W6MZ0mrYbt0Y75Z8E3juOYUNajjZs4PBk65Xg/9PBa7jIEt89W03Bg6Ot8Jmv7tNpA
-         +cHGR0Gy8qNU/zWK++PlsZyCnbJgyuSOC11Iy8B7ptgoRdryDMsboIiUcZZsRZlVm+tH
-         C/wappi8h+h/R/JG53ycmVLJslTFfGrad/XjYnh6jN92kBz1Nbv2dMDeqyIYvcz3lcT1
-         xaT1YuMevbLZGNQVIrNC+G7QD/evBOHeqpRO/C9kr4rVYMBdfoECXjn66Yw2rLyX3e57
-         VVdLEsPeMg8MUMVTebfkn1T5RG1H2OmHxHPe0pbF58Pio4m6ThmJiYsMD50kBCVsJ/dJ
-         rtTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709464517; x=1710069317;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RB9TQhlSLnlD4Oq8sKe8PbKMl4hDKLEdTEKSxiREv6c=;
-        b=weABUzKGLVpY6S1VivfcXNHfXOvMH+Kms130sWYm3R8JyIOTUuZrfIjzGTq7ofYiu9
-         9mMrV2OockWRABQo7XbZLE3x72O8tyC1Jq91OaLUADWXNfge95hxTWOvxJwv6DKMYN+v
-         /EjbGcB0PnkBazcAHuGYbMAqpUTLsZD3w+ugP4TlkOZnj9DPo3OtouWVdaEtD5m4mN2J
-         ZOW3hlyhbtfKEDvvTppprIDRpfropDhU8byR/p7qqoEHOgMxY9OizvTAqV/ziq7xnuLV
-         3cWw02TY0KIGVk/CwPt1Lt/PHzoLq77oUDUP4SmFPuzr92XEbtDsoy+rC1GRkhS73Nvl
-         xnHA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJJgSE3wCsGT08o2274IfAp7wHkF9n9kUiO8zLuRvVRS4bcjCR4OqEsKg+wsf7o6/FiZqpI0aCNK9750/q9VgUAt6eWFxdGgqq0bdPe3kE7fI0Ak5qmqM5MlShVmPDxofddaqiggGGoC4NWTPI3Q==
-X-Gm-Message-State: AOJu0YwXaMB9rncdXBTpOCy7jiAKsdjC0q+6s+Uvxh+dwlSXxjXXQd33
-	2DN54+qbm40DJIcOjEb6hGVCS0BvZEVIEe85bHVpGh+VV7RQW00+JYuuyhSOTNTlr5gl1UrgBCU
-	moyiNt5Olt43GhIgq/Ji9ZS4YnQ4=
-X-Google-Smtp-Source: AGHT+IGr/241ztiljhGTg6LOnVp9/D71oFXqrO2UIzE3SlwQMWjjPk26xq79/XZL59Nsgj8yXHeCc8biYMLh056p0Bg=
-X-Received: by 2002:a17:906:f856:b0:a43:f1fe:cf1e with SMTP id
- ks22-20020a170906f85600b00a43f1fecf1emr4865828ejb.55.1709464516472; Sun, 03
- Mar 2024 03:15:16 -0800 (PST)
+	s=arc-20240116; t=1709470199; c=relaxed/simple;
+	bh=5xQh+jRHgD8O9nvWUFO2fEQVFVkSy9anofndFYyV4aw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uaFqE871/8Ga74qPppnCWH/9q3zjRzU2kFEI5iFY8VgB3ZQwYmipZUD8SpqMvDDoNRJs+7joi/Z6NfnexVPBpC/FbwOBtiwYCLT6VBW7Hqn8Mm/iXVJ5SI2QACABHBCuHQv9AKyvbwHWx3yZpQXuC2D7dFH77U8YD+xCrp3zcxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WtOIA8hQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B88FCC433C7;
+	Sun,  3 Mar 2024 12:49:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709470198;
+	bh=5xQh+jRHgD8O9nvWUFO2fEQVFVkSy9anofndFYyV4aw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WtOIA8hQ1ilnaFOPKfqlaGZDecYZD6SYfNDxJZqd+pXA4mTvzH6p62LQr334teD4C
+	 9L/8U63PNyM7uGkEa2XwZKO3hA8hIXo+BrwjhOKr0u3Elql0RoYUV+lXZ2E4q3gzyn
+	 Eem1xHB7ka0WXsBadE41xscK2/i3aNfyevKInjdXlpmxBoLO1CC7G8iv08/MHNYOdX
+	 zW+XhqZdhsZF1+Xo6IjY9TEURWmrrrQMY73gnrnhVwZZA1AkUYwDx9EqAYCjZGSSZO
+	 rczkqhFEkuFKIxjHvgEzYOmmGtUy8zB6QFDq5NgJ3eD5vkhKFFwse/NJwaV3ec1/9g
+	 k0ebowhm94epA==
+Date: Sun, 3 Mar 2024 13:49:53 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH RFC 1/2] i2c: smbus: Prepare i2c_register_spd for usage
+ on muxed segments
+Message-ID: <ZeRx8aDFST_OKIgy@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <eac54582-44f6-4101-93d9-012eb4ee3241@gmail.com>
+ <db378364-018e-4e6b-8e41-8cdd21ce2afd@gmail.com>
+ <ZdxoVALRR8rz23Z5@shikoro>
+ <b06a0a71-c30e-4288-b648-fba2c75a5131@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240106160935.45487-1-hdegoede@redhat.com> <20240106160935.45487-3-hdegoede@redhat.com>
- <20240107171055.ac7jtwhu2kbalaou@pali> <20240213173050.0cf4a58f@endymion.delvare>
- <3e5b47ce-29a9-43a3-92bc-599a9a716fbb@redhat.com> <20240227214011.xeys7rtukn6hksdw@pali>
- <4344926b-40e9-4423-b208-c18263248a82@redhat.com> <20240229205724.4izh253onvh4mijd@pali>
- <cc13a44e-ca2b-4c4a-b2c6-23ae4b13f473@redhat.com>
-In-Reply-To: <cc13a44e-ca2b-4c4a-b2c6-23ae4b13f473@redhat.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sun, 3 Mar 2024 13:14:39 +0200
-Message-ID: <CAHp75VdUFdJyoipyWzkNsnTwkmHEmdu6HvjnRa04vDEE0RbMjA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] platform/x86: dell-smo8800: Move instantiation of
- lis3lv02d i2c_client from i2c-i801 to dell-smo8800
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
-	Jean Delvare <jdelvare@suse.de>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Andy Shevchenko <andy@kernel.org>, Paul Menzel <pmenzel@molgen.mpg.de>, 
-	Andi Shyti <andi.shyti@kernel.org>, eric.piel@tremplin-utc.net, 
-	Marius Hoch <mail@mariushoch.de>, Dell.Client.Kernel@dell.com, 
-	Kai Heng Feng <kai.heng.feng@canonical.com>, platform-driver-x86@vger.kernel.org, 
-	Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="b7rZ7EAL4t59F8sk"
+Content-Disposition: inline
+In-Reply-To: <b06a0a71-c30e-4288-b648-fba2c75a5131@gmail.com>
 
-On Sat, Mar 2, 2024 at 1:38=E2=80=AFPM Hans de Goede <hdegoede@redhat.com> =
-wrote:
-> On 2/29/24 21:57, Pali Roh=C3=A1r wrote:
 
-...
+--b7rZ7EAL4t59F8sk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> But the only real problem you have pointed out is that
-> if people *manually* rmmod i2c-i801 that then after *manually*
-> modprobing i2c-i801 again the i2c_client for the lis3lv02d chip
-> is not automatically re-instated, instead they will need to
-> also manually reload the dell-smo8800 driver. Which IMHO
-> really is not an issue since they are already manually messing
-> with drivers anyways.
 
-Actually we probably can add some code to the i2c core to list the
-clients that were instantiated in a way that can't be done again after
-removing the respective bus driver. But this is just an idea on how to
-inform users what exactly can go wrong after the rmmod/modprobe cycle,
-I haven't investigated this anyhow.
+> how many slots are populated. But we have a printout per populated slot
+> already: "Successfully instantiated SPD at 0x%hx\n"
+> So IMO we don't loose any relevant info.
 
-> And note that even that problem could be fixed by using
-> bus-notifiers as Andy suggested. IMHO using notifiers here is
-> overkill. But if you are ok with moving this code out of i2c-i801
-> and intel dell-smo8800 if I use notifiers in the next version so
-> that things will keep working even after a *manual* rmmod of
-> i2c-i801 then I'll do so for v3 of the patchset.
+Right. That makes me think we could even remove the dev_info() entirely.
+But I leave this up to you.
 
---=20
-With Best Regards,
-Andy Shevchenko
+> Actually a developer has to add the config to i801's mux_dmi_table[].
+> So yes, we should change the message to something like:
+> "More than 8 memory slots on a single bus, contact i801 maintainer to
+> add the missing mux configuration"
+
+Sounds good!
+
+
+--b7rZ7EAL4t59F8sk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXkce0ACgkQFA3kzBSg
+KbZXwhAAiJks5EzUWrR0iEIkv71mYcCunB8JaX6ik2tTZXhnEvugeD0DFx9IpZ0v
+DImdil7yIgL8kVNcTXxdXsMGMW1BBLi0dJJBdZ1hvyLqp++YLXRV6kBDodoQMgPU
+/aauKEK8HSk8KqHgeuEw5XvpWcX53W5dM02YOKD5h3uDkSWLizxeO17PBfTXBePw
+Glp9IQmPxLJa00bPLq72YRVl3cm5q1Im/e0OLHv6hMvSUYC77aw8GkmWn0Iq3Osi
+kF7lGhge/h6szmF9slbrBitUOmyR9VeJ0EYoSyMWpRdLATtM2xSMibiVj0+jT068
+ch7uyGfcAMdlCb5I59/QxcZPxA3M6NKTK+Dk0YPBY1dr+Vq6EtyjmgQiBtDf6HPO
+7Vx8emlyHgY763OJHiXfq2bNKOQvJKshxD44Dg6Z3g8clFt1Vlqxm4nBBFe7Bvdn
+IPV2vH24TxhZ2fEFsoUeTHXNRoxHXZ8/FyF2zaB1xP1TgMDGf95G3Cn4xzwPla+X
+P/3AUwTaaZ7ZKQnC3ADAUu+GOCNFTw2Mf/Tb/ykl519yMp2aGC3bO1TbKXpg9w1h
+WWBLv+fSbwZjoowP2O2bjB3ibygzEgmgx1++Iwzt0SzLsfZqhQGRczYSfIAIppUZ
+a2BWhQdfMF5jZVqWrsFy1lgPITmJdzmwD9uL4xKSCqhntj+Upqg=
+=C27F
+-----END PGP SIGNATURE-----
+
+--b7rZ7EAL4t59F8sk--
 
