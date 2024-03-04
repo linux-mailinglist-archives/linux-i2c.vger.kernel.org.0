@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-2132-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2133-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0156186FD03
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 10:19:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6250D86FD45
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 10:24:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 966011F24839
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 09:19:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93A0A1C21F40
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 09:24:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC74520B33;
-	Mon,  4 Mar 2024 09:18:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C106C224F1;
+	Mon,  4 Mar 2024 09:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cMVaAVwB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LDzdg1Z8"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A721BDC8;
-	Mon,  4 Mar 2024 09:18:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B7B2374B;
+	Mon,  4 Mar 2024 09:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709543886; cv=none; b=D0obt3atJRDb5L8R26UeTe97ppoeUdpyPx18axpcIuY+Z3Yacr3UcENU0bq4FVDdEJQwvArUKB6DM/epJNA073GyK3EF5m5N/qWTZ0MaBJXFk2R32cFjtlR3qkv53U1oRl8cBOxW9NSvmDmianILgGcw0tqvPxocVlJ1VSIAK/w=
+	t=1709544207; cv=none; b=hxTbHPerVspfAZW43lHRax3HrG4ouw6h+zUAdqYxfuziSKwIqqYe4mqDgqabgxv0yrDBrjWs0a/R1ZBGJFyAVuCKva54QPxTmrS4EFK35jdUmM3faHut6jiPTd5N9aoeq0WsKNtsLo/y+5d2KcvW5Ira0Qf6NyNQk639Xkxvp8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709543886; c=relaxed/simple;
-	bh=Hz5X8SjPZaPMVvkREhxPkwcMhjiRAzuRBm8lmosOsm8=;
+	s=arc-20240116; t=1709544207; c=relaxed/simple;
+	bh=Fjyke14FhJVuxn1qjXkhnPeP7VsIKBGI3TtDfBX5g7s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aWYhGJ2mGYK66YqdSDdVwnD2UCz2Cog9mGGi7A8Kstsa+Qt6QyY9lSB6wSd8uUkRXhaNhS7dvdYJed3fo8dev3w8BbklcUbCeiLYIzcObaHH7DV11gtG+/R5oPAmS5OxbSLOSxTJyd9w1FFyJdi36mU4Hc9hWmuf1fBFGY1W4EA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cMVaAVwB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5EEFC433C7;
-	Mon,  4 Mar 2024 09:18:05 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=n0IUki6sJpXG1mpcwT26g10Scamjj6CmdDVmTSWm4H9Pc566S11xDy6vwK9cE8pKtjEh7xxtceVfEA7nGCJ6thuOtWXi7KNjoft4jYcP8glz0wKsC/Ylj9Uyt47Dgu3fRPxIXxZecsqb8cmMZRRlPYXen9Ivf+zGBEy1Kudv0Ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LDzdg1Z8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AD21C433C7;
+	Mon,  4 Mar 2024 09:23:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709543886;
-	bh=Hz5X8SjPZaPMVvkREhxPkwcMhjiRAzuRBm8lmosOsm8=;
+	s=k20201202; t=1709544207;
+	bh=Fjyke14FhJVuxn1qjXkhnPeP7VsIKBGI3TtDfBX5g7s=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cMVaAVwBcvnPGrdq6e7btLLYM9gCJQP57sSCSb/GFXetumUhwhDWy4EWBcEfNHuOs
-	 nen/R8UCTax7+UIhGtc3FxuSQO9ozn82C6VBuIGCvx1vMD+24pTAKpz3Nje3Xf/I0N
-	 6mmZQl49BemD1XRaRAAs+ffgwzHIBcQ8iZwuHGxPdyuq4w7dcT3HDTPLg9kp9G2yB+
-	 BBtQVG7yQQ/iXqdMzkJqu+k8SjonewKeRUrQ0gv5yJ4Rg6YzEif7laeHz16KIkb0zT
-	 F5M6d4wEhuYNkksw5E8rb1nkn9Np/Q6fA/sSMFcnFRx22q2uNNONhVwWeg6zSRqx+B
-	 nIvgFipJpSi/A==
-Date: Mon, 4 Mar 2024 10:18:02 +0100
+	b=LDzdg1Z8PXwnwGjYQ4nm55CeEZ0UJ8Jj3hScHoRe7rhX1gUNkstTGpGvhRTgJtxbu
+	 OaHYE9XjY1a2dWg8jYFitJjCALv4shw7qUlRbYEJco5MxsLYQvYemONynN4uZlysFQ
+	 kXzz07BmAA78ss3V82Ov7u4eb5tOd0aOqu7RIsQstDPjjotYciNQnfYpaqRFIctkXU
+	 Xb2V9fSrqPinyYpc731SSf/m9t40BhCEZweynNeTi84EVcpo4LtJT2z9yx6k1CfEMv
+	 UUWjIy3iM4XemV/RBLLfJxTyU1R9XLfB62vK8vkfwVCtu59azNVXUo+pxliAXyODLE
+	 FLdHMQ4EzoZsQ==
+Date: Mon, 4 Mar 2024 10:23:23 +0100
 From: Wolfram Sang <wsa@kernel.org>
 To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>,
@@ -57,9 +57,9 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v2 06/11] i2c: nomadik: support short xfer timeouts using
- waitqueue & hrtimer
-Message-ID: <ZeWRyuN8v-VnraQA@ninjato>
+Subject: Re: [PATCH v2 07/11] i2c: nomadik: replace jiffies by ktime for FIFO
+ flushing timeout
+Message-ID: <ZeWTC4Eq9CzOs5AV@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
 	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
 	Linus Walleij <linus.walleij@linaro.org>,
@@ -76,7 +76,7 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
 References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
- <20240229-mbly-i2c-v2-6-b32ed18c098c@bootlin.com>
+ <20240229-mbly-i2c-v2-7-b32ed18c098c@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -84,65 +84,46 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ADopU0GSN45E8OWO"
+	protocol="application/pgp-signature"; boundary="7C433FooVKfPFjO0"
 Content-Disposition: inline
-In-Reply-To: <20240229-mbly-i2c-v2-6-b32ed18c098c@bootlin.com>
+In-Reply-To: <20240229-mbly-i2c-v2-7-b32ed18c098c@bootlin.com>
 
 
---ADopU0GSN45E8OWO
+--7C433FooVKfPFjO0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 29, 2024 at 07:10:54PM +0100, Th=C3=A9o Lebrun wrote:
-> Replace the completion by a waitqueue for synchronization from IRQ
-> handler to task. For short timeouts, use hrtimers, else use timers.
-> Usecase: avoid blocking the I2C bus for too long when an issue occurs.
->=20
-> The threshold picked is one jiffy: if timeout is below that, use
-> hrtimers. This threshold is NOT configurable.
->=20
-> Implement behavior but do NOT change fetching of timeout. This means the
-> timeout is unchanged (200ms) and the hrtimer case will never trigger.
->=20
-> A waitqueue is used because it supports both desired timeout approaches.
-> See wait_event_timeout() and wait_event_hrtimeout(). An atomic boolean
-> serves as synchronization condition.
+On Thu, Feb 29, 2024 at 07:10:55PM +0100, Th=C3=A9o Lebrun wrote:
+> The FIFO flush function uses a jiffies amount to detect timeouts as the
+> flushing is async. Replace with ktime to get more accurate precision
+> and support short timeouts.
 >=20
 > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
-Largely:
-
 Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Nit:
 
-> -	int				timeout;
-> +	int				timeout_usecs;
-
-I think 'unsigned' makes a lot of sense here. Maybe u32 even?
-
-
---ADopU0GSN45E8OWO
+--7C433FooVKfPFjO0
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXlkcoACgkQFA3kzBSg
-Kba7iw/8Cjwrc5SjA/NL3KJonpOz3S37vaadRXid+bhB8XUNVUI0PMJkyw//gEc4
-njYS1/v197pg+4JsPPorLhOxjDGoD14nvA+kQkZ4XDktCxU+U12NUBKDc5XgFMmN
-cx7+QIr8AtfJpo5Il8nNYO4xn15+F510a1qjPgTlCE4QV2sX9aeSgOazretpVNmp
-03IKZDUPmP3HCFfNkGgt5PzpZpnY4RlPflThQcMYJm2wXz+E/h6VM1xqmENlhJQa
-2oqZ9FNBttktiahGx8vBpGeLcSXnQF3okUiCJC1f7MCP9ApaLI7a9700eneemBLn
-+Q9M1Gexied95SJcIJYKzgTzN10+GOHg8P1pFsuf3NKNCmZApobOIc3Nv/zDfGum
-Rp08Hrq0OgTSXGyPsLPs6OSeEtEg7KvCO/WZyuLAdt+wHVEKTMYsWra3FUCu6YMB
-m1RIQcluy4QVlv4E61RmOI22YsKibwl2mw2WMENEbLodFPc6lvtSSiEmjWSOBL4r
-Pv1oTlkNjBGOpgFF1T9TByvhhmIWLCQcbAHxR2R+EGcO3NNQ7wLMFCLkm7cm1sI3
-u4Y+cxDfdXz0zag7rJkp6GwzxwmNorvo90wbNA3FODizmmqFuUt6tIExR2hfxkA8
-4GURp7XQJAp5kXMt5vBAaEoDDCvaa5ivgOmaq0OFdQRcYnHtHRw=
-=vre8
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXlkwsACgkQFA3kzBSg
+KbZlmQ/7BeOpHXFkVAV8V35Hfz9OhDx1QR4Sbzc1KklBr+gm5IbuVyYn6GgB5HVY
+6Xs/IIPgOk4V7xk079tFAfFCJ7X+I3vPVLh3l7ZXKSVpGKfoU4rmuBNnHL+eG4uL
++YIpuSlM05j1ne+TnkvY8fdFFFDFkpE+w0ZSlLMTiEkU9BOJSTkF7VX3vHqXDO2d
+E+SzqxObu4EuQonD5OSVMUsP/KTdWUciUejZSY4C5G1GjObV0hfNsG9CffYDAKH0
+HAVqfiH28XQ3ZDpqZ44n91eL0CtU5MIj4F/UESfrlny8F9Pi8pf48bHSCNBnFFyk
+wLsEgar+GHwlGL1QiIuLafN99CPAh2vNXDI29+UzziyMo4nkd1Zr5ap5HdLrIx/g
+mT87ioofGWlDkuGWaLjRMOPK/lxdrdiSKw3ctQ7Te1KSLzh5WY4VjvY0jWsnvOGa
+TlkHIuZYWiSyb6p7nSUBKZKkAv2GQbcagC+4B6JRS1vb8dxjv6xyz2+6WzNsVmyb
+QoH00jNGkpHczE4QOj35d0JMuZq3GeBnxJo2brOMXgcsHEUabQv+SAIGreIa2Haj
+zVaOmRb6ymLb9SgS5bp11kqbwjnJ/rPunzxoq29UteqSy+oECRt+EXUyuauEuf4r
+2m/tvl/MqTDN1qhuR3Yb3f4reiA2lTNSNOu7yUGF84Aa18fb0VU=
+=XC4v
 -----END PGP SIGNATURE-----
 
---ADopU0GSN45E8OWO--
+--7C433FooVKfPFjO0--
 
