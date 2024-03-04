@@ -1,105 +1,125 @@
-Return-Path: <linux-i2c+bounces-2137-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2138-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB49386FDE7
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 929A586FDE5
 	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 10:47:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C70452839ED
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 09:46:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C19EE283AB4
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 09:46:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 630E51B819;
-	Mon,  4 Mar 2024 09:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEEBA20DF4;
+	Mon,  4 Mar 2024 09:46:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IxKQHh55"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="U2hJjhPf"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2492A18EC3
-	for <linux-i2c@vger.kernel.org>; Mon,  4 Mar 2024 09:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFE01B7F3;
+	Mon,  4 Mar 2024 09:46:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709545576; cv=none; b=aZ8VKsvZ+Unx/jESb3NI2ZVt6I3SRESamvnTBhqTXJNCwDGbfaSaaTM+pO735KRvd+0k9NxbbTOpcOi17Fib0MwqxjcQqKkjpVHj5c/wdxr8qw61dbXxelqb5wdXpEzbFttvmbbuyQiFyMMOtMEtoETTAEHZSlfoHtzNXLYkgGI=
+	t=1709545595; cv=none; b=GuyjDDxjquQvooJOrmAlFUhk2BwnoYuzVfJSUzALPSrKF8PB3+zyct0H1rUtPPFLZUCqXCQqawQYupdTScOyYBPjdgrLvJ+imaXyQjsIXFYhCaw1ZgUGoLHBKx4xLodHw89+d5p2pF9qcWTP2emsiCP8Nd2LHUdfm4Z8lrhM8zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709545576; c=relaxed/simple;
-	bh=vkNPXhSTEOjCzGirZAQCOMPJLkI7j10aTQU6XfNoKDg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OgL2+91kMQxqfrkuNhKG8DkZr3bsosyVx2UKX/d5BzJtNzU8aIJQG276muvBQoOUPhcAlCpegCXjYxgkkseQlWEcDBXyypEDMP8HZE646HekGlQT/Pn/Dn/ZoMa9w+gG5+xulmcDhqFqIMxTYKpkuo2/b5IXOA8ubABct8HloxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IxKQHh55; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8F3EC433F1;
-	Mon,  4 Mar 2024 09:46:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709545575;
-	bh=vkNPXhSTEOjCzGirZAQCOMPJLkI7j10aTQU6XfNoKDg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IxKQHh55G6eO9fK1jmzVJ4S9iuyZMDR2itlSlMKD+UfGS+yzWkBCBuLMldE8gP+v3
-	 g/pB1hIsIlGXrGWeevZfhyfYvTCDENMQ3h26kmhxFajbcG9U2Q/7cUYFV5YSDH1CZD
-	 5j5CSen6cpP1WyHrQsEBMv5bz09rlBxMcKjNMKYbqHYtOj1FQJdjzPlNOPR+nzEFwt
-	 Mdb1cprgxI8ZRKZbnXo1VWVNgl/DRpbM83ukXD6fa3SkWi9NLjkV/WdvUwoMzjMVnF
-	 2p34NDR4PWLgcgH7n3tGc88FbXVaQvFfgZK/4qpUrHHj8p35zoqfKYqv2OLjIXy3L/
-	 lfyhaqIhaVs1w==
-Date: Mon, 4 Mar 2024 10:46:12 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Hans Hu <hanshu-oc@zhaoxin.com>
-Cc: andi.shyti@kernel.org, linux-i2c@vger.kernel.org, cobechen@zhaoxin.com,
-	hanshu@zhaoxin.com
-Subject: Re: [PATCH v8 5/6] i2c: wmt: add platform type VIAI2C_PLAT_WMT
-Message-ID: <ZeWYZImtMwTSZ-7p@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Hans Hu <hanshu-oc@zhaoxin.com>, andi.shyti@kernel.org,
-	linux-i2c@vger.kernel.org, cobechen@zhaoxin.com, hanshu@zhaoxin.com
-References: <cover.1709014237.git.hanshu-oc@zhaoxin.com>
- <b0e3571e961f0725a4be064942fe0c6dc24b519d.1709014237.git.hanshu-oc@zhaoxin.com>
+	s=arc-20240116; t=1709545595; c=relaxed/simple;
+	bh=anUB/OBSNGm/JeFQNlRuNFLtUQHaQ9D8+eh1w3c3q18=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=Sg3CWZcwnKmAIYuR55o4+eeuT37KeDEFitV+7j5ku6HnY5kyTLOLIkNvTjEaLhWmeqdpThJQaIbWBcmrgvaDkjTEwrNmi2quKgC+emPTAtoBHz6p8clLiGnF2M9CWTZ+QgftfSxb3yU0IZxglGOgCC0XGF85Bi8FQrX2Zqy/1/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=U2hJjhPf; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 11E9C1C000B;
+	Mon,  4 Mar 2024 09:46:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1709545590;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+obVxPBVye59ep/rc+NawmN0v65caHupg9rcnFDhO04=;
+	b=U2hJjhPfJOybFyQT4y93sxpTKV9BVq+ROnsiqrseqLuHyo3Algc9QmEqF78XZW4vw+nps0
+	hqWxOQFFeHpDSPWMuAWRgoV0kPPh34RzLGGX7Y3V8H98/CYTX5UI3Ihs5mkHSpV6SuRKRl
+	aL0SZKJz+mA6n1G1HOhWuWgtl5rKiVNGqKWVUbTPUmSE/ZOIdnaMdy+t3UhOMwI1UCnsu/
+	L+vQTaNYK2HGkHlEftlk/loHRTWUQyI1EY3XAaP7nfI5vN2mPQvSiWp0feResi5kFwVzwh
+	CDcUL78cCvMYjMlMm0LY1DY9wrLf/okIjsoRCL+BrkliozmRxEpBTh/m3ZSAnA==
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qQZS3HC4XyA6pWwF"
-Content-Disposition: inline
-In-Reply-To: <b0e3571e961f0725a4be064942fe0c6dc24b519d.1709014237.git.hanshu-oc@zhaoxin.com>
-
-
---qQZS3HC4XyA6pWwF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 04 Mar 2024 10:46:26 +0100
+Message-Id: <CZKVC09R7VQB.3DEDAIWIICORV@bootlin.com>
+Subject: Re: [SPAM] [PATCH v2 04/11] i2c: nomadik: simplify IRQ masking
+ logic
+Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
+ <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, "Gregory Clement"
+ <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "Andi Shyti" <andi.shyti@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.15.2
+References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
+ <20240229-mbly-i2c-v2-4-b32ed18c098c@bootlin.com>
+ <hbnkcqjgykfzivqvjnr5ixmp57am43mxslfnpxhro27kzd2pyt@q35uhgkxn5cv>
+In-Reply-To: <hbnkcqjgykfzivqvjnr5ixmp57am43mxslfnpxhro27kzd2pyt@q35uhgkxn5cv>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Tue, Feb 27, 2024 at 02:36:32PM +0800, Hans Hu wrote:
-> Enumeration variables are added to differentiate
-> between different platforms.
->=20
-> Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
+Hello,
 
-Just glimpsed it, looks OK:
+On Sat Mar 2, 2024 at 1:39 AM CET, Andi Shyti wrote:
+> On Thu, Feb 29, 2024 at 07:10:52PM +0100, Th=C3=A9o Lebrun wrote:
+> > IRQ_MASK and I2C_CLEAR_ALL_INTS are redundant. One masks the top three
+>
+> if I2C_CLEAR_ALL_INTS is redundant why don't you remove it?
 
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+I understand this is unclear. What I meant by redundant is that they are
+redundant from one another; one overlaps the other. I'll give a better
+commit description for v3. Something like:
 
+   IRQ_MASK and I2C_CLEAR_ALL_INTS both mask available interrupts.
+   IRQ_MASK removes top options (bits 29-31). I2C_CLEAR_ALL_INTS
+   removes reserved options including top bits. Keep the latter.
 
---qQZS3HC4XyA6pWwF
-Content-Type: application/pgp-signature; name="signature.asc"
+   31  29  27  25  23  21  19  17  15  13  11  09  07  05  03  01
+     30  28  26  24  22  20  18  16  14  12  10  08  06  04  02  00
+   --- IRQ_MASK: --------------------------------------------------
+          1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+    0 0 0
+   --- I2C_CLEAR_ALL_INTS: ----------------------------------------
+          1     1 1       1 1 1 1 1                   1 1 1 1 1 1 1
+    0 0 0   0 0     0 0 0           0 0 0 0 0 0 0 0 0
 
------BEGIN PGP SIGNATURE-----
+    Notice I2C_CLEAR_ALL_INTS is more restrictive than IRQ_MASK.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXlmGQACgkQFA3kzBSg
-KbZ6jw/+NocM8zaiEOBbb+YHMOumtApV4HxDftv4zhkgtmU2udCzLuCL+l4/cF24
-bRAHzlfhtB8fc0GKQzh274Lb59kr+U/7vH53OIWx9KeNbY/e8Gg6f31qSSQCsRNA
-QcIpt7caEoCu8r+vVnii0iXD8Ijm2LQseNZ1KbayPat0MgYoSV7kp//rFMqLYZXF
-lEEP+Tq8spXxMVL6f9fXN7Ou1HLjHmRgYa69mbqiV5WwAFRiAiZvIV67GIBF9JbO
-efKIw3e48kRC73CMyOSyTqX5nncbHyX7JbbLGd1K7VLfIwzgGrg1A+t6LZ8MQdDU
-/NyYLSaT9b+FY8D3NBgcWxz09oX8ahHfnO7SaJo0GK7MIeis1ArCxWGoQmu6HYVs
-YQ40szn+KEcVI1uFxkJ0z54oJteGgk2Ppn1HErnksxq12ooigNCEOWXKWyM5+XIc
-JrEE50jJjnT1xV2HRhI22blnLQv5zgYDTSQFZPC9FErtwqCXlPv+9XCekv5riGxg
-M4IseFE7vdBQb1hxXs3MSNAx/f9dxslSCs6y68+OcW1kHAZiQdyCTH29Dx0tdLxn
-v/Oj2RwFNYHGLdPRKUvUNoLqeLaLotavJ8r+yxDqQANDvv9IzS1YgnQBKU6YuW6W
-pLjHVVra/JxvVpF/4hINGROWEQ7H/iH1f+YvfXQAMBWi3IX/Mo8=
-=8Mr8
------END PGP SIGNATURE-----
+Is that better?
 
---qQZS3HC4XyA6pWwF--
+> > bits off as reserved, the other one masks the reserved IRQs inside the
+> > u32. Get rid of IRQ_MASK and only use the most restrictive mask.
+>
+> Why is IRQ_MASK redundant? What happens if you write in the
+> reserved bits?
+
+The wording wasn't correct. Have I answered your
+question from the above?
+
+Thanks Andi,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
