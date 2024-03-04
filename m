@@ -1,50 +1,50 @@
-Return-Path: <linux-i2c+bounces-2140-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2141-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49BCE86FE3A
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 11:01:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB8DD86FEBE
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 11:18:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C2321C219F7
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 10:01:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95D6A282FC3
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 10:18:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5FA8224D6;
-	Mon,  4 Mar 2024 10:00:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0341250EB;
+	Mon,  4 Mar 2024 10:14:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="maGBN6NO"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ym8KY+n2"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C2A24B2B;
-	Mon,  4 Mar 2024 10:00:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A6E249FE;
+	Mon,  4 Mar 2024 10:14:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709546451; cv=none; b=l0MT5Bsw8eczFjqsaGmUMf5MBFplnBxuno1zfVakksakhQjqlSFbo/fZcvFGt8aNIzuKTgBv20DdnPBcDYtjJT7gp7WZkDOwziZHZMU7+HiKwezUdNEoDEH00fE1CIPaYlr3uvifetFSKndXRLb7ubu+rsAgcMV0VUOd65Oz7t0=
+	t=1709547299; cv=none; b=clOntgSpgtQOPnrjM+T2zI6NEl3TEwqqe1I4FnaWjHjkla24IdewY2n5T6SULXckVQ4g5Iykx6xpMNSJJEaKgzQwJQGDLn4JprqDvsi8uT4pWutmVUPhNt9RiVFI6Db+pwTyvpMpL2qWqA4qwlwmZKivruOS+CfdK2x40mVd22Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709546451; c=relaxed/simple;
-	bh=Ltz90TO6kzYU5NNZDHlenUvdrRAeb9Z4YTkBpwDlM6k=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=flHKRM4ThWRKTv0OM7OnOduDta4uLQ23yuEzktjmGbirnDdkNqSlvu93BFRVHOspDzqXhf5agjf5KEJv2N6JlFbBYOBY10X53FvQdo1Bw+WtOT4ZpzMmBFOZieZioh9sG0jxUw+45nVSD9zWXhPpTyonGwLdbhRRVBzbUWNxiJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=maGBN6NO; arc=none smtp.client-ip=217.70.183.193
+	s=arc-20240116; t=1709547299; c=relaxed/simple;
+	bh=l1WERtT5arsgrWURcH/8kAmZA8tXvv8Qm9AF3iNFUnE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=WZtDF0PsVwtc0XDWeMPb/G4OA2PTWNqCXQq7YQAKz9Lh8d68pH5UjbUBXikBR/Vm8NPDyEBri/F5pd6PISemdYPV3l+ovsWKzMUQhZe2D6g0t5YdcWkESpGGBt3mZ6o4BnO90WUH/O5lgrzvqQWp8daN5JCLqX2eg9fKn5ylBbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ym8KY+n2; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 35D9C240011;
-	Mon,  4 Mar 2024 10:00:46 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1275A1C0004;
+	Mon,  4 Mar 2024 10:14:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709546446;
+	t=1709547294;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pz1yibsIsNHyK2XZsyjOxrFSmLQ7xgeVb+gsJobLKuE=;
-	b=maGBN6NOtE6vKHL1RnDS5WOvUaS37rhoc/gAC3aGOI2TqC8PyRPfBQq4vQxP0Gyyl2s4ax
-	NviTY9rFf8juUhThZVE4NqOCS0a8GhBFxTqjJTWIT0Qj92967tm4lPeJtTyWmQd84EBBiy
-	qldXFnyRJGr0n3OuBAJuYV7jdzwjN9j4fa4AG3ajgES9yK3hpFDGwv1AjLl3lXErJFMoxG
-	7PuFTSOxSFKsoOpmefpFyzU8wNLVcdJdgZE3F/4Q90L28+Q9T6+qgs8fZ0FGyFNNGffDEW
-	B8V6f6p/JiNEsog8hUpRWKfVtcsdad7apTXg6PhzhUHOJ8dM2k1+VK0+1p+3HA==
+	bh=rwK2LvulJHcbE7EmhorBdfblFEGwYo80VFJJkLx6bEM=;
+	b=Ym8KY+n2YskzH42HV2pYni6ovFBEES1RrCl8btmcC5bGzboVaC+z71RtEB0GOGiEYVX7HM
+	SV4gJnS44PUjERVjsW1NEqHGR2hbGYkOYE8ifxHS0iJEsncm1w6qMaBKRxMRdxJCgBfAvu
+	rao6ZStM6bI9yioHYxMRNbR+P7LgggIZO9jg4NSbdPRDuZrlh3kFDs7e0+lIJngJZgZ/rQ
+	ljGLKo/FdYEfyX6HqxXPCKHH9xnI0guJKrtuXPYrvoWsr7qsXL1jx0RD09mJF6EqonEf9b
+	0nnWI8iPOODQBB0isjQrT+Oypb/zfx1khrhL+pbIdcZV4x9fTUbmL/BqUqaV+Q==
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -53,12 +53,14 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 04 Mar 2024 11:00:45 +0100
-Message-Id: <CZKVMZC3BEXV.380JV1IP5RYFG@bootlin.com>
-Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+Date: Mon, 04 Mar 2024 11:14:53 +0100
+Message-Id: <CZKVXSULAGXC.1C5PDQJ6KCHN@bootlin.com>
+Subject: Re: [PATCH v2 06/11] i2c: nomadik: support short xfer timeouts
+ using waitqueue & hrtimer
+Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Andi Shyti"
+ <andi.shyti@kernel.org>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
  <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
  <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
  <linux-mips@vger.kernel.org>, "Gregory Clement"
@@ -66,97 +68,55 @@ Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
  <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
  <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
  <tawfik.bayouk@mobileye.com>
-To: "Andi Shyti" <andi.shyti@kernel.org>
+To: "Wolfram Sang" <wsa@kernel.org>
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v2 05/11] i2c: nomadik: use bitops helpers
 X-Mailer: aerc 0.15.2
 References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
- <20240229-mbly-i2c-v2-5-b32ed18c098c@bootlin.com>
- <3kooaexx6vhlfwoojcpmnyhagupqwppwenjh4k7ucxbvlfpjn6@e3b7c3ocu6kc>
-In-Reply-To: <3kooaexx6vhlfwoojcpmnyhagupqwppwenjh4k7ucxbvlfpjn6@e3b7c3ocu6kc>
+ <20240229-mbly-i2c-v2-6-b32ed18c098c@bootlin.com>
+ <ZeWRyuN8v-VnraQA@ninjato>
+In-Reply-To: <ZeWRyuN8v-VnraQA@ninjato>
 X-GND-Sasl: theo.lebrun@bootlin.com
 
 Hello,
 
-On Sat Mar 2, 2024 at 2:31 AM CET, Andi Shyti wrote:
-
-[...]
-
-> > @@ -284,7 +290,7 @@ static int init_hw(struct nmk_i2c_dev *priv)
-> >  }
-> > =20
-> >  /* enable peripheral, master mode operation */
-> > -#define DEFAULT_I2C_REG_CR	((1 << 1) | I2C_CR_PE)
-> > +#define DEFAULT_I2C_REG_CR	(FIELD_PREP(I2C_CR_OM, 0b01) | I2C_CR_PE)
+On Mon Mar 4, 2024 at 10:18 AM CET, Wolfram Sang wrote:
+> On Thu, Feb 29, 2024 at 07:10:54PM +0100, Th=C3=A9o Lebrun wrote:
+> > Replace the completion by a waitqueue for synchronization from IRQ
+> > handler to task. For short timeouts, use hrtimers, else use timers.
+> > Usecase: avoid blocking the I2C bus for too long when an issue occurs.
+> >=20
+> > The threshold picked is one jiffy: if timeout is below that, use
+> > hrtimers. This threshold is NOT configurable.
+> >=20
+> > Implement behavior but do NOT change fetching of timeout. This means th=
+e
+> > timeout is unchanged (200ms) and the hrtimer case will never trigger.
+> >=20
+> > A waitqueue is used because it supports both desired timeout approaches=
+.
+> > See wait_event_timeout() and wait_event_hrtimeout(). An atomic boolean
+> > serves as synchronization condition.
+> >=20
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 >
-> 0b01?
-
-OM is a two-bit field. We want to put 0b01 in that. We do not declare
-constants for its 4 potential values. Values are:
-
- - 0b00 slave mode
- - 0b01 master mode
- - 0b10 master/slave mode
- - 0b11 reserved
-
-To me the comment above DEFAULT_I2C_REG_CR is enough to show that we go
-into master mode. We could declare all values as constants but only
-0b01 would get used.
-
+> Largely:
 >
-> >  /**
-> >   * load_i2c_mcr_reg() - load the MCR register
-> > @@ -296,41 +302,42 @@ static u32 load_i2c_mcr_reg(struct nmk_i2c_dev *p=
-riv, u16 flags)
-> >  	u32 mcr =3D 0;
-> >  	unsigned short slave_adr_3msb_bits;
-> > =20
-> > -	mcr |=3D GEN_MASK(priv->cli.slave_adr, I2C_MCR_A7, 1);
-> > +	mcr |=3D FIELD_PREP(I2C_MCR_A7, priv->cli.slave_adr);
-> > =20
-> >  	if (unlikely(flags & I2C_M_TEN)) {
-> >  		/* 10-bit address transaction */
-> > -		mcr |=3D GEN_MASK(2, I2C_MCR_AM, 12);
-> > +		mcr |=3D FIELD_PREP(I2C_MCR_AM, 2);
-> >  		/*
-> >  		 * Get the top 3 bits.
-> >  		 * EA10 represents extended address in MCR. This includes
-> >  		 * the extension (MSB bits) of the 7 bit address loaded
-> >  		 * in A7
-> >  		 */
-> > -		slave_adr_3msb_bits =3D (priv->cli.slave_adr >> 7) & 0x7;
-> > +		slave_adr_3msb_bits =3D FIELD_GET(GENMASK(9, 7),
-> > +						priv->cli.slave_adr);
->
-> This looks like the only one not having a define. Shall we give a
-> definition to GENMASK(9, 7)?
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Indeed. What should it be named? It could be generic; this is about
-getting the upper 3 bits from an extended (10-bit) I2C address?
+Thanks for the reviews Wolfram.
 
-> > -		mcr |=3D GEN_MASK(slave_adr_3msb_bits, I2C_MCR_EA10, 8);
-> > +		mcr |=3D FIELD_PREP(I2C_MCR_EA10, slave_adr_3msb_bits);
+> Nit:
 >
-> ...
+> > -	int				timeout;
+> > +	int				timeout_usecs;
 >
-> > @@ -824,15 +827,16 @@ static irqreturn_t i2c_irq_handler(int irq, void =
-*arg)
-> >  	 * during the transaction.
-> >  	 */
-> >  	case I2C_IT_BERR:
-> > +	{
-> > +		u32 sr =3D readl(priv->virtbase + I2C_SR);
->
-> please give a blank line after the variable definition.
->
-> Besides, I'd prefer the assignment, when it is a bit more
-> complex, in a different line, as well.
+> I think 'unsigned' makes a lot of sense here. Maybe u32 even?
 
-Will do.
+Yes unsigned would make sense. unsigned int or u32, I wouldn't know
+which to pick.
 
-> Rest looks OK, didn't see anything off.
-
-Thanks for the review Andi!
+Regards,
 
 --
 Th=C3=A9o Lebrun, Bootlin
