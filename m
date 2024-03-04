@@ -1,220 +1,122 @@
-Return-Path: <linux-i2c+bounces-2178-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2179-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F01B870700
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 17:30:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45356870B1E
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 21:03:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 358961C219F8
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 16:30:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00CE6283180
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 20:03:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F6F71426C;
-	Mon,  4 Mar 2024 16:30:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 878037995F;
+	Mon,  4 Mar 2024 20:03:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="eK8c8Ers"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="o5HHxq2L"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2048.outbound.protection.outlook.com [40.107.104.48])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82873C485;
-	Mon,  4 Mar 2024 16:30:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709569808; cv=fail; b=js80uX/evYMWsEn5Uy/iy9Klt16BhsxSAycLWZAnVjAMw1KamBW2LfZsPVsXH3nHZPDLTGeS2O7prTHZky2w4zFbLxJWtKBMVkiYGfU/Mspdq5Uw/+Of0SfHmzkwhrrnlpUki9kE5rIEGvL1/rPZDaJyCi7lQ4ujzGPzFbEKU3c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709569808; c=relaxed/simple;
-	bh=V8PPWKfRKaAqGG79KyG/l808doCH09EavSbLwJFkS4s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=fZBbNggL9TjVApmm7Szbfje+wzwMLosUqGDcMpp9n+3qtoHtpvq7wZqtg2rLru4woEUpuh5C66dFzaenzsWK+2Sti4gf5MYjUSNa/7M6cM5TDkmqHLcZVOnY9lIoXoefCZ+oFP4HJwqLAQ8N6G6heYjAkPj0MFRta3M/TQq4lAc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=eK8c8Ers; arc=fail smtp.client-ip=40.107.104.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BuhuXEtqsQKv3b0FCdJ/SRVPg091Qwur5fSyD3vq87nqiJsNemg/xqYdkWrAneJqIRLB4/2fI97uZZsG9CYsNawkDf5I073ew3GkSjCbQtpAJj7ltUHbRmC/tqZkjVzbbdNQolZcKaqdPTOlwjH5nR/r7Jyr4wktQpzwt4cyT0TXxHjhx64fb/HKvIx1QDASojffaMQEF2SwjWlfgTPUcwE7rRVl0N7sVGtg9Olp7sbUoCuvpsS4t1miin7pxVX/ncVh+qDG3JTdt2xSmZCjXjm9r5sPX7ON/d6PVSulvQzcTLbnTRv+l2P+kTGJELpb6w7kqfdQ4OM/inb+w9/LGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IXGbO92C5AjqF5DdOeoJYGWVBQOMA88sFlwp8xctN2U=;
- b=Rpni1UUmb/zkj00HLEE/lEnh4VkbN+gouGU/BSwCubrK7DylUy3JQ9yNQT1qSlOBXXyyBh3rN3FNbUTfdZfDaQnK5F0s4HF6MDn0OBJyNDHzGPEe80DqExYsYvkMnQYuYDde7F3e2gLnAVK101aFMQm4KsilIdTJbX4ge26EMk9+gzJZMeJ0Eqo/tWBxe/kKK0rT14CoDoTCTJr9ZKH2a8XGKTbL5zU+BpleF2R6vlJVPlzAWKzBJ0RgRovEz26UijTgMdBnb+oFaPMKfZotUTR8uPpxl7h+n7kHHWHdeT6HDemqnIzxvDyrRTkY6DqDyeMfsv4lGgMMbfHAFKiOLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 195.60.68.100) smtp.rcpttodomain=kernel.org smtp.mailfrom=axis.com;
- dmarc=fail (p=none sp=none pct=100) action=none header.from=axis.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IXGbO92C5AjqF5DdOeoJYGWVBQOMA88sFlwp8xctN2U=;
- b=eK8c8Ers+AefngUXPS6wMDFztGabG++8Yae8pKnHfw8K2Mfa78fSoQh/dz+PlMW5w2NVveRyfJKzwP+9Asn1/7GReriQNrgbNedcr9Daqb+Oj2Jox/4gtlOHxv3Cb1I47L0rjyAhnxMAtFzSkZ9+7qenKwHGsDbIjyck7C4KAjk=
-Received: from AM0PR05CA0093.eurprd05.prod.outlook.com (2603:10a6:208:136::33)
- by AS2PR02MB9811.eurprd02.prod.outlook.com (2603:10a6:20b:60c::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.38; Mon, 4 Mar
- 2024 16:30:02 +0000
-Received: from AM4PEPF00027A68.eurprd04.prod.outlook.com
- (2603:10a6:208:136:cafe::23) by AM0PR05CA0093.outlook.office365.com
- (2603:10a6:208:136::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.38 via Frontend
- Transport; Mon, 4 Mar 2024 16:30:02 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 195.60.68.100)
- smtp.mailfrom=axis.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=axis.com;
-Received-SPF: Fail (protection.outlook.com: domain of axis.com does not
- designate 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
- client-ip=195.60.68.100; helo=mail.axis.com;
-Received: from mail.axis.com (195.60.68.100) by
- AM4PEPF00027A68.mail.protection.outlook.com (10.167.16.85) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7362.11 via Frontend Transport; Mon, 4 Mar 2024 16:30:02 +0000
-Received: from se-mail02w.axis.com (10.20.40.8) by se-mail02w.axis.com
- (10.20.40.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 4 Mar
- 2024 17:30:01 +0100
-Received: from se-intmail01x.se.axis.com (10.0.5.60) by se-mail02w.axis.com
- (10.20.40.8) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Mon, 4 Mar 2024 17:30:01 +0100
-Received: from pc55637-2337.se.axis.com (pc55637-2337.se.axis.com [10.88.4.11])
-	by se-intmail01x.se.axis.com (Postfix) with ESMTP id C5A39159F6;
-	Mon,  4 Mar 2024 17:30:01 +0100 (CET)
-Received: by pc55637-2337.se.axis.com (Postfix, from userid 363)
-	id B050422F9FA4; Mon,  4 Mar 2024 17:30:01 +0100 (CET)
-From: Jesper Nilsson <jesper.nilsson@axis.com>
-Date: Mon, 4 Mar 2024 17:30:02 +0100
-Subject: [PATCH v2] i2c: exynos5: Init data before registering interrupt
- handler
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B5E67A139
+	for <linux-i2c@vger.kernel.org>; Mon,  4 Mar 2024 20:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709582580; cv=none; b=qwh/EZ3xadDOFWpnhBQ4aXlKPmeLpj2R+X2lU8o0n6AFGSb6F1lgdekB49yAs6tEVtObx3m8rMQrhK47nOwnMojDGK9zpOpFDEnqSYQbI5IUUK86s+Cika2yBYr/i3pDYti9TwZpiEym0G0EK6ShhlJTJLheEh1GQ4rz81gzdxg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709582580; c=relaxed/simple;
+	bh=/LPidozw5UkwarCYzfBbkrQKWhhCq9LVcOP9y9lSJIM=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=A5Kgig6NnxeHnTmmjrpA+28MyRTW5tOSQGRqfVechHb48QBMLvuaKItUdRY12+4FKs83ZAbFQ2s8+g8yGwYSV/GFiBAyzW6fnuqDjyZXlYsUl0Ny1AsY5a2U5d9VNP6ZVbSXfhYX0h6bPbU1UZs4YjKAU2aB+5P4Kd0tC9Ary2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=o5HHxq2L; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9A7412C04C9;
+	Tue,  5 Mar 2024 09:02:48 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1709582568;
+	bh=/LPidozw5UkwarCYzfBbkrQKWhhCq9LVcOP9y9lSJIM=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=o5HHxq2LjuPmSQ3VhN1oHwqVoNUEAxD/8C3ahWW2Qs5AKe6lhe4l/KO/oTaIx81YQ
+	 mSml93DIEV5XPAOYZ2m84f3fTRZ+OFPxh+sRC3E4cqcBbVap9eLdlr6EvS/cWywc0E
+	 zmB7nAnfTL8SyEvVInifrNqRjt6vI5bWNdDqU1M+qUb0i05Vr4QRsbxwjGdNZOvU9Y
+	 +qhcGIZuEIYGHteguox2wT8RJQBf5lYD9hmLVbvwcjgb1KYImGg5Kom0k5zw9vHepB
+	 BOLGEGk9GDqujoCcequf3eVGmNb5LMsZW79BCEtUKg+dlXeIPgsH5rJkgcqkv7ihCc
+	 +6rMwso6lAC4w==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B65e628e80001>; Tue, 05 Mar 2024 09:02:48 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Tue, 5 Mar 2024 09:02:48 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.040; Tue, 5 Mar 2024 09:02:48 +1300
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang
+	<wsa+renesas@sang-engineering.com>
+CC: "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFT 1/3] dt-bindings: i2c: mpc: use proper binding for
+ transfer timeouts
+Thread-Topic: [PATCH RFT 1/3] dt-bindings: i2c: mpc: use proper binding for
+ transfer timeouts
+Thread-Index: AQHaav5GS1M8pxP1xEubQWdLBIKzKrEm3eAAgABQEQA=
+Date: Mon, 4 Mar 2024 20:02:48 +0000
+Message-ID: <89335a8e-4963-4992-a519-b88b15e3ff69@alliedtelesis.co.nz>
+References: <20240229105810.29220-5-wsa+renesas@sang-engineering.com>
+ <20240229105810.29220-6-wsa+renesas@sang-engineering.com>
+ <r3tho2bh3l23f5xkjc3ovq4xdehpsb3nz4ukbkremxvzq6shpe@kdsxfz4brskb>
+In-Reply-To: <r3tho2bh3l23f5xkjc3ovq4xdehpsb3nz4ukbkremxvzq6shpe@kdsxfz4brskb>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4E6D7DA30971DF4BA5FC17CF8E09617F@atlnz.lc>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20240304-i2c_exynos5-v2-1-7b9c312be719@axis.com>
-X-B4-Tracking: v=1; b=H4sIAAn35WUC/1XMQQ7CIBCF4as0sxYD0zZSV97DNIbCaGdhMWAIT
- cPdxbpy+U/mfRtECkwRzs0GgRJH9ksNPDRgZ7M8SLCrDSixk4haMNob5XXxsRduUq05IZHVE9T
- FK9Cd865dx9ozx7cP644n9b3+nFZ2f05SQgkalNV6cPWjv5jM8Wj9E8ZSygd3vfD8pQAAAA==
-To: Andi Shyti <andi.shyti@kernel.org>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>
-CC: Naveen Krishna Ch <ch.naveen@samsung.com>, <linux-i2c@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <kernel@axis.com>, Jesper Nilsson
-	<jesper.nilsson@axis.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1709569801; l=2873;
- i=jesper.nilsson@axis.com; s=20240216; h=from:subject:message-id;
- bh=V8PPWKfRKaAqGG79KyG/l808doCH09EavSbLwJFkS4s=;
- b=FV1ZS/PsPLmn2LHxNjNMqZgC59hd6nOEHksYia1TNVmryZGKk0PH2cBqYvtgGu0tS1u9yzgDS
- Mn2IeSZ6z/zCmaxi7JrA67UtGmU6yNGe7envpXWJlHRRIHm4BSjCjw6
-X-Developer-Key: i=jesper.nilsson@axis.com; a=ed25519;
- pk=RDobTFVrTaE8iMP112Wk0CDiLdcV7I+OkaCECzhr/bI=
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM4PEPF00027A68:EE_|AS2PR02MB9811:EE_
-X-MS-Office365-Filtering-Correlation-Id: cb72fe90-fd67-48af-4b55-08dc3c685799
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Cis6tcWKichui0UYkLMP5Dv0z6gO2/X8grCCWlj2g6irq8Zs9lUlFP3vM/BgY8pWc8BtRoB4Qn6EFbZdm7NrwUFW15gl1vR7Dzt61cIIVXbmO/kkXJNGw6970EoSdFwkRzZ2ttuFd8iSUsppceubc6Zqsxea9vsVihpuDOuVLfljJUOHlaisepTH09bO3MM7NMLhR09Cq/rK+5FObJ025M+5LAN3GwUvdU/9iekwyFUfWKmaPCXzbqnb5vWPjHvWJ9BarIpcsNHYLLEpiGtyLncfS1+xA6Wcjf6T2RHiVUBz69IZv0AL8w/ToY3x6SBsqNQSl39iGtKIVAohxsp+mpGbGAuN32IDHK+9BUv72QDmRxxCSBXd2WI4x9I/FnSA5Td6y4Y2w62XGT5sGPehsOk8/eTKRZNqezftyNUIK/2hmL8tIg8njUANDLsGLsf8pd+09gmxU6FwTCMSDFIfQb6aja2lvllZ/+zHRLXmaUt8UTd8yR0CK5U6s5F5mtc4wOjAGkGLXhVypUAFy6nOe8Lf2mjWuS9MHZ6kzriu0o/THlnbBm5c30tCUJZr+PWtUd3d9x1qAcMgnuixK1XfIL3/afnrDSLIdGL0MbgdWYpgysNSUW5sHIGaBYqDf0UidnYHY/Rr1enP0koiyh8GOTiPf26KIVLhgduIFxevTikpEijqodO74wEXvGmKI5MjMKDHosTX3ioF8TopbWfRhw==
-X-Forefront-Antispam-Report:
-	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(82310400014)(376005)(36860700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: axis.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2024 16:30:02.3228
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb72fe90-fd67-48af-4b55-08dc3c685799
-X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AM4PEPF00027A68.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR02MB9811
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=BKkQr0QG c=1 sm=1 tr=0 ts=65e628e8 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=K6JAEmCyrfEA:10 a=LDBv8-xUAAAA:8 a=wMjMLsQrkjzMquoGyIgA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=TIyoBwpO-cKII9bNTSam:22 a=DZeXCJrVpAJBw65Qk4Ds:22
+X-SEG-SpamProfiler-Score: 0
 
-devm_request_irq() is called before we initialize the "variant"
-member variable from of_device_get_match_data(), so if an interrupt
-is triggered inbetween, we can end up following a NULL pointer
-in the interrupt handler.
-
-This problem was exposed when the I2C controller in question was
-(mis)configured to be used in both secure world and Linux.
-
-That this can happen is also reflected by the existing code that
-clears any pending interrupts from "u-boot or misc causes".
-
-Move the clearing of pending interrupts and the call to
-devm_request_irq() to the end of probe.
-
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-Fixes: 218e1496135e ("i2c: exynos5: add support for HSI2C on Exynos5260 SoC")
-Signed-off-by: Jesper Nilsson <jesper.nilsson@axis.com>
----
-Changes in v2:
-- Use dev_err_probe() instead of open coding it
-- Dropped the return failure if we can't find a match in devicetree
-- Link to v1: https://lore.kernel.org/r/20240304-i2c_exynos5-v1-1-e91c889d2025@axis.com
----
- drivers/i2c/busses/i2c-exynos5.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
-index 385ef9d9e4d4..29d7cf158612 100644
---- a/drivers/i2c/busses/i2c-exynos5.c
-+++ b/drivers/i2c/busses/i2c-exynos5.c
-@@ -906,23 +906,9 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
- 	i2c->adap.algo_data = i2c;
- 	i2c->adap.dev.parent = &pdev->dev;
- 
--	/* Clear pending interrupts from u-boot or misc causes */
--	exynos5_i2c_clr_pend_irq(i2c);
--
- 	spin_lock_init(&i2c->lock);
- 	init_completion(&i2c->msg_complete);
- 
--	i2c->irq = ret = platform_get_irq(pdev, 0);
--	if (ret < 0)
--		goto err_clk;
--
--	ret = devm_request_irq(&pdev->dev, i2c->irq, exynos5_i2c_irq,
--			       IRQF_NO_SUSPEND, dev_name(&pdev->dev), i2c);
--	if (ret != 0) {
--		dev_err(&pdev->dev, "cannot request HS-I2C IRQ %d\n", i2c->irq);
--		goto err_clk;
--	}
--
- 	i2c->variant = of_device_get_match_data(&pdev->dev);
- 
- 	ret = exynos5_hsi2c_clock_setup(i2c);
-@@ -940,6 +926,20 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
- 	clk_disable(i2c->clk);
- 	clk_disable(i2c->pclk);
- 
-+	/* Clear pending interrupts from u-boot or misc causes */
-+	exynos5_i2c_clr_pend_irq(i2c);
-+
-+	i2c->irq = ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		goto err_clk;
-+
-+	ret = devm_request_irq(&pdev->dev, i2c->irq, exynos5_i2c_irq,
-+			       IRQF_NO_SUSPEND, dev_name(&pdev->dev), i2c);
-+	if (ret != 0) {
-+		dev_err(&pdev->dev, "cannot request HS-I2C IRQ %d\n", i2c->irq);
-+		goto err_clk;
-+	}
-+
- 	return 0;
- 
-  err_clk:
-
----
-base-commit: 0dd3ee31125508cd67f7e7172247f05b7fd1753a
-change-id: 20240228-i2c_exynos5-db13a72eec8b
-
-Best regards,
--- 
-
-/^JN - Jesper Nilsson
--- 
-               Jesper Nilsson -- jesper.nilsson@axis.com
-
+SGkgQW5kaSwNCg0KT24gNS8wMy8yNCAwNDoxNiwgQW5kaSBTaHl0aSB3cm90ZToNCj4gSGksDQo+
+DQo+IE9uIFRodSwgRmViIDI5LCAyMDI0IGF0IDExOjU4OjExQU0gKzAxMDAsIFdvbGZyYW0gU2Fu
+ZyB3cm90ZToNCj4+ICJpMmMtc2NsLWNsay1sb3ctdGltZW91dC11cyIgaGFzIGZsYXdzIGluIGl0
+c2VsZiBhbmQgdGhlIHVzYWdlIGhlcmUgaXMNCj4+IGFsbCB3cm9uZy4gVGhlIGRyaXZlciBkb2Vz
+bid0IHVzZSBpdCBhcyBhIG1heGltdW0gdGltZSBmb3IgY2xvY2sNCj4+IHN0cmV0Y2hpbmcgYnV0
+IHRoZSBtYXhpbXVtIHRpbWUgZm9yIGEgdG90YWwgdHJhbnNmZXIuIFdlIGFscmVhZHkgaGF2ZQ0K
+Pj4gYSBiaW5kaW5nIGZvciB0aGUgbGF0dGVyLiBDb252ZXJ0IHRoZSB3cm9uZyBiaW5kaW5nIGZy
+b20gZXhhbXBsZXMuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogV29sZnJhbSBTYW5nIDx3c2ErcmVu
+ZXNhc0BzYW5nLWVuZ2luZWVyaW5nLmNvbT4NCj4+IC0tLQ0KPj4gICBEb2N1bWVudGF0aW9uL2Rl
+dmljZXRyZWUvYmluZGluZ3MvaTJjL2kyYy1tcGMueWFtbCB8IDIgKy0NCj4+ICAgMSBmaWxlIGNo
+YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBh
+L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLW1wYy55YW1sIGIvRG9j
+dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMtbXBjLnlhbWwNCj4+IGluZGV4
+IDcwZmI2OWI5MjNjNC4uYjFkN2QxNGMwYmU0IDEwMDY0NA0KPj4gLS0tIGEvRG9jdW1lbnRhdGlv
+bi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMtbXBjLnlhbWwNCj4+ICsrKyBiL0RvY3VtZW50
+YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLW1wYy55YW1sDQo+PiBAQCAtOTYsNiAr
+OTYsNiBAQCBleGFtcGxlczoNCj4+ICAgICAgICAgICBpbnRlcnJ1cHRzID0gPDQzIDI+Ow0KPj4g
+ICAgICAgICAgIGludGVycnVwdC1wYXJlbnQgPSA8Jm1waWM+Ow0KPj4gICAgICAgICAgIGNsb2Nr
+LWZyZXF1ZW5jeSA9IDw0MDAwMDA+Ow0KPj4gLSAgICAgICAgaTJjLXNjbC1jbGstbG93LXRpbWVv
+dXQtdXMgPSA8MTAwMDA+Ow0KPj4gKyAgICAgICAgaTJjLXRyYW5zZmVyLXRpbWVvdXQtdXMgPSA8
+MTAwMDA+Ow0KPiBDaHJpcywgY2FuIHlvdSBwbGVhc2UgZ2l2ZSBpdCBhbiBhY2s/DQo+DQo+IFRo
+ZSB3aG9sZSBzZXJpZXMgaXMgY29oZXJlbnQgdG8gdGhpcyBjaGFuZ2UuDQoNCkxvb2tzIGxpa2Ug
+eW91IHdlcmVuJ3Qgb24gdGhlIFRvOiBsaXN0IGZvciB0aGUgY292ZXIgbGV0dGVyIHdoaWNoIEkg
+DQpyZXBsaWVkIHRvLg0KDQpGb3IgdGhlIHNlcmllcw0KDQpSZXZpZXdlZC1ieTogQ2hyaXMgUGFj
+a2hhbSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KDQphbmQgb24gYSBQMjA0
+MVJEQg0KDQpUZXN0ZWQtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVs
+ZXNpcy5jby5uej4NCg==
 
