@@ -1,54 +1,54 @@
-Return-Path: <linux-i2c+bounces-2169-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2170-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F5EA8705E5
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 16:40:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 188F48705E9
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 16:40:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53A2D1C22428
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 15:40:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C780E2853AB
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 15:40:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B073D5733D;
-	Mon,  4 Mar 2024 15:36:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B31B658122;
+	Mon,  4 Mar 2024 15:36:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OYOTK8bo"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DYGTkPWE"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C1754916;
-	Mon,  4 Mar 2024 15:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0320E56B98;
+	Mon,  4 Mar 2024 15:36:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709566597; cv=none; b=J1lXi+y0DQNDRmkNNstz+VZSxR/SEPM7WtWPE+Vi83aHetxLApjRmWatHqZLMWgwGvIjzz8l/0IqGvuQS4WcckHvwV+hiDA+SSJT3ILBLBOaOmOVGhslumfbARPbv4m47TYweu3KIMX77HT/JDZXqvSEkTc1JDx+cEWre/6cgG4=
+	t=1709566599; cv=none; b=keAR3yNcssE+WO6XKCClRP2Kj+XFHTGuqmPS6ljWtWAa6zc5brmsAPuWIcU/e4Aom5ue5+OvSmU4XxZQBU7cStbGYFPprk1F23T5+/xSDa/e797UoDh8yTOyk6RCPiQ0SjslVi/GucINBsm4Z56BF6pEoWEhhrnzTOFzP6uCK3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709566597; c=relaxed/simple;
-	bh=QGCbotRiQdOgnWzi1oFs9U8XPApR4DcBOUsWj+1+Pgk=;
+	s=arc-20240116; t=1709566599; c=relaxed/simple;
+	bh=PuFPfR2lIZ+bkqMkJWaCoXVb8zQMzKhIXQuBGxgZ6Mw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aqpt4/3sldsh3zhWx+tGDaqFWF7hFhBOmx8B4qS2v3LGAE8zF7z3JWqI6n7WKNxGZW3WaO5lYk6zFWciyij97mnpCMlAYmilMRzC93966O0OnuHR5kZlH1FjEmlj1ZUe2p6gGlkDsOov1b3U6ouX4af+Yysv1UI0tk8CJHK1wRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OYOTK8bo; arc=none smtp.client-ip=217.70.183.201
+	 In-Reply-To:To:Cc; b=DfwmF6mb913x9uh55jn+GJiZv8Dxyd7RGsW9Iop238NKNm4z0xbp0OiHmJOrTc3Kcm2DxhxEqDUkjHJmmHdyxv42BoELvWL1BKL+XCnPW3DJn+0emUdMszrkTUMI/3yit05jgdUqYTMUhVt1CIqOKlbOJpM36C+FlYg4oesn0hA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DYGTkPWE; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 865931BF216;
-	Mon,  4 Mar 2024 15:36:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 771F61BF20B;
+	Mon,  4 Mar 2024 15:36:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709566593;
+	t=1709566595;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=UcbAmu4dmEBPFqimSZPh3yEPPq1ape6wFi34dJc4ne4=;
-	b=OYOTK8boA3wSOeBGMzlrYVBUR9aW9TAdg4WSIxbjoRSEvtuaNf3OVnimXwUEVR2m+g+60V
-	g48l7l/BeSQJd00hnTI9Bs9ZDP/SG2wWhAoeAxaXAi59KsD12vbclhui7/fCyrRa6Y0rSa
-	u6obxZ0hZdmtn3WwNDZf1yVpNeiVfb7cZgt3RdiDcecGrVHuOZU0sFhVqaLEhQjQh5btSb
-	om/h4Qf7eG/OWOyb/yaJ7x9bnkMQU7gDfBtHJ0y9+t4v1vnJ+eSPUQzjF0wM7dYcotnzF+
-	+iawwIgWi9DzikK9K8x1kcZkn9Q1DTGLrDS0ozAV1x71MwuDcquxfbIq9Dy6lA==
+	bh=DaC56o2wBLHPxa2Ttp6Fja2dcIvmi8wc4P6dTqN62vk=;
+	b=DYGTkPWEslLKG8HWGpJ11wN+i6/cmO4SQCQb8RAV5EJtc4xXnvBDg6XQ/AXZOu2gFCUsAG
+	2+t6wdveq+JnF/wbiAGysqVcbo4f5C9KpKqmamF7ZOEBhmiCTDHKT7ZHqlNSyc1gzZFl8J
+	PU2u1fQ4dS6Fy6Lt3hhCCEJcMKNNrgp1PX53fvt/ufDHll2jicK16x89I2iVdXlIF/7fXB
+	hTMI3Ggc4WoGOgLD3mrg+4KXl7r+jExKUw99Tbha9BIGIwc40Yz2vAHgF66nE0bOeLL2mz
+	HS8lsbqZgkSVRWLF+kzb+jeVF54C6wzLxx+XEz/VVc9KzUZqddt0Ley+aYbBDA==
 From: Thomas Richard <thomas.richard@bootlin.com>
-Date: Mon, 04 Mar 2024 16:35:56 +0100
-Subject: [PATCH v4 13/18] phy: cadence-torrent: add suspend and resume
- support
+Date: Mon, 04 Mar 2024 16:35:57 +0100
+Subject: [PATCH v4 14/18] PCI: cadence: Extract link setup sequence from
+ cdns_pcie_host_setup()
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -56,8 +56,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240102-j7200-pcie-s2r-v4-13-6f1f53390c85@bootlin.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240102-j7200-pcie-s2r-v4-14-6f1f53390c85@bootlin.com>
 References: <20240102-j7200-pcie-s2r-v4-0-6f1f53390c85@bootlin.com>
 In-Reply-To: <20240102-j7200-pcie-s2r-v4-0-6f1f53390c85@bootlin.com>
 To: Linus Walleij <linus.walleij@linaro.org>, 
@@ -77,93 +77,102 @@ Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org, 
  linux-pci@vger.kernel.org, gregory.clement@bootlin.com, 
  theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com, 
- Thomas Richard <thomas.richard@bootlin.com>
+ Thomas Richard <thomas.richard@bootlin.com>, 
+ Siddharth Vadapalli <s-vadapalli@ti.com>
 X-Mailer: b4 0.12.0
 X-GND-Sasl: thomas.richard@bootlin.com
 
-Add suspend and resume support.
+The function cdns_pcie_host_setup() mixes probe structure and link setup.
 
-The already_configured flag is cleared during the suspend stage to force
-the PHY initialization during the resume stage.
+The link setup must be done during the resume sequence. So extract it from
+cdns_pcie_host_setup() and create a dedicated function.
 
-Co-developed-by: Théo Lebrun <theo.lebrun@bootlin.com>
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+Reviewed-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 ---
- drivers/phy/cadence/phy-cadence-torrent.c | 53 +++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ drivers/pci/controller/cadence/pcie-cadence-host.c | 39 ++++++++++++++--------
+ drivers/pci/controller/cadence/pcie-cadence.h      |  6 ++++
+ 2 files changed, 32 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/phy/cadence/phy-cadence-torrent.c b/drivers/phy/cadence/phy-cadence-torrent.c
-index 52cadca4c07b..b4245c088760 100644
---- a/drivers/phy/cadence/phy-cadence-torrent.c
-+++ b/drivers/phy/cadence/phy-cadence-torrent.c
-@@ -3005,6 +3005,58 @@ static void cdns_torrent_phy_remove(struct platform_device *pdev)
- 	cdns_torrent_clk_cleanup(cdns_phy);
+diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
+index 5b14f7ee3c79..93d9922730af 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence-host.c
++++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
+@@ -497,6 +497,30 @@ static int cdns_pcie_host_init(struct device *dev,
+ 	return cdns_pcie_host_init_address_translation(rc);
  }
  
-+static int cdns_torrent_phy_suspend_noirq(struct device *dev)
++int cdns_pcie_host_link_setup(struct cdns_pcie_rc *rc)
 +{
-+	struct cdns_torrent_phy *cdns_phy = dev_get_drvdata(dev);
-+	int i;
++	struct cdns_pcie *pcie = &rc->pcie;
++	struct device *dev = rc->pcie.dev;
++	int ret;
 +
-+	reset_control_assert(cdns_phy->phy_rst);
-+	reset_control_assert(cdns_phy->apb_rst);
-+	for (i = 0; i < cdns_phy->nsubnodes; i++)
-+		reset_control_assert(cdns_phy->phys[i].lnk_rst);
++	if (rc->quirk_detect_quiet_flag)
++		cdns_pcie_detect_quiet_min_delay_set(&rc->pcie);
 +
-+	if (cdns_phy->already_configured)
-+		cdns_phy->already_configured = 0;
-+	else
-+		clk_disable_unprepare(cdns_phy->clk);
++	cdns_pcie_host_enable_ptm_response(pcie);
 +
-+	return 0;
-+}
-+
-+static int cdns_torrent_phy_resume_noirq(struct device *dev)
-+{
-+	struct cdns_torrent_phy *cdns_phy = dev_get_drvdata(dev);
-+	int node = cdns_phy->nsubnodes;
-+	int ret, i;
-+
-+	ret = cdns_torrent_clk(cdns_phy);
-+	if (ret)
++	ret = cdns_pcie_start_link(pcie);
++	if (ret) {
++		dev_err(dev, "Failed to start link\n");
 +		return ret;
-+
-+	/* Enable APB */
-+	reset_control_deassert(cdns_phy->apb_rst);
-+
-+	if (cdns_phy->nsubnodes > 1) {
-+		ret = cdns_torrent_phy_configure_multilink(cdns_phy);
-+		if (ret)
-+			goto put_lnk_rst;
 +	}
 +
++	ret = cdns_pcie_host_start_link(rc);
++	if (ret)
++		dev_dbg(dev, "PCIe link never came up\n");
++
 +	return 0;
-+
-+put_lnk_rst:
-+	for (i = 0; i < node; i++)
-+		reset_control_assert(cdns_phy->phys[i].lnk_rst);
-+	reset_control_assert(cdns_phy->apb_rst);
-+	clk_disable_unprepare(cdns_phy->clk);
-+
-+	return ret;
 +}
 +
-+static DEFINE_NOIRQ_DEV_PM_OPS(cdns_torrent_phy_pm_ops,
-+			       cdns_torrent_phy_suspend_noirq,
-+			       cdns_torrent_phy_resume_noirq);
+ int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
+ {
+ 	struct device *dev = rc->pcie.dev;
+@@ -533,20 +557,9 @@ int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
+ 		return PTR_ERR(rc->cfg_base);
+ 	rc->cfg_res = res;
+ 
+-	if (rc->quirk_detect_quiet_flag)
+-		cdns_pcie_detect_quiet_min_delay_set(&rc->pcie);
+-
+-	cdns_pcie_host_enable_ptm_response(pcie);
+-
+-	ret = cdns_pcie_start_link(pcie);
+-	if (ret) {
+-		dev_err(dev, "Failed to start link\n");
+-		return ret;
+-	}
+-
+-	ret = cdns_pcie_host_start_link(rc);
++	ret = cdns_pcie_host_link_setup(rc);
+ 	if (ret)
+-		dev_dbg(dev, "PCIe link never came up\n");
++		return ret;
+ 
+ 	for (bar = RP_BAR0; bar <= RP_NO_BAR; bar++)
+ 		rc->avail_ib_bar[bar] = true;
+diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
+index 03b96798f858..9ca2ffca0bf9 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence.h
++++ b/drivers/pci/controller/cadence/pcie-cadence.h
+@@ -515,10 +515,16 @@ static inline bool cdns_pcie_link_up(struct cdns_pcie *pcie)
+ }
+ 
+ #ifdef CONFIG_PCIE_CADENCE_HOST
++int cdns_pcie_host_link_setup(struct cdns_pcie_rc *rc);
+ int cdns_pcie_host_setup(struct cdns_pcie_rc *rc);
+ void __iomem *cdns_pci_map_bus(struct pci_bus *bus, unsigned int devfn,
+ 			       int where);
+ #else
++static inline int cdns_pcie_host_link_setup(struct cdns_pcie_rc *rc)
++{
++	return 0;
++}
 +
- /* USB and DP link configuration */
- static struct cdns_reg_pairs usb_dp_link_cmn_regs[] = {
- 	{0x0002, PHY_PLL_CFG},
-@@ -4576,6 +4628,7 @@ static struct platform_driver cdns_torrent_phy_driver = {
- 	.driver = {
- 		.name	= "cdns-torrent-phy",
- 		.of_match_table	= cdns_torrent_phy_of_match,
-+		.pm	= pm_sleep_ptr(&cdns_torrent_phy_pm_ops),
- 	}
- };
- module_platform_driver(cdns_torrent_phy_driver);
+ static inline int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
+ {
+ 	return 0;
 
 -- 
 2.39.2
