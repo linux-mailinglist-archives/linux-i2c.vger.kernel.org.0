@@ -1,218 +1,114 @@
-Return-Path: <linux-i2c+bounces-2174-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2175-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C503870659
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 16:59:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6819487060F
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 16:45:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCCF6B2BBD2
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 15:41:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 994991C2030D
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 15:45:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876955A79C;
-	Mon,  4 Mar 2024 15:36:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92511482DD;
+	Mon,  4 Mar 2024 15:40:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DkCG7exs"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="RqrWTCk3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6095A10B;
-	Mon,  4 Mar 2024 15:36:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9EF482DF
+	for <linux-i2c@vger.kernel.org>; Mon,  4 Mar 2024 15:40:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709566606; cv=none; b=B/g/NQKrzL0i8u001ozC83Q2CHiEl/kqtJXPRN3uQX9IRcdhktZi5OdtYoWdGPGlCdK6S4Cob9knlUxdMC6WduAzDXPZwUgsUSl7u6kvJyVO1lkC+7mEworHup1ZJ4LeEJYSebye99laMbuVB8xuRMeh22PRy+MvaIRVViJ7yPY=
+	t=1709566852; cv=none; b=oUSV9i6Sw+R9KSu/ryhvd2IxgEumBHgWxBu35CcX4VOaE4mvDYhYFx2VQozpr/0zV9nnTy8RMKzLL1cM57wHFOvgGPWkT+wuRn6ciiKUnlHWAZB78pW6Q/oFGlUclLWmc4C2DGhkJT/VPmRG7ljU+vS8fPUlmBzv0GLY+cfGpSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709566606; c=relaxed/simple;
-	bh=/JaCgmvn7UffcKtiKZ8KnVu2ThvlYf/H+nfsZaXvtrs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bEus+0azwGKvDxi7ocx/giV6akC/oPRsyRmxzCD6PiDkSGTar6wTX6KA/iDJ0h52WcMD4fvk2IMDaucu57dzAsfRapmCQL7uX7DM5d+hiTL2nqo9lB5bRW5y4Yl/7+UtQ8IK03GzvrGLiISKUWDLDqRL2yMqEv7y8sZFhvLK6EA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DkCG7exs; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C85DC1BF20D;
-	Mon,  4 Mar 2024 15:36:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709566602;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=s6E/Ne64c6+x0FpS9CVe8d7lEAGfcFSrGEubkDw5WnM=;
-	b=DkCG7exsY9UG0LnSnUH7x6xVnM2DPQ1Lj6I2RzBY+M7bkhHNhhakHh7CoGAHXYsXcvlGbq
-	A4ejNjPUVEZWsUjN2ioBLevD96g9DYAkOMpX7opwl8btRLw7jmFxXMP/bauJTQo844czGL
-	OSe/8J5KC3IpIFWpHreXS9ou4YhhpN0nCNBtkCj/ruw3mJOxuLyXilxeDtASBR76Qigb6K
-	B114owohauREEMF/fDdF5MUh0CSC+C5D2QJqkBiZCrO6hRngqjLDG85AFBezRdn59uE0IG
-	3Rwp0QtrYvsmiBlp+g4K7wa2jNHudKR/F5DFFBkYT9eyk43BYTXkAVvLynrQSw==
-From: Thomas Richard <thomas.richard@bootlin.com>
-Date: Mon, 04 Mar 2024 16:36:01 +0100
-Subject: [PATCH v4 18/18] PCI: j721e: Add suspend and resume support
+	s=arc-20240116; t=1709566852; c=relaxed/simple;
+	bh=uD/ZOIIYdAxiTign+/0uOdZFUKosmxXX63brbDCyi1k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YIeCszzBtjt/A7uMtIpdZuU6x3+T3E58+rfJy7agYgfTCBXzrVjPokev2Ovr3qY3dxVPdmWu/jRM4vIvaL6+IyXqvecYgmjS8oit1bDqt2DLKjgCtiZhHd1oahqeGhs8s5l1CJTit9gvrnS5i5wB60Zj4zo0nemZQ0sxfcimNMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=RqrWTCk3; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=uD/Z
+	OIIYdAxiTign+/0uOdZFUKosmxXX63brbDCyi1k=; b=RqrWTCk38mtLR2O52WdE
+	r0I9EoVBNbJMWg/OPmEOlW6jCXdgM0Do618j6n21RGHLLf61M+p5hoERwxg2XdYI
+	NciUkXXJAOWzPE/YIHuubgPVmyg0oq/60tO3hsU7me3RJhlJIS+J5oxzp3Qh0+iC
+	LLDk8oxiOfeF28Txt8RqyosKIA146oGkXavkpK41QVg3WTFrmG+ou0iDLiKAgmd9
+	CRfDW9oImAaKOxVQstIF9q/DNadAPrQgf8ajA55/FSwUEmkEyqDoKv0Ut6ug1A6L
+	QpiZX1V2dCXqXAVq1j8GSf0ydBVHPzfZYjdCcijNOc6Y5t1O+sAk3ipbtm+2jsPA
+	bA==
+Received: (qmail 3551405 invoked from network); 4 Mar 2024 16:40:46 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Mar 2024 16:40:46 +0100
+X-UD-Smtp-Session: l3s3148p1@W6WSjNcS9NcujnuA
+Date: Mon, 4 Mar 2024 16:40:45 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-renesas-soc@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFT 1/3] dt-bindings: i2c: mpc: use proper binding for
+ transfer timeouts
+Message-ID: <ZeXrfYyf9GClCj6O@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-renesas-soc@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240229105810.29220-5-wsa+renesas@sang-engineering.com>
+ <20240229105810.29220-6-wsa+renesas@sang-engineering.com>
+ <r3tho2bh3l23f5xkjc3ovq4xdehpsb3nz4ukbkremxvzq6shpe@kdsxfz4brskb>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240102-j7200-pcie-s2r-v4-18-6f1f53390c85@bootlin.com>
-References: <20240102-j7200-pcie-s2r-v4-0-6f1f53390c85@bootlin.com>
-In-Reply-To: <20240102-j7200-pcie-s2r-v4-0-6f1f53390c85@bootlin.com>
-To: Linus Walleij <linus.walleij@linaro.org>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, 
- Tony Lindgren <tony@atomide.com>, 
- Haojian Zhuang <haojian.zhuang@linaro.org>, Vignesh R <vigneshr@ti.com>, 
- Aaro Koskinen <aaro.koskinen@iki.fi>, 
- Janusz Krzysztofik <jmkrzyszt@gmail.com>, 
- Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>, 
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
- Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>
-Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org, 
- linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org, 
- linux-pci@vger.kernel.org, gregory.clement@bootlin.com, 
- theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com, 
- Thomas Richard <thomas.richard@bootlin.com>
-X-Mailer: b4 0.12.0
-X-GND-Sasl: thomas.richard@bootlin.com
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="8dqE1F9IKolprz0p"
+Content-Disposition: inline
+In-Reply-To: <r3tho2bh3l23f5xkjc3ovq4xdehpsb3nz4ukbkremxvzq6shpe@kdsxfz4brskb>
 
-From: Théo Lebrun <theo.lebrun@bootlin.com>
 
-Add suspend and resume support. Only the rc mode is supported.
+--8dqE1F9IKolprz0p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-During the suspend stage PERST# is asserted, then deasserted during the
-resume stage.
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
----
- drivers/pci/controller/cadence/pci-j721e.c | 86 ++++++++++++++++++++++++++++++
- 1 file changed, 86 insertions(+)
+> Chris, can you please give it an ack?
 
-diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
-index 9af4fd64c1f9..a1f1232e8ee5 100644
---- a/drivers/pci/controller/cadence/pci-j721e.c
-+++ b/drivers/pci/controller/cadence/pci-j721e.c
-@@ -7,6 +7,8 @@
-  */
- 
- #include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/container_of.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
- #include <linux/io.h>
-@@ -22,6 +24,8 @@
- #include "../../pci.h"
- #include "pcie-cadence.h"
- 
-+#define cdns_pcie_to_rc(p) container_of(p, struct cdns_pcie_rc, pcie)
-+
- #define ENABLE_REG_SYS_2	0x108
- #define STATUS_REG_SYS_2	0x508
- #define STATUS_CLR_REG_SYS_2	0x708
-@@ -588,6 +592,87 @@ static void j721e_pcie_remove(struct platform_device *pdev)
- 	pm_runtime_disable(dev);
- }
- 
-+static int j721e_pcie_suspend_noirq(struct device *dev)
-+{
-+	struct j721e_pcie *pcie = dev_get_drvdata(dev);
-+
-+	if (pcie->mode == PCI_MODE_RC) {
-+		gpiod_set_value_cansleep(pcie->reset_gpio, 0);
-+		clk_disable_unprepare(pcie->refclk);
-+	}
-+
-+	cdns_pcie_disable_phy(pcie->cdns_pcie);
-+
-+	return 0;
-+}
-+
-+static int j721e_pcie_resume_noirq(struct device *dev)
-+{
-+	struct j721e_pcie *pcie = dev_get_drvdata(dev);
-+	struct cdns_pcie *cdns_pcie = pcie->cdns_pcie;
-+	int ret;
-+
-+	ret = j721e_pcie_ctrl_init(pcie);
-+	if (ret < 0)
-+		return ret;
-+
-+	j721e_pcie_config_link_irq(pcie);
-+
-+	/*
-+	 * This is not called explicitly in the probe, it is called by
-+	 * cdns_pcie_init_phy().
-+	 */
-+	ret = cdns_pcie_enable_phy(pcie->cdns_pcie);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (pcie->mode == PCI_MODE_RC) {
-+		struct cdns_pcie_rc *rc = cdns_pcie_to_rc(cdns_pcie);
-+
-+		ret = clk_prepare_enable(pcie->refclk);
-+		if (ret < 0)
-+			return ret;
-+
-+		/*
-+		 * "Power Sequencing and Reset Signal Timings" table in
-+		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 3.0
-+		 * indicates PERST# should be deasserted after minimum of 100us
-+		 * once REFCLK is stable. The REFCLK to the connector in RC
-+		 * mode is selected while enabling the PHY. So deassert PERST#
-+		 * after 100 us.
-+		 */
-+		if (pcie->reset_gpio) {
-+			fsleep(100);
-+			gpiod_set_value_cansleep(pcie->reset_gpio, 1);
-+		}
-+
-+		ret = cdns_pcie_host_link_setup(rc);
-+		if (ret < 0) {
-+			clk_disable_unprepare(pcie->refclk);
-+			return ret;
-+		}
-+
-+		/*
-+		 * Reset internal status of BARs to force reinitialization in
-+		 * cdns_pcie_host_init().
-+		 */
-+		for (enum cdns_pcie_rp_bar bar = RP_BAR0; bar <= RP_NO_BAR; bar++)
-+			rc->avail_ib_bar[bar] = true;
-+
-+		ret = cdns_pcie_host_init(rc);
-+		if (ret) {
-+			clk_disable_unprepare(pcie->refclk);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static DEFINE_NOIRQ_DEV_PM_OPS(j721e_pcie_pm_ops,
-+			       j721e_pcie_suspend_noirq,
-+			       j721e_pcie_resume_noirq);
-+
- static struct platform_driver j721e_pcie_driver = {
- 	.probe  = j721e_pcie_probe,
- 	.remove_new = j721e_pcie_remove,
-@@ -595,6 +680,7 @@ static struct platform_driver j721e_pcie_driver = {
- 		.name	= "j721e-pcie",
- 		.of_match_table = of_j721e_pcie_match,
- 		.suppress_bind_attrs = true,
-+		.pm	= pm_sleep_ptr(&j721e_pcie_pm_ops),
- 	},
- };
- builtin_platform_driver(j721e_pcie_driver);
+He did on the coverletter for the whole series? Or did I overlook
+something?
 
--- 
-2.39.2
 
+--8dqE1F9IKolprz0p
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXl63kACgkQFA3kzBSg
+KbYBww/+KZxlgQy3nPQ4hTE1wxdYLQqFbrSMxQ+/a04oDzPcPr0ds90n8GU7QU6m
+hU3sgMjVNAIx8MuUCiv4YEMyO5dORPFKYk2+WIRxrVoRdBnjbs0TggLwGVfYUQXG
+heWpYIjQEdOf7/LRU/0ESgEIubK+i4kqsTzY5QbfleivLA/LVKV7zXfomzsQrWPi
+3w6OQFkGjRWm9OrtySeFLhPUifNOR2wDbkDWlNoQK1XwEZ9bxFwbi5Xj7CFnsAP0
+etfo96pHpf11Eudp+PICEY1q06sa8lXcR473gbJhwhazqtgio2XTkkk4S0bPq2Ih
+xRgxRjFvZRXZethQ9cDI6iBcluRQS107T3JgQKF4M5qJMb5nPZEHTLURQuAmgceA
+7sxaRr4fNFBXwxcB2xNyXnST4jsbzuGYOIxz3X+CZetFCl3Nj1XecHaV5gnAtEZQ
+t5tYapA2OEVg9c1Ch3vyuGKs/D+f1k3NT/T5X4p3PnyTsSvxBOaPzbJJeHqlY0An
+jdMAdBkPCRWtUYOYK/Ed/97F9OrL0LwzIhU/ON6vLxFFueZlkFe/8q0gv5Q0Fhsq
+JxMno8xFnN+g6Pz5mjifl9vpdBCSObCmXmxmwNGXaAiUR2hFu2EJOHBg6nX3f0BQ
+r4Dm58k8MoqhS1rvwwNWd6kuW2TFXJez7daNa4M+ipjWvgrH1xs=
+=VT1J
+-----END PGP SIGNATURE-----
+
+--8dqE1F9IKolprz0p--
 
