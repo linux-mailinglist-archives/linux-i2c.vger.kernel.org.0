@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-2131-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2132-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3911686FCE0
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 10:14:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0156186FD03
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 10:19:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2DED1F23685
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 09:14:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 966011F24839
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 09:19:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7467F1B7FE;
-	Mon,  4 Mar 2024 09:13:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC74520B33;
+	Mon,  4 Mar 2024 09:18:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="obHW5v9R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cMVaAVwB"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2943D20DDB;
-	Mon,  4 Mar 2024 09:13:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A721BDC8;
+	Mon,  4 Mar 2024 09:18:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709543623; cv=none; b=YwrIRQOJ2AfSilWzXvEcVKWiTwZ4rNtAhHsaGdXs82OfXO16S6cN8w06sgsvSdRW4mtnBjj6AeRRkTu8YEkmR+1R1gcgIDif8bNM2/zW0rGffGQsc2K1NOdy33mNu8EA5zSpOCgCGEwNoMVTqqfS6UOIAaRJOBc8d/SThsXYoNc=
+	t=1709543886; cv=none; b=D0obt3atJRDb5L8R26UeTe97ppoeUdpyPx18axpcIuY+Z3Yacr3UcENU0bq4FVDdEJQwvArUKB6DM/epJNA073GyK3EF5m5N/qWTZ0MaBJXFk2R32cFjtlR3qkv53U1oRl8cBOxW9NSvmDmianILgGcw0tqvPxocVlJ1VSIAK/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709543623; c=relaxed/simple;
-	bh=P8nuIh++xRkNNRHSKN38/vYbt3eNpRBeOZLEj92Ny/w=;
+	s=arc-20240116; t=1709543886; c=relaxed/simple;
+	bh=Hz5X8SjPZaPMVvkREhxPkwcMhjiRAzuRBm8lmosOsm8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QN70G5gRPROvNxrNqGHe7rJr9HbcTJgO7t5w7T5kyKT87t1PD0mjsU8Mrvqwx5dkSHS+++oFPzI3tTMXSpWiyY/szYXTH5/aHiJY+opuaEET0USFoIbq+vhomzerqpqPRd2Os3+KfiYglFBn4TxmoWtUEJg0TDHt9XVIU5r8Pyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=obHW5v9R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 226CFC43394;
-	Mon,  4 Mar 2024 09:13:41 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=aWYhGJ2mGYK66YqdSDdVwnD2UCz2Cog9mGGi7A8Kstsa+Qt6QyY9lSB6wSd8uUkRXhaNhS7dvdYJed3fo8dev3w8BbklcUbCeiLYIzcObaHH7DV11gtG+/R5oPAmS5OxbSLOSxTJyd9w1FFyJdi36mU4Hc9hWmuf1fBFGY1W4EA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cMVaAVwB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5EEFC433C7;
+	Mon,  4 Mar 2024 09:18:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709543622;
-	bh=P8nuIh++xRkNNRHSKN38/vYbt3eNpRBeOZLEj92Ny/w=;
+	s=k20201202; t=1709543886;
+	bh=Hz5X8SjPZaPMVvkREhxPkwcMhjiRAzuRBm8lmosOsm8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=obHW5v9RjMQ9WnrWLPFMjLWV257hOelNfFeUi7opg4XaHFH1jYvsSmmWjvU+k/axw
-	 meqe0KINf+My7gX+4spY/GRJTlTYWDAlzuaxT3fqLYZRsaW/xQjI9PVieQN3iyG5zH
-	 PLBaz70GBvK8I9ZuFov02duFazclGcujaK8wVR7YZPB1rIWAn43scKFtsRb0bWl4s6
-	 pTYo83efdcQq5E63+CfbeaC9r9BjBYp/XSd0+2ahnuStropgmtnWHr8p/jVAwcDRbY
-	 E01i/kI+19yN1HMCFfbWIPXHsiJu3p1jtOJY/XiGFJTneyphJNQL9mNzQxu2n65Nea
-	 cMtlmQE5fr33A==
-Date: Mon, 4 Mar 2024 10:13:39 +0100
+	b=cMVaAVwBcvnPGrdq6e7btLLYM9gCJQP57sSCSb/GFXetumUhwhDWy4EWBcEfNHuOs
+	 nen/R8UCTax7+UIhGtc3FxuSQO9ozn82C6VBuIGCvx1vMD+24pTAKpz3Nje3Xf/I0N
+	 6mmZQl49BemD1XRaRAAs+ffgwzHIBcQ8iZwuHGxPdyuq4w7dcT3HDTPLg9kp9G2yB+
+	 BBtQVG7yQQ/iXqdMzkJqu+k8SjonewKeRUrQ0gv5yJ4Rg6YzEif7laeHz16KIkb0zT
+	 F5M6d4wEhuYNkksw5E8rb1nkn9Np/Q6fA/sSMFcnFRx22q2uNNONhVwWeg6zSRqx+B
+	 nIvgFipJpSi/A==
+Date: Mon, 4 Mar 2024 10:18:02 +0100
 From: Wolfram Sang <wsa@kernel.org>
 To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>,
@@ -57,9 +57,9 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v2 03/11] i2c: nomadik: rename private struct pointers
- from dev to priv
-Message-ID: <ZeWQwzuEcj6E1N3K@ninjato>
+Subject: Re: [PATCH v2 06/11] i2c: nomadik: support short xfer timeouts using
+ waitqueue & hrtimer
+Message-ID: <ZeWRyuN8v-VnraQA@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
 	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
 	Linus Walleij <linus.walleij@linaro.org>,
@@ -76,7 +76,7 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
 References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
- <20240229-mbly-i2c-v2-3-b32ed18c098c@bootlin.com>
+ <20240229-mbly-i2c-v2-6-b32ed18c098c@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -84,49 +84,65 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="L0ioVPZ9vDuw4eEX"
+	protocol="application/pgp-signature"; boundary="ADopU0GSN45E8OWO"
 Content-Disposition: inline
-In-Reply-To: <20240229-mbly-i2c-v2-3-b32ed18c098c@bootlin.com>
+In-Reply-To: <20240229-mbly-i2c-v2-6-b32ed18c098c@bootlin.com>
 
 
---L0ioVPZ9vDuw4eEX
+--ADopU0GSN45E8OWO
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 29, 2024 at 07:10:51PM +0100, Th=C3=A9o Lebrun wrote:
-> Disambiguate the usage of dev as a variable name; it is usually best to
-> keep it reserved for struct device pointers. Avoid having multiple
-> names for the same struct pointer (previously: dev, nmk, nmk_i2c).
+On Thu, Feb 29, 2024 at 07:10:54PM +0100, Th=C3=A9o Lebrun wrote:
+> Replace the completion by a waitqueue for synchronization from IRQ
+> handler to task. For short timeouts, use hrtimers, else use timers.
+> Usecase: avoid blocking the I2C bus for too long when an issue occurs.
+>=20
+> The threshold picked is one jiffy: if timeout is below that, use
+> hrtimers. This threshold is NOT configurable.
+>=20
+> Implement behavior but do NOT change fetching of timeout. This means the
+> timeout is unchanged (200ms) and the hrtimer case will never trigger.
+>=20
+> A waitqueue is used because it supports both desired timeout approaches.
+> See wait_event_timeout() and wait_event_hrtimeout(). An atomic boolean
+> serves as synchronization condition.
 >=20
 > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
-I think this improves readability a lot. I didn't really review, but I
-do like such changes:
+Largely:
 
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Nit:
+
+> -	int				timeout;
+> +	int				timeout_usecs;
+
+I think 'unsigned' makes a lot of sense here. Maybe u32 even?
 
 
---L0ioVPZ9vDuw4eEX
+--ADopU0GSN45E8OWO
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXlkMMACgkQFA3kzBSg
-KbbC5g//d/FvD4vAs/4O309G+glAvRqqik/d5LlefofbXB0L2uWYyOJ53pla7mDx
-9RSJftrY31EwgtYEDBekpt70jlzV/IkCNqq3mxQWCC0sT+k8Su9FpFRpYgA6+9Qe
-NA0ssvMBPLn1RPhcuv9omX05jBwlSIbTuAdj8uF1g16PnJKKYEbxQme2DEU06ggh
-y9IXa2Gq+8Txr/GqkHOhBgZGCuMkDjVrTU7ozkUpjWIlq7ltn2xcVQwHTfXlcyvc
-Q6QWyAQFsuX2JUyqsYSlgxURYWficUz7ZvcJwwMB1HqqMywrXI17T09J95A/u5Fd
-JMwnWgmki6FauTpz6+6taOGqZ+8fCSI6UvjMz8nzgy7Pm3jKY38QSj0wmePXfpC8
-PXwjVjYCstrVnXAD3r54iAByGVdaysVD91t4BaPb542jM7EvvvE0P/ebmoDXgY65
-sAQY2Opm5R9Hk/YPWbW5+995BRKJa7Gzl9RmFyQTKTpF04tOLJQfK2CBXYtVhCAU
-pQF+a+Dh4lQv3/flGbCPGTq4Oup4Q+EAmSKTW2vv5a7jK6v9UF0lW0W2MOJ3z9L4
-JoFQYVYUABAFqADbiLATtpHiUTeNXobzuuqF4DjOyhXrnWt9l4tebG3xS/bylK2r
-hOfxVGJQgqYN8ZNgB29CF4rv4kIRz721CFxKghSlqn6SxZTYM5w=
-=WUmR
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXlkcoACgkQFA3kzBSg
+Kba7iw/8Cjwrc5SjA/NL3KJonpOz3S37vaadRXid+bhB8XUNVUI0PMJkyw//gEc4
+njYS1/v197pg+4JsPPorLhOxjDGoD14nvA+kQkZ4XDktCxU+U12NUBKDc5XgFMmN
+cx7+QIr8AtfJpo5Il8nNYO4xn15+F510a1qjPgTlCE4QV2sX9aeSgOazretpVNmp
+03IKZDUPmP3HCFfNkGgt5PzpZpnY4RlPflThQcMYJm2wXz+E/h6VM1xqmENlhJQa
+2oqZ9FNBttktiahGx8vBpGeLcSXnQF3okUiCJC1f7MCP9ApaLI7a9700eneemBLn
++Q9M1Gexied95SJcIJYKzgTzN10+GOHg8P1pFsuf3NKNCmZApobOIc3Nv/zDfGum
+Rp08Hrq0OgTSXGyPsLPs6OSeEtEg7KvCO/WZyuLAdt+wHVEKTMYsWra3FUCu6YMB
+m1RIQcluy4QVlv4E61RmOI22YsKibwl2mw2WMENEbLodFPc6lvtSSiEmjWSOBL4r
+Pv1oTlkNjBGOpgFF1T9TByvhhmIWLCQcbAHxR2R+EGcO3NNQ7wLMFCLkm7cm1sI3
+u4Y+cxDfdXz0zag7rJkp6GwzxwmNorvo90wbNA3FODizmmqFuUt6tIExR2hfxkA8
+4GURp7XQJAp5kXMt5vBAaEoDDCvaa5ivgOmaq0OFdQRcYnHtHRw=
+=vre8
 -----END PGP SIGNATURE-----
 
---L0ioVPZ9vDuw4eEX--
+--ADopU0GSN45E8OWO--
 
