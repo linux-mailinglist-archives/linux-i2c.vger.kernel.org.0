@@ -1,125 +1,128 @@
-Return-Path: <linux-i2c+bounces-2138-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2139-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 929A586FDE5
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 10:47:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D52BE86FE01
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 10:52:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C19EE283AB4
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 09:46:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8697CB23369
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 09:52:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEEBA20DF4;
-	Mon,  4 Mar 2024 09:46:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABEB9224D6;
+	Mon,  4 Mar 2024 09:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="U2hJjhPf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sTQ/wKRr"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFE01B7F3;
-	Mon,  4 Mar 2024 09:46:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D309224CF
+	for <linux-i2c@vger.kernel.org>; Mon,  4 Mar 2024 09:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709545595; cv=none; b=GuyjDDxjquQvooJOrmAlFUhk2BwnoYuzVfJSUzALPSrKF8PB3+zyct0H1rUtPPFLZUCqXCQqawQYupdTScOyYBPjdgrLvJ+imaXyQjsIXFYhCaw1ZgUGoLHBKx4xLodHw89+d5p2pF9qcWTP2emsiCP8Nd2LHUdfm4Z8lrhM8zc=
+	t=1709545761; cv=none; b=NpPmESTtnZtthsHsC/UDRXft/QJPgTTR/WRaf9z2t8C0tqO2ltxKdVLSbWivzkySVNaoBD7XmwkY1E0sIARF0OfdreVWfiaOaUK1s2g/5Of0dyJgJQySylbs9KPwjXbQJDJo0NiFM4lGtDdQncB1tn5SRcUo94lBd+a2bsVJaoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709545595; c=relaxed/simple;
-	bh=anUB/OBSNGm/JeFQNlRuNFLtUQHaQ9D8+eh1w3c3q18=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=Sg3CWZcwnKmAIYuR55o4+eeuT37KeDEFitV+7j5ku6HnY5kyTLOLIkNvTjEaLhWmeqdpThJQaIbWBcmrgvaDkjTEwrNmi2quKgC+emPTAtoBHz6p8clLiGnF2M9CWTZ+QgftfSxb3yU0IZxglGOgCC0XGF85Bi8FQrX2Zqy/1/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=U2hJjhPf; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 11E9C1C000B;
-	Mon,  4 Mar 2024 09:46:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709545590;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+obVxPBVye59ep/rc+NawmN0v65caHupg9rcnFDhO04=;
-	b=U2hJjhPfJOybFyQT4y93sxpTKV9BVq+ROnsiqrseqLuHyo3Algc9QmEqF78XZW4vw+nps0
-	hqWxOQFFeHpDSPWMuAWRgoV0kPPh34RzLGGX7Y3V8H98/CYTX5UI3Ihs5mkHSpV6SuRKRl
-	aL0SZKJz+mA6n1G1HOhWuWgtl5rKiVNGqKWVUbTPUmSE/ZOIdnaMdy+t3UhOMwI1UCnsu/
-	L+vQTaNYK2HGkHlEftlk/loHRTWUQyI1EY3XAaP7nfI5vN2mPQvSiWp0feResi5kFwVzwh
-	CDcUL78cCvMYjMlMm0LY1DY9wrLf/okIjsoRCL+BrkliozmRxEpBTh/m3ZSAnA==
+	s=arc-20240116; t=1709545761; c=relaxed/simple;
+	bh=GyxKPP4y2fFwO5hWkHwDVZnD2WNqmV38uKVZV8g5V0w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bElEc/M3w/v22PRR8TIfbqqi2Q+bwjVrsrAuPFbbwy6FsUC3QV4eSki0v7JG3obp76KJSkELZ4/W+3mK85IhPlUKYU9fLm8dzpdU14PbYjC+/jA+zGhJXvKbaNsxKpcGtgt3Q8SHaa1o0JfkXckyZERZcGUSuufzgpgZoQ73tmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sTQ/wKRr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C4EFC433F1;
+	Mon,  4 Mar 2024 09:49:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709545761;
+	bh=GyxKPP4y2fFwO5hWkHwDVZnD2WNqmV38uKVZV8g5V0w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sTQ/wKRrMua82qhMntGVaWT5tJTcDDIEM8viXup5dlinjUOUa8gsWBo2xwy68s56W
+	 esQVF0WbwAf40yoLmMkkpf6s5lZbgkNlqYkpuWJFr7m6Qu114PtostiMOaS6TQvsYb
+	 ExIdzLVAXp/sQYDk3a40fERk+3dUPr2PddeBIj0XUKbC+d2WOiqh5kkDeJbYejapf/
+	 TKRw7QeNraW5WYygcstL2dGZopiK2CaJn5OXl71MX77Ij7jZGQTjM0drauSAw8OMWI
+	 i842NSv4Ae93sGZoPonOrmfXRDwOCemBYqJtcfKIcsyzJ8Hxkl8W98IAZeiKwoW0kr
+	 1kA8fqf470DRw==
+Date: Mon, 4 Mar 2024 10:49:17 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Hans Hu <hanshu-oc@zhaoxin.com>
+Cc: andi.shyti@kernel.org, linux-i2c@vger.kernel.org, cobechen@zhaoxin.com,
+	hanshu@zhaoxin.com
+Subject: Re: [PATCH v8 6/6] i2c: add zhaoxin i2c controller driver
+Message-ID: <ZeWZHSt-qm5wH3wn@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Hans Hu <hanshu-oc@zhaoxin.com>, andi.shyti@kernel.org,
+	linux-i2c@vger.kernel.org, cobechen@zhaoxin.com, hanshu@zhaoxin.com
+References: <cover.1709014237.git.hanshu-oc@zhaoxin.com>
+ <4e9c2c3a3940a00da67564c6e19f4771ab6dc67f.1709014237.git.hanshu-oc@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="b9HCCisY2Oo0FvOA"
+Content-Disposition: inline
+In-Reply-To: <4e9c2c3a3940a00da67564c6e19f4771ab6dc67f.1709014237.git.hanshu-oc@zhaoxin.com>
+
+
+--b9HCCisY2Oo0FvOA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 04 Mar 2024 10:46:26 +0100
-Message-Id: <CZKVC09R7VQB.3DEDAIWIICORV@bootlin.com>
-Subject: Re: [SPAM] [PATCH v2 04/11] i2c: nomadik: simplify IRQ masking
- logic
-Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Andi Shyti" <andi.shyti@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
- <20240229-mbly-i2c-v2-4-b32ed18c098c@bootlin.com>
- <hbnkcqjgykfzivqvjnr5ixmp57am43mxslfnpxhro27kzd2pyt@q35uhgkxn5cv>
-In-Reply-To: <hbnkcqjgykfzivqvjnr5ixmp57am43mxslfnpxhro27kzd2pyt@q35uhgkxn5cv>
-X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hello,
+On Tue, Feb 27, 2024 at 02:36:33PM +0800, Hans Hu wrote:
+> Add Zhaoxin I2C controller driver. It provides the access to the i2c
+> busses, which connects to the touchpad, eeprom, I2S, etc.
+>=20
+> Zhaoxin I2C controller has two separate busses, so may accommodate up
+> to two I2C adapters. Those adapters are listed in the ACPI namespace
+> with the "IIC1D17" HID, and probed by a platform driver.
+>=20
+> The driver works with IRQ mode, and supports basic I2C features. Flags
+> I2C_AQ_NO_ZERO_LEN and I2C_AQ_COMB_WRITE_THEN_READ are used to limit
+> the unsupported access.
+>=20
+> Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
 
-On Sat Mar 2, 2024 at 1:39 AM CET, Andi Shyti wrote:
-> On Thu, Feb 29, 2024 at 07:10:52PM +0100, Th=C3=A9o Lebrun wrote:
-> > IRQ_MASK and I2C_CLEAR_ALL_INTS are redundant. One masks the top three
->
-> if I2C_CLEAR_ALL_INTS is redundant why don't you remove it?
+Can't really say anything about the ACPI handling. Looks mostly good
+for my eyes.
 
-I understand this is unclear. What I meant by redundant is that they are
-redundant from one another; one overlaps the other. I'll give a better
-commit description for v3. Something like:
+> +		/*
+> +		 * if BIOS setting value far from golden value,
+> +		 * use golden value and warn user
+> +		 */
+> +		dev_warn(i2c->dev, "speed:%d, fstp:0x%x, golden:0x%x\n",
+> +				params[0], fstp, params[2]);
 
-   IRQ_MASK and I2C_CLEAR_ALL_INTS both mask available interrupts.
-   IRQ_MASK removes top options (bits 29-31). I2C_CLEAR_ALL_INTS
-   removes reserved options including top bits. Keep the latter.
+Well, if you want to warn the user, the string should be more
+descriptive. Maybe "FW settings might cause wrong timings" or whatever
+these values mean. I don't know.
 
-   31  29  27  25  23  21  19  17  15  13  11  09  07  05  03  01
-     30  28  26  24  22  20  18  16  14  12  10  08  06  04  02  00
-   --- IRQ_MASK: --------------------------------------------------
-          1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-    0 0 0
-   --- I2C_CLEAR_ALL_INTS: ----------------------------------------
-          1     1 1       1 1 1 1 1                   1 1 1 1 1 1 1
-    0 0 0   0 0     0 0 0           0 0 0 0 0 0 0 0 0
+The issues I mentioned could be resolved incrementally from my point of
+view. Or with a new series. I don't mind. So, in general:
 
-    Notice I2C_CLEAR_ALL_INTS is more restrictive than IRQ_MASK.
+Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Is that better?
 
-> > bits off as reserved, the other one masks the reserved IRQs inside the
-> > u32. Get rid of IRQ_MASK and only use the most restrictive mask.
->
-> Why is IRQ_MASK redundant? What happens if you write in the
-> reserved bits?
+--b9HCCisY2Oo0FvOA
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The wording wasn't correct. Have I answered your
-question from the above?
+-----BEGIN PGP SIGNATURE-----
 
-Thanks Andi,
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXlmR0ACgkQFA3kzBSg
+KbbNow//TCzWcxh2lUS1dAjOf0U+Em+HV5HEVtGnS6E9SaGfAzHM9KKs42LlpjgM
+LLG778SX4UZectUBeH8aEhMSieAPgZKvGUauiq1Cvv+/4ljEtaCUgX63yQaFs7vS
+0cz+eVzBMnBW9gnefTZDE0i8cGCmtYagUvE51hJDAXvK3zw8Fs8AIcav2wXI1QrC
+XXGLVewT+uBd3qa0vPf71ZkoCDPyjR5srAwY1d94LMzJ2oPAmMhIJXvGVRgGALaO
+VdIHjnhV3XhzG79GUExYPl50poxl9wOrCC06p3ePj5iCnFjUBqpMiwfy1Jne1Nq3
+XtnBa45o709dToY0RDvI+ceID1GIF5+gdbrARK/oSqc/5fHBQs2Zb7UICDKr4fjj
+MdizbwcwZ0psiBJCKavjArGRKJf2ALb+xs7rVMIpOD2kALq55flnbRMmIepBWDfk
+6IHuvB1luaYARRrzdOPcCTYU/sJ1QopYv6HAwX3J6wwlICJNxSamsat5qASeek4c
+GLDKRnkGoDjNBvZ0RF/VUPfaZWmSy4dHawOCxDjxbng6F9zu3tJsRqI6B/4kCNrf
+6+UIrM083UgOKru8r9lsStG2G/rgNfpxO4pMgAmGil4l8/3uQeFWqACYMUNuskOO
+NDDmsF06DCttn6hYZH4hxz+z7cZiwnwWL5xmUBzmP5q48NCtKgY=
+=HGRQ
+-----END PGP SIGNATURE-----
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+--b9HCCisY2Oo0FvOA--
 
