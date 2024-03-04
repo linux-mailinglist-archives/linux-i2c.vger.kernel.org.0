@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-2147-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2148-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 225DF87036C
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 14:55:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09514870376
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 14:57:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A35C285962
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 13:55:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B27B1C20983
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 13:57:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D64113F8D3;
-	Mon,  4 Mar 2024 13:55:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CB323FB0F;
+	Mon,  4 Mar 2024 13:57:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o9S+MQp1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CZAXPqkO"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C94E33CF;
-	Mon,  4 Mar 2024 13:55:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225AB3FB01;
+	Mon,  4 Mar 2024 13:57:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709560547; cv=none; b=Y3qWEE9D9fI+MROu1f9KiIEw508oTGmDqL6qRppBkyz5HholvjJnNGDq74fdsccguR5f3I9qvaL1s38sDT20PcOpG2yfg59vtAGwTmdw4jpfkpl7pF5DOSm4gsClBMuNFrPt546KeRxSeAfoPD29lORUfYwu+pf/1jmMMo+Stxk=
+	t=1709560651; cv=none; b=sk8kF0Le9/bHNHqWxIZjHhSOqSejCEP9eIZbWmHZFgUYj5eB8wyFVSaEhz2Ch5iz837aC3kzbq5Kv6Jn58wvGS2cF1JQ1v0hDKQa8FvyweQphAfugPTabShxffstwoJ3mM4QOHqCnejLsp2ErPASz9qcrW6mEL932qOcVc54/3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709560547; c=relaxed/simple;
-	bh=M65u/Bkh6ZmhHusXFXrbiVOO75W05EtI/6MYBPjQTH0=;
+	s=arc-20240116; t=1709560651; c=relaxed/simple;
+	bh=nPq643HkA5q8IS3cp0c7XoxseUBXXwbf88gB9gSO2TA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oNQwygqx6ZtRu9hmEMa6Ev1r3QmmRCTqrpXyR6DBTMvhEV2EFU+UFaHR62pRmGG8XBCftw5bDGHIUayYaJasO+q35Bg3poFKEoNnDT3H7odayo2ql7UH3+DeBzxIhkhk+9+NqH1sYVuxJHAL1SJLny4b7lZCEQb5reqy1qQfwk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o9S+MQp1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433EEC433B1;
-	Mon,  4 Mar 2024 13:55:46 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=TB1oaERL0KbReKkDwVl2LCCAjLWs3C5+a+KMWlw7NPhOLnnU2OePoUf3XJDMxcCdTq9csOn8jQf61jE7luVOzXiIEN5Syy+XKHvRyQJlBrVtca1GC+PQfx7vTvaJd1eVQU2mWtR+rtnKZlIFhK3ws9sc8bj7F9tbxGFxmvjhKBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CZAXPqkO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E3B6C433F1;
+	Mon,  4 Mar 2024 13:57:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709560547;
-	bh=M65u/Bkh6ZmhHusXFXrbiVOO75W05EtI/6MYBPjQTH0=;
+	s=k20201202; t=1709560650;
+	bh=nPq643HkA5q8IS3cp0c7XoxseUBXXwbf88gB9gSO2TA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=o9S+MQp153uTYwq1SOWKQxG9XeP4hdEE4JH/PEBX6M4kUzitYz3d44cF74PlLlYzg
-	 OpHwMcCNmCyjVlTPeI6LlcQFkXvzss+GyaxJBqhpffL8YPkRWbj+uvmfpfnNovmFOQ
-	 VPqaifkcZTI3Z5vs75y+7z9L9VM0fLdlaaic4ewi2P5dK6mVUErYyl6tXBLMLBd2sK
-	 3MGZB29WsKmh14xpBHOmFCcllwAQR+4h9S+K4j+JFufUHs9SKkb63o/ArmJA5ftmnK
-	 6baGsxYH5lDdxCpC2tiMeeis6TnRzVLVfxrm3O9W04AY9EOYyEKr+cEGabBRF3ld/i
-	 BbXpPvOdHZnUQ==
-Date: Mon, 4 Mar 2024 14:55:43 +0100
+	b=CZAXPqkOnvxXMyIw+Qlh/odp6y9XRorZ51xkb8K1XRbB6xsNXXU+McUll6KFmjjhM
+	 DDvxZA6rJ/EAKuFCceAYr4j6stSJ3C957x181HFSU1YLoH+wpk1Z1IWDJzsaCPAR8M
+	 ihUY4Rmz051bwneZm/fT58pkor+8f/aBt8kqwWJqKzM1wVxYp8cT66kaGVxPY3YS9+
+	 Wi5XSub7PP/Miyf+27DVP/J2twvETEaOkBS0LDFr+r19VvXEkgBwV0MWzJbngbitUL
+	 cJRVzoAx6rCmsYLq2UZ9WYjsiYfyd4bAQo6nnyBYbgbZwntGAraAyWtYK4/BIIg/35
+	 hYJw5j4gp7bZg==
+Date: Mon, 4 Mar 2024 14:57:26 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
 To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>, 
@@ -50,12 +50,13 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
 	Gregory Clement <gregory.clement@bootlin.com>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH v2 07/11] i2c: nomadik: replace jiffies by ktime for FIFO
- flushing timeout
-Message-ID: <tuqu3wvuhtevu4hjll63yy7oeax26o4p5ylkvvygcmw4mkc3il@j3gyxqjcjnyg>
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH v2 08/11] i2c: nomadik: fetch i2c-transfer-timeout-us
+ property from devicetree
+Message-ID: <euvozvodxwacw4tf2iifxs4zky7magyuc6nkraujwyb3766u33@iiifyt3nhb73>
 References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
- <20240229-mbly-i2c-v2-7-b32ed18c098c@bootlin.com>
+ <20240229-mbly-i2c-v2-8-b32ed18c098c@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -65,16 +66,17 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240229-mbly-i2c-v2-7-b32ed18c098c@bootlin.com>
+In-Reply-To: <20240229-mbly-i2c-v2-8-b32ed18c098c@bootlin.com>
 
 Hi Theo,
 
-On Thu, Feb 29, 2024 at 07:10:55PM +0100, Théo Lebrun wrote:
-> The FIFO flush function uses a jiffies amount to detect timeouts as the
-> flushing is async. Replace with ktime to get more accurate precision
-> and support short timeouts.
+On Thu, Feb 29, 2024 at 07:10:56PM +0100, Théo Lebrun wrote:
+> Allow overriding the default timeout value (200ms) from devicetree,
+> using the generic i2c-transfer-timeout-us property.
 > 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> The i2c_adapter->timeout field is an unaccurate jiffies amount;
+> i2c-nomadik uses hrtimers for timeouts below one jiffy.
+> 
 > Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 
 Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
