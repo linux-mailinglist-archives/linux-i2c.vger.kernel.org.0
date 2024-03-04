@@ -1,122 +1,159 @@
-Return-Path: <linux-i2c+bounces-2179-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2180-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45356870B1E
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 21:03:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E5C7870B6C
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 21:20:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00CE6283180
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 20:03:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B2427B231F3
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 20:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 878037995F;
-	Mon,  4 Mar 2024 20:03:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65D5D482DA;
+	Mon,  4 Mar 2024 20:20:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="o5HHxq2L"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ld/MB61e"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B5E67A139
-	for <linux-i2c@vger.kernel.org>; Mon,  4 Mar 2024 20:02:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8753347A6C
+	for <linux-i2c@vger.kernel.org>; Mon,  4 Mar 2024 20:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709582580; cv=none; b=qwh/EZ3xadDOFWpnhBQ4aXlKPmeLpj2R+X2lU8o0n6AFGSb6F1lgdekB49yAs6tEVtObx3m8rMQrhK47nOwnMojDGK9zpOpFDEnqSYQbI5IUUK86s+Cika2yBYr/i3pDYti9TwZpiEym0G0EK6ShhlJTJLheEh1GQ4rz81gzdxg=
+	t=1709583624; cv=none; b=FEsgEDlMzX+C/MvHvS5Krcyperf+8rz/h2yUzh49jgT3756FzKQAEoGOrXgMuh3x2X8hjQzVTsa6E5bFH45rm/gpKEwXd+0VWJ/MP1pwls7k3p5VTJdsVa+fYIyeG6487GS2zfvzKa4e53aZxokDB9avSSjPrzsv6+ZT0krInKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709582580; c=relaxed/simple;
-	bh=/LPidozw5UkwarCYzfBbkrQKWhhCq9LVcOP9y9lSJIM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=A5Kgig6NnxeHnTmmjrpA+28MyRTW5tOSQGRqfVechHb48QBMLvuaKItUdRY12+4FKs83ZAbFQ2s8+g8yGwYSV/GFiBAyzW6fnuqDjyZXlYsUl0Ny1AsY5a2U5d9VNP6ZVbSXfhYX0h6bPbU1UZs4YjKAU2aB+5P4Kd0tC9Ary2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=o5HHxq2L; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9A7412C04C9;
-	Tue,  5 Mar 2024 09:02:48 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1709582568;
-	bh=/LPidozw5UkwarCYzfBbkrQKWhhCq9LVcOP9y9lSJIM=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=o5HHxq2LjuPmSQ3VhN1oHwqVoNUEAxD/8C3ahWW2Qs5AKe6lhe4l/KO/oTaIx81YQ
-	 mSml93DIEV5XPAOYZ2m84f3fTRZ+OFPxh+sRC3E4cqcBbVap9eLdlr6EvS/cWywc0E
-	 zmB7nAnfTL8SyEvVInifrNqRjt6vI5bWNdDqU1M+qUb0i05Vr4QRsbxwjGdNZOvU9Y
-	 +qhcGIZuEIYGHteguox2wT8RJQBf5lYD9hmLVbvwcjgb1KYImGg5Kom0k5zw9vHepB
-	 BOLGEGk9GDqujoCcequf3eVGmNb5LMsZW79BCEtUKg+dlXeIPgsH5rJkgcqkv7ihCc
-	 +6rMwso6lAC4w==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B65e628e80001>; Tue, 05 Mar 2024 09:02:48 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 5 Mar 2024 09:02:48 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.040; Tue, 5 Mar 2024 09:02:48 +1300
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang
-	<wsa+renesas@sang-engineering.com>
-CC: "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFT 1/3] dt-bindings: i2c: mpc: use proper binding for
- transfer timeouts
-Thread-Topic: [PATCH RFT 1/3] dt-bindings: i2c: mpc: use proper binding for
- transfer timeouts
-Thread-Index: AQHaav5GS1M8pxP1xEubQWdLBIKzKrEm3eAAgABQEQA=
-Date: Mon, 4 Mar 2024 20:02:48 +0000
-Message-ID: <89335a8e-4963-4992-a519-b88b15e3ff69@alliedtelesis.co.nz>
-References: <20240229105810.29220-5-wsa+renesas@sang-engineering.com>
- <20240229105810.29220-6-wsa+renesas@sang-engineering.com>
- <r3tho2bh3l23f5xkjc3ovq4xdehpsb3nz4ukbkremxvzq6shpe@kdsxfz4brskb>
-In-Reply-To: <r3tho2bh3l23f5xkjc3ovq4xdehpsb3nz4ukbkremxvzq6shpe@kdsxfz4brskb>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4E6D7DA30971DF4BA5FC17CF8E09617F@atlnz.lc>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1709583624; c=relaxed/simple;
+	bh=unEbdlS0gfE5yDWftyvVkK9BRXW5ZuMgJInWSvd+5ko=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=hX9OsRPsyrDNZc06YioDPbl2OGrjRe6uVYIxEtGa6eFXnr+76MUCiAuTxx+hr6op48Xwj0IGtezPH9MkPN8OMj+/8xm2ZeqJIzRDG3CcAAAAefCgBM3K91gJnmYz0H1Z9X4B6BluHF9DRDX+MJCN7eFcX98AXsZCbnFPeFW6auw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ld/MB61e; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d275e63590so69577831fa.2
+        for <linux-i2c@vger.kernel.org>; Mon, 04 Mar 2024 12:20:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709583620; x=1710188420; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k7YMJaXw8cDkXO95TCQgkGK9v5RqbX9UoDSaplaBUGU=;
+        b=ld/MB61eJxh4Inqcoa2LbGcYDuRx2tQgAVstjS02OiV/IGj14Jr/5AaKbWUhcPvqPi
+         aRDPKKpMSifrmLnbVHchET3cjMliZ8Z/mj9a0+TQW1i/TdBEhJe3CYYP4bANBE/E/tBZ
+         hOjDic06l8GCZer4ayn7k01jtKxfh8AJRZK6peQgiBIXYe86q8yhy7N478qpEJdtToFC
+         xquIhCYoWOWv9rwK9bJZDFKw8scBjZXvxX6Y5TjSwK3PGoLA2bJmU94iFdc+zYiHI+z0
+         DxohD4tSD+tL/B0FipY1ya9pfQcrDld0sg6T+KixMdPm1g8z+A1utCfVYlBqgrLGVm3R
+         LmVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709583620; x=1710188420;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k7YMJaXw8cDkXO95TCQgkGK9v5RqbX9UoDSaplaBUGU=;
+        b=iU5ptlvxvrZly3Y2dekrP4gFW8aHwv8TL6d0ujzMI4RIL0Xi4kfsnTlvGUn/KJ/4qz
+         aEaybUNBaTFyFYSvEk00y2pxH5Bz6guQE2I63I1RqiImQ25RprEuv7JtYpNE71duol9P
+         3LwMQFCZQ1I1+Qq1PSaTmqW2pnsw+7gsSq+7FyzU1oIQC8UPsVYZGF0RRn/x2pD5lEUV
+         Jz6gCthZe9Vf55E87qqgbBaRHlnIoUlWqhI7R3+3LjUcXsusVOdwofq4T1S6ICYzTLWA
+         c6xRJCCT7q7rgeV0XpAhNal2guzs8/Yo/l3tRKPC4UQavWc6WIoH8O2103lolXZDwqtv
+         Eang==
+X-Forwarded-Encrypted: i=1; AJvYcCWpXo9LISSt3bXVlpA9a58YNr7lNwxv4GrVqNGqnzg9YoPBxhJkagbcvlfd1bm3h12nyey+I2dSOUq1EGgEh0xHKWWo+D5SFoGy
+X-Gm-Message-State: AOJu0YyZ34DayQx1sYAs+QjdkaMvgXRIcFBW0eSH9DnCqcOWG8MWRDjj
+	QGCezW1zoGmnbAN6bNs04Z5SPf7S4C1Jba/gbvcWGKFBeja2qi6tRmjbi6L3
+X-Google-Smtp-Source: AGHT+IFfvGg6XM6Yn2WnkuhBQLbmxwrZLWCALtI6dahSEhPe+E9UXyUNy1JZohT2TXkXnHY3oVFPvQ==
+X-Received: by 2002:a05:6512:2812:b0:513:1ca7:87b1 with SMTP id cf18-20020a056512281200b005131ca787b1mr8312529lfb.1.1709583620070;
+        Mon, 04 Mar 2024 12:20:20 -0800 (PST)
+Received: from ?IPV6:2a01:c23:c411:1a00:49f1:9fda:4d1e:4f64? (dynamic-2a01-0c23-c411-1a00-49f1-9fda-4d1e-4f64.c23.pool.telefonica.de. [2a01:c23:c411:1a00:49f1:9fda:4d1e:4f64])
+        by smtp.googlemail.com with ESMTPSA id a17-20020a170906671100b00a454438091fsm1583803ejp.70.2024.03.04.12.20.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Mar 2024 12:20:19 -0800 (PST)
+Message-ID: <ed7b0ebf-a1a5-4e63-bf92-8f37811decb4@gmail.com>
+Date: Mon, 4 Mar 2024 21:20:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=BKkQr0QG c=1 sm=1 tr=0 ts=65e628e8 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=K6JAEmCyrfEA:10 a=LDBv8-xUAAAA:8 a=wMjMLsQrkjzMquoGyIgA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=TIyoBwpO-cKII9bNTSam:22 a=DZeXCJrVpAJBw65Qk4Ds:22
-X-SEG-SpamProfiler-Score: 0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] i2c: smbus: Prepare i2c_register_spd for usage on
+ muxed segments
+Content-Language: en-US
+To: Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Jean Delvare <jdelvare@suse.com>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <d0b4aa2e-8b5d-4c27-8aab-164a089d95bd@gmail.com>
+ <ZeV8Oi-j8L7ugyhR@ninjato>
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+In-Reply-To: <ZeV8Oi-j8L7ugyhR@ninjato>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-SGkgQW5kaSwNCg0KT24gNS8wMy8yNCAwNDoxNiwgQW5kaSBTaHl0aSB3cm90ZToNCj4gSGksDQo+
-DQo+IE9uIFRodSwgRmViIDI5LCAyMDI0IGF0IDExOjU4OjExQU0gKzAxMDAsIFdvbGZyYW0gU2Fu
-ZyB3cm90ZToNCj4+ICJpMmMtc2NsLWNsay1sb3ctdGltZW91dC11cyIgaGFzIGZsYXdzIGluIGl0
-c2VsZiBhbmQgdGhlIHVzYWdlIGhlcmUgaXMNCj4+IGFsbCB3cm9uZy4gVGhlIGRyaXZlciBkb2Vz
-bid0IHVzZSBpdCBhcyBhIG1heGltdW0gdGltZSBmb3IgY2xvY2sNCj4+IHN0cmV0Y2hpbmcgYnV0
-IHRoZSBtYXhpbXVtIHRpbWUgZm9yIGEgdG90YWwgdHJhbnNmZXIuIFdlIGFscmVhZHkgaGF2ZQ0K
-Pj4gYSBiaW5kaW5nIGZvciB0aGUgbGF0dGVyLiBDb252ZXJ0IHRoZSB3cm9uZyBiaW5kaW5nIGZy
-b20gZXhhbXBsZXMuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogV29sZnJhbSBTYW5nIDx3c2ErcmVu
-ZXNhc0BzYW5nLWVuZ2luZWVyaW5nLmNvbT4NCj4+IC0tLQ0KPj4gICBEb2N1bWVudGF0aW9uL2Rl
-dmljZXRyZWUvYmluZGluZ3MvaTJjL2kyYy1tcGMueWFtbCB8IDIgKy0NCj4+ICAgMSBmaWxlIGNo
-YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBh
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLW1wYy55YW1sIGIvRG9j
-dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMtbXBjLnlhbWwNCj4+IGluZGV4
-IDcwZmI2OWI5MjNjNC4uYjFkN2QxNGMwYmU0IDEwMDY0NA0KPj4gLS0tIGEvRG9jdW1lbnRhdGlv
-bi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9pMmMtbXBjLnlhbWwNCj4+ICsrKyBiL0RvY3VtZW50
-YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLW1wYy55YW1sDQo+PiBAQCAtOTYsNiAr
-OTYsNiBAQCBleGFtcGxlczoNCj4+ICAgICAgICAgICBpbnRlcnJ1cHRzID0gPDQzIDI+Ow0KPj4g
-ICAgICAgICAgIGludGVycnVwdC1wYXJlbnQgPSA8Jm1waWM+Ow0KPj4gICAgICAgICAgIGNsb2Nr
-LWZyZXF1ZW5jeSA9IDw0MDAwMDA+Ow0KPj4gLSAgICAgICAgaTJjLXNjbC1jbGstbG93LXRpbWVv
-dXQtdXMgPSA8MTAwMDA+Ow0KPj4gKyAgICAgICAgaTJjLXRyYW5zZmVyLXRpbWVvdXQtdXMgPSA8
-MTAwMDA+Ow0KPiBDaHJpcywgY2FuIHlvdSBwbGVhc2UgZ2l2ZSBpdCBhbiBhY2s/DQo+DQo+IFRo
-ZSB3aG9sZSBzZXJpZXMgaXMgY29oZXJlbnQgdG8gdGhpcyBjaGFuZ2UuDQoNCkxvb2tzIGxpa2Ug
-eW91IHdlcmVuJ3Qgb24gdGhlIFRvOiBsaXN0IGZvciB0aGUgY292ZXIgbGV0dGVyIHdoaWNoIEkg
-DQpyZXBsaWVkIHRvLg0KDQpGb3IgdGhlIHNlcmllcw0KDQpSZXZpZXdlZC1ieTogQ2hyaXMgUGFj
-a2hhbSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KDQphbmQgb24gYSBQMjA0
-MVJEQg0KDQpUZXN0ZWQtYnk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVs
-ZXNpcy5jby5uej4NCg==
+On 04.03.2024 08:46, Wolfram Sang wrote:
+> Hello Heiner,
+> 
+Hello Wolfram,
+
+> 
+>> +		dev_info(&adap->dev, "%d/%d memory slots populated (from DMI)\n",
+>> +			 dimm_count, slot_count);
+> 
+> I am still in favor of removing this. I don't like the inconsistency of
+> the printout depending on the bus being muxed or not. We still have one
+> printout per device instantiated.
+> 
+> If you agree, I can remove this while applying. If not, then I'll apply
+> as is. No strong opinion here on my side.
+> 
+Yes, please remove it. I'll submit a patch for adding this message to
+drivers/firmware/dmi_scan.c. Let's whether DMI maintainers find it useful.
+
+> Happy hacking,
+> 
+>    Wolfram
+> 
+Heiner
 
