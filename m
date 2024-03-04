@@ -1,78 +1,113 @@
-Return-Path: <linux-i2c+bounces-2127-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2128-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72AFC86F7F9
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 01:33:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B416886FB11
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 08:46:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 322751F211DD
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 00:33:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 527D51F2289B
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 07:46:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1946F385;
-	Mon,  4 Mar 2024 00:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DB3514A93;
+	Mon,  4 Mar 2024 07:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IqYo9BtS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KDovF+qu"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2EB1362
-	for <linux-i2c@vger.kernel.org>; Mon,  4 Mar 2024 00:33:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F339653A6
+	for <linux-i2c@vger.kernel.org>; Mon,  4 Mar 2024 07:46:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709512398; cv=none; b=U4ggYArnPghfGn6jiiIeNr+HZv+E2WNCyPEH89JbzOgvzXl4m3BxVirBvB98NlxyiLZ4T0L2MG+u/xr86wRd2SjnzZansDjqc+VYReDq8PPG5RMiD5+6L4o45VFRAL0BKaFHo8ULAgEDxJE0qU9K9ap5ai84dpmdn/OxzznklbI=
+	t=1709538366; cv=none; b=Pv8OykCoVzp7f/wChXFvRXrrNitgdrdMroobPDXAg70d/K5VWbuWQug7v0ylHoGgi50xVvezo8yMK8tiYl3vlZ8C2gJK5IiWZoiYsPwvjj6Z+dqOE1iyhijhWpQZGDtM1MiBX+sXf7jeZ3T/pHfofdpe1egps/xELum/ZzRTecw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709512398; c=relaxed/simple;
-	bh=5e9Uso6+q35TC4SjsRvX2rVwCTCeLUw0E26VyA6HXtQ=;
+	s=arc-20240116; t=1709538366; c=relaxed/simple;
+	bh=P+DHtjXbJGmaldU2eaYU2ZfTWCngqC8V5mGM5t4AL4o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=POZD6899TtA2cE+f0Zq6ozEx8ipfVHfeHY+3RGmP0KXSafSTLSVbOV6khA7nHDzEC279i6i5Z7Ykm2P/wWvpreoltr7bbqULaMzeKbkFSOpL3MoeioCCDhNW0RAwDzvz7Hkisltd8nCDIEuv+uXe5pJGiilGZ4nX7cb2yOBNEIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IqYo9BtS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA066C433F1;
-	Mon,  4 Mar 2024 00:33:17 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=oOI0WWnzZvexVh9s1rP27c6CShV8SKecLrX16bLIjOhx0JvtsslZPnS7nUyTLz8MCaAhktLITQHJLpR98MAomqvW+Pgx890nF5MSP4K/X6LHucK80bT9OKztnGxjincEXeMTKCgdNaCgiUZTU2mqWrUcRk9DivIcikNaQTIWXvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KDovF+qu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEEF4C43390;
+	Mon,  4 Mar 2024 07:46:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709512398;
-	bh=5e9Uso6+q35TC4SjsRvX2rVwCTCeLUw0E26VyA6HXtQ=;
+	s=k20201202; t=1709538365;
+	bh=P+DHtjXbJGmaldU2eaYU2ZfTWCngqC8V5mGM5t4AL4o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IqYo9BtSN7me7GYXLHRVcDQojrQysOPghFmhA719fD98m/ccNdYQdlBgPUuWY94sd
-	 9ouCKKbH9DuC76IvibQAI1WKcN/R36p/lpCgRMGSV0WtT5TH6x1lnXyBDy0khTJq8K
-	 ElfhJCJlZIppBeK0ohnI3BVbehXLDJ8jbhliR6q62AfQvru+9uJUoexF3z8GdZJWJX
-	 cxKOD/v52A6LJ8nSnp9Fd0DjyH8/Hs3vISdWspb1hymHHIdRvSgXsYGhppONcxxmfX
-	 MJzrEjVMufuIk5eC16upWPJDyFf/eZXvQ10MdFHpF+2id2GyIi3SqfqvSOB8RLySky
-	 jkmhvXTUzhklg==
-Date: Mon, 4 Mar 2024 01:33:14 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
+	b=KDovF+quem6qR0emCTw+kYBXMCPgfoE+G0zuwDpN3kwBF9ktJcUwDtueYUZfH7K26
+	 R+A5tW9IR0Me8hTODajEx6H0iLFgKPWLcDA2ko+GRw4Ol/QCj7LIBX2de1DtT8AYhV
+	 SnaYmTWa3szNyU5K+ZL4Zf5MoBxk1/QZmPTf8bcoD38yHGSV+COt3Crn24qBehJ3im
+	 7TbCIL4SHpSbEj5Qr7/flL6O2P8jSq2biK+5jgNwndyGG4ftElMzE6xBGZrLwb7oZK
+	 epnNwfQ4tp6mVrDsmb55hfg/nGVLwQM8QCHth5twuChfD+uaDsKDShf/NBxwAQCUlg
+	 Pg+QlyxWz3rRw==
+Date: Mon, 4 Mar 2024 08:46:02 +0100
+From: Wolfram Sang <wsa@kernel.org>
 To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@the-dreams.de>, 
+Cc: Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.com>,
 	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2] i2c: i801: Fix using mux_pdev before it's set
-Message-ID: <ezran53u2uths36tt2o36uh3bsoufo4n3zzlygwha7pazzx7hc@2focqd3wxtia>
-References: <6db1e4ad-14b5-4d0e-ac06-46541970ce0e@gmail.com>
+Subject: Re: [PATCH v2] i2c: smbus: Prepare i2c_register_spd for usage on
+ muxed segments
+Message-ID: <ZeV8Oi-j8L7ugyhR@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <d0b4aa2e-8b5d-4c27-8aab-164a089d95bd@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="InYlFzGXk3uUnShi"
+Content-Disposition: inline
+In-Reply-To: <d0b4aa2e-8b5d-4c27-8aab-164a089d95bd@gmail.com>
+
+
+--InYlFzGXk3uUnShi
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6db1e4ad-14b5-4d0e-ac06-46541970ce0e@gmail.com>
 
-Hi Heiner,
+Hello Heiner,
 
-On Sun, Mar 03, 2024 at 11:45:22AM +0100, Heiner Kallweit wrote:
-> i801_probe_optional_slaves() is called before i801_add_mux().
-> This results in mux_pdev being checked before it's set by
-> i801_add_mux(). Fix this by changing the order of the calls.
-> I consider this safe as I see no dependencies.
-> 
-> Fixes: 80e56b86b59e ("i2c: i801: Simplify class-based client device instantiation")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> +		dev_info(&adap->dev, "%d/%d memory slots populated (from DMI)\n",
+> +			 dimm_count, slot_count);
 
-Thanks,
-Andi
+I am still in favor of removing this. I don't like the inconsistency of
+the printout depending on the bus being muxed or not. We still have one
+printout per device instantiated.
+
+If you agree, I can remove this while applying. If not, then I'll apply
+as is. No strong opinion here on my side.
+
+Happy hacking,
+
+   Wolfram
+
+
+--InYlFzGXk3uUnShi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXlfDYACgkQFA3kzBSg
+KbbEsw//RaMptByysNFkV9KkbbzMAtQ7S/ogqNJHqXjbbCDpqmCg5mzxq/pv6+j7
+JRVyWb/iWmQJYwofmSmECTXgQbT6uj9q879dCW/a+YoPGgoX9SRrCL7Ue9yDF+je
+U3JE/B4s6DqZCs22V+ao7/K/LwE2Y4gbXWD0j8xAczd1JekxtPjx91mOEnIjZNTR
+OAlUU5mdllzhTLGYEJMfNSKfNpyN092WxXAe76Fn4504KNSDZ4qZDRojhL7HHnR7
+3c/bZiZuKNU7OdTKP52550oFPngZ6Iz5ERpJqKiiI5yR/IjmWbJCJzfKAh/dWOOt
+9aJesveV/Itd9VQZCAkIxwcI/s4S8GzDMRaDYuNA6LbLieVDj0Kjf6gyn8V3xdp1
+NvyF5vyTd5nGrYQKjRJkQLP6cMVZvGFS64XWZJGdTXxQWa0yNeMCo2zC2ubMgOl5
+HIZPbw6pfaL7ikHokbho9i3Lej8DyDWJKvExJjSm+7BQp6VkLwAlCxxP3uYMH4m3
+TSae1sYlI719T3sry54yord8+lYLTfJaR9aJWLonD4w5FdNB8vwjJ+B0SxOEP9+D
+5g6GJng7HG3WhXw8FPJ1Bdvy2vzT/t/0p1kyLyY5XkaR19HTppylEwy21bv7LLT9
+3M5nBCZM51tk473er+1TxL093WEb9ay+EmEStpBlPPBU1kEQ6cY=
+=2eSV
+-----END PGP SIGNATURE-----
+
+--InYlFzGXk3uUnShi--
 
