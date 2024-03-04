@@ -1,72 +1,72 @@
-Return-Path: <linux-i2c+bounces-2181-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2182-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6472E870B9F
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 21:31:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D2BC870BB7
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 21:44:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDFB1280DF7
-	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 20:31:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A1381F22A8B
+	for <lists+linux-i2c@lfdr.de>; Mon,  4 Mar 2024 20:44:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4510749A;
-	Mon,  4 Mar 2024 20:31:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0F85947F;
+	Mon,  4 Mar 2024 20:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NgHyQBhz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QR/Gzy3R"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D7A6FA9
-	for <linux-i2c@vger.kernel.org>; Mon,  4 Mar 2024 20:31:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B41979DD
+	for <linux-i2c@vger.kernel.org>; Mon,  4 Mar 2024 20:44:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709584267; cv=none; b=KU32E+JuCmwCQyeUpPGm2Cj4Ngfrk2iBhRo0BxpvZo9JHBAxTR18obMxFb29WRGirr70spFJoUIN5O4uJX0aRdwboAO8mcWxVw9s4LnGs0yNnJCnOo3sdvFN9+qD8liIHecohtKs0lvgjA2JgiC2xjfbsEC+9kyy294JkcwO38M=
+	t=1709585062; cv=none; b=rd51Fvaa8VZzUY4R2Akz5C25uCMKAumYHIio9V2tuPiOnv3TFxNIdzF0h0saXtbMmHwjoLjVm9YQCdM4ErtZyBujDAzih1lo+o4QuGFnfAgOgKvjRWog/wMjDtoPJJMIxTZ8YcmAF2CsOBzWUk7PD3c8+4MGVg+ypV9EMRu0Sl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709584267; c=relaxed/simple;
-	bh=RQ16JjTfXAvv+NT1tCLXXajmw9iF43nmR77jtrLrohI=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=fZdvKCntqFPwOhwfGEe5viGPSik2WgUDPqV+Sn5WlNOQEtNOZHmoISY4kWYbaGT6oxSo+1B7P06wBWfyfS6XVDzKgEmToLd00EEpanJVeTdjKUygqL5c5ePunBfc+az81C/8ek4g8Q9wX2G9IQxld2oxZJuJJFtMY7LO9XOZQsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NgHyQBhz; arc=none smtp.client-ip=209.85.167.47
+	s=arc-20240116; t=1709585062; c=relaxed/simple;
+	bh=GrB6pXjngdsj/Gx8HQpyEs7W96X9FXI8uNKOIgf037E=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=s4V9TVFBxOzfJ6SXSO9/Ku9Pjl8/FfPpMH5uuygupgFl9xbx4j8sYiz+gIpxwqBHf4htL+Dg4hNh/P3r5k7GX6e/SMEPLEYU90LVtpUkHldm+xfsgQIsW2yYDkflhi3eD1l8p/frKo5wUlquUKw2t7udJrJ9F7mDBeZFCN1izis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QR/Gzy3R; arc=none smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5132b1e66ddso3973735e87.3
-        for <linux-i2c@vger.kernel.org>; Mon, 04 Mar 2024 12:31:05 -0800 (PST)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-564372fb762so6419072a12.0
+        for <linux-i2c@vger.kernel.org>; Mon, 04 Mar 2024 12:44:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709584264; x=1710189064; darn=vger.kernel.org;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+        d=gmail.com; s=20230601; t=1709585059; x=1710189859; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:autocrypt:subject:from
          :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Pp8sklLIffyqcAz9LK73IMJyQl0sAY2nMdEYzftSdHc=;
-        b=NgHyQBhzXAFVUtK5Q9EmFgjFUX5yhBV2beD/ozFZzpeyqgYQ05sNt/TMQecnId5uaM
-         eRCRvrU+WR4lEZyWenyFzi38rpIxqQ3+48iFjuD0/rpiKDTQ1LXtA2MkXM67eiKCcXoa
-         7krK5izUk9nCN7ANUD06oVyraN/ZsGWR1iJKBWWks7i7um2fsyuEXfLqDTPEddav6fCv
-         MGbKPypNl5TxwE2GnYV9zBqZV+T5tUrZWzj8QbDovZOppz/NP1uaYNQGi5ExuMrKa2tU
-         qvfEGs6J6mGrKOk6QLrDY50fiq65Oxavog84j9CHSkqKYgC0TqdySUFYpBvJcFb9VHA7
-         VMlQ==
+        bh=uum4DSkKjYDaFPvn+WTNXj6cxf3/eIpuiOXbvtULG6Y=;
+        b=QR/Gzy3RvMITbX6IiLbCAIct5M6B3iYuGUC1b8qFr844iA+oFaC+OThdaW8BnWv+ys
+         SQ2w60UrgIiEt7efe/eb8ZWBnODqR0CYxtZ27kMfQmPMg1OVKVfcZytLvVWYLIo0R7l+
+         SDWCv9kmKmhC3VTp9J/orR73Qqq6fbD/s8rZX+UJmY+fRLeuLYIAvzmCjEmCDmOdUVFf
+         T9RRei9Alx1bSXMGrM8mO7qBo3kmawRB8KDjvFRMcd5YmKi0OGujBIMsRBq+QzysMxkr
+         DkUStJRg1zAqgXvYPPpIicclVFXp47Nu6E6lJgFO49cYesBZnj/pot8ncioIQ63rNNqj
+         jM/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709584264; x=1710189064;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
+        d=1e100.net; s=20230601; t=1709585059; x=1710189859;
+        h=content-transfer-encoding:cc:to:autocrypt:subject:from
          :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pp8sklLIffyqcAz9LK73IMJyQl0sAY2nMdEYzftSdHc=;
-        b=EdDdp5wPamfPl9i8FBGVXOFasVNbarpjgGDCM2wU9EoPYBZE7DN8Z5yWXsu/4GcNse
-         BqH46sgBwS4at8VIARimsJHVioJ2VNjabanZNlrEmUFjnqvNJYga7+YZkGGVdmWrtqn8
-         g7759dbdbB/j8eG4RxPqu42aXHdEovB7YEyCslxIp0q9SrJBFgjSusaVuLf5tvJH98rU
-         RCsk7WXHhlIOE3LClJzCLcVV3Y3f8V4c7kz7qB0l8H7B4yNtePzSOi00HFcLZlmGSb02
-         B2Gsup0j1Us320bPBSDeK6nuwqyJK4LTEdWlFS+OGN4XW+A9HSkXbO8MNrMaJU8S0spd
-         EpPg==
-X-Gm-Message-State: AOJu0Yz06KUH09r4BWbCa9YoT4GVlFjbfE1yNEnS19ewbpQYqNna/twn
-	Wb+XhPvApqa93iuQYqLesyQ1qyIds2mZyOTFdAhj1/e5jSNWm1zj
-X-Google-Smtp-Source: AGHT+IEuYtHBiIjvAXtpCZFoTNnEdeFjbaueheL9wfgJrBT2wu9MbQMAirJogAaJKgx3I27ycnC+lA==
-X-Received: by 2002:a05:6512:3d8b:b0:513:2c29:216c with SMTP id k11-20020a0565123d8b00b005132c29216cmr8482518lfv.11.1709584263481;
-        Mon, 04 Mar 2024 12:31:03 -0800 (PST)
+        bh=uum4DSkKjYDaFPvn+WTNXj6cxf3/eIpuiOXbvtULG6Y=;
+        b=DadDNCC5hHqBslfyfKXmh6Xa6mW3bVXtG/7kMC3/2PYhwjWo6REXhmsRw3DxTc1FJ2
+         Eye5EgENteRKokX91bZYFUlQNo46Dc9Xz3d1HxUZLfjb6jk+N0PjrS6iTQtLMQ/mCxBo
+         2+yuzP/OYM8CFDVjEZfzCAXAaUXBe9aKfiA3IhFNmZVtzi32F15NH3N/gVr6OHdIdzTF
+         K+8T74KC+xI3cnILZsRc8aK6xBycH0b9/+0vXSZklySz/3OMHg8VFl85QOshds2J4a4D
+         ERhf70f/zSEa80xA5n4IsbwBw4/ayGOyh92hBJu5R7LyHqjyVZfUfeybotJdcMbj2h3h
+         FhMw==
+X-Gm-Message-State: AOJu0Yy8IoDcSjIaeVFHudu3eqWs7vkeHwMY+/qAk2dbj2Iz6teCGQ1H
+	+Rf8NTnjkoEpjq+1+PdcfBjzU20AXDXGWiPexcnhNDxwqio6CZVd8wwtcGqV
+X-Google-Smtp-Source: AGHT+IHqAlyLo79FVLFcfvAa5er9Avlu5S+dydnyE6N2nclDWIFGlL1OktY7mt2T3FOWVhIpg/be6A==
+X-Received: by 2002:a05:6402:1a58:b0:565:b456:435d with SMTP id bf24-20020a0564021a5800b00565b456435dmr7306947edb.17.1709585058276;
+        Mon, 04 Mar 2024 12:44:18 -0800 (PST)
 Received: from ?IPV6:2a01:c23:c411:1a00:49f1:9fda:4d1e:4f64? (dynamic-2a01-0c23-c411-1a00-49f1-9fda-4d1e-4f64.c23.pool.telefonica.de. [2a01:c23:c411:1a00:49f1:9fda:4d1e:4f64])
-        by smtp.googlemail.com with ESMTPSA id y13-20020a1709063a8d00b00a442e2940fdsm5359008ejd.179.2024.03.04.12.31.02
+        by smtp.googlemail.com with ESMTPSA id er8-20020a056402448800b00566d7e27dccsm3877563edb.0.2024.03.04.12.44.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Mar 2024 12:31:02 -0800 (PST)
-Message-ID: <8d35529d-8ba9-4bdd-a3a3-00d67ab6f2d5@gmail.com>
-Date: Mon, 4 Mar 2024 21:31:06 +0100
+        Mon, 04 Mar 2024 12:44:17 -0800 (PST)
+Message-ID: <d013d57f-bd75-4c79-b829-e19740fa3848@gmail.com>
+Date: Mon, 4 Mar 2024 21:44:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -75,13 +75,9 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Content-Language: en-US
-To: Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Wolfram Sang <wsa@kernel.org>
-Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>
 From: Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH v3] i2c: i801: Avoid potential double call to
- gpiod_remove_lookup_table
+Subject: [PATCH] Documentation: i2c: Document that client auto-detection is a
+ legacy mechanism
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -125,53 +121,78 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
+To: Wolfram Sang <wsa@kernel.org>
+Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-If registering the platform device fails, the lookup table is
-removed in the error path. On module removal we would try to
-remove the lookup table again. Fix this by setting priv->lookup
-only if registering the platform device was successful.
-In addition free the memory allocated for the lookup table in
-the error path.
+Class-based client auto-detection has been considered a legacy mechanism
+for 10 yrs now. See following change:
+0c176170089c ("i2c: add deprecation warning for class based instantiation")
+Change the documentation of how to write an i2c client accordingly.
 
-Fixes: d308dfbf62ef ("i2c: mux/i801: Switch to use descriptor passing")
-Cc: stable@vger.kernel.org
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
-v2:
-- cc stable
-- free memory allocated for the lookup table
-v3:
-- cc'ed Linus
----
- drivers/i2c/busses/i2c-i801.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ Documentation/i2c/writing-clients.rst | 32 ++++-----------------------
+ 1 file changed, 4 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index 291c609d1..9c624f31c 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -1428,7 +1428,6 @@ static void i801_add_mux(struct i801_priv *priv)
- 		lookup->table[i] = GPIO_LOOKUP(mux_config->gpio_chip,
- 					       mux_config->gpios[i], "mux", 0);
- 	gpiod_add_lookup_table(lookup);
--	priv->lookup = lookup;
+diff --git a/Documentation/i2c/writing-clients.rst b/Documentation/i2c/writing-clients.rst
+index 41ddc10f1..ad4247414 100644
+--- a/Documentation/i2c/writing-clients.rst
++++ b/Documentation/i2c/writing-clients.rst
+@@ -48,10 +48,6 @@ driver model device node, and its I2C address.
+ 	.id_table	= foo_idtable,
+ 	.probe		= foo_probe,
+ 	.remove		= foo_remove,
+-	/* if device autodetection is needed: */
+-	.class		= I2C_CLASS_SOMETHING,
+-	.detect		= foo_detect,
+-	.address_list	= normal_i2c,
  
- 	/*
- 	 * Register the mux device, we use PLATFORM_DEVID_NONE here
-@@ -1442,7 +1441,10 @@ static void i801_add_mux(struct i801_priv *priv)
- 				sizeof(struct i2c_mux_gpio_platform_data));
- 	if (IS_ERR(priv->mux_pdev)) {
- 		gpiod_remove_lookup_table(lookup);
-+		devm_kfree(dev, lookup);
- 		dev_err(dev, "Failed to register i2c-mux-gpio device\n");
-+	} else {
-+		priv->lookup = lookup;
- 	}
- }
+ 	.shutdown	= foo_shutdown,	/* optional */
+ 	.command	= foo_command,	/* optional, deprecated */
+@@ -203,27 +199,8 @@ reference for later use.
+ Device Detection
+ ----------------
  
+-Sometimes you do not know in advance which I2C devices are connected to
+-a given I2C bus.  This is for example the case of hardware monitoring
+-devices on a PC's SMBus.  In that case, you may want to let your driver
+-detect supported devices automatically.  This is how the legacy model
+-was working, and is now available as an extension to the standard
+-driver model.
+-
+-You simply have to define a detect callback which will attempt to
+-identify supported devices (returning 0 for supported ones and -ENODEV
+-for unsupported ones), a list of addresses to probe, and a device type
+-(or class) so that only I2C buses which may have that type of device
+-connected (and not otherwise enumerated) will be probed.  For example,
+-a driver for a hardware monitoring chip for which auto-detection is
+-needed would set its class to I2C_CLASS_HWMON, and only I2C adapters
+-with a class including I2C_CLASS_HWMON would be probed by this driver.
+-Note that the absence of matching classes does not prevent the use of
+-a device of that type on the given I2C adapter.  All it prevents is
+-auto-detection; explicit instantiation of devices is still possible.
+-
+-Note that this mechanism is purely optional and not suitable for all
+-devices.  You need some reliable way to identify the supported devices
++The device detection mechanism comes with a number of disadvantages.
++You need some reliable way to identify the supported devices
+ (typically using device-specific, dedicated identification registers),
+ otherwise misdetections are likely to occur and things can get wrong
+ quickly.  Keep in mind that the I2C protocol doesn't include any
+@@ -231,9 +208,8 @@ standard way to detect the presence of a chip at a given address, let
+ alone a standard way to identify devices.  Even worse is the lack of
+ semantics associated to bus transfers, which means that the same
+ transfer can be seen as a read operation by a chip and as a write
+-operation by another chip.  For these reasons, explicit device
+-instantiation should always be preferred to auto-detection where
+-possible.
++operation by another chip.  For these reasons, device detection is
++considered a legacy mechanism and shouldn't be used in new code.
+ 
+ 
+ Device Deletion
 -- 
 2.44.0
 
