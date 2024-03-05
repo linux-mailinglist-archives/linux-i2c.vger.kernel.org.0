@@ -1,99 +1,113 @@
-Return-Path: <linux-i2c+bounces-2189-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2190-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BE6787124E
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 02:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE0EC8713CD
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 03:46:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E5601C212CE
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 01:24:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E13D1C233F3
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 02:46:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DCEC125C1;
-	Tue,  5 Mar 2024 01:24:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC38028E0D;
+	Tue,  5 Mar 2024 02:46:02 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from TWMBX01.aspeed.com (211-20-114-70.hinet-ip.hinet.net [211.20.114.70])
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8E6FBE9;
-	Tue,  5 Mar 2024 01:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D462286BF
+	for <linux-i2c@vger.kernel.org>; Tue,  5 Mar 2024 02:45:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709601859; cv=none; b=eLS1xQR+pFmCCrOoCW0SyexrS9O+WH+lhRcMSLpS8cc+kyOXNJi79/GAcH5WTRrbSJsn4n7rE6o7zOTjK/PZgVccSwlbbSqc4zoTTVER84b+35tLPROYrwfo/7I8vZO+8oheE9SsSIZB0faYvUn84u3qD0LdwzoZpPlLyh858lE=
+	t=1709606762; cv=none; b=bRRRy7+L7CWWRSEL48wpw27bUj8uEe7UM4wzI1p78g1BL81rioDz7UJ5/AYaYdUpPJz570hOXtaaQTh1Q/oL8M1JWX6BMfY9Qcya97rEoAnPwTCgLvC7n7jKh5SZbk+UJhzVyqEk2VKFmOtDHWF4ZA+1bfcfCOYYH6f3vbpXDf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709601859; c=relaxed/simple;
-	bh=SiTU3/lQ/JkgDkpTq0F6QQJUJBb284UfhlEgXg8DB/Y=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nagu5/vinP8BIssbHXz6+NpjbDxB3FRgOg1nmibPPHvoA2u5Pywjl/4rKtZV/uGwv70DaP5St3uRQyvw/CnBfLiE4JRR+p9YYwRbmp9OkznqXcx0jwy1YpimldDDfOZ8u2FITxQMCSWIOccC7P9J9EhXkUxqraoxrkxxMwSoG6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=aspeedtech.com; spf=fail smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=aspeedtech.com
-Received: from TWMBX03.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
- (192.168.0.124) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Tue, 5 Mar
- 2024 09:20:08 +0800
-Received: from TWMBX02.aspeed.com (192.168.0.24) by TWMBX03.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 5 Mar
- 2024 09:20:08 +0800
-Received: from twmbx02.aspeed.com (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 5 Mar 2024 09:19:08 +0800
-From: Tommy Huang <tommy_huang@aspeedtech.com>
-To: <brendan.higgins@linux.dev>, <benh@kernel.crashing.org>, <joel@jms.id.au>,
-	<andi.shyti@kernel.org>, <andrew@codeconstruct.com.au>,
-	<jae.hyun.yoo@linux.intel.com>, <wsa@kernel.org>
-CC: <linux-i2c@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
-	<linux-kernel@vger.kernel.org>, <BMC-SW@aspeedtech.com>
-Subject: [PATCH v2] i2c: aspeed: Fix the dummy irq expected print
-Date: Tue, 5 Mar 2024 09:19:06 +0800
-Message-ID: <20240305011906.2745639-1-tommy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1709606762; c=relaxed/simple;
+	bh=UeyKAaMH3xaLWQ798d0626VFWE1lfi7M4YlxbYIfJLw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=bioLKH4tqhTTLsSRUSa/lPPScw3DsYD++k+Npt/7tu+t6gJ+tjxe0jyziHtF7wc+kR4An7HU+mB9htO0ufk06N6/qcTgD5aYzNIsFPi6u0ysVoo54h6I6XyU3rZrSd9knqPXq/Iw6ieWK2GZeunzRO035xtnfcU/F/92ehwd8UI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1709606756-086e2316ed077a0001-PT6Irj
+Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id 4PfVG5i1dTIEzoHo (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Tue, 05 Mar 2024 10:45:56 +0800 (CST)
+X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX3.zhaoxin.com
+ (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 5 Mar
+ 2024 10:45:55 +0800
+Received: from [10.28.66.68] (10.28.66.68) by ZXBJMBX03.zhaoxin.com
+ (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 5 Mar
+ 2024 10:45:54 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
+Message-ID: <c0eb2886-6250-4f67-8b17-c6ba953a42d3@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.66.68
+Date: Tue, 5 Mar 2024 10:45:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [SPAM] Re: [PATCH v8 6/6] i2c: add zhaoxin i2c controller driver
+To: Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+	<linux-i2c@vger.kernel.org>, <cobechen@zhaoxin.com>, <hanshu@zhaoxin.com>
+X-ASG-Orig-Subj: Re: [SPAM] Re: [PATCH v8 6/6] i2c: add zhaoxin i2c controller driver
+References: <cover.1709014237.git.hanshu-oc@zhaoxin.com>
+ <4e9c2c3a3940a00da67564c6e19f4771ab6dc67f.1709014237.git.hanshu-oc@zhaoxin.com>
+ <ZeWZHSt-qm5wH3wn@ninjato>
+ <7jopk32t6ygaxgo27ln2bsqhgsces5d2hxxri6g3la6datrlxd@llfdg36ldr4b>
+Content-Language: en-US
+From: Hans Hu <HansHu-oc@zhaoxin.com>
+In-Reply-To: <7jopk32t6ygaxgo27ln2bsqhgsces5d2hxxri6g3la6datrlxd@llfdg36ldr4b>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ ZXBJMBX03.zhaoxin.com (10.29.252.7)
+X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
+X-Barracuda-Start-Time: 1709606756
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 972
+X-Barracuda-BRTS-Status: 0
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.121678
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
 
-When the i2c error condition occurred and master state was not
-idle, the master irq function will goto complete state without any
-other interrupt handling. It would cause dummy irq expected print.
-Under this condition, assign the irq_status into irq_handle.
+Hi Wolfram and Andi,
 
-For example, when the abnormal start / stop occurred (bit 5) with
-normal stop status (bit 4) at same time. Then the normal stop status
-would not be handled and it would cause irq expected print in
-the aspeed_i2c_bus_irq.
 
-...
-aspeed-i2c-bus x. i2c-bus: irq handled != irq.
-Expected 0x00000030, but was 0x00000020
-...
+>>> +           /*
+>>> +            * if BIOS setting value far from golden value,
+>>> +            * use golden value and warn user
+>>> +            */
+>>> +           dev_warn(i2c->dev, "speed:%d, fstp:0x%x, golden:0x%x\n",
+>>> +                           params[0], fstp, params[2]);
+>> Well, if you want to warn the user, the string should be more
+>> descriptive. Maybe "FW settings might cause wrong timings" or whatever
+>> these values mean. I don't know.
+>>
+>> The issues I mentioned could be resolved incrementally from my point of
+>> view. Or with a new series. I don't mind. So, in general:
+> Same goes for few minor checkpatch warnings.
+>
+> I will accept incremental patches to fix them... they are mainly
+> allignment issues.
+>
 
-Fixes: 3e9efc3299dd ("i2c: aspeed: Handle master/slave combined irq events properly")
-Cc: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+OK, the issues you mentioned will be fixed with a new series.
+For the current series patch, do I need to push it to the latest
+for-next branch? Or will you push it?
 
-Signed-off-by: Tommy Huang <tommy_huang@aspeedtech.com>
----
- drivers/i2c/busses/i2c-aspeed.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-index 5511fd46a65e..ce8c4846b7fa 100644
---- a/drivers/i2c/busses/i2c-aspeed.c
-+++ b/drivers/i2c/busses/i2c-aspeed.c
-@@ -445,6 +445,7 @@ static u32 aspeed_i2c_master_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
- 			irq_status);
- 		irq_handled |= (irq_status & ASPEED_I2CD_INTR_MASTER_ERRORS);
- 		if (bus->master_state != ASPEED_I2C_MASTER_INACTIVE) {
-+			irq_handled = irq_status;
- 			bus->cmd_err = ret;
- 			bus->master_state = ASPEED_I2C_MASTER_INACTIVE;
- 			goto out_complete;
--- 
-2.25.1
+Thanks,
+Hans
 
 
