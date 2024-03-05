@@ -1,102 +1,109 @@
-Return-Path: <linux-i2c+bounces-2198-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2199-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87287871E67
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 12:59:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB6FD8724F3
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 17:57:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8FFC1C221EB
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 11:59:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 186CD1C20C5B
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 16:57:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C272559153;
-	Tue,  5 Mar 2024 11:59:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DE15D268;
+	Tue,  5 Mar 2024 16:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KwKWSBqC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eFO+fYMA"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E7758AC3
-	for <linux-i2c@vger.kernel.org>; Tue,  5 Mar 2024 11:59:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C89DDA0;
+	Tue,  5 Mar 2024 16:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709639967; cv=none; b=jAgkXfURky/nZiczpHGfeYVlYsZpCyh/XB+WURnYJamfKcwflqzRC7O7JE3K2NGcs8BHVHsypDfx8jJmXojajlmye7VvueOTpQqf44cfk8RoTV3p+t4WAtmWQ8Uplt/P/6/BNBY0ifZuOz2WWF4HbPt7PtE5NRj60Hpe8TeoqMU=
+	t=1709657819; cv=none; b=AITLAhP1YjKaYcKJczAwPvarbji1Hb1Ji/xhTEL/TS1v/aUghcy1zEXkpNYQQ+PJk2FgLzUrQMDKQ6DKYWs/F6qLL5hL3HJIJzPgxH9unNTOTNassFWkeBu2Yk5cCHdihKPMjKyYkz/MaKOTdx/XImxj4TBV0kXzng4YJzJZCQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709639967; c=relaxed/simple;
-	bh=8VLarsY7xO6hgS984HgyiFGfOzWJcsgDY2Q+GbSzI4s=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ZwOZQDoiB20xh0VNmOjGH5kgg16ShZGoFXP2J3daO03WsrBeQ+RW6UpYjwIVPpyPFUhSmtvddDcaLpeZEAPJ8z/2HfnMmlS5ipYsRYU70/zErpv0XCFNw5iMn/b3gNm4JxH3Kk72KfZqtlz1S5kBMKapAZEpXV8hREc3HSpCViU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KwKWSBqC; arc=none smtp.client-ip=209.85.221.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-4d35666c4bcso973862e0c.0
-        for <linux-i2c@vger.kernel.org>; Tue, 05 Mar 2024 03:59:25 -0800 (PST)
+	s=arc-20240116; t=1709657819; c=relaxed/simple;
+	bh=cI0DEFw2kaaMRX2yorxEsykml5XIXDljX1+quMTyEq8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Kf68tl+bcLgZSLRfMi2duyqPegavQ+wEBpSBCM5xncD6Kh/yvdoJV+Oq/izlwm4PMkFGmyQlcq0VFkkK8qGg7msVxXqcEnyNNOB0MY81liK3+ipC8r9uVKKWt7kE2DcBq7qzBM6C5NNKvACXYXQBaR4kfITaSbGWN2O7NNlYwec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eFO+fYMA; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6e46dcd8feaso636171b3a.2;
+        Tue, 05 Mar 2024 08:56:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709639965; x=1710244765; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=mn0t/pkvNce9+2PWmz7Y1Q2+8CLlu4R5wOIXaANDsnA=;
-        b=KwKWSBqCG0GRLrVFS4RHEx6tJXmoaxaHElSuozI4bB31kdG8HaIB/HCXgSkokAvKH0
-         LTdEHaS1m+nYFrp9uO2Uw4+t7G1zJuzzoHAHta2mvwT3hdBTIKo49bcHNebCwTKug8Zm
-         RJInNQkxim+TfYNt2eevQ544KEFf9mZjRXLFSMvGO9k1rGUCY/4+VZygyJw4cbG8Cerj
-         2BY45dXmDfCW2gH3nZK4wwN/OMq6Ps+XMn0km7504/HNlsW/zAFqBegpOgV8QrXmSABC
-         dqkmXGVDM3LfgNMNHNCmgxdTVmf6YmsFokfDkWz0oqb380TDv6FErG/mIwayLJg1mSGd
-         jngw==
+        d=gmail.com; s=20230601; t=1709657817; x=1710262617; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WQGkHUGJv9iAGFsBSsW89sAex03GUVkrj7xqR9KP8YU=;
+        b=eFO+fYMA2p6njRxUGRYeTF5kv8lZvrHCP3uv9IwMqRhVekj68Ba0TlsHsXBTOg9XVV
+         5Z1vznyKQ2+f+1zrVPj51OW0ft7GnxgzZ5lBCr+Iuk2TXK4wnDoBqchEBxiY3p4ky1iY
+         wc4j4XdTsEQ4pGMbKdSRlI5tk/hSEnWt3IZQcxmB5kkSgkjSRgzgM28OjI/c2biPwnPF
+         EzQ1WVFESBhPQnSBemqBd2mir2nEnsScvz4ddj2gbeIg78UvlkWjzNQZiZCGgm5Z6ya2
+         vq6hJ5ijy9l7qnDKIchrgN3GN9IZC7Wl+pG1/oNeAbnwycL8DMLRQukCYnfvr6y8nnq7
+         pAog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709639965; x=1710244765;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mn0t/pkvNce9+2PWmz7Y1Q2+8CLlu4R5wOIXaANDsnA=;
-        b=u3Ck1FaP6vDuhNamtyjNvbKX9q7bJtML2Chl+oCi/LsOMP6JKJowfZo2Tl+9Pvjc+Y
-         QAF5aHAHRJUeCbqPMrtTV9gCm11M4kzee5VJoy2V8tDqsSdRKECfgcavukYIJE0IDRpK
-         wrlCfIk60/blNuq+zLhFc7YJNJ0O2VCZqYDZuTMctz88KQ2TFjW3sTc06e8TdXgmRIdx
-         tu3AAuYyEnB5MmKUlvnow4M17rP7vn+cXCwVLzwltiXJmIaN3tjGp48d6oUG5ZFnNir8
-         qDBLHDUoj1fDxBw2QHWIvZJH2cQLdaprPcS0ilAPZ1nvMAFh7LEXrvWE7/mqrnCOGkFk
-         KlrQ==
-X-Gm-Message-State: AOJu0YyHV+k29hDy/t4Zt7VurRDjyRVzeh4IYeQ/z4E7AA6fLFYjLVfY
-	5rMQLovAl/nWst5CFgsFXxrHHVWu1q/zfZou9qwdnaHSj4Fs0DVOwyQ6le78E4MO35bAjPgeRqd
-	qRgN3tMneDWsz1YxVPFhNCZiRd8cUfVhtzmP1kLrRlDerkASZgnM=
-X-Google-Smtp-Source: AGHT+IGN5Hcad9J/QLmVi8iffmHg/kU/flzHDG0LTMk48TnFBOM3+9dAPA0YVgy9B5MPFV+XUGH5WBSLGbNpFzu1WrA=
-X-Received: by 2002:a05:6122:2908:b0:4d3:36b9:2c26 with SMTP id
- fm8-20020a056122290800b004d336b92c26mr1473621vkb.14.1709639964677; Tue, 05
- Mar 2024 03:59:24 -0800 (PST)
+        d=1e100.net; s=20230601; t=1709657817; x=1710262617;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WQGkHUGJv9iAGFsBSsW89sAex03GUVkrj7xqR9KP8YU=;
+        b=est2FqWmlOUAZ2f7fA8YsAX57DYNUaaeNJEgVrEdwGHoZ4kNlPtZSbKPtnd0O7Esko
+         gleAE55fdFH4Ef6ctNQvTlfzUR4p9lNvyZ2gQIEf4KoqACPYwRv7GixCAOFAZfrVbqCA
+         4+lExqNFOKB7W3aEfdY4RdgCb3stVY+KhOsfHZqczXDIb/BKtfuLu119xHOIJQsIBwsd
+         lqgiNmPzV8nElgmJdVU2K9YKJxRzfZ6YkIkxCA55WMEYMaJQyK6VDzs3/XeriTlRSbzR
+         uQcbrah2L70I9zZIKbHaZhuPaEJAj4HCtl2/xMKEVc4Mel16fEHQRlyxPjUYROe7dsGr
+         y16g==
+X-Forwarded-Encrypted: i=1; AJvYcCUbbXCtKYnFTI9M5/km9ubpMwITQJdy8aeNN6/ZBrS0h3VExROh6iZaWD/o3ajq5P+xNhqfE58H7pMgapZJWGUaSMZeyIElZPmfYJl9
+X-Gm-Message-State: AOJu0YxfYikiy4WUOF30g/bOyjLTJjBDbKkNe6af6/ago2yHATt467ur
+	X3AJtiNJpsafO0y6FJflqzNEu8ZhZeHul9OnldsyN0q1XUpH1JXU
+X-Google-Smtp-Source: AGHT+IFcnbfqjPlsggEMvV2KNpHuOuuGmUOnDuok3CiIrE06xauK1fAMcZvBkc6jD3L+h6rS7LA2Iw==
+X-Received: by 2002:a05:6a00:1a8b:b0:6e5:4f19:c863 with SMTP id e11-20020a056a001a8b00b006e54f19c863mr14917595pfv.33.1709657817288;
+        Tue, 05 Mar 2024 08:56:57 -0800 (PST)
+Received: from localhost.localdomain (125-229-101-177.hinet-ip.hinet.net. [125.229.101.177])
+        by smtp.gmail.com with ESMTPSA id y133-20020a62ce8b000000b006e45a0101basm9862766pfg.99.2024.03.05.08.56.55
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 05 Mar 2024 08:56:56 -0800 (PST)
+From: "Hsin-Yu.Chen" <harry021633@gmail.com>
+To: wsa+renesas@sang-engineering.com
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Hsin-Yu.Chen" <harry021633@gmail.com>
+Subject: [PATCH] i2c: remove redundant condition
+Date: Wed,  6 Mar 2024 00:56:52 +0800
+Message-Id: <20240305165652.18842-1-harry021633@gmail.com>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 5 Mar 2024 17:29:13 +0530
-Message-ID: <CA+G9fYutCUrni7JVzLf+c3Veh_jTscTKJtph8rPzy3xHmdxsbg@mail.gmail.com>
-Subject: riscv: ERROR: modpost: "acpi_device_notify_remove"
- [drivers/i2c/i2c-core.ko] undefined!
-To: linux-i2c@vger.kernel.org, open list <linux-kernel@vger.kernel.org>, 
-	lkft-triage@lists.linaro.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Hamish Martin <hamish.martin@alliedtelesis.co.nz>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-The riscv builds failed on today's Linux next tag next-20240305.
+I2C_M_RD is defined as 1 and `flag & I2C_M_RD` is one or zero
+no need one more condition to get the value
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Signed-off-by: Hsin-Yu.Chen <harry021633@gmail.com>
+---
+ include/linux/i2c.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Build log:
----------
-ERROR: modpost: "acpi_device_notify_remove" [drivers/i2c/i2c-core.ko] undefined!
-make[3]: *** [/builds/linux/scripts/Makefile.modpost:145:
-Module.symvers] Error 1
-                    ^~
-Steps to reproduce:
-# tuxmake --runtime podman --target-arch riscv --toolchain gcc-13
---kconfig defconfig
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 652ecb7abeda..363dde9ef94f 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -931,7 +931,7 @@ static inline int i2c_adapter_id(struct i2c_adapter *adap)
+ 
+ static inline u8 i2c_8bit_addr_from_msg(const struct i2c_msg *msg)
+ {
+-	return (msg->addr << 1) | (msg->flags & I2C_M_RD ? 1 : 0);
++	return (msg->addr << 1) | (msg->flags & I2C_M_RD);
+ }
+ 
+ u8 *i2c_get_dma_safe_msg_buf(struct i2c_msg *msg, unsigned int threshold);
+-- 
+2.38.1
 
-Links:
-- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240305/testrun/22956780/suite/build/test/gcc-13-defconfig/details/
-- https://storage.tuxsuite.com/public/linaro/lkft/builds/2dFxOgheW9s3vzzZr8Pl5vGsJJb/
-
---
-Linaro LKFT
-https://lkft.linaro.org
 
