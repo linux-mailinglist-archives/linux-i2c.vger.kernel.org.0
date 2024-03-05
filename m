@@ -1,116 +1,92 @@
-Return-Path: <linux-i2c+bounces-2193-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2194-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8825C8719B8
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 10:40:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18A758719E7
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 10:48:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3867F1F2232C
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 09:40:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD64E1F214E2
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 09:48:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4AFF52F8E;
-	Tue,  5 Mar 2024 09:40:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B18DD5381B;
+	Tue,  5 Mar 2024 09:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="if9DFU8k"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0713150246;
-	Tue,  5 Mar 2024 09:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F94A53816
+	for <linux-i2c@vger.kernel.org>; Tue,  5 Mar 2024 09:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709631608; cv=none; b=cuzWAMFis7AQUBkZrvTXYYxJFUvYIKzcF8ocdQMhhI5tqZHZZjyhz5o3aPKD8X5WdxO45qyfO5l2pVmvXzS8mgou8kAGjxa4tABUPOBUiPhgY/IlYJuvzk0n36O/8HFLso6d9JqfgTFtptn6lNlw1s77Hrif5bNMDbYPJq+1xmc=
+	t=1709632101; cv=none; b=O9Bmmt0S2eu6k2RyoReWk15wWV97IazfzQgeA8yrCQUp/y42YM6wvQieiV+8fdYmy5laMTBAlfwPBTc0WQUfu/WZ2NKVp/JgtdLKwzeM+eZX5G/EQErfLGSJH/rj98JPTFazbj1jUuY3PuxxzJPqQTKMkhOlrSzOnWYFDWYzvcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709631608; c=relaxed/simple;
-	bh=aEWbr2WkCKP40snjYGiyA85QnqaaaUKBFkdc5GTF0xE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LWiq0EfqHKT3F1iriwChPq0ZAprDoH0hMTnL7erBALXPrCxMDvrgveKLQKl81qa/VPvDxl4rc7dd1iAR0eR8IKQXxSdAOQllIM0yx6B+RLhVeqUzlqZW1pR4JWimHhu0slIdUL7Pyu2hwHZsLEJM8Y1E7tup42B6/k9GdU5sRhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-607e54b6cf5so37257717b3.0;
-        Tue, 05 Mar 2024 01:40:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709631605; x=1710236405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O5XV+PoB/P8Tl2LnlepmC1KderRJ5oKwfMd2xge/y1o=;
-        b=vmkd5o51DRXmcw1rrkdpgUKmn15s3c22Tmy3JvH5RpTjIEHDNW4xDpwD/nD78xvE2v
-         XQ1cIL5oBPC4jXEZ4wqOMdX74cN8XMNLANo+fK+WLUqAC9wRfS8dbnAJRBPof0jzytwF
-         AuiDB2t56oz3K0/da6He5XrQGRJ0YYP9BybzYzsZefsv3wkLSj0r5jtDVbpLC3SFkVFV
-         ess2iab/+gFBYcobJGuhNe2BvcBcxjdKTr9d2BkG4p3x7h0oMIQ6Y7c3ui/Y23EQVfY/
-         5ZnywxAimKu2RDOPBI+BR/3ZqRtiU3Awtz6WByCDDNW6sLf7zUm6yKkRnGdm/Z4+gOB5
-         VBNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVNOV9YIyQuZX3ilJ2Exk+4rcHZCPZIbVW2LKGBOQxXWv/UXU9O6xEJEC4MrYFxWj/rk+ecpIltyzoJoc1ifWPZKWLAAGbLxjtlAI0DkB2WiLv8a91gsxBSAszjdpMIJugxr692hKtfuegRprs=
-X-Gm-Message-State: AOJu0Yxltcaxvhxw5WNV1/s3gU6YfvkHVuBEPc/8AgyWbOpB/+RHJ1Xw
-	Z/xaSGE5dmDKM0azv58L1KEYTe9d1yvitQ/a5MsrvarD1OdcEi/Kp0vPOY6kT+Y=
-X-Google-Smtp-Source: AGHT+IHlADYBbQ8ct95e/CtBweb5/sApHlfkTtiT433V5LEgx1D8jVyonoSYsnxDCZkhrCQfExTZwQ==
-X-Received: by 2002:a0d:d993:0:b0:609:9191:bf06 with SMTP id b141-20020a0dd993000000b006099191bf06mr1313974ywe.7.1709631605405;
-        Tue, 05 Mar 2024 01:40:05 -0800 (PST)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id s63-20020a0de942000000b006097887f574sm2834295ywe.80.2024.03.05.01.40.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Mar 2024 01:40:04 -0800 (PST)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-dc6cbe1ac75so4281513276.1;
-        Tue, 05 Mar 2024 01:40:04 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX8l2/wIv1KyTerfetXNCHcpolGOM9vAoQkmGNW5i/xJPatWInfYyXBv6Uu3QZ3wj63LRfVz7+QPgmrxggK7wD/yJFC02H2Am2oyI1VXtf8bAAgxCGFPZKrC16POo6CKyaCy/9lRALfI1AcQsI=
-X-Received: by 2002:a25:d64e:0:b0:dcd:c909:334d with SMTP id
- n75-20020a25d64e000000b00dcdc909334dmr1443367ybg.12.1709631604317; Tue, 05
- Mar 2024 01:40:04 -0800 (PST)
+	s=arc-20240116; t=1709632101; c=relaxed/simple;
+	bh=zMP+w0Cfq42h/7Zxcdr+Gac62y0jdG9tdOzTgDnntpY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d0gmDH0JTcDEom95hlbCLX8RGi+hExaaDEQahLF1RB3ov0X9Ke2BcT3CyPyTMYpF+ub8wNRX61i1eIwvkgHsFFqj/cIADkyRtcuAvHQ3g76GF2fjGe1ugrKtA2bdPtbEbTOhimpDMmiXGlymNWN8rNYFudSW9BNIB46L2xcPz+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=if9DFU8k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EF2BC433F1;
+	Tue,  5 Mar 2024 09:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709632101;
+	bh=zMP+w0Cfq42h/7Zxcdr+Gac62y0jdG9tdOzTgDnntpY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=if9DFU8k9O872BuvG2cAJNVMD8r7MQi+2pWcBKWcCLK9fCky0cHNJAquwnKv15Yng
+	 eUNIz5EYMBEixytQjqIgQojCbQXmHVRrQybxsw4uqhb2Puk7/Dtdc7eqUIqOv9aSer
+	 dCgvf18Nq+EKr0PYR7ALc8jfPdcJ4OIHYOA9deyzf+/B40018xCSHeQw5H4BxaFOtF
+	 GzGC70Dzx29uxgiskzyKCz10PtGVrfk8qsmzWX8Kq6pDqkGKzJqDT7bdFL8UVC0E9r
+	 F5gVHSNYNDms892gUijCTdR89BbFVKrBhEiFlY0X31EG7khWlAKFo3k8YvWW96ti+c
+	 1PSvzXbLYccyA==
+Date: Tue, 5 Mar 2024 10:48:17 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>, 
+	Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@kernel.org>, 
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [SPAM] Re: [PATCH v3] i2c: i801: Avoid potential double call to
+ gpiod_remove_lookup_table
+Message-ID: <tmhdawkgkaxeg6qj556luilzbddq3vmqynpo54vd6lkaj67gia@7lyq5xofvpby>
+References: <8d35529d-8ba9-4bdd-a3a3-00d67ab6f2d5@gmail.com>
+ <CACRpkdb0WDyK7wnJ-z9KWteAp_epnfyXShGB==tzoVZxG9i0Dw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <bf7b105f7d9728ae5cd9fa99d1cdd278d71e7df2.1704723713.git.geert+renesas@glider.be>
- <Zb6l4PbN3l4SPvRN@shikoro> <ZdeERStL9kkGV5zg@shikoro>
-In-Reply-To: <ZdeERStL9kkGV5zg@shikoro>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 5 Mar 2024 10:39:52 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW=QFzPdzBHubXLsVpq_q5KNFb1kNWic2B399u2UDj6UQ@mail.gmail.com>
-Message-ID: <CAMuHMdW=QFzPdzBHubXLsVpq_q5KNFb1kNWic2B399u2UDj6UQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: rcar: Prepare for the advent of ARCH_RCAR_GEN4
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkdb0WDyK7wnJ-z9KWteAp_epnfyXShGB==tzoVZxG9i0Dw@mail.gmail.com>
 
-On Thu, Feb 22, 2024 at 6:28=E2=80=AFPM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> On Sat, Feb 03, 2024 at 09:45:20PM +0100, Wolfram Sang wrote:
-> > On Mon, Jan 08, 2024 at 03:24:20PM +0100, Geert Uytterhoeven wrote:
-> > > Currently, all Kconfig symbols for R-Car Gen4 SoCs select
-> > > ARCH_RCAR_GEN3, which might confuse the casual reader.  Prepare for t=
-he
-> > > advent of ARCH_RCAR_GEN4 by extending the dependency for auto-selecti=
-ng
-> > > reset controller support.
-> > >
-> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Hi Linus,
+
+> > If registering the platform device fails, the lookup table is
+> > removed in the error path. On module removal we would try to
+> > remove the lookup table again. Fix this by setting priv->lookup
+> > only if registering the platform device was successful.
+> > In addition free the memory allocated for the lookup table in
+> > the error path.
 > >
-> > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->
-> Andi, can we have this simple patch in 6.9 pretty please?
+> > Fixes: d308dfbf62ef ("i2c: mux/i801: Switch to use descriptor passing")
+> > Cc: stable@vger.kernel.org
+> > Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> > ---
+> > v2:
+> > - cc stable
+> > - free memory allocated for the lookup table
+> > v3:
+> > - cc'ed Linus
+> 
+> My bug I guess, mea culpa.
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-+1
+Thanks for your review! I have pushed this patch only in my
+testing branch so that i can still add your r-b.
 
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Andi
 
