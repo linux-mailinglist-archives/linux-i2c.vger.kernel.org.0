@@ -1,109 +1,101 @@
-Return-Path: <linux-i2c+bounces-2199-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2200-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB6FD8724F3
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 17:57:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EDAD872639
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 19:06:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 186CD1C20C5B
-	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 16:57:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40DC31C26532
+	for <lists+linux-i2c@lfdr.de>; Tue,  5 Mar 2024 18:06:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DE15D268;
-	Tue,  5 Mar 2024 16:56:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B009D17C60;
+	Tue,  5 Mar 2024 18:06:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eFO+fYMA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oGYA701B"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C89DDA0;
-	Tue,  5 Mar 2024 16:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67108175A6;
+	Tue,  5 Mar 2024 18:06:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709657819; cv=none; b=AITLAhP1YjKaYcKJczAwPvarbji1Hb1Ji/xhTEL/TS1v/aUghcy1zEXkpNYQQ+PJk2FgLzUrQMDKQ6DKYWs/F6qLL5hL3HJIJzPgxH9unNTOTNassFWkeBu2Yk5cCHdihKPMjKyYkz/MaKOTdx/XImxj4TBV0kXzng4YJzJZCQc=
+	t=1709661980; cv=none; b=mKHTPzPN3SGcdta2BN8GB/DhFYmR7i2STqUmN+e0gOhO92RtPtTejpUU+pLkHULyTO7TTUC+dqB8dAScSMk7WYOYhOys/GWPM2Ba83TpV3IrhIFWqpF1EE7yZVppeAbDDESS9T/roYL2tNTtWCGyDLxoSZbCvzYiST8mcxpEHF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709657819; c=relaxed/simple;
-	bh=cI0DEFw2kaaMRX2yorxEsykml5XIXDljX1+quMTyEq8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Kf68tl+bcLgZSLRfMi2duyqPegavQ+wEBpSBCM5xncD6Kh/yvdoJV+Oq/izlwm4PMkFGmyQlcq0VFkkK8qGg7msVxXqcEnyNNOB0MY81liK3+ipC8r9uVKKWt7kE2DcBq7qzBM6C5NNKvACXYXQBaR4kfITaSbGWN2O7NNlYwec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eFO+fYMA; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6e46dcd8feaso636171b3a.2;
-        Tue, 05 Mar 2024 08:56:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709657817; x=1710262617; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WQGkHUGJv9iAGFsBSsW89sAex03GUVkrj7xqR9KP8YU=;
-        b=eFO+fYMA2p6njRxUGRYeTF5kv8lZvrHCP3uv9IwMqRhVekj68Ba0TlsHsXBTOg9XVV
-         5Z1vznyKQ2+f+1zrVPj51OW0ft7GnxgzZ5lBCr+Iuk2TXK4wnDoBqchEBxiY3p4ky1iY
-         wc4j4XdTsEQ4pGMbKdSRlI5tk/hSEnWt3IZQcxmB5kkSgkjSRgzgM28OjI/c2biPwnPF
-         EzQ1WVFESBhPQnSBemqBd2mir2nEnsScvz4ddj2gbeIg78UvlkWjzNQZiZCGgm5Z6ya2
-         vq6hJ5ijy9l7qnDKIchrgN3GN9IZC7Wl+pG1/oNeAbnwycL8DMLRQukCYnfvr6y8nnq7
-         pAog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709657817; x=1710262617;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WQGkHUGJv9iAGFsBSsW89sAex03GUVkrj7xqR9KP8YU=;
-        b=est2FqWmlOUAZ2f7fA8YsAX57DYNUaaeNJEgVrEdwGHoZ4kNlPtZSbKPtnd0O7Esko
-         gleAE55fdFH4Ef6ctNQvTlfzUR4p9lNvyZ2gQIEf4KoqACPYwRv7GixCAOFAZfrVbqCA
-         4+lExqNFOKB7W3aEfdY4RdgCb3stVY+KhOsfHZqczXDIb/BKtfuLu119xHOIJQsIBwsd
-         lqgiNmPzV8nElgmJdVU2K9YKJxRzfZ6YkIkxCA55WMEYMaJQyK6VDzs3/XeriTlRSbzR
-         uQcbrah2L70I9zZIKbHaZhuPaEJAj4HCtl2/xMKEVc4Mel16fEHQRlyxPjUYROe7dsGr
-         y16g==
-X-Forwarded-Encrypted: i=1; AJvYcCUbbXCtKYnFTI9M5/km9ubpMwITQJdy8aeNN6/ZBrS0h3VExROh6iZaWD/o3ajq5P+xNhqfE58H7pMgapZJWGUaSMZeyIElZPmfYJl9
-X-Gm-Message-State: AOJu0YxfYikiy4WUOF30g/bOyjLTJjBDbKkNe6af6/ago2yHATt467ur
-	X3AJtiNJpsafO0y6FJflqzNEu8ZhZeHul9OnldsyN0q1XUpH1JXU
-X-Google-Smtp-Source: AGHT+IFcnbfqjPlsggEMvV2KNpHuOuuGmUOnDuok3CiIrE06xauK1fAMcZvBkc6jD3L+h6rS7LA2Iw==
-X-Received: by 2002:a05:6a00:1a8b:b0:6e5:4f19:c863 with SMTP id e11-20020a056a001a8b00b006e54f19c863mr14917595pfv.33.1709657817288;
-        Tue, 05 Mar 2024 08:56:57 -0800 (PST)
-Received: from localhost.localdomain (125-229-101-177.hinet-ip.hinet.net. [125.229.101.177])
-        by smtp.gmail.com with ESMTPSA id y133-20020a62ce8b000000b006e45a0101basm9862766pfg.99.2024.03.05.08.56.55
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 05 Mar 2024 08:56:56 -0800 (PST)
-From: "Hsin-Yu.Chen" <harry021633@gmail.com>
-To: wsa+renesas@sang-engineering.com
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Hsin-Yu.Chen" <harry021633@gmail.com>
-Subject: [PATCH] i2c: remove redundant condition
-Date: Wed,  6 Mar 2024 00:56:52 +0800
-Message-Id: <20240305165652.18842-1-harry021633@gmail.com>
-X-Mailer: git-send-email 2.38.1
+	s=arc-20240116; t=1709661980; c=relaxed/simple;
+	bh=2SDHv/6MK1rRoV3gdSoYW4yOT+A2jIAcePxtHgcL22I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=BJXob/mSFifG0HIs5vm6XfFdMde0RcXgJVinEX4blQhZq4BaOP4GobTIrT/z+BNv9tBPrbmnu3k5lZ/w3XurL9eerPKg9Vbmesqg5Pa3KgGDUUC30jsgypP2DRHTjpMWjyVYj0WIC1/qghEItS2x9lUEUqI1J934yQHcbr2gkbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oGYA701B; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05BE9C433C7;
+	Tue,  5 Mar 2024 18:06:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709661980;
+	bh=2SDHv/6MK1rRoV3gdSoYW4yOT+A2jIAcePxtHgcL22I=;
+	h=References:In-Reply-To:From:Date:Subject:To:From;
+	b=oGYA701BbkeJVy6WDd1Dok6gueir4mrCJgyRmrI5q8V5NAwhAtJ6rKxBonjk+JAi6
+	 H6MgFztln7d1jpo1HqW66ZLUjoBqB5MDG47f2qzn446SLBHl+wAstxzhlW1EcUZS1S
+	 PCFdx93Qx8R4dEIIMzaycGodcz6ZNcOU2PBVG9kv0Z9o/N7yRwsB9uQIXt4bkE2dGB
+	 cS7F0s72tskoUm80++99jaQb2UKaZWzyZt1rS1TxiOtlDCWGLU5xaHBA6dxe+JCg1V
+	 H4vgkZWbvPzYahl3s6XeYAHRp6QMEFDw79V5+pUxlZ6O8lqCFmBs1BWoQffk272cHu
+	 YD+xyZDltUCwg==
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2d3ee1c9ea9so15157451fa.3;
+        Tue, 05 Mar 2024 10:06:19 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW8kWlXwWnMyuP/IW70BKK7c2jgMlsPVRgmvwRAXJc7Y89Bhi62wQl90F67Ntf1Kw9zy3Tm2lcb9+LSf14tSPAlS5L9v9KGNAc9zQ7YryQYhRhKBkf2JseowtrqQbQJy17Desn9oHzfjMcLQvfXxECjANyXdEqPaZGPeVdfWNRjCmZZkQ==
+X-Gm-Message-State: AOJu0YxMq1f/oLQYd6CcO2UYy7RdMx8SEtwithgZJjmTwPShWazgTtMP
+	1OhM4hbuEaFNi8cyINr2NCF1OhIR3/Dkd1o3NcFZsQejSMlLymC6JSBqPJWPXguksvXc9Cfj6Wl
+	lfa9EZOF6l3clbcZN2IkePt0IhQ==
+X-Google-Smtp-Source: AGHT+IEFUbz0C8IzXKCEG0xPmqtSc7rWmrnUWonn1WU+SACvNCJUkl4MMM0KR1729CFmdhBDeKny5et1+AhpsahMuNo=
+X-Received: by 2002:a05:651c:2111:b0:2d3:17e6:3b3f with SMTP id
+ a17-20020a05651c211100b002d317e63b3fmr2426564ljq.39.1709661978150; Tue, 05
+ Mar 2024 10:06:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240124190552.1551929-1-robh@kernel.org> <Zb6nBYTkZmXZ0G2X@shikoro>
+ <Zdxq4GnRyjC07EH8@shikoro>
+In-Reply-To: <Zdxq4GnRyjC07EH8@shikoro>
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 5 Mar 2024 12:06:05 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLnCzXMsyeAHZUx2_oF5dqvLOWBvoj2Bb_Go6VimCxCoA@mail.gmail.com>
+Message-ID: <CAL_JsqLnCzXMsyeAHZUx2_oF5dqvLOWBvoj2Bb_Go6VimCxCoA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: i2c: mux: i2c-demux-pinctrl: Drop
+ i2c-mux.yaml reference
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, Rob Herring <robh@kernel.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I2C_M_RD is defined as 1 and `flag & I2C_M_RD` is one or zero
-no need one more condition to get the value
+On Mon, Feb 26, 2024 at 4:48=E2=80=AFAM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> On Sat, Feb 03, 2024 at 09:50:13PM +0100, Wolfram Sang wrote:
+> > On Wed, Jan 24, 2024 at 01:05:50PM -0600, Rob Herring wrote:
+> > > The I2C de-mux is different than an I2C mux, so i2c-mux.yaml is not
+> > > relevant and shouldn't be referenced.
+> > >
+> > > Signed-off-by: Rob Herring <robh@kernel.org>
+> >
+> > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>
+> Andi, can you pick these up?
 
-Signed-off-by: Hsin-Yu.Chen <harry021633@gmail.com>
----
- include/linux/i2c.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I already did since you gave your reviewed-by and they hadn't
+otherwise been picked up.
 
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index 652ecb7abeda..363dde9ef94f 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -931,7 +931,7 @@ static inline int i2c_adapter_id(struct i2c_adapter *adap)
- 
- static inline u8 i2c_8bit_addr_from_msg(const struct i2c_msg *msg)
- {
--	return (msg->addr << 1) | (msg->flags & I2C_M_RD ? 1 : 0);
-+	return (msg->addr << 1) | (msg->flags & I2C_M_RD);
- }
- 
- u8 *i2c_get_dma_safe_msg_buf(struct i2c_msg *msg, unsigned int threshold);
--- 
-2.38.1
+> Or you negotiate with Rob how you want to handle I2C DT patches. I
+> agreed with him that I usually take them. Except for generic cleanups or
+> so.
 
+Yes, that is my preference. And how most subsystems work for bindings.
+
+Rob
 
