@@ -1,59 +1,59 @@
-Return-Path: <linux-i2c+bounces-2217-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2215-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D96FB873B26
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 16:50:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3CA8873B02
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 16:44:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 176731C2169D
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 15:50:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 576ADB242B4
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 15:44:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0E92134403;
-	Wed,  6 Mar 2024 15:50:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC6DB137768;
+	Wed,  6 Mar 2024 15:43:34 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 11.mo582.mail-out.ovh.net (11.mo582.mail-out.ovh.net [188.165.38.119])
+Received: from 16.mo550.mail-out.ovh.net (16.mo550.mail-out.ovh.net [178.33.104.224])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27DBC1350D2
-	for <linux-i2c@vger.kernel.org>; Wed,  6 Mar 2024 15:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.38.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3023E136652
+	for <linux-i2c@vger.kernel.org>; Wed,  6 Mar 2024 15:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.33.104.224
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709740243; cv=none; b=ZB5btjOlYcvuY9NSgYHk9oPP3gMVzc87fXunRxwBojImhkZeSIIONpVdu2AO9l4KVyosxbWtkFEjTtD3h7OJzN2h/NEf1F1TC09E4Hms6OF7u59iJdk855arWmj1jZGAWGflLbNzdbcutiFraRiU6dndm2XJctRi9MTK81vR6i8=
+	t=1709739814; cv=none; b=FE+97CeliRT4Z934KJANjsg8Np5Wr0KviVVVnB6HAlGzz3TukRwSxAQ+MIZZUJjFs+p0UjGN8hqiAyzN6F09DE53mB3INNKZL0WmXA1wClsQjfLySPrUAQjKNNEsQxF2idbUJBJOiyKmnU0agYa0FO8wqEkMOHiwBKq7OQIN5Iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709740243; c=relaxed/simple;
-	bh=mOQMYrOjFL+BfYA9OZsNjIxxOcLbq6gJ3vaPs7tvY3E=;
+	s=arc-20240116; t=1709739814; c=relaxed/simple;
+	bh=ddVEZ/hCRRIaQR+Zd4qHp55qWobjMRKrD1xXYor6Njs=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=lqGjnk/9OvUPHITImAMfxuYEgjCNO2u61yk7v9GSaVAq62eYsYRnCferI+o9F/u4yKltPdez87eDOTP+M3Rg6CBlXZN4ZBfhxyyJ9hKCO9kUtG2j7sAJMIX9yhqKDIMczrUebIjGCKowkl3cExv8dTGzPlmUSdb3I9fPRthlbOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=188.165.38.119
+	 MIME-Version:Content-Type; b=UyQfsWyUOIItngmmZf2zV5zWi6LUHqMbYkIcrQH/vyEZlp0KbsPOTf9dorNYDE3dScMDYEi9w++xDE7J+xltSPJ97DB03lf+0/w0fQ3Pp+lstBqfW2V7a3ifmjnxCtdSj/6yH0OtQ0l1Lp87vcnE+8wMqAeFz8uLgKXEwMRxs00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=178.33.104.224
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director7.ghost.mail-out.ovh.net (unknown [10.108.2.12])
-	by mo582.mail-out.ovh.net (Postfix) with ESMTP id 4TqcCh39FJz1FZJ
-	for <linux-i2c@vger.kernel.org>; Wed,  6 Mar 2024 15:43:28 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-5vngl (unknown [10.110.96.50])
-	by director7.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 1E06F1FEDE;
-	Wed,  6 Mar 2024 15:43:26 +0000 (UTC)
-Received: from etezian.org ([37.59.142.102])
-	by ghost-submission-6684bf9d7b-5vngl with ESMTPSA
-	id dc+OAB6P6GXZFQIAO0zOww
-	(envelope-from <andi@etezian.org>); Wed, 06 Mar 2024 15:43:26 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-102R0045dce9fec-5935-488d-8dc9-5f4c41f889d9,
+Received: from director11.ghost.mail-out.ovh.net (unknown [10.108.17.189])
+	by mo550.mail-out.ovh.net (Postfix) with ESMTP id 4TqcCk0Jssz1KlB
+	for <linux-i2c@vger.kernel.org>; Wed,  6 Mar 2024 15:43:30 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-zgt6x (unknown [10.110.113.115])
+	by director11.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 523151FFCE;
+	Wed,  6 Mar 2024 15:43:29 +0000 (UTC)
+Received: from etezian.org ([37.59.142.109])
+	by ghost-submission-6684bf9d7b-zgt6x with ESMTPSA
+	id mCmqCiGP6GXMAwEAjxLk1w
+	(envelope-from <andi@etezian.org>); Wed, 06 Mar 2024 15:43:29 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-109S003b68dbd3f-2314-40a5-abca-d04c75d496b3,
                     62DEF991EB217AB86F953B10C2782167B22AFEEB) smtp.auth=andi@etezian.org
 X-OVh-ClientIp:89.217.109.169
 From: Andi Shyti <andi.shyti@kernel.org>
-To: linux-renesas-soc@vger.kernel.org, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>, 
- Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org, 
- linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240229105810.29220-5-wsa+renesas@sang-engineering.com>
-References: <20240229105810.29220-5-wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH RFT 0/3] i2c: mpc: use proper binding for transfer
- timeouts
-Message-Id: <170973980502.1763249.4893089217110620791.b4-ty@kernel.org>
-Date: Wed, 06 Mar 2024 16:43:25 +0100
+To: Michal Simek <michal.simek@amd.com>, 
+ Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+Cc: Ley Foon Tan <leyfoon.tan@starfivetech.com>, 
+ linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20240119013326.3405484-1-jisheng.teoh@starfivetech.com>
+References: <20240119013326.3405484-1-jisheng.teoh@starfivetech.com>
+Subject: Re: [PATCH v2 RESEND] i2c: cadence: Add system suspend and resume
+ PM support
+Message-Id: <170973980846.1763249.4872045565378143580.b4-ty@kernel.org>
+Date: Wed, 06 Mar 2024 16:43:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -63,22 +63,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13.0
-X-Ovh-Tracer-Id: 10313243148287740663
+X-Ovh-Tracer-Id: 10313524625080715995
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledriedugdejiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevjghfuffkffggtgfgofesthejredtredtjeenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepffetheduffdvhfdugfffudfgjeejudehheegfeeguefhieeugffhgfeuffdvgfefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpkeelrddvudejrddutdelrdduieelpdefjedrheelrddugedvrddutddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkedvpdhmohguvgepshhmthhpohhuth
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledriedugdejiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevjghfuffkffggtgfgofesthejredtredtjeenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepffetheduffdvhfdugfffudfgjeejudehheegfeeguefhieeugffhgfeuffdvgfefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpkeelrddvudejrddutdelrdduieelpdefjedrheelrddugedvrddutdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehhedtpdhmohguvgepshhmthhpohhuth
 
 Hi
 
-On Thu, 29 Feb 2024 11:58:10 +0100, Wolfram Sang wrote:
-> To clean up the confusing situation regarding I2C timeout bindings, here
-> is the series to fix up the MPC driver which mixed up clock stretching
-> timeout with transfer timeouts. Plus a minor cleanup while here.
-> 
-> Only build tested, so actual testing is welcome.
+On Fri, 19 Jan 2024 09:33:26 +0800, Ji Sheng Teoh wrote:
+> Enable device system suspend and resume PM support, and mark the device
+> state as suspended during system suspend to reject any data transfer.
 > 
 > 
-> [...]
 
 Applied to i2c/i2c-host on
 
@@ -89,11 +85,7 @@ Andi
 
 Patches applied
 ===============
-[1/3] dt-bindings: i2c: mpc: use proper binding for transfer timeouts
-      commit: f9ccb4533bdcf31f1225a9a09805329b8020a4e3
-[2/3] i2c: mpc: use proper binding for transfer timeouts
-      commit: 401a8e9e3d697b75c2e237b9b405bb0f388dd7ed
-[3/3] i2c: mpc: remove outdated macro
-      commit: d0e944150446d8056a050049a8f0e98241ba6194
+[1/1] i2c: cadence: Add system suspend and resume PM support
+      commit: 747bdf912e22732e8de9bd04a2d3e387055604a8
 
 
