@@ -1,117 +1,98 @@
-Return-Path: <linux-i2c+bounces-2207-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2208-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84280873299
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 10:34:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FD588735E1
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 12:50:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 395041F25D05
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 09:34:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D14851C21D55
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 11:50:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF195E08B;
-	Wed,  6 Mar 2024 09:34:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C66AE5F566;
+	Wed,  6 Mar 2024 11:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="flWszAUC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ll4Rbz8e"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94645EE96;
-	Wed,  6 Mar 2024 09:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867427F7E9
+	for <linux-i2c@vger.kernel.org>; Wed,  6 Mar 2024 11:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709717654; cv=none; b=a9SGI9mZKM0b4E4KocEjcHFpMTC+6bfucJLzWcTEXFFFQm6YoMghYVb14s+SAg8JegX4fmZu6zQP5e6uTJm5WYngrAZGyfz9OMYs0ZtacjC1fRlSw490t84UA8PMyIteo2qulc7QqdN3U4M0xnoniRy6BtSlt5O/XsOp+V/bJbM=
+	t=1709725828; cv=none; b=H9QcdQq98pE6zHouW88EzjSDiIXmALwudzdOndWXzpm2G8KIX/KswJt4TQFVj/4BUvB28DBYXX2RT84pQQPI1KiycDYCNqKxhNjVBdK1zATyf/lb9/6S3AMjV2OG4Kl/oM26pzUhWulAyoZlKALbJIF1XFhy4E9J68B96VN/Ucg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709717654; c=relaxed/simple;
-	bh=JinEX41/j7Pb/bWxW54bGmffaAtTNcThK8gdOptLKmY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=eF882WGEhiB5jRMSmh9kej6ISIvjqXudnfN1oQJNI0OIQL6cUh27R0qkBfSrcKwhZdUHDMt95q4od46vpDjKr4mB24Jq1VQajIl9DBbRC0WZju9RSO7Ue1wJson3YScNT72vByHxbjGPN20ZGVT5vp67a6fB6oue6Kc1wz41R2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=flWszAUC; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B95DFF80A;
-	Wed,  6 Mar 2024 09:34:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709717649;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=od4s/GMAsr52sikJcFgvSYexwtnWDcy7Z22NE3GsHO0=;
-	b=flWszAUCdRYte0IftesUvM5oIovUSfZcoWTw88vViiC3zzugdD6VABdpg/qSMIoiriNvEa
-	HwQ6CavPBKPEtMWhjiB1Jcx/h+8QmodvIi2fHXR+EHqw0knNc60bHgC9MB/4YwpsxQsc9L
-	C3Ay7A2aKHeZTAduHirmc4l7SsHzn9CiWUQXkpVsM9JP3ePCdLebbkVivyjkYGv4zw1ke8
-	+hHh9DdtCmExe4sk3tryFL2xap6DbZSDNF4cuFMZclKyl9eZQ22Nqi0Oh6HZzGGIAZmlNG
-	JH9RAXidbdI6QKlNno1AjYAmVwYjQr9rrE4mEiX+dQ682P+Hxli1IYdpqvIboA==
+	s=arc-20240116; t=1709725828; c=relaxed/simple;
+	bh=PCMRrmtS6Jnoi3W/ErngkaROfBNoRPQOEkQT7Cx6h4A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hA5uhsyChkaPtyN7v5BqXEbr4JGIlapjVeTA9LtbeWGBA3lsFcpOeHA8oSbIq43vkQR4E0+nYp8XdUblJ2+BmBLoe2ecVpdrE1sl9OBRGrYEZPZpVkzCnV7qUwfvJYK34pHlmYAZNikIoc8mOQk9yEWEpKI1ojc0dDOnwIE4Rcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ll4Rbz8e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73468C433F1;
+	Wed,  6 Mar 2024 11:50:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709725828;
+	bh=PCMRrmtS6Jnoi3W/ErngkaROfBNoRPQOEkQT7Cx6h4A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ll4Rbz8eA69U9uRQ1GgAuuW8qtdnkNUcntAHSY8gMpjhBc+xHnEgVxoHAC7YrE9zV
+	 nzHR2zzUw2eN5KwMirKNHHQTBCrVnLrxrZpBUiKxXOBIqAtPkPinZP4+n9dir4Qj/p
+	 fIvlw2yedFw5w4eROYu0RS4Hj20XWn4tappl3XqTKB8FoxzmVTG/Ye6MO/l64PCwrL
+	 kah6KUv3LQjcYEOU47mBVBKs+W3ckEGrMF6p6GMDYebqy/IsBUzT7IOmiljHZN05kp
+	 8gsLMwOY4n7qhukYOXTtQzPQVcKLG2iJp6evzYxZ/JwPz+YsqzG+UOiSUe306L5Mi6
+	 mCjvjcllxepqw==
+Date: Wed, 6 Mar 2024 12:50:24 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Hans Hu <HansHu-oc@zhaoxin.com>
+Cc: Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org, 
+	cobechen@zhaoxin.com, hanshu@zhaoxin.com
+Subject: Re: [SPAM] Re: [PATCH v8 6/6] i2c: add zhaoxin i2c controller driver
+Message-ID: <y47653e7g2nbwhpavbxpt27yuzpbbhfizjmp6q4tsxzuf2e6ct@onbajqix7hda>
+References: <cover.1709014237.git.hanshu-oc@zhaoxin.com>
+ <4e9c2c3a3940a00da67564c6e19f4771ab6dc67f.1709014237.git.hanshu-oc@zhaoxin.com>
+ <ZeWZHSt-qm5wH3wn@ninjato>
+ <7jopk32t6ygaxgo27ln2bsqhgsces5d2hxxri6g3la6datrlxd@llfdg36ldr4b>
+ <c0eb2886-6250-4f67-8b17-c6ba953a42d3@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 06 Mar 2024 10:34:08 +0100
-Message-Id: <CZMKBOH0BBTH.MZH1OTAZC7HH@bootlin.com>
-Subject: Re: [PATCH v2 00/11] Add Mobileye EyeQ5 support to the Nomadik I2C
- controller & use hrtimers for timeouts
-Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
- <robh+dt@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
- <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-mips@vger.kernel.org>, "Gregory Clement"
- <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, "Jean Delvare" <jdelvare@suse.com>, "Guenter
- Roeck" <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
-To: "Andi Shyti" <andi.shyti@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.15.2
-References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
- <bhiubxf3vuxfnz4rh75isgy5z5cexa6dnlw733box5ly3h7r5f@yqvzs75d3ykb>
-In-Reply-To: <bhiubxf3vuxfnz4rh75isgy5z5cexa6dnlw733box5ly3h7r5f@yqvzs75d3ykb>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c0eb2886-6250-4f67-8b17-c6ba953a42d3@zhaoxin.com>
 
-Hello Andi,
+Hi Hans,
 
-On Wed Mar 6, 2024 at 2:49 AM CET, Andi Shyti wrote:
-> > Th=C3=A9o Lebrun (11):
-> >       dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c bindings and ex=
-ample
-> >       dt-bindings: hwmon: lm75: use common hwmon schema
-> >       i2c: nomadik: rename private struct pointers from dev to priv
-> >       i2c: nomadik: simplify IRQ masking logic
-> >       i2c: nomadik: use bitops helpers
-> >       i2c: nomadik: support short xfer timeouts using waitqueue & hrtim=
-er
-> >       i2c: nomadik: replace jiffies by ktime for FIFO flushing timeout
-> >       i2c: nomadik: fetch i2c-transfer-timeout-us property from devicet=
-ree
-> >       i2c: nomadik: support Mobileye EyeQ5 I2C controller
-> >       MIPS: mobileye: eyeq5: add 5 I2C controller nodes
-> >       MIPS: mobileye: eyeq5: add evaluation board I2C temp sensor
->
-> what's your plan for this series? If you extract into a separate
-> series the refactoring patches that are not dependent on the
-> bindings I could queue them up for the merge window.
+> > > > +           /*
+> > > > +            * if BIOS setting value far from golden value,
+> > > > +            * use golden value and warn user
+> > > > +            */
+> > > > +           dev_warn(i2c->dev, "speed:%d, fstp:0x%x, golden:0x%x\n",
+> > > > +                           params[0], fstp, params[2]);
+> > > Well, if you want to warn the user, the string should be more
+> > > descriptive. Maybe "FW settings might cause wrong timings" or whatever
+> > > these values mean. I don't know.
+> > > 
+> > > The issues I mentioned could be resolved incrementally from my point of
+> > > view. Or with a new series. I don't mind. So, in general:
+> > Same goes for few minor checkpatch warnings.
+> > 
+> > I will accept incremental patches to fix them... they are mainly
+> > allignment issues.
+> > 
+> 
+> OK, the issues you mentioned will be fixed with a new series.
 
-V3 is ready and will be sent today. I think we can get trailers from
-dt-bindings maintainers as the discussion has been caried out on this
-revision.
+Thanks! Looking forward to receiving your new patches.
 
-Am I being too optimistic of seeing this series queued before the merge
-window?
+> For the current series patch, do I need to push it to the latest
+> for-next branch? Or will you push it?
 
-Thanks Andi,
+I believe you can't push it :-)
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I am taking care of it!
 
+Andi
 
