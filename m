@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-2221-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2229-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77A45873DE5
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 18:59:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4E67873E01
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 19:00:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A84A61C22BE2
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 17:59:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90ED62826B9
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 18:00:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B43D613DBA7;
-	Wed,  6 Mar 2024 17:59:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77ED2140E25;
+	Wed,  6 Mar 2024 17:59:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WGWNeC2M"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="B0dccRJg"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2965D48F;
-	Wed,  6 Mar 2024 17:59:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A045D13E7DB;
+	Wed,  6 Mar 2024 17:59:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709747973; cv=none; b=jfTTg9pEpWTjjAw1fvYmRoIhe8yM+nvHkxY+mznEZfrPHOEF3Lx6poviORPhGxHt1s44IFkVX0mzVPWwHkTBa25A+ouDYzd31KNLU7FWW9lA0yzum+ex3uT/jYHv2sIA+R3ENs/7RN89CcUx1LNeFsOKOQUPCCipKrpj2vobuiw=
+	t=1709747977; cv=none; b=AO6gSD71Pw7MZusfrEZb2pqRCOwz9uJvDm9BhkmheIwQREpI6ibV0CSCEb0ltkjkb6DZIdILJdjtjnxhVoF780L/JrR6IwfqDt9g/ewmITQL5nL4yMZi+H8c+IM348pAxAPNMq/mKMog4rs/FSJKWjScuL4RXioL99pCUD+xgOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709747973; c=relaxed/simple;
-	bh=ECHxC7b7bLXcI95sYnAvV2Yu8iR1BSGxurCKiipgcxk=;
+	s=arc-20240116; t=1709747977; c=relaxed/simple;
+	bh=5+66QCDuAPFthjMdVWRlfXiypvO36c87l+WuAP4TGMw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nIELKkdBaXuR1zB9DulCSdqBzYf79SrCoNZjkZY2loSrjRvVmQQO4BNpEilVH0tXqXuY0w8s3EgVAsIZo/D1gBcwiTiCa1ll3yF+CDejcaklVInDnazXex+KXN5Id5aLVU+ZHmko8nz1nd8q+tdJiiblHDwu0P0sOKWbO6HUPnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WGWNeC2M; arc=none smtp.client-ip=217.70.183.194
+	 In-Reply-To:To:Cc; b=Vvk7SIdVAxak4Gqk3l2S4cn/Ubyl8G0mR78fBI5qC00pg/peb1FetAOFtT49DpmaehxgLeQLsPCw9EkC53ux8N+czY0KpVw9bkzmKkuaq87eeGz/UJdqRhSMAto4doQNPOls5+ftxcaJLHukCczGD3hDY0a6DJd4YZmKb8E1yYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=B0dccRJg; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D5F8A4000D;
-	Wed,  6 Mar 2024 17:59:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7D0794000F;
+	Wed,  6 Mar 2024 17:59:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1709747969;
+	t=1709747970;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QnePZ6t0muj+qmO6GfgW6xbIGHfwmN9GJxf+1OfIJzA=;
-	b=WGWNeC2MV1NPZRTiQznlZ0yZ4yKFUe/qf+KzxskGcjIdLN+SrgM1jyS21PiAySEAn+hv5N
-	gEzBH4kuV8jXhiZY/Nlr1rCBbm3xBDeYy18MRGBcQtztI6xVP6sSC0qFAaz2snAxVShLTu
-	UdcXZXS51wR3IMhvA79U9MrWpwfvUrFotZioi/EtrIpxJrBtzCaCb8jhEHc5QQvEuBwjkx
-	uIQL79O9KsFFIFP5OxR3QBVWAZh6OpU/mcvHnkbKe3DcgeBCNz6ZLRhD0W6+eziLIkPcqI
-	PV1iGk03maSyqjpUfDpRHWb/tniMSimlFZ74ACB1oLSeAGGw1vyeAa66ULROvg==
+	bh=FXodg3L52Fw8MHiCrqJ138mAFruQudu9GRMVBdxvx8M=;
+	b=B0dccRJgHdRzXHRJkC2vXSschUUPdzCJUVzpQdYE9sIwSen84IbL7eRKpjPYBxm+pDGIdA
+	UXb0sHaOq2MZNKHdelMGZLpwTzZnQP3F+iILCAQ5pk3amuqhosGLLc6j8KczCn5EVC5DFw
+	+e69d5HAR4b+0WIkTCyIwN0e5HqdZv96ebqRyODxF9pOWIj4KEGpkLKW5nEuCNf77T2FZP
+	1WngAh1eY2etbu3ElNda9YYdvE20FD4+uAEHP/M0koEwFTPNDajYtesSxuRY67cDhQG7QS
+	RFqCVzaql/9Zwl4ghCF3bPCS+ZmC0v5TL6IMM2MgYRe+0Ms5flxxFdKl9Jyv+g==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Wed, 06 Mar 2024 18:59:29 +0100
-Subject: [PATCH v3 09/11] i2c: nomadik: sort includes
+Date: Wed, 06 Mar 2024 18:59:30 +0100
+Subject: [PATCH v3 10/11] MIPS: mobileye: eyeq5: add 5 I2C controller nodes
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240306-mbly-i2c-v3-9-605f866aa4ec@bootlin.com>
+Message-Id: <20240306-mbly-i2c-v3-10-605f866aa4ec@bootlin.com>
 References: <20240306-mbly-i2c-v3-0-605f866aa4ec@bootlin.com>
 In-Reply-To: <20240306-mbly-i2c-v3-0-605f866aa4ec@bootlin.com>
 To: Linus Walleij <linus.walleij@linaro.org>, 
@@ -74,47 +74,104 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
 X-Mailer: b4 0.13.0
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Sort #include statements in i2c-nomadik driver.
+Add the SoC I2C controller nodes to the platform devicetree. Use a
+default bus frequency of 400kHz. They are AMBA devices that are matched
+on PeriphID.
 
+Set transfer timeout to 10ms instead of Linux's default of 200ms.
+
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- drivers/i2c/busses/i2c-nomadik.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi | 75 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-nomadik.c b/drivers/i2c/busses/i2c-nomadik.c
-index 7d039bd36aa6..ce18f7d43945 100644
---- a/drivers/i2c/busses/i2c-nomadik.c
-+++ b/drivers/i2c/busses/i2c-nomadik.c
-@@ -15,21 +15,21 @@
-  * Author: Srinidhi Kasagar <srinidhi.kasagar@stericsson.com>
-  * Author: Sachin Verma <sachin.verma@st.com>
-  */
-+#include <linux/amba/bus.h>
- #include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/err.h>
-+#include <linux/i2c.h>
- #include <linux/init.h>
--#include <linux/module.h>
--#include <linux/amba/bus.h>
--#include <linux/slab.h>
- #include <linux/interrupt.h>
--#include <linux/i2c.h>
--#include <linux/err.h>
--#include <linux/clk.h>
- #include <linux/io.h>
--#include <linux/pm_runtime.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/module.h>
- #include <linux/of.h>
- #include <linux/pinctrl/consumer.h>
--#include <linux/mfd/syscon.h>
-+#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
-+#include <linux/slab.h>
+diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
+index 8d4f65ec912d..540d55503f3b 100644
+--- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
++++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
+@@ -70,6 +70,81 @@ soc: soc {
+ 		ranges;
+ 		compatible = "simple-bus";
  
- #define DRIVER_NAME "nmk-i2c"
- 
++		i2c0: i2c@300000 {
++			compatible = "mobileye,eyeq5-i2c", "arm,primecell";
++			reg = <0 0x300000 0x0 0x1000>;
++			interrupt-parent = <&gic>;
++			interrupts = <GIC_SHARED 1 IRQ_TYPE_LEVEL_HIGH>;
++			clock-frequency = <400000>; /* Fast mode */
++			#address-cells = <1>;
++			#size-cells = <0>;
++			clocks = <&i2c_ser_clk>, <&i2c_clk>;
++			clock-names = "i2cclk", "apb_pclk";
++			resets = <&reset 0 13>;
++			i2c-transfer-timeout-us = <10000>;
++			mobileye,olb = <&olb 0>;
++		};
++
++		i2c1: i2c@400000 {
++			compatible = "mobileye,eyeq5-i2c", "arm,primecell";
++			reg = <0 0x400000 0x0 0x1000>;
++			interrupt-parent = <&gic>;
++			interrupts = <GIC_SHARED 2 IRQ_TYPE_LEVEL_HIGH>;
++			clock-frequency = <400000>; /* Fast mode */
++			#address-cells = <1>;
++			#size-cells = <0>;
++			clocks = <&i2c_ser_clk>, <&i2c_clk>;
++			clock-names = "i2cclk", "apb_pclk";
++			resets = <&reset 0 14>;
++			i2c-transfer-timeout-us = <10000>;
++			mobileye,olb = <&olb 1>;
++		};
++
++		i2c2: i2c@500000 {
++			compatible = "mobileye,eyeq5-i2c", "arm,primecell";
++			reg = <0 0x500000 0x0 0x1000>;
++			interrupt-parent = <&gic>;
++			interrupts = <GIC_SHARED 3 IRQ_TYPE_LEVEL_HIGH>;
++			clock-frequency = <400000>; /* Fast mode */
++			#address-cells = <1>;
++			#size-cells = <0>;
++			clocks = <&i2c_ser_clk>, <&i2c_clk>;
++			clock-names = "i2cclk", "apb_pclk";
++			resets = <&reset 0 15>;
++			i2c-transfer-timeout-us = <10000>;
++			mobileye,olb = <&olb 2>;
++		};
++
++		i2c3: i2c@600000 {
++			compatible = "mobileye,eyeq5-i2c", "arm,primecell";
++			reg = <0 0x600000 0x0 0x1000>;
++			interrupt-parent = <&gic>;
++			interrupts = <GIC_SHARED 4 IRQ_TYPE_LEVEL_HIGH>;
++			clock-frequency = <400000>; /* Fast mode */
++			#address-cells = <1>;
++			#size-cells = <0>;
++			clocks = <&i2c_ser_clk>, <&i2c_clk>;
++			clock-names = "i2cclk", "apb_pclk";
++			resets = <&reset 0 16>;
++			i2c-transfer-timeout-us = <10000>;
++			mobileye,olb = <&olb 3>;
++		};
++
++		i2c4: i2c@700000 {
++			compatible = "mobileye,eyeq5-i2c", "arm,primecell";
++			reg = <0 0x700000 0x0 0x1000>;
++			interrupt-parent = <&gic>;
++			interrupts = <GIC_SHARED 5 IRQ_TYPE_LEVEL_HIGH>;
++			clock-frequency = <400000>; /* Fast mode */
++			#address-cells = <1>;
++			#size-cells = <0>;
++			clocks = <&i2c_ser_clk>, <&i2c_clk>;
++			clock-names = "i2cclk", "apb_pclk";
++			resets = <&reset 0 17>;
++			i2c-transfer-timeout-us = <10000>;
++			mobileye,olb = <&olb 4>;
++		};
++
+ 		uart0: serial@800000 {
+ 			compatible = "arm,pl011", "arm,primecell";
+ 			reg = <0 0x800000 0x0 0x1000>;
 
 -- 
 2.44.0
