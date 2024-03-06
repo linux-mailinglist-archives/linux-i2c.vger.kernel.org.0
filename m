@@ -1,112 +1,213 @@
-Return-Path: <linux-i2c+bounces-2218-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2220-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80275873CAE
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 17:54:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5675E873DE2
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 18:59:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FB831F21B87
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 16:54:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79D1D1C210F3
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 17:59:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 957E6137923;
-	Wed,  6 Mar 2024 16:54:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 120DD13C9FB;
+	Wed,  6 Mar 2024 17:59:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q2AJ3Oj+"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XrHjw7j1"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4867A136995
-	for <linux-i2c@vger.kernel.org>; Wed,  6 Mar 2024 16:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B22F13BAF5;
+	Wed,  6 Mar 2024 17:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709744075; cv=none; b=iw1mjLyCozhCBZZJlmMmgKFGlNe4XkrkD0L0Fm805FVZxIkOs7peK+IOQa4duKRqiHn6K2FJQxvFYIvkR6lee0OpPfH+3kG6sXgElwplqsKPd1bOXEUDu22lzfhzdVu10AD71u2Fw/mATkl/qe1Ct2uGm2Eu3lGPHnUqZmy6I+U=
+	t=1709747972; cv=none; b=MkInxexV3wsehVD6fYaO/jWOmc4ncFmshpXt7Kn0NSDQAMWw7Xx9R6qJDYMJeGSjtugbZjuKC0a2OrpMzpAKUTAaZNp4mcBuv9owfZ1fh2sAACgTwwfHiSbbWKoIxc/vxZFQWuRyS+Oqu5KFPE/B5XFnpfuJav/293nDqc7H1Hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709744075; c=relaxed/simple;
-	bh=BoA4clyJGdpKOSXO4fvBLqbIDSPr9DFImpz+/s60Eno=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A9AwaEaYrJIA1xBFS/wTMw6mv1cej0UHuXSWRKyZcvjV4kdyTUgkPXHhQSd4wgInom7FXT+jPP256fsjJvROhVz9zA3R6EzzNmtou1DpdOZSFShMvUQHZrsY/c17VSgt4IAw5a68xN4OkyjG0V23lhbtxcCD5TrcxaboCnFUIHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q2AJ3Oj+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6559EC433C7;
-	Wed,  6 Mar 2024 16:54:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709744074;
-	bh=BoA4clyJGdpKOSXO4fvBLqbIDSPr9DFImpz+/s60Eno=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q2AJ3Oj+jf2uT81tS54rIaH4ux8Uo3ZYpQrcyY+ZMo8K3lDAqOwgmhtsik2OEE35Q
-	 IJSvLwmeEwZjwzsX+1K1bA4p+nxHsuEu/dDo14a3h2QqAxgSVK04EC/GgywSg7yen8
-	 wIZu5mEptWg2NNhF0HZFsAL8ror94AdKZfsMOeY1o5bKWWak0eqXrWHUrvozwiThAZ
-	 O/oddYWS2oJnYVh1Ukj+xI2jdbLINJB7vj15eDbfGly59j9vigTWap2tql1FWoxTqD
-	 qxZcJEcEakz6fY5rvvj8jgSr6n54GNvEOzh8BxLcrylU7ejDWXU3KwGO+fCWRFh71a
-	 1n1vExq+SSVNQ==
-Date: Wed, 6 Mar 2024 17:54:31 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Hans Hu <HansHu-oc@zhaoxin.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	cobechen@zhaoxin.com, hanshu@zhaoxin.com
-Subject: Re: [SPAM] Re: [PATCH v8 6/6] i2c: add zhaoxin i2c controller driver
-Message-ID: <Zeifxys1OxWQrste@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Hans Hu <HansHu-oc@zhaoxin.com>, Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c@vger.kernel.org, cobechen@zhaoxin.com, hanshu@zhaoxin.com
-References: <cover.1709014237.git.hanshu-oc@zhaoxin.com>
- <4e9c2c3a3940a00da67564c6e19f4771ab6dc67f.1709014237.git.hanshu-oc@zhaoxin.com>
- <ZeWZHSt-qm5wH3wn@ninjato>
- <7jopk32t6ygaxgo27ln2bsqhgsces5d2hxxri6g3la6datrlxd@llfdg36ldr4b>
- <c0eb2886-6250-4f67-8b17-c6ba953a42d3@zhaoxin.com>
+	s=arc-20240116; t=1709747972; c=relaxed/simple;
+	bh=7rNmIiJvHZRRcyxK8sahGbJdTPGuTBAHirBOnXT5Ozk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gVZE3Nhq2e5oKgIpz5sD8+dn1yCB7NfjL8XuClaIw2x8N0GdxZW/uZEDwS5HqWzWppE9YNGSIotVKQ96gxFGwdXpCHUjkTlMSYP4CqhAnxvM6k+s+R1GoIes1nLK2VvzKlLjRchaxOaOtU0mkoANbPdMC3Q55qH1eG6VjcTDtQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XrHjw7j1; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6690940002;
+	Wed,  6 Mar 2024 17:59:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1709747963;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=feUsser08/oRbJl8T+/+meJYT6wkDGmgBWV/M3Vs1vU=;
+	b=XrHjw7j1yFLFY+SWL4phvU+R0M4qjVf9pCSNLN3GOiFINCKTO6V8tZqhb+X5qiZcr2mclM
+	FZ8SY4jubBSJBqmweKAnFsmx8gHYy+12Skxl9jUT7UCcZt5v6Ovt0bnMi4pRQ9qcObsdSe
+	gA3ptXKBzX0o98XKq41+ouc0xxlO2u12B8woLgVKI3T+tDfc/r7vZ0yyIPcc+FcNfqDSTU
+	dGDk8z9qv2u0826HicHpB1OUaE4v3scJYew4EjFr4yaFtYQByEhTSyH9g5EKX0DYgpIsrL
+	5RM6chw1hCg25gQreIDt1EcOuG6TZTQGHckB02375C26IOA12aYQbHM/WEbe6g==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v3 00/11] Add Mobileye EyeQ5 support to the Nomadik I2C
+ controller & use hrtimers for timeouts
+Date: Wed, 06 Mar 2024 18:59:20 +0100
+Message-Id: <20240306-mbly-i2c-v3-0-605f866aa4ec@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="iFb6S1sCTNbTVjsu"
-Content-Disposition: inline
-In-Reply-To: <c0eb2886-6250-4f67-8b17-c6ba953a42d3@zhaoxin.com>
-
-
---iFb6S1sCTNbTVjsu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAPiu6GUC/1WMzQ6CMBAGX4Xs2Zru1h/qyfcwHmgpsglQ05JGQ
+ nh3CxfxsIfZfDMzRBfYRbgVMwSXOLIfMqhDAbathpcTXGcGkqQwn+hNNwkmK66WGmMMktYN5Pk
+ 7uIY/W+rxzNxyHH2YtnLC9btGTpLw/IskFFKgrpS6OI21re7G+7Hj4Wh9D2sm0U4lvVMpq0aRq
+ 7G0Upf2X12W5QsnrkFb3QAAAA==
+To: Linus Walleij <linus.walleij@linaro.org>, 
+ Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mips@vger.kernel.org, Gregory Clement <gregory.clement@bootlin.com>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+X-Mailer: b4 0.13.0
+X-GND-Sasl: theo.lebrun@bootlin.com
 
 Hi,
 
-> OK, the issues you mentioned will be fixed with a new series.
+This series adds two tangent features to the Nomadik I2C controller:
 
-If you do this new series, please make sure you rebase it on top of
-Andi's for-next tree. He just applied a fix for wmt, namely:
+ - Add a new compatible to support Mobileye EyeQ5 which uses the same IP
+   block as Nomadik.
 
-"[PATCH] i2c: wmt: Fix an error handling path in wmt_i2c_probe()"
+   It has two quirks to be handled:
+    - The memory bus only supports 32-bit accesses. Avoid readb() and
+      writeb() calls that might generate byte load/store instructions.
+    - We must write a value into a shared register region (OLB)
+      depending on the I2C bus speed.
 
-Your new series should be on top of this patch to avoid merge conflicts.
+ - Allow xfer timeouts below one jiffy by using a waitqueue and hrtimers
+   instead of a completion.
 
-Happy hacking,
+   The situation to be addressed is:
+    - Many devices on the same I2C bus.
+    - One xfer to each device is sent at regular interval.
+    - One device gets stuck and does not answer.
+    - With long timeouts, following devices won't get their message. A
+      shorter timeout ensures we can still talk to the following
+      devices.
 
-   Wolfram
+   This clashes a bit with the current i2c_adapter timeout field that
+   stores a jiffies amount. We therefore avoid it and store the value
+   in a private struct field, as a µs amount. If the timeout is less
+   than a jiffy duration, we switch from standard jiffies timeout to
+   hrtimers.
 
+About dependencies:
+ - For testing on EyeQ5 hardware and devicetree patches, we need the
+   base platform series from Grégory [0] and its dependency [1]. Both
+   in mips-next [2].
+ - Devicetree commits require the EyeQ5 syscon series [3] that provides
+   the reset controller node.
 
---iFb6S1sCTNbTVjsu
-Content-Type: application/pgp-signature; name="signature.asc"
+Have a nice day,
+Théo Lebrun
 
------BEGIN PGP SIGNATURE-----
+[0]: https://lore.kernel.org/lkml/20240216174227.409400-1-gregory.clement@bootlin.com/
+[1]: https://lore.kernel.org/linux-mips/20240209-regname-v1-0-2125efa016ef@flygoat.com/
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/log/
+[3]: https://lore.kernel.org/lkml/20240301-mbly-clk-v9-0-cbf06eb88708@bootlin.com/
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXon8AACgkQFA3kzBSg
-KbZFmA/+I2cNXuBq5GjumuIByAK/jpP43+e5JiI03HlmRXt30wMUdhzUTrtenfP4
-7vbmQ+8s3GQe80zyYmeymzK9JSHeCt/l9VlIBHC6qUOsNXYUHown6WuTRNDT4BKS
-AtLwTB1KpMCKszXLrp9iCHJidCtr6R/yWh69lF/LPQ7eH2Equs7U2fP8BgSMe/CH
-DqzgzmKuvMJuGYUBr9dUgbFqFvZHXfN1rUTjKlS22vsQMOylNsaSIAN4SMwkgh6x
-RiOTOPANk1NPCjt9fCm5BK2kjfOninPiHGi8wYsQFqN9hNPqq1/yETk/Oj2E8mxi
-A1x4UK0JHXqnlgVhytLwfSqPOcQZm3KftHxvp1rj7b87Pql+mjq6JxUJy0aaqMtZ
-7KKVpMLVXJE6OuFX0YHEx8gVJldyJXfCbjfckDKgwJkqTlW77TIswVcaUbVG+FKm
-AB4hgcuLrQJkU0WPZzRWL4yv1uA8OaNnlzFg8/p2ZFiN4zU4cl4H1429XWUyHS6V
-4txKQLwKUnT2kz4gwLf4bEMaOKWiD10j61Tt42BFQOzJpwo2Y+ZJhuQQQUJAitmu
-g02ZnC7sbvQDKehKgSja6kJUudnbZAKmwSbFn9YVQ0nQ2U0v5S5iz1cIs2CHKxhP
-9qcAZYPRJHhswAwdmgL8tIp33v+O1EuzI8XDvOSW0oHcyDi5HQA=
-=Q75/
------END PGP SIGNATURE-----
+To: Linus Walleij <linus.walleij@linaro.org>
+To: Andi Shyti <andi.shyti@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: <linux-arm-kernel@lists.infradead.org>
+Cc: <linux-i2c@vger.kernel.org>
+Cc: <devicetree@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+Cc: <linux-mips@vger.kernel.org>
+Cc: Gregory Clement <gregory.clement@bootlin.com>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 
---iFb6S1sCTNbTVjsu--
+Changes in v3:
+- dt-bindings:
+  - hwmon: lm75: drop patch taken into hwmon-next.
+  - i2c: nomadik: remove superfluous "The variant found in..." comments.
+- i2c: nomadik:
+  - Add style fixes description in commit message of "rename private
+    struct pointers from dev to priv".
+  - Improve commit message of "simplify IRQ masking logic".
+  - introduce ADR_3MSB_BITS constant to avoid magic GENMASK() in code.
+  - Introduce enum i2c_operating_mode to avoid magic 0b01 in
+    DEFAULT_I2C_REG_CR. Named as in manual, using outdated terms.
+  - i2c_irq_handler(): add newline and split declaration and assignment
+    in I2C_IT_BERR case.
+  - Make timeout_usecs an u32 rather than int; avoid superfluous cast.
+  - nmk_i2c_probe(): remove extraneous debug log.
+  - nmk_i2c_eyeq5_probe():
+    - Straight return error and remove useless handling of NULL. Put
+      dev_err_probe() call in probe().
+    - Add ID value check.
+    - Add enum for speed mode values.
+    - Add static array for masks.
+  - Reorder includes in separate commit from Mobileye support.
+- Take trailers from Andi, Wolfram and Linus.
+- Link to v2: https://lore.kernel.org/r/20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com
+
+Changes in v2:
+- dt-bindings: i2c: st,nomadic-i2c:
+  - Drop timeout-usecs property, rely on generic i2c-transfer-timeout-us.
+  - Use phandle to syscon with cell args; remove mobileye,id prop; move
+    mobileye,olb from if-statement to top-level.
+- dt-bindings: hwmon: lm75:
+  - Inherit from hwmon-common.yaml rather than declare generic label property.
+- i2c: nomadik: (ie driver code)
+  - Parse i2c-transfer-timeout-us rather than custom timeout-usecs property.
+  - Introduce readb/writeb helpers with fallback to readl/writel.
+  - Avoid readb() on Mobileye.
+  - Use mobileye,olb cell args to get controller index rather than mobileye,id.
+  - Take 5 Reviewed-by Linus Walleij.
+- MIPS: mobileye: (ie devicetrees)
+  - Use mobileye,olb with cell args rather than mobileye,id.
+  - Squash reset commit.
+  - Add i2c-transfer-timeout-us value of 10ms to all controllers.
+  - Rename LM75 instance from tmp112@48 to temperature-sensor@48.
+- Link to v1: https://lore.kernel.org/r/20240215-mbly-i2c-v1-0-19a336e91dca@bootlin.com
+
+---
+Théo Lebrun (11):
+      dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c bindings and example
+      i2c: nomadik: rename private struct pointers from dev to priv
+      i2c: nomadik: simplify IRQ masking logic
+      i2c: nomadik: use bitops helpers
+      i2c: nomadik: support short xfer timeouts using waitqueue & hrtimer
+      i2c: nomadik: replace jiffies by ktime for FIFO flushing timeout
+      i2c: nomadik: fetch i2c-transfer-timeout-us property from devicetree
+      i2c: nomadik: support Mobileye EyeQ5 I2C controller
+      i2c: nomadik: sort includes
+      MIPS: mobileye: eyeq5: add 5 I2C controller nodes
+      MIPS: mobileye: eyeq5: add evaluation board I2C temp sensor
+
+ .../devicetree/bindings/i2c/st,nomadik-i2c.yaml    |  49 +-
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts         |   8 +
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  75 +++
+ drivers/i2c/busses/i2c-nomadik.c                   | 740 ++++++++++++---------
+ 4 files changed, 558 insertions(+), 314 deletions(-)
+---
+base-commit: 70a29ee8ef53a09ab62b46540c12ccb94a4a8532
+change-id: 20231023-mbly-i2c-7c2fbbb1299f
+
+Best regards,
+-- 
+Théo Lebrun <theo.lebrun@bootlin.com>
+
 
