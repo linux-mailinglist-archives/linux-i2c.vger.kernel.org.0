@@ -1,92 +1,117 @@
-Return-Path: <linux-i2c+bounces-2206-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2207-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7176F872F78
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 08:20:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84280873299
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 10:34:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E61B282979
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 07:20:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 395041F25D05
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 09:34:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82E965C615;
-	Wed,  6 Mar 2024 07:20:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF195E08B;
+	Wed,  6 Mar 2024 09:34:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ire0JjbT"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="flWszAUC"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5695C5F9;
-	Wed,  6 Mar 2024 07:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94645EE96;
+	Wed,  6 Mar 2024 09:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709709632; cv=none; b=Tf6CXJuW/dusJ1Np6FrscgXOOjOu+R/AY67gJdQxTXdci+BaarRyqRI3LDdiUVqsSmY0W3/aiRLP3VOCgn9Fs8ubwEyvxA3nZfXhnfuNFfZQiFkjrZ4a3bh2x4o5/h5rJXUeon+1LPz/q31si2RaSFYYiuj375ICG4MIwDxqnYs=
+	t=1709717654; cv=none; b=a9SGI9mZKM0b4E4KocEjcHFpMTC+6bfucJLzWcTEXFFFQm6YoMghYVb14s+SAg8JegX4fmZu6zQP5e6uTJm5WYngrAZGyfz9OMYs0ZtacjC1fRlSw490t84UA8PMyIteo2qulc7QqdN3U4M0xnoniRy6BtSlt5O/XsOp+V/bJbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709709632; c=relaxed/simple;
-	bh=Qugb/thylVBs/11++xQrE7py/hfjgS+7cmnTqZ6Npk0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lyzH6YF1I9cFnX4ggfv272jcqIChrQ/aHZ6z7ETrrLjNAqX+boPa7kqGeklRZB4sLFeej3yVADMqnUdJ8A1XDW4zVBKDWcBd0WHrHWpvdixzPLMOPNveWR8XLo8XXS1ZJzVZ+8t+AUfigpPaeThpJhkyyjtLC9BEHdGlXJTRdVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ire0JjbT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEAA5C433C7;
-	Wed,  6 Mar 2024 07:20:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709709630;
-	bh=Qugb/thylVBs/11++xQrE7py/hfjgS+7cmnTqZ6Npk0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ire0JjbTk37nJ8nW8ILDF6ozjTHy+9PDRACslzZH2SKcNTUuUi7a7ClpUtyz6ADno
-	 rtyc7cVI9D3yxR/B8zMEJhFsYPCZKimE7U/KgrQyMPXq6hJKHUGUuh5IBYsyW6GnhB
-	 WBV0qIVBxQlY+hkqyQ5WzrU+tPCZ+noTIbjfrtDPPozUfil+4/10xE3xY6IRXX3eW6
-	 roaePgsJUluqivsZn+2gPvHaMwqJPWAHdjvkpUd8t6udNueYP1UG0gBEd2VHp4lWDK
-	 rCYy18ssfJtM4HgvMfuFk/CKCk9Cz2TFPp5pt97Sj6BAFudLNevCpDufEgav9qBoFJ
-	 fvRlzsARGWpSg==
-Date: Wed, 6 Mar 2024 08:20:27 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: i2c: mux: i2c-demux-pinctrl: Drop
- i2c-mux.yaml reference
-Message-ID: <e6cuggewnewxp2tf4g45jkazu46pgiffooo6gdwi2ge44itsps@njsz64u5vjyr>
-References: <20240124190552.1551929-1-robh@kernel.org>
- <Zb6nBYTkZmXZ0G2X@shikoro>
- <Zdxq4GnRyjC07EH8@shikoro>
- <CAL_JsqLnCzXMsyeAHZUx2_oF5dqvLOWBvoj2Bb_Go6VimCxCoA@mail.gmail.com>
+	s=arc-20240116; t=1709717654; c=relaxed/simple;
+	bh=JinEX41/j7Pb/bWxW54bGmffaAtTNcThK8gdOptLKmY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=eF882WGEhiB5jRMSmh9kej6ISIvjqXudnfN1oQJNI0OIQL6cUh27R0qkBfSrcKwhZdUHDMt95q4od46vpDjKr4mB24Jq1VQajIl9DBbRC0WZju9RSO7Ue1wJson3YScNT72vByHxbjGPN20ZGVT5vp67a6fB6oue6Kc1wz41R2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=flWszAUC; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B95DFF80A;
+	Wed,  6 Mar 2024 09:34:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1709717649;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=od4s/GMAsr52sikJcFgvSYexwtnWDcy7Z22NE3GsHO0=;
+	b=flWszAUCdRYte0IftesUvM5oIovUSfZcoWTw88vViiC3zzugdD6VABdpg/qSMIoiriNvEa
+	HwQ6CavPBKPEtMWhjiB1Jcx/h+8QmodvIi2fHXR+EHqw0knNc60bHgC9MB/4YwpsxQsc9L
+	C3Ay7A2aKHeZTAduHirmc4l7SsHzn9CiWUQXkpVsM9JP3ePCdLebbkVivyjkYGv4zw1ke8
+	+hHh9DdtCmExe4sk3tryFL2xap6DbZSDNF4cuFMZclKyl9eZQ22Nqi0Oh6HZzGGIAZmlNG
+	JH9RAXidbdI6QKlNno1AjYAmVwYjQr9rrE4mEiX+dQ682P+Hxli1IYdpqvIboA==
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_JsqLnCzXMsyeAHZUx2_oF5dqvLOWBvoj2Bb_Go6VimCxCoA@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 06 Mar 2024 10:34:08 +0100
+Message-Id: <CZMKBOH0BBTH.MZH1OTAZC7HH@bootlin.com>
+Subject: Re: [PATCH v2 00/11] Add Mobileye EyeQ5 support to the Nomadik I2C
+ controller & use hrtimers for timeouts
+Cc: "Linus Walleij" <linus.walleij@linaro.org>, "Rob Herring"
+ <robh+dt@kernel.org>, "Krzysztof Kozlowski"
+ <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+ <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, "Gregory Clement"
+ <gregory.clement@bootlin.com>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>, "Jean Delvare" <jdelvare@suse.com>, "Guenter
+ Roeck" <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
+To: "Andi Shyti" <andi.shyti@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.15.2
+References: <20240229-mbly-i2c-v2-0-b32ed18c098c@bootlin.com>
+ <bhiubxf3vuxfnz4rh75isgy5z5cexa6dnlw733box5ly3h7r5f@yqvzs75d3ykb>
+In-Reply-To: <bhiubxf3vuxfnz4rh75isgy5z5cexa6dnlw733box5ly3h7r5f@yqvzs75d3ykb>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hi Rob,
+Hello Andi,
 
-On Tue, Mar 05, 2024 at 12:06:05PM -0600, Rob Herring wrote:
-> On Mon, Feb 26, 2024 at 4:48 AM Wolfram Sang
-> > On Sat, Feb 03, 2024 at 09:50:13PM +0100, Wolfram Sang wrote:
-> > > On Wed, Jan 24, 2024 at 01:05:50PM -0600, Rob Herring wrote:
-> > > > The I2C de-mux is different than an I2C mux, so i2c-mux.yaml is not
-> > > > relevant and shouldn't be referenced.
-> > > >
-> > > > Signed-off-by: Rob Herring <robh@kernel.org>
-> > >
-> > > Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> >
-> > Andi, can you pick these up?
-> 
-> I already did since you gave your reviewed-by and they hadn't
-> otherwise been picked up.
+On Wed Mar 6, 2024 at 2:49 AM CET, Andi Shyti wrote:
+> > Th=C3=A9o Lebrun (11):
+> >       dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c bindings and ex=
+ample
+> >       dt-bindings: hwmon: lm75: use common hwmon schema
+> >       i2c: nomadik: rename private struct pointers from dev to priv
+> >       i2c: nomadik: simplify IRQ masking logic
+> >       i2c: nomadik: use bitops helpers
+> >       i2c: nomadik: support short xfer timeouts using waitqueue & hrtim=
+er
+> >       i2c: nomadik: replace jiffies by ktime for FIFO flushing timeout
+> >       i2c: nomadik: fetch i2c-transfer-timeout-us property from devicet=
+ree
+> >       i2c: nomadik: support Mobileye EyeQ5 I2C controller
+> >       MIPS: mobileye: eyeq5: add 5 I2C controller nodes
+> >       MIPS: mobileye: eyeq5: add evaluation board I2C temp sensor
+>
+> what's your plan for this series? If you extract into a separate
+> series the refactoring patches that are not dependent on the
+> bindings I could queue them up for the merge window.
 
-Oh... I had them in my test branch and was waiting for some more
-tests before sending the notification.
+V3 is ready and will be sent today. I think we can get trailers from
+dt-bindings maintainers as the discussion has been caried out on this
+revision.
 
-Shall I remove them from my list?
+Am I being too optimistic of seeing this series queued before the merge
+window?
 
-Andi
+Thanks Andi,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
