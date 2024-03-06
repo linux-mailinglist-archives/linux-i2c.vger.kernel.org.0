@@ -1,90 +1,112 @@
-Return-Path: <linux-i2c+bounces-2216-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2218-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F48C873B25
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 16:50:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80275873CAE
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 17:54:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AE992827A2
-	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 15:50:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FB831F21B87
+	for <lists+linux-i2c@lfdr.de>; Wed,  6 Mar 2024 16:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D7B9135403;
-	Wed,  6 Mar 2024 15:50:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 957E6137923;
+	Wed,  6 Mar 2024 16:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q2AJ3Oj+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 1.mo582.mail-out.ovh.net (1.mo582.mail-out.ovh.net [46.105.56.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C803134CFA
-	for <linux-i2c@vger.kernel.org>; Wed,  6 Mar 2024 15:50:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.56.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4867A136995
+	for <linux-i2c@vger.kernel.org>; Wed,  6 Mar 2024 16:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709740236; cv=none; b=s9VkNm4XPzrGQxPNlqEjt/96fY5CianLGzfoC15qetoz6cFHnC51uKKZ27+uDDX9G/HXWgxMs+r9jCSIitwAnSiDB4sIznQrcLv0CQbOPZt6sDSXb6HA2wFrwHAusR5EXHoBIdli24aTmaDdM8qnLyhpnnW8kVUuU3EAgLUE0gY=
+	t=1709744075; cv=none; b=iw1mjLyCozhCBZZJlmMmgKFGlNe4XkrkD0L0Fm805FVZxIkOs7peK+IOQa4duKRqiHn6K2FJQxvFYIvkR6lee0OpPfH+3kG6sXgElwplqsKPd1bOXEUDu22lzfhzdVu10AD71u2Fw/mATkl/qe1Ct2uGm2Eu3lGPHnUqZmy6I+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709740236; c=relaxed/simple;
-	bh=MQfE8wsSPKQmhsxKtLSyfgknlqem5+C0uOcMNrIoMfE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=u0odtbCSYz+sd+lMfog0fFZj61JHjMYnNW+49vFKUEFlpp4DwiqhGMU2If3H5igx4F9Kff7Zdq1NbQL/oPXA+u7lgo9H+rx0egkWrdzi+OjYAXAacelLXCUQQbjjT9dKBd9gCdqFrgKK+WC3d5aQxsTRzWs306vW6poRIwktbCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.56.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director2.ghost.mail-out.ovh.net (unknown [10.109.148.126])
-	by mo582.mail-out.ovh.net (Postfix) with ESMTP id 4TqcCl604Kz18LK
-	for <linux-i2c@vger.kernel.org>; Wed,  6 Mar 2024 15:43:31 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-5ftjb (unknown [10.111.174.17])
-	by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id DDCD01FEBF;
-	Wed,  6 Mar 2024 15:43:30 +0000 (UTC)
-Received: from etezian.org ([37.59.142.109])
-	by ghost-submission-6684bf9d7b-5ftjb with ESMTPSA
-	id YR/XJSKP6GWyBAAArHCiFA
-	(envelope-from <andi@etezian.org>); Wed, 06 Mar 2024 15:43:30 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-109S00357faae83-dee3-4f70-a94c-fe5b44f90acc,
-                    62DEF991EB217AB86F953B10C2782167B22AFEEB) smtp.auth=andi@etezian.org
-X-OVh-ClientIp:89.217.109.169
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-In-Reply-To: <bf7b105f7d9728ae5cd9fa99d1cdd278d71e7df2.1704723713.git.geert+renesas@glider.be>
-References: <bf7b105f7d9728ae5cd9fa99d1cdd278d71e7df2.1704723713.git.geert+renesas@glider.be>
-Subject: Re: [PATCH] i2c: rcar: Prepare for the advent of ARCH_RCAR_GEN4
-Message-Id: <170973981000.1763249.1525720901010723550.b4-ty@kernel.org>
-Date: Wed, 06 Mar 2024 16:43:30 +0100
+	s=arc-20240116; t=1709744075; c=relaxed/simple;
+	bh=BoA4clyJGdpKOSXO4fvBLqbIDSPr9DFImpz+/s60Eno=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A9AwaEaYrJIA1xBFS/wTMw6mv1cej0UHuXSWRKyZcvjV4kdyTUgkPXHhQSd4wgInom7FXT+jPP256fsjJvROhVz9zA3R6EzzNmtou1DpdOZSFShMvUQHZrsY/c17VSgt4IAw5a68xN4OkyjG0V23lhbtxcCD5TrcxaboCnFUIHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q2AJ3Oj+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6559EC433C7;
+	Wed,  6 Mar 2024 16:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709744074;
+	bh=BoA4clyJGdpKOSXO4fvBLqbIDSPr9DFImpz+/s60Eno=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q2AJ3Oj+jf2uT81tS54rIaH4ux8Uo3ZYpQrcyY+ZMo8K3lDAqOwgmhtsik2OEE35Q
+	 IJSvLwmeEwZjwzsX+1K1bA4p+nxHsuEu/dDo14a3h2QqAxgSVK04EC/GgywSg7yen8
+	 wIZu5mEptWg2NNhF0HZFsAL8ror94AdKZfsMOeY1o5bKWWak0eqXrWHUrvozwiThAZ
+	 O/oddYWS2oJnYVh1Ukj+xI2jdbLINJB7vj15eDbfGly59j9vigTWap2tql1FWoxTqD
+	 qxZcJEcEakz6fY5rvvj8jgSr6n54GNvEOzh8BxLcrylU7ejDWXU3KwGO+fCWRFh71a
+	 1n1vExq+SSVNQ==
+Date: Wed, 6 Mar 2024 17:54:31 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Hans Hu <HansHu-oc@zhaoxin.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+	cobechen@zhaoxin.com, hanshu@zhaoxin.com
+Subject: Re: [SPAM] Re: [PATCH v8 6/6] i2c: add zhaoxin i2c controller driver
+Message-ID: <Zeifxys1OxWQrste@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Hans Hu <HansHu-oc@zhaoxin.com>, Andi Shyti <andi.shyti@kernel.org>,
+	linux-i2c@vger.kernel.org, cobechen@zhaoxin.com, hanshu@zhaoxin.com
+References: <cover.1709014237.git.hanshu-oc@zhaoxin.com>
+ <4e9c2c3a3940a00da67564c6e19f4771ab6dc67f.1709014237.git.hanshu-oc@zhaoxin.com>
+ <ZeWZHSt-qm5wH3wn@ninjato>
+ <7jopk32t6ygaxgo27ln2bsqhgsces5d2hxxri6g3la6datrlxd@llfdg36ldr4b>
+ <c0eb2886-6250-4f67-8b17-c6ba953a42d3@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
-X-Ovh-Tracer-Id: 10314087575055108855
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledriedugdejiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeffteehudffvdfhudfgffdugfejjeduheehgeefgeeuhfeiuefghffgueffvdfgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddruddtleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekvddpmhhouggvpehsmhhtphhouhht
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="iFb6S1sCTNbTVjsu"
+Content-Disposition: inline
+In-Reply-To: <c0eb2886-6250-4f67-8b17-c6ba953a42d3@zhaoxin.com>
 
-Hi
 
-On Mon, 08 Jan 2024 15:24:20 +0100, Geert Uytterhoeven wrote:
-> Currently, all Kconfig symbols for R-Car Gen4 SoCs select
-> ARCH_RCAR_GEN3, which might confuse the casual reader.  Prepare for the
-> advent of ARCH_RCAR_GEN4 by extending the dependency for auto-selecting
-> reset controller support.
-> 
-> 
+--iFb6S1sCTNbTVjsu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Applied to i2c/i2c-host on
+Hi,
 
-git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
+> OK, the issues you mentioned will be fixed with a new series.
 
-Thank you,
-Andi
+If you do this new series, please make sure you rebase it on top of
+Andi's for-next tree. He just applied a fix for wmt, namely:
 
-Patches applied
-===============
-[1/1] i2c: rcar: Prepare for the advent of ARCH_RCAR_GEN4
-      commit: 5d85665181beb6d75a0e9e0652f41bd0acb877df
+"[PATCH] i2c: wmt: Fix an error handling path in wmt_i2c_probe()"
 
+Your new series should be on top of this patch to avoid merge conflicts.
+
+Happy hacking,
+
+   Wolfram
+
+
+--iFb6S1sCTNbTVjsu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXon8AACgkQFA3kzBSg
+KbZFmA/+I2cNXuBq5GjumuIByAK/jpP43+e5JiI03HlmRXt30wMUdhzUTrtenfP4
+7vbmQ+8s3GQe80zyYmeymzK9JSHeCt/l9VlIBHC6qUOsNXYUHown6WuTRNDT4BKS
+AtLwTB1KpMCKszXLrp9iCHJidCtr6R/yWh69lF/LPQ7eH2Equs7U2fP8BgSMe/CH
+DqzgzmKuvMJuGYUBr9dUgbFqFvZHXfN1rUTjKlS22vsQMOylNsaSIAN4SMwkgh6x
+RiOTOPANk1NPCjt9fCm5BK2kjfOninPiHGi8wYsQFqN9hNPqq1/yETk/Oj2E8mxi
+A1x4UK0JHXqnlgVhytLwfSqPOcQZm3KftHxvp1rj7b87Pql+mjq6JxUJy0aaqMtZ
+7KKVpMLVXJE6OuFX0YHEx8gVJldyJXfCbjfckDKgwJkqTlW77TIswVcaUbVG+FKm
+AB4hgcuLrQJkU0WPZzRWL4yv1uA8OaNnlzFg8/p2ZFiN4zU4cl4H1429XWUyHS6V
+4txKQLwKUnT2kz4gwLf4bEMaOKWiD10j61Tt42BFQOzJpwo2Y+ZJhuQQQUJAitmu
+g02ZnC7sbvQDKehKgSja6kJUudnbZAKmwSbFn9YVQ0nQ2U0v5S5iz1cIs2CHKxhP
+9qcAZYPRJHhswAwdmgL8tIp33v+O1EuzI8XDvOSW0oHcyDi5HQA=
+=Q75/
+-----END PGP SIGNATURE-----
+
+--iFb6S1sCTNbTVjsu--
 
