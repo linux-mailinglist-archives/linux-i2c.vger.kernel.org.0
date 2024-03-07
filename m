@@ -1,128 +1,95 @@
-Return-Path: <linux-i2c+bounces-2264-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2265-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B7D5875936
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Mar 2024 22:25:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C09CE875A7C
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Mar 2024 23:58:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54F131F242F8
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Mar 2024 21:25:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 593BE1F235BE
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Mar 2024 22:58:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35D2613BAC4;
-	Thu,  7 Mar 2024 21:25:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 117E53D0C2;
+	Thu,  7 Mar 2024 22:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t9IcGzz0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z4HYD/c/"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FDB413B783
-	for <linux-i2c@vger.kernel.org>; Thu,  7 Mar 2024 21:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20F02E648;
+	Thu,  7 Mar 2024 22:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709846714; cv=none; b=Km1WP+wn4fDOriUl2fC6lfMGdoV1fcRXsWvflioVNYsNyFZdiCZS4X5FclHKyCLCtQPwTrFAmamAF+N3njQG8jrX25YsiwHXPqGl+WeStZ83WI2DyWr/lDqFt8ZaGUjgV3PA0CzCocaBYrPPRwO+Dc7AWTqYQs3aQe3Dm7NCXlk=
+	t=1709852294; cv=none; b=dcN4b/1mNhhLCNeUjJ1j2YoxPb5vyskJ8bQckAAB3SV0XWQqafIiBMIdhmEiAFxLQvrqEU/pJytSKt+fhpR0h9HASq7ADdoy47ALoW0HfyEu4gDHiRXgeSy0wQhdhi7B2uxX9XenaTJfuulIFlwoNpijzLwxKk/3VVfJ0M912P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709846714; c=relaxed/simple;
-	bh=fmMP5iKplWZjMSpRw/sZdefxBphDjLLMtsB0POMq9wQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ObjeZWKilHzxOSbtGK2i4ZD+tM7ZfIcY0tk9LoMeQYPF7zOpzV7A0mF5wCz+3GIVY/SOqmmxfSfr7HBTivhBtJJmP1ie8nAbTs+t1Q5HT//mAa4nK1OHEuqLjqZ99H/ijUG6bUs5CSrvfHk2cO8le96dm7PhTkqSjbLxkpTR3r0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=t9IcGzz0; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6098a20ab22so11746637b3.2
-        for <linux-i2c@vger.kernel.org>; Thu, 07 Mar 2024 13:25:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1709846710; x=1710451510; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=b9hhcys1gNGaG07NYC+PK2//TEd+2vYvb6mO1ZLDuZE=;
-        b=t9IcGzz0Nq1flpUvdkBGP5Euh/4CAnc5TKttnLkWvkLIn0vK0i9rW27uOo9+SmUQlJ
-         VCzJHkZTAKx47kejlueRP2QE+k5AjymQSVlYHD5qsHOxCA746r7Ga3CVzbtCpph85uJE
-         9tDorYeSJPafo9f83e2tH7IoPOd+l2oUH+7b5df3G0ffh5nfJKAxMymyYAF6v8DeZGuk
-         2esjb8Go/cTbBn/WpbydR5opCavOrbjnogHsfebj6kS+dF8ROF10DJ7myT/2kYp005Ul
-         ZtpZeDSeV3kScmmS4pmy7emHfBqUF45MQ5QP9pPLuCeivqvJAdzhW94033h4yUUaIyWt
-         axwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709846710; x=1710451510;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b9hhcys1gNGaG07NYC+PK2//TEd+2vYvb6mO1ZLDuZE=;
-        b=JcnL72Q6ndRHefXqIyALyOROn0cv/u3XnLM6yb89xRh1hUvO4cZe7i0MzDyyyTw8wx
-         1meV/ZJnvUdq52VXMslAbBI0A+kAe36KKh7OVV91tagcQbdI6bPC84b2ifOXlYbrPVmh
-         ZlvTqCg/jevB/LgSXh3HGGBcM7xqUvymgz0vLIVS3QBR0JYl3pYoR/zy5HzKr0+QesG/
-         +ZFIbjEwJ3B2PiJ1aoNHBJwmyMvmVIaSFqfFs1+aFc7g8sCXfnRjeHerXGHXmd7tWXrC
-         6urYhNjbDCVVKQwedm4nbOPn8b5YTzOlcI5emzxwT8W70cl/KNF+5S82XlA7EZBqWhX5
-         9mVA==
-X-Forwarded-Encrypted: i=1; AJvYcCUU5loQBi3XFxmGSSBF/gGh9ZrUdDja2uA0F16oQrAr8z44PlEEuVoaGUvmlfknJLJ1ATXmXiq4ugsIDsKtTPhOsPeEYpm8H0C6
-X-Gm-Message-State: AOJu0YzAMzy6PV+VoYsoKdzD7e6FRCHTRpY2Kiu0rKAdO5DzhAcrw16Q
-	SWnPF4w4x+xVrGl2UQ9qNj5w/MMxCQc1hOp69MX0+RevqGLk/ihTSL5ITp3jbLaFDtdufLdxZQ2
-	n/wbR52hpz94zZeIrtIz9X68PrXWy4jhQE2lSlQ==
-X-Google-Smtp-Source: AGHT+IFeiIPNPn9x5gaa4VWCe7fO1lW7o6wG5lJpI4FhUITzOYaLQsMD+ZKsTXTO2rCcXRWB2h99TPW5M52TItEo/AE=
-X-Received: by 2002:a05:690c:fc6:b0:609:2fad:a9d6 with SMTP id
- dg6-20020a05690c0fc600b006092fada9d6mr25256866ywb.7.1709846710102; Thu, 07
- Mar 2024 13:25:10 -0800 (PST)
+	s=arc-20240116; t=1709852294; c=relaxed/simple;
+	bh=ZWeH/MoPiO8obvi1BBRa2tCTsg0i4/M7P33Jb8aeLXM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nv6ZdBDdcI806K8HnlIA1vGoc9TnjO6drJN5hUkulY+lja8bYY7hWrcdyOTx0pxoZSnApaKaiTpX4FNWA2o2sqdPeb1QOFF2GInZolqM6pbo2Af4c+moX2bnWe7wsLBVi67IqkunM07Ty3nhmXO+DvcfknRsmH8CvdpbVJba+To=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z4HYD/c/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74014C433F1;
+	Thu,  7 Mar 2024 22:58:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709852294;
+	bh=ZWeH/MoPiO8obvi1BBRa2tCTsg0i4/M7P33Jb8aeLXM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z4HYD/c/wJycrlePvu+p5HaG8/6rcihDqcdPd7E3tNvltxk7hSUI9IaUs+70DZl6S
+	 r5a97MVhOZULFYMXRtzs+4IoltexYw44FfT7+B8WSeDaIxDPgQZAvIOKC8Z3/mS643
+	 UbP1vocXPV5Vgx4iaumJrx4DQ3wuULt0bFGPGR+rClVC/2bU8+zdMZHRsvkTmyY+MT
+	 fSMJZhxidC2R4j0VCQAHOXugUY3Hk9r2300Amcv9duOtG4jQkjVEyXuDizat53SWzA
+	 ZCkrRMBd/T7OdyOml6SgULzRxQjf4CKmRdo6AL686rc1a4xVjMUX0hdjrOwsCLj/dt
+	 LfFwwFNeyIhbQ==
+Date: Thu, 7 Mar 2024 23:58:09 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Cc: konrad.dybcio@linaro.org, andersson@kernel.org, vkoul@kernel.org, 
+	wsa@kernel.org, linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, quic_vdadhani@quicinc.com
+Subject: Re: [PATCH v3] i2c: i2c-qcom-geni: Parse Error correctly in i2c GSI
+ mode
+Message-ID: <cmtru4nvoab6g5emp2yrxnvfpvtrcsuna6dqsyewpagg3qmkau@r2zoj6vgslet>
+References: <20240307205539.217204-1-quic_msavaliy@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240307205539.217204-1-quic_msavaliy@quicinc.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20240307205539.217204-1-quic_msavaliy@quicinc.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Thu, 7 Mar 2024 23:24:58 +0200
-Message-ID: <CAA8EJpq01SPGnJx-YrM=GDRVD_DjYwMQqL9D9v5jADwd3OjVsg@mail.gmail.com>
-Subject: Re: [PATCH v3] i2c: i2c-qcom-geni: Parse Error correctly in i2c GSI mode
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Cc: konrad.dybcio@linaro.org, andersson@kernel.org, vkoul@kernel.org, 
-	andi.shyti@kernel.org, wsa@kernel.org, linux-arm-msm@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, quic_vdadhani@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 7 Mar 2024 at 22:56, Mukesh Kumar Savaliya
-<quic_msavaliy@quicinc.com> wrote:
->
+Hi Mukesh,
+
+On Fri, Mar 08, 2024 at 02:25:39AM +0530, Mukesh Kumar Savaliya wrote:
 > I2C driver currently reports "DMA txn failed" error even though it's
 > NACK OR BUS_PROTO OR ARB_LOST. Detect NACK error when no device ACKs
 > on the bus instead of generic transfer failure which doesn't give any
 > specific clue.
->
+> 
 > Make Changes inside i2c driver callback handler function
 > i2c_gpi_cb_result() to parse these errors and make sure GSI driver
 > stores the error status during error interrupt.
->
+
+funny note: this is half "imperative mood" :-)
+
+A real imperative would be "Pares the error inside
+i2c_gpi_cb_result()... blah blah blah". No need to resend.
+
 > Fixes: d8703554f4de ("i2c: qcom-geni: Add support for GPI DMA")
-> Co-developed-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-> ---
-> v2 -> v3:
-> - Modifed commit log reflecting an imperative mood.
->
-> v1 -> v2:
-> - Commit log changed we->We.
-> - Explained the problem that we are not detecing NACK error.
-> - Removed Heap based memory allocation and hence memory leakage issue.
-> - Used FIELD_GET and removed shiting and masking every time as suggested by Bjorn.
-> - Changed commit log to reflect the code changes done.
-> - Removed adding anything into struct gpi_i2c_config and created new structure
->   for error status as suggested by Bjorn.
-> ---
->
->  drivers/dma/qcom/gpi.c             | 12 +++++++++++-
->  drivers/i2c/busses/i2c-qcom-geni.c | 19 +++++++++++++++----
->  include/linux/dma/qcom-gpi-dma.h   | 10 ++++++++++
->  3 files changed, 36 insertions(+), 5 deletions(-)
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+I still don't understand what's the fix here. You are making a
+generic DMA error to be more specific... where is the bug? What
+exactly is broken now?
 
+Besides, keep in mind, that commits with fixes tags get
+backported to older kernels (this one dates back to 5.18) and you
+should also Cc the stable mailing list:
 
+Cc: <stable@vger.kernel.org> # v5.18+
 
--- 
-With best wishes
-Dmitry
+Thanks,
+Andi
 
