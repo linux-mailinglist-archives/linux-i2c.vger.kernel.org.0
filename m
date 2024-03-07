@@ -1,75 +1,59 @@
-Return-Path: <linux-i2c+bounces-2244-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2245-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3966874975
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Mar 2024 09:21:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF4388749D3
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Mar 2024 09:37:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 592B21F2125E
-	for <lists+linux-i2c@lfdr.de>; Thu,  7 Mar 2024 08:21:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90629B221D0
+	for <lists+linux-i2c@lfdr.de>; Thu,  7 Mar 2024 08:37:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0384C63137;
-	Thu,  7 Mar 2024 08:21:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C43D782C96;
+	Thu,  7 Mar 2024 08:37:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="F3l77BMV"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="WRudDpPS"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC376306D
-	for <linux-i2c@vger.kernel.org>; Thu,  7 Mar 2024 08:21:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF26B63110
+	for <linux-i2c@vger.kernel.org>; Thu,  7 Mar 2024 08:37:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709799701; cv=none; b=DOagkMzimyYShQbCyvxSRQjzhcuH6yNT5mNQb6JRC37rZT8SJGpFrjHB3C1XE/I+H0H1MPLhvzKufKQQ87AZHyhVAyeIuqDk73eAE5OdqmBt+ii5QXR5C4K9wUCadYB75LfNb4jgJxzjCVroMQKYhb5nI4WJiVEN2nVGLP5An7Q=
+	t=1709800650; cv=none; b=fwV4JGlRxjd8U4vba08XgQJsNjCvzec+qoLe2PDhpKfxVSAJUVG7PlbtSXdwG9Oim4cHf0qfxLP42UyZQx3cXU4dxYNHGYu2lSaYeuOx2yxWdFCe8+lR7zlGGTIq93eM7LgdxNgc/KCgunK46AWi1ITf28mCqLiQk1a1sSw6Dv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709799701; c=relaxed/simple;
-	bh=cGrQCcSMkymYB5IZHpWOTvUUbwNUQssV/LLj9ZrMhWY=;
+	s=arc-20240116; t=1709800650; c=relaxed/simple;
+	bh=C6YOL+H36w2gYFNpOncMKker3/8rALYdU8W2MfFeUeY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rI7GOIkyzuiK8XhkbFAvW7JfSRkcRSKA6lyn5GRDDJnJNd27OELLFINpNd+o+04iGaj2s17LEeHlbSuwpbXtDKQcgg4j10nUmp1DKjwbYMNPH9tbeGDLhQOkAIvnqgNE9WgM6w4S1sL+6L3VUFTnt53pe59yXa+4iCick7iivcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=F3l77BMV; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vgpe215V7BUjPSTMBMpC2siZbENhXidZDHuiXNHPMwprVyvZAyMcNztTjN5VFbj65o/10p5kf2xpOnKrogmEiXqOD+H9FMoEy2QWNZrq5T3WVmGiluxmYRJnPqKsenRI4arw4jXnqrQ3yjWNlDhDCE8/6V/tdOUYdmvIh7Q46CA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=WRudDpPS; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=cGrQ
-	CcSMkymYB5IZHpWOTvUUbwNUQssV/LLj9ZrMhWY=; b=F3l77BMVaU6W2W2/uBza
-	ULPf86P5AdnKm6XSAsTGzlarD7XBpxYMIyMj05Y4lU+qcn17VsAYyDtrBdmzaAC9
-	uxzEmCfcqzyAyJKrn7rsBaPbDb7QuY5OLtsFQmuT2ikcJbYzCY+NtrFvMIouWuAT
-	xGF2lGjhXcotsKRsgbXONML0J8cuMf6+2lvj2OuOpQtYFwQs9yMKi1UWhrxrpM8g
-	yczcZUVq4CZiTajK69pCq0fJTqqZxs9joUYLJNs/1AJ8J/dkTC/ZI6al5q5azPWB
-	D7FsejeqbYI9BgT0C/4cKXxmcF56TqncPAXq9NP8tkkfj/IKsVBtoDI+uS//ZC45
-	Ig==
-Received: (qmail 280653 invoked from network); 7 Mar 2024 09:21:30 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Mar 2024 09:21:30 +0100
-X-UD-Smtp-Session: l3s3148p1@OAYqww0TjM0gAwDPXwugANQqZcJxr0oT
-Date: Thu, 7 Mar 2024 09:21:29 +0100
-From: "wsa-dev@sang-engineering.com" <wsa-dev@sang-engineering.com>
-To: Hamish Martin <Hamish.Martin@alliedtelesis.co.nz>
-Cc: "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-	"andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-	"naresh.kamboju@linaro.org" <naresh.kamboju@linaro.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-	"lkp@intel.com" <lkp@intel.com>, "arnd@arndb.de" <arnd@arndb.de>,
-	linux-i2c@vger.kernel.org
-Subject: Re: [linux-next:master 11602/11963] ERROR: modpost:
- "acpi_device_notify_remove" [drivers/i2c/i2c-core.ko] undefined!
-Message-ID: <Zel5CYKpg82mErNQ@shikoro>
-Mail-Followup-To: "wsa-dev@sang-engineering.com" <wsa-dev@sang-engineering.com>,
-	Hamish Martin <Hamish.Martin@alliedtelesis.co.nz>,
-	"mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-	"andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-	"naresh.kamboju@linaro.org" <naresh.kamboju@linaro.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-	"lkp@intel.com" <lkp@intel.com>, "arnd@arndb.de" <arnd@arndb.de>,
-	linux-i2c@vger.kernel.org
-References: <202403052102.hlG8I44z-lkp@intel.com>
- <6da20a8cf84d358841068e7eff3323b6d61e014b.camel@alliedtelesis.co.nz>
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=C6YO
+	L+H36w2gYFNpOncMKker3/8rALYdU8W2MfFeUeY=; b=WRudDpPS89drV17hRDFS
+	K2BaM+2an+I0ArFIIssB0StmfFoIPnLY+lvq5QOQn1zwUqaV7lHERhWR6SPU8jB4
+	jekkbgeOOQv/JwgNst8qIAT08nnSdAycYlabKUcXfU2igtCpDyYs6kPzKLjOdl8o
+	XBXynY4WSnICbiGNvHcz0srby3sxwI78gt+esgWMvno/PM3CGdYicowOEWrh7/5V
+	nCN3xvV6EJXGJGLAPf24pGlPigqApfFERH1OnYBEPy7b/IXJXkwsQqK0RiV7+WLG
+	JB+W9Wl+cl/wBPHx1ff02pS5r4C1IvfxMtlMuLL3mpKzHb0S7Nm3jf5gXIWArdlw
+	Lw==
+Received: (qmail 285103 invoked from network); 7 Mar 2024 09:37:25 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Mar 2024 09:37:25 +0100
+X-UD-Smtp-Session: l3s3148p1@2b8a/A0TVt4gAwDPXwugANQqZcJxr0oT
+Date: Thu, 7 Mar 2024 09:37:25 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: "Hsin-Yu.Chen" <harry021633@gmail.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: remove redundant condition
+Message-ID: <Zel8xbERYjSRznfu@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	"Hsin-Yu.Chen" <harry021633@gmail.com>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+References: <20240306041900.22885-1-harry021633@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,43 +61,44 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kvx6EuOu55DTdTQp"
+	protocol="application/pgp-signature"; boundary="TE6MAaH4nDko0Ree"
 Content-Disposition: inline
-In-Reply-To: <6da20a8cf84d358841068e7eff3323b6d61e014b.camel@alliedtelesis.co.nz>
+In-Reply-To: <20240306041900.22885-1-harry021633@gmail.com>
 
 
---kvx6EuOu55DTdTQp
+--TE6MAaH4nDko0Ree
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Mar 06, 2024 at 12:19:00PM +0800, Hsin-Yu.Chen wrote:
+> I2C_M_RD is defined as 1 and `flag & I2C_M_RD` is one or zero
+> no need for an additional condition to obtain the value
+>=20
+> Signed-off-by: Hsin-Yu.Chen <harry021633@gmail.com>
+
+Applied to for-next, thanks!
 
 
-> My recent change introduced a build failure when building as a module.
-
-I will revert this change to remove problems in linux-next. It does not
-make sense to push a fix together with an incremental fix that late in
-the cycle anyhow. Please resend the updated patch as a whole. I'll try
-to get it into 6.8.
-
-
---kvx6EuOu55DTdTQp
+--TE6MAaH4nDko0Ree
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXpeQYACgkQFA3kzBSg
-KbZQ6A//f/YZHPQeFcSnwDqCMZ60p4rgYtyPSod5ClfwVmteGVKyajFEB/SobRXK
-E/qU4V0j4UGmYsrqJxM8B9DJVJFXMorYGPDN+B7h8x4YFLCzYGBj7L0tRZGF7589
-9ZUnS7qk6PK8XKZMQev/FBJahLzycXqf5jkEkza3Xjbwm9M4ZvbXE6NiiuWMV7xa
-AxE6yV2iDkgurSL9b5wtJIOR50yLh9moDaHWExYGRshtLMZcLDDAuHHO3bKgEu2W
-w85vNEymbDMiEpChZjgDjUhxGtm5b1212Gi6/DHDr9FIDq4hU7Eww16yxdDXwXoS
-n4kocAq9lmgPaASmHS9TWPUbMvjJrM6bUh+ZAYKVuH1agWz5DIWX/k+OgAEr8MlM
-zpFI0t2QyWEM+RqDWSqlA09xFWvwaQ0L57c6EmnYIK2NXnv4s7MX97JEzcyoah0F
-+n9/gTgkvjK4psO9gZwc9amnM1RCtcOzr5IkWye0HMDVei+m/GTRDxsbdtghDBBw
-TTWjB7QxXlVLhHHfTIJvjSXS2G4cQ66T9x4+Pn/TGK8Y1om574ZThqFKRwoAWVkz
-jFeqlXWiYdsh00k4aRk4bqZ+l1+M8PvjG5WR8xsAQEEByVcDaa1YRVy9v0co/bhp
-/kklX2OBJg/T6nD1mC/NvkzxL+1JR92KgY5lDR68pci8wzBZj9U=
-=O/cA
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXpfMUACgkQFA3kzBSg
+KbaBsxAAsxiyqPeqCQLgNVwbU4iXEL5SScdns2qnn+p+f61JwT4LQxEyYqTXQcFa
+kn9Vfmw5ItynxDrmz27Ey6T58cMFQ7gDhneVWBB4oTLtWmT9pt+uqwDbYK5F0SR6
+1RnKD6+XzjeFoLovi34/Uzp4umN+X5XqP+zVLTO0S8OfgwCDjOpFNXZOiHhMJoR5
+Oa4FMjmcbKGem3U0iBusazzWSptSig4LbNoUnWGxc4WswMMIN16rmDUeFZT05hIQ
+yHMmKNXwZ+TDSXyLE+QqYQaaWrBMgJ70MQOxVvrujwQHmNfGOUDi99DKt379ZBgO
+OD0POyXv9Hoz0TjKZFJD8iTN5vMI8fsc34qb9ej5zvTv+9nccqQ6mnJGFC6DHIPe
+dOsky2v65pZLyDy80pNSPcc2OclDJFgCBxGmeGo44jnPrrz8+n2gGKCNeZS/N0sR
+hBBIRxm/YbTICBo1MXkGcuQX94ZtZ0Yd9Nlp3FgJl0F4wzFn8/HA5SIGFGvW3AFf
+p2sp4D3EO2OI2ncu83BkGg2t3K+jbCUz1jy/C+0wjz3O57+5MNHqVmJjwjA2ZQBh
+TIPa0ygSctN0Vq7bL83k9Y3IZN2evV42BI8pe6yqMJKgBvDfdBlzTKK487NE4TgX
+dMfyte1EBRZ8kHi5r1jgH2LgTXRrQyku++QKylqCXFGJ5G0vOhg=
+=GgO4
 -----END PGP SIGNATURE-----
 
---kvx6EuOu55DTdTQp--
+--TE6MAaH4nDko0Ree--
 
