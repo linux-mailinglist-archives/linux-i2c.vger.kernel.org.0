@@ -1,99 +1,113 @@
-Return-Path: <linux-i2c+bounces-2274-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2273-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D69A2875E3C
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Mar 2024 08:06:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 838C4875E19
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Mar 2024 08:02:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 137911C20FEE
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Mar 2024 07:06:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B3CB282C3F
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Mar 2024 07:02:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37FDE4F1E0;
-	Fri,  8 Mar 2024 07:05:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E677A4EB32;
+	Fri,  8 Mar 2024 07:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a5r/nxFN"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 7.mo560.mail-out.ovh.net (7.mo560.mail-out.ovh.net [188.165.48.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52D92E3E4
-	for <linux-i2c@vger.kernel.org>; Fri,  8 Mar 2024 07:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.48.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8928F1CFB2;
+	Fri,  8 Mar 2024 07:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709881543; cv=none; b=Rs9LrCv5fGyLkWn6Gd3kXnxxPO1zgepY/kS+ttY2cYOGuvgca8iAVE5ko8cGHflcxD81hYzaGS7seHkQ3/Xvi8Qf/uA09q2QpGDYBQgXUCB2l5Vum3RDQTL5RBAEXywBIMEHRskL4stLuqqzFPb7zigvoXp4Fpl1HaCWprykU8I=
+	t=1709881335; cv=none; b=I5sRy2WcfkEHIGjlJEWu6bdyQg1ubOMpbYZVbwQSqbcP9lMFvB0b1xOV3csTdAoMG1TcOB1k4Y25osLphIIK908/V/DxdRJqawvIu1ionXUsOAepKoGVPSmFjXCAHVPS1WElI5i42RguZoMGoBXp+MQ7efIVbUA6gJqWwCIQvsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709881543; c=relaxed/simple;
-	bh=+WtNAUAUWq/BfAulUapucUzAISe2nXBsKcRWtXwicsk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=W18T/qHebNX7UTb8Oq23LYo3LZzo0RUYBTUEYOlLmg79AYC7QHdnlkMTB9OOYnT102uqPUziNI0QnZOw8mwN2odcgr/eDswrPlzCvhKb5wtimHa8aAZhtYky+7GvteK0M/NthBoY7vhEC+fL7myI2InOcJS3hVlDU83oHfSbZ5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=188.165.48.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director9.ghost.mail-out.ovh.net (unknown [10.108.17.43])
-	by mo560.mail-out.ovh.net (Postfix) with ESMTP id 4TrcQf37Fxz1L1X
-	for <linux-i2c@vger.kernel.org>; Fri,  8 Mar 2024 06:56:26 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-67h7n (unknown [10.110.178.59])
-	by director9.ghost.mail-out.ovh.net (Postfix) with ESMTPS id AB1081FE42;
-	Fri,  8 Mar 2024 06:56:24 +0000 (UTC)
-Received: from etezian.org ([37.59.142.109])
-	by ghost-submission-6684bf9d7b-67h7n with ESMTPSA
-	id MlWHKpi26mUsBgAAeUv1+w
-	(envelope-from <andi@etezian.org>); Fri, 08 Mar 2024 06:56:24 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-109S00328a07135-36d5-4a1a-85ea-111edb4fd173,
-                    2D11F706EFA52336831762ECFB2C8F5C1953C755) smtp.auth=andi@etezian.org
-X-OVh-ClientIp:89.217.109.169
+	s=arc-20240116; t=1709881335; c=relaxed/simple;
+	bh=iTLENVg3/Y3YtimadfoWFR5x7fj4yBYLoTVs3XljBhI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ALoE/Iw8pytXOg+HXR7W44NPzlij5U2O1bhVSm7cf+5OvJLDEk7d4sp2rkAyxIiMSJGbPXZfWnSMnXiT8F00yOZtF6cCD/g4O7aWnBlMoqZ64PO6aIosrUQRT6g2+kQrlA7VqNID2DSVsBoje6SK6VuvqM7ISI7dnkkwOg+voHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a5r/nxFN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 277D1C433C7;
+	Fri,  8 Mar 2024 07:02:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709881335;
+	bh=iTLENVg3/Y3YtimadfoWFR5x7fj4yBYLoTVs3XljBhI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=a5r/nxFNoA9OaeVntqzq6Bwqr+WsxPU8YQ5VdWAWOqe+ho4kZqxjAJ8MjNg3RKi/R
+	 1Rmm9U+vJ/3t4Brwv6zdRu7qB4A7KcMX1Lm+cW6MQ8uK9fsyrH3aS6fFcQJOGE5+4Y
+	 6T6thBj7FXIUv15Iz3Et6XaMyvdUz+VLldnA0rbtNtloK3iPI9iEmiqcBmdO0NV2wa
+	 0z+zGkwEqtUK/wXIgK9LLqPnQ3RhPyqJriRnj+fRsgGx9pJUgOkQJdnH/6jy5XnXiN
+	 CD/x5p7mwLsUqatUBIGfAngpRuZWTgQUSarpPl7K5WFeL9EgHA/pfQLkvxbKNEe8Pg
+	 KYqjQz5zM/aHg==
+Date: Fri, 8 Mar 2024 08:02:10 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Orson Zhai <orsonzhai@gmail.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Chunyan Zhang <zhang.lyra@gmail.com>, linux-i2c@vger.kernel.org, 
- kernel@pengutronix.de
-In-Reply-To: <20240306180241.83327-2-u.kleine-koenig@pengutronix.de>
-References: <20240306180241.83327-2-u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH] i2c: sprd: Convert to platform remove callback
- returning void
-Message-Id: <170988098388.2379036.4026488697020218182.b4-ty@kernel.org>
-Date: Fri, 08 Mar 2024 07:56:23 +0100
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Cc: konrad.dybcio@linaro.org, andersson@kernel.org, vkoul@kernel.org, 
+	wsa@kernel.org, linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, quic_vdadhani@quicinc.com
+Subject: Re: [PATCH v3] i2c: i2c-qcom-geni: Parse Error correctly in i2c GSI
+ mode
+Message-ID: <yocn3rjxn37c7qniv2kkawgg2k7ghdwvrxcf77tdlpujnul3du@6oqvt5v4ykno>
+References: <20240307205539.217204-1-quic_msavaliy@quicinc.com>
+ <cmtru4nvoab6g5emp2yrxnvfpvtrcsuna6dqsyewpagg3qmkau@r2zoj6vgslet>
+ <9dbe987a-fdd1-4bec-b350-5936abf69b1b@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13.0
-X-Ovh-Tracer-Id: 13157829262787807769
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrieeggddutddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvegjfhfukfffgggtgffosehtkeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpefhudekhefggeeuueelheevjeeugeeviedujefggeetffdvteejkedtledtieeukeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddruddtleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeitddpmhhouggvpehsmhhtphhouhht
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9dbe987a-fdd1-4bec-b350-5936abf69b1b@quicinc.com>
 
-Hi
+Hi Mukesh,
 
-On Wed, 06 Mar 2024 19:02:41 +0100, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource leaks.
+...
+
+> > > Fixes: d8703554f4de ("i2c: qcom-geni: Add support for GPI DMA")
+> > 
+> > I still don't understand what's the fix here. You are making a
+> > generic DMA error to be more specific... where is the bug? What
+> > exactly is broken now?
+> > 
+> This is about being particular while reporting specific error.
+> Like i mentioned, instead of generic DMA transfer error, it should be
+> particular error 1) NACK 2) BUT_PROTO 3)ARB_LOST.
+> Ofcourse when data transfer via DMA fails, it can be considered as
+> DMA Txfer fail.
+> In summary so far driver was considering all failure as txfer failure,
+> but i2c has errors which are kind of response/condition on the bus.
+
+I understand that, but what I need to know is: does the system
+crash? does the system act in unexpected way?
+
+Moving from "you received an error" to "you received a nack" is
+not a fix, it's an improvement and it should not have the Fixes
+tag.
+
+Having the Fixes tag decides which path this patch will take to
+to reach upstream. It's important because after it gets to
+upstream other people will take your patch and backport it older
+kernels.
+
+I want to avoid this extra work when not necessary.
+
+> Sorry if it confusing still, but please let me know if anything required to
+> be updated in  commit log which can bring clarity.
 > 
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new(), which already returns void. Eventually after all drivers
-> are converted, .remove_new() will be renamed to .remove().
+> > Besides, keep in mind, that commits with fixes tags get
+> > backported to older kernels (this one dates back to 5.18) and you
+> > should also Cc the stable mailing list:
+> > 
+> > Cc: <stable@vger.kernel.org> # v5.18+
 > 
-> [...]
+> Sure, will add into CC. was waiting for reviewed-by tag.
 
-Applied to i2c/i2c-host on
+No need to resend.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
-
-Thank you,
+Thanks,
 Andi
-
-Patches applied
-===============
-[1/1] i2c: sprd: Convert to platform remove callback returning void
-      commit: 3fe30b74207a4da40064f16a02655d170978547c
-
 
