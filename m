@@ -1,153 +1,148 @@
-Return-Path: <linux-i2c+bounces-2271-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2272-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C982875C37
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Mar 2024 03:04:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AF0F875DCA
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Mar 2024 06:43:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2EB8282E0A
-	for <lists+linux-i2c@lfdr.de>; Fri,  8 Mar 2024 02:04:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5071AB20ECA
+	for <lists+linux-i2c@lfdr.de>; Fri,  8 Mar 2024 05:43:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC90722EED;
-	Fri,  8 Mar 2024 02:04:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7DE932C9C;
+	Fri,  8 Mar 2024 05:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bwBN8Q+C"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XzVibmSv"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367F0139F
-	for <linux-i2c@vger.kernel.org>; Fri,  8 Mar 2024 02:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C21B2564;
+	Fri,  8 Mar 2024 05:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709863490; cv=none; b=DhXOVV/LBBkB5s5t9e0K4D2k/j/ZuEpLfRkVN6HKKWg5Ybg7mVVPxkoM+3uH4LwQvu8BIZdHWEAW3OUMTgKSftollVamqfxwBvlzksdv+OZklGbgOeBPok6wVGUOGLRSt600Y3DRWcS+VeQFsucG/A9Wk+5ncJBYMbcAMm4wwIU=
+	t=1709876612; cv=none; b=gjceCudE0slbdtHp/G+hVzjrrEbJaNHy+xuNRht71sJBduZzNarjpF88ZiOPl/aaIpgFWJ/mijJVbKXw0Xl96hgE6Yt2cr/A0Jm2W6VKXtGqHs+NbmpqRm1cjrx+1Fyh2WFcFUkshF4wbZp157zcTzAfCS9AveotPGIHkgGbDFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709863490; c=relaxed/simple;
-	bh=Vk9TOG2Z266HZLfIbozIujwFfzBXAMiQgFROOwjXoKE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bAs/cdRISBUfOjgSColfBfdnmwnMFzHIkaq57KGuRIILjVKdeY6RdTyjjHQf1wfN/OY7sYGj0fnmqJ2XqqOquCWxzyKrN6pzKq/CMztQfFPv7Fr86aTuy0ivDxaL9Eqao4Ee9CX8/yTLe2V4AXnE6VcukE/QWZWLc95Ii+xIEYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bwBN8Q+C; arc=none smtp.client-ip=209.85.160.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-220461b7597so717592fac.3
-        for <linux-i2c@vger.kernel.org>; Thu, 07 Mar 2024 18:04:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709863488; x=1710468288; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=55HF+XxUfnvgcQronqYrFoV+N6GvZw/ZcPNoFRF8tYg=;
-        b=bwBN8Q+Cr5W9LKODg6g7ZBU4GiRdcYgcaqKV7WGo63bq/NB+7BGlQesZusXcbj79a/
-         dSupccBjdnsy+DuEXLZIQKaVoe1c+RPtdE0va4psCdZZoSCVe+qyr642XzI0TS/0twoI
-         FTAE7mTpT6Z47sjSK5aaN38GmlneTYmb1UEGTW653WX7BZBTAeY3LagdopllD2JAkdjj
-         w9lKQNCNhG4jxIDeloGKeHK2knsryV2VRSyP4bO/Q9pT/Pmortg9GvavpUaYGofTzswr
-         rbXZz+AgDEDNXIbMd0CQpGT90uKyC6WpM9s+DX0zhkCTixeK5OFeJgstlcL+ISX1t3kI
-         7dQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709863488; x=1710468288;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=55HF+XxUfnvgcQronqYrFoV+N6GvZw/ZcPNoFRF8tYg=;
-        b=WdIDCLC4b5fz0wdJ6nK41E3ZQsNro8wRUrorRmViKKS6hnJ+H/vTlqBaqC/xh6LyWS
-         xojR1TTt5u0UnTWQ+FW3RP3nmBe95RtcvXQf9nlNj94XsiIZy/XLWzhR+0iHpzaJBPs9
-         XLUpyd6UlR/oPWqoptiGXd0yFIWgoc5f7Dk3xoLPxIxSFci1f04LJ8elEcYz4a5ZMSG8
-         BltPFOHopJI8GmY/z/DNyxjXFQCj6hr6USHDMek/eufwz5/exUj/qBnyUsvGf5r3FJYY
-         827m3wFASzwwBUjM4w30pWK0RCSzQBIK7zaUUpiZWwLkmOeQEvDn1JE3eJqcEkQ9A0tB
-         EYfg==
-X-Forwarded-Encrypted: i=1; AJvYcCW07RDVTVEOpbrhUJEW3VI70LZE474iznhL5oPJ1zGYNra6Ky3s65Uj/pdUS2X4rOtqGxAdxhau3zdIptG4TtGvhGSZZh467yOG
-X-Gm-Message-State: AOJu0YwHdUN2u6vwE0Ooh8PRa1C9xuFnu/816CL5dAj+vf7kdkb/0RAf
-	xBBorVHHmHlRmenZqT44PqAdeTHLfXV38ebwsvzIfCgFT8iPCowgO+63O08F4h+TWgWXgtXQhos
-	EWdPIQ8x8QOpALC4Sz+NLp9bEnJc=
-X-Google-Smtp-Source: AGHT+IHznAuvQiYsmZ54fXu23+wAKTKJDpGtdwp7GIRIILSiFDYVyze/gzVXXLJJJnnWOOewUX1jE8kHMpZbYgNwMb8=
-X-Received: by 2002:a05:6870:e38c:b0:220:8d0d:e25e with SMTP id
- x12-20020a056870e38c00b002208d0de25emr1891632oad.47.1709863488175; Thu, 07
- Mar 2024 18:04:48 -0800 (PST)
+	s=arc-20240116; t=1709876612; c=relaxed/simple;
+	bh=sZJ1rdk707vKoNzkaw+eRMJ9uw5RBuN0hPr+AtRP024=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=d+tO/OMNhn+wA+RUkupAnbdoYnA5afhY5MLfaOo2exM3yBKWVS+IEQtvajMKB7+jtRNZc0TmsVREufEkumTdprYdorlB05FZZ6+eWfLAhr36X20sFW2HcgKRLzmzP+7A+sv3/UxaYEMezctu6wsvCVfozfuLPMRqFy9gIy1LxZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XzVibmSv; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4280IhW5012661;
+	Fri, 8 Mar 2024 05:43:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=hBW0/JobW8mlK+ZTPhjJTLvOB59Mci3YgjCROfvXlCY=; b=Xz
+	VibmSvRE0EscASljFDxui0sFpShczbW2yIlKCr1Ubn03FQ8V4ba1hsd5uF2Jfut1
+	VCS6/XZCTxUhYIXoYiikFqm9fMn79ZnlrFWy+Vf27PQvhUxE/crAwpZiA1Of7tly
+	sHUKItSJszldVI/vR2ClDrIpi86c2k+76Z3wEN4otPw5e+aVaSC2Uhnd3ASsKUy3
+	VJVSOCg2nYNmAcSVNLhlDPdPq3gTIXT5xWENK/SHZdDymION7E8EyDpJ4JVovgJ0
+	IvtJHPGDPHbyEU7+4WBxGuAMqRMBq3whmlyFiGd0GXCLVfxcSwYmWpGt7DCdjtpZ
+	XNvM7eE3AS8oj+YiLNlw==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wqn8n8v74-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 Mar 2024 05:43:26 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4285hP7h016540
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 8 Mar 2024 05:43:25 GMT
+Received: from [10.216.43.112] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 7 Mar
+ 2024 21:43:22 -0800
+Message-ID: <9dbe987a-fdd1-4bec-b350-5936abf69b1b@quicinc.com>
+Date: Fri, 8 Mar 2024 11:13:18 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240306180241.83327-2-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20240306180241.83327-2-u.kleine-koenig@pengutronix.de>
-From: Chunyan Zhang <zhang.lyra@gmail.com>
-Date: Fri, 8 Mar 2024 10:04:12 +0800
-Message-ID: <CAAfSe-sCboYuaCu1SjUWYpE=pHn4J+eQYXMPUvx1RXwj2H+UCw@mail.gmail.com>
-Subject: Re: [PATCH] i2c: sprd: Convert to platform remove callback returning void
-To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Orson Zhai <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	linux-i2c@vger.kernel.org, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] i2c: i2c-qcom-geni: Parse Error correctly in i2c GSI
+ mode
+Content-Language: en-US
+To: Andi Shyti <andi.shyti@kernel.org>
+CC: <konrad.dybcio@linaro.org>, <andersson@kernel.org>, <vkoul@kernel.org>,
+        <wsa@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <quic_vdadhani@quicinc.com>
+References: <20240307205539.217204-1-quic_msavaliy@quicinc.com>
+ <cmtru4nvoab6g5emp2yrxnvfpvtrcsuna6dqsyewpagg3qmkau@r2zoj6vgslet>
+From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+In-Reply-To: <cmtru4nvoab6g5emp2yrxnvfpvtrcsuna6dqsyewpagg3qmkau@r2zoj6vgslet>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: QJZ4wP8DjNCk7R13WlBZ7D9Rm_1Ot2ni
+X-Proofpoint-ORIG-GUID: QJZ4wP8DjNCk7R13WlBZ7D9Rm_1Ot2ni
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-08_04,2024-03-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ adultscore=0 suspectscore=0 lowpriorityscore=0 priorityscore=1501
+ mlxlogscore=999 bulkscore=0 phishscore=0 impostorscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403080044
 
-On Thu, 7 Mar 2024 at 02:02, Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource leaks.
->
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new(), which already returns void. Eventually after all drivers
-> are converted, .remove_new() will be renamed to .remove().
->
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
 
-Thanks,
-Chunyan
+On 3/8/2024 4:28 AM, Andi Shyti wrote:
+> Hi Mukesh,
+> 
+> On Fri, Mar 08, 2024 at 02:25:39AM +0530, Mukesh Kumar Savaliya wrote:
+>> I2C driver currently reports "DMA txn failed" error even though it's
+>> NACK OR BUS_PROTO OR ARB_LOST. Detect NACK error when no device ACKs
+>> on the bus instead of generic transfer failure which doesn't give any
+>> specific clue.
+>>
+>> Make Changes inside i2c driver callback handler function
+>> i2c_gpi_cb_result() to parse these errors and make sure GSI driver
+>> stores the error status during error interrupt.
+> 
+> funny note: this is half "imperative mood" :-)
+> 
+> A real imperative would be "Pares the error inside
+> i2c_gpi_cb_result()... blah blah blah". No need to resend.
+> 
 
-> ---
->  drivers/i2c/busses/i2c-sprd.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-sprd.c b/drivers/i2c/busses/i2c-sprd.=
-c
-> index c52d1bec60b4..28c88901d9bc 100644
-> --- a/drivers/i2c/busses/i2c-sprd.c
-> +++ b/drivers/i2c/busses/i2c-sprd.c
-> @@ -570,7 +570,7 @@ static int sprd_i2c_probe(struct platform_device *pde=
-v)
->         return ret;
->  }
->
-> -static int sprd_i2c_remove(struct platform_device *pdev)
-> +static void sprd_i2c_remove(struct platform_device *pdev)
->  {
->         struct sprd_i2c *i2c_dev =3D platform_get_drvdata(pdev);
->         int ret;
-> @@ -586,8 +586,6 @@ static int sprd_i2c_remove(struct platform_device *pd=
-ev)
->
->         pm_runtime_put_noidle(i2c_dev->dev);
->         pm_runtime_disable(i2c_dev->dev);
-> -
-> -       return 0;
->  }
->
->  static int __maybe_unused sprd_i2c_suspend_noirq(struct device *dev)
-> @@ -645,7 +643,7 @@ MODULE_DEVICE_TABLE(of, sprd_i2c_of_match);
->
->  static struct platform_driver sprd_i2c_driver =3D {
->         .probe =3D sprd_i2c_probe,
-> -       .remove =3D sprd_i2c_remove,
-> +       .remove_new =3D sprd_i2c_remove,
->         .driver =3D {
->                    .name =3D "sprd-i2c",
->                    .of_match_table =3D sprd_i2c_of_match,
->
-> base-commit: 11afac187274a6177a7ac82997f8691c0f469e41
-> --
-> 2.43.0
->
+  :-) Thanks !
+
+>> Fixes: d8703554f4de ("i2c: qcom-geni: Add support for GPI DMA")
+> 
+> I still don't understand what's the fix here. You are making a
+> generic DMA error to be more specific... where is the bug? What
+> exactly is broken now?
+> 
+This is about being particular while reporting specific error.
+Like i mentioned, instead of generic DMA transfer error, it should be 
+particular error 1) NACK 2) BUT_PROTO 3)ARB_LOST.
+Ofcourse when data transfer via DMA fails, it can be considered as
+DMA Txfer fail.
+In summary so far driver was considering all failure as txfer failure,
+but i2c has errors which are kind of response/condition on the bus.
+
+Sorry if it confusing still, but please let me know if anything required 
+to be updated in  commit log which can bring clarity.
+
+> Besides, keep in mind, that commits with fixes tags get
+> backported to older kernels (this one dates back to 5.18) and you
+> should also Cc the stable mailing list:
+> 
+> Cc: <stable@vger.kernel.org> # v5.18+
+
+Sure, will add into CC. was waiting for reviewed-by tag.
+
+> 
+> Thanks,
+> Andi
 
