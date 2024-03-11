@@ -1,63 +1,50 @@
-Return-Path: <linux-i2c+bounces-2321-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2322-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2A67877B0B
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Mar 2024 07:47:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B1EE877B52
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Mar 2024 08:27:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 643121F21009
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Mar 2024 06:47:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 159BC28156B
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Mar 2024 07:27:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE3FDFBF2;
-	Mon, 11 Mar 2024 06:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="gTyVsjsZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A5031173F;
+	Mon, 11 Mar 2024 07:27:57 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD1CF9CC
-	for <linux-i2c@vger.kernel.org>; Mon, 11 Mar 2024 06:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6730B11711
+	for <linux-i2c@vger.kernel.org>; Mon, 11 Mar 2024 07:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710139641; cv=none; b=htYXrUbGYpoNjwIsSkFougoCBCZlC9lKG6ptsL6v4wowPOobWmLvAUI2HnDwLsu754sgP67+uX78eE4Q9FOcx+KgRY+XEKQjHJ6S/1vyQN7uQ6/vlFhtutK82FAqn/bW2/X0rQBwgljAB/ejmAPr0x+D+NOejK1eoPw/fcBiK2Y=
+	t=1710142077; cv=none; b=tWdGjcrMqHmt9La++2LYmDrTw1yDxg6MEcH2G1oLG6A/0nrk6scPXI3OETJ/p5JMAVWNtk7CUVzk7CCD8mFCx+OGp6wgu9m/6m9HRioegveAYk5OK6S6DO8rbldLAimLxZHpKSvbG2YLlP+TMYPmqMW7IPiwFvQoCznXwqrsisE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710139641; c=relaxed/simple;
-	bh=Tq05/rijRFkBDe0DCBHavR3unH6AqBe42bbhnXJ1qgg=;
+	s=arc-20240116; t=1710142077; c=relaxed/simple;
+	bh=gEhjroQOjIeASHQChWsw/8NNhgUdBNNXrOTANb8YeZo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=jzUdwjhFbXfRSwazDIkxNrBrR1ZQmoOm9cl46JJyPpHhEoHHVI41q5MludhigD+yWs4mRh62s+AjL0GcvDcgcyi8+6N4tmgWQAstG8rYY2ZsTs1j2n60FFP1I5V5Si2nblwiwl7MFfKIcL/HQ7aAVnKe9EBKMLsSkYrOR72LL+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=gTyVsjsZ; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42B5CZtd008566;
-	Mon, 11 Mar 2024 06:47:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=PnwMpNsuf0L3SyID9VZjkA1l3K34lnd9UOjBXAr3vZQ=; b=gT
-	yVsjsZGxQRyCqM6jqC7ssg7sAPzWYsE7clxM0F5sEClrY547EQmo4WDg+zTBKSrT
-	3k2YdGClDNXGCShiZ2p8hJRV/7lUw4OBW4TQ5fzIxYKiWLQmjfZz6eio4hOoBKTU
-	v/qitIq4pFw8VDd/sCeSobKsHBHXjFlsCERxgInDyUaJOgdHgKfMO/u6T3Dvjj3q
-	3SZol6PubanQ8uXJLRMMq2ErrfrLcSfsiCAQf1NW5zQMt5or1VwRW2lmr7Oktm54
-	7DdZJoc4PKsxFCyZ4U16DYO5ILbmBpwVFb9NjGP40pfWAOquz6T4V25hMZc2b6D5
-	1gk6liYcz6JVNtuj3vHg==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wssyg09kq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Mar 2024 06:47:05 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42B6l4nb028356
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Mar 2024 06:47:04 GMT
-Received: from [10.218.22.190] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sun, 10 Mar
- 2024 23:47:02 -0700
-Message-ID: <9469a44f-dc2d-475f-ac6c-199e8c4594dd@quicinc.com>
-Date: Mon, 11 Mar 2024 12:16:58 +0530
+	 In-Reply-To:Content-Type; b=pRMiPK7Zx2PtrSfK93FRqox8NeeYmyjORMJA1QnnRdO6XIuZ32wyWNoniWN7ai8fyJg2gA9Xo/57NTGgETgamGymoXeyT2NTXRaXz47sjEKviQ1dhTjnTWJUj1lBtFh5Btv8OAjHH8XvwJ8/lxMH0d2Z10MLwmY+x6fs1IEocdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1710142067-086e23661707fd0001-PT6Irj
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx1.zhaoxin.com with ESMTP id fNE6QaB3fjHtxcXn (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 11 Mar 2024 15:27:47 +0800 (CST)
+X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 11 Mar
+ 2024 15:27:47 +0800
+Received: from [10.28.66.68] (10.28.66.68) by ZXBJMBX03.zhaoxin.com
+ (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 11 Mar
+ 2024 15:27:44 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Message-ID: <3c165918-1f85-40cb-8bce-1e1ff924b379@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.66.68
+Date: Mon, 11 Mar 2024 15:27:40 +0800
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -66,106 +53,96 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 2/2] i2c: viai2c: Fix bug for msg->len is 0
-Content-Language: en-US
-To: Hans Hu <HansHu-oc@zhaoxin.com>, <andi.shyti@kernel.org>,
-        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+	<andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>, <wsa@kernel.org>
+X-ASG-Orig-Subj: Re: [PATCH 2/2] i2c: viai2c: Fix bug for msg->len is 0
 CC: <hanshu@zhaoxin.com>
 References: <20240311032600.56244-1-hanshu-oc@zhaoxin.com>
  <20240311032600.56244-2-hanshu-oc@zhaoxin.com>
  <97503419-f6a9-4939-89ee-195ce21b5d1e@quicinc.com>
  <36ec34ac-14b9-4dda-b39c-5544ce1dc372@zhaoxin.com>
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <36ec34ac-14b9-4dda-b39c-5544ce1dc372@zhaoxin.com>
+ <9469a44f-dc2d-475f-ac6c-199e8c4594dd@quicinc.com>
+Content-Language: en-US
+From: Hans Hu <HansHu-oc@zhaoxin.com>
+In-Reply-To: <9469a44f-dc2d-475f-ac6c-199e8c4594dd@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Rn_AQDHXHlKwHE3bZ4qvJGlSjO9KIQNb
-X-Proofpoint-GUID: Rn_AQDHXHlKwHE3bZ4qvJGlSjO9KIQNb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-11_03,2024-03-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- spamscore=0 lowpriorityscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
- suspectscore=0 adultscore=0 impostorscore=0 mlxlogscore=999 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2402120000
- definitions=main-2403110050
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ ZXBJMBX03.zhaoxin.com (10.29.252.7)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1710142067
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 1597
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -1.62
+X-Barracuda-Spam-Status: No, SCORE=-1.62 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=BSF_SC0_SA085b
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.121959
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
+	0.40 BSF_SC0_SA085b         Custom Rule SA085b
 
-Hi Hans,
+Hi Mukesh,
 
-On 3/11/2024 11:41 AM, Hans Hu wrote:
-> Hi Mukesh,
-> 
-> 
->> On 3/11/2024 8:56 AM, Hans Hu wrote:
->>> This is a bug that was accidentally introduced when
->>> adjusting the wmt driver. Now fix it
+
+>>>> This is a bug that was accidentally introduced when
+>>>> adjusting the wmt driver. Now fix it
+>>>>
+>>>
+>>> what exactly is the bug which you are fixing here ?
 >>>
 >>
->> what exactly is the bug which you are fixing here ?
+>> This bug was introduced by myself in a recent commit,
 >>
-> 
-> This bug was introduced by myself in a recent commit,
-> 
-> id: 4b0c0569f03261aa4c10c8f5b24df6c1ca27f889
-> 
-> https://patchwork.ozlabs.org/project/linux-i2c/patch/20240306212413.1850236-5-andi.shyti@kernel.org/
-> 
-> 
-> The function viai2c_irq_xfer() is working in the interrupt context,
-> 
-> if it returns a non-0 value indicating that the current msg access
-> 
-> has ended, otherwise it has not ended.
-Should be otherway around ? zero indicates success as per general 
-practices.
+>> id: 4b0c0569f03261aa4c10c8f5b24df6c1ca27f889
+>>
+>> https://patchwork.ozlabs.org/project/linux-i2c/patch/20240306212413.1850236-5-andi.shyti@kernel.org/ 
+>>
+>>
+>>
+>> The function viai2c_irq_xfer() is working in the interrupt context,
+>>
+>> if it returns a non-0 value indicating that the current msg access
+>>
+>> has ended, otherwise it has not ended.
+> Should be otherway around ? zero indicates success as per general
+> practices.
 
-Also i think accordingly your commit log should have the explanation.
 
-> 
-> For the access that msg->len is 0, when the interruption occurs,
-> 
-> it means that the access has ended, it should return 1;
-> 
-> Otherwise wait_for_completion_timeout() will timeout.
-> 
-> 
-IIUC, msg->len = 0 it indicates your transfer is completed and then you
-want to return 1 indicating current message transfer is successful ?
-Please ammend the logs reflecting the scenario to match with the code 
-changes.
+I understand your suggestion. The return value here indicates
+whether the transfer should end or not.
+0 means not, and non-0 means yes(error or successful).
 
-I would be more clear if commit log explains what you are doing.
 
->>> Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
->>> ---
->>>   drivers/i2c/busses/i2c-viai2c-common.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/i2c/busses/i2c-viai2c-common.c 
->>> b/drivers/i2c/busses/i2c-viai2c-common.c
->>> index 4c208b3a509e..894d24c6b4d3 100644
->>> --- a/drivers/i2c/busses/i2c-viai2c-common.c
->>> +++ b/drivers/i2c/busses/i2c-viai2c-common.c
->>> @@ -145,7 +145,7 @@ static int viai2c_irq_xfer(struct viai2c *i2c)
->>>               if (msg->len == 0) {
->>>                       val = VIAI2C_CR_TX_END | VIAI2C_CR_CPU_RDY | 
->>> VIAI2C_CR_ENABLE;
->>>                       writew(val, base + VIAI2C_REG_CR);
->>> -                     return 0;
->>> +                     return 1;
->> Question: Do you really need to do anything when no data is there to
->> transfer ? I am not sure what's the strategy adopted here.
-> 
-> 
-> This is to be consistent with former i2c-wmt.c:
-> https://elixir.bootlin.com/linux/v6.8/source/drivers/i2c/busses/i2c-wmt.c#L175
-> 
-> 
-> Hans,
-> 
-> Thanks
-> 
+>
+> Also i think accordingly your commit log should have the explanation.
+>
+
+Yes, I should give a more detailed commit log.
+
+
+>>
+>> For the access that msg->len is 0, when the interruption occurs,
+>>
+>> it means that the access has ended, it should return 1;
+>>
+>> Otherwise wait_for_completion_timeout() will timeout.
+>>
+>>
+> IIUC, msg->len = 0 it indicates your transfer is completed and then you
+> want to return 1 indicating current message transfer is successful ?
+> Please ammend the logs reflecting the scenario to match with the code
+> changes.
+>
+
+No, msg->len = 0 here means this is I2C_SMBUS_QUICK access.
+Yes, return 1 indicating current message transfer is successful.
+
+
+Hans,
+Thanks
+
 
