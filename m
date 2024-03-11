@@ -1,195 +1,123 @@
-Return-Path: <linux-i2c+bounces-2317-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2318-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 578A3877A47
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Mar 2024 05:14:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47F30877A6F
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Mar 2024 05:46:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BECD1F21D13
-	for <lists+linux-i2c@lfdr.de>; Mon, 11 Mar 2024 04:14:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7DDAB20A68
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Mar 2024 04:46:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84F7D1FC8;
-	Mon, 11 Mar 2024 04:14:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7731C8825;
+	Mon, 11 Mar 2024 04:46:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="sKUizwE7"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="d2A0y2Rc"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B46F1C3D
-	for <linux-i2c@vger.kernel.org>; Mon, 11 Mar 2024 04:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8D0881F
+	for <linux-i2c@vger.kernel.org>; Mon, 11 Mar 2024 04:46:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710130465; cv=none; b=C7722T3tPrt2/l+zzJTLYFhRWAfT8mEZTG42yVcEBfIQE5UcaYfyWrbkQqy68J2BntYqQr0h/kmtxJaz7csw3DWYzT1e6bMe6zatwblG9UUQZIB+NpHgBQgW+QtDnFoyUfbzY/XVdwvdMEMBLBXFA6wablqHA2jRD6t4TuHlp3g=
+	t=1710132399; cv=none; b=XS8Kub0CiGhRrwwP3KfYI/CUrn0LykKFPPf5IwNCMbWB1WdKKJ6WvEr84clBexvLfbKxPgnN0SpiUUE/pybQjfDQwIiwM0YMgQCU4Qrl8R9p0pTBYnICriESG5hG70iIUPaoMIkAQsDXEDuNh8zBdA2D9bSH+eA4n9u7vMdenVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710130465; c=relaxed/simple;
-	bh=T7eAEUhTdM+nl3KfEfDXrPZJrpXNMEqq0nIn06RMHjM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F3avKfSLJwQVYrBQWNF+z2h5oFwAYQh6/GOQj8Tzlzi35zuw3G8+T5Ph9aBa2QP7DsEDLeLkY0kzwTY9VpOQkiWvEc1q0qCgVR3CfR7XGaU9U9eHjFX8NS663vcofNuQV6GVXIF2Acb4X3+vZ1uUDVuy+XcOOwdiU3c8SgBaOM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=sKUizwE7; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 36D1C2C02AD;
-	Mon, 11 Mar 2024 17:14:19 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1710130459;
-	bh=4+jVJ6NWBAFRBdeAjMPSWgEoWs9+6EjSCoxpfMwrwzY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=sKUizwE7WaSi/aH0ZykgR0AgguxxlMauYoZAXoisjNa3FNLFcz5OnnGcNVmKwPl/W
-	 enHTqC7B18J/v/JnmKp2UbJ+FPXRvdN6zaQNRug+mDyODaB043Xs/ZF0uRLWPe4XyL
-	 CsyD4KmjUVmcc7kOSZyASEE/NPNrmrgXwkI5P/IhZWpF+n6oK+TJEIEk4QU8b733t9
-	 Ps18mhO7kQn8G7QG+qEaam6WhfsrwUdg633uj6x2hBDUA6qhqpxfb3PCWgoSB/P03N
-	 f4XPLRRk408qen7QOQyyDAajwFTXvW+qabaf9b4EbUStpmKeKTmMFUTxaMnulSs+5V
-	 H3YFS2HRN3stQ==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B65ee851a0000>; Mon, 11 Mar 2024 17:14:18 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id CA16613ED56;
-	Mon, 11 Mar 2024 17:14:18 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id C205D2806D9; Mon, 11 Mar 2024 17:14:18 +1300 (NZDT)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: peda@axentia.se,
-	p.zabel@pengutronix.de,
-	krzysztof.kozlowski@linaro.org
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH] i2c: muxes: pca954x: Allow sharing reset GPIO
-Date: Mon, 11 Mar 2024 17:14:12 +1300
-Message-ID: <20240311041412.3858710-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.43.2
+	s=arc-20240116; t=1710132399; c=relaxed/simple;
+	bh=ktUg84T2rB9rKizfVqETZROQkalYr5kpgbS/qvhJDs0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Ot73rGQcLgYqYs3gDu2YkzSOetAwKJj5rqHXHIIDexZPX//aD8Evu+7h61O+pKKpw99cx8TJGMoePj2OGLY1guC6dCQsYhd4o2rLT6S/fFurnFJHrZQYpJVT1fzncpHwWfTbK3CHS7I7FLXfsTZW5hwloppBvsmdB//laN3yd+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=d2A0y2Rc; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42B4PN7H006357;
+	Mon, 11 Mar 2024 04:46:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=X8wA6q0/2ydJsWB644beuJ1eWaI0zZhj0v5zIX7yj+w=; b=d2
+	A0y2RcuwuM+UriJjuNKKpgAXUPjyODPO1x5WpvmD64ho7HDF90oUQ44Tm8z3XB8K
+	30+SmVN/ftiChA8+mvabYpMwBrBASlr/WYqcl3Jn2dMll6vgn6mYxnuYdDQrFfFY
+	jmYCLJoQOiyNOSC+1HiMhCouLboQrFDSBpj0PSxyeiZm+0rPUU063svfnBjCxGrV
+	3Yd6eNGQiRTtokx0TzWdWmdR1bfj+0nN2xiiaz+LprRfq6FnD0xjo1OmQAgWznMO
+	XLRee6rRMPwF63mSFMOZVgRBw+O8Q2vggpvQpdNA7MZXDVMvbN1dEA7PNlmIb8Yc
+	grBct4gldIW+RHthaj2w==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wrfuxtp5x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 Mar 2024 04:46:33 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42B4kWBu013642
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 Mar 2024 04:46:32 GMT
+Received: from [10.218.22.190] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sun, 10 Mar
+ 2024 21:46:30 -0700
+Message-ID: <97503419-f6a9-4939-89ee-195ce21b5d1e@quicinc.com>
+Date: Mon, 11 Mar 2024 10:16:27 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=BKkQr0QG c=1 sm=1 tr=0 ts=65ee851a a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=K6JAEmCyrfEA:10 a=VwQbUJbxAAAA:8 a=KKAkSRfTAAAA:8 a=H3RM6WYtTQQ9Ov2Cx3cA:9 a=3ZKOabzyN94A:10 a=AjGcO6oz07-iQ99wixmX:22 a=cvBusfyB2V15izCimMoJ:22
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] i2c: viai2c: Fix bug for msg->len is 0
+Content-Language: en-US
+To: Hans Hu <hanshu-oc@zhaoxin.com>, <andi.shyti@kernel.org>,
+        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>
+CC: <hanshu@zhaoxin.com>
+References: <20240311032600.56244-1-hanshu-oc@zhaoxin.com>
+ <20240311032600.56244-2-hanshu-oc@zhaoxin.com>
+From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+In-Reply-To: <20240311032600.56244-2-hanshu-oc@zhaoxin.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: sOP3LrEbjn9u0MCziLNC8nn3m66RgCRM
+X-Proofpoint-GUID: sOP3LrEbjn9u0MCziLNC8nn3m66RgCRM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-11_01,2024-03-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ suspectscore=0 malwarescore=0 mlxscore=0 spamscore=0 bulkscore=0
+ adultscore=0 impostorscore=0 priorityscore=1501 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2402120000 definitions=main-2403110033
 
-Some hardware designs with multiple PCA954x devices use a reset GPIO
-connected to all the muxes. Support this configuration by making use of
-the reset controller framework which can deal with the shared reset
-GPIOs. Fall back to the old GPIO descriptor method if the reset
-controller framework is not enabled.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
 
-Notes:
-    This patch goes on top of Krzysztof's series adding the GPIO based re=
-set
-    controller[1] which will be in linux-6.9. With this I'm able to
-    correctly describe my hardware platform in the DTS and have the reset=
-s
-    appropriately controlled.
-   =20
-    [1] - https://lore.kernel.org/all/20240129115216.96479-1-krzysztof.ko=
-zlowski@linaro.org/
+On 3/11/2024 8:56 AM, Hans Hu wrote:
+> This is a bug that was accidentally introduced when
+> adjusting the wmt driver. Now fix it
+> 
 
- drivers/i2c/muxes/i2c-mux-pca954x.c | 46 ++++++++++++++++++++++++-----
- 1 file changed, 38 insertions(+), 8 deletions(-)
+what exactly is the bug which you are fixing here ?
 
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-=
-mux-pca954x.c
-index f5dfc33b97c0..c3f4ff08ac38 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -49,6 +49,7 @@
- #include <linux/pm.h>
- #include <linux/property.h>
- #include <linux/regulator/consumer.h>
-+#include <linux/reset.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <dt-bindings/mux/mux.h>
-@@ -116,6 +117,9 @@ struct pca954x {
- 	unsigned int irq_mask;
- 	raw_spinlock_t lock;
- 	struct regulator *supply;
-+
-+	struct gpio_desc *reset_gpio;
-+	struct reset_control *reset_cont;
- };
-=20
- /* Provide specs for the MAX735x, PCA954x and PCA984x types we know abou=
-t */
-@@ -518,6 +522,35 @@ static int pca954x_init(struct i2c_client *client, s=
-truct pca954x *data)
- 	return ret;
- }
-=20
-+static int pca954x_get_reset(struct device *dev, struct pca954x *data)
-+{
-+	data->reset_cont =3D devm_reset_control_get_optional_shared(dev, NULL);
-+	if (IS_ERR(data->reset_cont))
-+		return dev_err_probe(dev, PTR_ERR(data->reset_cont),
-+				     "Failed to get reset\n");
-+	else if (data->reset_cont)
-+		return 0;
-+
-+	/*
-+	 * fallback to legacy reset-gpios
-+	 */
-+	data->reset_gpio =3D devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HI=
-GH);
-+	if (IS_ERR(data->reset_gpio)) {
-+		return dev_err_probe(dev, PTR_ERR(data->reset_gpio),
-+				     "Failed to get reset gpio");
-+	}
-+
-+	return 0;
-+}
-+
-+static void pca954x_reset_deassert(struct pca954x *data)
-+{
-+	if (data->reset_cont)
-+		reset_control_deassert(data->reset_cont);
-+	else
-+		gpiod_set_value_cansleep(data->reset_gpio, 0);
-+}
-+
- /*
-  * I2C init/probing/exit functions
-  */
-@@ -526,7 +559,6 @@ static int pca954x_probe(struct i2c_client *client)
- 	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
- 	struct i2c_adapter *adap =3D client->adapter;
- 	struct device *dev =3D &client->dev;
--	struct gpio_desc *gpio;
- 	struct i2c_mux_core *muxc;
- 	struct pca954x *data;
- 	int num;
-@@ -554,15 +586,13 @@ static int pca954x_probe(struct i2c_client *client)
- 		return dev_err_probe(dev, ret,
- 				     "Failed to enable vdd supply\n");
-=20
--	/* Reset the mux if a reset GPIO is specified. */
--	gpio =3D devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
--	if (IS_ERR(gpio)) {
--		ret =3D PTR_ERR(gpio);
-+	ret =3D pca954x_get_reset(dev, data);
-+	if (ret)
- 		goto fail_cleanup;
--	}
--	if (gpio) {
-+
-+	if (data->reset_cont || data->reset_gpio) {
- 		udelay(1);
--		gpiod_set_value_cansleep(gpio, 0);
-+		pca954x_reset_deassert(data);
- 		/* Give the chip some time to recover. */
- 		udelay(1);
- 	}
---=20
-2.43.2
-
+> Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
+> ---
+>   drivers/i2c/busses/i2c-viai2c-common.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-viai2c-common.c b/drivers/i2c/busses/i2c-viai2c-common.c
+> index 4c208b3a509e..894d24c6b4d3 100644
+> --- a/drivers/i2c/busses/i2c-viai2c-common.c
+> +++ b/drivers/i2c/busses/i2c-viai2c-common.c
+> @@ -145,7 +145,7 @@ static int viai2c_irq_xfer(struct viai2c *i2c)
+>   		if (msg->len == 0) {
+>   			val = VIAI2C_CR_TX_END | VIAI2C_CR_CPU_RDY | VIAI2C_CR_ENABLE;
+>   			writew(val, base + VIAI2C_REG_CR);
+> -			return 0;
+> +			return 1;
+Question: Do you really need to do anything when no data is there to 
+transfer ? I am not sure what's the strategy adopted here.
+>   		}
+>   
+>   		if ((i2c->xfered_len + 1) == msg->len) {
 
