@@ -1,118 +1,195 @@
-Return-Path: <linux-i2c+bounces-2314-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2316-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EFB7877655
-	for <lists+linux-i2c@lfdr.de>; Sun, 10 Mar 2024 12:33:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 066AB877A07
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Mar 2024 04:26:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 02577B20D98
-	for <lists+linux-i2c@lfdr.de>; Sun, 10 Mar 2024 11:32:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A5121C209FF
+	for <lists+linux-i2c@lfdr.de>; Mon, 11 Mar 2024 03:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 450B2200D2;
-	Sun, 10 Mar 2024 11:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r1Wmo6g7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4980D1860;
+	Mon, 11 Mar 2024 03:26:13 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A37200AE;
-	Sun, 10 Mar 2024 11:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E5615A5
+	for <linux-i2c@vger.kernel.org>; Mon, 11 Mar 2024 03:26:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.110.167.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710070370; cv=none; b=i08RUcfRYIxB/1jDSVBgV9PcK2qPxskwKUV4gyOydqgsa/x2PuUjsABMX1u2CVsnqub92kHB23BZA3PfD+SComDTqPv+5ZCbKuJrguadqBgbC5mDJptz/MkEXDeyctQ2OQGDa70CuEkJrs2oUROkDMmQhck/ix8h7kppc1V3hHM=
+	t=1710127573; cv=none; b=jJQLEFbK1GPcs5HRcAnlJSfkZ9mrvlfRL/UzkvXQre07VW41tkToHUFZmhrDTtwrHYJhAom19zumnRHjHVPurT7cXUopWCaveh+2Jq4J3UeCw8EY2Rx5j1VKgVcWUIL8/KoPIRI5YQKgq8AMU5gvmys2BQgBFEXTFvMwi0ELd18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710070370; c=relaxed/simple;
-	bh=tgvuG2vFL41wYnIq+Hysp9HaTicCmN3CgwRQbDF1W1I=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mTrz9fTQzzF2CKfv+HWk6aHpdik1sZi7Ly2r/56zFPLAr/h+2QpWPO5hxwdB+FBFwaq9kX+QgrVafBR9G30eBBJy/P8rTFSaIRLnkIpcBEhgbGW1lYkcLYW2Vn/5AqwfrCIkX15Vsiuh8RhrEOi9S+tm4xRhqvJvoddzI9ahKrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r1Wmo6g7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9684AC433F1;
-	Sun, 10 Mar 2024 11:32:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710070369;
-	bh=tgvuG2vFL41wYnIq+Hysp9HaTicCmN3CgwRQbDF1W1I=;
-	h=Date:From:To:Cc:Subject:From;
-	b=r1Wmo6g74jTMj8YtQSlcrjPi1/ii1yikyWyExipheYGhh87cth7r5qMrJvV2mf10y
-	 MH5ziPN5+6iXPT7WDRcrYaBzf2D2pTKnrKAI5AxzakP7ERMQnn8LSFVgIiQZTO5Av9
-	 yqYrsf9TcPtMOzROANHJQklvkddHsGTq4It996wiNUwFMdCaiGphrgntIzKE3oDibk
-	 DMyqyQu9IZhryBPQ0S9T3g4X7ord731jlAmxJw7ssVIgqPraD5SrY24OxsIPxgux25
-	 DaYdPiCnS1fWryznXTBIfQNgGvAYKORmnbOdE5g1NTCFhCMw+bZNeB3+JMAjQ8TSAh
-	 TP6KygFCDvEsw==
-Date: Sun, 10 Mar 2024 12:32:45 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa@kernel.org>
-Cc: linux-i2c <linux-i2c@vger.kernel.org>, 
-	lkml <linux-kernel@vger.kernel.org>, Hans Hu <HansHu-oc@zhaoxin.com>
-Subject: [GIT PULL] i2c-host changes for v6.9 - part 2 (i2c zhaoxin)
-Message-ID: <sxe4w2iwfkaoowaqssz2lbig7tlnoasseod5atval23saqigee@tzz7qwy4fhaq>
+	s=arc-20240116; t=1710127573; c=relaxed/simple;
+	bh=hcmWfAHkepYcmqPqhP2t1ncjyVJFoCC6iF/0qdzq5N4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P3pwKfL3z/FEISYMj8CBzb/3WGKv0YXINuxI6N2y5W++fq8Nxn2IONyiKHbJoAWt8GcdvgQSEgzROs3+0bDj2M9oSa1KV2ug1QApp2OGTk8NiBKT/fiv7qyhBV875lHuverEBNHWvG+VOQ+355wxN5TadWy+oY1xr+MvBlpQ9VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=203.110.167.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1710127561-1eb14e2b8406fc0001-PT6Irj
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id gpVSCfkQCsLC6jNJ (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 11 Mar 2024 11:26:01 +0800 (CST)
+X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 11 Mar
+ 2024 11:26:01 +0800
+Received: from ml-HP-ProDesk-680-G4-MT.zhaoxin.com (10.28.66.68) by
+ ZXBJMBX03.zhaoxin.com (10.29.252.7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 11 Mar 2024 11:26:00 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+From: Hans Hu <hanshu-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.7
+To: <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>, <wsa@kernel.org>
+CC: <hanshu@zhaoxin.com>
+Subject: [PATCH 1/2] i2c: viai2c: Fix some minor style issues
+Date: Mon, 11 Mar 2024 11:25:59 +0800
+X-ASG-Orig-Subj: [PATCH 1/2] i2c: viai2c: Fix some minor style issues
+Message-ID: <20240311032600.56244-1-hanshu-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ ZXBJMBX03.zhaoxin.com (10.29.252.7)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1710127561
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 4684
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.121952
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
 
-Hi Wolfram,
+1. fixed some minor issues that were checked out by checkpatch
+2. deleted the unnecessary log that received nack during write cycle
+3. adjusted the log when FW gives inappropriate parameters
 
-after Linus pulled the commit from Christophe, which was causing
-conflicts with the I2C Zhaoxin controller, I'm sending you the
-second part of pull request for v6.9, which includes only the six
-patches from Hans that add support.
+Signed-off-by: Hans Hu <hanshu-oc@zhaoxin.com>
+---
+ drivers/i2c/busses/i2c-viai2c-common.c  | 15 ++++++---------
+ drivers/i2c/busses/i2c-viai2c-wmt.c     |  2 +-
+ drivers/i2c/busses/i2c-viai2c-zhaoxin.c |  9 ++++-----
+ 3 files changed, 11 insertions(+), 15 deletions(-)
 
-This series is in i2c/i2c-host-next. I haven't created a new
-branch since it has already been tested here for several days
-here.
+diff --git a/drivers/i2c/busses/i2c-viai2c-common.c b/drivers/i2c/busses/i2c-viai2c-common.c
+index 05b615144442..4c208b3a509e 100644
+--- a/drivers/i2c/busses/i2c-viai2c-common.c
++++ b/drivers/i2c/busses/i2c-viai2c-common.c
+@@ -81,8 +81,8 @@ static int viai2c_read(struct viai2c *i2c, struct i2c_msg *pmsg, bool first)
+ 
+ 	writew(tcr_val, i2c->base + VIAI2C_REG_TCR);
+ 
+-	if ((i2c->platform == VIAI2C_PLAT_WMT && (pmsg->flags & I2C_M_NOSTART))
+-	   || (i2c->platform == VIAI2C_PLAT_ZHAOXIN && !first)) {
++	if ((i2c->platform == VIAI2C_PLAT_WMT && (pmsg->flags & I2C_M_NOSTART)) ||
++	    (i2c->platform == VIAI2C_PLAT_ZHAOXIN && !first)) {
+ 		val = readw(i2c->base + VIAI2C_REG_CR);
+ 		val |= VIAI2C_CR_CPU_RDY;
+ 		writew(val, i2c->base + VIAI2C_REG_CR);
+@@ -104,8 +104,8 @@ int viai2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+ 	i2c->mode = VIAI2C_BYTE_MODE;
+ 	for (i = 0; ret >= 0 && i < num; i++) {
+ 		pmsg = &msgs[i];
+-		if ((i2c->platform == VIAI2C_PLAT_WMT)
+-		   && !(pmsg->flags & I2C_M_NOSTART)) {
++		if (i2c->platform == VIAI2C_PLAT_WMT &&
++		    !(pmsg->flags & I2C_M_NOSTART)) {
+ 			ret = viai2c_wait_bus_not_busy(i2c);
+ 			if (ret < 0)
+ 				return ret;
+@@ -138,12 +138,9 @@ static int viai2c_irq_xfer(struct viai2c *i2c)
+ 			val |= VIAI2C_CR_RX_END;
+ 		writew(val, base + VIAI2C_REG_CR);
+ 	} else {
+-
+ 		val = readw(base + VIAI2C_REG_CSR);
+-		if (val & VIAI2C_CSR_RCV_NOT_ACK) {
+-			dev_dbg_ratelimited(i2c->dev, "write RCV NACK error\n");
++		if (val & VIAI2C_CSR_RCV_NOT_ACK)
+ 			return -EIO;
+-		}
+ 
+ 		if (msg->len == 0) {
+ 			val = VIAI2C_CR_TX_END | VIAI2C_CR_CPU_RDY | VIAI2C_CR_ENABLE;
+@@ -236,7 +233,7 @@ int viai2c_init(struct platform_device *pdev, struct viai2c **pi2c, int plat)
+ 	i2c->platform = plat;
+ 
+ 	err = devm_request_irq(&pdev->dev, i2c->irq, viai2c_isr,
+-					irq_flags, pdev->name, i2c);
++			       irq_flags, pdev->name, i2c);
+ 	if (err)
+ 		return dev_err_probe(&pdev->dev, err,
+ 				"failed to request irq %i\n", i2c->irq);
+diff --git a/drivers/i2c/busses/i2c-viai2c-wmt.c b/drivers/i2c/busses/i2c-viai2c-wmt.c
+index aa6c34a78b1e..e1988f946026 100644
+--- a/drivers/i2c/busses/i2c-viai2c-wmt.c
++++ b/drivers/i2c/busses/i2c-viai2c-wmt.c
+@@ -91,7 +91,7 @@ static int wmt_i2c_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	err = of_property_read_u32(np, "clock-frequency", &clk_rate);
+-	if (!err && (clk_rate == I2C_MAX_FAST_MODE_FREQ))
++	if (!err && clk_rate == I2C_MAX_FAST_MODE_FREQ)
+ 		i2c->tcr = VIAI2C_TCR_FAST;
+ 
+ 	adap = &i2c->adapter;
+diff --git a/drivers/i2c/busses/i2c-viai2c-zhaoxin.c b/drivers/i2c/busses/i2c-viai2c-zhaoxin.c
+index 99db93caa4cb..7e3ac2a3e1fd 100644
+--- a/drivers/i2c/busses/i2c-viai2c-zhaoxin.c
++++ b/drivers/i2c/busses/i2c-viai2c-zhaoxin.c
+@@ -132,7 +132,8 @@ static int zxi2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int
+ 
+ 		i2c->msg = msgs;
+ 		i2c->mode = VIAI2C_FIFO_MODE;
+-		priv->xfer_len = i2c->xfered_len = 0;
++		priv->xfer_len = 0;
++		i2c->xfered_len = 0;
+ 
+ 		viai2c_fifo_irq_xfer(i2c, 0);
+ 
+@@ -196,7 +197,6 @@ static void zxi2c_get_bus_speed(struct viai2c *i2c)
+ 	u8 fstp;
+ 	const u32 *params;
+ 	struct viai2c_zhaoxin *priv = i2c->pltfm_priv;
+-
+ 	u32 acpi_speed = i2c_acpi_find_bus_speed(i2c->dev);
+ 
+ 	count = ARRAY_SIZE(zxi2c_speed_params_table);
+@@ -213,8 +213,7 @@ static void zxi2c_get_bus_speed(struct viai2c *i2c)
+ 		 * if BIOS setting value far from golden value,
+ 		 * use golden value and warn user
+ 		 */
+-		dev_warn(i2c->dev, "speed:%d, fstp:0x%x, golden:0x%x\n",
+-				params[0], fstp, params[2]);
++		dev_warn(i2c->dev, "FW FSTP[%x] might cause wrong timings, dropped\n", fstp);
+ 		priv->tr = params[2] | 0xff00;
+ 	} else {
+ 		priv->tr = fstp | 0xff00;
+@@ -257,7 +256,7 @@ static int zxi2c_probe(struct platform_device *pdev)
+ 	adap->dev.parent = &pdev->dev;
+ 	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
+ 	snprintf(adap->name, sizeof(adap->name), "zhaoxin-%s-%s",
+-			dev_name(pdev->dev.parent), dev_name(i2c->dev));
++		 dev_name(pdev->dev.parent), dev_name(i2c->dev));
+ 	i2c_set_adapdata(adap, i2c);
+ 
+ 	return devm_i2c_add_adapter(&pdev->dev, adap);
+-- 
+2.34.1
 
-If time permits, there are two series from Theo and Mukesh queued
-in i2c/i2c-host.
-
-Thanks,
-Andi
-
-The following changes since commit b3b00cea6378475f972eb49c068062627ff3a14d:
-
-  Merge branch 'i2c/i2c-host' into i2c/i2c-host-next (2024-03-08 23:30:28 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-6.9-pt.2-zhaoxin
-
-for you to fetch changes up to 391ead8dc4e49b6de96ffdd1f6b1d89fa2282e40:
-
-  i2c: add zhaoxin i2c controller driver (2024-03-08 23:30:50 +0100)
-
-----------------------------------------------------------------
-Added support for the Zhaoxin I2C controller. This required
-extensive code refactoring in the wmt driver, mainly targeting
-the extraction of the common IP from the viai2c, which will be
-used by both wmt and Zhaoxin.
-
-----------------------------------------------------------------
-Hans Hu (6):
-      i2c: wmt: create wmt_i2c_init for general init
-      i2c: wmt: split out common files
-      i2c: wmt: rename something
-      i2c: wmt: fix a bug when thread blocked
-      i2c: wmt: add platform type VIAI2C_PLAT_WMT
-      i2c: add zhaoxin i2c controller driver
-
- MAINTAINERS                             |  10 +++-
- drivers/i2c/busses/Kconfig              |  10 ++++
- drivers/i2c/busses/Makefile             |   3 ++
- drivers/i2c/busses/i2c-viai2c-common.c  | 250 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- drivers/i2c/busses/i2c-viai2c-common.h  |  85 +++++++++++++++++++++++++++++++++
- drivers/i2c/busses/i2c-viai2c-wmt.c     | 148 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- drivers/i2c/busses/i2c-viai2c-zhaoxin.c | 299 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- drivers/i2c/busses/i2c-wmt.c            | 421 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
- 8 files changed, 804 insertions(+), 422 deletions(-)
- create mode 100644 drivers/i2c/busses/i2c-viai2c-common.c
- create mode 100644 drivers/i2c/busses/i2c-viai2c-common.h
- create mode 100644 drivers/i2c/busses/i2c-viai2c-wmt.c
- create mode 100644 drivers/i2c/busses/i2c-viai2c-zhaoxin.c
- delete mode 100644 drivers/i2c/busses/i2c-wmt.c
 
