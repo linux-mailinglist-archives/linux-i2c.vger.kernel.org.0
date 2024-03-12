@@ -1,97 +1,66 @@
-Return-Path: <linux-i2c+bounces-2333-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2334-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0341F878F60
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 Mar 2024 09:03:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDEA98790D5
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Mar 2024 10:24:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B11C8281BC4
-	for <lists+linux-i2c@lfdr.de>; Tue, 12 Mar 2024 08:03:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E21BB22BB6
+	for <lists+linux-i2c@lfdr.de>; Tue, 12 Mar 2024 09:24:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D31E6997D;
-	Tue, 12 Mar 2024 08:03:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498897828B;
+	Tue, 12 Mar 2024 09:20:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GXWn4pMe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eW4gS9y3"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C20269D04;
-	Tue, 12 Mar 2024 08:03:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D2C78262;
+	Tue, 12 Mar 2024 09:20:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710230612; cv=none; b=LgK0CVK2cDNstXQZSxL2m/wti8IdIo8xxWt57//rNLlbG36g3TXKX3NKyWNgRwzyzidAJs7T74XeMo0gStDk1BlnakgLU6E99C2KJ/wnUjkjwcrA3qqzAWK2gS15TrZYpFy2KGUHBxqhhvaDp0RfH7xKf91y/nUdeFwKmp3bv1A=
+	t=1710235241; cv=none; b=Jk6RNPQ2eIJMUjye9G/HDaT5koRc6/37wCk4LFfeogHg8/GDtZquR0PYRKUxsVfQwCD9jh1cz71IuVd56fPxe1UQKqUR1wSE1dOhmuusSWyHiE/AO/XwvDczKnpp+ksUKGL1cmICAZn80qHBAnkXUK5L2gmoaFJDeQO5TT3LaRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710230612; c=relaxed/simple;
-	bh=7CSXkSa3VNcY7x9b6by6FO8IPWIdgHGiqUx6k0fKoo8=;
+	s=arc-20240116; t=1710235241; c=relaxed/simple;
+	bh=zxkiu9aVl8Thl9uVJ1JoV9B0j7ibOXaq9f6g5nQEndM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UA6tbP/e1nk17ts2exKxJ6vXFSbnTjPLgku9Yqg8/7uenstArnz6Nt40UnsymqKXFLsBf4rB657WukOBmYfqYEqBqbGqEXrZmnesqNEyBSh6NUzhtB1dSaxvOmMaSiMPJAaMFM1P6UPYaEXVztc6sZAZVOcZgcWx5d146aysPq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GXWn4pMe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14D4DC433C7;
-	Tue, 12 Mar 2024 08:03:30 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ag0FLqJVls6gu15xSy421QxoahnltJrxOBus+m7cyEbE8lE365llTt8RyJpIdkWP7lcLIgSNPoYyImLTI52cuhdJsplJMJQYBBP1hU960mVO32eHwL0Vt+ShCUvN65LkLIHxV7pBDXz5Db6TY3FofUVAvNT4LtVqbFdSF2GFvgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eW4gS9y3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A19DC433C7;
+	Tue, 12 Mar 2024 09:20:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710230610;
-	bh=7CSXkSa3VNcY7x9b6by6FO8IPWIdgHGiqUx6k0fKoo8=;
+	s=k20201202; t=1710235240;
+	bh=zxkiu9aVl8Thl9uVJ1JoV9B0j7ibOXaq9f6g5nQEndM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GXWn4pMeQg4hJsAkIuEH/dvhu5T8dLwWVRrGftqgwMwBYiZl0C3puzKCtdzWFrN7p
-	 gwR5tOBCsKepUM0L1+VQCxoLpLtMb6B+KZQl7ArGelO/pmj6hr4nfuvkGprlzZ3qmM
-	 UeEfu90878dwAoUylCYtFeiih9QICuFvQ6UIISX3SRELBGMBKdCfjOTSXgP9M0jnpk
-	 HmK5M6fp5QQhIVTKBncymtqYSzLtQlJEzp42lA1X9IulXYVq3/ffSL7iuQ3mSJ84hm
-	 Ez7uopf+12pzCQL/d/3d60MrnRv9ZLk4k1/IvmKVVnBhuL1vt5xtdjT2l4AB7Bw4zU
-	 udv4ffal4JQhg==
-Date: Tue, 12 Mar 2024 09:03:27 +0100
+	b=eW4gS9y3c6ESVgdHCwyPh8dT4j7jVE5Ns+Y/Jp2Wot7zMcCeUx039VarVhmkSNaCI
+	 vh9kFGjlbX6e+wHvJBaykGLQzjL+n0j2RbCStymyE8Ct2uPLt9aUl+x10x4X5PXjJF
+	 UllMPXed667HVZAB56aCHxQXZPrLeVXIjZgbFsIeeTxs0pUQwGHBW1xtpHppk8zTVB
+	 xsJ3NFVXQJ23Wo22FCw2ODnh1vv8TKkLajwcBlQg6TQT/zrfQ4u5locg8ajB5aDHbb
+	 QowO/OXolXhjulJI4IMXEnfyghJaciZmhI/Stfa0RBri+MU20SkF11LQv2N4SMK9lH
+	 KghG9PGxE4Bmg==
+Date: Tue, 12 Mar 2024 10:20:37 +0100
 From: Wolfram Sang <wsa@kernel.org>
-To: Tony Lindgren <tony@atomide.com>
-Cc: Thomas Richard <thomas.richard@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andy@kernel.org>,
-	Haojian Zhuang <haojian.zhuang@linaro.org>,
-	Vignesh R <vigneshr@ti.com>, Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
-	theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com,
-	u-kumar1@ti.com
-Subject: Re: [PATCH v4 03/18] i2c: omap: wakeup the controller during
- suspend() callback
-Message-ID: <ZfAMT8CDW1VKW0qR@shikoro>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: konrad.dybcio@linaro.org, andersson@kernel.org, vkoul@kernel.org,
+	linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+	quic_vdadhani@quicinc.com
+Subject: Re: [PATCH v3] i2c: i2c-qcom-geni: Parse Error correctly in i2c GSI
+ mode
+Message-ID: <ZfAeZbV0cXGR_Lkn@shikoro>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Tony Lindgren <tony@atomide.com>,
-	Thomas Richard <thomas.richard@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andy@kernel.org>,
-	Haojian Zhuang <haojian.zhuang@linaro.org>,
-	Vignesh R <vigneshr@ti.com>, Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
-	theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com,
-	u-kumar1@ti.com
-References: <20240102-j7200-pcie-s2r-v4-0-6f1f53390c85@bootlin.com>
- <20240102-j7200-pcie-s2r-v4-3-6f1f53390c85@bootlin.com>
- <20240308084240.GK52537@atomide.com>
+	Andi Shyti <andi.shyti@kernel.org>, konrad.dybcio@linaro.org,
+	andersson@kernel.org, vkoul@kernel.org,
+	linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+	quic_vdadhani@quicinc.com
+References: <20240307205539.217204-1-quic_msavaliy@quicinc.com>
+ <170993858923.2618408.4667207790973009000.b4-ty@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -99,59 +68,65 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Qxnn2a5IXmQEXJ6+"
+	protocol="application/pgp-signature"; boundary="ewTupQRwbxuX6vVW"
 Content-Disposition: inline
-In-Reply-To: <20240308084240.GK52537@atomide.com>
+In-Reply-To: <170993858923.2618408.4667207790973009000.b4-ty@kernel.org>
 
 
---Qxnn2a5IXmQEXJ6+
+--ewTupQRwbxuX6vVW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 08, 2024 at 10:42:40AM +0200, Tony Lindgren wrote:
-> * Thomas Richard <thomas.richard@bootlin.com> [240304 15:36]:
-> > A device may need the controller up during suspend_noirq() or
-> > resume_noirq().
-> > But if the controller is autosuspended, there is no way to wakeup it du=
-ring
-> > suspend_noirq() or resume_noirq() because runtime pm is disabled at this
-> > time.
+
+> On Fri, 08 Mar 2024 02:25:39 +0530, Mukesh Kumar Savaliya wrote:
+> > I2C driver currently reports "DMA txn failed" error even though it's
+> > NACK OR BUS_PROTO OR ARB_LOST. Detect NACK error when no device ACKs
+> > on the bus instead of generic transfer failure which doesn't give any
+> > specific clue.
 > >=20
-> > The suspend() callback wakes up the controller, so it is available until
-> > its suspend_noirq() callback (pm_runtime_force_suspend()).
-> > During the resume, it's restored by resume_noirq() callback
-> > (pm_runtime_force_resume()). Then resume() callback enables autosuspend.
+> > Make Changes inside i2c driver callback handler function
+> > i2c_gpi_cb_result() to parse these errors and make sure GSI driver
+> > stores the error status during error interrupt.
+> >=20
+> > [...]
 >=20
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Applied to i2c/i2c-host on
+>=20
+> git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
 
-I fully trust Tony and I assume that this series should go in via some
-other tree than I2C. So:
+Because this patch touches a file in the DMA realm, we should have an
+ack here from one of the maintainers. So they know and are okay with us
+changing something in their area.
 
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+$ scripts/get_maintainer.pl -f drivers/dma/qcom/gpi.c
+Bjorn Andersson <andersson@kernel.org>
+Konrad Dybcio <konrad.dybcio@linaro.org>
+Vinod Koul <vkoul@kernel.org>
+linux-arm-msm@vger.kernel.org
+dmaengine@vger.kernel.org
+linux-kernel@vger.kernel.org
 
-Andi, do you agree?
 
-
---Qxnn2a5IXmQEXJ6+
+--ewTupQRwbxuX6vVW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXwDE8ACgkQFA3kzBSg
-KbZneQ/+KWOJptPe830nsn7JfSUf3AOnK9q6xIxIiubJncJXVEeQU9CREDaUg9qm
-bI/l+empAXTCyZjGwuEjah2mFlBcT1y1+hNXAPG0px0omBk/p774NjskL0zONP4u
-rWQ6gc3Wl5cEyNBoZzUml+jdXYg8Ie2HL2Ymhxcpl4Y8bHiQT8WXyHdBDlD10hzK
-Q7oKeMO4aaoBHrnb8GTIPJkm6XaYNJHV7fVwf/b8pzzajEYoRJasGIdhs0U4b2aM
-gfC3C3/eTf035xZmqXvesTt0j3Kqbn5HxkcCG531iGpXUc6FthYKHHd77a46DwCe
-pCzGtTo8o7ezUnYOdySYJic5ZJEChC795pdl4rsrHMRM5B/NseT9ieAIvisVS4Ll
-mYQyCzW7jrhqT9A56/o+0rudG8LXs+b+MedNFDFcvCDv3LwWSt9imYDhvClKWMIJ
-4I+rDBS0ONXz/PqMD77QIOtuILV85GvDrbrmFUSiIzP/LtbIpUaFoRBQFw6QSpKI
-S3doeQqZayubO7DkMYhU4wrhSs5n6fKRHP4fr11VSclA8czlRuLKvm8vJrzmM5kh
-WU8UXU/JXpUHdQz3GSbIcHEs5e3AJa0JdCN+4x+qgSI4FYH5rr+SFnqnX6qXXipW
-+cNJyxzVT59Y4MQYLNhwXxa5FGwlKdOJuory0HQRv+qRip/+f8Y=
-=P3pn
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXwHmIACgkQFA3kzBSg
+KbYXUg//WE/vhqWVUyvCYAfe5NQpcr7VSpWQXTelvzhJov7fHX3qVMD5ZAzW9CSk
+Vh6iDgfKCb5JRNrKSvjyPsLvv5Ld2gDglF7+wyVZYh9ZhVpp8ncad6fLuXI3cul5
+mz7QRQ+R92BypzyAXEqE1jHIMgx3n4CDMBYrcJ3QLisUWzp8hPBmyTW7L/JMY3Xg
+Shyf+55Ncf80CXmvL3u1k/KbpGc01KFNMKSI7I0LU/NoJ2ckiVn+eVbpsWQX0JOz
+Ijso7riZWp8ltziANFSBxW0KiGpLlwnHuZUfb7gBPZ5SBNx+PVhX1SsKiw41szko
+JzC0F9WTMmt5FTj2GX7AcidnhpJP/Y4oQP23Nkt5DCkuTwNx3zwqauutshYpjl8x
+/KUyTCyE3eCgF6BzSt6/tWYOz7se4QTGGtAj6y/bnw3txppPOtPFoLP7b/8XPink
+/oQSho2ipuxF3A1o9YjDidV5YZCdbo/aByH0WTXuALJVWbAIgw4/4iMN3zqd30nH
+2jETRKrPj+AC529yh5Q/zUo1cHpNLLwIc+TblAfy0I3vL/aUiRNQssPETln5QxdW
+vkciPDnGD6Ut8gM7uMSbUcsiSItdisAqbDKdR8UoSXdl6YiHIRxh081r0ZanFB8E
+TGzku1i6hOgZ4L0F61zHREFxRRv+w/okp5LSv+FgHav0hKPiC0o=
+=Wqz8
 -----END PGP SIGNATURE-----
 
---Qxnn2a5IXmQEXJ6+--
+--ewTupQRwbxuX6vVW--
 
