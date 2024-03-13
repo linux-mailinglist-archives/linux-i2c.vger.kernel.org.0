@@ -1,124 +1,151 @@
-Return-Path: <linux-i2c+bounces-2346-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2347-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E3E087A2B7
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Mar 2024 06:35:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE35E87A2EF
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Mar 2024 07:21:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9A3A1F2279D
-	for <lists+linux-i2c@lfdr.de>; Wed, 13 Mar 2024 05:35:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C55341C216DF
+	for <lists+linux-i2c@lfdr.de>; Wed, 13 Mar 2024 06:21:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D824312E5C;
-	Wed, 13 Mar 2024 05:35:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA38713AD8;
+	Wed, 13 Mar 2024 06:21:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jUaMZqaY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NtNihdWS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB6910A1D;
-	Wed, 13 Mar 2024 05:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766741642A;
+	Wed, 13 Mar 2024 06:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710308145; cv=none; b=aEgMXsRhDPOF0xy64sg0q86bGx/Ll151Zw1LnRuBjdydKUNAmEx3g1Ikby05ZmRQNgQAQ0g/Da0jT69ukzbE2jmlF1DoSN9QipTpNucuUhS9Qdq4V31ucrZTcPMrOB9TDQTco0WN5rqMEv02yeL1CPeRRw2+wbcW/1OstYKybo8=
+	t=1710310880; cv=none; b=CKWZZgRe7wCroT0fPyGgrwcmk99qGZ+MZu8zXwMMd+VCTYCGJRV3JbJ6e8cdB5JZOqDCGZnCTGW+sNgUF7EtlOvTID/0cdhInBt9pbJJ6elpd407WJlWMNO1lh3x5dW/BZm7yjLFhWdsikOf8EG/QrejwsvgDp79H1bWiOr95xE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710308145; c=relaxed/simple;
-	bh=icYO5AqGUEJy2g2FzBgaoVvXzp73Jbi9ol7QJfdrF4Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=KzcP9ib2kABmBDVXq2YlXtCJU9MsI5cJEd4JgnzU8tI4V2LfnTPCZA0/WA3bRaelgVw0RMn/Cm73IfPGUX/m8iYJOWyN1F4X/lQ949n+YQ1u/UiswtPBhlE7V3HEHlmdcpP5kLBbKE8OwwiQG2rPly8HLTEWvdWEmDusdtv0FxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jUaMZqaY; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42D3Dhnw026482;
-	Wed, 13 Mar 2024 05:35:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=cCwcK/aazlsFy8Zq3Ky6o32u5JSaZ75YFGnu+hvDL1M=; b=jU
-	aMZqaYcdE1rEi2xEVBLaawc/DIuQ5LtLdCFHCYjZ6yn8sU3NTC+BeD8bRH+lsuG4
-	AQT8AiIuhrbLdpEfyzKCOnYiG5FOA5ZMGHfCHSprqFHq9nHjf/5ggiRn8v0wGGS2
-	o4/xdddGuPEbaQ3sEy7GIdLtF4abVVc9y+FxfV5iKx2ZXV4TswVQbv/0vEVJTy7T
-	j6eJu2rfTb/sWnmuz7EZu6oxINuzjLAbvWTSO9G/bsNAf+FumXEDlHtblvepRUdC
-	NoPDLL5/ck0vabsKiu/2izXwlzJou0p4XyvZsIb5/Yfvm49CcPNxQOclz9MI7xNE
-	E385+4sIeeQFiK4/e6zg==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wtmpd2by2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Mar 2024 05:35:35 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 42D5ZYWf019620
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Mar 2024 05:35:34 GMT
-Received: from [10.218.22.190] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 12 Mar
- 2024 22:35:30 -0700
-Message-ID: <0971ac51-f823-4338-ba95-3ceced9d2a1c@quicinc.com>
-Date: Wed, 13 Mar 2024 11:05:27 +0530
+	s=arc-20240116; t=1710310880; c=relaxed/simple;
+	bh=Kf6Rjwq8Q1L9x0D8vIvoKvL60yatJLvjveDYXD/c7gA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xnh59m8tOppVe/4K/2tgFA8Ug9EDB6YAv0wwOFsqrZe7crd376uCw8EW1k1dOatFOnWExmv65o9Rln6SPPG7i6tj3MIvv0VSeKc1aNinIR9dgEeAaHjHPV1kzn8Ybv67raPCyRhP4FJpvJ/gZtJKkDnpYuzA/jmePEEuSzXApBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NtNihdWS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D745C433C7;
+	Wed, 13 Mar 2024 06:21:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710310880;
+	bh=Kf6Rjwq8Q1L9x0D8vIvoKvL60yatJLvjveDYXD/c7gA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NtNihdWSavdZK7WJ7rW+uC0ywk1ZLKAmigCAUwxsZUA4LOLM8E2g9JQHQ7y+PfFbI
+	 U0j5+YurMymB4TupTy0krDJSIOzqf7MwVMT9jJ2ra12uNhkeL6/N8w2RNBB9M85q57
+	 ACmkvUktWcH+tJoT/qE1BSYU1gbjxP9cpIUop7/6hX+/JRi5HmH6nEI5KJuWgnEo9t
+	 YQ0sbFc6L4+F9uWBR0jjI5nNJBCGj4t87pVTLEtwOqfN+9s/rYLUVkYAe/Av4Ybxx3
+	 T0SySpLc85/Kd1g+opSMUY6oPyCZl9fT7H0LJykOUzxxKF54al5+FxVFTl5ltlCSiI
+	 o9KtJxRkR1xIA==
+Date: Wed, 13 Mar 2024 07:21:16 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Tony Lindgren <tony@atomide.com>,
+	Thomas Richard <thomas.richard@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andy Shevchenko <andy@kernel.org>,
+	Haojian Zhuang <haojian.zhuang@linaro.org>,
+	Vignesh R <vigneshr@ti.com>, Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Peter Rosin <peda@axentia.se>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
+	theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com,
+	u-kumar1@ti.com
+Subject: Re: [PATCH v4 03/18] i2c: omap: wakeup the controller during
+ suspend() callback
+Message-ID: <ZfFF3LpzesdwZH2t@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Tony Lindgren <tony@atomide.com>,
+	Thomas Richard <thomas.richard@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andy Shevchenko <andy@kernel.org>,
+	Haojian Zhuang <haojian.zhuang@linaro.org>,
+	Vignesh R <vigneshr@ti.com>, Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Peter Rosin <peda@axentia.se>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
+	theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com,
+	u-kumar1@ti.com
+References: <20240102-j7200-pcie-s2r-v4-0-6f1f53390c85@bootlin.com>
+ <20240102-j7200-pcie-s2r-v4-3-6f1f53390c85@bootlin.com>
+ <20240308084240.GK52537@atomide.com>
+ <ZfAMT8CDW1VKW0qR@shikoro>
+ <63oaudxrjdqredpbh4rojcpgjh5tot2tx2gs2kpfplwgjmrluw@f3x2x5us5hw5>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] i2c: i2c-qcom-geni: Parse Error correctly in i2c GSI
- mode
-Content-Language: en-US
-To: Andi Shyti <andi.shyti@kernel.org>
-CC: <konrad.dybcio@linaro.org>, <andersson@kernel.org>, <vkoul@kernel.org>,
-        <wsa@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <quic_vdadhani@quicinc.com>,
-        Stephen Rothwell
-	<sfr@canb.auug.org.au>
-References: <20240307205539.217204-1-quic_msavaliy@quicinc.com>
- <a5oiihch2yqsosq337hogqzd3r4ldgfrzub4m6kofheh2k3qjv@wxageydv4q37>
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <a5oiihch2yqsosq337hogqzd3r4ldgfrzub4m6kofheh2k3qjv@wxageydv4q37>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: gb-huY-5_rp4JyJruohlt362HGxFuzk4
-X-Proofpoint-ORIG-GUID: gb-huY-5_rp4JyJruohlt362HGxFuzk4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-13_05,2024-03-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=939 mlxscore=0
- spamscore=0 clxscore=1011 malwarescore=0 impostorscore=0 adultscore=0
- bulkscore=0 suspectscore=0 lowpriorityscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2403130040
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="5scK1x9kjxT2H4q5"
+Content-Disposition: inline
+In-Reply-To: <63oaudxrjdqredpbh4rojcpgjh5tot2tx2gs2kpfplwgjmrluw@f3x2x5us5hw5>
 
-Hi Andi, Wolfram,
 
-On 3/12/2024 4:19 PM, Andi Shyti wrote:
-> Hi Mukesh,
-> 
->> +	status = FIELD_GET(I2C_DMA_TX_IRQ_MASK, i2c_res->status);
-> 
-> This fails here:
-> 
-> drivers/i2c/busses/i2c-qcom-geni.c: In function 'i2c_gpi_cb_result':
-> drivers/i2c/busses/i2c-qcom-geni.c:493:18: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
->    493 |         status = FIELD_GET(I2C_DMA_TX_IRQ_MASK, i2c_res->status);
->        |                  ^~~~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> I will remove this patch from the i2c/i2c-host and we will need
-> to wait for the next merge window to get this through.
-> 
-> Please submit v4 with the Cc list recommended by Wolfram.
->Submitted V4 patch. Let me wait for the dmaengine maintainers to sig off 
-too. Sorry for the trouble.
+--5scK1x9kjxT2H4q5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Thanks,
-> Andi
-> 
+Hi Andi,
+
+> Agree... but who is going to take this? Eventually I can just
+> this one.
+
+Usually, it should be stated in the coverletter what the suggested path
+for upstreaming is. If it is not, then I apply my gut feeling what
+should be better. With this series (and seeing that there are no other
+omap patches pending), I assume some other tree so I ack in advance. If
+I am wrong and should apply it independently, people will tell me at
+this stage. That's how I handle it.
+
+Happy hacking,
+
+   Wolfram
+
+
+--5scK1x9kjxT2H4q5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmXxRdcACgkQFA3kzBSg
+Kba8phAAhAo3TFrjiov9KU/9ImhFn6FAJISY+9pjqIRBEVJVf+LM/ky3QcorHKZI
+dMtQR+V1gj8en3ZBi2oZSQB3VW8Ije4evX/CtxviumW34i1cH0NyN3dn0WLrTwb3
+Le+u1d8LSRIO+hIHLpRQ3WuRfk5TEI052bHmSJINKqh1TjHImKIn+niRruR+cb77
+7KNJwqPjFu1NnLgNV4nP56Jwh8wRO1oUEZrHq3st3yX3c6sq7oNovYoqenFtiNjt
+SkpsuJupYCYob+sH5b2F+ZhtSMSM0C7JvLk7oQSxuEJ5UeIxuDD1u/zhMMW1AjQ7
+c+f/y1SEeSQkwHt5ywEEYFxuHgQNV/YedJwFDT4j/U5kWL5dT2ZEslZIao+y0gEt
+f5ktqsPVeYCWDVZL56I0kNNDpJiR78uZxuBk5YB7VXLlihnmNVcD7cNYhRecU7d+
+gv1A21XSiCZLXK96YS9PqBKODRY5I+yqv2geNBOEW4KJvacFR8aQ9big1Oizppgm
+RYyHdnbkrfAUHU1NrVmYsn1kgboUxgi0E+mD0bImSXEUW/G1bHofOo+g2ccKSdXR
+jFlvQzck0qQQuxJCHlOTlTGZuqKVIkZ0x8ItqMQkSSP9GXtICdDWrl63V6+Yki5a
+josi4NEL739wHNHZDYyjd8wyR+CkkDsaQBH4eLrBYjOdyCvNybU=
+=jpCM
+-----END PGP SIGNATURE-----
+
+--5scK1x9kjxT2H4q5--
 
