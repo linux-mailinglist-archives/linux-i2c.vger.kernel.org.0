@@ -1,154 +1,127 @@
-Return-Path: <linux-i2c+bounces-2350-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2351-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C42F987B844
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Mar 2024 08:06:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 578F987B85B
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Mar 2024 08:13:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B603283B4C
-	for <lists+linux-i2c@lfdr.de>; Thu, 14 Mar 2024 07:06:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 893EF1C20D62
+	for <lists+linux-i2c@lfdr.de>; Thu, 14 Mar 2024 07:13:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2B4CDDAD;
-	Thu, 14 Mar 2024 07:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B330F5B5B3;
+	Thu, 14 Mar 2024 07:12:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oQ0fcmiF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jkjQXhTP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D24DF78
-	for <linux-i2c@vger.kernel.org>; Thu, 14 Mar 2024 07:06:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E315A780
+	for <linux-i2c@vger.kernel.org>; Thu, 14 Mar 2024 07:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710399990; cv=none; b=kpnDJF64NQbgQ4061F6HQO74fm/I2mvhOEDwOUe4QZDyqMZlTillCznsF+BdUQMlRnH6UJ+30wBWfWRZ+yDG2TrZdi0gjcaHheQWmCGtl89UtFIROLnU9LbV2/bLCORdYEROfv/dqQYwfWKuxvl1eIdIIbqshxmUDKojRXF9BVs=
+	t=1710400375; cv=none; b=gVzyJ3jLt1vzfp2moPTE2L7ILwFDfKfuPckVTpd5Q3sjKl6a3Nk11F6HMumvM18iwB8WY1lufUUbSlCuvw3wAu/ANYxqK9wqZiQpkjpsHbCeWqpopk0cjMOSf2jkHj2AJ96El7wdkw0s+mPxONWZIZ722n+b/+FEC5Gy8nm7zlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710399990; c=relaxed/simple;
-	bh=izHqxVUzGLnnW4w6MpjnqdI8BPYNvZ17o3iocQ0b9qk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tKV1DtyTRznwAIwZy8rDyGLD8gYgmmf7ZDDVZuJI5o4nNB2WkB02ZgPPp33Fm509ewB19+D8XmenKVIwcthowDx68kDtnyMQpCKUt3ts2ip0dw+12xwXpQlwUQQtGdjkyEWluy8o7wiU8T5GzGOYHVXlcDY9BemL4rzBaID3yOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oQ0fcmiF; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-413e93b10bfso3761795e9.1
-        for <linux-i2c@vger.kernel.org>; Thu, 14 Mar 2024 00:06:28 -0700 (PDT)
+	s=arc-20240116; t=1710400375; c=relaxed/simple;
+	bh=3NVA96cL/X1I7WqZvh883rB2R1562Xmgvbo2h1NKsxc=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=UtyrDWqumw1hMZrltrc7WTtAO9oklG0C4q3q0w2heOAOh2bW3kkK3ipZuqsoLRbFOu9HTbdfrBukxEyOh9R6kIW6YthP/bfbLtczUc8tCBiwmSodqQGqUJ0ArFS6avmeSXnTYlqsnImIv9wBck6L7XaMGDQpToI2/YLKWq+nnUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jkjQXhTP; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5101cd91017so1095505e87.2
+        for <linux-i2c@vger.kernel.org>; Thu, 14 Mar 2024 00:12:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710399987; x=1711004787; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uyTFEVNehRR5V4XWpSHKPbDPD3dX50qdrX5kLA29iAQ=;
-        b=oQ0fcmiF1m+3w9Ejj8fOMPjVKuQHYiiFcqkMhxDHR810FGrQDK966c47XIdmxl1d1T
-         WUKCiZ5S3shdQaEswelv6EV152IRExszfrSBDIlklw7DN7AMrmF6i2ShkuLuyBaPZE7J
-         u256ud1o47BEO9/X4ml3/p7Nwt8yeVFJAN3naNHX9On5oJRTm9bjvErYeoCy+CK1hZLR
-         0OT9ip3JK/rfAzrfemTZycevHbQN1jFF3Hfvz8uWNuL0iCKzk6IpLI2gMCAdYEgy3b/s
-         WPjMCgP3iDc+rKEl4OD0PRr/3SaMMq1c9xbkHsObQdbL0OaUyxSVLh20o3nQvPUY3vEq
-         0wew==
+        d=gmail.com; s=20230601; t=1710400372; x=1711005172; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3NVA96cL/X1I7WqZvh883rB2R1562Xmgvbo2h1NKsxc=;
+        b=jkjQXhTPr8dq/WlMEFka35kTuowzug0fc5oNppZd6FFRhLp19pSdw3tbodAgI6eoov
+         OzjcDU8aP6iNjBro9sZ3dkUPW0Sap1K+8Jsoo4PohjZuCVczAQ8DfdO2I3KeGwu6b9IQ
+         95jWpGHVIcX06FDaOUzgPjR7pgd9w7/LHUNn7xeHLUuFVoO0XJ59aVVInXzUcai7tLxI
+         3rAeSe6CnvhUFPXY8exG2d/pY/WqpHun55FGe5PIKzs/b0+/0OM+Uv+6HnIhC/9e8q9e
+         rABH5EC2pGliB9sz/aFjPYK/ktxTSfhfY0mw3i5TvGgLlZCiV8GiWEsApTmrlDvKz7q7
+         EhYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710399987; x=1711004787;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uyTFEVNehRR5V4XWpSHKPbDPD3dX50qdrX5kLA29iAQ=;
-        b=bhV6jjcj+pKZNG5RhQ2uW2cTfqdYrNcgqPgaRN/AMcOUB3wCihbVnMR9JRsK/zgvZY
-         m8ECL64xDIC0hmNPjHXVTY3mfOD8GHNi3zNoSrBHFkMKMcfY0exrfDM9+8wEBB+inesL
-         ius0oRVL56LWEe3LWH+gi5ka/X7xEb9AUiIb6mVpWncVHHIsBhtzIY8AWvVukXHWtIgf
-         zy41PPlhSxevQkCIvIAssBGKWCtKDzR1B4VWyVrtamvW72FEVh2S+ez2hmrX9keocuwZ
-         lhk1+nwssk1CXmN4glN3iHJo6TFY1gNZul1V66JZ2Q61xuLh6kHFTCHz3S2KA7aTS7r2
-         NLRQ==
-X-Gm-Message-State: AOJu0Yxpa7/kJwYkhqSpNdDui3kDV+VM6l7MpolEjjgk822QtQlWAXIn
-	w/w8VHAHCHEANek/Y6UxwYcxfjasv/IG9bQBSM0ar949YoMmUngxB7bjG/t4b7uttSWZpjOucjG
-	I
-X-Google-Smtp-Source: AGHT+IH4K+HmLZtz/WBexxc6jlaBxnwZHK5896HUPncVVb5eVfAQTy2fanIGHpf7CPYbCCk1kMqcSw==
-X-Received: by 2002:a05:600c:348d:b0:412:c811:b6a3 with SMTP id a13-20020a05600c348d00b00412c811b6a3mr1576127wmq.12.1710399986768;
-        Thu, 14 Mar 2024 00:06:26 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id bd7-20020a05600c1f0700b00413f3ca39easm599706wmb.5.2024.03.14.00.06.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Mar 2024 00:06:26 -0700 (PDT)
-Message-ID: <eb49c788-ad23-4cfc-98aa-ffc03d46009d@linaro.org>
-Date: Thu, 14 Mar 2024 08:06:23 +0100
+        d=1e100.net; s=20230601; t=1710400372; x=1711005172;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3NVA96cL/X1I7WqZvh883rB2R1562Xmgvbo2h1NKsxc=;
+        b=iag8NlLEUV5kGRVwSyjBycs7SRxYyccn9HSmoJoXv1Oq66SizMq/7Xly1/kMPJy0iR
+         QXnaELlhtdUnQtH3qAOxSQC77e1wE4HhioVBzQMdnqUvO7tJc8/7Z6+XJhtRmV2qpJU8
+         8mO6XNW0o41qYbcrT+DjERcVsja7HtG+Ii7IQOFg/zoWpgEWyLyCRN0/se27aOPavFaa
+         IuR3rf6J4jDLwuVkxHTWLqBaKqK5DZpiPosx6C3EimsDe+K7qMDgBrUT3ceBTCCtyQAE
+         5aeGWPlLMZDeAs7AKK6tQwuwAKqjvWuiu6WgH9SZtpbqaE46cnFU1eTUD548beTKUNx4
+         Y/Yw==
+X-Forwarded-Encrypted: i=1; AJvYcCWLAQIkz2ACTwNBACb3zMr0S2JyiVJe0yUiWSqmulB2gKo2zvxVNkja4e8zPgPb7nfw2HBT52gsOG2SB9SP2Xkwn2mrvCUMDPhc
+X-Gm-Message-State: AOJu0YwNZI9z4Ru3lcDuX+ewkP5NsLrkKN86y5WuK2iljoUcdFbNVUPw
+	o3qCJjnreYspkZxyf9xrtn8S6mYqG2rmtC/vaa+L2E07P6wO91aqtpHx1IJVXp8OfVhOlDdSgJK
+	IvQfdOyGXFqb4TAgpAZYXoO0REPE=
+X-Google-Smtp-Source: AGHT+IEjO0Hyfm1GpeQqIONHtbOGa0mptX9W3GQy+Ipj2qrV4B6RTZ/CC8T3ekSQf5mvanAUzJbVm4HTTSvON2LyJH4=
+X-Received: by 2002:a05:6512:3e1e:b0:513:4fb4:5388 with SMTP id
+ i30-20020a0565123e1e00b005134fb45388mr670738lfv.41.1710400371789; Thu, 14 Mar
+ 2024 00:12:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] media: dt-bindings: qcom,i2c-cci: Fix OV7251 'data-lanes'
- entries
-Content-Language: en-US
-To: Rob Herring <robh@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Andi Shyti <andi.shyti@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240311222605.1940826-1-robh@kernel.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240311222605.1940826-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Eva Kurchatova <nyandarknessgirl@gmail.com>
+Date: Thu, 14 Mar 2024 09:12:40 +0200
+Message-ID: <CA+eeCSPUDpUg76ZO8dszSbAGn+UHjcyv8F1J-CUPVARAzEtW9w@mail.gmail.com>
+Subject: Boot hang with SiFive PLIC when routing I2C-HID level-triggered interrupts
+To: linux-riscv <linux-riscv@lists.infradead.org>
+Cc: bugs@lists.linux.dev, linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 11/03/2024 23:26, Rob Herring wrote:
-> The OV7251 sensor only has a single data lane, so 2 entries is not valid.
-> Fix this to be 1 entry as the schema specifies.
-> 
-> The schema validation doesn't catch this currently due to some limitations
-> in handling of arrays vs. matrices, but a fix is being worked on.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+If an I2C-HID controller level-triggered IRQ line is routed directly as
+a PLIC IRQ, and we spam input early enough in kernel boot process
+(Somewhere between initializing NET, ALSA subsystems and before
+i2c-hid driver init), then there is a chance of kernel locking up
+completely and not going any further.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+There are no kernel messages printed with all the IRQ, task hang
+debugging enabled - other than (sometimes) it reports sched RT
+throttling after a few seconds. Basic timer interrupt handling is
+intact - fbdev tty cursor is still blinking.
 
-Best regards,
-Krzysztof
+It appears that in such a case the I2C-HID IRQ line is raised; PLIC
+notifies the (single) boot system hart, kernel claims the IRQ and
+immediately completes it by writing to CLAIM/COMPLETE register.
+No access to the I2C controller (OpenCores) or I2C-HID registers
+is made, so the HID report is never consumed and IRQ line stays
+raised forever. The kernel endlessly claims & completes IRQs
+without doing any work with the device. It doesn't always end up this
+way; sometimes boot process completes and there are no signs of
+interrupt storm or stuck IRQ processing afterwards.
 
+There was a suspicion this has to do with SiFive PLIC being
+not-so-explicit about level triggered interrupts. The research of this
+issue led this way: There is another DT PLIC binding; a THead one,
+and it has a flag `PLIC_QUIRK_EDGE_INTERRUPT` which allows
+to define IRQ source behavior as 2-cells in DT; and has some other
+changes to the logic (more on that below).
+When attempting to mimic a THead PLIC in kernel DT, and rewriting
+all DT interrupt sources to use 2-cell description, the hang ceases to
+happen. Curious as to what are the kernel side implications of this,
+I went to see what `PLIC_QUIRK_EDGE_INTERRUPT` actually does and
+bit-by-bit disabled the actual differences this flag makes in the
+driver logic.
+
+This return path in irq-sifive-plic.c@223
+(https://elixir.bootlin.com/linux/latest/source/drivers/irqchip/irq-sifive-plic.c#L223)
+is only enabled for SiFive PLIC, but not for THead one. Removing
+those 2 lines of code from the driver (whilst keeping the DT binding
+properly reporting a SiFive PLIC) fixes the hang. I am not an expert
+on the PLIC driver to debug further or determine what would be a
+proper fix to this, but this probably gets more experienced devs
+somewhere (I hope).
+
+This is reproducible at least from Linux 6.4.1 to Linux 6.7.9 on RVVM;
+Affects any hardware that would have SiFive PLIC + I2C-HID combination;
+Most likely this is reproducible on QEMU as well if it had i2c-hid emulation,
+or if we passthrough physical I2C-HID device & inject PLIC IRQs from
+it's IRQ line.
 
