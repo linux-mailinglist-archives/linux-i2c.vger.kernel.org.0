@@ -1,163 +1,137 @@
-Return-Path: <linux-i2c+bounces-2357-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2358-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B637687C7FA
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Mar 2024 04:33:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8630B87C9AC
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Mar 2024 09:09:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4BD81C2216E
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Mar 2024 03:33:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47E44281C0D
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Mar 2024 08:09:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D87D51D;
-	Fri, 15 Mar 2024 03:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15B6717581;
+	Fri, 15 Mar 2024 08:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gcrFCS1A"
+	dkim=pass (2048-bit key) header.d=uni-heidelberg.de header.i=@uni-heidelberg.de header.b="pX4ZOkts"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2.uni-heidelberg.de (relay2.uni-heidelberg.de [129.206.119.212])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B517C8F6D
-	for <linux-i2c@vger.kernel.org>; Fri, 15 Mar 2024 03:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B0917584
+	for <linux-i2c@vger.kernel.org>; Fri, 15 Mar 2024 08:08:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.206.119.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710473601; cv=none; b=GRqSsQP2DflKBvZA5SvkZqWVSjYZ0Fjr4sKcIqaWye4vNF2Y0UCBKSx16e009MPGC/fpuR2mwBW29qDOh3fLk71WcJPxy0HCyOy+798TRT2X+gSGuwxVajwfSRyEpvrPgLtZI8W1nkesV6tTu+9ib83mIOy5VQCT7hd9wcV+TdE=
+	t=1710490128; cv=none; b=g3LNXd0uF8fYak5SZ1W8F5YzN2q52sf1EQ2LYIPOnthO9WTR4ViqbIDY5ln01lLs92ywzq7oQ1dqpYgMTczZX9lsJBs1pO+4ArpbddIhi9hZvOuOoCtDtqBtd+a/m1jKgdwhdWc4cVQAieoCHcsmy2j7TNVmD2wn1WvsW5yvSq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710473601; c=relaxed/simple;
-	bh=p3XT5kBMyqXeFKhp5hnPEnsXzgnV5U7qU2ovO/CYlYc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 Cc:Content-Type; b=kXKCvJVuMPFU4q0s1abWjsAw+uO3wc385JJLnE5fsfg2RLQ6lTWYk5pioTnJOmht2Av+iIEr/yXPP4TcL4Jhp7ZX2yHAR7mNyZkYG1waQSc1o6H74QvTsxdcGICZp7yqkgnhvgZahmV/BNwgLU5Lh3yFo/jvPcZMaSnbgG51F74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gcrFCS1A; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2d46dd8b0b8so19446061fa.2
-        for <linux-i2c@vger.kernel.org>; Thu, 14 Mar 2024 20:33:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710473598; x=1711078398; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H32FltJCYmRuT1xpAWB9CWf2fiNQNrbCsZf2QEEHNWY=;
-        b=gcrFCS1AJ+3PYA2JiK5exOWJ67MOUtXQ8HMyQ7LIeYdX4YBccLYMhO6L+kZ8rE4bea
-         9/qZz3koHGkh1y7yMBWlgjh8UBlUP54NUlW2yBn7zc0Cy+6uUobN3MGCfDOzMNFxM9A2
-         +NPkhXdY9bf0G3d7Syd5jvAMZR9pnERDsQM/bQmyNZ+s1GYhtNGBNlSO1Qw3TuYrs15N
-         MyYlKcZeVnkpDnK2Wjlfrn6cQ2B6tB5dEEZzoLeVgaWuORnY7XX5Mnr2Al77i2ZfxnDK
-         u5lj0wrnyNZd4IZCxp212dSo7P1nxx1G6maGhyOAJUeFt2THQusXKFwi7dKFiUL4sS0l
-         772w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710473598; x=1711078398;
-        h=content-transfer-encoding:cc:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H32FltJCYmRuT1xpAWB9CWf2fiNQNrbCsZf2QEEHNWY=;
-        b=Bq58WXAahUbxeZ2STdvuNyz1G72FdH7+L5pVrE6oQBKjzEj36W4Pqxyy2dudwbv3zi
-         47T4TQEK9/HFOqMGVicUA7qk/dlV4e4b+1KjRNdD1Wa2tV/qSLyx4ffB5NqlmCgyyu99
-         FPmMn9OMysEKU5vRXWpsyW4mPKEVCUWGY19kIv9wzE4Rm3IRSJ3eImFa5k/scp1ARdw0
-         AlBFEj/Zb6GBbQt46/2FpfVo3xDUGcWxgph5XUQjMIC3fQ+zDZDp+lV/JHq5Yxw84XQT
-         9jAGUc1wnu82zefvkLcNKSXuQK9GT3Pa+2GgVQQ9Aw0XDcCR7pQKx6Rg8ysNYXb/cMju
-         +kwA==
-X-Forwarded-Encrypted: i=1; AJvYcCXjImA6Mnf02lwV5B9Tcoq02Ush2jyHBef5w6cNg29GGZLSFzOKc6tvLm9n8hAPNygD4sj7K3dUzybPwowTjxneYH06oP641b3E
-X-Gm-Message-State: AOJu0YwNMkCucVEv7c7e1ztFntrdq1uB+EXcnBy8pFNmoK+EHnGecyWF
-	s+fTXmiblBe6PaoHILs0ioObgW9NsFqxPD6bWVBq6bdHFTcxLjYdCGFS3mKvEEVTQuYCiYW0OQH
-	54Mbz2yCJINadDhJ+e7yz2SUQ6i4/GLFjjsU=
-X-Received: by 2002:a2e:91cd:0:b0:2d4:24cc:b499 with SMTP id
- u13-20020a2e91cd000000b002d424ccb499mt2098029ljg.15.1710473597737; Thu, 14
- Mar 2024 20:33:17 -0700 (PDT)
+	s=arc-20240116; t=1710490128; c=relaxed/simple;
+	bh=iOJXZuIDFX1dec7OVhw5mjBdW0VSYHpePVXQD/gwgpo=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=EGv80T1QoiSa3A+7CYK5LLoa6Kmbb7ZMzbdc/U5xYgkzy8LREbtvqdJyYUP8PyWZVtntmvBMDvWGY6xFJwWICSM7FOBjMvOeZ8RL5LbOSYI1Ob78gNEHs5Szgm3g0Oayo508kGM/mKWRH1KN44Qe5GQKn0fRXIfnZ9iQssfdcio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iwr.uni-heidelberg.de; spf=pass smtp.mailfrom=iwr.uni-heidelberg.de; dkim=pass (2048-bit key) header.d=uni-heidelberg.de header.i=@uni-heidelberg.de header.b=pX4ZOkts; arc=none smtp.client-ip=129.206.119.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iwr.uni-heidelberg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iwr.uni-heidelberg.de
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=uni-heidelberg.de; i=@uni-heidelberg.de; q=dns/txt;
+  s=s1; t=1710490124; x=1742026124;
+  h=message-id:date:mime-version:to:from:subject:
+   content-transfer-encoding;
+  bh=iOJXZuIDFX1dec7OVhw5mjBdW0VSYHpePVXQD/gwgpo=;
+  b=pX4ZOktsrprQMSWGbblyeEWknqrcRQzwRN3J0zgbDmZn1LJUZCQz2B9P
+   DISNuTjZyJzfZDbk4wejQzkWzaHzF0S5NrxrnvnIaCemFVsVcJp0KCJ4M
+   ueylIrZbNO+AyYTN0/u9rVUVJ7hbYWf1aEJItMnUopz9iawGYqftdMbWj
+   CdV/Xa72WkCE2UejfPHArBa6mh9HjhLqeC+EhpmKQS6QUL2Mj9jxKCMG6
+   b7edw82Y+G5BbRNEdI1H7fp2nQQ/Kb2u4IZVy72T5VC7mSclH5T8sHPLt
+   u3eP/D1+w3DX6Shv67X/yjkKCTdY8k3tJ1ghi5cWXzQkJBHTqst5Y38Gw
+   g==;
+X-CSE-ConnectionGUID: ylq9VxBIQhOs/FZZIaQRiQ==
+X-CSE-MsgGUID: bgDhDgTgSXG/Q1Q+EHfScg==
+X-IPAS-Result: =?us-ascii?q?A2D2BQCdAPRl/7gOzoFSCIEJgU+FFByEOJE6QZ90DwEBA?=
+ =?us-ascii?q?QEBAQEBAQgBRAQBAY0KJzcGDgECBAEBAQEDAgMBAQEBAQEBAQYBAQYBAQEBA?=
+ =?us-ascii?q?QcFgR2FeYZ4BAsBBVocAiYCXgESAgEBgnyCYJcYnDR/M4EBhHmuOYFqCQGBE?=
+ =?us-ascii?q?C6IJgGBVokRgVVEgTwOh090gw6CaASCE4M7ng0JgUqBJGsbEB43ERATDQMIb?=
+ =?us-ascii?q?h0CMToDBQMEMgoSDAsfBVQDQwZJCwMCGgUDAwSBLgUNGgIQLCYDAxJJAhAUA?=
+ =?us-ascii?q?zgDAwYDCjEwVUEMUANkHzIJPA8MGgIbFA0kIwIsPgMJChACFgMdFgQwEQkLJ?=
+ =?us-ascii?q?gMqBjYCEgwGBgZdIAcPCQQlAwgEAysnAyByEQMEGgQLB3iDPwQTRAMQgTQGi?=
+ =?us-ascii?q?hyDGAIFI4IhgSlTAxkrHUACAQttPTUGAwsbSKRnU4EklXaTLp8ANAeCNYFgg?=
+ =?us-ascii?q?VsGDJ8/BhMvl0MGkmQBmF8gqDMCBAIEBQIWgXqBfzMaJIM2UhcCD6IUdwI5A?=
+ =?us-ascii?q?gcBCgEBAwmJTAGBGwEB?=
+IronPort-Data: A9a23:LVA6CK+/SpPEJWVUJQE8DrUDSn6TJUtcMsCJ2f8bNWPcYEJGY0x3z
+ 2ccCmyEPfyPMGSnL91yOdm08UsGuMLWyNJrQQo5qH9EQiMRo6IpJ/zAcxiqb33ORiHgoOCLy
+ +1EN7Es+ehtFie0Si+Fa+Wn9T8kk/jQGtIQMcacUghpXwhoVSw9vhxqnu89k+ZAjMOwa++3k
+ YuaT/b3Zhn9hFaYDkpOs/jf8Eg24ayr0N8llgVWic5j7Qe2e0Y9Ucp3yZGZdxPQXoRSF+imc
+ OfPpJnRErTxpkpF5nuNy94XQ2VSKlLgFVHmZkl+A8BOtiN/Shkaic7XAha8hXB/0F1ll/gpo
+ DlEWAfZpQ0BZsUgk8xFO/VU/r0X0aBuoNf6zXaDXcO73knfIkX86dRXDGYteqMqyMd+OFtPz
+ KlNQNwNRkjra+OezaKwSuBqicllMc/qeYMSu31tyTvUF/lgTZ2rr6fivIUJmm1o2IYXQbCHN
+ 5ZxhTlHNXwsZzVTOlANBdQ5mPuogXfxWzxHshSIo6ty42XSwAF12rX3P5zZd7RmQO0PxxjC/
+ zqboDuR7hcyPtOzyRaKzn2XtsCIpHrCG68yGoaz+as/6LGU7jZKU0xLDgXTTeOCokGkVt1YM
+ V1S8S4jqKU06GShSd7hWxy+5nWDu3Y0RMFZUPc37gyWw7H8+A+fCS0JSDFAbtErrs4wSnoh0
+ Vrht9foAyF/9bzPQlqD+bqO6zC/Iy4YKSkFfyBscOcey8T5ssQoyx/fFo4+Vqe5yMDzGHTwz
+ jGGoSw0iq8cy8IGv0mmwbzZqyOov8n3XiQU3wXwRSWL3DFYbbefZrX9vDA38s18BIqeS1CAu
+ l0NlM6f8P0CAPmxeMqlHLhl8FaBu6ntDdHMvWODCaXN4ByB1haekW14/StsYVwsP9ZcIWKva
+ UOVpAVQoZ9ePXenaaV6eY33B8lCIUnc+TbNCK68gjlmO8YZmOq7EMdGPx74M4fFyhhErE3HE
+ c3HGftA9F5DYUmnpRLvLwvn7Zclxzol2UTYTo3hwhKs3NK2PSHMEetZaQLWP7hjsMtoRTk5F
+ f4DaaNmLD0DD4XDjtX/q+b/0HhTdiFgX8CeRzJ/L7DbSuaZJI3RI6WImuJ8ININc1V9i+HJ4
+ HynQU5EwVfjzX3KKAmHbnpucryHYHqMhSxTAMHtVH72s0UejXGHt/xCJ8VnI+R3r4SOD5dcF
+ pE4RilJOdwXIhyvxtjXRcCVQFBKHPhzuT+zAg==
+IronPort-HdrOrdr: A9a23:gbu+kayQTF4CjDkqg3TJKrPwBr1zdoMgy1knxilNoERuA6mlfr
+ OV7ZAmPH7P+U4ssR4b6LO90cW7LU80lqQFmrX5X43SPjUO0VHAROoJgLcKqAePJ8SKzI5gPN
+ BbEpSWZueeMbEwt7ec3ODxKadH/DBZytHTuQ8Op00dMD2CRZsQljtENg==
+X-Talos-CUID: 9a23:xITAKG/3hCSIjxLMkxqVv18QA5EbYlf89Xf3OAiWO1RIQYSvSGbFrQ==
+X-Talos-MUID: =?us-ascii?q?9a23=3A+QIrNg+Djdq6eVaYwRam6+KQf81nz6SCB3wCqqU?=
+ =?us-ascii?q?p/PDdDG9dGzmmhzviFw=3D=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+Received: from urz-s-ex005.ad.uni-heidelberg.de (HELO exchange.uni-heidelberg.de) ([129.206.14.184])
+  by relay2.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Mar 2024 09:08:35 +0100
+Received: from [129.206.104.130] (129.206.104.130) by
+ urz-s-ex005.ad.uni-heidelberg.de (129.206.14.184) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.37; Fri, 15 Mar 2024 09:08:36 +0100
+Message-ID: <c2aa287c-f576-4e9d-968a-7e412424a5d9@iwr.uni-heidelberg.de>
+Date: Fri, 15 Mar 2024 09:08:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+eeCSPUDpUg76ZO8dszSbAGn+UHjcyv8F1J-CUPVARAzEtW9w@mail.gmail.com>
- <20240314-sublevel-jargon-4234df3fa614@spud>
-In-Reply-To: <20240314-sublevel-jargon-4234df3fa614@spud>
-From: Eva Kurchatova <nyandarknessgirl@gmail.com>
-Date: Fri, 15 Mar 2024 05:33:06 +0200
-Message-ID: <CA+eeCSPgxB9VCyB9fmEy4A1rEynNFv34LYA1UDBNT8Po=ag28w@mail.gmail.com>
-Subject: Re: Boot hang with SiFive PLIC when routing I2C-HID level-triggered interrupts
-Cc: linux-riscv <linux-riscv@lists.infradead.org>, bugs@lists.linux.dev, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US, de-DE
+To: <gregory.clement@bootlin.com>, <wsa+renesas@sang-engineering.com>,
+	<linux-i2c@vger.kernel.org>
+From: Thore Olthoff <thore.olthoff@iwr.uni-heidelberg.de>
+Subject: [PATCH] i2c-mv46xxx driver
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: urz-s-ex004.ad.uni-heidelberg.de (129.206.14.183) To
+ urz-s-ex005.ad.uni-heidelberg.de (129.206.14.184)
 
-On Thu, Mar 14, 2024 at 11:46=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
-ote:
-> This immediately seemed odd to me, but I have no reason to disbelieve
-> you, given you say this was discovered in RVVM which is an emulator and
-> you should know whether or not registers are accessed.
-> The very first action taken by the ocores i2c controller driver when it
-> gets an interrupt though is to read a register:
->
->         u8 stat =3D oc_getreg(i2c, OCI2C_STATUS);
->
-> I would expect that this handler would be called, and therefore you'd
-> see the register read, had the probe function of that driver run to
-> completion. I'd also expect that the interrupt would not even be
-> unmasked if that probe function had failed.
-> In your case though, you can see that the interrupt is not masked,
-> since it is being raised and handled repeatedly by the PLIC driver.
-> Has the i2c controller driver probed in the period of boot that you say
-> this problem manifests?
+Fixing an inconvinience where a broken or loose connection could be only 
+found with additional equipment
+occured when working with i2c and not figuring out why a connection 
+sometimes failed even thought the cables measured alright
+enables developers to see the linestate on failure within dmesg no 
+further equipment needed
 
-There is not a single problem with the ocores I2C driver. I2C-HID device
-itself has a separate IRQ line which is level-triggered.
-This is to signal the host that there is input available without polling,
-since I2C is a master-driven bus with no "data available" notifications.
-So in reality the I2C-HID driver should handle the interrupt; Then it
-uses the I2C controller to access I2C-HID slave registers (via I2C) to
-read the incoming HID input report. I2C controller interrupts are unrelated=
-;
-it's the link between the HID device and the host and it doesn't seem
-to be touched at all inside the I2C-HID IRQ handler (So it's just a pair
-of Claim/Complete actions). I2C ocores interrupts are not generated
-(and shouldn't) at that point, because no I2C transfer was initiated at all=
-.
+Sorry if anything is improperly done. This is the first time I do this.
 
-There is a way to make I2C-HID device edge-triggered, in RVVM
-emulation code, but it's not actually spec compliant. It gets rid of the
-hang too; However the same Claim/Complete actions without any
-handling inside the IRQ handler are observed at least once, which
-technically means a lost interrupt (Pressing a key somewhere early in
-boot thus doesn't propagate the keypress to the guest until you press
-another key later, after which both HID reports are read), so it's not
-a way how I'd like to mitigate this in the emulator code.
-I, and another developer from Haiku OS team (X512), are almost sure
-this is a kernel bug related to level triggered IRQs with PLIC or a
-specific incompatibility of PLIC/I2C-HID (Not the ocores I2C controller).
 
-This hang is not reproducible with a Haiku OS guest in any way and
-most of the drivers involved seem to be FreeBSD based or written by
-X512 (Specifically the PLIC and I2C-HID drivers are). This person also
-believes that this Claim/Complete behavior on PLIC side without any
-other actions made in between is erroneous kernel behavior too.
+--- linux/drivers/i2c/busses/i2c-mv64xxx.c.orig    2024-03-15 
+08:33:07.606227057 +0100
++++ linux/drivers/i2c/busses/i2c-mv64xxx.c    2024-03-15 
+08:34:54.191439990 +0100
+@@ -582,8 +582,9 @@ mv64xxx_i2c_wait_for_completion(struct m
+              drv_data->state = MV64XXX_I2C_STATE_IDLE;
+              dev_err(&drv_data->adapter.dev,
+                  "mv64xxx: I2C bus locked, block: %d, "
+-                "time_left: %d\n", drv_data->block,
+-                (int)time_left);
++                "time_left: %d, LCR: %X\n", drv_data->block,
++                (int)time_left, (int)readl(drv_data->reg_base + 0x20));
++                /*LCR just a -> sda+scl low | 1a sda low | 2a scl low*/
+              mv64xxx_i2c_hw_init(drv_data);
+              i2c_recover_bus(&drv_data->adapter);
+          }
 
-I am open to discussions what specifically could be wrong with the VM
-since one of my end goals is to just make HID devices work without
-issues there; However if a simple 2-line patch (which I'm not entirely
-sure of it's implications) that removes return path at line 223 in PLIC
-driver resolves the issue (I kept a guest in a 24 hr reboot loop whilst
-spamming fake I2C-HID input and no hang was observed), then it does
-lead me to belief that it's at least not some blatant emulation issue.
+Signed-off-by: Thore Olthoff <thore.olthoff@iwr.uni-heidelberg.de>
 
-I came here to collect some kernel devs opinions since we are
-debugging this for some 2 weeks already. Your initial understanding
-that something is wrong with ocores I2C controller is not what I meant,
-sorry for lacking in my explanation.
-
->Are interrupts unmasked by default on RVVM?
-
-By default all PLIC ENABLE registers are set to zero. All PRIO,
-THRESHOLD registers are zero on reset. So all PLIC state is
-simply zeroed on reset, as can be seen here:
-https://github.com/LekKit/RVVM/blob/f81df57a2af77cbae25fd3cc65d07106d9505e2=
-3/src/devices/plic.c#L265
-
-> Have you checked that this actually affects any actual hardware?
-
-I might very soon if no one has immediate ideas what is wrong;
-Problem is that I don't have hardware that exposes PLIC IRQ lines to
-the user. It might be possible to use some FPGA or at least reproduce
-in other simulators.
 
