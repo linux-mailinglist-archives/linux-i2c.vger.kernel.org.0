@@ -1,148 +1,272 @@
-Return-Path: <linux-i2c+bounces-2363-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2364-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E93D87CB79
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Mar 2024 11:32:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C39E887CB8C
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Mar 2024 11:39:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECC9D282776
-	for <lists+linux-i2c@lfdr.de>; Fri, 15 Mar 2024 10:32:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1DC14B2299B
+	for <lists+linux-i2c@lfdr.de>; Fri, 15 Mar 2024 10:39:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4278A1BC37;
-	Fri, 15 Mar 2024 10:31:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5814618EB1;
+	Fri, 15 Mar 2024 10:39:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EvbZYSn6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPs6dAoi"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5561B941;
-	Fri, 15 Mar 2024 10:31:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1184118EA5;
+	Fri, 15 Mar 2024 10:39:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710498700; cv=none; b=UfAbxMbCMQZrsZEPjog8/VzQqw8I9h83U21z6mfEgC3coOATUHXUuhKHmlZIml6wAAJ0o6duboa3f29iWViawLjA5ftkxWgWsrMt/ZXW1nbGkX1EN21uacqf/ZB2uzVuoY/jwWnAEcTuOeOUjDmWsnXOYNS7gEu2NYtJUkU5lu8=
+	t=1710499144; cv=none; b=eiPsr7hgPAOptgVJ4WTJJ93srQzaI9qXk9nt0Yz3LD0kQgfuFTjrfcTyDQitqmuAMZkqh9ATI6eWcRFiMg3CLXl2Bd/rAzONB/a/QIu5iBIL8k+Z1SWjUrMD9DAh39PWTnKbATCVyahGycoUjK6EDAkM8A7Swe9NYPs+vHSXT94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710498700; c=relaxed/simple;
-	bh=lRdqpTT0gh2WtHqWtaq0VJmI8rtEhSLoMt9GWGgjokU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nt30VvA4Cx2C5nIbmlQe/5C7c7OwKLV5DIzLDI4K/anuXVHLr6LXof1EKx/9yYNuxKs7uWtAUDVphSRzA2L7FsgpNEK26Oa0L/f2eQOIm7lWhDOMfGKhkwDVEs/2fRc4fdCVaacLMZVeVaU6iVAG2m5Rbv3QMzai6QCxTu3+mFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EvbZYSn6; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-414037e9acdso1373245e9.1;
-        Fri, 15 Mar 2024 03:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710498697; x=1711103497; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CckpNQcaclBaLWHE4esIu6A7ypiEpjVfV/EelIKw3g8=;
-        b=EvbZYSn6h9lgNKXlmyPhhkg7F+jCKjeoIr/Zy3hG1+rq90r6YEiqmEDhdTP4Eo2R5+
-         U9+uCwY+EQlUyXbPc2o1ISJmhwj+AIS1C8tvIX1XbL/zr/78G3YfpGgSGkRJ0ybgYnFE
-         /qI72i8/l5UEnq2/0pMvJhhillHUBsQvZjxeEgYGBFZYKZIGFKvwRY46dGfQZnryxYjJ
-         gqZxYIuBGKfBswe8xt+sHk6s1uuPVwScG2xdl2hc5/P3AmOniujkBwJ7Wys8FXFJcfgu
-         pI/6uPSQ/bGWOaKGlDexQ7+MDGdzAA2hjKl5XzRsYhjcclGvuWYvIZFz8BNqprMjVKVm
-         s0Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710498697; x=1711103497;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CckpNQcaclBaLWHE4esIu6A7ypiEpjVfV/EelIKw3g8=;
-        b=AkcpaVN2VHQ6SDhBbvaJUWZ0XkieDTlx2iW18UZNymsmzddq8pb1zMHdD4a210DXJa
-         ZgbIHSO08xH0TEAR42hHmNuQvqxcO4zY5B8Rabx/PZ+FFIvZam+u6aJrCMbVt4z9ZZc7
-         4hlvg6IC0UG0fdkOR+qyB/C3d7pIgipVglOa/3a0ouLIrAWg928RuNPDNnf4kRYitEtp
-         +8V/WnICTEHRyclqm3LDNS0atqntWUixSmxLqY/I5Rt9IJtR6oM9vYFO8egjj2Ika5Pe
-         tDYbLJwnHHonHRIH3VLYXgk0FgVjvgb90XGrNRS+FZZmL6mAPCICG08CdBsXiHwVWuSZ
-         CXsg==
-X-Forwarded-Encrypted: i=1; AJvYcCXU3s80mGSpF6wXlbha6BLTNf5OEvkOP2ObsdAHJetNFN7tnN3ndGQNNlbRCuFM8Ffy+fIJEnT7EqIrFbfDL5b4KK0ukqiLrr1SUD5XYtOCgrM1zn2uKf74PjXRnrh1irv0NftGzbHRkYNOBXbdvVgkiKHL9njnATVhWIfoQIOMcc7P5Q==
-X-Gm-Message-State: AOJu0Yy+7fxwgG9igEUD54VcjLOg1TO9iG7QBNrfPQNKBWNAfw2VQKiW
-	44e27ut1cVmQ4tdwTFZBIr3+CDo/3cfNs8kcOC9TurdV1qBiqQed
-X-Google-Smtp-Source: AGHT+IGHdpZ3MrSAR8C+LtQYj0s4PZhbJXP8cthDm4G5cDLoC6N21cKw5gg26nHFO/y1GLUSHk5d8A==
-X-Received: by 2002:a05:600c:5187:b0:413:f1d7:ee09 with SMTP id fa7-20020a05600c518700b00413f1d7ee09mr4194825wmb.15.1710498696399;
-        Fri, 15 Mar 2024 03:31:36 -0700 (PDT)
-Received: from prasmi.home ([2a00:23c8:2500:a01:ae92:6adf:5cb6:274c])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05600c4f1300b004130378fb77sm8676549wmq.6.2024.03.15.03.31.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Mar 2024 03:31:34 -0700 (PDT)
-From: Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
-	Chris Brandt <chris.brandt@renesas.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 4/4] i2c: riic: Add support for R9A09G057 SoC
-Date: Fri, 15 Mar 2024 10:30:33 +0000
-Message-Id: <20240315103033.141226-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240315103033.141226-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20240315103033.141226-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	s=arc-20240116; t=1710499144; c=relaxed/simple;
+	bh=MBQse9dmC+iGixt2PNzSLK1zBPbCDEJTv1HX2QRB35o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=l/sx6eL/4PrSR8eHEMOCE8XEjDUyELBZV10ijpKrzJMSapTW7SxFWYoBgMtr9XDaDt621xt6LEN8mXfUxQJWE5o8uyRxzhF/YhsSDF7oOMjh2t706uXw12DnyISFBDUqjdFuo8fEIscyrNZRpVMIo8MeRLpIgVbKCfgjsMZ4DOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPs6dAoi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F39D8C433C7;
+	Fri, 15 Mar 2024 10:39:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710499143;
+	bh=MBQse9dmC+iGixt2PNzSLK1zBPbCDEJTv1HX2QRB35o=;
+	h=Date:From:To:Cc:Subject:From;
+	b=hPs6dAoipiUjbDq3hLX2som3R3tgem+FLmNTz/1JDGKmZc6R+x+rCmiuX9keTiLJ+
+	 qwMrmk2K6g+i7lAN/Aycmc5ql9+X40IF0fYEvSOOMexWe44ypGnBOK6/o4KTrRkP6O
+	 ZwkvQiOxJ8Kux5ZMGlcuriQep3XROYICq6r5LekEueXPxOtl2PDd7YCMsvFTyQbqQA
+	 Sh4FfTCSFXtseTUbitAL30tei/L8sLx5aG8ffBtqcHkrXlktgWZITdSJZWa5S7E78A
+	 063bWXqtUh80oxMKSgvpnblyiB5FGDXcdZyF2oA/5cauIqqEi+W/SjNpkaT6M1P2Kc
+	 r3iACYVeNcHJQ==
+Date: Fri, 15 Mar 2024 11:39:00 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: [PULL REQUEST] i2c-for-6.9-rc1
+Message-ID: <ZfQlREW9HGwKqvLE@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="lt3MCLn0VjeNbNWF"
+Content-Disposition: inline
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Extend the RIIC driver to support the RZ/V2H(P) ("R9A09G057") SoC. It
-accomplishes this by appending the compatible string list and passing
-the RZ/V2H-specific OF data.
+--lt3MCLn0VjeNbNWF
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v1->v2
-- Dropped setting family
----
- drivers/i2c/busses/i2c-riic.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+The following changes since commit b401b621758e46812da61fa58a67c3fd8d91de0d:
 
-diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index 3ae2d5c2f85a..861b244d5118 100644
---- a/drivers/i2c/busses/i2c-riic.c
-+++ b/drivers/i2c/busses/i2c-riic.c
-@@ -523,8 +523,25 @@ static const struct riic_of_data riic_rz_a_info = {
- 	},
- };
- 
-+static const struct riic_of_data riic_rz_v2h_info = {
-+	.regs = {
-+		[RIIC_ICCR1] = 0x00,
-+		[RIIC_ICCR2] = 0x01,
-+		[RIIC_ICMR1] = 0x02,
-+		[RIIC_ICMR3] = 0x04,
-+		[RIIC_ICSER] = 0x06,
-+		[RIIC_ICIER] = 0x07,
-+		[RIIC_ICSR2] = 0x09,
-+		[RIIC_ICBRL] = 0x10,
-+		[RIIC_ICBRH] = 0x11,
-+		[RIIC_ICDRT] = 0x12,
-+		[RIIC_ICDRR] = 0x13,
-+	},
-+};
-+
- static const struct of_device_id riic_i2c_dt_ids[] = {
- 	{ .compatible = "renesas,riic-rz", .data = &riic_rz_a_info },
-+	{ .compatible = "renesas,riic-r9a09g057", .data = &riic_rz_v2h_info },
- 	{ /* Sentinel */ },
- };
- 
--- 
-2.34.1
+  Linux 6.8-rc5 (2024-02-18 12:56:25 -0800)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-=
+6.9-rc1
+
+for you to fetch changes up to 91962feb9502bb98f830d90fe197653e6f4e84a4:
+
+  Merge tag 'i2c-host-6.9' of git://git.kernel.org/pub/scm/linux/kernel/git=
+/andi.shyti/linux into i2c/for-mergewindow (2024-03-12 08:56:06 +0100)
+
+----------------------------------------------------------------
+Minor changes to the I2C core. Most changes are in the drivers section
+and are described by Andi in the merge commit
+
+----------------------------------------------------------------
+Carlos Song (1):
+      i2c: imx-lpi2c: add generic GPIO recovery for LPI2C
+
+Devyn Liu (2):
+      i2c: hisi: Optimized the value setting of maxwrite limit to fifo dept=
+h - 1
+      i2c: hisi: Add clearing tx aempty interrupt operation
+
+Esben Haabendal (1):
+      i2c: imx: move to generic GPIO recovery
+
+Geert Uytterhoeven (3):
+      i2c: sh_mobile: Switch R-Mobile A1/APE6 and SH-Mobile AG5 to new freq=
+uency calculation
+      dt-bindings: i2c: renesas,rcar-i2c: Add r8a779h0 support
+      i2c: rcar: Prepare for the advent of ARCH_RCAR_GEN4
+
+Heiner Kallweit (9):
+      i2c: i801: Replace magic value with constant in dmi_check_onboard_dev=
+ices
+      i2c: i801: Remove unused argument from tco functions
+      i2c: i801: Define FEATURES_ICH5 as an extension of FEATURES_ICH4
+      i2c: i801: Add helper i801_check_and_clear_pec_error
+      i2c: i801: Split i801_block_transaction
+      i2c: i801: Add SMBUS_LEN_SENTINEL
+      i2c: i801: Add helper i801_get_block_len
+      i2c: smbus: Prepare i2c_register_spd for usage on muxed segments
+      Documentation: i2c: Document that client auto-detection is a legacy m=
+echanism
+
+Hsin-Yu.Chen (1):
+      i2c: remove redundant condition
+
+Jarkko Nikula (6):
+      i2c: designware: Uniform initialization flow for polling mode
+      i2c: designware: Do not enable interrupts shortly in polling mode
+      i2c: designware: Use accessors to DW_IC_INTR_MASK register
+      i2c: designware: Move interrupt handling functions before i2c_dw_xfer=
+()
+      i2c: designware: Fix RX FIFO depth define on Wangxun 10Gb NIC
+      i2c: designware: Implement generic polling mode code for Wangxun 10Gb=
+ NIC
+
+Ji Sheng Teoh (1):
+      i2c: cadence: Add system suspend and resume PM support
+
+Patrick Rudolph (2):
+      dt-bindings: i2c: pca954x: Add custom properties for MAX7357
+      i2c: muxes: pca954x: Enable features on MAX7357
+
+Peng Fan (1):
+      dt-bindings: i2c: imx-lpi2c: add i.MX95 LPI2C
+
+Rand Deeb (1):
+      i2c: Remove redundant comparison in npcm_i2c_reg_slave
+
+Ricardo B. Marliere (1):
+      i2c: constify the struct device_type usage
+
+Uwe Kleine-K=C3=B6nig (1):
+      i2c: sprd: Convert to platform remove callback returning void
+
+Varshini Rajendran (1):
+      dt-bindings: i2c: at91: Add sam9x7 compatible string
+
+Wolfram Sang (4):
+      dt-bindings: i2c: mpc: use proper binding for transfer timeouts
+      i2c: mpc: use proper binding for transfer timeouts
+      i2c: mpc: remove outdated macro
+      Merge tag 'i2c-host-6.9' of git://git.kernel.org/pub/scm/linux/kernel=
+/git/andi.shyti/linux into i2c/for-mergewindow
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andi Shyti (12):
+      (Rev.) i2c: remove redundant condition
+      (Rev.) i2c: cadence: Add system suspend and resume PM support
+      (Rev.) i2c: i801: Add helper i801_get_block_len
+      (Rev.) i2c: i801: Add SMBUS_LEN_SENTINEL
+      (Rev.) i2c: i801: Split i801_block_transaction
+      (Rev.) i2c: i801: Add helper i801_check_and_clear_pec_error
+      (Rev.) i2c: i801: Define FEATURES_ICH5 as an extension of FEATURES_IC=
+H4
+      (Rev.) i2c: hisi: Add clearing tx aempty interrupt operation
+      (Rev.) i2c: hisi: Optimized the value setting of maxwrite limit to fi=
+fo depth - 1
+      (Rev.) i2c: i801: Remove unused argument from tco functions
+      (Rev.) i2c: i801: Replace magic value with constant in dmi_check_onbo=
+ard_devices
+      (Rev.) i2c: muxes: pca954x: Enable features on MAX7357
+
+Chris Packham (6):
+      (Rev.) i2c: mpc: remove outdated macro
+      (Test) i2c: mpc: remove outdated macro
+      (Rev.) i2c: mpc: use proper binding for transfer timeouts
+      (Test) i2c: mpc: use proper binding for transfer timeouts
+      (Rev.) dt-bindings: i2c: mpc: use proper binding for transfer timeouts
+      (Test) dt-bindings: i2c: mpc: use proper binding for transfer timeouts
+
+Clark Wang (1):
+      (Rev.) i2c: imx-lpi2c: add generic GPIO recovery for LPI2C
+
+Dong Aisheng (1):
+      (Rev.) i2c: imx-lpi2c: add generic GPIO recovery for LPI2C
+
+Jiawen Wu (6):
+      (Test) i2c: designware: Implement generic polling mode code for Wangx=
+un 10Gb NIC
+      (Test) i2c: designware: Fix RX FIFO depth define on Wangxun 10Gb NIC
+      (Test) i2c: designware: Move interrupt handling functions before i2c_=
+dw_xfer()
+      (Test) i2c: designware: Use accessors to DW_IC_INTR_MASK register
+      (Test) i2c: designware: Do not enable interrupts shortly in polling m=
+ode
+      (Test) i2c: designware: Uniform initialization flow for polling mode
+
+Rob Herring (1):
+      (Rev.) dt-bindings: i2c: pca954x: Add custom properties for MAX7357
+
+Wolfram Sang (3):
+      (Rev.) i2c: rcar: Prepare for the advent of ARCH_RCAR_GEN4
+      (Rev.) i2c: Remove redundant comparison in npcm_i2c_reg_slave
+      (Rev.) i2c: sh_mobile: Switch R-Mobile A1/APE6 and SH-Mobile AG5 to n=
+ew frequency calculation
+
+Yicong Yang (2):
+      (Rev.) i2c: hisi: Add clearing tx aempty interrupt operation
+      (Rev.) i2c: hisi: Optimized the value setting of maxwrite limit to fi=
+fo depth - 1
+
+ .../devicetree/bindings/i2c/atmel,at91sam-i2c.yaml |   4 +-
+ .../devicetree/bindings/i2c/i2c-imx-lpi2c.yaml     |   1 +
+ Documentation/devicetree/bindings/i2c/i2c-mpc.yaml |   2 +-
+ .../devicetree/bindings/i2c/i2c-mux-pca954x.yaml   |  30 ++
+ .../devicetree/bindings/i2c/renesas,rcar-i2c.yaml  |   1 +
+ Documentation/i2c/writing-clients.rst              |  32 +-
+ drivers/i2c/busses/Kconfig                         |   2 +-
+ drivers/i2c/busses/i2c-cadence.c                   |  33 ++
+ drivers/i2c/busses/i2c-designware-common.c         |   2 +-
+ drivers/i2c/busses/i2c-designware-core.h           |  23 +-
+ drivers/i2c/busses/i2c-designware-master.c         | 424 +++++++++--------=
+----
+ drivers/i2c/busses/i2c-designware-pcidrv.c         |   2 +-
+ drivers/i2c/busses/i2c-designware-platdrv.c        |   2 +-
+ drivers/i2c/busses/i2c-hisi.c                      |  13 +-
+ drivers/i2c/busses/i2c-i801.c                      | 224 +++++------
+ drivers/i2c/busses/i2c-imx-lpi2c.c                 |  27 ++
+ drivers/i2c/busses/i2c-imx.c                       |  62 +--
+ drivers/i2c/busses/i2c-mpc.c                       |  16 +-
+ drivers/i2c/busses/i2c-npcm7xx.c                   |   3 -
+ drivers/i2c/busses/i2c-sh_mobile.c                 |  27 +-
+ drivers/i2c/busses/i2c-sprd.c                      |   6 +-
+ drivers/i2c/i2c-core-base.c                        |   4 +-
+ drivers/i2c/i2c-smbus.c                            |  19 +-
+ drivers/i2c/muxes/i2c-mux-pca954x.c                |  43 ++-
+ include/linux/i2c.h                                |   6 +-
+ 25 files changed, 522 insertions(+), 486 deletions(-)
+
+--lt3MCLn0VjeNbNWF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmX0JUQACgkQFA3kzBSg
+KbZj+Q//ZljpeVeJF8U0UxHMaCQEb9GjPFPk0H2yu2ndoXNXNHSSINBFsRsLI9k6
+eAc/5BbsefLUEdfINca9OSlMZt4t6S4dkt/3JTaX6LxsAXvZPmTTjSmqBH2kaQ/k
++SCQLUxQvFuJgvjp7KA5TOzdMJatKmrekfeM1jnWNLnd5gQN9ayiq4qX75lGQguF
+5qHDi0lILJ+XuZh5TDXMAec/T3cpcDcT73RGWUscQY3teNBULw3hGuOEPDzQvKlg
+VrCJNcK+uO1agM3XD6RnNnisu4RIUQbAOTytddYdOqWjBm9K5ndbG66gbPGgQGZH
+iDZOjaWmb/ECVNuKDWtmB2isrxPmDvpAYLYOsCrTtgTvNVKHeztmSKqmmwI0my54
+WAkd3lSKf9O6ZKHq/6mbo3mJyUcRzADWDaYTh8ygO2Fjv9XBth7wAhlHbvKp3Eg0
+kqWx1iPpHzPlNFORlQteIKmeaiLqR7b+ovXR/MB0Xl7X1t4P72GNK6G/7OosgQ75
+W6Q++B/kIvlsaextGzUmaTNW2EgS0BnnezPVxrI774eApJQOsDuXJNudTA0g5YJn
+Rs4x9zdAeKIEw4DWZyntOAIyD9DIZMiVktj5ELPUpWR1q+bqfnzbvMHHtYMrTu6Q
+BhkQVadKO7I/H/0oOwDvh1EZ0WUP1cAW+eoOQEWCAzlWU8Od1kE=
+=SOaT
+-----END PGP SIGNATURE-----
+
+--lt3MCLn0VjeNbNWF--
 
