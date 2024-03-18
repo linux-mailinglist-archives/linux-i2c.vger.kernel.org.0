@@ -1,162 +1,138 @@
-Return-Path: <linux-i2c+bounces-2376-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2377-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79F1A87E055
-	for <lists+linux-i2c@lfdr.de>; Sun, 17 Mar 2024 22:27:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 261A687E4E8
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Mar 2024 09:25:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 362F3281D9C
-	for <lists+linux-i2c@lfdr.de>; Sun, 17 Mar 2024 21:27:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E4981C21266
+	for <lists+linux-i2c@lfdr.de>; Mon, 18 Mar 2024 08:25:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B400208B4;
-	Sun, 17 Mar 2024 21:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1fNVmtkO";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SylwjTSs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3194025763;
+	Mon, 18 Mar 2024 08:25:16 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7EE20B0E;
-	Sun, 17 Mar 2024 21:27:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id E98FF25760
+	for <linux-i2c@vger.kernel.org>; Mon, 18 Mar 2024 08:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710710850; cv=none; b=oGvhg9gnzni1/RWcCOGfRvnZ65+lL/ZNOJYi+hvM0uDKUpPna6YAk6WgjIn8lWfZ2MBx/3FbOzx5vbwqyEzlR/CcnXrApiAfcI9f+2I5+pEBQ8P03vWmeEofRaiqJII/gg5T7Fpp2LaJwHP3vdErvNBKrEyYM3ijmu6VhA2L7tU=
+	t=1710750316; cv=none; b=W1dRVOdFbQxnsLHdlHo3FzP/z8+7nyJ6Twa554vIFnyPXilUWxqvqy1j+JVryN2Au7l9YWRY5ulDXEWP7xzcjKIXumSv/bGQOdUHZiM5jq6v2AsOTxEG1dQwH541cVjmrtz1BQ7+S0JSpJHfpADld6Ez/h63QhUH11TvufcwKRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710710850; c=relaxed/simple;
-	bh=r1A5i7RbsqOv08lAHnRoEkHu4xFVjK0PL6GJ6TPUP4g=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ezoyAcm4esyaqlUMM8uEtkeGlXvspVsECHXWU8dF6CCkYrOgt5sc2LQlHs+y1xAJuwDcFX4n7V6WBG+71TVcynUM6Oi1Qw14MaABYiWd8sqlnQYF5jS9JeyQ4l5M7q6ldAetx/vhVZvHfifQZpmXbDuWYoeKFYD/uBNMwDS8bPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1fNVmtkO; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SylwjTSs; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Sun, 17 Mar 2024 22:27:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1710710841;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3srrq43UiauzyNmV0S4k/pQ0+n44cbViGcHlmEyhFec=;
-	b=1fNVmtkODQCyt/lLuw8N+h0zm9GlRxTrwdCdxVYqb0U61pUF+sSwuEpypKO9P5v6SxPboT
-	F/UM87VVCz4tp1gxAH+xHT9mxvwzX/bw1BiLnk1tX+fl6FQ8UGe1hH3YJaR2vZIEBAuj2h
-	ej6eAmtwLZr31q/Aq7Nz7rJDI5EdONmSNSdVXhZnQDbvXa4r+5/TIh5A1F0yo+aNX1+7xe
-	HWqK59rrfupWFrxBGbVA3mUhrks5kaGIEpEAdTqoAzofwv5NbVQFuS4tejEyTTKkDn3Nqq
-	ilemSoMXJBAPOsCMWEj3CN+0sPjuWnkv+5PbUet5upLzYFVXbN+JORTcIyi8QQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1710710841;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3srrq43UiauzyNmV0S4k/pQ0+n44cbViGcHlmEyhFec=;
-	b=SylwjTSsGZaa+c23HhGRyB4sQnKHpj5LUrtHGIBxrFtqZWnK0ugZz2u31upBqdXswNlDOi
-	Z9nDIgvsqHsLJmCg==
-From: Nam Cao <namcao@linutronix.de>
-To: Eva Kurchatova <nyandarknessgirl@gmail.com>
-Cc: linux-riscv <linux-riscv@lists.infradead.org>, bugs@lists.linux.dev,
- linux-i2c@vger.kernel.org, jikos@kernel.org, benjamin.tissoires@redhat.com,
- dianders@chromium.org, mripard@kernel.org, johan+linaro@kernel.org,
- linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Boot hang with SiFive PLIC when routing I2C-HID level-triggered
- interrupts
-Message-ID: <20240317222718.3e03edb1@namcao>
-In-Reply-To: <CA+eeCSPUDpUg76ZO8dszSbAGn+UHjcyv8F1J-CUPVARAzEtW9w@mail.gmail.com>
-References: <CA+eeCSPUDpUg76ZO8dszSbAGn+UHjcyv8F1J-CUPVARAzEtW9w@mail.gmail.com>
+	s=arc-20240116; t=1710750316; c=relaxed/simple;
+	bh=6/3tgV5J0EzLZ2B37cjyii0yXv4uYYTBe3ejNESm2A4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OMuDHhFEFjtvd8P5SshTvnffSB/2rZyUe96q37SxDkn51f/vn/6MUHfXsYZM7UqmmACwUDNPo3+IDPCq2jtfRGjqeWF1q27C0sz479RQ19IkfwCMPrjALb/5xV7RQgIuL3dZ2HFXExAW01Ne4jRHmSd+eXOB6XgzlIOCr2ThBMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from localhost.localdomain (unknown [103.163.180.2])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 7E03F602A8719;
+	Mon, 18 Mar 2024 16:24:56 +0800 (CST)
+X-MD-Sfrom: youwan@nfschina.com
+X-MD-SrcIP: 103.163.180.2
+From: Youwan Wang <youwan@nfschina.com>
+To: jarkko.nikula@linux.intel.com
+Cc: andriy.shevchenko@linux.intel.com,
+	mika.westerberg@linux.intel.com,
+	jsd@semihalf.com,
+	andi.shyti@kernel.org,
+	linux-i2c@vger.kernel.org,
+	Youwan Wang <youwan@nfschina.com>
+Subject: [PATCH] i2c: Add msgs is NULL check
+Date: Mon, 18 Mar 2024 16:24:46 +0800
+Message-Id: <20240318082446.459759-1-youwan@nfschina.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Cc: HID folks
+fix crash because of null pointers
 
-On 14/Mar/2024 Eva Kurchatova wrote:
-> If an I2C-HID controller level-triggered IRQ line is routed directly as
-> a PLIC IRQ, and we spam input early enough in kernel boot process
-> (Somewhere between initializing NET, ALSA subsystems and before
-> i2c-hid driver init), then there is a chance of kernel locking up
-> completely and not going any further.
-> 
-> There are no kernel messages printed with all the IRQ, task hang
-> debugging enabled - other than (sometimes) it reports sched RT
-> throttling after a few seconds. Basic timer interrupt handling is
-> intact - fbdev tty cursor is still blinking.
-> 
-> It appears that in such a case the I2C-HID IRQ line is raised; PLIC
-> notifies the (single) boot system hart, kernel claims the IRQ and
-> immediately completes it by writing to CLAIM/COMPLETE register.
-> No access to the I2C controller (OpenCores) or I2C-HID registers
-> is made, so the HID report is never consumed and IRQ line stays
-> raised forever. The kernel endlessly claims & completes IRQs
-> without doing any work with the device. It doesn't always end up this
-> way; sometimes boot process completes and there are no signs of
-> interrupt storm or stuck IRQ processing afterwards.
+[  190.538113] kernel NULL pointer dereference at virtual address 0000000000000000
+[  190.538115] Mem abort info:
+[  190.538116]   ESR = 0x96000004
+[  190.538118]   Exception class = DABT (current EL), IL = 32 bits
+[  190.538119]   SET = 0, FnV = 0
+[  190.538120]   EA = 0, S1PTW = 0
+[  190.538121] Data abort info:
+[  190.538122]   ISV = 0, ISS = 0x00000004
+[  190.538123]   CM = 0, WnR = 0
+[  190.538125] user pgtable: 4k pages, 48-bit VAs, pgdp = 00000000cf937cf2
+[  190.538126] [0000000000000000] pgd=0000000000000000
+[  190.538129] Internal error: Oops: 96000004 [#1] SMP
+[  190.538172] Process swapper/0 (pid: 0, stack limit = 0x000000000179ba77)
+[  190.538175] CPU: 0 PID: 0 Comm: swapper/0 Kdump: loaded Tainted: G
+[  190.538178] pstate: 40000085 (nZcv daIf -PAN -UAO)
+[  190.538183] pc : i2c_dw_isr+0x2e4/0x614 [i2c_designware_core]
+[  190.538185] lr : i2c_dw_isr+0x9c/0x614 [i2c_designware_core]
+[  190.538186] sp : ffff000008003e40
+[  190.538187] x29: ffff000008003e40 x28: ffffd9cfad997200
+[  190.538189] x27: ffff5f18a4f2c018 x26: 0000000000000000
+[  190.538191] x25: ffff5f18a52d9fe8 x24: 0000000000000010
+[  190.538193] x23: 0000000000000000 x22: 0000000000000000
+[  190.538194] x21: 0000000000000510 x20: 0000000000000000
+[  190.538196] x19: ffffd9cfa08d6080 x18: 00000000fffffffe
+[  190.538197] x17: 0000000000000000 x16: 0000000000000000
+[  190.538199] x15: 0000000000000000 x14: 0000000000000000
+[  190.538200] x13: 0000000000000000 x12: 000000000000028d
+[  190.538202] x11: 0000000000000040 x10: ffff5f18a52fe340
+[  190.538203] x9 : ffffd9cfaf4a28f0 x8 : 0000000000000000
+[  190.538205] x7 : ffffd9cfaf401b88 x6 : ffffd9cfaf401b60
+[  190.538206] x5 : 0000000000000000 x4 : 0000000000000000
+[  190.538208] x3 : 0000000000000000 x2 : ffff000008125000
+[  190.538209] x1 : 0000000000000000 x0 : 0000000000000000
+[  190.538211] Call trace:
+[  190.538213]  i2c_dw_isr+0x2e4/0x614 [i2c_designware_core]
+[  190.538218]  __handle_irq_event_percpu+0x68/0x230
+[  190.538219]  handle_irq_event+0x6c/0x130
+[  190.538222]  handle_fasteoi_irq+0xc0/0x220
+[  190.538223]  __handle_domain_irq+0x80/0xe0
+[  190.538226]  gic_handle_irq+0x84/0x188
+[  190.538227]  el1_irq+0xb0/0x140
+[  190.538229]  arch_cpu_idle+0x38/0x1c0
+[  190.538232]  do_idle+0x238/0x2a4
+[  190.538234]  cpu_startup_entry+0x2c/0x50
+[  190.538237]  rest_init+0xbc/0xc8
+[  190.538240]  start_kernel+0x4a8/0x4dc
+[  190.538242] Code: 937c7c80 b940727a 8b0002c1 f9403e77 (78606ac0)
+[  190.538248] SMP: stopping secondary CPUs
+[  190.538400] Starting crashdump kernel...
+[  190.538406] Bye!
 
-It seems I2C HID's interrupt handler (i2c_hid_irq) returns immediately if
-I2C_HID_READ_PENDING is set. This flag is supposed to be cleared in
-i2c_hid_xfer(), but since the (threaded) interrupt handler runs at higher
-priority, the flag is never cleared. So we have a lock-up: interrupt
-handler won't do anything unless the flag is cleared, but the clearing of
-this flag is done in a lower priority task which never gets scheduled while
-the interrupt handler is active.
+Signed-off-by: Youwan Wang <youwan@nfschina.com>
+---
+ drivers/i2c/busses/i2c-designware-master.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-There is RT throttling to prevent RT tasks from locking up the system like
-this. I don't know much about scheduling stuffs, so I am not really sure
-why RT throttling does not work. I think because RT throttling triggers
-when RT tasks take too much CPU time, but in this case hard interrupt
-handlers take lots of CPU time too (~50% according to my measurement), so
-RT throttling doesn't trigger often enough (in this case, it triggers once
-and never again). Again, I don't know much about scheduler so I may be
-talking nonsense here.
-
-The flag I2C_HID_READ_PENDING seems to be used to make sure that only 1
-I2C operation can happen at a time. But this seems pointless, because I2C
-subsystem already takes care of this. So I think we can just remove it.
-
-Can you give the below patch a try?
-
-diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
-index 2735cd585af0..799ad0ef9c4a 100644
---- a/drivers/hid/i2c-hid/i2c-hid-core.c
-+++ b/drivers/hid/i2c-hid/i2c-hid-core.c
-@@ -64,7 +64,6 @@
- /* flags */
- #define I2C_HID_STARTED		0
- #define I2C_HID_RESET_PENDING	1
--#define I2C_HID_READ_PENDING	2
+diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
+index ca1035e010c7..849e8a3e85ed 100644
+--- a/drivers/i2c/busses/i2c-designware-master.c
++++ b/drivers/i2c/busses/i2c-designware-master.c
+@@ -429,12 +429,17 @@ i2c_dw_xfer_msg(struct dw_i2c_dev *dev)
+ 	struct i2c_msg *msgs = dev->msgs;
+ 	u32 intr_mask;
+ 	int tx_limit, rx_limit;
+-	u32 addr = msgs[dev->msg_write_idx].addr;
++	u32 addr;
+ 	u32 buf_len = dev->tx_buf_len;
+ 	u8 *buf = dev->tx_buf;
+ 	bool need_restart = false;
+ 	unsigned int flr;
  
- #define I2C_HID_PWR_ON		0x00
- #define I2C_HID_PWR_SLEEP	0x01
-@@ -190,15 +189,10 @@ static int i2c_hid_xfer(struct i2c_hid *ihid,
- 		msgs[n].len = recv_len;
- 		msgs[n].buf = recv_buf;
- 		n++;
--
--		set_bit(I2C_HID_READ_PENDING, &ihid->flags);
- 	}
++	if (WARN_ON(!msgs))
++		return;
++
++	addr = msgs[dev->msg_write_idx].addr;
++
+ 	intr_mask = DW_IC_INTR_MASTER_MASK;
  
- 	ret = i2c_transfer(client->adapter, msgs, n);
- 
--	if (recv_len)
--		clear_bit(I2C_HID_READ_PENDING, &ihid->flags);
--
- 	if (ret != n)
- 		return ret < 0 ? ret : -EIO;
- 
-@@ -566,9 +560,6 @@ static irqreturn_t i2c_hid_irq(int irq, void *dev_id)
- {
- 	struct i2c_hid *ihid = dev_id;
- 
--	if (test_bit(I2C_HID_READ_PENDING, &ihid->flags))
--		return IRQ_HANDLED;
--
- 	i2c_hid_get_input(ihid);
- 
- 	return IRQ_HANDLED;
+ 	for (; dev->msg_write_idx < dev->msgs_num; dev->msg_write_idx++) {
+-- 
+2.25.1
+
 
