@@ -1,195 +1,365 @@
-Return-Path: <linux-i2c+bounces-2432-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2433-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15C7C880AB7
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 06:36:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5097E880AB9
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 06:36:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98E401F22DCB
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 05:36:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59B8A1C20F99
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 05:36:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23DF91EB22;
-	Wed, 20 Mar 2024 05:35:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C09423770;
+	Wed, 20 Mar 2024 05:35:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DsRYkQ8J"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIqJiztV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579FE1DFC6;
-	Wed, 20 Mar 2024 05:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399A020DE5;
+	Wed, 20 Mar 2024 05:35:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710912930; cv=none; b=YLsDBdcDfF+CIVvIqNlj/RNE9OssBS9CVQiq6i9ivc+iKsmcxRreH/VGaaLXI4KxHeqGBwYHc/QbJO4mKO4TBmsvJx4kWoThr2YT7bAOEC6EJNRB4XRw+DVIlT2tXlgaa0p5wA9P8ql7h1f0wPOSSjUDGe43lgnq9fRk0ULra+w=
+	t=1710912933; cv=none; b=RwU4oscJWczlgm7lyfsL1jHe3ge1OxC0kdxM7RJAOcyESfg04Am6cPTW1YnugqRBFtKeDGzzXDCZWBNPAZt9N7xJqayAfpq4zXpUfKq6pWEA8q/Vz0sySf22JYfMA5WEGTkUF2CeAAMQkjfHQbRegsD8iTRu9R+eue/5ULLTNNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710912930; c=relaxed/simple;
-	bh=8+XRLv4yspwrSxXIBKsMaAahMv/pc1nzpXoHyOWLr6E=;
-	h=Message-ID:From:To:Cc:Date:Subject; b=ow4N9lneAfl0kk2fhg2Dt0yg4AT05jEgPc/feNtYFP3RExUxWRnapP28qmXPG1SBYy6hBu1uyWweDIl8WWEa2ZsllZfLw8FWTcNtc2VU2Jga2hT6nA7kDGXcMt2044wUKqI982+d04S5BwJPe5lnlIeqcE1m4ttc3033/ukTgjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DsRYkQ8J; arc=none smtp.client-ip=209.85.166.51
+	s=arc-20240116; t=1710912933; c=relaxed/simple;
+	bh=acjNLx8citQNYv7hc9P0dJeaGWmIbEhzPE1To+eghJk=;
+	h=Message-ID:From:To:Cc:Date:Subject; b=Z/ZjAKWqB9z3+BzrFgVUrsz0V3J6PElb9BcPHLcUV8qdthJTJ/TyY+nmNQfGK0f2iwvNMveEHdyeF/T8u3sZ1EGU1QylME5OMQ+wTwDg030Agow/UZVL9vbStYD+RCQy+DuKpw0rQaQctU3E+pSRVg8MBpjdMPfBKcdxOZkAtcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIqJiztV; arc=none smtp.client-ip=209.85.166.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-7cc864215caso79707039f.3;
-        Tue, 19 Mar 2024 22:35:29 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7c8060a8489so138882939f.0;
+        Tue, 19 Mar 2024 22:35:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710912928; x=1711517728; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710912930; x=1711517730; darn=vger.kernel.org;
         h=subject:date:cc:to:from:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IkJly6CToglvrrSNNJ0loQzOxfua+P4wReRnQggto/w=;
-        b=DsRYkQ8Jnam5lUM6cH3WXUfS7osc1aL5BeJtcEPTUWG4/qC7zB/QsUbnYBx7fepvzj
-         xVGqUDvIFZ7YsIM49iGUksoEnSfDwUx1oiKK44qhONFYOIRSlgqtEiK/4oD2bXUbu7I4
-         mM5EJdbh3GMAB1B2C/CmYJcXulZIEYU37Z6uFufwJS4k4S9H2PpzvRdEpJNFCZrF4BbS
-         +eBzdKake6zocWs4HR/A7Qticd4C/4vE9oeYKAutKzv0b9cvEzoVNIGgMsZfrXCZOiVT
-         yutH+Db830j/mCIB9xr71suYPm23hoF7Bp0okmw9P1THtdVOeKBuM067SE09+UEpSpky
-         0MJQ==
+        bh=J1TVeylraIHS/40ZJpeh/ShzEqQdq14GVcFuMpcFTQQ=;
+        b=PIqJiztVpIAemz0GZ4Q3r4Nu3zBud9gIX4bNTTfIADmVXe6TkQnADoZLxLTh4Z3tas
+         FBy+lmoIUhVHAfVU3MKOSoYrRkdnhH+wKfA44gYH7rZXv3/77gTyXOIPon0Al6JcW0rk
+         jYFMfCa/1WYZWnBXYpIkymz6+5ktXTei1WNxYwGgdSUli/IA6cz6neRFIVQqNK5xlA62
+         iFpoYvm2IxDSPBdOF8m/T6WYO7grctEDT75cksGIEQfmy2C+K1C8OCAFkxFVkcPi1gHG
+         L1kpA8ARCysfIo95M6JpX5L0g2TsByrM0Tlbf2Vp2cn/a92MX72cv8S5+dDApzUQIaoc
+         K0cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710912928; x=1711517728;
+        d=1e100.net; s=20230601; t=1710912930; x=1711517730;
         h=subject:date:cc:to:from:message-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IkJly6CToglvrrSNNJ0loQzOxfua+P4wReRnQggto/w=;
-        b=NE7QscgqWuk/+/rfQW/dzZXyMUhmG2UzRq+1UG+NUMBH/SyvIsoBzCMJh2OuUQFjvJ
-         qzA9lFx/o48Qeb9vlDRQzsvy+4c/YyGW70Gsui3n2iDM0tQnTbuxZIAvKZmc4QmLT5j6
-         fkzM4YG1Jc05ALbLEA+eZ47/MKY/0KWLcbSB2s7NI+9Jr3vEEOm1KgoQpkHe3VqHjIst
-         r9eAJCqFWy6k3eu/ncy+O+TMPh/yPh9Gt0ngu90UY6qcr4cPo7Xs6OOGvAnnm1hjIzZS
-         49DCenCiTMp9bEzz/gJOI+Lpq79G4U/tePD/26lp1yjQpaG2Ots2Zwi5G8wWo8yDzmV6
-         ihdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU8oXs9A7xeIyWoVIgF9iIjiJjzd7HIfVmBAcRA0ggfasX/B2vmGoM3ItfiyU2iqn2nJA/3pYFzbRgPa2sMLhlddXt1yHCzRZQ3JwoS
-X-Gm-Message-State: AOJu0YypVqnPbnT5e8RI0OY5wFjyTCZRh/ijfXOpvxM/u+bYOJf8bJCT
-	4fizF3Ho53yIhHA8G1LvXJ9GFEGbIA7GWu0VzgIkosRf0ERzKTw7OBz/Vcjt
-X-Google-Smtp-Source: AGHT+IEZXkMghds1FSnsqYDp4eoun7ENEdWKTUS1VXeqOmcK7Go63JKhsOnbfqX67JeKWmRuCfpSow==
-X-Received: by 2002:a05:6602:1799:b0:7cc:5e1:5418 with SMTP id y25-20020a056602179900b007cc05e15418mr12463029iox.19.1710912928485;
-        Tue, 19 Mar 2024 22:35:28 -0700 (PDT)
+        bh=J1TVeylraIHS/40ZJpeh/ShzEqQdq14GVcFuMpcFTQQ=;
+        b=eLQzyNW+ET8mJC0uNLXN/ialUETfEFUoEUTXPUsfdWgRmc7XkW6cDajv7H6f2Y5IeP
+         FSFL3gepG29pqhKuK1PNrTGtx6SvNhBq+WXfOooAvIezSxPf74SqJQSmByCnRQJM6f5K
+         wYWy3m7KXPiYhjzR86mM+RZ2TXLUA0xNpDEaTLiHPt56h/PqjOqiFfUH+NNnHzNdcKGe
+         C32SkWQcWq4yu14YbbefEdQ/nmxpIzqun93vF9abyuC4HVVGohWn1QkkRa0uwtYzJhsQ
+         k1LH9cBUn/OXDRqlfXwaInv1+XcA5quVJu3LznoBcMk3NlY2+xljTvEomTjCE2GfWh0r
+         rRLA==
+X-Forwarded-Encrypted: i=1; AJvYcCVxiEbuQSHSBOgX3DPX0YAa5R3LifYLm4Kg23G+dBNQpMBDVBw6dD5bRiVy9MyUYSC4xl4N6bzpfGPdjJLxWEz+tQGHI8w6RGe2Er3s
+X-Gm-Message-State: AOJu0YyHBSwDRUTaZd4DDsN6En9X5iu0/dcfF3n+EhxLRXhP1JsxI8E5
+	HnpoF8DZycJAeWtyCkVcCiJZ2lH8tvgCG2oGgbAkBD++MsOP1fhd
+X-Google-Smtp-Source: AGHT+IF5/q16vRWg25pzVE4/V1Y8i6AaZhh6eyiGEAHYlmU+l+JJS05HF01ZhsjnRmeznpsW1fMviQ==
+X-Received: by 2002:a5d:8c95:0:b0:7cc:6e18:4627 with SMTP id g21-20020a5d8c95000000b007cc6e184627mr1159899ion.20.1710912930417;
+        Tue, 19 Mar 2024 22:35:30 -0700 (PDT)
 Received: from ?IPV6:2001:470:42c4:101:9af9:b18f:3f69:51be? ([2001:470:42c4:101:9af9:b18f:3f69:51be])
-        by smtp.gmail.com with ESMTPSA id q6-20020a5d9f06000000b007cc6af6686esm1679597iot.30.2024.03.19.22.35.27
+        by smtp.gmail.com with ESMTPSA id q6-20020a5d9f06000000b007cc6af6686esm1679597iot.30.2024.03.19.22.35.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Mar 2024 22:35:28 -0700 (PDT)
-Message-ID: <65fa75a0.5d0a0220.fe5f7.1fa3@mx.google.com>
+        Tue, 19 Mar 2024 22:35:30 -0700 (PDT)
+Message-ID: <65fa75a2.5d0a0220.fe5f7.1fa4@mx.google.com>
 From: Sam Edwards <cfsworks@gmail.com>
 X-Google-Original-From: Sam Edwards <sam@turingpi.com>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>, Andi Shyti <andi.shyti@kernel.org>
 Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Tue, 19 Mar 2024 16:52:21 -0600
-Subject: [RESEND v2 RFC 4/5] i2c: mv64xxx: Allow continuing after read
+Date: Tue, 19 Mar 2024 16:52:25 -0600
+Subject: [RESEND v2 RFC 5/5] i2c: mv64xxx: Implement I2C_FUNC_NOSTART
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 
-The current FSM does not check the `send_stop` flag when completing a
-read message; it just assumes any read message is always the end of the
-transfer. This means subsequent messages go unprocessed, with no error
-code to indicate otherwise.
+There are certain I2C devices [1] that require some extra parameter bytes
+in any read operation, after the start byte but before the bus turnaround,
+in contrast to the "conventional" approach of using a normal write to
+parameterize the upcoming read.
 
-Fixing this requires that the FSM check the `send_stop` flag and issue
-the `SEND_RESTART` action instead of stop, but there are only two RCV_*
-variants, one for receive-and-continue and one for receive-and-stop. We
-could add another variant, however, the new FSM from the previous patch
-makes it pretty clear that the RCV_* variants aren't really full actions
-in their own respect, since they both implement the same observable
-functionality as another action, just with an added read from the data
-register first.
+The (Allwinner variant of) mv64xxx supports this kind of transfer, for
+up to 3 bytes of additional data, through a register called "TWI_EFR"
+("Enhance Feature Register"). These devices can be supported by setting
+this register appropriately when beginning the read operation.
 
-Therefore, convert the receive actions to a flag that can be set,
-allowing any action to have an "...and also read" variant. The FSM can
-then just use the plain SEND_RESTART action, but OR-in the flag, to
-represent "read a byte, finish this message, go to the next message."
+In absence of a specialized flag to represent this in Linux's I2C
+subsystem, clients use I2C_M_NOSTART to achieve this. In fact, this
+appears to be the most common use of I2C_M_NOSTART in the Linux
+codebase, with the second most common being to implement "gather" I/O by
+chaining a series of NOSTART writes.
+
+This patch implements both of these use cases when the EFR is present:
+1) Continuing a write message with further write bytes, as a sort of
+   "gather" operation.
+2) Inserting extra parameter bytes after the address of a read
+   operation, using a zero-byte read, a small (<= 3 bytes) NOSTART
+   write, and then a NOSTART read.
+
+...the hardware is likely too strict to allow any other uses, so the
+message bundle is checked for proper use of NOSTART before it begins.
+That being said, there's a good chance that these are the only two uses
+of NOSTART "in the wild," which would mean that this isn't much of a
+limitation.
+
+The implementation redesigns the hardware event handler slightly, so
+that the FSM can be invoked in a loop if the do_action function
+generates follow-up events. The NEXT_MESSAGE (formerly SEND_RESTART)
+action now results in either a restart, or (for NOSTART) a follow-up
+NOSTART event to the FSM, which allows it to bypass the entire start
+sequence and jump straight to the data.
+
+[1]: See e.g. `as5011_i2c_read`, `ivch_read`, `maven_get_reg`
 
 Signed-off-by: Sam Edwards <sam@turingpi.com>
 ---
- drivers/i2c/busses/i2c-mv64xxx.c | 47 +++++++++++---------------------
- 1 file changed, 16 insertions(+), 31 deletions(-)
+ drivers/i2c/busses/i2c-mv64xxx.c | 105 +++++++++++++++++++++++++++----
+ 1 file changed, 94 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
-index 3ae74160001d..6a205cca603a 100644
+index 6a205cca603a..f09f23404784 100644
 --- a/drivers/i2c/busses/i2c-mv64xxx.c
 +++ b/drivers/i2c/busses/i2c-mv64xxx.c
-@@ -116,9 +116,9 @@ enum mv64xxx_i2c_action {
+@@ -100,6 +100,7 @@ enum mv64xxx_i2c_state {
+ enum mv64xxx_i2c_event {
+ 	MV64XXX_I2C_EVENT_INVALID,
+ 	MV64XXX_I2C_EVENT_STARTED,
++	MV64XXX_I2C_EVENT_NOSTART,
+ 	MV64XXX_I2C_EVENT_ADDR_ACK,
+ 	MV64XXX_I2C_EVENT_ADDR_NO_ACK,
+ 	MV64XXX_I2C_EVENT_WR_ACK,
+@@ -112,7 +113,7 @@ enum mv64xxx_i2c_event {
+ enum mv64xxx_i2c_action {
+ 	MV64XXX_I2C_ACTION_INVALID,
+ 	MV64XXX_I2C_ACTION_CONTINUE,
+-	MV64XXX_I2C_ACTION_SEND_RESTART,
++	MV64XXX_I2C_ACTION_NEXT_MESSAGE,
  	MV64XXX_I2C_ACTION_SEND_ADDR_1,
  	MV64XXX_I2C_ACTION_SEND_ADDR_2,
  	MV64XXX_I2C_ACTION_SEND_DATA,
--	MV64XXX_I2C_ACTION_RCV_DATA,
--	MV64XXX_I2C_ACTION_RCV_DATA_STOP,
- 	MV64XXX_I2C_ACTION_SEND_STOP,
-+
-+	MV64XXX_I2C_ACTION_RECEIVE = 0x80,
+@@ -129,6 +130,7 @@ struct mv64xxx_i2c_regs {
+ 	u8	status;
+ 	u8	clock;
+ 	u8	soft_reset;
++	u8	enh_feat;
  };
  
- struct mv64xxx_i2c_regs {
-@@ -395,16 +395,15 @@ mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u32 status)
+ struct mv64xxx_i2c_data {
+@@ -185,6 +187,7 @@ static struct mv64xxx_i2c_regs mv64xxx_i2c_regs_sun4i = {
+ 	.status		= 0x10,
+ 	.clock		= 0x14,
+ 	.soft_reset	= 0x18,
++	.enh_feat	= 0x1c,
+ };
  
- 	case MV64XXX_I2C_STATE_READ:
- 		if (drv_data->bytes_left == 0) {
--			if (prev_state == MV64XXX_I2C_STATE_READ)
--				drv_data->action = MV64XXX_I2C_ACTION_RCV_DATA_STOP;
--			else
-+			if (drv_data->send_stop || drv_data->aborting) {
- 				drv_data->action = MV64XXX_I2C_ACTION_SEND_STOP;
--			drv_data->state = MV64XXX_I2C_STATE_IDLE;
-+				drv_data->state = MV64XXX_I2C_STATE_IDLE;
-+			} else {
-+				drv_data->action = MV64XXX_I2C_ACTION_SEND_RESTART;
-+				drv_data->state = MV64XXX_I2C_STATE_RESTART;
-+			}
- 		} else {
--			if (prev_state == MV64XXX_I2C_STATE_READ)
--				drv_data->action = MV64XXX_I2C_ACTION_RCV_DATA;
--			else
--				drv_data->action = MV64XXX_I2C_ACTION_CONTINUE;
-+			drv_data->action = MV64XXX_I2C_ACTION_CONTINUE;
+ static void
+@@ -306,9 +309,9 @@ mv64xxx_i2c_decode_status(struct mv64xxx_i2c_data *drv_data, u32 status)
+ }
  
- 			/*
- 			 * bytes_left counts the remaining read actions to send
-@@ -419,6 +418,8 @@ mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u32 status)
- 			if (drv_data->bytes_left == 0)
- 				drv_data->cntl_bits &= ~MV64XXX_I2C_REG_CONTROL_ACK;
- 		}
-+		if (prev_state == MV64XXX_I2C_STATE_READ)
-+			drv_data->action |= MV64XXX_I2C_ACTION_RECEIVE;
+ static void
+-mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u32 status)
++mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data,
++		enum mv64xxx_i2c_event event, u32 status)
+ {
+-	enum mv64xxx_i2c_event event;
+ 	enum mv64xxx_i2c_state prev_state = drv_data->state;
+ 
+ 	drv_data->action = MV64XXX_I2C_ACTION_INVALID;
+@@ -329,7 +332,6 @@ mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u32 status)
+ 	 * 2) Handle hardware event driven state transitions
+ 	 * 3) Perform internal state transitions and action emission
+ 	 */
+-	event = mv64xxx_i2c_decode_status(drv_data, status);
+ 
+ 	/* Handle event; determine state transition */
+ 	switch (event) {
+@@ -337,6 +339,7 @@ mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u32 status)
+ 		drv_data->state = MV64XXX_I2C_STATE_SEND_ADDR_1;
  		break;
  
- 	case MV64XXX_I2C_STATE_WRITE:
-@@ -457,6 +458,11 @@ static void mv64xxx_i2c_send_start(struct mv64xxx_i2c_data *drv_data)
- static void
++	case MV64XXX_I2C_EVENT_NOSTART:
+ 	case MV64XXX_I2C_EVENT_ADDR_ACK:
+ 		if ((drv_data->state == MV64XXX_I2C_STATE_SEND_ADDR_1)
+ 		    && (drv_data->msg->flags & I2C_M_TEN))
+@@ -399,7 +402,7 @@ mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u32 status)
+ 				drv_data->action = MV64XXX_I2C_ACTION_SEND_STOP;
+ 				drv_data->state = MV64XXX_I2C_STATE_IDLE;
+ 			} else {
+-				drv_data->action = MV64XXX_I2C_ACTION_SEND_RESTART;
++				drv_data->action = MV64XXX_I2C_ACTION_NEXT_MESSAGE;
+ 				drv_data->state = MV64XXX_I2C_STATE_RESTART;
+ 			}
+ 		} else {
+@@ -429,7 +432,7 @@ mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u32 status)
+ 				drv_data->action = MV64XXX_I2C_ACTION_SEND_STOP;
+ 				drv_data->state = MV64XXX_I2C_STATE_IDLE;
+ 			} else {
+-				drv_data->action = MV64XXX_I2C_ACTION_SEND_RESTART;
++				drv_data->action = MV64XXX_I2C_ACTION_NEXT_MESSAGE;
+ 				drv_data->state = MV64XXX_I2C_STATE_RESTART;
+ 			}
+ 		} else {
+@@ -444,18 +447,38 @@ mv64xxx_i2c_fsm(struct mv64xxx_i2c_data *drv_data, u32 status)
+ 
+ static void mv64xxx_i2c_send_start(struct mv64xxx_i2c_data *drv_data)
+ {
++	u8 extra_bytes;
++
+ 	drv_data->msg = drv_data->msgs;
+ 	drv_data->byte_posn = 0;
+ 	drv_data->bytes_left = drv_data->msg->len;
+ 	drv_data->aborting = 0;
+ 	drv_data->rc = 0;
+ 
++	if (drv_data->msg->flags & I2C_M_NOSTART)
++		return;
++
++	/*
++	 * If this is a zero-length read, and the next message is a NOSTART
++	 * write, the client driver is trying to insert extra bytes after the
++	 * address but before the read proper.
++	 */
++	if ((drv_data->msg->len == 0) && (drv_data->msg->flags & I2C_M_RD) &&
++	    (drv_data->num_msgs > 1) && (drv_data->msgs[1].flags == I2C_M_NOSTART))
++		extra_bytes = drv_data->msgs[1].len;
++	else
++		extra_bytes = 0;
++
++	if (drv_data->reg_offsets.enh_feat != 0)
++		writel(extra_bytes,
++		       drv_data->reg_base + drv_data->reg_offsets.enh_feat);
++
+ 	mv64xxx_i2c_prepare_for_io(drv_data, drv_data->msgs);
+ 	writel(drv_data->cntl_bits | MV64XXX_I2C_REG_CONTROL_START,
+ 	       drv_data->reg_base + drv_data->reg_offsets.control);
+ }
+ 
+-static void
++static enum mv64xxx_i2c_event
  mv64xxx_i2c_do_action(struct mv64xxx_i2c_data *drv_data)
  {
-+	if (drv_data->action & MV64XXX_I2C_ACTION_RECEIVE)
-+		drv_data->msg->buf[drv_data->byte_posn++] =
-+			readl(drv_data->reg_base + drv_data->reg_offsets.data);
-+	drv_data->action &= ~MV64XXX_I2C_ACTION_RECEIVE;
-+
+ 	if (drv_data->action & MV64XXX_I2C_ACTION_RECEIVE)
+@@ -464,7 +487,7 @@ mv64xxx_i2c_do_action(struct mv64xxx_i2c_data *drv_data)
+ 	drv_data->action &= ~MV64XXX_I2C_ACTION_RECEIVE;
+ 
  	switch(drv_data->action) {
- 	case MV64XXX_I2C_ACTION_SEND_RESTART:
+-	case MV64XXX_I2C_ACTION_SEND_RESTART:
++	case MV64XXX_I2C_ACTION_NEXT_MESSAGE:
  		/* We should only get here if we have further messages */
-@@ -503,27 +509,6 @@ mv64xxx_i2c_do_action(struct mv64xxx_i2c_data *drv_data)
- 			drv_data->reg_base + drv_data->reg_offsets.control);
+ 		BUG_ON(drv_data->num_msgs == 0);
+ 
+@@ -481,6 +504,10 @@ mv64xxx_i2c_do_action(struct mv64xxx_i2c_data *drv_data)
+ 		 * Thankfully, do not advertise support for that feature.
+ 		 */
+ 		drv_data->send_stop = drv_data->num_msgs == 1;
++
++		if (drv_data->msg->flags & I2C_M_NOSTART)
++			return MV64XXX_I2C_EVENT_NOSTART;
++
  		break;
  
--	case MV64XXX_I2C_ACTION_RCV_DATA:
--		drv_data->msg->buf[drv_data->byte_posn++] =
--			readl(drv_data->reg_base + drv_data->reg_offsets.data);
--		writel(drv_data->cntl_bits,
--			drv_data->reg_base + drv_data->reg_offsets.control);
--		break;
--
--	case MV64XXX_I2C_ACTION_RCV_DATA_STOP:
--		drv_data->msg->buf[drv_data->byte_posn++] =
--			readl(drv_data->reg_base + drv_data->reg_offsets.data);
--		if (!drv_data->atomic)
--			drv_data->cntl_bits &= ~MV64XXX_I2C_REG_CONTROL_INTEN;
--		writel(drv_data->cntl_bits | MV64XXX_I2C_REG_CONTROL_STOP,
--			drv_data->reg_base + drv_data->reg_offsets.control);
--		drv_data->block = 0;
--		if (drv_data->errata_delay)
--			udelay(5);
--
--		wake_up(&drv_data->waitq);
--		break;
--
- 	case MV64XXX_I2C_ACTION_INVALID:
- 	default:
- 		dev_err(&drv_data->adapter.dev,
+ 	case MV64XXX_I2C_ACTION_CONTINUE:
+@@ -525,6 +552,8 @@ mv64xxx_i2c_do_action(struct mv64xxx_i2c_data *drv_data)
+ 		wake_up(&drv_data->waitq);
+ 		break;
+ 	}
++
++	return MV64XXX_I2C_EVENT_INVALID;
+ }
+ 
+ static void
+@@ -595,6 +624,7 @@ static irqreturn_t
+ mv64xxx_i2c_intr(int irq, void *dev_id)
+ {
+ 	struct mv64xxx_i2c_data	*drv_data = dev_id;
++	enum mv64xxx_i2c_event event;
+ 	u32		status;
+ 	irqreturn_t	rc = IRQ_NONE;
+ 
+@@ -617,8 +647,11 @@ mv64xxx_i2c_intr(int irq, void *dev_id)
+ 			ndelay(100);
+ 
+ 		status = readl(drv_data->reg_base + drv_data->reg_offsets.status);
+-		mv64xxx_i2c_fsm(drv_data, status);
+-		mv64xxx_i2c_do_action(drv_data);
++		event = mv64xxx_i2c_decode_status(drv_data, status);
++		do {
++			mv64xxx_i2c_fsm(drv_data, event, status);
++			event = mv64xxx_i2c_do_action(drv_data);
++		} while (event != MV64XXX_I2C_EVENT_INVALID);
+ 
+ 		if (drv_data->irq_clear_inverted)
+ 			writel(drv_data->cntl_bits | MV64XXX_I2C_REG_CONTROL_IFLG,
+@@ -830,7 +863,54 @@ mv64xxx_i2c_can_offload(struct mv64xxx_i2c_data *drv_data)
+ static u32
+ mv64xxx_i2c_functionality(struct i2c_adapter *adap)
+ {
+-	return I2C_FUNC_I2C | I2C_FUNC_10BIT_ADDR | I2C_FUNC_SMBUS_EMUL;
++	struct mv64xxx_i2c_data *drv_data = i2c_get_adapdata(adap);
++	u32 func = I2C_FUNC_I2C | I2C_FUNC_10BIT_ADDR | I2C_FUNC_SMBUS_EMUL;
++
++	if (drv_data->reg_offsets.enh_feat != 0)
++		func |= I2C_FUNC_NOSTART;
++
++	return func;
++}
++
++static bool
++mv64xxx_i2c_check_msgs(struct i2c_msg msgs[], int num)
++{
++	int i;
++	bool is_write, prev_is_write;
++
++	/*
++	 * The I2C hardware is pretty strict about ensuring that the protocol
++	 * is followed properly, and doesn't allow a lot of "creativity" how
++	 * transfers are composed. This driver advertises I2C_FUNC_NOSTART, but
++	 * can only support the two most common patterns for use of NOSTART:
++	 * 1) Continuing a write message with further write bytes, as a sort of
++	 *    "gather" operation.
++	 * 2) Inserting extra parameter bytes after the address of a read
++	 *    operation, using a zero-byte read, a small (<= 3 bytes) NOSTART
++	 *    write, and then a NOSTART read.
++	 */
++
++	for (i = 0; i < num; i++) {
++		/* Check for case 1 */
++		if (msgs[i].flags & I2C_M_NOSTART) {
++			if (i == 0)
++				return false;
++			is_write = !(msgs[i].flags & I2C_M_RD);
++			prev_is_write = !(msgs[i-1].flags & I2C_M_RD);
++			if (!is_write || !prev_is_write)
++				return false;
++		}
++
++		/* Check for case 2 */
++		if (i + 2 < num) {
++			if ((msgs[i].flags == I2C_M_RD) && (msgs[i].len == 0) &&
++			    (msgs[i+1].flags == I2C_M_NOSTART) && (msgs[i+1].len <= 3) &&
++			    (msgs[i+2].flags == (I2C_M_NOSTART|I2C_M_RD)))
++				i += 2;
++		}
++	}
++
++	return true;
+ }
+ 
+ static int
+@@ -840,6 +920,9 @@ mv64xxx_i2c_xfer_core(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
+ 	int rc, ret = num;
+ 	u32 status;
+ 
++	if (!mv64xxx_i2c_check_msgs(msgs, num))
++		return -ENOTSUPP;
++
+ 	rc = pm_runtime_resume_and_get(&adap->dev);
+ 	if (rc)
+ 		return rc;
 -- 
 2.43.2
 
