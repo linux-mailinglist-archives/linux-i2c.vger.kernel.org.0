@@ -1,72 +1,72 @@
-Return-Path: <linux-i2c+bounces-2407-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2408-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B15F587FEC6
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Mar 2024 14:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C08A387FEC9
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Mar 2024 14:26:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E7198B25660
-	for <lists+linux-i2c@lfdr.de>; Tue, 19 Mar 2024 13:26:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37ED9B256F7
+	for <lists+linux-i2c@lfdr.de>; Tue, 19 Mar 2024 13:26:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00FFD80C06;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 573EB80C1E;
 	Tue, 19 Mar 2024 13:26:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QZlfMIUR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LNZCOC3j"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF40A8005C;
-	Tue, 19 Mar 2024 13:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D00D80622;
+	Tue, 19 Mar 2024 13:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710854774; cv=none; b=FxK3VbtdpyTFGLO+RJ9+upfud/VT4gUkNX23BO09p2npCXc1f6gZrXRci0wdbXFrub+QRuaG+YgHtbYeV+HvrfvtXBq/6GfWIl4d1sTOgCLVeTae8H/VUIKh750TJgkrghwfNoBdNoAMqxY8+oXQHEzcmyQb+HmI69UvschdXE8=
+	t=1710854775; cv=none; b=f2UouepgiLNFnzYgzFzBfJAg39W/PdlRgWrYWjyWSRCvVw40D4OaQ8vgfKQpcPcekb2ZYC517vPjKYUpWuTK7KEwhfP4QhthOiY7ZjXE9IgqxqBGyxc1P8suFI2bYtJ65g6AMz89hGs0kxdfmBDuWFuFdBn6HQ+YAO/fowQLVdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710854774; c=relaxed/simple;
-	bh=kd2RmNKFvIq1wxtY9YCEbC7//ee0vMk5dpipRsCVUXc=;
+	s=arc-20240116; t=1710854775; c=relaxed/simple;
+	bh=6yA0hcq4RzH3lD4x4m2PhMp40glly0iCkT4eX1gekaY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=d15NPG0CIeFWV0cokS2UGEpp26PAWWHj/ce8QPBOVIhBgfGMvc2+810ODfQTlgkX1bANlAanzccTlDU2hG5bTIsmXvWl5oeap8+PLcm8U39777cZt7vhjcDAQxd/8Me3jk91jNxu4q4MX4/TefczPIjhAylSJo3Is2QFyTpUB9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QZlfMIUR; arc=none smtp.client-ip=209.85.167.52
+	 MIME-Version; b=bBcMTtmrP070vZoOm2ZbEcQPnhK6n+qrrrcqu+0+TCPDNFjlPdo6NQLqV5Tb1fo7GzK2fMkZhpMK++lyJ6mL97ncujU2oLuO/SFzOCva9us0gSbA9kXbOoqtTNT0L5oNHVRb5Sgn76NFt5SRoLhV3kdQsSzUzfix00+yUnDai/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LNZCOC3j; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-513cf9bacf1so7015406e87.0;
-        Tue, 19 Mar 2024 06:26:12 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-33e1878e357so2269961f8f.3;
+        Tue, 19 Mar 2024 06:26:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710854771; x=1711459571; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1710854772; x=1711459572; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CkCyUMD3GO/K9NePHyzEWpQMwt6j9UPNlQM3LFOvqlw=;
-        b=QZlfMIURNCl2DqU6mS3U6YElZaJh6kuySBEcUplZEkRy1T0Uk9DPb8wTWUDM3L4RwZ
-         Y3q8yu2rVd8u9tnKtHuB80TNmirOq/b3uJgrIbawvJjEW6ivXhGVMWapewJRfpP+0CWz
-         8kY8yFs35gpAyXG2InA8m7tyJWu2LRRoyq/SOGU0dUn4d1yujJR4v5hhZY8W5z6hBfHN
-         OL9xFDvnZ6sG+pdmnFK0lxA4EElHpKcannWfWTN9YI8tcG1AEkmuGjYFZdj1VZzV16Yh
-         FmcjAX96+JTxwVNB2h2vr2/+iymE/N3eb6kqn9YWIqkAYanTBJqTefiXHuN6OZJdQYOg
-         dg3A==
+        bh=3Bis6tzXKxCRUGN+TmYPd/QOJDo38W17nENtxQhYz7g=;
+        b=LNZCOC3j/iaYxdGjSMMgTumVk4raYLdVClKhFZ/xFv33+lFmdb4LCwRLfu31ivTfPI
+         SpD24NZAwO+rJPH3ozH1xVWpnO4EKCMRTe+EMRWWc1CzPUtQwdrVwZHDSmergs907XZi
+         7LLtrG7D4ZyQvgKm7lqnof8psJdaNwGK8hubI56HbIr8R78/WtM9n4I8ooPAvsqo+FrV
+         c+TvkEWbbs+JffYoIaTwPoX2ijxAkggcOZkCW1BwopigkOvlaBMVAfpg4oF5k+16qcru
+         YWe2mkZ9v7YV6mBoyghKkwlnthosXo4ko9rhi2nCSDWgwz56qa0+whPZGRdz2peAKUas
+         ZNhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710854771; x=1711459571;
+        d=1e100.net; s=20230601; t=1710854772; x=1711459572;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CkCyUMD3GO/K9NePHyzEWpQMwt6j9UPNlQM3LFOvqlw=;
-        b=EUsD+nxxmAgsNOytgHKMEIZ7w5x/1YWdxEDM2TlTBfkyz0uW+Ik50fuCoA5ncDlxxA
-         a176zgemWtwSSg5a+Snpre0ijm2H+PbvEZovBf7tzGtjI5nTNcOIgIw6Lp6tDe7ZYM8u
-         JRgPeJK72eeUDdCCdcd8YYVYpp/JTTQBRsaFe2rwFi5n0GFkA1YaL5aA4YXacLo9PlqW
-         aCYxnFa0Jw9s/oL/ayRueJIkOG4t1PY2v+237vnODv84/trW9S/9AS8Hp05ap1dnWVr0
-         7yRj7LOwk7Z04WBKaIbRb9yyEPzYFf3ZxtlJ954fFECxD319wYxZL7/tfjcYsyOj+n2V
-         kg+g==
-X-Forwarded-Encrypted: i=1; AJvYcCXv7pDpnrtC5cMmJKyxyGbZR/AXX4CNfd9aJMXF0o2IwRUVwAoMkNP7hIM2kd0frXpyzUOnNds5ZYfNXBftyucQrLAT7msZARTv5mxViU8QII70/GnXz+QOCP0RTyq/Ynrp491i9q034f52ZBoZJC3Sx4tCy9/G1PS0AP88lb0CtlDUTQ==
-X-Gm-Message-State: AOJu0YwLxpz+LmrxTskMC1APWYtGD1DqHBKOqIKWL06V9Jqm95e+tILz
-	EyLGUFpHoF4o75JGUbaND9yYjVI7L31Nh8eh4pRlQ25Xi+Bmv8aa
-X-Google-Smtp-Source: AGHT+IEsC0NN01eMqg3NATrpbCeHhHEKqbs1Qo1IGUX49R6ZlGAJZKLqgYcfjjGzyaDkju1DiN6/Zg==
-X-Received: by 2002:a05:6512:3c88:b0:513:e63c:cfe7 with SMTP id h8-20020a0565123c8800b00513e63ccfe7mr6543804lfv.66.1710854770595;
-        Tue, 19 Mar 2024 06:26:10 -0700 (PDT)
+        bh=3Bis6tzXKxCRUGN+TmYPd/QOJDo38W17nENtxQhYz7g=;
+        b=YrHFdEHBx5SvRXE41KdoU1lnYrUIyxcFQFeYYtF2N+F5QjyC8KIfVRTyV9QhyPjOtz
+         RiHW0wdoaoBgYD9LWVDl3M43wjBGi1jV3jBYu8BcgzcW6fZIJyH2grVkoyxzvEsXev4g
+         HdCMoOW/AEquU/okbzrHHwLnZxu++9DRdbAhIveYug5nWvQ2aADb6VVp4sm4nGD+l/87
+         pkkncxQJ1N9Gfk79HZfHSfYmal/hrMF0hcoakrlC7OjoAdL2ltetP5mVobbbfrA5sFSG
+         lmllm5IK6FiMduRPV3f8S36ic21ireF/bPOMc2Sv1Oj4qLftg1C+bDCn/3AMB/MqvnA6
+         uInw==
+X-Forwarded-Encrypted: i=1; AJvYcCUMnz1s5nrqIhJvU48ERUPtLP4P9JdQ2jYf0yX73McofRdQwsBLCl2oJ2ggUVy5LknP3g2FrSHm5TKPKHDqVcCWqBy5yOkWEdpQ1KwyigCe6z5eD+amHsV7vaUZV6mW4i09q5AU0Emjq+3zpW18/35jF2IWsbuguemkgEerj4cVTabbdQ==
+X-Gm-Message-State: AOJu0YxMcvxi+TiWbBjIW2vexYlO0QwGiu3/u3FBCWow6g513WFYqv97
+	306bGYR/VMvIXrOkvY4RNGid1+tm7WBudFAHc2Cr1F4/v/lgrv5D
+X-Google-Smtp-Source: AGHT+IHdlPbl1ZRPu3ahi7f3Tin5v5arhIhjynpFGJnSqjwT2k1Y8nqRRsPwEW0S+ReQFi+dUlbN3A==
+X-Received: by 2002:adf:f649:0:b0:341:7864:b31e with SMTP id x9-20020adff649000000b003417864b31emr1624885wrp.68.1710854771699;
+        Tue, 19 Mar 2024 06:26:11 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2500:a01:3c11:2c6f:3ba9:bab])
-        by smtp.gmail.com with ESMTPSA id g4-20020adfe404000000b0033dd2a7167fsm12370020wrm.29.2024.03.19.06.26.09
+        by smtp.gmail.com with ESMTPSA id g4-20020adfe404000000b0033dd2a7167fsm12370020wrm.29.2024.03.19.06.26.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Mar 2024 06:26:09 -0700 (PDT)
+        Tue, 19 Mar 2024 06:26:11 -0700 (PDT)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -84,9 +84,9 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	Prabhakar <prabhakar.csengg@gmail.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v3 2/4] i2c: riic: Introduce helper functions for I2C read/write operations
-Date: Tue, 19 Mar 2024 13:25:01 +0000
-Message-Id: <20240319132503.80628-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v3 3/4] i2c: riic: Pass register offsets and chip details as OF data
+Date: Tue, 19 Mar 2024 13:25:02 +0000
+Message-Id: <20240319132503.80628-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240319132503.80628-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20240319132503.80628-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -100,188 +100,135 @@ Content-Transfer-Encoding: 8bit
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Introduce helper functions for performing I2C read and write operations
-in the RIIC driver.
+With an increasing number of SoCs reusing this driver, each with slight
+variations in the RIIC IP, it becomes necessary to support passing these
+details as OF data. This approach simplifies the extension of the driver
+for other SoCs.
 
-These helper functions lay the groundwork for adding support for the
-RZ/V2H SoC. This is essential because the register offsets for the RZ/V2H
-SoC differ from those of the RZ/A SoC. By abstracting the read and write
-operations, we can seamlessly adapt the driver to support different SoC
-variants without extensive modifications.
-
-This patch is part of the preparation process for integrating support for
-the RZ/V2H SoC into the RIIC driver.
+This patch lays the groundwork for adding support for the Renesas RZ/V2H
+SoC.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
 v2->v3
-- Made val as second argument for riic_writeb
+- Included RB tag from Geert
 
 v1->v2
-- Renamed i2c read/write to riic_readb/riic_writeb
-- Made riic as first parameter for riic_writeb
+- Dropped family from struct riic_of_data
+- Included RIIC_REG_END in enum list as flexible array member
+  in a struct with no named members is not allowed
 ---
- drivers/i2c/busses/i2c-riic.c | 56 +++++++++++++++++++++--------------
- 1 file changed, 33 insertions(+), 23 deletions(-)
+ drivers/i2c/busses/i2c-riic.c | 56 +++++++++++++++++++++++++----------
+ 1 file changed, 41 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
-index e43ff483c56e..ef35e67839fa 100644
+index ef35e67839fa..3cd5033286ca 100644
 --- a/drivers/i2c/busses/i2c-riic.c
 +++ b/drivers/i2c/busses/i2c-riic.c
-@@ -105,9 +105,19 @@ struct riic_irq_desc {
- 	char *name;
+@@ -46,18 +46,6 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/reset.h>
+ 
+-#define RIIC_ICCR1	0x00
+-#define RIIC_ICCR2	0x04
+-#define RIIC_ICMR1	0x08
+-#define RIIC_ICMR3	0x10
+-#define RIIC_ICSER	0x18
+-#define RIIC_ICIER	0x1c
+-#define RIIC_ICSR2	0x24
+-#define RIIC_ICBRL	0x34
+-#define RIIC_ICBRH	0x38
+-#define RIIC_ICDRT	0x3c
+-#define RIIC_ICDRR	0x40
+-
+ #define ICCR1_ICE	0x80
+ #define ICCR1_IICRST	0x40
+ #define ICCR1_SOWP	0x10
+@@ -87,6 +75,25 @@
+ 
+ #define RIIC_INIT_MSG	-1
+ 
++enum riic_reg_list {
++	RIIC_ICCR1 = 0,
++	RIIC_ICCR2,
++	RIIC_ICMR1,
++	RIIC_ICMR3,
++	RIIC_ICSER,
++	RIIC_ICIER,
++	RIIC_ICSR2,
++	RIIC_ICBRL,
++	RIIC_ICBRH,
++	RIIC_ICDRT,
++	RIIC_ICDRR,
++	RIIC_REG_END,
++};
++
++struct riic_of_data {
++	u8 regs[RIIC_REG_END];
++};
++
+ struct riic_dev {
+ 	void __iomem *base;
+ 	u8 *buf;
+@@ -94,6 +101,7 @@ struct riic_dev {
+ 	int bytes_left;
+ 	int err;
+ 	int is_last;
++	const struct riic_of_data *info;
+ 	struct completion msg_done;
+ 	struct i2c_adapter adapter;
+ 	struct clk *clk;
+@@ -107,12 +115,12 @@ struct riic_irq_desc {
+ 
+ static inline void riic_writeb(struct riic_dev *riic, u8 val, u8 offset)
+ {
+-	writeb(val, riic->base + offset);
++	writeb(val, riic->base + riic->info->regs[offset]);
+ }
+ 
+ static inline u8 riic_readb(struct riic_dev *riic, u8 offset)
+ {
+-	return readb(riic->base + offset);
++	return readb(riic->base + riic->info->regs[offset]);
+ }
+ 
+ static inline void riic_clear_set_bit(struct riic_dev *riic, u8 clear, u8 set, u8 reg)
+@@ -453,6 +461,8 @@ static int riic_i2c_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
++	riic->info = of_device_get_match_data(&pdev->dev);
++
+ 	adap = &riic->adapter;
+ 	i2c_set_adapdata(adap, riic);
+ 	strscpy(adap->name, "Renesas RIIC adapter", sizeof(adap->name));
+@@ -497,8 +507,24 @@ static void riic_i2c_remove(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ }
+ 
++static const struct riic_of_data riic_rz_a_info = {
++	.regs = {
++		[RIIC_ICCR1] = 0x00,
++		[RIIC_ICCR2] = 0x04,
++		[RIIC_ICMR1] = 0x08,
++		[RIIC_ICMR3] = 0x10,
++		[RIIC_ICSER] = 0x18,
++		[RIIC_ICIER] = 0x1c,
++		[RIIC_ICSR2] = 0x24,
++		[RIIC_ICBRL] = 0x34,
++		[RIIC_ICBRH] = 0x38,
++		[RIIC_ICDRT] = 0x3c,
++		[RIIC_ICDRR] = 0x40,
++	},
++};
++
+ static const struct of_device_id riic_i2c_dt_ids[] = {
+-	{ .compatible = "renesas,riic-rz", },
++	{ .compatible = "renesas,riic-rz", .data = &riic_rz_a_info },
+ 	{ /* Sentinel */ },
  };
  
-+static inline void riic_writeb(struct riic_dev *riic, u8 val, u8 offset)
-+{
-+	writeb(val, riic->base + offset);
-+}
-+
-+static inline u8 riic_readb(struct riic_dev *riic, u8 offset)
-+{
-+	return readb(riic->base + offset);
-+}
-+
- static inline void riic_clear_set_bit(struct riic_dev *riic, u8 clear, u8 set, u8 reg)
- {
--	writeb((readb(riic->base + reg) & ~clear) | set, riic->base + reg);
-+	riic_writeb(riic, (riic_readb(riic, reg) & ~clear) | set, reg);
- }
- 
- static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
-@@ -119,7 +129,7 @@ static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
- 
- 	pm_runtime_get_sync(adap->dev.parent);
- 
--	if (readb(riic->base + RIIC_ICCR2) & ICCR2_BBSY) {
-+	if (riic_readb(riic, RIIC_ICCR2) & ICCR2_BBSY) {
- 		riic->err = -EBUSY;
- 		goto out;
- 	}
-@@ -127,7 +137,7 @@ static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
- 	reinit_completion(&riic->msg_done);
- 	riic->err = 0;
- 
--	writeb(0, riic->base + RIIC_ICSR2);
-+	riic_writeb(riic, 0, RIIC_ICSR2);
- 
- 	for (i = 0, start_bit = ICCR2_ST; i < num; i++) {
- 		riic->bytes_left = RIIC_INIT_MSG;
-@@ -135,9 +145,9 @@ static int riic_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
- 		riic->msg = &msgs[i];
- 		riic->is_last = (i == num - 1);
- 
--		writeb(ICIER_NAKIE | ICIER_TIE, riic->base + RIIC_ICIER);
-+		riic_writeb(riic, ICIER_NAKIE | ICIER_TIE, RIIC_ICIER);
- 
--		writeb(start_bit, riic->base + RIIC_ICCR2);
-+		riic_writeb(riic, start_bit, RIIC_ICCR2);
- 
- 		time_left = wait_for_completion_timeout(&riic->msg_done, riic->adapter.timeout);
- 		if (time_left == 0)
-@@ -191,7 +201,7 @@ static irqreturn_t riic_tdre_isr(int irq, void *data)
- 	 * value could be moved to the shadow shift register right away. So
- 	 * this must be after updates to ICIER (where we want to disable TIE)!
- 	 */
--	writeb(val, riic->base + RIIC_ICDRT);
-+	riic_writeb(riic, val, RIIC_ICDRT);
- 
- 	return IRQ_HANDLED;
- }
-@@ -200,9 +210,9 @@ static irqreturn_t riic_tend_isr(int irq, void *data)
- {
- 	struct riic_dev *riic = data;
- 
--	if (readb(riic->base + RIIC_ICSR2) & ICSR2_NACKF) {
-+	if (riic_readb(riic, RIIC_ICSR2) & ICSR2_NACKF) {
- 		/* We got a NACKIE */
--		readb(riic->base + RIIC_ICDRR);	/* dummy read */
-+		riic_readb(riic, RIIC_ICDRR);	/* dummy read */
- 		riic_clear_set_bit(riic, ICSR2_NACKF, 0, RIIC_ICSR2);
- 		riic->err = -ENXIO;
- 	} else if (riic->bytes_left) {
-@@ -211,7 +221,7 @@ static irqreturn_t riic_tend_isr(int irq, void *data)
- 
- 	if (riic->is_last || riic->err) {
- 		riic_clear_set_bit(riic, ICIER_TEIE, ICIER_SPIE, RIIC_ICIER);
--		writeb(ICCR2_SP, riic->base + RIIC_ICCR2);
-+		riic_writeb(riic, ICCR2_SP, RIIC_ICCR2);
- 	} else {
- 		/* Transfer is complete, but do not send STOP */
- 		riic_clear_set_bit(riic, ICIER_TEIE, 0, RIIC_ICIER);
-@@ -230,7 +240,7 @@ static irqreturn_t riic_rdrf_isr(int irq, void *data)
- 
- 	if (riic->bytes_left == RIIC_INIT_MSG) {
- 		riic->bytes_left = riic->msg->len;
--		readb(riic->base + RIIC_ICDRR);	/* dummy read */
-+		riic_readb(riic, RIIC_ICDRR);	/* dummy read */
- 		return IRQ_HANDLED;
- 	}
- 
-@@ -238,7 +248,7 @@ static irqreturn_t riic_rdrf_isr(int irq, void *data)
- 		/* STOP must come before we set ACKBT! */
- 		if (riic->is_last) {
- 			riic_clear_set_bit(riic, 0, ICIER_SPIE, RIIC_ICIER);
--			writeb(ICCR2_SP, riic->base + RIIC_ICCR2);
-+			riic_writeb(riic, ICCR2_SP, RIIC_ICCR2);
- 		}
- 
- 		riic_clear_set_bit(riic, 0, ICMR3_ACKBT, RIIC_ICMR3);
-@@ -248,7 +258,7 @@ static irqreturn_t riic_rdrf_isr(int irq, void *data)
- 	}
- 
- 	/* Reading acks the RIE interrupt */
--	*riic->buf = readb(riic->base + RIIC_ICDRR);
-+	*riic->buf = riic_readb(riic, RIIC_ICDRR);
- 	riic->buf++;
- 	riic->bytes_left--;
- 
-@@ -260,10 +270,10 @@ static irqreturn_t riic_stop_isr(int irq, void *data)
- 	struct riic_dev *riic = data;
- 
- 	/* read back registers to confirm writes have fully propagated */
--	writeb(0, riic->base + RIIC_ICSR2);
--	readb(riic->base + RIIC_ICSR2);
--	writeb(0, riic->base + RIIC_ICIER);
--	readb(riic->base + RIIC_ICIER);
-+	riic_writeb(riic, 0, RIIC_ICSR2);
-+	riic_readb(riic, RIIC_ICSR2);
-+	riic_writeb(riic, 0, RIIC_ICIER);
-+	riic_readb(riic, RIIC_ICIER);
- 
- 	complete(&riic->msg_done);
- 
-@@ -365,15 +375,15 @@ static int riic_init_hw(struct riic_dev *riic, struct i2c_timings *t)
- 		 t->scl_rise_ns / (1000000000 / rate), cks, brl, brh);
- 
- 	/* Changing the order of accessing IICRST and ICE may break things! */
--	writeb(ICCR1_IICRST | ICCR1_SOWP, riic->base + RIIC_ICCR1);
-+	riic_writeb(riic, ICCR1_IICRST | ICCR1_SOWP, RIIC_ICCR1);
- 	riic_clear_set_bit(riic, 0, ICCR1_ICE, RIIC_ICCR1);
- 
--	writeb(ICMR1_CKS(cks), riic->base + RIIC_ICMR1);
--	writeb(brh | ICBR_RESERVED, riic->base + RIIC_ICBRH);
--	writeb(brl | ICBR_RESERVED, riic->base + RIIC_ICBRL);
-+	riic_writeb(riic, ICMR1_CKS(cks), RIIC_ICMR1);
-+	riic_writeb(riic, brh | ICBR_RESERVED, RIIC_ICBRH);
-+	riic_writeb(riic, brl | ICBR_RESERVED, RIIC_ICBRL);
- 
--	writeb(0, riic->base + RIIC_ICSER);
--	writeb(ICMR3_ACKWP | ICMR3_RDRFS, riic->base + RIIC_ICMR3);
-+	riic_writeb(riic, 0, RIIC_ICSER);
-+	riic_writeb(riic, ICMR3_ACKWP | ICMR3_RDRFS, RIIC_ICMR3);
- 
- 	riic_clear_set_bit(riic, ICCR1_IICRST, 0, RIIC_ICCR1);
- 
-@@ -481,7 +491,7 @@ static void riic_i2c_remove(struct platform_device *pdev)
- 	struct riic_dev *riic = platform_get_drvdata(pdev);
- 
- 	pm_runtime_get_sync(&pdev->dev);
--	writeb(0, riic->base + RIIC_ICIER);
-+	riic_writeb(riic, 0, RIIC_ICIER);
- 	pm_runtime_put(&pdev->dev);
- 	i2c_del_adapter(&riic->adapter);
- 	pm_runtime_disable(&pdev->dev);
 -- 
 2.34.1
 
