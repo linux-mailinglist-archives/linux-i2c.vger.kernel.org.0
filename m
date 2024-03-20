@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-2461-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2462-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C89F881907
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 22:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C38F788191D
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 22:29:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18AD9B2308A
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 21:26:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF47DB2382F
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 21:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5BBF85955;
-	Wed, 20 Mar 2024 21:26:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F9A4F8B2;
+	Wed, 20 Mar 2024 21:28:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iqpBuBZ+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bhmMsx9h"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1ACC1DFC6
-	for <linux-i2c@vger.kernel.org>; Wed, 20 Mar 2024 21:26:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA808594E
+	for <linux-i2c@vger.kernel.org>; Wed, 20 Mar 2024 21:28:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710969970; cv=none; b=Mth9hGZrUlaqycGj/hx1LL6hGS1hsArZmMb3BxPiYUmhPCO0i9ybRGuKFOJuy13IRQHsxb+1uM3GG59ipzzNbKb6T1b8aSTGQzbeWSm1fSnfDlesqXBhQ2CqqxgVn6a5v9XCdps2V5dkNt5dGEH4W1RZ2La0sZV38/Keq640ZXA=
+	t=1710970133; cv=none; b=ZZ8mcs5JLM1lcM8kTCIEYoNAlDa7SmoPogVt6fIk3WwdL6yBjmGHZSU41uqHMq9f78eT/mrrGcbYNVE8FxrVtM6ksX54HfG5PhKzWjJoyb/7mEq4RohdtXdWtQ8qiHVrOOducwc5s4o0LU7jhK+bd4v+08kkTEvVq1rLLs4vVgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710969970; c=relaxed/simple;
-	bh=YUnu4v/uOk4hdGEi8REVPLlUfFURbF8zDr4kEuRjcdE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AdIcQYkZYsjE9mWbKePU2RjN96THhXZhsR+3fgbJq+7F2KwRw9L67wGU2pmg8BEPDCG4El2EkcUlHkLuoDz7LB+/lDNVqmMS5ezCJOcKmw4MbEJ7x22I6/uPyDLBZfOcIkmmXRH7uwA8RiOBijeEbgZiSs4NV5tGWVg+b7wzVs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iqpBuBZ+; arc=none smtp.client-ip=209.85.218.41
+	s=arc-20240116; t=1710970133; c=relaxed/simple;
+	bh=D6mCONYTbHnrf3zMCG/1NpqEoUrzp8AtYhnjd/+pvTk=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=t5VeF0iwKVqbNLupk+I+85ARAb5M0ZoBxPC8Lq1CNCHM6XfeRU01IbF0jdjXsz4BwqudGAgl43zeHyZkcg+ZWLTS8/Ek4ed6lmLfssk2KHwnGxcGazgsfC3II6zHr7KWjJFs6lOkdJtNu1ugewrFvi9zXO78qx+Hz6WZTNvYguA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bhmMsx9h; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a468004667aso39299566b.2
-        for <linux-i2c@vger.kernel.org>; Wed, 20 Mar 2024 14:26:08 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-56829f41f81so354785a12.2
+        for <linux-i2c@vger.kernel.org>; Wed, 20 Mar 2024 14:28:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710969967; x=1711574767; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzsrM1L8P4mSOOl8hVgL169WcD3Sb3eP1CZAhfU2b84=;
-        b=iqpBuBZ+3gCPbAY1niWvqT5/WBSZNCkbIENCPbwcKWkrH76oq6HpGPbxZ8xrz4SD2s
-         7LZKF0D+pVJel7b6xQUhseduJmMnSJxuG/BzpzH/v1uc7+TAInfeakKMD59pq4OM2zAL
-         77wAksGZU1DSa4LJ/b4rU343POy/lN66FAZt2WYPzHw0e+UG3AVF3qvKhTe+TWxOo9uX
-         H31xrK/uP5MWAlY0Ra44IiL0GEE793/XLYCazmes9tDZH3+ODkZoMG72+1gndC69CScN
-         iodQExFwxH2rEfmgoD9L5i6tjOMERcNC2M/dorJD3dNatGcUTYZRpfRRf9qntEskm/Y/
-         6eHg==
+        d=gmail.com; s=20230601; t=1710970130; x=1711574930; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=TEht7YnmUJZ8GyBrObrphnVJUwyDyPdgqF88iptSAhQ=;
+        b=bhmMsx9hbMGAzw03lyklT7nm4iKmYxLe1ybdBuZ9GuklgaWJG7Sz7MWAMiGdzm80gg
+         uaC2besK/d9rPZRxtBPkJaBekdb7XhjxkVKSsplJECpA1/gGeUBzzbfnr4YvXgwmvppb
+         XyFVljn0pcVqOJTv+aCySv90Gh+gIm/L+TbMqIluvpDq5jYZhuLIJYkHnvNGGxXCOgVz
+         1oIaH+GDkvGNUr+nQYC4Zv6k43tRBaBj1GAXzIRTfkXAszK4/L2IuWB9euJ0AGXsh6RT
+         8T8FL9jWAtjdqoALrSk+rjZIcjYGQXuFIPbY5Z7zNBen8lynBa482MvbT1gWZ3KZliXE
+         Ynlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710969967; x=1711574767;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mzsrM1L8P4mSOOl8hVgL169WcD3Sb3eP1CZAhfU2b84=;
-        b=EzWIur/tnaFq4jHGcR50zMaWkOdG2OQBVMsKQX3cgeyj6xnwMxVfQ75xbPKFzcYUEP
-         XV0aiqsvaCjJ0KwfvO1We04vVp05FVh4/m5qbHTNsaVHbYcXfd0UV7M3omvnRKhGJDfJ
-         cRMDk07v2/cFgvZjPRO7cUL3lvtp7j6PxX8lgIJ9cVLfYrCkRtVC2lds/fUK5pBWDXo2
-         jtk7laLGYzhbO4dL+kYZVlh3/yc8Xb/wUbADsMK39gIZaJg/vtxfyKzYs+YnJwUo3u9J
-         0vk0JepOhiZHLv0Bhnx0kP/mZY0xovGhxSZJcnYfPOvdWXoPOnAy5204gQiuiqYAQqHH
-         W+iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU1ydbQd25pC7ZwVdjLshTn2TDvthmpSZd30bBQewFPCm1HiviQFTZEUtBR+TV1pK90phpH2A8BKkf/WOwsrWcqYbuBjzhO2Uhe
-X-Gm-Message-State: AOJu0YxqywCs/Xpo9r6NmYKfzMLM1Kx8BTag0sBtroxH4JJORiA4Jz5r
-	SBJS09oHsQ9DsUR1NPOiVjXo5Gxxvn3tgQ1vxcNCRki7wm3wNL3wSIhQdGMw
-X-Google-Smtp-Source: AGHT+IFAygae62mQF5OIS71xBnoHIY5NME7aFeMqZ4OASvjoUvZaXoiOmRGIvYPLDflpYdPXq1X7Rw==
-X-Received: by 2002:a17:907:2d2a:b0:a46:df55:e238 with SMTP id gs42-20020a1709072d2a00b00a46df55e238mr4527100ejc.44.1710969966969;
-        Wed, 20 Mar 2024 14:26:06 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710970130; x=1711574930;
+        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TEht7YnmUJZ8GyBrObrphnVJUwyDyPdgqF88iptSAhQ=;
+        b=JwEYJuw5ysU/5w+pDZKS54yDxh44R9pZ53Mz4rHcQv6ddRr0SvWHI6gGg5NplXqwgu
+         FVXRts5OcKXDnHtkrgY/eDyqlXCDWzJMe8moSB1AQsaJd0bmZzZfIFVM7tiedScCyMMb
+         u7lc7I1/9iURjW1V73Ttf/oKpfCZXzXK+UT+dJv21/y/r+1Z4K132n9yFJRd+nFm6sGd
+         ziV6sWOsOsGt042JXfkFdC9sQLy6CJpNMuFVLP+0N5UTu6e5OyRO+cP+opozyngFCa4q
+         qlW7kBmbO4ndjk7GyTjPpGd3aE0uKIn6xty5T4GgGWZUQRHeSH5ttbeXnfRl0kEDErT9
+         ZHHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUqOEh3bTal+22HIgpbQYeII2mTUbcQNNM1M1j0xxsuEZCMxz/h6X93iqwDgmOp2b39++sQdEcHxctHoHDMk6dHqd9kt72vFTHA
+X-Gm-Message-State: AOJu0Yx2RvImmqlCnqLfot8C7nnVnBp3kzVXf62Aipg4CFrfORPZIWNJ
+	Khhfcsdhum12RUHEBxchgKPPWhToy8Fl1LltdwraVDMdI62vOa1/qRdkai+x
+X-Google-Smtp-Source: AGHT+IHXaSEdFFzpSJhVOLol0k/87JD9w4M6f2zeRExKMGRqicFx9AAuN5SHIn5KFZv3X0K2J2Mf8w==
+X-Received: by 2002:a05:6402:e83:b0:568:b46c:c4ba with SMTP id h3-20020a0564020e8300b00568b46cc4bamr2479009eda.30.1710970129802;
+        Wed, 20 Mar 2024 14:28:49 -0700 (PDT)
 Received: from ?IPV6:2a01:c22:7ab5:f000:819a:3b4d:1a79:9330? (dynamic-2a01-0c22-7ab5-f000-819a-3b4d-1a79-9330.c22.pool.telefonica.de. [2a01:c22:7ab5:f000:819a:3b4d:1a79:9330])
-        by smtp.googlemail.com with ESMTPSA id x11-20020a170906298b00b00a46d514ed03sm2851678eje.220.2024.03.20.14.26.06
+        by smtp.googlemail.com with ESMTPSA id et5-20020a056402378500b0056ba8b68505sm1402197edb.92.2024.03.20.14.28.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Mar 2024 14:26:06 -0700 (PDT)
-Message-ID: <6d0b7ab5-7864-49f9-92ca-f3413fe6e1f9@gmail.com>
-Date: Wed, 20 Mar 2024 22:26:06 +0100
+        Wed, 20 Mar 2024 14:28:49 -0700 (PDT)
+Message-ID: <29cf1ae9-a7f8-4ab2-8327-9104e55a8f4d@gmail.com>
+Date: Wed, 20 Mar 2024 22:28:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,6 +78,8 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: i2c: designware: unhandled interrupt on N100 lpss channel 0
+Content-Language: en-US
+From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
  "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
@@ -90,8 +92,7 @@ References: <e3f2debf-c762-48d9-876e-bcb60841f909@gmail.com>
  <ZfsHyyrel-d1exxM@smile.fi.intel.com>
  <62500f74-8d73-40f3-80dd-36d3f70084f0@gmail.com>
  <ZftQKXWBKPj3ztYM@smile.fi.intel.com>
-Content-Language: en-US
-From: Heiner Kallweit <hkallweit1@gmail.com>
+ <6d0b7ab5-7864-49f9-92ca-f3413fe6e1f9@gmail.com>
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -135,51 +136,54 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
-In-Reply-To: <ZftQKXWBKPj3ztYM@smile.fi.intel.com>
+In-Reply-To: <6d0b7ab5-7864-49f9-92ca-f3413fe6e1f9@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 20.03.2024 22:07, Andy Shevchenko wrote:
-> On Wed, Mar 20, 2024 at 09:21:34PM +0100, Heiner Kallweit wrote:
->> On 20.03.2024 16:59, Andy Shevchenko wrote:
->>> On Wed, Mar 20, 2024 at 03:56:29PM +0100, Heiner Kallweit wrote:
-> 
-> ...
-> 
->>>   grep 0000001b /sys/kernel/debug/pinctrl/*/pins
+On 20.03.2024 22:26, Heiner Kallweit wrote:
+> On 20.03.2024 22:07, Andy Shevchenko wrote:
+>> On Wed, Mar 20, 2024 at 09:21:34PM +0100, Heiner Kallweit wrote:
+>>> On 20.03.2024 16:59, Andy Shevchenko wrote:
+>>>> On Wed, Mar 20, 2024 at 03:56:29PM +0100, Heiner Kallweit wrote:
 >>
->> pin 3 (GPPC_B_3) 3:INTC1057:00 GPIO 0x80100102 0x0000001b 0x00000000 [LOCKED tx]
->> pin 82 (GPP_F_7_EMMC_CMD) 135:INTC1057:00 GPIO 0x44000300 0x0000001b 0x00000000 [LOCKED full, ACPI]
->> pin 182 (GPPC_C_13) 269:INTC1057:00 GPIO 0x44000300 0x0000001b 0x00000000 [LOCKED full, ACPI]
+>> ...
+>>
+>>>>   grep 0000001b /sys/kernel/debug/pinctrl/*/pins
+>>>
+>>> pin 3 (GPPC_B_3) 3:INTC1057:00 GPIO 0x80100102 0x0000001b 0x00000000 [LOCKED tx]
+>>> pin 82 (GPP_F_7_EMMC_CMD) 135:INTC1057:00 GPIO 0x44000300 0x0000001b 0x00000000 [LOCKED full, ACPI]
+>>> pin 182 (GPPC_C_13) 269:INTC1057:00 GPIO 0x44000300 0x0000001b 0x00000000 [LOCKED full, ACPI]
+>>
+>> I was not correct, the value to grep is '0000[0-3][0-9a-f]1b' as there pull
+>> up/down can be enabled.
+>>
+> Result is the same
 > 
-> I was not correct, the value to grep is '0000[0-3][0-9a-f]1b' as there pull
-> up/down can be enabled.
+>> Nevertheless from the above the pin 3 is one that is enabled as GPIO input with
+>> RTE 27 and direct IRQ.  If it's a culprit, try to add in the pinctrl-intel.c at
+>> the end of .probe:
+>>
+>> 	{
+>> 		void __iomem *padcfg0;
+>> 	        u32 value;
+>>
+>> 		padcfg0 = intel_get_padcfg(pctrl, 3, PADCFG0);
+>>
+>> 		value = readl(padcfg0);
+>> 		value |= PADCFG0_GPIOTXDIS;
+>> 		value |= PADCFG0_GPIORXDIS;
+>> 		writel(value, padcfg0);
+>> 	}
+>>
+>> If it helps, it will show the BIOS bug (likely).
+>>
+> Wow, this indeed fixes the issue for me. Thanks a lot!
+> For my understanding: Shall we (kernel driver) rely on the BIOS to configure
+> GPIO's properly? Or better assume that GPIO's are in an unknown state on
+> driver load and configure them for our needs?
+> IOW: If we assume that other systems may have similar issues, should "some driver"
+> use e.g. the pinctrl API to configure relevant pins?
 > 
-Result is the same
-
-> Nevertheless from the above the pin 3 is one that is enabled as GPIO input with
-> RTE 27 and direct IRQ.  If it's a culprit, try to add in the pinctrl-intel.c at
-> the end of .probe:
-> 
-> 	{
-> 		void __iomem *padcfg0;
-> 	        u32 value;
-> 
-> 		padcfg0 = intel_get_padcfg(pctrl, 3, PADCFG0);
-> 
-> 		value = readl(padcfg0);
-> 		value |= PADCFG0_GPIOTXDIS;
-> 		value |= PADCFG0_GPIORXDIS;
-> 		writel(value, padcfg0);
-> 	}
-> 
-> If it helps, it will show the BIOS bug (likely).
-> 
-Wow, this indeed fixes the issue for me. Thanks a lot!
-For my understanding: Shall we (kernel driver) rely on the BIOS to configure
-GPIO's properly? Or better assume that GPIO's are in an unknown state on
-driver load and configure them for our needs?
-IOW: If we assume that other systems may have similar issues, should "some driver"
-use e.g. the pinctrl API to configure relevant pins?
+By the way: Great support! I wish I could get the same support level everywhere.
 
 
