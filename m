@@ -1,115 +1,129 @@
-Return-Path: <linux-i2c+bounces-2438-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2439-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D64B880D26
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 09:36:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F71F880D2D
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 09:37:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1733E285143
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 08:36:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEEDA1F2309E
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 08:37:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 185AC32C60;
-	Wed, 20 Mar 2024 08:36:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7079837169;
+	Wed, 20 Mar 2024 08:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lQ3Nv+RW"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YZcI3zZ6"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF16282F7;
-	Wed, 20 Mar 2024 08:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24B738F94;
+	Wed, 20 Mar 2024 08:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710923774; cv=none; b=qBByNMu+BxoF6PyiIO2ROCst4MIKiTSny3QxPeOq4P3VRSkpsNRSyRUUDiYepRuOZaT+4jc0e9B10tJCuIwmY84wgXQjzILoP7rRRZiCgpfm04nMPJNHut8re02OKFZ/BF+yBy/kDOmQ2/S90T6j09anR1Wx/RqxS0H5/1AmYPo=
+	t=1710923849; cv=none; b=WusI+gZVUcr7b+W1MELGUxVnFVnRgYRzp+EZU38F37LiEmDBPCpBNC/3uIKxrdBgnwnOF4BJlhhRW2ZoHnyidT2j3cNBOmX2wm0MjyONSKidL+/JwRRHtuVayklN6L9pFH8dqMOvFydl6t1Kj+iSogioHk8JM+ETz4xkK38Ud+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710923774; c=relaxed/simple;
-	bh=BsJ+dxxh982yw2l5lgbwqWd9Y4Ton6lBnFdvfnkwBvs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HXa0R6hbY6vPbOfQZ39lts4PJ7F5ZqDwaiMN2NO9dAGNYG1cMnxmJ0YoSPhv6vpgnM/zvoHvA1WO7/C1XP7S+sgpiZgVFSiL17gzRR/1UKDkqpn+U6LNIZmfQLb76r1tLQfKAY8N6IC414J3jszJsIXG6jIeP6cbm49HHMGlXJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lQ3Nv+RW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5013C433C7;
-	Wed, 20 Mar 2024 08:36:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710923774;
-	bh=BsJ+dxxh982yw2l5lgbwqWd9Y4Ton6lBnFdvfnkwBvs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lQ3Nv+RWH+wQcWwdP6fT/+5NIZEu9mLXSEhaSaJX1c+45aev45euIgFX4LnkC6JP5
-	 4oTYGVb8lb8r24JiMD9Oua6rwmLqpz9r9b3bepU1trQiYeta0gpZbQvO9zAuYr7iq4
-	 /o8C7EOQE7aTBmDw9JdOEiNwcXGBdu9JvOGJioyytWsXhMYKriMvGy9j2qU+edDQo3
-	 MMIh1w1s44ujInkX9MG7ZCKVJGMhbYwsmTcgUKZEAYezSraI7nnmU7Y3Hav7W3RcIf
-	 xWIzcWEpfYbdZMq3KRdj3sCFuzxU81cUze0U5Z8w40Y22nScVhF7mDef+Rg3vcMFvH
-	 HjsuYvyW7g2tA==
-Date: Wed, 20 Mar 2024 09:36:11 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c <linux-i2c@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>,
-	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
-Subject: Re: [GIT PULL] i2c-host changes for v6.9 - part 2
-Message-ID: <Zfqf--4NRpshpWTz@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	linux-i2c <linux-i2c@vger.kernel.org>,
-	lkml <linux-kernel@vger.kernel.org>,
-	=?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
-References: <xhohtljc7lvguz6inuqgwwzw7b752q3noa3umiqebfraxedco7@3yw2ea2eibjo>
+	s=arc-20240116; t=1710923849; c=relaxed/simple;
+	bh=e7sm5KHKe7u07Hsum6EAU2IzxwlcrcHFBumoupR3X0A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uxuYaJdW8uXRk4Spt+/0QGqZmodE5mBprctzoOqs7tzXP3uZW/x+Q1vhTQGOs7z8b8kgiAHZqOazg9aqIWhtzSpGFQNaj575B9+Wm/sPtJrhD0hy9VuH6LxaU3tWowxOo3bBpwfRTV25kcpFhnDjhuppG+q9Y2cKGQjZvhobZF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YZcI3zZ6; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 45FB44000B;
+	Wed, 20 Mar 2024 08:37:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1710923843;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=STDUP9Qpyn6byZT3Ex4nieAzKGvpxzwoBCLFYRcWYac=;
+	b=YZcI3zZ6pCAGbOyaL4vujc3a8ofF3MTLoqFnqYp2nnh6+aION1xaleoyRffG047ewxT09f
+	sAbNU86SW5htuCuTQnymVuuwp/9TS+uJ854aCbULiTNRZLut0QO6yurLmTxiWbboBE3Vzm
+	idoVKgot7+G7goramB7nNFKAjUuPNJ3KWJB3N0XiT3x8T/NUECF7n64SH3OfaKGlZBGilc
+	Rtwp2GMx7wArlXzCFnyM+RVp2pEedhtJy6oDAuH60kBFJK9byFbZNVdqce+2o4QoBChdg2
+	WTV5ompOrojR4xHgMsWPjDHilcSja1wX1gZ5i3z5sqYkp3un611thZiP4rQbCg==
+Message-ID: <feb63292-8739-41b2-9503-c83a6fd930fd@bootlin.com>
+Date: Wed, 20 Mar 2024 09:37:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4aMutjG0S9KwZMKL"
-Content-Disposition: inline
-In-Reply-To: <xhohtljc7lvguz6inuqgwwzw7b752q3noa3umiqebfraxedco7@3yw2ea2eibjo>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 02/18] pinctrl: pinctrl-single: move suspend()/resume()
+ callbacks to noirq
+Content-Language: en-US
+To: Dhruva Gole <d-gole@ti.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
+ Tony Lindgren <tony@atomide.com>, Haojian Zhuang
+ <haojian.zhuang@linaro.org>, Vignesh R <vigneshr@ti.com>,
+ Aaro Koskinen <aaro.koskinen@iki.fi>,
+ Janusz Krzysztofik <jmkrzyszt@gmail.com>, Andi Shyti
+ <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
+ theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com,
+ Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20240102-j7200-pcie-s2r-v4-0-6f1f53390c85@bootlin.com>
+ <20240102-j7200-pcie-s2r-v4-2-6f1f53390c85@bootlin.com>
+ <20240320074431.6yzao3jlyaxuii7c@dhruva>
+From: Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <20240320074431.6yzao3jlyaxuii7c@dhruva>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
 
+On 3/20/24 08:44, Dhruva Gole wrote:
+> Hi,
+> 
+> On Mar 04, 2024 at 16:35:45 +0100, Thomas Richard wrote:
+>> The goal is to extend the active period of pinctrl.
+>> Some devices may need active pinctrl after suspend() and/or before
+>> resume().
+>> So move suspend()/resume() to suspend_noirq()/resume_noirq() in order to
+>> have active pinctrl until suspend_noirq() (included), and from
+>> resume_noirq() (included).
+>>
+>> The deprecated API has been removed to use the new one (dev_pm_ops struct).
+>>
+>> No need to check the pointer returned by dev_get_drvdata(), as
+>> platform_set_drvdata() is called during the probe.
+>>
+>> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+>> ---
+> 
+> I was planning to do this but didn't see particular benefit to it. Do
+> you see the benefit on your specific device? Can you help me understand
+> how? Not against the patch, just curious.
 
---4aMutjG0S9KwZMKL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello Dhruva,
 
+We need this patch to support suspend to ram for the PCIe on J7200.
+In root complex mode, a gpio is used to reset endpoints.
+This gpio shall be managed during suspend_noirq and resume_noirq stages.
+On J7200 this gpio is on a gpio expander.
+So we need this patch to restore pinctrl to be able to do i2c accesses
+in noirq stages.
 
-> The following changes since commit 06d0cb6c824c7df736e66060b8c63b0100259d=
-3f:
->=20
->   i2c: sprd: Convert to platform remove callback returning void (2024-03-=
-08 08:02:47 +0100)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags=
-/i2c-host-6.9-part2
->=20
-> for you to fetch changes up to bb271301b80410592cbe0170b9f6d2f677f68171:
->=20
->   i2c: nomadik: sort includes (2024-03-12 11:50:45 +0100)
+Best Regards,
 
-Pulled, thanks!
+-- 
+Thomas Richard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-
---4aMutjG0S9KwZMKL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmX6n/sACgkQFA3kzBSg
-Kbbqmg//Xxtv7CaIsDLLCtyAhIYA6yQRPo3kSDfrBaPI45QhJfBUUOImSdIu0mmZ
-gOzJgPF3opRN+RHrNSbFbj67CieE9ZJsdIQxosmRN0f8lADL+1SkyThIU/RjytB8
-shg3pERTkpjIvi62MtZy9CtRS7dd+UIO0V3LCut+ew1E+QzRbFLvebemyxiuVQZc
-kTR9MM3a804tPjHbTyrqjpIvUZ0WMsUZTVSqCsaItFYfnVDYkRQ/3xEjioiKswpV
-eRUiH5ONmOTLMdFQA7yhfwZm2FQSSCcbYg40dDuTT6Dq7M7CcoOaCHfNMOKWW4n4
-/GQbDz1SoCzNQF0LKcKeMm82x0WFQHXNJHtkEn0xZlpmDPQ5Z8UqfOg6EO8ebzrd
-7i4qiCsC3uxcrne0KgS9uJaPNn8sXffGUjAXsU2tOaWGuW420fEiDPkx749rtr/F
-1TQBG3SH1I6dMc0AmaQmHdJgWPtrACSruklE9mtF0z9lddOvqexcIBJXc+b1CGYe
-brMRxDpd9Z3F4aZunHkbTce4ax9icNinuxIhZknSQewGAQSpATjErCEBLhgJX+Hi
-0VJXaBYz4279vx+ow7nFQmOoLp/HxGJrcOr+YD3o8H6QeGJipK8p6G5WgqI2mdqs
-mwgDv67lDCWgUN61id3sXARrcB87xeC/TR6Zlw/afXSU7a4Jyd0=
-=aNVo
------END PGP SIGNATURE-----
-
---4aMutjG0S9KwZMKL--
 
