@@ -1,66 +1,66 @@
-Return-Path: <linux-i2c+bounces-2422-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2423-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 258A0880A47
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 05:20:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FE92880A4A
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 05:20:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD114283FEB
-	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 04:20:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 082EDB21B99
+	for <lists+linux-i2c@lfdr.de>; Wed, 20 Mar 2024 04:20:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41D2811C92;
-	Wed, 20 Mar 2024 04:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DB1C14010;
+	Wed, 20 Mar 2024 04:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=turingpi.com header.i=@turingpi.com header.b="eSacToBk"
+	dkim=pass (2048-bit key) header.d=turingpi.com header.i=@turingpi.com header.b="jW35wPlH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7827711CA0
-	for <linux-i2c@vger.kernel.org>; Wed, 20 Mar 2024 04:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C808A14007
+	for <linux-i2c@vger.kernel.org>; Wed, 20 Mar 2024 04:20:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710908406; cv=none; b=FPPfrwvoHQpNbMYzevuDwB/cn1ttrpv8njg+qYiCxsOqNocI2HhJ/W2Gp981hap/3595KMx1cAagKH2eLuI8ZheyWc9F/Pi2jfGA7xLGGCiAHOF4/MoOKOmB5zbJI4V+Up/7VcAgccwSBktlMJ6OFyyGuv8H/OTYdqn3+7vwWBo=
+	t=1710908420; cv=none; b=H3YcB8G0V4eNiTCnAN87DbDkjZsgUXVbTmr0LHfDMn9mqKQpEN/H+rnNCttnpM/NzLSt8suTV4+nQbjB2UBs5hQP9Dy//4RT/IjjUnEe7kjcZHz6R8b+/MazE6UpioIspRRTKK4SykDUUC+onOopY5RBigpe8ymwEUlMyhuYlmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710908406; c=relaxed/simple;
-	bh=a+lyfj6zeTwlOIWPD4BenCcLHO+vHC6TPolOl4FzFoM=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=tWc0TNva1iGqhp75vnY4kVPS3eLrpTEsT5SrMVqKvUOKTWZt/GygKfuYLO9h4aDNX51vOylHygG4Ip2h17KMC+tvwS814GIL9j6todbE7BUr7PUFgYv8Xih3dOPxzNFjt50y12RXnZWBkjckr3mET5pn7Mr83wGB7VSdHRO9rKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=turingpi.com; spf=pass smtp.mailfrom=turingpi.com; dkim=pass (2048-bit key) header.d=turingpi.com header.i=@turingpi.com header.b=eSacToBk; arc=none smtp.client-ip=209.85.210.170
+	s=arc-20240116; t=1710908420; c=relaxed/simple;
+	bh=H/oWAmb3qdH6GqOGd7i1JdAe4XTSZAqLaJD9s7aHPtk=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ue+4c7onulOaIdMcmkHfw24UeFgxK7aupIA57xjfBSntuYb3a73O7bmGv7PJnn7hFbL7Vm2UuK4a4wDXU4ro7wyxiVChjH8k28nZQ/o9RDLa+xvbdqrRXehk782Ztt+z8ikiK1JLNTgyOPOQdYwiAlMO1jmBq3FbTlXMMholzbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=turingpi.com; spf=pass smtp.mailfrom=turingpi.com; dkim=pass (2048-bit key) header.d=turingpi.com header.i=@turingpi.com header.b=jW35wPlH; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=turingpi.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=turingpi.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6e6cadfffdbso5808153b3a.3
-        for <linux-i2c@vger.kernel.org>; Tue, 19 Mar 2024 21:20:04 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6e6c0098328so5164176b3a.3
+        for <linux-i2c@vger.kernel.org>; Tue, 19 Mar 2024 21:20:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=turingpi.com; s=google; t=1710908404; x=1711513204; darn=vger.kernel.org;
+        d=turingpi.com; s=google; t=1710908418; x=1711513218; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=guY2KM4DsbdsXz5uu7iJDnaLW29Dahcuc+xgvO6JLxI=;
-        b=eSacToBkG7M5Fh7SSvrJR8m/Y04obM0pOhhwymQRm/PXLUHuDhLkXgKN69uVUmjCVs
-         niPzeyANZ7cRGRPspkeLkoLXa93N9zNYUt6FTDG0r9GbDmTU/mADkFKJ/CQo/AllQmoM
-         AuTkWweiNwaan8sRpkArF9yb6fqaQ/aQsDU9HroEBL+TkRMRm/6yLA8/5lrg1WKhrmfb
-         eByrECt3HfHqbBW42IaO3SJ60+IBDAWBdUo9M54uHlk+f7BZlz0ekd6xHhGt+RTpIH5x
-         BR9J5NvkCEmz2wzKK8VOPCCSiL2wbnZpOgAINelcNNRi2sI6HY8jKU8pSyXc7R+KV1Ti
-         W1Cg==
+        bh=x/ne4R6QNYBHc5s1C1wG8NSPymgeCplkIkbc0sb+CmI=;
+        b=jW35wPlHXg3qlupWIcHLVQjTLb6Vz+uFu8/YqZrbFSYh0rq7qTfBFO3tYiDxLZSqYN
+         nYMzj8lBwk8KWhFB280YimQ9i35wxHBj2kfE3PG31VsRi9C38y4JqlUVq3uzA5uOM2f6
+         hjLZon7MlgTRXyInBNZEBFeDuQ0rMFq6eyIlo1wJpg1VHPDt1q2ZOu3qGQADw/XJjut1
+         KDCQ0EPQ9F1uHw60tZKYEC8NzDE2fB5WEkNK1AeyeXqxtkW3yX7NCmVMSkkxn4vV5Ofv
+         EpEGdvCmgycDYAprthqMPOALOp1XPDjEEb/Od2fQ9ISiuEY7lFBPUVW0vJl1nEhD5qQy
+         QUPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710908404; x=1711513204;
+        d=1e100.net; s=20230601; t=1710908418; x=1711513218;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=guY2KM4DsbdsXz5uu7iJDnaLW29Dahcuc+xgvO6JLxI=;
-        b=KhZW0vQm/T3yiem0T9ufo9ihlSzKuz2P2RUkv+foCHZNzjjC0qrRv9LhUFsdEudUtm
-         UhBiQI+JjNqTFRVLB6Bn3cLymcllRDJ4Lw1YbJsHudaJzcYfSySSCZmMlEl/3OSRkc8o
-         uIYJadb/G/XNoToy0VUDeBYr+XfHVgsTRrY6PDPSvcPhIc8B6NcE4tWGpmbGOHAoYYM+
-         scPHtBY4j+55LGYtXTyFL1BB6CHpQij4J0pOaWunPs+6WMIxNVKNy3f/MbD/ODsWTRBW
-         5l/VFgBNPEga3B/6mankvFtzEvEYvYPBcvWQifbcTwz8RXYPQL+Kq64ft6I+Et0lBAdb
-         eLUQ==
-X-Gm-Message-State: AOJu0YzcKLSVET2yrTQII6XIoRIF1LJaYWHx8zigSJ06rz13YAmB33Yn
-	V14BkduQY2+K1lkCn+4CeRhL90Fv2r1wvl3sLo+NVH9+dsfyyxIqk4uKAhZGuDi6UJcLVM5w2Fs
-	0nXsLid4AI8LuM9BQCxWjd+5mULp0Pwohkm2/Qd82Bg7J4fjWXzA=
-X-Google-Smtp-Source: AGHT+IGW0qUS/trpEAYa3MLlIWx9ApWjKgdJY2CL/NKVnVVBCvEDzMxShnrhHLrfqbVQSeTeRCdxn7LkBAh/+5qxRe8=
-X-Received: by 2002:a05:6a21:1798:b0:1a3:6fe9:4060 with SMTP id
- nx24-20020a056a21179800b001a36fe94060mr5194683pzb.17.1710908403659; Tue, 19
- Mar 2024 21:20:03 -0700 (PDT)
+        bh=x/ne4R6QNYBHc5s1C1wG8NSPymgeCplkIkbc0sb+CmI=;
+        b=GhnXpnWE+IXvyNN4+iteCLgvq8u8TWMigVOLaKeVFo5sH4FRECeyPw7IoLoYgagbpB
+         uVLTTkFvz44hw1dyVdOCcWznHoTkai9qO2M+pyeyBTUGmPMVo7P3qRWJU4bWHcnskGFw
+         uL2y8T6FgivbnhQ5wV5ARB6AmeBDLZPD34WUOCU3RyjxPY2cUosS9MDLwFut8s3GBRF5
+         E37iJ8Ftbinxro18LEHGAVgC/LfshmLrgAi+EmWi202SW+wnyu38Oglm1/iuvazYGOXZ
+         EFWZnojdBHYeEx9fZw1+K+T4Zndy9wlxhoXEVL/9d09X1gGsUgyUAD+C3lorx6El6FI6
+         JCNw==
+X-Gm-Message-State: AOJu0YziYq87YA63e6ZsT7Tc2r69lAj8zaZlnkTf44110Jlj0/JCinAJ
+	O1UkrPzsBv1qYqOtmBj0mzMcDCYqg5T7vO+84uUOeTjdz+CMbbiogO70bx7j+cx97rBs19N+OyG
+	6IAJnpxsC18GirnF15H2hAcsyHbDXJE+xlaDKc8McED2U7KCpXmY=
+X-Google-Smtp-Source: AGHT+IHff6ZCZ3a77kNIs1sj3YhQ2PuSoZWxg+6jNDPEOpMuOBgzBIEK6UEkagTBVQCJexujrskf7gcN6CxbhnGJtxg=
+X-Received: by 2002:a05:6a20:7351:b0:1a3:6833:1ccb with SMTP id
+ v17-20020a056a20735100b001a368331ccbmr1039918pzc.40.1710908418227; Tue, 19
+ Mar 2024 21:20:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -68,60 +68,65 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: Sam Edwards <sam@turingpi.com>
-Date: Tue, 19 Mar 2024 22:19:53 -0600
-Message-ID: <CAF8uH3tYaUwhkkeFuY+PdsnSPqeTtWtOsB_hy9oOjF=f-2Hdaw@mail.gmail.com>
-Subject: [RESEND RFC PATCH 0/5] Enhancements for mv64xxx I2C driver
+Date: Tue, 19 Mar 2024 22:20:07 -0600
+Message-ID: <CAF8uH3tRCACX23CyA=M+AYq4YRsf3P97eL=0k8Rdg1UACREY_g@mail.gmail.com>
+Subject: [RESEND RFC PATCH 1/5] i2c: mv64xxx: Clear bus errors before transfer
 To: Gregory CLEMENT <gregory.clement@bootlin.com>, Andi Shyti <andi.shyti@kernel.org>
 Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Salutations, Linux I2C team!
+The MV64XXX hardware can act as either a bus controller or target
+device. In order to protect target devices from a glitching bus
+(apparently), the core listens on the lines even when idle and moves the
+hardware FSM to the "BUS_ERR" state if an invalid transition is
+detected. The hardware then does not exit this state until reset.
 
-Sorry about the resend; it seems my mail client "helpfully" swallowed the
-newlines on any line consisting only of whitespace, garbling the patches.
+This feature is actually counterproductive when using the hardware as a
+controller (as this driver does): we do not actually *care* what
+happened on the bus previously, as long as it's ready for use when the
+new transfer starts. However, the controller will remember a previous
+glitch and trip up the driver after it attempts to send the start
+command. The driver logs and error and resets the controller, recovering
+from the BUS_ERR state, but not without erroring back the transfer with
+errno EAGAIN. Clients generally do not handle this gracefully.
 
-I am working with an Allwinner T113-s3 based board; the internal I2C bus of
-which has a Realtek RTL8370MB-CG Ethernet switch coexisting with other I2C
-devices. The RTL8370MB-CG deviates from "conventional" I2C read operations
-in that it expects the hardware register after the addr+read byte before it
-turns around the bus to send the value. For this reason, the `realtek-smi`
-driver currently implements the protocol via bit-banging. However, I am in the
-process of developing a separate patch series to promote this driver to a
-"full" I2C driver, leveraging I2C_M_NOSTART to support this odd read operation.
+This is easily fixed by checking for the BUS_ERR condition upfront and
+issuing the hardware reset before beginning the transfer. This patch
+does NOT also call i2c_recover_bus(): the assumption is that the bus is
+fine, just the hardware is upset; if the bus is also in a bad state,
+this should not pass silently.
 
-In anticipation of that, I am preparing this series comprising five patches to
-improve the functionality and reliability of the I2C adapter enough to support
-this kind of device. I have heavily tested these changes on the Allwinner-style
-mv64xxx core, but not the Marvell-style, and have not been able to test 10-bit
-addressing. I would greatly appreciate if anyone here could test this series,
-especially on non-Allwinner boards and/or boards with 10-bit devices.
+Signed-off-by: Sam Edwards <sam@turingpi.com>
+---
+ drivers/i2c/busses/i2c-mv64xxx.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-I'm a bit skeptical of using I2C_M_NOSTART for this purpose. The driver does
-not (and cannot) support "just any" use of I2C_M_NOSTART, so it may be
-inappropriate to claim the I2C_FUNC_NOSTART capability. On the other hand, I
-searched high and low and couldn't find any use of I2C_M_NOSTART that
-*wouldn't* be supported by this change, so this could very well be exactly what
-clients understand I2C_FUNC_NOSTART to mean. Given that the alternative would
-be inventing a new flag ("I2C_M_READEXTRA"?) and figuring out how to supply
-input bytes and output bytes in the same i2c_msg, I opted for the NOSTART
-route instead.
+diff --git a/drivers/i2c/busses/i2c-mv64xxx.c b/drivers/i2c/busses/i2c-mv64xxx.c
+index fd8403b07fa6..cfc16909fba3 100644
+--- a/drivers/i2c/busses/i2c-mv64xxx.c
++++ b/drivers/i2c/busses/i2c-mv64xxx.c
+@@ -753,6 +753,7 @@ mv64xxx_i2c_xfer_core(struct i2c_adapter *adap,
+struct i2c_msg msgs[], int num)
+ {
+        struct mv64xxx_i2c_data *drv_data = i2c_get_adapdata(adap);
+        int rc, ret = num;
++       u32 status;
 
-I look forward to any feedback, bug reports, test results, questions, concerns,
-commentary, or discussion that you can offer!
+        rc = pm_runtime_resume_and_get(&adap->dev);
+        if (rc)
+@@ -762,6 +763,11 @@ mv64xxx_i2c_xfer_core(struct i2c_adapter *adap,
+struct i2c_msg msgs[], int num)
+        drv_data->msgs = msgs;
+        drv_data->num_msgs = num;
 
-Best regards,
-Sam
-
-Sam Edwards (5):
-  i2c: mv64xxx: Clear bus errors before transfer
-  i2c: mv64xxx: Clean up the private data struct
-  i2c: mv64xxx: Refactor FSM
-  i2c: mv64xxx: Allow continuing after read
-  i2c: mv64xxx: Implement I2C_FUNC_NOSTART
-
- drivers/i2c/busses/i2c-mv64xxx.c | 430 ++++++++++++++++++++++---------
- 1 file changed, 302 insertions(+), 128 deletions(-)
-
++       /* Calm down the hardware if it was upset by a bus glitch while idle */
++       status = readl(drv_data->reg_base + drv_data->reg_offsets.status);
++       if (status == MV64XXX_I2C_STATUS_BUS_ERR)
++               mv64xxx_i2c_hw_init(drv_data);
++
+        if (mv64xxx_i2c_can_offload(drv_data) && !drv_data->atomic)
+                rc = mv64xxx_i2c_offload_xfer(drv_data);
+        else
 --
 2.43.2
 
