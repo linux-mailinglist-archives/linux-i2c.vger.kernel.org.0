@@ -1,68 +1,81 @@
-Return-Path: <linux-i2c+bounces-2469-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2470-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D380885A8C
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 15:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 90723885A94
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 15:23:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 176C9281754
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 14:19:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3616A282DF3
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 14:23:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDE5084FC3;
-	Thu, 21 Mar 2024 14:19:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 487EB85279;
+	Thu, 21 Mar 2024 14:23:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DmWwiZe/"
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="FBaOWFsv"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D9F85264
-	for <linux-i2c@vger.kernel.org>; Thu, 21 Mar 2024 14:19:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6634484A5A;
+	Thu, 21 Mar 2024 14:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711030786; cv=none; b=N7weIshhoUoec2n7Or8dQ2kBMyCM6tKxr97ZwdbdN6SI0RNPeg+4QOyZhBKoIeJ59GSP9/OTAu6426v95KX/DGI7t4tNWfqJOs1l+CRRFI+zGlEu4JZO3gWARPoObGBkzuvH+3wv8isjZPvBAWBYBCCESonb/sikfyWooLEkLrM=
+	t=1711031009; cv=none; b=FzNlc1RA6Y7vMeWAENQfuTuZ8PyuV8gx23/jO14itO0ZXZ+TEje/67s92CYf/21R+YcOfOFlKhGL0kkGTHxgKYpV1v7pSm5M+SxdlDvj7zQsQxhMOwNvcjl5Nh3wwJiVqrSYguaWNxOWmLJbaVbg5O/b6yg55e00hN8cCYnVI6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711030786; c=relaxed/simple;
-	bh=E42ll9dERYQeDCitci5NhXmUs/W94JnbCK8poS4Ofx4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BPSsZbElZEPPznC2S6nOOabIYkxG3rU3gSo3uHlZ4BqJbdItjh+fTmNCA/G9QLTsrQMzDOj/BtH2dvPS6huA8yTg+GadAfFxkJ348mHLCOeZ8ZREnrY0Rls1DcWbePVPSeE7BlhUSGQjRvHo/apuclndUZ8M/ofmKr5jgvoOFSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DmWwiZe/; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711030783;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=eqo+fR/qcUeO6cSXAqMCj6s8RG+XUPe+vPrRfJcqycY=;
-	b=DmWwiZe/sNVx493aXCxgGi6uHBgbxqBEN56upcLzob/w8WkjWSKRHJP6FTbRXKrtRTajOc
-	IgF2X6pENE0P6geX94V1SGmKJ+I/PHTJ3ZaaaYBdwMP/EjGltiSQqur0fqPECLNjpPgv0o
-	Wlpp2OnjuJW8kSL17iHp5+ab5+MG1VM=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-447--R_GO4aHOrWVblsLQcqPuQ-1; Thu,
- 21 Mar 2024 10:19:40 -0400
-X-MC-Unique: -R_GO4aHOrWVblsLQcqPuQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E59A53801FFF;
-	Thu, 21 Mar 2024 14:19:39 +0000 (UTC)
-Received: from intellaptop.redhat.com (unknown [10.22.32.80])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9762F3C54;
-	Thu, 21 Mar 2024 14:19:39 +0000 (UTC)
-From: Maxim Levitsky <mlevitsk@redhat.com>
-To: linux-kernel@vger.kernel.org
-Cc: Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	linux-i2c@vger.kernel.org,
-	Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH] i2c: i801: Fix a refactoring that broke a touchpad on Lenovo P1
-Date: Thu, 21 Mar 2024 10:19:19 -0400
-Message-Id: <20240321141919.26844-1-mlevitsk@redhat.com>
+	s=arc-20240116; t=1711031009; c=relaxed/simple;
+	bh=i3k8D2smcuGUV4zTuQXD6d2NhakJ/CGMge0aDELRsnE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=etkXpkzKVeqkJLwRr50ySzB1/V7NmTtUPvZIrccWvlahZbRAMudsPHggIf3v6tZeIbjpvQ6nbNi//NVWLfUmmdp+IrqroIhA4dI71oVgVxHe94vk5lnHmRKzMz28K7hgCwJ3n0/ozv2oW8QKiFRhhQihbxF99kTFPp6coqaVH9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=FBaOWFsv; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42LDJwZD012506;
+	Thu, 21 Mar 2024 10:23:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=
+	from:to:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=DKIM; bh=Vp84VOTUBzRN
+	rg+9EBiIB86THBzBhgqxHNyRGEzeUZs=; b=FBaOWFsvHGDRDzPBqza+z9hYKXYm
+	1belL/9dwLg6HgBL3vB0QzLSv8WF/IJRYMi5v6VAAUoxHKCJqmy67P9ivX4A5MHp
+	jupkSPqJHyGzJQXkBPAy/aKVHPiSQSl9yThlHDRj9I73fip/fkVGYL3YwPveBPvv
+	XkOHsMyawINN66/Ajjlilz/30IzoOi+qx+z7T0Z38PusxlHUddBOsKUzntj5xe8M
+	lZyaOIyXY8r9N5LPNFsLKDju4H05iyXvbLfYjR6hlLxTHoZThXB829WhAV5A129a
+	oGECOT+FIH2GjGcOH+AG2N21ZkKRKsEIk3kkMtUiESRqs5JQ8g6Kk9pLVw==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3wwr8njx1g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Mar 2024 10:23:11 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 42LENACi034186
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 21 Mar 2024 10:23:10 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 21 Mar
+ 2024 10:23:09 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Thu, 21 Mar 2024 10:23:09 -0400
+Received: from radu.ad.analog.com ([10.48.65.243])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 42LEMqp8014288;
+	Thu, 21 Mar 2024 10:22:55 -0400
+From: Radu Sabau <radu.sabau@analog.com>
+To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+        Rob
+ Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Delphine CC Chiu
+	<Delphine_CC_Chiu@Wiwynn.com>,
+        Radu Sabau <radu.sabau@analog.com>, <linux-hwmon@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-i2c@vger.kernel.org>
+Subject: [PATCH v4 1/2] dt-bindings: hwmon: pmbus: adp1050: add bindings
+Date: Thu, 21 Mar 2024 16:21:42 +0200
+Message-ID: <20240321142201.10330-1-radu.sabau@analog.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -70,48 +83,118 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: tL-Alckf2BwH53rQv9qeyXDUN_2aMS7l
+X-Proofpoint-GUID: tL-Alckf2BwH53rQv9qeyXDUN_2aMS7l
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-03-21_10,2024-03-18_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxscore=0 phishscore=0 priorityscore=1501 adultscore=0
+ spamscore=0 suspectscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403140001 definitions=main-2403210103
 
-Commit 857cc04cdf50 ("i2c: i801: Add helper i801_get_block_len")
-introduced a slight functional change: the status variable is now
-overwritten with the length of an SMBUS tranasaction,
-even in case of success.
+Add dt-bindings for adp1050 digital controller for isolated power supply
+with pmbus interface voltage, current and temperature monitor.
 
-This breaks the touchpad on at least my Lenovo P1:
-
-rmi4_physical rmi4-00: Read PDT entry at 0x00e9 failed, code: -6.
-rmi4_physical rmi4-00: RMI initial reset failed! Continuing in spite of this.
-rmi4_physical rmi4-00: Read PDT entry at 0x00e9 failed, code: -6.
-rmi4_physical rmi4-00: IRQ counting failed with code -6.
-
-Fixes: 857cc04cdf50 ("i2c: i801: Add helper i801_get_block_len")
-
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Radu Sabau <radu.sabau@analog.com>
 ---
- drivers/i2c/busses/i2c-i801.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+v4:
+ *Fix typo in schema link causing warnings at build.
+v3:
+ *Remove extra line before '$id'.
+ *Remove 'address-cells' and 'size-cells' from adp1050 node.
+ *Rename adp1050 node to generic name.
+ *Fix typo from 'adress-cells' to 'address-cells' causing errors in the
+  dt-bindings build.
+v2:
+ *Fix identation for example.
+ *Remove 'adi,vin-scale-monitor' and 'iin-scale-monitor' since they are not used
+  anymore.
+ *Fix typo for 'compatbile' to 'compatible'.
+ *Add blank line under datasheet link.
+---
+ .../bindings/hwmon/pmbus/adi,adp1050.yaml     | 49 +++++++++++++++++++
+ MAINTAINERS                                   |  7 +++
+ 2 files changed, 56 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
 
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index a6861660cb8c..79870dd7a014 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -536,11 +536,12 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
+diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
+new file mode 100644
+index 000000000000..10c2204bc3df
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/pmbus/adi,adp1050.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices ADP1050 digital controller with PMBus interface
++
++maintainers:
++  - Radu Sabau <radu.sabau@analog.com>
++
++description: |
++   The ADP1050 is used to monitor system voltages, currents and temperatures.
++   Through the PMBus interface, the ADP1050 targets isolated power supplies
++   and has four individual monitors for input/output voltage, input current
++   and temperature.
++   Datasheet:
++     https://www.analog.com/en/products/adp1050.html
++
++properties:
++  compatible:
++    const: adi,adp1050
++
++  reg:
++    maxItems: 1
++
++  vcc-supply: true
++
++required:
++  - compatible
++  - reg
++  - vcc-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        clock-frequency = <100000>;
++
++        hwmon@70 {
++            compatible = "adi,adp1050";
++            reg = <0x70>;
++            vcc-supply = <&vcc>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 43b39956694a..b45753e94756 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -479,6 +479,13 @@ L:	linux-wireless@vger.kernel.org
+ S:	Orphan
+ F:	drivers/net/wireless/admtek/adm8211.*
  
- 	if (read_write == I2C_SMBUS_READ ||
- 	    command == I2C_SMBUS_BLOCK_PROC_CALL) {
--		status = i801_get_block_len(priv);
--		if (status < 0)
-+		len = i801_get_block_len(priv);
-+		if (len < 0) {
-+			status = len;
- 			goto out;
-+		}
- 
--		len = status;
- 		data->block[0] = len;
- 		inb_p(SMBHSTCNT(priv));	/* reset the data buffer index */
- 		for (i = 0; i < len; i++)
++ADP1050 HARDWARE MONITOR DRIVER
++M:	Radu Sabau <radu.sabau@analog.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Supported
++W:	https://ez.analog.com/linux-software-drivers
++F:	Dcumentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
++
+ ADP1653 FLASH CONTROLLER DRIVER
+ M:	Sakari Ailus <sakari.ailus@iki.fi>
+ L:	linux-media@vger.kernel.org
 -- 
-2.40.1
+2.34.1
 
 
