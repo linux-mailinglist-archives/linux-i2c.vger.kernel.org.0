@@ -1,55 +1,56 @@
-Return-Path: <linux-i2c+bounces-2474-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2475-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 533678861D1
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 21:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5448388621C
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 21:54:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8AB31F22EB0
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 20:42:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F20511F21882
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 20:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E0F9135A7C;
-	Thu, 21 Mar 2024 20:42:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04F3D13540D;
+	Thu, 21 Mar 2024 20:54:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JeH0qeRN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LdBGofkv"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E824F135A73;
-	Thu, 21 Mar 2024 20:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47A11350EF;
+	Thu, 21 Mar 2024 20:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711053724; cv=none; b=tjgtbDBk/pcsLAphpX8mZAp8q07RLbyQ2CyJPQNAjDwB7m50YT0AhBJ6rZ50Q2hGB4W0VIMZU67IVonIyOCl9qt0WgSbEEA/MCWq4U6JgNtiOtZ2OPaRh2ZhdGlJYoRdc7JLm3Yyr05/jwDB071OTj1EhKX01m6xwLM5s+Vtf28=
+	t=1711054488; cv=none; b=u7PU/BkomAszaV+STDOlfiLQrbTamhvsJ6N7TfxONphedkdweZhRYOKxuoegBQUXeR/cHetfPDFoxreQVvsiPs0ger9dixo8pRDXFEnB/KgJry6MxNDjV+obDRitbqKq3tcuZCJ65Jfp9cpLsKveKoFqpIOB8Annfxatp6GwEzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711053724; c=relaxed/simple;
-	bh=NmpziW9BRh/m71deL6UzzTXuJp7VGLzKgaq9xo9Yzbw=;
+	s=arc-20240116; t=1711054488; c=relaxed/simple;
+	bh=AlXcd6BU1PdgV9t1OUjfyQ8MP4DXyg5Bru1eSL7IS1Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bp7gKLsiFmMnHpwTBxHAPsflcVQVDcyK1QY5U0PFgxKBNgtmnF3ALuF8VLT2qnKPQuVacwNddVR5pk1603gT3t1hIRfBZ5JOFT/goNBWp5lPjfp4ndBO7fyFDTsDhmI1C3qesw9hefk+V/El87usHuGtWeiY12mtNiUAZKhhe80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JeH0qeRN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1361BC43390;
-	Thu, 21 Mar 2024 20:42:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=E7ASiY81exvvFDqr6MYK5Ww2O7T1V9Ne1ZXCeX5RJs1gWFZpwswdUO8f03jR+vy1FHyc5leGaadEn+JufKTpldKbkbUTh0q/aIrjrM+dRWbcNQ8K2zc5cQ8y8KFkmbx9tv8UQZHmF2PcbAqXbOIBJvRaBjSvHuePdvCfGW5dIVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LdBGofkv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E539C433F1;
+	Thu, 21 Mar 2024 20:54:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711053723;
-	bh=NmpziW9BRh/m71deL6UzzTXuJp7VGLzKgaq9xo9Yzbw=;
+	s=k20201202; t=1711054488;
+	bh=AlXcd6BU1PdgV9t1OUjfyQ8MP4DXyg5Bru1eSL7IS1Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JeH0qeRNoMsQMC7cu3nTrqYjVsxi6LfXUoPiyFtb3XMkIhZt0a+TNbA/7CIWJiSN4
-	 8dvFUxuTLnwxK4sj491kzgSDs8qmu1UPEL964/t2z31Fd4IVJwmT++8cnvrFxZyoVv
-	 pLrTjMFKMqHrWvbiVKsvznaFkPyOv8KMSZhgIRtvFuTyVoSHts6GgI55w4g5Jsxk2y
-	 75bUMPxELRPdxLLIqikAqhOU+XrF923jyD3F+HA6k0aOY3I3VWiG1C6w2tB1SUvdZw
-	 0Bfnyy/aH6xMqhb2wONhyFwq5XobdIay+rTlBH0Po4Ml6Q6HN8sot8GyX70u1/+YG9
-	 bZrePSUV/K4Cg==
-Date: Thu, 21 Mar 2024 21:41:59 +0100
+	b=LdBGofkv8EeV/a9BMklXeGE/imMgVO7CfjHf4g6tgRcHGEy0R/kdidNwDKXjzOOWn
+	 BjFLBfQNYQeTWPJdxi057nTzyYaCQTm0rkA89EEdTISdAbA4j3yHdig+Sx6HQjadZj
+	 ZtHSAZCBb/n5L78pYh7bfQop5DO0I5TAyZrz7VmbHfrM9Qxmx9XFyXC37je21ETVV9
+	 yASzG7gFd1ViikML1rfRnbPX/pkEfCN8zr+2p0mkLt9FdqG7CEHtVzVSgNi6iPrVJV
+	 Kf6LM3ZFwW1uj/hNguArJ9YrIWQ0qiWYcDQsVnK2s3n2uw9fFCCCIoAUSAOzymlHDn
+	 PlygkW4iV+tZg==
+Date: Thu, 21 Mar 2024 21:54:43 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Maxim Levitsky <mlevitsk@redhat.com>
-Cc: linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] i2c: i801: Fix a refactoring that broke a touchpad on
- Lenovo P1
-Message-ID: <hanmsf4vklzy6u2a3bcqiqjwnjimwfxuk64vte6h5avjtowku4@wvcmu3ifb7bo>
-References: <20240321141919.26844-1-mlevitsk@redhat.com>
+To: Sam Edwards <sam@turingpi.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND RFC PATCH 0/5] Enhancements for mv64xxx I2C driver
+Message-ID: <wdpnjnuahedvbakhfavoobukdkocjfpfrgsu374sgjhkyy7exz@er4lyeadftyz>
+References: <CAF8uH3tYaUwhkkeFuY+PdsnSPqeTtWtOsB_hy9oOjF=f-2Hdaw@mail.gmail.com>
+ <p37qqpplxgmfzlq6wz7fvmvnrsumy6ra5nivzi4hd2gbvlbezx@dlh6ygyjbk24>
+ <4a043be8-8e88-4b92-913c-abd8f138b90d@turingpi.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -58,37 +59,63 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240321141919.26844-1-mlevitsk@redhat.com>
+In-Reply-To: <4a043be8-8e88-4b92-913c-abd8f138b90d@turingpi.com>
 
-Hi Maxim,
+Hi Sam,
 
-On Thu, Mar 21, 2024 at 10:19:19AM -0400, Maxim Levitsky wrote:
-> Commit 857cc04cdf50 ("i2c: i801: Add helper i801_get_block_len")
-> introduced a slight functional change: the status variable is now
-> overwritten with the length of an SMBUS tranasaction,
-> even in case of success.
+On Thu, Mar 21, 2024 at 12:24:43AM -0600, Sam Edwards wrote:
+> On 3/20/24 20:28, Andi Shyti wrote:
+> > > Sorry about the resend; it seems my mail client "helpfully" swallowed the
+> > > newlines on any line consisting only of whitespace, garbling the patches.
+> > 
+> > I received three series from you:
+> > 
+> >   1. [RESEND v2 RFC 1/5] i2c: mv64xxx: Clear bus errors before transfer
+> >   2. [RFC PATCH 0/5] Enhancements for mv64xxx I2C driver
+> >   3. [RESEND RFC PATCH 0/5] Enhancements for mv64xxx I2C driver
+> > 
+> > By the versioning, 1. is good, the rest is not good. Standing to
+> > the time sent and comments in patch '0', 3. is good, the rest
+> > not.
+> > 
+> > Which one should be discarded? Can you please state it clearly?
+
+...
+
+> I sent the series in the order 2-3-1, so 1 is the version to look at (though
+> I made no content changes between resends as I was only fighting my mail
+> client's formatting).
+
+so that it's the [RFC v2 ...] the right series... are you sure?
+
+The order of arrival is:
+
+ 1. Date: Tue, 19 Mar 2024 16:51:51 -0600
+ 2. Date: Tue, 19 Mar 2024 19:40:51 -0600
+ 3. Date: Tue, 19 Mar 2024 22:19:53 -0600
+
+Anyway, I will take "1" as the good one, being a v2. I will
+discard "2" and "3".
+
+Then, please, do not forget next time the patch 0 and the
+changelog.
+
+...
+
+> > Can you please make sure, next time (unless someone asks to
+> > resend them again), that the patches are threaded? You can send
+> > them to yourself first and see if they are really threaded.
 > 
-> This breaks the touchpad on at least my Lenovo P1:
+> Yes, definitely. I take it from your phrasing that you're willing to collect
+> the scattered mails yourself this one time only? If so, thank you for
+> cleaning up after my mess. :)
 > 
-> rmi4_physical rmi4-00: Read PDT entry at 0x00e9 failed, code: -6.
-> rmi4_physical rmi4-00: RMI initial reset failed! Continuing in spite of this.
-> rmi4_physical rmi4-00: Read PDT entry at 0x00e9 failed, code: -6.
-> rmi4_physical rmi4-00: IRQ counting failed with code -6.
-> 
-> Fixes: 857cc04cdf50 ("i2c: i801: Add helper i801_get_block_len")
-> 
+> If not (and/or if someone else doesn't like the mess), I can always resend.
+> I have already made one cleanup (removing the useless `default:` at the end
+> of the FSM) so I guess it would technically be an "RFC v2" at this point.
 
-next time please drop this blank line here.
+For now no need to resend (unless someone complains). Let's give
+it some time for review.
 
-Applied to i2c/i2c-host-fixes on
-
-git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
-
-Thank you,
 Andi
-
-Patches applied
-===============
-[1/1] i2c: i801: Fix a refactoring that broke a touchpad on Lenovo P1
-      commit: a5894bc48f64caa86dbea1744d067c925303c5fc
 
