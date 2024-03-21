@@ -1,179 +1,176 @@
-Return-Path: <linux-i2c+bounces-2472-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2473-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A4F8885D11
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 17:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 15A27885FD0
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 18:34:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 10A9EB20F4B
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 16:11:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA26FB20AAD
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 17:34:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937A112BF23;
-	Thu, 21 Mar 2024 16:11:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95248131720;
+	Thu, 21 Mar 2024 17:34:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="huqyANyA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HdcIXp9s"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B74588662F;
-	Thu, 21 Mar 2024 16:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4ED317590
+	for <linux-i2c@vger.kernel.org>; Thu, 21 Mar 2024 17:34:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711037484; cv=none; b=tC94yyyvx6GrDye1GB+qICR72k5YWkYiFen/ZwzDClnrULgAADT6jtjTNCBm11V3R7G1TeFfZFitzSidN5Tc6KAsTCSLGflno4N+s8H78KdJi+uK0AqK8Icxx+Que0hJOEhzI8xq8xpgKGpWWLzG9loe5QJMWTKiiX4Hfz5bbN0=
+	t=1711042443; cv=none; b=qtQby3i4r0f7YaW3lu3HyZI6qGKudeRbe0rR0B6OyilsAr5uw4650zeVfHWIPK6LfQs7HwOtqZOcVVlg3JcYvYZHsk92kwc8wxVDZReO0o0WiC9GiKZ9nQgJpLCOlAp6LZJL/ZIGRcuYgZpNFRxZASspOOBEQdLjup8wSzycnwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711037484; c=relaxed/simple;
-	bh=LAQZ4ZLWmBUyE62rnU+861jDb9FZB7bhHoZ+WNbwthI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k/AZmNC+05MeWMgNmDqctZZh1995We/i1mr+/PqRX2j5Zt7J8lHVbPcG5w9cXESYn0zhMX0G6qQZTTuQ7zBYkFxx/Mn97fHIakoElpctUnR/C1ZVWRqHwem3TIJfwJI4DBbsmgwK27fP9sMoFLJuJ5SV3UwmDYICpJLyiBjk+iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=huqyANyA; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-55a179f5fa1so1680074a12.0;
-        Thu, 21 Mar 2024 09:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711037481; x=1711642281; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j4TbJuGZPf1PxibNME+z5tQkWAHrehGe5LkiCxqU6ik=;
-        b=huqyANyAhtWUhkKHop+7ua2FUccWY7UCxyw4tdZuIlLA0uWiB4PJgNMnlJfbX6EoV9
-         XIDajsQs0kmLvyjDXObAX4cpB/LaBwd/YMYtFBR2GdeK5i4ED284vHJkJAj2soPTswX2
-         XxS48NIWK7xiLZHTxglWcu+OtOmrCSDYTRlC5wyMoTrXi1RXtx0esDHY58W3LdpmncDM
-         3Idj/SkGBUlOvyeXqBs6UyXSfToeQ2JqXV+KlVVo5A43xxp0pALisbE90mpIwLtqj/Ps
-         m+rUVzWpJgUqD6+N/h/BwqA3GXvsW3x3Tu1xlBveneaLocpIDiIgj5tBTVXwjnJ2ZKE9
-         xxHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711037481; x=1711642281;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4TbJuGZPf1PxibNME+z5tQkWAHrehGe5LkiCxqU6ik=;
-        b=rYUf9HXM+v1YoMfYExjoggon6lQJuR6sDG2+sng5RyyosVcw3oEqtWgvEBAJFWvgiQ
-         SPttNYBVXpIX4wzOnYjIv0qZo1ohq2CfeNLNQm/CGRNNOFtk/c/qnAeI62NVrPb7okH4
-         wZ+1g4arVOSuS9D27QNaxricXU5lkM2Pgah8IkIxpnG4EI7KSVMI8bziD4gXJQDHfW7h
-         S5Nfy1UTlNLcehtMDCrViGFO0SyUx6DRk3l5ltD+VA+CBMZzmAIOlkeN1jQVxJH4n8g7
-         gOWlP3FU913V1fhbbKFWJfc6136Y42/dg0ixStvWgaXkwEmko7d2H9m7Du/u4SLOUojF
-         0hjA==
-X-Forwarded-Encrypted: i=1; AJvYcCWQ7IIHRJeknQPA+teGivFc7BYV86sUrzpi2bDQQbprMw/uNKZwmjN+MpiltnoPFJiN0UquVmPW0aRAyd5PqZhJ9S0e03ZBY+9gxddR
-X-Gm-Message-State: AOJu0YwwfZJmc71Pr+i8SULq9VGUibVKKLeo9hQlz7Tveof1ljQh2326
-	wbdly4AegjlPSU57v9z/Rno+FHhfeUYaBGRCqyrW88lQPZeyA5Mv
-X-Google-Smtp-Source: AGHT+IHphC7/sIkGBVNLXbe7tRTyFazgJWF3pN4v5m1MheZTRe6KwUTvCZzUmRXHKoB2xtFdUWB8qA==
-X-Received: by 2002:a05:6402:1cc9:b0:565:6c72:40a9 with SMTP id ds9-20020a0564021cc900b005656c7240a9mr4685582edb.28.1711037480685;
-        Thu, 21 Mar 2024 09:11:20 -0700 (PDT)
-Received: from ?IPV6:2a01:c22:7b76:3a00:1c23:60d1:b92b:f2e7? (dynamic-2a01-0c22-7b76-3a00-1c23-60d1-b92b-f2e7.c22.pool.telefonica.de. [2a01:c22:7b76:3a00:1c23:60d1:b92b:f2e7])
-        by smtp.googlemail.com with ESMTPSA id e13-20020a056402104d00b0056bbf8898e7sm32883edu.54.2024.03.21.09.11.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Mar 2024 09:11:20 -0700 (PDT)
-Message-ID: <c87a9702-07c3-412f-a9a9-0e32b8aab668@gmail.com>
-Date: Thu, 21 Mar 2024 17:11:20 +0100
+	s=arc-20240116; t=1711042443; c=relaxed/simple;
+	bh=cje7qcbhuaX0GPTxwdpDU+ChtqHGE0XD+5Zh74Rnoig=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U3x9fNmwe86iHh1qA5d4LIn2pdUHj8cEFyEToyPX/KylcGvrIlNLQp2Hy2Xs6xN4uSJny0Xsx41bm92lDmP3qgmzhibrI3yh0Y4Rmln5l7ahbUTFlz60Tj7nyirwJ9LaNWcsE9W7BvwMzUP9wlbcnQ4t8jNf7EoNT5ho1gmrzmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HdcIXp9s; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711042442; x=1742578442;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cje7qcbhuaX0GPTxwdpDU+ChtqHGE0XD+5Zh74Rnoig=;
+  b=HdcIXp9sSG/IHTmqAuk3/gSY0nOzUC0+r2SGqzaaDuZwqYnEvWaUOuAq
+   x62yoVZdC6VBC5YOXsh6xxGv5GP7yQvWfFG/Ls23B7BkVj3Ep4cl/8b/i
+   406/2xcCXq8Sr9FtuP94k65+5aAvTNNepE26k8NeoG5BQ5sHIHjrawlyM
+   lpILQx/TqbrGjbfni23/MDB5JkRa9CVU5CkfTkhWJYU8nADzLf9tQgQak
+   SyDMNH4vKW8DfyRJlshVmR/ncy3SL7M1B3TvMEiMOC8yP8iIGzFZe35eh
+   r0GNtZw2rgDlynHWGmeAQqQiE50pzjZrt2uGTspB1onU+GF3sVVup8ekn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="5920167"
+X-IronPort-AV: E=Sophos;i="6.07,143,1708416000"; 
+   d="scan'208";a="5920167"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2024 10:34:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="914716402"
+X-IronPort-AV: E=Sophos;i="6.07,143,1708416000"; 
+   d="scan'208";a="914716402"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2024 10:33:59 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rnMIf-0000000Ex9S-0EZW;
+	Thu, 21 Mar 2024 19:33:57 +0200
+Date: Thu, 21 Mar 2024 19:33:56 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: i2c: designware: unhandled interrupt on N100 lpss channel 0
+Message-ID: <ZfxvhCRSQ-Cx_Spn@smile.fi.intel.com>
+References: <af839910-2c3d-4559-b8b3-1c6f2372144e@gmail.com>
+ <af547aab-e957-4dbf-922d-e2ad13e19877@linux.intel.com>
+ <ZfrvhvuW3ZgzWYjt@smile.fi.intel.com>
+ <700bbb84-90e1-4505-8ff0-3f17ea8bc631@gmail.com>
+ <ZfsHyyrel-d1exxM@smile.fi.intel.com>
+ <62500f74-8d73-40f3-80dd-36d3f70084f0@gmail.com>
+ <ZftQKXWBKPj3ztYM@smile.fi.intel.com>
+ <6d0b7ab5-7864-49f9-92ca-f3413fe6e1f9@gmail.com>
+ <ZfwX8d0Ux4ZhpxIS@smile.fi.intel.com>
+ <5f04727b-f566-4b01-a673-6375482811c6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] i2c: i801: Fix a refactoring that broke a touchpad on
- Lenovo P1
-Content-Language: en-US
-To: Maxim Levitsky <mlevitsk@redhat.com>, Jean Delvare <jdelvare@suse.com>,
- Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240321141919.26844-1-mlevitsk@redhat.com>
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-In-Reply-To: <20240321141919.26844-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f04727b-f566-4b01-a673-6375482811c6@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On 21.03.2024 15:19, Maxim Levitsky wrote:
-> Commit 857cc04cdf50 ("i2c: i801: Add helper i801_get_block_len")
-> introduced a slight functional change: the status variable is now
-> overwritten with the length of an SMBUS tranasaction,
-> even in case of success.
-> 
-> This breaks the touchpad on at least my Lenovo P1:
-> 
-> rmi4_physical rmi4-00: Read PDT entry at 0x00e9 failed, code: -6.
-> rmi4_physical rmi4-00: RMI initial reset failed! Continuing in spite of this.
-> rmi4_physical rmi4-00: Read PDT entry at 0x00e9 failed, code: -6.
-> rmi4_physical rmi4-00: IRQ counting failed with code -6.
-> 
-> Fixes: 857cc04cdf50 ("i2c: i801: Add helper i801_get_block_len")
-> 
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->  drivers/i2c/busses/i2c-i801.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index a6861660cb8c..79870dd7a014 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -536,11 +536,12 @@ static int i801_block_transaction_by_block(struct i801_priv *priv,
->  
->  	if (read_write == I2C_SMBUS_READ ||
->  	    command == I2C_SMBUS_BLOCK_PROC_CALL) {
-> -		status = i801_get_block_len(priv);
-> -		if (status < 0)
-> +		len = i801_get_block_len(priv);
-> +		if (len < 0) {
-> +			status = len;
->  			goto out;
-> +		}
->  
-> -		len = status;
->  		data->block[0] = len;
->  		inb_p(SMBHSTCNT(priv));	/* reset the data buffer index */
->  		for (i = 0; i < len; i++)
+On Thu, Mar 21, 2024 at 12:59:59PM +0100, Heiner Kallweit wrote:
+> On 21.03.2024 12:20, Andy Shevchenko wrote:
+> > On Wed, Mar 20, 2024 at 10:26:06PM +0100, Heiner Kallweit wrote:
+> >> On 20.03.2024 22:07, Andy Shevchenko wrote:
+> >>> On Wed, Mar 20, 2024 at 09:21:34PM +0100, Heiner Kallweit wrote:
+> >>>> On 20.03.2024 16:59, Andy Shevchenko wrote:
+> >>>>> On Wed, Mar 20, 2024 at 03:56:29PM +0100, Heiner Kallweit wrote:
 
-Indeed, my bad.
+...
 
-Reviewed-by: Heiner Kallweit <hkallweit1@gmail.com>
+> >>>>>   grep 0000001b /sys/kernel/debug/pinctrl/*/pins
+> >>>>
+> >>>> pin 3 (GPPC_B_3) 3:INTC1057:00 GPIO 0x80100102 0x0000001b 0x00000000 [LOCKED tx]
+> >>>> pin 82 (GPP_F_7_EMMC_CMD) 135:INTC1057:00 GPIO 0x44000300 0x0000001b 0x00000000 [LOCKED full, ACPI]
+> >>>> pin 182 (GPPC_C_13) 269:INTC1057:00 GPIO 0x44000300 0x0000001b 0x00000000 [LOCKED full, ACPI]
+> >>>
+> >>> I was not correct, the value to grep is '0000[0-3][0-9a-f]1b' as there pull
+> >>> up/down can be enabled.
+> >>>
+> >> Result is the same
+> >>
+> >>> Nevertheless from the above the pin 3 is one that is enabled as GPIO input with
+> >>> RTE 27 and direct IRQ.  If it's a culprit, try to add in the pinctrl-intel.c at
+> >>> the end of .probe:
+> >>>
+> >>> 	{
+> >>> 		void __iomem *padcfg0;
+> >>> 	        u32 value;
+> >>>
+> >>> 		padcfg0 = intel_get_padcfg(pctrl, 3, PADCFG0);
+> >>>
+> >>> 		value = readl(padcfg0);
+> >>> 		value |= PADCFG0_GPIOTXDIS;
+> >>> 		value |= PADCFG0_GPIORXDIS;
+> >>> 		writel(value, padcfg0);
+> >>> 	}
+> >>>
+> >>> If it helps, it will show the BIOS bug (likely).
+> >>>
+> >> Wow, this indeed fixes the issue for me. Thanks a lot!
+> > 
+> > Wow! Glad to hear this.
+> > (Side note, can you test the patch against idma64 I sent yesterday?
+> >  Tested-by tag will be appreciated!)
+> > 
+> Done, sent the Tested-by
+
+Thank you!
+
+> > We may try to have the quirk in the kernel, but it might be (quite) tricky
+> > (see the link below).
+> > 
+> > Can you share `acpidump -o n100-tables.dat` (the file) somewhere?
+> > I would like to see if this pin is anyhow being mentioned in the DSDT.
+> > 
+> Attached. Compressed file isn't that big, so hope it's ok to send it
+> as an attachment.
+
+Yes, got it.
+
+Can you also share the output of
+
+1) `dmesg` (when kernel command line has 'ignore_loglevel apic=debug');
+2) `lspci -nk -vv`;
+3) `grep -H 15 /sys/bus/acpi/devices/*/status`?
+
+> >> For my understanding: Shall we (kernel driver) rely on the BIOS to configure
+> >> GPIO's properly?
+> > 
+> > Yes, but there are bugs.
+> > You may look, e.g., https://bugzilla.kernel.org/show_bug.cgi?id=214749.
+> > 
+> >> Or better assume that GPIO's are in an unknown state on
+> >> driver load and configure them for our needs?
+> > 
+> > It depends. But usually (> 99% cases) we rely on the firmware.
+> > 
+> >> IOW: If we assume that other systems may have similar issues, should
+> >> "some driver" use e.g. the pinctrl API to configure relevant pins?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
