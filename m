@@ -1,65 +1,67 @@
-Return-Path: <linux-i2c+bounces-2470-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2471-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90723885A94
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 15:23:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 753E8885A9A
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 15:23:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3616A282DF3
-	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 14:23:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DEAC9B2047F
+	for <lists+linux-i2c@lfdr.de>; Thu, 21 Mar 2024 14:23:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 487EB85279;
-	Thu, 21 Mar 2024 14:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2439F85279;
+	Thu, 21 Mar 2024 14:23:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="FBaOWFsv"
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="NEfu+0nD"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6634484A5A;
-	Thu, 21 Mar 2024 14:23:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333A584A5A;
+	Thu, 21 Mar 2024 14:23:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711031009; cv=none; b=FzNlc1RA6Y7vMeWAENQfuTuZ8PyuV8gx23/jO14itO0ZXZ+TEje/67s92CYf/21R+YcOfOFlKhGL0kkGTHxgKYpV1v7pSm5M+SxdlDvj7zQsQxhMOwNvcjl5Nh3wwJiVqrSYguaWNxOWmLJbaVbg5O/b6yg55e00hN8cCYnVI6I=
+	t=1711031018; cv=none; b=Wsu16IL+7jMSM/myokwDGpWTG0WKX0dfmZm4EG8iSuWCjtaUETU6vjAl2KdLE2AKobD80fhSALSz5lfq4+X2DppoMfvkoP0sPhRrOHlR7+O0znn/ufV7tzHk/QxFwmBSwSG9AXZHX4rPRhZPsG2cRd6dgzQUlq75OSu5EM1XcZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711031009; c=relaxed/simple;
-	bh=i3k8D2smcuGUV4zTuQXD6d2NhakJ/CGMge0aDELRsnE=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=etkXpkzKVeqkJLwRr50ySzB1/V7NmTtUPvZIrccWvlahZbRAMudsPHggIf3v6tZeIbjpvQ6nbNi//NVWLfUmmdp+IrqroIhA4dI71oVgVxHe94vk5lnHmRKzMz28K7hgCwJ3n0/ozv2oW8QKiFRhhQihbxF99kTFPp6coqaVH9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=FBaOWFsv; arc=none smtp.client-ip=148.163.135.77
+	s=arc-20240116; t=1711031018; c=relaxed/simple;
+	bh=nGkGs5ryBM471WTCb43oATbjR2IaxOijUgYBT9ZzCcU=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JCeTLYeRi1PFBSDd2y3CnIAI8rI9pfOS1cMJ7yMSQZmww0gqDYpIq0XnRLhCG0fWn9kLaU3nPmTy9kTMBCo6P2/Vt5uQN0DXwG6yMd+5L9//hlNFbyne2Elil+JrJv0sRPVxn8Gum3AhdP7dqIfPVQ3znvO/ivhs42Qnxt2D5oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=NEfu+0nD; arc=none smtp.client-ip=148.163.135.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42LDJwZD012506;
-	Thu, 21 Mar 2024 10:23:11 -0400
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42LE0GWw026366;
+	Thu, 21 Mar 2024 10:23:20 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=
-	from:to:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=DKIM; bh=Vp84VOTUBzRN
-	rg+9EBiIB86THBzBhgqxHNyRGEzeUZs=; b=FBaOWFsvHGDRDzPBqza+z9hYKXYm
-	1belL/9dwLg6HgBL3vB0QzLSv8WF/IJRYMi5v6VAAUoxHKCJqmy67P9ivX4A5MHp
-	jupkSPqJHyGzJQXkBPAy/aKVHPiSQSl9yThlHDRj9I73fip/fkVGYL3YwPveBPvv
-	XkOHsMyawINN66/Ajjlilz/30IzoOi+qx+z7T0Z38PusxlHUddBOsKUzntj5xe8M
-	lZyaOIyXY8r9N5LPNFsLKDju4H05iyXvbLfYjR6hlLxTHoZThXB829WhAV5A129a
-	oGECOT+FIH2GjGcOH+AG2N21ZkKRKsEIk3kkMtUiESRqs5JQ8g6Kk9pLVw==
+	from:to:subject:date:message-id:in-reply-to:references
+	:mime-version:content-type:content-transfer-encoding; s=DKIM;
+	 bh=mUogf9dJImYn0s/zY5hOmCaBu9Xosz5HP/VfaOzKGiA=; b=NEfu+0nDKE46
+	GzLBuhCq91tQ53qsM1RsaKrb/FmJTMB9jxnXZ9GjWTg8O5Z1+6pfZ2taIx6TEFJZ
+	d2IiIejBd9YztfbxeZ26hUxWg/ZaGBn40fxF3+fyKZDlksgojvD/xmwuBWJ9IotS
+	rJnM3stSNNlizcRJhzR60+8dkZ27nAF+RNMdA9ODnp5Hies7AJTpMVOB6Sjf4fBP
+	yHXA5vqpz7UHEqh4rpeX00r7CXi59qDt0iIkoIxdfCUlk3fZHD3CCFPaeNnYxT6h
+	YID16a1etPMO/+oBOv8J8Z/mRAxTlzF+YfilpMGKQxcIhk2mwe+AJlb123yN2dPP
+	/6GNKR9ZnQ==
 Received: from nwd2mta4.analog.com ([137.71.173.58])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3wwr8njx1g-1
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3wwragu0p2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Mar 2024 10:23:11 -0400 (EDT)
+	Thu, 21 Mar 2024 10:23:20 -0400 (EDT)
 Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 42LENACi034186
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 42LENJQV034192
 	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 21 Mar 2024 10:23:10 -0400
+	Thu, 21 Mar 2024 10:23:19 -0400
 Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
  (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 21 Mar
- 2024 10:23:09 -0400
+ 2024 10:23:18 -0400
 Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
  (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 21 Mar 2024 10:23:09 -0400
+ Transport; Thu, 21 Mar 2024 10:23:18 -0400
 Received: from radu.ad.analog.com ([10.48.65.243])
-	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 42LEMqp8014288;
-	Thu, 21 Mar 2024 10:22:55 -0400
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 42LEMqp9014288;
+	Thu, 21 Mar 2024 10:23:11 -0400
 From: Radu Sabau <radu.sabau@analog.com>
 To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
         Rob
@@ -72,128 +74,244 @@ To: Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
         Radu Sabau <radu.sabau@analog.com>, <linux-hwmon@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-i2c@vger.kernel.org>
-Subject: [PATCH v4 1/2] dt-bindings: hwmon: pmbus: adp1050: add bindings
-Date: Thu, 21 Mar 2024 16:21:42 +0200
-Message-ID: <20240321142201.10330-1-radu.sabau@analog.com>
+Subject: [PATCH v4 2/2] hwmon: pmbus: adp1050: Add driver support
+Date: Thu, 21 Mar 2024 16:21:43 +0200
+Message-ID: <20240321142201.10330-2-radu.sabau@analog.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240321142201.10330-1-radu.sabau@analog.com>
+References: <20240321142201.10330-1-radu.sabau@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: tL-Alckf2BwH53rQv9qeyXDUN_2aMS7l
-X-Proofpoint-GUID: tL-Alckf2BwH53rQv9qeyXDUN_2aMS7l
+X-Proofpoint-GUID: 0p4IBYcAxUj-x9bIzEZJDGVjemGPvAzM
+X-Proofpoint-ORIG-GUID: 0p4IBYcAxUj-x9bIzEZJDGVjemGPvAzM
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-03-21_10,2024-03-18_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxscore=0 phishscore=0 priorityscore=1501 adultscore=0
- spamscore=0 suspectscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2403140001 definitions=main-2403210103
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999 malwarescore=0
+ suspectscore=0 spamscore=0 adultscore=0 phishscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2403140001 definitions=main-2403210102
 
-Add dt-bindings for adp1050 digital controller for isolated power supply
-with pmbus interface voltage, current and temperature monitor.
+Add support for ADP1050 Digital Controller for Isolated Power Supplies
+with PMBus interface Voltage, Current and Temperature Monitor.
+
+The ADP1050 implements several features to enable a robust
+system of parallel and redundant operation for customers who
+require high availability. The device can measure voltage,
+current and temperature that can be used in different
+techniques to identify and safely shut down an erroneous
+power supply in parallel operation mode.
 
 Signed-off-by: Radu Sabau <radu.sabau@analog.com>
 ---
 v4:
- *Fix typo in schema link causing warnings at build.
+ *No change.
 v3:
- *Remove extra line before '$id'.
- *Remove 'address-cells' and 'size-cells' from adp1050 node.
- *Rename adp1050 node to generic name.
- *Fix typo from 'adress-cells' to 'address-cells' causing errors in the
-  dt-bindings build.
+ *No change.
 v2:
- *Fix identation for example.
- *Remove 'adi,vin-scale-monitor' and 'iin-scale-monitor' since they are not used
-  anymore.
- *Fix typo for 'compatbile' to 'compatible'.
- *Add blank line under datasheet link.
+ *Remove mandatory chip unlocking from the probe function, as it is
+  a bit extreme.
+ *Remove iin_scale and vin_scale set in the probe function since it makes no
+  sense to force-override it (the user may use the chip's default or even
+  change it himself after the probe).
 ---
- .../bindings/hwmon/pmbus/adi,adp1050.yaml     | 49 +++++++++++++++++++
- MAINTAINERS                                   |  7 +++
- 2 files changed, 56 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
+ Documentation/hwmon/adp1050.rst | 65 +++++++++++++++++++++++++++++++++
+ Documentation/hwmon/index.rst   |  1 +
+ drivers/hwmon/pmbus/Kconfig     | 10 +++++
+ drivers/hwmon/pmbus/Makefile    |  1 +
+ drivers/hwmon/pmbus/adp1050.c   | 58 +++++++++++++++++++++++++++++
+ 5 files changed, 135 insertions(+)
+ create mode 100644 Documentation/hwmon/adp1050.rst
+ create mode 100644 drivers/hwmon/pmbus/adp1050.c
 
-diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
+diff --git a/Documentation/hwmon/adp1050.rst b/Documentation/hwmon/adp1050.rst
 new file mode 100644
-index 000000000000..10c2204bc3df
+index 000000000000..3281b096a53c
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/pmbus/adi,adp1050.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/Documentation/hwmon/adp1050.rst
+@@ -0,0 +1,65 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+title: Analog Devices ADP1050 digital controller with PMBus interface
++Kernel driver adp1050
++=====================
 +
-+maintainers:
++Supported chips:
++
++  * Analog Devices ADP1050
++
++    Prefix: 'adp1050'
++
++    Addresses scanned: I2C 0x70 - 0x77
++
++    Datasheet: https://www.analog.com/media/en/technical-documentation/data-
++sheets/ADP1050.pdf
++
++Authors:
++
 +  - Radu Sabau <radu.sabau@analog.com>
 +
-+description: |
-+   The ADP1050 is used to monitor system voltages, currents and temperatures.
-+   Through the PMBus interface, the ADP1050 targets isolated power supplies
-+   and has four individual monitors for input/output voltage, input current
-+   and temperature.
-+   Datasheet:
-+     https://www.analog.com/en/products/adp1050.html
 +
-+properties:
-+  compatible:
-+    const: adi,adp1050
++Description
++-----------
 +
-+  reg:
-+    maxItems: 1
++This driver supprts hardware monitoring for Analog Devices ADP1050 Digital
++Controller for Isolated Power Supply with PMBus interface.
 +
-+  vcc-supply: true
++The ADP1050 is an advanced digital controller with a PMBus™
++interface targeting high density, high efficiency dc-to-dc power
++conversion used to monitor system temperatures, voltages and currents.
++Through the PMBus interface, the device can monitor input/output voltages,
++input current and temperature.
 +
-+required:
-+  - compatible
-+  - reg
-+  - vcc-supply
++Usage Notes
++-----------
 +
-+additionalProperties: false
++This driver does not auto-detect devices. You will have to instantiate
++the devices explicitly.
++Please see Documentation/i2c/instantiating-devices.rst for details.
 +
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        clock-frequency = <100000>;
++Platform data support
++---------------------
 +
-+        hwmon@70 {
-+            compatible = "adi,adp1050";
-+            reg = <0x70>;
-+            vcc-supply = <&vcc>;
-+        };
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 43b39956694a..b45753e94756 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -479,6 +479,13 @@ L:	linux-wireless@vger.kernel.org
- S:	Orphan
- F:	drivers/net/wireless/admtek/adm8211.*
++The driver supports standard PMBus driver platform data.
++
++Sysfs Attributes
++----------------
++
++================= ========================================
++in1_label         "vin"
++in1_input         Measured input voltage
++in1_alarm	  Input voltage alarm
++in2_label	  "vout1"
++in2_input	  Measured output voltage
++in2_crit	  Critical maximum output voltage
++in2_crit_alarm    Output voltage high alarm
++in2_lcrit	  Critical minimum output voltage
++in2_lcrit_alarm	  Output voltage critical low alarm
++curr1_label	  "iin"
++curr1_input	  Measured input current.
++curr1_alarm	  Input current alarm
++temp1_input       Measured temperature
++temp1_crit	  Critical high temperature
++temp1_crit_alarm  Chip temperature critical high alarm
++================= ========================================
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 1ca7a4fe1f8f..9a4fd576e6f6 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -33,6 +33,7 @@ Hardware Monitoring Kernel Drivers
+    adm1266
+    adm1275
+    adm9240
++   adp1050
+    ads7828
+    adt7410
+    adt7411
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 557ae0c414b0..38e794d83cc3 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -57,6 +57,16 @@ config SENSORS_ADM1275
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called adm1275.
  
-+ADP1050 HARDWARE MONITOR DRIVER
-+M:	Radu Sabau <radu.sabau@analog.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Supported
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Dcumentation/devicetree/bindings/hwmon/pmbus/adi,adp1050.yaml
++config SENSORS_ADP1050
++	tristate "Analog Devices ADP1050 digital controller for Power Supplies"
++	help
++	  If you say yes here you get hardware monitoring support for Analog
++	  Devices ADP1050 digital controller for isolated power supply with
++	  PMBus interface.
 +
- ADP1653 FLASH CONTROLLER DRIVER
- M:	Sakari Ailus <sakari.ailus@iki.fi>
- L:	linux-media@vger.kernel.org
++	  This driver can also be built as a module. If so, the module will
++	  be called adp1050.
++
+ config SENSORS_BEL_PFE
+ 	tristate "Bel PFE Compatible Power Supplies"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index f14ecf03ad77..95a8dea5e5ed 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -8,6 +8,7 @@ obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
+ obj-$(CONFIG_SENSORS_ACBEL_FSG032) += acbel-fsg032.o
+ obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
+ obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
++obj-$(CONFIG_SENSORS_ADP1050)	+= adp1050.o
+ obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
+ obj-$(CONFIG_SENSORS_BPA_RS600)	+= bpa-rs600.o
+ obj-$(CONFIG_SENSORS_DELTA_AHE50DC_FAN) += delta-ahe50dc-fan.o
+diff --git a/drivers/hwmon/pmbus/adp1050.c b/drivers/hwmon/pmbus/adp1050.c
+new file mode 100644
+index 000000000000..0a49bea8e13b
+--- /dev/null
++++ b/drivers/hwmon/pmbus/adp1050.c
+@@ -0,0 +1,58 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Hardware monitoring driver for Analog Devices ADP1050
++ *
++ * Copyright (C) 2024 Analog Devices, Inc.
++ */
++#include <linux/bits.h>
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include "pmbus.h"
++
++static struct pmbus_driver_info adp1050_info = {
++	.pages = 1,
++	.format[PSC_VOLTAGE_IN] = linear,
++	.format[PSC_VOLTAGE_OUT] = linear,
++	.format[PSC_CURRENT_IN] = linear,
++	.format[PSC_TEMPERATURE] = linear,
++	.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		| PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
++		| PMBUS_HAVE_IIN | PMBUS_HAVE_TEMP
++		| PMBUS_HAVE_STATUS_TEMP,
++};
++
++static int adp1050_probe(struct i2c_client *client)
++{
++	return pmbus_do_probe(client, &adp1050_info);
++}
++
++static const struct i2c_device_id adp1050_id[] = {
++	{"adp1050", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, adp1050_id);
++
++static const struct of_device_id adp1050_of_match[] = {
++	{ .compatible = "adi,adp1050"},
++	{}
++};
++MODULE_DEVICE_TABLE(of, adp1050_of_match);
++
++static struct i2c_driver adp1050_driver = {
++	.driver = {
++		.name = "adp1050",
++		.of_match_table = adp1050_of_match,
++	},
++	.probe = adp1050_probe,
++	.id_table = adp1050_id,
++};
++module_i2c_driver(adp1050_driver);
++
++MODULE_AUTHOR("Radu Sabau <radu.sabau@analog.com>");
++MODULE_DESCRIPTION("Analog Devices ADP1050 HWMON PMBus Driver");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(PMBUS);
 -- 
 2.34.1
 
