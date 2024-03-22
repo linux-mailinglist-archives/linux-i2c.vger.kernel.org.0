@@ -1,58 +1,58 @@
-Return-Path: <linux-i2c+bounces-2535-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2537-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83740886D51
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 14:37:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDC8C886D55
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 14:37:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B34D91C24E23
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 13:37:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D3661F24D8F
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 13:37:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8394E64A9F;
-	Fri, 22 Mar 2024 13:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F72164CD4;
+	Fri, 22 Mar 2024 13:27:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="CqkWjw9V"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="lmVKV8Fv"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D70863121
-	for <linux-i2c@vger.kernel.org>; Fri, 22 Mar 2024 13:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3349A634FE
+	for <linux-i2c@vger.kernel.org>; Fri, 22 Mar 2024 13:27:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711114044; cv=none; b=ejy79bYc+rp3FM1LP2IwUo+R4ca9/I5XbaISaRdQAu9PPildZXzbZOI9YnAz3btxk7GDHkF9zAv5iwrAjh+yZfQ4NTE6ZpbAwoePveHigzVdACMMJ9PNqdJRdk/xA5a7I+QVHk00grM0ZRQKcjAgRnPcdkumeHChsSnVAmtKBW8=
+	t=1711114045; cv=none; b=hfhvMk4KKi3Nydcc6EiKlTfSQGNGNRrFR+CNc/mQOLmvU5dLiznA8EwU3VGnb1p84zUbzGTTY1lB05LmKfJVq438wgQEf/CP34w33A0UoXEtSY7tFG4C1xeCb2N7uo7o6LHxr4Vxxp3x1AO3Dg+wN6v7MoYZ2rMGL7qRU/x8dOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711114044; c=relaxed/simple;
-	bh=gSJCKAfsXYEX11Ce8qfxfrsskafXE1oEiD5eqfxB7XU=;
+	s=arc-20240116; t=1711114045; c=relaxed/simple;
+	bh=JopqC1CUA53KwbARMzk2PCnsUdhS27WGHgIgrl130yc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rqxU3pe/gRsNLPuKuzHPEvPL0bWWH7DpTkL36JdORrO0v1SWfEiqLtnAtdmWofxYpIdyk8f5JFeQHWMlw5L+fGFryyspLmLKkMTcgISI3uTgKReFp9NHb5O4InCahPEv9wqvCyKqHcvsLrgBozvLPX3wZi09Pp42sVATWtDKiJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=CqkWjw9V; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=u/YI1poH3xeg0fwUMwLHpmJCkJ1KeLXuQkSvnqFKQ2fm6Jxfw7aCDu35DRVrsZj9mW6MnSQtmzCieXxAbSxFobRDepJLndRJveN8GujvfRaZK5Ya00Pv1A+be1GhXxz4L3AHE8icDpbqD7dcKo9xck3ztU5smOeFBv6g2z8/r7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=lmVKV8Fv; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=ZOkUyh2PPBfs/TtcNX0aDE3PwaWXSyikNW3QoCUR2Z4=; b=CqkWjw
-	9VgMuR9+QAuQGKhGWBPrNS4twp5dh801okqJ4FsWHkJO0ID01OQifoo23+kYXSXi
-	BtRtTf2YCDxqhsX74M1OsbX853qlr8m1lHJHRzd+SXE5O0caEX9Wtw5NTjFNa3jA
-	QsO+mzvVFNHSg+8LTyZIyH8SNyMtl4xpXHkKiYKz/B0WehSFiMNg6sQyRUh/JL1I
-	4EMpFiRrlS2kq9TsR8jLsolth6KCrs80cbsjGucYx33gzig2wF8Sit5X/pmy1QqF
-	yjfH/azHRK1dUhfy4nNTem9u3sDIW9s6nqCkZx58wB6Nj+QMch8biRMHTFJwkYb4
-	nD7mhMkDykfwDhxw==
-Received: (qmail 3871838 invoked from network); 22 Mar 2024 14:27:02 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Mar 2024 14:27:02 +0100
-X-UD-Smtp-Session: l3s3148p1@s0R6xz8UIpRehhtF
+	 s=k1; bh=83ypbEc9zEl6mc8ZY/BhWqheV6O8ZhghdvuHQYn8SGw=; b=lmVKV8
+	Fv7W7PwTQKacO0Czh2T3OLVPheHj/dZG/Y1qnKYwxa+4V76ajiIV71HpaXJ8APPY
+	Vlz08qZ7Hrq5Zmycyj0/3901kolybUfUlsOb3nXVtE/5Ej7I7bXefHcJPUMjFoTo
+	ujOkZ0RDCSk4Xt1FUM61EWbUHf0BlE4y4OBKth00hiMNtBq44ciECxAODUQYs8Q8
+	0aKxYcdtk/pjE77HyOIUlir79KMbuTBazs2VxKdkdceZVpug5WAapNT//cdb2Xji
+	Xn4nUaaMUTws28u+fwr8JfF0SILwDB/p+8Nc39rfXupgJiw0VcMjDmocurJ4DDjB
+	9j+Z0kSvivo91URg==
+Received: (qmail 3871861 invoked from network); 22 Mar 2024 14:27:03 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Mar 2024 14:27:03 +0100
+X-UD-Smtp-Session: l3s3148p1@CtiFxz8UMJRehhtF
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Jean Delvare <jdelvare@suse.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 50/64] i2c: sis5595: reword according to newest specification
-Date: Fri, 22 Mar 2024 14:25:43 +0100
-Message-ID: <20240322132619.6389-51-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 51/64] i2c: sis630: reword according to newest specification
+Date: Fri, 22 Mar 2024 14:25:44 +0100
+Message-ID: <20240322132619.6389-52-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
 References: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
@@ -71,21 +71,63 @@ entity ("client") and a local one ("target").
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/busses/i2c-sis5595.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-sis630.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-sis5595.c b/drivers/i2c/busses/i2c-sis5595.c
-index 32476dc10ad6..198ba39a2651 100644
---- a/drivers/i2c/busses/i2c-sis5595.c
-+++ b/drivers/i2c/busses/i2c-sis5595.c
-@@ -257,7 +257,7 @@ static int sis5595_transaction(struct i2c_adapter *adap)
- 	if (temp & 0x20) {
- 		dev_err(&adap->dev, "Bus collision! SMBus may be locked until "
- 			"next hard reset (or not...)\n");
--		/* Clock stops and slave is stuck in mid-transmission */
-+		/* Clock stops and client is stuck in mid-transmission */
- 		result = -EIO;
- 	}
+diff --git a/drivers/i2c/busses/i2c-sis630.c b/drivers/i2c/busses/i2c-sis630.c
+index 3505cf29cedd..7910ba2fce15 100644
+--- a/drivers/i2c/busses/i2c-sis630.c
++++ b/drivers/i2c/busses/i2c-sis630.c
+@@ -18,7 +18,7 @@
+ 	+------------------------+--------------------+-------------------+
+ 	| Clock                  | 14kHz/56kHz        | 55.56kHz/27.78kHz |
+ 	| SMBus registers offset | 0x80               | 0xE0              |
+-	| SMB_CNT                | Bit 1 = Slave Busy | Bit 1 = Bus probe |
++	| SMB_CNT                | Bit 1 = Client Busy| Bit 1 = Bus probe |
+ 	|         (not used yet) | Bit 3 is reserved  | Bit 3 = Last byte |
+ 	| SMB_PCOUNT		 | Offset + 0x06      | Offset + 0x14     |
+ 	| SMB_COUNT              | 4:0 bits           | 5:0 bits          |
+@@ -56,8 +56,8 @@
+ 
+ /* SMB_CNT register */
+ #define MSTO_EN			0x40	/* Host Master Timeout Enable */
+-#define SMBCLK_SEL		0x20	/* Host master clock selection */
+-#define SMB_PROBE		0x02	/* Bus Probe/Slave busy */
++#define SMBCLK_SEL		0x20	/* Host clock selection */
++#define SMB_PROBE		0x02	/* Bus Probe/Client busy */
+ #define SMB_HOSTBUSY		0x01	/* Host Busy */
+ 
+ /* SMBHOST_CNT register */
+@@ -93,7 +93,7 @@ static bool high_clock;
+ static bool force;
+ module_param(high_clock, bool, 0);
+ MODULE_PARM_DESC(high_clock,
+-	"Set Host Master Clock to 56KHz (default 14KHz) (SIS630/730 only).");
++	"Set Host Clock to 56KHz (default 14KHz) (SIS630/730 only).");
+ module_param(force, bool, 0);
+ MODULE_PARM_DESC(force, "Forcibly enable the SIS630. DANGEROUS!");
+ 
+@@ -144,8 +144,7 @@ static int sis630_transaction_start(struct i2c_adapter *adap, int size,
+ 
+ 	dev_dbg(&adap->dev, "saved clock 0x%02x\n", *oldclock);
+ 
+-	/* disable timeout interrupt,
+-	 * set Host Master Clock to 56KHz if requested */
++	/* disable timeout interrupt, set Host Clock to 56KHz if requested */
+ 	if (high_clock)
+ 		sis630_write(SMB_CNT, SMBCLK_SEL);
+ 	else
+@@ -201,10 +200,7 @@ static void sis630_transaction_end(struct i2c_adapter *adap, u8 oldclock)
+ 	dev_dbg(&adap->dev,
+ 		"SMB_CNT before clock restore 0x%02x\n", sis630_read(SMB_CNT));
+ 
+-	/*
+-	 * restore old Host Master Clock if high_clock is set
+-	 * and oldclock was not 56KHz
+-	 */
++	/* restore old Host Clock if high_clock is set and oldclock was not 56KHz */
+ 	if (high_clock && !(oldclock & SMBCLK_SEL))
+ 		sis630_write(SMB_CNT, sis630_read(SMB_CNT) & ~SMBCLK_SEL);
  
 -- 
 2.43.0
