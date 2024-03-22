@@ -1,53 +1,68 @@
-Return-Path: <linux-i2c+bounces-2559-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2560-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E6EF887131
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 17:49:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB7D888716F
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 18:00:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 603631C22014
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 16:49:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C6871F24B90
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 17:00:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC725E091;
-	Fri, 22 Mar 2024 16:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55C025F466;
+	Fri, 22 Mar 2024 17:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="C5Ewx1W/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fkNsD6sn"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0CA5D733
-	for <linux-i2c@vger.kernel.org>; Fri, 22 Mar 2024 16:48:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7935D720;
+	Fri, 22 Mar 2024 17:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711126139; cv=none; b=Kn9A0wy4TBlVNmGX7rGL9mH6UztDZAuFc+CZqu/D8ZaEXA83vNhVTAbCLHsCcKM6f26/yaXBnOV0SMSbCa9lzlpZJc65a8/J6N45vdXF4t0/dV9kFRXtT6o1H7QHOIteOxHnr0qvtEqcor/7TGmnNWogvn3D27EWBpeNgXGSyZ8=
+	t=1711126825; cv=none; b=UVHCepI2fdHm1vQ4b4QqBTPBz0LvW/7djv4BlBerka+VF0bARaei0WzyQ64h+zbvsV+dW62trn+FAj2GY63atRK7qlsMg+2Dck7vYnTSq6s9paMCD2UbMh3wIli5n85FTBVh18yUqy5z+lOdTOo/VPABZbqdW4jahRRcdKPJrt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711126139; c=relaxed/simple;
-	bh=zAoemAHmU7udkQ3XYnLvczYLS1pkZUfJvttJxIMjQeY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d3sG7MijTaY9sjJPZ+0ZiXpnt5+0eqU3jHzXgtTxkqnWFIXi3FfyRJ2b0bYQCH0lgLnjRytMTO7C7s7D7drRwHFUJOODD+SWJttJHmT4NaDuzEyGo5EOeeT6Rjrycy+96T7mL6P4eP2VZ+zQyw51HTiyB4e1KQ6iGM1wSlO8mFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=C5Ewx1W/; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=Ezxi
-	fZ/NdoltWKmyiuN6imx75HAhf4NgVqu/1YvSeb0=; b=C5Ewx1W/xQ3t7Ny7X3wq
-	1OaJ45FEPAkLMBSzdSgEzZ37WKuAp+iNFi7wdpgvolxjlFs5YI8R50J7U4LU1Onb
-	c/bgsMRNiT47Vq/CQ/fvSzj7W+LjUfCJRY41x3yt+gopV7zbErpMsh7MwXZ40V3Q
-	FZn1nDgS02CrbdF5ZPqlgid9ZOYuUVHnYqB542i4G/yIpEjsTQLPJ8kgTyfk+ShR
-	HrcGrKOBhl/LLBnNpMcPLod1ozLcpM7Knt9Ho9sDxUGzbhXKvunqy+2j/lQFJ/2O
-	8w/wX7B/pQJTkQe/IEYkvdWAyKj2EUlGd6rjmjcpN3jpm3GqlbnKFTPRztTh9pxu
-	HQ==
-Received: (qmail 3924065 invoked from network); 22 Mar 2024 17:48:55 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Mar 2024 17:48:55 +0100
-X-UD-Smtp-Session: l3s3148p1@YwRumUIUZNtehhtF
-Date: Fri, 22 Mar 2024 17:48:54 +0100
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
+	s=arc-20240116; t=1711126825; c=relaxed/simple;
+	bh=eijYIPLIRnSAkyrL//Qucwww06P+qCR4wOCt19HryXE=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Znjpi8UD18sVLby9N6kmWM8UAW8yzhWZhQbVvqGk+YYWUjQhRdf8ex8UgOW1VZIZMMLSSBYoR53JhO4djET04tzCYSKWCwJZP4/RDeZi/J4Vb+jiD9k3mp0Ad5KBYYkSh6Oeext2qSjtR6h6bkSeDhNbJMyq8EmQaIq/vedJObo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fkNsD6sn; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711126824; x=1742662824;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=eijYIPLIRnSAkyrL//Qucwww06P+qCR4wOCt19HryXE=;
+  b=fkNsD6sn7kG3VNojJNPSX1zDG+ZAZtMGzgurDKheDFbMS5oVVeOPwHgQ
+   rd1FphQ2pY5MSdjRuNXBfznlSghFWajWzp58dJWzuzNPnCjQlrremA7Uh
+   r3BZF2l7ULmSKTjQfM/6KypHcikR8FLzJfiftTFeWhi2WEU2GFCrMghSZ
+   MvjmhlaEJaXQCyWr5d7Wd3AkKEQUvY9gAr0wymIO+N67VEQlsi+ozyevL
+   F9AqnLbYwZ360gtscpovMZl7kaHdTg7yJ3TKsi/HqqUelom+tH+lKWfSm
+   VclEj15mYxlPBnZ6Ygz/vv+45+NtEXoZu6ZtiukPM2HFSuUzqkoz/JIQQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="17619593"
+X-IronPort-AV: E=Sophos;i="6.07,146,1708416000"; 
+   d="scan'208";a="17619593"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 10:00:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11020"; a="914749126"
+X-IronPort-AV: E=Sophos;i="6.07,146,1708416000"; 
+   d="scan'208";a="914749126"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2024 10:00:18 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rniFb-0000000FDED-2Q86;
+	Fri, 22 Mar 2024 19:00:15 +0200
+Date: Fri, 22 Mar 2024 19:00:15 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
 	chrome-platform@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
@@ -61,74 +76,40 @@ Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
 	linux-tegra@vger.kernel.org, virtualization@lists.linux.dev
 Subject: Re: [PATCH 64/64] i2c: reword i2c_algorithm in drivers according to
  newest specification
-Message-ID: <Zf22dmwBpN7Ctk3v@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	chrome-platform@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
-	imx@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-amlogic@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
-	linux-omap@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-tegra@vger.kernel.org, virtualization@lists.linux.dev
+Message-ID: <Zf25H-LlAFmfuyYT@smile.fi.intel.com>
 References: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
  <20240322132619.6389-65-wsa+renesas@sang-engineering.com>
  <Zf2tSLJzujUHbJjp@smile.fi.intel.com>
+ <Zf22dmwBpN7Ctk3v@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gk90DgmVWePBMrYC"
-Content-Disposition: inline
-In-Reply-To: <Zf2tSLJzujUHbJjp@smile.fi.intel.com>
-
-
---gk90DgmVWePBMrYC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Zf22dmwBpN7Ctk3v@shikoro>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+
+On Fri, Mar 22, 2024 at 05:48:54PM +0100, Wolfram Sang wrote:
+> 
+> > >  static const struct i2c_algorithm at91_twi_algorithm = {
+> > > -	.master_xfer	= at91_twi_xfer,
+> > > +	.xfer	= at91_twi_xfer,
+> > 
+> > Seems you made this by a script, can you check the indentations afterwards?
+> 
+> Yes, I noticed as well. But other (not converted) drivers have issues
+> there as well, so this will be a seperate patch.
+
+The problem is that you add to a technical debt. We don't want that.
+If you have not introduced a new indentation issue, it obviously is
+not needed to be fixed in a separate patch. So, please consider this.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> >  static const struct i2c_algorithm at91_twi_algorithm =3D {
-> > -	.master_xfer	=3D at91_twi_xfer,
-> > +	.xfer	=3D at91_twi_xfer,
->=20
-> Seems you made this by a script, can you check the indentations afterward=
-s?
-
-Yes, I noticed as well. But other (not converted) drivers have issues
-there as well, so this will be a seperate patch.
-
-Thanks!
-
-
---gk90DgmVWePBMrYC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmX9tnUACgkQFA3kzBSg
-Kbbr8A//XEXud+6wIKsFTjfvJagkwqlNQp4For0+4AnAo3VuIMv44faNDOSxB63k
-K+vOfRi2HAVzhVrYUBQLf4thG+KXeX+7OXTO+HUwm81u+mdor/KfhPshTZfelzR4
-Sn9yxlg5kv2BQ3uCiNdv/7iznbabfUZPtQb9BnqBCj5O3nq5k1+WJYnm/1FamL9y
-M4h0p+yg14kIIMPV8fvDzWKHwQGsrEUcVMGLo7Nhj2tFai5yPJZCMzHpakzhVZQE
-wWsnWISmOwkFScr8cI8K8I5IQ1u4+2gDSUK0egM/spTBPqLfGamRt0SeVJnYEQQ7
-Owy4DrIPRiOITKuNc/DG6/+TeujZjLkyRuVwHbmP2woTVZcpc9pijAxzZDi8uQZg
-2zDdXj5mwtQMwkc+YwfTjnyAA8P8tbiAFdXgBcxn5w/4/by3uM4EtZBCEGhjXyDu
-8yTFnBzKNuNJJ3tiixvkB/GrTApip1rQ1vMxqZ706IMyPKXLQkJpbkBgVQ7vZtSt
-3AHRdwSBxBYBupcBKOxK5hMQLceYqyLnTVwppS7Om/ey7MkrnEFuCYWhmFuDb5MF
-5Tk6iReI6pt7T2lU/JNW9vWpkeMHDomHJ7T23RSMUmzQfsi4YvWFFJ87Yd4JRtrD
-wpacw1VztKHA12REQNWJHMwslzINn556NtcsRtarShBM5Xboofo=
-=euQt
------END PGP SIGNATURE-----
-
---gk90DgmVWePBMrYC--
 
