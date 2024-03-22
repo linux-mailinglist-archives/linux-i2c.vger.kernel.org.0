@@ -1,104 +1,187 @@
-Return-Path: <linux-i2c+bounces-2484-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2485-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6FC98865B0
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 05:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 020D788675B
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 08:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E3B828615E
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 04:04:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2C59286A10
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 07:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B87663D5;
-	Fri, 22 Mar 2024 04:04:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7CD311193;
+	Fri, 22 Mar 2024 07:15:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dkh5JKt4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YXEz6kwS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2D03539A;
-	Fri, 22 Mar 2024 04:04:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795DD8F7D;
+	Fri, 22 Mar 2024 07:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711080252; cv=none; b=Q3qLxq+dmR0YSCFFfAPapQuG5Qqz5Kcam4Up2mFhn93FulubYWF62dd0OBxAu5D5+Ndp2bpnSwJgfsv5GLfGG/CB038Y8ZAITs0QvAf0yOTUJiKTBeG42QxxjrRHJPvWREVZrTYfdXhGhPyyGh2gRlvcOt2l2VKkRMlPgBPZTaI=
+	t=1711091710; cv=none; b=iVzM7XomM2GTUP4f/VnFybPdK562OcMvgxz+SuYvcXDIqj14cfY58vbh+qJG7vPuvwL4Lgm9tvhQduPoejPI3a7/zpr28hcNVOIR+bC24Ccv4kVujjjTX60XkHIFNzCiRhefPH/JmUZjck/FwAwV0Bfca1TZc0+66oNZYUy2mXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711080252; c=relaxed/simple;
-	bh=8XsoOjRj04Rlf282vwPuGGrkCEPpbrEB6ypq7mgToQE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rrsNmf3GTR8aiJ+L5yhNetPfPlL3x1SadppcqaQMJwU8+DCoNn8BmguKKygsVTqHipwu/RsdtMX0LDEwUMP48l4+F3Qj0EzmI58HOyVb40xYn7BUQtcFM8ODh+HYGF3e4rkxwoODrTG64/noOo9fpvrsPfa4d7rgAvqTEXDe3Iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dkh5JKt4; arc=none smtp.client-ip=209.85.160.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-2220a389390so822582fac.0;
-        Thu, 21 Mar 2024 21:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711080249; x=1711685049; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YQ/izzScI1fREIZGekkyhtJcOgE3fms7DYKYprBPlpU=;
-        b=dkh5JKt4z9IlmRUXsSl+4b0bPn9EwVLEO7HYzzptxJUUdof+NKVaJ772cVzV2KuUFz
-         ZvKP2d2v7z8uwxko7HPGOEMXOg2flgCi2w6H4iUATwz+eyNusox0Dh/T+vdxP87OQ3qr
-         vZ1n148T8YoeIYOk/B+ItHuW7B2t36vxE6ikaMnTVJSm5BapAEDtmb91We/j8JIpT6hm
-         C5UkY1LY+lZRQjfQ6UasAPj6+5OeJPFQ4o+CDl7n/B3YpaQsixSSVHcNAPb6+RKMSoq/
-         nNsBwkMA4dsymyzFKuIPDebZQLlmoobYYxaipBcOgfNdEcKuZgh3QqcMIzcyyKfldJzV
-         oaIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711080249; x=1711685049;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YQ/izzScI1fREIZGekkyhtJcOgE3fms7DYKYprBPlpU=;
-        b=EEqeC9Q2mY+aBBYPa+jrlVoYlGvB5XGwa9XwRsRs8xEsGpb2ZFQMuaMbrW8e+CpvUr
-         wjim63uK68xEcC3tI70NXj1+yCqeLrhZZX1f0aTD1n1Rkj3nZGy6HrVWWlNl3zaXluZy
-         aqKcfBG6ydqZfqJSGn3FPZiX+AmwZUxh/BvriL6EK0b/EPjSpCuXAx5gUSMPCD1bBt8v
-         bvPCQE41B/SGlAnxxGtSbkcu907TvnaM8SP1PPiLR0p6heuZsWeh07p+704rYBKQhqPH
-         fjErGb42XOk/ijtkVCSm8nyE5SG1GrXO0dLqt7Uih/2ZF5lFHcFZLtTowY/LEl9k+Jzc
-         ocfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW1wPEHhD7KQYjPxlvyFUniQOPrGCCYBdrT1TLoRpzf/XXyxQwKQ2SRhipS9dDxOz3WdrmUGlZ7uJ0wqdfQ/jFzokXqnqPQyqHQnHp+7haOY8uwEtx2z/vrM8AGF5+Y5aTVqcQlsxI76aLgZojv7ZjXvOW/2yE6DibJYsUVvTZn4VkE/w==
-X-Gm-Message-State: AOJu0YxnKPMzR2J563/0s25JOCZetoP3gaXYFSnU3zE7SWTDarZ0AWSy
-	gqXquuzovnY2BJST/t5zPEukbcNsM7qvqiqwd0zb/OXwXRuKCabXxxC7G0gS2aq2qd/hZASoQCm
-	csfmic4mHcKFtu9IZsJvehga7J+I=
-X-Google-Smtp-Source: AGHT+IFXFqLQdxziVcpdTOgFwwmG4wRSlRUOhdZgESPBUD/lxXD1BNATgwjB0DZTlJ3m/o+6cAMejaY09lC4yiHjP/E=
-X-Received: by 2002:a05:6870:310:b0:222:4d2d:c3ba with SMTP id
- m16-20020a056870031000b002224d2dc3bamr441722oaf.5.1711080249604; Thu, 21 Mar
- 2024 21:04:09 -0700 (PDT)
+	s=arc-20240116; t=1711091710; c=relaxed/simple;
+	bh=Klxk6rNOBn5Q806diilCssq3tOM7VVxS7fAG43QvoFE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ekF/LZUOLxMjYY/6jtdifJJmul3KCqWBysK5Dq2sAVgvXmLSSCj/2Ck45HZTNM9in3UXVRaLV0oCU3TVGqt40GTdzEQ6V3klwyM2lL5q+MLeI+Yc0Le2r1CxNAkmpN1gfKl8lmAnJZ4Zvg762cmZGNOTJs8bClgA4Q/EZSn6wbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YXEz6kwS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2DBCC433C7;
+	Fri, 22 Mar 2024 07:15:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711091710;
+	bh=Klxk6rNOBn5Q806diilCssq3tOM7VVxS7fAG43QvoFE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=YXEz6kwSndTM1dTz81W+N2DVPH7ldsdW1HHytCthMbxYvQL3XtItk0OLTQgJ2eYLz
+	 F8pNzfc0Q5KMMR4ZbkJraQgklHgZVKicxGYZ+zPZjchrkcyDwMo5a7odSFr6DDE7eR
+	 jjiqbuPwGKU7g7uVEls1ODKi/7XUVzy2Gv++IuvE3Aka6ACYtIiHAejOc8SvREVpNG
+	 MysUDRMdL0fjHy0dCD+UmcMjUDw799zoqtLHwV4MUZHaWinFdmpv+pSriBzZ1MGhsh
+	 IFhZjcAj85fqTDi226nzeUQDYuhdHd6TGLiu/PJY4GahZa4y1P2W1R6Br+LEO/B+84
+	 PWqekeDqBV78g==
+Date: Fri, 22 Mar 2024 08:15:07 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: [PULL REQUEST] i2c-for-6.9-rc1-part2
+Message-ID: <Zf0v-8vtOcMdy9Hp@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240320084623.82248-1-animeshagarwal28@gmail.com> <171105547918.707638.11304000819202245225.b4-ty@kernel.org>
-In-Reply-To: <171105547918.707638.11304000819202245225.b4-ty@kernel.org>
-From: Animesh Agarwal <animeshagarwal28@gmail.com>
-Date: Fri, 22 Mar 2024 09:33:58 +0530
-Message-ID: <CAE3Oz805_eNoVSfxTq4Zy_kQEfsXWhcYZpvLnrcu-VCyDoBzWQ@mail.gmail.com>
-Subject: Re: [PATCH v3] dt-bindings: i2c: nxp,pnx-i2c: Convert to dtschema
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Conor Dooley <conor.dooley@microchip.com>, Vladimir Zapolskiy <vz@mleia.com>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Hb1JKRYRu+V3TCj4"
+Content-Disposition: inline
+
+
+--Hb1JKRYRu+V3TCj4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 22, 2024 at 2:41=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org> =
-wrote:
-> Applied to i2c/i2c-host on
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
->
-> Thank you,
-> Andi
->
-> Patches applied
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> [1/1] dt-bindings: i2c: nxp,pnx-i2c: Convert to dtschema
->       commit: e73b7060deb7da42f4e887cb726d0c7019a84cd0
+The following changes since commit a4145ce1e7bc247fd6f2846e8699473448717b37:
 
-Thanks Andi.
+  Merge tag 'bcachefs-2024-03-19' of https://evilpiepirate.org/git/bcachefs=
+ (2024-03-19 17:27:25 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-=
+6.9-rc1-part2
+
+for you to fetch changes up to e593a4a2d3ad5e1a4be338b38ed6ba7c70642d88:
+
+  dt-bindings: i2c: qcom,i2c-cci: Fix OV7251 'data-lanes' entries (2024-03-=
+20 10:28:56 +0100)
+
+----------------------------------------------------------------
+Some more I2C updates after the dependencies have been merged now.
+Plus a DT binding fix.
+
+----------------------------------------------------------------
+Chris Packham (1):
+      i2c: muxes: pca954x: Allow sharing reset GPIO
+
+Rob Herring (1):
+      dt-bindings: i2c: qcom,i2c-cci: Fix OV7251 'data-lanes' entries
+
+Th=C3=A9o Lebrun (9):
+      dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c bindings and example
+      i2c: nomadik: rename private struct pointers from dev to priv
+      i2c: nomadik: simplify IRQ masking logic
+      i2c: nomadik: use bitops helpers
+      i2c: nomadik: support short xfer timeouts using waitqueue & hrtimer
+      i2c: nomadik: replace jiffies by ktime for FIFO flushing timeout
+      i2c: nomadik: fetch i2c-transfer-timeout-us property from devicetree
+      i2c: nomadik: support Mobileye EyeQ5 I2C controller
+      i2c: nomadik: sort includes
+
+Wolfram Sang (1):
+      Merge tag 'i2c-host-6.9-part2' of git://git.kernel.org/pub/scm/linux/=
+kernel/git/andi.shyti/linux into i2c/for-mergewindow
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andi Shyti (8):
+      (Rev.) i2c: nomadik: sort includes
+      (Rev.) i2c: nomadik: support Mobileye EyeQ5 I2C controller
+      (Rev.) i2c: nomadik: fetch i2c-transfer-timeout-us property from devi=
+cetree
+      (Rev.) i2c: nomadik: replace jiffies by ktime for FIFO flushing timeo=
+ut
+      (Rev.) i2c: nomadik: support short xfer timeouts using waitqueue & hr=
+timer
+      (Rev.) i2c: nomadik: use bitops helpers
+      (Rev.) i2c: nomadik: simplify IRQ masking logic
+      (Rev.) i2c: nomadik: rename private struct pointers from dev to priv
+
+Krzysztof Kozlowski (2):
+      (Rev.) dt-bindings: i2c: qcom,i2c-cci: Fix OV7251 'data-lanes' entries
+      (Rev.) i2c: muxes: pca954x: Allow sharing reset GPIO
+
+Linus Walleij (8):
+      (Rev.) i2c: nomadik: sort includes
+      (Rev.) i2c: nomadik: support Mobileye EyeQ5 I2C controller
+      (Rev.) i2c: nomadik: fetch i2c-transfer-timeout-us property from devi=
+cetree
+      (Rev.) i2c: nomadik: replace jiffies by ktime for FIFO flushing timeo=
+ut
+      (Rev.) i2c: nomadik: support short xfer timeouts using waitqueue & hr=
+timer
+      (Rev.) i2c: nomadik: use bitops helpers
+      (Rev.) i2c: nomadik: simplify IRQ masking logic
+      (Rev.) i2c: nomadik: rename private struct pointers from dev to priv
+
+Rob Herring (1):
+      (Rev.) dt-bindings: i2c: nomadik: add mobileye,eyeq5-i2c bindings and=
+ example
+
+Wolfram Sang (3):
+      (Rev.) i2c: nomadik: fetch i2c-transfer-timeout-us property from devi=
+cetree
+      (Rev.) i2c: nomadik: replace jiffies by ktime for FIFO flushing timeo=
+ut
+      (Rev.) i2c: nomadik: support short xfer timeouts using waitqueue & hr=
+timer
+
+ .../devicetree/bindings/i2c/qcom,i2c-cci.yaml      |   2 +-
+ .../devicetree/bindings/i2c/st,nomadik-i2c.yaml    |  49 +-
+ drivers/i2c/busses/i2c-nomadik.c                   | 740 ++++++++++++-----=
+----
+ drivers/i2c/muxes/i2c-mux-pca954x.c                |  46 +-
+ 4 files changed, 514 insertions(+), 323 deletions(-)
+
+--Hb1JKRYRu+V3TCj4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmX9L/sACgkQFA3kzBSg
+KbYdaBAAipYlvuC5oSOv1tex+k+QL6YmmDHB/oz5xU67ZmT1FW+BcqzGEaMZqNdD
+ETpGTuZ6Dcxq19Sd0HKMYR7otrM4fSQmztnaN5yKCGBqsHEJJzzKJJN3V0sKd/ip
+lgx+qVGN6bEkRdrEqme7QN69EoijFgXvoZalQO85uofipGshzkwvn6LbBcboAynI
+6Cj/0Pvmnyhnn3lnLdA9IvcJnF8A7boNMGhEGYNYGG+FlvDpgfnCIt2mirWzLQUN
+Gu+Yirs2FDElIlgftVD390rwiw7oC2az/cjVEu9lwA9kcSY6jQDe50lqo39oWgx2
++4mQyTY+Cu0q7CKWES7LQ46zvFNwLXTd7dbdomX4TMKRgUp+uhK5Znn3jHy4xoxC
+eQnxGTGg0N07mZhmkCKYRCfoUn14+DAdo+sZU2p2JKyYYmdk6FMnFCnvLiNuGRwS
+n9s/7nQVG4UFPl2SfgOkE7i+USVvCRK0bdc8if2lFeT7eyY5dhI0HyGFEkFOtZiD
+FNc/X+N2unXvX2IjxEg+FFSDQXb12GKGjQckWkK616cNMdX/tTet1rqL4U33Stj0
+wVEF9SjzMV5ENNMatIK8QW33UQ7tFbIsNN3KJfCZKf3Mqe05Tcr50z9147uwL98a
+vRJiI8tXsaHEyRAymcyg7yPVaLO0La+vVV2Z/yhFSH6Dx0hT1YI=
+=wP3a
+-----END PGP SIGNATURE-----
+
+--Hb1JKRYRu+V3TCj4--
 
