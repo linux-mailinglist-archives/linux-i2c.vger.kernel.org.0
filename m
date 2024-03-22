@@ -1,57 +1,58 @@
-Return-Path: <linux-i2c+bounces-2509-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2511-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB869886D0F
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 14:31:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4500A886D13
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 14:31:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 826EB1F25604
-	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 13:31:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76CB31C21479
+	for <lists+linux-i2c@lfdr.de>; Fri, 22 Mar 2024 13:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 844C2605DC;
-	Fri, 22 Mar 2024 13:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAEDB6088E;
+	Fri, 22 Mar 2024 13:26:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="SH4q4sck"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="dAN0vM62"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542A0604AF
-	for <linux-i2c@vger.kernel.org>; Fri, 22 Mar 2024 13:26:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D989605AE
+	for <linux-i2c@vger.kernel.org>; Fri, 22 Mar 2024 13:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711114018; cv=none; b=lBpB/O8a6hhn7scy03guT3+hcVdhxyijNzJjF8oe0xECEAB/SigqBL/WbCVOtbBNa3qwJha90O/H9VHoMH1XjTYx69tXTMF2IiGpf+ONShwglnR4w1VM5Ypd4yzhLeiahOa/5ALLWyeovfNfrprCYtcJIfeYQRPryeBC4d22Hmo=
+	t=1711114019; cv=none; b=pN9Pxlopv4ZXTtVa9MHRZdz6/lGp3DKLXdMu+YN+koQIgziT/8t17zcQNqqTF368W6dNtlpNH5+Z0ezZxugAwatHoQY+p4pSNHNlpt2Ku+zjlXL71Adu6IsPXCPSsqGEZ/RIQuvT7iFTDyasewYDiELPOhRbfHwTtMtLEJvShuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711114018; c=relaxed/simple;
-	bh=m7oBZiPiCYpAs48i0suwGRxvQW5vIb79oo+w8VDHE58=;
+	s=arc-20240116; t=1711114019; c=relaxed/simple;
+	bh=KMlPjhymqUnFrcOezsGlxN4z0c5hiNab6hv/WcMS95s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fAcDLCTwhTTEo+vnrNAKphkXKKYnOMO0skJyyhls7vszMagE80oN8gt8h6H/5JdZxboI2bqdAqTg+/2VeXq6RPC13fUBK9vpuBw5bmkES46O5+b0p+RgG7KIVyL5RfRnp3qPphBb6486UDTEtOegHNayKPNXjhtoX4zAtd/cKBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=SH4q4sck; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=HNaFi2kEEmAsTpoCL0UT/f9O813ikUUR2zT3n/CD3pSdm6AKw8FrVUOzb6PBxRBO0QLg8RlNejWRZOO9z6Vt7jEoQ+KhVni/ijjC0ARFIEhnvkjbqdJ+HkZFj30cRJv0ZWOaBKW9F9lIKDOqAjNE4GWGdsk9B31RuO7dG1Y2U1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=dAN0vM62; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=zHWcrqcqGocHIBXF4RitcyOSKbklqY+OmlrTvuEauIc=; b=SH4q4s
-	ckAA+8fPDc59KFMUlUUyeLDLg+nI7lwTpVTrZ1ZDYtAf9Yp+3tfFzElEg1E5ZsXS
-	8Uzblu2k9EFn3Y9kVphWMLp5mDpFJASJuvWmJwTYRRVgaBPkKcNKyqGIHLR5EzWX
-	mQME/y1cwEcFymaUfcdHW+GoaNNB+1jvSANciScJT4oZoa/PU97vKizpeoho1LGM
-	SUlMm4ms7Kq1OCXE6DzJ3ygiSZrO2D8UExUtb1GSxn7xoupr0TSrD2X2eN0ppDxE
-	B/gZNC4eTqJ0TTfTafFCRrwTj80g73t9aFEb9MpBwECSYkw3EgMvO++jxMFfh04g
-	2KwyBBje2379BtVg==
-Received: (qmail 3870645 invoked from network); 22 Mar 2024 14:26:40 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Mar 2024 14:26:40 +0100
-X-UD-Smtp-Session: l3s3148p1@MQ4ixj8UnpRehhtF
+	 s=k1; bh=ELobiikT/EftdANZZNCWbmYEFMap38mTRb0PD3v43fw=; b=dAN0vM
+	62K1vHo9Ig88LNbKifyqaPmYYbUwnxrG6m7RtS1JzQPnwj9vhgxKQNoh4ekGjktW
+	X+uN8FXdTbuyQ/PTyf0GOxoipXoWNr1Qum9c1zEGavTc2wp6qAbfw4LEBeuX7wBF
+	bRG8GvBftkLNLBmOleniGhumM26A9+XXkoY8wn9HCR3j8KIIzk6T7r9yDFS1jhkU
+	kBDT0vZ50ug8ci8bbZ5olezjWhNaJ51OfYO/VBGyitdAIkrj6KIiS5CUgLtB7/Gr
+	IDfB4+E0Ffid8d9WosfStsYkTja6W0nf450JWcRO+V0B7UeJ62XyTtmFrHQYj0UO
+	fuM6vzljcwadKqvg==
+Received: (qmail 3870679 invoked from network); 22 Mar 2024 14:26:41 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Mar 2024 14:26:41 +0100
+X-UD-Smtp-Session: l3s3148p1@hVcvxj8UqJRehhtF
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Jean Delvare <jdelvare@suse.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 23/64] i2c: hix5hd2: reword according to newest specification
-Date: Fri, 22 Mar 2024 14:25:16 +0100
-Message-ID: <20240322132619.6389-24-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 24/64] i2c: i801: reword according to newest specification
+Date: Fri, 22 Mar 2024 14:25:17 +0100
+Message-ID: <20240322132619.6389-25-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
 References: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
@@ -70,30 +71,53 @@ entity ("client") and a local one ("target").
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/busses/i2c-hix5hd2.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/i2c/busses/i2c-i801.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-hix5hd2.c b/drivers/i2c/busses/i2c-hix5hd2.c
-index 8e75515c3ca4..d7a834a7fec5 100644
---- a/drivers/i2c/busses/i2c-hix5hd2.c
-+++ b/drivers/i2c/busses/i2c-hix5hd2.c
-@@ -200,7 +200,7 @@ static void hix5hd2_read_handle(struct hix5hd2_i2c_priv *priv)
- 		/* the last byte don't need send ACK */
- 		writel_relaxed(I2C_READ | I2C_NO_ACK, priv->regs + HIX5I2C_COM);
- 	} else if (priv->msg_len > 1) {
--		/* if i2c master receive data will send ACK */
-+		/* if i2c controller receive data will send ACK */
- 		writel_relaxed(I2C_READ, priv->regs + HIX5I2C_COM);
- 	} else {
- 		hix5hd2_rw_handle_stop(priv);
-@@ -384,7 +384,7 @@ static u32 hix5hd2_i2c_func(struct i2c_adapter *adap)
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index a6861660cb8c..68983f0a7fef 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -87,7 +87,7 @@
+  * Block buffer				yes
+  * Block process call transaction	yes
+  * I2C block read transaction		yes (doesn't use the block buffer)
+- * Slave mode				no
++ * Target mode				no
+  * SMBus Host Notify			yes
+  * Interrupt processing			yes
+  *
+@@ -1274,10 +1274,10 @@ static void register_dell_lis3lv02d_i2c_device(struct i801_priv *priv)
+ 	i2c_new_client_device(&priv->adapter, &info);
  }
  
- static const struct i2c_algorithm hix5hd2_i2c_algorithm = {
--	.master_xfer		= hix5hd2_i2c_xfer,
-+	.xfer		= hix5hd2_i2c_xfer,
- 	.functionality		= hix5hd2_i2c_func,
- };
+-/* Register optional slaves */
+-static void i801_probe_optional_slaves(struct i801_priv *priv)
++/* Register optional clients */
++static void i801_probe_optional_clients(struct i801_priv *priv)
+ {
+-	/* Only register slaves on main SMBus channel */
++	/* Only register clients on main SMBus channel */
+ 	if (priv->features & FEATURE_IDF)
+ 		return;
+ 
+@@ -1304,7 +1304,7 @@ static void i801_probe_optional_slaves(struct i801_priv *priv)
+ }
+ #else
+ static void __init input_apanel_init(void) {}
+-static void i801_probe_optional_slaves(struct i801_priv *priv) {}
++static void i801_probe_optional_clients(struct i801_priv *priv) {}
+ #endif	/* CONFIG_X86 && CONFIG_DMI */
+ 
+ #if IS_ENABLED(CONFIG_I2C_MUX_GPIO) && defined CONFIG_DMI
+@@ -1756,7 +1756,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 
+ 	/* We ignore errors - multiplexing is optional */
+ 	i801_add_mux(priv);
+-	i801_probe_optional_slaves(priv);
++	i801_probe_optional_clients(priv);
+ 
+ 	pci_set_drvdata(dev, priv);
  
 -- 
 2.43.0
