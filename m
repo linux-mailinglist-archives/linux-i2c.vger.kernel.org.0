@@ -1,63 +1,55 @@
-Return-Path: <linux-i2c+bounces-2567-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2568-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BEF78877C1
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Mar 2024 10:20:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DC808877DB
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Mar 2024 10:47:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A016F1F21D92
-	for <lists+linux-i2c@lfdr.de>; Sat, 23 Mar 2024 09:20:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 822AAB217D2
+	for <lists+linux-i2c@lfdr.de>; Sat, 23 Mar 2024 09:47:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 782A5FC1A;
-	Sat, 23 Mar 2024 09:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F80DF46;
+	Sat, 23 Mar 2024 09:47:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AmGkF125"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EUU4sVy7"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFED7DDC5;
-	Sat, 23 Mar 2024 09:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1DDA6D39;
+	Sat, 23 Mar 2024 09:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711185637; cv=none; b=ncOmAjFw4nEPoF0J2y/49n7YILGtVM/GZBxJPRBw7iGx8Q3CF1vxx75esN0JU+6OiKH8slJCUM7G2sYETfMhHBbpRJ7CpCBwHVf9u+7Oyej1He8OBtFzL0YYOMFdz/B17Y3BzBgzDeYdlmG37+laJae/kelDEGxseod/p95RRAM=
+	t=1711187237; cv=none; b=IO3P3DBomKSMFcvNln0wVZeA1WZHdoofWzhfc9vx+QW/OC7TTO0m455EAx2YDLGxf2YMplfaoNIzgPGLupp6FIcn9crI4EXrOUQRshlwNObc4W9mXFOgeodzx6pchJyfqXHuZPF5IR7gFy7mzEZcqBjAQWgBjBHVhTVBCFzzqvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711185637; c=relaxed/simple;
-	bh=aGTQuZy7vZpxuhlc2uWM1FWO2cNVLUpXYHPr+30NYM4=;
+	s=arc-20240116; t=1711187237; c=relaxed/simple;
+	bh=wxvzCkm4kET0OS7QfYEgwrchCejES0dLL0OfxVNRqzE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rh0DSAdSQVNBS1adbiZGMY4peRzHf0OTI1CLdrkJl+mE1QbOUeJ4y6uzhifAP3lPqxAJ+LIqYAI9lNkveAzkyTTykksIouPaF+eEm+Dp1DBn5jBle6zAmfSWwrlcPoHoim7asJCNSjOC4eFVZF68Wj1uh+JRYU+LavkF/Ophhpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AmGkF125; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D51C0C433F1;
-	Sat, 23 Mar 2024 09:20:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MeIPwve29q+ZnOBOqxP2kU87Za3qekbDc4NUZBvxlcAqZwgCGvtw9Jr9hTG845CcMYjqSagG3Trzvly9bbBMeqrvyTAluCCrxe+Ewdo6J0NAkCFP9d+IZ2NsNVIRLuO/oklzrXiAZytjQmC20b5o6xVJdCZ96q1BZdUYdziObQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EUU4sVy7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE057C433C7;
+	Sat, 23 Mar 2024 09:47:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711185636;
-	bh=aGTQuZy7vZpxuhlc2uWM1FWO2cNVLUpXYHPr+30NYM4=;
+	s=k20201202; t=1711187237;
+	bh=wxvzCkm4kET0OS7QfYEgwrchCejES0dLL0OfxVNRqzE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AmGkF125xegySFWAiHvPntmZ+07s8hZQPC/0IVIftdkxYeMJTqDHDoBaq087Sl4Ry
-	 qKx2QcAVw6S410SG7j4biAqt4/h5dTjc1vKUs5R8LJBjxtJSQyMNE1PxZTAhzLwpa+
-	 ZvDOHlqhfPGo+3K1JP9tq5K11rxRL31gNRIYe4fcfJjyAcpNQmozM0AzDwGqt7aAAm
-	 vL1bo7yWAyyXHWJXICav98Il7syCI5t9aEO0HLvfyTQ7cJVQX5WfpHiaD8JmvRG1Zm
-	 VmI4taBLphr2uo/nVmCk1uj3x3TE6/IYqaCXMkAcTk/3yvQe9KoaZIneVeSaGY4Thk
-	 hCCXd6I1k2Bcg==
-Date: Sat, 23 Mar 2024 10:20:32 +0100
+	b=EUU4sVy7j+vsEyQeXBmUI1KzR3dCw1jP7Ywa7eYXZZJg7pRl/LEoFfjpbX3v8ReTe
+	 FhNg4+M/sUurAeNV3XrBwLZrUW8ZVXx5l99kUpAF5MsshIrzirNv7v1cmmrpMM1Nzn
+	 leum/PTxADb0+pafJomCFECWl1steB17hkDitsQDPbAH8K0Ve5QT6LhIQ33l9+sXyE
+	 qgDFCiGctXfnjXo82gYgsCI11cdSnH1tyVhPTsIDVFc4bLILCF55ZmkYWsYkYYh4gF
+	 oWvJLfhDfHvc5q95yaTS79zlwc59yuT9sB4sWKkKP445OW/MszlwvFv8pAm3oYqHdF
+	 S5sM4aYEfaeag==
+Date: Sat, 23 Mar 2024 10:47:13 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org, asahi@lists.linux.dev, 
-	chrome-platform@lists.linux.dev, imx@lists.linux.dev, linux-actions@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-rockchip@lists.infradead.org, 
-	linux-rpi-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
-	openbmc@lists.ozlabs.org, virtualization@lists.linux.dev
-Subject: Re: [PATCH 00/64] i2c: reword i2c_algorithm according to newest
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/64] i2c: reword i2c_algorithm according to newest
  specification
-Message-ID: <ug266trshvhhbsln3eoh53fmsuj3l63ziz6gavcl7rv2jhjr5t@3av5givh5n7m>
+Message-ID: <54i4mvoxegs6vda7cwvlo6a6nn4qrdtibcpif2642bspid4mqu@5qjt5q2xyxoq>
 References: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
+ <20240322132619.6389-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -66,59 +58,25 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20240322132619.6389-2-wsa+renesas@sang-engineering.com>
 
 Hi Wolfram,
 
-On Fri, Mar 22, 2024 at 02:24:53PM +0100, Wolfram Sang wrote:
-> Okay, we need to begin somewhere...
-> 
+On Fri, Mar 22, 2024 at 02:24:54PM +0100, Wolfram Sang wrote:
 > Start changing the wording of the I2C main header wrt. the newest I2C
 > v7, SMBus 3.2, I3C specifications and replace "master/slave" with more
-> appropriate terms. This first step renames the members of struct
+
+nit: "I3C 1.1.1" as you added the version to every specification.
+
+> appropriate terms. The first step renames the members of struct
 > i2c_algorithm. Once all in-tree users are converted, the anonymous union
 > will go away again. All this work will also pave the way for finally
 > seperating the monolithic header into more fine-grained headers like
-> "i2c/clients.h" etc. So, this is not a simple renaming-excercise but
-> also a chance to update the I2C core to recent Linux standards.
-
-yes, very good! It's clearly stated in all three documentations
-that Target replaces Slave and Controller replaces Master (i3c is
-at the 1.1.1 version).
-
-> My motivation is to improve the I2C core API, in general. My motivation
-> is not to clean each and every driver. I think this is impossible
-> because register names based on official documentation will need to stay
-> as they are. But the Linux-internal names should be updated IMO.
-
-Also because some drivers have been written based on previous
-specifications where master/slave was used.
-
-> That being said, I worked on 62 drivers in this series beyond plain
-> renames inside 'struct i2c_algorithm' because the fruits were so
-> low-hanging. Before this series, 112 files in the 'busses/' directory
-> contained 'master' and/or 'slave'. After the series, only 57. Why not?
+> "i2c/clients.h" etc.
 > 
-> Next step is updating the drivers outside the 'i2c'-folder regarding
-> 'struct i2c_algorithm' so we can remove the anonymous union ASAP. To be
-> able to work on this with minimal dependencies, I'd like to apply this
-> series between -rc1 and -rc2.
-> 
-> I hope this will work for you guys. The changes are really minimal. If
-> you are not comfortable with changes to your driver or need more time to
-> review, please NACK the patch and I will drop the patch and/or address
-> the issues separeately.
-> 
-> @Andi: are you okay with this approach? It means you'd need to merge
-> -rc2 into your for-next branch. Or rebase if all fails.
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-I think it's a good plan, I'll try to support you with it.
-
-> Speaking of Andi, thanks a lot to him taking care of the controller
-> drivers these days. His work really gives me the freedom to work on I2C
-> core issues again.
-
-Thank you, Wolfram!
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 
 Andi
 
