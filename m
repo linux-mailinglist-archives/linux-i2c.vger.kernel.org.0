@@ -1,97 +1,110 @@
-Return-Path: <linux-i2c+bounces-2579-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2580-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C24C88B38A
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 23:09:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A733588B279
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 22:16:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73218B47501
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 16:49:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26913B2641F
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 18:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1228C5C902;
-	Mon, 25 Mar 2024 15:07:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C90CD4317B;
+	Mon, 25 Mar 2024 17:36:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="HyKVrXbA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xvpf7NjB"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC574E1C6
-	for <linux-i2c@vger.kernel.org>; Mon, 25 Mar 2024 15:07:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DCE1DA5B
+	for <linux-i2c@vger.kernel.org>; Mon, 25 Mar 2024 17:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711379267; cv=none; b=o4IdqBxDwaCsRkZKtf7nhMOtVToBAVJfsranWXNr7NDosJrHuO6ye/ZevjuIKx4ECJkZ8jL6pGlbxaBY7lEXILqxikMChzd4UBYoxt58VNvuFhJ+ZJSFK1sZO/dsq1DYEwIlv4MMygZILS3vO6AFSow6qjJDuba5fOCl1xNsiB0=
+	t=1711388170; cv=none; b=oTPyYCNyrsWjsqXMOus2/iN5K2NyZgcf0S2IGJ4cK0BUvt08tX5WsB4fbBbzBs1mVljxLF3Mmar6Y/yr0vS0Yyqg6c8Fb2iyDAYRf5zWS++Zttd3FgW40Wek3MebM2VeuAjOZrOxWIZNw3dws8AG4E9E3h7sIYz0bJ6DWrbXCV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711379267; c=relaxed/simple;
-	bh=6+wM/5Eml0jJjXbueM68ZzKT44rHBgaiZRCLtSh/Yuo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FUfIAfNTrAsrJB9HH9RXWk2ars/hJmxFbkiYSikBq9oLrwv6kaQjuWvvWfbPqUyFa+UqbZtrZ6kwb9J9lRMjNCkg5D41aR6GU+xQiMk6XmEKF4dKvUOyDWYUNN0WY2ObaPY0QSrJiPKZakGRB+uSPhDsJlJH6hkjc0IevnT8bUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=HyKVrXbA; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2d6c9678cbdso27744551fa.2
-        for <linux-i2c@vger.kernel.org>; Mon, 25 Mar 2024 08:07:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1711379264; x=1711984064; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6+wM/5Eml0jJjXbueM68ZzKT44rHBgaiZRCLtSh/Yuo=;
-        b=HyKVrXbAJgia2qR6aWAERV8S7eWY4GME5+3qgZENTj1xEl3lwVxlHgU9KSmRBaQZ52
-         vBOIk2P5KeSd2OBBaTXoHv0wleHCrpVsVdtO3ofFpsLpVMLOwlQvG1qs8G9gK0utvyqn
-         L1y788i6AU2L92D68kTLsutNK8VTHjjgp1qtcchMHttp6DVVYy64K4pBGttr9wwV6QtQ
-         unJXEVk54HBM27b9ZCgeRDXYeZquH0s/Di527OTl8evAWXOjOp+ZZVkoPSnWHvxnFELp
-         NYMMlqnsZnFGK9fGdDW76LxuFTFsRmvKu2md7U3UFPNdEPrubSCPY2szuFkVwsbdSgCE
-         MP9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711379264; x=1711984064;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6+wM/5Eml0jJjXbueM68ZzKT44rHBgaiZRCLtSh/Yuo=;
-        b=ZEsu9GviyRHO8178urubytL3YLJ5XSuqgAmc/tRvRmoGN9Bm6DJHMWRXQlySNyecEb
-         nJGkQAywGxYEEOuB0bLlPc1h8o4yXrBgnFiZFdg14Mrski6XvaTa1TDs2uk8onw1kn0S
-         0/HsNTahky5jYU4evh8fXS4yi2OLXxo0WsOHFjUmDkDbVhLGgq+/X1+mhFdkITBA9vXC
-         qsoVLLWKyOxXyQMfi0Xdz/fz1FF5tjaW/rjZWS4mlxvecNWJnjEt/e/SKmPqdg/4h0v9
-         z12hdbOlku50lfFXgU+4UefFAok1EcCcqUtEhuae+3kEo9b2KYqj2VJ+tCbQF6bNG7sY
-         yEzw==
-X-Gm-Message-State: AOJu0YziNHhlUbDmks7RL+PHWxSTimJrofD6bS8Yc3FPqlr0JxNASQEa
-	ldEzPiJxIfF1ZGJSGTXrEiJEHFIyRFTLD01jgRsmmG1hSrc/wY/01Lg8X11sKgZj0ADe19pfW53
-	VgRoL2Z+6j/znJ5glBvT+2c911OEkQS0BpCN4Uw==
-X-Google-Smtp-Source: AGHT+IF/D4oCFYlUK7HSZAQYxwcFlwbDpWsdJDLKuSRu3iGVi4RXC64dlOM7/dvQhbaOtDEjTxQoWt3Cd5SxBlG6+sA=
-X-Received: by 2002:a2e:2a82:0:b0:2d4:5d44:fe1d with SMTP id
- q124-20020a2e2a82000000b002d45d44fe1dmr4553062ljq.52.1711379264142; Mon, 25
- Mar 2024 08:07:44 -0700 (PDT)
+	s=arc-20240116; t=1711388170; c=relaxed/simple;
+	bh=AjOTT4YD16qoYuqItAJwaXAtdj5CkCHfLLXUiK+h21U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i2wX07Kfs8j/sSiaHn5Pbyrh1PPBex2tJSr4R2kiZVs/91VDymEXLVJWXWPat8EdksR1tz3icF/CS9kQDFM8H/+caMMga0yJELvWBrKfFIK8sr8pLWzkXLsDhSOE49pAj1WFzA5EikegJNFfIFy+2nXbtM8ZgHRPE2C6nic2Q/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xvpf7NjB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63598C433C7;
+	Mon, 25 Mar 2024 17:36:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711388169;
+	bh=AjOTT4YD16qoYuqItAJwaXAtdj5CkCHfLLXUiK+h21U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xvpf7NjBhj8IPEmAiMWf/f3YBFjPGgMjKekSi/A0wOB00IcgxcaMJlpcNod6e0AFq
+	 e2cZRdLwe/IFH2QWVJehAEGPuAo++CwkIokRMk9YO5aEy3wynonUCkMMPXv4+c4Y4y
+	 1qzuCbyaV2W0NLGVSSq5mrwXAXEpevPqdYjjU/tMDni2u59mwjVCyOZvY1w/ilnGfR
+	 EiqRHQxpCl8MHiEK4aLm0N8dx4ytNWjko6sUmxgrOPRNaEZIuB9ijKIP1b53noY92V
+	 uWjCHS4m92J9L1RsDzK7jk2QHcov7nJTwVu2Pvy/sDpiwGFzt08dCk5x5gMjX9qg04
+	 zUqbGAiduPoVw==
+Date: Mon, 25 Mar 2024 18:36:05 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH RFC 2/2] i2c: i801: Call i2c_register_spd for muxed child
+ segments
+Message-ID: <ZgG2BbOSO6GOo8yK@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <eac54582-44f6-4101-93d9-012eb4ee3241@gmail.com>
+ <cf8058db-03d2-4d47-bc39-2645c3d42e10@gmail.com>
+ <Zdxprq9jukWj0XJF@shikoro>
+ <b4cf0d37-f597-4218-9773-dc6eb8a0dc2a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322132619.6389-1-wsa+renesas@sang-engineering.com> <20240322132619.6389-16-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20240322132619.6389-16-wsa+renesas@sang-engineering.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 25 Mar 2024 16:07:33 +0100
-Message-ID: <CAMRc=Mf8xywzkF0cMHRC_AJeEozUhT31-gNpdT=FSmAZ+JQg8w@mail.gmail.com>
-Subject: Re: [PATCH 15/64] i2c: davinci: reword according to newest specification
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7gYveF8IRgEilSGs"
+Content-Disposition: inline
+In-Reply-To: <b4cf0d37-f597-4218-9773-dc6eb8a0dc2a@gmail.com>
 
-On Fri, Mar 22, 2024 at 2:26=E2=80=AFPM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> Match the wording of this driver wrt. the newest I2C v7, SMBus 3.2, I3C
-> specifications and replace "master/slave" with more appropriate terms.
-> They are also more specific because we distinguish now between a remote
-> entity ("client") and a local one ("target").
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+--7gYveF8IRgEilSGs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+
+> Now that 6.9-rc1 is out, we would have several weeks in linux-next
+> before 6.10-rc1. Would it be ok for you to apply the patch and see
+> whether we get any feedback from linux-next users?
+
+Yes, we can do that.
+
+> If yes, can you apply it as-is, or shall I resubmit the patch?
+
+This is a question for Andi who picks up driver patches meanwhile.
+
+
+--7gYveF8IRgEilSGs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmYBtgEACgkQFA3kzBSg
+KbZfOg//QxlNXWfKMPbw3euUa1hxoT31tq/wuI9XlBk1MWl+r8ec/NeBNBlB5AV4
+6jb0uMdhYxo05dSMbpRIirWRyTdwduZMSsfeVIEWIDaiYh1WBUyIaWZwHiDIMpPo
+Pey+FyFZMBhfxgHGzLPFahaXzBfyWVJlF7kZ/Th6H+UXm/oNcsT6ycFuRsedgq4a
+sBGtvG3rRI6stHjQTfDin85LlNk+8aEdvnL3ZrURUp6D/yhGLBWjAaqFgdGj1WaF
+qanPwxGKtrCiFQX0wh0W8VnXX31dFWqYAGDZvyrHIxMbqwgikdKNnk1XsMkdBGaE
+pKzZxoTtj1UU7eurNJJLxm6KWDlZZ2LgVW4ri1h7Rh1Z9hFJ2ehMm01MW1wWmRF3
+GVxgb/F5+BevlWgC5oHHSKKOhaMZUxfJXIbu1ccABfzsVRnnL8tqZ24P7n5onH+m
+CLz+smEpHTSQW/dvSq1uK5wBpT+a/343JwRZJB4LEslvLXzUuIPiYOc71JcFPQum
+hlFWKPii2E/oiwvA0QfBNDUPhzVmUYCAsGxWA/QjgXV+8tKQvu+rngDzttF2pFCp
+LonSSesmiaNsDX/7+hHDMkrd6UP+q9d1Wm73smF9D6h0rmYIfKWnqQx5suw23vDZ
+bEDHEs0yPARf85SD7rlmAXesHvcxX6m4L6Psj5RBFJ/KH9Rih2c=
+=EAMg
+-----END PGP SIGNATURE-----
+
+--7gYveF8IRgEilSGs--
 
