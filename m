@@ -1,95 +1,167 @@
-Return-Path: <linux-i2c+bounces-2573-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2574-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FA7688A156
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 14:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 533FE88A235
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 14:34:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC7932C1751
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 13:16:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0953729A2D0
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 13:34:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44C1516E88D;
-	Mon, 25 Mar 2024 09:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="a5fTqiDr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC8412D77F;
+	Mon, 25 Mar 2024 10:22:05 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896C83D0104;
-	Mon, 25 Mar 2024 03:39:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A0D12EBFF
+	for <linux-i2c@vger.kernel.org>; Mon, 25 Mar 2024 07:47:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711337966; cv=none; b=ek6OAC1HdhGSw2dfRBN101Q3+B2HeXAubFfmKGgET9VwphPukDJNwabIvb7nDGOCy1lxJ9tF3ijOkU14YhJRervC33ffC63P8l5IbUCcfGiGbSVw58lL/NUNJevp8TIdauLJ2umAOARBIuPcsJqeft7laLtP1R/0nObbIgjpd5w=
+	t=1711352822; cv=none; b=u2n1kv3wJwSVm5rhpKkOoO8UqRnfylN/gu0zK8EZ/DLFZz2V9gDRHaNP3YZKk19mX0tbTmySh+PndaXZyc3xTDZ3BsCxbqdMBYZRxOfD6BpFbSPVpmVpF/Ap7X/Ls6DfcrNUJmVUFzqP34T3apUfm8MHIUR5RXLubY1YuELHx4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711337966; c=relaxed/simple;
-	bh=sGIaBtqVxcSLEcbO/RNerhsBc2VftFecwlYKnFirhZo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hlrWkBRiQv659ZB0qOhrQ+6Mjcmrfbllnwcmn1Cx5Q2tu9kz1Vwsj8YzoH0RqI30MZLpCQnOQnZh2pajgBKMWNnCb+iV59CvvxO3vMD4+agtETr3+KsiRNnzvKhcCn1GF9kvs00jhj1uy/EeKF2boAtf1qUQbxGyFL5G4cr3gtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=a5fTqiDr; arc=none smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 42OMRRkr029557;
-	Sun, 24 Mar 2024 20:39:10 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=pfpt0220; bh=dLzwhtfNCY+WZdFgx7FUWY
-	HfsiEqYHSRJavE1/2Ss+M=; b=a5fTqiDrpA0T1ZmjU2PMOmBJB2FcHW7C0Tjo+V
-	8dDQaoocLvjlafShe1irRqA5oyXhmjs+aTV0qYJJ2sp7IivaJac4kU4zePReXHDO
-	+q9iN/9rSjzGo4kGZ8l8qOmg93lnXrO40VfYIGeB1UxqeZ9iBRasOUbHPxJlLaLf
-	txKEWYPO37rMU1eu7D+ia6R3znvtFWXaANr5XuYP1mc/Pv2DrH1XZ1fBRdyj/9eD
-	oOwqtYXg+y1Jv1YuW/n/t/ECHXFuaEwSo+bB3y2BaxtWiG3jyjt/TjCHcmF2lVDG
-	eRVXr2O2JSfGBRGP7N1MQoq81sm34csHF5w5JqTrWI88MHbA==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3x1vekpkuw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 24 Mar 2024 20:39:09 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Sun, 24 Mar 2024 20:39:09 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Sun, 24 Mar 2024 20:39:09 -0700
-Received: from IPBU-BLR-SERVER1 (IPBU-BLR-SERVER1.marvell.com [10.28.8.41])
-	by maili.marvell.com (Postfix) with SMTP id 409353F709D;
-	Sun, 24 Mar 2024 20:39:07 -0700 (PDT)
-Date: Mon, 25 Mar 2024 09:09:06 +0530
-From: George Cherian <george.cherian@marvell.com>
+	s=arc-20240116; t=1711352822; c=relaxed/simple;
+	bh=SwWn0CQu/X5SVnKJRgCwnQf5i60zqkGmkyhz8diQZ4M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mbbue+fV+Y1aea8d8066lmvIA+qAwhHexEmdt1o4JNK6uxdLpj4zZTyAi/0BCyb25lnoEH3vxvRv/xH7mmmaoOU4tZIR24A500aNQmGKhwA0yV1WNEsteduOb7eoB9rUaqKo4nxPadI3g/7K5TpAsWrRyCr1jY6zhXxHYzHwLN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1rof17-0003OW-Jx; Mon, 25 Mar 2024 08:45:13 +0100
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1rof0v-008NMm-2h; Mon, 25 Mar 2024 08:45:01 +0100
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1rof0u-00G1gD-2q;
+	Mon, 25 Mar 2024 08:45:00 +0100
+Date: Mon, 25 Mar 2024 08:45:00 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-CC: <linux-i2c@vger.kernel.org>, George Cherian <gcherian@marvell.com>,
-        "Andi
- Shyti" <andi.shyti@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 62/64] i2c: xlp9xx: reword according to newest
- specification
-Message-ID: <20240325033906.GA987833@IPBU-BLR-SERVER1>
+Cc: linux-i2c@vger.kernel.org, Elie Morisse <syniurge@gmail.com>,
+	Shyam Sundar S K <shyam-sundar.s-k@amd.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Krzysztof Adamski <krzysztof.adamski@nokia.com>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Jean-Marie Verdun <verdun@hpe.com>,
+	Nick Hawkins <nick.hawkins@hpe.com>,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Khalil Blaiech <kblaiech@nvidia.com>,
+	Asmaa Mnebhi <asmaa@nvidia.com>, Qii Wang <qii.wang@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Avi Fishman <avifishman70@gmail.com>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Ajay Gupta <ajayg@nvidia.com>,
+	Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>,
+	Robert Richter <rric@kernel.org>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Tony Lindgren <tony@atomide.com>, Vignesh R <vigneshr@ti.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Loic Poulain <loic.poulain@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+	Alain Volmat <alain.volmat@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Conghui Chen <conghui.chen@intel.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	chrome-platform@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
+	imx@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-amlogic@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
+	linux-omap@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	asahi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-tegra@vger.kernel.org, virtualization@lists.linux.dev
+Subject: Re: [PATCH 64/64] i2c: reword i2c_algorithm in drivers according to
+ newest specification
+Message-ID: <ZgErfGFanetan_gP@pengutronix.de>
 References: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
- <20240322132619.6389-63-wsa+renesas@sang-engineering.com>
+ <20240322132619.6389-65-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240322132619.6389-63-wsa+renesas@sang-engineering.com>
-X-Proofpoint-ORIG-GUID: laSvIC-wDHN7I7_Z6uaFHRIXYG_fl0DB
-X-Proofpoint-GUID: laSvIC-wDHN7I7_Z6uaFHRIXYG_fl0DB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-24_18,2024-03-21_02,2023-05-22_02
+In-Reply-To: <20240322132619.6389-65-wsa+renesas@sang-engineering.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-On 2024-03-22 at 18:55:55, Wolfram Sang (wsa+renesas@sang-engineering.com) wrote:
-> Match the wording of this driver wrt. the newest I2C v7, SMBus 3.2, I3C
-> specifications and replace "master/slave" with more appropriate terms.
-> They are also more specific because we distinguish now between a remote
-> entity ("client") and a local one ("target").
+On Fri, Mar 22, 2024 at 02:25:57PM +0100, Wolfram Sang wrote:
+> Match the wording in i2c_algorithm in I2C drivers wrt. the newest I2C
+> v7, SMBus 3.2, I3C specifications and replace "master/slave" with more
+> appropriate terms. For some drivers, this means no more conversions are
+> needed. For the others more work needs to be done but this will be
+> performed incrementally along with API changes/improvements. All these
+> changes here are simple search/replace results.
 > 
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Acked-by: George Cherian <george.cherian@marvell.com>
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de> # for i2c-imx.c 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
