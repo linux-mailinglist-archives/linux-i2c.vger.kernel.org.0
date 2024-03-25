@@ -1,184 +1,160 @@
-Return-Path: <linux-i2c+bounces-2577-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2578-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68ACE88A784
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 16:49:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2670088A934
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 17:28:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7D22B6061E
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 13:39:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26F6FCC532C
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 15:16:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B300D129E9D;
-	Mon, 25 Mar 2024 10:26:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 959476EB78;
+	Mon, 25 Mar 2024 12:34:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IrFyBjFo"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mout-u-107.mailbox.org (mout-u-107.mailbox.org [80.241.59.207])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2566180A9D;
-	Mon, 25 Mar 2024 08:17:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.59.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3361013C3EF
+	for <linux-i2c@vger.kernel.org>; Mon, 25 Mar 2024 12:34:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711354678; cv=none; b=orltkfsepUc2ao2XAM2UuamiGeciUvw0UYCaS/mjFMg+ukm4WjBGrj2BO2ufnEftGwzribU+UgrVC5EWuUHnQc7zLzr3AGXwqEJsiOQ20AUc0vHCLPs78iYoqgqnzaSo2Zi+Ol3b371/nQObK+9DZy+YLm49N6SUbthJhNuO1Kw=
+	t=1711370046; cv=none; b=gQtoKp107n5Qid867fESM264qy9RRsuG/xmpMOnWFPOHbLwyatw5jH+spsrL6sYUpHQTO1W7G9dBiFJJ97WZJmflSP4h+QtqzbAXwx4q2B4b9PTvEsDfpxS0+6odEaxoDeZUuK09OMvvRpFA2txZLAUix6FHOsVzwLXKpPowJ88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711354678; c=relaxed/simple;
-	bh=K5U+cs+US6PiUstJ6PPMTAHeJ9ZJdg/fnjJHc+bJpIs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nvz5sOBKvHMO47TEWs0VtrSMSiQ9RMwEypASfxMtF7+o4duhJ5aG7l2oXlCPnvFFkCYXxkpRXFoHXBg3vIosUBzPAOBnH8oB8Qr+dRr0ZCGSZVzu8UZGVNpy9VlV6D23Do/r43i+2S0b/U1YjoOPrTakNAt7hH9x/TeryN6rW+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=denx.de; spf=fail smtp.mailfrom=denx.de; arc=none smtp.client-ip=80.241.59.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=denx.de
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-u-107.mailbox.org (Postfix) with ESMTPS id 4V35C525S3z9sTP;
-	Mon, 25 Mar 2024 09:07:45 +0100 (CET)
-Message-ID: <7da930c8-d6d1-47e3-b346-b0e9e75edb54@denx.de>
-Date: Mon, 25 Mar 2024 09:07:43 +0100
+	s=arc-20240116; t=1711370046; c=relaxed/simple;
+	bh=bTnttvOtdrzxAyPXpO91xc1HnYTJDdmc/ptyyLo2nms=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=MYVnSQV7aCJDxgb1N0HVOLLmPbr/ic0li15mvmAt2k0ilTlME4UZuaa68oBcPDnQ0lFh1PyUfbmrLTociUyy6nHWbAbE4l4iKOjPQmj80kfl8EWAExCIzt5wOxvlI0klbHULTzGwfJhZ4kxCAtHZvWihQ6KA2Pa6gDp1eBhCz18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IrFyBjFo; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-56be32b9775so3637116a12.1
+        for <linux-i2c@vger.kernel.org>; Mon, 25 Mar 2024 05:34:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711370042; x=1711974842; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:cc:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=n+KIOoNPlI0P6SdBvaSi9JcYmbExi3dO6on2Vwomh00=;
+        b=IrFyBjFofZvZ56EdFXWohmZC64vx9hnbhzi00XDapwMU6GkV0OELGh1vYi1M5PHMvQ
+         vVSNmNQaqGBPYY9pxHjX4TmN7i9eSpiaHrdNco74/33EpB8bl68HGAjcAaW+Qzir41WY
+         5Mfzj5aulohZPLb1fdk+VB9/5lr3zRbQLMI4ZzRgJ74yHk7yDBRyTNLLgRyJZCKObvPs
+         FhK9Q670p6HYyf0z4Q53pk3+rRDxv1WtpRoJAYYekoO2Mt3iWpqTAaSlwe/m7c5w3ONe
+         qWOq6UYrNKGBDV32DOOkhTAR/p6kQGV1h/x0c72u7vB6X+vWfs/gGAKya51UjH8ItZ0g
+         uxBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711370042; x=1711974842;
+        h=content-transfer-encoding:in-reply-to:cc:autocrypt:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n+KIOoNPlI0P6SdBvaSi9JcYmbExi3dO6on2Vwomh00=;
+        b=Asza0QP3lpuYpqnQOrjc5xaTUVSMWR23Mh3XAZjnli7Ko4r3ZCabBzNpZ8alfa6NZG
+         Lp7JyGSyk0b+G9eLMtQ6YwMukjymmLaFornX8xpYz+yhbu8+zobvZJ8diY2UyIy1d1J+
+         qg+NPWY0qq0ealnBoMOnJrh8jYGNR+FixNmcRywPtZQRFuPI5J9d9PSOIXv7cwvGrXsO
+         uO0rzvC9Xnu/9jA6KwVcXvgseFMlI71f2u+mdUO/uB3Frc/ZQn9s/rNV2I7vHhdtcIuD
+         RHMZpQMrQ33bRWYGtUfxvlZiFf/qQALH+g7c2v+YgYYOnmQ4HzAmYqI55OjYhPAmc9WI
+         mcQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX57af5yLPd9p6B4epzEt7IjDSNWFC22Cz+aIp9PVSqT8tIF1sYxIWdWrNW3AgLgXru1gSf95anUqcNHSfGabMLk6K2yBFS71BB
+X-Gm-Message-State: AOJu0Yz3Hf1FPML3guC+xmtRowhFz8VnD8FiSfWJLZrRfCl/KvlTRdFa
+	OGesJTAkIoyq0V+cBYjdAzEo+fLt7n/yoSYjrZ6dQHFRdx8+nA67
+X-Google-Smtp-Source: AGHT+IFxTdc5zB4uPmRD1iXKxQgxShNCfmUvviz61bt0iuCmHIaJcdyTqQcpn/ZatIppLnzr1YMo6w==
+X-Received: by 2002:a17:906:e17:b0:a45:f4d9:acc5 with SMTP id l23-20020a1709060e1700b00a45f4d9acc5mr4140296eji.29.1711370042241;
+        Mon, 25 Mar 2024 05:34:02 -0700 (PDT)
+Received: from ?IPV6:2a01:c22:7a49:5100:3c90:4616:9ba3:2cce? (dynamic-2a01-0c22-7a49-5100-3c90-4616-9ba3-2cce.c22.pool.telefonica.de. [2a01:c22:7a49:5100:3c90:4616:9ba3:2cce])
+        by smtp.googlemail.com with ESMTPSA id a11-20020a170906670b00b00a44b90abb1dsm2992567ejp.110.2024.03.25.05.34.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Mar 2024 05:34:01 -0700 (PDT)
+Message-ID: <b4cf0d37-f597-4218-9773-dc6eb8a0dc2a@gmail.com>
+Date: Mon, 25 Mar 2024 13:34:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 37/64] i2c: mt7621: reword according to newest
- specification
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org
-Cc: Andi Shyti <andi.shyti@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-References: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
- <20240322132619.6389-38-wsa+renesas@sang-engineering.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/2] i2c: i801: Call i2c_register_spd for muxed child
+ segments
+To: Wolfram Sang <wsa@kernel.org>
+References: <eac54582-44f6-4101-93d9-012eb4ee3241@gmail.com>
+ <cf8058db-03d2-4d47-bc39-2645c3d42e10@gmail.com> <Zdxprq9jukWj0XJF@shikoro>
 Content-Language: en-US
-From: Stefan Roese <sr@denx.de>
-In-Reply-To: <20240322132619.6389-38-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+Cc: Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+In-Reply-To: <Zdxprq9jukWj0XJF@shikoro>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 3/22/24 14:25, Wolfram Sang wrote:
-> Match the wording of this driver wrt. the newest I2C v7, SMBus 3.2, I3C
-> specifications and replace "master/slave" with more appropriate terms.
-> They are also more specific because we distinguish now between a remote
-> entity ("client") and a local one ("target").
+On 26.02.2024 11:36, Wolfram Sang wrote:
+> On Thu, Feb 22, 2024 at 11:25:43PM +0100, Heiner Kallweit wrote:
+>> Once the gpio mux driver binds to the "i2c-mux-gpio" platform device,
+>> this creates the i2c adapters for the muxed child segments.
+>> We can use the bus notifier mechanism to check for creation of the
+>> child i2d adapters, and call i2c_register_spd() for them. This allows
+>> to detect all DIMM's on systems with more than 8 memory slots.
+>>
+>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Reviewed-by: Stefan Roese <sr@denx.de>
-
-Thanks,
-Stefan
-
-> ---
->   drivers/i2c/busses/i2c-mt7621.c | 22 +++++++++++-----------
->   1 file changed, 11 insertions(+), 11 deletions(-)
+> Yay, this looks *much* better. Thanks for doing it! Sadly, I can also
+> only review, not test. Let's hope someone can step up to do the real
+> testing. Maybe resend it as RFT to lkml?
 > 
-> diff --git a/drivers/i2c/busses/i2c-mt7621.c b/drivers/i2c/busses/i2c-mt7621.c
-> index 81d46169bc1f..c567a2cf4a90 100644
-> --- a/drivers/i2c/busses/i2c-mt7621.c
-> +++ b/drivers/i2c/busses/i2c-mt7621.c
-> @@ -117,26 +117,26 @@ static int mtk_i2c_check_ack(struct mtk_i2c *i2c, u32 expected)
->   	return ((ack & ack_expected) == ack_expected) ? 0 : -ENXIO;
->   }
->   
-> -static int mtk_i2c_master_start(struct mtk_i2c *i2c)
-> +static int mtk_i2c_host_start(struct mtk_i2c *i2c)
->   {
->   	iowrite32(SM0CTL1_START | SM0CTL1_TRI, i2c->base + REG_SM0CTL1_REG);
->   	return mtk_i2c_wait_idle(i2c);
->   }
->   
-> -static int mtk_i2c_master_stop(struct mtk_i2c *i2c)
-> +static int mtk_i2c_host_stop(struct mtk_i2c *i2c)
->   {
->   	iowrite32(SM0CTL1_STOP | SM0CTL1_TRI, i2c->base + REG_SM0CTL1_REG);
->   	return mtk_i2c_wait_idle(i2c);
->   }
->   
-> -static int mtk_i2c_master_cmd(struct mtk_i2c *i2c, u32 cmd, int page_len)
-> +static int mtk_i2c_host_cmd(struct mtk_i2c *i2c, u32 cmd, int page_len)
->   {
->   	iowrite32(cmd | SM0CTL1_TRI | SM0CTL1_PGLEN(page_len),
->   		  i2c->base + REG_SM0CTL1_REG);
->   	return mtk_i2c_wait_idle(i2c);
->   }
->   
-> -static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
-> +static int mtk_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
->   			       int num)
->   {
->   	struct mtk_i2c *i2c;
-> @@ -157,7 +157,7 @@ static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
->   			goto err_timeout;
->   
->   		/* start sequence */
-> -		ret = mtk_i2c_master_start(i2c);
-> +		ret = mtk_i2c_host_start(i2c);
->   		if (ret)
->   			goto err_timeout;
->   
-> @@ -169,14 +169,14 @@ static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
->   			if (pmsg->flags & I2C_M_RD)
->   				addr |= 1;
->   			iowrite32(addr, i2c->base + REG_SM0D0_REG);
-> -			ret = mtk_i2c_master_cmd(i2c, SM0CTL1_WRITE, 2);
-> +			ret = mtk_i2c_host_cmd(i2c, SM0CTL1_WRITE, 2);
->   			if (ret)
->   				goto err_timeout;
->   		} else {
->   			/* 7 bits address */
->   			addr = i2c_8bit_addr_from_msg(pmsg);
->   			iowrite32(addr, i2c->base + REG_SM0D0_REG);
-> -			ret = mtk_i2c_master_cmd(i2c, SM0CTL1_WRITE, 1);
-> +			ret = mtk_i2c_host_cmd(i2c, SM0CTL1_WRITE, 1);
->   			if (ret)
->   				goto err_timeout;
->   		}
-> @@ -202,7 +202,7 @@ static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
->   				cmd = SM0CTL1_WRITE;
->   			}
->   
-> -			ret = mtk_i2c_master_cmd(i2c, cmd, page_len);
-> +			ret = mtk_i2c_host_cmd(i2c, cmd, page_len);
->   			if (ret)
->   				goto err_timeout;
->   
-> @@ -222,7 +222,7 @@ static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
->   		}
->   	}
->   
-> -	ret = mtk_i2c_master_stop(i2c);
-> +	ret = mtk_i2c_host_stop(i2c);
->   	if (ret)
->   		goto err_timeout;
->   
-> @@ -230,7 +230,7 @@ static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
->   	return i;
->   
->   err_ack:
-> -	ret = mtk_i2c_master_stop(i2c);
-> +	ret = mtk_i2c_host_stop(i2c);
->   	if (ret)
->   		goto err_timeout;
->   	return -ENXIO;
-> @@ -247,7 +247,7 @@ static u32 mtk_i2c_func(struct i2c_adapter *a)
->   }
->   
->   static const struct i2c_algorithm mtk_i2c_algo = {
-> -	.master_xfer	= mtk_i2c_master_xfer,
-> +	.xfer	= mtk_i2c_xfer,
->   	.functionality	= mtk_i2c_func,
->   };
->   
+3 weeks ago I sent the change as RFT to lkml, as suggested.
+However I didn't receive a single response yet.
+Now that 6.9-rc1 is out, we would have several weeks in linux-next
+before 6.10-rc1. Would it be ok for you to apply the patch and see
+whether we get any feedback from linux-next users?
+If yes, can you apply it as-is, or shall I resubmit the patch?
 
-Viele Grüße,
-Stefan Roese
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> 
 
--- 
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-51 Fax: (+49)-8142-66989-80 Email: sr@denx.de
 
