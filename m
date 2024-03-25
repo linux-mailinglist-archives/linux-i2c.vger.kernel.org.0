@@ -1,77 +1,65 @@
-Return-Path: <linux-i2c+bounces-2576-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2577-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CCB088A282
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 14:39:06 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68ACE88A784
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 16:49:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13A562C1D8F
-	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 13:39:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7D22B6061E
+	for <lists+linux-i2c@lfdr.de>; Mon, 25 Mar 2024 13:39:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEC081442F9;
-	Mon, 25 Mar 2024 10:26:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="NneBBH1/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B300D129E9D;
+	Mon, 25 Mar 2024 10:26:11 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mout-u-107.mailbox.org (mout-u-107.mailbox.org [80.241.59.207])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B67158DBA;
-	Mon, 25 Mar 2024 08:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2566180A9D;
+	Mon, 25 Mar 2024 08:17:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.59.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711353986; cv=none; b=AAQrX8h1JNDB15TxKro0ekyneWU+2vjjX6fsbxnU3cMspBirAMNghYGqpp360MWqBkVB5uw9NUfr2ll6e+Zs2DYB7UPzXcb4X/WnAcAmzXpVkWUQgD1TOAZywdLObO9wR9bhHKYVmCwEo0tzDpTgUe5zZVwSja+Wf/7EHq3S1+Q=
+	t=1711354678; cv=none; b=orltkfsepUc2ao2XAM2UuamiGeciUvw0UYCaS/mjFMg+ukm4WjBGrj2BO2ufnEftGwzribU+UgrVC5EWuUHnQc7zLzr3AGXwqEJsiOQ20AUc0vHCLPs78iYoqgqnzaSo2Zi+Ol3b371/nQObK+9DZy+YLm49N6SUbthJhNuO1Kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711353986; c=relaxed/simple;
-	bh=4zmNwnO+rlwZyxMm6+DHyTmsDyPlSk/+VuFi7C20klI=;
+	s=arc-20240116; t=1711354678; c=relaxed/simple;
+	bh=K5U+cs+US6PiUstJ6PPMTAHeJ9ZJdg/fnjJHc+bJpIs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W9QTBa1ykrg8/BNA3vNMGNxrOYmpvz6BXb3gest016j4FT2rPUZ6+6ayddkT4XpL0KzqWUqjgf4spkSCKHL8Cpb9kFHw/2RBEoYoxkSg0Son1YmP4e09qxnMcnEEe+BLEFS2pLo/UhmUhEPms6j2UF3hHsSFN04Kw18Y7dsltYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=NneBBH1/; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1711353982;
-	bh=4zmNwnO+rlwZyxMm6+DHyTmsDyPlSk/+VuFi7C20klI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NneBBH1/h89T+j8vTmT6EtedvI9yYZAzutka6W/6D7Azt/SpnEBfLrj3Rf31qe1BK
-	 8pNlfz5pMi5SVO6por8o+Tf2Vfu7GXRczRiPuFme4dA5azM07gValBgJiWdv+wX7j3
-	 liU7jCVPtS76l3gIFZA0nNGmcPcsJU9SXbxn8USTUWt2pIelgXDmY+/61QgG4Ms5nq
-	 96eFz9So1oipSkAyUQune5KoKumV6TmMCThnk4koZ+dEE38vVNjoHMeeP0oepeWx0J
-	 qhCp9hYxXtyGNfX58ByaC70YyMA02/AMmx5wNCly91HUdhTzYlgpHYsUUx0Otw6RCx
-	 q7zcTbJUhk9yQ==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 In-Reply-To:Content-Type; b=Nvz5sOBKvHMO47TEWs0VtrSMSiQ9RMwEypASfxMtF7+o4duhJ5aG7l2oXlCPnvFFkCYXxkpRXFoHXBg3vIosUBzPAOBnH8oB8Qr+dRr0ZCGSZVzu8UZGVNpy9VlV6D23Do/r43i+2S0b/U1YjoOPrTakNAt7hH9x/TeryN6rW+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=denx.de; spf=fail smtp.mailfrom=denx.de; arc=none smtp.client-ip=80.241.59.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=denx.de
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 1EE313781013;
-	Mon, 25 Mar 2024 08:06:22 +0000 (UTC)
-Message-ID: <97b5904b-af1f-48a4-98b4-13d0531beece@collabora.com>
-Date: Mon, 25 Mar 2024 09:06:21 +0100
+	by mout-u-107.mailbox.org (Postfix) with ESMTPS id 4V35C525S3z9sTP;
+	Mon, 25 Mar 2024 09:07:45 +0100 (CET)
+Message-ID: <7da930c8-d6d1-47e3-b346-b0e9e75edb54@denx.de>
+Date: Mon, 25 Mar 2024 09:07:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 37/64] i2c: mt7621: reword according to newest
  specification
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org
-Cc: Stefan Roese <sr@denx.de>, Andi Shyti <andi.shyti@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+Cc: Andi Shyti <andi.shyti@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org
 References: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
  <20240322132619.6389-38-wsa+renesas@sang-engineering.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
+From: Stefan Roese <sr@denx.de>
 In-Reply-To: <20240322132619.6389-38-wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Il 22/03/24 14:25, Wolfram Sang ha scritto:
+On 3/22/24 14:25, Wolfram Sang wrote:
 > Match the wording of this driver wrt. the newest I2C v7, SMBus 3.2, I3C
 > specifications and replace "master/slave" with more appropriate terms.
 > They are also more specific because we distinguish now between a remote
@@ -79,7 +67,118 @@ Il 22/03/24 14:25, Wolfram Sang ha scritto:
 > 
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Stefan Roese <sr@denx.de>
 
+Thanks,
+Stefan
 
+> ---
+>   drivers/i2c/busses/i2c-mt7621.c | 22 +++++++++++-----------
+>   1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-mt7621.c b/drivers/i2c/busses/i2c-mt7621.c
+> index 81d46169bc1f..c567a2cf4a90 100644
+> --- a/drivers/i2c/busses/i2c-mt7621.c
+> +++ b/drivers/i2c/busses/i2c-mt7621.c
+> @@ -117,26 +117,26 @@ static int mtk_i2c_check_ack(struct mtk_i2c *i2c, u32 expected)
+>   	return ((ack & ack_expected) == ack_expected) ? 0 : -ENXIO;
+>   }
+>   
+> -static int mtk_i2c_master_start(struct mtk_i2c *i2c)
+> +static int mtk_i2c_host_start(struct mtk_i2c *i2c)
+>   {
+>   	iowrite32(SM0CTL1_START | SM0CTL1_TRI, i2c->base + REG_SM0CTL1_REG);
+>   	return mtk_i2c_wait_idle(i2c);
+>   }
+>   
+> -static int mtk_i2c_master_stop(struct mtk_i2c *i2c)
+> +static int mtk_i2c_host_stop(struct mtk_i2c *i2c)
+>   {
+>   	iowrite32(SM0CTL1_STOP | SM0CTL1_TRI, i2c->base + REG_SM0CTL1_REG);
+>   	return mtk_i2c_wait_idle(i2c);
+>   }
+>   
+> -static int mtk_i2c_master_cmd(struct mtk_i2c *i2c, u32 cmd, int page_len)
+> +static int mtk_i2c_host_cmd(struct mtk_i2c *i2c, u32 cmd, int page_len)
+>   {
+>   	iowrite32(cmd | SM0CTL1_TRI | SM0CTL1_PGLEN(page_len),
+>   		  i2c->base + REG_SM0CTL1_REG);
+>   	return mtk_i2c_wait_idle(i2c);
+>   }
+>   
+> -static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+> +static int mtk_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+>   			       int num)
+>   {
+>   	struct mtk_i2c *i2c;
+> @@ -157,7 +157,7 @@ static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+>   			goto err_timeout;
+>   
+>   		/* start sequence */
+> -		ret = mtk_i2c_master_start(i2c);
+> +		ret = mtk_i2c_host_start(i2c);
+>   		if (ret)
+>   			goto err_timeout;
+>   
+> @@ -169,14 +169,14 @@ static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+>   			if (pmsg->flags & I2C_M_RD)
+>   				addr |= 1;
+>   			iowrite32(addr, i2c->base + REG_SM0D0_REG);
+> -			ret = mtk_i2c_master_cmd(i2c, SM0CTL1_WRITE, 2);
+> +			ret = mtk_i2c_host_cmd(i2c, SM0CTL1_WRITE, 2);
+>   			if (ret)
+>   				goto err_timeout;
+>   		} else {
+>   			/* 7 bits address */
+>   			addr = i2c_8bit_addr_from_msg(pmsg);
+>   			iowrite32(addr, i2c->base + REG_SM0D0_REG);
+> -			ret = mtk_i2c_master_cmd(i2c, SM0CTL1_WRITE, 1);
+> +			ret = mtk_i2c_host_cmd(i2c, SM0CTL1_WRITE, 1);
+>   			if (ret)
+>   				goto err_timeout;
+>   		}
+> @@ -202,7 +202,7 @@ static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+>   				cmd = SM0CTL1_WRITE;
+>   			}
+>   
+> -			ret = mtk_i2c_master_cmd(i2c, cmd, page_len);
+> +			ret = mtk_i2c_host_cmd(i2c, cmd, page_len);
+>   			if (ret)
+>   				goto err_timeout;
+>   
+> @@ -222,7 +222,7 @@ static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+>   		}
+>   	}
+>   
+> -	ret = mtk_i2c_master_stop(i2c);
+> +	ret = mtk_i2c_host_stop(i2c);
+>   	if (ret)
+>   		goto err_timeout;
+>   
+> @@ -230,7 +230,7 @@ static int mtk_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
+>   	return i;
+>   
+>   err_ack:
+> -	ret = mtk_i2c_master_stop(i2c);
+> +	ret = mtk_i2c_host_stop(i2c);
+>   	if (ret)
+>   		goto err_timeout;
+>   	return -ENXIO;
+> @@ -247,7 +247,7 @@ static u32 mtk_i2c_func(struct i2c_adapter *a)
+>   }
+>   
+>   static const struct i2c_algorithm mtk_i2c_algo = {
+> -	.master_xfer	= mtk_i2c_master_xfer,
+> +	.xfer	= mtk_i2c_xfer,
+>   	.functionality	= mtk_i2c_func,
+>   };
+>   
+
+Viele Grüße,
+Stefan Roese
+
+-- 
+DENX Software Engineering GmbH,      Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-51 Fax: (+49)-8142-66989-80 Email: sr@denx.de
 
