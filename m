@@ -1,104 +1,110 @@
-Return-Path: <linux-i2c+bounces-2627-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2628-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE29D88D937
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Mar 2024 09:34:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 237A288DA2C
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Mar 2024 10:22:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A04201F2A650
-	for <lists+linux-i2c@lfdr.de>; Wed, 27 Mar 2024 08:34:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B950D1F22549
+	for <lists+linux-i2c@lfdr.de>; Wed, 27 Mar 2024 09:22:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF6D2E85A;
-	Wed, 27 Mar 2024 08:34:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9021C3771C;
+	Wed, 27 Mar 2024 09:22:47 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2B1125C9;
-	Wed, 27 Mar 2024 08:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B667364AA;
+	Wed, 27 Mar 2024 09:22:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711528456; cv=none; b=DX7bjHOzxBFtOqpm16rYb0krxtE9R7IbpOu+WTV7CUXLpNeLM/7Y4KWNv+poEZBFUtVTc01xr2tw+58unX69jKtxfYeTybzARsOqcHlGTwM7WkJLwAk19b7t7IMXF9ICiQI1WuLyiko3slonhlo+LfsOUvKuJYtfnNniPER3GKU=
+	t=1711531367; cv=none; b=Hx71qb3vcwLrwrH0MGSsCKQ8dJx/fVSj8GuJsPu2gjT+nvYb08sdUTQ6r4NDhfHOXHG1H2nyEqfxPuoBIym1rmMXn8p7L+hIA3qPYXa1h+8NC8k6VxZ7HZV3I5nAwpGVjy10NbxxOMLglXYRewlm1iM95LkFqW6ZH068t6yto1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711528456; c=relaxed/simple;
-	bh=UGvZxVMikB6qaCnJ2KKhOrkVnVs1RqwYKNO6LJX6940=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=msP3pHDyjb6JvkCo0ZAzFshCkuIq/sQd+xSRaVialcuokxkX5wkkVveXPFwcAWCPxfiNXDFneAyhew5ZVP0/oQNSguQf+S9XwlykvRK9uQX08khnpwTD/EsKvvx0Cj2bKUTPCUfNyTZqyEMJRW9qMCAcal5BpxZZVylPW6lri0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from localhost.localdomain (ip5f5aedba.dynamic.kabel-deutschland.de [95.90.237.186])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 86C4561E5FE06;
-	Wed, 27 Mar 2024 09:34:02 +0100 (CET)
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: smbus: Add (LP)DDR5 types to `i2c_register_spd()`
-Date: Wed, 27 Mar 2024 09:33:55 +0100
-Message-ID: <20240327083356.74246-1-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1711531367; c=relaxed/simple;
+	bh=ZWv952oYFxc39419lBwrbDg10Bj8qOEyHA+YfiwWqv0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hF84bndqtOg51K99PF+k56GoKptqawZ9cuyp7UI3FLErWFw7hD/3KYDUuLb8PvAc4G0b3kwxuO0K4xLoiC/MPKGOvn1SVUiNL5aSUHzUbAFaKXYhSAa1jOMEuZRzbAwclnAlmDUv8QHcnPrukbN7XrlpH34ZlhMgegjoqny4z18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 243A52F4;
+	Wed, 27 Mar 2024 02:23:13 -0700 (PDT)
+Received: from [10.57.81.167] (unknown [10.57.81.167])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4EF5C3F7C5;
+	Wed, 27 Mar 2024 02:22:35 -0700 (PDT)
+Message-ID: <d8fa8e1a-b2ce-4d91-9ab5-ad1b160111c6@arm.com>
+Date: Wed, 27 Mar 2024 09:22:33 +0000
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/19] amba: store owner from modules with
+ amba_driver_register()
+Content-Language: en-GB
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Russell King <linux@armlinux.org.uk>, Mike Leach <mike.leach@linaro.org>,
+ James Clark <james.clark@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Linus Walleij <linus.walleij@linaro.org>, Andi Shyti
+ <andi.shyti@kernel.org>, Olivia Mackall <olivia@selenic.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Vinod Koul <vkoul@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Michal Simek <michal.simek@amd.com>, Eric Auger <eric.auger@redhat.com>,
+ Alex Williamson <alex.williamson@redhat.com>
+Cc: linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-i2c@vger.kernel.org,
+ linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-input@vger.kernel.org, kvm@vger.kernel.org
+References: <20240326-module-owner-amba-v1-0-4517b091385b@linaro.org>
+ <3f61d6d3-a0d6-4c49-b094-6ba62d09ab14@arm.com>
+ <f23f2e60-e5c0-4c3c-9722-dba63a6e7ef6@linaro.org>
+From: Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <f23f2e60-e5c0-4c3c-9722-dba63a6e7ef6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On several systems Linux logs:
+On 27/03/2024 05:57, Krzysztof Kozlowski wrote:
+> On 27/03/2024 00:24, Suzuki K Poulose wrote:
+>> Hi Krzysztof
+>>
+>> On 26/03/2024 20:23, Krzysztof Kozlowski wrote:
+>>> Merging
+>>> =======
+>>> All further patches depend on the first amba patch, therefore please ack
+>>> and this should go via one tree.
+>>
+>> Are you able to provide a stable branch with these patches once you pull
+> 
+> I doubt I will be merging this. I think amba code goes through Russell.
+> 
+>> them in to "one tree" here ? We have changes coming up in the coresight
+>> tree, which would conflict with the changes here (horribly).
+>>
+> 
+> You mean conflict with  coresight conversion to platform driver? Worst
 
-     i2c i2c-0: Memory type 0x22 not supported yet, not instantiating SPD
+Yes.
 
-1.  Supermicro Super Server/X13SAE, BIOS 2.0 10/17/2022
-2.  Dell Inc. Precision 3660/0PRR48, BIOS 2.9.3 11/22/2023
-3.  Dell Inc. OptiPlex SFF Plus 7010/0YGWFV, BIOS 1.7.1 08/11/2023
-4.  Run `git grep 'emory type.*supported yet, not instantiating SPD'` in
-    the repository of dmesg reports for various computers collected by
-    Linux users at https://linux-hardware.org. [1]
+> case it is solveable: just drop .owner.
 
-Add 0x22 and 0x23 for DDR5 according to section 7.18.2 (Memory Device —
-Type), table 78 in *System Management BIOS (SMBIOS) Reference
-Specification*, version 3.6.0 [2].
+Or, we could merge the CoreSight changes (as they are really not
+affected by the problem this series is trying to address) after the
+base changes land in AMBA, via the CoreSight tree.
 
-I use the same name as for DDR4 out of ignorance.
 
-[1]: https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_3.6.0.pdf
-[2]: https://github.com/linuxhw/Dmesg
----
- drivers/i2c/i2c-smbus.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Suzuki
 
-diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-index 97f338b123b1..0d67a95c0599 100644
---- a/drivers/i2c/i2c-smbus.c
-+++ b/drivers/i2c/i2c-smbus.c
-@@ -308,7 +308,7 @@ EXPORT_SYMBOL_GPL(i2c_free_slave_host_notify_device);
-  * target systems are the same.
-  * Restrictions to automatic SPD instantiation:
-  *  - Only works if all filled slots have the same memory type
-- *  - Only works for DDR, DDR2, DDR3 and DDR4 for now
-+ *  - Only works for DDR, DDR2, DDR3, DDR4 and DDR5 for now
-  *  - Only works on systems with 1 to 8 memory slots
-  */
- #if IS_ENABLED(CONFIG_DMI)
-@@ -380,6 +380,8 @@ void i2c_register_spd(struct i2c_adapter *adap)
- 		break;
- 	case 0x1A:	/* DDR4 */
- 	case 0x1E:	/* LPDDR4 */
-+	case 0x22:	/* DDR5 */
-+	case 0x23:	/* LPDDR5 */
- 		name = "ee1004";
- 		break;
- 	default:
--- 
-2.43.0
+> 
+> Best regards,
+> Krzysztof
+> 
 
 
