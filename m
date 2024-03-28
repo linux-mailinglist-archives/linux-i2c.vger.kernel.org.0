@@ -1,120 +1,102 @@
-Return-Path: <linux-i2c+bounces-2646-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2647-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C32E88FAC9
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 10:10:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6222188FCE0
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 11:23:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AC411C2C118
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 09:10:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2E9C1F27066
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 10:23:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B6055F865;
-	Thu, 28 Mar 2024 09:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8776B5FBAF;
+	Thu, 28 Mar 2024 10:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OFLlSdaF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NY3w3oeP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405BF3C0B;
-	Thu, 28 Mar 2024 09:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA5A4E1DA
+	for <linux-i2c@vger.kernel.org>; Thu, 28 Mar 2024 10:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711617001; cv=none; b=lbtHWiyLLQa+F4ct5N0vjDYAYFDUsEi0qArHcVoy6YrRKDzIWbId3BF37ZOIz4mUsYfEHue9VLXraYep4Rt5eGVb5TDQOnz6zJuHphr8zFrR5SwPZ5NF4LTKwgLjHhzaaABA1WgRbOJ4DP8rei/Z1HA2NDHCK3oFSFEUP0ct8Xc=
+	t=1711621394; cv=none; b=hCWNjz+ZjHtwp53htbsDW+H8/7QpVYiaoP+rdFFUzxtoyklGRE3SbxP/VyuqE6C3yRPDuy6RsBc4Gzks9h5jk7dTixFD1ZRtJuRNXv0icbO3D9Ol0yPnfe7oFhwwNCk7htlcMJjapbKehf3nluPqh/7Ocmosgg1TpVNIQk19a04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711617001; c=relaxed/simple;
-	bh=buN5Ppu9AGNZtC/if8g17RcZZEQzgqGlib2VdnuWvYg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=llnRjhtlzYMgw9mR22yVZWJIz/eVD+RxtsnbndqRTfr3ths1g80V92Jk4Q8QoNii8e04StK1eEeITfG9bqzhHNWT0IuIOuEcQkyiO9DAVl0CsPwTshgg2Jt2KQpz13Qofgek37N2gpByTQ4i8U2jZCDoUlAISgbzeGst2QfCGj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OFLlSdaF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DAA8C433F1;
-	Thu, 28 Mar 2024 09:10:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711617000;
-	bh=buN5Ppu9AGNZtC/if8g17RcZZEQzgqGlib2VdnuWvYg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OFLlSdaFgLJfwlccYTUQ07QIz60FOyuC8o6pcVV92LZbtE4gq7IAodXVpi6MWqQKD
-	 /P4Fl8Qvp5yVtqoZgDTztgedrMv69WkJQHT0+Txctf1PpT/Xt7GN34m4JFuIr7B2Ob
-	 ZenIk9jv0ixo23yCmoRslgOW7owKOyIYOaTT9eixAfQmT/MLYqxgdsDEciF2ow33fx
-	 8Bp/LnCK2rxFLnCW0HllcXCOe0nR3LyIMLLjxk5pVqhide4zeg+ntfoRA3RYM/BQBD
-	 2/XHLh2NMuIq7tdO8199Pn4n+qV0Z9Lu1bznDyMzbl74t5Y9igoKy2SgIRxUTfCqJ8
-	 VO6OdnuV01Mcg==
-Date: Thu, 28 Mar 2024 10:09:57 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Russell King <linux@armlinux.org.uk>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Mike Leach <mike.leach@linaro.org>, 
-	James Clark <james.clark@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Olivia Mackall <olivia@selenic.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Vinod Koul <vkoul@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Michal Simek <michal.simek@amd.com>, Eric Auger <eric.auger@redhat.com>, 
-	Alex Williamson <alex.williamson@redhat.com>, linux-kernel@vger.kernel.org, coresight@lists.linaro.org, 
-	linux-arm-kernel@lists.infradead.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-i2c@vger.kernel.org, linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-input@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH 01/19] amba: store owner from modules with
- amba_driver_register()
-Message-ID: <bm7xoej6ihtzw63mhocvkkb7j5no2wnhztwrvvlogmuxjycviv@7frc2s3dsi5h>
-References: <20240326-module-owner-amba-v1-0-4517b091385b@linaro.org>
- <20240326-module-owner-amba-v1-1-4517b091385b@linaro.org>
- <6p4cdmbhrezm7fqbe3kgrkblqgrhaq4fgiw5x4n5dnptii7kjp@vmbj2pkjglp7>
- <c33833ad-9102-40e6-97bf-9a4e1bf0a3d9@linaro.org>
+	s=arc-20240116; t=1711621394; c=relaxed/simple;
+	bh=VB3OdON45zL1WUR/6pu968LwSNYKj6p/csUsGlvbFyQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sowL0rG/wNGsFtJgFHAWiQSIALln13mfTKifYmLNzdRdlLQ00ArjojhoQQzLSqDuqrZ/3SaxhOsi4tx+53C0NGrieZnp4u1t5DUJrZVtxHxK7/8n7N4jFTBCQZ0Fe+R87d65tmsZpU6s8zz7oWpIo1lyUyglhsyFS7BRl+gUHds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NY3w3oeP; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a474c4faf5eso83795066b.2
+        for <linux-i2c@vger.kernel.org>; Thu, 28 Mar 2024 03:23:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711621391; x=1712226191; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VB3OdON45zL1WUR/6pu968LwSNYKj6p/csUsGlvbFyQ=;
+        b=NY3w3oePv9UVSnZ/MInlYHzCsoK+ArguBqZf7/ymEqpGZ8HimhsZnm13vVzhruVAyv
+         Gs2/xRg4EwmI5EGR9wNwMRLzqd9jz+egfoJsYH98qH1u3Zgvf4/+ulwRrfoW1IUSrCFc
+         e+cibDu8nuyn41mM5AXLXaOSw5TMZjM9T2XqwoAfu0uvqQyN0c447MIvJNB1UptZvxcE
+         HK3WBaQSQuoGxQUIqT5FEw0IACZxvRCKh+OxHETH9+ab1Lcwpyp0/e/2QYVE6pziqseS
+         tArrUHR5PW8qJ9kA+lHNZrvWP1k4OK4xDCvV2qbB7DDoCQ1PNrt1tyj5Hwwpp9HQke5m
+         IXBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711621391; x=1712226191;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VB3OdON45zL1WUR/6pu968LwSNYKj6p/csUsGlvbFyQ=;
+        b=rpPpjvgW/grzzcLRT1NWbm0jWtTHHuC1rCgy98dQDz94zSQL49IgvWF9UZiJMlV/eD
+         PWGucNSmxMtOlhTvxepfhKfHuXuUv0LjRQflXMQ8TfSHQv+j9kfIkQ6Mkj3KzcstHi3l
+         MKlFkBNgquvylNt1oqLX1HpTRhwsGKstWSiMTzSDdyK9MC5f6LrYon89WBN715362yXS
+         61OEC5lerkCSWmh81r24y88CVyn4eI6xh54HVcxZ37jP1/zIj7XjGG4WPz7y3cS/nPpd
+         340I0NIzNHdCT2BPg1nF1uwfoYEosvu6PqG5IfG8ppm3NeCUCp39Zk/gTnUTdUfVNs0z
+         /Tcg==
+X-Gm-Message-State: AOJu0Yx0G9nDBG9EqL2JeUJdw2dhubqw9FaFXsHsWbZqWKqu2mOnA/T4
+	XIzDM+Y4mieOKL8iRRPpfbcR3LpSDfP0pl8ehZaC+aTMvpscDcsjj9RwbbKEHB+BI0PwUK1OZPy
+	yOBOXOf2ctF7Gm70l9auG3iqMg+w0IlQG
+X-Google-Smtp-Source: AGHT+IFKjRzfGPwCVm9Jt5TfWzY9vWBVJh8jLBxr5RM6nIiPXFoE9y9CHva9n43fPiOmKGttkkM7lCPq6c12hP34r/c=
+X-Received: by 2002:a17:906:a445:b0:a4e:23bf:77e8 with SMTP id
+ cb5-20020a170906a44500b00a4e23bf77e8mr678663ejb.72.1711621390853; Thu, 28 Mar
+ 2024 03:23:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c33833ad-9102-40e6-97bf-9a4e1bf0a3d9@linaro.org>
+References: <CA+DkFDbsa2tApdHJGDos5jvD7Q3o4Px_O7RxVBqA07ffbWPiUA@mail.gmail.com>
+ <20240327233319.qcst5ukbrq3j4j76@porty>
+In-Reply-To: <20240327233319.qcst5ukbrq3j4j76@porty>
+From: Patryk <pbiel7@gmail.com>
+Date: Thu, 28 Mar 2024 11:22:58 +0100
+Message-ID: <CA+DkFDa0+1sCp=+o_WghTqHwBtDvfD-MgfYc0x8XCp2YVci2-A@mail.gmail.com>
+Subject: Re: User userspace access to I2C device acquired by kernel driver
+To: Stefan Lengfeld <stefan@lengfeld.xyz>
+Cc: linux-i2c@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Krzysztof,
+Hi Stefan,
 
-> >>  /**
-> >> - *	amba_driver_register - register an AMBA device driver
-> >> + *	__amba_driver_register - register an AMBA device driver
-> >>   *	@drv: amba device driver structure
-> >> + *	@owner: owning module/driver
-> >>   *
-> >>   *	Register an AMBA device driver with the Linux device model
-> >>   *	core.  If devices pre-exist, the drivers probe function will
-> >>   *	be called.
-> >>   */
-> >> -int amba_driver_register(struct amba_driver *drv)
-> >> +int __amba_driver_register(struct amba_driver *drv,
-> > 
-> > ...
-> > 
-> >> +/*
-> >> + * use a macro to avoid include chaining to get THIS_MODULE
-> >> + */
-> > 
-> > Should the documentation be moved here? Well... I don't see any
-> > documentation linking this file yet, but in case it comes we want
-> > documented amba_driver_register() rather than
-> > __amba_driver_register().
-> > 
-> 
-> That's just a wrapper, not API... why would we care to have kerneldoc
-> for it?
+czw., 28 mar 2024 o 00:33 Stefan Lengfeld <stefan@lengfeld.xyz> napisa=C5=
+=82(a):
+> It's possible and already done to implement a kernel watchdog driver and
+> combine all the functionalites (gpio expander, interrupt controller and
+> watchdog) in a multi-function device (MFD)[1],
+> [1]: https://bootlin.com/pub/conferences/2015/elce/belloni-mfd-regmap-sys=
+con/belloni-mfd-regmap-syscon.pdf
 
-Because everyone should use the wrapper while the real function
-will be used only once or twice.
+This is even more information than I could expect, and that's totally
+satisfying for me, I'll also explore MFD devices a bit more, as I have
+a feeling that I've already seen something like this in the tps65086
+device driver.
 
-I see also that this is a common practice which I don't surely
-like.
-
-In any case there is no documentation exported for AMBA so that
-this discussion does not bring any tangible benefit.
-
-So that, considering that it's a good improvement,
-
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-
-Andi
+Best regards,
+Patryk
 
