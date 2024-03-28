@@ -1,219 +1,87 @@
-Return-Path: <linux-i2c+bounces-2640-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2645-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AAA688F894
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 08:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 08F4588FA08
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 09:32:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B571229648E
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 07:24:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B83582988A2
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 08:32:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 973F44F5F2;
-	Thu, 28 Mar 2024 07:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qJNXs/uR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59A7344C67;
+	Thu, 28 Mar 2024 08:32:13 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 11.mo561.mail-out.ovh.net (11.mo561.mail-out.ovh.net [87.98.184.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4DF620;
-	Thu, 28 Mar 2024 07:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264654F8AB
+	for <linux-i2c@vger.kernel.org>; Thu, 28 Mar 2024 08:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=87.98.184.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711610679; cv=none; b=aiiSzX1JGmY8akLfdT3U8UrXTY+eJ0OrLlsmkXt7w8nQI5pP8vki4LFo32TqbwCZTLAOXV33Scn/L3JShcKDwRJ9Fu0kx7err9eIn6V/Knob5r+q2ncQfEaiiAAFbo8AOtTlAgIg8ojKgwU98VSEQlN0unqtF3Q1sIZhWzwCgtI=
+	t=1711614733; cv=none; b=meYoDksFJY7AQFENm9BUkHBe+gd53qQz3/AWLIfpiMp0vNtHQwrsX3jGNxM2JL5G9IeC2PcGuZINfcNFZr/YPdtkRFErh6jxHR09hA8mP4qO8VQGElp0AWV7poxU5EE0fjYG0OrnQqu1A0SyfpxxfZnpOiYoGoHEz7Wm/wG65Ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711610679; c=relaxed/simple;
-	bh=gnHLTcZyGu47BuGpi6Hr8DRFguNh5pivM7KDJ0PlfTM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g04fj0ojsSkgdOWOMEHddlV4CSL3BEuAjSbCnO287St08hSZbq89J9dzRHI+JRyupgSsQ2lZkWObppk14MQ58NIUEb0rNkau5u9wWDhVtakbSTimi25xCUi/CI605Y/5V4OQ0+az6VG9n6no1qqZO+ePX6YjK3NUT3ltpc4eXsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qJNXs/uR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FBABC43390;
-	Thu, 28 Mar 2024 07:24:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711610678;
-	bh=gnHLTcZyGu47BuGpi6Hr8DRFguNh5pivM7KDJ0PlfTM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qJNXs/uR532qWhk3TEdVirrp508KXJSCjgy9wWIoKvODm5nUQQkKlxClPg1S7mglH
-	 vI3ooiUEo+CFGOFN25M5d1dYxjEp8rPko7297zN6eMsjkpbXsLP33Odnb4n0pW2/uG
-	 7x1krs3A8YwWHPTZXAzTENWo3hHC8vyX76tOnIYS69GgG9QABnf/pT/rJbnWgT593Q
-	 FOXDl3wBB+qYF+M+RdsCteCYFlBunb98Cg60lJWRIDNErX9OfzQCw2/HcS41QsJiB+
-	 MFTwx3mekRQ7luZbn/9+qVqtLedGwNGsxvMgIxqk5SMK2EOvzZePRYmPPXs1WbnDHT
-	 lGz7PFMedqVoA==
-Date: Thu, 28 Mar 2024 12:54:34 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Cc: konrad.dybcio@linaro.org, andersson@kernel.org, andi.shyti@kernel.org,
-	wsa@kernel.org, linux-arm-msm@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org, quic_vdadhani@quicinc.com,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4] i2c: i2c-qcom-geni: Parse Error correctly in i2c GSI
- mode
-Message-ID: <ZgUbMjTh0izF5Nj3@matsya>
-References: <20240313052639.1747078-1-quic_msavaliy@quicinc.com>
+	s=arc-20240116; t=1711614733; c=relaxed/simple;
+	bh=5jdL0NZakDKqF9gplUSDQhdeYmYZL6yIF2/zBxh1+kM=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=KUMx4hjckKY2TK2dkC53Ma6sU+Tgvh3AXfVLAI4hE48sCed60IpcFv9cZeht6S9wd2s0XcjTy+OexUrDgTEjICdRyNAce3sX1fnrM6yUm7WUyHoq/Jt07erCn+KigPLvlMT1GiDmkbw+AsVItbGznhq6hCwwv4YHKYqAfRG0I6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=87.98.184.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
+Received: from director5.ghost.mail-out.ovh.net (unknown [10.108.25.131])
+	by mo561.mail-out.ovh.net (Postfix) with ESMTP id 4V4wMs13Twz1D7V
+	for <linux-i2c@vger.kernel.org>; Thu, 28 Mar 2024 07:36:41 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-t7l5r (unknown [10.108.42.33])
+	by director5.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 665B41FEC4;
+	Thu, 28 Mar 2024 07:36:40 +0000 (UTC)
+Received: from etezian.org ([37.59.142.98])
+	by ghost-submission-6684bf9d7b-t7l5r with ESMTPSA
+	id 5CxFEAgeBWYTJAAAWKMMFQ
+	(envelope-from <andi@etezian.org>); Thu, 28 Mar 2024 07:36:40 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-98R002260416bf-d1f0-4904-9a61-cd2b2c3983f5,
+                    6D693167F0AB1D8A9C15294DA3267AC24BED3ACC) smtp.auth=andi@etezian.org
+X-OVh-ClientIp:89.217.109.169
+From: Andi Shyti <andi.shyti@kernel.org>
+To: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240327174705.519535-1-krzysztof.kozlowski@linaro.org>
+References: <20240327174705.519535-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] i2c: viperboard: drop driver owner assignment
+Message-Id: <171161139848.2698925.1593259780081719609.b4-ty@kernel.org>
+Date: Thu, 28 Mar 2024 08:36:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240313052639.1747078-1-quic_msavaliy@quicinc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
+X-Ovh-Tracer-Id: 2164261096738392600
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledruddukedguddtlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfgjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeelkefhieeljeejffdtvddthfffleffueekkefgieelveejjedtudettdeghfdutdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddrleeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedupdhmohguvgepshhmthhpohhuth
 
-On 13-03-24, 10:56, Mukesh Kumar Savaliya wrote:
-> I2C driver currently reports "DMA txn failed" error even though it's
-> NACK OR BUS_PROTO OR ARB_LOST. Detect NACK error when no device ACKs
-> on the bus instead of generic transfer failure which doesn't give any
-> specific clue.
+Hi
+
+On Wed, 27 Mar 2024 18:47:05 +0100, Krzysztof Kozlowski wrote:
+> Core in platform_driver_register() already sets the .owner, so driver
+> does not need to.
 > 
-> Make Changes inside i2c driver callback handler function
-> i2c_gpi_cb_result() to parse these errors and make sure GSI driver
-> stores the error status during error interrupt.
 > 
-> Co-developed-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
-> v3 -> v4:
-> - Included bitfield.h to fix compilation issue for x86 arch.
-> - Removed Fixes tag as this is not fixing any crash.
-> - Added Reviewed-by tag.
-> 
-> v2 -> v3:
-> - Modifed commit log reflecting an imperative mood.
-> 
-> v1 -> v2:
-> - Commit log changed we->We.
-> - Explained the problem that we are not detecing NACK error.
-> - Removed Heap based memory allocation and hence memory leakage issue.
-> - Used FIELD_GET and removed shiting and masking every time as suggested by Bjorn.
-> - Changed commit log to reflect the code changes done.
-> - Removed adding anything into struct gpi_i2c_config and created new structure
->   for error status as suggested by Bjorn.
-> ---
->  drivers/dma/qcom/gpi.c             | 12 +++++++++++-
->  drivers/i2c/busses/i2c-qcom-geni.c | 20 ++++++++++++++++----
->  include/linux/dma/qcom-gpi-dma.h   | 10 ++++++++++
->  3 files changed, 37 insertions(+), 5 deletions(-)
 
-Urgh, why do we have i2c and dma changes in single patch? I dont think
-they would be dependent
+Applied to i2c/i2c-host-next on
 
-> 
-> diff --git a/drivers/dma/qcom/gpi.c b/drivers/dma/qcom/gpi.c
-> index 1c93864e0e4d..e3508d51fdc9 100644
-> --- a/drivers/dma/qcom/gpi.c
-> +++ b/drivers/dma/qcom/gpi.c
-> @@ -1076,7 +1076,17 @@ static void gpi_process_xfer_compl_event(struct gchan *gchan,
->  	dev_dbg(gpii->gpi_dev->dev, "Residue %d\n", result.residue);
->  
->  	dma_cookie_complete(&vd->tx);
-> -	dmaengine_desc_get_callback_invoke(&vd->tx, &result);
-> +	if (gchan->protocol == QCOM_GPI_I2C) {
-> +		struct dmaengine_desc_callback cb;
-> +		struct gpi_i2c_result *i2c;
-> +
-> +		dmaengine_desc_get_callback(&vd->tx, &cb);
-> +		i2c = cb.callback_param;
-> +		i2c->status = compl_event->status;
-> +		dmaengine_desc_callback_invoke(&cb, &result);
+git://git.kernel.org/pub/scm/linux/kernel/git/local tree
 
-This is generic, why should this be i2c specific... we should set
-generic status value
+Thank you,
+Andi
 
+Patches applied
+===============
+[1/1] i2c: viperboard: drop driver owner assignment
+      commit: bfced8e642d8e221a765b4d97ce7705cfa63b9a6
 
-> +	} else {
-> +		dmaengine_desc_get_callback_invoke(&vd->tx, &result);
-> +	}
->  
->  gpi_free_desc:
->  	spin_lock_irqsave(&gchan->vc.lock, flags);
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index da94df466e83..11dcfcf13d8b 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -2,6 +2,7 @@
->  // Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
->  
->  #include <linux/acpi.h>
-> +#include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/dmaengine.h>
->  #include <linux/dma-mapping.h>
-> @@ -66,6 +67,7 @@ enum geni_i2c_err_code {
->  	GENI_TIMEOUT,
->  };
->  
-> +#define I2C_DMA_TX_IRQ_MASK	GENMASK(12, 5)
->  #define DM_I2C_CB_ERR		((BIT(NACK) | BIT(BUS_PROTO) | BIT(ARB_LOST)) \
->  									<< 5)
->  
-> @@ -99,6 +101,7 @@ struct geni_i2c_dev {
->  	struct dma_chan *rx_c;
->  	bool gpi_mode;
->  	bool abort_done;
-> +	struct gpi_i2c_result i2c_result;
->  };
->  
->  struct geni_i2c_desc {
-> @@ -484,9 +487,18 @@ static int geni_i2c_tx_one_msg(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
->  
->  static void i2c_gpi_cb_result(void *cb, const struct dmaengine_result *result)
->  {
-> -	struct geni_i2c_dev *gi2c = cb;
-> -
-> -	if (result->result != DMA_TRANS_NOERROR) {
-> +	struct gpi_i2c_result *i2c_res = cb;
-> +	struct geni_i2c_dev *gi2c = container_of(i2c_res, struct geni_i2c_dev, i2c_result);
-> +	u32 status;
-> +
-> +	status = FIELD_GET(I2C_DMA_TX_IRQ_MASK, i2c_res->status);
-> +	if (status == BIT(NACK)) {
-> +		geni_i2c_err(gi2c, NACK);
-> +	} else if (status == BIT(BUS_PROTO)) {
-> +		geni_i2c_err(gi2c, BUS_PROTO);
-> +	} else if (status == BIT(ARB_LOST)) {
-> +		geni_i2c_err(gi2c, ARB_LOST);
-> +	} else if (result->result != DMA_TRANS_NOERROR) {
->  		dev_err(gi2c->se.dev, "DMA txn failed:%d\n", result->result);
->  		gi2c->err = -EIO;
->  	} else if (result->residue) {
-> @@ -568,7 +580,7 @@ static int geni_i2c_gpi(struct geni_i2c_dev *gi2c, struct i2c_msg *msg,
->  	}
->  
->  	desc->callback_result = i2c_gpi_cb_result;
-> -	desc->callback_param = gi2c;
-> +	desc->callback_param = &gi2c->i2c_result;
->  
->  	dmaengine_submit(desc);
->  	*buf = dma_buf;
-> diff --git a/include/linux/dma/qcom-gpi-dma.h b/include/linux/dma/qcom-gpi-dma.h
-> index 6680dd1a43c6..f585c6a35e51 100644
-> --- a/include/linux/dma/qcom-gpi-dma.h
-> +++ b/include/linux/dma/qcom-gpi-dma.h
-> @@ -80,4 +80,14 @@ struct gpi_i2c_config {
->  	bool multi_msg;
->  };
->  
-> +/**
-> + * struct gpi_i2c_result - i2c transfer status result in GSI mode
-> + *
-> + * @status: store txfer status value as part of callback
-> + *
-> + */
-> +struct gpi_i2c_result {
-> +	u32 status;
-> +};
-> +
->  #endif /* QCOM_GPI_DMA_H */
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-
--- 
-~Vinod
 
