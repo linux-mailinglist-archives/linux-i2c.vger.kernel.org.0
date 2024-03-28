@@ -1,152 +1,119 @@
-Return-Path: <linux-i2c+bounces-2649-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2650-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B5A489023D
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 15:51:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC1DF890B50
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 21:27:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD1C01F25231
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 14:51:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6978229AADB
+	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 20:27:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0130F81AB1;
-	Thu, 28 Mar 2024 14:51:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3A1113A3E4;
+	Thu, 28 Mar 2024 20:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FVRqf8y7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nWtZDdfu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A923C7E799
-	for <linux-i2c@vger.kernel.org>; Thu, 28 Mar 2024 14:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23D7137779;
+	Thu, 28 Mar 2024 20:26:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711637500; cv=none; b=JqBhQXdIzey8kHgEZ4t5GBemaoF13jo5GRse6GkCWLmvnlt8y4Q4ftdfP/+tTyjk0NWv+x1h5xwahfZku19wEKaW/XHXMsC6pJrIE1S9fNTf9ce1hPKMPkpKNYPqWyyLvx74PIZL2eBQRUZq4ksCH/RLdlDUL2Pvz6ZTlgBHURw=
+	t=1711657562; cv=none; b=lxXDD8ZTfuCv/gnJgbpkx/o7QI0Cq9LVQONczDVAG9ytksiVaYxJgBm0e2or0cb3xqdJe6sSJymNvAy4SomALMCqDfO5BAvsJev8fLXsHeCzfCmRqV8O3x5aiaApiopBVVTeUjJxaV/XLH5DbIJxcktT4fbhYF/QCpK7u9wze/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711637500; c=relaxed/simple;
-	bh=ux6IFglXde1ERd54R7V4j1Ml1pPp+O0GYiElVJc4Bfw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CCkk/V2rzL7AgnEeWu6XEk5PGyVRSTYJjOmVWEhsSZvtdquQtbHTD0A5lI4MP+yycXeeSyrzDb0MSHcM+MjghhPcD59ef57aVH63ot+Faw61UhdVV7zPBQEnHP8LMSPixP01489sF8cHwZfCuRCECirYfh58X5Bg2Co+AuFJa/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FVRqf8y7; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-56bb22ff7baso1195517a12.3
-        for <linux-i2c@vger.kernel.org>; Thu, 28 Mar 2024 07:51:38 -0700 (PDT)
+	s=arc-20240116; t=1711657562; c=relaxed/simple;
+	bh=CbPk/DbLGKN7XwAP4qrp84AXgQM56BgTWNeXFQBg5io=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sN4m3IUKAvK6gh2ueHYon4wkW5GhXce2mdiI25qv/uJri88nemPhGrzey8IwWdTXhgS+PcTLMmUWoCna7fi2hrVFIxQUV4I3fUyMaXIhbCKJU56ZgonHMf8MAS+4bD8kuq+bOBLcdbMRBkrgbtgFGmcAlraEseZB89YP6NmJYAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nWtZDdfu; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso955311a12.3;
+        Thu, 28 Mar 2024 13:26:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1711637497; x=1712242297; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:user-agent:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Tj0J7fNo7JaNqggtcLUYIbAlRhY6zh5m7OfApE5VAVQ=;
-        b=FVRqf8y7mfXArQ3Zr3EP50wMzbg9QvQsijou6+spnKjIMt6sQGJ3LO5r7CdQoOtYFZ
-         NnfpaENDmYMtMmdyKVPhhkmihV7robi7w7R0xIC1wSEvkaR5Mvawm3f8V3elpmK+9oA2
-         pwAiECxti2SIjTigUVtKKqAW8+92RImwC2NaGdlqRUw5YApISfJ5vi+1Pkb/a1UMm6MN
-         wmHC0OmG+Zq08r2WQCaW+aHuxQug9s/VOC6Ylefv+dRjqv0O9Z0RlJF69yeNs4NkHF7k
-         IrI+Z+nw3ToZUZpLiWizdkeUrnkBfEAXsx9ZLk95qMnZL566IqIXVRMi0CCG1FLUviG0
-         Ko4w==
+        d=gmail.com; s=20230601; t=1711657560; x=1712262360; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DjTzWFlNYBOpXQ3CKmgioPdo4KwHiFtc75RCFzmDGfc=;
+        b=nWtZDdfuVl8C7GhM2e8bgp0QN/0MfPfpuOy1ew9BhF3McF/Dt96zVXUQB2h8kD+ihW
+         DCVoT8Jh7gldb3ROyPf1Yuh6gB9X4oi2HXurkG1oB6/lilhpY3kUC+RfO8cckzFU2DTy
+         r5i+R4qlnH1a/z6r7a1R8Nv6R1fSE7gO89B5Pfxw1lyCqti4F3FhsMAh+MhTIN62TwyW
+         rhLK290sBf+6vTe1g+s4ItgNwOUu8x/NgcpLuDL9PyNauY8lrJFkdOQ/hjw86KpO0Zu7
+         TLSpU2PUhpUppDNVNFKlcwW+tALF6qDyP0IACrZcfs/c4ovooheLgxQNKEDaNYypj/UF
+         zl1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711637497; x=1712242297;
-        h=content-transfer-encoding:mime-version:user-agent:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tj0J7fNo7JaNqggtcLUYIbAlRhY6zh5m7OfApE5VAVQ=;
-        b=pHvTAhVuApRBfdj5dbAvD9E4jJl6rQXSPbdm5HA499OU/axzCwmTyJqaaQ/X+HyxeP
-         vilLdkMZ02oFYEJkQxNfgS632POxbY5mEt7nay2php/kfZfnQwKZMTm5tqGeRFKsy38x
-         OaI5ghZF1Z/WlWHoJxTn2xLf7rBccCxpW1iOz/nvFAjHXDogrHvZMALOxrGPgONWzySq
-         ISBlXy7qseFasRcuJJ/UXeEMLoRK+wct3flN2djoh6+Zw70900aeOf0qGuPzm8dGkp7y
-         8oEcJ2TGw5iDLjApNtV0sWV4TDOHUNU+yqvXwRreSbuqJqmkk20DLWYZR+XF0BqWbEqj
-         jE4w==
-X-Forwarded-Encrypted: i=1; AJvYcCU67v2u3Gk9Fm3vgpToR++eH8SLqMg2VexablgRjGxEjoV7YDn935h5og1tb+Aa7R4AlkBvADqMMY7qyMA2DAUj76cKa/jlJD7P
-X-Gm-Message-State: AOJu0YxCFAJN/WPavUMIkOSYOw8C5f+K/H7fsPYdWvJi4Yqx9ecfgCQ5
-	L4g+flw1GfJVN1jWXkdHKvyroUoJCFnb38yA/sF0fTmfMzoEjz60/GXJxoQXQJs=
-X-Google-Smtp-Source: AGHT+IGTITQEdKTZjPj//fpsc7l4Mfxj5rl5wKaYL/aBb2bua1vgl0UWhgrKOjBQL8vGcr9As9OUhQ==
-X-Received: by 2002:a50:d6d7:0:b0:568:a9f3:b3fb with SMTP id l23-20020a50d6d7000000b00568a9f3b3fbmr2153146edj.8.1711637497098;
-        Thu, 28 Mar 2024 07:51:37 -0700 (PDT)
-Received: from ?IPv6:2a01:e0a:1d:5380:6cdc:9dff:7d8c:ff76? ([2a01:e0a:1d:5380:6cdc:9dff:7d8c:ff76])
-        by smtp.gmail.com with ESMTPSA id n7-20020a509347000000b0056c24df7a78sm949811eda.5.2024.03.28.07.51.36
+        d=1e100.net; s=20230601; t=1711657560; x=1712262360;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DjTzWFlNYBOpXQ3CKmgioPdo4KwHiFtc75RCFzmDGfc=;
+        b=CHk4e8AJOBx5KXCVHdgKazmoujGPIb6BZoF5MU9au9t+uBz3cTeYu1J0bFnYfx9ERQ
+         c2lUV13M7SpazP/seoNzBzs2dT1d2DqRN0fXt2uI3z3EINC0hYzkb6wvVEOX+c0pqiRE
+         e0Ud+U44jgZkViS7LU3hF4Trv5U0Hb7oXeOrdYymSG1mE8np9XeYcSBOX0qsj8ABPnbQ
+         8MzN2kYoM+SsB8kWBBU0rPH+BieiWXh7cM6COeUGuoyG8jvOamAtiWP503T9pHgy29tZ
+         S/tLn03Lwr2fLXlytd7kWByhxNXhu2dxzGZyxYkQa+HQNv+rRolNr3qod3CP3UdRLmU+
+         TYHw==
+X-Forwarded-Encrypted: i=1; AJvYcCW46Dga7urW7lLvwYPbf5UZ+bfHL2IbVLW90KNxHScKw9VrIGb2CFzU6DuZ9eook9Fpsg+V8Gpdw6zONECssSMkQOBePBaKDP5OBcIkfTuDiRvaUox3q/PBdM6yb4+cStDA02w+bAwzKdLFNxMLdXCxwt1WPEkqlOjH21DHmvC9CeZeUd4N+3Qqvt7MSSO28TaNKnwCt8WkE6Ybqfbdwt1Wx796rNBm5ziYtXjwozT+nS/pnfu+YFem8MeklGRUmusELo/txWUHdgeERmtK/HG5dSM=
+X-Gm-Message-State: AOJu0YxJ1IJPSUtzdzQJ3gF0wf+Jibjtsg8tfUX7w+t6AspJKWSEYHUl
+	f194JMzgYUVwBx2QZ7pc6Ls7/0GE8Fgb7Ma58VwrkVN9B73vHGX1
+X-Google-Smtp-Source: AGHT+IEx1w9caaaypQCI9yAm8E6MJQGwAU1nwtoauXZOhkZ6zuitYlyEc3oh95Bbc7PPnl5r2KW7ZQ==
+X-Received: by 2002:a05:6a21:3384:b0:1a3:c407:39d8 with SMTP id yy4-20020a056a21338400b001a3c40739d8mr288558pzb.45.1711657560070;
+        Thu, 28 Mar 2024 13:26:00 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:493e:82a3:49f9:d88])
+        by smtp.gmail.com with ESMTPSA id fk12-20020a056a003a8c00b006ea858e6e78sm1795975pfb.45.2024.03.28.13.25.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Mar 2024 07:51:36 -0700 (PDT)
-Message-ID: <cf21b9dd6499d3e6fa8d9e8c46d77eb035e9c7b5.camel@suse.com>
-Subject: Re: Please backport commit 13e3a512a290 (i2c: smbus: Support up to
- 8 SPD EEPROMs)
-From: Jean DELVARE <jdelvare@suse.com>
-To: Greg KH <gregkh@linuxfoundation.org>, Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: stable@vger.kernel.org, Wolfram Sang <wsa@kernel.org>, 
-	linux-i2c@vger.kernel.org
-Date: Thu, 28 Mar 2024 15:51:35 +0100
-In-Reply-To: <2024032814-colony-observant-4e42@gregkh>
-References: <3bea11ec-32fe-4288-bc03-8c3ba63979f6@molgen.mpg.de>
-	 <2024032713-atom-saxophone-0c15@gregkh>
-	 <4fa53db0-358d-4e30-bcfa-745cab71fa72@molgen.mpg.de>
-	 <2024032814-colony-observant-4e42@gregkh>
-Organization: SUSE Linux
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Thu, 28 Mar 2024 13:25:59 -0700 (PDT)
+Date: Thu, 28 Mar 2024 13:25:56 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Russell King <linux@armlinux.org.uk>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>,
+	James Clark <james.clark@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Vinod Koul <vkoul@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Eric Auger <eric.auger@redhat.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com, linux-i2c@vger.kernel.org,
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-input@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH 17/19] Input: ambakmi - drop owner assignment
+Message-ID: <ZgXSVB4gsKlhsPCz@google.com>
+References: <20240326-module-owner-amba-v1-0-4517b091385b@linaro.org>
+ <20240326-module-owner-amba-v1-17-4517b091385b@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240326-module-owner-amba-v1-17-4517b091385b@linaro.org>
 
-Hi Greg, Paul,
+On Tue, Mar 26, 2024 at 09:23:47PM +0100, Krzysztof Kozlowski wrote:
+> Amba bus core already sets owner, so driver does not need to.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 
-On Thu, 2024-03-28 at 07:10 +0100, Greg KH wrote:
-> On Wed, Mar 27, 2024 at 09:35:38PM +0100, Paul Menzel wrote:
-> > Am 27.03.24 um 17:52 schrieb Greg KH:
-> > > On Wed, Mar 27, 2024 at 04:13:26PM +0100, Paul Menzel wrote:
-> > 
-> > > > Please apply commit 13e3a512a290 (i2c: smbus: Support up to 8
-> > > > SPD EEPROMs) [1] to the stable series to get rid of a warning
-> > > > and to support more SPDs.
-> > > > That commit is present since v6.8-rc1.
-> > > 
-> > > How far back?
-> > 
-> > I’d say 6.1.
-> > 
-> > > But isn't this a new feature, why is it needed in older kernels?
-> > > It's not a fix for a regression.
-> > decode-dimm does not work on systems with more than four SPD
-> > EEPROMs, so I’d say it’s a fix.
->
-> But it's never worked on such systems so it's not a regression fix,
-> right?
+Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-It's hard to qualify whether this is a regression or not.
-
-On the one hand, automatic detection of SPD EEPROMs only ever supported
-4 modules maximum (since kernel v5.8):
-
-01590f361e94 ("i2c: i801: Instantiate SPD EEPROMs automatically")
-5ace60859e84 ("i2c: smbus: Add a way to instantiate SPD EEPROMs automatically")
-
-
-OTOH, this was implemented using the at24 driver, which replaced the
-legacy eeprom driver. Said legacy driver was removed in kernel v6.7:
-
-0113a99b8a75 ("eeprom: Remove deprecated legacy eeprom driver")
-
-As it would be possible to see up to 8 SPD EEPROMs using the legacy
-eeprom driver, and only 4 when using the at24 driver, you could say
-that kernel v6.7 suffers from a regression. So backporting commit
-13e3a512a290 to 6.7-stable would make sense.
-
-> Anyway, I'll defer to the i2c maintainers as to what they want to
-> have happen here, as they did not originally tag this commit for
-> stable inclusion.
-
-I'm definitely in favor of backporting 13e3a512a290 to 6.7-stable.
-
-For older kernels, I'm not so sure, as there's a fairly easy
-workaround: loading the legacy eeprom driver should let decode-dimms
-see all memory modules (modules 1-4 using the at24 driver and modules
-5-8 using the eeprom driver). Paul, can you try and confirm that this
-does work?
+Thanks.
 
 -- 
-Jean Delvare
-SUSE L3 Support
+Dmitry
 
