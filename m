@@ -1,93 +1,260 @@
-Return-Path: <linux-i2c+bounces-2687-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2688-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27637892E21
-	for <lists+linux-i2c@lfdr.de>; Sun, 31 Mar 2024 01:27:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CCF6893235
+	for <lists+linux-i2c@lfdr.de>; Sun, 31 Mar 2024 18:03:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5F22B21729
-	for <lists+linux-i2c@lfdr.de>; Sun, 31 Mar 2024 00:27:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21A902828F4
+	for <lists+linux-i2c@lfdr.de>; Sun, 31 Mar 2024 16:03:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96A0F65C;
-	Sun, 31 Mar 2024 00:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA1FD145FF4;
+	Sun, 31 Mar 2024 16:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Ohxy/Tpi"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 3.mo576.mail-out.ovh.net (3.mo576.mail-out.ovh.net [188.165.52.203])
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EC2628
-	for <linux-i2c@vger.kernel.org>; Sun, 31 Mar 2024 00:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.52.203
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E55E145FEC;
+	Sun, 31 Mar 2024 16:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711844858; cv=none; b=hHBax0OZQLo0W0zE8m6CXxXl1dbZ1ePiduvq1rX7xe1i8891bzHpgFmM6Hx51RI2KcAXOVXep/ADcvLsscQO8Z+Px0yvEIZ+t8pOf9lNoXl+g+xp9md5E8nkgmoDp9n3m6qwsCVK9dkHwqaED78WtKN5aCNZRcYdAsemBMoCHBk=
+	t=1711900927; cv=none; b=KfSLyhKjg5q7yNTUgckmLorZNtxTZnFOuZveG5j0sLZc7eypwmCmryeaLzbe0uUvuaoidObSt8GSCCFk901pDtg7XKdWYrZHhjjI3LSuyw/gHGVlMZ0vVcxs6eq+pB52u26CFM5mA5tuuAqtfgyI2J3+It+yhwmAaMMEXBpkzeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711844858; c=relaxed/simple;
-	bh=ECCo7RMLpeYUhpHIYa+A158zhqXbbkXV4/OmnD2t3ZU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=m9vs6LJ1QQo0cUcFagrv3WIn550TGJ2e9EQeSY550CJEZVlhItrjwzt6kAiHPklam+6dUbHmQAR8zQFrQ4jBwCkMwMVzQlg4J6uMFE0J4/netGkh4GmKZGdaoBI4ZFfVmzcM28o0Njgwneheyl57QCzbtR4J5ziMuVUSi1E1a7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=188.165.52.203
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director3.ghost.mail-out.ovh.net (unknown [10.108.25.63])
-	by mo576.mail-out.ovh.net (Postfix) with ESMTP id 4V6ZjC51RZz1WVy
-	for <linux-i2c@vger.kernel.org>; Sun, 31 Mar 2024 00:27:27 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-b8q8f (unknown [10.110.168.195])
-	by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 1E5821FDF3;
-	Sun, 31 Mar 2024 00:27:26 +0000 (UTC)
-Received: from etezian.org ([37.59.142.99])
-	by ghost-submission-6684bf9d7b-b8q8f with ESMTPSA
-	id OVINEe6tCGYlXAkAi3EkCw
-	(envelope-from <andi@etezian.org>); Sun, 31 Mar 2024 00:27:26 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-99G0030d2e3f9a-9e3f-4d42-a5f9-380ee953418c,
-                    3C51A916EC97189076D74FE9F96E37BFEF4240FA) smtp.auth=andi@etezian.org
-X-OVh-ClientIp:83.57.198.208
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
- Heiner Kallweit <hkallweit1@gmail.com>
-Cc: linux-i2c@vger.kernel.org
-In-Reply-To: <f9df04f6-9dc2-4874-bc6c-473dc3d692b9@gmail.com>
-References: <f9df04f6-9dc2-4874-bc6c-473dc3d692b9@gmail.com>
-Subject: Re: [PATCH] i2c: i801: Call i2c_register_spd for muxed child
- segments
-Message-Id: <171184484323.16458.16364948555678328368.b4-ty@kernel.org>
-Date: Sun, 31 Mar 2024 01:27:23 +0100
+	s=arc-20240116; t=1711900927; c=relaxed/simple;
+	bh=K0qocvwvrYWRNQvYnDS/H+UbwvsMZhO+c1XJJkrTUD8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rhXUyPcQos9N5Ao4OfIKjxdL1wYljDoCeoosLQKki2YrzoY3r14TGdBtypLTJJwad6mPM8bJsnCf5FJ1taVJuv7aNl7P4ex9C2UBpynEUgDL+4eobHwzBu4Fn8A5p+MdnFoBWMQvl8lnhle+6CxNNH3X0s5B2LpTRdJqkwGWAYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=fail smtp.mailfrom=lists.freedesktop.org; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Ohxy/Tpi; arc=none smtp.client-ip=62.96.220.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=lists.freedesktop.org
+Received: from localhost (localhost [127.0.0.1])
+	by a.mx.secunet.com (Postfix) with ESMTP id 0567620612;
+	Sun, 31 Mar 2024 18:02:04 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N_dneabcQBEb; Sun, 31 Mar 2024 18:02:03 +0200 (CEST)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by a.mx.secunet.com (Postfix) with ESMTPS id E79852083E;
+	Sun, 31 Mar 2024 18:02:02 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com E79852083E
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+	by mailout2.secunet.com (Postfix) with ESMTP id DB06380004A;
+	Sun, 31 Mar 2024 18:02:02 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Sun, 31 Mar 2024 18:02:02 +0200
+Received: from Pickup by mbx-essen-01.secunet.de with Microsoft SMTP Server id
+ 15.1.2507.17; Sun, 31 Mar 2024 15:52:48 +0000
+X-sender: <intel-gfx-bounces@lists.freedesktop.org>
+X-Receiver: <martin.weber@secunet.com> ORCPT=rfc822;martin.weber@secunet.com
+ NOTIFY=NEVER;
+ X-ExtendedProps=BQAVABYAAgAAAAUAFAARAJuYHy0vkvxLoOu7fW2WcxcPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURhdGEuSXNSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQBHAAIAAAUAEgAPAF4AAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChGWURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249V2ViZXIgTWFydGluOTU1BQALABcAvgAAALMpUnVJ4+pPsL47FHo+lvtDTj1EQjIsQ049RGF0YWJhc2VzLENOPUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChGWURJQk9IRjIzU1BETFQpLENOPUFkbWluaXN0cmF0aXZlIEdyb3VwcyxDTj1zZWN1bmV0LENOPU1pY3Jvc29mdCBFeGNoYW5nZSxDTj1TZXJ2aWNlcyxDTj1Db25maWd1cmF0aW9uLERDPXNlY3VuZXQsREM9ZGUFAA4AEQBACf3SYEkDT461FZzDv+B7BQAdAA8ADAAAAG1ieC1lc3Nlbi0wMQUAPAACAAAPADYAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0Lk1haWxSZWNpcGllbnQuRGlzcGxheU5hbWUPAA0AAABXZWJlciwgTWFydGluBQAMAAIAAAUAbAACAAAFAFgAFwBGAAAAm5gfLS+S/Eug67t9bZZzF0NOPVdlYmVyIE1hcnRpbixPVT1Vc2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQXV0b1Jlc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9yeTogRmFsc2UNCg8AL
+	wAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmVyc0dyb3VwRXhwYW5zaW9uBQAjAAIAAQ==
+X-CreatedBy: MSExchange15
+X-HeloDomain: a.mx.secunet.com
+X-ExtendedProps: BQBjAAoAc2xrGbMv3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAAAAAAAAAAAAAAAAAAAAAAAUASQACAAEFAAQAFCABAAAAGAAAAG1hcnRpbi53ZWJlckBzZWN1bmV0LmNvbQUABgACAAEFACkAAgABDwAJAAAAQ0lBdWRpdGVkAgABBQACAAcAAQAAAAUAAwAHAAAAAAAFAAUAAgABBQBiAAoAzAAAAO6KAAAFAGQADwADAAAASHVi
+X-Source: SMTP:Default MBX-ESSEN-01
+X-SourceIPAddress: 62.96.220.36
+X-EndOfInjectedXHeaders: 20107
+X-Virus-Scanned: by secunet
+Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=131.252.210.177; helo=gabe.freedesktop.org; envelope-from=intel-gfx-bounces@lists.freedesktop.org; receiver=martin.weber@secunet.com 
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 7F7F72083E
+Authentication-Results: gabe.freedesktop.org;
+	dkim=pass (1024-bit key; unprotected) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Ohxy/Tpi";
+	dkim-atps=neutral
+X-Original-To: intel-gfx@lists.freedesktop.org
+Delivered-To: intel-gfx@lists.freedesktop.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6B14020E6F42
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+ s=default; t=1711731737;
+ bh=1xAt8oLDivBzcFZmj4k6LuWQeVtOX6JrcyzssXeZ3pU=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=Ohxy/Tpis4rcZr+HmqqXLQ1kevTdDNaAjl+/S10lEH84ShVaJTi7yoXPaEoRlh1Ia
+ MyYKE35gS8u9NTdAgaEBLovHzzoDvWALpXM6LFWrBAzoFK88d9+Qat5qDC4ednKXPl
+ Kh6ndPQtI1OXBTVsPtSRnotMhgVWfK4FheWQeEeo=
+From: Easwar Hariharan <eahariha@linux.microsoft.com>
+To: Andy Walls <awalls@md.metrocast.net>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ linux-media@vger.kernel.org (open list:CX18 VIDEO4LINUX DRIVER),
+ linux-kernel@vger.kernel.org (open list)
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
+ dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
+ linux-kernel@vger.kernel.org (open list),
+ intel-gfx@lists.freedesktop.org (open list:INTEL DRM DISPLAY FOR XE AND I915
+ DRIVERS), 
+ intel-xe@lists.freedesktop.org (open list:INTEL DRM DISPLAY FOR XE AND I915
+ DRIVERS), 
+ nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO
+ GPUS), linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
+ linux-media@vger.kernel.org (open list:BTTV VIDEO4LINUX DRIVER),
+ linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER),
+ Easwar Hariharan <eahariha@linux.microsoft.com>
+Subject: [PATCH v0 06/14] media: cx18: Make I2C terminology more inclusive
+Date: Fri, 29 Mar 2024 17:00:30 +0000
+Message-ID: <20240329170038.3863998-7-eahariha@linux.microsoft.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240329170038.3863998-1-eahariha@linux.microsoft.com>
+References: <20240329170038.3863998-1-eahariha@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
-X-Ovh-Tracer-Id: 12533236290606205492
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledruddviedgvdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeffteehudffvdfhudfgffdugfejjeduheehgeefgeeuhfeiuefghffgueffvdfgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekfedrheejrdduleekrddvtdekpdefjedrheelrddugedvrdelleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejiedpmhhouggvpehsmhhtphhouhht
+Content-Transfer-Encoding: 8bit
+X-Mailman-Approved-At: Sun, 31 Mar 2024 08:50:08 +0000
+X-BeenThere: intel-gfx@lists.freedesktop.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Archive: <https://lists.freedesktop.org/archives/intel-gfx>
+List-Post: <mailto:intel-gfx@lists.freedesktop.org>
+List-Help: <mailto:intel-gfx-request@lists.freedesktop.org?subject=help>
+Errors-To: intel-gfx-bounces@lists.freedesktop.org
+Sender: Intel-gfx <intel-gfx-bounces@lists.freedesktop.org>
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
 
-Hi
+I2C v7, SMBus 3.2, and I3C specifications have replaced "master/slave"
+with more appropriate terms. Inspired by and following on to Wolfram's
+series to fix drivers/i2c/[1], fix the terminology for users of
+I2C_ALGOBIT bitbanging interface, now that the approved verbiage exists
+in the specification.
 
-On Tue, 26 Mar 2024 21:42:44 +0100, Heiner Kallweit wrote:
-> Once the gpio mux driver binds to the "i2c-mux-gpio" platform device,
-> this creates the i2c adapters for the muxed child segments.
-> We can use the bus notifier mechanism to check for creation of the
-> child i2d adapters, and call i2c_register_spd() for them. This allows
-> to detect all DIMM's on systems with more than 8 memory slots.
-> 
-> 
-> [...]
+I2S specification has also updated the terms in v.3 to use "controller"
+and "target" respectively. Make those changes in the relevant spaces as
+well.
 
-Applied to i2c/i2c-host on
+Compile tested, no functionality changes intended
 
-git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
+[1]: https://lore.kernel.org/all/20240322132619.6389-1-wsa+renesas@sang-engineering.com/
 
-Thank you,
-Andi
+Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+---
+ drivers/media/pci/cx18/cx18-av-firmware.c | 8 ++++----
+ drivers/media/pci/cx18/cx18-cards.c       | 6 +++---
+ drivers/media/pci/cx18/cx18-cards.h       | 4 ++--
+ drivers/media/pci/cx18/cx18-gpio.c        | 6 +++---
+ 4 files changed, 12 insertions(+), 12 deletions(-)
 
-Patches applied
-===============
-[1/1] i2c: i801: Call i2c_register_spd for muxed child segments
-      commit: d33bd3b707f476efcb907a7fd3ba3352f49775ed
+diff --git a/drivers/media/pci/cx18/cx18-av-firmware.c b/drivers/media/pci/cx18/cx18-av-firmware.c
+index 61aeb8c9af7f..906e0b33cffc 100644
+--- a/drivers/media/pci/cx18/cx18-av-firmware.c
++++ b/drivers/media/pci/cx18/cx18-av-firmware.c
+@@ -140,22 +140,22 @@ int cx18_av_loadfw(struct cx18 *cx)
+ 	cx18_av_and_or4(cx, CXADEC_PIN_CTRL1, ~0, 0x78000);
+ 
+ 	/* Audio input control 1 set to Sony mode */
+-	/* Audio output input 2 is 0 for slave operation input */
++	/* Audio output input 2 is 0 for target operation input */
+ 	/* 0xC4000914[5]: 0 = left sample on WS=0, 1 = left sample on WS=1 */
+ 	/* 0xC4000914[7]: 0 = Philips mode, 1 = Sony mode (1st SCK rising edge
+ 	   after WS transition for first bit of audio word. */
+ 	cx18_av_write4(cx, CXADEC_I2S_IN_CTL, 0x000000A0);
+ 
+ 	/* Audio output control 1 is set to Sony mode */
+-	/* Audio output control 2 is set to 1 for master mode */
++	/* Audio output control 2 is set to 1 for controller mode */
+ 	/* 0xC4000918[5]: 0 = left sample on WS=0, 1 = left sample on WS=1 */
+ 	/* 0xC4000918[7]: 0 = Philips mode, 1 = Sony mode (1st SCK rising edge
+ 	   after WS transition for first bit of audio word. */
+-	/* 0xC4000918[8]: 0 = slave operation, 1 = master (SCK_OUT and WS_OUT
++	/* 0xC4000918[8]: 0 = target operation, 1 = controller (SCK_OUT and WS_OUT
+ 	   are generated) */
+ 	cx18_av_write4(cx, CXADEC_I2S_OUT_CTL, 0x000001A0);
+ 
+-	/* set alt I2s master clock to /0x16 and enable alt divider i2s
++	/* set alt I2s controller clock to /0x16 and enable alt divider i2s
+ 	   passthrough */
+ 	cx18_av_write4(cx, CXADEC_PIN_CFG3, 0x5600B687);
+ 
+diff --git a/drivers/media/pci/cx18/cx18-cards.c b/drivers/media/pci/cx18/cx18-cards.c
+index f5a30959a367..d9b859ee4b1b 100644
+--- a/drivers/media/pci/cx18/cx18-cards.c
++++ b/drivers/media/pci/cx18/cx18-cards.c
+@@ -82,7 +82,7 @@ static const struct cx18_card cx18_card_hvr1600_esmt = {
+ 	},
+ 	.gpio_init.initial_value = 0x3001,
+ 	.gpio_init.direction = 0x3001,
+-	.gpio_i2c_slave_reset = {
++	.gpio_i2c_client_reset = {
+ 		.active_lo_mask = 0x3001,
+ 		.msecs_asserted = 10,
+ 		.msecs_recovery = 40,
+@@ -129,7 +129,7 @@ static const struct cx18_card cx18_card_hvr1600_s5h1411 = {
+ 	},
+ 	.gpio_init.initial_value = 0x3801,
+ 	.gpio_init.direction = 0x3801,
+-	.gpio_i2c_slave_reset = {
++	.gpio_i2c_client_reset = {
+ 		.active_lo_mask = 0x3801,
+ 		.msecs_asserted = 10,
+ 		.msecs_recovery = 40,
+@@ -176,7 +176,7 @@ static const struct cx18_card cx18_card_hvr1600_samsung = {
+ 	},
+ 	.gpio_init.initial_value = 0x3001,
+ 	.gpio_init.direction = 0x3001,
+-	.gpio_i2c_slave_reset = {
++	.gpio_i2c_client_reset = {
+ 		.active_lo_mask = 0x3001,
+ 		.msecs_asserted = 10,
+ 		.msecs_recovery = 40,
+diff --git a/drivers/media/pci/cx18/cx18-cards.h b/drivers/media/pci/cx18/cx18-cards.h
+index ae9cf5bfdd59..86f41ec6ca2f 100644
+--- a/drivers/media/pci/cx18/cx18-cards.h
++++ b/drivers/media/pci/cx18/cx18-cards.h
+@@ -69,7 +69,7 @@ struct cx18_gpio_init { /* set initial GPIO DIR and OUT values */
+ 	u32 initial_value;
+ };
+ 
+-struct cx18_gpio_i2c_slave_reset {
++struct cx18_gpio_i2c_client_reset {
+ 	u32 active_lo_mask; /* GPIO outputs that reset i2c chips when low */
+ 	u32 active_hi_mask; /* GPIO outputs that reset i2c chips when high */
+ 	int msecs_asserted; /* time period reset must remain asserted */
+@@ -121,7 +121,7 @@ struct cx18_card {
+ 	/* GPIO card-specific settings */
+ 	u8 xceive_pin;		/* XCeive tuner GPIO reset pin */
+ 	struct cx18_gpio_init		 gpio_init;
+-	struct cx18_gpio_i2c_slave_reset gpio_i2c_slave_reset;
++	struct cx18_gpio_i2c_client_reset gpio_i2c_client_reset;
+ 	struct cx18_gpio_audio_input    gpio_audio_input;
+ 
+ 	struct cx18_card_tuner tuners[CX18_CARD_MAX_TUNERS];
+diff --git a/drivers/media/pci/cx18/cx18-gpio.c b/drivers/media/pci/cx18/cx18-gpio.c
+index c85eb8d25837..82c9104b9e85 100644
+--- a/drivers/media/pci/cx18/cx18-gpio.c
++++ b/drivers/media/pci/cx18/cx18-gpio.c
+@@ -204,9 +204,9 @@ static int resetctrl_log_status(struct v4l2_subdev *sd)
+ static int resetctrl_reset(struct v4l2_subdev *sd, u32 val)
+ {
+ 	struct cx18 *cx = v4l2_get_subdevdata(sd);
+-	const struct cx18_gpio_i2c_slave_reset *p;
++	const struct cx18_gpio_i2c_client_reset *p;
+ 
+-	p = &cx->card->gpio_i2c_slave_reset;
++	p = &cx->card->gpio_i2c_client_reset;
+ 	switch (val) {
+ 	case CX18_GPIO_RESET_I2C:
+ 		gpio_reset_seq(cx, p->active_lo_mask, p->active_hi_mask,
+@@ -309,7 +309,7 @@ void cx18_reset_ir_gpio(void *data)
+ {
+ 	struct cx18 *cx = to_cx18(data);
+ 
+-	if (cx->card->gpio_i2c_slave_reset.ir_reset_mask == 0)
++	if (cx->card->gpio_i2c_client_reset.ir_reset_mask == 0)
+ 		return;
+ 
+ 	CX18_DEBUG_INFO("Resetting IR microcontroller\n");
+-- 
+2.34.1
 
 
