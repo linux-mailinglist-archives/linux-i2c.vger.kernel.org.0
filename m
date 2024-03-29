@@ -1,46 +1,46 @@
-Return-Path: <linux-i2c+bounces-2654-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2655-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3D3F891C72
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Mar 2024 14:50:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F4B0891D1C
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Mar 2024 15:09:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5EADB29A4F
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Mar 2024 13:47:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90D761C24E16
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Mar 2024 14:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD7C5181D0E;
-	Fri, 29 Mar 2024 12:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 833541BF21D;
+	Fri, 29 Mar 2024 12:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WetOfq6A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tWJPyLeB"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 759DD181D07;
-	Fri, 29 Mar 2024 12:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336111BF213;
+	Fri, 29 Mar 2024 12:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711716111; cv=none; b=CC9J6XXV5kJAvf7GW02Gjeaf9CSQW1d4KVrJesrrJKtGyz4mRuf2LBNeAzqbEhFUSdO0GhlVD4p08SHDQPQ1PoNEKCHQfGFTgP8hdw15GqoPfiRJdVugrAfn9DuF3vzDW9hLL9mti8uLllMtK0WEyouge0QmknthnMXyRqxX8r4=
+	t=1711716290; cv=none; b=kKCq1aLwH8qiMWAacXg6YEFacpxtHTJzfGjIaWfuMoTKM8HZv8xLUiXsQSthpx16PTqIwVQUKTsBDnCYVRtoJcfXPU/my1fQjnp5ZSUqBwwM+ZC0lcruYcuxHLlXvWPX+qIQyON2LtwqA3PK6uBcItsgLbkYlitD3XIwUUrIejc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711716111; c=relaxed/simple;
+	s=arc-20240116; t=1711716290; c=relaxed/simple;
 	bh=GKj+uGGDM2REz2nuSY3QZu0YyUCCfqb78Y2dQkQ7SFA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EfMBqmbr7OhW7pipcp0Zp9V7c1U7dBgtcYVRgdxEidvdVIMYEF4TLbJojYm2U3OUfwxJymUOajMP6OjcQsPpjjI7o6RDO40+TcILUkPq/LiTN7JhkDBXkj7pcTP6vvYWBRmiDrpPNHFancQ8VvBiT6oqVXQPfR/JZ7C4KKXg2/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WetOfq6A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D826C43390;
-	Fri, 29 Mar 2024 12:41:50 +0000 (UTC)
+	 MIME-Version; b=ndQPBUYqUhFWrxEDDen0GI96lU9bJR32pantGkwro7MdKpwORK2BW1Xez/BMNogbx9p9MEw5ls1lT9mJEpnc95yHc6TZQ1yto2TpZCcA5h/0Kq0PJCtCXBg+MVYmMYzXZDzpNeZ82oAKSB4gI1AJFMvyNi8BRRBgif3cZMGLhgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tWJPyLeB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E69FC433C7;
+	Fri, 29 Mar 2024 12:44:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711716111;
+	s=k20201202; t=1711716290;
 	bh=GKj+uGGDM2REz2nuSY3QZu0YyUCCfqb78Y2dQkQ7SFA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WetOfq6AVE/p+n6xT1pq/OUx1TfKuf+L9E46diaQ1Wt6kV8iZGTI+CdSw4fqKXYKn
-	 wZqw6/mUproD+b+h0DrGCM261mCXblMuAEe3QdgbYj1xYXrTQqpARGUbx3DdB5MQYP
-	 zRo/9uFyKS/i427HIzaMPYoiegec40VLOPhAff3a7ihOGnK8q074Mkzz8kSGXZltgD
-	 4JcoaCoCYJ0GyDowTjHOm1wPIzLQ6S+7U/Sq4Q2Mc7u3S67nvEMcP+Lp1nIyxZjFo5
-	 tme807+/bKsEgKUKUa+9C+AYa5swLxg53kXxVgGEm0v/Jy/8+SQfiB4/jqosYOrE8r
-	 HSEB8LbMBIe4w==
+	b=tWJPyLeBXwBME4UGj6gxseqO58YW/hbilNhZTd0gMKcWw7rgaUugJlJpqjHCXfUsU
+	 fUoRybq5T0q85E9+Am3HIaejPrnbasNPpbAPfKR/IErh4V+tQxNbxAJQGJaunnEGSy
+	 /U2+TkaPir+F1/EMRH02iCNfvDqqu9Gkuey22F4dH3UcyzDYZg9eh/Jju8UR0fhDcL
+	 QX6UHiQB+UQOc9/UbZbwTYSPP0oa46RMiy44a4fPZPq3jlRSulJoI181fXl0LKx6BP
+	 +aD1v4E9fazP2krdNJPZ1dsU/a0q0cFpVCurgbFOtp/yypUEc4Cub5mHm6APQf6Vhn
+	 FjdxCHh/mLkTA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,12 +49,12 @@ Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.8 60/98] i2c: designware: Fix RX FIFO depth define on Wangxun 10Gb NIC
-Date: Fri, 29 Mar 2024 08:37:31 -0400
-Message-ID: <20240329123919.3087149-60-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 42/75] i2c: designware: Fix RX FIFO depth define on Wangxun 10Gb NIC
+Date: Fri, 29 Mar 2024 08:42:23 -0400
+Message-ID: <20240329124330.3089520-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240329123919.3087149-1-sashal@kernel.org>
-References: <20240329123919.3087149-1-sashal@kernel.org>
+In-Reply-To: <20240329124330.3089520-1-sashal@kernel.org>
+References: <20240329124330.3089520-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.8.2
+X-stable-base: Linux 6.6.23
 Content-Transfer-Encoding: 8bit
 
 From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
