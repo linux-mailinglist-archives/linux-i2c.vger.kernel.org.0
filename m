@@ -1,108 +1,105 @@
-Return-Path: <linux-i2c+bounces-2653-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2654-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F31A9890D45
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 23:17:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3D3F891C72
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Mar 2024 14:50:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 301A71C27D2A
-	for <lists+linux-i2c@lfdr.de>; Thu, 28 Mar 2024 22:17:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5EADB29A4F
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Mar 2024 13:47:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75B57146D6D;
-	Thu, 28 Mar 2024 22:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD7C5181D0E;
+	Fri, 29 Mar 2024 12:41:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V4OxVoCD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WetOfq6A"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FB6146A9D;
-	Thu, 28 Mar 2024 22:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 759DD181D07;
+	Fri, 29 Mar 2024 12:41:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711663673; cv=none; b=K9UfdHWbYwAcT/7O0rGYYutGWaRCfwB03TY1H65hntoK3eDJCHBkpNiezQiaHvyKr1gf0dW6z+lvtgCVHdP44dm6wDxqRsuOc0+hKPxumzN2Jci1ziC5jmCVDAsLFEMxeKfQWp9Dh6wn69RtufYPfNTvPu+DWgQK/ztuiDqnv9E=
+	t=1711716111; cv=none; b=CC9J6XXV5kJAvf7GW02Gjeaf9CSQW1d4KVrJesrrJKtGyz4mRuf2LBNeAzqbEhFUSdO0GhlVD4p08SHDQPQ1PoNEKCHQfGFTgP8hdw15GqoPfiRJdVugrAfn9DuF3vzDW9hLL9mti8uLllMtK0WEyouge0QmknthnMXyRqxX8r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711663673; c=relaxed/simple;
-	bh=W4ByrRn+4LKetxSuLsKEBOpQVyml+dZHE4/n83TVljc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=UHv1CM/89YCdaR/PiK8E9LofDvhdJ1q8te2nSHxqG/rCCb5cHk3/ccxSOP2ZQij3kZXUOsEXxd82RGgjhomjgYOAMxeRnkLVpOgU+gLoK2q8nd6/UTLKA+Su+oI9GTv/iPxmyVXETTglw9AOuNrv0hl7Io7iOE3uGtKoVBLlaG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V4OxVoCD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A53C43390;
-	Thu, 28 Mar 2024 22:07:52 +0000 (UTC)
+	s=arc-20240116; t=1711716111; c=relaxed/simple;
+	bh=GKj+uGGDM2REz2nuSY3QZu0YyUCCfqb78Y2dQkQ7SFA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EfMBqmbr7OhW7pipcp0Zp9V7c1U7dBgtcYVRgdxEidvdVIMYEF4TLbJojYm2U3OUfwxJymUOajMP6OjcQsPpjjI7o6RDO40+TcILUkPq/LiTN7JhkDBXkj7pcTP6vvYWBRmiDrpPNHFancQ8VvBiT6oqVXQPfR/JZ7C4KKXg2/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WetOfq6A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D826C43390;
+	Fri, 29 Mar 2024 12:41:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711663673;
-	bh=W4ByrRn+4LKetxSuLsKEBOpQVyml+dZHE4/n83TVljc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=V4OxVoCDai/enFPnJBLQJykhNDl1EcgFkrrTcoUNMqRgYCsT3pKvCQ4pUMTw9c5EV
-	 7ps/B6RtmKls0wISTrTzJx0RlRfQcXeF2RY8SZiUL7i0ypKS1dLF7N6aZlbm0pweIC
-	 LFaO67i9Oj0i3UhJ3KHZ10ZxkwNoNG3eWgoSsLtZLbS17N4z+u64fF8VEx1yoq97/0
-	 DXM6Ed5G/l+aHVasdfhXppVn+Eekxz/UclPWyo1nU2dcbxkOitwfFqOYiBb1FSY4lh
-	 yJrHD6RSB0jUdgMYWUg5JYyO1xllzQfHIzDRgLwalJClI3LBKR5WgpTPQRC9/uy9D8
-	 EmwXkoGdDd/1w==
-Date: Thu, 28 Mar 2024 17:07:51 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andy@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Haojian Zhuang <haojian.zhuang@linaro.org>,
-	Vignesh R <vigneshr@ti.com>, Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pci@vger.kernel.org, gregory.clement@bootlin.com,
-	theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com,
-	u-kumar1@ti.com
-Subject: Re: [PATCH v4 18/18] PCI: j721e: Add suspend and resume support
-Message-ID: <20240328220751.GA1613553@bhelgaas>
+	s=k20201202; t=1711716111;
+	bh=GKj+uGGDM2REz2nuSY3QZu0YyUCCfqb78Y2dQkQ7SFA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WetOfq6AVE/p+n6xT1pq/OUx1TfKuf+L9E46diaQ1Wt6kV8iZGTI+CdSw4fqKXYKn
+	 wZqw6/mUproD+b+h0DrGCM261mCXblMuAEe3QdgbYj1xYXrTQqpARGUbx3DdB5MQYP
+	 zRo/9uFyKS/i427HIzaMPYoiegec40VLOPhAff3a7ihOGnK8q074Mkzz8kSGXZltgD
+	 4JcoaCoCYJ0GyDowTjHOm1wPIzLQ6S+7U/Sq4Q2Mc7u3S67nvEMcP+Lp1nIyxZjFo5
+	 tme807+/bKsEgKUKUa+9C+AYa5swLxg53kXxVgGEm0v/Jy/8+SQfiB4/jqosYOrE8r
+	 HSEB8LbMBIe4w==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Jiawen Wu <jiawenwu@trustnetic.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-i2c@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.8 60/98] i2c: designware: Fix RX FIFO depth define on Wangxun 10Gb NIC
+Date: Fri, 29 Mar 2024 08:37:31 -0400
+Message-ID: <20240329123919.3087149-60-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240329123919.3087149-1-sashal@kernel.org>
+References: <20240329123919.3087149-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.8.2
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240102-j7200-pcie-s2r-v4-18-6f1f53390c85@bootlin.com>
 
-On Mon, Mar 04, 2024 at 04:36:01PM +0100, Thomas Richard wrote:
-> From: Théo Lebrun <theo.lebrun@bootlin.com>
-> 
-> Add suspend and resume support. Only the rc mode is supported.
-> 
-> During the suspend stage PERST# is asserted, then deasserted during the
-> resume stage.
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
 
-> +		 * "Power Sequencing and Reset Signal Timings" table in
-> +		 * PCI EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 3.0
-> +		 * indicates PERST# should be deasserted after minimum of 100us
-> +		 * once REFCLK is stable. The REFCLK to the connector in RC
-> +		 * mode is selected while enabling the PHY. So deassert PERST#
-> +		 * after 100 us.
+[ Upstream commit c94612a72ac87b0337a0d85b9263266776ed4190 ]
 
-Please cite current spec (r5.1 was published August 2023), section,
-and parameter name.  I think this is T_PERST-CLK, "REFCLK stable
-before PERST# inactive", from sec 2.9.2.
+I believe RX FIFO depth define 0 is incorrect on Wangxun 10Gb NIC. It
+must be at least 1 since code is able to read received data from the
+DW_IC_DATA_CMD register.
 
-> +		 */
-> +		if (pcie->reset_gpio) {
-> +			fsleep(100);
+For now this define is irrelevant since the txgbe_i2c_dw_xfer_quirk()
+doesn't use the rx_fifo_depth member variable of struct dw_i2c_dev but
+is needed when converting code into generic polling mode implementation.
 
-I'd like to see a macro used here instead of a bare number.  Since
-this isn't anything specific to j721e, maybe add something like
-#define PCIE_T_PERST_CLK_US alongside PCIE_T_PVPERL_MS.
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Tested-by: Jiawen Wu <jiawenwu@trustnetic.com>
+Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/i2c/busses/i2c-designware-core.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +			gpiod_set_value_cansleep(pcie->reset_gpio, 1);
-> +		}
+diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
+index a7f6f3eafad7d..ae835000fd32a 100644
+--- a/drivers/i2c/busses/i2c-designware-core.h
++++ b/drivers/i2c/busses/i2c-designware-core.h
+@@ -318,7 +318,7 @@ struct dw_i2c_dev {
+ #define AMD_UCSI_INTR_EN			0xd
+ 
+ #define TXGBE_TX_FIFO_DEPTH			4
+-#define TXGBE_RX_FIFO_DEPTH			0
++#define TXGBE_RX_FIFO_DEPTH			1
+ 
+ struct i2c_dw_semaphore_callbacks {
+ 	int	(*probe)(struct dw_i2c_dev *dev);
+-- 
+2.43.0
+
 
