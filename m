@@ -1,108 +1,76 @@
-Return-Path: <linux-i2c+bounces-2659-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2660-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA76D89221B
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Mar 2024 18:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F414892223
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Mar 2024 18:02:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 673B61F266B2
-	for <lists+linux-i2c@lfdr.de>; Fri, 29 Mar 2024 17:02:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3F931F266D8
+	for <lists+linux-i2c@lfdr.de>; Fri, 29 Mar 2024 17:02:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD08136999;
-	Fri, 29 Mar 2024 17:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50D1B131BDD;
+	Fri, 29 Mar 2024 17:02:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="DapTCqdy"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Fq9Foy0j"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48E3013280B;
-	Fri, 29 Mar 2024 17:01:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50CF51311BD;
+	Fri, 29 Mar 2024 17:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711731704; cv=none; b=fONJiGpHyy7XlkP/279Au6kokj/daMHS168IiXJrPD4c6VlUfED4u5u7sosX1aHmMe528WLyKRwx89AE9gDgmkrVkxtLhb4RIUi0nVtscHpcxJxWe+3UkGODSOKJRaUkrlWPgyF4QHs2r5W5f6u/k0KchlSD4TPAJFLs04bDoOk=
+	t=1711731735; cv=none; b=iC+FxFzwkREcp6x1tMpLTvhz9wTwCpLuRS/hHeunnkBGfeOXVc9NivWDotDNcfhtfVQbBLsuZvlgtyTRlSk209L4HG/nzCXYXZQ/kXjnnn7JAcpLoJjhr9U8LbAxZwFJuVxxkz0fzOKlrgz8dqYTfhGT8zkWn7cdb3kE1PsJeLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711731704; c=relaxed/simple;
-	bh=ynlrh1NHr726SFwkyMK1QKwpj4OSawHITEtBPmm7yAI=;
+	s=arc-20240116; t=1711731735; c=relaxed/simple;
+	bh=0eZZv7jW/VBJ/AJ2nQrWYo41zmXJSjCnU0mqdAyjNuQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LtkHRpcd2640DrooQUTvqsBXbPiMWXlH10hz66MqRBAN0dzs6jGAyhngZVIp7g/y5JcJ3/a9VKjmjF2Uj1zPi10DKLicfC2NcRlnI2JF4ZWdu6Rt/EEqdD2JaP7mFzdDFPmgPcFZMZQaG25kE8B8/sZzye0ASmZVcPRlnW5mi2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=DapTCqdy; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=NdO7o8eMmDQVv4DObF/GS+HX7YLtfGukQLZAwq70uz2q+qf4Z00kc8UbjvrX0FmQD3xoblBEMmcSlrwdr7wzP3I625BAGoX0EQ/SU21SYFGzb/Gy9Bg1VsfvLhWFJSjtIykWQZq3yp7siyR9BCZZJ5acHr5++UiJ0I9jdUk+UVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Fq9Foy0j; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from rrs24-12-35.corp.microsoft.com (unknown [131.107.147.137])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 4254C20E6F3E;
-	Fri, 29 Mar 2024 10:01:41 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4254C20E6F3E
+	by linux.microsoft.com (Postfix) with ESMTPSA id AE66620E6F3E;
+	Fri, 29 Mar 2024 10:02:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AE66620E6F3E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1711731701;
-	bh=LMxDB4U8piuFU+SwDEiRATO61NO3M/ZS1ekhtLxKdW4=;
+	s=default; t=1711731731;
+	bh=TXF3chngF6WfBZMxY0bb+7aovYcEVbalNWIPlb+B8Qk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DapTCqdyFUVdgvKDrBWEyffgAxLRmwt9yic2m7NHNCzFKqrgs3Jog7oqUEW9qgxks
-	 FriTk7RG24I1VrPXIjJ3DpW8s5MhKkvQl2BNXMcY+MdDK9DnoOwO/7+yAWCAwt/j7t
-	 maM5vq37UFRT1XmW4qdYCEDvUrQufwdiILmZ7siA=
+	b=Fq9Foy0jdrIbtty2aeNBaIxnLWZbf1QQF+y14HHXF/SRp3a0OKFGF2Dcfg5BuUOYD
+	 /1fiCYAtQK3MTQ2MHiNPetXlXAhswmEupmGAn0/zeiZHroMo6Afb6X1k8qwZuFqcW+
+	 hJLg/90ix95mGIRi2UU9x1U5Xk2He7D8sbVpKNX4=
 From: Easwar Hariharan <eahariha@linux.microsoft.com>
-To: Alex Deucher <alexander.deucher@amd.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	"Pan, Xinhui" <Xinhui.Pan@amd.com>,
+To: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
 	David Airlie <airlied@gmail.com>,
 	Daniel Vetter <daniel@ffwll.ch>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>,
-	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-	Evan Quan <evan.quan@amd.com>,
-	Hawking Zhang <Hawking.Zhang@amd.com>,
-	Candice Li <candice.li@amd.com>,
-	Ran Sun <sunran001@208suo.com>,
-	Easwar Hariharan <eahariha@linux.microsoft.com>,
-	Alexander Richards <electrodeyt@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Hamza Mahfooz <hamza.mahfooz@amd.com>,
-	Ruan Jinjie <ruanjinjie@huawei.com>,
-	Alan Liu <haoping.liu@amd.com>,
-	Aurabindo Pillai <aurabindo.pillai@amd.com>,
-	Wayne Lin <wayne.lin@amd.com>,
-	Samson Tam <samson.tam@amd.com>,
-	Alvin Lee <alvin.lee2@amd.com>,
-	Charlene Liu <charlene.liu@amd.com>,
-	Sohaib Nadeem <sohaib.nadeem@amd.com>,
-	Lewis Huang <lewis.huang@amd.com>,
-	Tom Chung <chiahsuan.chung@amd.com>,
-	Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
-	Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>,
-	George Shen <george.shen@amd.com>,
-	Aric Cyr <aric.cyr@amd.com>,
-	Jun Lei <jun.lei@amd.com>,
-	Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-	Qingqing Zhuo <Qingqing.Zhuo@amd.com>,
-	Dillon Varone <dillon.varone@amd.com>,
-	Le Ma <Le.Ma@amd.com>,
-	Lijo Lazar <lijo.lazar@amd.com>,
-	Asad kamal <asad.kamal@amd.com>,
-	Kenneth Feng <kenneth.feng@amd.com>,
-	Ma Jun <Jun.Ma2@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Yang Wang <kevinyang.wang@amd.com>,
-	Darren Powell <darren.powell@amd.com>,
-	Yifan Zhang <yifan1.zhang@amd.com>,
-	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
-	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-	linux-kernel@vger.kernel.org (open list)
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	Zhenyu Wang <zhenyuw@linux.intel.com>,
+	Zhi Wang <zhi.wang.linux@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org (open list),
+	intel-gfx@lists.freedesktop.org (open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS),
+	intel-xe@lists.freedesktop.org (open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS),
+	intel-gvt-dev@lists.freedesktop.org (open list:INTEL GVT-g DRIVERS (Intel GPU Virtualization))
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
-	dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
 	linux-kernel@vger.kernel.org (open list),
 	intel-gfx@lists.freedesktop.org (open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS),
 	intel-xe@lists.freedesktop.org (open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS),
 	nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS),
 	linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
 	linux-media@vger.kernel.org (open list:BTTV VIDEO4LINUX DRIVER),
-	linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER)
-Subject: [PATCH v0 02/14] drm/amdgpu,drm/radeon: Make I2C terminology more inclusive
-Date: Fri, 29 Mar 2024 17:00:26 +0000
-Message-Id: <20240329170038.3863998-3-eahariha@linux.microsoft.com>
+	linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER),
+	Easwar Hariharan <eahariha@linux.microsoft.com>
+Subject: [PATCH v0 03/14] drm/gma500,drm/i915: Make I2C terminology more inclusive
+Date: Fri, 29 Mar 2024 17:00:27 +0000
+Message-Id: <20240329170038.3863998-4-eahariha@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240329170038.3863998-1-eahariha@linux.microsoft.com>
 References: <20240329170038.3863998-1-eahariha@linux.microsoft.com>
@@ -122,781 +90,1238 @@ in the specification.
 
 Compile tested, no functionality changes intended
 
-[1]: https://lore.kernel.org/all/20240322132619.6389-1-wsa+renesas@sang-engineering.com/
+[1]:
+https://lore.kernel.org/all/20240322132619.6389-1-wsa+renesas@sang-engineering.com/
 
 Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 ---
- .../gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c  |  8 +++---
- drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c       | 10 +++----
- drivers/gpu/drm/amd/amdgpu/atombios_i2c.c     |  8 +++---
- drivers/gpu/drm/amd/amdgpu/smu_v11_0_i2c.c    | 16 +++++------
- .../gpu/drm/amd/display/dc/bios/bios_parser.c |  2 +-
- .../drm/amd/display/dc/bios/bios_parser2.c    |  2 +-
- .../drm/amd/display/dc/core/dc_link_exports.c |  4 +--
- drivers/gpu/drm/amd/display/dc/dc.h           |  2 +-
- drivers/gpu/drm/amd/display/dc/dce/dce_i2c.c  |  4 +--
- .../display/include/grph_object_ctrl_defs.h   |  2 +-
- drivers/gpu/drm/amd/include/atombios.h        |  2 +-
- drivers/gpu/drm/amd/include/atomfirmware.h    | 26 ++++++++---------
- .../powerplay/hwmgr/vega20_processpptables.c  |  4 +--
- .../amd/pm/powerplay/inc/smu11_driver_if.h    |  2 +-
- .../inc/pmfw_if/smu11_driver_if_arcturus.h    |  2 +-
- .../inc/pmfw_if/smu11_driver_if_navi10.h      |  2 +-
- .../pmfw_if/smu11_driver_if_sienna_cichlid.h  |  2 +-
- .../inc/pmfw_if/smu13_driver_if_aldebaran.h   |  2 +-
- .../inc/pmfw_if/smu13_driver_if_v13_0_0.h     |  2 +-
- .../inc/pmfw_if/smu13_driver_if_v13_0_7.h     |  2 +-
- .../gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c |  4 +--
- .../amd/pm/swsmu/smu11/sienna_cichlid_ppt.c   |  8 +++---
- drivers/gpu/drm/radeon/atombios.h             |  2 +-
- drivers/gpu/drm/radeon/atombios_i2c.c         |  4 +--
- drivers/gpu/drm/radeon/radeon_combios.c       | 28 +++++++++----------
- drivers/gpu/drm/radeon/radeon_i2c.c           | 10 +++----
- drivers/gpu/drm/radeon/radeon_mode.h          |  6 ++--
- 27 files changed, 83 insertions(+), 83 deletions(-)
+ drivers/gpu/drm/gma500/cdv_intel_lvds.c       |  2 +-
+ drivers/gpu/drm/gma500/intel_bios.c           | 22 +++++++-------
+ drivers/gpu/drm/gma500/intel_bios.h           |  4 +--
+ drivers/gpu/drm/gma500/intel_gmbus.c          |  2 +-
+ drivers/gpu/drm/gma500/psb_drv.h              |  2 +-
+ drivers/gpu/drm/gma500/psb_intel_drv.h        |  2 +-
+ drivers/gpu/drm/gma500/psb_intel_lvds.c       |  4 +--
+ drivers/gpu/drm/gma500/psb_intel_sdvo.c       | 26 ++++++++--------
+ drivers/gpu/drm/i915/display/dvo_ch7017.c     | 14 ++++-----
+ drivers/gpu/drm/i915/display/dvo_ch7xxx.c     | 18 +++++------
+ drivers/gpu/drm/i915/display/dvo_ivch.c       | 16 +++++-----
+ drivers/gpu/drm/i915/display/dvo_ns2501.c     | 18 +++++------
+ drivers/gpu/drm/i915/display/dvo_sil164.c     | 18 +++++------
+ drivers/gpu/drm/i915/display/dvo_tfp410.c     | 18 +++++------
+ drivers/gpu/drm/i915/display/intel_bios.c     | 22 +++++++-------
+ drivers/gpu/drm/i915/display/intel_ddi.c      |  2 +-
+ .../gpu/drm/i915/display/intel_display_core.h |  2 +-
+ drivers/gpu/drm/i915/display/intel_dsi.h      |  2 +-
+ drivers/gpu/drm/i915/display/intel_dsi_vbt.c  | 18 +++++------
+ drivers/gpu/drm/i915/display/intel_dvo.c      | 14 ++++-----
+ drivers/gpu/drm/i915/display/intel_dvo_dev.h  |  2 +-
+ drivers/gpu/drm/i915/display/intel_gmbus.c    |  4 +--
+ drivers/gpu/drm/i915/display/intel_sdvo.c     | 30 +++++++++----------
+ drivers/gpu/drm/i915/display/intel_vbt_defs.h |  4 +--
+ drivers/gpu/drm/i915/gvt/edid.c               | 28 ++++++++---------
+ drivers/gpu/drm/i915/gvt/edid.h               |  4 +--
+ drivers/gpu/drm/i915/gvt/opregion.c           |  2 +-
+ 27 files changed, 150 insertions(+), 150 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c
-index 6857c586ded7..8c2c3f2280cd 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c
-@@ -614,7 +614,7 @@ bool amdgpu_atomfirmware_ras_rom_addr(struct amdgpu_device *adev,
- 		if ((frev == 3 && crev >= 4) || (frev > 3)) {
- 			firmware_info = (union firmware_info *)
- 				(mode_info->atom_context->bios + data_offset);
--			/* The ras_rom_i2c_slave_addr should ideally
-+			/* The ras_rom_i2c_client_addr should ideally
- 			 * be a 19-bit EEPROM address, which would be
- 			 * used as is by the driver; see top of
- 			 * amdgpu_eeprom.c.
-@@ -625,13 +625,13 @@ bool amdgpu_atomfirmware_ras_rom_addr(struct amdgpu_device *adev,
- 			 * leave the check for the pointer.
- 			 *
- 			 * The reason this works right now is because
--			 * ras_rom_i2c_slave_addr contains the EEPROM
-+			 * ras_rom_i2c_client_addr contains the EEPROM
- 			 * device type qualifier 1010b in the top 4
- 			 * bits.
- 			 */
--			if (firmware_info->v34.ras_rom_i2c_slave_addr) {
-+			if (firmware_info->v34.ras_rom_i2c_client_addr) {
- 				if (i2c_address)
--					*i2c_address = firmware_info->v34.ras_rom_i2c_slave_addr;
-+					*i2c_address = firmware_info->v34.ras_rom_i2c_client_addr;
- 				return true;
- 			}
- 		}
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c
-index d79cb13e1aa8..a34626882b67 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c
-@@ -280,7 +280,7 @@ amdgpu_i2c_lookup(struct amdgpu_device *adev,
- }
+diff --git a/drivers/gpu/drm/gma500/cdv_intel_lvds.c b/drivers/gpu/drm/gma500/cdv_intel_lvds.c
+index f08a6803dc18..84c9122062c4 100644
+--- a/drivers/gpu/drm/gma500/cdv_intel_lvds.c
++++ b/drivers/gpu/drm/gma500/cdv_intel_lvds.c
+@@ -565,7 +565,7 @@ void cdv_intel_lvds_init(struct drm_device *dev,
+ 			dev->dev, "I2C bus registration failed.\n");
+ 		goto err_encoder_cleanup;
+ 	}
+-	gma_encoder->i2c_bus->slave_addr = 0x2C;
++	gma_encoder->i2c_bus->client_addr = 0x2C;
+ 	dev_priv->lvds_i2c_bus = gma_encoder->i2c_bus;
  
- static void amdgpu_i2c_get_byte(struct amdgpu_i2c_chan *i2c_bus,
--				 u8 slave_addr,
-+				 u8 client_addr,
- 				 u8 addr,
- 				 u8 *val)
+ 	/*
+diff --git a/drivers/gpu/drm/gma500/intel_bios.c b/drivers/gpu/drm/gma500/intel_bios.c
+index 8245b5603d2c..333bece1a64f 100644
+--- a/drivers/gpu/drm/gma500/intel_bios.c
++++ b/drivers/gpu/drm/gma500/intel_bios.c
+@@ -14,8 +14,8 @@
+ #include "psb_intel_drv.h"
+ #include "psb_intel_reg.h"
+ 
+-#define	SLAVE_ADDR1	0x70
+-#define	SLAVE_ADDR2	0x72
++#define	CLIENT_ADDR1	0x70
++#define	CLIENT_ADDR2	0x72
+ 
+ static void *find_section(struct bdb_header *bdb, int section_id)
  {
-@@ -288,13 +288,13 @@ static void amdgpu_i2c_get_byte(struct amdgpu_i2c_chan *i2c_bus,
- 	u8 in_buf[2];
+@@ -357,10 +357,10 @@ parse_sdvo_device_mapping(struct drm_psb_private *dev_priv,
+ 			/* skip the device block if device type is invalid */
+ 			continue;
+ 		}
+-		if (p_child->slave_addr != SLAVE_ADDR1 &&
+-			p_child->slave_addr != SLAVE_ADDR2) {
++		if (p_child->client_addr != CLIENT_ADDR1 &&
++			p_child->client_addr != CLIENT_ADDR2) {
+ 			/*
+-			 * If the slave address is neither 0x70 nor 0x72,
++			 * If the client address is neither 0x70 nor 0x72,
+ 			 * it is not a SDVO device. Skip it.
+ 			 */
+ 			continue;
+@@ -371,22 +371,22 @@ parse_sdvo_device_mapping(struct drm_psb_private *dev_priv,
+ 			DRM_DEBUG_KMS("Incorrect SDVO port. Skip it\n");
+ 			continue;
+ 		}
+-		DRM_DEBUG_KMS("the SDVO device with slave addr %2x is found on"
++		DRM_DEBUG_KMS("the SDVO device with client addr %2x is found on"
+ 				" %s port\n",
+-				p_child->slave_addr,
++				p_child->client_addr,
+ 				(p_child->dvo_port == DEVICE_PORT_DVOB) ?
+ 					"SDVOB" : "SDVOC");
+ 		p_mapping = &(dev_priv->sdvo_mappings[p_child->dvo_port - 1]);
+ 		if (!p_mapping->initialized) {
+ 			p_mapping->dvo_port = p_child->dvo_port;
+-			p_mapping->slave_addr = p_child->slave_addr;
++			p_mapping->client_addr = p_child->client_addr;
+ 			p_mapping->dvo_wiring = p_child->dvo_wiring;
+ 			p_mapping->ddc_pin = p_child->ddc_pin;
+ 			p_mapping->i2c_pin = p_child->i2c_pin;
+ 			p_mapping->initialized = 1;
+ 			DRM_DEBUG_KMS("SDVO device: dvo=%x, addr=%x, wiring=%d, ddc_pin=%d, i2c_pin=%d\n",
+ 				      p_mapping->dvo_port,
+-				      p_mapping->slave_addr,
++				      p_mapping->client_addr,
+ 				      p_mapping->dvo_wiring,
+ 				      p_mapping->ddc_pin,
+ 				      p_mapping->i2c_pin);
+@@ -394,10 +394,10 @@ parse_sdvo_device_mapping(struct drm_psb_private *dev_priv,
+ 			DRM_DEBUG_KMS("Maybe one SDVO port is shared by "
+ 					 "two SDVO device.\n");
+ 		}
+-		if (p_child->slave2_addr) {
++		if (p_child->client2_addr) {
+ 			/* Maybe this is a SDVO device with multiple inputs */
+ 			/* And the mapping info is not added */
+-			DRM_DEBUG_KMS("there exists the slave2_addr. Maybe this"
++			DRM_DEBUG_KMS("there exists the client2_addr. Maybe this"
+ 				" is a SDVO device with multiple inputs.\n");
+ 		}
+ 		count++;
+diff --git a/drivers/gpu/drm/gma500/intel_bios.h b/drivers/gpu/drm/gma500/intel_bios.h
+index 0e6facf21e33..cfca33427f94 100644
+--- a/drivers/gpu/drm/gma500/intel_bios.h
++++ b/drivers/gpu/drm/gma500/intel_bios.h
+@@ -186,13 +186,13 @@ struct child_device_config {
+ 	u16 addin_offset;
+ 	u8  dvo_port; /* See Device_PORT_* above */
+ 	u8  i2c_pin;
+-	u8  slave_addr;
++	u8  client_addr;
+ 	u8  ddc_pin;
+ 	u16 edid_ptr;
+ 	u8  dvo_cfg; /* See DEVICE_CFG_* above */
+ 	u8  dvo2_port;
+ 	u8  i2c2_pin;
+-	u8  slave2_addr;
++	u8  client2_addr;
+ 	u8  ddc2_pin;
+ 	u8  capabilities;
+ 	u8  dvo_wiring;/* See DEVICE_WIRE_* above */
+diff --git a/drivers/gpu/drm/gma500/intel_gmbus.c b/drivers/gpu/drm/gma500/intel_gmbus.c
+index aa45509859f2..94cf854b1d3d 100644
+--- a/drivers/gpu/drm/gma500/intel_gmbus.c
++++ b/drivers/gpu/drm/gma500/intel_gmbus.c
+@@ -333,7 +333,7 @@ gmbus_xfer(struct i2c_adapter *adapter,
+ clear_err:
+ 	/* Toggle the Software Clear Interrupt bit. This has the effect
+ 	 * of resetting the GMBUS controller and so clearing the
+-	 * BUS_ERROR raised by the slave's NAK.
++	 * BUS_ERROR raised by the client's NAK.
+ 	 */
+ 	GMBUS_REG_WRITE(GMBUS1 + reg_offset, GMBUS_SW_CLR_INT);
+ 	GMBUS_REG_WRITE(GMBUS1 + reg_offset, 0);
+diff --git a/drivers/gpu/drm/gma500/psb_drv.h b/drivers/gpu/drm/gma500/psb_drv.h
+index c5edfa4aa4cc..bbf3af1b01cd 100644
+--- a/drivers/gpu/drm/gma500/psb_drv.h
++++ b/drivers/gpu/drm/gma500/psb_drv.h
+@@ -203,7 +203,7 @@ struct psb_intel_opregion {
+ struct sdvo_device_mapping {
+ 	u8 initialized;
+ 	u8 dvo_port;
+-	u8 slave_addr;
++	u8 client_addr;
+ 	u8 dvo_wiring;
+ 	u8 i2c_pin;
+ 	u8 i2c_speed;
+diff --git a/drivers/gpu/drm/gma500/psb_intel_drv.h b/drivers/gpu/drm/gma500/psb_intel_drv.h
+index c111e933e1ed..3536414c1988 100644
+--- a/drivers/gpu/drm/gma500/psb_intel_drv.h
++++ b/drivers/gpu/drm/gma500/psb_intel_drv.h
+@@ -80,7 +80,7 @@ struct psb_intel_mode_device {
+ struct gma_i2c_chan {
+ 	struct i2c_adapter base;
+ 	struct i2c_algo_bit_data algo;
+-	u8 slave_addr;
++	u8 client_addr;
+ 
+ 	/* for getting at dev. private (mmio etc.) */
+ 	struct drm_device *drm_dev;
+diff --git a/drivers/gpu/drm/gma500/psb_intel_lvds.c b/drivers/gpu/drm/gma500/psb_intel_lvds.c
+index 8486de230ec9..3ce54aaf92ce 100644
+--- a/drivers/gpu/drm/gma500/psb_intel_lvds.c
++++ b/drivers/gpu/drm/gma500/psb_intel_lvds.c
+@@ -97,7 +97,7 @@ static int psb_lvds_i2c_set_brightness(struct drm_device *dev,
+ 
  	struct i2c_msg msgs[] = {
  		{
--			.addr = slave_addr,
-+			.addr = client_addr,
+-			.addr = lvds_i2c_bus->slave_addr,
++			.addr = lvds_i2c_bus->client_addr,
+ 			.flags = 0,
+ 			.len = 2,
+ 			.buf = out_buf,
+@@ -707,7 +707,7 @@ void psb_intel_lvds_init(struct drm_device *dev,
+ 			dev->dev, "I2C bus registration failed.\n");
+ 		goto err_encoder_cleanup;
+ 	}
+-	lvds_priv->i2c_bus->slave_addr = 0x2C;
++	lvds_priv->i2c_bus->client_addr = 0x2C;
+ 	dev_priv->lvds_i2c_bus =  lvds_priv->i2c_bus;
+ 
+ 	/*
+diff --git a/drivers/gpu/drm/gma500/psb_intel_sdvo.c b/drivers/gpu/drm/gma500/psb_intel_sdvo.c
+index e4f914deceba..39a3b696efc5 100644
+--- a/drivers/gpu/drm/gma500/psb_intel_sdvo.c
++++ b/drivers/gpu/drm/gma500/psb_intel_sdvo.c
+@@ -70,7 +70,7 @@ struct psb_intel_sdvo {
+ 	struct gma_encoder base;
+ 
+ 	struct i2c_adapter *i2c;
+-	u8 slave_addr;
++	u8 client_addr;
+ 
+ 	struct i2c_adapter ddc;
+ 
+@@ -259,13 +259,13 @@ static bool psb_intel_sdvo_read_byte(struct psb_intel_sdvo *psb_intel_sdvo, u8 a
+ {
+ 	struct i2c_msg msgs[] = {
+ 		{
+-			.addr = psb_intel_sdvo->slave_addr,
++			.addr = psb_intel_sdvo->client_addr,
+ 			.flags = 0,
+ 			.len = 1,
+ 			.buf = &addr,
+ 		},
+ 		{
+-			.addr = psb_intel_sdvo->slave_addr,
++			.addr = psb_intel_sdvo->client_addr,
+ 			.flags = I2C_M_RD,
+ 			.len = 1,
+ 			.buf = ch,
+@@ -463,14 +463,14 @@ static bool psb_intel_sdvo_write_cmd(struct psb_intel_sdvo *psb_intel_sdvo, u8 c
+ 	psb_intel_sdvo_debug_write(psb_intel_sdvo, cmd, args, args_len);
+ 
+ 	for (i = 0; i < args_len; i++) {
+-		msgs[i].addr = psb_intel_sdvo->slave_addr;
++		msgs[i].addr = psb_intel_sdvo->client_addr;
+ 		msgs[i].flags = 0;
+ 		msgs[i].len = 2;
+ 		msgs[i].buf = buf + 2 *i;
+ 		buf[2*i + 0] = SDVO_I2C_ARG_0 - i;
+ 		buf[2*i + 1] = ((u8*)args)[i];
+ 	}
+-	msgs[i].addr = psb_intel_sdvo->slave_addr;
++	msgs[i].addr = psb_intel_sdvo->client_addr;
+ 	msgs[i].flags = 0;
+ 	msgs[i].len = 2;
+ 	msgs[i].buf = buf + 2*i;
+@@ -479,12 +479,12 @@ static bool psb_intel_sdvo_write_cmd(struct psb_intel_sdvo *psb_intel_sdvo, u8 c
+ 
+ 	/* the following two are to read the response */
+ 	status = SDVO_I2C_CMD_STATUS;
+-	msgs[i+1].addr = psb_intel_sdvo->slave_addr;
++	msgs[i+1].addr = psb_intel_sdvo->client_addr;
+ 	msgs[i+1].flags = 0;
+ 	msgs[i+1].len = 1;
+ 	msgs[i+1].buf = &status;
+ 
+-	msgs[i+2].addr = psb_intel_sdvo->slave_addr;
++	msgs[i+2].addr = psb_intel_sdvo->client_addr;
+ 	msgs[i+2].flags = I2C_M_RD;
+ 	msgs[i+2].len = 1;
+ 	msgs[i+2].buf = &status;
+@@ -1899,7 +1899,7 @@ psb_intel_sdvo_is_hdmi_connector(struct psb_intel_sdvo *psb_intel_sdvo, int devi
+ }
+ 
+ static u8
+-psb_intel_sdvo_get_slave_addr(struct drm_device *dev, int sdvo_reg)
++psb_intel_sdvo_get_client_addr(struct drm_device *dev, int sdvo_reg)
+ {
+ 	struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
+ 	struct sdvo_device_mapping *my_mapping, *other_mapping;
+@@ -1913,14 +1913,14 @@ psb_intel_sdvo_get_slave_addr(struct drm_device *dev, int sdvo_reg)
+ 	}
+ 
+ 	/* If the BIOS described our SDVO device, take advantage of it. */
+-	if (my_mapping->slave_addr)
+-		return my_mapping->slave_addr;
++	if (my_mapping->client_addr)
++		return my_mapping->client_addr;
+ 
+ 	/* If the BIOS only described a different SDVO device, use the
+ 	 * address that it isn't using.
+ 	 */
+-	if (other_mapping->slave_addr) {
+-		if (other_mapping->slave_addr == 0x70)
++	if (other_mapping->client_addr) {
++		if (other_mapping->client_addr == 0x70)
+ 			return 0x72;
+ 		else
+ 			return 0x70;
+@@ -2446,7 +2446,7 @@ bool psb_intel_sdvo_init(struct drm_device *dev, int sdvo_reg)
+ 		return false;
+ 
+ 	psb_intel_sdvo->sdvo_reg = sdvo_reg;
+-	psb_intel_sdvo->slave_addr = psb_intel_sdvo_get_slave_addr(dev, sdvo_reg) >> 1;
++	psb_intel_sdvo->client_addr = psb_intel_sdvo_get_client_addr(dev, sdvo_reg) >> 1;
+ 	psb_intel_sdvo_select_i2c_bus(dev_priv, psb_intel_sdvo, sdvo_reg);
+ 	if (!psb_intel_sdvo_init_ddc_proxy(psb_intel_sdvo, dev)) {
+ 		kfree(psb_intel_sdvo);
+diff --git a/drivers/gpu/drm/i915/display/dvo_ch7017.c b/drivers/gpu/drm/i915/display/dvo_ch7017.c
+index d0c3880d7f80..b9d04581b820 100644
+--- a/drivers/gpu/drm/i915/display/dvo_ch7017.c
++++ b/drivers/gpu/drm/i915/display/dvo_ch7017.c
+@@ -170,13 +170,13 @@ static bool ch7017_read(struct intel_dvo_device *dvo, u8 addr, u8 *val)
+ {
+ 	struct i2c_msg msgs[] = {
+ 		{
+-			.addr = dvo->slave_addr,
++			.addr = dvo->client_addr,
+ 			.flags = 0,
+ 			.len = 1,
+ 			.buf = &addr,
+ 		},
+ 		{
+-			.addr = dvo->slave_addr,
++			.addr = dvo->client_addr,
+ 			.flags = I2C_M_RD,
+ 			.len = 1,
+ 			.buf = val,
+@@ -189,7 +189,7 @@ static bool ch7017_write(struct intel_dvo_device *dvo, u8 addr, u8 val)
+ {
+ 	u8 buf[2] = { addr, val };
+ 	struct i2c_msg msg = {
+-		.addr = dvo->slave_addr,
++		.addr = dvo->client_addr,
+ 		.flags = 0,
+ 		.len = 2,
+ 		.buf = buf,
+@@ -197,7 +197,7 @@ static bool ch7017_write(struct intel_dvo_device *dvo, u8 addr, u8 val)
+ 	return i2c_transfer(dvo->i2c_bus, &msg, 1) == 1;
+ }
+ 
+-/** Probes for a CH7017 on the given bus and slave address. */
++/** Probes for a CH7017 on the given bus and client address. */
+ static bool ch7017_init(struct intel_dvo_device *dvo,
+ 			struct i2c_adapter *adapter)
+ {
+@@ -227,13 +227,13 @@ static bool ch7017_init(struct intel_dvo_device *dvo,
+ 		break;
+ 	default:
+ 		DRM_DEBUG_KMS("ch701x not detected, got %d: from %s "
+-			      "slave %d.\n",
+-			      val, adapter->name, dvo->slave_addr);
++			      "client %d.\n",
++			      val, adapter->name, dvo->client_addr);
+ 		goto fail;
+ 	}
+ 
+ 	DRM_DEBUG_KMS("%s detected on %s, addr %d\n",
+-		      str, adapter->name, dvo->slave_addr);
++		      str, adapter->name, dvo->client_addr);
+ 	return true;
+ 
+ fail:
+diff --git a/drivers/gpu/drm/i915/display/dvo_ch7xxx.c b/drivers/gpu/drm/i915/display/dvo_ch7xxx.c
+index 2e8e85da5a40..8e36d6e2dde0 100644
+--- a/drivers/gpu/drm/i915/display/dvo_ch7xxx.c
++++ b/drivers/gpu/drm/i915/display/dvo_ch7xxx.c
+@@ -153,13 +153,13 @@ static bool ch7xxx_readb(struct intel_dvo_device *dvo, int addr, u8 *ch)
+ 
+ 	struct i2c_msg msgs[] = {
+ 		{
+-			.addr = dvo->slave_addr,
++			.addr = dvo->client_addr,
  			.flags = 0,
  			.len = 1,
  			.buf = out_buf,
  		},
  		{
--			.addr = slave_addr,
-+			.addr = client_addr,
+-			.addr = dvo->slave_addr,
++			.addr = dvo->client_addr,
  			.flags = I2C_M_RD,
  			.len = 1,
  			.buf = in_buf,
-@@ -314,13 +314,13 @@ static void amdgpu_i2c_get_byte(struct amdgpu_i2c_chan *i2c_bus,
- }
+@@ -176,7 +176,7 @@ static bool ch7xxx_readb(struct intel_dvo_device *dvo, int addr, u8 *ch)
  
- static void amdgpu_i2c_put_byte(struct amdgpu_i2c_chan *i2c_bus,
--				 u8 slave_addr,
-+				 u8 client_addr,
- 				 u8 addr,
- 				 u8 val)
- {
- 	uint8_t out_buf[2];
+ 	if (!ch7xxx->quiet) {
+ 		DRM_DEBUG_KMS("Unable to read register 0x%02x from %s:%02x.\n",
+-			  addr, adapter->name, dvo->slave_addr);
++			  addr, adapter->name, dvo->client_addr);
+ 	}
+ 	return false;
+ }
+@@ -188,7 +188,7 @@ static bool ch7xxx_writeb(struct intel_dvo_device *dvo, int addr, u8 ch)
+ 	struct i2c_adapter *adapter = dvo->i2c_bus;
+ 	u8 out_buf[2];
  	struct i2c_msg msg = {
--		.addr = slave_addr,
-+		.addr = client_addr,
+-		.addr = dvo->slave_addr,
++		.addr = dvo->client_addr,
  		.flags = 0,
  		.len = 2,
  		.buf = out_buf,
-diff --git a/drivers/gpu/drm/amd/amdgpu/atombios_i2c.c b/drivers/gpu/drm/amd/amdgpu/atombios_i2c.c
-index a6501114322f..6a396ca6d1d6 100644
---- a/drivers/gpu/drm/amd/amdgpu/atombios_i2c.c
-+++ b/drivers/gpu/drm/amd/amdgpu/atombios_i2c.c
-@@ -36,7 +36,7 @@
- #define ATOM_MAX_HW_I2C_READ  255
+@@ -202,7 +202,7 @@ static bool ch7xxx_writeb(struct intel_dvo_device *dvo, int addr, u8 ch)
  
- static int amdgpu_atombios_i2c_process_i2c_ch(struct amdgpu_i2c_chan *chan,
--				       u8 slave_addr, u8 flags,
-+				       u8 client_addr, u8 flags,
- 				       u8 *buf, u8 num)
- {
- 	struct drm_device *dev = chan->dev;
-@@ -83,7 +83,7 @@ static int amdgpu_atombios_i2c_process_i2c_ch(struct amdgpu_i2c_chan *chan,
- 	args.ucFlag = flags;
- 	args.ucI2CSpeed = TARGET_HW_I2C_CLOCK;
- 	args.ucTransBytes = num;
--	args.ucSlaveAddr = slave_addr << 1;
-+	args.ucClientAddr = client_addr << 1;
- 	args.ucLineNumber = chan->rec.i2c_id;
- 
- 	amdgpu_atom_execute_table(adev->mode_info.atom_context, index, (uint32_t *)&args, sizeof(args));
-@@ -159,7 +159,7 @@ u32 amdgpu_atombios_i2c_func(struct i2c_adapter *adap)
- 	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
- }
- 
--void amdgpu_atombios_i2c_channel_trans(struct amdgpu_device *adev, u8 slave_addr, u8 line_number, u8 offset, u8 data)
-+void amdgpu_atombios_i2c_channel_trans(struct amdgpu_device *adev, u8 client_addr, u8 line_number, u8 offset, u8 data)
- {
- 	PROCESS_I2C_CHANNEL_TRANSACTION_PS_ALLOCATION args;
- 	int index = GetIndexIntoMasterTable(COMMAND, ProcessI2cChannelTransaction);
-@@ -169,7 +169,7 @@ void amdgpu_atombios_i2c_channel_trans(struct amdgpu_device *adev, u8 slave_addr
- 	args.ucFlag = 1;
- 	args.ucI2CSpeed = TARGET_HW_I2C_CLOCK;
- 	args.ucTransBytes = 1;
--	args.ucSlaveAddr = slave_addr;
-+	args.ucClientAddr = client_addr;
- 	args.ucLineNumber = line_number;
- 
- 	amdgpu_atom_execute_table(adev->mode_info.atom_context, index, (uint32_t *)&args, sizeof(args));
-diff --git a/drivers/gpu/drm/amd/amdgpu/smu_v11_0_i2c.c b/drivers/gpu/drm/amd/amdgpu/smu_v11_0_i2c.c
-index dd2d66090d23..f2fc96d1cd7b 100644
---- a/drivers/gpu/drm/amd/amdgpu/smu_v11_0_i2c.c
-+++ b/drivers/gpu/drm/amd/amdgpu/smu_v11_0_i2c.c
-@@ -229,7 +229,7 @@ static uint32_t smu_v11_0_i2c_poll_rx_status(struct i2c_adapter *control)
- 
- 	reg_c_tx_abrt_source = RREG32_SOC15(SMUIO, 0, mmCKSVII2C_IC_TX_ABRT_SOURCE);
- 
--	/* If slave is not present */
-+	/* If client is not present */
- 	if (REG_GET_FIELD(reg_c_tx_abrt_source,
- 			  CKSVII2C_IC_TX_ABRT_SOURCE,
- 			  ABRT_7B_ADDR_NOACK) == 1) {
-@@ -255,10 +255,10 @@ static uint32_t smu_v11_0_i2c_poll_rx_status(struct i2c_adapter *control)
- }
- 
- /**
-- * smu_v11_0_i2c_transmit - Send a block of data over the I2C bus to a slave device.
-+ * smu_v11_0_i2c_transmit - Send a block of data over the I2C bus to a client device.
-  *
-  * @control: I2C adapter reference
-- * @address: The I2C address of the slave device.
-+ * @address: The I2C address of the client device.
-  * @data: The data to transmit over the bus.
-  * @numbytes: The amount of data to transmit.
-  * @i2c_flag: Flags for transmission
-@@ -284,7 +284,7 @@ static uint32_t smu_v11_0_i2c_transmit(struct i2c_adapter *control,
- 			       16, 1, data, numbytes, false);
+ 	if (!ch7xxx->quiet) {
+ 		DRM_DEBUG_KMS("Unable to write register 0x%02x to %s:%d.\n",
+-			  addr, adapter->name, dvo->slave_addr);
++			  addr, adapter->name, dvo->client_addr);
  	}
  
--	/* Set the I2C slave address */
-+	/* Set the I2C client address */
- 	smu_v11_0_i2c_set_address(control, address);
- 	/* Enable I2C */
- 	smu_v11_0_i2c_enable(control, true);
-@@ -354,10 +354,10 @@ static uint32_t smu_v11_0_i2c_transmit(struct i2c_adapter *control,
+ 	return false;
+@@ -229,8 +229,8 @@ static bool ch7xxx_init(struct intel_dvo_device *dvo,
  
+ 	name = ch7xxx_get_id(vendor);
+ 	if (!name) {
+-		DRM_DEBUG_KMS("ch7xxx not detected; got VID 0x%02x from %s slave %d.\n",
+-			      vendor, adapter->name, dvo->slave_addr);
++		DRM_DEBUG_KMS("ch7xxx not detected; got VID 0x%02x from %s client %d.\n",
++			      vendor, adapter->name, dvo->client_addr);
+ 		goto out;
+ 	}
  
- /**
-- * smu_v11_0_i2c_receive - Receive a block of data over the I2C bus from a slave device.
-+ * smu_v11_0_i2c_receive - Receive a block of data over the I2C bus from a client device.
-  *
-  * @control: I2C adapter reference
-- * @address: The I2C address of the slave device.
-+ * @address: The I2C address of the client device.
-  * @data: Placeholder to store received data.
-  * @numbytes: The amount of data to transmit.
-  * @i2c_flag: Flags for transmission
-@@ -374,7 +374,7 @@ static uint32_t smu_v11_0_i2c_receive(struct i2c_adapter *control,
+@@ -240,8 +240,8 @@ static bool ch7xxx_init(struct intel_dvo_device *dvo,
  
- 	bytes_received = 0;
+ 	devid = ch7xxx_get_did(device);
+ 	if (!devid) {
+-		DRM_DEBUG_KMS("ch7xxx not detected; got DID 0x%02x from %s slave %d.\n",
+-			      device, adapter->name, dvo->slave_addr);
++		DRM_DEBUG_KMS("ch7xxx not detected; got DID 0x%02x from %s client %d.\n",
++			      device, adapter->name, dvo->client_addr);
+ 		goto out;
+ 	}
  
--	/* Set the I2C slave address */
-+	/* Set the I2C client address */
- 	smu_v11_0_i2c_set_address(control, address);
+diff --git a/drivers/gpu/drm/i915/display/dvo_ivch.c b/drivers/gpu/drm/i915/display/dvo_ivch.c
+index eef72bb3b767..718bb17da2e3 100644
+--- a/drivers/gpu/drm/i915/display/dvo_ivch.c
++++ b/drivers/gpu/drm/i915/display/dvo_ivch.c
+@@ -198,7 +198,7 @@ static bool ivch_read(struct intel_dvo_device *dvo, int addr, u16 *data)
  
- 	/* Enable I2C */
-@@ -509,7 +509,7 @@ static void smu_v11_0_i2c_init(struct i2c_adapter *control)
- 	if (res != I2C_OK)
- 		smu_v11_0_i2c_abort(control);
+ 	struct i2c_msg msgs[] = {
+ 		{
+-			.addr = dvo->slave_addr,
++			.addr = dvo->client_addr,
+ 			.flags = I2C_M_RD,
+ 			.len = 0,
+ 		},
+@@ -209,7 +209,7 @@ static bool ivch_read(struct intel_dvo_device *dvo, int addr, u16 *data)
+ 			.buf = out_buf,
+ 		},
+ 		{
+-			.addr = dvo->slave_addr,
++			.addr = dvo->client_addr,
+ 			.flags = I2C_M_RD | I2C_M_NOSTART,
+ 			.len = 2,
+ 			.buf = in_buf,
+@@ -226,7 +226,7 @@ static bool ivch_read(struct intel_dvo_device *dvo, int addr, u16 *data)
+ 	if (!priv->quiet) {
+ 		DRM_DEBUG_KMS("Unable to read register 0x%02x from "
+ 				"%s:%02x.\n",
+-			  addr, adapter->name, dvo->slave_addr);
++			  addr, adapter->name, dvo->client_addr);
+ 	}
+ 	return false;
+ }
+@@ -238,7 +238,7 @@ static bool ivch_write(struct intel_dvo_device *dvo, int addr, u16 data)
+ 	struct i2c_adapter *adapter = dvo->i2c_bus;
+ 	u8 out_buf[3];
+ 	struct i2c_msg msg = {
+-		.addr = dvo->slave_addr,
++		.addr = dvo->client_addr,
+ 		.flags = 0,
+ 		.len = 3,
+ 		.buf = out_buf,
+@@ -253,13 +253,13 @@ static bool ivch_write(struct intel_dvo_device *dvo, int addr, u16 data)
  
--	/* Configure I2C to operate as master and in standard mode */
-+	/* Configure I2C to operate as host and in standard mode */
- 	smu_v11_0_i2c_configure(control);
- 
- 	/* Initialize the clock to 50 kHz default */
-diff --git a/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c b/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
-index 6450853fea94..16c6a3997c8e 100644
---- a/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
-+++ b/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
-@@ -1871,7 +1871,7 @@ static enum bp_result get_gpio_i2c_info(struct bios_parser *bp,
- 	info->i2c_hw_assist = record->sucI2cId.bfHW_Capable;
- 	info->i2c_line = record->sucI2cId.bfI2C_LineMux;
- 	info->i2c_engine_id = record->sucI2cId.bfHW_EngineID;
--	info->i2c_slave_address = record->ucI2CAddr;
-+	info->i2c_client_address = record->ucI2CAddr;
- 
- 	info->gpio_info.clk_mask_register_index =
- 			le16_to_cpu(header->asGPIO_Info[info->i2c_line].usClkMaskRegisterIndex);
-diff --git a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
-index 05f392501c0a..33725f5ef72f 100644
---- a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
-+++ b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
-@@ -511,7 +511,7 @@ static enum bp_result get_gpio_i2c_info(
- 	info->i2c_hw_assist = (record->i2c_id & I2C_HW_CAP) ? true : false;
- 	info->i2c_line = record->i2c_id & I2C_HW_LANE_MUX;
- 	info->i2c_engine_id = (record->i2c_id & I2C_HW_ENGINE_ID_MASK) >> 4;
--	info->i2c_slave_address = record->i2c_slave_addr;
-+	info->i2c_client_address = record->i2c_client_addr;
- 
- 	/* TODO: check how to get register offset for en, Y, etc. */
- 	info->gpio_info.clk_a_register_index = le16_to_cpu(pin->data_a_reg_index);
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_exports.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_exports.c
-index c6c35037bdb8..6f922fea3fbe 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_link_exports.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_exports.c
-@@ -141,13 +141,13 @@ bool dc_link_update_dsc_config(struct pipe_ctx *pipe_ctx)
- 
- bool dc_is_oem_i2c_device_present(
- 	struct dc *dc,
--	size_t slave_address)
-+	size_t client_address)
- {
- 	if (dc->res_pool->oem_device)
- 		return dce_i2c_oem_device_present(
- 			dc->res_pool,
- 			dc->res_pool->oem_device,
--			slave_address);
-+			client_address);
+ 	if (!priv->quiet) {
+ 		DRM_DEBUG_KMS("Unable to write register 0x%02x to %s:%d.\n",
+-			  addr, adapter->name, dvo->slave_addr);
++			  addr, adapter->name, dvo->client_addr);
+ 	}
  
  	return false;
  }
-diff --git a/drivers/gpu/drm/amd/display/dc/dc.h b/drivers/gpu/drm/amd/display/dc/dc.h
-index ee8453bf958f..f13db28ee5ac 100644
---- a/drivers/gpu/drm/amd/display/dc/dc.h
-+++ b/drivers/gpu/drm/amd/display/dc/dc.h
-@@ -1803,7 +1803,7 @@ int dc_link_aux_transfer_raw(struct ddc_service *ddc,
  
- bool dc_is_oem_i2c_device_present(
- 	struct dc *dc,
--	size_t slave_address
-+	size_t client_address
- );
- 
- /* return true if the connected receiver supports the hdcp version */
-diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_i2c.c b/drivers/gpu/drm/amd/display/dc/dce/dce_i2c.c
-index f5cd2392fc5f..e4036d9c2d9e 100644
---- a/drivers/gpu/drm/amd/display/dc/dce/dce_i2c.c
-+++ b/drivers/gpu/drm/amd/display/dc/dce/dce_i2c.c
-@@ -28,7 +28,7 @@
- bool dce_i2c_oem_device_present(
- 	struct resource_pool *pool,
- 	struct ddc_service *ddc,
--	size_t slave_address
-+	size_t client_address
- )
+-/* Probes the given bus and slave address for an ivch */
++/* Probes the given bus and client address for an ivch */
+ static bool ivch_init(struct intel_dvo_device *dvo,
+ 		      struct i2c_adapter *adapter)
  {
- 	struct dc *dc = ddc->ctx->dc;
-@@ -45,7 +45,7 @@ bool dce_i2c_oem_device_present(
- 	if (dcb->funcs->get_i2c_info(dcb, id, &i2c_info) != BP_RESULT_OK)
- 		return false;
- 
--	if (i2c_info.i2c_slave_address != slave_address)
-+	if (i2c_info.i2c_client_address != client_address)
- 		return false;
- 
- 	return true;
-diff --git a/drivers/gpu/drm/amd/display/include/grph_object_ctrl_defs.h b/drivers/gpu/drm/amd/display/include/grph_object_ctrl_defs.h
-index 813463ffe15c..27aae2e03ef7 100644
---- a/drivers/gpu/drm/amd/display/include/grph_object_ctrl_defs.h
-+++ b/drivers/gpu/drm/amd/display/include/grph_object_ctrl_defs.h
-@@ -92,7 +92,7 @@ struct graphics_object_i2c_info {
- 	bool i2c_hw_assist;
- 	uint32_t i2c_line;
- 	uint32_t i2c_engine_id;
--	uint32_t i2c_slave_address;
-+	uint32_t i2c_client_address;
- };
- 
- struct graphics_object_hpd_info {
-diff --git a/drivers/gpu/drm/amd/include/atombios.h b/drivers/gpu/drm/amd/include/atombios.h
-index b78360a71bc9..94edf684db97 100644
---- a/drivers/gpu/drm/amd/include/atombios.h
-+++ b/drivers/gpu/drm/amd/include/atombios.h
-@@ -8503,7 +8503,7 @@ typedef struct _PROCESS_I2C_CHANNEL_TRANSACTION_PARAMETERS
-    USHORT  lpI2CDataOut;
-   UCHAR   ucFlag;
-   UCHAR   ucTransBytes;
--  UCHAR   ucSlaveAddr;
-+  UCHAR   ucClientAddr;
-   UCHAR   ucLineNumber;
- }PROCESS_I2C_CHANNEL_TRANSACTION_PARAMETERS;
- 
-diff --git a/drivers/gpu/drm/amd/include/atomfirmware.h b/drivers/gpu/drm/amd/include/atomfirmware.h
-index af3eebb4c9bc..1760a36c19a5 100644
---- a/drivers/gpu/drm/amd/include/atomfirmware.h
-+++ b/drivers/gpu/drm/amd/include/atomfirmware.h
-@@ -534,7 +534,7 @@ struct atom_firmware_info_v3_2 {
-   uint32_t mc_baseaddr_low;
-   uint8_t  board_i2c_feature_id;            // enum of atom_board_i2c_feature_id_def
-   uint8_t  board_i2c_feature_gpio_id;       // i2c id find in gpio_lut data table gpio_id
--  uint8_t  board_i2c_feature_slave_addr;
-+  uint8_t  board_i2c_feature_client_addr;
-   uint8_t  reserved3;
-   uint16_t bootup_mvddq_mv;
-   uint16_t bootup_mvpp_mv;
-@@ -562,7 +562,7 @@ struct atom_firmware_info_v3_3
-   uint32_t mc_baseaddr_low;
-   uint8_t  board_i2c_feature_id;            // enum of atom_board_i2c_feature_id_def
-   uint8_t  board_i2c_feature_gpio_id;       // i2c id find in gpio_lut data table gpio_id
--  uint8_t  board_i2c_feature_slave_addr;
-+  uint8_t  board_i2c_feature_client_addr;
-   uint8_t  reserved3;
-   uint16_t bootup_mvddq_mv;
-   uint16_t bootup_mvpp_mv;
-@@ -590,8 +590,8 @@ struct atom_firmware_info_v3_4 {
- 	uint32_t mc_baseaddr_low;
- 	uint8_t  board_i2c_feature_id;            // enum of atom_board_i2c_feature_id_def
- 	uint8_t  board_i2c_feature_gpio_id;       // i2c id find in gpio_lut data table gpio_id
--	uint8_t  board_i2c_feature_slave_addr;
--	uint8_t  ras_rom_i2c_slave_addr;
-+	uint8_t  board_i2c_feature_client_addr;
-+	uint8_t  ras_rom_i2c_client_addr;
- 	uint16_t bootup_mvddq_mv;
- 	uint16_t bootup_mvpp_mv;
- 	uint32_t zfbstartaddrin16mb;
-@@ -626,8 +626,8 @@ struct atom_firmware_info_v3_5 {
-   uint32_t mc_baseaddr_low;
-   uint8_t  board_i2c_feature_id;            // enum of atom_board_i2c_feature_id_def
-   uint8_t  board_i2c_feature_gpio_id;       // i2c id find in gpio_lut data table gpio_id
--  uint8_t  board_i2c_feature_slave_addr;
--  uint8_t  ras_rom_i2c_slave_addr;
-+  uint8_t  board_i2c_feature_client_addr;
-+  uint8_t  ras_rom_i2c_client_addr;
-   uint32_t bootup_voltage_reserved1;
-   uint32_t zfb_reserved;
-   // if pplib_pptable_id!=0, pplib get powerplay table inside driver instead of from VBIOS
-@@ -830,7 +830,7 @@ struct atom_i2c_record
- {
-   struct atom_common_record_header record_header;   //record_type = ATOM_I2C_RECORD_TYPE
-   uint8_t i2c_id; 
--  uint8_t i2c_slave_addr;                   //The slave address, it's 0 when the record is attached to connector for DDC
-+  uint8_t i2c_client_addr;                   //The client address, it's 0 when the record is attached to connector for DDC
- };
- 
- struct atom_hpd_int_record
-@@ -2026,7 +2026,7 @@ struct atom_smu_info_v3_5
-   uint16_t smuinitoffset;
-   uint32_t bootup_dprefclk_10khz;
-   uint32_t bootup_usbclk_10khz;
--  uint32_t smb_slave_address;
-+  uint32_t smb_client_address;
-   uint32_t cg_fdo_ctrl0_val;
-   uint32_t cg_fdo_ctrl1_val;
-   uint32_t cg_fdo_ctrl2_val;
-@@ -2083,7 +2083,7 @@ struct atom_smu_info_v3_6
- 	uint16_t smuinitoffset;
- 	uint32_t bootup_gfxavsclk_10khz;
- 	uint32_t bootup_mpioclk_10khz;
--	uint32_t smb_slave_address;
-+	uint32_t smb_client_address;
- 	uint32_t cg_fdo_ctrl0_val;
- 	uint32_t cg_fdo_ctrl1_val;
- 	uint32_t cg_fdo_ctrl2_val;
-@@ -2138,7 +2138,7 @@ struct atom_smu_info_v4_0 {
- 	uint16_t smuinitoffset;
- 	uint32_t bootup_dprefclk_10khz;
- 	uint32_t bootup_usbclk_10khz;
--	uint32_t smb_slave_address;
-+	uint32_t smb_client_address;
- 	uint32_t cg_fdo_ctrl0_val;
- 	uint32_t cg_fdo_ctrl1_val;
- 	uint32_t cg_fdo_ctrl2_val;
-@@ -2349,7 +2349,7 @@ struct atom_smc_dpm_info_v4_3
- 
- struct smudpm_i2ccontrollerconfig_t {
-   uint32_t  enabled;
--  uint32_t  slaveaddress;
-+  uint32_t  clientaddress;
-   uint32_t  controllerport;
-   uint32_t  controllername;
-   uint32_t  thermalthrottler;
-@@ -3510,7 +3510,7 @@ struct  atom_i2c_voltage_object_v4
-    struct atom_voltage_object_header_v4 header;  // voltage mode = VOLTAGE_OBJ_VR_I2C_INIT_SEQ
-    uint8_t  regulator_id;                        //Indicate Voltage Regulator Id
-    uint8_t  i2c_id;
--   uint8_t  i2c_slave_addr;
-+   uint8_t  i2c_client_addr;
-    uint8_t  i2c_control_offset;       
-    uint8_t  i2c_flag;                            // Bit0: 0 - One byte data; 1 - Two byte data
-    uint8_t  i2c_speed;                           // =0, use default i2c speed, otherwise use it in unit of kHz. 
-@@ -4152,7 +4152,7 @@ struct process_i2c_channel_transaction_parameters
-   uint16_t  i2c_data_out;
-   uint8_t   flag;                    /* enum atom_process_i2c_status */
-   uint8_t   trans_bytes;
--  uint8_t   slave_addr;
-+  uint8_t   client_addr;
-   uint8_t   i2c_id;
- };
- 
-diff --git a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega20_processpptables.c b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega20_processpptables.c
-index 79c817752a33..c0b421b85c14 100644
---- a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega20_processpptables.c
-+++ b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega20_processpptables.c
-@@ -784,8 +784,8 @@ static int append_vbios_pptable(struct pp_hwmgr *hwmgr, PPTable_t *ppsmc_pptable
- 	for (i = 0; i < I2C_CONTROLLER_NAME_COUNT; i++) {
- 		ppsmc_pptable->I2cControllers[i].Enabled =
- 			smc_dpm_table->i2ccontrollers[i].enabled;
--		ppsmc_pptable->I2cControllers[i].SlaveAddress =
--			smc_dpm_table->i2ccontrollers[i].slaveaddress;
-+		ppsmc_pptable->I2cControllers[i].ClientAddress =
-+			smc_dpm_table->i2ccontrollers[i].clientaddress;
- 		ppsmc_pptable->I2cControllers[i].ControllerPort =
- 			smc_dpm_table->i2ccontrollers[i].controllerport;
- 		ppsmc_pptable->I2cControllers[i].ThermalThrottler =
-diff --git a/drivers/gpu/drm/amd/pm/powerplay/inc/smu11_driver_if.h b/drivers/gpu/drm/amd/pm/powerplay/inc/smu11_driver_if.h
-index c2efc70ef288..82d2ee1ee9bb 100644
---- a/drivers/gpu/drm/amd/pm/powerplay/inc/smu11_driver_if.h
-+++ b/drivers/gpu/drm/amd/pm/powerplay/inc/smu11_driver_if.h
-@@ -287,7 +287,7 @@ typedef enum {
- 
- typedef struct {
-   uint32_t Enabled;
--  uint32_t SlaveAddress;
-+  uint32_t ClientAddress;
-   uint32_t ControllerPort;
-   uint32_t ControllerName;
- 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu11_driver_if_arcturus.h b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu11_driver_if_arcturus.h
-index d518dee18e1b..b4d29f14ae31 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu11_driver_if_arcturus.h
-+++ b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu11_driver_if_arcturus.h
-@@ -263,7 +263,7 @@ typedef struct {
-   uint8_t   Enabled;
-   uint8_t   Speed;
-   uint8_t   Padding[2];
--  uint32_t  SlaveAddress;
-+  uint32_t  ClientAddress;
-   uint8_t   ControllerPort;
-   uint8_t   ControllerName;
-   uint8_t   ThermalThrotter;
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu11_driver_if_navi10.h b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu11_driver_if_navi10.h
-index c5c1943fb6a1..9952eff1856d 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu11_driver_if_navi10.h
-+++ b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu11_driver_if_navi10.h
-@@ -267,7 +267,7 @@ typedef struct {
-   uint8_t   Enabled;
-   uint8_t   Speed;
-   uint8_t   Padding[2];
--  uint32_t  SlaveAddress;
-+  uint32_t  ClientAddress;
-   uint8_t   ControllerPort;
-   uint8_t   ControllerName;
-   uint8_t   ThermalThrotter;
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu11_driver_if_sienna_cichlid.h b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu11_driver_if_sienna_cichlid.h
-index aa6d29de4002..09fe241a449b 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu11_driver_if_sienna_cichlid.h
-+++ b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu11_driver_if_sienna_cichlid.h
-@@ -342,7 +342,7 @@ typedef enum {
- typedef struct {
-   uint8_t   Enabled;
-   uint8_t   Speed;
--  uint8_t   SlaveAddress;  
-+  uint8_t   ClientAddress;
-   uint8_t   ControllerPort;
-   uint8_t   ControllerName;
-   uint8_t   ThermalThrotter;
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_aldebaran.h b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_aldebaran.h
-index cddf45eebee8..e16617173538 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_aldebaran.h
-+++ b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_aldebaran.h
-@@ -167,7 +167,7 @@ typedef enum {
- typedef struct {
-   uint8_t   Enabled;
-   uint8_t   Speed;
--  uint8_t   SlaveAddress;
-+  uint8_t   ClientAddress;
-   uint8_t   ControllerPort;
-   uint8_t   ThermalThrotter;
-   uint8_t   I2cProtocol;
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_0.h b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_0.h
-index b114d14fc053..37a8f8f116bb 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_0.h
-+++ b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_0.h
-@@ -319,7 +319,7 @@ typedef enum {
- typedef struct {
-   uint8_t   Enabled;
-   uint8_t   Speed;
--  uint8_t   SlaveAddress;
-+  uint8_t   ClientAddress;
-   uint8_t   ControllerPort;
-   uint8_t   ControllerName;
-   uint8_t   ThermalThrotter;
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_7.h b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_7.h
-index 8b1496f8ce58..e1c2eeaa08d0 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_7.h
-+++ b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_7.h
-@@ -320,7 +320,7 @@ typedef enum {
- typedef struct {
-   uint8_t   Enabled;
-   uint8_t   Speed;
--  uint8_t   SlaveAddress;
-+  uint8_t   ClientAddress;
-   uint8_t   ControllerPort;
-   uint8_t   ControllerName;
-   uint8_t   ThermalThrotter;
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c
-index 0c2d04f978ac..87bfb2580ff7 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c
-@@ -1909,8 +1909,8 @@ static void arcturus_dump_pptable(struct smu_context *smu)
- 		dev_info(smu->adev->dev, "I2cControllers[%d]:\n", i);
- 		dev_info(smu->adev->dev, "                   .Enabled = %d\n",
- 				pptable->I2cControllers[i].Enabled);
--		dev_info(smu->adev->dev, "                   .SlaveAddress = 0x%x\n",
--				pptable->I2cControllers[i].SlaveAddress);
-+		dev_info(smu->adev->dev, "                   .ClientAddress = 0x%x\n",
-+				pptable->I2cControllers[i].ClientAddress);
- 		dev_info(smu->adev->dev, "                   .ControllerPort = %d\n",
- 				pptable->I2cControllers[i].ControllerPort);
- 		dev_info(smu->adev->dev, "                   .ControllerName = %d\n",
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
-index 1f18b61884f3..65a9e10ffd8a 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
-@@ -2988,8 +2988,8 @@ static void beige_goby_dump_pptable(struct smu_context *smu)
- 				pptable->I2cControllers[i].Enabled);
- 		dev_info(smu->adev->dev, "                   .Speed = 0x%x\n",
- 				pptable->I2cControllers[i].Speed);
--		dev_info(smu->adev->dev, "                   .SlaveAddress = 0x%x\n",
--				pptable->I2cControllers[i].SlaveAddress);
-+		dev_info(smu->adev->dev, "                   .ClientAddress = 0x%x\n",
-+				pptable->I2cControllers[i].ClientAddress);
- 		dev_info(smu->adev->dev, "                   .ControllerPort = 0x%x\n",
- 				pptable->I2cControllers[i].ControllerPort);
- 		dev_info(smu->adev->dev, "                   .ControllerName = 0x%x\n",
-@@ -3627,8 +3627,8 @@ static void sienna_cichlid_dump_pptable(struct smu_context *smu)
- 				pptable->I2cControllers[i].Enabled);
- 		dev_info(smu->adev->dev, "                   .Speed = 0x%x\n",
- 				pptable->I2cControllers[i].Speed);
--		dev_info(smu->adev->dev, "                   .SlaveAddress = 0x%x\n",
--				pptable->I2cControllers[i].SlaveAddress);
-+		dev_info(smu->adev->dev, "                   .ClientAddress = 0x%x\n",
-+				pptable->I2cControllers[i].ClientAddress);
- 		dev_info(smu->adev->dev, "                   .ControllerPort = 0x%x\n",
- 				pptable->I2cControllers[i].ControllerPort);
- 		dev_info(smu->adev->dev, "                   .ControllerName = 0x%x\n",
-diff --git a/drivers/gpu/drm/radeon/atombios.h b/drivers/gpu/drm/radeon/atombios.h
-index 2db40789235c..5ec4609114c1 100644
---- a/drivers/gpu/drm/radeon/atombios.h
-+++ b/drivers/gpu/drm/radeon/atombios.h
-@@ -7229,7 +7229,7 @@ typedef struct _PROCESS_I2C_CHANNEL_TRANSACTION_PARAMETERS
- 	USHORT  lpI2CDataOut;
-   UCHAR   ucFlag;               
-   UCHAR   ucTransBytes;
--  UCHAR   ucSlaveAddr;
-+  UCHAR   ucClientAddr;
-   UCHAR   ucLineNumber;
- }PROCESS_I2C_CHANNEL_TRANSACTION_PARAMETERS;
- 
-diff --git a/drivers/gpu/drm/radeon/atombios_i2c.c b/drivers/gpu/drm/radeon/atombios_i2c.c
-index 730f0b25312b..2000d35b9a1f 100644
---- a/drivers/gpu/drm/radeon/atombios_i2c.c
-+++ b/drivers/gpu/drm/radeon/atombios_i2c.c
-@@ -34,7 +34,7 @@
- #define ATOM_MAX_HW_I2C_READ  255
- 
- static int radeon_process_i2c_ch(struct radeon_i2c_chan *chan,
--				 u8 slave_addr, u8 flags,
-+				 u8 client_addr, u8 flags,
- 				 u8 *buf, int num)
- {
- 	struct drm_device *dev = chan->dev;
-@@ -75,7 +75,7 @@ static int radeon_process_i2c_ch(struct radeon_i2c_chan *chan,
- 	args.ucFlag = flags;
- 	args.ucI2CSpeed = TARGET_HW_I2C_CLOCK;
- 	args.ucTransBytes = num;
--	args.ucSlaveAddr = slave_addr << 1;
-+	args.ucClientAddr = client_addr << 1;
- 	args.ucLineNumber = chan->rec.i2c_id;
- 
- 	atom_execute_table_scratch_unlocked(rdev->mode_info.atom_context, index, (uint32_t *)&args, sizeof(args));
-diff --git a/drivers/gpu/drm/radeon/radeon_combios.c b/drivers/gpu/drm/radeon/radeon_combios.c
-index 6952b1273b0f..cf5c6f1e4a61 100644
---- a/drivers/gpu/drm/radeon/radeon_combios.c
-+++ b/drivers/gpu/drm/radeon/radeon_combios.c
-@@ -1398,7 +1398,7 @@ bool radeon_legacy_get_ext_tmds_info_from_table(struct radeon_encoder *encoder,
- 	case CT_MINI_EXTERNAL:
- 	default:
- 		tmds->dvo_chip = DVO_SIL164;
--		tmds->slave_addr = 0x70 >> 1; /* 7 bit addressing */
-+		tmds->client_addr = 0x70 >> 1; /* 7 bit addressing */
- 		break;
+@@ -283,10 +283,10 @@ static bool ivch_init(struct intel_dvo_device *dvo,
+ 	 * very unique, check that the value in the base address field matches
+ 	 * the address it's responding on.
+ 	 */
+-	if ((temp & VR00_BASE_ADDRESS_MASK) != dvo->slave_addr) {
++	if ((temp & VR00_BASE_ADDRESS_MASK) != dvo->client_addr) {
+ 		DRM_DEBUG_KMS("ivch detect failed due to address mismatch "
+ 			  "(%d vs %d)\n",
+-			  (temp & VR00_BASE_ADDRESS_MASK), dvo->slave_addr);
++			  (temp & VR00_BASE_ADDRESS_MASK), dvo->client_addr);
+ 		goto out;
  	}
  
-@@ -1420,14 +1420,14 @@ bool radeon_legacy_get_ext_tmds_info_from_combios(struct radeon_encoder *encoder
- 		i2c_bus = combios_setup_i2c_bus(rdev, DDC_MONID, 0, 0);
- 		tmds->i2c_bus = radeon_i2c_lookup(rdev, &i2c_bus);
- 		tmds->dvo_chip = DVO_SIL164;
--		tmds->slave_addr = 0x70 >> 1; /* 7 bit addressing */
-+		tmds->client_addr = 0x70 >> 1; /* 7 bit addressing */
- 	} else {
- 		offset = combios_get_table_offset(dev, COMBIOS_EXT_TMDS_INFO_TABLE);
- 		if (offset) {
- 			ver = RBIOS8(offset);
- 			DRM_DEBUG_KMS("External TMDS Table revision: %d\n", ver);
--			tmds->slave_addr = RBIOS8(offset + 4 + 2);
--			tmds->slave_addr >>= 1; /* 7 bit addressing */
-+			tmds->client_addr = RBIOS8(offset + 4 + 2);
-+			tmds->client_addr >>= 1; /* 7 bit addressing */
- 			gpio = RBIOS8(offset + 4 + 3);
- 			if (gpio == DDC_LCD) {
- 				/* MM i2c */
-@@ -2846,19 +2846,19 @@ void radeon_external_tmds_setup(struct drm_encoder *encoder)
- 	case DVO_SIL164:
- 		/* sil 164 */
- 		radeon_i2c_put_byte(tmds->i2c_bus,
--				    tmds->slave_addr,
-+				    tmds->client_addr,
- 				    0x08, 0x30);
- 		radeon_i2c_put_byte(tmds->i2c_bus,
--				       tmds->slave_addr,
-+				       tmds->client_addr,
- 				       0x09, 0x00);
- 		radeon_i2c_put_byte(tmds->i2c_bus,
--				    tmds->slave_addr,
-+				    tmds->client_addr,
- 				    0x0a, 0x90);
- 		radeon_i2c_put_byte(tmds->i2c_bus,
--				    tmds->slave_addr,
-+				    tmds->client_addr,
- 				    0x0c, 0x89);
- 		radeon_i2c_put_byte(tmds->i2c_bus,
--				       tmds->slave_addr,
-+				       tmds->client_addr,
- 				       0x08, 0x3b);
- 		break;
- 	case DVO_SIL1178:
-@@ -2887,7 +2887,7 @@ bool radeon_combios_external_tmds_setup(struct drm_encoder *encoder)
- 	struct radeon_device *rdev = dev->dev_private;
- 	struct radeon_encoder *radeon_encoder = to_radeon_encoder(encoder);
- 	uint16_t offset;
--	uint8_t blocks, slave_addr, rev;
-+	uint8_t blocks, client_addr, rev;
- 	uint32_t index, id;
- 	uint32_t reg, val, and_mask, or_mask;
- 	struct radeon_encoder_ext_tmds *tmds = radeon_encoder->enc_priv;
-@@ -2934,15 +2934,15 @@ bool radeon_combios_external_tmds_setup(struct drm_encoder *encoder)
- 						mdelay(val);
- 						break;
- 					case 6:
--						slave_addr = id & 0xff;
--						slave_addr >>= 1; /* 7 bit addressing */
-+						client_addr = id & 0xff;
-+						client_addr >>= 1; /* 7 bit addressing */
- 						index++;
- 						reg = RBIOS8(index);
- 						index++;
- 						val = RBIOS8(index);
- 						index++;
- 						radeon_i2c_put_byte(tmds->i2c_bus,
--								    slave_addr,
-+								    client_addr,
- 								    reg, val);
- 						break;
- 					default:
-@@ -2997,7 +2997,7 @@ bool radeon_combios_external_tmds_setup(struct drm_encoder *encoder)
- 					val = RBIOS8(index);
- 					index += 1;
- 					radeon_i2c_put_byte(tmds->i2c_bus,
--							    tmds->slave_addr,
-+							    tmds->client_addr,
- 							    reg, val);
- 					break;
- 				default:
-diff --git a/drivers/gpu/drm/radeon/radeon_i2c.c b/drivers/gpu/drm/radeon/radeon_i2c.c
-index 3d174390a8af..565d59536e9a 100644
---- a/drivers/gpu/drm/radeon/radeon_i2c.c
-+++ b/drivers/gpu/drm/radeon/radeon_i2c.c
-@@ -1038,7 +1038,7 @@ struct radeon_i2c_chan *radeon_i2c_lookup(struct radeon_device *rdev,
- }
+diff --git a/drivers/gpu/drm/i915/display/dvo_ns2501.c b/drivers/gpu/drm/i915/display/dvo_ns2501.c
+index 1df212fb000e..b15875a832f5 100644
+--- a/drivers/gpu/drm/i915/display/dvo_ns2501.c
++++ b/drivers/gpu/drm/i915/display/dvo_ns2501.c
+@@ -399,13 +399,13 @@ static bool ns2501_readb(struct intel_dvo_device *dvo, int addr, u8 *ch)
  
- void radeon_i2c_get_byte(struct radeon_i2c_chan *i2c_bus,
--			 u8 slave_addr,
-+			 u8 client_addr,
- 			 u8 addr,
- 			 u8 *val)
- {
-@@ -1046,13 +1046,13 @@ void radeon_i2c_get_byte(struct radeon_i2c_chan *i2c_bus,
- 	u8 in_buf[2];
  	struct i2c_msg msgs[] = {
  		{
--			.addr = slave_addr,
-+			.addr = client_addr,
+-		 .addr = dvo->slave_addr,
++		 .addr = dvo->client_addr,
+ 		 .flags = 0,
+ 		 .len = 1,
+ 		 .buf = out_buf,
+ 		 },
+ 		{
+-		 .addr = dvo->slave_addr,
++		 .addr = dvo->client_addr,
+ 		 .flags = I2C_M_RD,
+ 		 .len = 1,
+ 		 .buf = in_buf,
+@@ -423,7 +423,7 @@ static bool ns2501_readb(struct intel_dvo_device *dvo, int addr, u8 *ch)
+ 	if (!ns->quiet) {
+ 		DRM_DEBUG_KMS
+ 		    ("Unable to read register 0x%02x from %s:0x%02x.\n", addr,
+-		     adapter->name, dvo->slave_addr);
++		     adapter->name, dvo->client_addr);
+ 	}
+ 
+ 	return false;
+@@ -442,7 +442,7 @@ static bool ns2501_writeb(struct intel_dvo_device *dvo, int addr, u8 ch)
+ 	u8 out_buf[2];
+ 
+ 	struct i2c_msg msg = {
+-		.addr = dvo->slave_addr,
++		.addr = dvo->client_addr,
+ 		.flags = 0,
+ 		.len = 2,
+ 		.buf = out_buf,
+@@ -457,7 +457,7 @@ static bool ns2501_writeb(struct intel_dvo_device *dvo, int addr, u8 ch)
+ 
+ 	if (!ns->quiet) {
+ 		DRM_DEBUG_KMS("Unable to write register 0x%02x to %s:%d\n",
+-			      addr, adapter->name, dvo->slave_addr);
++			      addr, adapter->name, dvo->client_addr);
+ 	}
+ 
+ 	return false;
+@@ -488,8 +488,8 @@ static bool ns2501_init(struct intel_dvo_device *dvo,
+ 		goto out;
+ 
+ 	if (ch != (NS2501_VID & 0xff)) {
+-		DRM_DEBUG_KMS("ns2501 not detected got %d: from %s Slave %d.\n",
+-			      ch, adapter->name, dvo->slave_addr);
++		DRM_DEBUG_KMS("ns2501 not detected got %d: from %s Client %d.\n",
++			      ch, adapter->name, dvo->client_addr);
+ 		goto out;
+ 	}
+ 
+@@ -497,8 +497,8 @@ static bool ns2501_init(struct intel_dvo_device *dvo,
+ 		goto out;
+ 
+ 	if (ch != (NS2501_DID & 0xff)) {
+-		DRM_DEBUG_KMS("ns2501 not detected got %d: from %s Slave %d.\n",
+-			      ch, adapter->name, dvo->slave_addr);
++		DRM_DEBUG_KMS("ns2501 not detected got %d: from %s Client %d.\n",
++			      ch, adapter->name, dvo->client_addr);
+ 		goto out;
+ 	}
+ 	ns->quiet = false;
+diff --git a/drivers/gpu/drm/i915/display/dvo_sil164.c b/drivers/gpu/drm/i915/display/dvo_sil164.c
+index 6c461024c8e3..e9e4433ffa14 100644
+--- a/drivers/gpu/drm/i915/display/dvo_sil164.c
++++ b/drivers/gpu/drm/i915/display/dvo_sil164.c
+@@ -79,13 +79,13 @@ static bool sil164_readb(struct intel_dvo_device *dvo, int addr, u8 *ch)
+ 
+ 	struct i2c_msg msgs[] = {
+ 		{
+-			.addr = dvo->slave_addr,
++			.addr = dvo->client_addr,
  			.flags = 0,
  			.len = 1,
  			.buf = out_buf,
  		},
  		{
--			.addr = slave_addr,
-+			.addr = client_addr,
+-			.addr = dvo->slave_addr,
++			.addr = dvo->client_addr,
  			.flags = I2C_M_RD,
  			.len = 1,
  			.buf = in_buf,
-@@ -1072,13 +1072,13 @@ void radeon_i2c_get_byte(struct radeon_i2c_chan *i2c_bus,
- }
+@@ -102,7 +102,7 @@ static bool sil164_readb(struct intel_dvo_device *dvo, int addr, u8 *ch)
  
- void radeon_i2c_put_byte(struct radeon_i2c_chan *i2c_bus,
--			 u8 slave_addr,
-+			 u8 client_addr,
- 			 u8 addr,
- 			 u8 val)
- {
- 	uint8_t out_buf[2];
+ 	if (!sil->quiet) {
+ 		DRM_DEBUG_KMS("Unable to read register 0x%02x from %s:%02x.\n",
+-			  addr, adapter->name, dvo->slave_addr);
++			  addr, adapter->name, dvo->client_addr);
+ 	}
+ 	return false;
+ }
+@@ -113,7 +113,7 @@ static bool sil164_writeb(struct intel_dvo_device *dvo, int addr, u8 ch)
+ 	struct i2c_adapter *adapter = dvo->i2c_bus;
+ 	u8 out_buf[2];
  	struct i2c_msg msg = {
--		.addr = slave_addr,
-+		.addr = client_addr,
+-		.addr = dvo->slave_addr,
++		.addr = dvo->client_addr,
  		.flags = 0,
  		.len = 2,
  		.buf = out_buf,
-diff --git a/drivers/gpu/drm/radeon/radeon_mode.h b/drivers/gpu/drm/radeon/radeon_mode.h
-index 546381a5c918..9ae5ed661c75 100644
---- a/drivers/gpu/drm/radeon/radeon_mode.h
-+++ b/drivers/gpu/drm/radeon/radeon_mode.h
-@@ -409,7 +409,7 @@ struct radeon_encoder_int_tmds {
- struct radeon_encoder_ext_tmds {
- 	/* tmds over dvo */
- 	struct radeon_i2c_chan *i2c_bus;
--	uint8_t slave_addr;
-+	uint8_t client_addr;
- 	enum radeon_dvo_chip dvo_chip;
+@@ -127,7 +127,7 @@ static bool sil164_writeb(struct intel_dvo_device *dvo, int addr, u8 ch)
+ 
+ 	if (!sil->quiet) {
+ 		DRM_DEBUG_KMS("Unable to write register 0x%02x to %s:%d.\n",
+-			  addr, adapter->name, dvo->slave_addr);
++			  addr, adapter->name, dvo->client_addr);
+ 	}
+ 
+ 	return false;
+@@ -153,8 +153,8 @@ static bool sil164_init(struct intel_dvo_device *dvo,
+ 		goto out;
+ 
+ 	if (ch != (SIL164_VID & 0xff)) {
+-		DRM_DEBUG_KMS("sil164 not detected got %d: from %s Slave %d.\n",
+-			  ch, adapter->name, dvo->slave_addr);
++		DRM_DEBUG_KMS("sil164 not detected got %d: from %s Client %d.\n",
++			  ch, adapter->name, dvo->client_addr);
+ 		goto out;
+ 	}
+ 
+@@ -162,8 +162,8 @@ static bool sil164_init(struct intel_dvo_device *dvo,
+ 		goto out;
+ 
+ 	if (ch != (SIL164_DID & 0xff)) {
+-		DRM_DEBUG_KMS("sil164 not detected got %d: from %s Slave %d.\n",
+-			  ch, adapter->name, dvo->slave_addr);
++		DRM_DEBUG_KMS("sil164 not detected got %d: from %s Client %d.\n",
++			  ch, adapter->name, dvo->client_addr);
+ 		goto out;
+ 	}
+ 	sil->quiet = false;
+diff --git a/drivers/gpu/drm/i915/display/dvo_tfp410.c b/drivers/gpu/drm/i915/display/dvo_tfp410.c
+index 0939e097f4f9..ef1385fc16e7 100644
+--- a/drivers/gpu/drm/i915/display/dvo_tfp410.c
++++ b/drivers/gpu/drm/i915/display/dvo_tfp410.c
+@@ -100,13 +100,13 @@ static bool tfp410_readb(struct intel_dvo_device *dvo, int addr, u8 *ch)
+ 
+ 	struct i2c_msg msgs[] = {
+ 		{
+-			.addr = dvo->slave_addr,
++			.addr = dvo->client_addr,
+ 			.flags = 0,
+ 			.len = 1,
+ 			.buf = out_buf,
+ 		},
+ 		{
+-			.addr = dvo->slave_addr,
++			.addr = dvo->client_addr,
+ 			.flags = I2C_M_RD,
+ 			.len = 1,
+ 			.buf = in_buf,
+@@ -123,7 +123,7 @@ static bool tfp410_readb(struct intel_dvo_device *dvo, int addr, u8 *ch)
+ 
+ 	if (!tfp->quiet) {
+ 		DRM_DEBUG_KMS("Unable to read register 0x%02x from %s:%02x.\n",
+-			  addr, adapter->name, dvo->slave_addr);
++			  addr, adapter->name, dvo->client_addr);
+ 	}
+ 	return false;
+ }
+@@ -134,7 +134,7 @@ static bool tfp410_writeb(struct intel_dvo_device *dvo, int addr, u8 ch)
+ 	struct i2c_adapter *adapter = dvo->i2c_bus;
+ 	u8 out_buf[2];
+ 	struct i2c_msg msg = {
+-		.addr = dvo->slave_addr,
++		.addr = dvo->client_addr,
+ 		.flags = 0,
+ 		.len = 2,
+ 		.buf = out_buf,
+@@ -148,7 +148,7 @@ static bool tfp410_writeb(struct intel_dvo_device *dvo, int addr, u8 ch)
+ 
+ 	if (!tfp->quiet) {
+ 		DRM_DEBUG_KMS("Unable to write register 0x%02x to %s:%d.\n",
+-			  addr, adapter->name, dvo->slave_addr);
++			  addr, adapter->name, dvo->client_addr);
+ 	}
+ 
+ 	return false;
+@@ -183,15 +183,15 @@ static bool tfp410_init(struct intel_dvo_device *dvo,
+ 
+ 	if ((id = tfp410_getid(dvo, TFP410_VID_LO)) != TFP410_VID) {
+ 		DRM_DEBUG_KMS("tfp410 not detected got VID %X: from %s "
+-				"Slave %d.\n",
+-			  id, adapter->name, dvo->slave_addr);
++				"Client %d.\n",
++			  id, adapter->name, dvo->client_addr);
+ 		goto out;
+ 	}
+ 
+ 	if ((id = tfp410_getid(dvo, TFP410_DID_LO)) != TFP410_DID) {
+ 		DRM_DEBUG_KMS("tfp410 not detected got DID %X: from %s "
+-				"Slave %d.\n",
+-			  id, adapter->name, dvo->slave_addr);
++				"Client %d.\n",
++			  id, adapter->name, dvo->client_addr);
+ 		goto out;
+ 	}
+ 	tfp->quiet = false;
+diff --git a/drivers/gpu/drm/i915/display/intel_bios.c b/drivers/gpu/drm/i915/display/intel_bios.c
+index fe52c06271ef..dbeb3a89d004 100644
+--- a/drivers/gpu/drm/i915/display/intel_bios.c
++++ b/drivers/gpu/drm/i915/display/intel_bios.c
+@@ -69,8 +69,8 @@ struct intel_bios_encoder_data {
+ 	struct list_head node;
  };
  
-@@ -749,11 +749,11 @@ extern struct radeon_i2c_chan *radeon_i2c_create(struct drm_device *dev,
- 						 const char *name);
- extern void radeon_i2c_destroy(struct radeon_i2c_chan *i2c);
- extern void radeon_i2c_get_byte(struct radeon_i2c_chan *i2c_bus,
--				u8 slave_addr,
-+				u8 client_addr,
- 				u8 addr,
- 				u8 *val);
- extern void radeon_i2c_put_byte(struct radeon_i2c_chan *i2c,
--				u8 slave_addr,
-+				u8 client_addr,
- 				u8 addr,
- 				u8 val);
- extern void radeon_router_select_ddc_port(struct radeon_connector *radeon_connector);
+-#define	SLAVE_ADDR1	0x70
+-#define	SLAVE_ADDR2	0x72
++#define	CLIENT_ADDR1	0x70
++#define	CLIENT_ADDR2	0x72
+ 
+ /* Get BDB block size given a pointer to Block ID. */
+ static u32 _get_blocksize(const u8 *block_base)
+@@ -1231,10 +1231,10 @@ parse_sdvo_device_mapping(struct drm_i915_private *i915)
+ 		const struct child_device_config *child = &devdata->child;
+ 		struct sdvo_device_mapping *mapping;
+ 
+-		if (child->slave_addr != SLAVE_ADDR1 &&
+-		    child->slave_addr != SLAVE_ADDR2) {
++		if (child->client_addr != CLIENT_ADDR1 &&
++		    child->client_addr != CLIENT_ADDR2) {
+ 			/*
+-			 * If the slave address is neither 0x70 nor 0x72,
++			 * If the client address is neither 0x70 nor 0x72,
+ 			 * it is not a SDVO device. Skip it.
+ 			 */
+ 			continue;
+@@ -1247,22 +1247,22 @@ parse_sdvo_device_mapping(struct drm_i915_private *i915)
+ 			continue;
+ 		}
+ 		drm_dbg_kms(&i915->drm,
+-			    "the SDVO device with slave addr %2x is found on"
++			    "the SDVO device with client addr %2x is found on"
+ 			    " %s port\n",
+-			    child->slave_addr,
++			    child->client_addr,
+ 			    (child->dvo_port == DEVICE_PORT_DVOB) ?
+ 			    "SDVOB" : "SDVOC");
+ 		mapping = &i915->display.vbt.sdvo_mappings[child->dvo_port - 1];
+ 		if (!mapping->initialized) {
+ 			mapping->dvo_port = child->dvo_port;
+-			mapping->slave_addr = child->slave_addr;
++			mapping->client_addr = child->client_addr;
+ 			mapping->dvo_wiring = child->dvo_wiring;
+ 			mapping->ddc_pin = child->ddc_pin;
+ 			mapping->i2c_pin = child->i2c_pin;
+ 			mapping->initialized = 1;
+ 			drm_dbg_kms(&i915->drm,
+ 				    "SDVO device: dvo=%x, addr=%x, wiring=%d, ddc_pin=%d, i2c_pin=%d\n",
+-				    mapping->dvo_port, mapping->slave_addr,
++				    mapping->dvo_port, mapping->client_addr,
+ 				    mapping->dvo_wiring, mapping->ddc_pin,
+ 				    mapping->i2c_pin);
+ 		} else {
+@@ -1270,11 +1270,11 @@ parse_sdvo_device_mapping(struct drm_i915_private *i915)
+ 				    "Maybe one SDVO port is shared by "
+ 				    "two SDVO device.\n");
+ 		}
+-		if (child->slave2_addr) {
++		if (child->client2_addr) {
+ 			/* Maybe this is a SDVO device with multiple inputs */
+ 			/* And the mapping info is not added */
+ 			drm_dbg_kms(&i915->drm,
+-				    "there exists the slave2_addr. Maybe this"
++				    "there exists the client2_addr. Maybe this"
+ 				    " is a SDVO device with multiple inputs.\n");
+ 		}
+ 		count++;
+diff --git a/drivers/gpu/drm/i915/display/intel_ddi.c b/drivers/gpu/drm/i915/display/intel_ddi.c
+index c587a8efeafc..c408daee412a 100644
+--- a/drivers/gpu/drm/i915/display/intel_ddi.c
++++ b/drivers/gpu/drm/i915/display/intel_ddi.c
+@@ -4327,7 +4327,7 @@ static int intel_ddi_compute_config_late(struct intel_encoder *encoder,
+ 									connector->tile_group->id);
+ 
+ 	/*
+-	 * EDP Transcoders cannot be ensalved
++	 * EDP Transcoders cannot be slaves
+ 	 * make them a master always when present
+ 	 */
+ 	if (port_sync_transcoders & BIT(TRANSCODER_EDP))
+diff --git a/drivers/gpu/drm/i915/display/intel_display_core.h b/drivers/gpu/drm/i915/display/intel_display_core.h
+index 2167dbee5eea..663be73536e7 100644
+--- a/drivers/gpu/drm/i915/display/intel_display_core.h
++++ b/drivers/gpu/drm/i915/display/intel_display_core.h
+@@ -236,7 +236,7 @@ struct intel_vbt_data {
+ 	struct sdvo_device_mapping {
+ 		u8 initialized;
+ 		u8 dvo_port;
+-		u8 slave_addr;
++		u8 client_addr;
+ 		u8 dvo_wiring;
+ 		u8 i2c_pin;
+ 		u8 ddc_pin;
+diff --git a/drivers/gpu/drm/i915/display/intel_dsi.h b/drivers/gpu/drm/i915/display/intel_dsi.h
+index e99c94edfaae..d1031fe69e76 100644
+--- a/drivers/gpu/drm/i915/display/intel_dsi.h
++++ b/drivers/gpu/drm/i915/display/intel_dsi.h
+@@ -66,7 +66,7 @@ struct intel_dsi {
+ 	/* number of DSI lanes */
+ 	unsigned int lane_count;
+ 
+-	/* i2c bus associated with the slave device */
++	/* i2c bus associated with the client device */
+ 	int i2c_bus_num;
+ 
+ 	/*
+diff --git a/drivers/gpu/drm/i915/display/intel_dsi_vbt.c b/drivers/gpu/drm/i915/display/intel_dsi_vbt.c
+index a5d7fc8418c9..3335d4e31964 100644
+--- a/drivers/gpu/drm/i915/display/intel_dsi_vbt.c
++++ b/drivers/gpu/drm/i915/display/intel_dsi_vbt.c
+@@ -56,7 +56,7 @@
+ #define MIPI_PORT_SHIFT			3
+ 
+ struct i2c_adapter_lookup {
+-	u16 slave_addr;
++	u16 client_addr;
+ 	struct intel_dsi *intel_dsi;
+ 	acpi_handle dev_handle;
+ };
+@@ -443,7 +443,7 @@ static int i2c_adapter_lookup(struct acpi_resource *ares, void *data)
+ 	if (!i2c_acpi_get_i2c_resource(ares, &sb))
+ 		return 1;
+ 
+-	if (lookup->slave_addr != sb->slave_address)
++	if (lookup->client_addr != sb->slave_address)
+ 		return 1;
+ 
+ 	status = acpi_get_handle(lookup->dev_handle,
+@@ -460,12 +460,12 @@ static int i2c_adapter_lookup(struct acpi_resource *ares, void *data)
+ }
+ 
+ static void i2c_acpi_find_adapter(struct intel_dsi *intel_dsi,
+-				  const u16 slave_addr)
++				  const u16 client_addr)
+ {
+ 	struct drm_device *drm_dev = intel_dsi->base.base.dev;
+ 	struct acpi_device *adev = ACPI_COMPANION(drm_dev->dev);
+ 	struct i2c_adapter_lookup lookup = {
+-		.slave_addr = slave_addr,
++		.client_addr = client_addr,
+ 		.intel_dsi = intel_dsi,
+ 		.dev_handle = acpi_device_handle(adev),
+ 	};
+@@ -476,7 +476,7 @@ static void i2c_acpi_find_adapter(struct intel_dsi *intel_dsi,
+ }
+ #else
+ static inline void i2c_acpi_find_adapter(struct intel_dsi *intel_dsi,
+-					 const u16 slave_addr)
++					 const u16 client_addr)
+ {
+ }
+ #endif
+@@ -488,17 +488,17 @@ static const u8 *mipi_exec_i2c(struct intel_dsi *intel_dsi, const u8 *data)
+ 	struct i2c_msg msg;
+ 	int ret;
+ 	u8 vbt_i2c_bus_num = *(data + 2);
+-	u16 slave_addr = *(u16 *)(data + 3);
++	u16 client_addr = *(u16 *)(data + 3);
+ 	u8 reg_offset = *(data + 5);
+ 	u8 payload_size = *(data + 6);
+ 	u8 *payload_data;
+ 
+ 	drm_dbg_kms(&i915->drm, "bus %d client-addr 0x%02x reg 0x%02x data %*ph\n",
+-		    vbt_i2c_bus_num, slave_addr, reg_offset, payload_size, data + 7);
++		    vbt_i2c_bus_num, client_addr, reg_offset, payload_size, data + 7);
+ 
+ 	if (intel_dsi->i2c_bus_num < 0) {
+ 		intel_dsi->i2c_bus_num = vbt_i2c_bus_num;
+-		i2c_acpi_find_adapter(intel_dsi, slave_addr);
++		i2c_acpi_find_adapter(intel_dsi, client_addr);
+ 	}
+ 
+ 	adapter = i2c_get_adapter(intel_dsi->i2c_bus_num);
+@@ -514,7 +514,7 @@ static const u8 *mipi_exec_i2c(struct intel_dsi *intel_dsi, const u8 *data)
+ 	payload_data[0] = reg_offset;
+ 	memcpy(&payload_data[1], (data + 7), payload_size);
+ 
+-	msg.addr = slave_addr;
++	msg.addr = client_addr;
+ 	msg.flags = 0;
+ 	msg.len = payload_size + 1;
+ 	msg.buf = payload_data;
+diff --git a/drivers/gpu/drm/i915/display/intel_dvo.c b/drivers/gpu/drm/i915/display/intel_dvo.c
+index c076da75b066..7da2725149e4 100644
+--- a/drivers/gpu/drm/i915/display/intel_dvo.c
++++ b/drivers/gpu/drm/i915/display/intel_dvo.c
+@@ -60,42 +60,42 @@ static const struct intel_dvo_device intel_dvo_devices[] = {
+ 		.type = INTEL_DVO_CHIP_TMDS,
+ 		.name = "sil164",
+ 		.port = PORT_C,
+-		.slave_addr = SIL164_ADDR,
++		.client_addr = SIL164_ADDR,
+ 		.dev_ops = &sil164_ops,
+ 	},
+ 	{
+ 		.type = INTEL_DVO_CHIP_TMDS,
+ 		.name = "ch7xxx",
+ 		.port = PORT_C,
+-		.slave_addr = CH7xxx_ADDR,
++		.client_addr = CH7xxx_ADDR,
+ 		.dev_ops = &ch7xxx_ops,
+ 	},
+ 	{
+ 		.type = INTEL_DVO_CHIP_TMDS,
+ 		.name = "ch7xxx",
+ 		.port = PORT_C,
+-		.slave_addr = 0x75, /* For some ch7010 */
++		.client_addr = 0x75, /* For some ch7010 */
+ 		.dev_ops = &ch7xxx_ops,
+ 	},
+ 	{
+ 		.type = INTEL_DVO_CHIP_LVDS,
+ 		.name = "ivch",
+ 		.port = PORT_A,
+-		.slave_addr = 0x02, /* Might also be 0x44, 0x84, 0xc4 */
++		.client_addr = 0x02, /* Might also be 0x44, 0x84, 0xc4 */
+ 		.dev_ops = &ivch_ops,
+ 	},
+ 	{
+ 		.type = INTEL_DVO_CHIP_TMDS,
+ 		.name = "tfp410",
+ 		.port = PORT_C,
+-		.slave_addr = TFP410_ADDR,
++		.client_addr = TFP410_ADDR,
+ 		.dev_ops = &tfp410_ops,
+ 	},
+ 	{
+ 		.type = INTEL_DVO_CHIP_LVDS,
+ 		.name = "ch7017",
+ 		.port = PORT_C,
+-		.slave_addr = 0x75,
++		.client_addr = 0x75,
+ 		.gpio = GMBUS_PIN_DPB,
+ 		.dev_ops = &ch7017_ops,
+ 	},
+@@ -103,7 +103,7 @@ static const struct intel_dvo_device intel_dvo_devices[] = {
+ 		.type = INTEL_DVO_CHIP_LVDS_NO_FIXED,
+ 		.name = "ns2501",
+ 		.port = PORT_B,
+-		.slave_addr = NS2501_ADDR,
++		.client_addr = NS2501_ADDR,
+ 		.dev_ops = &ns2501_ops,
+ 	},
+ };
+diff --git a/drivers/gpu/drm/i915/display/intel_dvo_dev.h b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
+index af7b04539b93..042949ac8a16 100644
+--- a/drivers/gpu/drm/i915/display/intel_dvo_dev.h
++++ b/drivers/gpu/drm/i915/display/intel_dvo_dev.h
+@@ -38,7 +38,7 @@ struct intel_dvo_device {
+ 	enum port port;
+ 	/* GPIO register used for i2c bus to control this device */
+ 	u32 gpio;
+-	int slave_addr;
++	int client_addr;
+ 
+ 	const struct intel_dvo_dev_ops *dev_ops;
+ 	void *dev_priv;
+diff --git a/drivers/gpu/drm/i915/display/intel_gmbus.c b/drivers/gpu/drm/i915/display/intel_gmbus.c
+index d3e03ed5b79c..cbbdd84b4641 100644
+--- a/drivers/gpu/drm/i915/display/intel_gmbus.c
++++ b/drivers/gpu/drm/i915/display/intel_gmbus.c
+@@ -478,7 +478,7 @@ gmbus_xfer_read_chunk(struct drm_i915_private *i915,
+ /*
+  * HW spec says that 512Bytes in Burst read need special treatment.
+  * But it doesn't talk about other multiple of 256Bytes. And couldn't locate
+- * an I2C slave, which supports such a lengthy burst read too for experiments.
++ * an I2C client, which supports such a lengthy burst read too for experiments.
+  *
+  * So until things get clarified on HW support, to avoid the burst read length
+  * in fold of 256Bytes except 512, max burst read length is fixed at 767Bytes.
+@@ -701,7 +701,7 @@ do_gmbus_xfer(struct i2c_adapter *adapter, struct i2c_msg *msgs, int num,
+ 
+ 	/* Toggle the Software Clear Interrupt bit. This has the effect
+ 	 * of resetting the GMBUS controller and so clearing the
+-	 * BUS_ERROR raised by the slave's NAK.
++	 * BUS_ERROR raised by the client's NAK.
+ 	 */
+ 	intel_de_write_fw(i915, GMBUS1(i915), GMBUS_SW_CLR_INT);
+ 	intel_de_write_fw(i915, GMBUS1(i915), 0);
+diff --git a/drivers/gpu/drm/i915/display/intel_sdvo.c b/drivers/gpu/drm/i915/display/intel_sdvo.c
+index 5f9e748adc89..126493c662c5 100644
+--- a/drivers/gpu/drm/i915/display/intel_sdvo.c
++++ b/drivers/gpu/drm/i915/display/intel_sdvo.c
+@@ -95,7 +95,7 @@ struct intel_sdvo {
+ 	struct intel_encoder base;
+ 
+ 	struct i2c_adapter *i2c;
+-	u8 slave_addr;
++	u8 client_addr;
+ 
+ 	struct intel_sdvo_ddc ddc[3];
+ 
+@@ -255,13 +255,13 @@ static bool intel_sdvo_read_byte(struct intel_sdvo *intel_sdvo, u8 addr, u8 *ch)
+ 	struct drm_i915_private *i915 = to_i915(intel_sdvo->base.base.dev);
+ 	struct i2c_msg msgs[] = {
+ 		{
+-			.addr = intel_sdvo->slave_addr,
++			.addr = intel_sdvo->client_addr,
+ 			.flags = 0,
+ 			.len = 1,
+ 			.buf = &addr,
+ 		},
+ 		{
+-			.addr = intel_sdvo->slave_addr,
++			.addr = intel_sdvo->client_addr,
+ 			.flags = I2C_M_RD,
+ 			.len = 1,
+ 			.buf = ch,
+@@ -483,14 +483,14 @@ static bool __intel_sdvo_write_cmd(struct intel_sdvo *intel_sdvo, u8 cmd,
+ 	intel_sdvo_debug_write(intel_sdvo, cmd, args, args_len);
+ 
+ 	for (i = 0; i < args_len; i++) {
+-		msgs[i].addr = intel_sdvo->slave_addr;
++		msgs[i].addr = intel_sdvo->client_addr;
+ 		msgs[i].flags = 0;
+ 		msgs[i].len = 2;
+ 		msgs[i].buf = buf + 2 *i;
+ 		buf[2*i + 0] = SDVO_I2C_ARG_0 - i;
+ 		buf[2*i + 1] = ((u8*)args)[i];
+ 	}
+-	msgs[i].addr = intel_sdvo->slave_addr;
++	msgs[i].addr = intel_sdvo->client_addr;
+ 	msgs[i].flags = 0;
+ 	msgs[i].len = 2;
+ 	msgs[i].buf = buf + 2*i;
+@@ -499,12 +499,12 @@ static bool __intel_sdvo_write_cmd(struct intel_sdvo *intel_sdvo, u8 cmd,
+ 
+ 	/* the following two are to read the response */
+ 	status = SDVO_I2C_CMD_STATUS;
+-	msgs[i+1].addr = intel_sdvo->slave_addr;
++	msgs[i+1].addr = intel_sdvo->client_addr;
+ 	msgs[i+1].flags = 0;
+ 	msgs[i+1].len = 1;
+ 	msgs[i+1].buf = &status;
+ 
+-	msgs[i+2].addr = intel_sdvo->slave_addr;
++	msgs[i+2].addr = intel_sdvo->client_addr;
+ 	msgs[i+2].flags = I2C_M_RD;
+ 	msgs[i+2].len = 1;
+ 	msgs[i+2].buf = &status;
+@@ -2659,9 +2659,9 @@ intel_sdvo_select_i2c_bus(struct intel_sdvo *sdvo)
+ 	else
+ 		pin = GMBUS_PIN_DPB;
+ 
+-	drm_dbg_kms(&dev_priv->drm, "[ENCODER:%d:%s] I2C pin %d, slave addr 0x%x\n",
++	drm_dbg_kms(&dev_priv->drm, "[ENCODER:%d:%s] I2C pin %d, client addr 0x%x\n",
+ 		    sdvo->base.base.base.id, sdvo->base.base.name,
+-		    pin, sdvo->slave_addr);
++		    pin, sdvo->client_addr);
+ 
+ 	sdvo->i2c = intel_gmbus_get_adapter(dev_priv, pin);
+ 
+@@ -2687,7 +2687,7 @@ intel_sdvo_is_hdmi_connector(struct intel_sdvo *intel_sdvo)
+ }
+ 
+ static u8
+-intel_sdvo_get_slave_addr(struct intel_sdvo *sdvo)
++intel_sdvo_get_client_addr(struct intel_sdvo *sdvo)
+ {
+ 	struct drm_i915_private *dev_priv = to_i915(sdvo->base.base.dev);
+ 	const struct sdvo_device_mapping *my_mapping, *other_mapping;
+@@ -2701,15 +2701,15 @@ intel_sdvo_get_slave_addr(struct intel_sdvo *sdvo)
+ 	}
+ 
+ 	/* If the BIOS described our SDVO device, take advantage of it. */
+-	if (my_mapping->slave_addr)
+-		return my_mapping->slave_addr;
++	if (my_mapping->client_addr)
++		return my_mapping->client_addr;
+ 
+ 	/*
+ 	 * If the BIOS only described a different SDVO device, use the
+ 	 * address that it isn't using.
+ 	 */
+-	if (other_mapping->slave_addr) {
+-		if (other_mapping->slave_addr == 0x70)
++	if (other_mapping->client_addr) {
++		if (other_mapping->client_addr == 0x70)
+ 			return 0x72;
+ 		else
+ 			return 0x70;
+@@ -3412,7 +3412,7 @@ bool intel_sdvo_init(struct drm_i915_private *dev_priv,
+ 			 "SDVO %c", port_name(port));
+ 
+ 	intel_sdvo->sdvo_reg = sdvo_reg;
+-	intel_sdvo->slave_addr = intel_sdvo_get_slave_addr(intel_sdvo) >> 1;
++	intel_sdvo->client_addr = intel_sdvo_get_client_addr(intel_sdvo) >> 1;
+ 
+ 	intel_sdvo_select_i2c_bus(intel_sdvo);
+ 
+diff --git a/drivers/gpu/drm/i915/display/intel_vbt_defs.h b/drivers/gpu/drm/i915/display/intel_vbt_defs.h
+index a9f44abfc9fc..e268224355eb 100644
+--- a/drivers/gpu/drm/i915/display/intel_vbt_defs.h
++++ b/drivers/gpu/drm/i915/display/intel_vbt_defs.h
+@@ -432,7 +432,7 @@ struct child_device_config {
+ 	u16 addin_offset;
+ 	u8 dvo_port; /* See DEVICE_PORT_* and DVO_PORT_* above */
+ 	u8 i2c_pin;
+-	u8 slave_addr;
++	u8 client_addr;
+ 	u8 ddc_pin;
+ 	u16 edid_ptr;
+ 	u8 dvo_cfg; /* See DEVICE_CFG_* above */
+@@ -441,7 +441,7 @@ struct child_device_config {
+ 		struct {
+ 			u8 dvo2_port;
+ 			u8 i2c2_pin;
+-			u8 slave2_addr;
++			u8 client2_addr;
+ 			u8 ddc2_pin;
+ 		} __packed;
+ 		struct {
+diff --git a/drivers/gpu/drm/i915/gvt/edid.c b/drivers/gpu/drm/i915/gvt/edid.c
+index af9afdb53c7f..29380c774133 100644
+--- a/drivers/gpu/drm/i915/gvt/edid.c
++++ b/drivers/gpu/drm/i915/gvt/edid.c
+@@ -42,8 +42,8 @@
+ #define GMBUS1_TOTAL_BYTES_MASK 0x1ff
+ #define gmbus1_total_byte_count(v) (((v) >> \
+ 	GMBUS1_TOTAL_BYTES_SHIFT) & GMBUS1_TOTAL_BYTES_MASK)
+-#define gmbus1_slave_addr(v) (((v) & 0xff) >> 1)
+-#define gmbus1_slave_index(v) (((v) >> 8) & 0xff)
++#define gmbus1_client_addr(v) (((v) & 0xff) >> 1)
++#define gmbus1_client_index(v) (((v) >> 8) & 0xff)
+ #define gmbus1_bus_cycle(v) (((v) >> 25) & 0x7)
+ 
+ /* GMBUS0 bits definitions */
+@@ -54,7 +54,7 @@ static unsigned char edid_get_byte(struct intel_vgpu *vgpu)
+ 	struct intel_vgpu_i2c_edid *edid = &vgpu->display.i2c_edid;
+ 	unsigned char chr = 0;
+ 
+-	if (edid->state == I2C_NOT_SPECIFIED || !edid->slave_selected) {
++	if (edid->state == I2C_NOT_SPECIFIED || !edid->client_selected) {
+ 		gvt_vgpu_err("Driver tries to read EDID without proper sequence!\n");
+ 		return 0;
+ 	}
+@@ -179,7 +179,7 @@ static int gmbus1_mmio_write(struct intel_vgpu *vgpu, unsigned int offset,
+ 		void *p_data, unsigned int bytes)
+ {
+ 	struct intel_vgpu_i2c_edid *i2c_edid = &vgpu->display.i2c_edid;
+-	u32 slave_addr;
++	u32 client_addr;
+ 	u32 wvalue = *(u32 *)p_data;
+ 
+ 	if (vgpu_vreg(vgpu, offset) & GMBUS_SW_CLR_INT) {
+@@ -210,21 +210,21 @@ static int gmbus1_mmio_write(struct intel_vgpu *vgpu, unsigned int offset,
+ 
+ 		i2c_edid->gmbus.total_byte_count =
+ 			gmbus1_total_byte_count(wvalue);
+-		slave_addr = gmbus1_slave_addr(wvalue);
++		client_addr = gmbus1_client_addr(wvalue);
+ 
+ 		/* vgpu gmbus only support EDID */
+-		if (slave_addr == EDID_ADDR) {
+-			i2c_edid->slave_selected = true;
+-		} else if (slave_addr != 0) {
++		if (client_addr == EDID_ADDR) {
++			i2c_edid->client_selected = true;
++		} else if (client_addr != 0) {
+ 			gvt_dbg_dpy(
+-				"vgpu%d: unsupported gmbus slave addr(0x%x)\n"
++				"vgpu%d: unsupported gmbus client addr(0x%x)\n"
+ 				"	gmbus operations will be ignored.\n",
+-					vgpu->id, slave_addr);
++					vgpu->id, client_addr);
+ 		}
+ 
+ 		if (wvalue & GMBUS_CYCLE_INDEX)
+ 			i2c_edid->current_edid_read =
+-				gmbus1_slave_index(wvalue);
++				gmbus1_client_index(wvalue);
+ 
+ 		i2c_edid->gmbus.cycle_type = gmbus1_bus_cycle(wvalue);
+ 		switch (gmbus1_bus_cycle(wvalue)) {
+@@ -523,7 +523,7 @@ void intel_gvt_i2c_handle_aux_ch_write(struct intel_vgpu *vgpu,
+ 			} else if (addr == EDID_ADDR) {
+ 				i2c_edid->state = I2C_AUX_CH;
+ 				i2c_edid->port = port_idx;
+-				i2c_edid->slave_selected = true;
++				i2c_edid->client_selected = true;
+ 				if (intel_vgpu_has_monitor_on_port(vgpu,
+ 					port_idx) &&
+ 					intel_vgpu_port_is_dp(vgpu, port_idx))
+@@ -542,7 +542,7 @@ void intel_gvt_i2c_handle_aux_ch_write(struct intel_vgpu *vgpu,
+ 			return;
+ 		if (drm_WARN_ON(&i915->drm, msg_length != 4))
+ 			return;
+-		if (i2c_edid->edid_available && i2c_edid->slave_selected) {
++		if (i2c_edid->edid_available && i2c_edid->client_selected) {
+ 			unsigned char val = edid_get_byte(vgpu);
+ 
+ 			aux_data_for_write = (val << 16);
+@@ -571,7 +571,7 @@ void intel_vgpu_init_i2c_edid(struct intel_vgpu *vgpu)
+ 	edid->state = I2C_NOT_SPECIFIED;
+ 
+ 	edid->port = -1;
+-	edid->slave_selected = false;
++	edid->client_selected = false;
+ 	edid->edid_available = false;
+ 	edid->current_edid_read = 0;
+ 
+diff --git a/drivers/gpu/drm/i915/gvt/edid.h b/drivers/gpu/drm/i915/gvt/edid.h
+index dfe0cbc6aad8..c36f26c5f5cc 100644
+--- a/drivers/gpu/drm/i915/gvt/edid.h
++++ b/drivers/gpu/drm/i915/gvt/edid.h
+@@ -80,7 +80,7 @@ enum gmbus_cycle_type {
+  *      R/W Protect
+  *      Command and Status.
+  *      bit0 is the direction bit: 1 is read; 0 is write.
+- *      bit1 - bit7 is slave 7-bit address.
++ *      bit1 - bit7 is client 7-bit address.
+  *      bit16 - bit24 total byte count (ignore?)
+  *
+  * GMBUS2:
+@@ -130,7 +130,7 @@ struct intel_vgpu_i2c_edid {
+ 	enum i2c_state state;
+ 
+ 	unsigned int port;
+-	bool slave_selected;
++	bool client_selected;
+ 	bool edid_available;
+ 	unsigned int current_edid_read;
+ 
+diff --git a/drivers/gpu/drm/i915/gvt/opregion.c b/drivers/gpu/drm/i915/gvt/opregion.c
+index d2bed466540a..88fa6877ec90 100644
+--- a/drivers/gpu/drm/i915/gvt/opregion.c
++++ b/drivers/gpu/drm/i915/gvt/opregion.c
+@@ -86,7 +86,7 @@ struct efp_child_device_config {
+ 	u8 skip2;
+ 	u8 dvo_port;
+ 	u8 i2c_pin; /* for add-in card */
+-	u8 slave_addr; /* for add-in card */
++	u8 client_addr; /* for add-in card */
+ 	u8 ddc_pin;
+ 	u16 edid_ptr;
+ 	u8 dvo_config;
 -- 
 2.34.1
 
