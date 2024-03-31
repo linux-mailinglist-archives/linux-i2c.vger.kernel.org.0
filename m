@@ -1,79 +1,93 @@
-Return-Path: <linux-i2c+bounces-2686-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2687-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03789892CE9
-	for <lists+linux-i2c@lfdr.de>; Sat, 30 Mar 2024 21:22:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27637892E21
+	for <lists+linux-i2c@lfdr.de>; Sun, 31 Mar 2024 01:27:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97F8B1F2266B
-	for <lists+linux-i2c@lfdr.de>; Sat, 30 Mar 2024 20:22:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5F22B21729
+	for <lists+linux-i2c@lfdr.de>; Sun, 31 Mar 2024 00:27:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35704481C4;
-	Sat, 30 Mar 2024 20:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C0VjBPuO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96A0F65C;
+	Sun, 31 Mar 2024 00:27:38 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 3.mo576.mail-out.ovh.net (3.mo576.mail-out.ovh.net [188.165.52.203])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87BF45013;
-	Sat, 30 Mar 2024 20:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EC2628
+	for <linux-i2c@vger.kernel.org>; Sun, 31 Mar 2024 00:27:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.52.203
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711830120; cv=none; b=PM0hUhBaEVXv1/9Nl4d0odJYX1dPgOrcL72AWbQ0UUFdV1/xGYZ/J29KSykgnFt1GA9MZ1FfDkfyMAqfirvAI37T4HuH09q1URiaEHUH7VYiJBfdcH6hDbGF0blGGqHZ1VFXDWsoM+o0GcVXZJ/V+tiRy4lNJiok6SVjAN1r+TU=
+	t=1711844858; cv=none; b=hHBax0OZQLo0W0zE8m6CXxXl1dbZ1ePiduvq1rX7xe1i8891bzHpgFmM6Hx51RI2KcAXOVXep/ADcvLsscQO8Z+Px0yvEIZ+t8pOf9lNoXl+g+xp9md5E8nkgmoDp9n3m6qwsCVK9dkHwqaED78WtKN5aCNZRcYdAsemBMoCHBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711830120; c=relaxed/simple;
-	bh=eixB4TLeK/qnld9F3Wjde7VArKE8AQancMAaev9RXDw=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=UZrpbvjxne13ForKck9twe1I9n4d08dWlkYvNEgtOl63+xPqXLmQvaS5LhXMeIMM7LPT1mVgbwdpi5yYwbJEyaIcpCBfNsiujF0g5sUJ92f2EpqAhU/j6kLciXqkORg4hH969p+QFRHD51PW0z1Ya19xKW5urpUWbYK/oHG9MnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C0VjBPuO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5DC7DC43394;
-	Sat, 30 Mar 2024 20:22:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711830120;
-	bh=eixB4TLeK/qnld9F3Wjde7VArKE8AQancMAaev9RXDw=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=C0VjBPuO3U5KrfOPlwkSWTlmcFilg8C1RL+3o1NiMeVHPz0YNnVS435tRfdjZf6zX
-	 qDiydXpRRgSxC6Gb1hldYj/RSVPJludh0eY7BIJAdO4kd6BpcAQTG/GxRZKVjtJnUZ
-	 VWd720lGKOxYwBInmKJytO32VfWEfegpBCqmVHfSg7T5EtyL5q73FDULiKNhjipYhW
-	 jvZu7mQDpmCxgdHVoGn2nyZO32jgsjQLjXO9Hk6RBCkdrn5GJxsfoFcQ9otQsLXzaM
-	 3iGPWIujPvMCoxWKedW0kZz3uazb11Ex8NKlmdPk9c8VVzCpdqPEYF2tS+74KldYqE
-	 NNllz7FfM+ulA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 53EC6D2D0EB;
-	Sat, 30 Mar 2024 20:22:00 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c-for-6.9-rc2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZggmzvmHwewWq14U@shikoro>
-References: <ZggmzvmHwewWq14U@shikoro>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZggmzvmHwewWq14U@shikoro>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.9-rc2
-X-PR-Tracked-Commit-Id: 2953eb02875b42c96e5ecb2d1061d0a2c1f9972b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ac6727189c070863587e86705554bed47a85ff55
-Message-Id: <171183012034.3897.1814588348909367851.pr-tracker-bot@kernel.org>
-Date: Sat, 30 Mar 2024 20:22:00 +0000
-To: Wolfram Sang <wsa@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
+	s=arc-20240116; t=1711844858; c=relaxed/simple;
+	bh=ECCo7RMLpeYUhpHIYa+A158zhqXbbkXV4/OmnD2t3ZU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=m9vs6LJ1QQo0cUcFagrv3WIn550TGJ2e9EQeSY550CJEZVlhItrjwzt6kAiHPklam+6dUbHmQAR8zQFrQ4jBwCkMwMVzQlg4J6uMFE0J4/netGkh4GmKZGdaoBI4ZFfVmzcM28o0Njgwneheyl57QCzbtR4J5ziMuVUSi1E1a7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=188.165.52.203
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
+Received: from director3.ghost.mail-out.ovh.net (unknown [10.108.25.63])
+	by mo576.mail-out.ovh.net (Postfix) with ESMTP id 4V6ZjC51RZz1WVy
+	for <linux-i2c@vger.kernel.org>; Sun, 31 Mar 2024 00:27:27 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-b8q8f (unknown [10.110.168.195])
+	by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 1E5821FDF3;
+	Sun, 31 Mar 2024 00:27:26 +0000 (UTC)
+Received: from etezian.org ([37.59.142.99])
+	by ghost-submission-6684bf9d7b-b8q8f with ESMTPSA
+	id OVINEe6tCGYlXAkAi3EkCw
+	(envelope-from <andi@etezian.org>); Sun, 31 Mar 2024 00:27:26 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-99G0030d2e3f9a-9e3f-4d42-a5f9-380ee953418c,
+                    3C51A916EC97189076D74FE9F96E37BFEF4240FA) smtp.auth=andi@etezian.org
+X-OVh-ClientIp:83.57.198.208
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Heiner Kallweit <hkallweit1@gmail.com>
+Cc: linux-i2c@vger.kernel.org
+In-Reply-To: <f9df04f6-9dc2-4874-bc6c-473dc3d692b9@gmail.com>
+References: <f9df04f6-9dc2-4874-bc6c-473dc3d692b9@gmail.com>
+Subject: Re: [PATCH] i2c: i801: Call i2c_register_spd for muxed child
+ segments
+Message-Id: <171184484323.16458.16364948555678328368.b4-ty@kernel.org>
+Date: Sun, 31 Mar 2024 01:27:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
+X-Ovh-Tracer-Id: 12533236290606205492
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledruddviedgvdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeffteehudffvdfhudfgffdugfejjeduheehgeefgeeuhfeiuefghffgueffvdfgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekfedrheejrdduleekrddvtdekpdefjedrheelrddugedvrdelleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejiedpmhhouggvpehsmhhtphhouhht
 
-The pull request you sent on Sat, 30 Mar 2024 15:50:54 +0100:
+Hi
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.9-rc2
+On Tue, 26 Mar 2024 21:42:44 +0100, Heiner Kallweit wrote:
+> Once the gpio mux driver binds to the "i2c-mux-gpio" platform device,
+> this creates the i2c adapters for the muxed child segments.
+> We can use the bus notifier mechanism to check for creation of the
+> child i2d adapters, and call i2c_register_spd() for them. This allows
+> to detect all DIMM's on systems with more than 8 memory slots.
+> 
+> 
+> [...]
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ac6727189c070863587e86705554bed47a85ff55
+Applied to i2c/i2c-host on
 
-Thank you!
+git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thank you,
+Andi
+
+Patches applied
+===============
+[1/1] i2c: i801: Call i2c_register_spd for muxed child segments
+      commit: d33bd3b707f476efcb907a7fd3ba3352f49775ed
+
 
