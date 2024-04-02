@@ -1,117 +1,117 @@
-Return-Path: <linux-i2c+bounces-2720-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2721-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAA0D8952A9
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Apr 2024 14:14:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF3358952B9
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Apr 2024 14:17:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 753B7286045
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Apr 2024 12:14:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 643E51F24968
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Apr 2024 12:17:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB90E76F17;
-	Tue,  2 Apr 2024 12:14:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A946762DC;
+	Tue,  2 Apr 2024 12:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RbDENW0l"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WpmdsWL3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE64B76C61;
-	Tue,  2 Apr 2024 12:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C64634EA;
+	Tue,  2 Apr 2024 12:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712060071; cv=none; b=PC0lLoxJ2Rh9i86y34W+E6OEPKeepFTl2reJquU1Gwsu5l6GYzSkuUlyR8tDMQllfVYvqrKmJUpDsgd6aIHmlzImF9yiCoN+WM3i7B8Ef2psImRH4NgKmml/uCFuo9waSDacaQPa0k+JDer61s1tOa4GY6UTmhcg1rl5b9PTzkU=
+	t=1712060241; cv=none; b=ZM7mTrDmSWXAMsykE8KZMf9xtl0ZZmc/x2EIfgPZUrPmek7Q2hQCL3RP3Z1WN5EfdBfzniSup58AX+FHD5nboY5hSBkar+SWNLeHPJ1OHJwQ19lfFcoXGd+hVhF72P7KxvYrDL45OrLykfKXIqbcQMiUXbGMwoENQzECjFa201E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712060071; c=relaxed/simple;
-	bh=e7f9ClCzIprx8T/6sYnbbRpgI85tID2BPT+5Vs7gAwM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pVDK4+NaPZUB6R4BHxOOG+Jf6RiQIflrV9b3VSmV16fEeLnHMq6fkhzQVEST0tcFXze7VrPlgO2dkE6GqSVZrBYBF+Genj0TktjbCEAXtz282OoAL7BFzL+hC53S80Tv3hgKo8l8kjBP1FXUFYjGvUWhCSMa+Pg/ENc+tunSezQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RbDENW0l; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a466e53f8c0so666530366b.1;
-        Tue, 02 Apr 2024 05:14:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712060067; x=1712664867; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lTHANYFS7U6nUICR+q0D94lhFAasgzjgVW1g2kkoD+8=;
-        b=RbDENW0l/EAUfsKfmkh1XTgPlOCh6LpozMPSfBFx7gyT6rBjYWfZ89Qv/H2sVtQjvI
-         l/6D8TL5DcmDdSnDjbwDiI+JtIB3V1n85mJwcuRfo/CiCPXOQ1eUFCXQt0n/dBBDTxR/
-         KmCuOC3AYtWVMMr2y98yVlGq81TT9/Nfw6RhcLg+AdTEw6xxCN1e7WjTE5QTr/02TVpq
-         l4ZSEtlKrb9MP0YVJTfJuERFPntJaJ8r2dXJYhc8odLY3mvbYntzc/nk/P/ZqaQ8onZj
-         P0gRTdvuWuiNHZd6dvKuvRdbAbr105FXoVnlqjI6uQwYBahkCT3VA99XjqB5L0zQF3I/
-         0eTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712060067; x=1712664867;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lTHANYFS7U6nUICR+q0D94lhFAasgzjgVW1g2kkoD+8=;
-        b=i3RwkQ66JWzkS4kJ3OBvs1/6KDZjBPAx4gtrnigBy/Gisz0rQWmc21DHoPbwcnI0so
-         Zb56tPs4HuAKC4zuw9EsxFyVcpdH5Cxq8QTr9FMgguhOsTISjDqMSNp9ZbNAaNxCoh8Q
-         HZvKcbwcMey/NvGy+7jOryRpvxrwjqOoo28lxkzJd+ov7kXge9Tl9D0fLJi8/hIRKA4x
-         oGc1KVI9aP+OEOhG20LmGxKbUSHJLIh2F8XIw4OkC1yE+YnaV5d5j5cUtjfG2q9mE6Wm
-         WwWtUhrmm1MjJgD42u7Vo6PJFoS6kYnn944mYxMvWiAhQucIUiwqQTJXZIP59NFaz+17
-         0JbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVFUSObaNLlgu78LUDxRJb3QapjXgZmLA4EGlfSS1uX6DqhFbeHtnd2XKtMb83+ZS9dveGJGfElELmcxVmakD5nI1s7R13m2ZUiCFKl
-X-Gm-Message-State: AOJu0Yy5BFvMcyVqzctRexGg3oC+DOeygDfcd5o7j9YZ8V/CNvMXm8+G
-	MjtuacllIxEJZfIxXubRJIqeKpqKnpNh+I/yTsBNxZlHu0sGqCWHC1v4YSHiAEE=
-X-Google-Smtp-Source: AGHT+IF04rWtU/s4ho0E40kFwkrILba273Bs094Jazm8h8eORDs9pC83NwZXAjAnJKmcsVgEzUt1VQ==
-X-Received: by 2002:a17:906:7f07:b0:a4e:14e5:5737 with SMTP id d7-20020a1709067f0700b00a4e14e55737mr9618569ejr.45.1712060067397;
-        Tue, 02 Apr 2024 05:14:27 -0700 (PDT)
-Received: from LMI-NB77.. ([2a02:908:1d8:8f00:cda9:e760:34d7:4af1])
-        by smtp.googlemail.com with ESMTPSA id js19-20020a170906ca9300b00a4e8353be19sm992638ejb.224.2024.04.02.05.14.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Apr 2024 05:14:27 -0700 (PDT)
-From: Abdelrahman Morsy <abdelrahmanhesham94@gmail.com>
-To: linux-input@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	gupt21@gmail.com,
-	jikos@kernel.org,
-	benjamin.tissoires@redhat.com,
-	Abdelrahman Morsy <abdelrahmanhesham94@gmail.com>
-Subject: [PATCH] HID: mcp-2221: cancel delayed_work only when CONFIG_IIO is enabled
-Date: Tue,  2 Apr 2024 14:14:06 +0200
-Message-Id: <20240402121406.1703500-1-abdelrahmanhesham94@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1712060241; c=relaxed/simple;
+	bh=+PJl1XVFLkJu+n5tB+S3CJb6o62Vtp1lY3hBuuDSHnw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=PaWFKUJ7MnXzMOCehdfePE+DoMwFMwz6Gcuy7cn19AeP5SXpaOAUg/eWpq/dA+cbatI9mrfzhnOQKggUG24UtRfYPpIbcxwFJ9cgRk9VrLhrssAIks43JmLkREXp9Edmpdu1NDAPfRVxNOhARGUfrdlN9cDLhTH3l1W/nW2Ey4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WpmdsWL3; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A94C01C0007;
+	Tue,  2 Apr 2024 12:17:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1712060231;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hO0hGxLnoN3ueobt18N0TvoV+EUroS8WDZqsXk16514=;
+	b=WpmdsWL3cfrFq4LiSA1QwbtYoo2QKGBVBJfxOOOMABP7CUfGmHJ+1D44xcKhETphd2l2Ks
+	/wQ/GFxkO5M0/pKKD2fR6DF3V76iSpPEL1p2uysdxTzi2TN1pmo0N99jlcRZUc1a9HE8Rg
+	PLB2LocxPOtjQgtnpeVceWvhp0BfPK/UF4mFsgbA6bTWhHUxWOL/RZKkQSydeVKJy6Vsbf
+	qVUzjrbbfgRiTPnHBjqD7IhNop4mZBnJrEKs59oMJ04HUG+QjMIYldjol0xSVu+Bd/nXII
+	1wvCdHiUp4qPyRMGL8Vfcvp4NtGOc8JGbzx5nEmWQGJ/x/NU7QyAcdw5KqWTdw==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Andi Shyti <andi.shyti@kernel.org>, Sam Edwards <cfsworks@gmail.com>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND v2 RFC 0/5] Enhancements for mv64xxx I2C driver
+In-Reply-To: <gj3bu52qixnf7agreb7olfwmsllr3k6mcybmyhiw76esxoevk7@nmfshpqp55l4>
+References: <65fa7599.5d0a0220.fe5f7.1f9f@mx.google.com>
+ <gj3bu52qixnf7agreb7olfwmsllr3k6mcybmyhiw76esxoevk7@nmfshpqp55l4>
+Date: Tue, 02 Apr 2024 14:17:11 +0200
+Message-ID: <87le5w7yd4.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-GND-Sasl: gregory.clement@bootlin.com
 
-If the device is unplugged and CONFIG_IIO is not supported, this will
-result in a warning message at kernel/workqueue.
+Hello Andi and Sam,
 
-Only cancel delayed work in mcp2221_remove(), when CONFIG_IIO is enabled.
+> Hi Gregory,
+>
+> On Tue, Mar 19, 2024 at 06:44:56PM -0600, Sam Edwards wrote:
+>> Salutations, Linux I2C team!
+>
+> ...
+>
+>> In anticipation of that, I am preparing this series comprising five patches to
+>> improve the functionality and reliability of the I2C adapter enough to support
+>> this kind of device. I have heavily tested these changes on the Allwinner-style
+>> mv64xxx core, but not the Marvell-style, and have not been able to test 10-bit
+>> addressing. I would greatly appreciate if anyone here could test this series,
+>> especially on non-Allwinner boards and/or boards with 10-bit devices.
+>> 
+>> I'm a bit skeptical of using I2C_M_NOSTART for this purpose. The driver does
+>> not (and cannot) support "just any" use of I2C_M_NOSTART, so it may be
+>> inappropriate to claim the I2C_FUNC_NOSTART capability. On the other hand, I
+>> searched high and low and couldn't find any use of I2C_M_NOSTART that
+>> *wouldn't* be supported by this change, so this could very well be exactly what
+>> clients understand I2C_FUNC_NOSTART to mean. Given that the alternative would
+>> be inventing a new flag ("I2C_M_READEXTRA"?) and figuring out how to supply
+>> input bytes and output bytes in the same i2c_msg, I opted for the NOSTART
+>> route instead.
+>
+> any thought on this series? I believe here we might need a bit
+> more testing on other platforms.
 
-Signed-off-by: Abdelrahman Morsy <abdelrahmanhesham94@gmail.com>
----
- drivers/hid/hid-mcp2221.c | 2 ++
- 1 file changed, 2 insertions(+)
+Sorry for the lack of answer. However I saw the series, I will have a
+closer look on it and give you feednacks.
 
-diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
-index f9cceaeffd08..da5ea5a23b08 100644
---- a/drivers/hid/hid-mcp2221.c
-+++ b/drivers/hid/hid-mcp2221.c
-@@ -944,9 +944,11 @@ static void mcp2221_hid_unregister(void *ptr)
- /* This is needed to be sure hid_hw_stop() isn't called twice by the subsystem */
- static void mcp2221_remove(struct hid_device *hdev)
- {
-+#if IS_REACHABLE(CONFIG_IIO)
- 	struct mcp2221 *mcp = hid_get_drvdata(hdev);
- 
- 	cancel_delayed_work_sync(&mcp->init_work);
-+#endif
- }
- 
- #if IS_REACHABLE(CONFIG_IIO)
--- 
-2.34.1
+Regards,
 
+Gregory
+
+>
+> Andi
+>
+>> 
+>> I look forward to any feedback, bug reports, test results, questions, concerns,
+>> commentary, or discussion that you can offer!
+>> 
+>> Best regards,
+>> Sam
+>> 
+>> Sam Edwards (5):
+>>   i2c: mv64xxx: Clear bus errors before transfer
+>>   i2c: mv64xxx: Clean up the private data struct
+>>   i2c: mv64xxx: Refactor FSM
+>>   i2c: mv64xxx: Allow continuing after read
+>>   i2c: mv64xxx: Implement I2C_FUNC_NOSTART
 
