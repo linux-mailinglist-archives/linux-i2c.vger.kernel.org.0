@@ -1,124 +1,117 @@
-Return-Path: <linux-i2c+bounces-2719-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2720-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDF5889526E
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Apr 2024 14:06:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAA0D8952A9
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Apr 2024 14:14:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF7961C22E55
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Apr 2024 12:06:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 753B7286045
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Apr 2024 12:14:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B24B74262;
-	Tue,  2 Apr 2024 12:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB90E76F17;
+	Tue,  2 Apr 2024 12:14:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="JoPMQQrX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RbDENW0l"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C16136CDB3;
-	Tue,  2 Apr 2024 12:06:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE64B76C61;
+	Tue,  2 Apr 2024 12:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712059594; cv=none; b=N3zzxDBvc7Fnl8yIg/YkPFn0aKx7RnH0rlCHED82BSIrRzsa42HYSpQnzBOpiXBA6pc8ApDXeVZu0nc86i+GIGgzyKf1BcN8WrWzRcQaT2Knswzc46MxECcL1IRfozkYZ8ZWNXvDSg2BzboIHoFg9STcG/ezPuJDNzWkrLTOwMw=
+	t=1712060071; cv=none; b=PC0lLoxJ2Rh9i86y34W+E6OEPKeepFTl2reJquU1Gwsu5l6GYzSkuUlyR8tDMQllfVYvqrKmJUpDsgd6aIHmlzImF9yiCoN+WM3i7B8Ef2psImRH4NgKmml/uCFuo9waSDacaQPa0k+JDer61s1tOa4GY6UTmhcg1rl5b9PTzkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712059594; c=relaxed/simple;
-	bh=YM1wpGIbCTafqqk2E0Qt4/0Do5RjQ4D516TIYPBj+xc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TcXi3VWheFpFpps5FdSTqseQ7Zfm80DVNOK8iHySKNbp9eMMOm32tNPX82qyF4R0vwxZuBEcEgG8R/TlEE4875VSLEKgexq28umZLqauuJLUahoEtpe22DmGvyYBdc63bLcp5xFPcIy61gDukCW4BxNbSFudGjJ4NyHh4sSKuVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=JoPMQQrX; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [100.64.128.57] (unknown [20.29.225.195])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 1F2EA201F162;
-	Tue,  2 Apr 2024 04:59:50 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1F2EA201F162
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1712059190;
-	bh=4QKcorRa2j3e9zMA898RRqI/yThkz1ahxlu7DAFGz60=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JoPMQQrXjyUzoMzuxml6ieVZsmT+qn3e34FDKzFiEoOoqLmxXELbe9/YF/ja2sKWk
-	 GUCjiPUbanllynPF79fDgPPayCnsbRuDSs5v4oYgLp5tigqr9JXB7AWGAa/BO04Q/C
-	 9YbOKSm5RNmqEtccfO2K5qHk7dW/x5RqEeZsJkpQ=
-Message-ID: <7d5e6ed0-ffe9-46c2-b3b4-a4a47c09532e@linux.microsoft.com>
-Date: Tue, 2 Apr 2024 04:59:48 -0700
+	s=arc-20240116; t=1712060071; c=relaxed/simple;
+	bh=e7f9ClCzIprx8T/6sYnbbRpgI85tID2BPT+5Vs7gAwM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pVDK4+NaPZUB6R4BHxOOG+Jf6RiQIflrV9b3VSmV16fEeLnHMq6fkhzQVEST0tcFXze7VrPlgO2dkE6GqSVZrBYBF+Genj0TktjbCEAXtz282OoAL7BFzL+hC53S80Tv3hgKo8l8kjBP1FXUFYjGvUWhCSMa+Pg/ENc+tunSezQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RbDENW0l; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a466e53f8c0so666530366b.1;
+        Tue, 02 Apr 2024 05:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712060067; x=1712664867; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lTHANYFS7U6nUICR+q0D94lhFAasgzjgVW1g2kkoD+8=;
+        b=RbDENW0l/EAUfsKfmkh1XTgPlOCh6LpozMPSfBFx7gyT6rBjYWfZ89Qv/H2sVtQjvI
+         l/6D8TL5DcmDdSnDjbwDiI+JtIB3V1n85mJwcuRfo/CiCPXOQ1eUFCXQt0n/dBBDTxR/
+         KmCuOC3AYtWVMMr2y98yVlGq81TT9/Nfw6RhcLg+AdTEw6xxCN1e7WjTE5QTr/02TVpq
+         l4ZSEtlKrb9MP0YVJTfJuERFPntJaJ8r2dXJYhc8odLY3mvbYntzc/nk/P/ZqaQ8onZj
+         P0gRTdvuWuiNHZd6dvKuvRdbAbr105FXoVnlqjI6uQwYBahkCT3VA99XjqB5L0zQF3I/
+         0eTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712060067; x=1712664867;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lTHANYFS7U6nUICR+q0D94lhFAasgzjgVW1g2kkoD+8=;
+        b=i3RwkQ66JWzkS4kJ3OBvs1/6KDZjBPAx4gtrnigBy/Gisz0rQWmc21DHoPbwcnI0so
+         Zb56tPs4HuAKC4zuw9EsxFyVcpdH5Cxq8QTr9FMgguhOsTISjDqMSNp9ZbNAaNxCoh8Q
+         HZvKcbwcMey/NvGy+7jOryRpvxrwjqOoo28lxkzJd+ov7kXge9Tl9D0fLJi8/hIRKA4x
+         oGc1KVI9aP+OEOhG20LmGxKbUSHJLIh2F8XIw4OkC1yE+YnaV5d5j5cUtjfG2q9mE6Wm
+         WwWtUhrmm1MjJgD42u7Vo6PJFoS6kYnn944mYxMvWiAhQucIUiwqQTJXZIP59NFaz+17
+         0JbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVFUSObaNLlgu78LUDxRJb3QapjXgZmLA4EGlfSS1uX6DqhFbeHtnd2XKtMb83+ZS9dveGJGfElELmcxVmakD5nI1s7R13m2ZUiCFKl
+X-Gm-Message-State: AOJu0Yy5BFvMcyVqzctRexGg3oC+DOeygDfcd5o7j9YZ8V/CNvMXm8+G
+	MjtuacllIxEJZfIxXubRJIqeKpqKnpNh+I/yTsBNxZlHu0sGqCWHC1v4YSHiAEE=
+X-Google-Smtp-Source: AGHT+IF04rWtU/s4ho0E40kFwkrILba273Bs094Jazm8h8eORDs9pC83NwZXAjAnJKmcsVgEzUt1VQ==
+X-Received: by 2002:a17:906:7f07:b0:a4e:14e5:5737 with SMTP id d7-20020a1709067f0700b00a4e14e55737mr9618569ejr.45.1712060067397;
+        Tue, 02 Apr 2024 05:14:27 -0700 (PDT)
+Received: from LMI-NB77.. ([2a02:908:1d8:8f00:cda9:e760:34d7:4af1])
+        by smtp.googlemail.com with ESMTPSA id js19-20020a170906ca9300b00a4e8353be19sm992638ejb.224.2024.04.02.05.14.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Apr 2024 05:14:27 -0700 (PDT)
+From: Abdelrahman Morsy <abdelrahmanhesham94@gmail.com>
+To: linux-input@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	gupt21@gmail.com,
+	jikos@kernel.org,
+	benjamin.tissoires@redhat.com,
+	Abdelrahman Morsy <abdelrahmanhesham94@gmail.com>
+Subject: [PATCH] HID: mcp-2221: cancel delayed_work only when CONFIG_IIO is enabled
+Date: Tue,  2 Apr 2024 14:14:06 +0200
+Message-Id: <20240402121406.1703500-1-abdelrahmanhesham94@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v0 03/14] drm/gma500,drm/i915: Make I2C terminology more
- inclusive
-To: Jani Nikula <jani.nikula@linux.intel.com>,
- Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Tvrtko Ursulin <tursulin@ursulin.net>, Zhenyu Wang
- <zhenyuw@linux.intel.com>, Zhi Wang <zhi.wang.linux@gmail.com>,
- dri-devel@lists.freedesktop.org, open list <linux-kernel@vger.kernel.org>,
- "open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
- <intel-gfx@lists.freedesktop.org>,
- "open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
- <intel-xe@lists.freedesktop.org>,
- "open list:INTEL GVT-g DRIVERS (Intel GPU Virtualization)"
- <intel-gvt-dev@lists.freedesktop.org>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
- "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS"
- <nouveau@lists.freedesktop.org>,
- "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
- "open list:BTTV VIDEO4LINUX DRIVER" <linux-media@vger.kernel.org>,
- "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
-References: <20240329170038.3863998-1-eahariha@linux.microsoft.com>
- <20240329170038.3863998-4-eahariha@linux.microsoft.com>
- <87a5mcfbms.fsf@intel.com>
-Content-Language: en-CA
-From: Easwar Hariharan <eahariha@linux.microsoft.com>
-In-Reply-To: <87a5mcfbms.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4/2/2024 12:48 AM, Jani Nikula wrote:
-> On Fri, 29 Mar 2024, Easwar Hariharan <eahariha@linux.microsoft.com> wrote:
->> I2C v7, SMBus 3.2, and I3C specifications have replaced "master/slave"
->> with more appropriate terms. Inspired by and following on to Wolfram's
->> series to fix drivers/i2c/[1], fix the terminology for users of
->> I2C_ALGOBIT bitbanging interface, now that the approved verbiage exists
->> in the specification.
-> 
-> gma500 and i915 changes should be split. See MAINTAINERS.
-> 
-> Might also split the i915 changes to smaller pieces, it's kind of
-> random. And the changes here are not strictly related to I2C AFAICT, so
-> the commit message should be updated.
-> 
-> BR,
-> Jani.
-> 
-> 
+If the device is unplugged and CONFIG_IIO is not supported, this will
+result in a warning message at kernel/workqueue.
 
-<snip>
+Only cancel delayed work in mcp2221_remove(), when CONFIG_IIO is enabled.
 
-I will split gma500 and i915 into their respective patches if possible in v2.
+Signed-off-by: Abdelrahman Morsy <abdelrahmanhesham94@gmail.com>
+---
+ drivers/hid/hid-mcp2221.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Can you say more about the changes being "not strictly related to I2C"? My
-heuristic was to grep for master/slave, and look in the surrounding context for
-i2c-related terminology (i2c_pin, 7-bit address, struct i2c_adapter, i2c_bus, etc)
-to confirm that they are i2c-related, then following the references around to
-make the compiler happy. For e.g., I did not change the many references to bigjoiner
-master and slave because I understood from context they were not i2c references.
-
-A couple examples would help me restrict the changes to I2C, since as mentioned in the
-discussion on Wolfram's thread, there are places where migrating away from master/slave
-terms in the code would conflict with the original technical manuals and reduce correlation
-and understanding of the code.
-
-Thanks,
-Easwar
+diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
+index f9cceaeffd08..da5ea5a23b08 100644
+--- a/drivers/hid/hid-mcp2221.c
++++ b/drivers/hid/hid-mcp2221.c
+@@ -944,9 +944,11 @@ static void mcp2221_hid_unregister(void *ptr)
+ /* This is needed to be sure hid_hw_stop() isn't called twice by the subsystem */
+ static void mcp2221_remove(struct hid_device *hdev)
+ {
++#if IS_REACHABLE(CONFIG_IIO)
+ 	struct mcp2221 *mcp = hid_get_drvdata(hdev);
+ 
+ 	cancel_delayed_work_sync(&mcp->init_work);
++#endif
+ }
+ 
+ #if IS_REACHABLE(CONFIG_IIO)
+-- 
+2.34.1
 
 
