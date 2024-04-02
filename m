@@ -1,86 +1,112 @@
-Return-Path: <linux-i2c+bounces-2709-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2708-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E30E894E40
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Apr 2024 11:05:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB8D5894E22
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Apr 2024 11:00:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D86472835DA
-	for <lists+linux-i2c@lfdr.de>; Tue,  2 Apr 2024 09:05:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16962B23F43
+	for <lists+linux-i2c@lfdr.de>; Tue,  2 Apr 2024 09:00:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1643B58ABB;
-	Tue,  2 Apr 2024 09:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7527456444;
+	Tue,  2 Apr 2024 09:00:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="pCC4bfr3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qp9OqSaH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADB157305;
-	Tue,  2 Apr 2024 09:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8FE17C7C;
+	Tue,  2 Apr 2024 09:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712048688; cv=none; b=n3qtJF5qpdQE5O1EcgdH/k5Hef1IxUPvEtNb8oRqe6AZj/ZlJK4swbfcUzIG8AM/bt5tjYo8QfwmoIBLCUeT95DE395FCN9JFMZpafqsSW5Y8MvzpYLmlY6igTI8i3Mt7hpwtXCAxS6S/9xKyGUuIOdyHuevbsAjK9nMggXdYxo=
+	t=1712048434; cv=none; b=LvL6sZzrhoaxmwLgBE24upsDIZtNGHhr0/ldGJWiqcL8JAIl2/Vv88aaunQ+ZBtaSTBQvu1DaBX3tacgHiQIDpbBIb6SMJ7l6E08ZXRNfO1jB/GGVu/wI0Z0Xok6Txd+Px2dUNasEdlqTK7jCdNpTTbLe+ynnDx5yjCpTB/Bn8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712048688; c=relaxed/simple;
-	bh=YvAxsRirqP9WIUZqYwF0tiTfjgDxAvwrGrHJaBMhnbg=;
+	s=arc-20240116; t=1712048434; c=relaxed/simple;
+	bh=eL1PiuC+OxtsN6+5kmmUfS/ddM6OPqhmPRBb17Qn1mo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IJw0pWL92Na0iVJzfb+DbQLpuoRT3SiwP2Hzyq8x8XGkDZr9hSixS+AHGfNyVGcNFLIZCEoKEoqECIlKSQiadZA913auzQp1lAqgBYqa5SV3nvziOTuh4CE8g+FcX4eQxHsH9DJXkTLWR0fbqm4fN5jy9CVsBt4c71SP6cYuFnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=pCC4bfr3; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=/sLPoPRj7yaTMRifvssA4ocGQZQ13k50t3gTbGc6at4=; b=pCC4bfr3tEL7rd4uaTZq+6Fpyu
-	d+b3YySnKJPGaKKYgvve+kH+pO/ODBmZxycpxzsqacSBSdWqeYQDiEntqiuyA5cau6k33vgQiFDsO
-	qTlXke5NWkvtiCNdtwLxqrMeHOqaPZAmWI1PdAVLlcOnyjRqTOfUDAgYt7IIyRB97bgcLAVGHikxE
-	6FDGpSBr+ssVKqsGTlUYERTuxv8xLEMlCVg1uHs/VSLGiOfXKS+hO9Wxmm/9/x+Mpwtl6Z95AWH3e
-	Q6UlRsos1rowDkHF5p/nblE1JIq7nT7xR6M/TLYUUxuWJoHm2dDiLno9T0narThxj9NxMVoafbYWi
-	Xo6yfp7Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:39088)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rrZwT-00061T-21;
-	Tue, 02 Apr 2024 09:56:29 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rrZwH-0006pd-Kx; Tue, 02 Apr 2024 09:56:17 +0100
-Date: Tue, 2 Apr 2024 09:56:17 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Mike Leach <mike.leach@linaro.org>,
-	James Clark <james.clark@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Vinod Koul <vkoul@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Michal Simek <michal.simek@amd.com>,
-	Eric Auger <eric.auger@redhat.com>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com, linux-i2c@vger.kernel.org,
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-input@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH 00/19] amba: store owner from modules with
- amba_driver_register()
-Message-ID: <ZgvIMRDfeQaeVxYt@shell.armlinux.org.uk>
-References: <20240326-module-owner-amba-v1-0-4517b091385b@linaro.org>
- <f514d9e1-61fa-4c55-aea1-d70c955bb96a@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nWFZNCDhOnS0sS79rSN4JPtIw7lhaEd/X9y9f8QukWoiQud15m0gW6I46lE5mI2wbYYUai1K73VlH+HFCi95A/wNf3gM47irkDzyYub6rs9VXPZ8J6qAO7V6mHCJEkUjIAArvvQ4x743mcbEWNt33ZBE2waz9X/wJ67Rv6YXuuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qp9OqSaH; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-41568096c4aso9815115e9.0;
+        Tue, 02 Apr 2024 02:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712048431; x=1712653231; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S7HP43l12eov1KUoh9mzxUyEYfgWNMnEq1EVajRpXoI=;
+        b=Qp9OqSaHyxdnx5Nn4yKbDWyqbqKRlqe60Udo5gEMOunhoZAWFoGpQcdVvpDiGRsRON
+         /LHR+o3ujfPQkG/cm0EXm17JIqjTFBWRiQ728dZ4SMVQPxeMCOePw5Wu33gqNYJBL4Qy
+         4mfI/m4MfO8HRgciDR1+9Wxl7RaIR+ts4nmz8xjtSTBz51A6i9DWSCoPJc2OABO6nWjO
+         3kJZyNa0//m7Ilc9WF6diIZAIn1roBO0wKay6KN67oqjEUtWtWeiCffxyTk1H0G5scxu
+         hw1TaTGn+jlmKTth0vjHwHtjdz47cYbWEp5NwbkISF/TK+0DnAIinELyyCWKkeQcX1G4
+         ning==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712048431; x=1712653231;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S7HP43l12eov1KUoh9mzxUyEYfgWNMnEq1EVajRpXoI=;
+        b=R4Q86+dQkZGLI9xNEsDy1/OT2a5/m1JE47Ie7rvoznVTLaJqBb23R1E3tlXNctPtUq
+         twrU/JbrnAZ4G2Gb29kAw40CvtlhdK1/Us8Tk6mTzS+kcZBciFii1VhPE0Nr4QQitnBP
+         Ws3m3/R5pyfOq2Iyw1TNZe5b7fdx73UnjDAaYmlhXQbvVwGdXtPiBT5LjDgjGnakDhX1
+         Rj4L9kF1J1LhCXn66cZGkRPwtEyCgksZ2b4eVtuYX7T2bo6ohSv74E0TasnOs9Sc3rZj
+         rzTvHDBvi55LAAhEWdHlTF/xe+mUrc+HD5zPJ6H6la3PwDu8NRw+Bm//pd6Iz2OXaHNP
+         bIYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWyBhfBB7doqy1ibeuoF6oEP64WvaE5kmUtndI3nnxhp1gOQOCBeMfz7z9n2y182/V62PT2XRPgb/Mltks94FtFXPswg5ttacMzDIszjneMVz6CZaAHul7PCzjGxJwAi41cXkncUdALjmPL1CiWVmaRGF3HsUb0Z1ro1bxhP35RsopfS1a3T1QWu4iM3qVhZwDJ4T/mRaCsAgWyyEa7D0u/5fdu48a2r2c5Y2qB1m9+9vBH/fjbx8saxg==
+X-Gm-Message-State: AOJu0YyMPVZOmr35b1JqPQVufzXd0r56exbSFGKfXqtGHnEooyvzKFJd
+	LDJwQHQa5zz2G21al44b1oSqBYX+1YhY+DJVPh0BgiiucnqPmBcR
+X-Google-Smtp-Source: AGHT+IG8frznok1aF9okpQQTY2pR3XWd8JzFp2tX7BIUva1VqLJJmQZ3+crxPhY7ojqin4XV81Hf4w==
+X-Received: by 2002:a05:6000:1143:b0:33d:b2d6:b3a6 with SMTP id d3-20020a056000114300b0033db2d6b3a6mr7466595wrx.48.1712048430463;
+        Tue, 02 Apr 2024 02:00:30 -0700 (PDT)
+Received: from localhost ([81.168.73.77])
+        by smtp.gmail.com with ESMTPSA id l2-20020adff482000000b0033ec312cd8asm13554997wro.33.2024.04.02.02.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Apr 2024 02:00:29 -0700 (PDT)
+Date: Tue, 2 Apr 2024 10:00:28 +0100
+From: Martin Habets <habetsm.xilinx@gmail.com>
+To: Easwar Hariharan <eahariha@linux.microsoft.com>
+Cc: Edward Cree <ecree.xilinx@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	"open list:SFC NETWORK DRIVER" <netdev@vger.kernel.org>,
+	"open list:SFC NETWORK DRIVER" <linux-net-drivers@amd.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
+	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-gfx@lists.freedesktop.org>,
+	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-xe@lists.freedesktop.org>,
+	"open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" <nouveau@lists.freedesktop.org>,
+	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+	"open list:BTTV VIDEO4LINUX DRIVER" <linux-media@vger.kernel.org>,
+	"open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+Subject: Re: [PATCH v0 10/14] sfc: falcon: Make I2C terminology more inclusive
+Message-ID: <20240402090028.GA1759653@gmail.com>
+Mail-Followup-To: Easwar Hariharan <eahariha@linux.microsoft.com>,
+	Edward Cree <ecree.xilinx@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	"open list:SFC NETWORK DRIVER" <netdev@vger.kernel.org>,
+	"open list:SFC NETWORK DRIVER" <linux-net-drivers@amd.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
+	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-gfx@lists.freedesktop.org>,
+	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-xe@lists.freedesktop.org>,
+	"open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" <nouveau@lists.freedesktop.org>,
+	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+	"open list:BTTV VIDEO4LINUX DRIVER" <linux-media@vger.kernel.org>,
+	"open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+References: <20240329170038.3863998-1-eahariha@linux.microsoft.com>
+ <20240329170038.3863998-11-eahariha@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -89,95 +115,41 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f514d9e1-61fa-4c55-aea1-d70c955bb96a@linaro.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20240329170038.3863998-11-eahariha@linux.microsoft.com>
 
-On Sat, Mar 30, 2024 at 01:18:30PM +0100, Krzysztof Kozlowski wrote:
-> On 26/03/2024 21:23, Krzysztof Kozlowski wrote:
-> > Merging
-> > =======
-> > All further patches depend on the first amba patch, therefore please ack
-> > and this should go via one tree.
-> > 
-> > Description
-> > ===========
-> > Modules registering driver with amba_driver_register() often forget to
-> > set .owner field.
-> > 
-> > Solve the problem by moving this task away from the drivers to the core
-> > amba bus code, just like we did for platform_driver in commit
-> > 9447057eaff8 ("platform_device: use a macro instead of
-> > platform_driver_register").
-> > 
-> > Best regards,
+On Fri, Mar 29, 2024 at 05:00:34PM +0000, Easwar Hariharan wrote:
+> I2C v7, SMBus 3.2, and I3C specifications have replaced "master/slave"
+> with more appropriate terms. Inspired by and following on to Wolfram's
+> series to fix drivers/i2c/[1], fix the terminology for users of
+> I2C_ALGOBIT bitbanging interface, now that the approved verbiage exists
+> in the specification.
 > 
-> I tried to submit this series to Russell patch tracker and failed. This
-> is ridiculous. It's 2024 and instead of normal process, like every other
-> maintainer, so b4 or Patchwork, we have some unusable system rejecting
-> standard patches.
-
-Sorry but no. Stop being offensive.
-
-> First, it depends some weird, duplicated signed-off-by's.
-
-Eh? There is no such logic in there.
-
-> Second it > submitting patch-by-patch, all with clicking on some web
-> (!!!) interface.
-
-Again, no it doesn't, and you're just throwing crap out because you
-failed. Unlike most of the "normal" processes, the patch system allows
-you to submit both by *email* and also by *web* for those cases where
-the emails get screwed up by ones company mail server. That's why the
-web interface exists - to give people *flexibility*.
-
-The fact is, the web interface is merely a front end interface that
-generates an email and submits it in the usual way by email - an
-email that you can perfectly well generate that is *very* close to
-the standard email that git format-patch generates.
-
-The *only* difference is that the patch system wants a KernelVersion:
-tag in the email _somewhere_ and it doesn't matter where it appears.
-Git even has support to do this.
-
-  git format-patch --add-header="KernelVersion: $foo"
-
-Why does it want the kernel version? Because when we were running 2.4
-and 2.5 kernel versions in parallel, it was important to know which
-tree the patch was being submitted for. It has continued to be required
-because it means when there's problems applying a patch, it gives me
-the additional information about the base used for the patch (and it
-keeps on being useful to have.)
-
-> That's the response:
-> -------------
-> Your patch has not been logged because:
+> Compile tested, no functionality changes intended
 > 
-> Error:   Please supply a summary subject line briefly describing
->          your patch.
+> [1]: https://lore.kernel.org/all/20240322132619.6389-1-wsa+renesas@sang-engineering.com/
 > 
-> 
-> Error:   Please supply a "KernelVersion: " tag after "PATCH FOLLOWS" or
-> "---".
-> 
-> Error:   the patch you are submitting has one or more missing or incorrect
->          Signed-off-by lines:
-> 
->          - author signoff <krzkreg@gmail.com> is missing.
-> 
->          Please see the file Documentation/SubmittingPatches, section 11
->          for details on signing off patches.
+> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 
-Lots of people use it without a problem. I've just run the parser
-through its offline tests, and it parses email content correctly.
-I've no idea what you're doing wrong, but it looks like something
-pretty serious if it didn't parse the subject line.
+Reviewed-by: Martin Habets <habetsm.xilinx@gmail.com>
 
-Rather than getting stressed about it, why don't you send me an email
-the first time something goes wrong so I can investigate, turn on
-debugging to capture the problem email?
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> ---
+>  drivers/net/ethernet/sfc/falcon/falcon.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/sfc/falcon/falcon.c b/drivers/net/ethernet/sfc/falcon/falcon.c
+> index 7a1c9337081b..147e7c8e3c02 100644
+> --- a/drivers/net/ethernet/sfc/falcon/falcon.c
+> +++ b/drivers/net/ethernet/sfc/falcon/falcon.c
+> @@ -367,7 +367,7 @@ static const struct i2c_algo_bit_data falcon_i2c_bit_operations = {
+>  	.getsda		= falcon_getsda,
+>  	.getscl		= falcon_getscl,
+>  	.udelay		= 5,
+> -	/* Wait up to 50 ms for slave to let us pull SCL high */
+> +	/* Wait up to 50 ms for client to let us pull SCL high */
+>  	.timeout	= DIV_ROUND_UP(HZ, 20),
+>  };
+>  
+> -- 
+> 2.34.1
+> 
 
