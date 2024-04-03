@@ -1,127 +1,409 @@
-Return-Path: <linux-i2c+bounces-2740-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2741-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 713C28964C7
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Apr 2024 08:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 210BD89680A
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Apr 2024 10:13:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CC62283EB1
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Apr 2024 06:46:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA87528D3AF
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Apr 2024 08:13:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEB1844C76;
-	Wed,  3 Apr 2024 06:46:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D28517F7E9;
+	Wed,  3 Apr 2024 08:07:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="FOz+Xrox"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i9S2rWNS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99071757A;
-	Wed,  3 Apr 2024 06:46:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D18966CDDB;
+	Wed,  3 Apr 2024 08:07:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712126774; cv=none; b=ZsIQ4tzvRDJJ2fFbUTyTQdVuY/g79wafi1ApZcakBmHPyh48nWT+FqZVhKNFyFlOvl+jeYQUvxlSvyzkRi1uc8nYQJEZZyza0yLhmMWC8xTV/ixIemvus0Hf2Un2oUBJRQaR+SV3ITA0MkFMaw2D+BEgBx1zl3msHewtW5nITZw=
+	t=1712131649; cv=none; b=OrVdOvuQ6DQgAmvRW7m9scyyOCHXwaIHOmcnd2DQOMg5SQ7Twn680BFmDm6/wHKBH3rqFV3Of27iJyYxO7ySndSOAMbTINo38YlGdqej+y4KzBo6NNB6RRaBXXU+Z6OahRTo64wLBXJT/NBWXF50VWbiYUIJGRkWLyjleMaOOYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712126774; c=relaxed/simple;
-	bh=u71B/NuESvaUS9XPFvxOLkWOdGSwgWiD4+t5FnBk41w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=YY0nbrwKdQRPMni+ZFFs/wLMgSLKdzm3QqluRi0nep1tQ7LrVBIcPsu7XePugMJy50Uj8QCxRpJaKdnxv8uImKG2DTlCVmj4wOkG5M1BZQ091Bo1X2nOLGPPnUrJjmBiqyczvDS9cpWka5EEJTE3CAAwqkVpf9H8/QLe/Z/2QBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=FOz+Xrox; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4335uRiF022989;
-	Wed, 3 Apr 2024 06:46:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=V4gKdPA3bLrR7ftfrmRs9B6lyil3hKJom2PQtBnnE+o=; b=FO
-	z+XroxXp/2KRcM6Hhmjl6KATa8Eicj3/E7j0sOdJdPGWnj1b7WtVLxrT4lHwE5MY
-	koujeEowisqb6UtTDXcJ1mOOzBqFNXeGgjoBMOAMZL9bbSVDG9KcLJODdZAo6vy9
-	zmnsoNO3RqeXdueNB6oW1+FXt4Divgl7N0/QNxRqQzvaVa/t9ZXeu+H/ywIqXCQk
-	D0idlqDgIOH60ET5kt7o84QeGVPo0N1tCYxDWqCL8EhhEx3/A3jLNXYroQv9vYk0
-	aXl97nUzevToegQ8/VhcbIllv6y55E7VituseIazzPXicp/cTktThoYC3dy0iysX
-	Rz5sOe7RL6Q5NoUrufkw==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x8ny5hda8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Apr 2024 06:46:08 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4336k7qk009642
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 3 Apr 2024 06:46:07 GMT
-Received: from [10.218.22.190] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 2 Apr 2024
- 23:46:03 -0700
-Message-ID: <c805ff2a-8056-49a8-90b7-814c7a973d72@quicinc.com>
-Date: Wed, 3 Apr 2024 12:16:00 +0530
+	s=arc-20240116; t=1712131649; c=relaxed/simple;
+	bh=K2ePQOaggCQbp9MAuVhX6tyGJTkfITqYlV3FRyD1b2w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JezOO/nkq485blJcO79UI2aEI9pmImzeBT9+F0QISHITGX2lbHoyWngZsBhrxLqlLf1/v8KdNrbI+63WxzaC8C7nlJbNGVxW3jBzfjC6WZDiCzaiAyAGd1aofoT/DCmOrN6XeKiyofXkCo60Ys1R/bTTKUO0S5jayMBIONTg1TI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i9S2rWNS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9555FC433C7;
+	Wed,  3 Apr 2024 08:07:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712131648;
+	bh=K2ePQOaggCQbp9MAuVhX6tyGJTkfITqYlV3FRyD1b2w=;
+	h=From:To:Cc:Subject:Date:From;
+	b=i9S2rWNSxBnVceX/PhEYHUL/8obuw7YBD3dJv3NpxgtqFmbZ6YmcytIk5F3iE5aJR
+	 I5RYRukVlaohxFlUlx3DoVo8ioTOKPq24ESuwErVo02d8QkqEyqWnOCLJPy3IIKQQU
+	 hPSJJJ28UFYnjJaOw9nBVZfRfW9z44J6zH3uuTF5it8w/Z071qPjEqTUM2WnMMrizN
+	 fO98GSAxPEoZV8r5mdONzcx9Bk+cWCKiyR3aI2XXY3Z1B5LcdC6almvWr6dDKTwDko
+	 dlyuak8JP+s7GrNn1iYACGO+Vywch0Qm7yXwZNXpNcwyBGG5wOlDd55NN/VlxGiFO6
+	 vEIx/q6HxkU2Q==
+From: Arnd Bergmann <arnd@kernel.org>
+To: linux-kernel@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Corey Minyard <minyard@acm.org>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Tero Kristo <kristo@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Len Brown <lenb@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	John Allen <john.allen@amd.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Vinod Koul <vkoul@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Peter Rosin <peda@axentia.se>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Markuss Broks <markuss.broks@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Lee Jones <lee@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Stanislaw Gruszka <stf_xl@wp.pl>,
+	Kalle Valo <kvalo@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Tony Lindgren <tony@atomide.com>,
+	Mark Brown <broonie@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Xiang Chen <chenxiang66@hisilicon.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
+	Alex Elder <elder@kernel.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Helge Deller <deller@gmx.de>,
+	Christoph Hellwig <hch@lst.de>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <keescook@chromium.org>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Takashi Iwai <tiwai@suse.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-ide@vger.kernel.org,
+	openipmi-developer@lists.sourceforge.net,
+	linux-integrity@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-fpga@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-input@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	netdev@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-amlogic@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	greybus-dev@lists.linaro.org,
+	linux-staging@lists.linux.dev,
+	linux-serial@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-fbdev@vger.kernel.org,
+	iommu@lists.linux.dev,
+	linux-trace-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-hardening@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	alsa-devel@alsa-project.org,
+	linux-sound@vger.kernel.org
+Subject: [PATCH 00/34] address all -Wunused-const warnings
+Date: Wed,  3 Apr 2024 10:06:18 +0200
+Message-Id: <20240403080702.3509288-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] i2c: i2c-qcom-geni: Parse Error correctly in i2c GSI
- mode
-Content-Language: en-US
-To: Vinod Koul <vkoul@kernel.org>, Andi Shyti <andi.shyti@kernel.org>
-CC: <konrad.dybcio@linaro.org>, <andersson@kernel.org>, <wsa@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <quic_vdadhani@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20240313052639.1747078-1-quic_msavaliy@quicinc.com>
- <171161140136.2698925.4294566764047886777.b4-ty@kernel.org>
- <ZgbwJAb7Ffktf554@matsya>
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <ZgbwJAb7Ffktf554@matsya>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rHJgA76S2Y7MaYlhvr_VQ2Tob5M477HB
-X-Proofpoint-ORIG-GUID: rHJgA76S2Y7MaYlhvr_VQ2Tob5M477HB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-03_05,2024-04-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- lowpriorityscore=0 phishscore=0 mlxscore=0 mlxlogscore=962 clxscore=1015
- bulkscore=0 adultscore=0 impostorscore=0 spamscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2403210001
- definitions=main-2404030043
+Content-Transfer-Encoding: 8bit
 
-Hi Vinod,
+From: Arnd Bergmann <arnd@arndb.de>
 
-On 3/29/2024 10:15 PM, Vinod Koul wrote:
-> On 28-03-24, 08:36, Andi Shyti wrote:
->> Hi
->>
->> On Wed, 13 Mar 2024 10:56:39 +0530, Mukesh Kumar Savaliya wrote:
->>> I2C driver currently reports "DMA txn failed" error even though it's
->>> NACK OR BUS_PROTO OR ARB_LOST. Detect NACK error when no device ACKs
->>> on the bus instead of generic transfer failure which doesn't give any
->>> specific clue.
->>>
->>> Make Changes inside i2c driver callback handler function
->>> i2c_gpi_cb_result() to parse these errors and make sure GSI driver
->>> stores the error status during error interrupt.
->>>
->>> [...]
->>
->> Applied to i2c/i2c-host-next on
->>
->> git://git.kernel.org/pub/scm/linux/kernel/git/local tree
-> 
-> You applied changes to dmaengine driver without my ack! I dont agree to
-> the approach here, we could do better
-> 
-Could you please suggest changes OR approach related comments ? So i can 
-make a new change which can clean the merged code ?  Hope that can 
-address the concerns.
+Compilers traditionally warn for unused 'static' variables, but not
+if they are constant. The reason here is a custom for C++ programmers
+to define named constants as 'static const' variables in header files
+instead of using macros or enums.
+
+In W=1 builds, we get warnings only static const variables in C
+files, but not in headers, which is a good compromise, but this still
+produces warning output in at least 30 files. These warnings are
+almost all harmless, but also trivial to fix, and there is no
+good reason to warn only about the non-const variables being unused.
+
+I've gone through all the files that I found using randconfig and
+allmodconfig builds and created patches to avoid these warnings,
+with the goal of retaining a clean build once the option is enabled
+by default.
+
+Unfortunately, there is one fairly large patch ("drivers: remove
+incorrect of_match_ptr/ACPI_PTR annotations") that touches
+34 individual drivers that all need the same one-line change.
+If necessary, I can split it up by driver or by subsystem,
+but at least for reviewing I would keep it as one piece for
+the moment.
+
+Please merge the individual patches through subsystem trees.
+I expect that some of these will have to go through multiple
+revisions before they are picked up, so anything that gets
+applied early saves me from resending.
+
+        Arnd
+
+Arnd Bergmann (31):
+  powerpc/fsl-soc: hide unused const variable
+  ubsan: fix unused variable warning in test module
+  platform: goldfish: remove ACPI_PTR() annotations
+  i2c: pxa: hide unused icr_bits[] variable
+  3c515: remove unused 'mtu' variable
+  tracing: hide unused ftrace_event_id_fops
+  Input: synaptics: hide unused smbus_pnp_ids[] array
+  power: rt9455: hide unused rt9455_boost_voltage_values
+  efi: sysfb: don't build when EFI is disabled
+  clk: ti: dpll: fix incorrect #ifdef checks
+  apm-emulation: hide an unused variable
+  sisfb: hide unused variables
+  dma/congiguous: avoid warning about unused size_bytes
+  leds: apu: remove duplicate DMI lookup data
+  iio: ad5755: hook up of_device_id lookup to platform driver
+  greybus: arche-ctrl: move device table to its right location
+  lib: checksum: hide unused expected_csum_ipv6_magic[]
+  sunrpc: suppress warnings for unused procfs functions
+  comedi: ni_atmio: avoid warning for unused device_ids[] table
+  iwlegacy: don't warn for unused variables with DEBUG_FS=n
+  drm/komeda: don't warn for unused debugfs files
+  firmware: qcom_scm: mark qcom_scm_qseecom_allowlist as __maybe_unused
+  crypto: ccp - drop platform ifdef checks
+  usb: gadget: omap_udc: remove unused variable
+  isdn: kcapi: don't build unused procfs code
+  cpufreq: intel_pstate: hide unused intel_pstate_cpu_oob_ids[]
+  net: xgbe: remove extraneous #ifdef checks
+  Input: imagis - remove incorrect ifdef checks
+  sata: mv: drop unnecessary #ifdef checks
+  ASoC: remove incorrect of_match_ptr/ACPI_PTR annotations
+  spi: remove incorrect of_match_ptr annotations
+  drivers: remove incorrect of_match_ptr/ACPI_PTR annotations
+  kbuild: always enable -Wunused-const-variable
+
+Krzysztof Kozlowski (1):
+  Input: stmpe-ts - mark OF related data as maybe unused
+
+ arch/powerpc/sysdev/fsl_msi.c                 |  2 +
+ drivers/ata/sata_mv.c                         | 64 +++++++++----------
+ drivers/char/apm-emulation.c                  |  5 +-
+ drivers/char/ipmi/ipmb_dev_int.c              |  2 +-
+ drivers/char/tpm/tpm_ftpm_tee.c               |  2 +-
+ drivers/clk/ti/dpll.c                         | 10 ++-
+ drivers/comedi/drivers/ni_atmio.c             |  2 +-
+ drivers/cpufreq/intel_pstate.c                |  2 +
+ drivers/crypto/ccp/sp-platform.c              | 14 +---
+ drivers/dma/img-mdc-dma.c                     |  2 +-
+ drivers/firmware/efi/Makefile                 |  3 +-
+ drivers/firmware/efi/sysfb_efi.c              |  2 -
+ drivers/firmware/qcom/qcom_scm.c              |  2 +-
+ drivers/fpga/versal-fpga.c                    |  2 +-
+ .../gpu/drm/arm/display/komeda/komeda_dev.c   |  8 ---
+ drivers/hid/hid-google-hammer.c               |  6 +-
+ drivers/i2c/busses/i2c-pxa.c                  |  2 +-
+ drivers/i2c/muxes/i2c-mux-ltc4306.c           |  2 +-
+ drivers/i2c/muxes/i2c-mux-reg.c               |  2 +-
+ drivers/iio/dac/ad5755.c                      |  1 +
+ drivers/input/mouse/synaptics.c               |  2 +
+ drivers/input/touchscreen/imagis.c            |  4 +-
+ drivers/input/touchscreen/stmpe-ts.c          |  2 +-
+ drivers/input/touchscreen/wdt87xx_i2c.c       |  2 +-
+ drivers/isdn/capi/Makefile                    |  3 +-
+ drivers/isdn/capi/kcapi.c                     |  7 +-
+ drivers/leds/leds-apu.c                       |  3 +-
+ drivers/mux/adg792a.c                         |  2 +-
+ drivers/net/ethernet/3com/3c515.c             |  3 -
+ drivers/net/ethernet/amd/xgbe/xgbe-platform.c |  8 ---
+ drivers/net/ethernet/apm/xgene-v2/main.c      |  2 +-
+ drivers/net/ethernet/hisilicon/hns_mdio.c     |  2 +-
+ drivers/net/wireless/intel/iwlegacy/4965-rs.c | 15 +----
+ drivers/net/wireless/intel/iwlegacy/common.h  |  2 -
+ drivers/platform/goldfish/goldfish_pipe.c     |  2 +-
+ drivers/power/supply/rt9455_charger.c         |  2 +
+ drivers/regulator/pbias-regulator.c           |  2 +-
+ drivers/regulator/twl-regulator.c             |  2 +-
+ drivers/regulator/twl6030-regulator.c         |  2 +-
+ drivers/rtc/rtc-fsl-ftm-alarm.c               |  2 +-
+ drivers/scsi/hisi_sas/hisi_sas_v1_hw.c        |  2 +-
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c        |  2 +-
+ drivers/spi/spi-armada-3700.c                 |  2 +-
+ drivers/spi/spi-img-spfi.c                    |  2 +-
+ drivers/spi/spi-meson-spicc.c                 |  2 +-
+ drivers/spi/spi-meson-spifc.c                 |  2 +-
+ drivers/spi/spi-orion.c                       |  2 +-
+ drivers/spi/spi-pic32-sqi.c                   |  2 +-
+ drivers/spi/spi-pic32.c                       |  2 +-
+ drivers/spi/spi-rockchip.c                    |  2 +-
+ drivers/spi/spi-s3c64xx.c                     |  2 +-
+ drivers/spi/spi-st-ssc4.c                     |  2 +-
+ drivers/staging/greybus/arche-apb-ctrl.c      |  1 +
+ drivers/staging/greybus/arche-platform.c      |  9 +--
+ drivers/staging/pi433/pi433_if.c              |  2 +-
+ drivers/tty/serial/amba-pl011.c               |  6 +-
+ drivers/tty/serial/ma35d1_serial.c            |  2 +-
+ drivers/usb/gadget/udc/omap_udc.c             | 10 +--
+ drivers/video/fbdev/sis/init301.c             |  3 +-
+ kernel/dma/contiguous.c                       |  2 +-
+ kernel/trace/trace_events.c                   |  4 ++
+ lib/checksum_kunit.c                          |  2 +
+ lib/test_ubsan.c                              |  2 +-
+ net/sunrpc/cache.c                            | 10 +--
+ scripts/Makefile.extrawarn                    |  1 -
+ sound/soc/atmel/sam9x5_wm8731.c               |  2 +-
+ sound/soc/codecs/rt5514-spi.c                 |  2 +-
+ sound/soc/qcom/lpass-sc7280.c                 |  2 +-
+ sound/soc/samsung/aries_wm8994.c              |  2 +-
+ 69 files changed, 121 insertions(+), 169 deletions(-)
+
+-- 
+2.39.2
+
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Damien Le Moal <dlemoal@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Corey Minyard <minyard@acm.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Tero Kristo <kristo@kernel.org>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Ian Abbott <abbotti@mev.co.uk>
+Cc: H Hartley Sweeten <hsweeten@visionengravers.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Len Brown <lenb@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: John Allen <john.allen@amd.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Moritz Fischer <mdf@kernel.org>
+Cc: Liviu Dudau <liviu.dudau@arm.com>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>
+Cc: Michael Hennerich <michael.hennerich@analog.com>
+Cc: Peter Rosin <peda@axentia.se>
+Cc: Lars-Peter Clausen <lars@metafoo.de>
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Markuss Broks <markuss.broks@gmail.com>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Lee Jones <lee@kernel.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+Cc: Iyappan Subramanian <iyappan@os.amperecomputing.com>
+Cc: Yisen Zhuang <yisen.zhuang@huawei.com>
+Cc: Stanislaw Gruszka <stf_xl@wp.pl>
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Xiang Chen <chenxiang66@hisilicon.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Vaibhav Hiremath <hvaibhav.linux@gmail.com>
+Cc: Alex Elder <elder@kernel.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Cc: Jacky Huang <ychuang3@nuvoton.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc: Anna Schumaker <anna@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-ide@vger.kernel.org
+Cc: openipmi-developer@lists.sourceforge.net
+Cc: linux-integrity@vger.kernel.org
+Cc: linux-omap@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: dmaengine@vger.kernel.org
+Cc: linux-efi@vger.kernel.org
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-fpga@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-input@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-iio@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: netdev@vger.kernel.org
+Cc: linux-leds@vger.kernel.org
+Cc: linux-wireless@vger.kernel.org
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-spi@vger.kernel.org
+Cc: linux-amlogic@lists.infradead.org
+Cc: linux-rockchip@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: greybus-dev@lists.linaro.org
+Cc: linux-staging@lists.linux.dev
+Cc: linux-serial@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Cc: linux-fbdev@vger.kernel.org
+Cc: iommu@lists.linux.dev
+Cc: linux-trace-kernel@vger.kernel.org
+Cc: kasan-dev@googlegroups.com
+Cc: linux-hardening@vger.kernel.org
+Cc: linux-nfs@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: alsa-devel@alsa-project.org
+Cc: linux-sound@vger.kernel.org
 
