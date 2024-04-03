@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-2745-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2746-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62D1F896A42
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Apr 2024 11:15:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D31A896A40
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Apr 2024 11:15:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B489FB2C3A8
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Apr 2024 09:14:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF1D21F22A62
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Apr 2024 09:15:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7D7171733;
-	Wed,  3 Apr 2024 09:14:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E8136FE23;
+	Wed,  3 Apr 2024 09:14:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1rSTq2g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rBnCiwl+"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777E856471;
-	Wed,  3 Apr 2024 09:14:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6AF456471;
+	Wed,  3 Apr 2024 09:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712135651; cv=none; b=mHv5v2BuiULx457c6/qLuQtnSCzvszDyavWJvx75MZmwOTSHe5TliriwKfs9iKHpziRVXNmyQ74UfWfd/EDjqwVKkH08POP+9jDrWDp1XIjNWNN5zi56bH7qLarJI+kRTriplcs9atvQu70taT3PDe15ATRjvPZr9SBVL4W1v44=
+	t=1712135692; cv=none; b=ieO5EeWH5zxgzUnuybMvo61qfyMhiVw/ml1OBS14ihk9UvELlko1I2wr/4zhcqjszvSez2HfoZqhjtdu8dzjT+9Ma4W3VIcid3vxyn/D4xrOJX6AArJp82tm6kp5yHQ8xELaD987dv26GvJ0Ybb7dx13SHLWYp6aPuOlHMBaQN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712135651; c=relaxed/simple;
-	bh=bZq0rD5KiJxbGyvQb/XEzn9LUcVm4yswpSv88dX9nmI=;
+	s=arc-20240116; t=1712135692; c=relaxed/simple;
+	bh=tdYqN9JNU3y7bUqfHA7MIqAfZHQZ3nL90gh9cpYdd6k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sX5dP8NHjpVy4kZHIBeVNrcq1GBE9O9W42DQ8DxeyqahvIh4LMhm7l4wHBcXcvGdDPsUXeAKHMckmBWlL0+ikIHZj8NN0NzwgkF++NjmAk9oL6rxj2XqmC4pzC7OJRJnPGFJlO7CWbKcdYWh+iJpZEepTBJYF8rHxz4952bsFOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1rSTq2g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BC9BC433C7;
-	Wed,  3 Apr 2024 09:13:53 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=lNgCP2lEC6AXkPoM6slKp5o3377GtiWXFsgXABSn/hu7WBNs0uwW6V5aHY3yXBrCfqEikeBiLEizHOEZWAnpMm9usWKrna8tWJD5KXcrElJQMfVzjNBZHtqS0DlcSW0aWwTOmtlZejAN3QKJRLfgPW9O0bAHAy31FjBeBCsCfoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rBnCiwl+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6342C433F1;
+	Wed,  3 Apr 2024 09:14:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712135651;
-	bh=bZq0rD5KiJxbGyvQb/XEzn9LUcVm4yswpSv88dX9nmI=;
+	s=k20201202; t=1712135691;
+	bh=tdYqN9JNU3y7bUqfHA7MIqAfZHQZ3nL90gh9cpYdd6k=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=G1rSTq2gywOxFwfLMdqh7qECus3WHP07qERZ0GtkigtronOFreYYbj2DY7o4GJAuf
-	 oZcWqYuX9S+yINjNot/Bp8IG/Vi80ILjCS2//Ok2dQJAT6HaTBOFMamLWGUliYxUPA
-	 8BVbBtudthBAzSBfr4+Y4azAlGCuU+iRCMYsvOKYoUSZTcQ7PfGs/HopPAE4pcoQU+
-	 BbJhflh1B4w4H2blhxzV6+JjWy5ghyw29+l1oTVl0f9DGG94s9opUckIyY0h5WleuU
-	 3Bq427YWzfKwCbID07SgygmaByiWT5aDeupc6m3NnvqJSnGpeOlcXf+zMqgHPhs136
-	 haNwFSyBb+J4A==
-Message-ID: <f68a9bef-cbd8-4d85-afd4-55516d9925ed@kernel.org>
-Date: Wed, 3 Apr 2024 11:13:50 +0200
+	b=rBnCiwl+gwZRpZOrE+4NAJvne0HuzXzvlPlbkckwn1gjNGshzT+uI89ZQxSGRK5ok
+	 DvuTaNrqVupWhMOaDaqhO5X6drqfyU4RtHDSnsm6tntn8vPS6YXc28lTEkJdcKBxBB
+	 hviFdnJ7EY21aOoNX/k4fikOM/n5+ayAjqW7FBl+1SvPD6DjvDm5u8zXgJZTA8fpxI
+	 3AJryGcEcIkX7gYzb7yfGLF7p/CINw7UIqkXlSGSsQcsajfTy45TrL59jMBqhgBOhK
+	 tZc41eCqQr2fhMp+LtBkRNcxaX9pf2+gD2QOo/7muZhyu3AREf7+bj5WxrXCL/6bHd
+	 Zg9Eu23Q5cu0w==
+Message-ID: <3dad8ee4-7d9d-4602-bb5e-f148d51d1fcf@kernel.org>
+Date: Wed, 3 Apr 2024 11:14:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,43 +50,17 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 33/34] drivers: remove incorrect of_match_ptr/ACPI_PTR
- annotations
-To: Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org,
- Corey Minyard <minyard@acm.org>, Peter Huewe <peterhuewe@gmx.de>,
- Jarkko Sakkinen <jarkko@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
- Xu Yilun <yilun.xu@intel.com>, Jiri Kosina <jikos@kernel.org>,
- Benjamin Tissoires <benjamin.tissoires@redhat.com>,
- Michael Hennerich <michael.hennerich@analog.com>,
- Peter Rosin <peda@axentia.se>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Iyappan Subramanian <iyappan@os.amperecomputing.com>,
- Keyur Chudgar <keyur@os.amperecomputing.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Yisen Zhuang <yisen.zhuang@huawei.com>, Salil Mehta
- <salil.mehta@huawei.com>, Tony Lindgren <tony@atomide.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Xiang Chen <chenxiang66@hisilicon.com>,
- "James E.J. Bottomley" <jejb@linux.ibm.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Russell King <linux@armlinux.org.uk>, Jiri Slaby <jirislaby@kernel.org>,
- Jacky Huang <ychuang3@nuvoton.com>, Shan-Chun Hung <schung@nuvoton.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Jason Gunthorpe <jgg@ziepe.ca>,
- Tom Rix <trix@redhat.com>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
- <u.kleine-koenig@pengutronix.de>, Randy Dunlap <rdunlap@infradead.org>,
- Rob Herring <robh@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- openipmi-developer@lists.sourceforge.net, linux-integrity@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-fpga@vger.kernel.org,
- linux-input@vger.kernel.org, linux-i2c@vger.kernel.org,
- netdev@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
- linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-References: <20240403080702.3509288-1-arnd@kernel.org>
- <20240403080702.3509288-34-arnd@kernel.org>
+Subject: Re: [PATCH v4] i2c: i2c-qcom-geni: Parse Error correctly in i2c GSI
+ mode
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+ Vinod Koul <vkoul@kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+Cc: konrad.dybcio@linaro.org, andersson@kernel.org, wsa@kernel.org,
+ linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+ quic_vdadhani@quicinc.com, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+References: <20240313052639.1747078-1-quic_msavaliy@quicinc.com>
+ <171161140136.2698925.4294566764047886777.b4-ty@kernel.org>
+ <ZgbwJAb7Ffktf554@matsya> <c805ff2a-8056-49a8-90b7-814c7a973d72@quicinc.com>
 Content-Language: en-US
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -132,58 +106,41 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240403080702.3509288-34-arnd@kernel.org>
+In-Reply-To: <c805ff2a-8056-49a8-90b7-814c7a973d72@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 03/04/2024 10:06, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 03/04/2024 08:46, Mukesh Kumar Savaliya wrote:
+> Hi Vinod,
 > 
-> When building with CONFIG_OF and/or CONFIG_ACPI disabled but W=1 extra
-> warnings enabled, a lot of driver cause a warning about an unused
-> ID table:
-> 
-> drivers/char/tpm/tpm_ftpm_tee.c:356:34: error: unused variable 'of_ftpm_tee_ids' [-Werror,-Wunused-const-variable]
-> drivers/dma/img-mdc-dma.c:863:34: error: unused variable 'mdc_dma_of_match' [-Werror,-Wunused-const-variable]
-> drivers/fpga/versal-fpga.c:62:34: error: unused variable 'versal_fpga_of_match' [-Werror,-Wunused-const-variable]
-> drivers/i2c/muxes/i2c-mux-ltc4306.c:200:34: error: unused variable 'ltc4306_of_match' [-Werror,-Wunused-const-variable]
-> drivers/i2c/muxes/i2c-mux-reg.c:242:34: error: unused variable 'i2c_mux_reg_of_match' [-Werror,-Wunused-const-variable]
-> drivers/memory/pl353-smc.c:62:34: error: unused variable 'pl353_smc_supported_children' [-Werror,-Wunused-const-variable]
-> drivers/regulator/pbias-regulator.c:136:34: error: unused variable 'pbias_of_match' [-Werror,-Wunused-const-variable]
-> drivers/regulator/twl-regulator.c:552:34: error: unused variable 'twl_of_match' [-Werror,-Wunused-const-variable]
-> drivers/regulator/twl6030-regulator.c:645:34: error: unused variable 'twl_of_match' [-Werror,-Wunused-const-variable]
-> drivers/scsi/hisi_sas/hisi_sas_v2_hw.c:3635:36: error: unused variable 'sas_v2_acpi_match' [-Werror,-Wunused-const-variable]
-> drivers/staging/pi433/pi433_if.c:1359:34: error: unused variable 'pi433_dt_ids' [-Werror,-Wunused-const-variable]
-> drivers/tty/serial/amba-pl011.c:2945:34: error: unused variable 'sbsa_uart_of_match' [-Werror,-Wunused-const-variable]
-> 
-> The fix is always to just remove the of_match_ptr() and ACPI_PTR() wrappers
-> that remove the reference, rather than adding another #ifdef just for build
-> testing for a configuration that doesn't matter in practice.
-> 
-> I considered splitting up the large patch into per subsystem patches, but since
-> it's really just the same thing everywhere it feels better to do it all at once.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/char/ipmi/ipmb_dev_int.c          | 2 +-
->  drivers/char/tpm/tpm_ftpm_tee.c           | 2 +-
->  drivers/dma/img-mdc-dma.c                 | 2 +-
->  drivers/fpga/versal-fpga.c                | 2 +-
->  drivers/hid/hid-google-hammer.c           | 6 ++----
->  drivers/i2c/muxes/i2c-mux-ltc4306.c       | 2 +-
->  drivers/i2c/muxes/i2c-mux-reg.c           | 2 +-
->  drivers/input/touchscreen/wdt87xx_i2c.c   | 2 +-
->  drivers/mux/adg792a.c                     | 2 +-
->  drivers/net/ethernet/apm/xgene-v2/main.c  | 2 +-
->  drivers/net/ethernet/hisilicon/hns_mdio.c | 2 +-
->  drivers/regulator/pbias-regulator.c       | 2 +-
->  drivers/regulator/twl-regulator.c         | 2 +-
->  drivers/regulator/twl6030-regulator.c     | 2 +-
+> On 3/29/2024 10:15 PM, Vinod Koul wrote:
+>> On 28-03-24, 08:36, Andi Shyti wrote:
+>>> Hi
+>>>
+>>> On Wed, 13 Mar 2024 10:56:39 +0530, Mukesh Kumar Savaliya wrote:
+>>>> I2C driver currently reports "DMA txn failed" error even though it's
+>>>> NACK OR BUS_PROTO OR ARB_LOST. Detect NACK error when no device ACKs
+>>>> on the bus instead of generic transfer failure which doesn't give any
+>>>> specific clue.
+>>>>
+>>>> Make Changes inside i2c driver callback handler function
+>>>> i2c_gpi_cb_result() to parse these errors and make sure GSI driver
+>>>> stores the error status during error interrupt.
+>>>>
+>>>> [...]
+>>>
+>>> Applied to i2c/i2c-host-next on
+>>>
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/local tree
+>>
+>> You applied changes to dmaengine driver without my ack! I dont agree to
+>> the approach here, we could do better
+>>
+> Could you please suggest changes OR approach related comments ? So i can 
+> make a new change which can clean the merged code ?  Hope that can 
+> address the concerns.
 
-I covered regulators here the same way:
-https://lore.kernel.org/all/20230310214553.275450-5-krzysztof.kozlowski@linaro.org/
-
-but just like SPI and ASoC, Mark did not agree to pick them up.
+Can you address original comments?
 
 Best regards,
 Krzysztof
