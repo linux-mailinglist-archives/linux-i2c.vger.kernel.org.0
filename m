@@ -1,48 +1,63 @@
-Return-Path: <linux-i2c+bounces-2739-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2740-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E611A896495
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Apr 2024 08:34:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 713C28964C7
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Apr 2024 08:46:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C5361C218FC
-	for <lists+linux-i2c@lfdr.de>; Wed,  3 Apr 2024 06:34:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CC62283EB1
+	for <lists+linux-i2c@lfdr.de>; Wed,  3 Apr 2024 06:46:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9130517BD6;
-	Wed,  3 Apr 2024 06:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEB1844C76;
+	Wed,  3 Apr 2024 06:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F24N74o4"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="FOz+Xrox"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4170433F9;
-	Wed,  3 Apr 2024 06:34:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99071757A;
+	Wed,  3 Apr 2024 06:46:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712126043; cv=none; b=O7PiiKTm+fWnq900ZZJ7XziUM7rGZ0WNZ1MOYReBjvqftsYM67f4hW86PTu2HQn7mpu/ReEp++KulTJgCjyapzCxH0d4yI+R3lOMQa8sBQhpjL7GSENXEHlUoLF2lFXutJx1NguAP6ne/FHYBYolJjZMjT+bDPmjS5cEPRSxFXo=
+	t=1712126774; cv=none; b=ZsIQ4tzvRDJJ2fFbUTyTQdVuY/g79wafi1ApZcakBmHPyh48nWT+FqZVhKNFyFlOvl+jeYQUvxlSvyzkRi1uc8nYQJEZZyza0yLhmMWC8xTV/ixIemvus0Hf2Un2oUBJRQaR+SV3ITA0MkFMaw2D+BEgBx1zl3msHewtW5nITZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712126043; c=relaxed/simple;
-	bh=deDVyLuZRtdlRIuC56FtqogiXY03hr2Tql8Anu25uF4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BoKfKsSVLdhqyjwLX6OQgGNGo4A2iRV8tqqqkjmXOUTS5JQjZr6yzMJx1octpu/wvj7F52C/WOL+6jz30mmKwQSU5q6g/8seCt4fi1gtSPwN8oVMp+Gmv/SzA2xun4eMqtXtbRp9qSX9yOMQx06jnX5ZE+mJwxvG6GB+GBAF+zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F24N74o4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D20C433C7;
-	Wed,  3 Apr 2024 06:33:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712126042;
-	bh=deDVyLuZRtdlRIuC56FtqogiXY03hr2Tql8Anu25uF4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=F24N74o4qdQHRpG9PsqmE/GKVmy5scLZR2iEUvpa9Iy4Hij+bIK76Q2cmXXS07Zhs
-	 wWI+J9yCKWc3nXGluut3T5Lqcz470FyNuJaMStp97G2CYEyBOpNMwJzo4TQ4CS3vb1
-	 VJdpxiPqMRgGxK1d1Cpeugjc9TQuknCzIF10d2Uzyk4/T4IhiV6/dJcp9kHb5biDoU
-	 z49gZlSV74qYsYqabgEXTZKqcEEHmBuUGWFu9vh46syMKHFxr/uE2HRSbO+hX0Z0nw
-	 7hKolHH44c1Yb/Vvnm/gcv1nsyBOo64GKmX4GWUd4pI6C4IgUo2dtTc91M9c8Gt3A2
-	 THeWTF0TKbUOg==
-Message-ID: <fe22b7c3-fcb8-4575-9885-e486e747a0a5@kernel.org>
-Date: Wed, 3 Apr 2024 08:33:57 +0200
+	s=arc-20240116; t=1712126774; c=relaxed/simple;
+	bh=u71B/NuESvaUS9XPFvxOLkWOdGSwgWiD4+t5FnBk41w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=YY0nbrwKdQRPMni+ZFFs/wLMgSLKdzm3QqluRi0nep1tQ7LrVBIcPsu7XePugMJy50Uj8QCxRpJaKdnxv8uImKG2DTlCVmj4wOkG5M1BZQ091Bo1X2nOLGPPnUrJjmBiqyczvDS9cpWka5EEJTE3CAAwqkVpf9H8/QLe/Z/2QBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=FOz+Xrox; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4335uRiF022989;
+	Wed, 3 Apr 2024 06:46:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=V4gKdPA3bLrR7ftfrmRs9B6lyil3hKJom2PQtBnnE+o=; b=FO
+	z+XroxXp/2KRcM6Hhmjl6KATa8Eicj3/E7j0sOdJdPGWnj1b7WtVLxrT4lHwE5MY
+	koujeEowisqb6UtTDXcJ1mOOzBqFNXeGgjoBMOAMZL9bbSVDG9KcLJODdZAo6vy9
+	zmnsoNO3RqeXdueNB6oW1+FXt4Divgl7N0/QNxRqQzvaVa/t9ZXeu+H/ywIqXCQk
+	D0idlqDgIOH60ET5kt7o84QeGVPo0N1tCYxDWqCL8EhhEx3/A3jLNXYroQv9vYk0
+	aXl97nUzevToegQ8/VhcbIllv6y55E7VituseIazzPXicp/cTktThoYC3dy0iysX
+	Rz5sOe7RL6Q5NoUrufkw==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x8ny5hda8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 03 Apr 2024 06:46:08 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4336k7qk009642
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 3 Apr 2024 06:46:07 GMT
+Received: from [10.218.22.190] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 2 Apr 2024
+ 23:46:03 -0700
+Message-ID: <c805ff2a-8056-49a8-90b7-814c7a973d72@quicinc.com>
+Date: Wed, 3 Apr 2024 12:16:00 +0530
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -52,80 +67,61 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4] i2c: i2c-qcom-geni: Parse Error correctly in i2c GSI
  mode
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
- Andi Shyti <andi.shyti@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Cc: konrad.dybcio@linaro.org, andersson@kernel.org, wsa@kernel.org,
- linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
- quic_vdadhani@quicinc.com, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Content-Language: en-US
+To: Vinod Koul <vkoul@kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+CC: <konrad.dybcio@linaro.org>, <andersson@kernel.org>, <wsa@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <quic_vdadhani@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 References: <20240313052639.1747078-1-quic_msavaliy@quicinc.com>
  <171161140136.2698925.4294566764047886777.b4-ty@kernel.org>
  <ZgbwJAb7Ffktf554@matsya>
- <a76mmz5xrfipqpmq2ltsyobwc54dyw2d55gb4vta5d746dwb3i@5mm2ew5uudi3>
- <71ab7b0e-52bf-404b-9e0a-de73dbd36ad4@quicinc.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <71ab7b0e-52bf-404b-9e0a-de73dbd36ad4@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+In-Reply-To: <ZgbwJAb7Ffktf554@matsya>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rHJgA76S2Y7MaYlhvr_VQ2Tob5M477HB
+X-Proofpoint-ORIG-GUID: rHJgA76S2Y7MaYlhvr_VQ2Tob5M477HB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-03_05,2024-04-01_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ lowpriorityscore=0 phishscore=0 mlxscore=0 mlxlogscore=962 clxscore=1015
+ bulkscore=0 adultscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2403210001
+ definitions=main-2404030043
 
-On 03/04/2024 08:09, Mukesh Kumar Savaliya wrote:
-> Thanks Vinod and Andi !
+Hi Vinod,
+
+On 3/29/2024 10:15 PM, Vinod Koul wrote:
+> On 28-03-24, 08:36, Andi Shyti wrote:
+>> Hi
+>>
+>> On Wed, 13 Mar 2024 10:56:39 +0530, Mukesh Kumar Savaliya wrote:
+>>> I2C driver currently reports "DMA txn failed" error even though it's
+>>> NACK OR BUS_PROTO OR ARB_LOST. Detect NACK error when no device ACKs
+>>> on the bus instead of generic transfer failure which doesn't give any
+>>> specific clue.
+>>>
+>>> Make Changes inside i2c driver callback handler function
+>>> i2c_gpi_cb_result() to parse these errors and make sure GSI driver
+>>> stores the error status during error interrupt.
+>>>
+>>> [...]
+>>
+>> Applied to i2c/i2c-host-next on
+>>
+>> git://git.kernel.org/pub/scm/linux/kernel/git/local tree
 > 
-> It had time and also there was a comment to get sign off from DMA 
-> maintainers, we have had review and discussion on DMA part too.
+> You applied changes to dmaengine driver without my ack! I dont agree to
+> the approach here, we could do better
 > 
-> Hi Vinod, Since this is already merged, do you have preference to revert 
-> OR making a new change if any BUG OR design issue ? I can also fix the 
-> changes you suggest and raise a new patch in case of any real bug OR 
-> design expectations.
-
-Can you address Vinod's comments?
-
-Best regards,
-Krzysztof
-
+Could you please suggest changes OR approach related comments ? So i can 
+make a new change which can clean the merged code ?  Hope that can 
+address the concerns.
 
