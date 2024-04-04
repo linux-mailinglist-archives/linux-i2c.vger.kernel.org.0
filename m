@@ -1,72 +1,74 @@
-Return-Path: <linux-i2c+bounces-2762-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2763-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9495C898AFB
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Apr 2024 17:22:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 121FB898E15
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Apr 2024 20:39:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F726283755
-	for <lists+linux-i2c@lfdr.de>; Thu,  4 Apr 2024 15:22:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 231421C20F3F
+	for <lists+linux-i2c@lfdr.de>; Thu,  4 Apr 2024 18:39:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEAEA12AAE9;
-	Thu,  4 Apr 2024 15:21:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB931130A58;
+	Thu,  4 Apr 2024 18:39:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ehmQUfX5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z4UJn/4j"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F71A5C8FE
-	for <linux-i2c@vger.kernel.org>; Thu,  4 Apr 2024 15:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA0612C7FB
+	for <linux-i2c@vger.kernel.org>; Thu,  4 Apr 2024 18:39:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712244086; cv=none; b=Y+sdRryk29zVF8yyHAbbbivE0EBMbpzlApNTmwfkKPtnzdTCINqL9AZELpjGbUNuxScb4Vro0ABJEe/iDrtYFOBipXTqUkSNCmIiN3cxlLoomEvET4eVHAygpt7gwvFtEywJTWz5MMc4HW2q0tFjxMkiX5o1vmld1d6ltRGgGTg=
+	t=1712255992; cv=none; b=KpgHpSigJoGgzwlWawcbxCKs4s5re6wEP0QuVZIP8FayXTC8F4DXm6tlsOT9Ds4DCECnsKalwGZ8AKciz7m3gmEbY2t5Obpy6TFWJoo/C9xQlBWxG4qnjef4UtuDfRMVGJyc4soklVEMS/MOnYIYZxJpd+tGKDFW2oooY5KE7bM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712244086; c=relaxed/simple;
-	bh=8dKs5ZPZVpW9D+5Yj8nR2HNqIHHUT6vlrkoaz46GbBc=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=qiKHZrhd3H7bQLAMLtTAoXi2ZJdMA23xD6SLngyxWKP3UKMQv58XrkDThUpby99vrCX9RwrKcGaV+OhiVjiM9huxWnV9c2EvQw+EygKzeMitdnD65ObBpi8Aec8bEdiYjxSkeOpT0uvGFYYiV59JaQK9Au5YQj3V28rx0WFihZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ehmQUfX5; arc=none smtp.client-ip=209.85.208.50
+	s=arc-20240116; t=1712255992; c=relaxed/simple;
+	bh=oYv37zwkALp6jUGg6PdcvIParTyg4w6WMu3otwMktsQ=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=ZEBSqgYr/7AEZD08EPlGjb8K2q6P5Ed0ulKvIsqkL6vbTxCrP2EkPvq6qGNEGa4odS1Xmh9ZekBEbtNinms9sj+hGYwgGikLEkvvvUPyWUz+glssb4DKEbeXsnq77NEb40DMU3/J6Bg73WliePGdhGs0jmjRNYktHr1jpjxp8Bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z4UJn/4j; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-563cb3ba9daso1170348a12.3
-        for <linux-i2c@vger.kernel.org>; Thu, 04 Apr 2024 08:21:24 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a45f257b81fso188695766b.0
+        for <linux-i2c@vger.kernel.org>; Thu, 04 Apr 2024 11:39:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712244083; x=1712848883; darn=vger.kernel.org;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uRoYqiDn8k3kRrFYDGNnRYWDJ9vLQpPPndN9eHhQKgI=;
-        b=ehmQUfX5ep93RvrYCZ0Oylw+p9sbND6tPlpCPPY781JoqzU0ezbfWpOA6lVJHko0gh
-         Xezoy2CxiW76wWijdd7kbIhVZ7a8L047qtqgwJNlCh4JPQWLl4Pg64euqUtXGVss8VAh
-         lNZXuG9LOFgAThcVA7irzKyhSEKZMXtM8FPXfe8LTTJHAzpotnqYGjazE6W46XKjJI+b
-         rYWwEk2x1kBeX+m/KcLiOUQdqjE/P50db+Px8PY3ovvKC1u92c/QuIkMDqF/W/Lb+M4q
-         vLcnY3+7KOlgyABGMU2M8hklvwGOGL/tGDYfHUAbWwBx8XjtkGR94rms7+FOZP5ZmyWq
-         3lwQ==
+        d=gmail.com; s=20230601; t=1712255989; x=1712860789; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=/uBfgEzPnFgmCs9caM2jntvqWIQOCASTAU+3c+z+l1c=;
+        b=Z4UJn/4juOkQWr2BusVbX2Rw8EGwjz4n0Ch6q6H6q+KP0bUPacklB7n/Iy+kqtRf0/
+         SBHTE87E8N35VfAQAC/Fu2+R68GpkCohc3qw/bowJYFS5bX1O3hlh9uoKRW1hTHVPV7I
+         5aQtijyn6yK1u4hYUFaMADCuSxIdlaJ2oyVu9pxrySGZhHCEFXCxCrtn3G1yGhfWDROA
+         /mqk7OT4XZ6Mnp1zFRCOFScY5QgHOR95+F6sMnVxx0n8qBflxF3Oa8pbHF5R/VCIKIFR
+         8xsZU3xDU4Rg4+ArlX83LHRwyNuLcODUq8xZ6TiNEYwI7r0MZM6B7rC0LsQ3ZBUi9y25
+         tZsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712244083; x=1712848883;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uRoYqiDn8k3kRrFYDGNnRYWDJ9vLQpPPndN9eHhQKgI=;
-        b=W1Pg1BqnqxMkvoA/vFQb5rsWJcr+pnfyyiUmHZOsUaxC2ZJHlQBCH10lYljteMFMZf
-         y+cVWIDVMSW6IdRrjUV7VXngI3i4N62g790ejGZel0RP+Fy0J20r1F2B9AtN4p756+qL
-         CWxIZWk5lBxOdeilizgKSCXxjS0QfmkH+Bq/HAQ8a6i/zrbgFSNJjDLQTBx/OmgSx3VJ
-         eFpMw6fUdh2G2mNuFXvYf8mqr0bySJxqA2G5Dvkk5+PbxV/YJ9O1uYGukHMLQbFeXRCZ
-         n1Gt9dwLwO5Eo/J9VJt9mhwBxLvg9mPx6ckHGDpT6PIsskyi75P5IzcuW0vwI8uKzioE
-         6rRQ==
-X-Gm-Message-State: AOJu0YwbiGgJwHrOeLTa0gyHWMKYoVzFtv5l62vEvhoEm1HD/8t+Cv6p
-	sDsCVuMJXEjxZrP2GF5iGfr/p0mzoMapxcgAVijhcwbrLHhDHp96
-X-Google-Smtp-Source: AGHT+IFOJNTVylleOUAiJl3agcUCnBVZ7GZUVuUHpz+NENl4NRyRzHM3nEMvAyNdEw/6LBnn+zkNew==
-X-Received: by 2002:a17:907:119c:b0:a46:22a3:479f with SMTP id uz28-20020a170907119c00b00a4622a3479fmr10622ejb.21.1712244083106;
-        Thu, 04 Apr 2024 08:21:23 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712255989; x=1712860789;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/uBfgEzPnFgmCs9caM2jntvqWIQOCASTAU+3c+z+l1c=;
+        b=llm9PK47ZJ+57Ila0EO31VjlTed9hM8UM+2jfi8QDg3ZRIGNAVLFFogbeKfHRLrZf7
+         XQJaVJSRC5pTSm2f+b+5yw3e8dqgJX9SWci4KAJYLgJ5r3B82KjUurJhokfsE7IRTO3U
+         mFkTAz/E8Mw1WOWqncmN2pUsUkERYIbNFQtSm6vmPqJ+umQQgLwaB4cUCn7aw8UREdaf
+         uT1+7xsE7Fkly3/G7jbyxKFdmHmy+tPYzzCMQQDusHp1pEi6zxQUGX9zmA/N5G9dr45i
+         5ub1ZP83Y7B2VZnvp4WxLf2XZ83NF0kQMP6BavCW/NE2qpPgkRJXtRm8Su9Br9w+4zig
+         hEyw==
+X-Gm-Message-State: AOJu0YxOmuod4Cdfjvl2D5AOb20n/ySE385gPg5fRswuuzhE5SnoLAhI
+	ExrDNIln3ZDWlyJBHXeplpIO1s/bXSsfdVLN+XCidGy8sFiaKLoyKZojLRlK
+X-Google-Smtp-Source: AGHT+IHNDaYwWS9TRfa/L8aPDNjjvqRwskt+wE6ZBY7eaHFkA3FJ4vgc+A6q4sEuycLWPrwwE+tJzA==
+X-Received: by 2002:a17:906:5655:b0:a4e:2bd3:a060 with SMTP id v21-20020a170906565500b00a4e2bd3a060mr317233ejr.64.1712255989201;
+        Thu, 04 Apr 2024 11:39:49 -0700 (PDT)
 Received: from ?IPV6:2a01:c23:b917:8300:853f:3a79:973b:a77f? (dynamic-2a01-0c23-b917-8300-853f-3a79-973b-a77f.c23.pool.telefonica.de. [2a01:c23:b917:8300:853f:3a79:973b:a77f])
-        by smtp.googlemail.com with ESMTPSA id x18-20020a1709060a5200b00a46ab3adea5sm9129802ejf.113.2024.04.04.08.21.22
+        by smtp.googlemail.com with ESMTPSA id lo3-20020a170906fa0300b00a46a3ad035esm9490628ejb.179.2024.04.04.11.39.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Apr 2024 08:21:22 -0700 (PDT)
-Message-ID: <c5eb2644-8c05-47a5-84ef-07f8ef750e1a@gmail.com>
-Date: Thu, 4 Apr 2024 17:21:22 +0200
+        Thu, 04 Apr 2024 11:39:48 -0700 (PDT)
+Message-ID: <53e1238c-0732-4e13-b713-e724e12691c7@gmail.com>
+Date: Thu, 4 Apr 2024 20:39:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -74,11 +76,12 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Content-Language: en-US
+Subject: Re: [PATCH] i2c: i801: Fix missing Kconfig dependency
+From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.com>
 Cc: "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] i2c: i801: Fix missing Kconfig dependency
+References: <c5eb2644-8c05-47a5-84ef-07f8ef750e1a@gmail.com>
+Content-Language: en-US
 Autocrypt: addr=hkallweit1@gmail.com; keydata=
  xsFNBF/0ZFUBEAC0eZyktSE7ZNO1SFXL6cQ4i4g6Ah3mOUIXSB4pCY5kQ6OLKHh0FlOD5/5/
  sY7IoIouzOjyFdFPnz4Bl3927ClT567hUJJ+SNaFEiJ9vadI6vZm2gcY4ExdIevYHWe1msJF
@@ -122,33 +125,36 @@ Autocrypt: addr=hkallweit1@gmail.com; keydata=
  H/0Z53okMykVs3a8tECPHIxnre2UxKdTbCEkjkR4V6JyplTS47oWMw3zyI7zkaadfzVFBxk2
  lo/Tny+FX1Azea3Ce7oOnRUEZtWSsUidtIjmL8YUQFZYm+JUIgfRmSpMFq8JP4VH43GXpB/S
  OCrl+/xujzvoUBFV/cHKjEQYBxo+MaiQa1U54ykM2W4DnHb1UiEf5xDkFd4=
+In-Reply-To: <c5eb2644-8c05-47a5-84ef-07f8ef750e1a@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-The original change adds usage of i2c_root_adapter(), which is
-implemented in i2c-mux.c. So we need I2C_MUX to avoid a linker error.
+On 04.04.2024 17:21, Heiner Kallweit wrote:
+> The original change adds usage of i2c_root_adapter(), which is
+> implemented in i2c-mux.c. So we need I2C_MUX to avoid a linker error.
+> 
+> Fixes: 71b494e043d2 ("i2c: i801: Call i2c_register_spd for muxed child segments")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202404042206.MjAQC32x-lkp@intel.com/
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+>  drivers/i2c/busses/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 97989c914..201c5fc17 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -111,6 +111,7 @@ config I2C_I801
+>  	select P2SB if X86
+>  	select CHECK_SIGNATURE if X86 && DMI
+>  	select I2C_SMBUS
+> +	select I2C_MUX
+>  	help
+>  	  If you say yes to this option, support will be included for the Intel
+>  	  801 family of mainboard I2C interfaces.  Specifically, the following
 
-Fixes: 71b494e043d2 ("i2c: i801: Call i2c_register_spd for muxed child segments")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202404042206.MjAQC32x-lkp@intel.com/
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/i2c/busses/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 97989c914..201c5fc17 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -111,6 +111,7 @@ config I2C_I801
- 	select P2SB if X86
- 	select CHECK_SIGNATURE if X86 && DMI
- 	select I2C_SMBUS
-+	select I2C_MUX
- 	help
- 	  If you say yes to this option, support will be included for the Intel
- 	  801 family of mainboard I2C interfaces.  Specifically, the following
--- 
-2.44.0
-
+Please disregard, I'll send an improved version shortly.
+Issue with this version is that I2C_MUX may be enabled even if I2C_MUX_GPIO is
+unset and the mux part is disabled.
 
