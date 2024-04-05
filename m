@@ -1,73 +1,61 @@
-Return-Path: <linux-i2c+bounces-2776-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2777-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD365899A8E
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Apr 2024 12:18:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66795899AEC
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Apr 2024 12:32:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A8AD1F23315
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Apr 2024 10:18:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9784C1C228D8
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Apr 2024 10:32:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DE14161922;
-	Fri,  5 Apr 2024 10:18:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F008471738;
+	Fri,  5 Apr 2024 10:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="TbhXudkY"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Lkq1DS5W"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0CE71607B0
-	for <linux-i2c@vger.kernel.org>; Fri,  5 Apr 2024 10:18:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB3E6CDB7
+	for <linux-i2c@vger.kernel.org>; Fri,  5 Apr 2024 10:32:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712312323; cv=none; b=tFVXZ94E2Dfgfd9cH0hNGWAFLqKkGR4MMu3tlODLf3N2bLCGPxQDi//MQl82ehKIaBhSpdV1XGuFJJeBhHsmvlrn3DTV/Fjrk16Q42sMQDemtrR5DyCnmlu1KVVuQvc4bu6AHapkST0oA0mwX7Ktn5YtwfIG/1or0xZCjbYBLjU=
+	t=1712313166; cv=none; b=gOW7/rOYY2/1gX5GhOJDn68tuREQdR+n+XkyWgAqR5Ie648cVvODxeWTMPNuk+hiKoGtIvnwSSkQfEAdXTU1qMrqFX4B0aQT4AgNt1i2hXdmVgAHjmNGGskth0tBgUqTHq6CMvdN1dFIOndZDE81L3n/AEIhADaX8SbDmBq6RcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712312323; c=relaxed/simple;
-	bh=5fZz+hrMjs1KcvnTZOEbAJMZkLsCTGpJnRmjeSMAJeQ=;
+	s=arc-20240116; t=1712313166; c=relaxed/simple;
+	bh=LxF0BSRsYY9YuzF6RMysKr5fa1M5QCRgF2nZBa70Q1I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n5/Be8LL3kO1PL5yujXK0E2+H1cYPfwEFcGOElr6lYixYAIbMD1v/nGlZQE3mVKHin/6LRnrkw8/0zl3tUhWC0NEXNB6lquGGYAQ2c/a+GdHng4VIi49gob368pXi7uRnN3XJr93VwAxxlfiAIunav0a0fGrZ+yfNRh7DWGcug8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=TbhXudkY; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=JuljPr/W784IA0VNs9E/uMVBmUQe73gaOeaa0N9n2E30Dv8gI93ltMhjq49IQxbjCnPWkIXWx9Swxby7coPV0JCv906+mUnJQ5CKheUpoPffAVXtE2baUTVZmJhluA5KFPbSdxoSVW+de9uwuhnTAAmgm39+7gERNpI53A+Nwyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Lkq1DS5W; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=XRZ/
-	7f9TpBVm+EqkcIlzKupPDZE9c/6S0MGx+T9aWhU=; b=TbhXudkYnme5n6iHh1a7
-	RBdhDu2GT6+9PAy8ABhR4DJ4AFeu9vn7KF9NnItdIjxg3lODlyxOWMQzmHvBjUuV
-	6C2iJlxx9lPXa2C8k2zkTkCSAQ80w4ipFFE24BRkYFzXyEK7FP0vMNw5j1O2wMwt
-	rY3DTBf3ZIZFcTyDbCkD+x2BtRIlE2QfpykSPGqfi0fAa4E69G+hgGGV7l0hOuGb
-	eRpF0U2crVKhUWxUBjAZhcKkAmkgy6/e5eOeLvTbIQriGrx9zqcvXZvr+o3oYemF
-	ZV3lsTAHA9m7SGPcs05kwS6QKI/86ISnt7+jeteV6CxjkYrq8U88Su9gL7GEhrTR
-	qA==
-Received: (qmail 4072572 invoked from network); 5 Apr 2024 12:18:37 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Apr 2024 12:18:37 +0200
-X-UD-Smtp-Session: l3s3148p1@a0Brx1YVfIUgAwDPXwEGAANOsN0UmmrN
-Date: Fri, 5 Apr 2024 12:18:37 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=LxF0
+	BSRsYY9YuzF6RMysKr5fa1M5QCRgF2nZBa70Q1I=; b=Lkq1DS5WQOt2gkjm3G+A
+	GnIKYbysgu3ee9KcKgO2LeLP/l0MFDYuJEJmfMU1MfDh5YGj51uH13bBW+mMx46X
+	2PQrZjwV4U/5S06bBTdVc38EaJs7w0SpBzoQbBjdUTG8i6x91RhtDiZCZaXS1pL+
+	e16/kj3MVFd7Q+m/Lyj2BiF1vl1/iWf/mMgVmeMWpekjGIFV56iT/SCedPv3/pyt
+	xrAVPEn1dBE3Cc9sJD9sZwiGp8y5M1KJ2eoVcCh+0INiHlbBvP3+kWzBlZZh3Hz9
+	ij21sIL6dqznCIaNUt1xOezU49/3GjocMK6LWmjcpr4OKOlXhhXoSQDUZw3c9f6p
+	rA==
+Received: (qmail 4076162 invoked from network); 5 Apr 2024 12:32:42 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Apr 2024 12:32:42 +0200
+X-UD-Smtp-Session: l3s3148p1@d9LB+VYVypkgAwDPXwEGAANOsN0UmmrN
+Date: Fri, 5 Apr 2024 12:32:41 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: 
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-gfx@lists.freedesktop.org>, 
-	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-xe@lists.freedesktop.org>, 
-	"open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" <nouveau@lists.freedesktop.org>, 
-	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>, 
-	"open list:BTTV VIDEO4LINUX DRIVER" <linux-media@vger.kernel.org>, "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
-Subject: Re: [PATCH v0 00/14] Make I2C terminology more inclusive for I2C
- Algobit and consumers
-Message-ID: <ffumcagmzdstcf3qcn3f26555pnu7i6azjppciyd4zvcoit7pv@vu262tsfnqyr>
+To: Niklas Schnelle <schnelle@linux.ibm.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org, 
+	Arnd Bergmann <arnd@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] i2c: add HAS_IOPORT dependencies
+Message-ID: <b44wxgyzhxhxfqsazze3doy5kigi743vc6tuw4fgqrotzji4jz@osaug52h3pvg>
 Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Easwar Hariharan <eahariha@linux.microsoft.com>, 
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-gfx@lists.freedesktop.org>, 
-	"open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS" <intel-xe@lists.freedesktop.org>, 
-	"open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" <nouveau@lists.freedesktop.org>, 
-	"open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>, 
-	"open list:BTTV VIDEO4LINUX DRIVER" <linux-media@vger.kernel.org>, "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
-References: <20240329170038.3863998-1-eahariha@linux.microsoft.com>
+	Niklas Schnelle <schnelle@linux.ibm.com>, Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org, 
+	Arnd Bergmann <arnd@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org
+References: <20240405101009.2807447-1-schnelle@linux.ibm.com>
+ <20240405101009.2807447-2-schnelle@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -75,75 +63,47 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wrrai2fidezv42rs"
+	protocol="application/pgp-signature"; boundary="gcyxf7hf6r4jxara"
 Content-Disposition: inline
-In-Reply-To: <20240329170038.3863998-1-eahariha@linux.microsoft.com>
+In-Reply-To: <20240405101009.2807447-2-schnelle@linux.ibm.com>
 
 
---wrrai2fidezv42rs
+--gcyxf7hf6r4jxara
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hello Easwar,
+On Fri, Apr 05, 2024 at 12:10:09PM +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=3Dn will disable inb()/outb() and friends at
+> compile time. We thus need to add HAS_IOPORT as dependency for those
+> drivers using them.
+>=20
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-On Fri, Mar 29, 2024 at 05:00:24PM +0000, Easwar Hariharan wrote:
-> I2C v7, SMBus 3.2, and I3C specifications have replaced "master/slave"
-> with more appropriate terms. Inspired by and following on to Wolfram's
-> series to fix drivers/i2c/[1], fix the terminology for users of the
-> I2C_ALGOBIT bitbanging interface, now that the approved verbiage exists
-> in the specification.
-
-I really appreciate that you want to assist in this task to improve the
-I2C core. I do. I am afraid, however, that you took the second step
-before the first one, though. As I mentioned in my original cover
-letter, this is not only about renaming but also improving the I2C API
-(splitting up header files...). So, drivers are not a priority right
-now. They can be better fixed once the core is ready.
-
-It is true that I changed quite some controller drivers within the i2c
-realm. I did this to gain experience. As you also noticed quite some
-questions came up. We need to agree on answers first. And once we are
-happy with the answers we found, then IMO we can go outside of the i2c
-realm and send patches to other subsystems referencing agreed
-precedence. I intentionally did not go outside i2c yet. Since your
-patches are already there, you probably want to foster them until they
-are ready for inclusion. Yet, regarding further patches, my suggestion
-is to wait until the core is ready. That might take a while, though.
-However, there is enough to discuss until the core is ready. So, your
-collaboration there is highly appreciated!
-
-> The last patch updating the .master_xfer method to .xfer depends on
-> patch 1 of Wolfram's series below, but the series is otherwise
-> independent. It may make sense for the last patch to go in with
-
-Please drop the last patch from this series. It will nicely remove the
-dependency. Also, like above, I first want to gain experience with i2c
-before going to other subsystems. That was intended.
-
-All the best and happy hacking,
-
-   Wolfram
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---wrrai2fidezv42rs
+--gcyxf7hf6r4jxara
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmYPz/kACgkQFA3kzBSg
-Kbb2khAArgkbDpks50YTmBYCaMaPYcuR0VEc60/+z8tRAlS4IKaYIXzw2LEXG7Lz
-vJE8MMcWs6lGZjapOyfhFrB/U9Zu8Ffpg1qataFG3ZnRZG6BYb8i2cCTCwK9h4Vk
-KfijUXjmqXMGKRcaUcIYL/IxYZYRP0Y9yYGfBibDtxV7hnMakp6+XXbfM8FVCj1g
-iW3ORBfLYR32dJxnI4unFt15e2aXFDQkJDLqBJ4WGynGPaGr0lmfQpWQDP2aYlN0
-Dyormc+6tCEOAN6PBG0cssZbMUj4ABQYOxxNhQ8hP6gAqkMuqqC1+nHAH3PNQjkf
-VHMYFPogE0LGrCOOVKzgeU3QIfF9MABirrNB8bx+K3tl1te0EWse1u4CXIKrmBZ7
-VS1fVRMUdS25YnzNM5cfZQTGv2JxgebrXUqN1bneFpKmISO66p2hF3/8lsaPO8Rw
-6QOTRpcHay1sESrreLn9gAj/NeddgU7XhI3oGqk6PQyYQrE5LbTh0wuZil02rwjJ
-ea29MTkK7muy5fQT9dDHOk38fjG0jk48Oyk5NBVMboeLKlvPy6OTiXG6Z1lifGga
-xZe0cBBoH5gHPY6ZIVh4HaHfbmzt5jGIpzf8Sx9E9n03K6Njewqu+Wxm24AMr/OR
-79BvBK0rlCVMmck+ZJiW969Q/G9JKFieQnUDqHlMc5nIAHMB0Lw=
-=T3F5
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmYP00kACgkQFA3kzBSg
+KbbDsw//V18CsbXlLUZbOMcuZyTmbnf2TksMmnXYxLxV1PclCCP/A2TSXIsj6Tho
+RlvnjkW+3oQ1zbM75GN7bYX9pj67DrShceUnyamH7A8pCo9bmmCrk9bLWGYPGOO7
+umkR6fhmlsVbkiK61zZmFvfQwA9RrjkgS64VjSpQq00/WLOqgD2TxrGcCWio+HlF
+Xnz6WvHleReG75YacMz16uLYSFRMiafnwmFpQLQJVp7lqaF6L1MoCgY4gmMDwNyJ
+MWXZpbTqdPPmEevx2hpeJbU3okJt5OzArH5RsHVkSl9dmyfurXj18d1foZ/vhxJ/
+2k9PPbql8oVbR9u3xtas9b7oweB9pwR8tN0y57wJpitd/aw5G0uMNKbBtQ1A8lMX
+JxQnKP28RWSoik9S9HruwJ06xroloPJ7ZdBZ4xPLEUyw5PXTYOjcPG+jFW/otgyK
+7iyzWGQI+6uuqSeV7kP64KMpzRh73p5cleshEMgTW0ZRO2N9ODIiMUZzW7pZAWt7
+rG5aT9KAGg9jbg21aGRncZlQcnQtXfJxF3YeMt7NO09ajwc3CTsCdX9HTvpcXUXJ
+0KUJYL67pP2rNphf11sl6tQfoTl2au82Ee74B15mEMXtwyYz+VUWuU3hE6cRBdXx
+PxJwisLloBw/d+BtIDdtHMoBmjzbgf0T+JzMpoK/+iN6ZDyPl60=
+=IRCg
 -----END PGP SIGNATURE-----
 
---wrrai2fidezv42rs--
+--gcyxf7hf6r4jxara--
 
