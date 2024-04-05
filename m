@@ -1,137 +1,204 @@
-Return-Path: <linux-i2c+bounces-2789-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2790-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B27E89A445
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Apr 2024 20:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 868F989A4C6
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Apr 2024 21:18:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3CED284550
-	for <lists+linux-i2c@lfdr.de>; Fri,  5 Apr 2024 18:37:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13737285E36
+	for <lists+linux-i2c@lfdr.de>; Fri,  5 Apr 2024 19:18:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99E3C172BA2;
-	Fri,  5 Apr 2024 18:37:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1CF6172BB1;
+	Fri,  5 Apr 2024 19:18:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Mv1VVMFm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cUCxLyvL"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A6A172799
-	for <linux-i2c@vger.kernel.org>; Fri,  5 Apr 2024 18:37:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C7F134C4;
+	Fri,  5 Apr 2024 19:18:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712342223; cv=none; b=PHbbZhBzbwe7l75v48kLXtMqF9AR8Iyt2vH6EgjTBXExEGyLsQCNrQBFVAZjWYVYR0X2mpDbVAISAcZHKvo9dmL7Q0gZKwMe72uVC8tj/1iqE6ZkZg4aND6N3kIh3L9XAy0ReLxttaScn57ikAuft7wR8ScP8I0BP8LavJSOfaI=
+	t=1712344722; cv=none; b=dT8z6Whv6/twU0XVJ6O1WI5Owmzc+8nlm9cNur4do2gUjhuPKvwFgbHwc4s/qY08AASKXF0PN2NwOzGN5yW6bJZyvvRjIcdeIge2KXNnk5hmk6GefPbf26sZ3i7TSLhCLznXxoHyglK8PeYVpj5N5Zi2K0iyjJCtA+pGn4mq4Tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712342223; c=relaxed/simple;
-	bh=qvKsrMsm5amCXrkHqNf0dwZRvuZponfYbk9G0oYCwa0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ERypIER9Kv6/NDbMfdM+ia7G12O8HPMAQBiiDAUejaWY1Fgr7AswboecMcPBG/hQZTEjmslM51huEHQhWJemvE1Z0R/D1WWVI5oZY4ZEQUfqFjyEn46rj7ytfVlIF6qyv32fDGvx5/sI9GeKZ9UdHsv5oqWUO1BeGx3vP3Xt1NM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Mv1VVMFm; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712342221;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=qvKsrMsm5amCXrkHqNf0dwZRvuZponfYbk9G0oYCwa0=;
-	b=Mv1VVMFmpVAw7etmVSDjRa8VTDZL9FbLYSWWpP63jwB4ZgxuzOOzGVvRd0YknDM4fDGDg7
-	es+DaVzLxGZQ0UYj8jYATHYh8hwX5b9MVTfwzFGWqy5mmgEOOaSGbKmWjXxSu9CpyxgECu
-	cPF3zZYNG1b7b+IBTrPhebHo46SzURM=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-150-9-uibHTQOZKOeJNiM0DmmQ-1; Fri, 05 Apr 2024 14:36:57 -0400
-X-MC-Unique: 9-uibHTQOZKOeJNiM0DmmQ-1
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6e8ad7f1224so2761722a34.3
-        for <linux-i2c@vger.kernel.org>; Fri, 05 Apr 2024 11:36:57 -0700 (PDT)
+	s=arc-20240116; t=1712344722; c=relaxed/simple;
+	bh=+r1VE05dOtHhfpYm+if/zfx3U4RcR3zC5rPXBmWqICw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Li6QqqZRF5C3FJ3u+HR73jykhBea2upTEIjZY1IIrByK5EptxUucL7VfvDODT58IUwXPXnsM+kJm+PgbRdFY2seXtVcu02Yl2O4cMou5DTYbFqgkzb6aRjEYTJ9UQAbOUpAU/59T5cwfafxg6PNInD5C2nkN249RBzq8yxM85gM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cUCxLyvL; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-516cbf3fe68so2799898e87.0;
+        Fri, 05 Apr 2024 12:18:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712344719; x=1712949519; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=HKBz1xZFQF6731Fo879v1cUTJJwr/6Wx2pDKi598pkc=;
+        b=cUCxLyvL8mLPZ4lQ3U4GGbiqrAe8w1OWnKY99RBj2dmKdfBTUsxxs0lI1At46C4jji
+         895JDZYtFxHgSfP4/5X6MGfdxcD3QwpWjLwlq89EIsv4hCN3coyKUtZqRZhCkRJuY0++
+         3s9a5vcw54BMRPczpr1XzD2gkPggTsGCdaeU78jSLwMG8JaZRrYq4gRDkxH6Beg7M8qv
+         SYC1QVQT64OfIYOddq0g4RznUWQAFIj8TkawTsksFD5oNUXFCL7a2v2zQujXkXbuiFo3
+         momBo0PA8tcTHFwKkant7/jAk4vB2KARsZ8If2mGluskg9/GN5KHrW5o5zZPIj826/BU
+         x/VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712342216; x=1712947016;
-        h=mime-version:user-agent:content-transfer-encoding:organization
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qvKsrMsm5amCXrkHqNf0dwZRvuZponfYbk9G0oYCwa0=;
-        b=Imlbu3IjYcpAOs9Hr0jr338kwxI8aOGbGyRlSArJlY94zFNpnZVQleT/7lAg5eDo3l
-         qzfJcAU3biTG8eTEr+9ge1QoJBMQK8gHh+/OuEvh8fHvv0PIeOQXkEVSNgP8iwTJuWN1
-         YLdAo0MFGSW06M4kwETuKahD5My97NZCCk1o++SKbhRShH6lc+L5AQ3zl7k1Q+ZmGbED
-         RIQANbgm6IJGql9UmXLjwAgIzYRbqsDzt2jdo62Po4OHKibsovfksb26r9Re193fdEc+
-         +AcBLMaY9rg33ZT6Jl6q16JFfNRDPfpgGIVYy9jAnGC+oMrnPY9yMAqfSeeYbcE6oM90
-         P0NA==
-X-Forwarded-Encrypted: i=1; AJvYcCVPn9hH3POi895igrszb0hnavHa6xAv/n2hmvJdX2183Acqqw5wJ8Ho1c5OkwwSlEiVW90D/tE1WbVKfoOetuc8PKlG90xJghCH
-X-Gm-Message-State: AOJu0YzcDrYxfuOZ0Yd8GeilyFpHNjw5IeIgjapqtZLBHjTbr5WeC2Gc
-	VHEVSWZFfH5UnSADLCOWt7rKke5W6dWWfmjwy+gmtatbNuueMqxUH6SpVvvVSEDi7Z6Cxx49rA4
-	XKyQO5Vfi/7vU3o5IS92HfijE90ql/WUtb5wYUWMK8+KMNzLFBH3CH+qXzA==
-X-Received: by 2002:a9d:6755:0:b0:6e9:e829:2c77 with SMTP id w21-20020a9d6755000000b006e9e8292c77mr2188580otm.27.1712342216539;
-        Fri, 05 Apr 2024 11:36:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFt+D771XMHHFySTD83Ks6yYhCqZ6qH+nHPbjpQmLbCiVM6E3jPPssFvgzLpd4PouzY8zRNoQ==
-X-Received: by 2002:a9d:6755:0:b0:6e9:e829:2c77 with SMTP id w21-20020a9d6755000000b006e9e8292c77mr2188569otm.27.1712342216298;
-        Fri, 05 Apr 2024 11:36:56 -0700 (PDT)
-Received: from ?IPv6:2600:4040:5c6c:a300::789? ([2600:4040:5c6c:a300::789])
-        by smtp.gmail.com with ESMTPSA id qr2-20020a05620a390200b00789e2805f85sm854603qkn.21.2024.04.05.11.36.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Apr 2024 11:36:55 -0700 (PDT)
-Message-ID: <190fda6f12aa77170631fb12e505779ce33d1c64.camel@redhat.com>
-Subject: Re: [PATCH v0 13/14] drm/nouveau: Make I2C terminology more
- inclusive
-From: Lyude Paul <lyude@redhat.com>
-To: Easwar Hariharan <eahariha@linux.microsoft.com>, Danilo Krummrich
- <dakr@redhat.com>, Karol Herbst <kherbst@redhat.com>, David Airlie
- <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, "open list:DRM DRIVER
- FOR NVIDIA GEFORCE/QUADRO GPUS" <dri-devel@lists.freedesktop.org>, "open
- list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS"
- <nouveau@lists.freedesktop.org>, open list <linux-kernel@vger.kernel.org>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>, "open list:RADEON and
- AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, "open list:INTEL DRM
- DISPLAY FOR XE AND I915 DRIVERS" <intel-gfx@lists.freedesktop.org>, "open
- list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
- <intel-xe@lists.freedesktop.org>, "open list:I2C SUBSYSTEM HOST DRIVERS"
- <linux-i2c@vger.kernel.org>, "open list:BTTV VIDEO4LINUX DRIVER"
- <linux-media@vger.kernel.org>, "open list:FRAMEBUFFER LAYER"
- <linux-fbdev@vger.kernel.org>
-Date: Fri, 05 Apr 2024 14:36:54 -0400
-In-Reply-To: <e6b04b76-c695-47b4-9432-f2316e174585@linux.microsoft.com>
-References: <20240329170038.3863998-1-eahariha@linux.microsoft.com>
-	 <20240329170038.3863998-14-eahariha@linux.microsoft.com>
-	 <4dc6fb16-3d85-4a7f-85f9-ed249da0df1a@redhat.com>
-	 <e6b04b76-c695-47b4-9432-f2316e174585@linux.microsoft.com>
-Autocrypt: addr=lyude@redhat.com; prefer-encrypt=mutual; keydata=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
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+        d=1e100.net; s=20230601; t=1712344719; x=1712949519;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HKBz1xZFQF6731Fo879v1cUTJJwr/6Wx2pDKi598pkc=;
+        b=aQUTcGSevNEjHCJl7HA09GbPJStZPVab8f0NOdIX9b6gvGboX90Mh15/NagcURwPXe
+         vXr1czqi+K7P9ysj52CoRukdQoRzUAhVFnHI8WkSOVRLWUUdVQKi0YQkBdVyXB/+CpHg
+         gn1mxo5GdzLyh8ZyUSgtXzZ5GAG4Vy+xonRfCEHeJIFc65S0qfpT05bs0Roi1piwpqOe
+         8wGmS9Tc2PpzcUGlGuYGaFIM6oAC2T5alvZ7HEx7ScRY8hQrUHbYL2s9GQnG0eXuvne9
+         gnzehlhpNVdIrQlSllGj3Um1LAJpH/EgdHOZDIB9L6pXWAbNP5ia/xEKbix2hFgO7ciN
+         Vqxg==
+X-Forwarded-Encrypted: i=1; AJvYcCU+t7f/WAozFBDDWnW9hNkYDb8APBblQ5ypRqRQDL7kHLoRVKxPjuYJ8/Q81NtzcAGa5eyWcgp7a0d06V9HUqzAPJiHUSNgUY3zxvl3UNgjHZWDt/9SUOFvP1TwYEV8D2jptlVeOTdadlzz2kAe+KLMa0pTyby/nz2B1seTzhsMGkhD7wj+NZo=
+X-Gm-Message-State: AOJu0Yxc2VBreGrPBfUHPmXNN8Av9pCL4zzUuAa4wN7tMw49DHisgV59
+	vWj5k40wIHUwvMj0IyfTBc+gf52v+x5lK66T3ZR8Gnyj5cHgrNTh
+X-Google-Smtp-Source: AGHT+IGQ1uY1jp5rs0lz0a5idmCVq3eyxEWgVwPTMzGMTKRVkKcuuvhHqQf+xIC8/DhOaLPmL60Vew==
+X-Received: by 2002:ac2:46e9:0:b0:516:d63b:ff56 with SMTP id q9-20020ac246e9000000b00516d63bff56mr1437244lfo.56.1712344718496;
+        Fri, 05 Apr 2024 12:18:38 -0700 (PDT)
+Received: from ?IPV6:2a01:c22:72bb:b200:e0e0:cd27:7a04:5c79? (dynamic-2a01-0c22-72bb-b200-e0e0-cd27-7a04-5c79.c22.pool.telefonica.de. [2a01:c22:72bb:b200:e0e0:cd27:7a04:5c79])
+        by smtp.googlemail.com with ESMTPSA id qy25-20020a170907689900b00a51b18a77b2sm261076ejc.180.2024.04.05.12.18.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Apr 2024 12:18:38 -0700 (PDT)
+Message-ID: <35e0b5cf-f7d8-4329-8dba-1098ed9451dd@gmail.com>
+Date: Fri, 5 Apr 2024 21:18:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] i2c: i801: add I2C_MUX dependency
+To: Arnd Bergmann <arnd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>, Jean Delvare
+ <jdelvare@suse.de>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-watchdog@vger.kernel.org
+References: <20240405142823.615609-1-arnd@kernel.org>
+Content-Language: en-US
+From: Heiner Kallweit <hkallweit1@gmail.com>
+Autocrypt: addr=hkallweit1@gmail.com; keydata=
+ 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
+In-Reply-To: <20240405142823.615609-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, 2024-04-05 at 09:30 -0700, Easwar Hariharan wrote:
->=20
-> Thanks for the review, and for the appetite to go further! So we are
-> on the same page, you would prefer
-> renaming to controller/target like the feedback on other drm drivers
-> (i915, gma500, radeon)?
+On 05.04.2024 16:27, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> When I2C_MUX is a loadable module but I2C_I801 is built-in, the newly
+> added notifier function causes a link error:
+> 
+> x86_64-linux-ld: drivers/i2c/busses/i2c-i801.o: in function `i801_notifier_call':
+> i2c-i801.c:(.text+0x1f5): undefined reference to `i2c_root_adapter'
+> 
+> This code is only built if I2C_MUX_GPIO is also enabled, so add a
+> conditional dependency that allows building the driver as before if the
+> GPIO part is disabled, but otherwise require the linker dependency at
+> Kconfig level.
+> 
+> With the added dependency, the driver cannot be selected by a builtin
+> ITCO_WDT driver when I2C_MUX_GPIO is a loadable module, so remove
+> the 'select' statement in that driver as well. This was apparently
+> never needed at compile-time, and the watchdog driver just needs either
+> the LPC or the I2C drivers, but never both.
+> 
+> Configurations that rely on the implied 'select' from the watchdog
+> driver now need to enable all three.
+> 
 
-FWIW I'm in support of this as well! As long as we make sure it gets
-renamed everywhere :)
+Question is whether we really want that I2C_MUX restricts the choice for
+I2C_I801. Alternatively we can skip building the mux part in the problem case.
+The mux part can be used on very few old Asus systems with > 8 memory slots only.
+Proposal I sent:
+https://lore.kernel.org/all/4dhfyaefnw2rtx5q7aaum6pfwha5o3vs65iqcrj2ghps34ubtw@b3bw3gggudjs/T/
 
->=20
-> Thanks,
-> Easwar
->=20
+Note also the CI bot tags, as the problem was reported by a CI bot before.
 
---=20
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+> Fixes: 71b494e043d2 ("i2c: i801: Call i2c_register_spd for muxed child segments")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/i2c/busses/Kconfig | 1 +
+>  drivers/watchdog/Kconfig   | 2 --
+>  2 files changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 1872f1995c77..2619018dd756 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -108,6 +108,7 @@ config I2C_HIX5HD2
+>  config I2C_I801
+>  	tristate "Intel 82801 (ICH/PCH)"
+>  	depends on PCI
+> +	depends on I2C_MUX || I2C_MUX_GPIO=n
+>  	select P2SB if X86
+>  	select CHECK_SIGNATURE if X86 && DMI
+>  	select I2C_SMBUS
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 0b0df3fe1efd..4dfb3773e6e2 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1301,8 +1301,6 @@ config ITCO_WDT
+>  	select WATCHDOG_CORE
+>  	depends on I2C || I2C=n
+>  	depends on MFD_INTEL_PMC_BXT || !MFD_INTEL_PMC_BXT
+> -	select LPC_ICH if !EXPERT
+> -	select I2C_I801 if !EXPERT && I2C
+>  	help
+>  	  Hardware driver for the intel TCO timer based watchdog devices.
+>  	  These drivers are included in the Intel 82801 I/O Controller
 
 
