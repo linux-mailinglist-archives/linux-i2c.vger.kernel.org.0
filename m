@@ -1,79 +1,95 @@
-Return-Path: <linux-i2c+bounces-2801-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2803-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B166A89AC0B
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Apr 2024 18:35:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A47F89ADA8
+	for <lists+linux-i2c@lfdr.de>; Sun,  7 Apr 2024 01:25:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E31671C20BF0
-	for <lists+linux-i2c@lfdr.de>; Sat,  6 Apr 2024 16:35:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94038B2172F
+	for <lists+linux-i2c@lfdr.de>; Sat,  6 Apr 2024 23:25:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A472233CF5;
-	Sat,  6 Apr 2024 16:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AJTKi/5G"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A3C158104;
+	Sat,  6 Apr 2024 23:25:05 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 3.mo550.mail-out.ovh.net (3.mo550.mail-out.ovh.net [46.105.60.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CB4107B3;
-	Sat,  6 Apr 2024 16:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3454E1BC
+	for <linux-i2c@vger.kernel.org>; Sat,  6 Apr 2024 23:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.60.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712421303; cv=none; b=s4qC4Xj+p7XU2bDqW72NUFZbQm/6/r0+/wf/0JvXOBMBn69z+7poWxnZpAAVwZji7PqJuTkHjyr6guajfdPO0XP7V+BPIkCcgYrcrEV1ETtMv3mzKF71vwoJ4m+CrwFO+mkS1H+seRu0xnSNqnU2Vk6d2YchHaG17MbrulZY7Kw=
+	t=1712445905; cv=none; b=Wa4hivGEzEHVtv42jFTtnx2FH9BfWgJgfQfRSNvXjXJxekFv+jMisIYhJCils6yVKB/lfCGdfReTy+khfb97mYk6m0UsWBuwN9NNpeFoXa/VbiVwdWH6slcb4Kq4NSrn7E+uBk0UKF/g9oV3kk98dU6okFDey9ixRsAPz4PRFLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712421303; c=relaxed/simple;
-	bh=7KA9K48IrbMRV/1dY+e7BQAyqn3kmkUCdzyC0mQDjFc=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=bCs+ImXGxToaHk9ZbtZPBKE8eDKgns/R8n/bo37NKuyLv3rU+xeapZX9NsEZtTe0+hlnG8zshfmSdGstgekwLQ7DhvvALAHU0D/ySIYD5H49vxV2uFY9ZGUT1p4On8RRKgrWF8x7A9V4b7c+RNa1rRSG2DN9iab/K2Xe/kvUiDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AJTKi/5G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2DD22C433F1;
-	Sat,  6 Apr 2024 16:35:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712421303;
-	bh=7KA9K48IrbMRV/1dY+e7BQAyqn3kmkUCdzyC0mQDjFc=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=AJTKi/5GgER+ghxrIXv6V60qJU6PjZwF1f7ZNgs/J2lpIZ6iSS8Wwj+apcJrzh1O8
-	 TvpnmMyP1YkGd/6meC8chG6Cc19kgwsb5RCJ4yr17z4fwpRPTxy2bH7iy96xUd6er+
-	 BDI1LgulpkdjAPiXHHVOrKaxHrTJA4j+rvImebc9kuIV53FaqaoAPhFbfeLlPOH67/
-	 eniM+ATBbU3wHNlSSuN+DXibvj2JTxYZqGjSy7O0e04eK+fn6TSW8oKvED9zJk1toA
-	 /A2urvbI93L/2z2aJk85O9WpSKRI+wbZ0fsVCFOUENEENvyvBu3hKVVAiVawlMQi1Y
-	 KdRoBh821NwnA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 22BF3D8A107;
-	Sat,  6 Apr 2024 16:35:03 +0000 (UTC)
-Subject: Re: [PULL REQUEST] i2c-for-6.9-rc3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZhEb2zk8J-YCCgaZ@shikoro>
-References: <ZhEb2zk8J-YCCgaZ@shikoro>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZhEb2zk8J-YCCgaZ@shikoro>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.9-rc3
-X-PR-Tracked-Commit-Id: 5ceeabb0eb2e1982d25c384048735b9da66911f9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: cf17b9503f1781af60f414c183c1dda8cdba696f
-Message-Id: <171242130312.8716.7935450468280333391.pr-tracker-bot@kernel.org>
-Date: Sat, 06 Apr 2024 16:35:03 +0000
-To: Wolfram Sang <wsa@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
+	s=arc-20240116; t=1712445905; c=relaxed/simple;
+	bh=y7rjYAJFlIDV2+5E+3xKk0Wop34dA9aGa9K7aHF7l64=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Me5xhzwWGsQURZ8uox2SsXa1RQZFHK5h40oujR9927q5aLU91T7iNG200bnGTTlnHA5yuouK09r804bQOH6Yz7Fa3BCvDsnIm4Qtn5ZXPVn+dWab9KsrVEePDqZBdIrJC0vwcQvYn1Rz3+8slFMH/nJJDJMr0N27yOlovNVMkwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.60.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
+Received: from director1.ghost.mail-out.ovh.net (unknown [10.108.17.59])
+	by mo550.mail-out.ovh.net (Postfix) with ESMTP id 4VBmC25k0Dz1Dn7
+	for <linux-i2c@vger.kernel.org>; Sat,  6 Apr 2024 19:49:18 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-wcc7n (unknown [10.111.174.42])
+	by director1.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 63BC61FE47;
+	Sat,  6 Apr 2024 19:49:14 +0000 (UTC)
+Received: from etezian.org ([37.59.142.107])
+	by ghost-submission-6684bf9d7b-wcc7n with ESMTPSA
+	id qQRmNDqnEWZW6QUA7OFEhA
+	(envelope-from <andi@etezian.org>); Sat, 06 Apr 2024 19:49:14 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-107S00125f72fca-bae7-4125-a8c4-596bb9fcfba6,
+                    474D68B9A30E89157E7E9069718C3EC714C936DF) smtp.auth=andi@etezian.org
+X-OVh-ClientIp:194.230.160.95
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+ Niklas Schnelle <schnelle@linux.ibm.com>
+Cc: linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>, 
+ Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org
+In-Reply-To: <20240405101009.2807447-1-schnelle@linux.ibm.com>
+References: <20240405101009.2807447-1-schnelle@linux.ibm.com>
+Subject: Re: [PATCH v2 0/1] i2c: Handle HAS_IOPORT dependencies
+Message-Id: <171243294822.75370.15549035576290413403.b4-ty@kernel.org>
+Date: Sat, 06 Apr 2024 21:49:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
+X-Ovh-Tracer-Id: 12051069656881302036
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudegvddgudegvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevjghfuffkffggtgfgofesthejredtredtjeenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepffetheduffdvhfdugfffudfgjeejudehheegfeeguefhieeugffhgfeuffdvgfefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepuddvjedrtddrtddruddpudelgedrvdeftddrudeitddrleehpdefjedrheelrddugedvrddutdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehhedtpdhmohguvgepshhmthhpohhuth
 
-The pull request you sent on Sat, 6 Apr 2024 11:54:35 +0200:
+Hi
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.9-rc3
+On Fri, 05 Apr 2024 12:10:08 +0200, Niklas Schnelle wrote:
+> This is a follow up in my ongoing effort of making inb()/outb() and
+> similar I/O port accessors compile-time optional. Previously I sent this
+> as a treewide series titled "treewide: Remove I/O port accessors for
+> HAS_IOPORT=n" with the latest being its 5th version[0]. With a significant
+> subset of patches merged I've changed over to per-subsystem series. These
+> series are stand alone and should be merged via the relevant tree such
+> that with all subsystems complete we can follow this up with the final
+> patch that will make the I/O port accessors compile-time optional.
+> 
+> [...]
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/cf17b9503f1781af60f414c183c1dda8cdba696f
+Applied to i2c/i2c-host on
 
-Thank you!
+git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thank you,
+Andi
+
+Patches applied
+===============
+[1/1] i2c: add HAS_IOPORT dependencies
+      commit: 53f44c1005ba64215ab6c3c5bbbcaef0870ae7d6
+
 
