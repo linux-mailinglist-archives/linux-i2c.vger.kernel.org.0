@@ -1,140 +1,109 @@
-Return-Path: <linux-i2c+bounces-2824-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2825-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 653F089BADF
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Apr 2024 10:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CADD489BB29
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Apr 2024 11:04:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 969C31C21C21
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Apr 2024 08:51:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 083101C21BC3
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Apr 2024 09:04:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96AF63A1A2;
-	Mon,  8 Apr 2024 08:51:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 845B64D9F7;
+	Mon,  8 Apr 2024 09:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="XJjGzyTS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855C239AC7;
-	Mon,  8 Apr 2024 08:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635504D9E2
+	for <linux-i2c@vger.kernel.org>; Mon,  8 Apr 2024 09:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712566265; cv=none; b=kecv6hZQSbUUOUPkFHQFmAkbR/v7VraIPVTlFeveneZQfNktknA0896Hge4JLXlXTIip10w5Q3lJdJhkyOAVnWaSTSDwAkwp7GYFLplXmOJUXu4G4ZkRcwgUdjVSnt6Z1bldyM45UIHyaReUnRax3dzRbQeOUWVbMdy1f0VDDwI=
+	t=1712567079; cv=none; b=ji7rRvjeGk7hCMDGw5Jg2wq6cA9f0hfp3hMUUilUZB5SNx+Z6spxceEIcNzL3NRpIHhs1sKTzdy2bt8A46S87GhE0HJbhu4q803Do63s9rQOkd7oRg8wPFQklNfmIWbOOrz+7ol0YOVEEchXDYp4spDOlmRLKTss96tchh9G9/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712566265; c=relaxed/simple;
-	bh=eJGFI4I49dt7XThhdrVtXbmwrsX1OQrh72tEumdCWak=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZnwAYDJa0lgRjLaNBz/7r7lacYcUVeF6YzZSU2QTJtWzd1PtK35TQ2d178src3YLaWXZ2VA6m64QLBlaWFmMaLdld7tqLn7zPQ76bHIouM7SJtFCH4CqDE62G1M/eGoLfREBHuiZ2g/Ne3kovdl7umKhozVlkcJi+jZo4rMRgKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-61149e50602so27288397b3.0;
-        Mon, 08 Apr 2024 01:51:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712566262; x=1713171062;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y7knVccZ+joC6b/5osClP+4tRwlgsC83C6kaddSo96c=;
-        b=efjNkuvskvzMv9E4mp3+oddCG7MQuh2K1RfPhCtATMC2p+yWn+2LtJPNK067UJSi3F
-         3z2eHmC3EswnE09Ik+ewT/SpUHOYDB8+0kLfBhjUnmHgR7mh2K/UtdcD1jhuwreLweHP
-         /SJZM+n2+LiXPQUylYIJnMvbU5wQv2UyrCmK7oY563SXb1xG7mBw7QzI/ZGqUxPoupXB
-         JyEi67Lo8RRJbRVmsAGVP+dbdgTTBacjsEhFOTuoxNKGgAKrsLW/yHmmqmWwZjyjwMeT
-         JLpoIwxwZvKAUSH7hX8lIV2hEy/ZZ6TkLD2mCt0azPDQAI00lJ3IJ2ezUY11N0BGdVQE
-         4P+A==
-X-Forwarded-Encrypted: i=1; AJvYcCWwy0B4WEwzucBookldEi4V0RKGw0JsP9Ojz7rLj4AmuKGP3EkRPiaHAKWxMcOoQ2R6DITtCxDoZy5lVcsNyIfCzzcf2ZQF/JR7QcgZfm2HhscmC2clAAI76Uu0FhDSrGXtuXfP5KMI
-X-Gm-Message-State: AOJu0YxW+bCtYZPgyaAjCN7gxshIxoW38jhI8GqRgpAY298B6MGVClka
-	zGLFVS6o1HQ6YEt3t32NXbV9/B2bci14rMSC/JMOm4PQ4UPUOglOrmEtYIJvCBs=
-X-Google-Smtp-Source: AGHT+IGCu19QoaJOuUf23uFteit6D/90vy1ht/EtsH1gTkeTaV8gMJWZtPx4R6ZatwaLpXeod6SPMA==
-X-Received: by 2002:a0d:ca54:0:b0:615:1711:e9a1 with SMTP id m81-20020a0dca54000000b006151711e9a1mr5242663ywd.14.1712566261916;
-        Mon, 08 Apr 2024 01:51:01 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id p7-20020a0de607000000b00610e32312f6sm1633039ywe.43.2024.04.08.01.51.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Apr 2024 01:51:01 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dc6cbe1ac75so3066762276.1;
-        Mon, 08 Apr 2024 01:51:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXkHWfTYA2CrXhc4/cVzZPWzHpL6nVUmQdypZ4jBOcDKvKykUzFCk7Nu+/D1VlqY6A7ybE9a7HRfRV+F5+br+H5TWZVWRLeV4FXCLZ1y72DSI34/O3A2TmZ9tt8iSv0mR1DtRHt4KOy
-X-Received: by 2002:a25:dc92:0:b0:dcc:6894:4ac0 with SMTP id
- y140-20020a25dc92000000b00dcc68944ac0mr5240129ybe.20.1712566261458; Mon, 08
- Apr 2024 01:51:01 -0700 (PDT)
+	s=arc-20240116; t=1712567079; c=relaxed/simple;
+	bh=kjDjXKKoE8Ayi+1GrmxBgboTFb2pUfu6mHNkhO8ngac=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=llH9i8CJ1BBYfnKhN5ub/eKH61EzdAckQtxOM6s+ZVj/prATDiyr1W4hOtD+uwAgvtNXUW4Yw2EJlhUj9LvfEG9kfOcKuUOEEaVq4nX2VYw92FykuHKOxNKvSefG2/HJOar2x352kYWJ2ITLyuFh6yAfuhxA0InALao3vwA88Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=XJjGzyTS; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=lh0X
+	YsdX9X7r+2LfLut3yBKFYOyg97EUMVhcdGoaLIo=; b=XJjGzyTSVij7r9HRza6z
+	sWYNWwG61nhB7EyH5ca89Wl0/Fpvdj0+EIjvMtK+S+JG1yvPn/qH6QKJ55SL1Flc
+	VyQECrU3n3+PV7wMLcOpF8AVxCJ6ooDXSmC2aALkuHJ3CclgS4XjMhnZ3cc5Fs3C
+	gzNepVtYURM/uyuRHz0WJxtdNrBfZZZYCMaKtcBJU0688a4TFj/uLeMA4nSlvmMV
+	527TnoKEaOR2QLV/rgf6po1Ej5vzgfOXbgSm302RpwOa/MTwc5b4WxQfxUvReVm2
+	ePYrkjkTyfDgiGtaTUHu1x+WHt7tN6jji5W9aXBkKMrhH/U8w22qTKrxw/LsNEZz
+	ag==
+Received: (qmail 713144 invoked from network); 8 Apr 2024 11:04:34 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Apr 2024 11:04:34 +0200
+X-UD-Smtp-Session: l3s3148p1@YmsjGJIVvNAgAwDPXwE9APSWg5D5lDs4
+Date: Mon, 8 Apr 2024 11:04:34 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-i2c@vger.kernel.org, Jochen Friedrich <jochen@scram.de>, 
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 14/64] i2c: cpm: reword according to newest specification
+Message-ID: <maxjcriuq6qfoeoing5ic7l5pnxdyylovjdoh4w3bzhnmco6ax@mslv35p4k35k>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org, Jochen Friedrich <jochen@scram.de>, 
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
+ <20240322132619.6389-15-wsa+renesas@sang-engineering.com>
+ <jpp67ejeropvsc6gwompwc5t2nbl6cde2o33vtf42e2on2ycal@42ovfdhp6oh4>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240405101009.2807447-1-schnelle@linux.ibm.com> <20240405101009.2807447-2-schnelle@linux.ibm.com>
-In-Reply-To: <20240405101009.2807447-2-schnelle@linux.ibm.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 8 Apr 2024 10:50:49 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVUQ2WgtpYPYfO2T=itMmZ7w=geREqDtsP8Q3ODh9rxdw@mail.gmail.com>
-Message-ID: <CAMuHMdVUQ2WgtpYPYfO2T=itMmZ7w=geREqDtsP8Q3ODh9rxdw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] i2c: add HAS_IOPORT dependencies
-To: Niklas Schnelle <schnelle@linux.ibm.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>, 
-	Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="e5r3yanqecrrgaxn"
+Content-Disposition: inline
+In-Reply-To: <jpp67ejeropvsc6gwompwc5t2nbl6cde2o33vtf42e2on2ycal@42ovfdhp6oh4>
+
+
+--e5r3yanqecrrgaxn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Niklas,
 
-On Fri, Apr 5, 2024 at 12:10=E2=80=AFPM Niklas Schnelle <schnelle@linux.ibm=
-.com> wrote:
-> In a future patch HAS_IOPORT=3Dn will disable inb()/outb() and friends at
-> compile time. We thus need to add HAS_IOPORT as dependency for those
-> drivers using them.
->
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
-> Note: This patch does not depend any not-yet-mainline HAS_IOPORT changes
-> and may be merged via subsystem specific trees at your earliest
-> convenience.
->
-> v1 - v2:
-> - Removed HAS_IOPORT dependency for I2C_PARPORT
+> >  	out_8(&cpm->i2c_reg->i2mod, 0x00);
+> > -	out_8(&cpm->i2c_reg->i2com, I2COM_MASTER);	/* Master mode */
+> > +	out_8(&cpm->i2c_reg->i2com, I2COM_MASTER);	/* Host mode */
+>=20
+> I2COM_MASTER might be coming from the datasheet.
 
-Thanks for your patch, which is now commit 53f44c1005ba6421 ("i2c: add
-HAS_IOPORT dependencies") in i2c-host/i2c/i2c-host (next-20240408).
+Maybe we can just drop the comment? The value we write is pretty
+self-explaining.
 
-> --- a/drivers/i2c/busses/Kconfig
-> +++ b/drivers/i2c/busses/Kconfig
-> @@ -885,6 +885,7 @@ config I2C_NPCM
->
->  config I2C_OCORES
->         tristate "OpenCores I2C Controller"
-> +       depends on HAS_IOPORT
 
-This restricts the driver to platforms that select HAS_IOPORT, while
-the driver supports both MMIO and IOPORT.
+--e5r3yanqecrrgaxn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-At least for
-arch/xtensa/configs/audio_kc705_defconfig:CONFIG_I2C_OCORES=3Dy
-the HAS_IOPORT dependency does not seem to be met.
+-----BEGIN PGP SIGNATURE-----
 
-I think the IOPORT part in i2c-ocores.c should be protected by
-"#ifdef HAS_IOPORT" first, so the driver can still be built on platforms
-that do not support IOPORT.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmYTsx4ACgkQFA3kzBSg
+KbYO6g/5AedCCDQIWj4C4jH7ScNJsrMsQsNgW1n2+FdZUbvt0sA7ZQcuIVZnbQEP
+bHkMsZmy6ftTFuxN5a10qk/jpmIAGDBgP6MYa568mAPsBp4G9/9tK6sMo/q6Hvcl
+YWqiCbbhD5h3/EqcEEEzOr8ft+79mXdtLawdQH5BuwKtBNJPHdKvhtrc9Y9whFxg
+M4cWJUOgANxPIogyi6sWSsC2iaJTT4R14+ReipObubq32mZiGz7lk93wwAg0pF94
+jMzH3fpEMXmJHpcqob9oj9Rsg/ymefKh9aU/p/uCC4seFrvS94KYb4xjsSBFU1RZ
+a3vYArJNg3gclCE3AH6hks3UpQWHm6OYrQBX/VUZEhw/V013ymrIDWCpZY7nGgBr
+BIgEqWbn8pnOTCRXQ7E4WmoR0fyF+eWTK98EFQ5QI5Itxj+fyFuffWfvzo8PoXQI
+GqFT7LoEa1TvbL7pitevPMLzjKCWpdIDkLnvzzhe02oyd09AZlRhtM6wZ9oby3fc
+TZO9NP9OFH9iR+MEQ5awHBKlTim4VaBkCndqtw01ehQ2OgPD5fdlyNXgw3MIqFBf
+bsnitjgnu2lbv/xtL7aW1GOsHzRP4Z8t3aeYRUA0+PbYqD6Nq5QQGfRrLxCRxxTN
+RKgM6DeDl3dWXkU9NqV2W4HnKTsZQpegdg0cxYXZTcJAHwHvciE=
+=8GgV
+-----END PGP SIGNATURE-----
 
->         help
->           If you say yes to this option, support will be included for the
->           OpenCores I2C controller. For details see
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+--e5r3yanqecrrgaxn--
 
