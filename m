@@ -1,130 +1,154 @@
-Return-Path: <linux-i2c+bounces-2827-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2828-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBDD589BB61
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Apr 2024 11:15:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4C0989BBAE
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Apr 2024 11:29:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6294C281279
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Apr 2024 09:15:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85AE41F21F2E
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Apr 2024 09:29:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44E024EB5C;
-	Mon,  8 Apr 2024 09:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B51B4645B;
+	Mon,  8 Apr 2024 09:29:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="D7b7JHh1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F/5tfw9k"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38DF04E1CA
-	for <linux-i2c@vger.kernel.org>; Mon,  8 Apr 2024 09:14:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336D844C94;
+	Mon,  8 Apr 2024 09:29:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712567668; cv=none; b=Edgty0xOouPw//8C8Dzt65PqS6/GS+9L8YZPFURCdJH/vr3v40aBLfcRNViNfKtoQQxYnxy/QIX/wlczqxH3GMvH+BnzWQjW7RpmwPZ53tvIKqtbRKHcVLXQKvFRvChtN3Lal+fjByQBP3SrAD4aXCgmsfPbke1aoz2whCT2r7w=
+	t=1712568574; cv=none; b=nrBTKebsWyan1Pa5HHDlV4jWYe+jWes3U3N4UqhjbacB0jh2+rW2ygtkd82uvurGxEaHJRIG33+yiecgZ1jNC7Eho6WrARbO0/VYpn9vlpBlaFX3o+IX0egjyOBLLGo/VUFzC35xx7y0/x3EOCLo/fbPTZ8j8pAelQxH1o4FMxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712567668; c=relaxed/simple;
-	bh=z4CDEMFIMTjvOLif5sUmisJHGO9R4pf0qmsvsjOnpUs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CK/W+nuUnSncJFwTUqUpyhFyewkHOW78oM//WNEQWuNOhMT56T0Cla0EzGI02X08ttpemCO7BmBXxVlbtITSG5A0QC0dJMVeMs+ADbfuf+OfTNJ3swu1dwIOguoo1ouyWXDZ2ozVozPxmcnEKcMnJxFQEEE1PjK67Vi4F1mhzgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=D7b7JHh1; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=B1xU
-	GkiU6dmYPsBjCTtb6mRNv0nuvWzUMFCwA7SNs6U=; b=D7b7JHh1oY0gpZfVrcWm
-	bVLPU9k9q3DbofnpH/OfhR3aO1Pu7vm5BC95ccqnukqiFFrq8C8rPxn+wKmX3yhe
-	BeF1G4lEhOejWaSv785LLOpfbA2CXkv1tFklvdZHYUEIBrQu1f4Ov4LfTvbfJ8FQ
-	srPASuPZeYyzeQCSkLa4XimHy9jV7libC24ca6Cm23+2VCkgt5bO/P6hWlEPimz2
-	kB3OLKKsljxZDx4L5vzs51QWIhBGtq16LdG5EmnAQf8bwUuO/BWDKyrP3N7GQHUL
-	ShiqM5VjAaxQdgLg/BpK6XAgAO/ji5/Ms71bCFHMNseI49LHGHg5d8N/hxz4Dxk3
-	/g==
-Received: (qmail 716288 invoked from network); 8 Apr 2024 11:14:24 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Apr 2024 11:14:24 +0200
-X-UD-Smtp-Session: l3s3148p1@3RREO5IVVpwgAwDPXwE9APSWg5D5lDs4
-Date: Mon, 8 Apr 2024 11:14:23 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: linux-i2c@vger.kernel.org, 
-	Patrice Chotard <patrice.chotard@foss.st.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 53/64] i2c: st: reword according to newest specification
-Message-ID: <zpaizt3dhjbabotqylxph6hti7z4o4oq3mjqy4zmxjk74lpzdf@apnyh6m2fjst>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Easwar Hariharan <eahariha@linux.microsoft.com>, linux-i2c@vger.kernel.org, 
-	Patrice Chotard <patrice.chotard@foss.st.com>, Andi Shyti <andi.shyti@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20240322132619.6389-1-wsa+renesas@sang-engineering.com>
- <20240322132619.6389-54-wsa+renesas@sang-engineering.com>
- <f94f293c-4756-458e-8ffa-a10baa8379d0@linux.microsoft.com>
+	s=arc-20240116; t=1712568574; c=relaxed/simple;
+	bh=rBe98hJNY8XuRDecuH4PlMK9Yxww2sRXOAuYjPRlaSo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FjwqbiPfk898reaieovxhcnA+S/TTiYn+0K8t6o/YPof5FEloo7+mOefr5retlMEG2LwS96zg8xMb/+KVsMlVWmGx2+pJhHDJ9ig3THazx33+xFxdadDXMV3LkTP7NQHRJ85EjcWZkYOJqjHEbu1RvH6KUlUT9ufqNjGqX0JkB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F/5tfw9k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53DB5C433F1;
+	Mon,  8 Apr 2024 09:29:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712568574;
+	bh=rBe98hJNY8XuRDecuH4PlMK9Yxww2sRXOAuYjPRlaSo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=F/5tfw9k/x4622llVirTzKRAmTFIFVEW9tt360apuDlDTQ9eGswCsqVW5y9GwqngK
+	 dMcgm1UeYSkA+sPdVRHJ+0i/fiWliU5R3hHxJy73wWJClqR27AqTGk5Mn2GEIJUJiV
+	 oYP4PyAUaSgLaxlXGgav7sKDlrsWYvEwa/o+fIs/PrbIBtM+0z/RseVXehWb4s3bUt
+	 uB7iOqmEaiuExGwCgrhIN0CB2zQhBpDddZVM0L8qC9LDcLr0oyrnjTW2NvzxlKhuFV
+	 fmXmYim5kTYd4kBg7hslAnPwQpmshGG863YD+COo1SFOe3g1Sxo5atQZkeBpw0RqiV
+	 ljAlL/QZOfO2g==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Andi Shyti <andi.shyti@kernel.org>,
+	Peter Korsgaard <peter@korsgaard.com>,
+	Andrew Lunn <andrew@lunn.ch>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Gregor Herburger <gregor.herburger@tq-group.com>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: ocores: convert to ioport_map() for IORESOURCE_IO
+Date: Mon,  8 Apr 2024 11:28:36 +0200
+Message-Id: <20240408092923.2816928-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zc6r4szvuyukhmxj"
-Content-Disposition: inline
-In-Reply-To: <f94f293c-4756-458e-8ffa-a10baa8379d0@linux.microsoft.com>
+Content-Transfer-Encoding: 8bit
 
+From: Arnd Bergmann <arnd@arndb.de>
 
---zc6r4szvuyukhmxj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There is at least one machine that uses this driver but does not
+have support for inb()/outb() instructions.
 
-> > -	unsigned long timeout;
-> > +	unsigned long time_left;
->=20
-> Thanks for doing this. Is the timeout v/s time_left language also due to =
-the specification change?
-> A link to the specification(s) in the commit message would be nice to have
+Convert this to using ioport_map() so it can build on architectures
+that don't provide these but work correctly on machines that require
+using port I/O.
 
-I admit it is probably a seperate change...
+Fixes: 53f44c1005ba ("i2c: add HAS_IOPORT dependencies")
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Link: https://lore.kernel.org/lkml/CAMuHMdVUQ2WgtpYPYfO2T=itMmZ7w=geREqDtsP8Q3ODh9rxdw@mail.gmail.com/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/i2c/busses/Kconfig      |  1 -
+ drivers/i2c/busses/i2c-ocores.c | 21 +++++++--------------
+ 2 files changed, 7 insertions(+), 15 deletions(-)
 
-> > -	if (!timeout) {
-> > -		dev_err(i2c_dev->dev, "Write to slave 0x%x timed out\n",
-> > -				c->addr);
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 2d5e74ac9ea0..64c985ec0fae 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -886,7 +886,6 @@ config I2C_NPCM
+ 
+ config I2C_OCORES
+ 	tristate "OpenCores I2C Controller"
+-	depends on HAS_IOPORT
+ 	help
+ 	  If you say yes to this option, support will be included for the
+ 	  OpenCores I2C controller. For details see
+diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
+index e106af83cef4..56a4dabf5a38 100644
+--- a/drivers/i2c/busses/i2c-ocores.c
++++ b/drivers/i2c/busses/i2c-ocores.c
+@@ -32,7 +32,6 @@
+  */
+ struct ocores_i2c {
+ 	void __iomem *base;
+-	int iobase;
+ 	u32 reg_shift;
+ 	u32 reg_io_width;
+ 	unsigned long flags;
+@@ -136,16 +135,6 @@ static inline u8 oc_getreg_32be(struct ocores_i2c *i2c, int reg)
+ 	return ioread32be(i2c->base + (reg << i2c->reg_shift));
+ }
+ 
+-static void oc_setreg_io_8(struct ocores_i2c *i2c, int reg, u8 value)
+-{
+-	outb(value, i2c->iobase + reg);
+-}
+-
+-static inline u8 oc_getreg_io_8(struct ocores_i2c *i2c, int reg)
+-{
+-	return inb(i2c->iobase + reg);
+-}
+-
+ static inline void oc_setreg(struct ocores_i2c *i2c, int reg, u8 value)
+ {
+ 	i2c->setreg(i2c, reg, value);
+@@ -618,15 +607,19 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 		res = platform_get_resource(pdev, IORESOURCE_IO, 0);
+ 		if (!res)
+ 			return -EINVAL;
+-		i2c->iobase = res->start;
+ 		if (!devm_request_region(&pdev->dev, res->start,
+ 					 resource_size(res),
+ 					 pdev->name)) {
+ 			dev_err(&pdev->dev, "Can't get I/O resource.\n");
+ 			return -EBUSY;
+ 		}
+-		i2c->setreg = oc_setreg_io_8;
+-		i2c->getreg = oc_getreg_io_8;
++		i2c->base = devm_ioport_map(&pdev->dev, res->start,
++					    resource_size(res));
++		if (!i2c->base) {
++			dev_err(&pdev->dev, "Can't map I/O resource.\n");
++			return -EBUSY;
++		}
++		i2c->reg_io_width = 1;
+ 	}
+ 
+ 	pdata = dev_get_platdata(&pdev->dev);
+-- 
+2.39.2
 
-=2E.. motivated by this "if (!timeout) dev_err("timeout!")" which is super
-confusing to read because the logic is paradox.
-
-
-> > +	if (!time_left)
-> >  		ret =3D -ETIMEDOUT;
-> > -	}
->=20
-> Why did we lost the dev_err() here?
-
-Agreed. Another seperate change. A timeout is not something the user
-need to be aware of. It can regularly happen while an EEPROM is erasing
-a page. The client driver will probably handle it correctly by trying
-again. Only if the client driver sees a problem, then the user should be
-notified. But not in the controller driver.
-
-
---zc6r4szvuyukhmxj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmYTtW8ACgkQFA3kzBSg
-KbaxqxAAqwfl+isJvw+Tbn4zWASNYgUCF88fdAOUyScMYpiIlRk2c7CR4M4BipLs
-ppKwIrsKht9D++ljltU34nnMNsirMRI+QBRVrOubmvln130b6d5PzLvw0LmL92BR
-9sBawa9Ow1y14b6htJXMB0fjmbUtubcB4vn0vgPNl9DwOyZXGawSQbEDW7eB9Dag
-FePIO6KW1d01J54d3B0R+nBdbhB4Lr23Q99EEiO2N/f/Oa7cb6wc7nuqUkg1ymgG
-4sTRUK95w+FQd2DhaAsXhjzRy1AqCCaW8O6RVDDhR71q808K+L+R4G/Ip/OvuPKS
-nEd1r9HEG4jOVhNNbjtE8vILhIYU0bwdHR45YNCUQDXWNdfvkXa5A3THpfpE0iF/
-D1dsp030Ogwex0OFYtEcUOT9nMeE1Io46sTIwfhO/kmAx5zaZqNB/u0Duv5i6zPA
-vbG5yO6VEOU5wiJR97RTu1kzCs+UenOXSQ3mRjT3MJM5X8XvS/jQR6SSJflUsc7e
-E1tj9COegSg9APc+i0kMeJdqk6wV6JGS3XzYI5fOwaHaEK8eDORj/Al95Y/g1F3W
-yIYZbkL/TAV60Y4Z/VHYqblRa/eFvgzvyrkmZ3jjsTi7Zsh/2r8Dknx5l/tRiN6I
-Vi+ogc1ZQL8awmqdG2FR8V3hrTEQNp/QxphmSJ5M79Dv8t7iIcU=
-=4MpW
------END PGP SIGNATURE-----
-
---zc6r4szvuyukhmxj--
 
