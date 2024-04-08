@@ -1,144 +1,118 @@
-Return-Path: <linux-i2c+bounces-2832-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2833-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 813A289BE3E
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Apr 2024 13:42:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46BB889CEBB
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Apr 2024 01:13:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 370282830B0
-	for <lists+linux-i2c@lfdr.de>; Mon,  8 Apr 2024 11:42:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA644B22E79
+	for <lists+linux-i2c@lfdr.de>; Mon,  8 Apr 2024 23:13:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B855A69DEE;
-	Mon,  8 Apr 2024 11:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF4AB1448DD;
+	Mon,  8 Apr 2024 23:13:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RiTehVt7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tfUfF1PX"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4B253AC;
-	Mon,  8 Apr 2024 11:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA22E383A5
+	for <linux-i2c@vger.kernel.org>; Mon,  8 Apr 2024 23:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712576534; cv=none; b=koDjwQ8TCkuIbyhzEOr1dPVDT35cBnrYzPXaBstCxA8jLFc2pLdomL0KwjVAKZ7BeX3iU3xm3GFr1AKQp3olg0MTSs7FaYcMi9SFnWfF+e9IDe1EgHas0uuW0b6KLE6+/m0V9acbL900orgwGdSnu8mraBhgVqP0vVO3yk+dct8=
+	t=1712618003; cv=none; b=KH09SrhvSrQ3DI0bokZPD+oStQveI3wPMFvIel7vzaH0a8KiPrfTcZ35r1/yDu+M6PAAGhgrkSa4tpW5fVRXILLVinskShIJ1PI/IKgy2aubdCQBT2YNt1yAaNdIMqMvQa5hpOtIKY9K0SACbnQpcAKAXeeKFPBkffg5FPPBVeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712576534; c=relaxed/simple;
-	bh=nNPSYahXleYlLrrINWryV7HMiMqL8rx38AhnCGE7+ZI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=snk9cw6LoaIZk5endHl77nKf78/epS2Hqqzhbq7wsWhR82MHOKmfGCzfOPR2NokMO5Db8hImPGg8IHsdp4NpAObI2p5p/Pwj9TE3N7KjqN27FYmFtAlrGZxihkTi6b+d6BVS2RAVaktcYu1Y61W0rDyucd5SpT7OWMtlW99WGas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RiTehVt7; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1e3dda73192so8804475ad.3;
-        Mon, 08 Apr 2024 04:42:12 -0700 (PDT)
+	s=arc-20240116; t=1712618003; c=relaxed/simple;
+	bh=x9mwVZCtRJZxj4SxW0pxGiYFzzdRxitCW4paJ8e6Vwk=;
+	h=Date:Message-Id:Mime-Version:Subject:From:To:Cc:Content-Type; b=nFZ4jLOUQ2sOrLbl65fh9FMAD11Ehkhz+CKvw9uZDWkIoXDEoUGD/2wH0j+xRcxZj4fpT5sEgOZbKD8iRD6HUDfZ3d0/Pf2Vtv0aDecwVy36PCvVicD9/hw/YTtqs/tHCbUB/xnGXLHfw8tI4qKe3sYs/ZeGKnbTtXqFZ93YJTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--saravanak.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tfUfF1PX; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--saravanak.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6150dcdf83fso96950227b3.2
+        for <linux-i2c@vger.kernel.org>; Mon, 08 Apr 2024 16:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712576532; x=1713181332; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F7Q7LqhUOzgafb6Gz7z4EGohoVaiTS4bveRSGqzloyU=;
-        b=RiTehVt73XAlkrDS1UpR8q/WAG+3HFc+iYV3C49tukBzQd/xDu/2BQesUeocjXJgFk
-         vdq+3c/3FGZpmoXxbAWqsHDCIRAsqxvXr6la3l34NcRmRz3RH032ullyhR+eF98X1KGL
-         3WQgW6l/JQbX9Y213P2FV5DR7neZSfzZUgiU6uDOywqMMJ5VK2lxt9OpOr1oFYXTIdRj
-         j2yTvkkpsEvmMeo0ttAl0UVMCaheHdhLaHX2KbeGhH7eWmZ53kMg5IyFDgvFsD060IHu
-         NEE4oqEAAeDq6gCMxJ3bZaYfhBdPwvGpZ3BUU2GEZqBaedrMKvYiaanIpAnBCtJ1qqgW
-         JwIg==
+        d=google.com; s=20230601; t=1712618001; x=1713222801; darn=vger.kernel.org;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8KR9ZDVpmFlaIwvKuBx+EnAZl+aysJrEDZLL4TycsvM=;
+        b=tfUfF1PX/ufUeMkiwBfJE8B2Dbxw/WmajPZ105zDKfBVIZ9eg33wauBAvVOhenKp21
+         VTV5ca2mPMiwo7MsCYkqY/lcPrZG6qt3iV7crDBTqHL0ilpvMQkJCpOJBt4wXSvXM3gq
+         QoqN/pHlRJyr8flcdomG8fpD5nybyDE3XUaxXPOUuAxUL53EZxUH1EG6kM39g+xnlsuP
+         W/uURi2mV+pHGZrnIVRJKSW9yqUAAJ2fOb5e+8T1oPFXMBIC2S2/o9PLZXmAK/cdIx/c
+         RCqsu+EW59nXMSN9ugUboQy1VxMdtz8p0HoZKGSAMmQ29lqt+dLEnrg4lc+2lbow+DBJ
+         zGGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712576532; x=1713181332;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F7Q7LqhUOzgafb6Gz7z4EGohoVaiTS4bveRSGqzloyU=;
-        b=ih8CAtyDYsnjaRiFEzaWqxqLkKHdjtPX/TuWWuyESmofKlv2Qe11Wuf5iZ1LyTqc/U
-         KrM5dnhVFX0mBqvydpb6BbWjJHC5/SjnSLfx/WjOKMsc4OxO4Z2zHXJw+ge5A1tcsvsm
-         RNIAJYvFDSlCldG5MBONB310zakFaKDPIFlgWF/LlLwjb3o5i3qT5Mw/XGEermxR8ivn
-         ZE4lD4nK02rqA6y/3mWf83hCpq5gDW2KrX5uhlqb4Sen2ovm+wpd8ZAbeFV3+f6rXI8q
-         hxCf1LXQgN4qrZYRbufObpxm0r/CFNBjh5OgGBiRmiFQaPuSR2N2G2HQ9o9Fx66Uh0kD
-         x/HQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV84gAv1En/LnlOVK6j0LZesmo/Je4ISVIeobDWnWw9OaRU9AbMZLy26UooW0KRg3Nw2V2TNjmG4d1pv6Phif/U3ModI2BhUDLFbWVFNCkhaCZtZqKx7JVeLHoXk+T7HTB6jaT+B8NWcApTvii1IAUZfvCiojB+k+5nsWls7XjkbX2D8n2WsNE=
-X-Gm-Message-State: AOJu0Yyu4F7NHJjRn8sOPcHrAkQhTvMcFuP8ywY4eMIC6gPb7+m84ojj
-	1LnFZcBEMyZHcUIICLksG+NQujYkVZXWcBxaVwRKUnzqO9LEMQyi
-X-Google-Smtp-Source: AGHT+IFm0C8FzIBPiJbTKspBKacDErtAzdNbk4xEcb3w9ZiOmRS4YZF595FbnRiyRLlWia+eCn4ulw==
-X-Received: by 2002:a17:902:b7c9:b0:1e3:e0ca:d8a3 with SMTP id v9-20020a170902b7c900b001e3e0cad8a3mr4183246plz.6.1712576532097;
-        Mon, 08 Apr 2024 04:42:12 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y5-20020a170902ed4500b001dd6f1516a0sm6782072plb.87.2024.04.08.04.42.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 04:42:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 8 Apr 2024 04:42:10 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Arnd Bergmann <arnd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] i2c: i801: add I2C_MUX dependency
-Message-ID: <a24a2a8a-2be9-414d-8378-668ba4408c71@roeck-us.net>
-References: <20240405142823.615609-1-arnd@kernel.org>
- <e2d0fdde-ff8b-4851-b18a-89e69dd18d5f@roeck-us.net>
- <cea58361-16bd-4daf-85eb-4d63d47cb46f@app.fastmail.com>
+        d=1e100.net; s=20230601; t=1712618001; x=1713222801;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8KR9ZDVpmFlaIwvKuBx+EnAZl+aysJrEDZLL4TycsvM=;
+        b=T2WX2KStxCoOE0MASmpqE2R6sektPipsU/5DCh0xBEd59H+ZiJEKo95k/W4wmN8Ve+
+         U8z3y7yeAurHj2tLxz4JY69rpYiXjWHf5CrZalY7LbMl+wQ6OBIFhAkABRWSEfizD4aB
+         M6diWuQoEWmmkSY82JnxYTHOIEcdKtHFdLz5JKLvKHaje+XzBsOFNuEoLjJdJh3cv8Oo
+         o/+ziwuPLtXoOBYpyF3GyUV/vs2CJVqe9SJVfiDCmqV942i+XUPClNBMpN0MmdjvP/5e
+         oQAVK8CMyRYOODkUgUidpMrQb4huX0+f6NELFWGGTse1YVcimkMwlgPUmlvQ5EdQKHvu
+         FajQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVRPy+5sJ2XZtIEhhH8OprL5HuivX9ELewYOKY/sH9TuhnfiGEFZ/pF/YpQVGoMk48ga3Xob2XXQfsrMDyR7y9TQqdqqk/6PE9q
+X-Gm-Message-State: AOJu0YzOpxgU5r8QpL4dLW0EJZaDZQD2z8Gu5SJEEds/RRk2MBG+maXS
+	wjHhN7IdXEUnZedA99Y6Sv7/3p8I8tjATqmDWxy7JNvZVtx1S/KzwWHHSE/Ffa/jD2xRSmpwBw6
+	t+ecLRmOu8euNAQ==
+X-Google-Smtp-Source: AGHT+IEiBKuFp9QTgBmavvNyeuDLhVieZKacyXA60iTXYXv5owwSC1k0jFYE2SUKHElIfDGTrdBpXZCX+VZqUfk=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:96d3:321a:67f3:5322])
+ (user=saravanak job=sendgmr) by 2002:a81:73d6:0:b0:614:2c5c:d275 with SMTP id
+ o205-20020a8173d6000000b006142c5cd275mr2854389ywc.4.1712618000795; Mon, 08
+ Apr 2024 16:13:20 -0700 (PDT)
+Date: Mon,  8 Apr 2024 16:13:07 -0700
+Message-Id: <20240408231310.325451-1-saravanak@google.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cea58361-16bd-4daf-85eb-4d63d47cb46f@app.fastmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
+Subject: [RFC PATCH v1 0/2] fw_devlink overlay fix
+From: Saravana Kannan <saravanak@google.com>
+To: Herve Codina <herve.codina@bootlin.com>, Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Saravana Kannan <saravanak@google.com>, Rob Herring <robh@kernel.org>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Apr 06, 2024 at 05:45:57PM +0200, Arnd Bergmann wrote:
-> On Sat, Apr 6, 2024, at 15:08, Guenter Roeck wrote:
-> > On Fri, Apr 05, 2024 at 04:27:43PM +0200, Arnd Bergmann wrote:
-> >> 
-> >> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> >> index 1872f1995c77..2619018dd756 100644
-> >> --- a/drivers/i2c/busses/Kconfig
-> >> +++ b/drivers/i2c/busses/Kconfig
-> >> @@ -108,6 +108,7 @@ config I2C_HIX5HD2
-> >>  config I2C_I801
-> >>  	tristate "Intel 82801 (ICH/PCH)"
-> >>  	depends on PCI
-> >> +	depends on I2C_MUX || I2C_MUX_GPIO=n
-> >>  	select P2SB if X86
-> >>  	select CHECK_SIGNATURE if X86 && DMI
-> >>  	select I2C_SMBUS
-> >> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> >> index 0b0df3fe1efd..4dfb3773e6e2 100644
-> >> --- a/drivers/watchdog/Kconfig
-> >> +++ b/drivers/watchdog/Kconfig
-> >> @@ -1301,8 +1301,6 @@ config ITCO_WDT
-> >>  	select WATCHDOG_CORE
-> >>  	depends on I2C || I2C=n
-> >>  	depends on MFD_INTEL_PMC_BXT || !MFD_INTEL_PMC_BXT
-> >> -	select LPC_ICH if !EXPERT
-> >> -	select I2C_I801 if !EXPERT && I2C
-> >
-> > Sorry, I don't understand why LPC_ICH and I2C_I801 are neither a dependency
-> > nor need to be selected. What if both LPC_ICH=n and I2C_I801=n, or if one is
-> > selected but the other is needed to connect to the watchdog ?
-> 
-> The Kconfig dependencies are only required if there is a compile-time
-> dependencies. In this case, both LPC_ICH and I2C_I801 create a
-> platform device that is consumed by ITCO_WDT, but it could in
-> theory work with any other such driver providing the device.
-> 
-> It would be fine to make this explicit by adding
-> 'depends on LPC_ICH || I2C_I801' to enforce that the watchdog
-> driver can only be selected on if at least one of these
-> is present, but we have a lot of examples where we don't
-> spell out this type of dependency.
-> 
+Don't bother review this patch. It needs to be refactored better once I
+know it works.
 
-Yes, I know, there are lots of inconsistencies in the kernel and its
-configuration. That should not be an excuse to making it worse.
+Geert and Herve,
 
-Guenter
+This patch serious should hopefully fix both of your use cases. Can you
+please check to make sure the device links created to/from the overlay
+devices are to/from the right ones?
+
+I've only compile tested it. If I made some obvious mistake, feel free
+to fix it and give it a shot.
+
+Cc: Rob Herring <robh@kernel.org>
+
+Thanks,
+Saravana
+
+Saravana Kannan (2):
+  Revert "treewide: Fix probing of devices in DT overlays"
+  of: dynamic: Fix probing of overlay devices
+
+ drivers/base/core.c       | 10 ++++++++++
+ drivers/bus/imx-weim.c    |  6 ------
+ drivers/i2c/i2c-core-of.c |  5 -----
+ drivers/of/dynamic.c      |  9 ++++++++-
+ drivers/of/platform.c     |  5 -----
+ drivers/spi/spi.c         |  5 -----
+ include/linux/fwnode.h    |  2 ++
+ 7 files changed, 20 insertions(+), 22 deletions(-)
+
+-- 
+2.44.0.478.gd926399ef9-goog
+
 
