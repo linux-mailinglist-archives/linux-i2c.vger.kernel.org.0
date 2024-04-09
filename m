@@ -1,127 +1,134 @@
-Return-Path: <linux-i2c+bounces-2844-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2845-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5A3F89DB42
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Apr 2024 15:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7893089DE72
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Apr 2024 17:15:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FF59283205
-	for <lists+linux-i2c@lfdr.de>; Tue,  9 Apr 2024 13:54:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FE1028AA6A
+	for <lists+linux-i2c@lfdr.de>; Tue,  9 Apr 2024 15:15:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E74131BA3;
-	Tue,  9 Apr 2024 13:48:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jk/4sfVz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C455913A888;
+	Tue,  9 Apr 2024 15:10:22 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D10130E47;
-	Tue,  9 Apr 2024 13:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997AB13A875;
+	Tue,  9 Apr 2024 15:10:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712670512; cv=none; b=puMoAlSsR0M7Avc1e9YJGeBV32yNL7a/CB3yyAgH7a8SRf7W/soqv76FDfi4/TnJ3m1dUgIBLGvJSopnorGzrdK13HoVK27l+RszdsArvOPobPDOWDVwuALPaJd445vf/qD5jZTCzSzW46w+gEYzkVJ19uS46MBYc0uBWzMcuIk=
+	t=1712675422; cv=none; b=FwYJRv/DRpsuWGLd5ZZg+mq8qw/nKzZGvhI3RQ+smHrPKgAfAB50lsbF4jwQCeBNc0ef9tysuNQbcuEXAFO+SpRNSrcuvABpib/KlGYrm1gT1P6z8KExwjB4xPM44WrIroetvo0guLiDw+YseDujD/BztplQ+ewyRF7IHealCZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712670512; c=relaxed/simple;
-	bh=lY/4wKOh/DIkoH73lXxAFPUPx0Fw/2iox1dE6fYg0V4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WKOkVx6CJCij7ToaAzas08ZvRO3hl8jAJ0c6RwraY2gCypi9iIzYUBmxI0One/inPv57BFQTB8QJPnLKNtkRR9FpYFzvuyA5pL5BfV3h2aAMCJW5PCxl9RFRiFPeqVZW0XpaplPY/bsuktjguK1Wr8ZEvssnMSbG1JFXKTxpkoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jk/4sfVz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8499DC433C7;
-	Tue,  9 Apr 2024 13:48:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1712670511;
-	bh=lY/4wKOh/DIkoH73lXxAFPUPx0Fw/2iox1dE6fYg0V4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jk/4sfVzp/FqUu/E9Kv984LFB+BDnS4hpA6X7Xur98C4l2OpU0LQqrhXzdPxhLC5g
-	 maOM8QLXXPrlFxo+/o9nCh64QqB7E3dqEk4OBCFZ6kUJK0CQyaBup3A2HduHoP68sP
-	 nI956a18HBaBun5llmCJ9uH74oCtXxtH8ceqT1oI=
-Date: Tue, 9 Apr 2024 15:48:28 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Corey Minyard <minyard@acm.org>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Peter Rosin <peda@axentia.se>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-	Keyur Chudgar <keyur@os.amperecomputing.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Tony Lindgren <tony@atomide.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Xiang Chen <chenxiang66@hisilicon.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>, Arnd Bergmann <arnd@arndb.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Tom Rix <trix@redhat.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Randy Dunlap <rdunlap@infradead.org>, Rob Herring <robh@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	openipmi-developer@lists.sourceforge.net,
-	linux-integrity@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-fpga@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-	linux-omap@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 33/34] drivers: remove incorrect of_match_ptr/ACPI_PTR
- annotations
-Message-ID: <2024040921-propose-scorer-a319@gregkh>
-References: <20240403080702.3509288-1-arnd@kernel.org>
- <20240403080702.3509288-34-arnd@kernel.org>
+	s=arc-20240116; t=1712675422; c=relaxed/simple;
+	bh=OSR3v33z3GyfOGpNy2e2PuZ7HcUErp92Ny0BMAv8boI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GIcU9/whZQmOOrQgvRLiqRR540i9PjELRj46uFhy5Xl4ViUmHCEsddAI27bPoUVNZRtTNO5t3/JvHUDz9LB2b6pKQchWzwoSFKQSyPcJzf3aACXuuGOIfYertC5AG5w2w9LK90dhtAmamJwtvTksMYsr/WTy4ttmwuJoV2Yyl/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dcc80d6004bso5784884276.0;
+        Tue, 09 Apr 2024 08:10:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712675417; x=1713280217;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CrXgi9emwgSEedtpKFZ9CSpUf1af1pgKd2Pn8tKxkk8=;
+        b=E4A15QDUobfZmHSs+6nNSMKK1Hrci8uRmiNCguBtNbNkK+Ns54/zN/+dnP8y1crWLL
+         na6PfCCfaJBUg4pYZmLXr06LKcmqTPZDBM3NEWfHRWYWmRaufT7JpOsllngJsbuxJyq5
+         QR4xHbOaZfprQ9WQ67/qarfn5MkyfFUhfvAkF/GcHyvgv49jh3ZFmn+7y1Mtxt2b0N0B
+         zqJn9cnRjlgSTJRsHatLUIFGeX9NHSbjEX4LLQ9O3MPiZ4aStRHnj8OLvNWfrhzzASGe
+         Ru2qAdudEbFIyxH/VLSzxoi1XYy/KD9UodwLNqZZm44h38QpqPlDe2lJ9WqY7fNB8egg
+         TXzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVkfKI0TUdxgTdm3UNs3IPpB43blBVYbsv7CDszfE8QWYuWPiODqLiO/rzZDtPh7MpSFzaDwmx7IhjPbEvXfTYwkQRdeA8mquHuOwHLaiT8j7lwHa79loMU1WnufRGuSDBUpj2NueztPwUz3WAePG3gEcUX+KWgkv8eLOm9hBO3XToAt5/HQ0VB8Th1uMhhJJdqCLGC0/AdkclhmImmWpNlHd71//+qXerCCRsepODNlgWKqxFS3u65GnQ=
+X-Gm-Message-State: AOJu0YzHNFgDfe3q0QXgfCxfYOl4opkJZRjw2gdZx6Ohedk1S538AlBb
+	qCTMNilH6nh2tK4Le1DZN0rcP0czoTEXoNnh+4Sy2TqZvx0qGtm8Mi5il35pISI=
+X-Google-Smtp-Source: AGHT+IGk8Ka8ZZ0DADYHP7KCjXZs7r2ukE2BDq4B6rpJMA5epwYJh5o4HVPr98i70WeTQ0W/idR+9A==
+X-Received: by 2002:a25:9185:0:b0:dc6:4b66:2636 with SMTP id w5-20020a259185000000b00dc64b662636mr31242ybl.19.1712675416599;
+        Tue, 09 Apr 2024 08:10:16 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id u12-20020a252e0c000000b00dc6d6dc9771sm1758319ybu.8.2024.04.09.08.10.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Apr 2024 08:10:16 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-de0f9a501d6so2233708276.3;
+        Tue, 09 Apr 2024 08:10:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU/ILYuJ6MlYcbPGL90tDRbwYzzqLCJ1IGYj2Gkg7T2VO304SYuETXk9UN/nC1ZE0BQdA4TnP6WBlFwPtWIioivK3s75RhLszfl+gcvSNLdX2sj2gN/LYQIezPo+awoWfDrqSIPjxfxenQqwP4Yt7JX+hhyNugyCLHkbr/YdC4BF0OBDSGGPr+rbD4LUTendA17qaqqbqeN++re72q4ps755wpGFoE5w5Ecvgl9zOjqxDCwPY3G6ViXDu4=
+X-Received: by 2002:a25:3182:0:b0:de1:1b5d:9599 with SMTP id
+ x124-20020a253182000000b00de11b5d9599mr48436ybx.5.1712675415582; Tue, 09 Apr
+ 2024 08:10:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240403080702.3509288-34-arnd@kernel.org>
+References: <20240409053704.428336-1-saravanak@google.com>
+In-Reply-To: <20240409053704.428336-1-saravanak@google.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 9 Apr 2024 17:10:03 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVL4xUMARcze=ZyZA=Hi3=nvfZ34juSKG7cgA5ygxASaw@mail.gmail.com>
+Message-ID: <CAMuHMdVL4xUMARcze=ZyZA=Hi3=nvfZ34juSKG7cgA5ygxASaw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/2] fw_devlink overlay fix
+To: Saravana Kannan <saravanak@google.com>
+Cc: Herve Codina <herve.codina@bootlin.com>, Rob Herring <robh@kernel.org>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 03, 2024 at 10:06:51AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> When building with CONFIG_OF and/or CONFIG_ACPI disabled but W=1 extra
-> warnings enabled, a lot of driver cause a warning about an unused
-> ID table:
-> 
-> drivers/char/tpm/tpm_ftpm_tee.c:356:34: error: unused variable 'of_ftpm_tee_ids' [-Werror,-Wunused-const-variable]
-> drivers/dma/img-mdc-dma.c:863:34: error: unused variable 'mdc_dma_of_match' [-Werror,-Wunused-const-variable]
-> drivers/fpga/versal-fpga.c:62:34: error: unused variable 'versal_fpga_of_match' [-Werror,-Wunused-const-variable]
-> drivers/i2c/muxes/i2c-mux-ltc4306.c:200:34: error: unused variable 'ltc4306_of_match' [-Werror,-Wunused-const-variable]
-> drivers/i2c/muxes/i2c-mux-reg.c:242:34: error: unused variable 'i2c_mux_reg_of_match' [-Werror,-Wunused-const-variable]
-> drivers/memory/pl353-smc.c:62:34: error: unused variable 'pl353_smc_supported_children' [-Werror,-Wunused-const-variable]
-> drivers/regulator/pbias-regulator.c:136:34: error: unused variable 'pbias_of_match' [-Werror,-Wunused-const-variable]
-> drivers/regulator/twl-regulator.c:552:34: error: unused variable 'twl_of_match' [-Werror,-Wunused-const-variable]
-> drivers/regulator/twl6030-regulator.c:645:34: error: unused variable 'twl_of_match' [-Werror,-Wunused-const-variable]
-> drivers/scsi/hisi_sas/hisi_sas_v2_hw.c:3635:36: error: unused variable 'sas_v2_acpi_match' [-Werror,-Wunused-const-variable]
-> drivers/staging/pi433/pi433_if.c:1359:34: error: unused variable 'pi433_dt_ids' [-Werror,-Wunused-const-variable]
-> drivers/tty/serial/amba-pl011.c:2945:34: error: unused variable 'sbsa_uart_of_match' [-Werror,-Wunused-const-variable]
-> 
-> The fix is always to just remove the of_match_ptr() and ACPI_PTR() wrappers
-> that remove the reference, rather than adding another #ifdef just for build
-> testing for a configuration that doesn't matter in practice.
-> 
-> I considered splitting up the large patch into per subsystem patches, but since
-> it's really just the same thing everywhere it feels better to do it all at once.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi Saravana,
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Tue, Apr 9, 2024 at 7:37=E2=80=AFAM Saravana Kannan <saravanak@google.co=
+m> wrote:
+> Don't bother reviewing this patch. It needs to be tested and possibly
+> refactored first.
+>
+> Geert and Herve,
+>
+> This patch serious should hopefully fix both of your use cases
+> [1][2][3]. Can you please check to make sure the device links created
+> to/from the overlay devices are to/from the right ones?
+
+Thanks for your series!
+
+After applying the first patch (the revert), the issue reported in
+[1] is back, as expected.
+After applying both patches, applying[A]/unapplying[B]/reapplying[C]
+overlay [4] works as without this series, so
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Note that the state of /sys/class/devlink/ after [C] is still not the
+same as after [A], as reported before in [5]:
+  - platform:e6060000.pinctrl--platform:keys link is not recreated in [B],
+  - nothing changes in /sys/class/devlink in [C].
+But that issue is not introduced in this series.
+
+> [1] - https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=
+=3D9F9rZ+-KzjOg@mail.gmail.com/
+
+[4] "arm64: dts: renesas: ebisu: cn41: Add overlay for MSIOF0 and 25LC040"
+    https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.g=
+it/commit/?h=3Dtopic/renesas-overlays&id=3D222a4936b0d3dabd43bdffb3a578423b=
+ff97b02d
+[5] https://lore.kernel.org/lkml/CAMuHMdXNoYH8PJE1xb4PK-vzjXtOzrxNJoZhsHT-H=
+4Ucm=3D7_ig@mail.gmail.com/
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
