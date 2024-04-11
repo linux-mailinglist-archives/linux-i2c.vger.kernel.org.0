@@ -1,125 +1,165 @@
-Return-Path: <linux-i2c+bounces-2885-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2886-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C8178A0BA4
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Apr 2024 10:52:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 730908A0C0E
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Apr 2024 11:16:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B37B9B24827
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Apr 2024 08:52:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A465B1C21958
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Apr 2024 09:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE2D142620;
-	Thu, 11 Apr 2024 08:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C702614388B;
+	Thu, 11 Apr 2024 09:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I3xjWIDs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JxQgfbfo"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890141411C8
-	for <linux-i2c@vger.kernel.org>; Thu, 11 Apr 2024 08:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82993144308;
+	Thu, 11 Apr 2024 09:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712825546; cv=none; b=VskHytok5AX9bjLPjXuxNeYcRuarzy5Y5MO12fo/QxJJcwu4nCIxzl9IBdnrCBUr1b1gEk0uA1O4qybLa1GyjcT6miZjVF8uiIP79aAqWL5IqJ3JZZP9q9TzyprvSayq/G9IgF9tFLZvYP+DuwAL8ntIypASHKvEQyz8vG3/Fao=
+	t=1712826982; cv=none; b=CWpCEXAHNPfMMOS3ReC3BL9ki+Mpnl4ncIv8jxbdwyX0k933aM8S0gjIXhEslrluglotkaWBVuFzhB/Qtsof+b4ygDHA9E6jZGDBEmq9M/vBWs+xfB7rzaZJ5NiqMG8AP4t0OXcEwZBCy8SchqnL2SWdBGJKdQPfmd8RrBeoKsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712825546; c=relaxed/simple;
-	bh=oz1vppDKVcLy3ajc0dto/OD6QDdiRhJGUXxPZ8/cYfY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TOifijOZ3Q1YDOwviVkTXGuhAFlSSlmJtgG7T1uotblGdQWl1EDK26CNgm7P0PiGJRJvKs3uTTcfcfSU3JWYS8I8RmDu/qNdeuQUB2r+mB/CHdUczEYoGp3dL2dlFw9v6RRxHHszIx7PWpJd/TtmFfIWSmTYrekg8QBE96c2vb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=I3xjWIDs; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-516ced2f94cso2516563e87.1
-        for <linux-i2c@vger.kernel.org>; Thu, 11 Apr 2024 01:52:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712825543; x=1713430343; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PnP8Lqn3WKmBuN4LCmH6PJtaBigbDoHwQF5Dz835wx0=;
-        b=I3xjWIDsRT0fw0gUMq9lb5Nf2aDz4j4wxxFmu3qz4xWUYno2lC2PDW2pthUt8XyyBf
-         w6yyTHi8pQGCQuF7auYdkuI9ElmRIFwxEvs0nH4FbQCeYiUlQzUXxCkiuCbmIS4BC5R5
-         /a0mapzH/XRCgWCQvGK+ckq36wFrKMtUzqMJEV4oFR84q/JmIm/EW+cMKBkeAP0jl+Kb
-         6jktWCKgZcLY26iJzDv59UX4e2pFFR9IyZaVrQF9JaL3JaokXA1rSBxdjkBmF+7RzJ0p
-         rN0jSMV1Tw6qSOn9J6HjDL5FQ5a0DTjnfDqrq3FU+gQAvtWlpbVJCLIsgN84mGbYv/+R
-         tuWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712825543; x=1713430343;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PnP8Lqn3WKmBuN4LCmH6PJtaBigbDoHwQF5Dz835wx0=;
-        b=Nd0w8Gd4P+Odk2ZroMYoV1AUbXnxCfhk6jw4tdAgJkBfuPotripmK1F9Bret06RpKZ
-         VoHBXg2gL8xDAMsm0oiVpr1dBs1IgX8ZFkd1+soXOW8yDOxb5nyT7sqLoM9KvNTZ/47W
-         ogfO/b3xd0Y/Hrhc8VrNBQgvnPSF4ykUb/hk7jjJfyTJS3J0ku8JCZ8zSIr+xCAiXSxG
-         FzZE4Ix0o8bv1TuYv9AEkgDoF/FIyzBltivhgl3hNFFTrBknf+FslQ9RwS8feuhLlJEi
-         0LS+LG6L0hG4Q31g+p68IFVsCunt9qB2BIp9mz4+sCOGfcYpMHNQtQyJY/yckHb06DE/
-         LiKg==
-X-Forwarded-Encrypted: i=1; AJvYcCWUP1fWFZ3e6i0IS0Rov97acgLfO7H5E4WV4zaq3JCn3xb27opC1bC+tHGaI1t+nLV/1r3maS4jmyV6KxUg7FKEyfUiDUQ/angU
-X-Gm-Message-State: AOJu0Yx+2Xhw5zk6Wpr+DPIt/C1W3pKWithTlYqCJROQZfvJBbJc+jO2
-	YG4R9lInJTaUwj1rNCkyzfT7w0xUQ+vlD8Z9yYY98CmckTXbt4cY2gtnycUqeHM=
-X-Google-Smtp-Source: AGHT+IFsgyT59h7uLUMSIJtnMqqqFxMUp0Iiz6ouQd+KPyTANx2sGA/tMfTB7jcSdes20PhfQqYjyg==
-X-Received: by 2002:a19:9153:0:b0:513:cfb8:8cb3 with SMTP id y19-20020a199153000000b00513cfb88cb3mr3295631lfj.1.1712825542648;
-        Thu, 11 Apr 2024 01:52:22 -0700 (PDT)
-Received: from localhost.localdomain (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id o1-20020a056512052100b00513d1e9ce7esm149934lfc.90.2024.04.11.01.52.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Apr 2024 01:52:22 -0700 (PDT)
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Loic Poulain <loic.poulain@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Wolfram Sang <wsa@kernel.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-i2c@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: [PATCH] Revert "Revert "dt-bindings: i2c: qcom-cci: Document sc8280xp compatible""
-Date: Thu, 11 Apr 2024 11:52:18 +0300
-Message-Id: <20240411085218.450237-1-vladimir.zapolskiy@linaro.org>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1712826982; c=relaxed/simple;
+	bh=FD7ZMwASDJLrGL9Q6rjiGOks+Hr3Q/CkNdWe0CnAC5Y=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LAuWMQiIFfcmmlsZf+0GKkrbBN/rAAhGz2qfGOhl+UvNTH/9z83uPffpeD53Nm11g8i//hnyDUjGJhaoyuBEpXWet3D5mWct1ELijnljThbJcJtzFr0UHQQrgNmCzMJXVcy55jtr1FR8cq5uvEiet0YOZNRzs5xdyJDtQrri9b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JxQgfbfo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 725DCC43390;
+	Thu, 11 Apr 2024 09:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712826982;
+	bh=FD7ZMwASDJLrGL9Q6rjiGOks+Hr3Q/CkNdWe0CnAC5Y=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=JxQgfbfoQPXO75Bvknepu7S5cybTc3MuoQxVXQLt2ysmPPAaTjqT02Nd97CxO0pOO
+	 +1URVbwdMMYoIA/kMSt4tEl73wG3Uv9yTcFg4l8DweKTfYYmOz70yk2tdTZzySXy+G
+	 aElkNiC7Rr7vn8UQyfLKL7SIHuJ/J7V997QuSv5ZYnHJi8tG61SdtdM4Ysu0DKVCXE
+	 3t4z4kuo2V17Ox/+p9TyCgojMPsl5mg4IvclbQUADWH+9gEz4DTlj7nJ5B9s97gEIA
+	 gT9T0/RCTwIT1dQ1IfKsvQW26nQo21nE06KUa+3vp2Om56N22GlnrTP6gfdDtEm3h4
+	 3TwLQQPGas0lg==
+Date: Thu, 11 Apr 2024 11:16:18 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	linux-i2c@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/18] i2c: i801: remove printout on handled timeouts
+Message-ID: <uvnhbxkhj4skur5uhmbdtmbc4ebodrdujfzqmrv6tjejwvjrxk@xvad5h5ciiay>
+References: <20240410112418.6400-20-wsa+renesas@sang-engineering.com>
+ <20240410112418.6400-26-wsa+renesas@sang-engineering.com>
+ <242ogjpole3ltk5nu53knbfsxmmwcqfrbcivjh7fnkngvrroq5@cwspwdrtepwh>
+ <zmkluzi3ncze67wei6eccd67cpuab2k7qw7cdgju4tg7rermv2@hw6ukejz4cvy>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <zmkluzi3ncze67wei6eccd67cpuab2k7qw7cdgju4tg7rermv2@hw6ukejz4cvy>
 
-This reverts commit 3e383dce513f426b7d79c0e6f8afe5d22a581f58.
+Hi Wolfram,
 
-The commit ae2a1f0f2cb5 ("dt-bindings: i2c: qcom-cci: Document sc8280xp compatible")
-was correct apparently, it is required to describe the sc8280xp-cci
-controller properly, as well it eliminates dtbs_check warnings.
+On Thu, Apr 11, 2024 at 09:02:52AM +0200, Wolfram Sang wrote:
+> On Wed, Apr 10, 2024 at 02:21:58PM +0200, Andi Shyti wrote:
+> > On Wed, Apr 10, 2024 at 01:24:20PM +0200, Wolfram Sang wrote:
+> > > I2C and SMBus timeouts are not something the user needs to be informed
+> > > about on controller level. The client driver may know if that really is
+> > > a problem and give more detailed information to the user. The controller
+> > > should just pass this information upwards. Turn all timeout related
+> > > printouts to debug level.
+> > > 
+> > > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> > > ---
+> > > 
+> > > Here, I did not delete the printout to support checking the termination
+> > > process. The other drivers in this series do not have this SMBus
+> > > specific termination step.
+> > > 
+> > >  drivers/i2c/busses/i2c-i801.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> > > index 4294c0c63cef..a42b5152f9bd 100644
+> > > --- a/drivers/i2c/busses/i2c-i801.c
+> > > +++ b/drivers/i2c/busses/i2c-i801.c
+> > > @@ -400,7 +400,7 @@ static int i801_check_post(struct i801_priv *priv, int status)
+> > >  	 * If the SMBus is still busy, we give up
+> > >  	 */
+> > >  	if (unlikely(status < 0)) {
+> > > -		dev_err(&priv->pci_dev->dev, "Transaction timeout\n");
+> > > +		dev_dbg(&priv->pci_dev->dev, "Transaction timeout\n");
+> > 
+> > why after 5 patches of removing dev_err's, here you are changing
+> > them to dev_dbg?
+> 
+> The reasoning was explained above:
+> 
+> > > Here, I did not delete the printout to support checking the termination
+> > > process. The other drivers in this series do not have this SMBus
+> > > specific termination step.
+> 
+> This is also why I converted two calls here to dev_dbg. But read on
+> first.
 
-Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
----
- Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+It would make sense if the debug would give some more
+information...
 
-diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-index f0eabff86310..43af1c23ebe4 100644
---- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-+++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-@@ -26,6 +26,7 @@ properties:
-       - items:
-           - enum:
-               - qcom,sc7280-cci
-+              - qcom,sc8280xp-cci
-               - qcom,sdm845-cci
-               - qcom,sm6350-cci
-               - qcom,sm8250-cci
-@@ -161,6 +162,7 @@ allOf:
-           contains:
-             enum:
-               - qcom,sc7280-cci
-+              - qcom,sc8280xp-cci
-               - qcom,sm8250-cci
-               - qcom,sm8450-cci
-     then:
--- 
-2.33.0
+> > It's still good, but if we want to be strict, errors should
+> > print errors: as we are returning -ETIMEDOUT, then we are
+> > treating the case as an error and we should print error.
+> 
+> I strongly disagree. While we use an errno, we don't know if this is a
+> real error yet. It is more a return value saying that the transfer timed
+> out. The client driver knows. For some I2C clients this may be an error,
+> but for an EEPROM this might be an "oh, it might still be erasing a
+> page, let's try again after some defined delay".
+> 
+> Think of 'i2cdetect': If we printout something in the -ENXIO case (no
+> device responded to the address), the log file would have more than 100
+> entries on a typical I2C bus. Although we know that -ENXIO will be the
+> majority of cases and are fine with it.
+> 
+> > As you did before, I would just remove the printout here.
+> 
+> Maybe we could because there is still the "Terminating the current
+> operation" string as debug message making the code flow still clear.
 
+... e.g. for me it's not totally right if we do:
+
+	dev_dbg("timed out")
+	return -ETIMEDOUT;
+
+Considering that this might not be a real error I would let the
+calling function decide and print. Indeed i801_access() is not
+even checking the error but letting the caller of smbus_xfer()
+decide.
+
+It would make more sense if we provide more information like:
+
+	dev_dbg("Terminating current operation because the bus is busy and we timed out");
+
+Just merged the two consecutive messages (we could still trim it
+a bit and reduce dmesg spam).
+
+The second /dev_err/dev_dbg/ in this file to me is fine (even
+though it's not really self explaining).
+
+> > I will wait a bit for more comments and take patches 1 to 5 so
+> > that I can unburden you a little from them.
+> 
+> The patches have no dependencies. To keep mail traffic low, I suggest
+> you continue reviewing and I only resend the i801 patch?
+
+Yeah... I'll wait a few more days and give more time for reviews
+and comments. I checked the rest of the series and it's fine.
+
+If you are willing to send a V2 you could send it as reply to
+this mail instead of resending everything.
+
+Thanks,
+Andi
 
