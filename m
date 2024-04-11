@@ -1,59 +1,55 @@
-Return-Path: <linux-i2c+bounces-2877-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2878-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 074A68A056B
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Apr 2024 03:22:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F0AD8A067E
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Apr 2024 05:08:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6765DB24880
-	for <lists+linux-i2c@lfdr.de>; Thu, 11 Apr 2024 01:22:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED33428C14E
+	for <lists+linux-i2c@lfdr.de>; Thu, 11 Apr 2024 03:08:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BA5E60BBE;
-	Thu, 11 Apr 2024 01:22:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EB8C13B5B9;
+	Thu, 11 Apr 2024 03:08:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ub4GiJTm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rBDMuOfk"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8AA6FD0
-	for <linux-i2c@vger.kernel.org>; Thu, 11 Apr 2024 01:22:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBABB13B5B2;
+	Thu, 11 Apr 2024 03:08:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712798548; cv=none; b=nn92vQfBjaursZVd2NLAyVa56PMJdP3avQc4a79M2Jj8vDLUgOPfDf2IV0ap9Zzw0DWNASmydhG2vqUETJ8maPjHOKBNBiZtnGqazRHv4C0mc/cm08XHcJYHbR9tj4ZomzRdqEm1RXrnwtVfZCsTitFlCnZ6E8eEBBQW0gwPtI4=
+	t=1712804882; cv=none; b=Zfm6z95OYd3jrLdgeOn2Iv2VDjxv67oGuvr+QLgJqkAEEqFlnI2nwBg/W8l3gKwjrt2WfRHJYbs9LFnexmb/8qDX9+u5m2cqz17EiPSeEBtVyvqzUANf/2UZ2vUdC+O1yiyDmB92OCHyOKcBXvCnN5wfCyVC5S6BGaigofhXswI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712798548; c=relaxed/simple;
-	bh=NA1dY9YqYvS6RQ9f9muW8F74ZNcOEVWftn8L2jOQC/s=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C+p6sEQEsM4B2xQlSgLGDyKD7WQb28LhffplqvfUb/jk0YmLV7kV4YUEIeyCk0z1ta7+k4dTh5iOavvQYD1BinfllAwk02xyq00lka1vRhISC0awRvxeNwdNXiRxK7IZNU04tJP0vtry18LX4Y+7Zgup4hVZPZmYjid0W9u14Jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ub4GiJTm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44B58C433F1;
-	Thu, 11 Apr 2024 01:22:27 +0000 (UTC)
+	s=arc-20240116; t=1712804882; c=relaxed/simple;
+	bh=nIkVgvNu6ktxnbrIY/V2KS8zZFhOpatS2A7hVJTR3Ps=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=By3yYg1j5L/us0POzOjf4BnWyFjaGpdCf7mcl+sk/OpAnHKNxa/16vyZabRFTOr/TYze0o9yy/U3AOgWCha28CnQqPu0wWHdb36FFmJzPPW5KAHL7uQdB6GAt6Gc6AlGrI246d/0DHYwnQL9qDxONWWDZF4UmCSZIJ3CQIe1ZuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rBDMuOfk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 026A3C433C7;
+	Thu, 11 Apr 2024 03:08:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712798547;
-	bh=NA1dY9YqYvS6RQ9f9muW8F74ZNcOEVWftn8L2jOQC/s=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=ub4GiJTmgkn4Q/PEewql2fxB9zaM6vOIMpNeRR3nyqNydc/Jhqu3GqQjGDX71j3LZ
-	 JSDgd6bkaBrtUBkwPTs1FY1+AinOq7PfN4OWcCLg2trh5pQs3UgCvNyNOwsdbQBC54
-	 MnNwBs2NLcXQTkALbr3UiYVj7N/STeew982Ew3ckM5HAeQQ+Sg0Y3VOQDug5S6kcGH
-	 KglP8oZjd7p9EuAj3TYMy7SiUxzaq7DsSK4wEugl0arUGit2E9OclUyWbDaXIHViDu
-	 M3JZ5wkDC7xL0pGQclaklm8npP0rF4z6jPHAUM42rLp17IjH0luSgCDV5xJkDeRwJy
-	 XuU/oIQwIGjBQ==
-Date: Thu, 11 Apr 2024 03:22:23 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Jean Delvare <jdelvare@suse.com>, 
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH v2] i2c: i801: Fix missing Kconfig dependency
-Message-ID: <xybkdu7oujbasnunpkyrbjruakqm2ym64pigdm5yor44lqcbku@fib7b3vjshpq>
-References: <5b43041f-4f97-41dc-87fb-c2da425e7654@gmail.com>
- <4dhfyaefnw2rtx5q7aaum6pfwha5o3vs65iqcrj2ghps34ubtw@b3bw3gggudjs>
- <b31f445a-6f9b-47ed-94eb-b80360846625@gmail.com>
- <ilxot5cgzlivhmxpuiifpnyx3jxymlxy2avnkqjgfzcgmmk3wd@glnv7nlydz56>
- <a4092c9c-372f-4020-9a47-72941b8690b1@gmail.com>
- <ixtm7tq4lpnaq64lesbgefphk2f7mmfnzarx7bgd4ydxl6ehma@ukzbhugjspvl>
+	s=k20201202; t=1712804881;
+	bh=nIkVgvNu6ktxnbrIY/V2KS8zZFhOpatS2A7hVJTR3Ps=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rBDMuOfk9Ar/4I5dmjD3gbILprvgKZD9nO8wIxS+Zwx7njEC83h2AJQK2Vz1kBr+Q
+	 8/RQjU/0lQj7fhPgr5lfuepc5Be4i6cAd3ZobNKa4otsQgO5GkAXKCJuz2q1CRqNEg
+	 LNBzX70DAMz4SYUQZd6hdDjTyuNehDoXbnYI4q9tn9PPsURfjoOJ7H8XoaaMxIzimV
+	 XYWjD5gAZ92JuYS31JmpcbRDBtmu1ShxP1rPsxG6BwWRIag6Ihhydky/kEeWAh7r9r
+	 qo90OfOCkCVF4JBynfSotg+uvKOCtZHwxilRZK1vjqs9F/5adRGzsOaF0n/sadaza/
+	 BKGrUJKywL53A==
+Date: Wed, 10 Apr 2024 22:07:59 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/18] i2c: qcom-geni: remove printout on handled timeouts
+Message-ID: <ayyypwhenfofamynnlbqolbdxw3rnncsa52n5ga5paofd546qx@uxuf4n2r7uim>
+References: <20240410112418.6400-20-wsa+renesas@sang-engineering.com>
+ <20240410112418.6400-31-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,28 +58,43 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ixtm7tq4lpnaq64lesbgefphk2f7mmfnzarx7bgd4ydxl6ehma@ukzbhugjspvl>
+In-Reply-To: <20240410112418.6400-31-wsa+renesas@sang-engineering.com>
 
-Hi Wolfram,
-
-On Mon, Apr 08, 2024 at 09:42:11AM +0200, Wolfram Sang wrote:
-> > Another simple solution would be to move the implementation of
-> > i2c_root_adapter() from i2c mux to i2c core. It just uses
-> > i2c_parent_is_i2c_adapter() which is an inline function of
-> > i2c core. What do you think?
+On Wed, Apr 10, 2024 at 01:24:25PM +0200, Wolfram Sang wrote:
+> I2C and SMBus timeouts are not something the user needs to be informed
+> about on controller level. The client driver may know if that really is
+> a problem and give more detailed information to the user. The controller
+> should just pass this information upwards. Remove the printout.
 > 
-> I have no objections putting i2c_root_adapter() into the core. I think,
-> however, that this patch makes the code a tad more readable. What is the
-> downside of the symbol (despite we have way too many of those in
-> general)?
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-That's the only reason: "having too many of those in general".
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-But i2c_root_adapter(), I believe should belong to the mux, even
-though it makes life easier moving it to the core.
+Regards,
+Bjorn
 
-Heiner, I tested your patch and it works as expected. If no
-objections or suggestions, I will push it tomorrow.
-
-Andi
+> ---
+>  drivers/i2c/busses/i2c-qcom-geni.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index 11dcfcf13d8b..6054c62cd2ff 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -642,11 +642,8 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
+>  		dma_async_issue_pending(gi2c->tx_c);
+>  
+>  		timeout = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
+> -		if (!timeout) {
+> -			dev_err(gi2c->se.dev, "I2C timeout gpi flags:%d addr:0x%x\n",
+> -				gi2c->cur->flags, gi2c->cur->addr);
+> +		if (!timeout)
+>  			gi2c->err = -ETIMEDOUT;
+> -		}
+>  
+>  		if (gi2c->err) {
+>  			ret = gi2c->err;
+> -- 
+> 2.43.0
+> 
 
