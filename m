@@ -1,91 +1,104 @@
-Return-Path: <linux-i2c+bounces-2924-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2925-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BE138A3678
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Apr 2024 21:47:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BDF68A37B5
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Apr 2024 23:14:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E46A21F258FB
-	for <lists+linux-i2c@lfdr.de>; Fri, 12 Apr 2024 19:47:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDD911C20B62
+	for <lists+linux-i2c@lfdr.de>; Fri, 12 Apr 2024 21:14:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8150914F9F5;
-	Fri, 12 Apr 2024 19:47:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 402811509B6;
+	Fri, 12 Apr 2024 21:12:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GahFOO0K"
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="gJkPvnYV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C873446BD;
-	Fri, 12 Apr 2024 19:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A34A1509B8;
+	Fri, 12 Apr 2024 21:12:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712951232; cv=none; b=VcO4H6zgZxrxba9AHVY45ANND+WQhhAfqSqXpIz7fGMfJsyu0NftT62UxDEDuFmrU9p+Ng+a0S1+Wjf/QTcGC4vQaRhOigFZEMv+vM5Mhi+ekMi5uFDxMgFhR1LYPug9ljfF1kqjt/fnNG9CmuwFvMwc98NCnSqxmm9JSu5zvwA=
+	t=1712956376; cv=none; b=ogd16pLOUuQyc5dcrUaEHFcxuijtdKGf77ynI/eFCbkUeHe7ldNsa+xOdBOBUEY4dObwbVQJHWEU3DNkYTdUYl1X0njaOKQnWZ+HVnVye/8k/n2l3fBJoosdQFJjjVk5QYtImdmyO+2TOB9QZE/P20HmaZL74dOROX6w1tRlQ9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712951232; c=relaxed/simple;
-	bh=CfsPH7NNwB3Rm4gIvUDyGKYjaZUDiprjWdsWosYSfIs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VzoGNktK/3lqpIZp+msW5ZuMuRc9lekBU9+vQ7Zf3Yn8/RXk/Sr8hVarUxZoUrbvk+SZDFKtjWeZjPXhzoDyagLTvbFjGQH3Ld/TFvNapSnH5pu00xokBND0t+6XIiWiNstSqxaF9/yvQ8vXqKnJTVJiFTLeRucpUV5Cc7Q4cnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GahFOO0K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAF0EC113CC;
-	Fri, 12 Apr 2024 19:47:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712951231;
-	bh=CfsPH7NNwB3Rm4gIvUDyGKYjaZUDiprjWdsWosYSfIs=;
-	h=Date:From:To:Cc:Subject:From;
-	b=GahFOO0KNuU4CxKtAN2Nd3UdZvRaruKqYiwn97i1SOpl+cMoM8bryCFMxIV2t3cjp
-	 bh764RrVFmL+A3Gh9EgiMGIHBq2RPj3qIMFPUSTo1EeY1HkhNUsPecxKi6rhhA/ZvV
-	 x//aH6QfEvrkzpbqS2h5EQd6hJG+FGy/RzPexW5VVsUdb8bEyVf9JhlmHJR+Yi/YqV
-	 jKOJGzrOxmEIa0zD1KG0chqHnlbxi1FjKbMiFVTeybwYhZk7yBOdxz+JGQb7GxfCZl
-	 Hp7dr1lO3MFerBwHKBhu1ciF39aGeLGH32UKSPH95xp/driOj+thpx1hBWKegFOqzJ
-	 yps29T5OsXk7A==
-Date: Fri, 12 Apr 2024 21:47:07 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa@kernel.org>
-Cc: linux-i2c <linux-i2c@vger.kernel.org>, 
-	lkml <linux-kernel@vger.kernel.org>, Lukas Bulwahn <lbulwahn@redhat.com>, 
-	Andi Shyti <andi.shyti@kernel.org>
-Subject: [GIT PULL] i2c-host-fixes for v6.9-rc4
-Message-ID: <7z65zupqngw4i4mzgablb37osz3gwz6767og5t4b32o4o3joqy@ypkuxdgilibd>
+	s=arc-20240116; t=1712956376; c=relaxed/simple;
+	bh=EjX2jdQMVn1JND3qJNjAUXPOAkthZ0pv0rGGT5qdgYQ=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=TxiUklVJOsiHaHGWcTjEr5Rcn2ToebKsKbO5yOV3gAIe5TFmIK5tgPNYjLFghV1u0kNlVcp5iwe8SYPpMv+mmFbOma6MYcBa7F32Pl/22I76FQ+ir8ERbVyUEm/aA/evomC/PASkCZsKrevyIn2q39rb5rzWtFuSq3biqq3epiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=gJkPvnYV; arc=none smtp.client-ip=116.203.91.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+	t=1712956364;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+Eex/96Clk4YEe9dDCjud+Kr7GJR8Rpozk+rMxf9QX4=;
+	b=gJkPvnYVlzJVUbumqPTbD5rM2Qx+xmj9iyFfp9rnQtwduvxqrnGP0VT/rn7hKtf1/VD4kH
+	MrsjsQhnPG15tKJlqtE4lwPnEKHWDeYUpQIyBzNGgxiqyAfwXopy3SS28sqf3qdEb6zsdc
+	V9KveXmSS6fCL3e50Y62+p1XvM+rv+hIthnHtqwdHtMcoENrMgZSiHXmIIwrO4WrvTFRGy
+	4ItJhBKdefJvH5wP9Zj/D0Ngbik+ILf4m4PXv8R0MQCWqUP298ixzYyylV/LWVGvKVwfcH
+	WdnPLSnUkYtFVz7JkPXdueYmCn9wMmET+ClBbGGHHNOSoK4tLJee695/XW+cDQ==
+Date: Fri, 12 Apr 2024 23:12:44 +0200
+From: Dragan Simic <dsimic@manjaro.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>, Andi Shyti
+ <andi.shyti@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 13/18] i2c: rk3x: remove printout on handled timeouts
+In-Reply-To: <20240410112418.6400-33-wsa+renesas@sang-engineering.com>
+References: <20240410112418.6400-20-wsa+renesas@sang-engineering.com>
+ <20240410112418.6400-33-wsa+renesas@sang-engineering.com>
+Message-ID: <4bcd397ec377a4932c34d62c85ef28ed@manjaro.org>
+X-Sender: dsimic@manjaro.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-Hi Wolfram,
+Hello Wolfram,
 
-In this pull request there is only the path update in the
-MAINTAINER file for the pnx driver from Lukas.
+On 2024-04-10 13:24, Wolfram Sang wrote:
+> I2C and SMBus timeouts are not something the user needs to be informed
+> about on controller level. The client driver may know if that really is
+> a problem and give more detailed information to the user. The 
+> controller
+> should just pass this information upwards. Remove the printout.
 
-Thanks,
-Andi
+Maybe it would be good to turn it into a debug message, instead of
+simply removing it?  Maybe not all client drivers handle it correctly,
+in which case having an easy way for debugging would be beneficial.
 
-The following changes since commit fec50db7033ea478773b159e0e2efb135270e3b7:
-
-  Linux 6.9-rc3 (2024-04-07 13:22:46 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git tags/i2c-host-fixes-6.9-rc4
-
-for you to fetch changes up to 3731629ddb80ae5f52cb95d7321bccfb138cab7f:
-
-  MAINTAINERS: adjust file entry in ARM/LPC32XX SOC SUPPORT (2024-04-12 11:27:39 +0200)
-
-----------------------------------------------------------------
-No real fixes here, only one path updated in the MAINTAINERS
-file.
-
-----------------------------------------------------------------
-Lukas Bulwahn (1):
-      MAINTAINERS: adjust file entry in ARM/LPC32XX SOC SUPPORT
-
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/i2c/busses/i2c-rk3x.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-rk3x.c 
+> b/drivers/i2c/busses/i2c-rk3x.c
+> index 086fdf262e7b..8c7367f289d3 100644
+> --- a/drivers/i2c/busses/i2c-rk3x.c
+> +++ b/drivers/i2c/busses/i2c-rk3x.c
+> @@ -1106,9 +1106,6 @@ static int rk3x_i2c_xfer_common(struct 
+> i2c_adapter *adap,
+>  		spin_lock_irqsave(&i2c->lock, flags);
+> 
+>  		if (timeout == 0) {
+> -			dev_err(i2c->dev, "timeout, ipd: 0x%02x, state: %d\n",
+> -				i2c_readl(i2c, REG_IPD), i2c->state);
+> -
+>  			/* Force a STOP condition without interrupt */
+>  			i2c_writel(i2c, 0, REG_IEN);
+>  			val = i2c_readl(i2c, REG_CON) & REG_CON_TUNING_MASK;
 
