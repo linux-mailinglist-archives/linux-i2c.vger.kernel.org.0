@@ -1,145 +1,147 @@
-Return-Path: <linux-i2c+bounces-2933-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2934-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E650E8A3E61
-	for <lists+linux-i2c@lfdr.de>; Sat, 13 Apr 2024 22:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A47A58A41D7
+	for <lists+linux-i2c@lfdr.de>; Sun, 14 Apr 2024 12:35:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D266281EA5
-	for <lists+linux-i2c@lfdr.de>; Sat, 13 Apr 2024 20:13:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 369FE281B15
+	for <lists+linux-i2c@lfdr.de>; Sun, 14 Apr 2024 10:35:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28B5254BF0;
-	Sat, 13 Apr 2024 20:13:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C890A2D7B8;
+	Sun, 14 Apr 2024 10:35:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ir1RjVBh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TbVAWPZW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F7C56446
-	for <linux-i2c@vger.kernel.org>; Sat, 13 Apr 2024 20:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E85DB22EE9
+	for <linux-i2c@vger.kernel.org>; Sun, 14 Apr 2024 10:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713039193; cv=none; b=mbGBn+6Gr9DmoSm/n+pn5F4ws8JYM+FMtTx/6NM3tRgtgl1v3uQSxmfKkqG0X1KS3ncxtHURFl7qXR//moNQooIBwWW00XTWCuu/qWVjHrl8vDiIMI7b6PvQyeIrpY4OvZrc2qzIVNBQ3RDI82/rCJzoirLvMWTRHGsnuJo8ts8=
+	t=1713090900; cv=none; b=c7DhIXroFqnOg2Y4PT68UlysSZgovOFh0LztLHFmn6VTZogGLOh4+LZ8EiLxCCys9tAQYQTsu7DxAj4sdrImryRE7vpeHmIAc+jY2uja3Mduui/b96p0wSkN5+QTspLJ/jgBg6P/acVRndlf1SYhAWSAFFmT0R61j45qU9rvVkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713039193; c=relaxed/simple;
-	bh=6An0L48kYFjflh8FlJpVAhC+mhCU5vKixogNl4dF0Lw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E6kGLEWL93oj1zpvHk5Fcwu3CB01dbM4262ouGOpSlTfWUt1yIyDosA86QtjnGOvMQX1TFLY9s8oSuvN1EoaefQOt6bZH3l5RrkJJIcydthYNvkZYvPl12nXYOqculAtNfIMr8dWk9oQHn58kz89HSx73ZLDB6feoojel7nGYlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ir1RjVBh; arc=none smtp.client-ip=209.85.167.46
+	s=arc-20240116; t=1713090900; c=relaxed/simple;
+	bh=ZN/2Rkys9GxS+NsmV9Oq0Mou1cdT+ldCxQlnc+6y1vY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GREboflD4fxWBG2o+ukbpJk20bvF5xt7xaUDTeyy3yC4xFGmpyUNqQHD6lL3NvMxtZp3kPYJ5r0UX09PtiG4SHBQ+6f+SoMkimHvjNEBIW4Rk0LdEBfCCzk2DXnqYDmaWfTFPZoEgkch8OuehGjJpIAX1SzRy8roQnynQcC5PXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TbVAWPZW; arc=none smtp.client-ip=209.85.167.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5176a67d6b5so676454e87.0
-        for <linux-i2c@vger.kernel.org>; Sat, 13 Apr 2024 13:13:11 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5176f217b7bso3989239e87.0
+        for <linux-i2c@vger.kernel.org>; Sun, 14 Apr 2024 03:34:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713039190; x=1713643990; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c21Lbybh5bmPv2qzfkq/dwgMQUd0Rl2nuEZhArPPfjE=;
-        b=ir1RjVBhYTpya0sQyy7zJMTQJwnyQ+iZZyW4z39MvEansbjihvqYYBTix6lm1e7eIy
-         BaIwCxyjSmb2nDJdnA8mqUFwhkbQpC1DKG+EF+UwdbXpO6VQDNX6Oir4+1kGQgsbJXFU
-         AhPH3CMpMAuMaqovpQcGdpU+KOoYaqUWMjd/EM9MBnhV0gYEkdooUJJUu/vIHv+eb1nH
-         R1EMPyjmWaIUEntXFRGJgt3LDPhEx9+uJbgV0wqIDybXk7mZEbaII3Soak1i24wupgOV
-         Pq++HXyW2S/xb9FyThU7v2s9IpaQC0SmqCUP/gZJXWq/7rYNASpiq3aO8eqsZYFJ+WkG
-         MZJQ==
+        d=linaro.org; s=google; t=1713090897; x=1713695697; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3UQ++gxwD9lwMiCPaVI4itHAEaPjf5P2ziIdw7YNOfg=;
+        b=TbVAWPZW99jP3BcNiP677lo1DMX1oAodpK5mNVpNgxzWVzIUrMLna3n4c6jHBjNjRU
+         Q8M1errvEFlQHPBG4TBwM/aFv0uElPUC50G1OqrIOnWy74ueKkquWYSgHtqFi7EGi0m8
+         Ju4nTuWqKjVgPu3FCFOl4QoHxL0qLt4rYferqAtydtyc+0i+ztZwklrstSOcG910W2x0
+         CDbkxRhtIbVNNxhcX5XbXndb/VZkAJtqChDA+3yltDkGtSrEZB+rq2WGW9VHvd5LBIpA
+         Vj4E7wQBUqERVFfqTLgbJHUpwnVh5MDk8XCSyK4jTClY9sA1xQo3GeRqFxNAZ6Lken/r
+         w/qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713039190; x=1713643990;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c21Lbybh5bmPv2qzfkq/dwgMQUd0Rl2nuEZhArPPfjE=;
-        b=T21e+9T4WX9n3apEykO55GRb13/G0e4Q7nBuK2TxaO1fHCeGdW8xJnT9NqSo4PnGj9
-         O9S7mE6JIPfK92bzcR2pe5WUQliSU9BO9t9DKSF+PztZ0dlBUbHayW4RJ2h8M/e1iqyk
-         KUU0+5CqIyoP4zMr0E1DcRw+jYxLOCVxbUunGuC9pkQTZExtm0j6ZPYaQCWzRcAp5Kvw
-         42YbXtGqERcX3GqLTBzpRjjB/Xb1g3zZkJN7RMEdEq6Z1DXCx43ELafBiSLdD1DDsmMa
-         XsoFc7EGuTVZ+qPFpKZIKuYSC7a8uo2IHeZ1gTWt7KSqHDTus9y3bc/jilQ2gx4cJSBq
-         xCTA==
-X-Gm-Message-State: AOJu0Yynxd3p/8hAjXZxlSLPIw+mZa/mC15gxBFNsGT46/SY0mrxbPfQ
-	riVgOd4OEHNMIkqTLc0YwUwKCceGdBNYSuT9Lpo/k2Z12Qgh8KCTC9IqS18yvPQ=
-X-Google-Smtp-Source: AGHT+IEJIzEdlJ2h1Ko7lKjyl2QgL2RSUc87dFSTgw5U3NIFfqQuNFJckIWYYM5uOg82JI6kCKNPWw==
-X-Received: by 2002:a05:6512:3d1a:b0:513:ca5a:e9cb with SMTP id d26-20020a0565123d1a00b00513ca5ae9cbmr4541232lfv.4.1713039189663;
-        Sat, 13 Apr 2024 13:13:09 -0700 (PDT)
-Received: from [192.168.1.102] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id b17-20020a0565120b9100b00516d1afe4f6sm362963lfv.290.2024.04.13.13.13.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Apr 2024 13:13:09 -0700 (PDT)
-Message-ID: <d689cbf6-d7e1-4f8a-94d9-fa2e0b8ecee3@linaro.org>
-Date: Sat, 13 Apr 2024 23:13:08 +0300
+        d=1e100.net; s=20230601; t=1713090897; x=1713695697;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3UQ++gxwD9lwMiCPaVI4itHAEaPjf5P2ziIdw7YNOfg=;
+        b=AdAgEgrD9446dEnypcoZ8KhY61wsgPyFGlqm7VQ+VFVHtyc1Uj0TfX1FF8VsSGYH9q
+         0Kt6PKmyjdXLQ1ICbxqH6KID+kyqny1e7X44540pmopxG22jO86sDbhWqBblSlYFSFsT
+         WQc58MwE9X8qK+6VvAwjtHfN2JLK89bb/4JwzLW05M8vRfghsAPRSNlOmCzXzc45LVup
+         +At396aQTe47avbKJA6NcnUxyx8l+kcHpZ0ZIqPhSOZJt7UxFrz2iVy3aMUFfFbNyrLH
+         BMg3KXu8srn78WrCrRWVSt/90rsQH3VJJiI1BOTOtWl4zLVbqtak7PGQWE1uVgrpraBL
+         hQjw==
+X-Forwarded-Encrypted: i=1; AJvYcCWP1CnETFDtVPc+vl7nhTta0W/fT1MDh28VXvAaTuNt2Vs5h/tJRNVuUkf4dJtrP8oNHwYxRH7GdjOhlJRN8DR6cCwZQv/R6OIT
+X-Gm-Message-State: AOJu0YzAnEa0Ocndbm/+tn/cx3yzo3CVdxO5qAN+xh2yaFfJ/iJQwy9u
+	5mFSFvajvicqpAq2z431taBQ4GpGIjpBpmVzLenLs+gpOvHgKkYSjaCWpHj5AF0=
+X-Google-Smtp-Source: AGHT+IHRRIhsXhtPQpbnXWRN/evFQ9xpq1CsTuwyuPbVM1PmrjssVucapgd3lt6ANs4aSbJrf6z1aQ==
+X-Received: by 2002:ac2:53b3:0:b0:518:c2a5:5a3b with SMTP id j19-20020ac253b3000000b00518c2a55a3bmr1372919lfh.46.1713090896785;
+        Sun, 14 Apr 2024 03:34:56 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id ne33-20020a1709077ba100b00a51b26ba6c5sm4032596ejc.219.2024.04.14.03.34.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Apr 2024 03:34:56 -0700 (PDT)
+Date: Sun, 14 Apr 2024 13:34:52 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Robert Marko <robimarko@gmail.com>
+Cc: Hanna Hawa <hhhawa@amazon.com>, andriy.shevchenko@linux.intel.com,
+	wsa@kernel.org, linus.walleij@linaro.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	dwmw@amazon.co.uk, benh@amazon.com, ronenk@amazon.com,
+	talel@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
+	farbere@amazon.com, itamark@amazon.com
+Subject: Re: [PATCH v5 2/2] i2c: Set i2c pinctrl recovery info from it's
+ device pinctrl
+Message-ID: <ac51854b-09a6-4b79-b409-b950929655cb@moroto.mountain>
+References: <20221228164813.67964-1-hhhawa@amazon.com>
+ <20221228164813.67964-3-hhhawa@amazon.com>
+ <416340b6-33a9-4b9e-bdc5-c5a9cffb3055@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: i2c: qcom-cci: Document sc8280xp compatible
-Content-Language: en-US
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>, wsa@kernel.org,
- Loic Poulain <loic.poulain@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240412-linux-next-24-04-11-sc8280xp-cci-compat-string-fix-v1-1-7dbafff36932@linaro.org>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <20240412-linux-next-24-04-11-sc8280xp-cci-compat-string-fix-v1-1-7dbafff36932@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <416340b6-33a9-4b9e-bdc5-c5a9cffb3055@gmail.com>
 
-Hi Bryan,
+On Thu, Apr 11, 2024 at 07:08:56PM +0200, Robert Marko wrote:
+> 
+> On 28. 12. 2022. 17:48, Hanna Hawa wrote:
+> > Currently the i2c subsystem rely on the controller device tree to
+> > initialize the pinctrl recovery information, part of the drivers does
+> > not set this field (rinfo->pinctrl), for example i2c DesignWare driver.
+> > 
+> > The pins information is saved part of the device structure before probe
+> > and it's done on pinctrl_bind_pins().
+> > 
+> > Make the i2c init recovery to get the device pins if it's not
+> > initialized by the driver from the device pins.
+> > 
+> > Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
+> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> >   drivers/i2c/i2c-core-base.c | 5 ++++-
+> >   1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> > index 7539b0740351..fb5644457452 100644
+> > --- a/drivers/i2c/i2c-core-base.c
+> > +++ b/drivers/i2c/i2c-core-base.c
+> > @@ -34,6 +34,7 @@
+> >   #include <linux/of.h>
+> >   #include <linux/of_irq.h>
+> >   #include <linux/pinctrl/consumer.h>
+> > +#include <linux/pinctrl/devinfo.h>
+> >   #include <linux/pm_domain.h>
+> >   #include <linux/pm_runtime.h>
+> >   #include <linux/pm_wakeirq.h>
+> > @@ -282,7 +283,9 @@ static void i2c_gpio_init_pinctrl_recovery(struct i2c_adapter *adap)
+> >   {
+> >   	struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
+> >   	struct device *dev = &adap->dev;
+> > -	struct pinctrl *p = bri->pinctrl;
+> > +	struct pinctrl *p = bri->pinctrl ?: dev_pinctrl(dev->parent);
+> > +
+> > +	bri->pinctrl = p;
+> 
+> Hi Hanna,
+> I know this has already been merged, but setting bri->pinctrl breaks PXA
+> recovery.
 
-On 4/12/24 16:53, Bryan O'Donoghue wrote:
-> Add sc8280xp compatible consistent with recent CAMSS CCI interfaces.
-> 
-> sc8280xp has the following clock list and so requires its own compat
-> string and sc8280xp specific clock definition in the yaml.
-> 
-> - const: camnoc_axi
-> - const: slow_ahb_src
-> - const: cpas_ahb
-> - const: cci
-> 
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
-> Initially I added a compat string to yaml and driver for sc8280xp but, it
-> was incomplete and wrong so I asked for a revert.
-> 
-> Subsequent to posting the compat string I had posted dtsi changes to
-> sc8280xp to add in the CCI, forgetting to follow up on the compat revert.
-> 
-> I then completely forgot about the compat string and worse still
-> misremembered the whole reasoning behind it.
-> 
-> This one patch series cleans up the mess.
-> 
-> - The fallback compat qcom,msm8916-cci hooks the driver.
->    Since there are no driver changes specific to sc8280xp we don't
->    need to add yet another entry to the CCI driver.
-> 
-> - The compat string qcom,sc8280xp-cci is additionally declared in
->    the dts -> compat = "qcom,msm8916-cci", "qcom,sc8280xp-cci";
->    The sc8280xp-cci will match the yaml and enforce constraints.
-> 
-> - The yaml entry for qcom,sc8280xp-cci constrains the list of
->    clocks which is specific to sc8280xp-cci
-> 
-> Result:
-> 
-> - No new redundant compat string in the CCI driver
-> 
-> - DTS is unchanged
-> 
-> - YAML expanded to capture missing string
-> 
+This is patch is a year and half old so it's a bit late to just revert
+it...
 
-I believe it's excellent, thank you very much for the change and efforts!
+What does "breaks" mean in this context?  Is there a NULL dereference?
+Do you have a stack trace?  It's really hard to get inspired to look at
+the code when the bug report is so vague...
 
-Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-
---
-Best wishes,
-Vladimir
+regards,
+dan carpenter
 
