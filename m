@@ -1,86 +1,54 @@
-Return-Path: <linux-i2c+bounces-2953-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2954-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B96C48A5D1E
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Apr 2024 23:43:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E18008A5D44
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Apr 2024 23:59:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E82391C21C6E
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Apr 2024 21:43:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6B30CB22662
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Apr 2024 21:59:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB93157467;
-	Mon, 15 Apr 2024 21:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AA27157491;
+	Mon, 15 Apr 2024 21:59:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UDge/zA8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="grqdb+Fa"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2FC823CE;
-	Mon, 15 Apr 2024 21:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 567241EF1A;
+	Mon, 15 Apr 2024 21:59:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713217393; cv=none; b=Y231pO/seHV3swN2+RhOurqZhRzzaHYFrcpvVcXESepnYWb6G92nSpAbAT8AyRKhWfHHnKZj1ojn22x0ppSMrL8XIV9JuVwqK50hjwwPtVgJYK8FMjvNIhshh1VJiV5g9tJ35y4pw5HGD/oDIDoJ2lMepg4f3m9/yf0+NLR6WxU=
+	t=1713218379; cv=none; b=RwNZnS196OfYyRPRDGFjsl82ZcN6bgmZl9ZaiM7MdeKT9idHCHE28KGaFNi7qJMRwxtn2dEpo5lxxF5AOkyBR8L5ARRO1yhSZSA8HNe3PIJ2AYT7kGvgj7jFcve0Z2v3dL3FwpssVkJ2VzXGR8d8IcrTfgQJz7zO75JU93KTEDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713217393; c=relaxed/simple;
-	bh=Hti8yZW8mNamBN17Mr4lihd/DG8OJVKjQhX90Ajf8LI=;
+	s=arc-20240116; t=1713218379; c=relaxed/simple;
+	bh=P2PnYeUn+vbm0CIXRKVAZ7T5IeYl3SuSLmZ5NH9CDU4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iW14l0DtjWXiUa1uJLoQEcHfdAsORfFFrBjCvoAJF5QK19E2Cs0TiSUw6GuHyIFjBgNBSSagFJvBqHw60+9qjoA5afKeBRy8UFl0FaepJq15oGQkfnd7Ns9+lXX2tTfgLdBNKEKUZ3ZiTvDsrUlckKcLRTJH0XjAVMfiZvoaL7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UDge/zA8; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6ed0e9ccca1so3411824b3a.0;
-        Mon, 15 Apr 2024 14:43:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713217391; x=1713822191; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CwYuieFLrgD2vidWaMa/xY2PVYIE4Qyq+E/iIs1/OkQ=;
-        b=UDge/zA8ot7jRCNU9Jm9EfNHdd85HafIM/rlJ4OiBy0D5MPed660JAyY8gdp8QwPPE
-         KYLjdtQX4qhmyr11e6lB0o7b/eCZGStucVs6CtOB0I48rfjnuUvOKTYAcgGGEsArRMjB
-         /5q8fjbpm6s6RehvaOg8rWw48tvDbfXQb9B5pVMlWevNnsxaIh9ELvK5OXIWwUF0L43I
-         NfFyuf86Nd605d6ekgSDpU1v1S9nJNcCitGAYFi+F5ysbrEIQvfUReH2HrFNe0whHUhU
-         q2kDu5UxgZHQ7mJ71GEMFWlEJqSdlhgiKMAltkY18bPbCML3FIP7k0TqjgiNV+oFr3RG
-         foBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713217391; x=1713822191;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CwYuieFLrgD2vidWaMa/xY2PVYIE4Qyq+E/iIs1/OkQ=;
-        b=RTU2Xzaoqc0uIuWY3BossmyCPaf60uHJD04v7V3kwWeFuaXVQ2MGFxg2TleRtJVPAA
-         +sJWClkJmwU05/CvFkmNHIGQF8rRvAlv08N55q232UIwxmzoVDM5jHmE2q2MmXMURjHn
-         1X7CJBJr7jdurmTPzAeT+/o1x7M7IgEdbXZlglm0I60Xtd0OHHOltJgtW5KnGpP0o0S2
-         rFwXMXzgTFxmzQ4qlx3KQvXvTRfD4vUXxUWFs8oFGGHu2CZJ0tB7n1WSmYND97Lau7ai
-         xV1abv++kfpNTB7PXPt/0fNW6giZUiixK6DL4lNHog75/Eo/Xlt+J8RFg9NazpGYOHLC
-         rXjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX6C9NzR6CP6tn3BKesHfL/D7VXr1bfiCQ0D3fVS5lKSRNZkmBV1phQ83Mi8rgWDaq+dG85c5T5W5xNh6oJ2SIv07edk2EDxuMTmjiFhwCbQZYf/mcSpUkt1/EZ2aAJf61qdtmLE0Q=
-X-Gm-Message-State: AOJu0YwMpR9ZCE/9DEEl/d5Z1zJ5OOP5F/HUuSI0mRaE8TWBF+3hLGbb
-	DZee2cr9TYe6bol8530PxbTQbdPxxnM/AsGJw1zWD854Bq6Yj63+
-X-Google-Smtp-Source: AGHT+IEKzUaq5oqprDDeeO6woX7N//0YU382lPzNmAZoPHUQS213SBb6HqGqmFRRYxFysoSt5LI6bg==
-X-Received: by 2002:a05:6a00:3981:b0:6ec:fdcc:3cce with SMTP id fi1-20020a056a00398100b006ecfdcc3ccemr11989639pfb.5.1713217391055;
-        Mon, 15 Apr 2024 14:43:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z5-20020a656105000000b005f3d222eb42sm6502582pgu.20.2024.04.15.14.43.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Apr 2024 14:43:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 15 Apr 2024 14:43:08 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-	Wolfram Sang <wsa@the-dreams.de>,
-	Peter Korsgaard <peter.korsgaard@barco.com>,
-	Peter Rosin <peda@axentia.se>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH 3/4] hwmon: jc42: Remove I2C_CLASS_SPD support
-Message-ID: <8befd38e-212a-4ddb-9368-636db9f58ed0@roeck-us.net>
-References: <90a0786f-136b-4097-9def-8d52e9e5d3cc@gmail.com>
- <3c4a1715-bfbb-4ae2-b35f-2f20f95e4932@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=QaoIK250IlkLFMALCP7UCyhVOkOIAdmBnkG3fQdUqYyfaLq6w7CRZYxR475vv8do1jO9QTo8fvxB3B8Ogo85RaIKmYU2/1hjCUKNbieFxBshAeWcNaeUw7pFuM+byyMEZ2+KtSDOaVD8/Nl/z6AcPSbSk/00dmsOZE0zcah2e80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=grqdb+Fa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A955BC113CC;
+	Mon, 15 Apr 2024 21:59:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713218379;
+	bh=P2PnYeUn+vbm0CIXRKVAZ7T5IeYl3SuSLmZ5NH9CDU4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=grqdb+Fa95j2Tp1eo5VUC+A7hm54mtQrEJiRFN8VWY8O1SHi7yxWSBEYn8GcMepbN
+	 4tTjJcK3utrhXbr+vxBG4WkHCG66HHEmcoW7oW8ueZ22quURAJryTaXmlmqhyu3Z8S
+	 NIQkQ5gD5zGCJ4XtA0lwkhlFPkLNxlwxdSoI5Lqdx6PsrS6puHqe6PXSw5pNzEujYX
+	 mjlmx2QKuFy+05GezrDxf4EUuH8fVuuJ1cYSvygeuKsNjgQgJAbDoqpbxrgLR9CnaC
+	 +nfGQrdWfXL6EPoMNM+zn90AC4x0y06nsIAxQGT+arhAktKiGQRuTWvWIk/BF5fmjD
+	 AHaiBlO5Bx3pw==
+Date: Mon, 15 Apr 2024 23:59:35 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] i2c: octeon: Add block-mode r/w
+Message-ID: <o6xuyvunkceihtx4aifryfwviedx26scmlahygw5blijodmtge@c5cyhfoez5qq>
+References: <20230905102234.nlaeskxbbvu74co2@zenone.zhora.eu>
+ <20240415005213.3477671-1-aryan.srivastava@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -89,16 +57,133 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3c4a1715-bfbb-4ae2-b35f-2f20f95e4932@gmail.com>
+In-Reply-To: <20240415005213.3477671-1-aryan.srivastava@alliedtelesis.co.nz>
 
-On Mon, Apr 15, 2024 at 10:49:35PM +0200, Heiner Kallweit wrote:
-> Last host driver supporting I2C_CLASS_SPD was i801. Now that I2C_CLASS_SPD
-> support has been removed there, we can remove it here too.
+Hi Aryan,
+
+On Mon, Apr 15, 2024 at 12:52:13PM +1200, Aryan Srivastava wrote:
+> Add support for block mode read/write operations on
+> Thunderx chips.
 > 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> When attempting r/w operations of greater then 8 bytes
+> block mode is used, instead of performing a series of
+> 8 byte reads.
 
-Applied to hwmon-next.
+Can you please add some more description of your patch here.
 
-Thanks,
-Guenter
+How did you do it? Which modes have you added? What are these
+modes doing and how they work?
+
+The patch is not the easiest itself and with little description
+is very challenging to review. Please make my life easier :-)
+
+> Signed-off-by: Aryan Srivastava <aryan.srivastava@alliedtelesis.co.nz>
+
+...
+
+> +static void octeon_i2c_block_enable(struct octeon_i2c *i2c)
+> +{
+> +	if (i2c->block_enabled || !TWSI_BLOCK_CTL(i2c))
+
+does the block_ctl register stores the length of the message?
+If it goes '0' does it mean that it's ready for a block transfer?
+(same question for the disable function).
+
+> +		return;
+> +
+> +	i2c->block_enabled = true;
+> +	octeon_i2c_writeq_flush(TWSI_MODE_STRETCH
+> +		| TWSI_MODE_BLOCK_MODE, i2c->twsi_base + TWSI_MODE(i2c));
+> +}
+
+...
+
+> @@ -579,10 +612,7 @@ static int octeon_i2c_hlc_comp_write(struct octeon_i2c *i2c, struct i2c_msg *msg
+>  	if (set_ext)
+>  		octeon_i2c_writeq_flush(ext, i2c->twsi_base + SW_TWSI_EXT(i2c));
+>  
+> -	octeon_i2c_hlc_int_clear(i2c);
+> -	octeon_i2c_writeq_flush(cmd, i2c->twsi_base + SW_TWSI(i2c));
+> -
+> -	ret = octeon_i2c_hlc_wait(i2c);
+> +	ret = octeon_i2c_hlc_cmd_send(i2c, cmd);
+>  	if (ret)
+>  		goto err;
+
+Can you put the octeon_i2c_hlc_comp_read/octeon_i2c_hlc_comp_write
+refactoring in a different patch as a preparatory to this one?
+It's easier to review.
+
+Please, remember to keep patches logically separated in smaller
+chunks.
+
+>  
+> @@ -594,6 +624,106 @@ static int octeon_i2c_hlc_comp_write(struct octeon_i2c *i2c, struct i2c_msg *msg
+>  	return ret;
+>  }
+>  
+> +/**
+> + * high-level-controller composite block write+read, msg0=addr, msg1=data
+
+This message doesn't mean much. Please check the DOC formatting
+and the other functions, as well.
+
+Remember good comments are highly appreciated.
+
+> + * Used in the case where the i2c xfer is for greater than 8 bytes of read data.
+> + */
+
+...
+
+> +	/* read data in FIFO */
+> +	octeon_i2c_writeq_flush(TWSI_BLOCK_STS_RESET_PTR, i2c->twsi_base + TWSI_BLOCK_STS(i2c));
+> +	for (int i = 0; i < len; i += 8) {
+> +		u64 rd = __raw_readq(i2c->twsi_base + TWSI_BLOCK_FIFO(i2c));
+> +		for (int j = 7; j >= 0; j--)
+> +			msgs[1].buf[i + (7 - j)] = (rd >> (8 * j)) & 0xff;
+
+Looks good, but do you mind a comment here?
+
+> +	}
+> +
+> +	octeon_i2c_block_disable(i2c);
+> +	return ret;
+> +}
+
+...
+
+> +	/* Write msg into FIFO buffer */
+> +	octeon_i2c_writeq_flush(TWSI_BLOCK_STS_RESET_PTR, i2c->twsi_base + TWSI_BLOCK_STS(i2c));
+> +	for (int i = 0; i < len; i += 8) {
+> +		u64 buf = 0;
+> +		for (int j = 7; j >= 0; j--)
+> +			buf |= (msgs[1].buf[i + (7 - j)] << (8 * j));
+
+a comment here?
+
+> +		octeon_i2c_writeq_flush(buf, i2c->twsi_base + TWSI_BLOCK_FIFO(i2c));
+> +	}
+> +	if (set_ext)
+> +		octeon_i2c_writeq_flush(ext, i2c->twsi_base + SW_TWSI_EXT(i2c));
+> +
+> +	/* Send command to core (send data in FIFO) */
+> +	ret = octeon_i2c_hlc_cmd_send(i2c, cmd);
+> +	if (ret)
+> +		return ret;
+
+do we need to disable anything here?
+
+Thanks for your patch,
+Andi
+
+> +
+> +	cmd = __raw_readq(i2c->twsi_base + SW_TWSI(i2c));
+> +	if ((cmd & SW_TWSI_R) == 0)
+> +		return octeon_i2c_check_status(i2c, false);
+> +
+> +	octeon_i2c_block_disable(i2c);
+> +	return ret;
+> +}
+
+...
 
