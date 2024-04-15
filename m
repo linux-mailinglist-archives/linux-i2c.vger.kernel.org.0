@@ -1,75 +1,75 @@
-Return-Path: <linux-i2c+bounces-2946-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2947-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BEA68A5C6C
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Apr 2024 22:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A5CF48A5C6E
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Apr 2024 22:49:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCCC11C20F51
-	for <lists+linux-i2c@lfdr.de>; Mon, 15 Apr 2024 20:48:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C88701C21D7F
+	for <lists+linux-i2c@lfdr.de>; Mon, 15 Apr 2024 20:49:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90249156966;
-	Mon, 15 Apr 2024 20:48:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95F1A156969;
+	Mon, 15 Apr 2024 20:49:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gakCMFA3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J09nI7+Q"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50AB15688A;
-	Mon, 15 Apr 2024 20:48:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83957F7FF;
+	Mon, 15 Apr 2024 20:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713214127; cv=none; b=VIH1uLNnqTGvMVYeYT+SkNyk7LQkCoRJG94i/zL/caiG0mndKezpc/Ai5EfvSrs9FPkOfRiYMhfaXOIe2oTh+CyxWqdMxuQ9RudQJbbTFl76LPDUWb5rkGCoQJwya+OUixt39jSrRUe32xROEkrNpufIbN7C8X8wish9FGt1Q/8=
+	t=1713214179; cv=none; b=HPwm+7SeLaL6Y27yY8L65n8GAmQKAfxwo4I1wo/dbf8CZTBctLWiPB875G4fiuBhmmNPSZ8zkzA0+Z1xpRWUm1MiVwjXd1pQSUcVXpNHEpnz/4NmvNF6Kd6nV6p56xTR2zbTQ0pW8JzFkIsK2uB+3K35SVReY/uUBYjh5U03MjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713214127; c=relaxed/simple;
-	bh=E6k+7t2zK1hZ93mZ886ImpZZlWkQmDFiUMw7DfTqecY=;
+	s=arc-20240116; t=1713214179; c=relaxed/simple;
+	bh=UiydVApJesoyrIkizTw+5jXwllRwQoafBXKbTfWQFlQ=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=acuBXXlRFxpHjl0J+6qraQwl+i7zXahwUsCBqCf9jTgFOGv/IRvEpn3bYiRBSMUVa8P5339VyMnzdxnRUc9B+uf7GgbISIubdgVTLUUowTTJUOz2mgJzz2yBfpfE3Jf+LUC1C7pqLef9TaRtxMiqvMQgITVr/4uKIx2lECfLE08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gakCMFA3; arc=none smtp.client-ip=209.85.208.47
+	 In-Reply-To:Content-Type; b=Zg/8DncHdJ5ol2Mt76Jp4lBrfdSsqojeB5YxyxGegz3/cMzy8LG1rrvXomDFKwFHEUunyvW8rBb2+/VBP6J6nHJhxIOFWK8DFSd4K/E8NLyyFMDbQRmKlrHMKOqCF+7AnZZdsnm8ZUXzMrQugK8ndtvemeaTOeKphc8a+AB/hTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J09nI7+Q; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-56e78970853so7249025a12.0;
-        Mon, 15 Apr 2024 13:48:45 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a44665605f3so389153866b.2;
+        Mon, 15 Apr 2024 13:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713214124; x=1713818924; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713214176; x=1713818976; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=aUWZVs6B5B0Htbl4tJInfJJjBW57zG9RmY29XTSMOI0=;
-        b=gakCMFA3AW52png2g4cwCSoN4fVPzKM7TX4347CPzuvGO2psiMTxeBW71debqWpB2b
-         3RXAmQFEYAaYtLIVtNENvbWXRneCVkWWQbK7y3AOO8ic5Z9Xd8yFYNvLoJYc3yUtk4O5
-         eR2VaCMk0HrtiJ8BFKDJ/NgOMtx6hcxYJVSnd0HYSkdW4yJAz+kD1Z0q9rn/uZQoHkbJ
-         UP/sHs60e3X7ZTKT4l6aTZo3njaSLIWJW2COFkIaw25xcTJTeTaockUAjVlBbr8t7Qxi
-         yUXFCkaL8GM3k3nBXsPNcGBa3odX4FifeYc4FGneYuGWj5LQoWrbVNH6akR1lCiWI5In
-         H/Ig==
+        bh=g3lMN/A6AFbaLF98HaGAjQE9CvWwVfQFc6zV2xMkvf4=;
+        b=J09nI7+Qi40VzRGMjjzS7uS5sNf4bo25KnqmUz/LWSeiCtOqZKdCupgCDHDm0BTCbh
+         EzCpWTMx/4aiOOtNzpCEl77TVeHklA5v+49pJC2pfGTu6fs7CyIUIRmbQC8NObR+/8EE
+         xgXlS4YNkFAnYh26q21gtJJQpgLmi7HHzpXY4zf6JFa9uQQ/mWF83JShh4Ju8fShrP6S
+         boPtyLgmWY1T0b5B8bstMBg4YqWpyKcIM2wTDOSngVA1Fpk8IkT59nVHyCKCttK29Ny3
+         cNKUvP7gVkfn7t+fiEUfeqC3tic2+hXKTizYOdAEnR694J+syog9xDzlvECt8xR22kz2
+         5NZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713214124; x=1713818924;
+        d=1e100.net; s=20230601; t=1713214176; x=1713818976;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aUWZVs6B5B0Htbl4tJInfJJjBW57zG9RmY29XTSMOI0=;
-        b=swK44iz3cAXzjKL3qfMbsyODgPuuLX9QJZTZx4IDNrsaiyRf1J1NkkLL2MzgSMbgz8
-         DB8jr0+h2t1tI7zeDKP484nd4eFASZI7rAiDA14aADKNwXfoKaevcaWUswmwFg7wcwJi
-         YQqlUIJiAf6wHclCNb9j5advXXtiMfm6BG7c7DneLOmXS2g3624EodcwDzxG36S7CMaw
-         NJ+1AiGD8DM1wUT2+ave5rqCg7MRa83qKOWwlJDi0ZqS2adTYbBztZ8R8p+xRqA86dL2
-         uGcmmxUQCF7cQUibeBR7y1um8OFJjOqBMEvPLETR2bCematfPVJ66nBR+CibfuL3cAp6
-         V2pw==
-X-Forwarded-Encrypted: i=1; AJvYcCUbLNmsaw0yCj4k6lDC4E+HY/HKZr/BEdKikPJKLowTM3B1QscexM49zhr+LnFxug+ZezCgEGnJP1MHlXPArqwoni1KK/xTBKD5Zrs=
-X-Gm-Message-State: AOJu0Yzdps6mu1wLdAuvP9Onx3iLPM+RMDvItDKsz9lVRLvHxjZ23EqG
-	OatTNEc/qaWxVNgddb/3ljFMopJ3T/VPZ0juwQEU6BV8Hm1NEfUnhN+ndw==
-X-Google-Smtp-Source: AGHT+IHXMQjX4oIiK0fj2s8Utj9bGalht5nbd34CWd1ILPRnGJbQf9aEAS1tAh3GAJlYWrRQQYjIiQ==
-X-Received: by 2002:a17:906:cb95:b0:a52:67cd:1a71 with SMTP id mf21-20020a170906cb9500b00a5267cd1a71mr513774ejb.28.1713214123748;
-        Mon, 15 Apr 2024 13:48:43 -0700 (PDT)
+        bh=g3lMN/A6AFbaLF98HaGAjQE9CvWwVfQFc6zV2xMkvf4=;
+        b=Tw4jSuqJ5HdeOClBR57YCnQVt/oVTdNbfzXq9jTL7QJFkbhRgQaZzrT/ed24eV/kJw
+         CSEtT9o9QjmH+ZZ4t5MVFtOv9eoLtCbNtwhwS5tY4dOWaSCg6fClFJnhvl/rCn2/WJ+H
+         +Y3iCUAifw5H28xDHROipGO9LnE1t/kvz2czeGuQci6yUTR/r89XQGsTc6BGc1AHuLKG
+         hMaFewRMSwLSsWsP1mh7JRFbXmZrFcAL8YuQuCcaeTIqYkW50JKrYIB5i1c9fnSENMRP
+         PNELsgnukcqdsP60pGr5t+wY03oxLLQa9FbcjL0YkEQ+NCTkI2+q0I0MktEIzGLIcfwy
+         kkxg==
+X-Forwarded-Encrypted: i=1; AJvYcCV7g4bCQ9OfLkMsy7a4niyaRTJcTO0ZUU0baYcfrB6Rg5/QzAqtia6+S2Mq4i61dbr4cxNbXqsof07QCxtEU6qoSH7ynh22EIRfntE=
+X-Gm-Message-State: AOJu0YzrjH62wlJhP8QGfwGybqejZ/JS7dDBEQ1GzNcWHQ/oXUoReFhZ
+	iEAD9EPnni90SiG7qSJ8LibpcjPnOttSj9T5tgGBSOIAHwepkcvH
+X-Google-Smtp-Source: AGHT+IE4KM3CjhJBHqkhkkLmb2XcdX7VSO+3sfpj0aYmNKwr7rQOtsxzFfvA3mrBMv08Sw29Sqt/Tg==
+X-Received: by 2002:a17:907:2d93:b0:a52:274e:4f63 with SMTP id gt19-20020a1709072d9300b00a52274e4f63mr8943555ejc.7.1713214176199;
+        Mon, 15 Apr 2024 13:49:36 -0700 (PDT)
 Received: from ?IPV6:2a01:c22:6fba:a100:5c1:bdd1:c074:ea9f? (dynamic-2a01-0c22-6fba-a100-05c1-bdd1-c074-ea9f.c22.pool.telefonica.de. [2a01:c22:6fba:a100:5c1:bdd1:c074:ea9f])
-        by smtp.googlemail.com with ESMTPSA id x26-20020a170906b09a00b00a46caa13e67sm5860082ejy.105.2024.04.15.13.48.42
+        by smtp.googlemail.com with ESMTPSA id gv15-20020a170906f10f00b00a517995c070sm5885138ejb.33.2024.04.15.13.49.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Apr 2024 13:48:43 -0700 (PDT)
-Message-ID: <309ce021-c7ae-4498-88db-37c06f7cc34d@gmail.com>
-Date: Mon, 15 Apr 2024 22:48:42 +0200
+        Mon, 15 Apr 2024 13:49:35 -0700 (PDT)
+Message-ID: <3c4a1715-bfbb-4ae2-b35f-2f20f95e4932@gmail.com>
+Date: Mon, 15 Apr 2024 22:49:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,8 +77,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 2/4] i2c: mux: gpio: remove support for class-based device
- instantiation
+Subject: [PATCH 3/4] hwmon: jc42: Remove I2C_CLASS_SPD support
 From: Heiner Kallweit <hkallweit1@gmail.com>
 To: Andi Shyti <andi.shyti@kernel.org>, Jean Delvare <jdelvare@suse.com>,
  Wolfram Sang <wsa@the-dreams.de>, Peter Korsgaard
@@ -135,52 +134,27 @@ In-Reply-To: <90a0786f-136b-4097-9def-8d52e9e5d3cc@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-i801 as only user of gpio i2c mux removed support for class-based device
-instantiation on muxed busses. Class-based device instantiation is a
-legacy mechanism and shouldn't be used in new code, therefore remove
-support also here.
+Last host driver supporting I2C_CLASS_SPD was i801. Now that I2C_CLASS_SPD
+support has been removed there, we can remove it here too.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/i2c/muxes/i2c-mux-gpio.c           | 3 +--
- include/linux/platform_data/i2c-mux-gpio.h | 2 --
- 2 files changed, 1 insertion(+), 4 deletions(-)
+ drivers/hwmon/jc42.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/muxes/i2c-mux-gpio.c b/drivers/i2c/muxes/i2c-mux-gpio.c
-index 6b979a0a6..0fbb33a3d 100644
---- a/drivers/i2c/muxes/i2c-mux-gpio.c
-+++ b/drivers/i2c/muxes/i2c-mux-gpio.c
-@@ -206,9 +206,8 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
+diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+index 75dc25df0..a00168fe5 100644
+--- a/drivers/hwmon/jc42.c
++++ b/drivers/hwmon/jc42.c
+@@ -623,7 +623,7 @@ MODULE_DEVICE_TABLE(of, jc42_of_ids);
+ #endif
  
- 	for (i = 0; i < mux->data.n_values; i++) {
- 		u32 nr = mux->data.base_nr ? (mux->data.base_nr + i) : 0;
--		unsigned int class = mux->data.classes ? mux->data.classes[i] : 0;
- 
--		ret = i2c_mux_add_adapter(muxc, nr, mux->data.values[i], class);
-+		ret = i2c_mux_add_adapter(muxc, nr, mux->data.values[i], 0);
- 		if (ret)
- 			goto add_adapter_failed;
- 	}
-diff --git a/include/linux/platform_data/i2c-mux-gpio.h b/include/linux/platform_data/i2c-mux-gpio.h
-index 5e4c2c272..816a4cd3c 100644
---- a/include/linux/platform_data/i2c-mux-gpio.h
-+++ b/include/linux/platform_data/i2c-mux-gpio.h
-@@ -18,7 +18,6 @@
-  * @values: Array of bitmasks of GPIO settings (low/high) for each
-  *	position
-  * @n_values: Number of multiplexer positions (busses to instantiate)
-- * @classes: Optional I2C auto-detection classes
-  * @idle: Bitmask to write to MUX when idle or GPIO_I2CMUX_NO_IDLE if not used
-  */
- struct i2c_mux_gpio_platform_data {
-@@ -26,7 +25,6 @@ struct i2c_mux_gpio_platform_data {
- 	int base_nr;
- 	const unsigned *values;
- 	int n_values;
--	const unsigned *classes;
- 	unsigned idle;
- };
- 
+ static struct i2c_driver jc42_driver = {
+-	.class		= I2C_CLASS_SPD | I2C_CLASS_HWMON,
++	.class		= I2C_CLASS_HWMON,
+ 	.driver = {
+ 		.name	= "jc42",
+ 		.pm = JC42_DEV_PM_OPS,
 -- 
 2.44.0
 
