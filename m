@@ -1,58 +1,56 @@
-Return-Path: <linux-i2c+bounces-2986-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2984-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A88DE8A7849
-	for <lists+linux-i2c@lfdr.de>; Wed, 17 Apr 2024 01:04:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D58718A7820
+	for <lists+linux-i2c@lfdr.de>; Wed, 17 Apr 2024 00:50:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36A99B240BB
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 23:04:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 130061C21DC1
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 22:50:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 623E013A247;
-	Tue, 16 Apr 2024 23:03:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3830913AD38;
+	Tue, 16 Apr 2024 22:46:27 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 9.mo583.mail-out.ovh.net (9.mo583.mail-out.ovh.net [178.32.96.204])
+Received: from 4.mo575.mail-out.ovh.net (4.mo575.mail-out.ovh.net [46.105.59.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF289139D0B
-	for <linux-i2c@vger.kernel.org>; Tue, 16 Apr 2024 23:03:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.32.96.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E1913AD2F
+	for <linux-i2c@vger.kernel.org>; Tue, 16 Apr 2024 22:46:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.59.63
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713308594; cv=none; b=PP6X1TWDwjvMST2J3g9C955eeCD4Y24U/1GlBKepBguAcxxlcRoW26i+AIyA0W40/krNg5x8V8+giwjRFNc1lM6qmXSy375nHBBycpWjaemwTlQZYTyCBO86gnVL2xVlFeGXqu7/YKaI95E8D/ZqfkWZgk5xXF4g9L4+9jGEmcI=
+	t=1713307587; cv=none; b=QOk/sT45Gj907r5FFFAqHX5P8mxvrTNmJnwrH3g7oaHaD8mAfkgANvn/D+MyVvQR3cdDdpDmBb/qHsRLUTFhE7UPbSp2uJW924cc8+kjYQb1lkMFnKtGV6qBgFaSKOKtYlRMWwh1IveVfGZ8S+dlAyTk/CCdojPxfj1jmdJma5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713308594; c=relaxed/simple;
-	bh=qjlfiV/5rAQPv2xdoYdnGIazQZt8/f6D7rMpTZzMwS8=;
+	s=arc-20240116; t=1713307587; c=relaxed/simple;
+	bh=h3uo6l1//7OEjWkIE1XUEjdaQjX+wASqlaqJMt7R78A=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Vhkx+Eh9L0ldFyuX71OWqfUleLvzV/g9MJpps+R6uObBnHrGSEHtgxehZ7uodiooaKibbrhanxJQbruufYFvM3GWjUpU5uwJSIueHcSaNMktyYpSskvIzQegP0/s6QT4McC7i61CQHWD5G7nIRublDxt1jTkfMRtHOZVF2ztC/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=178.32.96.204
+	 MIME-Version:Content-Type; b=OaWFx8Y3iGdh9w46qgpiEZqQrXkTUEOyzS9J0QwMFO0osH2UsHUAW3L47b3jr4dKw7bgZTtIMEXt/8QGo7BaKrzieqvp1iSZMkut47rE0QGEhPvippA1vnszU8pZKCVXXXX64L9aGrzuDYsYZAEktvN30jsli5NRrSjwmTNFaQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.59.63
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director2.ghost.mail-out.ovh.net (unknown [10.108.17.88])
-	by mo583.mail-out.ovh.net (Postfix) with ESMTP id 4VJzfg5j8Kz1SVV
-	for <linux-i2c@vger.kernel.org>; Tue, 16 Apr 2024 22:46:19 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-tb8qh (unknown [10.111.174.115])
-	by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id E3DB21FD1A;
-	Tue, 16 Apr 2024 22:46:17 +0000 (UTC)
-Received: from etezian.org ([37.59.142.98])
-	by ghost-submission-6684bf9d7b-tb8qh with ESMTPSA
-	id ySEiL7n/HmbEKwAAaA9+Iw
-	(envelope-from <andi@etezian.org>); Tue, 16 Apr 2024 22:46:17 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-98R00216c54067-ef62-4a2b-ace9-7a315bec58b8,
+Received: from director4.ghost.mail-out.ovh.net (unknown [10.108.17.234])
+	by mo575.mail-out.ovh.net (Postfix) with ESMTP id 4VJzfk24DWz1WCP
+	for <linux-i2c@vger.kernel.org>; Tue, 16 Apr 2024 22:46:22 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-cwzjm (unknown [10.110.168.204])
+	by director4.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 44BE01FDFF;
+	Tue, 16 Apr 2024 22:46:20 +0000 (UTC)
+Received: from etezian.org ([37.59.142.109])
+	by ghost-submission-6684bf9d7b-cwzjm with ESMTPSA
+	id oV4ZOrz/HmZqMQAAXNgG0A
+	(envelope-from <andi@etezian.org>); Tue, 16 Apr 2024 22:46:20 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-109S003f5198866-139b-45c7-b3bb-350fab71a196,
                     38C292890E232DD6F9946AE994780F0893807590) smtp.auth=andi@etezian.org
 X-OVh-ClientIp:89.217.109.169
 From: Andi Shyti <andi.shyti@kernel.org>
 To: Jean Delvare <jdelvare@suse.com>, 
- Peter Korsgaard <peter.korsgaard@barco.com>, Peter Rosin <peda@axentia.se>, 
- Guenter Roeck <linux@roeck-us.net>, Wolfram Sang <wsa@kernel.org>, 
  Heiner Kallweit <hkallweit1@gmail.com>
-Cc: linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org
-In-Reply-To: <90a0786f-136b-4097-9def-8d52e9e5d3cc@gmail.com>
-References: <90a0786f-136b-4097-9def-8d52e9e5d3cc@gmail.com>
-Subject: Re: (subset) [PATCH 0/4] i2c: Remove I2C_CLASS_SPD
-Message-Id: <171330757627.1978363.4012133892929034393.b4-ty@kernel.org>
-Date: Wed, 17 Apr 2024 00:46:16 +0200
+Cc: linux-i2c@vger.kernel.org
+In-Reply-To: <41efcfe2-7e05-4a11-bd02-40d9e525c415@gmail.com>
+References: <41efcfe2-7e05-4a11-bd02-40d9e525c415@gmail.com>
+Subject: Re: [PATCH] i2c: i801: Annotate apanel_addr as __ro_after_init
+Message-Id: <171330757984.1978363.14103159711969518419.b4-ty@kernel.org>
+Date: Wed, 17 Apr 2024 00:46:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -62,25 +60,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13.0
-X-Ovh-Tracer-Id: 18427322300675852919
+X-Ovh-Tracer-Id: 18428166729492466320
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudejjedgudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeffteehudffvdfhudfgffdugfejjeduheehgeefgeeuhfeiuefghffgueffvdfgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddrleeknecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeefpdhmohguvgepshhmthhpohhuth
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudejjedgudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeffteehudffvdfhudfgffdugfejjeduheehgeefgeeuhfeiuefghffgueffvdfgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddruddtleenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejhedpmhhouggvpehsmhhtphhouhht
 
 Hi
 
-On Mon, 15 Apr 2024 22:47:04 +0200, Heiner Kallweit wrote:
-> Only remaining client driver supporting I2C_CLASS_SPD is jc42. This
-> type of thermal sensor can be found on several DDR3/DDR4 modules.
-> i2c_register_spd() instantiates also such thermal sensor i2c devices.
-> Since 71b494e043d2 ("i2c: i801: Call i2c_register_spd for muxed child
-> segments") i2c_register_spd() is called also for the remaining use case,
-> systems with muxed SMBUS segments for SPD EEPROMs. i801 was the last
-> bus driver supporting I2C_CLASS_SPD.
-> Therefore I2C_CLASS_SPD class-based instantiation isn't needed any longer,
-> and we can remove it completely.
+On Fri, 12 Apr 2024 12:21:58 +0200, Heiner Kallweit wrote:
+> Annotate this variable as __ro_after_init to protect it from being
+> overwritten later.
 > 
-> [...]
+> 
 
 Applied to i2c/i2c-host on
 
@@ -91,11 +82,7 @@ Andi
 
 Patches applied
 ===============
-[1/4] i2c: i801: Remove usage of I2C_CLASS_SPD
-      commit: 8bae811210b77e2cd1b62d9fb20d2e6126103135
-[2/4] i2c: mux: gpio: remove support for class-based device instantiation
-      commit: 1dfb192a687fded0f5e92518024baa673c297885
-[4/4] i2c: Remove I2C_CLASS_SPD
-      commit: f7ece6320f6f028873649b9aa836c5bc5abf2cb3
+[1/1] i2c: i801: Annotate apanel_addr as __ro_after_init
+      commit: 08944c074592041873f1cb3e5be5fc3fd4cdc3ad
 
 
