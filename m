@@ -1,133 +1,106 @@
-Return-Path: <linux-i2c+bounces-2959-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2960-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC6B38A61EE
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 06:00:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D57FE8A63C1
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 08:31:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 02EC2B23544
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 04:00:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9001D28409D
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 06:31:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9D691CD06;
-	Tue, 16 Apr 2024 04:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48B332628D;
+	Tue, 16 Apr 2024 06:31:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="W1eJND6P"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WfYCwy/3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64FD1BDD0
-	for <linux-i2c@vger.kernel.org>; Tue, 16 Apr 2024 04:00:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC8C8EEAB
+	for <linux-i2c@vger.kernel.org>; Tue, 16 Apr 2024 06:31:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713240006; cv=none; b=oroAxYdyEhWha2zDEYLUI5iiR+T3crMJgF0cZT/ja63AlRQqjd31TR5XjQgzayMptASY4LIjMcbxZ5mcMIR7iPYwbpt/zZC29ViSadC2A7a3L3RxZ/53oDj6juovUTfIV2njtN2EPEe6TAmjUo/LLP5/J5gCJA7J9rtQ+GqOyNI=
+	t=1713249092; cv=none; b=YshdwpCA8rJCsLTie8TfLB2HhHsUrhBGbghntKbxjsUokE3UFu2LVbLyLZhXvjwGWnImnsHiqcALUGyi/2Svp8CGYgNfqE+VQgAkPDSf5lRKPrnaDIMl4qtIDm2aYlmvQ0P2b/QVIHRYL/1iK/QLWYoDLOFlUItfdgDjwSjCMZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713240006; c=relaxed/simple;
-	bh=M71H6X5zt6I2PPvZyL9wihAZDyoIkvoQELS1aDcik+U=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Mxo/0RW4wFU7O4Xh8oOoDjaAx7npj3PwzzkWDgOENPsUP8BUVRsRn5DQ+wyQxGsnkcWRbdnhHd39aY0QwraRydSwv3A1yBy5PnqhYVcs8XzPIgIHnwRncNN8V5IblylAaelM6SGzi6Juw8njFYBX1/EMj3ZBderH0PCRJIltWiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=W1eJND6P; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0EE412C05CC;
-	Tue, 16 Apr 2024 16:00:03 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1713240003;
-	bh=M71H6X5zt6I2PPvZyL9wihAZDyoIkvoQELS1aDcik+U=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=W1eJND6Pz++mwEeXBV2WfzVwvi/L9pLJODMmtNq2LX58H8kzSwkM4sQxBD3B8zPXe
-	 R2ESey7uehNRS75trq60yR3FG/YzvVVfm2P1uyCgc4VCljXVhP4beubMqE3tVzxlnV
-	 tfvUcNxSGk0KxuOdmdpT/AhAulnf7suTRuWyJp8mo1cU3B/I86CrFRhjoV5oecsAXp
-	 3pD0sSynWoSxBEQt87MWMDGDPTBB2dcVFd2GN5xKW8XYFdSa++ju06Z5/pGi0S8V4J
-	 QjeEf0FJQzvrTCM3nlP31aAc+6ufwSUPm0X0DzvWpG5s2uL2FmGZzlS96RX6+kbUxy
-	 zn/STGFvfZTzw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B661df7c20001>; Tue, 16 Apr 2024 16:00:02 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1544.9; Tue, 16 Apr 2024 16:00:02 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Tue, 16 Apr 2024 16:00:02 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.009; Tue, 16 Apr 2024 16:00:02 +1200
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Abhinav Jain <jain.abhinav177@gmail.com>, "andi.shyti@kernel.org"
-	<andi.shyti@kernel.org>, "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-CC: "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-	"javier.carrasco.cruz@gmail.com" <javier.carrasco.cruz@gmail.com>, "Julia
- Lawall" <julia.lawall@inria.fr>
-Subject: Re: [PATCH] i2c: mpc: Removal of of_node_put with __free for auto
- cleanup
-Thread-Topic: [PATCH] i2c: mpc: Removal of of_node_put with __free for auto
- cleanup
-Thread-Index: AQHaj0/GzDJ4DPHHek+eKx0F5hnQY7FpfVMA
-Date: Tue, 16 Apr 2024 04:00:02 +0000
-Message-ID: <8d745069-3647-408b-b34c-b29053b121f8@alliedtelesis.co.nz>
-References: <20240415161220.8347-1-jain.abhinav177@gmail.com>
-In-Reply-To: <20240415161220.8347-1-jain.abhinav177@gmail.com>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F0B37EE7D034754284B08F9681F082E8@atlnz.lc>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1713249092; c=relaxed/simple;
+	bh=SBu2jOfREO+rmzaoTZreupV/HQyAjnejIhptpU4lPW4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o3FHpE2qPwOA1OwNTxNVplv14lLwGYn9eWxXoA8q4c9Rugl6d+cs9H9XObpdyU/JC0CjmBkKQ2hCXqOObJuqzAmsqq9saoZ70eSjBjwoxHVRjq1L1/1mgWbQMhCMb5fzBI055nKDgdG40O616Fd1ftShipD241Md3dgggbnPYFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WfYCwy/3; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713249091; x=1744785091;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SBu2jOfREO+rmzaoTZreupV/HQyAjnejIhptpU4lPW4=;
+  b=WfYCwy/3FJ26qL3GatNaK4v7D51KcZJzBUYxEwWMObaANMYFVRhSKHWW
+   hhMCwcGurzhVJ9X5nSRZj6T3U3Mengo85FLGzSUEg/zOWyFuNwRC0Q0dP
+   mFQOlbSKumbrYCExHbrFyMwv1EqPLhB1aEB7/GvdhyTxYrDrfBOStF4Ng
+   LV+290t1jQBnl+8TCCrUYf15aCrTbuNz+qDsV4t2hAeMoVvJmxS6TpHME
+   +aZD/vUO546xSVXhsoz6D7Q2GRncvWzKM4vsWg1ZhTB/ZG4ddUs2dsU17
+   GYK/UtcPHTfmIcsesEHPOyUuVxOTxZdUgI3fi/O+LQWmCejrjFPmX5Puw
+   Q==;
+X-CSE-ConnectionGUID: YLWQfquBQ8qJhCuy0J+M6A==
+X-CSE-MsgGUID: Aw+XG8c1SVCo7gZNCBH5MA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11045"; a="8530235"
+X-IronPort-AV: E=Sophos;i="6.07,205,1708416000"; 
+   d="scan'208";a="8530235"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2024 23:31:30 -0700
+X-CSE-ConnectionGUID: qgADT5ClQi2FMtOF7wDs+w==
+X-CSE-MsgGUID: jviGUwS7SFmc+Mdjr2WXRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,205,1708416000"; 
+   d="scan'208";a="26954636"
+Received: from ehlflashnuc2.fi.intel.com (HELO mylly.fi.intel.com.) ([10.237.72.57])
+  by orviesa005.jf.intel.com with ESMTP; 15 Apr 2024 23:31:28 -0700
+From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+To: linux-i2c@vger.kernel.org
+Cc: Andi Shyti <andi.shyti@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>,
+	Shanth Murthy <shanth.murthy@intel.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: [PATCH] i2c: designware: Add ACPI ID for Granite Rapids-D I2C controller
+Date: Tue, 16 Apr 2024 09:31:25 +0300
+Message-ID: <20240416063125.2303139-1-jarkko.nikula@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=dY4j3mXe c=1 sm=1 tr=0 ts=661df7c2 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=SQiHmE0Aj67H6G5b:21 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=raytVjVEu-sA:10 a=pGLkceISAAAA:8 a=SFYO0tGWFC1vQ0iUQ38A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Content-Transfer-Encoding: 8bit
 
-DQpPbiAxNi8wNC8yNCAwNDoxMiwgQWJoaW5hdiBKYWluIHdyb3RlOg0KPiBSZW1vdmUgb2Zfbm9k
-ZV9wdXQgZnJvbSBub2RlX2N0cmwgYW5kIG5vZGUgc3RydWN0IGRldmljZV9ub2Rlcy4NCj4gTW92
-ZSB0aGUgZGVjbGFyYXRpb24gdG8gaW5pdGlhbGl6YXRpb24gZm9yIGVuc3VyaW5nIHNjb3BlIHNh
-bml0eS4NCj4NCj4gU3VnZ2VzdGVkLWJ5OiBKdWxpYSBMYXdhbGwgPGp1bGlhLmxhd2FsbEBpbnJp
-YS5mcj4NCj4gU2lnbmVkLW9mZi1ieTogQWJoaW5hdiBKYWluIDxqYWluLmFiaGluYXYxNzdAZ21h
-aWwuY29tPg0KDQpSZXZpZXdlZC1ieTogQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFja2hhbUBhbGxp
-ZWR0ZWxlc2lzLmNvLm56Pg0KDQo+IC0tLQ0KPiAgIGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXBj
-LmMgfCAxMSArKysrLS0tLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyks
-IDcgZGVsZXRpb25zKC0pDQo+DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJj
-LW1wYy5jIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tcGMuYw0KPiBpbmRleCA4ZDczYzBmNDA1
-ZWQuLmM0MjIzNTU2YjNiOCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1t
-cGMuYw0KPiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW1wYy5jDQo+IEBAIC0zMDQsMTMg
-KzMwNCwxMiBAQCBzdGF0aWMgdm9pZCBtcGNfaTJjX3NldHVwXzUxMngoc3RydWN0IGRldmljZV9u
-b2RlICpub2RlLA0KPiAgIAkJCQkJIHN0cnVjdCBtcGNfaTJjICppMmMsDQo+ICAgCQkJCQkgdTMy
-IGNsb2NrKQ0KPiAgIHsNCj4gLQlzdHJ1Y3QgZGV2aWNlX25vZGUgKm5vZGVfY3RybDsNCj4gICAJ
-dm9pZCBfX2lvbWVtICpjdHJsOw0KPiAgIAl1MzIgaWR4Ow0KPiAgIA0KPiAgIAkvKiBFbmFibGUg
-STJDIGludGVycnVwdHMgZm9yIG1wYzUxMjEgKi8NCj4gLQlub2RlX2N0cmwgPSBvZl9maW5kX2Nv
-bXBhdGlibGVfbm9kZShOVUxMLCBOVUxMLA0KPiAtCQkJCQkgICAgImZzbCxtcGM1MTIxLWkyYy1j
-dHJsIik7DQo+ICsJc3RydWN0IGRldmljZV9ub2RlICpub2RlX2N0cmwgX19mcmVlKGRldmljZV9u
-b2RlKSA9DQo+ICsJCW9mX2ZpbmRfY29tcGF0aWJsZV9ub2RlKE5VTEwsIE5VTEwsICJmc2wsbXBj
-NTEyMS1pMmMtY3RybCIpOw0KPiAgIAlpZiAobm9kZV9jdHJsKSB7DQo+ICAgCQljdHJsID0gb2Zf
-aW9tYXAobm9kZV9jdHJsLCAwKTsNCj4gICAJCWlmIChjdHJsKSB7DQo+IEBAIC0zMjEsNyArMzIw
-LDYgQEAgc3RhdGljIHZvaWQgbXBjX2kyY19zZXR1cF81MTJ4KHN0cnVjdCBkZXZpY2Vfbm9kZSAq
-bm9kZSwNCj4gICAJCQlzZXRiaXRzMzIoY3RybCwgMSA8PCAoMjQgKyBpZHggKiAyKSk7DQo+ICAg
-CQkJaW91bm1hcChjdHJsKTsNCj4gICAJCX0NCj4gLQkJb2Zfbm9kZV9wdXQobm9kZV9jdHJsKTsN
-Cj4gICAJfQ0KPiAgIA0KPiAgIAkvKiBUaGUgY2xvY2sgc2V0dXAgZm9yIHRoZSA1Mnh4IHdvcmtz
-IGFsc28gZmluZSBmb3IgdGhlIDUxMnggKi8NCj4gQEAgLTM1OCwxMSArMzU2LDExIEBAIHN0YXRp
-YyBjb25zdCBzdHJ1Y3QgbXBjX2kyY19kaXZpZGVyIG1wY19pMmNfZGl2aWRlcnNfOHh4eFtdID0g
-ew0KPiAgIA0KPiAgIHN0YXRpYyB1MzIgbXBjX2kyY19nZXRfc2VjX2NmZ184eHh4KHZvaWQpDQo+
-ICAgew0KPiAtCXN0cnVjdCBkZXZpY2Vfbm9kZSAqbm9kZTsNCj4gICAJdTMyIF9faW9tZW0gKnJl
-ZzsNCj4gICAJdTMyIHZhbCA9IDA7DQo+ICAgDQo+IC0Jbm9kZSA9IG9mX2ZpbmRfbm9kZV9ieV9u
-YW1lKE5VTEwsICJnbG9iYWwtdXRpbGl0aWVzIik7DQo+ICsJc3RydWN0IGRldmljZV9ub2RlICpu
-b2RlIF9fZnJlZShkZXZpY2Vfbm9kZSkgPQ0KPiArCQlvZl9maW5kX25vZGVfYnlfbmFtZShOVUxM
-LCAiZ2xvYmFsLXV0aWxpdGllcyIpOw0KPiAgIAlpZiAobm9kZSkgew0KPiAgIAkJY29uc3QgdTMy
-ICpwcm9wID0gb2ZfZ2V0X3Byb3BlcnR5KG5vZGUsICJyZWciLCBOVUxMKTsNCj4gICAJCWlmIChw
-cm9wKSB7DQo+IEBAIC0zODMsNyArMzgxLDYgQEAgc3RhdGljIHUzMiBtcGNfaTJjX2dldF9zZWNf
-Y2ZnXzh4eHgodm9pZCkNCj4gICAJCQlpb3VubWFwKHJlZyk7DQo+ICAgCQl9DQo+ICAgCX0NCj4g
-LQlvZl9ub2RlX3B1dChub2RlKTsNCj4gICANCj4gICAJcmV0dXJuIHZhbDsNCj4gICB9
+From: Shanth Murthy <shanth.murthy@intel.com>
+
+Granite Rapids-D has additional I2C controller that is enumerated via
+ACPI. Add ACPI ID for it.
+
+Signed-off-by: Shanth Murthy <shanth.murthy@intel.com>
+Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index 4ab41ba39d55..926fb74a8570 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -46,6 +46,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
+ 	{ "INT33C3", 0 },
+ 	{ "INT3432", 0 },
+ 	{ "INT3433", 0 },
++	{ "INTC10EF", 0 },
+ 	{ "80860F41", ACCESS_NO_IRQ_SUSPEND },
+ 	{ "808622C1", ACCESS_NO_IRQ_SUSPEND },
+ 	{ "AMD0010", ACCESS_INTR_MASK },
+-- 
+2.43.0
+
 
