@@ -1,125 +1,132 @@
-Return-Path: <linux-i2c+bounces-2978-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2979-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D32C18A6F49
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 17:05:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3954E8A70CE
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 18:02:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AE2F1F217E4
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 15:05:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B6143B25394
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 16:02:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1967412FF9F;
-	Tue, 16 Apr 2024 15:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F031C131BDD;
+	Tue, 16 Apr 2024 16:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Evlue0WE"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hxAl+vKX"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE3E12AACA;
-	Tue, 16 Apr 2024 15:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979C213119E;
+	Tue, 16 Apr 2024 16:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713279925; cv=none; b=sQCTTemznZKOb9/jzHv83/zGIWdDpskWnFnJtV+aCAweUufGuOSlzYJQH7R6cMjeZfB+RUdxxgK+ONtOnfZf1xquF/pHYG1iEYbiGh5DQ8ghsrkRliHHiO89pNI9FkoNVUaLXCI3T9Zq/33SvYc0gg09VuwcC6I4EnVIE2I/JrE=
+	t=1713283314; cv=none; b=HWgjU4pspXf1kFToRMjYClCfGVjuYPiX6JUlPu2u2ZLFJxxMxjz48ncNj8dYyX3ngEBwBpOtepyN3yiOnY8iVBqG+GjBBIpopMzYjbVi0VVz8/AFfFTBpxYhQQpCND8VuYGisYcT3pRDlnznoKfw5FIBzdCvU1VVQLpq1TbJvts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713279925; c=relaxed/simple;
-	bh=eoUEUNDDT3IISkVkLcQVShb7N8n4cu8oTCAwsjC3QRk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b1E/ddFx7XUE+VfrRIlokjI9OFNRCgMx2/D1Ur96YXwcsjDlPyh1wSvl58ZebqU47YHDyCkG1okS2SasYVXisxgzpb0IoaULikr/ojAK2AYmeRh5aa36uJGDAzIIF4wSGXzwZnchSJ9RWw9I4YJ7Zy3ytroeUj9U5stxObiSv2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Evlue0WE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72DACC113CE;
-	Tue, 16 Apr 2024 15:05:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713279925;
-	bh=eoUEUNDDT3IISkVkLcQVShb7N8n4cu8oTCAwsjC3QRk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Evlue0WEIc8vjVKo7214wtqrJwG33LppDFpOSjHmzZdLCpH0Q5ZwKbIIiRdjODvRi
-	 io69mrj6mVB9dGbkDBmiNtGdXiX5X/SQ19kkg4C77i/9vZM0ArEnmYW3JquUAY7Y+D
-	 idxob1Z1DbnhbnMD+JG+/TXq45ba4+/JMMJ5RIJrNmsReWNyKb3tuBkk4R9hBh1+r4
-	 PU1VIJvEhcRnV5C4TUQ6vOasuo0TndKz0yClmR+lyJfUPdkO3zcH6vquhQnZ8dBksj
-	 KjL8P5Dt8rAVG30LcylEElB/LEjPH+JGka8otxNzGzv5QGpGiAIhE8xV1GR8wMZY3x
-	 0dZbj9gZT6ESw==
-Date: Tue, 16 Apr 2024 17:05:21 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Vinod Koul <vkoul@kernel.org>
-Cc: konrad.dybcio@linaro.org, andersson@kernel.org, wsa@kernel.org, 
-	linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, 
-	quic_vdadhani@quicinc.com, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v4] i2c: i2c-qcom-geni: Parse Error correctly in i2c GSI
- mode
-Message-ID: <j3zupurwq5vtzfwby7ubl7ft75fqqhutk4vfqolihkcldfcesi@ywwfnkjcfhgu>
-References: <20240313052639.1747078-1-quic_msavaliy@quicinc.com>
- <171161140136.2698925.4294566764047886777.b4-ty@kernel.org>
- <ZgbwJAb7Ffktf554@matsya>
- <a76mmz5xrfipqpmq2ltsyobwc54dyw2d55gb4vta5d746dwb3i@5mm2ew5uudi3>
- <ZhJVgDVthhr4hISg@matsya>
+	s=arc-20240116; t=1713283314; c=relaxed/simple;
+	bh=CIIWnHafYS85G8cd9e60rj7Vkph8QEAZkp+usIKi/X8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mQhvUCUROgCZ2iqGMsyopKKx7ywpFylGgmEBpw/VXzoPSEZv9M3RDRGZG66zDHgVORilaLZj3lY501qSO90g2/zpIVXSMOkAMtQXsbcR67NkPRTdgplzs6KY9SpqGRT4SdaOAUJd9ZYNEoyN50gJlyElj+9nfaZO+JXCjgESHjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hxAl+vKX; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4A265C0008;
+	Tue, 16 Apr 2024 16:01:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1713283303;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y7lcnqaRazFwJFVK5/WHOD289rB7ddonTK7K7dl1R7o=;
+	b=hxAl+vKX+Mf28jmCLqp3EiKVxs99qWvy6NWTthAfL/1rQYtCSESgYzQEgIcs9JNjpuyKag
+	cgtHErhGAkaYL237+kfmsg1uL1hzBndwQT6uMSnnFHEAXzLfXg0Rjqh4Afm+iKRTPKDZPq
+	if3ChBmix4sTpHn2V5XYpZa0lCIGhLOgnwjCyKWlpu2E4PBgu50gjLbDYD3/5/W0Su88cO
+	rzfckWPAUlM+xsXn6dBgX34WOOFUm3dd4PnZ7+780r/AZu4gbz/Rf/hz1zDQZHQxpQOFf5
+	CXQ1lFvZNiUf3xCdT7bRFM7WkpkM3Fgb2RSq88sn8cnTOfMbv+he40GgOokbkQ==
+Message-ID: <fcd7b616-07e0-45a3-b14a-d0c194d58a86@bootlin.com>
+Date: Tue, 16 Apr 2024 18:01:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZhJVgDVthhr4hISg@matsya>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 05/11] PCI: cadence: Extract link setup sequence from
+ cdns_pcie_host_setup()
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Tony Lindgren <tony@atomide.com>,
+ Aaro Koskinen <aaro.koskinen@iki.fi>,
+ Janusz Krzysztofik <jmkrzyszt@gmail.com>, Vignesh R <vigneshr@ti.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Siddharth Vadapalli <s-vadapalli@ti.com>, linux-gpio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, gregory.clement@bootlin.com,
+ theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com
+References: <20240102-j7200-pcie-s2r-v5-0-4b8c46711ded@bootlin.com>
+ <20240102-j7200-pcie-s2r-v5-5-4b8c46711ded@bootlin.com>
+ <111df2a5-7e05-480c-a5a5-57cf8d83c0d0@moroto.mountain>
+Content-Language: en-US
+From: Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <111df2a5-7e05-480c-a5a5-57cf8d83c0d0@moroto.mountain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
 
-Hi Vinod, Mukesh,
-
-On Sun, Apr 07, 2024 at 01:42:48PM +0530, Vinod Koul wrote:
-> On 02-04-24, 18:44, Andi Shyti wrote:
-> > On Fri, Mar 29, 2024 at 10:15:24PM +0530, Vinod Koul wrote:
-> > > On 28-03-24, 08:36, Andi Shyti wrote:
-> > > > On Wed, 13 Mar 2024 10:56:39 +0530, Mukesh Kumar Savaliya wrote:
-> > > > > I2C driver currently reports "DMA txn failed" error even though it's
-> > > > > NACK OR BUS_PROTO OR ARB_LOST. Detect NACK error when no device ACKs
-> > > > > on the bus instead of generic transfer failure which doesn't give any
-> > > > > specific clue.
-> > > > > 
-> > > > > Make Changes inside i2c driver callback handler function
-> > > > > i2c_gpi_cb_result() to parse these errors and make sure GSI driver
-> > > > > stores the error status during error interrupt.
-> > > > > 
-> > > > > [...]
-> > > > 
-> > > > Applied to i2c/i2c-host-next on
-> > > > 
-> > > > git://git.kernel.org/pub/scm/linux/kernel/git/local tree
-> > > 
-> > > You applied changes to dmaengine driver without my ack! I dont agree to
-> > > the approach here, we could do better
-> > 
-> > this must be an error from b4 ty. The changes have been added to
-> > 
-> > pub/scm/linux/kernel/git/andi.shyti/linux.git
-> > 
-> > branch i2c/i2c-host, As it has been agreed from very long.
-> > 
-> > Anyway, the changes are in -next. What do we do now? Do I revert
-> > it? Mukesh, can you please agree with Vinod?
+On 4/16/24 16:16, Dan Carpenter wrote:
+> On Tue, Apr 16, 2024 at 03:29:54PM +0200, Thomas Richard wrote:
+>> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
+>> index 5b14f7ee3c79..93d9922730af 100644
+>> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
+>> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
+>> @@ -497,6 +497,30 @@ static int cdns_pcie_host_init(struct device *dev,
+>>  	return cdns_pcie_host_init_address_translation(rc);
+>>  }
+>>  
+>> +int cdns_pcie_host_link_setup(struct cdns_pcie_rc *rc)
+>> +{
+>> +	struct cdns_pcie *pcie = &rc->pcie;
+>> +	struct device *dev = rc->pcie.dev;
+>> +	int ret;
+>> +
+>> +	if (rc->quirk_detect_quiet_flag)
+>> +		cdns_pcie_detect_quiet_min_delay_set(&rc->pcie);
+>> +
+>> +	cdns_pcie_host_enable_ptm_response(pcie);
+>> +
+>> +	ret = cdns_pcie_start_link(pcie);
+>> +	if (ret) {
+>> +		dev_err(dev, "Failed to start link\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	ret = cdns_pcie_host_start_link(rc);
+>> +	if (ret)
+>> +		dev_dbg(dev, "PCIe link never came up\n");
 > 
-> I dont apply patches to other subsystem without the ack. Either way you
-> can ask always! 
+> If we're going to ignore this error the message should be a dev_err()
+> at least.
 
-Yes, you are totally right; but please, keep in mind that this
-patch has some history and I would have loved to hear from you
-earlier. Anyway...
+Hello Dan,
 
-> I will leave it upto you...
+In fact we already ignore this error [1]
+I only moved the hardware configuration part of cdns_pcie_host_setup()
+into a new function cdns_pcie_host_link_setup().
 
-... Mukesh, I'm sorry, but I'm going to revert this patch again
-until we address all the last minute issues from Vinod. The
-silence on this thread is worrying me more than reverting it.
+But I can use this patch to switch to dev_err() if needed.
 
-I hope this will be the last time I revert this patch.
+[1]
+https://elixir.bootlin.com/linux/v6.9-rc4/source/drivers/pci/controller/cadence/pcie-cadence-host.c#L549
 
-Moreover, in order to avoid maintainers' rumble (:)), please
-let's try to split patches that are touching more than one
-subsystems keeping the logical meainings intact.
+Regards,
 
-I hope this is fine with you, Vinod.
+Thomas
 
-Andi
 
