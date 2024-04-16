@@ -1,95 +1,61 @@
-Return-Path: <linux-i2c+bounces-2977-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-2978-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5557A8A6DCE
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 16:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D32C18A6F49
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 17:05:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AB491F215DF
-	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 14:18:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AE2F1F217E4
+	for <lists+linux-i2c@lfdr.de>; Tue, 16 Apr 2024 15:05:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68249131187;
-	Tue, 16 Apr 2024 14:16:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1967412FF9F;
+	Tue, 16 Apr 2024 15:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t+q/OKJA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Evlue0WE"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2351131182
-	for <linux-i2c@vger.kernel.org>; Tue, 16 Apr 2024 14:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE3E12AACA;
+	Tue, 16 Apr 2024 15:05:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713276975; cv=none; b=GYeJxv4hy9b3k0EZMxn79xUq1Ns50jDwtEBPSpaQ6eA3wvJYeWQb7bcPT/zXuueOc9omM+Bo7RsQdhpZXfz16DK18B/UmA+tAiYkRp/ekfI8aPBgzlGLXBqEl5r5OsLPiT1EGUvQ72dW3Iya606VPsAQTtWgGaarsfLWZJAvC8g=
+	t=1713279925; cv=none; b=sQCTTemznZKOb9/jzHv83/zGIWdDpskWnFnJtV+aCAweUufGuOSlzYJQH7R6cMjeZfB+RUdxxgK+ONtOnfZf1xquF/pHYG1iEYbiGh5DQ8ghsrkRliHHiO89pNI9FkoNVUaLXCI3T9Zq/33SvYc0gg09VuwcC6I4EnVIE2I/JrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713276975; c=relaxed/simple;
-	bh=U12xAAwG4rQBVCQQyyweodHFp8votgTpdJu4ms7XTZY=;
+	s=arc-20240116; t=1713279925; c=relaxed/simple;
+	bh=eoUEUNDDT3IISkVkLcQVShb7N8n4cu8oTCAwsjC3QRk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YBkhk9ueMZjjLQD2VULL1VRRK1KIaCJkn1su2z6LK6Bz9jJbMbmdKbcOGTq7O4k3rCvrVRj49BGrn/fdQagmxxB/FD3ZNZQs4rvchCguZEHPTxuxrVRWF9W82RjE1A8+eprxTX6BXLMfStWJnWyvGf571FDcwm1JlBgrDBj+mwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=t+q/OKJA; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a52aa665747so267469166b.2
-        for <linux-i2c@vger.kernel.org>; Tue, 16 Apr 2024 07:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713276972; x=1713881772; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aQhrHnPK3yPIExTq+Bo/LE4b4eKmDn78YsL5+8fOLro=;
-        b=t+q/OKJAfkq1OJiLKWR5k5JMPuL9smkpO5cESBc+FW+nAPTS9MEUxxIRiVb3Ry6n9h
-         BPjNY/YRQeZ8PtB+3l1tj52mnqh1tEe2j7kBI9tjRsSOnBhGY9i43ld5AhZe6jPfNCQN
-         FEzVO8Sve7/IVGQl1JpB8ZoA3SiGZM3VylFHFYHfgYmge6xa7o+V2RIzFq5yiM6zjell
-         +FiN2YwFyoYi1eFo2b+j3G4PuBVpTSsRoeYMi1Zs3dunGZFFsOO76/pZP6nlCz5EToF8
-         jUvSHPi+y5Hk6P4gzRIVvkelh6zWIxBHcbYUdxCoVxu3ScyeKbTWWCWPNPMMKCHTTgjP
-         S9Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713276972; x=1713881772;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aQhrHnPK3yPIExTq+Bo/LE4b4eKmDn78YsL5+8fOLro=;
-        b=MhEkIpDp3aCehBDTgV89gFSWXnmzhj0+YkKxkcH3EKARLEM13KLiWAT1lu0kTDYX85
-         GAr2IzwooTyDnXsIljEKzhx8STzaHlkqIWE1vMBFGdAAPcU/rt9NqMMqR68y2BgIJZXN
-         AOYWv+FWlS6lER09//fR6wrA2l/yOykpj9Ok0esqBqtD9deKCURqqFEPUvl9bIf/EICD
-         nFPnN8c445IvMV9ZNQx8hkc2wctJRmx9xVpUz3RP6h+jJ4vEcRjbDc467nxtRe9myaeV
-         ckOzjJel1axncn3OpU81LhJybUdGk0vwukV9kJ25Z3kcUc1IO3in3hZMYxzZ/lLGm2DX
-         gqWw==
-X-Forwarded-Encrypted: i=1; AJvYcCVkveAG33NDz3Z/GOJ9BVicerX9DIOSpiaV29jguSrqdKkk2FzD3qwkmQx4GofJNQm+MZwpLLrW26pW4s2ZGQoBxVSuhEgHuO5g
-X-Gm-Message-State: AOJu0YyYV4DmxAKZpVS2TW37iUuZNtJRLk/L93yeErhBnkP+pgYNsg8w
-	0/iIeScc2s78A4x14vdCIMB6eTTbfZoSCAscBFkZh3Mmx/+4kacVkfz5QTFxv6A=
-X-Google-Smtp-Source: AGHT+IG/qwOEHsBcVNP7RIi8AIVdPffoVL9T6hEZjzp2r/9OuroPh0DYyonB2/NkWApdRwqTEgpAag==
-X-Received: by 2002:a17:906:b88e:b0:a53:ed46:f836 with SMTP id hb14-20020a170906b88e00b00a53ed46f836mr3076567ejb.2.1713276971657;
-        Tue, 16 Apr 2024 07:16:11 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id q23-20020a170906a09700b00a519ec0a965sm6867197ejy.49.2024.04.16.07.16.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 07:16:11 -0700 (PDT)
-Date: Tue, 16 Apr 2024 17:16:07 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Tony Lindgren <tony@atomide.com>,
-	Aaro Koskinen <aaro.koskinen@iki.fi>,
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-	Vignesh R <vigneshr@ti.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Peter Rosin <peda@axentia.se>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Siddharth Vadapalli <s-vadapalli@ti.com>,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	gregory.clement@bootlin.com, theo.lebrun@bootlin.com,
-	thomas.petazzoni@bootlin.com, u-kumar1@ti.com
-Subject: Re: [PATCH v5 05/11] PCI: cadence: Extract link setup sequence from
- cdns_pcie_host_setup()
-Message-ID: <111df2a5-7e05-480c-a5a5-57cf8d83c0d0@moroto.mountain>
-References: <20240102-j7200-pcie-s2r-v5-0-4b8c46711ded@bootlin.com>
- <20240102-j7200-pcie-s2r-v5-5-4b8c46711ded@bootlin.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=b1E/ddFx7XUE+VfrRIlokjI9OFNRCgMx2/D1Ur96YXwcsjDlPyh1wSvl58ZebqU47YHDyCkG1okS2SasYVXisxgzpb0IoaULikr/ojAK2AYmeRh5aa36uJGDAzIIF4wSGXzwZnchSJ9RWw9I4YJ7Zy3ytroeUj9U5stxObiSv2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Evlue0WE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72DACC113CE;
+	Tue, 16 Apr 2024 15:05:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713279925;
+	bh=eoUEUNDDT3IISkVkLcQVShb7N8n4cu8oTCAwsjC3QRk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Evlue0WEIc8vjVKo7214wtqrJwG33LppDFpOSjHmzZdLCpH0Q5ZwKbIIiRdjODvRi
+	 io69mrj6mVB9dGbkDBmiNtGdXiX5X/SQ19kkg4C77i/9vZM0ArEnmYW3JquUAY7Y+D
+	 idxob1Z1DbnhbnMD+JG+/TXq45ba4+/JMMJ5RIJrNmsReWNyKb3tuBkk4R9hBh1+r4
+	 PU1VIJvEhcRnV5C4TUQ6vOasuo0TndKz0yClmR+lyJfUPdkO3zcH6vquhQnZ8dBksj
+	 KjL8P5Dt8rAVG30LcylEElB/LEjPH+JGka8otxNzGzv5QGpGiAIhE8xV1GR8wMZY3x
+	 0dZbj9gZT6ESw==
+Date: Tue, 16 Apr 2024 17:05:21 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Vinod Koul <vkoul@kernel.org>
+Cc: konrad.dybcio@linaro.org, andersson@kernel.org, wsa@kernel.org, 
+	linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, 
+	quic_vdadhani@quicinc.com, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v4] i2c: i2c-qcom-geni: Parse Error correctly in i2c GSI
+ mode
+Message-ID: <j3zupurwq5vtzfwby7ubl7ft75fqqhutk4vfqolihkcldfcesi@ywwfnkjcfhgu>
+References: <20240313052639.1747078-1-quic_msavaliy@quicinc.com>
+ <171161140136.2698925.4294566764047886777.b4-ty@kernel.org>
+ <ZgbwJAb7Ffktf554@matsya>
+ <a76mmz5xrfipqpmq2ltsyobwc54dyw2d55gb4vta5d746dwb3i@5mm2ew5uudi3>
+ <ZhJVgDVthhr4hISg@matsya>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -98,47 +64,62 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240102-j7200-pcie-s2r-v5-5-4b8c46711ded@bootlin.com>
+In-Reply-To: <ZhJVgDVthhr4hISg@matsya>
 
-On Tue, Apr 16, 2024 at 03:29:54PM +0200, Thomas Richard wrote:
-> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> index 5b14f7ee3c79..93d9922730af 100644
-> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> @@ -497,6 +497,30 @@ static int cdns_pcie_host_init(struct device *dev,
->  	return cdns_pcie_host_init_address_translation(rc);
->  }
->  
-> +int cdns_pcie_host_link_setup(struct cdns_pcie_rc *rc)
-> +{
-> +	struct cdns_pcie *pcie = &rc->pcie;
-> +	struct device *dev = rc->pcie.dev;
-> +	int ret;
-> +
-> +	if (rc->quirk_detect_quiet_flag)
-> +		cdns_pcie_detect_quiet_min_delay_set(&rc->pcie);
-> +
-> +	cdns_pcie_host_enable_ptm_response(pcie);
-> +
-> +	ret = cdns_pcie_start_link(pcie);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to start link\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = cdns_pcie_host_start_link(rc);
-> +	if (ret)
-> +		dev_dbg(dev, "PCIe link never came up\n");
+Hi Vinod, Mukesh,
 
-If we're going to ignore this error the message should be a dev_err()
-at least.
+On Sun, Apr 07, 2024 at 01:42:48PM +0530, Vinod Koul wrote:
+> On 02-04-24, 18:44, Andi Shyti wrote:
+> > On Fri, Mar 29, 2024 at 10:15:24PM +0530, Vinod Koul wrote:
+> > > On 28-03-24, 08:36, Andi Shyti wrote:
+> > > > On Wed, 13 Mar 2024 10:56:39 +0530, Mukesh Kumar Savaliya wrote:
+> > > > > I2C driver currently reports "DMA txn failed" error even though it's
+> > > > > NACK OR BUS_PROTO OR ARB_LOST. Detect NACK error when no device ACKs
+> > > > > on the bus instead of generic transfer failure which doesn't give any
+> > > > > specific clue.
+> > > > > 
+> > > > > Make Changes inside i2c driver callback handler function
+> > > > > i2c_gpi_cb_result() to parse these errors and make sure GSI driver
+> > > > > stores the error status during error interrupt.
+> > > > > 
+> > > > > [...]
+> > > > 
+> > > > Applied to i2c/i2c-host-next on
+> > > > 
+> > > > git://git.kernel.org/pub/scm/linux/kernel/git/local tree
+> > > 
+> > > You applied changes to dmaengine driver without my ack! I dont agree to
+> > > the approach here, we could do better
+> > 
+> > this must be an error from b4 ty. The changes have been added to
+> > 
+> > pub/scm/linux/kernel/git/andi.shyti/linux.git
+> > 
+> > branch i2c/i2c-host, As it has been agreed from very long.
+> > 
+> > Anyway, the changes are in -next. What do we do now? Do I revert
+> > it? Mukesh, can you please agree with Vinod?
+> 
+> I dont apply patches to other subsystem without the ack. Either way you
+> can ask always! 
 
+Yes, you are totally right; but please, keep in mind that this
+patch has some history and I would have loved to hear from you
+earlier. Anyway...
 
-> +
-> +	return 0;
-> +}
-> +
+> I will leave it upto you...
 
-regards,
-dan carpenter
+... Mukesh, I'm sorry, but I'm going to revert this patch again
+until we address all the last minute issues from Vinod. The
+silence on this thread is worrying me more than reverting it.
+
+I hope this will be the last time I revert this patch.
+
+Moreover, in order to avoid maintainers' rumble (:)), please
+let's try to split patches that are touching more than one
+subsystems keeping the logical meainings intact.
+
+I hope this is fine with you, Vinod.
+
+Andi
 
