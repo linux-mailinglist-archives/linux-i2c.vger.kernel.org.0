@@ -1,70 +1,70 @@
-Return-Path: <linux-i2c+bounces-3010-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3011-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B2CC8AA0E7
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Apr 2024 19:16:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D1798AA0EA
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Apr 2024 19:17:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4E112821BC
-	for <lists+linux-i2c@lfdr.de>; Thu, 18 Apr 2024 17:16:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90F291C2103A
+	for <lists+linux-i2c@lfdr.de>; Thu, 18 Apr 2024 17:17:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D31F172BCD;
-	Thu, 18 Apr 2024 17:16:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 211F1172BC6;
+	Thu, 18 Apr 2024 17:17:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A5QCHLq0"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="ZR2vh+F8"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E25C171E54
-	for <linux-i2c@vger.kernel.org>; Thu, 18 Apr 2024 17:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F2516F855
+	for <linux-i2c@vger.kernel.org>; Thu, 18 Apr 2024 17:17:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713460571; cv=none; b=mUagOtkGeJ4rWEQHvkA0A2GfnLBmaJNbDEgzEM6jSI2V6Ae1B5nJxh1frQO1u0RLRAyy6Se6cnzZsW0n2ILXAsp9Gtst1/y58/odKxAUyRXfDIyyWTYF/kjqUViOBqr+dLseGnCqQOpS5W2X8rOpuhR+p/l1skTHNLBeKMJvWO0=
+	t=1713460634; cv=none; b=cOaeX4SZe9/wGb72VwURg7bZgZnmxtjwDnUCn4WPXd7NGCxDN6xhvAQB61xVWxKai53e8dr71aKTacuYQ3+z20kcx83bo2ioBa+1RKFmQsw3nU++LXzXmzlOsEP7OcVW/EpTxA51uKonwxRza0TnNvBAyIZAimCAMWLeVra4r9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713460571; c=relaxed/simple;
-	bh=F210ow5SuffL5Qd+LCc/09PARUdheMgc93VCoiUrgfE=;
+	s=arc-20240116; t=1713460634; c=relaxed/simple;
+	bh=v5XuTFSt2Kik+XEmSmTAttULoZnECzNaRJxl6D9YXHU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZC4fZeQYh2BVu2txbVPwsYCQRe69drYCs31zJx2G35BCvtj4X5EFWgNL4fP13F5N71t+un89CwOLCH/4vkvoKd3PVFi1vrxyYz4hjGfW2VNWD2XTUH/D82l03fgudC7yxKwpWZp8GsEaJha8MtErX10XMgYYPfqtbvbRUArqsUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A5QCHLq0; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-78f049ddd7dso73314585a.1
-        for <linux-i2c@vger.kernel.org>; Thu, 18 Apr 2024 10:16:07 -0700 (PDT)
+	 To:Cc:Content-Type; b=SS2PlxQI1NXQ0miimDGvaGRJVpjm8N5+pqVAverq2uKsnZNP4nTeVGWgJl+/VFByo2GPPAhDOwxcuO++6wgF1yyQUCwbvnM/HVxJ2BHsBSMkwsRMdIYMMXPH05Iq7+VETEavfEbWZMQEs56Sh/v01l9nhchCV+onK2eN4IgEajM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=ZR2vh+F8; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-518b9527c60so1230473e87.0
+        for <linux-i2c@vger.kernel.org>; Thu, 18 Apr 2024 10:17:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713460567; x=1714065367; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1713460632; x=1714065432; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QwgsV6Bgw8XAr7AlE0UkLUnQuWiMt0eg6v3cfIkpwUY=;
-        b=A5QCHLq0bdLeERVvkntz3dazjkkeE+Vy65iygJHWT+NI6yuVWe/ldC9WlaCGZTpE5/
-         Nnfez8f/r51akfOPTxBx1L5HTjxmY2hSGiWLTZUUQqL8Rbb4PBtgc5xKLXipwd7KN+X9
-         MCbpKM0VMoqiybUnCQ/8bYe5QvlQ9lNlGu8jxpHd3YceGby25XRB2H1629HtiYJVANd2
-         DLFj07SqpWzUduC2Y3PI4aaIPxOesP4hlaDf//b6bAyoLtJElwGbx6+xI8/VZv0C7Eli
-         tDt1aGuwtVb/Kmb62sVtbkl645Q3B0RKStrBw9y5XToIkvnZWN0vbOWtgpKFRn7sGQVl
-         NDPg==
+        bh=pRA3Nwo8/llUCeKE7NO8/3NSffIJqFe+sm4EX8Gj6IY=;
+        b=ZR2vh+F8IfVihlYJXzRawnhMIgZS2EBrUR6HdC4SeTtWGjiRIm9++/yYljF+Si/Otq
+         HSsqlMaZuZ1SzVjZzs2m1JZgMbU6Rm1YxuFTvttw5l2slqhUXlIh1VbO++Q0cPWkjorg
+         Y/nHxBB4m0CyX2pGIMXXvB/k2lb67GN8KuBL3I76T9+/QtEdUbQs0tRI7J6Uy+16oh/2
+         Tu8ZYffgV5SpZA6w2+2k4Oc75+FYlQOsy2AZO90bCY044zqNBc6Fe7mY8cKq8MqXMy3y
+         WU+4BpIU/pZK9Sq/Hi6v0I14a/Y5q9o8lLBur1jRjwN48MfuDJZ0KBrcjlloIt5gjLVI
+         0Tog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713460567; x=1714065367;
+        d=1e100.net; s=20230601; t=1713460632; x=1714065432;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QwgsV6Bgw8XAr7AlE0UkLUnQuWiMt0eg6v3cfIkpwUY=;
-        b=d2DsMKtld6Ykb8Ico9LeejCDdru87spDF1DfVvR+SNY9RHaRr+vKeQKnfIc7exI5H+
-         MNvSymYE9GcMRjxerYkl9Vvf2yBwn39eoelDxC2FQiVBoOfBM6lUWScSm4DifcOp3yjJ
-         T26pP2Jby8LTwitLWLuEa15Sr4vaPMIKPbVtGR88WjR0yTQUXYd2bHuF8pA6j27bnxoJ
-         2O2Nc3lE66Mm8P68QBlmc9QRvbRDefgZ1sSI/Xquzxx/h8ZRb1hkYDGT06NhInFo6lsG
-         1CLxCA+gfJNxptQSxQhyOIjEiZ+1MOWs4abTIhcwi0vpGZyf856oBIYyhIC745+XQYvv
-         fmKA==
-X-Forwarded-Encrypted: i=1; AJvYcCVEu2pK8S0AEXwaD+H7D2cNBiJ2m8s9TzwMBFZleX3iBd5eWtB0Jb0Z42rcxFZLEef7hFS+/IL1NnD7CjoVx4RmxrdV5ltZ1svA
-X-Gm-Message-State: AOJu0Yz+oYe+txSVfiEo+6AmpNrKQaHXDe6zPCcifLZ9Vqo6qkGJor+R
-	HjSsrQhikJmo55O88PYYYkF7bVroMHi2aXy5kp8CsoWbumiPjoIBzAIoHUnA7+KGjl2l3zZpY4W
-	rERA13mZUqrgBS1oYkg5LQBk5XoAK3Re+BMP0bJytRML8gHawEw==
-X-Google-Smtp-Source: AGHT+IF29U7JAW1A2P1WD0lV+Z3IXS9ks8l81DyVOnGCQURjJ73xRvDG0sjKCmBqRQqLZqLDVhqz85t0fRqjPEMQ5mE=
-X-Received: by 2002:a0c:c245:0:b0:69b:5c5e:be39 with SMTP id
- w5-20020a0cc245000000b0069b5c5ebe39mr3525831qvh.63.1713460566856; Thu, 18 Apr
- 2024 10:16:06 -0700 (PDT)
+        bh=pRA3Nwo8/llUCeKE7NO8/3NSffIJqFe+sm4EX8Gj6IY=;
+        b=ZsuS2mcZFG6GB0bJ4YbtdWHIvW/0Xk0RBmpa4BCI03tvj7+Q0udqM7taoNiU+/ywcI
+         Ko39Q7oEaTtnZQbOfv1QEsuIP/y4dpyQ0aTTf0azbjD7UCjqB4ZGeAWUTEy4xxEFNxFQ
+         CrZUbGq0zDcl3SbOq1JW8bnSCSBlQa+MmNGX0NPSeUH3D1JB3b5qhn3lRWBu7fgXKMnN
+         4VxwVWgiOvn8nQ3XeC8MPb+ei9uFP7UXOvhg5es588+OxZywazmR9SLsWqg3/9MjycVc
+         qrrEmLX1lBLpKbwYlkNYhRhSQFv0TVRZbGBKJp0wPOBHPnsgQGqDxuIqoJ/3MlopFyH3
+         M/Gg==
+X-Forwarded-Encrypted: i=1; AJvYcCUxZGAADzsiQoWys+Bk2Vv9GLTY9z+ye4cCrtmFC9wwh4hFsW+V/j6R7LZa/6Rb/yu8YWFKJc3VkjYW6JAiDXJxp5w9N/MLaID8
+X-Gm-Message-State: AOJu0YzmrpYUTqWJTf9wVUyFoj4Qpxu2tZ7tFXEpnDLVd57FKXufC0li
+	J1eEqnWt7x+Eci8fWGOhfpm3p85X0vj0JRAyUoAyj9f2yA2vyf+moklYDMWl6IlOOmBIhRLX1pL
+	oBFKYt/cv5Uv2FOWOLmerlfCI+fFHkH/wkAwX1Q==
+X-Google-Smtp-Source: AGHT+IGxt4gY5xvRqj+X0q6Yo3MbqlkRZaOSX6Mvc6ee2gPDB2zYeEmWVTTaFoLHAJ+chcVvCtVjJ16zdnVjKjkHWcs=
+X-Received: by 2002:a19:2d14:0:b0:515:b164:4112 with SMTP id
+ k20-20020a192d14000000b00515b1644112mr2535477lfj.68.1713460631543; Thu, 18
+ Apr 2024 10:17:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -75,23 +75,19 @@ References: <20240417230637.2592473-1-dtokazaki@google.com>
  <CAMRc=Mcbi8BQ-tHNs+BVjbm3aDSVY0zzOM4QfND3d2y8ryT62g@mail.gmail.com>
  <CAMRc=McRiv6vtU5LySrkbfdbCaqZ2tXbHnazo4iahRS-SKAXxg@mail.gmail.com> <CAOC40965VyOQX_WHxA0a=Ke6knoeYYYjqTkFva9eNyG55_Yi-g@mail.gmail.com>
 In-Reply-To: <CAOC40965VyOQX_WHxA0a=Ke6knoeYYYjqTkFva9eNyG55_Yi-g@mail.gmail.com>
-From: Daniel Okazaki <dtokazaki@google.com>
-Date: Thu, 18 Apr 2024 10:15:51 -0700
-Message-ID: <CAOC4094bymXuUV-WL7N-Pa3SmcAwJht6fN9Hxh2PN1V5DV_U5g@mail.gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 18 Apr 2024 19:17:00 +0200
+Message-ID: <CAMRc=Mcb0uAjUBOKraLaev_xU+3OObj9YJm1Yq2A2s2bZOViiQ@mail.gmail.com>
 Subject: Re: [PATCH v1] at24: fix memory corruption race condition
-To: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Daniel Okazaki <dtokazaki@google.com>
 Cc: Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, kernel-team@android.com, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Sorry forgot to include the key being that the probes happen in
-parallel so there are race conditions to the registering of the
-nvmem and other drivers using it after it starts getting torn down
-and memory gets freed.
-
-On Thu, Apr 18, 2024 at 10:13=E2=80=AFAM Daniel Okazaki <dtokazaki@google.c=
-om> wrote:
+On Thu, Apr 18, 2024 at 7:13=E2=80=AFPM Daniel Okazaki <dtokazaki@google.co=
+m> wrote:
 >
 > nvmem devices allow for linking by name in the DTS which doesn't
 > create a dependency in the probe order.
@@ -104,6 +100,15 @@ om> wrote:
 >
 > Daniel
 >
+
+Please don't top-post on the linux kernel mailing list.
+
+I'm Cc'ing Srini, the maintainer of NVMEM. I think this is an issue
+with nvmem core as it shouldn't allow access to nvmem devices once it
+starts tearing them down. Srini, could you comment on this?
+
+Bartosz
+
 >
 > On Wed, Apr 17, 2024 at 5:23=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.p=
 l> wrote:
