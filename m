@@ -1,138 +1,102 @@
-Return-Path: <linux-i2c+bounces-3025-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3026-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 552D68AB516
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Apr 2024 20:32:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 854D98AB55F
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Apr 2024 21:04:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12A5A281FF4
-	for <lists+linux-i2c@lfdr.de>; Fri, 19 Apr 2024 18:32:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 147F6B21150
+	for <lists+linux-i2c@lfdr.de>; Fri, 19 Apr 2024 19:04:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA57CC2C6;
-	Fri, 19 Apr 2024 18:32:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19C1813A86D;
+	Fri, 19 Apr 2024 19:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="n/+doOgA"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="MCpQ+vZ4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D07A23
-	for <linux-i2c@vger.kernel.org>; Fri, 19 Apr 2024 18:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245D777F13;
+	Fri, 19 Apr 2024 19:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713551521; cv=none; b=MkHA0GzR/xfVdxhkPFKdAWVxSQdNLbVyJ+MAMZNum68XkcZruA/VU6td+LF8CJQIUBkQz0nDfdQqOQA53A6JvJpFIhQ/4iVsnehbQg3UERLOXO/M8uvX5lCfWmSSqtKv9n9xu9aq+qLWQt/0/090tQl++/60drzVRr7iBOholUk=
+	t=1713553452; cv=none; b=P2Zzaw515cg+usCkIUN3TmJ+zLP0OeuMh6vKRvPzVUYsf0TsyqtJvfBQNV+pD4ohWBc6pnZQ655owLV6tuUP4ow/+uraFjfkZegwW6m2vbErjf+D+nCfRJlNOue0avaj+9tKhSxSripADvIEUdAx9Eelu1Aa3lJhosoCJRFDxCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713551521; c=relaxed/simple;
-	bh=JRt4Lm5ijonc81uaOCYMEVQeoylykPHN4N8OAuA84c8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qSJhKm1ehaB9lIm5LcsgDBe48aiWMp/PTANAsGHdYr2XufMU2MVrZKeDMn8PM/0XEmQNJSNjNisYtdShAjCmJ0PIAaB+JUMV43YWN8HDcTnw9dJ6Qk9jKw5rOV+ImcjlAFombqrVdNTkOs5WyI7GrCoT9e5jbvV2vAT1h6vGTZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dtokazaki.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=n/+doOgA; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dtokazaki.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dbe9e13775aso4437483276.1
-        for <linux-i2c@vger.kernel.org>; Fri, 19 Apr 2024 11:31:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713551519; x=1714156319; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LAJdb3eo33tTVB58hEyGtBn/dOgeujKwWfoeVeHgqQo=;
-        b=n/+doOgAv0wagV3viCNegky/qsYg4haiWyNUv4m9GKxGaWhgta42RzKDXCo44FMzsv
-         jXRRMeBTugphfLpTZs9+BcgkuvgnYffCoCTW+94hvOAKbS8ZMfLkg2qO3atD13fr1QyY
-         l1Bq4lZU7Kh90q1ACU4ho9AdKYOo2HZtcFsUk/U2lGEABf8kqk9RKi9TDnsxna5NSzF9
-         Lz7jTtPJI0ajutBLqm875ruvy+jMcMdRsBpjxGsXzRFOkKu6Bd2pUITgpyNkHUguRpN8
-         jSlp2z8Zhjc5zV4zj0XvXvr78XOU2/2fgtYShJi4jfvlWUsCbmvVpTeRI60iBSpRua8B
-         a+tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713551519; x=1714156319;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LAJdb3eo33tTVB58hEyGtBn/dOgeujKwWfoeVeHgqQo=;
-        b=TRi8xllik6ySQIJ1y3ekjrk+JyujDoUVQpAbDtsJh67hVK3LWPF1db5t0KW+lSKBmS
-         myIE/plijYdd2ycc1H4GXdsevTcRovgRpFBZbw0fRp8ec0HBJwFqfBzrI+jqp4vrvIrv
-         aiPq1farbn9ZCRfIiOZySODlz/AF/a1B6EFXBZoAVeY96tUIbymxVICkN06V3XQ8Y5+U
-         JvB8jvgvN4DhhM+x+x6QOrdtwmelc0/BEsZvTJVpL5/arbOyfNcbcV0SQRTl4CQQf/kG
-         HZpgH5DQw6D+UjfQneVEghnQY51UMscaD1YAa2RM9LhJPMKhUKOyXr/Wnq+Ke1XAacn7
-         2GHw==
-X-Forwarded-Encrypted: i=1; AJvYcCV0m94M/S25sddhxhnxMbndmmbsASg5eAuC37kgImbnJOn+3UAs+/sheyop0HgRT5jFORv5Tbl5BfYCSRLgzBSferq5UxPHWOt0
-X-Gm-Message-State: AOJu0YwsW6rlBkwpqVkILIGc8zjo5PBQJS7L3lxvH3uVz0jnchLeTXo7
-	WVoncgwX8lL0SS/3qfLNjqEAUOcIKYWitG2PlFxRNMkBmUnn1V4PqIjxnXmgUeP+kc7jKkHhIrk
-	42TxKOgG+PBw7vw==
-X-Google-Smtp-Source: AGHT+IH5CvUvdzIhwaJXD/StoRkGTbe4OvjJqoxUYPbnzdoniCeR6wNeea2/WyC8WEAYTC9DbFYXBcOHLQnz1Vg=
-X-Received: from dtokazaki-pixel.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1a03])
- (user=dtokazaki job=sendgmr) by 2002:a05:6902:2b88:b0:dd9:1db5:8348 with SMTP
- id fj8-20020a0569022b8800b00dd91db58348mr804205ybb.8.1713551519146; Fri, 19
- Apr 2024 11:31:59 -0700 (PDT)
-Date: Fri, 19 Apr 2024 18:31:41 +0000
-In-Reply-To: <CAMRc=Mcb0uAjUBOKraLaev_xU+3OObj9YJm1Yq2A2s2bZOViiQ@mail.gmail.com>
+	s=arc-20240116; t=1713553452; c=relaxed/simple;
+	bh=qBE2yyqSctW+YR1XWrzaQcihvJql1d+feDAhwjhB2Bw=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=Q9Huwldg6oZKGX5hVMplAo9qcSBoxvQ5aJR+fMvpjb9JP7T3LCIXrYSgQmdA/X3I4vm2/6nSVlynUxooYwfc+mhmQaemrXM8u2MqmX+Sg9mggQxuLem1QZG00ywyE5hkviWdphJQpuFWu7HnMB8JpfeA8phrVl7R7b1djqSZjbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=MCpQ+vZ4; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1713553443; x=1714158243; i=markus.elfring@web.de;
+	bh=qBE2yyqSctW+YR1XWrzaQcihvJql1d+feDAhwjhB2Bw=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=MCpQ+vZ4Uw1u2V/4xWXP5Dh9R72E/MzDtjijJJPhgEtTe4nbM94QIttiGyvvQwET
+	 g156Z8/7lNkE0tVDg6WA+9R7sat23UZjhfrw0uIbNVHV+fe3N9VZxGXXGP22wOQMN
+	 naIqd0ULkONK5jbHit0r8Pg8hMGLW/HvTMDjNwhO/biCEEdW3oM/cxER/P3Zr7dCE
+	 GCdrwcDnqjX2hMypPOb8pVWGqgvgCTo7nEqFWmOpm6FevcqVu8JP059gqTa21WIpm
+	 a09O2tGeEGLSCfFL2Ra+fjjp43MeRD2YcQlr76CI6do31cUzWMLfJ3TqjOmThHpJh
+	 Pkdc/VhghErkyKeVOg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1N30ZN-1sjJF80nTZ-013Nf8; Fri, 19
+ Apr 2024 21:04:03 +0200
+Message-ID: <cd8ff4fc-f6bd-4834-b837-2a0d59c93648@web.de>
+Date: Fri, 19 Apr 2024 21:04:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <CAMRc=Mcb0uAjUBOKraLaev_xU+3OObj9YJm1Yq2A2s2bZOViiQ@mail.gmail.com>
-X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
-Message-ID: <20240419183142.169963-1-dtokazaki@google.com>
-Subject: [PATCH v2] eeprom: at24: fix memory corruption race condition
-From: Daniel Okazaki <dtokazaki@google.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Daniel Okazaki <dtokazaki@google.com>, kernel-team@android.com, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Daniel Okazaki <dtokazaki@google.com>, kernel-team@android.com,
+ linux-i2c@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Arnd Bergmann <arnd@arndb.de>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <20240419183142.169963-1-dtokazaki@google.com>
+Subject: Re: [PATCH v2] eeprom: at24: fix memory corruption race condition
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240419183142.169963-1-dtokazaki@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:x/vF/xh/PZjJQryN3DceYuEZJQt0fvCrUORvR9v4mCMtdPaZH3T
+ VAA8OePyvwUhLukRVBbAxqjC9lusWoOoM8csaQWbbHSAl3YwvGI+VnDuyyW2aVPnuilI35L
+ 53rvtqJ5BWpV2gqF/ZwDIHzBedSz3HkgYC8TRePMV1vBB5LLOd5n1i6+EhLGP+l0zQh//Av
+ hKKb2Fpp6O4H++U5fneKQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:avNeIPiAZE8=;s718CUtrPhpkK2K3iLR0Wv98P/y
+ HOFnLl6NGq8XSVKrhrejUHCXEaVEV3NLoOmpAWlf2sppQOSjHap6qzOJcjiWepMxTfHdyhH2t
+ RSQeg8mawqv1jHgvXAvWHklPxEO0z7Q19Hdl6cdzmiV78NyqvSrW+7hw3gllWOFA35WtoUwQs
+ MCPsCcyddifw6pBTM4BPnqAuxCNNBzz7lLKe/+h48uOK6WyW0oN3LtYrhllkVkBCBRFvDvssE
+ xfTr/w5uqH9U447QaT7ZiOdWXF0/9/RP72c7e+fPpfB2rJ/C/osQzZqbElF5zYiGu32JGECrd
+ q9Qp+iVQJDeR0JDmaJNRJQO3zvwUtFOVl0vo/4xYiMwd/iKokBIfSJgPvnbgEaBGVxbKphXmV
+ tmN5R0cdVTGYOOEGF8owhBmOtmyGyACgRxL0EGYF8+Sc4OE7W+MfG08WpP5Iy7o0FHzLmjpRN
+ jGLEXAnFBRVkae/KZXqiPI6z6wBPIc0FFS+cKxMOXTefYfOFCG7zeDMjVQmx49nk9ZxxYeTLj
+ kl4FASRFpc4WytxqntdXIZqmC01QvHGKRZGKF4ATdDvo092blOUVcx7dA1bwENctW3TsZWPmK
+ IDiBjrhmAd7MSzUt9i4VA7sSR4sJKLsum0Rr7Zh6v8jTOJJY8fjzHrhCENR2lDlIndB8l2aTb
+ zyXDsU9CHRWRYJw7tCHCtEXNUxXr+45o5Q6PDmljSEF2fFynXcPkxh4GWUPte/Q3PrLeNadbA
+ 82VEgBWfrK5oVkgxcZY7ETSxmaX2zD30/m4Ad2df97LLTTXkp9+M/xSn9+n9ETmRPlDzlpwpw
+ 0DLaBaFJSL/dijk8t0oPORJWYKJXAkbk/+Z80w7DLizck=
 
-If the eeprom is not accessible, an nvmem device will be registered, the
-read will fail, and the device will be torn down. If another driver
-accesses the nvmem device after the teardown, it will reference
-invalid memory.
+=E2=80=A6
+> Move the failure point before registering the nvmem device.
+=E2=80=A6
+> Fixes: b20eb4c1 ("eeprom: at24: drop unnecessary label")
 
-Move the failure point before registering the nvmem device.
+Please use a longer hash for this tag.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/submitting-patches.rst?h=3Dv6.9-rc4#n145
 
-Signed-off-by: Daniel Okazaki <dtokazaki@google.com>
-Fixes: b20eb4c1 ("eeprom: at24: drop unnecessary label")
----
- drivers/misc/eeprom/at24.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 572333ead5fb..4bd4f32bcdab 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -758,15 +758,6 @@ static int at24_probe(struct i2c_client *client)
- 	}
- 	pm_runtime_enable(dev);
- 
--	at24->nvmem = devm_nvmem_register(dev, &nvmem_config);
--	if (IS_ERR(at24->nvmem)) {
--		pm_runtime_disable(dev);
--		if (!pm_runtime_status_suspended(dev))
--			regulator_disable(at24->vcc_reg);
--		return dev_err_probe(dev, PTR_ERR(at24->nvmem),
--				     "failed to register nvmem\n");
--	}
--
- 	/*
- 	 * Perform a one-byte test read to verify that the chip is functional,
- 	 * unless powering on the device is to be avoided during probe (i.e.
-@@ -782,6 +773,15 @@ static int at24_probe(struct i2c_client *client)
- 		}
- 	}
- 
-+	at24->nvmem = devm_nvmem_register(dev, &nvmem_config);
-+	if (IS_ERR(at24->nvmem)) {
-+		pm_runtime_disable(dev);
-+		if (!pm_runtime_status_suspended(dev))
-+			regulator_disable(at24->vcc_reg);
-+		return dev_err_probe(dev, PTR_ERR(at24->nvmem),
-+				     "failed to register nvmem\n");
-+	}
-+
- 	/* If this a SPD EEPROM, probe for DDR3 thermal sensor */
- 	if (cdata == &at24_data_spd)
- 		at24_probe_temp_sensor(client);
--- 
-2.44.0.769.g3c40516874-goog
-
+Regards,
+Markus
 
