@@ -1,137 +1,123 @@
-Return-Path: <linux-i2c+bounces-3043-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3044-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA57E8AD36D
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Apr 2024 19:43:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29FD58AD50E
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Apr 2024 21:44:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 43AD6B23388
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Apr 2024 17:43:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B0774B2214F
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Apr 2024 19:44:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D40153BEC;
-	Mon, 22 Apr 2024 17:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 326C315535E;
+	Mon, 22 Apr 2024 19:44:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Gul4CsuP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GMBO7gB5"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E524146A6A
-	for <linux-i2c@vger.kernel.org>; Mon, 22 Apr 2024 17:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33C315534B;
+	Mon, 22 Apr 2024 19:44:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713807823; cv=none; b=M2zg6npaTpsDz67Y6yRzSWSXNYQyPQo1j2MwH+QmMm5gkbWh5LIkopDOjm55WrW9/kQwjFDVKJb0xoollYcjley3tf/fXRd83LNDbfAov3rGwF0uPPHI1rnbqO5+k/rymrCFXDcZ0KBCi9MHIH8sD0NbAa0OHE5UWxMfsYQq7sE=
+	t=1713815066; cv=none; b=BLJDJmjz1aQPOqu9QNa1jl/doFa8CHOhbkn5j6tTOV9bB2IGv4TKtzglej6QTqVhDl6Qg3UIX7vMjqm53HmLErfUGGEwM3K+v8g99zeOe9MuezuLIFARkmfvbueG6NOOEeN9FXxyAVmePaPKQnPbgG+U+O4CUtjwW8QzC68KMtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713807823; c=relaxed/simple;
-	bh=Q0xqpWxTXYdH3SX1/MqeJ3/kDT5iZSBWsXkiUBJBGp0=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=N8OCCeERsH5wT9xpmNza2ohn8NiCtDMzAEqYyrix1sa5DXx+niLu9nW86b2HJxxC1+m9TAEgUbZugnAL+VzXj5VHvXgL4OMqh3IqQVu7SNB9bvtiR2q1uhhBTsAeraBI1klQ/ddwEIOlIf31cbeeEUSh3EFKNO7yfpV8LsvulKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dtokazaki.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Gul4CsuP; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dtokazaki.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-61b36187e6bso44282497b3.0
-        for <linux-i2c@vger.kernel.org>; Mon, 22 Apr 2024 10:43:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1713807821; x=1714412621; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=T0VSzHwGHOz5OGuxpcZUIi3ZbES2QXe0izyLeD5/pVs=;
-        b=Gul4CsuPq05ynGsJoc3tyTEqnqXT0b0BjIDtrL31THLjNwBRJYkD9Nn8FQd8M07W0K
-         zRxuEQF7nvUXS1a+MfU4mNacxD7vLLHOfwAokr03IOrZ3fLkga1hLf5jQmrNmhamhTUb
-         KwL2XdKlKOFx3iyIdQ+oTUeirW3AT06BdcDOAl+1XaA9IaMnkzssbLK5JQMAqusohk4c
-         MI0vFw2sxtMzQpQdUs7fAx32YHlKK9dY9GRJ7XmmxPQY3rMyZPqAO/MeR34U9cjWXbXt
-         ggghqCRhM5uZygq9eIzZ+yG83YHGlnYxsfcPMacxj+cVPJMpuzJyQnMyfxuWRGbDqfRN
-         4XmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713807821; x=1714412621;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T0VSzHwGHOz5OGuxpcZUIi3ZbES2QXe0izyLeD5/pVs=;
-        b=a7PFfBrqC7sMD2I8254KBacOIvy6wp6e8cz2HSoTLs+F7dbY2UFVtQ9I5/OGK0gfeF
-         ViSztme53N7DdOpImN0HH4BurQynoDZZW8CLbCz2jRo2LFqA4s1fVJOv7n3V/0fJx0u/
-         BpVIdQ88WJL5kDjT6SAiB+y8rKSEqWc8vSBIys58ltlNCsYb0c12UW8/V/gyLteecF0P
-         9lkfxF0Y/qmaJBgWYQQsX19CXqyYJDbwxk32UUKOSBAOoNw+N6u6wztL1nr6f+g931ue
-         76ouKDnvv3N2fUYIO0jn6PmFQgQ5seyAh0Wxcbu9saTYyUBZn1jGT4g09zP2u0df6IrQ
-         7nTw==
-X-Forwarded-Encrypted: i=1; AJvYcCUeHs7Zr/bdavmeVckDC1XSPWTVWW5g1PFxm/w6OyKa7/FdnbhJd/fGVVu51469FFoRtLYdkVlKF2mpiq3P4AA7EPjqtnwLQ/mU
-X-Gm-Message-State: AOJu0YwvDrz/XGi8VwEZDJmBArfbDYt4x/epMu8NzOYv986DWwexUJc1
-	3/ViX0HVM2bpN5DwszNVs1Tsc2DtvAQdV3T1HJkotPb5uMUYUqxzNWYD2aNaa1eqDdPu2THARIP
-	l6au/LGLdWY/9eg==
-X-Google-Smtp-Source: AGHT+IG873NiegqSmeP4wPl3e92ztZssjt4EKyf75LdosVkpqBxQnI+LaxxN12ECzIHuqDWk9LGrFCJ7JsiiSCE=
-X-Received: from dtokazaki-pixel.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1a03])
- (user=dtokazaki job=sendgmr) by 2002:a05:6902:1023:b0:dda:c4ec:7db5 with SMTP
- id x3-20020a056902102300b00ddac4ec7db5mr88799ybt.4.1713807821159; Mon, 22 Apr
- 2024 10:43:41 -0700 (PDT)
-Date: Mon, 22 Apr 2024 17:43:36 +0000
+	s=arc-20240116; t=1713815066; c=relaxed/simple;
+	bh=K8WN8aubdBUdpq2B/uKYg69yANymGJsXmW3941zGW1s=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=FpqNPGh4lS60cKG1o0KxOtSbPzII9X57pTfHsri2bQSjENadhInjyIjD+aBRSWt/XkxQ56M2NaigrhbKaWmx5Vv4U+eHh/fRc04FODHLyy4/9PKk5FNCWXsVeXceAHsAVejfs4bW7ICCxk6XHmgBtxDWxkgCI2UJrbKTFFlpYOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GMBO7gB5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CFF1C116B1;
+	Mon, 22 Apr 2024 19:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713815065;
+	bh=K8WN8aubdBUdpq2B/uKYg69yANymGJsXmW3941zGW1s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=GMBO7gB5pjdjM0klxQpfKSPZbshoJO0PuGP/01h9ETcM6twO2atsJALTuh+zPMT38
+	 OtIGcuxHm2VtBWIzQNCoiOMNyr6zdoObSloYFSjblqoLnbRBLQXjyFlp/OFQ+DdYNz
+	 r6xb2t/OSk2DG5KCgZYH8sfUy7ppbw0o/lBI58Smy+QewkeKumlPSw6Ki3qLI/0N5b
+	 26Z1hij8g8+RVqSYAYIBmo0mSuJzKVsGpo/T+n8iYgIMTk11Gw3d635aisJOwmLND7
+	 xpQXKqIB1Q9fvJRrIL+yQyZKoPijFAg9rBtf8C8dCm213am27yKB2DXaIo5mkWT88r
+	 8yKoVYGpWI2Ig==
+Date: Mon, 22 Apr 2024 14:44:23 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Thomas Richard <thomas.richard@bootlin.com>
+Cc: Andi Shyti <andi.shyti@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Tony Lindgren <tony@atomide.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Vignesh R <vigneshr@ti.com>, Peter Rosin <peda@axentia.se>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Siddharth Vadapalli <s-vadapalli@ti.com>,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	gregory.clement@bootlin.com, theo.lebrun@bootlin.com,
+	thomas.petazzoni@bootlin.com, u-kumar1@ti.com,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v5 02/11] i2c: omap: wakeup the controller during
+ suspend() callback
+Message-ID: <20240422194423.GA414623@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
-Message-ID: <20240422174337.2487142-1-dtokazaki@google.com>
-Subject: [PATCH v3] eeprom: at24: fix memory corruption race condition
-From: Daniel Okazaki <dtokazaki@google.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Daniel Okazaki <dtokazaki@google.com>, kernel-team@android.com, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cd5d0aa5-ca0c-47a5-8e40-4742bc939cfa@bootlin.com>
 
-If the eeprom is not accessible, an nvmem device will be registered, the
-read will fail, and the device will be torn down. If another driver
-accesses the nvmem device after the teardown, it will reference
-invalid memory.
+On Mon, Apr 22, 2024 at 11:40:02AM +0200, Thomas Richard wrote:
+> On 4/19/24 10:47, Andi Shyti wrote:
+> > Hi Thomas,
+> > 
+> >> +static int omap_i2c_suspend(struct device *dev)
+> >> +{
+> >> +	/*
+> >> +	 * If the controller is autosuspended, there is no way to wakeup it once
+> >> +	 * runtime pm is disabled (in suspend_late()).
+> >> +	 * But a device may need the controller up during suspend_noirq() or
+> >> +	 * resume_noirq().
+> >> +	 * Wakeup the controller while runtime pm is enabled, so it is available
+> >> +	 * until its suspend_noirq(), and from resume_noirq().
+> >> +	 */
+> >> +	return pm_runtime_resume_and_get(dev);
+> >> +}
+> >> +
+> >> +static int omap_i2c_resume(struct device *dev)
+> >> +{
+> >> +	pm_runtime_mark_last_busy(dev);
+> >> +	pm_runtime_put_autosuspend(dev);
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +
+> >>  static const struct dev_pm_ops omap_i2c_pm_ops = {
+> >>  	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+> >>  				      pm_runtime_force_resume)
+> >> +	SET_SYSTEM_SLEEP_PM_OPS(omap_i2c_suspend, omap_i2c_resume)
+> > 
+> > If you don't have CONFIG_PM_SLEEP, though, this doesn't compile.
+> 
+> Hello Andi,
+> 
+> Yes indeed, the __maybe_unused attribute is missing for
+> omap_i2c_suspend() and omap_i2c_resume().
 
-Move the failure point before registering the nvmem device.
+Isn't there a way to avoid having to use the __maybe_unused attribute?
 
-Signed-off-by: Daniel Okazaki <dtokazaki@google.com>
-Fixes: b20eb4c1f026 ("eeprom: at24: drop unnecessary label")
----
-Changed sha length to 12 in description
----
- drivers/misc/eeprom/at24.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+E.g., use DEFINE_SIMPLE_DEV_PM_OPS() as is done by these:
 
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 572333ead5fb..4bd4f32bcdab 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -758,15 +758,6 @@ static int at24_probe(struct i2c_client *client)
- 	}
- 	pm_runtime_enable(dev);
- 
--	at24->nvmem = devm_nvmem_register(dev, &nvmem_config);
--	if (IS_ERR(at24->nvmem)) {
--		pm_runtime_disable(dev);
--		if (!pm_runtime_status_suspended(dev))
--			regulator_disable(at24->vcc_reg);
--		return dev_err_probe(dev, PTR_ERR(at24->nvmem),
--				     "failed to register nvmem\n");
--	}
--
- 	/*
- 	 * Perform a one-byte test read to verify that the chip is functional,
- 	 * unless powering on the device is to be avoided during probe (i.e.
-@@ -782,6 +773,15 @@ static int at24_probe(struct i2c_client *client)
- 		}
- 	}
- 
-+	at24->nvmem = devm_nvmem_register(dev, &nvmem_config);
-+	if (IS_ERR(at24->nvmem)) {
-+		pm_runtime_disable(dev);
-+		if (!pm_runtime_status_suspended(dev))
-+			regulator_disable(at24->vcc_reg);
-+		return dev_err_probe(dev, PTR_ERR(at24->nvmem),
-+				     "failed to register nvmem\n");
-+	}
-+
- 	/* If this a SPD EEPROM, probe for DDR3 thermal sensor */
- 	if (cdata == &at24_data_spd)
- 		at24_probe_temp_sensor(client);
--- 
-2.44.0.769.g3c40516874-goog
+  82f9cefadac4 ("serial: 8250_exar: switch to DEFINE_SIMPLE_DEV_PM_OPS()")
+  f243df0a0be0 ("media: platform: rzg2l-cru: rzg2l-csi2: Switch to RUNTIME_PM_OPS()")
+  6ccc22a5afcb ("net: ravb: Switch to SYSTEM_SLEEP_PM_OPS()/RUNTIME_PM_OPS() and pm_ptr()")
 
+Bjorn
 
