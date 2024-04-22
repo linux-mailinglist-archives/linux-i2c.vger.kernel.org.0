@@ -1,83 +1,120 @@
-Return-Path: <linux-i2c+bounces-3046-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3047-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5721C8AD73E
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 00:26:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DDD58AD861
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 01:02:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 151A91F22A1D
-	for <lists+linux-i2c@lfdr.de>; Mon, 22 Apr 2024 22:26:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01B542811C8
+	for <lists+linux-i2c@lfdr.de>; Mon, 22 Apr 2024 23:02:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E9551F932;
-	Mon, 22 Apr 2024 22:26:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4608D16D9BA;
+	Mon, 22 Apr 2024 22:50:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="THfEvfJq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vCF+NLMw"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B2A1D54F;
-	Mon, 22 Apr 2024 22:26:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E361F43AB6;
+	Mon, 22 Apr 2024 22:50:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713824765; cv=none; b=ucNxfXIXnpeuKyu8j/eg8TFksr1i/mpxvMHkpOrTpmTbYPz7u2K5D3Yv4voPUaGLVHSsQVqpdUxDX3DqLp1FG0OQS6nQ0+Qoz0n3XIl9nKsAXvHSPMZZaTIjbucLmf799kMTlbOoZB9ce+cJQfEbjfbLl/PZCwnoVeD+K++Gmlw=
+	t=1713826258; cv=none; b=dB6hpxCgOVaqrVtqDJGzPgeQlJ9SyxiK5ccfyNKCDPWUMN+vOd4VF0Ni8XBmuOzJL6Ek7EQWMeeSw2Twq8I73L4QEvoWw+262A1um66uTCSTb+ie6KUKwUh8Y1rvnk8PvX6K/iHUniW8ZMxxcdZkForLhwzbEECbE4MXqfUuLB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713824765; c=relaxed/simple;
-	bh=Hd5Viy0Nj8LqCDVQU5jU/WzUH80cnkdPjYMuY1/EkGc=;
+	s=arc-20240116; t=1713826258; c=relaxed/simple;
+	bh=jKtuLpcmCSteOW9hC0hYxP5slIdPuPj5+s2We5UpC3I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cfxvO8WIq8VZ3Jhv5USjX9F95l8YNEYtaorwq2BA9plD2fXkpRre5z7dlrycT9FUGyMuFGesO78mRUnixPReo12w6B21yxEnjJkMfMPG2Me22zFnxR+SIFC0O0kr8EIl9kPwfgjEMzer58vOja/el//Dh2CCHZpksOJxyanSXzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=THfEvfJq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C928AC113CC;
-	Mon, 22 Apr 2024 22:26:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=k8KSsdazWM/SEgeWImV+8s6pM5Jd+LqDpj0pf8O6n47q9qo8sO9xQ2gDHkiXgDRNUTD5e5kilkzsZLiLSQm6XpdlyfFRcyqw8lHvVDN5fikEZgLR1ZPcWdDgZyG7dzBAYaiEV003Uqonn4wEcjbqxPEAXzYbhxewiVIawoHQmJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vCF+NLMw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB710C113CC;
+	Mon, 22 Apr 2024 22:50:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713824764;
-	bh=Hd5Viy0Nj8LqCDVQU5jU/WzUH80cnkdPjYMuY1/EkGc=;
+	s=k20201202; t=1713826257;
+	bh=jKtuLpcmCSteOW9hC0hYxP5slIdPuPj5+s2We5UpC3I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=THfEvfJqi5eSjOqntwvhBOb4ekKSttKZn4kYPuZ+uDfzUb2UtCO7Bl9XPpuvZlQ0/
-	 59Y177hTyz19Z/NOq+EANhhxQ9Y8PfcuohglhhFKlvO/KdNWuDV3beTuyr2399Vf0R
-	 vZ7Ccvd2BSWPJwwcUzJ1ZU0vI1ATM5IKVnZ8nns1UbGHRFOZrH5qCxBpUg7670BedB
-	 t4TraR6zJOx0McF9UzWBuF0+wUXE3atoPNySamVsJZCCfV67Q8lOCvJ0L2f3jvjSM2
-	 qhwwcfRQKhJXEwLYhdC9RD5cft3bUxcqOfJN+R7SRIbT8BMgdsM8PczYjHZH/VvYsZ
-	 t749YVHLCOTJA==
-Date: Tue, 23 Apr 2024 00:25:59 +0200
+	b=vCF+NLMwZE0DEUXq5CB6o75k/6Y41ZWq9YGcVm/jZ/leIl5/YxWDQJ6ARz6hpMeuO
+	 JHRXYrw04QC6/JVId2G6QpkMS2LDZAuX3hhfCqMdnKf6PQcfAoTTtXCXCjMp8rkYwH
+	 maVxoErtDVjKNEteAfM60Txj3mOBVybQzoirR5wqOPPnUJJauENH120UUPj1OmH6FB
+	 TN7XKHb8CecQYCJ7T+raxCxakM53ZKjbt3thyz9WanoFK1Qvc5fZrv8/ga5nXPC90m
+	 PVFEGS2u04tVkrZrbCVo2ndjHEJYO6uKpqz53ECZLwzf1unEhYWGwikLmkcHEUK1es
+	 htT3PxdNwz7fw==
+Date: Tue, 23 Apr 2024 00:50:53 +0200
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>, 
-	Dong Aisheng <aisheng.dong@nxp.com>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, imx@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	NXP Linux Team <linux-imx@nxp.com>, linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] i2c: lpi2c: Avoid calling clk_get_rate during
- transfer
-Message-ID: <rejqts2qv26lbtizjd3e4wppwm4s3fn7lrloszfrve7zq4t6aw@relukzfcpj6o>
-References: <20240422113629.1629891-1-alexander.stein@ew.tq-group.com>
- <7lcpupsaepqzxwovzvddtvrdr3f3xaxedxv5nfg4ax73gazu7t@mbc6ajq5suxh>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 00/18] i2c: remove printout on handled timeouts
+Message-ID: <3ptifixggno4as73pqwldh6cjkqwbygfz6hnr2zhfehi6e4fjo@g3x2nghl5esa>
+References: <20240410112418.6400-20-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7lcpupsaepqzxwovzvddtvrdr3f3xaxedxv5nfg4ax73gazu7t@mbc6ajq5suxh>
+In-Reply-To: <20240410112418.6400-20-wsa+renesas@sang-engineering.com>
 
-Hi Uwe,
+Hi Wolfram,
 
-On Mon, Apr 22, 2024 at 05:42:20PM +0200, Uwe Kleine-König wrote:
-> On Mon, Apr 22, 2024 at 01:36:29PM +0200, Alexander Stein wrote:
-> > The dependency from v2 has already been merged in commit b0cde62e4c548
-> > ("clk: Add a devm variant of clk_rate_exclusive_get()").
+On Wed, Apr 10, 2024 at 01:24:14PM +0200, Wolfram Sang wrote:
+> While working on another cleanup series, I stumbled over the fact that
+> some drivers print an error on I2C or SMBus related timeouts. This is
+> wrong because it may be an expected state. The client driver on top
+> knows this, so let's keep error handling on this level and remove the
+> prinouts from controller drivers.
 > 
-> Note that you might also need 7f1dd39aedfccf60772328c5b88d56dbd39954c3
-> which is part of v6.9-rc5.
+> Looking forward to comments,
+> 
+>    Wolfram
 
-it's fine... I have rebased all my branches on top of v6.9-rc5.
+Applyed everything but patch 6 in i2c/i2c-host on
 
-Thanks!
+git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
 
+Thank you,
 Andi
+
+Patches applied
+===============
+[01/18] i2c: at91-master: remove printout on handled timeouts
+        commit: 74cce8ed33aeac91f397d642901c94520e574f8b
+[02/18] i2c: bcm-iproc: remove printout on handled timeouts
+        commit: 9f98914320f3e332487042aa73bbbfacc1dc9896
+[03/18] i2c: bcm2835: remove printout on handled timeouts
+        commit: ab17612ffb60bf07e4268448e022576d42833bf7
+[04/18] i2c: cadence: remove printout on handled timeouts
+        commit: 7aaff22d3e939c5187512188d7e27eb5e93ae41e
+[05/18] i2c: davinci: remove printout on handled timeouts
+        commit: dc72daa5cdf1c6ffebaef0c6df1f4cdeb15cadd6
+[07/18] i2c: img-scb: remove printout on handled timeouts
+        commit: 3e720ba5e30d6dd1b22e0f8a23f1697d438092b8
+[08/18] i2c: ismt: remove printout on handled timeouts
+        commit: 800a297370161bda70a34cb00eb0fa2f0345b75f
+[09/18] i2c: nomadik: remove printout on handled timeouts
+        commit: 26fbd3025cbce49cb3dd71f3a10239f69546b3c2
+[10/18] i2c: omap: remove printout on handled timeouts
+        commit: d3f24197d8125b2bf75162ec5cc270fd68f894f4
+[11/18] i2c: qcom-geni: remove printout on handled timeouts
+        commit: 4677d9f5c98f1c2825de142de5df08621ea340b3
+[12/18] i2c: qup: remove printout on handled timeouts
+        commit: e28ec7512496848e8a340889c512a0167949dc8f
+[13/18] i2c: rk3x: remove printout on handled timeouts
+        commit: 1cf7a7b3c944f727f34453a132b8899685e32f81
+[14/18] i2c: sh_mobile: remove printout on handled timeouts
+        commit: 31fb960bf8a424c47a5bf4568685e058c9d6f24d
+[15/18] i2c: st: remove printout on handled timeouts
+        commit: bff862e67260f779b2188e4b39c1a9f9989532ee
+[16/18] i2c: tegra: remove printout on handled timeouts
+        commit: 5ea641d9ea5ee1b3536f8b75e658e3bf2c2a548e
+[17/18] i2c: uniphier-f: remove printout on handled timeouts
+        commit: c31bc8e162890cda38d045e73ff0004119ab28e7
+[18/18] i2c: uniphier: remove printout on handled timeouts
+        commit: 507a2da9539cdb839a1a2e57bfcca644bcfe0f03
 
