@@ -1,58 +1,59 @@
-Return-Path: <linux-i2c+bounces-3073-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3072-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C09C8AE5C0
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 14:13:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECE568AE5BF
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 14:13:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D0B81C21FEB
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EB401C21C58
 	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 12:13:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16171127E0B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10036127E0A;
 	Tue, 23 Apr 2024 12:13:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="OsLrmj9V"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="CHGkAUtZ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2050A84DE5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205EA84E02
 	for <linux-i2c@vger.kernel.org>; Tue, 23 Apr 2024 12:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713874416; cv=none; b=nbtex/l2XvsyjztN58/xVpRwXyabno79nTxq29Y7Z11w4d59zqzTYFWS1DJtuVPWG69/f/YH8XNM6myauHWIOOAibCNpf2tcpAPM0IHE6V4msCFVkzzb6ziUs2mzcXpNIuTKip+GKTPQ8wg10rrhvYTyRS4RgLyLb2z+lKpJH+s=
+	t=1713874416; cv=none; b=DclUtRiU0WDOz3CvjgELTRxUM7VevOTT4ImciCunziOk9J2J34klENa5/XcHRMRzfq7CIw+KdQ1OHMLa+2S3BE4CS6SBQi9s+g2VH7l27yPdfszjwav+t41SU/daYPcKBnUtmz8uOxtgoHhUJWWMXILVKq/5aExDlWpdIjbDt9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713874416; c=relaxed/simple;
-	bh=xbf1WNjP4IO1W0OZaIGlDuC4mr4dA5AtAr7R2Nila7w=;
+	bh=4GV9MbW2RUuneAx+t3k0TvU8fbKIZejKkKEkfAigKsY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nk+TM/1AsdUcJ1AR1PeOtOqLL3ZIS+Uffmbl/SdBYJYc/Lb/yRQd7mRCSPoLhTHsYucD1a0NRZ3VaBqCAus2hBOnApsTI5O/rm1em7ppCacMRv0xH2jabXyqKYxbUww9TuLnGBbbNnnRKVgpl3z+T+Ja7yDLDvIICC57qXZdYKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=OsLrmj9V; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=NOlqnyvH6R20lnAVM7LlCczyuUPkxQl2VeIOqwB5HqMi4n3TCmW6SLiGPrbK4Zzs/fvpNUcQ8lDS2shSqZ+4Wb3I49IR1O5zPeD3WFOnthI2Y33ZTbor+HsYlvtoS3fIX30KBNfAeQOfNwSE79uR+wpyT1oVLBIGAczkn9tSoPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=CHGkAUtZ; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=7RDJRV5+hQ+u4dC/v/o4TT1cTTNjvD7fahHVBI9qmOM=; b=OsLrmj
-	9VBC/sUCRhezmgv2Kvwp5KDUo0sKJFU5oLlAorfOsEsUiGFGnGukpqQ3RGlUKEno
-	4zqE+6wCW4NOxLyWPx3nlUvMPDwjfnSf6+0gmg8zv+aL59eM6QMcX2jlrrYHqgow
-	a6yCs3Q23+QTl/uQvZfYrgsLX0mtv+WiZ3ieTEot4NbymRk3WrEtFoaT9JJriKuB
-	enmSOkxbQixzHWpKdcQfTaqePkf04sEWzihlWZ77x/bX7e1O/nKqGZV1De79unB0
-	RW/zpielGkhB4ZMwgkkrzPVWeQLK5BnELptpBOIWJYDUJWnUeLYo9sZAtt5onf70
-	pvI4I8OxECiLRbfw==
-Received: (qmail 215926 invoked from network); 23 Apr 2024 14:13:29 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 Apr 2024 14:13:29 +0200
-X-UD-Smtp-Session: l3s3148p1@3SVZe8IWUsIgAwDPXxiyACzheF6dGXh7
+	 s=k1; bh=WOkkrOzp70gQH6ESIdM1GW0bOtr5jQu2Mkl7P4COiR8=; b=CHGkAU
+	tZKSh5LQE1xvhXrYl1zayyLSkqmqv+F9dGKxSTY26TAkT24LnloWOpaoHWHlEcjF
+	Unw5N8/t8kq7xu3LyRoatQZnPhe8FChGtLLrwHBtoy3ytI3n2zDPkLKOZ5ZRE+Iu
+	DcxAlBWfoaCu4a9DZo3pc7YeCKhnnY5Mq9SJPQ70zYW/S5Ojk9LA0qAfNpxP5jgQ
+	NdvtFmTiBdN1YtXmiwrRGSV0RRt+lpmH0PpLERABtTvxXpaqquCLvUtSnc06Lfbs
+	3x0KDClsYlHmUVCXXV3uxSZkZE+zw2+H0Y+7e+WSo17nJlD03tgpnDsAPa3aB2V7
+	B3XAAChg4Td2HccA==
+Received: (qmail 215962 invoked from network); 23 Apr 2024 14:13:30 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 Apr 2024 14:13:30 +0200
+X-UD-Smtp-Session: l3s3148p1@OGhke8IWVsIgAwDPXxiyACzheF6dGXh7
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Rudolf Marek <r.marek@assembler.cz>,
 	Jean Delvare <jdelvare@suse.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] i2c: ali1535: remove printout on handled timeouts
-Date: Tue, 23 Apr 2024 14:13:19 +0200
-Message-ID: <20240423121322.28460-3-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 3/4] i2c: ali1563: remove printout on handled timeouts
+Date: Tue, 23 Apr 2024 14:13:20 +0200
+Message-ID: <20240423121322.28460-4-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240423121322.28460-1-wsa+renesas@sang-engineering.com>
 References: <20240423121322.28460-1-wsa+renesas@sang-engineering.com>
@@ -71,37 +72,21 @@ should just pass this information upwards. Remove the printout.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/busses/i2c-ali1535.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/i2c/busses/i2c-ali1563.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-ali1535.c b/drivers/i2c/busses/i2c-ali1535.c
-index 461eb23f9d47..9d7b4efe26ad 100644
---- a/drivers/i2c/busses/i2c-ali1535.c
-+++ b/drivers/i2c/busses/i2c-ali1535.c
-@@ -285,10 +285,8 @@ static int ali1535_transaction(struct i2c_adapter *adap)
- 		 && (timeout++ < MAX_TIMEOUT));
+diff --git a/drivers/i2c/busses/i2c-ali1563.c b/drivers/i2c/busses/i2c-ali1563.c
+index 307fb0666ecb..63897a89bb35 100644
+--- a/drivers/i2c/busses/i2c-ali1563.c
++++ b/drivers/i2c/busses/i2c-ali1563.c
+@@ -99,7 +99,6 @@ static int ali1563_transaction(struct i2c_adapter *a, int size)
+ 		return 0;
  
- 	/* If the SMBus is still busy, we give up */
--	if (timeout > MAX_TIMEOUT) {
-+	if (timeout > MAX_TIMEOUT)
- 		result = -ETIMEDOUT;
--		dev_err(&adap->dev, "SMBus Timeout!\n");
--	}
- 
- 	if (temp & ALI1535_STS_FAIL) {
- 		result = -EIO;
-@@ -313,10 +311,8 @@ static int ali1535_transaction(struct i2c_adapter *adap)
- 	}
- 
- 	/* check to see if the "command complete" indication is set */
--	if (!(temp & ALI1535_STS_DONE)) {
-+	if (!(temp & ALI1535_STS_DONE))
- 		result = -ETIMEDOUT;
--		dev_err(&adap->dev, "Error: command never completed\n");
--	}
- 
- 	dev_dbg(&adap->dev, "Transaction (post): STS=%02x, TYP=%02x, "
- 		"CMD=%02x, ADD=%02x, DAT0=%02x, DAT1=%02x\n",
+ 	if (!timeout) {
+-		dev_err(&a->dev, "Timeout - Trying to KILL transaction!\n");
+ 		/* Issue 'kill' to host controller */
+ 		outb_p(HST_CNTL2_KILL, SMB_HST_CNTL2);
+ 		data = inb_p(SMB_HST_STS);
 -- 
 2.43.0
 
