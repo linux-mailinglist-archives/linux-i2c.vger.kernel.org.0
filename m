@@ -1,109 +1,100 @@
-Return-Path: <linux-i2c+bounces-3075-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3076-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D4778AE60D
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 14:30:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C2DA8AE9C2
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 16:44:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5976B282B98
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 12:30:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 132E31F23ED7
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 14:44:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECA2951C5C;
-	Tue, 23 Apr 2024 12:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB9B784FC5;
+	Tue, 23 Apr 2024 14:44:06 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+Received: from 19.mo581.mail-out.ovh.net (19.mo581.mail-out.ovh.net [178.33.251.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B998E1D545
-	for <linux-i2c@vger.kernel.org>; Tue, 23 Apr 2024 12:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.0.225.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07BE519470
+	for <linux-i2c@vger.kernel.org>; Tue, 23 Apr 2024 14:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.33.251.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713875429; cv=none; b=pH8XM+NB2vgbyO6ujC9gkXt+HH9ZAEq00jWe3pvJeowRdZCwUps183rT51WYuJzoqvppyu787L5gjO2eBeZxhhzTC3sh5E1KyUPjowOgglu7YSZmxGovrzkFpGAa+EbuiHOHog3IjbZdKfctcm+e4DqkUWifW1jB5E97PC1+pTI=
+	t=1713883446; cv=none; b=m2k1lVcbttWy84oloxM8pWSnnc7bjoYb9PxCTMsTAvD3yUAtI2ZVa/4eQn/pRkB1PWqRryFUg3R0h90v2rUB1/D7AVSGK1X+eJFElpNlsYYSMToLomm670rDUR+Ya0TuuHewZ/7VLaTJoAK0jGsNyMFpTkenn+R5lCR0ljCzECA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713875429; c=relaxed/simple;
-	bh=LM3EGfOkJipAaEd880S6zo6XXX/QjULO+dlQjabXu9g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=QuL48aut8MQsYQuzTy3LwO5hoIFgNpqNWC1I6jftW6iSadky1jMclGyRH88uyZn6c4zu1MjHUzLjaNyFn99uSh29smeGJeHT1yezxAnlSoc52TgvoRjs/7rM13vCGqf5l+4Pn+vI9PIY73TPtgC244U0UVUpbLcQVpiBgKD7jS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=210.0.225.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-X-ASG-Debug-ID: 1713874565-086e23661751450001-PT6Irj
-Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx1.zhaoxin.com with ESMTP id fjgUliGibVvDIDca (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Tue, 23 Apr 2024 20:16:05 +0800 (CST)
-X-Barracuda-Envelope-From: HansHu-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Received: from ZXBJMBX03.zhaoxin.com (10.29.252.7) by ZXSHMBX2.zhaoxin.com
- (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 23 Apr
- 2024 20:16:05 +0800
-Received: from [10.28.66.68] (10.28.66.68) by ZXBJMBX03.zhaoxin.com
- (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 23 Apr
- 2024 20:16:04 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Message-ID: <87b33408-ce66-49d1-8ebb-6aa8f535afa6@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.66.68
-Date: Tue, 23 Apr 2024 20:16:01 +0800
+	s=arc-20240116; t=1713883446; c=relaxed/simple;
+	bh=AwUAUzpHBOsc1lMca4BINuz9URPqQhgCUVu2azAuauE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Oc9i4sgG+tEgwoSWVFSr+wSckRV/U/UAMCILzNOC98f8zyDooZGlwMuVahwMnenSaf0RwJfgoAo3otEGw5ajtAWGdqlIPxCgjDzFCQ36nrzG/v4NrCqgwKFLo2BFQB8XrJayMDZ+tGOeipsmqKEmFla5OkTnlhwV7iv8IPhHPyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=178.33.251.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
+Received: from director1.ghost.mail-out.ovh.net (unknown [10.108.25.136])
+	by mo581.mail-out.ovh.net (Postfix) with ESMTP id 4VP4QJ6fDmz1K7w
+	for <linux-i2c@vger.kernel.org>; Tue, 23 Apr 2024 14:34:48 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-bhrm4 (unknown [10.110.113.89])
+	by director1.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 407C11FEC9;
+	Tue, 23 Apr 2024 14:34:48 +0000 (UTC)
+Received: from etezian.org ([37.59.142.97])
+	by ghost-submission-6684bf9d7b-bhrm4 with ESMTPSA
+	id Bgz7CQjHJ2bTTwEAbTVA8Q
+	(envelope-from <andi@etezian.org>); Tue, 23 Apr 2024 14:34:48 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-97G002eebf7df8-33da-4965-bbcb-682bf0db39b3,
+                    C447AC6F663E29B5B072953094682C3B23667ADA) smtp.auth=andi@etezian.org
+X-OVh-ClientIp:89.217.109.169
+From: Andi Shyti <andi.shyti@kernel.org>
+To: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Piyush Malgujar <pmalgujar@marvell.com>
+Cc: sgarapati@marvell.com, cchavva@marvell.com, jannadurai@marvell.com
+In-Reply-To: <20240423074618.3278609-1-pmalgujar@marvell.com>
+References: <20240423074618.3278609-1-pmalgujar@marvell.com>
+Subject: Re: [PATCH v7 0/5] i2c: thunderx: Marvell thunderx i2c changes
+Message-Id: <171388288720.439949.15428292378589168497.b4-ty@kernel.org>
+Date: Tue, 23 Apr 2024 16:34:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 0/6] i2c: add zhaoxin i2c controller driver
-To: Andi Shyti <andi.shyti@kernel.org>
-X-ASG-Orig-Subj: Re: [PATCH v10 0/6] i2c: add zhaoxin i2c controller driver
-CC: <linux-i2c@vger.kernel.org>, <wsa@kernel.org>, <cobechen@zhaoxin.com>,
-	<hanshu@zhaoxin.com>
-References: <20240306212413.1850236-1-andi.shyti@kernel.org>
- <cover.1712479417.git.hanshu-oc@zhaoxin.com>
- <pvou2xxuhzjal5ptxpuvir4crl4k2hnqsvjj2lca3xativ2oll@kdsvwmk263kr>
-Content-Language: en-US
-From: Hans Hu <HansHu-oc@zhaoxin.com>
-In-Reply-To: <pvou2xxuhzjal5ptxpuvir4crl4k2hnqsvjj2lca3xativ2oll@kdsvwmk263kr>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
- ZXBJMBX03.zhaoxin.com (10.29.252.7)
-X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
-X-Barracuda-Start-Time: 1713874565
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 536
-X-Barracuda-BRTS-Status: 0
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.123898
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------------------------
+X-Mailer: b4 0.13.0
+X-Ovh-Tracer-Id: 14341713015152839280
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudeluddgjeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeffteehudffvdfhudfgffdugfejjeduheehgeefgeeuhfeiuefghffgueffvdfgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddrleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpegrnhguihesvghtvgiiihgrnhdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhivdgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkedupdhmohguvgepshhmthhpohhuth
 
-Hi Andi,
+Hi
 
+On Tue, 23 Apr 2024 00:46:03 -0700, Piyush Malgujar wrote:
+> The changes are for Marvell OcteonTX2 SOC family:
+> 
+> - Handling clock divisor logic using subsytem ID
+> - Support for high speed mode
+> - Handle watchdog timeout
+> - Added ioclk support
+> 
+> [...]
 
-> Hi Hans,
->
-> it all looks good, except for that unrelated cleanup you added in
-> patch '1'.
->
-> If you are OK with it, I can take the series and remove the
-> cleanup.
->
-> Please keep in mind that splitting patches in smaller chunks
-> helps reviews and future bisects, even if the change is a trivial
-> cosmetic improvement.
+Applied to i2c/i2c-host on
 
+git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git
 
-I'm OK with it.
+Thank you,
+Andi
 
-I have learned a lot from submitting the i2c patch this time,
-and I will keep in mind all the suggestions you and others have.
-
-Hans,
-Thank you very much!
+Patches applied
+===============
+[1/5] i2c: thunderx: Clock divisor logic changes
+      commit: 1e82de6368238dfcca306fc66dc6c3f8c21e1b4b
+[2/5] i2c: thunderx: Support for High speed mode
+      commit: 305b1350c49993bbc879270764aa59e8de00a904
+[3/5] i2c: octeon: Add platform prefix to macros
+      commit: 8c82edccf99ad4395cf943dad48c47b44a1c920a
+[4/5] i2c: octeon: Handle watchdog timeout
+      commit: b6ea602a1100c6241c47a8b4326a050ff3379c4d
+[5/5] i2c: thunderx: Adding ioclk support
+      commit: 8d49135d177dbfee92bd84fef32b47d656e6b314
 
 
