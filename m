@@ -1,123 +1,105 @@
-Return-Path: <linux-i2c+bounces-3057-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3058-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FAFA8ADE87
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 09:47:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00BDE8ADF81
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 10:14:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A05E284842
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 07:47:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E288B24894
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 08:14:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ACD45026B;
-	Tue, 23 Apr 2024 07:46:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0B134D5BD;
+	Tue, 23 Apr 2024 08:14:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="Jwwtlv4R"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="Ujh1m7Oj"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A386653398;
-	Tue, 23 Apr 2024 07:46:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE8F10949
+	for <linux-i2c@vger.kernel.org>; Tue, 23 Apr 2024 08:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713858419; cv=none; b=HG3SBgn1OA1Vvd4OlKGpcxCECidSbKS/VTroXvCuCLenOeJ7/JqM4Hp6cbQlTEIvvjyJgDqDHa5xhMJrPRWR41Vp0BG3PaKxBG0C64k9WqOO5KRKO1qQUh12LCOYvEB6vBVDb8qCqWMty6oKZT0GyInnypV9QbVQVaBheUk3MOc=
+	t=1713860049; cv=none; b=potqdRZDXWVJiYYK1xBqM0jbXBYFI98sYKqOmAH46WYPw5wkqfwNccyeDlOP1MF1B4Rkyv+DQ6yiP0BhSP5Rroh8pgr6eKXb2lPXjD08txsjBx0ftppKzVV4mrvaixr3lYILAs77PUu4O9lq/4+zyvX5u53+XRPncmv7afsbU4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713858419; c=relaxed/simple;
-	bh=yP6lxvuSymTxQOW4Swfu6DslntzpjimH+bXUZsw9kYk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VWi9TyXE4Z2rIiw6Ns00qEMOmsdUClHj274GCk7aQ8rT5Jew4Xc6LIBBU8BAD8anJSm8nvgyA4Lzwn/x+c7GelX2cFchWPhw6L3rG0Cg9mg9yK5upq7J50kq2HtIBoBsNTsgbnfPYKX8Pt8g+LKvSJEPdqtxHYEgfte8LLkyp+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=Jwwtlv4R; arc=none smtp.client-ip=67.231.156.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43N5iwLN027446;
-	Tue, 23 Apr 2024 00:46:54 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	pfpt0220; bh=EaoaSnjxTEUWcZWHn2en1F+5MPQmfw/Te+tM5XZu4yg=; b=Jww
-	tlv4R8ghq1e014LM0RqyLi4pyF9QgJIvU7yjX1FsqHEPmCF1ONR6znL3N3/pF2M0
-	7kQzdQCFyuWkXyQwx+3vSbHxhIgdUfWJDjaQ7u8sDG+815uF6pmQILn1CfCJ2vdb
-	wscB2y/soFGrlQD9Ho5nuZguG6DwjTZgfBX0BqJeDxKIBtTSJmEq0ZkEYe65PZ8l
-	C//07zeCWQIDPzeHZ4Pd/I1sSu6tVUu9+bOs3fph2gcPZeAUsEkCB1bG7cHzWbvA
-	JcYN9CaCClCqGpwRIrr6dGHNSsBwbxkKcXFnmjFa2oiR6FPRIGOTRJUl2qJMz9pY
-	cOSQmXT/Wjc46awqzgA==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3xmd7gg849-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 23 Apr 2024 00:46:54 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Tue, 23 Apr 2024 00:46:53 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Tue, 23 Apr 2024 00:46:53 -0700
-Received: from Dell2s-9.sclab.marvell.com (unknown [10.110.150.250])
-	by maili.marvell.com (Postfix) with ESMTP id 0B1DD3F7051;
-	Tue, 23 Apr 2024 00:46:53 -0700 (PDT)
-From: Piyush Malgujar <pmalgujar@marvell.com>
-To: <andi.shyti@kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC: <sgarapati@marvell.com>, <cchavva@marvell.com>, <jannadurai@marvell.com>,
-        Piyush Malgujar <pmalgujar@marvell.com>
-Subject: [PATCH v7 5/5] i2c: thunderx: Adding ioclk support
-Date: Tue, 23 Apr 2024 00:46:08 -0700
-Message-ID: <20240423074618.3278609-6-pmalgujar@marvell.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240423074618.3278609-1-pmalgujar@marvell.com>
-References: <20240423074618.3278609-1-pmalgujar@marvell.com>
+	s=arc-20240116; t=1713860049; c=relaxed/simple;
+	bh=G2XMAS/2nOFbF5ygFwHume/DKQrQBVpGicjHQGx3ULk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=r9IMQNX2Ir4gso/d6jH/TeUJc28IuLtp8h1pMEixrOMV9+oErD+yfP2nzPidcOeKu6AfhlyaHaXD1oMjiL82wv34s5ssCaoueArv6/2plyG4xGfx/z75u5Qs+aGfo/CRLPMZu+IjCPDedJqSrFIgfoYKVJ1Ac5sIxPcukaj+VXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=Ujh1m7Oj; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-51ae315bb20so3709849e87.1
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Apr 2024 01:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1713860046; x=1714464846; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G2XMAS/2nOFbF5ygFwHume/DKQrQBVpGicjHQGx3ULk=;
+        b=Ujh1m7Oj9WnVALsuKExEGRdukKWAwwyPd0CjPbXkJT/x6fhfFKAHSRqJlSLTH+cj0f
+         FbLwkwa/fLtnazTqurrTnmFg/SATsknre0CwE+E4QPWzIHxihBKCenFqQrpSvdVgIbaP
+         CKy0ZOl4d8aYlo3g3Vr55BqwGDtrBAYCllx8k0I6AHlEJ1NwYgXSBtpir3vWg8gtfhBI
+         1ZO9iVMNznyeAqtp32QQQIqKI+eOuE41UjMwv9CaFZAdCax/K9wOAi3SFcnFFQQ+b1Aq
+         rmeTnEnU88kgPLnfEpCYgsdoMVDq1UzHgmxlvbEnGrLA25WEDtOYSgZ/LxZYNcyz8ssd
+         h/3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713860046; x=1714464846;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G2XMAS/2nOFbF5ygFwHume/DKQrQBVpGicjHQGx3ULk=;
+        b=DDT8SGyY5FQN0/VaWi6Gwk2FXKVaDO9A84JdO1nG8/d3SKDJWoyNOVeYXRvXrBNm4t
+         937gCpQDgciokpIXfJb3oThha6m6rwRK4k9zZhRSshRLb0FolhiWtyL49/OQlj7B3z40
+         Fz8rtruwwePUHP/8qA1JnxBoKflRCuQeF9HUv3lt1lP2d8oqc84IahFaQrQq9zEGFJsX
+         +oKjwfTgFSq5aBmx7Z0gzxCkBEsJfmQbaEHdGTvzyk1cB1+eZQQxReNj8dRP11kzEWlo
+         xwJENvprAQbgGVKrsf7sP91vYmAHZVHFOackm+MBBaotumoaZduvq+pnmJHIHmJ03Ozo
+         dJWg==
+X-Forwarded-Encrypted: i=1; AJvYcCUuJBhQVp/wOHs1KER7ZH51/NuEsqfnFmKjt1WPAeM4SM72B13F5nEjKtclpkEuGYj4DacKYFFsDoOEfUK6ThsvdyyLDJjgcBbl
+X-Gm-Message-State: AOJu0YxVe/6VJdG9sDZRHTTUIxbost2lBn5t6WhtXLfyYpbFZN6ECBWX
+	CkliM58/cwvJ9mcXsMQKuPUAp1WjyaZjV77ACo3ZYo8aW1aT4QQyiSVUQlxOF8rbrVjOazjzd0h
+	EydL02jMx0Dlk+HTnezkBSyn9sh0Cxq2FaaAXUA==
+X-Google-Smtp-Source: AGHT+IEqIjrpXL8hbzlug2nyOdo3DkQZYKQEzNJ2dsA7qTtdOAw0OjD83wxQWvJGHM1B7Xj4HS3T0bMIR9XXnlqH4y0=
+X-Received: by 2002:a05:6512:3090:b0:51a:f255:ade3 with SMTP id
+ z16-20020a056512309000b0051af255ade3mr6588814lfd.20.1713860045873; Tue, 23
+ Apr 2024 01:14:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: LJUejYXpfgUN92J9d_k7wGo4j1Sp7OLY
-X-Proofpoint-GUID: LJUejYXpfgUN92J9d_k7wGo4j1Sp7OLY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-23_04,2024-04-22_01,2023-05-22_02
+References: <20240422174337.2487142-1-dtokazaki@google.com>
+In-Reply-To: <20240422174337.2487142-1-dtokazaki@google.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Tue, 23 Apr 2024 10:13:54 +0200
+Message-ID: <CAMRc=MfhMZPfCRGBwsWQFxvyWtL5mE9A21vNGSKhM-Kc2h5xrA@mail.gmail.com>
+Subject: Re: [PATCH v3] eeprom: at24: fix memory corruption race condition
+To: Daniel Okazaki <dtokazaki@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, kernel-team@android.com, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Read the ioclk property as reference clock if sclk not present in acpi
-table to make it SOC agnostic.
-In case, it's not populated from dts/acpi table, use the default clock
-of 800 MHz which is optimal in either case of sclk/ioclk.
+On Mon, Apr 22, 2024 at 7:43=E2=80=AFPM Daniel Okazaki <dtokazaki@google.co=
+m> wrote:
+>
+> If the eeprom is not accessible, an nvmem device will be registered, the
+> read will fail, and the device will be torn down. If another driver
+> accesses the nvmem device after the teardown, it will reference
+> invalid memory.
+>
+> Move the failure point before registering the nvmem device.
+>
+> Signed-off-by: Daniel Okazaki <dtokazaki@google.com>
+> Fixes: b20eb4c1f026 ("eeprom: at24: drop unnecessary label")
+> ---
 
-Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-Acked-by: Andi Shyti <andi.shyti@kernel.org>
----
- drivers/i2c/busses/i2c-thunderx-pcidrv.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I will take this patch because it does make sense but for the record:
+this doesn't fully fix the issue with the nvmem race when tearing down
+the device.
 
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-index 31f11b77ab663626967c86086a03213876bf4a07..32d0e3930b675484138084e1bbed2e7cf898e1e1 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -27,7 +27,7 @@
- 
- #define PCI_DEVICE_ID_THUNDER_TWSI	0xa012
- 
--#define SYS_FREQ_DEFAULT		700000000
-+#define SYS_FREQ_DEFAULT		800000000
- #define OTX2_REF_FREQ_DEFAULT		100000000
- 
- #define TWSI_INT_ENA_W1C		0x1028
-@@ -100,7 +100,8 @@ static void thunder_i2c_clock_enable(struct device *dev, struct octeon_i2c *i2c)
- 		i2c->sys_freq = clk_get_rate(i2c->clk);
- 	} else {
- 		/* ACPI */
--		device_property_read_u32(dev, "sclk", &i2c->sys_freq);
-+		if (device_property_read_u32(dev, "sclk", &i2c->sys_freq))
-+			device_property_read_u32(dev, "ioclk", &i2c->sys_freq);
- 	}
- 
- skip:
--- 
-2.43.0
-
+Bart
 
