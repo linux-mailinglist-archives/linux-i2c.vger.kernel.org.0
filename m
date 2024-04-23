@@ -1,143 +1,109 @@
-Return-Path: <linux-i2c+bounces-3077-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3081-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 757B68AEB2E
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 17:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 851658AFCBD
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 01:37:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15A1E1F230B9
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 15:32:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 243CD1F2440B
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 23:37:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52BC313C907;
-	Tue, 23 Apr 2024 15:32:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27E25548F1;
+	Tue, 23 Apr 2024 23:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="i7ghu4dq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F2686273;
-	Tue, 23 Apr 2024 15:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 936DC502B3;
+	Tue, 23 Apr 2024 23:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713886336; cv=none; b=tNKgtB6B93n2WBbG7kwJDneKmvObraaQJcvomhCM1SHOynqgF/AgT5Dsa70ayaSMUqsJGXU+RwEMn672LndvqEuIhsoQaR6JA1+FNNTTf/LRaRCD/LaMJs07mmRtccmhZc/ERV0TX/3Xv6NGDE9bCAFCnwUFo7dZEe5Vnu6f7O8=
+	t=1713915397; cv=none; b=hnVmMQG/mflTBZxFF9e68b27O7txPi8Srgn5ulpR/6I7nZUUfnU7HwCRZm5XouAi3RqXhKBeMb+nIRo4UTYQ6fv9khq7yO1j3aTS3u9zKcpoRZr+jLu/r4u3sU3tMO8OYkzkisf6+aidiafp3btHbpM/OxzsKyUW1l4sCspuWaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713886336; c=relaxed/simple;
-	bh=Axa3Mn5+KVTK6qIzldvrgQzSEYO2/lcirqLJInKyRG8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GZXUHKad3OyzKN5sXvMkdcCwHi/SC+qdEiHlkpBu2RC39c/65eVwFVLgqCaKD0yxWm9nxqE7vzg9cGu2cc/n8sXv6gCB0IH4N4+gwcLp6Ao0P/rt5gYcjdPVX0csfc+Zwww0OvvARN5u9n7k5snp8/ROvx7LcmHdmMD3hQDFlTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-61816fc256dso50988897b3.0;
-        Tue, 23 Apr 2024 08:32:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713886333; x=1714491133;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pCFrzV7qoH1GMPZYbyZsRzzURQK7cGFU6Wp+TTcFvr8=;
-        b=LPth/cZFk4JlInnptjMDl2XXrxBuMp0XvL4yz+QzMwOw+nQtJnNxU6IvnOtkHNc26g
-         r9Dsdbd1RCRnGCFLbPbtbpU+ComM9edt8DNvVWY+mVi69/tQM/Q2USepwH3CsauSfZ9E
-         8exeAQQQQppYsLSrrz5XTkAEV2rRg73eMmQ5p3MyR3zVSBjvdCMOrk1tua83g4WSld/t
-         G4aiJ/8uvsFwDgJ6Bsve8MnyL78nzphgOt3ns2KOPA6ljKo5pPAeDG1T2KuJnt9JeXMS
-         Cm8teEftdPyUAw6hasL1/6DLyB5YdYc7DcWLwKHaV7dW6tB5VOu+HQCXTCl9K4D9kA8P
-         PXGA==
-X-Forwarded-Encrypted: i=1; AJvYcCV7Vti+OI5iSIThtBBjC6Chrsdy7O4OEQNRvPLTCumRwOTuJLD5zxzGA4u/7GRbgZeyd/zojaC9pFjziwq/YLzKiWpgfRxHO/f7kClseyR0dQc5vUA/HnCK6hsnlrS2fuuu9YiSIwf0X5CIRmXTQYLHR4h80VlJP2HDo9kf/Q/ztw6ImdQqlRwyANXZYO7kVASOVF+j3ZLvBwXKY7w3mEiuvMhMi1Ki6eWlaWGnH808ZQO0OVKzlHLZNK9gPuz/y0kzX5SRmQOpW5sOuyo7dKWrFoMhXotd02GAZ1suCw==
-X-Gm-Message-State: AOJu0YzgtujE/L709zM1lFPaeDlAMuS5nUCbJ3TtZPrjo6NHsudG/Cvq
-	GfMAJYIMAaYua5dSWK3IevJZh2dw+E4v7jWNtHEVtsizwisZ6Paid/fXetzm
-X-Google-Smtp-Source: AGHT+IEn9o9kwpQ21sUDm3boQ5gEGYvUxHSf9p6oYyBqPVpgAQDC1EghII1JwoT01XsucnyZNFnveA==
-X-Received: by 2002:a05:690c:61c6:b0:61b:1a4f:158b with SMTP id hk6-20020a05690c61c600b0061b1a4f158bmr13675592ywb.6.1713886331234;
-        Tue, 23 Apr 2024 08:32:11 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id z12-20020a81ac4c000000b00617f1b4943esm2480486ywj.106.2024.04.23.08.32.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Apr 2024 08:32:11 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-db4364ecd6aso5760935276.2;
-        Tue, 23 Apr 2024 08:32:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVI4gBTrDCBV79aoDQ+Z2jvbLk16BClJTyYYOHXBbHU8Dw6HZCDo28WffVKQpmrv7wzQliCHqJ0khwkjoH/BrxdVBlBuyiLZRkb+HuKTWWexZ0C2P7teEWKhR/F2i4ol7O9imDwzh12qvMGkwVfPbXI2S+iVhDSlPEmrxQl/jpA20Mmt9caMzgK+7T3Y+xQ8W9WKB7nFoZAkeTTTbv1Iixy2777zCnQaTNfLmalj6hUQqeCtPncVGQz4zwJKMWH+DChm1sbM90hIcRf31RUNGRC/jTHghxzSNZd4vI/UA==
-X-Received: by 2002:a25:86c7:0:b0:de0:d45f:7c5 with SMTP id
- y7-20020a2586c7000000b00de0d45f07c5mr11933981ybm.20.1713886329809; Tue, 23
- Apr 2024 08:32:09 -0700 (PDT)
+	s=arc-20240116; t=1713915397; c=relaxed/simple;
+	bh=hznnnD58QA4JaaOj/qkrk9nSWrFuvXnrqyI2HHl4VyU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tkYATi8a0RcmvipH3q7dpToEolJcSskHLdCB0yMpF7lFklRV4pJSfOkpVF5ZzDxo0Stt8OQjIt29SzC3J6Sf/sJc8+wHyzq1c1vu+Mz7cvVUAQCsM2WZAnSHa8X7VufLz4SaSKcHbARvDRMVtvm+2RETWiyk2y2uT0oNuKXYABI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=i7ghu4dq; arc=none smtp.client-ip=192.19.144.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id C1DACC001522;
+	Tue, 23 Apr 2024 16:36:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com C1DACC001522
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1713915388;
+	bh=hznnnD58QA4JaaOj/qkrk9nSWrFuvXnrqyI2HHl4VyU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=i7ghu4dqP/uBircYXR9RrIasZUOawqRvhPZcqLlerah6kWynkZpFiQzFxrJ1XF8kb
+	 bXK6Pro3FOSiwtELXrIiAHzPY0QYaDFrQwIF5Bvag54cs8iGHryuEX043TeVSPkM0t
+	 ZJtKvXJeJuoReurjab7hbScHyTub7xE72+DwE3K8=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id CB29A18041CAC4;
+	Tue, 23 Apr 2024 16:36:26 -0700 (PDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: linux-kernel@vger.kernel.org
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Jiawen Wu <jiawenwu@trustnetic.com>,
+	Mengyuan Lou <mengyuanlou@net-swift.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Duanqiang Wen <duanqiangwen@net-swift.com>,
+	linux-i2c@vger.kernel.org (open list:SYNOPSYS DESIGNWARE I2C DRIVER),
+	netdev@vger.kernel.org (open list:WANGXUN ETHERNET DRIVER)
+Subject: [PATCH 0/4] Define i2c_designware in a header file
+Date: Tue, 23 Apr 2024 16:36:18 -0700
+Message-Id: <20240423233622.1494708-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240102-j7200-pcie-s2r-v5-0-4b8c46711ded@bootlin.com>
- <20240102-j7200-pcie-s2r-v5-1-4b8c46711ded@bootlin.com> <CAMuHMdVnKX23yi7ir1LVxfXAMeeWMFzM+cdgSSTNjpn1OnC2xw@mail.gmail.com>
- <CAHp75Vf+F3ArczHQ+nSmP4uFvRdMAQWufmR6xR0xtbHfVvFm-g@mail.gmail.com> <c5ed5bed-9c93-47eb-8277-d78e12e96b42@bootlin.com>
-In-Reply-To: <c5ed5bed-9c93-47eb-8277-d78e12e96b42@bootlin.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 23 Apr 2024 17:31:58 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV3NbCHchm9eHhGQNuvzmdwuP_fdt31m7vNY7Cp2-3-=Q@mail.gmail.com>
-Message-ID: <CAMuHMdV3NbCHchm9eHhGQNuvzmdwuP_fdt31m7vNY7Cp2-3-=Q@mail.gmail.com>
-Subject: Re: [PATCH v5 01/11] gpio: pca953x: move suspend()/resume() to suspend_noirq()/resume_noirq()
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Tony Lindgren <tony@atomide.com>, Aaro Koskinen <aaro.koskinen@iki.fi>, 
-	Janusz Krzysztofik <jmkrzyszt@gmail.com>, Vignesh R <vigneshr@ti.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Siddharth Vadapalli <s-vadapalli@ti.com>, linux-gpio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, gregory.clement@bootlin.com, 
-	theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Thomas,
+This patch series depends upon the following two patches being applied:
 
-On Tue, Apr 23, 2024 at 12:53=E2=80=AFPM Thomas Richard
-<thomas.richard@bootlin.com> wrote:
-> On 4/23/24 12:34, Andy Shevchenko wrote:
-> > On Tue, Apr 23, 2024 at 12:42=E2=80=AFPM Geert Uytterhoeven
-> > <geert@linux-m68k.org> wrote:
-> >> On Tue, Apr 16, 2024 at 3:31=E2=80=AFPM Thomas Richard
-> >> <thomas.richard@bootlin.com> wrote:
-> >
-> > ...
-> >
-> >>         +i2c-rcar e66d8000.i2c: error -16 : 10000005
-> >
-> > It probably means that I=C2=B2C host controller is already in power off
-> > mode and can't serve anymore.
->
-> Yes the i2c controller is already off.
-> In fact it's the same issue I had with the i2c-omap driver.
-> In suspend-noirq, the runtime pm is disabled, so you can't wakeup a
-> device. More details available in this thread [1].
-> So the trick is to wakeup the device during suspend (like I did for the
-> i2c-omap driver [2].
->
-> [1]
-> https://lore.kernel.org/all/f68c9a54-0fde-4709-9d2f-0d23a049341b@bootlin.=
-com/
-> [2]
-> https://lore.kernel.org/all/20240102-j7200-pcie-s2r-v5-2-4b8c46711ded@boo=
-tlin.com/
->
-> I think the patch below should fix the issue.
+https://lore.kernel.org/all/20240422084109.3201-1-duanqiangwen@net-swift.com/
+https://lore.kernel.org/all/20240422084109.3201-2-duanqiangwen@net-swift.com/
 
-Thanks, I gave that a try, but it doesn't make any difference.
+There is no reason why each driver should have to repeat the
+"i2c_designware" string all over the place, because when that happens we
+see the reverts like the above being necessary.
 
-Gr{oetje,eeting}s,
+Florian Fainelli (4):
+  i2c: designware: Create shared header hosting driver name
+  mfd: intel-lpss: Utilize i2c-designware.h
+  mfd: intel_quark_i2c_gpio: Utilize i2c-designware.h
+  net: txgbe: Utilize i2c-designware.h
 
-                        Geert
+ MAINTAINERS                                    | 1 +
+ drivers/i2c/busses/i2c-designware-pcidrv.c     | 5 +++--
+ drivers/i2c/busses/i2c-designware-platdrv.c    | 5 +++--
+ drivers/mfd/intel-lpss.c                       | 3 ++-
+ drivers/mfd/intel_quark_i2c_gpio.c             | 5 +++--
+ drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c | 7 ++++---
+ include/linux/i2c-designware.h                 | 7 +++++++
+ 7 files changed, 23 insertions(+), 10 deletions(-)
+ create mode 100644 include/linux/i2c-designware.h
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+-- 
+2.34.1
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
