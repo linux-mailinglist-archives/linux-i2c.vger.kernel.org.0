@@ -1,130 +1,132 @@
-Return-Path: <linux-i2c+bounces-3050-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3051-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEBE18ADD63
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 08:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CFFCE8ADE62
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 09:38:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88056283517
-	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 06:16:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8927B281586
+	for <lists+linux-i2c@lfdr.de>; Tue, 23 Apr 2024 07:38:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D336F24B26;
-	Tue, 23 Apr 2024 06:16:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 982A547F45;
+	Tue, 23 Apr 2024 07:38:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ftJtTVSg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g2nCNumm"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A037A225CE;
-	Tue, 23 Apr 2024 06:16:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F5F46441;
+	Tue, 23 Apr 2024 07:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713852965; cv=none; b=UcEjgOnZUKnQ9DZRz/ZsCrD7YHiCoizrZRbRe81oX5Tch5fIyDZ0Q3mzLQR7GevfZpsU1nwM4GJdtLkJwWv2d0foSP7BqT1CtC2hFXgJczDFZEOWuHWRH48k3ktjwZ9Jk4hQNMB/FoZ31KNbStG3x4Fs/IXW6lgLkWj90frhTaw=
+	t=1713857931; cv=none; b=auiBXftCscdy1v3JteyE6UXnPdDO023fsUB1RZrT0eJj5lV2XXQ6QbP+zXeaEOZ44AVWBEL0iCz7uz7rGedi0/ZODbdZJshyic8cKxewU4/L8JUzFqmk8ATaksWz1PQj5vNIH3QvGU7gWCamQaXqaBq0JwIx8wPT6V+MQ2AEBNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713852965; c=relaxed/simple;
-	bh=8HZOokaf2e/urC9+j/zg8HM4yzJXhpo+pSuikz395pg=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=CPqlyFZcFDdWOtxwWg2w34cNifvnv8m7twzL1hS4TdMo/ZuIsIRtG5axF/V2vQ1idU4TanssJcId3lmhAKuPBdMXaOlc7ypM5zT05rRL/n1NuZ/e2Mt+za8xb+ugF9uPy7SAyyZRgakGCzaWiHGr++JPmU/IaQ7zKFQvzgDl5jw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ftJtTVSg; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1713852948; x=1714457748; i=markus.elfring@web.de;
-	bh=8HZOokaf2e/urC9+j/zg8HM4yzJXhpo+pSuikz395pg=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=ftJtTVSgNVSoDHfc+KAZQ7ywNskxloDYgJiUoHLnkVP3tPP2dDEI9tXC885mfawh
-	 o5Lt8/LTLMwyYp/99oA/SaCkHW90HqkM31+Nyt1uRcPz6DBHtPxD/tttdQJ3aU/9W
-	 cDgb1HpGDptwG2t298K9fN9qSsoq2Q4lkBud2WZT3nZSyTIMQ50H6WHPAsjvCrXcy
-	 2pVjkL4bPzJkx7yiljCwg306//ZE8hHACiiD7l2+kZLhtdRViot/gNzyigRzh9qPk
-	 fePF2N4qkCft0MFduYl1HMosF79SEifLQqoMVzqo8ZHibnLtQnUOj4saeZBfwJFWX
-	 m8yMm0djuIskLi5kCw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MYLmq-1sBkNl3eWg-00VgwC; Tue, 23
- Apr 2024 08:15:47 +0200
-Message-ID: <ac9cae80-cd9d-4ae0-9f27-b4b424304cbb@web.de>
-Date: Tue, 23 Apr 2024 08:15:33 +0200
+	s=arc-20240116; t=1713857931; c=relaxed/simple;
+	bh=mjRkFfdBtZbVYBPrvsjPmWl58HkXWr16xgIBP3dQroM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=COuefhTOhK8DI4ss2fOuEjv8uAb0+mEcyP6subvAxUnwnFt4Xv/wA0S6q1dYcudFqWQs7E9pwGod0fmudnC0pU8PEWo9bLHx8OoSA/4XIUvV472TggvfkSVDmve/iE2brcMDUfSLkJuKQLMmq4XpcX09NUmVeRKEwaNGqwajEbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g2nCNumm; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713857929; x=1745393929;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mjRkFfdBtZbVYBPrvsjPmWl58HkXWr16xgIBP3dQroM=;
+  b=g2nCNummvlRj+JVkPdJL1qOV+3rWgeywty2ipzANBbnJsXrpqJJhNC7x
+   dGhRdKrMZSNTTUv7zqboihF8yRIa41pCGR5wGmoqMRkgLsiM8PALfGbR1
+   QdhdVn+mJmY7z6GSblg/InVuNT9Rjr5AtxSwnZ3T6ufoZTK95L2gBnmWx
+   axZ/DlclZSuohycmHPNp5Se6llS/di/BlqDwFb3xVT7eUAq0rvYY2Du5K
+   lXp5pwMepesZQcGKV6qnCKNpwAwNpF8ae4EQ3zNICZrq10y2XAS9Y9ttD
+   omYiHR2SC0iie8sQ17O7EN5NbilH9cgNWuen1tOzmGrUrFS0yOTUm+Cb1
+   A==;
+X-CSE-ConnectionGUID: GvO6N5AUR2yId7/OmN5Dmw==
+X-CSE-MsgGUID: SWnKJNYuTzqKvj7J1LwpQg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="31918033"
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="31918033"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 00:38:48 -0700
+X-CSE-ConnectionGUID: s/KDoHdVTiSM0XnX3bJmkw==
+X-CSE-MsgGUID: mzxAigJiRoSRJZwbwrOibA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="24332315"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa006.fm.intel.com with ESMTP; 23 Apr 2024 00:38:37 -0700
+Date: Tue, 23 Apr 2024 15:33:16 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Corey Minyard <minyard@acm.org>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Peter Rosin <peda@axentia.se>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+	Keyur Chudgar <keyur@os.amperecomputing.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Xiang Chen <chenxiang66@hisilicon.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>, Arnd Bergmann <arnd@arndb.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Tom Rix <trix@redhat.com>,
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Randy Dunlap <rdunlap@infradead.org>, Rob Herring <robh@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	openipmi-developer@lists.sourceforge.net,
+	linux-integrity@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+	linux-omap@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 33/34] drivers: remove incorrect of_match_ptr/ACPI_PTR
+ annotations
+Message-ID: <ZidkPHp27jz0t6t3@yilunxu-OptiPlex-7050>
+References: <20240403080702.3509288-1-arnd@kernel.org>
+ <20240403080702.3509288-34-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Daniel Okazaki <dtokazaki@google.com>, kernel-team@android.com,
- linux-i2c@vger.kernel.org, kernel-janitors@vger.kernel.org,
- Arnd Bergmann <arnd@arndb.de>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <20240422174337.2487142-1-dtokazaki@google.com>
-Subject: Re: [PATCH v3] eeprom: at24: fix memory corruption race condition
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240422174337.2487142-1-dtokazaki@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:HueGTE6pDjjGq6fr0JtQFXMnH0PkSUwOeI6TKKF/rFse2NdxFMM
- js2RHiBMVQ4ZEw9p/zQQnMPF2/BR8XJ180yRoFmLISekyoprHvcYM+dBWTCSZcAIaGdh62E
- K1N18NIQrC+Zapvle9oC3ZshKQ6eHLqbSe4GN/VaIthN8ZLkKrwSPRFzHO8RD9Vy2v88Mpj
- W6OzuJxwp1MDtub7V8ZdQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:4UEACg2W1e0=;Xo4SzAXl0+sOQrC9KIxB9Mp5BBt
- /M8O5awMH88Oa8RtLXfshSJ6REZ79IZxchV4eATXnuq420jXN5S1zxOOAv3fZJOzkfP7zGN8l
- ENLvrRDOUmfh3x6soqg6sdaJuWj+24BYK80hOAmlHloP5cuy+9rAcZQvIgdKcWwj5MxhEhqRX
- soXe82Kj0zi1Dwlqsfj0PyDeo5z2JaJJ/iNGI1IfQwZ8/ZEZeh9rg8MbLyB3JqG5d75SfsLnO
- dh2ikNGQkDYN0U+oXCp+VwDY58JsezaZVQ2NZwCLfdnUTlfggpZnzg6axK0VKJ4wTXfe6HNcc
- JvgsbrzQJVK2x5EGeVeDqqML2HYh/s99DV+ff2iw8kmlQ879LJhHuDY2IEdNqkfixbxCZSZTc
- x+0lnwrZMEoHUe8ONPqIGuSnRaaRYuCePx0mXshY4sWa8qRckhfogkU4SI3WVqbPeQCtVCleA
- S0dRmDn3bNXzTajU8Y6bMvNJt58kTBdoKManKg/xH/DcGHVyVoShR9C+fKbTRe8qU1Tr9B8Y4
- SqOuezeF0IEUH6gCcvr+FaBBQfPOsWb5CpCHQBOre36+qNjAb93vI4+U+ubwvK936cLoy9UTn
- BCAAvvH2uNKCYhJzBJaE1dQceEUj6qiV1LMQLHIsE5ayrVyuM3nopGw1W2/Fv1xUdyIk5i8Ae
- 7PULxdGhPpHu/TdpIJJhRaxemeNm5tKk3YCkTkuc+NJvBnK6wp2k20gr2pPaDQdMrg6wJcPVm
- mKCaYc3RwKDVBg6QpqFnyCNYRoKli1g7cwqdZssuc/sgxLq3LpgGQoe91mhVQDlsotimQwVuu
- BmyZwKIMXSYpp+uFDEEK2Lvv24ylFxlUL7Dyy/LSIvE3E=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240403080702.3509288-34-arnd@kernel.org>
 
-How do you think about to increase the version number for your attempt in =
-the patch subject?
+> diff --git a/drivers/fpga/versal-fpga.c b/drivers/fpga/versal-fpga.c
+> index 3710e8f01be2..e6189106c468 100644
+> --- a/drivers/fpga/versal-fpga.c
+> +++ b/drivers/fpga/versal-fpga.c
+> @@ -69,7 +69,7 @@ static struct platform_driver versal_fpga_driver = {
+>  	.probe = versal_fpga_probe,
+>  	.driver = {
+>  		.name = "versal_fpga_manager",
+> -		.of_match_table = of_match_ptr(versal_fpga_of_match),
+> +		.of_match_table = versal_fpga_of_match,
 
-See also previous contribution:
-https://lore.kernel.org/lkml/20240419191200.219548-1-dtokazaki@google.com/
-https://lkml.org/lkml/2024/4/19/946
+For this part
 
-
-> If the eeprom is not accessible, an nvmem device will be registered, the
-> read will fail, and the device will be torn down.
-=E2=80=A6
-
-Please present the introduction for failure conditions as an enumeration.
-
-
-> Move the failure point before registering the nvmem device.
-=E2=80=A6
-
-I would interpret the diff data more in the way that a devm_nvmem_register=
-() call
-should be performed a bit later in the implementation of the function =E2=
-=80=9Cat24_probe=E2=80=9D.
-How do you think about to mention the affected function also in the summar=
-y phrase?
-
-
-> Changed sha length to 12 in description
-
-A specification was adjusted for a tag.
-Please add a version identifier here.
-Will version descriptions be extended another bit?
-
-
-> ---
-
-I suggest to use blank line instead of a duplicate marker line.
-
-Regards,
-Markus
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
