@@ -1,71 +1,71 @@
-Return-Path: <linux-i2c+bounces-3091-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3092-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 195438AFDC4
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 03:22:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 614088AFDD3
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 03:28:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CE591C22A98
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 01:22:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84A6F1C2278B
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 01:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E51963CF;
-	Wed, 24 Apr 2024 01:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 821C3C13D;
+	Wed, 24 Apr 2024 01:28:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="dqugEBpB"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="c3ncHWhI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095AD6112
-	for <linux-i2c@vger.kernel.org>; Wed, 24 Apr 2024 01:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8155695
+	for <linux-i2c@vger.kernel.org>; Wed, 24 Apr 2024 01:28:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713921739; cv=none; b=Ni7j9Y9ctVVBAjYF+/NPgfI4TtsuZkM/3KovsDy3+ZSRcIaBBj/h2lVj0Ybqi5Z2h5ZnUSgDevQ/hcjpC4neRWeBdw5qTA3Cwx2opRUV5zubFQPn79Vy7hZ5AkzClez7+EjmJQNgDEQvXYHTy2EVQrz/ZK6SOdmHrdxT0syz2Fk=
+	t=1713922112; cv=none; b=EQdp8W4nXNC9OlitZUjc/QWUgd1862velDv9PB4llrvbyYZCa/IzEhR5HDGr9cpKy3UtTSPS3dSupOSlbKV7vFqa/wiodju8WMk5NPHXoGoBC91shPJdBiIW0m1Fi2FFnTVs4q5Fp2DpFyNDG4TgWHTkckXD1SuIh8Z5vkfQvcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713921739; c=relaxed/simple;
-	bh=WJACWBqyrark7kzDHwkHLYgFrSetX/tqBfEKpkeqveA=;
+	s=arc-20240116; t=1713922112; c=relaxed/simple;
+	bh=Vgp5ky0trVGExFJv0sD4ED6OSPqbAdsj+6/j4QEN2V4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KKArLZTgEw5dld1kF2cnoJD+qsO8L9nnmO9ZYwZzTdVszRbKVn6VYTbf7bRZGHaWV7px0JdKiQpko9ZbQvwor8M9+au/ed8DAZT7XNM8wCv/1LiFJCTLmkQNEWyPAF9Ho88VXwToVXb8n3srBe2aIOYHtXNwrlTNR3o6LgGfolM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=dqugEBpB; arc=none smtp.client-ip=209.85.210.174
+	 In-Reply-To:Content-Type; b=tbQ2s20ESaghPJSdfFp95z2m6sWSzUrZgQ1ZKtAmbUMLR0e0T06HoR5SczeCEadfqY2gHXiqQJYteblR4WSOU5zsqzB2fsE2im7B9DBx5ZTM4eCHlonWjt8T9Uj308BeJJL9rDf4Hzf3pfXDHWgVAN60Fjum+TyEZuYIW/mMqGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=c3ncHWhI; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6ed691fb83eso5034863b3a.1
-        for <linux-i2c@vger.kernel.org>; Tue, 23 Apr 2024 18:22:17 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6eced6fd98aso5815558b3a.0
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Apr 2024 18:28:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1713921737; x=1714526537; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1713922109; x=1714526909; darn=vger.kernel.org;
         h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XKFWa35Ap33dZFlkeme2pTZv9XltwOuVxLepWRUzlpI=;
-        b=dqugEBpB8zgaftDtAglIswFlFEiN7LH1/i/cMtVbCqf9AEprCyGsRyXWt9kznvxhAT
-         S9nYw1gjq+feFi/jpblOHRALDcIvI8BVz1jtwYd3qtgfr031kC/RJIqekhDISy6SKRSD
-         DhuczLRlwv2ui7GqH9uB8X9PDaSuz1VZgLEg8=
+        bh=FRkWtehoaPLaOoITPZESZLa8/JZAJrTj5JvhUYgOYQ0=;
+        b=c3ncHWhIwRokmhsIahtUf1i9Qh2/tptN5E7xwHhh7mm3f7A9aCV8RdwCarbda3uIu3
+         fqTDR4WTgS9TuJqOJ9mLN/ZfgldecdOoJwzfOBju9S7wPbfEGlq/o8+PQ79M97S8/P+j
+         DTMgfk9HwSi4VUzuRN8vPSpz/YBWDHNuY40RE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713921737; x=1714526537;
+        d=1e100.net; s=20230601; t=1713922109; x=1714526909;
         h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=XKFWa35Ap33dZFlkeme2pTZv9XltwOuVxLepWRUzlpI=;
-        b=kZigm8NwSu7dz7UISgQ7knNBmhUF9V1jCoskBs7s4MhMwSj3V3JAHwuaS4A6r695Du
-         LLd913LVbEPcbTWIKKHmDSPgFXH6Ez4B7Qnaj8lkiWQTTIc3khy7pdhakx/d2FrwSsdB
-         iNfTQoc8FOJiWfD0bruxtk9s5JJjyyJvNJ/jEof2rdwplkmx5uzLBSi59EsYL8Hmotlu
-         BIj42QasnyJ3/gHpv/6baZFNFkVGw8XHlfn7UmHSsAYFWnMb+Khl2Kv3r7TDcG/IyGCa
-         4Kr+f544mE3HwqvvoAV8wyon+Je4sMKLtjXliC9DmUQmsDlucbmU6MTiqyOWioPxVnhf
-         rv5w==
-X-Forwarded-Encrypted: i=1; AJvYcCVKDHuqti/Gpcf0sGzLNxHC/q4CmHd2Yg2IW8ZqGxKbIAjfN9wdLNbY5gJTrAa+q6DS//OeEQaegtLVlPI2HX6xeCEWIFFZZAYO
-X-Gm-Message-State: AOJu0YydeUAw3Gl4hKHstNfJ8Arpw2Jn2de/XN86rJ3c0ES8ePn6exaa
-	zBwnxe3SidwNf+YUkpeLCm5+mszt7rObdDu2hc1wSewVSS6ti1T+LQ8IKIjk1Q==
-X-Google-Smtp-Source: AGHT+IFty+KZIZb2/QRdaDmTSvWnHpjwtxOihZ6oVrjOJaPk8Emc7arzAnnRdZxEuDf6VlT7d2hbSA==
-X-Received: by 2002:a05:6a21:1c82:b0:1ac:6762:e62e with SMTP id sf2-20020a056a211c8200b001ac6762e62emr922324pzb.30.1713921737300;
-        Tue, 23 Apr 2024 18:22:17 -0700 (PDT)
+        bh=FRkWtehoaPLaOoITPZESZLa8/JZAJrTj5JvhUYgOYQ0=;
+        b=Tv+sOBiQ1xskvggbCnTgQNaefibWkKOMb3pYVnCutauKyhZU+v3IDfnoC744DUsLzk
+         qU+z/8XgpCMVCC+hNLudDTaYNvff6167fu5toLpBQMmsHwMHvGAHQDQXdFWV8qh5KMsZ
+         dzbAe3kbBvrxJsXlbs5T+mWWodfMGKXfQ64Hgd9tCoXcgGJ/b7IIfHRgjeRilMmW/sk6
+         52o6f0mYDi6tfRgO5aUtGccGhQ446JKK7ZxPx+wiHtQLqIGPD7/r6tfhkbqEEFOLevf8
+         aQELg7QIYo6oOOBUWzVUN54XE+H4x/ImW5reFThrfnFT9NRZN1tHI99VEz+v76HaUJhB
+         wmtw==
+X-Forwarded-Encrypted: i=1; AJvYcCXEhIrN8nBsiClqCP48bxoDpeqCEHAuJeucfMq36d6rjpwbi8XjjDmgvTsu0BIQ7EXbKbPFWb3fAMUMVAYj7rHiyeBrGfoEV+va
+X-Gm-Message-State: AOJu0Yz/Mt8HylR27sDSomS3n8yR+WFqePlkfPMRFERjs6+OZIqBDxAg
+	r3bipcDPBBpt1DcHKc4aOrztRvrOhbEv2U1I/zvvwn6NNYPbtxqUwrQYdGy4Lg==
+X-Google-Smtp-Source: AGHT+IEWsr1LSwROJT8IjfHo25z3YV9vF2mRKNKNUQfk6cxPJYb16NMol83UFoJ6Kb8JngDhJ8H9qQ==
+X-Received: by 2002:a05:6a00:a0e:b0:6ea:b818:f499 with SMTP id p14-20020a056a000a0e00b006eab818f499mr1280142pfh.19.1713922108903;
+        Tue, 23 Apr 2024 18:28:28 -0700 (PDT)
 Received: from [192.168.1.3] (ip68-4-215-93.oc.oc.cox.net. [68.4.215.93])
-        by smtp.gmail.com with ESMTPSA id w12-20020a170902a70c00b001e45c0d6be6sm10705122plq.246.2024.04.23.18.22.15
+        by smtp.gmail.com with ESMTPSA id v2-20020aa78082000000b006eab6ac1f83sm10308462pff.0.2024.04.23.18.28.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Apr 2024 18:22:16 -0700 (PDT)
-Message-ID: <0aac2975-42d0-4abe-9405-bf8a38a94104@broadcom.com>
-Date: Tue, 23 Apr 2024 18:22:15 -0700
+        Tue, 23 Apr 2024 18:28:28 -0700 (PDT)
+Message-ID: <95ed17d4-06e5-4ed2-add1-a2bf14e29dd0@broadcom.com>
+Date: Tue, 23 Apr 2024 18:28:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -73,8 +73,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] i2c: designware: Create shared header hosting driver
- name
+Subject: Re: [PATCH 3/4] mfd: intel_quark_i2c_gpio: Utilize i2c-designware.h
 To: Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc: linux-kernel@vger.kernel.org,
  Jarkko Nikula <jarkko.nikula@linux.intel.com>,
@@ -90,8 +89,8 @@ Cc: linux-kernel@vger.kernel.org,
  "open list:SYNOPSYS DESIGNWARE I2C DRIVER" <linux-i2c@vger.kernel.org>,
  "open list:WANGXUN ETHERNET DRIVER" <netdev@vger.kernel.org>
 References: <20240423233622.1494708-1-florian.fainelli@broadcom.com>
- <20240423233622.1494708-2-florian.fainelli@broadcom.com>
- <ZihLSKe_BHxasBql@surfacebook.localdomain>
+ <20240423233622.1494708-4-florian.fainelli@broadcom.com>
+ <ZihL1mb1OzwdLSvN@surfacebook.localdomain>
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
@@ -125,57 +124,38 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
  7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
  95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <ZihLSKe_BHxasBql@surfacebook.localdomain>
+In-Reply-To: <ZihL1mb1OzwdLSvN@surfacebook.localdomain>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000005937790616cd80af"
+	boundary="0000000000007f58b40616cd96c0"
 
---0000000000005937790616cd80af
+--0000000000007f58b40616cd96c0
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 4/23/2024 4:59 PM, Andy Shevchenko wrote:
-> Tue, Apr 23, 2024 at 04:36:19PM -0700, Florian Fainelli kirjoitti:
->> We have a number of drivers that reference the string "i2c_designware"
->> yet this is copied all over the places with opportunities for this
->> string being mis-used. Create a shared header that defines this as a
->> constant that other drivers can reference.
+On 4/23/2024 5:01 PM, Andy Shevchenko wrote:
+> Tue, Apr 23, 2024 at 04:36:21PM -0700, Florian Fainelli kirjoitti:
+>> Rather than open code the i2c_designware string, utilize the newly
+>> defined constant in i2c-designware.h.
 > 
 > ...
 > 
->>   #include <linux/i2c.h>
->> +#include <linux/i2c-designware.h>
+>> -#define INTEL_QUARK_I2C_CONTROLLER_CLK "i2c_designware.0"
+>> +#define INTEL_QUARK_I2C_CONTROLLER_CLK I2C_DESIGNWARE_NAME ".0"
 > 
-> Can it be hidden in the subfolder?
+> So, if you build a module separately for older version of the kernel (assuming
+> it allows you to modprobe), this won't work anymore.
+> 
 
-That would require the MFD and ethernet drivers to include relative to 
-where they are in the source tree, do we really want that?
-
-> 
-> ...
-> 
->> -#define DRIVER_NAME "i2c-designware-pci"
->> +#define DRIVER_NAME I2C_DESIGNWARE_NAME "-pci"
-> 
-> Oh, this makes all the things hard to read.
-
-OK, besides there is a change for '_' when it was a '-' before, so maybe 
-I should drop that hunk.
-
-> 
->>   /* Work with hotplug and coldplug */
->> -MODULE_ALIAS("i2c_designware-pci");
->> +MODULE_ALIAS(DRIVER_NAME);
-> 
-> I believe we shouldn't use MODULE_ALIAS() without real justification.
-
-Pre-existing change.
+Sorry not following, was that comment supposed to be for patch #1 where 
+I changed the i2c-designware-pci to i2c_designware-pci? modprobe 
+recognizes both - and _ as interchangeable BTW.
 -- 
 Florian
 
---0000000000005937790616cd80af
+--0000000000007f58b40616cd96c0
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -246,15 +226,15 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICYkusyLfcuzUp1Z
-GDzW3PzA5NbW+7vaoel2TwU29FW9MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTI0MDQyNDAxMjIxN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJ0H8SH06scMlcA8
+mj6Vyvw+fxXL8FYWmrQsKsOG5V39MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTI0MDQyNDAxMjgyOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBrrAdpeRXGYB5p0IE6inm1ZstAvGxg3PRI
-8PoOxiS1jDZ1hLfS30iBpGeJoS8Fq6bV82SXA1weQ7nF7bBG5d/mZXo7j3qewQRPGw5N9EfEkYJ2
-yi/DzeEF166htivqByt1SN4WQ44w+Ar29hOsysAwiqOqnoDloastyScv6jyXGb3OdDuNgR0Naf0z
-xfebzIVZiBuV2fkaAaZRE7meW/IZaknm/Uw9aCwU5RtSFzIEtsnQu49goF3G9d0Fjd8P7V3C4qUD
-ppSy9m2gQXtjUeuiQBgpKW4bHzXiEDykM+lzEYi9D3S+WqPybNQdkEglWDGvenRqm1BTwPaMWWIu
-knwx
---0000000000005937790616cd80af--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDokvg1RLnCiSRV4eQmkZF7OUhV+qw9e+qP
+fjEw2pUXgCXzQkWMGy8ZaoY/l8rfuaQGdT8rj33VUbfqCELafAeMQcoe0cWMlkKymGhWvEuN9RkE
+fxzLeAvLuDe7yq8nil0xI2QhV/ATqdWUYBEz2u+41qWpHP0ksLM5mzRIflTal9kR305zd8Z2JwBY
+DIPZ9MN1qiGjLy0Z1JhOxFh8SoT4q6HSzIj0tUV7fXdDRkoI5P1JOEzJynnplV4J249B1//6+dKU
+G4nW5bvSwqkCWR0w3tqp72bcFxKhzZdEJrMgQBf3xYs6nK0FP4zpQ7263o8bIcqaVO55/mdQB6wR
+HrBO
+--0000000000007f58b40616cd96c0--
 
