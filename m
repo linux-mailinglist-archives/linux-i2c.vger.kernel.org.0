@@ -1,216 +1,144 @@
-Return-Path: <linux-i2c+bounces-3099-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3100-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DD978B06B5
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 11:58:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D6E38B0743
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 12:26:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A556EB25AA9
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 09:58:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF03D283379
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 10:26:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9494F15956C;
-	Wed, 24 Apr 2024 09:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D594B15957D;
+	Wed, 24 Apr 2024 10:26:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k2RJyw35"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dyD6o43s"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C251158DD6;
-	Wed, 24 Apr 2024 09:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E3915956F;
+	Wed, 24 Apr 2024 10:26:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713952601; cv=none; b=tOqLAL+x0BziEXNUFjPSeqveEMsEq/634RB57nWQsOb1HKQwPOVONWG2low4c/dB2qUFyBFSUTRrGY9GPqVItdW6POTs6rmTnpie56U113iQpsakB+zRikIdx7TLVe3HWlKyGeZARRdeAeiFfXk9rXtQYggNfU3gzqz7n566KiU=
+	t=1713954366; cv=none; b=bdix13e7ml+9PLLUc4zAbiyYieSP71TESMr4GgmvrMiOSPpvTEmdHfQPx9hM9H1vQgVaTTiRfuHnvPvwJ6zcQbj/FTct3FAHfjufgENr+30b2fQmThvVcGGVCdAr1CIU7Vbrqqb2ro+JUcydPmjIux+QD7F3JRuYvQu5t3UXyNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713952601; c=relaxed/simple;
-	bh=YqY//5lBl+yYaGi8/E20oc5trrx5qjW8jCobmFuWfWU=;
-	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MsmV/c11MV8UCYHwKf4efCFeXmhyZcbqXs2F1kELeCf+mddFdkrTvcYI+4q3w3oTJnVUBZdyeLXnjV2CgEXloQqJDjNUCljaPoxoJnRQGhjJjwSE+tDkMED4Q/NUmeVtb08WCiGFsgll4NL5HxbBHvaDecBaJwZbKVGyKcuoAmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k2RJyw35; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6f103b541aeso3652364b3a.3;
-        Wed, 24 Apr 2024 02:56:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713952599; x=1714557399; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1ioz599OIjAnA21zqxg3x3jvdxgxMKSXGk9djrFguws=;
-        b=k2RJyw35eogAhvG0WDh/1v9NFNh7uA94+5mrnsyvufAKBEVTU4ZYPtQlnbUjXHDFa7
-         /WxPfT3TMi+pQ56evQubmPVD4Imz9FMi+CcCsNaNHCn3xyoGUDX/jqrJ/B+K8Ajz3gOD
-         NhzG6WZzciuJVcCEEfzvGSyygSnRvJ1++/XDQkYR0/6f2PYHlYg+geTMOFepk7bm5w9B
-         TVpYsRge2yCws2HO7eP849FUozqD9W08CJeRtIVjeEloEzKmfHhXiQNaBaHxfDcgVeJY
-         fJVE4Qx+U0gP3oOMGdPgVq+NgqBcD6ga7ogqej7YupzhaQ7qkm91CMxrKgqy6AtLs4P3
-         A2mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713952599; x=1714557399;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1ioz599OIjAnA21zqxg3x3jvdxgxMKSXGk9djrFguws=;
-        b=v8V3c1mm4SGDskIKzbW8K2calOw6SZ4RswS08tzHSBQUVctQQJNPLJVIBTsj/jzbk5
-         BjUrhagwW2Hacv50UA3IlTiikJF6xiJEBopKLrEAYb6SiaN+S4d9BUsgXlVXHPHdyZ1G
-         aCIT7mBkd9R/7mMUJLv8AMRc5MQIHuD9kRSaBupDEDpHz3ltyrD7HuwdYILb/WFsQzWs
-         R/f7eVg0NsCjXNtZZpS3eHv3uX/MNPmRVUHv0sDcOFTZEGMC73XJ/ZAoOtdanciMtDZB
-         syAw1xINv4TOO6cmxalXSBMkypPQiKcFcRwb8vnN3NfaOcAjGxm5wRn5ZybOvGnAz4RW
-         30zw==
-X-Forwarded-Encrypted: i=1; AJvYcCVroRMS2gOigQf0NhoKNkx+BP90OILnIfazVlZWGYHBekM0PXHpm1j0rov5oimNiid964fXcQ6H/vUiuc/cUgMiXq07jX2VakSd0PCeF/k5nnEWaSLnmC75aL9zddhpowhAnyi5TkREeDb1Yf6clsgmlqShXjfdYnE7nuiiPzy/hgKWKXGZME/SrlaxY9NMxmu0lTzVPv4rOMM3aGvI1wEk18veapIgWoaCPtYpfpPOdhrPIR+Zlee+nci5
-X-Gm-Message-State: AOJu0YzGJ47zp1ZKqPI1ap2KwEUpkSSo9Sf/tpmlCX0nFv8LlGDsa+pA
-	rsaccHenAOdo6Aw+AmghkTGWY+X2R75evaDLYiZ6uP6DLI5r9Owj
-X-Google-Smtp-Source: AGHT+IFqcZdGhlM5bb2WUFyDPxvKU09dA2xfnEYMM8GJ9dIteNsekJtqKWSAUpk9WriPj/pXAX3ltQ==
-X-Received: by 2002:a05:6a20:4322:b0:1a9:e2e0:1806 with SMTP id h34-20020a056a20432200b001a9e2e01806mr2208462pzk.43.1713952599382;
-        Wed, 24 Apr 2024 02:56:39 -0700 (PDT)
-Received: from peter-bmc.dhcpserver.bu9bmc.local (2001-b400-e380-6057-c341-626e-0f0b-b82d.emome-ip6.hinet.net. [2001:b400:e380:6057:c341:626e:f0b:b82d])
-        by smtp.gmail.com with ESMTPSA id b19-20020a056a000a9300b006eae3aac040sm11042932pfl.31.2024.04.24.02.56.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Apr 2024 02:56:39 -0700 (PDT)
-From: Peter Yin <peteryin.openbmc@gmail.com>
-To: patrick@stwcx.xyz,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
-	Patrick Rudolph <patrick.rudolph@9elements.com>,
-	Cosmo Chou <chou.cosmo@gmail.com>,
-	Andre Werner <andre.werner@systec-electronic.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: [PATCH v1 3/3] Documentation: hwmon: Add infineon xdp710 driver
-Date: Wed, 24 Apr 2024 17:55:59 +0800
-Message-Id: <20240424095604.3425857-4-peteryin.openbmc@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240424095604.3425857-1-peteryin.openbmc@gmail.com>
-References: <20240424095604.3425857-1-peteryin.openbmc@gmail.com>
+	s=arc-20240116; t=1713954366; c=relaxed/simple;
+	bh=AZWGz/WvtgoCzFOkz9gz6ilvmzSpiEaQFbmh8lEyIyM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RwF8VdG8fJVGdLH7O99SRBf81PWdilx6m+OQLjYCMdoMWt4aADHXFjcGv1EEe7iGWpmIqqRpHngITO91UzkUerlS/kRN/MadlMVMuLBq3gPkrZhBV74Kvo1Vma5ElXDKoRj2JSzO71d+2d8P+DrR4TmtoyQSYq9sM68iRPyan00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dyD6o43s; arc=none smtp.client-ip=217.70.178.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from relay3-d.mail.gandi.net (unknown [217.70.183.195])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id 3784DC670A;
+	Wed, 24 Apr 2024 10:24:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8A89D6000A;
+	Wed, 24 Apr 2024 10:24:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1713954267;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OVEm7ob18VpKCaMTFhx5G9Kb6z4kp/qqC4mfGOtfzt0=;
+	b=dyD6o43s+X70tu36CaPntCI9S7G6Mpdm4x7hO6BsSEu9+z36dVwBteNQBwwE6iaBeSsi3c
+	QQheFRj/aPn5G/WMf+yvs9Pvyqlw7gnKvjlSXYYNjxagiLXQp4uGshTYl4sLZHiPtL+MgE
+	s2qOhPMm2usFpwEyyFnNGPXX+zYMyEEpxGsYdUiMcsnGAPgIlfSO7rrotuYJf7jDr2Z2LT
+	1g/pbBPsm0EBBk46JMYX/O0CmzfZ9cFAdHFXn0O/JWxV0P9p7bE8I/DuzdVuwIkfxdKMdc
+	Mi/GkwbyXIaSvZu9lxr4kZ1I7Da7PbFs5pHVPy69iriR07mtv50BcwN9qZbF3w==
+Message-ID: <8d49f316-bb17-4956-a62b-e64d460825d4@bootlin.com>
+Date: Wed, 24 Apr 2024 12:24:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 02/11] i2c: omap: wakeup the controller during
+ suspend() callback
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Andi Shyti <andi.shyti@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, Tony Lindgren <tony@atomide.com>,
+ Aaro Koskinen <aaro.koskinen@iki.fi>,
+ Janusz Krzysztofik <jmkrzyszt@gmail.com>, Vignesh R <vigneshr@ti.com>,
+ Peter Rosin <peda@axentia.se>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Siddharth Vadapalli <s-vadapalli@ti.com>, linux-gpio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, gregory.clement@bootlin.com,
+ theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+References: <20240422194423.GA414623@bhelgaas>
+Content-Language: en-US
+From: Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <20240422194423.GA414623@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
 
-Add document for xdp710 device
+On 4/22/24 21:44, Bjorn Helgaas wrote:
+> On Mon, Apr 22, 2024 at 11:40:02AM +0200, Thomas Richard wrote:
+>> On 4/19/24 10:47, Andi Shyti wrote:
+>>> Hi Thomas,
+>>>
+>>>> +static int omap_i2c_suspend(struct device *dev)
+>>>> +{
+>>>> +	/*
+>>>> +	 * If the controller is autosuspended, there is no way to wakeup it once
+>>>> +	 * runtime pm is disabled (in suspend_late()).
+>>>> +	 * But a device may need the controller up during suspend_noirq() or
+>>>> +	 * resume_noirq().
+>>>> +	 * Wakeup the controller while runtime pm is enabled, so it is available
+>>>> +	 * until its suspend_noirq(), and from resume_noirq().
+>>>> +	 */
+>>>> +	return pm_runtime_resume_and_get(dev);
+>>>> +}
+>>>> +
+>>>> +static int omap_i2c_resume(struct device *dev)
+>>>> +{
+>>>> +	pm_runtime_mark_last_busy(dev);
+>>>> +	pm_runtime_put_autosuspend(dev);
+>>>> +
+>>>> +	return 0;
+>>>> +}
+>>>> +
+>>>>  static const struct dev_pm_ops omap_i2c_pm_ops = {
+>>>>  	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+>>>>  				      pm_runtime_force_resume)
+>>>> +	SET_SYSTEM_SLEEP_PM_OPS(omap_i2c_suspend, omap_i2c_resume)
+>>>
+>>> If you don't have CONFIG_PM_SLEEP, though, this doesn't compile.
+>>
+>> Hello Andi,
+>>
+>> Yes indeed, the __maybe_unused attribute is missing for
+>> omap_i2c_suspend() and omap_i2c_resume().
+> 
+> Isn't there a way to avoid having to use the __maybe_unused attribute?
+> 
+> E.g., use DEFINE_SIMPLE_DEV_PM_OPS() as is done by these:
+> 
+>   82f9cefadac4 ("serial: 8250_exar: switch to DEFINE_SIMPLE_DEV_PM_OPS()")
+>   f243df0a0be0 ("media: platform: rzg2l-cru: rzg2l-csi2: Switch to RUNTIME_PM_OPS()")
+>   6ccc22a5afcb ("net: ravb: Switch to SYSTEM_SLEEP_PM_OPS()/RUNTIME_PM_OPS() and pm_ptr()")
 
-Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
----
- Documentation/hwmon/index.rst  |  1 +
- Documentation/hwmon/xdp710.rst | 83 ++++++++++++++++++++++++++++++++++
- 2 files changed, 84 insertions(+)
- create mode 100644 Documentation/hwmon/xdp710.rst
+Yes you're right, I don't need the __maybe_unused attribute if I use
+NOIRQ_SYSTEM_SLEEP_PM_OPS().
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 1ca7a4fe1f8f..b2546925fb15 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -250,6 +250,7 @@ Hardware Monitoring Kernel Drivers
-    wm831x
-    wm8350
-    xgene-hwmon
-+   xdp710
-    xdpe12284
-    xdpe152c4
-    zl6100
-diff --git a/Documentation/hwmon/xdp710.rst b/Documentation/hwmon/xdp710.rst
-new file mode 100644
-index 000000000000..083891f27818
---- /dev/null
-+++ b/Documentation/hwmon/xdp710.rst
-@@ -0,0 +1,83 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver xdp710
-+====================
-+
-+Supported chips:
-+
-+  * Infineon XDP710
-+
-+    Prefix: 'xdp710'
-+
-+  * Datasheet
-+
-+    Publicly available at the Infineon website : https://www.infineon.com/dgdl/Infineon-XDP710-001-DataSheet-v01_00-EN.pdf?fileId=8ac78c8c8412f8d301848a5316290b97
-+
-+Author:
-+
-+	Peter Yin <peteryin.openbmc@gmail.com>
-+
-+Description
-+-----------
-+
-+This driver implements support for Infineon XDP710 Hot-Swap Controller.
-+
-+Device compliant with:
-+
-+- PMBus rev 1.3 interface.
-+
-+Device supports direct and linear format for reading input voltage,
-+output voltage, output current, input power and temperature.
-+
-+The driver exports the following attributes via the 'sysfs' files
-+for input voltage:
-+
-+**in1_input**
-+
-+**in1_label**
-+
-+**in1_max**
-+
-+**in1_max_alarm**
-+
-+**in1_min**
-+
-+**in1_min_alarm**
-+
-+The driver provides the following attributes for output voltage:
-+
-+**in2_input**
-+
-+**in2_label**
-+
-+**in2_alarm**
-+
-+The driver provides the following attributes for output current:
-+
-+**curr1_input**
-+
-+**curr1_label**
-+
-+**curr1_alarm**
-+
-+**curr1_max**
-+
-+The driver provides the following attributes for input power:
-+
-+**power1_input**
-+
-+**power1_label**
-+
-+**power1_alarm**
-+
-+The driver provides the following attributes for temperature:
-+
-+**temp1_input**
-+
-+**temp1_max**
-+
-+**temp1_max_alarm**
-+
-+**temp1_crit**
-+
-+**temp1_crit_alarm**
+By the way I can add a patch in the series to remove all the
+__maybe_unused attributes of this driver.
+
+Regards,
+
 -- 
-2.25.1
+Thomas Richard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
