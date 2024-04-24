@@ -1,71 +1,71 @@
-Return-Path: <linux-i2c+bounces-3113-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3114-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEC808B0FB4
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 18:26:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E8AD8B1002
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 18:36:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7658128C9C9
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 16:26:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BEB61F24AB3
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 16:36:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA9B161B58;
-	Wed, 24 Apr 2024 16:26:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9909716D4D3;
+	Wed, 24 Apr 2024 16:35:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="AplHzOrg"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="GszOz4QF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F81161338
-	for <linux-i2c@vger.kernel.org>; Wed, 24 Apr 2024 16:26:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E7916C866
+	for <linux-i2c@vger.kernel.org>; Wed, 24 Apr 2024 16:35:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713976004; cv=none; b=lqWrBe4mAY88jbBdq5z/DROtW8s/eeO03OL1jOHSCT8OERxwYUVqyYapDe2A1wp3zknUQUsYHW2vsSPWuVpe1OMXxcN1V5FZSbzOLIEh3R3UqSp//5TLKer0XqzZ2vkx6XCX+yj4jMnsUwm57x2KlT418Wz8IsmcchgMxOuYCLk=
+	t=1713976534; cv=none; b=H004vjexhwZw7e95cmL7zrk8U7PQrCBrXdmpfWUv3YmWT+xjAffV7rZOWVpkQUqL5kflHOamsWnX0UXY63coeIRp3KkpkhJWSASzEc2sKI3tmxn+VmeoWcZynNtO4y9BqKTl9BeGlAgxK+dvRcDn2OlUsWSAxEP4SEQOJ0PtA7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713976004; c=relaxed/simple;
-	bh=zZHnI1FbvrqLUI9Q/L9LZxmdNtmy8CgJoL40V/N3GKw=;
+	s=arc-20240116; t=1713976534; c=relaxed/simple;
+	bh=2PFkVDNA9zlGD41C7J108Ppz7ZP9nOzRCK+1ry66Ufo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uusmeMKkvYbKIUuPc/x5bEX1loVp8wwqFuVH3HKmntznlxUx0XGU4Yj90nbgqoC76LB5vD7mWzknODzvWB0EpM5UESDDO2ErWecLuy4czBKEUYhAlX1uKq8NYOiy8x84a0OuMP0VHfG/pCZc0enQVKqRH6/ayIDm+yAzivvPVMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=AplHzOrg; arc=none smtp.client-ip=209.85.222.181
+	 In-Reply-To:Content-Type; b=EurPot914ipi4WWkmUF3BycBz+leTTRzNsmZY3uPShCfVI4YOVJ286txoOSixQErqGbV2m9cimbx20jWlNE6kQ5Vb3Bk8wgZLs1I9PkReA3VXC0Gx9tLEZzX9OFqRDtmweAhd7xHHPY++bmO+1i4hPFokUPoMRB3gJoFRNrO62M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=GszOz4QF; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-78ebc7e1586so107184285a.1
-        for <linux-i2c@vger.kernel.org>; Wed, 24 Apr 2024 09:26:42 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6edc61d0ff6so106695b3a.2
+        for <linux-i2c@vger.kernel.org>; Wed, 24 Apr 2024 09:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1713976002; x=1714580802; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1713976532; x=1714581332; darn=vger.kernel.org;
         h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jDK9rS+wBiWrsVwHPJcYfd7+GbsEuM+czTDRtcShJ28=;
-        b=AplHzOrgOUyHSeZ8YtWTrWY0wDSE0eASHtPmwgW0N9QKX3h1JVMkiKGEGpgkqMIwYz
-         YewnV6wXpypJ3SdJGfMvgVmhbp9/dehYUcq/u4bLCDNYK4uZnuIAn54lwKP58DWHEmIe
-         RnPRajJBjfRSFNK+ijKNmLBv8SyKswfwJX4/g=
+        bh=UGfG8h0SjS3yA4TRYdVi0HFMv25CGardlQWRaBIBqAc=;
+        b=GszOz4QFwD5ETox1UUrwGGrIx4MGvNuPY3wF2aYm+gnITexOVFz4lLYcqdZbcZ8MJs
+         3R8WelBlBwRHEKrb1Bb580Eb4wMzIyRGs/ArfsciL9qAActsSrrz7peYFR8Aw8tQSDbe
+         DesEIkylvBpxi+mmEHY77DyvsiyEGfLd+VaFU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713976002; x=1714580802;
+        d=1e100.net; s=20230601; t=1713976532; x=1714581332;
         h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=jDK9rS+wBiWrsVwHPJcYfd7+GbsEuM+czTDRtcShJ28=;
-        b=TTnFsmt9bKahu0hXeDI8BUHEL+fySOtnQKhmsc30vdnOoUC3TofXWPbiHZaegaUSDT
-         Pmq9z4CldYQEYCv1AdcWIzK++649qAZDVVM6/4pQXfOUraQtJpsPreeUFIyCEWN+8nHB
-         9Vyq1tp88NRJKvR0mQgobwxsgxGi34CdBXcio0hLR/vOipbtENRTJ3VJ6fLbU+FsXZte
-         vh0dk7NCBawXBYqbSqb/Ax9ZdDhM2Qx0F5tu6EcNut88clsaFtVlaZVreHXgljstha0H
-         mLbyi7lwb+aYnlCOCR8iWNZxcafNTzmJpqr0ChQssaINLNGi9QHGiuQkU9oM80YX8N6K
-         OTJw==
-X-Forwarded-Encrypted: i=1; AJvYcCWY5LdMS6WhGVH78cifhz4vV0IwkqvDZWa+Ny0s+Q8kjwAh+pWV+6WB5GXjZKDeJ9Ybt+kq9guhQI1fMay/ZpQHEvgbr6IQNNUd
-X-Gm-Message-State: AOJu0YzGN+RKk+IeNOloQbNfc/4pPULqzZwh1mAqv1dUthRC0yh4vVoE
-	8FDv4X2/UKdAgUYT+PN2pMsN0MFfyQWZ378lxq3jCFlq/ikAtlIbkkFsjgI81A==
-X-Google-Smtp-Source: AGHT+IF905+8eoeSVhIusqNdOxOfR7pFr/pAGtp8mau3xMpkn8HaflI/+5yZzTS2DQYvrcFnx5UHQw==
-X-Received: by 2002:a05:620a:a58:b0:790:6b18:f5bd with SMTP id j24-20020a05620a0a5800b007906b18f5bdmr286895qka.3.1713976001730;
-        Wed, 24 Apr 2024 09:26:41 -0700 (PDT)
+        bh=UGfG8h0SjS3yA4TRYdVi0HFMv25CGardlQWRaBIBqAc=;
+        b=PBN5cA5cTOt5TvR/q5uxogxxg/XoTTSaNb9Undh9IcNl+z9C/QX34sr81GODF1+rLr
+         QCQ4q5hOYxyWzClbgIyCYHMIlp4oszLOAyf3gBo/nSvOGOT8UBA01QAc8AXI0dZE04Md
+         ydMDKHwmFylV/Sa4RQt4Ud6+UgEdtHV3hW/A8wOkQ7PpBqSWo0qGB/bCa/23xAfJ5meT
+         v6wtn9KyT9XeKHaRcxQoquT3VcGxtkkvSbcqyFZFrOA7Lwu9iaE8GJMGFvEwtqbi/css
+         5PdjbwjT0ofxv80b8AAN1j2X7fqYdo/jexiwKbwtgEm8/tGiaorKQ7k8mycQO3Mkd0Lb
+         GH+w==
+X-Forwarded-Encrypted: i=1; AJvYcCWquosDuVpOZ7xhxb535eXnHi8/MbyNAM583LhWl2CvHGMACPLlmmtKikYAal/pslbzbY7ADYuyEG/RS37FYw0aXS1pzgmQ+AB5
+X-Gm-Message-State: AOJu0YzzY5sHVS8RiMWZ+m13Q7ZfYDsxGgMlUk2hpZFET+EDwD17tyAR
+	aSmOI3iRAHLNZeZxiQGmZnm7zw0fM5etUfDMetuE2hQggzgh2iC13yRI0FCvYA==
+X-Google-Smtp-Source: AGHT+IH8siZIbBLYsd3D3xWrHMd9K+j8BpP6+9sNccUf33cr7fB4g9kMnEBlHrODYVAsC6PTc+S8gw==
+X-Received: by 2002:aa7:888d:0:b0:6ed:d189:a0b6 with SMTP id z13-20020aa7888d000000b006edd189a0b6mr4062488pfe.32.1713976532336;
+        Wed, 24 Apr 2024 09:35:32 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id m6-20020ae9e006000000b0078efdcd9aa6sm6234018qkk.127.2024.04.24.09.26.39
+        by smtp.gmail.com with ESMTPSA id s12-20020a056a00194c00b006ead124ff9fsm11623365pfk.136.2024.04.24.09.35.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Apr 2024 09:26:40 -0700 (PDT)
-Message-ID: <dd469761-2a18-42f8-a98c-eb4ecbe9c85b@broadcom.com>
-Date: Wed, 24 Apr 2024 09:26:38 -0700
+        Wed, 24 Apr 2024 09:35:31 -0700 (PDT)
+Message-ID: <c0296f12-5850-4112-861d-a6a35e164852@broadcom.com>
+Date: Wed, 24 Apr 2024 09:35:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -73,10 +73,11 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/4] Define i2c_designware in a header file
+Subject: Re: [PATCH 3/4] mfd: intel_quark_i2c_gpio: Utilize i2c-designware.h
 To: Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc: linux-kernel@vger.kernel.org,
  Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
  Mika Westerberg <mika.westerberg@linux.intel.com>,
  Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
  Lee Jones <lee@kernel.org>, Jiawen Wu <jiawenwu@trustnetic.com>,
@@ -88,9 +89,10 @@ Cc: linux-kernel@vger.kernel.org,
  "open list:SYNOPSYS DESIGNWARE I2C DRIVER" <linux-i2c@vger.kernel.org>,
  "open list:WANGXUN ETHERNET DRIVER" <netdev@vger.kernel.org>
 References: <20240423233622.1494708-1-florian.fainelli@broadcom.com>
- <ZihKtSble151A5mT@surfacebook.localdomain>
- <e55c35c2-1bff-4b12-aa3b-713c6085d303@broadcom.com>
- <ZikWps1DIVPNJeOp@smile.fi.intel.com>
+ <20240423233622.1494708-4-florian.fainelli@broadcom.com>
+ <ZihL1mb1OzwdLSvN@surfacebook.localdomain>
+ <95ed17d4-06e5-4ed2-add1-a2bf14e29dd0@broadcom.com>
+ <CAHp75VdaYOy0uuLuNCVKY4Y_fxx5_+xCEFGSR3dCKxkkDfGxBQ@mail.gmail.com>
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
@@ -124,60 +126,64 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
  7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
  95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <ZikWps1DIVPNJeOp@smile.fi.intel.com>
+In-Reply-To: <CAHp75VdaYOy0uuLuNCVKY4Y_fxx5_+xCEFGSR3dCKxkkDfGxBQ@mail.gmail.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000c18dd30616da227c"
+	boundary="00000000000063332e0616da42cc"
 
---000000000000c18dd30616da227c
+--00000000000063332e0616da42cc
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4/24/24 07:26, Andy Shevchenko wrote:
-> On Tue, Apr 23, 2024 at 06:21:21PM -0700, Florian Fainelli wrote:
->> On 4/23/2024 4:56 PM, Andy Shevchenko wrote:
->>> Tue, Apr 23, 2024 at 04:36:18PM -0700, Florian Fainelli kirjoitti:
->>>> This patch series depends upon the following two patches being applied:
->>>>
->>>> https://lore.kernel.org/all/20240422084109.3201-1-duanqiangwen@net-swift.com/
->>>> https://lore.kernel.org/all/20240422084109.3201-2-duanqiangwen@net-swift.com/
->>>>
->>>> There is no reason why each driver should have to repeat the
->>>> "i2c_designware" string all over the place, because when that happens we
->>>> see the reverts like the above being necessary.
+On 4/24/24 05:37, Andy Shevchenko wrote:
+> On Wed, Apr 24, 2024 at 4:28 AM Florian Fainelli
+> <florian.fainelli@broadcom.com> wrote:
+>> On 4/23/2024 5:01 PM, Andy Shevchenko wrote:
+>>> Tue, Apr 23, 2024 at 04:36:21PM -0700, Florian Fainelli kirjoitti:
+>>>> Rather than open code the i2c_designware string, utilize the newly
+>>>> defined constant in i2c-designware.h.
+> 
+> ...
+> 
+>>>> -#define INTEL_QUARK_I2C_CONTROLLER_CLK "i2c_designware.0"
+>>>> +#define INTEL_QUARK_I2C_CONTROLLER_CLK I2C_DESIGNWARE_NAME ".0"
 >>>
->>> Isn't that a part of ABI between drivers, i.e. whenever ones want to
->>> request_module() or so they need to know what they are doing, no?
+>>> So, if you build a module separately for older version of the kernel (assuming
+>>> it allows you to modprobe), this won't work anymore.
 >>
->> Yes, the drivers should know, but as evidenced by the two patches above,
->> there was still room for error. If we have to abide by a certain contract,
->> which is platform_driver::driver::name, then we might as well have a header
->> defining it no?
+>> Sorry not following, was that comment supposed to be for patch #1 where
+>> I changed the i2c-designware-pci to i2c_designware-pci? modprobe
+>> recognizes both - and _ as interchangeable BTW.
 > 
-> Maybe, I simply don't like the manipulations with parts of the device instance
-> names / driver IDs / driver name, which all become mixed after this series.
+> I'm talking about something different. Let's assume you have a running
+> kernel (w.o. signature or version requirement for the modules), then
+> you have a new patch on top of it and then for an unknown reason you
+> changed. e.g., designware to DW in that definition. The newly built
+> module may not be loaded on the running kernel. Also note, here is the
+> instance name and not an ID in use. The replacement is wrong
+> semantically.
 > 
 
-That is fair enough, although there is definitively an expectation that 
-the clock name will match the dev_name() of the i2c bus, which is why it 
-changing or shortening the names as attempted by Duanqiang ended up not 
-working.
+See my response in the cover letter, the instance base name is not 
+independent from the i2c-designware-platdrv::driver::name because 
+otherwise the clock lookup done by devm_clk_get_optional() will fail. So 
+that change in this patch is entirely intentional and actually ensures 
+correctness if someone were to change the i2c_designware platform driver 
+name in the future for whatever reasons.
 
-This call in i2c-designware-platdrv.c is:
-
-dev->clk = devm_clk_get_optional(&pdev->dev, NULL);
-
-and because the name is NULL, we end-up searching for a clock named 
-dev_name(), and if we have a mismatch, then we won't find it.
-
-So the i2c_designware name is really something we must be sticking with, 
-or change *globally* for a) device(s) binding to the driver and b) a 
-successful clock search.
+As far as catering to the specific example you gave, is not this just 
+fraught with peril regardless of what is being changed in the kernel? 
+Any constant that is serves as a contract between independent parts 
+getting out of sync will result in some misbehavior. The only solution 
+that I can think of which is edging towards over engineering is to 
+export a string symbol which contains I2C_DESIGNWARE_NAME and then make 
+other modules dependent upon that symbol to enforce some sort of runtime 
+resolution, though I think your example could still be made to fail.
 -- 
 Florian
 
 
---000000000000c18dd30616da227c
+--00000000000063332e0616da42cc
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -248,15 +254,15 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBUGupq8WueQNrj4
-kBMtABb0ERjusC1YZ0AqtHh6qam0MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTI0MDQyNDE2MjY0MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKAvNOWBVAhBop1c
+EbYotzTKV40A+zsp1p0rcN7AS+d1MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTI0MDQyNDE2MzUzMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCeOl/MwC6XzDpCk88VVFBbNwWo4oANEpej
-w2riAMtoUhBMb7jkESEUogxqKvm0rsfo4JHtkfawJM+qMxtVUaHPLoYxzRTQzd11tVLNgItqGOsM
-BBUNJ6KPIdb9/FFugIOcx9FmosKPGYzyqtiePy36YRT1g7Urv6+4Pr+6ZlLkFP9PH7hVpNwqsTKm
-pRBV1amPz1/8O4W+vp5BeKgwwAof3tzunhlwc1NDjYlZxk36iwoFRXA41BM5KCp4/PNENvw7XIuc
-SemJlZgrCqVXAQo8KCtqSdN+XpRGGwYkv+B07I0m8N8/r0oQKYotxPY3YqieZMdYhrxHoug2+OTO
-ozz+
---000000000000c18dd30616da227c--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAPG+2m1TkxvX/8iQc2SnbrprppfwXqqYp7
+ThT/mwtcxz67QRUu0E6QCF4JihRUzZP5jhjRteLq7wcpbDvgSyCS4GnYyssbk6Xfbds2ID5/Gc3i
+b4OhA/29tpQ+W0xM4bAIW0oUYR+rAqsgvFteQONT9hkBPAb0pwMlM7bn8ZySQnY3JVzIWDifjM2n
+L++yQj3qDrK3DAalMrjsZYWjKOcm7SH1zqX9jryy51uxydwderFlp1Y7DgIYraHUYKxpMK4p1a7d
+tUQPwSIXwhk1gBQLOOZ39ipR6ICH2Fd9+gvFIPPP/klg6pDuEUkBBmq+JSVhW0w5h7Mcvb/MN8Br
+TRdp
+--00000000000063332e0616da42cc--
 
