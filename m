@@ -1,71 +1,71 @@
-Return-Path: <linux-i2c+bounces-3092-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3093-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 614088AFDD3
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 03:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5372D8AFF66
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 05:20:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84A6F1C2278B
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 01:28:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78E4E1C2215B
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 03:20:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 821C3C13D;
-	Wed, 24 Apr 2024 01:28:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2200A128360;
+	Wed, 24 Apr 2024 03:20:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="c3ncHWhI"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="RaYvjQxZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8155695
-	for <linux-i2c@vger.kernel.org>; Wed, 24 Apr 2024 01:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889268836
+	for <linux-i2c@vger.kernel.org>; Wed, 24 Apr 2024 03:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713922112; cv=none; b=EQdp8W4nXNC9OlitZUjc/QWUgd1862velDv9PB4llrvbyYZCa/IzEhR5HDGr9cpKy3UtTSPS3dSupOSlbKV7vFqa/wiodju8WMk5NPHXoGoBC91shPJdBiIW0m1Fi2FFnTVs4q5Fp2DpFyNDG4TgWHTkckXD1SuIh8Z5vkfQvcY=
+	t=1713928808; cv=none; b=leUCFHF4Z2Bd/qXcykSwocqLTrUS5VZ1Zff8JUdkbIhXGBjFbt9vW5usfXwlAYU4UtDLNiLhrbFMWHtYARPmbLfC8FqZ8oJNKk3fpJvb/GkMLpfDQyNrBi4rdyW8MUYaLIXZgR3390AjLcxJNnRqrah14NA9jo+oFdYWYrniQMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713922112; c=relaxed/simple;
-	bh=Vgp5ky0trVGExFJv0sD4ED6OSPqbAdsj+6/j4QEN2V4=;
+	s=arc-20240116; t=1713928808; c=relaxed/simple;
+	bh=MPJkYGVx4z7aVFK5bKY8+TSpcXt1kxpoAmFjbzul108=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tbQ2s20ESaghPJSdfFp95z2m6sWSzUrZgQ1ZKtAmbUMLR0e0T06HoR5SczeCEadfqY2gHXiqQJYteblR4WSOU5zsqzB2fsE2im7B9DBx5ZTM4eCHlonWjt8T9Uj308BeJJL9rDf4Hzf3pfXDHWgVAN60Fjum+TyEZuYIW/mMqGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=c3ncHWhI; arc=none smtp.client-ip=209.85.210.180
+	 In-Reply-To:Content-Type; b=CFXuzXEDBvWoT23w0YCXEelBWswxMX68mglVH6PwPiwYBvpAL7p0hkWFDgzvtkI3516fYSJiFs+eldj7Go5Z7iSqByAT93oHXn6KY5z+057ra72DjYZ1cecSA1dWWjF1/0fXtiKVb0F9jCkZjiCp3y2FfMpazGhVBcsR+GBTUAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=RaYvjQxZ; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6eced6fd98aso5815558b3a.0
-        for <linux-i2c@vger.kernel.org>; Tue, 23 Apr 2024 18:28:29 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ed3cafd766so5281500b3a.0
+        for <linux-i2c@vger.kernel.org>; Tue, 23 Apr 2024 20:20:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1713922109; x=1714526909; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1713928807; x=1714533607; darn=vger.kernel.org;
         h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FRkWtehoaPLaOoITPZESZLa8/JZAJrTj5JvhUYgOYQ0=;
-        b=c3ncHWhIwRokmhsIahtUf1i9Qh2/tptN5E7xwHhh7mm3f7A9aCV8RdwCarbda3uIu3
-         fqTDR4WTgS9TuJqOJ9mLN/ZfgldecdOoJwzfOBju9S7wPbfEGlq/o8+PQ79M97S8/P+j
-         DTMgfk9HwSi4VUzuRN8vPSpz/YBWDHNuY40RE=
+        bh=4jA7+X2hNBiufaYFdtz7gWY0aejJaMNTllgiWEV8v4o=;
+        b=RaYvjQxZNo9qOa6OnEDeFyA+V8EvaOdU7FiF57Ln3+jeuVn3XiUg5AUi0SlKxI6qf6
+         D2h4n31pV49oW4Dgcy42dNvycTL6LN+j8O4uffUByStIrhuon+l3Ghfkr4KCX7x0rqsJ
+         c58YpsTyJuLGj+/cJqG3PyzKXp7ra+MIAIS18=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713922109; x=1714526909;
+        d=1e100.net; s=20230601; t=1713928807; x=1714533607;
         h=in-reply-to:autocrypt:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=FRkWtehoaPLaOoITPZESZLa8/JZAJrTj5JvhUYgOYQ0=;
-        b=Tv+sOBiQ1xskvggbCnTgQNaefibWkKOMb3pYVnCutauKyhZU+v3IDfnoC744DUsLzk
-         qU+z/8XgpCMVCC+hNLudDTaYNvff6167fu5toLpBQMmsHwMHvGAHQDQXdFWV8qh5KMsZ
-         dzbAe3kbBvrxJsXlbs5T+mWWodfMGKXfQ64Hgd9tCoXcgGJ/b7IIfHRgjeRilMmW/sk6
-         52o6f0mYDi6tfRgO5aUtGccGhQ446JKK7ZxPx+wiHtQLqIGPD7/r6tfhkbqEEFOLevf8
-         aQELg7QIYo6oOOBUWzVUN54XE+H4x/ImW5reFThrfnFT9NRZN1tHI99VEz+v76HaUJhB
-         wmtw==
-X-Forwarded-Encrypted: i=1; AJvYcCXEhIrN8nBsiClqCP48bxoDpeqCEHAuJeucfMq36d6rjpwbi8XjjDmgvTsu0BIQ7EXbKbPFWb3fAMUMVAYj7rHiyeBrGfoEV+va
-X-Gm-Message-State: AOJu0Yz/Mt8HylR27sDSomS3n8yR+WFqePlkfPMRFERjs6+OZIqBDxAg
-	r3bipcDPBBpt1DcHKc4aOrztRvrOhbEv2U1I/zvvwn6NNYPbtxqUwrQYdGy4Lg==
-X-Google-Smtp-Source: AGHT+IEWsr1LSwROJT8IjfHo25z3YV9vF2mRKNKNUQfk6cxPJYb16NMol83UFoJ6Kb8JngDhJ8H9qQ==
-X-Received: by 2002:a05:6a00:a0e:b0:6ea:b818:f499 with SMTP id p14-20020a056a000a0e00b006eab818f499mr1280142pfh.19.1713922108903;
-        Tue, 23 Apr 2024 18:28:28 -0700 (PDT)
+        bh=4jA7+X2hNBiufaYFdtz7gWY0aejJaMNTllgiWEV8v4o=;
+        b=l37s+uIPVDS525oztB5j/miYwZl2ztthAKSST6BHEq0PccIeKZbVhQl2W6w1ga8eYR
+         hezgVZ+nc78GMqBUTHdEVjE/lx4WKDGU/0zj2cHBnk3CxqCVxjW/3v1qeZsQkj7LytdE
+         73JCO0ntVA9N/SdPVgPQSvzb8lo+e8z1Fyq6A/L/eXHmZz0rltAjGJmr3L9maGiVGalU
+         n9GfHNN+6gCHk5X2BQJHvqEHjFy1AdU1JL+23euVKPum826Kj/TC/XnKoM6EaWggJK7+
+         uWAQZY7UIDG2SJictvaPKsolX1eY6iRSbX82kX3YeNkWO8B0Swr9Zf41q+xH2D3Dl2UK
+         uPeg==
+X-Forwarded-Encrypted: i=1; AJvYcCVfekGfBBqGg7BN+j/VpPBpcEtQr0RmrYLOx4uSsaTqR9pWViDXW+kTMVK0U52j+R1+seLsi07FrF/g7ZCtIeOT7CEk4h0vxdfE
+X-Gm-Message-State: AOJu0YwU3I1w2IlxojkWGzlPUqoeNsxjn6wEEsjboDB8BDnWan+HqS3G
+	bHxIzpElZgXmjLs0WwiUNYKA3T/rAtO+nJL2XgUkSQazGmfRIeb4PJCW1eB2aQ==
+X-Google-Smtp-Source: AGHT+IGOqTDWHZwB92KOICduJe0v24E3NfVNBSjALHQ5jkohouPor5aVbcHtPB0BPhwZ4bmp4P5d0w==
+X-Received: by 2002:a05:6a20:244f:b0:1a7:91b0:4f2a with SMTP id t15-20020a056a20244f00b001a791b04f2amr1365655pzc.41.1713928806691;
+        Tue, 23 Apr 2024 20:20:06 -0700 (PDT)
 Received: from [192.168.1.3] (ip68-4-215-93.oc.oc.cox.net. [68.4.215.93])
-        by smtp.gmail.com with ESMTPSA id v2-20020aa78082000000b006eab6ac1f83sm10308462pff.0.2024.04.23.18.28.26
+        by smtp.gmail.com with ESMTPSA id x6-20020a170902ec8600b001e446490072sm5151047plg.25.2024.04.23.20.20.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Apr 2024 18:28:28 -0700 (PDT)
-Message-ID: <95ed17d4-06e5-4ed2-add1-a2bf14e29dd0@broadcom.com>
-Date: Tue, 23 Apr 2024 18:28:26 -0700
+        Tue, 23 Apr 2024 20:20:04 -0700 (PDT)
+Message-ID: <1d1467d1-b57b-4cc6-a995-4068d6741a73@broadcom.com>
+Date: Tue, 23 Apr 2024 20:20:01 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -73,7 +73,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] mfd: intel_quark_i2c_gpio: Utilize i2c-designware.h
+Subject: Re: [PATCH 2/4] mfd: intel-lpss: Utilize i2c-designware.h
 To: Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc: linux-kernel@vger.kernel.org,
  Jarkko Nikula <jarkko.nikula@linux.intel.com>,
@@ -89,8 +89,8 @@ Cc: linux-kernel@vger.kernel.org,
  "open list:SYNOPSYS DESIGNWARE I2C DRIVER" <linux-i2c@vger.kernel.org>,
  "open list:WANGXUN ETHERNET DRIVER" <netdev@vger.kernel.org>
 References: <20240423233622.1494708-1-florian.fainelli@broadcom.com>
- <20240423233622.1494708-4-florian.fainelli@broadcom.com>
- <ZihL1mb1OzwdLSvN@surfacebook.localdomain>
+ <20240423233622.1494708-3-florian.fainelli@broadcom.com>
+ <ZihLhl8eLC1ntJZK@surfacebook.localdomain>
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
@@ -124,38 +124,44 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
  7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
  95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <ZihL1mb1OzwdLSvN@surfacebook.localdomain>
+In-Reply-To: <ZihLhl8eLC1ntJZK@surfacebook.localdomain>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000007f58b40616cd96c0"
+	boundary="000000000000b990730616cf258c"
 
---0000000000007f58b40616cd96c0
+--000000000000b990730616cf258c
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 4/23/2024 5:01 PM, Andy Shevchenko wrote:
-> Tue, Apr 23, 2024 at 04:36:21PM -0700, Florian Fainelli kirjoitti:
+On 4/23/2024 5:00 PM, Andy Shevchenko wrote:
+> Tue, Apr 23, 2024 at 04:36:20PM -0700, Florian Fainelli kirjoitti:
 >> Rather than open code the i2c_designware string, utilize the newly
 >> defined constant in i2c-designware.h.
 > 
 > ...
 > 
->> -#define INTEL_QUARK_I2C_CONTROLLER_CLK "i2c_designware.0"
->> +#define INTEL_QUARK_I2C_CONTROLLER_CLK I2C_DESIGNWARE_NAME ".0"
+>>   static const struct mfd_cell intel_lpss_i2c_cell = {
+>> -	.name = "i2c_designware",
+>> +	.name = I2C_DESIGNWARE_NAME,
+>>   	.num_resources = ARRAY_SIZE(intel_lpss_dev_resources),
+>>   	.resources = intel_lpss_dev_resources,
+>>   };
 > 
-> So, if you build a module separately for older version of the kernel (assuming
-> it allows you to modprobe), this won't work anymore.
+> We have tons of drivers that are using explicit naming, why is this case
+> special?
 > 
 
-Sorry not following, was that comment supposed to be for patch #1 where 
-I changed the i2c-designware-pci to i2c_designware-pci? modprobe 
-recognizes both - and _ as interchangeable BTW.
+It is not special, just one of the 3 cases outside of drivers/i2c/busses 
+that reference a driver living under drivers/i2c/busses, as I replied in 
+the cover letter, this is a contract between the various device drivers 
+and their users, so we should have a central place where it is defined, 
+not repeated.
 -- 
 Florian
 
---0000000000007f58b40616cd96c0
+--000000000000b990730616cf258c
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -226,15 +232,15 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJ0H8SH06scMlcA8
-mj6Vyvw+fxXL8FYWmrQsKsOG5V39MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTI0MDQyNDAxMjgyOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIGZpLtJyEaQyahzN
+zaRBDKg6nBNAiDGQBsF8v4ObHQGxMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTI0MDQyNDAzMjAwN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDokvg1RLnCiSRV4eQmkZF7OUhV+qw9e+qP
-fjEw2pUXgCXzQkWMGy8ZaoY/l8rfuaQGdT8rj33VUbfqCELafAeMQcoe0cWMlkKymGhWvEuN9RkE
-fxzLeAvLuDe7yq8nil0xI2QhV/ATqdWUYBEz2u+41qWpHP0ksLM5mzRIflTal9kR305zd8Z2JwBY
-DIPZ9MN1qiGjLy0Z1JhOxFh8SoT4q6HSzIj0tUV7fXdDRkoI5P1JOEzJynnplV4J249B1//6+dKU
-G4nW5bvSwqkCWR0w3tqp72bcFxKhzZdEJrMgQBf3xYs6nK0FP4zpQ7263o8bIcqaVO55/mdQB6wR
-HrBO
---0000000000007f58b40616cd96c0--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCUeqm6sFJ4w6h5qAMwkrNkccfQnVfYet4c
++drl+ZVgyDv5i6ySA/vC1CmTMA9bg6vGwu0y4B1zzLd98UflcN9jKKgOEfaudE9Z8Mj+yHb/vPl0
+RNl6MJSL23k5dJqf8QPOVXfEwpLoLiFMMWCc1UVu4xA7gbuFF696LRAc+tVatLXqwfq0ygtAThMS
+Jdw5KORdC4KyuYvftXvdTBWJiOxazU92dETWYgy0sS6C/fYcr5mcjfa/VGJalmMTyncBbsTJL7ld
+PJ/+DSmJ8QFaej8Jbf40sOhOSDvLU3ybxHRgo7cA09Bwe8f7eNsNm/BioL2f5Y+sdWNBErk8S9YE
+J0Ai
+--000000000000b990730616cf258c--
 
