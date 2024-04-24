@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-3109-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3110-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 579558B0D6F
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 16:58:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3184D8B0D79
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 16:59:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B1211C249EB
-	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 14:58:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5516C1C24CEC
+	for <lists+linux-i2c@lfdr.de>; Wed, 24 Apr 2024 14:59:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BBCB15F31F;
-	Wed, 24 Apr 2024 14:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E13815EFCD;
+	Wed, 24 Apr 2024 14:59:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lbswhj58"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L6lQLvi9"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7426B15ECFE;
-	Wed, 24 Apr 2024 14:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6854B15ECE4;
+	Wed, 24 Apr 2024 14:59:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713970723; cv=none; b=VZyC5Njw79pf2LrZOHggv8/MQl8StkVgXcpbo+4rBgN1Ob53YiAIE9JoHf2io/kLkTVtNqc7UWlnbkTjZ1YxXTeTFqLdGUcfI2E1FKzXmKOw5TE+uYmnf92hkrs/gyfzIKdMTfGM3PL725MfVpXfIgjj/lZsRL0fTVvpuAXbwnY=
+	t=1713970777; cv=none; b=WalRZtdsCJjRWPZPx/IqGmvjwQ+HRZKF2R2+Br88i2hIurCpYHd6grwksWhq2DqVVzAgxEk5y4qDrCYFfXzYCmUZzr6ho5YLZozqVWCxqwQRPKo/3U5xPEuvWrACBtIv63KFtTH5vPRASBjYcaKXLuyRW/dllxIk1Xajj40xnY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713970723; c=relaxed/simple;
-	bh=wj+MmZtf5+VASW9gIjSu3qcMMHPCxn+8ARLhlwlyrFY=;
+	s=arc-20240116; t=1713970777; c=relaxed/simple;
+	bh=K4ExJ6GuSInNKXFwEk1HyFMrEa7tI+fZTKmnaHlNJw8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ZQZEhClng0yVk0FDYI50/lWZP5EUBJb1PoE/QCPDYm0KtgouI6df34N6i1JHoFPr/NX3YJc+qaqQtNjnyKkpIn8Jx79jkj7bcCvAUAJr8EfJxoOtBr7LM5d6nzNcCBLikq0BkXXvztnsksj5LIqYd8H+hY5iTcxvtny19Md2cBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lbswhj58; arc=none smtp.client-ip=209.85.214.175
+	 In-Reply-To:Content-Type; b=UScEEnlAOzz3KngmJe+9fyuXtlSEQFlLN/X5czqevz1eO0avnU5FxDCP3Bz6TujC0O5jOTuIFgZ9K3K2GHjm0jTKOyzBcHgxl93bgs2/lEDoCDYqwyDCUVzMX+aDiwr0JD1rzpbohjCD2GLDwPqy82HZXc7kscJ8Ag1D4eb9hyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L6lQLvi9; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1e83a2a4f2cso40334285ad.1;
-        Wed, 24 Apr 2024 07:58:41 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1e2c725e234so8472365ad.1;
+        Wed, 24 Apr 2024 07:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713970721; x=1714575521; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713970776; x=1714575576; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
          :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=BqCRomP2j+KXQnk5cDEaaIseDhvWGvZmbsLHr51E5oU=;
-        b=lbswhj58K38wqZPJIWbBs/CPjMY+pNmwIqUwMRcqA0VNwx+w7mydTbNkyzJwqRE56M
-         8HUOjLQgCNy9upYSTVOtaOVQiBZ9cC4Ir8hlKGzNsc9/dmXyS/W41Y83TOrMYbcZbR5N
-         T9QJ6XdgohjsCMvoMWTnUHZNOCp7YTrDAVedJCu5XqtNmhrbaaNdfOrP2oWfWpzvOjh7
-         JrabfBb1/KjPijEFiIla9nVOUFlXvGGGABPSE2XJDZnL1iR34XBI62RrBov0HBIpXxbK
-         L/Bdl56jYDwGIiYras3A5A3BYwRX9EhTZ4cpHtaFk1Qy6KojTjllSb3qUoq7wwcw4R/d
-         H+dw==
+        bh=X74eyG1DXY+71bNT+un+ltxuft24ng2YP6D2WUX4f2o=;
+        b=L6lQLvi9G7c7v9KFUe99/729EvO4yg/DxEBu0AxrW6KXMLNYlpXZp3huhwYFPITsxM
+         fMyI8K+1bY9a+497o/hczMx6dFCTb8/2VxoPnUYcUapVcO6veRLikuHRmr7GGuKwYIJm
+         lzCRrGKtw32zZ4Cwxp4OK9E88TqhHOIjM5mH+bh5NzYAAQXnLVTw8SFRMLjSyB1M5Civ
+         iFUa+AUelS5eFSI8Z2QF6c2JtceneMInqE1n9NPXrL30tlV+VtrDqFE5/4Q1voTMN7IB
+         27C/9388CJg0VFV8YSfmvqbAkwGq6UgSEWrqnujn8qNTK8ZWHwp3/iO4F8W/ZGA+y3hq
+         vtaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713970721; x=1714575521;
+        d=1e100.net; s=20230601; t=1713970776; x=1714575576;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:user-agent:mime-version:date
          :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BqCRomP2j+KXQnk5cDEaaIseDhvWGvZmbsLHr51E5oU=;
-        b=p8ExgPDszKwOs2Dq9HjJ/stKzOBVtUdL/NsytbyWvMYExK8qTH1zoupF90+8qkC19t
-         Wa78LljjU/0fuSypZpI9kOeQ7Q0EHwr/Vqj1NfurBkGSMM1HT/YLK4A+coTiYxoppHWN
-         a0mHqrF8R/KTu96CoSk8J7mwElS1qyAWCVpqAPgOOuqky2sH0eHV6vaPheYAMOmXedA9
-         RxOe7Rq0s1T5zTy2zzJfUBkGcDl8mf6PSgGG1Rp0MZg+bER8/umXPiucORUojXfBUs6m
-         TT+LXhrWXHwD4vG9/YofbOKDN/Ol5/6gXkRx9B/vJTZG4v4jnSlXROKJW9oaP5Vt+Egb
-         CKTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWGO/o5IbamLHpJOvVhrm8FD8arOwWZnlRFlgxOk00TLf9/r36FDJRK5h7yK7o6IsZ3OOngQk134e3kSU0MFPNEy63e+baDDlgrbCCRs4/zT86daCVChI1HNqJTErFkwe7E8g3FiRk0TGoxLyHDiraiY+DY0JnwSvcicpvGWSMBwcJoUHkDfpHVLT6Dztp+librkJDiLM8NrXustbZhRP/uZQ9/twX9cEe03NGjipM5kdHwLKrJ8jh69Ww4
-X-Gm-Message-State: AOJu0YyOi1MWtX5b1HHYYjo02RSchZ48JE0sYbTNoyLBlL6Hl+QoQu4T
-	nRftRetyWMVoGW9pxVvJ3smbZYVFUqV0aaeg3DSUtrJSabdvVJdR
-X-Google-Smtp-Source: AGHT+IELqL/OYTBYFMKKpWyzTxsQH2QVHDHpPYQodRl8lZ9PEaUxgBceVpm5bknl0arSGS1Dc1h/8w==
-X-Received: by 2002:a17:902:e849:b0:1e4:32ba:1ef with SMTP id t9-20020a170902e84900b001e432ba01efmr3024385plg.13.1713970720597;
-        Wed, 24 Apr 2024 07:58:40 -0700 (PDT)
+        bh=X74eyG1DXY+71bNT+un+ltxuft24ng2YP6D2WUX4f2o=;
+        b=dRW2Dod5GMvUaZPdGciH82PEKvEHaWqWyVYNZm0hxxej0JVODL7EX6R/5z893Ym+EV
+         e6MZlhzYRygaL1WoBAPLJwnAR/J+U6fHF0XeALPdoG4xx0ncIKXYA7TRpqIeJU0icG7f
+         pHDzoVXH8qABIRQvhAnJeqqsBWWLzQR84vkhJfV5zs5h9fauH9mO6crijYMowC8s8nJp
+         n/GQQgJV6wLlUeDStl1vFCJTj3XG3ZWm8LnhpLeRfyeM2rPbeYXqMin5U/zcqel5orjm
+         2Dcqlqns0KQ791R2EkBiuQAW1p9rrgwAE2R6ejmQ2zw/OODFhicCxkcH9woezj0pxp3k
+         K22g==
+X-Forwarded-Encrypted: i=1; AJvYcCWDIeJGcKHs+uoA4AIrz7uNxmaYWWkXejjQ0GdzocKgCar9JOGuyPpApS36A9zjzw1oeCbfMQa3/6H7qUzgF0JJvY0BBvxgdqpAaM1eUpMURASgXLF47TLZa//2ruh9yEJeds3xHecvOCTlhS7AERuWY3+VxfckkWNG7h++gqC4nV1XGB/oPNqxiNp9V3A2xTDWCZd98C5D6S1NyGaPDNF/j5wNryzTMQp5f0+zRIhH3mlmWBY9QcKGeH/v
+X-Gm-Message-State: AOJu0YxVaseueNsDZoBEX1/msAs1/gFIH7EoC55HJCTuKhn95uQTOx3c
+	bLDapXLTiPlhRABSWhSa7QiFtPh1uMcFjicGWOmVzJKcKSMXvcb0
+X-Google-Smtp-Source: AGHT+IH0ptHwUtqY8w4E+oyHPHd9wAxcdWO8sMQ345sdNTGWE/81J21xmHrBwm16sMQxwZAchKbajw==
+X-Received: by 2002:a17:902:d491:b0:1e8:682b:7f67 with SMTP id c17-20020a170902d49100b001e8682b7f67mr3977371plg.29.1713970775527;
+        Wed, 24 Apr 2024 07:59:35 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n6-20020a170903110600b001e668c1060bsm11995475plh.122.2024.04.24.07.58.38
+        by smtp.gmail.com with ESMTPSA id d1-20020a170903230100b001dee4a22c2bsm12028190plh.34.2024.04.24.07.59.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Apr 2024 07:58:39 -0700 (PDT)
+        Wed, 24 Apr 2024 07:59:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <430da9c0-f865-43e5-b9f0-935f8b68763e@roeck-us.net>
-Date: Wed, 24 Apr 2024 07:58:37 -0700
+Message-ID: <2b678387-2b19-4176-813d-408c121d9a87@roeck-us.net>
+Date: Wed, 24 Apr 2024 07:59:32 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,20 +78,21 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/3] hwmon: (pmbus) Add support for Infineon XDP710
+Subject: Re: [PATCH v1 3/3] Documentation: hwmon: Add infineon xdp710 driver
 To: Peter Yin <peteryin.openbmc@gmail.com>, patrick@stwcx.xyz,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
  Jonathan Corbet <corbet@lwn.net>,
  Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
  Patrick Rudolph <patrick.rudolph@9elements.com>,
- Michal Simek <michal.simek@amd.com>, Marek Vasut <marex@denx.de>,
- Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner <lukas@wunner.de>,
+ Cosmo Chou <chou.cosmo@gmail.com>,
+ Andre Werner <andre.werner@systec-electronic.com>,
+ Lukas Wunner <lukas@wunner.de>, Bjorn Helgaas <bhelgaas@google.com>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-i2c@vger.kernel.org
 References: <20240424095604.3425857-1-peteryin.openbmc@gmail.com>
- <20240424095604.3425857-2-peteryin.openbmc@gmail.com>
+ <20240424095604.3425857-4-peteryin.openbmc@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -137,282 +138,123 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240424095604.3425857-2-peteryin.openbmc@gmail.com>
+In-Reply-To: <20240424095604.3425857-4-peteryin.openbmc@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 4/24/24 02:55, Peter Yin wrote:
-> Add support for xdp710 device from Infineon vendor.
-
-Drop "vendor". Maybe "Add support for Infineon XDP710.".
-
-> This is a Hot-Swap Controller.
+> Add document for xdp710 device
 > 
 > Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+
+Please merge with the first patch of the series.
+
 > ---
->   drivers/hwmon/pmbus/Kconfig  |   9 ++
->   drivers/hwmon/pmbus/Makefile |   1 +
->   drivers/hwmon/pmbus/xdp710.c | 155 +++++++++++++++++++++++++++++++++++
->   3 files changed, 165 insertions(+)
->   create mode 100644 drivers/hwmon/pmbus/xdp710.c
+>   Documentation/hwmon/index.rst  |  1 +
+>   Documentation/hwmon/xdp710.rst | 83 ++++++++++++++++++++++++++++++++++
+>   2 files changed, 84 insertions(+)
+>   create mode 100644 Documentation/hwmon/xdp710.rst
 > 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 557ae0c414b0..d72bdecf758a 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -511,6 +511,15 @@ config SENSORS_UCD9200
->   	  This driver can also be built as a module. If so, the module will
->   	  be called ucd9200.
->   
-> +config SENSORS_XDP710
-> +	tristate "Infineon XDP710 family"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Infineon
-> +	  XDP710 device.
-> +
-Drop "device"
-
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called xdp710.
-> +
->   config SENSORS_XDPE152
->   	tristate "Infineon XDPE152 family"
->   	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index f14ecf03ad77..4fe630793721 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -51,6 +51,7 @@ obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
->   obj-$(CONFIG_SENSORS_TPS546D24)	+= tps546d24.o
->   obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
->   obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
-> +obj-$(CONFIG_SENSORS_XDP710)	+= xdp710.o
->   obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
->   obj-$(CONFIG_SENSORS_XDPE152)	+= xdpe152c4.o
->   obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
-> diff --git a/drivers/hwmon/pmbus/xdp710.c b/drivers/hwmon/pmbus/xdp710.c
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index 1ca7a4fe1f8f..b2546925fb15 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -250,6 +250,7 @@ Hardware Monitoring Kernel Drivers
+>      wm831x
+>      wm8350
+>      xgene-hwmon
+> +   xdp710
+>      xdpe12284
+>      xdpe152c4
+>      zl6100
+> diff --git a/Documentation/hwmon/xdp710.rst b/Documentation/hwmon/xdp710.rst
 > new file mode 100644
-> index 000000000000..3ed324bd0db6
+> index 000000000000..083891f27818
 > --- /dev/null
-> +++ b/drivers/hwmon/pmbus/xdp710.c
-> @@ -0,0 +1,155 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Driver for Infineon XDP710 Hot-Swap Controller
-> + */
+> +++ b/Documentation/hwmon/xdp710.rst
+> @@ -0,0 +1,83 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/bitops.h>
-
-Include files in alphabetic order, please.
-
-> +#include "pmbus.h"
+> +Kernel driver xdp710
+> +====================
 > +
-> +#define XDP710_REG_CFG		(0xD3)
-> +#define XDP710_V_SNS_CFG	(0xD4)
-> +#define XDP710_CS_RNG		(0xD5)
-
-Unnecessary ( )
-
+> +Supported chips:
 > +
-> +struct xdp710_data {
-> +	struct pmbus_driver_info info;
-> +	u8 cs_rng;
-> +	u8 vtlm_rng;
-> +	int rsense;
-
-I don't see those values used outside the probe function,
-meaning it is unnecessary to keep them in struct xdp710_data.
-
-> +};
+> +  * Infineon XDP710
 > +
-> +/*
-> + * 0x00 to 0x09
-> + * 0x0A to 0x13
-> + * 0x14 to 0x1D
-> + * 0x1E to 0x27
-> + * 0x28 to 0x32
-> + * 0x33 to 0x3F
-
-Pointless comment. Who is supposed to understand what it means ?
-Besides, if it does mean what I think it is (matching lines of values
-in the array below), it is wrong and misleading. The last line in
-the array starts at index 0x32 (50) and ends at 0x3b (59).
-
-I more useful comment would be something like "table to map configuration
-register values to sense resistor values" or similar.
-
-> + */
-> +const int microOhmRsense[] = {
-> +	200, 250, 300, 330, 400, 470, 500, 600, 670, 700,
-> +	750, 800, 900, 1000, 1100, 1200, 1250, 1300, 1400, 1500,
-> +	1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500,
-> +	2600, 2700, 2800, 3000, 3100, 3200, 3300, 3400, 3500, 3600,
-> +	3800, 3900, 4000, 4200, 4300, 4500, 4700, 4800, 4900, 5000,
-> +	5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000
-
-This array has only 60 entries. The configuration register field
-is 6 bits wide. This means that configuration register values
-of 0x3c..0x3f will access values beyond the end of the array.
-
-> +};
+> +    Prefix: 'xdp710'
 > +
-> +static struct pmbus_driver_info xdp710_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = direct,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +	.format[PSC_CURRENT_OUT] = direct,
-> +	.format[PSC_POWER] = direct,
-> +	.format[PSC_TEMPERATURE] = direct,
-> +	.m[PSC_VOLTAGE_IN] = 4653,
-> +	.b[PSC_VOLTAGE_IN] = 0,
-> +	.R[PSC_VOLTAGE_IN] = -2,
-> +	.m[PSC_VOLTAGE_OUT] = 4653,
-> +	.b[PSC_VOLTAGE_OUT] = 0,
-> +	.R[PSC_VOLTAGE_OUT] = -2,
-> +	.m[PSC_CURRENT_OUT] = 23165,
-> +	.b[PSC_CURRENT_OUT] = 0,
-> +	.R[PSC_CURRENT_OUT] = -2,
-> +	.m[PSC_POWER] = 4211,
-> +	.b[PSC_POWER] = 0,
-> +	.R[PSC_POWER] = -2,
-> +	.m[PSC_TEMPERATURE] = 52,
-> +	.b[PSC_TEMPERATURE] = 14321,
-> +	.R[PSC_TEMPERATURE] = -1,
-> +	.func[0] =
-> +		PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_PIN |
-> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT |
-> +		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
-> +};
+> +  * Datasheet
 > +
-> +static int xdp710_probe(struct i2c_client *client)
-> +{
-> +	struct pmbus_driver_info *info;
-> +	struct xdp710_data *data;
-> +	int ret;
-> +	int m = 0;
+> +    Publicly available at the Infineon website : https://www.infineon.com/dgdl/Infineon-XDP710-001-DataSheet-v01_00-EN.pdf?fileId=8ac78c8c8412f8d301848a5316290b97
 > +
-> +	data = devm_kzalloc(&client->dev, sizeof(struct xdp710_data),
-> +			    GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
+> +Author:
 > +
-> +	memcpy(&data->info, &xdp710_info, sizeof(*info));
-> +	info = &data->info;
+> +	Peter Yin <peteryin.openbmc@gmail.com>
 > +
-> +	/*
-> +	 * Read CS_RNG Value
-> +	 */
-
-Those comments are pointless and similar to
-
-	x = 5; /* add 5 to x */
-
-> +	ret = i2c_smbus_read_word_data(client, XDP710_CS_RNG);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev,
-> +			"Can't get CS_RNG. Setting the CS_RNG to 0");
-
-If this is an error, abort the probe function and return it.
-If not, don't use dev_err().
-
-> +		ret = 0;
-> +	}
-> +	data->cs_rng = (ret >> 6) & GENMASK(1, 0);
+> +Description
+> +-----------
 > +
-> +	/*
-> +	 * Read V_SNS_CFG Value
-> +	 */
-> +	ret = i2c_smbus_read_word_data(client, XDP710_V_SNS_CFG);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev,
-> +			"Can't get V_SNS_CFG. Setting the V_SNS_CFG to 0");
-
-Same as above.
-
-> +		ret = 0;
-> +	}
-> +	data->vtlm_rng = ret & GENMASK(1, 0);
+> +This driver implements support for Infineon XDP710 Hot-Swap Controller.
 > +
-> +	/*
-> +	 * Read RSNS_CFG Value
-> +	 */
-> +	ret = i2c_smbus_read_word_data(client, XDP710_REG_CFG);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev,
-> +			"Can't get REG_CFG, Setting the Rsense to 0.33mohm");
-
-And again. Overall, I do think that those errors should be treated as fatal.
-I don't see a reason for ignoring them. If accessing the chip fails on that
-level, it probably fails entirely. If you want to assign defaults after
-smbus errors, please explain in detail in a comment why this makes sense
-and doesn't mean that the chip is not accessible.
-
-> +		ret = 3;
-> +	}
-> +	ret &= GENMASK(5, 0);
-> +	data->rsense = microOhmRsense[(u8)ret];
-
-Unnecessary type cast.
-
+> +Device compliant with:
 > +
-> +	info->m[PSC_VOLTAGE_IN] <<= data->vtlm_rng;
-> +	info->m[PSC_VOLTAGE_OUT] <<= data->vtlm_rng;
+> +- PMBus rev 1.3 interface.
 > +
-> +	m = info->m[PSC_CURRENT_OUT];
-> +	info->m[PSC_CURRENT_OUT] = ((m >> (data->cs_rng)) *
-> +				   (data->rsense)) / 1000;
-
-Unnecessary () around data->cs_rng and data->rsense and around
-the multiplication.
-
-	info->m[PSC_CURRENT_OUT] = (m >> data->cs_rng) * data->rsense / 1000;
-
-However, it seems to me that the right shift will result in accuracy
-loss. Something like
-	info->m[PSC_CURRENT_OUT] = ((m * rsense) >> data->cs_rng) / 1000;
-might avoid that.
-
+> +Device supports direct and linear format for reading input voltage,
+> +output voltage, output current, input power and temperature.
 > +
-> +	m = info->m[PSC_POWER];
-> +	info->m[PSC_POWER] = ((m >> (data->cs_rng)) *
-> +			     (data->rsense)) / 1000;
-
-Unnecessary () around data->cs_rng and data->rsense and around
-the multiplication.
-
-Your call, but DIV_ROUND_CLOSEST() might result in better accuracy.
-
+> +The driver exports the following attributes via the 'sysfs' files
+> +for input voltage:
 > +
-> +	return pmbus_do_probe(client, info);
-> +}
+> +**in1_input**
 > +
-> +static const struct of_device_id xdp710_of_match[] = {
-> +	{ .compatible = "infineon,xdp710" },
-> +	{}
-> +};
+> +**in1_label**
 > +
-> +static const struct i2c_device_id xdp710_id[] = {
-> +	{"xdp710", 0},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, xdp710_id);
+> +**in1_max**
 > +
-> +static struct i2c_driver xdp710_driver = {
-> +	.driver = {
-> +		   .name = "xdp710",
-> +		   .of_match_table = xdp710_of_match,
-> +	},
-> +	.probe = xdp710_probe,
-> +	.id_table = xdp710_id,
-> +};
-> +module_i2c_driver(xdp710_driver);
+> +**in1_max_alarm**
 > +
-> +MODULE_AUTHOR("Peter Yin <peter.yin@quantatw.com>");
-> +MODULE_DESCRIPTION("PMBus driver for XDP710 HSC");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
+> +**in1_min**
+> +
+> +**in1_min_alarm**
+> +
+> +The driver provides the following attributes for output voltage:
+> +
+> +**in2_input**
+> +
+> +**in2_label**
+> +
+> +**in2_alarm**
+> +
+> +The driver provides the following attributes for output current:
+> +
+> +**curr1_input**
+> +
+> +**curr1_label**
+> +
+> +**curr1_alarm**
+> +
+> +**curr1_max**
+> +
+> +The driver provides the following attributes for input power:
+> +
+> +**power1_input**
+> +
+> +**power1_label**
+> +
+> +**power1_alarm**
+> +
+> +The driver provides the following attributes for temperature:
+> +
+> +**temp1_input**
+> +
+> +**temp1_max**
+> +
+> +**temp1_max_alarm**
+> +
+> +**temp1_crit**
+> +
+> +**temp1_crit_alarm**
 
 
