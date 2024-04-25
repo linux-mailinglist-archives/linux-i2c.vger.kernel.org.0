@@ -1,123 +1,178 @@
-Return-Path: <linux-i2c+bounces-3146-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3147-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61F0C8B24C0
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 17:11:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7D588B24F8
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 17:22:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1746B1F226A3
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 15:11:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E2901F22E22
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 15:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B99C14A4D7;
-	Thu, 25 Apr 2024 15:11:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41ACE14AD1A;
+	Thu, 25 Apr 2024 15:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="S8rxhxUb"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="CnZPwa+4";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="tyGDmiot";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="CnZPwa+4";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="tyGDmiot"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E1014A087
-	for <linux-i2c@vger.kernel.org>; Thu, 25 Apr 2024 15:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB6A14B091;
+	Thu, 25 Apr 2024 15:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714057862; cv=none; b=pij+z/SimJKWyw1F+tLf4E6GEAkIVgT9yZ0kpQKudg35jPINGO2aMNQTlIR84Obb8AdCNTK/txOOuks3icB37PWZiUsdxz6sFd5A92PuyigDu8JCMLXtRgzIYHJCsfWE38fF6ZBaNP7njAx338mJTJrnFV9oGz1/3j8C0zAM+04=
+	t=1714058541; cv=none; b=FLzbEPSl/GzEdCBrJTQCvlDWIzfpgLJGsAr+4hxPDIofolX/Z/UUVmpwoPl2tKyEyHd98aNDLBA1Va4Mw/yTVN8T2wHZ7RQg18c+fv+QodDb07SE+gAtIAM+LM0CiWY7wZbELd7gcE1OnhDKrD5sv0GJpzSMdBBTgUH8Zj1faWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714057862; c=relaxed/simple;
-	bh=Fk95ireKfpBQ10rrJwz4JEvXmIebseNTHBXugPthMTU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UwNMLHUwSXS4qiQ8fYRD2YJXwtw2DDZCseJGGqlNLXtBrH4YdTUNdNGuF0Hs3pv/yz0tLB4zWjggTro/QA2hcKOTjSmlw7d99aUURRRYxL0ptdOWDtR9tjvLieYKmtOSqBUgj2uFNs8HIjoLTuuIbzs8E9s8hdNfS3qBRORSzvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com; spf=none smtp.mailfrom=pdp7.com; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=S8rxhxUb; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pdp7.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6f07de6ab93so1042304b3a.2
-        for <linux-i2c@vger.kernel.org>; Thu, 25 Apr 2024 08:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1714057860; x=1714662660; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AY93I7EEs+BmoPEYFWkauRLMs29koe27zKuQPhldmBo=;
-        b=S8rxhxUbJdvAayu3KL/qbN6Q2vu0lmWsfPV2AmfYc10H/mcsYJzakAx8tnasWp1PJb
-         NSTwPxGw/HHBOzhiZy+FW7uvlTmpWAF8JbUmPQkPaUjxSlUGB/sed2x5v9IjyM9q3WYh
-         CxNQF1aj6xMgKUNbkDAy8HNGwWp9ACvUNph5AbX6Q4qo5om96x1AqLm9W9AnyQQvj5bO
-         oCRXYHAAfb1ZiH+pY+/fv9T5Gk4kxFJY5opQSkwyBx5chtqSpYWNxjFRWLYU8ny853h7
-         otwPcwuJ4lFX8wqrwcdhBzI+aWdEGHScQCju/Yn+Wrk7yGvxs3r2pAviitQpxeKK4WxC
-         mqdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714057860; x=1714662660;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AY93I7EEs+BmoPEYFWkauRLMs29koe27zKuQPhldmBo=;
-        b=fqFFjvWaChyDzKQNsAvyZ9MA0oB973UdUshs/KBtU4fzrxjf/7URvMUA0hwoiuqrWk
-         c0uOHTMqqaX0Sf1ixoKmRHgms+VjzxPZppfgdU71TNQToD7u1rnZD8ffDPv9dLNd5ANh
-         uR6T4gV7RRXLvXa1+D98BQS8V/GavXXK6Eb25XLvjgN3LR8h/zbHMwXX7zO6s7RxbFmu
-         kXdHWjsMKuOxPDxlJ+WRoNlccly/1P/aAxnoesFggbAt7HZeNxDR+pCx6TeHApOSzutZ
-         MYdmC2CN1uqE8483RLAtQisk0Frh+yZH3ItOUqHiG4yUO90Snf8vu1JCzDeiOwd56dSl
-         CB9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUntquwWJoXiuG2MKJHNRctj0kVW2rpUod8uQhGY+Z8IR5/umZVLMrRLLU7opDyHwnl+GlaQRKcVw5lpptpkfaX/0QU69pM18gh
-X-Gm-Message-State: AOJu0Yw+b5ijzF0plBN74+FGeyWTN8kDE1VeiVzv8RUYf18bBsSSKJ/o
-	L5eEGMaZPCQZVGgth3RuvLuY69UqTcZR9n/G885F+Cwa5x3M/tplGh257e6DOgE=
-X-Google-Smtp-Source: AGHT+IHvY7DZYX+EkssFptxYTzjgaUmPIJ9qGQ0l15Q85PHvyKcG5KvOmHeKEH1EXyvOyznu1y2e4A==
-X-Received: by 2002:a17:902:f60c:b0:1ea:5ac0:ce46 with SMTP id n12-20020a170902f60c00b001ea5ac0ce46mr7023197plg.66.1714057860114;
-        Thu, 25 Apr 2024 08:11:00 -0700 (PDT)
-Received: from x1 ([2601:1c2:1802:170:d29d:de91:a86d:7ccd])
-        by smtp.gmail.com with ESMTPSA id e6-20020a170902784600b001e2a3014541sm14130260pln.190.2024.04.25.08.10.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Apr 2024 08:10:59 -0700 (PDT)
-Date: Thu, 25 Apr 2024 08:10:57 -0700
-From: Drew Fustini <drew@pdp7.com>
-To: Conor Dooley <conor.dooley@microchip.com>
-Cc: Thomas Bonnefille <thomas.bonnefille@bootlin.com>, jszhang@kernel.org,
-	guoren@kernel.org, wefu@redhat.com, andi.shyti@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	miquel.raynal@bootlin.com, thomas.petazzoni@bootlin.com,
-	linux-riscv@lists.infradead.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-	Drew Fustini <dfustini@tenstorrent.com>
-Subject: Re: [PATCH 0/4] Add I2C support on TH1520
-Message-ID: <ZipygSDkbuFWq6q2@x1>
-References: <20240425082138.374445-1-thomas.bonnefille@bootlin.com>
- <20240425-boxcar-maroon-f07c5aba9272@wendy>
+	s=arc-20240116; t=1714058541; c=relaxed/simple;
+	bh=bSjS7vFRvhg18Vn5CvrSZuwzZrsRRVowjKTEqODOvXs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CzgiTadl82YCZrQGrC6fQdN5dW5ecLVVHyGGDfuET1WvyaXyd3wIKphqEXhTSNk/+1heFBkplwFg9FD1jsJessUPc8Ha390GX9c7BtJWsiB39Gej+eMRTRwUfP5WayvTuDUMFHQIl1rtAFpR+Mk6N5Cjh6zLESaI09+c1NPfOyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=CnZPwa+4; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=tyGDmiot; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=CnZPwa+4; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=tyGDmiot; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 40FE333E71;
+	Thu, 25 Apr 2024 15:22:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1714058537; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KwWYm2TSdOXNeK9m0m0SKDRDTUqTmYPARNYLw/hpChU=;
+	b=CnZPwa+4z6k6gYIptELJJqv23h6j6DnsneScRgWC3TnrPh6s1Vuj01AsEeYxGFyorkuOsu
+	H5AZ8DvLDfkMIbc7V957sknobVckaX/9nTVi6moXLpzGGCjvQQmuEe6cz08XKlDbkhYEKi
+	e56R5uR4/jWSYG7D8GSNBaGyxL3CgUI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1714058537;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KwWYm2TSdOXNeK9m0m0SKDRDTUqTmYPARNYLw/hpChU=;
+	b=tyGDmiotyYvPbLUytSU367yYWLBZAxwIbsfkSHn/35zHW3r7g2y5EQL75uncqMaSEtjuwl
+	Xr1yC4MQFYBe6/Bw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=CnZPwa+4;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=tyGDmiot
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1714058537; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KwWYm2TSdOXNeK9m0m0SKDRDTUqTmYPARNYLw/hpChU=;
+	b=CnZPwa+4z6k6gYIptELJJqv23h6j6DnsneScRgWC3TnrPh6s1Vuj01AsEeYxGFyorkuOsu
+	H5AZ8DvLDfkMIbc7V957sknobVckaX/9nTVi6moXLpzGGCjvQQmuEe6cz08XKlDbkhYEKi
+	e56R5uR4/jWSYG7D8GSNBaGyxL3CgUI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1714058537;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KwWYm2TSdOXNeK9m0m0SKDRDTUqTmYPARNYLw/hpChU=;
+	b=tyGDmiotyYvPbLUytSU367yYWLBZAxwIbsfkSHn/35zHW3r7g2y5EQL75uncqMaSEtjuwl
+	Xr1yC4MQFYBe6/Bw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 875971393C;
+	Thu, 25 Apr 2024 15:22:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id +fgyGih1KmYfEQAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Thu, 25 Apr 2024 15:22:16 +0000
+Date: Thu, 25 Apr 2024 17:22:12 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] i2c: ali15x3: remove printout on handled timeouts
+Message-ID: <20240425172212.4f002de1@endymion.delvare>
+In-Reply-To: <20240423121322.28460-5-wsa+renesas@sang-engineering.com>
+References: <20240423121322.28460-1-wsa+renesas@sang-engineering.com>
+	<20240423121322.28460-5-wsa+renesas@sang-engineering.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240425-boxcar-maroon-f07c5aba9272@wendy>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.02 / 50.00];
+	DWL_DNSWL_MED(-2.00)[suse.de:dkim];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	BAYES_HAM(-0.51)[80.03%];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_RCPT(0.00)[renesas];
+	TO_DN_SOME(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,suse.de:email];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 40FE333E71
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Score: -4.02
 
-On Thu, Apr 25, 2024 at 10:00:10AM +0100, Conor Dooley wrote:
-> On Thu, Apr 25, 2024 at 10:21:31AM +0200, Thomas Bonnefille wrote:
-> > This adds I2C support in the device tree of the T-Head TH1520 RISCV-SoC
-> > and a default configuration for the BeagleV-Ahead. It appears that the
-> > TH1520 I2C is already supported in the upstream kernel through the
-> > Synopsis Designware I2C adapter driver.
+On Tue, 23 Apr 2024 14:13:21 +0200, Wolfram Sang wrote:
+> I2C and SMBus timeouts are not something the user needs to be informed
+> about on controller level. The client driver may know if that really is
+> a problem and give more detailed information to the user. The controller
+> should just pass this information upwards. Remove the printout.
 > 
-> > As there is no clock driver for this board as of today, this patch
-> > series uses a fixed-clock named i2c_ic_clk.
-> > There is also no pinctrl driver yet so pinmux must be handled manually
-> > for now.
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/i2c/busses/i2c-ali15x3.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> https://lore.kernel.org/linux-riscv/20240103132852.298964-1-emil.renner.berthing@canonical.com/
-> https://lore.kernel.org/linux-riscv/20240110-clk-th1520-v1-0-8b0682567984@tenstorrent.com/
-> 
-> These seem to be the most recent versions of each. I guess they're both
-> just waiting for their authors to have the time to get another version
-> written.
+> diff --git a/drivers/i2c/busses/i2c-ali15x3.c b/drivers/i2c/busses/i2c-ali15x3.c
+> index d2fa30deb054..956e5020d71e 100644
+> --- a/drivers/i2c/busses/i2c-ali15x3.c
+> +++ b/drivers/i2c/busses/i2c-ali15x3.c
+> @@ -294,10 +294,8 @@ static int ali15x3_transaction(struct i2c_adapter *adap)
+>  		 && (timeout++ < MAX_TIMEOUT));
+>  
+>  	/* If the SMBus is still busy, we give up */
+> -	if (timeout > MAX_TIMEOUT) {
+> +	if (timeout > MAX_TIMEOUT)
+>  		result = -ETIMEDOUT;
+> -		dev_err(&adap->dev, "SMBus Timeout!\n");
+> -	}
+>  
+>  	if (temp & ALI15X3_STS_TERM) {
+>  		result = -EIO;
 
-Thanks for the impetus. I've been meaning to post but it keeps getting
-pushed down the stack.
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
-I'll post an updated clk series today. I do now have the emmc working
-with a real clock property.
-
-thanks,
-drew
-
+-- 
+Jean Delvare
+SUSE L3 Support
 
