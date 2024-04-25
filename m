@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-3181-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3182-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87CFE8B2DAB
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 01:40:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4CCE8B2DB2
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 01:40:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42C7128537C
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 23:40:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 719F128447E
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 23:40:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D452C15887D;
-	Thu, 25 Apr 2024 23:39:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 254D315DBA5;
+	Thu, 25 Apr 2024 23:40:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q8NJRlYV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="teblGcka"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748D1156647;
-	Thu, 25 Apr 2024 23:39:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C908215B978;
+	Thu, 25 Apr 2024 23:40:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714088399; cv=none; b=gX5tTu9Ah7rw1qcmmqH0RwQ5MCcCUkRNhy8uQgJZv0voMCyoEme9J8ayjjotxYnI3mcZ8k5UzldBUZP/f1bS5lbM/UsMmT1quNVMKrcSTWz5ZFBCnCjYHUzCq8PCpVbTX7m5y52HqOTiMEGdzK81sURxN9aOg0LvC8NY0+htE7Y=
+	t=1714088401; cv=none; b=EziVe0QIgD8++pRllBLAmcS/nfVLfOI9FrFPzw+diS8CHGp1JYgjkF9p+xEdg6IW++Ly53BLR+itfBjE7fk1wgIn2uDD14unfeEcF+vJQJyIlzYbynvn/7rzPD27+2uYXlogD50xIBEYb/fTDqgQ6VWQMwBYfNqwePOyW5Q7lG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714088399; c=relaxed/simple;
-	bh=/oN2iGCiL+NicvCJAspV+Q8NPoc1Br/lYrDCPGBMVNM=;
+	s=arc-20240116; t=1714088401; c=relaxed/simple;
+	bh=evdB63NMsMmGAiCN8AeT5XYZiSR91S9n0SCVkkG/xt0=;
 	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=MuXe4UCXdApURbcNhgzlxNL14VzY5cf324o6kkD+gI3P0euEd8HwqhEODdQ7MlRCu+W3c1ldqsDyuBFPS0ugs6wv7/ooaylfizChptMNBhehARg1aTd5LDnrx0dw+UneT77VRYkWk8LJNNnmyh0Lv8qxaVKrjQ2z0OcfXlrUcf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q8NJRlYV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE7D7C113CC;
-	Thu, 25 Apr 2024 23:39:58 +0000 (UTC)
+	 Message-Id:Subject; b=n/4hHD6ajXyqLIYAdqUI165CzEm8mKZdFC21cmkI2BvQKuDx1kzwPuun8TKt6iIjWeGqoU881ONltFgLcfq0H4NjfUMWKK+hMF6ChPM+/vrJ/WInQGGsJ6KEA+68wcZgdbaiwCpWqqGFFs6s4SbEGetGilxYQbJGJwN/Fn7vh58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=teblGcka; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23F17C32781;
+	Thu, 25 Apr 2024 23:40:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714088399;
-	bh=/oN2iGCiL+NicvCJAspV+Q8NPoc1Br/lYrDCPGBMVNM=;
+	s=k20201202; t=1714088401;
+	bh=evdB63NMsMmGAiCN8AeT5XYZiSR91S9n0SCVkkG/xt0=;
 	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=Q8NJRlYVdYooFr1LJ/zQYNSD6DtJ+hQ5FyOs+/6W/ul3ud90x5zt6Ex1RbYGoZKV3
-	 qukqvWj3AjRmAlVs0x6RbdfjulyPHFvJCcKppdTVfIL7ZnRUB8FhhOkpv8c+lwDg1q
-	 IywI4SQ8AxQr3gtPN9Cc2b8e0grCqC11wf7zb7LXbHxOJ4Zrb5w40lRnNpWLR4kXjR
-	 uZLkWrEKMZN9puXb0XDvWNXd/PCsRadQS9OT70dxVerVy/1IT70IZqn6v/Y2Cf5CAq
-	 KSLOCn3d3botO3EfDUBR48FzAupB01ttVy8VqmXrc7DVrac4MHI/LyqwTlHvSXsqXx
-	 vOz9P3QoGeSeA==
-Date: Thu, 25 Apr 2024 18:39:57 -0500
+	b=teblGckagfhS08PQPJ3BrF/9Xn5U38ispWYhbhqJbagfZ99kM/adIoZIA2Kqj098I
+	 UBCSPmJtnGsjyX3XpboAtkP8phh40nHnJHcqLoS08tLoB7xPgcEhcpw/RU2wpGch0O
+	 JY9avPFhRXgc/0wGSIUyhWrBuwjUJECwPoVUniTFihTu2g645MYpC2G0fJhrb4cKBG
+	 8DyRNrsyRuL8Us0RLT+PyT+JSGG4JnjgGNYGEepNDdOJC5bXlAs5mGWY97UsIoap8K
+	 LxPC6jdTAWdvzs+Sn5ft24sXz8m7V4X6DYm2pxsG7osNpfW0pcecW5IcA/oAoUtJcS
+	 +pCqKkLWMzTDg==
+Date: Thu, 25 Apr 2024 18:40:00 -0500
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -52,27 +52,29 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: Rob Herring <robh@kernel.org>
 To: Eddie James <eajames@linux.ibm.com>
-Cc: linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org, 
- andrew@codeconstruct.com.au, devicetree@vger.kernel.org, 
- conor+dt@kernel.org, linux-kernel@vger.kernel.org, joel@jms.id.au, 
- krzk+dt@kernel.org, linux-fsi@lists.ozlabs.org, lakshmiy@us.ibm.com, 
- linux-aspeed@lists.ozlabs.org
-In-Reply-To: <20240425213701.655540-2-eajames@linux.ibm.com>
+Cc: devicetree@vger.kernel.org, linux-i2c@vger.kernel.org, 
+ lakshmiy@us.ibm.com, linux-fsi@lists.ozlabs.org, 
+ andrew@codeconstruct.com.au, linux-kernel@vger.kernel.org, 
+ linux-aspeed@lists.ozlabs.org, joel@jms.id.au, krzk+dt@kernel.org, 
+ linux-spi@vger.kernel.org, conor+dt@kernel.org
+In-Reply-To: <20240425213701.655540-7-eajames@linux.ibm.com>
 References: <20240425213701.655540-1-eajames@linux.ibm.com>
- <20240425213701.655540-2-eajames@linux.ibm.com>
-Message-Id: <171408839602.3902645.11975304379095234562.robh@kernel.org>
-Subject: Re: [PATCH v3 01/14] dt-bindings: spi: Document the IBM Power SPI
- controller
+ <20240425213701.655540-7-eajames@linux.ibm.com>
+Message-Id: <171408839666.3902693.1860621022882259895.robh@kernel.org>
+Subject: Re: [PATCH v3 06/14] dt-bindings: fsi: Document the FSI controller
+ common properties
 
 
-On Thu, 25 Apr 2024 16:36:48 -0500, Eddie James wrote:
-> The IBM Power chips have a basic SPI controller. Document it.
+On Thu, 25 Apr 2024 16:36:53 -0500, Eddie James wrote:
+> Since there are multiple FSI controllers documented, the common
+> properties should be documented separately and then referenced
+> from the specific controller documentation.
 > 
 > Signed-off-by: Eddie James <eajames@linux.ibm.com>
 > ---
->  .../devicetree/bindings/spi/ibm,p10-spi.yaml  | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/ibm,p10-spi.yaml
+>  .../bindings/fsi/fsi-controller.yaml          | 65 +++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/fsi/fsi-controller.yaml
 > 
 
 My bot found errors running 'make dt_binding_check' on your patch:
@@ -80,12 +82,11 @@ My bot found errors running 'make dt_binding_check' on your patch:
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/ibm,p10-spi.example.dtb: fsi2spi@1c00: '#address-cells', '#size-cells', 'spi@0' do not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/fsi/ibm,fsi2spi.yaml#
+Documentation/devicetree/bindings/fsi/fsi-controller.example.dtb: /example-0/fsi@3400: failed to match any schema with compatible: ['fsi-controller']
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240425213701.655540-2-eajames@linux.ibm.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240425213701.655540-7-eajames@linux.ibm.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
