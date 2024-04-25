@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-3135-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3136-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51F318B1E15
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 11:34:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE5468B1E30
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 11:39:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 838751C215D0
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 09:34:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14E311F21F65
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 09:39:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5A5084FD0;
-	Thu, 25 Apr 2024 09:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E45284DEA;
+	Thu, 25 Apr 2024 09:39:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YLxTctwn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nGbQx4yH"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0550C84D1C;
-	Thu, 25 Apr 2024 09:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBA084D12;
+	Thu, 25 Apr 2024 09:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714037680; cv=none; b=mtDZdLLeH/ykSNop2yz8I9O3T3TTidZVID5LV+vTVI3K5kDXohoEZrAwh9WoP6WlfZZd5FK25eFF+QBt1Fo6guXt//Fqu2v3Gn5cjVH/D+CpFIFgGdux6Klpeh3fl6YwqNXcDMVYlU57sZsq1bR2aeA8sPOmnZ3eKnnT66FPNks=
+	t=1714037970; cv=none; b=I3W/F4UlM6mYOOJvzAvV2zkOXTnZpTgc0Nq8KMBjAH6PuSgehQP0Sab+/xVXb5IrZBRXkLcD8XM4+PiC60ObjaKOT3QAUptaGR0xTBe3PSXb0pkWmJvk62jG2s7UF7CxSK+3gwvOFgqcbON+rYta9SDKNedFEbDJzEoYmSUjjjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714037680; c=relaxed/simple;
-	bh=xf+cGSpTyS5HTjPAzG6cQ2kpu/5/9RutGA1f+6j5JMg=;
+	s=arc-20240116; t=1714037970; c=relaxed/simple;
+	bh=Qb3feMqyrxMO7slwFnpw9BneoXU35QtdGm80mHnaeT8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mDNV37P14aa0oQ6Ce3/YF6mtKC6A1Tk8aJ13SjbZeLvh/V8F85SzYrGYwKhaEalEw67Rwg/nBIl0Li0Wv0q75gljsbEiM58Ew9BG+PyXEFeWjsrbpNb+qbcf6z79ilwG7i3OwFnJq4SkH3ktcyEc0L4dTcrFXwVUpRmDo1Q912g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YLxTctwn; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=eN3+dCgkeyW6tWmccWoPr1eTZl/1pkRKS8LCZfd6T5GGQ4psqYDGIy9tg82HxOi1qzkZfSf3B/G9/BlDxya+2hOO//2qAavgu9arWC2nQeUBZFZwPZpK+63bP/BNc9g644F+I7/ixGDFGB7uUDdi4rw1bJxtSnCkDB+ARrxlzho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nGbQx4yH; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714037679; x=1745573679;
+  t=1714037969; x=1745573969;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=xf+cGSpTyS5HTjPAzG6cQ2kpu/5/9RutGA1f+6j5JMg=;
-  b=YLxTctwnKaN6VUetWsm7Lltw+mgjliLYhVgUnfMupLb4iSd+T/4p1cC6
-   m28YPul29bCkFDqsRpvr87U1ASsDX9b57w9bErdj6FS5Qr58l+NtbY2iG
-   FP4QsBSdaoHaso7ju73qLhEHNZiZDUf8mpW5yXkyZxpxyBWNPIrVx2/vZ
-   B6Cw868dFF/4u1uHg3maKpPSesL4ExS5NJ4FVf/g8UUyDxL/cuPWIKzfC
-   5ISXSp1HERpU9P8d6teDUM8bob2Li8D4yJOXBEqUz+HI4GnQm7HaWDoGj
-   k68SEjATP8VfS0p8YI8VASuo0FO8eZgdghUOZc2k7J2bvxNJQzUkIWJkX
+  bh=Qb3feMqyrxMO7slwFnpw9BneoXU35QtdGm80mHnaeT8=;
+  b=nGbQx4yHWf728dfvjY9Ll+MahJu3nfbPFaZczFEPvfPS8MECseFJK0BG
+   8yiV57LheItUfaJexCpyBwi+Yap7lVBrhMLFT/XVpNuoMVDQx4FRDHPj8
+   2rrjPBcVqPZYIPgfkTWTZnFKNRV8TbBhnOs/KDhGZKspS1Ub47FWyLxOj
+   /4d/hzv3cKwzI+ZmP0Pn4QGow1YPpC4hVA0huLNzX7wcAJe37lmJmGTY2
+   TCQWrtkFz/9kbmCnFzLSzSpM1G73bkQd8F6ATckMqiqVthKOATH/QBwUe
+   bw+1D2/OjKx4GhAkAfHTEVJ01Xa7+Yqtc0960H5M/Ioib6Y7txSYGinUl
    w==;
-X-CSE-ConnectionGUID: GeuCZC5dTd6SfTe49aVdeg==
-X-CSE-MsgGUID: fmcjr6yQQb+23NsLzvAwig==
-X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="9577330"
+X-CSE-ConnectionGUID: m3zWgUqgQfKQ9Pz5cJmz6Q==
+X-CSE-MsgGUID: YM19h1GIR7mdOjBrBT0FoQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="13496808"
 X-IronPort-AV: E=Sophos;i="6.07,228,1708416000"; 
-   d="scan'208";a="9577330"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 02:34:37 -0700
-X-CSE-ConnectionGUID: XEdt0L7yRv+zKzqu0H8pjQ==
-X-CSE-MsgGUID: JW2q2ci6SzKlPgRqJfpwRw==
+   d="scan'208";a="13496808"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 02:39:28 -0700
+X-CSE-ConnectionGUID: OgANpoOISYC+ySNvnDapjA==
+X-CSE-MsgGUID: Q2oq5WXaRAq/QuxnGkZeFw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,228,1708416000"; 
-   d="scan'208";a="48277830"
+   d="scan'208";a="29474489"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 02:34:33 -0700
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 02:39:23 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.97)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rzvUr-00000000wqq-3lRX;
-	Thu, 25 Apr 2024 12:34:29 +0300
-Date: Thu, 25 Apr 2024 12:34:29 +0300
+	id 1rzvZY-00000000wyF-2W3w;
+	Thu, 25 Apr 2024 12:39:20 +0300
+Date: Thu, 25 Apr 2024 12:39:20 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Florian Fainelli <florian.fainelli@broadcom.com>
 Cc: linux-kernel@vger.kernel.org,
@@ -79,10 +79,11 @@ Cc: linux-kernel@vger.kernel.org,
 	Duanqiang Wen <duanqiangwen@net-swift.com>,
 	"open list:SYNOPSYS DESIGNWARE I2C DRIVER" <linux-i2c@vger.kernel.org>,
 	"open list:WANGXUN ETHERNET DRIVER" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] mfd: intel-lpss: Utilize i2c-designware.h
-Message-ID: <ZiojpSXgKD2oCDtW@smile.fi.intel.com>
+Subject: Re: [PATCH v2 1/4] i2c: designware: Create shared header hosting
+ driver name
+Message-ID: <ZiokyEXqMTAs_M7M@smile.fi.intel.com>
 References: <20240425002642.2053657-1-florian.fainelli@broadcom.com>
- <20240425002642.2053657-3-florian.fainelli@broadcom.com>
+ <20240425002642.2053657-2-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -91,23 +92,94 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240425002642.2053657-3-florian.fainelli@broadcom.com>
+In-Reply-To: <20240425002642.2053657-2-florian.fainelli@broadcom.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Wed, Apr 24, 2024 at 05:26:40PM -0700, Florian Fainelli wrote:
-> Rather than open code the i2c_designware string, utilize the newly
-> defined constant in i2c-designware.h.
+On Wed, Apr 24, 2024 at 05:26:39PM -0700, Florian Fainelli wrote:
+> We have a number of drivers that reference the string "i2c_designware"
+> towards two goals:
+> 
+> - ensure their device gets bound to the i2c_designware platform_driver
+> - create a clock lookup reference that matches the i2c_designware
+>   instance number for the i2c-designware-platdrv.c driver to be able to
+>   lookup the input reference clock
+> 
+> Since this string is copied in a bunch of different places and since it
+> is possible to get this named wrong (see [1] and [2]) with unintended
+> consequences, create a header file that hosts that define for other
+> drivers to use and all agree on the correct name to use.
 
-...
+> [1]:
+> https://lore.kernel.org/all/20240422084109.3201-1-duanqiangwen@net-swift.com/
+> [2]:
+> https://lore.kernel.org/all/20240422084109.3201-2-duanqiangwen@net-swift.com/
+
+Make them tags.
+
+Link: URL#1 [1]
+Link: URL#2 [2]
+
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+
+> +++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/pci.h>
 
 > +#include <linux/platform_data/i2c-designware.h>
 
-Please, group this with linux/dma/idma64.h below.
+Please, make it a separate group after linux/* and before "xxx" below.
+
+>  #include <linux/pm_runtime.h>
+>  #include <linux/power_supply.h>
+>  #include <linux/sched.h>
 
 ...
 
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-in case this go anywhere.
+>  module_pci_driver(dw_i2c_driver);
+>  
+>  /* Work with hotplug and coldplug */
+> -MODULE_ALIAS("i2c_designware-pci");
+> +MODULE_ALIAS(I2C_DESIGNWARE_NAME "-pci");
+
+As Jarkko said, please get rid of this.
+You may take my patch from here:
+https://lore.kernel.org/linux-i2c/20231207141653.2785124-9-andriy.shevchenko@linux.intel.com/
+and incorporate in this series.
+
+...
+
+>  #include <linux/mfd/syscon.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/platform_data/i2c-designware.h>
+
+As per above.
+
+>  #include <linux/platform_device.h>
+>  #include <linux/pm.h>
+>  #include <linux/pm_runtime.h>
+
+...
+
+>  /* Work with hotplug and coldplug */
+> -MODULE_ALIAS("platform:i2c_designware");
+> +MODULE_ALIAS("platform:" I2C_DESIGNWARE_NAME);
+
+See above.
+
+...
+
+> +/* This is the i2c-designware-platdrv.c platform driver name. This name is used
+> + * to bind the device to the driver, as well as by the driver itself to request
+> + * the input reference clock
+> + */
+
+/*
+ * Use correct multi-line comment style. This
+ * is not the net subsystem, we use traditional style.
+ */
 
 -- 
 With Best Regards,
