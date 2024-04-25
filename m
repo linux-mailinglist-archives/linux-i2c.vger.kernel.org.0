@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3140-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3141-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2B358B1E60
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 11:49:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE3588B1E64
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 11:49:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30E801C23E0E
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 09:49:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65A951F22CF6
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 09:49:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F20884FA0;
-	Thu, 25 Apr 2024 09:49:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB0E184FCD;
+	Thu, 25 Apr 2024 09:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HK0Q//D4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hkny6sL6"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3D484E13;
-	Thu, 25 Apr 2024 09:49:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AFA84E06;
+	Thu, 25 Apr 2024 09:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714038543; cv=none; b=Ag3rkNcKUHWuqDOM+7637a3OMf9AFH/mvU7FhqwIzm996oaDU+vAPwESEZ1NH7MGpRBPMoFU+9lho6IykZyvrkdSrObNYdQGHObzDMrzDXa3ww2zPHraRerpw2vKrYAEEqihatZcty11l/d8pCZlK1YgCqh01tIs5REz6QNtTjM=
+	t=1714038558; cv=none; b=tJsIAi6a16G5NK6JFA1tN08PXNIkABXO7PfrtppFhsiADuRJz6X93QF3eygQsRrTd/wru7O96A6IQY3xuP0/C75ixKlHRQQCFZzDJhP4h1/cVfhPdRSQoMxQ6TeEFUC2mMfkpFbv/WJt+vlOoS7EU9Jlol6G3W4H542SDi5kIlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714038543; c=relaxed/simple;
-	bh=2dsaWmNB7Ku11P3jkgmyAoV/Wf5vq8JxR9ENm+Pycgc=;
+	s=arc-20240116; t=1714038558; c=relaxed/simple;
+	bh=VhF5Zm7lgNM/JEIvSCANEktWulXsZ4F6W0SCXWQfgjM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vy5vBYOUPJgcPOZnyZm9g6Cn3TNPW2v/MNgxELAmaoWQ1hTV1knBVNyPFJmMeHyIf/d71USNR3ig2k+B2vPHXhzo+PGpK4blYJbYrrXv2u/tpXkHzuDR7dKIEGql9ima3eotXl6U9vrUgMyxolN5KE78zirC7M6XTR+4nZ9WqYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HK0Q//D4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF3CDC113CC;
-	Thu, 25 Apr 2024 09:48:57 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=uqtQUjoA1QXYFT00X3mbhzCnrDORdAitStKpY0pOWRDukh7OJw4fwMYO47OEXm/Miyf6qN6VRmadRH1z45QRyX2cER/01dQFo7q9xYDhsbX9vAB2JZ1t3sIj1iUxGbB/vYLMV7ALZEmktcnt9n1rVEWM1bgAoN54z6861BU6e6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hkny6sL6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EFE9C113CC;
+	Thu, 25 Apr 2024 09:49:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714038543;
-	bh=2dsaWmNB7Ku11P3jkgmyAoV/Wf5vq8JxR9ENm+Pycgc=;
+	s=k20201202; t=1714038558;
+	bh=VhF5Zm7lgNM/JEIvSCANEktWulXsZ4F6W0SCXWQfgjM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HK0Q//D4RD+fqyX+yFJuiThFjF+qJePBpd+1yUvSJTtIyL/bs9nldw0QSa9J8Mwou
-	 YMPUlDiq3njpQVhFHnb4O0GIOKBQpTX61uKEecosyfBnyy7HFDGqHMGsdbxsLzJ8gb
-	 8WoTKLM6z3PLQHhTIgavlpJCS1iVs9bREQQSCGJnMW2LS4Mpr7WmtdWDOkB9JZl7k/
-	 QEgGtx7o2KmSz0BN22TeN9JBQ8supkJi13x0eNfO9EvmT27bHi6yOC5gchNVBAkpkr
-	 Ij1Q46UBbf9N5Aaji50Zf5lu/DIgmbkLiduKFchUJ609cJRYeOoTQMcnQw9tHlwjuP
-	 u6GV9VlTLGwWg==
-Message-ID: <624269fa-d860-4141-9969-56e066aa6dc1@kernel.org>
-Date: Thu, 25 Apr 2024 11:48:55 +0200
+	b=Hkny6sL6xh1DgQ/oY8s4BsAw/LM2Hi8i/Km2DwFhlUxoCV4FwOhbj0VCs6p4wUm2f
+	 DTm2tG4Pr+js7q5g3oBwhzKA7XPfjxNsPiR4q+CRwx07WoBmMKLVJazDWxkE4yKxsd
+	 hb/AeE4zq2vlJPxJDNKy8N+9sm+E9VfvBCAmo6IxLTmXN/Fx3n28CadbATO0HXYiJB
+	 1FCngP9AiaBn+Zj10jtQGIKgcfMKCbwIYKerCIRvfz5EHBRKEkX9y1ZC4vUsfTZ7uT
+	 GhO99KRu7vxnubFNdnd3Mf9+U8cc4EpLzMebeSCWzeAtfLK3f4ocz1eeCXOGBcahyT
+	 rhuAL65le49Nw==
+Message-ID: <bc69023d-5e70-4d5d-96d1-f298cec5b59d@kernel.org>
+Date: Thu, 25 Apr 2024 11:49:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: i2c: dw: Document compatible
- thead,th1520-i2c
+Subject: Re: [PATCH 2/4] riscv: boot: dts: thead: Fix node ordering in TH1520
+ device tree
 To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>, jszhang@kernel.org,
  guoren@kernel.org, wefu@redhat.com, andi.shyti@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org
@@ -60,9 +60,9 @@ Cc: miquel.raynal@bootlin.com, thomas.petazzoni@bootlin.com,
  devicetree@vger.kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
  aou@eecs.berkeley.edu
 References: <20240425082138.374445-1-thomas.bonnefille@bootlin.com>
- <20240425082138.374445-2-thomas.bonnefille@bootlin.com>
-Content-Language: en-US
+ <20240425082138.374445-3-thomas.bonnefille@bootlin.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -106,29 +106,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240425082138.374445-2-thomas.bonnefille@bootlin.com>
+In-Reply-To: <20240425082138.374445-3-thomas.bonnefille@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 25/04/2024 10:21, Thomas Bonnefille wrote:
-> Add documentation for compatible string thead,th1520-i2c which can be
-> used specifically for the TH1520 SoC.
+> According to the device tree coding style, nodes shall be ordered by
+> unit address in ascending order.
 > 
 > Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-> ---
 
-...
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching.
 
->      };
-> +  - |
-> +    i2c@e7f20000 {
-> +      compatible = "thead,th1520-i2c", "snps,designware-i2c";
-> +      reg = <0xe7f20000 0x4000>;
-> +      interrupts = <44>;
-> +      clocks = <&i2c_ic_clk>;
-> +      status = "disabled";
 
-No need for new example. No differences.
 
 Best regards,
 Krzysztof
