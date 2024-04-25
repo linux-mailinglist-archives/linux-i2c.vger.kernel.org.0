@@ -1,214 +1,141 @@
-Return-Path: <linux-i2c+bounces-3153-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3154-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B52C8B25CD
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 17:58:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3C958B269A
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 18:35:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE7DC1F21392
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 15:58:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 546BC1F21BB9
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 16:35:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1F3214C58E;
-	Thu, 25 Apr 2024 15:58:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 596D014D446;
+	Thu, 25 Apr 2024 16:35:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="eHnj5UQC";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="dezGulnG";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="gBx+i3ZL";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="WNnfGfMb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iv060Knj"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE7C149E05;
-	Thu, 25 Apr 2024 15:58:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F4D2B9D9;
+	Thu, 25 Apr 2024 16:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714060706; cv=none; b=MeZ5JqnxNjkDnG7V57Yf2RKWVZVrc1oDpf8Y8z6TrKi6EVbZWMiTH7ALJSDcUeroIzxdZFbf6e7tJqMUPrcBCitHbHWhBO7cy3LHWEw4KkodRqrvwZV3grpZQUeROb55LLxxAbJDM3MfyvJofcOIze/IUC+uVdO38cQ7UbQYrSs=
+	t=1714062927; cv=none; b=qk9trdCf/W5V+JjbkfGxg7244faqivoz2a5NtS7N5NFMLmdPvgAbvSxkOkcTVACqtCwrynuyqIox2mQzpggi5Tek5tyJjsdU6hjGsoMTVP6ZufCXShrM/Qz4byj7YxYqCRq7WRLAlzuxnTqrcHeRpYVhvcLKvU5AEEd5YCwtBdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714060706; c=relaxed/simple;
-	bh=OxG/QwOLFpTqJqioQwvBPSs3kg69DSi3qMbneBAzDeU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YsY5MbIQfPoURwFVYRxkQvUKiSspXUBQxait9NcMxWOZRBjrAmLuIKPMoYDGxo19NOKW3a3JJl7Y5GWAiBTKdM9HOFigBbaqofum3NW1HpUGxvGvecz28zwEdYYQci2fUXHmazlN3zEz1edRJayjKZMM+TGjUsy8BNyiCAS5cRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=eHnj5UQC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=dezGulnG; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=gBx+i3ZL; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=WNnfGfMb; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 3DEB95BF28;
-	Thu, 25 Apr 2024 15:58:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1714060703; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LTL/RRFbpvk/+mxrp2TJpSluJhlsQ2v73kcoSRWVGhE=;
-	b=eHnj5UQCzV0zNnpUZ924ax6ZKfd40F7KYQoI8HzJnDEDLW3gASgaxWtXN5PlMdCqrmxkGy
-	emmB7ET2pkVBpLoIyXl72ypf6w7BtuGBk9Xr4OZmiw0B0pjeeVUk0fx9QdIKBN/XgooVGF
-	bmOkC/+aXmCGJrXyFWk+1I6BPrcS/oo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1714060703;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LTL/RRFbpvk/+mxrp2TJpSluJhlsQ2v73kcoSRWVGhE=;
-	b=dezGulnGTk4qBg8G8dYpBDLJyWDu5hsA8Otf+SfM2Ch3UZ6NeItmL8nbc4fLgKbQNT8LsD
-	9PVMRL2Wn6s2WpBw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=gBx+i3ZL;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=WNnfGfMb
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1714060702; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LTL/RRFbpvk/+mxrp2TJpSluJhlsQ2v73kcoSRWVGhE=;
-	b=gBx+i3ZLtMmip8gNfQiPjMMQ0wKkImktVreGs+zMgnqKx8Ll/dCVKKdqU0Cs+OH8UXXgut
-	V9z8G8YtyyBHqvo7K6PglFKDkK9tiriblWJt0WLuaFzE4D/09e31ZnnnTGjhRRsibRdguk
-	Lzo3jy39kRGW3b4P2zjfzYKGKjpK2m8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1714060702;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LTL/RRFbpvk/+mxrp2TJpSluJhlsQ2v73kcoSRWVGhE=;
-	b=WNnfGfMbL1lk3g5SDW720qUCxh+Lz9Md4whWA2zq5Dcwe+FfD8EqOq7FpwQ/kKRMSEb3eK
-	I3uES+suPrONTuDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 887691393C;
-	Thu, 25 Apr 2024 15:58:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id N86UGp19KmZBGwAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Thu, 25 Apr 2024 15:58:21 +0000
-Date: Thu, 25 Apr 2024 17:58:19 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] i2c: ali1535: remove printout on handled timeouts
-Message-ID: <20240425175819.20c1d9aa@endymion.delvare>
-In-Reply-To: <20240423121322.28460-3-wsa+renesas@sang-engineering.com>
-References: <20240423121322.28460-1-wsa+renesas@sang-engineering.com>
-	<20240423121322.28460-3-wsa+renesas@sang-engineering.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
+	s=arc-20240116; t=1714062927; c=relaxed/simple;
+	bh=eKZlsQ9ssnVdmKeVleGh1NSZKulcJ3+HKLLsNghHnu4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y2xGlWfH1B51sEMSsIg3E2qKW2BJRJm4c2Efbhmpeya17PcbW8ZLayx8qU/LP7nZqg/JoDxKUIMwVbFhn1b3dk1qqkiDPcHgr5o6LlHGNdaw+LDleRJMpqdsaYR32cMzt3pCaqx4Y8gyB03kRD2zjJMUDG4qNhmqmALJO/bDxKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iv060Knj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9264BC113CC;
+	Thu, 25 Apr 2024 16:35:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714062925;
+	bh=eKZlsQ9ssnVdmKeVleGh1NSZKulcJ3+HKLLsNghHnu4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Iv060KnjxmA7fLWlZ2OQqxD7BnIl9ihl3lADBe/dGP51maPHYJo7imXVbeqPDvpzJ
+	 2G3Ep0+sM2DU69wnd8nHJY3w2xPWuZgVisM/bOtj3Swu+twTrlc/JueteQeeb0P1hI
+	 U2nOi1q5rEN3K45PVwKP4GUw2YKlxWq89J77quWGlEs+ktazNFFWT7D4XcFC0d/tIj
+	 zJ7eHL4DL0CQL8gV+CvB+z43sKJPU+ck8PorLRM44rVHGI+EhmKZTIaEKkLV/A6iKr
+	 IZrsOcOphJ6SFxRarvCFpiuIc3Iht/UoAoIf8nerhHEbe7eNqtNvBa6p2r5AaSZlOX
+	 ln+faTFS950NQ==
+Date: Thu, 25 Apr 2024 17:35:20 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
+	andi.shyti@kernel.org, jszhang@kernel.org,
+	miquel.raynal@bootlin.com, linux-riscv@lists.infradead.org,
+	linux-i2c@vger.kernel.org, thomas.petazzoni@bootlin.com,
+	guoren@kernel.org, wefu@redhat.com, conor+dt@kernel.org,
+	devicetree@vger.kernel.org, aou@eecs.berkeley.edu,
+	krzk+dt@kernel.org, palmer@dabbelt.com, paul.walmsley@sifive.com
+Subject: Re: [PATCH 0/4] Add I2C support on TH1520
+Message-ID: <20240425-script-fondness-0e80bfa31615@spud>
+References: <20240425082138.374445-1-thomas.bonnefille@bootlin.com>
+ <171405653346.2527762.16827325392956038580.robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Flag: NO
-X-Spam-Score: -4.51
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 3DEB95BF28
-X-Spam-Level: 
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[renesas];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sang-engineering.com:email,suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="LvUcHBMg/ZVHkvhr"
+Content-Disposition: inline
+In-Reply-To: <171405653346.2527762.16827325392956038580.robh@kernel.org>
 
-Hi Wolfram,
 
-On Tue, 23 Apr 2024 14:13:19 +0200, Wolfram Sang wrote:
-> I2C and SMBus timeouts are not something the user needs to be informed
-> about on controller level. The client driver may know if that really is
-> a problem and give more detailed information to the user. The controller
-> should just pass this information upwards. Remove the printout.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  drivers/i2c/busses/i2c-ali1535.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-ali1535.c b/drivers/i2c/busses/i2c-ali1535.c
-> index 461eb23f9d47..9d7b4efe26ad 100644
-> --- a/drivers/i2c/busses/i2c-ali1535.c
-> +++ b/drivers/i2c/busses/i2c-ali1535.c
-> @@ -285,10 +285,8 @@ static int ali1535_transaction(struct i2c_adapter *adap)
->  		 && (timeout++ < MAX_TIMEOUT));
->  
->  	/* If the SMBus is still busy, we give up */
-> -	if (timeout > MAX_TIMEOUT) {
-> +	if (timeout > MAX_TIMEOUT)
->  		result = -ETIMEDOUT;
-> -		dev_err(&adap->dev, "SMBus Timeout!\n");
-> -	}
->  
->  	if (temp & ALI1535_STS_FAIL) {
->  		result = -EIO;
-> @@ -313,10 +311,8 @@ static int ali1535_transaction(struct i2c_adapter *adap)
->  	}
->  
->  	/* check to see if the "command complete" indication is set */
-> -	if (!(temp & ALI1535_STS_DONE)) {
-> +	if (!(temp & ALI1535_STS_DONE))
->  		result = -ETIMEDOUT;
-> -		dev_err(&adap->dev, "Error: command never completed\n");
-> -	}
->  
->  	dev_dbg(&adap->dev, "Transaction (post): STS=%02x, TYP=%02x, "
->  		"CMD=%02x, ADD=%02x, DAT0=%02x, DAT1=%02x\n",
+--LvUcHBMg/ZVHkvhr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm skeptical about that one, although this might be mainly an issue
-with the code flow rather than your proposed changes.
+On Thu, Apr 25, 2024 at 09:51:26AM -0500, Rob Herring wrote:
+>=20
+> On Thu, 25 Apr 2024 10:21:31 +0200, Thomas Bonnefille wrote:
+> > This adds I2C support in the device tree of the T-Head TH1520 RISCV-SoC
+> > and a default configuration for the BeagleV-Ahead. It appears that the
+> > TH1520 I2C is already supported in the upstream kernel through the
+> > Synopsis Designware I2C adapter driver.
+> > As there is no clock driver for this board as of today, this patch
+> > series uses a fixed-clock named i2c_ic_clk.
+> > There is also no pinctrl driver yet so pinmux must be handled manually
+> > for now.
+> > It also fixes the order of the nodes in the device tree to comply with
+> > device-tree coding-style.
+> >=20
+> > Thomas Bonnefille (4):
+> >   dt-bindings: i2c: dw: Document compatible thead,th1520-i2c
+> >   riscv: boot: dts: thead: Fix node ordering in TH1520 device tree
+> >   riscv: dts: thead: Add TH1520 I2C nodes
+> >   riscv: dts: thead: Enable I2C on the BeagleV-Ahead
+> >=20
+> >  .../bindings/i2c/snps,designware-i2c.yaml     |  12 ++
+> >  .../boot/dts/thead/th1520-beaglev-ahead.dts   |  22 ++++
+> >  arch/riscv/boot/dts/thead/th1520.dtsi         | 120 ++++++++++++++----
+> >  3 files changed, 127 insertions(+), 27 deletions(-)
+> >=20
+> > --
+> > 2.44.0
+> >=20
+> >=20
+> >=20
+>=20
+>=20
+> My bot found new DTB warnings on the .dts files added or changed in this
+> series.
+>=20
+> Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+> are fixed by another series. Ultimately, it is up to the platform
+> maintainer whether these warnings are acceptable or not. No need to reply
+> unless the platform maintainer has comments.
+>=20
+> If you already ran DT checks and didn't see these error(s), then
+> make sure dt-schema is up to date:
+>=20
+>   pip3 install dtschema --upgrade
+>=20
+>=20
+> New warnings running 'make CHECK_DTBS=3Dy thead/th1520-beaglev-ahead.dtb'=
+ for 20240425082138.374445-1-thomas.bonnefille@bootlin.com:
+>=20
+> arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dtb: i2c-clock: clock-freq=
+uency:0:0: 50000000 is greater than the maximum of 5000000
 
-There are 2 conditions which cause result to be set to -ETIMEDOUT.
-After removing the messages, there's no way to differentiate between
-these two cases, which could make bug investigation more difficult.
+The bot is not freaking out here, 50 MHz is indeed more than 5 MHz :)
 
-Another concern is that it is possible (at least theoretically) to hit
-the first timeout condition and NOT return -TIMEDOUT. This is because
-the code flow tests a number of conditions in a non-exclusive way, so
-errnos may overwrite each other. I don't like this design. The
-consequence is that the calling device driver may not be able to report
-the timeout, while this was the reason you gave for removing the
-message.
+--LvUcHBMg/ZVHkvhr
+Content-Type: application/pgp-signature; name="signature.asc"
 
-That being said, this is a very old driver, maintained in best effort
-mode, I actually very much doubt it has any user left, so there's
-little point in spending too much time on this. My gut feeling is that
-the first "result = -ETIMEDOUT" isn't actually needed in practice and
-will always be overwritten by another errno later in the code flow
-(possibly the second "result = -ETIMEDOUT"). So most likely your change
-is safe.
+-----BEGIN PGP SIGNATURE-----
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZiqGSAAKCRB4tDGHoIJi
+0o+gAQD9y0YVzRTF8HegZu1SkndMW+2UKrW5hDZMBdhYKLCsJgEA2lS/uw7PcBKt
+sur9daO8spSl/mTvxgKzvuVTXvZQqAk=
+=kJRE
+-----END PGP SIGNATURE-----
 
--- 
-Jean Delvare
-SUSE L3 Support
+--LvUcHBMg/ZVHkvhr--
 
