@@ -1,122 +1,123 @@
-Return-Path: <linux-i2c+bounces-3133-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3134-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 968308B1D3D
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 11:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4395B8B1DBB
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 11:21:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 394B11F23A86
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 09:01:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAC761F23890
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 09:21:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD8E84A46;
-	Thu, 25 Apr 2024 09:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="1eLhvimG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216AC84D25;
+	Thu, 25 Apr 2024 09:20:27 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27C980056;
-	Thu, 25 Apr 2024 09:00:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE4184DFC;
+	Thu, 25 Apr 2024 09:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714035661; cv=none; b=MNEt+cw0tB9VNp9fQm+ZysHob0IvwJ8EjiAvnBQf4Ha6muIqoVVqrbRDd6LROkqMR8MAUyEvAZ63IuigQZ/a/KgppFQErsGMAHh6k3XIw/qx1iqedXGtnq4z++7LFFNC4wrHt9s3UL7/gD5fzgXkzJcrSXgexTHNPJ3Odo8LU5I=
+	t=1714036827; cv=none; b=t0x4VXSQyStnKvXn8E/rt+VvvhjwXcgpO7QxxAnA9xqQn4JoTVAlrQi55prvXmciPf5sv9j+48oJ6NkrWuEGSoFtty/boTkd/LmQUDUKqBBTvp//hM7qoEKjThJ15QBDSFH2ApAW4ECIJIgZN++6TXa0dnze3bJjkENZUBZsnzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714035661; c=relaxed/simple;
-	bh=wPeg0IqiY+o/vc4YdB3Yt/sWLRBKKZcicUVDHUyXfR8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z2vNpxVfd5+OI+89berGtdgEAfOt0/tF9XJ+L4IPsg1qBORe0NbH0K+S259uHan5V7w2p2b3GeolCe4gS/X8MzLZ66L8ayMQ2PazpGGj57RLw+1WkPmsGsDHLmBlYvp4c6hDQIF6qT0TVUvuje1urIwPRX2lbdbqCJIxiBbSLkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=1eLhvimG; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1714035660; x=1745571660;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wPeg0IqiY+o/vc4YdB3Yt/sWLRBKKZcicUVDHUyXfR8=;
-  b=1eLhvimGMmSREv4xGYXicmK4mo3Btnh7A7dfhaQJg0Sm3ggwszxhBD+w
-   zfWHUjY56UF0IboDTFtwWMKaQ3rUmAyP7HDw3+HwEYh9e34tmnzHT+wPT
-   IQGBylWPIQVLcI782AT/W0DlZIFDbB9W/ENhT4mRSAiESXWsxF7g37NPn
-   cgJOh8gxldLj4MikAIGEzULibYBruzowpIL20zuOWHAX/RjiG/OjypwYv
-   QgRY/Onz/FDU/CK+RFdJbNa6MjkmsQx/74coEB8XwDp2CAHQ1GE7D+Tw/
-   nM8IJdx6hT4iJu48+cg/luZsXsrUAhjTpLl/q7GobKtm1tmtz6S9gyjsy
-   A==;
-X-CSE-ConnectionGUID: /8g22YwRTJWm2ALCCzb01w==
-X-CSE-MsgGUID: vJF5Dj9pTq+mEs5pThBumA==
-X-IronPort-AV: E=Sophos;i="6.07,228,1708412400"; 
-   d="asc'?scan'208";a="22604673"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Apr 2024 02:00:53 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 25 Apr 2024 02:00:29 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Thu, 25 Apr 2024 02:00:26 -0700
-Date: Thu, 25 Apr 2024 10:00:10 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-CC: <jszhang@kernel.org>, <guoren@kernel.org>, <wefu@redhat.com>,
-	<andi.shyti@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <miquel.raynal@bootlin.com>,
-	<thomas.petazzoni@bootlin.com>, <linux-riscv@lists.infradead.org>,
-	<linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<paul.walmsley@sifive.com>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
-	Emil Renner Berthing <emil.renner.berthing@canonical.com>, Drew Fustini
-	<dfustini@tenstorrent.com>
-Subject: Re: [PATCH 0/4] Add I2C support on TH1520
-Message-ID: <20240425-boxcar-maroon-f07c5aba9272@wendy>
-References: <20240425082138.374445-1-thomas.bonnefille@bootlin.com>
+	s=arc-20240116; t=1714036827; c=relaxed/simple;
+	bh=b5xHrUaTH8w38xvavMQn5oxGZmYM/ryuyekrAQ4JJJs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y2vjJ9rZPgcQSr2r+OzX2SBdL7KrYm9niJwT/c0mtKDlS2e/3Cp1rzCH9oTS0WqZNB3EZ2BUJiq0HsT1VSnQnAzfEgQKEnyVILS1DnGtdaTkLF0maZtQ2iyPfrozixFnqN1w7hsOctb469jbmm3s46PWlUq5+/2aSDVuXe7JiJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+X-CSE-ConnectionGUID: 4OGhaSXxQxSJx/b/Bw4dSw==
+X-CSE-MsgGUID: ZyOa2snTQiOCkGECz5W/rg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11054"; a="32201143"
+X-IronPort-AV: E=Sophos;i="6.07,228,1708416000"; 
+   d="scan'208";a="32201143"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 02:20:25 -0700
+X-CSE-ConnectionGUID: 7jK+zlw0SRCZVKs9+SRg7A==
+X-CSE-MsgGUID: BkXce46QTKCVC1YFPVtR8w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,228,1708416000"; 
+   d="scan'208";a="25099980"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2024 02:20:21 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andy.shevchenko@gmail.com>)
+	id 1rzvH7-00000000wZV-32jl;
+	Thu, 25 Apr 2024 12:20:17 +0300
+Date: Thu, 25 Apr 2024 12:20:17 +0300
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+To: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	linux-kernel@vger.kernel.org,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Lee Jones <lee@kernel.org>, Jiawen Wu <jiawenwu@trustnetic.com>,
+	Mengyuan Lou <mengyuanlou@net-swift.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Duanqiang Wen <duanqiangwen@net-swift.com>,
+	"open list:SYNOPSYS DESIGNWARE I2C DRIVER" <linux-i2c@vger.kernel.org>,
+	"open list:WANGXUN ETHERNET DRIVER" <netdev@vger.kernel.org>
+Subject: Re: [PATCH 1/4] i2c: designware: Create shared header hosting driver
+ name
+Message-ID: <ZiogUS3yN5lXT-GH@smile.fi.intel.com>
+References: <20240423233622.1494708-1-florian.fainelli@broadcom.com>
+ <20240423233622.1494708-2-florian.fainelli@broadcom.com>
+ <ZihLSKe_BHxasBql@surfacebook.localdomain>
+ <59b7ba5a-14a8-497e-8cf8-53bdf4e8cb8e@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="ChY57WC1c4Rd39Ve"
-Content-Disposition: inline
-In-Reply-To: <20240425082138.374445-1-thomas.bonnefille@bootlin.com>
-
---ChY57WC1c4Rd39Ve
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <59b7ba5a-14a8-497e-8cf8-53bdf4e8cb8e@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Apr 25, 2024 at 10:21:31AM +0200, Thomas Bonnefille wrote:
-> This adds I2C support in the device tree of the T-Head TH1520 RISCV-SoC
-> and a default configuration for the BeagleV-Ahead. It appears that the
-> TH1520 I2C is already supported in the upstream kernel through the
-> Synopsis Designware I2C adapter driver.
+On Thu, Apr 25, 2024 at 11:33:02AM +0300, Jarkko Nikula wrote:
+> On 4/24/24 2:59 AM, Andy Shevchenko wrote:
+> > Tue, Apr 23, 2024 at 04:36:19PM -0700, Florian Fainelli kirjoitti:
+> > > We have a number of drivers that reference the string "i2c_designware"
+> > > yet this is copied all over the places with opportunities for this
+> > > string being mis-used. Create a shared header that defines this as a
+> > > constant that other drivers can reference.
 
-> As there is no clock driver for this board as of today, this patch
-> series uses a fixed-clock named i2c_ic_clk.
-> There is also no pinctrl driver yet so pinmux must be handled manually
-> for now.
+...
 
-https://lore.kernel.org/linux-riscv/20240103132852.298964-1-emil.renner.berthing@canonical.com/
-https://lore.kernel.org/linux-riscv/20240110-clk-th1520-v1-0-8b0682567984@tenstorrent.com/
+> > >   #include <linux/i2c.h>
+> > > +#include <linux/i2c-designware.h>
+> > 
+> > Can it be hidden in the subfolder?
 
-These seem to be the most recent versions of each. I guess they're both
-just waiting for their authors to have the time to get another version
-written.
+...
 
---ChY57WC1c4Rd39Ve
-Content-Type: application/pgp-signature; name="signature.asc"
+> > > -#define DRIVER_NAME "i2c-designware-pci"
+> > > +#define DRIVER_NAME I2C_DESIGNWARE_NAME "-pci"
+> > 
+> > Oh, this makes all the things hard to read.
+> > 
+> > >   /* Work with hotplug and coldplug */
+> > > -MODULE_ALIAS("i2c_designware-pci");
+> > > +MODULE_ALIAS(DRIVER_NAME);
+> > 
+> > I believe we shouldn't use MODULE_ALIAS() without real justification.
+> > 
+> I think MODULE_ALIAS() is even needless here since this device is not added
+> from another driver but loaded only for known PCI IDs in device table.
 
------BEGIN PGP SIGNATURE-----
+The patch that removes it got reverted :-( and then removed completely from PR.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZiobjwAKCRB4tDGHoIJi
-0m3oAP4tAD2kosaFcYvaXiFZn6dyRnma6alALn7IOrD+fGMjIAD+J6CU6uKzRjBl
-1LEW+b76173fZg3Ov1Ds6FNSXUQKLg8=
-=i8Ye
------END PGP SIGNATURE-----
+-- 
+With Best Regards,
+Andy Shevchenko
 
---ChY57WC1c4Rd39Ve--
+
 
