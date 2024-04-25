@@ -1,59 +1,61 @@
-Return-Path: <linux-i2c+bounces-3174-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3178-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C5A88B2B25
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 23:44:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40DA98B2B31
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 23:45:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 074DEB22152
-	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 21:44:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 728CE1C22ECF
+	for <lists+linux-i2c@lfdr.de>; Thu, 25 Apr 2024 21:45:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27C515575B;
-	Thu, 25 Apr 2024 21:44:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8156815667C;
+	Thu, 25 Apr 2024 21:44:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="ubFMABjg"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="u0NAEyL8"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BBED155723;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BBA7153834;
 	Thu, 25 Apr 2024 21:44:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714081484; cv=none; b=oh6pAN6w/UhjV5RNzvfIl4eBo6Mf0ouby+u1kVOkjOhMAYy8eIzSOScJFctgNBtVdNqAjnG4lwVc3bgW//CIqksNGcfdJerxVNhkKOATthg2r2VmCmaiqxU6G30UTpsrN1QjADX4Kui2RClbW5AnzrG/Fwr/DxIgsrenS4kqPPI=
+	t=1714081486; cv=none; b=ARPWe3qa7XAG8RhQn2jTSctPcnCctQHyt142PbKilFaYzcHq8I91vvN+ZrkPFFv4GtNp7B46Kv3/xXhVgW6rFrNRZDrreehHn9+OnxhxnTGIiF4LhR+uQMF10PkeV/rcprWZUWlWetMmNA64xQngd9rGjlI5fO5OaWhJIYEGZ3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714081484; c=relaxed/simple;
-	bh=evR01h6uW8bcnt8GR3szNRBfqTX5f8ZPUqLm/Whgqjw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QSmJqr7dcewpQzX96aGvQvytoa+1SGZNbYFqYWsvQBBGUdGZqqndgnFJ3z7DpxFrHkXBNtXvMdsLTRx1ZOo2+2YPUuCs8Res9ITzkWnmG/GYcaSIOWaTNDpINGjgsTZOZwtU7lLgvS0EfNmzDTOZQoVUsviq9VWsB4D0tqxw0bo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=ubFMABjg; arc=none smtp.client-ip=192.19.144.205
+	s=arc-20240116; t=1714081486; c=relaxed/simple;
+	bh=XWtzJrSwSicDwJ6itlPAo63YEYNCPCp+5FvVdfwfwc8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=qR9qnzH1eMXy13BROlpZy3+dB0oChr01WnM67A47iaUURucJwnOdf5HyFq8XNzKWaw8oZIpiEEXWFstXnYBinAbr/+57/3KnR8VxLb6RScrNy9poXYM4XTQZGThylBJ+8spXfTzCjtAjDNxM5oeOHfYyJdakUrtGkq9HQ8NOBhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=u0NAEyL8; arc=none smtp.client-ip=192.19.144.205
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id E5C42C00281F;
-	Thu, 25 Apr 2024 14:44:41 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com E5C42C00281F
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 1984FC002825;
+	Thu, 25 Apr 2024 14:44:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 1984FC002825
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
 	s=dkimrelay; t=1714081482;
-	bh=evR01h6uW8bcnt8GR3szNRBfqTX5f8ZPUqLm/Whgqjw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ubFMABjg5RcCJeR1RAi3GfQvCa2u9TwzWhMUTyY2GXNpQEjrc1mXyr17DaUPbyB2r
-	 e4fYm+IWbU6Tnm6Vyptniql9Z9d/koH346bmfW1nJAmdsi2M1ATHiERVThFrdG/Yw/
-	 /PbWCZW1TH4knO4U9f3Z2PPnSaCc3WkB9LjEySys=
+	bh=XWtzJrSwSicDwJ6itlPAo63YEYNCPCp+5FvVdfwfwc8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=u0NAEyL8pRwRLU25wUUIBJiXuxfN6Z27cFNnJiypMuatqHijrxLYyy2Vr18QNCHnQ
+	 Mi/luXIxXVlsbx2M4QsAHvrMusqMboLsCztYbPlODNZDn930lB/SnlO+Zr90LVg7Ih
+	 mq+BUrR8b73DZ28tFHKJQ32GcACt4S/9AbnoU9g4=
 Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id D1DA218041CAC4;
-	Thu, 25 Apr 2024 14:44:39 -0700 (PDT)
+	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 183C718041CAC6;
+	Thu, 25 Apr 2024 14:44:40 -0700 (PDT)
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 To: linux-kernel@vger.kernel.org
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Mario Limonciello <mario.limonciello@amd.com>,
 	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Serge Semin <fancer.lancer@gmail.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>,
 	Jan Dabros <jsd@semihalf.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
 	Lee Jones <lee@kernel.org>,
 	Jiawen Wu <jiawenwu@trustnetic.com>,
 	Mengyuan Lou <mengyuanlou@net-swift.com>,
@@ -66,10 +68,12 @@ Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
 	Duanqiang Wen <duanqiangwen@net-swift.com>,
 	linux-i2c@vger.kernel.org (open list:SYNOPSYS DESIGNWARE I2C DRIVER),
 	netdev@vger.kernel.org (open list:WANGXUN ETHERNET DRIVER)
-Subject: [PATCH v3 0/5] Define i2c_designware in a header file
-Date: Thu, 25 Apr 2024 14:44:33 -0700
-Message-Id: <20240425214438.2100534-1-florian.fainelli@broadcom.com>
+Subject: [PATCH v3 1/5] i2c: designware: Replace MODULE_ALIAS() with MODULE_DEVICE_TABLE()
+Date: Thu, 25 Apr 2024 14:44:34 -0700
+Message-Id: <20240425214438.2100534-2-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240425214438.2100534-1-florian.fainelli@broadcom.com>
+References: <20240425214438.2100534-1-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,51 +82,67 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series depends upon the following two patches being applied:
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-https://lore.kernel.org/all/20240422084109.3201-1-duanqiangwen@net-swift.com/
-https://lore.kernel.org/all/20240422084109.3201-2-duanqiangwen@net-swift.com/
+As Krzysztof Kozlowski pointed out the better is to use
+MODULE_DEVICE_TABLE() as it will be consistent with the content
+of the real ID table of the platform devices.
 
-There is no reason why each driver should have to repeat the
-"i2c_designware" string all over the place, because when that happens we
-see the reverts like the above being necessary.
+While at it, drop unneeded and unused module alias in PCI glue
+driver as PCI already has its own ID table and automatic loading
+should just work.
 
-Given the dependency on the two other patches above, it would make sense
-to route this via the networking tree, or wait until a v6.9-rc
-containing the above two changes gets merged into one of the i2c/mfd
-trees.
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Tested-by: Serge Semin <fancer.lancer@gmail.com>
+Link: https://lore.kernel.org/r/20231120144641.1660574-9-andriy.shevchenko@linux.intel.com
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-designware-pcidrv.c  | 2 --
+ drivers/i2c/busses/i2c-designware-platdrv.c | 8 ++++++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-Changes in v3:
-
-- incorporate Andy's change removing the MODULE_ALIAS
-- created a separate inclusion group as requested by Andy
-- changed the string format in txgbe_phy.c
-
-Changes in v2:
-
-- avoid changing i2c-designware-pcidrv.c more than necessary
-- move constant to include/linux/platform_data/i2c-designware.h
-- add comments as to how this constant is used and why
-
-Andy Shevchenko (1):
-  i2c: designware: Replace MODULE_ALIAS() with MODULE_DEVICE_TABLE()
-
-Florian Fainelli (4):
-  i2c: designware: Create shared header hosting driver name
-  mfd: intel-lpss: Utilize i2c-designware.h
-  mfd: intel_quark_i2c_gpio: Utilize i2c-designware.h
-  net: txgbe: Utilize i2c-designware.h
-
- MAINTAINERS                                    |  1 +
- drivers/i2c/busses/i2c-designware-pcidrv.c     |  2 --
- drivers/i2c/busses/i2c-designware-platdrv.c    | 12 +++++++++---
- drivers/mfd/intel-lpss.c                       |  3 ++-
- drivers/mfd/intel_quark_i2c_gpio.c             |  6 ++++--
- drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c |  6 ++++--
- include/linux/platform_data/i2c-designware.h   | 12 ++++++++++++
- 7 files changed, 32 insertions(+), 10 deletions(-)
- create mode 100644 include/linux/platform_data/i2c-designware.h
-
+diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+index 9be9a2658e1f..a1b379a1e904 100644
+--- a/drivers/i2c/busses/i2c-designware-pcidrv.c
++++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+@@ -424,8 +424,6 @@ static struct pci_driver dw_i2c_driver = {
+ };
+ module_pci_driver(dw_i2c_driver);
+ 
+-/* Work with hotplug and coldplug */
+-MODULE_ALIAS("i2c_designware-pci");
+ MODULE_AUTHOR("Baruch Siach <baruch@tkos.co.il>");
+ MODULE_DESCRIPTION("Synopsys DesignWare PCI I2C bus adapter");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+index 4ab41ba39d55..0be7b0dc849b 100644
+--- a/drivers/i2c/busses/i2c-designware-platdrv.c
++++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+@@ -479,8 +479,11 @@ static const struct dev_pm_ops dw_i2c_dev_pm_ops = {
+ 	RUNTIME_PM_OPS(dw_i2c_plat_runtime_suspend, dw_i2c_plat_runtime_resume, NULL)
+ };
+ 
+-/* Work with hotplug and coldplug */
+-MODULE_ALIAS("platform:i2c_designware");
++static const struct platform_device_id dw_i2c_platform_ids[] = {
++	{ "i2c_designware" },
++	{}
++};
++MODULE_DEVICE_TABLE(platform, dw_i2c_platform_ids);
+ 
+ static struct platform_driver dw_i2c_driver = {
+ 	.probe = dw_i2c_plat_probe,
+@@ -491,6 +494,7 @@ static struct platform_driver dw_i2c_driver = {
+ 		.acpi_match_table = ACPI_PTR(dw_i2c_acpi_match),
+ 		.pm	= pm_ptr(&dw_i2c_dev_pm_ops),
+ 	},
++	.id_table = dw_i2c_platform_ids,
+ };
+ 
+ static int __init dw_i2c_init_driver(void)
 -- 
 2.34.1
 
