@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3196-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3197-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CA218B3091
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:37:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 773928B3095
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:37:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAB131F214A2
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:37:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C5B42827D8
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:37:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8794213AA31;
-	Fri, 26 Apr 2024 06:35:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B62AF13A88F;
+	Fri, 26 Apr 2024 06:36:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XP7Ni1uw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u59GTOxM"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE1A13AA20;
-	Fri, 26 Apr 2024 06:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A46613A884;
+	Fri, 26 Apr 2024 06:36:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714113348; cv=none; b=lpDvwmWW0P/vUkAsn8En+M+BeNn5YeYdWMTZvN/MkQElf+1oJDicZBrXLDwmkxtfSZ/17EkDICVujPeFfWsf+PQXvYghrx8MNPGYWmYZIZDdRRIlgDMFVIn/nub/KHICEDrmAVDHYByoKCzQT2Ujl0Pf7cvbh1jQwnXj1zTTK7I=
+	t=1714113411; cv=none; b=CC5BcEtOuQI6cRCVca9V16XSX1o7YsAXfneLFPqLxwMnY4pQqBvTiaZTI5Io7MYzI8lboWo6364+VGKMxsuglB2S5pv1eFYY9u8MelHdSl9svqc0C42JlUynRHS8KviRuJ9bwogXCO/bALhgQfOIwMPnnafp/Hddyab5XQHQIQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714113348; c=relaxed/simple;
-	bh=RbWSL3rKRB91eZg18rXGPl0tISwD1FwO73TKO3S0/Co=;
+	s=arc-20240116; t=1714113411; c=relaxed/simple;
+	bh=zBK7g+qN+gxsF4rU5ggqp4pY12D4FPO/9gwC8bpG/xs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HrkrGV+ZsRIexwKz7ATrpW6lO+uYl7SIq0gBFCZFKpolh9c2ig+3rEJqT1kyRoRv0eqbvjJkmveYV3x9YynYWT9Jjl1Yl1iPBn6mWD79BC8xrKRc8XyDCrM0ztIy7AP/cMqltr82K7Q6SRaX2+tUhxDoBvWWZZSq2OBmV4X3yXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XP7Ni1uw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BCABC113CD;
-	Fri, 26 Apr 2024 06:35:43 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=mMmMXr+mDXovr4M6DWUoptXD4w1/ggU4Win/fYwtyxFMNcSppdMkgJahYSDumm0kg1BQfDQuJ0mAcjm5H77kQ4xbPEDzkYliTzgjhS7y12duU/nY6OzdqHujjfqiq5cpzaIlzqp6y0g9vl4JBQjj1WqooXjk93oLZI+i9V07nn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u59GTOxM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDAA5C113CE;
+	Fri, 26 Apr 2024 06:36:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714113347;
-	bh=RbWSL3rKRB91eZg18rXGPl0tISwD1FwO73TKO3S0/Co=;
+	s=k20201202; t=1714113411;
+	bh=zBK7g+qN+gxsF4rU5ggqp4pY12D4FPO/9gwC8bpG/xs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XP7Ni1uwiLiVNbxUnHuL6grl8pY4gjDS6VtBBEGujfo8z4Ilot/CDCenM7IE08AsX
-	 gRKEQb2n25SYqppry361qlDAoggc3hY8BEFKSfNeD8Q3phPfroogtrx+wFyflo1NkP
-	 9HCybdLIUrcQPpWdEI8XWY1IvGzAqMYmfgdynl5omGgogUPcdaBkXbLK37RYs/FRdr
-	 8jEPgPyEd8U58DuRC7EdkUmRFCfEq0aCIWkgasfKeaYCYkcC5WiFLV6V2IDy3be7C8
-	 Xx/itasF49P05JSx1Otjr/Mi0/WtTIM4GsBKakHJa6mEnq6Fp5AE8HS1JIJCbQa3Dw
-	 YTBcCXVZf6DRg==
-Message-ID: <b6c54d2e-9906-4607-bc19-e0de077c25b9@kernel.org>
-Date: Fri, 26 Apr 2024 08:35:40 +0200
+	b=u59GTOxMKUWP0seE3ch5bNiWlzz5FiCoGmZFdzS7MAlro7/mxaoaf+cikdza94Zf5
+	 +vLVKn0mhLA9TMfrrrePm0ZPtwPtiLuSLCU5ZqywhRdZxoaLelXvfC1IW7zC8rfEYx
+	 Y3h7l+Kn62M4s0sjZWAf9ez9Fht/vNezOuRgA9qKa30DIjBVRH9GDetRFHbHY2bfbm
+	 xnBl7ToKADoIxBWAL3vVmrI03hd6IWHj7BWVHYEiniMQX5so4EvUymP5IXCQImY+yU
+	 C2XtczL7r4dWoWF8tHEsPmRGufqYtSkDTnpWrSx1oTwWpvzgDOMfTdoWqwS6wpR+6I
+	 KP+Tvnyr9ho3A==
+Message-ID: <e13eca2b-b4aa-4583-878c-e88cebec0753@kernel.org>
+Date: Fri, 26 Apr 2024 08:36:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 13/14] ARM: dts: aspeed: Add IBM P11 Blueridge BMC
- system
+Subject: Re: [PATCH v3 14/14] ARM: dts: aspeed: Add IBM P11 Fuji BMC system
 To: Eddie James <eajames@linux.ibm.com>, linux-aspeed@lists.ozlabs.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
@@ -59,7 +58,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
  andrew@codeconstruct.com.au
 References: <20240425213701.655540-1-eajames@linux.ibm.com>
- <20240425213701.655540-14-eajames@linux.ibm.com>
+ <20240425213701.655540-15-eajames@linux.ibm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,26 +104,42 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240425213701.655540-14-eajames@linux.ibm.com>
+In-Reply-To: <20240425213701.655540-15-eajames@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 25/04/2024 23:37, Eddie James wrote:
-> Add the device tree for the new BMC system. The Blueridge is a
-> P11 system with four processors.
+> Add the device tree for the new BMC system. The Fuji is a P11
+> system with eight processors.
 > 
 > Signed-off-by: Eddie James <eajames@linux.ibm.com>
 > ---
->  .../dts/aspeed/aspeed-bmc-ibm-blueridge.dts   | 1711 +++++++++++++++++
->  1 file changed, 1711 insertions(+)
->  create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-blueridge.dts
+>  arch/arm/boot/dts/aspeed/Makefile             |    2 +
+>  .../boot/dts/aspeed/aspeed-bmc-ibm-fuji.dts   | 3984 +++++++++++++++++
+>  2 files changed, 3986 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-fuji.dts
 > 
-> diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-blueridge.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-blueridge.dts
+> diff --git a/arch/arm/boot/dts/aspeed/Makefile b/arch/arm/boot/dts/aspeed/Makefile
+> index 715106b3baa1..783409b7c206 100644
+> --- a/arch/arm/boot/dts/aspeed/Makefile
+> +++ b/arch/arm/boot/dts/aspeed/Makefile
+> @@ -33,8 +33,10 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+>  	aspeed-bmc-facebook-yamp.dtb \
+>  	aspeed-bmc-facebook-yosemitev2.dtb \
+>  	aspeed-bmc-facebook-yosemite4.dtb \
+> +	aspeed-bmc-ibm-blueridge.dtb \
+>  	aspeed-bmc-ibm-bonnell.dtb \
+>  	aspeed-bmc-ibm-everest.dtb \
+> +	aspeed-bmc-ibm-fuji.dtb \
+>  	aspeed-bmc-ibm-rainier.dtb \
+>  	aspeed-bmc-ibm-rainier-1s4u.dtb \
+>  	aspeed-bmc-ibm-rainier-4u.dtb \
+> diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-fuji.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-fuji.dts
 > new file mode 100644
-> index 000000000000..8503ce2480b5
+> index 000000000000..dc41fa815761
 > --- /dev/null
-> +++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-blueridge.dts
-> @@ -0,0 +1,1711 @@
+> +++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-fuji.dts
+> @@ -0,0 +1,3984 @@
 > +// SPDX-License-Identifier: GPL-2.0-or-later
 > +// Copyright 2024 IBM Corp.
 > +/dts-v1/;
@@ -135,34 +150,169 @@ On 25/04/2024 23:37, Eddie James wrote:
 > +#include <dt-bindings/leds/leds-pca955x.h>
 > +
 > +/ {
-> +	model = "Blueridge";
-> +	compatible = "ibm,blueridge-bmc", "aspeed,ast2600";
+> +	model = "Fuji";
+> +	compatible = "ibm,fuji-bmc", "aspeed,ast2600";
 > +
 > +	aliases {
+> +		i2c500 = &cfam4_i2c0;
+> +		i2c501 = &cfam4_i2c1;
+> +		i2c510 = &cfam4_i2c10;
+> +		i2c511 = &cfam4_i2c11;
+> +		i2c512 = &cfam4_i2c12;
+> +		i2c513 = &cfam4_i2c13;
+> +		i2c514 = &cfam4_i2c14;
+> +		i2c515 = &cfam4_i2c15;
+> +		i2c602 = &cfam5_i2c2;
+> +		i2c603 = &cfam5_i2c3;
+> +		i2c610 = &cfam5_i2c10;
+> +		i2c611 = &cfam5_i2c11;
+> +		i2c614 = &cfam5_i2c14;
+> +		i2c615 = &cfam5_i2c15;
+> +		i2c616 = &cfam5_i2c16;
+> +		i2c617 = &cfam5_i2c17;
+> +		i2c700 = &cfam6_i2c0;
+> +		i2c701 = &cfam6_i2c1;
+> +		i2c710 = &cfam6_i2c10;
+> +		i2c711 = &cfam6_i2c11;
+> +		i2c712 = &cfam6_i2c12;
+> +		i2c713 = &cfam6_i2c13;
+> +		i2c714 = &cfam6_i2c14;
+> +		i2c715 = &cfam6_i2c15;
+> +		i2c802 = &cfam7_i2c2;
+> +		i2c803 = &cfam7_i2c3;
+> +		i2c810 = &cfam7_i2c10;
+> +		i2c811 = &cfam7_i2c11;
+> +		i2c814 = &cfam7_i2c14;
+> +		i2c815 = &cfam7_i2c15;
+> +		i2c816 = &cfam7_i2c16;
+> +		i2c817 = &cfam7_i2c17;
+> +
+> +		i2c16 = &i2c4mux0chn0;
+> +		i2c17 = &i2c4mux0chn1;
+> +		i2c18 = &i2c4mux0chn2;
+> +		i2c19 = &i2c5mux0chn0;
+> +		i2c20 = &i2c5mux0chn1;
+> +		i2c21 = &i2c5mux0chn2;
+> +		i2c22 = &i2c5mux0chn3;
+> +		i2c23 = &i2c6mux0chn0;
+> +		i2c24 = &i2c6mux0chn1;
+> +		i2c25 = &i2c6mux0chn2;
+> +		i2c26 = &i2c6mux0chn3;
+> +		i2c27 = &i2c14mux0chn0;
+> +		i2c28 = &i2c14mux0chn1;
+> +		i2c29 = &i2c14mux0chn2;
+> +		i2c30 = &i2c14mux0chn3;
+> +		i2c31 = &i2c14mux1chn0;
+> +		i2c32 = &i2c14mux1chn1;
+> +		i2c33 = &i2c14mux1chn2;
+> +		i2c34 = &i2c14mux1chn3;
+> +		i2c35 = &i2c15mux0chn0;
+> +		i2c36 = &i2c15mux0chn1;
+> +		i2c37 = &i2c15mux0chn2;
+> +		i2c38 = &i2c15mux0chn3;
+> +		i2c39 = &i2c15mux1chn0;
+> +		i2c40 = &i2c15mux1chn1;
+> +		i2c41 = &i2c15mux1chn2;
+> +		i2c42 = &i2c15mux1chn3;
+> +		i2c43 = &i2c15mux2chn0;
+> +		i2c44 = &i2c15mux2chn1;
+> +		i2c45 = &i2c15mux2chn2;
+> +		i2c46 = &i2c15mux2chn3;
+> +		i2c47 = &i2c8mux0chn0;
+> +		i2c48 = &i2c8mux0chn1;
+> +
 > +		serial4 = &uart5;
-> +		i2c16 = &i2c2mux0;
-> +		i2c17 = &i2c2mux1;
-> +		i2c18 = &i2c2mux2;
-> +		i2c19 = &i2c2mux3;
-> +		i2c20 = &i2c4mux0chn0;
-> +		i2c21 = &i2c4mux0chn1;
-> +		i2c22 = &i2c4mux0chn2;
-> +		i2c23 = &i2c5mux0chn0;
-> +		i2c24 = &i2c5mux0chn1;
-> +		i2c25 = &i2c6mux0chn0;
-> +		i2c26 = &i2c6mux0chn1;
-> +		i2c27 = &i2c6mux0chn2;
-> +		i2c28 = &i2c6mux0chn3;
-> +		i2c29 = &i2c11mux0chn0;
-> +		i2c30 = &i2c11mux0chn1;
+> +
+> +		sbefifo500 = &sbefifo500;
+> +		sbefifo501 = &sbefifo501;
+> +		sbefifo510 = &sbefifo510;
+> +		sbefifo511 = &sbefifo511;
+> +		sbefifo512 = &sbefifo512;
+> +		sbefifo513 = &sbefifo513;
+> +		sbefifo514 = &sbefifo514;
+> +		sbefifo515 = &sbefifo515;
+> +		sbefifo602 = &sbefifo602;
+> +		sbefifo603 = &sbefifo603;
+> +		sbefifo610 = &sbefifo610;
+> +		sbefifo611 = &sbefifo611;
+> +		sbefifo614 = &sbefifo614;
+> +		sbefifo615 = &sbefifo615;
+> +		sbefifo616 = &sbefifo616;
+> +		sbefifo617 = &sbefifo617;
+> +		sbefifo700 = &sbefifo700;
+> +		sbefifo701 = &sbefifo701;
+> +		sbefifo710 = &sbefifo710;
+> +		sbefifo711 = &sbefifo711;
+> +		sbefifo712 = &sbefifo712;
+> +		sbefifo713 = &sbefifo713;
+> +		sbefifo714 = &sbefifo714;
+> +		sbefifo715 = &sbefifo715;
+> +		sbefifo802 = &sbefifo802;
+> +		sbefifo803 = &sbefifo803;
+> +		sbefifo810 = &sbefifo810;
+> +		sbefifo811 = &sbefifo811;
+> +		sbefifo814 = &sbefifo814;
+> +		sbefifo815 = &sbefifo815;
+> +		sbefifo816 = &sbefifo816;
+> +		sbefifo817 = &sbefifo817;
+> +
+> +		scom500 = &scom500;
+> +		scom501 = &scom501;
+> +		scom510 = &scom510;
+> +		scom511 = &scom511;
+> +		scom512 = &scom512;
+> +		scom513 = &scom513;
+> +		scom514 = &scom514;
+> +		scom515 = &scom515;
+> +		scom602 = &scom602;
+> +		scom603 = &scom603;
+> +		scom610 = &scom610;
+> +		scom611 = &scom611;
+> +		scom614 = &scom614;
+> +		scom615 = &scom615;
+> +		scom616 = &scom616;
+> +		scom617 = &scom617;
+> +		scom700 = &scom700;
+> +		scom701 = &scom701;
+> +		scom710 = &scom710;
+> +		scom711 = &scom711;
+> +		scom712 = &scom712;
+> +		scom713 = &scom713;
+> +		scom714 = &scom714;
+> +		scom715 = &scom715;
+> +		scom802 = &scom802;
+> +		scom803 = &scom803;
+> +		scom810 = &scom810;
+> +		scom811 = &scom811;
+> +		scom814 = &scom814;
+> +		scom815 = &scom815;
+> +		scom816 = &scom816;
+> +		scom817 = &scom817;
+> +
+> +		spi50 = &cfam4_spi0;
+> +		spi51 = &cfam4_spi1;
+> +		spi52 = &cfam4_spi2;
+> +		spi53 = &cfam4_spi3;
+> +		spi60 = &cfam5_spi0;
+> +		spi61 = &cfam5_spi1;
+> +		spi62 = &cfam5_spi2;
+> +		spi63 = &cfam5_spi3;
+> +		spi70 = &cfam6_spi0;
+> +		spi71 = &cfam6_spi1;
+> +		spi72 = &cfam6_spi2;
+> +		spi73 = &cfam6_spi3;
+> +		spi80 = &cfam7_spi0;
+> +		spi81 = &cfam7_spi1;
+> +		spi82 = &cfam7_spi2;
+> +		spi83 = &cfam7_spi3;
 > +	};
 > +
 > +	chosen {
 > +		stdout-path = &uart5;
-> +		bootargs = "console=ttyS4,115200n8 earlycon";
+> +		bootargs = "console=ttyS4,115200n8";
 
-Drop bootargs. ALWAYS.
 
+Drop bootargs. Everywhere.
 
 > +	};
 > +
@@ -178,227 +328,19 @@ Drop bootargs. ALWAYS.
 > +
 > +		event_log: tcg_event_log@b3d00000 {
 
-No underscores.
-
-Didn't you already received such basic review?
+Same problem
 
 
-> +			no-map;
-> +			reg = <0xb3d00000 0x100000>;
-> +		};
-> +
-> +		ramoops@b3e00000 {
-> +			compatible = "ramoops";
-> +			reg = <0xb3e00000 0x200000>; /* 16 * (4 * 0x8000) */
-> +			record-size = <0x8000>;
-> +			console-size = <0x8000>;
-> +			ftrace-size = <0x8000>;
-> +			pmsg-size = <0x8000>;
-> +			max-reason = <3>; /* KMSG_DUMP_EMERG */
-> +		};
-> +
-> +		/* LPC FW cycle bridge region requires natural alignment */
-> +		flash_memory: region@b4000000 {
-> +			no-map;
-> +			reg = <0xb4000000 0x04000000>; /* 64M */
-> +		};
-> +
-> +		/* VGA region is dictated by hardware strapping */
-> +		vga_memory: region@bf000000 {
-> +			no-map;
-> +			compatible = "shared-dma-pool";
-> +			reg = <0xbf000000 0x01000000>;  /* 16M */
-> +		};
-> +	};
-> +
-> +	i2c2mux: i2cmux {
-> +		compatible = "i2c-mux-gpio";
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		status = "okay";
 
-??? Drop
-
-
-> +
-> +		i2c-parent = <&i2c2>;
-> +		mux-gpios = <&gpio0 ASPEED_GPIO(G, 4) GPIO_ACTIVE_HIGH>,
-> +			    <&gpio0 ASPEED_GPIO(G, 5) GPIO_ACTIVE_HIGH>;
-> +		idle-state = <0>;
-> +
-> +		i2c2mux0: i2c@0 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0>;
-> +		};
-> +
-> +		i2c2mux1: i2c@1 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <1>;
-> +		};
-> +
-> +		i2c2mux2: i2c@2 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <2>;
-> +		};
-> +
-> +		i2c2mux3: i2c@3 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <3>;
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		/* BMC Card fault LED at the back */
-> +		led-bmc-ingraham0 {
-> +			gpios = <&gpio0 ASPEED_GPIO(H, 1) GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		/* Enclosure ID LED at the back */
-> +		led-rear-enc-id0 {
-> +			gpios = <&gpio0 ASPEED_GPIO(H, 2) GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		/* Enclosure fault LED at the back */
-> +		led-rear-enc-fault0 {
-> +			gpios = <&gpio0 ASPEED_GPIO(H, 3) GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		/* PCIE slot power LED */
-> +		led-pcieslot-power {
-> +			gpios = <&gpio0 ASPEED_GPIO(P, 4) GPIO_ACTIVE_LOW>;
-> +		};
-> +	};
-> +
-> +	gpio-keys-polled {
-> +		compatible = "gpio-keys-polled";
-> +		poll-interval = <1000>;
-> +
-> +		event-fan0-presence {
-> +			label = "fan0-presence";
-> +			gpios = <&pca0 6 GPIO_ACTIVE_LOW>;
-> +			linux,code = <6>;
-> +		};
-> +
-> +		event-fan1-presence {
-> +			label = "fan1-presence";
-> +			gpios = <&pca0 7 GPIO_ACTIVE_LOW>;
-> +			linux,code = <7>;
-> +		};
-> +
-> +		event-fan2-presence {
-> +			label = "fan2-presence";
-> +			gpios = <&pca0 8 GPIO_ACTIVE_LOW>;
-> +			linux,code = <8>;
-> +		};
-> +
-> +		event-fan3-presence {
-> +			label = "fan3-presence";
-> +			gpios = <&pca0 9 GPIO_ACTIVE_LOW>;
-> +			linux,code = <9>;
-> +		};
-> +
-> +		event-fan4-presence {
-> +			label = "fan4-presence";
-> +			gpios = <&pca0 10 GPIO_ACTIVE_LOW>;
-> +			linux,code = <10>;
-> +		};
-> +
-> +		event-fan5-presence {
-> +			label = "fan5-presence";
-> +			gpios = <&pca0 11 GPIO_ACTIVE_LOW>;
-> +			linux,code = <11>;
-> +		};
-> +	};
-> +
-> +	iio-hwmon {
-> +		compatible = "iio-hwmon";
-> +		io-channels = <&adc1 7>;
-> +	};
-> +};
-> +
-> +&adc1 {
-> +	status = "okay";
-> +	aspeed,int-vref-microvolt = <2500000>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
-> +		&pinctrl_adc10_default &pinctrl_adc11_default
-> +		&pinctrl_adc12_default &pinctrl_adc13_default
-> +		&pinctrl_adc14_default &pinctrl_adc15_default>;
-> +};
-> +
-> +&ehci1 {
-> +	status = "okay";
-> +};
-> +
-> +&uhci {
-> +	status = "okay";
-> +};
-> +
-> +&gpio0 {
-> +	gpio-line-names =
-> +	/*A0-A7*/	"","","","","","","","",
-> +	/*B0-B7*/	"","","","","","","checkstop","",
-> +	/*C0-C7*/	"","","","","","","","",
-> +	/*D0-D7*/	"","","","","","","","",
-> +	/*E0-E7*/	"","","","","","","","",
-> +	/*F0-F7*/	"","","rtc-battery-voltage-read-enable","reset-cause-pinhole","","","factory-reset-toggle","",
-> +	/*G0-G7*/	"","","","","","","","",
-> +	/*H0-H7*/	"","bmc-ingraham0","rear-enc-id0","rear-enc-fault0","","","","",
-> +	/*I0-I7*/	"","","","","","","bmc-secure-boot","",
-> +	/*J0-J7*/	"","","","","","","","",
-> +	/*K0-K7*/	"","","","","","","","",
-> +	/*L0-L7*/	"","","","","","","","",
-> +	/*M0-M7*/	"","","","","","","","",
-> +	/*N0-N7*/	"","","","","","","","",
-> +	/*O0-O7*/	"","","","usb-power","","","","",
-> +	/*P0-P7*/	"","","","","pcieslot-power","","","",
-> +	/*Q0-Q7*/	"cfam-reset","","regulator-standby-faulted","","","","","",
-> +	/*R0-R7*/	"bmc-tpm-reset","power-chassis-control","power-chassis-good","","","","","",
-> +	/*S0-S7*/	"presence-ps0","presence-ps1","presence-ps2","presence-ps3",
-> +	"power-ffs-sync-history","","","",
-> +	/*T0-T7*/	"","","","","","","","",
-> +	/*U0-U7*/	"","","","","","","","",
-> +	/*V0-V7*/	"","","","","","","","",
-> +	/*W0-W7*/	"","","","","","","","",
-> +	/*X0-X7*/	"","","","","","","","",
-> +	/*Y0-Y7*/	"","","","","","","","",
-> +	/*Z0-Z7*/	"","","","","","","","";
-> +
-> +	i2c3_mux_oe_n-hog {
-> +		gpio-hog;
-> +		gpios = <ASPEED_GPIO(G, 6) GPIO_ACTIVE_LOW>;
-> +		output-high;
-> +		line-name = "I2C3_MUX_OE_N";
-> +	};
 > +
 > +	usb_power-hog {
+
+No underscores.
+
 > +		gpio-hog;
 > +		gpios = <ASPEED_GPIO(O, 3) GPIO_ACTIVE_LOW>;
 > +		output-high;
 > +	};
-> +};
-> +
-> +&emmc_controller {
-> +	status = "okay";
-> +};
-> +
-> +&pinctrl_emmc_default {
-> +	bias-disable;
-> +};
-> +
-> +&emmc {
-> +	status = "okay";
-> +	clk-phase-mmc-hs200 = <180>, <180>;
-> +};
-> +
-> +&ibt {
-> +	status = "okay";
 > +};
 > +
 > +&i2c0 {
@@ -409,275 +351,9 @@ Didn't you already received such basic review?
 > +		reg = <0x51>;
 > +	};
 > +
-> +	tca_pres1: tca9554@20{
+> +	pca1: pca9552@62 {
 
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Also missing space before {
-
-
-> +		compatible = "ti,tca9554";
-> +		reg = <0x20>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +
-> +		gpio-line-names = "",
-> +			"RUSSEL_FW_I2C_ENABLE_N",
-> +			"RUSSEL_OPPANEL_PRESENCE_N",
-> +			"BLYTH_OPPANEL_PRESENCE_N",
-> +			"CPU_TPM_CARD_PRESENT_N",
-> +			"DASD_BP2_PRESENT_N",
-> +			"DASD_BP1_PRESENT_N",
-> +			"DASD_BP0_PRESENT_N";
-> +	};
-> +};
-> +
-> +&i2c1 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c2 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c3 {
-> +	status = "okay";
-> +
-> +	power-supply@68 {
-> +		compatible = "ibm,cffps";
-> +		reg = <0x68>;
-> +	};
-> +
-> +	power-supply@69 {
-> +		compatible = "ibm,cffps";
-> +		reg = <0x69>;
-> +	};
-> +
-> +	pca_pres1: pca9552@61 {
-
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-
-> +		compatible = "nxp,pca9552";
-> +		reg = <0x61>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +
-> +		gpio-line-names =
-> +			"SLOT0_PRSNT_EN_RSVD", "SLOT1_PRSNT_EN_RSVD",
-> +			"SLOT2_PRSNT_EN_RSVD", "SLOT3_PRSNT_EN_RSVD",
-> +			"SLOT4_PRSNT_EN_RSVD", "SLOT0_EXPANDER_PRSNT_N",
-> +			"SLOT1_EXPANDER_PRSNT_N", "SLOT2_EXPANDER_PRSNT_N",
-> +			"SLOT3_EXPANDER_PRSNT_N", "SLOT4_EXPANDER_PRSNT_N",
-> +			"", "", "", "", "", "";
-> +	};
-> +};
-> +
-> +&i2c4 {
-> +	status = "okay";
-> +
-> +	tmp275@48 {
-
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-
-
-> +		compatible = "ti,tmp275";
-> +		reg = <0x48>;
-> +	};
-> +
-> +	tmp275@49 {
-
-So it's everywhere...
-
-> +		compatible = "ti,tmp275";
-> +		reg = <0x49>;
-> +	};
-> +
-> +	tmp275@4a {
-> +		compatible = "ti,tmp275";
-> +		reg = <0x4a>;
-> +	};
-> +
-> +	i2c-mux@70 {
-> +		compatible = "nxp,pca9546";
-> +		reg = <0x70>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		status = "okay";
-
-Why? Drop
-
-> +		i2c-mux-idle-disconnect;
-> +
-> +		i2c4mux0chn0: i2c@0 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0>;
-> +
-> +			eeprom@50 {
-> +				compatible = "atmel,24c64";
-> +				reg = <0x50>;
-> +			};
-> +
-> +			pca9551@60 {
-
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-
-> +				compatible = "nxp,pca9551";
-> +				reg = <0x60>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				gpio-controller;
-> +				#gpio-cells = <2>;
-> +
-> +				led@0 {
-> +					label = "cablecard0-cxp-top";
-> +					reg = <0>;
-> +					retain-state-shutdown;
-> +					default-state = "keep";
-> +					type = <PCA955X_TYPE_LED>;
-> +				};
-> +
-> +				led@1 {
-> +					label = "cablecard0-cxp-bot";
-> +					reg = <1>;
-> +					retain-state-shutdown;
-> +					default-state = "keep";
-> +					type = <PCA955X_TYPE_LED>;
-> +				};
-> +			};
-> +		};
-> +
-> +		i2c4mux0chn1: i2c@1 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <1>;
-
-reg is after compatible, which means if there is no compatible, reg is
-always first. This applies you all your DTS patches. This patchset and
-future.
-
-
-> +
-> +			eeprom@51 {
-> +				compatible = "atmel,24c64";
-> +				reg = <0x51>;
-> +			};
-> +		};
-> +
-> +		i2c4mux0chn2: i2c@2 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <2>;
-> +
-> +			eeprom@52 {
-> +				compatible = "atmel,24c64";
-> +				reg = <0x52>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&i2c5 {
-> +	status = "okay";
-> +
-> +	tmp275@48 {
-
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-
-> +		compatible = "ti,tmp275";
-> +		reg = <0x48>;
-> +	};
-> +
-> +	tmp275@49 {
-> +		compatible = "ti,tmp275";
-> +		reg = <0x49>;
-> +	};
-> +
-> +	i2c-mux@70 {
-> +		compatible = "nxp,pca9546";
-> +		reg = <0x70>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		status = "okay";
-
-Drop
-
-
-> +		i2c-mux-idle-disconnect;
-> +
-> +		i2c5mux0chn0: i2c@0 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0>;
-> +
-> +			eeprom@50 {
-> +				compatible = "atmel,24c64";
-> +				reg = <0x50>;
-> +			};
-> +
-> +			pca9551@60 {
-> +				compatible = "nxp,pca9551";
-> +				reg = <0x60>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				gpio-controller;
-> +				#gpio-cells = <2>;
-> +
-> +				led@0 {
-> +					label = "cablecard3-cxp-top";
-> +					reg = <0>;
-> +					retain-state-shutdown;
-> +					default-state = "keep";
-> +					type = <PCA955X_TYPE_LED>;
-> +				};
-> +
-> +				led@1 {
-> +					label = "cablecard3-cxp-bot";
-> +					reg = <1>;
-> +					retain-state-shutdown;
-> +					default-state = "keep";
-> +					type = <PCA955X_TYPE_LED>;
-> +				};
-> +			};
-> +		};
-> +
-> +		i2c5mux0chn1: i2c@1 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <1>;
-> +
-> +			eeprom@51 {
-> +				compatible = "atmel,24c64";
-> +				reg = <0x51>;
-> +			};
-> +
-> +			pca9551@61 {
-> +				compatible = "nxp,pca9551";
-> +				reg = <0x61>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-
-
-And here you have correct order of properties...
+All my previous comments apply.
 
 
 
