@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3212-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3213-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B2188B3625
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 12:58:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE1F08B362B
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 12:59:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01719B229E3
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 10:58:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6505C284CAA
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 10:59:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C3A1448F4;
-	Fri, 26 Apr 2024 10:58:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C211448F4;
+	Fri, 26 Apr 2024 10:59:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bocjBleb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CnE57//r"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F019143C67;
-	Fri, 26 Apr 2024 10:58:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB9D143C67;
+	Fri, 26 Apr 2024 10:59:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714129083; cv=none; b=OHL70x2uJxkd4+r3LvedRw115qlU3CUYYWt+gl56y8bcf4b1+zCnsY2e2+0PUXD2w+ygetaJ6WHGOwfhX14jSMRRMfHrhvBQQJD9Z8mnpmTYVyfqNxwu+KTWOLasUiqyJh4KuQvMaZB0aRh7/ms/hy5uCx6PUZ5Xjk0Bl7FhIB4=
+	t=1714129190; cv=none; b=HOrKRc/aBmpn36yvNx8/8humpktiJVRlqDMx+EIDN8GEbcxVwatGD4imojTw4DMXbaEPQ0+a2atHJrX00Oll3OayQQp/w+TcNZS3sxwYgpntCc5K9neL+29YtknqOyQAIxEeYBFy0KcpoxVzwrpdFGfzW4kPjSSJxHalXchnJgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714129083; c=relaxed/simple;
-	bh=1s2TzWQTvm/zFKaHYKLT50Sq8YNHnWRrOO6rm42qpLM=;
+	s=arc-20240116; t=1714129190; c=relaxed/simple;
+	bh=KaQOrrIRKBegc78ArdoGcbZUFg4f73NCcN2MIPJHubg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LFh7wUiAlqnO2JwWmoqI/kmvAz7aEUzqYljn79FQTlBgokjFHg0cUqNkzmkt6pS1eaVubCHPsYReOVHsLKSgmjsTTLnMOf9JWEhjOApLHZB3B+qhI/hASduInUFS6VayyplfrjiIm+TpD8dqVDh5jkYGQ6A7+G28STKpGXEBQTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bocjBleb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF5B3C113CD;
-	Fri, 26 Apr 2024 10:57:57 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ins2uXmZuKJKqzwsz0TGwm0VY/iTNtHUYnlXjodjvpswXSwIbKGbh0s4BVzbyt5b+Z5BE4cFKe3iXyOvf8/4cgyr1z83WYRuhPD8Mh5fEKo94R7TgFP+9SbfACY+gb2+JlRTorUXve+bs+7EeFeQRKYsTNZsRfPyJTii3G/cUMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CnE57//r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4479C113CE;
+	Fri, 26 Apr 2024 10:59:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714129082;
-	bh=1s2TzWQTvm/zFKaHYKLT50Sq8YNHnWRrOO6rm42qpLM=;
+	s=k20201202; t=1714129189;
+	bh=KaQOrrIRKBegc78ArdoGcbZUFg4f73NCcN2MIPJHubg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=bocjBlebDBUw2qMyEF2v9rPG+PhLEnxnPk10JqMYZ1kGuufFQOlXoJ/7UuxVV69P2
-	 PDrk38Z3byFmzGS1BThNaSBtApl2o5QCarfXY1+FqRv6tPw1B9KnJW3gbMaQDRkbOZ
-	 Jvxdr62S11TOunO9loajShJHRPmzmUhXxUAgIXeVys/TPQ8Piudcuk2T/jgEgJe9vR
-	 zT8he5UtUVfvXxA1ms5SXh4FBtpIeSPc5oIsIRT/6zBUIGRyhecfs5Uu0en7pv8VY8
-	 3YkY8hJz+FJUREVddAwRxzZtQSnD9j7fhwt1cacPuN1kWisdTZekmTDIxJwG4GcH+l
-	 uR9O8g/qraSXg==
-Message-ID: <313b2d06-ad72-49f6-90f6-5eb6a49e96f8@kernel.org>
-Date: Fri, 26 Apr 2024 12:57:55 +0200
+	b=CnE57//r60fYZEt/Pzox+aCqs0Rdt5TI26EedBdvQ8HsCLbrPk2T0DkxEz8eygkF/
+	 3mCdwX6MFg3ytJIrWRPjkENVFP+0TAtRuwPYJsStf0ec78oylATJ6Xl39cC1bdS+yR
+	 KWn4WLf6+gBUO3O+Dd1u+3UM3EJuiDxP6TvALY+v0rsY3DqroK70YqZ3+9aEb2DieX
+	 Sa3sTNRKXFXXb9ca7sM1Tz1L54BwmX6HOTmRs4TFWsGgWyhmEKckUW08tty3RabJGS
+	 ywWnj2o49vBKFgg6OSRt5dyMko1P70AYW6fpAHmF34yRfb0Z8tuiXmtSyMsk9Hcffs
+	 9Ws5mkx0w4pWQ==
+Message-ID: <eec0ccef-17c7-456e-aa5c-58195a06ffb2@kernel.org>
+Date: Fri, 26 Apr 2024 12:59:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] dt-bindings: eeprom: at24: Add support for at24c64
+Subject: Re: [PATCH 3/3] dt-bindings: eeprom: at24: Add property dovdd-supply
 To: "zoie.lin" <zoie.lin@mediatek.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
@@ -63,7 +63,7 @@ Cc: linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
  linux-mediatek@lists.infradead.org,
  Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20240426102949.23057-1-zoie.lin@mediatek.com>
- <20240426102949.23057-3-zoie.lin@mediatek.com>
+ <20240426102949.23057-4-zoie.lin@mediatek.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,32 +109,22 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240426102949.23057-3-zoie.lin@mediatek.com>
+In-Reply-To: <20240426102949.23057-4-zoie.lin@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 26/04/2024 12:29, zoie.lin wrote:
 > From: Zoie Lin <zoie.lin@mediatek.com>
 > 
-> Update EEPROM bindings to include Atmel AT24C64
-> 
-> Signed-off-by: Zoie Lin <zoie.lin@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/eeprom/at24.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> index 1812ef31d5f1..8befd09963be 100644
-> --- a/Documentation/devicetree/bindings/eeprom/at24.yaml
-> +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> @@ -131,6 +131,8 @@ properties:
->        - items:
->            - const: giantec,gt24c32a
->            - const: atmel,24c32
-> +      - items:
-> +          - const: atmel,24c64
+> Include a new property named dovdd-supply to provide an
+> additional power supply.
 
-It is already there as part of pattern. Did you look at it?
+Which pin is it? Which device? Please write something useful...
+
+I cannot find such pin on AT24C64, which you are adding support here.
+https://ww1.microchip.com/downloads/en/devicedoc/doc0336.pdf
+
+
 
 Best regards,
 Krzysztof
