@@ -1,115 +1,198 @@
-Return-Path: <linux-i2c+bounces-3219-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3220-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 284148B3A0E
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 16:30:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E3728B3A3E
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 16:42:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28A26B2489B
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 14:30:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 403A61C22546
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 14:42:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC941E869;
-	Fri, 26 Apr 2024 14:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBFC1144D2E;
+	Fri, 26 Apr 2024 14:42:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VqgdVq9Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mCbWI8A+"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569361DFFC;
-	Fri, 26 Apr 2024 14:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B3034CD8;
+	Fri, 26 Apr 2024 14:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714141834; cv=none; b=bgyPF1m3viucTgJ+mivEBajvnhEYVyCe5IT2lbn0ojZL327poygRiDsxN8zd3v44SV5u5vaAtmwvZvh+eT4P7XtP6geW8jSV4uiRrMfJoVxtqEVCRkRNFAekYPc5fTHQ4mA4NOUX9kJsrrmdalb52fnz/YhcjI2O8vsMn6FZ2vQ=
+	t=1714142542; cv=none; b=oEmhBUkhHw7I8hDJocCq5Du5iAcCqL6/TYymvw3ZIClCHAjEDs/vZfz20BiRwi2r9HdtI0eNe4HBHxz3uGJLoCPapAHQapbtmrNgj83zH/hQZfROYD7uICWqmTj/WhSSadWmK9zW/7LGPO69OopaLESUSNuXdqEp9gxKUTXdbfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714141834; c=relaxed/simple;
-	bh=7jaY6iKYpTLxfAVZPPuHMnYRCkS4mEJxcsaz7O6SumU=;
+	s=arc-20240116; t=1714142542; c=relaxed/simple;
+	bh=2taC0FbVINV/Pfa20kvrVfsK3Rx9kry5R3sfqmV0PUs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GsvdYZRK+jRyq4XC4ewBv7jnxNxVvjSvWEasO2B4A3TuJabOmqTZxCvs4lau5+z0DCx2v90Gh73hpwvf/WZ1JRShepu+FgUFFP4o95OGRogTNSzlP2mRs7gE8LvSQsKE8DP68QMgXvXG+2mqIl68+O6nD0dFgtFUeScUfInqIPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VqgdVq9Y; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714141833; x=1745677833;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=7jaY6iKYpTLxfAVZPPuHMnYRCkS4mEJxcsaz7O6SumU=;
-  b=VqgdVq9YLi7SQyrorzGhy7HHfxv1C/QMuMUF4EY2fYnvI/ddDU1tbHoH
-   pOTNf1Z03SDbRI8rVpKATbPhAbhXtot2fZus2uyvDebPJvJ/92/Z22Xlq
-   wpPCrTrtHoCe7bL2QFCuCxeIlZrRasn+3azpcPBjeySPj0ElxqlWhRVC8
-   SslFkLzVe4EFvywtwIS6dUqADbPIlU3V42UWR9hxCOdH+W/qraNxaDnq8
-   TEL4r/hmYLzOXPeT/nEld6yz1kbQXc6SD2syTMzhjpON92LIUm4d/EwsL
-   o70Ow0nV/hzIgyF9rs0bm+wsTEMv+BlCKI5RcJNaQ5B1YSVs6wFDp4wzG
-   Q==;
-X-CSE-ConnectionGUID: 7xCOhSf4S0KvSUSsV4N5Dw==
-X-CSE-MsgGUID: CbYAnsGJQkyX7LoRmsZIGw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11056"; a="10410813"
-X-IronPort-AV: E=Sophos;i="6.07,232,1708416000"; 
-   d="scan'208";a="10410813"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 07:30:32 -0700
-X-CSE-ConnectionGUID: fC5i3e8/QKihJMqDtRb86Q==
-X-CSE-MsgGUID: Md3LwZRaRf6CT10gcwaJhg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,232,1708416000"; 
-   d="scan'208";a="25459838"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 07:30:28 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1s0Man-00000001LTV-0yOy;
-	Fri, 26 Apr 2024 17:30:25 +0300
-Date: Fri, 26 Apr 2024 17:30:24 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: linux-kernel@vger.kernel.org,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Lee Jones <lee@kernel.org>, Jiawen Wu <jiawenwu@trustnetic.com>,
-	Mengyuan Lou <mengyuanlou@net-swift.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Duanqiang Wen <duanqiangwen@net-swift.com>,
-	"open list:SYNOPSYS DESIGNWARE I2C DRIVER" <linux-i2c@vger.kernel.org>,
-	"open list:WANGXUN ETHERNET DRIVER" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v3 4/5] mfd: intel_quark_i2c_gpio: Utilize
- i2c-designware.h
-Message-ID: <Ziu6gDOqhEYQNhcH@smile.fi.intel.com>
-References: <20240425214438.2100534-1-florian.fainelli@broadcom.com>
- <20240425214438.2100534-5-florian.fainelli@broadcom.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=V64v/+9Xv+aWyKgSsJm3lALQjHMdhmaYXC5uqSqHO+aE0DtUTxvIvoek0stF4KlC67gYfO9vcUNoUZwKmamXnFew7rm0SlCbysGpfWcOcomTajtIcrWZqEdtTnNWXayjqtDYMELzFxB9xeSwznwWc1Yv2yGRkV+Ue2NGLwHqvRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mCbWI8A+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E445CC113CD;
+	Fri, 26 Apr 2024 14:42:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714142542;
+	bh=2taC0FbVINV/Pfa20kvrVfsK3Rx9kry5R3sfqmV0PUs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mCbWI8A+jISuOv0mZ+DcLmk+vP3iNpg4+yWdV4NfEKb9/8K0swgIHUKW6NMaNGlym
+	 /Z9/cMghRk/r+yS58kPcjq7HfIYDE7jSIkCRKZGBKiMmttlf27eHOoVUUwTUCK0HBh
+	 OXpWajgdBA39Q2xiv7XnV1B5yxGTouLZG9mdwgyuIl+DtAas+pKe9n9pLJ0oJKIoJf
+	 0BajOXAcx4WEk2NhL0j5A3w7AkIIKFgIcqLyoqMOjbcQ7ydkljQsNYJ4O3BgGQLnUi
+	 DlSCrCTHd7lR4Jig1SrbtawkJB+VtSYSNnYMZs+nWFHsGBf3jMFK02OfOShnYBPa7A
+	 k0KgVahADwIvg==
+Date: Fri, 26 Apr 2024 15:42:16 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Cc: Rob Herring <robh@kernel.org>, andi.shyti@kernel.org,
+	jszhang@kernel.org, miquel.raynal@bootlin.com,
+	linux-riscv@lists.infradead.org, linux-i2c@vger.kernel.org,
+	thomas.petazzoni@bootlin.com, guoren@kernel.org, wefu@redhat.com,
+	conor+dt@kernel.org, devicetree@vger.kernel.org,
+	aou@eecs.berkeley.edu, krzk+dt@kernel.org, palmer@dabbelt.com,
+	paul.walmsley@sifive.com
+Subject: Re: [PATCH 0/4] Add I2C support on TH1520
+Message-ID: <20240426-patchy-grievance-e7103a344c82@spud>
+References: <20240425082138.374445-1-thomas.bonnefille@bootlin.com>
+ <171405653346.2527762.16827325392956038580.robh@kernel.org>
+ <20240425-script-fondness-0e80bfa31615@spud>
+ <3eb27570-4a53-47f6-8e36-e25fc1063124@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="Jc7O/HQugX9deMnA"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240425214438.2100534-5-florian.fainelli@broadcom.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-
-On Thu, Apr 25, 2024 at 02:44:37PM -0700, Florian Fainelli wrote:
-> Rather than open code the i2c_designware string, utilize the newly
-> defined constant in i2c-designware.h.
-
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-P.S>
-Note, my tags for MFD patches does not imply that I agree on the general idea
-of this series, it's just in case if it will be approved by the respective
-maintainers (I²C / MFD / etc).
-
--- 
-With Best Regards,
-Andy Shevchenko
+In-Reply-To: <3eb27570-4a53-47f6-8e36-e25fc1063124@bootlin.com>
 
 
+--Jc7O/HQugX9deMnA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Apr 26, 2024 at 04:12:00PM +0200, Thomas Bonnefille wrote:
+>=20
+>=20
+> On 4/25/24 6:35 PM, Conor Dooley wrote:
+> > On Thu, Apr 25, 2024 at 09:51:26AM -0500, Rob Herring wrote:
+> > >=20
+> > > On Thu, 25 Apr 2024 10:21:31 +0200, Thomas Bonnefille wrote:
+> > > > This adds I2C support in the device tree of the T-Head TH1520 RISCV=
+-SoC
+> > > > and a default configuration for the BeagleV-Ahead. It appears that =
+the
+> > > > TH1520 I2C is already supported in the upstream kernel through the
+> > > > Synopsis Designware I2C adapter driver.
+> > > > As there is no clock driver for this board as of today, this patch
+> > > > series uses a fixed-clock named i2c_ic_clk.
+> > > > There is also no pinctrl driver yet so pinmux must be handled manua=
+lly
+> > > > for now.
+> > > > It also fixes the order of the nodes in the device tree to comply w=
+ith
+> > > > device-tree coding-style.
+> > > >=20
+> > > > Thomas Bonnefille (4):
+> > > >    dt-bindings: i2c: dw: Document compatible thead,th1520-i2c
+> > > >    riscv: boot: dts: thead: Fix node ordering in TH1520 device tree
+> > > >    riscv: dts: thead: Add TH1520 I2C nodes
+> > > >    riscv: dts: thead: Enable I2C on the BeagleV-Ahead
+> > > >=20
+> > > >   .../bindings/i2c/snps,designware-i2c.yaml     |  12 ++
+> > > >   .../boot/dts/thead/th1520-beaglev-ahead.dts   |  22 ++++
+> > > >   arch/riscv/boot/dts/thead/th1520.dtsi         | 120 +++++++++++++=
++----
+> > > >   3 files changed, 127 insertions(+), 27 deletions(-)
+> > > >=20
+> > > > --
+> > > > 2.44.0
+> > > >=20
+> > > >=20
+> > > >=20
+> > >=20
+> > >=20
+> > > My bot found new DTB warnings on the .dts files added or changed in t=
+his
+> > > series.
+> > >=20
+> > > Some warnings may be from an existing SoC .dtsi. Or perhaps the warni=
+ngs
+> > > are fixed by another series. Ultimately, it is up to the platform
+> > > maintainer whether these warnings are acceptable or not. No need to r=
+eply
+> > > unless the platform maintainer has comments.
+> > >=20
+> > > If you already ran DT checks and didn't see these error(s), then
+> > > make sure dt-schema is up to date:
+> > >=20
+> > >    pip3 install dtschema --upgrade
+> > >=20
+> > >=20
+> > > New warnings running 'make CHECK_DTBS=3Dy thead/th1520-beaglev-ahead.=
+dtb' for 20240425082138.374445-1-thomas.bonnefille@bootlin.com:
+> > >=20
+> > > arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dtb: i2c-clock: clock-=
+frequency:0:0: 50000000 is greater than the maximum of 5000000
+> >=20
+> > The bot is not freaking out here, 50 MHz is indeed more than 5 MHz :)
+>=20
+> 5MHz is the maximum clock-frequency, ie. the I2C bus frequency.
+> This is actually set to 100kHz for I2C0 in the DT:
+>=20
+> &i2c0 {
+>     status =3D "okay";
+>     clock-frequency =3D <100000>; <----
+> ...
+> };
+>=20
+> 50MHz is the "fixed-clock" frequency, that is the clock feeding the I2C
+> IP block:
+>=20
+> i2c_ic_clk: i2c-clock {
+>     compatible =3D "fixed-clock";
+>     clock-frequency =3D <50000000>; <-----
+>     #clock-cells =3D <0>;
+> };
+>=20
+> My guess is that the bot confused the clock-frequency parameter for the b=
+us
+> clock (SCL) with the i2c-ic-clock value for the controller itself during =
+the
+> checks.
+>=20
+> Do you agree with this or am I misunderstanding the error ?
+>=20
+> If I lower the fixed-clock frequency to eg. 100kHz, the error is gone. Bu=
+t I
+> guess the 5MHz limit should probably not apply to the input clock?
+
+Heh, I know why that's happening - it's your node name.
+The pattern for i2c controllers is "^i2c(@.*)?":
+https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/i2c/=
+i2c-controller.yaml
+
+Rob co-incidentally (or maybe not) put out a patch for fixed-frequency
+clock names, suggesting using clock as a prefix:
+https://lore.kernel.org/all/20240425183810.3079069-1-robh@kernel.org/
+If we switched to that format, I believe your problem goes away.
+
+Cheers,
+Conor.
+
+--Jc7O/HQugX9deMnA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZiu9SAAKCRB4tDGHoIJi
+0nLnAQCECEfc78RXxXpCNNDudKkhw+shCzwB7WRgYXqgv327zgEA0OHduv5XJhqr
+P/HzRFwkJyBZfvmgYqKH2EPtxsIfmwA=
+=GWVt
+-----END PGP SIGNATURE-----
+
+--Jc7O/HQugX9deMnA--
 
