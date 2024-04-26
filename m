@@ -1,141 +1,143 @@
-Return-Path: <linux-i2c+bounces-3204-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3206-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 736A88B3235
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 10:21:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF7EE8B3330
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 10:44:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF3A21F22FCC
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:21:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E49D01C2212F
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:44:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5143813CFAE;
-	Fri, 26 Apr 2024 08:21:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E8443AC5;
+	Fri, 26 Apr 2024 08:44:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kDOh/Hqc"
+	dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il header.b="aX8CtGSq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A0B13C912;
-	Fri, 26 Apr 2024 08:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D85813A879;
+	Fri, 26 Apr 2024 08:44:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.110.109.230
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714119667; cv=none; b=a1IBb6RKFRrDJEdwtdCsZhZ7A8Zm1jVA2RiVoDjs6Vgz124Qfk67DI0BljrjzdIwPkpAWiUsBgfH/i6/dm50AZF11OnlCmFzB4uqxeUY/xbHIEYVLBdOYPvrD2XL9wRxYbQLhZtEw1A9n6g0G4nsGblsQK/Yt3o72XnmyGAnYg4=
+	t=1714121088; cv=none; b=WzO2MfpcqOQY4i6WJ/b9pYNLbKqZVeeB9CoLNRY8bgDOUFOt/rBSnLBsKg8JxnN5JDF0SVSYEgSIJWUM7Qzn2neoHjlbkFrb2tfz4x5xAYAoA/LX1mEjRMgk9gbREMP+701Hjufd5welv3GAaafx/PWKmLjXqhJQeVaLciPR+40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714119667; c=relaxed/simple;
-	bh=da+XBsT3HsI42ooeRyvS7kzGLhnYoAOLHQlDAp+t1AA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t1NyjdMmYZpnmHL39DSWQVBiX89Z/MZtZ9zZlOCdCx8p9zORxtY0GaQNXDesdmhIDxAzK8r250OhlwRDeAbKySk+ouAkXQFuxYNUaYdh68SlQFiZMDTPK3QP/31eMMSMkO+Vxe3qS3RUElsbT9aNmOOSbEBuYyyGNGXKjL+pLVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kDOh/Hqc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EB59C113CD;
-	Fri, 26 Apr 2024 08:21:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714119666;
-	bh=da+XBsT3HsI42ooeRyvS7kzGLhnYoAOLHQlDAp+t1AA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kDOh/Hqccaa5nzG2xi0zroGXU2rDlkx5dsSaq3+yrHMpvVBDbkkcXhuT/QyCLy19V
-	 d2Gec6xiO+kvRr7Ab6PkTH7hMxGmDoq66gKFEk8FLowwEPP51wBeUw6wpmHGC6PiqF
-	 Pu6cnffPr+4KHKO3mdVSWt5cWMMalg8+yeBbToVN3arJDihHUprxsgEtrofIPSaUN6
-	 RdUihC3gmiSnbveRPdAbmvgWP3E4sxG5z4YkeICEhaI/U7sUf8K6Uvg//C2Yv2X6Vz
-	 o7dsonyK7pb6qMMb1uKDJgG5X5Qm4rQ5ZgzouHSCh1OFg2nvHC2d8vOYBHwobkmeib
-	 evSphbxiKtdrw==
-Message-ID: <d1cc7b23-32e9-4326-851d-88708ba28052@kernel.org>
-Date: Fri, 26 Apr 2024 10:20:58 +0200
+	s=arc-20240116; t=1714121088; c=relaxed/simple;
+	bh=OAVtZtBf7B9h6ZnYh5M/C/oO9W5Yg0/byzN4wLUDgb0=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=kUcDUkGwz35kJXFhrW8qmhHpj9rH0SXAwpiyhgotsMBpH6teo15J1leboRVtjMAQLV3tutdWP74dVvyyg9wBY7s3hviglwXuorAYWMwVV4VV+hzgH5W3IQQ0nOZFtFwBsubhVmsL9b7RmY6DcJBjfJOVe2qpu/2zGyYTKw6QrGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tkos.co.il; spf=pass smtp.mailfrom=tkos.co.il; dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il header.b=aX8CtGSq; arc=none smtp.client-ip=84.110.109.230
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tkos.co.il
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tkos.co.il
+Received: from localhost (unknown [10.0.8.2])
+	by mail.tkos.co.il (Postfix) with ESMTP id E3074440534;
+	Fri, 26 Apr 2024 11:38:22 +0300 (IDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tkos.co.il;
+	s=default; t=1714120702;
+	bh=OAVtZtBf7B9h6ZnYh5M/C/oO9W5Yg0/byzN4wLUDgb0=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+	b=aX8CtGSqsKGv/OzL6CPpi+dX9N6dhOwBlp/IsUivA9Dv/EfbCCXY59PhlTStpHu3g
+	 xphb3xLfNLhY6iEdHbuvdeF74l53KNsX3KYqFzbhFxFtOy5f2Jimab2ckNojsXsiBs
+	 QY17hX6o1kQo5kYhyXezD9NQEpwZZQSz+90XZvOtqlxlARqAYo9EVMy8CMGNO+Ffbt
+	 oKpMhK9RBEsbUl7ualBGHsBIciAlqopeEKlpn+XkK5BxZRZ1piUP81Iyc18Q9lmXoh
+	 TYaWzLRuKd28qpFAXHPaqkv+GNdvWNyyW7foSpAHVRYWV8/p0DG0gJUT4uiQln7te/
+	 23+JT9YmxPieQ==
+References: <20240426064408.7372-1-wsa+renesas@sang-engineering.com>
+User-agent: mu4e 1.10.8; emacs 29.2
+From: Baruch Siach <baruch@tkos.co.il>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: smbus: fix NULL function pointer dereference
+Date: Fri, 26 Apr 2024 11:32:49 +0300
+In-reply-to: <20240426064408.7372-1-wsa+renesas@sang-engineering.com>
+Message-ID: <87edas5xip.fsf@tarshish>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: Add infineon xdp710 driver
- bindings
-To: Chia Hsing Yin <peteryin.openbmc@gmail.com>
-Cc: patrick@stwcx.xyz, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
- Patrick Rudolph <patrick.rudolph@9elements.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>, Charles Hsu
- <ythsu0511@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Lukas Wunner <lukas@wunner.de>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20240425153608.4003782-1-peteryin.openbmc@gmail.com>
- <20240425153608.4003782-3-peteryin.openbmc@gmail.com>
- <4e329d1b-fad5-416f-b0ca-55e8c6c3394c@kernel.org>
- <CAPSyxFQcKvpvO2-U7QPjrVTqam_bQ6OP8VoomnSbmEj4g7uDVw@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <CAPSyxFQcKvpvO2-U7QPjrVTqam_bQ6OP8VoomnSbmEj4g7uDVw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 26/04/2024 09:12, Chia Hsing Yin wrote:
-> I use b4 download and apply it, I think it is a tool issue, I can fix
-> in the next version.
+Hi Wolfram,
 
-Just did it now:
+On Fri, Apr 26 2024, Wolfram Sang wrote:
+> Brauch reported an OOPS when using the designware controller as target
+> only. Target-only modes break the assumption of one transfer function
+> always being available. Fix this by always checking the pointer in
+> __i2c_transfer.
+>
+> Reported-by: Baruch Siach <baruch@tkos.co.il>
+> Closes: https://lore.kernel.org/r/4269631780e5ba789cf1ae391eec1b959def7d99.1712761976.git.baruch@tkos.co.il
+> Fixes: 4b1acc43331d ("i2c: core changes for slave support")
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-b4 trailers -C -u -F '20240424095604.3425857-1-peteryin.openbmc@gmail.com>'
-Calculating patch-ids from commits, this may take a moment...
-Grabbing thread from
-lore.kernel.org/all/20240424095604.3425857-1-peteryin.openbmc@gmail.com/t.mbox.gz
-Looking for additional code-review trailers on lore.kernel.org
----
-  dt-bindings: hwmon: Add infineon xdp710 driver bindings
-    + Acked-by: Rob Herring (Arm) <robh@kernel.org> (✓ DKIM/kernel.org)
+Tested-by: Baruch Siach <baruch@tkos.co.il>
+
+Thanks,
+baruch
+
+> ---
+>  drivers/i2c/i2c-core-base.c  | 12 ++++++------
+>  drivers/i2c/i2c-core-smbus.c |  2 +-
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index ff5c486a1dbb..db0d1ac82910 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -2200,13 +2200,18 @@ static int i2c_check_for_quirks(struct i2c_adapter *adap, struct i2c_msg *msgs,
+>   * Returns negative errno, else the number of messages executed.
+>   *
+>   * Adapter lock must be held when calling this function. No debug logging
+> - * takes place. adap->algo->master_xfer existence isn't checked.
+> + * takes place.
+>   */
+>  int __i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+>  {
+>  	unsigned long orig_jiffies;
+>  	int ret, try;
+>  
+> +	if (!adap->algo->master_xfer) {
+> +		dev_dbg(&adap->dev, "I2C level transfers not supported\n");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+>  	if (WARN_ON(!msgs || num < 1))
+>  		return -EINVAL;
+>  
+> @@ -2273,11 +2278,6 @@ int i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+>  {
+>  	int ret;
+>  
+> -	if (!adap->algo->master_xfer) {
+> -		dev_dbg(&adap->dev, "I2C level transfers not supported\n");
+> -		return -EOPNOTSUPP;
+> -	}
+> -
+>  	/* REVISIT the fault reporting model here is weak:
+>  	 *
+>  	 *  - When we get an error after receiving N bytes from a slave,
+> diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
+> index e3b96fc53b5c..a942c5306a4e 100644
+> --- a/drivers/i2c/i2c-core-smbus.c
+> +++ b/drivers/i2c/i2c-core-smbus.c
+> @@ -596,7 +596,7 @@ s32 __i2c_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
+>  				break;
+>  		}
+>  
+> -		if (res != -EOPNOTSUPP || !adapter->algo->master_xfer)
+> +		if (res != -EOPNOTSUPP)
+>  			goto trace;
+>  		/*
+>  		 * Fall back to i2c_smbus_xfer_emulated if the adapter doesn't
 
 
-And no quotes...
-
-Best regards,
-Krzysztof
-
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 
