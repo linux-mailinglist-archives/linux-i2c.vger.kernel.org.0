@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3190-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3191-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 736E08B303E
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:20:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7FBF8B304A
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:23:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F9412855B5
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:20:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCCD11C231B2
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:23:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E68F13A869;
-	Fri, 26 Apr 2024 06:20:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F3213A879;
+	Fri, 26 Apr 2024 06:23:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dROt7lg7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oahcaZI7"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3A013A410;
-	Fri, 26 Apr 2024 06:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C28E2F2F;
+	Fri, 26 Apr 2024 06:23:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714112432; cv=none; b=fVfnGZpb/OUz9maH2COoFFD/omTWTSmWGTLIRJzhBeJVG3dQ0AdgTl5Jlycoa3Q6AxxQ9csSNGQmoCzVxRHVcAaShZeYHgN6ggbywl2q106Wwb4ymjpGTts76SmexOWR20C6VngTN6T3sAaeMpVtc9c1yKGGTy2H7HQMaWUZed0=
+	t=1714112611; cv=none; b=S7rk1zcLATeyuQEusLD2ajXojI8IWhiF6PfhbpmshhQExu5t6nNQMKMqq96FieA2/Bdv7HJkfGZKxRBopxqlizPhm2smHtfNP0S9G8ahbWnIolB2e3S+GvkMRvxRySSaHp28qKQEkBTEfLeJVYTq5DjzreR4QRvA0WlNQ/t6xPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714112432; c=relaxed/simple;
-	bh=uc8nBsRy/kKS7/y9JmVjEpVkj3GTeWLiH1Uq9RjTRSg=;
+	s=arc-20240116; t=1714112611; c=relaxed/simple;
+	bh=YtshXLNHd+oeMo09vvuPVWrGyeKWyQJGrt5mDGX3NiM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IkvXt56F6GOgNAMYogpXnh/z7cUAD+sKHWW045lPEqNgwRGt52jw7+KVVWKYugp3bXlRNWhEkYoSxkKcMfNgkLGAvzmyRz7dt0Z8een0rg+hd0GKGYjUXdH1v5jmgi4t1M9NkVa4UF7zFkLlWjvKx+ew02o+S+DKJPhAXJcdW5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dROt7lg7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 492C0C113CD;
-	Fri, 26 Apr 2024 06:20:26 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=b2Frl9jCgsb1/zXCme/HJqMKFRhRTtwz3rMY33vNmlcOkFJGF3HSyPITa1rVze+MYgbWKhTneMVqpANta4+YRgNUPRw+TfGc5a/1Vls2f8PmtuFz2QABAah3KjzP/IbBCTptG+e40r/pGZTLRlnYJ+xINnxtxd58YmvUvRBNf/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oahcaZI7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB951C113CD;
+	Fri, 26 Apr 2024 06:23:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714112431;
-	bh=uc8nBsRy/kKS7/y9JmVjEpVkj3GTeWLiH1Uq9RjTRSg=;
+	s=k20201202; t=1714112610;
+	bh=YtshXLNHd+oeMo09vvuPVWrGyeKWyQJGrt5mDGX3NiM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dROt7lg7029qLIS8L7ypl6PN61foHuRZFD899GApJeMjOWlm5obMGgugU25T8OPaK
-	 8XFXabfYlUdD/doJiPSSc1Vr80oOaaSbl1yayBGAUEiKFNye4OQHtJlOOkZQORx+dC
-	 nd0zNyl3/Y/c4axqYQZ5LgMuFEv8P+zK/3IXuoYjbZIIAo2Zi3e1naUu0ejloMR2H2
-	 FIKSz1Sqc4xgXIoO9MdUeVPJNUnx9ti3c4bN50pD0GM/7Vsxtjt8Zh+IjF7b19M4oa
-	 dVdIHrzw7WHZO6em3YLwzKefjnBa6EWa62fik+cj9zxQlNc7D2iwwQqn6UpJzEC1X1
-	 GrA8PQqOYHZRA==
-Message-ID: <5fb62fcf-36a8-4efa-9387-d0af8fcafb18@kernel.org>
-Date: Fri, 26 Apr 2024 08:20:24 +0200
+	b=oahcaZI7flfMnYzZIhm0Js0aQL7aZzyH/L68wKC+ovfKl6M3RyLA1jSMUup6zaZTU
+	 G+NVs+03/Egrn8xU/GvpMirylgYrAeZspGiEhnnIZZsm2I5c6S7RhYfuVjgo3o77bs
+	 pvnrul04Sq6Oqc1LVi4WJeTXzVfrsHwmhN76XHxq0iBOAAzBKvI45yHQuWcUZgpC0h
+	 tPQAkRvyMAOspuMJdSyiB9rAiT0tV3gzw40B5aiuGLpVSmLT5BgoId2wzB6AcODisc
+	 +VoMS3xUnJrFQVlB0zoRLNhWw6LvHsTvHlO1GVCL5lYMT4saK+K+3/hDwlKGRY12ZA
+	 VmB9cZq5o9uYQ==
+Message-ID: <3f381a54-49ce-4a45-a960-00cf2e91b044@kernel.org>
+Date: Fri, 26 Apr 2024 08:23:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 05/14] dt-bindings: fsi: Document the IBM SBEFIFO
- engine
+Subject: Re: [PATCH v3 06/14] dt-bindings: fsi: Document the FSI controller
+ common properties
 To: Eddie James <eajames@linux.ibm.com>, linux-aspeed@lists.ozlabs.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
@@ -59,7 +59,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
  andrew@codeconstruct.com.au
 References: <20240425213701.655540-1-eajames@linux.ibm.com>
- <20240425213701.655540-6-eajames@linux.ibm.com>
+ <20240425213701.655540-7-eajames@linux.ibm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,47 +105,64 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240425213701.655540-6-eajames@linux.ibm.com>
+In-Reply-To: <20240425213701.655540-7-eajames@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 25/04/2024 23:36, Eddie James wrote:
-> The SBEFIFO engine provides an interface to the POWER processor
-> Self Boot Engine (SBE).
+> Since there are multiple FSI controllers documented, the common
+> properties should be documented separately and then referenced
+> from the specific controller documentation.
 > 
 > Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Andrew Jeffery <andrew@codeconstruct.com.au>
 > ---
 
 
-> +description:
-> +  The SBEFIFO is an FSI CFAM engine that provides an interface to the
-> +  POWER processor Self Boot Engine (SBE). This node will always be a child
-> +  of an FSI CFAM node; see fsi.txt for details on FSI slave and CFAM
-> +  nodes.
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ibm,p9-sbefifo
-> +      - ibm,odyssey-sbefifo
-> +
-> +  reg:
-> +    items:
-> +      - description: FSI slave address
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
+> +  no-scan-on-init:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      The FSI controller cannot scan the bus during initialization.
 > +
 > +patternProperties:
-> +  "^occ(@.*)?":
+> +  "cfam@[0-9a-f],[0-9a-f]":
+> +    type: object
+> +    properties:
+> +      chip-id:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
 
-Why unit address is optional?
+Missing description
 
+> +
+> +      reg:
+> +        maxItems: 1
+> +
+> +      "#address-cells":
+> +        const: 1
+> +
+> +      "#size-cells":
+> +        const: 1
+> +
+> +    required:
+> +      - reg
+> +
+> +    additionalProperties: true> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    fsi@3400 {
+> +        #address-cells = <2>;
+> +        #size-cells = <0>;
+> +        compatible = "fsi-controller";
+
+No, there is no such compatible here.
+
+> +        reg = <0x3400 0x400>;
+
+Neither reg.
+
+Also, keep order of properties matching DTS coding style.
 
 
 Best regards,
