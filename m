@@ -1,128 +1,137 @@
-Return-Path: <linux-i2c+bounces-3200-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3201-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01FD58B30D8
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:55:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FADE8B3114
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 09:10:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E9C3B23D1E
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:55:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1C8F1C2238D
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 07:10:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D0A113BC18;
-	Fri, 26 Apr 2024 06:55:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C45113B295;
+	Fri, 26 Apr 2024 07:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rz0/8hiV"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="SDDMwoVU"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD47113A88F;
-	Fri, 26 Apr 2024 06:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3DB13A898
+	for <linux-i2c@vger.kernel.org>; Fri, 26 Apr 2024 07:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714114502; cv=none; b=nQPZuFY14A0W4EBIPpsnY8uTWvE+mXzPh2rBFAWPo3nsixAWKU8L13YYN/W04nrMXlidHMKc3ECKNtOYNGA4NN87jyRrMXSji6ogc04vo6GJ4O/+giznOG5UhmZAcNzSUOhzQrhMR9K6sPjHgVQGb8Yh3KPH/HCVxxkYzvqzXMA=
+	t=1714115430; cv=none; b=NJliq20Ixi1ooqVXMHg/yTQZJAo3uKDrsqhORYMfBLh1wvck9jw/k/oQSMAoNB8jgQOskDEfIOcTSjPsEMmZUqm63+NX5KR4vMuTRvFb9lN/V38qiG9ia8zf+7mntJFiI6ZwaOi4qitjF3KOj7gJzUPHqZxjKi352MN0rgBS2Ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714114502; c=relaxed/simple;
-	bh=4iDY+/cO9vuxWLs+6fs4Xvs7bYgo+VK3ieBdHNf09Pk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=r7gXP9oAuPznwlMudJLQ5uSPwgQfy+5RA9LYKvIdi8pAvSD1AqbLtBLpF2AjU7GPxaEqOr/UPObuvOACXpS1sWOtcuJ51kE1MEXUTI05btBvR52h+GYaJDUGBrYi+EVv54jRucVmGkU3zQaRkVqKLarOxUl2ZMjV9Kl98iOr9w0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rz0/8hiV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 838AFC113CD;
-	Fri, 26 Apr 2024 06:54:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714114502;
-	bh=4iDY+/cO9vuxWLs+6fs4Xvs7bYgo+VK3ieBdHNf09Pk=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=rz0/8hiVQUUYFWPUeXwztOH5w6U8apBN/4Kfv+9IyxT4jH5/rG3iItpk7IV1h+hYr
-	 Qrr2tFiSqie5Cj8Sx9VJfUOHdCqV9J0MWfEmdZH4c79XDzR+lNOB94fuX6Wx9TxX3g
-	 698reVJVZnHV5g7Uk05ZCWAv5eHmyKHjbHu1BmyWFL+31iAc5CSRoZZhYRLv15Nlzg
-	 v5427V4N90U649z4HFVkqpy2Cmz2bCo/cTkREE0LH7lsQwEkuQYvRRXMIqrN2ELGGf
-	 vtlHjenPcnFU35bJ9Ob8YtRC4TfOP4CtSnBaHzDnELmtD/V0ErTC9wUtgeD8xwTCha
-	 KSQyuqu5C5+pw==
-Message-ID: <4e329d1b-fad5-416f-b0ca-55e8c6c3394c@kernel.org>
-Date: Fri, 26 Apr 2024 08:54:53 +0200
+	s=arc-20240116; t=1714115430; c=relaxed/simple;
+	bh=F4nJnCeMeJbzdSAttCiiXn5l5cLsIKYVH7U5G5ZIats=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GdZtsuAKi1041wwtB+albbI9D0e/ny8B6TZI7oAdG5bG8aUpYl9LCvzYEM18eJJFjEnl3OD9lxD5AmVl562kS0LVsY829IQt3Noib0GRVpv4YmPe4zlpkZNmiRE6tDk+cFNQTYfUYW4sOFvTHJiz+LE3c3UFON4FSyUXduT0sX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=SDDMwoVU; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=cYhv
+	w8wPCJiy34fg1AjO1KQ4LfdL7d8RjCi2kla6Za4=; b=SDDMwoVUwhRgHOSt/l9b
+	Icnchdha5Yk8t27jh2saXGUzV1XtRCt5+aSqIRDbdWuRUmkfcxYjajHyOamJZidH
+	YE+Y71vCQ96ETaKpTM8u0L6mxCzGuUNtbPDsLC0HRkM6TOOfgl69JIDWhPao3K2A
+	jchqs9jdwtu3v6+ue38c7toQIcQHuvKhPIbe1GjVEb0mToLyXxHjk1xHkCoyA9/9
+	odkqHKhjUCEtRqZxW4IjFZ91ttM7uFp7nurRT8Obgi2xxbB+lfb2zAZNj/IZcKEt
+	kAJ+bZ86qvangzDE+4aloGOS5fjEBVxta1PxNP1xOaxMOly1hw7e9C4KF9liazsq
+	yA==
+Received: (qmail 1213087 invoked from network); 26 Apr 2024 09:10:23 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Apr 2024 09:10:23 +0200
+X-UD-Smtp-Session: l3s3148p1@WfbgmPoWvpUujnvp
+Date: Fri, 26 Apr 2024 09:10:22 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Paul Menzel <pmenzel@molgen.mpg.de>, Jean Delvare <jdelvare@suse.de>
+Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: smbus: Add (LP)DDR5 types to `i2c_register_spd()`
+Message-ID: <20240426071022.lqapnn6uzcypezrp@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Paul Menzel <pmenzel@molgen.mpg.de>,
+	Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+References: <20240327083356.74246-1-pmenzel@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: Add infineon xdp710 driver
- bindings
-To: Peter Yin <peteryin.openbmc@gmail.com>, patrick@stwcx.xyz,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
- Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
- Patrick Rudolph <patrick.rudolph@9elements.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>, Charles Hsu
- <ythsu0511@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Lukas Wunner <lukas@wunner.de>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20240425153608.4003782-1-peteryin.openbmc@gmail.com>
- <20240425153608.4003782-3-peteryin.openbmc@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240425153608.4003782-3-peteryin.openbmc@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qexz6bcsbtp276vt"
+Content-Disposition: inline
+In-Reply-To: <20240327083356.74246-1-pmenzel@molgen.mpg.de>
 
-On 25/04/2024 17:36, Peter Yin wrote:
-> Add a device tree bindings for xdp710 device
-> 
-> Acked-by: "Rob Herring (Arm)" <robh@kernel.org>
 
-That's not the tag you received. Please do not modify the tags. Quotes
-are not needed.
+--qexz6bcsbtp276vt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+Hi Paul,
 
+(adding Jean)
+
+On Wed, Mar 27, 2024 at 09:33:55AM +0100, Paul Menzel wrote:
+> On several systems Linux logs:
+>=20
+>      i2c i2c-0: Memory type 0x22 not supported yet, not instantiating SPD
+>=20
+> 1.  Supermicro Super Server/X13SAE, BIOS 2.0 10/17/2022
+> 2.  Dell Inc. Precision 3660/0PRR48, BIOS 2.9.3 11/22/2023
+> 3.  Dell Inc. OptiPlex SFF Plus 7010/0YGWFV, BIOS 1.7.1 08/11/2023
+> 4.  Run `git grep 'emory type.*supported yet, not instantiating SPD'` in
+>     the repository of dmesg reports for various computers collected by
+>     Linux users at https://linux-hardware.org. [1]
+>=20
+> Add 0x22 and 0x23 for DDR5 according to section 7.18.2 (Memory Device =E2=
+=80=94
+> Type), table 78 in *System Management BIOS (SMBIOS) Reference
+> Specification*, version 3.6.0 [2].
+>=20
+> I use the same name as for DDR4 out of ignorance.
+
+So, you didn't test it on DDR5 on your own? I'd like to have it tested.
+The document you referenced does only mention I2C but the wikipedia
+article [3]  mentions I3C. It will probably support I2C fallback, but
+I'd like to be sure.
+
+[3] https://en.wikipedia.org/wiki/Serial_presence_detect
+
+> [1]: https://www.dmtf.org/sites/default/files/standards/documents/DSP0134=
+_3.6.0.pdf
+> [2]: https://github.com/linuxhw/Dmesg
+
+[1] and [2] are mixed up.
+
+Thanks for the patch!
+
+   Wolfram
+
+
+--qexz6bcsbtp276vt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmYrU14ACgkQFA3kzBSg
+KbaQHxAAlcfN1CJgz+8hKLyiImddE3Qz5/cJhvjTdggh/B8Hp/onVlgseclViPVA
+/t7aXXnbHMwjomUu9i0L+/Di73LLT+Ms7Kzc66QB/HC6wGPALYjpsOuAkD8bvbJq
+Xzt4FuJ3hNznz8FOLo/iEvV7UCFsy0rppsfj0plxOl+xzuGh152SAR3NSieAoPdV
+NXjEfYRobiFrC6gy+sG/GfqfRnXNeK+SJiUiB3jBWUSydTPD6pOCsOl9YNHqFISY
+5xY920E/3tQBKShRR8x9AM65AtV43Lvr6pn63ifS3K74zkFeclFAoetb6slP+smV
+//matVFSFTqJstQah1t1VlupzdkCRr6pJrdcZQPlJr5J1ZDhLtPN+ESU9lfhOeU1
+HYzQ3S3FpuMrN9zq47ud2xm1+60BPEw7cPubMVSp4W8Uyo8x4ogmeUTVdI2AAEPd
+sZfkHAIIU1inmLS9lVwckhE3k2I6YkwXd1UU5rZx64q+JcLluGU/fjVyYHAFrvfH
+LeEg4wDRg7vlWR3uPE20Z8Ayc9cEsU4bpjAeMJMPvXa/n5GrqkVFQ/bxURCiBaQO
+hkCY7YWB9ZYQiwANhiqiihc4mTBMEEjqZUqgjAZclTlXYeTn8nq8jvI4NiAISy9d
+EcMQ5r/Qtois3AwJQUG8QAGh3jfpWmV40oWxaomfdwe8SlRpMog=
+=C3Jd
+-----END PGP SIGNATURE-----
+
+--qexz6bcsbtp276vt--
 
