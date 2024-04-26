@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3188-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3189-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 457C98B302F
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:18:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E1938B3036
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:19:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2B751F22C3F
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:18:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7E5B2819D1
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:19:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE9713A41D;
-	Fri, 26 Apr 2024 06:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88FEA13A41B;
+	Fri, 26 Apr 2024 06:19:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nP49z1B7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bihmPHJ9"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2AE2F2F;
-	Fri, 26 Apr 2024 06:18:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3849D2F2F;
+	Fri, 26 Apr 2024 06:19:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714112296; cv=none; b=NkFv9pSoimGVSMXKe8vPF5ve8n8Um4BOnila0a++vt8B8Mg8y+qF4CtCnDURQPE8Bbvk4cd3Xq9XR/sfQDBe4hfNmV9QiJePf9FQuxIIH07VoFBpeeBIO2eaBiWaLeM9Zk34JkZ/890ywi4jbma9Jvb8Ucz7fD9My5zUgZcrY8k=
+	t=1714112367; cv=none; b=WjocTor4ztvcF68rJ7knWQLrw1/qWMMYNwdgY4Ar+8t+uIPccHv49s8OQTOkno1BuiTCw8qKbtzeTxheaxVJhALDl2VYQel/rJXyPsQNeZU7C1BOrV2hxMCIFdcDa1MPyBbBfag8Q6ejG6gINLHH6NP+d2m9HUPfuszqUxzbYCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714112296; c=relaxed/simple;
-	bh=TkzXZHSau1pHlNzNIZUdLGqxZ+qZ0oi0PrH5UqDNTvk=;
+	s=arc-20240116; t=1714112367; c=relaxed/simple;
+	bh=XyTI7ypwL9XuJwKRNN0RAtJ/sCeTZRClu7Qjug3+9io=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SQ2MrT8NvK5Ma+pZ0NbOUu1n65cBAoy9eGrvkrGkv6QNN6QuUabaqw+Fu35vmMo521atndie2Pp54EG2JVrQLrc0DNi7YRITKaTxrip0Ev37MtGZduxhnEzZCbFJOP0hACogkaDQXLceT0EMO7q77QXw4iykGqRkWF+Lguzj8eA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nP49z1B7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 978BDC113CD;
-	Fri, 26 Apr 2024 06:18:11 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=n12yO37uTOhk22QiK+HABfzRk6srSk6OazDIBmNO0yPON6wS/uJ0ok4dFcFM4b7LCx12Bio/J4wxuq87fRfMrYUGUcdTIxrowcsFri/rI8SIt6qqqM32OIH7vjArjaYcKaUsppa/j76jTgMu9sH4XxV9N+HnjimvO3vMKLS8fXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bihmPHJ9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9ABEC113CD;
+	Fri, 26 Apr 2024 06:19:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714112295;
-	bh=TkzXZHSau1pHlNzNIZUdLGqxZ+qZ0oi0PrH5UqDNTvk=;
+	s=k20201202; t=1714112366;
+	bh=XyTI7ypwL9XuJwKRNN0RAtJ/sCeTZRClu7Qjug3+9io=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nP49z1B7UjhZaSMgIvCsgHYL2oxCp2smBQ0fEUPIFEInloWPEj/gizGbYA06Oj3nn
-	 QtQRqv7cDfEZu7MvLXIVUnefjlc3W2YJcBxs1s+r64jRMuIJiRuiElnJLstf6oNIij
-	 L/47o9w6zRE/izvhF0bzu2rv34WcY3L1yv4fjqiv5s1iZcWWwnVldIfdnNJxRrfNZf
-	 a/2FDTgW8f512x1bZzeeW1xGL3wsaMbASmqM9+N7Om0Q5GS7xENyR+Ke5Kb8Q+gvvV
-	 DO3pKV110vcVtFvOMfAx+zYP9S60LlSKl+duacp+pAMP0Y3tIdxGHg3n/JDKR2jsI3
-	 UJIx0k6xo2RQA==
-Message-ID: <3f822b56-8e6a-43e4-afb0-15c964f9474e@kernel.org>
-Date: Fri, 26 Apr 2024 08:18:09 +0200
+	b=bihmPHJ9TAj7CA/+t9/CNJCCAE90+eKnV9pc1gmINLmt56pp0NgVhyN5q78O9KpfQ
+	 8IWCyJ1gZOQN7sxPqQei39aE5Fa8s0QT3qlfz3KsQu8q3iF3y39OfguoTb07CtCQks
+	 XcJjMe4PZIbDmXNZweh4DLXlJYPKHRghdsX4KwUqYMonKgL237goUwdTFk+V/WrQj9
+	 evcQT1MNDaXjz2yAKsO65ObqzppTuzq+0/7p8eUGpZ+u+ykOaeKt+MYIBAHdbPm+vM
+	 pOB6pCTEHw3X8ht0r9cztUVL0bfqLps19p9a1PV64Wy+StHqfNfzn0co0RGAhMLxeI
+	 B1EoW7aE1Ldlg==
+Message-ID: <d5e79c40-d961-43a9-ad4c-ebed17dfe814@kernel.org>
+Date: Fri, 26 Apr 2024 08:19:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 03/14] dt-bindings: fsi: Document the FSI2PIB engine
+Subject: Re: [PATCH v3 04/14] dt-bindings: fsi: p9-occ: Switch to yaml format
 To: Eddie James <eajames@linux.ibm.com>, linux-aspeed@lists.ozlabs.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
@@ -58,7 +58,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
  andrew@codeconstruct.com.au
 References: <20240425213701.655540-1-eajames@linux.ibm.com>
- <20240425213701.655540-4-eajames@linux.ibm.com>
+ <20240425213701.655540-5-eajames@linux.ibm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,51 +104,101 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240425213701.655540-4-eajames@linux.ibm.com>
+In-Reply-To: <20240425213701.655540-5-eajames@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 25/04/2024 23:36, Eddie James wrote:
-> The FSI2PIB or SCOM engine provides an interface to the POWER processor
-> PIB (Pervasive Interconnect Bus).
+> Switch to yaml for the OCC documentation. Also document the fact
+> that the OCC "bridge" device will often have the hwmon node as a
+> child.
 > 
 > Signed-off-by: Eddie James <eajames@linux.ibm.com>
 > ---
->  .../devicetree/bindings/fsi/ibm,fsi2pib.yaml  | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/fsi/ibm,fsi2pib.yaml
+>  .../devicetree/bindings/fsi/ibm,p9-occ.txt    | 16 --------
+>  .../devicetree/bindings/fsi/ibm,p9-occ.yaml   | 41 +++++++++++++++++++
+>  2 files changed, 41 insertions(+), 16 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt
+>  create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-occ.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/fsi/ibm,fsi2pib.yaml b/Documentation/devicetree/bindings/fsi/ibm,fsi2pib.yaml
+> diff --git a/Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt b/Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt
+> deleted file mode 100644
+> index e73358075a90..000000000000
+> --- a/Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt
+> +++ /dev/null
+> @@ -1,16 +0,0 @@
+> -Device-tree bindings for FSI-attached POWER9/POWER10 On-Chip Controller (OCC)
+> ------------------------------------------------------------------------------
+> -
+> -This is the binding for the P9 or P10 On-Chip Controller accessed over FSI from
+> -a service processor. See fsi.txt for details on bindings for FSI slave and CFAM
+> -nodes. The OCC is not an FSI slave device itself, rather it is accessed
+> -through the SBE FIFO.
+> -
+> -Required properties:
+> - - compatible = "ibm,p9-occ" or "ibm,p10-occ"
+> -
+> -Examples:
+> -
+> -    occ {
+> -        compatible = "ibm,p9-occ";
+> -    };
+> diff --git a/Documentation/devicetree/bindings/fsi/ibm,p9-occ.yaml b/Documentation/devicetree/bindings/fsi/ibm,p9-occ.yaml
 > new file mode 100644
-> index 000000000000..4d557150c2e3
+> index 000000000000..1fa87d452489
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/fsi/ibm,fsi2pib.yaml
-> @@ -0,0 +1,38 @@
+> +++ b/Documentation/devicetree/bindings/fsi/ibm,p9-occ.yaml
+> @@ -0,0 +1,41 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/fsi/ibm,fsi2pib.yaml#
+> +$id: http://devicetree.org/schemas/fsi/ibm,p9-occ.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: IBM FSI-attached SCOM engine
+> +title: IBM FSI-attached On-Chip Controller (OCC)
 > +
 > +maintainers:
 > +  - Eddie James <eajames@linux.ibm.com>
 > +
 > +description:
-> +  The SCOM engine is an interface to the POWER processor PIB (Pervasive
-> +  Interconnect Bus). This node will always be a child of an FSI CFAM node;
-> +  see fsi.txt for details on FSI slave and CFAM nodes.
+> +  The POWER processor On-Chip Controller (OCC) helps manage power and
+> +  thermals for the system, accessed through the FSI-attached SBEFIFO
+> +  from a service processor.
 > +
 > +properties:
 > +  compatible:
 > +    enum:
-> +      - ibm,fsi2pib
-> +      - ibm,i2cr-scom
+> +      - ibm,p9-occ
+> +      - ibm,p10-occ
+> +
+> +  reg:
+> +    items:
+> +      - description: Processor index
+> +
+> +required:
+> +  - compatible
 
-Sometimes you call these p9, sometimes p10... what is the system or SoC
-here? Aren't you adding some generic compatibles? writing-bindings and
-numerous guides are clear on that.
+required goes after all properties, so below.
+
+> +
+> +patternProperties:
+> +  "^occ-hwmon(@.*)?":
+> +    type: object
+> +    $ref: /schemas/hwmon/ibm,occ-hwmon.yaml
+
+Drop occ, not relevant. Why unit address is optional? This is supposed
+to be specific. Use proper regex as well for hex numbers.
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    occ {
+> +        compatible = "ibm,p9-occ";
+
+Not complete.
+
 
 Best regards,
 Krzysztof
