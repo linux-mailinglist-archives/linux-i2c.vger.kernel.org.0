@@ -1,106 +1,94 @@
-Return-Path: <linux-i2c+bounces-3241-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3242-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30B708B3FF0
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 21:10:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8D8E8B40EC
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 22:38:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81FABB2346C
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 19:10:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05C2F1C2209F
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 20:38:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3F6E1170F;
-	Fri, 26 Apr 2024 19:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBA212C1A3;
+	Fri, 26 Apr 2024 20:38:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uPWB69KL"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pf8jGySc"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2D246A4;
-	Fri, 26 Apr 2024 19:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CEC129411;
+	Fri, 26 Apr 2024 20:38:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714158607; cv=none; b=aTE/Cjbaatw2ipFziWCAp2V3LuFcHxl439RlDV4jfPy+54Q6LtBSDGcZ26W4+/L29c/qFHawQz7HNdW854dnA3YizTHf/8MF1J+cSiMbiK9MqDQckEZ+HM7ZXg3ewTmQzCdZrRjoSTGAlxTdnbjbtlRhGWMukyj2dkkouy+TD/o=
+	t=1714163903; cv=none; b=Jkt4VepWqgDUWlSlexXaPHfsgnp9ot899D0IDtXBqiu0bGHPjKDIh9qJG57Wev4dVqd/Fzna4FjCnndd+KuOwQp4KaeVCOqbCzd/4lY6CHLYYfhoj+5JyhwvjypRPrZwBvmH1Ait38u9cNOmk9FHnS2io7RcJ4POA8vqnihyxqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714158607; c=relaxed/simple;
-	bh=/5D69c/HjZZ5w1KhjR62OOz+fM/4KJRsPcVh8kxgYos=;
+	s=arc-20240116; t=1714163903; c=relaxed/simple;
+	bh=26fIsN8LMhPXlfknTM2vpoq+uq8fejMYjSlvP+Hn5S4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rlCtgLhAjtkqbIRynxc89lVEIYZUZ7LcYszCoV9fCUrpM+YD0J2+zYvWjhAPDvQpC/GHrDisjEyNkbE9mtWXStI1vywNmAm9TTEYZIPHKEzruv/y9BOouGRWsSO1pBkVQstT9UhhvDYMpBIzHUnyIkP8pFDocGp+pmbIWO5WZJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uPWB69KL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBD0CC113CD;
-	Fri, 26 Apr 2024 19:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714158607;
-	bh=/5D69c/HjZZ5w1KhjR62OOz+fM/4KJRsPcVh8kxgYos=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=DhBNebr9UD8AjukfXKN8wfBmKOeP+NOkLijp8TOTA30tSHkRL9nJH2ty7H2xlCAS+OkBOUJ/I5SPO/nNyfi9bgrriFeB+N4Mi1GcoFiQXJkgdv+wkYqIvonHmm2ETuHk+RTAjrvHYIsE9AJOm04RKIn+RU0aBYcEHHKyeuoTaMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pf8jGySc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBA96C113CD;
+	Fri, 26 Apr 2024 20:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1714163903;
+	bh=26fIsN8LMhPXlfknTM2vpoq+uq8fejMYjSlvP+Hn5S4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uPWB69KLYOETZ/HxAdPvCyHATYvJFXi7xWJi3xNNbjJlFIn9sXL4RlleII4LtexxY
-	 /1dxte7j4pgCPy+w0/lxTGCWnZWnvuZfeTWJTD1L37Ifb/IXJu0erWpJPPWq5bdWOM
-	 94MB35DfHtzCm5HNUlBkfcmsEZPUtOOii7CImtjJx5XgqrV6uW9EVJAlHD02pcSWZo
-	 9aCsnpd8PiguQE7w16jjkMmk/bljeXcjX3R6xtgaicXZaW3Q68DexX3WLFeYrUz0hz
-	 KzEZmXURAq/oWfERJB+jT3JbXVFdJsXyz7I71HeORRKIZomKpmNUcTm2DUBe5sKjpz
-	 7VNrvuQzYZPzA==
-Date: Fri, 26 Apr 2024 14:10:03 -0500
-From: Rob Herring <robh@kernel.org>
-To: "zoie.lin" <zoie.lin@mediatek.com>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH 3/3] dt-bindings: eeprom: at24: Add property dovdd-supply
-Message-ID: <20240426191003.GA2655695-robh@kernel.org>
-References: <20240426102949.23057-1-zoie.lin@mediatek.com>
- <20240426102949.23057-4-zoie.lin@mediatek.com>
+	b=pf8jGyScXrzsqy2ahtnIiDL1+9whu+NaGRhNMUZxxrLjNXcSSTfiocq9ZzTByrlaZ
+	 L7pa4ZzE1PviE4l7q26PRyhLQgmq9s1T5Q3wtw6W4WwiLP+m4B14SD+Sh8LJKs2QJI
+	 tV+5BXlK74iGF8GDErke0tvGuiBDhaQ7ZZ/6UGY0=
+Date: Fri, 26 Apr 2024 16:38:19 -0400
+From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Chia Hsing Yin <peteryin.openbmc@gmail.com>, patrick@stwcx.xyz, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>, 
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>, Patrick Rudolph <patrick.rudolph@9elements.com>, 
+	Luca Ceresoli <luca.ceresoli@bootlin.com>, Charles Hsu <ythsu0511@gmail.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner <lukas@wunner.de>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: Add infineon xdp710 driver
+ bindings
+Message-ID: <20240426-fantastic-charming-pheasant-64f7fb@lemur>
+References: <20240425153608.4003782-1-peteryin.openbmc@gmail.com>
+ <20240425153608.4003782-3-peteryin.openbmc@gmail.com>
+ <4e329d1b-fad5-416f-b0ca-55e8c6c3394c@kernel.org>
+ <CAPSyxFQcKvpvO2-U7QPjrVTqam_bQ6OP8VoomnSbmEj4g7uDVw@mail.gmail.com>
+ <d1cc7b23-32e9-4326-851d-88708ba28052@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240426102949.23057-4-zoie.lin@mediatek.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d1cc7b23-32e9-4326-851d-88708ba28052@kernel.org>
 
-On Fri, Apr 26, 2024 at 06:29:49PM +0800, zoie.lin wrote:
-> From: Zoie Lin <zoie.lin@mediatek.com>
+On Fri, Apr 26, 2024 at 10:20:58AM GMT, Krzysztof Kozlowski wrote:
+> On 26/04/2024 09:12, Chia Hsing Yin wrote:
+> > I use b4 download and apply it, I think it is a tool issue, I can fix
+> > in the next version.
 > 
-> Include a new property named dovdd-supply to provide an
-> additional power supply.
+> Just did it now:
 > 
-> Signed-off-by: Zoie Lin <zoie.lin@mediatek.com>
+> b4 trailers -C -u -F '20240424095604.3425857-1-peteryin.openbmc@gmail.com>'
+> Calculating patch-ids from commits, this may take a moment...
+> Grabbing thread from
+> lore.kernel.org/all/20240424095604.3425857-1-peteryin.openbmc@gmail.com/t.mbox.gz
+> Looking for additional code-review trailers on lore.kernel.org
 > ---
->  Documentation/devicetree/bindings/eeprom/at24.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+>   dt-bindings: hwmon: Add infineon xdp710 driver bindings
+>     + Acked-by: Rob Herring (Arm) <robh@kernel.org> (✓ DKIM/kernel.org)
 > 
-> diff --git a/Documentation/devicetree/bindings/eeprom/at24.yaml b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> index 8befd09963be..0ecb7ea76d1d 100644
-> --- a/Documentation/devicetree/bindings/eeprom/at24.yaml
-> +++ b/Documentation/devicetree/bindings/eeprom/at24.yaml
-> @@ -193,6 +193,10 @@ properties:
->      description:
->        phandle of the regulator that provides the supply voltage.
->  
-> +  dovdd-supply:
-> +    description:
-> +      phandle of the regulator that provides the supply voltage.
-
-We already have "the regulator that provides the supply voltage" just 
-above.
-
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.18.0
 > 
+> And no quotes...
+
+Yes, this was fixed in b4-0.12.4 and b4-0.13.
+
+-K
 
