@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3191-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3192-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7FBF8B304A
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:23:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFB1D8B3055
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:25:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCCD11C231B2
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:23:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 008E2B23580
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:25:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F3213A879;
-	Fri, 26 Apr 2024 06:23:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86B6613A869;
+	Fri, 26 Apr 2024 06:25:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oahcaZI7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IsqS5wqF"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C28E2F2F;
-	Fri, 26 Apr 2024 06:23:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF43282FD;
+	Fri, 26 Apr 2024 06:25:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714112611; cv=none; b=S7rk1zcLATeyuQEusLD2ajXojI8IWhiF6PfhbpmshhQExu5t6nNQMKMqq96FieA2/Bdv7HJkfGZKxRBopxqlizPhm2smHtfNP0S9G8ahbWnIolB2e3S+GvkMRvxRySSaHp28qKQEkBTEfLeJVYTq5DjzreR4QRvA0WlNQ/t6xPg=
+	t=1714112710; cv=none; b=Byo6Eic/PGEH9Q0/A6wSc+g/kUIuUEPFtjHAXtGsVD/baXEuIfBl/aDDZvWQb/TxdVjLVoxpiCZ3kYjsfWvoSzcuERidGeYcluPyihzDmcAgdsbgn/o5YsSY45Xu7qEDDEjn1jD6pf+3/OR5GoXaB5zFxCF72gA2HhWaYZhIQrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714112611; c=relaxed/simple;
-	bh=YtshXLNHd+oeMo09vvuPVWrGyeKWyQJGrt5mDGX3NiM=;
+	s=arc-20240116; t=1714112710; c=relaxed/simple;
+	bh=csyB+IN5F24U2fIUWzQsCV3qp20uV+VUljrHnFIY0XE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b2Frl9jCgsb1/zXCme/HJqMKFRhRTtwz3rMY33vNmlcOkFJGF3HSyPITa1rVze+MYgbWKhTneMVqpANta4+YRgNUPRw+TfGc5a/1Vls2f8PmtuFz2QABAah3KjzP/IbBCTptG+e40r/pGZTLRlnYJ+xINnxtxd58YmvUvRBNf/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oahcaZI7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB951C113CD;
-	Fri, 26 Apr 2024 06:23:26 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=kpmW5+mJ0bbLbiflFh2Wf46a+aBwmziojzVehgbJYaZiZWy97Y3OHmSkRGWPyeIjQ7j5sfBgwz+klytuGEkibx9y8rw4sp1yCONJOAxrZgN6L/spuVqIL/y5ppQOLTY/LH9NuVyyWU/gha1BCfQYj7IZGFD/OU5w1dgUQAIg6jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IsqS5wqF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E37D7C113CD;
+	Fri, 26 Apr 2024 06:25:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714112610;
-	bh=YtshXLNHd+oeMo09vvuPVWrGyeKWyQJGrt5mDGX3NiM=;
+	s=k20201202; t=1714112709;
+	bh=csyB+IN5F24U2fIUWzQsCV3qp20uV+VUljrHnFIY0XE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oahcaZI7flfMnYzZIhm0Js0aQL7aZzyH/L68wKC+ovfKl6M3RyLA1jSMUup6zaZTU
-	 G+NVs+03/Egrn8xU/GvpMirylgYrAeZspGiEhnnIZZsm2I5c6S7RhYfuVjgo3o77bs
-	 pvnrul04Sq6Oqc1LVi4WJeTXzVfrsHwmhN76XHxq0iBOAAzBKvI45yHQuWcUZgpC0h
-	 tPQAkRvyMAOspuMJdSyiB9rAiT0tV3gzw40B5aiuGLpVSmLT5BgoId2wzB6AcODisc
-	 +VoMS3xUnJrFQVlB0zoRLNhWw6LvHsTvHlO1GVCL5lYMT4saK+K+3/hDwlKGRY12ZA
-	 VmB9cZq5o9uYQ==
-Message-ID: <3f381a54-49ce-4a45-a960-00cf2e91b044@kernel.org>
-Date: Fri, 26 Apr 2024 08:23:24 +0200
+	b=IsqS5wqFEIVfXN4uzT7K7B7UBuWJRjjTlX1Pckc4McKqkjlkY/oVhH/GpadOScn7/
+	 CwWUCFQFo/e4droS1TM1b13E8JQjNLZm/l4YHu0CRA/hnNbWSs1K2qSaf7Ad6mFvaZ
+	 wdtOLsSX/2rKwY6eTwAP0Tqfe7opSoQH18s/wY/PGEcdJDUgQX3NGRL+54MX+5rbx9
+	 Ht5W4YOy9Pe7fTxAp0L9tWeCq1urP4tUaTyW++czFK+g3DZvzDPutb5QMDpc+1ICME
+	 K6L7qRFGopDuXAniHsSbI31uZDmhu0DVGGXxSKLY8kDYD/HubfGCrr2NV86ZE6nlgK
+	 lvL4eKxICnk0A==
+Message-ID: <5822e000-01d3-442c-bb52-04fab87cb3da@kernel.org>
+Date: Fri, 26 Apr 2024 08:25:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 06/14] dt-bindings: fsi: Document the FSI controller
- common properties
+Subject: Re: [PATCH v3 08/14] dt-bindings: fsi: ast2600-fsi-master: Switch to
+ yaml format
 To: Eddie James <eajames@linux.ibm.com>, linux-aspeed@lists.ozlabs.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
@@ -59,7 +59,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
  andrew@codeconstruct.com.au
 References: <20240425213701.655540-1-eajames@linux.ibm.com>
- <20240425213701.655540-7-eajames@linux.ibm.com>
+ <20240425213701.655540-9-eajames@linux.ibm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,64 +105,106 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240425213701.655540-7-eajames@linux.ibm.com>
+In-Reply-To: <20240425213701.655540-9-eajames@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 25/04/2024 23:36, Eddie James wrote:
-> Since there are multiple FSI controllers documented, the common
-> properties should be documented separately and then referenced
-> from the specific controller documentation.
+> Switch to yaml for the AST2600 FSI master documentation.
 > 
 > Signed-off-by: Eddie James <eajames@linux.ibm.com>
 > ---
+>  .../fsi/aspeed,ast2600-fsi-master.yaml        | 72 +++++++++++++++++++
+>  .../bindings/fsi/fsi-master-aspeed.txt        | 36 ----------
+>  2 files changed, 72 insertions(+), 36 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/fsi/fsi-master-aspeed.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml b/Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml
+> new file mode 100644
+> index 000000000000..f053e3e1d259
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/fsi/aspeed,ast2600-fsi-master.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Aspeed FSI master
+> +
+> +maintainers:
+> +  - Eddie James <eajames@linux.ibm.com>
+> +
+> +description:
+> +  The AST2600 and later contain two identical FSI masters. They share a
+> +  clock and have a separate interrupt line and output pins.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - "aspeed,ast2600-fsi-master"
+> +      - "aspeed,ast2700-fsi-master"
 
+This wasn't tested. No quotes. Do you see any other example like this?
 
 > +
-> +  no-scan-on-init:
-> +    $ref: /schemas/types.yaml#/definitions/flag
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  cfam-reset-gpios:
+> +    maxItems: 1
 > +    description:
-> +      The FSI controller cannot scan the bus during initialization.
+> +      Output GPIO pin for CFAM reset
 > +
-> +patternProperties:
-> +  "cfam@[0-9a-f],[0-9a-f]":
-> +    type: object
-> +    properties:
-> +      chip-id:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +  fsi-routing-gpios:
+> +    maxItems: 1
+> +    description:
+> +      Output GPIO pin for setting the FSI mux (internal or cabled)
+> +
+> +  fsi-mux-gpios:
+> +    maxItems: 1
+> +    description:
+> +      Input GPIO pin for detecting the desired FSI mux state
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +allOf:
+> +  - $ref: fsi-controller.yaml#
 
-Missing description
+This goes after required:
 
 > +
-> +      reg:
-> +        maxItems: 1
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - interrupts
 > +
-> +      "#address-cells":
-> +        const: 1
-> +
-> +      "#size-cells":
-> +        const: 1
-> +
-> +    required:
-> +      - reg
-> +
-> +    additionalProperties: true> +
-> +additionalProperties: true
+> +unevaluatedProperties: false
 > +
 > +examples:
 > +  - |
-> +    fsi@3400 {
-> +        #address-cells = <2>;
-> +        #size-cells = <0>;
-> +        compatible = "fsi-controller";
+> +    #include <dt-bindings/clock/ast2600-clock.h>
+> +    #include <dt-bindings/gpio/aspeed-gpio.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    fsi-master@1e79b000 {
+> +        compatible = "aspeed,ast2600-fsi-master";
+> +        reg = <0x1e79b000 0x94>;
+> +        interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&pinctrl_fsi1_default>;
+> +        clocks = <&syscon ASPEED_CLK_GATE_FSICLK>;
+> +        fsi-routing-gpios = <&gpio0 ASPEED_GPIO(Q, 7) GPIO_ACTIVE_HIGH>;
+> +        fsi-mux-gpios = <&gpio0 ASPEED_GPIO(B, 0) GPIO_ACTIVE_HIGH>;
+> +        cfam-reset-gpios = <&gpio0 ASPEED_GPIO(Q, 0) GPIO_ACTIVE_LOW>;
 
-No, there is no such compatible here.
-
-> +        reg = <0x3400 0x400>;
-
-Neither reg.
-
-Also, keep order of properties matching DTS coding style.
+No children?
 
 
 Best regards,
