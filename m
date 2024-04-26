@@ -1,129 +1,128 @@
-Return-Path: <linux-i2c+bounces-3199-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3200-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C0E48B30B0
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:44:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01FD58B30D8
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:55:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6C0A1F24862
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:44:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E9C3B23D1E
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:55:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6634313A888;
-	Fri, 26 Apr 2024 06:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D0A113BC18;
+	Fri, 26 Apr 2024 06:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="hNBveKLM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rz0/8hiV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55A717721
-	for <linux-i2c@vger.kernel.org>; Fri, 26 Apr 2024 06:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD47113A88F;
+	Fri, 26 Apr 2024 06:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714113871; cv=none; b=EZkaOlIU8iExOGQqT8Uk2lWDRI32CmOrBwm+gPBkjITb3SZHGoC3G7Ykr+h235HA8KMq73jA/3AzL1ey9punSDKePrxmMpMbSlk++SDj4gLOtupaGmTavrbU1eO8HZtT2IqUsGmZKt1OYzczIK7smvka4Kubkwpb9+05/rY/dqY=
+	t=1714114502; cv=none; b=nQPZuFY14A0W4EBIPpsnY8uTWvE+mXzPh2rBFAWPo3nsixAWKU8L13YYN/W04nrMXlidHMKc3ECKNtOYNGA4NN87jyRrMXSji6ogc04vo6GJ4O/+giznOG5UhmZAcNzSUOhzQrhMR9K6sPjHgVQGb8Yh3KPH/HCVxxkYzvqzXMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714113871; c=relaxed/simple;
-	bh=aCF9YJ/3AVcp7Uo4nJ5GWEg/vMZeJEHnYrSYZ1gdY0s=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UBIb4dkSjKoTNfn2SmOVNpXNejt5H3CuoxkqnNVu4R7yXm6YEyArVsFSVQ0l797weBKZGxj0jb6Oh035nL4ZBCPzSRyM0E1LMl1BLBi9j3geJ0f62wB1dE/5ihP4RWDfQjRitUTHKM577hpkrCqiSEEOyMjEHpyEvwEJliAPEpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=hNBveKLM; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=HMLrUoCgVuOtf+
-	mCDqUTfN9K6VIrEPm+iJ7p/Jm5Smw=; b=hNBveKLMvWmdd10rWkWc9ObrARjlmo
-	qeTnQzbnWKvNvTBUJRp239X1uzAlM0Yg+hw8dC6dxP9TwmFg+N51EFrSGvnY8AB2
-	wn5oWy3t443NX8SlGbPxan04lqvef/0Ip+gtLXC/n9VxMSHLveLDmhId8Bw+oKq0
-	ppXKdqCEDk4lRyG6o8EsIShHN2EB2BlcmDpxAzqWw/qnn56Jgnmg93iH96qsf2a0
-	InRggodGaQ7aenH5KunSdsZVtRLG4pGSIRaDSA+8lKtIABPn75il3GR2WJfiIltG
-	tBNdu1Kn/wsk4zpYb5U4m5r0ii4AETKZ6y3aFKJNA9inB5o1N7aHLKuA==
-Received: (qmail 1204080 invoked from network); 26 Apr 2024 08:44:26 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Apr 2024 08:44:26 +0200
-X-UD-Smtp-Session: l3s3148p1@TPgdPPoWSMIujnvp
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Baruch Siach <baruch@tkos.co.il>,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: smbus: fix NULL function pointer dereference
-Date: Fri, 26 Apr 2024 08:44:08 +0200
-Message-Id: <20240426064408.7372-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1714114502; c=relaxed/simple;
+	bh=4iDY+/cO9vuxWLs+6fs4Xvs7bYgo+VK3ieBdHNf09Pk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=r7gXP9oAuPznwlMudJLQ5uSPwgQfy+5RA9LYKvIdi8pAvSD1AqbLtBLpF2AjU7GPxaEqOr/UPObuvOACXpS1sWOtcuJ51kE1MEXUTI05btBvR52h+GYaJDUGBrYi+EVv54jRucVmGkU3zQaRkVqKLarOxUl2ZMjV9Kl98iOr9w0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rz0/8hiV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 838AFC113CD;
+	Fri, 26 Apr 2024 06:54:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714114502;
+	bh=4iDY+/cO9vuxWLs+6fs4Xvs7bYgo+VK3ieBdHNf09Pk=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=rz0/8hiVQUUYFWPUeXwztOH5w6U8apBN/4Kfv+9IyxT4jH5/rG3iItpk7IV1h+hYr
+	 Qrr2tFiSqie5Cj8Sx9VJfUOHdCqV9J0MWfEmdZH4c79XDzR+lNOB94fuX6Wx9TxX3g
+	 698reVJVZnHV5g7Uk05ZCWAv5eHmyKHjbHu1BmyWFL+31iAc5CSRoZZhYRLv15Nlzg
+	 v5427V4N90U649z4HFVkqpy2Cmz2bCo/cTkREE0LH7lsQwEkuQYvRRXMIqrN2ELGGf
+	 vtlHjenPcnFU35bJ9Ob8YtRC4TfOP4CtSnBaHzDnELmtD/V0ErTC9wUtgeD8xwTCha
+	 KSQyuqu5C5+pw==
+Message-ID: <4e329d1b-fad5-416f-b0ca-55e8c6c3394c@kernel.org>
+Date: Fri, 26 Apr 2024 08:54:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: Add infineon xdp710 driver
+ bindings
+To: Peter Yin <peteryin.openbmc@gmail.com>, patrick@stwcx.xyz,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Jonathan Corbet <corbet@lwn.net>,
+ Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>,
+ Patrick Rudolph <patrick.rudolph@9elements.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, Charles Hsu
+ <ythsu0511@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ Lukas Wunner <lukas@wunner.de>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <20240425153608.4003782-1-peteryin.openbmc@gmail.com>
+ <20240425153608.4003782-3-peteryin.openbmc@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240425153608.4003782-3-peteryin.openbmc@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Brauch reported an OOPS when using the designware controller as target
-only. Target-only modes break the assumption of one transfer function
-always being available. Fix this by always checking the pointer in
-__i2c_transfer.
+On 25/04/2024 17:36, Peter Yin wrote:
+> Add a device tree bindings for xdp710 device
+> 
+> Acked-by: "Rob Herring (Arm)" <robh@kernel.org>
 
-Reported-by: Baruch Siach <baruch@tkos.co.il>
-Closes: https://lore.kernel.org/r/4269631780e5ba789cf1ae391eec1b959def7d99.1712761976.git.baruch@tkos.co.il
-Fixes: 4b1acc43331d ("i2c: core changes for slave support")
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/i2c/i2c-core-base.c  | 12 ++++++------
- drivers/i2c/i2c-core-smbus.c |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+That's not the tag you received. Please do not modify the tags. Quotes
+are not needed.
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index ff5c486a1dbb..db0d1ac82910 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -2200,13 +2200,18 @@ static int i2c_check_for_quirks(struct i2c_adapter *adap, struct i2c_msg *msgs,
-  * Returns negative errno, else the number of messages executed.
-  *
-  * Adapter lock must be held when calling this function. No debug logging
-- * takes place. adap->algo->master_xfer existence isn't checked.
-+ * takes place.
-  */
- int __i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
- {
- 	unsigned long orig_jiffies;
- 	int ret, try;
- 
-+	if (!adap->algo->master_xfer) {
-+		dev_dbg(&adap->dev, "I2C level transfers not supported\n");
-+		return -EOPNOTSUPP;
-+	}
-+
- 	if (WARN_ON(!msgs || num < 1))
- 		return -EINVAL;
- 
-@@ -2273,11 +2278,6 @@ int i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
- {
- 	int ret;
- 
--	if (!adap->algo->master_xfer) {
--		dev_dbg(&adap->dev, "I2C level transfers not supported\n");
--		return -EOPNOTSUPP;
--	}
--
- 	/* REVISIT the fault reporting model here is weak:
- 	 *
- 	 *  - When we get an error after receiving N bytes from a slave,
-diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
-index e3b96fc53b5c..a942c5306a4e 100644
---- a/drivers/i2c/i2c-core-smbus.c
-+++ b/drivers/i2c/i2c-core-smbus.c
-@@ -596,7 +596,7 @@ s32 __i2c_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
- 				break;
- 		}
- 
--		if (res != -EOPNOTSUPP || !adapter->algo->master_xfer)
-+		if (res != -EOPNOTSUPP)
- 			goto trace;
- 		/*
- 		 * Fall back to i2c_smbus_xfer_emulated if the adapter doesn't
--- 
-2.39.2
+Best regards,
+Krzysztof
 
 
