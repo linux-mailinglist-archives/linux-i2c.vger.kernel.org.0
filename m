@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3186-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3187-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B65388B301E
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:15:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9907D8B3028
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 08:17:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA7FA1C22F09
-	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:15:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56F64285546
+	for <lists+linux-i2c@lfdr.de>; Fri, 26 Apr 2024 06:17:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEEDC13A410;
-	Fri, 26 Apr 2024 06:15:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBC3E13A89C;
+	Fri, 26 Apr 2024 06:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YwKw7Ws3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qFn07a4r"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCF22F2F;
-	Fri, 26 Apr 2024 06:15:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB872F2F;
+	Fri, 26 Apr 2024 06:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714112106; cv=none; b=hYPa2wuHl/qpJWGsFMs0eIH/CeRiQnHlwm+veSDuqqbpTJBf7qu4aQ4SmCFI+B1Hro2U0sOwPx9EW+kR1z1VZJ1ellAXGdYljZ8WrnXN/pkRnP9p7s63iXir6KA0rRkU2LMjg9KnfrCvM/atSvd/kY0U4VI0hyEtdi0rSXkwfRw=
+	t=1714112234; cv=none; b=Q7kTyjq9nyGmv0cpuzvocIsLy2ExHyyo97neI+x3Rn7+WEfp4lxiiw8HK2Jr4etv0Pxjy/zvplSt0DZx2RoXlBk4kc9HrMXLXY6b9WTec+c7dCbtpQq447yfq6df3hoUd2L+rMzwMeAAOzib3lJ/mONpqnXc2lpJCBLXUDRZ1Tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714112106; c=relaxed/simple;
-	bh=2zMjsUSfslciVWlXYRwI/HomcPgj2FUOtYL/1gugbYw=;
+	s=arc-20240116; t=1714112234; c=relaxed/simple;
+	bh=Kyg1CztQ3JrcI+QF2gyuzG9xXs2XGKVQrTPd53DuGPo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jh6WoNjg62DKaTSIevewG5HP1Vb+ET4l3dSVFd4pmIQ26Z3qoZn/79h0e/3xXWOa1nY91izb3anbjhzfy0dA0hAjsEOZPoSuqwYtKr1zi1Pt2zJbTjfY/eRa+hz19SaVWW/C4i3Rfr6Yva5Ghn0EBPt65FfGkpkoFTGtcDFtHFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YwKw7Ws3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8022C113CD;
-	Fri, 26 Apr 2024 06:15:02 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=eSu+TBbi9+pXVQ8U7oYVoyo9nReE8UEkHUk/F/AlGxBBk/DCbYvHOBEtHvbCLAJVGJSdCbNhNBn3hQHl/P2LkxIRa/NTUtYCFQq9g8hoWILTZKPUkUBkV1FVbhaMZLtT0ZPGe6Vf7qSTychEixOWaXL75bBs1i5hp1pUelGENSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qFn07a4r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FCB1C113CE;
+	Fri, 26 Apr 2024 06:17:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714112106;
-	bh=2zMjsUSfslciVWlXYRwI/HomcPgj2FUOtYL/1gugbYw=;
+	s=k20201202; t=1714112234;
+	bh=Kyg1CztQ3JrcI+QF2gyuzG9xXs2XGKVQrTPd53DuGPo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YwKw7Ws3nJqXx95A035lnkvAL+lLCnq33LBDNlXhHW3n0K4ReQJsZRQqtGixyvgOk
-	 cMMlXKEsEH2/3Y2cnbqrWUMaiePoU6CBxD3QlbvgubjWt5JT0LjzpiPxlGA75lgPni
-	 y+T3wx/4VPktiDD6mK1G8m3z6ZfjAK6w7S6ntTDXr4KhKJCFQDd/e8GpyTtJ4ahIF+
-	 3bzJTu5FlPcPpH8KvtNIgzQsryn4jo/HSUnvW7yMe3K3lTZs5tEnQExUZHmiGijJEm
-	 3lJu4M5ohUyBvL0nuFuMPA3WFPDP9/W0OMgoYOyiSrlhf4Su4U2bkzsoxi5L33LZCL
-	 e4n45cCcP27cA==
-Message-ID: <e2b52bfb-0742-4baf-8269-86075b5cc54e@kernel.org>
-Date: Fri, 26 Apr 2024 08:15:00 +0200
+	b=qFn07a4rb1R/DKgZVgGYvSEZGZUTwA0XYNg6OKtOQu847NVXKlNpD2JntbhExeOGM
+	 UPyD+hQ+NWWHCa0KjiI5e4oQEuU64iMnY+Ir0mrDMz1OrdG0OmXbPaU6GyQAIaM13O
+	 NAdvDwuqoX7RumwJiW3xvAcoXQxpWmzvIIMaW2wAzs3297KjoCuiuO6vHeCW5Cg/jG
+	 o21WwYC1zmVYUn+r/ja8rbjaXq+/mCIY/aXFgV1FTUuV2Px+maAMD5soANpna+iKzv
+	 eIcD9gw/VOzEyOjKcGyuUOSvWS9VaqxyFyZAn0rl/GHtTsfSE6HLjVGQcqEVqYJmAj
+	 s/I9wQGwxBntQ==
+Message-ID: <39bdf357-76c8-4ae4-9a06-d00ba9ce16e3@kernel.org>
+Date: Fri, 26 Apr 2024 08:17:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 01/14] dt-bindings: spi: Document the IBM Power SPI
- controller
+Subject: Re: [PATCH v3 03/14] dt-bindings: fsi: Document the FSI2PIB engine
 To: Eddie James <eajames@linux.ibm.com>, linux-aspeed@lists.ozlabs.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
@@ -59,7 +58,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
  andrew@codeconstruct.com.au
 References: <20240425213701.655540-1-eajames@linux.ibm.com>
- <20240425213701.655540-2-eajames@linux.ibm.com>
+ <20240425213701.655540-4-eajames@linux.ibm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,77 +104,36 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240425213701.655540-2-eajames@linux.ibm.com>
+In-Reply-To: <20240425213701.655540-4-eajames@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 25/04/2024 23:36, Eddie James wrote:
-> The IBM Power chips have a basic SPI controller. Document it.
-
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
-
+> The FSI2PIB or SCOM engine provides an interface to the POWER processor
+> PIB (Pervasive Interconnect Bus).
 > 
 > Signed-off-by: Eddie James <eajames@linux.ibm.com>
 > ---
->  .../devicetree/bindings/spi/ibm,p10-spi.yaml  | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/ibm,p10-spi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/ibm,p10-spi.yaml b/Documentation/devicetree/bindings/spi/ibm,p10-spi.yaml
-> new file mode 100644
-> index 000000000000..9bf57b621c1f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/ibm,p10-spi.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/ibm,p10-spi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: IBM SPI Controller
-
-IBM P10 SPI Controller
-
-> +
-> +maintainers:
-> +  - Eddie James <eajames@linux.ibm.com>
-> +
-> +description:
-> +  A basic SPI controller found on IBM Power chips, accessed over FSI. This
-> +  node will always be a child node of an ibm,fsi2spi node.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ibm,p10-spi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +allOf:
-> +  - $ref: spi-controller.yaml#
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    fsi2spi@1c00 {
-> +        compatible = "ibm,fsi2spi";
-> +        reg = <0x1c00 0x400>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-
-Use rather some simple wrapper instead of node causing warnings, e.g.
-fsi {} with only address/size cells.
 
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+---
+
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you know the process, you can skip it (please do
+not feel offended by me posting it here - no bad intentions intended).
+If you do not know the process, here is a short explanation:
+
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tag is "received", when
+provided in a message replied to you on the mailing list. Tools like b4
+can help here. However, there's no need to repost patches *only* to add
+the tags. The upstream maintainer will do that for tags received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
 
 Best regards,
 Krzysztof
