@@ -1,60 +1,61 @@
-Return-Path: <linux-i2c+bounces-3265-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3264-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 328B68B480A
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Apr 2024 22:39:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E010C8B4809
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Apr 2024 22:39:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 488DB1C20C98
-	for <lists+linux-i2c@lfdr.de>; Sat, 27 Apr 2024 20:39:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97B3F1F215EC
+	for <lists+linux-i2c@lfdr.de>; Sat, 27 Apr 2024 20:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 749CE15B985;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57FC615B97B;
 	Sat, 27 Apr 2024 20:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="aM1UUK0o"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="bZBZ1isp"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AC015B147
-	for <linux-i2c@vger.kernel.org>; Sat, 27 Apr 2024 20:36:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D5E15B13E
+	for <linux-i2c@vger.kernel.org>; Sat, 27 Apr 2024 20:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714250198; cv=none; b=Kwl6Ikvksjyvix5az4tDvedW8eSGtSiowasYbp0IFIyUBob1ymnS88yN2ZwGnD7KnNw3THxYgxgRWi+fNaKNkeQfzTZ807exOftFcKh0hJHxg84Og5Zr0QdMsp9rUIewRH/8TlRaRgPGyjH8kIxvqN1BeD2S1FShoRRgTaalXLw=
+	t=1714250198; cv=none; b=YIZ6zXQq5c53SX48VeSBUB0UY1Pn2EDexERZ5AM67YsOsvWqnVZDjJ8e1DaaY4hENG9FDZSQ8Tvhcm/AUOK03RzLrJxSKzuKtdlf/r22XC3df/5DkY4vP2gtSwM8/fD1u1XNFlsejhBkK51PInpQKkHXMepOxs/qJwuYrBiDPTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1714250198; c=relaxed/simple;
-	bh=ICJxO/oSoreCPN4scyq2cUFCghZPxBGHSD5xgC0rDFY=;
+	bh=Vr6FJGRmH65/Z+SbGDHhY+dUnDZnbqoip1Sy/Q8SJio=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l/EVwKHtUSGWt0rRiN4pMPXnN+1GvEjIYeZ55fmlDt5c26r6aWrA7+g1WNt+NP3t8zLFaSgKcM9Q/kxCLPPPhJ0UQrWapXeI44dGn7ndF/wW8dKZsMB/XcCenx0nR78kci+xsQ01rB+cwhkdJH6keC/21t+n70h3gHzhLeUlyPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=aM1UUK0o; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=sc0JFICvmNIltaLHoaVV3ZSEgKW5FAOr3hvIgzyzbovHBXAgZsQ0MwUV1C/tCvsoZgOjtxbCAz8VqGnQj9bUyl0SzmAF9FzB9S9FJoyhRojU+TqPxWxRByuy8mchtuMMjMapWx0ukbMOVzZJM0p5N686lukaHw0YLRFFVDZBS18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=bZBZ1isp; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=Mqxa2PoRjYYBR4TQvcaMfBjEHimjCGFPRonW4OLsXg0=; b=aM1UUK
-	0ob0Dn1guHJxPMrE1lLm/SPHStcdwkVQLew562thX6mna5R/Eq7H38PKiLYDFjNw
-	AvZE/2YHutuyWnenR8vGOrC1lzVizEfWj7mFHEaRAjc9IOzg34sGj4BPYpdfpLK2
-	jGCxEtGRnxcsEo3ayNe+2qOF9jMK6AMstMX5gjJnBHJinWS5TvxbjYH1HNWlMPtX
-	aAAIHK3wO8PKKZwtk+DC1RyXw/wAp8gldZqHVVckF/Gc2+eCZyfwfPaTvDb4PrWU
-	fFlLppn+xVHWqddAFCNyZapTgGXCt9JnbZ+g9rxlERvRuyISt5cb4Ae8KNjmXHL3
-	//dirk2CdNRzy6tg==
-Received: (qmail 1782108 invoked from network); 27 Apr 2024 22:36:25 +0200
+	 s=k1; bh=wxBftEHkYMQUmyq9eqJI/NqAPsdhyx/MQOFdHVmTJFI=; b=bZBZ1i
+	spPigwswTyePXwpc39oBGmZ4zvAHVdFIS4CJQshYU094QHut33dW4aqiCNUO8Wt6
+	OcrK/ADcvb51QkO65EuSr65gz45DiXUfyqLXfGFIMVcUk6/CcaoJvRKU45hMmT0w
+	0SSRhKfof4aR6E36w/SdP3kUbcHgGWfQfmUvSN5BT5uwLU0ZkGRFRj4euNRhhhhw
+	oWFzu0sSTof4uICSb0Gs23/c5yGCwkioIIMeRwpcQfw22SW6jo2A+g/hiCCoBis1
+	3JVIMP8sKT2JGKUfXpYAysXmXa2bqJC6dQI1awnDvTGQAVQvLaIYxTWjyAUOuUaF
+	xDNkIVIhtJhAlprw==
+Received: (qmail 1782144 invoked from network); 27 Apr 2024 22:36:25 +0200
 Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Apr 2024 22:36:25 +0200
-X-UD-Smtp-Session: l3s3148p1@WgJR+RkX/s9ehh9l
+X-UD-Smtp-Session: l3s3148p1@7Phd+RkXBtBehh9l
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-i2c@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Heiko Stuebner <heiko@sntech.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
 	Andi Shyti <andi.shyti@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 13/15] i2c: rk3x: use 'time_left' variable with wait_event_timeout()
-Date: Sat, 27 Apr 2024 22:36:05 +0200
-Message-ID: <20240427203611.3750-14-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 14/15] i2c: s3c2410: use 'time_left' variable with wait_event_timeout()
+Date: Sat, 27 Apr 2024 22:36:06 +0200
+Message-ID: <20240427203611.3750-15-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240427203611.3750-1-wsa+renesas@sang-engineering.com>
 References: <20240427203611.3750-1-wsa+renesas@sang-engineering.com>
@@ -79,48 +80,40 @@ Fix to the proper variable type 'long' while here.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/i2c/busses/i2c-rk3x.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-s3c2410.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-index 8c7367f289d3..beca61700c89 100644
---- a/drivers/i2c/busses/i2c-rk3x.c
-+++ b/drivers/i2c/busses/i2c-rk3x.c
-@@ -1060,7 +1060,8 @@ static int rk3x_i2c_xfer_common(struct i2c_adapter *adap,
- 				struct i2c_msg *msgs, int num, bool polling)
+diff --git a/drivers/i2c/busses/i2c-s3c2410.c b/drivers/i2c/busses/i2c-s3c2410.c
+index 275f7c42165c..01419c738cfc 100644
+--- a/drivers/i2c/busses/i2c-s3c2410.c
++++ b/drivers/i2c/busses/i2c-s3c2410.c
+@@ -685,7 +685,7 @@ static void s3c24xx_i2c_wait_idle(struct s3c24xx_i2c *i2c)
+ static int s3c24xx_i2c_doxfer(struct s3c24xx_i2c *i2c,
+ 			      struct i2c_msg *msgs, int num)
  {
- 	struct rk3x_i2c *i2c = (struct rk3x_i2c *)adap->algo_data;
--	unsigned long timeout, flags;
-+	unsigned long flags;
-+	long time_left;
- 	u32 val;
- 	int ret = 0;
- 	int i;
-@@ -1092,20 +1093,20 @@ static int rk3x_i2c_xfer_common(struct i2c_adapter *adap,
- 		if (!polling) {
- 			rk3x_i2c_start(i2c);
+-	unsigned long timeout = 0;
++	long time_left = 0;
+ 	int ret;
  
--			timeout = wait_event_timeout(i2c->wait, !i2c->busy,
--						     msecs_to_jiffies(WAIT_TIMEOUT));
-+			time_left = wait_event_timeout(i2c->wait, !i2c->busy,
-+						       msecs_to_jiffies(WAIT_TIMEOUT));
- 		} else {
- 			disable_irq(i2c->irq);
- 			rk3x_i2c_start(i2c);
- 
--			timeout = rk3x_i2c_wait_xfer_poll(i2c);
-+			time_left = rk3x_i2c_wait_xfer_poll(i2c);
- 
- 			enable_irq(i2c->irq);
+ 	ret = s3c24xx_i2c_set_master(i2c);
+@@ -715,7 +715,7 @@ static int s3c24xx_i2c_doxfer(struct s3c24xx_i2c *i2c,
+ 				dev_err(i2c->dev, "deal with arbitration loss\n");
  		}
+ 	} else {
+-		timeout = wait_event_timeout(i2c->wait, i2c->msg_num == 0, HZ * 5);
++		time_left = wait_event_timeout(i2c->wait, i2c->msg_num == 0, HZ * 5);
+ 	}
  
- 		spin_lock_irqsave(&i2c->lock, flags);
- 
--		if (timeout == 0) {
-+		if (time_left == 0) {
- 			/* Force a STOP condition without interrupt */
- 			i2c_writel(i2c, 0, REG_IEN);
- 			val = i2c_readl(i2c, REG_CON) & REG_CON_TUNING_MASK;
+ 	ret = i2c->msg_idx;
+@@ -724,7 +724,7 @@ static int s3c24xx_i2c_doxfer(struct s3c24xx_i2c *i2c,
+ 	 * Having these next two as dev_err() makes life very
+ 	 * noisy when doing an i2cdetect
+ 	 */
+-	if (timeout == 0)
++	if (time_left == 0)
+ 		dev_dbg(i2c->dev, "timeout\n");
+ 	else if (ret != num)
+ 		dev_dbg(i2c->dev, "incomplete xfer (%d)\n", ret);
 -- 
 2.43.0
 
