@@ -1,75 +1,52 @@
-Return-Path: <linux-i2c+bounces-3293-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3294-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D9638B55DF
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 12:53:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CF5D8B5970
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 15:08:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C169928265D
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 10:53:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B118428BA34
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 13:08:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCF923B295;
-	Mon, 29 Apr 2024 10:52:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33C1756B6C;
+	Mon, 29 Apr 2024 13:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nexus-software-ie.20230601.gappssmtp.com header.i=@nexus-software-ie.20230601.gappssmtp.com header.b="GNODwKgZ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hf+P86eg"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4947022EEB
-	for <linux-i2c@vger.kernel.org>; Mon, 29 Apr 2024 10:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E35E54FAB;
+	Mon, 29 Apr 2024 13:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714387972; cv=none; b=SlRq+tiIjPu7oAoMZaYkO/Q7qSAA1V+XeRjZV48t4bLAQMLRoyvIadU/pD6P9P0B6Mm/+YkBWvP2zIzBSNTe97gcl/874VjEzEn4rKPfdX1Ezd6LqAd0vIwh4raqE5AbpWVN1Lh8HZrnRwleElVtDF1lRfLuWp/6exPbsV93xbo=
+	t=1714396088; cv=none; b=GgdCKfFhlCoKxnqUmRAFAI/nrk8GCvLuROe7NOtJd7b8gGaMsclokCkoSJhko2zoOTpIQPyLD/BmHnMAwGgx+2WzzcnJVz2XWcF34XEOxxSgOzZYHTEtg/fKIxiOs0JbGW5VK5oCdzyvq3aKagNmle6QXYN4cTJj+hicFi7+iE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714387972; c=relaxed/simple;
-	bh=o8wOtjyB4H1XLEyLHIcG4C34RaapqzbqcWqjwmC6atY=;
+	s=arc-20240116; t=1714396088; c=relaxed/simple;
+	bh=ePlZxWQDXGQpBQ8vaCkjnelDcjrUJhQtwABdrueLxfo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZNc4/oK3OM9kOzLWReVVGcCBYJtHiW2l0Lq69jWrSxFSEPtFO79x57yfI4kHQbA/+Ybl9Ca0Awlee13d9SLVf54QkCnI/QE01rTUuLo6p27EHmCg4nXJLyZWn/d+g13wwL7CMpA8tuA25h6KnMztMpo81T6niehtU14cB6cAMH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nexus-software.ie; spf=none smtp.mailfrom=nexus-software.ie; dkim=pass (2048-bit key) header.d=nexus-software-ie.20230601.gappssmtp.com header.i=@nexus-software-ie.20230601.gappssmtp.com header.b=GNODwKgZ; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nexus-software.ie
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=nexus-software.ie
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-41b9dff6be8so19174675e9.3
-        for <linux-i2c@vger.kernel.org>; Mon, 29 Apr 2024 03:52:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexus-software-ie.20230601.gappssmtp.com; s=20230601; t=1714387967; x=1714992767; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/fgJIL5pu/9arRZ3qBAu3NHtnfRP0VZyCjshY2QEahY=;
-        b=GNODwKgZ8qxgDyBjqNpbV6crvy/5yO6L5GzuaBGENOTv19bIbGLeGmhR87AOaHmvKM
-         dd1/YKV71GmPeKRwXSI6nF4VMWw5CBmuf3j9N9oCNCNvf1f8SP7WVx3rCbRDTQbQtUs2
-         1lbT5/t1+DIUFO5oUv/KKX8GkiHFUDP8hEYMEyr+tE8KkLBpglCMkCpKXgA5ZXOO5/og
-         9mofVD9Un0J28W0xHP5k76qkXjA9+ad6j+KmaPBwEongRrrhdq5fgIEHYoiwpAxobhkb
-         PfdWwWHiYB/8idL8GyaJOZ335lU/CIW+115Dxq5MODWSd6WOO3Nc/ko42nSzZ2gAWLPV
-         LuSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714387967; x=1714992767;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/fgJIL5pu/9arRZ3qBAu3NHtnfRP0VZyCjshY2QEahY=;
-        b=YoC9R3EhVKejED2OE6oEC0yues+Aq5wnZ5odsxiCDegByJs1x80DuTIv0kSebJV9B7
-         s1zeEE0KaaqpipBO40xeM3I0P0gOU/o1945J9RBqLph3NdhE1Yg/E3bSfAbJ0eIZziAu
-         5m96ZVs7hWPnhRP0LVIcxJF42z9iLNbMv1advKcGgbhHRdkBJZv2ERVvqSzFHikaZukz
-         UFUNCOsNFeHsmnJQnvzbHGRvl+5iiAmwE6Xnjqp+OLezNgS5P1QV8e+ggTld4AuzkVbU
-         7ArmNyH3wJGha4Za+IthzSJsGfZ3B1lsYY5VkNKmKD6qUCU+TGbCDCUQASQZckkn26tq
-         7StQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW3dsZMzIEMJn22jwhTeppSivmzyQ+cr5HG+KfQAEIAeIijaXCj3m2napVxc+WZMJxP4bNEA6zOpDkYSKuhW9/876E6cI2t6zsD
-X-Gm-Message-State: AOJu0YzEdG49YbrRZaErHL/sMYs/dokmfQkxiq5GnH2PKhz/waqKa+uA
-	iG21jfgvITuyrTFliuVStp+icMyEA1LqWTezUattuizznqpObbxc0XiDoDPrbBmR1f4v5FHQIqY
-	N
-X-Google-Smtp-Source: AGHT+IHr/wzLkphA1zzTirAeTnU83OYcBlmoMRkY4gcRgafVZK8SRhnGsx09GRSLiXv2nSUK4zoAbA==
-X-Received: by 2002:a05:600c:1f94:b0:41b:83bc:e9ba with SMTP id je20-20020a05600c1f9400b0041b83bce9bamr7105320wmb.23.1714387967438;
-        Mon, 29 Apr 2024 03:52:47 -0700 (PDT)
-Received: from [192.168.0.102] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id e8-20020a05600c4e4800b0041bf7da4200sm7095641wmq.33.2024.04.29.03.52.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Apr 2024 03:52:46 -0700 (PDT)
-Message-ID: <0703c962-727f-439c-ba56-ff70288f7224@nexus-software.ie>
-Date: Mon, 29 Apr 2024 11:52:45 +0100
+	 In-Reply-To:Content-Type; b=i1E+pT6TVWCCOJqIdFgRZonfnIqqtcwhTYQkhRmVuyRFFcy+lAu/st+OnMxVJjYE6M9dJC46L5jdWuKkcUyw22IGPWVvCgCYrTDy0rQ1SxPr5BfHVt2JOLKLknFZvJus/CUO1tjbrrIEK8M5wE8WYhw/h68FxHYi2oLOsRhQZys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hf+P86eg; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1FB5A1C0011;
+	Mon, 29 Apr 2024 13:07:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1714396078;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4T8jHqkc/pwYAZPpY3tPykrSPNntOxfw2cx/+VnKdJ0=;
+	b=hf+P86egTGrP4TwSUuKw8GWmwN5RqIBzVTughWx1y6TAnshMaxooCmjTxsF16Vh4rtLfeF
+	u4+0BhEld4JBBTIwh2QN72iFAiUKif5lsDwI+Z4d5/Lsp8tg/5ygKM73Utgbr9t+Zg9pFM
+	XpRaDQ6oRHkwvHiNvcAEl4TlwhbDjDfHYBBS30iSDlbKdsNCNpcVlF6ot+gcBUpkWxJ7bp
+	ewll399OHCxTyQG1+O9Ni707qUnz+4wP9nWxF90W7RKF5V4ZrwbHiIUB2UDebtZHcrjRbw
+	6kKfL/u8q9LMNPW7tQ7a4elmuHxyfe0FAlVQ7FJwpQhzKiinW7/I5V7K3A3CSg==
+Message-ID: <1b7f9c68-32da-405f-add3-33e542406345@bootlin.com>
+Date: Mon, 29 Apr 2024 15:07:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,62 +54,135 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/15] i2c: qcom-geni: use 'time_left' variable with
- wait_for_completion_timeout()
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org
-Cc: Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Andi Shyti
- <andi.shyti@kernel.org>, linux-arm-msm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240427203611.3750-1-wsa+renesas@sang-engineering.com>
- <20240427203611.3750-13-wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH 0/4] Add I2C support on TH1520
+To: Conor Dooley <conor@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, andi.shyti@kernel.org, jszhang@kernel.org,
+ miquel.raynal@bootlin.com, linux-riscv@lists.infradead.org,
+ linux-i2c@vger.kernel.org, thomas.petazzoni@bootlin.com, guoren@kernel.org,
+ wefu@redhat.com, conor+dt@kernel.org, devicetree@vger.kernel.org,
+ aou@eecs.berkeley.edu, krzk+dt@kernel.org, palmer@dabbelt.com,
+ paul.walmsley@sifive.com
+References: <20240425082138.374445-1-thomas.bonnefille@bootlin.com>
+ <171405653346.2527762.16827325392956038580.robh@kernel.org>
+ <20240425-script-fondness-0e80bfa31615@spud>
+ <3eb27570-4a53-47f6-8e36-e25fc1063124@bootlin.com>
+ <20240426-patchy-grievance-e7103a344c82@spud>
 Content-Language: en-US
-From: Bryan O'Donoghue <pure.logic@nexus-software.ie>
-In-Reply-To: <20240427203611.3750-13-wsa+renesas@sang-engineering.com>
+From: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+In-Reply-To: <20240426-patchy-grievance-e7103a344c82@spud>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.bonnefille@bootlin.com
 
-On 27/04/2024 21:36, Wolfram Sang wrote:
-> There is a confusing pattern in the kernel to use a variable named 'timeout' to
-> store the result of wait_for_completion_timeout() causing patterns like:
+
+
+On 4/26/24 4:42 PM, Conor Dooley wrote:
+> On Fri, Apr 26, 2024 at 04:12:00PM +0200, Thomas Bonnefille wrote:
+>>
+>>
+>> On 4/25/24 6:35 PM, Conor Dooley wrote:
+>>> On Thu, Apr 25, 2024 at 09:51:26AM -0500, Rob Herring wrote:
+>>>>
+>>>> On Thu, 25 Apr 2024 10:21:31 +0200, Thomas Bonnefille wrote:
+>>>>> This adds I2C support in the device tree of the T-Head TH1520 RISCV-SoC
+>>>>> and a default configuration for the BeagleV-Ahead. It appears that the
+>>>>> TH1520 I2C is already supported in the upstream kernel through the
+>>>>> Synopsis Designware I2C adapter driver.
+>>>>> As there is no clock driver for this board as of today, this patch
+>>>>> series uses a fixed-clock named i2c_ic_clk.
+>>>>> There is also no pinctrl driver yet so pinmux must be handled manually
+>>>>> for now.
+>>>>> It also fixes the order of the nodes in the device tree to comply with
+>>>>> device-tree coding-style.
+>>>>>
+>>>>> Thomas Bonnefille (4):
+>>>>>     dt-bindings: i2c: dw: Document compatible thead,th1520-i2c
+>>>>>     riscv: boot: dts: thead: Fix node ordering in TH1520 device tree
+>>>>>     riscv: dts: thead: Add TH1520 I2C nodes
+>>>>>     riscv: dts: thead: Enable I2C on the BeagleV-Ahead
+>>>>>
+>>>>>    .../bindings/i2c/snps,designware-i2c.yaml     |  12 ++
+>>>>>    .../boot/dts/thead/th1520-beaglev-ahead.dts   |  22 ++++
+>>>>>    arch/riscv/boot/dts/thead/th1520.dtsi         | 120 ++++++++++++++----
+>>>>>    3 files changed, 127 insertions(+), 27 deletions(-)
+>>>>>
+>>>>> --
+>>>>> 2.44.0
+>>>>>
+>>>>>
+>>>>>
+>>>>
+>>>>
+>>>> My bot found new DTB warnings on the .dts files added or changed in this
+>>>> series.
+>>>>
+>>>> Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+>>>> are fixed by another series. Ultimately, it is up to the platform
+>>>> maintainer whether these warnings are acceptable or not. No need to reply
+>>>> unless the platform maintainer has comments.
+>>>>
+>>>> If you already ran DT checks and didn't see these error(s), then
+>>>> make sure dt-schema is up to date:
+>>>>
+>>>>     pip3 install dtschema --upgrade
+>>>>
+>>>>
+>>>> New warnings running 'make CHECK_DTBS=y thead/th1520-beaglev-ahead.dtb' for 20240425082138.374445-1-thomas.bonnefille@bootlin.com:
+>>>>
+>>>> arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dtb: i2c-clock: clock-frequency:0:0: 50000000 is greater than the maximum of 5000000
+>>>
+>>> The bot is not freaking out here, 50 MHz is indeed more than 5 MHz :)
+>>
+>> 5MHz is the maximum clock-frequency, ie. the I2C bus frequency.
+>> This is actually set to 100kHz for I2C0 in the DT:
+>>
+>> &i2c0 {
+>>      status = "okay";
+>>      clock-frequency = <100000>; <----
+>> ...
+>> };
+>>
+>> 50MHz is the "fixed-clock" frequency, that is the clock feeding the I2C
+>> IP block:
+>>
+>> i2c_ic_clk: i2c-clock {
+>>      compatible = "fixed-clock";
+>>      clock-frequency = <50000000>; <-----
+>>      #clock-cells = <0>;
+>> };
+>>
+>> My guess is that the bot confused the clock-frequency parameter for the bus
+>> clock (SCL) with the i2c-ic-clock value for the controller itself during the
+>> checks.
+>>
+>> Do you agree with this or am I misunderstanding the error ?
+>>
+>> If I lower the fixed-clock frequency to eg. 100kHz, the error is gone. But I
+>> guess the 5MHz limit should probably not apply to the input clock?
 > 
-> 	timeout = wait_for_completion_timeout(...)
-> 	if (!timeout) return -ETIMEDOUT;
+> Heh, I know why that's happening - it's your node name.
+> The pattern for i2c controllers is "^i2c(@.*)?":
+> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/i2c/i2c-controller.yaml
 > 
-> with all kinds of permutations. Use 'time_left' as a variable to make the code
-> self explaining.
+> Rob co-incidentally (or maybe not) put out a patch for fixed-frequency
+> clock names, suggesting using clock as a prefix:
+> https://lore.kernel.org/all/20240425183810.3079069-1-robh@kernel.org/
+> If we switched to that format, I believe your problem goes away.
 > 
-> Fix to the proper variable type 'unsigned long' while here.
+> Cheers,
+> Conor.
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->   drivers/i2c/busses/i2c-qcom-geni.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
-> index 090b4846ed62..0a8b95ce35f7 100644
-> --- a/drivers/i2c/busses/i2c-qcom-geni.c
-> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
-> @@ -586,7 +586,8 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
->   {
->   	struct dma_slave_config config = {};
->   	struct gpi_i2c_config peripheral = {};
-> -	int i, ret = 0, timeout;
-> +	int i, ret = 0;
-> +	unsigned long time_left;
->   	dma_addr_t tx_addr, rx_addr;
->   	void *tx_buf = NULL, *rx_buf = NULL;
->   	const struct geni_i2c_clk_fld *itr = gi2c->clk_fld;
-> @@ -629,8 +630,8 @@ static int geni_i2c_gpi_xfer(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], i
->   
->   		dma_async_issue_pending(gi2c->tx_c);
->   
-> -		timeout = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
-> -		if (!timeout)
-> +		time_left = wait_for_completion_timeout(&gi2c->done, XFER_TIMEOUT);
-> +		if (!time_left)
->   			gi2c->err = -ETIMEDOUT;
->   
->   		if (gi2c->err) {
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+
+Indeed it was the node name, when I switched the name of the fixed clock 
+to clock-i2c-ic, the error was gone, thank you. :)
+But i2c_ic_clk shouldn't match "^i2c(@.*)?", one of my teammates 
+suggested that the error may instead come from this line 
+https://elixir.bootlin.com/linux/latest/source/scripts/dtc/checks.c#L1023.
+
+But as Drew is working on new iterations of the TH1520's clock driver I 
+will just delete this fixed clock and publish a second version depending 
+on his patch.
+
+Thank you,
+Thomas
 
