@@ -1,159 +1,171 @@
-Return-Path: <linux-i2c+bounces-3297-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3298-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA0BC8B5A3E
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 15:38:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 730038B5A9F
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 15:56:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 068FC1C21367
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 13:38:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CF931F21493
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 13:56:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC2236F510;
-	Mon, 29 Apr 2024 13:38:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="pCGJMsAd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 363A6757E3;
+	Mon, 29 Apr 2024 13:56:21 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46ACE6F53D
-	for <linux-i2c@vger.kernel.org>; Mon, 29 Apr 2024 13:38:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD0B6A8DC
+	for <linux-i2c@vger.kernel.org>; Mon, 29 Apr 2024 13:56:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714397930; cv=none; b=Ovtpj5tGG73OwGoHFGLq8XRBQfzEwTrUofm0oVhTR7uqjADGx9OFrZCaw6IdMHiV9CMHnVdfHPHeB5SA8XRsoiqVwXqC5lNtEyIVWXCrs1PcU7K5kY3N/FK/xTEe27en5uqdCzu1TAuXcc19u5NUAy3JSOH8OBQf4NsKKy4WCCo=
+	t=1714398981; cv=none; b=HDFxASr01b2hGdjlZicuTndzaZtS4ngMImNs4t0t/YJScPkjmmT7Nqll2Voth7QMXu8Lj+iybiknPCipBH6mIftft8qH1SYli2I32eAD3LYunTCtLXi9wIc7oBEmsIFaRb4EkSwwUn2DibTcAMMzk5p28X14w17UbNFyHFiUozg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714397930; c=relaxed/simple;
-	bh=BgG4r2ZzwmkVHoC8Y+iUIR12GGobZxPL3TajjFp3CA4=;
-	h=From:In-Reply-To:References:Mime-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bIVvtpSyqKWH7UvDu/LLaNGbMLaggpfFS0AANVqtlPkwBHS2A+31N530v7RQIPTEd0M98/9saPzrjWfqgmJgdA0JJhfgayQhz2wI5KNZsrRku+m2Yg1dK71f6q4J9QK3rEcfNQQziaOgtlv8Kv0r3nnuwMW8A4d+otF6uBwfu4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=pCGJMsAd; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4FE773FB72
-	for <linux-i2c@vger.kernel.org>; Mon, 29 Apr 2024 13:38:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1714397922;
-	bh=kzInz2Vec2Du6of2Q2xRfBv09lBEjQPll+bykpZr/3A=;
-	h=From:In-Reply-To:References:Mime-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=pCGJMsAdbesIO5ygg3UU/dSWG3Qg8HAkgdKKtP9gtIpmvWefBNOvAIoqFlkmcLNcX
-	 OxWpOAtmIhUjr8boeRNL/NYoE4o1+ag5r4RKC7odHo8OuLiMJSTPYx0BOZ8bQns10J
-	 A1uYMvBAGE+P3GvMPgHuVwBZdHkzZ5+BygDRR4Re/4mgikEVy6GPttqjJgmlrc6uYw
-	 bvp8PsKmcMmcY0z/02itUeeWNe/9CgCUOJ05C+uUL0BIzaM6cB8we6jR5DLa2c3hFM
-	 /SJE46Jang73dLYHS0ykJ8Pc6twXOcpdCgRgEEnQH39mmAQIlFr+M3U2pZfqAKLmJ1
-	 ABacP53ckffSQ==
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-43ad0f16513so12269161cf.0
-        for <linux-i2c@vger.kernel.org>; Mon, 29 Apr 2024 06:38:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714397921; x=1715002721;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kzInz2Vec2Du6of2Q2xRfBv09lBEjQPll+bykpZr/3A=;
-        b=Y1/yu7QVp1a4h//Q7ehfNzocDOu8ZdrL6vJOhimaizFNI91k2Mzeb/b+wWKZlezEdW
-         Gf9bAobNnRnhaBElIdLeZp3w8QbmbRoFHXhLoO0K2a0Ng7zKijkeAUfGxkQdKDAHem8y
-         pQ+8xsAxwpC9lCO3KXy6VUc8bzkILpR91vQZ88odw2cYzmrDJxfMezDEdsMPx3oQRVTO
-         sKYr7qzmnSb+5YEeVSCXOvjMFgosfUhrlhWsbKzsf27CfFUKeZ0UxrzerMEKX4FxHRxW
-         5jt8sStm5DUUydET37KGIT59HriFWgynPT2RoyjZELp3vS2o9lv4F+q3rjPOcxbJKH1E
-         wp9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUFzkqMLQaZStpKtanwKc5FPc2IDqT0xxLWY7WuijAuAJIizfmO8GHSkBL6ZtKCG5piacErqr/f+WwBY7HuzihrzZ6YsIF4bjnk
-X-Gm-Message-State: AOJu0Ywons3ud7hDKjpy8s99NPRrClP+wBaPaWFkLF+Ubf+yOAvp75nX
-	qNa6N7pJAxjntnUQJx//xyaceGaVm5JqfADtdf9D8r8kAFJvV/oflEjq6rYGM5QWWM6gAXXmUVK
-	u5s1XKPsRvsKiXbcfE17xFWLJjSA1/HOYPApq5NkfiB6he9HKXhJN1ogZTIoLdA7Sw0fVO4h9nL
-	0K3lmjohZcqXDTzT4K+pY9HtDsWexBbJjnD4TtheezgbIx0k0V
-X-Received: by 2002:a05:622a:d2:b0:43a:c1cd:2f54 with SMTP id p18-20020a05622a00d200b0043ac1cd2f54mr5559221qtw.56.1714397921132;
-        Mon, 29 Apr 2024 06:38:41 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGeybrboGuMYLfrb0LN1/Eksczu7rd1QL7MzncvDdBt5BJRSCjVGbxulLQUKQopeFU++pv+AdoWRrTYLVYMbT4=
-X-Received: by 2002:a05:622a:d2:b0:43a:c1cd:2f54 with SMTP id
- p18-20020a05622a00d200b0043ac1cd2f54mr5559199qtw.56.1714397920849; Mon, 29
- Apr 2024 06:38:40 -0700 (PDT)
-Received: from 348282803490 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 29 Apr 2024 06:38:40 -0700
-From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-In-Reply-To: <20240425082138.374445-5-thomas.bonnefille@bootlin.com>
-References: <20240425082138.374445-1-thomas.bonnefille@bootlin.com> <20240425082138.374445-5-thomas.bonnefille@bootlin.com>
+	s=arc-20240116; t=1714398981; c=relaxed/simple;
+	bh=XJJqLybtv4ZNsL2tQOnqLpSX+EdHqF6ImFUkTFrJaXE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AOQh+LYz1829GBoYO5DjOFatwyGxQAX43i6QgQ7pfC8BfqhOIVKwCox1Nczygivi6N1Zcc0+qCBEYFG68jo+AzZHAbMJRrcrWk8fWO3r4JiXt2pEKGAFc8o96UIKyQ+NGbs+z3v07uQfnr++ZNPtRfOVolXilWQWi4YnVr0jilQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1s1RU7-0001tD-C8; Mon, 29 Apr 2024 15:55:59 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1s1RU5-00EzUo-VH; Mon, 29 Apr 2024 15:55:57 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1s1RU5-00BTdr-2q;
+	Mon, 29 Apr 2024 15:55:57 +0200
+Date: Mon, 29 Apr 2024 15:55:57 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	linux-i2c@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH RFC] i2c: Add a void pointer to i2c_device_id
+Message-ID: <f6ddimzsqjuweaeagsmnfowcktofngjrafosab6owxj4mxkulk@2f6mg7wfdk6p>
+References: <20240426213832.915485-2-u.kleine-koenig@pengutronix.de>
+ <Zi9gRVVw7qbKSL5k@smile.fi.intel.com>
+ <youkuwbynndjpcoux2zaxwjp5gquj647leub3bat37a4wtho6p@ypir6ay3vhaw>
+ <Zi92UCnZa90DXAI9@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Date: Mon, 29 Apr 2024 06:38:40 -0700
-Message-ID: <CAJM55Z8Nj8WAohbANf99nznKxkrTMnSxyC8imYXNJZnuC0XH1g@mail.gmail.com>
-Subject: Re: [PATCH 4/4] riscv: dts: thead: Enable I2C on the BeagleV-Ahead
-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>, jszhang@kernel.org, guoren@kernel.org, 
-	wefu@redhat.com, andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org
-Cc: miquel.raynal@bootlin.com, thomas.petazzoni@bootlin.com, 
-	linux-riscv@lists.infradead.org, linux-i2c@vger.kernel.org, 
-	devicetree@vger.kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com, 
-	aou@eecs.berkeley.edu
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="yplwnmmgy24mn2r3"
+Content-Disposition: inline
+In-Reply-To: <Zi92UCnZa90DXAI9@smile.fi.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-i2c@vger.kernel.org
 
-Thomas Bonnefille wrote:
-> This commit enables the I2C0 controller of the TH1520, together with
-> the FT24C32A EEPROM that is connected to it.
-> In addition, this commit also enables the I2C controllers I2C2, I2C4
-> and I2C5 as they are all three exposed on headers (P9 19 and 20 for I2C2,
-> P9 17 and 18 for I2C5 and MikroBus 7 and 5 for I2C4).
->
-> Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-> ---
->  .../boot/dts/thead/th1520-beaglev-ahead.dts   | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
->
-> diff --git a/arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts b/arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts
-> index d9b4de9e4757..22a6935e7204 100644
-> --- a/arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts
-> +++ b/arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts
-> @@ -79,3 +79,25 @@ &sdio0 {
->  &uart0 {
->  	status = "okay";
->  };
-> +
-> +&i2c0 {
-> +	status = "okay";
-> +	clock-frequency = <100000>;
-> +
-> +	eeprom: eeprom@50 {
 
-Nothing seems to reference this. Are you planning on adding adding some code
-that needs to read this? Otherwise the label is not really needed.
+--yplwnmmgy24mn2r3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +		compatible = "atmel,24c32";
-> +		reg = <0x50>;
-> +	};
-> +};
-> +
-> +&i2c2 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c4 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c5 {
-> +	status = "okay";
-> +};
+Hello Andy,
 
-Does u-boot or some other firmware set up pinctrl for these 3 I2Cs? Otherwise
-enabling them doesn't really make sense before we have the pinctrl settings for
-them.
+On Mon, Apr 29, 2024 at 01:28:32PM +0300, Andy Shevchenko wrote:
+> On Mon, Apr 29, 2024 at 12:21:05PM +0200, Uwe Kleine-K=F6nig wrote:
+> > On Mon, Apr 29, 2024 at 11:54:29AM +0300, Andy Shevchenko wrote:
+> > > On Fri, Apr 26, 2024 at 11:38:33PM +0200, Uwe Kleine-K=F6nig wrote:
+>=20
+> ...
+>=20
+> > > >  static const struct i2c_device_id wlf_gf_module_id[] =3D {
+> > > > -	{ "wlf-gf-module", 0 },
+> > > > +	{ "wlf-gf-module", },
+> > >=20
+> > > In such cases the inner comma is redundant as well.
+> >=20
+> > I would tend to keep the comma, but no strong opinion on my side.
+>=20
+> It's just a confusing leftover in my opinion.
+>=20
+> > If another member init is added later, the line has to be touched
+> > anyhow, but in the layout:
+> >=20
+> > 	... =3D {
+> > 		{
+> > 			"wlf-gf-module",
+> > 		},
+> > 		{ }
+> > 	}
+> >=20
+> > I'd keep it for sure.
+>=20
+> That's not what I object. Here I am 100% with you.
 
-/Emil
+OK, agreed. I'm not sure yet if I prefer
 
-> --
-> 2.44.0
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+	static const struct i2c_device_id wlf_gf_module_id[] =3D {
+		{ "wlf-gf-module" },
+		{ }
+	};
+
+or
+
+	static const struct i2c_device_id wlf_gf_module_id[] =3D {
+		{ .name =3D "wlf-gf-module" },
+		{ }
+	};
+
+> > > In general idea might be okay, but I always have the same Q (do we ha=
+ve it
+> > > being clarified in the documentation, btw): is an ID table the ABI or=
+ not?
+> > > In another word, how should we treat the changes there, because ID ta=
+bles
+> > > are being used by the user space tools.
+> >=20
+> > Note that the layout doesn't change and the traditional interpretation
+> > of the data still works fine. Or do you see something that I miss?
+>=20
+> Do we have any configurations / architectures / etc when
+> sizeof(kernel_ulong_t) !=3D sizeof(void *) ? If not, we are fine.
+
+According to https://wiki.debian.org/ArchitectureSpecificsMemo (my goto
+address for such questions) we have sizeof(void *) =3D=3D sizeof(long) on
+all archs. Also storing a pointer in today's struct
+i2c_device_id::driver_data is so common that it should be safe to assume
+that sizeof(void *) <=3D sizeof(kernel_ulong_t). And that <=3D is enough
+that the union doesn't get bigger.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--yplwnmmgy24mn2r3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmYvpuwACgkQj4D7WH0S
+/k6DJAgAqZLAEMwQxR26phS6LkfoFWF90kQ7uLUalhP6/azWI17TvOZ8dT+wvyIs
+ivFfDWWPKzm6I2oQVwxE7wjXfaywlXIPoB+3fPlwjnsXk3vkgh1Yr5riUwS/cA/D
+oAxMwDqEWAR5lpJpYPtaS0ROcTQyUSwpVF3sOK0X5Nx3UPu7Bp9T6/Wy2Zx48GxH
+AzrhhNj5Q0di//Bf6mI23ldI4CcPk2b1dweu/QYYIvczddF411DOQQpOMCmvegRg
+BZeh2hZLOyjqIDDUIo1NYCG9s9uZ2tJ3isNeL5qa7iA9ia36CBERhTVjHlCSQksA
+2RRvwiFhudWYAxMFrsc1ZOq0IfbE/w==
+=78yx
+-----END PGP SIGNATURE-----
+
+--yplwnmmgy24mn2r3--
 
