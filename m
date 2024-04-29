@@ -1,74 +1,74 @@
-Return-Path: <linux-i2c+bounces-3287-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3288-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2ECA8B5166
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 08:28:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C7EA8B5189
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 08:33:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58C131F22272
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 06:28:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B513B220E8
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 06:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EDCB111BB;
-	Mon, 29 Apr 2024 06:27:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD1C16FCB;
+	Mon, 29 Apr 2024 06:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Py6EuaIT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hUihe81w"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF013DDB1
-	for <linux-i2c@vger.kernel.org>; Mon, 29 Apr 2024 06:27:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9411F1119F
+	for <linux-i2c@vger.kernel.org>; Mon, 29 Apr 2024 06:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714372072; cv=none; b=nUVZD1bezw5dvV5rpsJDUK1Gr2qP6jYCE010kmy/aYwnORmHpRe9iSPjVyDcmBbpAx4+kePymK8/LVmp1nhhsBT0B3n7qBWM0/TLBHmbDeu63/XF84vtID3Bd5u4/5X7aP+xBKhT+G33EFX2Zoa5G+dVSwdDQ8+TPQ+FiUkPDq4=
+	t=1714372417; cv=none; b=Y4ti2EITYSneZJaifdD+XLAmeNPR2RlRYY6KNcH1EjoavT1M3ybiEFbyzra3Zo0U+cC68boe+XFno8Y/FyCM8elqcUdOu5IQXmFRCOpAi0boN00DMXSileGUlM6U+pZdxWt+65GLsFZEITuA2Nzk7f90nLw9oG+rZeoAwSn15uU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714372072; c=relaxed/simple;
-	bh=pQ1HlVQ90krhqOnXJ5XQMVdoHSa9+n1hUzM/hln9e50=;
+	s=arc-20240116; t=1714372417; c=relaxed/simple;
+	bh=qnRwQf45yzYiSfDkao2m2Vv65LVwtO8vIp0IgdpFnJ8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L37XJEK2De3w7sU/NeC4IEBhN/jjo8+3GGokhIfcOPo5NCIdqb2gsuJEJj5ttrKyxwUhuKgU53TpInkzMAxyOquBH2V2I0M+TlWPpV4kXJjpAX2jGv56chG40M2duuO4S9p0CQ1QIPdgjxwdFnXwkikZQ4DxmfZQfZ2C7kG8hjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Py6EuaIT; arc=none smtp.client-ip=209.85.208.41
+	 In-Reply-To:Content-Type; b=oXOQ9ZSdza+WOfVtNiY2mTkW+x2LQwJE20rhes0P0IO5lcVo/8mUuITaUZDMgWditjUqr83CBiS9CGn839J2nu8N7PAEfqSOjHNxziSSItMwNgEHaJuiw3xplitazWolKClZB6DFy5xotqAi3lAygJEcxFjblj3zxClh9puC380=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hUihe81w; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-56e47843cc7so3894841a12.0
-        for <linux-i2c@vger.kernel.org>; Sun, 28 Apr 2024 23:27:48 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-571ba432477so4124963a12.1
+        for <linux-i2c@vger.kernel.org>; Sun, 28 Apr 2024 23:33:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714372067; x=1714976867; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1714372414; x=1714977214; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=qA1Mq+BKArwz7aZn7XQgiZHHBtYnA3j8xSFLJOCXWzY=;
-        b=Py6EuaITLY+hOvGO4ULiTbwDKB8P/f2O9c0pbW0ZWvFfPEJ+upQ5Auz4UpsTHZUxXJ
-         Omb97/Ua/Pmsitn6DGSTP9lTnTzdOkkmP/Xv5XeVS66AicLUURQ9TVGeD6+bJ8qGzxMZ
-         fwLRc39vDGzUKEfiTdVk5+zpirSXyYrU+j+8zVotnP+pDC1CJlmjvlKFhT2PuLorwoyP
-         24AE0KDlNw8cvzKvL3MEkwzLRWkv0CVH4zzsrgTQUMzwJ1+LWscqfwfBmknXgdl8IqcE
-         YmwGZDEKOKMcda7hysVznjjWK39Q4FPkXXvSw+Heo9xP5uItK7pvEWlFwTrno32lPol5
-         3nqQ==
+        bh=H1tmeGPRsKgr01+Hna3ZLZEaqrTdXl0tdVgdsAtbRbg=;
+        b=hUihe81wlqgVxrS0pEvifAQvo/FLLx7NTlXtXj+RQFrR2Zb4ICvZY48y0qcosdcMYH
+         9Jc/po1E9Zgs3Ifk/hvEWU8G2SGVB+1+0KHnXBftqCvp22EVm293Zo5uE2omcb37vbHE
+         5mlKFWsxAntfgmKGzX5hwFQGkR6m5786Mel1Ml6At90LmE55kH3uLGKjs3DP8smpeiPe
+         fvlOnVV4YzI4K5n0ssHxMuHeBsObGrg9akBdzuhOW372GC6G6i+uaCUQjVS3/h59xXNn
+         K9pSTbn98MW+MuPH62QjIXVkBomXOmtz+SzmUhnL1gCY8Xt4lR+oHIzY08EOnI+AzvVz
+         0IZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714372067; x=1714976867;
+        d=1e100.net; s=20230601; t=1714372414; x=1714977214;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qA1Mq+BKArwz7aZn7XQgiZHHBtYnA3j8xSFLJOCXWzY=;
-        b=A4B27YCPCvpeFzY4SkeTL/rD3eI5gjX0sELJGa8MdHnSqG8ppHqmLSpGnd++wYXwa6
-         coX99TC2qgJwqZCwHFq4HwRASN9k89g/TUjBsT2WA4CgvWuaNIT3qpH6LmYdvqL71wvh
-         LW6Ubw0OFpD5Rf/n0qC5D9HgAusoeqT0ljvxNUmpCUdkwg9wN4I+Ucp3xPWSJ1Vq5HDx
-         yUB5tYYROkCA82rMvAnwt9psb+VE44Z3y8EGu9o7M6VVAEykqzD6C20QW0+PxRCAkBd2
-         knj7uO9Q2rkm/g8+JQlRT9VTGgkpxxsd9ASUttWm09f/35wpjemI7HtO4g5+ommFSBKA
-         LOCw==
-X-Gm-Message-State: AOJu0YzYi7nprlseHqyoJa2ibq4hTT8YA7mL7S5CRdggGbQ+wUS1vqgp
-	NipU6R770jKK0m/2umUeCJa50QnBu2FcM0uAuOpXZL05dD31fIX2KWItv6b42Fs=
-X-Google-Smtp-Source: AGHT+IESUXN7I7fO318PxM8X0XDcywLSdQf4htvE8HhqgqMtYThdRx/pY4Ue7USfJXLXKoE92r5Sog==
-X-Received: by 2002:a50:8acd:0:b0:56e:3774:749b with SMTP id k13-20020a508acd000000b0056e3774749bmr4907398edk.42.1714372067101;
-        Sun, 28 Apr 2024 23:27:47 -0700 (PDT)
+        bh=H1tmeGPRsKgr01+Hna3ZLZEaqrTdXl0tdVgdsAtbRbg=;
+        b=b/RVzT/sukYk7p/Jbq/TLgN3qX1N9J7RLAAJOdXJ68U6ue3g/Vs4ZHJSkIWXb8Bf4Z
+         oEkmTT+V4ZHZ6jAPNUQb/WAYThFjUHLA/B+f61PEi5CoiV7Zv5lVFOmhTXrJ68zlsI+M
+         z4Lpu1EDuVCjo+CTZQ2vEbfcDfAuSqtHbM1lQGcVtWL69av/75rG/+IC7EhcnDwCw5Ln
+         6LxYUUd+FLsDfmN5ygdczbGCzJrz+6kZ4rDb19IZRDQHlL06T7/y7ePklvHvSOjOgGO1
+         hIzuosrVxrg2U8w6UrCi0nJxlCEPEGowAP70lTZVnZbu0SFrWUHD9ckn0lIDHWWf8ptw
+         QLWw==
+X-Gm-Message-State: AOJu0YxnaYme4LgnZIwQ7BEp3OMc/D+FxSYzbpGvHZvmC9+gf9vwHoNX
+	rb9k7kLbukG1bvxONMdP1lGQLE+fipoNyDf4q+VIrFuLopuUjtTktuKIXNw7uvo=
+X-Google-Smtp-Source: AGHT+IG/1NM9hUHGik2NjLOZfisA/b6fFn8v5z38DB20x7mgyzkcafLOU/i261hJlp0O1Y0ut+vVzg==
+X-Received: by 2002:a50:aaca:0:b0:572:78df:c606 with SMTP id r10-20020a50aaca000000b0057278dfc606mr2705343edc.26.1714372413874;
+        Sun, 28 Apr 2024 23:33:33 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id a13-20020aa7d74d000000b005726ee95a38sm2183591eds.88.2024.04.28.23.27.45
+        by smtp.gmail.com with ESMTPSA id h8-20020aa7c948000000b0057204902580sm8677922edt.48.2024.04.28.23.33.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Apr 2024 23:27:46 -0700 (PDT)
-Message-ID: <1613d7e3-a5cc-4b8e-a905-3699779476fe@linaro.org>
-Date: Mon, 29 Apr 2024 08:27:44 +0200
+        Sun, 28 Apr 2024 23:33:33 -0700 (PDT)
+Message-ID: <d074880a-14dd-46e4-852c-0bb068154603@linaro.org>
+Date: Mon, 29 Apr 2024 08:33:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,8 +76,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/7] dt-bindings: i2c: mux: mule: add dt-bindings for mule
- i2c multiplexer
+Subject: Re: [PATCH 3/7] i2c: muxes: add support for mule i2c multiplexer
 To: Farouk Bouabid <farouk.bouabid@theobroma-systems.com>,
  Wolfram Sang <wsa+renesas@sang-engineering.com>,
  Peter Rosin <peda@axentia.se>, Andi Shyti <andi.shyti@kernel.org>,
@@ -90,7 +89,7 @@ Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-rockchip@lists.infradead.org
 References: <20240426-dev-mule-i2c-mux-v1-0-045a482f6ffb@theobroma-systems.com>
- <20240426-dev-mule-i2c-mux-v1-2-045a482f6ffb@theobroma-systems.com>
+ <20240426-dev-mule-i2c-mux-v1-3-045a482f6ffb@theobroma-systems.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
@@ -137,98 +136,231 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240426-dev-mule-i2c-mux-v1-2-045a482f6ffb@theobroma-systems.com>
+In-Reply-To: <20240426-dev-mule-i2c-mux-v1-3-045a482f6ffb@theobroma-systems.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Except that this was not fully tested few comments.
-
-A nit, subject: drop second/last, redundant "dt-bindings for". The
-"dt-bindings" prefix is already stating that these are bindings.
-See also:
-https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
-
-
 On 26/04/2024 18:49, Farouk Bouabid wrote:
-> This patch adds support for the Mule I2C multiplexer.
-
-Please do not use "This commit/patch/change", but imperative mood. See
-longer explanation here:
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
-> 
 > Mule is an mcu that emulates a set of i2c devices which are reacheable
 > through an i2c-mux.
 > 
 > The emulated devices share a single i2c address with the mux itself where
 > the requested register is what determines which logic is executed (mux or
-> device).
+> device):
+> 
+> 1- The devices on the mux can be selected (mux function) by writing the
+> appropriate device number to an i2c config register (0xff) that is not
+> used by any device logic.
+> 
+> 2- Any access to a register other than the config register will be
+> handled by the previously selected device.
 > 
 > Signed-off-by: Farouk Bouabid <farouk.bouabid@theobroma-systems.com>
 > ---
->  .../devicetree/bindings/i2c/i2c-mux-mule.yaml      | 80 ++++++++++++++++++++++
->  1 file changed, 80 insertions(+)
+>  drivers/i2c/muxes/Kconfig        |  11 +++
+>  drivers/i2c/muxes/Makefile       |   1 +
+>  drivers/i2c/muxes/i2c-mux-mule.c | 157 +++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 169 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-mule.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-mule.yaml
+> diff --git a/drivers/i2c/muxes/Kconfig b/drivers/i2c/muxes/Kconfig
+> index db1b9057612a..593a20a6ac51 100644
+> --- a/drivers/i2c/muxes/Kconfig
+> +++ b/drivers/i2c/muxes/Kconfig
+> @@ -119,4 +119,15 @@ config I2C_MUX_MLXCPLD
+>  	  This driver can also be built as a module.  If so, the module
+>  	  will be called i2c-mux-mlxcpld.
+>  
+> +config I2C_MUX_MULE
+> +	tristate "Mule I2C device multiplexer"
+> +	depends on OF
+> +	help
+> +	  If you say yes to this option, support will be included for a
+> +	  Mule I2C device multiplexer. This driver provides access to
+> +	  I2C devices connected on the Mule I2C mux.
+
+Describe what is Mule. Here and in bindings documentation.
+
+> +
+> +	  This driver can also be built as a module.  If so, the module
+> +	  will be called i2c-mux-mule.
+> +
+>  endmenu
+> diff --git a/drivers/i2c/muxes/Makefile b/drivers/i2c/muxes/Makefile
+> index 6d9d865e8518..4b24f49515a7 100644
+> --- a/drivers/i2c/muxes/Makefile
+> +++ b/drivers/i2c/muxes/Makefile
+> @@ -10,6 +10,7 @@ obj-$(CONFIG_I2C_MUX_GPIO)	+= i2c-mux-gpio.o
+>  obj-$(CONFIG_I2C_MUX_GPMUX)	+= i2c-mux-gpmux.o
+>  obj-$(CONFIG_I2C_MUX_LTC4306)	+= i2c-mux-ltc4306.o
+>  obj-$(CONFIG_I2C_MUX_MLXCPLD)	+= i2c-mux-mlxcpld.o
+> +obj-$(CONFIG_I2C_MUX_MULE)	+= i2c-mux-mule.o
+>  obj-$(CONFIG_I2C_MUX_PCA9541)	+= i2c-mux-pca9541.o
+>  obj-$(CONFIG_I2C_MUX_PCA954x)	+= i2c-mux-pca954x.o
+>  obj-$(CONFIG_I2C_MUX_PINCTRL)	+= i2c-mux-pinctrl.o
+> diff --git a/drivers/i2c/muxes/i2c-mux-mule.c b/drivers/i2c/muxes/i2c-mux-mule.c
 > new file mode 100644
-> index 000000000000..458e4661cbc8
+> index 000000000000..da2a9526522e
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-mux-mule.yaml
+> +++ b/drivers/i2c/muxes/i2c-mux-mule.c
+> @@ -0,0 +1,157 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Mule I2C device multiplexer
+> + *
+> + * Copyright (C) 2024 Theobroma Systems Design und Consulting GmbH
+> + */
+> +
+> +#include <linux/i2c-mux.h>
+> +#include <linux/i2c.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/property.h>
+> +#include <linux/regmap.h>
+> +
+> +#define MUX_CONFIG_REG	0xff
+> +#define MUX_DEFAULT_DEV	0x0
+> +
+> +struct mule_i2c_reg_mux {
+> +	struct regmap *regmap;
+> +};
+> +
+> +static const struct regmap_config mule_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +};
+> +
+> +static const struct of_device_id mule_i2c_mux_of_match[] = {
+> +	{.compatible = "tsd,mule-i2c-mux",},
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, mule_i2c_mux_of_match);
 
-Use compatible as filename.
+This goes after or before probe. Don't introduce unusual coding style.
 
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/i2c-mux-mule.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Mule I2C multiplexer
-> +
-> +maintainers:
-> +  - Farouk Bouabid <farouk.bouabid@theobroma-systems.com>
-> +  - Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> +
-> +description: |
-> +  Mule is an mcu that emulates a set of i2c devices which are reacheable
 
-typo, reachable
+...
 
-> +  through an i2c-mux.
+> +static void mux_remove(void *data)
+> +{
+> +	struct i2c_mux_core *muxc = data;
 > +
-> +  The emulated devices share a single i2c address with the mux itself where
-> +  the requested register is what determines which logic is executed (mux or
-> +  device)
+> +	i2c_mux_del_adapters(muxc);
 > +
-> +      +--------------------------------------------------+
-> +      | Mule                                             |
-> +      |    +---------------+                             |
-> +  ------+->|Config register|----+                        |
-> +      | |  +---------------+    |                        |
-> +      | |                       V_                       |
-> +      | |                      |  \          +--------+  |
-> +      | |                      |   \-------->| dev #0 |  |
-> +      | |                      |   |         +--------+  |
-> +      | |                      | M |-------->| dev #1 |  |
-> +      | +--------------------->| U |         +--------+  |
-> +      |                        | X |-------->| dev #2 |  |
-> +      |                        |   |         +--------+  |
-> +      |                        |   /-------->| dev #3 |  |
-> +      |                        |__/          +--------+  |
-> +      +--------------------------------------------------+
+> +	mux_deselect(muxc, MUX_DEFAULT_DEV);
+> +}
 > +
+> +static int mule_i2c_mux_probe(struct i2c_client *client)
+> +{
+> +	struct i2c_adapter *adap = client->adapter;
+> +	struct mule_i2c_reg_mux *priv;
+> +	struct i2c_mux_core *muxc;
+> +	struct device_node *dev;
+> +	unsigned int readback;
+> +	bool old_fw;
+> +	int ndev, ret;
 > +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-mux.yaml#
+> +	/* Count devices on the mux */
+> +	ndev = of_get_child_count(client->dev.of_node);
+> +	dev_dbg(&client->dev, "%u devices on the mux\n", ndev);
 > +
-> +properties:
-> +  compatible:
-> +    const: tsd,mule-i2c-mux
+> +	muxc = i2c_mux_alloc(adap, &client->dev,
+> +						 ndev, sizeof(*priv),
+> +						 I2C_MUX_LOCKED,
+> +						 mux_select, mux_deselect);
+
+Very odd alignment. This is absolutely unreadable.
+
+Please properly align with opening (.
+
+> +	if (!muxc)
+> +		return -ENOMEM;
 > +
-> +  reg:
-> +    maxItems: 1
+> +	muxc->share_addr_with_children = 1;
+> +	priv = i2c_mux_priv(muxc);
 > +
+> +	priv->regmap = devm_regmap_init_i2c(client, &mule_regmap_config);
+> +	if (IS_ERR(priv->regmap))
+> +		return dev_err_probe(&client->dev, PTR_ERR(priv->regmap),
+> +							 "Failed to allocate i2c register map\n");
+> +
+> +	i2c_set_clientdata(client, muxc);
+> +
+> +	/*
+> +	 * Mux 0 is guaranteed to exist on all old and new mule fw.
+> +	 * mule fw without mux support will accept write ops to the
+> +	 * config register, but readback returns 0xff (register not updated).
+> +	 */
+> +	ret = mux_select(muxc, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_read(priv->regmap, MUX_CONFIG_REG, &readback);
+> +	if (ret)
+> +		return ret;
+> +
+> +	old_fw = (readback == 0);
+> +
+> +	ret = devm_add_action_or_reset(&client->dev, mux_remove, muxc);
+
+This is really odd. Why do you call remove callback as devm action?
+
+I have serious doubts this was really tested.
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Create device adapters */
+> +	for_each_child_of_node(client->dev.of_node, dev) {
+> +		u32 reg;
+> +
+> +		ret = of_property_read_u32(dev, "reg", &reg);
+> +		if (ret) {
+> +			dev_err(&client->dev, "No reg property found for %s: %d\n",
+> +					of_node_full_name(dev), ret);
+
+Very odd alignment. Please properly align with opening (.
+
+> +			return ret;
+> +		}
+> +
+> +		if (!old_fw && reg != 0) {
+> +			dev_warn(&client->dev,
+> +					 "Mux %d not supported, please update Mule FW\n", reg);
+> +			continue;
+> +		}
+> +
+> +		ret = mux_select(muxc, reg);
+> +		if (ret) {
+> +			dev_warn(&client->dev,
+> +					 "Mux %d not supported, please update Mule FW\n", reg);
+> +			continue;
+> +		}
+> +
+> +		ret = i2c_mux_add_adapter(muxc, 0, reg, 0);
+> +		if (ret) {
+> +			dev_err(&client->dev, "Failed to add i2c mux adapter %d: %d\n", reg, ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	mux_deselect(muxc, MUX_DEFAULT_DEV);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct i2c_driver mule_i2c_mux_driver = {
+> +	.driver		= {
+> +		.name	= "mule-i2c-mux",
+> +		.of_match_table = mule_i2c_mux_of_match,
+> +	},
+> +	.probe		= mule_i2c_mux_probe,
+> +};
+> +
+
+Anyway, all this looks like i2c-mux-reg. Please provide rationale in
+commit msg WHY you need one more driver.
+
 
 Best regards,
 Krzysztof
