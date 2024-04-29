@@ -1,71 +1,71 @@
-Return-Path: <linux-i2c+bounces-3311-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3308-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90E088B640F
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 23:02:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 587E48B63FC
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 23:02:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 472981F21FCF
-	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 21:02:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B1811C2193F
+	for <lists+linux-i2c@lfdr.de>; Mon, 29 Apr 2024 21:02:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63A3617B500;
-	Mon, 29 Apr 2024 21:01:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4AA17966D;
+	Mon, 29 Apr 2024 21:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="P9DxeVIZ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="WfYac4k4"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960371791ED;
-	Mon, 29 Apr 2024 21:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F41B178CC3;
+	Mon, 29 Apr 2024 21:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714424515; cv=none; b=LvhaBmigTFYertZucilQA4I7v/Sk3j/MZ0c5TdNqK7PGnHwSq7qLWDAFcQ/psRj58PD8ytt4om9m9SNaKK01xeE4Kf4Ym1aWqJ3v2KpC9yHsiVnhfJrg73T3XEbhTIgdXBzOa3fffOVL6y/rpla5fjg3YDA2oxcXx+L4YXZMgQM=
+	t=1714424513; cv=none; b=MKvXz5PXeOhcN6BG8vsblP6BtHSpkWaKwCSft6YMnhV8ciljTMAAlOO0KFdXlYURbpZkQL9uGGiN68aSNYps5v48dinXwLSxJflT23Z98Vuc/kIF7rvFBYTTyRPur6TiMUcojXZbFhbSFwIkd8M+B2x54lsdv2z4L/+ZSj/uG9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714424515; c=relaxed/simple;
-	bh=fdagL69QjEvyUmW4qGHPHB7wqUvnvm2wx+GPtu5/siM=;
+	s=arc-20240116; t=1714424513; c=relaxed/simple;
+	bh=GtjEpD+LaB4853MyvznM6RAG65wmbXGSpTk6s+wp9R4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PLtqyZL+7wH5uLBlfnBb2tMjMJoSsQQsBas0K22pjh7c5pHKNvQgkRRbGXa4GggIvNDdPBb9pItEPaPAdan/2jb5KDnp6RnyoQoTq8yRms8JRT7Kqebi1KNnKO3VdGZfHlQ4eK0aZIxCkcaNrBPADgx7Gt2YtCsCw4orePhC3yw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=P9DxeVIZ; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=TrgGO5m1KjffqO8pYsT8Ns9GwtNqG3vwx+iPESNrWisCZ+DMJpROxrrUbUzwPxLaXHzP3W1ox6fOGncIQxvkY004KoK9YUhwx0JGrCq5N6KLi6UajyIg/6cdnE9bnqQIPxRWVZeM75To7K3a3mzxZoLFfRvHrOQNYCfZzcsRTDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=WfYac4k4; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43TKs6MR019885;
-	Mon, 29 Apr 2024 21:01:42 GMT
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43TL0j3J007565;
+	Mon, 29 Apr 2024 21:01:43 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=8TIk2brL1Ms7e3ju+fp90mqmERPaTNV0nfhxKKVNKc0=;
- b=P9DxeVIZ/P94qfueAFgcyZy1P7Hj33tCP5U0lnK+O7cF6m2bY61CfuSkT4Sfzv76+cQp
- jDC7A64q2WVQ5E/1yqBI2F6unoMnw4a2UIX53hPCNrHmU24c0vZ8TtUr+/ezMx5GhQkN
- IKIpZFAkGwdupWEHkj4VFZf0iYsE1N/wMNoZaM4Sypy9MOVJgrJTZHIjbCsNcGUZhife
- bvsJP/PwNN/K2XWvY4e+EQmi5SuSUKPLXkndq414w6mGKcv0iOfp4jIATh39yKGYpPp4
- PmpKcY/3Xw3SVSoBBlpyUTpR+bzXI//ebjTMj3FIXeJ1lHYYgep7znkrKZTZ+tp/JPdl iA== 
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xtjyj01ch-1
+ : mime-version; s=pp1; bh=zWTKLxmt6yOSwvuD28OrBhw1B8rpuY0O8+zTYnaHU+Y=;
+ b=WfYac4k4Kmf2DUOmvhJ794KIjVYejrBMW9FfFFL2HCkWtu34Huu6ti8qjMFleUD9qfN9
+ jwZ8RPAWGwjI0FDG3NIJmhdupf0z2S09MYdJ5jiYclLFw986M5OB8VYp9WvYEvLOcDrY
+ jga7BJ0qik2NdXlQBD3iRhl4u69o+gltlvFLIKYKHCjQD6on4tRRy+ORRYvfvzAggB7t
+ BGKOML31kUL4oJvH2uXh/NVHQStQ4gTihcrX8Ov7LjnGdc2bOThXioYbBbGOWr7gQlxA
+ mZ6YCd9/wM6QsNEhC+WVaA4Zj6aT/G8H5kh05KWjSb8kPGYsfJA0Y8MdeTfXHFA2ZcsM CA== 
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xtjy9g0g5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 29 Apr 2024 21:01:42 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 43TIBLtl003038;
+	Mon, 29 Apr 2024 21:01:41 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3xscpp9gbn-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Mon, 29 Apr 2024 21:01:41 +0000
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 43TKeXoF001433;
-	Mon, 29 Apr 2024 21:01:40 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3xsbptsqxv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 29 Apr 2024 21:01:40 +0000
 Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 43TL1bj427918884
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 43TL1cpK48234804
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 29 Apr 2024 21:01:39 GMT
+	Mon, 29 Apr 2024 21:01:40 GMT
 Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5D81958055;
+	by IMSVA (Postfix) with ESMTP id 3813858059;
+	Mon, 29 Apr 2024 21:01:38 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 73EAF5805B;
 	Mon, 29 Apr 2024 21:01:37 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 98CEA5805B;
-	Mon, 29 Apr 2024 21:01:36 +0000 (GMT)
 Received: from slate16.aus.stglabs.ibm.com (unknown [9.61.151.254])
 	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 29 Apr 2024 21:01:36 +0000 (GMT)
+	Mon, 29 Apr 2024 21:01:37 +0000 (GMT)
 From: Eddie James <eajames@linux.ibm.com>
 To: linux-aspeed@lists.ozlabs.org
 Cc: eajames@linux.ibm.com, devicetree@vger.kernel.org,
@@ -74,15 +74,15 @@ Cc: eajames@linux.ibm.com, devicetree@vger.kernel.org,
         lakshmiy@us.ibm.com, robh@kernel.org, krzk+dt@kernel.org,
         conor+dt@kernel.org, joel@jms.id.au, andrew@codeconstruct.com.au,
         andi.shyti@kernel.org
-Subject: [PATCH v4 05/17] dt-bindings: fsi: Document the IBM SBEFIFO engine
-Date: Mon, 29 Apr 2024 16:01:19 -0500
-Message-Id: <20240429210131.373487-6-eajames@linux.ibm.com>
+Subject: [PATCH v4 06/17] dt-bindings: fsi: Document the FSI controller common properties
+Date: Mon, 29 Apr 2024 16:01:20 -0500
+Message-Id: <20240429210131.373487-7-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240429210131.373487-1-eajames@linux.ibm.com>
 References: <20240429210131.373487-1-eajames@linux.ibm.com>
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: OA0XMnPZvgN6W4FgJEY5QiINwmN0hI6N
-X-Proofpoint-GUID: OA0XMnPZvgN6W4FgJEY5QiINwmN0hI6N
+X-Proofpoint-ORIG-GUID: Oh3joq_-j6frQsoUDGD4K8g1UnjUhdDA
+X-Proofpoint-GUID: Oh3joq_-j6frQsoUDGD4K8g1UnjUhdDA
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
@@ -94,81 +94,97 @@ MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
  definitions=2024-04-29_18,2024-04-29_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- mlxscore=0 suspectscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
- adultscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ malwarescore=0 mlxlogscore=999 priorityscore=1501 lowpriorityscore=0
+ mlxscore=0 bulkscore=0 phishscore=0 suspectscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2404010000 definitions=main-2404290138
 
-The SBEFIFO engine provides an interface to the POWER processor
-Self Boot Engine (SBE).
+Since there are multiple FSI controllers documented, the common
+properties should be documented separately and then referenced
+from the specific controller documentation.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Reviewed-by: Andrew Jeffery <andrew@codeconstruct.com.au>
 ---
 Changes since v3:
- - Drop occ unit address
+ - Add chip-id description
+ - Use a real compatible
+ - Re-order example properties
 
- .../bindings/fsi/ibm,p9-sbefifo.yaml          | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-sbefifo.yaml
+ .../bindings/fsi/fsi-controller.yaml          | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fsi/fsi-controller.yaml
 
-diff --git a/Documentation/devicetree/bindings/fsi/ibm,p9-sbefifo.yaml b/Documentation/devicetree/bindings/fsi/ibm,p9-sbefifo.yaml
+diff --git a/Documentation/devicetree/bindings/fsi/fsi-controller.yaml b/Documentation/devicetree/bindings/fsi/fsi-controller.yaml
 new file mode 100644
-index 000000000000..24903829fca1
+index 000000000000..fd624181c030
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/fsi/ibm,p9-sbefifo.yaml
-@@ -0,0 +1,51 @@
++++ b/Documentation/devicetree/bindings/fsi/fsi-controller.yaml
+@@ -0,0 +1,66 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/fsi/ibm,p9-sbefifo.yaml#
++$id: http://devicetree.org/schemas/fsi/fsi-controller.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: IBM FSI-attached SBEFIFO engine
++title: FSI Controller Common Properties
 +
 +maintainers:
 +  - Eddie James <eajames@linux.ibm.com>
 +
 +description:
-+  The SBEFIFO is an FSI CFAM engine that provides an interface to the
-+  POWER processor Self Boot Engine (SBE). This node will always be a child
-+  of an FSI CFAM node.
++  FSI (FRU (Field Replaceable Unit) Service Interface) is a two wire bus. The
++  FSI bus is connected to a CFAM (Common FRU Access Macro) which contains
++  various engines such as I2C controllers, SPI controllers, etc.
 +
 +properties:
-+  compatible:
-+    enum:
-+      - ibm,p9-sbefifo
-+      - ibm,odyssey-sbefifo
++  "#address-cells":
++    const: 2
 +
-+  reg:
-+    items:
-+      - description: FSI slave address
++  "#size-cells":
++    const: 0
++
++  no-scan-on-init:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      The FSI controller cannot scan the bus during initialization.
 +
 +patternProperties:
-+  "^occ":
++  "cfam@[0-9a-f],[0-9a-f]":
 +    type: object
-+    $ref: ibm,p9-occ.yaml#
++    properties:
++      chip-id:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description:
++          Processor index
 +
-+required:
-+  - compatible
-+  - reg
++      reg:
++        maxItems: 1
 +
-+additionalProperties: false
++      "#address-cells":
++        const: 1
++
++      "#size-cells":
++        const: 1
++
++    required:
++      - reg
++
++    additionalProperties: true
++
++additionalProperties: true
 +
 +examples:
 +  - |
-+    fsi-slave-engine@2400 {
-+        compatible = "ibm,p9-sbefifo";
-+        reg = <0x2400 0x400>;
++    fsi {
++        #address-cells = <2>;
++        #size-cells = <0>;
 +
-+        occ {
-+            compatible = "ibm,p9-occ";
-+
-+            hwmon {
-+                compatible = "ibm,p9-occ-hwmon";
-+            };
++        cfam@0,0 {
++            reg = <0 0>;
++            #address-cells = <1>;
++            #size-cells = <1>;
++            chip-id = <0>;
 +        };
 +    };
 -- 
