@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3336-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3337-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E26CC8B6BF6
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 09:35:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFE958B6BFC
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 09:37:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F58F1C21E1B
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 07:35:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BA27282AAD
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 07:37:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA953B295;
-	Tue, 30 Apr 2024 07:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9DC83B185;
+	Tue, 30 Apr 2024 07:37:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OaThDulk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CBVKNDlR"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63023D3A0;
-	Tue, 30 Apr 2024 07:35:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E395211C;
+	Tue, 30 Apr 2024 07:37:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714462523; cv=none; b=o2s9S4CnMQksllp6ws19IEn3uUx76ibhJLKZcAjqjp7hbeeGQ50BcxZa/xJYikuYvhiDLWffeADoeyfRntxdULanxubQU5ICAWrt+7PnWhmBu8bPfr1oFUdvZRZYjUKi2P0MfWlsOs7SsueGnRMQS9KVz+0p54egoF5zrNSq46o=
+	t=1714462657; cv=none; b=HRw9KKR6BtjMocFQyEFh0N6RCENp/gtGcBKx7/1UjojbSw2fhyikVleQLBT0X6iMEBzpiPAgCkBWmEtanxjSSkt3t6CQuYWOpeh2P8DeUerSLgYwK2ItD+bFg8b/V+2Acbc0nETEhNf157gyE3mjhPprgn5uDE0SfCK6fhJe5cA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714462523; c=relaxed/simple;
-	bh=6nsio7mbfMnOGQIRKl59cP00GjIv8aY3kARWMRMlnI8=;
+	s=arc-20240116; t=1714462657; c=relaxed/simple;
+	bh=krPJeBCTuBz1aWldMqdexquKCcUfoDQsCJfqOk4ydOU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IfN6/7d4whsYDhKjMig7ekphEXAxz3aRN65c03IoWJTBeecFPwtthXAp43ktKrlqX7CqCvXaM4/WF11uL9ZVZUatufcbSXJ5w82m0qioKakboXA3JwM+zW5xWdr5TKqKNdCcBlW0ngwZT7rgdz/RRneEopGAw9J63eUk2e1ojng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OaThDulk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1906C2BBFC;
-	Tue, 30 Apr 2024 07:35:19 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=X+H9pkPc0GWJcwOvM8TZK6HdkapvJY8v/g0VU8nj+T4WJznZprVc8grePnCe5kT9m7JO/agQZXLuxzW3PhVxv9xvmeLCNDnN5xx0kRyhnc09Fp87U+/3AoXa7EfkA5azJV2y9KlK5thLooqZV7andec4TJt5iuOLpht8BGtdpOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CBVKNDlR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5DD5C2BBFC;
+	Tue, 30 Apr 2024 07:37:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714462523;
-	bh=6nsio7mbfMnOGQIRKl59cP00GjIv8aY3kARWMRMlnI8=;
+	s=k20201202; t=1714462656;
+	bh=krPJeBCTuBz1aWldMqdexquKCcUfoDQsCJfqOk4ydOU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OaThDulkO/9pUMW0MQ4y2R5uvE8Zt3lqAbYLUnQa5fyoLsxXpMP8vv25mum97BkP+
-	 RrKypoyUQT9L/gqINk6lsyx8klHNB8eLJH45qd/N5KP5Rw4v7JIo+l01WEeC4X0bU3
-	 7sBtYU7+198oyPn9f2UKSgU43SNuqoj9n8v1K2C0om7XB53y6eOs9qTfXk2a5jQj9r
-	 1P7+Y5QIgyUelRJyheNID87YtNJUpOdnxUkbMTrMype0H1MqbHfFs3/eKyQWnXAH7y
-	 z4GUUfbbYYGkGDXmuh8GylbZBgfplBn1mQlAv3sOavteztAJVu/PxnHZsC01i+I1w0
-	 hEUy9A5xqUVZQ==
-Message-ID: <a78b125e-7f9e-40c2-bb1c-29ef83f1153f@kernel.org>
-Date: Tue, 30 Apr 2024 09:35:17 +0200
+	b=CBVKNDlRT/H9+nTjaIvp/4Kfs7GOGznhW+JsLqWqtnYWCZuqyw/F5HTmmPouDNeOC
+	 mceznabUuXWFBooVSyOUVijqNDBOsDg7nkN1kP5AuFyMX3G6VzqpUlkrrCITjvi3/u
+	 fPC/LDN/xwvkhFT6bmAFX5b+mmpIzhZdvP1TmMiNIcomcF0Sj+G+7Wkt7k2CW79rYj
+	 JFZy+4pizK2VDS1txnXi3j/La0ILi0Qyg+sWXMB7YwPMa/so2mG4H0X9K/jY+fPR7w
+	 mLDOXHJX1EcQKdMmOnQM+/GHNo3iI6u76mq1PBe6Samwrb2M9zy9DNnqqJi5Me09fb
+	 ZJMWk41z/lgfw==
+Message-ID: <c722d3d6-2acb-4669-b541-eebaf71b3a04@kernel.org>
+Date: Tue, 30 Apr 2024 09:37:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 11/17] dt-bindings: arm: aspeed: add IBM P11 BMC boards
+Subject: Re: [PATCH v4 17/17] fsi: scom: Update compatible string to match
+ documentation
 To: Eddie James <eajames@linux.ibm.com>, linux-aspeed@lists.ozlabs.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
@@ -58,7 +59,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
  andrew@codeconstruct.com.au, andi.shyti@kernel.org
 References: <20240429210131.373487-1-eajames@linux.ibm.com>
- <20240429210131.373487-12-eajames@linux.ibm.com>
+ <20240429210131.373487-18-eajames@linux.ibm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,17 +105,33 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240429210131.373487-12-eajames@linux.ibm.com>
+In-Reply-To: <20240429210131.373487-18-eajames@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 29/04/2024 23:01, Eddie James wrote:
-> Document two new AST2600 BMC boards for IBM P11 systems.
+> Use p9-scom instead of fsi2pib.
+
+Why? Commits must *always* say why you are doing it. What is easy to see.
+
 > 
 > Signed-off-by: Eddie James <eajames@linux.ibm.com>
 > ---
+>  drivers/fsi/fsi-scom.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fsi/fsi-scom.c b/drivers/fsi/fsi-scom.c
+> index 61dbda9dbe2b..18ca213fdc7e 100644
+> --- a/drivers/fsi/fsi-scom.c
+> +++ b/drivers/fsi/fsi-scom.c
+> @@ -589,7 +589,7 @@ static int scom_remove(struct device *dev)
+>  }
+>  
+>  static const struct of_device_id scom_of_ids[] = {
+> -	{ .compatible = "ibm,fsi2pib" },
+> +	{ .compatible = "ibm,p9-scom" },
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This breaks all users without any explanation in the commit!
 
 Best regards,
 Krzysztof
