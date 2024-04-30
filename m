@@ -1,112 +1,193 @@
-Return-Path: <linux-i2c+bounces-3339-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3340-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB8238B7603
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 14:43:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E32A48B7667
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 14:56:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6EFAB2217E
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 12:43:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9786C28576B
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 12:56:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2618171099;
-	Tue, 30 Apr 2024 12:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D9AF172BDE;
+	Tue, 30 Apr 2024 12:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zenRqpyt"
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="pRrgql8g"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from aposti.net (aposti.net [89.234.176.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B087171088
-	for <linux-i2c@vger.kernel.org>; Tue, 30 Apr 2024 12:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470CD17279C;
+	Tue, 30 Apr 2024 12:55:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714481025; cv=none; b=GdhndN0xIFHxP/V3Qf23AAsN9oXRlPzZkn/jsgNpwQqKx0HMFdG0mWgv+FfyaqH7oI10MczmQaVLolnhYLQXs7oLgB7g6HvIsxrD72skjG3dNXZkeVv72pnw6KM40hEDoP2wsAiUfLoa7fydMr1dsKYBflYZFGaKBIqzaEqyV9M=
+	t=1714481753; cv=none; b=CkwTiMwyWOuq7coOE1aMeOvRuqxOadIAeE2k/StM/kStq3AFaGg6LugHmH6mSAgtRCDLdbdNzIGBhq6qWurt9+d5A8Ztjpy0rQWQrPp93HYegpMlcmI+3HPcJSLfrv29/UFHdmydwkmvqAMzw9Y8WeXfKFoHd9rjSYq0lJs/cOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714481025; c=relaxed/simple;
-	bh=VRRnaPTgYijOUmzlvv2SBU8fJEkG0dJpXrbLMcP8Rek=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EG/bGCeWKTI7iJ51wfyIMfHIHZMc4oWSLzV/5FglV8ODeEcE8UcDXiybc7fGmNUOcKlgGwJj3MPmKKJtP3dRkM5KPMxHx2Fsj43Ktoqc8QFoebKMHZj0iirRQi4fe8WTNQIw/R+xnpAknKxCenLZLg5CwQYr26i/UUD9BzC+pkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zenRqpyt; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a58989cd1f8so722865766b.1
-        for <linux-i2c@vger.kernel.org>; Tue, 30 Apr 2024 05:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714481022; x=1715085822; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z2cfWtBAsXqglGUC0FXhyb0s4Cp7D8stHYMoBK9Lwj4=;
-        b=zenRqpyt06LFArtaqoHAbn+vfmoaXFEEzxcFKcHCvHXmFRhYmNVfq7cWSQYybNVVlT
-         dlTSMsEjSmpI7QrtvKxvKfhyAmBS/N8YEjrovphUWFRuafcAoie+hbFBpesZHedIn+/l
-         /Fw+EgZgGOXUQJQV4u+Q4+TkJlq7JCaJnj+BXiCiGto5BVEZaQIBy5RwLmew73BirDh0
-         nIIjNhdokLgntSyHQFiKHge6nTtHGeBsUiyKGvgNMKuA/mcjzSwgoxKI4i3D+tf8i+pm
-         87jHuT8peg79BqpGiXSceql74+TXzYKRTRSSftMr3CMRZsCUn5sbrjzB7f6gLyHt2Je6
-         r3Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714481022; x=1715085822;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z2cfWtBAsXqglGUC0FXhyb0s4Cp7D8stHYMoBK9Lwj4=;
-        b=bbao6D2oh+C1yfk4j3atV1/NtKkOffwdX5CiH7tFOn5N57xBx62woNkjq/D5K7TRVE
-         yqdDugXQO20oUJliHOYwGlvlkEzjZgdGqkuxzqLAZD2xwOQhNL9nmXvgabjQD11NbwXc
-         a+HM9ZUY60YDgTaVpd+YzIoqAUFvsVaOFo22Q6mbzpMfuSliSSYu5g289b7+1/TpjkKP
-         M+QYF5eBX326qL6EXEL+pNT+XiaujGR5d/crsw7p6r/rIEW+8PJS3srGY+ypYD8oxtOy
-         JKIgRTyxTVLM1gwgQL2ILz+ciAKPDprLnBHXmyhOujU6mLLrwiWMZEeIgKIcjYNKqoSL
-         i+Yw==
-X-Forwarded-Encrypted: i=1; AJvYcCVB1J1evwzlU5rSAnP9fkoa5sQDGQj/f3+bnXpfu2+erxYHQSQ98vh6V5QYpOJNCJ/YxN3EDSDyPFEWAAhs22Q7TPU4SNjR9HHr
-X-Gm-Message-State: AOJu0Ywv5aVU5RlyOavthBgyG6rw9l6C8nuit1602W0Tn4w95XLr7BIv
-	XSfQPItjsiTovInZcmaSlxLFuqia5Nbxq54L6yBTF00WsG/9qLmWFgWK5SYlTAqjlTLi4SOok4i
-	u
-X-Google-Smtp-Source: AGHT+IGKnsEjYbVO9tsQMU0q//NW8easf6LR39ruZ3uVz0sbWxIo09F61ggnl/AGlRz7WlJcdeQEHg==
-X-Received: by 2002:a17:906:b00d:b0:a55:5ee3:3c80 with SMTP id v13-20020a170906b00d00b00a555ee33c80mr7366326ejy.29.1714481022554;
-        Tue, 30 Apr 2024 05:43:42 -0700 (PDT)
-Received: from [192.168.69.100] (mab78-h01-176-184-55-179.dsl.sta.abo.bbox.fr. [176.184.55.179])
-        by smtp.gmail.com with ESMTPSA id h20-20020a170906591400b00a51d3785c7bsm15006034ejq.196.2024.04.30.05.43.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Apr 2024 05:43:42 -0700 (PDT)
-Message-ID: <85cfd4f4-ce6f-4c38-8c51-25c72e3ffa9f@linaro.org>
-Date: Tue, 30 Apr 2024 14:43:40 +0200
+	s=arc-20240116; t=1714481753; c=relaxed/simple;
+	bh=h1L/HFA86d8yYp7QrNCUAGu7UScmEPtBVcWRfNzKEnY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=CmiubbLhj9Yw3/BbtK/WVvgSUYhAWwkfpwCcOJ9jKWnSVq5hC7ZV8Vf3/zDTRjnmrzKGFoaCESA1/gVuoZKb61WF2/CFWUeYxml3Fv4youWqQnMJH66+y0hKoRXzbKDl5JT7jFSb2Xsks9DkhGRcijx/HYERjabjh66Eck44hmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=pRrgql8g; arc=none smtp.client-ip=89.234.176.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+	s=mail; t=1714481392;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=rwUo9fW2TVE8Ef255vklCN/02eGVq/9QqsXdrnT9H4A=;
+	b=pRrgql8gXGvkBcFrqAfrVkBEdBtDICNZvNLy29XU8ZUF5SRr5aoK8WgojRsT2aOLGS52Uh
+	84Ok/Vzr/82s8p+FIfxrabWY+HgGdoDDRX/e1JfdXR5n/6PABifzC5YGvfzOk0C2rltE9O
+	tnRDIpTubyB8TDEDfL5haERyG2zYtcU=
+Message-ID: <1a72ad2d6f72805de2c99db8ba8ea984711da81b.camel@crapouillou.net>
+Subject: Re: [PATCH 11/15] i2c: jz4780: use 'time_left' variable with
+ wait_for_completion_timeout()
+From: Paul Cercueil <paul@crapouillou.net>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	linux-i2c@vger.kernel.org
+Cc: Andi Shyti <andi.shyti@kernel.org>, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Tue, 30 Apr 2024 14:49:50 +0200
+In-Reply-To: <20240427203611.3750-12-wsa+renesas@sang-engineering.com>
+References: <20240427203611.3750-1-wsa+renesas@sang-engineering.com>
+	 <20240427203611.3750-12-wsa+renesas@sang-engineering.com>
+Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
+ keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
+ LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
+ FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
+ z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
+ +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
+ 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
+ 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
+ 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
+ dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
+ 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
+ rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
+ lBwgAhlGy6nqP7O3u7q23hRW5AQ0EXQqFwQEIAMo+MgvYHsyjX3Ja4Oolg1Txzm8woj30ch2nACFC
+ qaO0R/1kLj2VVeLrDyQUOlXx9PD6IQI4M8wy8m0sR4wV2p/g/paw7k65cjzYYLh+FdLNyO7IWYXnd
+ JO+wDPi3aK/YKUYepqlP+QsmaHNYNdXEQDRKqNfJg8t0f5rfzp9ryxd1tCnbV+tG8VHQWiZXNqN70
+ 62DygSNXFUfQ0vZ3J2D4oAcIAEXTymRQ2+hr3Hf7I61KMHWeSkCvCG2decTYsHlw5Erix/jYWqVOt
+ X0roOOLqWkqpQQJWtU+biWrAksmFmCp5fXIg1Nlg39v21xCXBGxJkxyTYuhdWyu1yDQ+LSIUAEQEA
+ AYkBNgQYAQoAIBYhBNdHYd8OeCBwpMuVxnPua9InSr1BBQJdCoXBAhsMAAoJEHPua9InSr1B4wsH/
+ Az767YCT0FSsMNt1jkkdLCBi7nY0GTW+PLP1a4zvVqFMo/vD6uz1ZflVTUAEvcTi3VHYZrlgjcxmc
+ Gu239oruqUS8Qy/xgZBp9KF0NTWQSl1iBfVbIU5VV1vHS6r77W5x0qXgfvAUWOH4gmN3MnF01SH2z
+ McLiaUGF+mcwl15rHbjnT3Nu2399aSE6cep86igfCAyFUOXjYEGlJy+c6UyT+DUylpjQg0nl8MlZ/
+ 7Whg2fAU9+FALIbQYQzGlT4c71SibR9T741jnegHhlmV4WXXUD6roFt54t0MSAFSVxzG8mLcSjR2c
+ LUJ3NIPXixYUSEn3tQhfZj07xIIjWxAYZo=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/15] i2c: jz4780: use 'time_left' variable with
- wait_for_completion_timeout()
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-i2c@vger.kernel.org
-Cc: Paul Cercueil <paul@crapouillou.net>, Andi Shyti <andi.shyti@kernel.org>,
- linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240427203611.3750-1-wsa+renesas@sang-engineering.com>
- <20240427203611.3750-12-wsa+renesas@sang-engineering.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-In-Reply-To: <20240427203611.3750-12-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 27/4/24 22:36, Wolfram Sang wrote:
-> There is a confusing pattern in the kernel to use a variable named 'timeout' to
-> store the result of wait_for_completion_timeout() causing patterns like:
-> 
-> 	timeout = wait_for_completion_timeout(...)
+Le samedi 27 avril 2024 =C3=A0 22:36 +0200, Wolfram Sang a =C3=A9crit=C2=A0=
+:
+> There is a confusing pattern in the kernel to use a variable named
+> 'timeout' to
+> store the result of wait_for_completion_timeout() causing patterns
+> like:
+>=20
+> 	timeout =3D wait_for_completion_timeout(...)
 > 	if (!timeout) return -ETIMEDOUT;
-> 
-> with all kinds of permutations. Use 'time_left' as a variable to make the code
+>=20
+> with all kinds of permutations. Use 'time_left' as a variable to make
+> the code
 > self explaining.
-> 
+>=20
 > Fix to the proper variable type 'unsigned long' while here.
-> 
+>=20
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->   drivers/i2c/busses/i2c-jz4780.c | 22 +++++++++++-----------
->   1 file changed, 11 insertions(+), 11 deletions(-)
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Acked-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
+> ---
+> =C2=A0drivers/i2c/busses/i2c-jz4780.c | 22 +++++++++++-----------
+> =C2=A01 file changed, 11 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-jz4780.c
+> b/drivers/i2c/busses/i2c-jz4780.c
+> index 55035cca0ae5..7951891d6b97 100644
+> --- a/drivers/i2c/busses/i2c-jz4780.c
+> +++ b/drivers/i2c/busses/i2c-jz4780.c
+> @@ -565,7 +565,7 @@ static inline int jz4780_i2c_xfer_read(struct
+> jz4780_i2c *i2c,
+> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int idx)
+> =C2=A0{
+> =C2=A0	int ret =3D 0;
+> -	long timeout;
+> +	unsigned long time_left;
+> =C2=A0	int wait_time =3D JZ4780_I2C_TIMEOUT * (len + 5);
+> =C2=A0	unsigned short tmp;
+> =C2=A0	unsigned long flags;
+> @@ -600,10 +600,10 @@ static inline int jz4780_i2c_xfer_read(struct
+> jz4780_i2c *i2c,
+> =C2=A0
+> =C2=A0	spin_unlock_irqrestore(&i2c->lock, flags);
+> =C2=A0
+> -	timeout =3D wait_for_completion_timeout(&i2c->trans_waitq,
+> -					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
+> msecs_to_jiffies(wait_time));
+> +	time_left =3D wait_for_completion_timeout(&i2c->trans_waitq,
+> +						msecs_to_jiffies(wai
+> t_time));
+> =C2=A0
+> -	if (!timeout) {
+> +	if (!time_left) {
+> =C2=A0		dev_err(&i2c->adap.dev, "irq read timeout\n");
+> =C2=A0		dev_dbg(&i2c->adap.dev, "send cmd count:%d=C2=A0 %d\n",
+> =C2=A0			i2c->cmd, i2c->cmd_buf[i2c->cmd]);
+> @@ -627,7 +627,7 @@ static inline int jz4780_i2c_xfer_write(struct
+> jz4780_i2c *i2c,
+> =C2=A0{
+> =C2=A0	int ret =3D 0;
+> =C2=A0	int wait_time =3D JZ4780_I2C_TIMEOUT * (len + 5);
+> -	long timeout;
+> +	unsigned long time_left;
+> =C2=A0	unsigned short tmp;
+> =C2=A0	unsigned long flags;
+> =C2=A0
+> @@ -655,14 +655,14 @@ static inline int jz4780_i2c_xfer_write(struct
+> jz4780_i2c *i2c,
+> =C2=A0
+> =C2=A0	spin_unlock_irqrestore(&i2c->lock, flags);
+> =C2=A0
+> -	timeout =3D wait_for_completion_timeout(&i2c->trans_waitq,
+> -					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
+> msecs_to_jiffies(wait_time));
+> -	if (timeout && !i2c->stop_hold) {
+> +	time_left =3D wait_for_completion_timeout(&i2c->trans_waitq,
+> +						msecs_to_jiffies(wai
+> t_time));
+> +	if (time_left && !i2c->stop_hold) {
+> =C2=A0		unsigned short i2c_sta;
+> =C2=A0		int write_in_process;
+> =C2=A0
+> -		timeout =3D JZ4780_I2C_TIMEOUT * 100;
+> -		for (; timeout > 0; timeout--) {
+> +		time_left =3D JZ4780_I2C_TIMEOUT * 100;
+> +		for (; time_left > 0; time_left--) {
+> =C2=A0			i2c_sta =3D jz4780_i2c_readw(i2c,
+> JZ4780_I2C_STA);
+> =C2=A0
+> =C2=A0			write_in_process =3D (i2c_sta &
+> JZ4780_I2C_STA_MSTACT) ||
+> @@ -673,7 +673,7 @@ static inline int jz4780_i2c_xfer_write(struct
+> jz4780_i2c *i2c,
+> =C2=A0		}
+> =C2=A0	}
+> =C2=A0
+> -	if (!timeout) {
+> +	if (!time_left) {
+> =C2=A0		dev_err(&i2c->adap.dev, "write wait timeout\n");
+> =C2=A0		ret =3D -EIO;
+> =C2=A0	}
 
 
