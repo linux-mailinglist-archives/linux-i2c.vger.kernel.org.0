@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3334-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3335-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BF9C8B6BCF
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 09:33:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 960878B6BF0
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 09:35:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E67E41F21A11
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 07:33:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B92CB1C21B45
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 07:35:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7C9016D4F2;
-	Tue, 30 Apr 2024 07:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7B973EA83;
+	Tue, 30 Apr 2024 07:35:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ca+0Nzhm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L7J0PFyB"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9699D128811;
-	Tue, 30 Apr 2024 07:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C6C3AC2B;
+	Tue, 30 Apr 2024 07:35:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714462295; cv=none; b=T9gR4vPfAXz5q2GoVlPu+PA0Mya9GWfIXI7w7mS7IbXvEAjrGwzO1mxtbDqVQKChuEaVRZzIshPqk/p0XQ8yhWENjnCQu/CP35Ke/LmgGTRmydmq5LO2xymR+vJhE9E+/+abf2axM4saLDfa8ocv6MWk1/8eoPA++C++hafWJpI=
+	t=1714462509; cv=none; b=BrdXOvTKnewoZ3YT8bt7qGBQK71zusJRgdaT9AcDDQKN/lqBgfs3cOp6B5opGbMEsWYjwa9vmkPf3jRzTiqlCghHD5H2M5YTneKAZrxd7CnhwF9Gkd/PhhlHOMvVvkg+IG4r2wiE6/GFewJRBBcBtZ7rFdbLF0MiPCnhnBIhR14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714462295; c=relaxed/simple;
-	bh=INlw0TqjaaI+AbkPu4uKLcP5p0WoCUaYrEKzHtKAngs=;
+	s=arc-20240116; t=1714462509; c=relaxed/simple;
+	bh=eL+Ia3NO3S1rbXyCocCNbARCF1TD21Bkxt4AjnrqoTI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=inhVxEnicLGGcizYEIesGSQ5nyEjTkmt54AkD4fDPVAe53DWALiCmbLyshS4xz+oSK/DYTKFKdTqANqgmlF8xzz1qlhKmQjDsq/VH0phOD/X7D9zxiqNuxyFWXlgOzDEQTZFuwQLl2AkAMk3M+h9ERc3emllrA10hcr+VoYq2o4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ca+0Nzhm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC226C2BBFC;
-	Tue, 30 Apr 2024 07:31:31 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=lyfyDdQBNEWqSljDyQNgfxM2zk7CHxk6+i9vsb+cDGxP57VQE5P1O53yKY7y98bJvU/Nu78e5PL6WQs02pyDLf0JP4DaGJHdb9V+2UQo8wYul/pANrnEZo7GmrHl/GUasGI7ubACcIuPDLjhVdQh8eHUYNgh88mFdOU7OTvPaIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L7J0PFyB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24FD6C2BBFC;
+	Tue, 30 Apr 2024 07:35:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714462295;
-	bh=INlw0TqjaaI+AbkPu4uKLcP5p0WoCUaYrEKzHtKAngs=;
+	s=k20201202; t=1714462509;
+	bh=eL+Ia3NO3S1rbXyCocCNbARCF1TD21Bkxt4AjnrqoTI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ca+0NzhmJ2/zp9OBXsCQlHhA1ZS67lXZtcDZBD2ZQmPfRHdSmMYGkoO952OZuZFaJ
-	 19cWef8iD28NI+HocfiFbrZxY4TUWeKa07ewohrx7JOTgRpw3WzMzMN5b5VVEzklvL
-	 lFZ3fGvsRV/xngEfqF4gRVCPbofuSQ9RWmh3ql5MOFbNi1sAUFdIroD84NyVegAifI
-	 huu78E6RK5irabREm6KZ0+alsjbxSzMBaT7db30+XjvvLX0iYWpyO0rlIE/pm0If5l
-	 Um4vBL3zBlMlS6awXH4fwkh5d2Te0XbaMNE250f3MgO/v/2G5l1Vt7pGEblI1kVMOE
-	 FMywhbICRDCDg==
-Message-ID: <3544b83e-f441-4d1e-9794-21dd637b898d@kernel.org>
-Date: Tue, 30 Apr 2024 09:31:29 +0200
+	b=L7J0PFyBwVGayQDrAxTV0fpcArAsWw6UCFPH3Ay2QUUJX41bEA4oV2EfkKvvaguH8
+	 u1ma9o0JF2a4Z8QJ+/NcFWhp1OF3lqjLGKCwDO/+jbbUtehc3s6+uMk9jkDJUjhVxG
+	 K4JSXObuihbfP7BWCyr2sENAHck1XyJ+ZVU9sp7jdVVlphcG0PcwQCsv3WvjHWO95g
+	 Rtl362FM6e6ekRRRGhwkU1WivKeF9avhahv6K/ATnG+tvFxpKLcK3BxhvglndOXRnj
+	 iWvvnL1lEKqUAKdwo+O/ia4gs0VShuDcWmc6NG9/Pk12Gc/1lB5DuXAI6o3oKIy00V
+	 WcEEneur0dODg==
+Message-ID: <bbf12675-e0f5-4150-96d1-097eb7abd81a@kernel.org>
+Date: Tue, 30 Apr 2024 09:35:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 09/17] dt-bindings: fsi: Document the FSI Hub
- Controller
+Subject: Re: [PATCH v4 10/17] dt-bindings: i2c: i2c-fsi: Convert to
+ json-schema
 To: Eddie James <eajames@linux.ibm.com>, linux-aspeed@lists.ozlabs.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
@@ -59,7 +59,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
  andrew@codeconstruct.com.au, andi.shyti@kernel.org
 References: <20240429210131.373487-1-eajames@linux.ibm.com>
- <20240429210131.373487-10-eajames@linux.ibm.com>
+ <20240429210131.373487-11-eajames@linux.ibm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,20 +105,91 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240429210131.373487-10-eajames@linux.ibm.com>
+In-Reply-To: <20240429210131.373487-11-eajames@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 29/04/2024 23:01, Eddie James wrote:
-> Document the FSI Hub Controller CFAM engine.
+> Convert to json-schema for the FSI-attached I2C controller.
 > 
 > Signed-off-by: Eddie James <eajames@linux.ibm.com>
 > ---
 > Changes since v3:
->  - Change name from ibm,hub-fsi-controller to ibm,p9-fsi-controller
+>  - Update MAINTAINERS
+>  - Change commit message to match similar commits
+> 
+>  .../devicetree/bindings/i2c/i2c-fsi.txt       | 40 -------------
+>  .../devicetree/bindings/i2c/ibm,i2c-fsi.yaml  | 58 +++++++++++++++++++
+
+
+Please split independent patches to separate patchsets, so they can be
+reviewed and picked up by respective maintainers.
+
+I don't see any dependency here. Neither in 1st patch.
+
+
+>  MAINTAINERS                                   |  2 +-
+>  3 files changed, 59 insertions(+), 41 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-fsi.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml
 > 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+...
+
+> diff --git a/Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml b/Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml
+> new file mode 100644
+> index 000000000000..8ff5585a3aa5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml
+> @@ -0,0 +1,58 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/ibm,i2c-fsi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: IBM FSI-attached I2C controller
+> +
+> +maintainers:
+> +  - Eddie James <eajames@linux.ibm.com>
+> +
+> +description:
+> +  This I2C controller is an FSI CFAM engine, providing access to a number of
+> +  I2C busses. Therefore this node will always be a child of an FSI CFAM node.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ibm,i2c-fsi
+> +
+> +  reg:
+> +    items:
+> +      - description: FSI slave address
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c@1800 {
+> +        compatible = "ibm,i2c-fsi";
+> +        reg = <0x1800 0x400>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        i2c-bus@0 {
+> +            reg = <0>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+
+This does not look right. Why do you have multiple i2c-bus children? I
+do not think i2c-controller.yaml schema allows this.
 
 Best regards,
 Krzysztof
