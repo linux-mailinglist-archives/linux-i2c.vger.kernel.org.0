@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-3345-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3346-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEF668B7EF6
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 19:40:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5637A8B7EFA
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 19:40:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A32B286529
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 17:40:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03E3A1F23CF4
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 17:40:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E66491836F2;
-	Tue, 30 Apr 2024 17:39:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B449C184133;
+	Tue, 30 Apr 2024 17:39:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="cYVo4Oqs"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="gjFawLTz"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D01E1802B5;
-	Tue, 30 Apr 2024 17:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9D7181D1A;
+	Tue, 30 Apr 2024 17:39:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714498782; cv=none; b=gtymmrV7G4AwWkiicSVhVN4PjcfXEBI2xrF/AUsOWArTFkaKtp5H+23/c5uBwjgG9u7LZhWeTXqJA5saZwWourpNoHadCjuuHhg3CJIPeNFQFOKWE+ZoyUSoJ+0GN07Vvc6XVi2sKAB52rbpj83pET24mcvUIHmVMwoZHuEuf9A=
+	t=1714498783; cv=none; b=bomddOZQK5JhPoODJi/shPOMjoUL3rnTT+2L4OgdeBPkopLd/1Tz4ZGyBRyOq1WMXkLFV+B+vjNj+Gg4Let2x+4SrxO5k2eS4TDj/hZxYlBolA+trE5xXK6pbR5BDlUr3RehtFKVz/H3fbBYtEm9QuHFEe13Vek2xutB6MArHg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714498782; c=relaxed/simple;
-	bh=ZZeVnGGxUDEZl4bwK9B50ns3Fp48h5Q5egqI9mwqLA0=;
+	s=arc-20240116; t=1714498783; c=relaxed/simple;
+	bh=/77BFg/ljyfmUeE1+O1WPWG68l9QKH86sz9OfmL2pZ4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LPaaP+dtOoQIWxdz27QzOZdihZNalXj3BQnsQM4nGPjRo7d9Vp0NwtPOb1bpU3yo4Wnu9Lu4192edBZHa8q4lRctraE5Y/ZzesrXddp0Nt3LuRN0VrLoWG9+7rw2twQLdkf9XcKFN0L9uiomujczUIgIPDXohZiZn66XNtRXR2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=cYVo4Oqs; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=eOpXisiV9ObU+YkeYVknn+KSSs8yVpty915Ylu47ZSHURhXCXmAGomimLFq0Dusrbd8zqTclShpF2nCZLfPHeyu+ZtJ7XuwSeVFxYt0CSRjGeK77xa4zDvYYt4waIuv1PtuWPIdumAbf24p6SaNYgx/e+/NoSix4n5sKLImx380=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=gjFawLTz; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from rrs24-12-35.corp.microsoft.com (unknown [131.107.174.176])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 00A55210FBDE;
-	Tue, 30 Apr 2024 10:39:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 00A55210FBDE
+	by linux.microsoft.com (Postfix) with ESMTPSA id B4ED5210FBDF;
+	Tue, 30 Apr 2024 10:39:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B4ED5210FBDF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1714498781;
-	bh=vlIex9KM14eooueS8z9AwXzxiXKC5zIDGKsFdV61O8s=;
+	bh=GHAW6qW4WA/oAJKIMASrtOuwS0xGaRgm050S/InKhew=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cYVo4Oqszg6QYdpeIBZOe/D1MCd73sVS9/RN+qi4sCblw+UeqXfxBWdMaOHue5yqv
-	 0NkfKKN6FOqQi2KV9ShwkB2U9EglhiBhaqQW9po2uBMBt8sa/a+5Qo7H3l6DU8D2Oh
-	 whQPXVyRYiM1oOARBjNndmP7SyUsw8jCpgsAxnDE=
+	b=gjFawLTzzT5n5hByLvy0ba4Yuv8dNzde2XdQac1V0hUeFwKIEaitOgrGU69boxUon
+	 6xbLJKwhhb1SGsG6HR1byAPO7Ljs+RVaXaFJXdrLqa+uJo3s/Ms9Z8xjIUHSDlqAjv
+	 69TnBshGeuEEGUTWIq95dEnFX6hkDNKUQugqyWZA=
 From: Easwar Hariharan <eahariha@linux.microsoft.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Easwar Hariharan <eahariha@linux.microsoft.com>,
-	linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)),
+To: Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org (open list:COBALT MEDIA DRIVER),
 	linux-kernel@vger.kernel.org (open list)
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
@@ -54,10 +54,11 @@ Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS),
 	linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
 	linux-media@vger.kernel.org (open list:BTTV VIDEO4LINUX DRIVER),
-	linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER)
-Subject: [PATCH v1 04/12] media: au0828: Make I2C terminology more inclusive
-Date: Tue, 30 Apr 2024 17:38:03 +0000
-Message-Id: <20240430173812.1423757-5-eahariha@linux.microsoft.com>
+	linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER),
+	Easwar Hariharan <eahariha@linux.microsoft.com>
+Subject: [PATCH v1 05/12] media: cobalt: Make I2C terminology more inclusive
+Date: Tue, 30 Apr 2024 17:38:04 +0000
+Message-Id: <20240430173812.1423757-6-eahariha@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240430173812.1423757-1-eahariha@linux.microsoft.com>
 References: <20240430173812.1423757-1-eahariha@linux.microsoft.com>
@@ -81,45 +82,35 @@ Compile tested, no functionality changes intended
 
 Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 ---
- drivers/media/usb/au0828/au0828-i2c.c   | 4 ++--
- drivers/media/usb/au0828/au0828-input.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/pci/cobalt/cobalt-i2c.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/au0828/au0828-i2c.c b/drivers/media/usb/au0828/au0828-i2c.c
-index 749f90d73b5b..3e66d42bf134 100644
---- a/drivers/media/usb/au0828/au0828-i2c.c
-+++ b/drivers/media/usb/au0828/au0828-i2c.c
-@@ -23,7 +23,7 @@ MODULE_PARM_DESC(i2c_scan, "scan i2c bus at insmod time");
- #define I2C_WAIT_DELAY 25
- #define I2C_WAIT_RETRY 1000
+diff --git a/drivers/media/pci/cobalt/cobalt-i2c.c b/drivers/media/pci/cobalt/cobalt-i2c.c
+index 10c9ee33f73e..d2963370f949 100644
+--- a/drivers/media/pci/cobalt/cobalt-i2c.c
++++ b/drivers/media/pci/cobalt/cobalt-i2c.c
+@@ -45,10 +45,10 @@ struct cobalt_i2c_regs {
+ /* I2C stop condition */
+ #define M00018_CR_BITMAP_STO_MSK	(1 << 6)
  
--static inline int i2c_slave_did_read_ack(struct i2c_adapter *i2c_adap)
-+static inline int i2c_client_did_read_ack(struct i2c_adapter *i2c_adap)
- {
- 	struct au0828_dev *dev = i2c_adap->algo_data;
- 	return au0828_read(dev, AU0828_I2C_STATUS_201) &
-@@ -35,7 +35,7 @@ static int i2c_wait_read_ack(struct i2c_adapter *i2c_adap)
- 	int count;
+-/* I2C read from slave */
++/* I2C read from client */
+ #define M00018_CR_BITMAP_RD_MSK		(1 << 5)
  
- 	for (count = 0; count < I2C_WAIT_RETRY; count++) {
--		if (!i2c_slave_did_read_ack(i2c_adap))
-+		if (!i2c_client_did_read_ack(i2c_adap))
- 			break;
- 		udelay(I2C_WAIT_DELAY);
- 	}
-diff --git a/drivers/media/usb/au0828/au0828-input.c b/drivers/media/usb/au0828/au0828-input.c
-index 3d3368202cd0..98a57b6e02e2 100644
---- a/drivers/media/usb/au0828/au0828-input.c
-+++ b/drivers/media/usb/au0828/au0828-input.c
-@@ -30,7 +30,7 @@ struct au0828_rc {
- 	int polling;
- 	struct delayed_work work;
+-/* I2C write to slave */
++/* I2C write to client */
+ #define M00018_CR_BITMAP_WR_MSK		(1 << 4)
  
--	/* i2c slave address of external device (if used) */
-+	/* i2c client address of external device (if used) */
- 	u16 i2c_dev_addr;
+ /* I2C ack */
+@@ -59,7 +59,7 @@ struct cobalt_i2c_regs {
  
- 	int  (*get_key_i2c)(struct au0828_rc *ir);
+ /* SR[7:0] - Status register */
+ 
+-/* Receive acknowledge from slave */
++/* Receive acknowledge from client */
+ #define M00018_SR_BITMAP_RXACK_MSK	(1 << 7)
+ 
+ /* Busy, I2C bus busy (as defined by start / stop bits) */
 -- 
 2.34.1
 
