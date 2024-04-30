@@ -1,139 +1,92 @@
-Return-Path: <linux-i2c+bounces-3337-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3338-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFE958B6BFC
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 09:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 98CC38B6E8C
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 11:37:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BA27282AAD
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 07:37:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53E372813CC
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 09:37:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9DC83B185;
-	Tue, 30 Apr 2024 07:37:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F949194C8A;
+	Tue, 30 Apr 2024 09:36:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CBVKNDlR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gyX+AXMA"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E395211C;
-	Tue, 30 Apr 2024 07:37:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568771292CE;
+	Tue, 30 Apr 2024 09:36:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714462657; cv=none; b=HRw9KKR6BtjMocFQyEFh0N6RCENp/gtGcBKx7/1UjojbSw2fhyikVleQLBT0X6iMEBzpiPAgCkBWmEtanxjSSkt3t6CQuYWOpeh2P8DeUerSLgYwK2ItD+bFg8b/V+2Acbc0nETEhNf157gyE3mjhPprgn5uDE0SfCK6fhJe5cA=
+	t=1714469776; cv=none; b=MRRhs7Sq/Rdx3cMheMtuPHbg23Awvp1cmDW14lXP7osZ0/u6Az5Qob6zE86ROb95mxtG68MAWCXPmyDInfpmrLdfgVrNMGN8CZjx8hUiJDd+2zigXnC62FOkcJTaOj1+Qc9E4vc8s1/EUXXoXU9PFAw6WJ12TjbArviFeRdLITE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714462657; c=relaxed/simple;
-	bh=krPJeBCTuBz1aWldMqdexquKCcUfoDQsCJfqOk4ydOU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X+H9pkPc0GWJcwOvM8TZK6HdkapvJY8v/g0VU8nj+T4WJznZprVc8grePnCe5kT9m7JO/agQZXLuxzW3PhVxv9xvmeLCNDnN5xx0kRyhnc09Fp87U+/3AoXa7EfkA5azJV2y9KlK5thLooqZV7andec4TJt5iuOLpht8BGtdpOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CBVKNDlR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5DD5C2BBFC;
-	Tue, 30 Apr 2024 07:37:32 +0000 (UTC)
+	s=arc-20240116; t=1714469776; c=relaxed/simple;
+	bh=3l20woefNrUTmYr2WXVuXJsLYYGk9ONQKilh/0kO8iQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FfDre1ZhayB4HWfrxOMm9nlpwmaHawrk6dC69qP8M/6nfG1jUIJuRSr4+UsLphNhI7XyaG6oalwKJBg40SfNcvyuGN0BUadb3/n6UpNE804Hk4s0kXAeb+S/R3H1/lu5RsAgr99LBszQX5WZRxlAUpprsgYI6XIsk+aGwFP7f90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gyX+AXMA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 647EEC2BBFC;
+	Tue, 30 Apr 2024 09:36:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714462656;
-	bh=krPJeBCTuBz1aWldMqdexquKCcUfoDQsCJfqOk4ydOU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CBVKNDlRT/H9+nTjaIvp/4Kfs7GOGznhW+JsLqWqtnYWCZuqyw/F5HTmmPouDNeOC
-	 mceznabUuXWFBooVSyOUVijqNDBOsDg7nkN1kP5AuFyMX3G6VzqpUlkrrCITjvi3/u
-	 fPC/LDN/xwvkhFT6bmAFX5b+mmpIzhZdvP1TmMiNIcomcF0Sj+G+7Wkt7k2CW79rYj
-	 JFZy+4pizK2VDS1txnXi3j/La0ILi0Qyg+sWXMB7YwPMa/so2mG4H0X9K/jY+fPR7w
-	 mLDOXHJX1EcQKdMmOnQM+/GHNo3iI6u76mq1PBe6Samwrb2M9zy9DNnqqJi5Me09fb
-	 ZJMWk41z/lgfw==
-Message-ID: <c722d3d6-2acb-4669-b541-eebaf71b3a04@kernel.org>
-Date: Tue, 30 Apr 2024 09:37:30 +0200
+	s=k20201202; t=1714469775;
+	bh=3l20woefNrUTmYr2WXVuXJsLYYGk9ONQKilh/0kO8iQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gyX+AXMA9YSULYnBC+gtH6mJufvYQCBvx6Ht5xJUrQvYCrX49bBiw6tH+Xj6k01im
+	 Rmo5vvSa1PYWEDPmetLVJZCJqSxWc2rl/4x3WGZ0Urr3ZHirbdjZxcLwT35sJVJWA0
+	 oZGrVOL5ET+QVSwNr+1Bphxt6zLbUjS+lCHYMy4wdrernxtiLWEmdYvhCWcc6hKMD9
+	 r7OByvdGgwnHbb5Row0k7R4W/2AticzWeWOpyut759IWQSdvxGVNMp4+7Ypp2pVoBn
+	 t2c/FtoCBv2qm91Sph9G79mT1SovRErqRlHEKvx6Zg5DYmO7IgQMjDI1Q0Mx7OLKW0
+	 BxQLptzD3DobQ==
+Date: Tue, 30 Apr 2024 11:36:12 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>, 
+	linux-kernel@vger.kernel.org, Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, Jan Dabros <jsd@semihalf.com>, Lee Jones <lee@kernel.org>, 
+	Jiawen Wu <jiawenwu@trustnetic.com>, Mengyuan Lou <mengyuanlou@net-swift.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Duanqiang Wen <duanqiangwen@net-swift.com>, 
+	"open list:SYNOPSYS DESIGNWARE I2C DRIVER" <linux-i2c@vger.kernel.org>, "open list:WANGXUN ETHERNET DRIVER" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v3 4/5] mfd: intel_quark_i2c_gpio: Utilize
+ i2c-designware.h
+Message-ID: <fidbc7locp32lypdui67crj3qkj3nbcp5vpxcnlxrdmme2sn4c@npdan5ncxxog>
+References: <20240425214438.2100534-1-florian.fainelli@broadcom.com>
+ <20240425214438.2100534-5-florian.fainelli@broadcom.com>
+ <Ziu6gDOqhEYQNhcH@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 17/17] fsi: scom: Update compatible string to match
- documentation
-To: Eddie James <eajames@linux.ibm.com>, linux-aspeed@lists.ozlabs.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
- linux-i2c@vger.kernel.org, lakshmiy@us.ibm.com, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
- andrew@codeconstruct.com.au, andi.shyti@kernel.org
-References: <20240429210131.373487-1-eajames@linux.ibm.com>
- <20240429210131.373487-18-eajames@linux.ibm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240429210131.373487-18-eajames@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Ziu6gDOqhEYQNhcH@smile.fi.intel.com>
 
-On 29/04/2024 23:01, Eddie James wrote:
-> Use p9-scom instead of fsi2pib.
+Hi Andy,
 
-Why? Commits must *always* say why you are doing it. What is easy to see.
-
+On Fri, Apr 26, 2024 at 05:30:24PM +0300, Andy Shevchenko wrote:
+> On Thu, Apr 25, 2024 at 02:44:37PM -0700, Florian Fainelli wrote:
+> > Rather than open code the i2c_designware string, utilize the newly
+> > defined constant in i2c-designware.h.
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  drivers/fsi/fsi-scom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> diff --git a/drivers/fsi/fsi-scom.c b/drivers/fsi/fsi-scom.c
-> index 61dbda9dbe2b..18ca213fdc7e 100644
-> --- a/drivers/fsi/fsi-scom.c
-> +++ b/drivers/fsi/fsi-scom.c
-> @@ -589,7 +589,7 @@ static int scom_remove(struct device *dev)
->  }
->  
->  static const struct of_device_id scom_of_ids[] = {
-> -	{ .compatible = "ibm,fsi2pib" },
-> +	{ .compatible = "ibm,p9-scom" },
+> P.S>
+> Note, my tags for MFD patches does not imply that I agree on the general idea
+> of this series, it's just in case if it will be approved by the respective
+> maintainers (I²C / MFD / etc).
 
-This breaks all users without any explanation in the commit!
+I waited a bit to see if more comments were coming.
 
-Best regards,
-Krzysztof
+Do you have a better approach in mind?
 
+Andi
 
