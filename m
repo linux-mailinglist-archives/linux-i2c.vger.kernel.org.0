@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-3347-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3348-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9238B8B7EFF
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 19:40:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 584F58B7F02
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 19:40:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FE69B2102C
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 17:40:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA9CF1F23DB9
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 17:40:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A7AE194C95;
-	Tue, 30 Apr 2024 17:39:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87A37180A74;
+	Tue, 30 Apr 2024 17:39:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="m9ykHH6v"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Xzl8Y7dK"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6844318412B;
-	Tue, 30 Apr 2024 17:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6DFE199E99;
+	Tue, 30 Apr 2024 17:39:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714498784; cv=none; b=agEGe8LX0pAqYxYSUvMxG0m7wgkA4Oqvn5b+t4Q4BpBZ7zAXl3QJtKvLtYDs5amV8QkKBaAF8L1NcwAjxcTnW8SNkzrVAFbsbtqIKyLiCbMnqBgUJ3nsOnRCuY+WfZW1TaR9NyIqhoJG580VAkh5fJL8B7lLbWkzxiSatHAANY0=
+	t=1714498787; cv=none; b=cx7jXKdGEswddB+AB43xJWQsvXKh/tQ5kaaO/SWWIEB4P9FKANvogfzcRwJDXW8Bj9QdeGpKjHx8VWgGEKLhToxxSeGj3s9dQbTgaJYoqg9v2Lr67T+/1ToJ8hMNsv6zTGLZLYr9X9R+WTPto6LINZsl7Y5vlZ/SYl3RdqXA8fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714498784; c=relaxed/simple;
-	bh=IbclzdHHetD3w3RiWZXeQ9ndiE6j4C2bvNMOGyEYxws=;
+	s=arc-20240116; t=1714498787; c=relaxed/simple;
+	bh=GiaLBHeyxCK6vqA9oXnDuA/09cUAcHbpc5COM0sVPeg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HZhC/5NgpTxAWrH2Jd1bowK/krnP1TTTzM6VzKFM6Nz1Gfy2yF8u5IiEbj44vpZlsfJsQALZlv5euIWqRO6feVuTa4PSYz0iLgFy9ekOUUgww8aXuxdVTqQ8lSmZtn8EWPyrWkeMvDs+IR9+9Hdc8Kz59gevCmh/2NUhfixLKfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=m9ykHH6v; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=cT0HxjldVV5ug/3zrP5V06hl3fI8flELgtUtKwTka4bF+69I9aLDB+JyozfzsRRKR4S770Kp32V5LPDwgFVZqGIuSXJ6Czx5tvJOQF8rjEX+qs/8/h92XOwAJqKpvtbXzuJoUrr0WfQWwhi8/EhsdPYzJ0vhII+O/Bbja6KSSyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Xzl8Y7dK; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from rrs24-12-35.corp.microsoft.com (unknown [131.107.174.176])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 1ACF1210FBDE;
-	Tue, 30 Apr 2024 10:39:43 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1ACF1210FBDE
+	by linux.microsoft.com (Postfix) with ESMTPSA id 8951F210FBDF;
+	Tue, 30 Apr 2024 10:39:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8951F210FBDF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1714498783;
-	bh=3TJnFImt+vzp+fhHiYBlaZrmbfS1BxYE4Fx/aNsJNlg=;
+	s=default; t=1714498785;
+	bh=rcfYVAHkQOpTrlPgYUDecaSeekpFDvLxrEvRZ7jqaLk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=m9ykHH6vXMagvrXPos7D04+8PtyCIIan1vG2dKc0OKfSq+UBSSbzyuMAqAzJtDzxp
-	 MNc8pZ0Tdf8n6PbFOUX1v7mkbkPgxqjO4xxxQlFgvUdjGzS3G2i8n9DdD81GA6eve1
-	 HQvaBWJd0q9WLRB4heRPR5spuuADaRvbnes4UaH8=
+	b=Xzl8Y7dK47MOxC0E5yakG9wZYswUHKm9iclFS4TWptvzP8V/hSQ478M2JjtrvO/LM
+	 2vvbpjKdLoE5UDV1jdCIUrCfjaorcW3jEyQezp11dI1otbOLQETU0suZKaTfiZ6/fX
+	 i6tJ2dim6XGpDIPE9PHcYhnztyKYE7B7NtNUJhSE=
 From: Easwar Hariharan <eahariha@linux.microsoft.com>
-To: Andy Walls <awalls@md.metrocast.net>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org (open list:CX18 VIDEO4LINUX DRIVER),
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Easwar Hariharan <eahariha@linux.microsoft.com>,
+	linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)),
 	linux-kernel@vger.kernel.org (open list)
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
@@ -54,11 +54,10 @@ Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS),
 	linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
 	linux-media@vger.kernel.org (open list:BTTV VIDEO4LINUX DRIVER),
-	linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER),
-	Easwar Hariharan <eahariha@linux.microsoft.com>
-Subject: [PATCH v1 06/12] media: cx18: Make I2C terminology more inclusive
-Date: Tue, 30 Apr 2024 17:38:05 +0000
-Message-Id: <20240430173812.1423757-7-eahariha@linux.microsoft.com>
+	linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER)
+Subject: [PATCH v1 07/12] media: cx25821: Make I2C terminology more inclusive
+Date: Tue, 30 Apr 2024 17:38:06 +0000
+Message-Id: <20240430173812.1423757-8-eahariha@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240430173812.1423757-1-eahariha@linux.microsoft.com>
 References: <20240430173812.1423757-1-eahariha@linux.microsoft.com>
@@ -76,131 +75,46 @@ series to fix drivers/i2c/[1], fix the terminology for users of
 I2C_ALGOBIT bitbanging interface, now that the approved verbiage exists
 in the specification.
 
-I2S specification has also updated the terms in v.3 to use "controller"
-and "target" respectively. Make those changes in the relevant spaces as
-well.
-
 Compile tested, no functionality changes intended
 
 [1]: https://lore.kernel.org/all/20240322132619.6389-1-wsa+renesas@sang-engineering.com/
 
 Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 ---
- drivers/media/pci/cx18/cx18-av-firmware.c | 8 ++++----
- drivers/media/pci/cx18/cx18-cards.c       | 6 +++---
- drivers/media/pci/cx18/cx18-cards.h       | 4 ++--
- drivers/media/pci/cx18/cx18-gpio.c        | 6 +++---
- 4 files changed, 12 insertions(+), 12 deletions(-)
+ drivers/media/pci/cx25821/cx25821-i2c.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/cx18/cx18-av-firmware.c b/drivers/media/pci/cx18/cx18-av-firmware.c
-index 61aeb8c9af7f..906e0b33cffc 100644
---- a/drivers/media/pci/cx18/cx18-av-firmware.c
-+++ b/drivers/media/pci/cx18/cx18-av-firmware.c
-@@ -140,22 +140,22 @@ int cx18_av_loadfw(struct cx18 *cx)
- 	cx18_av_and_or4(cx, CXADEC_PIN_CTRL1, ~0, 0x78000);
+diff --git a/drivers/media/pci/cx25821/cx25821-i2c.c b/drivers/media/pci/cx25821/cx25821-i2c.c
+index 0ef4cd6528a0..bad8fb9f5319 100644
+--- a/drivers/media/pci/cx25821/cx25821-i2c.c
++++ b/drivers/media/pci/cx25821/cx25821-i2c.c
+@@ -33,7 +33,7 @@ do {									\
+ #define I2C_EXTEND  (1 << 3)
+ #define I2C_NOSTOP  (1 << 4)
  
- 	/* Audio input control 1 set to Sony mode */
--	/* Audio output input 2 is 0 for slave operation input */
-+	/* Audio output input 2 is 0 for target operation input */
- 	/* 0xC4000914[5]: 0 = left sample on WS=0, 1 = left sample on WS=1 */
- 	/* 0xC4000914[7]: 0 = Philips mode, 1 = Sony mode (1st SCK rising edge
- 	   after WS transition for first bit of audio word. */
- 	cx18_av_write4(cx, CXADEC_I2S_IN_CTL, 0x000000A0);
- 
- 	/* Audio output control 1 is set to Sony mode */
--	/* Audio output control 2 is set to 1 for master mode */
-+	/* Audio output control 2 is set to 1 for controller mode */
- 	/* 0xC4000918[5]: 0 = left sample on WS=0, 1 = left sample on WS=1 */
- 	/* 0xC4000918[7]: 0 = Philips mode, 1 = Sony mode (1st SCK rising edge
- 	   after WS transition for first bit of audio word. */
--	/* 0xC4000918[8]: 0 = slave operation, 1 = master (SCK_OUT and WS_OUT
-+	/* 0xC4000918[8]: 0 = target operation, 1 = controller (SCK_OUT and WS_OUT
- 	   are generated) */
- 	cx18_av_write4(cx, CXADEC_I2S_OUT_CTL, 0x000001A0);
- 
--	/* set alt I2s master clock to /0x16 and enable alt divider i2s
-+	/* set alt I2s controller clock to /0x16 and enable alt divider i2s
- 	   passthrough */
- 	cx18_av_write4(cx, CXADEC_PIN_CFG3, 0x5600B687);
- 
-diff --git a/drivers/media/pci/cx18/cx18-cards.c b/drivers/media/pci/cx18/cx18-cards.c
-index f5a30959a367..d9b859ee4b1b 100644
---- a/drivers/media/pci/cx18/cx18-cards.c
-+++ b/drivers/media/pci/cx18/cx18-cards.c
-@@ -82,7 +82,7 @@ static const struct cx18_card cx18_card_hvr1600_esmt = {
- 	},
- 	.gpio_init.initial_value = 0x3001,
- 	.gpio_init.direction = 0x3001,
--	.gpio_i2c_slave_reset = {
-+	.gpio_i2c_client_reset = {
- 		.active_lo_mask = 0x3001,
- 		.msecs_asserted = 10,
- 		.msecs_recovery = 40,
-@@ -129,7 +129,7 @@ static const struct cx18_card cx18_card_hvr1600_s5h1411 = {
- 	},
- 	.gpio_init.initial_value = 0x3801,
- 	.gpio_init.direction = 0x3801,
--	.gpio_i2c_slave_reset = {
-+	.gpio_i2c_client_reset = {
- 		.active_lo_mask = 0x3801,
- 		.msecs_asserted = 10,
- 		.msecs_recovery = 40,
-@@ -176,7 +176,7 @@ static const struct cx18_card cx18_card_hvr1600_samsung = {
- 	},
- 	.gpio_init.initial_value = 0x3001,
- 	.gpio_init.direction = 0x3001,
--	.gpio_i2c_slave_reset = {
-+	.gpio_i2c_client_reset = {
- 		.active_lo_mask = 0x3001,
- 		.msecs_asserted = 10,
- 		.msecs_recovery = 40,
-diff --git a/drivers/media/pci/cx18/cx18-cards.h b/drivers/media/pci/cx18/cx18-cards.h
-index ae9cf5bfdd59..86f41ec6ca2f 100644
---- a/drivers/media/pci/cx18/cx18-cards.h
-+++ b/drivers/media/pci/cx18/cx18-cards.h
-@@ -69,7 +69,7 @@ struct cx18_gpio_init { /* set initial GPIO DIR and OUT values */
- 	u32 initial_value;
- };
- 
--struct cx18_gpio_i2c_slave_reset {
-+struct cx18_gpio_i2c_client_reset {
- 	u32 active_lo_mask; /* GPIO outputs that reset i2c chips when low */
- 	u32 active_hi_mask; /* GPIO outputs that reset i2c chips when high */
- 	int msecs_asserted; /* time period reset must remain asserted */
-@@ -121,7 +121,7 @@ struct cx18_card {
- 	/* GPIO card-specific settings */
- 	u8 xceive_pin;		/* XCeive tuner GPIO reset pin */
- 	struct cx18_gpio_init		 gpio_init;
--	struct cx18_gpio_i2c_slave_reset gpio_i2c_slave_reset;
-+	struct cx18_gpio_i2c_client_reset gpio_i2c_client_reset;
- 	struct cx18_gpio_audio_input    gpio_audio_input;
- 
- 	struct cx18_card_tuner tuners[CX18_CARD_MAX_TUNERS];
-diff --git a/drivers/media/pci/cx18/cx18-gpio.c b/drivers/media/pci/cx18/cx18-gpio.c
-index c85eb8d25837..82c9104b9e85 100644
---- a/drivers/media/pci/cx18/cx18-gpio.c
-+++ b/drivers/media/pci/cx18/cx18-gpio.c
-@@ -204,9 +204,9 @@ static int resetctrl_log_status(struct v4l2_subdev *sd)
- static int resetctrl_reset(struct v4l2_subdev *sd, u32 val)
+-static inline int i2c_slave_did_ack(struct i2c_adapter *i2c_adap)
++static inline int i2c_client_did_ack(struct i2c_adapter *i2c_adap)
  {
- 	struct cx18 *cx = v4l2_get_subdevdata(sd);
--	const struct cx18_gpio_i2c_slave_reset *p;
-+	const struct cx18_gpio_i2c_client_reset *p;
+ 	struct cx25821_i2c *bus = i2c_adap->algo_data;
+ 	struct cx25821_dev *dev = bus->dev;
+@@ -85,7 +85,7 @@ static int i2c_sendbytes(struct i2c_adapter *i2c_adap,
+ 		if (!i2c_wait_done(i2c_adap))
+ 			return -EIO;
  
--	p = &cx->card->gpio_i2c_slave_reset;
-+	p = &cx->card->gpio_i2c_client_reset;
- 	switch (val) {
- 	case CX18_GPIO_RESET_I2C:
- 		gpio_reset_seq(cx, p->active_lo_mask, p->active_hi_mask,
-@@ -309,7 +309,7 @@ void cx18_reset_ir_gpio(void *data)
- {
- 	struct cx18 *cx = to_cx18(data);
+-		if (!i2c_slave_did_ack(i2c_adap))
++		if (!i2c_client_did_ack(i2c_adap))
+ 			return -EIO;
  
--	if (cx->card->gpio_i2c_slave_reset.ir_reset_mask == 0)
-+	if (cx->card->gpio_i2c_client_reset.ir_reset_mask == 0)
- 		return;
+ 		dprintk(1, "%s(): returns 0\n", __func__);
+@@ -174,7 +174,7 @@ static int i2c_readbytes(struct i2c_adapter *i2c_adap,
+ 		cx_write(bus->reg_ctrl, bus->i2c_period | (1 << 2) | 1);
+ 		if (!i2c_wait_done(i2c_adap))
+ 			return -EIO;
+-		if (!i2c_slave_did_ack(i2c_adap))
++		if (!i2c_client_did_ack(i2c_adap))
+ 			return -EIO;
  
- 	CX18_DEBUG_INFO("Resetting IR microcontroller\n");
+ 		dprintk(1, "%s(): returns 0\n", __func__);
 -- 
 2.34.1
 
