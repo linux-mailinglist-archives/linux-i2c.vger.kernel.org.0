@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3331-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3332-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA3BC8B6AFF
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 09:02:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C5B48B6B05
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 09:02:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB5701C2189A
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 07:02:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A7511F226F3
+	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 07:02:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 071272209F;
-	Tue, 30 Apr 2024 07:01:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1638321340;
+	Tue, 30 Apr 2024 07:02:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gNqKfn2H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AcckXu+E"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A873C18EB8;
-	Tue, 30 Apr 2024 07:01:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6811BF20;
+	Tue, 30 Apr 2024 07:02:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714460516; cv=none; b=VQ15GTWIF4LkvA3ODcSW3vUYLHuKj9MtdW/myjPgLC1E5bKFuouHYRGm2F3piomF1yA3ijWEj1rBavHsIAiZzQYDj3PXMRN7j/mQ+Y3IZ2Ni4H0+4jgHeZ89wimRfMu8YBzqfFOQYBahpkHWROv+e0vTekMlP8psNPRSnNz5HX0=
+	t=1714460552; cv=none; b=h3JYe6PMsias7QTW48NrPgBRfOvzpXAG9hSqAJMAEWpDzrO/bnJ3E1gMTwdoSkLbP8RwCGLpIvdsrTPRIpgd//gOcA9i0MUQN6dmgIbnN8V5cBHgR32w+5XLR9ZrmV2u3ZQwipSXgk/5HHvm8RqWvRfOWraeSYpzTyGELDnVobw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714460516; c=relaxed/simple;
-	bh=fCPTaBfcKbGKLE037h0ONS7UWVgKa1jbbDt/3YYljzQ=;
+	s=arc-20240116; t=1714460552; c=relaxed/simple;
+	bh=O59eyLa7MJFhtixOochUuqDfITN4cQyyHA6j3hZmAms=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gGOxp1jECB9bYo5eS1lNm9FO5YoqvTHly+jxUcSYVnk/GLUiKjObJFJrGse6wc+MmnDxAXm41Mu06AQBLYnU//cVk4fqY0vUan+PcJA34JvHr7ZeUWTzOdfrsw+GUt8S0p2C8ETT8faButdWaHcpvW6Rbd7PQ2sACM5stZrJbuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gNqKfn2H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6741C2BBFC;
-	Tue, 30 Apr 2024 07:01:52 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=bX3XVeDteP8YUh2dbBNQKdGjRRRjxnpATY3odFyzLrcH8xbvsV1qIqzT48saeTiDyGMu4o+nIT4Y701Au3biymyWCy5Dxr2HmOn5BzU2jzTTUH8uTM1AM0KI6WRyP7B0Tpp6s0jWZEXACKXF6ao/uIBM5WKvwntHxbNis5+R5MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AcckXu+E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E43DDC2BBFC;
+	Tue, 30 Apr 2024 07:02:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714460516;
-	bh=fCPTaBfcKbGKLE037h0ONS7UWVgKa1jbbDt/3YYljzQ=;
+	s=k20201202; t=1714460551;
+	bh=O59eyLa7MJFhtixOochUuqDfITN4cQyyHA6j3hZmAms=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gNqKfn2Hp2553c2aUvBZWs5HQE2cinHXoVgOXQJqxwpLGuuRE5PpzR2E+A6GAxMBN
-	 /AIvjDC8JQcj1pa8IaEANn6fbbLbAyXmabe8Ku2DCruB/6jTv8jWuUUuXeL+X8ERo9
-	 jC9XzC1E4lGZr+DYQxjaXaUmCfYtntIeYFDzB5Pm8SoaCh9+PiGaJloWfNcNBmn24y
-	 XGHIA2SW+lceyXcmmiVMQrwz8zXqSkHu75KhE1ckoWSoh0WuBKL7ywNlfMs391y0kz
-	 HXuYxnU8eWU3XLaTseaULC3TfCVBK2t2Crh81ItPfaPEpwDUN8vdRiJVBibD9BAH7w
-	 bte/SUWXkEvdg==
-Message-ID: <3bcc9143-6896-496b-aa30-7ac0fc2d8e51@kernel.org>
-Date: Tue, 30 Apr 2024 09:01:50 +0200
+	b=AcckXu+EA2sZLPtmTz2bdG4gEG6pkC/ojvQeWvxtWSvy0QM+Ztl8rQxT1kRoPEhka
+	 SfxFxeOr5iH6w1OyT9hZV8mOvICjOLtMfyN81aHr1LOgUunBozqKLfkLUAdh61iGaX
+	 ljJzXBO7+wtAa2jiVrPHkQTW+vI4+qy9IwvZT/s4fQloo19ce64gPG/uYOHa1YSuGc
+	 /qyfA4njE6vN6j2PWhCS+bmZrTo37Uh/7PybZjkiBgi/VhHKBtRtB5PFja8zrCBYz7
+	 oLv1vgI7/GKR/CGWXcSAp0pww+FNqDRnzlHChGGviLu4YYZQPSuHslWXHOh5VE/qw7
+	 F0GEi7aBPmEJA==
+Message-ID: <9bd12b77-f4c6-4da5-b491-3c00742f6137@kernel.org>
+Date: Tue, 30 Apr 2024 09:02:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 06/17] dt-bindings: fsi: Document the FSI controller
- common properties
+Subject: Re: [PATCH v4 07/17] dt-bindings: fsi: ibm,i2cr-fsi-master: Reference
+ common FSI controller
 To: Eddie James <eajames@linux.ibm.com>, linux-aspeed@lists.ozlabs.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
@@ -59,7 +59,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
  andrew@codeconstruct.com.au, andi.shyti@kernel.org
 References: <20240429210131.373487-1-eajames@linux.ibm.com>
- <20240429210131.373487-7-eajames@linux.ibm.com>
+ <20240429210131.373487-8-eajames@linux.ibm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,56 +105,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240429210131.373487-7-eajames@linux.ibm.com>
+In-Reply-To: <20240429210131.373487-8-eajames@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 29/04/2024 23:01, Eddie James wrote:
-> +
-> +patternProperties:
-> +  "cfam@[0-9a-f],[0-9a-f]":
-> +    type: object
-> +    properties:
-> +      chip-id:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        description:
-> +          Processor index
+> Remove the common properties from the I2CR documentation and instead
+> point to the common FSI controller documentation.
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+> Changes since v3:
+>  - Re-order allOf to below required
+> 
 
-fsi.txt tells a bit more about it, so extend the description.
-
-
-> +
-> +      reg:
-> +        maxItems: 1
-> +
-> +      "#address-cells":
-> +        const: 1
-> +
-> +      "#size-cells":
-> +        const: 1
-> +
-> +    required:
-> +      - reg
-> +
-> +    additionalProperties: true
-> +
-> +additionalProperties: true
-> +
-> +examples:
-> +  - |
-> +    fsi {
-> +        #address-cells = <2>;
-> +        #size-cells = <0>;
-> +
-> +        cfam@0,0 {
-> +            reg = <0 0>;
-> +            #address-cells = <1>;
-> +            #size-cells = <1>;
-> +            chip-id = <0>;
-> +        };
-> +    };
-
-Drop the example, it's not being validated/used.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
