@@ -1,140 +1,162 @@
-Return-Path: <linux-i2c+bounces-3356-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3357-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53E228B8202
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 23:40:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D57A08B8612
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 May 2024 09:27:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D10EFB2185A
-	for <lists+linux-i2c@lfdr.de>; Tue, 30 Apr 2024 21:40:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EAB81F22D6C
+	for <lists+linux-i2c@lfdr.de>; Wed,  1 May 2024 07:27:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF7641BED70;
-	Tue, 30 Apr 2024 21:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0E6B4CE09;
+	Wed,  1 May 2024 07:27:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="dsoh69Pe"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="VRNh6w6T"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 278481E52C;
-	Tue, 30 Apr 2024 21:40:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D8C4AEF0
+	for <linux-i2c@vger.kernel.org>; Wed,  1 May 2024 07:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714513223; cv=none; b=fD1lLi0XJxU4B1BqBr3yDiGtXcJaqVzfrl8L9Tmm8QZbe0JZvqImqxlG1SIAq7FWoxXJ1NFSOLhLD/JPkDE3b8uI8RmyKp5pCbbIz7eOmPSlZPcy7uPEchW7rJiOEuGHPtbUwiVp6dBiOXAqxfdx1okv7WmPdMv2sJv0G1F7mhE=
+	t=1714548472; cv=none; b=qtJ3RTZQgMmmCzCjcTkfR2pLDSlk8g286M3D1rY1QZHpaJTWCJymycabtgVueqDCudWGjGixAiTiY46+NHA4G3Rb3HC/eP6cgrE9rJKJzYZZPnQ9QtTyt1LIxPD87vYV/dNswCIWIk3HVIx3uIjI5bWBmi7NYj986mhv2UMOXjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714513223; c=relaxed/simple;
-	bh=Mrs/Piw8jse4ek5sQYu6v7Fpg89TSqWrpsLnLI2WElU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hqv/+ta/HVir39jC1ikuZoSUTuIiP04N7Kf/RRI7D+oWSwO3c+FIu8BhzGjZOzI6kEIkpSZG5ptD1Sy2sZpuGjmEdY/QalrU/MfynklI+c8RgTiXcaa2kTloNVPFJV6YWqYP+xTEdwe71AUhYEOnl8b3sXQWHaVJhVItce1cbt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=dsoh69Pe; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [100.65.32.120] (unknown [20.236.11.185])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 2953021112E1;
-	Tue, 30 Apr 2024 14:40:21 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2953021112E1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1714513221;
-	bh=N5FvQ/TypNHdjNMqYFIqXh66AahkR8SgB9HzMwk5dOg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dsoh69PeBK5TTLU3vn54yAjgk6HEgw6uX5/96K1j6MEq+uhUAt3mt7u2D+71GOFNI
-	 WvGANH7w+I/8RenBbMN5ykkWz3Uk5CrLxIasJ2xUAitAkekfx5YEX9aKxDjas/zyYs
-	 t0b5kEvCuz8TxGtWmnMzMga/jwInlSVIoFyEUWbA=
-Message-ID: <92189a8c-00dc-4b79-8fd0-3670b80d0db2@linux.microsoft.com>
-Date: Tue, 30 Apr 2024 14:40:18 -0700
+	s=arc-20240116; t=1714548472; c=relaxed/simple;
+	bh=CbmnI0ixFU/UnH5GwPrDfwF3OFJuaiKTaWu3NEzh3fo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G9CKiXCvbXqV4H60Kuti4NOMSA0a72Fxd+IoaW81HKAFR7dJWSU6qkJ2Uxk/Mb/dcCNI3yBkoYPJd4N/94jm3pVkQRLM8fGSwDZ4fRqe9DeDbCZPO1oahP24I7c7oa2aB0uZHeIShBXPCOsq/AVq5W25kaIqk8AXi2XYFY/uk+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=VRNh6w6T; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=eFUG
+	sqLXKowvxfkkojJ7LTLfmxYmD0KYjv2UmQgqrSk=; b=VRNh6w6THAl5uYgAhAyK
+	UZSKHgt6zWevqTgJjmmXZGzsvkR1ugOSv+M34y7VcExy/iJs80Fp90neLuIeHLsG
+	hvxflTjB2MqNR0JXepBkUkV2kS9b1juGQdVRirJf4gHcjy3V+/HGFLnAA2pGp/Xx
+	IdE4TRl9jHFHQ9poLnuV24i0YqzuTiNOvamesiEsLmg0NNc096CvwP67VT1nkKMY
+	lVAUo55ngz+pVlJoTb95kegggTgvehZ0+8yeGCw28ctHlfXU0qP9e9nJ/5gy5fUT
+	w5kViDoK8wL7i4oZ2bM880PH3ajAtYDTrv+1MbUhu5k/QsO2FpJAGyZGskr+t22e
+	KA==
+Received: (qmail 2867333 invoked from network); 1 May 2024 09:27:44 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 May 2024 09:27:44 +0200
+X-UD-Smtp-Session: l3s3148p1@jI8rbF8XgOdehhrb
+Date: Wed, 1 May 2024 09:27:44 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+	Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.de>, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, ruirui.yang@linux.dev,
+	Wolfram Sang <wsa@kernel.org>
+Subject: Re: [Regression] dmesg warnings after "i2c: smbus: Support up to 8
+ SPD EEPROMs"
+Message-ID: <20240501072744.2xm4v3idjjsehwkq@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Jean Delvare <jdelvare@suse.de>, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, ruirui.yang@linux.dev,
+	Wolfram Sang <wsa@kernel.org>
+References: <53582ef1-6d05-4379-a445-5f879cd676b8@o2.pl>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 03/12] drm/i915: Make I2C terminology more inclusive
-To: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Zhenyu Wang <zhenyuw@linux.intel.com>,
- Zhi Wang <zhi.wang.linux@gmail.com>,
- "open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
- <intel-gfx@lists.freedesktop.org>,
- "open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
- <intel-xe@lists.freedesktop.org>,
- "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:INTEL GVT-g DRIVERS (Intel GPU Virtualization)"
- <intel-gvt-dev@lists.freedesktop.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
- "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS"
- <nouveau@lists.freedesktop.org>,
- "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
- "open list:BTTV VIDEO4LINUX DRIVER" <linux-media@vger.kernel.org>,
- "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
-References: <20240430173812.1423757-1-eahariha@linux.microsoft.com>
- <20240430173812.1423757-4-eahariha@linux.microsoft.com>
- <ZjFUwjMFMcvJr5KI@intel.com>
-Content-Language: en-CA
-From: Easwar Hariharan <eahariha@linux.microsoft.com>
-In-Reply-To: <ZjFUwjMFMcvJr5KI@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="5bhcmolquvvegtpf"
+Content-Disposition: inline
+In-Reply-To: <53582ef1-6d05-4379-a445-5f879cd676b8@o2.pl>
 
-On 4/30/2024 1:29 PM, Rodrigo Vivi wrote:
-> On Tue, Apr 30, 2024 at 05:38:02PM +0000, Easwar Hariharan wrote:
->> I2C v7, SMBus 3.2, and I3C 1.1.1 specifications have replaced "master/slave"
->> with more appropriate terms. Inspired by and following on to Wolfram's
->> series to fix drivers/i2c/[1], fix the terminology for users of
->> I2C_ALGOBIT bitbanging interface, now that the approved verbiage exists
->> in the specification.
->>
->> Compile tested, no functionality changes intended
->>
->> [1]: https://lore.kernel.org/all/20240322132619.6389-1-wsa+renesas@sang-engineering.com/
->>
->> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
-> 
-> I'm glad to see this change!
-> 
-> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> 
->> ---
->>  drivers/gpu/drm/i915/display/dvo_ch7017.c     | 14 ++++-----
->>  drivers/gpu/drm/i915/display/dvo_ch7xxx.c     | 18 +++++------
->>  drivers/gpu/drm/i915/display/dvo_ivch.c       | 16 +++++-----
->>  drivers/gpu/drm/i915/display/dvo_ns2501.c     | 18 +++++------
->>  drivers/gpu/drm/i915/display/dvo_sil164.c     | 18 +++++------
->>  drivers/gpu/drm/i915/display/dvo_tfp410.c     | 18 +++++------
->>  drivers/gpu/drm/i915/display/intel_bios.c     | 22 +++++++-------
->>  drivers/gpu/drm/i915/display/intel_ddi.c      |  2 +-
->>  .../gpu/drm/i915/display/intel_display_core.h |  2 +-
->>  drivers/gpu/drm/i915/display/intel_dsi.h      |  2 +-
->>  drivers/gpu/drm/i915/display/intel_dsi_vbt.c  | 20 ++++++-------
->>  drivers/gpu/drm/i915/display/intel_dvo.c      | 14 ++++-----
->>  drivers/gpu/drm/i915/display/intel_dvo_dev.h  |  2 +-
->>  drivers/gpu/drm/i915/display/intel_gmbus.c    |  4 +--
->>  drivers/gpu/drm/i915/display/intel_sdvo.c     | 30 +++++++++----------
->>  drivers/gpu/drm/i915/display/intel_vbt_defs.h |  4 +--
->>  drivers/gpu/drm/i915/gvt/edid.c               | 28 ++++++++---------
->>  drivers/gpu/drm/i915/gvt/edid.h               |  4 +--
->>  drivers/gpu/drm/i915/gvt/opregion.c           |  2 +-
->>  19 files changed, 119 insertions(+), 119 deletions(-)
-> 
-> The chances of conflicts are high with this many changes,
-> but should be easy enough to deal with later, so feel free
-> to move with this i915 patch on any other tree and we catch-up
-> later.
-> 
-> Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> 
 
-Thanks for the review and ack! I actually thought that this might end up going in as individual
-patches via the various respective trees since it's now completely independent of Wolfram's enabling
-series with the drop of the final patch that was treewide.
+--5bhcmolquvvegtpf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-What do you think?
 
-Thanks,
-Easwar
+Adding Heiner...
 
+On Tue, Apr 30, 2024 at 09:39:03PM +0200, Mateusz Jo=C5=84czyk wrote:
+> Hello,
+>=20
+> I have received a regression report on
+> commit 13e3a512a29001c ("i2c: smbus: Support up to 8 SPD EEPROMs")
+> as I was subscribed to some kernel Bugzilla thread and I'm posting it here
+> to make you aware of it.
+>=20
+> This thread was
+>=20
+> Bug 213345 - i801_smbus: Timeout waiting for interrupt, driver can't acce=
+ss SMBus=20
+>=20
+> ruirui.yang@linux.dev on 2024-04-19 08:22:57 UTC wrote:
+> > I got similar issue on thinkpad X1 gen9 with latest 6.9.0-rc4+
+> > Git bisect the first bad commit is "13e3a512a29001c  i2c: smbus: Suppor=
+t up to 8 SPD EEPROMs
+> > "
+> >=20
+> > modprobe without param:
+> > [ 1290.401393] i801_smbus 0000:00:1f.4: SPD Write Disable is set
+> > [ 1290.401486] i801_smbus 0000:00:1f.4: SMBus using PCI interrupt
+> > [ 1290.403340] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1290.403383] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1290.403410] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1290.403437] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1290.403465] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1290.403492] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1290.403519] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1290.403546] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> >=20
+> > with param=20
+> > [ 1314.568785] i801_smbus 0000:00:1f.4: Interrupt disabled by user
+> > [ 1314.568837] i801_smbus 0000:00:1f.4: SPD Write Disable is set
+> > [ 1314.568894] i801_smbus 0000:00:1f.4: SMBus using po*lling
+> > [ 1314.570230] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1314.570257] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1314.570283] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1314.570310] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1314.570336] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1314.570362] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1314.570389] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+> > [ 1314.570415] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+>=20
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D213345
+>=20
+> The param mentioned was i2c-i801.disable_features=3D0x10, which disables =
+interrupt usage
+> of this driver.
+>=20
+> Please decide if this is serious enough to warrant a revert.
+>=20
+> Greetings,
+> Mateusz
+>=20
+>=20
+
+--5bhcmolquvvegtpf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmYx7uwACgkQFA3kzBSg
+KbY56hAApyd18s1XTbNkvQKTxaD25o149Usj9rZ5GmAG8BpkmHq4pDny2dTrFO9z
+SRnofnKId9t/uAkVQdWBK8RI4IuRKKk5ER3xJ/6DFECkWA6b1ZSYRzLsi8h7b2BR
+EmgCAM2Tiq1VsHnD6PAU4WSb8TUuypr/psD4a0C5vVi8exqAIx/sFeK+ps94iM0k
+qgJWNx8vF8xAmWLmjswHDkIyjeUKGi3MI6z8hc2NXoyR7B4vXisszVivMtlB7N0E
+TWb+tBmGaQ0kswQK8UtTt/++GZQh3fSNky17Wh1xByBjfrFQOh48sJWViniwBE2m
+gdeCmXjJPht+DHnL7HBjwUpExXgReU+Ej6f12T5ek103qEyH9pn38zNZqJW9PqzT
+PhmndNX4LHYpVE/AhLZ+mWLteBF0MmK1ZI/QBFUtM0pZzsU1zx1Qm2UzM6df8DWI
+83Qo9SlLEIhVJipzFPXT5JxvVf9j7XmT92uLR9Va47MK7iwzwkvFwKtZqCLvHQUZ
+JJp0T946Zk2pNl3K7QjDyn/ZuQo6LEKYw/K0XE46xvHprmWcxDCYeFxcF6Lo2RSS
+s8vsTwj3HZP1FLdA/WsCb9SxMHkNlIrMi/b3Nqg7nWjId1rxwwN6qlPWZUs+bTFi
+LEtq5OK2b0wjOifZZKFIrM5OP6aEIxmgS2s1k4xmvFtb/qrI+gM=
+=XhB/
+-----END PGP SIGNATURE-----
+
+--5bhcmolquvvegtpf--
 
