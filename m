@@ -1,136 +1,128 @@
-Return-Path: <linux-i2c+bounces-3379-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3380-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F36B38B9EC8
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 May 2024 18:42:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6216A8BA322
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 May 2024 00:26:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94B471F225E6
-	for <lists+linux-i2c@lfdr.de>; Thu,  2 May 2024 16:42:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 825BEB238B4
+	for <lists+linux-i2c@lfdr.de>; Thu,  2 May 2024 22:26:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CF7416C858;
-	Thu,  2 May 2024 16:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE62180A9E;
+	Thu,  2 May 2024 22:26:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TRjOtlaG"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="NhCrLKdI"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4481928FC;
-	Thu,  2 May 2024 16:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B8A357CB9;
+	Thu,  2 May 2024 22:26:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714668172; cv=none; b=Indq6ERGFZufeRx+7fKN/LVrnGQDPiiGSTGzhAdlsXIePIUCQYGJKHVzR8YID/SD8q+MTk/GiVqtG2oH9b0AFIbfyz2TRQ685AfwyhZtXhzH3iI27yFYmrcQAgWtA0xTus8aoB5ID2IBNgPEa6jXKU3C72wS1v8SoliLodUW7lA=
+	t=1714688799; cv=none; b=H5rOr9VvlIH0qj8R+JOubV1FpIeriGGTzNSfUeTJkazkTtayuA0DGwBNbTz/O8WXJwGpUO+e8tBQWdV+wXj0SY31WgLjrD7ZEO8EyF5IFNKz6UVzCX0FF+iZadums8CxAYK2CL5oo+RaTUkt3I9LEheAjlDPrMa3WZNR/1HhFjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714668172; c=relaxed/simple;
-	bh=cj5bYAt98fbHNpOz6Lk3FAQsG3zOEVkQQT9pOnQDzFE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V8895zxvNclFezriu1CEhxGdL+QF/MnQ1z7aoRPzYHMI9lIsOvNHvxDlHfUo00mqngwazPU+aWL0pjcumvUV72rGLNAFYQkX9PX8+sjEBBBidXLaXIUE+f+3fzDI4GB2vjZ2qQtt9Ei2jluHJbOLpIuGfhVhNgGrM94h1QrdVsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TRjOtlaG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA074C32789;
-	Thu,  2 May 2024 16:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714668171;
-	bh=cj5bYAt98fbHNpOz6Lk3FAQsG3zOEVkQQT9pOnQDzFE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TRjOtlaGF85tupGTKMBErbPBlfCZuvG+Nh2mzE7TWe4Bt5pvoN7vV2n6UboqGVGKH
-	 eqEK7yZtuGkH4lj5/US2yL9YCV10cJgn+Z4NEBngdaonz5aLmJ2kdKyVrnbtC0WgXd
-	 +glMCl04Yw4Rt4hfOoQTUCc/lSIDy6LCnIA432+0wAxrjVHFooZxsg+kXa18YQCOL3
-	 BDrCR54yV2qZj5B90JJ+UL1uk/HlQUgwTLRyzIMkpt2V/FbiS+u5Pw7WUDSw0ZhD+1
-	 vofVfAIvFf8n/BTeDKSM7GcPlT/lIqptFrtrfjM1qPWFd8lg1UiJvG/RmINGiEzty6
-	 XnMZzUYpA+pSw==
-Date: Thu, 2 May 2024 17:42:44 +0100
-From: Lee Jones <lee@kernel.org>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Jan Dabros <jsd@semihalf.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Jiawen Wu <jiawenwu@trustnetic.com>,
-	Mengyuan Lou <mengyuanlou@net-swift.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Duanqiang Wen <duanqiangwen@net-swift.com>,
-	"open list:SYNOPSYS DESIGNWARE I2C DRIVER" <linux-i2c@vger.kernel.org>,
-	"open list:WANGXUN ETHERNET DRIVER" <netdev@vger.kernel.org>
-Subject: Re: [PATCH 2/4] mfd: intel-lpss: Utilize i2c-designware.h
-Message-ID: <20240502164244.GA1200070@google.com>
-References: <20240423233622.1494708-1-florian.fainelli@broadcom.com>
- <20240423233622.1494708-3-florian.fainelli@broadcom.com>
- <ZihLhl8eLC1ntJZK@surfacebook.localdomain>
- <1d1467d1-b57b-4cc6-a995-4068d6741a73@broadcom.com>
- <20240502071751.GA5338@google.com>
- <6646b690-7b05-4a0e-a524-375b389ad591@broadcom.com>
+	s=arc-20240116; t=1714688799; c=relaxed/simple;
+	bh=tzRQzMAo0KYbIQARBspopH2O28PH5OzJsS1h1UoNqJY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ap3bR+Dkdqxe3KCEwbaZs0diB3yVgDVwhorh/DhDVGgLLnDmGvAR3ZH+CBUyEkWRkM1e9//NZ6wpQmkbksDYdSFhT5lZ9TUOtL1bJkbvoFz8jccpDA66HuWGb7VuH7Mn3TgER4tgwPe4z3SiK9QwF0m10X0Nsmtws90z3nxXgiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=NhCrLKdI; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [100.64.232.195] (unknown [20.29.225.195])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 518C5206B4FD;
+	Thu,  2 May 2024 15:26:37 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 518C5206B4FD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1714688797;
+	bh=NzMrFwSnELsNTouka86zwY4xBu0HDKLPheXHNRlf/UY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NhCrLKdI/ZqOMxIi0x/9IcKVE1fu8SJgV6IOu9yOzA4/X9AoPavE5e5S65Ugw3uBC
+	 sulaSRBperkkDcIDt2jCnwInTZEDOTYmaUAyGGeCvlgfS23LBxyBkoeXTUrIdi6qwD
+	 4F+b4DUgYEKEoHW556opdVdEoci1DJoGsON85j90=
+Message-ID: <076e0a0d-ad26-490e-9784-300ed52637ca@linux.microsoft.com>
+Date: Thu, 2 May 2024 15:26:36 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 12/12] fbdev/viafb: Make I2C terminology more inclusive
+To: Thomas Zimmermann <tzimmermann@suse.de>,
+ Florian Tobias Schandinat <FlorianSchandinat@gmx.de>,
+ Helge Deller <deller@gmx.de>,
+ "open list:VIA UNICHROME(PRO)/CHROME9 FRAMEBUFFER DRIVER"
+ <linux-fbdev@vger.kernel.org>,
+ "open list:FRAMEBUFFER LAYER" <dri-devel@lists.freedesktop.org>,
+ open list <linux-kernel@vger.kernel.org>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
+ "open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
+ <intel-gfx@lists.freedesktop.org>,
+ "open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
+ <intel-xe@lists.freedesktop.org>,
+ "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS"
+ <nouveau@lists.freedesktop.org>,
+ "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+ "open list:BTTV VIDEO4LINUX DRIVER" <linux-media@vger.kernel.org>
+References: <20240430173812.1423757-1-eahariha@linux.microsoft.com>
+ <20240430173812.1423757-13-eahariha@linux.microsoft.com>
+ <271ad513-0ea1-45df-ba0f-51582474ff34@suse.de>
+Content-Language: en-CA
+From: Easwar Hariharan <eahariha@linux.microsoft.com>
+In-Reply-To: <271ad513-0ea1-45df-ba0f-51582474ff34@suse.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6646b690-7b05-4a0e-a524-375b389ad591@broadcom.com>
 
-On Thu, 02 May 2024, Florian Fainelli wrote:
-
-> On 5/2/24 00:17, Lee Jones wrote:
-> > On Tue, 23 Apr 2024, Florian Fainelli wrote:
-> > 
-> > > 
-> > > 
-> > > On 4/23/2024 5:00 PM, Andy Shevchenko wrote:
-> > > > Tue, Apr 23, 2024 at 04:36:20PM -0700, Florian Fainelli kirjoitti:
-> > > > > Rather than open code the i2c_designware string, utilize the newly
-> > > > > defined constant in i2c-designware.h.
-> > > > 
-> > > > ...
-> > > > 
-> > > > >    static const struct mfd_cell intel_lpss_i2c_cell = {
-> > > > > -	.name = "i2c_designware",
-> > > > > +	.name = I2C_DESIGNWARE_NAME,
-> > > > >    	.num_resources = ARRAY_SIZE(intel_lpss_dev_resources),
-> > > > >    	.resources = intel_lpss_dev_resources,
-> > > > >    };
-> > > > 
-> > > > We have tons of drivers that are using explicit naming, why is this case
-> > > > special?
-> > > > 
-> > > 
-> > > It is not special, just one of the 3 cases outside of drivers/i2c/busses
-> > > that reference a driver living under drivers/i2c/busses, as I replied in the
-> > > cover letter, this is a contract between the various device drivers and
-> > > their users, so we should have a central place where it is defined, not
-> > > repeated.
-> > 
-> > I have always held the opinion that replacing user-facing strings with
-> > defines harms debugability, since grepping becomes a multi-stage
-> > process, often with ambiguous results (in the case of multiple
-> > definitions with the same name.  Please keep the string in-place.
+On 5/2/2024 3:46 AM, Thomas Zimmermann wrote:
 > 
-> I am not buying into that argument and the fact that Duangiang was able to
-> trip over the lack of an explicit contract between drivers seems like a
-> bigger obstacle than doing a multi-stage grep. Anyway, I have no skin in
-> this game, I just don't like seeing repetition and not stating contracts
-> between drivers more explicitly.
+> 
+> Am 30.04.24 um 19:38 schrieb Easwar Hariharan:
+>> I2C v7, SMBus 3.2, and I3C 1.1.1 specifications have replaced "master/slave"
+>> with more appropriate terms. Inspired by and following on to Wolfram's
+>> series to fix drivers/i2c/[1], fix the terminology for users of
+>> I2C_ALGOBIT bitbanging interface, now that the approved verbiage exists
+>> in the specification.
+>>
+>> Compile tested, no functionality changes intended
+>>
+>> [1]: https://lore.kernel.org/all/20240322132619.6389-1-wsa+renesas@sang-engineering.com/
+>>
+>> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+> 
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> 
 
-Good thing no one is asking you to buy into it then. :)
+Thanks for the ack! I had been addressing feedback as I got it on the v0 series, and it seems
+I missed out on updating viafb and smscufx to spec-compliant controller/target terminology like
+the v0->v1 changelog calls out before posting v1.
 
-I'm not sure how or if the code that failed to match was tested or what
-went wrong exactly and I'm pleased that the bug was caught and fixed.
+For smscufx, I feel phrasing the following line (as an example)
 
-However, swapping out matching strings with a define is a regression
-from a development perspective.  One which I've felt the pain of
-personally in the past.  I've pushed back on it before and I'm pushing
-back again.  We're not swapping out matching strings for defines.
+> -/* sets up I2C Controller for 100 Kbps, std. speed, 7-bit addr, host, 
+> +/* sets up I2C Controller for 100 Kbps, std. speed, 7-bit addr, *controller*, 
 
--- 
-Lee Jones [李琼斯]
+would actually impact readability negatively, so I propose to leave smscufx as is.
+
+For viafb, I propose making it compliant with the spec using the controller/target terminology and
+posting a v2 respin (which I can send out as soon as you say) and ask you to review again.
+
+What do you think?
+
+Thanks,
+Easwar
+
+>> ---
+>>   drivers/video/fbdev/via/chip.h    |  8 ++++----
+>>   drivers/video/fbdev/via/dvi.c     | 24 ++++++++++++------------
+>>   drivers/video/fbdev/via/lcd.c     |  6 +++---
+>>   drivers/video/fbdev/via/via_aux.h |  2 +-
+>>   drivers/video/fbdev/via/via_i2c.c | 12 ++++++------
+>>   drivers/video/fbdev/via/vt1636.c  |  6 +++---
+>>   6 files changed, 29 insertions(+), 29 deletions(-)
+>>
+
+<snip>
 
