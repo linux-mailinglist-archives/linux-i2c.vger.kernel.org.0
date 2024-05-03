@@ -1,259 +1,214 @@
-Return-Path: <linux-i2c+bounces-3385-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3386-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C04A8BA7F4
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 May 2024 09:39:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DBFA8BA96F
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 May 2024 11:05:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 414B128234F
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 May 2024 07:39:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D3881F22F51
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 May 2024 09:05:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0B4D147C60;
-	Fri,  3 May 2024 07:39:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A5E814E2FD;
+	Fri,  3 May 2024 09:05:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="l1WAHkFt";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="WugzJKS8";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="z+pKQcos";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="b1FkdEyV"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="TfPJXFaK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2046.outbound.protection.outlook.com [40.107.212.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14331474AB;
-	Fri,  3 May 2024 07:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714721979; cv=none; b=pQz1hGCQXS2f6LsijHEq74e4k02q4D9Z5RwdqvjtRvA/mBliP7ldZZDLRBDt12+nWXI/HHS32cS9Uaz+Rq2xyvSIc2Bv+r/iIMTwxRRjrn/ORODnsuo9Z3aXkC/Y9lnawFDnwBFdBeELHX+g48j2242pkjqrNTgk7AFQmzkfHt0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714721979; c=relaxed/simple;
-	bh=GQBew1/qJlvNTkgxM4kDUOeCxcM8UIukTDBqToT6Fbk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CIpQWAVJaHF/SqI6fWkeF0HJ5wl38VVZ6O9v2iZwagtpMuU4pp2gr4YCGqXP5EJn1p00XkuJZz7CEYYH3t9GlZ7+lHvAY2G4VDabAwSwvy/5Y9D/vovMzz4l+OOnmpxK3RCzvAtxO8Yd49WIaMj4PKK2qEBn5tlJaekGpzYAgKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=l1WAHkFt; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=WugzJKS8; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=z+pKQcos; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=b1FkdEyV; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id EC3D122B72;
-	Fri,  3 May 2024 07:39:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1714721976; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zC4n5/KOp6vqeKDwDsLw1bD+2gPkRxe5hP009QMQGPI=;
-	b=l1WAHkFtzff0Oi1c7MksftylSip13XAhH4VQNnKW4CvonoMIP/x3yN6AtWOvWRj5kToJVL
-	QMjyx8ywHcelra0n4bmMrNXUh+wDpOKCFr+Ef9bZocseOaXQxd+3Fh6zsUr6vXZ/rYzA/a
-	6sgt2qWdKSYnSLm/hptwGXKwJwoFzzU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1714721976;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zC4n5/KOp6vqeKDwDsLw1bD+2gPkRxe5hP009QMQGPI=;
-	b=WugzJKS82ovy1MgZm3UqVt3p4qhDofDMmmRaTt8k18I0ecI+Ths+TIRQQxqjgstOSgaqTn
-	G0FlmF4AuVIiXoDg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=z+pKQcos;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=b1FkdEyV
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1714721975; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zC4n5/KOp6vqeKDwDsLw1bD+2gPkRxe5hP009QMQGPI=;
-	b=z+pKQcos0Tld6Da6Fm8P+48qV7IvUHlNuLUJRwhN8nZSApr7JXhJeCaf1XKIUTONmvrfHy
-	LV3bse4K9zcE0VA7gI3S8rv6BRsqTNXkeDb3T7Y9JtQxjb+8ww7Vlb6fBMYzAjsLibPWFI
-	6fv0TZzYKGmB7yJbLjEa7mH0yYNa1EE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1714721975;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zC4n5/KOp6vqeKDwDsLw1bD+2gPkRxe5hP009QMQGPI=;
-	b=b1FkdEyVIqEA9KzBsgkLfnGrLxatk7E0y0n/8TwK/h1copLY7D18TuZkj2fEpOD0aRpinu
-	SRPPz36nEQT8fwDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 977A3139CB;
-	Fri,  3 May 2024 07:39:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id U2nQI7eUNGbqCwAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Fri, 03 May 2024 07:39:35 +0000
-Message-ID: <f1eccd9d-885f-4508-9325-3454ecc35eae@suse.de>
-Date: Fri, 3 May 2024 09:39:35 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB1A1367;
+	Fri,  3 May 2024 09:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714727147; cv=fail; b=fSOLihjnvlybJXOsdqxI13nV0sdJDuoZ+BoeIOBiYiJsOZ5SwuWi67ByARA3X8NVgnEciP9qOefJwrJQBNGDy12X4vcjEKsteg5BlTiot+G4RwVFIDJ9cSKANz/aU2YzKXFGAsxyIsd1AyuqBeplyLcHis4uvHBJg9z37OXALzk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714727147; c=relaxed/simple;
+	bh=eGanRzW2DpqC1ZPOQOBwlWHOzTec2dsds26uIFdQMCU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=q3Ck64+PVwHcB4MK4cqxbhBFVD3dbp3WCp/K3p3Sm4L5Si3HqPf1y11iZsStzjmjJaH2NrLHuOcvHm7vfwb6rtPFpWsRnx9HGcZ7ylkjxQGWu3XzkadfslBqmWVEsW6KngKVcM+EEVo/9EjNJ3+UTJUMlVa/OfR+mxrr/MAlKE8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=TfPJXFaK; arc=fail smtp.client-ip=40.107.212.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HTOHHAl8wTj00Gpac1koivtAX2A+VtTNycPTEOGmi0fEIauH9eRe7vQY3SlF73gZHn0rJWiOI2Ht0gqyhqsQobXMGl+pHzcn8uaZjH3z1sRF2gcNovuxhYBPe7bmyCDr9133GqSGYuhvTNLebyduPAgUpkNsI+o8KaV+ciBS/TgID9orqhk6O3XNfuI1vrPwXTiifqOCqoSeX9b51rIIro7JgzCfUPtbdKd/4YvyO/qamfXoljvlye6SRFlE/FaT8aJu5ku7N9P3vqVx3FOE5KSPB5DEE5R9/L4HiI889zC2U26K9mrrAqc+C8F1nhjDVoV6cTjCTRPPesvEIza8+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=50+MNcL2qQZZrxw+84dMTJ22XJJCXR76gKq+nKjeLfg=;
+ b=aX1KEhTo21cspbC9GhBik4YwiEFCzr9bWBS0Ha+B0IFeJW7CHLWPnpjFu6RWdp11M6vQdTedUl94eOCPcYtFcXJZHmytXg+IYowdb/HyJDtng9pOAUNiMyy5JQZznRaGsSFpRjLLyBR1dZa0wKicg3IlHT14GvCYtaH9FFQ8vRwB7kp0h1OtgjJq9s3FCJqOYKsRz+/vxTZ4Q31M4Q6XkziYZIJYDozxSHqJ/aKsxigwb047ZpVejNxFBqH4UF15g293X0V6f640N8jwUurF4S2lC6lUmg/lVQrCY/UxtT7WMS7VJEfpSiT34RS8U+hhnh7VAnug7LgWuGL1T+BYzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=50+MNcL2qQZZrxw+84dMTJ22XJJCXR76gKq+nKjeLfg=;
+ b=TfPJXFaKPoune73McTSvj2RKrE5GKFTlluDXTlrV6trQqHnOjCD8c2/djIxtQ8cj3XY1eC50nroT8wYyMKCyPUWZaGZNr1KeCsLg5xehV3blzqZX/lop3s4VUuuXus3Qtc6O74U07xP+3ztYfm4M2K+8E7vfVvW5HagSIEieaY0=
+Received: from DS7PR12MB5741.namprd12.prod.outlook.com (2603:10b6:8:70::7) by
+ PH0PR12MB8052.namprd12.prod.outlook.com (2603:10b6:510:28b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.30; Fri, 3 May
+ 2024 09:05:38 +0000
+Received: from DS7PR12MB5741.namprd12.prod.outlook.com
+ ([fe80::4a06:1053:ead5:ef39]) by DS7PR12MB5741.namprd12.prod.outlook.com
+ ([fe80::4a06:1053:ead5:ef39%5]) with mapi id 15.20.7544.029; Fri, 3 May 2024
+ 09:05:37 +0000
+From: "Boddu, Sai Pavan" <sai.pavan.boddu@amd.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "Simek, Michal"
+	<michal.simek@amd.com>, Lars-Peter Clausen <lars@metafoo.de>, Wolfram Sang
+	<wsa@kernel.org>
+Subject: RE: [PATCH] i2c: cadence: Avoid fifo clear after start
+Thread-Topic: [PATCH] i2c: cadence: Avoid fifo clear after start
+Thread-Index: AQHaSUfcsQJjTnMwH0iIfDUOatck5LDeSs0AgAA0hYCApibR8A==
+Date: Fri, 3 May 2024 09:05:37 +0000
+Message-ID:
+ <DS7PR12MB5741674CE218A971F52F3604B61F2@DS7PR12MB5741.namprd12.prod.outlook.com>
+References: <20240105125258.2470397-1-sai.pavan.boddu@amd.com>
+ <lzvb6oyinlmdrbaat6ayxioca5r2qf7wi3kt63lzorbjytmmbn@wfuz63znrzbr>
+ <DS7PR12MB5741FC0E92875C8DB7BFEEDFB6722@DS7PR12MB5741.namprd12.prod.outlook.com>
+ <pi4mct77spgoef3mfth7qcha73qrzlmvxhjrqrdf5rjfcxzlb4@zwxbyxf3httv>
+In-Reply-To: <pi4mct77spgoef3mfth7qcha73qrzlmvxhjrqrdf5rjfcxzlb4@zwxbyxf3httv>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS7PR12MB5741:EE_|PH0PR12MB8052:EE_
+x-ms-office365-filtering-correlation-id: 399d12ed-6c54-4ffb-53e3-08dc6b5032ef
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230031|376005|1800799015|366007|38070700009;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?LiIE4KMA4IGuqctaIJI3gqnxtxoYubHLVta+A3yKSHaQGWGFIZ3pcT2eCUDi?=
+ =?us-ascii?Q?sYbMaWl2+AvXlYaWpix9KxgZdSH96E0UGZ6n1sfnFw45+1ylhMB66ktFuI8m?=
+ =?us-ascii?Q?qBQ5MzUgYUg7xWmB5LA9y7E3sXVCRcuYnvd7qddbkfJ0cjXp6+glqSdWKoBX?=
+ =?us-ascii?Q?WFiIUysrPTYUCJSSdteUidQNED6nGfluLyeQAjNMzFpH9i96juunhTJlmU/Z?=
+ =?us-ascii?Q?CJ0o2M3d/QWzGho8tyFFcbEKTmcAx/U2EhjjP7ebIEOQ/irR6YFnqAr6d0za?=
+ =?us-ascii?Q?dIgzdw+l8PfNFTShvsIQyLbRZUDIiAy01JCWEXOgA7xx8DevCa03yQHuWai3?=
+ =?us-ascii?Q?XWTlgzUgtXo0yJ4iyRi9vFOR2nOdAHV1sBzR8yM377OLWop9375fa6iltr2n?=
+ =?us-ascii?Q?Y+UndaslmjfRoCO+IKoP4tR883KvDjrR4zWKAsE3CPejrnwZ9ZX8+P26wbOW?=
+ =?us-ascii?Q?1FfqNrhpFbIqrAajHyf/qBvTqb/vlJ8TQo/pJHco30P/tnN9rZG55a+rOxNX?=
+ =?us-ascii?Q?8iWo8CC64WY1mG5feX9XVjcb+/KKXX3CcM6lfWdNDqWI+5zCly4jR/BRqCYJ?=
+ =?us-ascii?Q?tJk6MF1EbxJvncwubxqlfje2jMPMjMEtsvyBqZ1RbZGqdQUGoq5Vd5n4Ox+z?=
+ =?us-ascii?Q?lIUAiaGKpKhka9Xw5dNO9yD315aRgh5krz+uId5vjTyOGzIplo2ERBDqrhBe?=
+ =?us-ascii?Q?j7JGMSpT6MvmzZ1809f3qxovH9CbTrd6e0SDjeSgpNl2pe7JsLgsTqwarcOH?=
+ =?us-ascii?Q?HH2ga574ZPrEQnfdCiw2Qh2AJVCLY+8aV/ylsWbFbsg+7DvABboszVcGsf+b?=
+ =?us-ascii?Q?8WG5mQPoITHBgiXutFnbaQdMAn86mbNNBxUeyn6touIx3GyzoW3V9qlIya12?=
+ =?us-ascii?Q?cpG287O9pE0PK7K4+pfSaAk/Vuft37ISTYjB9SmsRzjdOlZ7Re2VFf9JyUZx?=
+ =?us-ascii?Q?9btwRk5G9dLFsb7VTMkB4druq+Po3kP7pQ/BY1OXRavBoQ0Fw4UWFna1jXxZ?=
+ =?us-ascii?Q?4uUR+jWQ5vYVpr1QGvX++WohW4YUhi3nUl95Uft35QDBgu7TdKUSx5HTIXfF?=
+ =?us-ascii?Q?+MwFfhKi94GEJDBi88+36hvrQ4JOto0B7tck7mS7SvjMAbH2KbIc+ljxoo0o?=
+ =?us-ascii?Q?J8stvVqHk4kDktvbBQWuNHtwuHfISxZBaWwvk86sRvE9bDO+vylNvmWFyDTP?=
+ =?us-ascii?Q?jLvtz9PClDyRY6tuumWK6p5xeyJ/pXa3/Xc8JVI1qvZUN1s0Piy+BTCGazKr?=
+ =?us-ascii?Q?ZKu1Myd0zAe5qMN3kM0X2x12Wum0zfaK9nrnRrK2lkwegmKyxpHlK6tiuwSj?=
+ =?us-ascii?Q?zCUTUllZIil2tJVjEZPCiyy60jGHLdLnOBEGwwHD8dS1SQ=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5741.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?Nh/C3pm4zMpvXyDH6DIKw13o1UUgVdxsTLTb+ZZJxx5I/LIDiAeoVc5h6FcP?=
+ =?us-ascii?Q?XFX+v9mqFND/gWTStdFEof3P5Qg8jf2+iZe2tACVAGxuIf6j7K8NEUX4FHm9?=
+ =?us-ascii?Q?U8hFbQ/T97T0SzouwVgz7Mv8M8eudmBqW1ckGtLPXmyqgrIBC/J/TaQkYb0O?=
+ =?us-ascii?Q?2tfxOw9EU7TrRa1PoxfsnTC8G5sxy/ydp278+iI5CGhcZEbA0WD5ZOlx6IXz?=
+ =?us-ascii?Q?IrW4ytKoVAK7/ZWfrmxBUY0gQnj+fjWdxXrxLhG7p0miBv/OWvK3HDSbIriI?=
+ =?us-ascii?Q?S6Pkvyf7vujLf6FMAB1qC+O5Ja5/mvWgMITTvNmDiRxCyB6MD59G1XwsGDmN?=
+ =?us-ascii?Q?217ix242Zt1BAduqJFFLzihM6YkEX8GzXXqfCWKX1Trv2Lon8TH7lGfOUMBe?=
+ =?us-ascii?Q?+AxKxfGR9Y57P1r49IN+mPZm89haQ8co+kwMDCBvutalmjm0bxgMz4s6wBOb?=
+ =?us-ascii?Q?p30/ehNkJgHOhAsviVmZ7xKxP8tlz9y3hZmyLpxB2TnUetCkzTY9iHy1b42Z?=
+ =?us-ascii?Q?+RaX6I2UfFqAmvK9IBu8J95OCcjfT+ubzKE/Fec08ArX7GXgamibX4hvofr7?=
+ =?us-ascii?Q?jEdlTHRbPozJjMbL6EWIAu8JFm3HymnFRy5EfcT/+MaJKaMJIFZNM9xg2B1c?=
+ =?us-ascii?Q?Rtlpc2Ek8sNlMGMFmz9Qzg4f6bN8usWhIauwrJZyMNuUUjgWVTb2RKaexetk?=
+ =?us-ascii?Q?mWfCTNBfLTEBUOSnVV6cv3iFgEk4ju5LsXvOV2L6Eil7TNgMiSGL3/Y8B8cU?=
+ =?us-ascii?Q?1PuM6QF4TFjZM1oewmZ30ZAML3rPyuBRqXKNArCXPwqmOBtnLmLFHVQ0YPgY?=
+ =?us-ascii?Q?t0svlK/JwLd9KsCHk+zt6bBoy3KaLxnsnfm0TTVqCFG2gizf1Wg/0ntBbesK?=
+ =?us-ascii?Q?Tvr2PY2Wp2MsHQykIB1W/4CcOHqr8KmKRM1NP2VQw7WRKsxZH6k7wyzShqUK?=
+ =?us-ascii?Q?E+4gqNijlfVPNvZw/0LXcc4Nubr76Pxi0PaOifpVYXyDfybwd24vxZedO+n7?=
+ =?us-ascii?Q?Q2VQPcnNEyw0FawYt0Rb6b0U3vWW8irpZZHDiuTbvvFpmWoGPcro5AkXD4NS?=
+ =?us-ascii?Q?/XkGnjhpJ8HV2KaYcWosMvfp78NutJ25KTrStx4Sp7MTcxbfMvyBTEdA60U7?=
+ =?us-ascii?Q?spy9v7Ov1jp2scT9xT44Nc0Bdck9XqDcifrTFPKZwYTiEftEwmV8nSwBm0G2?=
+ =?us-ascii?Q?W9IUoFJ79WvhCUCN6waLsmD3hnyVreFO4AUuHqgL77s+OojMCQyTA6F++Eow?=
+ =?us-ascii?Q?QLv/73Ygy9GG1Ryk7qKSkF0O7IGEGBUlz+HU92tR+tKZ9jIZBlfFNSmIC6Ip?=
+ =?us-ascii?Q?7fOHYpOJpvQz03OdYFRflX6Fu47CC6ZV6Xi9YeMBlL0Ppx3fBg8WuPAUAn1+?=
+ =?us-ascii?Q?/LoIpBpZyL5hsPz0x3tScBdf/nqcb5KwVR027+EbhlnxH82/E63WVrxg+Z8u?=
+ =?us-ascii?Q?c7hht2aaYR/6TA/IR8D0EWxXFNv8B8v38VaVahfYNF+REkIOrUCpa9JEV3mn?=
+ =?us-ascii?Q?yOSXQ1+IeE8GdQ4vzPFP+LEbDftke4c0gmpGpyLrTD2JdlPA/b3sIzTpC6mI?=
+ =?us-ascii?Q?mQ2gx1CB5zEXrHh3sVU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 12/12] fbdev/viafb: Make I2C terminology more inclusive
-To: Easwar Hariharan <eahariha@linux.microsoft.com>,
- Florian Tobias Schandinat <FlorianSchandinat@gmx.de>,
- Helge Deller <deller@gmx.de>,
- "open list:VIA UNICHROME(PRO)/CHROME9 FRAMEBUFFER DRIVER"
- <linux-fbdev@vger.kernel.org>,
- "open list:FRAMEBUFFER LAYER" <dri-devel@lists.freedesktop.org>,
- open list <linux-kernel@vger.kernel.org>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
- "open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
- <intel-gfx@lists.freedesktop.org>,
- "open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
- <intel-xe@lists.freedesktop.org>,
- "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS"
- <nouveau@lists.freedesktop.org>,
- "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
- "open list:BTTV VIDEO4LINUX DRIVER" <linux-media@vger.kernel.org>
-References: <20240430173812.1423757-1-eahariha@linux.microsoft.com>
- <20240430173812.1423757-13-eahariha@linux.microsoft.com>
- <271ad513-0ea1-45df-ba0f-51582474ff34@suse.de>
- <076e0a0d-ad26-490e-9784-300ed52637ca@linux.microsoft.com>
-Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <076e0a0d-ad26-490e-9784-300ed52637ca@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -5.00
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: EC3D122B72
-X-Spam-Level: 
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-5.00 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	DWL_DNSWL_MED(-2.00)[suse.de:dkim];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
-	MX_GOOD(-0.01)[];
-	FREEMAIL_TO(0.00)[linux.microsoft.com,gmx.de,vger.kernel.org,lists.freedesktop.org];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_DN_ALL(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmx.de];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[renesas];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,suse.de:email]
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5741.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 399d12ed-6c54-4ffb-53e3-08dc6b5032ef
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 May 2024 09:05:37.5249
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zNIs7grajkecOSoFnlcDKaf4IxIS8PjxbxJoGNAvgO2klK8jtTOiLyFQJl1/H2oZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8052
 
-Hi
+Hi Andi,
 
-Am 03.05.24 um 00:26 schrieb Easwar Hariharan:
-> On 5/2/2024 3:46 AM, Thomas Zimmermann wrote:
->>
->> Am 30.04.24 um 19:38 schrieb Easwar Hariharan:
->>> I2C v7, SMBus 3.2, and I3C 1.1.1 specifications have replaced "master/slave"
->>> with more appropriate terms. Inspired by and following on to Wolfram's
->>> series to fix drivers/i2c/[1], fix the terminology for users of
->>> I2C_ALGOBIT bitbanging interface, now that the approved verbiage exists
->>> in the specification.
->>>
->>> Compile tested, no functionality changes intended
->>>
->>> [1]: https://lore.kernel.org/all/20240322132619.6389-1-wsa+renesas@sang-engineering.com/
->>>
->>> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
->> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
->>
-> Thanks for the ack! I had been addressing feedback as I got it on the v0 series, and it seems
-> I missed out on updating viafb and smscufx to spec-compliant controller/target terminology like
-> the v0->v1 changelog calls out before posting v1.
+Sorry, I did not close on this one.
+Anyway I will re-spin fixing the commit message issues. More comments inlin=
+e below.
+
+>-----Original Message-----
+>From: Andi Shyti <andi.shyti@kernel.org>
+>Sent: Thursday, January 18, 2024 2:36 AM
+>To: Boddu, Sai Pavan <sai.pavan.boddu@amd.com>
+>Cc: linux-kernel@vger.kernel.org; linux-i2c@vger.kernel.org; linux-arm-
+>kernel@lists.infradead.org; Simek, Michal <michal.simek@amd.com>; Lars-
+>Peter Clausen <lars@metafoo.de>; Wolfram Sang <wsa@kernel.org>
+>Subject: Re: [PATCH] i2c: cadence: Avoid fifo clear after start
 >
-> For smscufx, I feel phrasing the following line (as an example)
+>Hi,
 >
->> -/* sets up I2C Controller for 100 Kbps, std. speed, 7-bit addr, host,
->> +/* sets up I2C Controller for 100 Kbps, std. speed, 7-bit addr, *controller*,
-> would actually impact readability negatively, so I propose to leave smscufx as is.
-
-Why? I don't see much of a difference.
-
+>> >> b/drivers/i2c/busses/i2c-cadence.c
+>> >> index de3f58b60dce..6f7d753a8197 100644
+>> >> --- a/drivers/i2c/busses/i2c-cadence.c
+>> >> +++ b/drivers/i2c/busses/i2c-cadence.c
+>> >> @@ -633,6 +633,7 @@ static void cdns_i2c_mrecv(struct cdns_i2c *id)
+>> >>
+>> >>  	if (hold_clear) {
+>> >>  		ctrl_reg &=3D ~CDNS_I2C_CR_HOLD;
+>> >> +		ctrl_reg &=3D ~CDNS_I2C_CR_CLR_FIFO;
+>> >
+>> >I'm wondering whether the whole ctrl_reg should be reset after the firs=
+t
+>write.
 >
-> For viafb, I propose making it compliant with the spec using the controller/target terminology and
-> posting a v2 respin (which I can send out as soon as you say) and ask you to review again.
+>> [Boddu, Sai Pavan] previous implementation of read-modify-write was good
+>then ?
 >
-> What do you think?
-
-I think we should adopt the spec's language everywhere. That makes it 
-possible to grep the spec for terms used in the source code. Using 
-'host' in smscufx appears to introduce yet another term. If you are 
-worried about using 'I2C controller' and 'controller' in the same 
-sentence, you can replace 'I2C controller' with 'DDC channel'. That's 
-even more precise about the purpose of this code.
-
-Best regards
-Thomas
-
+>I don't know, I'm just asking... because rather than read-modify-write, th=
+is is
+>read-modify-write-modify-write :-)
 >
-> Thanks,
-> Easwar
->
->>> ---
->>>    drivers/video/fbdev/via/chip.h    |  8 ++++----
->>>    drivers/video/fbdev/via/dvi.c     | 24 ++++++++++++------------
->>>    drivers/video/fbdev/via/lcd.c     |  6 +++---
->>>    drivers/video/fbdev/via/via_aux.h |  2 +-
->>>    drivers/video/fbdev/via/via_i2c.c | 12 ++++++------
->>>    drivers/video/fbdev/via/vt1636.c  |  6 +++---
->>>    6 files changed, 29 insertions(+), 29 deletions(-)
->>>
-> <snip>
->
+>I'm just wondering if after the first write ctrl_reg is still holding a va=
+lid value.
+[Boddu, Sai Pavan] Yes, all bits in ctrl_reg stay as configured except CLR_=
+FIFO which is self-clearing.
+None of the other bits would change state.
 
--- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstrasse 146, 90461 Nuernberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-HRB 36809 (AG Nuernberg)
+CLR_FIFO post start of transactions should not be allowed; this patch addre=
+ss the same.
 
+Regards,
+Sai Pavan=20
+>
+>Andi
 
