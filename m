@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-3401-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3402-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82F068BB289
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 May 2024 20:17:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F6C18BB28D
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 May 2024 20:17:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD5BF1C23AD1
-	for <lists+linux-i2c@lfdr.de>; Fri,  3 May 2024 18:17:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 179251F25395
+	for <lists+linux-i2c@lfdr.de>; Fri,  3 May 2024 18:17:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1572915956B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B37E6159589;
 	Fri,  3 May 2024 18:15:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="BzM1EruY"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="RbaGjOBB"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 830EA15886F;
-	Fri,  3 May 2024 18:15:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39A2315886D;
+	Fri,  3 May 2024 18:15:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714760123; cv=none; b=pbG/8w4+P52r2o4d/m1SplbdA+vLb36X3mxORRyS0YpyfT9IOsPd9XM3qK8FsagLS7kLBh2t3H0VRogCVK+WsgkVf6JH0CdofNy3VKQ/d1ZBib8qmGPr7g71V9XiRctDIrELYlVT3fHKvvZ6EzWKU8+wJt5INNBxkG9pEuguwPk=
+	t=1714760124; cv=none; b=jhzL9Os+qxN5mSWrqZ9XxvCgTZo4II4oponGHttHxKHTCheSAznyzb2Xse3dq5saJAtSalIaCW1GoYPmluiTXXSkF1C4NYbVSI4avQspYUOCZ6/X1NbbYd6OvgBP1XKMZXiIMBqSpIs9iqJQKADDXBytkTJCw/bToG3qoE8yFbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714760123; c=relaxed/simple;
-	bh=HWOur8mMNKLom8n/Yk3LM09hNfjdJiCVYJUwP7f6nvs=;
+	s=arc-20240116; t=1714760124; c=relaxed/simple;
+	bh=wLq3sm8LLTny1er+ZAX4jFReI7BFVWVfuWHBZaZCj/k=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Iy44IBNsPb5FRX6hnWI00v1gzrZmGhJNerOocKfi3RQAcgo0fMEpWU6WyA2lePL7Khm+kDamkIWk2xKithtiO4hYLOjVc+u7/Tsx7irbVtswlwUbOt6O2IWewx/GjZR/iRlj88r4A/6xCDpr/Z2rUgQFEvrsIPYhF7YITPYo8xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=BzM1EruY; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=PUo7s9a5MCdg6iedHX8X4LOIOOREJxLS5iqzWSr6IIdCIgNca/vq78kjYf8KtAOmgaMHwXY0jIo/mQBV8FIAQKcvTijoIcn4OdAQzl3hkcdedaAO2UVnscPsS5EHHvBYGFYESbwBjIhiOqqQJ0cV0dheC2xmSSaLd9WI714k4nk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=RbaGjOBB; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from rrs24-12-35.corp.microsoft.com (unknown [131.107.8.16])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 28BF8206B4F5;
+	by linux.microsoft.com (Postfix) with ESMTPSA id E4C07207DBD3;
 	Fri,  3 May 2024 11:15:22 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 28BF8206B4F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E4C07207DBD3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1714760122;
-	bh=bQBQraGFvzhYBeoO4i27QnX+vrBgJBB6lkWb2f0RYG4=;
+	s=default; t=1714760123;
+	bh=GRfclEajWoxq9anjZ8/quZpV/Z3y2+4plsXg8F9UrVY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BzM1EruYArXSoGqVOAyjgaL7cxLbWCPnUwOxTT5ns7UdswCZ4BDGXiv50bvCSBZ+x
-	 5BJ7M6ddV4p76I0AQVwvP81spMsyVeWe5ICb0uxnbSVHMkqypYiucp+x/UA1sn8prm
-	 zAWMvt7hag5VChWD0FvyLcb0m6gkN6LjFdNy024E=
+	b=RbaGjOBBdDpdkReR4G1Vy/PQmVk7kDqLiUu/ZWwLqHH3iZsD3GLww0ZwrbgD3eg6e
+	 P8CoCikMLUwY0jvmFyD939JMdB60FBBltMTPH5dXcJoMhNDi3+Ff/Am1+J6gq3l6rP
+	 ArWOYoPFGDHm1xbRHIAeC4dLAjQygket18Gjs7oE=
 From: Easwar Hariharan <eahariha@linux.microsoft.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Easwar Hariharan <eahariha@linux.microsoft.com>,
-	linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)),
+To: Andy Walls <awalls@md.metrocast.net>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org (open list:IVTV VIDEO4LINUX DRIVER),
 	linux-kernel@vger.kernel.org (open list)
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
@@ -54,10 +54,11 @@ Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS),
 	linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
 	linux-media@vger.kernel.org (open list:BTTV VIDEO4LINUX DRIVER),
-	linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER)
-Subject: [PATCH v2 07/12] media: cx25821: Make I2C terminology more inclusive
-Date: Fri,  3 May 2024 18:13:28 +0000
-Message-Id: <20240503181333.2336999-8-eahariha@linux.microsoft.com>
+	linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER),
+	Easwar Hariharan <eahariha@linux.microsoft.com>
+Subject: [PATCH v2 08/12] media: ivtv: Make I2C terminology more inclusive
+Date: Fri,  3 May 2024 18:13:29 +0000
+Message-Id: <20240503181333.2336999-9-eahariha@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240503181333.2336999-1-eahariha@linux.microsoft.com>
 References: <20240503181333.2336999-1-eahariha@linux.microsoft.com>
@@ -81,82 +82,94 @@ Compile tested, no functionality changes intended
 
 Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 ---
- drivers/media/pci/cx25821/cx25821-core.c         | 2 +-
- drivers/media/pci/cx25821/cx25821-i2c.c          | 6 +++---
- drivers/media/pci/cx25821/cx25821-medusa-video.c | 2 +-
- drivers/media/pci/cx25821/cx25821.h              | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/media/pci/ivtv/ivtv-i2c.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
-index 6627fa9166d3..a9af18910c1f 100644
---- a/drivers/media/pci/cx25821/cx25821-core.c
-+++ b/drivers/media/pci/cx25821/cx25821-core.c
-@@ -877,7 +877,7 @@ static int cx25821_dev_setup(struct cx25821_dev *dev)
- 	dev->pci_slot = PCI_SLOT(dev->pci->devfn);
- 	dev->pci_irqmask = 0x001f00;
+diff --git a/drivers/media/pci/ivtv/ivtv-i2c.c b/drivers/media/pci/ivtv/ivtv-i2c.c
+index c052c57c6dce..a22c7caa92f7 100644
+--- a/drivers/media/pci/ivtv/ivtv-i2c.c
++++ b/drivers/media/pci/ivtv/ivtv-i2c.c
+@@ -33,14 +33,14 @@
+     Some more general comments about what we are doing:
  
--	/* External Master 1 Bus */
-+	/* External Controller 1 Bus */
- 	dev->i2c_bus[0].nr = 0;
- 	dev->i2c_bus[0].dev = dev;
- 	dev->i2c_bus[0].reg_stat = I2C1_STAT;
-diff --git a/drivers/media/pci/cx25821/cx25821-i2c.c b/drivers/media/pci/cx25821/cx25821-i2c.c
-index 0ef4cd6528a0..0000f3322dd2 100644
---- a/drivers/media/pci/cx25821/cx25821-i2c.c
-+++ b/drivers/media/pci/cx25821/cx25821-i2c.c
-@@ -33,7 +33,7 @@ do {									\
- #define I2C_EXTEND  (1 << 3)
- #define I2C_NOSTOP  (1 << 4)
+     The i2c bus is a 2 wire serial bus, with clock (SCL) and data (SDA)
+-    lines.  To communicate on the bus (as a master, we don't act as a slave),
++    lines.  To communicate on the bus (as a controller, we don't act as a target),
+     we first initiate a start condition (ivtv_start).  We then write the
+     address of the device that we want to communicate with, along with a flag
+-    that indicates whether this is a read or a write.  The slave then issues
++    that indicates whether this is a read or a write.  The target then issues
+     an ACK signal (ivtv_ack), which tells us that it is ready for reading /
+     writing.  We then proceed with reading or writing (ivtv_read/ivtv_write),
+     and finally issue a stop condition (ivtv_stop) to make the bus available
+-    to other masters.
++    to other controllers.
  
--static inline int i2c_slave_did_ack(struct i2c_adapter *i2c_adap)
-+static inline int i2c_target_did_ack(struct i2c_adapter *i2c_adap)
+     There is an additional form of transaction where a write may be
+     immediately followed by a read.  In this case, there is no intervening
+@@ -379,7 +379,7 @@ static int ivtv_waitsda(struct ivtv *itv, int val)
+ 	return 0;
+ }
+ 
+-/* Wait for the slave to issue an ACK */
++/* Wait for the target to issue an ACK */
+ static int ivtv_ack(struct ivtv *itv)
  {
- 	struct cx25821_i2c *bus = i2c_adap->algo_data;
- 	struct cx25821_dev *dev = bus->dev;
-@@ -85,7 +85,7 @@ static int i2c_sendbytes(struct i2c_adapter *i2c_adap,
- 		if (!i2c_wait_done(i2c_adap))
- 			return -EIO;
+ 	int ret = 0;
+@@ -396,7 +396,7 @@ static int ivtv_ack(struct ivtv *itv)
+ 	ivtv_scldelay(itv);
+ 	ivtv_setscl(itv, 1);
+ 	if (!ivtv_waitsda(itv, 0)) {
+-		IVTV_DEBUG_I2C("Slave did not ack\n");
++		IVTV_DEBUG_I2C("Target did not ack\n");
+ 		ret = -EREMOTEIO;
+ 	}
+ 	ivtv_setscl(itv, 0);
+@@ -407,7 +407,7 @@ static int ivtv_ack(struct ivtv *itv)
+ 	return ret;
+ }
  
--		if (!i2c_slave_did_ack(i2c_adap))
-+		if (!i2c_target_did_ack(i2c_adap))
- 			return -EIO;
+-/* Write a single byte to the i2c bus and wait for the slave to ACK */
++/* Write a single byte to the i2c bus and wait for the target to ACK */
+ static int ivtv_sendbyte(struct ivtv *itv, unsigned char byte)
+ {
+ 	int i, bit;
+@@ -427,7 +427,7 @@ static int ivtv_sendbyte(struct ivtv *itv, unsigned char byte)
+ 		}
+ 		ivtv_setscl(itv, 1);
+ 		if (!ivtv_waitscl(itv, 1)) {
+-			IVTV_DEBUG_I2C("Slave not ready for bit\n");
++			IVTV_DEBUG_I2C("Target not ready for bit\n");
+ 			return -EREMOTEIO;
+ 		}
+ 	}
+@@ -471,7 +471,7 @@ static int ivtv_readbyte(struct ivtv *itv, unsigned char *byte, int nack)
+ 	return 0;
+ }
  
- 		dprintk(1, "%s(): returns 0\n", __func__);
-@@ -174,7 +174,7 @@ static int i2c_readbytes(struct i2c_adapter *i2c_adap,
- 		cx_write(bus->reg_ctrl, bus->i2c_period | (1 << 2) | 1);
- 		if (!i2c_wait_done(i2c_adap))
- 			return -EIO;
--		if (!i2c_slave_did_ack(i2c_adap))
-+		if (!i2c_target_did_ack(i2c_adap))
- 			return -EIO;
+-/* Issue a start condition on the i2c bus to alert slaves to prepare for
++/* Issue a start condition on the i2c bus to alert targets to prepare for
+    an address write */
+ static int ivtv_start(struct ivtv *itv)
+ {
+@@ -534,7 +534,7 @@ static int ivtv_stop(struct ivtv *itv)
+ 	return 0;
+ }
  
- 		dprintk(1, "%s(): returns 0\n", __func__);
-diff --git a/drivers/media/pci/cx25821/cx25821-medusa-video.c b/drivers/media/pci/cx25821/cx25821-medusa-video.c
-index f0a1ac77f048..67a18add6ed3 100644
---- a/drivers/media/pci/cx25821/cx25821-medusa-video.c
-+++ b/drivers/media/pci/cx25821/cx25821-medusa-video.c
-@@ -659,7 +659,7 @@ int medusa_video_init(struct cx25821_dev *dev)
- 	if (ret_val < 0)
- 		goto error;
+-/* Write a message to the given i2c slave.  do_stop may be 0 to prevent
++/* Write a message to the given i2c target.  do_stop may be 0 to prevent
+    issuing the i2c stop condition (when following with a read) */
+ static int ivtv_write(struct ivtv *itv, unsigned char addr, unsigned char *data, u32 len, int do_stop)
+ {
+@@ -558,7 +558,7 @@ static int ivtv_write(struct ivtv *itv, unsigned char addr, unsigned char *data,
+ 	return ret;
+ }
  
--	/* Turn off Master source switch enable */
-+	/* Turn off Controller source switch enable */
- 	value = cx25821_i2c_read(&dev->i2c_bus[0], MON_A_CTRL, &tmp);
- 	value &= 0xFFFFFFDF;
- 	ret_val = cx25821_i2c_write(&dev->i2c_bus[0], MON_A_CTRL, value);
-diff --git a/drivers/media/pci/cx25821/cx25821.h b/drivers/media/pci/cx25821/cx25821.h
-index 3aa7604fb944..e96be9127467 100644
---- a/drivers/media/pci/cx25821/cx25821.h
-+++ b/drivers/media/pci/cx25821/cx25821.h
-@@ -234,7 +234,7 @@ struct cx25821_dev {
- 
- 	u32 clk_freq;
- 
--	/* I2C adapters: Master 1 & 2 (External) & Master 3 (Internal only) */
-+	/* I2C adapters: Controller 1 & 2 (External) & Controller 3 (Internal only) */
- 	struct cx25821_i2c i2c_bus[3];
- 
- 	int nr;
+-/* Read data from the given i2c slave.  A stop condition is always issued. */
++/* Read data from the given i2c target.  A stop condition is always issued. */
+ static int ivtv_read(struct ivtv *itv, unsigned char addr, unsigned char *data, u32 len)
+ {
+ 	int retry, ret = -EREMOTEIO;
 -- 
 2.34.1
 
