@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3415-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3416-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61B848BBAF4
-	for <lists+linux-i2c@lfdr.de>; Sat,  4 May 2024 13:50:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22F578BBAFC
+	for <lists+linux-i2c@lfdr.de>; Sat,  4 May 2024 13:55:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBF181F21F80
-	for <lists+linux-i2c@lfdr.de>; Sat,  4 May 2024 11:50:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C09FD28273C
+	for <lists+linux-i2c@lfdr.de>; Sat,  4 May 2024 11:55:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CECC200DE;
-	Sat,  4 May 2024 11:50:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BBDA208C4;
+	Sat,  4 May 2024 11:55:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jdh6kJvj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IZBqNNX1"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20E1F513;
-	Sat,  4 May 2024 11:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA36200DE;
+	Sat,  4 May 2024 11:55:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714823428; cv=none; b=ZyYSTdXoHvY/WYZhXJi+YymIGT64vGZeRZsJENyiZKFLsJ1t7YyRIPpnG3M4GJ6sCy/b/szhXgH/S06urhZjR6ClkvAaSTV/SQdtzDDyJwt1/CPvCeuT5oGSmT4lhjVlfCZswJKKQAdm21Df/bmTpY5lz/PNRVpCWJJiRLiYNTY=
+	t=1714823727; cv=none; b=I2QaVrQLq5fG/rq7rz79tuacjc9zon76mjILS1czio5Ju5TVzmbghicwR+0Fs8/MPe3ZuMFPhyxrowJqyXAovnJ0svpEQQ21OUAa4vNCojdqk3779Xy/jjsEUY3VlT81EjlJ+N3B8CcT9Wrr760FlWPJMggT7v/2LrW6rW/Bj70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714823428; c=relaxed/simple;
-	bh=dq8QtycUf+wkQxrsoNbONtWcPfDnxfNHqIFbsIOuZEk=;
+	s=arc-20240116; t=1714823727; c=relaxed/simple;
+	bh=NPoACW8DYNp6GZJ3amyL+KgYI51JmnSB/XDaYx9gg5o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cODVie5zsE8fdWJxq9uV4wMPnVxL9KUnKAgqC2DuIcGCy58x5ilsgxQBSRIpKvyqKsTaXruCN+5GlZoXX0fEdfRUi9g/UD5G7GhWbOanCvm7gzJiELzxqG4Jmgiaz9khSopSzxOIsyf10AbC4P+TCDeQqYq26Pjrq0Vrcw1Vg3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jdh6kJvj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A850C072AA;
-	Sat,  4 May 2024 11:50:24 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=KTbXinBCGZaDEYhuhj/NlmxX/TrI4/egrl/TrqmE4NovpFluK4J/lxilXPZ5UBQnT4Bh/OnUgrWLH03+O3RPwGJS5LuvAUfI5ZUAwhY4iuojbJlJ4B8Iy0doQsSvEZtFvcsTYDFnFQTpABTumBXADxpceE44DPCihpc4GHLF/rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IZBqNNX1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F025C072AA;
+	Sat,  4 May 2024 11:55:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714823428;
-	bh=dq8QtycUf+wkQxrsoNbONtWcPfDnxfNHqIFbsIOuZEk=;
+	s=k20201202; t=1714823727;
+	bh=NPoACW8DYNp6GZJ3amyL+KgYI51JmnSB/XDaYx9gg5o=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jdh6kJvjTYBynzpzQN7moyxVLm3dZ7tmkxjfREYMS/6Ad6NdcVwkgY8UQ2DgBgrx7
-	 +m5RLs2ZY/bj6ILCJET3a8LXjVjI3p3t46QaL5jeGrmcdFgE3bGeHlUDow1G0Y7WUE
-	 wY/jZykqJUydPDJs8CrRQPSZPQbokSrFbLAHEMUubgVxDf7S9BtPYvRvtzzyAzdLhr
-	 UFax9vUd9zstdkLUeTh035sjDYsVggpuGkP9VdXgBflO3o6JrsB4rgRyxfYEWBFsw8
-	 vCyU9Yf/N7vJMN4oE0WHIFfNfoa83jSS2fmy6ViuRgc76zPc1P0dAtO8J3Pd6DBJGM
-	 XWq/zYcDYOdjg==
-Message-ID: <e98ade57-0646-49d4-8b41-ab6f936bb1f0@kernel.org>
-Date: Sat, 4 May 2024 13:50:22 +0200
+	b=IZBqNNX18019PLh58E5UQmu+DFS4t0PboI5OlUpdtWCksRYRebFFM2a9M+cXc5v6W
+	 OAT1e5IBN45IrNU0hpsICzg2P3xmh9V/y8WhSxD76pqKuaRU7zGF7/UTBfkbSSd8yY
+	 a3DLCUDbAeptggnZnzkqgJDdbPyB+zPOmS9UnCLl1gZMEZDNIQswk8d5/Ol4L3LRyI
+	 2bzd/q0E90cZhdJ+U/DVrfUnTtRal8ElT34cMJaVTXiDJOdl+Fky7M+pnXCSFSAJ/E
+	 mksHd3LW/kHPjtx7lh0N8Iabced5M4D0izfo9YRd7tIrVB1j5AQple5uuOcYOUXiL4
+	 TSnVxJie/eing==
+Message-ID: <0a43b522-7c07-43a0-b4b0-155c3cf94177@kernel.org>
+Date: Sat, 4 May 2024 13:55:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 04/17] dt-bindings: fsi: p9-occ: Convert to json-schema
+Subject: Re: [PATCH v4 08/17] dt-bindings: fsi: ast2600-fsi-master: Convert to
+ json-schema
 To: Eddie James <eajames@linux.ibm.com>, linux-aspeed@lists.ozlabs.org
 Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-fsi@lists.ozlabs.org, linux-spi@vger.kernel.org,
@@ -58,9 +59,9 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au,
  andrew@codeconstruct.com.au, andi.shyti@kernel.org
 References: <20240429210131.373487-1-eajames@linux.ibm.com>
- <20240429210131.373487-5-eajames@linux.ibm.com>
- <0fcadbe6-7615-498e-89c0-e3b072c4828c@kernel.org>
- <e3601656-84d3-47e1-9cbd-d2cb0dde5f51@linux.ibm.com>
+ <20240429210131.373487-9-eajames@linux.ibm.com>
+ <af51132f-e4a3-4f45-b066-24b8c348eb28@kernel.org>
+ <a7ca71c0-971c-49ab-b9f3-f6e6b32e9567@linux.ibm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,104 +107,87 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <e3601656-84d3-47e1-9cbd-d2cb0dde5f51@linux.ibm.com>
+In-Reply-To: <a7ca71c0-971c-49ab-b9f3-f6e6b32e9567@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 01/05/2024 17:59, Eddie James wrote:
+On 01/05/2024 18:12, Eddie James wrote:
 > 
-> On 4/30/24 01:53, Krzysztof Kozlowski wrote:
+> On 4/30/24 02:04, Krzysztof Kozlowski wrote:
 >> On 29/04/2024 23:01, Eddie James wrote:
->>> Conver to json-schema for the OCC documentation. Also document the fact
->>> that the OCC "bridge" device will often have the hwmon node as a
->>> child.
->>>
+>>> Convert to json-schema for the AST2600 FSI master documentation.
+>> Please mention all the changes from pure conversion.
+> 
+> 
+> Sure.
+> 
+> 
+>>
 >>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 >>> ---
 >>> Changes since v3:
->>>   - Move required below other properties
->>>   - Drop "occ-" in child node
->>>   - Drop hwmon unit address
->>>   - Complete example
+>>>   - Remove quotes around compatible strings
+>>>   - Re-order allOf to below required
+>>>   - Add child node in the example
 >>>   - Change commit message to match similar commits
 >>>
->>>   .../devicetree/bindings/fsi/ibm,p9-occ.txt    | 16 --------
->>>   .../devicetree/bindings/fsi/ibm,p9-occ.yaml   | 41 +++++++++++++++++++
->>>   2 files changed, 41 insertions(+), 16 deletions(-)
->>>   delete mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt
->>>   create mode 100644 Documentation/devicetree/bindings/fsi/ibm,p9-occ.yaml
+>>>   .../fsi/aspeed,ast2600-fsi-master.yaml        | 81 +++++++++++++++++++
+>>>   .../bindings/fsi/fsi-master-aspeed.txt        | 36 ---------
+>>>   2 files changed, 81 insertions(+), 36 deletions(-)
+>>>   create mode 100644 Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml
+>>>   delete mode 100644 Documentation/devicetree/bindings/fsi/fsi-master-aspeed.txt
 >>>
->>> diff --git a/Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt b/Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt
->>> deleted file mode 100644
->>> index e73358075a90..000000000000
->>> --- a/Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt
->>> +++ /dev/null
->>> @@ -1,16 +0,0 @@
->>> -Device-tree bindings for FSI-attached POWER9/POWER10 On-Chip Controller (OCC)
->>> ------------------------------------------------------------------------------
->>> -
->>> -This is the binding for the P9 or P10 On-Chip Controller accessed over FSI from
->>> -a service processor. See fsi.txt for details on bindings for FSI slave and CFAM
->>> -nodes. The OCC is not an FSI slave device itself, rather it is accessed
->>> -through the SBE FIFO.
->>> -
->>> -Required properties:
->>> - - compatible = "ibm,p9-occ" or "ibm,p10-occ"
->>> -
->>> -Examples:
->>> -
->>> -    occ {
->>> -        compatible = "ibm,p9-occ";
->>> -    };
->>> diff --git a/Documentation/devicetree/bindings/fsi/ibm,p9-occ.yaml b/Documentation/devicetree/bindings/fsi/ibm,p9-occ.yaml
+>>> diff --git a/Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml b/Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml
 >>> new file mode 100644
->>> index 000000000000..3ab2582cb8a0
+>>> index 000000000000..fcf7c4b93b78
 >>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/fsi/ibm,p9-occ.yaml
->>> @@ -0,0 +1,41 @@
+>>> +++ b/Documentation/devicetree/bindings/fsi/aspeed,ast2600-fsi-master.yaml
+>>> @@ -0,0 +1,81 @@
 >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 >>> +%YAML 1.2
 >>> +---
->>> +$id: http://devicetree.org/schemas/fsi/ibm,p9-occ.yaml#
+>>> +$id: http://devicetree.org/schemas/fsi/aspeed,ast2600-fsi-master.yaml#
 >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >>> +
->>> +title: IBM FSI-attached On-Chip Controller (OCC)
+>>> +title: Aspeed FSI master
 >>> +
 >>> +maintainers:
 >>> +  - Eddie James <eajames@linux.ibm.com>
 >>> +
 >>> +description:
->>> +  The POWER processor On-Chip Controller (OCC) helps manage power and
->>> +  thermals for the system, accessed through the FSI-attached SBEFIFO
->>> +  from a service processor.
+>>> +  The AST2600 and later contain two identical FSI masters. They share a
+>>> +  clock and have a separate interrupt line and output pins.
 >>> +
 >>> +properties:
 >>> +  compatible:
 >>> +    enum:
->>> +      - ibm,p9-occ
->>> +      - ibm,p10-occ
->>> +
->>> +patternProperties:
->>> +  "^hwmon":
->> And now it raises questions:
->> 1. Other devices on FSI bus have unit addresses, so why this does not?
->> 2. This suggest only one hwmon, so ^hwmon$, which is then not a
->> patternProperty but property.
->> 3. But the true problem why do you even need two empty nodes? These
->> should be combined into one node.
+>>> +      - aspeed,ast2600-fsi-master
+>>> +      - aspeed,ast2700-fsi-master
+>> There was no such compatible before.
+>>
+>> How does this even validate? Where is fsi-master? You dropped a
+>> compatible without any explanation.
 > 
 > 
-> 1. This is not truly on the FSI bus. It is on the SBEFIFO "bus"
+> I can make it a separate change to add ast2700.
 > 
-> 2. True enough, I'll change it to property.
 > 
-> 3. If this binding was being designed now, I'd agree with you, but the 
-> two nodes (occ and occ-hwmon) are already documented, I'm just changing 
-> to yaml here... Changing that would require a lot of changes and would 
-> break the two drivers.
+> I suppose I don't understand having two compatibles... Aspeed master 
+> shouldn't use "fsi-master" as that is too generic, right? Why wouldn't 
 
-No child was documented before and documenting things post-factum does
-not allow to bypass regular review rules.
+Not necessarily, depends. Dropping it silently is confusing. What about
+other users? firmware, bootloaders, out-of-tree, other OS? Did you
+investigate all of them?
+
+> it validate? Devicetrees using "fsi-master" also use 
+> "aspeed,ast2600-fsi-master" so they should be OK...
+
+No, because the compatibles do not match. Run validation and you will
+see the errors.
+
+I am fine with dropping such compatible, which is not used by current
+kernel ABI, but first DTS must be fixed and second some explanation and
+justification is needed.
 
 Best regards,
 Krzysztof
