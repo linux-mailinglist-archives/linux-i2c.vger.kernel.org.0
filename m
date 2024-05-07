@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3454-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3455-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0450E8BDB96
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 May 2024 08:35:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE64D8BDBA1
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 May 2024 08:37:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD7A51F223D8
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 May 2024 06:35:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DE221C20E17
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 May 2024 06:37:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F90774267;
-	Tue,  7 May 2024 06:35:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE46678C8B;
+	Tue,  7 May 2024 06:37:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rD6QrtV9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DdTY2SBZ"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28E42EB08;
-	Tue,  7 May 2024 06:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691132EB08;
+	Tue,  7 May 2024 06:37:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715063749; cv=none; b=u6SN29XCloBaQ2jqYTi2sEJlVcKKFFMasIA2wANt/72ZrbznZnxOgl7OJYN10Qq+uvrnSUhcLq9UK2mxSk+8KZKuNjI0jmaroWsIGomM8dGqbszAAjJGRDFvpWAYvqAL8RtHSPQJBBkbHJ63VjqF3U/1c2qERaqC/R5RBZmpa4A=
+	t=1715063859; cv=none; b=CP/xAHG1aG4sKypD423ECaZt82L0o+pWtMsodPjZRLZUZyIl2t+9iHOjpAnMvbsZFboZrg98HcG88JNLJQBErpSCN4xRi19E85uetwKEl+ZHt9bYFxCotvjPlKOAPFc2XreeX4u+Y7wkLv0g41xMp8YRmypf39nSDknABTXMUi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715063749; c=relaxed/simple;
-	bh=/Mlhnh+UCfgw9ZOZJQ3oMWCD2KpVf5vQppclCcvAgLQ=;
+	s=arc-20240116; t=1715063859; c=relaxed/simple;
+	bh=So5cWA9X/plmkFRBimltC9aU3la3EuxEVdH1kzJTYmE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EUPUJJMNOi5u5TC8PTFKc49dV2b1LW6spbGXmIaE1oVB3bkOc0IEDXm0sVana8TGA+mMPORNsNGkEQjWcVZUGNMXAD6/4Z1mBOqtIR8xgKI4cVWacs0RMgoZm6sbUtGpISXIOJ5iD4ICLD4DspbkIFNyt3v0tdULs7HJXqR3Crg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rD6QrtV9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C92F6C2BBFC;
-	Tue,  7 May 2024 06:35:42 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=rZSwyF+zS3R19osSsY0dQVeD2dVrXJR71l64ICAExBpOFhy0uwtP2942k/51gEMhKf7vgK1rkF44fg1bR0uyYEllWTXCSexRTQ3pez43p7KvgAcASZqw0/1ZcIot/vu6VPr+ADGnZwJVX9My0Ol/QgwRSZCNjjd2oOZu9t434VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DdTY2SBZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C91D5C4AF63;
+	Tue,  7 May 2024 06:37:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715063749;
-	bh=/Mlhnh+UCfgw9ZOZJQ3oMWCD2KpVf5vQppclCcvAgLQ=;
+	s=k20201202; t=1715063858;
+	bh=So5cWA9X/plmkFRBimltC9aU3la3EuxEVdH1kzJTYmE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rD6QrtV9qW6k0cGQYJWhixxTt7MFNwMKrQleRioW9eppgaO5tlBFTJqgudXH68Lxl
-	 hEIXYoEcKQjWZm1Dx53KyJGV+ICvVQLWm1ytCKQ7vVEdAKiGXocecKWyE7qOW/LvmP
-	 RkXuj3piPlKQLWvUbeI3vvztNvziA1w3Z/3givY3MYwXUqd4HCwh/4OEuwoya79if4
-	 1DV84Ms0zk94F/TcpDsnjOMgiw5V35bwlWCIEhTwbc4yPtA2pUXvD1KDI92ug28E3v
-	 /Nu2Mjyj7uuokyu1kw5giCAlRyKQM9qz4cszR6BhJrGCQCGW9eFxDrZ+YlshtyfrDe
-	 woDv0ZbVHn0qg==
-Message-ID: <8f3cc030-e3cb-4758-8114-7364ce47481a@kernel.org>
-Date: Tue, 7 May 2024 08:35:40 +0200
+	b=DdTY2SBZ5TwZQSl3KEq39YQvqzELf14NOBJg+qVN3UILiefALRvquwFcp1oePXPVI
+	 XRZN8WUR3lUl87s0KT/rfwVzAxq9iSQJu67hfYTmjMprz3n+DZakLzXMsIEhEUuqD5
+	 bWcexrvgfMLz0HWvep7i93EUsLDHKt0Z3W3bzy3mGKH2pM+1fRMXR8TbFMzL4mAxno
+	 6B0lNUnQr70OisPBstXNqklz+3oCI9J/7WzYrbWpdzP4d6WoSw8E1nB9y3BX4p4NtL
+	 2hvjunY3VFlp7VzwPGBu4vZRJbimIkM8/tHWeE5jqOEsvzgAoS4nUs6CPY9NU7XE4M
+	 ecaWtAvsGgWYQ==
+Message-ID: <321b9a79-e4d1-4cdc-80ba-c226a6b2cdb4@kernel.org>
+Date: Tue, 7 May 2024 08:37:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 05/11] i2c: core: Avoid config node enumeration
+Subject: Re: [RFC PATCH 09/11] sdhci: dt-bindings: configuration settings
 To: Krishna Yarlagadda <kyarlagadda@nvidia.com>, linux-tegra@vger.kernel.org,
  devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
@@ -61,7 +61,7 @@ Cc: thierry.reding@gmail.com, jonathanh@nvidia.com, robh@kernel.org,
  ulf.hansson@linaro.org, adrian.hunter@intel.com, digetx@gmail.com,
  ldewangan@nvidia.com, mkumard@nvidia.com
 References: <20240506225139.57647-1-kyarlagadda@nvidia.com>
- <20240506225139.57647-6-kyarlagadda@nvidia.com>
+ <20240506225139.57647-10-kyarlagadda@nvidia.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,35 +107,67 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240506225139.57647-6-kyarlagadda@nvidia.com>
+In-Reply-To: <20240506225139.57647-10-kyarlagadda@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 07/05/2024 00:51, Krishna Yarlagadda wrote:
-> Add "config" as a common node to add device configuration settings and
-> other data. This child node should not be treated as a device.
-> Skip "config" child node during i2c device registration.
+> SDHCI vendor tuning registers are configured using config setting
+> framework. Document available config for Tegra SDHCI controllers.
 > 
 > Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
 > ---
->  drivers/i2c/i2c-core-of.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  .../bindings/mmc/nvidia,tegra20-sdhci.yaml    | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
 > 
-> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-> index a6c407d36800..f50206c6c4d6 100644
-> --- a/drivers/i2c/i2c-core-of.c
-> +++ b/drivers/i2c/i2c-core-of.c
-> @@ -98,6 +98,9 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
->  		bus = of_node_get(adap->dev.of_node);
+> diff --git a/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml b/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
+> index 72987f0326a1..002bc1ffc156 100644
+> --- a/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
+> @@ -177,6 +177,37 @@ properties:
+>        operates at a 1.8 V fixed I/O voltage.
+>      $ref: /schemas/types.yaml#/definitions/flag
 >  
->  	for_each_available_child_of_node(bus, node) {
-> +		if (!strcmp(node->name, "config"))
-> +			continue;
+> +  config:
 
-NAK
+No. This node does not re
 
-All children are devices (they have unit addresses). Do not introduce
-some another, parallel addressing.
+
+> +    description: Config settings for SDHCI devices.
+> +      Config setting is the configuration based on chip/board/system
+> +      characterization on interface/controller settings. This is needed for
+> +      - making the controller internal configuration to better perform
+> +      - making the interface to work proper by setting drive strength, slew
+> +        rates etc
+> +      - making the low power leakage.
+> +      SDHCI has configuration based on device speed modes.
+> +      - common is set on all speeds and can be overridden by speed mode.
+> +      - List of speed modes and their config name
+> +        "default", /* MMC_TIMING_LEGACY */
+> +        "sd-mmc-highspeed", /* MMC_TIMING_MMC_HS */
+> +        "sd-mmc-highspeed", /* MMC_TIMING_SD_HS */
+> +        "uhs-sdr12", /* MMC_TIMING_UHS_SDR12 */
+> +        "uhs-sdr25", /* MMC_TIMING_UHS_SDR25 */
+> +        "uhs-sdr50", /* MMC_TIMING_UHS_SDR50 */
+> +        "uhs-sdr104", /* MMC_TIMING_UHS_SDR104 */
+> +        "uhs-ddr52", /* MMC_TIMING_UHS_DDR50 */
+> +        "uhs-ddr52", /* MMC_TIMING_MMC_DDR52 */
+> +        "mmc-hs200", /* MMC_TIMING_MMC_HS200 */
+> +        "mmc-hs400", /* MMC_TIMING_MMC_HS400 */
+> +    type: object
+> +    unevaluatedProperties: true
+
+NAK.
+
+> +    properties:
+> +      nvidia,num-tuning-iter:
+> +        description: Specify DQS trim value for HS400 timing.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        minimum: 0
+> +        maximum: 0xffff
+
+"iterations" is decimal value. How it can be 0? 0 tries to time?
+
 
 Best regards,
 Krzysztof
