@@ -1,158 +1,107 @@
-Return-Path: <linux-i2c+bounces-3459-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3460-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4B3D8BEB74
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 May 2024 20:22:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F5358BF01C
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 May 2024 00:59:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFAD1B2B4C5
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 May 2024 18:16:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A80111F239CD
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 May 2024 22:59:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 039F016D9A9;
-	Tue,  7 May 2024 18:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E35E84E18;
+	Tue,  7 May 2024 22:57:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="DzBShiH1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3eVclrG"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D7E716D4C6;
-	Tue,  7 May 2024 18:16:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B868884E0D;
+	Tue,  7 May 2024 22:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715105779; cv=none; b=DzWWAQKBxAfwwHtekB48haxJVaJ4et38nNJuX0qd3ii8sgChbVc4iSqog2meIu1CGJOVVZWf2U7KYEzGqwyKUDDfUYLTeqHix5aMG8CXDgf4iLGyalHwluXAJubbzKMTwJdBGYcATg00O6ZbQKm5QmCSSYJOEeQ1GOP1EmN9ixk=
+	t=1715122660; cv=none; b=Ba+sxi//bkFEDBiKPCYlGN8P8GMO73DJOFUc3sfEOx8PyCZYYx3r2EH331P/cxwA87bORDKD3VmhcizQ0AaYqgMy/I6L+p6odf8DxougwgnJg2+Bl3bRiqIyLa4b8xTR041rWB8kAbYZKnayY6b4WCPOinCjpirzWrN7gKqMZ1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715105779; c=relaxed/simple;
-	bh=wWjeFhQmx4RAgiRysXr20ZnNZGZCeLrDNtRy30798z4=;
-	h=Message-ID:Date:MIME-Version:Subject:Cc:References:From:To:
-	 In-Reply-To:Content-Type; b=sSepa0NwLUDU/MCedXw2OgFvVEKQbKUrg7RRPQqmWLqWDmqCLBsKJ+r2A1DL4qEzwKGE8cdjqDHLI9gTjXf7X6NixhrhvNa/jGikC50zQZWxvuUBHBGDEO2+1CiCOcq914sgwjUBvKzOrH6uyoCHMhlU4GW/kRjcfstEyIhwu40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=DzBShiH1; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.49.54] (c-73-118-245-227.hsd1.wa.comcast.net [73.118.245.227])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 62C1B20B2C82;
-	Tue,  7 May 2024 11:16:16 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 62C1B20B2C82
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1715105777;
-	bh=PBRGTo20ufCiYvX5W3y8n5KQS3c/rPiOhM35HSOsaRQ=;
-	h=Date:Subject:Cc:References:From:To:In-Reply-To:From;
-	b=DzBShiH152LXFot+KucPmQbM03mnN+laHxZysZ8V2qQxlMhZsTtUKqypgwJBIJvdJ
-	 n4Dz3w5CxX9vwpxTmKdIir2/VI20bIqZRRAfX/Mkdm6k/UIvMPkOxKqoliWGntbNPc
-	 Ks6+pWYVRh/88H64gqZiZ1m1bIkwqOD3hIiBq8OM=
-Message-ID: <0a6d4fa9-169f-425b-93d6-04314c617090@linux.microsoft.com>
-Date: Tue, 7 May 2024 11:16:15 -0700
+	s=arc-20240116; t=1715122660; c=relaxed/simple;
+	bh=srp+0voWpZpnFxnV8w6Oid1p/ImC/tZG1yH9vsuUfAU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ooZGKaRYVFHMqeXGvS7LrC5J30b4qiMBFcQVoI1nl9MKihE7xc4kr7o0CY7xdq/BhATUHS3P53HSJlCtL1tKnyvVqV36ArslJzPGlD5u6wkluzpotMirqnQaK8DulgrFM67NQ7ppwaqbTriiQFkR5KDNJQrZLBwhtyE178F27pE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T3eVclrG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 532F2C3277B;
+	Tue,  7 May 2024 22:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715122660;
+	bh=srp+0voWpZpnFxnV8w6Oid1p/ImC/tZG1yH9vsuUfAU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=T3eVclrGmJRkdjvDHUoj67vcA+lwC2gvQmu107n4A0ohYlW+JMw8eYA9tF8OdtyZw
+	 Gejg9RNNuwAPkCua4FoPFD7edbBJo2saCdAAR6Vq+piYjR7gc7UmBwLRymlxJfDLKm
+	 whG/UamcMKZ8UlkAyYYfQ3XkDU0fxQ7J53IQvBbEVNw7tFtDgjoXEmgawnHv7scMuj
+	 LM2NFPjcVNJtWPvzg9lPTNECjTOwAVkj46fhPzXROUgtKZIgQOrEkzxvg9ik/2m+bB
+	 wmV95B6mYmGn3sdhIoTW1ooo0+LNvv/SjqmtNB3HhX1PF2TUu1eE+j0iSzdqRYsHAv
+	 lLvPoS8W9YfOg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Abdelrahman Morsy <abdelrahmanhesham94@gmail.com>,
+	Jiri Kosina <jkosina@suse.com>,
+	Sasha Levin <sashal@kernel.org>,
+	gupt21@gmail.com,
+	jikos@kernel.org,
+	bentiss@kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.8 07/23] HID: mcp-2221: cancel delayed_work only when CONFIG_IIO is enabled
+Date: Tue,  7 May 2024 18:56:33 -0400
+Message-ID: <20240507225725.390306-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240507225725.390306-1-sashal@kernel.org>
+References: <20240507225725.390306-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 01/12] drm/amdgpu, drm/radeon: Make I2C terminology
- more inclusive
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
- "open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
- <intel-gfx@lists.freedesktop.org>,
- "open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS"
- <intel-xe@lists.freedesktop.org>,
- "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS"
- <nouveau@lists.freedesktop.org>,
- "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
- "open list:BTTV VIDEO4LINUX DRIVER" <linux-media@vger.kernel.org>,
- "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
- "Pan, Xinhui" <Xinhui.Pan@amd.com>, Harry Wentland <harry.wentland@amd.com>,
- Leo Li <sunpeng.li@amd.com>, Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
- Evan Quan <evan.quan@amd.com>, Hawking Zhang <Hawking.Zhang@amd.com>,
- Candice Li <candice.li@amd.com>, Ran Sun <sunran001@208suo.com>,
- Alexander Richards <electrodeyt@gmail.com>, Wolfram Sang <wsa@kernel.org>,
- Andi Shyti <andi.shyti@linux.intel.com>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Heiko Stuebner <heiko@sntech.de>, Heiner Kallweit <hkallweit1@gmail.com>,
- Hamza Mahfooz <hamza.mahfooz@amd.com>, Ruan Jinjie <ruanjinjie@huawei.com>,
- Aurabindo Pillai <aurabindo.pillai@amd.com>, Wayne Lin <wayne.lin@amd.com>,
- Samson Tam <samson.tam@amd.com>, Alvin Lee <alvin.lee2@amd.com>,
- Sohaib Nadeem <sohaib.nadeem@amd.com>, Charlene Liu <charlene.liu@amd.com>,
- Tom Chung <chiahsuan.chung@amd.com>, Alan Liu <haoping.liu@amd.com>,
- Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
- Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>,
- George Shen <george.shen@amd.com>, Aric Cyr <aric.cyr@amd.com>,
- Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
- Qingqing Zhuo <Qingqing.Zhuo@amd.com>, Dillon Varone
- <dillon.varone@amd.com>, Lijo Lazar <lijo.lazar@amd.com>,
- Asad kamal <asad.kamal@amd.com>, Kenneth Feng <kenneth.feng@amd.com>,
- Ma Jun <Jun.Ma2@amd.com>, Darren Powell <darren.powell@amd.com>,
- Yang Wang <kevinyang.wang@amd.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Yifan Zhang <yifan1.zhang@amd.com>, Le Ma <Le.Ma@amd.com>,
- "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
- "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
- Alex Deucher <alexander.deucher@amd.com>,
- open list <linux-kernel@vger.kernel.org>
-References: <20240503181333.2336999-1-eahariha@linux.microsoft.com>
- <20240503181333.2336999-2-eahariha@linux.microsoft.com>
-Content-Language: en-CA
-From: Easwar Hariharan <eahariha@linux.microsoft.com>
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
-In-Reply-To: <20240503181333.2336999-2-eahariha@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.8.9
+Content-Transfer-Encoding: 8bit
 
-On 5/3/2024 11:13 AM, Easwar Hariharan wrote:
-> I2C v7, SMBus 3.2, and I3C 1.1.1 specifications have replaced "master/slave"
-> with more appropriate terms. Inspired by and following on to Wolfram's
-> series to fix drivers/i2c/[1], fix the terminology for users of
-> I2C_ALGOBIT bitbanging interface, now that the approved verbiage exists
-> in the specification.
-> 
-> Compile tested, no functionality changes intended
-> 
-> [1]: https://lore.kernel.org/all/20240322132619.6389-1-wsa+renesas@sang-engineering.com/
-> 
-> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
-> ---
->  .../gpu/drm/amd/amdgpu/amdgpu_atomfirmware.c  |  8 +++---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_i2c.c       | 10 +++----
->  drivers/gpu/drm/amd/amdgpu/atombios_i2c.c     |  8 +++---
->  drivers/gpu/drm/amd/amdgpu/atombios_i2c.h     |  2 +-
->  drivers/gpu/drm/amd/amdgpu/smu_v11_0_i2c.c    | 20 ++++++-------
->  .../gpu/drm/amd/display/dc/bios/bios_parser.c |  2 +-
->  .../drm/amd/display/dc/bios/bios_parser2.c    |  2 +-
->  .../drm/amd/display/dc/core/dc_link_exports.c |  4 +--
->  drivers/gpu/drm/amd/display/dc/dc.h           |  2 +-
->  drivers/gpu/drm/amd/display/dc/dce/dce_i2c.c  |  4 +--
->  .../display/include/grph_object_ctrl_defs.h   |  2 +-
->  drivers/gpu/drm/amd/include/atombios.h        |  2 +-
->  drivers/gpu/drm/amd/include/atomfirmware.h    | 26 ++++++++---------
->  .../powerplay/hwmgr/vega20_processpptables.c  |  4 +--
->  .../amd/pm/powerplay/inc/smu11_driver_if.h    |  2 +-
->  .../inc/pmfw_if/smu11_driver_if_arcturus.h    |  2 +-
->  .../inc/pmfw_if/smu11_driver_if_navi10.h      |  2 +-
->  .../pmfw_if/smu11_driver_if_sienna_cichlid.h  |  2 +-
->  .../inc/pmfw_if/smu13_driver_if_aldebaran.h   |  2 +-
->  .../inc/pmfw_if/smu13_driver_if_v13_0_0.h     |  2 +-
->  .../inc/pmfw_if/smu13_driver_if_v13_0_7.h     |  2 +-
->  .../gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c |  4 +--
->  .../amd/pm/swsmu/smu11/sienna_cichlid_ppt.c   |  8 +++---
->  drivers/gpu/drm/radeon/atombios.h             | 16 +++++------
->  drivers/gpu/drm/radeon/atombios_i2c.c         |  4 +--
->  drivers/gpu/drm/radeon/radeon_combios.c       | 28 +++++++++----------
->  drivers/gpu/drm/radeon/radeon_i2c.c           | 10 +++----
->  drivers/gpu/drm/radeon/radeon_mode.h          |  6 ++--
->  28 files changed, 93 insertions(+), 93 deletions(-)
->
+From: Abdelrahman Morsy <abdelrahmanhesham94@gmail.com>
 
-<snip>
+[ Upstream commit 3cba9cfcc1520a2307a29f6fab887bcfc121c417 ]
 
-Hello Christian, Daniel, David, others,
+If the device is unplugged and CONFIG_IIO is not supported, this will
+result in a warning message at kernel/workqueue.
 
-Could you re-review v2 since the feedback provided in v0 [1] has now been addressed? I can send v3 with
-all other feedback and signoffs from the other maintainers incorporated when I have something for amdgpu 
-and radeon.
+Only cancel delayed work in mcp2221_remove(), when CONFIG_IIO is enabled.
 
-Thanks,
-Easwar
+Signed-off-by: Abdelrahman Morsy <abdelrahmanhesham94@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hid/hid-mcp2221.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-[1] https://lore.kernel.org/all/53f3afba-4759-4ea1-b408-8a929b26280c@amd.com/
+diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
+index f9cceaeffd081..da5ea5a23b087 100644
+--- a/drivers/hid/hid-mcp2221.c
++++ b/drivers/hid/hid-mcp2221.c
+@@ -944,9 +944,11 @@ static void mcp2221_hid_unregister(void *ptr)
+ /* This is needed to be sure hid_hw_stop() isn't called twice by the subsystem */
+ static void mcp2221_remove(struct hid_device *hdev)
+ {
++#if IS_REACHABLE(CONFIG_IIO)
+ 	struct mcp2221 *mcp = hid_get_drvdata(hdev);
+ 
+ 	cancel_delayed_work_sync(&mcp->init_work);
++#endif
+ }
+ 
+ #if IS_REACHABLE(CONFIG_IIO)
+-- 
+2.43.0
+
 
