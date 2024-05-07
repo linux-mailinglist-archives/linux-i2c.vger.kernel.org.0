@@ -1,206 +1,197 @@
-Return-Path: <linux-i2c+bounces-3451-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3452-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E2E28BD801
-	for <lists+linux-i2c@lfdr.de>; Tue,  7 May 2024 00:56:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 008B38BDB84
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 May 2024 08:32:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CD3E1F2297B
-	for <lists+linux-i2c@lfdr.de>; Mon,  6 May 2024 22:56:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 131B11C204D6
+	for <lists+linux-i2c@lfdr.de>; Tue,  7 May 2024 06:32:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79DEC15F408;
-	Mon,  6 May 2024 22:53:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9040A73510;
+	Tue,  7 May 2024 06:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="iPcmLS2w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KS2EvKXf"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2085.outbound.protection.outlook.com [40.107.94.85])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDE015F30D;
-	Mon,  6 May 2024 22:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.85
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715036013; cv=fail; b=E3SEDRvISe3Tq6TmLyDMQzNQ62qBp+N+85rz1frjhfQkktH0ZsccWyh7She4KgXACjd6ByxKTmMyZxQBq+gB4ErraJ88ZVgoJfx4KQCJ73A3cUkJzJoUetWKzlZhkSGV+oKYyOT0mMaeEdfaXOxzqerxLemxUSC8KECh3Uu20jM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715036013; c=relaxed/simple;
-	bh=FurZBtDayT8KVOQWb5a+JH0WSk8OR04OieKsW5FTv0Q=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Omhp5/ATSP+nAYNarI91xh6u0zpEa8gqSm5plC/6hvUt/C+SCf29EGhXSUNWmPdHllWF+JdjSLG7jsYhtQPDE8gfiWjC0l3jK7Z3LoqwJNL83/Iuj/voyx3TNpJtdK/wmxCIVjYglkuSf71vPcLOxf7U94/q7tIJRfFAh5gGz00=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=iPcmLS2w; arc=fail smtp.client-ip=40.107.94.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gPq41I1IF8+FRX3Al+xQ6Azw2ZJc75Dx3xCzBBPCL0LSjleMwbrpSOgGKZfB/ZygbiiK1FkvFsSRiVINP9p4uO12Wq6H639B6R5n9m5/NfqLCSo9RyaagPziJoNcbmRpHKKof0nofX/pynM0IQXCqjn4P7apONeVcG4znuqLvDHa/E99sj6B++32/8jh+nL0YiadgqQIbTpzs4JwVuEy8OkgE28N3SbIvkSJae9QZp73SNDODnI1zzRNi/QR59VFEgjxtpPg6XO94td7BkysmvT23YzSKYx5APtxhjK2SF+M7puLsfQi9fVbUnft9odnfqMTogzLXj+rqgMY5NJF1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jqoTQh6sZkzbBLNA3XYso3LxgeNyoG5U9zc5JxmSyLI=;
- b=k+0DrmMKuwDtECF7QTUvDLDfga7sa8zHj7tq/pf8Nz5wTaJlcGdf6ZL0jbXV4ilqxsKtE2/OLTEGx5ro6bxXba3nEdAAN1CoSWBeH8rXXKbQ/2Xbcx5OEFNBxlwVU77dS2OzCbei1BwKV2+FrJwjDXkohKnLQZggWo3ms3GgU89ZFAs9thW73zNnYwC0kr8Cdq5SyRN8m9fCrytQRhtU8FTGXoAkaKkt7z3vRZHDHr0Set549a/gX2gTqnedfgm7z/UPr+rnHJ9/yG84gI8MGd2KMgrSXzmumrdxQHN6BioC4ED6qDTFzntOglLXnWPFsG+I0Pk5CcmrHNNUWGJi7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jqoTQh6sZkzbBLNA3XYso3LxgeNyoG5U9zc5JxmSyLI=;
- b=iPcmLS2w+Z/j0u421WKtM+WAROWBKjVqW3QCl5czruKuYvKb3n9CC5BIThwdJoUWbe7sSbM9cP+wHGXRGQ9Qkz9EcUsgKbjXKl1a+91pU17UZula5q78Kybrb1QWBf2dbn4P5lfZvNcAy9omavwkVBtOIPPC9/A5au2Sv4cDCMuBVBDZgDHEyPktvKOuMmJxTtnAOa8obId4h79WuYTc9dj2vuDpYTpWlr9076bwecE9rvPb/3sDfj2OKhHZk28Zjk9xN6msMFywtGYYjeWdXJmvl7aiveIFlg6m1fYw541nO6xDIGRnPgGPrYtOw2eX0bMJqzw3eyiAU2srM/F87w==
-Received: from SA9P223CA0019.NAMP223.PROD.OUTLOOK.COM (2603:10b6:806:26::24)
- by PH7PR12MB7987.namprd12.prod.outlook.com (2603:10b6:510:27c::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.41; Mon, 6 May
- 2024 22:53:23 +0000
-Received: from SN1PEPF00036F3C.namprd05.prod.outlook.com
- (2603:10b6:806:26:cafe::43) by SA9P223CA0019.outlook.office365.com
- (2603:10b6:806:26::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.42 via Frontend
- Transport; Mon, 6 May 2024 22:53:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- SN1PEPF00036F3C.mail.protection.outlook.com (10.167.248.20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7544.18 via Frontend Transport; Mon, 6 May 2024 22:53:23 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 6 May 2024
- 15:53:11 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Mon, 6 May 2024 15:53:10 -0700
-Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Mon, 6 May 2024 15:53:05 -0700
-From: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To: <linux-tegra@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-	<linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: <thierry.reding@gmail.com>, <jonathanh@nvidia.com>, <robh@kernel.org>,
-	<krzk+dt@kernel.org>, <conor+dt@kernel.org>, <corbet@lwn.net>,
-	<andi.shyti@kernel.org>, <wsa+renesas@sang-engineering.com>,
-	<ulf.hansson@linaro.org>, <adrian.hunter@intel.com>, <digetx@gmail.com>,
-	<ldewangan@nvidia.com>, <kyarlagadda@nvidia.com>, <mkumard@nvidia.com>
-Subject: [RFC PATCH 11/11] arm64: tegra: SDHCI timing settings
-Date: Tue, 7 May 2024 04:21:39 +0530
-Message-ID: <20240506225139.57647-12-kyarlagadda@nvidia.com>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <20240506225139.57647-1-kyarlagadda@nvidia.com>
-References: <20240506225139.57647-1-kyarlagadda@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C53453E03;
+	Tue,  7 May 2024 06:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715063569; cv=none; b=pTKlkVCVbgXKEKaa6qfNFcsN8HP59z5XPDi+Y4qrLN+xz6B5Dx1kSNMneHFAwooT3CCy0g3F4qV5nAspjDY4LXM0/Mf/gXmhnT7HW+DzOcszGLZe4nX+RacbpuPF5Dx24lVWY74mrC0hov4DyntnPqmTFZUPLjeuiFOT2LLqGQw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715063569; c=relaxed/simple;
+	bh=m1+nZDdUknZhikivLgYhcE5Ss2bmiSlxKhFfhbTuIyE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ib3Lfg77pG5eDZnlMPlGPKmGJiHgOwdiJeVtA6w9PKHNUBvPfLKuj7uJwCccRdytPju6fHET4+sTOsMlVHF7lRDHviksC69ijoKf8pUtbaLprNVmH7oui4N8ULAqK5LJMF6QAgKn4J6DrNdDFHZ61lJZeBtk8b+HtJnyzfFVlJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KS2EvKXf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1902CC2BBFC;
+	Tue,  7 May 2024 06:32:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715063568;
+	bh=m1+nZDdUknZhikivLgYhcE5Ss2bmiSlxKhFfhbTuIyE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KS2EvKXf/FqoOi1xCnwwgiVVxqmYvhjj5O+k7SaN4SeK+N+/2qByEWNgDaOr7xxba
+	 rovPhIl4TJ5hOp6Xb0W9SZuY4j8TFknoLHVLLVTcmu5ZRvYDt69yjhYECV6Wwr3KAl
+	 pY2qPjf6nH7KaL8UH625t4hSMOljMqcdwbVjFJhR4GUEkQ3v27mwo9Koi2oWVCHDF/
+	 tpsHnZbQRhUFoTYbJNuamTYM0PkjOIxNyl9Rsh/8se6uqdNNT5s76rCXDE6zS3wXsA
+	 2yzT+qOCT9m1PTJ6+VBRFLkrA+R45fNmfvxRB0yFe/VZEUqSFzMipeFqgxgKPAm5Xp
+	 4B9hK0D7WLnzQ==
+Message-ID: <29e26d22-04b3-47ee-ba70-9f4eb77326f7@kernel.org>
+Date: Tue, 7 May 2024 08:32:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF00036F3C:EE_|PH7PR12MB7987:EE_
-X-MS-Office365-Filtering-Correlation-Id: 76aa8b6a-121d-4f50-fb05-08dc6e1f5589
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|82310400017|376005|36860700004|1800799015|7416005;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?KiGl4lLu4VdN5Uvz7h02jlXCfwl1Aoo/nrdBoedEgDdEUh1IAX0moAMYBask?=
- =?us-ascii?Q?3n/DzBliXFc3c/IsDDO0bhHoekrHT31HkFQ07IQXq6M+/blPWURl5z5E52d8?=
- =?us-ascii?Q?RWLjui5VAN6vnStEmFk37u7XWiGbSkMFl1FJMk0/Lht/icPJ8cF0r4mpjBSk?=
- =?us-ascii?Q?9EFovQ5XEv0gzLhrd9zLfOJ15Iygul4yjI9IL96ZyzmiCtquQqAHuO/Z6oNQ?=
- =?us-ascii?Q?o0z+8KyQXWQ3hPhsrFACw2YXT2PTsDtdq4gCHi1KdDVSo24Dn9fLseiZcGMZ?=
- =?us-ascii?Q?Kd5JqlYwUEyfWglg6Rf9tLnnhvuC3F4ADISZX4xl4Flp9sE6sHhnoPpJLCO2?=
- =?us-ascii?Q?wzC4rumqt7NVa0ZcQ6DEit1rx/Rh8hmURKiU1iqu0mB/BqCDxbY7FgA1Hd8B?=
- =?us-ascii?Q?bxvrmQgf8ZQqM/osUO/Fy9oRN8MAoOOOMrMULw1vtIrYD2p+ftGu4+gyEO/v?=
- =?us-ascii?Q?Xr+j/vze2SlmuRGP/rZkNApBKhGGojM8Ij0id2n+1VKanOSfULClV1AXST8j?=
- =?us-ascii?Q?SdWpS7XfFH1oodHyM1S0BU0TZfDSQXw99jdRpkm8KTOfbBWI5UR0mNDXb0dv?=
- =?us-ascii?Q?7XjRPz0wCvvlrs+hV5t4UAPma1L0vgOermSbWMTWcnVgJ67Aw+O976AcpGGt?=
- =?us-ascii?Q?7aBwrYwhv96266tXIOhIkoWeIlrhKokCWV3770HvtkSBzXAx2RdKoZWGY4m4?=
- =?us-ascii?Q?G1TcSjzMEaz4UfM2hFGtQIv9Jhw6Z4H9ouTaiHsp3nfl/Fd+snOrNk1hkZzZ?=
- =?us-ascii?Q?q+tmOYA3FFZhWQavSDpEAhUt6hkiODKD+ZxGzjLv651e+r1nConb7MuG08oZ?=
- =?us-ascii?Q?ie6Kpqh/PCaQN0RBAlABVuA+qGYE7sK9saosjvkcWU8Hgn/0/n42U4QZ+WIe?=
- =?us-ascii?Q?ol3tcO4n+3vY36pegA8CEE57zybBXy1P86cPl4f02Pm3gFQyu+PuDWdaLHvO?=
- =?us-ascii?Q?zGtJSsnG5csehRUV0uM2WN29ol0KL9CvJthenuw1nIzc0ZzbJYnOsFEv8OXv?=
- =?us-ascii?Q?yKTXNp3wiZCrOCkHKaahWfhDIh6vPGg+QUlhDF1ZxYjfZcEyB1hBswJ8f/Mh?=
- =?us-ascii?Q?7kmvCFfObzP10H7qLAZ4XIb7C56veRYtnY4jXDUAo+xVVjuEi42ZlfW2IBDy?=
- =?us-ascii?Q?kvTveZyPCF7hynAIGxE+EhNewuKUd2tNz0tGc0g9CekPVqWrwLjQwrOrL6ys?=
- =?us-ascii?Q?NqS1Q5k1DVl7KbOHBLpiI50hobzhOTut9RaSdpyk59EKEkm6md+k5pT3U5K1?=
- =?us-ascii?Q?DEEoWGlMRFDjQBL2o3xR9VvF0KC8X9B7LHIe1KmCT3tu4GWvYimeKmHFEfRs?=
- =?us-ascii?Q?PJEt/bUi3AB23M5sRZ5qRFGoSygTD8mlZ5mu+e3M08MZW4WWgjPiyUavK3oy?=
- =?us-ascii?Q?Bo2orpXRb0YIpOdvELolNfxUyXLN?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230031)(82310400017)(376005)(36860700004)(1800799015)(7416005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2024 22:53:23.6665
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76aa8b6a-121d-4f50-fb05-08dc6e1f5589
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF00036F3C.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7987
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 03/11] soc: tegra: config settings binding document
+To: Krishna Yarlagadda <kyarlagadda@nvidia.com>, linux-tegra@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: thierry.reding@gmail.com, jonathanh@nvidia.com, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net,
+ andi.shyti@kernel.org, wsa+renesas@sang-engineering.com,
+ ulf.hansson@linaro.org, adrian.hunter@intel.com, digetx@gmail.com,
+ ldewangan@nvidia.com, mkumard@nvidia.com
+References: <20240506225139.57647-1-kyarlagadda@nvidia.com>
+ <20240506225139.57647-4-kyarlagadda@nvidia.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240506225139.57647-4-kyarlagadda@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Set SDHCI timing registers through config settings for
-Tegra234 chip and P3701 board.
+On 07/05/2024 00:51, Krishna Yarlagadda wrote:
+> Config framework parses device tree and provides a list of register
+> settings with mask per mode to be applied by the controller.
+> 
+> Add binding document for config settings framework. Config settings
+> are defined as a property per field and have different modes per device.
 
-Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra234-cfg.dtsi | 32 ++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234-cfg.dtsi b/arch/arm64/boot/dts/nvidia/tegra234-cfg.dtsi
-index 832538e45797..f9a92853b04a 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234-cfg.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234-cfg.dtsi
-@@ -442,5 +442,37 @@ standard {
- 			};
- 		};
- 
-+		mmc@3400000 {
-+			config {
-+
-+				mmc-hs200 {
-+					nvidia,num-tuning-iter = <0x2>;
-+				};
-+
-+				uhs-sdr104 {
-+					nvidia,num-tuning-iter = <0x2>;
-+				};
-+
-+				uhs-sdr50 {
-+					nvidia,num-tuning-iter = <0x4>;
-+				};
-+
-+			};
-+		};
-+
-+		mmc@3460000 {
-+			config {
-+
-+				mmc-hs200 {
-+					nvidia,num-tuning-iter = <0x2>;
-+				};
-+
-+				mmc-hs400 {
-+					nvidia,num-tuning-iter = <0x2>;
-+				};
-+
-+			};
-+		};
-+
- 	};
- };
--- 
-2.43.2
+> 
+> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> ---
+>  .../misc/nvidia,tegra-config-settings.yaml    | 50 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/nvidia,tegra-config-settings.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/misc/nvidia,tegra-config-settings.yaml b/Documentation/devicetree/bindings/misc/nvidia,tegra-config-settings.yaml
+> new file mode 100644
+> index 000000000000..e379cbd5b597
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/nvidia,tegra-config-settings.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/misc/nvidia,tegra-config-settings.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Config properties for a device.
+
+No full stop, that's a title.
+
+> +
+> +description:
+> +  Config setting is the configuration based on chip/board/system
+> +  characterization on interface/controller settings. This is needed for
+> +  - making the controller internal configuration to better perform
+> +  - making the interface to work proper by setting drive strength, slew
+> +    rates etc
+> +  - making the low power leakage.
+> +  There are two types of recommended configuration settings
+> +  - Controller register specific for internal operation of controller.
+> +  - Pad control/Pinmux/pincontrol registers for interfacing.
+> +  These configurations can further be categorized as static and dynamic.
+> +  - Static config does not change until a controller is reset.
+> +  - Dynamic config changes based on mode or condition, controller is
+> +    operating in.
+> +
+> +maintainers:
+> +  - Thierry Reding <thierry.reding@gmail.com>
+> +
+> +patternProperties:
+> +  "^[a-z0-9_]*$":
+> +    description:
+> +      Config name to be applied on controller.
+> +    type: object
+
+Nope, this means nothing. Sorry, describe hardware, do not create some
+fake nodes.
+
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +        config {
+
+Messed indentation.
+
+> +            common {
+> +                nvidia,i2c-hs-sclk-high-period = <0x03>;
+> +                nvidia,i2c-hs-sclk-low-period = <0x08>;
+> +            };
+
+
+Best regards,
+Krzysztof
 
 
