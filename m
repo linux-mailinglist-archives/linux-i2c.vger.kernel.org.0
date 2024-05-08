@@ -1,56 +1,50 @@
-Return-Path: <linux-i2c+bounces-3471-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3472-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0020B8C0812
-	for <lists+linux-i2c@lfdr.de>; Thu,  9 May 2024 01:46:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91B398C0817
+	for <lists+linux-i2c@lfdr.de>; Thu,  9 May 2024 01:46:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFB1C281780
-	for <lists+linux-i2c@lfdr.de>; Wed,  8 May 2024 23:46:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 327D31F22491
+	for <lists+linux-i2c@lfdr.de>; Wed,  8 May 2024 23:46:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E32CE134418;
-	Wed,  8 May 2024 23:45:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8C7B134430;
+	Wed,  8 May 2024 23:45:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="JrbGV5df"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Rl5C93v9"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C92613342C;
-	Wed,  8 May 2024 23:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2608E13342E;
+	Wed,  8 May 2024 23:45:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715211950; cv=none; b=HadnKBPNjJN5L1X6VvPf5vD5gAq8uO7K+eTk4fpoe2Kj3+JRNAfMB/GtLExurKjEuQ6fDJyUnzT+t1nJTsJ6s8cmABSknd4vAaRVkcJyAFeHGp2tFrrZLNrsH7oY91v58XPZq39iYu1QI5NFu9fFZfbHDJD7k5GcZudnj25z5Xc=
+	t=1715211951; cv=none; b=UKtAO/EDqOWAbncie+z4xmnU+nZyyRiUNDLAk/Sbi2s5a8hriClmD+jRmAysprGaUNeW+10Qw7d+oH0P54jNfkQrwWkqhU6j//yi2GCCsFZ6lnhfCgHkWUxlwkrtP4nfnlckJjKPPZXYglyy+JSIcdGEZVjwhRWoiR5O2EZC2u4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715211950; c=relaxed/simple;
-	bh=3zWtvcNWCgLUfgBX4gIzIKMoGwniQ6wxbrwfCecZxcQ=;
+	s=arc-20240116; t=1715211951; c=relaxed/simple;
+	bh=xZe2UUwFOa6fKTFcG0bAE47ebUYsbp+SSq4DtYY5dOM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NmKMxfd7eU9S/bIqi2bQ9nyg7xEWXwTBDVuopwwBrnVb6PZM0fPElzc2/g5hMsTGrCCmi8Sz6AAk0XsjJo0N3hm6oz8ffY3zqzR0jkvWCTx6kYRww4z5FXXuSNgOS/8JdOJ+GMT95WJrePOLevL+GGvHMiB6pgz+Lw8a5a+F2YE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=JrbGV5df; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=QknZOncgn2gvUNbAv0XsnN5XjQbWq38i//BaH/mkQaDlZaEnekVsxsg7USNQEdO/NKzOXU+JP93BlFnHhH0A8WBM0VdVCrrfSfBsDLUHdxtzDN/HfBlalVkdhibL52e7wTXaHQ6NweuE7jbEteVUo2eUmg2AOCQe7JW8NBIqnYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Rl5C93v9; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from rrs24-12-35.corp.microsoft.com (unknown [131.107.1.144])
-	by linux.microsoft.com (Postfix) with ESMTPSA id DFA0B20B2C80;
-	Wed,  8 May 2024 16:45:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DFA0B20B2C80
+	by linux.microsoft.com (Postfix) with ESMTPSA id AC85D20B2C82;
+	Wed,  8 May 2024 16:45:49 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AC85D20B2C82
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1715211949;
-	bh=Qu3bClL9qiQqt/18Ro/tj+TIHJVXYmveUAFfxO+JRj0=;
+	bh=ESOO7vcC8nw070xfZPv4kHKylJK5PcWPFkA3TGLgTXQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JrbGV5dfnw8yry+V9GG0jxyDw1v/YmfDjtYW/LbUsMIaXsfA52i9//DgyVC14mON6
-	 Ix0OR3Cj2P9WzyjNLfEUQjYIpqaGGYbnz/3HEFL3D0YaKivrT7AU/z4JIUQWmLQxPy
-	 7N0mBeS1PMq4YGnH+1MvdgO8fzKs7F2AblwVHqqQ=
+	b=Rl5C93v97PiXj7e7b6rfgI9bl04lop2/yhEatpsUACNRzLcSXpXNSHno98LeoAQB7
+	 gS+0i+obuI0+IENonaQaGjUv8p/CBuF643J8XjETiK+E5V+je01jXkIq8MFqgXuezN
+	 yIAJI05Tc3ELeVIzZK9bzaksGSVwXWFhHgkGQfHg=
 From: Easwar Hariharan <eahariha@linux.microsoft.com>
-To: Edward Cree <ecree.xilinx@gmail.com>,
-	Martin Habets <habetsm.xilinx@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Easwar Hariharan <eahariha@linux.microsoft.com>,
-	netdev@vger.kernel.org (open list:SFC NETWORK DRIVER),
-	linux-net-drivers@amd.com (open list:SFC NETWORK DRIVER),
+To: Steve Glendinning <steve.glendinning@shawell.net>,
+	Helge Deller <deller@gmx.de>,
+	linux-fbdev@vger.kernel.org (open list:SMSC UFX6000 and UFX7000 USB to VGA DRIVER),
+	dri-devel@lists.freedesktop.org (open list:FRAMEBUFFER LAYER),
 	linux-kernel@vger.kernel.org (open list)
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Andi Shyti <andi.shyti@linux.intel.com>,
@@ -60,10 +54,12 @@ Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	intel-gfx@lists.freedesktop.org (open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS),
 	intel-xe@lists.freedesktop.org (open list:INTEL DRM DISPLAY FOR XE AND I915 DRIVERS),
 	linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
-	linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER)
-Subject: [PATCH v3 4/6] sfc: falcon: Make I2C terminology more inclusive
-Date: Wed,  8 May 2024 23:43:40 +0000
-Message-Id: <20240508234342.2927398-5-eahariha@linux.microsoft.com>
+	linux-fbdev@vger.kernel.org (open list:FRAMEBUFFER LAYER),
+	Easwar Hariharan <eahariha@linux.microsoft.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v3 5/6] fbdev/smscufx: Make I2C terminology more inclusive
+Date: Wed,  8 May 2024 23:43:41 +0000
+Message-Id: <20240508234342.2927398-6-eahariha@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240508234342.2927398-1-eahariha@linux.microsoft.com>
 References: <20240508234342.2927398-1-eahariha@linux.microsoft.com>
@@ -82,26 +78,34 @@ the approved verbiage exists in the specification.
 
 Compile tested, no functionality changes intended
 
-Reviewed-by: Martin Habets <habetsm.xilinx@gmail.com>
-Reviewed-by: Simon Horman <horms@kernel.org>
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 ---
- drivers/net/ethernet/sfc/falcon/falcon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/video/fbdev/smscufx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/falcon/falcon.c b/drivers/net/ethernet/sfc/falcon/falcon.c
-index 7a1c9337081b5..36114ce88034c 100644
---- a/drivers/net/ethernet/sfc/falcon/falcon.c
-+++ b/drivers/net/ethernet/sfc/falcon/falcon.c
-@@ -367,7 +367,7 @@ static const struct i2c_algo_bit_data falcon_i2c_bit_operations = {
- 	.getsda		= falcon_getsda,
- 	.getscl		= falcon_getscl,
- 	.udelay		= 5,
--	/* Wait up to 50 ms for slave to let us pull SCL high */
-+	/* Wait up to 50 ms for target to let us pull SCL high */
- 	.timeout	= DIV_ROUND_UP(HZ, 20),
- };
+diff --git a/drivers/video/fbdev/smscufx.c b/drivers/video/fbdev/smscufx.c
+index 35d682b110c42..5f0dd01fd8349 100644
+--- a/drivers/video/fbdev/smscufx.c
++++ b/drivers/video/fbdev/smscufx.c
+@@ -1292,7 +1292,7 @@ static int ufx_realloc_framebuffer(struct ufx_data *dev, struct fb_info *info)
+ 	return 0;
+ }
  
+-/* sets up I2C Controller for 100 Kbps, std. speed, 7-bit addr, master,
++/* sets up DDC channel for 100 Kbps, std. speed, 7-bit addr, controller mode,
+  * restart enabled, but no start byte, enable controller */
+ static int ufx_i2c_init(struct ufx_data *dev)
+ {
+@@ -1321,7 +1321,7 @@ static int ufx_i2c_init(struct ufx_data *dev)
+ 	/* 7-bit (not 10-bit) addressing */
+ 	tmp &= ~(0x10);
+ 
+-	/* enable restart conditions and master mode */
++	/* enable restart conditions and controller mode */
+ 	tmp |= 0x21;
+ 
+ 	status = ufx_reg_write(dev, 0x1000, tmp);
 -- 
 2.34.1
 
