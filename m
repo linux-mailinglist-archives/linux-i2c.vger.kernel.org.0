@@ -1,53 +1,53 @@
-Return-Path: <linux-i2c+bounces-3503-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3504-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 552FA8C64A2
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 May 2024 12:04:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70CE18C64A8
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 May 2024 12:04:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5C46285F60
-	for <lists+linux-i2c@lfdr.de>; Wed, 15 May 2024 10:04:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2910028629F
+	for <lists+linux-i2c@lfdr.de>; Wed, 15 May 2024 10:04:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 151EF7A705;
-	Wed, 15 May 2024 10:01:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 542B380031;
+	Wed, 15 May 2024 10:01:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="e6MO0lwS"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UiqFlvbH"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9351376057;
-	Wed, 15 May 2024 10:01:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37B778C71;
+	Wed, 15 May 2024 10:01:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715767304; cv=none; b=ZuBPNGpCCKqCuOYiEOZht+yq14nD+q9rDfI6GAckHa7iPvNQV+rLcxhQV+5kj2U/7Pg4jEsoS6n7GKz9YiAJmzP/Wdorkh0BR+3JjHqkwWkshxxRrvAgrdeP0QICiNk2gsWLQlhMXp/jRSPgm31DrknX7FRH3y0OPgAnKdU862M=
+	t=1715767307; cv=none; b=DktMgCcIMVRvd4s2AKEeastGx4NLo4NqYV0QbSbPqCsf7wVnDBqVfRI5KHkBnhHUh7BgCsS/l8GfZRSPboxfZ5GnXNEvbM+GEXcxLle1evnsx4/2FZ+I5Iy8sCyQJ43IGDGxYAjlYpkV8m7X8oB5mw7qi/r+ontdwJl0cXnVx/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715767304; c=relaxed/simple;
-	bh=D/mIw5PQXaVybV8q1M5tT5irn19bOqE7/C1r84b60EQ=;
+	s=arc-20240116; t=1715767307; c=relaxed/simple;
+	bh=aNY1BCk37hgomQWTjUsQ5l9jnB52GHjycJLv3+RRDtA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hrx3jAHyswVK36GahPj17WI/vKKWXnGrHFXWVAeCMeKn78nVdK4I82aL9o+WgZSddXS6/R+MiDfb5co/JLc9/iifW1eNvYL6xItGY5+ea1eY0rPiuGOwVKONyc8v/JeRpiAVi4BzWUaa9WFzBBZZhLNDe9Honbe8uiymdgdu0Kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=e6MO0lwS; arc=none smtp.client-ip=217.70.183.201
+	 In-Reply-To:To:Cc; b=rG8v83xVpvWIyycXVzh+yQUVJ9/3IxKqxBcJf7fjhX1UlKn9ZdonNYEchz86ERjOmpLNxwLKdo42kt2wUyD/4GuoXtyi1cv8EGDgYTjiRrHkPjKlcLHj3JCl3Ms4jZCS7pCAQqgxu0LSCDHpkYWEdtLJtEgEmpkjLrA6IQ5mIm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UiqFlvbH; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 898AF1BF217;
-	Wed, 15 May 2024 10:01:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 623221BF20D;
+	Wed, 15 May 2024 10:01:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1715767301;
+	t=1715767303;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pAhWJDZy3Qxtd03byX/QomLU+QUbXtxsEhEbMTufqk0=;
-	b=e6MO0lwS8WgaP79vHG+A2B9FcakIel5UokK/xMHNp3rN6XT73NXrUUeCiZ/0zpYKT28nTy
-	DnPPmEExwvUbrwB8PzZydR6+masYhW3x4BFcyWyK+y8LyTBRNjnaVwhchbFzOgCQ1W9tHI
-	GHMMrqTf1k7DubnXxQGmTFWKzfsRcP+ldk+kPh/uqKAp0z7Yr508yk02AtGAyDFX6CWDP8
-	xBiq9zsK0kUEDYTE0NNX0jaHUn8jRruaiS49gjS8TvvQXLVakS9jm1BLoFJe/LHdYgJgnR
-	2ZxzVTAe+tbzSsizvTmzhrlXGxSQJ0D/gTnS5zWO7puFEMkCeIJqFgMHLSTSJw==
+	bh=SOtYByFbOq/kD+SHjuSXQZVzJTtVnLBLPoL8nOih1ao=;
+	b=UiqFlvbH31h6V/QqiutFpVZFkSvYJguJAqLq14slR5t3xFhTKJFij4/0pjFzQKnj3FKigV
+	V2vHnDu8KSr0PElHxCY9Qwv7mCsXy2ne49/DoO+nHoT1JJJg3ubrODx7DDoYIsI7BxXQil
+	6NgtXiIrxS+qPPdi9YY0o0TZpesHtDcjffgUFI6DehZyonsC7wYyCQsLfPF40vgWT3pYrz
+	pf802u1LaV0EVzcJXPErOrFwrhG7xdkvSzvBKQN7QvuRHGyAc31SqQlRtp48cI4Wnna/1t
+	8007ES6min2YDQl2jKdDICssfUD9ph4vIKZ+znQZho3pqksf3SJfaIo7DMBeaA==
 From: Thomas Richard <thomas.richard@bootlin.com>
-Date: Wed, 15 May 2024 12:01:10 +0200
-Subject: [PATCH v6 09/12] PCI: j721e: Add reset GPIO to struct j721e_pcie
+Date: Wed, 15 May 2024 12:01:11 +0200
+Subject: [PATCH v6 10/12] PCI: Add T_PERST_CLK_US macro
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -55,8 +55,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240102-j7200-pcie-s2r-v6-9-4656ef6e6d66@bootlin.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240102-j7200-pcie-s2r-v6-10-4656ef6e6d66@bootlin.com>
 References: <20240102-j7200-pcie-s2r-v6-0-4656ef6e6d66@bootlin.com>
 In-Reply-To: <20240102-j7200-pcie-s2r-v6-0-4656ef6e6d66@bootlin.com>
 To: Linus Walleij <linus.walleij@linaro.org>, 
@@ -77,37 +77,32 @@ Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
 X-Mailer: b4 0.12.0
 X-GND-Sasl: thomas.richard@bootlin.com
 
-From: Théo Lebrun <theo.lebrun@bootlin.com>
+"Power Sequencing and Reset Signal Timings" table (section 2.9.2) in PCI
+EXPRESS CARD ELECTROMECHANICAL SPECIFICATION, REV. 5.1 indicates PERST#
+should be deasserted after minimum of 100us once REFCLK is stable (symbol
+T_PERST-CLK).
 
-Add reset GPIO to struct j721e_pcie, so it can be used at suspend and
-resume stages.
+Add a macro so that PCIe controller drivers can use it.
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 ---
- drivers/pci/controller/cadence/pci-j721e.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/pci/pci.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
-index 98484f001562..9af4fd64c1f9 100644
---- a/drivers/pci/controller/cadence/pci-j721e.c
-+++ b/drivers/pci/controller/cadence/pci-j721e.c
-@@ -52,6 +52,7 @@ struct j721e_pcie {
- 	u32			mode;
- 	u32			num_lanes;
- 	u32			max_lanes;
-+	struct gpio_desc	*reset_gpio;
- 	void __iomem		*user_cfg_base;
- 	void __iomem		*intd_cfg_base;
- 	u32			linkdown_irq_regfield;
-@@ -508,6 +509,7 @@ static int j721e_pcie_probe(struct platform_device *pdev)
- 			ret = dev_err_probe(dev, PTR_ERR(gpiod), "Failed to get reset GPIO\n");
- 			goto err_get_sync;
- 		}
-+		pcie->reset_gpio = gpiod;
+diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+index 17fed1846847..c47b1d3b5887 100644
+--- a/drivers/pci/pci.h
++++ b/drivers/pci/pci.h
+@@ -16,6 +16,9 @@
+ /* Power stable to PERST# inactive from PCIe card Electromechanical Spec */
+ #define PCIE_T_PVPERL_MS		100
  
- 		ret = cdns_pcie_init_phy(dev, cdns_pcie);
- 		if (ret) {
++/* REFCLK stable before PERST# inactive from PCIe card Electromechanical Spec */
++#define PCIE_T_PERST_CLK_US		100
++
+ /*
+  * PCIe r6.0, sec 5.3.3.2.1 <PME Synchronization>
+  * Recommends 1ms to 10ms timeout to check L2 ready.
 
 -- 
 2.39.2
