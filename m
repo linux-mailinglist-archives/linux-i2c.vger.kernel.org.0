@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-3534-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3545-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C8708C7C40
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 May 2024 20:24:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D1018C7C75
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 May 2024 20:30:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9F9CB2390C
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 May 2024 18:24:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F0391C2085D
+	for <lists+linux-i2c@lfdr.de>; Thu, 16 May 2024 18:30:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20DDB15CD50;
-	Thu, 16 May 2024 18:19:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43BA4165FAA;
+	Thu, 16 May 2024 18:20:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LAVrrGGI"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kcxeOmqU"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32A51598E2;
-	Thu, 16 May 2024 18:19:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6440915747B;
+	Thu, 16 May 2024 18:20:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715883580; cv=none; b=Qh2wuzktU12r0IIf0ROUNJu7DQtoJqor4s722/FUKO8+ujBsYSD4VvOVXG8xyuPPLRSbIMH6/a1SjjotW4EQwe0dJ95EKwSVFcCOHgm/lnW+eYrv4fPoHYr0DEeh7EJzXwZXNkd0RLEcveeZ7q2l0LCvp/Zmco7FtSh2mHrVI8I=
+	t=1715883606; cv=none; b=HJ+9vJTJjGpUITzkv9QM+WUk0Z4eYKVb+FCKKf5+qKICHT8vzSIgHZbFalvc3IUEDd5PzFTeeu0je2JPu5q5DgUqC/8LzM4Geo8uBHVW8frF14Ec2TwxtDBzUr1kE9nTRWciCSMfqQMKF8bnOzhmVd9TMCPp5uOMwOMLZtLl7e0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715883580; c=relaxed/simple;
-	bh=SJUTkBqyyZTlwDRg7ldRmAZztx4EwiyDcC6kI4kRcwc=;
+	s=arc-20240116; t=1715883606; c=relaxed/simple;
+	bh=AhnSzDLDOWLJZ6wOtscN8EKiHKe2AkmW1DojbzM9uJ0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dnVwfzd+tr8199p4N25M6pPA5E/lkTLB7hAQYokH8QZUYs8CR+oveIsdToylr2raOAMsTM4hGIY61kAU0q68XpYst3K2crBo+tW1uKsnhC4Z+78m8O4DtNOWqsf2MB50p0dKku0yRBKAh2Td8Wq6FhdkcD4v8p2CVkfLJwAJxHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=LAVrrGGI; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=P3077AtVB+bDms+aZaIs7Pr5GOWMokbcDiCqI5U67EQXwZWIfFEP8iFOrlTQMwUSqoxIsqutNbtPklBS9rkiXDDFnFK+OIGKU4SITAlE2mDzwkwkx5WOHPV4BHGPhYq64MR3kOBPdEy7jStXtntPzv/A7x9MNB7gDYm1kdKQTIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kcxeOmqU; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44GHbvhH010836;
-	Thu, 16 May 2024 18:19:17 GMT
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44GHgcpA003291;
+	Thu, 16 May 2024 18:19:16 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=IS0irjXh2U091zKbKR7d+9rVvpukYBODxtV/+wXMALY=;
- b=LAVrrGGIKeMKY1Eg1La1dhURSkr87BqPf/8Kv68jMCoZn8ws3VWZ3duHCRnVi28fOqgp
- +cd/gv8VTCHgKx2aW1Nf98GptbN0EuqxxlbEllipcWKkL7ewdOKrFwxxE4N+rKLwDbkw
- urEeBZAj2LtNucp5AQyTuD/hKQdHZYDa62Bs31KtX1D1i36XhikeFqcQFEg+fxoziQ3D
- Ohju8txrwWR+KywxPG+0DOFCulyjIDWIpZ3DQGcFJm/LEKpzBN8IbnykMK/QyJq0AziK
- 5UbgynHe8hjS8ZSs7MXr8DucldiVY7aLhwUDn0/8/2LskhGvic+lEoK3QnqWLirSrQii 3w== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3y5pq5r365-1
+ bh=i2C43nvKw0UyLSXoCA7myzkhI4FP4JjR32/Jp3Q/4S8=;
+ b=kcxeOmqUNSeqYlzzh415K6o8upP8u549P6khtI4vRZOsD3IkfW4U+49dzOShgGfopF0V
+ ktxpc9WLtFUZVAovh2rs3s5JTnT+ATCjAto4nTtjVbhV/9eOCLeJK32JJEins4mUiirw
+ 0c2anHy/5BcyeGToZqn0Zwl/78SDMVvobiRdFtG/1ZefF+c1nuIMeSxYPMuVIH6cl/sA
+ LHWSA4P9VnoUQNq37jHcADftlM7opMC1PKkF6Fq3uWxYmnnionpWc6P/GM8BA5ruAbqV
+ 1YpbyX36KbaQ21CvZRoco8usUzoUrpiGGIegQbyQfFEUGxWds6XxKG6SzTThl0mVwFaj Qg== 
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3y5pse82hs-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 May 2024 18:19:17 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44GG03Yg006027;
-	Thu, 16 May 2024 18:19:16 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3y2nq331w2-1
+	Thu, 16 May 2024 18:19:15 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44GHkRCE006189;
+	Thu, 16 May 2024 18:19:14 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3y2mgmud30-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 May 2024 18:19:16 +0000
+	Thu, 16 May 2024 18:19:14 +0000
 Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44GIJDvg35455468
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44GIJC0d26411652
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 16 May 2024 18:19:16 GMT
+	Thu, 16 May 2024 18:19:14 GMT
 Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C6EAB58080;
-	Thu, 16 May 2024 18:19:11 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 2099358084;
+	Thu, 16 May 2024 18:19:12 +0000 (GMT)
 Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 87A0258075;
+	by IMSVA (Postfix) with ESMTP id CF4F158073;
 	Thu, 16 May 2024 18:19:11 +0000 (GMT)
 Received: from slate16.aus.stglabs.ibm.com (unknown [9.61.107.19])
 	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
@@ -74,9 +74,9 @@ Cc: linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         joel@jms.id.au, alistair@popple.id.au, jk@ozlabs.org,
         andrew@codeconstruct.com.au, linux-aspeed@lists.ozlabs.org,
         eajames@linux.ibm.com
-Subject: [PATCH v3 14/40] fsi: hub: Use common initialization and link enable
-Date: Thu, 16 May 2024 13:18:41 -0500
-Message-Id: <20240516181907.3468796-15-eajames@linux.ibm.com>
+Subject: [PATCH v3 15/40] fsi: aspeed: Use common initialization and link enable
+Date: Thu, 16 May 2024 13:18:42 -0500
+Message-Id: <20240516181907.3468796-16-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240516181907.3468796-1-eajames@linux.ibm.com>
 References: <20240516181907.3468796-1-eajames@linux.ibm.com>
@@ -88,244 +88,321 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: PERxO3mfmi5SQtAcViUm7s-hG3sfF54E
-X-Proofpoint-ORIG-GUID: PERxO3mfmi5SQtAcViUm7s-hG3sfF54E
+X-Proofpoint-ORIG-GUID: c_Cs3YasAoQVJu-SuocsWfkfMryTR1xg
+X-Proofpoint-GUID: c_Cs3YasAoQVJu-SuocsWfkfMryTR1xg
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
  definitions=2024-05-16_07,2024-05-15_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 bulkscore=0 spamscore=0 malwarescore=0 phishscore=0
- clxscore=1015 mlxlogscore=904 priorityscore=1501 adultscore=0
- impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ suspectscore=0 lowpriorityscore=0 mlxscore=0 priorityscore=1501
+ spamscore=0 impostorscore=0 phishscore=0 mlxlogscore=999 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2405010000 definitions=main-2405160132
 
-Set up an FSI regmap for the hub master to use the new common
-master initialization and link enable procedures.
+Create a regmap for accessing the master registers over OPB
+to use the new common master initialization and link enable procedures.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- drivers/fsi/fsi-master-hub.c | 142 ++++++-----------------------------
- 1 file changed, 23 insertions(+), 119 deletions(-)
+Changes since v2:
+ - Add AST2700 direct AHB access of master registers
 
-diff --git a/drivers/fsi/fsi-master-hub.c b/drivers/fsi/fsi-master-hub.c
-index eea8649fee74d..91ad6b7728fa2 100644
---- a/drivers/fsi/fsi-master-hub.c
-+++ b/drivers/fsi/fsi-master-hub.c
-@@ -9,6 +9,7 @@
- #include <linux/fsi.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/regmap.h>
- #include <linux/slab.h>
- 
- #include "fsi-master.h"
-@@ -16,8 +17,6 @@
- 
- #define FSI_ENGID_HUB_MASTER		0x1c
+ drivers/fsi/fsi-master-aspeed.c | 173 +++++++++++++-------------------
+ 1 file changed, 68 insertions(+), 105 deletions(-)
+
+diff --git a/drivers/fsi/fsi-master-aspeed.c b/drivers/fsi/fsi-master-aspeed.c
+index 3d15e867237df..a67f185bb8814 100644
+--- a/drivers/fsi/fsi-master-aspeed.c
++++ b/drivers/fsi/fsi-master-aspeed.c
+@@ -27,6 +27,7 @@ struct fsi_master_aspeed {
+ 	struct mutex		lock;	/* protect HW access */
+ 	struct device		*dev;
+ 	void __iomem		*base;
++	void __iomem		*ctrl;
+ 	struct clk		*clk;
+ 	struct gpio_desc	*cfam_reset_gpio;
+ };
+@@ -95,14 +96,6 @@ static const u32 fsi_base = 0xa0000000;
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/fsi_master_aspeed.h>
  
 -#define FSI_LINK_ENABLE_SETUP_TIME	10	/* in mS */
 -
- /*
-  * FSI hub master support
-  *
-@@ -78,134 +77,33 @@ static int hub_master_break(struct fsi_master *master, int link)
- 	return hub_master_write(master, link, 0, addr, &cmd, sizeof(cmd));
+-/* Run the bus at maximum speed by default */
+-#define FSI_DIVISOR_DEFAULT            1
+-#define FSI_DIVISOR_CABLED             2
+-static u16 aspeed_fsi_divisor = FSI_DIVISOR_DEFAULT;
+-module_param_named(bus_div,aspeed_fsi_divisor, ushort, 0);
+-
+ #define OPB_POLL_TIMEOUT		500
+ 
+ static int __opb_write(struct fsi_master_aspeed *aspeed, u32 addr,
+@@ -333,35 +326,6 @@ static int aspeed_master_write(struct fsi_master *master, int link,
+ 	return ret;
  }
  
--static int hub_master_link_enable(struct fsi_master *master, int link,
--				  bool enable)
+-static int aspeed_master_link_enable(struct fsi_master *master, int link,
+-				     bool enable)
 -{
--	struct fsi_master_hub *hub = to_fsi_master_hub(master);
--	int idx, bit;
+-	struct fsi_master_aspeed *aspeed = to_fsi_master_aspeed(master);
+-	int idx, bit, ret;
 -	__be32 reg;
--	int rc;
 -
 -	idx = link / 32;
 -	bit = link % 32;
 -
 -	reg = cpu_to_be32(0x80000000 >> bit);
 -
--	if (!enable)
--		return fsi_device_write(hub->upstream, FSI_MCENP0 + (4 * idx),
--					&reg, 4);
+-	mutex_lock(&aspeed->lock);
 -
--	rc = fsi_device_write(hub->upstream, FSI_MSENP0 + (4 * idx), &reg, 4);
--	if (rc)
--		return rc;
+-	if (!enable) {
+-		ret = opb_writel(aspeed, ctrl_base + FSI_MCENP0 + (4 * idx), reg);
+-		goto done;
+-	}
+-
+-	ret = opb_writel(aspeed, ctrl_base + FSI_MSENP0 + (4 * idx), reg);
+-	if (ret)
+-		goto done;
 -
 -	mdelay(FSI_LINK_ENABLE_SETUP_TIME);
--
--	return 0;
+-done:
+-	mutex_unlock(&aspeed->lock);
+-	return ret;
 -}
 -
- static void hub_master_release(struct device *dev)
+ static int aspeed_master_term(struct fsi_master *master, int link, uint8_t id)
  {
- 	struct fsi_master_hub *hub = to_fsi_master_hub(to_fsi_master(dev));
+ 	uint32_t addr;
+@@ -389,72 +353,54 @@ static void aspeed_master_release(struct device *dev)
+ 	struct fsi_master_aspeed *aspeed =
+ 		to_fsi_master_aspeed(to_fsi_master(dev));
  
-+	regmap_exit(hub->master.map);
- 	kfree(hub);
++	regmap_exit(aspeed->master.map);
+ 	kfree(aspeed);
  }
  
 -/* mmode encoders */
 -static inline u32 fsi_mmode_crs0(u32 x)
--{
++static int regmap_aspeed_opb_read(void *context, unsigned int reg, unsigned int *val)
+ {
 -	return (x & FSI_MMODE_CRS0MASK) << FSI_MMODE_CRS0SHFT;
 -}
--
++	__be32 v;
++	int ret;
+ 
 -static inline u32 fsi_mmode_crs1(u32 x)
 -{
 -	return (x & FSI_MMODE_CRS1MASK) << FSI_MMODE_CRS1SHFT;
--}
--
--static int hub_master_init(struct fsi_master_hub *hub)
--{
--	struct fsi_device *dev = hub->upstream;
++	ret = opb_readl(context, ctrl_base + reg, &v);
++	if (ret)
++		return ret;
++
++	*val = be32_to_cpu(v);
++	return 0;
+ }
+ 
+-static int aspeed_master_init(struct fsi_master_aspeed *aspeed)
++static int regmap_aspeed_opb_write(void *context, unsigned int reg, unsigned int val)
+ {
 -	__be32 reg;
--	int rc;
 -
 -	reg = cpu_to_be32(FSI_MRESP_RST_ALL_MASTER | FSI_MRESP_RST_ALL_LINK
 -			| FSI_MRESP_RST_MCR | FSI_MRESP_RST_PYE);
--	rc = fsi_device_write(dev, FSI_MRESP0, &reg, sizeof(reg));
--	if (rc)
--		return rc;
+-	opb_writel(aspeed, ctrl_base + FSI_MRESP0, reg);
 -
 -	/* Initialize the MFSI (hub master) engine */
 -	reg = cpu_to_be32(FSI_MRESP_RST_ALL_MASTER | FSI_MRESP_RST_ALL_LINK
 -			| FSI_MRESP_RST_MCR | FSI_MRESP_RST_PYE);
--	rc = fsi_device_write(dev, FSI_MRESP0, &reg, sizeof(reg));
--	if (rc)
--		return rc;
+-	opb_writel(aspeed, ctrl_base + FSI_MRESP0, reg);
 -
 -	reg = cpu_to_be32(FSI_MECTRL_EOAE | FSI_MECTRL_P8_AUTO_TERM);
--	rc = fsi_device_write(dev, FSI_MECTRL, &reg, sizeof(reg));
--	if (rc)
--		return rc;
+-	opb_writel(aspeed, ctrl_base + FSI_MECTRL, reg);
 -
--	reg = cpu_to_be32(FSI_MMODE_EIP | FSI_MMODE_ECRC | FSI_MMODE_EPC
--			| fsi_mmode_crs0(1) | fsi_mmode_crs1(1)
+-	reg = cpu_to_be32(FSI_MMODE_ECRC | FSI_MMODE_EPC | FSI_MMODE_RELA
+-			| fsi_mmode_crs0(aspeed_fsi_divisor)
+-			| fsi_mmode_crs1(aspeed_fsi_divisor)
 -			| FSI_MMODE_P8_TO_LSB);
--	rc = fsi_device_write(dev, FSI_MMODE, &reg, sizeof(reg));
--	if (rc)
--		return rc;
+-	dev_info(aspeed->dev, "mmode set to %08x (divisor %d)\n",
+-			be32_to_cpu(reg), aspeed_fsi_divisor);
+-	opb_writel(aspeed, ctrl_base + FSI_MMODE, reg);
 -
 -	reg = cpu_to_be32(0xffff0000);
--	rc = fsi_device_write(dev, FSI_MDLYR, &reg, sizeof(reg));
--	if (rc)
--		return rc;
+-	opb_writel(aspeed, ctrl_base + FSI_MDLYR, reg);
 -
 -	reg = cpu_to_be32(~0);
--	rc = fsi_device_write(dev, FSI_MSENP0, &reg, sizeof(reg));
--	if (rc)
--		return rc;
+-	opb_writel(aspeed, ctrl_base + FSI_MSENP0, reg);
 -
 -	/* Leave enabled long enough for master logic to set up */
 -	mdelay(FSI_LINK_ENABLE_SETUP_TIME);
 -
--	rc = fsi_device_write(dev, FSI_MCENP0, &reg, sizeof(reg));
--	if (rc)
--		return rc;
+-	opb_writel(aspeed, ctrl_base + FSI_MCENP0, reg);
 -
--	rc = fsi_device_read(dev, FSI_MAEB, &reg, sizeof(reg));
--	if (rc)
--		return rc;
--
+-	opb_readl(aspeed, ctrl_base + FSI_MAEB, NULL);
++	return opb_writel(context, ctrl_base + reg, cpu_to_be32(val));
++}
+ 
 -	reg = cpu_to_be32(FSI_MRESP_RST_ALL_MASTER | FSI_MRESP_RST_ALL_LINK);
--	rc = fsi_device_write(dev, FSI_MRESP0, &reg, sizeof(reg));
--	if (rc)
--		return rc;
--
--	rc = fsi_device_read(dev, FSI_MLEVP0, &reg, sizeof(reg));
--	if (rc)
--		return rc;
--
+-	opb_writel(aspeed, ctrl_base + FSI_MRESP0, reg);
++static const struct regmap_bus regmap_aspeed_opb = {
++	.reg_write = regmap_aspeed_opb_write,
++	.reg_read = regmap_aspeed_opb_read,
++};
+ 
+-	opb_readl(aspeed, ctrl_base + FSI_MLEVP0, NULL);
++static int regmap_ast2700_read(void *context, unsigned int reg, unsigned int *val)
++{
++	struct fsi_master_aspeed *aspeed = context;
+ 
 -	/* Reset the master bridge */
 -	reg = cpu_to_be32(FSI_MRESB_RST_GEN);
--	rc = fsi_device_write(dev, FSI_MRESB0, &reg, sizeof(reg));
--	if (rc)
--		return rc;
--
+-	opb_writel(aspeed, ctrl_base + FSI_MRESB0, reg);
++	*val = readl(aspeed->ctrl + reg);
++	return 0;
++}
+ 
 -	reg = cpu_to_be32(FSI_MRESB_RST_ERR);
--	return fsi_device_write(dev, FSI_MRESB0, &reg, sizeof(reg));
--}
--
- static int hub_master_probe(struct device *dev)
- {
-+	struct regmap_config hub_master_regmap_config;
- 	struct fsi_device *fsi_dev = to_fsi_dev(dev);
- 	struct fsi_master_hub *hub;
-+	struct regmap *map;
- 	uint32_t reg, links;
--	__be32 __reg;
- 	int rc;
+-	opb_writel(aspeed, ctrl_base + FSI_MRESB0, reg);
++static int regmap_ast2700_write(void *context, unsigned int reg, unsigned int val)
++{
++	struct fsi_master_aspeed *aspeed = context;
  
--	rc = fsi_device_read(fsi_dev, FSI_MVER, &__reg, sizeof(__reg));
-+	fsi_master_regmap_config(&hub_master_regmap_config);
-+	hub_master_regmap_config.reg_base = fsi_dev->addr;
-+	map = regmap_init_fsi(fsi_dev, &hub_master_regmap_config);
-+	if (IS_ERR(map))
-+		return PTR_ERR(map);
++	writel(val, aspeed->ctrl + reg);
+ 	return 0;
+ }
+ 
++static const struct regmap_bus regmap_ast2700 = {
++	.reg_write = regmap_ast2700_write,
++	.reg_read = regmap_ast2700_read,
++};
 +
-+	rc = regmap_read(map, FSI_MVER, &reg);
- 	if (rc)
--		return rc;
-+		goto err_regmap;
+ static ssize_t cfam_reset_store(struct device *dev, struct device_attribute *attr,
+ 				const char *buf, size_t count)
+ {
+@@ -466,7 +412,7 @@ static ssize_t cfam_reset_store(struct device *dev, struct device_attribute *att
+ 	usleep_range(900, 1000);
+ 	gpiod_set_value(aspeed->cfam_reset_gpio, 0);
+ 	usleep_range(900, 1000);
+-	opb_writel(aspeed, ctrl_base + FSI_MRESP0, cpu_to_be32(FSI_MRESP_RST_ALL_MASTER));
++	regmap_write(aspeed->master.map, FSI_MRESP0, FSI_MRESP_RST_ALL_MASTER);
+ 	mutex_unlock(&aspeed->lock);
+ 	trace_fsi_master_aspeed_cfam_reset(false);
  
--	reg = be32_to_cpu(__reg);
- 	links = (reg >> 8) & 0xff;
- 	dev_dbg(dev, "hub version %08x (%d links)\n", reg, links);
+@@ -526,14 +472,6 @@ static int tacoma_cabled_fsi_fixup(struct device *dev)
  
-@@ -213,7 +111,7 @@ static int hub_master_probe(struct device *dev)
- 			FSI_HUB_LINK_SIZE * links);
+ 	/* If the routing GPIO is high we should set the mux to low. */
+ 	if (gpio) {
+-		/*
+-		 * Cable signal integrity means we should run the bus
+-		 * slightly slower. Do not override if a kernel param
+-		 * has already overridden.
+-		 */
+-		if (aspeed_fsi_divisor == FSI_DIVISOR_DEFAULT)
+-			aspeed_fsi_divisor = FSI_DIVISOR_CABLED;
+-
+ 		gpiod_direction_output(mux_gpio, 0);
+ 		dev_info(dev, "FSI configured for external cable\n");
+ 	} else {
+@@ -549,9 +487,13 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
+ {
+ 	const struct fsi_master_aspeed_data *md = of_device_get_match_data(&pdev->dev);
+ 	u32 opb_retry_counter = md ? md->opb_retry_counter : OPB_RC_DEFAULT;
++	const struct regmap_bus *bus = &regmap_aspeed_opb;
++	struct regmap_config aspeed_master_regmap_config;
+ 	struct fsi_master_aspeed *aspeed;
+-	int rc, links, reg;
+-	__be32 raw;
++	u32 opb_ctrl_base = ctrl_base;
++	struct resource *res;
++	unsigned int reg;
++	int rc, links;
+ 
+ 	rc = tacoma_cabled_fsi_fixup(&pdev->dev);
  	if (rc) {
- 		dev_err(dev, "can't claim slave address range for links");
--		return rc;
+@@ -571,6 +513,17 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
+ 		goto err_free_aspeed;
+ 	}
+ 
++	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ctrl");
++	if (res) {
++		aspeed->ctrl = devm_ioremap_resource(&pdev->dev, res);
++		if (!IS_ERR(aspeed->ctrl)) {
++			/* Access FSI controller over AHB */
++			opb_ctrl_base = res->start;
++			opb_retry_counter &= ~OPB_RC_CTRL_OPB;
++			bus = &regmap_ast2700;
++		}
++	}
++
+ 	aspeed->clk = devm_clk_get(aspeed->dev, NULL);
+ 	if (IS_ERR(aspeed->clk)) {
+ 		dev_err(aspeed->dev, "couldn't get clock\n");
+@@ -594,7 +547,7 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
+ 
+ 	writel(opb_retry_counter, aspeed->base + OPB_RETRY_COUNTER);
+ 
+-	writel(ctrl_base, aspeed->base + OPB_CTRL_BASE);
++	writel(opb_ctrl_base, aspeed->base + OPB_CTRL_BASE);
+ 	writel(fsi_base, aspeed->base + OPB_FSI_BASE);
+ 
+ 	/* Set read data order */
+@@ -611,13 +564,19 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
+ 	 */
+ 	writel(0x1, aspeed->base + OPB0_SELECT);
+ 
+-	rc = opb_readl(aspeed, ctrl_base + FSI_MVER, &raw);
++	fsi_master_regmap_config(&aspeed_master_regmap_config);
++	aspeed->master.map = regmap_init(&pdev->dev, bus, aspeed, &aspeed_master_regmap_config);
++	if (IS_ERR(aspeed->master.map)) {
++		rc = PTR_ERR(aspeed->master.map);
++		goto err_release;
++	}
++
++	rc = regmap_read(aspeed->master.map, FSI_MVER, &reg);
+ 	if (rc) {
+ 		dev_err(&pdev->dev, "failed to read hub version\n");
+-		goto err_release;
 +		goto err_regmap;
  	}
  
- 	hub = kzalloc(sizeof(*hub), GFP_KERNEL);
-@@ -229,22 +127,24 @@ static int hub_master_probe(struct device *dev)
- 	hub->master.dev.parent = dev;
- 	hub->master.dev.release = hub_master_release;
- 	hub->master.dev.of_node = of_node_get(dev_of_node(dev));
-+	hub->master.map = map;
+-	reg = be32_to_cpu(raw);
+ 	links = (reg >> 8) & 0xff;
+ 	dev_info(&pdev->dev, "hub version %08x (%d links)\n", reg, links);
  
- 	hub->master.idx = fsi_dev->slave->link + 1;
- 	hub->master.n_links = links;
--	hub->master.flags = FSI_MASTER_FLAG_NO_BREAK_SID;
-+	hub->master.flags = FSI_MASTER_FLAG_NO_BREAK_SID | FSI_MASTER_FLAG_INTERRUPT;
- 	hub->master.read = hub_master_read;
- 	hub->master.write = hub_master_write;
- 	hub->master.send_break = hub_master_break;
--	hub->master.link_enable = hub_master_link_enable;
+@@ -626,20 +585,22 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
+ 	aspeed->master.dev.of_node = of_node_get(dev_of_node(&pdev->dev));
  
- 	dev_set_drvdata(dev, hub);
+ 	aspeed->master.n_links = links;
++	aspeed->master.flags = FSI_MASTER_FLAG_RELA;
+ 	aspeed->master.read = aspeed_master_read;
+ 	aspeed->master.write = aspeed_master_write;
+ 	aspeed->master.send_break = aspeed_master_break;
+ 	aspeed->master.term = aspeed_master_term;
+-	aspeed->master.link_enable = aspeed_master_link_enable;
  
--	hub_master_init(hub);
-+	rc = fsi_master_init(&hub->master, fsi_dev->slave->master->clock_frequency);
+ 	dev_set_drvdata(&pdev->dev, aspeed);
+ 
+ 	mutex_init(&aspeed->lock);
+-	aspeed_master_init(aspeed);
++	rc = fsi_master_init(&aspeed->master, clk_get_rate(aspeed->clk));
 +	if (rc)
-+		goto err_free;
++		goto err_regmap;
  
- 	rc = fsi_master_register(&hub->master);
+ 	rc = fsi_master_register(&aspeed->master);
  	if (rc)
 -		goto err_release;
-+		goto err_free;
++		goto err_regmap;
  
  	/* At this point, fsi_master_register performs the device_initialize(),
  	 * and holds the sole reference on master.dev. This means the device
-@@ -256,9 +156,13 @@ static int hub_master_probe(struct device *dev)
- 	get_device(&hub->master.dev);
+@@ -651,6 +612,8 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
+ 	get_device(&aspeed->master.dev);
  	return 0;
  
-+err_free:
-+	kfree(hub);
- err_release:
- 	fsi_slave_release_range(fsi_dev->slave, FSI_HUB_LINK_OFFSET,
- 			FSI_HUB_LINK_SIZE * links);
 +err_regmap:
-+	regmap_exit(map);
- 	return rc;
- }
- 
++	regmap_exit(aspeed->master.map);
+ err_release:
+ 	clk_disable_unprepare(aspeed->clk);
+ err_free_aspeed:
 -- 
 2.39.3
 
