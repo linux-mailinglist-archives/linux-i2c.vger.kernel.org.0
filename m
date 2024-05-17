@@ -1,210 +1,137 @@
-Return-Path: <linux-i2c+bounces-3573-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3574-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88DF78C88F5
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 May 2024 17:04:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FFAC8C8998
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 May 2024 17:49:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0249BB22E91
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 May 2024 15:04:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A3332896F2
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 May 2024 15:49:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59BB67A0D;
-	Fri, 17 May 2024 15:03:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90F9212F591;
+	Fri, 17 May 2024 15:49:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NNF4CVWG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h7AioeaS"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3C837149;
-	Fri, 17 May 2024 15:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747923FBBF;
+	Fri, 17 May 2024 15:49:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715958238; cv=none; b=iq2ym5I8oDxxNj7RLTr3BEBy1qMwb3wCLP9rPaYDoozZUjUpK9OgdgQ7krwDFN0kTPEWL6PPLNO2F/RAX11jlT07GbcURGYvLDC6ybvQiovWUGsGx/Fdi2xAmnMGTgZgV6+wahE0tnLsEtzhqbCFnDY2dpDhxQ2owXx+7ZhYzAs=
+	t=1715960964; cv=none; b=N/tk1dmgEyU908sa0MqLrwvqZOFKNGLcfjMlUifaIZUm7us4I0K4LucgvlPM5gCQaH2LcrNy1XQ3wUn+/xelDms8UVCz1qm33Osmlq3ilUt+0cuYucDordrah3xfnNclmxTUBidwQv7/HyoEdvGKbTWOOh4F78RYYSR/UnFmuQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715958238; c=relaxed/simple;
-	bh=ows2zNDPZTSEXPPVIIdIEYEbYQxQQ5Em7kepFx0r25E=;
+	s=arc-20240116; t=1715960964; c=relaxed/simple;
+	bh=nYaui3EVpbCs7z9n+UR9+uF/xT8dwlB3DJdTf8Aj4oc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XR5OjhJCAdpu/Lb/qZoh/og8UeTo1j5DgWSxqzJwFGWmC4uYyidr9jWbl3NrFzSz8rSyr+roHVxKg4XSGMCJWjItJGCFoCV61X69ftPlXpNZ7mjs5LR0+BlSuP9k8Mebuolw4tk77MTBY7FYgq/qsfacpfkE1ITI5d0tps5j+aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NNF4CVWG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12A19C2BD10;
-	Fri, 17 May 2024 15:03:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715958238;
-	bh=ows2zNDPZTSEXPPVIIdIEYEbYQxQQ5Em7kepFx0r25E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NNF4CVWGtKc6iIOYp3g1LWKKBE1c2KJenyE9HXOHCRjKtXOeY+OzwO9VeYLzxM2Lh
-	 wK9/ar0Au/ImNeJigUkICKaXfl8oFOxRNfVY7NofT4C9tPu6+z6EDGVctbjClhs8XF
-	 U3aANBZrX8VBqW/GXcKvcv3w/l0Fi5DeaPRPdN1EwTP5X/gR6K18WQTe9EW0Jb4k4e
-	 kgN8ntW2UiiBi/D5Gd7DFkBW3eAADgys4DbMVqcE/3kFUkKY9xOPM1qED6o6/mLMcA
-	 2f8CI+oJsQdy0hzims9EATeSxIqmLFpvXoXcOf1JcIa13JXK/CK1wVTRHDVYHto4OD
-	 gO0lhNytwliAw==
-Date: Fri, 17 May 2024 16:03:50 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Emil Svendsen <emas@bang-olufsen.dk>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-sound@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-Subject: Re: [PATCH 07/13] ASoC: codecs: add AD24xx codec driver
-Message-ID: <e5782aef-d64d-46f3-ab5c-dc01285e08c2@sirena.org.uk>
-References: <20240517-a2b-v1-0-b8647554c67b@bang-olufsen.dk>
- <20240517-a2b-v1-7-b8647554c67b@bang-olufsen.dk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hGZqkjb+ofo4GxT6HFnBmtoXBTdlPhxuLI7kiS6WiYHytwXDK0MtrnyIsW65hBEcPeylF8zQFlFR6/NjScjjAn1ZjA/8QPCdv95M/cqd2e+D5tpnT/5w0xVxQT3SqW9Cyw4cRRVgbpbo+H6o3UR/9ffk6iLWCyk5EhzMnAIaX6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h7AioeaS; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715960963; x=1747496963;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nYaui3EVpbCs7z9n+UR9+uF/xT8dwlB3DJdTf8Aj4oc=;
+  b=h7AioeaS+zbT//bmxNFqq6HaAGJei6ewif7RxAZQMw/+KUtnxR5U1CNU
+   tpIvMucbMxEuJqlukgj10TnG4Lk3l83rO+CuBd4msUqEazVZOUVtsqxED
+   wut+OhgM1yskvMpqpzIsni5PPtBBngj9sm+bjIOIE/saDJmgugCCFdbwU
+   yAv7jdTS188IGTFVMtqO3nkM+ftfaHF+NqGbbVpSzyjam0EXbuCk1icm2
+   Hi78kGwvTuCO9A/HgECm6P9w3eaWgKdz1fVdrVkVweOxxDl2chDnA1G1t
+   fcyN2QQWG6LlhxCpQJDfDrSMjGEoHZFarFEUhTSbdCz9HyokdX1tNZwfm
+   g==;
+X-CSE-ConnectionGUID: Bz3J2bQpTBOXUd1NVBFXQg==
+X-CSE-MsgGUID: geZwmPhdSKGDT7QuVCA92g==
+X-IronPort-AV: E=McAfee;i="6600,9927,11075"; a="12256641"
+X-IronPort-AV: E=Sophos;i="6.08,168,1712646000"; 
+   d="scan'208";a="12256641"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2024 08:49:22 -0700
+X-CSE-ConnectionGUID: gdfmtDVsSuSm4Pk+sKEWcA==
+X-CSE-MsgGUID: bJpcJ3KdQRypXWaRp5ZLeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,168,1712646000"; 
+   d="scan'208";a="55053761"
+Received: from unknown (HELO 108735ec233b) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 17 May 2024 08:49:19 -0700
+Received: from kbuild by 108735ec233b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s7zpY-0000rx-22;
+	Fri, 17 May 2024 15:49:13 +0000
+Date: Fri, 17 May 2024 23:49:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+	broonie@kernel.org, andi.shyti@kernel.org, joel@jms.id.au,
+	alistair@popple.id.au, jk@ozlabs.org, andrew@codeconstruct.com.au,
+	linux-aspeed@lists.ozlabs.org, eajames@linux.ibm.com
+Subject: Re: [PATCH v3 37/40] fsi: core: Add different types of CFAM
+Message-ID: <202405172346.olJbkgod-lkp@intel.com>
+References: <20240516181907.3468796-38-eajames@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="skuonK/bS9x9MsEH"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240517-a2b-v1-7-b8647554c67b@bang-olufsen.dk>
-X-Cookie: Function reject.
+In-Reply-To: <20240516181907.3468796-38-eajames@linux.ibm.com>
 
+Hi Eddie,
 
---skuonK/bS9x9MsEH
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build warnings:
 
-On Fri, May 17, 2024 at 02:58:05PM +0200, Alvin =C5=A0ipraga wrote:
+[auto build test WARNING on andi-shyti/i2c/i2c-host]
+[also build test WARNING on linus/master v6.9 next-20240517]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> +++ b/sound/soc/codecs/ad24xx-codec.c
-> @@ -0,0 +1,665 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * AD24xx codec driver
+url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/fsi-hub-Set-master-index-to-link-number-plus-one/20240517-023205
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20240516181907.3468796-38-eajames%40linux.ibm.com
+patch subject: [PATCH v3 37/40] fsi: core: Add different types of CFAM
+config: x86_64-randconfig-122-20240517 (https://download.01.org/0day-ci/archive/20240517/202405172346.olJbkgod-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240517/202405172346.olJbkgod-lkp@intel.com/reproduce)
 
-Please make the whole comment a C++ comment.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202405172346.olJbkgod-lkp@intel.com/
 
-> +static const char *const ad24xx_codec_slot_size_text[] =3D {
-> +	"8 bits",  "12 bits", "16 bits", "20 bits",
-> +	"24 bits", "28 bits", "32 bits",
-> +};
+sparse warnings: (new ones prefixed by >>)
+>> drivers/fsi/fsi-core.c:1113:26: sparse: sparse: symbol 'fsi_get_cfam_type' was not declared. Should it be static?
 
-Why is this configured by the user rather than via set_tdm_slot(), and
-how would one usefully use this at runtime?
+vim +/fsi_get_cfam_type +1113 drivers/fsi/fsi-core.c
 
-> +static int ad24xx_codec_slot_config_put(struct snd_kcontrol *kcontrol,
-> +					struct snd_ctl_elem_value *ucontrol)
-> +{
+  1112	
+> 1113	const struct device_type *fsi_get_cfam_type(u32 id)
+  1114	{
+  1115		u32 major = (id & 0xf00) >> 8;
+  1116		u32 minor = (id & 0xf0) >> 4;
+  1117	
+  1118		switch (major) {
+  1119		case 0x9:
+  1120			return &cfam_s_type;
+  1121		case 0xc:
+  1122			if (minor == 0)
+  1123				return &cfam_ody_type;
+  1124			fallthrough;
+  1125		case 0xd:
+  1126		default:
+  1127			return &cfam_type;
+  1128		}
+  1129	}
+  1130	
 
-> +	} else if (priv =3D=3D &ad24xx_codec_up_slot_format_enum ||
-> +		   priv =3D=3D &ad24xx_codec_dn_slot_format_enum) {
-> +		if (val >=3D ARRAY_SIZE(ad24xx_codec_slot_format_text))
-> +			return -EINVAL;
-> +		slot_config->format[direction] =3D val;
-> +	} else
-> +		return -ENOENT;
-
-If one side has {} both sides should, see coding-style.rst.
-
-> +
-> +	return 0;
-> +}
-
-This won't flag changes by returning 1 which will mean no events are
-generated and break some UIs.  Please show the output of the mixer-test
-selftest on new submissions, it will check for this and other issues.
-
-> +	/* Main node must be BCLK/FSYNC consumer, subordinate node provider */
-> +	if ((fmt & SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK) !=3D
-> +	    (is_a2b_main(adc->node) ? SND_SOC_DAIFMT_CBC_CFC :
-> +				      SND_SOC_DAIFMT_CBP_CFP))
-> +		return -EINVAL;
-
-Please don't use the ternery operator like this, it just makes things
-harder to read.
-
-> +	val =3D bclk_invert ? A2B_I2SCFG_RXBCLKINV_MASK :
-> +			    A2B_I2SCFG_TXBCLKINV_MASK;
-
-Similarly, please use normal conditional statements.
-
-> +static int ad24xx_codec_hw_params(struct snd_pcm_substream *substream,
-> +				  struct snd_pcm_hw_params *params,
-> +				  struct snd_soc_dai *dai)
-
-> +
-> +	/* Finally, request slots */
-> +	ret =3D a2b_node_request_slots(adc->node, &slot_req);
-> +	if (ret)
-> +		return ret;
-
-Note that hw_params() can be called multiple times before starting the
-audio stream, will this leak?
-
-> +				struct snd_soc_dai *dai)
-> +{
-> +	struct snd_soc_component *component =3D dai->component;
-> +	struct ad24xx_codec *adc =3D snd_soc_component_get_drvdata(component);
-> +	int ret;
-> +
-> +	ret =3D a2b_node_free_slots(adc->node);
-> +	if (ret)
-> +		return ret;
-
-What if we close without having called hw_params()?
-
-> +static const struct snd_soc_dai_driver ad24xx_codec_dai_drv[] =3D {
-> +	[AD24XX_DAI_I2S] =3D {
-> +		.name =3D "ad24xx-i2s",
-> +		.playback =3D {
-> +			.stream_name =3D "I2S Playback",
-> +			.channels_min =3D 1,
-> +			.channels_max =3D 32,
-> +		},
-> +		.capture =3D {
-> +			.stream_name =3D "I2S Capture",
-> +			.channels_min =3D 1,
-> +			.channels_max =3D 32,
-> +		},
-> +		.ops =3D &ad24xx_codec_dai_ops,
-> +		.symmetric_rate =3D 1,
-> +	},
-> +};
-
-Why is this an array?
-
-> +static const struct regmap_config ad24xx_codec_regmap_config =3D {
-> +	.reg_bits =3D 8,
-> +	.val_bits =3D 8,
-> +	.cache_type =3D REGCACHE_RBTREE,
-> +};
-
-New code should use _MAPLE unless there's a strong reason to use
-something else.
-
---skuonK/bS9x9MsEH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZHcdUACgkQJNaLcl1U
-h9ABtwf9HncflXNFY8QIXgA4cSV8pllWbpngmZChE9+u+sfBWesth1fTKTC9ejk+
-lvIb3qtIDq9BorlQlfdfX8/arFQYpgrXcEhDIpGccNO2OrNZXHSNxnbz90q70XNX
-MEil8c3aa9ciM2+g8z3855vKmv+pRCB+GZNbfW/zlmr4pTyumWRIjWI+RWCa5CeV
-7w5xGqfedug4xGxlplhyM8Yyu9YDbY5C9GELhAlz0zPBJ+W8yCclZJSsJNYI+jcs
-pPPel76R4NsKy7UGqOLoDgFDUFs1Ps5N0wxkeXg3lTUpsLHdu0JH0uifkz8evQ9L
-u9RBNxjmWhezCSsPkWCgUbwzjSdCTQ==
-=QFB6
------END PGP SIGNATURE-----
-
---skuonK/bS9x9MsEH--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
