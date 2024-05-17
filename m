@@ -1,49 +1,49 @@
-Return-Path: <linux-i2c+bounces-3562-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3563-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 832038C86F6
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 May 2024 15:06:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B59F88C8706
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 May 2024 15:14:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 134A91F21D49
-	for <lists+linux-i2c@lfdr.de>; Fri, 17 May 2024 13:06:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C673B21AFE
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 May 2024 13:14:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01E8A537E0;
-	Fri, 17 May 2024 13:06:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F1E51C4B;
+	Fri, 17 May 2024 13:14:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pqrs.dk header.i=@pqrs.dk header.b="dOTaOKOX"
+	dkim=pass (2048-bit key) header.d=pqrs.dk header.i=@pqrs.dk header.b="estYxcPJ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from out-187.mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E13A52F80
-	for <linux-i2c@vger.kernel.org>; Fri, 17 May 2024 13:06:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFAC4548EF
+	for <linux-i2c@vger.kernel.org>; Fri, 17 May 2024 13:14:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715951190; cv=none; b=Ey3ZACino28wk7sy5Xri6hPLuANW4QdoNH+4+leyXtvGytGQYc2wPGn7cDVkZCK48jR1ejOjDYr6ivVbCTzWUUxDQRgne2VEikepkL2YBTtyp6skDexxYWJnIQJRRO9j24i1CW7MqHDXlORhbNPEvQh5kN5SYc1CF653rOAftgw=
+	t=1715951684; cv=none; b=lngm2AzHnoWUmi/r3LVtxokBZnI2lZ1IIhwr0apdr9kpjdQHrf2io9KS8ks/RanRMCiJkpNYCep/UKjjUdnPVYX99VG7/AWeZTuKzXYkuOJrZlv59EbAYzl6pfBxtO4X1BTldJGa0DbLN9xLGu/cuMHUXdLmOlJzMlA8crHr2ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715951190; c=relaxed/simple;
+	s=arc-20240116; t=1715951684; c=relaxed/simple;
 	bh=+BQrjQj8fvQHF8fbbT0PBaakRFsdp/Ftmf8qaj4dRD4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gZMtArNG6lv7s9c/v9sshUMYTb9h9Cgdb5w5HAcYQRSof8TLZoorSX+vleqGVaAClED6/kjGjEutGep3ZdSjbbbCuKqvYkYQnNKs9i8oyPpV/FqrgeoLwBH781N3kXe207AtiUhW+MkdSClEVtIAOeapdzmYTmZj3THAtt5HVn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pqrs.dk; spf=pass smtp.mailfrom=pqrs.dk; dkim=pass (2048-bit key) header.d=pqrs.dk header.i=@pqrs.dk header.b=dOTaOKOX; arc=none smtp.client-ip=91.218.175.187
+	 In-Reply-To:To:Cc; b=FkH45x16UIBCoE1bRuL0Rm5sXcOKxeF8ZzC/KvR4gRG+RJKfw/GWy0rekFr/STTDvjuN3GwMv5ZVVrxrMMe0RRrNu8mLxvRMLNGWZIOZaX3jugP/3oYqdc0JGhHhfD6oSVz2E4UTQ2AXTHG8emOBqKBoojufgJt5Jqn73mvyG8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pqrs.dk; spf=pass smtp.mailfrom=pqrs.dk; dkim=pass (2048-bit key) header.d=pqrs.dk header.i=@pqrs.dk header.b=estYxcPJ; arc=none smtp.client-ip=95.215.58.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pqrs.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pqrs.dk
 X-Envelope-To: broonie@kernel.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pqrs.dk; s=key1;
-	t=1715951186;
+	t=1715951679;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
 	bh=KGwqzFatac3SdyxB8/u13aV/YQxtNfiylkMZnmEN/dw=;
-	b=dOTaOKOXRY1/J9FXikk6Plm0TjP7QZu6iKqVOOSxBpP7jNKFg+rZoZNSIJ4SBzuxrfv6S4
-	Txzj3GF4F4fLeAIOv8y6WrFGLTAft5DKHIRpn4KPbj26f7zEjh8b7CKvKVXkdalN6FU8FE
-	rv6/nbPPMzwtJjBN8eriUY89iZQYM9H8RnU9y24aeLEb1ITyn1vkqbhW4/2u6WS0kVrfqD
-	2/TfL3RD5lBAJ0SZs0vFiwc8DQzE2xDA61ctozaRV2fMSAwvyp2HetdPqS3y8tUcP/MOtL
-	TrbECBNI6PEVyMzBKKSknGnjGCYWB1PxwRW2NneQQF/zNjI4x7UtVcOwuJrdiw==
+	b=estYxcPJm2tGc9LCnhQIwaTlvZ9mIP7xAf+KWFFcnH55yBaAN0jvXjWwUXf5WctD2UUHLY
+	rHQLlsZNacEIrdY3BGMfskH9SDtgwbqBZu5sA9DR/87Jo3pBkcAriJ++4MLMzDdSm9ilX8
+	L5CXeSpw1ywI7vQIWJEOBMgW76R1shvA6OPqiQ8nXA7/pczqux9FhRBvc7lKzCxhN7p5Av
+	lZ8Rch2B7ntAV7xZjYOQEnEqOyeY5zqFS+cLxWztfDBw3zrNOGqqIp7ViVs7NNDXsT3OFI
+	PjOrv14b+lydrSVA09CBYGiZhkDs0TEZLZ6HEMxyFjrRQ8Foo1hzGZQ3Clnbew==
 X-Envelope-To: gregkh@linuxfoundation.org
 X-Envelope-To: rafael@kernel.org
 X-Envelope-To: robh@kernel.org
@@ -78,9 +78,9 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240517-a2b-v1-8-7e776c784e02@bang-olufsen.dk>
-References: <20240517-a2b-v1-0-7e776c784e02@bang-olufsen.dk>
-In-Reply-To: <20240517-a2b-v1-0-7e776c784e02@bang-olufsen.dk>
+Message-Id: <20240517-a2b-v1-8-b8647554c67b@bang-olufsen.dk>
+References: <20240517-a2b-v1-0-b8647554c67b@bang-olufsen.dk>
+In-Reply-To: <20240517-a2b-v1-0-b8647554c67b@bang-olufsen.dk>
 To: Mark Brown <broonie@kernel.org>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
  "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>, 
