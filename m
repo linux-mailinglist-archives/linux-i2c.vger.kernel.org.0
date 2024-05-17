@@ -1,96 +1,115 @@
-Return-Path: <linux-i2c+bounces-3548-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3549-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EDB58C7C83
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 May 2024 20:31:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 036668C8306
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 May 2024 11:10:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A088AB22B86
-	for <lists+linux-i2c@lfdr.de>; Thu, 16 May 2024 18:31:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEDD51F22E70
+	for <lists+linux-i2c@lfdr.de>; Fri, 17 May 2024 09:10:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA7DD15748B;
-	Thu, 16 May 2024 18:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498E91DDDB;
+	Fri, 17 May 2024 09:10:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nkYjuS/N"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Z3XVq7HT"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A35156C7F;
-	Thu, 16 May 2024 18:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33541EB26;
+	Fri, 17 May 2024 09:10:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715883892; cv=none; b=tcEgwi+qRJl9nl4U6V6KkhG+9LI9jAIRQId9GsliZlA8D0Gis8MEQ9ebW+80tip13YByZz7Efu7Ly74ZGjhI+UqX0Nfh05wA/YM2uRidgu/fH7EqaFZbpvzCxJXRexAAa0vxHN+HPZwPm2Cbo84tm16GM4nHxyWTHLJ+v7eHe3M=
+	t=1715937023; cv=none; b=V5LYY2u3rCLUGvZB7p9vIe07xbp57IvujZlk8ZG4V5K0p0M5QA1G/0WYDqjkXV8LEv08RV4gmsX2p67RGYEY4Ay2Bq+iTVqQ+YW3TdEpBONZ/I2Y1GCv6kNFF7XJ0oL5wxoQ+yUz+TjhpHXx16btiHpToHXmYz9xJSlom0SfBNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715883892; c=relaxed/simple;
-	bh=cPL1DhrdW/xtQHPL/q/XvgIelBXk6IEmMe/AGb1c944=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BA2WgGa7wl5zBkPsETlWeJUuy6ZIh4Jn1vbq+ONn4otFiYhV+jvQCSbYVL5aOpW8tqdnrSx2JotEpGBHf9Nvm3gzC9KELGbH/KEC2tIbK16HUgscEmUS5OqzrzBXKo3X3PYHixzt9VQo2+pTqhsDAOtCrGmmORUQuuX1Svbn9+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nkYjuS/N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C819C113CC;
-	Thu, 16 May 2024 18:24:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715883891;
-	bh=cPL1DhrdW/xtQHPL/q/XvgIelBXk6IEmMe/AGb1c944=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nkYjuS/NexdomGUYU3PhmF2BEhhJUZUm4c0PYZXVThwzQ1oUCUlMhSlRnZ1V3G0dI
-	 Wl35yGix0v9t0gXtX+EXf16tY03zkK6DewJ36fpxh/djVTlLkaW2R/+NRXUvKtylgO
-	 aRhbWYSXg7PTX9Y3jEpRtXFnL/Ydoiw95ivnOxxWhnRT0x2UWZks1Yk+85EkqyFn5O
-	 nTSQ8P7WVoKmLK5lq+y0Pd+JeIEPBYtIRr+ORf7MgipT/MbEkZBrOLgo2UNDPPG02Z
-	 zMHpHpGNvRSuztl7iD7RNVzpr3jdPiJZ6FCQPxGqpZOxeN0/+iPfCsNAxZV4HyVH8v
-	 ULd2zSEYDI5Pw==
-Date: Thu, 16 May 2024 19:24:46 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Eddie James <eajames@linux.ibm.com>
-Cc: linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-	andi.shyti@kernel.org, joel@jms.id.au, alistair@popple.id.au,
-	jk@ozlabs.org, andrew@codeconstruct.com.au,
-	linux-aspeed@lists.ozlabs.org
-Subject: Re: [PATCH v3 38/40] spi: fsi: Calculate clock divider from local
- bus frequency
-Message-ID: <a3cf96f2-fa53-4f18-90f0-c21d6df5b2af@sirena.org.uk>
-References: <20240516181907.3468796-1-eajames@linux.ibm.com>
- <20240516181907.3468796-39-eajames@linux.ibm.com>
+	s=arc-20240116; t=1715937023; c=relaxed/simple;
+	bh=BMycXKMVC3HpLwk8KGm1ckRBUv6vbXZF1bf3OI+h9x0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ubj3HNy/Kwwsmg+b/qsgOzoQt0z79rYyQ13UksqNBjzb+UEMWRV8eBLaRJSZPs1JzAdw+yqOww6uUFQiJoMix2C2G91wAtCLzVUiGQGVtYcIX2xOvwbeiPsitIjIomhItuTW4/ZzdgJNeaCUFHwAlLwYt/KBudXPWDtnjxu6Dfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Z3XVq7HT; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2A19320003;
+	Fri, 17 May 2024 09:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1715937013;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=E9YI5IhJQd+9CPiNZ2Juj0hyKn1eM6koEnskZ7nXuGk=;
+	b=Z3XVq7HTZDQDQNn5t+fzpekKxhSYeQR0NMJsT0E7v0NazyG3Hhd6Ij3FodPhpxYXezfIJR
+	2iP1ZwBWYEj0iyUI8ijZEwnm48MU51UBF03xMCZoYiUDom7zrRfo1hVhg5btwgXAtzgOhI
+	pmN/L9ci8XIRqwztOOBo8FPD9KAh0SSVD8rK6Nx83JFtMi4WwT1BPClN9Ns8R3uxdmfVG+
+	X3o+kD1tMz9+rUJuLHDj7wDntCwSCawoO0D58y5bLO4+5lUT/mj40cIaUkmxMke2JovFD+
+	G8vxkgmp4Wo1KEBaFpH+hY33JP/IK31HHo6WnSDonQ7Us7wvzslv4xCJG3adXw==
+From: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Subject: [PATCH v2 0/3] Add I2C support on TH1520
+Date: Fri, 17 May 2024 11:09:52 +0200
+Message-Id: <20240517-i2c-th1520-v2-0-d364d135ccc6@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="EtRMkbJm6V6cCFzH"
-Content-Disposition: inline
-In-Reply-To: <20240516181907.3468796-39-eajames@linux.ibm.com>
-X-Cookie: I'm having a MID-WEEK CRISIS!
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOAeR2YC/1XMQQ7CIBCF4as0sxYDI6TElfcwXRRKZRIFA4RoG
+ u4u1pXL/yXv2yC7RC7DedgguUqZYuiBhwGsn8PNMVp6A3KUXKJihJYVLxRyttqTdWLWRo4I/fB
+ MbqXXjl2n3p5yiem92xW/649R4o+pyDgzRokF9agk1xcTY7lTONr4gKm19gGCJDUwpgAAAA==
+To: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jisheng Zhang <jszhang@kernel.org>, 
+ Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+ Drew Fustini <dfustini@tenstorrent.com>, 
+ Emil Renner Berthing <emil.renner.berthing@canonical.com>, 
+ Conor Dooley <conor@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, 
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+X-Mailer: b4 0.13.0
+X-GND-Sasl: thomas.bonnefille@bootlin.com
 
+This adds I2C support in the device tree of the T-Head TH1520 RISCV-SoC
+and a default configuration for the BeagleV-Ahead. It appears that the
+TH1520 I2C is already supported in the upstream kernel through the
+Synopsis Designware I2C adapter driver.
 
---EtRMkbJm6V6cCFzH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This patch depends on the clock patch from Drew Fustini
+Link: https://lore.kernel.org/linux-riscv/20240426-th1520-clk-v2-v2-0-96b829e6fcee@tenstorrent.com
+and the pinctrl patch from Emil Renner Berthing
+Link: https://lore.kernel.org/linux-riscv/20240103132852.298964-1-emil.renner.berthing@canonical.com
 
-On Thu, May 16, 2024 at 01:19:05PM -0500, Eddie James wrote:
-> Use the new FSI device local bus clock to calculate the proper SPI
-> clock divider.
+Changed from v1:
+1. Remove redundant example for Synopsis DesignWare-I2C bindings
+2. Remove Node Ordering commit as it has already been taken
+3. Remove EEPROM label
+4. Rebase on pinctrl and clock driver patches
+5. Add pinctrl configuration
+6. Replaced the fixed-clock with a correct configuration
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+---
+Thomas Bonnefille (3):
+      dt-bindings: i2c: dw: Document compatible thead,th1520-i2c
+      riscv: dts: thead: Add TH1520 I2C nodes
+      riscv: dts: thead: Enable I2C on the BeagleV-Ahead
 
---EtRMkbJm6V6cCFzH
-Content-Type: application/pgp-signature; name="signature.asc"
+ .../bindings/i2c/snps,designware-i2c.yaml          |  4 ++
+ arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts | 84 ++++++++++++++++++++++
+ arch/riscv/boot/dts/thead/th1520.dtsi              | 50 +++++++++++++
+ 3 files changed, 138 insertions(+)
+---
+base-commit: e1fb0b71c746f863fa49ff359d58c949538ce181
+change-id: 20240425-i2c-th1520-fc3ce1a8b472
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+-- 
+Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZGT20ACgkQJNaLcl1U
-h9Cd2Af/YyaJyngR16Od3D4m0rdz60YKgrtOS3Cb/uzkT7akZun/GI8APPvqa3eT
-MoMILsYV/sJLZZSToRxWTX4KeD6W05e/xroFqQGdEFOYPKIgSKurASoHutiksOW+
-6eG20q6tI7MHN0ljWxuvxl5f50mmgNGHilOP9SliRxqwZ7Opezxbmjefr1Zzekpd
-VpuzfhVO+Cb29HWR8NWcIqFcLi0Hi/VzEtJ6ydEWQAUuVU1UOWP1VeNLiNxLrP4d
-mAn+T8KHJfreTV9pf2d9hGxH0KXpeEVeq1CYJCjClrSZ3I5ra3iSVNxIQhpTZnWJ
-BhkD4E3BAnkYctMOFZms4ZgVm8W50A==
-=n/DO
------END PGP SIGNATURE-----
-
---EtRMkbJm6V6cCFzH--
 
