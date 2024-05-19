@@ -1,55 +1,55 @@
-Return-Path: <linux-i2c+bounces-3586-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3587-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60B038C93A9
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 09:16:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1978D8C93B0
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 09:33:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EEAB7B20B06
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 07:16:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49F6A1C209F3
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 07:33:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BF2217582;
-	Sun, 19 May 2024 07:16:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20B8417C9B;
+	Sun, 19 May 2024 07:33:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="O6OwOLue"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="aCfhLd9t"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9046FB666;
-	Sun, 19 May 2024 07:15:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61497168DC;
+	Sun, 19 May 2024 07:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716102960; cv=none; b=rF2CmOCWg3JnMJ4RVLdd5LMtPUPzy262dB2tKmIkUz4Nh0UHKgbFxMqG06tMvCo1uQmVDrgUPTJuBdDN12PfJdS28dS5EhJLbt0HWo0qwClwMonjH4CCFit4ax9Gryre4deTLIMHs14ewkAL8mdHljrt7u6oaC39S6QIuCt6nLI=
+	t=1716104010; cv=none; b=kbUAF3X61rxZ1FT0K7g5zLJPtSD7RMg+f/fPCVQgVNO/A3wwGx4zZa3aCqTq5/SGvBzudVABz509kfiJte7pgLmstyhuacXQgdo31RP08hRXFmNiBRIf9PIqWZSxRcnfxGyMzdWAkCB8GOXCihA6oXt1VWQ8xD9CVsim9/0vC4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716102960; c=relaxed/simple;
-	bh=3Ib/4jVZX15fK3hvYNLAJEDzsJyGYYDvKxm3yexwV/M=;
+	s=arc-20240116; t=1716104010; c=relaxed/simple;
+	bh=xzuyhU/C3Sgs8JAj/uu65583uObYWqEmKO2M6mcchQ8=;
 	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=dO58ejgtk4GMENwalpis2MtPvyB/FqE5DzDrzYuzbXGRpuEV8+rhIrMO+dz35EH+3DVILrFLlktcRPm+csBMazuTWTia1ye0kWaPxYjXl23Ns4vnhGE4me+QCFS4/ayGYCnYwF2rkOLxJCm73IZFDUNfBwh2+Vzqv/g6FFM7Rc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=O6OwOLue; arc=none smtp.client-ip=212.227.17.11
+	 In-Reply-To:Content-Type; b=q1OItuWpcSwnqBU3aRQGXSUV+MuO+YInK6Q1t7u3DgYRmAyYukkK8hEjlPp+hAEAQPeMTIQexggiVa20wWQYRQ2AErn5TbvyoR3x4SnCsi2bqA9j8l+TlM54SzJZtl2GpcMxtIyW6raTXsQTOh0AEpZD7hwqNOOBda1rqkWCSQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=aCfhLd9t; arc=none smtp.client-ip=212.227.17.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1716102924; x=1716707724; i=markus.elfring@web.de;
-	bh=awBD3TGD+O80uOUmxCjUFbBY5uYZxYKTob1I/UkA+vE=;
+	s=s29768273; t=1716103991; x=1716708791; i=markus.elfring@web.de;
+	bh=Vc/DskwTkMLimCdzc1KNw8QmtDiL/132/HZiZz6WkFY=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
 	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
 	 cc:content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=O6OwOLueNplf1cccVOoDKe+1IWy74wk7u2b2KBJL+76S9QRpUBJPmmZRZlWoT3Sy
-	 Dp39K4Zwr2Mj3WAwXLiz6OwEP8sgVZhmOFNAStu0oa6KzCmoqhXiK26g41p4jY3tB
-	 FMW6gbMV1gVmaq921lzi0aJ2KJtLxyWBmmc4u041MAxwNwRX3M1RH5Q6IDs08N28M
-	 a3d7PLvqWk94gVCNW25vFAzzPHZLyM+UUMOEwZS2FjaT9RLr8Yjc3yLtAhqlYseCa
-	 wW4XNr2JwIeYhC2u4Yw4zV+GJh8E5w/mtJTtj0xPBLlx3d59W4/z1u46gSS41041j
-	 X52gqx+vItakwwc38g==
+	b=aCfhLd9tDYLgNa2qsXvmkiLbpArbAYDjI7YmR1xaNLZaDBvq11qaTZnG6ywIxReK
+	 SuQJeiEZLm5HGzkMyPEokOS/NQAzjuuMbX+9PGLKk+PQdbaadUdxBwk62GNRuaggp
+	 F+C16FSZDOyYrHNnqkHxZ+p2/P/opXKIQ0NEH3zNRU+Y7Cr1kiNgxAUiTk0tc7oKc
+	 rZdxoLjzEzv4x+xY+4k8fzZSDpzxxU6pVBI8ri125Xn+n9fP7zOyAYvyRRaA9ZNWW
+	 HABnOk3PRRXjABWiYNvilNvhtJohRp+4CKCzQEkd4hbh6i7CtFz/E73sH7CfVuK2Z
+	 4ugDdCnYLVCjILW7RQ==
 X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.82.95]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1N9LIc-1seOuF3JBM-015Ky5; Sun, 19
- May 2024 09:15:23 +0200
-Message-ID: <43f4acb9-4409-4b51-9cb6-543bcf42f0ba@web.de>
-Date: Sun, 19 May 2024 09:15:19 +0200
+Received: from [192.168.178.21] ([94.31.82.95]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MwR4R-1sQxIw1eXl-014UAw; Sun, 19
+ May 2024 09:33:11 +0200
+Message-ID: <e2dc9857-d3ad-4060-8363-f8ea0cc37919@web.de>
+Date: Sun, 19 May 2024 09:33:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -80,39 +80,46 @@ From: Markus Elfring <Markus.Elfring@web.de>
 In-Reply-To: <20240517-a2b-v1-1-b8647554c67b@bang-olufsen.dk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:NEkB/gm/kIFqYDsQ8gGsUusFhiSrnLq0i2UUuLPVIe+oePa5zTf
- fkVCMhH4sItWIoH/iCPB+hN6FpWGVHAcPkKh82G6vgUD9Jk+guNKQ4BEKH1Avm249Ihhr3P
- Dcx0z+T555vWJCQsByKRjkd9j1VijpPhrZBXd4oqs3lPmrlobaDZdEBo2YQ5BR1Aul0jWye
- t79NiTVhdvkwIknnthtTA==
+X-Provags-ID: V03:K1:+l3+NQO2VssluOBJJXXnKAg3DDtBKfwnya4Yj2/k/UC2D+zw5+4
+ 5wfQkxlfmnAAtNNFCCjQ+BU0F7rn+cGTYPS2zZnk+WCR4g0TyFXpYDB1leaJU2S0HV30pfs
+ xU2auRNo2LPMSNPMOXHZuo5BcD3XSpP433Rqp/0V76PL2HviR15aWHqMYeyyjkj6kZzl9Bb
+ N4XePPuYdCvEFIlb24vmA==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:A6h29kzZZCU=;scPHcuHdNkNc6ycjFNwFZucbAhY
- MprszvjeRvSwg/FEKzeionPG512gGR6psy9f/yzvvH7DWIGiber5m3EwPhXs3JrkqNYLJGe4A
- 1ms8rKNzdCQ7BwZqNLQD0FBHykLpgVqUqBcaLbWCZ0WBfBweg4rqTMBdg3MKf/sWfDVGvIBe6
- 9gp4Ev/kLjPwj5+m6VhmfSgMKVz+CDTZjVbwqfXet6gCVbK2YMP6MHJDz2dOsRwaXzWpOTkDX
- Ohe0pZxbrtH35P391zmfXEC5BWfxyjES6IHlbsCrmS5K7gDETbcGMVEOpUvmhGofwOLZzIPDP
- BJ670qzI4gtrMl972fFbchNKJ9Mc2HTL+ZeW/HgIaIOSp3hj1mPxcImQbtdmoJl70W6EF+sus
- HtkSYgUpG9r2j7Fu0xZzYEEu91ozDmMSisS8CPphewaXu6ld999NyGnKJia2iYBksUsZWb/W0
- JwNdNsByuQzaN6/YTNZqNT+Fpzk3sffP3z9ivtwMCwKc+OXxvowQxUjgwjTfrxMR4g+7+pT5T
- oxj10kVao94VNqVyKrNgN5sKyDSIWPp5osh9wEb2nfcFCbbcCwU3ntl1py863QCQfPgaq2Eij
- EnIa+K5QqXtH5s9G24TGflxdSj7771aQ9ycTJ2dnnoXNHUIWNs/HWPrYZxpcGP2XePtxH9XME
- ZPQCwIWyLvHJtxyqWnU/EEaua1iN2ZLKpytT6Pcgf5SCALXQs4UC6W/FJrLxZQ1OQMysh//84
- TIisovgFrB+t66GFLmp9mm09R6bkJJMiu0WvSh4w/91RKFaFUO/j3Rbfvgu5vDB8szLpek0Pz
- o8JUoIa7qfLNAcvTWhEhhTWGvBs6Af68W2s7u951lPgzo=
+UI-OutboundReport: notjunk:1;M01:P0:ZKr4EqZbUiQ=;9LA7nsO9L3QH/khKeG9YCNPasJ1
+ qie9orih1hOiq5F82MekSv77InOTDe00MK5trWdRlRJ0xQCVYDZA9s7gOejT4ieFq4fHtnmin
+ IU1HY8qmp7qeMN5CjQeGz0T6B1b17UILq25Gh3tdKq2n094AQok3E7oxh1z2egS0IV0wTa+/c
+ kQ9u1zbKQhpBTEgsXY26job3L83t4GM4NJ07KZcQx8IiV4YOVbzvUwQUuFKcUanK6IijdHBZ3
+ VRbGUywRb+9y+4klqJEfayWmXG66m3YtfV32q8BmLqhiycF9YvjXpJsFZnAOYfUKltjHmO6+8
+ xCpxBxbZ2ksWU23HXfX3zaP0SoaPSHxGsQBJDBD+o30VMzMSAbq4zqFPN5WZJeFM3lf86svly
+ mQbPcAqkQmtEC1vclRtCvA7goyWsePWyYhgqWIRQTTRqcUUEa1HQjN1L+4us+PPRX6riYHdHs
+ dekVKdSuzzSdeU3QsjLeA9dQCnah4/QHJaiTMu/Acinx53NwNeCkMW93hV6C2kcYOglGVkok6
+ q6x14ug6svM5aYFj+Iu/NPM1X1y1DLkIOUccxgRA57jhN/1Zu8NzIfXRURXkMAmtGUbIkgV4Z
+ PPhPamHt0qluIGUstK3Ll0qRhaac/nM416/FsRYdu9gdUw146+gJzcnW3CBUrxh5z1/svLiZG
+ pRela0v+jfl/vCW2lj+nbh5nmQq7Rvbmrpt2UQ/NJfhFrOX0IEcJWQjGV5ie7Kus4lzd3XAwd
+ zu1PxieCX8rrGxgFFTCKSsSbhQw0lKXyLQNMfIsjs+aa5XMGKjX+p+U9ncjeqLkkR9hslh+Lx
+ +a0pr9P9D7UOF/P363jhsz3xPD9nQFSkkvV0DhcRY9O8E=
 
 =E2=80=A6
 > +++ b/drivers/a2b/a2b.c
 > @@ -0,0 +1,1252 @@
 =E2=80=A6
-> +#define __a2b_bus_for_each_node(__bus, __node, __i) \
-> +	for (__i =3D 0; __i < A2B_MAX_NODES && (__node =3D __bus->nodes[__i]);=
- i++)
+> +unsigned long a2b_bus_status(struct a2b_bus *bus)
+> +{
+> +	unsigned long status;
+> +
+> +	mutex_lock(&bus->mutex);
+> +	status =3D bus->status;
+> +	mutex_unlock(&bus->mutex);
+> +
+> +	return status;
+> +}
 =E2=80=A6
 
-I suggest to reconsider the usage of double underscores for identifiers.
-How do you think about to avoid that this software depends on undefined be=
-haviour?
-https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+or+d=
-efine+a+reserved+identifier
+How do you think about to increase the application of scope-base resource =
+management
+also for such software components?
+https://elixir.bootlin.com/linux/v6.9.1/source/include/linux/cleanup.h#L12=
+4
 
 Regards,
 Markus
