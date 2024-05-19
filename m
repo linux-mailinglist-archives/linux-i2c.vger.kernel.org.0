@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3590-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3591-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F8068C9473
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 13:40:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74EBB8C9478
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 13:41:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3F74281195
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 11:40:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 985511C20D84
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 11:41:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4C744C77;
-	Sun, 19 May 2024 11:40:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 624EF45020;
+	Sun, 19 May 2024 11:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eYRYETdZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VIXs/d34"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4821401B;
-	Sun, 19 May 2024 11:40:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 023E91401B;
+	Sun, 19 May 2024 11:40:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716118836; cv=none; b=VwkImj9veDAtX2FqGNSl7kzrOLdW3fVzEEie52XdGrnC1tXYIljwAAXjV8jS3NCEWPj+TAKetDaUcTyhaD099I+AyKeig6WJpI8K4zMwnxlefMplnZOxXzGFQTVHkYh65WFHVo3yHUuJ0wLc5aV4E9NQzBJ23TVqdSUBi1t1Asc=
+	t=1716118857; cv=none; b=cKhr9iuduiwAx//JvsplWCpyOv7/AkJT5tRsdyJt6RKNxYDQO4iXMwd7JPe4rLsAudPZmqcwshG/KTgrd3Vg17XOw+BhcuBZ3wVb6jYlYnmJQW2zYe5bKkRV01emccgqKZ+GbGRQFczn+HSW9ZfALRjsLZTaX3a+2PNWiy49RU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716118836; c=relaxed/simple;
-	bh=XE+2nt77E9BjQRhQkjwv9byTbuCMNge4WdDHEESWL78=;
+	s=arc-20240116; t=1716118857; c=relaxed/simple;
+	bh=Wcle0E7YZYZPCZTuFb7GmpU5GqTT13FsI2zFe8ikVrE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y0i5UN8yyRIIkZ6MEJGbaVwhHL1GKMlO0csoE080Mb9x36NxVjRcIyRLVeDHVghvqS1CW1K+gjcqm1WhlWmWsGDhAoSFveh83B7jg/geD6Io0WOsiprKbR76Sw9BZKQaqEE8sxPc2XrWQJ+HxKD9+d47NUzbufEOjowVKlXNLDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eYRYETdZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B37FC4AF07;
-	Sun, 19 May 2024 11:40:27 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=HBLPEEi2/frcSTF1XzYuLH3sD8JwDeXxvvMD7iBJAMg3FeXqKbBEMqMYdGYUUH46Xng7F3Ifp9u3BbT3WDNqi5Fs/CAO002UVcCtdA/v5GspyThi6yNMPFctixDfQbHrW6G75M/axV1680HS0mP7ncwmPryfEv9lCXSp22QmUVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VIXs/d34; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 900D0C32781;
+	Sun, 19 May 2024 11:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716118835;
-	bh=XE+2nt77E9BjQRhQkjwv9byTbuCMNge4WdDHEESWL78=;
+	s=k20201202; t=1716118856;
+	bh=Wcle0E7YZYZPCZTuFb7GmpU5GqTT13FsI2zFe8ikVrE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eYRYETdZJTIqmQNL/AhLwwGO8suBlfW8ZFzsi8GDX9L8Y8EP9AhmJ3NU8DOP/HQmV
-	 iLL9X6VpSUVYwyObtoJ0Rn144tNU9yxYywcau0JXPz7egJMBzSOev3/zvZEW8buq4j
-	 5IzNJDvQy3ckwIEZSF+aWhgY3XOrlBQ8Jmott5V+Zv4T1nzz0dfIvjsII3VHe2wqmx
-	 HEPdvqJlK7M5xe1m50WuBBW1BRDQPXxJxzNcTzNjDW9eqW1OAZyUWxwLbLDZix80Si
-	 2ZmrBnhzNdmkWqLn6ckeI1zvy59vqSOemZsJRUFkbxibvXiCA7JKtQyfEEGk+1Qt4N
-	 My60/TPNaFSsA==
-Message-ID: <f1605873-c36c-4e61-8076-13a7094dc13b@kernel.org>
-Date: Sun, 19 May 2024 13:40:25 +0200
+	b=VIXs/d34Gs29Mq3shAzOi3hd58vz9zlb8wfI6Zgs1WecbvbSN4gkSGBJtLzUyVLZf
+	 0etcXpb94SRnBnQo7DrY8lEoMht+KYvUuS6yix2MOUK70qeuefyz2x9hXMToGZyTIj
+	 xcab/nSzXT3Ixvv2ifU9g/kMpPyDTfODpCsEpjy3fAXF0i/FMalIaILa+lnnFZndEh
+	 7SzB3KbZTWulsNFwLKW2GoHEg2SJWaG2PgC0ZE8tYSbzfJlkzLnTlvzOVSlXKwXZSq
+	 schI/NZiGMdjSD10yqR0B+j+NioLBXh4I1Dq7jDfr8kHtzucYeQclx2iUenzIeTdHY
+	 yImQZ71maPQ1w==
+Message-ID: <b6a52705-0bf5-4c92-b398-a1c1553f96b7@kernel.org>
+Date: Sun, 19 May 2024 13:40:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/13] dt-bindings: a2b: Analog Devices AD24xx devices
+Subject: Re: [PATCH 10/13] dt-bindings: vendor-prefixes: add Bang & Olufsen
+ a/s
 To: =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>,
  Mark Brown <broonie@kernel.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -68,7 +69,7 @@ Cc: Emil Svendsen <emas@bang-olufsen.dk>, linux-kernel@vger.kernel.org,
  linux-i2c@vger.kernel.org, =?UTF-8?Q?Alvin_=C5=A0ipraga?=
  <alsi@bang-olufsen.dk>
 References: <20240517-a2b-v1-0-b8647554c67b@bang-olufsen.dk>
- <20240517-a2b-v1-3-b8647554c67b@bang-olufsen.dk>
+ <20240517-a2b-v1-10-b8647554c67b@bang-olufsen.dk>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,413 +115,37 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240517-a2b-v1-3-b8647554c67b@bang-olufsen.dk>
+In-Reply-To: <20240517-a2b-v1-10-b8647554c67b@bang-olufsen.dk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 17/05/2024 14:58, Alvin Šipraga wrote:
+On 17/05/2024 15:02, Alvin Šipraga wrote:
 > From: Alvin Šipraga <alsi@bang-olufsen.dk>
 > 
-> Add device tree bindings for the AD24xx series A2B transceiver chips,
-> including their functional blocks.
+> Bang & Olufsen a/s is a Danish designer and manufacturer of high-end
+> consumer audio and home entertainment products.
+> 
+> The vendor prefix 'beo,' follows from the ubiquitous product naming
+> scheme, e.g. Beosound Balance, Beolab 28.
+> 
+> https://www.bang-olufsen.com/
 > 
 > Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
 > ---
->  .../devicetree/bindings/a2b/adi,ad24xx-clk.yaml    |  53 +++++
-
-What is a2b and why clock bindings are not in clock?
-
->  .../devicetree/bindings/a2b/adi,ad24xx-codec.yaml  |  52 +++++
->  .../devicetree/bindings/a2b/adi,ad24xx-gpio.yaml   |  76 +++++++
->  .../devicetree/bindings/a2b/adi,ad24xx-i2c.yaml    |  55 +++++
->  .../devicetree/bindings/a2b/adi,ad24xx.yaml        | 253 +++++++++++++++++++++
-
-Sorry, all this looks weirdly placed.
-
->  5 files changed, 489 insertions(+)
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/a2b/adi,ad24xx-clk.yaml b/Documentation/devicetree/bindings/a2b/adi,ad24xx-clk.yaml
-> new file mode 100644
-> index 000000000000..819efaa6a3f9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/a2b/adi,ad24xx-clk.yaml
-> @@ -0,0 +1,53 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/a2b/adi,ad24xx-clk.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices Inc. AD24xx clock functional block
-> +
-> +maintainers:
-> +  - Alvin Šipraga <alsi@bang-olufsen.dk>
-> +
-> +allOf:
-> +  - $ref: /schemas/clock/clock.yaml
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index fbf47f0bacf1..470ed53de8f1 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -208,6 +208,8 @@ patternProperties:
+>      description: Compass Electronics Group, LLC
+>    "^beagle,.*":
+>      description: BeagleBoard.org Foundation
+> +  "^beo,.*":
 
-Drop. There is no single binding doing this, which is usually a hint you
-do something not correct.
-
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,ad2420-clk
-> +      - adi,ad2421-clk
-> +      - adi,ad2422-clk
-> +      - adi,ad2425-clk
-> +      - adi,ad2426-clk
-> +      - adi,ad2427-clk
-> +      - adi,ad2428-clk
-> +      - adi,ad2429-clk
-> +
-
-This is just incomplete. See other bindings how clock controller is written.
-
-> +required:
-> +  - compatible
-> +  - clock-output-names
-> +
-> +unevaluatedProperties: false
-
-additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    a2b {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-
-Not related, drop entire node.
-
-> +
-> +      node@1 {
-> +        compatible = "adi,ad2425-node";
-
-Not related, drop entire node.
-
-> +        reg = <1>;
-> +        interrupts = <1>;
-> +        adi,tdm-mode = <16>;
-> +        adi,tdm-slot-size = <32>;
-> +
-> +        clock {
-> +          compatible = "adi,ad2425-clk";
-> +          #clock-cells = <1>;
-> +          clock-indices = <1>;
-> +          clock-output-names = "A2B1 CLKOUT2";
-> +        };
-> +      };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/a2b/adi,ad24xx-codec.yaml b/Documentation/devicetree/bindings/a2b/adi,ad24xx-codec.yaml
-> new file mode 100644
-> index 000000000000..eee12f1c810e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/a2b/adi,ad24xx-codec.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/a2b/adi,ad24xx-codec.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices Inc. AD24xx I2S/TDM functional block
-> +
-> +maintainers:
-> +  - Alvin Šipraga <alsi@bang-olufsen.dk>
-> +
-> +allOf:
-> +  - $ref: /schemas/sound/dai-common.yaml#
-
-Why full path? It's the same directory, isn't it?
-
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,ad2403-codec
-> +      - adi,ad2410-codec
-> +      - adi,ad2425-codec
-> +      - adi,ad2428-codec
-> +      - adi,ad2429-codec
-> +
-> +  '#sound-dai-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - '#sound-dai-cells'
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    a2b {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      node@2 {
-> +        compatible = "adi,ad2428-node";
-> +        reg = <2>;
-> +        interrupts = <2>;
-> +        adi,tdm-mode = <8>;
-> +        adi,tdm-slot-size = <32>;
-
-Same comments. Limited review follows.
-
-
-...
-
-
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
-
-Sorry, but not. No resources, nothing here. Do not create bindings just
-to instantiate drivers.
-
-
-...
-
-> diff --git a/Documentation/devicetree/bindings/a2b/adi,ad24xx.yaml b/Documentation/devicetree/bindings/a2b/adi,ad24xx.yaml
-> new file mode 100644
-> index 000000000000..dcda15e8032a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/a2b/adi,ad24xx.yaml
-> @@ -0,0 +1,253 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/a2b/adi,ad24xx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices Inc. AD24xx Automotive Audio Bus A2B Transceiver
-> +
-> +description: |
-> +  AD24xx chips provide A2B bus functionality together with several peripheral
-
-What is A2B?
-
-> +  functions, including GPIO, I2S/TDM, an I2C controller interface, and
-> +  programmable clock outputs.
-> +
-> +maintainers:
-> +  - Alvin Šipraga <alsi@bang-olufsen.dk>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,ad2403
-> +      - adi,ad2410
-> +      - adi,ad2425
-> +      - adi,ad2428
-> +      - adi,ad2429
-> +
-
-reg: is second property.
-
-> +  reg-names:
-> +    items:
-> +      - const: base
-> +      - const: bus
-> +
-> +  reg:
-> +    items:
-> +      - description: Normal I2C address of the chip
-> +      - description: Auxiliary BUS_ADDR I2C address of the chip
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  clock-names:
-> +    items:
-> +      - const: sync
-
-Again misordered. -names always follow main entry. Anyway, clock-names
-for just one entry is not really useful.
-
-> +
-> +  clocks:
-> +    items:
-> +      - description: SYNC input pin clock source
-> +
-> +  vin-supply:
-> +    description: Optional regulator for supply voltage to VIN pin
-> +
-> +  bus-supply:
-> +    description: Optional regulator for out-of-band supply voltage to
-> +      subodrinate nodes' VIN pins
-> +
-> +  interrupts: true
-
-??? This must be specific.
-
-> +
-> +  interrupt-controller: true
-> +
-> +  '#interrupt-cells':
-> +    const: 1
-> +
-> +patternProperties:
-> +  '^node@[0-9]+$':
-> +    type: object
-> +    unevaluatedProperties: false
-
-Why? This must be additionalProperties: false, or I miss something...
-
-> +
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - adi,ad2401-node
-> +          - adi,ad2402-node
-> +          - adi,ad2403-node
-> +          - adi,ad2410-node
-> +          - adi,ad2420-node
-> +          - adi,ad2421-node
-> +          - adi,ad2422-node
-> +          - adi,ad2425-node
-> +          - adi,ad2426-node
-> +          - adi,ad2427-node
-> +          - adi,ad2428-node
-> +          - adi,ad2429-node
-> +
-> +      reg:
-> +        maxItems: 1
-> +
-> +      interrupts:
-> +        maxItems: 1
-> +
-> +      interrupt-controller: true
-> +
-> +      '#interrupt-cells':
-> +        const: 1
-> +
-> +      gpio:
-> +        $ref: adi,ad24xx-gpio.yaml#
-> +
-> +      codec:
-> +        $ref: adi,ad24xx-codec.yaml#
-> +
-> +      i2c:
-> +        $ref: adi,ad24xx-i2c.yaml#
-> +
-> +      clock:
-> +        $ref: adi,ad24xx-clk.yaml#
-> +
-> +      adi,tdm-mode:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        description: TDM mode
-
-Please do not add descriptions which are copies of property name. You
-basically said ZERO here. Say something useful...
-
-> +        enum: [2, 4, 8, 12, 16, 20, 24, 32]
-> +
-> +      adi,tdm-slot-size:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        description: TDM slot size
-> +        enum: [16, 32]
-> +
-> +      adi,invert-sync:
-> +        description: Falling edge of SYNC pin indicates the start of an audio
-> +          frame, as opposed to rising edge.
-> +        type: boolean
-> +
-> +      adi,early-sync:
-> +        description: The SYNC pin changes one cycle before the MSB of the first
-> +          data slot.
-> +        type: boolean
-> +
-> +      adi,alternating-sync:
-> +        description: Drive SYNC pin during first half of I2S/TDM data
-> +          transmission rather than just pulsing it for once cycle.
-> +        type: boolean
-> +
-> +      adi,rx-on-dtx1:
-> +        description: Use the DTX1 pin for I2S/TDM RX in place of the DRX1 pin.
-> +        type: boolean
-> +
-> +      adi,a2b-external-switch-mode-1:
-> +        description: Use external switch mode 1 instead of 0 on the assumption
-> +          that the downstream node is not using A2B bus power.
-> +        type: boolean
-> +
-> +      adi,drive-strength:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        description: Configures drive strength low (0) or high (1, default).
-> +        enum: [0, 1]
-> +        default: 1
-> +
-> +      adi,invert-interrupt:
-> +        description: Invert polarity of IRQ pin, making it active low.
-> +        type: boolean
-> +
-> +      adi,tristate-interrupt:
-> +        description: Rather than always actively driving the IRQ pin, only drive
-> +          when the interrupt is active and otherwise set to tristate (high-Z).
-> +        type: boolean
-
-It looks you put all children properties into parent node... With so
-little explanation tricky to judge.
-
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +      - adi,tdm-mode
-> +      - adi,tdm-slot-size
-> +
-> +    dependencies:
-> +      interrupt-controller: [ '#interrupt-cells' ]
-> +      '#interrupt-cells': [ interrupt-controller ]
-> +
-> +required:
-> +  - compatible
-> +  - reg-names
-> +  - reg
-> +  - clock-names
-> +  - clocks
-> +  - '#address-cells'
-> +  - '#size-cells'
-> +  - interrupts
-> +  - interrupt-controller
-> +  - '#interrupt-cells'
-> +  - node@0
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    sync_clk: sync-clock {
-
-Drop, not related.
-
-> +          compatible = "fixed-clock";
-> +          #clock-cells = <0>;
-> +          clock-frequency = <48000>;
-> +    };
-> +
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      a2b@68 {
-> +        compatible = "adi,ad2428";
-> +        reg-names = "base", "bus";
-> +        reg = <0x68>, <0x69>;
-
-
-Please follow DTS coding style. Do not introduce entire different style
-and order of properties. reg-names IS NEVER the second property.
-
-
+Keep order.
 
 Best regards,
 Krzysztof
