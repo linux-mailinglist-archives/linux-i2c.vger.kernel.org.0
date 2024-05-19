@@ -1,48 +1,48 @@
-Return-Path: <linux-i2c+bounces-3592-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3593-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1694F8C947C
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 13:42:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 341AF8C9483
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 13:44:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6D892812C4
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 11:42:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA345B21075
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 11:44:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A054501E;
-	Sun, 19 May 2024 11:42:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D627945023;
+	Sun, 19 May 2024 11:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X6Z3fKtg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="htABLW6c"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8271A18042;
-	Sun, 19 May 2024 11:42:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835431401B;
+	Sun, 19 May 2024 11:44:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716118920; cv=none; b=q7x9hsVCGtVRny3BA7f0Dl2ys7lMZ6EMcttwumX1XIjrRK2qEIi7gEovM+3cEG0f5pgGBjcoTWmb5ONL8hks/ITzkZb95RWeeIeyjqASOtn1/LhV7t0nu4fdAmcTDkaJ3vRxJb8x+cqXOtZnrDWv4yC5+uUZ//ClT7NJgPULpPk=
+	t=1716119050; cv=none; b=ahY+bke/kWDfO4UcC6uDtmJcT0eRpTlNyP/T9S+SOIiX9ZzuuwX+5fqzl7KOmhD8s7pRUWNzCuZbrNfOJwQz9s7FkVUpdrxYN5JYCHj04+xZuoSKyWcLoYGc9KZJJb+abbde0lKsaEGquv52QSG27NU/vg5UzZgofLbXpUKM534=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716118920; c=relaxed/simple;
-	bh=dAZ5Qd/wQPrlnsYGsNYRYzaf+y9ibUD5MCZ1KZ/14xg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PF8rIGcmqZsZbA0XzMABIw52cEHnacqXirfwnclM6nqz3TiX7lmeIsm+R9EyT+2tdOnYV1l9HJmRA61VBfPibbSl2h6kkNz374RlY+4DrD2HKl3f6oZa7cIxyukoDiUQdf9ob6bK+aC2jjSAqQYNFLVbkakrOD7YCnzimppNmTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X6Z3fKtg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A10F3C32781;
-	Sun, 19 May 2024 11:41:51 +0000 (UTC)
+	s=arc-20240116; t=1716119050; c=relaxed/simple;
+	bh=pLG4xOOSd/VdrFGicflX0jEABc52gpetmo53inC26Nk=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=E4ABkJnKKSvYtwKKA3qYMRygZMPZxS6deVWXtJOsO6LyDlSD+a+MGQPM6CWZ2QdyRQ03t5dJHea5546z10mwKMVNQtYlF5cdw/D3TVzdDPXtR3ydFojZkjb5HLEWGK+m7XHusOgfm5YH7vDSNsNm/5hbkpqyg4+utV/79tGRKyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=htABLW6c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB301C32781;
+	Sun, 19 May 2024 11:44:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716118920;
-	bh=dAZ5Qd/wQPrlnsYGsNYRYzaf+y9ibUD5MCZ1KZ/14xg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=X6Z3fKtgP1GPW8Eq9uQezSN7Zg7BYseeo3ry/YprMjIsWHPMjkeGgV4GLzStnpCam
-	 qg3GWldLoXEj65g27Wp7ewc3zlraW81GvQWgesXg40oC+qJd2K7N9g1CPfXT0MfLlo
-	 rxXlcO+adRVbqFWxzxAwroo8nrBuoH1DQBlvuOr9eBJt/HUiOlYF7LDSO1L2eyl4eQ
-	 oKzyWKEQI4oaq3uHKYLMvLQxlsjiXFFYMXxLepBaNl6CbCoSmSs0rBCsDvSIx72kue
-	 9szYOwEa9n6f9aR3sb1XTW5olVOng52LzFslPJa/H1qrV2AofAXFTMmEYgjr3onD58
-	 EbOGBSnOO7gKQ==
-Message-ID: <2d311fd3-8d07-40df-bc91-e4df522efb99@kernel.org>
-Date: Sun, 19 May 2024 13:41:48 +0200
+	s=k20201202; t=1716119049;
+	bh=pLG4xOOSd/VdrFGicflX0jEABc52gpetmo53inC26Nk=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=htABLW6cCkXMfHDoiA96KGV8rtUh2F3lGjQ8Oig0JbqABwZaYNF2WXISpx/UV9SsX
+	 dmTmDoqa41WCAsQjXCA1AAfV5Wvp1+atQ6cKI9KxHTwQtTYedew22w4/seFPAIe9EN
+	 EXNa/nf+xeQMtvBX+75GgBfRhnSuYQZG9r8d2EprIVvVR07mxodGUVuglxla0e5Veo
+	 61vGelUGVRRvgAiXdpXlJHYjqFp+f+O35f9HBm9YbNlBKvxuN7adxh6/0l2l3/DoKj
+	 H0kf39f2D19QZCXPO0PAFPW81eQZgAtLa2TMUXxvbZyqVQitiLOA5LklE8xTyg0GJU
+	 U1qmX/gY5zjMg==
+Message-ID: <d4e5d11d-9b71-4caa-a55b-f3accd7185ce@kernel.org>
+Date: Sun, 19 May 2024 13:44:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/13] dt-bindings: a2b: add compatible string for
- Beosound Shape node
+Subject: Re: [PATCH 03/13] dt-bindings: a2b: Analog Devices AD24xx devices
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>,
  Mark Brown <broonie@kernel.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -69,8 +69,8 @@ Cc: Emil Svendsen <emas@bang-olufsen.dk>, linux-kernel@vger.kernel.org,
  linux-i2c@vger.kernel.org, =?UTF-8?Q?Alvin_=C5=A0ipraga?=
  <alsi@bang-olufsen.dk>
 References: <20240517-a2b-v1-0-b8647554c67b@bang-olufsen.dk>
- <20240517-a2b-v1-11-b8647554c67b@bang-olufsen.dk>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20240517-a2b-v1-3-b8647554c67b@bang-olufsen.dk>
+ <f1605873-c36c-4e61-8076-13a7094dc13b@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -115,36 +115,29 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240517-a2b-v1-11-b8647554c67b@bang-olufsen.dk>
+In-Reply-To: <f1605873-c36c-4e61-8076-13a7094dc13b@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 17/05/2024 15:02, Alvin Šipraga wrote:
-> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On 19/05/2024 13:40, Krzysztof Kozlowski wrote:
+> On 17/05/2024 14:58, Alvin Šipraga wrote:
+>> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+>>
+>> Add device tree bindings for the AD24xx series A2B transceiver chips,
+>> including their functional blocks.
+>>
+>> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+>> ---
+>>  .../devicetree/bindings/a2b/adi,ad24xx-clk.yaml    |  53 +++++
 > 
-> The Beosound Shape has the same device tree bindings as an AD2425, so it
-> is sufficient to just add an entry to the compatible enum.
+> What is a2b and why clock bindings are not in clock?
 
-? If it has the same, then devices are compatible but your binding did
-not express it.
+Just in case you reply "but I have cover letter", so no, it does not
+matter really. This is the patch describing hardware, so here you
+describe hardware. Not in cover letter which often is ignored. Many
+people, including myself, skip cover letters.
 
-> 
-> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
-> ---
->  Documentation/devicetree/bindings/a2b/adi,ad24xx.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/a2b/adi,ad24xx.yaml b/Documentation/devicetree/bindings/a2b/adi,ad24xx.yaml
-> index dcda15e8032a..bea29f88d535 100644
-> --- a/Documentation/devicetree/bindings/a2b/adi,ad24xx.yaml
-> +++ b/Documentation/devicetree/bindings/a2b/adi,ad24xx.yaml
-> @@ -81,6 +81,7 @@ patternProperties:
->            - adi,ad2427-node
->            - adi,ad2428-node
->            - adi,ad2429-node
-> +          - beo,shape-node
-
-You just added this binding. Add entire binding in one patch.
+Provide *hardware* description here.
 
 Best regards,
 Krzysztof
