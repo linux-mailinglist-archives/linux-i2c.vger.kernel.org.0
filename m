@@ -1,112 +1,136 @@
-Return-Path: <linux-i2c+bounces-3594-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3595-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73F278C956B
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 19:02:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA9E08C95C3
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 20:04:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 38F4E1C20AD1
-	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 17:02:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7414B1F21978
+	for <lists+linux-i2c@lfdr.de>; Sun, 19 May 2024 18:04:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51A16487BE;
-	Sun, 19 May 2024 17:02:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B765029B;
+	Sun, 19 May 2024 18:03:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b="PcgcU1SF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sDVZj/dt"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out.freemail.hu (fmfe28.freemail.hu [46.107.16.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7713A1E867;
-	Sun, 19 May 2024 17:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.107.16.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E647345BE3;
+	Sun, 19 May 2024 18:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716138150; cv=none; b=ic6KbYNZdATdr3afDmDC2vExXn9NKJ2gly8ZWDDaqwbQact+St2LA5PB94erMegwd/HV7+DVg2h0RNFxAxWDNZrg8ZadcFdf13BKZcZrLXbSpdCsdlqJ6HeRdOd1EfThpA+cx/Arkn+7tKNSq6ErYCkmkBSR6S+hkjrIr9fO37M=
+	t=1716141835; cv=none; b=fy/8c9UYHlrmdfYcnWo9lHRXWo66bbfGuFrMiU2yaS7rW+zC1BtFyqKxb2GkTB2ppnwKFRDMoVciIi7GBxKs2S93Z/H4K1q1x9pm+pnhqLPTJrm/A2Z5J9bPHANfy+ce2OZIw+C2tbIvuQV1JkbCHJsY7pwzdwDvnCwCE35kCng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716138150; c=relaxed/simple;
-	bh=z0HEpwuxgZUJe2+XFOQ3mW/AL7YeIiVbzyFq4gc3vbE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ESd5Nat8pyPArAHn8omObx3VpQL6EhKZap2oi7J5SaLcPih/260EXaT+Au7fkUbYVFTwqZMH5QKj0Qkz9lwyePtlIacWtUzFBFd1vJNvNRMGmkWLWYk9oxc89awbypTezz4VcVZ5ppJp0ioxF67ylJMCkt9RJVub/Uxos/71+nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu; spf=pass smtp.mailfrom=freemail.hu; dkim=fail (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b=PcgcU1SF reason="signature verification failed"; arc=none smtp.client-ip=46.107.16.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freemail.hu
-Received: from fizweb.elte.hu (fizweb.elte.hu [157.181.183.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.freemail.hu (Postfix) with ESMTPSA id 4Vj6JH3s6Lz4dp;
-	Sun, 19 May 2024 18:55:11 +0200 (CEST)
-From: egyszeregy@freemail.hu
-To: wsa+renesas@sang-engineering.com,
-	linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: =?UTF-8?q?Benjamin=20Sz=C5=91ke?= <egyszeregy@freemail.hu>
-Subject: [PATCH] i2c-dev: Introduce "linux,i2c-dev-name" property for device tree of I2C controller.
-Date: Sun, 19 May 2024 18:55:04 +0200
-Message-Id: <20240519165504.19627-1-egyszeregy@freemail.hu>
-X-Mailer: git-send-email 2.39.3
+	s=arc-20240116; t=1716141835; c=relaxed/simple;
+	bh=CXxCmcwV0Ful9YiIlYBMxoNe85SgMcfVKjdXQRGH0Sw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IxY0hgrlTm7Kq1/wF5bZ2v223z1dCXk8pNfu1GsztFPKj1ifuefkT4qaUsgG2QiKdobN9UavKO2Tch8o7cZVg6EUTuTOTmDnK1vog7pndO/x+xFI8S7kmuoHcvlfkqdvrSklFSIYjIs1kDHfLX9QD682D/06i24yJ5y+OCHBy9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sDVZj/dt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFA4FC32781;
+	Sun, 19 May 2024 18:03:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716141834;
+	bh=CXxCmcwV0Ful9YiIlYBMxoNe85SgMcfVKjdXQRGH0Sw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sDVZj/dtAUymQhbHj1K2jHNIc7jU1lsTcb0drQ89FnVgZtLfvO15ffz0Aasgtz/Q1
+	 2oxUvHEKErZRH//HE+6Ww4yF6CpeRLKmkDRhtk2OCIQ61saWnmbJ0v6tK/REWmMmA2
+	 QtUpTnnZUT4n0ZjP02QAPCUZHnz5Uxyv2x1cg+RMLwf26emwJ/d4ktEqpoHVZGNZQ/
+	 zYC7nIJYD8X+kOHG5omAuFVceYJTjldufLWjLymOOnnAZ1cuRfaZjpSjq9YQrPttaT
+	 ebOrtjIxITy4/0Ztg+CKoadmvRdwnP3r8+2jl79KyPnnwOhsS8xR+BJ8yvjrYfdWIc
+	 z/MELCE0FkZcw==
+Message-ID: <79bed5c3-14be-4f15-a2f8-2e2342cb6b57@kernel.org>
+Date: Sun, 19 May 2024 20:03:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5] dt-bindings: i2c: i2c-fsi: Convert to json-schema
+To: Eddie James <eajames@linux.ibm.com>, linux-i2c@vger.kernel.org
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org,
+ andi.shyti@kernel.org
+References: <20240514205454.158157-1-eajames@linux.ibm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240514205454.158157-1-eajames@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/relaxed; t=1716137712;
-	s=20181004; d=freemail.hu;
-	h=From:To:Cc:Subject:Date:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	l=1506; bh=SpZ0hi7sZoilYx08Os0iQ7zMl6chRN/0TUPqVc9082s=;
-	b=PcgcU1SF4t47qJMHd47C/PTdJAf+Z0cHl4+46HozeIKSY16BYsXFtOjdPhcOQP++
-	uc3KwZqMX992JtvPfoC2C/HaB1OnKU2gjVQdU0Kpg0nl+QZy2lGftFVsu38ssEzPW/Q
-	9zX9ep+t84aa2WQJjO7l/YEHwJcTAcE4u/qnrqgiqn6TfIJDp36Qm+PJjUY8UGpKX+7
-	DRCW56Rf09VQj9wtuH+WQSenE01qHsneU+fpUUuJOztA/I9PIADrkrmaIsdmVbK/o39
-	GjMG8aRzVDDc0TG5kqRM+NDUNFv60ABOJPxrheeIegW29Nrcdx5oOx8ZZj8Ih9Wr5z5
-	xxV756CF9w==
+Content-Transfer-Encoding: 7bit
 
-From: Benjamin Szőke <egyszeregy@freemail.hu>
+On 14/05/2024 22:54, Eddie James wrote:
 
-Optionally, an I2C controller may have a "linux,i2c-dev-name" property.
-This is a string which is defining a custom suffix name for I2C device
-in /dev/i2c-<name> format. It helps to improve software portability between
-various SoCs and reduce complexities of hardware related codes in SWs.
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ibm,i2c-fsi
+> +
+> +  reg:
+> +    items:
+> +      - description: FSI slave address
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +patternProperties:
+> +  "^i2c(@.*)?":
 
-Signed-off-by: Benjamin Szőke <egyszeregy@freemail.hu>
----
- drivers/i2c/i2c-dev.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+Either you have or you have not unit addresses. Please fix the pattern.
+Why is this so flexible? Do you want to deprecate i2c-bus in favor of
+i2c? If so, then example should use new naming. I am fine with children
+as i2c-bus, assuming this is allowed by dtschema. Did you actually test it?
 
-diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
-index 8b7e599f1674..df4cec88ea59 100644
---- a/drivers/i2c/i2c-dev.c
-+++ b/drivers/i2c/i2c-dev.c
-@@ -651,6 +651,7 @@ static void i2cdev_dev_release(struct device *dev)
- 
- static int i2cdev_attach_adapter(struct device *dev)
- {
-+	const char *name;
- 	struct i2c_adapter *adap;
- 	struct i2c_dev *i2c_dev;
- 	int res;
-@@ -672,7 +673,16 @@ static int i2cdev_attach_adapter(struct device *dev)
- 	i2c_dev->dev.parent = &adap->dev;
- 	i2c_dev->dev.release = i2cdev_dev_release;
- 
--	res = dev_set_name(&i2c_dev->dev, "i2c-%d", adap->nr);
-+	/*
-+	 * If "linux,i2c-dev-name" is specified in device tree, use /dev/i2c-<name>
-+	 * in Linux userspace, otherwise use /dev/i2c-<nr>.
-+	 */
-+	res = device_property_read_string(&adap->dev, "linux,i2c-dev-name", &name);
-+	if (res < 0)
-+		res = dev_set_name(&i2c_dev->dev, "i2c-%d", adap->nr);
-+	else
-+		res = dev_set_name(&i2c_dev->dev, "i2c-%s", name);
-+
- 	if (res)
- 		goto err_put_i2c_dev;
- 
--- 
-2.39.3
+Best regards,
+Krzysztof
 
 
