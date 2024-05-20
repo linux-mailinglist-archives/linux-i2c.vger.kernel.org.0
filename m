@@ -1,130 +1,126 @@
-Return-Path: <linux-i2c+bounces-3600-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3601-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A3B48C9F2E
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 May 2024 17:01:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7AC58C9FD7
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 May 2024 17:40:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79504B209F5
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 May 2024 15:01:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9121E285B2E
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 May 2024 15:40:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8021B136675;
-	Mon, 20 May 2024 15:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2F213774A;
+	Mon, 20 May 2024 15:40:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XlEVKSu3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cdB08FAO"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C2728E7;
-	Mon, 20 May 2024 15:01:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B43AAFC01;
+	Mon, 20 May 2024 15:40:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716217310; cv=none; b=dLASfI9k6v57bdTNOQ0BCFEx0+clZU5ACb0YELflWeRpYIXRQb+gGEYBxXfcJrn1ZRNkHTHS7KI+jtkMe7+7ITjs6g7VUkbf/8vaI6VLH1LhEVTOqsrkoE3+tt0wkbs0AbS3HJN7UDKxHUXl6tkzRw+nvQaO8LjY01dYAiv6Uiw=
+	t=1716219615; cv=none; b=KprWtHnuRwVDARsU/LkvCJqRbdq35l0Yok3MFnuSCFz0fkt5loAitl7iL/p4W84gh4anSC2sFk9Ga8xWhQkXP5MOv+HOu8S90mMoQSKMkya03rXiywrJ6CjUrIUXJ9VcS9txXHyfS1tz1JjRwB3Sj/vEEFwmG1u/qk16hn1lG4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716217310; c=relaxed/simple;
-	bh=h9G+PzNOBo0XpGBoArWpCHVHv14Yl1PQqd7N8807B0M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oLHzQv7EIg0PTA9xIWAIC3fuXl7398LUtvPn1qyrckrs9wftvzO1D6tdGtxQtJzK1L1ZNTAsQYq7d5kw/Ix0iPR53p++SUjWxqdW2lYqxdSjQbKVqypveaj2U/9MHETERMm/JgASfbDdL4KMcpWP+Cj1spJyG5lQEca9NjY6nEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XlEVKSu3; arc=none smtp.client-ip=209.85.218.49
+	s=arc-20240116; t=1716219615; c=relaxed/simple;
+	bh=bxz7jyZF4t7F6adRiq0DRQVZau32bwbgme1aKJMz9gM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hUJxmq+JODJ9sNe6nVxdun/xbFxitH3R3R1tpVyUNlNW5acCYoSWW+0M1Qelvk5UFAmkLfSUr3m8Kzmk+H/BcQc3c1X+Vu09hBFBNxWeyE6Mox7hSof8bdQhJx4ZwQF1Ph3ZBy3w5AZUp8biPWzDAmxuv0ERTq1fhbJiwrxj6hA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cdB08FAO; arc=none smtp.client-ip=209.85.208.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a59b097b202so543072266b.0;
-        Mon, 20 May 2024 08:01:48 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-571ba432477so8419258a12.1;
+        Mon, 20 May 2024 08:40:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716217307; x=1716822107; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NrznS2cuTf/vafEauQb8pP6KkMct4u3y/Gx+jtIqOBk=;
-        b=XlEVKSu3ROuRrQYunpZeWcMO4IZM+XoM6JLpT5YJtIsGtqejaXhAOd4oK8MDZqxUr5
-         VVDby/eZMF5G2rvsIRCVLrnT3Hq5M3o6Ro+QfrPbucm7NnAUW4IK4lEL9rPR3oLC+PAi
-         YQJ1hBWRwClNsTu6h6gatB3+0t4LSk6BVkwaSZVTAQmlC5SfUyQQ6/AEC+QoY/6sWB7G
-         Ypu9GmmGRLHMCU3v3XAUgiIW9q6NUepxpFJUhUds6NNf0C7vbrhJOs+NssNfiEfeUHdr
-         qRLe3/TviBKoPsf4LKQNbjiHVqKYSFDIuenBpUTuqTSR5ytFcHs6hTIjnE19wycNz9h6
-         xxcA==
+        d=gmail.com; s=20230601; t=1716219612; x=1716824412; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lnr1potWpuTZcvydit76tGvDXKhaYKHwXt27AplNE/o=;
+        b=cdB08FAOTHJcCvcB99obQF9x21JlPWxZVV0Lvi2Nd/Dju91NWERRLfoL6D14LXlYYt
+         WNCrC1PtVxiEY/2WECDjhPZyW5KkX4nrGjaS1Zh2lwjvz2KyOwImw2YfMs71/YcIP9bs
+         6xxBuNtk3AizrtFiKXEdN6urgJNmXwdRMHOXndLFlit1F7mJAUcDVVtFFHr1POm8HdLJ
+         lYcf5i2hMX6f7C+NKrtua8Mt/9fxUyzIcZ3jfX0lk3y61PgeiLoihKJFVnHyCAaHkxt3
+         vxX1ZCYu94niDFk+Fx0Nqu+2q5Bl88ezL4r3Cf3BeGxdZU5kKtsHUxpTfRHtxlaaGnNi
+         ctZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716217307; x=1716822107;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NrznS2cuTf/vafEauQb8pP6KkMct4u3y/Gx+jtIqOBk=;
-        b=g7r0RLpL2sHGdIwfvjhpICX4xnqV6DeH8aGgSU6Zrshg0AtIjLVnPWHefqPPP0R1XP
-         7wI+Ntf4ARrK0JOfrxBC3efYHAoUPRRQQ4KUrX6cNkZ4IhYlup02Iy1yPCuvH8yq2M02
-         I/grBkVrO+I3dozt01rqTmXoCvThVs3kx+7gc2I1387+rBSN4mhdn1b0YY6joTbdeWPr
-         Xtc/3PHuoZgrHl10Q5Ov8HAw2CajvzX8OEeTHUhEGz2q6bMOTYFWbxkGZGD9XYAgXsvN
-         5o/vBR7X84wCw4qtJmc8ljufHABZnAOBdB1Xy5d6pL4ruMfbMYz7uHxjLmoMXZzOU5Ie
-         Ukfg==
-X-Forwarded-Encrypted: i=1; AJvYcCX0siFaOPNOvktZB7hqLNN/O1WeOm48C6iFxpnyD2ejiJjcFF7sTUYvMqc6tjtepiidpVbleJGxRYhrM9epMX+FkYUvuTrXYTx3vg004665ZwqdccXkLggGWDteSJ0SH+Kq810c6gyZOV6k4xIg/2lOZgE2F6d40BKMbml7pQjZ7sze/ITVsu2d
-X-Gm-Message-State: AOJu0YyIPJmW1S6+DyILpx5UqcX4DlmJjsvnNUFADSKr7af3X7w6STlb
-	f7W9K5ryhU4/kyGG8PA9pNb7o7k0rJ2a2h7riqTEuVSnea8uATuh39ky7IUcJowKcgg48XK7Auk
-	t+buqdcTGV9T7TUiQuSOahT1++zo=
-X-Google-Smtp-Source: AGHT+IGGnQKNWxIxOvVxR+lGNx1s7DwBsojy6rWDdcN/SEWlpdlGR5yRRJJkPCknsF5uAt1G1irGlDzBZLb6IZHllVE=
-X-Received: by 2002:a17:907:6e9e:b0:a59:c39b:6bc3 with SMTP id
- a640c23a62f3a-a5a2d6417e5mr2100229966b.49.1716217306721; Mon, 20 May 2024
- 08:01:46 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1716219612; x=1716824412;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Lnr1potWpuTZcvydit76tGvDXKhaYKHwXt27AplNE/o=;
+        b=aQbnUYp7Oz/NVQODOVy8YPe9MOusPYuWFEhW3Z1CkTQrp8/qto0zcg9LkzbA1KMijY
+         Epx61tDLHV45Lz6O3zJitof7/BlEFvs1uBXNnF52JGIIzsEEwycBz0+fkSj13OPj10Hp
+         c2BbzOegAr6nOxDG69rFDPu1MJFrKZcpqSiNkxaxVCuKCisBya8A5nWvV0BZJa4pO5Bw
+         Zcw86vHNbI5Jk83kB33cSY9T35XkjfqsPd9hFcfUnvMMeBHI2hciO9CYdHdhtJrkjPFS
+         ugWl8MT5bq/e4FqwI6x2+WAOkob3ATVlme0RSgxO0maDhp6apA+3sdN+sbQHTthYYHjV
+         QLbw==
+X-Forwarded-Encrypted: i=1; AJvYcCVL7pnbUIhApZ2IvKWKJWXGPrXIscZsIr4XFDBpXvEG0FgPl9bL89lRGD4lpG1WPGvB00+z7uf/weYw+v5RvSL9Pqt1ZN2uWOT6XxU0g0xdtt+TZwt6FOukaLBj0xMSfLMrvHvIwDVqB9alo6Vvs0Y7ToPx+c9FMnqV6OBrOU8h
+X-Gm-Message-State: AOJu0Yy2vas8lPS37k70RUFs5Qot6biC1zNfiVFAkmWPn+TVZp+DBqdl
+	tqn/X1qF+EETcE5ZnczwA5t+dKs6yYMzulN8I5PpP5M5VKva1YxU
+X-Google-Smtp-Source: AGHT+IEMExvEaNZcfHPPaX/8k+WlPHRrW1ag/azymJJNxRfVzHV/Z79udHSmjR4oX2TvioCo2Y/O+w==
+X-Received: by 2002:a50:9ec5:0:b0:568:8e22:4eff with SMTP id 4fb4d7f45d1cf-5734d6df0d5mr18784232a12.37.1716219612034;
+        Mon, 20 May 2024 08:40:12 -0700 (PDT)
+Received: from think.fritz.box (2001-8e0-3c0d-4001-4e1d-96ff-fe13-2153.bbcs.ip6.as8758.net. [2001:8e0:3c0d:4001:4e1d:96ff:fe13:2153])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-574bcad0362sm11760902a12.20.2024.05.20.08.40.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 May 2024 08:40:11 -0700 (PDT)
+From: Grygorii Tertychnyi <grembeter@gmail.com>
+X-Google-Original-From: Grygorii Tertychnyi <grygorii.tertychnyi@leica-geosystems.com>
+To: Markus Elfring <Markus.Elfring@web.de>,
+	Peter Korsgaard <peter@korsgaard.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Grygorii Tertychnyi <grygorii.tertychnyi@leica-geosystems.com>,
+	bsp-development.geo@leica-geosystems.com,
+	stable@vger.kernel.org
+Subject: [PATCH v2] i2c: ocores: set IACK bit after core is enabled
+Date: Mon, 20 May 2024 17:39:32 +0200
+Message-ID: <20240520153932.116731-1-grygorii.tertychnyi@leica-geosystems.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240517191000.11390-1-grygorii.tertychnyi@leica-geosystems.com>
- <6eee1069-81ae-495a-850f-7f526006db8b@web.de> <CAGFuAuyXhBT8Nkvz5qN8iejeoHMFmx1b86tTNmpVfQ2xqjMtLw@mail.gmail.com>
- <a42d75ad-8065-49f0-906a-c8ae3761457c@lunn.ch>
-In-Reply-To: <a42d75ad-8065-49f0-906a-c8ae3761457c@lunn.ch>
-From: grygorii tertychnyi <grembeter@gmail.com>
-Date: Mon, 20 May 2024 17:01:34 +0200
-Message-ID: <CAGFuAuwot_7+R=J4NC=0Z_48YZ-RTJjRUoQnSjZUvpt=AWF39Q@mail.gmail.com>
-Subject: Re: [PATCH] i2c: ocores: set IACK bit after core is enabled
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Markus Elfring <Markus.Elfring@web.de>, 
-	Grygorii Tertychnyi <grygorii.tertychnyi@leica-geosystems.com>, 
-	bsp-development.geo@leica-geosystems.com, linux-i2c@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org, Peter Korsgaard <peter@korsgaard.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 20, 2024 at 3:41=E2=80=AFPM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> On Mon, May 20, 2024 at 03:30:43PM +0200, grygorii tertychnyi wrote:
-> > On Sun, May 19, 2024 at 7:25=E2=80=AFAM Markus Elfring <Markus.Elfring@=
-web.de> wrote:
-> > >
-> > > =E2=80=A6
-> > > > Sometimes it causes failure for the very first message transfer, =
-=E2=80=A6
-> > >
-> > > Does such an information indicate the need for the tag =E2=80=9CFixes=
-=E2=80=9D?
-> >
-> > I'm not sure: the original initialization order was introduced by the
-> > very first commit
-> > 18f98b1e3147 ("[PATCH] i2c: New bus driver for the OpenCores I2C contro=
-ller").
->
-> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
->
->   It fixes a problem like an oops, a hang, data corruption, a real
->   security issue, a hardware quirk, a build error (but not for things
->   marked CONFIG_BROKEN), or some =E2=80=9Coh, that=E2=80=99s not good=E2=
-=80=9D issue.
->
-> Your description of the very first message transfer failing sounds
-> like a data corruption? Using the commit which adds the driver is also
-> fine, some bugs have been there all the time.
+Setting IACK bit when core is disabled does not clear the "Interrupt Flag"
+bit in the status register, and the interrupt remains pending.
 
-Thanks! Yes, it is a data corruption.
+Sometimes it causes failure for the very first message transfer, that is
+usually a device probe.
 
-> Remember to add a
->
-> Cc: stable@vger.kernel.org
+Hence, set IACK bit after core is enabled to clear pending interrupt.
 
-I will send v2.
+Fixes: 18f98b1e3147 ("[PATCH] i2c: New bus driver for the OpenCores I2C controller")
+Signed-off-by: Grygorii Tertychnyi <grygorii.tertychnyi@leica-geosystems.com>
+Acked-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: stable@vger.kernel.org
+---
+V1 -> V2: Added "Acked-by:", "Fixes:" and "Cc:" tags
 
-Regards,
-Grygorii
+ drivers/i2c/busses/i2c-ocores.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
+index e106af83cef4..350ccfbe8634 100644
+--- a/drivers/i2c/busses/i2c-ocores.c
++++ b/drivers/i2c/busses/i2c-ocores.c
+@@ -442,8 +442,8 @@ static int ocores_init(struct device *dev, struct ocores_i2c *i2c)
+ 	oc_setreg(i2c, OCI2C_PREHIGH, prescale >> 8);
+ 
+ 	/* Init the device */
+-	oc_setreg(i2c, OCI2C_CMD, OCI2C_CMD_IACK);
+ 	oc_setreg(i2c, OCI2C_CONTROL, ctrl | OCI2C_CTRL_EN);
++	oc_setreg(i2c, OCI2C_CMD, OCI2C_CMD_IACK);
+ 
+ 	return 0;
+ }
+-- 
+2.43.0
+
 
