@@ -1,142 +1,130 @@
-Return-Path: <linux-i2c+bounces-3599-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3600-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4C598C9F1F
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 May 2024 16:56:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A3B48C9F2E
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 May 2024 17:01:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 043931C21E61
-	for <lists+linux-i2c@lfdr.de>; Mon, 20 May 2024 14:56:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79504B209F5
+	for <lists+linux-i2c@lfdr.de>; Mon, 20 May 2024 15:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F066C136E00;
-	Mon, 20 May 2024 14:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8021B136675;
+	Mon, 20 May 2024 15:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="K0J4/JRK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XlEVKSu3"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B1E13699B;
-	Mon, 20 May 2024 14:56:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C2728E7;
+	Mon, 20 May 2024 15:01:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716216982; cv=none; b=PPv52V7lbjxigqhnfNusdJh826I+yUYvHRKPA5Mzju3Q+O+9qpmTtyCeuzoms5miZlDKVTMxSCyNh0M7nU4EtTujlinfAsCBH4F7hnRuCNuv/x3yM1Q1OBGrHarE5KTetKS67r1Dms3QuSqQQg2H7N9xempSIf+MwluO8MZ1Wns=
+	t=1716217310; cv=none; b=dLASfI9k6v57bdTNOQ0BCFEx0+clZU5ACb0YELflWeRpYIXRQb+gGEYBxXfcJrn1ZRNkHTHS7KI+jtkMe7+7ITjs6g7VUkbf/8vaI6VLH1LhEVTOqsrkoE3+tt0wkbs0AbS3HJN7UDKxHUXl6tkzRw+nvQaO8LjY01dYAiv6Uiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716216982; c=relaxed/simple;
-	bh=r016ACG9rLPHqBFAH7IwIq8KsAEq11uLlcFIl+XU3CI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JUxmSDu5GJteUyJiTE5SsCpFrHtEIeZ6OCtguo7tWxzGYTnheJZiIErj8xAtdqIhIEhgqJERrm8RzRJZooTVEFxM+WdubdQJHLhuWO/muZ81Q7Q1GjQOazTXOmmZAQ+WWElKMEb47DlDFp1QzQwxCeASbmW8MeWBgZ3dDvor26M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=K0J4/JRK; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44KEhEEL023548;
-	Mon, 20 May 2024 14:56:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=k8LthJaFono5kzefOLh4BpFlOGemu1pGW+k0msP+I4Y=;
- b=K0J4/JRKbpzYapY0L2S8Q9yiyrgoCqpkVHqfyhmcQKXctmLMR63b1B0F7SkrwRqWlKNo
- uZ61Wq2UWu5Hq91ibUc6D2rpnoyLyaBSWeCwAW6veNAcdkN2eyqcw4zr+2L4buJz2hzk
- 5pWLpBNBLLnm/IUdx2iT3reaIz2ZkXIQlH07hDY+D6nPI6464xS08GbOfzgh4hnh7ha6
- 8Oev4NMJQ9YUMtz3GNyH9jzTv4T/cLKDFpL4zlcSlnRKOY0Ad9IEIG29O6ZMQE8E79qN
- qvCyoFoJDUopIxTL5WfS/6jc3dGzJMQ1JMdQbI0FPUzQWGRwN3k0g3U7mh1qZjpWmJBO kg== 
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3y88h901ey-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 20 May 2024 14:56:10 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44KCV6vX000878;
-	Mon, 20 May 2024 14:56:10 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3y77200fs7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 20 May 2024 14:56:10 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44KEu7gw28115624
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 20 May 2024 14:56:10 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9C28858060;
-	Mon, 20 May 2024 14:56:07 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6DB4E5805C;
-	Mon, 20 May 2024 14:56:07 +0000 (GMT)
-Received: from [9.61.17.2] (unknown [9.61.17.2])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 20 May 2024 14:56:07 +0000 (GMT)
-Message-ID: <f23e2669-c5b9-4257-ad75-f1431690a544@linux.ibm.com>
-Date: Mon, 20 May 2024 09:56:07 -0500
+	s=arc-20240116; t=1716217310; c=relaxed/simple;
+	bh=h9G+PzNOBo0XpGBoArWpCHVHv14Yl1PQqd7N8807B0M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oLHzQv7EIg0PTA9xIWAIC3fuXl7398LUtvPn1qyrckrs9wftvzO1D6tdGtxQtJzK1L1ZNTAsQYq7d5kw/Ix0iPR53p++SUjWxqdW2lYqxdSjQbKVqypveaj2U/9MHETERMm/JgASfbDdL4KMcpWP+Cj1spJyG5lQEca9NjY6nEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XlEVKSu3; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a59b097b202so543072266b.0;
+        Mon, 20 May 2024 08:01:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716217307; x=1716822107; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NrznS2cuTf/vafEauQb8pP6KkMct4u3y/Gx+jtIqOBk=;
+        b=XlEVKSu3ROuRrQYunpZeWcMO4IZM+XoM6JLpT5YJtIsGtqejaXhAOd4oK8MDZqxUr5
+         VVDby/eZMF5G2rvsIRCVLrnT3Hq5M3o6Ro+QfrPbucm7NnAUW4IK4lEL9rPR3oLC+PAi
+         YQJ1hBWRwClNsTu6h6gatB3+0t4LSk6BVkwaSZVTAQmlC5SfUyQQ6/AEC+QoY/6sWB7G
+         Ypu9GmmGRLHMCU3v3XAUgiIW9q6NUepxpFJUhUds6NNf0C7vbrhJOs+NssNfiEfeUHdr
+         qRLe3/TviBKoPsf4LKQNbjiHVqKYSFDIuenBpUTuqTSR5ytFcHs6hTIjnE19wycNz9h6
+         xxcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716217307; x=1716822107;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NrznS2cuTf/vafEauQb8pP6KkMct4u3y/Gx+jtIqOBk=;
+        b=g7r0RLpL2sHGdIwfvjhpICX4xnqV6DeH8aGgSU6Zrshg0AtIjLVnPWHefqPPP0R1XP
+         7wI+Ntf4ARrK0JOfrxBC3efYHAoUPRRQQ4KUrX6cNkZ4IhYlup02Iy1yPCuvH8yq2M02
+         I/grBkVrO+I3dozt01rqTmXoCvThVs3kx+7gc2I1387+rBSN4mhdn1b0YY6joTbdeWPr
+         Xtc/3PHuoZgrHl10Q5Ov8HAw2CajvzX8OEeTHUhEGz2q6bMOTYFWbxkGZGD9XYAgXsvN
+         5o/vBR7X84wCw4qtJmc8ljufHABZnAOBdB1Xy5d6pL4ruMfbMYz7uHxjLmoMXZzOU5Ie
+         Ukfg==
+X-Forwarded-Encrypted: i=1; AJvYcCX0siFaOPNOvktZB7hqLNN/O1WeOm48C6iFxpnyD2ejiJjcFF7sTUYvMqc6tjtepiidpVbleJGxRYhrM9epMX+FkYUvuTrXYTx3vg004665ZwqdccXkLggGWDteSJ0SH+Kq810c6gyZOV6k4xIg/2lOZgE2F6d40BKMbml7pQjZ7sze/ITVsu2d
+X-Gm-Message-State: AOJu0YyIPJmW1S6+DyILpx5UqcX4DlmJjsvnNUFADSKr7af3X7w6STlb
+	f7W9K5ryhU4/kyGG8PA9pNb7o7k0rJ2a2h7riqTEuVSnea8uATuh39ky7IUcJowKcgg48XK7Auk
+	t+buqdcTGV9T7TUiQuSOahT1++zo=
+X-Google-Smtp-Source: AGHT+IGGnQKNWxIxOvVxR+lGNx1s7DwBsojy6rWDdcN/SEWlpdlGR5yRRJJkPCknsF5uAt1G1irGlDzBZLb6IZHllVE=
+X-Received: by 2002:a17:907:6e9e:b0:a59:c39b:6bc3 with SMTP id
+ a640c23a62f3a-a5a2d6417e5mr2100229966b.49.1716217306721; Mon, 20 May 2024
+ 08:01:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] dt-bindings: i2c: i2c-fsi: Convert to json-schema
-To: Krzysztof Kozlowski <krzk@kernel.org>, linux-i2c@vger.kernel.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org,
-        andi.shyti@kernel.org
-References: <20240514205454.158157-1-eajames@linux.ibm.com>
- <79bed5c3-14be-4f15-a2f8-2e2342cb6b57@kernel.org>
-Content-Language: en-US
-From: Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <79bed5c3-14be-4f15-a2f8-2e2342cb6b57@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: IBG5_ypo9PzQetmL-qX-ZWH2SCXS76R_
-X-Proofpoint-ORIG-GUID: IBG5_ypo9PzQetmL-qX-ZWH2SCXS76R_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-20_05,2024-05-17_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=816
- malwarescore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- suspectscore=0 bulkscore=0 impostorscore=0 clxscore=1015 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2405200120
+References: <20240517191000.11390-1-grygorii.tertychnyi@leica-geosystems.com>
+ <6eee1069-81ae-495a-850f-7f526006db8b@web.de> <CAGFuAuyXhBT8Nkvz5qN8iejeoHMFmx1b86tTNmpVfQ2xqjMtLw@mail.gmail.com>
+ <a42d75ad-8065-49f0-906a-c8ae3761457c@lunn.ch>
+In-Reply-To: <a42d75ad-8065-49f0-906a-c8ae3761457c@lunn.ch>
+From: grygorii tertychnyi <grembeter@gmail.com>
+Date: Mon, 20 May 2024 17:01:34 +0200
+Message-ID: <CAGFuAuwot_7+R=J4NC=0Z_48YZ-RTJjRUoQnSjZUvpt=AWF39Q@mail.gmail.com>
+Subject: Re: [PATCH] i2c: ocores: set IACK bit after core is enabled
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Markus Elfring <Markus.Elfring@web.de>, 
+	Grygorii Tertychnyi <grygorii.tertychnyi@leica-geosystems.com>, 
+	bsp-development.geo@leica-geosystems.com, linux-i2c@vger.kernel.org, 
+	kernel-janitors@vger.kernel.org, Peter Korsgaard <peter@korsgaard.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On 5/19/24 13:03, Krzysztof Kozlowski wrote:
-> On 14/05/2024 22:54, Eddie James wrote:
+On Mon, May 20, 2024 at 3:41=E2=80=AFPM Andrew Lunn <andrew@lunn.ch> wrote:
 >
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - ibm,i2c-fsi
->> +
->> +  reg:
->> +    items:
->> +      - description: FSI slave address
->> +
->> +  "#address-cells":
->> +    const: 1
->> +
->> +  "#size-cells":
->> +    const: 0
->> +
->> +patternProperties:
->> +  "^i2c(@.*)?":
-> Either you have or you have not unit addresses. Please fix the pattern.
-> Why is this so flexible? Do you want to deprecate i2c-bus in favor of
-> i2c? If so, then example should use new naming. I am fine with children
-> as i2c-bus, assuming this is allowed by dtschema. Did you actually test it?
-
-
-This is the exact pattern of the i2c-controller schema node name, which 
-I thought would be good. I can make it more specific. But yes I tested 
-it, i2c-bus works fine
-
-
-Thanks, Eddie
-
-
+> On Mon, May 20, 2024 at 03:30:43PM +0200, grygorii tertychnyi wrote:
+> > On Sun, May 19, 2024 at 7:25=E2=80=AFAM Markus Elfring <Markus.Elfring@=
+web.de> wrote:
+> > >
+> > > =E2=80=A6
+> > > > Sometimes it causes failure for the very first message transfer, =
+=E2=80=A6
+> > >
+> > > Does such an information indicate the need for the tag =E2=80=9CFixes=
+=E2=80=9D?
+> >
+> > I'm not sure: the original initialization order was introduced by the
+> > very first commit
+> > 18f98b1e3147 ("[PATCH] i2c: New bus driver for the OpenCores I2C contro=
+ller").
 >
-> Best regards,
-> Krzysztof
+> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
 >
+>   It fixes a problem like an oops, a hang, data corruption, a real
+>   security issue, a hardware quirk, a build error (but not for things
+>   marked CONFIG_BROKEN), or some =E2=80=9Coh, that=E2=80=99s not good=E2=
+=80=9D issue.
+>
+> Your description of the very first message transfer failing sounds
+> like a data corruption? Using the commit which adds the driver is also
+> fine, some bugs have been there all the time.
+
+Thanks! Yes, it is a data corruption.
+
+> Remember to add a
+>
+> Cc: stable@vger.kernel.org
+
+I will send v2.
+
+Regards,
+Grygorii
 
