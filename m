@@ -1,47 +1,47 @@
-Return-Path: <linux-i2c+bounces-3618-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3619-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E4858CAC68
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2024 12:43:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 384AA8CAC8D
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2024 12:50:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CF94B2156B
-	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2024 10:43:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1D9B282230
+	for <lists+linux-i2c@lfdr.de>; Tue, 21 May 2024 10:49:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3655973539;
-	Tue, 21 May 2024 10:43:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A526757FD;
+	Tue, 21 May 2024 10:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PvlGCWbJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QkCGxQgO"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D6473173;
-	Tue, 21 May 2024 10:43:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4682471B3D;
+	Tue, 21 May 2024 10:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716288195; cv=none; b=LfAQSp6Md9urA3EUJUnncPHWhH2D09DNxaPQ8SKJSBRn+EUyC2ZQlabFB6aD5pdDPUAGxtFPQ826Q3VioeGRVTVtJv4X6t+zv8bwAbpMcx0awml/XIbVxwC+s7xkpCQxon0x1++LTxpseXGGc7rD3r+mRhiKUdyWhvQcOlx6iws=
+	t=1716288570; cv=none; b=na+uFEtBXvCGz3qLzHQFwkAdXLG2/i7Lrus5DITJQ2vCtKuxMYsfCz1V6hQSbgsxR1JWVw/nqI2RN1B+mTWQfrgP+Q5y8jXv7OVW91ndsx+Tk7CDzAOpm4D+QQG6nKoefWofRLvCGGzyH49Rn2v6NYPe3nTzPsUjSYPFSF9YcQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716288195; c=relaxed/simple;
-	bh=8UBOj6p0fXqyvtdIPctQRf1rtkQtpy9K2lzno53x+7k=;
+	s=arc-20240116; t=1716288570; c=relaxed/simple;
+	bh=6KPrfDvxePiYqQ+U86QGOtRIQhJqkZNmdPViVsnR34A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sBmBKAaHBf1+FBhN+MN0kWHwE7Yv181wmWMlhRijZRgR0WCExvlPJ5Qy/p8i9SpjYBObMx/eB+7Y0dZ9AQPXD/Wkih+1FL/T0Psw7uflOuwvaozOkfy2bnUx+i1G/1rVfG0ffUEcHJQJl0OFOjQblXbHIeaOFWZMfhKegeVJiOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PvlGCWbJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E043C2BD11;
-	Tue, 21 May 2024 10:43:09 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=J+qe6KnFRARArbjdPJq6cwsPu4NKgl3CAjQWdcMIFU9CGY+8XHaqZNO8pgt/gXlkYq15nQeZhwpCe/TSsA8GurPiUHaNTpUI9y6sxvgnTjj6ku3g5QW6l+I0yHS6qBjeYoJf3HPXRT1cOOS4NkPiZaG7UBt06s6JdqiUOhI4J8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QkCGxQgO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9034EC32789;
+	Tue, 21 May 2024 10:49:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716288194;
-	bh=8UBOj6p0fXqyvtdIPctQRf1rtkQtpy9K2lzno53x+7k=;
+	s=k20201202; t=1716288570;
+	bh=6KPrfDvxePiYqQ+U86QGOtRIQhJqkZNmdPViVsnR34A=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PvlGCWbJ7TJmuM2IKy/KZsHOsPW6YkfZWIb9G4ul1hTomoU7Ku5AfYKDtXaUi51B1
-	 OqUS5kmlnyldZ6LI/ECVh49lw8o9tarxJNQi0rXG4iH5GVPvp5VAGiE5elB/suaKuX
-	 w2uXTnaOx20Uaix+VouFIZbu7MoJyTryz3jsr0PkbFXAW1DS6BOUkBfqNKFaogtAnd
-	 vKHFC6TN34J0AvqFbOcJjQH2GKJWb8+y+n5NRI7u2vR10klJH+Q26JG3aoC4bs//6k
-	 BC7BvzVTJgeEftTOD0SOaDufrkRA9q8mEXVwi9e8hc5WOpul1GnOXtihZYGgdyIc+2
-	 RltEkELEmRvdg==
-Date: Tue, 21 May 2024 11:43:05 +0100
+	b=QkCGxQgOHgBFCqFIlV4VgKAH9/B6+1F+Do1GmLFKqPl1Igib7uV61Ae3Xkqy7JuLn
+	 3cbFhuqfwf58ScdoX0J9/J8vTCOeD5Kip4AIehMr9L2lnevQxOZmoxk2fSjrTxU0Sa
+	 tZI+VSdqYEFh9l2Sj7pD5AjLcDfoMHzG+2qKUMaW/PT39BqCr39gGKwjCcqVt49d8n
+	 SC/7q0VHuRPRf3/c19Sbj1hHOrIZcEscJEN5EHv30PXm/YrePix9wM+ykthsAxBJcx
+	 RF/IsckJu+5LM+j2eELP6rptO7nE223xSnwXI0IxvSPS7oVyMucBQHmH7pks1gSWcC
+	 tCtE0o/rXxVtA==
+Date: Tue, 21 May 2024 11:49:21 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
 Cc: Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
@@ -64,12 +64,12 @@ Cc: Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
 	"linux-sound@vger.kernel.org" <linux-sound@vger.kernel.org>,
 	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
 	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 02/13] regmap: add A2B support
-Message-ID: <840887df-88af-4235-aed3-6d1e03197d7f@sirena.org.uk>
+Subject: Re: [PATCH 07/13] ASoC: codecs: add AD24xx codec driver
+Message-ID: <e2ab39b8-55a3-4afe-9832-b1a780b93831@sirena.org.uk>
 References: <20240517-a2b-v1-0-b8647554c67b@bang-olufsen.dk>
- <20240517-a2b-v1-2-b8647554c67b@bang-olufsen.dk>
- <49cd7b8e-d104-4136-bf7d-7eb45725c596@sirena.org.uk>
- <hpid3fdj3igswrqtwavudhgicsadnacbyxbg65to5yr4hduzst@yjspwxnwsw6c>
+ <20240517-a2b-v1-7-b8647554c67b@bang-olufsen.dk>
+ <e5782aef-d64d-46f3-ab5c-dc01285e08c2@sirena.org.uk>
+ <edv5aqfnb5gdxfmrh5nywnzg3tzfdq27kfvpkhg2t2q2jwf7ej@vjqgiw3ssv3b>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -77,41 +77,61 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="St7M108N36sHj33E"
+	protocol="application/pgp-signature"; boundary="IfNqVr8A6eo57Tqb"
 Content-Disposition: inline
-In-Reply-To: <hpid3fdj3igswrqtwavudhgicsadnacbyxbg65to5yr4hduzst@yjspwxnwsw6c>
+In-Reply-To: <edv5aqfnb5gdxfmrh5nywnzg3tzfdq27kfvpkhg2t2q2jwf7ej@vjqgiw3ssv3b>
 X-Cookie: Eloquence is logic on fire.
 
 
---St7M108N36sHj33E
+--IfNqVr8A6eo57Tqb
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 21, 2024 at 06:27:19AM +0000, Alvin =C5=A0ipraga wrote:
-> On Fri, May 17, 2024 at 03:42:31PM GMT, Mark Brown wrote:
+On Tue, May 21, 2024 at 06:46:21AM +0000, Alvin =C5=A0ipraga wrote:
+> On Fri, May 17, 2024 at 04:03:50PM GMT, Mark Brown wrote:
+> > On Fri, May 17, 2024 at 02:58:05PM +0200, Alvin =C5=A0ipraga wrote:
 
-> > (looks like you'll need to add
-> > the hook for the bus there).
+> > > +static const char *const ad24xx_codec_slot_size_text[] =3D {
+> > > +	"8 bits",  "12 bits", "16 bits", "20 bits",
+> > > +	"24 bits", "28 bits", "32 bits",
+> > > +};
+> >=20
+> > Why is this configured by the user rather than via set_tdm_slot(), and
+> > how would one usefully use this at runtime?
+>=20
+> This configures the slot size of A2B data slots, not the slot size on
+> the TDM interface. Typically one would expect it to be the same, so your
+> question is valid. But it is not a strict requirement as far as the A2B
+> bus and hardware is concerned.
+>=20
+> To give a concrete example, the TDM interface might run with a TDM slot
+> size of 32 bits, but the PCM data is in reality 24 bits padded to 32
+> bits. In this case, A2B bus bandwidth can be saved by configuring the
+> "{Up,Down}stream Slot Size" kcontrol to "24 bits".
+>=20
+> More detailed information can be found in the manual in [1] section 3-22
+> "I2S/TDM Port Programming Concepts", where an analogous example is
+> given.
 
-> I am not sure what you mean by this, can you elaborate?
+That still doesn't sound like something that should be configured
+dynamically by the user.  Based on that description it sounds like it's
+just the sample size so should cope from hw_params.
 
-I didn't check but I don't think we have flags at the bus level.
-
---St7M108N36sHj33E
+--IfNqVr8A6eo57Tqb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZMergACgkQJNaLcl1U
-h9CSTgf/QQ1StDcAzJXlybD/xqdF15O3+KIogLD1ZLOcgaFE1RXBo6CGx3eBFVwD
-Qn6pDxYFyi13O94/sl11FxmYPk/Of7ejjB0z9NB5orfk9vwWBkTGEbKTtwpps//X
-kxO35VVAaPyLG8+f/liuoHMB+51kTR/OB/jaKyBEY+LyNxctTCrScagH/GsS6XfO
-SwUyF1Lv2iuopRx+mJdO4e0xZkeBEPonp6mXiVeJKCF/n/Y7SxHfMm8wHdcOrD8P
-W9HkUQK3wk5GLhvk3KsyJXRrQrbPDitFT60k/nRZGC/E0UjRA2hGwPo259B4OyFV
-KBpg0UVPsOhhlb5ZSx4SNHgFvZBDmA==
-=vtdb
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZMfDAACgkQJNaLcl1U
+h9ACLgf9F/4Hlcaz6ms2pQ1jUz65htj1EgnNuZtgs/G5QOQR/dSlJToXp1Fsk0+B
+LX+uL2Bi+Va82Rv/PoN/GXymodv97hPrbFvwmyNHUaDncUXdlZSBVzo0h/3uk9Hf
+P2yvFxZLGkFVMrCxAaA+/C75nwRoftdmd/DbxGCtmcfy9VCO95LVf9jP6pHmAWk6
+JGJ+VUBmwqZZ3NDyFqRvujjpE1uFgWrvgracm1PAujirj0hcYbhXwVpOTxh8HWBL
+1WhXTof/JrHLwVWAWFEE2nuh2ZziHMiq1sWYA6tCxhdtQZSc4z2EJnI+qXJfrd2b
+ZHe0aWB3mYxQ+jN2cq3QGaG2KR7PUA==
+=Woy1
 -----END PGP SIGNATURE-----
 
---St7M108N36sHj33E--
+--IfNqVr8A6eo57Tqb--
 
