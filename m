@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-3624-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3629-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86AA68CC6DB
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 May 2024 21:26:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F25478CC6ED
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 May 2024 21:27:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9D0D1C20D95
-	for <lists+linux-i2c@lfdr.de>; Wed, 22 May 2024 19:26:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1860E1C20D95
+	for <lists+linux-i2c@lfdr.de>; Wed, 22 May 2024 19:27:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91DEC146A75;
-	Wed, 22 May 2024 19:26:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B71FE1474D3;
+	Wed, 22 May 2024 19:26:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rVEi0nUu"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hxWvxgg3"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6E4145B2F;
-	Wed, 22 May 2024 19:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7167146013;
+	Wed, 22 May 2024 19:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716406003; cv=none; b=kA/FCEJDWZDjUBExgNwRR0r9PryhSDKKeRewj61OCv010hCnE0TXfqCDVthxnFlWfWqCCkea+k7Z+l9HQPYLiuR69ENDEQRUwaLJnQjZk7RrELJ1jyGTEfSYo/HkZNtfNG5kAEF0g02P1ZOxVudU4vf7TOVXSIZd6w8AH5h4vno=
+	t=1716406004; cv=none; b=U36/Ef4QzsXVYQ/XawhhfKQ/QTeh0W42rglnCZUuBqfsjmbqap3piei2neVIV31E6a2Uo6ZfEnd+H/GpHuWf9hL2WQC6PvXTVziSHhDKFHAea7K2jnEFFfYXL382guHih5olVtu8yGP3Xq17idi6kq8Qcx7JfZEtYpxCogQx7EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716406003; c=relaxed/simple;
-	bh=cFWcpARcjYT9zgqi3WWrWm5Xze5Fb0jQpNzucFqM79k=;
+	s=arc-20240116; t=1716406004; c=relaxed/simple;
+	bh=zWLtlAGCK4IGSNUM/n/Z8G3A2WXEvTGsOyco0+kE7DY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BWaeySQ5Z2nnkc3jYyDb1Ds0qCNrPLLvk5wwdVaWSzAUeLoFJEN9zkEyysg/Cj3hLOQQB33uhOgesz8LEHDewV3J+3PH1R0YfKs4YUvrH0v2RWpxwRtJi6YkuOw5NGSQ2AZCFpJcGWFA9reIUe3oHC90UEecYthubRVV4lwK8Zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rVEi0nUu; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=QQvvI2LfPCbJdXuQKFFjJ0+jDmQxD1U0wqNLo3BnNP6E9wHSuI6q8B1EX77FdfTpOJ7JcIwxUqQo+YcefpD82v3y61MgkXQMbtceaoBdP7jhev+eNhCyFn7gc5SU25nFy1XjYjP+TKukpJUEaZoJC/KMBLcvqY3lYKjWUykhlIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hxWvxgg3; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44MINKxp011088;
-	Wed, 22 May 2024 19:25:36 GMT
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44MIuAQe027630;
+	Wed, 22 May 2024 19:25:37 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=Lee03BLXifhyW6cVx+t02zzYMJGHqQXg03t0Uf26jiE=;
- b=rVEi0nUuZrtwZvO53NNDoN+BbhMBdsysL4A4/TzZ/C/0HeeTXJxF5F7ptxf6y018sz2t
- aq15g978utHsUGmweF1YPaX5SYxy4wcgFLZoSCjbbLkAjoN/fkJYDIv2exVEF/e7UV2+
- c9RO0SiA31zOedGJtyf6byl8/Qv+4QTfBCexDPeEFeYlL73ROKLqddFjtpSyA0uyW/Zz
- Th8NNetI3hofNBOsYS8fYUKxAS4amIpOimIWY9P0EOlCDjLRDAE9lTRS8dP8k3VUEtTR
- qTXSGCRsK9+RbpKgOQ0NyjjKF+r8ORdpJUTA2vp4+4qwvTI5OAYnoIF3SjPoUAgG+kIl sA== 
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3y9nx0g4yq-1
+ bh=x7pWOfCWK1R/iOvFYMyRCieamnXkuL2K1vcfY/HPR24=;
+ b=hxWvxgg3yRdfHphvzPwEnhwha4i3Sn6VbRCol6V9vSNVC0GLKUWVpBM5KGCChp8J1WJk
+ RWFbGbnRYZxvcKFTxFmPz6BVEDwDmdcfa4juCc7yJoa5/uNrEkcKADlzNrYlWxRNF1Te
+ VFot0IG1zhYKjZTwNtbSH4h7uMwypxme8jG/T5FclGCJRO/VXBrW4QeTc6nvQbdCuLVc
+ qZZUGiGymR/HbQW1A+dLwPGFlx7AQf20Sc9upvkzAO+1CgLTbiOWIxjXC4gy1vZQHhuo
+ Hiaodm6dW5VLR/2oOWnfit50w0KDOqGTDmIsKMYDmZxief0W6pe0dEC/9tfKnsA+2aRU Vg== 
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3y9p4x83vg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Wed, 22 May 2024 19:25:36 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44MJ5Mav008123;
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44MJ47wD008090;
 	Wed, 22 May 2024 19:25:35 GMT
 Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3y78vm5a62-1
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3y79c359ag-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Wed, 22 May 2024 19:25:35 +0000
 Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44MJPVbs36700826
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44MJPVWQ59113748
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 22 May 2024 19:25:33 GMT
+	Wed, 22 May 2024 19:25:34 GMT
 Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6CA8D58062;
+	by IMSVA (Postfix) with ESMTP id C28FE5805D;
 	Wed, 22 May 2024 19:25:31 +0000 (GMT)
 Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1FB095805D;
+	by IMSVA (Postfix) with ESMTP id 742C758066;
 	Wed, 22 May 2024 19:25:31 +0000 (GMT)
 Received: from slate16.aus.stglabs.ibm.com (unknown [9.61.104.209])
 	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
@@ -75,9 +75,9 @@ Cc: eajames@linux.ibm.com, devicetree@vger.kernel.org,
         linux-aspeed@lists.ozlabs.org, andrew@codeconstruct.com.au,
         joel@jms.id.au, robh@kernel.org, conor+dt@kernel.org,
         krzk+dt@kernel.org, andi.shyti@kernel.org, broonie@kernel.org
-Subject: [PATCH v6 17/20] ARM: dts: aspeed: Add IBM Huygens BMC system
-Date: Wed, 22 May 2024 14:25:21 -0500
-Message-Id: <20240522192524.3286237-18-eajames@linux.ibm.com>
+Subject: [PATCH v6 18/20] fsi: occ: Get device number from FSI minor number API
+Date: Wed, 22 May 2024 14:25:22 -0500
+Message-Id: <20240522192524.3286237-19-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240522192524.3286237-1-eajames@linux.ibm.com>
 References: <20240522192524.3286237-1-eajames@linux.ibm.com>
@@ -89,67 +89,143 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 2DIixh4kmnmVHg76-TI-thoi7B-3m9oJ
-X-Proofpoint-GUID: 2DIixh4kmnmVHg76-TI-thoi7B-3m9oJ
+X-Proofpoint-ORIG-GUID: 7aQTrkIu-uauI0UtU_rAaYawFYzJnvCh
+X-Proofpoint-GUID: 7aQTrkIu-uauI0UtU_rAaYawFYzJnvCh
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
  definitions=2024-05-22_10,2024-05-22_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 mlxscore=0 suspectscore=0 adultscore=0 mlxlogscore=943
- impostorscore=0 clxscore=1015 priorityscore=1501 malwarescore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 bulkscore=0 phishscore=0
+ adultscore=0 spamscore=0 clxscore=1015 mlxlogscore=999 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2405010000 definitions=main-2405220134
 
-The Huygens is a Rainier with modifed FSI wiring.
+Remove the IDA indexing for OCC devices and instead use the FSI
+minor number API. This will make the OCC numbering consistent
+with other FSI engines and make the "reg" device tree property
+unnecessary.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- arch/arm/boot/dts/aspeed/Makefile             |  1 +
- .../dts/aspeed/aspeed-bmc-ibm-huygens.dts     | 23 +++++++++++++++++++
- 2 files changed, 24 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-huygens.dts
+ drivers/fsi/fsi-occ.c | 47 +++++++++----------------------------------
+ 1 file changed, 9 insertions(+), 38 deletions(-)
 
-diff --git a/arch/arm/boot/dts/aspeed/Makefile b/arch/arm/boot/dts/aspeed/Makefile
-index 5e3392621697a..ac2804c96554a 100644
---- a/arch/arm/boot/dts/aspeed/Makefile
-+++ b/arch/arm/boot/dts/aspeed/Makefile
-@@ -36,6 +36,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-ibm-bonnell.dtb \
- 	aspeed-bmc-ibm-everest.dtb \
- 	aspeed-bmc-ibm-fuji.dtb \
-+	aspeed-bmc-ibm-huygens.dtb \
- 	aspeed-bmc-ibm-rainier.dtb \
- 	aspeed-bmc-ibm-rainier-1s4u.dtb \
- 	aspeed-bmc-ibm-rainier-4u.dtb \
-diff --git a/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-huygens.dts b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-huygens.dts
-new file mode 100644
-index 0000000000000..4a731b772fc0b
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-huygens.dts
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright 2024 IBM Corp.
-+/dts-v1/;
+diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
+index da35ca9e84a6e..2023355b39805 100644
+--- a/drivers/fsi/fsi-occ.c
++++ b/drivers/fsi/fsi-occ.c
+@@ -4,9 +4,9 @@
+ #include <linux/err.h>
+ #include <linux/errno.h>
+ #include <linux/fs.h>
++#include <linux/fsi.h>
+ #include <linux/fsi-sbefifo.h>
+ #include <linux/gfp.h>
+-#include <linux/idr.h>
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+ #include <linux/miscdevice.h>
+@@ -44,6 +44,7 @@ struct occ {
+ 	struct device *sbefifo;
+ 	char name[32];
+ 	int idx;
++	dev_t devt;
+ 	bool platform_hwmon;
+ 	u8 sequence_number;
+ 	void *buffer;
+@@ -75,8 +76,6 @@ struct occ_client {
+ 
+ #define to_client(x)	container_of((x), struct occ_client, xfr)
+ 
+-static DEFINE_IDA(occ_ida);
+-
+ static int occ_open(struct inode *inode, struct file *file)
+ {
+ 	struct occ_client *client = kzalloc(sizeof(*client), GFP_KERNEL);
+@@ -622,7 +621,6 @@ static int occ_unregister_of_child(struct device *dev, void *data)
+ static int occ_probe(struct platform_device *pdev)
+ {
+ 	int rc;
+-	u32 reg;
+ 	char child_name[32];
+ 	struct occ *occ;
+ 	struct platform_device *hwmon_dev = NULL;
+@@ -637,6 +635,10 @@ static int occ_probe(struct platform_device *pdev)
+ 	if (!occ)
+ 		return -ENOMEM;
+ 
++	rc = fsi_get_new_minor(to_fsi_dev(dev->parent), fsi_dev_occ, &occ->devt, &occ->idx);
++	if (rc)
++		return rc;
 +
-+#include "aspeed-bmc-ibm-rainier.dts"
-+
-+/ {
-+	model = "Huygens";
-+};
-+
-+&fsim0 {
-+	/delete-node/ cfam@0,0;
-+	/delete-property/ cfam-reset-gpios;
-+
-+	bus-frequency = <100000000>;
-+};
-+
-+&fsim1 {
-+	#address-cells = <2>;
-+	#size-cells = <0>;
-+	status = "okay";
-+	bus-frequency = <100000000>;
-+};
+ 	/* SBE words are always four bytes */
+ 	occ->buffer = kvmalloc(OCC_MAX_RESP_WORDS * 4, GFP_KERNEL);
+ 	if (!occ->buffer)
+@@ -651,24 +653,6 @@ static int occ_probe(struct platform_device *pdev)
+ 	 */
+ 	occ->sequence_number = (u8)((jiffies % 0xff) + 1);
+ 	mutex_init(&occ->occ_lock);
+-
+-	if (dev->of_node) {
+-		rc = of_property_read_u32(dev->of_node, "reg", &reg);
+-		if (!rc) {
+-			/* make sure we don't have a duplicate from dts */
+-			occ->idx = ida_simple_get(&occ_ida, reg, reg + 1,
+-						  GFP_KERNEL);
+-			if (occ->idx < 0)
+-				occ->idx = ida_simple_get(&occ_ida, 1, INT_MAX,
+-							  GFP_KERNEL);
+-		} else {
+-			occ->idx = ida_simple_get(&occ_ida, 1, INT_MAX,
+-						  GFP_KERNEL);
+-		}
+-	} else {
+-		occ->idx = ida_simple_get(&occ_ida, 1, INT_MAX, GFP_KERNEL);
+-	}
+-
+ 	platform_set_drvdata(pdev, occ);
+ 
+ 	snprintf(occ->name, sizeof(occ->name), "occ%d", occ->idx);
+@@ -680,7 +664,7 @@ static int occ_probe(struct platform_device *pdev)
+ 	rc = misc_register(&occ->mdev);
+ 	if (rc) {
+ 		dev_err(dev, "failed to register miscdevice: %d\n", rc);
+-		ida_simple_remove(&occ_ida, occ->idx);
++		fsi_free_minor(occ->devt);
+ 		kvfree(occ->buffer);
+ 		return rc;
+ 	}
+@@ -719,7 +703,7 @@ static int occ_remove(struct platform_device *pdev)
+ 	else
+ 		device_for_each_child(&pdev->dev, NULL, occ_unregister_of_child);
+ 
+-	ida_simple_remove(&occ_ida, occ->idx);
++	fsi_free_minor(occ->devt);
+ 
+ 	return 0;
+ }
+@@ -746,20 +730,7 @@ static struct platform_driver occ_driver = {
+ 	.remove = occ_remove,
+ };
+ 
+-static int occ_init(void)
+-{
+-	return platform_driver_register(&occ_driver);
+-}
+-
+-static void occ_exit(void)
+-{
+-	platform_driver_unregister(&occ_driver);
+-
+-	ida_destroy(&occ_ida);
+-}
+-
+-module_init(occ_init);
+-module_exit(occ_exit);
++module_platform_driver(occ_driver);
+ 
+ MODULE_AUTHOR("Eddie James <eajames@linux.ibm.com>");
+ MODULE_DESCRIPTION("BMC P9 OCC driver");
 -- 
 2.39.3
 
