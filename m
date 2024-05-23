@@ -1,72 +1,72 @@
-Return-Path: <linux-i2c+bounces-3666-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3667-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 618F68CDC22
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 23:32:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56EC88CDC2F
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 23:36:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93AC61C225A0
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 21:32:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4EDBB22125
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 21:36:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B48127E06;
-	Thu, 23 May 2024 21:32:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66929127E17;
+	Thu, 23 May 2024 21:36:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XN4FpWtJ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="KgMkoNXu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F928839FF;
-	Thu, 23 May 2024 21:32:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C707101E2;
+	Thu, 23 May 2024 21:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716499937; cv=none; b=Ks025PZnlJvb9DhDwF1FdsixEEjjy1MEOB7ut776p2aEy5z14k2uvnDTMYFUA4D1/eEuBULmk6RAEmXvNCoMyEdncl+9DdcFvmEFcElMUIbGWx0olvVPgp23m5DF+bbmtzpROe5hHRnkwh7qHbpG7q5Uq8V24Dbf58TFmUUqLp8=
+	t=1716500199; cv=none; b=RZOWNnsJiLumHk685d/oPzoDCf3VNl5k0pmivfSP/PDpinMl2mI8N90R2fkW8NPy0jNOdGRAevN9D3HQH6U1+M+XCaXgaiNmBh0WtrNarKsMhlRnnE7jvU3ndacdATuLkFHF1vvM2JwpWYOI/AOwZQ1aZg+4DGVEjxn6+CfTGS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716499937; c=relaxed/simple;
-	bh=6DS3VPbtZ6K+MswhTHFpSZiWdd0ezBo62nEDDcuZzRc=;
+	s=arc-20240116; t=1716500199; c=relaxed/simple;
+	bh=MzjdYaN2JntmHSsF6OaPiegFLXOuLtU5g2XL+USSFNw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VD/uesMHaBctk0G6Gp9zBDeZgT1+pGUSqUPIr5ha++6DuRpXkLBXad6Bzm2+6t0TOpz/CcjNvJ/Zkdh5zTqjkwDyR4yvdbh8GxvlborcX6LVB/zwvfMfvA6qxXZ5ucDNF7NEPvfdpP2bGEnQVu1rK1tTZ6UoQ545il2jqxWsQqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XN4FpWtJ; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=RICSh/UUZSW8Lm4XDLKGe9om6yJ2vrSzJumnTIKB6mTZoFPAdcqKuZ3GI93gu0LhD2KbhT6ywGtXTcPPpoVEBoduyh8qMQdZJTuAyWzZv54A7+4jzi7U6OHq//adaJwzQnzA65HVrSm9PxDkSnI36tBvT6lqQnJMWTq06Ht++qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=KgMkoNXu; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44NLW31Q029683;
-	Thu, 23 May 2024 21:32:04 GMT
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44NLBrob014427;
+	Thu, 23 May 2024 21:36:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=6DS3VPbtZ6K+MswhTHFpSZiWdd0ezBo62nEDDcuZzRc=;
- b=XN4FpWtJqadjMSsctrwFUrQ89cMBoa8QkElnTVc7iC2E1MQhM6j6jAYjWPP4HLgoa6DS
- 3ZoF+uRzqBxozXZl/34bmRmxSfnOCAlrG1hw235paKi3FqVzto9H2LnX/jCnn0O5RC7h
- MtSWFzOudN4czMiUKWYY4OjEWTmHCNm0MHGcvFAbiqsqtqHE0xKQ+0tLesXuE83mPKTo
- VZRuQaFywi8Wi4okvFHpMz33KgM2KRKKh+c0N1iVyVuy7eS/NUPc7TLDguizE0mHBjOX
- 8nCxo3rz/INX3wdkTIeKm5Q1DKhKWKx4cJiK8msavhpnkuoJZr5sHaAvo/8lLdv0WRui Ww== 
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yadt08007-1
+ bh=MzjdYaN2JntmHSsF6OaPiegFLXOuLtU5g2XL+USSFNw=;
+ b=KgMkoNXu8wRukJKwy1zBtg5ZTqc48luT8j3fK47WMYTSo2sQ0cjGAeWtYX/AXNe07o71
+ yEA2T3AVFhbA+C2eokZZszdiIZ4PQh/7OgG/Qu0iRuaYdyjj1F47mT9y/k0dM3IRPJdA
+ n7x24NB/3EpXZ8+N0/sMEpsUdlraSCWqvgxaamokWPtF1mH1vP2TJVbzz1BIfTZ9oDNQ
+ A/1llASAykTS4+L5W2VRQcnFMhuBk7M1xLCVbf9fnUbw/JVPBJC86UwGo/vi+dJLX1Oz
+ YALsJF9PFjgZtojonuXVlkEq3O+zGfTMSibQunxnd8D27wH0OL0iwc7znedVtAmfO5VS ew== 
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yadg3g2ej-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 May 2024 21:32:04 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44NK14LV000898;
-	Thu, 23 May 2024 21:32:03 GMT
+	Thu, 23 May 2024 21:36:23 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44NL2PWi026453;
+	Thu, 23 May 2024 21:36:22 GMT
 Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3y7720mpu7-1
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3y785mve3b-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 May 2024 21:32:03 +0000
+	Thu, 23 May 2024 21:36:22 +0000
 Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44NLVxt314090982
+	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44NLaJ3L1770164
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 23 May 2024 21:32:02 GMT
+	Thu, 23 May 2024 21:36:21 GMT
 Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C638B58061;
-	Thu, 23 May 2024 21:31:59 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 77CD558060;
+	Thu, 23 May 2024 21:36:19 +0000 (GMT)
 Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 88E315803F;
-	Thu, 23 May 2024 21:31:59 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 218995803F;
+	Thu, 23 May 2024 21:36:19 +0000 (GMT)
 Received: from gfwa153.aus.stglabs.ibm.com (unknown [9.3.84.127])
 	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 23 May 2024 21:31:59 +0000 (GMT)
+	Thu, 23 May 2024 21:36:19 +0000 (GMT)
 From: Ninad Palsule <ninad@linux.ibm.com>
 To: eajames@linux.ibm.com
 Cc: andi.shyti@kernel.org, andrew@codeconstruct.com.au, broonie@kernel.org,
@@ -75,12 +75,12 @@ Cc: andi.shyti@kernel.org, andrew@codeconstruct.com.au, broonie@kernel.org,
         linux-fsi@lists.ozlabs.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
         ninad@linux.ibm.com, robh@kernel.org
-Subject: Re: [PATCH v6 19/20] fsi: occ: Find next available child rather than node name match
-Date: Thu, 23 May 2024 16:31:57 -0500
-Message-Id: <20240523213157.4083494-1-ninad@linux.ibm.com>
+Subject: Re: [PATCH v6 18/20] fsi: occ: Get device number from FSI minor number API
+Date: Thu, 23 May 2024 16:36:16 -0500
+Message-Id: <20240523213616.4087472-1-ninad@linux.ibm.com>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240522192524.3286237-21-eajames@linux.ibm.com>
-References: <20240522192524.3286237-21-eajames@linux.ibm.com>
+In-Reply-To: <20240522192524.3286237-19-eajames@linux.ibm.com>
+References: <20240522192524.3286237-19-eajames@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -89,16 +89,17 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9Fw4YdbsuLVbiQYCpqSt1_zlWI-EvdEr
-X-Proofpoint-GUID: 9Fw4YdbsuLVbiQYCpqSt1_zlWI-EvdEr
+X-Proofpoint-GUID: -Ani03N30rzIGwfav1bvLDAEuIBHop0Z
+X-Proofpoint-ORIG-GUID: -Ani03N30rzIGwfav1bvLDAEuIBHop0Z
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
  definitions=2024-05-23_12,2024-05-23_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=598 mlxscore=0 suspectscore=0 phishscore=0 priorityscore=1501
- clxscore=1015 spamscore=0 malwarescore=0 adultscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ clxscore=1015 bulkscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=658
+ impostorscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2405010000 definitions=main-2405230149
+
 
 Reviewed-by: Ninad Palsule <ninad@linux.ibm.com>
 
