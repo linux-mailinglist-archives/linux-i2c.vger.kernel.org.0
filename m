@@ -1,84 +1,150 @@
-Return-Path: <linux-i2c+bounces-3655-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3656-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF88D8CDA5A
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 21:02:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36CF08CDA73
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 21:08:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97BB42835F1
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 19:02:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA1611F21B57
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 19:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 898A6762DC;
-	Thu, 23 May 2024 19:02:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFD7982D83;
+	Thu, 23 May 2024 19:07:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sgztMBPF"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OCWaWop/"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4495341A87;
-	Thu, 23 May 2024 19:02:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF6382863;
+	Thu, 23 May 2024 19:07:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716490960; cv=none; b=NOHz/TJulgkouOuClcMbqhRi1SzPUbeH9r/IHuURmjOkuqmms48AYUYwwtkGYi1rLH5V0W4iRoyiXOU3YVH/I72xpihKj27dk6sfRSdFGcC/NMqV3lQQtHVSbjeOS2ce9zJ3wQw/TBhoQ+bKSDrQoWAMNiV5IdhEq2DWMWLs7G4=
+	t=1716491273; cv=none; b=d1YinAZxL5g5GnnYIGbyL9PZ9AEE9L5XxLOYLp3D1rRe2C/Yw+s8nu265fTGpbRh2NoTmOOFM/GahLdtDQHjS9NSBHbg4v6R2eg0Q/qbsP3YHi9wcLoHVc6pUlNPljLq7Fb4Ztaz2lUc27Q8BMIdNaqWHd/DZpXVH+Mxxy4Dkf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716490960; c=relaxed/simple;
-	bh=gfkz/J8nYGjD56/dQaiy4UsG2977FaOY/pSGvSeeors=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UrEuqkLsdNNWTQgHdOr1oO6sW3o0CuA6QL+fglWtByN2MX8GzCdFu5ZmG5QTKqZe5JnVoD8wznSx2PKpM3iTylBDNDc2fvPiLeRQN5azlMGgssp8ha0aVFaB4h9uZU3b7hNGHOJ2bMX67Xq+xjT1nvp2pOTmciYY/uCD26tEcbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sgztMBPF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49D35C2BD10;
-	Thu, 23 May 2024 19:02:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716490959;
-	bh=gfkz/J8nYGjD56/dQaiy4UsG2977FaOY/pSGvSeeors=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=sgztMBPFbrjZvr1E6gEF2akirFN2oIML14ycvXRZDy/K6YlhH7WW56Zwpr6BNtr1U
-	 cBBf+8o1AEbVBPCioTYXc0U4BCsSCH/dw9hcFH74chTrwkd2wpROR7FaAdjpgkMA14
-	 EoETuJPcIJ/AnOErgkg+M1XyNpKBOK7S2qQ+O3V9e8uWAfFJ8w34WaTsz5ntTXmcb0
-	 SwWk/qjgcOacbsjojyn9LZyZfv/DjhDqXHRDrXtxtNitc+etCiOiBfmIDnft31kgKt
-	 1d3LHN80adQeIDYyWQwaafJZn3LwtwWi9JmUKcgC124MKdS3z8IYBToiqyFDp0ZiKF
-	 apjA/0qlWvKhA==
-Date: Thu, 23 May 2024 21:02:36 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Wolfram Sang <wsa@kernel.org>, linux-i2c <linux-i2c@vger.kernel.org>, 
-	lkml <linux-kernel@vger.kernel.org>, Heiner Kallweit <hkallweit1@gmail.com>, 
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [GIT PULL] i2c-host changes for v6.10 - pt. 2
-Message-ID: <fnznf6fb6vzk72b42lkir3jbopb6cog6mmjjr3f44o5ejmyelj@ehkhoevbn6dr>
-References: <2qtn3bk6pat2xkw7qz34pjpgh6zariuz6zjxhmuuo2jcddfpi4@xn6aqqppl3hi>
- <20240523154820.vza7xbdkgqyyth6w@ninjato>
+	s=arc-20240116; t=1716491273; c=relaxed/simple;
+	bh=XD30UEzgSSeL2mflAtdZXCCb5Md7riSIGIVnfpWQ3hw=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=U9s/pbM+aZcTqDCkye61kzQ5+1a5RRM3rKq8mFHMTAzAdRToL7rJkuJNbNFNB2G8xbaD20XYFeCcSUKQPp9vOWSo5iKWf0PPYXAl4XKyANHXLP6gKGNNckoo2iHQL7x1YJtLbzUuhE5wCfkrPIKkELN4fzVinJfC+j9Hg56NFzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OCWaWop/; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44NJ7VWF025991;
+	Thu, 23 May 2024 19:07:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Q688xSTw6bWKVlI3IHoLWJi8/sQGfWoYKVe4r6Iv/ww=;
+ b=OCWaWop/kQs/bPc1og2/kn2iSnXtYM1ra6y92lZ5/up+cWbRdvEdxecLWJcv4p8NU5M3
+ 78upzBMzpVkSmrylcJLljGtemVPeXBwXu7Spw/8mW3c2IBy6KVs1WkMJCuPl3g94s3bL
+ CUVhTIOpqUUdI+P8PwMxmul8v1NO9CbxsClkjgT2+B0lH4wcEiWH8q1M2Oh+uHnmno2b
+ 7goaPK12oKqsTJyEk5jR1h/MQVYXRWTcJoGIBWSnVEk0DV1+uCXBVuzdCbkXJJqBJGdk
+ ejT+rB3LHPPcpHBoi0O3WZyeZjjpbVfvGPaFoGvo+jLk26UvBzALzH0uB+H4b7cCcAI4 zQ== 
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yabp0g01j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 23 May 2024 19:07:37 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44NHDRtD023485;
+	Thu, 23 May 2024 19:07:36 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3y77npkudv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 23 May 2024 19:07:36 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44NJ7XXK44761568
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 23 May 2024 19:07:35 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2F27B58055;
+	Thu, 23 May 2024 19:07:33 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 548C55804B;
+	Thu, 23 May 2024 19:07:32 +0000 (GMT)
+Received: from [9.61.104.209] (unknown [9.61.104.209])
+	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 23 May 2024 19:07:32 +0000 (GMT)
+Message-ID: <36030de9-0b05-4ab8-a603-510602d0fdf8@linux.ibm.com>
+Date: Thu, 23 May 2024 14:07:32 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 17/20] ARM: dts: aspeed: Add IBM Huygens BMC system
+To: linux-fsi@lists.ozlabs.org
+Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ninad@linux.ibm.com, lakshmiy@us.ibm.com,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, andrew@codeconstruct.com.au,
+        joel@jms.id.au, robh@kernel.org, conor+dt@kernel.org,
+        krzk+dt@kernel.org, andi.shyti@kernel.org, broonie@kernel.org
+References: <20240522192524.3286237-18-eajames@linux.ibm.com>
+ <202405232008.olE9azVd-lkp@intel.com>
+Content-Language: en-US
+From: Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <202405232008.olE9azVd-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 35oWZC4sOfejH1QRxif28YVySryd5vh4
+X-Proofpoint-ORIG-GUID: 35oWZC4sOfejH1QRxif28YVySryd5vh4
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240523154820.vza7xbdkgqyyth6w@ninjato>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-23_11,2024-05-23_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ bulkscore=0 spamscore=0 clxscore=1011 impostorscore=0 mlxlogscore=999
+ priorityscore=1501 mlxscore=0 adultscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2405010000 definitions=main-2405230131
 
-Hi Wolfram,
 
-> > now that the dependencies are fixed and no error report has been
-> > sent on these two patches, I can finally send the second part of
-> > the i2c pull request.
-> 
-> Pulled, but I can't send out to Linus because
-> e22e0e483b2c76728ccd119fdcfea81eb176b3a5 (drm/amd/pm: remove deprecated
-> I2C_CLASS_SPD support from newly added SMU_14_0_2) is not in his tree
-> yet, only in next.
+On 5/23/24 07:48, kernel test robot wrote:
+> Hi Eddie,
+>
+> kernel test robot noticed the following build errors:
 
-argh! Good catch! I don't have drm amd in my config.
 
-Indeed I don't see Hiner's patch in the DRM pull request and not
-even in the AMD's.
+Silly mistake. If this patch can be dropped from the series, I can send 
+an updated Huygens DTS after this series is merged, unless I need to do 
+a v7.
 
-OK that needs to shift to the 6.11 pull request.
 
 Thanks,
-Andi
+
+Eddie
+
+
+>
+> [auto build test ERROR on andi-shyti/i2c/i2c-host]
+> [also build test ERROR on linus/master v6.9 next-20240523]
+> [cannot apply to robh/for-next broonie-spi/for-next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/spi-dt-bindings-Document-the-IBM-FSI-attached-SPI-controller/20240523-033334
+> base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+> patch link:    https://lore.kernel.org/r/20240522192524.3286237-18-eajames%40linux.ibm.com
+> patch subject: [PATCH v6 17/20] ARM: dts: aspeed: Add IBM Huygens BMC system
+> config: arm-randconfig-001-20240523 (https://download.01.org/0day-ci/archive/20240523/202405232008.olE9azVd-lkp@intel.com/config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240523/202405232008.olE9azVd-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202405232008.olE9azVd-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>>> Error: arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-huygens.dts:13.2-37 Properties must precede subnodes
+>     FATAL ERROR: Unable to parse input tree
+>
 
