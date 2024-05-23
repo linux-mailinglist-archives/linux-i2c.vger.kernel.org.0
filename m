@@ -1,101 +1,116 @@
-Return-Path: <linux-i2c+bounces-3650-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3651-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 346238CD74D
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 17:38:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09DF98CD7A2
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 17:49:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 644381C214E6
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 15:38:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA019282CF0
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 15:49:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CDF9125A9;
-	Thu, 23 May 2024 15:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 909CD18C36;
+	Thu, 23 May 2024 15:48:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="svLxltUm"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="XpK4HD6z"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4845117999;
-	Thu, 23 May 2024 15:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B3D18633
+	for <linux-i2c@vger.kernel.org>; Thu, 23 May 2024 15:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716478692; cv=none; b=A1IDOTUhLBr7kaONKjlkOXVw6czFAf6bmmQOhkwdkFPPes0n+DNjx57fLxl2+xgGL0ztNGRuqtS5E2Bg8m8xBCjk+EPSpS/ag0NHznWuPE8vSP37RCrQ1pSDHBOcriB4oneEzl3GBbdP7oOOEWyDBGqfuWdtNQvvYZr2bOdmDck=
+	t=1716479314; cv=none; b=p+HAIoEGoISWvOHDVsoxz7O3aYjyOeLqMz29J65oijtA+ACv90Dr3Joux16N2qF2lms03uulMAL+j5nF8V+Zn67eCI94FAXfaAAW11PysB9nWDcJS8pV3NwxgLb7981GS3AMHJuKToJnHQd7Pu84dVQY2QDreBibWuUF3Yd44Xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716478692; c=relaxed/simple;
-	bh=zCQjA/5a6mMmlaYjkFL5H55+TN3ow0QoYukyt9cnByk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=O1Dd3RLV22H7+h7HKQ6xme6WPe1DAeh2q+bzqPYVR9CS+P/vvouMYMLKQcL0xxhfaOQ1hSW+ORTjVqfuWxrQ5/VG6taO0ztheGiT2COcl7z2//xPqKDBxKF9LI3+b3nZjwW7+1szTMwM3pmVem3A7kWrr3uNOUptach0/1eEWFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=svLxltUm; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1716478669; x=1717083469; i=markus.elfring@web.de;
-	bh=9+nxfIAX4pQNUcpluSGV0XxummSpstZaxeh2ZeUEgLM=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=svLxltUmJKc5H6C+lrIx0Thh+k1aqmPiG9PfWNsmCyHaWwmOFcb4s3l+af9+voSt
-	 gNVXX16SBXkb3/7AYxUodd7o63uZd4xMrxybFzDsogXW9JGcCXLt3nh8EwL3uQVm5
-	 BI2457n5a62986LZrx052uibVrTRSy6TVDFEjPB+7bahtf2FIAlPGdKQkwh+42Nq2
-	 gqdYE/Fc6Zx1ihflcKYCblq9ijTEyjASqVB9dP99cR7/SnqPcCsf6va3rZcXoV0z+
-	 E0lPJe62EuYprpw7TqjopZ58WZhOcDubCX+H7yFCStnVm3MICzf1KS0LnES6YMi6c
-	 h9v0y9mXm+h3PjBTEQ==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.82.95]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1Mft7j-1slSGy1Rc1-00gDkv; Thu, 23
- May 2024 17:37:49 +0200
-Message-ID: <58cb9176-bedd-4219-9816-495cd6b343cc@web.de>
-Date: Thu, 23 May 2024 17:37:45 +0200
+	s=arc-20240116; t=1716479314; c=relaxed/simple;
+	bh=joRVzwdZMfiuRYTp/LAgcznS1tEIbKXziY5L8is3Xrg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jaCdK3M0nGRZjrm7mqRWiw9aL1kk4F+t9wSDg1eUFfS84lObZV4D0B99RJ3hyBpnKyXqcf66imZqAqz14vgjHPfNhbvyVKlLs9o5U9abQy8+luF69D/Dy6q3BsCyO4OxgcVkJnzaIjiU1UsJVlqEDWnuPqOUDQkCMJtOTNAU+rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=XpK4HD6z; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=GMCX
+	jeQr/kc1haogBJ6sSOcdurhMSQkjSfFlJEVXoZo=; b=XpK4HD6zv+jNRT551lE6
+	xjYMyvu+GOUxa/57m2+S0DqornBlPEC8ZG/zmaQTDrO2ssAmi/KCwU2SX6H33rKH
+	JhDvu1eHYyq8YrxP+qzcQ/aZf2OqAY97YwSuBU5V8Vi+sTzNWhtSjXCGRNfP6tvY
+	DTtV5V9xIqNqWRPSjwAoHDDHoNdWSP1XJFc4iPg0A5ehPicRuMdgICPYnS1zv24c
+	5WjXphKW7364gyFfZoM3qGALSi9iH+NF7QD2gvJjo1Aeufnvv5rMnLk2HgLSbE2d
+	6DF8aLUbTsyxCEHkbyK3XIV3W5t8qVa1LtWM4nQyEv/3sIGtzYheN1nyqzcuZTib
+	iQ==
+Received: (qmail 1173772 invoked from network); 23 May 2024 17:48:21 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 May 2024 17:48:21 +0200
+X-UD-Smtp-Session: l3s3148p1@dycF+yAZ1pQujntm
+Date: Thu, 23 May 2024 17:48:20 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Wolfram Sang <wsa@kernel.org>, linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [GIT PULL] i2c-host changes for v6.10 - pt. 2
+Message-ID: <20240523154820.vza7xbdkgqyyth6w@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+	linux-i2c <linux-i2c@vger.kernel.org>,
+	lkml <linux-kernel@vger.kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+References: <2qtn3bk6pat2xkw7qz34pjpgh6zariuz6zjxhmuuo2jcddfpi4@xn6aqqppl3hi>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org,
- linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Lakshmi Yadlapati <lakshmiy@us.ibm.com>, Mark Brown <broonie@kernel.org>,
- Ninad Palsule <ninad@linux.ibm.com>, Rob Herring <robh@kernel.org>
-References: <20240522192524.3286237-5-eajames@linux.ibm.com>
-Subject: Re: [PATCH v6 04/20] dt-bindings: fsi: p9-occ: Convert to json-schema
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240522192524.3286237-5-eajames@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:6uUBnjXwoYTBl65AmSP4bcUm9yYkqDShAEAbhWM6H189RdKKnxz
- oVcolhaMOwtEJcXr+cktyel6GIa8xr80cB2NMgeeewp511zPje/1jngr+m2B8UhYPxiOGI+
- nCe/2N4ClNmZZHeH0HGzAP2dB6XWRrD6LLsQUZyKrG5KUOaKxlB7/mW0bd+dHT5Qd83ZC8Z
- 0jspFu+iLQADHLYV/qm+g==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:AMG44tVUeQ0=;gHcW+AfMMVcn0FO8GHdTGTcE2L9
- JbmxHGHiETfcIxNUAkoM8lPOUnEm8Cqtt8IbTY6kGFJv+eumNedF6Sw1/mAxxYSJJYJKzCqW+
- l8vF3QztykQnys9yOlSdxg0Vu5u63kdNOlfCMlvSidXL3LvNXu0X9DnhIan8eZs4fgrGi4nHa
- j3Ek5aLNqXh1vaRlDi5OB4Ka7IzMh1tNDeY2GWpz3TQCvkLVfHMPTVyW0S4Iiv3A8RVRsKNLY
- PK5N5v7ud2xznfxgj+m2vu7g3aWoRd28rAROp5NE//rgnXqG8OKN3Nfm+32ZWaez+nzUDq2BO
- 2tAam1pS4nnBP04SG+oAjdnzovMYU9QjXzFV5VK4OGaXtGEwT1EVadLqVIamBrdMFUbnKrQwb
- JKIud+t1E/NRF5gfXguFUB+0NDYuD/Fq8AreOZBl/aM+ORRH1PFyVaWSqhuVjOLp/3NpyLezS
- whSnFB4snfj8STEEFTzXYZdC00s+DPkSS7dTqL3XsIOKgPTwNGJmDv3pOVZkXPz/nHLpsdj+m
- ROiffKtt3PAO/ZMEzJwartiHNDcgH3wFS0HtK21MqtmMGFr+9FoRoVjhymlVVgKA+KdBCIjo5
- Kwih5/lJqlKyveneWPTaYUKnLnqS7B2iRP5K3HjZTu5KtYZWmaVuYTisuMUNrKISvptS+lafR
- CUE9a3R8BU21soinyJdsfOnX5POH5kla4nHqavWasP+6ZVJpztt81Taa/JsnRS8p8aZkwiTHe
- EFa5OIFmRfak3zG7JhkbjWeWDfuMjEazOVGlyPovZYdlyH+cHSXdJUxFN1L3za80taRr6zBrA
- Mp14C/eCWOcywrKj1Phe2oNFaHQJdWQGTJPdAGqA6GhdQ=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="k276mwu3dvz5qa7m"
+Content-Disposition: inline
+In-Reply-To: <2qtn3bk6pat2xkw7qz34pjpgh6zariuz6zjxhmuuo2jcddfpi4@xn6aqqppl3hi>
 
-> Conver to json-schema for the OCC documentation. =E2=80=A6
 
-  Convert?
+--k276mwu3dvz5qa7m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Regards,
-Markus
+Hi Andi,
+
+> now that the dependencies are fixed and no error report has been
+> sent on these two patches, I can finally send the second part of
+> the i2c pull request.
+
+Pulled, but I can't send out to Linus because
+e22e0e483b2c76728ccd119fdcfea81eb176b3a5 (drm/amd/pm: remove deprecated
+I2C_CLASS_SPD support from newly added SMU_14_0_2) is not in his tree
+yet, only in next.
+
+Happy hacking,
+
+   Wolfram
+
+
+--k276mwu3dvz5qa7m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZPZT8ACgkQFA3kzBSg
+KbZRtw/8CoUEMB+quI3WY1PWm+RUzwTzLqJxc6N+nWbNyg4RY3riARW2skQeyF00
+t+yM46bZxg3YQUm19IH95XTxaN+BbX5F79RhYFO8vKI9ELPLZyeInxWulxg+nWGf
+ifP2Mgk6wlJG6RLce1pNfmD1WnYzpDI36KOzyDFYK2If4XWeg2siLjnv5XnObmcf
+trjr0pohqmSOPu74XNLnCGQ9toQofqObta+VbLlQ/F12oyRqoH+a07pQDy1u04BB
+qKyxmgm9Z+1hSwLWbooK/jGPAMupk+bz0QewN8d6n57zcnNfDeeeXOtmYfU+EwSg
+C7Njekt0LHCXiBBgo7dH6ifg153YxBLu8hYH4abBtk0lXx0HfsVx9IfxzlZokELI
+24izDi7BnbhE5vMwqK89zRTumvsTbwh8fFFAIvdYm0BHdqrcWZmb6lq7leqp/3rJ
+97ybh9ccZ3R2OBB5TfVSbpie1rnKQa4NDeR6LrpmLiaeV7UtLAwT/mTab2P2rUyF
+L7v6mfq/GkmiPxaSHV7LxZnzN14aSUwuSePt8scumZkPrAAAEwFDGtEvOYdmVvv1
+eG3NWIvPoIhhz98g8cnKq6cqQ2yDmWtXWoUIP18aKY6trrQFnsZShdXGUjeGAyIb
+LD22iRIJaSxAV9e5bV0Ys8mDteGD6WioGH+H8tNOPFOx7wQNTnI=
+=Xl9G
+-----END PGP SIGNATURE-----
+
+--k276mwu3dvz5qa7m--
 
