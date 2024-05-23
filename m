@@ -1,150 +1,121 @@
-Return-Path: <linux-i2c+bounces-3656-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3657-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36CF08CDA73
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 21:08:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C0268CDAE2
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 21:31:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA1611F21B57
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 19:08:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE66A1C22B0B
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 19:31:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFD7982D83;
-	Thu, 23 May 2024 19:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C1F88405F;
+	Thu, 23 May 2024 19:31:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OCWaWop/"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="IU5MAlBk"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF6382863;
-	Thu, 23 May 2024 19:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4396F29AB;
+	Thu, 23 May 2024 19:31:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716491273; cv=none; b=d1YinAZxL5g5GnnYIGbyL9PZ9AEE9L5XxLOYLp3D1rRe2C/Yw+s8nu265fTGpbRh2NoTmOOFM/GahLdtDQHjS9NSBHbg4v6R2eg0Q/qbsP3YHi9wcLoHVc6pUlNPljLq7Fb4Ztaz2lUc27Q8BMIdNaqWHd/DZpXVH+Mxxy4Dkf4=
+	t=1716492678; cv=none; b=p6BiFkJZPJrCiOuMd9d6h1HNjAqJZIiOwWK+PUXEV2KZB7+hoGYjKh0BDWJAIpAZKTOPnaNFKk5z9oKaAHI+vWEyUlPQLx2M+skpHu+1PgRowR+SOXSQZRhin0DSp+6zTbFslVEPSV4hTcm+kDD4VOwAyuBiphDqdCpMI2Jjlfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716491273; c=relaxed/simple;
-	bh=XD30UEzgSSeL2mflAtdZXCCb5Md7riSIGIVnfpWQ3hw=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=U9s/pbM+aZcTqDCkye61kzQ5+1a5RRM3rKq8mFHMTAzAdRToL7rJkuJNbNFNB2G8xbaD20XYFeCcSUKQPp9vOWSo5iKWf0PPYXAl4XKyANHXLP6gKGNNckoo2iHQL7x1YJtLbzUuhE5wCfkrPIKkELN4fzVinJfC+j9Hg56NFzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OCWaWop/; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44NJ7VWF025991;
-	Thu, 23 May 2024 19:07:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Q688xSTw6bWKVlI3IHoLWJi8/sQGfWoYKVe4r6Iv/ww=;
- b=OCWaWop/kQs/bPc1og2/kn2iSnXtYM1ra6y92lZ5/up+cWbRdvEdxecLWJcv4p8NU5M3
- 78upzBMzpVkSmrylcJLljGtemVPeXBwXu7Spw/8mW3c2IBy6KVs1WkMJCuPl3g94s3bL
- CUVhTIOpqUUdI+P8PwMxmul8v1NO9CbxsClkjgT2+B0lH4wcEiWH8q1M2Oh+uHnmno2b
- 7goaPK12oKqsTJyEk5jR1h/MQVYXRWTcJoGIBWSnVEk0DV1+uCXBVuzdCbkXJJqBJGdk
- ejT+rB3LHPPcpHBoi0O3WZyeZjjpbVfvGPaFoGvo+jLk26UvBzALzH0uB+H4b7cCcAI4 zQ== 
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yabp0g01j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 May 2024 19:07:37 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44NHDRtD023485;
-	Thu, 23 May 2024 19:07:36 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3y77npkudv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 May 2024 19:07:36 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44NJ7XXK44761568
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 23 May 2024 19:07:35 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2F27B58055;
-	Thu, 23 May 2024 19:07:33 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 548C55804B;
-	Thu, 23 May 2024 19:07:32 +0000 (GMT)
-Received: from [9.61.104.209] (unknown [9.61.104.209])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 23 May 2024 19:07:32 +0000 (GMT)
-Message-ID: <36030de9-0b05-4ab8-a603-510602d0fdf8@linux.ibm.com>
-Date: Thu, 23 May 2024 14:07:32 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 17/20] ARM: dts: aspeed: Add IBM Huygens BMC system
-To: linux-fsi@lists.ozlabs.org
-Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ninad@linux.ibm.com, lakshmiy@us.ibm.com,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, andrew@codeconstruct.com.au,
-        joel@jms.id.au, robh@kernel.org, conor+dt@kernel.org,
-        krzk+dt@kernel.org, andi.shyti@kernel.org, broonie@kernel.org
-References: <20240522192524.3286237-18-eajames@linux.ibm.com>
- <202405232008.olE9azVd-lkp@intel.com>
-Content-Language: en-US
-From: Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <202405232008.olE9azVd-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 35oWZC4sOfejH1QRxif28YVySryd5vh4
-X-Proofpoint-ORIG-GUID: 35oWZC4sOfejH1QRxif28YVySryd5vh4
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1716492678; c=relaxed/simple;
+	bh=TK0k/etgn4gRoJ/jFUnhfFck0IgfY5juULg0GsXhWCA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MX3pcJftx9OaXGsyYtri1PFRB5/Nt01IaF+vIWMnzLP5FPLqLbO74PL4xRClOA2Cl5v0ecOxdlRwKWGVSK78B0SR5QF/E97sY9FATyV8LBKy5W2WXJomufUwGXSqk+tnSLJeld2GFEyJ/oI+x8BABo8z4EzeqiEdIPgq+Alz4AA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=IU5MAlBk; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1716492658; x=1717097458; i=markus.elfring@web.de;
+	bh=TK0k/etgn4gRoJ/jFUnhfFck0IgfY5juULg0GsXhWCA=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=IU5MAlBkygKlyE/FJFR795c2AV5JmiM+5/V75BfZhIj+xqR0jb0X0xzbnSiUx9Fb
+	 4JVOw/WkZXUwK+4g7ujtGM6Z8cUHm1RONLnCsLmgECMWNofAxsrG5/YRlKgYSZBEP
+	 kpWEJh461RMrRibNkwLWE2Tu6HnovKMMyOi1ziupgqdNwJRPhnTBZm2rF2L9VZOBC
+	 yNfgzTi33Hg5Z09BiANFInRI+tEhnc7GQj58IMSi8DIvxk+6ljYLLPeZHUs1ad1G8
+	 kNzqQNw8rXA2LqPCd8lGG7HFYLJlkfOw6XeRlm7Siqn5Ckw4b1kXFKmB6FizkRK0g
+	 nzk4iPzZ/YYLPAMHUg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.82.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MWQuP-1s2sfJ1Fwx-00XwPl; Thu, 23
+ May 2024 21:30:58 +0200
+Message-ID: <398bf753-6701-4925-b814-781a68a75cc5@web.de>
+Date: Thu, 23 May 2024 21:30:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-23_11,2024-05-23_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- bulkscore=0 spamscore=0 clxscore=1011 impostorscore=0 mlxlogscore=999
- priorityscore=1501 mlxscore=0 adultscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2405230131
+User-Agent: Mozilla Thunderbird
+Subject: Re: [v6 17/20] ARM: dts: aspeed: Add IBM Huygens BMC system
+To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org,
+ linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+ kernel-janitors@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Lakshmi Yadlapati <lakshmiy@us.ibm.com>, Mark Brown <broonie@kernel.org>,
+ Ninad Palsule <ninad@linux.ibm.com>, Rob Herring <robh@kernel.org>
+References: <20240522192524.3286237-18-eajames@linux.ibm.com>
+ <2fe45df6-01a2-488b-99fb-5ee20491554c@web.de>
+ <910b18b7-3717-4087-b028-fcaf5f2a604b@linux.ibm.com>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <910b18b7-3717-4087-b028-fcaf5f2a604b@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:DAGnwtib86FkvFWf5Ytb4zfOvEDuQlQ1LfywcVNule/e6md8cTj
+ cZ81CNDimlWAJHud38f4peWZFqWRBbK2Baop2QNPyneIHFsRkJ9KrYRBmbjQ0uQDkhxgXCZ
+ dYlQ4D+X5r6RN2N2TWQaiuS4uBeDqtyw7tMHMFmbvhAU0QY/STpENG0YggEXjHAlK08pKr2
+ PlTJtlKhF3m6iXBICcECg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:AvAUgeT2+NE=;92TPdx7IhOKSe1vyjO3YA8PfoWa
+ wzrEU9QnhnZQGo73Zhn8I5Sqdkbp25SsbeS8Z02pMV2BNysdZDsOaNOTnof+7z87NAtoEWv6N
+ 8d8pKYf7xRyloijiXNSDcwt+eknm4+WUFhFp6SRAsaRPnq+p3t0KcTVqrw2wgmGc3jiqe88z3
+ soX5Ky0VnQ53AU9qJbXHaSu9uuo+8s0GF+emLYmv7caQYZxy/HEna+VYuO9apa1HD/5CzvGsf
+ BxrgcB7H2hqvH5iQ/KTYkycbi4dsJO8T97sd9qXdeA6dcQHKmYjQTCq/ABzI+Q7cXqXib3MSE
+ FUyN/GcKcbhRO6WPeWMef8VUFP/bYkrTCYd8gIWdDjKfaHQVnUK5Q/QIvdHBx2PuOdb3Ol/Fj
+ xb7FvqkLGCXp1MS9UkeBc0pUDXoPnqV0NUQG/D+GkuvAtXytJ+qrg8H+wSt6q3BuYxcg24VZd
+ TvCiA997y0F+NYclHLXF24tQNkGOhC0GbvoRuLAEMuH23arU5zaTZ6FajoQBnLDYTQsYakRhD
+ FIZTvhJSvFfoC8gu/0ygVhZcgmMa3jSwXdc5cExperNWqQhTX7Ut0/pCkVYuWBPAR3bF0kezZ
+ 83GVaUSOcBqbDBorLCwpzSjrRLrQuxjnOc/+dgrBClYK1Qdem8GI2eYq+f/sZ1Mo8wkWjX4b2
+ fG51IQOVVM8Q4KGxv5lk3V0zKtB2w6Ye/wi6fMKjd0mb7iSjK6gR7TuTqVHqOSTHkl203mOIV
+ lqUHb0wMjGbSbdmhQq/YovQX434I2QJgtbtuDvoTcMKnH0f4DrrZyTWtnWdB9XauuGnydRs6e
+ N0D37WL9Z/2AO/szkiJ5UgnNjIyVVi9tpRdVj3wH+RBUc=
 
-
-On 5/23/24 07:48, kernel test robot wrote:
-> Hi Eddie,
+>>> The Huygens is a Rainier with modifed FSI wiring.
+>> Will imperative wordings become helpful for a better commit message her=
+e?
 >
-> kernel test robot noticed the following build errors:
-
-
-Silly mistake. If this patch can be dropped from the series, I can send 
-an updated Huygens DTS after this series is merged, unless I need to do 
-a v7.
-
-
-Thanks,
-
-Eddie
-
-
 >
-> [auto build test ERROR on andi-shyti/i2c/i2c-host]
-> [also build test ERROR on linus/master v6.9 next-20240523]
-> [cannot apply to robh/for-next broonie-spi/for-next]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/spi-dt-bindings-Document-the-IBM-FSI-attached-SPI-controller/20240523-033334
-> base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-> patch link:    https://lore.kernel.org/r/20240522192524.3286237-18-eajames%40linux.ibm.com
-> patch subject: [PATCH v6 17/20] ARM: dts: aspeed: Add IBM Huygens BMC system
-> config: arm-randconfig-001-20240523 (https://download.01.org/0day-ci/archive/20240523/202405232008.olE9azVd-lkp@intel.com/config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240523/202405232008.olE9azVd-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202405232008.olE9azVd-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->>> Error: arch/arm/boot/dts/aspeed/aspeed-bmc-ibm-huygens.dts:13.2-37 Properties must precede subnodes
->     FATAL ERROR: Unable to parse input tree
->
+> This statement is a description of hardware. I cannot word that imperati=
+vely.
+
+Please take another look at corresponding improvement possibilities.
+
+
+> The commit message is imperative - "Add Huygens system".
+
+This information fits to the summary phrase.
+
+Would you like to mention in the changelog that a hardware description
+should be extended anyhow?
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/submitting-patches.rst?h=3Dv6.9#n94
+
+Regards,
+Markus
 
