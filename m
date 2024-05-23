@@ -1,73 +1,58 @@
-Return-Path: <linux-i2c+bounces-3663-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3664-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4A4C8CDB6A
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 22:34:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C712E8CDBEB
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 23:25:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A127B281EE0
-	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 20:34:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80C96285A07
+	for <lists+linux-i2c@lfdr.de>; Thu, 23 May 2024 21:25:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D354084DF7;
-	Thu, 23 May 2024 20:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15814127E1C;
+	Thu, 23 May 2024 21:23:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="v5SIrry9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZvmKpBhr"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9D584D3B;
-	Thu, 23 May 2024 20:33:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55A1127E11;
+	Thu, 23 May 2024 21:23:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716496440; cv=none; b=G0GzDjYMVOdIszpe/fOqVbk2KQJIB8BnXuZM0zyBHV9riPgSrO5ur2S5a1rhNIVBHfawCJ5ZZFOSOXli6/jiUjSamuR2ApIevumr5BkJm0tKK0ZddpdBDZts48mQd2ZRcmGlpWVguqDWYzFuBR20dbaOne00UF20WfmVkeSL09E=
+	t=1716499425; cv=none; b=pcpPtiTti42RGa1OauOybYox8URcdGZ4ozGHSPwqjjMBABLUZRMep6wkdyodhfokbEFf1gle9uwcRmkMyCUlInva8gQ7y5BCguqBi6xMNtIFFW7adsM4GtHs+kVdkcHQpxtz1J2ay6lXIy+VS8P2IzEpax2nLi5AQ1GwivwjnOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716496440; c=relaxed/simple;
-	bh=+4B+O3Aw4Sfg8AK5WRHfCt9FlwQ2zU3xpqnsewfYaD8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MnKonR3E2OTBYkFrKh0drLl1pkbVTCU3EKKc6ieaIDwWuuX4TnT5OHAvtnc3uJTz9L5D0ET/Oc7k4ELcWFZL7zrZZTKgkLTyVOkBqUxmbDXpK0MGeP2rXK8y05Lq36NKFMeIm3cxqpNGo/YNtRMabW4uVNh9YJJMc0o8MPjdysg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=v5SIrry9; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=izeBpVR9zkGYZYzcEzW+5qmgjUEU7HHob31bUa9JVsE=; b=v5SIrry9+IaF99OePM7YUdRyno
-	cVsnEhHNr06WRsn3NW3lZXPn3htbxeR9HAUu6+CDRP+jAmogdmV5o1iUD5U/Th9lL7Oliw+sE2dfI
-	x6nkflNw4E8ORRP3CMNmMdgBsn79rBkZD0FJ438NyPEhhtMQImA8vBHAqGnjWeMtKkJlEAd1R7tQi
-	ek+ntVHCA9RYzp8MdYd07xm0rgABte/5PVRL9cBFude4gJiAmHofpkSCogAkWv7UXym/J1wPgbM5Y
-	Aj+L4JCdSWpJ6X+BYhnUwdp4xiHAfp+89RISTbqoPXXfjBIKLr6yJXw3Hc7fUH8DzfFwFmwuz+0ga
-	Uvu5+nEQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1sAF88-003rgV-03;
-	Thu, 23 May 2024 20:33:40 +0000
-Date: Thu, 23 May 2024 21:33:39 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: Conor Dooley <conor@kernel.org>, linux-fsi@lists.ozlabs.org,
-	linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Eddie James <eajames@linux.ibm.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Lakshmi Yadlapati <lakshmiy@us.ibm.com>,
-	Mark Brown <broonie@kernel.org>,
-	Ninad Palsule <ninad@linux.ibm.com>, Rob Herring <robh@kernel.org>
-Subject: Re: [v6 17/20] ARM: dts: aspeed: Add IBM Huygens BMC system
-Message-ID: <20240523203339.GS2118490@ZenIV>
-References: <20240522192524.3286237-18-eajames@linux.ibm.com>
- <2fe45df6-01a2-488b-99fb-5ee20491554c@web.de>
- <910b18b7-3717-4087-b028-fcaf5f2a604b@linux.ibm.com>
- <398bf753-6701-4925-b814-781a68a75cc5@web.de>
- <20240523-rinse-sturdily-7c78d8517884@spud>
- <d6289d1c-deae-49a3-9fc9-98a2f2e57802@web.de>
+	s=arc-20240116; t=1716499425; c=relaxed/simple;
+	bh=BhxisE82YS2Tm+kO+YbMq/cbnu147OOHSg8vMxpz28k=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RDOZzXCxxZAA01QYzw5IgrhBSDlIxjoluiwAbAeFZ/2Z4AV+KLoA4aglCGpeGe0/wrAMr5KTCLVyz4BiOm8+kqWZnCGXBGhc6f1DuyDVkzotDNEY6nPr51LZ5rBiTX0IkLrWFWwn9KskxHx0azPNJA/p7lLP26h4L8g4Vp2wYDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZvmKpBhr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE986C2BD10;
+	Thu, 23 May 2024 21:23:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716499425;
+	bh=BhxisE82YS2Tm+kO+YbMq/cbnu147OOHSg8vMxpz28k=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=ZvmKpBhrvMWjR1iq7qqKvXe57frza9lO7Z8+7RT+u6DINvy05B+kczyUBQKKiltRX
+	 tKJCP6Vm/Hv+e6zxwLl6kzZ1gtAe7ibl1EHk98OcePebj1gp3PsvRNDL1pI+3VgbXE
+	 EFKxgwQm6v1QeIo7AoyYVFrLctsqjWW9ZNPbor8BBZ0dSYQz95eZkbUrInrEmymKu0
+	 QOVhfWVZWqzRQrKCaDIpOJlMXw4IFgq3dOcvxhupuVqcJj+E3lvh607NnZc6zpH1gq
+	 IB3WL3+7iTQ73aQYms2mFvyCVJ2tTLIQzohRHAeO4ylgBMUrSNFcyq7Wb9AURmbsFM
+	 3iRoR0mxzHjyA==
+Date: Thu, 23 May 2024 23:23:41 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Wolfram Sang <wsa@kernel.org>, linux-i2c <linux-i2c@vger.kernel.org>, 
+	lkml <linux-kernel@vger.kernel.org>, Heiner Kallweit <hkallweit1@gmail.com>, 
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [GIT PULL] i2c-host changes for v6.10 - pt. 2
+Message-ID: <eaph6dm5rk3ispqucu27n5uwoe7y6l2cljyiffns6c5gixqh5w@tomfq4l34l6m>
+References: <2qtn3bk6pat2xkw7qz34pjpgh6zariuz6zjxhmuuo2jcddfpi4@xn6aqqppl3hi>
+ <20240523154820.vza7xbdkgqyyth6w@ninjato>
+ <fnznf6fb6vzk72b42lkir3jbopb6cog6mmjjr3f44o5ejmyelj@ehkhoevbn6dr>
+ <20240523201850.yl253jum4sqnykji@ninjato>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -76,33 +61,34 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d6289d1c-deae-49a3-9fc9-98a2f2e57802@web.de>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+In-Reply-To: <20240523201850.yl253jum4sqnykji@ninjato>
 
-On Thu, May 23, 2024 at 09:46:48PM +0200, Markus Elfring wrote:
-> >> Would you like to mention in the changelog that a hardware description
-> >> should be extended anyhow?
-> >> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?h=v6.9#n94
-> >
-> > You are talking absolute crap here. Stop harassing contributors with
-> > your inane comments.
+On Thu, May 23, 2024 at 10:18:50PM +0200, Wolfram Sang wrote:
+> > > Pulled, but I can't send out to Linus because
+> > > e22e0e483b2c76728ccd119fdcfea81eb176b3a5 (drm/amd/pm: remove deprecated
+> > > I2C_CLASS_SPD support from newly added SMU_14_0_2) is not in his tree
+> > > yet, only in next.
+> > 
+> > argh! Good catch! I don't have drm amd in my config.
 > 
-> Why do you interpret my patch review contributions in this direction
-> when the official Linux development documentation provides special advice
-> on affected wording details?
+> Me neither, I just checked with 'git grep I2C_CLASS_SPD' :)
+> 
+> > OK that needs to shift to the 6.11 pull request.
+> 
+> Hmm, that gives too much time for new users to appear IMO. If you don't
+> mind, I'll take over and I'll ping them to apply the drm patch soonish,
+> so I can apply the removal. Doesn't matter if it becomes rc2 or rc3.
 
-Your "contributions" are garbage in general, and this thread is not an exception.
-More specifically, you are picking an advice that is inapplicable, transforming
-it into a question and "contributing" the result.
+DRM pull requests for merge window are normally sent during -rc5
+and only urgent patches are accepted latest in -rc6.
 
-And your entire modus operandi fits that pattern - you spew random garbage and
-expect the contributors to spend their time and efforts on checking if your
-(contents-free) "advice" happens to make any sense.
+Heiner's patch was taken later.
 
-That.  Is.  Worthless.
+I can try to to ping Alex Deucher on that specific patch.
 
-According to people who'd met you in person you *are* a member of our species,
-and I can't exclude the possibility that in some other environments you might
-be capable of sentience.  Unfortunately, the kernel development is clearly
-not among those.
+In the meantime, I will send a pull request with just
+Christophe's patch that can safely be taken.
+
+Thanks,
+Andi
 
