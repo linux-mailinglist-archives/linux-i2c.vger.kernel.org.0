@@ -1,130 +1,135 @@
-Return-Path: <linux-i2c+bounces-3689-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3690-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1660C8D1F50
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2024 16:53:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEE318D2213
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2024 18:57:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87C57B21485
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2024 14:53:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B97A1C226C4
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2024 16:57:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C14116FF49;
-	Tue, 28 May 2024 14:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5174517333A;
+	Tue, 28 May 2024 16:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qkbRdsUd"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FMaIWg8Z"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501811E886;
-	Tue, 28 May 2024 14:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89957172BCE
+	for <linux-i2c@vger.kernel.org>; Tue, 28 May 2024 16:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716907984; cv=none; b=cXynhF5gA7EeWL/EpokYyM82mz3PniIFNXkcK73kVnBJsDLX2dgzou4mcRASe7lwBETpPoDrsqD/hx4I3UOPWaW6B8+GZWAFzPhh6hxNd17lhWJ+wrQfBNy/3Hfm//98+qDZNCT9T6rU6j8l/PfUb230OwZ1pUhT9e1NKdmc1Ao=
+	t=1716915454; cv=none; b=uirESAgh7dYbDNhyo0lg/ORNMR0er2w+BcaMTVFgyBnZxHjaij4UuvmUXGpWrrrqnm5t6t3ql8Fkp4BEdLoYJH4oV9ymxvDunuEDjM8rEIfHZ6zL8nDYjVyImbwfpw+sPzC8pAPVM1JRxqXQa3+9OJu1kTxg9Qk/iJRGRmvxODI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716907984; c=relaxed/simple;
-	bh=ibWri2e7aV7kKGd9z7TStSKeci5H+utCiZFOLKXx/5Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KeRVtCtKRXoXzZTl9uLWYHKv9ZalId+558/9Pd9HPKgaWDDtTGiuO3N5OTcGjBMpimw+mf89CO2K+YsgjUELiwe1wUUyNmRdYebSOm70jpM1BxjM+GIwovtH8t62F/uv4OCu3BjjUbm140lw5By0mw0ydPI80sGHUIfjkSsG/MQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qkbRdsUd; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44SElbMB007284;
-	Tue, 28 May 2024 14:52:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc :
- content-transfer-encoding : content-type : date : from : in-reply-to :
- message-id : mime-version : references : subject : to; s=pp1;
- bh=o9+3kDnLrc7JCHXQXr78xCMvmabUv1s7h/3uhWF4yLU=;
- b=qkbRdsUddMAa3elm0uRvSrmhThOOe/TgtcWUeiX/G1fFSFKKJraO0oH8NoppboJ6n5+R
- Iu+OKAyRxCJ6sXuoqJI+rUTzNh/ddyEqM7VG1cfaC2O8aKrqs13nNlXOLC8DM8jn5H0d
- SON+g8fz8fs6wL/OwoqPQgyck1zbwYP/MKiKZ2n5/1RWBzLN6cL4kVKAQuYEDJOoilKF
- JmRZ0Cmsr7DBZkKd34DmhW6U0uuKDsxQy1AGixoeAIxLN0Ok1RAp4cf3469JYCXXa0zP
- 9pkwRwoVbEj98rMtxF/P/BQBsbm2smeXnUQ36OZMqtvThn2+ADGtdmm6kIYJBlZZxoEX jQ== 
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ydhb680b9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 May 2024 14:52:15 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 44SDY1pc032276;
-	Tue, 28 May 2024 14:52:14 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ybutm77k4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 May 2024 14:52:14 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 44SEqBhL7995710
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 May 2024 14:52:13 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E97745806A;
-	Tue, 28 May 2024 14:52:10 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8FD4058064;
-	Tue, 28 May 2024 14:52:10 +0000 (GMT)
-Received: from [9.24.12.86] (unknown [9.24.12.86])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 28 May 2024 14:52:10 +0000 (GMT)
-Message-ID: <3c7fd737-c410-40a3-9994-282f214bad61@linux.ibm.com>
-Date: Tue, 28 May 2024 09:52:10 -0500
+	s=arc-20240116; t=1716915454; c=relaxed/simple;
+	bh=20lWxuyncauYpRPdcIP2qeiyq8Pn90Gk/tUHOS/51sw=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=A5296ofB4zzW8OUGFuT9DOhYGiQ+nEUNmTjYBA1uU1c86K3o+68yY2dGmQtT1zz2OiaWdm+NgoQlKF+lIZDNQTFwM2PABuVTJ/AEmuHON2qZnLeb3d82yyYZYWH2N9uRhZbHwVvVQxdPnBkDeqxgPoYQgQ/xiEit9zIU05ZfBnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FMaIWg8Z; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: andrew@lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1716915449;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jNceAp37GB1si/9T0wIzhGZuQRX1PlheHnoihJOZ330=;
+	b=FMaIWg8ZBt2go1CkaZdykQtMyRQWLzUq8vG5dX1s/BuhqoUK8kYWDN//VMNuJzplplQ8KU
+	UotCwJMPUUHD+HUaf9QEb2kc1h/ThDL6i7kDh6wJxiHjxpl2L3ogNkU2MsEjKKGVo61l9D
+	gfJpYBIKAlfY//vWE3msD2JkVLYGo3c=
+X-Envelope-To: linux@armlinux.org.uk
+X-Envelope-To: andi.shyti@kernel.org
+X-Envelope-To: netdev@vger.kernel.org
+X-Envelope-To: linux-i2c@vger.kernel.org
+X-Envelope-To: michal.simek@amd.com
+X-Envelope-To: hkallweit1@gmail.com
+X-Envelope-To: linux-arm-kernel@lists.infradead.org
+X-Envelope-To: linux-kernel@vger.kernel.org
+Message-ID: <ec7907f1-cb5a-41ab-824c-aa0b02440ada@linux.dev>
+Date: Tue, 28 May 2024 12:57:25 -0400
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 11/20] dt-bindings: i2c: i2c-fsi: Convert to
- json-schema
-To: Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lakshmiy@us.ibm.com, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        andrew@codeconstruct.com.au, joel@jms.id.au, robh@kernel.org,
-        conor+dt@kernel.org, krzk+dt@kernel.org, andi.shyti@kernel.org,
-        broonie@kernel.org
-References: <20240522192524.3286237-1-eajames@linux.ibm.com>
- <20240522192524.3286237-12-eajames@linux.ibm.com>
 Content-Language: en-US
-From: Ninad Palsule <ninad@linux.ibm.com>
-In-Reply-To: <20240522192524.3286237-12-eajames@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Sean Anderson <sean.anderson@linux.dev>
+Subject: [BUG] SFP I2C timeout forces link down with PHY_ERROR
+To: Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
+ Andi Shyti <andi.shyti@kernel.org>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>, linux-i2c@vger.kernel.org
+Cc: Michal Simek <michal.simek@amd.com>,
+ Heiner Kallweit <hkallweit1@gmail.com>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jRes7fg_2wU65S26qKhIKfzoEE91q9nR
-X-Proofpoint-ORIG-GUID: jRes7fg_2wU65S26qKhIKfzoEE91q9nR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-28_11,2024-05-28_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 phishscore=0 suspectscore=0
- clxscore=1015 spamscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2405280112
+X-Migadu-Flow: FLOW_OUT
 
-Hi Eddie,
+Hi,
 
-On 5/22/24 14:25, Eddie James wrote:
-> Convert to json-schema for the FSI-attached I2C controller.
->
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
-> Changes since v5:
->   - Use more specific regex for node names
->
->   .../devicetree/bindings/i2c/i2c-fsi.txt       | 40 ----------
->   .../devicetree/bindings/i2c/ibm,i2c-fsi.yaml  | 76 +++++++++++++++++++
->   MAINTAINERS                                   |  2 +-
->   3 files changed, 77 insertions(+), 41 deletions(-)
->   delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-fsi.txt
->   create mode 100644 Documentation/devicetree/bindings/i2c/ibm,i2c-fsi.yaml
+I saw the following warning [1] twice when testing 1000Base-T SFP
+modules:
 
+[ 1481.682501] cdns-i2c ff030000.i2c: timeout waiting on completion
+[ 1481.692010] Marvell 88E1111 i2c:sfp-ge3:16: Master/Slave resolution failed
+[ 1481.699910] ------------[ cut here ]------------
+[ 1481.705459] phy_check_link_status+0x0/0xe8: returned: -67
+[ 1481.711448] WARNING: CPU: 2 PID: 67 at drivers/net/phy/phy.c:1233 phy_state_machine+0xac/0x2ec
+<snip>
+[ 1481.904544] macb ff0c0000.ethernet net1: Link is Down
 
-Reviewed-by: Ninad Palsule <ninad@linux.ibm.com>
+and a second time with some other errors too:
 
-Thanks & Regards,
-Ninad
+[   64.972751] cdns-i2c ff030000.i2c: xfer_size reg rollover. xfer aborted!
+[   64.979478] cdns-i2c ff030000.i2c: xfer_size reg rollover. xfer aborted!
+[   65.998108] cdns-i2c ff030000.i2c: timeout waiting on completion
+[   66.010558] Marvell 88E1111 i2c:sfp-ge3:16: Master/Slave resolution failed
+[   66.017856] ------------[ cut here ]------------
+[   66.022786] phy_check_link_status+0x0/0xcc: returned: -67
+[   66.028255] WARNING: CPU: 0 PID: 70 at drivers/net/phy/phy.c:1233 phy_state_machine+0xa4/0x2b8
+<snip>
+[   66.339533] macb ff0c0000.ethernet net1: Link is Down
 
+The chain of events is:
+
+- The I2C transaction times out for some reason (in the latter case due
+  to a known hardware bug).
+- mdio-i2c converts the error response to a 0xffff return value
+- genphy_read_lpa sees that LPA_1000MSFAIL is set in MII_STAT1000 and
+  returns -ENOLINK. This propagates up the calls stack.
+- phy_check_link_status returns -ENOLINK
+- phy_error_precise forces the link down with state = PHY_ERROR.
+
+The problem with this is that although the register read fails due to a
+temporary condition, the link goes down permanently (or at least until
+the admin cycles the interface state).
+
+I think some part of the stack should implement a retry mechanism, but
+I'm not sure which part. One idea could be to have mdio-i2c propagate
+negative errors instead of converting them to successful reads of
+0xffff. But we would still need to handle that in the phy driver or in
+phy_state_machine.
+
+- Are I2C bus drivers supposed to be flaky like this? That is, are callers of
+  i2c_transfer expected to handle the occasional spurious error?
+- Similarly, are MDIO bus drivers allowed to be flaky?
+- Is ETIMEDOUT even supposed to be recoverable? Maybe we should have
+  cdns-i2c return EAGAIN instead so it gets retried by the bus
+  arbitration logic in __i2c_transfer.
+- ENOLINK really seems like something which we could recover from by
+  resetting the phy (or even just waiting a bit). Maybe we should have
+  the phy state machine just switch to PHY_NOLINK?
+
+Of course, the best option would be to fix cdns-i2c to not be buggy, but
+the hardware itself is buggy in at least one of the above cases so that
+may not be practical.
+
+--Sean
 
