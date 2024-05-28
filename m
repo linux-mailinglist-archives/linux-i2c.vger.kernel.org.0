@@ -1,166 +1,194 @@
-Return-Path: <linux-i2c+bounces-3695-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3696-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8281E8D2345
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2024 20:23:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 680AB8D2562
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2024 22:02:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B6951C22B06
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2024 18:23:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DD4C1F23F7D
+	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2024 20:02:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9CDC4C61B;
-	Tue, 28 May 2024 18:23:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="erbA/PqX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4BD178CC4;
+	Tue, 28 May 2024 20:02:45 +0000 (UTC)
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED254175AB;
-	Tue, 28 May 2024 18:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E574178383
+	for <linux-i2c@vger.kernel.org>; Tue, 28 May 2024 20:02:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.83
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716920583; cv=none; b=iQ1opwFgniqP3ozEKHX+ny0xm0hQvYfPs9K0ChLkd2j7BjvDsqa5t8dC/BjjlxCZFx0Ngao8xmUdca81GTQPzocR70q1oJnOliubdNuvUWS+GMcctzvMKPDhWxA3ouAhAgdBxA9myX/a1Pb3iehailKhScnu/aZoNy8aOps48tE=
+	t=1716926565; cv=none; b=VRB/sx8M71ze3FbS1qMHONErTblqtNXvFbE/n1Jp9DXjhIZYpMlzjiZUcZGbQvRyIlEeGALXTQatK4gugZLvTkQml5lzo0dY48cCusNyeapTgqi7vKZxAzpUk5VEHJ7o0fZMMRji3Yilr9s9SIR7AA1qV9RVW2y6gtYVoEIJQaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716920583; c=relaxed/simple;
-	bh=QtUNxodfoUepzLMWfu0cElQDt+Ru0oc5fQ8DaPXi9gQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DzA9WdnpTFwNY91vQRaWe2TGvsZ2/GWiYPDNEKuUvPzrLX8+tgE7KUaVVBDRlvC6c4XTzJyGKSbnTPsg6+pu4eO44lmeVs9LNf9efDQ2fqIinS10/HfaoRF2WV+kYaaKhGeKi6yuZ8QGMmIZZwvi2yzFiNus7FHOGitteafTW/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=erbA/PqX; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=hDGUpXuW9Jg+FqGgsoUFDxobgoSVzaRR+6S6ti9ZcBA=; b=erbA/PqXxYvPjxGKphfKhIrXAe
-	CEuEZt6fPkSMvmQpujGJKQBoBjW7EUOFxsdtDqLTjmcdQQZCWXRYI3vdRng+EsArZgLCLcHXWlXKY
-	w3Q2lKFSlDNQ3NjoLV0G6akHY16gDWEK3quH4io8zsPsGjWxO/0FpN79DLTY6E7tWitf3bnhwr9Ej
-	eVNnY0AqzW6Io1eby05A7Wol926cqsWicQX2IIuplm+UaU5sy+ysX9FJ4vPmUAqfV3cbNIwnWVIZ3
-	Z+LowyNdJmvNVrBYoWOov8RMYpmSi/6W1vbBrjwYr3/KUTMe7EPCY7G21dSF2aPqlq0uBme0Q/ilm
-	XSedWBcA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:49050)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1sC1TJ-0005Ak-1Y;
-	Tue, 28 May 2024 19:22:53 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1sC1TK-0003SR-Rt; Tue, 28 May 2024 19:22:54 +0100
-Date: Tue, 28 May 2024 19:22:54 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Sean Anderson <sean.anderson@linux.dev>
-Cc: Andrew Lunn <andrew@lunn.ch>, Andi Shyti <andi.shyti@kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	linux-i2c@vger.kernel.org, Michal Simek <michal.simek@amd.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] SFP I2C timeout forces link down with PHY_ERROR
-Message-ID: <ZlYg/hDhy6q/Olpr@shell.armlinux.org.uk>
-References: <ec7907f1-cb5a-41ab-824c-aa0b02440ada@linux.dev>
- <ZlYUNCRroM0up0xk@shell.armlinux.org.uk>
- <90873b78-13ba-445e-890a-0b90a653721b@linux.dev>
+	s=arc-20240116; t=1716926565; c=relaxed/simple;
+	bh=pTf2qUi734ES9Al085wTXfYC8mQU+J7CT38EpK7LQlk=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ncZ/ucebWaclToqAjNDTJiJ9yeONmJljV83KQAc6oO5uf2OfwVv2D7HsOdJyvxFinY0Rk/nWeAV52MaIFs/E6LUzz+ena3q/KtOqDTSQhaGFkqyjY9vc2uqQYzudztBZoLhb9REBkA46DpEOenvBuo1N1MMftLbzYt/LZgKFapU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-26-230.elisa-laajakaista.fi [88.113.26.230])
+	by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+	id 3cab8281-1d2d-11ef-aaf5-005056bdd08f;
+	Tue, 28 May 2024 23:02:41 +0300 (EEST)
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Tue, 28 May 2024 23:02:39 +0300
+To: Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
+Cc: Mark Brown <broonie@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Emil Svendsen <emas@bang-olufsen.dk>, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>
+Subject: Re: [PATCH 06/13] gpio: add AD24xx GPIO driver
+Message-ID: <ZlY4X2P1VpF0aqjM@surfacebook.localdomain>
+References: <20240517-a2b-v1-0-b8647554c67b@bang-olufsen.dk>
+ <20240517-a2b-v1-6-b8647554c67b@bang-olufsen.dk>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <90873b78-13ba-445e-890a-0b90a653721b@linux.dev>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240517-a2b-v1-6-b8647554c67b@bang-olufsen.dk>
 
-On Tue, May 28, 2024 at 01:50:54PM -0400, Sean Anderson wrote:
-> On 5/28/24 13:28, Russell King (Oracle) wrote:
-> > First, note that phylib's policy is if it loses comms with the PHY,
-> > then the link will be forced down. This is out of control of the SFP
-> > or phylink code.
-> > 
-> > I've seen bugs with the I2C emulation on some modules resulting in
-> > problems with various I2C controllers.
-> > 
-> > Sometimes the problem is due to a bad I2C level shifter. Some I2C
-> > level shifter manufacturers will swear blind that their shifter
-> > doesn't lock up, but strangely, one can prove with an osciloscope
-> > that it _does_ lock up - and in a way that the only way to recover
-> > was to possibly unplug the module or poewr cycle the platform.
+Fri, May 17, 2024 at 02:58:04PM +0200, Alvin Šipraga kirjoitti:
+> From: Alvin Šipraga <alsi@bang-olufsen.dk>
 > 
-> Well, I haven't seen any case where the bus locks up. I've been able to
-> recover just by doing
-> 
-> 	ip link set net0 down
-> 	ip link set net0 up
-> 
-> which suggests that this is just a transient problem.
-> 
-> > My advice would be to investigate the hardware in the first instance.
-> 
-> I'll try to keep this in mind, but it's pretty infrequent and I probably
-> won't be able to test anything until I can reproduce it better.
-> 
-> > On Tue, May 28, 2024 at 12:57:25PM -0400, Sean Anderson wrote:
-> >> Hi,
-> >> 
-> >> I saw the following warning [1] twice when testing 1000Base-T SFP
-> >> modules:
-> >> 
-> >> [ 1481.682501] cdns-i2c ff030000.i2c: timeout waiting on completion
-> >> [ 1481.692010] Marvell 88E1111 i2c:sfp-ge3:16: Master/Slave resolution failed
-> >> [ 1481.699910] ------------[ cut here ]------------
-> >> [ 1481.705459] phy_check_link_status+0x0/0xe8: returned: -67
-> >> [ 1481.711448] WARNING: CPU: 2 PID: 67 at drivers/net/phy/phy.c:1233 phy_state_machine+0xac/0x2ec
-> >> <snip>
-> >> [ 1481.904544] macb ff0c0000.ethernet net1: Link is Down
-> >> 
-> >> and a second time with some other errors too:
-> >> 
-> >> [   64.972751] cdns-i2c ff030000.i2c: xfer_size reg rollover. xfer aborted!
-> >> [   64.979478] cdns-i2c ff030000.i2c: xfer_size reg rollover. xfer aborted!
-> > 
-> > I2C driver bug? From what I can see, this occurs when there is further
-> > data to be read, and id->recv_count hits zero. The I2C controller is
-> > entirely in control of how many bytes are transferred from the remote
-> > device, and it should raise a NAK on the last byte before signalling a
-> > STOP condition during a read.
-> 
-> Commit bbf967b223b3 ("i2c: cadence: Handle transfer_size rollover")
-> makes it seem like a hardware error. E.g. Linux thinks we're done but
-> the hardware thinks there's still more data. I've added Alex to CC;
-> maybe he can comment.
+> This driver adds GPIO function support for AD24xx A2B transceiver chips.
 
-See https://www.ti.com/lit/an/slva704/slva704.pdf figure 9 and the
-text immediately above it. On a read, the controller is entirely
-in control of how many bytes are transferred from the connected
-device, and the controller has the responsibility to generate the
-ACK after each byte read from the device _if_ it wants another
-byte, or a NAK if it doesn't.
+"Add GPIO..."
 
-So, if the controller has been programmed to transfer e.g. 2 bytes,
-but decides to ACK the 2nd byte and proceed to receive a 3rd byte,
-that's nothing to do with the bus or the device, it's entirely down
-to the controller being silly when it knows we only want 2 bytes.
+> When a GPIO is requested, the relevant pin is automatically muxed to
+> GPIO mode. The device tree property gpio-reserved-ranges can be used to
+> protect certain pins which are reserved for other functionality such as
+> I2S/TDM data.
 
-> > Many drivers now do not check whether the PHY accesses they are
-> > performing succeeded or not, and rely on the failure being permanent.
-> 
-> Well, this driver does, which is how the error gets propagated all the
-> way up to phy_state_machine. 
+Why this doesn't use gpio-regmap?
 
-While the Marvell driver is good (probably because phylib maintainers
-look after it!), this isn't true of all drivers, and I don't think we
-should add a kind of recovery to the core without sorting out the
-other drivers first.
+...
 
-Maybe it needs to be something that PHY drivers opt into.
+> +config GPIO_AD24XX
+> +	tristate "Analog Devies Inc. AD24xx GPIO support"
+> +	depends on A2B_AD24XX_NODE
+> +	help
+> +	  Say Y here to enable GPIO support for AD24xx A2B transceivers.
+
+checkpatch probably complain about too short help text. You may extend it by
+explaining how module will be called.
+
+...
+
+> +#include <linux/a2b/a2b.h>
+> +#include <linux/a2b/ad24xx.h>
+
+This seems to me not so generic as below...
+
++ bits.h
++ device.h
++ err.h
+
+> +#include <linux/gpio/driver.h>
+
+> +#include <linux/interrupt.h>
+
++ mod_devicetable.h
+
+> +#include <linux/module.h>
+
++ mutex.h
+
+> +#include <linux/of_irq.h>
+
+Please, can we avoid OF in a new code?
+
+> +#include <linux/regmap.h>
+
+...hence move that group here and put a blank line before.
+
+...
+
+> +struct ad24xx_gpio {
+> +	struct device *dev;
+> +	struct a2b_func *func;
+> +	struct a2b_node *node;
+> +	struct regmap *regmap;
+> +	int irqs[AD24XX_MAX_GPIOS];
+
+> +	struct gpio_chip gpio_chip;
+
+If you move this to be the first member, you might get less code being
+generated at compile time.
+
+> +	struct irq_chip irq_chip;
+
+Should not be here, but static.
+
+> +	struct mutex mutex;
+> +	unsigned int irq_invert : AD24XX_MAX_GPIOS;
+> +	unsigned int irq_enable : AD24XX_MAX_GPIOS;
+> +};
+
+...
+
+> +	if (ret)
+> +		dev_err(adg->dev,
+> +			"failed to update interrupt configuration: %d\n", ret);
+
+Why and how is this useful?
+
+...
+
+> +	struct fwnode_handle *fwnode = of_node_to_fwnode(dev->of_node);
+
+First of all it uses a wrong API (custom to IRQ core), second why do you need
+this?
+
+...
+
+> +	struct device_node *np;
+
+> +	np = of_irq_find_parent(dev->of_node);
+> +	if (!np)
+> +		return -ENOENT;
+> +
+> +	parent_domain = irq_find_host(np);
+> +	of_node_put(np);
+> +	if (!parent_domain)
+> +		return -ENOENT;
+
+Why is this magic needed?
+
+...
+
+> +	ret = devm_gpiochip_add_data(dev, gpio_chip, adg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+
+	return devm_gpiochip_add_data(...);
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+With Best Regards,
+Andy Shevchenko
+
+
 
