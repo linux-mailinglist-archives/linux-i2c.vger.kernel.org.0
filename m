@@ -1,48 +1,50 @@
-Return-Path: <linux-i2c+bounces-3698-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3699-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DB5D8D32BE
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 May 2024 11:17:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F0C08D32C1
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 May 2024 11:18:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DEB94B25084
-	for <lists+linux-i2c@lfdr.de>; Wed, 29 May 2024 09:17:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C229283123
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 May 2024 09:18:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FC25169AE6;
-	Wed, 29 May 2024 09:17:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD36C16A386;
+	Wed, 29 May 2024 09:17:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cAG55kEX"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ufpv6dxm"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D245A15CD41;
-	Wed, 29 May 2024 09:17:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7566E169AD1;
+	Wed, 29 May 2024 09:17:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716974272; cv=none; b=ncCRvnEVItE8xSaRKs81jMgtQ+e9fPQ+Np/ubNi42Gh/qiz2Nu1kOuBIbV5YGr92mGZVehi2UHo9sV63o33Ua1Xu1Cem/KoqOgwt+hGQnMlkmJGwVOsVeNkKgI8VoBriNn9Q6U+S00WrxY5z1aFR8vaMG/QKLJ6mkJlQvWf7YjY=
+	t=1716974273; cv=none; b=gKktC9yotmd1o+hoOTI9AnZf+KUhexKBR8JiLDK5L+ZqJl59MUqR6tRY3u/9m95t8ZqF0xWVbKMxF0TGWBOsBTB2s+Lz/39rHMMygjm3GHsENu5bdS//PMq4jFz+Mjd6murTRKC72Yf/D39xelE5fosOrESuqDsjxtfOgeYG2SA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716974272; c=relaxed/simple;
-	bh=pVcY8brKHTTyuvaNTRKSX1bJjN/WbvVqShR0h/341m4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q2RVD5htkHflKESIaJ9i47X6zcNXtE6UdxwAppnFO3KWYCrwl1koyp3dcw0iLd5dSHgiiJ25gFmaNm1HPJ+Ocuv3sQpsxos4sDnPyA15wNxltwp5Tlv0g8W3kvJ5Swr2zoMf+p/L7NHydIA9mD/1s1tezSguLTq45VqFyvo5y3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cAG55kEX; arc=none smtp.client-ip=217.70.183.194
+	s=arc-20240116; t=1716974273; c=relaxed/simple;
+	bh=l2cYH5DO9BxfSbaKKQ7q+5RKiD4WnwLONqPtXAYMNsI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=my5cji6GKCrxuc3TtnvxvkOOB+tUEeMqHBXY/8Fmj/leQng7no2js9MNpjPiItZOMWIeyNonVKuLeL8AtbPFqXOsRWQRiUpMKFE8MYa7IMAjP5wLbPy9+N4mNKiPsaqH+zel+BPCS4cYR1CuS3FdGXYZnKL3OIlW3Q7v1z6zPoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ufpv6dxm; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id 90F1E40005;
-	Wed, 29 May 2024 09:17:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 2492C40002;
+	Wed, 29 May 2024 09:17:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1716974262;
+	t=1716974263;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=VGSu2junM166eo2ekTBWdX+3iGwIta7UqT2TDo+DFpA=;
-	b=cAG55kEXfs3opX//eb+q+Gv8b9IHUT756AwPP+NJYsTAFV4jdEOe5Jb75+7KDFD8+Ae85h
-	6R14laBVFnhrJljzK17lzT5rKj9w3bz/7GtSRyvnrmcxLrHCricipGTSsKLuLfJHamAex2
-	D1/mtvF4op74J5dtJoEuVM7GYntfiwQTACzzg17Em09c3m7BejRp4frZe2rh99YujEp/Vo
-	OE1h7VxxkhJumfKYKnjhBK0E9p2WY7sIRQrjp59+JD+xSZc0X+0zhzR9V0ZRYH+NjWzUBC
-	TrsFqtU4kgAdAhrxK0KSHz6h14kn3LMjEYKMd8a2mxc9614cz5Xs2Pmth6uOxw==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=F+Uj9V8vQpSPX6d1BoZ2cs5q7owsR97LnfY1SKzEsDs=;
+	b=Ufpv6dxma+VCHd8mqMdUizaOu0z8teZYax62fxwy0HYRdbmZr0GfZC41HuJSNSq9xG4+Qf
+	CH6a4lIpRbFrD5knztVwqBVpv3D44jvzAb69SMB/Ucm21Yi0s6kmzBMqDckPy5kwK0aE2O
+	NKeE2E7LG63r+iaLzkERzXolnf5zFSGea+1APzCfBkpD6BdcvzEynhFbLDb9fg++9cIxtc
+	07i9mkagUn2sMQ5489YE33UjCvBH+NXR86GZB9OjtV/EveAnR9jZrZ1Au5h4CxwZM+qxgC
+	xlKHwCYGr5YYIVRhuvK5HFPrlz7TCFMFePvLCkCkM1TSqwfh8TWBq4WWv+fkXA==
 From: Bastien Curutchet <bastien.curutchet@bootlin.com>
 To: Peter Rosin <peda@axentia.se>,
 	Andi Shyti <andi.shyti@kernel.org>,
@@ -58,10 +60,12 @@ Cc: linux-i2c@vger.kernel.org,
 	Herve Codina <herve.codina@bootlin.com>,
 	Christopher Cordahi <christophercordahi@nanometrics.ca>,
 	Bastien Curutchet <bastien.curutchet@bootlin.com>
-Subject: [PATCH v2 0/3] i2c: mux: gpio: Add 'transition-delay-us' property
-Date: Wed, 29 May 2024 11:17:36 +0200
-Message-ID: <20240529091739.10808-1-bastien.curutchet@bootlin.com>
+Subject: [PATCH v2 1/3] dt-bindings: i2c: gpio: Add 'transition-delay-us' property
+Date: Wed, 29 May 2024 11:17:37 +0200
+Message-ID: <20240529091739.10808-2-bastien.curutchet@bootlin.com>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240529091739.10808-1-bastien.curutchet@bootlin.com>
+References: <20240529091739.10808-1-bastien.curutchet@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -71,50 +75,34 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-Hi all,
+I2C MUXes described by the i2c-gpio-mux sometimes need a significant
+amount of time to switch from a bus to another. When a new bus is
+selected, the first I2C transfer can fail if it occurs too early. There
+is no way to describe this transition delay that has to be waited before
+starting the first I2C transfer.
 
-The i2c-gpio-mux can be used to describe a multiplexer built upon
-several i2c isolators having an enable pin (such as LTC4310):
+Add a 'transition-delay-us' property that indicates the delay to be
+respected before doing the first i2c transfer.
 
- +---------------+                     +------+  +------+
- | +-----------+ |                     | dev  |  | dev  |
- | | GPIO_EN_A |-|-----------|         +------+  +------+
- | +-----------+ |     +-----+---+         |         |
- |               |  |--| isol. A |---------+---------+
- |     +-----+   |  |  +---------+
- | SOC | I2C |---|--|
- |     +-----+   |  |  +---------+
- |               |  |--| isol. B |------+---------+---------+
- | +-----------+ |     +-----+---+      |         |         |
- | | GPIO_EN_B |-|-----------|      +------+  +------+  +------+
- | +-----------+ |                  | dev  |  | dev  |  | dev  |
- +---------------+                  +------+  +------+  +------+
+Signed-off-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
+---
+ Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-These isolators often need some time between their enable pin's
-assertion and the first i2c transfer. If the first i2c transfer
-happens before this enabling time is reached, transfer fails.
-
-There is no available option to configure such a time in the
-i2c-gpio-mux driver.
-
-Add a optional property in the bindings called 'transition-delay-us'.
-If present, driver waits for this delay every time a new bus is
-selected, i.e. before returning from the bus_select() callback.
-
-Changes in v2:
- * Rewrite bindings' commit log
- * Express the 'transition delay' in us instead of ms
-
-Bastien Curutchet (3):
-  dt-bindings: i2c: gpio: Add 'transition-delay-us' property
-  i2c: mux: gpio: Re-order #include to match alphabetic order
-  i2c: mux: gpio: Add support for the 'transition-delay-us' property
-
- .../devicetree/bindings/i2c/i2c-mux-gpio.yaml      |  3 +++
- drivers/i2c/muxes/i2c-mux-gpio.c                   | 14 ++++++++++----
- include/linux/platform_data/i2c-mux-gpio.h         |  2 ++
- 3 files changed, 15 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml
+index f34cc7ad5a00..20d72c3e1e10 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-mux-gpio.yaml
+@@ -57,6 +57,9 @@ properties:
+       last value used.
+     $ref: /schemas/types.yaml#/definitions/uint32
+ 
++  transition-delay-us:
++    description: Delay to wait before doing any transfer when a new bus gets selected.
++
+ allOf:
+   - $ref: i2c-mux.yaml
+ 
 -- 
 2.44.0
 
