@@ -1,194 +1,139 @@
-Return-Path: <linux-i2c+bounces-3696-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3697-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 680AB8D2562
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2024 22:02:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA28D8D2D95
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 May 2024 08:47:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DD4C1F23F7D
-	for <lists+linux-i2c@lfdr.de>; Tue, 28 May 2024 20:02:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 154FA1C235FE
+	for <lists+linux-i2c@lfdr.de>; Wed, 29 May 2024 06:47:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4BD178CC4;
-	Tue, 28 May 2024 20:02:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B91DC15B144;
+	Wed, 29 May 2024 06:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="E7ftm9ck"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E574178383
-	for <linux-i2c@vger.kernel.org>; Tue, 28 May 2024 20:02:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6A8273DC
+	for <linux-i2c@vger.kernel.org>; Wed, 29 May 2024 06:47:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716926565; cv=none; b=VRB/sx8M71ze3FbS1qMHONErTblqtNXvFbE/n1Jp9DXjhIZYpMlzjiZUcZGbQvRyIlEeGALXTQatK4gugZLvTkQml5lzo0dY48cCusNyeapTgqi7vKZxAzpUk5VEHJ7o0fZMMRji3Yilr9s9SIR7AA1qV9RVW2y6gtYVoEIJQaM=
+	t=1716965274; cv=none; b=oCq7ustBha+r7rlUyreHi+65cx/pT9/o0HUZJTAkt+kEXDYuvAhp3939zySq00fZ/b6kIxrSKWrgt6Gdp/e41qzRizefSr6KBgKdxFNmhrvTUEMwIHqRP/ZllfMcDGfNoIKTcW/0jDjYMdiY9Yup2KudMxcCNLLSdD0i2qaFBv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716926565; c=relaxed/simple;
-	bh=pTf2qUi734ES9Al085wTXfYC8mQU+J7CT38EpK7LQlk=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ncZ/ucebWaclToqAjNDTJiJ9yeONmJljV83KQAc6oO5uf2OfwVv2D7HsOdJyvxFinY0Rk/nWeAV52MaIFs/E6LUzz+ena3q/KtOqDTSQhaGFkqyjY9vc2uqQYzudztBZoLhb9REBkA46DpEOenvBuo1N1MMftLbzYt/LZgKFapU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-Received: from localhost (88-113-26-230.elisa-laajakaista.fi [88.113.26.230])
-	by fgw21.mail.saunalahti.fi (Halon) with ESMTP
-	id 3cab8281-1d2d-11ef-aaf5-005056bdd08f;
-	Tue, 28 May 2024 23:02:41 +0300 (EEST)
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Tue, 28 May 2024 23:02:39 +0300
-To: Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc: Mark Brown <broonie@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Emil Svendsen <emas@bang-olufsen.dk>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-sound@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-Subject: Re: [PATCH 06/13] gpio: add AD24xx GPIO driver
-Message-ID: <ZlY4X2P1VpF0aqjM@surfacebook.localdomain>
-References: <20240517-a2b-v1-0-b8647554c67b@bang-olufsen.dk>
- <20240517-a2b-v1-6-b8647554c67b@bang-olufsen.dk>
+	s=arc-20240116; t=1716965274; c=relaxed/simple;
+	bh=QmHCdhc/mlqBoOr0oFW0zwuSvgOYS1EtOT4a9Re3w98=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mi14FXv/HKsFRzVmuMTPYgVyeuAv81v8dl+AC/rqhWqUrlGEo5DY4H0a3hNJCYNWnU4+WDUvoQKkHGbFUZVlAsILsQ86FC+I3xtzyLlgaxsIal6+Sln6V7b/5VpNd8adX/JdM4ZZK4pH40eMehelxgq3tw1Xu860me7/z2hNDwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=E7ftm9ck; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=0v7Y
+	Z0DGoTlv5LbwocGv+P6A+uUTCQ30CCVAx/ZCEx8=; b=E7ftm9ck0lSppdUms6M5
+	ZAV58PgI8DI6F5hFBa75dSPgM+Er8wmVPvCk8IjxCgpMdFFjFcCSu4vW2JhXI84m
+	e0z5IFsv5hwOdWqAmngo4XuISnTxd5NDR4e6RyeQHFXmtFGaFSwPzRfge92DbE55
+	z38O7/WCNYjkP2eoeERAiITk3kQTFo+84doVsvqCrLcUFClzd3CyBn1V98ioyVr7
+	C7BZUy/0KRkpul92YNWAzgre3n9ZwBy1wCgttMHnlD1eSECZQuCKte47rG8XOjpf
+	HQ8pssNEn1VhAPJEultutJsc41Pm73Eh177dK734ibgJFcIHuP0DDdVZaZQKgbcA
+	Rw==
+Received: (qmail 468843 invoked from network); 29 May 2024 08:47:38 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 29 May 2024 08:47:38 +0200
+X-UD-Smtp-Session: l3s3148p1@a9xNIJIZzswgAwDPXwS5AFh1mWvQq9Po
+Date: Wed, 29 May 2024 08:47:38 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Alex Deucher <alexdeucher@gmail.com>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>, Evan Quan <evan.quan@amd.com>, 
+	Alex Deucher <alexander.deucher@amd.com>, Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, 
+	"Pan, Xinhui" <Xinhui.Pan@amd.com>, David Airlie <airlied@gmail.com>, 
+	Daniel Vetter <daniel@ffwll.ch>, "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, 
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, "open list:AMD KFD" <dri-devel@lists.freedesktop.org>
+Subject: Re: [PATCH] drm/amd/pm: remove deprecated I2C_CLASS_SPD support from
+ newly added SMU_14_0_2
+Message-ID: <x7p5tf6tdgyflv4niimtvjc3hwovj72bo54a6dkmk3uxy4qvc6@2i2atfyfvgsv>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Alex Deucher <alexdeucher@gmail.com>, Heiner Kallweit <hkallweit1@gmail.com>, 
+	Evan Quan <evan.quan@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, "Pan, Xinhui" <Xinhui.Pan@amd.com>, 
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>, 
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>, "open list:AMD KFD" <dri-devel@lists.freedesktop.org>
+References: <ed236ed6-0e6d-4243-8316-28485c9797c0@gmail.com>
+ <CADnq5_O6YMr2EK3J+NnnfycLpq321PTwgt2-NNE0X82Jq+DC=A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="cb3f75dzqp4rngsr"
+Content-Disposition: inline
+In-Reply-To: <CADnq5_O6YMr2EK3J+NnnfycLpq321PTwgt2-NNE0X82Jq+DC=A@mail.gmail.com>
+
+
+--cb3f75dzqp4rngsr
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240517-a2b-v1-6-b8647554c67b@bang-olufsen.dk>
+Content-Transfer-Encoding: quoted-printable
 
-Fri, May 17, 2024 at 02:58:04PM +0200, Alvin Šipraga kirjoitti:
-> From: Alvin Šipraga <alsi@bang-olufsen.dk>
-> 
-> This driver adds GPIO function support for AD24xx A2B transceiver chips.
+Hi Alex,
 
-"Add GPIO..."
+On Thu, May 09, 2024 at 01:15:32PM -0400, Alex Deucher wrote:
+> On Thu, May 9, 2024 at 8:02=E2=80=AFAM Heiner Kallweit <hkallweit1@gmail.=
+com> wrote:
+> >
+> > Support for I2C_CLASS_SPD  is currently being removed from the kernel.
+> > Only remaining step is to remove the definition of I2C_CLASS_SPD.
+> > Setting I2C_CLASS_SPD  in a driver is a no-op meanwhile, so remove it
+> > here.
+> >
+> > Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>=20
+> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+> and applied.
 
-> When a GPIO is requested, the relevant pin is automatically muxed to
-> GPIO mode. The device tree property gpio-reserved-ranges can be used to
-> protect certain pins which are reserved for other functionality such as
-> I2S/TDM data.
+TLDR: can you ack this so I can apply it for -rc2?
 
-Why this doesn't use gpio-regmap?
+Reason: I2C_CLASS_SPD was scheduled to be removed for 5.10. For some
+reason, the newly introduced usage of I2C_CLASS_SPD in this driver went
+unnoticed in -next. I would really like to remove I2C_CLASS_SPD now
+before other users appear in the next cycle. In my experience, it is
+possible to send Linus such patches for early rcX. Like it fixes a "bug"
+when trying to handle a moving target.
 
-...
+So, would that be possible that I push this upstream so I can ultimately
+remove I2C_CLASS_SPD without further dependencies? If you prefer to push
+it through your tree, can you send it to Linus soon?
 
-> +config GPIO_AD24XX
-> +	tristate "Analog Devies Inc. AD24xx GPIO support"
-> +	depends on A2B_AD24XX_NODE
-> +	help
-> +	  Say Y here to enable GPIO support for AD24xx A2B transceivers.
+Thanks and happy hacking,
 
-checkpatch probably complain about too short help text. You may extend it by
-explaining how module will be called.
-
-...
-
-> +#include <linux/a2b/a2b.h>
-> +#include <linux/a2b/ad24xx.h>
-
-This seems to me not so generic as below...
-
-+ bits.h
-+ device.h
-+ err.h
-
-> +#include <linux/gpio/driver.h>
-
-> +#include <linux/interrupt.h>
-
-+ mod_devicetable.h
-
-> +#include <linux/module.h>
-
-+ mutex.h
-
-> +#include <linux/of_irq.h>
-
-Please, can we avoid OF in a new code?
-
-> +#include <linux/regmap.h>
-
-...hence move that group here and put a blank line before.
-
-...
-
-> +struct ad24xx_gpio {
-> +	struct device *dev;
-> +	struct a2b_func *func;
-> +	struct a2b_node *node;
-> +	struct regmap *regmap;
-> +	int irqs[AD24XX_MAX_GPIOS];
-
-> +	struct gpio_chip gpio_chip;
-
-If you move this to be the first member, you might get less code being
-generated at compile time.
-
-> +	struct irq_chip irq_chip;
-
-Should not be here, but static.
-
-> +	struct mutex mutex;
-> +	unsigned int irq_invert : AD24XX_MAX_GPIOS;
-> +	unsigned int irq_enable : AD24XX_MAX_GPIOS;
-> +};
-
-...
-
-> +	if (ret)
-> +		dev_err(adg->dev,
-> +			"failed to update interrupt configuration: %d\n", ret);
-
-Why and how is this useful?
-
-...
-
-> +	struct fwnode_handle *fwnode = of_node_to_fwnode(dev->of_node);
-
-First of all it uses a wrong API (custom to IRQ core), second why do you need
-this?
-
-...
-
-> +	struct device_node *np;
-
-> +	np = of_irq_find_parent(dev->of_node);
-> +	if (!np)
-> +		return -ENOENT;
-> +
-> +	parent_domain = irq_find_host(np);
-> +	of_node_put(np);
-> +	if (!parent_domain)
-> +		return -ENOENT;
-
-Why is this magic needed?
-
-...
-
-> +	ret = devm_gpiochip_add_data(dev, gpio_chip, adg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-
-	return devm_gpiochip_add_data(...);
-
--- 
-With Best Regards,
-Andy Shevchenko
+   Wolfram
 
 
+--cb3f75dzqp4rngsr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZWz4YACgkQFA3kzBSg
+Kbb4wRAAnmHF2z89VfGtBVsqHxdIowGPdNh2V6Tp6TrJzr7JsVbTdFOESEp9JpKG
++4NBNwp6pq08scDa9LzwvOEKFk9pr/G3CJCZofUpfOI8c2mbnvUD0QIBaOuxb/Dz
+P6w38oAO6l3ujJ0nZuFPA272FXaMHoLyAuMfX6J8Oi+KHJwyVsdvCPWABtY/HXbk
+k73iOhaWVcmfjGpFXTURuiGuJmiQsAFaze5DzcWDHqrryM8gsR+nwrR/KAjmhnUo
+YXmw5wWUIaPZtg8+xChd6Qz5Q35pJdkyL9sTGh7CELxOMQjlUOK1JR9BlZw8QL2d
+XFBCiU9ZiuHS7WjJ4fPSeD2EIEWX5YvXlQQBzaxHIj9jpTHjJSJEhbBSvVrw/AMl
+q310OPOjlGxy9rnezn7ijCVTjqIsfE5+t7m3XZfqJPj0v3XTLs7AtCq2A6yDoMH/
+T/BvvRKK9Bnlfgr+0dwzDy7kMpt8BQl3io+gDRciwz1FaF6Q4ZaJD4Nche15QtY/
+z/gaPg8Dz/102E1e+w+wbqyA7dELhOWrjUDM0pe0lhW+YVHWE2+uegGeenjDvdW8
+lO7b3xmvoFTAu4W7PXwuDpJU6c6eieI56VscVn/jC6so26/y5y9dzz7zVSK2aITY
+xeYPkW8lWgH8DQ5xaMtLt1edhrBRy6oUl0VTednA25bhpRSm92w=
+=ydZ4
+-----END PGP SIGNATURE-----
+
+--cb3f75dzqp4rngsr--
 
