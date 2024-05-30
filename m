@@ -1,242 +1,249 @@
-Return-Path: <linux-i2c+bounces-3712-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3713-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 384BE8D4699
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2024 10:01:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 198D98D4C8E
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2024 15:25:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B98121F22361
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2024 08:01:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4875284316
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2024 13:25:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C8D4143720;
-	Thu, 30 May 2024 08:01:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96014183086;
+	Thu, 30 May 2024 13:25:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="qPgNUsMv"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TNJTr5I1";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="5rQzeFmB";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="evRYP/yB";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="4V9RjjSf"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2132.outbound.protection.outlook.com [40.107.215.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D99A20322;
-	Thu, 30 May 2024 08:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.132
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717056102; cv=fail; b=GUODsx0BS+Bl9Bn+PFrfmdIjdS9LwtFa+c2chnJBdVYZVu67iaTfvG1Zll6vPWG4FeJX0kCuCzTxnY8WDwyuIq133w86VBL+rH1iWmmUqzejrW+SVC7CiycQfQbUszQf/rBcByjVlThspNj5BCJGiJNuhkfpe9OJLGCCxm3Xgn0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717056102; c=relaxed/simple;
-	bh=hNfAo5mSy/WS5gLDqp5z3ccLpTfiIn0eYWAeHWdARaM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=MWFO5V6adV1eqWjKvk6ggQxS4bpasDC17VsDmeg/ioRlQXiIZsDplxLrwZZezqRGktEUQk0OSUE9F01KdWwdX678eYveYk30cIUJlC1wFAQeEteOgfYBjEnmwJLRyTOBCxddqfmRKkhZJ0GkSef6gacQAGbCFd6Q7UMyKNTLhT8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=qPgNUsMv; arc=fail smtp.client-ip=40.107.215.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZVXLlQLDKzdD5Jo8e9C4K7jWVK2n52dYXFt9HOcnVa0/UIFgjLwVJlTqSbgM9Vu6ulFzpROA9pq6dSM9Wrn0o8sx/tQXENP1MgbcUtL03z0Y2DomZPfeZlHBjnd1ajgw6/hV1HprXNK+xlpxEPc4vkJVx0kZj8OyUYZNPGSto4OeAUhDngA6BXLzfgGPTjPsINlkSEidsMxXahGkhgLLfKRWCcNLgPs72xmvE0zq4xeh5yGZj50LZoANatbF1IBNZuYucgvVr7FkqIAgq9nD3Nv9ZH8yhwECwoSxmW9dqyqBs7IkUPP0tgzAviWDDfjE5kpvO9a9rZE1GxQKo34Y8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hNfAo5mSy/WS5gLDqp5z3ccLpTfiIn0eYWAeHWdARaM=;
- b=YBV7B6FmNY0DlOYsUJN5Y2n7Q1pMzis4jadgraX53MjkpNbhlIeG//Bx9NjAOXH5qD9bGNpqiei8Po7dIp3xy0BODBTZMLyKI27oQjnCIqzThzsEeFT1F5wbl3TdHkVLTy3+hr1C7bPfTZErE4oN2MpRmAt8YkgT9Y0HDzcJeE14B7++U0iuKg8QasJ9Dhq/nKzUtkK9UA9pffRKR5DXZ0K+OZMUJWrGxJSl04s7MvTJAMIG7/e0MBbeNZ/sDpLXjbg4ZmSh4hw6qC2o6Vnv2ZurQjMPANebMTInbkRIKMvfs62f58rgOCEdSVZWMxse5Lueri6tgSxJ6FSOdy1xrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hNfAo5mSy/WS5gLDqp5z3ccLpTfiIn0eYWAeHWdARaM=;
- b=qPgNUsMvHSgLYisBd5/KAv3NdS1qZDgnzQjhscSYtUbSsDgXUZo/ehn/jezgnQcl4VdEF2lHkoUlO8GSgUR2k866sZ9LmIReHKvETyRzMW2c8U/5APBTdUx7TSgtzPeaIRyvm7R64n6lwzix9R0CzaTiDYwXftMpD7Sb+fGRH27PDYJJQk3HGB3wfprz8IfrkNJYnydBZ38JCmPECCKzoLnY+GQCQ3po25alNH1k8GaL7kgAgFnKJ0jX0v4pnJ+S36QbEbrWpHBHZXn9oQXMIAlqWgu6YSbg0Ler+ANLwl4hH55twz8yCBJES8BE3ZGJwlnC3tWTdCq9KwnLeomEpw==
-Received: from TYZPR06MB6191.apcprd06.prod.outlook.com (2603:1096:400:33d::12)
- by SEYPR06MB5857.apcprd06.prod.outlook.com (2603:1096:101:c3::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.21; Thu, 30 May
- 2024 08:01:31 +0000
-Received: from TYZPR06MB6191.apcprd06.prod.outlook.com
- ([fe80::cc07:35e3:9143:c8e2]) by TYZPR06MB6191.apcprd06.prod.outlook.com
- ([fe80::cc07:35e3:9143:c8e2%5]) with mapi id 15.20.7611.030; Thu, 30 May 2024
- 08:01:31 +0000
-From: Tommy Huang <tommy_huang@aspeedtech.com>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-CC: "brendan.higgins@linux.dev" <brendan.higgins@linux.dev>,
-	"benh@kernel.crashing.org" <benh@kernel.crashing.org>, "joel@jms.id.au"
-	<joel@jms.id.au>, "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
-	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>, "wsa@kernel.org"
-	<wsa@kernel.org>, BMC-SW <BMC-SW@aspeedtech.com>,
-	"linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH] i2c: aspeed: Update the stop sw state when the bus
- recovry occurs
-Thread-Topic: [PATCH] i2c: aspeed: Update the stop sw state when the bus
- recovry occurs
-Thread-Index: AQHasl/7kNWQnBw5T0ayJZ/33ciwnbGvZo8AgAAAYFA=
-Date: Thu, 30 May 2024 08:01:31 +0000
-Message-ID:
- <TYZPR06MB6191FAF87E840853959AB98CE1F32@TYZPR06MB6191.apcprd06.prod.outlook.com>
-References: <20240530070656.3841066-1-tommy_huang@aspeedtech.com>
- <2774cb4c-4eea-4bf5-8b2b-438adf18448d@molgen.mpg.de>
-In-Reply-To: <2774cb4c-4eea-4bf5-8b2b-438adf18448d@molgen.mpg.de>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYZPR06MB6191:EE_|SEYPR06MB5857:EE_
-x-ms-office365-filtering-correlation-id: 8033774b-2b95-4820-eb64-08dc807eb79d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230031|366007|376005|1800799015|7416005|38070700009;
-x-microsoft-antispam-message-info:
- =?utf-8?B?TkRNWkE5Uk9TZjBaRmk5S2VJUFplSUtjZmhqZmN2QmNyTVM3bVB1SXFXSkVP?=
- =?utf-8?B?ckhLRzdCbFR2KzdTQ2JJcVNVS2twVzE1cmpxanVtT1JHRy9IaGJrM3JGc1l1?=
- =?utf-8?B?RG9BOHZaaUJRVWdXL0VQY1V4NXZ2TTNaaGJjQWtJTDRQd2xXWVFGUE9jbEpq?=
- =?utf-8?B?T1R0WGNNREhSV1hTSlJSckhrYzE5bVM0cFhRbEt5dGxtdU1UMk1oTDFLLzYv?=
- =?utf-8?B?WmtzS05tM3V5OXNuM1N1SU1COUk0cEFqbUg5R1VVOGUzSEtSRGo3b1BPY2Rt?=
- =?utf-8?B?c2FTU0VJaU1MdW1XcSttWTh1cExYd0pPbHM4eHYyaEh2eWx5TVFYQkwyVERu?=
- =?utf-8?B?NDN5VWFrQ20yVElwakczUUNyZkpKN3RId3pZWTFwMmxrRmIxdnVjZlp2QTBN?=
- =?utf-8?B?MWZ6cVpqRjRPa3M3Y1RpWHBxWmkwaFBVSmZqWmJtbzd6SmVWQTd0NTRNTlY0?=
- =?utf-8?B?NUdsWVZjcmxmUUJxcUxqcXpHZG82MG5tNzZuVGZWL1d6Z09VemE1K0dFTmxv?=
- =?utf-8?B?bUdxT3BPNGVxV0ZhNVMzbEh6NGFLK1ZlMmQrVDU1VUQzaW10TkNkUy9hcnFa?=
- =?utf-8?B?TkNJTmZLQU80aHQ1ejhYVVN6T1VCT015TVpMUlJGV0hUaEhkOUZzazMwNldL?=
- =?utf-8?B?d2JZUW5SMmN3NTNHVmg4U1ZvalozL3JWVlNoUU52OEhjaTdCVUZmUUYzM01r?=
- =?utf-8?B?WUZ4eUpjQ1hyMTRQN1ZzaEVzYWdKeEdMZHpqSnhxalk0UlF0Yi9EVHVmaEFI?=
- =?utf-8?B?cldEY1FZaElwbXY4aEYycTNpakJKTGNvU2JyVXFLNGRJUUo1cVJEWTFDMmJl?=
- =?utf-8?B?RFJWdHovUjRvanR2NldkTzhKNFRaYVBCS0s1VE5POG83VWpVNGVqY1FyOEhi?=
- =?utf-8?B?UVpHMUgwTi9RL0VmUisrV3l5MGhadWE4bS8zcGczU09oRVc3Y1dXbkx3QkRr?=
- =?utf-8?B?dE95alJhRWhHVk9uYWNFQ24rWURRVE1qS3JtOU1Ec0U0M2pZK3FZSDVGZjMv?=
- =?utf-8?B?WTE4NGowMTZZamFWdkNxMUs5Zy9KVW5iN3JxYmdvSE5QNTFWMjNoL2ZESE1I?=
- =?utf-8?B?akZ3bHFGVExzam5DS0pwUzFESmZDckp5V0p5amVsa0RzTEN1Qkt2QzR5azNM?=
- =?utf-8?B?S1lCN29QVVBTYXRtRHZ0ZzFSNWZPb1lqWXVzZFVzZ3JKQU5qSkVZK1p3bm15?=
- =?utf-8?B?S3Eyb3I0SlZaVVVVUVBDNmQ0dmFSQUVzb29yYytNVW5EQTVnc3ZEVFhIN082?=
- =?utf-8?B?b2lueVpTNUNMeEJ6bGg5TmxWVkNaODR3Q3BUMjNCSXRmSU5FZUJaSGdkb0hs?=
- =?utf-8?B?bFVBZTFjNUpJak1GajZ3MU5GRFphOGpXVmwwWm80LzRjSmhSclR4dGNxU0tW?=
- =?utf-8?B?RlRtcEpuTUR0dE13VlIvL3JUdVhRSkVRcU02RnJOUXlJYUd5blV4Rzl5Zm9T?=
- =?utf-8?B?VHdIWFBMdFVsWDVUNjFSYmRNeGpLVnV0NUkzZTJMUG5IUmk0azR4emJWbTl4?=
- =?utf-8?B?NE05V2lMeHdYYlZmVE5VVzQxNVNtOUVCT2V2cVNkVHdIVFRtazNkSEFsWDVN?=
- =?utf-8?B?R2tDZngxRDBjRFdzRDNwY253cEJGOXJmOXBYQTFWTmVkVk5zdUR0cm52eEVZ?=
- =?utf-8?B?NFl5UlBlVmh5VEd4eFF2UEEwMzNkZXorVDI0N3k3RmxLWXloZWd5YmdNM2tj?=
- =?utf-8?B?MU1JUmlmWHNHS3JvbW5saktna0dvY0ZnUTh5aE80VzNFaTNudExzbElBUXN5?=
- =?utf-8?B?VVhLWkEzblJLY1k2TTh0MXExZkhuWlZwSzJpUnI1ZEwxNlRCVGJkMURCb0du?=
- =?utf-8?B?RDJUZHpOMWNXWVpvc2NTQT09?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-tw;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6191.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015)(7416005)(38070700009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?TitHT0dNQ3dyUmtSOFozYjRxekJnVHB0L1VQaGlLUDdsSWY2VnZreWoxWjZK?=
- =?utf-8?B?MlJLTUZ2d3dTeWw3V00rOUR3eDlaODRWWmQvaVM3M1J5N0tGNGxWUnNoZnBR?=
- =?utf-8?B?Y0lmc0ZyWEFiTDlidEVieWtHbkNqelpmblhuU1RTWnhabUgybEp6U1kzeEJn?=
- =?utf-8?B?ZlNKTE1kVzZwY0VoeG50OUpTNVZxZDZCN0xFT2crQ2VlN2g2ckFFYS9IT1Ry?=
- =?utf-8?B?YXFtWVVsOGxyeHQ4NWJWQ3BvdE5aNFR2Rk9sOFQweDZaSUc0R3o4cFJJeGdo?=
- =?utf-8?B?WGYrdEVwdmNuT1VkcEJkUmZwWmN6T3hqcmt5c3Fib2tlOWF0U3h5RVgvRTNC?=
- =?utf-8?B?cFYvcVQ1bzhpVlpHcVhWTDRkZzBZdzNlSGUyODM2Z3Z1akxKQnd1Y1lBNm04?=
- =?utf-8?B?a0grNDZ0b3NpLyt3eHdDMVBUb3FKL0Q3WUZhNEtZSUc2L1BaRFhmMC9EVVQw?=
- =?utf-8?B?WUY1KzlweFRKZHRFMkI2azluTG5qYW1CdW5HY1k2MGwra2ZoYUVFMDhrVEx3?=
- =?utf-8?B?WjZHRVh1ZGc2Q3VBQ1hqaXpQbVJvaU9TVnd5UEtyaU9uNXRVZnNCT0diOWxU?=
- =?utf-8?B?NVpaZlJYRUlpR0RkYXArM29WbWRiTHAvOEY3c0kzT0dBWlZTM1hxZFQ3Nko4?=
- =?utf-8?B?N1BXVkRmMnpRcU0xUi9aR0VBdllDZmNhK3JiVkhMZU5jcGJIekdOYmoxUWY2?=
- =?utf-8?B?SEQrd0JBeFpTL2k4akVWdll5ZlRibUFHSHV3UUZrMjVqZnRaY1FTNnVIZy85?=
- =?utf-8?B?dHFTMjRRUzVhZkRhSXRONlY2M2ZBTUE1WlJnWGNXeHFmTDlNMUVxQm9zSmV3?=
- =?utf-8?B?Z0RydEh1TGFKTE9JMkhiUmNmZHNQSE80anVvWmdKams3UjZYajVsMTNyekRE?=
- =?utf-8?B?aVRtUUwxRDVqLy9kM1Q0WVZBSDV2ZG1ZZzd1NnZOMCtlWmZRZUJha0w0WHNX?=
- =?utf-8?B?dDJqZEZRdmRvK2IxZnVLRm82TmRBSDU2QzMvQUYrZGxWVGRMV2dFTjBUVTJF?=
- =?utf-8?B?Uk5IQmJwTFVjYnlucUJmbXdWVXdEWFFPc2VIRVRyZmtvL1BoVC83enhLMDdi?=
- =?utf-8?B?WXNneHNsMEM5K3piZk5BOTBTY2taaFFiZ2NxYnZJb3NVbXUvdjhUSCtkaThM?=
- =?utf-8?B?Q1l5RzNRSTBIRzI0anFISTBqOFZtT2JSZVlDODRZUnpoQ1czb3dlYWZ5bmxr?=
- =?utf-8?B?RG15NHo4UUhPRlpDNS8xcWMxVVlJcno3TkJFcXp1a0toS0dMVDYwZ3pjUEdj?=
- =?utf-8?B?WDE0dTVPZG8wVXQrOHdhRFJ4RmUzYWN6bGJGM0NQajFGQWNpRGRSR1VGeDB2?=
- =?utf-8?B?ZG54eFkvWmdwWXc3RkMveHdBdkQ0OXlDY1J4c2c4OUlRUC9tc09CZTZQVHcw?=
- =?utf-8?B?cml5NitBZG9ZNkFWTDRyUVI2MGRsYTRWTEV1U1RPdkp5QVRUbFdyT2lsdnN2?=
- =?utf-8?B?VlhxRHhWWTY5RFlkMW5Fc0tyYnFmRGVYaW04V3JueEpVMUdEQzdkNjREZFZp?=
- =?utf-8?B?QjBNL0Z0aGN0VnNVejVZaDkySFJqbEIxZHNjUjBObDFieEgvaW9GUzlWM01M?=
- =?utf-8?B?Y1h4N0dnRzFoOTl3d1l5VzFEc3JYUTY2MlBQVHJhNTVpQko2Y3h3M0twUEZB?=
- =?utf-8?B?a3Iyc0lVMk9OUVhyTDJOZHNjQXFRMFptTGVGSjZEK2FQaWNMalJjY2lkQXp1?=
- =?utf-8?B?SnRuUVpmREVQRGVxNFlGNCs0QTFiVldmaG94MXNhS0JWdGwzaGZVTXUwekFw?=
- =?utf-8?B?a045SFJBamM5VloyM2QrSHZ0dWJicXdicjlxQ0hUNHZzZ1F0dWl1c1RUVS9h?=
- =?utf-8?B?TjhhRlFZcmJpdzRhSnR4cG9URkRRZ2Q4Q0RIS0E1aFdQV1kvTG5sOExDZ1ZE?=
- =?utf-8?B?Q2F0REtsT3VPZ2tXSVV5bndvK1VJVm9WZlVpUzlETjJVUCtwZ3pWdmpNeU9T?=
- =?utf-8?B?MVJJVkYwMVo2a254dDRsZ3BsSCtDSXpzZDVkaHdIaGNDdXB5akJtaWNYMmJ1?=
- =?utf-8?B?RUN5amtGaWR0ZlRoMUtrajNpMW1Zd3ltREZEeEVKdy9rYTE1SDloNG9vT1lS?=
- =?utf-8?B?R1RncmovWlpyTE93bjJzM2NhM0k1UmpJNDVIcW93K3dadEFWeGE0eXNzUzJr?=
- =?utf-8?B?YjcrS2YyOVdWYkNIWDlVWElhdDRmSmZLK2FpcCtjbzd1OFc3SE51Yk1PNng0?=
- =?utf-8?B?aXc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185F11C2A8;
+	Thu, 30 May 2024 13:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717075507; cv=none; b=cRVcEG0DWTqR90X+RDTvL2PBqejxqI+j1O9VIa9n8D1oOVJxqx++dGHs+ljFdbO0zCS9JIK32vDpQ9StRgTtwUzhReUqonuGS4c12ooWi7ztXgnzs5N7Vmd5oVt+wRNve4u6R8nOkvLh5/JfQWb/r+RZJzgHDbDDCGWDTeW8ih0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717075507; c=relaxed/simple;
+	bh=CTNp3tSmoZu517100oC9N7M79WsRcBjopPTx2HtKEXM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AKfZhyL/JKwC/tvU3/Y6VvCEiI2S+R95JqSBSHJxrTAIGGwyx4XzH5uFJotertqVZSLynlxSm4uDfLnPWNhf6Rs5YphYbLX1RmGYav2QvkZymk6ulaYObIV0U5KnayZQk2B2hH5E/AQ9vI4cCdCWaqrSd65xdDNIFtoaQJutcAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TNJTr5I1; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=5rQzeFmB; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=evRYP/yB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=4V9RjjSf; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id CED7B33876;
+	Thu, 30 May 2024 13:25:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717075503; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/fTnH1k9PCe7lPHHa/LlxqVdBbmwOs57Vq5J6smfmlM=;
+	b=TNJTr5I1t+cnIehLm2KgzziHKQPwH5vTSXmK33XrrgB/+8EaIyGUhr8//iLCeNWPqrrGJ6
+	w+eytJ1mgt51hTeI/OAnLh7UEmnZbKbMc6DHkrss9bXVLhKKZKjgZMnXJ4WlvnU6EPDYIX
+	Ohf5t0FJwfE/RaJGyCt0y2H6CHxYPOQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717075503;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/fTnH1k9PCe7lPHHa/LlxqVdBbmwOs57Vq5J6smfmlM=;
+	b=5rQzeFmBSWr15givsFXgqUzwF3ZzFjZbtftuarFvHsENz+CPkeZ2SkYcojsKFe/mNO4g+1
+	rwwmUyirkftzeyAQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="evRYP/yB";
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=4V9RjjSf
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717075501; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/fTnH1k9PCe7lPHHa/LlxqVdBbmwOs57Vq5J6smfmlM=;
+	b=evRYP/yBCgDxIgKu9Ci+mIiBD1yl4baeB8Hl8zYyDKQYs233xess4LS9eZu5OluldW5xJC
+	j5//fDIDonU4cQ+MO1y2C0o8OTnaqEWR1nJ/s3VKXg9Ordk6+KzdzJ5D/L15yuX7UizRbX
+	JN7VabjMw9avMuTYzscWuow2eSVRAmg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717075501;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/fTnH1k9PCe7lPHHa/LlxqVdBbmwOs57Vq5J6smfmlM=;
+	b=4V9RjjSfyyeR5QrFeTMzS4dq+FJHVbbFL2E95ay6EB+eUN6bz2GoatzZM5rxLXjeX8+dyT
+	TlQ3jjBMca800fAw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id DE5F813A83;
+	Thu, 30 May 2024 13:25:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id D5STLyx+WGaEVgAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Thu, 30 May 2024 13:25:00 +0000
+Message-ID: <1e626d93f4220cc348300bbc61089de32300122d.camel@suse.de>
+Subject: Re: [PATCH] i2c: smbus: fix NULL function pointer dereference
+From: Jean Delvare <jdelvare@suse.de>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	linux-renesas-soc@vger.kernel.org
+Cc: Baruch Siach <baruch@tkos.co.il>, linux-i2c@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>
+Date: Thu, 30 May 2024 15:24:58 +0200
+In-Reply-To: <20240426064408.7372-1-wsa+renesas@sang-engineering.com>
+References: <20240426064408.7372-1-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6191.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8033774b-2b95-4820-eb64-08dc807eb79d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2024 08:01:31.4485
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3q9jgkR8gc+lO9/CLah6JMiHskO8GVC8oketq0mEknaRRteK1DIo+xL/4XtUdSy5g3v2WmfVgTMwBb47C5lgrVz+cN3H4kQJVBRvRI4hWkw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5857
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DWL_DNSWL_BLOCKED(0.00)[suse.de:dkim];
+	TAGGED_RCPT(0.00)[renesas];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sang-engineering.com:email,suse.de:dkim,tkos.co.il:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: CED7B33876
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
 
-SGkgUGF1bCwNCg0KCVRoYW5rcyBmb3IgeW91ciBjb21tZW50cy4NCg0KPiAtLS0tLU9yaWdpbmFs
-IE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBQYXVsIE1lbnplbCA8cG1lbnplbEBtb2xnZW4ubXBnLmRl
-Pg0KPiBTZW50OiBUaHVyc2RheSwgTWF5IDMwLCAyMDI0IDM6NDggUE0NCj4gVG86IFRvbW15IEh1
-YW5nIDx0b21teV9odWFuZ0Bhc3BlZWR0ZWNoLmNvbT4NCj4gQ2M6IGJyZW5kYW4uaGlnZ2luc0Bs
-aW51eC5kZXY7IGJlbmhAa2VybmVsLmNyYXNoaW5nLm9yZzsgam9lbEBqbXMuaWQuYXU7DQo+IGFu
-ZGkuc2h5dGlAa2VybmVsLm9yZzsgYW5kcmV3QGNvZGVjb25zdHJ1Y3QuY29tLmF1OyB3c2FAa2Vy
-bmVsLm9yZzsNCj4gQk1DLVNXIDxCTUMtU1dAYXNwZWVkdGVjaC5jb20+OyBsaW51eC1hc3BlZWRA
-bGlzdHMub3psYWJzLm9yZzsNCj4gb3BlbmJtY0BsaXN0cy5vemxhYnMub3JnOyBsaW51eC1rZXJu
-ZWxAdmdlci5rZXJuZWwub3JnOw0KPiBsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnOyBsaW51eC1h
-cm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSF0gaTJj
-OiBhc3BlZWQ6IFVwZGF0ZSB0aGUgc3RvcCBzdyBzdGF0ZSB3aGVuIHRoZSBidXMNCj4gcmVjb3Zy
-eSBvY2N1cnMNCj4gDQo+IERlYXIgVG9tbXksDQo+IA0KPiANCj4gVGhhbmsgeW91IGZvciB5b3Vy
-IHBhdGNoLg0KPiANCj4gQW0gMzAuMDUuMjQgdW0gMDk6MDYgc2NocmllYiBUb21teSBIdWFuZzoN
-Cj4gPiBXaGVuIHRoZSBpMmMgYnVzIHJlY292ZXkgb2NjdXJzLCBkcml2ZXIgd2lsbCBzZW5kIGky
-YyBzdG9wIGNvbW1hbmQNCj4gDQo+IHJlY292ZSpyKnkNCg0KSSB3aWxsIGZpeCB0aGlzIHNwZWxs
-aW5nIHR5cG8gb24gbmV4dCBwYXRjaC4gVGhhbmtzLg0KDQo+IA0KPiA+IGluIHRoZSBzY2wgbG93
-IGNvbmRpdGlvbi4gSW4gdGhpcyBjYXNlIHRoZSBzdyBzdGF0ZSB3aWxsIHN0aWxsIGtlZXANCj4g
-PiBvcmlnaW5hbCBzaXR1YXRpb24uIFVuZGVyIG11bHRpLW1hc3RlciB1c2FnZSwgaTJjIGJ1cyBy
-ZWNvdmVyeSB3aWxsDQo+IA0KPiBXaGF0IGlzIHRoZSB1c2VyIHZpc2libGUgcHJvYmxlbT8NCj4g
-DQoNCkluIHRoZSBtdWx0aS1tYXN0ZXIgY2FzZSwgdGhlIGkyYyB0cmFuc2ZlciB0aW1lb3V0IHdp
-bGwgZXhlY3V0ZSB0aGUgYXNwZWVkX2kyY19yZWNvdmVyX2J1cy4NCldoYXQgd2Ugbm90aWNlZCB3
-aGVuIHRpbWVvdXQgYXBwZWFycywgYW5kIGtlcm5lbCBwYW5pYyBpcyBvYnNlcnZlZDoNCi0JeGZl
-ciBnb2VzIHRocm91Z2ggYXNwZWVkX2kyY19yZWNvdmVyeV9idXMgDQotCWluc2lkZSByZWNvdmVy
-eSB3ZSBjYW4gc2VlIOKAnFNDTCBodW5nIChzdGF0ZSBlYzBiMDAwMCksIGF0dGVtcHRpbmcgcmVj
-b3ZlcnnigJ0uIA0KLQlTVE9QX0NNRCBpcyBwZXJmb3JtZWQgYnV0IHRpbWVfbGVmdCA9IDAgd2hh
-dCBjYXVzZXMgdGhhdCBhc3BlZWRfaTJjX3Jlc2V0IGlzIGNhbGxlZCAoYW5kIHJldHVybnMgMCkN
-Ci0JR29pbmcgb3V0IG9mIHRpbWVvdXQgaGFuZGxpbmcsIHJlbGVhc2UgbWVtb3J5LCBpcnEgaGFu
-ZGxlciBpcyBpbnZva2VkIGFuZCByaXNlIGludGVycnVwdCBjYXVzaW5nIHRoYXQgcmVsZWFzZWQg
-bWVtb3J5IGlzIHVzZWQuDQoNCj4gPiBiZSBjYWxsZWQgd2hlbiBpMmMgdHJhbnNmZXIgdGltZW91
-dCBvY2N1cnMuIFVwZGF0ZSB0aGUgc3RvcCBjb21tYW5kDQo+ID4gY2FsbGluZyB3aXRoIGFzcGVl
-ZF9pMmNfZG9fc3RvcCBmdW5jdGlvbiB0byB1cGRhdGUgbWFzdGVyX3N0YXRlLg0KPiANCj4gSG93
-IGNhbiB0aGlzIGJlIHRlc3RlZD8NCg0KSXQganVzdCB1cGRhdGVzIG1hc3Rlcl9zdGF0ZSBmb3Ig
-dXNhZ2Ugc2FmZXR5LiBUaGUgb3JpZ2luYWwgc3RvcCBjb21tYW5kIHN0aWxsIGJlIHRyaWdnZXJl
-ZC4NCj4gDQo+ID4gRml4ZXM6IGYzMjdjNjg2ZDNiYSAoImkyYzogYXNwZWVkOiBhZGRlZCBkcml2
-ZXIgZm9yIEFzcGVlZCBJMkMiKQ0KPiA+DQo+IA0KPiBUaGUgYmxhbmsgbGluZSBjYW4gYmUgcmVt
-b3ZlZC4NCj4gDQo+ID4gU2lnbmVkLW9mZi1ieTogVG9tbXkgSHVhbmcgPHRvbW15X2h1YW5nQGFz
-cGVlZHRlY2guY29tPg0KPiA+IC0tLQ0KPiA+ICAgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hc3Bl
-ZWQuYyB8IDMgKystDQo+ID4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRl
-bGV0aW9uKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1h
-c3BlZWQuYw0KPiA+IGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hc3BlZWQuYyBpbmRleCBjZThj
-NDg0NmI3ZmEuLjMyZjhiMGMxYzE3NA0KPiA+IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvaTJj
-L2J1c3Nlcy9pMmMtYXNwZWVkLmMNCj4gPiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLWFz
-cGVlZC5jDQo+ID4gQEAgLTE2OSw2ICsxNjksNyBAQCBzdHJ1Y3QgYXNwZWVkX2kyY19idXMgew0K
-PiA+ICAgfTsNCj4gPg0KPiA+ICAgc3RhdGljIGludCBhc3BlZWRfaTJjX3Jlc2V0KHN0cnVjdCBh
-c3BlZWRfaTJjX2J1cyAqYnVzKTsNCj4gPiArc3RhdGljIHZvaWQgYXNwZWVkX2kyY19kb19zdG9w
-KHN0cnVjdCBhc3BlZWRfaTJjX2J1cyAqYnVzKTsNCj4gPg0KPiA+ICAgc3RhdGljIGludCBhc3Bl
-ZWRfaTJjX3JlY292ZXJfYnVzKHN0cnVjdCBhc3BlZWRfaTJjX2J1cyAqYnVzKQ0KPiA+ICAgew0K
-PiA+IEBAIC0xODcsNyArMTg4LDcgQEAgc3RhdGljIGludCBhc3BlZWRfaTJjX3JlY292ZXJfYnVz
-KHN0cnVjdA0KPiBhc3BlZWRfaTJjX2J1cyAqYnVzKQ0KPiA+ICAgCQkJY29tbWFuZCk7DQo+ID4N
-Cj4gPiAgIAkJcmVpbml0X2NvbXBsZXRpb24oJmJ1cy0+Y21kX2NvbXBsZXRlKTsNCj4gPiAtCQl3
-cml0ZWwoQVNQRUVEX0kyQ0RfTV9TVE9QX0NNRCwgYnVzLT5iYXNlICsNCj4gQVNQRUVEX0kyQ19D
-TURfUkVHKTsNCj4gPiArCQlhc3BlZWRfaTJjX2RvX3N0b3AoYnVzKTsNCj4gPiAgIAkJc3Bpbl91
-bmxvY2tfaXJxcmVzdG9yZSgmYnVzLT5sb2NrLCBmbGFncyk7DQo+ID4NCj4gPiAgIAkJdGltZV9s
-ZWZ0ID0gd2FpdF9mb3JfY29tcGxldGlvbl90aW1lb3V0KA0KPiANCj4gDQo+IEtpbmQgcmVnYXJk
-cywNCj4gDQo+IFBhdWwNCg0KQlIsDQoNClRvbW15DQo=
+Hi Wolfram, Baruch, Peter,
+
+On Fri, 2024-04-26 at 08:44 +0200, Wolfram Sang wrote:
+> Brauch reported an OOPS when using the designware controller as target
+> only. Target-only modes break the assumption of one transfer function
+> always being available. Fix this by always checking the pointer in
+> __i2c_transfer.
+
+I was asked to backport this fix to our oldest kernel branches, so I
+looked into it and I have comments and a question.
+
+> Reported-by: Baruch Siach <baruch@tkos.co.il>
+> Closes: https://lore.kernel.org/r/4269631780e5ba789cf1ae391eec1b959def7d99.1712761976.git.baruch@tkos.co.il
+> Fixes: 4b1acc43331d ("i2c: core changes for slave support")
+
+I have a hard time establishing a formal link between the reported bug
+and the commit listed above. I do understand that it wouldn't make
+sense to register an i2c_adapter with neither .master_xfer nor
+.smbus_xfer set before .reg_slave was added to struct i2c_algorithm,
+but there were no checks in i2c-core preventing it from happening.
+
+It was also possible for any (broken) device driver to call
+__i2c_transfer() without first checking if plain I2C transfers were
+actually supported by the i2c_adapter. I would argue that such an issue
+should have been fixed at the device driver level by checking for the
+I2C_FUNC_I2C functionality flag before calling __i2c_transfer(). That's
+a theoretical issue though as I'm not aware of any device driver having
+this issue.
+
+The call stack in Baruch's report shows that the real issue is with
+i2c_smbus_xfer_emulated() being called with the i2c bus lock already
+held, and thus having to call __i2c_transfer() instead of
+i2c_transfer(). This code path did not exist before commit 63453b59e411
+("i2c: smbus: add unlocked __i2c_smbus_xfer variant"), which was added
+in kernel v4.19. Therefore I claim that CVE-2024-35984 only affects
+kernel v4.19 and newer. Do we agree on that?
+
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/i2c/i2c-core-base.c  | 12 ++++++------
+>  drivers/i2c/i2c-core-smbus.c |  2 +-
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index ff5c486a1dbb..db0d1ac82910 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -2200,13 +2200,18 @@ static int i2c_check_for_quirks(struct i2c_adapter *adap, struct i2c_msg *msgs,
+>   * Returns negative errno, else the number of messages executed.
+>   *
+>   * Adapter lock must be held when calling this function. No debug logging
+> - * takes place. adap->algo->master_xfer existence isn't checked.
+> + * takes place.
+>   */
+>  int __i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
+>  {
+>         unsigned long orig_jiffies;
+>         int ret, try;
+>  
+> +       if (!adap->algo->master_xfer) {
+> +               dev_dbg(&adap->dev, "I2C level transfers not supported\n");
+> +               return -EOPNOTSUPP;
+> +       }
+> +
+
+Not related specifically to this commit, as it is only moving a check
+which already existed before, but this looks inefficient to me.
+
+We end up performing the check with every I2C-level transfer, while the
+availability of such support can almost always be checked once and for
+all in the I2C device driver (i2c-dev and i2c_smbus_xfer_emulated being
+the exceptions).
+
+I see two ways for us to reach this check:
+* __i2c_transfer() or i2c_transfer() gets called directly by a device
+driver. This driver should have checked for the I2C_FUNC_I2C
+functionality flag before calling either function. If they did not,
+it's a driver bug, which should be fixed in the driver in question.
+Note that i2c-dev currently lacks this check, I think it should be
+added.
+* __i2c_transfer() gets called by i2c_smbus_xfer_emulated(). We should
+add a check for I2C_FUNC_I2C in __i2c_smbus_xfer() before calling this
+function. This is more or less what Baruch proposed initially, and I
+think it would have been a more efficient fix.
+
+And if you are concerned about functionality flags not being set
+properly (specifically I2C_FUNC_I2C being set while .master_xfer isn't
+set [1]) then we should add a consistency check at i2c_adapter
+registration time, so again it's done once and for all and we don't
+have to check again and again at transfer time.
+
+Or is this optimization not worth it?
+
+[1] BTW, looking at the only two in-tree slave-only I2C adapter
+drivers, i2c-at91-slave and i2c-designware-slave, both are setting
+functionality flags other than I2C_FUNC_SLAVE. Unless I don't
+understand how the slave functionality works, this is a bug. I'll
+prepare and post patches later today.
+
+
+-- 
+Jean Delvare
+SUSE L3 Support
 
