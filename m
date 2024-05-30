@@ -1,249 +1,157 @@
-Return-Path: <linux-i2c+bounces-3713-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3714-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 198D98D4C8E
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2024 15:25:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB2E48D5050
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2024 18:56:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4875284316
-	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2024 13:25:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB2341C22350
+	for <lists+linux-i2c@lfdr.de>; Thu, 30 May 2024 16:56:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96014183086;
-	Thu, 30 May 2024 13:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45BAF446D1;
+	Thu, 30 May 2024 16:56:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TNJTr5I1";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="5rQzeFmB";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="evRYP/yB";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="4V9RjjSf"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F6jDcoqx"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185F11C2A8;
-	Thu, 30 May 2024 13:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374344437F
+	for <linux-i2c@vger.kernel.org>; Thu, 30 May 2024 16:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717075507; cv=none; b=cRVcEG0DWTqR90X+RDTvL2PBqejxqI+j1O9VIa9n8D1oOVJxqx++dGHs+ljFdbO0zCS9JIK32vDpQ9StRgTtwUzhReUqonuGS4c12ooWi7ztXgnzs5N7Vmd5oVt+wRNve4u6R8nOkvLh5/JfQWb/r+RZJzgHDbDDCGWDTeW8ih0=
+	t=1717088187; cv=none; b=USZgkhODUB6mwjBXqqOQUd/vor/Y8rFsjK0/+8k1Wc/7u3/DOKHqb+8vgMYgYwcC1eC4kc9c1Azeh3gRLQ5iyH0v++vkRPd+yyocnBORy1bbmg/VjFsufWoM3v4R1EkPapO0B1PtwUFACS24ihVZp2KLTLRBA3c5mMIaYUtfZQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717075507; c=relaxed/simple;
-	bh=CTNp3tSmoZu517100oC9N7M79WsRcBjopPTx2HtKEXM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AKfZhyL/JKwC/tvU3/Y6VvCEiI2S+R95JqSBSHJxrTAIGGwyx4XzH5uFJotertqVZSLynlxSm4uDfLnPWNhf6Rs5YphYbLX1RmGYav2QvkZymk6ulaYObIV0U5KnayZQk2B2hH5E/AQ9vI4cCdCWaqrSd65xdDNIFtoaQJutcAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TNJTr5I1; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=5rQzeFmB; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=evRYP/yB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=4V9RjjSf; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id CED7B33876;
-	Thu, 30 May 2024 13:25:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1717075503; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	s=arc-20240116; t=1717088187; c=relaxed/simple;
+	bh=Yg3EXj5RngxLqTEo9ge9vxA8ConxQueqEBmFRNHCpVY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VA4FbKUHq1K1lMgMK2QvwQamHkb0KGMHzfFRRrgQBlKD/xYupami9FB4nQsVkNLtOB4RYq/aHkltNDKTqVqBX6rjA2xnI4BD1QzWDBc7AzVgYSHy1mUlT6w6+SkyeAdFTABY9EuwfcLsOqx+mklmwVWOGZaMlwbhV+VzZqv2Nys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F6jDcoqx; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: andrew@lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1717088183;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/fTnH1k9PCe7lPHHa/LlxqVdBbmwOs57Vq5J6smfmlM=;
-	b=TNJTr5I1t+cnIehLm2KgzziHKQPwH5vTSXmK33XrrgB/+8EaIyGUhr8//iLCeNWPqrrGJ6
-	w+eytJ1mgt51hTeI/OAnLh7UEmnZbKbMc6DHkrss9bXVLhKKZKjgZMnXJ4WlvnU6EPDYIX
-	Ohf5t0FJwfE/RaJGyCt0y2H6CHxYPOQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1717075503;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/fTnH1k9PCe7lPHHa/LlxqVdBbmwOs57Vq5J6smfmlM=;
-	b=5rQzeFmBSWr15givsFXgqUzwF3ZzFjZbtftuarFvHsENz+CPkeZ2SkYcojsKFe/mNO4g+1
-	rwwmUyirkftzeyAQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="evRYP/yB";
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=4V9RjjSf
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1717075501; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/fTnH1k9PCe7lPHHa/LlxqVdBbmwOs57Vq5J6smfmlM=;
-	b=evRYP/yBCgDxIgKu9Ci+mIiBD1yl4baeB8Hl8zYyDKQYs233xess4LS9eZu5OluldW5xJC
-	j5//fDIDonU4cQ+MO1y2C0o8OTnaqEWR1nJ/s3VKXg9Ordk6+KzdzJ5D/L15yuX7UizRbX
-	JN7VabjMw9avMuTYzscWuow2eSVRAmg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1717075501;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/fTnH1k9PCe7lPHHa/LlxqVdBbmwOs57Vq5J6smfmlM=;
-	b=4V9RjjSfyyeR5QrFeTMzS4dq+FJHVbbFL2E95ay6EB+eUN6bz2GoatzZM5rxLXjeX8+dyT
-	TlQ3jjBMca800fAw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id DE5F813A83;
-	Thu, 30 May 2024 13:25:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id D5STLyx+WGaEVgAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Thu, 30 May 2024 13:25:00 +0000
-Message-ID: <1e626d93f4220cc348300bbc61089de32300122d.camel@suse.de>
-Subject: Re: [PATCH] i2c: smbus: fix NULL function pointer dereference
-From: Jean Delvare <jdelvare@suse.de>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	linux-renesas-soc@vger.kernel.org
-Cc: Baruch Siach <baruch@tkos.co.il>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>
-Date: Thu, 30 May 2024 15:24:58 +0200
-In-Reply-To: <20240426064408.7372-1-wsa+renesas@sang-engineering.com>
-References: <20240426064408.7372-1-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	bh=2ct3hM3Ww+WHMzbbEaPHOdhaeIFR0TgxFOCopIwLsWM=;
+	b=F6jDcoqx6HAHd7R/e3fFvka+K1XKYaWdL46hXt0ONACvxsu8C54cjfGYUqAOmvFFs4zprd
+	io5fsrew2rK0YFbM4Q4fThuW6oY8EtHQfqv2swgJGUMYPWlsVR1P1GiktNTuSUpZXjy/M9
+	3+z9S53UpRvXVYZB1XIScdLDA9DSufQ=
+X-Envelope-To: linux@armlinux.org.uk
+X-Envelope-To: alex.williams@ni.com
+X-Envelope-To: andi.shyti@kernel.org
+X-Envelope-To: netdev@vger.kernel.org
+X-Envelope-To: linux-i2c@vger.kernel.org
+X-Envelope-To: michal.simek@amd.com
+X-Envelope-To: hkallweit1@gmail.com
+X-Envelope-To: linux-arm-kernel@lists.infradead.org
+X-Envelope-To: linux-kernel@vger.kernel.org
+Message-ID: <93e8839d-e712-4708-a2ca-df81051b8360@linux.dev>
+Date: Thu, 30 May 2024 12:56:18 -0400
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DWL_DNSWL_BLOCKED(0.00)[suse.de:dkim];
-	TAGGED_RCPT(0.00)[renesas];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	DKIM_TRACE(0.00)[suse.de:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sang-engineering.com:email,suse.de:dkim,tkos.co.il:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: CED7B33876
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Score: -3.01
+Subject: Re: [BUG] SFP I2C timeout forces link down with PHY_ERROR
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>,
+ Alex Williams <alex.williams@ni.com>, Andi Shyti <andi.shyti@kernel.org>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ linux-i2c@vger.kernel.org, Michal Simek <michal.simek@amd.com>,
+ Heiner Kallweit <hkallweit1@gmail.com>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <ec7907f1-cb5a-41ab-824c-aa0b02440ada@linux.dev>
+ <ZlYUNCRroM0up0xk@shell.armlinux.org.uk>
+ <90873b78-13ba-445e-890a-0b90a653721b@linux.dev>
+ <ebf93967-81d0-46bc-baf5-b20f9336cfa8@linux.dev>
+ <1398a492-95aa-46d9-b52b-a374fd6e9e77@lunn.ch>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Sean Anderson <sean.anderson@linux.dev>
+In-Reply-To: <1398a492-95aa-46d9-b52b-a374fd6e9e77@lunn.ch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Wolfram, Baruch, Peter,
-
-On Fri, 2024-04-26 at 08:44 +0200, Wolfram Sang wrote:
-> Brauch reported an OOPS when using the designware controller as target
-> only. Target-only modes break the assumption of one transfer function
-> always being available. Fix this by always checking the pointer in
-> __i2c_transfer.
-
-I was asked to backport this fix to our oldest kernel branches, so I
-looked into it and I have comments and a question.
-
-> Reported-by: Baruch Siach <baruch@tkos.co.il>
-> Closes: https://lore.kernel.org/r/4269631780e5ba789cf1ae391eec1b959def7d99.1712761976.git.baruch@tkos.co.il
-> Fixes: 4b1acc43331d ("i2c: core changes for slave support")
-
-I have a hard time establishing a formal link between the reported bug
-and the commit listed above. I do understand that it wouldn't make
-sense to register an i2c_adapter with neither .master_xfer nor
-.smbus_xfer set before .reg_slave was added to struct i2c_algorithm,
-but there were no checks in i2c-core preventing it from happening.
-
-It was also possible for any (broken) device driver to call
-__i2c_transfer() without first checking if plain I2C transfers were
-actually supported by the i2c_adapter. I would argue that such an issue
-should have been fixed at the device driver level by checking for the
-I2C_FUNC_I2C functionality flag before calling __i2c_transfer(). That's
-a theoretical issue though as I'm not aware of any device driver having
-this issue.
-
-The call stack in Baruch's report shows that the real issue is with
-i2c_smbus_xfer_emulated() being called with the i2c bus lock already
-held, and thus having to call __i2c_transfer() instead of
-i2c_transfer(). This code path did not exist before commit 63453b59e411
-("i2c: smbus: add unlocked __i2c_smbus_xfer variant"), which was added
-in kernel v4.19. Therefore I claim that CVE-2024-35984 only affects
-kernel v4.19 and newer. Do we agree on that?
-
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  drivers/i2c/i2c-core-base.c  | 12 ++++++------
->  drivers/i2c/i2c-core-smbus.c |  2 +-
->  2 files changed, 7 insertions(+), 7 deletions(-)
+On 5/28/24 14:14, Andrew Lunn wrote:
+> On Tue, May 28, 2024 at 01:52:56PM -0400, Sean Anderson wrote:
+>> (forgot to CC Alex)
+>> 
+>> On 5/28/24 13:50, Sean Anderson wrote:
+>> > On 5/28/24 13:28, Russell King (Oracle) wrote:
+>> >> First, note that phylib's policy is if it loses comms with the PHY,
+>> >> then the link will be forced down. This is out of control of the SFP
+>> >> or phylink code.
+>> >> 
+>> >> I've seen bugs with the I2C emulation on some modules resulting in
+>> >> problems with various I2C controllers.
+>> >> 
+>> >> Sometimes the problem is due to a bad I2C level shifter. Some I2C
+>> >> level shifter manufacturers will swear blind that their shifter
+>> >> doesn't lock up, but strangely, one can prove with an osciloscope
+>> >> that it _does_ lock up - and in a way that the only way to recover
+>> >> was to possibly unplug the module or poewr cycle the platform.
+>> > 
+>> > Well, I haven't seen any case where the bus locks up. I've been able to
+>> > recover just by doing
+>> > 
+>> > 	ip link set net0 down
+>> > 	ip link set net0 up
+>> > 
+>> > which suggests that this is just a transient problem.
 > 
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index ff5c486a1dbb..db0d1ac82910 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -2200,13 +2200,18 @@ static int i2c_check_for_quirks(struct i2c_adapter *adap, struct i2c_msg *msgs,
->   * Returns negative errno, else the number of messages executed.
->   *
->   * Adapter lock must be held when calling this function. No debug logging
-> - * takes place. adap->algo->master_xfer existence isn't checked.
-> + * takes place.
->   */
->  int __i2c_transfer(struct i2c_adapter *adap, struct i2c_msg *msgs, int num)
->  {
->         unsigned long orig_jiffies;
->         int ret, try;
->  
-> +       if (!adap->algo->master_xfer) {
-> +               dev_dbg(&adap->dev, "I2C level transfers not supported\n");
-> +               return -EOPNOTSUPP;
-> +       }
-> +
+> If you look back over the history, i don't think you will find any
+> reports to transient problems with real MDIO busses. Hence any error
+> is considered fatal. Also, when you consider the design of MDIO, it is
+> actually very hard for an error to be detected. It is basically a
+> shift register, shifting out 64 bits for a write, or 48 bits for a
+> read, followed by receiving 16 bits for a read. There is no protocol
+> to indicate any sort of error. If there is no device at the address,
+> the pullup means you receive 1s. End of story.
 
-Not related specifically to this commit, as it is only moving a check
-which already existed before, but this looks inefficient to me.
+Yes, I would expect the only time there could be transient problems
+would be with external MII (such as if someone jiggled the phy).
 
-We end up performing the check with every I2C-level transfer, while the
-availability of such support can almost always be checked once and for
-all in the I2C device driver (i2c-dev and i2c_smbus_xfer_emulated being
-the exceptions).
+> With MDIO over I2C, it is I2C which has problems, not MDIO. Do you
+> expect transient problems with I2C?
 
-I see two ways for us to reach this check:
-* __i2c_transfer() or i2c_transfer() gets called directly by a device
-driver. This driver should have checked for the I2C_FUNC_I2C
-functionality flag before calling either function. If they did not,
-it's a driver bug, which should be fixed in the driver in question.
-Note that i2c-dev currently lacks this check, I think it should be
-added.
-* __i2c_transfer() gets called by i2c_smbus_xfer_emulated(). We should
-add a check for I2C_FUNC_I2C in __i2c_smbus_xfer() before calling this
-function. This is more or less what Baruch proposed initially, and I
-think it would have been a more efficient fix.
+Well, I2C is known to have devices which can get stuck and hang the bus
+(generally requiring some bit-banging from Linux to get things unstuck,
+or a reset of the device). So while I2C (like MDIO) is supposed to be
+completely reliable, there is a history of it being not quite perfect.
 
-And if you are concerned about functionality flags not being set
-properly (specifically I2C_FUNC_I2C being set while .master_xfer isn't
-set [1]) then we should add a consistency check at i2c_adapter
-registration time, so again it's done once and for all and we don't
-have to check again and again at transfer time.
+That said, I did not expect to see these kinds of errors at all. I'll
+have a closer look at the controller driver when I have the time. Maybe
+there is some errata for this...
 
-Or is this optimization not worth it?
+> I would also point out that MDIO is not idempotent. Reading an
+> interrupt status register often clears it. Reading the link status
+> clears the latched link status. If you need to retry the read of the
+> interrupt status register, you cannot, the interrupt has been cleared,
+> you have lost it, and probably your hardware no longer works because
+> you don't know what interrupt to handle.... If you need to re-read the
+> link status, you have lost the latched version, and you have missed a
+> up or down event.
 
-[1] BTW, looking at the only two in-tree slave-only I2C adapter
-drivers, i2c-at91-slave and i2c-designware-slave, both are setting
-functionality flags other than I2C_FUNC_SLAVE. Unless I don't
-understand how the slave functionality works, this is a bug. I'll
-prepare and post patches later today.
+Yes. Same thing with I2C.
 
+>> >> My advice would be to investigate the hardware in the first instance.
+> 
+> I agree with Russell. Figure out why I2C is flaky. Since this is an
+> SFP it maybe something as trivial as the contacts need cleaning. Or
+> the resistors are wrong, or you have a cheap module which is out of
+> spec.
 
--- 
-Jean Delvare
-SUSE L3 Support
+OK, I'll try to dig into this a little more...
+
+--Sean
 
