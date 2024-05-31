@@ -1,105 +1,190 @@
-Return-Path: <linux-i2c+bounces-3732-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3733-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBE818D6776
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2024 18:55:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC8BE8D6AF8
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2024 22:42:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24D071C2434C
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2024 16:55:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65D7B1F24966
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2024 20:42:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 744D4171E4A;
-	Fri, 31 May 2024 16:55:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2B917D8B3;
+	Fri, 31 May 2024 20:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jCTyzD5S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a9Bfzypu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38D45381A;
-	Fri, 31 May 2024 16:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E75B1CA80;
+	Fri, 31 May 2024 20:42:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717174518; cv=none; b=DyGbV6HQgssJacOIWTpyyuOD0YlYAIGOzKS0KyVaRM35QspJdWkgw2x1g/bVz3BryKftJ+hUEj4PknLxLJFC4Dvi3IzchyYOPeEt5c6+qG2T/pC6Rm6T/ZA1lfwO8BHvXL05RiEgdaUHtBDiOQNKU7oEekWySlSfmfLJvZaiiKM=
+	t=1717188170; cv=none; b=UKE4/3YB19u5DuPqO1RYpV2dUZp2ApkJgz2RXFH3uvcfaRezn9S8U6IipyVBXVTHV4sRkqqtldBMIvIZR+4QuaHifT1XJGSwKAlcRNwc7kj52Fe9hCHzpXSyuACEh0IxcTm5mNEcbTHDFCwEmDEGlU+tKk4XwLyYcY6vXrYiaK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717174518; c=relaxed/simple;
-	bh=wwDkFQlCmYaBWNt+sIQJ30LdSolr6sdRGekCzcglKQw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E7XVvZQkyZ4opPLwjFVWGNleCeQOUewe4BM7v8f+vpjuNvYdZkn9Go+ZLP/cJbijicQPm2aJYW1uFwR8UDLa12OwChLrZSIFbW/I6iAkM0q9YtyhGQWKckS51tkMRxmXYcizNQi555mg3a+7wXBNjFzGjtMBQEhiuloEseJ3m3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jCTyzD5S; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0525240002;
-	Fri, 31 May 2024 16:55:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1717174508;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eCyP3NsB6+TrwW+rJ92fdE1KqnkQyffJu7CwUmKcvjg=;
-	b=jCTyzD5S5jiQ2h1XLSSXcBzegACpsb4kPK6kpHDjYa3qU4eZXeg/54l25IVRE9oH5iXokx
-	mBXTvWrErcaFW9G+iqcTxPIxuxLLnBXFa8JPa76Ge+gtinBsSlpDKZWseUHYKIJX/3x2y5
-	PrztJFUE32LBoRTF7QLK4TZhci2PHa3kMydGuloEO0PBk/23fyGmGN8bfWqF/htKXPwGU2
-	8e2SbyVWMa/e3BPdfSKC4VitKht+H8g+8nQEg0cGFEYDM+BACQT3TUK00wrwR/IwPP1rsT
-	+qpW4eTTnAGSW5LeBvBsy7BXdEZvQ2EirMdjJusqh5+TAk8lVffyuhd+Zc/IPw==
-Message-ID: <42affba4-4600-4c44-ad88-926597cc2225@bootlin.com>
-Date: Fri, 31 May 2024 18:55:03 +0200
+	s=arc-20240116; t=1717188170; c=relaxed/simple;
+	bh=PmQQOgLJnwokEGexRwTsR1exmf+oVHAZYP4+TByy+p8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=ThirfbKV41cv5xowaDxNuAwV0CCsSk+hR4/XDwdL4eNQzCBhpVFesj17t34WOjCoNkXWDGC4Hs42hWlts8i1B/HR9NSbyOgX1/tIootVAxHPl6bE6H6WRhX6LOUb0M1HJpan2Afpof9Hri/PJpGbH+1zGwvDCoUbY3HoxL2T1eI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a9Bfzypu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75DB6C116B1;
+	Fri, 31 May 2024 20:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717188170;
+	bh=PmQQOgLJnwokEGexRwTsR1exmf+oVHAZYP4+TByy+p8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=a9BfzypuYtA3cKVYacZV5EUUB7zGI9r1QtwtHcPQPd15rb31JAV1xxx7E5Gq4ftuj
+	 bI6pfP+Vik12+WsTDbeQxN4ADrMwuI7cGxEAO/g/uSerH5E7laglQFEw0d9w0YUJpt
+	 9A5hc7zZzStxGpSkE9uO0V/EJuxWd6zAWAiZtAMgwTr47CL3aRyq0DK3AfajXuhALo
+	 VKxJCrbYbt35VIxzBCOGTAvFHnZZCty/BfrICg3pBK+P77HcNwCiuuDK9WtBHCoyOW
+	 vNLGOaqefSmGk/nd2R9v+OVsxtk5II400eLyc415oNxmudPCFzDXNvsbh6yTbsZfKX
+	 js0gePmdrrcyg==
+Date: Fri, 31 May 2024 15:42:47 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Noah Wang <noahwang.wang@outlook.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, linux@roeck-us.net,
+	conor+dt@kernel.org, jdelvare@suse.com, corbet@lwn.net,
+	Delphine_CC_Chiu@wiwynn.com, peteryin.openbmc@gmail.com,
+	javier.carrasco.cruz@gmail.com, patrick.rudolph@9elements.com,
+	luca.ceresoli@bootlin.com, chou.cosmo@gmail.com,
+	bhelgaas@google.com, lukas@wunner.de, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [v3,1/2] hwmon: add MP2891 driver
+Message-ID: <20240531204247.GA608272@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 00/12] Add suspend to ram support for PCIe on J7200
-To: Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Tony Lindgren <tony@atomide.com>,
- Aaro Koskinen <aaro.koskinen@iki.fi>,
- Janusz Krzysztofik <jmkrzyszt@gmail.com>, Vignesh R <vigneshr@ti.com>,
- Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
- Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
- Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- gregory.clement@bootlin.com, theo.lebrun@bootlin.com,
- thomas.petazzoni@bootlin.com, u-kumar1@ti.com,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- Andy Shevchenko <andy.shevchenko@gmail.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Francesco Dolcini <francesco.dolcini@toradex.com>
-References: <20240102-j7200-pcie-s2r-v6-0-4656ef6e6d66@bootlin.com>
-Content-Language: en-US
-From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <20240102-j7200-pcie-s2r-v6-0-4656ef6e6d66@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: thomas.richard@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SEYPR04MB648253BF01D42B24A72B0027FAFC2@SEYPR04MB6482.apcprd04.prod.outlook.com>
 
-On 5/15/24 12:01, Thomas Richard wrote:
-> This adds suspend to ram support for the PCIe (RC mode) on J7200 platform.
-> 
+On Fri, May 31, 2024 at 03:26:01PM +0800, Noah Wang wrote:
+> Add support for MPS VR controller mp2891. This driver exposes
+> telemetry and limit value readings and writings.
 
-Hello,
+> +++ b/Documentation/hwmon/index.rst
+> @@ -168,6 +168,7 @@ Hardware Monitoring Kernel Drivers
+>     mp2975
+>     mp5023
+>     mp5990
+> +   mp2891
 
-Gentle ping.
-No merge conflict with 6.10-rc1.
-I know the patch for the gpio-pca953x driver causes a regression for one
-other platform.
-But most of the patches could be applied.
+Add in alpha order.
 
-Best Regards,
+>     mpq8785
+>     nct6683
+>     nct6775
 
-Thomas
+> +++ b/Documentation/hwmon/mp2891.rst
 
--- 
-Thomas Richard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> +Device supports direct and linear format for reading input voltage,
+> +output voltage, input currect, output current, input power, output
 
+s/currect/current/
+
+> +++ b/MAINTAINERS
+> @@ -22683,6 +22683,13 @@ S:	Maintained
+>  F:	Documentation/hwmon/tps546d24.rst
+>  F:	drivers/hwmon/pmbus/tps546d24.c
+>  
+> ++MPS MP2891 DRIVER
+
+Should be added in alpha order.
+
+> ++M:	Noah Wang <noahwang.wang@outlook.com>
+> ++L:	linux-hwmon@vger.kernel.org
+> ++S:	Maintained
+> ++F:	Documentation/hwmon/mp2891.rst
+> ++F:	drivers/hwmon/pmbus/mp2891.c
+> +
+>  TQ SYSTEMS BOARD & DRIVER SUPPORT
+
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -39,6 +39,7 @@ obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
+>  obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+>  obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
+>  obj-$(CONFIG_SENSORS_MP5990)	+= mp5990.o
+> +obj-$(CONFIG_SENSORS_MP2891)	+= mp2891.o
+
+This list as a whole isn't sorted, but I would move this so the MPxxxx
+entries remain sorted.
+
+> +++ b/drivers/hwmon/pmbus/mp2891.c
+
+> + * Vender specific registers, the register MFR_SVI3_IOUT_PRT(0x65),
+> + * MFR_VOUT_LOOP_CTRL(0xBD), READ_PIN_EST(0x94)and READ_IIN_EST(0x95)
+> + * redefine the standard PMBUS register. The MFR_SVI3_IOUT_PRT(0x65)
+> + * is used to identify the iout scale and the MFR_VOUT_LOOP_CTRL(0xBD)
+> + * is used to identify the vout scale. The READ_PIN_EST(0x94) is used
+> + * to read input power of per rail. The MP2891 does not have standard
+
+s/of per rail/per rail/ ?
+
+> +	 * The output voltage is equal to the READ_VOUT(0x8B) register value multiply
+> +	 * by vout_scale.
+
+s/multiply by/multiplied by/
+
+> +	 * The output current is equal to the READ_IOUT(0x8C) register value
+> +	 * multiply by iout_scale.
+
+s/multiply by/multiplied by/
+
+> +		 * The MP2891 does not follow standard PMBus protocol completely, the
+> +		 * PMBUS_VOUT_MODE(0x20) in MP2891 is reserved and 0x00 is always be
+> +		 * returned when the register is read. But the calculation of vout in
+
+s/always be/always/
+
+> +		 * The MP2891 has standard PMBUS_READ_PIN register(0x97), but this
+> +		 * is not used to read the input power of per rail. The input power
+
+s/of per rail/per rail/ ?
+
+> +		 * of per rail is read through the vender redefined register
+
+s/of per rail/per rail/ ?
+
+> +		 * The MP2891 PMBUS_VIN_OV_FAULT_LIMIT scale is 125mV/Lsb.
+> +		 * but the vin scale is set to 31.25mV/Lsb(using r/m/b scale).
+> +		 * As a result, the limit value should multiply by 4.
+
+s/multiply by/be multiplied by/
+
+> +		 * The scale of PMBUS_IIN_OC_WARN_LIMIT is 0.5A/Lsb, but the iin scale
+> +		 * is set to 1A/Lsb(using r/m/b scale), so the word data should divide
+> +		 * by 2.
+
+s/divide by/be divided by/
+
+> +		 * The scale of PMBUS_PIN_OP_WARN_LIMIT is 2W/Lsb, but the pin scale
+> +		 * is set to 1W/Lsb(using r/m/b scale), so the word data should multiply
+> +		 * by 2.
+
+s/multiply by/be multiplied by/
+
+> +		 * The PMBUS_VIN_OV_FAULT_LIMIT[7:0] is the limit value, and bit8-bit15
+> +		 * should not be changed. The scale of PMBUS_VIN_OV_FAULT_LIMIT is 125mV/Lsb,
+> +		 * but the vin scale is set to 31.25mV/Lsb(using r/m/b scale), so the word data
+> +		 * should divide by 4.
+
+s/divide by/be divided by/
+
+> +		 * The scale of PMBUS_IIN_OC_WARN_LIMIT is 0.5A/Lsb, but the iin scale
+> +		 * is set to 1A/Lsb(using r/m/b scale), so the word data should multiply
+> +		 * by 2.
+
+s/multiply by/be multiplied by/
+
+> +		 * The scale of PMBUS_PIN_OP_WARN_LIMIT is 2W/Lsb, but the pin scale
+> +		 * is set to 1W/Lsb(using r/m/b scale), so the word data should divide
+> +		 * by 2.
+
+s/divide by/be divided by/
 
