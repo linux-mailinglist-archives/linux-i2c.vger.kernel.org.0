@@ -1,142 +1,105 @@
-Return-Path: <linux-i2c+bounces-3731-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3732-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8381A8D64BD
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2024 16:45:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBE818D6776
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2024 18:55:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B48691C2358B
-	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2024 14:45:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24D071C2434C
+	for <lists+linux-i2c@lfdr.de>; Fri, 31 May 2024 16:55:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3CDD5337C;
-	Fri, 31 May 2024 14:45:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 744D4171E4A;
+	Fri, 31 May 2024 16:55:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gIgfamOO"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jCTyzD5S"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BFA2E859;
-	Fri, 31 May 2024 14:45:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38D45381A;
+	Fri, 31 May 2024 16:55:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717166720; cv=none; b=PVjeTurLoYS50vRnWOfXSqdTfMfnsOO55b+MuBsyi/8lKkX/pu3IfZi+ygw14Rri90+MLpv6QsxuN20NhXmXk683HihBaM8TfGuF91WFNUv/LSrEchz/2aqMnmZvKhiewTDhAdFBmTw9Up/sx9bvkbDKHUttRSWomG7Ez9Ox7zE=
+	t=1717174518; cv=none; b=DyGbV6HQgssJacOIWTpyyuOD0YlYAIGOzKS0KyVaRM35QspJdWkgw2x1g/bVz3BryKftJ+hUEj4PknLxLJFC4Dvi3IzchyYOPeEt5c6+qG2T/pC6Rm6T/ZA1lfwO8BHvXL05RiEgdaUHtBDiOQNKU7oEekWySlSfmfLJvZaiiKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717166720; c=relaxed/simple;
-	bh=EIrwrMgP84onPe3hHLgvihCbppR9nSwhvh1a+A539DY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EPaawZlAt/un4UkTd4hrKgd4O5ide/XdHP5hIlP77VPlztlmxrsgNpK8osS0bhNMsMierlIPoHjcJzglLf12qNPmZKLuMSycyX/4wPl3vmTjLPERoeCZnliOpSQU41wtcuS1tSMLeoaBkm2BXU/qS5WDVplGDjtjhL4A2RhvWh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gIgfamOO; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717166719; x=1748702719;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EIrwrMgP84onPe3hHLgvihCbppR9nSwhvh1a+A539DY=;
-  b=gIgfamOOAheaM2zBu2lQ4GMOSELo/ZqSOsYGTom12B+TgfDIbkMNTTuQ
-   asIFUfdMBPLNvCdG6GEaf863ROjyNVYjM2AH/x1ebhV9KKOXJhcBwQxaH
-   Mwah1iAolf0hKn/LjwRsLTruQw8/UF+zP3/nh3juJERcJuNnESna9+8Gi
-   C7e7gWi6LKbQU0rnvth01ZqRD7A41AwuZI6YT9Wgt295R+63w27si6mvq
-   Vgs+zo2bThGn4MpdwGIYwbrYy5NwDG5enIT9fTFMya18nCR8QTDGYvpg5
-   +HplbfP2lJYpvzwQUeGfVn65auDiL/bNT+lHCrmkrig2fjTPvasX9gXnz
-   A==;
-X-CSE-ConnectionGUID: xOAAyloVQK6zyP39xzGL+Q==
-X-CSE-MsgGUID: QJQeq4zxQIWPexzpDikVQQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11088"; a="13939047"
-X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="13939047"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 07:45:19 -0700
-X-CSE-ConnectionGUID: AF/eqOPGQtC4ibKbWQSFkQ==
-X-CSE-MsgGUID: OrRQBb5xQYCHfCfMLf2tzQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,204,1712646000"; 
-   d="scan'208";a="67030268"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2024 07:45:14 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1sD3VG-0000000CUn1-45IS;
-	Fri, 31 May 2024 17:45:10 +0300
-Date: Fri, 31 May 2024 17:45:10 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Stefan Eichenberger <eichest@gmail.com>
-Cc: o.rempel@pengutronix.de, kernel@pengutronix.de, andi.shyti@kernel.org,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-	jic23@kernel.org, lars@metafoo.de, nuno.sa@analog.com,
-	u.kleine-koenig@pengutronix.de, marcelo.schmitt@analog.com,
-	gnstark@salutedevices.com, francesco.dolcini@toradex.com,
-	linux-i2c@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>
-Subject: Re: [RFC PATCH] i2c: imx: avoid rescheduling when waiting for bus
- not busy
-Message-ID: <Zlnidi62gEWwdQ3U@smile.fi.intel.com>
-References: <20240531142437.74831-1-eichest@gmail.com>
+	s=arc-20240116; t=1717174518; c=relaxed/simple;
+	bh=wwDkFQlCmYaBWNt+sIQJ30LdSolr6sdRGekCzcglKQw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E7XVvZQkyZ4opPLwjFVWGNleCeQOUewe4BM7v8f+vpjuNvYdZkn9Go+ZLP/cJbijicQPm2aJYW1uFwR8UDLa12OwChLrZSIFbW/I6iAkM0q9YtyhGQWKckS51tkMRxmXYcizNQi555mg3a+7wXBNjFzGjtMBQEhiuloEseJ3m3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jCTyzD5S; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0525240002;
+	Fri, 31 May 2024 16:55:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1717174508;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eCyP3NsB6+TrwW+rJ92fdE1KqnkQyffJu7CwUmKcvjg=;
+	b=jCTyzD5S5jiQ2h1XLSSXcBzegACpsb4kPK6kpHDjYa3qU4eZXeg/54l25IVRE9oH5iXokx
+	mBXTvWrErcaFW9G+iqcTxPIxuxLLnBXFa8JPa76Ge+gtinBsSlpDKZWseUHYKIJX/3x2y5
+	PrztJFUE32LBoRTF7QLK4TZhci2PHa3kMydGuloEO0PBk/23fyGmGN8bfWqF/htKXPwGU2
+	8e2SbyVWMa/e3BPdfSKC4VitKht+H8g+8nQEg0cGFEYDM+BACQT3TUK00wrwR/IwPP1rsT
+	+qpW4eTTnAGSW5LeBvBsy7BXdEZvQ2EirMdjJusqh5+TAk8lVffyuhd+Zc/IPw==
+Message-ID: <42affba4-4600-4c44-ad88-926597cc2225@bootlin.com>
+Date: Fri, 31 May 2024 18:55:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240531142437.74831-1-eichest@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 00/12] Add suspend to ram support for PCIe on J7200
+To: Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Tony Lindgren <tony@atomide.com>,
+ Aaro Koskinen <aaro.koskinen@iki.fi>,
+ Janusz Krzysztofik <jmkrzyszt@gmail.com>, Vignesh R <vigneshr@ti.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+ Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ gregory.clement@bootlin.com, theo.lebrun@bootlin.com,
+ thomas.petazzoni@bootlin.com, u-kumar1@ti.com,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ Andy Shevchenko <andy.shevchenko@gmail.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Francesco Dolcini <francesco.dolcini@toradex.com>
+References: <20240102-j7200-pcie-s2r-v6-0-4656ef6e6d66@bootlin.com>
+Content-Language: en-US
+From: Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <20240102-j7200-pcie-s2r-v6-0-4656ef6e6d66@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
 
-On Fri, May 31, 2024 at 04:24:37PM +0200, Stefan Eichenberger wrote:
-> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+On 5/15/24 12:01, Thomas Richard wrote:
+> This adds suspend to ram support for the PCIe (RC mode) on J7200 platform.
 > 
-> On our i.MX8M Mini based module we have an ADS1015 I2C ADC connected to
-> the I2C bus. The ADS1015 I2C ADC will timeout after 25ms when the I2C
-> bus is idle. The imx i2c driver will call schedule when waiting for the
-> bus to become idle after switching to master mode. When the i2c
-> controller switches to master mode it pulls SCL and SDA low, if the
-> ADS1015 I2C ADC sees this for more than 25 ms without seeing SCL
-> clocking, it will timeout and ignore all signals until the next start
-> condition occurs (SCL and SDA low). This can occur when the system load
-> is high and schedule returns after more than 25 ms.
-> 
-> This rfc tries to solve the problem by using a udelay for the first 10
-> ms before calling schedule. This reduces the chance that we will
-> reschedule. However, it is still theoretically possible for the problem
-> to occur. To properly solve the problem, we would also need to disable
-> interrupts during the transfer.
-> 
-> After some internal discussion, we see three possible solutions:
-> 1. Use udelay as shown in this rfc and also disable the interrupts
->    during the transfer. This would solve the problem but disable the
->    interrupts. Also, we would have to re-enable the interrupts if the
->    timeout is longer than 1ms (TBD).
-> 2. We use a retry mechanism in the ti-ads1015 driver. When we see a
->    timeout, we try again.
-> 3. We use the suggested solution and accept that there is an edge case
->    where the timeout can happen.
-> 
-> There may be a better way to do this, which is why this is an RFC.
 
-...
+Hello,
 
-> +			/*
-> +			 * Avoid rescheduling in the first 10 ms to avoid
-> +			 * timeouts for SMBus like devices
-> +			 */
-> +			if (time_before(jiffies, orig_jiffies + msecs_to_jiffies(10)))
-> +				udelay(10);
-> +			else
-> +				schedule();
+Gentle ping.
+No merge conflict with 6.10-rc1.
+I know the patch for the gpio-pca953x driver causes a regression for one
+other platform.
+But most of the patches could be applied.
 
-Isn't there cond_resched() or so for such things?
-More info here: 494e46d08d35 ("airo: Replace in_atomic() usage.")
+Best Regards,
+
+Thomas
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Thomas Richard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
