@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-3740-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3741-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D32818D7297
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 00:52:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDDC68D72D1
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 01:45:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E57A281B62
-	for <lists+linux-i2c@lfdr.de>; Sat,  1 Jun 2024 22:52:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F12341C20A92
+	for <lists+linux-i2c@lfdr.de>; Sat,  1 Jun 2024 23:45:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABC1E2D03B;
-	Sat,  1 Jun 2024 22:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C425F47A48;
+	Sat,  1 Jun 2024 23:45:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N2eX01Sa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NnoVYImF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD8E2C87A
-	for <linux-i2c@vger.kernel.org>; Sat,  1 Jun 2024 22:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9BD2CCB7
+	for <linux-i2c@vger.kernel.org>; Sat,  1 Jun 2024 23:45:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717282371; cv=none; b=pUrqABFy7CqQ3dD1PVFUtLhcP7mVzJ0f6EAyihu9t/TdRYB0OYqZVUDkWoWJI0aBQUwK5QI8Hv2s9SI0g7a/Bj312K5vFj059QIlu2nHx7QvwFS30+2ztPg+OzBwL9XWRQoLvKp/j/BoGRe/3SNIalbESH4kEo4RZJtnlqobREw=
+	t=1717285546; cv=none; b=ODHUpojTL8c+kqh+xTxRUl0pRD5I/Ldbf8mJJqm6zurV3dqWb1Q2E3R6eVKkC2ytnCG85kLWCZVPnIutP2dKOkEox4puWG0JKw3URBkPF71TepUjJsjIFmWYuHEGOWvjYPUboNsiDDq35X86/AZlRgMiQKP/f+naDA5F6lDkL8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717282371; c=relaxed/simple;
-	bh=ocXYML42mn784O1Op9lmjxrbuZKI080VDiVmCKhpP3w=;
+	s=arc-20240116; t=1717285546; c=relaxed/simple;
+	bh=LeE/DKM7nORnodW5HlSYlXnlRdu0lEUmbIUh0ZGAa/4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t8FJAntghQTtuaY2R68WP9AfU9upQfDhkVcsjOAEpp9DLlFlU3HXmzvV9OXXxeIhzcqtFPTtDKhHGRNQSF4NzDa/Rb+/x34GRMIQv7HYh5f/usAMpOZoP5WnyE7LZ2HCppQ3EcNQU6YTGkh/hPRQS5UeJyUN9z1xMgsbc0gn2Cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N2eX01Sa; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=o3/6YkU9ZyjmUbrp7QNJkf7uWMJKkUGFr20JFFJEfX1SQ5gCUZz/HmuH40QZafUtwyOULsY9rUs0yJknLgUfwJ/y5RZ0BQExNHL/6ZTYBJL8HbaQCM/idaEWXKhi8ru4JXjyrAOXMwwOQsrurj3a1CHSDj9+Kv/5Hy49lMMdk0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NnoVYImF; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717282370; x=1748818370;
+  t=1717285545; x=1748821545;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ocXYML42mn784O1Op9lmjxrbuZKI080VDiVmCKhpP3w=;
-  b=N2eX01Saw6O/rPw1F9o2jl4ebp8Rh3FSMIymVlgR+qvXa6BkmUfdWXOr
-   nOCm8vZtr3dX1Gfz1Jhg0Z++3/IftRN4hCKAewwk8JxaTuE/nrqeeVSg7
-   JjXvfK1Mi1JsB8QR1l+ELhpIiDxP1EoTeaiXl28JGktm4I45JOYL40dee
-   GVcmsrE4AN6Wm3huuOx+jqrhvj27VwN7CrDu+EJ0Ao6kX50nkDeF9KvUD
-   s/gpFL0MLXgJNho9TXqBy586ChWTIq/synxTs32QX+pOCPhruV9zBW9xn
-   j+vU1YU2PegJzr+XqSzRcNkFv4pwr5KTK7OezoyNXciutUgXwtKV7GJem
-   A==;
-X-CSE-ConnectionGUID: OJqjrrIpQ5O2nggAA9JLcw==
-X-CSE-MsgGUID: jeGnKzYbTSut6KNRAzT8kg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11090"; a="24925628"
+  bh=LeE/DKM7nORnodW5HlSYlXnlRdu0lEUmbIUh0ZGAa/4=;
+  b=NnoVYImF1fcEGvIln77Ji2ErlKIX8eSc3M5i84IuVVWxNCLiDhoksVtR
+   uXcDOaVxrDVutzFZ5czEonetT95sPbas5AvrpDgs8+VDQbS/2YNMcvY6O
+   5cqfB9ZZfKUctnXFXN5UFavJxjQfAR0IwUwEMUnC5jyrG+GmQM3+E/W29
+   9lMIZ2fQHiWnFRfuj7zVrgWnpnWEqKE8RggwN8uG66DaBoCNReF1lFDqv
+   00QOC8LDKvw/AfdkjQ56/JgYZOPUwTVJHJwFpznVrkH8aFT+VEWXmHH9O
+   P0oySlRlAFNpNCa9zAdZZZlXpQxvbT15nREqHDZX0NMbHcXoIuKOD9f5y
+   Q==;
+X-CSE-ConnectionGUID: jsgDNuFXRnOyXfWFGtu5cw==
+X-CSE-MsgGUID: UrKVGA+yT/SjhdndcnVJog==
+X-IronPort-AV: E=McAfee;i="6600,9927,11090"; a="24437080"
 X-IronPort-AV: E=Sophos;i="6.08,208,1712646000"; 
-   d="scan'208";a="24925628"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2024 15:52:49 -0700
-X-CSE-ConnectionGUID: X+C4K3ZdTLGS1QQXdigOlA==
-X-CSE-MsgGUID: rpHvPhY+RbOpq0dXtC/gsA==
+   d="scan'208";a="24437080"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2024 16:45:45 -0700
+X-CSE-ConnectionGUID: U1fTR9JtQyCFDollWQF+8g==
+X-CSE-MsgGUID: ScpkeA/OQF2ZCgyOGdFmFg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,208,1712646000"; 
-   d="scan'208";a="36420804"
+   d="scan'208";a="36524187"
 Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 01 Jun 2024 15:52:47 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 01 Jun 2024 16:45:42 -0700
 Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sDXae-000JS7-1y;
-	Sat, 01 Jun 2024 22:52:44 +0000
-Date: Sun, 2 Jun 2024 06:52:30 +0800
+	id 1sDYPq-000JV2-0x;
+	Sat, 01 Jun 2024 23:45:38 +0000
+Date: Sun, 2 Jun 2024 07:45:20 +0800
 From: kernel test robot <lkp@intel.com>
 To: Gerhard Engleder <gerhard@engleder-embedded.com>,
 	linux-i2c@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, andi.shyti@kernel.org, arnd@arndb.de,
-	gregkh@linuxfoundation.org,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	andi.shyti@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
 	Gerhard Engleder <gerhard@engleder-embedded.com>
 Subject: Re: [PATCH 1/2] i2c: keba: Add KEBA I2C controller support
-Message-ID: <202406020634.cfpd5wMw-lkp@intel.com>
+Message-ID: <202406020713.qwylbUoh-lkp@intel.com>
 References: <20240601192846.68146-2-gerhard@engleder-embedded.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
@@ -96,20 +96,64 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Gerhard-Engleder/i2c-keba
 base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
 patch link:    https://lore.kernel.org/r/20240601192846.68146-2-gerhard%40engleder-embedded.com
 patch subject: [PATCH 1/2] i2c: keba: Add KEBA I2C controller support
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20240602/202406020634.cfpd5wMw-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240602/202406020634.cfpd5wMw-lkp@intel.com/reproduce)
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240602/202406020713.qwylbUoh-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project bafda89a0944d947fc4b3b5663185e07a397ac30)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240602/202406020713.qwylbUoh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406020634.cfpd5wMw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406020713.qwylbUoh-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/i2c/busses/i2c-keba.c:568:34: warning: 'ki2c_devtype' defined but not used [-Wunused-variable]
+   In file included from drivers/i2c/busses/i2c-keba.c:11:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/i2c/busses/i2c-keba.c:11:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/i2c/busses/i2c-keba.c:11:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/i2c/busses/i2c-keba.c:13:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/i2c/busses/i2c-keba.c:568:34: warning: unused variable 'ki2c_devtype' [-Wunused-variable]
      568 | static struct platform_device_id ki2c_devtype[] = {
          |                                  ^~~~~~~~~~~~
+   8 warnings generated.
 
 
 vim +/ki2c_devtype +568 drivers/i2c/busses/i2c-keba.c
