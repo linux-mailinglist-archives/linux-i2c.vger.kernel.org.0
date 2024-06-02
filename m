@@ -1,138 +1,188 @@
-Return-Path: <linux-i2c+bounces-3745-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3746-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBCD58D77AD
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 21:55:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A07BF8D786A
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 23:42:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 764C5B20F80
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 19:55:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD8001C20AF3
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 21:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 371ED6F301;
-	Sun,  2 Jun 2024 19:55:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC6F729401;
+	Sun,  2 Jun 2024 21:42:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="ixfDvuMW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ezKe8PrV"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx08lb.world4you.com (mx08lb.world4you.com [81.19.149.118])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF716BFD5
-	for <linux-i2c@vger.kernel.org>; Sun,  2 Jun 2024 19:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049CA1CD3D
+	for <linux-i2c@vger.kernel.org>; Sun,  2 Jun 2024 21:42:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717358147; cv=none; b=UjcfgtKf/BAa4L9MIxdvjtKlf1J9xoOnKjUis4j9yVs+ARLiSBfnBSa7NdW19Qld2XF5w/FFt8D6HUD7Vz76l4lFt3V63EOiyjzjL1oXvYf2KVW3Auuok3dnvUwsUU22QebZTqThNa++Nzk1CgzSFRa/4psmxKqh7tEeoH9NNXM=
+	t=1717364536; cv=none; b=dXdkq8CxsFNeFdz9N0alXeoRoir8sSieFmsVzrZPKRpiprtgQVQgvNSEw1JGggQvWpnVfF8zbJcacKhacELg3l3i6pedUD0roymstA45ePHFc0pkRrEt+JMgqmgsl5aabKvCTJZ57z4+9TyLsGcuwM4KCYFlF2MK0HeKQkiEDK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717358147; c=relaxed/simple;
-	bh=8BiuaRrNCGS1HhO2l7i0UYCpBme5DuuM7YwmtEtfaak=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oNh+S1nlGlTQOCBv4op7orCD0hnduNdMOtm6knxCUVuXIDqNQG6kr//o8bAmuuMvjz3zb1P4ITbiB4I086H4w/fr2/8ZN14Y2bv0Iqdb/jYacybpgiE3s8RHlcHyAUwUNuTLjTSpRUcPddlx3eQUTgJoJuvydN2xHKkju++RXQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=ixfDvuMW; arc=none smtp.client-ip=81.19.149.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=8cnVcEB1DcRNE8avQbQtDILDsY3DcMo5NSitp/huAyo=; b=ixfDvuMWqUWtekpoeGp8+1UYlX
-	HwFTpjQwEmSE2mjV2yGgwmtIXaSlIC3w9fY/WrbWN95unL77NPqK5VWni0Yfinr2Uy27LN7exGpwa
-	r+gZJcxqlupbxft7zpxjwMfEWFv/uNGhz094VoPg3/l7Nv5w8fgQ7k3ubTFSLtOJLi5A=;
-Received: from [88.117.63.44] (helo=[10.0.0.160])
-	by mx08lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <gerhard@engleder-embedded.com>)
-	id 1sDqQI-0000SF-1H;
-	Sun, 02 Jun 2024 20:59:18 +0200
-Message-ID: <147b3d46-3c01-4e73-8e9e-59f5b61fd54a@engleder-embedded.com>
-Date: Sun, 2 Jun 2024 20:59:17 +0200
+	s=arc-20240116; t=1717364536; c=relaxed/simple;
+	bh=hbJ3wHkhQ3tuqihB4rH0Z9XdKGCZ4cSlWhBPz44nwic=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l17UjJmTn9dhRzxswYkGWYcdbQs4pyCKVKaYovJsD8zWAzjUK6deeW/S2Tz/kamOUFCYoqcTuW7XJkdHiUwLLUFTNmibfjinhmbwY9AVJ4IkaeqT2IvetHX3aQ6t1aXCN+hAjQXUyjTm7/3n2nanVj+RCMi7WMkMYKzdcyJzIFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ezKe8PrV; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717364535; x=1748900535;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hbJ3wHkhQ3tuqihB4rH0Z9XdKGCZ4cSlWhBPz44nwic=;
+  b=ezKe8PrVcYIvNj9r0XR1z2UQ8aqFbixbY2TyJQmQ2qoGu4VB9K6pzLay
+   uqe7N6MAY3vKjQ2dRPTegmLOg/wdUihUmN40f3UWO6WjilIKasrLgwWqA
+   XN2+bwW97bogd/vJ5fVzeqlmoPdKJzSRTJMvEjDceyGZirUvsf+GOZich
+   FxA9hTQVMfMPFyIQch+M1h5PQlIamRVcR4jVYNgIOqzRBNntAwK0fIq2u
+   kOUpGu+tsV6snRAtl9KTxwV2jhpOfqDkoMvJi/8fkQivHnSygyoO0NA46
+   1EY4uwl2XuStcBSs4492LomLpvG7Xe6Z32QKBckQE/eRO1i2g8m/kfQ3z
+   g==;
+X-CSE-ConnectionGUID: Y5BPmw+hSyq6TJ7oAc0D9A==
+X-CSE-MsgGUID: Zm34dk+eSn+lmYncWt8s6A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11091"; a="31385257"
+X-IronPort-AV: E=Sophos;i="6.08,210,1712646000"; 
+   d="scan'208";a="31385257"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2024 14:42:14 -0700
+X-CSE-ConnectionGUID: 5WdJsbmoTRC05FwxbSZrlw==
+X-CSE-MsgGUID: 47x1voyoSPKd0eI/NYYQcA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,210,1712646000"; 
+   d="scan'208";a="67539307"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 02 Jun 2024 14:42:12 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sDsxu-000KUj-0P;
+	Sun, 02 Jun 2024 21:42:10 +0000
+Date: Mon, 3 Jun 2024 05:41:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gerhard Engleder <gerhard@engleder-embedded.com>,
+	linux-i2c@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, andi.shyti@kernel.org, arnd@arndb.de,
+	gregkh@linuxfoundation.org,
+	Gerhard Engleder <gerhard@engleder-embedded.com>
+Subject: Re: [PATCH 1/2] i2c: keba: Add KEBA I2C controller support
+Message-ID: <202406030504.QcIr6Qaw-lkp@intel.com>
+References: <20240601192846.68146-2-gerhard@engleder-embedded.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] misc: keba: Add basic KEBA CP500 system FPGA support
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-i2c@vger.kernel.org, andi.shyti@kernel.org, arnd@arndb.de,
- Gerhard Engleder <eg@keba.com>
-References: <20240601192846.68146-1-gerhard@engleder-embedded.com>
- <20240601192846.68146-3-gerhard@engleder-embedded.com>
- <2024060203-impeding-curing-e6cd@gregkh>
-Content-Language: en-US
-From: Gerhard Engleder <gerhard@engleder-embedded.com>
-In-Reply-To: <2024060203-impeding-curing-e6cd@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AV-Do-Run: Yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240601192846.68146-2-gerhard@engleder-embedded.com>
 
-On 02.06.24 09:19, Greg KH wrote:
-> On Sat, Jun 01, 2024 at 09:28:46PM +0200, Gerhard Engleder wrote:
->> From: Gerhard Engleder <eg@keba.com>
->>
->> The KEBA CP500 system FPGA is a PCIe device, which consists of multiple
->> IP cores. Every IP core has its own platform driver. The cp500 driver
->> registers a platform device for each device and the corresponding
->> drivers are loaded by the Linux driver infrastructure.
-> 
-> Please use the aux bus code for this, not the platform driver code.
-> That's what the aux bus is explicitly for, platform devices are NOT
-> meant to hang off of a PCIe device at all.
+Hi Gerhard,
 
-Thank you for that advice! I was not aware of aux bus, but it seems to
-be a good fit.
+kernel test robot noticed the following build warnings:
 
->> Currently 3 variants of this device exists. Every variant has its own
->> PCI device ID, which is used to determine the list of available IP
->> cores. In this first version only the platform device for the I2C
->> controller is registered.
->>
->> Besides the platform device registration some other basic functions of
->> the FPGA are implemented; e.g, FPGA version sysfs file, keep FPGA
->> configuration on reset sysfs file, error message for errors on the
->> internal AXI bus of the FPGA.
->>
->> Signed-off-by: Gerhard Engleder <eg@keba.com>
->> ---
->>   drivers/misc/Kconfig       |   1 +
->>   drivers/misc/Makefile      |   1 +
->>   drivers/misc/keba/Kconfig  |  12 +
->>   drivers/misc/keba/Makefile |   3 +
->>   drivers/misc/keba/cp500.c  | 433 +++++++++++++++++++++++++++++++++++++
->>   5 files changed, 450 insertions(+)
->>   create mode 100644 drivers/misc/keba/Kconfig
->>   create mode 100644 drivers/misc/keba/Makefile
->>   create mode 100644 drivers/misc/keba/cp500.c
-> 
-> You create sysfs files for this driver, yet there is no
-> Documentation/ABI/ entries for it?  Please do so in your next version of
-> this series.
+[auto build test WARNING on andi-shyti/i2c/i2c-host]
+[also build test WARNING on char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus soc/for-next linus/master v6.10-rc1 next-20240531]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I will do so.
->> +static ssize_t keep_cfg_show(struct device *dev, struct device_attribute *attr,
->> +			     char *buf)
->> +{
->> +	struct cp500 *cp500 = dev_get_drvdata(dev);
->> +	unsigned long keep_cfg = 1;
->> +
->> +	/* FPGA configuration stream is kept during reset when RECONFIG bit is
->> +	 * zero
->> +	 */
->> +	if (ioread8(cp500->system_startup_addr + CP500_RECONFIG_REG) &
->> +		CP500_RECFG_REQ)
->> +		keep_cfg = 0;
->> +
->> +	return sprintf(buf, "%lu\n", keep_cfg);
-> 
-> sysfs_emit() for all sysfs show functions please.
+url:    https://github.com/intel-lab-lkp/linux/commits/Gerhard-Engleder/i2c-keba-Add-KEBA-I2C-controller-support/20240602-040548
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20240601192846.68146-2-gerhard%40engleder-embedded.com
+patch subject: [PATCH 1/2] i2c: keba: Add KEBA I2C controller support
+config: s390-randconfig-r062-20240603 (https://download.01.org/0day-ci/archive/20240603/202406030504.QcIr6Qaw-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 13.2.0
 
-sysfs_emit() will be used.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406030504.QcIr6Qaw-lkp@intel.com/
 
+cocci warnings: (new ones prefixed by >>)
+>> drivers/i2c/busses/i2c-keba.c:491:14-15: WARNING comparing pointer to 0
 
-Thank you for your feedback!
+vim +491 drivers/i2c/busses/i2c-keba.c
 
-gerhard
+   480	
+   481	static int ki2c_probe(struct platform_device *pdev)
+   482	{
+   483		struct i2c_keba_platform_data *pdata;
+   484		struct device *dev = &pdev->dev;
+   485		struct i2c_adapter *adap;
+   486		struct resource *io;
+   487		struct ki2c *ki2c;
+   488		int ret;
+   489	
+   490		pdata = dev->platform_data;
+ > 491		if (pdata == 0) {
+   492			dev_err(dev, "Platform data not found!\n");
+   493			return -ENODEV;
+   494		}
+   495	
+   496		ki2c = devm_kzalloc(dev, sizeof(*ki2c), GFP_KERNEL);
+   497		if (!ki2c)
+   498			return -ENOMEM;
+   499		ki2c->pdev = pdev;
+   500		ki2c->client = devm_kcalloc(dev, pdata->info_size,
+   501					    sizeof(*ki2c->client), GFP_KERNEL);
+   502		if (!ki2c->client)
+   503			return -ENOMEM;
+   504		ki2c->client_size = pdata->info_size;
+   505		platform_set_drvdata(pdev, ki2c);
+   506	
+   507		io = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+   508		ki2c->base = devm_ioremap_resource(dev, io);
+   509		if (IS_ERR(ki2c->base))
+   510			return PTR_ERR(ki2c->base);
+   511	
+   512		/* enable controller */
+   513		iowrite8(KI2C_CONTROL_MEN, ki2c->base + KI2C_CONTROL_REG);
+   514	
+   515		adap = &ki2c->adapter;
+   516		strscpy(adap->name, "KEBA I2C adapter", sizeof(adap->name));
+   517		adap->owner = THIS_MODULE;
+   518		adap->class = I2C_CLASS_HWMON;
+   519		adap->algo = &ki2c_algo;
+   520		adap->dev.parent = dev;
+   521	
+   522		i2c_set_adapdata(adap, ki2c);
+   523	
+   524		/* reset bus before probing I2C devices */
+   525		ret = ki2c_reset_bus(ki2c);
+   526		if (ret) {
+   527			dev_err(dev, "Failed to reset bus (%d)!\n", ret);
+   528			goto out_disable;
+   529		}
+   530	
+   531		ret = i2c_add_adapter(adap);
+   532		if (ret) {
+   533			dev_err(dev, "Failed to add adapter (%d)!\n", ret);
+   534			goto out_disable;
+   535		}
+   536	
+   537		ret = ki2c_register_devices(ki2c, pdata);
+   538		if (ret) {
+   539			dev_err(dev, "Failed to register devices (%d)!\n", ret);
+   540			goto out_delete;
+   541		}
+   542	
+   543		return 0;
+   544	
+   545	out_delete:
+   546		i2c_del_adapter(adap);
+   547	out_disable:
+   548		iowrite8(0, ki2c->base + KI2C_CONTROL_REG);
+   549		return ret;
+   550	}
+   551	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
