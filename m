@@ -1,111 +1,138 @@
-Return-Path: <linux-i2c+bounces-3744-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3745-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C8A68D7639
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 16:31:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBCD58D77AD
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 21:55:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F6621C2197F
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 14:31:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 764C5B20F80
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 19:55:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B5D4175A;
-	Sun,  2 Jun 2024 14:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 371ED6F301;
+	Sun,  2 Jun 2024 19:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="0kucGJq/"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="ixfDvuMW"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mx08lb.world4you.com (mx08lb.world4you.com [81.19.149.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45488B64B;
-	Sun,  2 Jun 2024 14:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF716BFD5
+	for <linux-i2c@vger.kernel.org>; Sun,  2 Jun 2024 19:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717338704; cv=none; b=EmjDFPHi6rw8AQBLp54J8/qCI0es5XuLi6eZ8K1RrYnZeuVUCXusrTfhUZGd11H3ZTpp5HUh8X994nOdmxtceuiRzlbEdFfTWjBtL2Fe7CK7dJ6P8pAlWFF7T2E3aa4gjMqRg+J5XYxVxG6vVJAwSlMP529mDMInVg2eOf2vM4s=
+	t=1717358147; cv=none; b=UjcfgtKf/BAa4L9MIxdvjtKlf1J9xoOnKjUis4j9yVs+ARLiSBfnBSa7NdW19Qld2XF5w/FFt8D6HUD7Vz76l4lFt3V63EOiyjzjL1oXvYf2KVW3Auuok3dnvUwsUU22QebZTqThNa++Nzk1CgzSFRa/4psmxKqh7tEeoH9NNXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717338704; c=relaxed/simple;
-	bh=CotbdNz9LHK9WkQCoFQqdqV3uDXLQoDBucayG0hD5MI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R8fc63TBmsoD2OUzedrwH9nPBC+VB4ykpas16UjICO6HDp8/AIkgMW1yvlKnzb5Siqe4gslhyRYaXZRfWHHq16kZvkhNAjg+GxbuuyLdWZLwZgBRfbnmAEclhy7+u2Tt5JlHo+5kiUIh7q1leVh35QuXe+V8+7G9kNzO3/hCR6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=0kucGJq/; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=RWGYwTysSvB1AzNEXTEGFJRM12Fxwodp6LFILw+wyVM=; b=0kucGJq/2zFxgbs7FdovI3m/Ll
-	zpIf8Am8tEyQf0bBEC4b/ONEn+HRO5v/03B53Vtpg/CpaGoCUtIFF9MOQawlK2wVuOselEUlDvOpg
-	II/vCIWvIBW04lULUZbw8wLLKiuxT+s6eHY9EQpNDcuOkeHmmod46dJTxqWNZ9DAG+1w=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1sDmF5-00Gc71-T9; Sun, 02 Jun 2024 16:31:27 +0200
-Date: Sun, 2 Jun 2024 16:31:27 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Stefan Eichenberger <eichest@gmail.com>
-Cc: o.rempel@pengutronix.de, kernel@pengutronix.de, andi.shyti@kernel.org,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-	jic23@kernel.org, lars@metafoo.de, nuno.sa@analog.com,
-	andriy.shevchenko@linux.intel.com, u.kleine-koenig@pengutronix.de,
-	marcelo.schmitt@analog.com, gnstark@salutedevices.com,
-	francesco.dolcini@toradex.com, linux-i2c@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>
-Subject: Re: [RFC PATCH] i2c: imx: avoid rescheduling when waiting for bus
- not busy
-Message-ID: <f5d537e2-b102-415f-bc22-c949fd859344@lunn.ch>
-References: <20240531142437.74831-1-eichest@gmail.com>
+	s=arc-20240116; t=1717358147; c=relaxed/simple;
+	bh=8BiuaRrNCGS1HhO2l7i0UYCpBme5DuuM7YwmtEtfaak=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oNh+S1nlGlTQOCBv4op7orCD0hnduNdMOtm6knxCUVuXIDqNQG6kr//o8bAmuuMvjz3zb1P4ITbiB4I086H4w/fr2/8ZN14Y2bv0Iqdb/jYacybpgiE3s8RHlcHyAUwUNuTLjTSpRUcPddlx3eQUTgJoJuvydN2xHKkju++RXQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=ixfDvuMW; arc=none smtp.client-ip=81.19.149.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=8cnVcEB1DcRNE8avQbQtDILDsY3DcMo5NSitp/huAyo=; b=ixfDvuMWqUWtekpoeGp8+1UYlX
+	HwFTpjQwEmSE2mjV2yGgwmtIXaSlIC3w9fY/WrbWN95unL77NPqK5VWni0Yfinr2Uy27LN7exGpwa
+	r+gZJcxqlupbxft7zpxjwMfEWFv/uNGhz094VoPg3/l7Nv5w8fgQ7k3ubTFSLtOJLi5A=;
+Received: from [88.117.63.44] (helo=[10.0.0.160])
+	by mx08lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <gerhard@engleder-embedded.com>)
+	id 1sDqQI-0000SF-1H;
+	Sun, 02 Jun 2024 20:59:18 +0200
+Message-ID: <147b3d46-3c01-4e73-8e9e-59f5b61fd54a@engleder-embedded.com>
+Date: Sun, 2 Jun 2024 20:59:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240531142437.74831-1-eichest@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] misc: keba: Add basic KEBA CP500 system FPGA support
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-i2c@vger.kernel.org, andi.shyti@kernel.org, arnd@arndb.de,
+ Gerhard Engleder <eg@keba.com>
+References: <20240601192846.68146-1-gerhard@engleder-embedded.com>
+ <20240601192846.68146-3-gerhard@engleder-embedded.com>
+ <2024060203-impeding-curing-e6cd@gregkh>
+Content-Language: en-US
+From: Gerhard Engleder <gerhard@engleder-embedded.com>
+In-Reply-To: <2024060203-impeding-curing-e6cd@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AV-Do-Run: Yes
 
-On Fri, May 31, 2024 at 04:24:37PM +0200, Stefan Eichenberger wrote:
-> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+On 02.06.24 09:19, Greg KH wrote:
+> On Sat, Jun 01, 2024 at 09:28:46PM +0200, Gerhard Engleder wrote:
+>> From: Gerhard Engleder <eg@keba.com>
+>>
+>> The KEBA CP500 system FPGA is a PCIe device, which consists of multiple
+>> IP cores. Every IP core has its own platform driver. The cp500 driver
+>> registers a platform device for each device and the corresponding
+>> drivers are loaded by the Linux driver infrastructure.
 > 
-> On our i.MX8M Mini based module we have an ADS1015 I2C ADC connected to
-> the I2C bus. The ADS1015 I2C ADC will timeout after 25ms when the I2C
-> bus is idle. The imx i2c driver will call schedule when waiting for the
-> bus to become idle after switching to master mode. When the i2c
-> controller switches to master mode it pulls SCL and SDA low, if the
-> ADS1015 I2C ADC sees this for more than 25 ms without seeing SCL
-> clocking, it will timeout and ignore all signals until the next start
-> condition occurs (SCL and SDA low).
+> Please use the aux bus code for this, not the platform driver code.
+> That's what the aux bus is explicitly for, platform devices are NOT
+> meant to hang off of a PCIe device at all.
 
-Does the I2C specification say anything about this behaviour, or is it
-specific to this device?
+Thank you for that advice! I was not aware of aux bus, but it seems to
+be a good fit.
 
-> This rfc tries to solve the problem by using a udelay for the first 10
-> ms before calling schedule. This reduces the chance that we will
-> reschedule. However, it is still theoretically possible for the problem
-> to occur. To properly solve the problem, we would also need to disable
-> interrupts during the transfer.
+>> Currently 3 variants of this device exists. Every variant has its own
+>> PCI device ID, which is used to determine the list of available IP
+>> cores. In this first version only the platform device for the I2C
+>> controller is registered.
+>>
+>> Besides the platform device registration some other basic functions of
+>> the FPGA are implemented; e.g, FPGA version sysfs file, keep FPGA
+>> configuration on reset sysfs file, error message for errors on the
+>> internal AXI bus of the FPGA.
+>>
+>> Signed-off-by: Gerhard Engleder <eg@keba.com>
+>> ---
+>>   drivers/misc/Kconfig       |   1 +
+>>   drivers/misc/Makefile      |   1 +
+>>   drivers/misc/keba/Kconfig  |  12 +
+>>   drivers/misc/keba/Makefile |   3 +
+>>   drivers/misc/keba/cp500.c  | 433 +++++++++++++++++++++++++++++++++++++
+>>   5 files changed, 450 insertions(+)
+>>   create mode 100644 drivers/misc/keba/Kconfig
+>>   create mode 100644 drivers/misc/keba/Makefile
+>>   create mode 100644 drivers/misc/keba/cp500.c
 > 
-> After some internal discussion, we see three possible solutions:
-> 1. Use udelay as shown in this rfc and also disable the interrupts
->    during the transfer. This would solve the problem but disable the
->    interrupts. Also, we would have to re-enable the interrupts if the
->    timeout is longer than 1ms (TBD).
-> 2. We use a retry mechanism in the ti-ads1015 driver. When we see a
->    timeout, we try again.
-> 3. We use the suggested solution and accept that there is an edge case
->    where the timeout can happen.
+> You create sysfs files for this driver, yet there is no
+> Documentation/ABI/ entries for it?  Please do so in your next version of
+> this series.
 
-2. has the advantage you fix it for any system with this device, not
-just those using an IMX. Once question would be, is such a retry safe
-in all conditions. Does the timeout happen before any non idempotent
-operation is performed?
+I will do so.
+>> +static ssize_t keep_cfg_show(struct device *dev, struct device_attribute *attr,
+>> +			     char *buf)
+>> +{
+>> +	struct cp500 *cp500 = dev_get_drvdata(dev);
+>> +	unsigned long keep_cfg = 1;
+>> +
+>> +	/* FPGA configuration stream is kept during reset when RECONFIG bit is
+>> +	 * zero
+>> +	 */
+>> +	if (ioread8(cp500->system_startup_addr + CP500_RECONFIG_REG) &
+>> +		CP500_RECFG_REQ)
+>> +		keep_cfg = 0;
+>> +
+>> +	return sprintf(buf, "%lu\n", keep_cfg);
+> 
+> sysfs_emit() for all sysfs show functions please.
 
-If the I2C specification allows this behaviour, maybe a more generic
-solution is needed, since it could affect more devices?
+sysfs_emit() will be used.
 
-	Andrew
+
+Thank you for your feedback!
+
+gerhard
 
