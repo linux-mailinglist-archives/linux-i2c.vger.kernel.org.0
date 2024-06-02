@@ -1,137 +1,111 @@
-Return-Path: <linux-i2c+bounces-3743-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3744-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30F9F8D758F
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 15:07:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C8A68D7639
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 16:31:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C35181F22240
-	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 13:07:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F6621C2197F
+	for <lists+linux-i2c@lfdr.de>; Sun,  2 Jun 2024 14:31:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEE4A3B78D;
-	Sun,  2 Jun 2024 13:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B5D4175A;
+	Sun,  2 Jun 2024 14:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bHCcJoWI"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="0kucGJq/"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 140533A29C;
-	Sun,  2 Jun 2024 13:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45488B64B;
+	Sun,  2 Jun 2024 14:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717333644; cv=none; b=BFBz9tL8nq4rS41vQZL3e1pAfBKsHo7r/krCp93BBZpJke4OzHZEKWg1tPMOO0psmKTBzek98BiGOxaF6mOmv10O4nXPqEG7gZPrCaCZ5sWMdmNUDrcCcblMRg8b2u6tf10/JZP79qPjLT4e4HIOX45mW0LkRY0MnLIO22vTs/k=
+	t=1717338704; cv=none; b=EmjDFPHi6rw8AQBLp54J8/qCI0es5XuLi6eZ8K1RrYnZeuVUCXusrTfhUZGd11H3ZTpp5HUh8X994nOdmxtceuiRzlbEdFfTWjBtL2Fe7CK7dJ6P8pAlWFF7T2E3aa4gjMqRg+J5XYxVxG6vVJAwSlMP529mDMInVg2eOf2vM4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717333644; c=relaxed/simple;
-	bh=Cgksc72eAMMIcTvh3wyCdxIKeFLm1F+kDhJGe5dZzak=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tYCk/wloZLMUkhi7VkRPGZ/4jtIvxohm5A2rqGL2yRmdfX0zxqPwo7uHOzCakqInxagyLkR6QDrHOWKzuyg1SbZefuNPejt9ObIXzvUxs4lOuva03qt3w91DomuTpbeRTB5pYCOHYl14HUJ/irLtfQ25oydsbHVhKAInQF9clvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bHCcJoWI; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-57a20c600a7so3785522a12.3;
-        Sun, 02 Jun 2024 06:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717333641; x=1717938441; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AZQ5HXBwQ88FT7B7s1/v7gqMjd/4lRJq+5TYb9UVsi8=;
-        b=bHCcJoWIQGc5cMaHa9ox37gs39YoL4QP3TcDllEmACHJUgrRhcqfF0CQvbJF/YklR2
-         frCgUE7YXTfPMcaeh3JD7pLrt2lor8iutHZoWUOgSzl0diHHzuxaWOgJKVkwCsTui86E
-         hGB1tiiVuo/VOet1KtpOrMSYHBFLKHqucrgDI7bYPjo2gVxg2j+DOdBCeUCR4S4M98I4
-         HIp/jFdj8nrrIQv3T0smffoHYuVcWlWeYAkllG/kGVRZNdvFPlGNcQ4NcQINp7V/Ktir
-         vd/8q168TK3T6QJGHy8Y2zYmtBmHW4JS7DbIWtrhPFNxckK+QiYSn1obMcG9nFipGL8z
-         mYQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717333641; x=1717938441;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AZQ5HXBwQ88FT7B7s1/v7gqMjd/4lRJq+5TYb9UVsi8=;
-        b=frbVTMhVwg8SmWAohU6kwsy/36lZRVHJL1vyN3AaLSgcQkLDfaHC1IVlriX2n1TGQb
-         3rE0Ow8FLHSfNrGeRXMDZ/htkRKzezjbpWhvZI9XcgQ0HAGHdDMq2373cVlH30imoq88
-         w6PukgpS9JKGBmzn52WUs0+pq/e9b5RrXtUx6z9hzLvvh15Rl+3SL27zJpccx3VEvJqm
-         vHeSQ8G/180ODRr/VmBpEGtD9tlh72cCGaPeyaG/ggjvukWkovDEC6R5/FRmN224/BrE
-         08heT9eYgqEawLabarhMLU/1IuuYAVqLyanNSd0vLcRQ3o0enkZMISg+RvEXLRS7TVFU
-         gtdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXKWmKPnvZ1MC6Ij31TZP96CRuD6N7koYjb59x+CfPmEiAvumne8LqVqQmUCXbw6rjJhCGXmQAp+XmZCMhKGu4fLhfQB45QgCx0Pp61uP601zbTZF6w8PUYLLLW+hKonrwdl7ydu3Gah0LhmwG60CNTa9TFt9lvcQN4U8O2FxSD
-X-Gm-Message-State: AOJu0YyWOxjeQzF0ZpGMAJLfx7gaS34kDogiDjxsVoxSxShkRW98x98m
-	L7sCkVQ0DR9YLmzFB9y8wx84U2LyQrlX7a6btZs3lbRSo8K7h1CWmdne2MRWRyKbWEjn4P4He3x
-	16OFngb7QvScXVXvFHkxoK0pbWHo=
-X-Google-Smtp-Source: AGHT+IGKQNEUlUoT4M7yQQXU1HHxklUwAPHbBIEteybFFusX4q7/PREa8DEMOkDcDd6Jpmxx7OIdwdHQNYu7dlIl9xw=
-X-Received: by 2002:a50:aa93:0:b0:57a:2537:a730 with SMTP id
- 4fb4d7f45d1cf-57a36382342mr4828360a12.4.1717333641105; Sun, 02 Jun 2024
- 06:07:21 -0700 (PDT)
+	s=arc-20240116; t=1717338704; c=relaxed/simple;
+	bh=CotbdNz9LHK9WkQCoFQqdqV3uDXLQoDBucayG0hD5MI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R8fc63TBmsoD2OUzedrwH9nPBC+VB4ykpas16UjICO6HDp8/AIkgMW1yvlKnzb5Siqe4gslhyRYaXZRfWHHq16kZvkhNAjg+GxbuuyLdWZLwZgBRfbnmAEclhy7+u2Tt5JlHo+5kiUIh7q1leVh35QuXe+V8+7G9kNzO3/hCR6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=0kucGJq/; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=RWGYwTysSvB1AzNEXTEGFJRM12Fxwodp6LFILw+wyVM=; b=0kucGJq/2zFxgbs7FdovI3m/Ll
+	zpIf8Am8tEyQf0bBEC4b/ONEn+HRO5v/03B53Vtpg/CpaGoCUtIFF9MOQawlK2wVuOselEUlDvOpg
+	II/vCIWvIBW04lULUZbw8wLLKiuxT+s6eHY9EQpNDcuOkeHmmod46dJTxqWNZ9DAG+1w=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1sDmF5-00Gc71-T9; Sun, 02 Jun 2024 16:31:27 +0200
+Date: Sun, 2 Jun 2024 16:31:27 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Stefan Eichenberger <eichest@gmail.com>
+Cc: o.rempel@pengutronix.de, kernel@pengutronix.de, andi.shyti@kernel.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+	jic23@kernel.org, lars@metafoo.de, nuno.sa@analog.com,
+	andriy.shevchenko@linux.intel.com, u.kleine-koenig@pengutronix.de,
+	marcelo.schmitt@analog.com, gnstark@salutedevices.com,
+	francesco.dolcini@toradex.com, linux-i2c@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+	Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Subject: Re: [RFC PATCH] i2c: imx: avoid rescheduling when waiting for bus
+ not busy
+Message-ID: <f5d537e2-b102-415f-bc22-c949fd859344@lunn.ch>
+References: <20240531142437.74831-1-eichest@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240520153932.116731-1-grygorii.tertychnyi@leica-geosystems.com>
-In-Reply-To: <20240520153932.116731-1-grygorii.tertychnyi@leica-geosystems.com>
-From: grygorii tertychnyi <grembeter@gmail.com>
-Date: Sun, 2 Jun 2024 15:07:11 +0200
-Message-ID: <CAGFuAux2BRy8SS=OqU=e4vryTnNLm0oKD6OCbEecy4ZoPO1yqA@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: ocores: set IACK bit after core is enabled
-To: Peter Korsgaard <peter@korsgaard.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Thomas Gleixner <tglx@linutronix.de>, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Cc: Grygorii Tertychnyi <grygorii.tertychnyi@leica-geosystems.com>, 
-	bsp-development.geo@leica-geosystems.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240531142437.74831-1-eichest@gmail.com>
 
-Hi,
+On Fri, May 31, 2024 at 04:24:37PM +0200, Stefan Eichenberger wrote:
+> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+> 
+> On our i.MX8M Mini based module we have an ADS1015 I2C ADC connected to
+> the I2C bus. The ADS1015 I2C ADC will timeout after 25ms when the I2C
+> bus is idle. The imx i2c driver will call schedule when waiting for the
+> bus to become idle after switching to master mode. When the i2c
+> controller switches to master mode it pulls SCL and SDA low, if the
+> ADS1015 I2C ADC sees this for more than 25 ms without seeing SCL
+> clocking, it will timeout and ignore all signals until the next start
+> condition occurs (SCL and SDA low).
 
-just a gentle ping...  Is there anything missing?
+Does the I2C specification say anything about this behaviour, or is it
+specific to this device?
 
-regards
+> This rfc tries to solve the problem by using a udelay for the first 10
+> ms before calling schedule. This reduces the chance that we will
+> reschedule. However, it is still theoretically possible for the problem
+> to occur. To properly solve the problem, we would also need to disable
+> interrupts during the transfer.
+> 
+> After some internal discussion, we see three possible solutions:
+> 1. Use udelay as shown in this rfc and also disable the interrupts
+>    during the transfer. This would solve the problem but disable the
+>    interrupts. Also, we would have to re-enable the interrupts if the
+>    timeout is longer than 1ms (TBD).
+> 2. We use a retry mechanism in the ti-ads1015 driver. When we see a
+>    timeout, we try again.
+> 3. We use the suggested solution and accept that there is an edge case
+>    where the timeout can happen.
 
-On Mon, May 20, 2024 at 5:40=E2=80=AFPM Grygorii Tertychnyi <grembeter@gmai=
-l.com> wrote:
->
-> Setting IACK bit when core is disabled does not clear the "Interrupt Flag=
-"
-> bit in the status register, and the interrupt remains pending.
->
-> Sometimes it causes failure for the very first message transfer, that is
-> usually a device probe.
->
-> Hence, set IACK bit after core is enabled to clear pending interrupt.
->
-> Fixes: 18f98b1e3147 ("[PATCH] i2c: New bus driver for the OpenCores I2C c=
-ontroller")
-> Signed-off-by: Grygorii Tertychnyi <grygorii.tertychnyi@leica-geosystems.=
-com>
-> Acked-by: Peter Korsgaard <peter@korsgaard.com>
-> Cc: stable@vger.kernel.org
-> ---
-> V1 -> V2: Added "Acked-by:", "Fixes:" and "Cc:" tags
->
->  drivers/i2c/busses/i2c-ocores.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-oco=
-res.c
-> index e106af83cef4..350ccfbe8634 100644
-> --- a/drivers/i2c/busses/i2c-ocores.c
-> +++ b/drivers/i2c/busses/i2c-ocores.c
-> @@ -442,8 +442,8 @@ static int ocores_init(struct device *dev, struct oco=
-res_i2c *i2c)
->         oc_setreg(i2c, OCI2C_PREHIGH, prescale >> 8);
->
->         /* Init the device */
-> -       oc_setreg(i2c, OCI2C_CMD, OCI2C_CMD_IACK);
->         oc_setreg(i2c, OCI2C_CONTROL, ctrl | OCI2C_CTRL_EN);
-> +       oc_setreg(i2c, OCI2C_CMD, OCI2C_CMD_IACK);
->
->         return 0;
->  }
-> --
-> 2.43.0
->
+2. has the advantage you fix it for any system with this device, not
+just those using an IMX. Once question would be, is such a retry safe
+in all conditions. Does the timeout happen before any non idempotent
+operation is performed?
+
+If the I2C specification allows this behaviour, maybe a more generic
+solution is needed, since it could affect more devices?
+
+	Andrew
 
