@@ -1,88 +1,88 @@
-Return-Path: <linux-i2c+bounces-3748-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3749-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 475EF8D7C80
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2024 09:35:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D30EC8D7CAA
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2024 09:43:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3503283594
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2024 07:35:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8506528111B
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2024 07:43:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CA6B47F4B;
-	Mon,  3 Jun 2024 07:35:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F70495CC;
+	Mon,  3 Jun 2024 07:43:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L2LXQcPj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d5CisiQy"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B266A63D5;
-	Mon,  3 Jun 2024 07:35:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54C647A4C;
+	Mon,  3 Jun 2024 07:43:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717400104; cv=none; b=E2abAY+epn9klBygRD4b/+KzKJsI+Q3d4skl0+mNpHjuYjoIs90xUGmSyzwRRmRlSk3AHXqWYro7VJbloKCY7i2QTkNPR4zxa2rEQV0tXsyzrQtoQO9GL4iiSLT+EF2kbt0D1q15FGVXYsOuLUOn6a4ps/8yzdVDlGslBeGtZWw=
+	t=1717400623; cv=none; b=OHPnB0Bn3CdZsnp7hz9bBJ4HuS20B9Ctp43vVmDmadb4LgTIUWcgWiW/5encBgi1klPj4to3FBgSd79XMy38S5hh7IWVOAi2sI62QgDBFESGtEscEU2G+9fepiYvDuwUyXHVXb2X8/0JGXlGoUbULypnR3CrdCwEgGBA0lRVhTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717400104; c=relaxed/simple;
-	bh=NKByOjzEgPFF13Q0AdwzXS9EvRu3omSeUKK5hLUrkj4=;
+	s=arc-20240116; t=1717400623; c=relaxed/simple;
+	bh=m1D/sHfPfHRZFlkY+CEB8mS07gtrCM2m0LDbYaEiwPU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y2RmTlQ/fmdZGUXWJI+tpiLK+oK6VKNefbXeus1hyjQ8pSWv3nJTiQBcLWt9bfGnxSV2qrn1QDCdUK1GvYpn164qPOMc/gBpocAOOpMKAVStwnWFhcu9YwTBj5Sk4fL657LS9f6syfsnJt1i+/+K2cMPVPbC0OQRw5gAMaw3cF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L2LXQcPj; arc=none smtp.client-ip=209.85.128.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=X7hoZzSJNgkWzLOHLw5PdbgfY1OZ7LYzoF1ZDMTQZQDkwb3LpgTwRTNFmEFl03v/eutuk6nDFWmgjyy44i1wCBX+JGw5OfzPjFOn+0tWz5m6lR92f51ij1UDbX3wY6g3RPrzjhKPnEpgtLq2E4o/oHt12rAA5SI0/zeyLneBPNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d5CisiQy; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-42121d28664so34622305e9.2;
-        Mon, 03 Jun 2024 00:35:02 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-35dc9cef36dso3226587f8f.3;
+        Mon, 03 Jun 2024 00:43:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717400101; x=1718004901; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717400619; x=1718005419; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dicgZOJvKn5T8RaFpyT/8hZCmr01MJ9Sp/DfGcqf1B0=;
-        b=L2LXQcPjQDHCy54h+K9IQENelNLQ/LOs447B8r+Mxp0hXrtCOrfdpxA+Tgi0LHpwk+
-         OhBlNGv2LFAwt6sPdxC1ZzY0xGFPweIuSVg669l9idexGIA+rcjXpIidAPxqG9uha0q0
-         fzVB9b/K00M1REldlLCMAmyP4AZYxoCPlE8S3O+q1erckCUAedcIOeYfB0knr24kmqkW
-         jKhGeSWxrhtQnRuuuO0waF3+o2UQTv/PrdSjmGvE3MtAW9ugD8bS2F6xXBkoIf1PlFJb
-         Pj58eO60Rb7TTw+w0fUNIUWyOiGgJ48bd22ILktByvUeLPrpVeg9NV1L4KAn3EMj69fs
-         0iww==
+        bh=9+3KpBVqTTJeo965A1KR/YlsEUxQQiOfIdsh4+kRbIs=;
+        b=d5CisiQyz5aEuNDdgQYZxzAdrMN7b+Je01hVu17jqWlO/zqC8yKbzff4ySJc4Rb1B/
+         BFlUHb7i3bB97TWz3QhDnvA1cvvOWHZBiH/xHeLbojpBW3p+CE2CqDjz1JL0G+H4cjgk
+         77HpLgi2EgUrtCyjf3pfFKPysmpCTlnv0pP8zApuVTr5Z6yLeeLra5KsvbQpT5oVJ4If
+         s2GyacdrzUGFMtoAETThS/ml1hK1QXK5I4H5Bf9VNtWUfq85rrinXAerjKDh7JW0Posz
+         x5cYR3y9bzVDkhcjtk4abC01CTApxnFNMGZleUPMLDoW2e1xRwTYJFGU6cm3tJuO34+n
+         pwuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717400101; x=1718004901;
+        d=1e100.net; s=20230601; t=1717400619; x=1718005419;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dicgZOJvKn5T8RaFpyT/8hZCmr01MJ9Sp/DfGcqf1B0=;
-        b=VrTWLN0WbeDjhuU/gp4mldtYE0pSy8mscFuuoDwwxkfwIFsnbZBsX5HOEk9AXWyc2/
-         FCDtPhp1vLRbpdPGoLTNldH1r7n/l49/eGlT/y/nvcFajxqMS5yy2LQ30En44HN+SZyZ
-         yLi/cxWn03v7SaiLHjpJJtyHbQvPm3RqXlUs9BfQU4MMDGG1EL1XafL0hU8KVGcSISXz
-         VYFNvjcKqOf4ti6ozL8Jdp6ylzvyVuwnVnnjfloDcm3p0mQ7fsUIfgnkLTxaEfOlXd0O
-         Ru7c37duwd9gf0Gk40K5FIbNPj/vCxCdqLNrttMrtSnQijdXZRFGGvGhLegQWAROOr3B
-         OF2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUNTWo+XxuOtuOyxZLVt0wpocuZpIFW1zJGafQ8CgdE6xq7DrKd8U3h8eANdzRNhiTH++tBRQzfMZU04Sg4LLVqFw70vX4Dj93IiQfYUsj3dO95yGst9yl3wld/uOFW82At7ZiaKhxbJ/ZFTdMLPTPIkhdfN+OccHEaFh+l0zFFvCze
-X-Gm-Message-State: AOJu0Yw0bsjCeqVjhUGV7GDo725PMpWppXS4rp1u4QAbjqONWnnLfP9f
-	jp0qKznz1c29bICeyf+TkZVxxDyJqRCMEGrgc9r6rtFc6J4hFm00
-X-Google-Smtp-Source: AGHT+IEEgeFVnXmG6lbJKYsvkxGXa9tP597wtFh2250QbRrm/he4vpWuR6MbekVDIbwfm4OL4KByBw==
-X-Received: by 2002:a05:600c:45c3:b0:420:171c:3d70 with SMTP id 5b1f17b1804b1-4212e05daa7mr70827895e9.16.1717400100851;
-        Mon, 03 Jun 2024 00:35:00 -0700 (PDT)
+        bh=9+3KpBVqTTJeo965A1KR/YlsEUxQQiOfIdsh4+kRbIs=;
+        b=UXKWbyVHZVB2uY+KH+qkkTn21Yg0o/lf8SDbIt1E583e+5z+a2taDDA3q5YWeHSJMB
+         DRv3M38U1ep/vanSZQTV+ODNHV+Rwf/A3lZsITSvRl33wtwW2n44uHVaff74A+sgtZ6F
+         sDsNr3egT46I1IbG/EDqmyCo0A/IlFw3amovbBrPswmmLRatyGQUJ1shfi/L4f9paihK
+         fy+YyCqbEuip4u4iGD2DLVJn8TM3BPEWxTtkqTvT8dWpN4ojTc6KNU4J2aYF2roU0K0L
+         OU0gg4gkYZ8hNdSx5JZwDQrahf7WkPy53CxuksHpXqpYnlvDLHBqriITqfDjobs3QZz0
+         vNWw==
+X-Forwarded-Encrypted: i=1; AJvYcCVN+EXTg9sUZWcvgRizGPiGQGoT44Cx5OZnbs+ebUIRCzjimlJHwi6QlKlVPHB8VXGA2Y0uNbeSJa6pnhp2u2CIbLuFnr+leG/ByNxL6MPRHbHZ1EnnAnpv87aFwBrs6l9CL/1SyWpvLaK8lf22W9yYFjOTDjvipt09OD7pxMh1VNQc
+X-Gm-Message-State: AOJu0YzIzujgGJkOHZ8QUVOsUDn30D3UK6sYrPZsR+zTnyff3I5bzoCh
+	PuW/hVAn/jlbgH8Head7rPqEp+4KT38rcR25Fcho7gN7CpBzr+7f
+X-Google-Smtp-Source: AGHT+IEanqGnQyE0VRVI9jQex6bQ4+XQs3Oue5+MhhMZ/CjI0wOwj0rSpqUdBr/gjbzmQgzPke+uJA==
+X-Received: by 2002:a05:6000:1944:b0:34c:cca6:3d18 with SMTP id ffacd0b85a97d-35e0f333b6emr5523593f8f.68.1717400619152;
+        Mon, 03 Jun 2024 00:43:39 -0700 (PDT)
 Received: from eichest-laptop ([2a02:168:af72:0:2b03:375:843f:be9d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4212b8a5658sm107324345e9.34.2024.06.03.00.34.59
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35dd062ea66sm7981749f8f.78.2024.06.03.00.43.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jun 2024 00:35:00 -0700 (PDT)
-Date: Mon, 3 Jun 2024 09:34:58 +0200
+        Mon, 03 Jun 2024 00:43:37 -0700 (PDT)
+Date: Mon, 3 Jun 2024 09:43:35 +0200
 From: Stefan Eichenberger <eichest@gmail.com>
-To: Andrew Lunn <andrew@lunn.ch>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: o.rempel@pengutronix.de, kernel@pengutronix.de, andi.shyti@kernel.org,
 	shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
 	jic23@kernel.org, lars@metafoo.de, nuno.sa@analog.com,
-	andriy.shevchenko@linux.intel.com, u.kleine-koenig@pengutronix.de,
-	marcelo.schmitt@analog.com, gnstark@salutedevices.com,
-	francesco.dolcini@toradex.com, linux-i2c@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+	u.kleine-koenig@pengutronix.de, marcelo.schmitt@analog.com,
+	gnstark@salutedevices.com, francesco.dolcini@toradex.com,
+	linux-i2c@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org,
 	Stefan Eichenberger <stefan.eichenberger@toradex.com>
 Subject: Re: [RFC PATCH] i2c: imx: avoid rescheduling when waiting for bus
  not busy
-Message-ID: <Zl1yIsE6f5JJY89S@eichest-laptop>
+Message-ID: <Zl10J9H+8k0KXAPR@eichest-laptop>
 References: <20240531142437.74831-1-eichest@gmail.com>
- <f5d537e2-b102-415f-bc22-c949fd859344@lunn.ch>
+ <Zlnidi62gEWwdQ3U@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -91,9 +91,9 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f5d537e2-b102-415f-bc22-c949fd859344@lunn.ch>
+In-Reply-To: <Zlnidi62gEWwdQ3U@smile.fi.intel.com>
 
-On Sun, Jun 02, 2024 at 04:31:27PM +0200, Andrew Lunn wrote:
+On Fri, May 31, 2024 at 05:45:10PM +0300, Andy Shevchenko wrote:
 > On Fri, May 31, 2024 at 04:24:37PM +0200, Stefan Eichenberger wrote:
 > > From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 > > 
@@ -104,18 +104,9 @@ On Sun, Jun 02, 2024 at 04:31:27PM +0200, Andrew Lunn wrote:
 > > controller switches to master mode it pulls SCL and SDA low, if the
 > > ADS1015 I2C ADC sees this for more than 25 ms without seeing SCL
 > > clocking, it will timeout and ignore all signals until the next start
-> > condition occurs (SCL and SDA low).
-> 
-> Does the I2C specification say anything about this behaviour, or is it
-> specific to this device?
-> 
-
-The timeouting mechanism is normally used in SMBus mode. However, for
-this specific device they still call it I2C which is a bit confusing.
-The difference between I2C and SMBus is that SMBus has a timeout while
-the I2C uses a recovery mechanism. Besides that the two protocols are
-identical.
-
+> > condition occurs (SCL and SDA low). This can occur when the system load
+> > is high and schedule returns after more than 25 ms.
+> > 
 > > This rfc tries to solve the problem by using a udelay for the first 10
 > > ms before calling schedule. This reduces the chance that we will
 > > reschedule. However, it is still theoretically possible for the problem
@@ -131,20 +122,31 @@ identical.
 > >    timeout, we try again.
 > > 3. We use the suggested solution and accept that there is an edge case
 > >    where the timeout can happen.
+> > 
+> > There may be a better way to do this, which is why this is an RFC.
 > 
-> 2. has the advantage you fix it for any system with this device, not
-> just those using an IMX. Once question would be, is such a retry safe
-> in all conditions. Does the timeout happen before any non idempotent
-> operation is performed?
+> ...
 > 
-> If the I2C specification allows this behaviour, maybe a more generic
-> solution is needed, since it could affect more devices?
+> > +			/*
+> > +			 * Avoid rescheduling in the first 10 ms to avoid
+> > +			 * timeouts for SMBus like devices
+> > +			 */
+> > +			if (time_before(jiffies, orig_jiffies + msecs_to_jiffies(10)))
+> > +				udelay(10);
+> > +			else
+> > +				schedule();
+> 
+> Isn't there cond_resched() or so for such things?
+> More info here: 494e46d08d35 ("airo: Replace in_atomic() usage.")
 
-Maybe I could add a smbus_xfer function to the i2c driver and then
-change the ti-ads1015 driver to use the smbus_xfer function instead of
-i2c. However, I would still have to disable preemption while the SMBus
-transfer is happening which concerns me a bit.
+The problem would be that I have to disable preemption during the
+transfer, then cond_resched would do nothing if I understand it
+correctly. However, an I2C transfer @100kHz for 3 bytes takes at least
+240us + overhead (e.g. waiting for the bus idle) which might end in a
+close to ms ranage. This is what concerns me.
 
 Regards,
 Stefan
+
+
 
