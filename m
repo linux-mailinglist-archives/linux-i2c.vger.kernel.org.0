@@ -1,108 +1,124 @@
-Return-Path: <linux-i2c+bounces-3750-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3751-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7F7B8D7D11
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2024 10:12:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDF318D7D68
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2024 10:34:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1A881C20B66
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2024 08:12:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33522B22A6F
+	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2024 08:34:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EA9153804;
-	Mon,  3 Jun 2024 08:12:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 677B85FB9B;
+	Mon,  3 Jun 2024 08:34:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="X4wxBFKn"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="GRmfC4BF"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BF524EB30
-	for <linux-i2c@vger.kernel.org>; Mon,  3 Jun 2024 08:12:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.50.220
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20815A7AA
+	for <linux-i2c@vger.kernel.org>; Mon,  3 Jun 2024 08:34:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717402367; cv=none; b=Pz41608XDJed+pwXYFJA6AmjDLfmM1O8OBR7aU1AUpeQUidplhYBzc92WDDcjd2UkVGbidGG+fePEHShybutI1DMWX8/Q3I8GLT21c1UWvKYvNVlMQxHLVX2Vycd9Y0M3F1Of99rvJ+hBIFORKfqZSMzGYl/epd/bCIMTlJdJfg=
+	t=1717403644; cv=none; b=IQ1vSykKGvso4yjfDMDmzXzJ5NA92nmRHVmY0MV9kLW9NlZkLbU66Q/2FyJCru2ogGkn+3aWBySVLH9YY27Jzd+iCKqMfRpHvZrsko8J1EnSKOeUMDc/Ql/9cwYXkRSrNoVEdrNzIon5nD2ZbS/i3hFlKwhZIvmUOqAKSPBqgTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717402367; c=relaxed/simple;
-	bh=BwZT1qhEW0wWEBSf8ZBijjJL3vLh8Q8tRNYB2KL0W48=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lM8py6qGifounoBfpOnkD9X+QPodKJ+5QhBo7a4avPtIYJ7p2SYrwEv5GYmZ7mcSnQx87VIKuUyjeov9ifNQkaLVCMoLDrqhmIk+VZsAeN8VaHc+IWK+fYL2dXSQGnOjvO/ryboHHrGVq1MD69hze7MpsdIF4bVT0LjV7kmS0M8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=X4wxBFKn; arc=none smtp.client-ip=45.254.50.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=wz6u1
-	fv1qF1PPCtjKxBKuhVJsff46+jrBP2vDPFZrus=; b=X4wxBFKn8x2JmcTKYmzSY
-	dkqVEXIC+rE8gwhOjum8kuR2LxlKk6X6cJkeYy3VRLWm65qeWb2bx96pl+OsZiTX
-	U3qPjlE/dQFJ+BJFPRwBG2U0raRYgfTJ3YXXbFaSg6Am+ZUrzHA8ACZcNCJadWNF
-	zTG95ILM9YTvMabtCqkxxU=
-Received: from localhost.localdomain (unknown [39.156.73.13])
-	by gzga-smtp-mta-g0-2 (Coremail) with SMTP id _____wD3n9_jel1msyBxGw--.47889S2;
-	Mon, 03 Jun 2024 16:12:20 +0800 (CST)
-From: guoqi0226 <guoqi0226@163.com>
-To: Wolfram Sang <wsa@kernel.org>
-Cc: linux-i2c@vger.kernel.org,
-	guoqi0226 <guoqi0226@163.com>
-Subject: [PATCH] i2c: smbus: Fixed uninitialized variable msgbuf in i2c_smbus_xfer_emulated
-Date: Mon,  3 Jun 2024 16:12:18 +0800
-Message-Id: <20240603081218.3759742-1-guoqi0226@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1717403644; c=relaxed/simple;
+	bh=Ikj/DBN/g9Zt5L5G7xLVPzrxbxEC+dxcwFUKg868Muk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KxRTMD2Zj6CjW9qDGHi5sA7+BR9ic9ohmRUq261R2v9+CO3EI9UFPxJXrxZae1Tgs8PEXnsezzGqgkVUeDIWAAz4IWTDst1Co3hR+l31hY5Z9htkb1YtSd+hhNKlMzubadZRq8m7+P64ZpjB4+Wr7dD5EPkbScJVE5bX8SBW7r0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=GRmfC4BF; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2e96f29884dso48135261fa.0
+        for <linux-i2c@vger.kernel.org>; Mon, 03 Jun 2024 01:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1717403641; x=1718008441; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ikj/DBN/g9Zt5L5G7xLVPzrxbxEC+dxcwFUKg868Muk=;
+        b=GRmfC4BFA9yPv9NPmjaK/C9/ocYPvfmpmbB45hSEzr5AGRs7MKe6K3Pjo3ZBJ1687K
+         ekxBHa6FlJbTzHEyKZyqbSlq2eKpXlQbUlIkHShatQ7O9KUJHWVhbcnfd1irbrAQmbAs
+         aFVdLCWajN533bhkvgyt2AaDjpCzLXF0zX2iEf3mlDb/PHKO3sOd/BkBGV8tmWu4IWQ7
+         l9amNU1RqLiycPPsNgoPsMVM9JRdppH1VyJbeRsb4HkzXYzo1OhHv4QayN/4/w4MlrD1
+         D6Uy76cocWqlS3NaYSRydnNVNRnFW+x6LUSYhGU7SkFghcOizgN1dfBwjvU3MmsQbt/F
+         01dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717403641; x=1718008441;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ikj/DBN/g9Zt5L5G7xLVPzrxbxEC+dxcwFUKg868Muk=;
+        b=I1ZVLKgUZ5ief+0lv3oX3LYIyufQmQLbVwEcKckSPsXNjZulruCJ4/8axfUA7D/u00
+         tmZCiV7KHANmkUNpL3L0T75jdat77OTE+Tkg+cUvBC5GfavtZwN1VlcO9Kito5Ucgb46
+         u8xOjAoDFZLdQu7nNqba77KXUfmFoIQq2kgEmCI0mV54Mj89rnEzy4ego41EcYVZ6OHJ
+         jf12M9pv9p19e9eRdRkSri26mf5+UhCZf1t8iKvkjJYO+ra65o2T3DKxd1DT5XDAULIG
+         71x/WOXe1lArtfNjCK/grrXQqdw3fV9BezcV3rgQYk3qvOezZ0C+9qveEnd+8bZ/FGmI
+         lNhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWnJH6JZ6rorS8X/UBZVhtQ5ykVLacdXC4u+Ef++YdwnAl8xVctq2NhhKaUM3gKXkWkAgufRpO0j3ug5WMfNXe2TLynyfNZmz3V
+X-Gm-Message-State: AOJu0Yx/OZfoLOjTqSW49ZtZhFe0k5Pbi+OtIqFbXYtWkvZWYhfj0e2M
+	eduswx8GblnEvg3OOnIjfwm/TGP95vP7UFIang9iohsx2fhZWtf+Fp9g+fcOiHOu8R2TqNHiuqY
+	dXglU/R2aqxejy5Xa1XFvirZ57f9AiitKGqpyHQ==
+X-Google-Smtp-Source: AGHT+IGnNHHMISpzPygIalsotaJP07IzKe4++9Y4RTlc22DVE2oCaNXkvhBDC8IiyrnfA9GfomhAV8qL4SXbYv7PEQM=
+X-Received: by 2002:a2e:9141:0:b0:2e5:1dae:1789 with SMTP id
+ 38308e7fff4ca-2ea9512f6d0mr59194391fa.22.1717403641151; Mon, 03 Jun 2024
+ 01:34:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3n9_jel1msyBxGw--.47889S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7trWfZFyDZw1rKF1UXF17Awb_yoW8Cw4kpa
-	y7WrZ8ur1jgF4jv3WrZw1UuFWYgws7ZryUJFZxWwn8ua1DJwsFkryIqFyF9F18Arsag3Wf
-	Aayjyay8Aas0yrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRLNVgUUUUU=
-X-CM-SenderInfo: 5jxr1xaqsslqqrwthudrp/xtbBzgTyaGV4I+guFAAAs8
+References: <20240102-j7200-pcie-s2r-v6-0-4656ef6e6d66@bootlin.com> <42affba4-4600-4c44-ad88-926597cc2225@bootlin.com>
+In-Reply-To: <42affba4-4600-4c44-ad88-926597cc2225@bootlin.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 3 Jun 2024 10:33:50 +0200
+Message-ID: <CAMRc=MftX7Sk5OknNhGrZuT1f+w496+jD3pX4LN014L_ojUtqg@mail.gmail.com>
+Subject: Re: [PATCH v6 00/12] Add suspend to ram support for PCIe on J7200
+To: Thomas Richard <thomas.richard@bootlin.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Tony Lindgren <tony@atomide.com>, 
+	Aaro Koskinen <aaro.koskinen@iki.fi>, Janusz Krzysztofik <jmkrzyszt@gmail.com>, Vignesh R <vigneshr@ti.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, Peter Rosin <peda@axentia.se>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Siddharth Vadapalli <s-vadapalli@ti.com>, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, gregory.clement@bootlin.com, 
+	theo.lebrun@bootlin.com, thomas.petazzoni@bootlin.com, u-kumar1@ti.com, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Andy Shevchenko <andy.shevchenko@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Francesco Dolcini <francesco.dolcini@toradex.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-1. msgbuf1 definition: unsigned char msgbuf1[I2C_SMBUS_BLOCK_MAX+2];
-2. msgbuf1 initial initialization:
-   status = __i2c_transfer(adapter, msg, nmsgs);
-3. msgbuf1 data return:
-   if (read_write == I2C_SMBUS_READ)
-	case I2C_SMBUS_BYTE_DATA:
-		data->byte = msgbuf1[0];
-		break;
-	case I2C_SMBUS_WORD_DATA:
-	case I2C_SMBUS_PROC_CALL:
-		data->word = msgbuf1[0] | (msgbuf1[1] << 8);
-		break;
+On Fri, May 31, 2024 at 6:55=E2=80=AFPM Thomas Richard
+<thomas.richard@bootlin.com> wrote:
+>
+> On 5/15/24 12:01, Thomas Richard wrote:
+> > This adds suspend to ram support for the PCIe (RC mode) on J7200 platfo=
+rm.
+> >
+>
+> Hello,
+>
+> Gentle ping.
+> No merge conflict with 6.10-rc1.
+> I know the patch for the gpio-pca953x driver causes a regression for one
+> other platform.
+> But most of the patches could be applied.
+>
+> Best Regards,
+>
+> Thomas
+>
 
-Based on the original logic reference, the following situation is analyzed:
+If the patches targeting different subsystems don't depend on each
+other then you'd have more chance of getting them picked up by
+splitting the series up and sending individual bits and pieces to
+appropriate maintainers separately.
 
-- Under normal circumstances:
-  The master device sends data reading action, obtains data through __i2c_transfer and hardware controller driver,
-  initializes msfbuf1 data in msg, and returns the obtained data.
-- In this case, the I2C secondary device is a pluggable battery
-  When the I2C bus is transmitting normally, the slave device is abnormally disconnected (the battery is removed).
-  According to the I2C protocol, the entire process cannot receive an ACK, resulting in communication interruption.
-  If the I2C controller driver does not do exception handling, __i2c_transfer returns with msbuf1's uninitialized data (random data).
-
-Therefore, when i2c_smbus_xfer_emulated uses the random data of msgbuf1, the back-end data is also abnormal.
-
-Signed-off-by: guoqi0226 <guoqi0226@163.com>
----
- drivers/i2c/i2c-core-smbus.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
-index e3b96fc..f7b0980d 100644
---- a/drivers/i2c/i2c-core-smbus.c
-+++ b/drivers/i2c/i2c-core-smbus.c
-@@ -351,6 +351,8 @@ static s32 i2c_smbus_xfer_emulated(struct i2c_adapter *adapter, u16 addr,
- 	bool wants_pec = ((flags & I2C_CLIENT_PEC) && size != I2C_SMBUS_QUICK
- 			  && size != I2C_SMBUS_I2C_BLOCK_DATA);
- 
-+	memset(msgbuf0, 0, sizeof(msgbuf0));
-+	memset(msgbuf1, 0, sizeof(msgbuf1));
- 	msgbuf0[0] = command;
- 	switch (size) {
- 	case I2C_SMBUS_QUICK:
--- 
-2.7.4
-
+Bart
 
