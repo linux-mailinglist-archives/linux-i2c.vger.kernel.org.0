@@ -1,92 +1,77 @@
-Return-Path: <linux-i2c+bounces-3763-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3762-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54F4B8FA76C
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 03:17:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93E938FA754
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 03:12:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 022152894B3
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 01:16:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03FF7B22DD2
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 01:12:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2AF58494;
-	Tue,  4 Jun 2024 01:16:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E96B8C09;
+	Tue,  4 Jun 2024 01:12:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UVUt2EMZ"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from 7.mo576.mail-out.ovh.net (7.mo576.mail-out.ovh.net [46.105.50.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23068F45
-	for <linux-i2c@vger.kernel.org>; Tue,  4 Jun 2024 01:16:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.105.50.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84968494
+	for <linux-i2c@vger.kernel.org>; Tue,  4 Jun 2024 01:12:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717463814; cv=none; b=rwxFs2JOf2uZMO7XB2WMPUYT706hL09hlBQqMtTszHVy1TyrB4O3MziatdzvxkYvuT6A/eUC8fU5NJfd3o1q6ERKHQZDai4zMzkiGzx775t9cbJwD9v2+fIVjwTAZyp+Aqkp2JfHSlBxuFDKRcIt5OferXNlOA7qTKtdUWHJBuA=
+	t=1717463560; cv=none; b=urffQnkjFpdNc3LDIoFaOub0YdmeGKl1LPR4QqSlElBBqrz+VEBEoumdI+yw+yhgxNcf8168REe9JkgC3o2KRgAwsgMcx6PQ9N5cd+/a/KJdV8vGtTlijZfWVVS5R6kyGjFTDPXFLIOxrSuqDpwLJjW+1hs6Ktn6VA79mjUpmy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717463814; c=relaxed/simple;
-	bh=zbupZxnOt+JwuMeb7qPV83HUERgYTYr+cTS6+xxTHQA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=SClKWa/mFwa6OybclV833ZD8KVjGNg+qaxNDNrqzyCQvYpCDxoyrBW+oMemqTJ77KZOkGGSElNksLGVTD+i6YURnJgiTtBgGueLYUnZFj001NR8ufjvNVypaazmaQbNsufSy/7H6rGegRc+3BIUDYah4LbdbDyqeVSQWni9CEsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=etezian.org; arc=none smtp.client-ip=46.105.50.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etezian.org
-Received: from director3.ghost.mail-out.ovh.net (unknown [10.108.9.71])
-	by mo576.mail-out.ovh.net (Postfix) with ESMTP id 4VtXZl3v4Zz1k9L
-	for <linux-i2c@vger.kernel.org>; Tue,  4 Jun 2024 01:10:23 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-kd7dz (unknown [10.110.96.102])
-	by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 161C51FE07;
-	Tue,  4 Jun 2024 01:10:21 +0000 (UTC)
-Received: from etezian.org ([37.59.142.105])
-	by ghost-submission-6684bf9d7b-kd7dz with ESMTPSA
-	id M/nSOH1pXmZXsRgARY42cQ
-	(envelope-from <andi@etezian.org>); Tue, 04 Jun 2024 01:10:21 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-105G0068250c7b1-fd9d-4e3e-b30c-b9e5b8d8dc9c,
-                    0128271CB94951378F9AAB743D4D9DD493E1C1D0) smtp.auth=andi@etezian.org
-X-OVh-ClientIp:89.217.109.169
+	s=arc-20240116; t=1717463560; c=relaxed/simple;
+	bh=dJpYpLdHbQQIAWDUNvHrTUvxxzWRBkzdVQoZSyPdjJY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cJqpP+qeptqQe0YjfMYxPSrcKO+7gMJ6R2M5cp+OO1O57yEyuFee8veLEH7GiB0rLMgvKxFU+FOFa2Psa7G+2jjglLMhWAhpPuhUS01tnkLbm92ZOOZq8ZR51wnYebWFUheh9O0ukAfARqq83WOr76K2g6y9aPnrglqJrt7KPI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UVUt2EMZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 037FAC2BD10;
+	Tue,  4 Jun 2024 01:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717463560;
+	bh=dJpYpLdHbQQIAWDUNvHrTUvxxzWRBkzdVQoZSyPdjJY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UVUt2EMZugl+xM2fG7YI4SVmySgLFo5KV/ev6cVuYyglyGtWnJiXNiaEFyjuG3IBL
+	 1OO6B6ub0V3we/4MSMzPBenqJipRJtCFcQohFHWZW6F0v3fpeZ0wGPrcXWkE7jX0NE
+	 /bNYvocq/8IeTKEqUU3lAGUoSCv63G/AG7jedbVM8a4VUO6Chqs6L60PhleQlSHt1/
+	 ZmWBiAg49r7zqWsKAvo8qCjmKzgfp8LI0IVZqtNZKCt/6GrG8smo7R3va+hfTwhAfz
+	 sPsjnrb0BAF8t4/kZge8UdD2qUYjinRS96KqfObSpzB6yGp4FLUYkLoP0u9O62DXfa
+	 Gw3xpAyUU5Lpw==
+Date: Tue, 4 Jun 2024 02:12:36 +0100
 From: Andi Shyti <andi.shyti@kernel.org>
-To: Linux I2C <linux-i2c@vger.kernel.org>, Jean Delvare <jdelvare@suse.de>
-Cc: Luis Oliveira <lolivei@synopsys.com>, 
- Jarkko Nikula <jarkko.nikula@linux.intel.com>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Mika Westerberg <mika.westerberg@linux.intel.com>, 
- Jan Dabros <jsd@semihalf.com>
-In-Reply-To: <20240531111748.441a85b6@endymion.delvare>
-References: <20240531111748.441a85b6@endymion.delvare>
-Subject: Re: [PATCH] i2c: designware: Fix the functionality flags of the
- slave-only interface
-Message-Id: <171746341851.238712.12338315556365264797.b4-ty@kernel.org>
-Date: Tue, 04 Jun 2024 02:10:18 +0100
+To: Jean Delvare <jdelvare@suse.de>
+Cc: Linux I2C <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c: dev: Check for I2C_FUNC_I2C before calling
+ i2c_transfer
+Message-ID: <lwmdtysg42bw5a2bz6kssiolsvj22vylqribzbexvvwbsl4ny6@plrwglgsr2xt>
+References: <20240531113407.4df71f5a@endymion.delvare>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
-X-Ovh-Tracer-Id: 7601794696830913216
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrvdelfedggedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihdrshhhhihtiheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpeffteehudffvdfhudfgffdugfejjeduheehgeefgeeuhfeiuefghffgueffvdfgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduvdejrddtrddtrddupdekledrvddujedruddtledrudeiledpfeejrdehledrudegvddruddtheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomheprghnughisegvthgviihirghnrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqihdvtgesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejiedpmhhouggvpehsmhhtphhouhht
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240531113407.4df71f5a@endymion.delvare>
 
-Hi
+Hi Jean,
 
-On Fri, 31 May 2024 11:17:48 +0200, Jean Delvare wrote:
-> When an I2C adapter acts only as a slave, it should not claim to
-> support I2C master capabilities.
+On Fri, May 31, 2024 at 11:34:07AM +0200, Jean Delvare wrote:
+> It is good practice to check that the underlying adapter supports
+> I2C transfers before attempting them. The i2c core would eventually
+> return an error, but it's more efficient to fail early.
 > 
-> 
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
 
-Applied to i2c/i2c-host-next on
+Looks good to me:
 
-git://git.kernel.org/pub/scm/linux/kernel/git/local tree
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 
-Thank you,
+Thanks,
 Andi
-
-Patches applied
-===============
-[1/1] i2c: designware: Fix the functionality flags of the slave-only interface
-      commit: 9224b8546453758f73210256597f60f897f8dafe
-
 
