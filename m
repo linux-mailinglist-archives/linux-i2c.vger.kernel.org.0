@@ -1,344 +1,167 @@
-Return-Path: <linux-i2c+bounces-3800-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3801-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D21278FBCEB
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 22:03:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54FD08FBD28
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 22:15:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B242B2513F
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 20:02:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B57A31F25CE4
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 20:15:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7695D14B940;
-	Tue,  4 Jun 2024 20:02:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C93F514265F;
+	Tue,  4 Jun 2024 20:15:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="XOxU5kk9"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Beev9rSt"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx14lb.world4you.com (mx14lb.world4you.com [81.19.149.124])
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DFAC2F25
-	for <linux-i2c@vger.kernel.org>; Tue,  4 Jun 2024 20:02:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8712C14036B
+	for <linux-i2c@vger.kernel.org>; Tue,  4 Jun 2024 20:15:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717531369; cv=none; b=L8adGk9nVEWOJ5heMyWzAtNBaJ3j9u0ZmhFeXxCJHagbUL9dPem208liypQSQio/MbfFthk4DzQ7YGfmYzon9N0HuMp/AiFXbAi6YR/3kOlCcpkhHAMxZu8l36tBB3oU3ZKp6Lx8xQuFaWh98WRaFBmSEnyKw6ONsZnXLYEkWEQ=
+	t=1717532128; cv=none; b=Lw15gQXK+hdQpIBgjbAJDU5ScfyHgZTyAYdm32L/N/JrXYYVxm+6Elj56vd9BRLIzorVsKlrjKEm17wcbNEU1wnQ7slVcbtJhkI3ApRDiwTRzwCzr4xfdYZoSUoBS+gXbR/sAkYSUlwyewhEPxn6fK1FykkhMcJf/RNAcZuvlR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717531369; c=relaxed/simple;
-	bh=bdxwLyrRMLQ+CvdEGRVuVD7Iz78Oq0cy2POaEGKl2l4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WFOnJKJ19aADHVcRpprdjlMPjmaHFPnHnrmovIQ/nkC+Mr7SIah+N/ywfaDk92VM5xgQzjI2JSrUZW2t3I9q8gbaMXSpwHEC56ahOAPlqWHuI6Q3O1KW1/vqJXWDw+dQJZAIbRrO+WKcmjq/X0B4yLtPv4n1FbJzKUF7epuuJns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=XOxU5kk9; arc=none smtp.client-ip=81.19.149.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=7H1fesgwXMgO7rJ2z2NxquH6QShflLB2sK2MSwTA4/U=; b=XOxU5kk9lovvEm98M1AxaZXFY2
-	zVR3PynfQvWH23IPtEBZYgFrfR9CCxwZVp86K6rz01t9L4UHRX3mJQa7ezjBJNRrwjNvCM5GCXH0d
-	ZO8YkNUGqChOfumWvodAPRxBAlU5NVSAqiVBEiISonnp2zBIasGdEz6es9cc5l50GKuI=;
-Received: from [88.117.63.44] (helo=[10.0.0.160])
-	by mx14lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <gerhard@engleder-embedded.com>)
-	id 1sEZU4-0000mG-2o;
-	Tue, 04 Jun 2024 21:06:13 +0200
-Message-ID: <5c656faf-be5c-46b2-9d00-46fa8e002990@engleder-embedded.com>
-Date: Tue, 4 Jun 2024 21:06:11 +0200
+	s=arc-20240116; t=1717532128; c=relaxed/simple;
+	bh=843Pxj9q/wszPDCTdOObwl7gl9BDaaPWFGEg1gnkF10=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UR7HzPQm95U3C8RFrKDpXSNsbNwcbQdvOrOHZclezZzTFAGAEJj1qVmo9OHvBc1DjXDi5XcJ+IQKA8C9q39P6tx4Xd5cEMnTuJM1akRKAwIZWNM2WlP6/mzNBZVee3eMISvSSVwPyso+SchIG7mxpZ4gbkkzSiyoTosHxS1uNw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Beev9rSt; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=80M9
+	/oFeQrdHA5qzmIt/EiiNd4PHMkgSxg0oOqw3y5U=; b=Beev9rStyx1sTek2gs0e
+	VVLK3gieGjFU6iGVBwpNVS9US/BFN25KxB6txKVv7eTWTkoIzuXH+7CJtv/ipJJu
+	zzCIh9x9Avn1dZ8u4x7O6oUcHRrb4GqPWPHfsrYopdtQkOyPlI8DQr9VWHyhM4kg
+	coh1nGvp2+kzJ1rFxm3cFXDcjLfBsyYwiOJVm11uzw9JxBt69UCMmeNT9qd0FUAG
+	/IWdEpDNS+/Shc4PlipLA850UO1CnSSqFXk8j6GUZnwEa8MNT65VnTfvXMGfIONz
+	tfC7BC5EqEa8rcyHfl/dTFM4jYdJ77QoyhhIpeNm9Vaso3BZgmzbuv1PO72/8Jvj
+	gA==
+Received: (qmail 2434857 invoked from network); 4 Jun 2024 22:08:41 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Jun 2024 22:08:41 +0200
+X-UD-Smtp-Session: l3s3148p1@VjAmBBYawNFehhtB
+Date: Tue, 4 Jun 2024 22:08:41 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Jean Delvare <jdelvare@suse.de>
+Cc: linux-renesas-soc@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>
+Subject: Re: [PATCH] i2c: smbus: fix NULL function pointer dereference
+Message-ID: <bk6rgqfcn5op5iuojoisogvtrp24ldblgkq4g62ffr4z7wnzug@xlp3ce5bx7bs>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Jean Delvare <jdelvare@suse.de>, linux-renesas-soc@vger.kernel.org, 
+	Baruch Siach <baruch@tkos.co.il>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Peter Rosin <peda@axentia.se>
+References: <20240426064408.7372-1-wsa+renesas@sang-engineering.com>
+ <1e626d93f4220cc348300bbc61089de32300122d.camel@suse.de>
+ <b2tnimag62ty6wndyjsy7u5fay6y52zn47vvifw6rh5abeqzpu@pqyyczutxcwu>
+ <20240604171113.232628f9@endymion.delvare>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] i2c: keba: Add KEBA I2C controller support
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-i2c@vger.kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
- Gerhard Engleder <eg@keba.com>
-References: <20240601192846.68146-1-gerhard@engleder-embedded.com>
- <20240601192846.68146-2-gerhard@engleder-embedded.com>
- <oo2eydydqmtysgzwzfee5p4oxncy66b2wwnuio53asubqm7wbo@ur2q2n7groll>
-Content-Language: en-US
-From: Gerhard Engleder <gerhard@engleder-embedded.com>
-In-Reply-To: <oo2eydydqmtysgzwzfee5p4oxncy66b2wwnuio53asubqm7wbo@ur2q2n7groll>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AV-Do-Run: Yes
-
-On 04.06.24 00:37, Andi Shyti wrote:
-> Hi Gerhard,
-
-Hello Andi
-
-> On Sat, Jun 01, 2024 at 09:28:45PM +0200, Gerhard Engleder wrote:
->> From: Gerhard Engleder <eg@keba.com>
->>
->> The KEBA I2C controller is found in the system FPGA of KEBA PLC devices.
->> It is used to connect EEPROMs and hardware monitoring chips.
-> 
-> can you please add more information about the device, please?
-
-I will add more information
-
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright (C) KEBA AG 2012
-> 
-> can we update the date here?
-
-First driver version is from 2012. I will remove that line.
-
->> + * Copyright (C) KEBA Industrial Automation Gmbh 2024
->> + *
->> + * Driver for KEBA I2C controller FPGA IP core
->> + */
->> +
->> +#include <linux/module.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/io.h>
->> +#include <linux/iopoll.h>
->> +#include <linux/i2c.h>
->> +#include <linux/platform_data/i2c-keba.h>
-> 
-> Can you sort them in alphabetical order, please?
-
-Will be done.
-
->> +#define KI2C "i2c-keba"
->> +
->> +#define KI2C_CAPABILITY_REG	0x02
->> +#define KI2C_CONTROL_REG	0x04
->> +#define KI2C_CONTROL_DC_REG	0x05
->> +#define KI2C_STATUS_REG		0x08
->> +#define KI2C_STATUS_DC_REG	0x09
->> +#define KI2C_DATA_REG		0x0c
->> +
->> +#define KI2C_CAPABILITY_CRYPTO	0x01
-> 
-> This crypto is not used anywhere, did you add it for completness
-> or have you forgotten to use it?
-
-It is there for completeness/documentation.
-
->> +#define KI2C_CAPABILITY_DC	0x02
->> +
->> +#define KI2C_CONTROL_MEN	0x01
->> +#define KI2C_CONTROL_MSTA	0x02
->> +#define KI2C_CONTROL_RSTA	0x04
->> +#define KI2C_CONTROL_MTX	0x08
->> +#define KI2C_CONTROL_TXAK	0x10
->> +
->> +#define KI2C_STATUS_IN_USE	0x01
->> +#define KI2C_STATUS_ACK_CYC	0x02
->> +#define KI2C_STATUS_RXAK	0x04
->> +#define KI2C_STATUS_MCF		0x08
->> +
->> +#define KI2C_DC_SDA		0x01
->> +#define KI2C_DC_SCL		0x02
-> 
-> You could eventually make it as:
-> 
-> #define REG1_ADDR	0xXX
-> #define   REG1_VAL_1	0xXX
-> #define   REG1_VAL_2	0xXX
-> #define   REG1_VAL_3	0xXX
-> 
-> #define REG2_ADDR	0xXX
-> #define   REG2_VAL_1	0xXX
-> #define   REG2_VAL_2	0xXX
-> #define   REG2_VAL_3	0xXX
-> 
-> So that it's clear what belongs to what. Not a binding comment,
-> just an aesthetic note.
-
-I will give it a try.
-
->> +
->> +#define KI2C_INUSE_SLEEP_US	(2 * USEC_PER_MSEC)
->> +#define KI2C_INUSE_TIMEOUT_US	(10 * USEC_PER_SEC)
->> +
->> +#define KI2C_POLL_DELAY_US	5
->> +
->> +struct ki2c {
->> +	struct platform_device *pdev;
->> +	void __iomem *base;
->> +	struct i2c_adapter adapter;
->> +
->> +	struct i2c_client **client;
->> +	int client_size;
->> +};
->> +
->> +static int ki2c_inuse_lock(struct ki2c *ki2c)
->> +{
->> +	u8 sts;
->> +	int ret;
->> +
->> +	/* The I2C controller has an IN_USE bit for locking access to the
->> +	 * controller. This enables the use of I2C controller by other none
->> +	 * Linux processors.
-> 
-> Please use the proper commenting style:
-> 
-> 	/*
-> 	 * Comment line 1
-First driver version is from 2012. I will
-> 	 * Comment line 2
-> 	 * ...
-> 	 * Comment line N
-> 	 */
->
-
-Sorry, I forgot that only net is using that style. Will be changed for
-all comments.
-
->> +	 *
->> +	 * If the I2C controller is free, then the first read returns
->> +	 * IN_USE == 0. After that the I2C controller is locked and further
->> +	 * reads of IN_USE return 1.
->> +	 *
->> +	 * The I2C controller is unlocked by writing 1 into IN_USE.
->> +	 */
-> 
-> Basically this is a semaphore.
-
-I will enhance the comment.
-
->> +	ret = readb_poll_timeout(ki2c->base + KI2C_STATUS_REG,
->> +				 sts, (sts & KI2C_STATUS_IN_USE) == 0,
->> +				 KI2C_INUSE_SLEEP_US, KI2C_INUSE_TIMEOUT_US);
-> 
-> we are waiting too long here... the documentaition recommends to
-> use the readb_poll_timeout for less than 10us, while we are
-> waiting 2ms.
-
-I will check if it can be changed. Should be possible.
-
->> +	if (ret != 0)
->> +		dev_warn(&ki2c->pdev->dev, "%s err!\n", __func__);
->> +
->> +	return ret;
->> +}
->> +
->> +static void ki2c_inuse_unlock(struct ki2c *ki2c)
->> +{
->> +	/* unlock the controller by writing 1 into IN_USE */
->> +	iowrite8(KI2C_STATUS_IN_USE, ki2c->base + KI2C_STATUS_REG);
->> +}
->> +
->> +static int ki2c_wait_for_bit(u8 mask, void __iomem *addr, unsigned long timeout)
-> 
-> It looks more natural to have "addr" as a first argument.
-
-I will reorder.
-
->> +{
->> +	u8 val;
->> +
->> +	return readb_poll_timeout(addr, val, (val & mask), KI2C_POLL_DELAY_US,
->> +				  jiffies_to_usecs(timeout));
->> +}
->> +static int ki2c_get_sda(struct ki2c *ki2c)
->> +{
->> +	/* capability KI2C_CAPABILITY_DC required */
->> +	return (ioread8(ki2c->base + KI2C_STATUS_DC_REG) & KI2C_DC_SDA) != 0;
-> 
-> Please avoid using such compact style.
-
-Will make it more readable.
-
->> +}
->> +	/* generate clock cycles */
->> +	ki2c_set_scl(ki2c, val);
->> +	ndelay(KI2C_RECOVERY_NDELAY);
->> +	while (count++ < KI2C_RECOVERY_CLK_CNT * 2) {
->> +		if (val) {
->> +			/* SCL shouldn't be low here */
->> +			if (!ki2c_get_scl(ki2c)) {
->> +				dev_err(&ki2c->pdev->dev,
->> +					"SCL is stuck low!\n");
->> +				ret = -EBUSY;
->> +				break;
->> +			}
->> +
->> +			/* break if SDA is high */
->> +			if (ki2c_get_sda(ki2c))
->> +				break;
->> +		}
->> +
->> +		val = !val;
->> +		ki2c_set_scl(ki2c, val);
->> +		ndelay(KI2C_RECOVERY_NDELAY);
-> 
-> I don't know how much sense it makes to wait in ndelays, this is
-> not going to be precise and... are we sure we want to wait
-> atomically here?
-
-So far there were no problems so it should be precise enough. Delay
-is only 5us so sleeping is not necessary. This is done during startup,
-sleeping would delay startup.
-
->> +	}
->> +
->> +	if (!ki2c_get_sda(ki2c)) {
->> +		dev_err(&ki2c->pdev->dev, "SDA is still low!\n");
-> 
-> To me this and the above dev_err's are just spamming the dmesg as
-> we are already printing up in the probe function. If we want to
-> have more precision printing, then we need to chose where the
-> dev_err's need to be.
-
-I will improve the error reporting.
-
->> +		ret = -EBUSY;
->> +	}
->> +
->> +	/* reenable controller */
->> +	iowrite8(KI2C_CONTROL_MEN, ki2c->base + KI2C_CONTROL_REG);
-> 
-> ...
-> 
->> +	ret = ki2c_wait_for_data_ack(ki2c);
->> +	if (ret < 0)
->> +		/* For EEPROMs this is normal behavior during internal write
->> +		 * operation.
-> 
-> Please, mind the coding style.
-
-I will do.
-
->> +		 */
->> +		dev_dbg(&ki2c->pdev->dev, "%s wait for ACK err at 0x%02x!\n",
->> +			__func__, m->addr);
->> +
->> +	return ret;
->> +}
-> 
-> ...
-> 
->> +static int ki2c_probe(struct platform_device *pdev)
->> +{
->> +	struct i2c_keba_platform_data *pdata;
->> +	struct device *dev = &pdev->dev;
->> +	struct i2c_adapter *adap;
->> +	struct resource *io;
->> +	struct ki2c *ki2c;
->> +	int ret;
->> +
->> +	pdata = dev->platform_data;
->> +	if (pdata == 0) {
->> +		dev_err(dev, "Platform data not found!\n");
->> +		return -ENODEV;
-> 
-> please use dev_err_probe()
-
-This function is new to me. I will check.
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4bhsazqdizvel7kz"
+Content-Disposition: inline
+In-Reply-To: <20240604171113.232628f9@endymion.delvare>
 
 
-Thank you for your review!
+--4bhsazqdizvel7kz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Gerhard
+Hi Jean,
+
+> Note that we still want I2C_FUNC_I2C to be set properly, because it
+> allows device drivers to optimize transfers (the at24 driver is a prime
+> example of that) or even just to bind to the I2C bus (for device
+> drivers which properly check for it).
+
+I agree. We definitely want I2C_FUNC_I2C to be set and make use of it as
+much as possible. We should just not completely rely on it.
+
+> > (There is a CVE for it??) For Baruch's case, this is true. But there are
+> > __i2c_transfer users all over the tree, they are all potentially
+> > vulnerable, or?
+>=20
+> Yes there are many, but I think we shall differentiate between 2 cases:
+> * Missing check in a specific kernel device driver. These are unlikely
+>   to be a problem in practice because (1) these devices are typically
+>   instantiated explicitly, and such explicit code or device tree
+>   description would not exist in the first place if said device was not
+>   compatible with said I2C bus, and (2) if such an incompatibility was
+>   really present then it would have been spotted and fixed very
+>   quickly. Arbitrary binding through sysfs attributes is still possible
+>   but would definitely require root access and evil intentions (at
+>   which point we are screwed no matter what). I'm honestly not worried
+>   about this scenario.
+
+OK, can be argued.
+
+> * The issue being triggered from user-space through i2c-dev, which is
+>   what Baruch reported. The user doing that can target any arbitrary
+>   I2C bus and thus cause the oops by accident or even on purpose. For
+>   me this is what CVE-2024-35984 is about. What limits the attack
+>   surface here is that slave-only I2C buses are rare and you typically
+>   need to be root to use i2c-dev. But this is still a serious issue.
+
+Agreed.
+
+> Also note that the first case could happen ever since __i2c_transfer()
+> was introduced (kernel v3.6, commit b37d2a3a75cb) and is not limited to
+> slave-only adapters, as any SMBus-only i2c_adapter would also be
+> vulnerable.
+
+Which makes handling this gracefully even more important.
+
+> So the "Fixes:" tag in commit 91811a31b68d is incorrect for both
+> scenarios.
+
+Ack. Sorry! :)
+
+> > gracefully because kicking off I2C transfers is not a hot path. Maybe we
+> > could turn the dev_dbg into something louder to make people aware that
+> > there is a bug?
+>=20
+> My previous message initially had a suggestion in that direction ;-)
+> but I first wanted your opinion on the check itself. dev_dbg() is
+> definitely not appropriate for a condition which should never happen
+> and implies there's a bug somewhere else. A WARN_ON_ONCE would probably
+> be better, so that the bug gets spotted and fixed quickly.
+
+So, are you okay with keeping the check where it is now and turning the
+dev_dbg into WARN_ON_ONCE? I am.
+
+All the best,
+
+   Wolfram
+
+
+--4bhsazqdizvel7kz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZfdEUACgkQFA3kzBSg
+Kba6Tw//ZXtwgs1Z64LmhwEfpaTqY+W5nFX6jknwWjmZovfxNwQw8d/YqCuQKKfP
+07P18mNfynJxN/H/QQZi6QW4XSyW0vEv18co4QNmW9YRRWRcyT18U0Onhf4NzwH2
+uZBta6T2zoPiCAAiALKUCXCg1KTG0rm2usWZzuBG6dtlNnTQtmbNj6GyqTg9+NkB
+i5Il7D9Vq2OvryNAe0dBgJYbd58rESLNeTYk99+4vqzR+bzTt3DPWvwuFa8JBEaH
+RvQHHEMxYol3Jdp60WwRaWDIvMvFdVT6qmxkrSZDTLGSw3VwZdJ+YMY1B2dPAXPr
+JFPwNEQftVaf7uRFj7lsBqgtzHkDtvAWbJtZP4DCdaMPOZKSV4oc0qm4iF8MV/Oj
+jtBWFEJ68H4DCd89l2Y4I5EbA8eTpDRHQNLsjI7cMw5+bg8/z71rqSLa5nLNetLY
+roHH/3+hMvOACaxKxv7EVGGZXoSfTid/hp7CpSciiwcI5h8uFkEnw3QHWgyS7b7v
+EORXybfUyv/CCPJNybhoJdCsupmtFohn48NiWr1fVcvpCimvpiTatXuBP7uuOspN
+EwqUW31YYobHybDmaIhD7DetIWPwGMZItcztkUfM3T7LbWFxGh44mbmGdfEobscT
+AW0o7GioHbwSeU78vAUrjje8hVmmQwJE1DQ8gda/RtmFmjQEmoY=
+=8vSS
+-----END PGP SIGNATURE-----
+
+--4bhsazqdizvel7kz--
 
