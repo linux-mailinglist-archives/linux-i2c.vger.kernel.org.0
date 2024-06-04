@@ -1,70 +1,72 @@
-Return-Path: <linux-i2c+bounces-3766-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3767-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 546D38FA8F0
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 06:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 429AC8FA8F4
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 06:03:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D79D0B24E9F
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 04:02:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D18ADB2620D
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 04:03:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F1F132104;
-	Tue,  4 Jun 2024 04:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D48213DB96;
+	Tue,  4 Jun 2024 04:02:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eJ8SrO70"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hwsqYWJR"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD59238B;
-	Tue,  4 Jun 2024 04:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8694177A1E;
+	Tue,  4 Jun 2024 04:02:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717473764; cv=none; b=evuFE4/WjCHmoLcsiRXnlTcmuDJsZH4Es9vQbsnggdI3/vfquhzcBsW7hNEVWK6hUG99wxYhZN4R21SuZjfYozD1rzDaSNlDtkuifbjFJlUZYq1xAPlY1H59OgLqZyrDsa6Dx7QIu9Njbrk3l7dXz3i56x8vmjFrgwbS0L4Ucxo=
+	t=1717473766; cv=none; b=mu3r7Z79WcfYgzH6WF63wjwoMW82lRIH2GlE9TZyRrzNTy3qd45x7u8bvikdk8pXTUZeMFvT+36tJmaOu3ZzaQQCsyF59fUyzMXl/dAF7CMCaEa/WkH/EtPAV5RZ1mBMB/7yzaQaX7KvBmdxQqPagBcDTfvwEB5T8kTrDzXdx1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717473764; c=relaxed/simple;
-	bh=g1qqpl96AdAYEBX7DOCPaDYf/Og0BxLUQKggssWSn3M=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Ll164m8opo417zW9VRDjmV4aU7SD1JNTI+sx8g9n+lh5SGfqLN9/Uj82N7zdelf0wcrkfaJnfyjeUXgQFwoWJD1l9nIFsaiF28Fpk3ENIcVaRFJ+XwcZygqrcjtuNDOQtENMVDp57tZw+vXRV6FpUzpRpkMb93MQBSZwB4f9L2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eJ8SrO70; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1717473766; c=relaxed/simple;
+	bh=rtJFyYapRC85QY1SVBCDL3Yw6aBiggbxdK4cxx7DI50=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=nZKqFEcxBdEwww1mrpNjbNdjbe6l+EzSvOo24X1F7E35qYj988bh/X+sBa9vCo5ly0s7aVOzqKmzambcdIMFM47Fc6EgII5LwM9t9JPHEURel+VcrRyanl58HISV3bfbUrH06l+04RVAE7UiInf1VKNN27GVVKOeTkzEa09YX/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hwsqYWJR; arc=none smtp.client-ip=209.85.160.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1f480624d0dso40660065ad.1;
-        Mon, 03 Jun 2024 21:02:42 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-25082dbeb44so342117fac.3;
+        Mon, 03 Jun 2024 21:02:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717473761; x=1718078561; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=JlyCTeaCH4Oen+k1b5qm5UwIXUpqadxOqG00edSRfEo=;
-        b=eJ8SrO70pmz1VL0NfhEhN6x22JtACLZMMsMVgZdV58sVWCVZAzFV2/GjXEQr1hn1Lr
-         0Yg3bgq0+nwGse5YtH4HOdX1J59+XmYMMLSdtEMp0GMHMBoGtV1hrYUy+/eFmae92cH2
-         mVkKnbOD/xmIci7CIUAZAYH8x4IphXMEh6UMQ1eNuZz0gEwAcn8Ci0VGgXz3xRYanyVm
-         Si1tdhhs48OJRsSSho/EwMm28xQYcMcFMoV51+uF7Hkl3n71aLOKFaTL4hjg4KnXPkLO
-         MpS0ybYOMs/0UotVtlHndRpUtJ4JtuX0CcPTou5rwxwe2zeEhu/ha6C4uNihUM/GKjQp
-         9qBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717473761; x=1718078561;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1717473763; x=1718078563; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JlyCTeaCH4Oen+k1b5qm5UwIXUpqadxOqG00edSRfEo=;
-        b=HUN89WHLPekZh2BC8rNxsXt4f2e+UEVYs5zyo/oe13NnTfTjhKtaJoxrBVR9+bGb7Y
-         Ws/g+LNNbkhNRRmbhzIRJKM/rFj9U1wuw5udj3mdiG9rnO9csYR620BaiuNH56B4T4Wq
-         kZS3/rRwR12EPAuVFMPUPLYM7NfsVq95UB8IMKqrbRNevvLkZ/LSLG4PGFttYWVn7ATt
-         VnfJEPsCdm5ly8//RRNW8ec5VrAGGtKAJBkGUZdlH6Cf4EYRVThDSGahdJ4UQUe7rVrb
-         9x2lj70kqeU+SmQPyyQIF9cZAAAiQMfcHPaaNsQn2fbwDiHOOJ82Gwx0WcZJDpTZyF2j
-         lzig==
-X-Forwarded-Encrypted: i=1; AJvYcCVuWLTNdwEfDj/g2KEXxzgVr+9GMmT112wJGX5htB0fW2KBHME+rX6Jogef1lj1RU8NDP+pWQIyzA5DxZbpsMx3FIjIAyDG5jbThtvSUck+sf12dlzDcyQC2rKVRkQsx8p30gRNTm0dsg==
-X-Gm-Message-State: AOJu0YyulXpDzRaND6ixqS0mpOkjt/1DAQw4KbNU796dcIya1eRMotqh
-	eyV5Zn8HTZBApu78jZ8e7cE/fsZb+aEJNxxdkWa0qWLW9SSJi0S1K8bvaw==
-X-Google-Smtp-Source: AGHT+IFqdUa+JwtJ+RCDCcGeklgRUk+qu9sxaUHH87jmwn3HEYfBJNaN0ce0pgGxCIRUlgCz57I0xw==
-X-Received: by 2002:a17:902:e742:b0:1f6:80e2:e423 with SMTP id d9443c01a7336-1f680e314f6mr52815495ad.68.1717473761080;
-        Mon, 03 Jun 2024 21:02:41 -0700 (PDT)
+        bh=4OOepMOqN3xULXLyB8tcKBBYcxy3ibGpXyjansLnUeU=;
+        b=hwsqYWJRfY2siFBNYujHkp1PGZ33hZ59CbEiNTnpDus1KXLwzivmY0aGkwS0WOiiqV
+         sCaiwApXpn6SLFUSzw2eonGJP4Wg27iFHnaTdYSAUZEdVnCU1/IVZeFLwQ2RuZ7ZpHYI
+         bOD/DGdvTiAReNzCE5KgvVLgPHDXBq2vbEOtA4ziSFiBqJnPrczd6aDabC1JMdIhZxSo
+         PXpmvbFQguQnTmh1PP6rYYTkdLeSgR+Nln183hXqpr3S2jOfClXMjBtXX8/7kP6CMlii
+         hfqwurC0xVh7VYkgtz6fAVrOoqVDDL4Rx/4kH3bxM7zDt33+Xy0JtjOirwiFQ7LvV77U
+         QiJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717473763; x=1718078563;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=4OOepMOqN3xULXLyB8tcKBBYcxy3ibGpXyjansLnUeU=;
+        b=caUIYxY6FiCVF7NpaqBCG6VXdbz7giCwHI26i9pqekFTJNWV4PtaKfIHbiOw3ZrKS2
+         JY+zNRPvE3YIUmKMaNOPuMdvo4o63x7LvlvbpZGaLDfc8Y4BLvcZzCSSwlbqVlCGRvec
+         2dcVFLEug1DR1TxSQsJhFkDr91aIT35Eo7kQEg1FAdSizSUYvV1ZXDtrqwRXLcTZoD+v
+         uQiAJgZmM5dU8bKeoG4cRkRnn/HoV8zuGCRcplmtQ0zunuSIY8woqMiVb4pnInTejbmk
+         5ZpCF2fcPYRI8ItNk00UpOkau8jzV6Q1dwyMWydSXeHDyFIMjPYD1YIK1+znBSnGZFsw
+         Glsw==
+X-Forwarded-Encrypted: i=1; AJvYcCUviW92zfgd0xKXeOK0GJtQkG/wgp9Tcic45KkT7SNAWTxcsJh36I07jLdRNNfY7Aaede2rmmcD+MgyKg+tvcTqwpiC/HE8eLgml6VNzklkUPvDdvT7/FDmpo/e3wzzlgRcJsSCPDKjAg==
+X-Gm-Message-State: AOJu0YxZ836WzN4J4KpMIaShOZQBRWQzKuZfTCaId1/6kQoPelikd8H3
+	ur5X92s6vWzGqdGyO2cxkaWjl/6qGqEIQcNnJKdqggLo6J1n0x7OSQSXnQ==
+X-Google-Smtp-Source: AGHT+IFsvsXv7RhqNBGWUxxUjNJ17Tmnj+Wd4561BKzAsQV5Qdd/oKIk+prwsY7MzHLpTXmDFpR1Rg==
+X-Received: by 2002:a05:6870:9214:b0:250:725f:ed50 with SMTP id 586e51a60fabf-2508bab5cd6mr12770877fac.17.1717473762970;
+        Mon, 03 Jun 2024 21:02:42 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f634380b34sm71840785ad.12.2024.06.03.21.02.39
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6c355aeaae3sm6171598a12.43.2024.06.03.21.02.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jun 2024 21:02:40 -0700 (PDT)
+        Mon, 03 Jun 2024 21:02:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-hwmon@vger.kernel.org
@@ -77,66 +79,51 @@ Cc: linux-i2c@vger.kernel.org,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
 	Armin Wolf <W_Armin@gmx.de>,
 	Stephen Horvath <s.horvath@outlook.com.au>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v4 0/6] hwmon: Add support for SPD5118 compliant chips
-Date: Mon,  3 Jun 2024 21:02:31 -0700
-Message-Id: <20240604040237.1064024-1-linux@roeck-us.net>
+	Guenter Roeck <linux@roeck-us.net>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 1/6] dt-bindings: trivial-devices: Add jedec,spd5118
+Date: Mon,  3 Jun 2024 21:02:32 -0700
+Message-Id: <20240604040237.1064024-2-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240604040237.1064024-1-linux@roeck-us.net>
+References: <20240604040237.1064024-1-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add support for SPD5118 (Jedec JESD300) compliant chips supporting
-a temperature sensor and SPD NVRAM. Such devices are typically found on
-DDR5 memory modules.
+Add bindings for the SPD hub present in DDR5 modules.
+(https://www.jedec.org/standards-documents/docs/jesd300-5b01).
 
-The first patch of the series adds SPD5118 devicetree bindings. The second
-patch adds support for SPD5118 temperature sensors. The third patch adds
-support for suspend/resume. The 4th patch adds support for reading the
-SPD NVRAM. The 5th patch adds support for auto-detecting SPD5118 compliant
-chips to i2c_register_spd() in the i2c-smbus code. The last patch of the
-series adds a configuration option to make the auto-detect code in the
-spd5118 driver configurable.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v4: Add Krzysztof's Acked-by:
 
-Note: The driver introduced with this patch series does not currently
-support accessing SPD5118 compliant chips in I3C mode.
+v3: Drop explicit bindings file; add binding to trivial devices
+    instead
 
-v4: Add support for detecting SPD5118 compliant chips in i2c-smbus driver
-    Make auto-detect code in driver optional
-    Fix suspend code
-    Ignore failure to register with nvmem core if it is disabled
-    Use NVMEM_DEVID_NONE instead of NVMEM_DEVID_AUTO in nvmem code,
-    changing nvmem attribute directories from 0-005[0-7]X to 0-005[0-7]
 
-v3: Drop explicit bindings document; add binding to trivial devices instead
-    Add support for reading SPD NVRAM
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-v2: Drop PEC support; it only applies to I3C mode.
-    Update documentation
-    Add suspend/resume support 
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index 0a419453d183..1d19e67de2a1 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -168,6 +168,8 @@ properties:
+           - isil,isl69269
+             # Intersil ISL76682 Ambient Light Sensor
+           - isil,isl76682
++            # JEDEC JESD300 (SPD5118) Hub and Serial Presence Detect
++          - jedec,spd5118
+             # Linear Technology LTC2488
+           - lineartechnology,ltc2488
+             # 5 Bit Programmable, Pulse-Width Modulator
+-- 
+2.39.2
 
-----------------------------------------------------------------
-Guenter Roeck (6):
-      dt-bindings: trivial-devices: Add jedec,spd5118
-      hwmon: Add support for SPD5118 compliant temperature sensors
-      hwmon: (spd5118) Add suspend/resume support
-      hwmon: (spd5118) Add support for reading SPD data
-      i2c: smbus: Support DDR5 SPD EEPROMs
-      hwmon: (spd5118) Add configuration option for auto-detection
-
- .../devicetree/bindings/trivial-devices.yaml       |   2 +
- Documentation/hwmon/index.rst                      |   1 +
- Documentation/hwmon/spd5118.rst                    |  63 ++
- drivers/hwmon/Kconfig                              |  30 +
- drivers/hwmon/Makefile                             |   1 +
- drivers/hwmon/spd5118.c                            | 661 +++++++++++++++++++++
- drivers/i2c/i2c-smbus.c                            |   4 +
- 7 files changed, 762 insertions(+)
- create mode 100644 Documentation/hwmon/spd5118.rst
- create mode 100644 drivers/hwmon/spd5118.c
 
