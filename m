@@ -1,56 +1,77 @@
-Return-Path: <linux-i2c+bounces-3773-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3774-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 914168FA955
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 06:38:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 126A78FA9CF
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 07:15:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 492D8287026
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 04:38:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD6FB28E302
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 05:15:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA9D13D8B5;
-	Tue,  4 Jun 2024 04:37:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70C0C13DDB2;
+	Tue,  4 Jun 2024 05:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="aHztsujz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ARH6LJQq"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C79113D88F;
-	Tue,  4 Jun 2024 04:37:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C7482A8D0
+	for <linux-i2c@vger.kernel.org>; Tue,  4 Jun 2024 05:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717475876; cv=none; b=juUFkqStEOo7I0LvakQKX7N02XNwVex0gGJxFB9CdRm//6QbDru4yA2Pwh64VnzriswwCXlNbVAlMKqS10NDc+1ftq6Al11u9agNzLAr9YZh6EWcB4z+6sn15aW7l3iRxeVM7C+Jf6Cay6NUiQ1Rgf1SXlOpR+jqsVEN/HuTuLY=
+	t=1717478064; cv=none; b=pRqwcIn01CE7tXM7sdpOn/L0KSroHamY4/hVdSf7PYzhclBW4wpmMrvp+ikLSOxsL6hB+JR06p0KbtQ+A5exg9v1hBZrP3HNv7L8tgY/lCHd+ssnoyI17MQqdSMaYiOygBX/lHb4+P4zJXRShQGJGyXR9n02MipOyweVGF5dVk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717475876; c=relaxed/simple;
-	bh=iVLiMTAtf7/Fl+fz4quBPQf213lTjGcAUNkm2Kpn84o=;
+	s=arc-20240116; t=1717478064; c=relaxed/simple;
+	bh=BFs+Im/0w0+5yhb0ZsHQ8NsdUzGpCZq3fhm5A3fGSek=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OXTHmwlxxfWx1GrwQKZqz+yf7QHOW+qK/ZAUc0r5plJLbaYyI0Ol9sfiLKAwn1LABfHT8903lqOLnCJ4kEYhrPgsUGxplE3bIIfIDTDExr3i1QKkeAffrajRfdu3m+PLKAhDrqOIUmRU3XjfSf4feLJNcnYBGreRnXGc2FC5ur8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=aHztsujz; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1717475869;
-	bh=iVLiMTAtf7/Fl+fz4quBPQf213lTjGcAUNkm2Kpn84o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aHztsujzql/3kj70X0+SleuKO5jRa3jqgLuojMbU1v8x/nmepZa8CvcmFUYQzcsXZ
-	 2lXvqJ/7i0xXvr012/qckqYrTA5qEEi2RIG8+O/ndvp4f1nRvAkGRd1uVPQerIjW/+
-	 U/oWCk9JWflk/15ItpQ7dC9nqnee3ghZmadUL4oc=
-Date: Tue, 4 Jun 2024 06:37:47 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	=?utf-8?B?UmVuw6k=?= Rebe <rene@exactcode.de>, Armin Wolf <W_Armin@gmx.de>, 
-	Stephen Horvath <s.horvath@outlook.com.au>
-Subject: Re: [PATCH v4 6/6] hwmon: (spd5118) Add configuration option for
- auto-detection
-Message-ID: <452386bd-8238-4fac-ad6d-6a8f096ecc35@t-8ch.de>
-References: <20240604040237.1064024-1-linux@roeck-us.net>
- <20240604040237.1064024-7-linux@roeck-us.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qfiSzMtk9E2yYshkLZGDyIIKPTpllxezQvVjlkxEQYZEImsDVwSltbrVYeFtIt8xjftUrguEG79b9SXwFwXka332honEVzQayrYh0fYWJGs6yCfEuBFxlXF8pkAE8DakYAg2CK6tfGrZHJGcKLDd8WejmwSkaF3V+WB9wsrDbXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ARH6LJQq; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717478062; x=1749014062;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BFs+Im/0w0+5yhb0ZsHQ8NsdUzGpCZq3fhm5A3fGSek=;
+  b=ARH6LJQqX3sr1MfNRJ9yA2acBzrAvcRBtO1PuJUKEVOR5HslJpTwBzme
+   5gZWxQReLd6XQxevl46IzlDgMAsRt+5ptYaZWYuIo++7AAFvaplPiiklm
+   /0CDlKKg3DbYpgXTH094xoC0e/oaduHQ74MjLPQP2v9GlwMZUF+9zgOh9
+   mgJJ0AcMciSRRGFzd2a1NLlFJ8Ggpn8+x5B1CdJHC5KKmpG1Fk0jsgFYO
+   TNOYSKGMPYlrxmuXz9kZabs4xQ1PxRSw0itn2FGbdOLJsSM2fMZ+Ikhq2
+   HyIat+9rDXisTT0/WYNWN2I4wB9fBoIr2xwYkLdi6/lEdqGMSdbSjys78
+   g==;
+X-CSE-ConnectionGUID: lPBFEJKFSYSvCHgwWuJ/jQ==
+X-CSE-MsgGUID: 3F8yzMMSSl+I1HRVOPV/Sw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="16936850"
+X-IronPort-AV: E=Sophos;i="6.08,213,1712646000"; 
+   d="scan'208";a="16936850"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 22:14:18 -0700
+X-CSE-ConnectionGUID: C4aXGUYRTU6jFPVtV1xDaA==
+X-CSE-MsgGUID: P3BX5KqWTvO00/CuBJmd/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,213,1712646000"; 
+   d="scan'208";a="37172643"
+Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 03 Jun 2024 22:14:17 -0700
+Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sEMUw-000Mb5-01;
+	Tue, 04 Jun 2024 05:14:14 +0000
+Date: Tue, 4 Jun 2024 13:13:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gerhard Engleder <gerhard@engleder-embedded.com>,
+	linux-i2c@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, andi.shyti@kernel.org, arnd@arndb.de,
+	gregkh@linuxfoundation.org,
+	Gerhard Engleder <gerhard@engleder-embedded.com>
+Subject: Re: [PATCH 2/2] misc: keba: Add basic KEBA CP500 system FPGA support
+Message-ID: <202406041218.9TKBWHf2-lkp@intel.com>
+References: <20240601192846.68146-3-gerhard@engleder-embedded.com>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -59,119 +80,250 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240604040237.1064024-7-linux@roeck-us.net>
+In-Reply-To: <20240601192846.68146-3-gerhard@engleder-embedded.com>
 
-On 2024-06-03 21:02:37+0000, Guenter Roeck wrote:
-> With SPD5118 chip detection for the most part handled by the i2c-smbus
-> core using DMI information, the spd5118 driver no longer needs to
-> auto-detect spd5118 compliant chips.
-> 
-> Auto-detection by the driver is still needed on systems with no DMI support
-> or on systems with more than eight DIMMs and can not be removed entirely.
-> However, it affects boot time and introduces the risk of mis-identifying
-> chips. Add configuration option to be able to disable it on systems where
-> chip detection is handled outside the driver.
-> 
-> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> v4: New patch
-> 
->  drivers/hwmon/Kconfig   | 18 ++++++++++++++++++
->  drivers/hwmon/spd5118.c |  4 +++-
->  2 files changed, 21 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 7a84e7637b51..0bb1bdee3e43 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -2185,6 +2185,7 @@ config SENSORS_SPD5118
->  	tristate "SPD5118 Compliant Temperature Sensors"
->  	depends on I2C
->  	select REGMAP_I2C
-> +	select SENSORS_SPD5118_DETECT if !DMI
->  	help
->  	  If you say yes here you get support for SPD5118 (JEDEC JESD300)
->  	  compliant temperature sensors. Such sensors are found on DDR5 memory
-> @@ -2193,6 +2194,23 @@ config SENSORS_SPD5118
->  	  This driver can also be built as a module. If so, the module
->  	  will be called spd5118.
->  
-> +config SENSORS_SPD5118_DETECT
-> +	bool "Enable detect function"
-> +	depends on SENSORS_SPD5118
-> +	default y
-> +	help
-> +	  If enabled, the driver auto-detects if a chip in the SPD address
-> +	  range is compliant to the SPD51888 standard and auto-instantiates
-> +	  if that is the case. If disabled, SPD5118 compliant devices have
-> +	  to be instantiated by other means. On systems with DMI support
-> +	  this will typically be done from DMI DDR detection code in the
-> +	  I2C SMBus subsystem.
-> +	  Disabling the detect function will speed up boot time and reduce
-> +	  the risk of mis-detecting SPD5118 compliant devices. In general
-> +	  it should only be enabled if necessary.
-> +
-> +	  If unsure, say Y.
+Hi Gerhard,
 
-The combination of
+kernel test robot noticed the following build warnings:
 
-"In general it should only be enabled if necessary."
+[auto build test WARNING on andi-shyti/i2c/i2c-host]
+[also build test WARNING on char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus soc/for-next linus/master v6.10-rc2 next-20240603]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-and
+url:    https://github.com/intel-lab-lkp/linux/commits/Gerhard-Engleder/i2c-keba-Add-KEBA-I2C-controller-support/20240602-040548
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20240601192846.68146-3-gerhard%40engleder-embedded.com
+patch subject: [PATCH 2/2] misc: keba: Add basic KEBA CP500 system FPGA support
+config: csky-randconfig-r132-20240604 (https://download.01.org/0day-ci/archive/20240604/202406041218.9TKBWHf2-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 13.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20240604/202406041218.9TKBWHf2-lkp@intel.com/reproduce)
 
-"default y" / "If unsure, say Y."
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406041218.9TKBWHf2-lkp@intel.com/
 
-looks weird.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/misc/keba/cp500.c:64:19: sparse: sparse: symbol 'cp035_devices' was not declared. Should it be static?
+>> drivers/misc/keba/cp500.c:70:19: sparse: sparse: symbol 'cp505_devices' was not declared. Should it be static?
+>> drivers/misc/keba/cp500.c:76:19: sparse: sparse: symbol 'cp520_devices' was not declared. Should it be static?
+>> drivers/misc/keba/cp500.c:262:26: sparse: sparse: Using plain integer as NULL pointer
+   drivers/misc/keba/cp500.c:324:22: sparse: sparse: Using plain integer as NULL pointer
+   drivers/misc/keba/cp500.c:407:34: sparse: sparse: Using plain integer as NULL pointer
+   drivers/misc/keba/cp500.c: note: in included file (through include/linux/mmzone.h, include/linux/gfp.h, include/linux/xarray.h, ...):
+   include/linux/page-flags.h:240:46: sparse: sparse: self-comparison always evaluates to false
+   include/linux/page-flags.h:240:46: sparse: sparse: self-comparison always evaluates to false
 
+vim +/cp035_devices +64 drivers/misc/keba/cp500.c
 
-Also right now it is not possible to disable detection on non-DMI
-configurations. But when using OF, custom kernel code or userspace
-instantiation then neither DMI nor CONFIG_DETECT are necessary.
+    62	
+    63	/* list of devices within FPGA of CP035 family (CP035, CP056, CP057) */
+  > 64	struct cp500_devs cp035_devices = {
+    65		.startup   = { 0x0000, SZ_4K },
+    66		.i2c       = { 0x4000, SZ_4K },
+    67	};
+    68	
+    69	/* list of devices within FPGA of CP505 family (CP503, CP505, CP507) */
+  > 70	struct cp500_devs cp505_devices = {
+    71		.startup   = { 0x0000, SZ_4K },
+    72		.i2c       = { 0x5000, SZ_4K },
+    73	};
+    74	
+    75	/* list of devices within FPGA of CP520 family (CP520, CP530) */
+  > 76	struct cp500_devs cp520_devices = {
+    77		.startup     = { 0x0000, SZ_4K },
+    78		.i2c         = { 0x5000, SZ_4K },
+    79	};
+    80	
+    81	struct cp500 {
+    82		struct pci_dev *pci_dev;
+    83		struct cp500_devs *devs;
+    84		int msix_num;
+    85		struct {
+    86			int major;
+    87			int minor;
+    88			int build;
+    89		} version;
+    90	
+    91		/* system FPGA BAR */
+    92		resource_size_t sys_hwbase;
+    93		struct platform_device *i2c;
+    94	
+    95		/* ECM EtherCAT BAR */
+    96		resource_size_t ecm_hwbase;
+    97	
+    98		void __iomem *system_startup_addr;
+    99	};
+   100	
+   101	/* I2C devices */
+   102	static struct i2c_board_info cp500_i2c_info[] = {
+   103		{	/* temperature sensor */
+   104			I2C_BOARD_INFO("emc1403", 0x4c),
+   105		},
+   106		{	/* CPU EEPROM
+   107			 * CP035 family: CPU board
+   108			 * CP505 family: bridge board
+   109			 * CP520 family: carrier board
+   110			 */
+   111			I2C_BOARD_INFO("24c32", 0x50),
+   112			.dev_name = CP500_HW_CPU_EEPROM_NAME,
+   113		},
+   114		{	/* interface board EEPROM */
+   115			I2C_BOARD_INFO("24c32", 0x51),
+   116		},
+   117		{	/* EEPROM (optional)
+   118			 * CP505 family: CPU board
+   119			 * CP520 family: MMI board
+   120			 */
+   121			I2C_BOARD_INFO("24c32", 0x52),
+   122		},
+   123		{	/* extension module 0 EEPROM (optional) */
+   124			I2C_BOARD_INFO("24c32", 0x53),
+   125		},
+   126		{	/* extension module 1 EEPROM (optional) */
+   127			I2C_BOARD_INFO("24c32", 0x54),
+   128		},
+   129		{	/* extension module 2 EEPROM (optional) */
+   130			I2C_BOARD_INFO("24c32", 0x55),
+   131		},
+   132		{	/* extension module 3 EEPROM (optional) */
+   133			I2C_BOARD_INFO("24c32", 0x56),
+   134		}
+   135	};
+   136	
+   137	static ssize_t cp500_get_fpga_version(struct cp500 *cp500, char *buf,
+   138					      size_t max_len)
+   139	{
+   140		int n;
+   141	
+   142		if (CP500_IS_CP035(cp500))
+   143			n = scnprintf(buf, max_len, "CP035");
+   144		else if (CP500_IS_CP505(cp500))
+   145			n = scnprintf(buf, max_len, "CP505");
+   146		else
+   147			n = scnprintf(buf, max_len, "CP500");
+   148	
+   149		n += scnprintf(buf + n, max_len - n, "_FPGA_%d.%02d",
+   150			       cp500->version.major, cp500->version.minor);
+   151	
+   152		/* test versions have test bit set */
+   153		if (cp500->version.build & CP500_BUILD_TEST)
+   154			n += scnprintf(buf + n, max_len - n, "Test%d",
+   155				       cp500->version.build & ~CP500_BUILD_TEST);
+   156	
+   157		n += scnprintf(buf + n, max_len - n, "\n");
+   158	
+   159		return n;
+   160	}
+   161	
+   162	static ssize_t version_show(struct device *dev, struct device_attribute *attr,
+   163				    char *buf)
+   164	{
+   165		struct cp500 *cp500 = dev_get_drvdata(dev);
+   166	
+   167		return cp500_get_fpga_version(cp500, buf, PAGE_SIZE);
+   168	}
+   169	static DEVICE_ATTR_RO(version);
+   170	
+   171	static ssize_t keep_cfg_show(struct device *dev, struct device_attribute *attr,
+   172				     char *buf)
+   173	{
+   174		struct cp500 *cp500 = dev_get_drvdata(dev);
+   175		unsigned long keep_cfg = 1;
+   176	
+   177		/* FPGA configuration stream is kept during reset when RECONFIG bit is
+   178		 * zero
+   179		 */
+   180		if (ioread8(cp500->system_startup_addr + CP500_RECONFIG_REG) &
+   181			CP500_RECFG_REQ)
+   182			keep_cfg = 0;
+   183	
+   184		return sprintf(buf, "%lu\n", keep_cfg);
+   185	}
+   186	
+   187	static ssize_t keep_cfg_store(struct device *dev, struct device_attribute *attr,
+   188				      const char *buf, size_t count)
+   189	{
+   190		struct cp500 *cp500 = dev_get_drvdata(dev);
+   191		unsigned long keep_cfg;
+   192	
+   193		if (kstrtoul(buf, 10, &keep_cfg) < 0)
+   194			return -EINVAL;
+   195	
+   196		/* In normal operation "keep_cfg" is "1". This means that the FPGA keeps
+   197		 * its configuration stream during a reset.
+   198		 * In case of a firmware update of the FPGA, the configuration stream
+   199		 * needs to be reloaded. This can be done without a powercycle by
+   200		 * writing a "0" into the "keep_cfg" attribute. After a reset/reboot th
+   201		 * new configuration stream will be loaded.
+   202		 */
+   203		if (keep_cfg)
+   204			iowrite8(0, cp500->system_startup_addr + CP500_RECONFIG_REG);
+   205		else
+   206			iowrite8(CP500_RECFG_REQ,
+   207				 cp500->system_startup_addr + CP500_RECONFIG_REG);
+   208	
+   209		return count;
+   210	}
+   211	static DEVICE_ATTR_RW(keep_cfg);
+   212	
+   213	static struct attribute *attrs[] = {
+   214		&dev_attr_version.attr,
+   215		&dev_attr_keep_cfg.attr,
+   216		NULL
+   217	};
+   218	static const struct attribute_group attrs_group = { .attrs = attrs };
+   219	
+   220	static int cp500_register_i2c(struct cp500 *cp500)
+   221	{
+   222		struct i2c_keba_platform_data data;
+   223		struct platform_device *pdev;
+   224		struct resource res[] = {
+   225			{
+   226			 /* I2C register area */
+   227			 .start = (resource_size_t) cp500->sys_hwbase +
+   228				  cp500->devs->i2c.offset,
+   229			 .end   = (resource_size_t) cp500->sys_hwbase +
+   230				  cp500->devs->i2c.offset +
+   231				  cp500->devs->i2c.size - 1,
+   232			 .flags = IORESOURCE_MEM,
+   233			 },
+   234		};
+   235	
+   236		data.info = cp500_i2c_info;
+   237		data.info_size = ARRAY_SIZE(cp500_i2c_info);
+   238	
+   239		pdev = platform_device_register_resndata(&cp500->pci_dev->dev,
+   240							 "i2c-keba", 0, res,
+   241							 ARRAY_SIZE(res), &data,
+   242							 sizeof(data));
+   243		if (IS_ERR(pdev))
+   244			return PTR_ERR(pdev);
+   245		cp500->i2c = pdev;
+   246	
+   247		return 0;
+   248	}
+   249	
+   250	static void cp500_register_platform_devs(struct cp500 *cp500)
+   251	{
+   252		struct device *dev = &cp500->pci_dev->dev;
+   253	
+   254		if (cp500_register_i2c(cp500))
+   255			dev_warn(dev, "Failed to register i2c-keba!\n");
+   256	}
+   257	
+   258	static void cp500_unregister_dev(struct platform_device **ppdev)
+   259	{
+   260		if (*ppdev) {
+   261			platform_device_unregister(*ppdev);
+ > 262			*ppdev = 0;
+   263		}
+   264	}
+   265	
 
-The following would support those usecases, too:
-
-config SENSORS_SPD5118_DETECT
-	bool "Enable detect function"
-	depends on SENSORS_SPD5118
-	default !DMI
-
-(And no "select SENSORS_SPD5118_DETECT if !DMI")
-
-> +
->  config SENSORS_TC74
->  	tristate "Microchip TC74"
->  	depends on I2C
-> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
-> index 5cb5e52c0a38..19d203283a21 100644
-> --- a/drivers/hwmon/spd5118.c
-> +++ b/drivers/hwmon/spd5118.c
-> @@ -313,7 +313,7 @@ static bool spd5118_vendor_valid(u8 bank, u8 id)
->  }
->  
->  /* Return 0 if detection is successful, -ENODEV otherwise */
-> -static int spd5118_detect(struct i2c_client *client, struct i2c_board_info *info)
-> +static int __maybe_unused spd5118_detect(struct i2c_client *client, struct i2c_board_info *info)
->  {
->  	struct i2c_adapter *adapter = client->adapter;
->  	int regval;
-> @@ -647,7 +647,9 @@ static struct i2c_driver spd5118_driver = {
->  	},
->  	.probe		= spd5118_probe,
->  	.id_table	= spd5118_id,
-> +#ifdef CONFIG_SENSORS_SPD5118_DETECT
->  	.detect		= spd5118_detect,
-> +#endif
->  	.address_list	= normal_i2c,
-
-.address_list is also only needed with CONFIG_SENSORS_SPD5118_DETECT.
-
-
-If you use
-
-.detect         = IS_ENABLED(CONFIG_SENSORS_SPD5118_DETECT) ?  spd5118_detect : NULL,
-.address_list   = IS_ENABLED(CONFIG_SENSORS_SPD5118_DETECT) ?  normal_i2c : NULL,
-
-then the need for __maybe_unused goes away and type checking is a tiny
-bit better.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
