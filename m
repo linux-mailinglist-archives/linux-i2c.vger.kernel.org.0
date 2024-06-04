@@ -1,190 +1,333 @@
-Return-Path: <linux-i2c+bounces-3759-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3760-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5400D8FA628
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 01:03:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDFF38FA6D0
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 02:10:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C641A1F23345
-	for <lists+linux-i2c@lfdr.de>; Mon,  3 Jun 2024 23:03:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D8831C21385
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 00:10:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E20C9839F7;
-	Mon,  3 Jun 2024 23:02:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41A2D63E;
+	Tue,  4 Jun 2024 00:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WbHR5k/g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HY6ST8IK"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E5B13D26A
-	for <linux-i2c@vger.kernel.org>; Mon,  3 Jun 2024 23:02:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFFF384;
+	Tue,  4 Jun 2024 00:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717455768; cv=none; b=hQgWbHknFzCoEkrST+j0DpoqiYLh9MAId2AUQx2YzQ16nFNnrqWbxYqVBRNDMwTuFhM1k3FMIxLJHEeQygAIwZPiv8zFts/gcJtOFUlgpymFqypX3gvJCDZqIMEpQiHA981bSiRpK0KJ1KDg1zUU2Zd+LZ4IfudvWI0LNHN5InU=
+	t=1717459828; cv=none; b=eReN3PhNOpfsAzn+32zhaRYZ1kcdd+s8/PKcX0qJ39LdFbgxBbiKbie/AfuNjRtlYUEmqZnRga4GPp65zobyZEH7rKTDcavPmiPYfy5+OKYVLTe6GbHuFdKMsUNAT5cfOOAKknb/IjKQTLp4N/rs9+zME3F2D9RHbA2z7p+sp9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717455768; c=relaxed/simple;
-	bh=ogo9QjShsjI5pHCxr9mp3cKkK6L/QeUcMCAYliuKlyQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pl8FBnwkjdmFDM0EwAO8IZkOV+cx0yh9V9Hj2wUboq3XBPTdApj//E/bcITPAvtd1Jl0NL9MEMhXdtSzlUVcH6PpEjS8twD8z1/MStjz3QvCqf/xgmAYdSHhLSzVLJeu/yPaiZAJYS5GZHAOqtwtYzfahi8RWbcwBZIopaQtyx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WbHR5k/g; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717455767; x=1748991767;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ogo9QjShsjI5pHCxr9mp3cKkK6L/QeUcMCAYliuKlyQ=;
-  b=WbHR5k/gj2+zAFHondDfO3IymmTXBrRdO8dnTcDDMhh7DYJPDnEsL8dK
-   6XwV7PFexhOsYJWTD2Jfk8FviSjXIEjrddiqsiWIvEyL3a7xIugEDXj/g
-   jfrIYJFcxcolId0Plv3BWjhfJ0iJ+O7iYD23bTKBUqo7oiPQPSG8DGrLo
-   zWGzayOjB0MG0pfSnxQToCh1aJtYqka2Kn22prJwob7wBY9OdmwRzE0DM
-   Z/3ACHFVQRAaZePSjGz15JdBx9rDGc8f63YzEXM9urCGwgE73Vq51xl0X
-   V1eJSwFVNhcMS/sxJPGmVJT6Lot9tckVAExP7QZXMc2kR007UrqcwKKm2
-   g==;
-X-CSE-ConnectionGUID: heqgggUgS4CiHbxDNUmcGw==
-X-CSE-MsgGUID: ABc+e5TWQWuJyHbN10x3eA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11092"; a="14159503"
-X-IronPort-AV: E=Sophos;i="6.08,212,1712646000"; 
-   d="scan'208";a="14159503"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 16:02:46 -0700
-X-CSE-ConnectionGUID: m7nRgeOtSo25PaIr1MtVkQ==
-X-CSE-MsgGUID: AGZZqO7YTuGeFSgqc72e5A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,212,1712646000"; 
-   d="scan'208";a="42098261"
-Received: from unknown (HELO 0610945e7d16) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 03 Jun 2024 16:02:44 -0700
-Received: from kbuild by 0610945e7d16 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sEGhN-000MIl-2y;
-	Mon, 03 Jun 2024 23:02:41 +0000
-Date: Tue, 4 Jun 2024 07:00:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gerhard Engleder <gerhard@engleder-embedded.com>,
-	linux-i2c@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, andi.shyti@kernel.org, arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	Gerhard Engleder <gerhard@engleder-embedded.com>
-Subject: Re: [PATCH 1/2] i2c: keba: Add KEBA I2C controller support
-Message-ID: <202406040659.nZr6W80c-lkp@intel.com>
-References: <20240601192846.68146-2-gerhard@engleder-embedded.com>
+	s=arc-20240116; t=1717459828; c=relaxed/simple;
+	bh=UnZP8hTxJqNQKBXlQ6Yjy1MXD2T4EGPiF4S7k9wGFSg=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=Dg2ppSX+Pe9NPAvIJZ3EKxAOoghSBAuNs/V6JWCxoCU7CGGI/u+xgV2Mm7BqM2nQbo5psJpJY0YkV5blNz1L5bPH84VB/QOLwUfv2FiMzUlWUE/wiZFzWmBBb+y7RzGJQMmcixsfhQSCQM33u88OEUZrjQoMmtg3yFOOq8db+LI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HY6ST8IK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A99EC2BD10;
+	Tue,  4 Jun 2024 00:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717459827;
+	bh=UnZP8hTxJqNQKBXlQ6Yjy1MXD2T4EGPiF4S7k9wGFSg=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=HY6ST8IK5UWhR0hRot1g38azQUr9oyF17qxp+LOxv8q+7KMnYN+vZXvW/Q79AAj5b
+	 lpYejqrtRCnSUFNrRFk9G1ZDCwvE9OYyK1abre8em4OHt07PbM+uV7cjqDe8Ty6qVN
+	 mwi+wyg9Nge//d+hy+O2GZHHJwJ+93Ftg9TVlARIbem0MFG+LCMW4IkjypNyHq8B+b
+	 wju0Er2rj8HtQVxlNX82BFnAc+Kvvj9CtWRJvJzZQcYCnzntXFGj5g6KRMVKH39H5U
+	 /3JGEvq0y0PhoXV57OstJSggR5wyr6mId88RvkzKg8qOqUrg8PFIGIFk6HRm34Q+4I
+	 TTQuNVL4j5VFQ==
+Message-ID: <8e6fcde41671b0a1e8365214e6df4ec2.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240601192846.68146-2-gerhard@engleder-embedded.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240517-a2b-v1-8-b8647554c67b@bang-olufsen.dk>
+References: <20240517-a2b-v1-0-b8647554c67b@bang-olufsen.dk> <20240517-a2b-v1-8-b8647554c67b@bang-olufsen.dk>
+Subject: Re: [PATCH 08/13] clk: add AD24xx clock driver
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Emil Svendsen <emas@bang-olufsen.dk>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, linux-sound@vger.kernel.org, linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, Alvin =?utf-8?q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>
+To: Alvin =?utf-8?q?=C5=A0ipraga?= <alvin@pqrs.dk>, Andi Shyti <andi.shyti@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jaroslav Kysela <perex@perex.cz>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Mark Brown <broonie@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Rafael J. Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Takashi Iwai <tiwai@suse.com>
+Date: Mon, 03 Jun 2024 17:10:25 -0700
+User-Agent: alot/0.10
 
-Hi Gerhard,
+Quoting Alvin =C5=A0ipraga (2024-05-17 06:02:15)
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index 3e9099504fad..a3d54b077e68 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -257,6 +257,13 @@ config COMMON_CLK_LAN966X
+>           LAN966X SoC. GCK generates and supplies clock to various periph=
+erals
+>           within the SoC.
+> =20
+> +config COMMON_CLK_AD24XX
+> +       bool "Clock driver for Analog Devices Inc. AD24xx"
 
-kernel test robot noticed the following build warnings:
+tristate
 
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus soc/for-next linus/master v6.10-rc2 next-20240603]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> +       depends on A2B_AD24XX_NODE
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gerhard-Engleder/i2c-keba-Add-KEBA-I2C-controller-support/20240602-040548
-base:   git://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20240601192846.68146-2-gerhard%40engleder-embedded.com
-patch subject: [PATCH 1/2] i2c: keba: Add KEBA I2C controller support
-config: csky-randconfig-r121-20240604 (https://download.01.org/0day-ci/archive/20240604/202406040659.nZr6W80c-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 13.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20240604/202406040659.nZr6W80c-lkp@intel.com/reproduce)
+Please make it be COMPILE_TESTed as well?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406040659.nZr6W80c-lkp@intel.com/
+> +       help
+> +         This driver supports the clock output functionality of AD24xx s=
+eries
+> +         A2B transceiver chips.
+> +
+>  config COMMON_CLK_ASPEED
+>         bool "Clock driver for Aspeed BMC SoCs"
+>         depends on ARCH_ASPEED || COMPILE_TEST
+> diff --git a/drivers/clk/clk-ad24xx.c b/drivers/clk/clk-ad24xx.c
+> new file mode 100644
+> index 000000000000..ed227c317faa
+> --- /dev/null
+> +++ b/drivers/clk/clk-ad24xx.c
+> @@ -0,0 +1,341 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * AD24xx clock driver
+> + *
+> + * Copyright (c) 2023 Alvin =C5=A0ipraga <alsi@bang-olufsen.dk>
+> + */
+> +
+> +#include <linux/a2b/a2b.h>
+> +#include <linux/a2b/ad24xx.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/module.h>
+> +#include <linux/regmap.h>
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/i2c/busses/i2c-keba.c:491:22: sparse: sparse: Using plain integer as NULL pointer
-   drivers/i2c/busses/i2c-keba.c:563:36: sparse: sparse: Using plain integer as NULL pointer
+Include header for static_assert() at least. There's probably more that
+are needed, please check.
 
-vim +491 drivers/i2c/busses/i2c-keba.c
+> +
+> +#define AD24XX_NUM_CLKS 2
+> +
+> +/* Define some safe macros to make the code more readable */
+> +#define A2B_CLKCFG(_idx)        (!(_idx) ? A2B_CLK1CFG : A2B_CLK2CFG)
+> +
+> +#define A2B_CLKCFG_DIV_SHIFT    A2B_CLK1CFG_CLK1DIV_SHIFT
+> +#define A2B_CLKCFG_PDIV_SHIFT   A2B_CLK1CFG_CLK1PDIV_SHIFT
+> +
+> +#define A2B_CLKCFG_DIV_MASK     A2B_CLK1CFG_CLK1DIV_MASK
+> +#define A2B_CLKCFG_PDIV_MASK    A2B_CLK1CFG_CLK1PDIV_MASK
+> +#define A2B_CLKCFG_INV_MASK     A2B_CLK1CFG_CLK1INV_MASK
+> +#define A2B_CLKCFG_EN_MASK      A2B_CLK1CFG_CLK1EN_MASK
+> +
+> +static_assert(A2B_CLK1CFG_CLK1DIV_MASK  =3D=3D A2B_CLK2CFG_CLK2DIV_MASK);
+> +static_assert(A2B_CLK1CFG_CLK1PDIV_MASK =3D=3D A2B_CLK2CFG_CLK2PDIV_MASK=
+);
+> +static_assert(A2B_CLK1CFG_CLK1INV_MASK  =3D=3D A2B_CLK2CFG_CLK2INV_MASK);
+> +static_assert(A2B_CLK1CFG_CLK1EN_MASK   =3D=3D A2B_CLK2CFG_CLK2EN_MASK);
+> +
+> +struct ad24xx_clkout {
+> +       struct clk_hw hw;
+> +       unsigned int idx;
+> +       bool registered;
+> +};
+> +
+> +struct ad24xx_clk {
+> +       struct device *dev;
 
-   480	
-   481	static int ki2c_probe(struct platform_device *pdev)
-   482	{
-   483		struct i2c_keba_platform_data *pdata;
-   484		struct device *dev = &pdev->dev;
-   485		struct i2c_adapter *adap;
-   486		struct resource *io;
-   487		struct ki2c *ki2c;
-   488		int ret;
-   489	
-   490		pdata = dev->platform_data;
- > 491		if (pdata == 0) {
-   492			dev_err(dev, "Platform data not found!\n");
-   493			return -ENODEV;
-   494		}
-   495	
-   496		ki2c = devm_kzalloc(dev, sizeof(*ki2c), GFP_KERNEL);
-   497		if (!ki2c)
-   498			return -ENOMEM;
-   499		ki2c->pdev = pdev;
-   500		ki2c->client = devm_kcalloc(dev, pdata->info_size,
-   501					    sizeof(*ki2c->client), GFP_KERNEL);
-   502		if (!ki2c->client)
-   503			return -ENOMEM;
-   504		ki2c->client_size = pdata->info_size;
-   505		platform_set_drvdata(pdev, ki2c);
-   506	
-   507		io = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-   508		ki2c->base = devm_ioremap_resource(dev, io);
-   509		if (IS_ERR(ki2c->base))
-   510			return PTR_ERR(ki2c->base);
-   511	
-   512		/* enable controller */
-   513		iowrite8(KI2C_CONTROL_MEN, ki2c->base + KI2C_CONTROL_REG);
-   514	
-   515		adap = &ki2c->adapter;
-   516		strscpy(adap->name, "KEBA I2C adapter", sizeof(adap->name));
-   517		adap->owner = THIS_MODULE;
-   518		adap->class = I2C_CLASS_HWMON;
-   519		adap->algo = &ki2c_algo;
-   520		adap->dev.parent = dev;
-   521	
-   522		i2c_set_adapdata(adap, ki2c);
-   523	
-   524		/* reset bus before probing I2C devices */
-   525		ret = ki2c_reset_bus(ki2c);
-   526		if (ret) {
-   527			dev_err(dev, "Failed to reset bus (%d)!\n", ret);
-   528			goto out_disable;
-   529		}
-   530	
-   531		ret = i2c_add_adapter(adap);
-   532		if (ret) {
-   533			dev_err(dev, "Failed to add adapter (%d)!\n", ret);
-   534			goto out_disable;
-   535		}
-   536	
-   537		ret = ki2c_register_devices(ki2c, pdata);
-   538		if (ret) {
-   539			dev_err(dev, "Failed to register devices (%d)!\n", ret);
-   540			goto out_delete;
-   541		}
-   542	
-   543		return 0;
-   544	
-   545	out_delete:
-   546		i2c_del_adapter(adap);
-   547	out_disable:
-   548		iowrite8(0, ki2c->base + KI2C_CONTROL_REG);
-   549		return ret;
-   550	}
-   551	
+Is this used?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +       struct a2b_func *func;
+
+Is this used?
+
+> +       struct a2b_node *node;
+
+Is this used?
+
+> +       struct regmap *regmap;
+> +       struct clk_hw *pll_hw;
+
+Is this used outside of probe?
+
+> +       struct ad24xx_clkout clkouts[AD24XX_NUM_CLKS];
+> +};
+> +
+[..]
+> +
+> +static const struct regmap_config ad24xx_clk_regmap_config =3D {
+> +       .reg_bits =3D 8,
+> +       .val_bits =3D 8,
+> +       .cache_type =3D REGCACHE_RBTREE,
+
+No max_register?
+
+> +};
+> +
+> +static struct clk_hw *ad24xx_clk_of_get(struct of_phandle_args *clkspec,=
+ void *data)
+> +{
+> +       struct ad24xx_clk *adclk =3D data;
+> +       unsigned int idx =3D clkspec->args[0];
+> +
+> +       if (idx >=3D AD24XX_NUM_CLKS)
+> +               return ERR_PTR(-EINVAL);
+> +
+> +       if (!adclk->clkouts[idx].registered)
+> +               return ERR_PTR(-ENOENT);
+> +
+> +       return &adclk->clkouts[idx].hw;
+> +}
+> +
+> +static int ad24xx_clk_probe(struct device *dev)
+> +{
+> +       struct a2b_func *func =3D to_a2b_func(dev);
+> +       struct a2b_node *node =3D func->node;
+> +       struct device_node *np =3D dev->of_node;
+> +       char *pll_name;
+> +       const char *sync_clk_name;
+> +       struct ad24xx_clk *adclk;
+> +       int num_clks;
+> +       int ret;
+> +       int i;
+> +
+> +       /*
+> +        * Older series AD240x and AD241x chips have a single discrete
+> +        * A2B_CLKCFG register that behaves differently to the A2B_CLKnCFG
+> +        * registers of the later AD242x series. This driver only support=
+s the
+> +        * latter right now.
+> +        */
+> +       if (!(node->chip_info->caps & A2B_CHIP_CAP_CLKOUT))
+> +               return -ENODEV;
+
+Maybe print a warning message to make it more obvious.
+
+> +
+> +       adclk =3D devm_kzalloc(dev, sizeof(*adclk), GFP_KERNEL);
+> +       if (!adclk)
+> +               return -ENOMEM;
+> +
+> +       adclk->regmap =3D
+> +               devm_regmap_init_a2b_func(func, &ad24xx_clk_regmap_config=
+);
+
+Put it on one line please .
+
+> +       if (IS_ERR(adclk->regmap))
+> +               return PTR_ERR(adclk->regmap);
+> +
+> +       adclk->dev =3D dev;
+> +       adclk->func =3D func;
+> +       adclk->node =3D node;
+> +       dev_set_drvdata(dev, adclk);
+> +
+> +       num_clks =3D of_property_count_strings(np, "clock-output-names");
+> +       if (num_clks < 0 || num_clks > AD24XX_NUM_CLKS)
+> +               return -EINVAL;
+
+Please register all the clks provided by this chip.
+
+> +
+> +       /*
+> +        * Register the PLL internally to use it as the parent of the CLK=
+OUTs.
+> +        * The PLL runs at 2048 times the SYNC clock rate.
+> +        */
+> +       pll_name =3D
+> +               devm_kasprintf(dev, GFP_KERNEL, "%s_pll", dev_name(&node-=
+>dev));
+> +       if (!pll_name)
+> +               return -ENOMEM;
+> +       sync_clk_name =3D __clk_get_name(a2b_node_get_sync_clk(func->node=
+));
+> +       adclk->pll_hw =3D devm_clk_hw_register_fixed_factor(
+> +               dev, pll_name, sync_clk_name, 0, 2048, 1);
+
+I think this should be devm_clk_hw_register_fixed_factor_fwname().
+
+> +       if (IS_ERR(adclk->pll_hw))
+> +               return PTR_ERR(adclk->pll_hw);
+> +
+> +       for (i =3D 0; i < num_clks; i++) {
+> +               struct clk_init_data init =3D { };
+> +               const char *parent_names =3D clk_hw_get_name(adclk->pll_h=
+w);
+
+Please use struct clk_parent_data instead of strings to describe
+topology.
+
+> +               unsigned int idx =3D i;
+> +
+> +               /* Clock outputs can be skipped with the clock-indices pr=
+operty */
+> +               of_property_read_u32_index(np, "clock-indices", i, &idx);
+> +               if (idx > AD24XX_NUM_CLKS)
+> +                       return -EINVAL;
+> +
+> +               ret =3D of_property_read_string_index(np, "clock-output-n=
+ames", i,
+> +                                                   &init.name);
+
+The name should only be for debug purposes. Please don't use
+clock-output-names DT property. If you need to make it unique perhaps
+you can add in the device name or something like that?
+
+> +               if (ret)
+> +                       return ret;
+> +
+> +               init.ops =3D &ad24xx_clk_ops;
+> +               init.parent_names =3D &parent_names;
+> +               init.num_parents =3D 1;
+> +
+> +               adclk->clkouts[idx].hw.init =3D &init;
+> +               adclk->clkouts[idx].idx =3D idx;
+> +               adclk->clkouts[idx].registered =3D true;
+> +
+> +               ret =3D devm_clk_hw_register(dev, &adclk->clkouts[idx].hw=
+);
+> +               if (ret)
+> +                       return ret;
+> +       }
+> +
+> +       ret =3D devm_of_clk_add_hw_provider(dev, ad24xx_clk_of_get, adclk=
+);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return 0;
+
+Please just return devm_of_clk_add_hw_provider(...) to prevent the
+cleanup crews from sending a followup patch.
+
+> +}
+> +
+> +static const struct of_device_id ad24xx_clk_of_match_table[] =3D {
+> +       { .compatible =3D "adi,ad2420-clk" },
+> +       { .compatible =3D "adi,ad2421-clk" },
+> +       { .compatible =3D "adi,ad2422-clk" },
+> +       { .compatible =3D "adi,ad2425-clk" },
+> +       { .compatible =3D "adi,ad2426-clk" },
+> +       { .compatible =3D "adi,ad2427-clk" },
+> +       { .compatible =3D "adi,ad2428-clk" },
+> +       { .compatible =3D "adi,ad2429-clk" },
+> +       { /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ad24xx_clk_of_match_table);
+> +
+> +static struct a2b_driver ad24xx_clk_driver =3D {
+
+I guess because this isn't a platform driver I can't merge this through
+the clk tree? Is there any difference from the platform bus?
+
+> +       .driver =3D {
+> +               .name =3D "ad24xx-clk",
+> +               .of_match_table =3D ad24xx_clk_of_match_table,
+> +               .probe_type =3D PROBE_PREFER_ASYNCHRONOUS,
+> +       },
+> +       .probe =3D ad24xx_clk_probe,
+> +};
+> +module_a2b_driver(ad24xx_clk_driver);
 
