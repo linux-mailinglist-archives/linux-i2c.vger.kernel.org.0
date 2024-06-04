@@ -1,63 +1,64 @@
-Return-Path: <linux-i2c+bounces-3786-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3787-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EECC88FADD7
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 10:45:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D63B8FADF4
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 10:49:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D5AC1C2205C
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 08:45:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E03EB23B65
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 08:49:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0D93142E63;
-	Tue,  4 Jun 2024 08:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 288ED142E7E;
+	Tue,  4 Jun 2024 08:49:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b="bibi9F64"
+	dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b="LdnxwnwP"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from AUS01-SY4-obe.outbound.protection.outlook.com (mail-sy4aus01olkn2163.outbound.protection.outlook.com [40.92.62.163])
+Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2160.outbound.protection.outlook.com [40.92.63.160])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C92F140384;
-	Tue,  4 Jun 2024 08:45:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.62.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49CB222066;
+	Tue,  4 Jun 2024 08:48:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.63.160
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717490747; cv=fail; b=Vd2P/d+okwAeTFGtrFsJWFK4Sl99ppRZhdB2XfmyMVgHiMBGFD0DGgqlsKde3s5Y3e3SkqEIXhAJiT/JoGHdeN8P6J98rK899IZ2k39jm+RW8sX/frP1ACN96rkPS67TFjs3piTJ0nChYBaKgJQAkbS9hoHOJ8UK3VSAid+un/0=
+	t=1717490941; cv=fail; b=ZDQ+jwYMKqT7Ua5DGl5XtWGXF/qkY5IAFjsUHW62kRHbUjo1fj68IESAF1lZVWzaLSRVgOiTRdEd1KT/c1+X5Jhxa7aF9SSFxgI5z6CcqKH8PIND8W0eAhfJ7QEMqTH1HOjnhPLXLRZw2OI1m2KcwvNryh+T4H5gqoBB5LE2CBQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717490747; c=relaxed/simple;
-	bh=+Puh0gKnGwBRRB2HKf/WH13Mrk8HrKjtgqajyhtDTnE=;
+	s=arc-20240116; t=1717490941; c=relaxed/simple;
+	bh=sliAdc9zknd4EPTPPygv/yar1UeOf2JBmCVI2u0MuWw=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=EeokDNL54y5HTLMRQL/zLMIzf26mxypdmKlrABGoYM6kNCW3Iq9IrqYJNmAcG1j77AVYoHb/B9Q54QrEZNN7eOFZX6qujR1gmmJHVIawKwh9m/n3ii6Vd8XVRmw9ZAfCUlk9ergcwJEnfFaqZc75eLn+LVU3F3Clca2BGZBB5Tk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com.au; spf=pass smtp.mailfrom=outlook.com.au; dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b=bibi9F64; arc=fail smtp.client-ip=40.92.62.163
+	 Content-Type:MIME-Version; b=Fx+No3+Iawh+SKGw3dFKy22TxDsuDGvjcClG3pGQdKcEes8Dcy52HaytGE04uGPm/9pIHV3vA0ObBkjO58kNjd5mcA0wpG6jov71JbY0c/hXe872evoaw1gDvhKNc6x5oPcnzwAH3PaDe7PPVQUF95kGorsfZkI8CrJg0YPkF8o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com.au; spf=pass smtp.mailfrom=outlook.com.au; dkim=pass (2048-bit key) header.d=OUTLOOK.COM.AU header.i=@OUTLOOK.COM.AU header.b=LdnxwnwP; arc=fail smtp.client-ip=40.92.63.160
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com.au
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ROQxSu2M+7mJGdnFfiUsMMEmtOfu72/A+LRX+tgnrSfuG3FxPfO4nN15RW8YgbRx7aMoZcJX5TN6KQeN9HSpK0h+J79qyuLc0LmVHBa6ORm7Cs9B31+J1ArRnO2m3PrZc47q6eHZ/UXmE7cAXTobTxYhbo1pEgA1EBBGiatA7lyNlAmw1d2Wqbbgwezep1lusbacF8bjWo1zjgG2H+5oMEM/ZJyAm3AXRWjnwzLv0CnEQXjZsbDWnbRkO0mu1hqVALI0ADzPRUdp/cUM6Vs/r7/HVOhIBCEO4JstZ/7VK64QtAFeLWCuMzq+svc8emaXwr08FoLwO++QOXGHPSN7hQ==
+ b=jGiZghcCPFZvL8IZggChJ6lT6bz53+rI3eGzLGAOcolF2BHJac/0h9QAPBduE/P2q2RgVQYAWzNjLPOOWiQaHy7hk3opsnS/6D5RlT3d8OS0pM5ViVKZcDcm2eC6mGUuQ1wmrFdFHy/nP+UD4n1lr8UyH2Aoiqd7WvnOhzxW1pAXR2cA25PViy+G4jWS7Eu6bwOZ2HftY8Cd1UTHD7FS8Doe52zpgiRvXKFhfhpyVPtFwYO+wp94Nmr1xwi7DvvVTIEd1rMi1QUHSdN9LSPheVWAn0GV36C5cnWOh810d84AbLIiohzynV47lUfqehEfVUypCGRhVJK/vTZpQWmPtA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=srG2tahIHRjdsnh8I4SpQQT6WhmS9Axb26IIR9ZW/yg=;
- b=FwarwHGUx7C412YlBcuhk5V+DR9GazSp+BsbwrO2+2e8M3Mrwo1w7CZmzAQPVVyIyJWBAEQNMix0CpRuidoEa1w62cEiDeehxQV5zsVMlCWkmspioONrqEn6aOfeEV1SoiPSAjiW5JGpaAWcJWP4WI6OeaxlWGqZPX2C+lMVv7FexhUlumhLrE3UeFFWv93dvkQNcGYFoZ1JxedNOmRxpIuc+IWohCKRFRY0RCILbHsxUriSaHlwv8v9+hUnn+ypfwq3z+sp38k9ptZypV60P7WgFze7SoD6IkSh5D4MBBDfGd8Mw70hQOoUBDjDT8wUKeFlSUAaF91GuDuqgaFYpg==
+ bh=gbQb2+2HmY5kY2Fdb25F8TfnULwCk59ICgHHEZ8Yr/8=;
+ b=Bg5gGwPackXrTyPW2QdoREIQMo8XtW9nzFtBDR30YJjVTj0ZSySViTy1LYc4L7EUMohpQvVluMGIHxsHoRS21rjpZU76154YMK7OOVfO/jFL95A1MZHziizUORkRZd23CBiN2popS4ul3M/fFhX+e2dSnrXEZcS/wEdXRnPne+rpr7UBkh3X6QDzgRTr6cMJj4LsJ7+OQWitc5NIBCzyZJVTHm/kvzrbVAwNSJzo5qyO/3O27la+LoLsHTAOM52Dts0sbmutCa77T6UHML4vgYvkMA5U+Dh6kFFnxIUqNn2fMvreJID0AixDkSbCXEYtYuzJ1DpZPY5vWWbmFaLGQQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=OUTLOOK.COM.AU;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=srG2tahIHRjdsnh8I4SpQQT6WhmS9Axb26IIR9ZW/yg=;
- b=bibi9F648hVj+wQWCgOyANylQPAm5gt1wpOKKXEnI5aRTDMiEPrjM30rr3V0T0Kv4vswmHx3/+PzuaVlPkloPOiA6RCdE/y29TQrJg4CVPOwGgtMWUfB6jIFJaRwoD5DHp5HLbWJZXRdq7tVS5WghRXT5b54HrQSMOtl/tE05KzWCHcp/mzsW+Gw02AB9C8/vR52gYbCTRbD/Zczub8xCoVVAYHbSkPt2Y7yYN6680Fm0n2Nl3pyLC/Azq36a7FO8o5jWLTjVqMjLcNIw8Faz1odska4N/HSmxlygCnkMPJ769yQaVu1lBRtbICqHqGR4gGOZGeboCMvcVb4vtpnHg==
+ bh=gbQb2+2HmY5kY2Fdb25F8TfnULwCk59ICgHHEZ8Yr/8=;
+ b=LdnxwnwPW/BV/FcJfOS2ztl3ClmAa65ta2KQhHj8Tvz+L9sFPnIj/TtE1SDFGdkYm9vAMY8uWglyuwkE43BFJFOJxVPcFLtlpbJOGtx7NMPKdwB2QheB4bdIRn9iTScq1IfKb38D4y4YsVAmgBk8TVTw9yH3PHKQbjvAI3LZqhc9gdu0TLAzGEUsY1GW033lt7JRlP+Gq7CeeKZyIiYiJs6z8iQIBuy0ZFHewQbn4n52E4URWy/lZBwfpLiSD5ChgQY4M1A0MS3IxLsb6H6wPu/bkz97auZTQoYASZHIUo8aNtKyOWJ4R3dugSfIqPfZkh3Pk7MUiWMNlh7K00aClA==
 Received: from SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:159::9) by
  SY7P282MB4571.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:27c::6) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7409.15; Tue, 4 Jun 2024 08:45:40 +0000
+ 15.20.7409.15; Tue, 4 Jun 2024 08:48:55 +0000
 Received: from SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
  ([fe80::37cc:3733:d1e9:d8e4]) by SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
  ([fe80::37cc:3733:d1e9:d8e4%3]) with mapi id 15.20.7633.021; Tue, 4 Jun 2024
- 08:45:40 +0000
+ 08:48:55 +0000
 Message-ID:
- <SY4P282MB3063FE1968B72C3187042917C5F82@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
-Date: Tue, 4 Jun 2024 18:45:32 +1000
+ <SY4P282MB30639393B10CC313292C936BC5F82@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
+Date: Tue, 4 Jun 2024 18:48:52 +1000
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/6] hwmon: (spd5118) Add suspend/resume support
+Subject: Re: [PATCH v4 2/6] hwmon: Add support for SPD5118 compliant
+ temperature sensors
 To: Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
 Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -66,18 +67,18 @@ Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
  =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
  Armin Wolf <W_Armin@gmx.de>
 References: <20240604040237.1064024-1-linux@roeck-us.net>
- <20240604040237.1064024-4-linux@roeck-us.net>
+ <20240604040237.1064024-3-linux@roeck-us.net>
 Content-Language: en-AU, en-US, en-GB
 From: Stephen Horvath <s.horvath@outlook.com.au>
-In-Reply-To: <20240604040237.1064024-4-linux@roeck-us.net>
+In-Reply-To: <20240604040237.1064024-3-linux@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN: [/ivfvdM1y5H9c1P3/2ITQS0SBxd5X+fGbl3n57VyyskfbuA0GiisLm1pDl69VwcH]
-X-ClientProxiedBy: SYYP282CA0001.AUSP282.PROD.OUTLOOK.COM
- (2603:10c6:10:b4::11) To SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
+Content-Transfer-Encoding: 8bit
+X-TMN: [5Yp1q1fTKdMd5OIUcM9vBiS+GROZ3QAvQbsbmJ2pQHsMLvqkeKOkbqYlAVhB5Zyw]
+X-ClientProxiedBy: SY5P300CA0056.AUSP300.PROD.OUTLOOK.COM
+ (2603:10c6:10:1fe::20) To SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
  (2603:10c6:10:159::9)
 X-Microsoft-Original-Message-ID:
- <60a00f05-0cca-4762-a4fb-87e49d0ec106@outlook.com.au>
+ <286a8879-3995-4d6c-a9cf-12c61f0bf019@outlook.com.au>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -87,47 +88,47 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SY4P282MB3063:EE_|SY7P282MB4571:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8ab923d1-310d-41fb-e2e1-08dc8472b50c
+X-MS-Office365-Filtering-Correlation-Id: d737b2fa-72c4-4874-a2ce-08dc84732a81
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	YMd5odYv00y4+ciCzzApd19o2BY13azjxdN2miKZso8/nR1DcUK3JFJzF8DXb/7WRZUoaqgJwRs6bMxZqwKbROPbewFvucLA34aatdDQgg0OkDQYmRRsvcchCjxW4VK2XmVdWtjAB6Lp3d5TbbF3wn8TE0S76lEcp79YmHlGWxeq99Xv9yeOtBLtB2lJjp2bd3O5T4qeXzbNjPtUqPMOZsKlOosVvZYZljtuf0702k7G5p6ST6Sh6RRffw+KvqZIWWxIqixD/mzvxzABBojreNYB92uTDH4Ocwe3DHfHs8gfC90Tdpj4OjJHepu9WDKvWDQExmMBamJm2HCC98Ubadyu/amlnivBR1AMK0V8s+oWry5ZVoJr/kuL6R9pUlpTYNFAyH0ZwEUQB+78B4TT+0uivbq2Dt5l/0vCN9jAtFbUyjR7XHXZ4VauwH9SfX5PEgpQO0D0eMAzZHcxSyOHk28AKVn6k4T3ifo/X2Z4DckmgqgPKA84t2JUvqXOAkhrscLhPuc7jmIBg6kAUIwRYYNKEMmdTyAl7sZHkoydqPO8wpdxaato10NHb6O6qfw0
+	AiCh54RhxqxUMOKz23bT/Aylu4Ljuaekor4Za8Jg+xLlvo8sCfCEDdx7rdxW25D0WGmuBm3pmbklTrrFlzCqNLUs3fpXsnE+w/y2zGjUK/0wCg5wyXYKtETox7n0f5bQIrlShcD0AckojX/OAYu91oeL3NHpYsZh3aNHBEOZR7ZhbkFwK47J7C8qqKuMgS6rfZ+l5fL7DqQmo6+lANYXy3Du90c6th6vDMeH6hS3hGIRUZbUveGrCF6tfAP6akguhNrvmltNYCCg5jIiWYHQCTI6Vj2NRLls+EZ7UgzIV8u+Yebsht/I0nXg8Rl2ZpNvw9mutPILMx8jIUu10AWhH7pF/EOqH7acBPZLbRZyQirH0VsFLUXoanySuuWsrKe588xHT6YKuafsp+AiNpC6y7mSWbVoyz8RZqIfEa45j/AVq7R22Uij7xJv2cEDWcWquSgSXoqbD2o1qCFpfE40AM/Q2B1A0zEkTtuCvEtMns4V26501WAnAP5uatTfcWCSt1MD9zwzYSkmT9MhrsNJLiBNsfkG77aMxsUI7qDUSfKH4QSVyk0c7BYjup2rmjox
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?M3g5U1NpNk5GeG5QTXpaZElzZEphQlVZNEN5QUVxZWlVV0RsRmRBcWF4Vnh4?=
- =?utf-8?B?bjd3LzJxWmR4Y1dYUlJvUy83M2VrWHd5VmlaTGkzcU1mR2ZOSytQd3YraVYx?=
- =?utf-8?B?K25mMzloc2JLdDBESmRjelZNdkhhVHRKcG0wRnQ5Z2Z1MGhJTlMyRmxXYnN6?=
- =?utf-8?B?dmlZcjRWVlFXUDlET01YSEJ5RU9IamthOVFHcVBQODRpVE0vSzFEK3hZbTZW?=
- =?utf-8?B?RjZhVHN4T2lFVFY4Z2F5SXJJNGwzMW81NURkeXgwYjlad200RW51bjB1U1pq?=
- =?utf-8?B?Njk2Y3pnRVZtOEFRRzF0SVlvb2F4cnZQNGlKT21tdDNDYUEwbEJwelJZT2Fs?=
- =?utf-8?B?RmlGQTlOVDhYM2I3RlpMQzZFQy9kRFJlQUhDbWVZOGJBcWVFWDlwYzNoLzMr?=
- =?utf-8?B?MUdmczJqNEkwY1R6TUwxREdyTy9KM2hvSEFsRWY1cXU3QmdBOFlyZytZTW52?=
- =?utf-8?B?OTREb1RrejUwZjVSeFdjeEh4OWEzeVNkbzRWQW1OdnhjSFRUY2lUNEpkTVM3?=
- =?utf-8?B?MGJMT2xLUUlVQmF2Z3RYbTQvb2k5UDFyMnU0ajJKc09hVVBUeW9GMUxTbC9U?=
- =?utf-8?B?S0tCNnpSWnZGWms2TE1reHpuc1Zyck1CMHM0aEsrVUNPdHNYbWpoVlBGY0JS?=
- =?utf-8?B?c2VTVWZCQlR6cnppMHRxWFZSdjh0dzB2NTlBQmpNeEF0YkJQcmQyUktsN1Ju?=
- =?utf-8?B?dlE3OGtLbGdsT0s0Tm11QWV1aW1QVHhsV2FhSHdyQVlSTCtXM250bFN3MUcy?=
- =?utf-8?B?YmFxYkxRby9Ua2xNemhXWEFsSXZveHl0aXhyNUgwd2hqN2VTdWMyNUs4WXVP?=
- =?utf-8?B?cFlzeVozK0syd2dFdVJpQ2lxUVp4VnZzbjBLQVV4YVBPd3JDajdtbG9IWUZm?=
- =?utf-8?B?TVBLYXJ3MDNoZTQ5clF5WThZdHBmb095eENrazhUOTNwdWpWdEJDYlVQV0VW?=
- =?utf-8?B?QVJaTG80VVZNNWFaRDhLSmdzT2U2SVBOTktxd2RZbWZyZnVaNGRqUFdaREVI?=
- =?utf-8?B?RTc5N2dIK0FNdExsWTdTaFJCd3A4ZHJuR0VwWlZVdThWUmxnOUF4VjgxMytQ?=
- =?utf-8?B?Y050bHd0NUhCd05GTmFaekNpOThON29QZE9IQmtNSXZhbWljQXhGRUkzVFF0?=
- =?utf-8?B?OVNjS0g4WFNIWEN4T2FBdk9XVjhsK3ZCcVRNM3NyemhLdzF6Z25IR3d6dllx?=
- =?utf-8?B?Sjd3S2NhcFdZdlJZdVptOUJEb25nOHJqWHd5ZElXS0tmc1llM2VnNEhkT1c0?=
- =?utf-8?B?cUdlVnVOVVN6NEphNHJSMzVJdGtZc2t2YTJtb2RFKzc0cDhKOG1xdnZoZ0tX?=
- =?utf-8?B?Wkp6L0ViZGNDTGNKeUhtZmgvT08vZjB1R2RseXNLQnJKQnp6bDVrclNQVFJl?=
- =?utf-8?B?YUpzbEN4dlBmZ0ZOckZrSUpGNzJTSFNrN1Z5RksyUWdNeXZ4b0xrMmwwZGNI?=
- =?utf-8?B?c1FVNkNrbW5xUG5zS1JYZU8xajg2VVA1K1F5MDZvWUR1Qkx4bFl0bVpKVnJw?=
- =?utf-8?B?UWVucDVZQW1jbnd1YWpPbGwydEFxR0paT2FGenFkY1NEdDE2Wm1neU95RjYy?=
- =?utf-8?B?cnNEQWxCd2NoSFFMSWlWcFZLc0VIS09nR2ZFdFdRelNYQ0xFK0hqS3BuYXpU?=
- =?utf-8?B?Q0VPc0dhVEJSaUxGLzJBVnF6VTlBRTJvZjNoVUQ2ajZrT2h2a21aRVc4c0tY?=
- =?utf-8?B?REw0NGlVZVZtWHhHbEYwa2hyb1ZOWGJVN2EwTlBadmVLZ0lPT1BBclZub0p0?=
- =?utf-8?Q?m3wbFFAWFdB84XHxX6Muy4c1EXFglzk/nUPvqyB?=
+	=?utf-8?B?Rko2Zi9vV2ZPWFRhaEgxYVlyK1R4RDREUFBsS1pZeHBwOVBVK0FvR2kzVmRq?=
+ =?utf-8?B?MVpUZmZvQlF6ZE82REJIUVdvSjhEMmFrOENlSGZGeEltcEtWSjBjaVBJclFH?=
+ =?utf-8?B?U0lMME5sY200SXRTV0dtVHQ0SHo3dEd5OHpmVE85R0RycEIvOU5SN0pROGR1?=
+ =?utf-8?B?SmlOTzZwVmxWMkx3VUdwVUY2d0hwWEVLc252eENXdXY3OW1pWVExdUIvUTlk?=
+ =?utf-8?B?bVp2SlRSb0ZRazJheGY0aXU4YWpPdnpJazcrbkRkVUFXRCtaWldsZ2JaeWwy?=
+ =?utf-8?B?aVl6MnlHQ1d0bWRETGNGZktHYzB0OTh4cHk2RHY5bVBFSXVEOTVZUllMTTE5?=
+ =?utf-8?B?eGhOU3pRbFhReUh5T0Q4ZE9Fekc4U01ickZ5SUhvTEtvbXNndDEyNGhlZXBK?=
+ =?utf-8?B?aEQxaGtYZHJaNmsxS2F0d08rS0s0VmV5RlcvTW9KWFV0ZVRUcEd5N0QvUUlM?=
+ =?utf-8?B?eDJMYVhMVHh3RVdXNjVlRms3VmZ0R2h1RENEZEtWc1ZYVjV6R1JJd2V5YjZG?=
+ =?utf-8?B?SlRmNHhUTGJYZU1VdXNzUWlrNzJIYVhrcmVTZ1VGSWlXNnR5SkxvZ3c5MFJ4?=
+ =?utf-8?B?L1FZaEljVjBtOGJESjdRS2NVQWg4VUx4VElZTG9oNy9KcCtKSDlLQ0IxRE1w?=
+ =?utf-8?B?TlNqbjR5KzNsTnJ4cTh0M1Aybk1rNnBoMUgzQnI5Q2xxejMyQU9GeEpRUnNu?=
+ =?utf-8?B?VUgrakhqNlM1bjg0TFVSZVZZRWdvZlFEZk1ndC9KcEwweTlNRWsvd2VZanpy?=
+ =?utf-8?B?QWpyL3VZajQzbzQ3S3V1WDJ3TzE5UElobUltOTVmS0hMZFQ2M1FQYStXdzh0?=
+ =?utf-8?B?cC9kc0xtUUJYS0FxcGF3TTBvSTlnOHNaWnZmSFJ4VjVYQUxOSGNqYXRpdFE2?=
+ =?utf-8?B?Z3kvd040eUFCczhrRFc2N0drbHd2SFluVytSMXBJOHEzOEU1TkpiVUZ3SHNY?=
+ =?utf-8?B?Y3pxWFp0dWwzU1laQ3QxZk14Q1ZlQmMvUVVKWFREZ1JNRFJPR2wwREFCREdK?=
+ =?utf-8?B?dEdOSHJLeHN0Y0t5dzBDaEtkQzJFczJXT1RKalpOOURON1VNRldsTkM2QVVj?=
+ =?utf-8?B?OVlVT1YxbnIxMk55Z0s4M1ZBVGZOWUZIeW5hejB4dnErK1kzV2pJcnZlYUhH?=
+ =?utf-8?B?VFZlU1Q1UzlnYkVTaFRUNjZMSk93R1YweUxQNTcrNnUweGNRODJjSUhRWUtW?=
+ =?utf-8?B?K1ovWkovbE5TM296a0FUMkMzTENBZSsxVHEzcnVyYVZZMzhBa0FESFh0L3BL?=
+ =?utf-8?B?MjVxeDNPZmVXM0hPWFRNTVF4M2x5elp4SjVOeWhWN1MyblowZ3JZV3FlY2tI?=
+ =?utf-8?B?akFtQjBybzRxdDNCa2pSRFJvQ2RhbW45dFFFMnJVd24ybUFnYnBKRzhBdjA4?=
+ =?utf-8?B?empleXhDU1dGVmQ0TDdjay8wOXFBU1NuazhueXNnQzcya2ZTWDNKUlRFdXhW?=
+ =?utf-8?B?ZHRqSHVkVTU4YUJzdUdaSE1ZSUJIbHE0QmU4MFU3K0NxZXJrTUkycHlBVkVH?=
+ =?utf-8?B?MWpXcXRwdjVud1JtMHpFQWxIZzd0bllpbCtNOXVtSEJ3ZXRVYUYxSGNJUENP?=
+ =?utf-8?B?OWw2ejB4SE4yY0JVcHFoR0Q2Nzc5WnRTSUpKSkRkUjRjcUE2Z3YydHYxaWRJ?=
+ =?utf-8?B?SjBoTFhpWFVzV3laREVxZHpTbUVZUHcyTjZIb1RiR2kwY21jazliWWVNVjZH?=
+ =?utf-8?B?c054QWhERCtLajBmTk14bFpwblBwaCtoSlVRZjNNYkxGSEV4SGpnMWF2QnIw?=
+ =?utf-8?Q?LIwlWtwOm3mmqFYYelZZmOxxaR/ZoFXsx3ByHWO?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-746f3.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ab923d1-310d-41fb-e2e1-08dc8472b50c
+X-MS-Exchange-CrossTenant-Network-Message-Id: d737b2fa-72c4-4874-a2ce-08dc84732a81
 X-MS-Exchange-CrossTenant-AuthSource: SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2024 08:45:40.2921
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2024 08:48:55.1533
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -138,17 +139,38 @@ X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY7P282MB4571
 Hi,
 
 On 4/6/24 14:02, Guenter Roeck wrote:
-> Add suspend/resume support to ensure that limit and configuration
-> registers are updated and synchronized after a suspend/resume cycle.
+> Add support for SPD5118 (Jedec JESD300) compliant temperature
+> sensors. Such sensors are typically found on DDR5 memory modules.
 > 
-> Cc: Armin Wolf <W_Armin@gmx.de>
-> Cc: Stephen Horvath <s.horvath@outlook.com.au>
+> Cc: René Rebe <rene@exactcode.de>
+> Cc: Thomas Weißschuh <linux@weissschuh.net>
+> Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+> Tested-by: Thomas Weißschuh <linux@weissschuh.net>
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
-> v4: Fix bug seen if the enable attribute was never read prior
->      to a suspend/resume cycle.
+> v4: No change
+> 
+> v3: Shorten JESD300-5B.01 to JESD300; 5B.01 refers to the version
+>      of the standard
+>      Drop unnecessary 'attr' parameter from spd5118_{read,write}_enable()
+> 
+> v2: Drop PEC property documentation
+>      Add note indicating that alarm attributes are sticky until read
+>      to documentation
+>      Fix detect function
+>      Fix misspelling in Makefile (CONFIG_SENSORS_SPD5118->CONFIG_SENSORS_SPD5118)
+> 
+>   Documentation/hwmon/index.rst   |   1 +
+>   Documentation/hwmon/spd5118.rst |  55 ++++
+>   drivers/hwmon/Kconfig           |  12 +
+>   drivers/hwmon/Makefile          |   1 +
+>   drivers/hwmon/spd5118.c         | 481 ++++++++++++++++++++++++++++++++
+>   5 files changed, 550 insertions(+)
+>   create mode 100644 Documentation/hwmon/spd5118.rst
+>   create mode 100644 drivers/hwmon/spd5118.c
+> 
 
-I can confirm this works for my devices, so:
+It seems to report correct temperatures for my sticks, so I guess:
 
 Tested-by: Stephen Horvath <s.horvath@outlook.com.au>
 
