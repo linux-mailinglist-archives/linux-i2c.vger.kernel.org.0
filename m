@@ -1,212 +1,142 @@
-Return-Path: <linux-i2c+bounces-3765-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3766-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0A2D8FA7AE
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 03:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 546D38FA8F0
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 06:02:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E596B22104
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 01:38:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D79D0B24E9F
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 04:02:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56E2913D2BF;
-	Tue,  4 Jun 2024 01:38:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F1F132104;
+	Tue,  4 Jun 2024 04:02:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eJ8SrO70"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2DF7462;
-	Tue,  4 Jun 2024 01:38:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD59238B;
+	Tue,  4 Jun 2024 04:02:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717465101; cv=none; b=JvxZkDxHuCb221SvNWLsy7LDyq2/cJhXDesH2TSL0d2EBGAGTmpgf7GkkY58zFmT8ooLBuWWmy/Ax9fz7gI8HfwXBO56ArDiOPAA78FS++EA8yBQ0kjF6nsxCwga3ymGWHxf5nILIHC0n0Dq0CtvSmMi88DvZ4Os2bOPE+1x1l8=
+	t=1717473764; cv=none; b=evuFE4/WjCHmoLcsiRXnlTcmuDJsZH4Es9vQbsnggdI3/vfquhzcBsW7hNEVWK6hUG99wxYhZN4R21SuZjfYozD1rzDaSNlDtkuifbjFJlUZYq1xAPlY1H59OgLqZyrDsa6Dx7QIu9Njbrk3l7dXz3i56x8vmjFrgwbS0L4Ucxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717465101; c=relaxed/simple;
-	bh=AJSz8KJObMMDxhywmduW5EuoLxLL09BUaUxOa9QUubw=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=W76wPOqJhcfdB6bDI384qYWr5It8IGNtsF7P3ZiEf2do4DteNys1XNAEj5j60+v6mm0u/CGqeb0nwGs+414yqQsMpnESMXIbwZneeb0x7Kbi/vtHxEGiYG4HQPZLqgd0UOu3U5f8c5+SFb6zgHHWbikoW93g8IYO0vRmjfGZQu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4VtY6M2gZgzxRDr;
-	Tue,  4 Jun 2024 09:34:19 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (unknown [7.193.23.68])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7C016180069;
-	Tue,  4 Jun 2024 09:38:14 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 4 Jun 2024 09:38:02 +0800
-Subject: Re: [PATCH v1 1/1] treewide: Align match_string() with
- sysfs_match_string()
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, "Rafael J. Wysocki"
-	<rafael.j.wysocki@intel.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Corey Minyard <minyard@acm.org>, Allen Pais
-	<apais@linux.microsoft.com>, Sebastian Reichel
-	<sebastian.reichel@collabora.com>, Perry Yuan <perry.yuan@amd.com>, Giovanni
- Cabiddu <giovanni.cabiddu@intel.com>, Herbert Xu
-	<herbert@gondor.apana.org.au>, Nuno Sa <nuno.sa@analog.com>, Guenter Roeck
-	<linux@roeck-us.net>, Randy Dunlap <rdunlap@infradead.org>, Andi Shyti
-	<andi.shyti@kernel.org>, Heiner Kallweit <hkallweit1@gmail.com>, Lee Jones
-	<lee@kernel.org>, Samuel Holland <samuel@sholland.org>, Elad Nachman
-	<enachman@marvell.com>, Arseniy Krasnov <AVKrasnov@sberdevices.ru>, Johannes
- Berg <johannes.berg@intel.com>, Gregory Greenman
-	<gregory.greenman@intel.com>, Benjamin Berg <benjamin.berg@intel.com>, Bjorn
- Helgaas <bhelgaas@google.com>, Robert Richter <rrichter@amd.com>, Vinod Koul
-	<vkoul@kernel.org>, Chunfeng Yun <chunfeng.yun@mediatek.com>, Linus Walleij
-	<linus.walleij@linaro.org>, Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>, Nikita
- Kravets <teackot@gmail.com>, Jiri Slaby <jirislaby@kernel.org>, Srinivas
- Pandruvada <srinivas.pandruvada@linux.intel.com>, Stanley Chang
-	<stanley_chang@realtek.com>, Heikki Krogerus
-	<heikki.krogerus@linux.intel.com>, Abdel Alkuor <abdelalkuor@geotab.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>, Eric Biggers
-	<ebiggers@google.com>, Kees Cook <keescook@chromium.org>, Ingo Molnar
-	<mingo@kernel.org>, "Steven Rostedt (Google)" <rostedt@goodmis.org>, Daniel
- Bristot de Oliveira <bristot@kernel.org>, Andrew Morton
-	<akpm@linux-foundation.org>, Hugh Dickins <hughd@google.com>, Abel Wu
-	<wuyun.abel@bytedance.com>, John Johansen <john.johansen@canonical.com>, Mimi
- Zohar <zohar@linux.ibm.com>, Stefan Berger <stefanb@linux.ibm.com>, Roberto
- Sassu <roberto.sassu@huawei.com>, Eric Snowberg <eric.snowberg@oracle.com>,
-	Takashi Iwai <tiwai@suse.de>, Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, Mark Brown
-	<broonie@kernel.org>, Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-	<linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-	<keyrings@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-	<openipmi-developer@lists.sourceforge.net>, <linux-clk@vger.kernel.org>,
-	<linux-rpi-kernel@lists.infradead.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-rockchip@lists.infradead.org>,
-	<linux-tegra@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<qat-linux@intel.com>, <dri-devel@lists.freedesktop.org>,
-	<intel-gfx@lists.freedesktop.org>, <intel-xe@lists.freedesktop.org>,
-	<nouveau@lists.freedesktop.org>, <linux-hwmon@vger.kernel.org>,
-	<linux-i2c@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-	<linux-sunxi@lists.linux.dev>, <linux-omap@vger.kernel.org>,
-	<linux-mmc@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-	<netdev@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-	<linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-	<linux-phy@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
-	<platform-driver-x86@vger.kernel.org>, <linux-staging@lists.linux.dev>,
-	<linux-usb@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
-	<linux-bcachefs@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
-	<cgroups@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-mm@kvack.org>, <apparmor@lists.ubuntu.com>,
-	<linux-security-module@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
-	<alsa-devel@alsa-project.org>, <linux-sound@vger.kernel.org>
-CC: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
-	<npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen
- N. Rao" <naveen.n.rao@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
-	<hpa@zytor.com>, David Howells <dhowells@redhat.com>, "David S. Miller"
-	<davem@davemloft.net>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown
-	<lenb@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>, Damien Le Moal
-	<dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, Daniel Scally
-	<djrscally@gmail.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Florian
- Fainelli <florian.fainelli@broadcom.com>, Ray Jui <rjui@broadcom.com>, Scott
- Branden <sbranden@broadcom.com>, Broadcom internal kernel review list
-	<bcm-kernel-feedback-list@broadcom.com>, Heiko Stuebner <heiko@sntech.de>,
-	Peter De Schrijver <pdeschrijver@nvidia.com>, Prashant Gaikwad
-	<pgaikwad@nvidia.com>, Thierry Reding <thierry.reding@gmail.com>, Jonathan
- Hunter <jonathanh@nvidia.com>, Huang Rui <ray.huang@amd.com>, "Gautham R.
- Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello
-	<mario.limonciello@amd.com>, Viresh Kumar <viresh.kumar@linaro.org>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
-	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
-	<airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Jani Nikula
-	<jani.nikula@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, Joonas
- Lahtinen <joonas.lahtinen@linux.intel.com>, Tvrtko Ursulin
-	<tursulin@ursulin.net>, Karol Herbst <kherbst@redhat.com>, Lyude Paul
-	<lyude@redhat.com>, Danilo Krummrich <dakr@redhat.com>, Jean Delvare
-	<jdelvare@suse.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Pavel Machek <pavel@ucw.cz>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
-	<jernej.skrabec@gmail.com>, Tony Lindgren <tony@atomide.com>, Adrian Hunter
-	<adrian.hunter@intel.com>, Hu Ziji <huziji@marvell.com>, Ulf Hansson
-	<ulf.hansson@linaro.org>, Miquel Raynal <miquel.raynal@bootlin.com>, Richard
- Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Potnuri
- Bharat Teja <bharat@chelsio.com>, Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Miri Korenblit
-	<miriam.rachel.korenblit@intel.com>, Kalle Valo <kvalo@kernel.org>, Mahesh J
- Salgaonkar <mahesh@linux.ibm.com>, Oliver O'Halloran <oohall@gmail.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, JC Kuo <jckuo@nvidia.com>, Andrew
- Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Sebastian Reichel
-	<sre@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>, Helge Deller <deller@gmx.de>, Brian Foster
-	<bfoster@redhat.com>, Tejun Heo <tj@kernel.org>, Zefan Li
-	<lizefan.x@bytedance.com>, Johannes Weiner <hannes@cmpxchg.org>, Peter
- Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, Vincent
- Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
-	<dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman
-	<mgorman@suse.de>, Daniel Bristot de Oliveira <bristot@redhat.com>, Valentin
- Schneider <vschneid@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jason Baron
-	<jbaron@akamai.com>, Jim Cromie <jim.cromie@gmail.com>, Paul Moore
-	<paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
-	<serge@hallyn.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Clemens
- Ladisch <clemens@ladisch.de>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
-	<tiwai@suse.com>, Liam Girdwood <lgirdwood@gmail.com>, Linus Torvalds
-	<torvalds@linux-foundation.org>
-References: <20240603211538.289765-1-andriy.shevchenko@linux.intel.com>
-From: Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <a6cff4d3-821a-3723-b261-3699053b5a51@huawei.com>
-Date: Tue, 4 Jun 2024 09:37:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+	s=arc-20240116; t=1717473764; c=relaxed/simple;
+	bh=g1qqpl96AdAYEBX7DOCPaDYf/Og0BxLUQKggssWSn3M=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Ll164m8opo417zW9VRDjmV4aU7SD1JNTI+sx8g9n+lh5SGfqLN9/Uj82N7zdelf0wcrkfaJnfyjeUXgQFwoWJD1l9nIFsaiF28Fpk3ENIcVaRFJ+XwcZygqrcjtuNDOQtENMVDp57tZw+vXRV6FpUzpRpkMb93MQBSZwB4f9L2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eJ8SrO70; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1f480624d0dso40660065ad.1;
+        Mon, 03 Jun 2024 21:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717473761; x=1718078561; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=JlyCTeaCH4Oen+k1b5qm5UwIXUpqadxOqG00edSRfEo=;
+        b=eJ8SrO70pmz1VL0NfhEhN6x22JtACLZMMsMVgZdV58sVWCVZAzFV2/GjXEQr1hn1Lr
+         0Yg3bgq0+nwGse5YtH4HOdX1J59+XmYMMLSdtEMp0GMHMBoGtV1hrYUy+/eFmae92cH2
+         mVkKnbOD/xmIci7CIUAZAYH8x4IphXMEh6UMQ1eNuZz0gEwAcn8Ci0VGgXz3xRYanyVm
+         Si1tdhhs48OJRsSSho/EwMm28xQYcMcFMoV51+uF7Hkl3n71aLOKFaTL4hjg4KnXPkLO
+         MpS0ybYOMs/0UotVtlHndRpUtJ4JtuX0CcPTou5rwxwe2zeEhu/ha6C4uNihUM/GKjQp
+         9qBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717473761; x=1718078561;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JlyCTeaCH4Oen+k1b5qm5UwIXUpqadxOqG00edSRfEo=;
+        b=HUN89WHLPekZh2BC8rNxsXt4f2e+UEVYs5zyo/oe13NnTfTjhKtaJoxrBVR9+bGb7Y
+         Ws/g+LNNbkhNRRmbhzIRJKM/rFj9U1wuw5udj3mdiG9rnO9csYR620BaiuNH56B4T4Wq
+         kZS3/rRwR12EPAuVFMPUPLYM7NfsVq95UB8IMKqrbRNevvLkZ/LSLG4PGFttYWVn7ATt
+         VnfJEPsCdm5ly8//RRNW8ec5VrAGGtKAJBkGUZdlH6Cf4EYRVThDSGahdJ4UQUe7rVrb
+         9x2lj70kqeU+SmQPyyQIF9cZAAAiQMfcHPaaNsQn2fbwDiHOOJ82Gwx0WcZJDpTZyF2j
+         lzig==
+X-Forwarded-Encrypted: i=1; AJvYcCVuWLTNdwEfDj/g2KEXxzgVr+9GMmT112wJGX5htB0fW2KBHME+rX6Jogef1lj1RU8NDP+pWQIyzA5DxZbpsMx3FIjIAyDG5jbThtvSUck+sf12dlzDcyQC2rKVRkQsx8p30gRNTm0dsg==
+X-Gm-Message-State: AOJu0YyulXpDzRaND6ixqS0mpOkjt/1DAQw4KbNU796dcIya1eRMotqh
+	eyV5Zn8HTZBApu78jZ8e7cE/fsZb+aEJNxxdkWa0qWLW9SSJi0S1K8bvaw==
+X-Google-Smtp-Source: AGHT+IFqdUa+JwtJ+RCDCcGeklgRUk+qu9sxaUHH87jmwn3HEYfBJNaN0ce0pgGxCIRUlgCz57I0xw==
+X-Received: by 2002:a17:902:e742:b0:1f6:80e2:e423 with SMTP id d9443c01a7336-1f680e314f6mr52815495ad.68.1717473761080;
+        Mon, 03 Jun 2024 21:02:41 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f634380b34sm71840785ad.12.2024.06.03.21.02.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jun 2024 21:02:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	=?UTF-8?q?Ren=C3=A9=20Rebe?= <rene@exactcode.de>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Armin Wolf <W_Armin@gmx.de>,
+	Stephen Horvath <s.horvath@outlook.com.au>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v4 0/6] hwmon: Add support for SPD5118 compliant chips
+Date: Mon,  3 Jun 2024 21:02:31 -0700
+Message-Id: <20240604040237.1064024-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240603211538.289765-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
 
-ÔÚ 2024/6/2 23:57, Andy Shevchenko Ð´µÀ:
-> Make two APIs look similar. Hence convert match_string() to be
-> a 2-argument macro. In order to avoid unneeded churn, convert
-> all users as well. There is no functional change intended.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> 
-> Compile tested with `make allyesconfig` and `make allmodconfig`
-> on x86_64, arm, aarch64, powerpc64 (8 builds total).
-> 
+Add support for SPD5118 (Jedec JESD300) compliant chips supporting
+a temperature sensor and SPD NVRAM. Such devices are typically found on
+DDR5 memory modules.
 
-[...]
-> diff --git a/fs/ubifs/auth.c b/fs/ubifs/auth.c
-> index a4a0158f712d..fc0da18bfa65 100644
-> --- a/fs/ubifs/auth.c
-> +++ b/fs/ubifs/auth.c
-> @@ -264,13 +264,13 @@ int ubifs_init_authentication(struct ubifs_info *c)
->   		return -EINVAL;
->   	}
->   
-> -	c->auth_hash_algo = match_string(hash_algo_name, HASH_ALGO__LAST,
-> -					 c->auth_hash_name);
-> -	if ((int)c->auth_hash_algo < 0) {
-> +	err = __match_string(hash_algo_name, HASH_ALGO__LAST, c->auth_hash_name);
-> +	if (err < 0) {
->   		ubifs_err(c, "Unknown hash algo %s specified",
->   			  c->auth_hash_name);
-> -		return -EINVAL;
-> +		return err;
->   	}
-> +	c->auth_hash_algo = err;
->   
->   	snprintf(hmac_name, CRYPTO_MAX_ALG_NAME, "hmac(%s)",
->   		 c->auth_hash_name);
+The first patch of the series adds SPD5118 devicetree bindings. The second
+patch adds support for SPD5118 temperature sensors. The third patch adds
+support for suspend/resume. The 4th patch adds support for reading the
+SPD NVRAM. The 5th patch adds support for auto-detecting SPD5118 compliant
+chips to i2c_register_spd() in the i2c-smbus code. The last patch of the
+series adds a configuration option to make the auto-detect code in the
+spd5118 driver configurable.
 
-Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>  # fs/ubifs
+Note: The driver introduced with this patch series does not currently
+support accessing SPD5118 compliant chips in I3C mode.
+
+v4: Add support for detecting SPD5118 compliant chips in i2c-smbus driver
+    Make auto-detect code in driver optional
+    Fix suspend code
+    Ignore failure to register with nvmem core if it is disabled
+    Use NVMEM_DEVID_NONE instead of NVMEM_DEVID_AUTO in nvmem code,
+    changing nvmem attribute directories from 0-005[0-7]X to 0-005[0-7]
+
+v3: Drop explicit bindings document; add binding to trivial devices instead
+    Add support for reading SPD NVRAM
+
+v2: Drop PEC support; it only applies to I3C mode.
+    Update documentation
+    Add suspend/resume support 
+
+----------------------------------------------------------------
+Guenter Roeck (6):
+      dt-bindings: trivial-devices: Add jedec,spd5118
+      hwmon: Add support for SPD5118 compliant temperature sensors
+      hwmon: (spd5118) Add suspend/resume support
+      hwmon: (spd5118) Add support for reading SPD data
+      i2c: smbus: Support DDR5 SPD EEPROMs
+      hwmon: (spd5118) Add configuration option for auto-detection
+
+ .../devicetree/bindings/trivial-devices.yaml       |   2 +
+ Documentation/hwmon/index.rst                      |   1 +
+ Documentation/hwmon/spd5118.rst                    |  63 ++
+ drivers/hwmon/Kconfig                              |  30 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/spd5118.c                            | 661 +++++++++++++++++++++
+ drivers/i2c/i2c-smbus.c                            |   4 +
+ 7 files changed, 762 insertions(+)
+ create mode 100644 Documentation/hwmon/spd5118.rst
+ create mode 100644 drivers/hwmon/spd5118.c
 
