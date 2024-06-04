@@ -1,76 +1,76 @@
-Return-Path: <linux-i2c+bounces-3793-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3794-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DD198FB544
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 16:30:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53BA88FB556
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 16:32:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0A541C22205
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 14:30:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D221A1F2253B
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 14:32:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1352613D27C;
-	Tue,  4 Jun 2024 14:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEEB013D635;
+	Tue,  4 Jun 2024 14:31:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PCU4TJ2/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HwbPk1Xu"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A68D13C90F;
-	Tue,  4 Jun 2024 14:30:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496DA13CF96;
+	Tue,  4 Jun 2024 14:31:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717511426; cv=none; b=HKfY4MgcCIL0+IKMLzAKqT8eqjlOGLvPECplAxweZQsr4cYrCAXWWuRcY3tchvJevMS/nOpF/cLcyetvqe3G5MF6ULtbsTXDkaofk7KWH1m+LsaMHXpPjaOJFWb4rHu9+FNsC35M1040fdTr21eD4IaiXmUVlFuB4oUzzjnqReA=
+	t=1717511497; cv=none; b=gNg4Pz1yhF8zX/L9/HuX+5bX8jrJ9IqZn1MX8W7X7Q1QRmPuU0rcr6/a5zioK+EJYUL+dyOgwIerWqAbO7dOmaW7JqWaNAEEUdsNxnzc1ztceQsva7D/y5hWp7flw7RnybR1aapsTCQguImUcPzxvaMbhTQ3q8rzntUaZvKk4b8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717511426; c=relaxed/simple;
-	bh=HwX1B5xANCMQwH4ThuytM1R4l4HRqT25rPLilxhsrlE=;
+	s=arc-20240116; t=1717511497; c=relaxed/simple;
+	bh=1WSGdLp+UD5bFmugssJHEFegRhyeHsX2gBn93rXfMjA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qKJFERfZ7bl6ipd2z68falSzcJgN0Gfj7Fj9dmDO6pe2FcICpQciKVQo+I4s1rH+hUsyI0/S7Q5AZqKx+LkuucX4uDFXW9uyVEoTrA4xFqQnpnyLC4Au/veDyay5cinqBUEcCAC4x5JnoASABYwypAT/f3rssuGjCWYJ5r+tJbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PCU4TJ2/; arc=none smtp.client-ip=209.85.216.48
+	 In-Reply-To:Content-Type; b=mXdaJ2GB3r7zFOmn025reCw2ByRQklYc6Eph9QknquVUbUdHUJWWUtQs48ljZ/hHCJU01+SBa5/NkVpiTRKtYdQKJX1eWLs5lZWd4DcnnC3dx/MfemsFNLNd1iYCSByvjruYO8+zr5wDtLyJK6Ns6q8kBzYsOr7AOCcbnjDPv/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HwbPk1Xu; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2bda9105902so3352892a91.0;
-        Tue, 04 Jun 2024 07:30:25 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1f61f775738so40110885ad.2;
+        Tue, 04 Jun 2024 07:31:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717511424; x=1718116224; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717511495; x=1718116295; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=thPFwuuLv1KcZDTeCxBeR8Efu8jvfri7D4yrW1vwDoo=;
-        b=PCU4TJ2/VmYzFGChPme1rSH37SWcJEtXy3TS55ku9oRJH69wSKKV9xT+CVU8+Z2MD+
-         GJ2OqqjvSpjW04fDRprKShvxb18ckbywuMEV8v8sCyB38bCAwC8oaEhN7uA48Mugwk0/
-         v3BwiJXt076gvd29vGzEMHf7eBmGsYeD1hQoJeSbpwxk587OdwPeZ0cqbNpNc3KT4v5t
-         LYOKl61FCwVl+XcMOEAj2iu666GXT242H+zq0S+GiSMMAEn7G28LFYLt380oE8KkYeir
-         33DhmgXcV3mVJSeXGTmUPVRM2PNL7qeJmCFXho8gchOo6dXAKBelEOibqcq+Fmb94xEg
-         AtYQ==
+        bh=2VGDou59bdsH4zjlcFOpFMQmh8HN0lld2Fx8fUhnGKc=;
+        b=HwbPk1XuDgpUQtV0EVFncMrLjSGHu+C55awmfaACjaMkcOvHsbRSylmfeHBs6ykZ7+
+         CzA7HLz36nEZ5//qUpqRIY6Xo2PMAg/We/LSh2MbJ2X7BIMNS52UjtUn0vKzJrhLVVAT
+         DCM/VeJ3ZBNVzU66SjTiJkEgkQcEqzp+94Rd3Oc0OZeuwB+fvbgf6W2QCCWZRIJDH7pa
+         3lGDvUno+NeYVbncIZc0qCHcOCwr0u9L9t6ZsgkiNhFDPL7apTGg1wAAzrlX/nl0BMLP
+         2kEJZG/V5r7HxfM028ScNH+GNU1UBvlDDHHDSgHivbN3JuxWJ1DX4uw/L3GM92sxba/g
+         P1bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717511424; x=1718116224;
+        d=1e100.net; s=20230601; t=1717511495; x=1718116295;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=thPFwuuLv1KcZDTeCxBeR8Efu8jvfri7D4yrW1vwDoo=;
-        b=biyYYtLN7h5qd6yNiiFYIwPlNZs27fu2sLUuNQBcfAtUq5lLuG34TQK5TRJ2kLRHxR
-         /gpu5mWtnduL3eg0xQHjk7U6R7G6VxSe9erfpQImytQexVNo2OBRwLXE3rIHFYGxCGRX
-         EgLkJJZvpGrDHCVdVbO+DjqRDSFs1etKTfvA+201NY96tz1V6ChBq/+bruN/vAwlXVsW
-         FgqGGcXvRnP8lao2XJShFx5MPP8oAGJPWPKKZVObdDyrzmP/yEy2/XxS5PpcGzQCSc8m
-         kHUN5HPLWUZLN/WogsmupxvYYqLBPF7T3aayCjLc+jnOB4SLxSwOcJdLKr7goCvdevRC
-         lXTA==
-X-Forwarded-Encrypted: i=1; AJvYcCWivdRlcFJK/vS3akieLFPUBjCA5Aw+v3G0om8G1O4nzKnB44qVp9OQ1zOpCqzjI7ewJFerf+OY8NBGto+sBvFy61JOtUGr/8xMyPb/teGcU9kBiYSi2FZxq6jmQmwl7kAq9WVfmq9S3oSf2/ztYcIg9yMd2YRoGk4BX42hHeokb3XWSRp+
-X-Gm-Message-State: AOJu0YxpMS4jk+AOMFsg/IlLodRdQIRKJxDSmK0eMcNlPt/GDdlE0mSB
-	pYyikT2n5vIG9FsmHvvX6g6OrX/VXpvXcO1D6dEMq4c/3brDb7rN
-X-Google-Smtp-Source: AGHT+IEWv14qqDnlNOn1wcBAI1+Pu8swB1LvY/tgLdAc1sXY59NVOcRBGe3oAWrIBP+qHMzfV0LFPA==
-X-Received: by 2002:a17:90a:ee8d:b0:2c0:1dd7:4221 with SMTP id 98e67ed59e1d1-2c1dc568f90mr10564016a91.10.1717511424411;
-        Tue, 04 Jun 2024 07:30:24 -0700 (PDT)
+        bh=2VGDou59bdsH4zjlcFOpFMQmh8HN0lld2Fx8fUhnGKc=;
+        b=G5aVmMTwYu/mKjC+ODBz1s7kkFQymL7/3PoIqSZUplUFVz9f70hcYfAILiTIvPuqDB
+         /xbp1DCk0jYw2OGi7IW12axsWPlprBA04gTU6hfGx6gusAkFIqtVaNWCANP3dad26EzN
+         pyjq39oLveWII9mkJdgwSeM73y6P39+sKwReX0bxjtSwMzy6kgct/XNJ0iqII72y3Rng
+         kdtr4JY+mHS+cO3ilD6Y0v53VVpU0/In0zX4ZgFJ0WKE143qRqSWBrkd9/qYAciZoGtj
+         ugkHn0CeDHFHSTrRmU1Lwz/37KQogE7mP596Yu4T41NY95RMxuBOH7yqS9v2ebhqSaUg
+         5Teg==
+X-Forwarded-Encrypted: i=1; AJvYcCXpxdQHrgI1Ch+Dd8I0CPcK9+OHieaxTHbAAUd063GWjDuMuhb+W8aYgY/B8hQvFw1QP/qxITXQiGLFopX2YRiWWO/MdZR349ZGQbQa36TsZaAnq0sMzpXrSj6vavOwA+7rehjVcEexRjdPn8CazRwEk/eY7tzG/ZgKk95RW4qloLZrmRlF
+X-Gm-Message-State: AOJu0Yyk1GCtWw79EDMDAf3+vkBg0xL1OebzA03OyTWIYRaqcZ4DAm/i
+	+49g3Z58t9PZt8KkarWmHkIRtBHrSGeeyKJ2TgT5QgKmT/tc56B6
+X-Google-Smtp-Source: AGHT+IEzDlys+F/jUx2MCmUjvjs8/ulEGsDBmvmCp+PXq8O1xr6iLx5sZJ5+LZBul55ULfaVgAXd1g==
+X-Received: by 2002:a17:902:cec6:b0:1f4:8190:33c3 with SMTP id d9443c01a7336-1f637082698mr127997975ad.40.1717511495398;
+        Tue, 04 Jun 2024 07:31:35 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1a7771386sm10540400a91.22.2024.06.04.07.30.22
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6323e9f2csm84612865ad.200.2024.06.04.07.31.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jun 2024 07:30:23 -0700 (PDT)
+        Tue, 04 Jun 2024 07:31:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2c94220a-29e9-4b83-a427-5ad406ff1c48@roeck-us.net>
-Date: Tue, 4 Jun 2024 07:30:22 -0700
+Message-ID: <14431116-84c1-4744-a84e-27e9605e7252@roeck-us.net>
+Date: Tue, 4 Jun 2024 07:31:33 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -78,17 +78,17 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/6] hwmon: (spd5118) Add support for reading SPD data
-To: Armin Wolf <W_Armin@gmx.de>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v4 3/6] hwmon: (spd5118) Add suspend/resume support
+To: Stephen Horvath <s.horvath@outlook.com.au>, linux-hwmon@vger.kernel.org
 Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Wolfram Sang <wsa+renesas@sang-engineering.com>,
  =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
  =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Stephen Horvath <s.horvath@outlook.com.au>
+ Armin Wolf <W_Armin@gmx.de>
 References: <20240604040237.1064024-1-linux@roeck-us.net>
- <20240604040237.1064024-5-linux@roeck-us.net>
- <4cfe1004-77d4-432b-b07e-557a2e57de58@gmx.de>
+ <20240604040237.1064024-4-linux@roeck-us.net>
+ <SY4P282MB3063FE1968B72C3187042917C5F82@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -134,75 +134,32 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <4cfe1004-77d4-432b-b07e-557a2e57de58@gmx.de>
+In-Reply-To: <SY4P282MB3063FE1968B72C3187042917C5F82@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 6/4/24 04:58, Armin Wolf wrote:
-> Am 04.06.24 um 06:02 schrieb Guenter Roeck:
-> 
->> Add support for reading SPD NVMEM data from SPD5118 (Jedec JESD300)
->> compliant memory modules. NVMEM write operation is not supported.
->>
->> NVMEM support is optional. If CONFIG_NVMEM is disabled, the driver will
->> still instantiate but not provide NVMEM attribute files.
->>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> v4: Use NVMEM_DEVID_NONE instead of NVMEM_DEVID_AUTO
->>      Ignore nvmem registration failure if nvmem support is disabled
->>
->> v3: New patch
->>
->>   Documentation/hwmon/spd5118.rst |   8 ++
->>   drivers/hwmon/spd5118.c         | 147 +++++++++++++++++++++++++++++++-
-
-
-[ ... ]
-
->> +static int spd5118_nvmem_init(struct device *dev, struct spd5118_data *data)
->> +{
->> +    struct nvmem_config nvmem_config = {
->> +        .type = NVMEM_TYPE_EEPROM,
->> +        .name = dev_name(dev),
->> +        .id = NVMEM_DEVID_NONE,
->> +        .dev = dev,
->> +        .base_dev = dev,
->> +        .read_only = true,
->> +        .root_only = false,
->> +        .owner = THIS_MODULE,
->> +        .compat = true,
-> 
+On 6/4/24 01:45, Stephen Horvath wrote:
 > Hi,
 > 
-> do we really need this setting here?
+> On 4/6/24 14:02, Guenter Roeck wrote:
+>> Add suspend/resume support to ensure that limit and configuration
+>> registers are updated and synchronized after a suspend/resume cycle.
+>>
+>> Cc: Armin Wolf <W_Armin@gmx.de>
+>> Cc: Stephen Horvath <s.horvath@outlook.com.au>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>> v4: Fix bug seen if the enable attribute was never read prior
+>>      to a suspend/resume cycle.
+> 
+> I can confirm this works for my devices, so:
+> 
+> Tested-by: Stephen Horvath <s.horvath@outlook.com.au>
 > 
 
-The "eeprom" file is only created if both "base_dev" and "compat" are set.
-decode-dimms depends on it. While decode-dimms has to be updated anyway,
-I did not want to make that more complicated than necessary.
+Thanks a lot for testing!
 
-Another option would be not to use the nvmem subsystem in the first place,
-similar to the ee1004 driver, but my understanding is that the use of the
-nvmem subsystem is preferred.
-
-[ ... ]
-
->> +
->> +    err = spd5118_nvmem_init(dev, data);
->> +    /* Ignore if NVMEM support is disabled */
->> +    if (err && err != -EOPNOTSUPP) {
-> 
-> Maybe we can use IS_REACHABLE(CONFIG_NVMEM) here?
-> 
-
-We could, but I prefer to avoid conditionals in the code if possible,
-the dummy devm_nvmem_register() is there specifically to cover that
-situation, and no other driver does that. Also, since the underlying
-functions are dummy, the compiler should optimize it all away if
-CONFIG_NVMEM=n.
-
-Thanks,
 Guenter
+
 
 
