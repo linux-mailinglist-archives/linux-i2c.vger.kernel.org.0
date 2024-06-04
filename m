@@ -1,187 +1,235 @@
-Return-Path: <linux-i2c+bounces-3795-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3796-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5527E8FB55F
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 16:32:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BC468FB6AE
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 17:11:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5AF81F222E2
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 14:32:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71B6CB24484
+	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 15:11:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BE98143C6B;
-	Tue,  4 Jun 2024 14:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEFB413D50E;
+	Tue,  4 Jun 2024 15:11:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XO4ZL1q5"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1UKubv5G";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zicZU98k";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1UKubv5G";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zicZU98k"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A97113B5B7;
-	Tue,  4 Jun 2024 14:31:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9445F4C91;
+	Tue,  4 Jun 2024 15:11:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717511512; cv=none; b=N/Td9l/n/pLDJD9tU5+2RoM2Cc59zB4L8+D3rXGmrNSPTN0/OtHQFWVoAHxvUobXkDduoAoLytZxk/akMyxs88+AQrn0/jt8P2JoI+zXYgFKlHIJSHWhxNksV/TECP2YZRUIubr/B+Ax18omrdBz80t6EVdzc4ELVD+WJwjo//Y=
+	t=1717513887; cv=none; b=upJMUWp2FM4xi3vsp969L4gXhuvlc+cE42loq1xXrVgdTnyfqpkjYkp/pqIzWAxlU26zxgOuP49B/m7v3jcJUvOmYDb8AOQqVMqdAesMcDNQDSWTnVXpR9FVN9mWqqMjMVvzL/Q8Wg2RYNjIbue0AzLmXzMDk08kDNNtoGSzUnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717511512; c=relaxed/simple;
-	bh=RM+SjVMkg/K7DFppKMcbKWOM/ucNqttsWoRCyloK3M0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QuOKF9oFTKkOOZ2+95Mfl+y/2dXYBl9VQAy6bvPuxkS3aNJzbAep5iB/kJn6mTlgkFbmsFW9a7ThlpHQnWQuGf4HWLrUkimhJQIhK0XrWIuyK6iwqzA1kHuWfNt+plpP+1TBjOhEPH1xxahan0/W/kJa/TexAAkF+5UZkiO5XMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XO4ZL1q5; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1f44b5d0c50so42498165ad.2;
-        Tue, 04 Jun 2024 07:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717511510; x=1718116310; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=btxrm+NJ1/xNKhjXV8pJNpI5p98TsdjFZzhEY1yUR+o=;
-        b=XO4ZL1q5Ew+X4qTeHyOhMulVEyE9bRGiut1mkP/abZj2XR9OLrjeuDgdTJQo1iwyYb
-         qE8I5yU7M8iT6N0cMRKjNFESEOZao9vPpBbE+kiRYpaKvLV5jboypWfzYwwGL8tstHLL
-         3HJKwzftJLAlpH6Fn3wwgpolUudMjbEWVsnYYy3MsX6NCBO1j/2OPtu1aRYoKngjY0Wp
-         v7vhkKNNNIHdzYEs8qS0XjNVkjPW5u3d55rh9JCAzsWnkH5Ndv6SLoSRzzy6e9RIs4JY
-         qEv/Dv1OROq8fRAudY3BsJfsb3fwauoFn8HTnnDsdqBtyr6l01j/qAG7QnBm9rKMw7I6
-         jj3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717511510; x=1718116310;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=btxrm+NJ1/xNKhjXV8pJNpI5p98TsdjFZzhEY1yUR+o=;
-        b=pt2WqIMr45y5JKU20ZxyhDv2bzCwnoqM6GRwnCsVYfbc30Ec2CYnSBzuEzCgTP5U/k
-         w3aIXia12VJooypwxyHLrEaJaihAtHnQt/RmuLmuM3fG0ATZXcBCEgEo0UNuA6qG6K3M
-         n+Hcdj0LnD7+ivh6LxzjCyp3GBCO227IOCd0izISmTjsVpSVHI2CpokVEyPqMZPpG0OF
-         +C55v1XaNAfkrVY2G0HOjLDbT981u2j5TNWazFqV5WSYVuFAnu1lMbekoMgKN+n2kx3R
-         gV475asx1WraRRaNJpXPNtizoWeu3Xg9zq9ypcw2osucTtddqzpVpnLgXHRwApWpAmcl
-         GXCA==
-X-Forwarded-Encrypted: i=1; AJvYcCUKuckHThmOua+rI8RbLf0zei5GFttQCQ+HlR1HZU5fEg77902WKKDLANmzA86u6UcD6i17g5RGG3b62R3EclmysfVZNCDZH1Y81Sd6mTK8WS1bwDkKjvqhfE/DbP5xjWG+yYc2daBmVUDPyr6DXGg2tduxgTr3kIsdmIWFfFFG9wh0MX5a
-X-Gm-Message-State: AOJu0Yx7YrA1iR+edfz8afguLZZModdTU/ywk437J9jpvi3WXOhv65BN
-	/wKFxMtCg9+vnMb8+g8w9FJwCfPYsxmB6OGiSB3JYP8hyvSOw4Of
-X-Google-Smtp-Source: AGHT+IGfgO9f/KQcrZNeBmHYEnduCT8loWCjHxpEbGwARcRqv9BttQMFRx9GiCUS8Qh+vo45YcDpSA==
-X-Received: by 2002:a17:902:fc48:b0:1f6:792c:6372 with SMTP id d9443c01a7336-1f6792c66e0mr70220135ad.47.1717511509717;
-        Tue, 04 Jun 2024 07:31:49 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6323dde56sm86252335ad.165.2024.06.04.07.31.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jun 2024 07:31:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c25ff311-7742-46b3-a2f3-77d7b6a37ab7@roeck-us.net>
-Date: Tue, 4 Jun 2024 07:31:48 -0700
+	s=arc-20240116; t=1717513887; c=relaxed/simple;
+	bh=QEz05DuTsIvHAwj2T7TyXVgPHATwBc4k25U6wzxI1fM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HKKLjOeoDSus3BevKeH1JES+pHa9mSsgsm04vFxcz509TSAdZcP/t49maLr8LGNr8fi2dGYR29VPFR6fuRbHGwlcuTYG7ue6hfkpun0pf9x+mWOUe/9opwyK4tFRmyr7Tr/gOe4Ag5PP1wizAklaRoKnfTTQICQ0Q65vDRKmA7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1UKubv5G; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zicZU98k; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1UKubv5G; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zicZU98k; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 94E541F803;
+	Tue,  4 Jun 2024 15:11:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717513882; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=suG/UwcmICtQXRCel+rkvU09OoVD7nEthrbtfU0L2LU=;
+	b=1UKubv5G1QmsZNeH6WNzmwGBJahPo70aYyMUqME4cgTkgvCyQed03TyvzaQzfjGOb4Ti0O
+	Mq8XnTUSkv2H+S7scAQjFJb4h1yrTNJFZuJsjLtXDQp/xaa0V8w7gdstOpQxE1HOW8EqRY
+	Jo0KbjxEYi+IxlPUyzZncF5DZdF7cZA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717513882;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=suG/UwcmICtQXRCel+rkvU09OoVD7nEthrbtfU0L2LU=;
+	b=zicZU98kiHvP2nllYoLgmyLu5LG4Gwm5U+32RLTv2B2BhdFuzRNZZWZLEQUpBSu58b3/hm
+	DYYqSDFgU2SOKdAw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=1UKubv5G;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=zicZU98k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717513882; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=suG/UwcmICtQXRCel+rkvU09OoVD7nEthrbtfU0L2LU=;
+	b=1UKubv5G1QmsZNeH6WNzmwGBJahPo70aYyMUqME4cgTkgvCyQed03TyvzaQzfjGOb4Ti0O
+	Mq8XnTUSkv2H+S7scAQjFJb4h1yrTNJFZuJsjLtXDQp/xaa0V8w7gdstOpQxE1HOW8EqRY
+	Jo0KbjxEYi+IxlPUyzZncF5DZdF7cZA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717513882;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=suG/UwcmICtQXRCel+rkvU09OoVD7nEthrbtfU0L2LU=;
+	b=zicZU98kiHvP2nllYoLgmyLu5LG4Gwm5U+32RLTv2B2BhdFuzRNZZWZLEQUpBSu58b3/hm
+	DYYqSDFgU2SOKdAw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7499413ABC;
+	Tue,  4 Jun 2024 15:11:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id GQ6uFZQuX2YIIAAAD6G6ig
+	(envelope-from <jdelvare@suse.de>); Tue, 04 Jun 2024 15:11:16 +0000
+Date: Tue, 4 Jun 2024 17:11:13 +0200
+From: Jean Delvare <jdelvare@suse.de>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
+ linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Peter Rosin
+ <peda@axentia.se>
+Subject: Re: [PATCH] i2c: smbus: fix NULL function pointer dereference
+Message-ID: <20240604171113.232628f9@endymion.delvare>
+In-Reply-To: <b2tnimag62ty6wndyjsy7u5fay6y52zn47vvifw6rh5abeqzpu@pqyyczutxcwu>
+References: <20240426064408.7372-1-wsa+renesas@sang-engineering.com>
+	<1e626d93f4220cc348300bbc61089de32300122d.camel@suse.de>
+	<b2tnimag62ty6wndyjsy7u5fay6y52zn47vvifw6rh5abeqzpu@pqyyczutxcwu>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/6] hwmon: Add support for SPD5118 compliant
- temperature sensors
-To: Stephen Horvath <s.horvath@outlook.com.au>, linux-hwmon@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Armin Wolf <W_Armin@gmx.de>
-References: <20240604040237.1064024-1-linux@roeck-us.net>
- <20240604040237.1064024-3-linux@roeck-us.net>
- <SY4P282MB30639393B10CC313292C936BC5F82@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <SY4P282MB30639393B10CC313292C936BC5F82@SY4P282MB3063.AUSP282.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 94E541F803
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TAGGED_RCPT(0.00)[renesas];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_FIVE(0.00)[6];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.de:+]
 
-On 6/4/24 01:48, Stephen Horvath wrote:
-> Hi,
+Hi Wolfram,
+
+Thanks for your answer.
+
+On Tue, 4 Jun 2024 10:50:30 +0200, Wolfram Sang wrote:
+> Hi Jean,
 > 
-> On 4/6/24 14:02, Guenter Roeck wrote:
->> Add support for SPD5118 (Jedec JESD300) compliant temperature
->> sensors. Such sensors are typically found on DDR5 memory modules.
->>
->> Cc: René Rebe <rene@exactcode.de>
->> Cc: Thomas Weißschuh <linux@weissschuh.net>
->> Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
->> Tested-by: Thomas Weißschuh <linux@weissschuh.net>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> v4: No change
->>
->> v3: Shorten JESD300-5B.01 to JESD300; 5B.01 refers to the version
->>      of the standard
->>      Drop unnecessary 'attr' parameter from spd5118_{read,write}_enable()
->>
->> v2: Drop PEC property documentation
->>      Add note indicating that alarm attributes are sticky until read
->>      to documentation
->>      Fix detect function
->>      Fix misspelling in Makefile (CONFIG_SENSORS_SPD5118->CONFIG_SENSORS_SPD5118)
->>
->>   Documentation/hwmon/index.rst   |   1 +
->>   Documentation/hwmon/spd5118.rst |  55 ++++
->>   drivers/hwmon/Kconfig           |  12 +
->>   drivers/hwmon/Makefile          |   1 +
->>   drivers/hwmon/spd5118.c         | 481 ++++++++++++++++++++++++++++++++
->>   5 files changed, 550 insertions(+)
->>   create mode 100644 Documentation/hwmon/spd5118.rst
->>   create mode 100644 drivers/hwmon/spd5118.c
->>
+> > I have a hard time establishing a formal link between the reported bug
+> > and the commit listed above. I do understand that it wouldn't make
+> > sense to register an i2c_adapter with neither .master_xfer nor
+> > .smbus_xfer set before .reg_slave was added to struct i2c_algorithm,
+> > but there were no checks in i2c-core preventing it from happening.  
 > 
-> It seems to report correct temperatures for my sticks, so I guess:
+> Well, yes, correct.
 > 
-> Tested-by: Stephen Horvath <s.horvath@outlook.com.au>
+> > It was also possible for any (broken) device driver to call
+> > __i2c_transfer() without first checking if plain I2C transfers were
+> > actually supported by the i2c_adapter. I would argue that such an issue
+> > should have been fixed at the device driver level by checking for the
+> > I2C_FUNC_I2C functionality flag before calling __i2c_transfer(). That's
+> > a theoretical issue though as I'm not aware of any device driver having
+> > this issue.  
 > 
+> In theory, checking against I2C_FUNC_I2C should happen. In practice,
+> most I2C drivers do not do this. Being picky here could results in bad
+> user experience because of OOPS. If we really want to enforce checking
+> I2C_FUNC_I2C, then we should have this safety net while we convert all
+> users. No, actually, I think we always should have some safety nets.
 
-Thanks!
+Point taken, makes sense.
 
-Guenter
+Note that we still want I2C_FUNC_I2C to be set properly, because it
+allows device drivers to optimize transfers (the at24 driver is a prime
+example of that) or even just to bind to the I2C bus (for device
+drivers which properly check for it).
 
+> > The call stack in Baruch's report shows that the real issue is with
+> > i2c_smbus_xfer_emulated() being called with the i2c bus lock already
+> > held, and thus having to call __i2c_transfer() instead of
+> > i2c_transfer(). This code path did not exist before commit 63453b59e411
+> > ("i2c: smbus: add unlocked __i2c_smbus_xfer variant"), which was added
+> > in kernel v4.19. Therefore I claim that CVE-2024-35984 only affects
+> > kernel v4.19 and newer. Do we agree on that?  
+> 
+> (There is a CVE for it??) For Baruch's case, this is true. But there are
+> __i2c_transfer users all over the tree, they are all potentially
+> vulnerable, or?
 
+Yes there are many, but I think we shall differentiate between 2 cases:
+* Missing check in a specific kernel device driver. These are unlikely
+  to be a problem in practice because (1) these devices are typically
+  instantiated explicitly, and such explicit code or device tree
+  description would not exist in the first place if said device was not
+  compatible with said I2C bus, and (2) if such an incompatibility was
+  really present then it would have been spotted and fixed very
+  quickly. Arbitrary binding through sysfs attributes is still possible
+  but would definitely require root access and evil intentions (at
+  which point we are screwed no matter what). I'm honestly not worried
+  about this scenario.
+* The issue being triggered from user-space through i2c-dev, which is
+  what Baruch reported. The user doing that can target any arbitrary
+  I2C bus and thus cause the oops by accident or even on purpose. For
+  me this is what CVE-2024-35984 is about. What limits the attack
+  surface here is that slave-only I2C buses are rare and you typically
+  need to be root to use i2c-dev. But this is still a serious issue.
+
+Also note that the first case could happen ever since __i2c_transfer()
+was introduced (kernel v3.6, commit b37d2a3a75cb) and is not limited to
+slave-only adapters, as any SMBus-only i2c_adapter would also be
+vulnerable.
+
+So the "Fixes:" tag in commit 91811a31b68d is incorrect for both
+scenarios.
+
+> (...)
+> I see the performance penalty, yet I prefer handling the buggy driver
+> gracefully because kicking off I2C transfers is not a hot path. Maybe we
+> could turn the dev_dbg into something louder to make people aware that
+> there is a bug?
+
+My previous message initially had a suggestion in that direction ;-)
+but I first wanted your opinion on the check itself. dev_dbg() is
+definitely not appropriate for a condition which should never happen
+and implies there's a bug somewhere else. A WARN_ON_ONCE would probably
+be better, so that the bug gets spotted and fixed quickly.
+
+-- 
+Jean Delvare
+SUSE L3 Support
 
