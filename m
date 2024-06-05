@@ -1,167 +1,179 @@
-Return-Path: <linux-i2c+bounces-3801-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3802-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54FD08FBD28
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 22:15:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D68F8FC1A6
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 04:19:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B57A31F25CE4
-	for <lists+linux-i2c@lfdr.de>; Tue,  4 Jun 2024 20:15:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0AFE1C227E9
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 02:19:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C93F514265F;
-	Tue,  4 Jun 2024 20:15:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 165EA61FD4;
+	Wed,  5 Jun 2024 02:19:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="Beev9rSt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z+q5WxJl"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8712C14036B
-	for <linux-i2c@vger.kernel.org>; Tue,  4 Jun 2024 20:15:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0516F2744E;
+	Wed,  5 Jun 2024 02:19:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717532128; cv=none; b=Lw15gQXK+hdQpIBgjbAJDU5ScfyHgZTyAYdm32L/N/JrXYYVxm+6Elj56vd9BRLIzorVsKlrjKEm17wcbNEU1wnQ7slVcbtJhkI3ApRDiwTRzwCzr4xfdYZoSUoBS+gXbR/sAkYSUlwyewhEPxn6fK1FykkhMcJf/RNAcZuvlR4=
+	t=1717553958; cv=none; b=kiPiB1c7oci+dwS3ysePw1FbjY/gxcIjOTzgx5tqLa+VnQFKo9XR0/s8wzaP6xJdKoxBGHkh4MFjg4CZ5efK0mhHqVZD0VSbUCWxGh3JyX2osl5GFvaCmUlhJpJCiOHs2izoMoRe8PIfW1/JAaNX/Iaqbt5WxObuQ+tOEkqAjjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717532128; c=relaxed/simple;
-	bh=843Pxj9q/wszPDCTdOObwl7gl9BDaaPWFGEg1gnkF10=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UR7HzPQm95U3C8RFrKDpXSNsbNwcbQdvOrOHZclezZzTFAGAEJj1qVmo9OHvBc1DjXDi5XcJ+IQKA8C9q39P6tx4Xd5cEMnTuJM1akRKAwIZWNM2WlP6/mzNBZVee3eMISvSSVwPyso+SchIG7mxpZ4gbkkzSiyoTosHxS1uNw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Beev9rSt; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=80M9
-	/oFeQrdHA5qzmIt/EiiNd4PHMkgSxg0oOqw3y5U=; b=Beev9rStyx1sTek2gs0e
-	VVLK3gieGjFU6iGVBwpNVS9US/BFN25KxB6txKVv7eTWTkoIzuXH+7CJtv/ipJJu
-	zzCIh9x9Avn1dZ8u4x7O6oUcHRrb4GqPWPHfsrYopdtQkOyPlI8DQr9VWHyhM4kg
-	coh1nGvp2+kzJ1rFxm3cFXDcjLfBsyYwiOJVm11uzw9JxBt69UCMmeNT9qd0FUAG
-	/IWdEpDNS+/Shc4PlipLA850UO1CnSSqFXk8j6GUZnwEa8MNT65VnTfvXMGfIONz
-	tfC7BC5EqEa8rcyHfl/dTFM4jYdJ77QoyhhIpeNm9Vaso3BZgmzbuv1PO72/8Jvj
-	gA==
-Received: (qmail 2434857 invoked from network); 4 Jun 2024 22:08:41 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Jun 2024 22:08:41 +0200
-X-UD-Smtp-Session: l3s3148p1@VjAmBBYawNFehhtB
-Date: Tue, 4 Jun 2024 22:08:41 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Jean Delvare <jdelvare@suse.de>
-Cc: linux-renesas-soc@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>, 
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>
-Subject: Re: [PATCH] i2c: smbus: fix NULL function pointer dereference
-Message-ID: <bk6rgqfcn5op5iuojoisogvtrp24ldblgkq4g62ffr4z7wnzug@xlp3ce5bx7bs>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Jean Delvare <jdelvare@suse.de>, linux-renesas-soc@vger.kernel.org, 
-	Baruch Siach <baruch@tkos.co.il>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Peter Rosin <peda@axentia.se>
-References: <20240426064408.7372-1-wsa+renesas@sang-engineering.com>
- <1e626d93f4220cc348300bbc61089de32300122d.camel@suse.de>
- <b2tnimag62ty6wndyjsy7u5fay6y52zn47vvifw6rh5abeqzpu@pqyyczutxcwu>
- <20240604171113.232628f9@endymion.delvare>
+	s=arc-20240116; t=1717553958; c=relaxed/simple;
+	bh=MN5QUhpveLtR3vzOpslL0uzm+4RYwh54UdoJyZVPeus=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=mWJ+FcNupQGf43VOd8Q1sQ9F/gHL/ShgJRhvMD3WX6Fk17FbD0GGwkR+2Lkut9kUrqgkhNMBy2K24m/rv2+tmDbJJnRQHKiSG05vbxzw4mAWE1UeEjMxK8Ist+idyBxQyLgdW93P3k3u7USgnF0tKgGoHpz+uMhSDBnbwfOINCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z+q5WxJl; arc=none smtp.client-ip=209.85.160.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-24c0dbd2866so2816730fac.0;
+        Tue, 04 Jun 2024 19:19:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717553955; x=1718158755; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yH7bfOUTp5Qehb6cDSUFa9U/OcV22YcwBdkqqYDC6kU=;
+        b=Z+q5WxJlbUwJmZJQu0guOdTkurXNX0fish8ULU+AlQQFsCzj5Flt6vYgzFqTfsrTQ7
+         pAGscVP8KNnTKZOARs/fhzdZlYhbqzXzlH3ABvNbc73qV84iki93CQEZy8knWGBBzut/
+         R0BAjEhPG1yWlRF7M9H8HNtIM20Kp3eapwRZ/4+10fVhJ9GOXHRO9LdlBOm8fdR7+r6Y
+         Ez+eNvBWZb7fCcmwQxHv3VKFrG/2o67evPqU7bgI27OqKZgqm7bUNQS/49sbNMbYIF5y
+         2Ks0ytEgcoony9i4Y3+WAtT6r+goukgGdaq5IYnpNPawa483dBpal/+fdE12zji0awuF
+         RuWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717553955; x=1718158755;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yH7bfOUTp5Qehb6cDSUFa9U/OcV22YcwBdkqqYDC6kU=;
+        b=MfrrFzhc8cr6t0KAA46OLJEeqpw/Xajt2UPh+eyJ9sScOqLmLF7ojb+V360wZ6VCIm
+         DgmqjVbtcpqK1w4/V+SApOg0fG/G7rQtCrNC0Nx8SUbbrjdfMagZJjYxAQ89RzMd/IG2
+         W+jKIVmzqbklhXfkg2d9TFTJZterZ6RqQwx/NLrkIXooEV7bCkrf2sOFKM2rGEjpWeMG
+         ML+YulCDZncu1vsuH+bH0wE1WBstwy8ApnuH/uyS0zYlQCMx4rO7g8MnaK/Q4DX1lYJs
+         1NuQKeONfxkEuBxRpb3pA7iqn2E8F/uR/VbzxnpMtL5Svv/0jMvCval5urfYeOzcP9p6
+         emyw==
+X-Forwarded-Encrypted: i=1; AJvYcCWuNfWM8V68dE0R4rJnOEAQXuFC8TmsnwpN73v1HDb6kI/XYBBraQhnDdxVRqs5qhIFxdOzEnR++08HDSHMg7zGj3dsrsdRtxGSNNosDTGWdeetOJGTm+I/cnWrtFMEuZfxmDXAgZJz3A==
+X-Gm-Message-State: AOJu0YyhLcmnaQR7T3vcXfhJekAuQxf4SbfCva+ANfABwMzTXuuOTrzk
+	VmuqbfQk6IG60V5nszmxY24DUz51YrsjHXwzsH08nubKbgkYQhvSJq96JQ==
+X-Google-Smtp-Source: AGHT+IFQd51VLz90gjLy96kC0m145tkni8e7Yv5/EHoJYHDwUGJmrO9SydWBlbsdmzi73PVDj9GySQ==
+X-Received: by 2002:a05:6870:96a4:b0:24c:63b2:8a18 with SMTP id 586e51a60fabf-25121c7e095mr1577477fac.7.1717553955365;
+        Tue, 04 Jun 2024 19:19:15 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-702544e2e52sm5900559b3a.74.2024.06.04.19.19.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jun 2024 19:19:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-hwmon@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	=?UTF-8?q?Ren=C3=A9=20Rebe?= <rene@exactcode.de>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Armin Wolf <W_Armin@gmx.de>,
+	Stephen Horvath <s.horvath@outlook.com.au>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v4a 6/6] hwmon: (spd5118) Add configuration option for auto-detection
+Date: Tue,  4 Jun 2024 19:19:07 -0700
+Message-Id: <20240605021907.4125716-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240604040237.1064024-7-linux@roeck-us.net>
+References: <20240604040237.1064024-7-linux@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4bhsazqdizvel7kz"
-Content-Disposition: inline
-In-Reply-To: <20240604171113.232628f9@endymion.delvare>
+Content-Transfer-Encoding: 8bit
 
+With SPD5118 chip detection for the most part handled by the i2c-smbus
+core using DMI information, the spd5118 driver no longer needs to
+auto-detect spd5118 compliant chips.
 
---4bhsazqdizvel7kz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Auto-detection by the driver is still needed on systems with no DMI support
+or on systems with more than eight DIMMs and can not be removed entirely.
+However, it affects boot time and introduces the risk of mis-identifying
+chips. Add configuration option to be able to disable it on systems where
+chip detection is handled outside the driver.
 
-Hi Jean,
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+Sent as v4a to avoid resending the entire series.
 
-> Note that we still want I2C_FUNC_I2C to be set properly, because it
-> allows device drivers to optimize transfers (the at24 driver is a prime
-> example of that) or even just to bind to the I2C bus (for device
-> drivers which properly check for it).
+v4a:
+    Do not auto-select SENSORS_SPD5118_DETECT if DMI is disabled
+    Modify help text of SENSORS_SPD5118_DETECT
+    Default SENSORS_SPD5118_DETECT to y if (!DMI || !X86)
+     
+v4: New patch
 
-I agree. We definitely want I2C_FUNC_I2C to be set and make use of it as
-much as possible. We should just not completely rely on it.
+ drivers/hwmon/Kconfig   | 19 +++++++++++++++++++
+ drivers/hwmon/spd5118.c |  4 +++-
+ 2 files changed, 22 insertions(+), 1 deletion(-)
 
-> > (There is a CVE for it??) For Baruch's case, this is true. But there are
-> > __i2c_transfer users all over the tree, they are all potentially
-> > vulnerable, or?
->=20
-> Yes there are many, but I think we shall differentiate between 2 cases:
-> * Missing check in a specific kernel device driver. These are unlikely
->   to be a problem in practice because (1) these devices are typically
->   instantiated explicitly, and such explicit code or device tree
->   description would not exist in the first place if said device was not
->   compatible with said I2C bus, and (2) if such an incompatibility was
->   really present then it would have been spotted and fixed very
->   quickly. Arbitrary binding through sysfs attributes is still possible
->   but would definitely require root access and evil intentions (at
->   which point we are screwed no matter what). I'm honestly not worried
->   about this scenario.
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 7a84e7637b51..d5eced417fc3 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -2193,6 +2193,25 @@ config SENSORS_SPD5118
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called spd5118.
+ 
++config SENSORS_SPD5118_DETECT
++	bool "Enable detect function"
++	depends on SENSORS_SPD5118
++	default (!DMI || !X86)
++	help
++	  If enabled, the driver auto-detects if a chip in the SPD address
++	  range is compliant to the SPD51888 standard and auto-instantiates
++	  if that is the case. If disabled, SPD5118 compliant devices have
++	  to be instantiated by other means. On X86 systems with DMI support
++	  this will typically be done from DMI DDR detection code in the
++	  I2C SMBus subsystem. Devicetree based systems will instantiate
++	  attached devices if the DIMMs are listed in the devicetree file.
++
++	  Disabling the detect function will speed up boot time and reduce
++	  the risk of mis-detecting SPD5118 compliant devices. However, it
++	  may result in missed DIMMs under some circumstances.
++
++	  If unsure, say Y.
++
+ config SENSORS_TC74
+ 	tristate "Microchip TC74"
+ 	depends on I2C
+diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+index 5cb5e52c0a38..19d203283a21 100644
+--- a/drivers/hwmon/spd5118.c
++++ b/drivers/hwmon/spd5118.c
+@@ -313,7 +313,7 @@ static bool spd5118_vendor_valid(u8 bank, u8 id)
+ }
+ 
+ /* Return 0 if detection is successful, -ENODEV otherwise */
+-static int spd5118_detect(struct i2c_client *client, struct i2c_board_info *info)
++static int __maybe_unused spd5118_detect(struct i2c_client *client, struct i2c_board_info *info)
+ {
+ 	struct i2c_adapter *adapter = client->adapter;
+ 	int regval;
+@@ -647,7 +647,9 @@ static struct i2c_driver spd5118_driver = {
+ 	},
+ 	.probe		= spd5118_probe,
+ 	.id_table	= spd5118_id,
++#ifdef CONFIG_SENSORS_SPD5118_DETECT
+ 	.detect		= spd5118_detect,
++#endif
+ 	.address_list	= normal_i2c,
+ };
+ 
+-- 
+2.39.2
 
-OK, can be argued.
-
-> * The issue being triggered from user-space through i2c-dev, which is
->   what Baruch reported. The user doing that can target any arbitrary
->   I2C bus and thus cause the oops by accident or even on purpose. For
->   me this is what CVE-2024-35984 is about. What limits the attack
->   surface here is that slave-only I2C buses are rare and you typically
->   need to be root to use i2c-dev. But this is still a serious issue.
-
-Agreed.
-
-> Also note that the first case could happen ever since __i2c_transfer()
-> was introduced (kernel v3.6, commit b37d2a3a75cb) and is not limited to
-> slave-only adapters, as any SMBus-only i2c_adapter would also be
-> vulnerable.
-
-Which makes handling this gracefully even more important.
-
-> So the "Fixes:" tag in commit 91811a31b68d is incorrect for both
-> scenarios.
-
-Ack. Sorry! :)
-
-> > gracefully because kicking off I2C transfers is not a hot path. Maybe we
-> > could turn the dev_dbg into something louder to make people aware that
-> > there is a bug?
->=20
-> My previous message initially had a suggestion in that direction ;-)
-> but I first wanted your opinion on the check itself. dev_dbg() is
-> definitely not appropriate for a condition which should never happen
-> and implies there's a bug somewhere else. A WARN_ON_ONCE would probably
-> be better, so that the bug gets spotted and fixed quickly.
-
-So, are you okay with keeping the check where it is now and turning the
-dev_dbg into WARN_ON_ONCE? I am.
-
-All the best,
-
-   Wolfram
-
-
---4bhsazqdizvel7kz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmZfdEUACgkQFA3kzBSg
-Kba6Tw//ZXtwgs1Z64LmhwEfpaTqY+W5nFX6jknwWjmZovfxNwQw8d/YqCuQKKfP
-07P18mNfynJxN/H/QQZi6QW4XSyW0vEv18co4QNmW9YRRWRcyT18U0Onhf4NzwH2
-uZBta6T2zoPiCAAiALKUCXCg1KTG0rm2usWZzuBG6dtlNnTQtmbNj6GyqTg9+NkB
-i5Il7D9Vq2OvryNAe0dBgJYbd58rESLNeTYk99+4vqzR+bzTt3DPWvwuFa8JBEaH
-RvQHHEMxYol3Jdp60WwRaWDIvMvFdVT6qmxkrSZDTLGSw3VwZdJ+YMY1B2dPAXPr
-JFPwNEQftVaf7uRFj7lsBqgtzHkDtvAWbJtZP4DCdaMPOZKSV4oc0qm4iF8MV/Oj
-jtBWFEJ68H4DCd89l2Y4I5EbA8eTpDRHQNLsjI7cMw5+bg8/z71rqSLa5nLNetLY
-roHH/3+hMvOACaxKxv7EVGGZXoSfTid/hp7CpSciiwcI5h8uFkEnw3QHWgyS7b7v
-EORXybfUyv/CCPJNybhoJdCsupmtFohn48NiWr1fVcvpCimvpiTatXuBP7uuOspN
-EwqUW31YYobHybDmaIhD7DetIWPwGMZItcztkUfM3T7LbWFxGh44mbmGdfEobscT
-AW0o7GioHbwSeU78vAUrjje8hVmmQwJE1DQ8gda/RtmFmjQEmoY=
-=8vSS
------END PGP SIGNATURE-----
-
---4bhsazqdizvel7kz--
 
