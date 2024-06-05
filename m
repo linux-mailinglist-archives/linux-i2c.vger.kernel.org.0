@@ -1,68 +1,68 @@
-Return-Path: <linux-i2c+bounces-3864-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3860-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C1DC8FD8C1
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 23:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9205E8FD8A5
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 23:25:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 501B41C22FDF
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 21:26:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A96AE1C235DE
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 21:25:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FA13171671;
-	Wed,  5 Jun 2024 21:23:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 102EB16C6A6;
+	Wed,  5 Jun 2024 21:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ng06+JGx"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="nIlE4vI8"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6803A1586D7;
-	Wed,  5 Jun 2024 21:23:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C001649D3;
+	Wed,  5 Jun 2024 21:23:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717622625; cv=none; b=qattLc1b2Wv+lryZUBx1YWELJGYkKxUQrQJ/x4zYfWmFx4hjv16LDWW4PmGluBeVQYgrI9rd4ezbqD/+w2/zzgB7Y3rDU1O5LtlkCxDK+LEy/A3Fr9hAuDbz/DMZE2+SvQl63AsvWkJP7PArx/lZmDClV7cM1CWtzOWasEhOyB0=
+	t=1717622622; cv=none; b=Bw1cM0OCDQJCjUmVs9dAM4D+RqZ97TnTleZHljGOQJPGOsSit2TCOGg+N/hjjsrntFz8lMi7r70DBMYauQ2ybW6lrW2/fuRxaZf2FxU6n96nar/vrDjs7vQBi6kr3+D6ftzU3L2AJ2IIj9nXGUN7Wt1QGNmZ//XnzN1jRFpa3Yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717622625; c=relaxed/simple;
-	bh=Da+7g2WRkg7jGuc0nH2HzTkA09fzVTkF+Wt3wcS/lYo=;
+	s=arc-20240116; t=1717622622; c=relaxed/simple;
+	bh=87vNvPwlNAGeQ5WqIoHAelTRCQC/Naflh/0oKi3szzY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pW92soh/cl66LzVD7B+hXHZuw4DmwmFZLLWT+80+gL/ClILbnCsZAdTi0V2FNGvwuLUJzVy7dytav7bBmsv0rbpF5GhNgkaSt/65PTrQKN4WkmymsIO3TuUK3e0GvMLBi8Q/st4XpY9xKN4iqWMVZ3M98/2bsqdrzRPFZQqkUBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ng06+JGx; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=Tb2arbgN9R0cb8Hq2LiBuYYilIim1nrF0UH9g5itLWf1F6IxqMWfdFxrV5AOfYTv4pUgJsbCt0XQNpLxywRgzLlIiA8Gv1oUKhe0dTMKSFXujgPFlMyNnyiFrgnkoA9KlW74/M+7Xmej2VeEDummdLVjMbgwTQkhp2QPdJn82do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=nIlE4vI8; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 455KvShv014025;
-	Wed, 5 Jun 2024 21:23:25 GMT
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 455LC7nj011974;
+	Wed, 5 Jun 2024 21:23:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc :
  content-transfer-encoding : date : from : in-reply-to : message-id :
  mime-version : references : subject : to; s=pp1;
- bh=WNiOJmiLmJsTND7DuVuE19O0w7Czdt5rWrFBHzegWuE=;
- b=ng06+JGxn+54pyqbL9zNE7micGEVzpVHIuMDDGQ5VR4IxojWTKfuwwp23X0oANnzixN+
- DG+TTvLTybKU9xeXBLWPRQ/R24Nk4Gbs2otCftcFHPMtQav5lKEktN/t9o5KCu3FO3Z/
- 7oW+R5AgVSLIU7sTx4JGb7yQImJf0hp9PQnIuDWR1FruUQ1gdFTsvfqk82GhnaghE6Ib
- BPowBey19fBI2TDjWuiFb4oAjP8hdDIJkKei62Skj1rt1oRIOBTj9h0UqIgoPXDlGODO
- /nsr3mwfV3yfySesoFv4+pQcTWm8bO8Ndv60H5fNrze905P24VN9OrhOMIe0hTtG8kT7 Qg== 
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yjygp81ug-1
+ bh=8PJMQwkXBuHRk4+y67UGNnhw/k8TP4I96ElVzPKL2DE=;
+ b=nIlE4vI8/SfDnpvvPHcGAdea760Vd0k1amKWBVugRkkjlpWGuJ5ZwWR779PQwfn7OcOr
+ ZcJp+ynBWlHXz9VV5gtpABl8M1i5n6v2UgysnYvhEmOZbk6bEiQQGoUpRrzhsZN1Urym
+ KmX8pNk4f91eTSJX8okyfSZM6kzUjBmmmGyexUpid0WRhdQorCeRB/qHDFQijsgy7A3D
+ bPZ3WCfLA5Grl5PPwrff6mQoHNqpI8qbdWf2UGUFEOBRpvmi4hVkH7QgPVt9Nhy8Fd8Z
+ qg74ZtCgrXX87RHIwNrVI3hVDWzctzXFwgtyTQxeTs5RxJYhf8BjuKqWqv/7C5jegbPq 8g== 
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3yjyqf00rr-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Wed, 05 Jun 2024 21:23:25 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 455KwRtD026549;
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 455J3Ge9031147;
 	Wed, 5 Jun 2024 21:23:24 GMT
 Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3yggp366fb-1
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3ygeyppnuc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Wed, 05 Jun 2024 21:23:24 +0000
 Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 455LNKS221758634
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 455LNKwF10355290
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 5 Jun 2024 21:23:22 GMT
+	Wed, 5 Jun 2024 21:23:23 GMT
 Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6AB7F58061;
+	by IMSVA (Postfix) with ESMTP id B14F758067;
 	Wed,  5 Jun 2024 21:23:20 +0000 (GMT)
 Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 25A5758075;
+	by IMSVA (Postfix) with ESMTP id 721665805F;
 	Wed,  5 Jun 2024 21:23:20 +0000 (GMT)
 Received: from slate16.aus.stglabs.ibm.com (unknown [9.61.121.242])
 	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
@@ -75,9 +75,9 @@ Cc: eajames@linux.ibm.com, linux-kernel@vger.kernel.org,
         alistair@popple.id.au, jk@ozlabs.org, andrew@codeconstruct.com.au,
         linux-aspeed@lists.ozlabs.org, ninad@linux.ibm.com,
         lakshmiy@us.ibm.com
-Subject: [PATCH v4 23/40] fsi: core: Add interrupt support
-Date: Wed,  5 Jun 2024 16:22:55 -0500
-Message-Id: <20240605212312.349188-24-eajames@linux.ibm.com>
+Subject: [PATCH v4 24/40] fsi: aspeed: Add interrupt support
+Date: Wed,  5 Jun 2024 16:22:56 -0500
+Message-Id: <20240605212312.349188-25-eajames@linux.ibm.com>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20240605212312.349188-1-eajames@linux.ibm.com>
 References: <20240605212312.349188-1-eajames@linux.ibm.com>
@@ -89,362 +89,237 @@ List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: mv2oWU15DpZQWFChEZ7HZlF2hKia-8YK
-X-Proofpoint-ORIG-GUID: mv2oWU15DpZQWFChEZ7HZlF2hKia-8YK
+X-Proofpoint-GUID: TZy6v-nwDVax87CmXxW2TRfPA3FaSa3S
+X-Proofpoint-ORIG-GUID: TZy6v-nwDVax87CmXxW2TRfPA3FaSa3S
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-06-05_02,2024-06-05_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- phishscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999 priorityscore=1501
- impostorscore=0 suspectscore=0 malwarescore=0 lowpriorityscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2406050160
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 mlxlogscore=883 impostorscore=0 adultscore=0
+ bulkscore=0 malwarescore=0 clxscore=1015 mlxscore=0 suspectscore=0
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2405010000 definitions=main-2406050160
 
-Add an irq chip to the FSI master structure to control slave interrupt
-masking. Add a function to request an IRQ from the FSI device.
-The FSI master IRQ mapping is based on the FSI device engine type and
-slave link.
+Handle slave interrupts and pass them to the FSI core.
 
 Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
-Changes since v3:
- - Remove use of handle_irq_desc
+ drivers/fsi/fsi-master-aspeed.c          | 106 ++++++++++++++++++++++-
+ include/trace/events/fsi_master_aspeed.h |  12 +++
+ 2 files changed, 115 insertions(+), 3 deletions(-)
 
-Changes since v2:
- - Remove slave interrupt handler since it's not used yet
-
- drivers/fsi/fsi-core.c     | 159 +++++++++++++++++++++++++++++++++++++
- drivers/fsi/fsi-master.h   |   9 +++
- drivers/fsi/fsi-slave.h    |   1 -
- include/linux/fsi.h        |   2 +
- include/trace/events/fsi.h |  41 ++++++++++
- 5 files changed, 211 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
-index 8b402149acbe9..58cb6bc6ccc91 100644
---- a/drivers/fsi/fsi-core.c
-+++ b/drivers/fsi/fsi-core.c
-@@ -14,10 +14,12 @@
- #include <linux/device.h>
+diff --git a/drivers/fsi/fsi-master-aspeed.c b/drivers/fsi/fsi-master-aspeed.c
+index eecd64bc29512..34f4c9e00e43d 100644
+--- a/drivers/fsi/fsi-master-aspeed.c
++++ b/drivers/fsi/fsi-master-aspeed.c
+@@ -6,6 +6,8 @@
+ #include <linux/delay.h>
  #include <linux/fsi.h>
- #include <linux/idr.h>
+ #include <linux/io.h>
++#include <linux/irqchip/chained_irq.h>
 +#include <linux/irqdomain.h>
+ #include <linux/mfd/syscon.h>
  #include <linux/module.h>
  #include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/of_device.h>
-+#include <linux/of_irq.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
- #include <linux/bitops.h>
-@@ -109,6 +111,67 @@ int fsi_device_peek(struct fsi_device *dev, void *val)
- 
- 	return fsi_slave_read(dev->slave, addr, val, sizeof(uint32_t));
- }
-+EXPORT_SYMBOL_GPL(fsi_device_peek);
-+
-+static int fsi_request_irq(struct fsi_slave *slave, irq_handler_t handler, void *data,
-+			   unsigned int engine_irq, struct device *dev)
-+{
-+	struct device_node *parent = of_node_get(slave->master->dev.of_node);
-+	struct irq_fwspec fwspec;
-+	unsigned int irq;
-+
-+	/*
-+	 * FSI devices can only report interrupts to their own master, so if the master
-+	 * isn't an interrupt controller, don't try and map an irq.
-+	 */
-+	if (!of_get_property(parent, "#interrupt-cells", NULL)) {
-+		of_node_put(parent);
-+		return -EINVAL;
-+	}
-+
-+	fwspec.fwnode = of_node_to_fwnode(parent);
-+	fwspec.param_count = 1;
-+	fwspec.param[0] = engine_irq + (slave->link * FSI_IRQ_COUNT);
-+	irq = irq_create_fwspec_mapping(&fwspec);
-+	if (!irq)
-+		return -EINVAL;
-+
-+	return devm_request_irq(dev, irq, handler, 0, dev_name(dev), data);
-+}
-+
-+int fsi_device_request_irq(struct fsi_device *dev, irq_handler_t handler, void *data)
-+{
-+	unsigned int engine_irq;
-+
-+	switch (dev->engine_type) {
-+	case 0x4:	// shift
-+		engine_irq = 1;
-+		break;
-+	case 0x5:	// scom
-+		engine_irq = 2;
-+		break;
-+	case 0x6:	// scratchpad
-+		engine_irq = 3;
-+		break;
-+	case 0x7:	// i2cm
-+		engine_irq = 4;
-+		break;
-+	case 0x20:	// mbox
-+		engine_irq = 7;
-+		break;
-+	case 0x22:	// sbefifo
-+		engine_irq = 6;
-+		break;
-+	case 0x23:	// spim
-+		engine_irq = 5;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return fsi_request_irq(dev->slave, handler, data, engine_irq, &dev->dev);
-+}
-+EXPORT_SYMBOL_GPL(fsi_device_request_irq);
- 
- unsigned long fsi_device_local_bus_frequency(struct fsi_device *dev)
- {
-@@ -1467,6 +1530,99 @@ void fsi_master_regmap_config(struct regmap_config *config)
- }
- EXPORT_SYMBOL_GPL(fsi_master_regmap_config);
- 
-+int fsi_master_irq(struct fsi_master *master, struct irq_domain *irq_domain, unsigned int link)
-+{
-+	unsigned int downstream = irq_find_mapping(irq_domain, (link * FSI_IRQ_COUNT) + 8);
-+	unsigned long size = FSI_SI1S_SLAVE_BIT + 1;
-+	unsigned long bit = FSI_SI1S_MBOX_BIT;
-+	unsigned long srsis0 = 0;
-+	unsigned long srsis4 = 0;
-+	unsigned long si1s;
-+	__be32 reg;
-+	int rc;
-+
-+	rc = fsi_master_read(master, link, 0, FSI_SLAVE_BASE + FSI_SI1S, &reg, sizeof(reg));
-+	if (rc)
-+		return rc;
-+
-+	si1s = (unsigned long)be32_to_cpu(reg);
-+	for_each_set_bit_from(bit, &si1s, size)
-+		generic_handle_domain_irq(irq_domain, (link * FSI_IRQ_COUNT) + (31 - bit));
-+
-+	if (downstream) {
-+		int i;
-+
-+		master->remote_interrupt_status = 0;
-+
-+		rc = fsi_master_read(master, link, 0, FSI_SLAVE_BASE + FSI_SRSIS0, &reg,
-+				     sizeof(reg));
-+		if (rc)
-+			return rc;
-+
-+		srsis0 = (unsigned long)be32_to_cpu(reg);
-+		for (i = 0; i < 4; ++i) {
-+			if (srsis0 & (0xff000000 >> (8 * i)))
-+				master->remote_interrupt_status |= (1 << i);
-+		}
-+
-+		rc = fsi_master_read(master, link, 0, FSI_SLAVE_BASE + FSI_SRSIS4, &reg,
-+				     sizeof(reg));
-+		if (rc)
-+			return rc;
-+
-+		srsis4 = (unsigned long)be32_to_cpu(reg);
-+		for (i = 0; i < 4; ++i) {
-+			if (srsis4 & (0xff000000 >> (8 * i)))
-+				master->remote_interrupt_status |= (16 << i);
-+		}
-+
-+		if (master->remote_interrupt_status) {
-+			generic_handle_irq(downstream);
-+
-+			reg = cpu_to_be32(0xffffffff);
-+			if (master->remote_interrupt_status & 0xf)
-+				fsi_master_write(master, link, 0, FSI_SLAVE_BASE + FSI_SRSIC0,
-+						 &reg, sizeof(reg));
-+
-+			if (master->remote_interrupt_status & 0xf0)
-+				fsi_master_write(master, link, 0, FSI_SLAVE_BASE + FSI_SRSIC4,
-+						 &reg, sizeof(reg));
-+		}
-+	}
-+
-+	trace_fsi_master_irq(master, link, si1s, srsis0, srsis4);
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(fsi_master_irq);
-+
-+static void fsi_master_irq_mask(struct irq_data *data)
-+{
-+	unsigned int bit = 31 - (data->hwirq % FSI_IRQ_COUNT);
-+
-+	if (bit >= FSI_SI1S_MBOX_BIT) {
-+		struct fsi_master *master = irq_data_get_irq_chip_data(data);
-+		int link = data->hwirq / FSI_IRQ_COUNT;
-+		__be32 mask = cpu_to_be32(BIT(bit));
-+
-+		trace_fsi_master_irq_mask(master, link, data->hwirq % FSI_IRQ_COUNT, true);
-+		fsi_master_write(master, link, 0, FSI_SLAVE_BASE + FSI_SCI1M, &mask, sizeof(mask));
-+	}
-+}
-+
-+static void fsi_master_irq_unmask(struct irq_data *data)
-+{
-+	unsigned int bit = 31 - (data->hwirq % FSI_IRQ_COUNT);
-+
-+	if (bit >= FSI_SI1S_MBOX_BIT) {
-+		struct fsi_master *master = irq_data_get_irq_chip_data(data);
-+		int link = data->hwirq / FSI_IRQ_COUNT;
-+		__be32 mask = cpu_to_be32(BIT(bit));
-+
-+		trace_fsi_master_irq_mask(master, link, data->hwirq % FSI_IRQ_COUNT, false);
-+		fsi_master_write(master, link, 0, FSI_SLAVE_BASE + FSI_SSI1M, &mask, sizeof(mask));
-+	}
-+}
-+
- int fsi_master_register(struct fsi_master *master)
- {
- 	int rc;
-@@ -1491,6 +1647,9 @@ int fsi_master_register(struct fsi_master *master)
- 	if (master->flags & FSI_MASTER_FLAG_SWCLOCK)
- 		master->clock_frequency = 100000000; // POWER reference clock
- 
-+	master->irq_chip.name = dev_name(&master->dev);
-+	master->irq_chip.irq_mask = fsi_master_irq_mask;
-+	master->irq_chip.irq_unmask = fsi_master_irq_unmask;
- 	master->dev.class = &fsi_master_class;
- 
- 	mutex_lock(&master->scan_lock);
-diff --git a/drivers/fsi/fsi-master.h b/drivers/fsi/fsi-master.h
-index 8ea2f69ec4922..2104902091e05 100644
---- a/drivers/fsi/fsi-master.h
-+++ b/drivers/fsi/fsi-master.h
-@@ -10,6 +10,7 @@
- #define DRIVERS_FSI_MASTER_H
- 
- #include <linux/device.h>
-+#include <linux/irq.h>
- #include <linux/mutex.h>
- 
- /*
-@@ -112,6 +113,7 @@
- /* Misc */
- #define	FSI_CRC_SIZE		4
- #define FSI_LINK_ENABLE_SETUP_TIME	10	/* in mS */
-+#define FSI_IRQ_COUNT		9
- 
- /* fsi-master definition and flags */
- #define FSI_MASTER_FLAG_SWCLOCK		0x1
-@@ -137,6 +139,7 @@ struct fsi_master {
- 	int		n_links;
- 	int		flags;
- 	struct mutex	scan_lock;
-+	struct irq_chip	irq_chip;
- 	int		(*read)(struct fsi_master *, int link, uint8_t id,
- 				uint32_t addr, void *val, size_t size);
- 	int		(*write)(struct fsi_master *, int link, uint8_t id,
-@@ -147,6 +150,7 @@ struct fsi_master {
- 				       bool enable);
- 	int		(*link_config)(struct fsi_master *, int link,
- 				       u8 t_send_delay, u8 t_echo_delay);
-+	u8		remote_interrupt_status;
+@@ -25,11 +27,13 @@ struct fsi_master_aspeed_data {
+ struct fsi_master_aspeed {
+ 	struct fsi_master	master;
+ 	spinlock_t		lock;	/* protect HW access */
++	struct irq_domain	*irq_domain;
+ 	struct device		*dev;
+ 	void __iomem		*base;
+ 	void __iomem		*ctrl;
+ 	struct clk		*clk;
+ 	struct gpio_desc	*cfam_reset_gpio;
++	u32			irq_mask;
  };
  
- #define to_fsi_master(d) container_of(d, struct fsi_master, dev)
-@@ -176,4 +180,9 @@ extern void fsi_master_unregister(struct fsi_master *master);
+ #define to_fsi_master_aspeed(m) \
+@@ -79,6 +83,11 @@ static const u32 fsi_base = 0xa0000000;
+ #define STATUS_TIMEOUT		BIT(4)
  
- extern int fsi_master_rescan(struct fsi_master *master);
+ /* OPB_IRQ_MASK */
++#define FSI_MASTER_ERROR_IRQ	BIT(28)
++#define FSI_PORT_ERROR_IRQ	BIT(27)
++#define FSI_HOTPLUG_IRQ		BIT(26)
++#define FSI_REMOTE_SLV_IRQ(l)	(BIT(FSI_REMOTE_SLV_IRQ_BIT) << (l))
++#define FSI_REMOTE_SLV_IRQ_BIT	18
+ #define OPB1_XFER_ACK_EN BIT(17)
+ #define OPB0_XFER_ACK_EN BIT(16)
  
-+struct irq_domain;
+@@ -96,7 +105,7 @@ static const u32 fsi_base = 0xa0000000;
+ #define OPB_RC_CTRL_OPB		BIT(18)	/* Access controller over OPB, not AHB (AST27xx+) */
+ #define OPB_RC_XFER_ACK_EN	BIT(16)	/* Enable OPBx xfer ack bit without mask */
+ #define OPB_RC_COUNT		GENMASK(15, 0)	/* Number of retries */
+-#define OPB_RC_DEFAULT		0x10
++#define OPB_RC_DEFAULT		(OPB_RC_XFER_ACK_EN | 0x10)
+ 
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/fsi_master_aspeed.h>
+@@ -322,11 +331,76 @@ static int aspeed_master_break(struct fsi_master *master, int link)
+ 	return aspeed_master_write(master, link, 0, addr, &cmd, 4);
+ }
+ 
++static int aspeed_master_link_enable(struct fsi_master *master, int link, bool enable)
++{
++	struct fsi_master_aspeed *aspeed = to_fsi_master_aspeed(master);
++	unsigned long flags;
++	int rc;
 +
-+extern int fsi_master_irq(struct fsi_master *master, struct irq_domain *irq_domain,
-+			  unsigned int link);
++	spin_lock_irqsave(&aspeed->lock, flags);
++	if (enable) {
++		rc = fsi_master_link_enable(master, link, enable);
++		if (rc)
++			goto done;
 +
- #endif /* DRIVERS_FSI_MASTER_H */
-diff --git a/drivers/fsi/fsi-slave.h b/drivers/fsi/fsi-slave.h
-index 0468ec1c60db2..762636e7c8633 100644
---- a/drivers/fsi/fsi-slave.h
-+++ b/drivers/fsi/fsi-slave.h
-@@ -73,7 +73,6 @@
- #define FSI_SISS_MFSI_PORT_ERROR	BIT(2)
- #define FSI_SISS_MFSI_HP		BIT(1)
- #define FSI_SISS_MFSI_CR_PARITY_ERROR	BIT(0)
--#define FSI_SISS_ALL			0xfe007f00
++		aspeed->irq_mask |= FSI_REMOTE_SLV_IRQ(link);
++		writel(aspeed->irq_mask, aspeed->base + OPB_IRQ_MASK);
++	} else {
++		aspeed->irq_mask &= ~FSI_REMOTE_SLV_IRQ(link);
++		writel(aspeed->irq_mask, aspeed->base + OPB_IRQ_MASK);
++
++		rc = fsi_master_link_enable(master, link, enable);
++	}
++
++done:
++	spin_unlock_irqrestore(&aspeed->lock, flags);
++	return rc;
++}
++
++static irqreturn_t aspeed_master_irq(int irq, void *data)
++{
++	struct fsi_master_aspeed *aspeed = data;
++	unsigned long size = FSI_REMOTE_SLV_IRQ_BIT + aspeed->master.n_links;
++	unsigned long bit = FSI_REMOTE_SLV_IRQ_BIT;
++	unsigned long status;
++
++	status = readl(aspeed->base + OPB_IRQ_STATUS);
++	writel(0, aspeed->base + OPB_IRQ_MASK);
++
++	for_each_set_bit_from(bit, &status, size)
++		fsi_master_irq(&aspeed->master, aspeed->irq_domain, bit - FSI_REMOTE_SLV_IRQ_BIT);
++
++	writel(status, aspeed->base + OPB_IRQ_STATUS);
++	writel(0, aspeed->base + OPB_IRQ_STATUS);
++	writel(aspeed->irq_mask, aspeed->base + OPB_IRQ_MASK);
++
++	trace_fsi_master_aspeed_irq(status);
++	return IRQ_HANDLED;
++}
++
++static int aspeed_master_irqd_map(struct irq_domain *domain, unsigned int irq,
++				  irq_hw_number_t hwirq)
++{
++	struct fsi_master_aspeed *aspeed = domain->host_data;
++
++	irq_set_chip_and_handler(irq, &aspeed->master.irq_chip, handle_simple_irq);
++	irq_set_chip_data(irq, &aspeed->master);
++
++	return 0;
++}
++
++static const struct irq_domain_ops aspeed_master_irq_domain_ops = {
++	.map = aspeed_master_irqd_map,
++};
++
+ static void aspeed_master_release(struct device *dev)
+ {
+ 	struct fsi_master_aspeed *aspeed =
+ 		to_fsi_master_aspeed(to_fsi_master(dev));
  
- /*
-  * SI1S fields
-diff --git a/include/linux/fsi.h b/include/linux/fsi.h
-index e0309bf0ae072..c249a95b7ff84 100644
---- a/include/linux/fsi.h
-+++ b/include/linux/fsi.h
-@@ -8,6 +8,7 @@
- #define LINUX_FSI_H
++	if (aspeed->irq_domain)
++		irq_domain_remove(aspeed->irq_domain);
++
+ 	regmap_exit(aspeed->master.map);
+ 	kfree(aspeed);
+ }
+@@ -477,6 +551,7 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	unsigned int reg;
+ 	int rc, links;
++	int irq;
  
- #include <linux/device.h>
-+#include <linux/interrupt.h>
+ 	rc = tacoma_cabled_fsi_fixup(&pdev->dev);
+ 	if (rc) {
+@@ -567,11 +642,12 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
+ 	aspeed->master.dev.of_node = of_node_get(dev_of_node(&pdev->dev));
  
- struct fsi_device {
- 	struct device		dev;
-@@ -25,6 +26,7 @@ extern int fsi_device_write(struct fsi_device *dev, uint32_t addr,
- 		const void *val, size_t size);
- extern int fsi_device_peek(struct fsi_device *dev, void *val);
- extern unsigned long fsi_device_local_bus_frequency(struct fsi_device *dev);
-+extern int fsi_device_request_irq(struct fsi_device *dev, irq_handler_t handler, void *data);
+ 	aspeed->master.n_links = links;
+-	aspeed->master.flags = FSI_MASTER_FLAG_RELA;
++	aspeed->master.flags = FSI_MASTER_FLAG_INTERRUPT | FSI_MASTER_FLAG_RELA;
+ 	aspeed->master.read = aspeed_master_read;
+ 	aspeed->master.write = aspeed_master_write;
+ 	aspeed->master.send_break = aspeed_master_break;
+ 	aspeed->master.term = aspeed_master_term;
++	aspeed->master.link_enable = aspeed_master_link_enable;
  
- struct fsi_device_id {
- 	u8	engine_type;
-diff --git a/include/trace/events/fsi.h b/include/trace/events/fsi.h
-index da977d59e163e..c750ae8e1f5b4 100644
---- a/include/trace/events/fsi.h
-+++ b/include/trace/events/fsi.h
-@@ -8,6 +8,47 @@
+ 	dev_set_drvdata(&pdev->dev, aspeed);
+ 
+@@ -579,9 +655,30 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
+ 	if (rc)
+ 		goto err_regmap;
+ 
++	irq = platform_get_irq(pdev, 0);
++	if (irq > 0) {
++		unsigned int size = links * FSI_IRQ_COUNT;
++
++		aspeed->irq_domain = irq_domain_add_linear(aspeed->dev->of_node, size,
++							   &aspeed_master_irq_domain_ops, aspeed);
++		if (aspeed->irq_domain) {
++			rc = devm_request_irq(aspeed->dev, irq, aspeed_master_irq, 0,
++					      dev_name(aspeed->dev), aspeed);
++			if (rc) {
++				dev_warn(aspeed->dev, "failed to request irq:%d\n", irq);
++				irq_domain_remove(aspeed->irq_domain);
++				aspeed->irq_domain = NULL;
++			} else {
++				dev_info(aspeed->dev, "enabling interrupts irq:%d\n", irq);
++			}
++		} else {
++			dev_warn(aspeed->dev, "failed to create irq domain\n");
++		}
++	}
++
+ 	rc = fsi_master_register(&aspeed->master);
+ 	if (rc)
+-		goto err_regmap;
++		goto err_irq;
+ 
+ 	/* At this point, fsi_master_register performs the device_initialize(),
+ 	 * and holds the sole reference on master.dev. This means the device
+@@ -593,6 +690,9 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
+ 	get_device(&aspeed->master.dev);
+ 	return 0;
+ 
++err_irq:
++	if (aspeed->irq_domain)
++		irq_domain_remove(aspeed->irq_domain);
+ err_regmap:
+ 	regmap_exit(aspeed->master.map);
+ err_release:
+diff --git a/include/trace/events/fsi_master_aspeed.h b/include/trace/events/fsi_master_aspeed.h
+index 7eeecbfec7f09..dba1776334a0e 100644
+--- a/include/trace/events/fsi_master_aspeed.h
++++ b/include/trace/events/fsi_master_aspeed.h
+@@ -8,6 +8,18 @@
  
  #include <linux/tracepoint.h>
  
-+TRACE_EVENT(fsi_master_irq,
-+	TP_PROTO(const struct fsi_master *master, unsigned int link, uint32_t si1s,
-+		 uint32_t srsis0, uint32_t srsis4),
-+	TP_ARGS(master, link, si1s, srsis0, srsis4),
++TRACE_EVENT(fsi_master_aspeed_irq,
++	TP_PROTO(uint32_t status),
++	TP_ARGS(status),
 +	TP_STRUCT__entry(
-+		__field(int, master_idx)
-+		__field(unsigned int, link)
-+		__field(uint32_t, si1s)
-+		__field(uint32_t, srsis0)
-+		__field(uint32_t, srsis4)
++		__field(uint32_t, status)
 +	),
 +	TP_fast_assign(
-+		__entry->master_idx = master->idx;
-+		__entry->link = link;
-+		__entry->si1s = si1s;
-+		__entry->srsis0 = srsis0;
-+		__entry->srsis4 = srsis4;
++		__entry->status = status;
 +	),
-+	TP_printk("fsi%d:%02d si1s:%08x srsis0:%08x srsis4:%08x", __entry->master_idx,
-+		  __entry->link, __entry->si1s, __entry->srsis0, __entry->srsis4)
++	TP_printk("status %08x", __entry->status)
 +);
 +
-+TRACE_EVENT(fsi_master_irq_mask,
-+	TP_PROTO(const struct fsi_master *master, unsigned int link, unsigned int bit, bool mask),
-+	TP_ARGS(master, link, bit, mask),
-+	TP_STRUCT__entry(
-+		__field(int, master_idx)
-+		__field(unsigned int, link)
-+		__field(unsigned int, bit)
-+		__field(bool, mask)
-+	),
-+	TP_fast_assign(
-+		__entry->master_idx = master->idx;
-+		__entry->link = link;
-+		__entry->bit = bit;
-+		__entry->mask = mask;
-+	),
-+	TP_printk("fsi%d:%02d %s bit:%d", __entry->master_idx, __entry->link,
-+		  __entry->mask ? "mask" : "unmask", __entry->bit)
-+);
-+
- TRACE_EVENT(fsi_master_xfer,
- 	TP_PROTO(int master_idx, int link, int id, uint32_t addr, size_t size, const void *data,
- 		 bool read),
+ TRACE_EVENT(fsi_master_aspeed_opb_xfer,
+ 	TP_PROTO(uint32_t addr, uint32_t size, uint32_t data, bool read),
+ 	TP_ARGS(addr, size, data, read),
 -- 
 2.39.3
 
