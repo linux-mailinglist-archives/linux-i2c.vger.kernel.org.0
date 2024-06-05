@@ -1,266 +1,247 @@
-Return-Path: <linux-i2c+bounces-3812-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3813-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F19138FD03E
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 15:56:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAFE08FD064
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 16:05:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88B4E29D6E7
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 13:56:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F1651F21CC9
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 14:05:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2A17D518;
-	Wed,  5 Jun 2024 13:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA12810A36;
+	Wed,  5 Jun 2024 14:04:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y1zkHWmp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RcaDeQPj"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5452C132;
-	Wed,  5 Jun 2024 13:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5991125BA;
+	Wed,  5 Jun 2024 14:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717595773; cv=none; b=Ob5LfYMljNwqU/yxkGERqqvqZN72VOv1t4jr4JmTKp88PdozC25qou7RuFW9bZVin/CdMhzyKw0dHF8LGDqPu51UdVi/ySz30xbhk9mUuC7DJAdY2id6SFLNp4b60PqoZTCXWcDPyyDRDbsLNVoWKPHZxSTfIH05GICc55LfiXw=
+	t=1717596296; cv=none; b=NAoC5M5A7fR3HusF5tu9bTvwJDDRuN+mGWE2LuokXb9f6ciD1dIiQFuLSZmvEewp324NG65jKHUTqG8RTEd33IUWQHdbUD8I9lkHu9G7XvvTBctLBpPKouv3XuR39OLlK6fgds5UxPhbpuHvLzIBxm2lZLpfOryHJc5hw6yBhjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717595773; c=relaxed/simple;
-	bh=fEWnPn/LF0XpawezW7e5tZ6bGnBM0nB8OqKarFOWnbw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KNtDjXW2Dx5DDxFDJNBXkuWPKwybmAAR7XWFe/PLqMh7ypbIEKHqz+4rIRG0SZ86nuJ+222qdvfaavdo9CLpZGqPFgT4nJYxFfSC6pRd8tFm2ReWTZ5tpQn4q63nfaa03NS0l/uubwkVemQKGIVowjJtC3ti12Ps3hQsWJvC0Ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y1zkHWmp; arc=none smtp.client-ip=209.85.214.178
+	s=arc-20240116; t=1717596296; c=relaxed/simple;
+	bh=p8+UBElJvT76w9HMbNMCxRJfanMU1vkZtUGBQHCIF4U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y1zBeCgfNuSShX9oPR9t7dSI0xaPyupp9OdoTOvYNQBliPhvMmw7otuJu3v3CneUrDQs0hKj9MGdDrhyrfdjWJLBDk6kzLTswoqnXDJNeb29AXxDRKBKVJOrogYlhjBWJY8QD8f2Brt64a9lIa10LS4Zvqc6vYPwA6yZzGppsrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RcaDeQPj; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1f67fa9cd73so7086715ad.0;
-        Wed, 05 Jun 2024 06:56:11 -0700 (PDT)
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-6c5a6151ff8so1871789a12.2;
+        Wed, 05 Jun 2024 07:04:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717595771; x=1718200571; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LpF7MY6zGEBbIyxQfDuVxoxQilPPnjYvJErElpnvtAw=;
-        b=Y1zkHWmpx2zfTuLnD2uncbziDQxUZXdNKuCMJ8nVSz+mlczV4vvbmjOWUOzqHaZIog
-         hINigxQhw6ElXhxilbmCKGf8/BS9+z1BTGhyMhNyhFa5rCHB1o0/vXAmpKbk4bm1ZF3j
-         jWEex4jszm7Vhg6+NV6+SOiiyIw1bqthDsgAD6J4ct/k7/1Xhq+hwlTBC93coaCrqzQj
-         r+kvx4ZO/gAncnhF0fRR1iWx9Rz6Zyr25lEdccCQZZ8Uo/C8MyjlzbemwDAYI36JXT00
-         3PuPePRrTLvhp5N/CautogSEleu3GI6lovlPU4I2+KhsQQyovG9UkVwD7v/NmG93pLjI
-         qL4g==
+        d=gmail.com; s=20230601; t=1717596294; x=1718201094; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=kOf2pXDoP6bXL3TDZ1k6BJtZjPCNkpQOe/d8aTG5sDs=;
+        b=RcaDeQPjEflfOVOaMSprhlqTRrhRSSo5wDJvgJy23QTwgyH90DpoEtTGkhVvNBofRr
+         kUUNzD6Th1PyH8uWNwt/Zl5zWoOhDzxCuf8cx/1MjbWipOnLMyWG8fgtXRADq8yUSMCf
+         h/pbZmppS/ffOzda1oM+ZXfzF4PK2645RaAD0vLXAx0VBFWvHX8bgmnllYKliKbhg5Ty
+         h33f3JHiH8j1d3WsBbChAZbTPXycCXpallU8lPia32lATaXZ1JYzR/j0Z8VUuNAzcEFK
+         6Vuu/8njD2aoPsAAbPfdFxQ3Yx0aMVSx3LFy51RUOFCystKxtbyLeFDGl2+gRdQSyzUN
+         486w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717595771; x=1718200571;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LpF7MY6zGEBbIyxQfDuVxoxQilPPnjYvJErElpnvtAw=;
-        b=cb1RNzSXZsC+FAj1N2Gz3I09VwYEJFUWY32Q4olAhYXIo/cg+cJWyUpLC+BoCqmMQh
-         l7QBDd9v17bmNWSX3f7raYz+z/tVXInmEhwEPaVUgcyEh8xxTHeU9XLMyOeEfs+qTL1G
-         P7LUKH1Q+A5XfSWa25WzK265wL2KoQDJrsUTpDU1Q4+vS/IKZzUIsWABxF/YMow3fslo
-         8JPGS8m1yjEE3hr+RwlWfBmNSIzoTNA0sbebzmpW7gNisYUnbSG5fq7jJIghLyDSkULW
-         /grhlhS04vfKCmuL6tZhsiq1iggV40dIMeJ3lmFu966FZ+l0wKZBcdHkeaJogeUi8A3J
-         MIEA==
-X-Forwarded-Encrypted: i=1; AJvYcCXKFpsrCr2Md06u8gia6so1BQ5vicDsXkMwH6B9TTpuDI9D80fZ4Fyg2cD0ajyLvQC+2AIZSNx65t1611awF/E4SBD8aHnePk9GuGHlMZjcwW8PsR+zpdvcm1gFkfyg63K+vyJvzlCakzKBBsHKwX1UNFBiy7/iYThXS6d55XpLqszZ9Q==
-X-Gm-Message-State: AOJu0YyzpE+5SGHX0Hm9sqFfwVuiF3uT8+dXxuRvf8gsqdhpJmWxKxdf
-	rfcG1yNG69Q0/48hAdq1NVpTRX86KxI9iXp93vCgY4QAVsFkud3h
-X-Google-Smtp-Source: AGHT+IHCHGWPHo/mhx3fAHCUvV1+YdW3pvIpkYURnyIqdl5d+GU6Ur6AxTYH74RbJwPjP8dHnuQOeQ==
-X-Received: by 2002:a17:902:ce90:b0:1f6:3a73:1eac with SMTP id d9443c01a7336-1f6a569e528mr45489525ad.17.1717595770925;
-        Wed, 05 Jun 2024 06:56:10 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6a5258b54sm18318125ad.53.2024.06.05.06.56.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jun 2024 06:56:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717596294; x=1718201094;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kOf2pXDoP6bXL3TDZ1k6BJtZjPCNkpQOe/d8aTG5sDs=;
+        b=dAQmUiAGIXDPI5em/ynQD+cf8JGc1edy9rBPFssASG17ZCszpt0QrMZiJDoGw4HMdD
+         QXA76Rm9Ta8yH8inBSD8EwHc8DK+AcU7r0lPM6DPlNTiGcMA7IIM7ZVdoqzAv6Rvooea
+         9LFCuhx3YI9/QHSQGDuRytuU8HA3tsFhSLzpCW5p/DcmFCx6h3IozVmTFIsknkXgrfpN
+         SO+a6tyZ13Ei2qlJw9G1eANhNzKKho9PMBk58dHKiRKH2ACJeRtnqvYi80FOQk7Er1VZ
+         DgYEMeyo7V+IpqTkorFUc/jZ/zHZEW6QeJG5Ak1fFrpS4Nc091SWQ6NiMsPl+HcO6Mll
+         e6aQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWgaFTxUnXbCB6aI+tX47z1a+w1WYHwsn967bXG4vqyupmsYNMemTnA4jUWozdWvzOV4ROO/efD3EgDqLTfJjgFo0pSRufcpq7rwyZXv0LWPqwSrurux6VtHHj6tXf27Iicw+4lbKqRKrXklt1dkBWthKi3KqkMZH2goTV7rrJTN+mDmg==
+X-Gm-Message-State: AOJu0Yyip+VUeZWTKPBpTJtUjua8Wzzq0HSjbm2Xd11jrKglquW4xkYl
+	JgJTsSzbvv7PZYG6tkPdBloiZBeZq5CwTHKI9kDCxDdGtLS3iF3WlW8tWQ==
+X-Google-Smtp-Source: AGHT+IH3wRuBV8148bcuq9f24RSdMLZTS4091K407OpaKZLOI9bMIWh/vMLerG0uzmiR26BwklynMg==
+X-Received: by 2002:a17:90a:cf03:b0:2c1:aefa:1e7f with SMTP id 98e67ed59e1d1-2c27daf6705mr2374303a91.3.1717596293650;
+        Wed, 05 Jun 2024 07:04:53 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c2806ccf77sm1527234a91.51.2024.06.05.07.04.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jun 2024 07:04:52 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 5 Jun 2024 06:56:08 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	=?iso-8859-1?Q?Ren=E9?= Rebe <rene@exactcode.de>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Armin Wolf <W_Armin@gmx.de>,
-	Stephen Horvath <s.horvath@outlook.com.au>
-Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
-Message-ID: <efb77b37-30e5-48a8-b4af-eb9995a2882b@roeck-us.net>
-References: <20240604040237.1064024-1-linux@roeck-us.net>
- <20240604040237.1064024-6-linux@roeck-us.net>
- <a5aa120d-8497-4ca8-9752-7d800240b999@molgen.mpg.de>
+Message-ID: <b83f47cd-2b4f-4681-8f3e-d6123cbf48ce@roeck-us.net>
+Date: Wed, 5 Jun 2024 07:04:51 -0700
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4a 6/6] hwmon: (spd5118) Add configuration option for
+ auto-detection
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>, Armin Wolf <W_Armin@gmx.de>,
+ Stephen Horvath <s.horvath@outlook.com.au>
+References: <20240604040237.1064024-7-linux@roeck-us.net>
+ <20240605021907.4125716-1-linux@roeck-us.net>
+ <85236eae-f5a2-408c-9bbf-fe547b0c32d5@t-8ch.de>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <85236eae-f5a2-408c-9bbf-fe547b0c32d5@t-8ch.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a5aa120d-8497-4ca8-9752-7d800240b999@molgen.mpg.de>
 
-Hi Paul,
+On 6/5/24 02:22, Thomas Wei√üschuh wrote:
+> On 2024-06-04 19:19:07+0000, Guenter Roeck wrote:
+>> With SPD5118 chip detection for the most part handled by the i2c-smbus
+>> core using DMI information, the spd5118 driver no longer needs to
+>> auto-detect spd5118 compliant chips.
+>>
+>> Auto-detection by the driver is still needed on systems with no DMI support
+>> or on systems with more than eight DIMMs and can not be removed entirely.
+>> However, it affects boot time and introduces the risk of mis-identifying
+>> chips. Add configuration option to be able to disable it on systems where
+>> chip detection is handled outside the driver.
+>>
+>> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>> Sent as v4a to avoid resending the entire series.
+>>
+>> v4a:
+>>      Do not auto-select SENSORS_SPD5118_DETECT if DMI is disabled
+>>      Modify help text of SENSORS_SPD5118_DETECT
+>>      Default SENSORS_SPD5118_DETECT to y if (!DMI || !X86)
+>>       
+>> v4: New patch
+>>
+>>   drivers/hwmon/Kconfig   | 19 +++++++++++++++++++
+>>   drivers/hwmon/spd5118.c |  4 +++-
+>>   2 files changed, 22 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index 7a84e7637b51..d5eced417fc3 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -2193,6 +2193,25 @@ config SENSORS_SPD5118
+>>   	  This driver can also be built as a module. If so, the module
+>>   	  will be called spd5118.
+>>   
+>> +config SENSORS_SPD5118_DETECT
+>> +	bool "Enable detect function"
+>> +	depends on SENSORS_SPD5118
+>> +	default (!DMI || !X86)
+>> +	help
+>> +	  If enabled, the driver auto-detects if a chip in the SPD address
+>> +	  range is compliant to the SPD51888 standard and auto-instantiates
+>> +	  if that is the case. If disabled, SPD5118 compliant devices have
+>> +	  to be instantiated by other means. On X86 systems with DMI support
+>> +	  this will typically be done from DMI DDR detection code in the
+>> +	  I2C SMBus subsystem. Devicetree based systems will instantiate
+>> +	  attached devices if the DIMMs are listed in the devicetree file.
+>> +
+>> +	  Disabling the detect function will speed up boot time and reduce
+>> +	  the risk of mis-detecting SPD5118 compliant devices. However, it
+>> +	  may result in missed DIMMs under some circumstances.
+>> +
+>> +	  If unsure, say Y.
+>> +
+>>   config SENSORS_TC74
+>>   	tristate "Microchip TC74"
+>>   	depends on I2C
+>> diff --git a/drivers/hwmon/spd5118.c b/drivers/hwmon/spd5118.c
+>> index 5cb5e52c0a38..19d203283a21 100644
+>> --- a/drivers/hwmon/spd5118.c
+>> +++ b/drivers/hwmon/spd5118.c
+>> @@ -313,7 +313,7 @@ static bool spd5118_vendor_valid(u8 bank, u8 id)
+>>   }
+>>   
+>>   /* Return 0 if detection is successful, -ENODEV otherwise */
+>> -static int spd5118_detect(struct i2c_client *client, struct i2c_board_info *info)
+>> +static int __maybe_unused spd5118_detect(struct i2c_client *client, struct i2c_board_info *info)
+>>   {
+>>   	struct i2c_adapter *adapter = client->adapter;
+>>   	int regval;
+>> @@ -647,7 +647,9 @@ static struct i2c_driver spd5118_driver = {
+>>   	},
+>>   	.probe		= spd5118_probe,
+>>   	.id_table	= spd5118_id,
+>> +#ifdef CONFIG_SENSORS_SPD5118_DETECT
+>>   	.detect		= spd5118_detect,
+>> +#endif
+>>   	.address_list	= normal_i2c,
+>>   };
+> 
+> For the if-deffery I proposed something during the last review,
+> I'm not sure if you saw it. If you did, please ignore this comment:
+> 
 
-On Wed, Jun 05, 2024 at 02:21:50PM +0200, Paul Menzel wrote:
-> Dear Guenter,
-> 
-> 
-> Thank you so much for taking this on.
-> 
-> Am 04.06.24 um 06:02 schrieb Guenter Roeck:
-> > Detect DDR5 memory and instantiate the SPD5118 driver automatically.
-> > 
-> > Suggested-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> > Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> > v5: New patch
-> > 
-> >   drivers/i2c/i2c-smbus.c | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-> > index 97f338b123b1..8a0dab835761 100644
-> > --- a/drivers/i2c/i2c-smbus.c
-> > +++ b/drivers/i2c/i2c-smbus.c
-> > @@ -382,6 +382,10 @@ void i2c_register_spd(struct i2c_adapter *adap)
-> >   	case 0x1E:	/* LPDDR4 */
-> >   		name = "ee1004";
-> >   		break;
-> > +	case 0x22:	/* DDR5 */
-> > +	case 0x23:	/* LPDDR5 */
-> > +		name = "spd5118";
-> > +		break;
-> >   	default:
-> >   		dev_info(&adap->dev,
-> >   			 "Memory type 0x%02x not supported yet, not instantiating SPD\n",
-> 
-> Testing this on top of 6.10-rc2+ on a Supermicro X13SAE, Linux logs:
-> 
->     $ dmesg | grep -e "DMI:" -e "Linux version" -e i2c-0
->     [    0.000000] Linux version 6.10.0-rc2.mx64.461-00036-g151dfab265df
-> (pmenzel@foreveralone.molgen.mpg.de) (gcc (GCC) 12.3.0, GNU ld (GNU
-> Binutils) 2.41) #74 SMP PREEMPT_DYNAMIC Wed Jun  5 08:24:59 CEST 2024
->     [    0.000000] DMI: Supermicro Super Server/X13SAE, BIOS 2.0 10/17/2022
->     [    0.000000] DMI: Memory slots populated: 4/4
->     [    5.434488] i2c i2c-0: Successfully instantiated SPD at 0x50
->     [    5.443848] i2c i2c-0: Successfully instantiated SPD at 0x51
->     [    5.450033] i2c i2c-0: Successfully instantiated SPD at 0x52
->     [    5.459378] i2c i2c-0: Successfully instantiated SPD at 0x53
-> 
-> Then with `sudo modprobe at24` and `sudo modprobe ee1004`, `decode-dimms`
-> shows:
-> 
-You'd actually have to load the spd5118 driver.
+I missed that, sorry (and I hope I didn't miss anything else).
 
->     $ sudo ./eeprom/decode-dimms
->     # decode-dimms version 4.3
 > 
->     Memory Serial Presence Detect Decoder
->     By Philip Edelbrock, Christian Zuckschwerdt, Burkart Lingner,
->     Jean Delvare, Trent Piepho and others
+> .address_list is also only needed with CONFIG_SENSORS_SPD5118_DETECT.
 > 
+> If you use
 > 
->     Number of SDRAM DIMMs detected and decoded: 0
+> .detect         = IS_ENABLED(CONFIG_SENSORS_SPD5118_DETECT) ?  spd5118_detect : NULL,
+> .address_list   = IS_ENABLED(CONFIG_SENSORS_SPD5118_DETECT) ?  normal_i2c : NULL,
 > 
-> This might be expected, and `decode-dimms` also needs to be updated.
-> 
+> then the need for __maybe_unused goes away and type checking is a tiny
+> bit better.
 
-Correct. The hack below makes it detect the DIMMs, but the data format
-is all different, so it is only really useful to validate reading
-the EEPROM (i.e., the checksum over the first 512 bytes of the eeprom
-is correct). With that patch applied, I get
-
-Decoding EEPROM: /sys/bus/i2c/drivers/spd5118/0-0050
-Guessing DIMM is in                              bank 1
-Kernel driver used                               spd5118
-
----=== SPD EEPROM Information ===---
-EEPROM CRC of bytes 0-509 48 1                   OK (0x47A2)
-# of bytes written to SDRAM EEPROM               1024
-Total number of bytes in EEPROM                  1024
-Fundamental Memory type                          DDR5 SDRAM
-
----=== Manufacturing Information ===---
-Manufacturer                                     Invalid
-Custom Manufacturer Data                         00 00 00 00 00 88 13 ("???????")
-Manufacturing Location Code                      0x08
-Part Number                                      Undefined
-Revision Code                                    0x4C1D
-Manufacturing Date                               0x0C00
-
-and so on.
+It does let me drop the #ifdef, so I agree it is a bit better.
+I made that change, but I'll wait for a couple of days before sending
+the updated version to give others time for additional feedback.
 
 Thanks,
 Guenter
-
----
-diff --git a/eeprom/decode-dimms b/eeprom/decode-dimms
-index 787b6f5..64b6e81 100755
---- a/eeprom/decode-dimms
-+++ b/eeprom/decode-dimms
-@@ -2407,7 +2407,12 @@ sub spd_sizes($)
- 	my $bytes = shift;
- 	my $type = $bytes->[2];
- 
--	if ($type == 12 || $type == 14 || $type == 16 || $type == 17) {
-+	if ($type == 18 || $type == 19 || $type == 20 || $type == 21) {
-+		# DDR5
-+		my $spd_len = 256 * ((($bytes->[0] >> 4) & 7) + 1);
-+		my $used = $spd_len;
-+		return ($spd_len, $used);
-+	} elsif ($type == 12 || $type == 14 || $type == 16 || $type == 17) {
- 		# DDR4
- 		my $spd_len = 256 * (($bytes->[0] >> 4) & 7);
- 		my $used = 128 * ($bytes->[0] & 15);
-@@ -2516,11 +2521,17 @@ sub calculate_crc($$$)
- sub check_crc($)
- {
- 	my $bytes = shift;
-+	my $is_ddr5 = ($bytes->[0] & 0x70) == 0x30;
- 	my $crc_cover = $bytes->[0] & 0x80 ? 116 : 125;
-+	my $crc_start = 126;
-+	if ($is_ddr5) {
-+	    $crc_cover = 509;
-+	    $crc_start = 510;
-+	}
- 	my $crc = calculate_crc($bytes, 0, $crc_cover + 1);
- 
--	my $dimm_crc = ($bytes->[127] << 8) | $bytes->[126];
--	return ("EEPROM CRC of bytes 0-$crc_cover",
-+	my $dimm_crc = ($bytes->[$crc_start + 1] << 8) | $bytes->[$crc_start];
-+	return ("EEPROM CRC of bytes 0-$crc_cover $bytes->[0] $is_ddr5",
- 		($dimm_crc == $crc) ? 1 : 0,
- 		sprintf("0x%04X", $dimm_crc),
- 		sprintf("0x%04X", $crc));
-@@ -2622,6 +2633,7 @@ sub get_dimm_list
- 	if ($use_sysfs) {
- 		@drivers = ('eeprom',
- 			    'at24',
-+			    'spd5118',
- 			    'ee1004');	# DDR4
- 	} else {
- 		@drivers = ('eeprom');
-@@ -2640,14 +2652,13 @@ sub get_dimm_list
- 				# We look for I2C devices like 0-0050 or 2-0051
- 				next unless $file =~ /^\d+-[\da-f]+$/i;
- 				next unless -d "$dir/$file";
--
- 				# Device name must be eeprom (driver eeprom)
- 				# spd (driver at24) or ee1004 (driver ee1004)
- 				my $attr = sysfs_device_attribute("$dir/$file", "name");
- 				next unless defined $attr &&
- 					    ($attr eq "eeprom" ||
- 					     $attr eq "spd" ||
--					     $attr eq "ee1004");	# DDR4
-+					     $attr eq "spd5118" || $attr eq "ee1004");	# DDR4
- 			} else {
- 				next unless $file =~ /^eeprom-/;
- 			}
-@@ -2681,7 +2692,7 @@ sub get_dimm_list
- @dimm = get_dimm_list() unless $use_hexdump;
- 
- for my $i (0 .. $#dimm) {
--	my @bytes = readspd(0, 128, $dimm[$i]->{file});
-+	my @bytes = readspd(0, 512, $dimm[$i]->{file});
- 	$dimm[$i]->{bytes} = \@bytes;
- 	$dimm[$i]->{is_rambus} = $bytes[0] < 4;		# Simple heuristic
- 	if ($dimm[$i]->{is_rambus} || $bytes[2] < 9) {
 
 
