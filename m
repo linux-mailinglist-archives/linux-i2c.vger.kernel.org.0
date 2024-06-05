@@ -1,43 +1,52 @@
-Return-Path: <linux-i2c+bounces-3809-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3810-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 332938FCE60
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 15:07:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 597EA8FCEA8
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 15:14:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4581D1C2515C
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 13:07:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD9EE2823EC
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 13:14:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A21251BC07A;
-	Wed,  5 Jun 2024 12:22:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 175191953B9;
+	Wed,  5 Jun 2024 12:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JNBTOBE9"
 X-Original-To: linux-i2c@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF6C619A2AC;
-	Wed,  5 Jun 2024 12:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FA719D882;
+	Wed,  5 Jun 2024 12:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717590165; cv=none; b=BNCLUxjGR/A3prG7S0KDCqG0vpg8k11KhsW77YrzjUjtS+4BvZGb/JAYBNOmHus2+nPuq5Rwk2TrC6hjlHrM8yUHLUmPzKPnAwEX/j1tbc4wbAE12LbKt0KsFh8bTSyZ2yAYyzVVTbbDJJSu5yoC33KchvQPRQrw7HVWUpA4eXs=
+	t=1717590766; cv=none; b=nkjpk1ZyYl+Rc2lRXxthh7ttXg92UBUnB2HkmLi7accXkbbaEcmXMcQ1IhCJSBeLKDNHBZPP3xvXoOmckslYuVvdYrSEH7dXPg2vk6/f8/uoys9KiGKslAt9dpX41JpkiBx7u6nDpHxwGPCamNUf2vP5nHzXqNLfLlI+dihgC/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717590165; c=relaxed/simple;
-	bh=hRjmhe9Ngf0wmEAJSQe3o0q7qinQYcgJZNR83dg0CPM=;
+	s=arc-20240116; t=1717590766; c=relaxed/simple;
+	bh=PfhQeGJITJTvs+p/Hge5SmZR5Iv7XJjDoRihZXn1CME=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IVT3m58Bf/FK0HAQQZYSVSAJ/XfogoyvfMpW7E2HDjcpyLlIh/MwmShKivm01yhcDT//Q4yAm/T4Ems1+dhnnIBpny6dMwnPBDbbX1iLcE8amSk3M62Sb60T+31T0X4iu8VrSdmh8xgS7dUvBDZHSLSPs0i3MoUnhvpT1IY0KYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 91EE561E5FE05;
-	Wed,  5 Jun 2024 14:21:51 +0200 (CEST)
-Message-ID: <a5aa120d-8497-4ca8-9752-7d800240b999@molgen.mpg.de>
-Date: Wed, 5 Jun 2024 14:21:50 +0200
+	 In-Reply-To:Content-Type; b=uTi8NAvxQO432rURWQif52jmqJGjxRI67xjW3OIl7a2jcNTgmF25t4wPIaVYVzeaBRWpOU83YNZ0EsjuF+ffXCVO4fEccaBoXmUwK/G/8eQI2xNmbmoKzD5fxFap1S+YKIMYFhZwXsFPYnEQUZBuyPMNtL72iEGZG7qTLKcRZxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JNBTOBE9; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6BC19E0005;
+	Wed,  5 Jun 2024 12:32:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1717590756;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PbnUs0MSq2j9sy1LgeEvLYnILq+qylhWfc/HqlZBIlQ=;
+	b=JNBTOBE9C1+Jb/djiD05CcRKaJnyba3X338QbcyFU2V8rwpuVElD+sX3YHbWrh1Lgrrs8v
+	ClTridWJQLNPj4OmVMbF9oa+F2RhZdSDVxPOC8W2IGkb8RAKPdR3R6FGo1PzngjQBWURlv
+	8BzA+9asD/76DVv/aKBdszkLWnN8f2G2zin/rNNOl2a/diBZ9yguqhlLrmeKEtaidmrJCo
+	tLyrXjHT9qjF858YGk5EQR61zoYda/bjhT+/bVBAbii+H4jcsXszoiKjcMm48z8dR1Kfoj
+	J7N0fcbLwtyOUPy0NmOI0xeSAbjzTb86ErgD1laih6Ilc10aKUjEckvjh7edOQ==
+Message-ID: <26e9970c-7dbf-48ac-9832-58bf2952d350@bootlin.com>
+Date: Wed, 5 Jun 2024 14:32:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
@@ -45,87 +54,55 @@ List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/6] i2c: smbus: Support DDR5 SPD EEPROMs
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.de>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Armin Wolf <W_Armin@gmx.de>, Stephen Horvath <s.horvath@outlook.com.au>
-References: <20240604040237.1064024-1-linux@roeck-us.net>
- <20240604040237.1064024-6-linux@roeck-us.net>
+Subject: Re: [PATCH v2 1/3] dt-bindings: i2c: gpio: Add 'transition-delay-us'
+ property
+To: Rob Herring <robh@kernel.org>, Peter Rosin <peda@axentia.se>
+Cc: Andi Shyti <andi.shyti@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Peter Korsgaard <peter.korsgaard@barco.com>,
+ Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Herve Codina <herve.codina@bootlin.com>,
+ Christopher Cordahi <christophercordahi@nanometrics.ca>
+References: <20240529091739.10808-1-bastien.curutchet@bootlin.com>
+ <20240529091739.10808-2-bastien.curutchet@bootlin.com>
+ <718d86a7-d70a-c38a-089d-5276bcc6e88b@axentia.se>
+ <20240603155810.GA509311-robh@kernel.org>
 Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20240604040237.1064024-6-linux@roeck-us.net>
+From: Bastien Curutchet <bastien.curutchet@bootlin.com>
+In-Reply-To: <20240603155810.GA509311-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: bastien.curutchet@bootlin.com
 
-Dear Guenter,
+Hi Rob, Hi Peter,
 
-
-Thank you so much for taking this on.
-
-Am 04.06.24 um 06:02 schrieb Guenter Roeck:
-> Detect DDR5 memory and instantiate the SPD5118 driver automatically.
+On 6/3/24 17:58, Rob Herring wrote:
+> On Wed, May 29, 2024 at 02:13:37PM +0200, Peter Rosin wrote:
+>> Hi!
+>>
+>> 2024-05-29 at 11:17, Bastien Curutchet wrote:
+>>> I2C MUXes described by the i2c-gpio-mux sometimes need a significant
+>>> amount of time to switch from a bus to another. When a new bus is
+>>> selected, the first I2C transfer can fail if it occurs too early. There
+>>> is no way to describe this transition delay that has to be waited before
+>>> starting the first I2C transfer.
+>>>
+>>> Add a 'transition-delay-us' property that indicates the delay to be
+>>> respected before doing the first i2c transfer.
+>>
+>> The io-channel-mux has a property with very similar intent named
+>> settle-time-us [1]. I think we should use the same name here.
+>>
+>> [1] Documentation/devicetree/bindings/iio/multiplexer/io-channel-mux.yaml
 > 
-> Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> v5: New patch
+> Agreed. I knew we had something and went looking... I only checked the
+> base mux and i2c mux bindings.
 > 
->   drivers/i2c/i2c-smbus.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-> index 97f338b123b1..8a0dab835761 100644
-> --- a/drivers/i2c/i2c-smbus.c
-> +++ b/drivers/i2c/i2c-smbus.c
-> @@ -382,6 +382,10 @@ void i2c_register_spd(struct i2c_adapter *adap)
->   	case 0x1E:	/* LPDDR4 */
->   		name = "ee1004";
->   		break;
-> +	case 0x22:	/* DDR5 */
-> +	case 0x23:	/* LPDDR5 */
-> +		name = "spd5118";
-> +		break;
->   	default:
->   		dev_info(&adap->dev,
->   			 "Memory type 0x%02x not supported yet, not instantiating SPD\n",
 
-Testing this on top of 6.10-rc2+ on a Supermicro X13SAE, Linux logs:
+Ok I'll do this in V3, thank you.
 
-     $ dmesg | grep -e "DMI:" -e "Linux version" -e i2c-0
-     [    0.000000] Linux version 
-6.10.0-rc2.mx64.461-00036-g151dfab265df 
-(pmenzel@foreveralone.molgen.mpg.de) (gcc (GCC) 12.3.0, GNU ld (GNU 
-Binutils) 2.41) #74 SMP PREEMPT_DYNAMIC Wed Jun  5 08:24:59 CEST 2024
-     [    0.000000] DMI: Supermicro Super Server/X13SAE, BIOS 2.0 10/17/2022
-     [    0.000000] DMI: Memory slots populated: 4/4
-     [    5.434488] i2c i2c-0: Successfully instantiated SPD at 0x50
-     [    5.443848] i2c i2c-0: Successfully instantiated SPD at 0x51
-     [    5.450033] i2c i2c-0: Successfully instantiated SPD at 0x52
-     [    5.459378] i2c i2c-0: Successfully instantiated SPD at 0x53
-
-Then with `sudo modprobe at24` and `sudo modprobe ee1004`, 
-`decode-dimms` shows:
-
-     $ sudo ./eeprom/decode-dimms
-     # decode-dimms version 4.3
-
-     Memory Serial Presence Detect Decoder
-     By Philip Edelbrock, Christian Zuckschwerdt, Burkart Lingner,
-     Jean Delvare, Trent Piepho and others
-
-
-     Number of SDRAM DIMMs detected and decoded: 0
-
-This might be expected, and `decode-dimms` also needs to be updated.
-
-
-Kind regards and thank you again for these patches,
-
-Paul
+Best regards
+Bastien
 
