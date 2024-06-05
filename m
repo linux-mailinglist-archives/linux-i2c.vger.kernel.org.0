@@ -1,79 +1,83 @@
-Return-Path: <linux-i2c+bounces-3835-lists+linux-i2c=lfdr.de@vger.kernel.org>
+Return-Path: <linux-i2c+bounces-3836-lists+linux-i2c=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-i2c@lfdr.de
 Delivered-To: lists+linux-i2c@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81D968FD5AC
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 20:26:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18CFB8FD78C
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 22:33:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D06402895B1
-	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 18:25:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16E131C22C86
+	for <lists+linux-i2c@lfdr.de>; Wed,  5 Jun 2024 20:33:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A38F17559;
-	Wed,  5 Jun 2024 18:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73BDC15ECC9;
+	Wed,  5 Jun 2024 20:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NaC8vTXz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DNXEwxrq"
 X-Original-To: linux-i2c@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94D9624;
-	Wed,  5 Jun 2024 18:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EEE17347A;
+	Wed,  5 Jun 2024 20:33:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717611957; cv=none; b=GRzZLm/FxXiBa95s8xTlE/FxPTfs2xB9bPcE0yMkO+06lojepilapONZu2T/Whz4pay3PYW8bBubBtdcoN6KeODY+kA6QgKlwBtgoWovsYyR03YfP9/sQJcj+H8I6csEPacuGkvCEu0XtIYyxdKDcPwC7/S9cOBhtQRHodTLtfM=
+	t=1717619582; cv=none; b=CWBrHp+7Y1TZoqoau1yV3yt27OWgH1sBpMyUUQv9BxebduTuWt6pOJYlPH+dzzM2SRI2rKe/DaJa6SM2wEoV6WRav6dVOXU3LUoYxFn+kWZB49XSSH8Xvbo3wkoWrb+KOAko+ofAVzJWJDQeFyWLGSelcZ+v5kWwHJ2FaxxLDYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717611957; c=relaxed/simple;
-	bh=4y/5omC4EzN6RGvi7zJRrpb/JlLZ7cEbjI/uqSM0BDc=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=kmLaigrS/0Eh694CBSHjrCScAXAOwBxQphwdfX/27bwQtoyc0yW4+IhDgilgOSfyOJNOCcqBdUY9LbeKASKajS9jaNIuSm9VXWlH2CrtaRm0ljV8pcNLYjXFQplyMO+X+6Fvui3QCo2OC+jZjD+zmzZ+5xAl9tEFTUzHPgno9Zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NaC8vTXz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D21DC2BD11;
-	Wed,  5 Jun 2024 18:25:57 +0000 (UTC)
+	s=arc-20240116; t=1717619582; c=relaxed/simple;
+	bh=pxVHh32DoFTykGJNSWL1YSbeEc74Mjkrhq/pwmV4b+k=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Okx1+y4lrmGx0ljqMLcxs7QB0ChxUGSTj52Ut8wbyVLQPPL6Xf8uHld4pU+j20gIp9NsK32btM+20UumoAbvIwYNqgQ2I2/P1RaBCA1fxJcqnQMkmya22LwyJHfL0C3GuEGHPeJJeHNow+80Foz8XAN9nktSAnQtm7MKzS/5LuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DNXEwxrq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29789C2BD11;
+	Wed,  5 Jun 2024 20:33:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717611957;
-	bh=4y/5omC4EzN6RGvi7zJRrpb/JlLZ7cEbjI/uqSM0BDc=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=NaC8vTXzldpN99NeCh4qXmN3smgEB4UGQInaebiB8m8+5kbkPvIKaGfu5jBWjvuwR
-	 gbEOc3n3j8Iovn6/FVPII5N4c6YbSXfWC91RwMu0gmf2O31AI7MKFr5Kiae+wCEmxZ
-	 QzOetn3gYJVl7wGwLJp3eW0NYk3Kst9b/ekcLIPOH1O6dyDE3QgMJarXHKkr87yQHl
-	 Y9bKa1DBezrapE7xmqyyyixwR+2m9JztCCOunsFSZMIxemjOu8UxWNkNwJF34kXukg
-	 yXImiNWfZNG1Hk9EKfFcF/tQkNA/OFGx+jiyCrY8aUIrQTg6y0o3e8cwwEXpmEABIS
-	 TldfE6soAyLsg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3EE07C4332C;
-	Wed,  5 Jun 2024 18:25:57 +0000 (UTC)
+	s=k20201202; t=1717619581;
+	bh=pxVHh32DoFTykGJNSWL1YSbeEc74Mjkrhq/pwmV4b+k=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=DNXEwxrqtxeGw1A7p/P4+pvkASK2IfnqLzQAQMmc/tdXBwLME1yBgmz3j/tqep0hl
+	 GmgJwxJszbSsOOeZi0hRktrTFOH1hv9bKTHzbLXONA4+P/h6Q67O2D2pIGVLRmHcg+
+	 R+awe2DcprKObg+8yymg51FOEOdaSxWK4635Ag4bAWlf/6fI2h4cLe5IK17XqcWRpk
+	 B2DGl5eJGYcZfMgkPbax21pdNSHBr4XCYCLm7yziuI5MibhLyaicDnZBDiW8M07YxG
+	 4iOzWsHygumDt6X+mK+3em4OCdDuA8CtXLmakG6mTBNnlUXy/RVdyJOAw1wKcsYF+m
+	 PQHiWm7mKmAIg==
+Date: Wed, 5 Jun 2024 21:32:57 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	Wolfram Sang <wsa@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>
 Subject: Re: [PULL REQUEST] i2c-for-6.10-rc3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZmARnWliAuHLbwOy@shikoro>
+Message-ID: <c2yw3oj6btmcd2jjqglgdqdyg3vyhvxjxyyf7yhksg5omfoayn@uxpmlei3gktz>
 References: <ZmARnWliAuHLbwOy@shikoro>
-X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZmARnWliAuHLbwOy@shikoro>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.10-rc3
-X-PR-Tracked-Commit-Id: c4aff1d1ec90d9596c71b6f06b0bfab40a36a34a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 558dc49aacc7f3a348c1f10af7d1169bed2fe426
-Message-Id: <171761195723.15423.10373651732253520378.pr-tracker-bot@kernel.org>
-Date: Wed, 05 Jun 2024 18:25:57 +0000
-To: Wolfram Sang <wsa@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org, Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>
+ <xa6xj6rpt5uuyxq4psm26qs5ptjn3n2krpdhcevh2kv2tz6eft@4t2undxir6un>
+ <ckglrvpcemoff55qlhj3naiyclsipujqumincgrxrfr4wlxiyt@ivvgtko2vmvj>
 Precedence: bulk
 X-Mailing-List: linux-i2c@vger.kernel.org
 List-Id: <linux-i2c.vger.kernel.org>
 List-Subscribe: <mailto:linux-i2c+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-i2c+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ckglrvpcemoff55qlhj3naiyclsipujqumincgrxrfr4wlxiyt@ivvgtko2vmvj>
 
-The pull request you sent on Wed, 5 Jun 2024 09:19:57 +0200:
+Hi Wolfram,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.10-rc3
+On Wed, Jun 05, 2024 at 04:18:31PM +0200, Wolfram Sang wrote:
+> > I have a few fixes more for rc3, though that I'm planning to send
+> > you tomorrow.
+> 
+> I see. If they are urgent, I will send a second PR. If not so much we
+> can wait for rc4.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/558dc49aacc7f3a348c1f10af7d1169bed2fe426
+Sure... will keep them for rc4.
 
-Thank you!
+> But I really wanted to get rid of I2C_CLASS_SPD as
+> soon as possible before new "users" (copy & pasting code) show up.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Makes sense!
+
+Thanks,
+Andi
 
